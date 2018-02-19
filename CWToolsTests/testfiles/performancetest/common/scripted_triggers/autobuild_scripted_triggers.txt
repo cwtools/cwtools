@@ -1,0 +1,956 @@
+
+#	Example:
+#
+#	example_trigger = {
+#		is_country_type = default
+#		free_leader_slots > 0
+#	}
+#
+#
+#	In a script file:
+#
+#	trigger = {
+#		example_trigger = yes
+#	}
+#
+
+autobuild_trigger_is_sth = {
+	has_global_flag = star_trek_new_horizons
+}
+
+# for planet
+autobuild_trigger_local_autoupdate = {
+	autobuild_trigger_free_from_autoupdate = no
+	exists = owner
+	owner = {
+		or = {
+			has_country_flag = autobuild_1
+			and = {
+				is_ai = yes
+				has_global_flag = autobuild_ai_allowed
+			}
+		}
+		autobuild_trigger_cost = yes
+	}
+	autobuild_trigger_has_any_capital_or_shelter = yes
+}
+
+# for planet/tile
+autobuild_trigger_has_any_power_plant = {
+	or = {
+		has_building = building_basic_power_plant
+		has_building = building_power_plant_1
+		has_building = building_power_plant_2
+		has_building = building_power_plant_3
+		has_building = building_power_plant_4
+		has_building = building_power_plant_5
+		has_building = building_power_hub_1
+		has_building = building_power_hub_2
+		has_building = building_hab_solar_power_processor
+	}
+}
+
+autobuild_trigger_has_any_mine = {
+	or = {
+		has_building = building_primitive_factory
+		has_building = building_mineral_processing_plant_1
+		has_building = building_mineral_processing_plant_2
+		has_building = building_basic_mine
+		has_building = building_mining_network_1
+		has_building = building_mining_network_2
+		has_building = building_mining_network_3
+		has_building = building_mining_network_4
+		has_building = building_mining_network_5
+		has_building = building_hab_astro_mining_facility
+	}
+}
+
+autobuild_trigger_has_any_farm = {
+	or = {
+		has_building = building_primitive_farm
+		has_building = building_basic_farm
+		has_building = building_hydroponics_farm_1
+		has_building = building_hydroponics_farm_2
+		has_building = building_hydroponics_farm_3
+		has_building = building_hydroponics_farm_4
+		has_building = building_hydroponics_farm_5
+		has_building = building_hab_agri_bay
+	}
+}
+
+autobuild_trigger_has_any_science_lab = {
+	or = {
+		has_building = building_basic_science_lab_1
+		has_building = building_physics_lab_1
+		has_building = building_physics_lab_2
+		has_building = building_physics_lab_3
+		has_building = building_physics_lab_4
+		has_building = building_biolab_1
+		has_building = building_biolab_2
+		has_building = building_biolab_3
+		has_building = building_biolab_4
+		has_building = building_engineering_facility_1
+		has_building = building_engineering_facility_2
+		has_building = building_engineering_facility_3
+		has_building = building_engineering_facility_4
+		has_building = building_hab_laboratory_module
+	}
+}
+
+autobuild_trigger_has_any_regular_building = {
+	or = {
+		autobuild_trigger_has_any_power_plant = yes
+		autobuild_trigger_has_any_farm = yes
+		autobuild_trigger_has_any_mine = yes
+		autobuild_trigger_has_any_science_lab = yes
+	}
+}
+
+autobuild_trigger_has_any_mine_not_replace = {
+	or = {
+		has_building = building_ancient_factory
+
+		# dlc
+		has_building = building_worm_mine
+	}
+}
+
+autobuild_trigger_has_any_farm_not_replace = {
+	or = {
+		has_building = building_agri_processing_complex
+		has_building = building_great_pyramid
+		has_building = building_paradise_dome
+
+		# horizont dlc
+		has_building = building_worm_farm
+	}
+}
+
+autobuild_trigger_has_any_power_plant_not_replace = {
+	or = {
+		has_building = betharian_power_plant
+		has_building = building_dark_matter_power_plant
+		has_building = building_odd_factory
+
+		# dlc
+		has_building = building_akx_worm_1
+	}
+}
+
+autobuild_trigger_has_any_science_lab_not_replace = {
+	or = {
+		has_building = building_mutant_landfill
+		has_building = building_vault
+		has_building = building_vault_2
+		has_building = building_zanaam_obelisk
+		has_building = building_toy_factory
+		has_building = building_particle_accelerator
+		has_building = building_fe_xeno_zoo
+
+		# dlc
+		has_building = building_akx_worm_2
+		has_building = building_akx_worm_3
+	}
+}
+
+autobuild_trigger_has_any_capital_or_shelter = {
+	or = {
+		autobuild_trigger_has_any_capital = yes
+		has_building = building_colony_shelter
+		has_building = building_deployment_post
+		# temporaly fix
+		has_global_flag = gf_alphamod_activated
+		has_global_flag = star_trek_new_horizons
+	}
+}
+
+autobuild_trigger_has_any_capital = {
+	or = {
+		has_building = building_capital_1
+		has_building = building_capital_2
+		has_building = building_capital_3
+		has_building = building_hab_capital
+		has_building = building_machine_capital_1
+		has_building = building_machine_capital_2
+		has_building = building_machine_capital_3
+		alphamod_trigger_autobuild_has_any_capital = yes
+		# fell free use this trigger for your mod
+		autobuild_trigger_has_any_capital_mod_api = yes
+	}
+}
+
+alphamod_trigger_autobuild_has_any_capital = {
+	always = no
+}
+
+autobuild_trigger_has_any_capital_mod_api = {
+	always = no
+}
+
+autobuild_trigger_free_from_autobuild = {
+	or = {
+		has_modifier = free_from_autobuild
+		has_building_construction = yes
+		is_planet_class = pc_habitat
+		autobuild_trigger_planet_energy = yes
+		autobuild_trigger_planet_minerals = yes
+		autobuild_trigger_planet_food = yes
+		autobuild_trigger_planet_science = yes
+		and = {
+			sector_controlled = yes
+			owner = {
+				has_country_flag = autobuild_ignore_sector
+			}
+		}
+	}
+}
+
+autobuild_trigger_free_from_autobuild_not_spec_planets = {
+	or = {
+		has_modifier = free_from_autobuild
+		has_building_construction = yes
+		and = {
+			sector_controlled = yes
+			owner = {
+				has_country_flag = autobuild_ignore_sector
+			}
+		}
+	}
+}
+
+autobuild_trigger_free_from_autoupdate = {
+	or = {
+		is_planet_class = pc_habitat
+		has_modifier = free_from_auto_update
+		has_building_construction = yes
+		and = {
+			sector_controlled = yes
+			owner = {
+				has_country_flag = autobuild_ignore_sector
+			}
+		}
+	}
+}
+
+autobuild_trigger_planet_energy = {
+	or = {
+		has_modifier = planet_power_plant_autobuild
+		has_modifier = human_fallen_empires_migration_yellow_ring
+	}
+}
+
+autobuild_trigger_planet_minerals = {
+	or = {
+		has_modifier = planet_forge_autobuild
+		has_modifier = human_fallen_empires_migration_red_ring
+	}
+}
+
+autobuild_trigger_planet_food = {
+	or = {
+		has_modifier = planet_farms_autobuild
+		has_modifier = human_fallen_empires_migration_green_ring
+	}
+}
+
+autobuild_trigger_planet_science = {
+	or = {
+		has_modifier = planet_labs_autobuild
+		has_modifier = human_fallen_empires_migration_blue_ring
+	}
+}
+
+# for tile
+autobuild_trigger_tile_has_strategic_res = {
+	or = {
+		alphamod_trigger_autobuild_tile_has_strategic_res = yes
+		sth_trigger_autobuild_tile_has_strategic_res = yes
+		# fell free use this trigger for your mod
+		autobuild_trigger_tile_has_strategic_res_mod_api = yes
+		has_resource = sr_alien_pets
+		has_resource = sr_betharian
+		and = {
+			has_resource = yes
+			nor = {
+				has_resource = minerals
+				has_resource = food
+				has_resource = energy
+				has_resource = physics_research
+				has_resource = society_research
+				has_resource = engineering_research
+			}
+		}
+	}
+}
+
+alphamod_trigger_autobuild_tile_has_strategic_res = {
+	always = no
+}
+
+autobuild_trigger_tile_has_strategic_res_mod_api = {
+	always = no
+}
+
+autobuild_trigger_tile_has_any_res = {
+	#has_resource = yes
+	has_any_resource = yes
+	nand = {
+		owner = {
+			has_country_flag = autobuild_ignore_minerals
+		}
+		planet = {
+			autobuild_trigger_planet_minerals = no
+		}
+		has_resource = minerals
+	}
+	nand = {
+		owner = {
+			has_country_flag = autobuild_ignore_food
+		}
+		planet = {
+			autobuild_trigger_planet_food = no
+		}
+		has_resource = food
+	}
+	nand = {
+		owner = {
+			has_country_flag = autobuild_ignore_energy
+		}
+		planet = {
+			autobuild_trigger_planet_energy = no
+		}
+		has_resource = energy
+	}
+	nand = {
+		owner = {
+			has_country_flag = autobuild_ignore_science
+		}
+		planet = {
+			autobuild_trigger_planet_science = no
+		}
+		or = {
+			has_resource = physics_research
+			has_resource = society_research
+			has_resource = engineering_research
+		}
+	}
+}
+
+autobuild_trigger_tile_has_energy_more_than_others = {
+	autobuild_trigger_tile_has_strategic_res = no
+	or = {
+		owner = {
+			not = {
+				has_country_flag = autobuild_ignore_energy
+			}
+		}
+		planet = {
+			autobuild_trigger_planet_energy = yes
+		}
+	}
+	or = {
+		has_resource = {
+			type = energy
+			amount > 4
+		}
+		and = {
+			has_resource = {
+				type = energy
+				amount = 4
+			}
+			nor = {
+				has_resource = {
+					type = minerals
+					amount > 4
+				}
+				has_resource = {
+					type = physics_research
+					amount > 4
+				}
+				has_resource = {
+					type = society_research
+					amount > 4
+				}
+				has_resource = {
+					type = engineering_research
+					amount > 4
+				}
+			}
+		}
+		and = {
+			has_resource = {
+				type = energy
+				amount = 3
+			}
+			nor = {
+				has_resource = {
+					type = minerals
+					amount > 3
+				}
+				has_resource = {
+					type = physics_research
+					amount > 3
+				}
+				has_resource = {
+					type = society_research
+					amount > 3
+				}
+				has_resource = {
+					type = engineering_research
+					amount > 3
+				}
+			}
+		}
+		and = {
+			has_resource = {
+				type = energy
+				amount = 2
+			}
+			nor = {
+				has_resource = {
+					type = minerals
+					amount > 2
+				}
+				has_resource = {
+					type = physics_research
+					amount > 2
+				}
+				has_resource = {
+					type = society_research
+					amount > 2
+				}
+				has_resource = {
+					type = engineering_research
+					amount > 2
+				}
+			}
+		}
+		and = {
+			has_resource = {
+				type = energy
+				amount = 1
+			}
+			nor = {
+				has_resource = {
+					type = minerals
+					amount > 1
+				}
+				has_resource = {
+					type = physics_research
+					amount > 1
+				}
+				has_resource = {
+					type = society_research
+					amount > 1
+				}
+				has_resource = {
+					type = engineering_research
+					amount > 1
+				}
+			}
+		}
+	}
+}
+
+autobuild_trigger_tile_has_minerals_more_than_others = {
+	autobuild_trigger_tile_has_strategic_res = no
+	or = {
+		owner = {
+			not = {
+				has_country_flag = autobuild_ignore_minerals
+			}
+		}
+		planet = {
+			autobuild_trigger_planet_minerals = yes
+		}
+	}
+	or = {
+		has_resource = {
+			type = minerals
+			amount > 4
+		}
+		and = {
+			has_resource = {
+				type = minerals
+				amount = 4
+			}
+			nor = {
+				has_resource = {
+					type = energy
+					amount > 4
+				}
+				has_resource = {
+					type = physics_research
+					amount > 4
+				}
+				has_resource = {
+					type = society_research
+					amount > 4
+				}
+				has_resource = {
+					type = engineering_research
+					amount > 4
+				}
+			}
+		}
+		and = {
+			has_resource = {
+				type = minerals
+				amount = 3
+			}
+			nor = {
+				has_resource = {
+					type = energy
+					amount > 3
+				}
+				has_resource = {
+					type = physics_research
+					amount > 3
+				}
+				has_resource = {
+					type = society_research
+					amount > 3
+				}
+				has_resource = {
+					type = engineering_research
+					amount > 3
+				}
+			}
+		}
+		and = {
+			has_resource = {
+				type = minerals
+				amount = 2
+			}
+			nor = {
+				has_resource = {
+					type = energy
+					amount > 2
+				}
+				has_resource = {
+					type = physics_research
+					amount > 2
+				}
+				has_resource = {
+					type = society_research
+					amount > 2
+				}
+				has_resource = {
+					type = engineering_research
+					amount > 2
+				}
+			}
+		}
+		and = {
+			has_resource = {
+				type = minerals
+				amount = 1
+			}
+			nor = {
+				has_resource = {
+					type = energy
+					amount > 1
+				}
+				has_resource = {
+					type = physics_research
+					amount > 1
+				}
+				has_resource = {
+					type = society_research
+					amount > 1
+				}
+				has_resource = {
+					type = engineering_research
+					amount > 1
+				}
+			}
+		}
+	}
+}
+
+autobuild_trigger_tile_has_food_more_than_others = {
+	autobuild_trigger_tile_has_strategic_res = no
+	or = {
+		owner = {
+			not = {
+				has_country_flag = autobuild_ignore_food
+			}
+		}
+		planet = {
+			autobuild_trigger_planet_food = yes
+		}
+	}
+	has_resource = food
+	nor = {
+		has_resource = energy
+		has_resource = minerals
+		has_resource = physics_research
+		has_resource = society_research
+		has_resource = engineering_research
+	}
+	# or = {
+	# 	has_resource = {
+	# 		type = food
+	# 		amount > 4
+	# 	}
+	# 	and = {
+	# 		has_resource = {
+	# 			type = food
+	# 			amount = 4
+	# 		}
+	# 		nor = {
+	# 			has_resource = {
+	# 				type = energy
+	# 				amount > 4
+	# 			}
+	# 			has_resource = {
+	# 				type = minerals
+	# 				amount > 3
+	# 			}
+	# 			has_resource = {
+	# 				type = physics_research
+	# 				amount > 4
+	# 			}
+	# 			has_resource = {
+	# 				type = society_research
+	# 				amount > 4
+	# 			}
+	# 			has_resource = {
+	# 				type = engineering_research
+	# 				amount > 4
+	# 			}
+	# 		}
+	# 	}
+	# 	and = {
+	# 		has_resource = {
+	# 			type = food
+	# 			amount = 3
+	# 		}
+	# 		nor = {
+	# 			has_resource = {
+	# 				type = energy
+	# 				amount > 3
+	# 			}
+	# 			has_resource = {
+	# 				type = minerals
+	# 				amount > 2
+	# 			}
+	# 			has_resource = {
+	# 				type = physics_research
+	# 				amount > 3
+	# 			}
+	# 			has_resource = {
+	# 				type = society_research
+	# 				amount > 3
+	# 			}
+	# 			has_resource = {
+	# 				type = engineering_research
+	# 				amount > 3
+	# 			}
+	# 		}
+	# 	}
+	# 	and = {
+	# 		has_resource = {
+	# 			type = food
+	# 			amount = 2
+	# 		}
+	# 		nor = {
+	# 			has_resource = {
+	# 				type = energy
+	# 				amount > 2
+	# 			}
+	# 			has_resource = {
+	# 				type = minerals
+	# 				amount > 1
+	# 			}
+	# 			has_resource = {
+	# 				type = physics_research
+	# 				amount > 2
+	# 			}
+	# 			has_resource = {
+	# 				type = society_research
+	# 				amount > 2
+	# 			}
+	# 			has_resource = {
+	# 				type = engineering_research
+	# 				amount > 2
+	# 			}
+	# 		}
+	# 	}
+	# 	and = {
+	# 		has_resource = {
+	# 			type = food
+	# 			amount = 1
+	# 		}
+	# 		nor = {
+	# 			has_resource = {
+	# 				type = energy
+	# 				amount > 1
+	# 			}
+	# 			has_resource = {
+	# 				type = minerals
+	# 				amount > 0
+	# 			}
+	# 			has_resource = {
+	# 				type = physics_research
+	# 				amount > 1
+	# 			}
+	# 			has_resource = {
+	# 				type = society_research
+	# 				amount > 1
+	# 			}
+	# 			has_resource = {
+	# 				type = engineering_research
+	# 				amount > 1
+	# 			}
+	# 		}
+	# 	}
+	# }
+}
+
+autobuild_trigger_tile_has_science_more_than_others = {
+	autobuild_trigger_tile_has_strategic_res = no
+	or = {
+		owner = {
+			not = {
+				has_country_flag = autobuild_ignore_science
+			}
+		}
+		planet = {
+			autobuild_trigger_planet_energy = yes
+		}
+	}
+	or = {
+		has_resource = {
+			type = physics_research
+			amount > 4
+		}
+		has_resource = {
+			type = society_research
+			amount > 4
+		}
+		has_resource = {
+			type = engineering_research
+			amount > 4
+		}
+		and = {
+			or = {
+				has_resource = {
+					type = physics_research
+					amount = 4
+				}
+				has_resource = {
+					type = society_research
+					amount = 4
+				}
+				has_resource = {
+					type = engineering_research
+					amount = 4
+				}
+			}
+			nor = {
+				has_resource = {
+					type = energy
+					amount > 4
+				}
+				has_resource = {
+					type = minerals
+					amount > 4
+				}
+			}
+		}
+		and = {
+			or = {
+				has_resource = {
+					type = physics_research
+					amount = 3
+				}
+				has_resource = {
+					type = society_research
+					amount = 3
+				}
+				has_resource = {
+					type = engineering_research
+					amount = 3
+				}
+			}
+			nor = {
+				has_resource = {
+					type = energy
+					amount > 3
+				}
+				has_resource = {
+					type = minerals
+					amount > 3
+				}
+			}
+		}
+		and = {
+			or = {
+				has_resource = {
+					type = physics_research
+					amount = 2
+				}
+				has_resource = {
+					type = society_research
+					amount = 2
+				}
+				has_resource = {
+					type = engineering_research
+					amount = 2
+				}
+			}
+			nor = {
+				has_resource = {
+					type = energy
+					amount > 2
+				}
+				has_resource = {
+					type = minerals
+					amount > 2
+				}
+			}
+		}
+		and = {
+			or = {
+				has_resource = {
+					type = physics_research
+					amount = 1
+				}
+				has_resource = {
+					type = society_research
+					amount = 1
+				}
+				has_resource = {
+					type = engineering_research
+					amount = 1
+				}
+			}
+			nor = {
+				has_resource = {
+					type = energy
+					amount > 1
+				}
+				has_resource = {
+					type = minerals
+					amount > 1
+				}
+			}
+		}
+	}
+}
+
+autobuild_trigger_tile_has_any_minerals = {
+	autobuild_trigger_tile_has_strategic_res = no
+	or = {
+		owner = {
+			not = {
+				has_country_flag = autobuild_ignore_minerals
+			}
+		}
+		planet = {
+			autobuild_trigger_planet_minerals = yes
+		}
+	}
+	has_resource = minerals
+}
+
+# for country
+autobuild_trigger_cost = {
+	minerals > 0
+	or = {
+		not = {
+			has_country_flag = autobuild_cost
+		}
+		and = {
+			has_country_flag = autobuild_cost_20000
+			minerals > 20000
+		}
+		and = {
+			has_country_flag = autobuild_cost_5000
+			minerals > 5000
+		}
+		and = {
+			has_country_flag = autobuild_cost_2500
+			minerals > 2500
+		}
+		and = {
+			has_country_flag = autobuild_cost_1000
+			minerals > 1000
+		}
+		and = {
+			has_country_flag = autobuild_cost_500
+			minerals > 500
+		}
+	}
+	or = {
+		not = {
+			has_global_flag = gf_alphamod_activated
+		}
+		autobuild_trigger_cost_energy = yes
+	}
+}
+
+autobuild_trigger_cost_energy = {
+	energy > 0
+	or = {
+		not = {
+			has_country_flag = autobuild_cost
+		}
+		and = {
+			has_country_flag = autobuild_cost_20000
+			energy > 20000
+		}
+		and = {
+			has_country_flag = autobuild_cost_5000
+			energy > 5000
+		}
+		and = {
+			has_country_flag = autobuild_cost_2500
+			energy > 2500
+		}
+		and = {
+			has_country_flag = autobuild_cost_1000
+			energy > 1000
+		}
+		and = {
+			has_country_flag = autobuild_cost_500
+			energy > 500
+		}
+	}
+}
+
+autobuild_trigger_has_pop = {
+	exists = pop
+	pop = {
+		exists = owner
+		nor = {
+			has_purge_type = {
+				country = owner
+				type = purge_matrix
+			}
+			# с этим дерьмом не пашет
+			# has_purge_type = {
+			# 	country = owner
+			# 	type = purge_normal
+			# }
+			# has_purge_type = {
+			# 	country = owner
+			# 	type = purge_processing
+			# }
+			has_slavery_type = {
+				country = owner
+				type = slavery_matrix
+			}
+			has_slavery_type = {
+				country = owner
+				type = slavery_livestock
+			}
+		}
+	}
+}
+
+autobuild_trigger_tile_is_clean = {
+	has_pop = no
+	has_blocker = no
+}

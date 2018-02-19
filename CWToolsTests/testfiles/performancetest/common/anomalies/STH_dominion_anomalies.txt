@@ -1,0 +1,21 @@
+########################
+##ANOMALY EVENTS ###
+########################
+#potential = ship scope
+
+#All discoveries assigned weight 1. Or not?
+
+# Baby Changeling - Not met Dominion Yet
+anomaly = {
+	event = STH_dominion_story.101
+	category = "STH_the_hundred_category"
+	weight = 1
+	potential = { always = yes }
+}
+
+anomaly = {
+	event = STH_dominion_flavour.2020
+	category = "STH_the_ship_category"
+	weight = 1
+	potential = { always = yes }
+}

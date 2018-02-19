@@ -1,0 +1,113 @@
+defined_text = {
+	name = GetSpyService
+	text = {
+		trigger = { has_country_flag = romulan_star_empire }
+		localization_key = spy_service_tal_shiar
+	}
+	text = {
+		trigger = { has_country_flag = cardassian_union }
+		localization_key = spy_service_obsidian_order
+	}
+	text = {
+		trigger = { OR = { has_country_flag = united_earth has_country_flag = united_federation_of_planets } }
+		localization_key = spy_service_starfleet_intelligence
+	}
+	text = {
+		trigger = { has_country_flag = vulcan_high_command }
+		localization_key = spy_service_v_shar
+	}
+	text = {
+		localization_key = spy_service_fallback ###Annoyingly can't use targets in this?
+	}
+}
+
+defined_text = {
+	name = GetMainEnergyWeapon
+	text = {
+		trigger = { uses_polaron_weapons = yes }
+		localization_key = polaron
+	}
+	text = {
+		trigger = { uses_tetryon_weapons = yes }
+		localization_key = tetryon
+	}
+	text = {
+		trigger = { uses_antiproton_weapons = yes }
+		localization_key = antiproton
+	}
+	text = {
+		trigger = { uses_plasma_weapons = yes }
+		localization_key = plasma
+	}
+	text = {
+		trigger = { uses_disruptor_weapons_any = yes }
+		localization_key = disruptor
+	}
+	text = {
+		trigger = { uses_phaser_weapons_any = yes }
+		localization_key = phaser
+	}
+	text = {
+		localization_key = laser
+	}
+}
+
+defined_text = {
+	name = GetCaptainTitle
+	text = {
+		trigger = { has_country_flag = ferengi_alliance }
+		localization_key = title_daimon
+	}
+	text = {
+		trigger = { OR = { has_country_flag = cardassian_union has_country_flag = hebitian_union has_country_flag = hebitian_country } }
+		localization_key = title_gul
+	}
+	text = {
+		trigger = { has_country_flag = breen_confederacy }
+		localization_key = title_thot
+	}
+	text = {
+		localization_key = title_captain
+	}
+}
+
+defined_text = {
+	name = GetGeneralTitle
+	text = {
+		trigger = { has_country_flag = ferengi_alliance }
+		localization_key = title_saimon
+	}
+	text = {
+		trigger = { OR = { has_country_flag = cardassian_union has_country_flag = hebitian_union has_country_flag = hebitian_country } }
+		localization_key = title_gul
+	}
+	text = {
+		trigger = { has_country_flag = breen_confederacy }
+		localization_key = title_thet
+	}
+	text = {
+		localization_key = title_general
+	}
+}
+
+defined_text = {
+    name = GetDerDieDas
+    text = {
+        trigger = {
+            OR = { DE_loc_der_empires = yes }
+        }
+        localization_key = der
+    }
+    text = {
+        trigger = {
+            OR = { DE_loc_die_empires = yes }
+        }
+        localization_key = die
+    }
+    text = {
+        trigger = {
+            OR = { DE_loc_das_empires = yes }
+        }
+        localization_key = das
+    }
+}

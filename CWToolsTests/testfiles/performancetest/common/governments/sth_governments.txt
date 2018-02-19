@@ -1,0 +1,609 @@
+#gov_example = {
+#	possible = {}							# Determines if a government name can be chosen. AND trigger, scope: country; valid triggers: has_ethic, has_authority, has_civic; everything else is undefined behavior!
+#	weight = {								# scriptable value, scope: country; the (possible) government type with the biggest weight is assigned to the country
+#		base = 100
+#	}
+#
+#	ruler_title = RT_KING					# translation tag for male ruler's title
+#	ruler_title_female = RT_QUEEN			# translation tag for female ruler's title
+#	heir_title = HT_CROWN_PRINCE			# translation tag for male heir's title
+#	heir_title_female = HT_CROWN_PRINCESS	# translation tag for female heir's title
+#	use_regnal_names = yes / no				# default: no
+#	dynastic_last_names = yes / no			# default: no
+#	
+#	election_candidates = {					# scriptable value to weight election candidates for oligarchic elections, scope: leader
+#		modifier = {
+#			add = 1000
+#			leader_class = ruler
+#		}
+#	}
+#}
+
+gov_borg_collective = {
+	ruler_title = RT_BORG_COLLECTIVE
+	possible = {
+		has_authority = auth_cybernetic_consciousness
+		has_valid_civic = civic_assimilators
+	}
+	weight = { 
+		base = 10000
+	}	
+}
+
+# Unique variant of Moral Democracy for Unimatrix Zero borg faction
+gov_borg_unimatrix = {
+	ruler_title = RT_PRIME_MINISTER
+	ruler_title_female = RT_PRIME_MINISTER_FEMALE
+
+	election_candidates = {
+		modifier = {
+			add = 1000
+			leader_class = ruler
+		}
+		modifier = {
+			add = 100
+			OR = {
+				leader_class = scientist
+				leader_class = governor
+			}
+		}
+		modifier = {
+			factor = 0
+			leader_class = admiral
+			leader_class = general
+		}
+	}
+
+	possible = {
+	    has_authority = auth_democratic
+		has_valid_civic = civic_cyber_dreamer
+	}
+
+	weight = { base = 10000 }
+}
+
+# Unique variant of Rational Consensus for Borg Cooperative faction
+gov_borg_cooperative = {
+	ruler_title = RT_FIRST_SPEAKER
+	ruler_title_female = RT_FIRST_SPEAKER_FEMALE
+
+	election_candidates = {
+		modifier = {
+			add = 1000
+			leader_class = ruler
+		}
+		modifier = {
+			add = 100
+			leader_class = scientist
+		}
+	}
+
+	possible = {
+		has_authority = auth_democratic
+		has_valid_civic = civic_cooperative
+	}
+
+	weight = { base = 10000 }
+}
+
+# Unique variant of Divine Empire, for Borg Mechanical Perfection faction
+gov_borg_cyborg = {
+	ruler_title = RT_GOD_EMPEROR
+	ruler_title_female = RT_GOD_EMPRESS
+	heir_title = HT_SAINT
+	heir_title_female = HT_SAINT_FEMALE
+
+	use_regnal_names = yes
+	dynastic_last_names = yes
+
+	possible = {
+		has_authority = auth_imperial
+		has_valid_civic = civic_cult_personality
+	}
+
+	weight = { base = 10000 }
+}
+
+# Unique variant of Divine Empire, for D'Arsay culture
+gov_darsay_converts = {
+	ruler_title = RT_GOD_EMPEROR
+	ruler_title_female = RT_GOD_EMPRESS
+	heir_title = HT_SAINT
+	heir_title_female = HT_SAINT_FEMALE
+
+	use_regnal_names = yes
+	dynastic_last_names = yes
+
+	possible = {
+		has_authority = auth_imperial
+		OR = {
+			has_valid_civic = civic_korgano
+			has_valid_civic = civic_masaka
+		}
+	}
+
+	weight = { base = 10000 }
+}
+
+# Unique variant of Moral Democracy for Kelpian
+gov_elder_council = {
+	ruler_title = RT_HIGH_ELDER
+	ruler_title_female = RT_HIGH_ELDER_FEMALE
+
+	election_candidates = {
+		modifier = {
+			add = 1000
+			leader_class = ruler
+		}
+		modifier = {
+			add = 100
+			OR = {
+				leader_class = scientist
+				leader_class = governor
+			}
+		}
+		modifier = {
+			factor = 0
+			leader_class = admiral
+			leader_class = general
+		}
+	}
+
+	possible = {
+	    has_authority = auth_democratic
+		has_valid_civic = civic_the_herd
+	}
+
+	weight = { base = 10000 }
+}
+
+# Unique rational Consensus variant for tellarite
+gov_deliberative_democracy = {
+	ruler_title = RT_FIRST_SPEAKER
+	ruler_title_female = RT_FIRST_SPEAKER_FEMALE
+
+	election_candidates = {
+		modifier = {
+			add = 1000
+			leader_class = ruler
+		}
+		modifier = {
+			add = 100
+			leader_class = scientist
+		}
+	}
+
+	possible = {
+		has_authority = auth_democratic
+		has_valid_civic = civic_stubborn_pride
+	}
+
+	weight = { base = 10000 }
+}
+
+# Unique Direct Democracy for Andorian
+gov_constitutional_empire = {
+	ruler_title = RT_CHANCELLOR
+	ruler_title_female = RT_CHANCELLOR_FEMALE
+
+	possible = {
+		has_authority = auth_democratic
+		has_valid_civic = civic_imperial_guard
+	}
+
+	weight = { base = 10000 }
+}
+
+# Unique megacorporation variant for Sheliak
+gov_sheliak_corporate = {
+	ruler_title = RT_DIRECTOR
+	ruler_title_female = RT_DIRECTOR_FEMALE
+
+	election_candidates = {
+		modifier = {
+			add = 1000
+			leader_class = ruler
+		}
+		modifier = {
+			add = 100
+			leader_class = governor
+		}
+	}
+
+	possible = {
+		has_authority = auth_oligarchic
+		has_valid_civic = civic_attention_detail
+	}
+
+	weight = { base = 10000 }
+}
+
+### Unique variant of holy tribunal for Voth
+gov_ministry_elder = {
+	ruler_title = RT_REVERED_ELDER
+	ruler_title_female = RT_REVERED_ELDER_FEMALE
+
+	election_candidates = {
+		modifier = {
+			add = 100
+			leader_class = ruler
+		}
+		modifier = {
+			add = 10
+			leader_class = governor
+		}
+	}
+
+	possible = {
+		has_authority = auth_oligarchic
+		has_valid_civic = civic_distant_origins
+	}
+
+	weight = { base = 10000 }
+}
+
+### Unique variant of Irenic Bureaucracy for Skeera
+gov_circle_matrons = {
+	ruler_title = RT_FATHER
+	ruler_title_female = RT_FATHER_FEMALE
+
+	election_candidates = {
+		modifier = {
+			add = 100
+			leader_class = ruler
+		}
+		modifier = {
+			add = 10
+			OR = {
+				leader_class = scientist
+				leader_class = governor
+			}
+		}
+		modifier = {
+			factor = 0
+			leader_class = admiral
+			leader_class = general
+		}
+	}
+
+	possible = {
+		has_authority = auth_oligarchic
+		has_valid_civic = civic_matriarchy
+	}
+
+	weight = { base = 10000 }
+}
+
+### unique variant of Science Directorate for Hur'Q
+gov_curator_council = {
+	ruler_title = RT_CURATOR
+	ruler_title_female = RT_CURATOR_FEMALE
+
+	election_candidates = {
+		modifier = {
+			add = 100
+			leader_class = ruler
+		}
+		modifier = {
+			add = 10
+			leader_class = scientist
+		}
+	}
+
+	possible = {
+		has_authority = auth_oligarchic
+		has_valid_civic = civic_museums
+	}
+
+	weight = { base = 10000 }
+}
+
+# Unique Krenim variant of Illuminated Autocracy
+gov_krenim_imperium = {
+	ruler_title = RT_EMPEROR
+	ruler_title_female = RT_EMPRESS
+	heir_title = HT_CROWN_PRINCE
+	heir_title_female = HT_CROWN_PRINCESS
+
+	use_regnal_names = yes
+	dynastic_last_names = yes
+
+	possible = {
+		has_authority = auth_imperial
+		has_valid_civic = civic_master_time
+	}
+
+	weight = { base = 10000 }
+}
+
+# Romulan Senate, unique Romulan replacement for Citizen Stratocracy
+gov_romulan_senate = {
+	ruler_title = RT_PRAETOR
+	ruler_title_female = RT_PRAETOR_FEMALE
+
+	election_candidates = {
+		modifier = {
+			add = 1000
+			leader_class = ruler
+		}
+		modifier = {
+			add = 100
+			OR = {
+				leader_class = admiral
+				leader_class = general
+				leader_class = governor
+			}
+		}
+		modifier = {
+			factor = 0
+			leader_class = scientist
+		}
+	}
+
+	possible = {
+		has_authority = auth_oligarchic
+		has_valid_civic = civic_born_of_order
+	}
+
+	weight = { base = 10000 }
+}
+
+# Bajoran Vedek Assembly, unique replacement to Holy Tribunal
+gov_vedek_assembly = {
+	ruler_title = RT_BAJORAN
+	ruler_title_female = RT_BAJORAN_FEMALE
+
+	election_candidates = {
+		modifier = {
+			add = 1000
+			leader_class = ruler
+		}
+		modifier = {
+			add = 100
+			leader_class = governor
+		}
+	}
+
+	possible = {
+		has_authority = auth_oligarchic
+		has_valid_civic = civic_prophet_1
+	}
+
+	weight = { base = 10000 }
+}
+
+# Detapa Civilian Council - Cardassian only variant of Junta
+gov_detapa_council = {
+	ruler_title = RT_LEGATE
+	ruler_title_female = RT_LEGATE_FEMALE
+
+	election_candidates = {
+		modifier = {
+			add = 1000
+			leader_class = ruler
+		}
+		modifier = {
+			add = 100
+			OR = {
+				leader_class = admiral
+				leader_class = general
+			}
+		}
+	}
+
+	possible = {
+		has_authority = auth_oligarchic
+		has_valid_civic = civic_obsidian_order	
+	}
+
+	weight = { base = 10000 }
+}
+
+# Medical Directorate - special Vidiian alternative to science directorate
+gov_medical_directorate = {
+	ruler_title = RT_MD
+	ruler_title_female = RT_MD_FEMALE
+
+	election_candidates = {
+		modifier = {
+			add = 1000
+			leader_class = ruler
+		}
+		modifier = {
+			add = 100
+			leader_class = scientist
+		}
+	}
+
+	possible = {
+		has_authority = auth_oligarchic
+		has_valid_civic = civic_unrelenting_struggle
+	}
+
+	weight = { base = 10000 }
+}
+
+# Unique variant of megacorporation, for Ferengi
+gov_ferengi_board = {
+	ruler_title = RT_NAGUS
+	ruler_title_female = RT_NAGUS_FEMALE
+
+	election_candidates = {
+		modifier = {
+			add = 1000
+			leader_class = ruler
+		}
+		modifier = {
+			add = 100
+			leader_class = governor
+		}
+	}
+
+	possible = {
+		has_valid_civic = civic_ritualized_greed
+	}
+
+	weight = { base = 10000 }
+}
+
+
+# Dominion only
+gov_great_link = {
+	ruler_title = RT_FOUNDER
+	ruler_title_female = RT_FOUNDER_FEMALE
+
+	possible = {
+		has_authority = auth_great_link
+	}
+
+	weight = { base = 10000 }
+}
+
+# High Council - klingon only variant of war council
+gov_high_council = {
+	ruler_title = RT_CHANCELLOR
+	ruler_title_female = RT_CHANCELLOR_FEMALE
+
+	election_candidates = {
+		modifier = {
+			add = 1000
+			leader_class = ruler
+		}
+		modifier = {
+			add = 100
+			OR = {
+				leader_class = admiral
+				leader_class = general
+			}
+		}
+	}
+
+	possible = {
+		has_authority = auth_oligarchic
+		has_valid_civic = civic_great_houses
+	}
+
+	weight = { base = 10000 }
+}
+
+# Tholian only variant of Citizen Stratocracy
+gov_ruling_conclave = {
+	ruler_title = RT_THOLIAN
+	ruler_title_female = RT_THOLIAN_FEMALE
+
+	election_candidates = {
+		modifier = {
+			add = 1000
+			leader_class = ruler
+		}
+		modifier = {
+			add = 100
+			OR = {
+				leader_class = admiral
+				leader_class = general
+			}
+		}
+	}
+
+	possible = {
+		has_authority = auth_oligarchic
+		has_valid_civic = civic_perfect_memory
+	}
+
+	weight = { base = 10000 }
+}
+
+# Chernoite only variant of Executive Committee
+gov_commission = {
+	ruler_title = RT_CEO
+	ruler_title_female =  RT_CEO_FEMALE
+
+	possible = {
+		has_authority = auth_oligarchic
+		has_valid_civic = civic_black_right_side
+	}
+
+	weight = { base = 10000 }
+}
+
+# Virtual Democracy, unique Bynar variant of moral democracy
+gov_virtual_democracy = {
+	ruler_title = RT_BYNAR
+	ruler_title_female = RT_BYNAR_FEMALE
+
+	election_candidates = {
+		modifier = {
+			add = 1000
+			leader_class = ruler
+		}
+		modifier = {
+			add = 100
+			OR = {
+				leader_class = scientist
+				leader_class = governor
+			}
+		}
+		modifier = {
+			factor = 0
+			leader_class = admiral
+			leader_class = general
+		}
+	}
+
+	possible = {
+		has_valid_civic = civic_duality
+	}
+
+	weight = { base = 10000 }
+}
+
+# Federal Republic, unique Moral Democracy variant for United Earth
+gov_federal_republic = {
+	ruler_title = RT_PRIME_MINISTER
+	ruler_title_female = RT_PRIME_MINISTER_FEMALE
+
+	election_candidates = {
+		modifier = {
+			add = 1000
+			leader_class = ruler
+		}
+		modifier = {
+			add = 100
+			OR = {
+				leader_class = scientist
+				leader_class = governor
+			}
+		}
+		modifier = {
+			factor = 0
+			leader_class = admiral
+			leader_class = general
+		}
+	}
+
+		possible = {
+		has_valid_civic = civic_post_scarcity
+	}
+
+	weight = { base = 10000 }
+}
+
+gov_ufp_sector = {
+	ruler_title = RT_GOVERNOR
+	possible = { has_authority = auth_federation_sector }
+	weight = { base = 10000 }
+}
+
+# Ancient Democracy - unique variant of Stagnant Ascendancy for First Federation
+gov_stagnant_democracy = {
+	ruler_title = RT_PRESIDENT
+	ruler_title_female = RT_PRESIDENT_FEMALE
+
+	possible = {
+		has_valid_civic = civic_lethargic_democracy
+	}
+
+	weight = {
+		base = 100000
+	}
+}

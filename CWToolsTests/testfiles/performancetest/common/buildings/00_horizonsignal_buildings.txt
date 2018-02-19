@@ -1,0 +1,219 @@
+@b0time = 120
+@b0cost = 30
+@b0effect = 1
+@b0upkeep = 0.5
+
+@b1time = 210
+@b1cost = 60
+@b1effect = 2
+@b1upkeep = 1
+
+@b2time = 180
+@b2cost = 90
+@b2effect = 3
+@b2upkeep = 1.5
+
+@b3time = 180
+@b3cost = 120
+@b3effect = 4
+@b3upkeep = 2
+
+@b4time = 180
+@b4cost = 150
+@b4effect = 5
+@b4upkeep = 2.5
+
+@b5time = 180
+@b5cost = 180
+@b5effect = 8
+@b5upkeep = 3
+
+@feupkeep = 4
+@feproduction = 12
+
+@science1 = 1
+@science2 = 2
+@science3 = 3
+@science4 = 4
+@science5 = 6
+
+#
+#	THE WORM-IN-WAITING
+#
+
+building_akx_worm_1 = {
+	base_buildtime = @b3time
+	is_listed = yes
+	planet_unique = yes
+	
+	cost = {
+		minerals = @b3cost
+	}
+	
+	potential = {
+		#planet = { is_capital = yes }
+	}
+	
+	allow = { always = no }
+
+	planet_modifier  = {
+		tile_resource_energy_mult = 0.20
+		pop_happiness = -0.05
+	}
+
+	produced_resources = {
+		energy = 6
+	}
+	
+	prerequisites = {
+		"tech_akx_worm_1"
+	}
+	
+	ai_allow = {
+		# NOR = {
+			# has_resource = {
+				# type = sr_betharian
+				# amount > 0
+			# }	
+			# has_resource = {
+				# type = sr_alien_pets
+				# amount > 0
+			# }				
+		# }
+	}
+	
+	ai_weight = {
+		factor = 10
+	}
+}
+
+building_akx_worm_2 = {
+	base_buildtime = @b3time
+	is_listed = yes
+	planet_unique = yes
+	
+	cost = {
+		minerals = @b3cost
+	}
+	
+	potential = {
+		#planet = { is_capital = yes }
+	}	
+	
+	allow = { always = no }
+
+	produced_resources = {
+		society_research = 8
+	}
+
+	planet_modifier  = {
+		pop_government_ethic_attraction = 0.05
+		pop_happiness = 0.05
+	}
+	
+	required_resources = {
+		energy = @b3upkeep
+	}
+	
+	prerequisites = {
+		"tech_akx_worm_2"
+	}
+	
+	ai_allow = {
+		# NOR = {
+			# has_resource = {
+				# type = sr_betharian
+				# amount > 0
+			# }	
+			# has_resource = {
+				# type = sr_alien_pets
+				# amount > 0
+			# }				
+		# }
+	}
+	
+	ai_weight = {
+		factor = 10
+	}
+}
+
+building_akx_worm_3 = {
+	base_buildtime = @b5time
+	is_listed = yes
+	empire_unique = yes
+	
+	cost = {
+		minerals = @b3cost
+	}
+	
+	potential = {
+	}	
+	
+	allow = { always = no }
+
+	produced_resources = {
+		physics_research = 10
+	}
+
+	planet_modifier  = {
+	}
+	
+	required_resources = {
+		energy = @b5upkeep
+	}
+	
+	prerequisites = {
+		"tech_akx_worm_3"
+	}
+	
+	ai_allow = {
+		# NOR = {
+			# has_resource = {
+				# type = sr_betharian
+				# amount > 0
+			# }	
+			# has_resource = {
+				# type = sr_alien_pets
+				# amount > 0
+			# }				
+		# }
+	}
+	
+	ai_weight = {
+		factor = 10
+	}
+}
+
+building_worm_mine = {
+	is_listed = no
+	
+	allow = { always = no }
+	
+	produced_resources = {
+		minerals = @feproduction
+	}
+	
+	required_resources = {
+		energy = @b3upkeep
+	}
+	
+	ai_replace = no
+	event_building = yes
+}
+
+building_worm_farm = {
+	is_listed = no
+	
+	allow = { always = no }
+	
+	produced_resources = {
+		food = @feproduction
+	}
+	
+	required_resources = {
+		energy = @b3upkeep
+	}
+	
+	ai_replace = no
+	event_building = yes
+}

@@ -1,0 +1,94 @@
+﻿### Ferengi Alliance
+Ferengi = {
+	randomized = no
+
+	ship_names = {
+		generic = {
+			D'Kora Nagus Nandi Fiscal Pareto Credit Marauder Abundance Acquisition Actuary Adeel Affidavit Affluence Allotment Alltier Amortize Andrion Annex Annuity Appraiser Arbitrage Arbitration Arrears Asin Assay Assessor Auditor Avarice Avonia Bestan Bokira Bovris Braktel Capitalist Chulebas Climmakral Client Commerce Commission Company Compound Contrarian Contribution Credit Crell Dalion Deyer Domu Dussooron Edja Krannek Garvan Hartan Hester Himpos Igen Karluk Keechvar Kekron Kimel-Mirom Korr Kraalor Kramora Krayton Krayvis Kreechta Kyrasam "Latinum Queen" "Leveraged Buyout" Margin Merchant Merger Mes-Vatra Moori Nam-Breth Negotiator Notary Ob-Strori Oetalgolor Ondik Preekon Qartum Rard-Pis "Rational Profit" "Seventy-Fifth Rule" Soodii Tadinia Tampanium Tenyt Tinnarr Togram Usotroo Varkart Venture Wealth Windfall
+		}
+		corvette = {
+		}
+		saber = {
+		}
+		sovereign = {
+		}
+		steamrunner = {
+		}		
+		adv_cruiser = {
+		}
+		strike = {
+		}			
+		outpost_station = {
+			sequential_name = "Frontier Outpost"
+		}
+	}
+
+
+	fleet_names = {
+		sequential_name = "%O% Privateers"
+	}
+	
+	army_names = {
+		defense_army = {
+			sequential_name = "%O% Domestic Guard"
+		}
+		assault_army = {
+			sequential_name = "%O% Mauraders"
+		}
+		slave_army = {
+			sequential_name = "%O% Indentured Phasers"
+		}
+		clone_army = { 
+			sequential_name = "%O% Clone Mauraders"
+		}
+		robotic_army = {
+			sequential_name = "%O% Mechanical Mauraders"
+		}
+		android_army = {
+			sequential_name = "%O% Synthetic Mauraders"
+		}
+		psionic_army = { 
+			sequential_name = "%O% Psi Mauraders"
+		}
+		xenomorph_army = {
+			sequential_name = "%O% Bio-Warfare Mauraders"
+		}
+		gene_warrior_army = {
+			sequential_name = "%O% Bio-Engineered Mauraders"
+		}
+	}
+
+	planet_names = {
+		generic = {
+			names = { Drasax Groont Gorik Frirot Neramag Falelok Raxor Besh Igerin Stozig Zerigis Unisha Kaxen Unirni Birari Gelirona Losak Nosicera Nemocis Kellape Karavar Gorik Argatek Gnamra Decar Onak Broimag Grarrot Halok Zerot Kiga Pehakis Helape Namaba Krenni Tilalina Renarles Lerarra Krecis Kirles Krarrot Glant Monk Zebac Orator Fnarot Torrop Glarrot Zylaron Horanog
+			}
+		}
+	}
+
+
+	### CHARACTERS
+
+	character_names = {
+		names1 = {
+			weight = 100
+			first_names_male = {
+				Adred Arridor Barbo Belongo Berik Birta Bok Bractor Brak Broik Brunt Farek Frin Frool Gaila Gant Gegis Gint Gorad Goss Gral Grimp Grish Hoex Igel Kayron Kazago Keldar Kol Kono Krax Krem Kro Leck "Par Lenor" Letek Lonzo Lurin Mordoc Morta Muk Nava Nibor Nilva Nog Nunk Omag Orpax Plegg Prak Qol Quark Rata Reyga Rom Smeet Solok Sovak Stol Tarr Tog Tol Torrot Turot Tye Ulis Yeggie Zek Fnat Berr Ugrota Srano Ordaga Mulva Rhas Derin Ozaxon Peraba Fracar Famag Kress
+			}
+			first_names_female = {
+				Ishka Pel Prinadora Lumba Ishkadora Lumbadora Peladora Prin Nisha Qolshka Frolshka Frinadora Gel Beladora Bel Grishka Koladora Arridora Hoshka Orshka Kazshka Rey Sol Sov Sto Stoladora Let Gin Bir Bractadora Birshka Lade Pall Decine Beerles Remadel Bligena Belagis Isapia Fesatis Gak Hialea Irogis Ak Belera Atis Nialea Pehavira Remar Bose Fianka Isarra Nosipe Hide Selasha Fesakia Yeme Belakia Beeres Rikale Nemata Sill Nemodel Rosane Ararles Tirone Daxen
+			}
+			second_names = {
+				" "
+			}
+			regnal_first_names_male = {
+				Adred Arridor Barbo Belongo Berik Birta Bok Bractor Brak Broik Brunt Farek Frin Frool Gaila Gant Gegis Gint Gorad Goss Gral Grimp Grish Hoex Igel Kayron Kazago Keldar Kol Kono Krax Krem Kro Leck "Par Lenor" Letek Lonzo Lurin Mordoc Morta Muk Nava Nibor Nilva Nog Nunk Omag Orpax Plegg Prak Qol Quark Rata Reyga Rom Smeet Solok Sovak Stol Tarr Tog Tol Torrot Turot Tye Ulis Yeggie Zek Fnat Berr Ugrota Srano Ordaga Mulva Rhas Derin Ozaxon Peraba Fracar Famag Kress 
+			}
+			regnal_first_names_female = {
+				Ishka Pel Prinadora Lumba Ishkadora Lumbadora Peladora Prin Nisha Qolshka Frolshka Frinadora Gel Beladora Bel Grishka Koladora Arridora Hoshka Orshka Kazshka Rey Sol Sov Sto Stoladora Let Gin Bir Bractadora Birshka Lade Pall Decine Beerles Remadel Bligena Belagis Isapia Fesatis Gak Hialea Irogis Ak Belera Atis Nialea Pehavira Remar Bose Fianka Isarra Nosipe Hide Selasha Fesakia Yeme Belakia Beeres Rikale Nemata Sill Nemodel Rosane Ararles Tirone Daxen				
+			}
+			regnal_second_names = {
+				" "
+			}
+		}
+	}
+}

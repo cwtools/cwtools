@@ -1,0 +1,530 @@
+#Xindi Spawn System
+kolea = {
+	name = "Kolea"
+	class = sc_g
+	planet = { name = "Kolea" class = star size = 41 orbit_distance = 0 orbit_angle = 1 has_ring = no }
+	planet = {
+		name = "Vei"
+		class = "pc_toxic"
+		orbit_distance = 15.2
+		orbit_angle = 125
+		size = 15
+		has_ring = no
+		init_effect = { set_planet_flag = kolea_vei orbital_deposit_tile = { clear_deposits = yes add_deposit = d_sr_trellium_1_deposit } }
+	}
+}
+
+xindi_homeworld = {
+	name = "Azati"
+	class = sc_g
+	flags = { xindi_homeworld }
+	init_effect = { log = "xindi homeworld" }
+	usage = custom_empire
+	max_instances = 1
+	planet = { name = "Azati" class = star size = 30 orbit_distance = 0 orbit_angle = 1 has_ring = no }
+	change_orbit = { min = 30 max = 40}
+	planet = { name = "Azati I" class = "pc_b_class" size = 8 orbit_angle = { min = 45 max = 270 } has_ring = no }
+	change_orbit = { min = 20 max = 30 }
+	planet = {
+		name = "Azati II"
+		class = "pc_b_class"
+		size = 8
+		orbit_angle = { min = 45 max = 270 }
+		has_ring = no
+		init_effect = { orbital_deposit_tile = { clear_deposits = yes add_deposit = d_sr_trellium_1_deposit } }
+	}
+	change_orbit = { min = 20 max = 30}
+	planet = {
+		name = "Azati Prime"
+		class = "pc_ocean"
+		size = 25
+		orbit_angle = { min = 45 max = 270 }
+		starting_planet = yes
+		tile_blockers = none
+		has_ring = no
+		init_effect = {
+			prevent_anomaly = yes
+			if = {
+				limit = { NOT = { any_country = { has_country_flag = xindi_council } } }
+				create_species = { 
+					name = "Xindi-Primate"
+					class = XINMAM 
+					portrait = xindi_mammalian 
+					homeworld = THIS 
+					traits = { 
+						trait = "trait_xindi"
+						trait = "trait_fragmented"
+						trait = "trait_survivor"
+						trait = "trait_sedentary"
+						ideal_planet_class = "pc_continental" 
+					} 
+				}
+				last_created_species = { save_global_event_target_as = xindi_mammalian }
+				create_country = {
+					name = NAME_xindi_council
+					type = default
+					ignore_initial_colony_error = yes
+					civics = { civic = "civic_convergent_evolution" civic = "civic_shadow_council" }
+					authority = auth_oligarchic
+					name_list = "XINMAM"
+					ethos = { ethic = "ethic_xenophobe" ethic = "ethic_authoritarian" ethic = "ethic_materialist" }
+					species = event_target:xindi_mammalian
+					flag = {
+						icon = { category="trek" file="xindi.dds" }
+						background = { category="backgrounds" file="00_solid.dds" }
+						colors={ "green" "black" "null" "null" }
+					}
+					ship_prefix="XCV"
+					effect = {
+						set_graphical_culture = xindi_01
+						set_country_flag = xindi_council
+						set_country_flag = custom_start_screen
+						set_country_flag = generic_ent
+						set_country_flag = alpha_beta_empire
+						set_country_flag = init_spawned
+						set_country_flag = no_spawn
+						save_global_event_target_as = xindi_council
+					}
+				}
+				create_colony = { owner = event_target:xindi_council species = event_target:xindi_mammalian ethos = owner }
+			}
+			set_capital = yes
+			random_country = {
+				limit = { has_country_flag = xindi_council }
+				add_appropriate_start_techs = yes
+				species	= { save_global_event_target_as = xindi_mammalian  }
+				save_global_event_target_as = xindi_council
+			}
+			if = {
+				limit = { exists = event_target:xindi_mammalian }
+				if = { 
+					limit = { NOT = { exists = event_target:xindi_reptilian } }
+					create_species = { 
+						name = "Xindi-Reptilian" 
+						class = XINREP 
+						portrait = xindi_reptilian
+						name_list = "XINREP"						
+						homeworld = THIS 
+						traits = { 
+							trait = "trait_xindi"
+							trait = "trait_fragmented"
+							trait = "trait_reptilian"
+							trait = "trait_very_strong" 
+							ideal_planet_class = "pc_tropical" 
+						} 
+					}
+					last_created_species = { save_global_event_target_as = xindi_reptilian set_species_identity = event_target:xindi_mammalian }
+				}
+				if = { 
+					limit = { NOT = { exists = event_target:xindi_insectoid } }
+					create_species = { 
+						name = "Xindi-Insectoid" 
+						class = XININS 
+						portrait = xindi_insectoid 
+						homeworld = THIS 
+						name_list = "XININS"
+						traits = { 
+							trait = "trait_xindi" 
+							trait = "trait_fragmented"
+							trait = "trait_highly_industrious"
+							trait = "trait_natural_engineers"
+							trait = "trait_short_lived"
+							ideal_planet_class = "pc_arid" 
+						} 
+					}
+					last_created_species = { save_global_event_target_as = xindi_insectoid set_species_identity = event_target:xindi_mammalian }
+				}
+				if = { 
+					limit = { NOT = { exists = event_target:xindi_arboreal } }
+					create_species = { 
+						name = "Xindi-Arboreal" 
+						class = XINARB 
+						portrait = xindi_arboreal 
+						homeworld = THIS 
+						traits = { 
+							trait = "trait_xindi"
+							trait = "trait_fragmented"
+							trait = "trait_natural_sociologists"
+							trait = "trait_agrarian"
+							ideal_planet_class = "pc_tropical"
+						} 
+					}
+					last_created_species = { save_global_event_target_as = xindi_arboreal set_species_identity = event_target:xindi_mammalian }
+				}
+				if = { 
+					limit = { NOT = { exists = event_target:xindi_aquatic } }
+					create_species = { 
+						name = "Xindi-Aquatic" 
+						class = XINAQU 
+						portrait = xindi_aquatic 
+						homeworld = THIS 
+						name_list = "XINAQU"
+						traits = { 
+							trait = "trait_xindi"
+							trait = "trait_fragmented"
+							trait = "trait_natural_physicists"
+							trait = "trait_intelligent"
+							ideal_planet_class = "pc_ocean"
+						} 
+					}
+					last_created_species = { save_global_event_target_as = xindi_aquatic set_species_identity = event_target:xindi_mammalian }
+				}
+				event_target:xindi_council = {
+					species = { save_global_event_target_as = xindi_mammalian }
+					log = "xindi homeworld pre citzenships"
+					event_target:xindi_mammalian = { set_citizenship_type = { country = event_target:xindi_council type = citizenship_full } }
+					event_target:xindi_reptilian = { set_citizenship_type = { country = event_target:xindi_council type = citizenship_full } }
+					event_target:xindi_insectoid = { set_citizenship_type = { country = event_target:xindi_council type = citizenship_full } }
+					event_target:xindi_arboreal = { set_citizenship_type = { country = event_target:xindi_council type = citizenship_full } }
+					event_target:xindi_aquatic = { set_citizenship_type = { country = event_target:xindi_council type = citizenship_full } }
+				}
+				set_owner = event_target:xindi_council
+				generate_major_empire_start_buildings = yes
+				random_tile = {
+					limit = { has_blocker = no has_grown_pop = no has_growing_pop = no }
+					create_pop = { species = event_target:xindi_reptilian }
+				}
+				random_tile = {
+					limit = { has_blocker = no has_grown_pop = no has_growing_pop = no }
+					create_pop = { species = event_target:xindi_insectoid }
+				}
+				random_tile = {
+					limit = { has_blocker = no has_grown_pop = no has_growing_pop = no }
+					create_pop = { species = event_target:xindi_arboreal }
+				}
+				random_tile = {
+					limit = { has_blocker = no has_grown_pop = no has_growing_pop = no }
+					create_pop = { species = event_target:xindi_aquatic }
+				}
+				random_tile = {
+					limit = { has_blocker = no has_building = no }
+					add_deposit = d_engineering_deposit	
+				}
+				random_tile = {
+					limit = { has_blocker = no has_building = no }
+					add_deposit = d_society_deposit			
+				}
+				random_tile = {
+					limit = { has_blocker = no has_building = no }
+					add_deposit = d_physics_deposit				
+				}
+				every_tile = {
+					limit = { has_blocker = no has_grown_pop = no has_growing_pop = no }
+					random_list = {
+						10 =  { create_pop = { species = event_target:xindi_aquatic } }
+						10 =  { create_pop = { species = event_target:xindi_mammalian } }
+						10 =  { create_pop = { species = event_target:xindi_arboreal } }
+						10 =  { create_pop = { species = event_target:xindi_insectoid } }
+						10 =  { create_pop = { species = event_target:xindi_reptilian } }
+					}
+				}
+				generate_major_empire_start_fleets = yes
+				set_name = "Azati Prime"
+			}
+		}	
+	}
+}
+
+xindi_system_event_spawn = {
+	name = "Azati"
+	class = sc_g
+	flags = { xindi_homeworld }
+	init_effect = { log = "xindi spawn homeworld" }
+	planet = { 
+		name = "Azati" class = star size = 30 orbit_distance = 0 orbit_angle = 1 has_ring = no
+	}
+	change_orbit = { min = 30 max = 40}
+	planet = { 
+		name = "Azati I" class = "pc_b_class" size = 8 orbit_angle = { min = 45 max = 270 } has_ring = no 
+	}
+	change_orbit = { min = 20 max = 30 }
+	planet = {
+		name = "Azati II"
+		class = "pc_b_class"
+		size = 8
+		orbit_angle = { min = 45 max = 270 }
+		has_ring = no
+		init_effect = { orbital_deposit_tile = { clear_deposits = yes add_deposit = d_sr_trellium_1_deposit } }
+	}
+	change_orbit = { min = 20 max = 30}
+	planet = {
+		name = "Azati Prime"
+		class = "pc_ocean"
+		size = 25
+		orbit_angle = { min = 45 max = 270 }
+		starting_planet = yes
+		tile_blockers = none
+		has_ring = no
+		init_effect = {
+			prevent_anomaly = yes			
+			if = {
+				limit = { NOT = { any_country = { has_country_flag = xindi_council } } }
+				create_species = { 
+					name = "Xindi-Primate" 
+					class = XINMAM 
+					portrait = xindi_mammalian 
+					homeworld = THIS 
+					traits = { 
+						trait="trait_survivor"
+						trait="trait_sedentary"
+						trait="trait_fragmented"
+						trait="trait_xindi"
+						ideal_planet_class = "pc_continental" 
+					} 
+				}
+				last_created_species = { save_global_event_target_as = xindi_mammalian }
+				create_species = { 
+					name = "Xindi-Reptilian" 
+					class = XINREP 
+					portrait = xindi_reptilian 
+					homeworld = THIS 
+					traits = { 
+						trait = "trait_xindi"
+						trait = "trait_fragmented"
+						trait = "trait_reptilian"
+						trait = "trait_very_strong" 
+						ideal_planet_class = "pc_tropical" 
+					} 
+				}
+				last_created_species = { save_global_event_target_as = xindi_reptilian set_species_identity = event_target:xindi_mammalian }
+				create_species = { 
+					name = "Xindi-Insectoid" 
+					class = XININS 
+					portrait = xindi_insectoid 
+					homeworld = THIS 
+					traits = { 
+						trait = "trait_xindi" 
+						trait = "trait_fragmented"
+						trait = "trait_highly_industrious"
+						trait = "trait_natural_engineers"
+						trait = "trait_short_lived"
+						ideal_planet_class = "pc_arid" 
+					} 
+				}
+				last_created_species = { save_global_event_target_as = xindi_insectoid set_species_identity = event_target:xindi_mammalian }
+				create_species = { 
+					name = "Xindi-Arboreal" 
+					class = XINARB 
+					portrait = xindi_arboreal 
+					homeworld = THIS 
+					traits = { 
+						trait = "trait_xindi"
+						trait = "trait_fragmented"
+						trait = "trait_natural_sociologists"
+						trait = "trait_agrarian"
+						ideal_planet_class = "pc_tropical" 
+					} 
+				}
+				last_created_species = { save_global_event_target_as = xindi_arboreal set_species_identity = event_target:xindi_mammalian }
+				create_species = { 
+					name = "Xindi-Aquatic" 
+					class = XINAQU 
+					portrait = xindi_aquatic 
+					homeworld = THIS 
+					traits = { 
+						trait = trait_xindi 
+						trait="trait_fragmented"
+						trait = trait_natural_engineers 
+						trait = trait_industrious 
+						ideal_planet_class = "pc_ocean" 
+					} 
+				}
+				last_created_species = { save_global_event_target_as = xindi_aquatic set_species_identity = event_target:xindi_mammalian }
+				create_country = {
+					name = NAME_xindi_council
+					type = default
+					ignore_initial_colony_error = yes
+					civics = { civic = "civic_convergent_evolution" civic = "civic_shadow_council" }
+					authority = auth_oligarchic
+					name_list = "MAM1"
+					ethos = { ethic = "ethic_xenophobe" ethic = "ethic_authoritarian" ethic = "ethic_materialist" }
+					species = event_target:xindi_mammalian
+					flag = {
+						icon = { category="trek" file="xindi.dds" }
+						background = { category="backgrounds" file="00_solid.dds" }
+						colors={ "green" "black" "null" "null" }
+					}
+					ship_prefix="XCS"
+					effect = {
+						set_graphical_culture = xindi_01
+						set_country_flag = xindi_council
+						set_country_flag = custom_start_screen
+						set_country_flag = generic_ent
+						set_country_flag = alpha_beta_empire
+						set_country_flag = init_spawned
+						set_country_flag = no_spawn
+						save_global_event_target_as = xindi_council
+					}
+				}
+				create_colony = { owner = event_target:xindi_council species = event_target:xindi_mammalian ethos = owner }
+			}
+			set_capital = yes
+			random_country = {
+				limit = { has_country_flag = xindi_council }
+				save_global_event_target_as = xindi_council
+			}
+			if = {
+				limit = { exists = event_target:xindi_council }
+				event_target:xindi_council = { species = { save_global_event_target_as = xindi_mammalian} }
+				if = { 
+					limit = { NOT = { exists = event_target:xindi_reptilian } }
+					create_species = { 
+					name = "Xindi-Reptilian" 
+					class = XINREP 
+					portrait = xindi_reptilian 
+					homeworld = THIS 
+					traits = { 
+						trait = trait_xindi 
+						trait="trait_fragmented"
+						trait = trait_very_strong 
+						ideal_planet_class = "pc_tropical" 
+						} 
+					}
+					last_created_species = { save_global_event_target_as = xindi_reptilian set_species_identity = event_target:xindi_mammalian }
+				}
+				if = { 
+					limit = { NOT = { exists = event_target:xindi_insectoid } }
+					create_species = { 
+					name = "Xindi-Insectoid" 
+					class = XININS 
+					portrait = xindi_insectoid 
+					homeworld = THIS 
+					traits = { 
+						trait = trait_xindi 
+						trait="trait_fragmented"
+						trait = trait_rapid_breeders 
+						trait = trait_strong 
+						trait = trait_natural_engineers 
+						ideal_planet_class = "pc_arid" 
+						} 
+					}
+					last_created_species = { save_global_event_target_as = xindi_insectoid set_species_identity = event_target:xindi_mammalian }
+				}
+				if = { 
+					limit = { NOT = { exists = event_target:xindi_arboreal } }
+					create_species = { 
+					name = "Xindi-Arboreal" 
+					class = XINARB 
+					portrait = xindi_arboreal 
+					homeworld = THIS 
+					traits = { 
+						trait = trait_xindi 
+						trait="trait_fragmented"
+						trait = trait_natural_engineers 
+						trait = trait_industrious 
+						ideal_planet_class = "pc_tropical" 
+						} 
+					}
+					last_created_species = { save_global_event_target_as = xindi_arboreal set_species_identity = event_target:xindi_mammalian }
+				}
+				if = { 
+					limit = { NOT = { exists = event_target:xindi_aquatic } }
+					create_species = { 
+					name = "Xindi-Aquatic" 
+					class = XINAQU 
+					portrait = xindi_aquatic 
+					homeworld = THIS 
+					traits = { 
+						trait = "trait_xindi"
+						trait = "trait_fragmented"
+						trait = "trait_natural_physicists"
+						trait = "trait_intelligent"
+						ideal_planet_class = "pc_ocean" 
+						} 
+					}
+					last_created_species = { save_global_event_target_as = xindi_aquatic set_species_identity = event_target:xindi_mammalian }
+				}
+				random_country = {
+					limit = { has_country_flag = xindi_council }
+					save_global_event_target_as = xindi_council
+					add_appropriate_start_techs = yes
+					species = { save_global_event_target_as = xindi_mammalian }
+					event_target:xindi_mammalian = { set_citizenship_type = { country = prev type = citizenship_full } }
+					event_target:xindi_reptilian = { set_citizenship_type = { country = prev type = citizenship_full } }
+					event_target:xindi_insectoid = { set_citizenship_type = { country = prev type = citizenship_full } }
+					event_target:xindi_arboreal = { set_citizenship_type = { country = prev type = citizenship_full } }
+					event_target:xindi_aquatic = { set_citizenship_type = { country = prev type = citizenship_full } }
+				}
+				set_owner = event_target:xindi_council
+				random_tile = {
+					limit = { has_blocker = no has_building = no num_adjacent_tiles > 3 }
+					set_building = "building_capital_1"
+					add_deposit = d_energy_deposit
+					create_pop = { species = event_target:xindi_mammalian }				
+					random_neighboring_tile = {
+						limit = { has_blocker = no has_building = no }
+						set_building = "building_hydroponics_farm_1"
+						add_deposit = d_farmland_deposit						
+					}
+					random_neighboring_tile = {
+					limit = { has_blocker = no has_building = no }
+					set_building = "building_hydroponics_farm_1"
+					add_deposit = d_energy_deposit					
+					}
+					random_neighboring_tile = {
+						limit = { has_blocker = no has_building = no }
+						set_building = "building_power_plant_1"
+						add_deposit = d_energy_deposit					
+					}
+					random_neighboring_tile = {
+						limit = { has_blocker = no has_building = no }
+						set_building = "building_mining_network_1"
+						add_deposit = d_mineral_deposit					
+					}
+				}
+				random_tile = {
+					limit = { has_blocker = no has_grown_pop = no has_growing_pop = no }
+					create_pop = { species = event_target:xindi_reptilian }
+				}
+				random_tile = {
+					limit = { has_blocker = no has_grown_pop = no has_growing_pop = no }
+					create_pop = { species = event_target:xindi_insectoid }
+				}
+				random_tile = {
+					limit = { has_blocker = no has_grown_pop = no has_growing_pop = no }
+					create_pop = { species = event_target:xindi_arboreal }
+				}
+				random_tile = {
+					limit = { has_blocker = no has_grown_pop = no has_growing_pop = no }
+					create_pop = { species = event_target:xindi_aquatic }
+				}
+				random_tile = {
+					limit = { has_blocker = no has_building = no }
+					set_blocker = "tb_failing_infrastructure"
+					add_deposit = d_engineering_deposit	
+				}
+				random_tile = {
+					limit = { has_blocker = no has_building = no }
+					set_blocker = "tb_failing_infrastructure"
+					add_deposit = d_society_deposit			
+				}
+				random_tile = {
+					limit = { has_blocker = no has_building = no }
+					set_blocker = "tb_failing_infrastructure"
+					add_deposit = d_physics_deposit				
+				}
+				random_tile = {
+					limit = { has_blocker = no has_building = no }
+					set_blocker = "tb_decrepit_dwellings"
+					add_deposit = d_rich_energy_deposit					
+				}
+				every_tile = {
+					limit = { has_blocker = no has_grown_pop = no has_growing_pop = no }
+					random_list = {
+						10 =  { create_pop = { species = event_target:xindi_aquatic } }
+						10 =  { create_pop = { species = event_target:xindi_mammalian } }
+						10 =  { create_pop = { species = event_target:xindi_arboreal } }
+						10 =  { create_pop = { species = event_target:xindi_insectoid } }
+						10 =  { create_pop = { species = event_target:xindi_reptilian } }
+					}
+				}	
+				create_spaceport = {
+					owner = event_target:xindi_council 
+					initial_module = "module_defense_plasma_0_initial"
+				}
+				set_capital = yes
+				event_target:xindi_council = { capital_scope = { set_name = "Azati Prime" } }
+			}
+		}		
+	}
+}

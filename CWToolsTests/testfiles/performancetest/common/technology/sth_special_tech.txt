@@ -1,0 +1,25 @@
+### XCV Tech
+tech_xcv330_1 = {   
+	cost = 300
+	area = engineering
+	category = { industry }
+	tier = 1
+	### No special notes
+	weight = 0
+	ai_weight = {
+		factor = 1
+	}
+}
+
+#never unlocked just for prereq of hero ships
+tech_hero_ships = {   
+	cost = 300
+	area = engineering
+	category = { industry }
+	tier = 1
+	### No special notes
+	weight = 0
+	ai_weight = {
+		factor = 1
+	}
+}

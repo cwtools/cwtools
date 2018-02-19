@@ -1,0 +1,81 @@
+﻿### Hirogen
+Hirogen = {
+	randomized = no
+
+	ship_names = {
+		generic = {
+			Hunter Predator Carnivore "Beast of Prey" "Hunter Killer" Raptor Marauder Killer Vulture Brute Assailant Tracker Aggressor Stalker Survivor Venator Hunter "Valiant Chase" Pursuer Trapper Ambusher Huntress Apex "Apex Predator" Seeker Huntmaster "Hunter Escort" Baiter
+		}
+		corvette = {
+		}
+		saber = {
+		}
+		sovereign = {
+		}
+		steamrunner = {
+		}		
+		adv_cruiser = {
+		}
+		strike = {
+		}	
+		constructor = { }
+		colonizer = { }
+		science = { }
+		transport = { }
+		outpost_station = {
+			sequential_name = "Frontier Outpost"
+		}
+	}
+
+	fleet_names = {
+		sequential_name = "%O% Hunting Pack"
+	}
+	
+	army_names = {
+		defense_army = {
+			sequential_name = "%O% Guard"
+		}
+		assault_army = {
+			sequential_name = "%O% Hunters"
+		}
+		slave_army = {
+			sequential_name = "%O% Enslaved Hunt Troops"
+		}
+		clone_army = { 
+			sequential_name = "%O% Clone Hunters"
+		}
+		robotic_army = {
+			sequential_name = "%O% Mechanical Hunters"
+		}
+		android_army = {
+			sequential_name = "%O% Synthetic Hunters"
+		}
+		psionic_army = { 
+			sequential_name = "%O% Psi Defence Hunters"
+		}
+		xenomorph_army = {
+			sequential_name = "%O% Bio-Warfare Hunters"
+		}
+		gene_warrior_army = {
+			sequential_name = "%O% Bio-Engineered Hunters"
+		}
+	}
+
+	planet_names = {
+		generic = {
+			names = { }
+		}
+	}
+
+
+	### CHARACTERS
+
+	character_names = {
+		names1 = {
+			weight = 100
+			full_names = {		
+				Davar Decaren Donik Dossok Gann Hajur Harkan Idrin Jetarn Jorik Karon Karr Kezal Konuric Netek Ormoch Ranjen Saransk Takirac Turanj Vurond Kinn Koruj Doranj Dijak Idarr Darr Kaan Maan Idrik Tajan Lijan Darrak Tanakarr Karran Kadij Kijran Tordinarr Tordarr Taj Kanin Kajak Tijanarr Rajarr Tudanak Kudanak Kadarraj
+			}
+		}
+	}
+}

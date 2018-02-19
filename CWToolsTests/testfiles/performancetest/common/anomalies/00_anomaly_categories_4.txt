@@ -1,0 +1,100 @@
+############################
+### ANOMALY CATEGORIES ###
+############################
+# default = planet scope
+# from = ship scope ###apparently this is not true
+# potential = planet scope
+# on_success = ship scope
+# on_fail = ship scope
+# on_critical_fail = ship scope
+# level = level of anomaly that is checked against scientist level
+# risk = risk of researching the anomaly (defaults to NDefines::NGameplay:anomaly_RISK_DEFAULT)
+
+# Rogue moon
+# on successful scan, fires one of the discovery events with the same category.
+# ensure there is always at least one event 
+anomaly_category = {
+	key = "rogue_moon_category" 
+	desc = "rogue_moon_category_desc"
+	picture = GFX_evt_mining_station
+	level = 1
+	spawn_chance = { modifier = { add = 1 is_moon = yes } }
+	on_success = { }
+	on_fail = {
+		if = {
+			limit = { owner = { is_borg_empire = no is_assimilator = no } }
+			ship_event = { id = anomaly_failure.1 }
+		}
+		if = {
+			limit = { owner = { is_borg_empire = yes is_assimilator = yes } }
+			ship_event = { id = STH_borg_anomaly_failure.1 }
+		}
+	}
+	on_critical_fail = {
+		if = {
+			limit = { owner = { is_borg_empire = no is_assimilator = no } }
+			ship_event = { id = anomaly_failure.400 }
+		}
+		if = {
+			limit = { owner = { is_borg_empire = yes is_assimilator = yes } }
+			ship_event = { id = STH_borg_anomaly_failure.1 }
+		}
+	}
+}
+
+
+
+# Strong magnetic field
+anomaly_category = {
+	key = "strong_magnetic_category" 
+	desc = "strong_magnetic_category_desc"
+	picture = GFX_evt_mining_station
+	level = 1
+	#risk = 30
+	
+	spawn_chance = {		
+		modifier = {
+			add = 3
+			has_planet_modifier = "pm_strong_magnetic_field"
+			FROM = { owner = { is_borg_empire = no is_assimilator = no } }
+		}
+	}
+	
+	on_success = {
+	}
+
+	on_fail = {
+		ship_event = { id = anomaly_failure.1 }
+	}
+
+	on_critical_fail = {
+		random_list = {
+			50 = { ship_event = { id = anomaly_failure.400 } }
+			50 = { ship_event = { id = anomaly_failure.6000 } }
+		}
+	}
+}
+
+# undiscovered planetary modifier
+anomaly_category = {
+	key = "undiscovered_planetary_modifier_category"
+	desc = "undiscovered_planetary_modifier_category_desc"
+	picture = GFX_evt_mining_station #TODO better pic
+	level = 1
+	#risk = 0
+	
+	spawn_chance = {		
+		#added by event
+	}
+	
+	on_success = {
+	}
+
+	on_fail = {
+		
+	}
+
+	on_critical_fail = {
+
+	}
+}

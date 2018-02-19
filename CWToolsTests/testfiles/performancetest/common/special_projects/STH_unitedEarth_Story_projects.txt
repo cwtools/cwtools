@@ -1,0 +1,128 @@
+
+special_project = {
+	key = "TERRA_PRIME_1_PROJECT"
+	event_chain = "terra_prime_chain"
+	cost = 0
+	days_to_research = 30
+	tech_department = society_technology
+	picture = sth_GFX_evt_terraPrime7
+	timelimit = 720
+	event_scope = ship_event
+	requirements = {
+		shipclass_transport = 1
+		leader = general
+	}
+	on_success = { 
+		ship_event = { id = STH_united_earth_story.3 } 
+		owner = { end_event_chain = "terra_prime_chain" }
+	}
+	on_fail = {	
+		country_event = { id = STH_united_earth_story.4 }
+		end_event_chain = "terra_prime_chain"
+	}
+}
+
+special_project = {
+	key = "XINDI_1_PROJECT"
+	event_chain = "xindi_event_chain"
+	cost = 0
+	days_to_research = 30
+	tech_department = engineering_technology
+	picture = sth_GFX_evt_xindiProbe1
+	timelimit = 1800
+	event_scope = ship_event
+	requirements = {
+		shipclass_science_ship = 1
+		leader = scientist
+	}
+	on_success = { ship_event = { id = STH_united_earth_story.14 } }
+	on_fail = {	
+		capital_scope = { planet_event = { id = STH_united_earth_story.20 } } 
+		end_event_chain = "xindi_event_chain"
+	}
+}
+
+special_project = {
+	key = "XINDI_2_PROJECT"
+	event_chain = "xindi_event_chain"
+	cost = 0
+	days_to_research = 30
+	tech_department = engineering_technology
+	picture = sth_GFX_evt_xindiProbe1
+	timelimit = 1800
+	event_scope = ship_event
+	requirements = {
+		shipclass_military = 1
+		leader = admiral
+	}
+    on_success = {
+        random_country = {
+            limit = { has_country_flag = xindi_probe_target_country }
+            save_event_target_as = xindi_probe_target_country
+        }
+        if = {
+            limit = { exists = fleet }
+            fleet = { fleet_event = { id = STH_united_earth_story.15 } }
+            else = {
+                event_target:xindi_probe_target_country = {
+                    random_owned_fleet = {
+                        limit = { 
+                            exists = leader
+                            leader = { leader_class = admiral }
+                        }
+                        fleet_event = { id = STH_united_earth_story.15 }
+                    }
+                }
+            }
+        }
+        event_target:xindi_probe_target_country = { end_event_chain = "xindi_event_chain" }
+    }
+	on_fail = { 
+		capital_scope = { planet_event = { id = STH_united_earth_story.20 } } 
+		end_event_chain = "xindi_event_chain"
+	}
+}
+
+special_project = {
+	key = "MARS_1_PROJECT"
+	cost = 0
+	days_to_research = 30
+	tech_department = engineering_technology
+	picture = sth_GFX_evt_marsColonies
+	
+	event_scope = ship_event
+	
+	requirements = {
+		shipclass_transport = 3
+		leader = general
+	}
+	
+	on_success = { 
+		ship_event = { id = STH_mars.153 }
+			}
+	on_fail = {	
+	}
+}
+
+
+special_project = {
+	key = "DE_DECLARATEM_1_PROJECT"
+	#event_chain = "de_declaratem_event_chain"
+	cost = 0
+	days_to_research = 30
+	tech_department = engineering_technology
+	picture = sth_GFX_evt_deDeclaratem1
+	timelimit = 1800
+	event_scope = ship_event
+	requirements = {
+		shipclass_science_ship = 1
+		leader = scientist
+	}
+	on_success = { ship_event = { id = STH_deDeclaratem_event.11 } }
+	on_fail = {	
+		if = {
+			limit = { exists = event_target:xcv247 }
+			event_target:xcv247 = { destroy_ambient_object = this }
+		}
+	}
+}

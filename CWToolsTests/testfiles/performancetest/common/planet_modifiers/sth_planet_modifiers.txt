@@ -1,0 +1,42 @@
+### Planet Modifiers
+
+pm_miniature_population = {
+	spawn_chance = {
+		#None - From anomaly 
+	}
+	modifier = "miniature_population"
+}
+pm_mars_colony = {
+	spawn_chance = { }
+	modifier = "mars_colony"
+}
+
+pm_rure_penthe_colony = {
+	spawn_chance = { }
+	modifier = "rure_colony"
+}
+
+pm_boreth_colony = {
+	spawn_chance = { }
+	modifier = "boreth_colony"
+}
+
+pm_surface_impact = {
+	spawn_chance = {  }
+	modifier = "surface_impact"
+}
+
+pm_janus_vi = {
+	spawn_chance = {  }
+	modifier = "janus_colony"
+}
+
+pm_iconia = {
+	spawn_chance = {  }
+	modifier = "iconia"
+}
+
+pm_city_ship = {
+	spawn_chance = {  }
+	modifier = "city_ship"
+}

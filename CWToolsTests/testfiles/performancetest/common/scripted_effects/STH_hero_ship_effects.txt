@@ -1,0 +1,87 @@
+#Hero Ship Spawn Effects
+
+# Spawn Nx-01 Refit (ENT Earth Hero Ship)
+# Only Creates the ship because it's a refit!
+spawn_hero_ship_ENT_FED = {
+    create_ship = { name = "Enterprise" design = "NX-01 Refit" graphical_culture = "hero_ships_01" prefix = no }
+    last_created_ship = {
+        set_ship_flag = hero_ship
+        set_ship_flag = hero_ship_ent
+        add_modifier = { modifier = "herobuff_ent" }
+    }
+}
+
+# Spawn IKS Bortas (ENT Klingon Hero Ship)
+spawn_hero_ship_ENT_KDF = {
+    capital_scope = { save_event_target_as = capital }
+    create_fleet = { name = "IKS Bortas" }
+    last_created_fleet = {
+        set_owner = root
+        set_location = { target = event_target:capital }
+        create_ship = { name = "IKS Bortas" design = "IKS Bortas" graphical_culture = "hero_ships_01" prefix = no }
+        last_created_ship = {
+            set_ship_flag = hero_ship
+            set_ship_flag = hero_ship_ent
+            add_modifier = { modifier = "herobuff_ent" }
+        }
+#        set_leader = "Duras" <- Todo
+    }
+}
+
+# Spawn IRW ??? (ENT Romulan Hero Ship)
+spawn_hero_ship_ENT_ROM = {
+    capital_scope = { save_event_target_as = capital }
+    create_fleet = { name = "Hero Ship" }
+    last_created_fleet = {
+        set_owner = root
+        set_location = { target = event_target:capital }
+        create_ship = { name = random design = "ENT_romulan" graphical_culture = "hero_ships_01" prefix = yes }
+        last_created_ship = {
+            set_ship_flag = hero_ship
+            set_ship_flag = hero_ship_ent
+            add_modifier = { modifier = "herobuff_ent" }
+        }
+#        set_leader = random
+    }
+}
+
+# Spawn CNS ??? (ENT Cardassian Hero Ship)
+# Spawn DNS ??? (ENT Dominion Hero Ship)
+
+# Spawn VSS Seleya (ENT Vulcan Hero Ship)
+spawn_hero_ship_ENT_VUL = {
+    capital_scope = { save_event_target_as = capital }
+    create_fleet = { name = "VSS Seleya" }
+    last_created_fleet = {
+        set_owner = root
+        set_location = { target = event_target:capital }
+        create_ship = { name = "VSS Seleya" design = "VSS Seleya" graphical_culture = "hero_ships_01" prefix = no }
+        last_created_ship = {
+            set_ship_flag = hero_ship
+            set_ship_flag = hero_ship_ent
+            set_ship_flag = "VSS_Seleya"
+            add_modifier = { modifier = "herobuff_ent" }
+        }
+#        set_leader = random
+    }
+}
+
+# Spawn TV ??? (ENT Tellarite Hero Ship)
+
+# Spawn IGS Kumari (ENT Andorian Hero Ship)
+spawn_hero_ship_ENT_ADR = {
+    capital_scope = { save_event_target_as = capital }
+	create_fleet = { name = "IGS Kumari" }
+	last_created_fleet = {
+	    set_owner = root
+        set_location = { target = event_target:capital }
+	    create_ship = { name = "IGS Kumari" design = "IGS Kumari" graphical_culture = "hero_ships_01" prefix = no }
+        last_created_ship = {
+            set_ship_flag = hero_ship
+            set_ship_flag = hero_ship_ent
+            set_ship_flag = "IGS_Kumari"
+            add_modifier = { modifier = "herobuff_ent" }
+        }
+        # set_leader = "Shran" <- Todo
+	}
+}

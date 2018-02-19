@@ -1,0 +1,169 @@
+##########################################################################
+# HARD FIXED STATE - DO NOT REMOVE OR RENAME ANY OF THESE
+##########################################################################
+
+# Opinion from AI personality
+opinion_from_personality = {
+	opinion = {
+		modifier = {
+			add = -1000
+			has_ai_personality = genocidal_assimilators	
+		}
+		modifier = {
+			add = 50
+			AND = {
+				has_ai_personality = federation_founders
+				FROM = { has_ai_personality = federation_founders }
+			}
+		}
+		modifier = {
+			add = -1000
+			has_ai_personality = metalhead	
+		}	
+		modifier = {
+			add = 100
+			has_ai_personality = fanatic_befrienders
+		}			
+	}
+}
+
+opinion_fanatic_purifiers_vs_xeno = {
+	opinion = {
+		modifier = {
+			add = -1000
+			has_civic = civic_fanatic_purifiers
+			NOT = { is_same_species = FROM }		
+		}		
+	}
+}
+
+opinion_both_fanatic_purifiers = {
+	opinion = {
+		modifier = {
+			add = 200
+			has_civic = civic_fanatic_purifiers
+			FROM = { has_civic = civic_fanatic_purifiers }	
+			is_same_species = FROM			
+		}	
+	}
+}
+
+opinion_fanatic_purifiers = {
+	opinion = {
+		modifier = {
+			add = -1000
+			is_country_type = default
+			NOT = { has_civic = civic_fanatic_purifiers }
+			FROM = { has_civic = civic_fanatic_purifiers }		
+		}	
+	}
+}
+
+
+opinion_zealots_vs_materialists = {
+	opinion = {
+		modifier = {
+			add = -100
+			OR = {
+				has_ai_personality = evangelising_zealots
+				has_ai_personality = awakened_fallen_empire_spiritualist
+			}
+			OR = {
+				has_ethic = "ethic_spiritualist"
+				has_ethic = "ethic_fanatic_spiritualist"
+			}
+			OR = {
+				FROM = { has_ethic = "ethic_materialist" }
+				FROM = { has_ethic = "ethic_fanatic_materialist" }
+			}				
+		}
+	}
+}
+
+opinion_hw_vs_pacifist = {
+	opinion = {
+		modifier = {
+			add = -100
+			has_ai_personality = honorbound_warriors
+			FROM = { has_ethic = "ethic_fanatic_pacifist" }
+		}
+		modifier = {
+			add = -50
+			has_ai_personality = honorbound_warriors
+			FROM = { has_ethic = "ethic_pacifist" }
+		}			
+	}
+}
+
+opinion_dc_vs_democratic = {
+	opinion = {
+		modifier = {
+			add = 25
+			has_ai_personality = democratic_crusaders 
+			FROM = { has_election_type = democratic }
+		}		
+	}
+}
+
+opinion_dc_vs_oligarchic = {
+	opinion = {
+		modifier = {
+			add = -50
+			has_ai_personality = democratic_crusaders	
+			FROM = { has_election_type = oligarchic }
+		}	
+	}
+}
+
+opinion_dc_vs_autocracy = {
+	opinion = {
+		modifier = {
+			add = -100
+			has_ai_personality = democratic_crusaders	
+			FROM = { has_election_type = none }
+		}	
+	}
+}
+
+# Desecrated Fallen Empire's holy world
+opinion_desecrated_holy_world = {
+	opinion = {	
+	}
+}
+
+# Desecrated Tomb World
+opinion_desecrated_tomb_world = {
+	opinion = {			
+	}
+}
+
+# Fallen Empire doesn't like you researching AI
+opinion_researching_ai = {
+	opinion = {				
+	}
+}
+
+# Xenophobe Fallen Empires aren't fans of bordering you
+opinion_encroaching_borders = {
+	opinion = {
+		modifier = {
+			add = -200
+			has_ai_personality = fallen_empire_xenophobe
+			from = {
+				OR = {
+					any_owned_planet = {
+						is_capital = no
+						is_neighbor_of = root
+					}
+					any_owned_fleet = {
+						is_ship_class = shipclass_outpost_station
+						distance_to_empire = {
+							who = root
+							distance = 100
+						}									
+					}	
+				}	
+			}
+		}
+	}
+}

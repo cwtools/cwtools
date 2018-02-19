@@ -1,0 +1,236 @@
+#Cured Phage
+opinion_phage_cure = {
+	opinion = { base = 200 }
+	unique = yes
+	monthly = yes
+	decay = { base = 1 }
+}
+
+#Genocide 
+opinion_genocide = {
+	opinion = {	base = -250 }
+	unique = yes
+	monthly = yes
+	decay = { base = 1 }
+}
+
+# Demanded Low Tribute
+opinion_demanded_low_tribute = {
+	opinion = { base = -12 }
+	unique = no
+	monthly = yes
+	decay = { base = 1 }
+}
+
+# Demanded Medium Tribute
+opinion_demanded_medium_tribute = {
+	opinion = { base = -25 }
+	unique = no
+	monthly = yes
+	decay = { base = 1 }
+}
+
+# Demanded High Tribute
+opinion_demanded_high_tribute = {
+	opinion = { base = -50 }
+	unique = no
+	monthly = yes
+	decay = { base = 1 }
+}
+
+# Demanded Low Fleet
+opinion_demanded_small_fleet = {
+	opinion = { base = -10 }
+	unique = no
+	monthly = yes
+	decay = { base = 1 }
+}
+
+# Demanded Medium Fleet
+opinion_demanded_medium_fleet = {
+	opinion = { base = -20 }
+	unique = no
+	monthly = yes
+	decay = { base = 1 }
+}
+
+# Demanded High Fleet
+opinion_demanded_big_fleet = {
+	opinion = { base = -30 }
+	unique = no
+	monthly = yes
+	decay = { base = 1 }
+}
+
+
+# Low propaganda
+opinion_low_propaganda = {
+	opinion = { base = 25 }
+	unique = no
+	monthly = yes
+	decay = { base = 1 }
+}
+
+# Medium propaganda
+opinion_medium_propaganda = {
+	opinion = { base = 50 }
+	unique = no
+	monthly = yes
+	decay = { base = 1 }
+}
+
+# High propaganda
+opinion_high_propaganda = {
+	opinion = { base = 75 }
+	unique = no
+	monthly = yes
+	decay = { base = 1 }
+}
+# Very High propaganda
+opinion_very_high_propaganda = {
+	opinion = { base = 100 }
+	unique = no
+	monthly = yes
+	decay = { base = 1 }
+}
+
+# Demanded Planet
+opinion_demanded_planet = {
+	opinion = { base = -125 }
+	unique = no
+	monthly = yes
+	decay = { base = 1 }
+}
+
+# Demanded Capital
+opinion_demanded_capital = {
+	opinion = { base = -175 }
+	unique = no
+	monthly = yes
+	decay = { base = 1 }
+}
+
+# Demanded Outpost Deconstruction
+opinion_demanded_outpost_deconstruction = {
+	opinion = { base = -50 }
+	unique = no
+	monthly = yes
+	decay = { base = 1 }
+}
+
+
+# Concerned Modifier
+opinion_concerned = {
+	opinion = { base = -25 }
+	unique = yes
+	monthly = yes
+	decay = { base = 1 }
+}
+
+opinion_very_concerned = {
+	opinion = { base = -50 }
+	unique = yes
+	monthly = yes
+	decay = { base = 1 }
+}
+
+opinion_intimidated = {
+	opinion = { base = -25 }
+	unique = yes
+	monthly = yes
+	decay = { base = 1 }
+}
+
+opinion_moderately_intimidated = {
+	opinion = { base = -50 }
+	unique = yes
+	monthly = yes
+	decay = { base = 1 }
+}
+
+opinion_very_intimidated = {
+	opinion = {
+		base = -75
+	}
+	unique = yes
+	monthly = yes
+	decay = {
+		base = 1
+	}
+}
+
+opinion_outraged = {
+	opinion = {
+		base = -125
+	}
+	unique = yes
+	monthly = yes
+	decay = {
+		base = 1
+	}
+}
+
+opinion_light_border_conflict = {
+	opinion = {
+		base = -75
+	}
+	unique = yes
+	monthly = yes
+	decay = {
+		base = 1
+	}
+}
+
+opinion_very_small_boost = {
+	opinion = { base = 10 }
+	unique = yes
+	monthly = yes
+	decay = { base = 1 }
+}
+
+opinion_small_boost = {
+	opinion = { base = 25 }
+	unique = yes
+	monthly = yes
+	decay = { base = 1 }
+}
+opinion_medium_boost = {
+	opinion = { base = 50 }
+	unique = yes
+	monthly = yes
+	decay = { base = 1 }
+}
+opinion_large_boost = {
+	opinion = { base = 75 }
+	unique = yes
+	monthly = yes
+	decay = { base = 1 }
+}
+
+opinion_returned_planet = {
+	opinion = { base = 25 }
+	unique = no
+	monthly = yes
+	decay = { base = 1 }
+}
+
+opinion_returned_changeling = {
+	opinion = { base = 50 }
+	unique = no
+	monthly = yes
+	decay = { base = 2 }
+}
+
+
+#Espionage
+opinion_espionaged = {
+	opinion = { base = -30 }
+	unique = no
+	decay = { base = 1 }
+}
+
+opinion_changeling_infiltration = {
+	opinion = { base = -30 }
+	unique = no
+	decay = { base = 1 }
+}

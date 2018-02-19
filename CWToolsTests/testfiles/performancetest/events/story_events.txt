@@ -1,0 +1,2011 @@
+###############################
+# Narrative Progression Events
+# by Maximilian Olbers
+# STNH - Capek 1.8.0 Compat
+###############################
+
+namespace = story
+
+@tier1influencecontact = 7
+@tier1influencecontactxenophile = 8
+@tier1influencecontactmin = 20
+@tier1influencecontactmax = 80
+
+@tier2influencecontact = 10
+@tier2influencecontactxenophile = 12
+@tier2influencecontactmin = 40
+@tier2influencecontactmax = 100
+
+@tier1materialreward = 6
+@tier1materialmin = 100
+@tier1materialmax = 500
+@tier2materialreward = 12
+@tier2materialmin = 150
+@tier2materialmax = 1000
+@tier3materialreward = 18
+@tier3materialmin = 250
+@tier3materialmax = 1500
+@tier4materialreward = 24
+@tier4materialmin = 350
+@tier4materialmax = 2000
+@tier5materialreward = 48
+@tier5materialmin = 700
+@tier5materialmax = 4000
+
+@tier1influencereward = 6
+@tier1influencemin = 40
+@tier1influencemax = 100
+@tier2influencereward = 12
+@tier2influencemin = 80
+@tier2influencemax = 175
+@tier3influencereward = 18
+@tier3influencemin = 125
+@tier3influencemax = 250
+@tier4influencereward = 24
+@tier4influencemin = 150
+@tier4influencemax = 300
+@tier5influencereward = 36
+@tier5influencemin = 250
+@tier5influencemax = 500
+@tier6influencereward = 48
+@tier6influencemin = 300
+@tier6influencemax = 600
+
+@tier1researchreward = 6
+@tier1researchmin = 60
+@tier1researchmax = 150
+@tier2researchreward = 12
+@tier2researchmin = 90
+@tier2researchmax = 250
+@tier3researchreward = 18
+@tier3researchmin = 120
+@tier3researchmax = 350
+@tier4researchreward = 24
+@tier4researchmin = 150
+@tier4researchmax = 500
+@tier5researchreward = 48
+@tier5researchmin = 300
+@tier5researchmax = 1000
+
+### 1 - Microbial, simple plant life
+country_event = {
+	id = story.1
+	title = story.1.name
+	desc = {
+		trigger = {
+			switch = {
+				trigger = has_ethic
+				ethic_fanatic_spiritualist = { text = story.1.desc.spiri }
+				ethic_fanatic_xenophobe = { text = story.1.desc.phobe }
+				ethic_fanatic_xenophile = { text = story.1.desc.phile }
+				ethic_spiritualist = { text = story.1.desc.spiri }
+				ethic_xenophobe = { text = story.1.desc.phobe }
+				ethic_xenophile = { text = story.1.desc.phile }
+				default = { text = story.1.desc }
+			}
+		}
+	}
+
+	picture = GFX_evt_news_room
+	show_sound = event_scanner
+
+	is_triggered_only = yes
+
+	trigger = {
+		is_borg_empire = no
+		NOR = {
+			has_country_flag = Story1
+			has_country_flag = Story2
+			has_country_flag = Story3
+			has_country_flag = Story4
+			has_country_flag = Story5
+			has_country_flag = Story6
+			has_country_flag = Story7
+		}
+	}
+
+	immediate = {
+		if = {
+			limit = { NOT = { has_country_flag = first_alien_life } }
+			set_country_flag = first_alien_life
+		}
+		set_country_flag = StoryFirst
+		set_country_flag = Story1
+	}
+
+	option = {
+		name = OK
+	}
+}
+
+### 2 - Spacers
+country_event = {
+	id = story.2
+	title = story.2.name
+	# First
+	desc = {
+		trigger = { NOT = {has_country_flag = StoryFirst } }
+		text = story.2.desc
+	}
+	# Xenophile regardless of status
+	desc = {
+		trigger = { OR = { has_ethic = ethic_fanatic_xenophile has_ethic = ethic_xenophile } }
+		text = story.2.desc.phile
+	}
+	# Followup
+	desc = {
+		trigger = { has_country_flag = Story1 }
+		text = story.2.desc.followup
+	}
+	# Fallback
+	desc = {
+		trigger = { has_country_flag = StoryFirst NOT = { has_ethic = ethic_fanatic_xenophile has_ethic = ethic_xenophile } }
+		text = story.2.desc
+	}
+	picture = GFX_evt_news_room
+	show_sound = event_scanner
+#	location = from
+
+	is_triggered_only = yes
+
+	trigger = {
+		is_borg_empire = no
+		NOT = {
+			has_country_flag = Story2
+			has_country_flag = Story3
+			has_country_flag = Story4
+			has_country_flag = Story5
+			has_country_flag = Story6
+			has_country_flag = Story7
+			#has_country_flag = Story8
+		}
+	}
+
+	immediate = {
+		if = {
+			limit = { NOT = { has_country_flag = StoryFirst } }
+			set_country_flag = StoryFirst
+		}
+		if = {
+			limit = { NOT = { has_country_flag = first_alien_life } }
+			set_country_flag = first_alien_life
+		}
+		set_country_flag = Story2
+	}
+
+	option = {
+		name = OK
+	}
+}
+
+### 3 - Animalia
+country_event = {
+	id = story.3
+	title = story.3.name
+	# First
+	desc = {
+		text = story.3.desc
+		trigger = {
+			NOT = {
+				has_country_flag = StoryFirst
+			}
+		}
+	}
+	# Spiritualist regardless of status
+	desc = {
+		text = story.3.desc.spiri
+		trigger = {
+			OR = {
+				has_ethic = ethic_fanatic_spiritualist
+				has_ethic = ethic_spiritualist
+			}
+		}
+	}
+	# Followup
+	desc = {
+		trigger = { OR = { has_country_flag = Story1 has_country_flag = Story2 } }
+		text = story.3.desc.followup
+	}
+	picture = GFX_evt_news_room
+	show_sound = event_scanner
+
+	is_triggered_only = yes
+
+	trigger = {
+		is_borg_empire = no
+		NOT = {
+			has_country_flag = Story3
+			has_country_flag = Story4
+			has_country_flag = Story5
+			has_country_flag = Story6
+			has_country_flag = Story7
+		}
+	}
+
+	immediate = {
+		if = {
+			limit = { NOT = { has_country_flag = StoryFirst } }
+			set_country_flag = StoryFirst
+		}
+		if = {
+			limit = { NOT = { has_country_flag = first_alien_life } }
+			set_country_flag = first_alien_life
+		}
+		set_country_flag = Story3
+	}
+
+	option = {
+		name = OK
+	}
+}
+
+### 4 - Pre-Sapients
+country_event = {
+	id = story.4
+	title = story.4.name
+	# First
+	desc = {
+		trigger = { NOT = {has_country_flag = StoryFirst } }
+		text = story.4.desc
+	}
+	# Fanatic Spiritualist regardless of status
+	desc = {
+		trigger = { OR = { has_ethic = ethic_fanatic_spiritualist has_ethic = ethic_spiritualist } }
+		text = story.4.desc.spiri
+	}
+	# Xenophobe
+	desc = {
+		trigger = {
+			OR = {
+				has_ethic = ethic_fanatic_xenophobe
+				has_ethic = ethic_xenophobe
+			}
+		}
+		text = story.4.desc.phobe
+	}
+	# Xenophile
+	desc = {
+		trigger = {
+			OR = {
+				has_ethic = ethic_fanatic_xenophile
+				has_ethic = ethic_xenophile
+			}
+		}
+		text = story.4.desc.phile
+	}
+	# Followup
+	desc = {
+		trigger = {
+			OR = {
+				has_country_flag = Story1
+				has_country_flag = Story2
+				has_country_flag = Story3
+			}
+		}
+		text = story.4.desc.followup
+	}
+	picture = GFX_evt_news_room
+	show_sound = event_scanner
+
+	is_triggered_only = yes
+
+	trigger = {
+		is_borg_empire = no
+		NOT = {
+			has_country_flag = has_uplifted_species
+			has_country_flag = Story4
+			has_country_flag = Story41
+			has_country_flag = Story5
+			has_country_flag = Story6
+			has_country_flag = Story7
+		}
+	}
+
+	immediate = {
+		if = {
+			limit = { NOT = { has_country_flag = StoryFirst } }
+			set_country_flag = StoryFirst
+		}
+		if = {
+			limit = { NOT = { has_country_flag = first_alien_life } }
+			set_country_flag = first_alien_life
+		}
+		set_country_flag = Story4
+	}
+
+	option = {
+		name = OK
+	}
+}
+
+### 5 - Remnants
+country_event = {
+	id = story.5
+	title = story.5.name
+	# First
+	desc = {
+		trigger = { NOT = { has_country_flag = StoryFirst } }
+		text = story.5.desc
+	}
+	# Xenophobe
+	desc = {
+		trigger = { OR = { has_ethic = ethic_fanatic_xenophobe has_ethic = ethic_xenophobe } }
+		text = story.5.desc.phobe
+	}
+	# Xenophile
+	desc = {
+		trigger = { OR = { has_ethic = ethic_fanatic_xenophile has_ethic = ethic_xenophile } }
+		text = story.5.desc.phile
+	}
+	# Followup
+	desc = {
+		trigger = {
+			OR = {
+				has_country_flag = Story1
+				has_country_flag = Story2
+				has_country_flag = Story3
+				has_country_flag = Story4
+			}
+		}
+		text = story.5.desc.followup
+	}
+	picture = GFX_evt_news_room
+	show_sound = event_scanner
+
+	is_triggered_only = yes
+
+	trigger = {
+		is_borg_empire = no
+		NOT = {
+			has_country_flag = Story5
+			has_country_flag = Story6
+			has_country_flag = Story7
+		}
+	}
+
+	immediate = {
+		if = {
+			limit = { NOT = { has_country_flag = StoryFirst } }
+			set_country_flag = StoryFirst
+		}
+		if = {
+			limit = { NOT = { has_country_flag = first_alien_life } }
+			set_country_flag = first_alien_life
+		}
+		set_country_flag = Story5
+	}
+
+	option = {
+		name = OK
+	}
+}
+
+### 6 - Primitives
+country_event = {
+	id = story.6
+	title = story.6.name
+	# First
+	desc = {
+		trigger = { NOT = { has_country_flag = StoryFirst } }
+		text = story.6.desc
+	}
+	# Xenophobe
+	desc = {
+		trigger = { OR = { has_ethic = ethic_fanatic_xenophobe has_ethic = ethic_xenophobe } }
+		text = story.6.desc.phobe
+	}
+	# Xenophile
+	desc = {
+		trigger = { OR = { has_ethic = ethic_fanatic_xenophile has_ethic = ethic_xenophile } }
+		text = story.6.desc.phile
+	}
+	# Followup 5
+	desc = {
+		trigger = { has_country_flag = Story5 }
+		text = story.6.desc.followup5
+	}
+	# Followup 4
+	desc = {
+		trigger = { has_country_flag = Story4 }
+		text = story.6.desc.followup4
+	}
+	# Followup 1-2-3
+	desc = {
+		text = story.6.desc.followup123
+		trigger = {
+			OR = {
+				has_country_flag = Story1
+				has_country_flag = Story2
+				has_country_flag = Story3
+			}
+		}
+	}
+	picture = GFX_evt_news_room
+	show_sound = event_scanner
+
+	is_triggered_only = yes
+
+	trigger = {
+		is_borg_empire = no
+		NOR = {
+			has_country_flag = Story6
+			has_country_flag = Story7
+		}
+	}
+
+	immediate = {
+		if = {
+			limit = { NOT = { has_country_flag = StoryFirst } }
+			set_country_flag = StoryFirst
+		}
+		if = {
+			limit = { NOT = { has_country_flag = first_alien_life } }
+			set_country_flag = first_alien_life
+		}
+		set_country_flag = Story6
+	}
+
+	option = {
+		name = OK
+	}
+}
+
+### 7 - Unknown Empire
+country_event = {
+	id = story.7
+	title = story.7.name
+	# First
+	desc = {
+		trigger = { NOT = { has_country_flag = StoryFirst } }
+		text = story.7.desc
+	}
+	# Xenophobe
+	desc = {
+		trigger = { OR = { has_ethic = ethic_fanatic_xenophobe has_ethic = ethic_xenophobe } }
+		text = story.7.desc.phobe
+	}
+	# Xenophile
+	desc = {
+		trigger = { OR = { has_ethic = ethic_fanatic_xenophile has_ethic = ethic_xenophile } }
+		text = story.7.desc.phile
+	}
+	# Followup 6
+	desc = {
+		trigger = { has_country_flag = Story6 }
+		text = story.7.desc.followup6
+	}
+	# Followup 1-2-3-4-5
+	desc = {
+		trigger = {
+			OR = {
+				has_country_flag = Story1
+				has_country_flag = Story2
+				has_country_flag = Story3
+				has_country_flag = Story4
+				has_country_flag = Story5
+			}
+		}
+		text = story.7.desc.followup12345
+	}
+	picture = GFX_evt_metropolis
+	show_sound = event_scanner
+
+	is_triggered_only = yes
+
+	trigger = {
+		is_borg_empire = no
+		NOT = { has_country_flag = Story7 }
+		NOT = { has_country_flag = first_contact_event }
+		FROM = {
+			NOR = {
+				has_country_flag = radical_cult
+				is_country_type = fallen_empire
+				is_country_type = awakened_fallen_empire
+				is_country_type = primitive
+				is_guardian_country = yes
+				has_relation_flag = { flag = no_coms who = root }
+				has_relation_flag = { flag = AbandonedRefugees who = root }
+				has_relation_flag = { flag = pirate_relation who = root }
+				has_country_flag = day_0
+			}
+		}
+	}
+
+	immediate = {
+		set_country_flag = Story7
+		set_country_flag = has_encountered_other_empire
+		if = {
+			limit = { NOT = { has_country_flag = StoryFirst } }
+			set_country_flag = StoryFirst
+		}
+		if = {
+			limit = { NOT = { has_country_flag = first_alien_life } }
+			set_country_flag = first_alien_life
+		}
+	}
+
+	option = {
+		name = OK
+	}
+}
+
+### 8 - Leviathan
+country_event = {
+	id = story.8
+	title = story.8.name
+	# First
+	desc = {
+		trigger = { NOT = { has_country_flag = StoryFirst } }
+		text = story.8.desc
+	}
+	# Spiritualist
+	desc = {
+		trigger = { OR = { has_ethic = ethic_fanatic_spiritualist has_ethic = ethic_spiritualist } }
+		text = story.8.desc.spirit
+	}
+	# Xenophile
+	desc = {
+		trigger = { OR = { has_ethic = ethic_fanatic_xenophile has_ethic = ethic_xenophile } }
+		text = story.8.desc.phile
+	}
+	# Followup 6
+	desc = {
+		trigger = { has_country_flag = Story7 }
+		text = story.8.desc.followup7
+	}
+	# Followup 1-2-3-4-5-6
+	desc = {
+		trigger = { is_borg_empire = no }
+		trigger = {
+			OR = {
+				has_country_flag = Story1
+				has_country_flag = Story2
+				has_country_flag = Story3
+				has_country_flag = Story4
+				has_country_flag = Story5
+				has_country_flag = Story6
+			}
+		}
+		text = story.8.desc.followup123456
+	}
+	picture = GFX_evt_unspeakable_horror
+	show_sound = event_mystic_reveal
+
+	is_triggered_only = yes
+
+	trigger = {
+		NOT = { has_country_flag = Story8 }
+		#FROM = {
+		#	is_guardian_country = yes
+		#	NOT = {
+		#		has_country_flag = day_0
+		#	}
+		#}
+	}
+
+	immediate = {
+		set_country_flag = Story8
+		if = {
+			limit = { NOT = { has_country_flag = StoryFirst } }
+			set_country_flag = StoryFirst
+		}
+		if = {
+			limit = { NOT = { has_country_flag = first_alien_life } }
+			set_country_flag = first_alien_life
+		}
+		if = {
+			limit = { NOT = { has_country_flag = first_contact_event } }
+			set_country_flag = first_contact_event
+		}
+		#if = {
+		#	limit = {
+		#		from = {
+		#			debug_scope_type = country
+		#			is_guardian_country = yes
+		#		}
+		#		NOT = { has_communications = from }
+		#	}
+		#	establish_communications_no_message = from
+		#}
+	}
+
+	option = {
+		name = story.8.a
+		trigger = {
+			NOT = { has_country_flag = StoryFirst }
+		}
+	}
+	option = {
+		name = story.8.b
+		trigger = {
+			has_country_flag = StoryFirst
+			NOT = {
+				has_ethic = ethic_fanatic_xenophile
+				has_ethic = ethic_xenophile
+			}
+		}
+	}
+	option = {
+		name = story.8.c
+		trigger = {
+			has_country_flag = StoryFirst
+			OR = {
+				has_ethic = ethic_fanatic_xenophile
+				has_ethic = ethic_xenophile
+			}
+		}
+	}
+}
+
+##############################
+# Uchuukaijuu
+##############################
+
+### Tiyanki
+
+
+### Drones
+# Triggered by action.17
+country_event = {
+	id = story.300
+	hide_window = yes
+	is_triggered_only = yes
+
+	immediate = {
+		every_country = {
+			limit = { is_country_type = drone }
+			establish_communications = ROOT
+		}
+		country_event = { id = story.301 days = 5 }
+	}
+}
+
+country_event = {
+	id = story.301
+	title = story.301.name
+	#Borg
+	desc = {
+		trigger = { is_borg_empire = yes }
+		text = story.301.desc.borg
+	}
+	# Phile
+	desc = {
+		trigger = {
+			OR = { has_ethic = ethic_materialist has_ethic = ethic_fanatic_materialist }
+			is_borg_empire = no
+		}
+		text = story.301.desc.mater
+	}
+	# Phobe
+	desc = {
+		trigger = {
+			OR = { has_ethic = ethic_pacifist has_ethic = ethic_fanatic_pacifist }
+			is_borg_empire = no
+		}
+		text = story.301.desc.pacif
+	}
+	# Generic
+	desc = {
+		trigger = {
+			NOT = {
+				has_ethic = ethic_materialist has_ethic = ethic_fanatic_materialist has_ethic = ethic_pacifist has_ethic = ethic_fanatic_pacifist
+			}
+			is_borg_empire = no
+		}
+		text = story.301.desc
+	}
+	picture = GFX_evt_mining_station
+
+	show_sound = event_ancient_drone
+	location = from
+
+	is_triggered_only = yes
+
+	option = {
+		name = story.301.a
+		trigger = { is_borg_empire = no }
+		capital_scope = {
+			enable_special_project = {
+				name = "DRONES_1_PROJECT"
+				location = this
+				owner = root
+			}
+		}
+	}
+
+	option = {
+		name = story.301.b
+		trigger = {
+			NOR = {
+				has_ethic = ethic_pacifist
+				has_ethic = ethic_fanatic_pacifist
+			}
+			is_borg_empire = no
+		}
+		begin_event_chain = {
+			event_chain = "drones_1_chain"
+			target = root
+		}
+	}
+	option = {
+		name = story.301.c
+		trigger = { is_borg_empire = yes }
+		begin_event_chain = { event_chain = "drones_1_chain" target = root }
+	}
+}
+
+# Project complete
+country_event = {
+	id = story.305
+	title = story.305.name
+	#Borg
+	desc = {
+		trigger = { is_borg_empire = yes }
+		text = story.305.desc.borg
+	}
+	# Phile
+	desc = {
+		trigger = { OR = { has_ethic = ethic_pacifist has_ethic = ethic_fanatic_pacifist } is_borg_empire = no }
+
+		text = story.305.desc.pacif
+	}
+	# Pacifist
+	desc = {
+		trigger = { OR = { has_ethic = ethic_materialist has_ethic = ethic_fanatic_materialist } is_borg_empire = no }
+		text = story.305.desc.mater
+	}
+	desc = {
+		trigger = { NOT = { has_ethic = ethic_materialist has_ethic = ethic_fanatic_materialist has_ethic = ethic_pacifist has_ethic = ethic_fanatic_pacifist } is_borg_empire = no }
+		text = story.305.desc
+	}
+	picture = GFX_evt_mining_station
+	show_sound = event_ancient_drone
+	location = from
+
+	is_triggered_only = yes
+
+	option = {
+		name = story.305.a
+		custom_tooltip = story.305.a.tooltip
+		trigger = {
+			is_borg_empire = no
+			OR = {
+				has_ethic = ethic_xenophile
+				has_ethic = ethic_fanatic_xenophile
+				has_ethic = ethic_pacifist
+				has_ethic = ethic_fanatic_pacifist
+			}
+			NOT = { has_country_flag = droning_optimizations_edict_available }
+		}
+		hidden_effect = {
+			set_country_flag = droning_optimizations_edict_available
+		}
+	}
+
+	option = {
+		name = story.305.b
+		custom_tooltip = story.305.b.tooltip
+		trigger = { is_borg_empire = no }
+		hidden_effect = {
+		# High-value targets
+			begin_event_chain = {
+				event_chain = "mineral_planet_chain"
+				target = root
+			}
+			country_event = { id = story.306 }
+		}
+	}
+	
+	option = {
+		name = story.305.c
+		custom_tooltip = story.305.a.tooltip
+		trigger = { is_borg_empire = yes }
+		hidden_effect = { set_country_flag = droning_optimizations_edict_available }
+	}
+
+	option = {
+		name = story.305.d
+		custom_tooltip = story.305.b.tooltip
+		trigger = { is_borg_empire = yes }
+		hidden_effect = {
+		# High-value targets
+			begin_event_chain = {
+				event_chain = "mineral_planet_chain"
+				target = root
+			}
+			country_event = { id = story.306 }
+		}
+	}
+}
+
+country_event = {
+	id = story.306
+	hide_window = yes
+
+	is_triggered_only = yes
+
+	immediate = {
+		capital_scope = { save_event_target_as = capital }
+		closest_system = {
+			min_steps = 5
+			limit = {
+				has_owner = no
+				NOT = {
+					has_star_flag = hostile_system
+					has_star_flag = drone_home_system
+					any_planet = { has_planet_flag = mineral_planet_1 }
+					any_planet = { has_planet_flag = mineral_planet_2 }
+					any_planet = { has_planet_flag = mineral_planet_3 }
+					any_planet = { has_planet_flag = mineral_planet_4 }
+					any_planet = { has_planet_flag = mineral_planet_5 }
+				}
+				any_planet = {
+					exists = orbital_deposit_tile
+					orbital_deposit_tile = {
+						has_resource = {
+							type = minerals
+							amount > 3
+						}
+					}
+				}
+			}
+			random_system_planet = {
+				limit = {
+					NOT = {
+						has_planet_flag = mineral_planet_1
+						has_planet_flag = mineral_planet_2
+						has_planet_flag = mineral_planet_3
+						has_planet_flag = mineral_planet_4
+						has_planet_flag = mineral_planet_5
+					}
+					exists = orbital_deposit_tile
+					orbital_deposit_tile = {
+						has_resource = {
+							type = minerals
+							amount > 3
+						}
+					}
+				}
+				save_event_target_as = mineral_planet_1
+				set_planet_flag = mineral_planet_1
+				root = { set_country_flag = mineral_planet_1_exists }
+			}
+		}
+		closest_system = {
+			min_steps = 5
+			limit = {
+				has_owner = no
+				NOT = {
+					has_star_flag = hostile_system
+					has_star_flag = drone_home_system
+					any_planet = { has_planet_flag = mineral_planet_1 }
+					any_planet = { has_planet_flag = mineral_planet_2 }
+					any_planet = { has_planet_flag = mineral_planet_3 }
+					any_planet = { has_planet_flag = mineral_planet_4 }
+					any_planet = { has_planet_flag = mineral_planet_5 }
+				}
+				any_planet = {
+					exists = orbital_deposit_tile
+					orbital_deposit_tile = {
+						has_resource = {
+							type = minerals
+							amount > 3
+						}
+					}
+				}
+			}
+			random_system_planet = {
+				limit = {
+					NOT = {
+						has_planet_flag = mineral_planet_1
+						has_planet_flag = mineral_planet_2
+						has_planet_flag = mineral_planet_3
+						has_planet_flag = mineral_planet_4
+						has_planet_flag = mineral_planet_5
+					}
+					exists = orbital_deposit_tile
+					orbital_deposit_tile = {
+						has_resource = {
+							type = minerals
+							amount > 3
+						}
+					}
+				}
+				save_event_target_as = mineral_planet_2
+				set_planet_flag = mineral_planet_2
+				root = { set_country_flag = mineral_planet_2_exists }
+			}
+		}
+		closest_system = {
+			min_steps = 5
+			limit = {
+				has_owner = no
+				NOT = {
+					has_star_flag = hostile_system
+					has_star_flag = drone_home_system
+					any_planet = { has_planet_flag = mineral_planet_1 }
+					any_planet = { has_planet_flag = mineral_planet_2 }
+					any_planet = { has_planet_flag = mineral_planet_3 }
+					any_planet = { has_planet_flag = mineral_planet_4 }
+					any_planet = { has_planet_flag = mineral_planet_5 }
+				}
+				any_planet = {
+					exists = orbital_deposit_tile
+					orbital_deposit_tile = {
+						has_resource = {
+							type = minerals
+							amount > 3
+						}
+					}
+				}
+			}
+			random_system_planet = {
+				limit = {
+					NOT = {
+						has_planet_flag = mineral_planet_1
+						has_planet_flag = mineral_planet_2
+						has_planet_flag = mineral_planet_3
+						has_planet_flag = mineral_planet_4
+						has_planet_flag = mineral_planet_5
+					}
+					exists = orbital_deposit_tile
+					orbital_deposit_tile = {
+						has_resource = {
+							type = minerals
+							amount > 3
+						}
+					}
+				}
+				save_event_target_as = mineral_planet_3
+				set_planet_flag = mineral_planet_3
+				root = { set_country_flag = mineral_planet_3_exists }
+			}
+		}
+		closest_system = {
+			min_steps = 5
+			limit = {
+				has_owner = no
+				NOT = {
+					has_star_flag = hostile_system
+					has_star_flag = drone_home_system
+					any_planet = { has_planet_flag = mineral_planet_1 }
+					any_planet = { has_planet_flag = mineral_planet_2 }
+					any_planet = { has_planet_flag = mineral_planet_3 }
+					any_planet = { has_planet_flag = mineral_planet_4 }
+					any_planet = { has_planet_flag = mineral_planet_5 }
+				}
+				any_planet = {
+					exists = orbital_deposit_tile
+					orbital_deposit_tile = {
+						has_resource = {
+							type = minerals
+							amount > 3
+						}
+					}
+				}
+			}
+			random_system_planet = {
+				limit = {
+					NOT = {
+						has_planet_flag = mineral_planet_1
+						has_planet_flag = mineral_planet_2
+						has_planet_flag = mineral_planet_3
+						has_planet_flag = mineral_planet_4
+						has_planet_flag = mineral_planet_5
+					}
+					exists = orbital_deposit_tile
+					orbital_deposit_tile = {
+						has_resource = {
+							type = minerals
+							amount > 3
+						}
+					}
+				}
+				save_event_target_as = mineral_planet_4
+				set_planet_flag = mineral_planet_4
+				root = { set_country_flag = mineral_planet_4_exists }
+			}
+		}
+		closest_system = {
+			limit = {
+				has_star_flag = drone_home_system
+			}
+			random_system_planet = {
+				limit = {
+					exists = orbital_deposit_tile
+					orbital_deposit_tile = {
+						has_resource = {
+							type = minerals
+							amount > 3
+						}
+					}
+				}
+				save_event_target_as = mineral_planet_5
+				set_planet_flag = mineral_planet_5
+				root = { set_country_flag = mineral_planet_5_exists }
+			}
+		}
+		country_event = { id = story.308 }
+	}
+}
+
+# eh
+country_event = {
+	id = story.308
+	hide_window = yes
+
+	is_triggered_only = yes
+
+	immediate = {
+		if = {
+			limit = { has_country_flag = mineral_planet_1_exists }
+			create_point_of_interest = {
+				id = mineral_planet_1_poi
+				name = mineral_planet_poi_title
+				desc = mineral_planet_poi_desc
+				event_chain = mineral_planet_chain
+				category = mineral_planet_chain_cat
+				location = event_target:mineral_planet_1
+			}
+		}
+		if = {
+			limit = { has_country_flag = mineral_planet_2_exists }
+			create_point_of_interest = {
+				id = mineral_planet_2_poi
+				name = mineral_planet_poi_title
+				desc = mineral_planet_poi_desc
+				event_chain = mineral_planet_chain
+				category = mineral_planet_chain_cat
+				location = event_target:mineral_planet_2
+			}
+		}
+		if = {
+			limit = { has_country_flag = mineral_planet_3_exists }
+			create_point_of_interest = {
+				id = mineral_planet_3_poi
+				name = mineral_planet_poi_title
+				desc = mineral_planet_poi_desc
+				event_chain = mineral_planet_chain
+				category = mineral_planet_chain_cat
+				location = event_target:mineral_planet_3
+			}
+		}
+		if = {
+			limit = { has_country_flag = mineral_planet_4_exists }
+			create_point_of_interest = {
+				id = mineral_planet_4_poi
+				name = mineral_planet_poi_title
+				desc = mineral_planet_poi_desc
+				event_chain = mineral_planet_chain
+				category = mineral_planet_chain_cat
+				location = event_target:mineral_planet_4
+			}
+		}
+		if = {
+			limit = { has_country_flag = mineral_planet_5_exists }
+			create_point_of_interest = {
+				id = mineral_planet_5_poi
+				name = mineral_planet_poi_title
+				desc = mineral_planet_poi_desc
+				event_chain = mineral_planet_chain
+				category = mineral_planet_chain_cat
+				location = event_target:mineral_planet_5
+			}
+		}
+
+		if = {
+			limit = {
+				any_system = {
+					any_planet = {
+						is_point_of_interest = {
+							id = mineral_planet_1_poi
+							owner = root
+							event_chain = mineral_planet_chain
+						}
+						is_surveyed = {
+							status = yes
+							who = root
+						}
+					}
+				}
+			}
+			remove_point_of_interest = mineral_planet_1_poi
+		}
+
+		if = {
+			limit = {
+				any_system = {
+					any_planet = {
+						is_point_of_interest = {
+							id = mineral_planet_2_poi
+							owner = root
+							event_chain = mineral_planet_chain
+						}
+						is_surveyed = {
+							status = yes
+							who = root
+						}
+					}
+				}
+			}
+			remove_point_of_interest = mineral_planet_2_poi
+		}
+
+		if = {
+			limit = {
+				any_system = {
+					any_planet = {
+						is_point_of_interest = {
+							id = mineral_planet_3_poi
+							owner = root
+							event_chain = mineral_planet_chain
+						}
+						is_surveyed = {
+							status = yes
+							who = root
+						}
+					}
+				}
+			}
+			remove_point_of_interest = mineral_planet_3_poi
+		}
+
+		if = {
+			limit = {
+				any_system = {
+					any_planet = {
+						is_point_of_interest = {
+							id = mineral_planet_4_poi
+							owner = root
+							event_chain = mineral_planet_chain
+						}
+						is_surveyed = {
+							status = yes
+							who = root
+						}
+					}
+				}
+			}
+			remove_point_of_interest = mineral_planet_4_poi
+		}
+
+		if = {
+			limit = {
+				any_system = {
+					any_planet = {
+						is_point_of_interest = {
+							id = mineral_planet_5_poi
+							owner = root
+							event_chain = mineral_planet_chain
+						}
+						is_surveyed = {
+							status = yes
+							who = root
+						}
+						is_same_value = event_target:mineral_planet_5
+					}
+				}
+			}
+			remove_point_of_interest = mineral_planet_5_poi
+		}
+
+		if = {
+			limit = {
+				has_completed_event_chain_counter = {
+					event_chain = "mineral_planet_chain"
+					counter = "systems_visited"
+				}
+			}
+			end_event_chain = "mineral_planet_chain"
+			country_event = { id = story.320 }
+		}
+	}
+}
+
+# A ship has surveyed a planet.
+# Scope = Ship
+# From = Planet
+ship_event = {
+	id = story.307
+	hide_window = yes
+
+	is_triggered_only = yes
+
+	trigger = {
+		owner = {
+			is_ai = no
+			has_event_chain = "mineral_planet_chain"
+		}
+		from = {
+			OR = {
+				has_planet_flag = mineral_planet_1
+				has_planet_flag = mineral_planet_2
+				has_planet_flag = mineral_planet_3
+				has_planet_flag = mineral_planet_4
+				has_planet_flag = mineral_planet_5
+			}
+		}
+	}
+
+	immediate = {
+		owner = { save_event_target_as = chainowner }
+		from = {
+			if = {
+				limit = { has_planet_flag = mineral_planet_1 }
+				root = {
+					owner = {
+						remove_point_of_interest = mineral_planet_1_poi
+						add_event_chain_counter = { 
+							event_chain = "mineral_planet_chain" 
+							counter = "systems_visited" 
+							amount = 1 
+						}
+					}
+				}
+				remove_planet_flag = mineral_planet_1
+			}
+			if = {
+				limit = { has_planet_flag = mineral_planet_2 }
+				root = {
+					owner = {
+						remove_point_of_interest = mineral_planet_2_poi
+						add_event_chain_counter = { 
+							event_chain = "mineral_planet_chain" 
+							counter = "systems_visited" 
+							amount = 1 
+						}
+					}
+				}
+				remove_planet_flag = mineral_planet_2
+			}
+			if = {
+				limit = { has_planet_flag = mineral_planet_3 }
+				root = {
+					owner = {
+						remove_point_of_interest = mineral_planet_3_poi
+						add_event_chain_counter = { 
+							event_chain = "mineral_planet_chain" 
+							counter = "systems_visited"
+							amount = 1 
+						}
+					}
+				}
+				remove_planet_flag = mineral_planet_3
+			}
+			if = {
+				limit = { has_planet_flag = mineral_planet_4 }
+				root = {
+					owner = {
+						remove_point_of_interest = mineral_planet_4_poi
+						add_event_chain_counter = { 
+							event_chain = "mineral_planet_chain" 
+							counter = "systems_visited" 
+							amount = 1 
+						}
+					}
+				}
+				remove_planet_flag = mineral_planet_4
+			}
+			if = {
+				limit = { has_planet_flag = mineral_planet_5 }
+				root = {
+					owner = {
+						remove_point_of_interest = mineral_planet_5_poi
+						add_event_chain_counter = { 
+							event_chain = "mineral_planet_chain" 
+							counter = "systems_visited" 
+							amount = 1 
+						}
+					}
+				}
+				remove_planet_flag = mineral_planet_5
+			}
+		}
+		if = {
+			limit = {
+				owner = {
+					has_completed_event_chain_counter = {
+						event_chain = "mineral_planet_chain"
+						counter = "systems_visited"
+					}
+				}
+			}
+			owner = {
+				end_event_chain = "mineral_planet_chain"
+				country_event = { id = story.320 }
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				NOT = {
+					any_system = {
+						any_planet = {
+							is_point_of_interest = {
+								id = mineral_planet_1_poi
+								owner = event_target:chainowner
+								event_chain = mineral_planet_chain
+							}
+						}
+					}
+				}
+				NOT = {
+					any_system = {
+						any_planet = {
+							is_point_of_interest = {
+								id = mineral_planet_2_poi
+								owner = event_target:chainowner
+								event_chain = mineral_planet_chain
+							}
+						}
+					}
+				}
+				NOT = {
+					any_system = {
+						any_planet = {
+							is_point_of_interest = {
+								id = mineral_planet_3_poi
+								owner = event_target:chainowner
+								event_chain = mineral_planet_chain
+							}
+						}
+					}
+				}
+				NOT = {
+					any_system = {
+						any_planet = {
+							is_point_of_interest = {
+								id = mineral_planet_4_poi
+								owner = event_target:chainowner
+								event_chain = mineral_planet_chain
+							}
+						}
+					}
+				}
+				NOT = {
+					any_system = {
+						any_planet = {
+							is_point_of_interest = {
+								id = mineral_planet_5_poi
+								owner = event_target:chainowner
+								event_chain = mineral_planet_chain
+							}
+						}
+					}
+				}
+			}
+			owner = {
+				end_event_chain = "mineral_planet_chain"
+				country_event = { id = story.320 }
+			}
+		}
+	}
+}
+
+# Drone kill-check for chain 1
+country_event = {
+	id = story.309
+	trigger = {
+		exists = from
+		is_ai = no
+		has_event_chain = "drones_1_chain"
+		from = { is_country_type = drone }
+	}
+	hide_window = yes
+	is_triggered_only = yes
+	immediate = {
+		add_event_chain_counter = { 
+			event_chain = "drones_1_chain" 
+			counter = "drone_disassembled" 
+			amount = 1 
+		}
+		country_event = { id = story.310 days = 5 }
+	}
+}
+
+# One killed, chain 1 ends
+country_event = {
+	id = story.310
+	title = story.310.name
+	# Borg
+	desc = {
+		trigger = { is_borg_empire = yes }
+		text = story.310.desc.borg
+	}
+	# Materialist
+	desc = {
+		trigger = { OR = { has_ethic = ethic_materialist has_ethic = ethic_fanatic_materialist } is_borg_empire = no }
+		text = story.310.desc.mater
+	}
+	desc = {
+		trigger = { NOT = { has_ethic = ethic_materialist has_ethic = ethic_fanatic_materialist } is_borg_empire = no }
+		text = story.310.desc
+	}
+	picture = GFX_evt_mining_station
+	show_sound = event_ancient_drone
+	location = from
+
+	is_triggered_only = yes
+
+	option = {
+		name = story.310.a
+		trigger = { is_borg_empire = no }
+		custom_tooltip = story.310.a.tooltip
+		end_event_chain = "drones_1_chain"
+		hidden_effect = {
+			set_country_flag = drone_bounty_edict_available
+		}
+	}
+	option = {
+		name = BORG_UNDERSTOOD
+		trigger = { is_borg_empire = yes }
+		custom_tooltip = story.310.a.tooltip
+		end_event_chain = "drones_1_chain"
+		hidden_effect = {
+			set_country_flag = drone_bounty_edict_available
+		}
+	}
+}
+
+country_event = {
+	id = story.311
+	hide_window = yes
+	is_triggered_only = yes
+	trigger = {
+		exists = from
+		is_ai = no
+		has_edict = drone_bounty
+		from = { is_country_type = drone }
+	}
+
+	immediate = {
+		add_energy = 50
+	}
+}
+
+# All deposits surveyed
+country_event = {
+	id = story.320
+	title = story.320.name
+	desc = story.320.desc
+	picture = GFX_evt_mining_station
+	show_sound = event_ancient_drone
+
+	is_triggered_only = yes
+
+	option = {
+		name = OK
+	}
+}
+
+# Entering drone home system
+fleet_event = {
+	id = story.330
+	title = story.330.name
+	desc = { 
+		trigger = { owner = { is_borg_empire = yes } }
+		text = story.330.desc.borg
+	}
+	desc = { 
+		trigger = { owner = { is_borg_empire = no } }
+		text = story.330.desc
+	}
+	picture = GFX_evt_mining_station
+	show_sound = event_ancient_drone
+	is_triggered_only = yes
+	trigger = {
+		exists = event_target:drone_country
+		owner = {
+			has_communications = event_target:drone_country
+			NOT = { has_country_flag = seen_drone_home }
+		}
+		from = {
+			has_star_flag = drone_home_system
+		}
+	}
+
+	immediate = {
+		owner = {
+			set_country_flag = seen_drone_home
+		} 
+	}
+	option = { 
+		trigger = { owner = { is_borg_empire = no } }
+		name = story.330.a 
+	}
+	option = {
+		name = story.330.b
+		trigger = { owner = { is_borg_empire = no } }
+		owner.capital_scope = {
+			enable_special_project = { name = MINING_BASE_PROJECT location = this owner = root.owner }
+		}
+	}
+	option = {
+		trigger = { owner = { is_borg_empire = yes } }
+		name = story.330.c
+	}
+	option = {
+		name = story.330.d
+		trigger = { owner = { is_borg_empire = yes } }
+		owner.capital_scope = {
+			enable_special_project = { name = MINING_BASE_PROJECT location = this owner = root.owner }
+		}
+	}
+}
+
+# project outcome
+planet_event = {
+	id = story.331
+	title = story.331.name
+	desc = { 
+		trigger = { owner = { is_borg_empire = yes } }
+		text = story.331.desc.borg
+	}
+	desc = { 
+		trigger = { owner = { is_borg_empire = no } }
+		text = story.331.desc
+	}
+	picture = GFX_evt_mining_station
+	show_sound = event_ancient_drone
+
+	is_triggered_only = yes
+
+	option = {
+		trigger = { owner = { is_borg_empire = no } }
+		name = story.331.a
+		owner = { add_modifier = { modifier = "em_ancient_mining_boost" } }
+	}
+	option = {
+		trigger = { owner = { is_borg_empire = yes } }
+		name = BORG_UNDERSTOOD
+		owner = { add_modifier = { modifier = "em_ancient_mining_boost" } }
+	}
+}
+
+# station destroyed
+country_event = {
+	id = story.332
+	hide_window = yes
+
+	is_triggered_only = yes
+
+	trigger = {
+		from = {
+			is_same_value = event_target:drone_country
+		}
+		fromfromfrom = { has_fleet_flag = ore_grinder }
+	}
+
+	immediate = {
+		fromfromfrom.solar_system = {
+			random_system_planet = {
+				limit = { has_planet_flag = ore_grinder_planet }
+				save_event_target_as = location_planet
+				orbital_deposit_tile = {
+					add_deposit = d_immense_mineral_deposit
+					add_deposit = d_immense_mineral_deposit
+				}
+			}
+		}
+		every_country = {
+			limit = { has_country_flag = seen_drone_home }
+			country_event = { id = story.333 }
+		}
+	}
+}
+
+# notification / project cancellation event
+country_event = {
+	id = story.333
+	title = story.333.name
+	desc = {
+		trigger = { is_borg_empire = yes }
+		text = story.333.desc.borg
+	}
+	desc = {
+		trigger = { is_borg_empire = no }
+		text = story.333.desc
+	}
+	picture = GFX_evt_exploding_ship
+	location = event_target:location_planet
+
+	is_triggered_only = yes
+
+	immediate = {
+		if = {
+			limit = { has_special_project = MINING_BASE_PROJECT }
+			abort_special_project = {
+				type = MINING_BASE_PROJECT
+				location = capital_scope
+			}
+			set_country_flag = abort_1
+		}
+	}
+	option = {
+		name = story.333.a
+		custom_tooltip = story.333.a.tooltip
+		trigger = { has_country_flag = abort_1 is_borg_empire = no }
+		hidden_effect = { remove_country_flag = abort_1 }
+	}
+	option = {
+		name = story.333.b
+		custom_tooltip = story.333.b.tooltip
+		trigger = { NOT = { has_country_flag = abort_1 } is_borg_empire = no }
+	}
+	option = {
+		name = BORG_UNDERSTOOD
+		custom_tooltip = story.333.a.tooltip
+		trigger = { has_country_flag = abort_1 is_borg_empire = yes }
+		hidden_effect = { remove_country_flag = abort_1 }
+	}
+	option = {
+		name = BORG_UNDERSTOOD
+		custom_tooltip = story.333.b.tooltip
+		trigger = { NOT = { has_country_flag = abort_1 } is_borg_empire = yes }
+	}
+}
+
+
+
+#country_event = {
+#	id = story.406
+#	hide_window = yes
+#
+#	is_triggered_only = yes
+#
+#	immediate = {
+#		capital_scope = {
+#			save_event_target_as = capital
+#			solar_system = {
+#				closest_system = {
+#					limit = {
+#						root = {
+#							intel_level = {
+#								level = none
+#								system = prev
+#							}
+#						}
+#						has_star_flag = hostile_system
+#						any_ship_in_system = { owner = { is_country_type = #cloud } }
+#						NOT = {
+#							has_star_flag = cloud_1
+#							has_star_flag = cloud_2
+#							has_star_flag = cloud_3
+#							has_star_flag = cloud_4
+#							has_star_flag = cloud_5
+#						}
+#					}
+#					save_event_target_as = cloud_1
+#					set_star_flag = cloud_1
+#					root = { set_country_flag = has_cloud_1 }
+#				}
+#				closest_system = {
+#					limit = {
+#						root = {
+#							intel_level = {
+#								level = none
+#								system = prev
+#							}
+#						}
+#						has_star_flag = hostile_system
+#						any_ship_in_system = { owner = { is_country_type = #cloud } }
+#						NOT = {
+#							has_star_flag = cloud_1
+#							has_star_flag = cloud_2
+#							has_star_flag = cloud_3
+#							has_star_flag = cloud_4
+#							has_star_flag = cloud_5
+#						}
+#					}
+#					save_event_target_as = cloud_2
+#					set_star_flag = cloud_2
+#					root = { set_country_flag = has_cloud_2 }
+#				}
+#				closest_system = {
+#					limit = {
+#						root = {
+#							intel_level = {
+#								level = none
+#								system = prev
+#							}
+#						}
+#						has_star_flag = hostile_system
+#						any_ship_in_system = { owner = { is_country_type = #cloud } }
+#						NOT = {
+#							has_star_flag = cloud_1
+#							has_star_flag = cloud_2
+#							has_star_flag = cloud_3
+#							has_star_flag = cloud_4
+#							has_star_flag = cloud_5
+#						}
+#					}
+#					save_event_target_as = cloud_3
+#					set_star_flag = cloud_3
+#					root = { set_country_flag = has_cloud_3 }
+#				}
+#				closest_system = {
+#					limit = {
+#						root = {
+#							intel_level = {
+#								level = none
+#								system = prev
+#							}
+#						}
+#						has_star_flag = hostile_system
+#						any_ship_in_system = { owner = { is_country_type = #cloud } }
+#						NOT = {
+#							has_star_flag = cloud_1
+#							has_star_flag = cloud_2
+#							has_star_flag = cloud_3
+#							has_star_flag = cloud_4
+#							has_star_flag = cloud_5
+#						}
+#					}
+#					save_event_target_as = cloud_4
+#					set_star_flag = cloud_4
+#					root = { set_country_flag = has_cloud_4 }
+#				}
+#				closest_system = {
+#					limit = {
+#						root = {
+#							intel_level = {
+#								level = none
+#								system = prev
+#							}
+#						}
+#						has_star_flag = hostile_system
+#						any_ship_in_system = { owner = { is_country_type = #cloud } }
+#						NOT = {
+#							has_star_flag = cloud_1
+#							has_star_flag = cloud_2
+#							has_star_flag = cloud_3
+#							has_star_flag = cloud_4
+#							has_star_flag = cloud_5
+#						}
+#					}
+#					save_event_target_as = cloud_5
+#					set_star_flag = cloud_5
+#					root = { set_country_flag = has_cloud_5 }
+#				}
+#			}
+#		}
+#		country_event = { id = story.407 }
+#	}
+#}
+#
+## eh
+#country_event = {
+#	id = story.407
+#	hide_window = yes
+#
+#	is_triggered_only = yes
+#
+#	immediate = {
+#		if = {
+#			limit = { has_country_flag = has_cloud_1 }
+#			create_point_of_interest = {
+#				id = cloud_1_poi
+#				name = cloud_poi_title
+#				desc = cloud_poi_desc
+#				event_chain = cloud_chain
+#				category = cloud_chain_cat
+#				location = event_target:cloud_1
+#			}
+#		}
+#		if = {
+#			limit = { has_country_flag = has_cloud_2 }
+#			create_point_of_interest = {
+#				id = cloud_2_poi
+#				name = cloud_poi_title
+#				desc = cloud_poi_desc
+#				event_chain = cloud_chain
+#				category = cloud_chain_cat
+#				location = event_target:cloud_2
+#			}
+#		}
+#		if = {
+#			limit = { has_country_flag = has_cloud_3 }
+#			create_point_of_interest = {
+#				id = cloud_3_poi
+#				name = cloud_poi_title
+#				desc = cloud_poi_desc
+#				event_chain = cloud_chain
+#				category = cloud_chain_cat
+#				location = event_target:cloud_3
+#			}
+#		}
+#		if = {
+#			limit = { has_country_flag = has_cloud_4 }
+#			create_point_of_interest = {
+#				id = cloud_4_poi
+#				name = cloud_poi_title
+#				desc = cloud_poi_desc
+#				event_chain = cloud_chain
+#				category = cloud_chain_cat
+#				location = event_target:cloud_4
+#			}
+#		}
+#		if = {
+#			limit = { has_country_flag = has_cloud_5 }
+#			create_point_of_interest = {
+#				id = cloud_5_poi
+#				name = cloud_poi_title
+#				desc = cloud_poi_desc
+#				event_chain = cloud_chain
+#				category = cloud_chain_cat
+#				location = event_target:cloud_5
+#			}
+#		}
+#		if = {
+#			limit = { has_country_flag = has_cloud_1 }
+#			event_target:cloud_1 = {
+#				root = {
+#					clear_uncharted_space = {
+#						from = prev
+#						radius = 10
+#					}
+#				}
+#			}
+#		}
+#		if = {
+#			limit = { has_country_flag = has_cloud_2 }
+#			event_target:cloud_2 = {
+#				root = {
+#					clear_uncharted_space = {
+#						from = prev
+#						radius = 10
+#					}
+#				}
+#			}
+#		}
+#		if = {
+#			limit = { has_country_flag = has_cloud_3 }
+#			event_target:cloud_3 = {
+#				root = {
+#					clear_uncharted_space = {
+#						from = prev
+#						radius = 10
+#					}
+#				}
+#			}
+#		}
+#		if = {
+#			limit = { has_country_flag = has_cloud_4 }
+#			event_target:cloud_4 = {
+#				root = {
+#					clear_uncharted_space = {
+#						from = prev
+#						radius = 10
+#					}
+#				}
+#			}
+#		}
+#		if = {
+#			limit = { has_country_flag = has_cloud_5 }
+#			event_target:cloud_5 = {
+#				root = {
+#					clear_uncharted_space = {
+#						from = prev
+#						radius = 10
+#					}
+#				}
+#			}
+#		}
+#	}
+#}
+#
+## Fleet enters Void Cloud system
+## Scope = Ship
+## From = System
+#fleet_event = {
+#	id = story.408
+#	hide_window = yes
+#
+#	is_triggered_only = yes
+#
+#	trigger = {
+#		owner = {
+#			is_ai = no
+#			has_event_chain = "cloud_chain"
+#		}
+#		from = {
+#			OR = {
+#				has_star_flag = cloud_1
+#				has_star_flag = cloud_2
+#				has_star_flag = cloud_3
+#				has_star_flag = cloud_4
+#				has_star_flag = cloud_5
+#			}
+#		}
+#	}
+#
+#	immediate = {
+#		from = {
+#			if = {
+#				limit = { has_star_flag = cloud_1 }
+#				root = {
+#					owner = {
+#						remove_point_of_interest = cloud_1_poi
+#						add_event_chain_counter = { 
+#							event_chain = "cloud_chain" 
+#							counter = "clouds_watched" 
+#							amount = 1 
+#						}
+#					}
+#				}
+#				remove_star_flag = cloud_1
+#			}
+#			if = {
+#				limit = { has_star_flag = cloud_2 }
+#				root = {
+#					owner = {
+#						remove_point_of_interest = cloud_2_poi
+#						add_event_chain_counter = { 
+#							event_chain = "cloud_chain" 
+#							counter = "clouds_watched" 
+#							amount = 1 
+#						}
+#					}
+#				}
+#				remove_star_flag = cloud_2
+#			}
+#			if = {
+#				limit = { has_star_flag = cloud_3 }
+#				root = {
+#					owner = {
+#						remove_point_of_interest = cloud_3_poi
+#						add_event_chain_counter = { 
+#							event_chain = "cloud_chain" 
+#							counter = "clouds_watched" 
+#							amount = 1 
+#						}
+#					}
+#				}
+#				remove_star_flag = cloud_3
+#			}
+#			if = {
+#				limit = { has_star_flag = cloud_4 }
+#				root = {
+#					owner = {
+#						remove_point_of_interest = cloud_4_poi
+#						add_event_chain_counter = { 
+#							event_chain = "cloud_chain" 
+#							counter = "clouds_watched" 
+#							amount = 1 
+#						}
+#					}
+#				}
+#				remove_star_flag = cloud_4
+#			}
+#			if = {
+#				limit = { has_star_flag = cloud_5 }
+#				root = {
+#					owner = {
+#						remove_point_of_interest = cloud_5_poi
+#						add_event_chain_counter = { 
+#							event_chain = "cloud_chain" 
+#							counter = "clouds_watched" 
+#							amount = 1 
+#						}
+#					}
+#				}
+#				remove_star_flag = cloud_5
+#			}
+#		}
+#		if = {
+#			limit = {
+#				owner = {
+#					has_completed_event_chain_counter = {
+#						event_chain = "cloud_chain"
+#						counter = "clouds_watched"
+#					}
+#				}
+#			}
+#			owner = { end_event_chain = "cloud_chain" }
+#		}
+#	}
+#}
+
+
+
+### Tiyanki

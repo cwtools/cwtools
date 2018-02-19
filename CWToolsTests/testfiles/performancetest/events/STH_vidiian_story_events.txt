@@ -1,0 +1,417 @@
+########################
+#
+# Vidiian Story Events
+#
+# Written by Walshicus
+#
+########################
+
+namespace = STH_vidiian_story
+
+
+
+#Scientist proposes cure
+country_event = {
+	id = STH_vidiian_story.1
+	title = "STH_vidiian_story.1.name"
+	desc = { text = "STH_vidiian_story.1.desc_01" }
+	desc = { text = "STH_vidiian_story.1.desc_02" }
+	desc = { text = "STH_vidiian_story.1.desc_03" }
+	desc = { text = "STH_vidiian_story.1.desc_04" }
+	diplomatic = yes
+	picture_event_data = {
+		portrait = root
+		planet_background = root
+		graphical_culture = root
+		city_level = root
+		room = root
+	}
+	mean_time_to_happen = { months = 60 }
+	trigger = {
+		NOT = { has_global_flag = phageCure }
+		any_owned_pop_species = { has_trait = trait_the_phage }
+		is_species_class = VID
+		NOT = {	has_country_flag = phageCureResearchInProgress }
+	}
+	immediate = { 
+		set_country_flag = phageCureResearchInProgress 
+	}
+	option = {
+		name = STH_vidiian_story.1.a #Approve project
+		response_text = STH_vidiian_story.1.a.response
+		# if = { 
+			# limit = { NOT = { has_event_chain = the_phage_chain } }
+			# begin_event_chain = { event_chain = "the_phage_chain" target = ROOT }
+			# change_variable = { which = phageCureAttempts = value = 1 }
+		# }
+		capital_scope = { enable_special_project = { name = "THE_PHAGE_PROJECT_1" location = this owner = root } }
+	}
+	option = { 
+		name = STH_vidiian_story.1.b
+		response_text = STH_vidiian_story.1.b.response
+		hidden_effect = { remove_country_flag = phageCureResearchInProgress }
+	}
+}
+
+#Check Outcome
+country_event = {
+	id = STH_vidiian_story.2
+	hide_window = yes
+	is_triggered_only = yes
+	immediate = {
+		remove_country_flag = phageCureResearchInProgress
+		if = {
+			limit = { is_species_class = VID }
+			random_list = {
+				99 = { country_event = { id = STH_vidiian_story.3 days = 0 } }
+				1 = {
+					modifier = { factor = 2.00 check_variable = { which = phageCureAttempts value > 0 } }
+					modifier = { factor = 2.00 check_variable = { which = phageCureAttempts value > 1 } }
+					modifier = { factor = 2.00 check_variable = { which = phageCureAttempts value > 5 } }
+					modifier = { factor = 2.00 check_variable = { which = phageCureAttempts value > 10 } }
+					modifier = { factor = 2.00 check_variable = { which = phageCureAttempts value > 15 } }
+					modifier = { factor = 2.00 check_variable = { which = phageCureAttempts value > 20 } }
+					modifier = { factor = 2.00 check_variable = { which = phageCureAttempts value > 25 } }
+					modifier = { factor = 2.00 check_variable = { which = phageCureAttempts value > 30 } }
+					modifier = { factor = 2.00 years_passed > 50 }
+					modifier = { factor = 2.00 years_passed > 100 }
+					modifier = { factor = 2.00 years_passed > 150 }
+					modifier = { factor = 2.00 years_passed > 200 }
+					country_event = { id = STH_vidiian_story.4 days = 0 }
+				}
+			}
+			else = {
+				random_list = {
+					199 = { country_event = { id = STH_vidiian_story.11 days = 0 } }
+					1 = {
+						modifier = { factor = 2.00 check_variable = { which = phageCureAttempts value > 0 } }
+						modifier = { factor = 2.00 check_variable = { which = phageCureAttempts value > 1 } }
+						modifier = { factor = 2.00 check_variable = { which = phageCureAttempts value > 5 } }
+						modifier = { factor = 2.00 check_variable = { which = phageCureAttempts value > 10 } }
+						modifier = { factor = 2.00 check_variable = { which = phageCureAttempts value > 15 } }
+						modifier = { factor = 2.00 check_variable = { which = phageCureAttempts value > 20 } }
+						modifier = { factor = 2.00 check_variable = { which = phageCureAttempts value > 25 } }
+						modifier = { factor = 2.00 check_variable = { which = phageCureAttempts value > 30 } }
+						modifier = { factor = 2.00 years_passed > 50 }
+						modifier = { factor = 2.00 years_passed > 100 }
+						modifier = { factor = 2.00 years_passed > 150 }
+						modifier = { factor = 2.00 years_passed > 200 }
+						country_event = { id = STH_vidiian_story.12 days = 0 }
+					}
+				}
+			}
+		}
+	}
+}
+
+#Cure Failed
+country_event = {
+	id = STH_vidiian_story.3
+	title = "STH_vidiian_story.3.name"
+	desc = { text = "STH_vidiian_story.3.desc_01" }
+	# desc = { text = "STH_vidiian_story.3.desc_02" }
+	# desc = { text = "STH_vidiian_story.3.desc_03" }
+	# desc = { text = "STH_vidiian_story.3.desc_04" }
+	diplomatic = yes
+	picture_event_data = {
+		portrait = root
+		planet_background = root
+		graphical_culture = root
+		city_level = root
+		room = root
+	}
+	is_triggered_only = yes
+	option = { 
+		name = STH_vidiian_story.3.a
+	}
+}
+
+
+
+#Cure Succeeded
+country_event = {
+	id = STH_vidiian_story.4
+	title = "STH_vidiian_story.4.name"
+	desc = { text = "STH_vidiian_story.4.desc_01" }
+	# desc = { text = "STH_vidiian_story.4.desc_02" }
+	# desc = { text = "STH_vidiian_story.4.desc_03" }
+	# desc = { text = "STH_vidiian_story.4.desc_04" }
+	diplomatic = yes
+	picture_event_data = {
+		portrait = root
+		planet_background = root
+		graphical_culture = root
+		city_level = root
+		room = root
+	}
+	is_triggered_only = yes
+	immediate = {		
+		set_global_flag = phageCure
+		every_pop = {
+			limit = { has_trait = "trait_the_phage" }
+			modify_species = { species = this remove_trait = trait_the_phage }
+		}
+		every_country = {
+			every_owned_leader = { remove_trait = "leader_trait_the_phage" }
+			every_pool_leader = { remove_trait = "leader_trait_the_phage" }
+		}
+	}
+	option = { 
+		name = STH_vidiian_story.4.a
+		response_text = STH_vidiian_story.4.a.response
+		hidden_effect = {
+			country_event = { id = STH_vidiian_story.6 days = 90 random = 30 }
+			every_country = {
+				limit = { 
+					has_communications = root 
+					is_borg_empire = no 
+					NOT = { is_same_value = root }
+				}
+				country_event = { id = STH_vidiian_story.5 days = 10 random = 3 scopes = { from = root } }
+			}
+		}
+	}
+}
+
+
+country_event = { #Neighbour Notification
+	id = STH_vidiian_story.5
+	title = "STH_vidiian_story.5.name"
+	desc = "STH_vidiian_story.5.desc"
+	picture = sth_GFX_evt_thePhageProject2	
+	is_triggered_only = yes	
+	option = { 
+		name = STH_vidiian_story.5.a
+	}
+	option = { 
+		name = STH_vidiian_story.5.b
+	}
+	option = { 
+		name = STH_vidiian_story.5.c
+	}
+}
+
+country_event = { 
+	id = STH_vidiian_story.6
+	title = "STH_vidiian_story.6.name"
+	desc = "STH_vidiian_story.6.desc"
+	picture = sth_GFX_evt_thePhageProject2	
+	is_triggered_only = yes
+	immediate = {
+		if = {
+			limit = { exists = leader }
+			leader = { save_event_target_as = leader }
+		}
+	}
+	after = {
+		if = {
+			limit = { exists = leader }
+			leader = { unassign_leader = this }
+		}
+	}
+	option = { 
+		name = STH_vidiian_story.6.a
+		shift_ethic = "ethic_pacifist"
+		shift_ethic = "ethic_xenophile"
+	}
+	option = { 
+		name = STH_vidiian_story.6.b
+		shift_ethic = "ethic_pacifist"
+	}
+	option = { 
+		name = STH_vidiian_story.6.c
+		shift_ethic = "ethic_xenophile"
+	}
+	option = { 
+		name = STH_vidiian_story.6.d
+	}
+}
+
+
+
+#Scientist proposes cure for non-Vidiian Countries
+country_event = {
+	id = STH_vidiian_story.10
+	title = "STH_vidiian_story.10.name"
+	desc = { text = "STH_vidiian_story.10.desc_01" }
+	desc = { text = "STH_vidiian_story.10.desc_02" }
+	desc = { text = "STH_vidiian_story.10.desc_03" }
+	desc = { text = "STH_vidiian_story.10.desc_04" }
+	diplomatic = yes
+	picture_event_data = {
+		portrait = event_target:phageCureScientist
+		planet_background = root
+		graphical_culture = root
+		city_level = root
+		room = root
+	}
+	mean_time_to_happen = { months = 600 }
+	trigger = {
+		NOT = { has_global_flag = phageCure }
+		any_owned_pop_species = { has_trait = trait_the_phage }
+		NOT = { is_species_class = VID }
+		is_normal_country = yes
+		is_borg_empire = no
+		NOT = {	has_country_flag = phageCureResearchInProgress }
+	}
+	immediate = { 
+		set_country_flag = phageCureResearchInProgress
+		create_leader = { name = random type = scientist species = owner_main_species }
+		last_created_leader = {
+			save_event_target_as = phageCureScientist
+			set_leader_flag = phageCureScientist
+			recruitable = no
+		}
+	}
+	option = {
+		name = STH_vidiian_story.10.a #Approve project
+		response_text = STH_vidiian_story.10.a.response
+		capital_scope = { enable_special_project = { name = "THE_PHAGE_PROJECT_2" location = this owner = root } }
+	}
+	option = { 
+		name = STH_vidiian_story.10.b
+		response_text = STH_vidiian_story.10.b.response
+		hidden_effect = { remove_country_flag = phageCureResearchInProgress }
+	}
+	after = {
+		event_target:phageCureScientist = {
+			# hidden_effect = { kill_leader = { show_notification = no } }
+		}
+	}
+}
+
+#Cure Failed
+country_event = {
+	id = STH_vidiian_story.11
+	title = "STH_vidiian_story.11.name"
+	desc = { text = "STH_vidiian_story.11.desc_01" }
+	diplomatic = yes
+	picture_event_data = {
+		portrait = event_target:phageCureScientist
+		planet_background = root
+		graphical_culture = root
+		city_level = root
+		room = root
+	}
+	is_triggered_only = yes
+	immediate = {
+	}
+	option = { 
+		name = STH_vidiian_story.11.a
+	}
+}
+
+
+
+#Cure Succeeded
+country_event = {
+	id = STH_vidiian_story.12
+	title = "STH_vidiian_story.12.name"
+	desc = { text = "STH_vidiian_story.12.desc_01" }
+	diplomatic = yes
+	picture_event_data = {
+		portrait = event_target:phageCureScientist
+		planet_background = root
+		graphical_culture = root
+		city_level = root
+		room = root
+	}
+	is_triggered_only = yes
+	immediate = {		
+		set_global_flag = phageCure
+		every_pop = {
+			limit = { has_trait = "trait_the_phage" }
+			modify_species = { species = this remove_trait = trait_the_phage }
+		}
+		every_country = {
+			every_owned_leader = { remove_trait = "leader_trait_the_phage" }
+			every_pool_leader = { remove_trait = "leader_trait_the_phage" }
+		}
+	}
+	option = { 
+		name = STH_vidiian_story.12.a
+		response_text = STH_vidiian_story.12.a.response
+		hidden_effect = {
+			country_event = { id = STH_vidiian_story.14 days = 90 random = 30 }
+			every_country = { 
+				limit = { is_species_class = VID }
+				country_event = { id = STH_vidiian_story.6 days = 90 random = 30 }
+			}
+			every_country = {
+				limit = { 
+					has_communications = root 
+					is_borg_empire = no 
+					NOT = { is_same_value = root }
+				}
+				country_event = { id = STH_vidiian_story.13 days = 10 random = 3 scopes = { from = root } }
+			}
+		}
+	}
+}
+
+country_event = { #Neighbour Notification
+	id = STH_vidiian_story.13
+	title = "STH_vidiian_story.13.name"
+	desc = {
+		trigger = { NOT = { is_species_class = VID } }
+		text = "STH_vidiian_story.13.desc_01"
+	}
+	desc = {
+		trigger = { is_species_class = VID }
+		text = "STH_vidiian_story.13.desc_02"
+	}
+	picture = sth_GFX_evt_thePhageProject2	
+	is_triggered_only = yes	
+	option = { 
+		trigger = { NOT = { is_species_class = VID } }
+		name = STH_vidiian_story.13.a
+	}
+	option = { 
+		trigger = { NOT = { is_species_class = VID } }
+		name = STH_vidiian_story.13.b
+	}
+	option = { 
+		trigger = { NOT = { is_species_class = VID } }
+		name = STH_vidiian_story.13.c
+	}
+	option = { 
+		trigger = { is_species_class = VID }
+		name = STH_vidiian_story.13.c
+	}
+}
+
+country_event = { #Neighbour Notification
+	id = STH_vidiian_story.14
+	title = "STH_vidiian_story.14.name"
+	desc = "STH_vidiian_story.14.desc"
+	diplomatic = yes
+	picture_event_data = {
+		portrait = event_target:vidiianCountry
+		planet_background = event_target:vidiianCountry
+		graphical_culture = event_target:vidiianCountry
+		city_level = event_target:vidiianCountry
+		room = event_target:vidiianCountry
+	}
+	is_triggered_only = yes
+	trigger = {
+		any_country = { is_species_class = VID }
+	}
+	immediate = {
+		random_country = {
+			limit = { is_species_class = VID }
+			save_event_target_as = vidiianCountry
+		}
+	}
+	after = {
+		every_country = {
+			limit = { is_species_class = VID }
+			add_opinion_modifier = { modifier = opinion_phage_cure who = root }
+		}
+	}
+	option = { 
+		name = STH_vidiian_story.14.a
+	}
+	option = { 
+		name = STH_vidiian_story.14.b
+	}
+}

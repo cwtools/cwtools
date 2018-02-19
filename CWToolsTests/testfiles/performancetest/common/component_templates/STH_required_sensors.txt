@@ -1,0 +1,695 @@
+### New combat sensors
+   
+utility_component_template = {
+      key = "Required_Combat_Sensor_charge_1"
+      size = medium
+      icon = "GFX_ship_part_Required_Sensors_Short_0"
+      icon_frame = 1
+      ship_behavior = "charge_default"
+       sensor_range = 5
+      power = -5
+      cost = 5
+      ai_weight = { weight = 2 }
+      prerequisites = { "tech_combat_sensors" }
+      component_set = "required_ship_sensors"
+   }
+   
+utility_component_template = {
+      key = "Required_Combat_Sensor_picket_1"
+      size = medium
+      icon = "GFX_ship_part_Required_Sensors_Short_0"
+      icon_frame = 1
+      ship_behavior = "picket_mid_range_default"
+       sensor_range = 5
+      power = -5
+      cost = 5
+      ai_weight = { weight = 5 }
+      prerequisites = { "tech_combat_sensors" }
+      component_set = "required_ship_sensors"
+   }
+   
+utility_component_template = {
+      key = "Required_Combat_Sensor_brawler_1"
+      size = medium
+      icon = "GFX_ship_part_Required_Sensors_Short_0"
+      icon_frame = 1
+      ship_behavior = "brawler_mid_range_default"
+       sensor_range = 5
+      power = -5
+      cost = 5
+      ai_weight = { weight = 10 }
+      prerequisites = { "tech_combat_sensors" }
+      component_set = "required_ship_sensors"
+   }
+   
+utility_component_template = {
+      key = "Required_Combat_Sensor_skirmisher_1"
+      size = medium
+      icon = "GFX_ship_part_Required_Sensors_Short_0"
+      icon_frame = 1
+      ship_behavior = "skirmisher_mid_range_default"
+       sensor_range = 5
+      power = -5
+      cost = 5
+      ai_weight = { weight = 10 }
+      prerequisites = { "tech_combat_sensors" }
+      component_set = "required_ship_sensors"
+   }
+   
+utility_component_template = {
+      key = "Required_Combat_Sensor_sniper_1"
+      size = medium
+      icon = "GFX_ship_part_Required_Sensors_Short_0"
+      icon_frame = 1
+      ship_behavior = "long_range_sniper"
+       sensor_range = 5
+      power = -5
+      cost = 5
+      ai_weight = { weight = 1 }
+      prerequisites = { "tech_combat_sensors" }
+      component_set = "required_ship_sensors"
+   }
+   
+utility_component_template = {
+      key = "Required_Combat_Sensor_charge_2"
+      size = medium
+      icon = "GFX_ship_part_Required_Sensors_Short_0"
+      icon_frame = 1
+      ship_behavior = "charge_default"
+       sensor_range = 5
+      power = -5
+      cost = 5
+      ai_weight = { weight = 100 }
+      prerequisites = { "tech_combat_sensors" }
+      ship_modifier = { ship_fire_rate_mult = 0.1 }
+      size_restriction = { strike }
+      component_set = "required_ship_sensors"
+   }
+   
+utility_component_template = {
+      key = "Required_Combat_Sensor_picket_2"
+      size = medium
+      icon = "GFX_ship_part_Required_Sensors_Short_0"
+      icon_frame = 1
+      ship_behavior = "picket_mid_range_default"
+       sensor_range = 5
+      power = -5
+      cost = 5
+      ai_weight = { weight = 100 }
+      prerequisites = { "tech_combat_sensors" }
+      ship_modifier = { ship_tracking_add = 25 }
+      size_restriction = { saber fallen_interdictor }
+      component_set = "required_ship_sensors"
+   }
+   
+utility_component_template = {
+      key = "Required_Combat_Sensor_skirmisher_2"
+      size = medium
+      icon = "GFX_ship_part_Required_Sensors_Short_0"
+      icon_frame = 1
+      ship_behavior = "skirmisher_mid_range_default"
+       sensor_range = 5
+      power = -5
+      cost = 5
+      ai_weight = { weight = 100 }
+      prerequisites = { "tech_combat_sensors" }
+      ship_modifier = { ship_armor_mult = 0.25 }
+      size_restriction = { sovereign fallen_flagship }
+      component_set = "required_ship_sensors"
+   }
+   
+utility_component_template = {
+      key = "Required_Combat_Sensor_sniper_2"
+      size = medium
+      icon = "GFX_ship_part_Required_Sensors_Short_0"
+      icon_frame = 1
+      ship_behavior = "long_range_sniper"
+       sensor_range = 5
+      power = -5
+      cost = 5
+      ai_weight = { weight = 100 }
+      prerequisites = { "tech_combat_sensors" }
+      ship_modifier = { ship_weapon_range_mult = 0.1 }
+      size_restriction = { steamrunner borg_diamond fallen_assault }
+      component_set = "required_ship_sensors"
+   }
+   
+### Legacy combat sensors
+
+# Optical Combat Sensor (Short-Range) (Skirmisher (standard))
+utility_component_template = {
+  key = "REQUIRED_COMBAT_SENSORS_0_SHORT_SKIRMISHER"
+  size = medium
+  icon = "GFX_ship_part_Required_Sensors_Short_0"
+  icon_frame = 1
+  ship_behavior = "short_range_default"
+  sensor_range = 5
+  power = -5
+  cost = 5
+  upgrades_to = "REQUIRED_COMBAT_SENSORS_1_SHORT_SKIRMISHER"
+  ship_modifier = { ship_fire_rate_mult = 0.05 ship_tracking_add = 5   }
+  modifier = {     }
+  ai_weight = { 
+  weight = 100
+     modifier = {
+         factor = 10
+         use_weapon_cannon = yes
+       }
+    }
+  prerequisites = { "tech_legacy_unlock" }
+  component_set = "required_ship_sensors"
+}
+
+# Optical Combat Sensor (Mid-Range) (Skirmisher (standard))
+utility_component_template = {
+  key = "REQUIRED_COMBAT_SENSORS_0_MID_SKIRMISHER"
+  size = medium
+  icon = "GFX_ship_part_Required_Sensors_Mid_0"
+  icon_frame = 1
+  ship_behavior = "mid_range_default"
+  sensor_range = 5
+  power = -5
+  cost = 5
+  upgrades_to = "REQUIRED_COMBAT_SENSORS_1_MID_SKIRMISHER"
+  ship_modifier = { ship_weapon_damage = 0.05 ship_tracking_add = 5   }
+  modifier = {     }
+  ai_weight = { weight = 10 }
+  prerequisites = { "tech_legacy_unlock" }
+  component_set = "required_ship_sensors"
+}
+  
+# Optical Combat Sensor (Long-Range) (Skirmisher (standard))
+utility_component_template = {
+  key = "REQUIRED_COMBAT_SENSORS_0_LONG_SKIRMISHER"
+  size = medium
+  icon = "GFX_ship_part_Required_Sensors_Long_0"
+  icon_frame = 1
+  ship_behavior = "long_range_default"
+  sensor_range = 5
+  power = -5
+  cost = 5
+  upgrades_to = "REQUIRED_COMBAT_SENSORS_1_LONG_SKIRMISHER"
+  ship_modifier = { ship_weapon_range_mult = 0.1 ship_tracking_add = 5   }
+  modifier = {     }
+  ai_weight = { weight = 10 }
+  prerequisites = { "tech_legacy_unlock" }
+  component_set = "required_ship_sensors"
+}
+
+# Gravitic Combat Sensor (Short-Range) (Skirmisher (standard))
+utility_component_template = {
+  key = "REQUIRED_COMBAT_SENSORS_1_SHORT_SKIRMISHER"
+  size = medium
+  icon = "GFX_ship_part_Required_Sensors_Short_1"
+  icon_frame = 1
+  ship_behavior = "short_range_default"
+  sensor_range = 10
+  power = -20
+  cost = 20
+  upgrades_to = "REQUIRED_COMBAT_SENSORS_2_SHORT_SKIRMISHER"
+  ship_modifier = { ship_fire_rate_mult = 0.05 ship_tracking_add = 10   }
+  modifier = {     }
+  ai_weight = { 
+  weight = 1000
+     modifier = {
+         factor = 10
+         use_weapon_cannon = yes
+       }
+    }
+  prerequisites = { "tech_legacy_unlock" }
+  component_set = "required_ship_sensors"
+}
+
+# Gravitic Combat Sensor (Mid-Range) (Skirmisher (standard))
+utility_component_template = {
+  key = "REQUIRED_COMBAT_SENSORS_1_MID_SKIRMISHER"
+  size = medium
+  icon = "GFX_ship_part_Required_Sensors_Mid_1"
+  icon_frame = 1
+  ship_behavior = "mid_range_default"
+  sensor_range = 10
+  power = -20
+  cost = 20
+  upgrades_to = "REQUIRED_COMBAT_SENSORS_2_MID_SKIRMISHER"
+  ship_modifier = { ship_weapon_damage = 0.05 ship_tracking_add = 10   }
+  modifier = {     }
+  ai_weight = { weight = 110 }
+  prerequisites = { "tech_legacy_unlock" }
+  component_set = "required_ship_sensors"
+}
+
+# Gravitic Combat Sensor (Long-Range) (Skirmisher (standard))
+utility_component_template = {
+  key = "REQUIRED_COMBAT_SENSORS_1_LONG_SKIRMISHER"
+  size = medium
+  icon = "GFX_ship_part_Required_Sensors_Long_1"
+  icon_frame = 1
+  ship_behavior = "long_range_default"
+  sensor_range = 10
+  power = -20
+  cost = 20
+  upgrades_to = "REQUIRED_COMBAT_SENSORS_2_LONG_SKIRMISHER"
+  ship_modifier = { ship_weapon_range_mult = 0.1 ship_tracking_add = 10   }
+  modifier = {     }
+  ai_weight = { weight = 110 }
+  prerequisites = { "tech_legacy_unlock" }
+  component_set = "required_ship_sensors"
+}
+
+# Tachyon Combat Sensor (Short-Range) (Skirmisher (standard))
+utility_component_template = {
+  key = "REQUIRED_COMBAT_SENSORS_2_SHORT_SKIRMISHER"
+  size = medium
+  icon = "GFX_ship_part_Required_Sensors_Short_2"
+  icon_frame = 1
+  ship_behavior = "short_range_default"
+  sensor_range = 15
+  power = -45
+  cost = 45
+  
+  ship_modifier = { ship_fire_rate_mult = 0.05 ship_tracking_add = 15   }
+  modifier = {     }
+  ai_weight = { 
+  weight = 10000
+     modifier = {
+         factor = 10
+         use_weapon_cannon = yes
+       }
+    }
+  prerequisites = { "tech_legacy_unlock" }
+  component_set = "required_ship_sensors"
+}
+
+# Tachyon Combat Sensor (Mid-Range) (Skirmisher (standard))
+utility_component_template = {
+  key = "REQUIRED_COMBAT_SENSORS_2_MID_SKIRMISHER"
+  size = medium
+  icon = "GFX_ship_part_Required_Sensors_Mid_2"
+  icon_frame = 1
+  ship_behavior = "mid_range_default"
+  sensor_range = 15
+  power = -45
+  cost = 45
+  
+  ship_modifier = { ship_weapon_damage = 0.05 ship_tracking_add = 15   }
+  modifier = {     }
+  ai_weight = { weight = 1100 }
+  prerequisites = { "tech_legacy_unlock" }
+  component_set = "required_ship_sensors"
+}
+
+# Tacyon Combat Sensor (Long-Range) (Skirmisher (standard))
+utility_component_template = {
+  key = "REQUIRED_COMBAT_SENSORS_2_LONG_SKIRMISHER"
+  size = medium
+  icon = "GFX_ship_part_Required_Sensors_Long_2"
+  icon_frame = 1
+  ship_behavior = "long_range_default"
+  sensor_range = 15
+  power = -45
+  cost = 45
+  
+  ship_modifier = { ship_weapon_range_mult = 0.1 ship_tracking_add = 15   }
+  modifier = {     }
+  ai_weight = { weight = 1100 }
+  prerequisites = { "tech_legacy_unlock" }
+  component_set = "required_ship_sensors"
+}
+
+# Optical Combat Sensor (Short-Range) (Blitzer (Close-range, heavy escort only))
+utility_component_template = {
+  key = "REQUIRED_COMBAT_SENSORS_0_SHORT_BLITZER"
+  size = medium
+  icon = "GFX_ship_part_Required_Sensors_Short_0"
+  icon_frame = 1
+  ship_behavior = "short_range_blitzer"
+  sensor_range = 5
+  
+  power = -15
+  cost = 15
+  upgrades_to = "REQUIRED_COMBAT_SENSORS_1_SHORT_BLITZER"
+  ship_modifier = { ship_fire_rate_mult = 0.1 ship_weapon_range_mult = -0.5 ship_tracking_add = 5  }
+  modifier = {     }
+  ai_weight = { 
+  weight = 100
+     modifier = {
+         factor = 10
+         use_weapon_cannon = yes
+       }
+    }
+  prerequisites = { "tech_legacy_unlock" }
+  component_set = "required_ship_sensors_HE"
+}
+
+# Optical Combat Sensor (Mid-Range) (Blitzer (Close-range, heavy escort only))
+utility_component_template = {
+  key = "REQUIRED_COMBAT_SENSORS_0_MID_BLITZER"
+  size = medium
+  icon = "GFX_ship_part_Required_Sensors_Mid_0"
+  icon_frame = 1
+  ship_behavior = "mid_range_default"
+  sensor_range = 5
+  
+  power = -5
+  cost = 5
+  upgrades_to = "REQUIRED_COMBAT_SENSORS_1_MID_BLITZER"
+  ship_modifier = { ship_fire_rate_mult = 0.05 ship_weapon_range_mult = -0.25 ship_tracking_add = 5  }
+  modifier = {     }
+  ai_weight = { weight = 10 }
+  prerequisites = { "tech_legacy_unlock" }
+  component_set = "required_ship_sensors_HE"
+}
+  
+# Optical Combat Sensor (Long-Range) (Blitzer (Close-range, heavy escort only))
+utility_component_template = {
+  key = "REQUIRED_COMBAT_SENSORS_0_LONG_BLITZER"
+  size = medium
+  icon = "GFX_ship_part_Required_Sensors_Long_0"
+  icon_frame = 1
+  ship_behavior = "long_range_default"
+  sensor_range = 5
+  
+  power = -5
+  cost = 5
+  upgrades_to = "REQUIRED_COMBAT_SENSORS_1_LONG_BLITZER"
+  ship_modifier = { ship_weapon_range_mult = 0.1  ship_tracking_add = 5  }
+  modifier = {     }
+  ai_weight = { weight = 10 }
+  prerequisites = { "tech_legacy_unlock" }
+  component_set = "required_ship_sensors_HE"
+}
+
+# Gravitic Combat Sensor (Short-Range) (Blitzer (Close-range, heavy escort only))
+utility_component_template = {
+  key = "REQUIRED_COMBAT_SENSORS_1_SHORT_BLITZER"
+  size = medium
+  icon = "GFX_ship_part_Required_Sensors_Short_1"
+  icon_frame = 1
+  ship_behavior = "short_range_blitzer"
+  sensor_range = 10
+  
+  power = -40
+  cost = 40
+  upgrades_to = "REQUIRED_COMBAT_SENSORS_2_SHORT_BLITZER"
+  ship_modifier = { ship_fire_rate_mult = 0.2 ship_weapon_range_mult = -0.5 ship_tracking_add = 10  }
+  modifier = {     }
+  ai_weight = { 
+  weight = 200
+     modifier = {
+         factor = 10
+         use_weapon_cannon = yes
+       }
+    }
+  prerequisites = { "tech_legacy_unlock" }
+  component_set = "required_ship_sensors_HE"
+}
+
+# Gravitic Combat Sensor (Mid-Range) (Blitzer (Close-range, heavy escort only))
+utility_component_template = {
+  key = "REQUIRED_COMBAT_SENSORS_1_MID_BLITZER"
+  size = medium
+  icon = "GFX_ship_part_Required_Sensors_Mid_1"
+  icon_frame = 1
+  ship_behavior = "mid_range_default"
+  sensor_range = 10
+  
+  power = -10
+  cost = 10
+  upgrades_to = "REQUIRED_COMBAT_SENSORS_2_MID_BLITZER"
+  ship_modifier = { ship_fire_rate_mult = 0.1 ship_weapon_range_mult = -0.25 ship_tracking_add = 10  }
+  modifier = {     }
+  ai_weight = { weight = 110 }
+  prerequisites = { "tech_legacy_unlock" }
+  component_set = "required_ship_sensors_HE"
+}
+
+# Gravitic Combat Sensor (Long-Range) (Blitzer (Close-range, heavy escort only))
+utility_component_template = {
+  key = "REQUIRED_COMBAT_SENSORS_1_LONG_BLITZER"
+  size = medium
+  icon = "GFX_ship_part_Required_Sensors_Long_1"
+  icon_frame = 1
+  ship_behavior = "long_range_default"
+  sensor_range = 10
+  
+  power = -10
+  cost = 10
+  upgrades_to = "REQUIRED_COMBAT_SENSORS_2_LONG_BLITZER"
+  ship_modifier = { ship_weapon_range_mult = 0.1  ship_tracking_add = 10  }
+  modifier = {     }
+  ai_weight = { weight = 110 }
+  prerequisites = { "tech_legacy_unlock" }
+  component_set = "required_ship_sensors_HE"
+}
+
+# Tachyon Combat Sensor (Short-Range) (Blitzer (Close-range, heavy escort only))
+utility_component_template = {
+  key = "REQUIRED_COMBAT_SENSORS_2_SHORT_BLITZER"
+  size = medium
+  icon = "GFX_ship_part_Required_Sensors_Short_2"
+  icon_frame = 1
+  ship_behavior = "short_range_blitzer"
+  sensor_range = 15
+  
+  power = -60
+  cost = 60
+  
+  ship_modifier = { ship_fire_rate_mult = 0.3 ship_weapon_range_mult = -0.5 ship_tracking_add = 15  }
+  modifier = {     }
+  ai_weight = { 
+  weight = 300
+     modifier = {
+         factor = 10
+         use_weapon_cannon = yes
+       }
+    }
+  prerequisites = { "tech_legacy_unlock" }
+  component_set = "required_ship_sensors_HE"
+}
+
+# Tachyon Combat Sensor (Mid-Range) (Blitzer (Close-range, heavy escort only))
+utility_component_template = {
+  key = "REQUIRED_COMBAT_SENSORS_2_MID_BLITZER"
+  size = medium
+  icon = "GFX_ship_part_Required_Sensors_Mid_2"
+  icon_frame = 1
+  ship_behavior = "mid_range_default"
+  sensor_range = 15
+  
+  power = -20
+  cost = 20
+  
+  ship_modifier = { ship_fire_rate_mult = 0.15 ship_weapon_range_mult = -0.25 ship_tracking_add = 15  }
+  modifier = {     }
+  ai_weight = { weight = 1100 }
+  prerequisites = { "tech_legacy_unlock" }
+  component_set = "required_ship_sensors_HE"
+}
+
+# Tacyon Combat Sensor (Long-Range) (Blitzer (Close-range, heavy escort only))
+utility_component_template = {
+  key = "REQUIRED_COMBAT_SENSORS_2_LONG_BLITZER"
+  size = medium
+  icon = "GFX_ship_part_Required_Sensors_Long_2"
+  icon_frame = 1
+  ship_behavior = "long_range_default"
+  sensor_range = 15
+  
+  power = -20
+  cost = 20
+  
+  ship_modifier = { ship_weapon_range_mult = 0.1  ship_tracking_add = 15  }
+  modifier = {     }
+  ai_weight = { weight = 1100 }
+  prerequisites = { "tech_legacy_unlock" }
+  component_set = "required_ship_sensors_HE"
+}
+# Optical Combat Sensor (Short-Range) (Sniper (long-range, battlecruiser only))
+utility_component_template = {
+  key = "REQUIRED_COMBAT_SENSORS_0_SHORT_SNIPER"
+  size = medium
+  icon = "GFX_ship_part_Required_Sensors_Short_0"
+  icon_frame = 1
+  ship_behavior = "short_range_default"
+  sensor_range = 5
+  
+  power = -5
+  cost = 5
+  upgrades_to = "REQUIRED_COMBAT_SENSORS_1_SHORT_SNIPER"
+  ship_modifier = { ship_fire_rate_mult = 0.05  ship_tracking_add = 5  }
+  modifier = {     }
+  ai_weight = { 
+  weight = 100
+     modifier = {
+         factor = 10
+         use_weapon_cannon = yes
+       }
+    }
+  prerequisites = { "tech_legacy_unlock" }
+  component_set = "required_ship_sensors_BC"
+}
+
+# Optical Combat Sensor (Mid-Range) (Sniper (long-range, battlecruiser only))
+utility_component_template = {
+  key = "REQUIRED_COMBAT_SENSORS_0_MID_SNIPER"
+  size = medium
+  icon = "GFX_ship_part_Required_Sensors_Mid_0"
+  icon_frame = 1
+  ship_behavior = "mid_range_default"
+  sensor_range = 5
+  
+  power = -15
+  cost = 15
+  upgrades_to = "REQUIRED_COMBAT_SENSORS_1_MID_SNIPER"
+  ship_modifier = { ship_fire_rate_mult = -0.05 ship_weapon_range_mult = 0.1 ship_tracking_add = 5  }
+  modifier = {     }
+  ai_weight = { weight = 10 }
+  prerequisites = { "tech_legacy_unlock" }
+  component_set = "required_ship_sensors_BC"
+}
+
+# Optical Combat Sensor (Long-Range) (Sniper (long-range, battlecruiser only))
+utility_component_template = {
+  key = "REQUIRED_COMBAT_SENSORS_0_LONG_SNIPER"
+  size = medium
+  icon = "GFX_ship_part_Required_Sensors_Long_0"
+  icon_frame = 1
+  ship_behavior = "long_range_sniper"
+  sensor_range = 5
+  
+  power = -10
+  cost = 10
+  upgrades_to = "REQUIRED_COMBAT_SENSORS_1_LONG_SNIPER"
+  ship_modifier = { ship_fire_rate_mult = -0.1 ship_weapon_range_mult = 0.2 ship_tracking_add = 5  }
+  modifier = {     }
+  ai_weight = { weight = 10 }
+  prerequisites = { "tech_legacy_unlock" }
+  component_set = "required_ship_sensors_BC"
+}
+  
+# Gravitic Combat Sensor (Short-Range) (Sniper (long-range, battlecruiser only))
+utility_component_template = {
+  key = "REQUIRED_COMBAT_SENSORS_1_SHORT_SNIPER"
+  size = medium
+  icon = "GFX_ship_part_Required_Sensors_Short_1"
+  icon_frame = 1
+  ship_behavior = "short_range_default"
+  sensor_range = 10
+  
+  power = -10
+  cost = 10
+  upgrades_to = "REQUIRED_COMBAT_SENSORS_2_SHORT_SNIPER"
+  ship_modifier = { ship_fire_rate_mult = 0.05  ship_tracking_add = 10  }
+  modifier = {     }
+  ai_weight = { 
+  weight = 200
+     modifier = {
+         factor = 10
+         use_weapon_cannon = yes
+       }
+    }
+  prerequisites = { "tech_legacy_unlock" }
+  component_set = "required_ship_sensors_BC"
+}
+
+# Gravitic Combat Sensor (Mid-Range) (Sniper (long-range, battlecruiser only))
+utility_component_template = {
+  key = "REQUIRED_COMBAT_SENSORS_1_MID_SNIPER"
+  size = medium
+  icon = "GFX_ship_part_Required_Sensors_Mid_1"
+  icon_frame = 1
+  ship_behavior = "mid_range_default"
+  sensor_range = 10
+  
+  power = -40
+  cost = 40
+  upgrades_to = "REQUIRED_COMBAT_SENSORS_2_MID_SNIPER"
+  ship_modifier = { ship_fire_rate_mult = -0.05 ship_weapon_range_mult = 0.2 ship_tracking_add = 10  }
+  modifier = {     }
+  ai_weight = { weight = 110 }
+  prerequisites = { "tech_legacy_unlock" }
+  component_set = "required_ship_sensors_BC"
+}
+
+# Gravitic Combat Sensor (Long-Range) (Sniper (long-range, battlecruiser only))
+utility_component_template = {
+  key = "REQUIRED_COMBAT_SENSORS_1_LONG_SNIPER"
+  size = medium
+  icon = "GFX_ship_part_Required_Sensors_Long_1"
+  icon_frame = 1
+  ship_behavior = "long_range_sniper"
+  sensor_range = 10
+  
+  power = -20
+  cost = 20
+  upgrades_to = "REQUIRED_COMBAT_SENSORS_2_LONG_SNIPER"
+  ship_modifier = { ship_fire_rate_mult = -0.1 ship_weapon_range_mult = 0.3 ship_tracking_add = 10  }
+  modifier = {     }
+  ai_weight = { weight = 110 }
+  prerequisites = { "tech_legacy_unlock" }
+  component_set = "required_ship_sensors_BC"
+}
+
+# Tachyon Combat Sensor (Short-Range) (Sniper (long-range, battlecruiser only))
+utility_component_template = {
+  key = "REQUIRED_COMBAT_SENSORS_2_SHORT_SNIPER"
+  size = medium
+  icon = "GFX_ship_part_Required_Sensors_Short_2"
+  icon_frame = 1
+  ship_behavior = "short_range_default"
+  sensor_range = 15
+  
+  power = -20
+  cost = 20
+  
+  ship_modifier = { ship_fire_rate_mult = 0.05  ship_tracking_add = 15  }
+  modifier = {     }
+  ai_weight = { 
+  weight = 300
+     modifier = {
+         factor = 10
+         use_weapon_cannon = yes
+       }
+    }
+  prerequisites = { "tech_legacy_unlock" }
+  component_set = "required_ship_sensors_BC"
+}
+
+# Tachyon Combat Sensor (Mid-Range) (Sniper (long-range, battlecruiser only))
+utility_component_template = {
+  key = "REQUIRED_COMBAT_SENSORS_2_MID_SNIPER"
+  size = medium
+  icon = "GFX_ship_part_Required_Sensors_Mid_2"
+  icon_frame = 1
+  ship_behavior = "mid_range_default"
+  sensor_range = 15
+  
+  power = -60
+  cost = 60
+  
+  ship_modifier = { ship_fire_rate_mult = -0.05 ship_weapon_range_mult = 0.2 ship_tracking_add = 15  }
+  modifier = {     }
+  ai_weight = { weight = 1100 }
+  prerequisites = { "tech_legacy_unlock" }
+  component_set = "required_ship_sensors_BC"
+}
+
+# Tacyon Combat Sensor (Long-Range) (Sniper (long-range, battlecruiser only))
+utility_component_template = {
+  key = "REQUIRED_COMBAT_SENSORS_2_LONG_SNIPER"
+  size = medium
+  icon = "GFX_ship_part_Required_Sensors_Long_2"
+  icon_frame = 1
+  ship_behavior = "long_range_sniper"
+  sensor_range = 15
+  
+  power = -40
+  cost = 40
+  
+  ship_modifier = { ship_fire_rate_mult = -0.1 ship_weapon_range_mult = 0.4 ship_tracking_add = 15  }
+  modifier = {     }
+  ai_weight = { weight = 1100 }
+  prerequisites = { "tech_legacy_unlock" }
+  component_set = "required_ship_sensors_BC"
+}
+

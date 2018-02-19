@@ -1,0 +1,856 @@
+# STNH - Capek 1.8.0 Compat
+
+namespace = game_start
+
+### Hidden Game Start Event
+event = {
+	id = game_start.1
+	hide_window = yes
+	is_triggered_only = yes
+	
+	immediate = {
+		set_global_flag = game_started
+
+		# every_country = {
+			# limit = { is_ai = no }
+			# country_event = { id = country.900 days = 360 random = 60 }
+		# }
+		
+		## SPAWN UNIQUE SYSTEMS
+		# If any Empire is Commonwealth and UN is unplayed
+		# if = {
+			# limit = {
+				# any_country = { has_country_flag = human_2 }
+				# NOT = { any_country = { has_country_flag = human_1 } }
+				# Replaced UN check with generic Sol check
+				# NOT = { any_system = { has_star_flag = sol } }
+			# }
+			# random_system = {
+				# spawn_system = { initializer = "com_sol_system" }
+			# }
+			# else = {
+				# If there are no Sols
+				# if = {
+					# limit = {
+						# NOT = {
+							# any_system = {
+								# has_star_flag = sol
+							# }
+						# }
+					# }
+					# random_list = {
+						# 60 = { }
+						# 30 = {
+							# random_system = {
+								# spawn_system = { initializer = "special_init_03" }
+							# }
+						# }
+						# 10 = {
+							# random_system = {
+								# spawn_system = { initializer = "special_init_04" }
+							# }
+						# }
+					# }
+				# }
+			# }
+		# }
+
+		### SPAWN INVISIBLE GLOBAL EVENT COUNTRY
+		create_country = {
+			name = "global_event_country"
+			type = global_event
+			effect = { save_global_event_target_as = global_event_country }
+		}
+		### SPAWN SPECIAL COUNTRIES
+		# create_country = {
+			# name = "NAME_The_Shroud"
+			# type = shroud
+			# flag = {
+				# icon = {
+					# category = "special"
+					# file = "the_shroud.dds"
+				# }
+				# background= {
+					# category = "backgrounds"
+					# file = "00_solid.dds"
+				# }
+				# colors={
+					# "red"
+					# "black"
+					# "null"
+					# "null"
+				# }
+			# }
+		# }
+		
+		### HANDLE EMPIRE RELATIONS
+		# every_country = {
+			# limit = {
+				# has_country_flag = fallen_empire_machine
+			# }
+			# every_country = {
+				# limit = {
+					# is_country_type = drone
+				# }
+				# set_faction_hostility = {
+					# target = prev
+					# set_hostile = no
+					# set_neutral = no
+					# set_friendly = yes
+				# }					
+			# }
+		# }
+	}
+}
+
+event = {
+	id = game_start.2
+	hide_window = yes
+	is_triggered_only = yes
+	
+	immediate = {
+		every_country = {
+			limit = { exists = capital_scope }
+			capital_scope = {
+				solar_system = {
+					every_system_planet = {
+						if = {
+							limit = { has_modifier = hazardous_weather }
+							remove_modifier = hazardous_weather
+						}
+						if = {
+							limit = { has_modifier = dangerous_wildlife }
+							remove_modifier = dangerous_wildlife
+						}
+						if = {
+							limit = { has_modifier = weak_magnetic_field }
+							remove_modifier = weak_magnetic_field
+						}
+						if = {
+							limit = { has_modifier = strong_magnetic_field }
+							remove_modifier = strong_magnetic_field
+						}
+						if = {
+							limit = { has_modifier = unstable_tectonics }
+							remove_modifier = unstable_tectonics
+						}
+						if = {
+							limit = { has_modifier = tidal_locked }
+							remove_modifier = tidal_locked
+						}
+						if = {
+							limit = { has_modifier = chthonian_planet }
+							remove_modifier = chthonian_planet
+						}
+						if = {
+							limit = { has_modifier = asteroid_impacts }
+							remove_modifier = asteroid_impacts
+						}
+						if = {
+							limit = { has_modifier = extensive_moon_system }
+							remove_modifier = extensive_moon_system
+						}
+						if = {
+							limit = { has_modifier = carbon_world }
+							remove_modifier = carbon_world
+						}
+						if = {
+							limit = { has_modifier = wild_storms }
+							remove_modifier = wild_storms
+						}
+						if = {
+							limit = { has_modifier = low_gravity }
+							remove_modifier = low_gravity
+						}
+						if = {
+							limit = { has_modifier = high_gravity }
+							remove_modifier = high_gravity
+						}
+						#if = {
+						#	limit = { has_modifier = hollow_planet }
+						#	remove_modifier = hollow_planet
+						#}
+						if = {
+							limit = { has_modifier = mineral_rich }
+							remove_modifier = mineral_rich
+						}
+						if = {
+							limit = { has_modifier = ultra_rich }
+							remove_modifier = ultra_rich
+						}
+						if = {
+							limit = { has_modifier = mineral_poor }
+							remove_modifier = mineral_poor
+						}
+						if = {
+							limit = { has_modifier = titanic_life }
+							remove_modifier = titanic_life
+						}
+						if = {
+							limit = { has_modifier = mineral_poor }
+							remove_modifier = mineral_poor
+						}
+						if = {
+							limit = { has_modifier = asteroid_belt }
+							remove_modifier = asteroid_belt
+						}
+						if = {
+							limit = { has_modifier = natural_beauty }
+							remove_modifier = natural_beauty
+						}
+						if = {
+							limit = { has_modifier = atmospheric_aphrodisiac }
+							remove_modifier = atmospheric_aphrodisiac
+						}
+						if = {
+							limit = { has_modifier = atmospheric_hallucinogen }
+							remove_modifier = atmospheric_hallucinogen
+						}
+						if = {
+							limit = { has_modifier = lush_planet }
+							remove_modifier = lush_planet
+						}
+						if = {
+							limit = { has_modifier = bleak_planet }
+							remove_modifier = bleak_planet
+						}
+						if = {
+							limit = { has_modifier = irradiated_planet }
+							remove_modifier = irradiated_planet
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+### Hidden Game Start Event that resets tutorial for advisor trigger purposes
+event = {
+	id = game_start.3
+	hide_window = yes
+	is_triggered_only = yes
+	
+	# immediate = {
+		# every_country = {
+			# limit = { is_ai = no }
+			# country_event = { id = tutorial.104 }
+		# }
+	# }
+}
+
+### Countdown to Nomad Fleet
+event = {
+	id = game_start.5
+	hide_window = yes
+	is_triggered_only = yes
+
+	immediate = {
+		every_country = {
+			limit = { is_ai = no }
+			random_list = {
+				#1 = { country_event = { id = nomad.1 days = 1 } } # DEBUG
+				20 = { country_event = { id = nomad.1 days = 7300 random = 500 } } # 25 years
+				25 = { country_event = { id = nomad.1 days = 14600 random = 500 } } # 40 years
+				25 = { country_event = { id = nomad.1 days = 20075 random = 500 } } # 55 years
+				30 = { } # No nomads
+			}
+		}
+	}
+}
+
+### Country-scope start event for advanced empires
+country_event = {
+	id = game_start.6
+	hide_window = yes
+	is_triggered_only = yes
+
+	immediate = {
+		# give_technology = { tech = "tech_ship_armor_1" message = no }
+		# give_technology = { tech = "tech_shields_1" message = no }
+		# give_technology = { tech = "tech_solar_panel_network" message = no }
+		# give_technology = { tech = "tech_biolab_1" message = no }
+		# give_technology = { tech = "tech_engineering_lab_1" message = no }
+		# give_technology = { tech = "tech_physics_lab_1" message = no }
+		# give_technology = { tech = "tech_planetary_unification" message = no }
+	}
+}
+
+### Empire init - add technologies and resources
+country_event = {
+	id = game_start.8
+	hide_window = yes
+	is_triggered_only = yes
+
+	immediate = {
+		if = { 
+			limit = { 
+				has_civic = civic_mechanists 
+			}
+			# give_technology = { message = no tech = tech_powered_exoskeletons }
+			# give_technology = { message = no tech = tech_robotic_workers }
+		}
+		if = {
+			limit = { 
+				has_authority = auth_machine_intelligence 
+			}
+			if = {
+				limit = {
+					has_valid_civic = civic_machine_servitor
+				}
+				add_energy = 50
+				add_food = 50
+				else = {
+					add_energy = 100
+				}
+			}			
+			else = {
+				add_food = 100
+			}
+		}
+	}
+}
+
+### Empire init - add ships
+country_event = {
+	id = game_start.9
+	hide_window = yes
+	is_triggered_only = yes
+
+	immediate = {
+		
+		#science
+		create_fleet = {
+			effect = {
+				set_owner = prev
+
+				create_ship = {
+					name = random
+					random_existing_design = science
+				}
+
+				set_fleet_stance = evasive				
+				set_location = prev.capital_scope
+				
+				owner = {
+					create_leader = {
+						type = scientist
+						sub_type = survey
+						name = random
+						species = owner_main_species
+					}
+				}
+				set_leader = last_created_leader
+			}			
+		}
+			
+		#constructor
+		create_fleet = {
+			effect = {
+				set_owner = prev
+				
+				create_ship = {
+					name = random
+					random_existing_design = constructor
+				}
+				
+				set_fleet_stance = evasive
+				set_location = prev.capital_scope
+			}
+		}
+
+		#military
+		create_fleet = {
+			set_take_point = yes
+			effect = {
+				set_owner = prev
+				
+				while = {
+					count = 3
+					create_ship = {
+						name = random
+						random_existing_design = corvette
+					}
+				}
+				
+				set_location = prev.capital_scope
+			}
+		}
+	}
+}
+
+# Game start - Fallen Empiress
+country_event = {
+	id = game_start.10
+	hide_window = yes
+	is_triggered_only = yes
+	
+	trigger = {
+		is_country_type = fallen_empire
+	}
+
+	immediate = {
+		if = {
+			limit = {
+				has_authority = auth_machine_intelligence
+			}
+			random_list = {
+				66 = { set_country_flag = fallen_machine_empire_awaken_1 }	# Custodian
+				33 = { set_country_flag = fallen_machine_empire_awaken_2 }	# Berserker
+			}				
+		}
+		if = {
+			limit = {
+				NOT = { has_authority = auth_machine_intelligence }
+			}
+			every_owned_pop = {
+				set_pop_flag = organic_fallen_empire_pop
+			}
+		}
+		# contact other fallen empires
+		every_country = {
+			limit = { 
+				is_country_type = fallen_empire 
+				NOT = { has_communications = root }
+			}
+			establish_communications_no_message = root
+		}		
+		
+		# setup mining & research stations			
+		every_planet_within_border = {
+			limit = { 
+				has_deposit_for = shipclass_mining_station 
+				has_mining_station = no
+			}
+			create_mining_station = {
+				owner = ROOT
+			}
+		}
+		every_planet_within_border = {
+			limit = { 
+				has_deposit_for = shipclass_research_station 
+				has_research_station = no
+			}
+			create_research_station = {
+				owner = ROOT
+			}
+		}
+		while = {
+			count = 10
+			random_planet_within_border = {
+				limit = {
+					OR = {
+						has_research_station = yes
+						has_mining_station = yes
+					}
+					solar_system = { 
+						NOT = {
+							any_ship_in_system = {
+								is_ship_class = shipclass_military_station
+							}
+						}
+					}
+				}
+			
+				create_fleet = {
+					effect = {
+						set_owner = ROOT
+						create_fallen_empire_small_station = yes
+						set_location = {
+							target = PREV
+							distance = 20
+							angle = random
+						}
+					}
+				}
+			}			
+		}
+	}
+}
+
+# secondary species: assign trait_machine_unit, turn into robotics, then create pops
+# this: capital planet
+# from: secondary species
+planet_event = {
+	id = game_start.11
+	hide_window = yes
+	is_triggered_only = yes
+
+	immediate = {
+		# from = { save_event_target_as = secondary_species }
+
+		# if = { limit = { owner = { has_valid_civic = civic_syncretic_evolution } }
+			# event_target:secondary_species = {
+				# set_citizenship_type = {
+					# country = root.owner
+					# type = citizenship_slavery
+				# }
+			# }
+			# while = {
+				# count = 4
+				# random_tile = {
+					# limit = {
+						# OR = {
+							# has_building = building_mining_network_1
+							# has_building = building_hydroponics_farm_1
+						# }
+						# has_pop = no
+					# }
+					# create_pop = {
+						# species = event_target:secondary_species
+						# ethos = random
+					# }
+				# }
+			# }
+		# }
+	}
+}
+
+# assign trait_hive_mind or trait_machine_unit, turn into robotics, then create pops
+# this: capital planet
+# from: founder species
+planet_event = {
+	id = game_start.12
+	hide_window = yes
+	is_triggered_only = yes
+
+	immediate = {
+		from = {
+			if = { limit = { is_machine_empire = yes }
+				apply_robotic_pop_growth_behavior = yes
+			}
+		}
+
+		if = { limit = { owner = { has_valid_civic = civic_mechanists } }
+			while = {
+				count = 2
+				random_tile = {
+					limit = {
+						has_building = building_mining_network_1
+						has_pop = no
+					}
+					# build_pop = {
+						# name = buildable_robot_pop_1
+					# }
+				}
+			}
+		}
+
+		while = {
+			limit = {
+				OR = {
+					AND = {
+						owner = { NOT = { has_valid_civic = civic_machine_servitor } }
+						num_pops < 8
+					}
+					AND = {
+						owner = { has_valid_civic = civic_machine_servitor }
+						num_pops < 10	# 2 extra pops are useless bio trophies, see game_start.11
+					}
+				}
+			}
+			create_pop = {
+				species = owner_main_species
+				ethos = random
+			}
+		}
+	}
+}
+
+# replace some buildings for special empires
+# this: capital planet
+# from: founder species
+planet_event = {
+	id = game_start.13
+	hide_window = yes
+	is_triggered_only = yes
+
+	immediate = {
+		# Power Plant for Mechanists instead of Science Lab
+		if = { limit = { owner = { has_valid_civic = civic_mechanists } }
+			random_tile = {
+				limit = { has_building = building_basic_science_lab_1 }
+				remove_building = yes
+				set_building = building_power_plant_1
+				set_deposit = d_energy_deposit
+			}
+		}			
+	}
+}
+
+# replace some tile blockers for special empires
+# this: capital planet
+# from: founder species
+planet_event = {
+	id = game_start.14
+	hide_window = yes
+	is_triggered_only = yes
+
+	immediate = {
+		if = { limit = { owner = { has_authority = auth_hive_mind } }
+			every_tile = {
+				limit = { has_blocker = "tb_decrepit_dwellings" }
+				remove_blocker = yes
+				set_blocker = "tb_collapsed_burrows"
+			}
+		}
+
+		if = { limit = { owner = { has_government = gov_machine_assimilator } }
+			every_tile = {
+				limit = { has_blocker = "tb_failing_infrastructure" }
+				remove_blocker = yes
+				set_blocker = "tb_assimilators_ruins"
+			}
+		}
+
+		if = { limit = { owner = { has_government = gov_machine_terminator } }
+			every_tile = {
+				limit = { has_blocker = "tb_failing_infrastructure" }
+				remove_blocker = yes
+				set_blocker = "tb_exterminators_ruins"
+			}
+			every_tile = {
+				limit = { has_blocker = "tb_decrepit_dwellings" }
+				remove_blocker = yes
+				set_blocker = "tb_former_battlefield"
+			}
+		}
+
+		if = { limit = { owner = { has_government = gov_machine_servitor } }
+			every_tile = {
+				limit = { has_blocker = "tb_decrepit_dwellings" }
+				remove_blocker = yes
+				set_blocker = "tb_unsupervised_settlement"
+			}
+		}
+
+		if = {
+			limit = {
+				owner = {
+					OR = {
+						has_government = gov_machine_empire
+						has_government = gov_machine_assimilator
+						has_government = gov_machine_research
+						has_government = gov_machine_industrial
+					}
+				}
+			}
+			every_tile = {
+				limit = { has_blocker = "tb_decrepit_dwellings" }
+				remove_blocker = yes
+				set_blocker = "tb_strip_mine"
+			}
+		}
+	}
+}
+
+# on_initialize_advanced_colony: remove tile blockers on capital
+planet_event = {
+	id = game_start.20
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = { is_capital = yes }
+
+	immediate = {
+		every_tile = {
+			remove_blocker = yes
+		}
+	}
+}
+
+# on_initialize_advanced_colony: upgrade colony shelter
+planet_event = {
+	id = game_start.21
+	hide_window = yes
+	is_triggered_only = yes
+
+	immediate = {
+		every_tile = {
+			switch = {
+				trigger = has_building
+				"building_colony_shelter" = { set_building = "building_capital_1" }
+			}
+		}
+	}
+}
+
+@advanced_empire_capital_num_power_plants = 4
+@advanced_empire_colony_num_power_plants = 2
+@advanced_empire_num_mines = 1
+@advanced_empire_num_farms = 1
+
+# on_initialize_advanced_colony: set up additional buildings (mines, farms, power plants)
+planet_event = {
+	id = game_start.22
+	hide_window = yes
+	is_triggered_only = yes
+
+	immediate = {
+		every_tile = {
+			limit = { has_building = no }
+			if = {
+				limit = {
+					has_building = no
+					planet = {
+						OR = {
+							AND = {
+								is_capital = yes
+								count_tile = {
+									count < @advanced_empire_capital_num_power_plants
+									limit = { has_building = building_power_plant_1 }
+								}
+							}
+							AND = {
+								is_capital = no
+								count_tile = {
+									count < @advanced_empire_colony_num_power_plants
+									limit = { has_building = building_power_plant_1 }
+								}
+							}
+						}
+					}
+					has_resource = energy
+				}
+				remove_blocker = yes
+				set_building = building_power_plant_1
+			}
+
+			if = {
+				limit = {
+					has_building = no
+					planet = {
+						count_tile = {
+							count < @advanced_empire_num_mines
+							limit = { has_building = building_mining_network_1 }
+						}
+					}
+					has_resource = minerals
+				}
+				remove_blocker = yes
+				set_building = building_mining_network_1
+			}
+
+			if = {
+				limit = {
+					has_building = no
+					planet = {
+						count_tile = {
+							count < @advanced_empire_num_farms
+							limit = { has_building = building_hydroponics_farm_1 }
+						}
+					}
+					has_resource = food
+				}
+				remove_blocker = yes
+				set_building = building_hydroponics_farm_1
+			}
+		}
+
+		every_tile = {
+			limit = { has_building = no }
+			if = {
+				limit = {
+					has_building = no
+					planet = {
+						OR = {
+							AND = {
+								is_capital = yes
+								count_tile = {
+									count < @advanced_empire_capital_num_power_plants
+									limit = { has_building = building_power_plant_1 }
+								}
+							}
+							AND = {
+								is_capital = no
+								count_tile = {
+									count < @advanced_empire_colony_num_power_plants
+									limit = { has_building = building_power_plant_1 }
+								}
+							}
+						}
+					}
+					has_resource = no
+				}
+				remove_blocker = yes
+				set_building = building_power_plant_1
+			}
+
+			if = {
+				limit = {
+					has_building = no
+					planet = {
+						count_tile = {
+							count < @advanced_empire_num_mines
+							limit = { has_building = building_mining_network_1 }
+						}
+					}
+					has_resource = no
+				}
+				remove_blocker = yes
+				set_building = building_mining_network_1
+			}
+
+			if = {
+				limit = {
+					has_building = no
+					planet = {
+						count_tile = {
+							count < @advanced_empire_num_farms
+							limit = { has_building = building_hydroponics_farm_1 }
+						}
+					}
+					has_resource = no
+				}
+				remove_blocker = yes
+				set_building = building_hydroponics_farm_1
+			}
+
+			if = {
+				limit = {
+					planet = {
+						owner = { has_authority = auth_machine_intelligence }
+					}
+					has_building = building_hydroponics_farm_1
+				}
+				remove_building = yes
+				set_building = building_power_plant_1
+			}
+		}
+	}
+}
+
+# on_initialize_advanced_colony: add additional pops
+planet_event = {
+	id = game_start.23
+	hide_window = yes
+	is_triggered_only = yes
+
+	immediate = {
+		if = { limit = { is_capital = yes }
+
+			# 2-4 extra pops on capital planet
+			create_pop = { species = owner_main_species }
+			create_pop = { species = owner_main_species }
+			random_list = {
+				1 = {
+				}
+				1 = {
+					create_pop = { species = owner_main_species }
+				}
+				1 = {
+					create_pop = { species = owner_main_species }
+					create_pop = { species = owner_main_species }
+				}
+			}
+
+			else = {
+				# 4 extra pops on additional colony
+				create_pop = { species = owner_main_species }
+				create_pop = { species = owner_main_species }
+				create_pop = { species = owner_main_species }
+				create_pop = { species = owner_main_species }
+			}
+		}
+	}
+}

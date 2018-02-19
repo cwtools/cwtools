@@ -1,0 +1,42 @@
+########################
+##ANOMALY EVENTS ###
+########################
+#potential = ship scope
+
+#All discoveries assigned weight 1. Or not?
+
+# Rogue moon
+anomaly = {
+	event = STH_borg_anomaly.1
+	category = "rogue_moon_category"
+	
+	weight = 1
+	
+	potential = {
+		owner = { is_borg_empire = yes }
+	}
+}
+
+# Rogue moonbase
+anomaly = {
+	event = STH_borg_anomaly.2
+	category = "rogue_moon_category"
+	
+	weight = 1
+	
+	potential = {
+		owner = { is_borg_empire = yes }
+	}
+}
+
+# Lethal Tropical Wildlife
+anomaly = {
+	event = STH_borg_anomaly.3
+	category = "TROP_BIOLOGY_CAT"
+	
+	weight = 1
+	
+	potential = {
+		owner = { is_borg_empire = yes }
+	}
+}

@@ -1,0 +1,91 @@
+tributary = {
+	can_colonize = yes
+	joins_overlord_wars = no
+	calls_overlord_to_war = yes
+	can_do_diplomacy = yes
+	
+	can_switch_to = {
+		vassal protectorate
+	}
+	
+	subject_tax_rate = {
+		minerals = 0.25
+		energy = 0.25
+	}
+	
+	potential = {
+		from = { is_country_type = default }
+	}
+	
+	effect = {
+		if = {
+			limit = {
+				from = { 
+					has_valid_civic = civic_hive_devouring_swarm
+				}
+			}
+			set_subject_of = {
+				who = none
+			}
+		}			
+		if = {
+			limit = {
+				NOT = { is_same_species = from }
+				from = { 
+					has_valid_civic = civic_fanatic_purifiers
+				}
+			}
+			set_subject_of = {
+				who = none
+			}
+		}	
+		if = {
+			limit = {
+				from = { 
+					is_country_type = awakened_fallen_empire
+					has_ethic = ethic_fanatic_materialist
+				}
+			}
+			set_subject_of = {
+				who = from
+				subject_type = satellite
+			}
+		}	
+		if = {
+			limit = {
+				from = { 
+					is_country_type = awakened_fallen_empire
+					has_ethic = ethic_fanatic_spiritualist
+				}
+			}
+			set_subject_of = {
+				who = from
+				subject_type = dominion
+			}
+		}
+		if = {
+			limit = {
+				from = { 
+					is_country_type = awakened_fallen_empire
+					has_ethic = ethic_fanatic_xenophile
+				}
+			}
+			set_subject_of = {
+				who = from
+				subject_type = signatory
+			}
+		}
+		if = {
+			limit = {
+				from = { 
+					is_country_type = awakened_fallen_empire
+					has_ethic = ethic_fanatic_xenophobe
+				}
+			}
+			set_subject_of = {
+				who = from
+				subject_type = thrall
+			}
+		}
+	}	
+}

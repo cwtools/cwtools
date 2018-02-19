@@ -1,0 +1,79 @@
+﻿### Andorian Empire
+Bynar = {
+	randomized = no
+
+	ship_names = {
+		generic = {
+			"Vessel 01001101" "Vessel 10111010" "Vessel 11110010" "Vessel 01110001" "Vessel 01011001" "Vessel 10001100" "Vessel 01001100" "Vessel 01010001" "Vessel 01010110" "Vessel 10100011" "Vessel 01000111" "Vessel 11010110" "Vessel 11011010" "Vessel 11111010" "Vessel 01000010" "Vessel 11111000" "Vessel 01011111" "Vessel 11101011" "Vessel 11011110" "Vessel 00110110" "Vessel 10010100" "Vessel 00010101" "Vessel 10110111" "Vessel 10000111" "Vessel 10100111" "Vessel 00100100" "Vessel 10010001" "Vessel 00110001" "Vessel 00101001" "Vessel 01101101" "Vessel 11011101" "Vessel 11001110" "Vessel 11011000" "Vessel 01111010" "Vessel 00111001" "Vessel 11000010" "Vessel 00111011" "Vessel 11111001" "Vessel 10011001" "Vessel 00010110" "Vessel 01010111" "Vessel 10110011" "Vessel 10100001" "Vessel 10100100" "Vessel 11101111" "Vessel 10101100" "Vessel 10110001" "Vessel 10101010" "Vessel 01101110" "Vessel 01111111" "Vessel 11010111" "Vessel 11000000" "Vessel 11101100" "Vessel 01101111" "Vessel 10111110" "Vessel 11011001" "Vessel 10001000" "Vessel 00010111" "Vessel 11111111" "Vessel 10110010" "Vessel 11010011" "Vessel 10101001" "Vessel 00111010" "Vessel 10010000" "Vessel 01001011" "Vessel 00101000" "Vessel 10011011" "Vessel 10000010" "Vessel 00010000" "Vessel 00010100" "Vessel 00010011" "Vessel 00110101" "Vessel 01001110" "Vessel 01000101" "Vessel 01001000" "Vessel 00000110" "Vessel 10010111" "Vessel 10001111" "Vessel 00000000" "Vessel 00100001" "Vessel 10011111" "Vessel 01111110" "Vessel 11001000" "Vessel 00000001" "Vessel 01011011" "Vessel 10010010" "Vessel 00011011" "Vessel 10111001" "Vessel 10000000" "Vessel 11100000" "Vessel 01110111" "Vessel 01110000" "Vessel 10101111" "Vessel 11101110" "Vessel 10001010" "Vessel 10000110" "Vessel 00001110" "Vessel 11000110" "Vessel 01100011" "Vessel 11011100" "Vessel 11110101" "Vessel 00100010" "Vessel 00111100" "Vessel 11010101" "Vessel 10101110" "Vessel 11010001" "Vessel 00001011" "Vessel 11110011" "Vessel 11111100" "Vessel 00111000" "Vessel 00001001" "Vessel 01110100" "Vessel 10111111" "Vessel 00100000" "Vessel 00111110" "Vessel 01101000" "Vessel 11110111" "Vessel 01110011" "Vessel 00111101" "Vessel 11010100" "Vessel 11111110" "Vessel 10111000" "Vessel 00101011" "Vessel 01111000" "Vessel 11001011" "Vessel 01010010" "Vessel 11010010" "Vessel 11011111" "Vessel 00110011" "Vessel 11001111" "Vessel 00000101" "Vessel 11101000" "Vessel 01110110" "Vessel 00111111" "Vessel 10111011" "Vessel 00100101" "Vessel 10000011" "Vessel 01011101" "Vessel 00010001" "Vessel 11100111" "Vessel 11110000" "Vessel 10000100" "Vessel 00100111" "Vessel 10101000" "Vessel 01111101" "Vessel 00000111" "Vessel 00011111" "Vessel 11000111" "Vessel 10111101" "Vessel 00110100" "Vessel 01011110" "Vessel 10100000" "Vessel 10011000" "Vessel 00000100" "Vessel 00101101" "Vessel 00110000" "Vessel 00100110" "Vessel 10010101" "Vessel 10001110" "Vessel 11100110" "Vessel 11100010" "Vessel 00011110" "Vessel 11011011" "Vessel 00010010" "Vessel 11100011" "Vessel 10010011" "Vessel 01010101" "Vessel 10100110" "Vessel 00001010" "Vessel 11110001" "Vessel 11000011" "Vessel 00001101" "Vessel 11100101" "Vessel 11110100" "Vessel 01001001" "Vessel 00001100" "Vessel 00101111" "Vessel 01010011" "Vessel 11111101" "Vessel 11001001" "Vessel 10111100" "Vessel 01010000" "Vessel 01101011" "Vessel 01110101" "Vessel 01111011" "Vessel 01100100" "Vessel 00000011" "Vessel 00001000" "Vessel 10011101" "Vessel 11100001" "Vessel 01010100" "Vessel 00011101" "Vessel 10101011" "Vessel 10011100" "Vessel 01100101" "Vessel 01111100" "Vessel 11110110" "Vessel 00101010" "Vessel 00011000" "Vessel 10001011" "Vessel 01100000" "Vessel 01000100" "Vessel 01011010" "Vessel 10001101" "Vessel 01011100" "Vessel 00011100" "Vessel 11010000" "Vessel 00110111" "Vessel 01101010" "Vessel 11000001" "Vessel 01100111" "Vessel 11111011" "Vessel 11000100" "Vessel 11000101" "Vessel 00001111" "Vessel 10100101" "Vessel 00110010" "Vessel 11001010" "Vessel 01101100" "Vessel 00101110" "Vessel 01000011" "Vessel 00011010" "Vessel 10000101" "Vessel 00101100" "Vessel 01000110" "Vessel 11001100" "Vessel 01000001" "Vessel 10110000" "Vessel 10110101" "Vessel 10000001" "Vessel 11001101" "Vessel 01001111" "Vessel 01111001" "Vessel 10010110" "Vessel 01100001" "Vessel 10101101" "Vessel 00000010" "Vessel 01110010" "Vessel 10110110" "Vessel 01000000" "Vessel 00011001" "Vessel 01001010" "Vessel 10001001" "Vessel 11100100" "Vessel 11101101" "Vessel 11101001" "Vessel 10110100" "Vessel 01100010" "Vessel 01101001" "Vessel 10011110" "Vessel 01011000" "Vessel 10100010" "Vessel 01100110" "Vessel 11101010" "Vessel 10011010" "Vessel 00100011"
+		}
+		outpost_station = { sequential_name = "Frontier Outpost" }
+	}
+	
+	ship_class_names = {
+		corvette = { "0001" }
+		saber = { "0010" }
+		sovereign = { "0011" }
+		steamrunner = { "0100" }
+		adv_cruiser = { "0101" }
+		strike = { "0110" }
+		science = { "0000" }
+	}
+
+	fleet_names = {
+		sequential_name = "%O% Fleet"
+	}
+	
+	army_names = {
+		defense_army = {
+			sequential_name = "%O% Home Guard"
+		}
+		assault_army = {
+			sequential_name = "%O% Expeditionary Guard"
+		}
+		slave_army = {
+			sequential_name = "%O% Indentured Guard"
+		}
+		clone_army = { 
+			sequential_name = "%O% Clone Guard"
+		}
+		robotic_army = {
+			sequential_name = "%O% Mechanical Guard"
+		}
+		android_army = {
+			sequential_name = "%O% Synthetic Guard"
+		}
+		psionic_army = { 
+			sequential_name = "%O% Psi Guard"
+		}
+		xenomorph_army = {
+			sequential_name = "%O% Bio-Warfare Guard"
+		}
+		gene_warrior_army = {
+			sequential_name = "%O% Bio-Engineered Guard"
+		}
+	}
+
+	planet_names = {
+		generic = {
+			names = { }
+		}
+	}
+
+
+	### CHARACTERS
+
+	character_names = {
+		names1 = {
+			weight = 100
+			first_names_male = {
+				"0100" "1011" "1111" "0111" "0101" "1000" "1010" "1101" "1110" "0011" "1001" "0001" "0010" "0110" "1100" "0000"
+			}
+			first_names_female = {
+				"0100" "1011" "1111" "0111" "0101" "1000" "1010" "1101" "1110" "0011" "1001" "0001" "0010" "0110" "1100" "0000"
+			}
+			second_names = {
+				"0100" "1011" "1111" "0111" "0101" "1000" "1010" "1101" "1110" "0011" "1001" "0001" "0010" "0110" "1100" "0000"
+			}
+		}
+	}
+}

@@ -1,0 +1,3354 @@
+
+
+
+### Diplomacy Adopt
+   tr_diplomacy_adopt = {
+      cost = { unity = 60 }
+      modifier = {
+         diplomacy_influence_cost = -0.25
+      }
+   
+      tradition_swap = {
+         name = tr_versatility_adopt
+         inherit_effects = no
+         inherit_name = yes
+         inherit_icon = yes
+         trigger = { is_assimilator = yes }
+         modifier = {
+            pop_food_req_mult = -0.15
+         }
+         weight = { factor = 1 }
+      }
+   
+      tradition_swap = {
+         name = tr_purity_adopt
+         inherit_effects = no
+         inherit_name = yes
+         inherit_icon = yes
+         trigger = { xenophobe_country_traditions = yes }
+         modifier = {
+            law_building_build_cost_mult = -0.25
+            military_building_build_cost_mult = -0.25
+         }
+         weight = { factor = 1 }
+      }
+   
+      tradition_swap = {
+         name = tr_binary_adopt
+         inherit_effects = no
+         inherit_name = yes
+         inherit_icon = yes
+         trigger = { has_authority = auth_machine_intelligence }
+         modifier = {
+            pop_robot_build_cost_mult = -0.10
+         }
+         weight = { factor = 1 }
+      }
+   
+      tradition_swap = {
+         name = tr_greed_adopt
+         inherit_effects = no
+         inherit_name = yes
+         inherit_icon = yes
+         trigger = { has_country_flag = ferengi_alliance }
+         modifier = {
+            diplomacy_influence_cost = -0.33
+         }
+         weight = { factor = 1 }
+      }
+      ai_weight = {
+         factor = 10
+         modifier = {
+            factor = 2
+            has_ethic = ethic_xenophile
+         }
+         modifier = {
+            factor = 3
+            has_ethic = ethic_fanatic_xenophile
+         }
+      }
+   }
+   
+### Trade Agreements
+   tr_diplomacy_dynamic_ecomorphism = {
+      cost = { unity = 60 }
+   
+      ### allows multiculturalism and Tourism Bureau edicts
+   
+      modifier = {
+         country_trust_growth = 0.33
+      }
+   
+      tradition_swap = {
+         name = tr_versatility_1
+         inherit_effects = no
+         inherit_name = no
+         inherit_icon = no
+         trigger = { is_assimilator = yes }
+         modifier = {
+            country_leader_cap = 2
+         }
+         weight = { factor = 1 }
+      }
+   
+      tradition_swap = {
+         name = tr_purity_1
+         inherit_effects = no
+         inherit_name = no
+         inherit_icon = yes
+         trigger = { xenophobe_country_traditions = yes }
+         modifier = {
+            planet_unrest_add = -20
+         }
+         weight = { factor = 1 }
+      }
+   
+      tradition_swap = {
+         name = tr_versatility_operational_proxies
+         inherit_effects = no
+         inherit_name = no
+         inherit_icon = no
+         trigger = { has_authority = auth_machine_intelligence }
+         modifier = {
+            country_leader_cap = 2
+         }
+         weight = { factor = 1 }
+      }
+   
+      tradition_swap = {
+         name = tr_greed_1
+         inherit_effects = no
+         inherit_name = no
+         inherit_icon = yes
+         trigger = { has_country_flag = ferengi_alliance }
+      on_enabled = { give_technology = { tech = "tech_society_new_worlds_1183" message = no } }
+         weight = { factor = 1 }
+      }
+      ai_weight = {
+         factor = 1000
+      }
+   }
+   
+### Alien Tourism
+   tr_diplomacy_alien_tourism = {
+      cost = { unity = 60 }
+   
+      ### allow visitor center
+   
+      modifier = {
+         country_border_friction_mult = -0.25
+      }
+      possible = {
+         has_tradition = tr_diplomacy_dynamic_ecomorphism
+      }
+   
+      tradition_swap = {
+         name = tr_versatility_2
+         inherit_effects = no
+         inherit_name = no
+         inherit_icon = no
+         trigger = { is_assimilator = yes }
+         modifier = {
+            leader_skill_levels = 1
+         }
+         weight = { factor = 1 }
+      }
+   
+      tradition_swap = {
+         name = tr_purity_2
+         inherit_effects = no
+         inherit_name = no
+         inherit_icon = yes
+         trigger = { xenophobe_country_traditions = yes }
+         modifier = {
+            country_leader_cap = 3
+         }
+         weight = { factor = 1 }
+      }
+   
+      tradition_swap = {
+         name = tr_versatility_peak_performance
+         inherit_effects = no
+         inherit_name = no
+         inherit_icon = no
+         trigger = { has_authority = auth_machine_intelligence }
+         modifier = {
+            leader_skill_levels = 1
+         }
+         weight = { factor = 1 }
+      }
+   
+      tradition_swap = {
+         name = tr_greed_2
+         inherit_effects = no
+         inherit_name = no
+         inherit_icon = yes
+         trigger = { has_country_flag = ferengi_alliance }
+         modifier = {
+            country_resource_energy_mult = 0.1
+         }
+         weight = { factor = 1 }
+      }
+      ai_weight = {
+         factor = 5000
+      }
+   }
+   
+### Bureau of InterPlanetary Treaties
+   tr_diplomacy_the_federation = {
+      cost = { unity = 60 }
+      modifier = {
+         ship_home_territory_fire_rate_mult = 0.15
+         spaceport_defensive_war_ship_build_speed_mult = 0.25
+      }
+   
+      tradition_swap = {
+         name = tr_versatility_3
+         inherit_effects = no
+         inherit_name = no
+         inherit_icon = no
+         trigger = { is_assimilator = yes }
+         modifier = {
+            tile_resource_food_mult = 0.20
+         }
+         weight = { factor = 1 }
+      }
+   
+      tradition_swap = {
+         name = tr_purity_3
+         inherit_effects = no
+         inherit_name = no
+         inherit_icon = yes
+         trigger = { xenophobe_country_traditions = yes }
+      on_enabled = { give_technology = { tech = "tech_society_mass-scale_490" message = no } }
+         weight = { factor = 1 }
+      }
+   
+      tradition_swap = {
+         name = tr_versatility_universal_compatibility
+         inherit_effects = no
+         inherit_name = no
+         inherit_icon = no
+         trigger = { has_authority = auth_machine_intelligence }
+         modifier = {
+            country_synthetic_trust_cap_add = 50
+         }
+         weight = { factor = 1 }
+      }
+   
+      tradition_swap = {
+         name = tr_greed_3
+         inherit_effects = no
+         inherit_name = no
+         inherit_icon = yes
+         trigger = { has_country_flag = ferengi_alliance }
+         modifier = {
+            country_border_friction_mult = -0.33
+         }
+         weight = { factor = 1 }
+      }
+      ai_weight = {
+         factor = 1000
+      }
+   }
+   
+### Entente Coordination
+   tr_diplomacy_entente_coordination = {
+      cost = { unity = 60 }
+      modifier = {
+         federation_naval_cap_contribution_mult = 1.00
+      }
+      possible = {
+         has_tradition = tr_diplomacy_the_federation
+      }
+   
+      tradition_swap = {
+         name = tr_versatility_4
+         inherit_effects = no
+         inherit_name = no
+         inherit_icon = no
+         trigger = { is_assimilator = yes }
+         weight = { factor = 1 }
+      }
+   
+      tradition_swap = {
+         name = tr_purity_4
+         inherit_effects = no
+         inherit_name = no
+         inherit_icon = yes
+         trigger = { xenophobe_country_traditions = yes }
+         modifier = {
+            spaceport_defensive_war_ship_build_speed_mult = 0.25
+            ship_home_territory_fire_rate_mult = 0.15
+         }
+         weight = { factor = 1 }
+      }
+   
+      tradition_swap = {
+         name = tr_versatility_adaptive_programming
+         inherit_effects = no
+         inherit_name = no
+         inherit_icon = no
+         trigger = { has_authority = auth_machine_intelligence }
+         modifier = {
+            MACHINE_species_trait_points_add = 1
+         }
+         weight = { factor = 1 }
+      }
+   
+      tradition_swap = {
+         name = tr_greed_4
+         inherit_effects = no
+         inherit_name = no
+         inherit_icon = yes
+         trigger = { has_country_flag = ferengi_alliance }
+         modifier = {
+            leader_skill_levels = 1
+         }
+         weight = { factor = 1 }
+      }
+      ai_weight = {
+         factor = 5000
+      }
+   }
+   
+### Federal Unity
+   tr_diplomacy_federal_unity = {
+      cost = { unity = 60 }
+      modifier = {
+         country_federation_member_resource_unity_mult = 0.05
+         country_federation_member_resource_unity_max_mult = 0.3
+      }
+      possible = {
+         has_tradition = tr_diplomacy_the_federation
+      }
+   
+      tradition_swap = {
+         name = tr_versatility_5
+         inherit_effects = no
+         inherit_name = no
+         inherit_icon = no
+         trigger = { is_assimilator = yes }
+         modifier = {
+            country_strategic_resources_resource_unity_mult = 0.02
+            country_strategic_resources_resource_unity_max_mult = 0.3
+         }
+         weight = { factor = 1 }
+      }
+   
+      tradition_swap = {
+         name = tr_purity_5
+         inherit_effects = no
+         inherit_name = no
+         inherit_icon = yes
+         trigger = { xenophobe_country_traditions = yes }
+         modifier = {
+            pop_government_ethic_attraction = 0.1
+            country_unrest_unhappy_slave_effect_mult = -0.25
+         }
+         weight = { factor = 1 }
+      }
+   
+      tradition_swap = {
+         name = tr_versatility_material_analysis
+         inherit_effects = no
+         inherit_name = no
+         inherit_icon = no
+         trigger = { has_authority = auth_machine_intelligence }
+         modifier = {
+            country_strategic_resources_resource_unity_mult = 0.02
+            country_strategic_resources_resource_unity_max_mult = 0.3
+         }
+         weight = { factor = 1 }
+      }
+   
+      tradition_swap = {
+         name = tr_greed_5
+         inherit_effects = no
+         inherit_name = no
+         inherit_icon = yes
+         trigger = { has_country_flag = ferengi_alliance }
+         modifier = {
+            country_federation_member_resource_unity_mult = 0.05
+            country_federation_member_resource_unity_max_mult = 0.3
+         }
+         weight = { factor = 1 }
+      }
+      ai_weight = {
+         factor = 5000
+      }
+   }
+   
+### 
+   tr_diplomacy_finish = {
+      modifier = {
+         ascension_perks_add = 1
+         country_trust_cap_add = 25
+      }
+   
+      tradition_swap = {
+         name = tr_versatility_finish
+         inherit_effects = no
+         inherit_name = yes
+         inherit_icon = yes
+         trigger = { is_assimilator = yes }
+         modifier = {
+            pop_growth_req = -55
+            ascension_perks_add = 1
+         }
+         weight = { factor = 1 }
+      }
+   
+      tradition_swap = {
+         name = tr_purity_finish
+         inherit_effects = no
+         inherit_name = yes
+         inherit_icon = yes
+         trigger = { xenophobe_country_traditions = yes }
+         modifier = {
+            rivalry_influence_gain = 0.2
+            ascension_perks_add = 1
+         }
+         weight = { factor = 1 }
+      }
+   
+      tradition_swap = {
+         name = tr_binary_finish
+         inherit_effects = no
+         inherit_name = yes
+         inherit_icon = yes
+         trigger = { has_authority = auth_machine_intelligence }
+         modifier = {
+            pop_robot_production_output = 0.05
+            ascension_perks_add = 1
+         }
+         weight = { factor = 1 }
+      }
+   
+      tradition_swap = {
+         name = tr_greed_finish
+         inherit_effects = no
+         inherit_name = yes
+         inherit_icon = yes
+         trigger = { has_country_flag = ferengi_alliance }
+         modifier = {
+            ascension_perks_add = 1
+            country_leader_cap = 2
+         }
+         weight = { factor = 1 }
+      }
+   }
+   
+### 
+   tr_discovery_adopt = {
+      cost = { unity = 60 }
+   
+      ### allow auto-explore
+   
+      on_enabled = { give_technology = { tech = "tech_automated_exploring" message = no } }
+   
+      tradition_swap = {
+         name = tr_perfection_adopt
+         inherit_effects = no
+         inherit_name = yes
+         inherit_icon = yes
+         trigger = { is_assimilator = yes }
+      on_enabled = { give_technology = { tech = "tech_automated_exploring" message = no } }
+         weight = { factor = 1 }
+      }
+   
+      tradition_swap = {
+         name = tr_doctrine_adopt
+         inherit_effects = no
+         inherit_name = yes
+         inherit_icon = yes
+         trigger = { spiritualist_country_traditions = yes }
+         weight = { factor = 1 }
+      }
+   
+      tradition_swap = {
+         name = tr_discovery_adopt_machine
+         inherit_effects = no
+         inherit_name = yes
+         inherit_icon = yes
+         trigger = { has_authority = auth_machine_intelligence }
+      on_enabled = { give_technology = { tech = "tech_automated_exploring" message = no } }
+         weight = { factor = 1 }
+      }
+   
+      tradition_swap = {
+         name = tr_order_adopt
+         inherit_effects = no
+         inherit_name = yes
+         inherit_icon = yes
+         trigger = { has_country_flag = cardassian_union }
+         modifier = {
+            species_leader_exp_gain = 0.33
+         }
+         weight = { factor = 1 }
+      }
+   
+      tradition_swap = {
+         name = tr_logic_adopt
+         inherit_effects = no
+         inherit_name = yes
+         inherit_icon = yes
+         trigger = { has_country_flag = vulcan_high_command }
+         modifier = {
+            ship_anomaly_generation_chance_mult = 0.05
+         }
+      on_enabled = { give_technology = { tech = "tech_automated_exploring" message = no } }
+         weight = { factor = 1 }
+      }
+   
+      tradition_swap = {
+         name = tr_glory_adopt
+         inherit_effects = no
+         inherit_name = yes
+         inherit_icon = yes
+         trigger = { has_country_flag = klingon_empire }
+         weight = { factor = 1 }
+      }
+   
+      tradition_swap = {
+         name = tr_prophecy_adopt
+         inherit_effects = no
+         inherit_name = yes
+         inherit_icon = yes
+         trigger = { has_country_flag = bajoran_republic }
+         weight = { factor = 1 }
+      }
+   
+      tradition_swap = {
+         name = tr_tanagra_adopt
+         inherit_effects = no
+         inherit_name = yes
+         inherit_icon = yes
+         trigger = { has_country_flag = tamarian_unity }
+         modifier = {
+            pop_government_ethic_attraction = 0.2
+         }
+         weight = { factor = 1 }
+      }
+      ai_weight = {
+         factor = 10
+         modifier = {
+            factor = 2
+            has_ethic = ethic_materialist
+         }
+         modifier = {
+            factor = 3
+            has_ethic = ethic_fanatic_materialist
+         }
+      }
+   }
+   
+### Department of Cartography
+   tr_discovery_science_division = {
+      cost = { unity = 60 }
+      modifier = {
+         ship_anomaly_generation_chance_mult = 0.10
+      }
+   
+      tradition_swap = {
+         name = tr_perfection_1
+         inherit_effects = no
+         inherit_name = no
+         inherit_icon = no
+         trigger = { is_assimilator = yes }
+         modifier = {
+            ship_anomaly_fail_risk = -0.2
+         }
+         weight = { factor = 1 }
+      }
+   
+      tradition_swap = {
+         name = tr_doctrine_1
+         inherit_effects = no
+         inherit_name = no
+         inherit_icon = yes
+         trigger = { spiritualist_country_traditions = yes }
+         modifier = {
+            leader_skill_levels = 1
+         }
+         weight = { factor = 1 }
+      }
+   
+      tradition_swap = {
+         name = tr_discovery_science_division_machine
+         inherit_effects = no
+         inherit_name = no
+         inherit_icon = yes
+         trigger = { has_authority = auth_machine_intelligence }
+         modifier = {
+            num_tech_alternatives_add = 1
+         }
+         weight = { factor = 1 }
+      }
+   
+      tradition_swap = {
+         name = tr_order_1
+         inherit_effects = no
+         inherit_name = no
+         inherit_icon = yes
+         trigger = { has_country_flag = cardassian_union }
+      on_enabled = { give_technology = { tech = "tech_society_new_worlds_1184" message = no } }
+         weight = { factor = 1 }
+      }
+   
+      tradition_swap = {
+         name = tr_logic_1
+         inherit_effects = no
+         inherit_name = no
+         inherit_icon = yes
+         trigger = { has_country_flag = vulcan_high_command }
+         modifier = {
+            leader_skill_levels = 1
+         }
+         weight = { factor = 1 }
+      }
+   
+      tradition_swap = {
+         name = tr_glory_1
+         inherit_effects = no
+         inherit_name = no
+         inherit_icon = yes
+         trigger = { has_country_flag = klingon_empire }
+         modifier = {
+            leader_skill_levels = 1
+         }
+         weight = { factor = 1 }
+      }
+   
+      tradition_swap = {
+         name = tr_prophecy_1
+         inherit_effects = no
+         inherit_name = no
+         inherit_icon = yes
+         trigger = { has_country_flag = bajoran_republic }
+         modifier = {
+            leader_skill_levels = 1
+         }
+         weight = { factor = 1 }
+      }
+   
+      tradition_swap = {
+         name = tr_tanagra_1
+         inherit_effects = no
+         inherit_name = no
+         inherit_icon = yes
+         trigger = { has_country_flag = tamarian_unity }
+         modifier = {
+            leader_skill_levels = 1
+         }
+         weight = { factor = 1 }
+      }
+      ai_weight = {
+         factor = 1000
+      }
+   }
+   
+### Pushing the Frontier
+   tr_discovery_polytechnic_education = {
+      cost = { unity = 60 }
+      modifier = {
+         country_planet_classes_resource_unity_mult = 0.05
+         country_planet_classes_resource_unity_max_mult = 0.3
+      }
+      possible = {
+         has_tradition = tr_discovery_science_division
+      }
+   
+      tradition_swap = {
+         name = tr_perfection_2
+         inherit_effects = no
+         inherit_name = no
+         inherit_icon = no
+         trigger = { is_assimilator = yes }
+         modifier = {
+            science_ship_survey_speed = 0.5
+         }
+         weight = { factor = 1 }
+      }
+   
+      tradition_swap = {
+         name = tr_doctrine_2
+         inherit_effects = no
+         inherit_name = no
+         inherit_icon = yes
+         trigger = { spiritualist_country_traditions = yes }
+      on_enabled = { give_technology = { tech = "tech_society_new_worlds_1185" message = no } }
+         weight = { factor = 1 }
+      }
+   
+      tradition_swap = {
+         name = tr_discovery_polytechnic_education_machine
+         inherit_effects = no
+         inherit_name = no
+         inherit_icon = yes
+         trigger = { has_authority = auth_machine_intelligence }
+         modifier = {
+            species_leader_exp_gain = 0.33
+         }
+         weight = { factor = 1 }
+      }
+   
+      tradition_swap = {
+         name = tr_order_2
+         inherit_effects = no
+         inherit_name = no
+         inherit_icon = yes
+         trigger = { has_country_flag = cardassian_union }
+         modifier = {
+            army_morale = 0.2
+         }
+         weight = { factor = 1 }
+      }
+   
+      tradition_swap = {
+         name = tr_logic_2
+         inherit_effects = no
+         inherit_name = no
+         inherit_icon = yes
+         trigger = { has_country_flag = vulcan_high_command }
+         modifier = {
+            science_ship_survey_speed = 0.5
+         }
+         weight = { factor = 1 }
+      }
+   
+      tradition_swap = {
+         name = tr_glory_2
+         inherit_effects = no
+         inherit_name = no
+         inherit_icon = yes
+         trigger = { has_country_flag = klingon_empire }
+         modifier = {
+            country_planet_classes_resource_unity_mult = 0.05
+            country_planet_classes_resource_unity_max_mult = 0.3
+         }
+         weight = { factor = 1 }
+      }
+   
+      tradition_swap = {
+         name = tr_prophecy_2
+         inherit_effects = no
+         inherit_name = no
+         inherit_icon = yes
+         trigger = { has_country_flag = bajoran_republic }
+      on_enabled = { give_technology = { tech = "tech_society_new_worlds_1185" message = no } }
+         weight = { factor = 1 }
+      }
+   
+      tradition_swap = {
+         name = tr_tanagra_2
+         inherit_effects = no
+         inherit_name = no
+         inherit_icon = yes
+         trigger = { has_country_flag = tamarian_unity }
+         modifier = {
+            country_planet_classes_resource_unity_mult = 0.05
+            country_planet_classes_resource_unity_max_mult = 0.3
+         }
+         weight = { factor = 1 }
+      }
+      ai_weight = {
+         factor = 5000
+      }
+   }
+   
+### Faith in Science
+   tr_discovery_faith_in_science = {
+      cost = { unity = 60 }
+      modifier = {
+         shipclass_science_ship_evasion_add = 30
+         science_ship_survey_speed = 0.10
+      }
+      possible = {
+         has_tradition = tr_discovery_polytechnic_education
+      }
+   
+      tradition_swap = {
+         name = tr_perfection_3
+         inherit_effects = no
+         inherit_name = no
+         inherit_icon = no
+         trigger = { is_assimilator = yes }
+         weight = { factor = 1 }
+      }
+   
+      tradition_swap = {
+         name = tr_doctrine_3
+         inherit_effects = no
+         inherit_name = no
+         inherit_icon = yes
+         trigger = { spiritualist_country_traditions = yes }
+         modifier = {
+            science_ship_survey_speed = 0.05
+            ship_anomaly_generation_chance_mult = 0.05
+         }
+      on_enabled = { give_technology = { tech = "tech_automated_exploring" message = no } }
+         weight = { factor = 1 }
+      }
+   
+      tradition_swap = {
+         name = tr_discovery_faith_in_science_machine
+         inherit_effects = no
+         inherit_name = no
+         inherit_icon = yes
+         trigger = { has_authority = auth_machine_intelligence }
+         modifier = {
+            shipclass_science_ship_evasion_add = 30
+         }
+         weight = { factor = 1 }
+      }
+   
+      tradition_swap = {
+         name = tr_order_3
+         inherit_effects = no
+         inherit_name = no
+         inherit_icon = yes
+         trigger = { has_country_flag = cardassian_union }
+         modifier = {
+            num_tech_alternatives_add = 1
+            shipclass_science_ship_evasion_add = 30
+         }
+         weight = { factor = 1 }
+      }
+   
+      tradition_swap = {
+         name = tr_logic_3
+         inherit_effects = no
+         inherit_name = no
+         inherit_icon = yes
+         trigger = { has_country_flag = vulcan_high_command }
+         modifier = {
+            num_tech_alternatives_add = 1
+         }
+         weight = { factor = 1 }
+      }
+   
+      tradition_swap = {
+         name = tr_glory_3
+         inherit_effects = no
+         inherit_name = no
+         inherit_icon = yes
+         trigger = { has_country_flag = klingon_empire }
+         modifier = {
+            army_morale = 0.2
+         }
+         weight = { factor = 1 }
+      }
+   
+      tradition_swap = {
+         name = tr_prophecy_3
+         inherit_effects = no
+         inherit_name = no
+         inherit_icon = yes
+         trigger = { has_country_flag = bajoran_republic }
+         weight = { factor = 1 }
+      }
+   
+      tradition_swap = {
+         name = tr_tanagra_3
+         inherit_effects = no
+         inherit_name = no
+         inherit_icon = yes
+         trigger = { has_country_flag = tamarian_unity }
+         modifier = {
+            leader_age = 20
+         }
+         weight = { factor = 1 }
+      }
+      ai_weight = {
+         factor = 5000
+      }
+   }
+   
+### To Boldly Go
+   tr_discovery_to_boldly_go = {
+      cost = { unity = 60 }
+   
+      ### grants xenobiology science module and stasis pods colony module
+   
+      on_enabled = { give_technology = { tech = "tech_society_new_worlds_1188" message = no } }
+   
+      tradition_swap = {
+         name = tr_perfection_4
+         inherit_effects = no
+         inherit_name = no
+         inherit_icon = no
+         trigger = { is_assimilator = yes }
+         modifier = {
+            num_tech_alternatives_add = 1
+         }
+         weight = { factor = 1 }
+      }
+   
+      tradition_swap = {
+         name = tr_doctrine_4
+         inherit_effects = no
+         inherit_name = no
+         inherit_icon = yes
+         trigger = { spiritualist_country_traditions = yes }
+         weight = { factor = 1 }
+      }
+   
+      tradition_swap = {
+         name = tr_discovery_to_boldly_go_machine
+         inherit_effects = no
+         inherit_name = no
+         inherit_icon = yes
+         trigger = { has_authority = auth_machine_intelligence }
+         modifier = {
+            science_ship_survey_speed = 0.5
+         }
+         weight = { factor = 1 }
+      }
+   
+      tradition_swap = {
+         name = tr_order_4
+         inherit_effects = no
+         inherit_name = no
+         inherit_icon = yes
+         trigger = { has_country_flag = cardassian_union }
+         modifier = {
+            science_ship_survey_speed = 0.5
+         }
+      on_enabled = { give_technology = { tech = "tech_automated_exploring" message = no } }
+         weight = { factor = 1 }
+      }
+   
+      tradition_swap = {
+         name = tr_logic_4
+         inherit_effects = no
+         inherit_name = no
+         inherit_icon = yes
+         trigger = { has_country_flag = vulcan_high_command }
+         modifier = {
+            leader_age = 20
+         }
+         weight = { factor = 1 }
+      }
+   
+      tradition_swap = {
+         name = tr_glory_4
+         inherit_effects = no
+         inherit_name = no
+         inherit_icon = yes
+         trigger = { has_country_flag = klingon_empire }
+      on_enabled = { give_technology = { tech = "tech_automated_exploring" message = no } }
+         weight = { factor = 1 }
+      }
+   
+      tradition_swap = {
+         name = tr_prophecy_4
+         inherit_effects = no
+         inherit_name = no
+         inherit_icon = yes
+         trigger = { has_country_flag = bajoran_republic }
+         modifier = {
+            shipclass_science_ship_evasion_add = 30
+         }
+      on_enabled = { give_technology = { tech = "tech_automated_exploring" message = no } }
+         weight = { factor = 1 }
+      }
+   
+      tradition_swap = {
+         name = tr_tanagra_4
+         inherit_effects = no
+         inherit_name = no
+         inherit_icon = yes
+         trigger = { has_country_flag = tamarian_unity }
+         modifier = {
+            science_ship_survey_speed = 0.05
+            ship_anomaly_generation_chance_mult = 0.05
+         }
+      on_enabled = { give_technology = { tech = "tech_automated_exploring" message = no } }
+         weight = { factor = 1 }
+      }
+      ai_weight = {
+         factor = 1000
+      }
+   }
+   
+### Planetary Survey Corps
+   tr_discovery_planetary_survey_corps = {
+      cost = { unity = 60 }
+   
+      ### Bonus implementation see action.54
+   
+      possible = {
+         has_tradition = tr_discovery_to_boldly_go
+      }
+   
+      tradition_swap = {
+         name = tr_perfection_5
+         inherit_effects = no
+         inherit_name = no
+         inherit_icon = no
+         trigger = { is_assimilator = yes }
+         modifier = {
+            species_leader_exp_gain = 0.33
+         }
+         weight = { factor = 1 }
+      }
+   
+      tradition_swap = {
+         name = tr_doctrine_5
+         inherit_effects = no
+         inherit_name = no
+         inherit_icon = yes
+         trigger = { spiritualist_country_traditions = yes }
+         modifier = {
+            species_leader_exp_gain = 0.33
+         }
+         weight = { factor = 1 }
+      }
+   
+      tradition_swap = {
+         name = tr_discovery_planetary_survey_corps_machine
+         inherit_effects = no
+         inherit_name = no
+         inherit_icon = yes
+         trigger = { has_authority = auth_machine_intelligence }
+         modifier = {
+            ship_anomaly_fail_risk = -0.10
+            ship_anomaly_generation_chance_mult = 0.15
+         }
+         weight = { factor = 1 }
+      }
+   
+      tradition_swap = {
+         name = tr_order_5
+         inherit_effects = no
+         inherit_name = no
+         inherit_icon = yes
+         trigger = { has_country_flag = cardassian_union }
+         modifier = {
+            country_planet_classes_resource_unity_mult = 0.05
+            country_planet_classes_resource_unity_max_mult = 0.3
+         }
+         weight = { factor = 1 }
+      }
+   
+      tradition_swap = {
+         name = tr_logic_5
+         inherit_effects = no
+         inherit_name = no
+         inherit_icon = yes
+         trigger = { has_country_flag = vulcan_high_command }
+         modifier = {
+            species_leader_exp_gain = 0.33
+            army_morale = 0.1
+         }
+         weight = { factor = 1 }
+      }
+   
+      tradition_swap = {
+         name = tr_glory_5
+         inherit_effects = no
+         inherit_name = no
+         inherit_icon = yes
+         trigger = { has_country_flag = klingon_empire }
+         modifier = {
+            species_leader_exp_gain = 0.33
+         }
+         weight = { factor = 1 }
+      }
+   
+      tradition_swap = {
+         name = tr_prophecy_5
+         inherit_effects = no
+         inherit_name = no
+         inherit_icon = yes
+         trigger = { has_country_flag = bajoran_republic }
+         modifier = {
+            species_leader_exp_gain = 0.33
+         }
+         weight = { factor = 1 }
+      }
+   
+      tradition_swap = {
+         name = tr_tanagra_5
+         inherit_effects = no
+         inherit_name = no
+         inherit_icon = yes
+         trigger = { has_country_flag = tamarian_unity }
+         modifier = {
+            species_leader_exp_gain = 0.33
+         }
+         weight = { factor = 1 }
+      }
+      ai_weight = {
+         factor = 5000
+      }
+   }
+   
+### 
+   tr_discovery_finish = {
+      modifier = {
+         ascension_perks_add = 1
+         all_technology_research_speed = 0.05
+      }
+   
+      tradition_swap = {
+         name = tr_perfection_finish
+         inherit_effects = no
+         inherit_name = yes
+         inherit_icon = yes
+         trigger = { is_assimilator = yes }
+         modifier = {
+            ascension_perks_add = 1
+            all_technology_research_speed = 0.05
+         }
+         weight = { factor = 1 }
+      }
+   
+      tradition_swap = {
+         name = tr_doctrine_finish
+         inherit_effects = no
+         inherit_name = yes
+         inherit_icon = yes
+         trigger = { spiritualist_country_traditions = yes }
+         modifier = {
+            ascension_perks_add = 1
+            pop_government_ethic_attraction = 0.2
+         }
+         weight = { factor = 1 }
+      }
+   
+      tradition_swap = {
+         name = tr_discovery_finish_machine
+         inherit_effects = no
+         inherit_name = yes
+         inherit_icon = yes
+         trigger = { has_authority = auth_machine_intelligence }
+         modifier = {
+            all_technology_research_speed = 0.05
+            ascension_perks_add = 1
+         }
+         weight = { factor = 1 }
+      }
+   
+      tradition_swap = {
+         name = tr_order_finish
+         inherit_effects = no
+         inherit_name = yes
+         inherit_icon = yes
+         trigger = { has_country_flag = cardassian_union }
+         modifier = {
+            ascension_perks_add = 1
+            pop_government_ethic_attraction = 0.2
+         }
+         weight = { factor = 1 }
+      }
+   
+      tradition_swap = {
+         name = tr_logic_finish
+         inherit_effects = no
+         inherit_name = yes
+         inherit_icon = yes
+         trigger = { has_country_flag = vulcan_high_command }
+         modifier = {
+            ascension_perks_add = 1
+            all_technology_research_speed = 0.05
+         }
+         weight = { factor = 1 }
+      }
+   
+      tradition_swap = {
+         name = tr_glory_finish
+         inherit_effects = no
+         inherit_name = yes
+         inherit_icon = yes
+         trigger = { has_country_flag = klingon_empire }
+         modifier = {
+            ascension_perks_add = 1
+            pop_government_ethic_attraction = 0.2
+         }
+         weight = { factor = 1 }
+      }
+   
+      tradition_swap = {
+         name = tr_prophecy_finish
+         inherit_effects = no
+         inherit_name = yes
+         inherit_icon = yes
+         trigger = { has_country_flag = bajoran_republic }
+         modifier = {
+            ascension_perks_add = 1
+            pop_government_ethic_attraction = 0.2
+         }
+         weight = { factor = 1 }
+      }
+   
+      tradition_swap = {
+         name = tr_tanagra_finish
+         inherit_effects = no
+         inherit_name = yes
+         inherit_icon = yes
+         trigger = { has_country_flag = tamarian_unity }
+         modifier = {
+            ascension_perks_add = 1
+            all_technology_research_speed = 0.05
+         }
+         weight = { factor = 1 }
+      }
+   }
+   
+### 
+   tr_domination_adopt = {
+      cost = { unity = 60 }
+   
+      ### bonus: reduce all subjugation wargoal costs
+   
+   
+      tradition_swap = {
+         name = tr_adaptability_adopt
+         inherit_effects = no
+         inherit_name = yes
+         inherit_icon = yes
+         trigger = { is_assimilator = yes }
+         modifier = {
+            planet_clear_blocker_cost_mult = -0.25
+         }
+         weight = { factor = 1 }
+      }
+   
+      tradition_swap = {
+         name = tr_preservation_adopt
+         inherit_effects = no
+         inherit_name = yes
+         inherit_icon = yes
+         trigger = { xenophile_country_traditions = yes }
+         modifier = {
+            medical_building_build_cost_mult = -0.25
+            green_building_build_cost_mult = -0.25
+         }
+         weight = { factor = 1 }
+      }
+   
+      tradition_swap = {
+         name = tr_domination_adopt_machine
+         inherit_effects = no
+         inherit_name = yes
+         inherit_icon = yes
+         trigger = { has_authority = auth_machine_intelligence }
+         modifier = {
+            country_subject_acceptance_add = 20
+         }
+         weight = { factor = 1 }
+      }
+   
+      tradition_swap = {
+         name = tr_cunning_adopt
+         inherit_effects = no
+         inherit_name = yes
+         inherit_icon = yes
+         trigger = { has_country_flag = romulan_star_empire }
+         modifier = {
+            governor_skill_levels = 1
+         }
+         weight = { factor = 1 }
+      }
+      ai_weight = {
+         factor = 10
+         modifier = {
+            factor = 2
+            has_ethic = ethic_xenophobe
+         }
+         modifier = {
+            factor = 3
+            has_ethic = ethic_fanatic_xenophobe
+         }
+      }
+   }
+   
+### Colonial Viceroys
+   tr_domination_colonial_viceroys = {
+      cost = { unity = 60 }
+      modifier = {
+         governor_skill_levels = 1
+      }
+      on_enabled = {
+         every_owned_leader = {
+            limit = { leader_class = governor }
+            add_skill = 1
+         }
+         every_pool_leader = {
+            limit = { leader_class = governor }
+            add_skill = 1
+         }
+      }
+   
+      tradition_swap = {
+         name = tr_adaptability_1
+         inherit_effects = no
+         inherit_name = no
+         inherit_icon = no
+         trigger = { is_assimilator = yes }
+         weight = { factor = 1 }
+      }
+   
+      tradition_swap = {
+         name = tr_preservation_1
+         inherit_effects = no
+         inherit_name = no
+         inherit_icon = yes
+         trigger = { xenophile_country_traditions = yes }
+      on_enabled = { give_technology = { tech = "tech_society_new_worlds_1182" message = no } }
+         weight = { factor = 1 }
+      }
+   
+      tradition_swap = {
+         name = tr_domination_colonial_viceroys_machine
+         inherit_effects = no
+         inherit_name = no
+         inherit_icon = yes
+         trigger = { has_authority = auth_machine_intelligence }
+         modifier = {
+            governor_skill_levels = 1
+         }
+         weight = { factor = 1 }
+      }
+   
+      tradition_swap = {
+         name = tr_cunning_1
+         inherit_effects = no
+         inherit_name = no
+         inherit_icon = yes
+         trigger = { has_country_flag = romulan_star_empire }
+         modifier = {
+            max_rivalries = 2
+         }
+         weight = { factor = 1 }
+      }
+      ai_weight = {
+         factor = 1000
+      }
+   }
+   
+### Star Lords
+   tr_domination_star_lords = {
+      cost = { unity = 60 }
+   
+      ###  bonus: subject opinion increased
+   
+      modifier = {
+         country_subject_acceptance_add = 20
+      }
+   
+      tradition_swap = {
+         name = tr_adaptability_2
+         inherit_effects = no
+         inherit_name = no
+         inherit_icon = no
+         trigger = { is_assimilator = yes }
+         modifier = {
+            shipclass_military_station_hit_points_mult = 0.33
+         }
+         weight = { factor = 1 }
+      }
+   
+      tradition_swap = {
+         name = tr_preservation_2
+         inherit_effects = no
+         inherit_name = no
+         inherit_icon = yes
+         trigger = { xenophile_country_traditions = yes }
+         modifier = {
+            governor_skill_levels = 1
+         }
+         weight = { factor = 1 }
+      }
+   
+      tradition_swap = {
+         name = tr_domination_star_lords_machine
+         inherit_effects = no
+         inherit_name = no
+         inherit_icon = yes
+         trigger = { has_authority = auth_machine_intelligence }
+         modifier = {
+            country_subject_trust_cap_add = 50
+         }
+         weight = { factor = 1 }
+      }
+   
+      tradition_swap = {
+         name = tr_cunning_2
+         inherit_effects = no
+         inherit_name = no
+         inherit_icon = yes
+         trigger = { has_country_flag = romulan_star_empire }
+         modifier = {
+            pop_resettlement_cost_mult = -0.33
+            garrison_health = 1
+         }
+         weight = { factor = 1 }
+      }
+      ai_weight = {
+         factor = 1000
+      }
+   }
+   
+### Slave Markets
+   tr_domination_protection_racket = {
+      cost = { unity = 60 }
+   
+      ### unlock slave processing, building and slave army, share the burden edict
+   
+      possible = {
+         has_tradition = tr_domination_colonial_viceroys
+      }
+   
+      tradition_swap = {
+         name = tr_adaptability_3
+         inherit_effects = no
+         inherit_name = no
+         inherit_icon = no
+         trigger = { is_assimilator = yes }
+         weight = { factor = 1 }
+      }
+   
+      tradition_swap = {
+         name = tr_preservation_3
+         inherit_effects = no
+         inherit_name = no
+         inherit_icon = yes
+         trigger = { xenophile_country_traditions = yes }
+         modifier = {
+            pop_environment_tolerance = 0.05
+         }
+         weight = { factor = 1 }
+      }
+   
+      tradition_swap = {
+         name = tr_domination_protection_racket_machine
+         inherit_effects = no
+         inherit_name = no
+         inherit_icon = yes
+         trigger = { has_authority = auth_machine_intelligence }
+         modifier = {
+            subject_tribute_mult = 0.125
+         }
+         weight = { factor = 1 }
+      }
+   
+      tradition_swap = {
+         name = tr_cunning_3
+         inherit_effects = no
+         inherit_name = no
+         inherit_icon = yes
+         trigger = { has_country_flag = romulan_star_empire }
+         weight = { factor = 1 }
+      }
+      ai_weight = {
+         factor = 5000
+      }
+   }
+   
+### Vassal Acculturation
+   tr_domination_vassal_acculturation = {
+      cost = { unity = 60 }
+      modifier = {
+         subject_tribute_mult = 0.125
+      }
+      possible = {
+         has_tradition = tr_domination_colonial_viceroys
+      }
+   
+      tradition_swap = {
+         name = tr_adaptability_4
+         inherit_effects = no
+         inherit_name = no
+         inherit_icon = no
+         trigger = { is_assimilator = yes }
+         modifier = {
+            pop_resettlement_cost_mult = -0.25
+         }
+         weight = { factor = 1 }
+      }
+   
+      tradition_swap = {
+         name = tr_preservation_4
+         inherit_effects = no
+         inherit_name = no
+         inherit_icon = yes
+         trigger = { xenophile_country_traditions = yes }
+         modifier = {
+            tile_resource_food_mult = 0.1
+            planet_clear_blocker_cost_mult = -0.1
+         }
+         weight = { factor = 1 }
+      }
+   
+      tradition_swap = {
+         name = tr_domination_vassal_acculturation_machine
+         inherit_effects = no
+         inherit_name = no
+         inherit_icon = yes
+         trigger = { has_authority = auth_machine_intelligence }
+         modifier = {
+            country_subjects_resource_unity_mult = 0.05
+            country_subjects_resource_unity_max_mult = 0.3
+         }
+         weight = { factor = 1 }
+      }
+   
+      tradition_swap = {
+         name = tr_cunning_4
+         inherit_effects = no
+         inherit_name = no
+         inherit_icon = yes
+         trigger = { has_country_flag = romulan_star_empire }
+         modifier = {
+            country_subjects_resource_unity_mult = 0.05
+            country_subjects_resource_unity_max_mult = 0.3
+         }
+         weight = { factor = 1 }
+      }
+      ai_weight = {
+         factor = 5000
+      }
+   }
+   
+### Fleet Levies
+   tr_domination_fleet_levies = {
+      cost = { unity = 60 }
+   
+      ### Will also work for dominion members
+   
+      modifier = {
+         country_vassal_naval_capacity_contribution_mult = 0.25
+      }
+      possible = {
+         has_tradition = tr_domination_colonial_viceroys
+         has_tradition = tr_domination_star_lords
+      }
+   
+      tradition_swap = {
+         name = tr_adaptability_5
+         inherit_effects = no
+         inherit_name = no
+         inherit_icon = no
+         trigger = { is_assimilator = yes }
+         modifier = {
+            garrison_health = 0.5
+         }
+         weight = { factor = 1 }
+      }
+   
+      tradition_swap = {
+         name = tr_preservation_5
+         inherit_effects = no
+         inherit_name = no
+         inherit_icon = yes
+         trigger = { xenophile_country_traditions = yes }
+         modifier = {
+            terraforming_cost_mult = -0.2
+         }
+         weight = { factor = 1 }
+      }
+   
+      tradition_swap = {
+         name = tr_domination_fleet_levies_machine
+         inherit_effects = no
+         inherit_name = no
+         inherit_icon = yes
+         trigger = { has_authority = auth_machine_intelligence }
+         modifier = {
+            country_vassal_naval_capacity_contribution_mult = 0.50
+         }
+         weight = { factor = 1 }
+      }
+   
+      tradition_swap = {
+         name = tr_cunning_5
+         inherit_effects = no
+         inherit_name = no
+         inherit_icon = yes
+         trigger = { has_country_flag = romulan_star_empire }
+         modifier = {
+            country_vassal_naval_capacity_contribution_mult = 0.25
+            subject_tribute_mult = 0.1
+         }
+         weight = { factor = 1 }
+      }
+      ai_weight = {
+         factor = 5000
+      }
+   }
+   
+### 
+   tr_domination_finish = { 
+      modifier = {
+         ascension_perks_add = 1
+         country_subject_technology_sharing_mult = 0.30
+      }
+   
+      tradition_swap = {
+         name = tr_adaptability_finish
+         inherit_effects = no
+         inherit_name = yes
+         inherit_icon = yes
+         trigger = { is_assimilator = yes }
+         modifier = {
+            country_resource_unity_mult = 0.15
+            ascension_perks_add = 1
+         }
+         weight = { factor = 1 }
+      }
+   
+      tradition_swap = {
+         name = tr_preservation_finish
+         inherit_effects = no
+         inherit_name = yes
+         inherit_icon = yes
+         trigger = { xenophile_country_traditions = yes }
+         modifier = {
+            pop_food_req_mult = -0.1
+            ascension_perks_add = 1
+         }
+         weight = { factor = 1 }
+      }
+   
+      tradition_swap = {
+         name = tr_domination_finish_machine
+         inherit_effects = no
+         inherit_name = yes
+         inherit_icon = yes
+         trigger = { has_authority = auth_machine_intelligence }
+         modifier = {
+            country_subject_technology_sharing_mult = 0.30
+            ascension_perks_add = 1
+         }
+         weight = { factor = 1 }
+      }
+   
+      tradition_swap = {
+         name = tr_cunning_finish
+         inherit_effects = no
+         inherit_name = yes
+         inherit_icon = yes
+         trigger = { has_country_flag = romulan_star_empire }
+         modifier = {
+            ascension_perks_add = 1
+            country_subject_technology_sharing_mult = 0.35
+         }
+         weight = { factor = 1 }
+      }
+   }
+   
+### 
+   tr_expansion_adopt = {
+      cost = { unity = 60 }
+   
+      ### unlock deep space stations
+   
+   
+      tradition_swap = {
+         name = tr_assimilation_adopt
+         inherit_effects = no
+         inherit_name = yes
+         inherit_icon = yes
+         trigger = { is_assimilator = yes }
+         weight = { factor = 1 }
+      }
+   
+      tradition_swap = {
+         name = tr_roving_adopt
+         inherit_effects = no
+         inherit_name = yes
+         inherit_icon = yes
+         trigger = { is_habitat_empire_tradition = yes }
+         modifier = {
+            planet_clear_blocker_cost_mult = -0.5
+         }
+         weight = { factor = 1 }
+      }
+   
+      tradition_swap = {
+         name = tr_expansion_adopt_machine
+         inherit_effects = no
+         inherit_name = yes
+         inherit_icon = yes
+         trigger = { has_authority = auth_machine_intelligence }
+         weight = { factor = 1 }
+      }
+   
+      tradition_swap = {
+         name = tr_heritage_adopt
+         inherit_effects = no
+         inherit_name = yes
+         inherit_icon = yes
+         trigger = {  has_country_flag = is_sth_fallen_empire
+ }
+         modifier = {
+            megastructure_build_speed_mult = 1
+         }
+         weight = { factor = 1 }
+      }
+      ai_weight = {
+         factor = 6000
+         modifier = {
+            factor = 2
+            has_ethic = ethic_egalitarian
+         }
+         modifier = {
+            factor = 3
+            has_ethic = ethic_fanatic_egalitarian
+         }
+      }
+   }
+   
+### Colonization Fever
+   tr_expansion_colonization_fever = {
+      cost = { unity = 60 }
+   
+      ### 1 unity from capital
+   
+      modifier = {
+         planet_colony_development_speed_mult = 0.25
+         pop_growth_speed = 0.10
+      }
+   
+      tradition_swap = {
+         name = tr_assimilation_1
+         inherit_effects = no
+         inherit_name = no
+         inherit_icon = no
+         trigger = { is_assimilator = yes }
+         modifier = {
+            tradition_cost_num_colonies_mult = -0.5
+         }
+         weight = { factor = 1 }
+      }
+   
+      tradition_swap = {
+         name = tr_roving_1
+         inherit_effects = no
+         inherit_name = no
+         inherit_icon = yes
+         trigger = { is_habitat_empire_tradition = yes }
+         modifier = {
+            country_border_mult = 0.2
+         }
+         weight = { factor = 1 }
+      }
+   
+      tradition_swap = {
+         name = tr_expansion_colonization_fever_machine
+         inherit_effects = no
+         inherit_name = no
+         inherit_icon = yes
+         trigger = { has_authority = auth_machine_intelligence }
+         weight = { factor = 1 }
+      }
+   
+      tradition_swap = {
+         name = tr_heritage_1
+         inherit_effects = no
+         inherit_name = no
+         inherit_icon = yes
+         trigger = {  has_country_flag = is_sth_fallen_empire
+ }
+         modifier = {
+            pop_growth_speed = 0.25
+         }
+         weight = { factor = 1 }
+      }
+      ai_weight = {
+         factor = 6000
+      }
+   }
+   
+### Reach for the Stars
+   tr_expansion_reach_for_the_stars = {
+      cost = { unity = 60 }
+      modifier = {
+         country_expansion_distance_mult = -0.25
+      }
+   
+      tradition_swap = {
+         name = tr_assimilation_2
+         inherit_effects = no
+         inherit_name = no
+         inherit_icon = no
+         trigger = { is_assimilator = yes }
+         modifier = {
+            shipsize_outpost_station_upkeep_mult = -0.33
+         }
+         weight = { factor = 1 }
+      }
+   
+      tradition_swap = {
+         name = tr_roving_2
+         inherit_effects = no
+         inherit_name = no
+         inherit_icon = yes
+         trigger = { is_habitat_empire_tradition = yes }
+         modifier = {
+            pop_growth_speed = 0.25
+         }
+         weight = { factor = 1 }
+      }
+   
+      tradition_swap = {
+         name = tr_expansion_reach_for_the_stars_machine
+         inherit_effects = no
+         inherit_name = no
+         inherit_icon = yes
+         trigger = { has_authority = auth_machine_intelligence }
+         modifier = {
+            country_expansion_distance_mult = -0.25
+         }
+         weight = { factor = 1 }
+      }
+   
+      tradition_swap = {
+         name = tr_heritage_2
+         inherit_effects = no
+         inherit_name = no
+         inherit_icon = yes
+         trigger = {  has_country_flag = is_sth_fallen_empire
+ }
+         modifier = {
+            ship_fire_rate_mult = 0.1
+         }
+         weight = { factor = 1 }
+      }
+      ai_weight = {
+         factor = 6000
+      }
+   }
+   
+### Above and Beyond
+   tr_expansion_a_new_life = {
+      cost = { unity = 60 }
+   
+      ### unlock deep space station expansion. increases the maximum number of deep space stations from 3 to 5.
+   
+      possible = {
+         has_tradition = tr_expansion_colonization_fever
+      }
+      on_enabled = { give_technology = { tech = "tech_engineering_industry_1297" message = no } }
+   
+      tradition_swap = {
+         name = tr_assimilation_3
+         inherit_effects = no
+         inherit_name = no
+         inherit_icon = no
+         trigger = { is_assimilator = yes }
+         weight = { factor = 1 }
+      }
+   
+      tradition_swap = {
+         name = tr_roving_3
+         inherit_effects = no
+         inherit_name = no
+         inherit_icon = yes
+         trigger = { is_habitat_empire_tradition = yes }
+         modifier = {
+            megastructure_build_speed_mult = 1
+         }
+         weight = { factor = 1 }
+      }
+   
+      tradition_swap = {
+         name = tr_expansion_a_new_life_machine
+         inherit_effects = no
+         inherit_name = no
+         inherit_icon = yes
+         trigger = { has_authority = auth_machine_intelligence }
+      on_enabled = { give_technology = { tech = "tech_engineering_industry_1297" message = no } }
+         weight = { factor = 1 }
+      }
+   
+      tradition_swap = {
+         name = tr_heritage_3
+         inherit_effects = no
+         inherit_name = no
+         inherit_icon = yes
+         trigger = {  has_country_flag = is_sth_fallen_empire
+ }
+         modifier = {
+            country_border_mult = 0.25
+            planet_clear_blocker_cost_mult = -0.25
+         }
+         weight = { factor = 1 }
+      }
+      ai_weight = {
+         factor = 6000
+      }
+   }
+   
+### Civilian Courier Network
+
+   tr_expansion_courier_network = {
+      cost = { unity = 60 }
+      modifier = {
+         tradition_cost_num_colonies_mult = -0.33
+      }
+      possible = {
+         has_tradition = tr_expansion_colonization_fever
+      }
+   
+      tradition_swap = {
+         name = tr_assimilation_4
+         inherit_effects = no
+         inherit_name = no
+         inherit_icon = no
+         trigger = { is_assimilator = yes }
+         weight = { factor = 1 }
+      }
+   
+      tradition_swap = {
+         name = tr_roving_4
+         inherit_effects = no
+         inherit_name = no
+         inherit_icon = yes
+         trigger = { is_habitat_empire_tradition = yes }
+         modifier = {
+            tradition_cost_num_colonies_mult = -0.5
+         }
+         weight = { factor = 1 }
+      }
+   
+      tradition_swap = {
+         name = tr_expansion_courier_network_machine
+         inherit_effects = no
+         inherit_name = no
+         inherit_icon = yes
+         trigger = { has_authority = auth_machine_intelligence }
+         modifier = {
+            tradition_cost_num_colonies_mult = -0.33
+         }
+         weight = { factor = 1 }
+      }
+   
+      tradition_swap = {
+         name = tr_heritage_4
+         inherit_effects = no
+         inherit_name = no
+         inherit_icon = yes
+         trigger = {  has_country_flag = is_sth_fallen_empire
+ }
+         modifier = {
+            country_resource_influence_add = 0.5
+            tradition_cost_num_colonies_mult = -0.25
+         }
+         weight = { factor = 1 }
+      }
+      ai_weight = {
+         factor = 6000
+      }
+   }
+   
+### Solar News Network
+   tr_expansion_galactic_ambition = {
+      cost = { unity = 60 }
+      modifier = { 
+         shipsize_outpost_station_upkeep_mult = -0.25
+      }
+      possible = {
+         has_tradition = tr_expansion_reach_for_the_stars
+      }
+   
+      tradition_swap = {
+         name = tr_assimilation_5
+         inherit_effects = no
+         inherit_name = no
+         inherit_icon = no
+         trigger = { is_assimilator = yes }
+         modifier = {
+            megastructure_build_speed_mult = 0.33
+         }
+         weight = { factor = 1 }
+      }
+   
+      tradition_swap = {
+         name = tr_roving_5
+         inherit_effects = no
+         inherit_name = no
+         inherit_icon = yes
+         trigger = { is_habitat_empire_tradition = yes }
+         modifier = {
+            shipsize_outpost_station_upkeep_mult = -0.5
+         }
+         weight = { factor = 1 }
+      }
+   
+      tradition_swap = {
+         name = tr_expansion_galactic_ambition_machine
+         inherit_effects = no
+         inherit_name = no
+         inherit_icon = yes
+         trigger = { has_authority = auth_machine_intelligence }
+         modifier = {
+            shipsize_outpost_station_upkeep_mult = -0.25
+         }
+         weight = { factor = 1 }
+      }
+   
+      tradition_swap = {
+         name = tr_heritage_5
+         inherit_effects = no
+         inherit_name = no
+         inherit_icon = yes
+         trigger = {  has_country_flag = is_sth_fallen_empire
+ }
+         modifier = {
+            pop_resource_output = 0.05
+            shipsize_outpost_station_upkeep_mult = -0.25
+         }
+         weight = { factor = 1 }
+      }
+      ai_weight = {
+         factor = 6000
+      }
+   }
+   
+### 
+   tr_expansion_finish = {
+      modifier = {
+         ascension_perks_add = 1
+         country_core_sector_system_cap = 2
+      }
+   
+      tradition_swap = {
+         name = tr_assimilation_finish
+         inherit_effects = no
+         inherit_name = yes
+         inherit_icon = yes
+         trigger = { is_assimilator = yes }
+         modifier = {
+            ascension_perks_add = 1
+            country_core_sector_system_cap = 2
+         }
+         weight = { factor = 1 }
+      }
+   
+      tradition_swap = {
+         name = tr_roving_finish
+         inherit_effects = no
+         inherit_name = yes
+         inherit_icon = yes
+         trigger = { is_habitat_empire_tradition = yes }
+         modifier = {
+            ascension_perks_add = 1
+            country_core_sector_system_cap = 2
+         }
+         weight = { factor = 1 }
+      }
+   
+      tradition_swap = {
+         name = tr_expansion_finish_machine
+         inherit_effects = no
+         inherit_name = yes
+         inherit_icon = yes
+         trigger = { has_authority = auth_machine_intelligence }
+         modifier = {
+            ascension_perks_add = 1
+            country_core_sector_system_cap = 2
+         }
+         weight = { factor = 1 }
+      }
+   
+      tradition_swap = {
+         name = tr_heritage_finish
+         inherit_effects = no
+         inherit_name = yes
+         inherit_icon = yes
+         trigger = {  has_country_flag = is_sth_fallen_empire
+ }
+         modifier = {
+            ascension_perks_add = 1
+            country_core_sector_system_cap = 3
+         }
+         weight = { factor = 1 }
+      }
+   }
+   
+### 
+   tr_harmony_adopt = {
+      cost = { unity = 60 }
+   
+      ### unlock first plantation
+   
+   
+      tradition_swap = {
+         name = tr_synchronicity_adopt
+         inherit_effects = no
+         inherit_name = yes
+         inherit_icon = yes
+         trigger = { is_assimilator = yes }
+         modifier = {
+            pop_growth_speed = 0.25
+         }
+         weight = { factor = 1 }
+      }
+   
+      tradition_swap = {
+         name = tr_innovation_adopt
+         inherit_effects = no
+         inherit_name = yes
+         inherit_icon = yes
+         trigger = { materialist_country_traditions = yes }
+         modifier = {
+            megastructure_build_speed_mult = 0.33
+         }
+         weight = { factor = 1 }
+      }
+   
+      tradition_swap = {
+         name = tr_synchronicity_machine_adopt
+         inherit_effects = no
+         inherit_name = yes
+         inherit_icon = yes
+         trigger = { has_authority = auth_machine_intelligence }
+         modifier = {
+            pop_robot_build_speed_mult = 0.33
+         }
+         weight = { factor = 1 }
+      }
+   
+      tradition_swap = {
+         name = tr_honour_adopt
+         inherit_effects = no
+         inherit_name = yes
+         inherit_icon = yes
+         trigger = { has_country_flag = klingon_empire }
+         modifier = {
+            mod_distance_to_capital_static_modifier_efficiency_mult = -0.33
+         }
+         weight = { factor = 1 }
+      }
+      ai_weight = {
+         factor = 10
+         modifier = {
+            factor = 2
+            has_ethic = ethic_pacifist
+         }
+         modifier = {
+            factor = 3
+            has_ethic = ethic_fanatic_pacifist
+         }
+      }
+   }
+   
+### Kinship
+   tr_harmony_kinship = {
+      cost = { unity = 60 }
+      modifier = {
+         mod_distance_to_capital_static_modifier_efficiency_mult = -0.25
+      }
+   
+      tradition_swap = {
+         name = tr_synchronicity_1
+         inherit_effects = no
+         inherit_name = no
+         inherit_icon = no
+         trigger = { is_assimilator = yes }
+         modifier = {
+            planet_building_build_speed_mult = 0.20
+         }
+         weight = { factor = 1 }
+      }
+   
+      tradition_swap = {
+         name = tr_innovation_1
+         inherit_effects = no
+         inherit_name = no
+         inherit_icon = yes
+         trigger = { materialist_country_traditions = yes }
+         modifier = {
+            modify_species_cost_mult = -0.25
+         }
+         weight = { factor = 1 }
+      }
+   
+      tradition_swap = {
+         name = tr_synchronicity_drone_network
+         inherit_effects = no
+         inherit_name = no
+         inherit_icon = no
+         trigger = { has_authority = auth_machine_intelligence }
+         modifier = {
+            planet_building_build_speed_mult = 0.20
+         }
+         weight = { factor = 1 }
+      }
+   
+      tradition_swap = {
+         name = tr_honour_1
+         inherit_effects = no
+         inherit_name = no
+         inherit_icon = yes
+         trigger = { has_country_flag = klingon_empire }
+         modifier = {
+            navy_size_mult = 0.1
+         }
+         weight = { factor = 1 }
+      }
+      ai_weight = {
+         factor = 1000
+      }
+   }
+   
+### Mind and Body
+   tr_harmony_mind_and_body = {
+      cost = { unity = 60 }
+      modifier = {
+         pop_growth_speed = 0.25
+      }
+   
+      tradition_swap = {
+         name = tr_synchronicity_2
+         inherit_effects = no
+         inherit_name = no
+         inherit_icon = no
+         trigger = { is_assimilator = yes }
+         modifier = {
+            governor_skill_levels = 1
+         }
+         weight = { factor = 1 }
+      }
+   
+      tradition_swap = {
+         name = tr_innovation_2
+         inherit_effects = no
+         inherit_name = no
+         inherit_icon = yes
+         trigger = { materialist_country_traditions = yes }
+         weight = { factor = 1 }
+      }
+   
+      tradition_swap = {
+         name = tr_synchronicity_self_preservation
+         inherit_effects = no
+         inherit_name = no
+         inherit_icon = no
+         trigger = { has_authority = auth_machine_intelligence }
+         weight = { factor = 1 }
+      }
+   
+      tradition_swap = {
+         name = tr_honour_2
+         inherit_effects = no
+         inherit_name = no
+         inherit_icon = yes
+         trigger = { has_country_flag = klingon_empire }
+         weight = { factor = 1 }
+      }
+      ai_weight = {
+         factor = 1000
+      }
+   }
+   
+### Post-Scarcity Economics
+   tr_harmony_the_greater_good = {
+      cost = { unity = 60 }
+      modifier = {
+         pop_consumer_goods_mult = -0.2
+      }
+   
+      tradition_swap = {
+         name = tr_synchronicity_3
+         inherit_effects = no
+         inherit_name = no
+         inherit_icon = no
+         trigger = { is_assimilator = yes }
+         modifier = {
+            pop_consumer_goods_mult = -0.5
+         }
+         weight = { factor = 1 }
+      }
+   
+      tradition_swap = {
+         name = tr_innovation_3
+         inherit_effects = no
+         inherit_name = no
+         inherit_icon = yes
+         trigger = { materialist_country_traditions = yes }
+         weight = { factor = 1 }
+      }
+   
+      tradition_swap = {
+         name = tr_synchronicity_organic_intermediaries
+         inherit_effects = no
+         inherit_name = no
+         inherit_icon = yes
+         trigger = { has_authority = auth_machine_intelligence }
+         modifier = {
+            planet_unrest_mult = -0.25
+         }
+         weight = { factor = 1 }
+      }
+   
+      tradition_swap = {
+         name = tr_honour_3
+         inherit_effects = no
+         inherit_name = no
+         inherit_icon = yes
+         trigger = { has_country_flag = klingon_empire }
+         modifier = {
+            planet_unrest_mult = -0.2
+         }
+         weight = { factor = 1 }
+      }
+      ai_weight = {
+         factor = 1000
+      }
+   }
+   
+### A Celebration of Individuality
+   tr_harmony_utopian_dream = {
+      cost = { unity = 60 }
+   
+      ### unlock second plantation
+   
+      possible = {
+         has_tradition = tr_harmony_the_greater_good
+      }
+   
+      tradition_swap = {
+         name = tr_synchronicity_4
+         inherit_effects = no
+         inherit_name = no
+         inherit_icon = no
+         trigger = { is_assimilator = yes }
+         modifier = {
+            spaceport_ship_build_speed_mult = 0.10
+            ship_upkeep_mult = -0.10
+         }
+         weight = { factor = 1 }
+      }
+   
+      tradition_swap = {
+         name = tr_innovation_4
+         inherit_effects = no
+         inherit_name = no
+         inherit_icon = yes
+         trigger = { materialist_country_traditions = yes }
+      on_enabled = { give_technology = { tech = "tech_black_ops" message = no } }
+         weight = { factor = 1 }
+      }
+   
+      tradition_swap = {
+         name = tr_synchronicity_machine_center
+         inherit_effects = no
+         inherit_name = no
+         inherit_icon = no
+         trigger = { has_authority = auth_machine_intelligence }
+         weight = { factor = 1 }
+      }
+   
+      tradition_swap = {
+         name = tr_honour_4
+         inherit_effects = no
+         inherit_name = no
+         inherit_icon = yes
+         trigger = { has_country_flag = klingon_empire }
+         modifier = {
+            spaceport_ship_build_speed_mult = 0.10
+            ship_upkeep_mult = -0.10
+         }
+         weight = { factor = 1 }
+      }
+      ai_weight = {
+         factor = 5000
+      }
+   }
+   
+### Peacekeeping Armada
+   tr_harmony_bulwark_of_harmony = {
+      cost = { unity = 60 }
+      modifier = {
+         pop_happiness = 0.05
+      }
+      possible = {
+         has_tradition = tr_harmony_kinship
+         has_tradition = tr_harmony_mind_and_body
+      }
+   
+      tradition_swap = {
+         name = tr_synchronicity_5
+         inherit_effects = no
+         inherit_name = no
+         inherit_icon = no
+         trigger = { is_assimilator = yes }
+         modifier = {
+            navy_size_mult = 0.10
+         }
+         weight = { factor = 1 }
+      }
+   
+      tradition_swap = {
+         name = tr_innovation_5
+         inherit_effects = no
+         inherit_name = no
+         inherit_icon = yes
+         trigger = { materialist_country_traditions = yes }
+         modifier = {
+            pop_robot_build_cost_mult = -0.10
+            pop_robot_production_output = 0.1
+            pop_robot_upkeep_mult = -0.10
+         }
+         weight = { factor = 1 }
+      }
+   
+      tradition_swap = {
+         name = tr_synchronicity_bulwark
+         inherit_effects = no
+         inherit_name = no
+         inherit_icon = yes
+         trigger = { has_authority = auth_machine_intelligence }
+         modifier = {
+            spaceport_defensive_war_ship_build_speed_mult = 0.33
+            ship_home_territory_fire_rate_mult = 0.15
+         }
+         weight = { factor = 1 }
+      }
+   
+      tradition_swap = {
+         name = tr_honour_5
+         inherit_effects = no
+         inherit_name = no
+         inherit_icon = yes
+         trigger = { has_country_flag = klingon_empire }
+         modifier = {
+            pop_happiness = 0.05
+         }
+         weight = { factor = 1 }
+      }
+      ai_weight = {
+         factor = 5000
+      }
+   }
+   
+### 
+   tr_harmony_finish = {
+      modifier = {
+         ascension_perks_add = 1
+         planet_unrest_add = -20
+      }
+   
+      tradition_swap = {
+         name = tr_synchronicity_finish
+         inherit_effects = no
+         inherit_name = yes
+         inherit_icon = yes
+         trigger = { is_assimilator = yes }
+         modifier = {
+            ascension_perks_add = 1
+            country_resource_influence_add = 1
+         }
+         weight = { factor = 1 }
+      }
+   
+      tradition_swap = {
+         name = tr_innovation_finish
+         inherit_effects = no
+         inherit_name = yes
+         inherit_icon = yes
+         trigger = { materialist_country_traditions = yes }
+         modifier = {
+            ascension_perks_add = 1
+            country_resource_influence_add = 1
+         }
+         weight = { factor = 1 }
+      }
+   
+      tradition_swap = {
+         name = tr_synchronicity_machine_finish
+         inherit_effects = no
+         inherit_name = yes
+         inherit_icon = yes
+         trigger = { has_authority = auth_machine_intelligence }
+         modifier = {
+            country_resource_influence_add = 1
+            ascension_perks_add = 1
+         }
+         weight = { factor = 1 }
+      }
+   
+      tradition_swap = {
+         name = tr_honour_finish
+         inherit_effects = no
+         inherit_name = yes
+         inherit_icon = yes
+         trigger = { has_country_flag = klingon_empire }
+         modifier = {
+            ascension_perks_add = 1
+            country_resource_influence_add = 1
+         }
+         weight = { factor = 1 }
+      }
+   }
+   
+### 
+   tr_prosperity_adopt = {
+      cost = { unity = 60 }
+      modifier = {
+         spaceport_ship_build_cost_mult = -0.05
+      }
+      on_enabled = { give_technology = { tech = "tech_society_new_worlds_1189" message = no } }
+   
+      tradition_swap = {
+         name = tr_productivity_adopt
+         inherit_effects = no
+         inherit_name = yes
+         inherit_icon = yes
+         trigger = { is_assimilator = yes }
+         weight = { factor = 1 }
+      }
+   
+      tradition_swap = {
+         name = tr_strength_adopt
+         inherit_effects = no
+         inherit_name = yes
+         inherit_icon = yes
+         trigger = { militarist_country_traditions = yes }
+         modifier = {
+            army_morale = 0.2
+         }
+         weight = { factor = 1 }
+      }
+   
+      tradition_swap = {
+         name = tr_prosperity_adopt_machine
+         inherit_effects = no
+         inherit_name = yes
+         inherit_icon = yes
+         trigger = { has_authority = auth_machine_intelligence }
+         modifier = {
+            spaceport_ship_build_cost_mult = -0.15
+            planet_building_cost_mult = -0.15
+         }
+         weight = { factor = 1 }
+      }
+   
+      tradition_swap = {
+         name = tr_federation_adopt
+         inherit_effects = no
+         inherit_name = yes
+         inherit_icon = yes
+         trigger = { has_country_flag = federation_founder }
+         weight = { factor = 1 }
+      }
+      ai_weight = {
+         factor = 10
+         modifier = {
+            factor = 2
+            has_ethic = ethic_materialist
+         }
+         modifier = {
+            factor = 3
+            has_ethic = ethic_fanatic_materialist
+         }
+      }
+   }
+   
+### Standard Construction Templates
+   tr_prosperity_sct = {
+      cost = { unity = 60 }
+      modifier = {
+         commerce_building_build_cost_mult = -0.25
+         housing_construction_build_cost_mult = -0.25
+      }
+   
+      tradition_swap = {
+         name = tr_productivity_1
+         inherit_effects = no
+         inherit_name = no
+         inherit_icon = no
+         trigger = { is_assimilator = yes }
+         modifier = {
+            spaceport_ship_build_cost_mult = -0.15
+         }
+         weight = { factor = 1 }
+      }
+   
+      tradition_swap = {
+         name = tr_strength_1
+         inherit_effects = no
+         inherit_name = no
+         inherit_icon = yes
+         trigger = { militarist_country_traditions = yes }
+         modifier = {
+            pop_consumer_goods_mult = -0.1
+         }
+         weight = { factor = 1 }
+      }
+   
+      tradition_swap = {
+         name = tr_prosperity_sct_machine
+         inherit_effects = no
+         inherit_name = no
+         inherit_icon = yes
+         trigger = { has_authority = auth_machine_intelligence }
+         modifier = {
+            spaceport_ship_build_speed_mult = 0.15
+            planet_building_build_speed_mult = 0.15
+         }
+         weight = { factor = 1 }
+      }
+   
+      tradition_swap = {
+         name = tr_federation_1
+         inherit_effects = no
+         inherit_name = no
+         inherit_icon = yes
+         trigger = { has_country_flag = federation_founder }
+         modifier = {
+            pop_consumer_goods_mult = -0.05
+            planet_building_cost_mult = -0.05
+         }
+         weight = { factor = 1 }
+      }
+      ai_weight = {
+         factor = 1000
+      }
+   }
+   
+### Trans-Stellar Corporations
+   tr_prosperity_trans_stellar_corporations = {
+      cost = { unity = 60 }
+   
+      ### Housing produce extra prosperity and unity
+   
+   
+      tradition_swap = {
+         name = tr_productivity_2
+         inherit_effects = no
+         inherit_name = no
+         inherit_icon = no
+         trigger = { is_assimilator = yes }
+         modifier = {
+            army_upkeep_mult = -0.2
+         }
+         weight = { factor = 1 }
+      }
+   
+      tradition_swap = {
+         name = tr_strength_2
+         inherit_effects = no
+         inherit_name = no
+         inherit_icon = yes
+         trigger = { militarist_country_traditions = yes }
+         modifier = {
+            garrison_health = 1.00
+         }
+         weight = { factor = 1 }
+      }
+   
+      tradition_swap = {
+         name = tr_prosperity_efficiency_algorithms
+         inherit_effects = no
+         inherit_name = no
+         inherit_icon = no
+         trigger = { has_authority = auth_machine_intelligence }
+         modifier = {
+            pop_robot_upkeep_mult = -0.10
+         }
+         weight = { factor = 1 }
+      }
+   
+      tradition_swap = {
+         name = tr_federation_2
+         inherit_effects = no
+         inherit_name = no
+         inherit_icon = yes
+         trigger = { has_country_flag = federation_founder }
+         weight = { factor = 1 }
+      }
+      ai_weight = {
+         factor = 1000
+      }
+   }
+   
+### All that Glitters
+   tr_prosperity_administrative_operations = {
+      cost = { unity = 60 }
+   
+      ### bonus from number of strategic resources. Change title and desc
+   
+      modifier = {
+         country_strategic_resources_resource_unity_mult = 0.02
+         country_strategic_resources_resource_unity_max_mult = 0.3
+      }
+      possible = {
+         has_tradition = tr_prosperity_sct
+      }
+   
+      tradition_swap = {
+         name = tr_productivity_3
+         inherit_effects = no
+         inherit_name = no
+         inherit_icon = no
+         trigger = { is_assimilator = yes }
+         weight = { factor = 1 }
+      }
+   
+      tradition_swap = {
+         name = tr_strength_3
+         inherit_effects = no
+         inherit_name = no
+         inherit_icon = yes
+         trigger = { militarist_country_traditions = yes }
+         modifier = {
+            country_subjects_resource_unity_mult = 0.05
+            country_subjects_resource_unity_max_mult = 0.3
+         }
+         weight = { factor = 1 }
+      }
+   
+      tradition_swap = {
+         name = tr_prosperity_administrative_operations_machine
+         inherit_effects = no
+         inherit_name = no
+         inherit_icon = yes
+         trigger = { has_authority = auth_machine_intelligence }
+         modifier = {
+            planet_building_upkeep_mult = -0.10
+         }
+         weight = { factor = 1 }
+      }
+   
+      tradition_swap = {
+         name = tr_federation_3
+         inherit_effects = no
+         inherit_name = no
+         inherit_icon = yes
+         trigger = { has_country_flag = federation_founder }
+      on_enabled = { give_technology = { tech = "tech_society_new_worlds_1186" message = no } }
+         weight = { factor = 1 }
+      }
+      ai_weight = {
+         factor = 5000
+      }
+   }
+   
+### A Newer Deal
+   tr_prosperity_fleet_logistical_corps = {
+      cost = { unity = 60 }
+      modifier = {
+         planet_building_cost_mult = -0.15
+      }
+      possible = {
+         has_tradition = tr_prosperity_sct
+      }
+   
+      tradition_swap = {
+         name = tr_productivity_4
+         inherit_effects = no
+         inherit_name = no
+         inherit_icon = no
+         trigger = { is_assimilator = yes }
+         modifier = {
+            planet_building_cost_mult = -0.15
+         }
+         weight = { factor = 1 }
+      }
+   
+      tradition_swap = {
+         name = tr_strength_4
+         inherit_effects = no
+         inherit_name = no
+         inherit_icon = yes
+         trigger = { militarist_country_traditions = yes }
+         modifier = {
+            ship_upkeep_mult = -0.10
+         }
+         weight = { factor = 1 }
+      }
+   
+      tradition_swap = {
+         name = tr_prosperity_fleet_logistical_corps_machine
+         inherit_effects = no
+         inherit_name = no
+         inherit_icon = yes
+         trigger = { has_authority = auth_machine_intelligence }
+         modifier = {
+            ship_upkeep_mult = -0.10
+         }
+         weight = { factor = 1 }
+      }
+   
+      tradition_swap = {
+         name = tr_federation_4
+         inherit_effects = no
+         inherit_name = no
+         inherit_icon = yes
+         trigger = { has_country_flag = federation_founder }
+         weight = { factor = 1 }
+      }
+      ai_weight = {
+         factor = 5000
+      }
+   }
+   
+### The Pursuit of Profit
+   tr_prosperity_pursuit_of_profit = {
+      cost = { unity = 60 }
+   
+      ### 2 unity from power hub
+   
+      possible = {
+         has_tradition = tr_prosperity_trans_stellar_corporations
+      }
+   
+      tradition_swap = {
+         name = tr_productivity_5
+         inherit_effects = no
+         inherit_name = no
+         inherit_icon = no
+         trigger = { is_assimilator = yes }
+         weight = { factor = 1 }
+      }
+   
+      tradition_swap = {
+         name = tr_strength_5
+         inherit_effects = no
+         inherit_name = no
+         inherit_icon = yes
+         trigger = { militarist_country_traditions = yes }
+         modifier = {
+            shipclass_military_station_hit_points_mult = 0.33
+         }
+         weight = { factor = 1 }
+      }
+   
+      tradition_swap = {
+         name = tr_prosperity_pursuit_of_profit_machine
+         inherit_effects = no
+         inherit_name = no
+         inherit_icon = yes
+         trigger = { has_authority = auth_machine_intelligence }
+         weight = { factor = 1 }
+      }
+   
+      tradition_swap = {
+         name = tr_federation_5
+         inherit_effects = no
+         inherit_name = no
+         inherit_icon = yes
+         trigger = { has_country_flag = federation_founder }
+         modifier = {
+            spaceport_ship_build_cost_mult = -0.05
+            ship_upkeep_mult = -0.05
+         }
+         weight = { factor = 1 }
+      }
+      ai_weight = {
+         factor = 1000
+      }
+   }
+   
+### 
+   tr_prosperity_finish = {
+      modifier = {
+         ascension_perks_add = 1
+         planet_building_upkeep_mult = -0.10
+      }
+   
+      tradition_swap = {
+         name = tr_productivity_finish
+         inherit_effects = no
+         inherit_name = yes
+         inherit_icon = yes
+         trigger = { is_assimilator = yes }
+         modifier = {
+            planet_building_upkeep_mult = -0.10
+            ascension_perks_add = 1
+         }
+         weight = { factor = 1 }
+      }
+   
+      tradition_swap = {
+         name = tr_strength_finish
+         inherit_effects = no
+         inherit_name = yes
+         inherit_icon = yes
+         trigger = { militarist_country_traditions = yes }
+         modifier = {
+            country_subject_trust_cap_add = 50
+            ascension_perks_add = 1
+         }
+         weight = { factor = 1 }
+      }
+   
+      tradition_swap = {
+         name = tr_prosperity_finish_machine
+         inherit_effects = no
+         inherit_name = yes
+         inherit_icon = yes
+         trigger = { has_authority = auth_machine_intelligence }
+         modifier = {
+            pop_consumer_goods_mult = -0.20
+            ascension_perks_add = 1
+         }
+         weight = { factor = 1 }
+      }
+   
+      tradition_swap = {
+         name = tr_federation_finish
+         inherit_effects = no
+         inherit_name = yes
+         inherit_icon = yes
+         trigger = { has_country_flag = federation_founder }
+         modifier = {
+            ascension_perks_add = 1
+            planet_building_upkeep_mult = -0.10
+         }
+         weight = { factor = 1 }
+      }
+   }
+   
+### 
+   tr_supremacy_adopt = {
+      cost = { unity = 60 }
+      modifier = {
+         country_border_mult = 0.10
+      }
+   
+      tradition_swap = {
+         name = tr_resilience_adopt
+         inherit_effects = no
+         inherit_name = yes
+         inherit_icon = yes
+         trigger = { is_assimilator = yes }
+         modifier = {
+            country_border_mult = 0.20
+         }
+         weight = { factor = 1 }
+      }
+   
+      tradition_swap = {
+         name = tr_diversity_adopt
+         inherit_effects = no
+         inherit_name = yes
+         inherit_icon = yes
+         trigger = { pacifist_country_traditions = yes }
+         modifier = {
+            academic_building_build_cost_mult = -0.25
+            cultural_building_build_cost_mult = -0.25
+         }
+         weight = { factor = 1 }
+      }
+   
+      tradition_swap = {
+         name = tr_supremacy_adopt_machine
+         inherit_effects = no
+         inherit_name = yes
+         inherit_icon = yes
+         trigger = { has_authority = auth_machine_intelligence }
+         modifier = {
+            country_border_mult = 0.1
+         }
+         weight = { factor = 1 }
+      }
+   
+      tradition_swap = {
+         name = tr_victory_adopt
+         inherit_effects = no
+         inherit_name = yes
+         inherit_icon = yes
+         trigger = { has_country_flag = the_dominion }
+         modifier = {
+            country_border_mult = 0.05
+            navy_size_mult = 0.05
+         }
+         weight = { factor = 1 }
+      }
+      ai_weight = {
+         factor = 10
+         modifier = {
+            factor = 2
+            has_ethic = ethic_militarist
+         }
+         modifier = {
+            factor = 3
+            has_ethic = ethic_fanatic_militarist
+         }
+      }
+   }
+   
+### Master Shipwrights
+   tr_supremacy_master_shipwrights = {
+      cost = { unity = 60 }
+      modifier = {
+         navy_size_mult = 0.10
+      }
+   
+      tradition_swap = {
+         name = tr_resilience_1
+         inherit_effects = no
+         inherit_name = no
+         inherit_icon = no
+         trigger = { is_assimilator = yes }
+         weight = { factor = 1 }
+      }
+   
+      tradition_swap = {
+         name = tr_diversity_1
+         inherit_effects = no
+         inherit_name = no
+         inherit_icon = yes
+         trigger = { pacifist_country_traditions = yes }
+         modifier = {
+            faction_influence_mult = 0.25
+         }
+         weight = { factor = 1 }
+      }
+   
+      tradition_swap = {
+         name = tr_supremacy_master_shipwrights_machine
+         inherit_effects = no
+         inherit_name = no
+         inherit_icon = yes
+         trigger = { has_authority = auth_machine_intelligence }
+         modifier = {
+            spaceport_ship_build_speed_mult = 0.15
+            navy_size_mult = 0.1              
+         }
+         weight = { factor = 1 }
+      }
+   
+      tradition_swap = {
+         name = tr_victory_1
+         inherit_effects = no
+         inherit_name = no
+         inherit_icon = yes
+         trigger = { has_country_flag = the_dominion }
+         weight = { factor = 1 }
+      }
+      ai_weight = {
+         factor = 1000
+      }
+   }
+   
+### Right of Conquest
+   tr_supremacy_right_of_conquest = {
+      cost = { unity = 60 }
+   
+      ### allows 'the grand fleet' and Arms Race edicts
+   
+      modifier = {
+         spaceport_ship_build_speed_mult = 0.10
+         ship_upkeep_mult = -0.10
+      }
+   
+      tradition_swap = {
+         name = tr_resilience_2
+         inherit_effects = no
+         inherit_name = no
+         inherit_icon = no
+         trigger = { is_assimilator = yes }
+         modifier = {
+            damage_vs_country_type_undine_mult = 0.5
+         }
+         weight = { factor = 1 }
+      }
+   
+      tradition_swap = {
+         name = tr_diversity_2
+         inherit_effects = no
+         inherit_name = no
+         inherit_icon = yes
+         trigger = { pacifist_country_traditions = yes }
+         modifier = {
+            science_ship_survey_speed = 0.5
+         }
+         weight = { factor = 1 }
+      }
+   
+      tradition_swap = {
+         name = tr_supremacy_right_of_conquest_machine
+         inherit_effects = no
+         inherit_name = no
+         inherit_icon = yes
+         trigger = { has_authority = auth_machine_intelligence }
+         modifier = {
+            spaceport_ship_build_speed_mult = 0.10
+            ship_upkeep_mult = -0.10
+         }
+         weight = { factor = 1 }
+      }
+   
+      tradition_swap = {
+         name = tr_victory_2
+         inherit_effects = no
+         inherit_name = no
+         inherit_icon = yes
+         trigger = { has_country_flag = the_dominion }
+         modifier = {
+            jemhadar_species_trait_points_add = 2
+         }
+      on_enabled = { give_technology = { tech = "tech_society_enhanced_478" message = no } }
+         weight = { factor = 1 }
+      }
+      ai_weight = {
+         factor = 1000
+      }
+   }
+   
+### Overwhelming Force
+   tr_supremacy_overwhelming_force = {
+      cost = { unity = 60 }
+      modifier = {
+         army_damage_mult = 0.1
+         subject_integration_influence_cost_mult = -0.25
+         country_integration_cooldown_mult = -0.50
+      }
+   
+      tradition_swap = {
+         name = tr_resilience_3
+         inherit_effects = no
+         inherit_name = no
+         inherit_icon = no
+         trigger = { is_assimilator = yes }
+         modifier = {
+            army_damage_mult = 0.25
+         }
+         weight = { factor = 1 }
+      }
+   
+      tradition_swap = {
+         name = tr_diversity_3
+         inherit_effects = no
+         inherit_name = no
+         inherit_icon = yes
+         trigger = { pacifist_country_traditions = yes }
+      on_enabled = { give_technology = { tech = "tech_society_new_worlds_1187" message = no } }
+         weight = { factor = 1 }
+      }
+   
+      tradition_swap = {
+         name = tr_supremacy_overwhelming_force_machine
+         inherit_effects = no
+         inherit_name = no
+         inherit_icon = yes
+         trigger = { has_authority = auth_machine_intelligence }
+         modifier = {
+            army_damage_mult = 0.25
+         }
+         weight = { factor = 1 }
+      }
+   
+      tradition_swap = {
+         name = tr_victory_3
+         inherit_effects = no
+         inherit_name = no
+         inherit_icon = yes
+         trigger = { has_country_flag = the_dominion }
+         modifier = {
+            country_subject_power_penalty_mult = -0.33
+         }
+         weight = { factor = 1 }
+      }
+      ai_weight = {
+         factor = 1000
+      }
+   }
+   
+### Spirit of the Hunt
+   tr_supremacy_great_game = {
+      cost = { unity = 60 }
+   
+      ### implementation in the should_apply_neighbor_rival_modifier game rule. Also modifiers against space critters
+   
+      modifier = {
+         damage_vs_country_type_amoeba_mult = 0.25
+         damage_vs_country_type_crystal_mult = 0.25
+         damage_vs_country_type_drone_mult = 0.25
+         damage_vs_country_type_cloud_mult = 0.25
+         damage_vs_country_type_swarm_mult = 0.25
+      }
+      possible = {
+         has_tradition = tr_supremacy_right_of_conquest
+         has_tradition = tr_supremacy_overwhelming_force
+      }
+   
+      tradition_swap = {
+         name = tr_resilience_4
+         inherit_effects = no
+         inherit_name = no
+         inherit_icon = no
+         trigger = { is_assimilator = yes }
+         weight = { factor = 1 }
+      }
+   
+      tradition_swap = {
+         name = tr_diversity_4
+         inherit_effects = no
+         inherit_name = no
+         inherit_icon = yes
+         trigger = { pacifist_country_traditions = yes }
+         modifier = {
+            species_leader_exp_gain = 0.1
+         }
+         weight = { factor = 1 }
+      }
+   
+      tradition_swap = {
+         name = tr_supremacy_great_game_machine
+         inherit_effects = no
+         inherit_name = no
+         inherit_icon = yes
+         trigger = { has_authority = auth_machine_intelligence }
+         weight = { factor = 1 }
+      }
+   
+      tradition_swap = {
+         name = tr_victory_4
+         inherit_effects = no
+         inherit_name = no
+         inherit_icon = yes
+         trigger = { has_country_flag = the_dominion }
+         weight = { factor = 1 }
+      }
+      ai_weight = {
+         factor = 1000
+      }
+   }
+   
+### War Games
+   tr_supremacy_war_games = {
+      cost = { unity = 60 }
+   
+      ### 1 admiral level
+   
+      modifier = {
+         admiral_skill_levels = 1
+      }
+      possible = {
+         has_tradition = tr_supremacy_master_shipwrights
+         has_tradition = tr_supremacy_right_of_conquest
+      }
+      on_enabled = {
+         every_owned_leader = {
+            limit = { leader_class = admiral }
+            add_skill = 1
+         }
+         every_pool_leader = {
+            limit = { leader_class = admiral }
+            add_skill = 1
+         }
+      }
+   
+      tradition_swap = {
+         name = tr_resilience_5
+         inherit_effects = no
+         inherit_name = no
+         inherit_icon = no
+         trigger = { is_assimilator = yes }
+         modifier = {
+            admiral_skill_levels = 1
+         }
+         weight = { factor = 1 }
+      }
+   
+      tradition_swap = {
+         name = tr_diversity_5
+         inherit_effects = no
+         inherit_name = no
+         inherit_icon = yes
+         trigger = { pacifist_country_traditions = yes }
+         modifier = {
+            country_leader_pool_size = 1
+         }
+         weight = { factor = 1 }
+      }
+   
+      tradition_swap = {
+         name = tr_supremacy_war_games_machine
+         inherit_effects = no
+         inherit_name = no
+         inherit_icon = yes
+         trigger = { has_authority = auth_machine_intelligence }
+         modifier = {
+            admiral_skill_levels = 1
+         }
+         weight = { factor = 1 }
+      }
+   
+      tradition_swap = {
+         name = tr_victory_5
+         inherit_effects = no
+         inherit_name = no
+         inherit_icon = yes
+         trigger = { has_country_flag = the_dominion }
+         modifier = {
+            vorta_species_trait_points_add = 2
+            edict_influence_cost = -0.25
+         }
+      on_enabled = { give_technology = { tech = "tech_society_enhanced_478" message = no } }
+         weight = { factor = 1 }
+      }
+      ai_weight = {
+         factor = 1000
+      }
+   }
+   
+### 
+   tr_supremacy_finish = {
+      modifier = {
+         ascension_perks_add = 1
+         ship_fire_rate_mult = 0.05
+      }
+   
+      tradition_swap = {
+         name = tr_resilience_finish
+         inherit_effects = no
+         inherit_name = yes
+         inherit_icon = yes
+         trigger = { is_assimilator = yes }
+         modifier = {
+            ascension_perks_add = 1
+            ship_fire_rate_mult = 0.05
+         }
+         weight = { factor = 1 }
+      }
+   
+      tradition_swap = {
+         name = tr_diversity_finish
+         inherit_effects = no
+         inherit_name = yes
+         inherit_icon = yes
+         trigger = { pacifist_country_traditions = yes }
+         modifier = {
+            country_resource_unity_mult = 0.1
+            ascension_perks_add = 1
+         }
+         weight = { factor = 1 }
+      }
+   
+      tradition_swap = {
+         name = tr_supremacy_finish_machine
+         inherit_effects = no
+         inherit_name = yes
+         inherit_icon = yes
+         trigger = { has_authority = auth_machine_intelligence }
+         modifier = {
+            ascension_perks_add = 1
+            ship_fire_rate_mult = 0.05
+         }
+         weight = { factor = 1 }
+      }
+   
+      tradition_swap = {
+         name = tr_victory_finish
+         inherit_effects = no
+         inherit_name = yes
+         inherit_icon = yes
+         trigger = { has_country_flag = the_dominion }
+         modifier = {
+            ascension_perks_add = 1
+            ship_fire_rate_mult = 0.05
+         }
+         weight = { factor = 1 }
+      }
+   }
+   

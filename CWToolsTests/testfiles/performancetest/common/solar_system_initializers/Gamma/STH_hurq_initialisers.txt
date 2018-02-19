@@ -1,0 +1,96 @@
+@distance = 30
+@base_moon_distance = 10
+
+# Hur'Q
+hurq_homeworld = {
+	name = "Hur'Q"
+	class = "sc_m"
+	usage = custom_empire
+	flags = { hurq_homeworld }
+	init_effect = { log = "hurq homeworld" }
+	max_instances = 1
+	planet = { count = 1 class = star name = "Hur'Q" orbit_distance = 0 orbit_angle = 1 size = { min = 20 max = 30 } has_ring = no }
+	change_orbit = 50
+	planet = { name = "Shattered Dreams" class = "pc_barren_broken" orbit_distance = 25 size = 20 has_ring = no }
+	planet = { name = "Lost Memories" class = "pc_barren_broken" orbit_distance = 15 orbit_angle = 125 size = 25 has_ring = no }
+	change_orbit = 30
+	planet = {
+		count = 1
+		home_planet = yes
+		class = pc_arid
+		name = "Refuge"
+		orbit_distance = 10
+		orbit_angle = { min = 90 max = 270 }
+		size = 25
+		starting_planet = yes
+		tile_blockers = none
+		modifiers = none
+		init_effect = { prevent_anomaly = yes }
+		init_effect = {
+			if = {
+				limit = { NOT = { any_country = { has_country_flag = hurq_stagnancy } } }
+				create_species = { 
+				    name = "Hur'Q" 
+				    class = HUR 
+				    portrait = "hur'q" 
+				    homeworld = THIS 
+				    traits = { 
+				        trait="trait_venerable"
+						trait="trait_resilient"
+						trait="trait_repugnant"
+						trait="trait_slow_breeders"
+						trait="trait_sedentary"
+				        ideal_planet_class = "pc_arid" 
+					} 
+				}
+				last_created_species = { save_global_event_target_as = hurqSpecies }
+				create_country = {
+					name = "NAME_hurq_stagnancy"
+					type = default
+					ignore_initial_colony_error = yes
+					civics = { civic = "civic_museums" civic = "civic_museums_2" }
+					authority = "auth_oligarchic"
+					name_list = "MAM2"
+					ethos = { ethic = "ethic_militarist" ethic = "ethic_fanatic_xenophobe" }
+					species = event_target:hurqSpecies
+					flag = {
+						icon = { category = "trek" file = "hur'q.dds" }
+						background = { category = "backgrounds" file = "circle.dds" }
+						colors = { "customcolor1909" "customcolor1628" "null" "null" }
+					}
+					ship_prefix = ""
+					effect = {
+						set_graphical_culture = generic_01
+						set_country_flag = hurq_stagnancy
+						set_country_flag = custom_start_screen
+						set_country_flag = generic_ent
+						set_country_flag = gamma_empire
+						set_country_flag = init_spawned
+						set_country_flag = first_alien_life
+						set_country_flag = first_contact_event
+						set_country_flag = is_stnh_fallen_empire
+						set_country_flag = sth_medium_galaxy
+						save_global_event_target_as = hurq_stagnancy
+					}
+				}
+				create_colony = { owner = event_target:hurq_stagnancy species = event_target:hurqSpecies ethos = owner }
+			}
+			set_capital = yes
+			random_country = {
+				limit = { has_country_flag = hurq_stagnancy }
+				save_global_event_target_as = hurq_stagnancy
+				add_appropriate_start_techs = yes
+				give_technology = {	tech = "tech_society_new_worlds_1169" message = no }
+				species = { save_global_event_target_as = hurqSpecies }
+            }
+			set_owner = event_target:hurq_stagnancy
+			generate_major_empire_start_buildings = yes
+			generate_haven_blockers_hurq = yes
+			generate_major_empire_start_pops = yes
+			generate_major_empire_start_fleets = yes
+			set_name = "Refuge"
+		}
+	}
+	planet = { name = "Forgotten Heroics" class = "pc_barren_broken" orbit_distance = 38 orbit_angle = 20 size = 35 has_ring = no }
+	planet = { name = "Broken Relics" class = "pc_barren_broken" orbit_distance = 70 orbit_angle = -195 size = 30 has_ring = no }
+}

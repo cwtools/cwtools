@@ -1,0 +1,105 @@
+﻿### Garidian by EHKodiak
+Garidian = {
+	randomized = no
+
+	ship_names = {
+		generic = {
+			"Shagus" "Grinselius" "Swiselas" "Walshicus" "Matixas" "Ha'rel" "Zi'Mpuls" "Aj'rmr" "Belak" "D'ridthau" "Decius" "Dividices" "Devoras" "Genorex" "Haakona" "Khazara" "Kodiakerex" "Makar" "Narada" "Precetor" "Scimitar" "T'Met" "T'Tpalok" "Talvath" "Terix" "Tomal" "Valdore" "T'liss" "T'varo" "Dhelan" "Dhael" "Mogai" "D'deridex" "D'ridthau" "Ar'Kif" "Ha'feh" "Ha'apax" "Daeinos" "Ha'nom" "Faeht" "Shamshir" "Tulwar" "Khaiell" "Kara" "Jaeih" "D'Khellra" "Jhu'aek" "Deihu" "Okhala" "Malem" "Vastam" "Morrigu" "Khopesh" "Falchion" "D'renet" "D'retex" "D'ridren" "R'derex" "R'tan" "D'dredar" "Asiram"
+		}
+		corvette = {
+		}
+		saber = {
+		}
+		sovereign = {
+		}
+		steamrunner = {
+		}		
+		adv_cruiser = {
+		}
+		strike = {
+		}		
+		constructor = { "Construction Vessel" }
+		colonizer = { "Colony Vessel" }
+		science = { "Science Vessel" }
+		transport = { "Transport Vessel" }
+		outpost_station = {
+			sequential_name = "Frontier Outpost"
+		}
+	}
+	ship_class_names = {
+		corvette = { T'Liss }
+		saber = { Kara }
+		sovereign = { Malem }
+		steamrunner = { D'retex }
+		adv_cruiser = { D'Deridex }
+		strike = { Mogai }
+	}
+
+	fleet_names = {
+		sequential_name = "%O% Fleet"
+	}
+	
+	army_names = {
+		defense_army = {
+			sequential_name = "%O% Guard"
+		}
+		assault_army = {
+			sequential_name = "%O% Legion"
+		}
+		slave_army = {
+			sequential_name = "%O% Indentured Legion"
+		}
+		clone_army = { 
+			sequential_name = "%O% Clone Legion"
+		}
+		robotic_army = {
+			sequential_name = "%O% Mechanical Legion"
+		}
+		android_army = {
+			sequential_name = "%O% Synthetic Legion"
+		}
+		psionic_army = { 
+			sequential_name = "%O% Psi Legion"
+		}
+		xenomorph_army = {
+			sequential_name = "%O% Bio-Warfare Legion"
+		}
+		gene_warrior_army = {
+			sequential_name = "%O% Bio-Engineered Legion"
+		}
+	}
+
+	planet_names = {
+		generic = {
+			names = {
+			}
+		}
+	}
+
+
+	### CHARACTERS
+
+	character_names = {
+		names1 = {
+			weight = 100
+			first_names_male = {		
+				Aehkhifv Aerv Aev Argelian Chavek Deletham Delon Dhiemm D'Nal Ejiul Fveirrolh Galan Giellun Hanaj Hatham H'daen Hexce Hirl Havraha Hexce Hvaid Kalabam Kaol Khaiel Khiy Khoal Lai Lhaerrh Lhaes Llhran Maec Maiell Maiek Mandukar Miral Nnerhin Nniol Nuhir Nveid Rh'vaurek R'Imus Saren S'harien S'auen S'Talon S'Task S'Tcaevra S'Ten S'Tev Stelam S'Tokkr Taev Takaram T'maekh Vaebn Terrh Vrih Yhea T'Bak Avakar
+			}
+			first_names_female = {
+				Ael Aidoann Ariennye Arrenhe Arrhae D'Elon Dhael Dhivael D'Ral Ecural Ekkhae Eviess Hannam Hloal Jaeih Ihho Isha Jaeih Jhu Latta Llaiir LLuni Mhai Mnheia N'alae Nalah Nn'khiy Nuhir Rhhaein Rhian Rhiana Ro'Wena Saeihr S'anra Shiarrael Sienae Sindari Ssaedhe S'Tarleya Teelis Thue T'Mandara T'Rehu Verelan Lucana Pentara 
+			}
+			second_names = {
+				Aenikh Aelhih Aieme Aimne Annhwi Barel Dharvanek Cretak D'Amarok D'mora D'varo Dar Deletham Dorek`a Donatra Ehhelih Gaius Galathon Hdaen Hiren Hheinia Hrienth Hwaehrai Hwaerianh Hwersuil Illialhlae Ieithoedd Jhaelaa Jomar Jo'rek Kassus Kayton Keirianh Keras Khellian Khev Khnialmnae Kota Koval Lareth Letant Lhaihtrha Lhoell Liorae-sihaer Llhweiir Llweii Louris Lovok Maec Maelrok Marrus Mas Mendak Merek Mirok Movar Nanclus Neral N'Vek Othan Pardek Parthok Qellar R'Mor Raaik Raedheol Rahaen'fvil Ralaa Rehu Riuurren Rllaillieu Ruwon Rylov Sahen Sarine Sela Sirol Solos Solius Sullan Suran Tal'Aura Tela Terik Terrh'vnau Tomalak Tovan Valdran Velal Vreenak Xereth
+			}
+			regnal_first_names_male = {
+				Aehkhifv Aerv Aev Argelian Chavek Deletham Delon Dhiemm D'Nal Ejiul Fveirrolh Galan Giellun Hanaj Hatham H'daen Hexce HHirl Havraha Hexce Hvaid Kalabam Kaol Khaiel Khiy Khoal Lai Lhaerrh Lhaes Llhran Maec Maiell Maiek Mandukar Miral Nnerhin Nniol Nuhir Nveid Rh'vaurek R'Imus Saren S'harien S'auen S'Talon S'Task S'Tcaevra S'Ten S'Tev Stelam S'Tokkr Taev Takaram T'maekh Vaebn Terrh Vrih Yhea T'Bak Avakar
+			}
+			regnal_first_names_female = {
+				Ael Aidoann Ariennye Arrenhe Arrhae D'Elon Dhael Dhivael D'Ral Ecural Ekkhae Eviess Hannam Hloal Jaeih Ihho Isha Jaeih Jhu Latta Llaiir LLuni Mhai Mnheia N'alae Nalah Nn'khiy Nuhir Rhhaein Rhian Rhiana Ro'Wena Saeihr S'anra Shiarrael Sienae Sindari Ssaedhe S'Tarleya Teelis Thue T'Manda T'Rehu Verelan Lucana Pentara
+			}
+			regnal_second_names = {
+				Aenikh Aelhih Aieme Aimne Annhwi Barel Dharvanek Cretak D'Amarok D'mora D'varo Dar Deletham Dorek`a Donatra Ehhelih Gaius Galathon Hdaen Hiren Hheinia Hrienth Hwaehrai Hwaerianh Hwersuil Illialhlae Ieithoedd Jhaelaa Jomar Jo'rek Kassus Kayton Keirianh Keras Khellian Khev Khnialmnae Kota Koval Lareth Letant Lhaihtrha Lhoell Liorae-sihaer Llhweiir Llweii Louris Lovok Maec Maelrok Marrus Mas Mendak Merek Mirok Movar Nanclus Neral N'Vek Othan Pardek Parthok Qellar R'Mor Raaik Raedheol Rahaen'fvil Ralaa Rehu Riuurren Rllaillieu Ruwon Rylov Sahen Sarine Sela Sirol Solos Solius Sullan Suran Tal'Aura Tela Terik Terrh'vnau Tomalak Tovan Valdran Velal Vreenak Xereth
+			}
+		}
+	}
+}

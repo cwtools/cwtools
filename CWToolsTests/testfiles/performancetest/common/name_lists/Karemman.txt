@@ -1,0 +1,96 @@
+﻿### Karemman by EHKodiak
+Karemman = {
+	randomized = no
+
+	ship_names = {
+		generic = { Annex Annuity Appraiser Arbitrage Arbitration Arrears Assay Assessor Auditor Avarice Capitalist Client Commerce Commission Company Compound Contrarian Contribution Credit "Wily Merchant" "Latinum Queen" "Leveraged Buyout" Margin Isik Merchant Merger "Extra Delight"  Negotiator Notary Strorith Goloth Ondith Preekoth Qartum Rard-Pis "Rational Profit" "Benevolent Rule"  Varkart Venture Wealth Windfall "Belt of Plunder" "Fearful Trident" "Wandering Blade" "Opportune Exploit" Kingpin Endowment Speakeasy Constite Invigorator Innervater Animater Tradesman Ransom
+		}
+		corvette = {
+		}
+		saber = {
+		}
+		sovereign = {
+		}
+		steamrunner = {
+		}		
+		adv_cruiser = {
+		}
+		strike = {
+		}	
+		constructor = { }
+		colonizer = { }
+		science = { }
+		transport = { }
+		outpost_station = {
+			sequential_name = "Frontier Outpost"
+		}
+	}
+
+	fleet_names = {
+		sequential_name = "%O% Fleet"
+	}
+	
+	army_names = {
+		defense_army = {
+			sequential_name = "%O% Guard"
+		}
+		assault_army = {
+			sequential_name = "%O% Assault Force"
+		}
+		slave_army = {
+			sequential_name = "%O% Indentured Defence Force"
+		}
+		clone_army = { 
+			sequential_name = "%O% Clone Defence Force"
+		}
+		robotic_army = {
+			sequential_name = "%O% Mechanised Defence Force"
+		}
+		android_army = {
+			sequential_name = "%O% Synthetic Defence Force"
+		}
+		psionic_army = { 
+			sequential_name = "%O% Psi Defence Force"
+		}
+		xenomorph_army = {
+			sequential_name = "%O% Bio-Warfare Defence Force"
+		}
+		gene_warrior_army = {
+			sequential_name = "%O% Bio-Engineered Defence Force"
+		}
+	}
+
+	planet_names = {
+		generic = {
+			names = { 
+			}
+		}
+	}
+
+
+	### CHARACTERS 
+
+	character_names = {
+		names1 = {
+			weight = 40
+			first_names_male = {
+			Hanok Ornithar Atteracar Atteem Malkadt Torosek Malkadosek Tottar Ornsek Torithar Thar Nithar Olkorhanot Malrosar Malkadsek Ornthark Torot Malnohar Korok Harek Grinok Walshithar Harok Kodok Shaggok Mishok Treazarce Sirice Janok Kaidok Ositok Zimpok
+			}
+			first_names_female = {
+			Atterace Orterace Moroce Morase Attrice Arica Malca Malnorace Hanokace Ornitharace Attece Malkace Torose Malkadose Totta Ornse Toritha Tharce Nitharce Olkorhanoose Malrose Malarose Malkadseek Ornthara Toro Malnohare Orntroce Ornitha Atmadose Orntohace Malrlroitha Malka Hanose Nitharcece Nithara Nitharace Orattece Toritattece Tharace Mkorhce Saramearsce Angface 
+			}
+			second_names = {
+			Prees Looos Laaas Praas Slaade Meers Bissi Inoni Icus Marahu Harel Cereb Inoos Halcus Marac Inonel Brahu Bissni Loorel Cearab Prahu Locus Maraos Cedcus Lacus Laoni Precus Preous Inrel
+			}
+			regnal_first_names_male = {
+			Hanok Ornithar Atteracar Atteem Malkadt Torosek Malkadosek Tottar Ornsek Torithar Thar Nithar Olkorhanot Malrosar Malkadsek Ornthark Torot Malnohar Korok Harok Grinok Walshithar Harek Kodok Shaggok Mishok Treazarce Sirice Janok Kaidok Ositok Zimpok
+			}
+			regnal_first_names_female = {
+			Atterace Orterace Moroce Morase Attrice Arica Malca Malnorace Hanokace Ornitharace Attece Malkace Torose Malkadose Totta Ornse Toritha Tharce Nitharce Olkorhanoose Malrose Malarose Malkadseek Ornthara Toro Malnohare Orntroce Ornitha Atmadose Orntohace Malrlroitha Malka Hanose Nitharcece Nithara Nitharace Orattece Toritattece Tharace Mkorhce Saramearsce Angface 
+			}
+			regnal_second_names = {
+			Prees Looos Laaas Praas Slaade Meers Bissi Inoni Icus Marahu Harel Cereb Inoos Halcus Marac Inonel Brahu Bissni Loorel Cearab Prahu Locus Maraos Cedcus Lacus Laoni Precus Preous Inrel
+			}
+		}
+	}
+}

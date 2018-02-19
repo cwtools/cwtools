@@ -1,0 +1,247 @@
+#################
+### LEADER TRAITS
+#################
+
+leader_trait_energy_tycoon = {
+	cost = 1
+	modification = no
+	icon = "gfx/interface/icons/traits/leader_traits/leader_trait_energy_tycoon.dds"
+	modifier = {
+		tile_resource_energy_mult = 0.10
+		power_plant_build_cost_mult = -0.20
+	}
+	leader_trait = yes
+	leader_class = { governor }
+}
+
+leader_trait_doctor_governor = {
+	cost = 1
+	modification = no
+	icon = "gfx/interface/icons/traits/leader_traits/trait_ruler_doctor.dds"
+	modifier = {
+	    tile_resource_society_research_mult = 0.10
+		medical_building_build_cost_mult = -0.20
+	}
+	leader_potential_add = {
+		from = { is_drone_authority = no }
+	}
+	leader_trait = yes
+	leader_class = { governor }
+}
+
+leader_trait_fortifier = {
+	cost = 1
+	modification = no
+	icon = "gfx/interface/icons/traits/leader_traits/leader_trait_fortifier.dds"
+	modifier = {
+		garrison_health = 0.5
+		military_building_build_cost_mult = -0.20
+	}
+	leader_trait = yes
+	leader_class = { governor }
+}
+
+leader_trait_art_aficionado = {
+	cost = 1
+	modification = no
+	icon = "gfx/interface/icons/traits/leader_traits/trait_ruler_art_aficionado.dds"
+	modifier = {
+		edict_influence_cost = -0.2
+		cultural_building_build_cost_mult = -0.20
+	}
+	leader_potential_add = {
+		from = { is_drone_authority = no }
+	}
+	leader_trait = yes
+	leader_class = { ruler }
+}
+
+leader_trait_urbanizer = {
+	cost = 1
+	modification = no
+	icon = "gfx/interface/icons/traits/leader_traits/trait_ruler_urbaniser.dds"
+	modifier = {
+		pop_happiness = 0.02
+		housing_construction_build_cost_mult = -0.20
+	}
+	leader_potential_add = {
+		from = { is_drone_authority = no }
+	}
+	leader_trait = yes
+	leader_class = { ruler }
+}
+
+leader_trait_learned = {
+	cost = 1
+	modification = no
+	icon = "gfx/interface/icons/traits/leader_traits/trait_ruler_learned.dds"
+	modifier = {
+		ship_anomaly_research_speed_mult = 0.33
+		academic_building_build_cost_mult = -0.20
+	}
+	leader_potential_add = {
+		from = { is_drone_authority = no }
+	}
+	leader_trait = yes
+	leader_class = { ruler }
+}
+
+leader_trait_immortal = {
+	cost = 0
+	icon = "gfx/interface/icons/traits/leader_traits/leader_trait_immortal.dds"
+	modification = no
+	immortal_leaders = yes
+	modifier = { }
+	leader_trait = yes
+	leader_class = { admiral scientist general governor ruler }
+	initial = no
+	randomized = no
+	ai_categories = { survey physics society engineering }
+}
+
+leader_trait_assimilated = {
+	cost = 1
+	icon = "gfx/interface/icons/traits/leader_traits/leader_trait_assimilated.dds"
+	modification = no
+	modifier = { }
+	leader_trait = yes
+	leader_class = { admiral scientist general governor ruler }
+	initial = no
+	randomized = no
+}
+
+leader_trait_the_phage = {
+	cost = 0
+	icon = "gfx/interface/icons/traits/trait_the_phage.dds"
+	modification = no
+	leader_trait = yes
+	initial = no
+	randomized = no
+	self_modifier = {
+		leader_age = -5
+	}
+}
+
+
+leader_trait_maimed = {
+	cost = 0
+	icon = "gfx/interface/icons/traits/leader_traits/leader_trait_maimed.dds"
+	modification = no
+	self_modifier = {
+		leader_age = -10
+		species_leader_exp_gain = -0.05
+	}
+	leader_trait = yes
+	initial = no
+	randomized = no
+}
+
+leader_trait_reverred = {
+	cost = 0
+	icon = "gfx/interface/icons/traits/leader_traits/leader_trait_reverred.dds"
+	modification = no
+	leader_trait = yes
+	initial = no
+	randomized = no
+}
+
+leader_trait_revilled = {
+	cost = 0
+	icon = "gfx/interface/icons/traits/leader_traits/leader_trait_revilled.dds"
+	modification = no
+	leader_trait = yes
+	initial = no
+	randomized = no
+}
+
+leader_trait_hero = {
+	cost = 1
+	icon = "gfx/interface/icons/traits/leader_traits/leader_trait_hero.dds"
+	modification = no
+	modifier = {
+		ship_combat_speed_mult = 0.1
+		ship_fire_rate_mult = 0.1
+	}
+	leader_trait = yes
+	leader_class = { admiral }
+	initial = no
+	randomized = no
+}
+
+leader_trait_doctor = {
+	cost = 1
+	modification = no
+	icon = "gfx/interface/icons/traits/leader_traits/trait_ruler_doctor.dds"
+	modifier = {
+		category_biology_research_speed_mult = 0.075
+		leader_age = 10
+	}
+	leader_potential_add = {
+		from = { is_drone_authority = no }
+	}
+	opposites = { 
+		"leader_trait_expertise_materials" 
+		"leader_trait_expertise_rocketry" 
+		"leader_trait_expertise_voidcraft"
+		"leader_trait_expertise_industry" 
+		"leader_trait_expertise_field_manipulation"
+		"leader_trait_expertise_particles"
+		"leader_trait_expertise_psionics"
+		"leader_trait_expertise_computing" 
+		"leader_trait_expertise_new_worlds"
+		"leader_trait_expertise_statecraft"
+		"leader_trait_expertise_military_theory"
+		"leader_trait_expertise_biology"
+	}
+	leader_trait = yes
+	leader_class = { scientist }
+	# higher chance to generate techs in category biology (done in tech-script)
+	
+	ai_categories = {
+		society
+	}
+	
+	ai_weight = {
+		weight = 100
+	}
+}
+
+leader_trait_shapeshifter = {
+	cost = 0
+	icon = "gfx/interface/icons/traits/leader_traits/leader_trait_shapeshifter.dds"
+	modifier = { 
+		
+	}
+	leader_trait = yes
+	leader_class = { admiral scientist general governor ruler }
+	leader_potential_add = { species = { has_trait = trait_shapeshifter } }
+	modification = no
+}
+
+leader_trait_honoured_elder_army = {
+	cost = 1
+	icon = "gfx/interface/icons/traits/trait_diverse.dds"
+	modification = no
+	modifier = {
+		army_morale = 0.15
+		army_attack_morale_mult = 0.15
+	}
+	leader_trait = yes
+	leader_class = { general }
+	initial = no
+	randomized = no
+}
+
+leader_trait_honoured_elder_fleet = {
+	cost = 1
+	icon = "gfx/interface/icons/traits/trait_diverse.dds"
+	modification = no
+	modifier = {
+		ship_combat_speed_mult = 0.1
+		ship_fire_rate_mult = 0.1
+	}
+	leader_trait = yes
+	leader_class = { admiral }
+	initial = no
+	randomized = no
+}

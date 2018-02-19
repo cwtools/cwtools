@@ -1,0 +1,108 @@
+### Note this file is required. We must keep a hostile_system_initializers.txt file, or we will get all the vanilla hostiles spawning.
+### These hostiles have a chance of appearing in systems with no specific system initializer.
+### There are further hostile initializers (directed to systems with a specific system initializer) in STH_static_map_system_initializers.txt
+### NB When copying initializers from vanilla, delete any 'neighbor' system initializers.
+
+### Hirogen System
+hirogen_init_01 = {
+	usage = misc_system_init
+	usage_odds = {
+		base = 4
+		modifier = {
+			factor = 0
+			NOT = { is_in_cluster = resource_cluster_0 }
+		}
+	}
+
+	flags = { hirogen_system hirogen_1 }
+	
+	planet = {
+		count = 1
+		class = star
+		orbit_distance = 0
+		orbit_angle = 1
+		size = { min = 20 max = 30 }
+		has_ring = no
+	}
+	
+	change_orbit = 30
+	
+	planet = {
+		count = 2
+		orbit_distance = 20
+		orbit_angle = { min = 90 max = 270 }
+	}
+	
+	change_orbit = 25
+	
+	planet = {
+		count = { min = 1 max = 2 }
+		class = random_asteroid
+		orbit_distance = 0
+		orbit_angle = { min = 90 max = 270 }
+
+		init_effect = {
+			save_event_target_as = piratePlanet
+			create_hirogen_country = yes
+			
+			create_fleet = {
+				name = "Hunter's Lodge"
+				effect = {
+					set_owner = event_target:hirogen_country
+					create_ship = {
+						name = random
+						design = "Pirate Hideout"
+						graphical_culture = "pirate_01"
+					}
+					set_location = event_target:piratePlanet
+				}
+			}
+			event_target:hirogen_country = {
+				create_leader = {
+					type = admiral
+					species = event_target:hirogen_country
+					name = random
+					skill = 500
+				}
+				create_fleet = {
+					name = "Hunting Party"
+					effect = {
+						set_owner = event_target:hirogen_country
+						while = {
+							count = 12
+							create_ship = {
+								name = random
+								design = "Brigand"
+								graphical_culture = "pirate_01"
+							}
+						}
+						while = {
+							count = 20
+							create_ship = {
+								name = random
+								design = "Skull"
+								graphical_culture = "pirate_01"
+							}
+						}
+						set_location = event_target:piratePlanet
+						assign_leader = last_created_leader
+					}
+				}
+			}
+		}		
+	}
+	
+	planet = {
+		count = { min = 2 max = 5 }
+		orbit_distance = 25
+		orbit_angle = { min = 90 max = 270 }
+		
+		change_orbit = @base_moon_distance
+		
+		moon = {
+			count = { min = 0 max = 1 }
+			orbit_angle = { min = 90 max = 270 }
+			orbit_distance = 5
+		}
+	}
+}

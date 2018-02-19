@@ -1,0 +1,78 @@
+########################
+##ANOMALY EVENTS ###
+########################
+#potential = ship scope
+
+#All discoveries assigned weight 1. Or not?
+
+# Rogue moon
+anomaly = {
+	event = anomaly.6000
+	category = "rogue_moon_category"
+	
+	weight = 4
+	
+	potential = {
+		owner = { is_borg_empire = no }
+	}
+}
+
+# Rogue moonbase
+anomaly = {
+	event = anomaly.6001
+	category = "rogue_moon_category"
+	
+	weight = 1
+	
+	potential = {
+		owner = { is_borg_empire = no }
+	}
+}
+
+# hollow planet, artificial #will become colony event instead
+#anomaly = {
+#	event = anomaly.6002
+#	category = "hollow_planet_category"
+#	
+#	weight = 1
+#	
+#	potential = {
+#		owner = { is_borg_empire = no is_assimilator = no }
+#	}
+#}
+
+# hollow planet, hollowed
+#anomaly = {
+#	event = anomaly.6003
+#	category = "hollow_planet_category"
+#	
+#	weight = 1
+#	
+#	potential = {
+#		owner = { is_borg_empire = no is_assimilator = no }
+#	}
+#}
+
+# strong magnetic field
+#anomaly = {
+#	event = anomaly.6004
+#	category = "strong_magnetic_category"
+#	
+#	weight = 1
+#	
+#	potential = {
+#		owner = { is_borg_empire = no is_assimilator = no }
+#	}
+#}
+
+# undiscovered planetary modifier
+#anomaly = {
+#	event = anomaly.6006
+#	category = "undiscovered_planetary_modifier_category"
+#	
+#	weight = 1
+#	
+#	potential = {
+#		owner = { is_borg_empire = no is_assimilator = no }
+#	}
+#}

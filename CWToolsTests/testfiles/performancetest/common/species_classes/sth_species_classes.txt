@@ -1,0 +1,851 @@
+### STNH 1.8 Compatible ###
+
+
+# Number of entries controlls amount to choose from in designer  I.E.   "mol1" "mol2" "mol3" "mol4"
+#   graphical_culture is connected to the looks used for ships and cities, see "common/  graphical_culture/"
+# Portraits here are one you can choose from in the character creater. For prescripted races they are grabbed straight from the .gfx file. 
+# can specify playable=no to disable people from picking specified class.
+# can specify randomized=no to filter specified class from randomization.
+
+@robot_trait_points = 0
+@robot_max_traits = 3
+@machine_trait_points = 1
+@machine_max_traits = 4
+@species_trait_points = 2
+@species_max_traits = 5
+
+
+FED = { archetype = HUMANOID randomized = no portraits = { "human" "humanAugment" } graphical_culture = federation_01 move_pop_sound_effect = "moving_pop_confirmation" uplifted_into = "FED" uplifted_portraits = { "human" "humanAugment" } }
+KDF = { archetype = HUMANOID randomized = no portraits = { "klingon" } graphical_culture = klingon_01 move_pop_sound_effect = "moving_pop_confirmation" uplifted_into = "KDF" uplifted_portraits = { "klingon" } }
+ROM = { archetype = HUMANOID randomized = no portraits = { "romulan" } graphical_culture = romulan_01 move_pop_sound_effect = "moving_pop_confirmation" uplifted_into = "ROM" uplifted_portraits = { "romulan" } }
+FER = { archetype = HUMANOID randomized = no portraits = { "ferengi" } graphical_culture = ferengi_01 move_pop_sound_effect = "moving_pop_confirmation" uplifted_into = "FER" uplifted_portraits = { "ferengi" } }
+TRI = { archetype = HUMANOID randomized = no portraits = { "trill" } graphical_culture = generic_02 move_pop_sound_effect = "moving_pop_confirmation" uplifted_into = "TRI" uplifted_portraits = { "trill" } }
+BET = { archetype = HUMANOID randomized = no portraits = { "betazoid" } graphical_culture = generic_01 move_pop_sound_effect = "moving_pop_confirmation" uplifted_into = "BET" uplifted_portraits = { "betazoid" } }
+CAR = { archetype = HUMANOID randomized = no portraits = { "cardassian" } graphical_culture = cardassian_01 move_pop_sound_effect = "moving_pop_confirmation" uplifted_into = "CAR" uplifted_portraits = { "cardassian" } }
+VUL = { archetype = HUMANOID randomized = no portraits = { "vulcan" } graphical_culture = vulcan_01 move_pop_sound_effect = "moving_pop_confirmation" uplifted_into = "VUL" uplifted_portraits = { "vulcan" } }
+BOL = { archetype = HUMANOID randomized = no portraits = { "bolian" } graphical_culture = generic_02 move_pop_sound_effect = "moving_pop_confirmation" uplifted_into = "BOL" uplifted_portraits = { "bolian" } }
+ADR = { archetype = HUMANOID randomized = no portraits = { "andorian" } graphical_culture = andorian_01 move_pop_sound_effect = "moving_pop_confirmation" uplifted_into = "ADR" uplifted_portraits = { "andorian" } }
+AEN = { archetype = HUMANOID randomized = no portraits = { "aenar" } graphical_culture = andorian_01 move_pop_sound_effect = "moving_pop_confirmation" uplifted_into = "AEN" uplifted_portraits = { "aenar" } }
+BRE = { archetype = HUMANOID randomized = no portraits = { "breen" } graphical_culture = breen_01 move_pop_sound_effect = "moving_pop_confirmation" uplifted_into = "BRE" uplifted_portraits = { "breen" } }
+REM = { archetype = HUMANOID randomized = no portraits = { "reman" } graphical_culture = romulan_01 move_pop_sound_effect = "moving_pop_confirmation" uplifted_into = "REM" uplifted_portraits = { "reman" } }
+DOM = { archetype = CHANGELING randomized = no portraits = { "changeling" } graphical_culture = dominion_01 move_pop_sound_effect = "moving_pop_confirmation" uplifted_into = "DOM" uplifted_portraits = { "changeling" } }
+VOR = { archetype = VORTA randomized = no portraits = { "vorta" } graphical_culture = dominion_01 move_pop_sound_effect = "moving_pop_confirmation" uplifted_into = "VOR" uplifted_portraits = { "vorta" } }
+JEM = { archetype = JEMHADAR randomized = no portraits = { "jem'hadar" } graphical_culture = dominion_01 move_pop_sound_effect = "moving_pop_confirmation" uplifted_into = "JEM" uplifted_portraits = { "jem'hadar" } }
+BAJ = { archetype = HUMANOID randomized = no portraits = { "bajoran" } graphical_culture = generic_02 move_pop_sound_effect = "moving_pop_confirmation" uplifted_into = "BAJ" uplifted_portraits = { "bajoran" } }
+THO = { archetype = CRYSTALINE randomized = no portraits = { "tholian" } graphical_culture = tholian_01 move_pop_sound_effect = "moving_pop_confirmation" uplifted_into = "THO" uplifted_portraits = { "tholian" } }
+TEL = { archetype = HUMANOID randomized = no portraits = { "tellarite" } graphical_culture = tellarite_01 move_pop_sound_effect = "moving_pop_confirmation" uplifted_into = "TEL" uplifted_portraits = { "tellarite" } }
+VOT = { archetype = HUMANOID randomized = no portraits = { "voth" } graphical_culture = voth_01 move_pop_sound_effect = "moving_pop_confirmation" uplifted_into = "VOT" uplifted_portraits = { "voth" } }
+GOR = { archetype = HUMANOID randomized = no portraits = { "gorn" } graphical_culture = generic_01 move_pop_sound_effect = "moving_pop_confirmation" uplifted_into = "GOR" uplifted_portraits = { "gorn" } }
+VAA = { archetype = HUMANOID randomized = no portraits = { "vaadwaur" } graphical_culture = generic_01 move_pop_sound_effect = "moving_pop_confirmation" uplifted_into = "VAA" uplifted_portraits = { "vaadwaur" } }
+BEN = { archetype = HUMANOID randomized = no portraits = { "benzite" } graphical_culture = generic_02 move_pop_sound_effect = "moving_pop_confirmation" uplifted_into = "BEN" uplifted_portraits = { "benzite" } }
+FLA = { archetype = HUMANOID randomized = no portraits = { "flaxian" } graphical_culture = generic_01 move_pop_sound_effect = "moving_pop_confirmation" uplifted_into = "FLA" uplifted_portraits = { "flaxian" } }
+ORI = { archetype = HUMANOID randomized = no portraits = { "orion" } graphical_culture = generic_01 move_pop_sound_effect = "moving_pop_confirmation" uplifted_into = "ORI" uplifted_portraits = { "orion" } }
+BRU = { archetype = HUMANOID randomized = no portraits = { "brunali" } graphical_culture = generic_02 move_pop_sound_effect = "moving_pop_confirmation" uplifted_into = "BRU" uplifted_portraits = { "brunali" } }
+KAZ = { archetype = HUMANOID randomized = no portraits = { "kazon" } graphical_culture = kazon_01 move_pop_sound_effect = "moving_pop_confirmation" uplifted_into = "KAZ" uplifted_portraits = { "kazon" } }
+DOS = { archetype = HUMANOID randomized = no portraits = { "dosi" } graphical_culture = generic_02 move_pop_sound_effect = "moving_pop_confirmation" uplifted_into = "DOS" uplifted_portraits = { "dosi" } }
+NAU = { archetype = HUMANOID randomized = no portraits = { "nausicaan" } graphical_culture = generic_01 move_pop_sound_effect = "moving_pop_confirmation" uplifted_into = "NAU" uplifted_portraits = { "nausicaan" } }
+KRE = { archetype = HUMANOID randomized = no portraits = { "krenim" } graphical_culture = generic_01 move_pop_sound_effect = "moving_pop_confirmation" uplifted_into = "KRE" uplifted_portraits = { "krenim" } }
+TAL = { archetype = HUMANOID randomized = no portraits = { "talaxian" } graphical_culture = generic_02 move_pop_sound_effect = "moving_pop_confirmation" uplifted_into = "TAL" uplifted_portraits = { "talaxian" } }
+LYR = { archetype = HUMANOID randomized = no portraits = { "lyridian" } graphical_culture = generic_03 move_pop_sound_effect = "moving_pop_confirmation" uplifted_into = "LYR" uplifted_portraits = { "lyridian" } }
+TAM = { archetype = HUMANOID randomized = no portraits = { "tamarian" } graphical_culture = generic_02 move_pop_sound_effect = "moving_pop_confirmation" uplifted_into = "TAM" uplifted_portraits = { "tamarian" } }
+GAR = { archetype = HUMANOID randomized = no portraits = { "garidian" } graphical_culture = garidian_01 move_pop_sound_effect = "moving_pop_confirmation" uplifted_into = "GAR" uplifted_portraits = { "garidian" } }
+WAD = { archetype = HUMANOID randomized = no portraits = { "wadi" } graphical_culture = generic_02 move_pop_sound_effect = "moving_pop_confirmation" uplifted_into = "WAD" uplifted_portraits = { "wadi" } }
+BRG = { archetype = CYBORG randomized = no portraits = { "borg" } graphical_culture = borg_01 move_pop_sound_effect = "moving_pop_confirmation" uplifted_into = "BRG" uplifted_portraits = { borg } }
+NRC = { archetype = HUMANOID randomized = no portraits = { "norcadian" } graphical_culture = generic_01 move_pop_sound_effect = "moving_pop_confirmation" uplifted_into = "NRC" uplifted_portraits = { "norcadian" } }
+DEV = { archetype = HUMANOID randomized = no portraits = { "devore" } graphical_culture = generic_01 move_pop_sound_effect = "moving_pop_confirmation" uplifted_into = "DEV" uplifted_portraits = { "devore" } }
+NYB = { archetype = HUMANOID randomized = no portraits = { "nyberrite" } graphical_culture = generic_02 move_pop_sound_effect = "moving_pop_confirmation" uplifted_into = "NYB" uplifted_portraits = { "nyberrite" } }
+FEN = { archetype = HUMANOID randomized = no portraits = { "fen_domar" } graphical_culture = generic_01 move_pop_sound_effect = "moving_pop_confirmation" uplifted_into = "FEN" uplifted_portraits = { "fen_domar" } }
+SHE = { archetype = SILICOID randomized = no portraits = { "sheliak" } graphical_culture = sheliak_01 move_pop_sound_effect = "moving_pop_confirmation" uplifted_into = "SHE" uplifted_portraits = { "sheliak" } }
+ZAH = { archetype = HUMANOID randomized = no portraits = { "zahl" } graphical_culture = generic_02 move_pop_sound_effect = "moving_pop_confirmation" uplifted_into = "ZAH" uplifted_portraits = { "zahl" } }
+ARG = { archetype = HUMANOID randomized = no portraits = { "argrathian" } graphical_culture = generic_02 move_pop_sound_effect = "moving_pop_confirmation" uplifted_into = "ARG" uplifted_portraits = { "argrathian" } }
+UND = { archetype = FLUIDIC randomized = no portraits = { "undine" } graphical_culture = undine_01 move_pop_sound_effect = "moving_pop_confirmation" uplifted_into = "UND" uplifted_portraits = { "undine" } }
+KAR = { archetype = HUMANOID randomized = no portraits = { "karemma" } graphical_culture = karemma_01 move_pop_sound_effect = "moving_pop_confirmation" uplifted_into = "KAR" uplifted_portraits = { "karemma" } }
+TRO = { archetype = HUMANOID randomized = no portraits = { "sth_humanoid_01" } graphical_culture = generic_01 move_pop_sound_effect = "moving_pop_confirmation" uplifted_into = "TRO" uplifted_portraits = { "sth_humanoid_01" } }
+MOR = { archetype = HUMANOID randomized = no portraits = { "sth_humanoid_02" } graphical_culture = generic_01 move_pop_sound_effect = "moving_pop_confirmation" uplifted_into = "MOR" uplifted_portraits = { "sth_humanoid_02" } }
+RAK = { archetype = HUMANOID randomized = no portraits = { "rakhari" } graphical_culture = generic_01 move_pop_sound_effect = "moving_pop_confirmation" uplifted_into = "RAK" uplifted_portraits = { "rakhari" } }
+HUR = { archetype = HUMANOID randomized = no portraits = { "hur'q" } graphical_culture = generic_01 move_pop_sound_effect = "moving_pop_confirmation" uplifted_into = "HUR" uplifted_portraits = { "hur'q" } }
+DEN = { archetype = HUMANOID randomized = no portraits = { "denobulan" } graphical_culture = generic_01 move_pop_sound_effect = "moving_pop_confirmation" uplifted_into = "DEN" uplifted_portraits = { "denobulan" } }
+XINMAM = { archetype = HUMANOID randomized = no portraits = { "xindi_mammalian" } graphical_culture = xindi_01 move_pop_sound_effect = "moving_pop_confirmation" uplifted_into = "XINMAM" uplifted_portraits = { "xindi_mammalian" } }
+XINARB = { archetype = HUMANOID randomized = no portraits = { "xindi_arboreal" } graphical_culture = xindi_01 move_pop_sound_effect = "moving_pop_confirmation" uplifted_into = "XINARB" uplifted_portraits = { "xindi_arboreal" } }
+XINREP = { archetype = HUMANOID randomized = no portraits = { "xindi_reptilian" } graphical_culture = xindi_01 move_pop_sound_effect = "moving_pop_confirmation" uplifted_into = "XINREP" uplifted_portraits = { "xindi_reptilian" } }
+XININS = { archetype = INSECTOID randomized = no portraits = { "xindi_insectoid" } graphical_culture = xindi_01 move_pop_sound_effect = "moving_pop_confirmation" uplifted_into = "XININS" uplifted_portraits = { "xindi_insectoid" } }
+XINAQU = { archetype = AQUATIC randomized = no portraits = { "xindi_aquatic" } graphical_culture = xindi_01 move_pop_sound_effect = "moving_pop_confirmation" uplifted_into = "XINAQU" uplifted_portraits = { "xindi_aquatic" } }
+CAT = { archetype = HUMANOID randomized = no portraits = { "caitian" } graphical_culture = generic_03 move_pop_sound_effect = "moving_pop_confirmation" uplifted_into = "CAT" uplifted_portraits = { "caitian" } }
+KRA = { archetype = HUMANOID randomized = no portraits = { "kraylor" } graphical_culture = generic_01 move_pop_sound_effect = "moving_pop_confirmation" uplifted_into = "KRA" uplifted_portraits = { "kraylor" } }
+SKO = { archetype = HUMANOID randomized = no portraits = { "skorr" } graphical_culture = generic_01 move_pop_sound_effect = "moving_pop_confirmation" uplifted_into = "SKO" uplifted_portraits = { "skorr" } }
+CHE = { archetype = HUMANOID randomized = no portraits = { "cheronite" } graphical_culture = generic_01 move_pop_sound_effect = "moving_pop_confirmation" uplifted_into = "CHE" uplifted_portraits = { "cheronite" } }
+SUL = { archetype = HUMANOID randomized = no portraits = { "suliban" } graphical_culture = suliban_01 move_pop_sound_effect = "moving_pop_confirmation" uplifted_into = "SUL" uplifted_portraits = { "suliban" } }
+HIR = { archetype = HUMANOID randomized = no portraits = { "hirogen" } graphical_culture = generic_02 move_pop_sound_effect = "moving_pop_confirmation" uplifted_into = "HIR" uplifted_portraits = { "hirogen" } }
+AXA = { archetype = HUMANOID randomized = no portraits = { "axanari" } graphical_culture = generic_02 move_pop_sound_effect = "moving_pop_confirmation" uplifted_into = "AXA" uplifted_portraits = { "axanari" } }
+HUS = { archetype = HUMANOID randomized = no portraits = { "husnock" } graphical_culture = husnock_01 move_pop_sound_effect = "moving_pop_confirmation" uplifted_into = "HUS" uplifted_portraits = { "husnock" } }
+NER = { archetype = HUMANOID randomized = no portraits = { "neryj" } graphical_culture = husnock_01 move_pop_sound_effect = "moving_pop_confirmation" uplifted_into = "NER" uplifted_portraits = { "neryj" } }
+DUR = { archetype = HUMANOID randomized = no portraits = { "rakhari" } graphical_culture = husnock_01 move_pop_sound_effect = "moving_pop_confirmation" uplifted_into = "DUR" uplifted_portraits = { "rakhari" } }
+BRI = { archetype = HUMANOID randomized = no portraits = { "b'rinn" } graphical_culture = husnock_01 move_pop_sound_effect = "moving_pop_confirmation" uplifted_into = "BRI" uplifted_portraits = { "b'rinn" } }
+ANT = { archetype = HUMANOID randomized = no portraits = { "antican" } graphical_culture = generic_04 move_pop_sound_effect = "moving_pop_confirmation" uplifted_into = "ANT" uplifted_portraits = { "antican" } }
+SEL = { archetype = HUMANOID randomized = no portraits = { "selay" } graphical_culture = generic_04 move_pop_sound_effect = "moving_pop_confirmation" uplifted_into = "SEL" uplifted_portraits = { "selay" } }
+BYN = { archetype = CYBORG randomized = no portraits = { "bynar" } graphical_culture = generic_04 move_pop_sound_effect = "moving_pop_confirmation" uplifted_into = "BYN" uplifted_portraits = { "bynar" } }
+ZAK = { archetype = HUMANOID randomized = no portraits = { "zakdorn" } graphical_culture = generic_04 move_pop_sound_effect = "moving_pop_confirmation" uplifted_into = "ZAK" uplifted_portraits = { "zakdorn" } }
+YAD = { archetype = HUMANOID randomized = no portraits = { "yaderan" } graphical_culture = generic_04 move_pop_sound_effect = "moving_pop_confirmation" uplifted_into = "YAD" uplifted_portraits = { "yaderan" } }
+VID = { archetype = HUMANOID randomized = no portraits = { "vidiian" } graphical_culture = vidiian_01 move_pop_sound_effect = "moving_pop_confirmation" uplifted_into = "VID" uplifted_portraits = { "vidiian" } }
+KOB = { archetype = HUMANOID randomized = no portraits = { "kobali" } graphical_culture = generic_04 move_pop_sound_effect = "moving_pop_confirmation" uplifted_into = "KOB" uplifted_portraits = { "kobali" } }
+KEL = { archetype = HUMANOID randomized = no portraits = { "kelpian" } graphical_culture = generic_02 move_pop_sound_effect = "moving_pop_confirmation" uplifted_into = "KEL" uplifted_portraits = { "kelpian" } }
+SKR = { archetype = HUMANOID randomized = no portraits = { "skrreean" } graphical_culture = generic_02 move_pop_sound_effect = "moving_pop_confirmation" uplifted_into = "SKR" uplifted_portraits = { "skrreean" } }
+OSC = { archetype = HUMANOID randomized = no portraits = { "oschean" } graphical_culture = generic_04 move_pop_sound_effect = "moving_pop_confirmation" uplifted_into = "OSC" uplifted_portraits = { "oschean" } }
+TOS = { archetype = HUMANOID randomized = no portraits = { "tosk" } graphical_culture = generic_04 move_pop_sound_effect = "moving_pop_confirmation" uplifted_into = "TOS" uplifted_portraits = { "tosk" } }
+CYT = { archetype = HUMANOID randomized = no portraits = { "cytherian" } graphical_culture = cytherian_01 move_pop_sound_effect = "moving_pop_confirmation" uplifted_into = "CYT" uplifted_portraits = { "cytherian" } }
+FES = { archetype = HUMANOID randomized = no portraits = { "fesarian" } graphical_culture = fesarian_01 move_pop_sound_effect = "moving_pop_confirmation" uplifted_into = "FES" uplifted_portraits = { "fesarian" } }
+MET = { archetype = HUMANOID randomized = no portraits = { "metron" } graphical_culture = generic_04 move_pop_sound_effect = "moving_pop_confirmation" uplifted_into = "MET" uplifted_portraits = { "metron" } }
+RIG = { archetype = HUMANOID randomized = no portraits = { "rigellian" } graphical_culture = generic_02 move_pop_sound_effect = "moving_pop_confirmation" uplifted_into = "RIG" uplifted_portraits = { "rigellian" } }
+HAA = { archetype = HUMANOID randomized = no portraits = { "haakonian" } graphical_culture = generic_02 move_pop_sound_effect = "moving_pop_confirmation" uplifted_into = "HAA" uplifted_portraits = { "haakonian" } }
+TRA = { archetype = HUMANOID randomized = no portraits = { "trabe" } graphical_culture = generic_02 move_pop_sound_effect = "moving_pop_confirmation" uplifted_into = "TRA" uplifted_portraits = { "trabe" } }
+
+
+
+
+#ROBOT
+PRA = { 
+	archetype = MACHINE
+	playable = { host_has_dlc = "Synthetic Dawn Story Pack" }
+	randomized = no
+	possible = { authority = { OR = { value = auth_machine_intelligence text = SPECIES_CLASS_MUST_USE_MACHINE_INTELLIGENCE } } }
+	possible_secondary = { always = no text = SECONDARY_SPECIES_CLASS_INVALID }
+	robotic = yes
+	gender = no
+	use_climate_preference = no
+	portraits = { "pralor" } 
+	graphical_culture = generic_04 
+	move_pop_sound_effect = "moving_pop_confirmation" 
+	uplifted_into = "PRA" uplifted_portraits = { "pralor" }
+}
+CRA = { 
+	archetype = MACHINE
+	playable = { host_has_dlc = "Synthetic Dawn Story Pack" } 
+	randomized = no
+	possible = { authority = { OR = { value = auth_machine_intelligence text = SPECIES_CLASS_MUST_USE_MACHINE_INTELLIGENCE } } }
+	possible_secondary = { always = no text = SECONDARY_SPECIES_CLASS_INVALID }
+	robotic = yes
+	gender = no
+	use_climate_preference = no
+	portraits = { "cravic" }  
+	graphical_culture = generic_04 
+	move_pop_sound_effect = "moving_pop_confirmation" 
+	uplifted_into = "CRA" uplifted_portraits = { "cravic" }
+}
+
+RANDOMTREK = {
+	archetype = HUMANOID 
+	playable = { always = no }
+	randomized = yes
+	portraits = {
+		"humanoid_02"
+		"humanoid_03"
+		"humanoid_04"
+		"humanoid_05"
+		"sth_humanoid_01"
+		"sth_humanoid_02"
+		"sth_humanoid_04"
+		"sth_humanoid_05"
+		"sth_humanoid_06"
+		"sth_humanoid_07"
+		"sth_humanoid_08"
+		"sth_humanoid_08b"
+		"sth_humanoid_09"
+		"sth_humanoid_10"
+		# "sth_humanoid_11"
+	}
+	graphical_culture = generic_02
+	move_pop_sound_effect = "moving_pop_confirmation"
+}
+
+PRE_RANDOMTREK = {
+	archetype = PRESAPIENT
+	playable = { always = no }
+	randomized = yes
+	portraits = {
+		"pre_mam6"
+		"pre_mam13"
+		# "pre_mam6"
+		# "pre_mam13"
+		# "pre_mam6"
+		# "pre_mam13"
+		# "pre_mam6"
+		# "pre_mam13"
+		# "pre_mam6"
+		# "pre_mam13"
+		# "pre_mam6"
+		# "pre_mam13"
+		# "pre_mam6"
+		# "pre_mam13"
+	}
+	graphical_culture = generic_02
+	move_pop_sound_effect = "moving_pop_confirmation"
+	uplifted_into = "RANDOMTREK"
+	uplifted_portraits = {
+		"humanoid_02"
+		"humanoid_03"
+		# "humanoid_04"
+		# "humanoid_05"
+		# "sth_humanoid_01"
+		# "sth_humanoid_02"
+		# "sth_humanoid_04"
+		# "sth_humanoid_05"
+		# "sth_humanoid_06"
+		# "sth_humanoid_07"
+		# "sth_humanoid_08"
+		# "sth_humanoid_08b"
+		# "sth_humanoid_09"
+		# "sth_humanoid_10"
+	}	
+}
+
+
+#MINOR
+KRI = { archetype = HUMANOID randomized = no portraits = { "valtese" } graphical_culture = generic_02 move_pop_sound_effect = "moving_pop_confirmation" uplifted_into = "KRI" uplifted_portraits = { "valtese" } }
+VAL = { archetype = HUMANOID randomized = no portraits = { "valtese" } graphical_culture = generic_02 move_pop_sound_effect = "moving_pop_confirmation" uplifted_into = "VAL" uplifted_portraits = { "valtese" } }
+BAN = { archetype = HUMANOID randomized = no portraits = { "banea" } graphical_culture = generic_02 move_pop_sound_effect = "moving_pop_confirmation" uplifted_into = "BAN" uplifted_portraits = { "banea" } }
+
+
+BANEA = {
+	archetype = HUMANOID 
+	playable = { always = no }
+	randomized = no
+	portraits = {
+		kazon
+	}
+
+	graphical_culture = generic_02
+	move_pop_sound_effect = "moving_pop_confirmation"
+	uplifted_into = "BANEA"
+	uplifted_portraits = {
+		kazon
+	}
+}
+
+
+
+
+KAYLAR = {
+	archetype = HUMANOID 
+	playable = { always = no }
+	randomized = no
+	portraits = {
+		sth_humanoid_04
+	} 
+	graphical_culture = generic_02
+	move_pop_sound_effect = "moving_pop_confirmation"
+	uplifted_into = "KAYLAR"
+	uplifted_portraits = {
+		sth_humanoid_04
+	}
+}
+
+CENTAUR = {
+	archetype = HUMANOID 
+	playable = { always = no }
+	randomized = no
+	portraits = {
+		sth_humanoid_01
+	}
+
+	graphical_culture = generic_02
+	move_pop_sound_effect = "moving_pop_confirmation"
+	uplifted_into = "CENTAUR"
+	uplifted_portraits = {
+		sth_humanoid_01
+	}
+}
+
+KLAHA = {
+	archetype = HUMANOID 
+	playable = { always = no }
+	randomized = no
+	portraits = {
+		sth_humanoid_05
+	}
+
+	graphical_culture = generic_02
+	move_pop_sound_effect = "moving_pop_confirmation"
+	uplifted_into = "KLAHA"
+	uplifted_portraits = {
+		sth_humanoid_05
+	}
+}
+
+ARGEL = {
+	archetype = HUMANOID 
+	playable = { always = no }
+	randomized = no
+	portraits = {
+		sth_humanoid_06
+	}
+
+	graphical_culture = generic_02
+	move_pop_sound_effect = "moving_pop_confirmation"
+	uplifted_into = "ARGEL"
+	uplifted_portraits = {
+		sth_humanoid_06
+	}
+}
+
+ALTAIR = {
+	archetype = HUMANOID 
+	playable = { always = no }
+	randomized = no
+	portraits = {
+		sth_humanoid_01
+	}
+
+	graphical_culture = generic_02
+	move_pop_sound_effect = "moving_pop_confirmation"
+	uplifted_into = "ALTAIR"
+	uplifted_portraits = {
+		sth_humanoid_01
+	}
+}
+
+PALKEO = {
+	archetype = HUMANOID 
+	playable = { always = no }
+	randomized = no
+	portraits = {
+		sth_humanoid_02
+	}
+
+	graphical_culture = generic_02
+	move_pop_sound_effect = "moving_pop_confirmation"
+	uplifted_into = "PALKEO"
+	uplifted_portraits = {
+		sth_humanoid_02
+	}
+}
+
+ARDANA = {
+	archetype = HUMANOID 
+	playable = { always = no }
+	randomized = no
+	portraits = {
+		sth_humanoid_02
+	}
+
+	graphical_culture = generic_02
+	move_pop_sound_effect = "moving_pop_confirmation"
+	uplifted_into = "ARDANA"
+	uplifted_portraits = {
+		sth_humanoid_02
+	}
+}
+
+CORID = {
+	archetype = HUMANOID 
+	playable = { always = no }
+	randomized = no
+	portraits = {
+		sth_humanoid_04
+	}
+
+	graphical_culture = generic_02
+	move_pop_sound_effect = "moving_pop_confirmation"
+	uplifted_into = "CORID"
+	uplifted_portraits = {
+		sth_humanoid_04
+	}
+}
+
+TALAR = {
+	archetype = HUMANOID 
+	playable = { always = no }
+	randomized = no
+	portraits = {
+		tamarian
+	}
+
+	graphical_culture = generic_02
+	move_pop_sound_effect = "moving_pop_confirmation"
+	uplifted_into = "TALAR"
+	uplifted_portraits = {
+		tamarian
+	}
+}
+
+VENTAX = {
+	archetype = HUMANOID 
+	playable = { always = no }
+	randomized = no
+	portraits = {
+		sth_humanoid_02
+	}
+
+	graphical_culture = generic_02
+	move_pop_sound_effect = "moving_pop_confirmation"
+	uplifted_into = "VENTAX"
+	uplifted_portraits = {
+		sth_humanoid_02
+	}
+}
+
+MALCOR = {
+	archetype = HUMANOID 
+	playable = { always = no }
+	randomized = no
+	portraits = {
+		sth_humanoid_01
+	}
+
+	graphical_culture = generic_02
+	move_pop_sound_effect = "moving_pop_confirmation"
+	uplifted_into = "MALCOR"
+	uplifted_portraits = {
+		sth_humanoid_01
+	}
+}
+
+AKRIT = {
+	archetype = HUMANOID 
+	playable = { always = no }
+	randomized = no
+	portraits = {
+		kazon
+	}
+
+	graphical_culture = generic_02
+	move_pop_sound_effect = "moving_pop_confirmation"
+	uplifted_into = "AKRIT"
+	uplifted_portraits = {
+		kazon
+	}
+}
+
+
+
+QOMAR = {
+	archetype = HUMANOID 
+	playable = { always = no }
+	randomized = no
+	portraits = {
+		kazon
+	}
+
+	graphical_culture = generic_02
+	move_pop_sound_effect = "moving_pop_confirmation"
+	uplifted_into = "QOMAR"
+	uplifted_portraits = {
+		kazon
+	}
+}
+
+KRESS = {
+	archetype = HUMANOID 
+	playable = { always = no }
+	randomized = no
+	portraits = {
+		tamarian
+	}
+
+	graphical_culture = generic_02
+	move_pop_sound_effect = "moving_pop_confirmation"
+	uplifted_into = "KRESS"
+	uplifted_portraits = {
+		tamarian
+	}
+}
+
+LORIL = {
+	archetype = HUMANOID 
+	playable = { always = no }
+	randomized = no
+	portraits = {
+		sth_humanoid_01
+	}
+
+	graphical_culture = generic_02
+	move_pop_sound_effect = "moving_pop_confirmation"
+	uplifted_into = "LORIL"
+	uplifted_portraits = {
+		sth_humanoid_01
+	}
+}
+
+ELAS = {
+	archetype = HUMANOID 
+	playable = { always = no }
+	randomized = no
+	portraits = {
+		sth_humanoid_01
+	}
+
+	graphical_culture = generic_02
+	move_pop_sound_effect = "moving_pop_confirmation"
+	uplifted_into = "ELAS"
+	uplifted_portraits = {
+		sth_humanoid_01
+	}
+}
+
+TROY = {
+	archetype = HUMANOID 
+	playable = { always = no }
+	randomized = no
+	portraits = {
+		orion
+	}
+
+	graphical_culture = generic_02
+	move_pop_sound_effect = "moving_pop_confirmation"
+	uplifted_into = "TROY"
+	uplifted_portraits = {
+		orion
+	}
+}
+
+RISIAN = {
+	archetype = HUMANOID 
+	playable = { always = no }
+	randomized = no
+	portraits = {
+		sth_humanoid_02
+	}
+
+	graphical_culture = generic_02
+	move_pop_sound_effect = "moving_pop_confirmation"
+	uplifted_into = "RISIAN"
+	uplifted_portraits = {
+		sth_humanoid_02
+	}
+}
+
+TARL = {
+	archetype = HUMANOID 
+	playable = { always = no }
+	randomized = no
+	portraits = {
+		orion
+	}
+
+	graphical_culture = generic_02
+	move_pop_sound_effect = "moving_pop_confirmation"
+	uplifted_into = "TARL"
+	uplifted_portraits = {
+		orion
+	}
+}
+
+ONLIES = {
+	archetype = HUMANOID 
+	playable = { always = no }
+	randomized = no
+	portraits = {
+		sth_humanoid_02
+	}
+
+	graphical_culture = generic_02
+	move_pop_sound_effect = "moving_pop_confirmation"
+	uplifted_into = "ONLIES"
+	uplifted_portraits = {
+		sth_humanoid_02
+	}
+}
+
+MADEN = {
+	archetype = HUMANOID 
+	playable = { always = no }
+	randomized = no
+	portraits = {
+		sth_humanoid_01
+	}
+
+	graphical_culture = generic_02
+	move_pop_sound_effect = "moving_pop_confirmation"
+	uplifted_into = "MADEN"
+	uplifted_portraits = {
+		sth_humanoid_01
+	}
+}
+
+VALAK = {
+	archetype = HUMANOID 
+	playable = { always = no }
+	randomized = no
+	portraits = {
+		sth_humanoid_02
+	}
+
+	graphical_culture = generic_02
+	move_pop_sound_effect = "moving_pop_confirmation"
+	uplifted_into = "VALAK"
+	uplifted_portraits = {
+		sth_humanoid_02
+	}
+}
+
+OCAMPA = {
+	archetype = HUMANOID 
+	playable = { always = no }
+	randomized = no
+	portraits = {
+		sth_humanoid_01
+	}
+
+	graphical_culture = generic_02
+	move_pop_sound_effect = "moving_pop_confirmation"
+	uplifted_into = "OCAMPA"
+	uplifted_portraits = {
+		sth_humanoid_01
+	}
+}
+
+DORVAN = {
+	archetype = HUMANOID 
+	playable = { always = no }
+	randomized = no
+	portraits = {
+		sth_humanoid_02
+	}
+
+	graphical_culture = generic_02
+	move_pop_sound_effect = "moving_pop_confirmation"
+	uplifted_into = "DORVAN"
+	uplifted_portraits = {
+		sth_humanoid_02
+	}
+}
+
+EKOS = {
+	archetype = HUMANOID 
+	playable = { always = no }
+	randomized = no
+	portraits = {
+		sth_humanoid_02
+	}
+
+	graphical_culture = generic_02
+	move_pop_sound_effect = "moving_pop_confirmation"
+	uplifted_into = "EKOS"
+	uplifted_portraits = {
+		sth_humanoid_02
+	}
+}
+
+ZEON = {
+	archetype = HUMANOID 
+	playable = { always = no }
+	randomized = no
+	portraits = {
+		sth_humanoid_01
+	}
+
+	graphical_culture = generic_02
+	move_pop_sound_effect = "moving_pop_confirmation"
+	uplifted_into = "ZEON"
+	uplifted_portraits = {
+		sth_humanoid_01
+	}
+}
+
+FREMEN = {
+	archetype = HUMANOID 
+	playable = { always = no }
+	randomized = no
+	portraits = {
+		sth_humanoid_01
+	}
+
+	graphical_culture = generic_02
+	move_pop_sound_effect = "moving_pop_confirmation"
+	uplifted_into = "FREMEN"
+	uplifted_portraits = {
+		sth_humanoid_01
+	}
+}
+
+SELDON = {
+	archetype = HUMANOID 
+	playable = { always = no }
+	randomized = no
+	portraits = {
+		sth_humanoid_01
+	}
+
+	graphical_culture = generic_02
+	move_pop_sound_effect = "moving_pop_confirmation"
+	uplifted_into = "SELDON"
+	uplifted_portraits = {
+		sth_humanoid_01
+	}
+}
+
+VERID = {
+	archetype = HUMANOID 
+	playable = { always = no }
+	randomized = no
+	portraits = {
+		sth_humanoid_02
+	}
+
+	graphical_culture = generic_02
+	move_pop_sound_effect = "moving_pop_confirmation"
+	uplifted_into = "VERID"
+	uplifted_portraits = {
+		sth_humanoid_02
+	}
+}
+
+IOTIA = {
+	archetype = HUMANOID 
+	playable = { always = no }
+	randomized = no
+	portraits = {
+		sth_humanoid_01
+	}
+
+	graphical_culture = generic_02
+	move_pop_sound_effect = "moving_pop_confirmation"
+	uplifted_into = "IOTIA"
+	uplifted_portraits = {
+		sth_humanoid_01
+	}
+}
+
+HILL = {
+	archetype = HUMANOID 
+	playable = { always = no }
+	randomized = no
+	portraits = {
+		sth_humanoid_02
+	}
+
+	graphical_culture = generic_02
+	move_pop_sound_effect = "moving_pop_confirmation"
+	uplifted_into = "HILL"
+	uplifted_portraits = {
+		sth_humanoid_02
+	}
+}
+
+TOROTH = {
+	archetype = HUMANOID 
+	playable = { always = no }
+	randomized = no
+	portraits = {
+		humanoid_02
+	}
+
+	graphical_culture = generic_02
+	move_pop_sound_effect = "moving_pop_confirmation"
+	uplifted_into = "TOROTH"
+	uplifted_portraits = {
+		humanoid_02
+	}
+}
+
+KELIS = {
+	archetype = HUMANOID 
+	playable = { always = no }
+	randomized = no
+	portraits = {
+		sth_humanoid_01
+	}
+
+	graphical_culture = generic_02
+	move_pop_sound_effect = "moving_pop_confirmation"
+	uplifted_into = "KELIS"
+	uplifted_portraits = {
+		sth_humanoid_01
+	}
+}
+
+CAPELLA = {
+	archetype = HUMANOID 
+	playable = { always = no }
+	randomized = no
+	portraits = {
+		humanoid_04
+	}
+
+	graphical_culture = generic_02
+	move_pop_sound_effect = "moving_pop_confirmation"
+	uplifted_into = "CAPELLA"
+	uplifted_portraits = {
+		humanoid_04
+	}
+}
+
+AKAALI = {
+	archetype = HUMANOID 
+	playable = { always = no }
+	randomized = no
+	portraits = {
+		sth_humanoid_01
+	}
+
+	graphical_culture = generic_02
+	move_pop_sound_effect = "moving_pop_confirmation"
+	uplifted_into = "AKAALI"
+	uplifted_portraits = {
+		sth_humanoid_01
+	}
+}
+
+ACAMAR = {
+	archetype = HUMANOID 
+	playable = { always = no }
+	randomized = no
+	portraits = {
+		devore
+	}
+
+	graphical_culture = generic_02
+	move_pop_sound_effect = "moving_pop_confirmation"
+	uplifted_into = "ACAMAR"
+	uplifted_portraits = {
+		devore
+	}
+}
+
+ANTAR = {
+	archetype = HUMANOID 
+	playable = { always = no }
+	randomized = no
+	portraits = {
+		denobulan
+	}
+
+	graphical_culture = generic_02
+	move_pop_sound_effect = "moving_pop_confirmation"
+	uplifted_into = "ANTAR"
+	uplifted_portraits = {
+		denobulan
+	}
+}
+
+ANTOS = {
+	archetype = HUMANOID 
+	playable = { always = no }
+	randomized = no
+	portraits = {
+		sth_humanoid_02
+	}
+
+	graphical_culture = generic_02
+	move_pop_sound_effect = "moving_pop_confirmation"
+	uplifted_into = "ANTOS"
+	uplifted_portraits = {
+		sth_humanoid_02
+	}
+}
+
+ARBAZ = {
+	archetype = HUMANOID 
+	playable = { always = no }
+	randomized = no
+	portraits = {
+		sth_humanoid_02
+	}
+
+	graphical_culture = generic_02
+	move_pop_sound_effect = "moving_pop_confirmation"
+	uplifted_into = "ARBAZ"
+	uplifted_portraits = {
+		sth_humanoid_02
+	}
+}
+

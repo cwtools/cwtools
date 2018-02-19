@@ -1,0 +1,247 @@
+
+
+
+tradition_diplomacy = {
+      adoption_bonus = "tr_diplomacy_adopt"
+      finish_bonus = "tr_diplomacy_finish"
+      traditions = { "tr_diplomacy_dynamic_ecomorphism" "tr_diplomacy_alien_tourism" "tr_diplomacy_the_federation" "tr_diplomacy_entente_coordination" "tr_diplomacy_federal_unity" }
+      tradition_swap = {
+         name = tradition_versatility_borg
+         trigger = { is_assimilator = yes }
+         weight = { factor = 1 }
+      }
+      tradition_swap = {
+         name = tradition_purity
+         trigger = { xenophobe_country_traditions = yes }
+         weight = { factor = 1 }
+      }
+      tradition_swap = {
+         name = tradition_versatility
+         trigger = { has_authority = auth_machine_intelligence }
+         weight = { factor = 1 }
+      }
+      tradition_swap = {
+         name = tradition_greed
+         trigger = { has_country_flag = ferengi_alliance }
+         weight = { factor = 1 }
+      }
+   }
+   
+
+
+
+
+
+
+tradition_discovery = {
+      adoption_bonus = "tr_discovery_adopt"
+      finish_bonus = "tr_discovery_finish"
+      traditions = { "tr_discovery_science_division" "tr_discovery_polytechnic_education" "tr_discovery_faith_in_science" "tr_discovery_to_boldly_go" "tr_discovery_planetary_survey_corps" }
+      tradition_swap = {
+         name = tradition_perfection
+         trigger = { is_assimilator = yes }
+         weight = { factor = 1 }
+      }
+      tradition_swap = {
+         name = tradition_doctrine
+         trigger = { spiritualist_country_traditions = yes }
+         weight = { factor = 1 }
+      }
+      tradition_swap = {
+         name =  tradition_discovery_machine
+         trigger = { has_authority = auth_machine_intelligence }
+         weight = { factor = 1 }
+      }
+      tradition_swap = {
+         name = tradition_order
+         trigger = { has_country_flag = cardassian_union }
+         weight = { factor = 1 }
+      }
+      tradition_swap = {
+         name = tradition_logic
+         trigger = { has_country_flag = vulcan_high_command }
+         weight = { factor = 1 }
+      }
+      tradition_swap = {
+         name = tradition_glory
+         trigger = { has_country_flag = klingon_empire }
+         weight = { factor = 1 }
+      }
+      tradition_swap = {
+         name = tradition_prophecy
+         trigger = { has_country_flag = bajoran_republic }
+         weight = { factor = 1 }
+      }
+      tradition_swap = {
+         name = tradition_tanagra
+         trigger = { has_country_flag = tamarian_unity }
+         weight = { factor = 1 }
+      }
+   }
+   
+
+
+
+
+
+
+tradition_domination = {
+      adoption_bonus = "tr_domination_adopt"
+      finish_bonus = "tr_domination_finish"
+      traditions = { "tr_domination_colonial_viceroys" "tr_domination_star_lords" "tr_domination_protection_racket" "tr_domination_vassal_acculturation" "tr_domination_fleet_levies" }
+      tradition_swap = {
+         name = tradition_adaptability
+         trigger = { is_assimilator = yes }
+         weight = { factor = 1 }
+      }
+      tradition_swap = {
+         name = tradition_preservation
+         trigger = { xenophile_country_traditions = yes }
+         weight = { factor = 1 }
+      }
+      tradition_swap = {
+         name =  tradition_domination_machine
+         trigger = { has_authority = auth_machine_intelligence }
+         weight = { factor = 1 }
+      }
+      tradition_swap = {
+         name = tradition_cunning
+         trigger = { has_country_flag = romulan_star_empire }
+         weight = { factor = 1 }
+      }
+   }
+   
+
+
+
+
+
+
+tradition_expansion = {
+      adoption_bonus = "tr_expansion_adopt"
+      finish_bonus = "tr_expansion_finish"
+      traditions = { "tr_expansion_colonization_fever" "tr_expansion_reach_for_the_stars" "tr_expansion_a_new_life" "tr_expansion_courier_network" "tr_expansion_galactic_ambition" }
+      tradition_swap = {
+         name = tradition_assimilation
+         trigger = { is_assimilator = yes }
+         weight = { factor = 1 }
+      }
+      tradition_swap = {
+         name = tradition_roving
+         trigger = { is_habitat_empire_tradition = yes }
+         weight = { factor = 1 }
+      }
+      tradition_swap = {
+         name = tradition_expansion_machine
+         trigger = { has_authority = auth_machine_intelligence }
+         weight = { factor = 1 }
+      }
+      tradition_swap = {
+         name = tradition_heritage
+         trigger = {  has_country_flag = is_sth_fallen_empire
+ }
+         weight = { factor = 1 }
+      }
+   }
+   
+
+
+
+
+
+
+tradition_harmony = {
+      adoption_bonus = "tr_harmony_adopt"
+      finish_bonus = "tr_harmony_finish"
+      traditions = { "tr_harmony_kinship" "tr_harmony_mind_and_body" "tr_harmony_the_greater_good" "tr_harmony_utopian_dream" "tr_harmony_bulwark_of_harmony" }
+      tradition_swap = {
+         name = tradition_synchronicity_borg
+         trigger = { is_assimilator = yes }
+         weight = { factor = 1 }
+      }
+      tradition_swap = {
+         name = tradition_innovation
+         trigger = { materialist_country_traditions = yes }
+         weight = { factor = 1 }
+      }
+      tradition_swap = {
+         name = tradition_synchronicity
+         trigger = { has_authority = auth_machine_intelligence }
+         weight = { factor = 1 }
+      }
+      tradition_swap = {
+         name = tradition_honour
+         trigger = { has_country_flag = klingon_empire }
+         weight = { factor = 1 }
+      }
+   }
+   
+
+
+
+
+
+
+tradition_prosperity = {
+      adoption_bonus = "tr_prosperity_adopt"
+      finish_bonus = "tr_prosperity_finish"
+      traditions = { "tr_prosperity_sct" "tr_prosperity_trans_stellar_corporations" "tr_prosperity_administrative_operations" "tr_prosperity_fleet_logistical_corps" "tr_prosperity_pursuit_of_profit" }
+      tradition_swap = {
+         name = tradition_productivity
+         trigger = { is_assimilator = yes }
+         weight = { factor = 1 }
+      }
+      tradition_swap = {
+         name = tradition_strength
+         trigger = { militarist_country_traditions = yes }
+         weight = { factor = 1 }
+      }
+      tradition_swap = {
+         name =  tradition_prosperity_machine
+         trigger = { has_authority = auth_machine_intelligence }
+         weight = { factor = 1 }
+      }
+      tradition_swap = {
+         name = tradition_federation
+         trigger = { has_country_flag = federation_founder }
+         weight = { factor = 1 }
+      }
+   }
+   
+
+
+
+
+
+
+tradition_supremacy = {
+      adoption_bonus = "tr_supremacy_adopt"
+      finish_bonus = "tr_supremacy_finish"
+      traditions = { "tr_supremacy_master_shipwrights" "tr_supremacy_right_of_conquest" "tr_supremacy_overwhelming_force" "tr_supremacy_great_game" "tr_supremacy_war_games" }
+      tradition_swap = {
+         name =  tradition_resilience
+         trigger = { is_assimilator = yes }
+         weight = { factor = 1 }
+      }
+      tradition_swap = {
+         name = tradition_diversity
+         trigger = { pacifist_country_traditions = yes }
+         weight = { factor = 1 }
+      }
+      tradition_swap = {
+         name = tradition_supremacy_machine
+         trigger = { has_authority = auth_machine_intelligence }
+         weight = { factor = 1 }
+      }
+      tradition_swap = {
+         name = tradition_victory
+         trigger = { has_country_flag = the_dominion }
+         weight = { factor = 1 }
+      }
+   }
+   
+
+
+
+
+

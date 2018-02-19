@@ -1,0 +1,97 @@
+﻿### Brunali by EHKodiak
+Brunali = {
+	randomized = no
+
+	ship_names = {
+		generic = {
+		Burgdorferi Garinii Borrelia Afzelii Pertussi Henselae Cereus Anthracis Jejuni Pneumoniae Diphtheriae Botulinu Leprae Aeruginosa Sonnei Aureus Agalactiae Pallidum Cholerae Pestis Enterocoli Neisseria Listeria Helicobacter Francisella Haemophilus Treponema Vibrio Yersinia Pestis Tularensis Pylori Leptosira Sphirochete Bacillus Cocci
+		}
+		corvette = {
+		}
+		saber = {
+		}
+		sovereign = {
+		}
+		steamrunner = {
+		}		
+		adv_cruiser = {
+		}
+		strike = {
+		}	
+		constructor = { }
+		colonizer = { }
+		science = { }
+		transport = { }
+		outpost_station = {
+			sequential_name = "Frontier Outpost"
+		}
+	}
+
+	fleet_names = {
+		sequential_name = "%O% Fleet"
+	}
+	
+	army_names = {
+		defense_army = {
+			sequential_name = "%O% Guard"
+		}
+		assault_army = {
+			sequential_name = "%O% Brunali Regiment"
+		}
+		slave_army = {
+			sequential_name = "%O% Indentured Assault Force"
+		}
+		clone_army = { 
+			sequential_name = "%O% Clone Assault Force"
+		}
+		robotic_army = {
+			sequential_name = "%O% Mechanical Assault Force"
+		}
+		android_army = {
+			sequential_name = "%O% Synthetic Assault Force"
+		}
+		psionic_army = { 
+			sequential_name = "%O% Psionic Assault Force"
+		}
+		xenomorph_army = {
+			sequential_name = "%O% Bio-Warfare Assault Force"
+		}
+		gene_warrior_army = {
+			sequential_name = "%O% Bio-Engineered Assault Force"
+		}
+	}
+
+	planet_names = {
+		generic = {
+			names = { 
+			}
+		}
+	}
+
+
+	### CHARACTERS
+
+	character_names = {
+		names1 = {
+			weight = 40
+			first_names_male = {
+			Leucon Icheb Manu Remi Yivel Roubbin Teilan Chivdeb Sihah Saiwant Utlercay Raymi Intir Azarpak Nopet Ronjerem Pateb Jaimeb Tyriab Neb Breb Ocheb Eddereb Bacheb Laseb Lacon Roucon Ronjereb Olseb 
+			}
+			first_names_female = {
+			Yifay Mafay Kadam Gaikyad Gojey Gokhay Emay Igpay Esyay Oonsay Romfay Amway Iway Intiray Lunalay Sasagray Vikivay Miamalkovay Jynxmay Sunnyley Rilay Asaykiray Lexibey Breolsey Remylacray Remylay Evay Jenahay Railay Jenay Keylay
+			}
+			second_names = {
+			" "
+			}
+			regnal_first_names_male = {
+			Leucon Icheb Manu Remi Yivel Roubbin Teilan Chivdeb Sihah Saiwant Utlercay Raymi Intir Azarpak Nopet Ronjerem Pateb Jaimeb Tyriab Neb Breb Ocheb Eddereb Bacheb Laseb Lacon Roucon Ronjereb Olseb 
+			}
+			regnal_first_names_female = {
+			Yifay Mafay Kadam Gaikyad Gojey Gokhay Emay Igpay Esyay Oonsay Romfay Amway Iway Intiray Lunalay Sasagray Vikivay Miamalkovay Jynxmay Sunnyley Rilay Asaykiray Lexibey Breolsey Remylacray Remylay Evay Jenahay Railay Jenay Keylay
+			}
+			regnal_second_names = {
+			" "
+			}
+		}
+	}
+}

@@ -1,0 +1,31 @@
+skorr = {
+	counts_for_victory = yes
+	needs_survey = no
+	can_planets_be_attacked = yes
+	has_capital = no
+	enforces_borders = no
+	home_system = jihadSpawn1
+	orbital_bombardment = yes
+	ai = {
+		enabled = yes
+		declare_war = yes
+		colonizer = no
+		construction = no
+		modules = {
+			military_minister_module
+			foreign_minister_module
+		}
+	}
+	faction = {
+		needs_colony = no
+		hostile = yes
+		needs_border_access = no
+	}
+	custom_diplomacy = yes
+	modules = {
+		all_technology_module = {}
+		standard_event_module = {}
+		standard_leader_module = {}
+		standard_diplomacy_module = {}
+	}
+}

@@ -1,0 +1,220 @@
+# Rigellian Homeworld
+# Beta Rigel
+rigellian_homeworld = {			
+	name = "Beta Rigel"		
+	class = sc_b		
+	usage = custom_empire
+	flags = { rigellian_consortium }
+	init_effect = { log = "rigellian homeworld" }
+	planet = { name = "Beta Rigel" class = star orbit_distance = 0 orbit_angle = 1 size = 50 has_ring = no }		
+	planet = { name = "Deyirdar" orbit_distance = 90 class = "pc_b_class" size = { min = 5 max = 12 } }		
+	planet = {		
+		name = "Mokalar"
+		orbit_distance = {min = 10 max = 20}	
+		class = "pc_l2_class"
+		size = { min = 6 max = 10 }
+		moon = { name = "Dahoj" class = random_non_colonizable size = 6 orbit_distance = 12 has_ring = no }
+		moon = { name = "Vialma" class = random_non_colonizable size = 6 orbit_distance = 8 has_ring = no }		
+	}		
+	planet = { name = "Chelar" class = "pc_toxic" orbit_distance = 20 size = {min = 6 max = 10} has_ring = no modifiers = none }
+	planet = {		
+		name = "Zamiar"
+		orbit_distance = {min = 10 max = 20}	
+		class = "pc_toxic"
+		size = { min = 6 max = 10 }
+		moon = { name = "Rendar" class = random_non_colonizable size = 6 orbit_distance = 12 has_ring = no }
+	}		
+	planet = {		
+		name = "Rigel"
+		starting_planet = yes
+		orbit_distance = {min = 10 max = 20}	
+		class = "pc_arid"
+		size = { min = 18 max = 20 }
+		tile_blockers = none		
+		modifiers = none				
+		init_effect = {
+			prevent_anomaly = yes			
+			if = {
+				limit = { NOT = { any_country = { has_country_flag = rigellian_consortium } } }
+				create_species = {
+					name = "Rigellian"
+					class = RIG
+					portrait = rigellian
+					homeworld = THIS
+					traits = {
+						trait = "trait_enduring"
+						trait = "trait_intelligent"
+						trait = "trait_nonadaptive"
+						trait = "trait_strong"
+						ideal_planet_class = "pc_arid"
+					}
+				}
+				last_created_species = { save_global_event_target_as = rigellianSpecies }
+				create_country = {
+					name = "NAME_rigellian_consortium"
+					type = default
+					ignore_initial_colony_error = yes
+					civics = { civic = "civic_corporate_dominion" civic = "civic_mining_guilds" }
+					authority = auth_oligarchic
+					name_list = "Rigellian"
+					ethos = { ethic = "ethic_egalitarian" ethic="ethic_fanatic_materialist" }
+					species = event_target:rigellianSpecies
+					flag = {
+						icon = { category = "spherical" file = "flag_spherical_5.dds" }
+						background = { category = "backgrounds" file = "circle.dds" }
+						colors = { "customcolor1359" "dark_green" "null" "null" }
+					}
+					ship_prefix=""
+					effect = {
+						set_graphical_culture = generic_01
+						set_country_flag = rigellian_consortium
+						set_country_flag = custom_start_screen
+						set_country_flag = generic_ent
+						set_country_flag = alpha_beta_empire
+						set_country_flag = init_spawned
+						set_country_flag = botf_minor
+						save_global_event_target_as = rigellian_consortium
+					}
+				}
+				create_colony = { owner = event_target:rigellian_consortium species = event_target:rigellianSpecies ethos = owner }
+			}
+			set_capital = yes
+			random_country = {
+				limit = { has_country_flag = rigellian_consortium }
+				save_global_event_target_as = rigellian_consortium
+				add_appropriate_start_techs = yes
+				species = { save_global_event_target_as = rigellianSpecies }
+				set_country_type = minorRace
+			}
+			set_owner = event_target:rigellian_consortium
+			generate_minor_empire_start_buildings = yes
+			generate_minor_empire_start_pops = yes
+			generate_major_empire_start_fleets = yes
+			set_name = "Rigel"
+		}
+		change_orbit = @base_moon_distance
+		moon = { name = "Rigel a" class = random_non_colonizable size = {min = 1 max = 7} orbit_distance = { min = 1 max = 5} orbit_angle = { min = 30 max = 270} }
+		moon = { name = "Rigel b" class = random_non_colonizable size = {min = 1 max = 7} orbit_distance = { min = 1 max = 5} orbit_angle = { min = 30 max = 270} }
+	}		
+	planet = {		
+		name = "Sirk"
+		orbit_distance = {min = 10 max = 20}	
+		class = "pc_k_class"
+		size = { min = 5 max = 10 }	
+		moon = { name = "Sirk a" class = random_non_colonizable size = 6 orbit_distance = 8 has_ring = no }	
+	}		
+	planet = {
+		name = "Kaylar"
+		class = "pc_alpine" #Rigel VII
+		orbit_distance = 16						
+		orbit_angle = 220						
+		size = { min = 12 max = 14 }	
+		tile_blockers = none		
+		has_ring = no
+		init_effect = {
+			prevent_anomaly = yes
+			create_species = { class = "KAYLAR" homeworld = THIS traits = { trait = random_traits } }
+			last_created_species = { save_global_event_target_as = kaylarSpecies }
+			create_country = {
+				name = "Kaylar"
+				civics = random
+				authority = random
+				species = event_target:kaylarSpecies
+				ethos = { ethic = "ethic_fanatic_xenophobe" ethic = "ethic_militarist" }
+				flag = {
+					icon = { category = "special" file = "primitive.dds" }
+					background = { category = "backgrounds" file = "new_dawn.dds" }
+					colors = { "turquoise" "green" "null" "null" }
+				}
+				type = primitive
+			}
+			last_created_country = {
+				set_graphical_culture = preindustrial_01
+				set_country_flag = late_medieval_age 
+				set_primitive_age = late_medieval_age
+				save_global_event_target_as = kaylar
+			}
+			create_colony = {
+				owner = event_target:kaylar
+				species = event_target:kaylarSpecies
+				ethos = owner
+			}
+			random_tile = {
+				limit = { has_blocker = no has_grown_pop = no has_growing_pop = no }
+				create_pop = { species = event_target:kaylarSpecies }
+			}
+			random_tile = {
+				limit = { has_blocker = no has_grown_pop = no has_growing_pop = no }
+				create_pop = { species = event_target:kaylarSpecies }
+			}
+			random_tile = {
+				limit = { has_blocker = no has_building = no has_grown_pop = yes }
+				set_building = "building_primitive_factory"
+				add_deposit = d_mineral_deposit	
+			}
+			random_tile = {
+				limit = { has_blocker = no has_building = no has_grown_pop = yes }
+				set_building = "building_primitive_farm"
+				add_deposit = d_farmland_deposit
+			}
+			random_tile = {
+				limit = { has_blocker = no has_building = no }
+				set_blocker = "tb_mountain_range"
+				add_deposit = d_engineering_deposit	
+			}
+			random_tile = {
+				limit = { has_blocker = no has_building = no }
+				set_blocker = "tb_dense_jungle"
+				add_deposit = d_society_deposit			
+			}
+			random_tile = {
+				limit = { has_blocker = no has_building = no }
+				set_blocker = "tb_mountain_range"
+				add_deposit = d_physics_deposit				
+			}
+			random_tile = {
+				limit = { has_blocker = no has_building = no }
+				set_blocker = "tb_dense_jungle"
+				add_deposit = d_energy_deposit					
+			}
+			random_tile = {
+				limit = { has_blocker = no has_building = no }
+				set_blocker = "tb_mountain_range"
+			}
+			random_tile = {
+				limit = { has_blocker = no has_building = no }
+				set_blocker = "tb_dense_jungle"
+			}
+			random_tile = {
+				limit = { has_building = "building_colony_shelter" }
+				remove_building = yes
+			}
+			event_target:kaylar = { capital_scope = { set_name = "Kaylar" } }
+		}
+		moon = { name = "Kaylar a" class = random_non_colonizable size = {min = 1 max = 7} orbit_angle = { min = 30 max = 270} }
+	}
+	planet = {		
+		name = "Botchok" # Rigel VIII
+		orbit_distance = {min = 10 max = 20}	
+		class = "pc_tundra"
+		size = { min = 16 max = 20 }	
+		has_ring = yes
+		moon = { name = "Botchok a" class = random_non_colonizable size = 6 orbit_distance = 12 has_ring = no }
+		moon = { name = "Botchok b" class = random_non_colonizable size = 9 orbit_distance = 8 has_ring = no }	
+	}		
+	planet = {		
+		name = "T'ap" #Rigel IX
+		orbit_distance = {min = 30 max = 40}	
+		class = "pc_gas_giant"
+		size = 30	
+		moon = { name = "T'ap a" class = random_non_colonizable size = 6 orbit_distance = 12 has_ring = no }
+		moon = { name = "T'ap b" class = random_non_colonizable size = 6 orbit_distance = 8 has_ring = no }
+	}		
+	planet = {		
+		name = "Onot" #Rigel X
+		orbit_distance = {min = 30 max = 40}	
+		class = "pc_gas_giant"
+		size = 40	
+		moon = { name = "Kohlor" class = "pc_frozen" size = { min = 12 max = 18 } orbit_distance = 30 has_ring = no }
+	}
+}		

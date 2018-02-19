@@ -1,0 +1,587 @@
+spawn_random_trek_system = {
+	random_list = {
+		1000 = {
+			modifier = { factor = 0 exists = event_target:klingon_empire }
+			spawn_system = { min_distance = 10 max_distance = 50 initializer = klingon_homeworld }
+		}
+		1000 = {
+			modifier = { factor = 0 exists = event_target:romulan_star_empire }
+			spawn_system = { min_distance = 10 max_distance = 50 initializer = romulan_homeworld }
+		}
+		1000 = {
+			modifier = { factor = 0 exists = event_target:breen_confederacy }
+			spawn_system = { min_distance = 10 max_distance = 50 initializer = breen_homeworld }
+		}
+		1000 = {
+			modifier = { factor = 0 exists = event_target:cardassian_union }
+			spawn_system = { min_distance = 10 max_distance = 50 initializer = cardassian_homeworld }
+		}
+		1000 = {
+			modifier = { factor = 0 exists = event_target:ferengi_alliance }
+			spawn_system = { min_distance = 10 max_distance = 50 initializer = ferengi_homeworld }
+		}
+		1000 = {
+			modifier = { factor = 0 exists = event_target:united_earth }
+			spawn_system = { min_distance = 10 max_distance = 50 initializer = human_homeworld }
+		}
+		1000 = {
+			modifier = { factor = 0 exists = event_target:sheliak_corporate }
+			spawn_system = { min_distance = 10 max_distance = 50 initializer = sheliak_homeworld }
+		}
+		1000 = {
+			modifier = { factor = 0 exists = event_target:tholian_assembly }
+			spawn_system = { min_distance = 10 max_distance = 50 initializer = tholian_homeworld }
+		}
+		1000 = {
+			modifier = { factor = 0 exists = event_target:andorian_empire }
+			spawn_system = { min_distance = 10 max_distance = 50 initializer = andorian_homeworld }
+		}
+		1000 = {
+			modifier = { factor = 0 exists = event_target:gorn_empire }
+			spawn_system = { min_distance = 10 max_distance = 50 initializer = gorn_homeworld }
+		}
+		1000 = {
+			modifier = { factor = 0 exists = event_target:husnock_ascendency }
+			spawn_system = { min_distance = 10 max_distance = 50 initializer = husnock_homeworld }
+		}
+		1000 = {
+			modifier = { factor = 0 exists = event_target:orion_free_states }
+			spawn_system = { min_distance = 10 max_distance = 50 initializer = orion_homeworld }
+		}
+		1000 = {
+			modifier = { factor = 0 exists = event_target:suliban_cabal }
+			spawn_system = { min_distance = 10 max_distance = 50 initializer = suliban_homeworld }
+		}
+		1000 = {
+			modifier = { factor = 0 exists = event_target:vulcan_high_command }
+			spawn_system = { min_distance = 10 max_distance = 50 initializer = vulcan_homeworld }
+		}
+		1000 = {
+			modifier = { factor = 0 exists = event_target:borgCollective }
+			spawn_system = { min_distance = 10 max_distance = 50 initializer = borg_initializer }
+		}
+		1000 = {
+			modifier = { factor = 0 exists = event_target:brunali_empire }
+			spawn_system = { min_distance = 10 max_distance = 50 initializer = BrunaliHomeworld }
+		}
+		1000 = {
+			modifier = { factor = 0 exists = event_target:devorian_solidarity }
+			spawn_system = { min_distance = 10 max_distance = 50 initializer = devorian_homeworld }
+		}
+		1000 = {
+			modifier = { factor = 0 exists = event_target:fen_domar_states }
+			spawn_system = { min_distance = 10 max_distance = 50 initializer = FenDomarHomeworld }
+		}
+		1000 = {
+			modifier = { factor = 0 exists = event_target:hirogen_hunters }
+			spawn_system = { min_distance = 10 max_distance = 50 initializer = hirogen_homeworld }
+		}
+		1000 = {
+			modifier = { factor = 0 exists = event_target:kazon_sects }
+			spawn_system = { min_distance = 10 max_distance = 50 initializer = kazon_homeworld }
+		}
+		1000 = {
+			modifier = { factor = 0 exists = event_target:kobali_republic }
+			spawn_system = { min_distance = 10 max_distance = 50 initializer = kobali_homeworld }
+		}
+		1000 = {
+			modifier = { factor = 0 exists = event_target:krenim_imperium }
+			spawn_system = { min_distance = 10 max_distance = 50 initializer = krenim_homeworld }
+		}
+		1000 = {
+			modifier = { factor = 0 exists = event_target:lyridian_diaspora }
+			spawn_system = { min_distance = 10 max_distance = 50 initializer = LyridianHomeworld }
+		}
+		1000 = {
+			modifier = { factor = 0 exists = event_target:talaxian_empire }
+			spawn_system = { min_distance = 10 max_distance = 50 initializer = talaxian_homeworld }
+		}
+		1000 = {
+			modifier = { factor = 0 exists = event_target:vaadwaur_supremacy }
+			spawn_system = { min_distance = 10 max_distance = 50 initializer = vaadwaur_homeworld }
+		}
+		1000 = {
+			modifier = { factor = 0 exists = event_target:vidiian_sodality }
+			spawn_system = { min_distance = 10 max_distance = 50 initializer = vidiian_homeworld }
+		}
+		1000 = {
+			modifier = { factor = 0 exists = event_target:voth_theocracy }
+			spawn_system = { min_distance = 10 max_distance = 50 initializer = voth_homeworld }
+		}
+		1000 = {
+			modifier = { factor = 0 exists = event_target:zahl_technocracy }
+			spawn_system = { min_distance = 10 max_distance = 50 initializer = zahl_homeworld }
+		}
+		1000 = {
+			modifier = { factor = 0 exists = event_target:kazon_sects }
+			spawn_system = { min_distance = 10 max_distance = 50 initializer = kazon_homeworld }
+		}
+		1000 = {
+			modifier = { factor = 0 exists = event_target:the_dominion }
+			spawn_system = { min_distance = 10 max_distance = 50 initializer = founders_homeworld }
+		}
+		1000 = {
+			modifier = { factor = 0 exists = event_target:hurq_stagnancy }
+			spawn_system = { min_distance = 10 max_distance = 50 initializer = hurq_homeworld }
+		}
+		1000 = {
+			modifier = { factor = 0 exists = event_target:nyberrite_alliance }
+			spawn_system = { min_distance = 10 max_distance = 50 initializer = nyberrite_homeworld }
+		}
+		1000 = {
+			modifier = { factor = 0 exists = event_target:wadi_emirates }
+			spawn_system = { min_distance = 10 max_distance = 50 initializer = WadiHomeworld }
+		}
+		1000 = {
+			modifier = { factor = 0 exists = event_target:tellarian_technocracy }
+			spawn_system = { min_distance = 10 max_distance = 50 initializer = tellarian_homeworld }
+		}
+		1 = {}
+	}
+}
+
+
+
+erase_invalid_spawn_system = {
+	set_country_flag = cleanupRemove
+	every_owned_planet = {
+		destroy_colony = { keep_buildings = no }
+		solar_system = { 
+			set_star_flag = remakeSystem
+			every_system_planet = { 
+				limit = { OR = { is_planet_class = pc_thegreatlink is_planet_class = pc_r_class is_planet_class = pc_unimatrix  } }
+				change_pc = pc_r_class
+				set_random_rogue_planet_name = yes
+			}
+			every_system_planet = { limit = { is_star = yes } set_random_star_name = yes  }	
+			every_system_planet = {
+				limit = { is_star = no }
+				remove_planet = yes
+			}
+			every_system_megastructure = { remove_megastructure = this }
+			every_system_ambient_object = { destroy_ambient_object = this }
+			rebuild_random_system = yes
+			if = {
+				limit = { sth_random_maps = yes }
+				spawn_random_trek_system = yes
+			}
+		}
+	}
+	destroy_country = yes
+}
+
+
+
+set_random_star_name = {
+	random_list = {
+		10 = { modifier = { factor = 0 any_system = { has_star_flag = "Zink" } } set_name = "Zink" solar_system = { set_name = "Zink" set_star_flag = "Zink" } }
+		10 = { modifier = { factor = 0 any_system = { has_star_flag = "Laster" } } set_name = "Laster" solar_system = { set_name = "Laster" set_star_flag = "Laster" } }
+		10 = { modifier = { factor = 0 any_system = { has_star_flag = "Lapointe" } } set_name = "Lapointe" solar_system = { set_name = "Lapointe" set_star_flag = "Lapointe" } }
+		10 = { modifier = { factor = 0 any_system = { has_star_flag = "Moy" } } set_name = "Moy" solar_system = { set_name = "Moy" set_star_flag = "Moy" } }
+		10 = { modifier = { factor = 0 any_system = { has_star_flag = "Ammons" } } set_name = "Ammons" solar_system = { set_name = "Ammons" set_star_flag = "Ammons" } }
+		10 = { modifier = { factor = 0 any_system = { has_star_flag = "Llamas" } } set_name = "Llamas" solar_system = { set_name = "Llamas" set_star_flag = "Llamas" } }
+		10 = { modifier = { factor = 0 any_system = { has_star_flag = "Foltz" } } set_name = "Foltz" solar_system = { set_name = "Foltz" set_star_flag = "Foltz" } }
+		10 = { modifier = { factor = 0 any_system = { has_star_flag = "Fleck" } } set_name = "Fleck" solar_system = { set_name = "Fleck" set_star_flag = "Fleck" } }
+		10 = { modifier = { factor = 0 any_system = { has_star_flag = "Chew" } } set_name = "Chew" solar_system = { set_name = "Chew" set_star_flag = "Chew" } }
+		10 = { modifier = { factor = 0 any_system = { has_star_flag = "Amaral" } } set_name = "Amaral" solar_system = { set_name = "Amaral" set_star_flag = "Amaral" } }
+		10 = { modifier = { factor = 0 any_system = { has_star_flag = "Geer" } } set_name = "Geer" solar_system = { set_name = "Geer" set_star_flag = "Geer" } }
+		10 = { modifier = { factor = 0 any_system = { has_star_flag = "Su" } } set_name = "Su" solar_system = { set_name = "Su" set_star_flag = "Su" } }
+		10 = { modifier = { factor = 0 any_system = { has_star_flag = "Carden" } } set_name = "Carden" solar_system = { set_name = "Carden" set_star_flag = "Carden" } }
+		10 = { modifier = { factor = 0 any_system = { has_star_flag = "Nunley" } } set_name = "Nunley" solar_system = { set_name = "Nunley" set_star_flag = "Nunley" } }
+		10 = { modifier = { factor = 0 any_system = { has_star_flag = "Creel" } } set_name = "Creel" solar_system = { set_name = "Creel" set_star_flag = "Creel" } }
+		10 = { modifier = { factor = 0 any_system = { has_star_flag = "Clarkson" } } set_name = "Clarkson" solar_system = { set_name = "Clarkson" set_star_flag = "Clarkson" } }
+		10 = { modifier = { factor = 0 any_system = { has_star_flag = "Provost" } } set_name = "Provost" solar_system = { set_name = "Provost" set_star_flag = "Provost" } }
+		10 = { modifier = { factor = 0 any_system = { has_star_flag = "Paine" } } set_name = "Paine" solar_system = { set_name = "Paine" set_star_flag = "Paine" } }
+		10 = { modifier = { factor = 0 any_system = { has_star_flag = "Covey" } } set_name = "Covey" solar_system = { set_name = "Covey" set_star_flag = "Covey" } }
+		10 = { modifier = { factor = 0 any_system = { has_star_flag = "Wofford" } } set_name = "Wofford" solar_system = { set_name = "Wofford" set_star_flag = "Wofford" } }
+		10 = { modifier = { factor = 0 any_system = { has_star_flag = "Frame" } } set_name = "Frame" solar_system = { set_name = "Frame" set_star_flag = "Frame" } }
+		10 = { modifier = { factor = 0 any_system = { has_star_flag = "Dube" } } set_name = "Dube" solar_system = { set_name = "Dube" set_star_flag = "Dube" } }
+		10 = { modifier = { factor = 0 any_system = { has_star_flag = "Grice" } } set_name = "Grice" solar_system = { set_name = "Grice" set_star_flag = "Grice" } }
+		10 = { modifier = { factor = 0 any_system = { has_star_flag = "Tully" } } set_name = "Tully" solar_system = { set_name = "Tully" set_star_flag = "Tully" } }
+		10 = { modifier = { factor = 0 any_system = { has_star_flag = "Winstead" } } set_name = "Winstead" solar_system = { set_name = "Winstead" set_star_flag = "Winstead" } }
+		10 = { modifier = { factor = 0 any_system = { has_star_flag = "Molnar" } } set_name = "Molnar" solar_system = { set_name = "Molnar" set_star_flag = "Molnar" } }
+		10 = { modifier = { factor = 0 any_system = { has_star_flag = "Luciano" } } set_name = "Luciano" solar_system = { set_name = "Luciano" set_star_flag = "Luciano" } }
+		10 = { modifier = { factor = 0 any_system = { has_star_flag = "Bartels" } } set_name = "Bartels" solar_system = { set_name = "Bartels" set_star_flag = "Bartels" } }
+		10 = { modifier = { factor = 0 any_system = { has_star_flag = "Canady" } } set_name = "Canady" solar_system = { set_name = "Canady" set_star_flag = "Canady" } }
+		10 = { modifier = { factor = 0 any_system = { has_star_flag = "Moreau" } } set_name = "Moreau" solar_system = { set_name = "Moreau" set_star_flag = "Moreau" } }
+		10 = { modifier = { factor = 0 any_system = { has_star_flag = "Burnside" } } set_name = "Burnside" solar_system = { set_name = "Burnside" set_star_flag = "Burnside" } }
+		10 = { modifier = { factor = 0 any_system = { has_star_flag = "Bratcher" } } set_name = "Bratcher" solar_system = { set_name = "Bratcher" set_star_flag = "Bratcher" } }
+		10 = { modifier = { factor = 0 any_system = { has_star_flag = "Infante" } } set_name = "Infante" solar_system = { set_name = "Infante" set_star_flag = "Infante" } }
+		10 = { modifier = { factor = 0 any_system = { has_star_flag = "Peterman" } } set_name = "Peterman" solar_system = { set_name = "Peterman" set_star_flag = "Peterman" } }
+		10 = { modifier = { factor = 0 any_system = { has_star_flag = "Swope" } } set_name = "Swope" solar_system = { set_name = "Swope" set_star_flag = "Swope" } }
+		10 = { modifier = { factor = 0 any_system = { has_star_flag = "Freeland" } } set_name = "Freeland" solar_system = { set_name = "Freeland" set_star_flag = "Freeland" } }
+		10 = { modifier = { factor = 0 any_system = { has_star_flag = "Vetter" } } set_name = "Vetter" solar_system = { set_name = "Vetter" set_star_flag = "Vetter" } }
+		10 = { modifier = { factor = 0 any_system = { has_star_flag = "Marquis" } } set_name = "Marquis" solar_system = { set_name = "Marquis" set_star_flag = "Marquis" } }
+		10 = { modifier = { factor = 0 any_system = { has_star_flag = "Lanning" } } set_name = "Lanning" solar_system = { set_name = "Lanning" set_star_flag = "Lanning" } }
+		10 = { modifier = { factor = 0 any_system = { has_star_flag = "Schulze" } } set_name = "Schulze" solar_system = { set_name = "Schulze" set_star_flag = "Schulze" } }
+		10 = { modifier = { factor = 0 any_system = { has_star_flag = "Thai" } } set_name = "Thai" solar_system = { set_name = "Thai" set_star_flag = "Thai" } }
+		10 = { modifier = { factor = 0 any_system = { has_star_flag = "Coppola" } } set_name = "Coppola" solar_system = { set_name = "Coppola" set_star_flag = "Coppola" } }
+		10 = { modifier = { factor = 0 any_system = { has_star_flag = "Rayburn" } } set_name = "Rayburn" solar_system = { set_name = "Rayburn" set_star_flag = "Rayburn" } }
+		10 = { modifier = { factor = 0 any_system = { has_star_flag = "Conte" } } set_name = "Conte" solar_system = { set_name = "Conte" set_star_flag = "Conte" } }
+		10 = { modifier = { factor = 0 any_system = { has_star_flag = "Martz" } } set_name = "Martz" solar_system = { set_name = "Martz" set_star_flag = "Martz" } }
+		10 = { modifier = { factor = 0 any_system = { has_star_flag = "Showalter" } } set_name = "Showalter" solar_system = { set_name = "Showalter" set_star_flag = "Showalter" } }
+		10 = { modifier = { factor = 0 any_system = { has_star_flag = "Quinonez" } } set_name = "Quinonez" solar_system = { set_name = "Quinonez" set_star_flag = "Quinonez" } }
+		10 = { modifier = { factor = 0 any_system = { has_star_flag = "Bandy" } } set_name = "Bandy" solar_system = { set_name = "Bandy" set_star_flag = "Bandy" } }
+		10 = { modifier = { factor = 0 any_system = { has_star_flag = "Rao" } } set_name = "Rao" solar_system = { set_name = "Rao" set_star_flag = "Rao" } }
+		10 = { modifier = { factor = 0 any_system = { has_star_flag = "Bunting" } } set_name = "Bunting" solar_system = { set_name = "Bunting" set_star_flag = "Bunting" } }
+		10 = { modifier = { factor = 0 any_system = { has_star_flag = "Cruse" } } set_name = "Cruse" solar_system = { set_name = "Cruse" set_star_flag = "Cruse" } }
+		10 = { modifier = { factor = 0 any_system = { has_star_flag = "Belt" } } set_name = "Belt" solar_system = { set_name = "Belt" set_star_flag = "Belt" } }
+		10 = { modifier = { factor = 0 any_system = { has_star_flag = "Hamblin" } } set_name = "Hamblin" solar_system = { set_name = "Hamblin" set_star_flag = "Hamblin" } }
+		10 = { modifier = { factor = 0 any_system = { has_star_flag = "Himes" } } set_name = "Himes" solar_system = { set_name = "Himes" set_star_flag = "Himes" } }
+		10 = { modifier = { factor = 0 any_system = { has_star_flag = "Raney" } } set_name = "Raney" solar_system = { set_name = "Raney" set_star_flag = "Raney" } }
+		10 = { modifier = { factor = 0 any_system = { has_star_flag = "Merrell" } } set_name = "Merrell" solar_system = { set_name = "Merrell" set_star_flag = "Merrell" } }
+		10 = { modifier = { factor = 0 any_system = { has_star_flag = "See" } } set_name = "See" solar_system = { set_name = "See" set_star_flag = "See" } }
+		10 = { modifier = { factor = 0 any_system = { has_star_flag = "Gough" } } set_name = "Gough" solar_system = { set_name = "Gough" set_star_flag = "Gough" } }
+		10 = { modifier = { factor = 0 any_system = { has_star_flag = "Maciel" } } set_name = "Maciel" solar_system = { set_name = "Maciel" set_star_flag = "Maciel" } }
+		10 = { modifier = { factor = 0 any_system = { has_star_flag = "Wimberly" } } set_name = "Wimberly" solar_system = { set_name = "Wimberly" set_star_flag = "Wimberly" } }
+		10 = { modifier = { factor = 0 any_system = { has_star_flag = "Craddock" } } set_name = "Craddock" solar_system = { set_name = "Craddock" set_star_flag = "Craddock" } }
+		10 = { modifier = { factor = 0 any_system = { has_star_flag = "Marquardt" } } set_name = "Marquardt" solar_system = { set_name = "Marquardt" set_star_flag = "Marquardt" } }
+		10 = { modifier = { factor = 0 any_system = { has_star_flag = "Wentz" } } set_name = "Wentz" solar_system = { set_name = "Wentz" set_star_flag = "Wentz" } }
+		10 = { modifier = { factor = 0 any_system = { has_star_flag = "Meeker" } } set_name = "Meeker" solar_system = { set_name = "Meeker" set_star_flag = "Meeker" } }
+		10 = { modifier = { factor = 0 any_system = { has_star_flag = "Sandberg" } } set_name = "Sandberg" solar_system = { set_name = "Sandberg" set_star_flag = "Sandberg" } }
+		10 = { modifier = { factor = 0 any_system = { has_star_flag = "Wasson" } } set_name = "Wasson" solar_system = { set_name = "Wasson" set_star_flag = "Wasson" } }
+		10 = { modifier = { factor = 0 any_system = { has_star_flag = "Mosier" } } set_name = "Mosier" solar_system = { set_name = "Mosier" set_star_flag = "Mosier" } }
+		10 = { modifier = { factor = 0 any_system = { has_star_flag = "Joe" } } set_name = "Joe" solar_system = { set_name = "Joe" set_star_flag = "Joe" } }
+		10 = { modifier = { factor = 0 any_system = { has_star_flag = "Hundley" } } set_name = "Hundley" solar_system = { set_name = "Hundley" set_star_flag = "Hundley" } }
+		10 = { modifier = { factor = 0 any_system = { has_star_flag = "Shumaker" } } set_name = "Shumaker" solar_system = { set_name = "Shumaker" set_star_flag = "Shumaker" } }
+		10 = { modifier = { factor = 0 any_system = { has_star_flag = "Fortin" } } set_name = "Fortin" solar_system = { set_name = "Fortin" set_star_flag = "Fortin" } }
+		10 = { modifier = { factor = 0 any_system = { has_star_flag = "Embry" } } set_name = "Embry" solar_system = { set_name = "Embry" set_star_flag = "Embry" } }
+		10 = { modifier = { factor = 0 any_system = { has_star_flag = "Olivarez" } } set_name = "Olivarez" solar_system = { set_name = "Olivarez" set_star_flag = "Olivarez" } }
+		10 = { modifier = { factor = 0 any_system = { has_star_flag = "Akin" } } set_name = "Akin" solar_system = { set_name = "Akin" set_star_flag = "Akin" } }
+		10 = { modifier = { factor = 0 any_system = { has_star_flag = "Seidel" } } set_name = "Seidel" solar_system = { set_name = "Seidel" set_star_flag = "Seidel" } }
+		10 = { modifier = { factor = 0 any_system = { has_star_flag = "Coons" } } set_name = "Coons" solar_system = { set_name = "Coons" set_star_flag = "Coons" } }
+		10 = { modifier = { factor = 0 any_system = { has_star_flag = "Earle" } } set_name = "Earle" solar_system = { set_name = "Earle" set_star_flag = "Earle" } }
+		10 = { modifier = { factor = 0 any_system = { has_star_flag = "Corrales" } } set_name = "Corrales" solar_system = { set_name = "Corrales" set_star_flag = "Corrales" } }
+		10 = { modifier = { factor = 0 any_system = { has_star_flag = "Matheny" } } set_name = "Matheny" solar_system = { set_name = "Matheny" set_star_flag = "Matheny" } }
+		10 = { modifier = { factor = 0 any_system = { has_star_flag = "Kish" } } set_name = "Kish" solar_system = { set_name = "Kish" set_star_flag = "Kish" } }
+		10 = { modifier = { factor = 0 any_system = { has_star_flag = "Outlaw" } } set_name = "Outlaw" solar_system = { set_name = "Outlaw" set_star_flag = "Outlaw" } }
+		10 = { modifier = { factor = 0 any_system = { has_star_flag = "Spalding" } } set_name = "Spalding" solar_system = { set_name = "Spalding" set_star_flag = "Spalding" } }
+		10 = { modifier = { factor = 0 any_system = { has_star_flag = "Lieberman" } } set_name = "Lieberman" solar_system = { set_name = "Lieberman" set_star_flag = "Lieberman" } }
+		10 = { modifier = { factor = 0 any_system = { has_star_flag = "Barnette" } } set_name = "Barnette" solar_system = { set_name = "Barnette" set_star_flag = "Barnette" } }
+		10 = { modifier = { factor = 0 any_system = { has_star_flag = "Martel" } } set_name = "Martel" solar_system = { set_name = "Martel" set_star_flag = "Martel" } }
+		10 = { modifier = { factor = 0 any_system = { has_star_flag = "Hargis" } } set_name = "Hargis" solar_system = { set_name = "Hargis" set_star_flag = "Hargis" } }
+		10 = { modifier = { factor = 0 any_system = { has_star_flag = "Merrick" } } set_name = "Merrick" solar_system = { set_name = "Merrick" set_star_flag = "Merrick" } }
+		10 = { modifier = { factor = 0 any_system = { has_star_flag = "Kelso" } } set_name = "Kelso" solar_system = { set_name = "Kelso" set_star_flag = "Kelso" } }
+		10 = { modifier = { factor = 0 any_system = { has_star_flag = "Fullerton" } } set_name = "Fullerton" solar_system = { set_name = "Fullerton" set_star_flag = "Fullerton" } }
+		10 = { modifier = { factor = 0 any_system = { has_star_flag = "Fries" } } set_name = "Fries" solar_system = { set_name = "Fries" set_star_flag = "Fries" } }
+		10 = { modifier = { factor = 0 any_system = { has_star_flag = "Doucette" } } set_name = "Doucette" solar_system = { set_name = "Doucette" set_star_flag = "Doucette" } }
+		10 = { modifier = { factor = 0 any_system = { has_star_flag = "Prewitt" } } set_name = "Prewitt" solar_system = { set_name = "Prewitt" set_star_flag = "Prewitt" } }
+		10 = { modifier = { factor = 0 any_system = { has_star_flag = "Clouse" } } set_name = "Clouse" solar_system = { set_name = "Clouse" set_star_flag = "Clouse" } }
+		10 = { modifier = { factor = 0 any_system = { has_star_flag = "Hawks" } } set_name = "Hawks" solar_system = { set_name = "Hawks" set_star_flag = "Hawks" } }
+		10 = { modifier = { factor = 0 any_system = { has_star_flag = "Keaton" } } set_name = "Keaton" solar_system = { set_name = "Keaton" set_star_flag = "Keaton" } }
+		10 = { modifier = { factor = 0 any_system = { has_star_flag = "Worthy" } } set_name = "Worthy" solar_system = { set_name = "Worthy" set_star_flag = "Worthy" } }
+		10 = { modifier = { factor = 0 any_system = { has_star_flag = "Zook" } } set_name = "Zook" solar_system = { set_name = "Zook" set_star_flag = "Zook" } }
+		10 = { modifier = { factor = 0 any_system = { has_star_flag = "Montez" } } set_name = "Montez" solar_system = { set_name = "Montez" set_star_flag = "Montez" } }
+		10 = { modifier = { factor = 0 any_system = { has_star_flag = "Poore" } } set_name = "Poore" solar_system = { set_name = "Poore" set_star_flag = "Poore" } }
+		10 = { modifier = { factor = 0 any_system = { has_star_flag = "Autry" } } set_name = "Autry" solar_system = { set_name = "Autry" set_star_flag = "Autry" } }
+		10 = { modifier = { factor = 0 any_system = { has_star_flag = "Withyr" } } set_name = "Withyr" solar_system = { set_name = "Withyr" set_star_flag = "Withyr" } }
+		10 = { modifier = { factor = 0 any_system = { has_star_flag = "Marath" } } set_name = "Marath" solar_system = { set_name = "Marath" set_star_flag = "Marath" } }
+		10 = { modifier = { factor = 0 any_system = { has_star_flag = "Krakaum" } } set_name = "Krakaum" solar_system = { set_name = "Krakaum" set_star_flag = "Krakaum" } }
+		10 = { modifier = { factor = 0 any_system = { has_star_flag = "Cordip" } } set_name = "Cordip" solar_system = { set_name = "Cordip" set_star_flag = "Cordip" } }
+		10 = { modifier = { factor = 0 any_system = { has_star_flag = "Hesstamur" } } set_name = "Hesstamur" solar_system = { set_name = "Hesstamur" set_star_flag = "Hesstamur" } }
+		10 = { modifier = { factor = 0 any_system = { has_star_flag = "Elderak" } } set_name = "Elderak" solar_system = { set_name = "Elderak" set_star_flag = "Elderak" } }
+		10 = { modifier = { factor = 0 any_system = { has_star_flag = "Saldropis" } } set_name = "Saldropis" solar_system = { set_name = "Saldropis" set_star_flag = "Saldropis" } }
+		10 = { modifier = { factor = 0 any_system = { has_star_flag = "Irriamun" } } set_name = "Irriamun" solar_system = { set_name = "Irriamun" set_star_flag = "Irriamun" } }
+		10 = { modifier = { factor = 0 any_system = { has_star_flag = "Hiklam" } } set_name = "Hiklam" solar_system = { set_name = "Hiklam" set_star_flag = "Hiklam" } }
+		10 = { modifier = { factor = 0 any_system = { has_star_flag = "Witris" } } set_name = "Witris" solar_system = { set_name = "Witris" set_star_flag = "Witris" } }
+		10 = { modifier = { factor = 0 any_system = { has_star_flag = "Wollaeus" } } set_name = "Wollaeus" solar_system = { set_name = "Wollaeus" set_star_flag = "Wollaeus" } }
+		10 = { modifier = { factor = 0 any_system = { has_star_flag = "Nizatorom" } } set_name = "Nizatorom" solar_system = { set_name = "Nizatorom" set_star_flag = "Nizatorom" } }
+		10 = { modifier = { factor = 0 any_system = { has_star_flag = "Bazzanac" } } set_name = "Bazzanac" solar_system = { set_name = "Bazzanac" set_star_flag = "Bazzanac" } }
+		10 = { modifier = { factor = 0 any_system = { has_star_flag = "Chatiib" } } set_name = "Chatiib" solar_system = { set_name = "Chatiib" set_star_flag = "Chatiib" } }
+		10 = { modifier = { factor = 0 any_system = { has_star_flag = "Gallamun" } } set_name = "Gallamun" solar_system = { set_name = "Gallamun" set_star_flag = "Gallamun" } }
+		10 = { modifier = { factor = 0 any_system = { has_star_flag = "Gidzerak" } } set_name = "Gidzerak" solar_system = { set_name = "Gidzerak" set_star_flag = "Gidzerak" } }
+		10 = { modifier = { factor = 0 any_system = { has_star_flag = "Tiuz" } } set_name = "Tiuz" solar_system = { set_name = "Tiuz" set_star_flag = "Tiuz" } }
+		10 = { modifier = { factor = 0 any_system = { has_star_flag = "Zoldar" } } set_name = "Zoldar" solar_system = { set_name = "Zoldar" set_star_flag = "Zoldar" } }
+		10 = { modifier = { factor = 0 any_system = { has_star_flag = "Zorf" } } set_name = "Zorf" solar_system = { set_name = "Zorf" set_star_flag = "Zorf" } }
+		10 = { modifier = { factor = 0 any_system = { has_star_flag = "Kodracca" } } set_name = "Kodracca" solar_system = { set_name = "Kodracca" set_star_flag = "Kodracca" } }
+		10 = { modifier = { factor = 0 any_system = { has_star_flag = "Kelsim" } } set_name = "Kelsim" solar_system = { set_name = "Kelsim" set_star_flag = "Kelsim" } }
+		10 = { modifier = { factor = 0 any_system = { has_star_flag = "Siccon" } } set_name = "Siccon" solar_system = { set_name = "Siccon" set_star_flag = "Siccon" } }
+		10 = { modifier = { factor = 0 any_system = { has_star_flag = "Nodro" } } set_name = "Nodro" solar_system = { set_name = "Nodro" set_star_flag = "Nodro" } }
+		10 = { modifier = { factor = 0 any_system = { has_star_flag = "Nokkam" } } set_name = "Nokkam" solar_system = { set_name = "Nokkam" set_star_flag = "Nokkam" } }
+		10 = { modifier = { factor = 0 any_system = { has_star_flag = "Lessim" } } set_name = "Lessim" solar_system = { set_name = "Lessim" set_star_flag = "Lessim" } }
+		10 = { modifier = { factor = 0 any_system = { has_star_flag = "Yanduz" } } set_name = "Yanduz" solar_system = { set_name = "Yanduz" set_star_flag = "Yanduz" } }
+		10 = { modifier = { factor = 0 any_system = { has_star_flag = "Arbatraeus" } } set_name = "Arbatraeus" solar_system = { set_name = "Arbatraeus" set_star_flag = "Arbatraeus" } }
+		10 = { modifier = { factor = 0 any_system = { has_star_flag = "Isius" } } set_name = "Isius" solar_system = { set_name = "Isius" set_star_flag = "Isius" } }
+		10 = { modifier = { factor = 0 any_system = { has_star_flag = "Ibloranda" } } set_name = "Ibloranda" solar_system = { set_name = "Ibloranda" set_star_flag = "Ibloranda" } }
+		10 = { modifier = { factor = 0 any_system = { has_star_flag = "Ibleen" } } set_name = "Ibleen" solar_system = { set_name = "Ibleen" set_star_flag = "Ibleen" } }
+		10 = { modifier = { factor = 0 any_system = { has_star_flag = "Elthir" } } set_name = "Elthir" solar_system = { set_name = "Elthir" set_star_flag = "Elthir" } }
+		10 = { modifier = { factor = 0 any_system = { has_star_flag = "Erimadon" } } set_name = "Erimadon" solar_system = { set_name = "Erimadon" set_star_flag = "Erimadon" } }
+		10 = { modifier = { factor = 0 any_system = { has_star_flag = "Troidom" } } set_name = "Troidom" solar_system = { set_name = "Troidom" set_star_flag = "Troidom" } }
+		10 = { modifier = { factor = 0 any_system = { has_star_flag = "Tropallum" } } set_name = "Tropallum" solar_system = { set_name = "Tropallum" set_star_flag = "Tropallum" } }
+		10 = { modifier = { factor = 0 any_system = { has_star_flag = "Trijam" } } set_name = "Trijam" solar_system = { set_name = "Trijam" set_star_flag = "Trijam" } }
+		10 = { modifier = { factor = 0 any_system = { has_star_flag = "Jhapp" } } set_name = "Jhapp" solar_system = { set_name = "Jhapp" set_star_flag = "Jhapp" } }
+		10 = { modifier = { factor = 0 any_system = { has_star_flag = "Yiriam" } } set_name = "Yiriam" solar_system = { set_name = "Yiriam" set_star_flag = "Yiriam" } }
+		10 = { modifier = { factor = 0 any_system = { has_star_flag = "Yinin" } } set_name = "Yinin" solar_system = { set_name = "Yinin" set_star_flag = "Yinin" } }
+		10 = { modifier = { factor = 0 any_system = { has_star_flag = "Yomon" } } set_name = "Yomon" solar_system = { set_name = "Yomon" set_star_flag = "Yomon" } }
+		10 = { modifier = { factor = 0 any_system = { has_star_flag = "Yodd Bem" } } set_name = "Yodd Bem" solar_system = { set_name = "Yodd Bem" set_star_flag = "Yodd Bem" } }
+		10 = { modifier = { factor = 0 any_system = { has_star_flag = "Yarak" } } set_name = "Yarak" solar_system = { set_name = "Yarak" set_star_flag = "Yarak" } }
+		10 = { modifier = { factor = 0 any_system = { has_star_flag = "Yotla" } } set_name = "Yotla" solar_system = { set_name = "Yotla" set_star_flag = "Yotla" } }
+		10 = { modifier = { factor = 0 any_system = { has_star_flag = "Piskus" } } set_name = "Piskus" solar_system = { set_name = "Piskus" set_star_flag = "Piskus" } }
+		10 = { modifier = { factor = 0 any_system = { has_star_flag = "Tram Bodon" } } set_name = "Tram Bodon" solar_system = { set_name = "Tram Bodon" set_star_flag = "Tram Bodon" } }
+		10 = { modifier = { factor = 0 any_system = { has_star_flag = "Advatir" } } set_name = "Advatir" solar_system = { set_name = "Advatir" set_star_flag = "Advatir" } }
+		10 = { modifier = { factor = 0 any_system = { has_star_flag = "Ruul" } } set_name = "Ruul" solar_system = { set_name = "Ruul" set_star_flag = "Ruul" } }
+		10 = { modifier = { factor = 0 any_system = { has_star_flag = "Coggan" } } set_name = "Coggan" solar_system = { set_name = "Coggan" set_star_flag = "Coggan" } }
+		10 = { modifier = { factor = 0 any_system = { has_star_flag = "Cazzabius" } } set_name = "Cazzabius" solar_system = { set_name = "Cazzabius" set_star_flag = "Cazzabius" } }
+		10 = { modifier = { factor = 0 any_system = { has_star_flag = "Sabtrok" } } set_name = "Sabtrok" solar_system = { set_name = "Sabtrok" set_star_flag = "Sabtrok" } }
+		10 = { modifier = { factor = 0 any_system = { has_star_flag = "Unnabin" } } set_name = "Unnabin" solar_system = { set_name = "Unnabin" set_star_flag = "Unnabin" } }
+		10 = { modifier = { factor = 0 any_system = { has_star_flag = "Burtios" } } set_name = "Burtios" solar_system = { set_name = "Burtios" set_star_flag = "Burtios" } }
+		10 = { modifier = { factor = 0 any_system = { has_star_flag = "Dradim" } } set_name = "Dradim" solar_system = { set_name = "Dradim" set_star_flag = "Dradim" } }
+		10 = { modifier = { factor = 0 any_system = { has_star_flag = "Mestros" } } set_name = "Mestros" solar_system = { set_name = "Mestros" set_star_flag = "Mestros" } }
+		10 = { modifier = { factor = 0 any_system = { has_star_flag = "Saphiban" } } set_name = "Saphiban" solar_system = { set_name = "Saphiban" set_star_flag = "Saphiban" } }
+		10 = { modifier = { factor = 0 any_system = { has_star_flag = "Wistral" } } set_name = "Wistral" solar_system = { set_name = "Wistral" set_star_flag = "Wistral" } }
+		10 = { modifier = { factor = 0 any_system = { has_star_flag = "Ejok" } } set_name = "Ejok" solar_system = { set_name = "Ejok" set_star_flag = "Ejok" } }
+		10 = { modifier = { factor = 0 any_system = { has_star_flag = "Gossok" } } set_name = "Gossok" solar_system = { set_name = "Gossok" set_star_flag = "Gossok" } }
+		10 = { modifier = { factor = 0 any_system = { has_star_flag = "Bovatir" } } set_name = "Bovatir" solar_system = { set_name = "Bovatir" set_star_flag = "Bovatir" } }
+		10 = { modifier = { factor = 0 any_system = { has_star_flag = "Impan" } } set_name = "Impan" solar_system = { set_name = "Impan" set_star_flag = "Impan" } }
+		10 = { modifier = { factor = 0 any_system = { has_star_flag = "Hocry" } } set_name = "Hocry" solar_system = { set_name = "Hocry" set_star_flag = "Hocry" } }
+		10 = { modifier = { factor = 0 any_system = { has_star_flag = "Raltry" } } set_name = "Raltry" solar_system = { set_name = "Raltry" set_star_flag = "Raltry" } }
+		10 = { modifier = { factor = 0 any_system = { has_star_flag = "Binami" } } set_name = "Binami" solar_system = { set_name = "Binami" set_star_flag = "Binami" } }
+		10 = { modifier = { factor = 0 any_system = { has_star_flag = "Sastram" } } set_name = "Sastram" solar_system = { set_name = "Sastram" set_star_flag = "Sastram" } }
+		10 = { modifier = { factor = 0 any_system = { has_star_flag = "Walzirin" } } set_name = "Walzirin" solar_system = { set_name = "Walzirin" set_star_flag = "Walzirin" } }
+		10 = { modifier = { factor = 0 any_system = { has_star_flag = "Teersonia" } } set_name = "Teersonia" solar_system = { set_name = "Teersonia" set_star_flag = "Teersonia" } }
+		10 = { modifier = { factor = 0 any_system = { has_star_flag = "Avaconea" } } set_name = "Avaconea" solar_system = { set_name = "Avaconea" set_star_flag = "Avaconea" } }
+		10 = { modifier = { factor = 0 any_system = { has_star_flag = "Atlabba" } } set_name = "Atlabba" solar_system = { set_name = "Atlabba" set_star_flag = "Atlabba" } }
+		10 = { modifier = { factor = 0 any_system = { has_star_flag = "Raskamir" } } set_name = "Raskamir" solar_system = { set_name = "Raskamir" set_star_flag = "Raskamir" } }
+		10 = { modifier = { factor = 0 any_system = { has_star_flag = "Romsir" } } set_name = "Romsir" solar_system = { set_name = "Romsir" set_star_flag = "Romsir" } }
+		10 = { modifier = { factor = 0 any_system = { has_star_flag = "Rint Beekun" } } set_name = "Rint Beekun" solar_system = { set_name = "Rint Beekun" set_star_flag = "Rint Beekun" } }
+		10 = { modifier = { factor = 0 any_system = { has_star_flag = "Trunt" } } set_name = "Trunt" solar_system = { set_name = "Trunt" set_star_flag = "Trunt" } }
+		10 = { modifier = { factor = 0 any_system = { has_star_flag = "Parsax" } } set_name = "Parsax" solar_system = { set_name = "Parsax" set_star_flag = "Parsax" } }
+		10 = { modifier = { factor = 0 any_system = { has_star_flag = "Nemozi" } } set_name = "Nemozi" solar_system = { set_name = "Nemozi" set_star_flag = "Nemozi" } }
+		10 = { modifier = { factor = 0 any_system = { has_star_flag = "Jurnast" } } set_name = "Jurnast" solar_system = { set_name = "Jurnast" set_star_flag = "Jurnast" } }
+		10 = { modifier = { factor = 0 any_system = { has_star_flag = "Pennosta" } } set_name = "Pennosta" solar_system = { set_name = "Pennosta" set_star_flag = "Pennosta" } }
+		10 = { modifier = { factor = 0 any_system = { has_star_flag = "Satrinias" } } set_name = "Satrinias" solar_system = { set_name = "Satrinias" set_star_flag = "Satrinias" } }
+		10 = { modifier = { factor = 0 any_system = { has_star_flag = "Howoz" } } set_name = "Howoz" solar_system = { set_name = "Howoz" set_star_flag = "Howoz" } }
+		10 = { modifier = { factor = 0 any_system = { has_star_flag = "Ydria" } } set_name = "Ydria" solar_system = { set_name = "Ydria" set_star_flag = "Ydria" } }
+		10 = { modifier = { factor = 0 any_system = { has_star_flag = "Yssom" } } set_name = "Yssom" solar_system = { set_name = "Yssom" set_star_flag = "Yssom" } }
+		10 = { modifier = { factor = 0 any_system = { has_star_flag = "Yrgel" } } set_name = "Yrgel" solar_system = { set_name = "Yrgel" set_star_flag = "Yrgel" } }
+		10 = { modifier = { factor = 0 any_system = { has_star_flag = "Azax" } } set_name = "Azax" solar_system = { set_name = "Azax" set_star_flag = "Azax" } }
+		10 = { modifier = { factor = 0 any_system = { has_star_flag = "Appon" } } set_name = "Appon" solar_system = { set_name = "Appon" set_star_flag = "Appon" } }
+		10 = { modifier = { factor = 0 any_system = { has_star_flag = "Assaniz" } } set_name = "Assaniz" solar_system = { set_name = "Assaniz" set_star_flag = "Assaniz" } }
+		10 = { modifier = { factor = 0 any_system = { has_star_flag = "Tunobo" } } set_name = "Tunobo" solar_system = { set_name = "Tunobo" set_star_flag = "Tunobo" } }
+		10 = { modifier = { factor = 0 any_system = { has_star_flag = "Tiblic" } } set_name = "Tiblic" solar_system = { set_name = "Tiblic" set_star_flag = "Tiblic" } }
+		10 = { modifier = { factor = 0 any_system = { has_star_flag = "Markaz" } } set_name = "Markaz" solar_system = { set_name = "Markaz" set_star_flag = "Markaz" } }
+		10 = { modifier = { factor = 0 any_system = { has_star_flag = "Molsir" } } set_name = "Molsir" solar_system = { set_name = "Molsir" set_star_flag = "Molsir" } }
+		10 = { modifier = { factor = 0 any_system = { has_star_flag = "Jugrad" } } set_name = "Jugrad" solar_system = { set_name = "Jugrad" set_star_flag = "Jugrad" } }
+		10 = { modifier = { factor = 0 any_system = { has_star_flag = "Gromen" } } set_name = "Gromen" solar_system = { set_name = "Gromen" set_star_flag = "Gromen" } }
+		10 = { modifier = { factor = 0 any_system = { has_star_flag = "Camglaria" } } set_name = "Camglaria" solar_system = { set_name = "Camglaria" set_star_flag = "Camglaria" } }
+		10 = { modifier = { factor = 0 any_system = { has_star_flag = "Esteraeus" } } set_name = "Esteraeus" solar_system = { set_name = "Esteraeus" set_star_flag = "Esteraeus" } }
+		10 = { modifier = { factor = 0 any_system = { has_star_flag = "Brakma" } } set_name = "Brakma" solar_system = { set_name = "Brakma" set_star_flag = "Brakma" } }
+		10 = { modifier = { factor = 0 any_system = { has_star_flag = "Ziris" } } set_name = "Ziris" solar_system = { set_name = "Ziris" set_star_flag = "Ziris" } }
+		10 = { modifier = { factor = 0 any_system = { has_star_flag = "Lijiz" } } set_name = "Lijiz" solar_system = { set_name = "Lijiz" set_star_flag = "Lijiz" } }
+		10 = { modifier = { factor = 0 any_system = { has_star_flag = "Izta" } } set_name = "Izta" solar_system = { set_name = "Izta" set_star_flag = "Izta" } }
+		10 = { modifier = { factor = 0 any_system = { has_star_flag = "Paraggir" } } set_name = "Paraggir" solar_system = { set_name = "Paraggir" set_star_flag = "Paraggir" } }
+		10 = { modifier = { factor = 0 any_system = { has_star_flag = "Paggol" } } set_name = "Paggol" solar_system = { set_name = "Paggol" set_star_flag = "Paggol" } }
+		10 = { modifier = { factor = 0 any_system = { has_star_flag = "Barban" } } set_name = "Barban" solar_system = { set_name = "Barban" set_star_flag = "Barban" } }
+		10 = { modifier = { factor = 0 any_system = { has_star_flag = "Bitrius" } } set_name = "Bitrius" solar_system = { set_name = "Bitrius" set_star_flag = "Bitrius" } }
+		10 = { modifier = { factor = 0 any_system = { has_star_flag = "Loisar" } } set_name = "Loisar" solar_system = { set_name = "Loisar" set_star_flag = "Loisar" } }
+	}
+}
+
+set_random_rogue_planet_name = {
+	random_list = {
+		10 = { modifier = { factor = 0 any_system = { has_star_flag = "R-2586e" } } set_name = "R-2586e" solar_system = { set_name = "R-2586e" set_star_flag = "R-2586e" } }
+		10 = { modifier = { factor = 0 any_system = { has_star_flag = "R-2297" } } set_name = "R-2297" solar_system = { set_name = "R-2297" set_star_flag = "R-2297" } }
+		10 = { modifier = { factor = 0 any_system = { has_star_flag = "R-3166" } } set_name = "R-3166" solar_system = { set_name = "R-3166" set_star_flag = "R-3166" } }
+		10 = { modifier = { factor = 0 any_system = { has_star_flag = "R-3391d" } } set_name = "R-3391d" solar_system = { set_name = "R-3391d" set_star_flag = "R-3391d" } }
+		10 = { modifier = { factor = 0 any_system = { has_star_flag = "R-2928c" } } set_name = "R-2928c" solar_system = { set_name = "R-2928c" set_star_flag = "R-2928c" } }
+		10 = { modifier = { factor = 0 any_system = { has_star_flag = "R-2029" } } set_name = "R-2029" solar_system = { set_name = "R-2029" set_star_flag = "R-2029" } }
+		10 = { modifier = { factor = 0 any_system = { has_star_flag = "R-765" } } set_name = "R-765" solar_system = { set_name = "R-765" set_star_flag = "R-765" } }
+		10 = { modifier = { factor = 0 any_system = { has_star_flag = "R-2934b" } } set_name = "R-2934b" solar_system = { set_name = "R-2934b" set_star_flag = "R-2934b" } }
+		10 = { modifier = { factor = 0 any_system = { has_star_flag = "R-3895" } } set_name = "R-3895" solar_system = { set_name = "R-3895" set_star_flag = "R-3895" } }
+		10 = { modifier = { factor = 0 any_system = { has_star_flag = "R-2886e" } } set_name = "R-2886e" solar_system = { set_name = "R-2886e" set_star_flag = "R-2886e" } }
+		10 = { modifier = { factor = 0 any_system = { has_star_flag = "R-859" } } set_name = "R-859" solar_system = { set_name = "R-859" set_star_flag = "R-859" } }
+		10 = { modifier = { factor = 0 any_system = { has_star_flag = "R-3848e" } } set_name = "R-3848e" solar_system = { set_name = "R-3848e" set_star_flag = "R-3848e" } }
+		10 = { modifier = { factor = 0 any_system = { has_star_flag = "R-1906b" } } set_name = "R-1906b" solar_system = { set_name = "R-1906b" set_star_flag = "R-1906b" } }
+		10 = { modifier = { factor = 0 any_system = { has_star_flag = "R-1527" } } set_name = "R-1527" solar_system = { set_name = "R-1527" set_star_flag = "R-1527" } }
+		10 = { modifier = { factor = 0 any_system = { has_star_flag = "R-1789a" } } set_name = "R-1789a" solar_system = { set_name = "R-1789a" set_star_flag = "R-1789a" } }
+		10 = { modifier = { factor = 0 any_system = { has_star_flag = "R-2913a" } } set_name = "R-2913a" solar_system = { set_name = "R-2913a" set_star_flag = "R-2913a" } }
+
+	}
+}
+
+set_random_planet_name = {
+	if = {
+		limit = { event_target:systemEntity = { check_variable = { which = systemPlanets value = 1 } } }
+		set_name = "[systemEntity.GetName] I"
+	}
+	if = {
+		limit = { event_target:systemEntity = { check_variable = { which = systemPlanets value = 2 } } }
+		set_name = "[systemEntity.GetName] II"
+	}
+	if = {
+		limit = { event_target:systemEntity = { check_variable = { which = systemPlanets value = 3 } } }
+		set_name = "[systemEntity.GetName] III"
+	}
+	if = {
+		limit = { event_target:systemEntity = { check_variable = { which = systemPlanets value = 4 } } }
+		set_name = "[systemEntity.GetName] IV"
+	}
+	if = {
+		limit = { event_target:systemEntity = { check_variable = { which = systemPlanets value = 5 } } }
+		set_name = "[systemEntity.GetName] V"
+	}
+	if = {
+		limit = { event_target:systemEntity = { check_variable = { which = systemPlanets value = 6 } } }
+		set_name = "[systemEntity.GetName] VI"
+	}
+	if = {
+		limit = { event_target:systemEntity = { check_variable = { which = systemPlanets value = 7 } } }
+		set_name = "[systemEntity.GetName] VII"
+	}
+	if = {
+		limit = { event_target:systemEntity = { check_variable = { which = systemPlanets value = 8 } } }
+		set_name = "[systemEntity.GetName] VIII"
+	}
+	if = {
+		limit = { event_target:systemEntity = { check_variable = { which = systemPlanets value = 9 } } }
+		set_name = "[systemEntity.GetName] IX"
+	}
+	if = {
+		limit = { event_target:systemEntity = { check_variable = { which = systemPlanets value = 10 } } }
+		set_name = "[systemEntity.GetName] X"
+	}
+	if = {
+		limit = { event_target:systemEntity = { check_variable = { which = systemPlanets value = 11 } } }
+		set_name = "[systemEntity.GetName] XI"
+	}
+	if = {
+		limit = { event_target:systemEntity = { check_variable = { which = systemPlanets value = 12 } } }
+		set_name = "[systemEntity.GetName] XII"
+	}
+}
+
+rebuild_random_system = {
+	#Hot inner planets
+	# random_planet = {
+		# limit = { is_star = yes }
+		# save_event_target_as = systemStar
+	# }
+	save_event_target_as = systemEntity
+	if = {
+		limit = { exists = event_target:systemEntity }			
+		#Inner
+		random_list = {
+			10 = { 
+				modifier = { factor = 2 count_planets = { count < 4 } }
+				spawn_planet = {
+					class = "rl_inner_unhabitable_planets"
+					location = event_target:systemEntity
+					# orbit_location = yes
+					orbit_distance_offset = 30
+					orbit_angle_offset = 45
+					init_effect = { event_target:systemEntity = { change_variable = { which = systemPlanets value = 1 } } set_random_planet_name = yes }
+				} 
+			}
+			10 = { }
+		}
+		random_list = {
+			10 = { 
+				modifier = { factor = 2 count_planets = { count < 4 } }
+				spawn_planet = { 
+					class = "rl_inner_unhabitable_planets"
+					location = event_target:systemEntity
+					# orbit_location = yes
+					orbit_distance_offset = 60
+					orbit_angle_offset = 70
+					init_effect = { event_target:systemEntity = { change_variable = { which = systemPlanets value = 1 } } set_random_planet_name = yes }
+				} 
+			}
+			10 = { }
+		}
+		#Mid planets
+		random_list = {
+			10 = { 
+				modifier = { factor = 2 count_planets = { count < 4 } }
+				spawn_planet = { 
+					class = "rl_habitable_m_class"
+					location = event_target:systemEntity
+					# orbit_location = yes
+					orbit_distance_offset = 85
+					orbit_angle_offset = 200
+					init_effect = { event_target:systemEntity = { change_variable = { which = systemPlanets value = 1 } } set_random_planet_name = yes }
+				} 
+			}
+			20 = { }
+		}
+		random_list = {
+				10 = { 
+					modifier = { factor = 2 count_planets = { count < 4 } }
+					spawn_planet = { 
+						class = "rl_habitable_m_class"
+						location = event_target:systemEntity
+						# orbit_location = yes
+						orbit_distance_offset = 115
+						orbit_angle_offset = 300
+						init_effect = { event_target:systemEntity = { change_variable = { which = systemPlanets value = 1 } } set_random_planet_name = yes }
+					} 
+				}
+				20 = { }
+			}
+		#Outer planets
+		random_list = {
+			10 = { 
+				modifier = { factor = 2 count_planets = { count < 4 } }
+				spawn_planet = { 
+					class = "rl_outer_unhabitable_planets" 
+					location = event_target:systemEntity
+					# orbit_location = yes
+					orbit_distance_offset = 140
+					orbit_angle_offset = 100
+					init_effect = { event_target:systemEntity = { change_variable = { which = systemPlanets value = 1 } } set_random_planet_name = yes }
+				} 
+			}
+			10 = { 
+				modifier = { factor = 2 count_planets = { count < 4 } }
+				spawn_planet = { 
+					class = "rl_gas_giants" 
+					location = event_target:systemEntity
+					# orbit_location = yes
+					orbit_distance_offset = 160
+					orbit_angle_offset = 150
+					init_effect = { event_target:systemEntity = { change_variable = { which = systemPlanets value = 1 } } set_random_planet_name = yes }
+				} 
+			}
+			10 = { }
+		}
+		random_list = {
+			10 = { 
+				modifier = { factor = 2 count_planets = { count < 4 } }
+				spawn_planet = { 
+					class = "rl_outer_unhabitable_planets" 
+					location = event_target:systemEntity
+					# orbit_location = yes
+					orbit_distance_offset = 180
+					orbit_angle_offset = 250
+					init_effect = { event_target:systemEntity = { change_variable = { which = systemPlanets value = 1 } } set_random_planet_name = yes }
+				} 
+			}
+			10 = { 
+				modifier = { factor = 2 count_planets = { count < 4 } }
+				spawn_planet = { 
+					class = "rl_gas_giants" 
+					location = event_target:systemEntity
+					# orbit_location = yes
+					orbit_distance_offset = 200
+					orbit_angle_offset = 50
+					init_effect = { event_target:systemEntity = { change_variable = { which = systemPlanets value = 1 } } set_random_planet_name = yes }
+				} 
+			}
+			10 = { }
+		}
+		#Icy Planets
+		random_list = {
+			10 = { 
+				modifier = { factor = 2 count_planets = { count < 4 } }
+				spawn_planet = { 
+					class = "rl_outer_moons" 
+					location = event_target:systemEntity
+					# orbit_location = yes
+					orbit_distance_offset = 300
+					orbit_angle_offset = 20
+					init_effect = { event_target:systemEntity = { change_variable = { which = systemPlanets value = 1 } } set_random_planet_name = yes }
+				} 
+			}
+			10 = { }
+		}
+	}
+}

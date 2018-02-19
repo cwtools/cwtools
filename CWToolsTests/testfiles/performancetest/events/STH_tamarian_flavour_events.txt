@@ -1,0 +1,67 @@
+############################
+#
+# Tamarian Flavour Events
+#
+# Written by Walshicus
+#
+############################
+
+namespace = STH_tamarian_flavour
+
+
+
+country_event = {
+	id = STH_tamarian_flavour.1
+	title = STH_tamarian_flavour.1.name
+	desc = STH_tamarian_flavour.1.desc
+	picture = sth_GFX_evt_tamarian1
+	location = ROOT
+	trigger = {
+		NOT = { is_species_class = TAM is_assimilator = no }
+		exists = capital_scope
+		any_country = {
+			NOT = { reverse_has_relation_flag = { who = ROOT flag = translated } }
+			is_species_class = TAM
+			has_established_contact = ROOT
+		}
+	}
+	mean_time_to_happen = { months = 720 }
+	immediate = {
+		capital_scope = { save_event_target_as = home_planet }
+	}
+	option = {
+		name = STH_tamarian_flavour.1.a
+		allow = { influence > 199 }
+		add_influence = -200
+		hidden_effect = {
+			enable_special_project = {
+				name = "TAMARIAN_LANGUAGE_PROJECT"
+				location = event_target:home_planet
+				owner = ROOT
+			}
+		}
+	}
+	option = {
+		name = STH_tamarian_flavour.1.b
+		hidden_effect = { }
+	}
+}
+
+country_event = {
+	id = STH_tamarian_flavour.2
+	title = STH_tamarian_flavour.2.name
+	desc = STH_tamarian_flavour.2.desc
+	picture = sth_GFX_evt_tamarian1
+	trigger = {	}
+	is_triggered_only = yes
+	immediate = {
+		every_country = {
+			limit = { is_species_class = TAM }
+			ROOT = { set_relation_flag = { who = PREV flag = "translated" } }
+		}
+	}
+	option = {
+		name = STH_tamarian_flavour.2.a
+		hidden_effect = { }
+	}
+}

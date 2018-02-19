@@ -1,0 +1,80 @@
+sabotage_relations_random_target = {
+	random_country = {
+		limit = { 
+			has_communications = root 
+			NOR = { 
+				is_same_value = root
+				is_same_value = from 
+			}
+			is_normal_country = yes
+		}
+		add_opinion_modifier = { who = root modifier = opinion_insult }
+		save_event_target_as = sabotaged_relations_random_country
+	}
+}
+
+sabotage_random_building = {
+	random_list = {
+		10 = {
+			random_owned_planet = {
+				save_event_target_as = destroyed_random_building_planet
+				random_tile = {
+					limit = {
+						has_building = yes
+						is_ruined = no
+					}
+					save_event_target_as = destroyed_random_building
+					set_ruined = yes
+				}
+			}
+		}
+		10 = {
+			modifier = {
+				factor = 0.0 
+				NOT = {
+					any_owned_ship  = {
+						OR = {
+							is_ship_class = shipclass_observation_station
+							is_ship_class = shipclass_research_station
+							is_ship_class = shipclass_mining_station
+						}
+					}
+				}
+			}
+			random_owned_ship  = {
+				limit = { 
+					OR = {
+						is_ship_class = shipclass_observation_station
+						is_ship_class = shipclass_research_station
+						is_ship_class = shipclass_mining_station
+					}
+				}
+				fleet = { orbit = { save_event_target_as = destroyed_random_station_planet } }
+				save_event_target_as = destroyed_random_station
+				fleet = { save_event_target_as = destroyed_random_station_fleet }
+				reduce_hp_percent = 200
+			}
+		}
+	}
+}
+
+sabotage_random_starship = {
+	random_owned_ship  = {
+		limit = { 
+			OR = {
+				is_ship_class = shipclass_military
+				is_ship_class = shipclass_military_station
+			}
+		}
+		save_event_target_as = destroyed_random_ship
+		fleet = { save_event_target_as = destroyed_random_ship_fleet }
+		# reduce_hp_percent = 200
+	}
+}
+
+assassinate_random_leader = {
+	random_owned_leader   = {
+		save_event_target_as = assassinated_leader
+		# kill_leader = { show_notification = no }
+	}
+}

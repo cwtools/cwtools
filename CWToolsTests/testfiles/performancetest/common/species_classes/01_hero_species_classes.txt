@@ -1,0 +1,40 @@
+# Number of entries controlls amount to choose from in designer  I.E.   "mol1" "mol2" "mol3" "mol4"
+# graphical_culture is connected to the looks used for ships and cities, see "common/graphical_culture/"
+# Portraits here are one you can choose from in the character creater. For prescripted races they are grabbed straight from the .gfx file. 
+# can specify playable=no to disable people from picking specified class.
+# can specify randomized=no to filter specified class from randomization.
+
+
+TREKHEROES = {
+	playable = { always = no }
+	randomized = no
+	portraits = { 
+		"MeiCarterLin" 
+		"Kutaya"
+		"Valda"
+		"JonathanArcher"
+		"JonathanEsteban"
+		"Satelk"
+		"MatthewWalsh"
+		"JohnPaxton"
+		"KhanNoonienSingh"
+		"Antaak"
+		"AntaakAugment"
+	}
+	graphical_culture = generic_01
+	move_pop_sound_effect = "moving_pop_confirmation"
+	uplifted_into = "TREKHEROES" 
+	uplifted_portraits = { 
+		"MeiCarterLin" 
+		"Kutaya"
+		"Valda"
+		"JonathanArcher"
+		"JonathanEsteban"
+		"Satelk"
+		"MatthewWalsh"
+		"JohnPaxton" 
+		"KhanNoonienSingh"
+		"Antaak"
+		"AntaakAugment"
+	}
+}

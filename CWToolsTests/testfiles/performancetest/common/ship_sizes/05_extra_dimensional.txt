@@ -1,0 +1,224 @@
+#reloadable with 'reload stats'
+# This file is where you start when you want to configure something new, then go to sections
+
+@civilian_ships_combat_speed = 0.5
+@corvette_combat_speed = 1.5 	# assault ships
+@corvette_combat_rotation = 0.08
+@corvette_collision_radius = 2.0
+
+@destroyer_combat_speed = 1.0	 # picket ships, should stay with the battleships
+@destroyer_combat_rotation = 0.05
+@destroyer_collision_radius = 2.5
+
+@cruiser_combat_speed = 1.25	 # assault ships
+@cruiser_combat_rotation = 0.025
+@cruiser_collision_radius = 3
+
+@battleship_combat_speed = 0.75	
+@battleship_combat_rotation = 0.02
+@battleship_collision_radius = 3
+
+@titan_combat_speed = 0.75
+@titan_combat_rotation = 0.02
+@titan_collision_radius = 15
+
+@build_block_radius_none = 0
+@build_block_radius_tiny = 10
+@build_block_radius_small = 70
+@build_block_radius_medium = 90
+@build_block_radius_large = 110
+
+
+####################
+# EXTRADIMENSIONAL #
+####################
+
+# Extradimensional Large Ship  
+large_ship_ed = {
+	graphical_culture = { "extra_dimensional_01" }
+	max_speed = 3
+	acceleration = 0.2
+	rotation_speed = 0.15
+	combat_max_speed = @battleship_combat_speed
+	combat_rotation_speed = @battleship_combat_rotation
+	collision_radius = @battleship_collision_radius
+	modifier = {
+		ship_evasion_add = 15
+	}
+	max_hitpoints = 3000
+	size_multiplier = 8
+	fleet_slot_size = 8
+	section_slots = { "mid" = { locator = "part1" } }
+	num_target_locators = 0
+	is_space_station = no
+	icon_frame = 5
+	
+	class = shipclass_military
+	is_designable = no
+}
+
+# Extradimensional Medium Ship
+medium_ship_ed = {
+	graphical_culture = { "extra_dimensional_01" }
+	max_speed = 3.75
+	acceleration = 0.25
+	rotation_speed = 0.175
+	combat_max_speed = @cruiser_combat_speed
+	combat_rotation_speed = @cruiser_combat_rotation
+	collision_radius = @cruiser_collision_radius
+	modifier = {
+		ship_evasion_add = 25
+	}
+	max_hitpoints = 1500
+	size_multiplier = 4
+	fleet_slot_size = 4
+	section_slots = { "mid" = { locator = "part1" } }
+	num_target_locators = 0
+	is_space_station = no
+	icon_frame = 4
+	
+	class = shipclass_military
+	is_designable = no
+}
+
+# Extradimensional Small Ship
+small_ship_ed = {
+	graphical_culture = { "extra_dimensional_01" }
+	max_speed = 4.5
+	acceleration = 0.3
+	rotation_speed = 0.2
+	combat_max_speed = @destroyer_combat_speed
+	combat_rotation_speed = @destroyer_combat_rotation
+	collision_radius = @destroyer_collision_radius
+	modifier = {
+		ship_evasion_add = 20
+	}
+	max_hitpoints = 750
+	size_multiplier = 2
+	fleet_slot_size = 2
+	section_slots = { "mid" = { locator = "part1" } }
+	num_target_locators = 0
+	icon_frame = 3
+	is_space_station = no
+	
+	class = shipclass_military
+	is_designable = no
+}
+
+# Extradimensional Large Station
+military_station_large_ed = {
+	graphical_culture = { "extra_dimensional_01" }
+	max_speed = 0.0
+	acceleration = 0.0
+	rotation_speed = 0.0
+	modifier = {
+		ship_evasion_mult = -1
+		ship_weapon_range_mult = 0.20
+	}
+	max_hitpoints = 6000
+	size_multiplier = 8
+	fleet_slot_size = 4
+	section_slots = { "mid" = { locator = "part1" } }
+	num_target_locators = 0
+	is_space_station = yes
+	build_block_radius = @build_block_radius_none
+	
+	class = shipclass_military_station
+	is_designable = no
+}
+
+# Extradimensional Small Station
+military_station_small_ed = {
+	graphical_culture = { "extra_dimensional_01" }
+	max_speed = 0.0
+	acceleration = 0.0
+	rotation_speed = 0.0
+	modifier = {
+		ship_evasion_mult = -1
+		ship_weapon_range_mult = 0.20
+	}
+	max_hitpoints = 3000
+	size_multiplier = 8
+	fleet_slot_size = 4
+	section_slots = { "mid" = { locator = "part1" } }
+	num_target_locators = 0
+	is_space_station = yes
+	build_block_radius = @build_block_radius_none
+	
+	class = shipclass_military_station
+	is_designable = no
+}
+
+# Dimensional Portal
+dimensional_portal_ed = {
+	graphical_culture = { "extra_dimensional_01" }
+	max_speed = 0.0
+	acceleration = 0.0
+	rotation_speed = 0.0
+	modifier = {
+		ship_evasion_mult = -1
+		ship_armor_add = 150
+	}
+	max_hitpoints = 100000
+	size_multiplier = 16
+	fleet_slot_size = 4
+	section_slots = { "mid" = { locator = "part1" } }
+	num_target_locators = 0
+	is_space_station = yes
+	build_block_radius = @build_block_radius_none
+	
+	icon_frame = 12
+	
+	class = shipclass_military_station
+	is_designable = no
+}
+
+# Extradimensional Constructor
+construction_ship_ed = {
+	graphical_culture = { "extra_dimensional_01" }
+	is_space_object = yes
+	max_speed = 3.75
+	acceleration = 0.3
+	rotation_speed = 0.2
+	combat_max_speed = @civilian_ships_combat_speed
+	combat_rotation_speed = 0.2
+	modifier = {
+		ship_evasion_add = 30
+	}
+	max_hitpoints = 600
+	size_multiplier = 1
+	fleet_slot_size = 3
+	section_slots = { "mid" = { locator = "part1" } }
+	num_target_locators = 0
+	is_space_station = no
+	icon_frame = 9
+	
+	is_civilian = yes
+	is_designable = no
+	class = shipclass_constructor
+	required_component_set = "ftl_components"
+	required_component_set = "thruster_components"
+}
+
+# Extradimensional Dimensional Anchor
+anchor_station = {
+	graphical_culture = { "extra_dimensional_01" }
+	max_speed = 0.0
+	acceleration = 0.0
+	rotation_speed = 0.0
+	modifier = {
+		ship_evasion_mult = -1
+		ship_weapon_range_mult = 0.20
+		ship_armor_add = 70
+	}
+	max_hitpoints = 42000
+	size_multiplier = 8
+	fleet_slot_size = 4
+	section_slots = { "mid" = { locator = "part1" } }
+	num_target_locators = 0
+	is_space_station = yes
+	build_block_radius = @build_block_radius_none
+	
+	class = shipclass_military_station
+	is_designable = no
+}

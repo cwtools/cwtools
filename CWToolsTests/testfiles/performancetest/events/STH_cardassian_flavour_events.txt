@@ -1,0 +1,461 @@
+############################
+#
+# Cardassian Flavour Events
+#
+# Written by Walshicus / Kodiak
+#
+############################
+
+namespace = STH_cardassian_flavour
+
+@tier1materialreward = 6
+@tier1materialmin = 100
+@tier1materialmax = 500
+@tier2materialreward = 12
+@tier2materialmin = 150
+@tier2materialmax = 1000
+@tier3materialreward = 18
+@tier3materialmin = 250
+@tier3materialmax = 1500
+@tier4materialreward = 24
+@tier4materialmin = 350
+@tier4materialmax = 2000
+
+@tier1influencereward = 6
+@tier1influencemin = 40
+@tier1influencemax = 100
+@tier2influencereward = 12
+@tier2influencemin = 80
+@tier2influencemax = 175
+@tier3influencereward = 18
+@tier3influencemin = 125
+@tier3influencemax = 250
+@tier4influencereward = 24
+@tier4influencemin = 150
+@tier4influencemax = 300
+
+@tier1researchreward = 6
+@tier1researchmin = 60
+@tier1researchmax = 150
+@tier2researchreward = 12
+@tier2researchmin = 90
+@tier2researchmax = 250
+@tier3researchreward = 18
+@tier3researchmin = 120
+@tier3researchmax = 350
+@tier4researchreward = 24
+@tier4researchmin = 150
+@tier4researchmax = 500
+
+
+# Cardassian Literature 1 to 10
+country_event = {
+	id = STH_cardassian_flavour.1
+	title = STH_cardassian_flavour.1.name
+	desc = STH_cardassian_flavour.1.desc
+	picture = sth_GFX_evt_cardassiaPrime
+	fire_only_once = yes
+	trigger = {
+		is_species_class  = CAR
+		years_passed > 25
+	}
+	mean_time_to_happen = {
+		months = 120
+	}
+	immediate = { 
+		set_country_flag = theNeverEndingSacrifice
+	}
+	option = {
+		name = STH_cardassian_flavour.1.a
+		add_influence = 50
+		add_monthly_resource_mult = {
+			resource = society_research
+			value = @tier3researchreward
+			min = @tier3researchmin
+			max = @tier3researchmax
+		}
+		add_modifier = {
+			modifier = em_the_never_ending_sacrifice
+			days = 3600
+		}		
+	}
+}
+
+country_event = {
+	id = STH_cardassian_flavour.2
+	title = STH_cardassian_flavour.2.name
+	desc = STH_cardassian_flavour.2.desc
+	picture = sth_GFX_evt_cardassiaPrime
+	fire_only_once = yes
+	trigger = {
+		is_species_class  = CAR
+		years_passed > 50
+		has_country_flag = theNeverEndingSacrifice
+	}
+	mean_time_to_happen = {
+		months = 120
+	}
+	immediate = { 
+		set_country_flag = enigmaTales
+	}
+	option = {
+		name = STH_cardassian_flavour.2.a
+		add_influence = 50
+		add_monthly_resource_mult = {
+			resource = society_research
+			value = @tier3researchreward
+			min = @tier3researchmin
+			max = @tier3researchmax
+		}
+		add_modifier = {
+			modifier = em_enigma_tales
+			days = 3600
+		}		
+	}
+}
+
+country_event = {
+	id = STH_cardassian_flavour.3
+	title = STH_cardassian_flavour.3.name
+	desc = STH_cardassian_flavour.3.desc
+	picture = sth_GFX_evt_cardassiaPrime
+	# fire_only_once = yes
+	trigger = {
+		is_species_class  = CAR
+		years_passed > 75
+		has_country_flag = enigmaTales
+		any_country = {
+			exists = capital_scope
+			has_communications = root
+			NOT = {
+				opinion = {
+					who = root
+					value > 0
+				}
+			}
+			NOT = { is_species_class  = CAR }
+		}
+	}
+	mean_time_to_happen = {
+		months = 120
+	}
+	immediate = { 
+		set_country_flag = meditationsOnACrimsonShadow
+		random_country = {
+			limit = {
+				NOT = {
+					opinion = {
+						who = root
+						value > 0
+					}
+				}
+				is_country_type = default
+				has_communications = root
+				NOT = { is_species_class  = CAR }
+			}
+			save_event_target_as = other_empire
+		}
+	}
+	option = {
+		name = STH_cardassian_flavour.3.a
+		add_influence = 75
+		add_monthly_resource_mult = {
+			resource = society_research
+			value = @tier3researchreward
+			min = @tier3researchmin
+			max = @tier3researchmax
+		}
+		add_modifier = {
+			modifier = em_meditations_on_a_crimson_shadow
+			days = 3600
+		}		
+	}
+}
+
+
+# Cardassian Obsidian Order Inquisition 1 to 10
+fleet_event = {
+	id = STH_cardassian_flavour.11
+	title = STH_cardassian_flavour.11.name
+	desc = STH_cardassian_flavour.11.desc
+	picture = sth_GFX_evt_galorCruiser
+	location = ROOT
+	trigger = {
+		owner = { has_country_flag = cardassian_union }
+		exists = leader
+		leader = { 
+			has_level < 3
+			NOT = { has_leader_flag = obsidianOrderInvestigated }
+		}
+		is_in_combat = no
+	}
+	mean_time_to_happen = { months = 3600 }
+	immediate = { 
+		leader = { 
+			save_event_target_as = officer
+			set_leader_flag = obsidianOrderInvestigated 
+		}
+	}
+	option = {
+		name = STH_cardassian_flavour.11.a
+		hidden_effect = {
+			random_list = {
+				80 = { fleet_event = { id = STH_cardassian_flavour.12 days = 1 } } #Win and gain positive trait
+				20 = { fleet_event = { id = STH_cardassian_flavour.13 days = 1 } } #Lose and gain negative trait
+			}
+		}
+	}
+}
+fleet_event = {
+	id = STH_cardassian_flavour.12
+	title = STH_cardassian_flavour.12.name
+	desc = STH_cardassian_flavour.12.desc
+	picture = sth_GFX_evt_cardassianCourt
+	location = ROOT
+	is_triggered_only = yes
+	immediate = { leader = { save_event_target_as = officer } }
+	option = {
+		name = STH_cardassian_flavour.12.a
+		leader = { add_trait = leader_trait_resilient }	
+		owner = { add_influence = 25 }
+	}
+}
+fleet_event = {
+	id = STH_cardassian_flavour.13
+	title = STH_cardassian_flavour.13.name
+	desc = STH_cardassian_flavour.13.desc
+	picture = sth_GFX_evt_cardassianCourt
+	location = ROOT
+	is_triggered_only = yes
+	immediate = { leader = { save_event_target_as = officer } }
+	option = {
+		name = STH_cardassian_flavour.13.a
+		leader = { add_trait = leader_trait_arrested_development }
+		owner = {
+			add_influence = -25
+		}
+	}
+}
+
+# Obsidian Order Inquisition TWO
+fleet_event = {
+	id = STH_cardassian_flavour.14
+	title = STH_cardassian_flavour.14.name
+	desc = STH_cardassian_flavour.14.desc
+	picture = sth_GFX_evt_galorCruiser
+	location = ROOT
+	trigger = {
+		owner = { has_country_flag = cardassian_union }
+		exists = leader
+		leader = {
+			has_level < 3
+			NOT = {	has_leader_flag = obsidianOrderInvestigated	}
+		}
+		is_in_combat = no
+	}
+	mean_time_to_happen = { months = 3600 }
+	immediate = { 
+		leader = {
+			save_event_target_as = officer
+			set_leader_flag = obsidianOrderInvestigated
+		}
+	}
+	option = {
+		name = STH_cardassian_flavour.14.a
+		hidden_effect = {
+			random_list = {
+				60 = { fleet_event = { id = STH_cardassian_flavour.15 days = 1 } } #Win and gain positive trait
+				40 = { fleet_event = { id = STH_cardassian_flavour.16 days = 1 } } #Lose and gain negative trait
+			}
+		}
+	}
+}
+fleet_event = {
+	id = STH_cardassian_flavour.15
+	title = STH_cardassian_flavour.15.name
+	desc = STH_cardassian_flavour.15.desc
+	picture = sth_GFX_evt_fiveLights
+	location = ROOT
+	is_triggered_only = yes
+	immediate = { leader = { save_event_target_as = officer } }
+	option = {
+		name = STH_cardassian_flavour.15.a
+		leader = { add_trait = leader_trait_resilient }	
+		owner = {
+			add_influence = 25
+		}
+	}
+}
+fleet_event = {
+	id = STH_cardassian_flavour.16
+	title = STH_cardassian_flavour.16.name
+	desc = STH_cardassian_flavour.16.desc
+	picture = sth_GFX_evt_fiveLights
+	location = ROOT
+	is_triggered_only = yes
+	immediate = { leader = { save_event_target_as = officer } }
+	option = {
+		name = STH_cardassian_flavour.16.a
+		leader = { add_trait = leader_trait_arrested_development }
+		owner = {
+			add_influence = -25
+		}
+	}
+}
+
+##Obsidian spy lockbox
+ship_event = {
+	id = STH_cardassian_flavour.17
+	title = STH_cardassian_flavour.17.name
+	desc = STH_cardassian_flavour.17.desc
+	picture = sth_GFX_evt_galorCruiser
+	location = ROOT
+	trigger = {
+		owner = { has_country_flag = cardassian_union }
+		exists = leader
+		leader = {
+			has_level > 3
+			NOT = { has_leader_flag = obsidianOrderInvestigated }
+		}
+		is_in_combat = no
+	}
+	mean_time_to_happen = { months = 3600 }
+	immediate = {
+		leader = { 
+			save_event_target_as = officer
+			set_leader_flag = obsidianOrderInvestigated 
+		}
+	}
+	option = {
+		name = STH_cardassian_flavour.17.a
+		hidden_effect = {
+			random_list = {
+				50 = { ship_event = { id = STH_cardassian_flavour.18 days = 1 } } #Win and gain positive trait
+				50 = { ship_event = { id = STH_cardassian_flavour.19 days = 1 } } #Win and gain positive trait
+			}
+		}
+	}
+}
+ship_event = {
+	id = STH_cardassian_flavour.18
+	title = STH_cardassian_flavour.18.name
+	desc = STH_cardassian_flavour.18.desc
+	picture = sth_GFX_evt_galorCruiser
+	location = ROOT
+	is_triggered_only = yes
+	immediate = { leader = { save_event_target_as = officer } }
+	option = {
+		name = STH_cardassian_flavour.18.a
+		leader = { add_trait = leader_trait_scout }	
+		owner = { add_influence = 25 }
+	}
+}
+ship_event = {
+	id = STH_cardassian_flavour.19
+	title = STH_cardassian_flavour.19.name
+	desc = STH_cardassian_flavour.19.desc
+	picture = sth_GFX_evt_galorCruiser
+	location = ROOT
+	is_triggered_only = yes
+	immediate = { leader = { save_event_target_as = officer } }
+	option = {
+		name = STH_cardassian_flavour.19.a
+		leader = { add_trait = leader_trait_trickster }
+		owner = { add_influence = 25 }
+	}
+}
+
+#An Odd Report
+ship_event = {
+	id = STH_cardassian_flavour.20
+	title = STH_cardassian_flavour.20.name
+	desc = STH_cardassian_flavour.20.desc
+	picture = sth_GFX_evt_galorCruiser
+	location = ROOT
+	trigger = {
+		owner = { 
+			is_country_type = default
+			has_country_flag = cardassian_union
+		}
+		exists = leader
+		leader = { 
+			has_level < 3 
+			leader_class = admiral
+			NOT = { has_leader_flag = obsidianOrderInvestigated }
+		}
+		is_in_combat = no
+	}
+	mean_time_to_happen = { months = 3600 }
+	immediate = { 
+		leader = { 
+			save_event_target_as = officer 
+			set_leader_flag = obsidianOrderInvestigated
+		}			
+	}
+	option = {
+		name = STH_cardassian_flavour.20.a
+		hidden_effect = {
+			random_list = {
+				10 = { ship_event = { id = STH_cardassian_flavour.21 days = 1 } } #Critical success
+				40 = { ship_event = { id = STH_cardassian_flavour.22 days = 1 } } #Success
+				40 = { ship_event = { id = STH_cardassian_flavour.23 days = 1 } } #Failure
+				10 = { ship_event = { id = STH_cardassian_flavour.24 days = 1 } } #Critical failure
+			}
+		}
+	}
+}
+ship_event = {
+	id = STH_cardassian_flavour.21
+	title = STH_cardassian_flavour.21.name
+	desc = STH_cardassian_flavour.21.desc
+	picture = sth_GFX_evt_galorCruiser
+	location = ROOT
+	is_triggered_only = yes
+	immediate = { leader = { save_event_target_as = officer } }
+	option = {
+		name = STH_cardassian_flavour.21.a
+		leader = { add_trait = leader_trait_fleet_logistician }
+		owner = { add_influence = 25 }
+	}
+}
+ship_event = {
+	id = STH_cardassian_flavour.22
+	title = STH_cardassian_flavour.22.name
+	desc = STH_cardassian_flavour.22.desc
+	picture = sth_GFX_evt_galorCruiser
+	location = ROOT
+	is_triggered_only = yes
+	immediate = { leader = { save_event_target_as = officer } }
+	option = {
+		name = STH_cardassian_flavour.22.a
+		owner = { add_influence = 10 }
+	}
+}
+ship_event = {
+	id = STH_cardassian_flavour.23
+	title = STH_cardassian_flavour.23.name
+	desc = STH_cardassian_flavour.23.desc
+	picture = sth_GFX_evt_galorCruiser
+	location = ROOT
+	is_triggered_only = yes
+	immediate = { leader = { save_event_target_as = officer } }
+	option = {
+		name = STH_cardassian_flavour.23.a
+		leader = { add_trait = leader_trait_substance_abuser }
+		owner = { add_influence = -10 }
+	}
+}
+ship_event = {
+	id = STH_cardassian_flavour.24
+	title = STH_cardassian_flavour.24.name
+	desc = STH_cardassian_flavour.24.desc
+	picture = sth_GFX_evt_galorCruiser
+	location = ROOT
+	is_triggered_only = yes
+	immediate = { leader = { save_event_target_as = officer } }
+	option = {
+		name = STH_cardassian_flavour.24.a
+		kill_leader = { type = admiral }
+		owner = { add_influence = -25 }
+	}
+}

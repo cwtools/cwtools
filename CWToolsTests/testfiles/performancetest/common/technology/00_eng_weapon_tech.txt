@@ -1,0 +1,375 @@
+##################
+### TECH COSTS ###
+##################
+#If you change any of these, use replace in files so the values are the same across all files
+
+@tier1cost1 = 240
+@tier1cost2 = 360
+@tier1cost3 = 480
+@tier1cost4 = 600
+
+@tier2cost1 = 900
+@tier2cost2 = 1200
+@tier2cost3 = 1500
+@tier2cost4 = 1800
+
+@tier3cost1 = 2320
+@tier3cost2 = 2840
+@tier3cost3 = 3360
+@tier3cost4 = 3880
+
+####################
+### TECH WEIGHTS ###
+####################
+
+@tier1weight1 = 100
+@tier1weight2 = 95
+@tier1weight3 = 90
+@tier1weight4 = 85
+
+@tier2weight1 = 75
+@tier2weight2 = 70
+@tier2weight3 = 65
+@tier2weight4 = 60
+
+@tier3weight1 = 50
+@tier3weight2 = 45
+@tier3weight3 = 40
+@tier3weight4 = 35
+
+# ## Engineering - Weapon Technologies
+
+# ##################
+# Mass Drivers
+# ##################
+
+# Mass Drivers
+tech_mass_drivers_1 = {
+	area = engineering
+	cost = @tier1cost1
+	tier = 2
+	category = { materials }
+	ai_update_type = military
+	weight = @tier1weight1
+	weight_modifier = {
+		factor = 0.00
+	}
+	ai_weight = { factor = 0.00	}
+}
+
+# Coilguns
+tech_mass_drivers_2 = {
+	area = engineering
+	cost = @tier1cost3
+	tier = 1
+	category = { materials }
+	ai_update_type = military
+	prerequisites = { "tech_mass_drivers_1" }
+	weight = @tier1weight1
+	weight_modifier = {
+		factor = 0.00
+	}
+	ai_weight = { factor = 0.00	}
+}
+
+# Railguns
+tech_mass_drivers_3 = {
+	area = engineering
+	cost = @tier2cost1
+	tier = 2
+	category = { materials }
+	ai_update_type = military	
+	prerequisites = { "tech_mass_drivers_2" }
+	weight = @tier1weight1
+	weight_modifier = {
+		factor = 0.00
+	}
+	ai_weight = { factor = 0.00	}
+}
+
+# Advanced Railguns
+tech_mass_drivers_4 = {
+	area = engineering
+	cost = @tier2cost4
+	tier = 2
+	category = { materials }
+	ai_update_type = military
+	prerequisites = { "tech_mass_drivers_3" }
+	weight = @tier1weight1
+	weight_modifier = {
+		factor = 0.00
+	}
+	ai_weight = { factor = 0.00	}
+}
+
+# Gauss Cannons
+tech_mass_drivers_5 = {
+	area = engineering
+	cost = @tier3cost4
+	tier = 3
+	category = { materials }
+	ai_update_type = military
+	prerequisites = { "tech_mass_drivers_4" }
+	weight = @tier1weight1
+	weight_modifier = {
+		factor = 0.00
+	}
+	ai_weight = { factor = 0.00	}
+}
+
+tech_kinetic_artillery_1 = {
+	area = engineering
+	cost = @tier3cost1
+	tier = 3
+	category = { materials }
+	ai_update_type = military	
+	prerequisites = { "tech_mass_drivers_4" }
+	weight = @tier1weight1
+	weight_modifier = {
+		factor = 0.00
+	}
+	ai_weight = { factor = 0.00	}
+}
+
+tech_kinetic_artillery_2 = {
+	area = engineering
+	cost = @tier3cost4
+	tier = 3
+	category = { materials }
+	ai_update_type = military	
+	prerequisites = { "tech_kinetic_artillery_1" }
+	weight = @tier1weight1
+	weight_modifier = {
+		factor = 0.00
+	}
+	ai_weight = { factor = 0.00	}
+}
+
+# ##################
+# Auto-Cannons
+# ##################
+
+tech_autocannons_1 = {
+	area = engineering
+	cost = @tier2cost1
+	tier = 2
+	category = { materials }	
+	ai_update_type = military
+	weight = @tier1weight1
+	weight_modifier = {
+		factor = 0.00
+	}
+	ai_weight = { factor = 0.00	}
+}
+
+tech_autocannons_2 = {
+	area = engineering
+	cost = @tier2cost4
+	tier = 2
+	category = { materials }
+	ai_update_type = military	
+	prerequisites = { "tech_autocannons_1" }
+	weight = @tier1weight1
+	weight_modifier = {
+		factor = 0.00
+	}
+	ai_weight = { factor = 0.00	}
+}
+
+tech_autocannons_3 = {
+	area = engineering
+	cost = @tier3cost4
+	tier = 3
+	category = { materials }
+	ai_update_type = military	
+	prerequisites = { "tech_autocannons_2" }
+	weight = @tier1weight1
+	weight_modifier = {
+		factor = 0.00
+	}
+	ai_weight = { factor = 0.00	}
+}
+
+tech_flak_batteries_1 = {
+	area = engineering
+	cost = @tier3cost1
+	tier = 3
+	category = { materials }
+	ai_update_type = military	
+	prerequisites = { "tech_autocannons_2" }
+	weight = @tier1weight1
+	weight_modifier = {
+		factor = 0.00
+	}
+	ai_weight = { factor = 0.00	}
+}
+
+tech_flak_batteries_2 = {
+	area = engineering
+	cost = @tier3cost4
+	tier = 3
+	category = { materials }
+	ai_update_type = military	
+	prerequisites = { "tech_flak_batteries_1" }
+	weight = @tier1weight1
+	weight_modifier = {
+		factor = 0.00
+	}
+	ai_weight = { factor = 0.00	}
+}
+
+############
+# Missiles #
+############
+
+# Nuclear Missiles
+tech_missiles_1 = {
+	area = engineering
+	cost = @tier1cost1
+	tier = 1
+	category = { rocketry }
+	ai_update_type = military
+	weight = @tier1weight1
+	weight_modifier = {
+		factor = 0.00
+	}
+	ai_weight = { factor = 0.00	}
+}
+
+# Fusion Missiles
+tech_missiles_2 = {
+	area = engineering
+	cost = @tier1cost3
+	tier = 1
+	category = { rocketry }
+	ai_update_type = military
+	prerequisites = { "tech_missiles_1" }
+	weight = @tier1weight1
+	weight_modifier = {
+		factor = 0.00
+	}
+	ai_weight = { factor = 0.00	}
+}
+
+# Antimatter Missiles
+tech_missiles_3 = {
+	area = engineering
+	cost = @tier2cost1
+	tier = 2
+	category = { rocketry }
+	ai_update_type = military
+	prerequisites = { "tech_missiles_2" }
+	weight = @tier1weight1
+	weight_modifier = {
+		factor = 0.00
+	}
+	ai_weight = { factor = 0.00	}
+}
+
+# Heavy Missiles
+tech_missiles_4 = {
+	area = engineering
+	cost = @tier2cost4
+	tier = 2
+	category = { rocketry }
+	ai_update_type = military
+	prerequisites = { "tech_missiles_3" }
+	weight = @tier1weight1
+	weight_modifier = {
+		factor = 0.00
+	}
+	ai_weight = { factor = 0.00	}
+}
+
+# Marauder Missiles
+tech_missiles_5 = {
+	area = engineering
+	cost = @tier3cost4
+	tier = 3
+	category = { rocketry }
+	ai_update_type = military
+	prerequisites = { "tech_missiles_4" }
+	weight = @tier1weight1
+	weight_modifier = {
+		factor = 0.00
+	}
+	ai_weight = { factor = 0.00	}
+}
+
+#Swarmer Missiles
+tech_swarmer_missiles_1 = {
+	area = engineering
+	cost = @tier3cost1
+	tier = 3
+	category = { rocketry }
+	ai_update_type = military	
+	prerequisites = { "tech_missiles_4" }
+	weight = @tier1weight1
+	weight_modifier = {
+		factor = 0.00
+	}
+	ai_weight = { factor = 0.00	}
+}
+
+#Whirlwind Missiles
+tech_swarmer_missiles_2 = {
+	area = engineering
+	cost = @tier3cost4
+	tier = 3
+	category = { rocketry }
+	ai_update_type = military	
+	prerequisites = { "tech_swarmer_missiles_1" }
+	weight = @tier1weight1
+	weight_modifier = {
+		factor = 0.00
+	}
+	ai_weight = { factor = 0.00	}
+}
+
+# ##################
+# Torpedo Weapons
+# ##################
+
+#Space Torpedoes
+tech_torpedoes_1 = {
+	area = engineering
+	cost = @tier2cost1
+	tier = 2
+	category = { rocketry }
+	ai_update_type = military
+	weight = @tier1weight1
+	weight_modifier = {
+		factor = 0.00
+	}
+	ai_weight = { factor = 0.00	}
+}
+
+#Armored Torpedoes
+tech_torpedoes_2 = {
+	area = engineering
+	cost = @tier2cost4
+	tier = 2
+	category = { rocketry }
+	ai_update_type = military
+	prerequisites = { "tech_torpedoes_1" }
+	weight = @tier1weight1
+	weight_modifier = {
+		factor = 0.00
+	}
+	ai_weight = { factor = 0.00	}
+}
+
+#Devastator Torpedoes
+tech_torpedoes_3 = {
+	area = engineering
+	cost = @tier3cost4
+	tier = 3
+	category = { rocketry }
+	ai_update_type = military	
+	prerequisites = { "tech_torpedoes_2" }
+	weight = @tier1weight1
+	weight_modifier = {
+		factor = 0.00
+	}
+	ai_weight = { factor = 0.00	}
+}

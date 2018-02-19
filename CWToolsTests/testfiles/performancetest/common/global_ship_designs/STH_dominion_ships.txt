@@ -1,0 +1,137 @@
+# Rogue Drone Station
+ship_design = {
+	name = "NAME_Rogue_Jem_Hadar_Station"
+	ship_size = pirate_station #CHANGE THIS
+	hide_size = yes
+	section = {
+		template = "PIRATE_STATION_SECTION"
+		slot = "west"
+		
+		component = {
+			slot = "SMALL_GUN_01"
+			template = "SMALL_REVERSE_POLARON_1"
+		}
+		component = {
+			slot = "SMALL_GUN_01"
+			template = "SMALL_REVERSE_POLARON_1"
+		}
+		component = {
+			slot = "MEDIUM_GUN_01"
+			template = "MEDIUM_PHASED_POLARON_1"
+		}
+		component = {
+			slot = "LARGE_UTILITY_1"
+			template = "UTILITY_LARGE_REACTOR_4"
+		}
+		component = {
+			slot = "LARGE_UTILITY_2"
+			template = "UTILITY_LARGE_REACTOR_4"
+		}
+		component = {
+			slot = "LARGE_UTILITY_3"
+			template = "UTILITY_LARGE_TRACKING_0"
+		}
+	}
+	required_component="SHIP_SENSOR_1"
+}
+
+ship_design = {
+	name = "NAME_Rogue_Jem_Hadar_Ship"
+	ship_size = corvette
+	section = {
+		template = "corvette_stern_beam"
+		slot = "stern"
+		component = { slot = "SMALL_GUN_01" template = "SMALL_REVERSE_POLARON_1" }
+		component = { slot = "SMALL_GUN_02" template = "SMALL_REVERSE_POLARON_1" }
+		component = { slot = "SMALL_GUN_1" template = "POINT_DEFENCE_POLARON_TORPEDO_1" }
+	}
+	section = {
+		template = "corvette_mid_17"
+		slot = "mid"
+		component = { slot = "SMALL_UTILITY_1" template = "UTILITY_SMALL_ARMOR_0" }
+		component = { slot = "LARGE_UTILITY_1" template = "UTILITY_LARGE_TRACKING_0" }
+	}	
+	required_component="REQUIRED_WARP_1_PF"
+	required_component="REQUIRED_COMPUTER_1_PF"
+	required_component="REQUIRED_THRUSTERS_1A_PF"
+	required_component="Required_Combat_Sensor_brawler_1"
+	required_component="REQUIRED_DEFENSE_1_ARMOR_PF"
+	required_component="REQUIRED_HULL_1A_PF"
+}
+
+ship_design = {
+	name = "NAME_Jem_Hadar_Ship" #For Event
+	ship_size = corvette
+	section = {
+		template = "corvette_stern_beam"
+		slot = "stern"
+		component = { slot = "SMALL_GUN_01" template = "SMALL_REVERSE_POLARON_1" }
+		component = { slot = "SMALL_GUN_02" template = "SMALL_REVERSE_POLARON_1" }
+		component = { slot = "SMALL_GUN_1" template = "POINT_DEFENCE_POLARON_TORPEDO_1" }
+	}
+	section = {
+		template = "corvette_mid_17"
+		slot = "mid"
+		component = { slot = "SMALL_UTILITY_1" template = "UTILITY_SMALL_ARMOR_0" }
+		component = { slot = "LARGE_UTILITY_1" template = "UTILITY_LARGE_TRACKING_0" }
+	}	
+	required_component="REQUIRED_WARP_1_PF"
+	required_component="REQUIRED_COMPUTER_1_PF"
+	required_component="REQUIRED_THRUSTERS_1A_PF"
+	required_component="Required_Combat_Sensor_brawler_1"
+	required_component="REQUIRED_DEFENSE_1_ARMOR_PF"
+	required_component="REQUIRED_HULL_1A_PF"
+}
+
+ship_design = {
+    name = "NAME_dominion_advanced_flagship"
+    ship_size = super_battleship
+    section = {
+        template = "super_battleship_stern_3"
+        slot = "stern"
+        component = { slot = "SMALL_GUN_01" template = "SMALL_PHASED_POLARON_5" }
+        component = { slot = "SMALL_GUN_02" template = "SMALL_PHASED_POLARON_5" }
+        component = { slot = "SMALL_GUN_03" template = "SMALL_PHASED_POLARON_5" }
+        component = { slot = "SMALL_GUN_04" template = "SMALL_PHASED_POLARON_5" }
+        component = { slot = "SMALL_GUN_05" template = "SMALL_PHASED_POLARON_5" }
+        component = { slot = "SMALL_GUN_1" template = "POINT_DEFENCE_POLARON_TORPEDO_8a" }
+        component = { slot = "SMALL_GUN_2" template = "POINT_DEFENCE_POLARON_TORPEDO_8a" }
+        component = { slot = "SMALL_GUN_3" template = "POINT_DEFENCE_POLARON_TORPEDO_8a" }
+        component = { slot = "MEDIUM_GUN_01" template = "MEDIUM_PHASED_POLARON_5" }
+        component = { slot = "MEDIUM_GUN_02" template = "MEDIUM_PHASED_POLARON_5" }
+        component = { slot = "MEDIUM_GUN_03" template = "MEDIUM_PHASED_POLARON_5" }
+        component = { slot = "TORPEDO_01" template = "TORPEDO_POLARON_TORPEDO_8b" }
+        component = { slot = "STRIKE_CRAFT_01" template = "LARGE_HANGAR_DOMINION_4" }
+        component = { slot = "STRIKE_CRAFT_02" template = "LARGE_HANGAR_DOMINION_4" }
+    }
+    section = {
+        template = "super_battleship_mid_17"
+        slot = "mid"
+        component = { slot = "SMALL_UTILITY_1" template = "UTILITY_SMALL_GENERATOR_3" }
+        component = { slot = "SMALL_UTILITY_2" template = "UTILITY_SMALL_GENERATOR_3" }
+        component = { slot = "SMALL_UTILITY_3" template = "UTILITY_SMALL_GENERATOR_3" }
+        component = { slot = "SMALL_UTILITY_4" template = "UTILITY_SMALL_GENERATOR_3" }
+        component = { slot = "SMALL_UTILITY_5" template = "UTILITY_SMALL_GENERATOR_3" }
+        component = { slot = "LARGE_UTILITY_1" template = "UTILITY_LARGE_SCIENCE_STATION" }
+        component = { slot = "LARGE_UTILITY_2" template = "UTILITY_LARGE_SCIENCE_STATION" }
+        component = { slot = "LARGE_UTILITY_3" template = "UTILITY_LARGE_SCIENCE_STATION" }
+        component = { slot = "LARGE_UTILITY_4" template = "UTILITY_LARGE_SCIENCE_STATION" }
+        component = { slot = "LARGE_UTILITY_5" template = "UTILITY_LARGE_SCIENCE_STATION" }
+        component = { slot = "MEDIUM_UTILITY_1" template = "UTILITY_MEDIUM_EPS_4" }
+        component = { slot = "MEDIUM_UTILITY_2" template = "UTILITY_MEDIUM_EPS_4" }
+        component = { slot = "MEDIUM_UTILITY_3" template = "UTILITY_MEDIUM_EPS_4" }
+        component = { slot = "MEDIUM_UTILITY_4" template = "UTILITY_MEDIUM_EPS_4" }
+        component = { slot = "MEDIUM_UTILITY_5" template = "UTILITY_MEDIUM_EPS_4" }
+        component = { slot = "MEDIUM_UTILITY_6" template = "UTILITY_MEDIUM_EPS_4" }
+        component = { slot = "MEDIUM_UTILITY_7" template = "UTILITY_MEDIUM_EPS_4" }
+        component = { slot = "MEDIUM_UTILITY_8" template = "UTILITY_MEDIUM_EPS_4" }
+        component = { slot = "AUX_UTILITY_1" template = "UTILITY_AUX_FUEL_2" }
+    }
+    required_component="Required_Combat_Sensor_brawler_1"
+    required_component="REQUIRED_COMPUTER_3_SB"
+    required_component="REQUIRED_TACTICAL_TACTICAL"
+    required_component="REQUIRED_WARP_8_COMBAT_SB"
+    required_component="REQUIRED_THRUSTERS_7A_SB"
+    required_component="REQUIRED_DEFENSE_6_SHIELD_B_SB"
+    required_component="REQUIRED_HULL_7B_SB"
+}

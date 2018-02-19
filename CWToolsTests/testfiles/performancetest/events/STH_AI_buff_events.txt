@@ -1,0 +1,92 @@
+########################
+#
+# AI buff events
+#
+# Written by Shaggo
+#
+########################
+
+namespace = AI_buff
+#### Dominion
+# country_event = {
+    # id = AI_buff.1
+    # hide_window = yes
+    # trigger = {
+        # is_ai = yes
+		# is_at_war = yes
+        # num_armies < 1
+		# NOT = { has_country_flag = ai_invasion_buff }
+    # }
+    # immediate = {
+        # every_owned_planet = {
+			# limit = { is_capital = yes }
+			# planet_event = { id = AI_buff.2 days = 2 }
+        # }
+		# set_timed_country_flag = { flag = ai_invasion_buff days = 360 }
+    # }
+# }
+
+#planet_event = {
+#    id = AI_buff.2
+#	title = "OK"
+#	desc = "OK"
+#	hide_window = yes
+#	is_triggered_only = yes
+#	immediate = {
+#		create_army = { name = random owner = owner species = owner type = "assault_army" }
+#		create_army = { name = random owner = owner species = owner type = "assault_army" }
+#		create_army = { name = random owner = owner species = owner type = "assault_army" }
+#		create_army = { name = random owner = owner species = owner type = "assault_army" }
+#		create_army = { name = random owner = owner species = owner type = "assault_army" }
+#		create_army = { name = random owner = owner species = owner type = "assault_army" }
+#		create_army = { name = random owner = owner species = owner type = "assault_army" }
+#		create_army = { name = random owner = owner species = owner type = "assault_army" }
+#		create_army = { name = random owner = owner species = owner type = "assault_army" }
+#		create_army = { name = random owner = owner species = owner type = "assault_army" }
+#	}
+#}
+
+country_event = {
+    id = AI_buff.10
+    hide_window = yes
+    trigger = {
+		NOT = { has_country_flag = buffed_borg_collective }
+		has_country_flag = borg_collective
+        is_ai = yes
+        years_passed > 100
+        num_pops < 150
+    }
+	immediate = {
+		capital_scope = { save_event_target_as = capital }
+		save_event_target_as = owner_country
+		create_fleet = { name = "Borg Invasion Force 1" }
+		last_created_fleet = {
+			set_owner = root
+			create_ship_design = { design = "Borg1" ftl = event_target:owner_country }
+			create_ship = { name = random design = last_created_design prefix = no }
+			create_ship = { name = random design = last_created_design prefix = no }
+			create_ship = { name = random design = last_created_design prefix = no }
+			create_ship = { name = random design = last_created_design prefix = no }
+			set_location = event_target:capital
+		}
+		create_fleet = { name = "Borg Invasion Force 2" }
+		last_created_fleet = {
+			set_owner = root
+			create_ship_design = { design = "Borg2" ftl = event_target:owner_country }
+			create_ship = { name = random design = last_created_design prefix = no }
+			create_ship = { name = random design = last_created_design prefix = no }
+			create_ship = { name = random design = last_created_design prefix = no }
+			create_ship = { name = random design = last_created_design prefix = no }
+			set_location = event_target:capital
+		}
+		create_fleet = { name = "Borg Invasion Force 3" }
+		last_created_fleet = {
+			set_owner = root
+			create_ship_design = { design = "Borg3" ftl = event_target:owner_country }
+			create_ship = { name = random design = last_created_design prefix = no }
+			create_ship = { name = random design = last_created_design prefix = no }
+			set_location = event_target:capital
+		}
+		set_timed_country_flag = { flag = buffed_borg_collective days = 1800 }
+	}
+}

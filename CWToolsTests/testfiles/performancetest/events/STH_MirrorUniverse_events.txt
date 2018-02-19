@@ -1,0 +1,2990 @@
+namespace = STH_MirrorUniverse_event
+
+# Set Mirror Universe Starting Conditions
+event = {
+	id = STH_MirrorUniverse_event.1
+	hide_window = yes
+	is_triggered_only = yes
+	trigger = { sth_mirror_maps = yes }
+	immediate = {
+		every_country = {
+			if = { limit = { has_country_flag = united_earth } become_terran_empire = yes }
+			if = { limit = { has_country_flag = romulan_star_empire } become_romulan_republic = yes }
+			if = { limit = { has_country_flag = ferengi_alliance } become_ferengi_cooperative = yes }
+			if = { limit = { has_country_flag = vulcan_high_command } become_vulcan_rebellion = yes }
+			if = { limit = { has_country_flag = andorian_empire } become_andorian_rebellion = yes }
+			if = { limit = { has_country_flag = tellarian_technocracy } become_tellarite_rebellion = yes }
+			if = { limit = { has_country_flag = klingon_empire } become_mirror_klingons = yes }
+			if = { limit = { has_country_flag = trill_republic } become_mirror_trills = yes }
+			if = { limit = { has_country_flag = cardassian_union } become_mirror_cardassians = yes }
+			if = { limit = { has_country_flag = benzarian_commonwealth } become_mirror_benzites = yes }
+			if = { limit = { has_country_flag = bolian_league } become_mirror_bolians = yes }
+			if = { limit = { has_country_flag = bajoran_republic } become_mirror_bajorans = yes }
+			if = { limit = { has_country_flag = the_dominion } become_mirror_dominion = yes }
+			if = { limit = { has_country_flag = the_borg_collective } become_mirror_borg = yes }
+			if = { limit = { has_country_flag = tholian_assembly } become_mirror_tholians = yes }
+			# if = {
+				# limit = { has_country_flag = terran_empire }
+				# save_global_event_target_as = terran_empire
+				# setup_terran_empire = yes
+				# if = { limit = { NOT = { has_country_flag = alien_rebellion_begun } } country_event = { id = STH_MirrorUniverse_event.4 days = 365 random = 365 } }
+			# }
+			if = {
+				limit = {
+					is_normal_country = yes
+					NOR = {
+						has_country_flag = mirror_universe_ethics
+						has_country_flag = united_earth
+						has_country_flag = romulan_star_empire
+						has_country_flag = ferengi_alliance
+						has_country_flag = vulcan_high_command
+						has_country_flag = andorian_empire
+						has_country_flag = tellarian_technocracy
+						has_country_flag = trill_republic
+						has_country_flag = cardassian_union
+						has_country_flag = benzarian_commonwealth
+						has_country_flag = bolian_league
+						has_country_flag = bajoran_republic
+						has_country_flag = the_dominion
+						has_country_flag = the_borg_collective
+						has_country_flag = tholian_assembly
+						has_country_flag = terran_empire
+					}
+				}
+				become_mirror_other = yes
+			}
+		}
+	}
+}
+
+# Set Mirror Universe opinions towards/from Terran Empire
+country_event = {
+	id = STH_MirrorUniverse_event.2
+	hide_window = yes
+	is_triggered_only = yes
+	trigger = { sth_mirror_maps = yes }
+	immediate = {
+		if = {
+			limit = {
+				has_country_flag = terran_empire
+				from = {
+					NOR = {
+						has_country_flag = vulcan_high_command
+						has_country_flag = vulcan_rebellion
+						has_country_flag = andorian_empire
+						has_country_flag = andorian_rebellion
+						has_country_flag = tellarian_technocracy
+						has_country_flag = tellarite_rebellion
+					}
+				}
+			}
+			add_opinion_modifier = {
+				modifier = opinion_terran_to_neighbours
+				who = from
+			}
+		}
+		if = {
+			limit = {
+				NOR = {
+					has_country_flag = vulcan_high_command
+					has_country_flag = vulcan_rebellion
+					has_country_flag = andorian_empire
+					has_country_flag = andorian_rebellion
+					has_country_flag = tellarian_technocracy
+					has_country_flag = tellarite_rebellion
+					has_country_flag = denobulan_unity
+				}
+				from = { has_country_flag = terran_empire }
+			}
+			add_opinion_modifier = {
+				modifier = opinion_terran_from_neighbours
+				who = from
+			}
+		}
+	}
+}
+
+#Rebellion Event Start
+country_event = {
+	id = STH_MirrorUniverse_event.4
+	title = "STH_MirrorUniverse_event.4.name"
+	desc = "STH_MirrorUniverse_event.4.desc"
+	picture = sth_GFX_evt_rebels_attack_empire
+	location = event_target:alien_rebellion_planet
+	trigger = {
+		has_country_flag = terran_empire
+		nor = {
+			has_country_flag = easy_mode
+			exists = event_target:alien_rebellion
+		}
+	}
+	is_triggered_only = yes
+	immediate = {
+		event_target:vulcan_colony = {
+			create_rebels = {
+				name = "Rebellion"
+				authority = auth_democratic
+				civics = random
+				species = event_target:vulcanSpecies
+				ethos = { ethic = "ethic_xenophile" ethic = "ethic_militarist" ethic = "ethic_egalitarian" }
+				flag = {
+					icon = { category = "trek" file = "Vulcan.dds" }
+					background = { category = "backgrounds" file = "00_solid.dds" }
+					colors = { "blue" "black" "null" "null" }
+				}
+				released_from_country = root
+				name_list = "Vulcan"
+				effect = {
+					save_global_event_target_as = alien_rebellion
+					set_country_flag = alien_rebellion
+					set_graphical_culture = vulcan_01
+					set_country_type = default
+					add_energy = 1000
+					add_minerals = 1000
+					event_target:vulcan_colony = {
+						set_owner = event_target:alien_rebellion
+						set_controller = event_target:alien_rebellion
+						save_event_target_as = alien_rebellion_planet
+					}
+					add_modifier = { modifier = em_rebel_advantage }
+					create_leader = { type = admiral species = event_target:vulcanSpecies name = random skill = random traits = { trait = random_trait trait = random_trait } }
+					last_created_leader = { save_event_target_as = alien_rebellion_leader }
+					assign_leader = event_target:alien_rebellion_leader
+				}
+			}
+			event_target:alien_rebellion = {
+				sth_effect_mu_start_rebel_war = yes
+				random_owned_planet = {
+					while = {
+						count = 4
+						create_army = { name = random owner = event_target:alien_rebellion species = event_target:vulcanSpecies type = defense_army }
+					}
+					while = {
+						count = 2
+						create_army = { name = random owner = event_target:alien_rebellion species = event_target:andorianSpecies type = defense_army }
+					}
+					while = {
+						count = 2
+						create_army = { name = random owner = event_target:alien_rebellion species = event_target:tellariteSpecies type = defense_army }
+					}
+					while = {
+						count = 2
+						create_army = { name = random owner = event_target:alien_rebellion species = event_target:orionSpecies type = defense_army }
+					}
+				}
+				create_leader = { type = general species = event_target:orionSpecies name = random skill = 100 }
+				create_fleet = { name = "Rebel Invasion Fleet" settings = { can_change_composition = no can_change_leader = no } }
+				last_created_fleet = {
+					set_owner = event_target:alien_rebellion
+					while = {
+						count = 5
+						create_army_transport = {
+							ship_name = "Rebel Invasion Force"
+							graphical_culture = vulcan_01
+							army_name = "Rebel Invasion Force"
+							army_type = assault_army
+							species = event_target:vulcanSpecies
+						}
+					}
+					while = {
+						count = 5
+						create_army_transport = {
+							ship_name = "Rebel Invasion Force"
+							graphical_culture = andorian_01
+							army_name = "Rebel Invasion Force"
+							army_type = assault_army
+							species = event_target:andorianSpecies
+						}
+					}
+					while = {
+						count = 5
+						create_army_transport = {
+							ship_name = "Rebel Invasion Force"
+							graphical_culture = tellarite_01
+							army_name = "Rebel Invasion Force"
+							army_type = assault_army
+							species = event_target:tellariteSpecies
+						}
+					}
+					assign_leader = last_created_leader
+					set_location = owner.capital_scope
+				}
+				create_leader = {
+					type = admiral
+					species = event_target:orionSpecies
+					name = random
+					skill = 100
+				}
+				create_fleet = {
+					name = "Rebel Defence Fleet"
+					settings = { can_change_composition = no can_change_leader = no }
+				}
+				last_created_fleet = {
+					sth_effect_mu_rebel_fleet_setup = yes
+					queue_actions = {
+						repeat = {
+							find_closest_planet = {
+								trigger = {
+									id = "rebeldef1.trigger.1"
+									is_planet = event_target:alien_rebellion.capital_scope
+								}
+								found_planet = {
+									orbit_planet = THIS
+									wait = {
+										duration = 200
+									}
+								}
+							}
+						}
+					}
+				}
+				create_leader = {
+					type = admiral
+					species = event_target:andorianSpecies
+					name = random
+					skill = 100
+				}
+				# need fix attack after retreat
+				create_fleet = {
+					name = "Kumari Attack Fleet"
+					settings = { can_change_composition = no can_change_leader = no }
+				}
+				last_created_fleet = {
+					create_ship = { name = "IGS Kumari" design = "Kumari" graphical_culture = "andorian_01" prefix = no }
+					last_created_ship = { set_ship_flag = "IGS_Kumari" }
+					sth_effect_mu_rebel_fleet_setup = yes
+					sth_effect_mu_rebel_fleet_logic = yes
+				}
+				create_leader = {
+					type = admiral
+					species = event_target:vulcanSpecies
+					name = random
+					skill = 100
+				}
+				create_fleet = {
+					name = "Seleya Attack Fleet"
+					settings = { can_change_composition = no can_change_leader = no }
+				}
+				last_created_fleet = {
+					create_ship = { name = "VSS Seleya" design = "Seleya" graphical_culture = "vulcan_01" prefix = no }
+					last_created_ship = { set_ship_flag = "VSS_Seleya" }
+					sth_effect_mu_rebel_fleet_setup = yes
+					sth_effect_mu_rebel_fleet_logic = yes
+				}
+				create_leader = {
+					type = admiral
+					species = event_target:tellariteSpecies
+					name = random
+					skill = 100
+				}
+				create_fleet = {
+					name = "Skev Attack Fleet"
+					settings = { can_change_composition = no can_change_leader = no }
+				}
+				last_created_fleet = {
+					create_ship = { name = "TV Skev" design = "Skev" graphical_culture = "tellarite_01" prefix = no }
+					last_created_ship = { set_ship_flag = "TV_Skev" }
+					sth_effect_mu_rebel_fleet_setup = yes
+					sth_effect_mu_rebel_fleet_logic = yes
+				}
+			}
+		}
+	}
+	option = {
+		name = "STH_MirrorUniverse_event.4.a"
+	}
+	option = {
+		name = "STH_MirrorUniverse_event.4.b"
+		event_target:alien_rebellion = {
+			set_player = root
+			hidden_effect = {
+				every_owned_fleet = {
+					clear_fleet_actions = this
+				}
+				remove_modifier = em_rebel_advantage
+				add_modifier = {
+					modifier = em_rebel_advantage
+					days = 3650
+				}
+			}
+		}
+	}
+}
+
+country_event = {
+	id = STH_MirrorUniverse_event.5
+	title = "STH_MirrorUniverse_event.5.name"
+	# strange
+	desc = {
+		trigger = { def_war_score_sum < 0 }
+		text = "STH_MirrorUniverse_event.5.desc_01"
+	}
+	desc = {
+		trigger = { def_war_score_sum > -1 }
+		text = "STH_MirrorUniverse_event.5.desc_02"
+	}
+	picture = sth_GFX_evt_tholian_base
+	trigger = {
+		has_country_flag = terran_empire
+		NOT = { has_country_flag = united_federation_of_planets }
+	}
+	immediate = {
+		random_country = {
+			limit = { has_country_flag = tholian_assembly }
+			save_global_event_target_as = tholian_assembly
+		}
+	}
+	is_triggered_only = yes
+	option = {
+		name = "STH_MirrorUniverse_event.5.a"
+		hidden_effect = {
+			setup_tholian_scout_mission = yes
+		}
+		begin_event_chain = { event_chain = "capture_defiant_chain" target = THIS }
+		enable_special_project = { name = "CAPTURE_DEFIANT_PROJECT_1" location = event_target:tholianScoutPos owner = root }
+	}
+	option = {
+		name = "STH_MirrorUniverse_event.5.b"
+		hidden_effect = {
+			country_event = { id = STH_MirrorUniverse_event.35 days = 365 random = 180 }
+		}
+	}
+}
+
+country_event = {
+	id = "STH_MirrorUniverse_event.6"
+	title = "STH_MirrorUniverse_event.6.name"
+	desc = "STH_MirrorUniverse_event.6.desc"
+	picture = sth_GFX_evt_defiant_in_base
+	location = event_target:tholianScoutPos
+	trigger = {
+		has_country_flag = terran_empire
+		NOT = { has_country_flag = united_federation_of_planets }
+	}
+	is_triggered_only = yes
+	option = {
+		name = "STH_MirrorUniverse_event.6.a"
+	}
+}
+
+ship_event = {
+	id = "STH_MirrorUniverse_event.7"
+	title = "STH_MirrorUniverse_event.7.name"
+	desc = "STH_MirrorUniverse_event.7.desc"
+	picture = sth_GFX_evt_tholian_destroyed
+	is_triggered_only = yes
+	immediate = {
+		random_country = {
+			limit = { has_country_flag = tholian_scout_faction }
+			every_owned_fleet = {
+				destroy_fleet = this
+			}
+		}
+	}
+	option = {
+		name = "STH_MirrorUniverse_event.7.a"
+		owner = { end_event_chain = "capture_defiant_chain" }
+		hidden_effect = {
+			owner = { country_event = { id = STH_MirrorUniverse_event.35 days = 365 random = 180 } }
+		}
+	}
+}
+
+country_event = {
+	id = "STH_MirrorUniverse_event.8"
+	title = "STH_MirrorUniverse_event.8.name"
+	desc = "STH_MirrorUniverse_event.8.desc"
+	picture = sth_GFX_evt_tholian_destroyed
+	trigger = {
+		fromfromfrom = {
+			has_ship_flag = tholianScoutShip
+		}
+	}
+	is_triggered_only = yes
+	option = {
+		name = "STH_MirrorUniverse_event.8.a"
+		end_event_chain = "capture_defiant_chain"
+		hidden_effect = {
+			country_event = { id = STH_MirrorUniverse_event.35 days = 365 random = 180 }
+		}
+	}
+}
+
+ship_event = {
+	id = "STH_MirrorUniverse_event.9"
+	title = "STH_MirrorUniverse_event.9.name"
+	desc = "STH_MirrorUniverse_event.9.desc"
+	picture = sth_GFX_evt_tholian_captured
+	is_triggered_only = yes
+	immediate = {
+		random_country = {
+			limit = { has_country_flag = tholian_scout_faction }
+			every_owned_fleet = {
+				destroy_fleet = this
+			}
+		}
+	}
+	option = {
+		name = "STH_MirrorUniverse_event.9.a"
+		hidden_effect = {
+			random_list = {
+				20 = { ship_event = { id = STH_MirrorUniverse_event.10 } }
+				56 = { ship_event = { id = STH_MirrorUniverse_event.11 } }
+				24 = { ship_event = { id = STH_MirrorUniverse_event.12 } }
+			}
+		}
+	}
+	option = {
+		name = "STH_MirrorUniverse_event.9.b"
+		hidden_effect = {
+			random_list = {
+				30 = { ship_event = { id = STH_MirrorUniverse_event.13 } }
+				70 = { ship_event = { id = STH_MirrorUniverse_event.14 } }
+			}
+		}
+	}
+}
+
+ship_event = {
+	id = "STH_MirrorUniverse_event.10"
+	title = "STH_MirrorUniverse_event.10.name"
+	desc = "STH_MirrorUniverse_event.10.desc"
+	picture = sth_GFX_evt_tholian_captured
+	is_triggered_only = yes
+	immediate = {
+		setup_tholian_base = yes
+	}
+	option = {
+		name = "STH_MirrorUniverse_event.10.a"
+		owner = { enable_special_project = { name = "CAPTURE_DEFIANT_PROJECT_2" location = event_target:tholianBasePos } }
+	}
+}
+
+ship_event = {
+	id = "STH_MirrorUniverse_event.11"
+	title = "STH_MirrorUniverse_event.11.name"
+	desc = "STH_MirrorUniverse_event.11.desc"
+	picture = sth_GFX_evt_tholian_torture
+	is_triggered_only = yes
+	location = event_target:tholianBasePos
+	immediate = {
+		setup_tholian_base = yes
+	}
+	option = {
+		name = "STH_MirrorUniverse_event.11.a"
+		owner = { enable_special_project = { name = "CAPTURE_DEFIANT_PROJECT_2" location = event_target:tholianBasePos } }
+	}
+}
+
+ship_event = {
+	id = "STH_MirrorUniverse_event.12"
+	title = "STH_MirrorUniverse_event.12.name"
+	desc = "STH_MirrorUniverse_event.12.desc"
+	picture = sth_GFX_evt_tholian_dead
+	is_triggered_only = yes
+	option = {
+		name = "STH_MirrorUniverse_event.12.a"
+		owner = { end_event_chain = "capture_defiant_chain" }
+		hidden_effect = {
+			owner = { country_event = { id = STH_MirrorUniverse_event.35 days = 180 random = 90 } }
+		}
+	}
+}
+
+ship_event = {
+	id = "STH_MirrorUniverse_event.13"
+	title = "STH_MirrorUniverse_event.13.name"
+	desc = "STH_MirrorUniverse_event.13.desc"
+	picture = sth_GFX_evt_tholian_dead
+	is_triggered_only = yes
+	option = {
+		name = "STH_MirrorUniverse_event.13.a"
+		owner = { end_event_chain = "capture_defiant_chain" }
+		hidden_effect = {
+			owner = { country_event = { id = STH_MirrorUniverse_event.35 days = 180 random = 90 } }
+		}
+	}
+}
+
+ship_event = {
+	id = "STH_MirrorUniverse_event.14"
+	title = "STH_MirrorUniverse_event.14.name"
+	desc = "STH_MirrorUniverse_event.14.desc"
+	picture = sth_GFX_evt_tholian_torture
+	is_triggered_only = yes
+	location = event_target:tholianBasePos
+	immediate = {
+		setup_tholian_base = yes
+	}
+	option = {
+		name = "STH_MirrorUniverse_event.14.a"
+		owner = { enable_special_project = { name = "CAPTURE_DEFIANT_PROJECT_2" location = event_target:tholianBasePos } }
+	}
+}
+
+country_event = {
+	id = "STH_MirrorUniverse_event.15"
+	title = "STH_MirrorUniverse_event.15.name"
+	desc = "STH_MirrorUniverse_event.15.desc"
+	picture = sth_GFX_evt_base_destroyed
+	trigger = {
+		fromfromfrom = {
+			has_ship_flag = tholianBaseStation
+		}
+	}
+	is_triggered_only = yes
+	option = {
+		name = "STH_MirrorUniverse_event.15.a"
+		end_event_chain = "capture_defiant_chain"
+	}
+}
+
+ship_event = {
+	id = "STH_MirrorUniverse_event.16"
+	title = "STH_MirrorUniverse_event.16.name"
+	desc = "STH_MirrorUniverse_event.16.desc"
+	picture = sth_GFX_evt_base_destroyed
+	is_triggered_only = yes
+	option = {
+		name = "STH_MirrorUniverse_event.16.a"
+		owner = { end_event_chain = "capture_defiant_chain" }
+	}
+}
+
+# broken event chain we need setup non global event targets again
+ship_event = {
+	id = "STH_MirrorUniverse_event.17"
+	title = "STH_MirrorUniverse_event.17.name"
+	desc = "STH_MirrorUniverse_event.17.desc"
+	picture = sth_GFX_evt_defiant_escape_base
+	is_triggered_only = yes
+	immediate = {
+		random_country = {
+			limit = { has_country_flag = tholian_base_faction }
+			random_owned_ship = {
+				limit = { has_ship_flag = tholianBaseStation }
+				save_event_target_as = tholianBasePos
+			}
+			every_owned_fleet = {
+				destroy_fleet = this
+			}
+		}
+		leader = {
+			set_leader_flag = defiant_leader
+			save_event_target_as = defiant_leader
+			add_trait = leader_trait_defiant_captain
+		} #Add failsafe to allow for no leader present?
+		create_fleet = {
+			name = "USS Defiant"
+			settings = { can_upgrade = no can_change_composition = no can_change_leader = no }
+		}
+		last_created_fleet = {
+			set_owner = root.owner
+			create_ship = { name = "USS Defiant" design = "Constitution" graphical_culture = "federation_02" prefix = no }
+			last_created_ship = { set_ship_flag = "USS_Defiant" }
+			assign_leader = event_target:defiant_leader
+			set_location = event_target:tholianBasePos
+		}
+		event_target:alien_rebellion = {
+			save_event_target_as = alien_rebellion
+			random_owned_pop = {
+				save_event_target_as = rebelAdmiralPop
+			}
+			create_leader = {
+				type = admiral
+				species = event_target:rebelAdmiralPop.species
+				name = random
+				skill = 100
+			}
+			create_fleet = {
+				name = "Rebel Defence Fleet"
+				settings = { can_change_composition = no can_change_leader = no }
+			}
+			last_created_fleet = {
+				set_owner = event_target:alien_rebellion
+				create_ship = { name = random design = "Kumari" graphical_culture = "andorian_01" prefix = no }
+				create_ship = { name = random design = "Andorian Attack Ship" graphical_culture = "andorian_01" prefix = no }
+				create_ship = { name = random design = "Andorian Attack Ship" graphical_culture = "andorian_01" prefix = no }
+				create_ship = { name = random design = "Seleya" graphical_culture = "vulcan_01" prefix = no }
+				create_ship = { name = random design = "Vulcan Attack Ship" graphical_culture = "vulcan_01" prefix = no }
+				create_ship = { name = random design = "Vulcan Attack Ship" graphical_culture = "vulcan_01" prefix = no }
+				create_ship = { name = random design = "Skev" graphical_culture = "tellarite_01" prefix = no }
+				create_ship = { name = random design = "Tellarite Attack Ship" graphical_culture = "tellarite_01" prefix = no }
+				create_ship = { name = random design = "Tellarite Attack Ship" graphical_culture = "tellarite_01" prefix = no }
+				assign_leader = last_created_leader
+				set_location = owner.capital_scope
+				set_fleet_stance = aggressive
+				set_aggro_range_measure_from = self
+				set_aggro_range = 150
+				# strange
+				queue_actions = {
+					repeat = {
+						find_closest_planet = {
+							trigger = {
+								id = "rebeldef2.trigger.1"
+								is_planet = event_target:alien_rebellion.capital_scope
+							}
+							found_planet = {
+								orbit_planet = THIS
+								wait = {
+									duration = 20
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+	option = {
+		name = "STH_MirrorUniverse_event.17.a"
+		owner = { enable_special_project = { name = "CAPTURE_DEFIANT_PROJECT_3" location = event_target:terran_empire.capital_scope } }
+		hidden_effect = {
+			ship_event = { id = STH_MirrorUniverse_event.18 }
+		}
+	}
+	option = {
+		name = "STH_MirrorUniverse_event.17.b"
+		owner = { enable_special_project = { name = "CAPTURE_DEFIANT_PROJECT_4" location = event_target:alien_rebellion.capital_scope } }
+		hidden_effect = {
+			ship_event = { id = STH_MirrorUniverse_event.19 }
+		}
+	}
+}
+
+ship_event = {
+	id = "STH_MirrorUniverse_event.18"
+	title = "STH_MirrorUniverse_event.18.name"
+	desc = "STH_MirrorUniverse_event.18.desc"
+	picture = sth_GFX_evt_defiant_earth
+	location = root
+	is_triggered_only = yes
+	option = {
+		name = "STH_MirrorUniverse_event.18.a"
+		hidden_effect = {
+			random_list = {
+				30 = { owner = { country_event = { id = STH_MirrorUniverse_event.20 days = 20 random = 10 } } }
+				30 = { owner = { country_event = { id = STH_MirrorUniverse_event.30 days = 20 random = 10 } } }
+				40 = { }
+			}
+		}
+	}
+}
+
+ship_event = {
+	id = "STH_MirrorUniverse_event.19"
+	title = "STH_MirrorUniverse_event.19.name"
+	desc = "STH_MirrorUniverse_event.19.desc"
+	picture = sth_GFX_evt_defiant_destroy_vulcans
+	is_triggered_only = yes
+	option = {
+		name = "STH_MirrorUniverse_event.19.a"
+		hidden_effect = {
+			owner = {
+				random_list = {
+					30 = { country_event = { id = STH_MirrorUniverse_event.25 days = 20 random = 10 } }
+					30 = { country_event = { id = STH_MirrorUniverse_event.30 days = 20 random = 10 } }
+					40 = { }
+				}
+			}
+		}
+	}
+}
+
+country_event = {
+	id = "STH_MirrorUniverse_event.20"
+	title = "STH_MirrorUniverse_event.20.name"
+	desc = "STH_MirrorUniverse_event.20.desc"
+	picture = sth_GFX_evt_renegade_mutiny
+	trigger = {
+		has_country_flag = terran_empire
+	}
+	is_triggered_only = yes
+	immediate = {
+		create_leader = { type = admiral species = owner_main_species name = random skill = random traits = { trait = random_trait trait = random_trait } }
+		last_created_leader = {
+			set_leader_flag = mutiny_leader
+			save_event_target_as = mutiny_leader
+			add_trait = leader_trait_defiant_captain
+		}
+	}
+	option = {
+		name = "STH_MirrorUniverse_event.20.a"
+		hidden_effect = {
+			random_list = {
+				70 = { country_event = { id = STH_MirrorUniverse_event.21 } }
+				30 = { country_event = { id = STH_MirrorUniverse_event.22 } }
+			}
+		}
+	}
+	option = {
+		name = "STH_MirrorUniverse_event.20.b"
+		hidden_effect = {
+			random_list = {
+				30 = { country_event = { id = STH_MirrorUniverse_event.23 } }
+				70 = { country_event = { id = STH_MirrorUniverse_event.24 } }
+			}
+		}
+	}
+}
+
+country_event = {
+	id = "STH_MirrorUniverse_event.21"
+	title = "STH_MirrorUniverse_event.21.name"
+	desc = "STH_MirrorUniverse_event.21.desc"
+	picture = sth_GFX_evt_renegade_mutiny
+	trigger = {
+		has_country_flag = terran_empire
+	}
+	is_triggered_only = yes
+	option = {
+		name = "STH_MirrorUniverse_event.21.a"
+		hidden_effect = {
+			random_owned_ship = {
+				limit = { has_ship_flag = USS_Defiant }
+				fleet = {
+					kill_leader = { type = admiral show_notification = no }
+					assign_leader = event_target:mutiny_leader
+				}
+			}
+		}
+		abort_special_project = { type = CAPTURE_DEFIANT_PROJECT_3 }
+		enable_special_project = { name = "CAPTURE_DEFIANT_PROJECT_4" location = event_target:alien_rebellion.capital_scope owner = root }
+	}
+}
+
+country_event = {
+	id = "STH_MirrorUniverse_event.22"
+	title = "STH_MirrorUniverse_event.22.name"
+	desc = "STH_MirrorUniverse_event.22.desc"
+	picture = sth_GFX_evt_loyalist_mutiny
+	trigger = {
+		has_country_flag = terran_empire
+	}
+	is_triggered_only = yes
+	option = {
+		name = "STH_MirrorUniverse_event.22.a"
+		hidden_effect = {
+			every_owned_leader = {
+				limit = { has_leader_flag = mutiny_leader }
+				kill_leader = { type = admiral show_notification = no }
+			}
+		}
+	}
+}
+
+country_event = {
+	id = "STH_MirrorUniverse_event.23"
+	title = "STH_MirrorUniverse_event.23.name"
+	desc = "STH_MirrorUniverse_event.23.desc"
+	picture = sth_GFX_evt_renegade_mutiny
+	trigger = {
+		has_country_flag = terran_empire
+	}
+	is_triggered_only = yes
+	option = {
+		name = "STH_MirrorUniverse_event.23.a"
+		hidden_effect = {
+			every_owned_ship = {
+				limit = { has_ship_flag = USS_Defiant }
+				fleet = {
+					kill_leader = { type = admiral show_notification = no }
+					assign_leader = event_target:mutiny_leader
+				}
+			}
+		}
+		abort_special_project = { type = CAPTURE_DEFIANT_PROJECT_3 }
+		enable_special_project = { name = "CAPTURE_DEFIANT_PROJECT_4" location = event_target:alien_rebellion.capital_scope owner = root }
+	}
+}
+
+country_event = {
+	id = "STH_MirrorUniverse_event.24"
+	title = "STH_MirrorUniverse_event.24.name"
+	desc = "STH_MirrorUniverse_event.24.desc"
+	picture = sth_GFX_evt_loyalist_mutiny
+	trigger = {
+		has_country_flag = terran_empire
+	}
+	is_triggered_only = yes
+	option = {
+		name = "STH_MirrorUniverse_event.24.a"
+		hidden_effect = {
+			every_owned_leader = {
+				limit = { has_leader_flag = mutiny_leader }
+				kill_leader = { type = admiral show_notification = no }
+			}
+		}
+	}
+}
+
+country_event = {
+	id = "STH_MirrorUniverse_event.25"
+	title = "STH_MirrorUniverse_event.25.name"
+	desc = "STH_MirrorUniverse_event.25.desc"
+	picture = sth_GFX_evt_loyalist_mutiny
+	trigger = {
+		has_country_flag = terran_empire
+	}
+	is_triggered_only = yes
+	immediate = {
+		create_leader = { type = admiral species = owner_main_species name = random skill = random traits = { trait = random_trait trait = random_trait } }
+		last_created_leader = {
+			set_leader_flag = mutiny_leader
+			save_event_target_as = mutiny_leader
+			add_trait = leader_trait_defiant_captain
+		}
+	}
+	option = {
+		name = "STH_MirrorUniverse_event.25.a"
+		hidden_effect = {
+			random_list = {
+				70 = { country_event = { id = STH_MirrorUniverse_event.26 } }
+				30 = { country_event = { id = STH_MirrorUniverse_event.27 } }
+			}
+		}
+	}
+	option = {
+		name = "STH_MirrorUniverse_event.25.b"
+		hidden_effect = {
+			random_list = {
+				30 = { country_event = { id = STH_MirrorUniverse_event.28 } }
+				70 = { country_event = { id = STH_MirrorUniverse_event.29 } }
+			}
+		}
+	}
+}
+
+country_event = {
+	id = "STH_MirrorUniverse_event.26"
+	title = "STH_MirrorUniverse_event.26.name"
+	desc = "STH_MirrorUniverse_event.26.desc"
+	picture = sth_GFX_evt_loyalist_mutiny
+	trigger = {
+		has_country_flag = terran_empire
+	}
+	is_triggered_only = yes
+	option = {
+		name = "STH_MirrorUniverse_event.26.a"
+		hidden_effect = {
+			every_owned_ship = {
+				limit = { has_ship_flag = USS_Defiant }
+				fleet = {
+					kill_leader = { type = admiral show_notification = no }
+					assign_leader = event_target:mutiny_leader
+				}
+			}
+		}
+		abort_special_project = { type = CAPTURE_DEFIANT_PROJECT_4 }
+		enable_special_project = { name = "CAPTURE_DEFIANT_PROJECT_3" location = event_target:terran_empire.capital_scope owner = root }
+	}
+}
+
+country_event = {
+	id = "STH_MirrorUniverse_event.27"
+	title = "STH_MirrorUniverse_event.27.name"
+	desc = "STH_MirrorUniverse_event.27.desc"
+	picture = sth_GFX_evt_renegade_mutiny
+	trigger = {
+		has_country_flag = terran_empire
+	}
+	is_triggered_only = yes
+	option = {
+		name = "STH_MirrorUniverse_event.27.a"
+		hidden_effect = {
+			every_owned_leader = {
+				limit = { has_leader_flag = mutiny_leader }
+				kill_leader = { type = admiral show_notification = no }
+			}
+		}
+	}
+}
+
+country_event = {
+	id = "STH_MirrorUniverse_event.28"
+	title = "STH_MirrorUniverse_event.28.name"
+	desc = "STH_MirrorUniverse_event.28.desc"
+	picture = sth_GFX_evt_loyalist_mutiny
+	trigger = {
+		has_country_flag = terran_empire
+	}
+	is_triggered_only = yes
+	option = {
+		name = "STH_MirrorUniverse_event.28.a"
+		hidden_effect = {
+			every_owned_ship = {
+				limit = { has_ship_flag = USS_Defiant }
+				fleet = {
+					kill_leader = { type = admiral show_notification = no }
+					assign_leader = event_target:mutiny_leader
+				}
+			}
+		}
+		abort_special_project = { type = CAPTURE_DEFIANT_PROJECT_4 }
+		enable_special_project = { name = "CAPTURE_DEFIANT_PROJECT_3" location = event_target:terran_empire.capital_scope owner = root }
+	}
+}
+
+country_event = {
+	id = "STH_MirrorUniverse_event.29"
+	title = "STH_MirrorUniverse_event.29.name"
+	desc = "STH_MirrorUniverse_event.29.desc"
+	picture = sth_GFX_evt_renegade_mutiny
+	trigger = {
+		has_country_flag = terran_empire
+	}
+	is_triggered_only = yes
+	option = {
+		name = "STH_MirrorUniverse_event.29.a"
+		hidden_effect = {
+			every_owned_leader = {
+				limit = { has_leader_flag = mutiny_leader }
+				kill_leader = { type = admiral show_notification = no }
+			}
+		}
+	}
+}
+
+country_event = {
+	id = "STH_MirrorUniverse_event.30"
+	title = "STH_MirrorUniverse_event.30.name"
+	desc = "STH_MirrorUniverse_event.30.desc"
+	picture = sth_GFX_evt_alien_mutiny
+	trigger = {
+		has_country_flag = terran_empire
+	}
+	is_triggered_only = yes
+	option = {
+		name = "STH_MirrorUniverse_event.30.a"
+		hidden_effect = {
+			random_list = {
+				70 = { country_event = { id = STH_MirrorUniverse_event.31 } }
+				30 = { country_event = { id = STH_MirrorUniverse_event.32 } }
+			}
+		}
+	}
+	option = {
+		name = "STH_MirrorUniverse_event.30.b"
+		hidden_effect = {
+			random_list = {
+				30 = { country_event = { id = STH_MirrorUniverse_event.33 } }
+				70 = { country_event = { id = STH_MirrorUniverse_event.34 } }
+			}
+		}
+	}
+}
+
+country_event = {
+	id = "STH_MirrorUniverse_event.31"
+	title = "STH_MirrorUniverse_event.31.name"
+	desc = "STH_MirrorUniverse_event.31.desc"
+	picture = sth_GFX_evt_alien_mutiny
+	trigger = {
+		has_country_flag = terran_empire
+	}
+	is_triggered_only = yes
+	option = {
+		name = "STH_MirrorUniverse_event.31.a"
+		end_event_chain = "capture_defiant_chain"
+		hidden_effect = {
+			every_owned_ship = {
+				limit = { has_ship_flag = USS_Defiant }
+				fleet = {
+					destroy_fleet = this
+				}
+			}
+		}
+	}
+}
+
+country_event = {
+	id = "STH_MirrorUniverse_event.32"
+	title = "STH_MirrorUniverse_event.32.name"
+	desc = "STH_MirrorUniverse_event.32.desc"
+	picture = sth_GFX_evt_loyalist_mutiny
+	trigger = {
+		has_country_flag = terran_empire
+	}
+	is_triggered_only = yes
+	option = {
+		name = "STH_MirrorUniverse_event.32.a"
+	}
+}
+
+country_event = {
+	id = "STH_MirrorUniverse_event.33"
+	title = "STH_MirrorUniverse_event.33.name"
+	desc = "STH_MirrorUniverse_event.33.desc"
+	picture = sth_GFX_evt_alien_mutiny
+	trigger = {
+		has_country_flag = terran_empire
+	}
+	is_triggered_only = yes
+	option = {
+		name = "STH_MirrorUniverse_event.33.a"
+		end_event_chain = "capture_defiant_chain"
+		hidden_effect = {
+			every_owned_ship = {
+				limit = { has_ship_flag = USS_Defiant }
+				fleet = {
+					destroy_fleet = this
+				}
+			}
+		}
+	}
+}
+
+country_event = {
+	id = "STH_MirrorUniverse_event.34"
+	title = "STH_MirrorUniverse_event.34.name"
+	desc = "STH_MirrorUniverse_event.34.desc"
+	picture = sth_GFX_evt_renegade_mutiny
+	trigger = {
+		has_country_flag = terran_empire
+	}
+	is_triggered_only = yes
+	option = {
+		name = "STH_MirrorUniverse_event.34.a"
+	}
+}
+
+country_event = {
+	id = "STH_MirrorUniverse_event.35"
+	title = "STH_MirrorUniverse_event.35.name"
+	desc = "STH_MirrorUniverse_event.35.desc"
+	picture = sth_GFX_evt_tholian_base
+	is_triggered_only = yes
+	immediate = {
+		setup_tholian_base = yes
+	}
+	option = {
+		name = "STH_MirrorUniverse_event.35.a"
+		if = {
+			limit = { NOT = { has_event_chain = "capture_defiant_chain" } }
+			begin_event_chain = { event_chain = "capture_defiant_chain" target = THIS }
+		}
+		enable_special_project = { name = "CAPTURE_DEFIANT_PROJECT_2" location = event_target:tholianBasePos owner = root }
+	}
+}
+
+# unused event
+ship_event = {
+	id = "STH_MirrorUniverse_event.36"
+	title = "STH_MirrorUniverse_event.36.name"
+	desc = "STH_MirrorUniverse_event.36.desc"
+	picture = sth_GFX_evt_defiant_destroyed
+	is_triggered_only = yes
+	option = {
+		name = "STH_MirrorUniverse_event.36.a"
+		owner = { end_event_chain = "capture_defiant_chain" }
+		hidden_effect = {
+			random_country = {
+				limit = { has_country_flag = terran_empire }
+				every_owned_ship = {
+					limit = { has_ship_flag = USS_Defiant }
+					fleet = {
+						destroy_fleet = this
+					}
+				}
+			}
+		}
+	}
+}
+
+# unused event
+ship_event = {
+	id = "STH_MirrorUniverse_event.37"
+	title = "STH_MirrorUniverse_event.37.name"
+	desc = "STH_MirrorUniverse_event.37.desc"
+	picture = sth_GFX_evt_defiant_destroyed
+	is_triggered_only = yes
+	option = {
+		name = "STH_MirrorUniverse_event.37.a"
+		owner = { end_event_chain = "capture_defiant_chain" }
+		hidden_effect = {
+			random_country = {
+				limit = { has_country_flag = terran_empire }
+				every_owned_ship = {
+					limit = { has_ship_flag = USS_Defiant }
+					fleet = {
+						destroy_fleet = this
+					}
+				}
+			}
+		}
+	}
+}
+
+ship_event = {
+	id = "STH_MirrorUniverse_event.38"
+	title = "STH_MirrorUniverse_event.38.name"
+	desc = "STH_MirrorUniverse_event.38.desc"
+	picture = sth_GFX_evt_defiant_earth
+	is_triggered_only = yes
+	option = {
+		name = "STH_MirrorUniverse_event.38.a"
+		hidden_effect = {
+			ship_event = { id = STH_MirrorUniverse_event.39 }
+		}
+		owner = { enable_special_project = { name = "CAPTURE_DEFIANT_PROJECT_5" location = event_target:alien_rebellion.capital_scope } }
+	}
+}
+
+ship_event = {
+	id = "STH_MirrorUniverse_event.39"
+	title = "STH_MirrorUniverse_event.39.name"
+	desc = "STH_MirrorUniverse_event.39.desc"
+	picture = sth_GFX_evt_defiant_empire_rebels
+	is_triggered_only = yes
+	immediate = {
+	}
+	option = {
+		name = "STH_MirrorUniverse_event.39.a"
+	}
+}
+
+ship_event = {
+	id = "STH_MirrorUniverse_event.40"
+	title = "STH_MirrorUniverse_event.40.name"
+	desc = "STH_MirrorUniverse_event.40.desc"
+	picture = sth_GFX_evt_defiant_destroy_vulcans
+	is_triggered_only = yes
+	immediate = {
+		event_target:alien_rebellion = {
+			every_owned_fleet = {
+				destroy_fleet = this
+			}
+			every_owned_planet = {
+				random_owned_pop = {
+					limit = { NOT = { is_same_species = root.owner } }
+					kill_pop = yes
+				}
+				create_pop = {
+					species = root.owner
+				}
+				set_owner = root.owner
+			}
+		}
+	}
+	option = {
+		name = "STH_MirrorUniverse_event.40.a"
+		hidden_effect = {
+			random_country = {
+				limit = { has_country_flag = terran_empire }
+				every_owned_ship = {
+					limit = { has_ship_flag = USS_Defiant }
+					# remove_ship_flag = USS_Defiant
+					# delete_ship = this
+					fleet = {
+						set_location = event_target:terran_empire.capital_scope
+					}
+				}
+				# create_fleet = {
+				# name = "USS Defiant"
+				# settings = { can_upgrade = no can_change_composition = no can_change_leader = yes }
+				# }
+				# last_created_fleet = {
+				# set_owner = event_target:terran_empire
+				# create_ship = { name = "USS Defiant" design = "Constitution" graphical_culture = "federation_02" prefix = no }
+				# last_created_ship = { set_ship_flag = "USS_Defiant" }
+				# assign_leader = event_target:defiant_leader
+				# set_location = event_target:terran_empire.capital_scope
+				# }
+				remove_country_flag = alien_rebellion_begun
+				set_country_flag = alien_rebellion_crisis_completed
+			}
+		}
+		owner = { end_event_chain = "capture_defiant_chain" }
+	}
+}
+
+ship_event = {
+	id = "STH_MirrorUniverse_event.41"
+	title = "STH_MirrorUniverse_event.41.name"
+	desc = "STH_MirrorUniverse_event.41.desc"
+	picture = sth_GFX_evt_defiant_destroy_vulcans
+	is_triggered_only = yes
+	option = {
+		name = "STH_MirrorUniverse_event.41.a"
+		hidden_effect = {
+			ship_event = { id = STH_MirrorUniverse_event.42 }
+		}
+	}
+}
+
+ship_event = {
+	id = "STH_MirrorUniverse_event.42"
+	title = "STH_MirrorUniverse_event.42.name"
+	desc = "STH_MirrorUniverse_event.42.desc"
+	picture = sth_GFX_evt_defiant_earth
+	is_triggered_only = yes
+	immediate = {
+		event_target:alien_rebellion = {
+			every_owned_fleet = {
+				destroy_fleet = this
+			}
+			every_owned_planet = {
+				random_owned_pop = {
+					limit = { NOT = { is_same_species = root.owner } }
+					kill_pop = yes
+				}
+				create_pop = {
+					species = root.owner
+				}
+				set_owner = root.owner
+			}
+		}
+	}
+	option = {
+		name = "STH_MirrorUniverse_event.42.a"
+		owner = { enable_special_project = { name = "CAPTURE_DEFIANT_PROJECT_6" location = event_target:terran_empire.capital_scope } }
+	}
+	option = {
+		name = "STH_MirrorUniverse_event.42.b"
+		owner = { enable_special_project = { name = "CAPTURE_DEFIANT_PROJECT_7" location = event_target:terran_empire.capital_scope } }
+	}
+}
+
+ship_event = {
+	id = "STH_MirrorUniverse_event.43"
+	title = "STH_MirrorUniverse_event.43.name"
+	desc = "STH_MirrorUniverse_event.43.desc"
+	picture = sth_GFX_evt_empire_fleet
+	is_triggered_only = yes
+	option = {
+		name = "STH_MirrorUniverse_event.43.a"
+		hidden_effect = {
+			random_country = {
+				limit = { has_country_flag = terran_empire }
+				every_owned_ship = {
+					limit = { has_ship_flag = USS_Defiant }
+					# remove_ship_flag = USS_Defiant
+					# delete_ship = this
+					fleet = { set_location = event_target:terran_empire.capital_scope }
+				}
+				# create_fleet = {
+				# name = "USS Defiant"
+				# settings = { can_upgrade = no can_change_composition = no can_change_leader = yes }
+				# }
+				# last_created_fleet = {
+				# set_owner = event_target:terran_empire
+				# create_ship = { name = "USS Defiant" design = "Constitution" graphical_culture = "federation_02" prefix = no }
+				# last_created_ship = { set_ship_flag = "USS_Defiant" }
+				# assign_leader = last_created_leader
+				# set_location = event_target:terran_empire.capital_scope
+				# }
+				remove_country_flag = alien_rebellion_crisis
+				set_country_flag = alien_rebellion_crisis_completed
+			}
+		}
+		owner = { end_event_chain = "capture_defiant_chain" }
+	}
+}
+
+ship_event = {
+	id = "STH_MirrorUniverse_event.44"
+	title = "STH_MirrorUniverse_event.44.name"
+	desc = "STH_MirrorUniverse_event.44.desc"
+	picture = sth_GFX_evt_defiant_destroyed
+	is_triggered_only = yes
+	option = {
+		name = "STH_MirrorUniverse_event.44.a"
+		owner = { end_event_chain = "capture_defiant_chain" }
+		hidden_effect = {
+			random_country = {
+				limit = { has_country_flag = terran_empire }
+				every_owned_ship = {
+					limit = { has_ship_flag = USS_Defiant }
+					fleet = {
+						destroy_fleet = this
+					}
+				}
+			}
+		}
+	}
+}
+
+ship_event = {
+	id = "STH_MirrorUniverse_event.45"
+	title = "STH_MirrorUniverse_event.45.name"
+	desc = "STH_MirrorUniverse_event.45.desc"
+	picture = sth_GFX_evt_defiant_destroyed
+	is_triggered_only = yes
+	option = {
+		name = "STH_MirrorUniverse_event.45.a"
+		owner = { end_event_chain = "capture_defiant_chain" }
+		hidden_effect = {
+			random_country = {
+				limit = { has_country_flag = terran_empire }
+				every_owned_ship = {
+					limit = { has_ship_flag = USS_Defiant }
+					fleet = {
+						destroy_fleet = this
+					}
+				}
+			}
+		}
+	}
+}
+
+ship_event = {
+	id = "STH_MirrorUniverse_event.46"
+	title = "STH_MirrorUniverse_event.46.name"
+	desc = "STH_MirrorUniverse_event.46.desc"
+	picture = sth_GFX_evt_empire_fleet
+	is_triggered_only = yes
+	option = {
+		name = "STH_MirrorUniverse_event.46.a"
+		hidden_effect = {
+			random_country = {
+				limit = { has_country_flag = terran_empire }
+				remove_country_flag = alien_rebellion_crisis
+				set_country_flag = alien_rebellion_crisis_completed
+				assign_leader = event_target:defiant_leader
+				create_leader = { type = admiral species = owner_main_species name = random skill = random traits = { trait = random_trait trait = random_trait } }
+				every_owned_ship = {
+					limit = { has_ship_flag = USS_Defiant }
+					# remove_ship_flag = USS_Defiant
+					# delete_ship = this
+					fleet = { set_location = event_target:terran_empire.capital_scope }
+				}
+				# create_fleet = {
+				# name = "USS Defiant"
+				# settings = { can_upgrade = no can_change_composition = no can_change_leader = yes }
+				# }
+				# last_created_fleet = {
+				# set_owner = event_target:terran_empire
+				# create_ship = { name = "USS Defiant" design = "Constitution" graphical_culture = "federation_02" prefix = no }
+				# last_created_ship = { set_ship_flag = "USS_Defiant" }
+				# assign_leader = last_created_leader
+				# set_location = event_target:terran_empire.capital_scope
+				# }
+			}
+		}
+		owner = { end_event_chain = "capture_defiant_chain" }
+	}
+}
+
+country_event = {
+	id = "STH_MirrorUniverse_event.47"
+	title = "STH_MirrorUniverse_event.47.name"
+	desc = "STH_MirrorUniverse_event.47.desc"
+	picture = sth_GFX_evt_defiant_destroyed
+	trigger = {
+		fromfromfrom = {
+			has_ship_flag = USS_Defiant
+		}
+	}
+	is_triggered_only = yes
+	option = {
+		name = "STH_MirrorUniverse_event.47.a"
+		end_event_chain = "capture_defiant_chain"
+	}
+}
+
+country_event = {
+	id = "STH_MirrorUniverse_event.48"
+	title = "STH_MirrorUniverse_event.48.name"
+	desc = "STH_MirrorUniverse_event.48.desc"
+	picture = sth_GFX_evt_defiant_destroyed
+	trigger = {
+		OR = {
+			has_country_flag = vulcan_rebellion
+			has_country_flag = andorian_rebellion
+			has_country_flag = tellarite_rebellion
+			has_country_flag = alien_rebellion
+		}
+		from = {
+			has_country_flag = terran_empire
+		}
+	}
+	immediate = {
+
+	}
+	is_triggered_only = yes
+	option = { name = "STH_MirrorUniverse_event.48.a" }
+}
+
+# Alliance conditions on_yearly_pulse
+event = {
+	id = "STH_MirrorUniverse_event.50"
+	hide_window = yes
+	is_triggered_only = yes
+	trigger = {
+		not = {
+			has_global_flag = sth_has_event_STH_MirrorUniverse_event.50
+		}
+		years_passed > 99
+		any_country = {
+			or = {
+				and = {
+					has_country_flag = mirror_klingon_empire
+					is_ai = yes
+				}
+				and = {
+					has_country_flag = mirror_cardassian_union
+					is_ai = yes
+				}
+			}
+		}
+		any_country = {
+			NOR = {
+				has_country_flag = mirror_klingon_cardassian_alliance
+				has_country_flag = hebitian_union
+				has_country_flag = hebitian_country
+			}
+		}
+		any_country = { has_country_flag = terran_empire }
+		any_country = { has_country_flag = mirror_cardassian_union }
+		any_country = { has_country_flag = mirror_klingon_empire }
+	}
+	immediate = {
+		random_country = {
+			limit = { has_country_flag = mirror_klingon_empire }
+			save_event_target_as = mirror_klingon_empire
+		}
+		random_country = {
+			limit = { has_country_flag = mirror_cardassian_union }
+			save_event_target_as = mirror_cardassian_union
+		}
+		# union start from player if any
+		if = {
+			limit = {
+				any_country = {
+					is_ai = no
+					or = {
+						has_country_flag = mirror_klingon_empire
+						has_country_flag = mirror_cardassian_union
+					}
+				}
+			}
+			random_country = {
+				limit = {
+					is_ai = no
+					or = {
+						has_country_flag = mirror_klingon_empire
+						has_country_flag = mirror_cardassian_union
+					}
+				}
+				save_event_target_as = sth_union_starter
+			}
+			else = {
+				random_country = {
+					limit = {
+						or = {
+							has_country_flag = mirror_klingon_empire
+							has_country_flag = mirror_cardassian_union
+						}
+					}
+					save_event_target_as = sth_union_starter
+				}
+			}
+		}
+		event_target:sth_union_starter = {
+			if = {
+				limit = {
+					has_country_flag = mirror_klingon_empire
+					has_established_contact = event_target:terran_empire
+					has_established_contact = event_target:mirror_cardassian_union
+					OR = {
+						relative_power = { who = event_target:terran_empire category = fleet value = inferior }
+						relative_power = { who = event_target:terran_empire category = fleet value = pathetic }
+					}
+				}
+				event_target:mirror_klingon_empire = {
+					country_event = {
+						id = STH_MirrorUniverse_event.52
+						days = 1
+						random = 360
+					}
+					set_global_flag = sth_has_event_STH_MirrorUniverse_event.50
+				}
+			}
+			if = {
+				limit = {
+					has_country_flag = mirror_cardassian_union
+					has_established_contact = event_target:terran_empire
+					has_established_contact = event_target:mirror_klingon_empire
+					OR = {
+						relative_power = { who = event_target:terran_empire category = fleet value = inferior }
+						relative_power = { who = event_target:terran_empire category = fleet value = pathetic }
+					}
+				}
+				event_target:mirror_cardassian_union = {
+					country_event = {
+						id = STH_MirrorUniverse_event.52
+						days = 1
+						random = 360
+					}
+					set_global_flag = sth_has_event_STH_MirrorUniverse_event.50
+				}
+			}
+		}
+	}
+}
+
+# (Klingon) Alliance initial concept
+country_event = {
+	id = "STH_MirrorUniverse_event.51"
+	title = "STH_MirrorUniverse_event.51.name"
+	desc = "STH_MirrorUniverse_event.51.desc"
+	picture = sth_GFX_evt_alliance_logo
+	is_triggered_only = yes
+	option = {
+		name = "STH_MirrorUniverse_event.51.a"
+		ai_chance = { factor = 90 }
+		hidden_effect = {
+			event_target:mirror_cardassian_union = {
+				country_event = { id = STH_MirrorUniverse_event.54 days = 10 }
+			}
+		}
+	}
+	option = {
+		name = "STH_MirrorUniverse_event.51.b"
+		ai_chance = { factor = 10 }
+	}
+}
+
+# (Cardassian) Alliance initial concept
+country_event = {
+	id = "STH_MirrorUniverse_event.52"
+	title = "STH_MirrorUniverse_event.52.name"
+	desc = "STH_MirrorUniverse_event.52.desc"
+	picture = sth_GFX_evt_alliance_logo
+	is_triggered_only = yes
+	option = {
+		name = "STH_MirrorUniverse_event.52.a"
+		ai_chance = { factor = 90 }
+		hidden_effect = {
+			event_target:mirror_klingon_empire = {
+				country_event = { id = STH_MirrorUniverse_event.53 days = 10 }
+			}
+		}
+	}
+	option = {
+		name = "STH_MirrorUniverse_event.52.b"
+		ai_chance = { factor = 10 }
+	}
+}
+
+# (Klingon) Alliance offer
+country_event = {
+	id = "STH_MirrorUniverse_event.53"
+	title = "STH_MirrorUniverse_event.53.name"
+	desc = "STH_MirrorUniverse_event.53.desc"
+	picture = sth_GFX_evt_alliance_logo
+	is_triggered_only = yes
+	option = {
+		name = "STH_MirrorUniverse_event.53.a"
+		ai_chance = { factor = 90 }
+		hidden_effect = {
+			event_target:mirror_cardassian_union = {
+				country_event = { id = STH_MirrorUniverse_event.56 days = 10 }
+			}
+		}
+	}
+	option = {
+		name = "STH_MirrorUniverse_event.53.b"
+		ai_chance = { factor = 10 }
+		hidden_effect = {
+			event_target:mirror_cardassian_union = {
+				country_event = { id = STH_MirrorUniverse_event.58 days = 10 }
+			}
+		}
+	}
+}
+
+# (Cardassian) Alliance offer
+country_event = {
+	id = "STH_MirrorUniverse_event.54"
+	title = "STH_MirrorUniverse_event.54.name"
+	desc = "STH_MirrorUniverse_event.54.desc"
+	picture = sth_GFX_evt_alliance_logo
+	is_triggered_only = yes
+	option = {
+		name = "STH_MirrorUniverse_event.54.a"
+		ai_chance = { factor = 90 }
+		hidden_effect = {
+			event_target:mirror_klingon_empire = {
+				country_event = { id = STH_MirrorUniverse_event.55 days = 10 }
+			}
+		}
+	}
+	option = {
+		name = "STH_MirrorUniverse_event.54.b"
+		ai_chance = { factor = 10 }
+		hidden_effect = {
+			event_target:mirror_klingon_empire = {
+				country_event = { id = STH_MirrorUniverse_event.57 days = 10 }
+			}
+		}
+	}
+}
+
+# (Klingon) Alliance formed
+country_event = {
+	id = "STH_MirrorUniverse_event.55"
+	title = "STH_MirrorUniverse_event.55.name"
+	desc = "STH_MirrorUniverse_event.55.desc"
+	picture = sth_GFX_evt_alliance_logo
+	is_triggered_only = yes
+	option = {
+		name = "STH_MirrorUniverse_event.55.a"
+		hidden_effect = {
+			mirror_klingon_cardassian_alliance_formation = yes
+		}
+	}
+}
+
+# (Cardassian) Alliance formed
+country_event = {
+	id = "STH_MirrorUniverse_event.56"
+	title = "STH_MirrorUniverse_event.56.name"
+	desc = "STH_MirrorUniverse_event.56.desc"
+	picture = sth_GFX_evt_alliance_logo
+	is_triggered_only = yes
+	option = {
+		name = "STH_MirrorUniverse_event.56.a"
+		hidden_effect = {
+			mirror_klingon_cardassian_alliance_formation = yes
+		}
+	}
+}
+
+# (Klingon) Alliance rejected
+country_event = {
+	id = "STH_MirrorUniverse_event.57"
+	title = "STH_MirrorUniverse_event.57.name"
+	desc = "STH_MirrorUniverse_event.57.desc"
+	picture = sth_GFX_evt_alliance_logo
+	is_triggered_only = yes
+	immediate = {
+		declare_war = { who = event_target:cardassian_union major_war = yes name = "Klingon-Cardassian War" }
+		add_war_demand = { type = "cede_planet" parameter:planet = event_target:cardassian_union.capital_scope warscore_cost = 100 target = this enemy = event_target:cardassian_union }
+		event_target:cardassian_union = { add_war_demand = { type = "cede_planet" parameter:planet = root.capital_scope warscore_cost = 100 target = this enemy = root } }
+	}
+	option = { name = "STH_MirrorUniverse_event.57.a" }
+}
+
+# (Cardassian) Alliance rejected
+country_event = {
+	id = "STH_MirrorUniverse_event.58"
+	title = "STH_MirrorUniverse_event.58.name"
+	desc = "STH_MirrorUniverse_event.58.desc"
+	picture = sth_GFX_evt_alliance_logo
+	is_triggered_only = yes
+	immediate = {
+		declare_war = { who = event_target:klingon_empire major_war = yes name = "Klingon-Cardassian War" }
+		add_war_demand = { type = "cede_planet" parameter:planet = event_target:klingon_empire.capital_scope warscore_cost = 100 target = this enemy = event_target:klingon_empire }
+		event_target:klingon_empire = { add_war_demand = { type = "cede_planet" parameter:planet = root.capital_scope warscore_cost = 100 target = this enemy = root } }
+	}
+	option = { name = "STH_MirrorUniverse_event.58.a" }
+}
+
+# Alliance formed (Terran)
+country_event = {
+	id = "STH_MirrorUniverse_event.59"
+	title = "STH_MirrorUniverse_event.59.name"
+	desc = "STH_MirrorUniverse_event.59.desc"
+	picture = sth_GFX_evt_alliance_logo
+	is_triggered_only = yes
+	trigger = {
+		has_country_flag = terran_empire
+	}
+	option = { name = "STH_MirrorUniverse_event.59.a" }
+}
+
+# Alliance formed (Non-Terran)
+country_event = {
+	id = "STH_MirrorUniverse_event.60"
+	title = "STH_MirrorUniverse_event.60.name"
+	desc = "STH_MirrorUniverse_event.60.desc"
+	picture = sth_GFX_evt_alliance_logo
+	is_triggered_only = yes
+	trigger = {
+		NOR = {
+			has_country_flag = mirror_cardassian_union
+			has_country_flag = terran_empire
+			has_country_flag = mirror_klingon_empire
+		}
+	}
+	option = { name = "STH_MirrorUniverse_event.60.a" }
+}
+
+# Alien Rebellion aftermath (Terran victory) conditions
+country_event = {
+	id = "STH_MirrorUniverse_event.61"
+	hide_window = yes
+	trigger = {
+		has_country_flag = alien_rebellion_crisis_completed
+		has_country_flag = terran_empire
+		NOR = {
+			has_country_flag = vulcans_freed
+			has_country_flag = andorians_freed
+			has_country_flag = tellarites_freed
+			has_country_flag = alien_rebellion_crisis_aftermath
+		}
+	}
+	mean_time_to_happen = {
+		days = 1
+	}
+	immediate = {
+		country_event = { id = STH_MirrorUniverse_event.62 days = 1460 random = 730 }
+		set_country_flag = alien_rebellion_crisis_aftermath
+	}
+}
+
+# Alien Rebellion aftermath (Terran victory)
+country_event = {
+	id = "STH_MirrorUniverse_event.62"
+	title = "STH_MirrorUniverse_event.62.name"
+	desc = "STH_MirrorUniverse_event.62.desc"
+	picture = sth_GFX_evt_empire_fleet
+	is_triggered_only = yes
+	trigger = {
+		has_country_flag = terran_empire
+	}
+	option = {
+		name = "STH_MirrorUniverse_event.62.a"
+		hidden_effect = { country_event = { id = STH_MirrorUniverse_event.63 days = 90 random = 90 } }
+	}
+	option = {
+		name = "STH_MirrorUniverse_event.62.b"
+		hidden_effect = { country_event = { id = STH_MirrorUniverse_event.64 days = 90 random = 90 } }
+	}
+	option = {
+		name = "STH_MirrorUniverse_event.62.c"
+		hidden_effect = { country_event = { id = STH_MirrorUniverse_event.65 days = 90 random = 90 } }
+	}
+}
+
+# Vulcans freed by Terran Empire
+country_event = {
+	id = "STH_MirrorUniverse_event.63"
+	title = "STH_MirrorUniverse_event.63.name"
+	desc = "STH_MirrorUniverse_event.63.desc"
+	picture = sth_GFX_evt_alien_mutiny
+	is_triggered_only = yes
+	trigger = {
+		has_country_flag = terran_empire
+	}
+	option = {
+		name = "STH_MirrorUniverse_event.63.a"
+		hidden_effect = {
+			set_country_flag = vulcans_freed
+			remove_country_flag = alien_rebellion_crisis_aftermath
+		}
+		random_owned_pop = {
+			limit = { is_species = "Vulcan" }
+			set_citizenship_type = {
+				country = event_target:terran_empire
+				type = citizenship_full
+				cooldown = yes
+			}
+			set_living_standard  = {
+				country = event_target:terran_empire
+				type = living_standard_normal
+				cooldown = yes
+			}
+		}
+	}
+}
+
+# Andorians & Aenar freed by Terran Empire
+country_event = {
+	id = "STH_MirrorUniverse_event.64"
+	title = "STH_MirrorUniverse_event.64.name"
+	desc = "STH_MirrorUniverse_event.64.desc"
+	picture = sth_GFX_evt_andorianUshaan
+	is_triggered_only = yes
+	trigger = {
+		has_country_flag = terran_empire
+	}
+	option = {
+		name = "STH_MirrorUniverse_event.64.a"
+		name = "STH_MirrorUniverse_event.63.a"
+		hidden_effect = {
+			set_country_flag = andorians_freed
+			remove_country_flag = alien_rebellion_crisis_aftermath
+		}
+		random_owned_pop = {
+			limit = { is_species = "Andorian" }
+			set_citizenship_type = {
+				country = event_target:terran_empire
+				type = citizenship_full
+				cooldown = yes
+			}
+			set_living_standard  = {
+				country = event_target:terran_empire
+				type = living_standard_normal
+				cooldown = yes
+			}
+		}
+		random_owned_pop = {
+			limit = { is_species = "Aenar" }
+			set_citizenship_type = {
+				country = event_target:terran_empire
+				type = citizenship_full
+				cooldown = yes
+			}
+			set_living_standard  = {
+				country = event_target:terran_empire
+				type = living_standard_normal
+				cooldown = yes
+			}
+		}
+	}
+}
+
+# Tellarites freed by Terran Empire
+country_event = {
+	id = "STH_MirrorUniverse_event.65"
+	title = "STH_MirrorUniverse_event.65.name"
+	desc = "STH_MirrorUniverse_event.65.desc"
+	picture = sth_GFX_evt_empire_fleet
+	is_triggered_only = yes
+	trigger = {
+		has_country_flag = terran_empire
+	}
+	option = {
+		name = "STH_MirrorUniverse_event.65.a"
+		name = "STH_MirrorUniverse_event.63.a"
+		hidden_effect = {
+			set_country_flag = tellarites_freed
+			remove_country_flag = alien_rebellion_crisis_aftermath
+		}
+		random_owned_pop = {
+			limit = { is_species = "Tellarite" }
+			set_citizenship_type = {
+				country = event_target:terran_empire
+				type = citizenship_full
+				cooldown = yes
+			}
+			set_living_standard  = {
+				country = event_target:terran_empire
+				type = living_standard_normal
+				cooldown = yes
+			}
+		}
+	}
+}
+
+# Terran Empire "Mirror, Mirror" Event Chain (conditions) on_yearly_pulse
+event = {
+	id = "STH_MirrorUniverse_event.66"
+	hide_window = yes
+	is_triggered_only = yes
+	trigger = {
+		years_passed > 49
+		exists = event_target:terran_empire
+		event_target:terran_empire = {
+			has_country_flag = alien_rebellion_crisis_completed
+			OR = {
+				has_country_flag = vulcans_freed
+				has_country_flag = andorians_freed
+				has_country_flag = tellarites_freed
+			}
+			NOR = {
+				has_country_flag = mirrorMirror_event_prebegun
+				has_country_flag = mirrorMirror_event_begun
+				has_country_flag = mirrorMirror_event_finished
+			}
+		}
+	}
+	immediate = {
+		event_target:terran_empire = {
+			country_event = { id = STH_MirrorUniverse_event.67 days = 365 random = 365 }
+			set_country_flag = mirrorMirror_event_prebegun
+		}
+	}
+}
+
+# Terran Empire "Mirror, Mirror" Event Chain
+country_event = {
+	id = "STH_MirrorUniverse_event.67"
+	title = "STH_MirrorUniverse_event.67.name"
+	desc = "STH_MirrorUniverse_event.67.desc"
+	picture = sth_GFX_evt_empire_fleet
+	location = event_target:terran_mirrorMirror_colony_planet
+	is_triggered_only = yes
+	trigger = {
+		has_country_flag = terran_empire
+	}
+	immediate = {
+		capital_scope.solar_system = {
+			closest_system = {
+				min_steps = 10
+				limit = {
+					any_planet = {
+						is_colonizable = yes
+						has_anomaly = no
+						is_surveyed = {
+							who = ROOT
+							status = no
+						}
+					}
+					has_access_fleet = root
+					is_pirate_system = no
+					NOT = {
+						has_star_flag = hostile_system
+						has_star_flag = capital_system
+						is_star_class = sc_black_hole
+						exists = space_owner
+					}
+				}
+				save_global_event_target_as = terran_mirrorMirror_colony_system
+				set_star_flag = terran_mirrorMirror_colony_system
+				random_system_planet = {
+					limit = {
+						is_colonizable = yes
+						has_anomaly = no
+						is_surveyed = {
+							who = ROOT
+							status = no
+						}
+					}
+					save_global_event_target_as = terran_mirrorMirror_colony_planet
+					set_planet_flag = terran_mirrorMirror_colony_planet
+					surveyed = {
+						set_surveyed = yes
+						surveyor = ROOT
+					}
+					create_species = {
+						name = random
+						class = RANDOMTREK
+						portrait = random
+						homeworld = THIS
+						traits = {
+							trait = random_traits
+						}
+					}
+					last_created_species = {
+						save_global_event_target_as = terran_mirrorMirror_colony_species
+					}
+					create_country = {
+						name = random
+						authority = random
+						civics = {
+							civic = civic_increasing_urbanization
+							civic = civic_atmospheric_pollution
+						}
+						species = last_created_species
+						ethos = random
+						flag = random
+						type = primitive
+					}
+					last_created_country = {
+						set_graphical_culture = industrial_01
+						save_global_event_target_as = terran_mirrorMirror_colony_country
+						establish_communications_no_message = root
+						set_country_flag = terran_mirrorMirror_colony_country
+						random_list = {
+							25 = {
+								set_country_flag = industrial_age
+								set_primitive_age = industrial_age
+							}
+							25 = {
+								set_country_flag = machine_age
+								set_primitive_age = machine_age
+							}
+							25 = {
+								set_country_flag = atomic_age
+								set_primitive_age = atomic_age
+							}
+							25 = {
+								set_country_flag = early_space_age
+								set_primitive_age = early_space_age
+							}
+						}
+					}
+					create_colony = {
+						owner = last_created_country
+						species = last_created
+						ethos = owner
+					}
+					random_tile = {
+						limit = { has_building = "building_colony_shelter" }
+						remove_building = yes
+					}
+					every_tile = {
+						limit = {
+							has_blocker = yes
+						}
+						remove_blocker = yes
+					}
+					while = {
+						count = 3
+						random_tile = {
+							limit = {
+								has_blocker = no
+								has_building = no
+								has_grown_pop = no
+							}
+							set_blocker = tb_decrepit_dwellings
+							clear_deposits = yes
+							add_deposit = d_sr_dilithium_10_deposit
+						}
+						random_tile = {
+							limit = {
+								has_blocker = no
+								has_building = no
+								has_grown_pop = no
+							}
+							set_blocker = tb_failing_infrastructure
+							clear_deposits = yes
+							add_deposit = d_sr_dilithium_10_deposit
+						}
+					}
+					while = {
+						count = 5
+						random_tile = {
+							limit = {
+								has_blocker = no
+								has_grown_pop = no
+								has_growing_pop = no
+							}
+							create_pop = {
+								species = last_created
+							}
+						}
+					}
+					if = {
+						limit = {
+							last_created_country = {
+								OR = {
+									has_country_flag = machine_age
+									has_country_flag = atomic_age
+									has_country_flag = early_space_age
+								}
+							}
+						}
+						random_tile = {
+							limit = {
+								has_blocker = no
+								has_grown_pop = no
+								has_growing_pop = no
+							}
+							create_pop = {
+								species = last_created
+							}
+							clear_deposits = yes
+							add_deposit = d_sr_dilithium_10_deposit
+						}
+					}
+					if = {
+						limit = {
+							last_created_country = {
+								OR = {
+									has_country_flag = machine_age
+									has_country_flag = atomic_age
+									has_country_flag = early_space_age
+								}
+							}
+						}
+						random_tile = {
+							limit = {
+								has_blocker = no
+								has_building = no
+								has_grown_pop = yes
+							}
+							set_building = "building_primitive_factory"
+							add_deposit = d_mineral_deposit
+						}
+					}
+					if = {
+						limit = {
+							last_created_country = {
+								has_country_flag = early_space_age
+							}
+						}
+						random_tile = {
+							limit = {
+								has_blocker = no
+								has_grown_pop = no
+								has_growing_pop = no
+							}
+							create_pop = {
+								species = last_created
+							}
+						}
+					}
+					if = {
+						limit = {
+							last_created_country = {
+								has_country_flag = early_space_age
+							}
+						}
+						random_tile = {
+							limit = {
+								has_blocker = no
+								has_building = no
+								has_grown_pop = yes
+							}
+							set_building = "building_primitive_factory"
+							 add_deposit = d_mineral_deposit
+						}
+					}
+					while = {
+						count = 2
+						random_tile = {
+							limit = {
+								has_blocker = no
+								has_building = no
+								has_grown_pop = yes
+							}
+							set_building = "building_primitive_factory"
+							add_deposit = d_mineral_deposit
+						}
+					}
+					while = {
+						count = 4
+						random_tile = {
+							limit = {
+								has_blocker = no
+								has_building = no
+								has_grown_pop = yes
+							}
+							set_building = "building_primitive_farm"
+							 add_deposit = d_farmland_deposit
+						}
+					}
+					last_created_country = {
+						if = {
+							limit = { has_country_flag = industrial_age }
+							PREV = {
+								while = {
+									count = 4
+									create_army = {
+										name = "Industrial Army"
+										owner = last_created
+										species = last_created
+										type = "industrial_army"
+									}
+								}
+							}
+							break = yes
+						}
+						if = {
+							limit = { has_country_flag = machine_age }
+							PREV = {
+								while = {
+									count = 5
+									create_army = {
+										name = "Industrial Army"
+										owner = last_created
+										species = last_created
+										type = "industrial_army"
+									}
+								}
+							}
+							break = yes
+						}
+						if = {
+							limit = { has_country_flag = atomic_age }
+							PREV = {
+								while = {
+									count = 4
+									create_army = {
+										name = "Post-Atomic Army"
+										owner = last_created
+										species = last_created
+										type = "postatomic_army"
+									}
+								}
+							}
+							break = yes
+						}
+						if = {
+							limit = { has_country_flag = early_space_age }
+							PREV = {
+								while = {
+									count = 5
+									create_army = {
+										name = "Post-Atomic Army"
+										owner = last_created
+										species = last_created
+										type = "postatomic_army"
+									}
+								}
+								create_fleet = {
+									name = "NAME_Space_Station"
+									effect = {
+										set_owner = last_created_country
+										create_ship = {
+											name = "NAME_Space_Station"
+											design = "Space Station"
+										}
+										set_location = PREV
+									}
+								}
+							}
+							break = yes
+						}
+					}
+				}
+			}
+
+		}
+	}
+	option = {
+		name = "STH_MirrorUniverse_event.67.a"
+		hidden_effect = {
+			set_country_flag = mirrorMirror_event_begun
+		}
+		begin_event_chain = { event_chain = "terran_mirrorMirror_chain" target = THIS }
+		enable_special_project = { name = "TERRAN_MIRRORMIRROR_PROJECT_1" location = event_target:terran_mirrorMirror_colony_planet owner = root }
+	}
+}
+
+# Beam down to primitive colony
+ship_event = {
+	id = STH_MirrorUniverse_event.68
+	title = "STH_MirrorUniverse_event.68.name"
+	desc = "STH_MirrorUniverse_event.68.desc"
+	diplomatic = yes
+	picture_event_data = {
+		portrait = event_target:terran_mirrorMirror_colony_country
+		planet_background = event_target:terran_mirrorMirror_colony_country
+		graphical_culture = event_target:terran_mirrorMirror_colony_country
+		city_level = event_target:terran_mirrorMirror_colony_country
+		room = event_target:terran_mirrorMirror_colony_country
+	}
+	is_triggered_only = yes
+	immediate = {
+		fleet = {
+			leader = {
+				set_leader_flag = terran_mirrorMirror_captain
+				save_global_event_target_as = terran_mirrorMirror_captain
+			}
+		}
+	}
+	option = {
+		name = STH_MirrorUniverse_event.68.a
+		response_text = STH_MirrorUniverse_event.68.a.response
+		is_dialog_only = yes
+	}
+	option = {
+		name = STH_MirrorUniverse_event.68.b
+		response_text = STH_MirrorUniverse_event.68.b.response
+		is_dialog_only = yes
+	}
+	option = {
+		name = STH_MirrorUniverse_event.68.c
+		hidden_effect = { ship_event = { id = STH_MirrorUniverse_event.69 } }
+	}
+}
+
+# Transporter Accident
+ship_event = {
+	id = STH_MirrorUniverse_event.69
+	title = "STH_MirrorUniverse_event.69.name"
+	desc = "STH_MirrorUniverse_event.69.desc"
+	picture = sth_GFX_evt_mirrorMirror1
+	location = root
+	is_triggered_only = yes
+	immediate = {
+		owner = {
+			IF = {
+				limit = { has_country_flag = vulcans_freed }
+				create_leader = { type = admiral species = event_target:vulcanSpecies set_age = 25 name = random skill = random traits = { trait = random_trait trait = random_trait } }
+				last_created_leader = {
+					set_leader_flag = terran_mirrorMirror_first_officer
+					save_global_event_target_as = terran_mirrorMirror_first_officer
+					add_trait = leader_trait_terran_mirrorMirror_captain_1
+					exile_leader_as = terran_mirrorMirror_first_officer
+				}
+			}
+			IF = {
+				limit = { has_country_flag = tellarites_freed }
+				create_leader = { type = admiral species = event_target:tellariteSpecies set_age = 25 name = random skill = random traits = { trait = random_trait trait = random_trait } }
+				last_created_leader = {
+					set_leader_flag = terran_mirrorMirror_first_officer
+					save_global_event_target_as = terran_mirrorMirror_first_officer
+					add_trait = leader_trait_terran_mirrorMirror_captain_1
+					exile_leader_as = terran_mirrorMirror_first_officer
+				}
+			}
+			IF = {
+				limit = { has_country_flag = andorians_freed }
+				random_list = {
+					50 = {
+						create_leader = { type = admiral species = event_target:andorianSpecies set_age = 25 name = random skill = random traits = { trait = random_trait trait = random_trait } }
+						last_created_leader = {
+							set_leader_flag = terran_mirrorMirror_first_officer
+							save_global_event_target_as = terran_mirrorMirror_first_officer
+							add_trait = leader_trait_terran_mirrorMirror_captain_1
+							exile_leader_as = terran_mirrorMirror_first_officer
+						}
+					}
+					50 = {
+						create_leader = { type = admiral species = event_target:aenarSpecies name = random skill = random traits = { trait = random_trait trait = random_trait } }
+						last_created_leader = {
+							set_leader_flag = terran_mirrorMirror_first_officer
+							save_global_event_target_as = terran_mirrorMirror_first_officer
+							add_trait = leader_trait_terran_mirrorMirror_captain_1
+							exile_leader_as = terran_mirrorMirror_first_officer
+						}
+					}
+				}
+			}
+		}
+	}
+	option = {
+		name = "STH_MirrorUniverse_event.69.a"
+		hidden_effect = {
+			random_list = {
+				50 = {
+					ship_event = { id = STH_MirrorUniverse_event.70 days = 1 }
+				}
+			}
+		}
+	}
+	option = {
+		name = "STH_MirrorUniverse_event.69.b"
+		hidden_effect = {
+			random_list = {
+				50 = {
+					ship_event = { id = STH_MirrorUniverse_event.71 days = 1 }
+				}
+				50 = {
+					ship_event = { id = STH_MirrorUniverse_event.72 days = 1 }
+				}
+			}
+		}
+	}
+}
+
+# Confrontation
+ship_event = {
+	id = STH_MirrorUniverse_event.70
+	title = "STH_MirrorUniverse_event.70.name"
+	desc = "STH_MirrorUniverse_event.70.desc"
+	picture = sth_GFX_evt_mirrorMirror8
+	location = root
+	is_triggered_only = yes
+	option = {
+		name = "STH_MirrorUniverse_event.70.a"
+		hidden_effect = {
+			random_list = {
+				50 = {
+					ship_event = { id = STH_MirrorUniverse_event.73 days = 1 }
+				}
+				50 = {
+					ship_event = { id = STH_MirrorUniverse_event.74 days = 1 }
+				}
+			}
+		}
+	}
+	option = {
+		name = "STH_MirrorUniverse_event.70.b"
+		hidden_effect = {
+			random_list = {
+				50 = {
+					ship_event = { id = STH_MirrorUniverse_event.75 days = 1 }
+				}
+				50 = {
+					ship_event = { id = STH_MirrorUniverse_event.76 days = 1 }
+				}
+			}
+		}
+	}
+}
+
+# Attempted Mutiny
+ship_event = {
+	id = STH_MirrorUniverse_event.71
+	title = "STH_MirrorUniverse_event.71.name"
+	desc = "STH_MirrorUniverse_event.71.desc"
+	picture = sth_GFX_evt_mirrorMirror4
+	location = root
+	is_triggered_only = yes
+	option = {
+		name = "STH_MirrorUniverse_event.71.a"
+		hidden_effect = {
+			ship_event = { id = STH_MirrorUniverse_event.70 days = 1 }
+		}
+	}
+}
+
+# Disobeying Orders
+ship_event = {
+	id = STH_MirrorUniverse_event.72
+	title = "STH_MirrorUniverse_event.72.name"
+	desc = "STH_MirrorUniverse_event.72.desc"
+	picture = sth_GFX_evt_mirrorMirror3
+	location = root
+	is_triggered_only = yes
+	option = {
+		name = "STH_MirrorUniverse_event.72.a"
+		hidden_effect = {
+			ship_event = { id = STH_MirrorUniverse_event.70 days = 1 }
+		}
+	}
+}
+
+# Transporter Success
+ship_event = {
+	id = STH_MirrorUniverse_event.73
+	title = "STH_MirrorUniverse_event.73.name"
+	desc = "STH_MirrorUniverse_event.73.desc"
+	picture = sth_GFX_evt_mirrorMirror5
+	location = root
+	is_triggered_only = yes
+	option = {
+		name = "STH_MirrorUniverse_event.73.a"
+		hidden_effect = {
+			owner = { set_country_flag = mirrorMirror_event_influenced }
+			ship_event = { id = STH_MirrorUniverse_event.78 days = 1 }
+		}
+		fleet = {
+			leader = {
+				add_experience = 1000
+				add_trait = leader_trait_terran_mirrorMirror_captain_1
+			}
+		}
+	}
+}
+
+# Transporter Fail
+ship_event = {
+	id = STH_MirrorUniverse_event.74
+	title = "STH_MirrorUniverse_event.74.name"
+	desc = "STH_MirrorUniverse_event.74.desc"
+	picture = sth_GFX_evt_mirrorMirror6
+	location = root
+	is_triggered_only = yes
+	option = {
+		name = "STH_MirrorUniverse_event.74.a"
+		hidden_effect = {
+			fleet = {
+				kill_leader = {
+					type = admiral
+					show_notification = no
+				}
+				set_leader = terran_mirrorMirror_first_officer
+				leader = {
+					add_experience = 500
+					add_trait = leader_trait_terran_mirrorMirror_captain_1
+				}
+			}
+			owner = { set_country_flag = mirrorMirror_event_influenced }
+			ship_event = { id = STH_MirrorUniverse_event.77 days = 1 }
+		}
+	}
+}
+
+# Death
+ship_event = {
+	id = STH_MirrorUniverse_event.75
+	title = "STH_MirrorUniverse_event.75.name"
+	desc = "STH_MirrorUniverse_event.75.desc"
+	picture = sth_GFX_evt_mirrorMirror6
+	location = root
+	is_triggered_only = yes
+	option = {
+		name = "STH_MirrorUniverse_event.75.a"
+		hidden_effect = {
+			fleet = {
+				kill_leader = {
+					type = admiral
+					show_notification = no
+				}
+				set_leader = terran_mirrorMirror_first_officer
+				leader = {
+					add_experience = 500
+					add_trait = leader_trait_terran_mirrorMirror_captain_1
+				}
+			}
+			owner = { set_country_flag = mirrorMirror_event_loyal }
+			ship_event = { id = STH_MirrorUniverse_event.77 days = 1 }
+		}
+	}
+}
+
+# Escape
+ship_event = {
+	id = STH_MirrorUniverse_event.76
+	title = "STH_MirrorUniverse_event.76.name"
+	desc = "STH_MirrorUniverse_event.76.desc"
+	picture = sth_GFX_evt_mirrorMirror5
+	location = root
+	is_triggered_only = yes
+	option = {
+		name = "STH_MirrorUniverse_event.76.a"
+		hidden_effect = {
+			owner = { set_country_flag = mirrorMirror_event_loyal }
+			ship_event = { id = STH_MirrorUniverse_event.78 days = 1 }
+		}
+		fleet = {
+			leader = {
+				add_experience = 1000
+				add_trait = leader_trait_terran_mirrorMirror_captain_1
+			}
+		}
+	}
+}
+
+# Captain Dead, Ordered to Destroy Colony
+ship_event = {
+	id = STH_MirrorUniverse_event.77
+	title = "STH_MirrorUniverse_event.77.name"
+	desc = {
+		trigger = { owner = { has_country_flag = mirrorMirror_event_loyal } }
+		text = "STH_MirrorUniverse_event.77.desc_01"
+	}
+	desc = {
+		trigger = { owner = { has_country_flag = mirrorMirror_event_influenced } }
+		text = "STH_MirrorUniverse_event.77.desc_02"
+	}
+	picture = sth_GFX_evt_empire_fleet
+	location = root
+	is_triggered_only = yes
+	immediate = { leader = { save_event_target_as = leader } }
+	option = {
+		name = "STH_MirrorUniverse_event.77.a"
+		owner = { enable_special_project = { name = "TERRAN_MIRRORMIRROR_PROJECT_2" location = event_target:terran_mirrorMirror_colony_planet } }
+	}
+	option = {
+		trigger = { owner = { has_country_flag = mirrorMirror_event_influenced } }
+		name = "STH_MirrorUniverse_event.77.b"
+		owner = { enable_special_project = { name = "TERRAN_MIRRORMIRROR_PROJECT_3" location = event_target:terran_mirrorMirror_colony_planet } }
+	}
+}
+
+# Captain Alive, Ordered to Destroy Colony
+ship_event = {
+	id = STH_MirrorUniverse_event.78
+	title = "STH_MirrorUniverse_event.78.name"
+	desc = {
+		trigger = { owner = { has_country_flag = mirrorMirror_event_loyal } }
+		text = "STH_MirrorUniverse_event.78.desc_01"
+	}
+	desc = {
+		trigger = { owner = { has_country_flag = mirrorMirror_event_influenced } }
+		text = "STH_MirrorUniverse_event.78.desc_02"
+	}
+	picture = sth_GFX_evt_empire_fleet
+	location = root
+	is_triggered_only = yes
+	option = {
+		name = "STH_MirrorUniverse_event.78.a"
+		owner = { enable_special_project = { name = "TERRAN_MIRRORMIRROR_PROJECT_2" location = event_target:terran_mirrorMirror_colony_planet } }
+	}
+	option = {
+		trigger = { owner = { has_country_flag = mirrorMirror_event_influenced } }
+		name = "STH_MirrorUniverse_event.78.b"
+		hidden_effect = {
+			random_list = {
+				50 = {
+					ship_event = { id = STH_MirrorUniverse_event.79 days = 1 }
+				}
+				50 = {
+					ship_event = { id = STH_MirrorUniverse_event.80 days = 1 }
+				}
+			}
+		}
+	}
+}
+
+# Mutiny Failed
+ship_event = {
+	id = STH_MirrorUniverse_event.79
+	title = "STH_MirrorUniverse_event.79.name"
+	desc = "STH_MirrorUniverse_event.79.desc"
+	picture = sth_GFX_evt_empire_fleet
+	location = root
+	is_triggered_only = yes
+	option = {
+		name = "STH_MirrorUniverse_event.79.a"
+		owner = { enable_special_project = { name = "TERRAN_MIRRORMIRROR_PROJECT_2" location = event_target:terran_mirrorMirror_colony_planet } }
+	}
+}
+
+# Mutiny Suceeded
+ship_event = {
+	id = STH_MirrorUniverse_event.80
+	title = "STH_MirrorUniverse_event.80.name"
+	desc = "STH_MirrorUniverse_event.80.desc"
+	picture = sth_GFX_evt_empire_fleet
+	location = root
+	is_triggered_only = yes
+	option = {
+		name = "STH_MirrorUniverse_event.80.a"
+		owner = { enable_special_project = { name = "TERRAN_MIRRORMIRROR_PROJECT_3" location = event_target:terran_mirrorMirror_colony_planet } }
+		hidden_effect = {
+			fleet = {
+				kill_leader = {
+					type = admiral
+					show_notification = no
+				}
+				set_leader = terran_mirrorMirror_first_officer
+				leader = {
+					add_experience = 500
+					add_trait = leader_trait_terran_mirrorMirror_captain_1
+				}
+			}
+		}
+	}
+}
+
+# Colony Destroyed
+ship_event = {
+	id = STH_MirrorUniverse_event.81
+	title = "STH_MirrorUniverse_event.81.name"
+	desc = "STH_MirrorUniverse_event.81.desc"
+	picture = sth_GFX_evt_empire_fleet
+	location = root
+	is_triggered_only = yes
+	immediate = {
+		random_planet = {
+			limit = { has_planet_flag = terran_mirrorMirror_colony_planet }
+			event_target:terran_mirrorMirror_colony_country = {
+				every_owned_pop = {
+					kill_pop = yes
+				}
+			}
+			destroy_colony = { keep_buildings = no }
+			every_tile = { clear_deposits = yes }
+			change_pc = pc_nuked
+			random_tile = { set_blocker = "tb_radioactive_wasteland" }
+			random_tile = { set_blocker = "tb_radioactive_wasteland" }
+			random_tile = { set_blocker = "tb_bomb_crater" }
+			random_tile = { set_blocker = "tb_bomb_crater" }
+			random_tile = { set_blocker = "tb_city_ruins" }
+			random_tile = { set_blocker = "tb_city_ruins" }
+		}
+	}
+	option = {
+		name = "STH_MirrorUniverse_event.81.a"
+		owner = { end_event_chain = "terran_mirrorMirror_chain" }
+		hidden_effect = {
+			owner = {
+				remove_country_flag = mirrorMirror_event_prebegun
+				remove_country_flag = mirrorMirror_event_begun
+				if = { limit = { has_country_flag = mirrorMirror_event_influenced } remove_country_flag = mirrorMirror_event_influenced }
+				set_country_flag = mirrorMirror_event_finished
+				if = { limit = { NOT = { has_country_flag = mirrorMirror_event_loyal } } set_country_flag = mirrorMirror_event_loyal }
+			}
+		}
+	}
+}
+
+# Negotiated Surrender of Colony
+ship_event = {
+	id = STH_MirrorUniverse_event.82
+	title = "STH_MirrorUniverse_event.82.name"
+	desc = "STH_MirrorUniverse_event.82.desc"
+	picture = sth_GFX_evt_empire_fleet
+	location = root
+	is_triggered_only = yes
+	immediate = {
+		random_planet = {
+			limit = { has_planet_flag = terran_mirrorMirror_colony_planet }
+			set_owner = event_target:terran_empire
+			event_target:terran_empire = {
+				every_owned_pop = {
+					limit = { is_species = event_target:terran_mirrorMirror_colony_species}
+					set_citizenship_type = {
+						country = event_target:terran_empire
+						type = citizenship_slavery
+						cooldown = no
+					}
+					set_living_standard  = {
+						country = event_target:terran_empire
+						type = living_standard_subsistence
+						cooldown = no
+					}
+					set_slavery_type  = {
+						country = event_target:terran_empire
+						type = slavery_normal
+						cooldown = no
+					}
+				}
+			}
+		}
+		fleet = {
+			leader = {
+				if = {
+					limit = { has_trait = leader_trait_terran_mirrorMirror_captain_1 }
+					remove_trait = leader_trait_terran_mirrorMirror_captain_1
+					add_trait = leader_trait_terran_mirrorMirror_captain_2
+				}
+			}
+		}
+	}
+	option = {
+		name = "STH_MirrorUniverse_event.82.a"
+		owner = { end_event_chain = "terran_mirrorMirror_chain" }
+		hidden_effect = {
+			owner = {
+				remove_country_flag = mirrorMirror_event_prebegun
+				remove_country_flag = mirrorMirror_event_begun
+				if = { limit = { has_country_flag = mirrorMirror_event_loyal } remove_country_flag = mirrorMirror_event_loyal }
+				set_country_flag = mirrorMirror_event_finished
+				if = { limit = { NOT = { has_country_flag = mirrorMirror_event_influenced } } set_country_flag = mirrorMirror_event_influenced }
+			}
+		}
+	}
+}
+
+# Terran Empire initial civil war conditions
+country_event = {
+	id = "STH_MirrorUniverse_event.83"
+	hide_window = yes
+	trigger = {
+		has_country_flag = mirrorMirror_event_finished
+		has_country_flag = mirrorMirror_event_loyal
+		has_country_flag = terran_empire
+		NOR = {
+			has_country_flag = terran_first_civilwar_prebegun
+			has_country_flag = terran_first_civilwar_occured
+			has_country_flag = recent_civil_war
+		}
+		any_owned_planet = {
+			is_capital = no
+		}
+	}
+	mean_time_to_happen = {
+		months = 120
+	}
+	immediate = {
+		country_event = { id = STH_MirrorUniverse_event.84 }
+		set_country_flag = terran_first_civilwar_prebegun
+	}
+}
+
+# Terran Empire initial civil war begins
+country_event = {
+	id = STH_MirrorUniverse_event.84
+	title = "STH_MirrorUniverse_event.84.name"
+	desc = "STH_MirrorUniverse_event.84.desc"
+	picture = sth_GFX_evt_empire_fleet
+	is_triggered_only = yes
+	trigger = {
+		any_owned_planet = {
+			is_capital = no
+		}
+	}
+	immediate = {
+		random_owned_planet = {
+			limit = { NOT = { is_capital = yes } }
+			create_terran_rebel_country_1 = yes
+			last_created_country = { save_event_target_as = terran_rebel_1 }
+			save_event_target_as = terran_rebel_planet_1
+			solar_system = { save_event_target_as = terran_rebel_system_1 }
+			set_owner = last_created_country
+		}
+	}
+	option = {
+		name = "STH_MirrorUniverse_event.84.a"
+		hidden_effect = {
+			set_country_flag = terran_first_civilwar_occured
+			remove_country_flag = terran_first_civilwar_prebegun
+			set_timed_country_flag = { flag = recent_civil_war days = 7300 }
+		}
+	}
+}
+
+# Terran Empire subsequent civil wars conditions on_yearly_pulse
+event = {
+	id = "STH_MirrorUniverse_event.85"
+	hide_window = yes
+	is_triggered_only = yes
+	trigger = {
+		exists = event_target:terran_empire
+		event_target:terran_empire = {
+			has_country_flag = terran_first_civilwar_occured
+			has_country_flag = terran_empire
+			NOR = {
+				has_country_flag = terran_civilwar_prebegun
+				has_country_flag = recent_civil_war
+			}
+			any_owned_planet = {
+				is_capital = no
+				unrest > 50
+			}
+		}
+	}
+	immediate = {
+		event_target:terran_empire = {
+			random_list = {
+				30 = {
+					country_event = { id = STH_MirrorUniverse_event.86 }
+					set_country_flag = terran_civilwar_prebegun
+				}
+				30 = {
+					country_event = { id = STH_MirrorUniverse_event.87 }
+					set_country_flag = terran_civilwar_prebegun
+				}
+				30 = {
+					country_event = { id = STH_MirrorUniverse_event.88 }
+					set_country_flag = terran_civilwar_prebegun
+				}
+				10 = {
+					set_timed_country_flag = { flag = recent_civil_war days = 7300 }
+				}
+			}
+		}
+	}
+}
+
+# Terran Empire small civil war begins
+country_event = {
+	id = STH_MirrorUniverse_event.86
+	title = "STH_MirrorUniverse_event.86.name"
+	desc = "STH_MirrorUniverse_event.86.desc"
+	picture = sth_GFX_evt_empire_fleet
+	is_triggered_only = yes
+	trigger = {
+		any_owned_planet = {
+			is_capital = no
+			unrest > 50
+		}
+	}
+	immediate = {
+		random_owned_planet = {
+			limit = {
+				is_capital = no
+				unrest > 50
+			}
+			create_terran_rebel_country_1 = yes
+			last_created_country = { save_event_target_as = terran_rebel_1 }
+			save_event_target_as = terran_rebel_planet_1
+			solar_system = { save_event_target_as = terran_rebel_system_1 }
+			set_owner = last_created_country
+		}
+	}
+	option = {
+		name = "STH_MirrorUniverse_event.86.a"
+		hidden_effect = {
+			remove_country_flag = terran_civilwar_prebegun
+			set_timed_country_flag = { flag = recent_civil_war days = 7300 }
+		}
+	}
+}
+
+# Terran Empire medium civil war begins
+country_event = {
+	id = STH_MirrorUniverse_event.87
+	title = "STH_MirrorUniverse_event.87.name"
+	desc = "STH_MirrorUniverse_event.87.desc"
+	picture = sth_GFX_evt_empire_fleet
+	is_triggered_only = yes
+	trigger = {
+		any_owned_planet = {
+			is_capital = no
+			unrest > 50
+			count > 1
+		}
+	}
+	immediate = {
+		random_owned_planet = {
+			limit = {
+				is_capital = no
+				unrest > 50
+			}
+			create_terran_rebel_country_1 = yes
+			last_created_country = { save_event_target_as = terran_rebel_1 }
+			save_event_target_as = terran_rebel_planet_1
+			solar_system = { save_event_target_as = terran_rebel_system_1 }
+			set_owner = last_created_country
+			set_timed_planet_flag = {
+				flag = sth_terran_revolt
+				days = 1
+			}
+		}
+		random_owned_planet = {
+			limit = {
+				is_capital = no
+				unrest > 50
+				not = {
+					has_planet_flag = sth_terran_revolt
+				}
+			}
+			create_terran_rebel_country_2 = yes
+			last_created_country = { save_event_target_as = terran_rebel_2 }
+			save_event_target_as = terran_rebel_planet_2
+			solar_system = { save_event_target_as = terran_rebel_system_2 }
+			set_owner = last_created_country
+		}
+	}
+	option = {
+		name = "STH_MirrorUniverse_event.87.a"
+		hidden_effect = {
+			remove_country_flag = terran_civilwar_prebegun
+			set_timed_country_flag = { flag = recent_civil_war days = 7300 }
+		}
+	}
+}
+
+# Terran Empire large civil war begins
+country_event = {
+	id = STH_MirrorUniverse_event.88
+	title = "STH_MirrorUniverse_event.88.name"
+	desc = "STH_MirrorUniverse_event.88.desc"
+	picture = sth_GFX_evt_empire_fleet
+	is_triggered_only = yes
+	trigger = {
+		any_owned_planet = {
+			is_capital = no
+			unrest > 50
+			count > 2
+		}
+	}
+	immediate = {
+		random_owned_planet = {
+			limit = {
+				is_capital = no
+				unrest > 50
+			}
+			create_terran_rebel_country_1 = yes
+			last_created_country = { save_event_target_as = terran_rebel_1 }
+			save_event_target_as = terran_rebel_planet_1
+			solar_system = { save_event_target_as = terran_rebel_system_1 }
+			set_owner = last_created_country
+			set_timed_planet_flag = {
+				flag = sth_terran_revolt
+				days = 1
+			}
+		}
+		random_owned_planet = {
+			limit = {
+				is_capital = no
+				unrest > 50
+				not = {
+					has_planet_flag = sth_terran_revolt
+				}
+			}
+			create_terran_rebel_country_2 = yes
+			last_created_country = { save_event_target_as = terran_rebel_2 }
+			save_event_target_as = terran_rebel_planet_2
+			solar_system = { save_event_target_as = terran_rebel_system_2 }
+			set_owner = last_created_country
+			set_timed_planet_flag = {
+				flag = sth_terran_revolt
+				days = 1
+			}
+		}
+		random_owned_planet = {
+			limit = {
+				is_capital = no
+				unrest > 50
+				not = {
+					has_planet_flag = sth_terran_revolt
+				}
+			}
+			create_terran_rebel_country_3 = yes
+			last_created_country = { save_event_target_as = terran_rebel_3 }
+			save_event_target_as = terran_rebel_planet_3
+			solar_system = { save_event_target_as = terran_rebel_system_3 }
+			set_owner = last_created_country
+		}
+	}
+	option = {
+		name = "STH_MirrorUniverse_event.88.a"
+		hidden_effect = {
+			remove_country_flag = terran_civilwar_prebegun
+			set_timed_country_flag = { flag = recent_civil_war days = 7300 }
+		}
+	}
+}

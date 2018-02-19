@@ -1,0 +1,279 @@
+#########################################
+#
+# Hero Ship Events (NX-01 Refit for now)
+#
+# Written by Oninoni
+#
+#########################################
+
+namespace = STH_hero_ship
+
+
+##NX Alpha and Beta programmes
+country_event = {
+    id = STH_hero_ship.6
+	title = "STH_hero_ship.6.name"
+	desc = { 
+		text = "STH_hero_ship.6.desc_01" 
+	}
+	picture = sth_GFX_evt_nxAlpha
+	fire_only_once = yes
+	trigger = {
+		has_country_flag = united_earth
+		years_passed > 0
+		years_passed < 4
+	}
+	mean_time_to_happen = { months = 3 }
+	option = { 
+		name = STH_hero_ship.6.a
+		country_event = { id = STH_hero_ship.7 days = 360 random = 45 }
+	}
+}
+country_event = {
+    id = STH_hero_ship.7
+	title = "STH_hero_ship.7.name"
+	desc = { 
+		text = "STH_hero_ship.7.desc_01" 
+	}
+	picture = sth_GFX_evt_nxBeta
+    is_triggered_only = yes
+	option = { 
+		name = STH_hero_ship.7.a
+	}
+}
+##
+
+
+#Spawn NX-01
+planet_event = {
+    id = STH_hero_ship.0
+    hide_window = yes
+    is_triggered_only = yes
+    immediate = {
+        owner = {
+            create_fleet = { name = "Enterprise" }
+            last_created_fleet = {
+                set_owner = root.owner
+                create_ship = { name = "Enterprise" design = "NX-01" graphical_culture = "hero_ships_01" prefix = no }
+                last_created_ship = {
+                    set_ship_flag = hero_ship
+                    set_ship_flag = nx-01
+                    add_modifier = { modifier = "herobuff_ent" }
+                    #ship_event = { id = STH_hero_ship.1 days = 720 }
+                    ship_event = { id = STH_hero_ship.1 days = 30 }
+                }
+                set_location = { target = ROOT distance = 400 angle = random }
+                set_leader = xindi_probe_leader
+            }
+        }
+    }
+}
+#Loop Until you have Shields
+ship_event = {
+	id = STH_hero_ship.1
+	hide_window = yes
+	is_triggered_only = yes
+	immediate = {
+		if = {
+			limit = { owner = { has_technology = "tech_physics_advanced_84" } }
+            ship_event = { id = STH_hero_ship.2 }
+            else = { ship_event = { id = STH_hero_ship.1 days = 30 } }
+		}
+	}
+}
+#Trigger on Shields Researched
+ship_event = {
+    id = STH_hero_ship.2
+    title = "STH_hero_ship.2.name"
+    desc = { 
+		trigger = { owner = { has_country_flag = united_federation_of_planets } }
+		text = "STH_hero_ship.2.desc_01" 
+	}
+	desc = { 
+		trigger = { owner = { NOT = { has_country_flag = united_federation_of_planets } } }
+		text = "STH_hero_ship.2.desc_02" 
+	}
+    picture = sth_GFX_evt_nx01Refit1
+    is_triggered_only = yes
+    immediate = {
+        random_country = {
+			limit = { is_country_type = ufp_member_world }
+			save_event_target_as = member_world_1
+		}
+		owner = { begin_event_chain = { event_chain = "nx01_refit_event_chain" } }
+        set_ship_flag = refit_planned
+    }
+    option = { name = sth_understood }
+}
+# on_fleet_enter_orbit 
+fleet_event = { 
+    id = STH_hero_ship.3
+    hide_window = yes 
+    is_triggered_only = yes
+	trigger = { exists = owner }
+    immediate = { 
+        save_event_target_as = fleet
+        owner = { 
+			if = {
+				limit = { exists = capital_scope }
+				capital_scope = { save_event_target_as = capital }
+			}
+		}
+		if = { 
+            limit = { 
+                exists = event_target:capital
+				orbit = { is_same_value = event_target:capital }
+            }
+            random_owned_ship = {
+                limit = {
+                    fleet = { is_same_value = event_target:fleet }
+                    has_ship_flag = hero_ship
+                    has_ship_flag = nx-01
+                    has_ship_flag = refit_planned
+                }
+                ship_event = { id = STH_hero_ship.4 }
+            }
+        } 
+    } 
+} 
+# Upgrade or not 
+ship_event = {
+    id = STH_hero_ship.4 
+    title = "STH_hero_ship.4.name" 
+    desc = "STH_hero_ship.4.desc" 
+    picture = sth_GFX_evt_nx01Refit2 
+    is_triggered_only = yes 
+    option = { # Upgrade 
+        name = STH_hero_ship.4.a 
+        trigger = { owner = { minerals > 499 } } 
+        owner = { add_minerals = -500 } 
+        hidden_effect = {
+            # TODO: Detect if Enterprise is alone. If she is rename if not don't
+            fleet = {
+            #    set_name = "Enterprise §R(Refitting)§!" 
+                set_event_locked = yes
+            }
+            remove_ship_flag = refit_planned 
+            set_ship_flag = refit_in_progess 
+            ship_event = { id = STH_hero_ship.5 days = 90 }
+        } 
+    } 
+    option = { # Upgrade (Not enough Recources) 
+        name = STH_hero_ship.4.b 
+        trigger = { owner = { minerals < 500 } }
+		fleet = { fleet_event = { id = STH_hero_ship.3 days = 30 } }
+    } 
+    option = { # Don't upgrade yet 
+        name = STH_hero_ship.4.c
+    } 
+} 
+# Refit Ship
+ship_event = {
+    id = STH_hero_ship.5
+    title = "STH_hero_ship.5.name"
+    desc = "STH_hero_ship.5.desc"
+    picture = sth_GFX_evt_nx01Refit3    
+    is_triggered_only = yes
+    trigger = {
+        has_ship_flag = refit_in_progess
+        has_ship_flag = hero_ship
+        has_ship_flag = nx-01
+    }
+    immediate = {
+        owner = { end_event_chain = "nx01_refit_event_chain" }  
+        fleet = {
+            set_name = "Enterprise"
+            set_event_locked = no
+
+            spawn_hero_ship_ENT_FED = yes
+        }
+        delete_ship = this
+    }
+    option = { name = sth_understood }
+}
+
+
+# NX Get Phaser 2 Tech
+ship_event = {
+    id = STH_hero_ship.10
+    title = "STH_hero_ship.10.name"
+    desc = "STH_hero_ship.10.desc"
+    picture = sth_GFX_evt_nx01    
+    trigger = {
+        NOT = { has_ship_flag = refit_in_progess }
+        has_ship_flag = hero_ship
+        has_ship_flag = nx-01
+		exists = owner
+		owner = { 
+			NAND = { 
+				has_technology = tech_engineering_inertial_629
+				has_technology = tech_physics_gravimetric_65
+				has_technology = tech_engineering_improved_604
+				has_technology = tech_physics_duotronic_4
+				has_technology = tech_physics_phase_156 
+				has_technology = tech_engineering_anti-matter_652
+			} 
+			NOT = { has_country_flag = nxTechEvent }
+		}
+    }
+	mean_time_to_happen = { months = 12 }
+	fire_only_once = yes
+    option = { 
+		name = STH_hero_ship.10.a
+		owner = { set_timed_country_flag = { flag = nxTechEvent days = 360 } }
+		enable_special_project = { name = NX_WEAPONS_PROJECT_1 owner = root.owner location = this }
+	}
+}
+
+#NX Get Phaser 3 Tech
+ship_event = {
+    id = STH_hero_ship.11
+    title = "STH_hero_ship.11.name"
+    desc = "STH_hero_ship.11.desc"
+    picture = sth_GFX_evt_nx01
+    trigger = {
+        NOT = { has_ship_flag = refit_in_progess }
+        has_ship_flag = hero_ship
+        has_ship_flag = nx-01
+		exists = owner
+		owner = { 
+			NAND = { 
+				has_technology = tech_engineering_advanced_547
+				has_technology = tech_engineering_destroyer_541
+				has_technology = tech_ship_program
+				has_technology = tech_society_long-term_401
+				has_technology = tech_physics_gravity_82
+				has_technology = tech_physics_gravity_121
+			} 
+			NOT = { has_country_flag = nxTechEvent }
+		}
+    }
+	mean_time_to_happen = { months = 24 }
+	fire_only_once = yes
+    option = { 
+		name = STH_hero_ship.11.a
+		owner = { set_timed_country_flag = { flag = nxTechEvent days = 360 } }
+		enable_special_project = { name = NX_WEAPONS_PROJECT_2 owner = root.owner location = this }
+	}
+}
+
+
+
+
+
+
+#Debug Event
+country_event = {
+    id = STH_hero_ship.4242
+    hide_window = yes 
+    is_triggered_only = yes 
+    immediate = {
+        spawn_hero_ship_ENT_KDF = yes
+        spawn_hero_ship_ENT_ROM = yes
+#        spawn_hero_ship_ENT_CAR = yes
+#        spawn_hero_ship_ENT_DOM = yes
+        spawn_hero_ship_ENT_VUL = yes
+#        spawn_hero_ship_ENT_TEL = yes
+        spawn_hero_ship_ENT_ADR = yes
+    }
+}

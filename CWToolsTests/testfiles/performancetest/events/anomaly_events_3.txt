@@ -1,0 +1,3257 @@
+#################################
+#
+# Anomaly Events
+# by Maximilian Olbers
+# STNH - Banks 1.8.0 Compat # REVISIT
+#################################
+
+namespace = anomaly
+
+@tier1influencecontact = 7
+@tier1influencecontactxenophile = 8
+@tier1influencecontactmin = 20
+@tier1influencecontactmax = 80
+
+@tier2influencecontact = 10
+@tier2influencecontactxenophile = 12
+@tier2influencecontactmin = 40
+@tier2influencecontactmax = 100
+
+@tier1materialreward = 6
+@tier1materialmin = 100
+@tier1materialmax = 500
+@tier2materialreward = 12
+@tier2materialmin = 150
+@tier2materialmax = 1000
+@tier3materialreward = 18
+@tier3materialmin = 250
+@tier3materialmax = 1500
+@tier4materialreward = 24
+@tier4materialmin = 350
+@tier4materialmax = 2000
+@tier5materialreward = 48
+@tier5materialmin = 700
+@tier5materialmax = 4000
+
+@tier1influencereward = 6
+@tier1influencemin = 40
+@tier1influencemax = 100
+@tier2influencereward = 12
+@tier2influencemin = 80
+@tier2influencemax = 175
+@tier3influencereward = 18
+@tier3influencemin = 125
+@tier3influencemax = 250
+@tier4influencereward = 24
+@tier4influencemin = 150
+@tier4influencemax = 300
+@tier5influencereward = 36
+@tier5influencemin = 250
+@tier5influencemax = 500
+@tier6influencereward = 48
+@tier6influencemin = 300
+@tier6influencemax = 600
+
+@tier1unityreward = 6
+@tier1unitymin = 100
+@tier1unitymax = 500
+@tier2unityreward = 12
+@tier2unitymin = 150
+@tier2unitymax = 1000
+@tier3unityreward = 18
+@tier3unitymin = 250
+@tier3unitymax = 1500
+@tier4unityreward = 24
+@tier4unitymin = 350
+@tier4unitymax = 2000
+@tier5unityreward = 48
+@tier5unitymin = 700
+@tier5unitymax = 4000
+
+@tier1researchreward = 6
+@tier1researchmin = 60
+@tier1researchmax = 150
+@tier2researchreward = 12
+@tier2researchmin = 90
+@tier2researchmax = 250
+@tier3researchreward = 18
+@tier3researchmin = 120
+@tier3researchmax = 350
+@tier4researchreward = 24
+@tier4researchmin = 150
+@tier4researchmax = 500
+@tier5researchreward = 48
+@tier5researchmin = 300
+@tier5researchmax = 1000
+
+
+# ROOT = ship scope
+# FROM = planet scope
+
+### Thinking Asteroid 1
+ship_event = {
+	id = anomaly.75
+	title = "anomaly.75.name"
+	desc = "anomaly.75.desc"
+	picture = GFX_evt_mining_station
+	show_sound = event_scanner
+	location = FROM
+	
+	is_triggered_only = yes
+
+	immediate = {
+		from = { orbital_deposit_tile = { clear_deposits = yes } }
+	}
+
+	option = {
+		name = anomaly.75.a
+		hidden_effect = { ship_event = { id = anomaly.80 days = 5 } }
+	}
+
+	option = {
+		name = anomaly.75.b
+		#custom_tooltip = anomaly.75.b.tooltip
+		from = {
+			orbital_deposit_tile = {
+				add_deposit = d_vast_physics_deposit
+				add_deposit = d_vast_society_deposit
+			}
+		}
+		hidden_effect = {
+			FROM = {
+				add_modifier = {
+					modifier = "rock_brain"
+					days = -1
+				}
+			}
+		}
+	}
+}
+
+### Thinking Asteroid 2
+ship_event = {
+	id = anomaly.80
+	title = "anomaly.80.name"
+	desc = "anomaly.80.desc"
+	picture = GFX_evt_mining_station
+	show_sound = event_structural_collapse
+	location = FROM
+
+	is_triggered_only = yes
+
+	option = {
+		name = anomaly.80.a
+		leader = { add_trait = leader_trait_carefree }
+		owner = {
+			add_monthly_resource_mult = {
+				resource = physics_research
+				value = @tier2researchreward
+				min = @tier2researchmin
+				max = @tier2researchmax
+			}
+			add_monthly_resource_mult = {
+				resource = energy
+				value = @tier2materialreward
+				min = @tier2materialmin
+				max = @tier2materialmax
+			}
+		}
+	}
+}
+
+### Talking Planets
+ship_event = {
+	id = anomaly.85
+	title = "anomaly.85.name"
+	desc = "anomaly.85.desc"
+	picture = GFX_evt_ship_in_orbit
+	show_sound = event_alien_signal
+	location = FROM
+	
+	is_triggered_only = yes
+
+	option = {
+		name = anomaly.85.a
+		owner = {
+			add_monthly_resource_mult = {
+				resource = engineering_research
+				value = @tier2researchreward
+				min = @tier2researchmin
+				max = @tier2researchmax
+			}
+		}
+	}
+	
+	option = {
+		name = anomaly.85.b
+		owner = { save_event_target_as = ship_owner }
+		solar_system = {
+			every_system_planet = {
+				surveyed = {
+					set_surveyed = yes
+					surveyor = event_target:ship_owner
+				}
+			}
+		}
+	}
+}
+
+### Cunning Flora
+ship_event = {
+	id = anomaly.90
+	title = "anomaly.90.name"
+	desc = "anomaly.90.desc"
+	picture = GFX_evt_big_landing_ship
+	show_sound = event_alien_nature
+	location = FROM
+
+	is_triggered_only = yes
+
+	immediate = { from = { orbital_deposit_tile = { clear_deposits = yes } } }
+
+	option = {
+		name = anomaly.90.a
+		from = {
+			enable_special_project = {
+				name = "DEAL_WITH_FLORA"
+				location = this
+				owner = root
+			}
+		}
+		hidden_effect = { owner = { country_event = { id = story.1 days = 30 } } }
+	}
+}
+
+### Cunning Flora followup
+ship_event = {
+	id = anomaly.91
+	title = "anomaly.91.name"
+	desc = "anomaly.90.desc"
+	picture = GFX_evt_big_landing_ship
+	show_sound = event_alien_nature
+	location = FROM
+
+	is_triggered_only = yes
+
+	option = {
+		name = FASCINATING
+		custom_tooltip = anomaly.91.a.tooltip
+		hidden_effect = {
+			fromfrom = {
+				add_modifier = {
+					modifier = "cunning_flora"
+					days = -1
+				}
+				orbital_deposit_tile = {
+					add_deposit = d_vast_society_deposit
+					add_deposit = d_vast_society_deposit 
+				}
+			}
+		}
+	}
+}
+
+### Pioneer Plaque Aliens, asteroid only
+ship_event = {
+	id = anomaly.95
+	title = "anomaly.95.name"
+	desc = "anomaly.95.desc"
+	picture = GFX_evt_mining_station
+	show_sound = event_scanner
+	location = FROM
+
+	is_triggered_only = yes
+
+	immediate = {
+		hidden_effect = { owner = { country_event = { id = story.5 days = 30 } } }
+		hidden_effect = {
+			owner = { set_country_flag = found_pioneer }
+		}
+	}
+
+	option = {
+		name = anomaly.95.a
+		trigger = {
+			owner = {
+				OR = {
+					has_ethic = "ethic_xenophobe"
+					has_ethic = "ethic_fanatic_xenophobe"
+				}
+			}
+		}
+		owner = {
+			add_monthly_resource_mult = {
+				resource = influence
+				value = @tier1influencereward
+				min = @tier1influencemin
+				max = @tier1influencemax
+			}
+		}
+	}
+
+	option = {
+		name = anomaly.95.b
+		custom_tooltip = anomaly.95.b.tooltip
+		trigger = {
+			any_system = {
+				OR = {
+					# Commonwealth of Man NPC system
+					has_star_flag = com_sol
+					# Tomb World
+					has_star_flag = nuked_sol
+					# Early Space Age Humans
+					AND = {
+						has_star_flag = primitive_sol
+						any_planet = {
+							exists = owner
+							owner = {
+								has_country_flag = humans_early_space_age
+							}
+						}
+					}
+				}
+			}
+		}
+		leader = {
+			add_experience = 200
+		}
+		owner = {
+			add_monthly_resource_mult = {
+				resource = engineering_research
+				value = @tier3researchreward
+				min = @tier3researchmin
+				max = @tier3researchmax
+			}
+			begin_event_chain = {
+				event_chain = "find_sol_chain"
+				target = this
+			}
+		}
+		hidden_effect = {
+			random_system = {
+				limit = {
+					OR = {
+						# Commonwealth of Man NPC system
+						has_star_flag = com_sol
+						# Tomb World
+						has_star_flag = nuked_sol
+						# Early Space Age Humans
+						AND = {
+							has_star_flag = primitive_sol
+							any_planet = {
+								exists = owner
+								owner = {
+									has_country_flag = humans_early_space_age
+								}
+							}
+						}
+					}
+				}
+				save_event_target_as = earf
+				set_star_flag = sol_target
+			}
+			owner = {
+				set_country_flag = sol_search
+				create_point_of_interest = {
+					id = sol.1
+					name = "sol_1_poi"
+					desc = sol_1_desc_neutral
+					event_chain = find_sol_chain
+					location = event_target:earf
+				}
+			}
+		}
+	}
+
+
+	option = {
+		name = anomaly.95.c
+		owner = {
+			add_monthly_resource_mult = {
+				resource = engineering_research
+				value = @tier3researchreward
+				min = @tier3researchmin
+				max = @tier3researchmax
+			}
+		}
+	}
+}
+
+# Scope = Ship
+# From = System
+# FromFrom = Country
+# also owner, obv
+ship_event = {
+	id = anomaly.96
+	title = anomaly.96.name
+	desc = {
+		trigger = {
+			owner = {
+				NOT = {
+					has_ethic = ethic_xenophobe
+					has_ethic = ethic_fanatic_xenophobe
+					has_ethic = ethic_xenophile
+					has_ethic = ethic_fanatic_xenophile
+				}
+			}
+		}
+		text = anomaly.96.desc.neutral
+	}
+	desc = {
+		trigger = {
+			owner = {
+				OR = {
+					has_ethic = ethic_xenophobe
+					has_ethic = ethic_fanatic_xenophobe
+				}
+			}
+		}
+		text = anomaly.96.desc.phobe
+	}
+	desc = {
+		trigger = {
+			owner = {
+				OR = {
+					has_ethic = ethic_xenophile
+					has_ethic = ethic_fanatic_xenophile
+				}
+			}
+		}
+		text = anomaly.96.desc.phile
+	}
+	picture = GFX_evt_continental
+	show_sound = event_scanner
+	location = FROM
+
+	is_triggered_only = yes
+
+	trigger = {
+		from = { has_star_flag = sol_target }
+		owner = { has_country_flag = sol_search }
+	}
+
+	immediate = {
+		from = { remove_star_flag = sol_target }
+		owner = {
+			remove_country_flag = sol_search
+			add_event_chain_counter = { 
+				event_chain = "find_sol_chain" 
+				counter = "found" 
+				amount = 1 
+			}
+		}
+	}
+
+	option = {
+		name = anomaly.96.a.neutral
+		trigger = {
+			owner = {
+				NOT = {
+					has_ethic = ethic_xenophobe
+					has_ethic = ethic_fanatic_xenophobe
+					has_ethic = ethic_xenophile
+					has_ethic = ethic_fanatic_xenophile
+				}
+			}
+		}
+		owner = {
+			add_monthly_resource_mult = {
+				resource = influence
+				value = @tier2influencereward
+				min = @tier2influencemin
+				max = @tier2influencemax
+			}
+			end_event_chain = "find_sol_chain"
+		}
+	}
+
+	option = {
+		name = anomaly.96.a.phobe
+		trigger = {
+			owner = {
+				OR = {
+					has_ethic = ethic_xenophobe
+					has_ethic = ethic_fanatic_xenophobe
+				}
+			}
+		}
+		owner = {
+			add_monthly_resource_mult = {
+				resource = influence
+				value = @tier2influencereward
+				min = @tier2influencemin
+				max = @tier2influencemax
+			}
+			end_event_chain = "find_sol_chain"
+		}
+	}
+
+	option = {
+		name = anomaly.96.a.phile
+		trigger = {
+			owner = {
+				OR = {
+					has_ethic = ethic_xenophile
+					has_ethic = ethic_fanatic_xenophile
+				}
+			}
+		}
+		owner = {
+			add_monthly_resource_mult = {
+				resource = influence
+				value = @tier2influencereward
+				min = @tier2influencemin
+				max = @tier2influencemax
+			}
+			end_event_chain = "find_sol_chain"
+		}
+	}
+}
+
+### Pioneer Plaque Humans, asteroid only
+ship_event = {
+	id = anomaly.100
+	title = "anomaly.100.name"
+	desc = "anomaly.100.desc"
+	picture = GFX_evt_mining_station
+	show_sound = event_mystic_reveal
+	location = FROM
+
+	is_triggered_only = yes
+
+	immediate = {
+		hidden_effect = {
+			owner = { set_country_flag = found_pioneer }
+		}
+	}
+
+	option = {
+		name = anomaly.100.a
+		owner = {
+			add_monthly_resource_mult = {
+				resource = influence
+				value = @tier1influencereward
+				min = @tier1influencemin
+				max = @tier1influencemax
+			}
+		}
+	}	
+}
+
+### Voyager Record Aliens, asteroid only
+ship_event = {
+	id = anomaly.105
+	title = "anomaly.105.name"
+	desc = "anomaly.105.desc"
+	picture = GFX_evt_mining_station
+	show_sound = event_radio_chatter
+	location = FROM
+
+	is_triggered_only = yes
+
+	immediate = {
+		owner = {
+			set_country_flag = found_voyager
+			country_event = { id = story.1 days = 30 }
+		}
+	}
+
+	option = {
+		name = anomaly.105.a
+		trigger = {
+			owner = {
+				OR = {
+					has_ethic = "ethic_xenophobe"
+					has_ethic = "ethic_fanatic_xenophobe"
+				}
+			}
+		}
+		owner = {
+			add_monthly_resource_mult = {
+				resource = influence
+				value = @tier1influencereward
+				min = @tier1influencemin
+				max = @tier1influencemax
+			}
+		}
+	}
+
+	option = {
+		name = anomaly.105.b
+		custom_tooltip = anomaly.105.b.tooltip
+		trigger = {
+			any_system = {
+				OR = {
+					# Commonwealth of Man NPC system
+					has_star_flag = com_sol
+					# Tomb World
+					has_star_flag = nuked_sol
+					# Early Space Age Humans
+					AND = {
+						has_star_flag = primitive_sol
+						any_planet = {
+							exists = owner
+							owner = {
+								has_country_flag = humans_early_space_age
+							}
+						}
+					}
+				}
+			}
+		}
+		leader = {
+			add_experience = 200
+		}
+		owner = {
+			add_monthly_resource_mult = {
+				resource = society_research
+				value = @tier3researchreward
+				min = @tier3researchmin
+				max = @tier3researchmax
+			}
+			begin_event_chain = {
+				event_chain = "find_sol_chain"
+				target = this
+			}
+		}
+		hidden_effect = {
+			random_system = {
+				limit = {
+					OR = {
+						# Commonwealth of Man NPC system
+						has_star_flag = com_sol
+						# Tomb World
+						has_star_flag = nuked_sol
+						# Early Space Age Humans
+						AND = {
+							has_star_flag = primitive_sol
+							any_planet = {
+								exists = owner
+								owner = {
+									has_country_flag = humans_early_space_age
+								}
+							}
+						}
+					}
+				}
+				save_event_target_as = earf
+				set_star_flag = sol_target
+			}
+			root = {
+				owner = {
+					set_country_flag = sol_search
+					create_point_of_interest = {
+						id = sol.1
+						name = "sol_1_poi"
+						desc = sol_1_desc_neutral
+						event_chain = find_sol_chain
+						location = event_target:earf
+					}
+				}
+			}
+		}
+	}
+
+
+	option = {
+		name = anomaly.105.c
+		owner = {
+			add_monthly_resource_mult = {
+				resource = engineering_research
+				value = @tier3researchreward
+				min = @tier3researchmin
+				max = @tier3researchmax
+			}
+		}
+	}
+}
+
+# found sol, voyager
+ship_event = {
+	id = anomaly.106
+	title = anomaly.106.name
+	desc = {
+		trigger = {
+			owner = {
+				NOT = {
+					has_ethic = ethic_xenophobe
+					has_ethic = ethic_fanatic_xenophobe
+					has_ethic = ethic_xenophile
+					has_ethic = ethic_fanatic_xenophile
+				}
+			}
+		}
+		text = anomaly.106.desc.neutral
+	}
+	desc = {
+		trigger = {
+			owner = {
+				OR = {
+					has_ethic = ethic_xenophobe
+					has_ethic = ethic_fanatic_xenophobe
+				}
+			}
+		}
+		text = anomaly.106.desc.phobe
+	}
+	desc = {
+		trigger = {
+			owner = {
+				OR = {
+					has_ethic = ethic_xenophile
+					has_ethic = ethic_fanatic_xenophile
+				}
+			}
+		}
+		text = anomaly.106.desc.phile
+	}
+	picture = GFX_evt_continental
+	show_sound = event_scanner
+	location = FROM
+
+	is_triggered_only = yes
+
+	trigger = {
+		owner = { has_country_flag = sol_search }
+		from = { has_star_flag = sol_target }
+	}
+
+	immediate = {
+		from = { remove_star_flag = sol_target }
+		owner = {
+			remove_country_flag = sol_search
+			add_event_chain_counter = { 
+				event_chain = "find_sol_chain" 
+				counter = "found" 
+				amount = 1 
+			}
+		}
+	}
+
+	option = {
+		name = anomaly.106.a.neutral
+		trigger = {
+			owner = {
+				NOT = {
+					has_ethic = ethic_xenophobe
+					has_ethic = ethic_fanatic_xenophobe
+					has_ethic = ethic_xenophile
+					has_ethic = ethic_fanatic_xenophile
+				}
+			}
+		}
+		owner = {
+			add_monthly_resource_mult = {
+				resource = influence
+				value = @tier1influencereward
+				min = @tier1influencemin
+				max = @tier1influencemax
+			}
+			end_event_chain = "find_sol_chain"
+		}
+	}
+
+	option = {
+		name = anomaly.106.a.phobe
+		trigger = {
+			owner = {
+				OR = {
+					has_ethic = ethic_xenophobe
+					has_ethic = ethic_fanatic_xenophobe
+				}
+			}
+		}
+		owner = {
+			add_monthly_resource_mult = {
+				resource = influence
+				value = @tier1influencereward
+				min = @tier1influencemin
+				max = @tier1influencemax
+			}
+			end_event_chain = "find_sol_chain"
+		}
+	}
+
+	option = {
+		name = anomaly.106.a.phile
+		trigger = {
+			owner = {
+				OR = {
+					has_ethic = ethic_xenophile
+					has_ethic = ethic_fanatic_xenophile
+				}
+			}
+		}
+		owner = {
+			add_monthly_resource_mult = {
+				resource = influence
+				value = @tier1influencereward
+				min = @tier1influencemin
+				max = @tier1influencemax
+			}
+			end_event_chain = "find_sol_chain"
+		}
+	}
+}
+
+### Voyager Record Humans, continental/tropical only
+ship_event = {
+	id = anomaly.110
+	title = "anomaly.110.name"
+	desc = "anomaly.110.desc"
+	picture = GFX_evt_sapient_AI
+	show_sound = event_mystic_reveal
+	location = FROM
+
+	is_triggered_only = yes
+
+	immediate = {
+		owner = { set_country_flag = found_voyager }
+	}
+
+	option = {
+		name = anomaly.110.a
+		owner = {
+			add_monthly_resource_mult = {
+				resource = influence
+				value = @tier1influencereward
+				min = @tier1influencemin
+				max = @tier1influencemax
+			}
+		}
+	}
+}
+
+### Genetic Library, asteroid only
+ship_event = {
+	id = anomaly.115
+	title = "anomaly.115.name"
+	desc = "anomaly.115.desc"
+	picture = GFX_evt_society_research
+	show_sound = event_laboratory_sound
+	location = FROM
+
+	is_triggered_only = yes
+	auto_opens = yes
+
+	immediate = { from = { orbital_deposit_tile = { clear_deposits = yes } } }
+
+	option = {
+		name = FASCINATING
+		hidden_effect = { owner = { country_event = { id = story.5 days = 30 } } }
+		hidden_effect = {
+			FROM = {
+				add_modifier = {
+					modifier = old_genetic_library
+					days = -1
+				}
+				orbital_deposit_tile = {
+					add_deposit = d_vast_engineering_deposit
+					add_deposit = d_rich_society_deposit
+				}
+			}
+		}
+	}
+}
+
+### Monolith Museum, uninhabitable planet only
+ship_event = {
+	id = anomaly.120
+	title = "anomaly.120.name"
+	desc = "anomaly.120.desc"
+	picture = GFX_evt_alien_city
+	show_sound = event_scanner
+	location = FROM
+
+	is_triggered_only = yes
+
+	trigger = {
+		owner = { NOT = { has_country_flag = UHB_ANCIENT_RUINS_1_FLAG } }
+	}
+
+	option = {
+		name = anomaly.120.a
+		owner = {
+			add_monthly_resource_mult = {
+				resource = engineering_research
+				value = @tier3researchreward
+				min = @tier3researchmin
+				max = @tier3researchmax
+			}
+		}
+		hidden_effect = { owner = { country_event = { id = story.5 days = 30 } } }
+	}
+
+	option = {
+		name = anomaly.120.b
+		custom_tooltip = anomaly.120.b.tooltip
+		trigger = {
+			owner = {
+				NOT = {
+					has_ethic = "ethic_xenophobe"
+					has_ethic = "ethic_fanatic_xenophobe"
+					has_ethic = "ethic_xenophile"
+					has_ethic = "ethic_fanatic_xenophile"
+					has_ethic = "ethic_gestalt_consciousness"
+				}
+			}
+		}
+		hidden_effect = {
+			owner = {
+				country_event = { id = story.5 days = 2 }
+				if = {
+					limit = {
+						count_owned_pops = {
+							limit = {
+								NOT = { pop_has_ethic = ethic_xenophile }
+							}
+							count > 12
+						}
+					}
+					random_owned_pop = {
+						limit = {
+							NOT = {
+								pop_has_ethic = ethic_xenophile
+								pop_has_trait = trait_robotic_1
+								pop_has_trait = trait_robotic_2
+							}
+						}
+						if = {
+							limit = { pop_has_ethic = ethic_xenophobe }
+							pop_remove_ethic = ethic_xenophobe
+						}
+						pop_change_ethic = "ethic_xenophile"
+					}
+					random_owned_pop = {
+						limit = {
+							NOT = {
+								pop_has_ethic = ethic_xenophile
+								pop_has_trait = trait_robotic_1
+								pop_has_trait = trait_robotic_2
+							}
+						}
+						if = {
+							limit = { pop_has_ethic = ethic_xenophobe }
+							pop_remove_ethic = ethic_xenophobe
+						}
+						pop_change_ethic = "ethic_xenophile"
+					}
+					random_owned_pop = {
+						limit = {
+							NOT = {
+								pop_has_ethic = ethic_xenophile
+								pop_has_trait = trait_robotic_1
+								pop_has_trait = trait_robotic_2
+							}
+						}
+						if = {
+							limit = { pop_has_ethic = ethic_xenophobe }
+							pop_remove_ethic = ethic_xenophobe
+						}
+						pop_change_ethic = "ethic_xenophile"
+					}
+					random_owned_pop = {
+						limit = {
+							NOT = {
+								pop_has_ethic = ethic_xenophile
+								pop_has_trait = trait_robotic_1
+								pop_has_trait = trait_robotic_2
+							}
+						}
+						if = {
+							limit = { pop_has_ethic = ethic_xenophobe }
+							pop_remove_ethic = ethic_xenophobe
+						}
+						pop_change_ethic = "ethic_xenophile"
+					}
+					random_owned_pop = {
+						limit = {
+							NOT = {
+								pop_has_ethic = ethic_xenophile
+								pop_has_trait = trait_robotic_1
+								pop_has_trait = trait_robotic_2
+							}
+						}
+						if = {
+							limit = { pop_has_ethic = ethic_xenophobe }
+							pop_remove_ethic = ethic_xenophobe
+						}
+						pop_change_ethic = "ethic_xenophile"
+					}
+					random_owned_pop = {
+						limit = {
+							NOT = {
+								pop_has_ethic = ethic_xenophile
+								pop_has_trait = trait_robotic_1
+								pop_has_trait = trait_robotic_2
+							}
+						}
+						if = {
+							limit = { pop_has_ethic = ethic_xenophobe }
+							pop_remove_ethic = ethic_xenophobe
+						}
+						pop_change_ethic = "ethic_xenophile"
+					}
+					set_country_flag = eddic_1
+					country_event = { id = anomaly.121 days = 4 }
+					else = {
+						if = {
+							limit = {
+								count_owned_pops = {
+									limit = {
+										NOT = { pop_has_ethic = ethic_xenophile }
+									}
+									count > 6
+								}
+							}
+							random_owned_pop = {
+								limit = {
+									NOT = {
+										pop_has_ethic = ethic_xenophile
+										pop_has_trait = trait_robotic_1
+										pop_has_trait = trait_robotic_2
+									}
+								}
+								if = {
+									limit = { pop_has_ethic = ethic_xenophobe }
+									pop_remove_ethic = ethic_xenophobe
+								}
+								pop_change_ethic = "ethic_xenophile"
+							}
+							random_owned_pop = {
+								limit = {
+									NOT = {
+										pop_has_ethic = ethic_xenophile
+										pop_has_trait = trait_robotic_1
+										pop_has_trait = trait_robotic_2
+									}
+								}
+								if = {
+									limit = { pop_has_ethic = ethic_xenophobe }
+									pop_remove_ethic = ethic_xenophobe
+								}
+								pop_change_ethic = "ethic_xenophile"
+							}
+							random_owned_pop = {
+								limit = {
+									NOT = {
+										pop_has_ethic = ethic_xenophile
+										pop_has_trait = trait_robotic_1
+										pop_has_trait = trait_robotic_2
+									}
+								}
+								if = {
+									limit = { pop_has_ethic = ethic_xenophobe }
+									pop_remove_ethic = ethic_xenophobe
+								}
+								pop_change_ethic = "ethic_xenophile"
+							}
+							set_country_flag = eddic_2
+							country_event = { id = anomaly.121 days = 4 }
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+country_event = {
+	id = anomaly.121
+	title = anomaly.120.name
+	desc = anomaly.121.desc
+	picture = GFX_evt_alien_city
+	show_sound = event_scanner
+	location = FROMFROM
+
+	is_triggered_only = yes
+
+	option = {
+		name = INTRIGUING
+		custom_tooltip = anomaly.121.a.tooltip
+		trigger = { has_country_flag = eddic_1 }
+		hidden_effect = { remove_country_flag = eddic_1 }
+	}
+	option = {
+		name = INTERESTING
+		custom_tooltip = anomaly.121.b.tooltip
+		trigger = { has_country_flag = eddic_2 }
+		hidden_effect = { remove_country_flag = eddic_2 }
+	}
+}
+
+### Derelict Star Chart, molten planet only
+ship_event = {
+	id = anomaly.125
+	title = "anomaly.125.name"
+	desc = "anomaly.125.desc"
+	picture = GFX_evt_molten
+	show_sound = event_ship_thrusters
+	location = FROM
+
+	is_triggered_only = yes
+
+	option = {
+		name = anomaly.125.a
+		solar_system = {
+			every_system_planet = {
+				surveyed = {
+					set_surveyed = yes
+					surveyor = root.owner
+				}
+			}
+		}
+	}
+}
+
+### Transient Gravitational Anomaly, asteroid only
+ship_event = {
+	id = anomaly.130
+	title = "anomaly.130.name"
+	desc = "anomaly.130.desc"
+	picture = GFX_evt_wormhole
+	show_sound = event_space_cloud
+	location = FROM
+
+	is_triggered_only = yes
+	auto_opens = yes
+
+	trigger = {
+		FROM = { is_planet_class = pc_asteroid }
+	}
+
+	option = {
+		name = anomaly.130.a
+		owner = {
+			add_monthly_resource_mult = {
+				resource = physics_research
+				value = @tier3researchreward
+				min = @tier3researchmin
+				max = @tier3researchmax
+			}
+		}
+		leader = { add_experience = 100 }
+	}
+}
+
+### Abandoned Playground, GEN_PLAYGROUND_CAT
+# Gives society and engineering research
+ship_event = {
+	id = anomaly.135
+	title = "anomaly.135.name"
+	desc = "anomaly.135.desc"
+	picture = GFX_evt_alien_city
+	show_sound = event_administrative_work
+	location = FROM
+
+	is_triggered_only = yes
+	auto_opens = yes
+
+	trigger = {
+		FROM = {
+			NOT = {
+				is_planet_class = pc_asteroid
+				is_planet_class = pc_gas_giant
+			}
+		}
+	}
+
+	immediate = { owner = { country_event = { id = story.5 days = 30 } } }
+
+	option = {
+		name = INTRIGUING
+		owner = {
+			add_monthly_resource_mult = {
+				resource = society_research
+				value = @tier2researchreward
+				min = @tier2researchmin
+				max = @tier2researchmax
+			}
+			add_monthly_resource_mult = {
+				resource = engineering_research
+				value = @tier3researchreward
+				min = @tier3researchmin
+				max = @tier3researchmax
+			}
+		}
+	}
+}
+
+### Familiar Shrine, AST_SHRINE_1_CAT
+ship_event = {
+	id = anomaly.140
+	title = "anomaly.140.name"
+	desc = "anomaly.140.desc"
+	picture = GFX_evt_asteroid_approaching_planet
+	show_sound = event_mystic_reveal
+	location = FROM
+
+	is_triggered_only = yes
+
+	immediate = {
+		closest_system = {
+			limit = {
+				NOR = {
+					has_star_flag = hostile_system
+					is_same_value = root.solar_system
+					is_pirate_system = yes
+					any_planet = { is_colony = yes }
+				}
+				has_access_fleet = root.owner
+			}
+			min_steps = 10
+			max_steps = 80
+			set_star_flag = old_gods_system_1@root.owner
+		}
+		closest_system = {
+			limit = {
+				NOR = {
+					has_star_flag = old_gods_system_1@root.owner
+					has_star_flag = hostile_system
+					is_same_value = root.solar_system
+					is_pirate_system = yes
+					any_planet = { is_colony = yes }
+				}
+				has_access_fleet = root.owner
+			}
+			min_steps = 20
+			max_steps = 90
+			set_star_flag = old_gods_system_2@root.owner
+		}
+		closest_system = {
+			limit = {
+				NOR = {
+					has_star_flag = old_gods_system_1@root.owner
+					has_star_flag = old_gods_system_2@root.owner
+					is_same_value = root.solar_system
+					has_star_flag = hostile_system
+					is_pirate_system = yes
+					any_planet = { is_colony = yes }
+				}
+				has_access_fleet = root.owner
+			}
+			min_steps = 30
+			max_steps = 100
+			set_star_flag = old_gods_system_3@root.owner
+		}
+	}
+
+	option = {
+		name = "anomaly.140.a"
+		custom_tooltip = "anomaly.140.a.tooltip"
+		trigger = {	owner = { NOT = { has_ethic = ethic_fanatic_spiritualist } } }
+	}
+
+	option = {
+		name = "anomaly.140.c"
+		custom_tooltip = "anomaly.140.c.tooltip"
+		trigger = {	owner = { has_ethic = ethic_fanatic_spiritualist } }
+	}
+
+	option = {
+		trigger = {
+			any_system = { has_star_flag = old_gods_system_1@root.owner }
+			any_system = { has_star_flag = old_gods_system_2@root.owner }
+			any_system = { has_star_flag = old_gods_system_3@root.owner }
+		}
+		name = "anomaly.140.b"
+		owner = {
+			begin_event_chain = {
+				event_chain = "old_gods_chain"
+				target = root.owner
+			}
+		}
+		hidden_effect = {
+			random_system = {
+				limit = { has_star_flag = old_gods_system_1@root.owner }
+				save_event_target_as = old_gods_system_1
+			}
+			random_system = {
+				limit = { has_star_flag = old_gods_system_2@root.owner }
+				save_event_target_as = old_gods_system_2
+			}
+			random_system = {
+				limit = { has_star_flag = old_gods_system_3@root.owner }
+				save_event_target_as = old_gods_system_3
+			}
+			create_point_of_interest = {
+				id = old_gods_shrine_poi.1
+				name = "old_gods_shrine_poi_1"
+				desc = "old_gods_shrine_poi_1_desc"
+				event_chain = "old_gods_chain"
+				location = event_target:old_gods_system_1
+			}
+			create_point_of_interest = {
+				id = old_gods_shrine_poi.2
+				name = "old_gods_shrine_poi_2"
+				desc = "old_gods_shrine_poi_2_desc"
+				event_chain = "old_gods_chain"
+				location = event_target:old_gods_system_2
+			}
+			create_point_of_interest = {
+				id = old_gods_shrine_poi.3
+				name = "old_gods_shrine_poi_3"
+				desc = "old_gods_shrine_poi_3_desc"
+				event_chain = "old_gods_chain"
+				location = event_target:old_gods_system_3
+			}
+		}
+	}
+}
+
+# Entering Old God Shrine system (HIDDEN)
+#ship_event = {
+#	id = anomaly.141
+#	hide_window = yes
+#	
+#	is_triggered_only = yes
+#	
+#	trigger = {
+#		owner = { has_event_chain = "old_gods_chain" }
+#		FROM = {
+#			OR = {
+#				has_star_flag = old_gods_system_1
+#				has_star_flag = old_gods_system_2
+#				has_star_flag = old_gods_system_3
+#			}
+#		}
+#	}
+#	
+#	immediate = {
+#		if = {
+#			limit = { FROM = { has_star_flag = old_gods_system_1 } }
+#			FROM = { remove_star_flag = old_gods_system_1 }
+#			owner = { remove_point_of_interest = old_gods_shrine_poi.1 }
+#			ship_event = { id = anomaly.142 }
+#		}
+#		if = {
+#			limit = { FROM = { has_star_flag = old_gods_system_2 } }
+#			FROM = { remove_star_flag = old_gods_system_2 }
+#			owner = { remove_point_of_interest = old_gods_shrine_poi.2 }
+#			ship_event = { id = anomaly.143 }
+#		}
+#		if = {
+#			limit = { FROM = { has_star_flag = old_gods_system_3 } }
+#			FROM = { remove_star_flag = old_gods_system_3 }
+#			owner = { remove_point_of_interest = old_gods_shrine_poi.3 }
+#			ship_event = { id = anomaly.144 }
+#		}
+#	}
+#}
+
+# OLD GODS - THE BENEFACTRESS DISCOVERED, NEEDS SOCIETY
+ship_event = {
+	id = anomaly.142
+	title = "anomaly.142.name"
+	desc = "anomaly.142.desc"
+	picture = GFX_evt_mining_station
+	show_sound = event_mystic_reveal
+	location = event_target:shrine
+
+	is_triggered_only = yes
+	
+	trigger = {
+		owner = { has_event_chain = "old_gods_chain" }
+		FROM = {
+			has_star_flag = old_gods_system_1@root.owner
+		}
+	}
+
+	immediate = {
+		FROM = { remove_star_flag = old_gods_system_1@root.owner }
+		owner = { remove_point_of_interest = old_gods_shrine_poi.1 }
+		create_ambient_object = {
+			type = "shrine_object"
+			location = solar_system
+		}
+		last_created_ambient_object = {
+			save_event_target_as = shrine
+			enable_special_project = {
+				name = "OLD_GODS_BENEFACTRESS_PROJECT"
+				location = this
+				owner = root
+			}
+		}
+		owner = { set_country_flag = old_gods_benefactress }
+	}
+
+	option = {
+		name = "anomaly.142.a"
+	}
+}
+
+# OLD GODS - THE UNDAUNTED DISCOVERED, NEEDS ENGINEERING
+ship_event = {
+	id = anomaly.143
+	title = "anomaly.143.name"
+	desc = "anomaly.143.desc"
+	picture = GFX_evt_mining_station
+	show_sound = event_mystic_reveal
+	location = event_target:shrine
+
+	is_triggered_only = yes
+
+	trigger = {
+		owner = { has_event_chain = "old_gods_chain" }
+		FROM = {
+			has_star_flag = old_gods_system_2@root.owner
+		}
+	}
+
+	immediate = {
+		FROM = { remove_star_flag = old_gods_system_2@root.owner }
+		owner = { remove_point_of_interest = old_gods_shrine_poi.2 }
+		create_ambient_object = {
+			type = "shrine_object"
+			location = solar_system
+		}
+		last_created_ambient_object = {
+			save_event_target_as = shrine
+			enable_special_project = {
+				name = "OLD_GODS_UNDAUNTED_PROJECT"
+				location = this
+				owner = root
+			}
+		}
+		owner = { set_country_flag = old_gods_undaunted }
+	}
+
+	option = {
+		name = "anomaly.143.a"
+	}
+}
+
+# OLD GODS - THE PERCIPIENT DISCOVERED, NEEDS PHYSICS
+ship_event = {
+	id = anomaly.144
+	title = "anomaly.144.name"
+	desc = "anomaly.144.desc"
+	picture = GFX_evt_mining_station
+	show_sound = event_mystic_reveal
+	location = event_target:shrine
+
+	is_triggered_only = yes
+	
+	trigger = {
+		owner = { has_event_chain = "old_gods_chain" }
+		FROM = {
+			has_star_flag = old_gods_system_3@root.owner
+		}
+	}
+
+	immediate = {
+		FROM = { remove_star_flag = old_gods_system_3@root.owner }
+		owner = { remove_point_of_interest = old_gods_shrine_poi.3 }
+		create_ambient_object = {
+			type = "shrine_object"
+			location = solar_system
+		}
+		last_created_ambient_object = {
+			save_event_target_as = shrine
+			enable_special_project = {
+				name = "OLD_GODS_PERCIPIENT_PROJECT"
+				location = this
+				owner = root
+			}
+		}
+		owner = { set_country_flag = old_gods_percipient }
+	}
+
+	option = {
+		name = "anomaly.144.a"
+	}
+}
+
+# OLD GODS - THE BENEFACTRESS RESEARCHED
+ship_event = {
+	id = anomaly.165
+	title = "anomaly.165.name"
+	desc = "anomaly.165.desc"
+	picture = GFX_evt_mining_station
+	show_sound = event_mystic_reveal
+	location = fromfrom
+	
+	is_triggered_only = yes
+
+	immediate = {
+		owner = {
+			add_event_chain_counter = {
+				event_chain = "old_gods_chain"
+				counter = "shrines_searched"
+				amount = 1
+			}
+		}
+	}
+
+	option = {
+		name = FASCINATING
+		hidden_effect = {
+			fromfrom = { destroy_ambient_object = this }
+			owner = {
+				if = {
+					limit = {
+						has_completed_event_chain_counter = {
+							event_chain = old_gods_chain
+							counter = shrines_searched
+						}
+					}
+					country_event = { id = anomaly.168 }
+				}
+			}
+		}
+	}
+}
+
+# OLD GODS - THE UNDAUNTED RESEARCHED
+ship_event = {
+	id = anomaly.166
+	title = "anomaly.166.name"
+	desc = "anomaly.166.desc"
+	picture = GFX_evt_mining_station
+	show_sound = event_mystic_reveal
+	location = fromfrom
+	
+	is_triggered_only = yes
+
+	immediate = {
+		owner = {
+			add_event_chain_counter = {
+				event_chain = "old_gods_chain"
+				counter = "shrines_searched"
+				amount = 1
+			}
+		}
+	}
+
+	option = {
+		name = FASCINATING
+		hidden_effect = {
+			fromfrom = { destroy_ambient_object = this }
+			owner = {
+				if = {
+					limit = {
+						has_completed_event_chain_counter = {
+							event_chain = old_gods_chain
+							counter = shrines_searched
+						}
+					}
+					country_event = { id = anomaly.168 }
+				}
+			}
+		}
+	}
+}
+
+# OLD GODS - THE PERCIPIENT RESEARCHED
+ship_event = {
+	id = anomaly.167
+	title = "anomaly.167.name"
+	desc = "anomaly.167.desc"
+	picture = GFX_evt_mining_station
+	show_sound = event_mystic_reveal
+	location = fromfrom
+	
+	is_triggered_only = yes
+
+	immediate = {
+		owner = {
+			add_event_chain_counter = {
+				event_chain = "old_gods_chain"
+				counter = "shrines_searched"
+				amount = 1
+			}
+		}
+	}
+
+	option = {
+		name = FASCINATING
+		hidden_effect = {
+			fromfrom = { destroy_ambient_object = this }
+			owner = {
+				if = {
+					limit = {
+						has_completed_event_chain_counter = {
+							event_chain = "old_gods_chain"
+							counter = "shrines_searched"
+						}
+					}
+					country_event = { id = anomaly.168 }
+				}
+			}
+		}
+	}
+}
+
+# OLD GODS - CHAIN COMPLETE
+country_event = {
+	id = anomaly.168
+	title = "anomaly.168.name"
+	desc = "anomaly.168.desc"
+	picture = GFX_evt_metropolis
+	show_sound = event_mystic_reveal
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		remove_country_flag = old_gods_chain_begun
+		set_country_flag = completed_old_gods
+	}
+
+	option = {
+		name = "anomaly.168.a"
+		custom_tooltip = "anomaly.168.a.tooltip"
+		end_event_chain = "old_gods_chain"
+		add_monthly_resource_mult = {
+			resource = influence
+			value = @tier2influencereward
+			min = @tier2influencemin
+			max = @tier2influencemax
+		}
+	}
+
+	option = {
+		name = "anomaly.168.b"
+		custom_tooltip = "anomaly.168.b.tooltip"
+		add_monthly_resource_mult = {
+				resource = energy
+				value = @tier3materialreward
+				min = @tier3materialmin
+				max = @tier3materialmax
+			}
+		end_event_chain = "old_gods_chain"
+
+	}
+
+	option = {
+		name = "anomaly.168.c"
+		custom_tooltip = "anomaly.168.c.tooltip"
+		add_monthly_resource_mult = {
+				resource = society_research
+				value = @tier3researchreward
+				min = @tier3researchmin
+				max = @tier3researchmax
+			}
+		end_event_chain = "old_gods_chain"
+	}
+
+	option = {
+		name = "anomaly.168.d"
+		custom_tooltip = "anomaly.168.d.tooltip"
+		if = {
+			limit = {
+				NOT = { has_ethic = "ethic_fanatic_spiritualist" }
+			}
+			add_monthly_resource_mult = {
+				resource = unity
+				value = @tier3unityreward
+				min = @tier3unitymin
+				max = @tier3unitymax
+			}			
+			shift_ethic = "ethic_spiritualist"
+			hidden_effect = {
+				while = {
+					count = 3			
+					random_owned_pop = {
+						limit = {
+							is_same_species = owner.species
+							NOT = { has_ethic = "ethic_spiritualist" }
+						}
+						pop_change_ethic = "ethic_spiritualist"
+					}
+				}
+			}
+			else = {
+				add_monthly_resource_mult = {
+					resource = unity
+					value = @tier4unityreward
+					min = @tier4unitymin
+					max = @tier4unitymax
+				}			
+			}
+		}
+		end_event_chain = "old_gods_chain"		
+	}
+}
+
+### What Music They Make, HBL_MUSIC_1_CAT
+ship_event = {
+	id = anomaly.145
+	title = "anomaly.145.name"
+	desc = "anomaly.145.desc"
+	picture = GFX_evt_landing_ship
+	show_sound = event_alien_nature
+	location = FROM
+
+	is_triggered_only = yes
+
+	immediate = { owner = { set_country_flag = HBL_MUSIC_1_FLAG } }
+
+	option = {
+		name = FASCINATING
+		owner = {
+			if = {
+				limit = {
+					has_tech_option = tech_society_secrets_442
+				}
+				add_tech_progress = {
+					tech = tech_society_secrets_442
+					progress = 0.80
+				}
+				else = {
+					add_research_option = tech_society_secrets_442
+					add_tech_progress = {
+						tech = tech_society_secrets_442
+						progress = 0.5
+					}
+				}
+			}
+		}
+		hidden_effect = {
+			owner = { country_event = { id = story.3 days = 30 } }
+		}
+	}
+}
+
+### Below Zro, GAS_ZRO_ICE_CAT
+# Adds 2 Zro to gas giant
+ship_event = {
+	id = anomaly.150
+	title = "anomaly.150.name"
+	desc = "anomaly.150.desc"
+	picture = GFX_evt_gas_giant
+	show_sound = event_scanner
+	location = FROM
+
+	is_triggered_only = yes
+
+	immediate = { from = { orbital_deposit_tile = { clear_deposits = yes } } }
+
+	option = {
+		name = FASCINATING
+		FROM = {
+			add_modifier = {
+				modifier = "zro_ice"
+				days = -1
+			}
+			hidden_effect = {
+				orbital_deposit_tile = {
+					add_deposit = d_sr_neutronium_8_deposit
+				}
+			}
+		}
+	}
+}
+
+### Illicit Matter, AST_ILLICIT_DARK_CAT
+# Adds 2 Dark Matter to asteroid
+ship_event = {
+	id = anomaly.155
+	title = "anomaly.155.name"
+	desc = "anomaly.155.desc"
+	picture = GFX_evt_mining_station
+	show_sound = event_activating_unknown_technology
+	location = FROM
+
+	is_triggered_only = yes
+
+	immediate = { from = { orbital_deposit_tile = { clear_deposits = yes } } }
+
+	option = {
+		name = FASCINATING
+		hidden_effect = { owner = { country_event = { id = story.5 days = 30 } } }
+		FROM = {
+			add_modifier = {
+				modifier = "dark_matter_funnel"
+				days = -1
+			}
+			hidden_effect = {
+				orbital_deposit_tile = {
+					add_deposit = d_sr_dark_9_deposit
+				}
+			}
+		}
+	}
+}
+
+### Purple Rain, TOX_PURPLE_RAIN_CAT
+# + Happiness mod
+ship_event = {
+	id = anomaly.160
+	title = "anomaly.160.name"
+	desc = "anomaly.160.desc"
+	picture = GFX_evt_alien_nature
+	show_sound = event_alien_nature
+	location = FROM
+
+	is_triggered_only = yes
+
+	option = {
+		name = REMARKABLE
+		owner = {
+			add_modifier = {
+				modifier = inspired_arts
+				days = 7200
+			}
+		}
+	}
+}
+
+# Exiled scientist
+ship_event = {
+	id = anomaly.170
+	title = "anomaly.170.name"
+	desc = "anomaly.170.desc"
+	show_sound = event_airlock
+	picture = GFX_evt_outpost
+	location = FROM
+
+	is_triggered_only = yes
+
+	trigger = {
+		from = { is_planet_class = pc_frozen }
+	}
+
+	immediate = {
+		owner = { set_country_flag = FROZ_BASE_FLAG }
+	}
+
+	option = {
+		name = anomaly.170.a
+		owner = {
+			add_monthly_resource_mult = {
+				resource = physics_research
+				value = @tier3researchreward
+				min = @tier3researchmin
+				max = @tier3researchmax
+			}
+		}
+		hidden_effect = {
+			random_list = {
+				20 = { ship_event = { id = anomaly.172 days = 5 } }
+				80 = { ship_event = { id = anomaly.171 days = 5 } }
+			}
+		}
+	}
+
+	option = {
+		name = anomaly.170.b
+		custom_tooltip = "anomaly.170.b.tooltip"
+		hidden_effect = {
+			owner = {
+				create_leader = {
+					type = scientist
+					species = owner_main_species
+					name = "NAME_The_Exile"
+					skill = 0
+					event_leader = yes   
+				}
+				last_created_leader = {
+					add_experience = 500
+				}
+				set_country_flag = exile_employed
+			}
+		}
+	}
+}
+
+# Exile followup 1
+ship_event = {
+	id = anomaly.171
+	title = "anomaly.171.name"
+	desc = "anomaly.171.desc"
+	show_sound = event_mystic_reveal
+	picture = GFX_evt_outpost
+	location = FROMFROM
+
+	is_triggered_only = yes
+
+	option = {
+		name = "anomaly.171.a"
+		hidden_effect = {
+			owner = { set_country_flag = exile_missing }
+		}
+	}
+}
+
+# Exile followup 2
+ship_event = {
+	id = anomaly.172
+	title = "anomaly.172.name"
+	desc = "anomaly.172.desc"
+	show_sound = event_mystic_reveal
+	picture = GFX_evt_outpost
+	location = FROMFROM
+
+	is_triggered_only = yes
+
+	option = {
+		name = UNFORTUNATE
+		hidden_effect = {
+			owner = { set_country_flag = exile_missing }
+		}
+	}
+}
+
+# Stellar Salt
+ship_event = {
+	id = anomaly.175
+	title = "anomaly.175.name"
+	desc = "anomaly.175.desc"
+	show_sound = event_scanner
+	picture = GFX_evt_outpost
+	location = FROMFROM
+
+	is_triggered_only = yes
+
+	option = {
+		name = "anomaly.175.a"
+		owner = {
+			add_modifier = {
+				modifier = stellar_salt
+				days = 7200
+			}
+		}
+	}
+}
+
+# Nimkip
+ship_event = {
+	id = anomaly.180
+	title = "anomaly.180.name"
+	desc = "anomaly.180.desc"
+	show_sound = event_alien_nature
+	picture = GFX_evt_alien_nature
+	location = FROMFROM
+
+	is_triggered_only = yes
+
+	option = {
+		name = "anomaly.180.a"
+		trigger = {
+			owner = {
+				has_technology = tech_society_xenology_445
+				NOR = {
+					has_country_flag = timed_trop_pets
+					has_policy_flag = interference_passive
+				}
+			}
+		}
+		hidden_effect = { owner = { country_event = { id = story.1 days = 30 } } }
+		from = {
+			while = {
+				count = 2
+				random_tile = {
+					limit = { has_deposit = no }
+					add_deposit = d_sr_tribbles_6_deposit
+				}
+			}
+		}
+		hidden_effect = {
+			owner = {
+				set_timed_country_flag = { flag = timed_trop_pets days = 1200 }
+			}
+		}
+	}
+
+	option = {
+		name = "anomaly.180.b"
+		trigger = {
+			owner = {
+				OR = {
+					has_ethic = ethic_fanatic_xenophobe
+					has_ethic = ethic_xenophobe
+					has_ethic = ethic_fanatic_militarist
+					has_ethic = ethic_militarist
+				}
+				NOT = {
+					has_ethic = ethic_fanatic_xenophile
+					has_ethic = ethic_xenophile
+					has_policy_flag = interference_passive
+					has_country_flag = timed_trop_pets
+				}
+			}
+		}
+		custom_tooltip = "anomaly.180.b.tooltip"
+		owner = {
+			add_monthly_resource_mult = {
+				resource = influence
+				value = @tier1influencereward
+				min = @tier1influencemin
+				max = @tier1influencemax
+			}
+		}
+		hidden_effect = {
+			owner = {
+				set_timed_country_flag = { flag = timed_trop_pets days = 1200 }
+			}
+		}
+	}
+
+	option = {
+		name = "anomaly.180.c"
+		trigger = {
+			owner = { has_policy_flag = interference_passive }
+		}
+	}
+
+	option = {
+		name = "anomaly.180.d"
+		trigger = {
+			owner = { NOT = { has_policy_flag = interference_passive } }
+		}
+	}
+}
+
+
+# Planetary Projection
+ship_event = {
+	id = anomaly.190
+	title = "anomaly.190.name"
+	desc = "anomaly.190.desc"
+	show_sound = event_radio_chatter
+	picture = GFX_evt_satellite_in_orbit
+	location = FROM
+
+	is_triggered_only = yes
+
+	immediate = { from = { orbital_deposit_tile = { clear_deposits = yes } } }
+
+	option = {
+		name = OK
+		hidden_effect = {
+			from = {
+				random_moon = {
+					set_planet_flag = projecting_moon
+					enable_special_project = {
+						name = "PROJECTING_MOON_PROJECT"
+						location = this
+						owner = root
+					}
+				}
+			}
+		}
+	}
+}
+
+# Planetary Projection followup
+planet_event = {
+	id = anomaly.191
+	title = "anomaly.191.name"
+	desc = "anomaly.191.desc"
+	show_sound = event_radio_chatter
+	picture = GFX_evt_asteroid_approaching_planet
+	location = fromfrom
+
+	is_triggered_only = yes
+
+	option = {
+		name = INTRIGUING
+		custom_tooltip = anomaly.191.a.tooltip
+		hidden_effect = { owner = { country_event = { id = story.5 days = 30 } } }
+		hidden_effect = {
+			add_modifier = {
+				modifier = projecting_moon
+				days = -1
+			}
+			orbital_deposit_tile = {
+				add_deposit = d_vast_engineering_deposit
+				add_deposit = d_rich_engineering_deposit
+			}
+			surveyed = {
+				set_surveyed = yes
+				surveyor = event_target:ship_owner
+			}
+			remove_planet_flag = projecting_moon
+		}
+	}
+}
+
+# Misty Shores
+ship_event = {
+	id = anomaly.195
+	title = "anomaly.195.name"
+	desc = "anomaly.195.desc"
+	show_sound = event_mystic_reveal
+	picture = GFX_evt_ship_in_orbit
+	location = FROM
+
+	is_triggered_only = yes
+
+	option = {
+		name = FASCINATING
+		hidden_effect = { owner = { country_event = { id = story.5 days = 30 } } }
+		leader = {
+			add_experience = 200
+		}
+	}
+}
+
+# Old Geothermal Installation
+ship_event = {
+	id = anomaly.200
+	title = "anomaly.200.name"
+	desc = "anomaly.200.desc"
+	show_sound = event_structural_collapse
+	picture = GFX_evt_dead_city
+	location = FROM
+
+	is_triggered_only = yes
+
+	immediate = { from = { orbital_deposit_tile = { clear_deposits = yes } } }
+
+	option = {
+		name = EXCELLENT
+		hidden_effect = { owner = { country_event = { id = story.5 days = 30 } } }
+		owner = {
+			add_monthly_resource_mult = {
+				resource = energy
+				value = @tier2materialreward
+				min = @tier2materialmin
+				max = @tier2materialmax
+			}
+		}
+		from = {
+			hidden_effect = {
+				orbital_deposit_tile = {
+					add_deposit = d_vast_engineering_deposit
+					add_deposit = d_rich_engineering_deposit
+				}
+			}
+		}
+	}
+}
+
+# Completely Leveled
+ship_event = {
+	id = anomaly.205
+	title = "anomaly.205.name"
+	desc = "anomaly.205.desc"
+	show_sound = event_structural_collapse
+	picture = GFX_evt_ship_in_orbit
+	location = FROM
+
+	is_triggered_only = yes
+
+	immediate = {
+		from = {
+			while = {
+				limit = {
+					any_tile = { has_blocker = yes }
+				}
+				random_tile = {
+					limit = { has_blocker = yes }
+					remove_blocker = yes
+				}
+			}
+		}
+	}
+
+	option = {
+		name = anomaly.205.a
+		custom_tooltip = "anomaly.205.a.tooltip"
+	}
+}
+
+# Dimensional Duplicate
+ship_event = {
+	id = anomaly.210
+	title = "anomaly.210.name"
+	desc = "anomaly.210.desc"
+	show_sound = event_mystic_reveal
+	picture = GFX_evt_federation_fleet
+	location = FROM
+
+	is_triggered_only = yes
+
+	immediate = { owner = { set_country_flag = dimensional_pocketed } }
+
+	option = {
+		name = UNFORTUNATE
+		leader = {
+			add_experience = 200
+		}
+		hidden_effect = {
+			ship_event = { id = anomaly.211 days = 33 }
+		}
+	}
+}
+
+# Dimensional Duplicate followup
+ship_event = {
+	id = anomaly.211
+	title = "anomaly.211.name"
+	desc = "anomaly.211.desc"
+	show_sound = event_mystic_reveal
+	picture = GFX_evt_federation_fleet
+	location = FROMFROM
+
+	is_triggered_only = yes
+
+	immediate = { fromfrom = { save_event_target_as = dimensional_planet } }
+
+	option = {
+		name = anomaly.211.a
+		custom_tooltip = anomaly.211.a.tooltip
+		hidden_effect = {
+			owner = {
+				save_event_target_as = owner_country
+				create_fleet = {
+					name = "NAME_Other_Science_Ship"
+					effect = {
+						set_owner = prev
+						create_ship_design = {
+							design = "NAME_Prototype"
+							ftl = event_target:owner_country
+						}
+						create_ship = {
+							name = "NAME_From_Beyond"
+							design = last_created_design
+							#graphical_culture = "extra_dimensional_01"
+							prefix = no
+							upgradable = no
+						}
+						set_location = fromfrom
+					}
+				}
+			}
+		}
+	}
+
+	option = {
+		name = anomaly.211.b
+		custom_tooltip = anomaly.211.b.tooltip
+		hidden_effect = {
+			ship_event = { id = anomaly.212 }
+		}
+	}
+}
+
+ship_event = {
+	id = anomaly.212
+	hide_window = yes
+
+	is_triggered_only = yes
+
+	immediate = {
+		create_country = {
+			name = "NAME_5th_Dimensionalists"
+			type = faction
+			effect = {
+				establish_communications_no_message = root.owner
+				establish_contact = { who = root.owner location = root.fleet.solar_system }
+				save_event_target_as = dimensional
+				create_fleet = {
+					name = "NAME_From_Beyond"
+					effect = {
+						set_owner = prev
+						create_ship = {
+							name = "NAME_Ship_of_Unknown_Origin"
+							design = "NAME_Dagger"
+							graphical_culture = "extra_dimensional_01"
+							prefix = no
+						}
+						set_location = event_target:dimensional_planet
+					}
+				}
+				set_faction_hostility = { set_hostile = yes }
+			}
+		}
+	}
+}
+
+# Cornucopia
+ship_event = {
+	id = anomaly.215
+	title = "anomaly.215.name"
+	desc = "anomaly.215.desc"
+	picture = GFX_evt_big_landing_ship
+	show_sound = event_alien_nature
+	location = FROM
+
+	is_triggered_only = yes
+	auto_opens = yes
+
+	option = {
+		name = FANTASTIC
+		custom_tooltip = anomaly.215.a.tooltip
+		hidden_effect = {
+			from = {
+				add_modifier = {
+					modifier = "cornucopia"
+					days = -1
+				}
+				random_tile = {
+					limit = {
+						has_blocker = no
+						has_deposit = no
+					}
+					add_deposit = d_rich_farmland_deposit
+					add_deposit = d_farmland_deposit
+				}
+				random_tile = {
+					limit = {
+						has_blocker = no
+						has_deposit = no
+					}
+					add_deposit = d_rich_farmland_deposit
+					add_deposit = d_farmland_deposit
+				}
+				random_tile = {
+					limit = {
+						has_blocker = no
+						has_deposit = no
+					}
+					add_deposit = d_rich_farmland_deposit
+					add_deposit = d_farmland_deposit
+				}
+				random_tile = {
+					limit = {
+						has_blocker = no
+						has_deposit = no
+					}
+					add_deposit = d_rich_farmland_deposit
+					add_deposit = d_farmland_deposit
+				}
+			}
+		}
+	}
+}
+
+# Wealth of raw materials
+ship_event = {
+	id = anomaly.220
+	title = "anomaly.220.name"
+	desc = "anomaly.220.desc"
+	picture = GFX_evt_big_landing_ship
+	show_sound = event_scanner
+	location = FROM
+
+	is_triggered_only = yes
+	auto_opens = yes
+
+	option = {
+		name = FANTASTIC
+		custom_tooltip = anomaly.220.a.tooltip
+
+		hidden_effect = {
+			from = {
+				add_modifier = {
+					modifier = "raw_materials"
+					days = -1
+				}
+				random_tile = {
+					limit = {
+						has_blocker = no
+						has_deposit = no
+					}
+					add_deposit = d_vast_mineral_deposit
+				}
+				random_tile = {
+					limit = {
+						has_blocker = no
+						has_deposit = no
+					}
+					add_deposit = d_vast_mineral_deposit
+				}
+				random_tile = {
+					limit = {
+						has_blocker = no
+						has_deposit = no
+					}
+					add_deposit = d_vast_mineral_deposit
+				}
+				random_tile = {
+					limit = {
+						has_blocker = no
+						has_deposit = no
+					}
+					add_deposit = d_vast_mineral_deposit
+				}
+			}
+		}
+	}
+}
+
+# Shadow Play
+ship_event = {
+	id = anomaly.225
+	title = "anomaly.225.name"
+	desc = "anomaly.225.desc"
+	picture = GFX_evt_ship_in_orbit
+	show_sound = event_mystic_reveal
+	location = FROM
+
+	is_triggered_only = yes
+
+	immediate = { from = { orbital_deposit_tile = { clear_deposits = yes } } }
+
+	option = {
+		name = OK
+		custom_tooltip = anomaly.225.a.tooltip
+		hidden_effect = {
+			from = {
+				add_modifier = {
+					modifier = shadow_play
+					days = -1
+				}
+			}
+			from = {
+				orbital_deposit_tile = {
+					add_deposit = d_vast_society_deposit
+					add_deposit = d_vast_society_deposit
+				}
+			}
+		}
+	}
+}
+
+# Grimacing
+ship_event = {
+	id = anomaly.230
+	title = "anomaly.230.name"
+	desc = {
+		trigger = { owner = { has_technology = tech_terraforming_base_1 } }
+		text = anomaly.230.desc.v1
+	}
+	desc = {
+		trigger = { owner = { NOT = { has_technology = tech_terraforming_base_1 } } }
+		text = anomaly.230.desc.v2
+	}
+	picture = GFX_evt_cold_barren
+	show_sound = event_scanner
+	location = FROM
+
+	is_triggered_only = yes
+
+	immediate = { from = { orbital_deposit_tile = { clear_deposits = yes } } }
+
+	option = {
+		trigger = { owner = { energy > 199 } }
+		name = anomaly.230.a
+		custom_tooltip = anomaly.230.a.tooltip
+		hidden_effect = {
+			from = {
+				add_modifier = {
+					modifier = grimacing
+					days = -1
+				}
+				orbital_deposit_tile = {
+					add_deposit = d_vast_physics_deposit
+					add_deposit = d_vast_physics_deposit
+				}
+			}
+		}
+	}
+
+	option = {
+		trigger = { owner = { energy > 199 } }
+		name = anomaly.230.b
+		custom_tooltip = anomaly.230.b.tooltip
+		owner = { add_energy = -200 }
+		hidden_effect = {
+			random_list = {
+				50 = { ship_event = { id = anomaly.231 days = 5 } }
+				50 = { ship_event = { id = anomaly.232 days = 5 } }
+			}
+		}
+	}
+
+	option = {
+		trigger = { owner = { energy < 199 } }
+		name = anomaly.230.c
+		custom_tooltip = anomaly.230.a.tooltip
+		hidden_effect = {
+			from = {
+				orbital_deposit_tile = {
+					add_deposit = d_vast_physics_deposit
+					add_deposit = d_vast_physics_deposit
+				}
+				add_modifier = {
+					modifier = grimacing
+					days = -1
+				}
+			}
+		}
+	}
+}
+
+# Grimacing - can enable special project
+ship_event = {
+	id = anomaly.231
+	title = anomaly.231.name
+	desc = anomaly.231.desc
+	picture = GFX_evt_atmospheric_entry
+	show_sound = event_laboratory_sound
+	location = FROMFROM
+
+	is_triggered_only = yes
+
+	option = {
+		name = EXCELLENT
+		fromfrom = {
+			enable_special_project = {
+				name = "GRIMACING_PLANET_PROJECT"
+				location = this
+				owner = root.owner
+			}
+		}
+	}
+}
+
+# Grimacing - failed to enable special project
+ship_event = {
+	id = anomaly.232
+	title = anomaly.232.name
+	desc = anomaly.232.desc
+	picture = GFX_evt_atmospheric_entry
+	show_sound = event_structural_collapse
+	location = FROMFROM
+
+	is_triggered_only = yes
+
+	option = {
+		name = UNFORTUNATE
+	}
+}
+
+# Grimacing - special project followup
+ship_event = {
+	id = anomaly.233
+	title = anomaly.233.name
+	desc = anomaly.233.desc
+	picture = GFX_evt_physics_research
+	show_sound = event_mystic_reveal
+	location = fromfrom
+
+	is_triggered_only = yes
+
+	immediate = {
+		owner = {
+			if = {
+				limit = {
+					NOT = { has_authority = auth_machine_intelligence }
+				}
+				fromfrom = {
+					change_pc = pc_arid
+					reset_planet = yes
+				}
+				else = {
+					fromfrom = {
+						change_pc = pc_machine
+						reset_planet = yes
+					}
+				}
+			}
+		}
+	}
+
+	option = {
+		name = MARVELOUS
+		owner = {
+			add_monthly_resource_mult = {
+				resource = physics_research
+				value = @tier3researchreward
+				min = @tier3researchmin
+				max = @tier3researchmax
+			}
+			add_monthly_resource_mult = {
+				resource = engineering_research
+				value = @tier3researchreward
+				min = @tier3researchmin
+				max = @tier3researchmax
+			}
+		}
+	}
+}
+
+# Lasers through ice
+ship_event = {
+	id = anomaly.235
+	title = anomaly.235.name
+	desc = {
+		trigger = { owner = { has_second_tier_starting_weapon = yes } }
+		text = anomaly.235.desc.v1
+	}
+	desc = {
+		trigger = { owner = { has_second_tier_starting_weapon = no } }
+		text = anomaly.235.desc.v2
+	}
+	picture = GFX_evt_frozen
+	show_sound = event_space_battle
+	location = FROM
+
+	is_triggered_only = yes
+
+	option = {
+		name = INTERESTING
+		trigger = { owner = { has_second_tier_starting_weapon = yes } }
+		hidden_effect = { owner = { country_event = { id = story.5 days = 30 } } }
+		leader = { add_experience = 100 }
+	}
+
+	option = { #STNH REVISIT
+		name = anomaly.235.b
+		trigger = { owner = { has_second_tier_starting_weapon = no } }
+		hidden_effect = { owner = { country_event = { id = story.5 days = 30 } } }
+		owner = {
+			if = {
+				limit = { uses_polaron_weapons = yes }
+				give_technology = { tech = tech_physics_focused_296 }
+			}
+			if = {
+				limit = { uses_tetryon_weapons = yes }
+				give_technology = { tech = tech_physics_tetryon_321 }
+			}
+			if = {
+				limit = { uses_antiproton_weapons = yes }
+				give_technology = { tech = tech_physics_anti-proton_269 }
+			}
+			if = {
+				limit = { uses_plasma_weapons = yes }
+				give_technology = { tech = tech_physics_modulating_241 }
+			}
+			if = {
+				limit = { uses_disruptor_weapons = yes }
+				give_technology = { tech = tech_physics_phase_202 }
+			}
+			if = {
+				limit = { uses_plasma_disruptor_weapons = yes }
+				give_technology = { tech = tech_physics_modulated_203 }
+			}
+			if = {
+				limit = { uses_phaser_weapons = yes }
+				give_technology = { tech = tech_physics_nadion_159 }
+			}
+			if = {
+				limit = { uses_phaser_weapons_fed = yes }
+				give_technology = { tech = tech_physics_phase_156 }
+			}
+		}
+	}
+}
+
+# Deceptive Gas Giant
+ship_event = {
+	id = anomaly.240
+	title = anomaly.240.name
+	desc = anomaly.240.desc
+	picture = GFX_evt_warm_barren
+	show_sound = event_mystic_reveal
+	location = FROM
+
+	is_triggered_only = yes
+
+	immediate = {
+		from = {
+			clear_planet_modifiers = yes
+			change_pc = pc_barren
+			reset_planet = yes
+			change_planet_size = 25
+		}
+	}
+
+	option = {
+		name = REMARKABLE
+		custom_tooltip = anomaly.240.a.tooltip
+		leader = {
+			add_experience = 200
+		}
+	}
+}
+
+# Eden overrun
+ship_event = {
+	id = anomaly.245
+	title = anomaly.245.name
+	desc = anomaly.245.desc
+	picture = GFX_evt_alien_nature
+	show_sound = event_alien_nature
+	location = from
+
+	is_triggered_only = yes
+
+	trigger = { from = { is_planet_class = pc_gaia } }
+
+	immediate = {
+		from = {
+			random_tile = {
+				limit = { has_blocker = no }
+				set_blocker = tb_dangerous_wildlife
+			}
+			random_tile = {
+				limit = { has_blocker = no }
+				set_blocker = tb_dangerous_wildlife
+			}
+			random_tile = {
+				limit = { has_blocker = no }
+				set_blocker = tb_dangerous_wildlife
+			}
+			random_tile = {
+				limit = { has_blocker = no }
+				set_blocker = tb_dangerous_wildlife
+			}
+		}
+	}
+
+	option = {
+		name = UNFORTUNATE
+		leader = {
+			add_experience = 200
+		}
+		owner = {
+			add_monthly_resource_mult = {
+				resource = society_research
+				value = @tier4researchreward
+				min = @tier4researchmin
+				max = @tier4researchmax
+			}
+		}
+	}
+}
+
+# Olfactory Document
+ship_event = {
+	id = anomaly.250
+	title = anomaly.250.name
+	desc = anomaly.250.desc
+	picture = GFX_evt_archaeological_dig
+	show_sound = event_scanner
+	location = from
+
+	is_triggered_only = yes
+
+	option = {
+		name = anomaly.250.a
+		hidden_effect = { owner = { country_event = { id = story.5 days = 30 } } }
+		from = {
+			enable_special_project = {
+				name = "OLFACTORY_PROJECT"
+				location = this
+				owner = root
+			}
+		}
+	}
+}
+
+# Olfactory followup
+ship_event = {
+	id = anomaly.251
+	title = anomaly.251.name
+	desc = anomaly.251.desc
+	picture = GFX_evt_archaeological_dig
+	show_sound = event_default
+	location = fromfrom
+
+	is_triggered_only = yes
+
+	option = {
+		name = INTERESTING
+		leader = {
+			add_experience = 100
+		}
+		owner = {
+			add_monthly_resource_mult = {
+				resource = society_research
+				value = @tier3researchreward
+				min = @tier3researchmin
+				max = @tier3researchmax
+			}
+		}
+	}
+}
+
+# Ultimate weapon
+ship_event = {
+	id = anomaly.255
+	title = anomaly.255.name
+	desc = anomaly.255.desc
+	picture = GFX_evt_alien_city
+	show_sound = event_planetary_riot
+	location = from
+
+	is_triggered_only = yes
+
+	option = {
+		name = anomaly.255.a
+		hidden_effect = { owner = { country_event = { id = story.5 days = 30 } } }
+	}
+
+	option = {
+		name = anomaly.255.b
+		hidden_effect = { owner = { country_event = { id = story.5 days = 30 } } }
+		from = {
+			enable_special_project = {
+				name = ULTIMATE_WEAPON_PROJECT
+				location = this
+				owner = root
+			}
+		}
+	}
+}
+
+# Ultimate Weapon followup 1 - starting weapon
+ship_event = {
+	id = anomaly.256
+	title = anomaly.256.name
+	desc = anomaly.256.desc
+	picture = GFX_evt_alien_city
+	show_sound = event_default
+	location = fromfrom
+
+	is_triggered_only = yes
+
+	immediate = {
+		if = {
+			limit = {
+				owner = {
+					NOT = {
+						has_technology = tech_mass_drivers_1
+						has_country_flag = got_mass
+						has_country_flag = got_miss
+						has_country_flag = got_laser
+					}
+				}
+			}
+			owner = {
+				# give_technology = tech_mass_drivers_1 FIX THIS LATER
+				set_country_flag = got_mass
+			}
+		}
+		if = {
+			limit = {
+				owner = {
+					NOT = {
+						has_technology = tech_missiles_1
+						has_country_flag = got_mass
+						has_country_flag = got_miss
+						has_country_flag = got_laser
+					}
+				}
+			}
+			owner = {
+				# give_technology = tech_missiles_1 FIX THIS LATER
+				set_country_flag = got_miss
+			}
+		}
+		if = {
+			limit = {
+				owner = {
+					NOT = {
+						has_technology = tech_lasers_1
+						has_country_flag = got_mass
+						has_country_flag = got_miss
+						has_country_flag = got_laser
+					}
+				}
+			}
+			owner = {
+				# give_technology = tech_lasers_1 FIX THIS LATER
+				set_country_flag = got_laser
+			}
+		}
+	}
+
+	option = {
+		name = anomaly.256.a
+		if = {
+			limit = { owner = { has_country_flag = got_mass } }
+			custom_tooltip = anomaly.256.a.tooltip.mass
+		}
+		if = {
+			limit = { owner = { has_country_flag = got_miss } }
+			custom_tooltip = anomaly.256.a.tooltip.miss
+		}
+		if = {
+			limit = { owner = { has_country_flag = got_laser } }
+			custom_tooltip = anomaly.256.a.tooltip.laser
+		}
+	}
+
+	option = {
+		name = anomaly.256.b
+		trigger = {
+			owner = {
+				NOT = {
+					has_country_flag = got_mass
+					has_country_flag = got_miss
+					has_country_flag = got_laser
+				}
+				AND = {
+					has_technology = tech_mass_drivers_1
+					has_technology = tech_missiles_1
+					has_technology = tech_lasers_1
+				}
+			}
+		}
+	}
+}
+
+# Ultimate Weapon followup 2 - exotic weapon
+ship_event = {
+	id = anomaly.257
+	title = anomaly.257.name
+	desc = anomaly.257.desc
+	picture = GFX_evt_alien_city
+	show_sound = event_mystic_reveal
+	location = fromfrom
+
+	is_triggered_only = yes
+
+	option = {
+		name = anomaly.257.a
+		trigger = {
+			NOT = {
+				OR = {
+					owner = {
+						has_technology = tech_lasers_1
+						NOT = { has_technology = tech_energy_lance_1 }
+					}
+					owner = {
+						has_technology = tech_mass_drivers_1
+						NOT = { has_technology = tech_kinetic_artillery_1 }
+					}
+					owner = {
+						has_technology = tech_missiles_1
+						NOT = { has_technology = tech_swarmer_missiles_1 }
+					}
+				}
+			}
+		}
+		leader = {
+			add_experience = 200
+		}
+	}
+
+	option = {
+		name = EXCELLENT
+		trigger = {
+			owner = {
+				has_technology = tech_lasers_1
+				NOT = { has_technology = tech_energy_lance_1 }
+			}
+		}
+		# owner = { give_technology = tech_energy_lance_1 } FIX THIS LATER
+		leader = { add_experience = 200 }
+	}
+
+	option = {
+		name = EXCELLENT
+		trigger = {
+			owner = {
+				has_technology = tech_mass_drivers_1
+				NOT = { has_technology = tech_kinetic_artillery_1 }
+			}
+		}
+		# owner = { give_technology = tech_kinetic_artillery_1 } FIX THIS LATER
+		leader = { add_experience = 200 }
+	}
+
+	option = {
+		name = EXCELLENT
+		trigger = {
+			owner = {
+				has_technology = tech_missiles_1
+				NOT = { has_technology = tech_swarmer_missiles_1 }
+			}
+		}
+		# owner = { give_technology =  tech_swarmer_missiles_1 } FIX THIS LATER
+		leader = { add_experience = 200 }
+	}
+
+	OPTION = {
+		name = UNFORTUNATE
+		trigger = {
+			owner = {
+				has_technology = tech_energy_lance_1
+				has_technology = tech_kinetic_artillery_1
+				has_technology = tech_swarmer_missiles_1
+			}
+		}
+		leader = { add_experience = 200 }
+	}
+}
+
+# Ultimate Weapon followup 3 - nothing
+ship_event = {
+	id = anomaly.258
+	title = anomaly.258.name
+	desc = anomaly.258.desc
+	picture = GFX_evt_alien_city
+	show_sound = event_default
+	location = fromfrom
+
+	is_triggered_only = yes
+
+	option = {
+		name = UNFORTUNATE
+	}
+}
+
+# Abandoned Mining Operation on Arctic planet
+ship_event = {
+	id = anomaly.260
+	title = anomaly.260.name
+	desc = anomaly.260.desc
+	picture = GFX_evt_outpost
+	show_sound = event_activating_unknown_technology
+
+	is_triggered_only = yes
+
+	immediate = { from = { orbital_deposit_tile = { clear_deposits = yes } } }
+
+	option = {
+		name = anomaly.260.a
+		custom_tooltip = anomaly.260.a.tooltip
+		hidden_effect = { owner = { country_event = { id = story.5 days = 30 } } }
+		owner = {
+			add_monthly_resource_mult = {
+				resource = engineering_research
+				value = @tier2researchreward
+				min = @tier2researchmin
+				max = @tier2researchmax
+			}
+		}
+		hidden_effect = {
+			from = {
+				random_tile = {
+					limit = {
+						has_blocker = no
+						is_orbital_tile = no
+					}
+					set_building = building_ancient_factory
+				}
+			}
+		}
+	}
+}
+
+# Crater drag race
+ship_event = {
+	id = anomaly.265
+	title = anomaly.265.name
+	desc = anomaly.265.desc
+	picture = GFX_evt_archaeological_dig
+	show_sound = event_ship_thrusters
+
+	is_triggered_only = yes
+
+	immediate = { from = { orbital_deposit_tile = { clear_deposits = yes } } }
+
+	option = {
+		name = anomaly.265.a
+		custom_tooltip = anomaly.265.a.tooltip
+		hidden_effect = { owner = { country_event = { id = story.5 days = 30 } } }
+		hidden_effect = {
+			from = {
+				add_modifier = {
+					modifier = skid_marks
+					days = -1
+				}
+				orbital_deposit_tile = {
+					add_deposit = d_vast_engineering_deposit
+					add_deposit = d_vast_engineering_deposit
+				}
+			}
+		}
+	}
+}
+
+# Artificial Impact
+ship_event = {
+	id = anomaly.270
+	title = anomaly.270.name
+	desc = anomaly.270.desc
+	picture = GFX_evt_asteroid_approaching_planet
+	show_sound = event_default
+
+	is_triggered_only = yes
+
+	immediate = { from = { orbital_deposit_tile = { clear_deposits = yes } } }
+
+	option = {
+		name = anomaly.270.a
+		custom_tooltip = anomaly.270.a.tooltip
+		hidden_effect = { owner = { country_event = { id = story.5 days = 30 } } }
+		hidden_effect = {
+			from = {
+				add_modifier = {
+					modifier = dust_circuits
+					days = -1
+				}
+				orbital_deposit_tile = {
+					add_deposit = d_vast_engineering_deposit
+					add_deposit = d_vast_engineering_deposit
+					add_deposit = d_vast_engineering_deposit
+				}
+			}
+		}
+	}
+}
+
+# Abandoned Thrusters
+ship_event = {
+	id = anomaly.275
+	title = anomaly.275.name
+	desc = anomaly.275.desc
+	picture = GFX_evt_archaeological_dig
+	show_sound = event_ship_thrusters
+
+	is_triggered_only = yes
+
+	option = {
+		name = anomaly.275.a
+		trigger = { owner = { NOT = { has_ethic = ethic_fanatic_xenophobe } } }
+		owner = {
+			if = {
+				limit = { NOT = { has_technology = tech_engineering_inertial_629 } }
+				give_technology = { tech = tech_engineering_inertial_629 }
+				else = {
+					add_monthly_resource_mult = {
+						resource = unity
+						value = @tier1unityreward
+						min = @tier1unitymin
+						max = @tier1unitymax
+					}
+				}
+			}
+		}
+		hidden_effect = { owner = { country_event = { id = story.5 days = 30 } } }
+	}
+
+	option = {
+		name = anomaly.275.b
+		trigger = { owner = { has_ethic = ethic_fanatic_xenophobe } }
+		owner = {
+			add_monthly_resource_mult = {
+				resource = unity
+				value = @tier1influencereward
+				min = @tier1influencemin
+				max = @tier1influencemax
+			}
+		}
+		hidden_effect = { owner = { country_event = { id = story.5 days = 30 } } }
+	}
+}
+
+# Unusual Tectonics
+ship_event = {
+	id = anomaly.285
+	title = anomaly.285.name
+	desc = anomaly.285.desc
+	picture = GFX_evt_ship_in_orbit
+	show_sound = event_scanner
+
+	is_triggered_only = yes
+
+	immediate = { from = { orbital_deposit_tile = { clear_deposits = yes } } }
+
+	option = {
+		name = anomaly.285.a
+		custom_tooltip = anomaly.285.a.tooltip
+		hidden_effect = {
+			from = {
+				add_modifier = {
+					modifier = unusual_tectonics
+					days = -1
+				}
+				orbital_deposit_tile = {
+					add_deposit = d_vast_engineering_deposit
+					add_deposit = d_vast_physics_deposit
+					add_deposit = d_vast_physics_deposit
+				}
+			}
+		}
+	}
+}
+
+# Irradiating rock for fun and profit
+ship_event = {
+	id = anomaly.290
+	title = anomaly.290.name
+	desc = anomaly.290.desc
+	picture = GFX_evt_ship_in_orbit
+	show_sound = event_ship_bridge
+	location =  from
+
+	is_triggered_only = yes
+
+	immediate = {
+		from = {
+			orbital_deposit_tile = {
+				clear_deposits = yes
+			}
+		}
+	}
+
+	option = {
+		name = anomaly.290.a
+	}
+
+	option = {
+		name = anomaly.290.b
+		trigger = { owner = { energy > 99 } }
+		owner = { add_energy = -100 }
+		from = {
+			enable_special_project = {
+				name = "REFINE_ROCK_PROJECT"
+				location = this
+				owner = root
+			}
+		}
+	}
+}
+
+# Special project followup
+ship_event = {
+	id = anomaly.292
+	title = anomaly.290.name
+	desc = anomaly.292.desc
+	picture = GFX_evt_underground_civilization
+	show_sound = event_default
+	location = fromfrom
+
+	is_triggered_only = yes
+
+	option = {
+		name = EXCELLENT
+		hidden_effect = {
+			fromfrom = {
+				orbital_deposit_tile = {
+					add_deposit = d_vast_mineral_deposit
+					add_deposit = d_vast_mineral_deposit
+					add_deposit = d_vast_mineral_deposit
+				}
+			}
+		}
+	}
+}
+
+# Gravity emitters
+ship_event = {
+	id = anomaly.295
+	title = anomaly.295.name
+	desc = anomaly.295.desc
+	picture = GFX_evt_mining_station
+	show_sound = event_activating_unknown_technology
+
+	is_triggered_only = yes
+
+	option = {
+		name = anomaly.295.a
+		hidden_effect = { owner = { country_event = { id = story.5 days = 30 } } }
+		owner = {
+			add_monthly_resource_mult = {
+				resource = physics_research
+				value = @tier3researchreward
+				min = @tier3researchmin
+				max = @tier3researchmax
+			}
+			add_monthly_resource_mult = {
+				resource = engineering_research
+				value = @tier3researchreward
+				min = @tier3researchmin
+				max = @tier3researchmax
+			}
+		}
+	}
+}

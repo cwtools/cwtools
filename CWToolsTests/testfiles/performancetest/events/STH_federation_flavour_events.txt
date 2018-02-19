@@ -1,0 +1,634 @@
+#################################
+#
+# Federation Story / Crisis Events
+# by Walshicus
+#
+#################################
+
+
+namespace = STH_federation_flavour
+
+#Bajoran Accession - Religious Dress Code
+country_event = {
+	id = STH_federation_flavour.1
+	title = "STH_federation_flavour.1.name"
+	desc = "STH_federation_flavour.1.desc"
+	picture = sth_GFX_evt_vedekAssembly
+	trigger = {
+		has_country_flag = united_federation_of_planets
+		any_country = { 
+			has_country_flag = bajoran_republic
+			has_country_flag = federationAccessionState
+			check_variable = { which = "accession_progress" value < 80 } 
+		}
+		any_country = {
+			has_country_flag = bajoranReligionCountry
+			any_owned_leader = { OR = { has_leader_flag = bajoranKai } }
+		}
+	}
+	fire_only_once = yes
+	mean_time_to_happen = { months = 60 }
+	immediate = {
+		random_country = { 
+			limit = { has_country_flag = bajoran_republic }
+			save_event_target_as = bajoran_republic
+		}
+		random_country = {
+			limit = { has_country_flag = bajoranReligionCountry }
+			random_owned_leader = { 
+				limit = { has_leader_flag = bajoranKai }
+				save_event_target_as = bajoranKai
+			}
+		}
+	}
+	option = {
+		name = STH_federation_flavour.1.a #Discuss with the Kai
+		hidden_effect = { country_event = { id = STH_federation_flavour.2 days = 30 random = 6 } }
+		custom_tooltip = "STH_federation_flavour.1.a.tooltip"
+	}
+	option = {
+		name = STH_federation_flavour.1.b #Refuse meeting
+		hidden_effect = { event_target:bajoran_republic = { change_variable = { which = "accession_progress" value = -15 } } }
+		custom_tooltip = "STH_federation_flavour.1.b.tooltip"
+		add_unity = 10
+	}
+}
+country_event = {
+	id = STH_federation_flavour.2
+	title = "STH_federation_flavour.2.name"
+	desc = "STH_federation_flavour.2.desc"
+	diplomatic = yes
+	picture_event_data = {
+		portrait = event_target:bajoranKai
+		planet_background = root
+		graphical_culture = root
+		city_level = root
+		room = root
+	}
+	trigger = { }
+	is_triggered_only = yes
+	immediate = {
+		random_country = { 
+			limit = { has_country_flag = bajoran_republic }
+			save_event_target_as = bajoran_republic
+		}
+		random_country = {
+			limit = { has_country_flag = bajoranReligionCountry }
+			random_owned_leader = { 
+				limit = { has_leader_flag = bajoranKai }
+				save_event_target_as = bajoranKai
+			}
+		}
+	}
+	option = {
+		name = STH_federation_flavour.2.a #Accept uniform request
+		response_text = STH_federation_flavour.2.a.response
+		custom_tooltip = "STH_federation_flavour.2.a.tooltip"
+		allow = { influence > 24 }
+		hidden_effect = { event_target:bajoran_republic = { change_variable = { which = "accession_progress" value = 10 } } }
+		add_influence = -25
+	}
+	option = {
+		name = STH_federation_flavour.2.b #Ask for more detail
+		is_dialog_only = yes
+		response_text = STH_federation_flavour.2.b.response
+	}
+	option = {
+		name = STH_federation_flavour.2.c #Reject uniform request
+		response_text = STH_federation_flavour.2.c.response
+		custom_tooltip = "STH_federation_flavour.2.c.tooltip"
+		hidden_effect = { event_target:bajoran_republic = { change_variable = { which = "accession_progress" value = -10 } } }
+		add_unity = 10
+	}
+}
+
+
+#Generic Remove Authoritarian
+country_event = {
+	id = STH_federation_flavour.100
+	title = "STH_federation_flavour.100.name"
+	desc = "STH_federation_flavour.100.desc"
+	diplomatic = yes
+	picture_event_data = { portrait = event_target:accessionStateLeader room = federation_council_room }
+	trigger = {
+		has_country_flag = united_federation_of_planets
+		OR = { has_ethic = ethic_egalitarian has_ethic = ethic_fanatic_egalitarian }
+		any_country = { 
+			OR = { has_ethic = ethic_authoritarian has_ethic = ethic_fanatic_authoritarian }
+			has_country_flag = federationAccessionState
+			check_variable = { which = "accession_progress" value > 20 }
+			NOT = { has_country_flag = recent_authoritarian_shift }
+		}
+	}
+	mean_time_to_happen = { months = 60 }
+	immediate = {
+		random_country = { 
+			limit = { 
+				OR = { has_ethic = ethic_authoritarian has_ethic = ethic_fanatic_authoritarian }
+				has_country_flag = federationAccessionState
+				check_variable = { which = "accession_progress" value > 20 }
+			}
+			save_event_target_as = accessionState
+			leader = { save_event_target_as = accessionStateLeader }
+		}
+	}
+	option = {
+		name = STH_federation_flavour.100.a #Fund education campaigns
+		allow = { influence > 99 }
+		add_influence = -100
+		hidden_effect = {
+			event_target:accessionState = {  
+				set_timed_country_flag = { flag = recent_authoritarian_shift days = 3600 }
+				random_list = {
+					10 = { shift_ethic = "ethic_egalitarian" change_variable = { which = "accession_progress" value = 5 } }
+					10 = { shift_ethic = "ethic_egalitarian" shift_ethic = "ethic_fanatic_egalitarian" change_variable = { which = "accession_progress" value = 3 } }
+				}
+				every_owned_pop = {
+					random_list = {
+						10 = { pop_change_ethic = "ethic_fanatic_egalitarian" }
+						15 = { pop_change_ethic = "ethic_egalitarian" }
+						75 = {}
+					}
+				}
+			}
+		}
+		custom_tooltip = "STH_federation_flavour.100.a.tooltip"
+	}
+	option = {
+		name = STH_federation_flavour.100.b #Support local initiatives
+		hidden_effect = {
+			event_target:accessionState = {  
+				set_timed_country_flag = { flag = recent_authoritarian_shift days = 1200 }
+				random_list = {
+					10 = { shift_ethic = "ethic_egalitarian" change_variable = { which = "accession_progress" value = 5 } }
+					10 = { }
+				}
+				every_owned_pop = {
+					random_list = {
+						15 = { pop_change_ethic = "ethic_egalitarian" }
+						85 = {}
+					}
+				}
+			}
+		}
+		custom_tooltip = "STH_federation_flavour.100.b.tooltip"
+	}
+	option = {
+		name = STH_federation_flavour.100.c #Refuse meeting
+		hidden_effect = { event_target:accessionState = { change_variable = { which = "accession_progress" value = -15 } } }
+		custom_tooltip = "STH_federation_flavour.100.c.tooltip"
+		add_unity = 25
+	}
+}
+
+#Generic Remove Militarist
+country_event = {
+	id = STH_federation_flavour.101
+	title = "STH_federation_flavour.101.name"
+	desc = "STH_federation_flavour.101.desc"
+	diplomatic = yes
+	picture_event_data = { portrait = event_target:accessionStateLeader room = federation_council_room }
+	trigger = {
+		has_country_flag = united_federation_of_planets
+		OR = { has_ethic = ethic_pacifist has_ethic = ethic_fanatic_pacifist }
+		any_country = { 
+			OR = { has_ethic = ethic_militarist has_ethic = ethic_fanatic_militarist }
+			has_country_flag = federationAccessionState
+			check_variable = { which = "accession_progress" value > 20 }
+			NOT = { has_country_flag = recent_militarist_shift }
+		}
+	}
+	mean_time_to_happen = { months = 60 }
+	immediate = {
+		random_country = { 
+			limit = { 
+				OR = { has_ethic = ethic_militarist has_ethic = ethic_fanatic_militarist }
+				has_country_flag = federationAccessionState
+				check_variable = { which = "accession_progress" value > 20 }
+			}
+			save_event_target_as = accessionState
+			leader = { save_event_target_as = accessionStateLeader }
+		}
+	}
+	option = {
+		name = STH_federation_flavour.101.a #Fund education campaigns
+		allow = { influence > 99 }
+		add_influence = -100
+		hidden_effect = {
+			event_target:accessionState = {  
+				set_timed_country_flag = { flag = recent_militarist_shift days = 3600 }
+				random_list = {
+					10 = { shift_ethic = "ethic_pacifist" change_variable = { which = "accession_progress" value = 5 } }
+					10 = { shift_ethic = "ethic_pacifist" shift_ethic = "ethic_fanatic_pacifist" change_variable = { which = "accession_progress" value = 3 } }
+				}
+				every_owned_pop = {
+					random_list = {
+						10 = { pop_change_ethic = "ethic_fanatic_pacifist" }
+						15 = { pop_change_ethic = "ethic_pacifist" }
+						75 = {}
+					}
+				}
+			}
+		}
+		custom_tooltip = "STH_federation_flavour.101.a.tooltip"
+	}
+	option = {
+		name = STH_federation_flavour.101.b #Support local initiatives
+		hidden_effect = {
+			event_target:accessionState = {  
+				set_timed_country_flag = { flag = recent_militarist_shift days = 1200 }
+				random_list = {
+					10 = { shift_ethic = "ethic_pacifist" change_variable = { which = "accession_progress" value = 5 } }
+					10 = { }
+				}
+				every_owned_pop = {
+					random_list = {
+						15 = { pop_change_ethic = "ethic_pacifist" }
+						85 = {}
+					}
+				}
+			}
+		}
+		custom_tooltip = "STH_federation_flavour.101.b.tooltip"
+	}
+	option = {
+		name = STH_federation_flavour.101.c #Refuse meeting
+		hidden_effect = { event_target:accessionState = { change_variable = { which = "accession_progress" value = -15 } } }
+		custom_tooltip = "STH_federation_flavour.101.c.tooltip"
+		add_unity = 25
+	}
+}
+
+#Generic Remove Xenophobia
+country_event = {
+	id = STH_federation_flavour.102
+	title = "STH_federation_flavour.102.name"
+	desc = "STH_federation_flavour.102.desc"
+	diplomatic = yes
+	picture_event_data = { portrait = event_target:accessionStateLeader room = federation_council_room }
+	trigger = {
+		has_country_flag = united_federation_of_planets
+		OR = { has_ethic = ethic_xenophile has_ethic = ethic_fanatic_xenophile }
+		any_country = { 
+			OR = { has_ethic = ethic_xenophobe has_ethic = ethic_fanatic_xenophobe }
+			has_country_flag = federationAccessionState
+			check_variable = { which = "accession_progress" value > 20 }
+			NOT = { has_country_flag = recent_xenophobe_shift }
+		}
+	}
+	mean_time_to_happen = { months = 60 }
+	immediate = {
+		random_country = { 
+			limit = { 
+				OR = { has_ethic = ethic_xenophobe has_ethic = ethic_fanatic_xenophobe }
+				has_country_flag = federationAccessionState
+				check_variable = { which = "accession_progress" value > 20 }
+			}
+			save_event_target_as = accessionState
+			leader = { save_event_target_as = accessionStateLeader }
+		}
+	}
+	option = {
+		name = STH_federation_flavour.102.a #Fund education campaigns
+		allow = { influence > 99 }
+		add_influence = -100
+		hidden_effect = {
+			event_target:accessionState = {  
+				set_timed_country_flag = { flag = recent_xenophobe_shift days = 3600 }
+				random_list = {
+					10 = { shift_ethic = "ethic_xenophile" change_variable = { which = "accession_progress" value = 5 } }
+					10 = { shift_ethic = "ethic_xenophile" shift_ethic = "ethic_fanatic_xenophile" change_variable = { which = "accession_progress" value = 3 } }
+				}
+				every_owned_pop = {
+					random_list = {
+						10 = { pop_change_ethic = "ethic_fanatic_xenophile" }
+						15 = { pop_change_ethic = "ethic_xenophile" }
+						75 = {}
+					}
+				}
+			}
+		}
+		custom_tooltip = "STH_federation_flavour.102.a.tooltip"
+	}
+	option = {
+		name = STH_federation_flavour.102.b #Support local initiatives
+		hidden_effect = {
+			event_target:accessionState = {  
+				set_timed_country_flag = { flag = recent_xenophobe_shift days = 1200 }
+				random_list = {
+					10 = { shift_ethic = "ethic_xenophile" change_variable = { which = "accession_progress" value = 5 } }
+					10 = { }
+				}
+				every_owned_pop = {
+					random_list = {
+						15 = { pop_change_ethic = "ethic_xenophile" }
+						85 = {}
+					}
+				}
+			}
+		}
+		custom_tooltip = "STH_federation_flavour.102.b.tooltip"
+	}
+	option = {
+		name = STH_federation_flavour.102.c #Refuse meeting
+		hidden_effect = { event_target:accessionState = { change_variable = { which = "accession_progress" value = -15 } } }
+		custom_tooltip = "STH_federation_flavour.102.c.tooltip"
+		add_unity = 25
+	}
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# Naval Museum Initial
+country_event = {
+	id = STH_federation_flavour.1000
+	title = STH_federation_flavour.1000.name
+	desc = STH_federation_flavour.1000.desc_01
+	is_triggered_only = yes
+	diplomatic = yes
+	custom_gui = "enclave_curator_window"
+	force_open = yes
+	picture_event_data = {
+		portrait = event_target:starfleet_naval_museum_administrator
+		room = starfleet_museum_room
+	}
+	trigger = {
+		from = {
+			is_country_type = naval_museum
+			has_country_flag = starfleet_naval_museum_country
+		}
+		NOT = { has_country_flag = naval_museum_diplomacy_engaged }
+	}
+
+	immediate = {
+		set_country_flag = naval_museum_diplomacy_engaged
+		FROM = { 
+			save_event_target_as = starfleet_naval_museum_country 
+			leader = { save_event_target_as = starfleet_naval_museum_administrator }
+		}
+	}
+	after = { hidden_effect = { remove_country_flag = naval_museum_diplomacy_engaged } }
+	option = {
+		name = STH_federation_flavour.1000.a #What is this?
+		is_dialog_only = yes
+		response_text = STH_federation_flavour.1000.a.response
+		custom_gui = "enclave_curator_option"
+		trigger = { }
+	}
+	option = {
+		name = STH_federation_flavour.1000.b #Enterprise era 
+		custom_gui = "enclave_curator_option"
+		trigger = { hidden_trigger = { OR = { has_country_flag = starfleet_tos has_country_flag = starfleet_tmp has_country_flag = starfleet_tng } } }
+		allow = { hidden_trigger = { OR = { has_country_flag = starfleet_tos has_country_flag = starfleet_tmp has_country_flag = starfleet_tng } } }
+		hidden_effect = {
+			country_event = { id = STH_federation_flavour.1001 }
+		}
+	}
+	option = {
+		name = STH_federation_flavour.1000.z #Close
+		response_text = STH_federation_flavour.1000.z.response
+		default_hide_option = yes
+		custom_gui = "enclave_curator_option"
+		hidden_effect = { remove_country_flag = naval_museum_diplomacy_engaged }
+	}
+}
+
+# Naval Museum ENT Era
+country_event = {
+	id = STH_federation_flavour.1001
+	title = STH_federation_flavour.1001.name
+	desc = STH_federation_flavour.1001.desc_01
+	is_triggered_only = yes
+	diplomatic = yes
+	custom_gui = "enclave_curator_window"
+	picture_event_data = {
+		portrait = event_target:starfleet_naval_museum_administrator
+		room = starfleet_museum_room
+	}
+	immediate = {
+		set_country_flag = naval_museum_diplomacy_engaged
+		FROM = { save_event_target_as = starfleet_naval_museum_country }
+	}
+	after = { hidden_effect = { remove_country_flag = naval_museum_diplomacy_engaged } }
+	option = {
+		name = STH_federation_flavour.1001.a #Neptune
+		is_dialog_only = yes
+		response_text = STH_federation_flavour.1001.a.response
+		custom_gui = "enclave_curator_option"
+		trigger = { }
+		allow = { NOT = { has_country_flag = museum_90d_cooldown } minerals > 204 }
+		hidden_effect = {
+			# country_event = { id = STH_federation_flavour.1001 }
+			country_event = { id = STH_federation_flavour.1101 days = 21 random = 4 } #Neptune Class Ordered
+			set_timed_country_flag = { flag = museum_90d_cooldown days = 90 }
+		}
+		add_minerals = -205
+	}
+	option = {
+		name = STH_federation_flavour.1001.b #Intrepid
+		is_dialog_only = yes
+		response_text = STH_federation_flavour.1001.b.response
+		custom_gui = "enclave_curator_option"
+		trigger = { }
+		allow = { NOT = { has_country_flag = museum_210d_cooldown } minerals > 734 }
+		hidden_effect = {
+			# country_event = { id = STH_federation_flavour.1001 }
+			country_event = { id = STH_federation_flavour.1102 days = 28 random = 5 } #Intrepid Class Ordered
+			set_timed_country_flag = { flag = museum_210d_cooldown days = 210 }
+		}
+		add_minerals = -735
+	}
+	option = {
+		name = STH_federation_flavour.1001.c #NX
+		is_dialog_only = yes
+		response_text = STH_federation_flavour.1001.c.response
+		custom_gui = "enclave_curator_option"
+		trigger = { }
+		allow = { NOT = { has_country_flag = museum_210d_cooldown } minerals > 834 }
+		hidden_effect = {
+			# country_event = { id = STH_federation_flavour.1001 }
+			country_event = { id = STH_federation_flavour.1103 days = 35 random = 6 } #NX Class Ordered
+			set_timed_country_flag = { flag = museum_210d_cooldown days = 210 }
+		}
+		add_minerals = -835
+	}
+	option = {
+		name = STH_federation_flavour.1001.d #NX Refit
+		is_dialog_only = yes
+		response_text = STH_federation_flavour.1001.d.response
+		custom_gui = "enclave_curator_option"
+		trigger = { }
+		allow = { NOT = { has_country_flag = museum_400d_cooldown } minerals > 1814 }
+		hidden_effect = {
+			# country_event = { id = STH_federation_flavour.1001 }
+			country_event = { id = STH_federation_flavour.1104 days = 42 random = 7 } #NX Refit Class Ordered
+			set_timed_country_flag = { flag = museum_400d_cooldown days = 400 }
+		}
+		add_minerals = -1815
+	}
+	option = {
+		name = STH_federation_flavour.1001.z #Back
+		custom_gui = "enclave_curator_option"
+		default_hide_option = yes
+		hidden_effect = {
+			country_event = { id = STH_federation_flavour.1000 }
+		}
+	}
+}
+
+country_event = {
+	id = STH_federation_flavour.1050
+	hide_window = yes
+	is_triggered_only = yes
+	trigger = {
+		or = {
+			has_country_flag = starfleet_naval_museum_country
+			FROM = { has_country_flag = starfleet_naval_museum_country }
+		}
+	}
+	immediate = {
+		establish_communications_no_message = FROM
+	}
+}
+
+
+country_event = {
+	id = STH_federation_flavour.1101
+	hide_window = yes	
+	is_triggered_only = yes
+	immediate = {
+		if = {
+			limit = { NOT = { exists = event_target:starfleet_naval_museum } }
+			random_country = {
+				limit = { has_country_flag = starfleet_naval_museum_country }
+				random_owned_fleet = { 
+					limit = { has_fleet_flag = starfleet_naval_museum } 
+					save_event_target_as = starfleet_naval_museum 
+				}
+			}
+		}
+		# if = { 
+		# 	limit = { exists = event_target:starfleet_naval_museum_country } 
+		# 	event_target:starfleet_naval_museum_country = { set_graphical_culture = "federation_01" }
+		# }
+		if = {
+			limit = { exists = event_target:starfleet_naval_museum }
+			create_fleet = {
+				name = "Museum Neptune"
+				effect = {
+					set_owner = root
+					create_ship = { name = random design = "Museum Neptune" graphical_culture = "federation_01" }
+					set_location = { target = event_target:starfleet_naval_museum distance = 5 }
+				}
+			}
+		}
+	}
+}
+country_event = {
+	id = STH_federation_flavour.1102
+	hide_window = yes	
+	is_triggered_only = yes
+	immediate = {
+		if = {
+			limit = { NOT = { exists = event_target:starfleet_naval_museum } }
+			random_country = {
+				limit = { has_country_flag = starfleet_naval_museum }
+				random_owned_fleet = { 
+					limit = { has_fleet_flag = starfleet_naval_museum } 
+					save_event_target_as = starfleet_naval_museum 
+				}
+			}
+		}
+		# if = { 
+		# 	limit = { exists = event_target:starfleet_naval_museum_country } 
+		# 	event_target:starfleet_naval_museum_country = { set_graphical_culture = "federation_01" }
+		# }
+		if = {
+			limit = { exists = event_target:starfleet_naval_museum }
+			create_fleet = {
+				name = "Museum Intrepid"
+				effect = {
+					set_owner = root
+					create_ship = { name = random design = "Museum Intrepid" graphical_culture = "federation_01" }
+					set_location = { target = event_target:starfleet_naval_museum distance = 5 }
+				}
+			}
+		}
+	}
+}
+country_event = {
+	id = STH_federation_flavour.1103
+	hide_window = yes	
+	is_triggered_only = yes
+	immediate = {
+		if = {
+			limit = { NOT = { exists = event_target:starfleet_naval_museum } }
+			random_country = {
+				limit = { has_country_flag = starfleet_naval_museum_country }
+				random_owned_fleet = { 
+					limit = { has_fleet_flag = starfleet_naval_museum } 
+					save_event_target_as = starfleet_naval_museum 
+				}
+			}
+		}
+		# if = { 
+		# 	limit = { exists = event_target:starfleet_naval_museum_country } 
+		# 	event_target:starfleet_naval_museum_country = { set_graphical_culture = "federation_01" }
+		# }
+		if = {
+			limit = { exists = event_target:starfleet_naval_museum }
+			create_fleet = {
+				name = "Museum NX"
+				effect = {
+					set_owner = root
+					create_ship = { name = random design = "Museum NX" graphical_culture = "federation_01" }
+					set_location = { target = event_target:starfleet_naval_museum distance = 5 }
+				}
+			}
+		}
+	}
+}
+country_event = {
+	id = STH_federation_flavour.1104
+	hide_window = yes	
+	is_triggered_only = yes
+	immediate = {
+		if = {
+			limit = { NOT = { exists = event_target:starfleet_naval_museum } }
+			random_country = {
+				limit = { has_country_flag = starfleet_naval_museum_country }
+				random_owned_fleet = { 
+					limit = { has_fleet_flag = starfleet_naval_museum } 
+					save_event_target_as = starfleet_naval_museum 
+				}
+			}
+		}
+		# if = { 
+		# 	limit = { exists = event_target:starfleet_naval_museum_country } 
+		# 	event_target:starfleet_naval_museum_country = { set_graphical_culture = "federation_01" }
+		# }
+		if = {
+			limit = { exists = event_target:starfleet_naval_museum }
+			create_fleet = {
+				name = "Museum NX Refit"
+				effect = {
+					set_owner = root
+					create_ship = { name = random design = "Museum NX Refit" graphical_culture = "federation_01" }
+					set_location = { target = event_target:starfleet_naval_museum distance = 5 }
+				}
+			}
+		}
+	}
+}

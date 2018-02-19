@@ -1,0 +1,886 @@
+### keep this file to disable vanilla synethic dawn building error logs, and for compatibility with auto-build mod. Replaces the delete-vanilla building file
+
+@b0time = 120
+@b0cost = 30
+@b0effect = 1
+@b0upkeep = 0.5
+
+@b1time = 210
+@b1cost = 60
+@b1effect = 2
+@b1upkeep = 1
+
+@b2time = 180
+@b2cost = 90
+@b2effect = 3
+@b2upkeep = 1.5
+
+@b3time = 180
+@b3cost = 120
+@b3effect = 4
+@b3upkeep = 2
+
+@b4time = 180
+@b4cost = 150
+@b4effect = 5
+@b4upkeep = 2.5
+
+@b5time = 180
+@b5cost = 180
+@b5effect = 8
+@b5upkeep = 3
+
+@science1 = 1
+@science2 = 2
+@science3 = 3
+@science4 = 4
+@science5 = 6
+
+@natural_equilibrium_happiness = 0.02
+
+
+building_clinic = {
+    base_buildtime = 360
+    planet_unique = yes
+    
+    cost = {
+        minerals = 150
+    }
+    
+    potential = {
+        always = no
+        planet = {
+            NOR = {
+                is_planet_class = pc_gaia
+                is_planet_class = pc_habitat
+                is_planet_class = pc_ringworld_habitable
+            }       
+        }   
+    }
+    
+    allow = {
+        custom_tooltip = {
+            text = "requirement_not_homeworld"
+            planet = {
+                NOT = { has_modifier = "capital" }
+            }
+        }       
+    }
+    
+    required_resources = {
+        energy = 1
+    }
+    
+    produced_resources = {
+        society_research = 2
+    }
+    
+    planet_modifier = {
+        pop_growth_speed = 0.1
+    }
+    
+    
+    
+    upgrades = {
+        building_hospital
+    }
+    
+    ai_allow = {        
+        # If planet only has slaves/robots, keep it to mining and farming...
+        is_slave_tile_or_planet = no        
+    }
+
+    ai_weight = {
+        factor = 10
+    }
+}
+
+
+building_hospital = {
+    base_buildtime = 180
+    planet_unique = yes
+    is_listed = no
+    
+    cost = {
+        minerals = 200
+    }
+    
+    potential = {
+        always = no
+        planet = {
+            NOR = {
+                is_planet_class = pc_gaia
+                is_planet_class = pc_habitat
+                is_planet_class = pc_ringworld_habitable
+            }       
+        }   
+    }   
+    
+    allow = {
+        AND = {
+            custom_tooltip = {
+                text = "requirement_not_homeworld"
+                planet = {
+                    NOT = { has_modifier = "capital" }
+                }
+            }
+            custom_tooltip = {
+                text = "requires_building_capital_2"
+                planet = {
+                    OR = {
+                        has_building = "building_capital_2"
+                        has_building = "building_capital_3"
+                    }
+                }
+            }
+        }
+    }
+    
+    required_resources = {
+        energy = 2
+    }
+    
+    produced_resources = {
+        society_research = 4
+        unity = 1
+    }
+    
+    planet_modifier = {
+        pop_growth_speed = 0.2
+    }
+    
+    
+    
+    ai_allow = {
+        # If planet only has slaves/robots, keep it to mining and farming...
+        is_slave_tile_or_planet = no
+    }
+
+    ai_weight = {
+        factor = 10
+    }
+}
+
+building_visitor_center = {
+    base_buildtime = 270
+    planet_unique = yes
+    
+    cost = {
+        minerals = 150
+    }
+    
+    potential = {
+        always = no
+        owner = {
+            has_tradition = tr_diplomacy_alien_tourism
+        }       
+    }
+    
+    produced_resources = {
+        energy = 2
+        unity = 2
+    }
+    
+    planet_modifier = {
+        planet_migration_xeno_pull = 0.50
+        pop_environment_tolerance = 0.05
+    }
+    
+    ai_allow = {
+        NOR = {
+                
+                            
+        }
+        
+        # If planet only has slaves/robots, keep it to mining and farming...
+        is_slave_tile_or_planet = no            
+    }
+
+    ai_weight = {
+        factor = 10
+    }
+}
+
+building_autochthon_monument = {
+    base_buildtime = 180
+    planet_unique = yes
+    
+    cost = {
+        minerals = 100
+    }
+    
+    potential = {
+        always = no
+        planet = {
+            NOT = { is_planet_class = pc_habitat }
+        }
+    }
+    
+    produced_resources = {
+        unity = 2
+    }
+    
+    required_resources = {
+        energy = 1
+    }
+    
+        
+    
+    upgrades = {
+        building_heritage_site
+    }
+    
+    ai_allow = {
+        NOR = {
+                
+                            
+        }
+    }
+
+    ai_weight = {
+        factor = 1
+    }
+    
+    ai_allow = {
+        # If planet only has slaves/robots, keep it to mining and farming...
+        is_slave_tile_or_planet = no
+    }   
+}
+
+building_heritage_site = {
+    base_buildtime = 270
+    is_listed = no
+    planet_unique = yes
+    
+    cost = {
+        minerals = 200
+    }
+    
+    produced_resources = {
+        unity = 4
+    }
+    
+    required_resources = {
+        energy = 2
+    }
+    
+    potential = {
+        always = no
+        planet = {
+            NOT = { is_planet_class = pc_habitat }  
+        }
+    }
+    
+    allow = {
+        custom_tooltip = {
+            text = "requires_building_capital_1"
+            planet = {
+                OR = {
+                    has_building = "building_capital_1"
+                    has_building = "building_capital_2"
+                    has_building = "building_capital_3"
+                }
+            }
+        }
+    }
+    
+    
+    
+    upgrades = {
+        building_hypercomms_forum
+    }
+    
+    ai_allow = {
+        # If planet only has slaves/robots, keep it to mining and farming...
+        is_slave_tile_or_planet = no    
+    }
+}
+
+building_hypercomms_forum = {
+    base_buildtime = 360
+    is_listed = no
+    planet_unique = yes
+    
+    cost = {
+        minerals = 350
+    }
+    
+    produced_resources = {
+        unity = 6
+    }
+    
+    required_resources = {
+        energy = 3
+    }
+    
+    planet_modifier = {
+        tile_resource_unity_mult = 0.10
+    }
+    
+    potential = {
+        always = no
+        planet = {
+            NOT = { is_planet_class = pc_habitat }
+        }
+        NOR = {
+            has_building = "building_hypercomms_forum"
+            has_building = "building_autocurating_vault"            
+        }
+    }
+    
+    allow = {
+        custom_tooltip = {
+            text = "requires_building_capital_2"
+            planet = {
+                OR = {
+                    has_building = "building_capital_2"
+                    has_building = "building_capital_3"
+                }
+            }
+        }
+    }   
+    
+    
+    
+    upgrades = {
+        building_autocurating_vault
+    }
+    
+    ai_allow = {
+        # If planet only has slaves/robots, keep it to mining and farming...
+        is_slave_tile_or_planet = no    
+    }
+}
+
+building_temple = {
+    base_buildtime = 270
+    planet_unique = yes
+    
+    cost = {
+        minerals = 100
+    }
+    
+    produced_resources = {
+        unity = 2
+    }
+    
+    planet_modifier = {
+        pop_ethic_spiritualist_attraction_mult = 0.2
+    }
+    
+    required_resources = {
+        energy = 1
+    }
+    
+    potential = {
+        always = no     
+        owner = {
+            OR = {
+                has_ethic = ethic_spiritualist      
+                has_ethic = ethic_fanatic_spiritualist
+            }
+        }
+    }
+    
+    upgrades = {
+        building_holotemple
+    }
+    
+    ai_allow = {
+        NOR = {
+                
+                            
+        }
+    }
+
+    ai_weight = {
+        factor = 10
+    }
+    
+    ai_allow = {
+        # If planet only has slaves/robots, keep it to mining and farming...
+        is_slave_tile_or_planet = no    
+    }
+}
+
+building_holotemple = {
+    base_buildtime = 360
+    planet_unique = yes
+    is_listed = no
+    
+    cost = {
+        minerals = 350
+    }
+    
+    produced_resources = {
+        unity = 4
+    }
+    
+    planet_modifier = {
+        pop_ethic_spiritualist_attraction_mult = 0.3
+    }
+    
+    required_resources = {
+        energy = 2
+    }
+    
+    potential = {
+        always = no
+        planet = {
+            NOT = { is_planet_class = pc_habitat }  
+        }
+        owner = {
+            OR = {
+                has_ethic = ethic_spiritualist      
+                has_ethic = ethic_fanatic_spiritualist
+            }
+        }
+    }
+    
+    allow = {
+        custom_tooltip = {
+            text = "requires_building_capital_2"
+            planet = {
+                OR = {
+                    has_building = "building_capital_2"
+                    has_building = "building_capital_3"
+                }
+            }
+        }
+    }
+    
+    upgrades = {
+        building_citadel_of_faith
+    }   
+    
+    
+
+    ai_weight = {
+        factor = 10
+    }
+    
+    ai_allow = {
+        # If planet only has slaves/robots, keep it to mining and farming...
+        is_slave_tile_or_planet = no
+    }
+}
+
+building_citadel_of_faith = {
+    base_buildtime = 720
+    empire_unique = yes
+    is_listed = no
+    
+    cost = {
+        minerals = 500
+    }
+    
+    produced_resources = {
+        unity = 10
+    }
+    
+    planet_modifier = {
+        pop_ethic_spiritualist_attraction_mult = 0.4
+    }
+    
+    required_resources = {
+        energy = 4
+    }
+    
+    potential = {
+        always = no
+        owner = {
+            OR = {
+                has_ethic = ethic_spiritualist      
+                has_ethic = ethic_fanatic_spiritualist
+            }
+        }
+    }       
+    
+    potential = {
+        always = no
+        planet = {
+            NOT = { is_planet_class = pc_habitat }  
+        }
+        custom_tooltip = {
+            text = "requires_building_capital_3"
+            planet = {
+                has_building = "building_capital_3"
+            }
+        }   
+    }   
+    
+    
+
+    ai_weight = {
+        factor = 10
+    }
+    
+    ai_allow = {
+        # If planet only has slaves/robots, keep it to mining and farming...
+        is_slave_tile_or_planet = no
+    }
+}
+
+
+building_biolab_1 = {
+    base_buildtime = @b2time
+    is_listed = no
+    
+    cost = {
+        minerals = @b2cost
+    }
+    
+    potential = {
+        always = no
+        planet = {
+            NOT = { is_planet_class = pc_habitat }  
+        }
+    }   
+    
+    allow = {
+        custom_tooltip = {
+            text = "requires_building_capital_1"
+            planet = {
+                OR = {
+                    has_building = "building_capital_1"
+                    has_building = "building_capital_2"
+                    has_building = "building_capital_3"
+                }
+            }
+        }
+    }
+    
+    produced_resources = {
+        engineering_research = @science1
+        physics_research = @science1
+        society_research = @science2
+    }
+    
+    required_resources = {
+        energy = @b2upkeep
+    }
+    
+    upgrades = {
+        building_biolab_2
+    }
+    
+        
+    
+    ai_allow = {
+        # If planet only has slaves/robots, keep it to mining and farming...
+        is_slave_tile_or_planet = no    
+    }   
+}
+
+building_biolab_2 = {
+    base_buildtime = @b3time
+    is_listed = no
+    
+    cost = {
+        minerals = @b3cost
+    }   
+    
+    potential = {
+        always = no
+        planet = {
+            NOT = { is_planet_class = pc_habitat }  
+        }
+    }   
+    
+    allow = {
+        custom_tooltip = {
+            text = "requires_building_capital_2"
+            planet = {
+                OR = {
+                    has_building = "building_capital_2"
+                    has_building = "building_capital_3"
+                }
+            }
+        }
+    }
+
+    produced_resources = {
+        engineering_research = @science1
+        physics_research = @science1
+        society_research = @science3
+    }
+    
+    required_resources = {
+        energy = @b3upkeep
+    }
+    
+    upgrades = {
+        building_biolab_3
+    }
+    
+    
+
+    ai_allow = {
+        # If planet only has slaves/robots, keep it to mining and farming...
+        is_slave_tile_or_planet = no    
+    }   
+}
+
+building_biolab_3 = {
+    base_buildtime = @b4time
+    is_listed = no
+    
+    cost = {
+        minerals = @b4cost
+    }   
+    
+    potential = {
+        always = no
+        planet = {
+            NOT = { is_planet_class = pc_habitat }  
+        }
+    }   
+    
+    allow = {
+        custom_tooltip = {
+            text = "requires_building_capital_2"
+            planet = {
+                OR = {
+                    has_building = "building_capital_2"
+                    has_building = "building_capital_3"
+                }
+            }
+        }
+    }
+    
+    produced_resources = {
+        engineering_research = @science1
+        physics_research = @science1
+        society_research = @science4
+    }
+    
+    required_resources = {
+        energy = @b4upkeep
+    }
+    
+    upgrades = {
+        building_biolab_4
+    }
+    
+        
+    
+    ai_allow = {
+        # If planet only has slaves/robots, keep it to mining and farming...
+        is_slave_tile_or_planet = no    
+    }   
+}
+
+building_biolab_4 = {
+    base_buildtime = @b5time
+    is_listed = no
+    
+    cost = {
+        minerals = @b5cost
+    }
+    
+    potential = {
+        always = no
+        planet = {
+            is_capital = yes
+            NOT = { is_planet_class = pc_habitat }  
+        }
+    }
+    
+    destroy_if = {
+        planet = { is_capital = no }
+    }   
+    
+    allow = {
+        custom_tooltip = {
+            text = "requires_building_capital_3"
+            planet = {
+                has_building = "building_capital_3"
+            }
+        }
+    }
+    
+    produced_resources = {
+        engineering_research = @science1
+        physics_research = @science1
+        society_research = @science5
+    }
+    
+    required_resources = {
+        energy = @b5upkeep
+    }
+    
+        
+    
+    ai_allow = {
+        # If planet only has slaves/robots, keep it to mining and farming...
+        is_slave_tile_or_planet = no    
+    }   
+}
+
+building_mineral_silo_3 = {
+    base_buildtime = @b3time
+    icon = "building_mineral_silo_1"
+    planet_unique = yes
+    
+    is_listed = no
+    
+    cost = {
+        minerals = @b3cost
+    }
+
+    potential = {
+        always = no
+        planet = {
+            NOT = { is_planet_class = pc_habitat }  
+        }
+    }   
+    
+    allow = {
+        custom_tooltip = {
+            text = "requires_building_capital_2"
+            planet = {
+                OR = {
+                    has_building = "building_capital_2"
+                    has_building = "building_capital_3"
+                }
+            }
+        }
+    }
+    
+    country_modifier = {
+        max_minerals = 4000
+    }
+    
+    adjacency_bonus = {
+        tile_building_resource_minerals_add = 1
+    }
+    
+        
+}
+
+building_mineral_processing_plant_2 = {
+    base_buildtime = @b3time
+    is_listed = no
+    planet_unique = yes
+    
+    cost = {
+        minerals = 200
+    }
+    
+    potential = {
+        always = no
+        planet = {
+            NOT = { is_planet_class = pc_habitat }  
+        }
+    }   
+    
+    allow = {
+        custom_tooltip = {
+            text = "requires_building_capital_2"
+            planet = {
+                OR = {
+                    has_building = "building_capital_2"
+                    has_building = "building_capital_3"
+                }
+            }
+        }
+    }
+    
+    produced_resources = {
+        minerals = 4
+    }
+    
+    planet_modifier  = {
+        tile_resource_minerals_mult = 0.20
+    }
+    
+    required_resources = {
+        energy = 3
+    }
+    
+    
+}
+
+betharian_power_plant = {
+    base_buildtime = @b3time
+    icon = "building_betharian_power_plant_1"
+    
+    cost = {
+        minerals = @b3cost
+    }
+    
+    potential = {
+        always = no
+        planet = {
+            NOT = { is_planet_class = pc_habitat }  
+        }
+    }
+    
+    produced_resources = {
+        energy = 10
+    }
+    
+    
+    
+    allow = {
+    }
+    
+    ai_allow = {
+        always = yes
+    }
+    
+    ai_weight = {
+        weight = 10 
+    }
+}
+
+building_autocurating_vault = {
+    base_buildtime = 720
+    is_listed = no
+    empire_unique = yes
+    
+    cost = {
+        minerals = 500
+    }
+    
+    produced_resources = {
+        unity = 10
+    }
+    
+    required_resources = {
+        energy = 4
+    }
+    
+    country_modifier = {
+        country_resource_unity_mult = 0.10
+    }
+    
+    potential = {
+        always = no
+        planet = {
+            is_capital = yes
+        }
+    }
+
+    destroy_if = {
+        planet = { is_capital = no }
+    }   
+    
+    allow = {
+        custom_tooltip = {
+            text = "requires_any_empire_capital"
+            planet = {
+                OR = {
+                    has_building = "building_capital_3"
+                    has_building = "building_hab_capital"
+                }       
+            }
+        }
+    }
+    
+    ai_special_building = yes
+    
+    ai_weight = {
+        weight = 10000
+    }
+}

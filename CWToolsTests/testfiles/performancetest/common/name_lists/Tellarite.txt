@@ -1,0 +1,98 @@
+﻿### Tellarite
+Tellarite = {
+	randomized = no
+
+	ship_names = {
+		generic = {
+			Miracht Phinda "Claw of the Vindicator" Shallash Skev Duroc Gral Degbaxis G'buqoff Tezra Genglist Henglist Shallash Terev Skalaar Henglaar Glaar Grel Grellash Barc Brek Grev Agram Rif Barc Bolek Burgun Colv Croth Rugast Dorkin Fronch "F'xaq" Gaavrin Gann Gartiv Gav Gavron Varech Gerva Glorak "Gett'lpher" Brek Bera Glev Glissa Thur Glorak Efrak Jarv Emrik Gora Gralless Grev Grishnash Pral Tor Khund Loak Nem Chab Gom Muso Gaff Sem Prev Ragaav Win Runkaar Shav Teg Thantora Theloss Tuuk Kav Molan Haros Zarv Zeblon Zhag
+		}
+		corvette = {
+		}
+		saber = {
+		}
+		sovereign = {
+		}
+		steamrunner = {
+		}		
+		adv_cruiser = {
+		}
+		strike = {
+		}	
+		constructor = { }
+		colonizer = { }
+		science = { }
+		transport = { }
+		outpost_station = {
+			sequential_name = "Frontier Outpost"
+		}
+	}
+
+	fleet_names = {
+		sequential_name = "%O% Fleet"
+	}
+	
+	army_names = {
+		defense_army = {
+			sequential_name = "%O% Tellarite Guard"
+		}
+		assault_army = {
+			sequential_name = "%O% Defence Force"
+		}
+		slave_army = {
+			sequential_name = "%O% Indentured Defence Force"
+		}
+		clone_army = { 
+			sequential_name = "%O% Clone Defence Force"
+		}
+		robotic_army = {
+			sequential_name = "%O% Mechanical Defence Force"
+		}
+		android_army = {
+			sequential_name = "%O% Synthetic Defence Force"
+		}
+		psionic_army = { 
+			sequential_name = "%O% Psi Defence Force"
+		}
+		xenomorph_army = {
+			sequential_name = "%O% Bio-Warfare Defence Force"
+		}
+		gene_warrior_army = {
+			sequential_name = "%O% Bio-Engineered Defence Force"
+		}
+	}
+
+	planet_names = {
+		generic = {
+			names = {
+				Tellamarkus Wagm Nablersh Thal Dvind Zhaand Dvew Tonsh Xegirr Cuch Zuss Crill Braanch Crorc Mosash Tlaaluss 
+			}
+		}
+	}
+
+
+	### CHARACTERS
+
+	character_names = {
+		names1 = {
+			weight = 100
+			first_names_male = {		
+				Gaav Gav Gral Naarg Shallash Terev Skalaar Henglaar Glaar Grel Grellash Barc Brek Grev Agram Rif Barc Bolek Burgun Colv Croth Rugast Dorkin Fronch "F'xaq" Gaavrin Gann Gartiv Gav Gavron Varech Gerva Glorak "Gett'lpher" Brek Bera Glev Glissa Thur Glorak Efrak Jarv Emrik Gora Gralless Grev Grishnash Pral Tor Khund Loak Nem Chab Gom Muso Gaff Sem Prev Ragaav Win Runkaar Shav Teg Thantora Theloss Tuuk Kav Molan Haros Zarv Zeblon Zhag
+			}
+			first_names_female = {
+				Sagar Gavar Evesh Teresh Skalesh Henglist Glaresh Gresh Grellesh Barsh Grevesh Agrash Rifaa Barcar Burgar Colvar Crosh Rugash Dorkar Fronsh Gaavrish Gallar Gannar Gavar Gavrar Varesh Gervar Glorar Brekar Berar Thursh Efrash Jarsh Emrish Gorash Grallesh Grevar Pralsh Khundar Loakar Nemar Chabar Gomar Bersh Musosh Gaffar Semesh Prevar Ragaar Winaar Thantorar Thelosh Tuukaar 
+			}
+			second_names = {
+				"bav Balkar" "chim Gleer" "glov Mog" "glov Balkar" "chim Mog" "glasch Moar" "chim Nak" "blasch Cheg" Dlumppheg "bum Gral" "glasch Tev" "glasch Pak" "glov Mog" "chim Gleer" "chim Gliv" "chim Glak" Dagran "glasch Hok" "chim Hok" "glasch Yov" "glasch Vokrak" "jav Gek" "glasch Hok" "chim Hok" "jav Hok"
+			}
+			regnal_first_names_male = {
+				Gaav Gav Gral Naarg Shallash Terev Skalaar Henglaar Glaar Grel Grellash Barc Brek Grev Agram Rif Barc Bolek Burgun Colv Croth Rugast Dorkin Fronch "F'xaq" Gaavrin Gann Gartiv Gav Gavron Varech Gerva Glorak "Gett'lpher" Brek Bera Glev Glissa Thur Glorak Efrak Jarv Emrik Gora Gralless Grev Grishnash Pral Tor Khund Loak Nem Chab Gom Muso Gaff Sem Prev Ragaav Win Runkaar Shav Teg Thantora Theloss Tuuk Kav Molan Haros Zarv Zeblon Zhag
+			}
+			regnal_first_names_female = {
+				Sagar Gavar Evesh Teresh Skalesh Henglist Glaresh Gresh Grellesh Barsh Grevesh Agrash Rifaa Barcar Burgar Colvar Crosh Rugash Dorkar Fronsh Gaavrish Gallar Gannar Gavar Gavrar Varesh Gervar Glorar Brekar Berar Thursh Efrash Jarsh Emrish Gorash Grallesh Grevar Pralsh Khundar Loakar Nemar Chabar Gomar Bersh Musosh Gaffar Semesh Prevar Ragaar Winaar Thantorar Thelosh Tuukaar 
+			}
+			regnal_second_names = {
+				"bav Balkar" "chim Gleer" "glov Mog" "glov Balkar" "chim Mog" "glasch Moar" "chim Nak" "blasch Cheg" Dlumppheg "bum Gral" "glasch Tev" "glasch Pak" "glov Mog" "chim Gleer" "chim Gliv" "chim Glak" Dagran "glasch Hok" "chim Hok" "glasch Yov" "glasch Vokrak" "jav Gek" "glasch Hok" "chim Hok" "jav Hok"
+			}
+		}
+	}
+}

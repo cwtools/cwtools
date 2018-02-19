@@ -1,0 +1,2878 @@
+############################
+### DISCOVERY CATEGORIES ###
+############################
+# potential = planet scope
+# on_success = ship scope
+# on_fail = ship scope
+# on_critical_fail = ship scope
+# level = level of discovery that is checked against scientist level
+# risk = risk of researching the discovery (defaults to NDefines::NGameplay:anomaly_RISK_DEFAULT)
+
+# For on_success, on_fail, on_critical_fail
+# FROM = planet scope
+# ROOT = ship scope
+# Ex. on_fail, ship_event would have the planet in From.From
+
+### PRECURSOR DISCOVERIES
+
+#########################
+# VULTAUM STAR ASSEMBLY #
+#########################
+
+# Vultaum Mining Base (Uninhabitable Planet)
+anomaly_category = {
+	key = "vultaum_1_cat"
+	desc = "vultaum_uninhabitable_category_desc"
+	picture = GFX_evt_ship_in_orbit
+	level = 1
+	#risk = 30
+	
+	spawn_chance = {		
+		modifier = {
+			add = 10
+			uninhabitable_regular_planet = yes
+			solar_system = { has_star_flag = precursor_1 }
+			FROM = {
+				owner = {
+					is_ai = no
+					NOT = { has_country_flag = vultaum_1 }
+					has_country_flag = vultaum_intro 
+					has_event_chain = vultaum_chain
+				}
+			}
+			FROM = { owner = { is_borg_empire = no is_assimilator = no } }
+		}
+	}
+	
+	on_spawn = {
+		FROM = {
+			owner = { set_country_flag = vultaum_1 }
+		}
+	}
+	
+	on_success = {
+	}
+
+	on_fail = {
+		ship_event = { id = anomaly_failure.33 }
+	}
+
+	on_critical_fail = {
+		random_list = {
+			16 = { ship_event = { id = anomaly_failure.1400 } }
+			16 = { ship_event = { id = anomaly_failure.1401 } }
+			16 = { ship_event = { id = anomaly_failure.1402 } }
+			16 = { ship_event = { id = anomaly_failure.1403 } }
+			16 = { ship_event = { id = anomaly_failure.1404 } }
+			16 = { ship_event = { id = anomaly_failure.1405 } }
+		}
+	}
+}
+
+# Vultaum Observatory (Uninhabitable Planet)
+anomaly_category = {
+	key = "vultaum_2_cat"
+	desc = "vultaum_uninhabitable_category_desc"
+	picture = GFX_evt_ship_in_orbit
+	level = 1
+	#risk = 30
+	
+	spawn_chance = {		
+		modifier = {
+			add = 10
+			uninhabitable_regular_planet = yes
+			solar_system = { has_star_flag = precursor_1 }
+			FROM = {
+				owner = {
+					is_ai = no
+					NOT = { has_country_flag = vultaum_2 }
+					has_country_flag = vultaum_intro 
+					has_event_chain = vultaum_chain
+				}
+			}
+			FROM = { owner = { is_borg_empire = no is_assimilator = no } }
+		}
+	}
+	
+	on_spawn = {
+		FROM = {
+			owner = { set_country_flag = vultaum_2 }
+		}
+	}
+	
+	on_success = {
+	}
+
+	on_fail = {
+		ship_event = { id = anomaly_failure.33 }
+	}
+
+	on_critical_fail = {
+		random_list = {
+			16 = { ship_event = { id = anomaly_failure.1400 } }
+			16 = { ship_event = { id = anomaly_failure.1401 } }
+			16 = { ship_event = { id = anomaly_failure.1402 } }
+			16 = { ship_event = { id = anomaly_failure.1403 } }
+			16 = { ship_event = { id = anomaly_failure.1404 } }
+			16 = { ship_event = { id = anomaly_failure.1405 } }
+		}
+	}
+}
+
+# Vultaum Colony 1 (Habitable Planet)
+anomaly_category = {
+	key = "vultaum_3_cat"
+	desc = "vultaum_habitable_category_desc"
+	picture = GFX_evt_ship_in_orbit
+	level = 1
+	#risk = 30
+	
+	spawn_chance = {		
+		modifier = {
+			add = 10
+			habitable_planet = yes
+			solar_system = { has_star_flag = precursor_1 }
+			FROM = {
+				owner = {
+					is_ai = no
+					NOT = { has_country_flag = vultaum_3 }
+					has_country_flag = vultaum_intro 
+					has_event_chain = vultaum_chain
+				}
+			}
+			FROM = { owner = { is_borg_empire = no is_assimilator = no } }
+		}
+	}
+	
+	on_spawn = {
+		FROM = {
+			owner = { set_country_flag = vultaum_3 }
+		}
+	}
+	
+	on_success = {
+	}
+
+	on_fail = {
+		ship_event = { id = anomaly_failure.33 }
+	}
+
+	on_critical_fail = {
+		random_list = {
+			16 = { ship_event = { id = anomaly_failure.1400 } }
+			16 = { ship_event = { id = anomaly_failure.1401 } }
+			16 = { ship_event = { id = anomaly_failure.1402 } }
+			16 = { ship_event = { id = anomaly_failure.1403 } }
+			16 = { ship_event = { id = anomaly_failure.1404 } }
+			16 = { ship_event = { id = anomaly_failure.1405 } }
+		}
+	}
+}
+
+# Vultaum Colony 2 (Habitable Planet)
+anomaly_category = {
+	key = "vultaum_4_cat"
+	desc = "vultaum_habitable_category_desc"
+	picture = GFX_evt_ship_in_orbit
+	level = 1
+	#risk = 30
+	
+	spawn_chance = {		
+		modifier = {
+			add = 10
+			habitable_planet = yes
+			solar_system = { has_star_flag = precursor_1 }
+			FROM = {
+				owner = {
+					is_ai = no
+					NOT = { has_country_flag = vultaum_4 }
+					has_country_flag = vultaum_intro 
+					has_event_chain = vultaum_chain
+				}
+			}
+			FROM = { owner = { is_borg_empire = no is_assimilator = no } }
+		}
+	}
+	
+	on_spawn = {
+		FROM = {
+			owner = { set_country_flag = vultaum_4 }
+		}
+	}
+	
+	on_success = {
+	}
+
+	on_fail = {
+		ship_event = { id = anomaly_failure.33 }
+	}
+
+	on_critical_fail = {
+		random_list = {
+			16 = { ship_event = { id = anomaly_failure.1400 } }
+			16 = { ship_event = { id = anomaly_failure.1401 } }
+			16 = { ship_event = { id = anomaly_failure.1402 } }
+			16 = { ship_event = { id = anomaly_failure.1403 } }
+			16 = { ship_event = { id = anomaly_failure.1404 } }
+			16 = { ship_event = { id = anomaly_failure.1405 } }
+		}
+	}
+}
+
+# Vultaum Colony 3 (Habitable Planet)
+anomaly_category = {
+	key = "vultaum_5_cat"
+	desc = "vultaum_habitable_category_desc"
+	picture = GFX_evt_ship_in_orbit
+	level = 1
+	#risk = 30
+	
+	spawn_chance = {		
+		modifier = {
+			add = 10
+			habitable_planet = yes
+			solar_system = { has_star_flag = precursor_1 }
+			FROM = {
+				owner = {
+					is_ai = no
+					NOT = { has_country_flag = vultaum_5 }
+					has_country_flag = vultaum_intro 
+					has_event_chain = vultaum_chain
+				}
+			}
+			FROM = { owner = { is_borg_empire = no is_assimilator = no } }
+		}
+	}
+	
+	on_spawn = {
+		FROM = {
+			owner = { set_country_flag = vultaum_5 }
+		}
+	}
+	
+	on_success = {
+	}
+
+	on_fail = {
+		ship_event = { id = anomaly_failure.33 }
+	}
+
+	on_critical_fail = {
+		random_list = {
+			16 = { ship_event = { id = anomaly_failure.1400 } }
+			16 = { ship_event = { id = anomaly_failure.1401 } }
+			16 = { ship_event = { id = anomaly_failure.1402 } }
+			16 = { ship_event = { id = anomaly_failure.1403 } }
+			16 = { ship_event = { id = anomaly_failure.1404 } }
+			16 = { ship_event = { id = anomaly_failure.1405 } }
+		}
+	}
+}
+
+# Vultaum Gas Giant Base (Gas Giant)
+anomaly_category = {
+	key = "vultaum_6_cat"
+	desc = "vultaum_gasgiant_category_desc"
+	picture = GFX_evt_microscopic_life
+	level = 2
+	#risk = 30
+	
+	spawn_chance = {		
+		modifier = {
+			add = 10
+			is_planet_class = pc_gas_giant
+			solar_system = { has_star_flag = precursor_1 }
+			FROM = {
+				owner = {
+					is_ai = no
+					NOT = { has_country_flag = vultaum_6 }
+					has_country_flag = vultaum_intro 
+					has_event_chain = vultaum_chain
+				}
+			}
+			FROM = { owner = { is_borg_empire = no is_assimilator = no } }
+		}
+	}
+	
+	on_spawn = {
+		FROM = {
+			owner = { set_country_flag = vultaum_6 }
+		}
+	}
+	
+	on_success = {
+	}
+
+	on_fail = {
+		ship_event = { id = anomaly_failure.33 }
+	}
+
+	on_critical_fail = {
+		random_list = {
+			16 = { ship_event = { id = anomaly_failure.900 } }
+			16 = { ship_event = { id = anomaly_failure.901 } }
+			16 = { ship_event = { id = anomaly_failure.902 } }
+			16 = { ship_event = { id = anomaly_failure.903 } }
+		}
+	}
+}
+
+# Vultaum Trade Post (Uninhabitable Planet)
+anomaly_category = {
+	key = "vultaum_7_cat"
+	desc = "vultaum_uninhabitable_category_desc"
+	picture = GFX_evt_ship_in_orbit
+	level = 1
+	#risk = 30
+	
+	spawn_chance = {		
+		modifier = {
+			add = 10
+			uninhabitable_regular_planet = yes
+			solar_system = { has_star_flag = precursor_1 }
+			FROM = {
+				owner = {
+					is_ai = no
+					NOT = { has_country_flag = vultaum_7 }
+					has_country_flag = vultaum_intro 
+					has_event_chain = vultaum_chain
+				}
+			}
+			FROM = { owner = { is_borg_empire = no is_assimilator = no } }
+		}
+	}
+	
+	on_spawn = {
+		FROM = {
+			owner = { set_country_flag = vultaum_7 }
+		}
+	}
+	
+	on_success = {
+	}
+
+	on_fail = {
+		ship_event = { id = anomaly_failure.33 }
+	}
+
+	on_critical_fail = {
+		random_list = {
+			16 = { ship_event = { id = anomaly_failure.1400 } }
+			16 = { ship_event = { id = anomaly_failure.1401 } }
+			16 = { ship_event = { id = anomaly_failure.1402 } }
+			16 = { ship_event = { id = anomaly_failure.1403 } }
+			16 = { ship_event = { id = anomaly_failure.1404 } }
+			16 = { ship_event = { id = anomaly_failure.1405 } }
+		}
+	}
+}
+
+# Vultaum Satellite (Uninhabitable Planet)
+anomaly_category = {
+	key = "vultaum_8_cat"
+	desc = "vultaum_uninhabitable_category_desc"
+	picture = GFX_evt_ship_in_orbit
+	level = 1
+	#risk = 30
+	
+	spawn_chance = {		
+		modifier = {
+			add = 10
+			uninhabitable_regular_planet = yes
+			solar_system = { has_star_flag = precursor_1 }
+			FROM = {
+				owner = {
+					is_ai = no
+					NOT = { has_country_flag = vultaum_8 }
+					has_country_flag = vultaum_intro 
+					has_event_chain = vultaum_chain
+				}
+			}
+			FROM = { owner = { is_borg_empire = no is_assimilator = no } }
+		}
+	}
+	
+	on_spawn = {
+		FROM = {
+			owner = { set_country_flag = vultaum_8 }
+		}
+	}
+	
+	on_success = {
+	}
+
+	on_fail = {
+		ship_event = { id = anomaly_failure.33 }
+	}
+
+	on_critical_fail = {
+		random_list = {
+			16 = { ship_event = { id = anomaly_failure.1400 } }
+			16 = { ship_event = { id = anomaly_failure.1401 } }
+			16 = { ship_event = { id = anomaly_failure.1402 } }
+			16 = { ship_event = { id = anomaly_failure.1403 } }
+			16 = { ship_event = { id = anomaly_failure.1404 } }
+			16 = { ship_event = { id = anomaly_failure.1405 } }
+		}
+	}
+}
+
+# Vultaum Splinter Colony (Habitable Planet)
+anomaly_category = {
+	key = "vultaum_9_cat"
+	desc = "vultaum_habitable_category_desc"
+	picture = GFX_evt_ship_in_orbit
+	level = 1
+	#risk = 30
+	
+	spawn_chance = {		
+		modifier = {
+			add = 10
+			habitable_planet = yes
+			solar_system = { has_star_flag = precursor_1 }
+			FROM = {
+				owner = {
+					is_ai = no
+					NOT = { has_country_flag = vultaum_9 }
+					has_country_flag = vultaum_intro 
+					has_event_chain = vultaum_chain
+				}
+			}
+			FROM = { owner = { is_borg_empire = no is_assimilator = no } }
+		}
+	}
+	
+	on_spawn = {
+		FROM = {
+			owner = { set_country_flag = vultaum_9 }
+		}
+	}
+	
+	on_success = {
+	}
+
+	on_fail = {
+		ship_event = { id = anomaly_failure.33 }
+	}
+
+	on_critical_fail = {
+		random_list = {
+			16 = { ship_event = { id = anomaly_failure.1400 } }
+			16 = { ship_event = { id = anomaly_failure.1401 } }
+			16 = { ship_event = { id = anomaly_failure.1402 } }
+			16 = { ship_event = { id = anomaly_failure.1403 } }
+			16 = { ship_event = { id = anomaly_failure.1404 } }
+			16 = { ship_event = { id = anomaly_failure.1405 } }
+		}
+	}
+}
+
+# Vultaum Virtual Reality Center (Uninhabitable Planet)
+anomaly_category = {
+	key = "vultaum_10_cat"
+	desc = "vultaum_uninhabitable_category_desc"
+	picture = GFX_evt_ship_in_orbit
+	level = 1
+	#risk = 30
+	
+	spawn_chance = {		
+		modifier = {
+			add = 10
+			uninhabitable_regular_planet = yes
+			solar_system = { has_star_flag = precursor_1 }
+			FROM = {
+				owner = {
+					is_ai = no
+					NOT = { has_country_flag = vultaum_10 }
+					has_country_flag = vultaum_intro 
+					has_event_chain = vultaum_chain
+				}
+			}
+			FROM = { owner = { is_borg_empire = no is_assimilator = no } }
+		}
+	}
+	
+	on_spawn = {
+		FROM = {
+			owner = { set_country_flag = vultaum_10 }
+		}
+	}
+	
+	on_success = {
+	}
+
+	on_fail = {
+		ship_event = { id = anomaly_failure.33 }
+	}
+
+	on_critical_fail = {
+		random_list = {
+			16 = { ship_event = { id = anomaly_failure.1400 } }
+			16 = { ship_event = { id = anomaly_failure.1401 } }
+			16 = { ship_event = { id = anomaly_failure.1402 } }
+			16 = { ship_event = { id = anomaly_failure.1403 } }
+			16 = { ship_event = { id = anomaly_failure.1404 } }
+			16 = { ship_event = { id = anomaly_failure.1405 } }
+		}
+	}
+}
+
+# Vultaum Asteroid Mining Base (Asteroid)
+anomaly_category = {
+	key = "vultaum_11_cat"
+	desc = "vultaum_asteroid_category_desc"
+	picture = GFX_evt_mining_station
+	level = 2
+	#risk = 30
+	
+	spawn_chance = {		
+		modifier = {
+			add = 10
+			is_asteroid = yes
+			solar_system = { has_star_flag = precursor_1 }
+			FROM = {
+				owner = {
+					is_ai = no
+					NOT = { has_country_flag = vultaum_11 }
+					has_country_flag = vultaum_intro 
+					has_event_chain = vultaum_chain
+				}
+			}
+			FROM = { owner = { is_borg_empire = no is_assimilator = no } }
+		}
+	}
+	
+	on_spawn = {
+		FROM = {
+			owner = { set_country_flag = vultaum_11 }
+		}
+	}
+	
+	on_success = {
+	}
+
+	on_fail = {
+		ship_event = { id = anomaly_failure.33 }
+	}
+
+	on_critical_fail = {
+		random_list = {
+			16 = { ship_event = { id = anomaly_failure.400 } }
+			16 = { ship_event = { id = anomaly_failure.401 } }
+			16 = { ship_event = { id = anomaly_failure.402 } }
+			16 = { ship_event = { id = anomaly_failure.403 } }
+			16 = { ship_event = { id = anomaly_failure.404 } }
+			16 = { ship_event = { id = anomaly_failure.405 } }
+		}
+	}
+}
+
+###############
+# YUHT EMPIRE #
+###############
+
+# Yuht Hatchery World (Habitable Planet)
+anomaly_category = {
+	key = "yuht_1_cat"
+	desc = "yuht_habitable_category_desc"
+	picture = GFX_evt_ship_in_orbit
+	level = 1
+	#risk = 30
+	
+	spawn_chance = {		
+		modifier = {
+			add = 10
+			habitable_planet = yes
+			solar_system = { has_star_flag = precursor_2 }
+			FROM = {
+				owner = { 
+					is_ai = no
+					NOT = { has_country_flag = yuht_1 }
+					has_country_flag = yuht_intro 
+					has_event_chain = yuht_chain
+				}
+			}
+			FROM = { owner = { is_borg_empire = no is_assimilator = no } }
+		}
+	}
+	
+	on_spawn = {
+		FROM = {
+			owner = { set_country_flag = yuht_1 }
+		}
+	}
+	
+	on_success = {
+	}
+
+	on_fail = {
+		ship_event = { id = anomaly_failure.34 }
+	}
+
+	on_critical_fail = {
+		random_list = {
+			16 = { ship_event = { id = anomaly_failure.1400 } }
+			16 = { ship_event = { id = anomaly_failure.1401 } }
+			16 = { ship_event = { id = anomaly_failure.1402 } }
+			16 = { ship_event = { id = anomaly_failure.1403 } }
+			16 = { ship_event = { id = anomaly_failure.1404 } }
+			16 = { ship_event = { id = anomaly_failure.1405 } }
+		}
+	}
+}
+
+# Yuht Listening Post (Uninhabitable Planet)
+anomaly_category = {
+	key = "yuht_2_cat"
+	desc = "yuht_uninhabitable_category_desc"
+	picture = GFX_evt_ship_in_orbit
+	level = 1
+	#risk = 30
+	
+	spawn_chance = {		
+		modifier = {
+			add = 10
+			uninhabitable_regular_planet = yes
+			solar_system = { has_star_flag = precursor_2 }
+			FROM = {
+				owner = {
+					is_ai = no
+					NOT = { has_country_flag = yuht_2 }
+					has_country_flag = yuht_intro 
+					has_event_chain = yuht_chain
+				}
+			}
+			FROM = { owner = { is_borg_empire = no is_assimilator = no } }
+		}
+	}
+	
+	on_spawn = {
+		FROM = {
+			owner = { set_country_flag = yuht_2 }
+		}
+	}
+	
+	on_success = {
+	}
+
+	on_fail = {
+		ship_event = { id = anomaly_failure.34 }
+	}
+
+	on_critical_fail = {
+		random_list = {
+			16 = { ship_event = { id = anomaly_failure.1400 } }
+			16 = { ship_event = { id = anomaly_failure.1401 } }
+			16 = { ship_event = { id = anomaly_failure.1402 } }
+			16 = { ship_event = { id = anomaly_failure.1403 } }
+			16 = { ship_event = { id = anomaly_failure.1404 } }
+			16 = { ship_event = { id = anomaly_failure.1405 } }
+		}
+	}
+}
+
+# Yuht Colony 1 (Habitable Planet)
+anomaly_category = {
+	key = "yuht_3_cat"
+	desc = "yuht_habitable_category_desc"
+	picture = GFX_evt_ship_in_orbit
+	level = 1
+	#risk = 30
+	
+	spawn_chance = {		
+		modifier = {
+			add = 10
+			habitable_planet = yes
+			solar_system = { has_star_flag = precursor_2 }
+			FROM = {
+				owner = {
+					is_ai = no
+					NOT = { has_country_flag = yuht_3 }
+					has_country_flag = yuht_intro 
+					has_event_chain = yuht_chain
+				}
+			}
+			FROM = { owner = { is_borg_empire = no is_assimilator = no } }
+		}
+	}
+	
+	on_spawn = {
+		FROM = {
+			owner = { set_country_flag = yuht_3 }
+		}
+	}
+	
+	on_success = {
+	}
+
+	on_fail = {
+		ship_event = { id = anomaly_failure.34 }
+	}
+
+	on_critical_fail = {
+		random_list = {
+			16 = { ship_event = { id = anomaly_failure.1400 } }
+			16 = { ship_event = { id = anomaly_failure.1401 } }
+			16 = { ship_event = { id = anomaly_failure.1402 } }
+			16 = { ship_event = { id = anomaly_failure.1403 } }
+			16 = { ship_event = { id = anomaly_failure.1404 } }
+			16 = { ship_event = { id = anomaly_failure.1405 } }
+		}
+	}
+}
+
+# Yuht Colony 2 (Habitable Planet)
+anomaly_category = {
+	key = "yuht_4_cat"
+	desc = "yuht_habitable_category_desc"
+	picture = GFX_evt_ship_in_orbit
+	level = 1
+	#risk = 30
+	
+	spawn_chance = {		
+		modifier = {
+			add = 10
+			habitable_planet = yes
+			solar_system = { has_star_flag = precursor_2 }
+			FROM = {
+				owner = {
+					is_ai = no
+					NOT = { has_country_flag = yuht_4 }
+					has_country_flag = yuht_intro 
+					has_event_chain = yuht_chain
+				}
+			}
+			FROM = { owner = { is_borg_empire = no is_assimilator = no } }
+		}
+	}
+	
+	on_spawn = {
+		FROM = {
+			owner = { set_country_flag = yuht_4 }
+		}
+	}
+	
+	on_success = {
+	}
+
+	on_fail = {
+		ship_event = { id = anomaly_failure.34 }
+	}
+
+	on_critical_fail = {
+		random_list = {
+			16 = { ship_event = { id = anomaly_failure.1400 } }
+			16 = { ship_event = { id = anomaly_failure.1401 } }
+			16 = { ship_event = { id = anomaly_failure.1402 } }
+			16 = { ship_event = { id = anomaly_failure.1403 } }
+			16 = { ship_event = { id = anomaly_failure.1404 } }
+			16 = { ship_event = { id = anomaly_failure.1405 } }
+		}
+	}
+}
+
+# Yuht Colony 3 (Habitable Planet)
+anomaly_category = {
+	key = "yuht_5_cat"
+	desc = "yuht_habitable_category_desc"
+	picture = GFX_evt_ship_in_orbit
+	level = 1
+	#risk = 30
+	
+	spawn_chance = {		
+		modifier = {
+			add = 10
+			habitable_planet = yes
+			solar_system = { has_star_flag = precursor_2 }
+			FROM = {
+				owner = {
+					is_ai = no
+					NOT = { has_country_flag = yuht_5 }
+					has_country_flag = yuht_intro 
+					has_event_chain = yuht_chain
+				}
+			}
+			FROM = { owner = { is_borg_empire = no is_assimilator = no } }
+		}
+	}
+	
+	on_spawn = {
+		FROM = {
+			owner = { set_country_flag = yuht_5 }
+		}
+	}
+	
+	on_success = {
+	}
+
+	on_fail = {
+		ship_event = { id = anomaly_failure.34 }
+	}
+
+	on_critical_fail = {
+		random_list = {
+			16 = { ship_event = { id = anomaly_failure.1400 } }
+			16 = { ship_event = { id = anomaly_failure.1401 } }
+			16 = { ship_event = { id = anomaly_failure.1402 } }
+			16 = { ship_event = { id = anomaly_failure.1403 } }
+			16 = { ship_event = { id = anomaly_failure.1404 } }
+			16 = { ship_event = { id = anomaly_failure.1405 } }
+		}
+	}
+}
+
+# Yuht Satellite (Gas Giant)
+anomaly_category = {
+	key = "yuht_6_cat"
+	desc = "yuht_gasgiant_category_desc"
+	picture = GFX_evt_microscopic_life
+	level = 2
+	#risk = 30
+	
+	spawn_chance = {		
+		modifier = {
+			add = 10
+			is_planet_class = pc_gas_giant
+			solar_system = { has_star_flag = precursor_2 }
+			FROM = {
+				owner = {
+					is_ai = no
+					NOT = { has_country_flag = yuht_6 }
+					has_country_flag = yuht_intro 
+					has_event_chain = yuht_chain
+				}
+			}
+			FROM = { owner = { is_borg_empire = no is_assimilator = no } }
+		}
+	}
+	
+	on_spawn = {
+		FROM = {
+			owner = { set_country_flag = yuht_6 }
+		}
+	}
+	
+	on_success = {
+	}
+
+	on_fail = {
+		ship_event = { id = anomaly_failure.34 }
+	}
+
+	on_critical_fail = {
+		random_list = {
+			16 = { ship_event = { id = anomaly_failure.900 } }
+			16 = { ship_event = { id = anomaly_failure.901 } }
+			16 = { ship_event = { id = anomaly_failure.902 } }
+			16 = { ship_event = { id = anomaly_failure.903 } }
+		}
+	}
+}
+
+# Yuht Cruiser (Uninhabitable Planet)
+anomaly_category = {
+	key = "yuht_7_cat"
+	desc = "yuht_uninhabitable_category_desc"
+	picture = GFX_evt_ship_in_orbit
+	level = 1
+	#risk = 30
+	
+	spawn_chance = {		
+		modifier = {
+			add = 10
+			uninhabitable_regular_planet = yes
+			solar_system = { has_star_flag = precursor_2 }
+			FROM = {
+				owner = {
+					is_ai = no
+					NOT = { has_country_flag = yuht_7 }
+					has_country_flag = yuht_intro 
+					has_event_chain = yuht_chain
+				}
+			}
+			FROM = { owner = { is_borg_empire = no is_assimilator = no } }
+		}
+	}
+	
+	on_spawn = {
+		FROM = {
+			owner = { set_country_flag = yuht_7 }
+		}
+	}
+	
+	on_success = {
+	}
+
+	on_fail = {
+		ship_event = { id = anomaly_failure.34 }
+	}
+
+	on_critical_fail = {
+		random_list = {
+			16 = { ship_event = { id = anomaly_failure.1400 } }
+			16 = { ship_event = { id = anomaly_failure.1401 } }
+			16 = { ship_event = { id = anomaly_failure.1402 } }
+			16 = { ship_event = { id = anomaly_failure.1403 } }
+			16 = { ship_event = { id = anomaly_failure.1404 } }
+			16 = { ship_event = { id = anomaly_failure.1405 } }
+		}
+	}
+}
+
+# Yuht Colony Ship (Uninhabitable Planet)
+anomaly_category = {
+	key = "yuht_8_cat"
+	desc = "yuht_uninhabitable_category_desc"
+	picture = GFX_evt_ship_in_orbit
+	level = 1
+	#risk = 30
+	
+	spawn_chance = {		
+		modifier = {
+			add = 10
+			uninhabitable_regular_planet = yes
+			solar_system = { has_star_flag = precursor_2 }
+			FROM = {
+				owner = {
+					is_ai = no
+					NOT = { has_country_flag = yuht_8 }
+					has_country_flag = yuht_intro 
+					has_event_chain = yuht_chain
+				}
+			}
+			FROM = { owner = { is_borg_empire = no is_assimilator = no } }
+		}
+	}
+	
+	on_spawn = {
+		FROM = {
+			owner = { set_country_flag = yuht_8 }
+		}
+	}
+	
+	on_success = {
+	}
+
+	on_fail = {
+		ship_event = { id = anomaly_failure.34 }
+	}
+
+	on_critical_fail = {
+		random_list = {
+			16 = { ship_event = { id = anomaly_failure.1400 } }
+			16 = { ship_event = { id = anomaly_failure.1401 } }
+			16 = { ship_event = { id = anomaly_failure.1402 } }
+			16 = { ship_event = { id = anomaly_failure.1403 } }
+			16 = { ship_event = { id = anomaly_failure.1404 } }
+			16 = { ship_event = { id = anomaly_failure.1405 } }
+		}
+	}
+}
+
+# Yuht Asteroid Dwelling (Asteroid)
+anomaly_category = {
+	key = "yuht_9_cat"
+	desc = "yuht_asteroid_category_desc"
+	picture = GFX_evt_mining_station
+	level = 2
+	#risk = 30
+	
+	spawn_chance = {		
+		modifier = {
+			add = 10
+			is_asteroid = yes
+			solar_system = { has_star_flag = precursor_2 }
+			FROM = {
+				owner = {
+					is_ai = no
+					NOT = { has_country_flag = yuht_9 }
+					has_country_flag = yuht_intro 
+					has_event_chain = yuht_chain
+				}
+			}
+			FROM = { owner = { is_borg_empire = no is_assimilator = no } }
+		}
+	}
+	
+	on_spawn = {
+		FROM = {
+			owner = { set_country_flag = yuht_9 }
+		}
+	}
+	
+	on_success = {
+	}
+
+	on_fail = {
+		ship_event = { id = anomaly_failure.34 }
+	}
+
+	on_critical_fail = {
+		random_list = {
+			16 = { ship_event = { id = anomaly_failure.400 } }
+			16 = { ship_event = { id = anomaly_failure.401 } }
+			16 = { ship_event = { id = anomaly_failure.402 } }
+			16 = { ship_event = { id = anomaly_failure.403 } }
+			16 = { ship_event = { id = anomaly_failure.404 } }
+			16 = { ship_event = { id = anomaly_failure.405 } }
+		}
+	}
+}
+
+################
+# FIRST LEAGUE #
+################
+
+# League Naval Base (Uninhabitable Planet)
+anomaly_category = {
+	key = "league_1_cat"
+	desc = "league_uninhabitable_category_desc"
+	picture = GFX_evt_ship_in_orbit
+	level = 1
+	#risk = 30
+	
+	spawn_chance = {		
+		modifier = {
+			add = 10
+			uninhabitable_regular_planet = yes
+			solar_system = { has_star_flag = precursor_3 }
+			FROM = {
+				owner = {
+					is_ai = no
+					NOT = { has_country_flag = first_league_1 }
+					has_country_flag = first_league_intro 
+					has_event_chain = first_league_chain
+				}
+			}
+			FROM = { owner = { is_borg_empire = no is_assimilator = no } }
+		}
+	}
+	
+	on_spawn = {
+		FROM = {
+			owner = { set_country_flag = first_league_1 }
+		}
+	}
+	
+	on_success = {
+	}
+
+	on_fail = {
+		ship_event = { id = anomaly_failure.35 }
+	}
+
+	on_critical_fail = {
+		random_list = {
+			16 = { ship_event = { id = anomaly_failure.1400 } }
+			16 = { ship_event = { id = anomaly_failure.1401 } }
+			16 = { ship_event = { id = anomaly_failure.1402 } }
+			16 = { ship_event = { id = anomaly_failure.1403 } }
+			16 = { ship_event = { id = anomaly_failure.1404 } }
+			16 = { ship_event = { id = anomaly_failure.1405 } }
+		}
+	}
+}
+
+# League Cruiser (Gas Giant)
+anomaly_category = {
+	key = "league_2_cat"
+	desc = "league_gasgiant_category_desc"
+	picture = GFX_evt_microscopic_life
+	level = 2
+	#risk = 30
+	
+	spawn_chance = {		
+		modifier = {
+			add = 10
+			is_planet_class = pc_gas_giant
+			solar_system = { has_star_flag = precursor_3 }
+			FROM = {
+				owner = {
+					is_ai = no
+					NOT = { has_country_flag = first_league_2 }
+					has_country_flag = first_league_intro 
+					has_event_chain = first_league_chain
+				}
+			}
+			FROM = { owner = { is_borg_empire = no is_assimilator = no } }
+		}
+	}
+	
+	on_spawn = {
+		FROM = {
+			owner = { set_country_flag = first_league_2 }
+		}
+	}
+	
+	on_success = {
+	}
+
+	on_fail = {
+		ship_event = { id = anomaly_failure.35 }
+	}
+
+	on_critical_fail = {
+		random_list = {
+			16 = { ship_event = { id = anomaly_failure.900 } }
+			16 = { ship_event = { id = anomaly_failure.901 } }
+			16 = { ship_event = { id = anomaly_failure.902 } }
+			16 = { ship_event = { id = anomaly_failure.903 } }
+		}
+	}
+}
+
+# League Khamdai Homeworld (Habitable Planet)
+anomaly_category = {
+	key = "league_3_cat"
+	desc = "league_habitable_category_desc"
+	picture = GFX_evt_ship_in_orbit
+	level = 1
+	#risk = 30
+	
+	spawn_chance = {		
+		modifier = {
+			add = 10
+			habitable_planet = yes
+			solar_system = { has_star_flag = precursor_3 }
+			FROM = {
+				owner = {
+					is_ai = no
+					NOT = { has_country_flag = first_league_3 }
+					has_country_flag = first_league_intro 
+					has_event_chain = first_league_chain
+				}
+			}
+			FROM = { owner = { is_borg_empire = no is_assimilator = no } }
+		}
+	}
+	
+	on_spawn = {
+		FROM = {
+			owner = { set_country_flag = first_league_3 }
+		}
+	}
+	
+	on_success = {
+	}
+
+	on_fail = {
+		ship_event = { id = anomaly_failure.35 }
+	}
+
+	on_critical_fail = {
+		random_list = {
+			16 = { ship_event = { id = anomaly_failure.1400 } }
+			16 = { ship_event = { id = anomaly_failure.1401 } }
+			16 = { ship_event = { id = anomaly_failure.1402 } }
+			16 = { ship_event = { id = anomaly_failure.1403 } }
+			16 = { ship_event = { id = anomaly_failure.1404 } }
+			16 = { ship_event = { id = anomaly_failure.1405 } }
+		}
+	}
+}
+
+# League Chassago Homeworld (Habitable Planet)
+anomaly_category = {
+	key = "league_4_cat"
+	desc = "league_habitable_category_desc"
+	picture = GFX_evt_ship_in_orbit
+	level = 1
+	#risk = 30
+	
+	spawn_chance = {		
+		modifier = {
+			add = 10
+			habitable_planet = yes
+			solar_system = { has_star_flag = precursor_3 }
+			FROM = {
+				owner = {
+					is_ai = no
+					NOT = { has_country_flag = first_league_4 }
+					has_country_flag = first_league_intro 
+					has_event_chain = first_league_chain
+				}
+			}
+			FROM = { owner = { is_borg_empire = no is_assimilator = no } }
+		}
+	}
+	
+	on_spawn = {
+		FROM = {
+			owner = { set_country_flag = first_league_4 }
+		}
+	}
+	
+	on_success = {
+	}
+
+	on_fail = {
+		ship_event = { id = anomaly_failure.35 }
+	}
+
+	on_critical_fail = {
+		random_list = {
+			16 = { ship_event = { id = anomaly_failure.1400 } }
+			16 = { ship_event = { id = anomaly_failure.1401 } }
+			16 = { ship_event = { id = anomaly_failure.1402 } }
+			16 = { ship_event = { id = anomaly_failure.1403 } }
+			16 = { ship_event = { id = anomaly_failure.1404 } }
+			16 = { ship_event = { id = anomaly_failure.1405 } }
+		}
+	}
+}
+
+# League Migir-Yan Homeworld (Habitable Planet)
+anomaly_category = {
+	key = "league_5_cat"
+	desc = "league_habitable_category_desc"
+	picture = GFX_evt_ship_in_orbit
+	level = 1
+	#risk = 30
+	
+	spawn_chance = {		
+		modifier = {
+			add = 10
+			habitable_planet = yes
+			solar_system = { has_star_flag = precursor_3 }
+			FROM = {
+				owner = {
+					is_ai = no
+					NOT = { has_country_flag = first_league_5 }
+					has_country_flag = first_league_intro 
+					has_event_chain = first_league_chain
+				}
+			}
+			FROM = { owner = { is_borg_empire = no is_assimilator = no } }
+		}
+	}
+	
+	on_spawn = {
+		FROM = {
+			owner = { set_country_flag = first_league_5 }
+		}
+	}
+	
+	on_success = {
+	}
+
+	on_fail = {
+		ship_event = { id = anomaly_failure.35 }
+	}
+
+	on_critical_fail = {
+		random_list = {
+			16 = { ship_event = { id = anomaly_failure.1400 } }
+			16 = { ship_event = { id = anomaly_failure.1401 } }
+			16 = { ship_event = { id = anomaly_failure.1402 } }
+			16 = { ship_event = { id = anomaly_failure.1403 } }
+			16 = { ship_event = { id = anomaly_failure.1404 } }
+			16 = { ship_event = { id = anomaly_failure.1405 } }
+		}
+	}
+}
+
+# League V'ropak Homeworld (Habitable Planet)
+anomaly_category = {
+	key = "league_6_cat"
+	desc = "league_habitable_category_desc"
+	picture = GFX_evt_ship_in_orbit
+	level = 1
+	#risk = 30
+	
+	spawn_chance = {		
+		modifier = {
+			add = 10
+			habitable_planet = yes
+			solar_system = { has_star_flag = precursor_3 }
+			FROM = {
+				owner = {
+					is_ai = no
+					NOT = { has_country_flag = first_league_6 }
+					has_country_flag = first_league_intro 
+					has_event_chain = first_league_chain
+				}
+			}
+			FROM = { owner = { is_borg_empire = no is_assimilator = no } }
+		}
+	}
+	
+	on_spawn = {
+		FROM = {
+			owner = { set_country_flag = first_league_6 }
+		}
+	}
+	
+	on_success = {
+	}
+
+	on_fail = {
+		ship_event = { id = anomaly_failure.35 }
+	}
+
+	on_critical_fail = {
+		random_list = {
+			16 = { ship_event = { id = anomaly_failure.1400 } }
+			16 = { ship_event = { id = anomaly_failure.1401 } }
+			16 = { ship_event = { id = anomaly_failure.1402 } }
+			16 = { ship_event = { id = anomaly_failure.1403 } }
+			16 = { ship_event = { id = anomaly_failure.1404 } }
+			16 = { ship_event = { id = anomaly_failure.1405 } }
+		}
+	}
+}
+
+# League Science Base (Uninhabitable Planet)
+anomaly_category = {
+	key = "league_7_cat"
+	desc = "league_uninhabitable_category_desc"
+	picture = GFX_evt_ship_in_orbit
+	level = 1
+	#risk = 30
+	
+	spawn_chance = {		
+		modifier = {
+			add = 10
+			uninhabitable_regular_planet = yes
+			solar_system = { has_star_flag = precursor_3 }
+			FROM = {
+				owner = {
+					is_ai = no
+					NOT = { has_country_flag = first_league_7 }
+					has_country_flag = first_league_intro 
+					has_event_chain = first_league_chain
+				}
+			}
+			FROM = { owner = { is_borg_empire = no is_assimilator = no } }
+		}
+	}
+	
+	on_spawn = {
+		FROM = {
+			owner = { set_country_flag = first_league_7 }
+		}
+	}
+	
+	on_success = {
+	}
+
+	on_fail = {
+		ship_event = { id = anomaly_failure.35 }
+	}
+
+	on_critical_fail = {
+		random_list = {
+			16 = { ship_event = { id = anomaly_failure.1400 } }
+			16 = { ship_event = { id = anomaly_failure.1401 } }
+			16 = { ship_event = { id = anomaly_failure.1402 } }
+			16 = { ship_event = { id = anomaly_failure.1403 } }
+			16 = { ship_event = { id = anomaly_failure.1404 } }
+			16 = { ship_event = { id = anomaly_failure.1405 } }
+		}
+	}
+}
+
+# League Joint Colony (Habitable Planet)
+anomaly_category = {
+	key = "league_8_cat"
+	desc = "league_habitable_category_desc"
+	picture = GFX_evt_ship_in_orbit
+	level = 1
+	#risk = 30
+	
+	spawn_chance = {		
+		modifier = {
+			add = 10
+			habitable_planet = yes
+			solar_system = { has_star_flag = precursor_3 }
+			FROM = {
+				owner = {
+					is_ai = no
+					NOT = { has_country_flag = first_league_8 }
+					has_country_flag = first_league_intro 
+					has_event_chain = first_league_chain
+				}
+			}
+			FROM = { owner = { is_borg_empire = no is_assimilator = no } }
+		}
+	}
+	
+	on_spawn = {
+		FROM = {
+			owner = { set_country_flag = first_league_8 }
+		}
+	}
+	
+	on_success = {
+	}
+
+	on_fail = {
+		ship_event = { id = anomaly_failure.35 }
+	}
+
+	on_critical_fail = {
+		random_list = {
+			16 = { ship_event = { id = anomaly_failure.1400 } }
+			16 = { ship_event = { id = anomaly_failure.1401 } }
+			16 = { ship_event = { id = anomaly_failure.1402 } }
+			16 = { ship_event = { id = anomaly_failure.1403 } }
+			16 = { ship_event = { id = anomaly_failure.1404 } }
+			16 = { ship_event = { id = anomaly_failure.1405 } }
+		}
+	}
+}
+
+# League Trade Center (Habitable Planet)
+anomaly_category = {
+	key = "league_9_cat"
+	desc = "league_habitable_category_desc"
+	picture = GFX_evt_ship_in_orbit
+	level = 1
+	#risk = 30
+	
+	spawn_chance = {		
+		modifier = {
+			add = 10
+			habitable_planet = yes
+			solar_system = { has_star_flag = precursor_3 }
+			FROM = {
+				owner = {
+					is_ai = no
+					NOT = { has_country_flag = first_league_9 }
+					has_country_flag = first_league_intro 
+					has_event_chain = first_league_chain
+				}
+			}
+			FROM = { owner = { is_borg_empire = no is_assimilator = no } }
+		}
+	}
+	
+	on_spawn = {
+		FROM = {
+			owner = { set_country_flag = first_league_9 }
+		}
+	}
+	
+	on_success = {
+	}
+
+	on_fail = {
+		ship_event = { id = anomaly_failure.35 }
+	}
+
+	on_critical_fail = {
+		random_list = {
+			16 = { ship_event = { id = anomaly_failure.1400 } }
+			16 = { ship_event = { id = anomaly_failure.1401 } }
+			16 = { ship_event = { id = anomaly_failure.1402 } }
+			16 = { ship_event = { id = anomaly_failure.1403 } }
+			16 = { ship_event = { id = anomaly_failure.1404 } }
+			16 = { ship_event = { id = anomaly_failure.1405 } }
+		}
+	}
+}
+
+# League Battle Wreckage (Uninhabitable Planet)
+anomaly_category = {
+	key = "league_10_cat"
+	desc = "league_uninhabitable_category_desc"
+	picture = GFX_evt_ship_in_orbit
+	level = 1
+	#risk = 30
+	
+	spawn_chance = {		
+		modifier = {
+			add = 10
+			uninhabitable_regular_planet = yes
+			solar_system = { has_star_flag = precursor_3 }
+			FROM = {
+				owner = {
+					is_ai = no
+					NOT = { has_country_flag = first_league_10 }
+					has_country_flag = first_league_intro 
+					has_event_chain = first_league_chain
+				}
+			}
+			FROM = { owner = { is_borg_empire = no is_assimilator = no } }
+		}
+	}
+	
+	on_spawn = {
+		FROM = {
+			owner = { set_country_flag = first_league_10 }
+		}
+	}
+	
+	on_success = {
+	}
+
+	on_fail = {
+		ship_event = { id = anomaly_failure.35 }
+	}
+
+	on_critical_fail = {
+		random_list = {
+			16 = { ship_event = { id = anomaly_failure.1400 } }
+			16 = { ship_event = { id = anomaly_failure.1401 } }
+			16 = { ship_event = { id = anomaly_failure.1402 } }
+			16 = { ship_event = { id = anomaly_failure.1403 } }
+			16 = { ship_event = { id = anomaly_failure.1404 } }
+			16 = { ship_event = { id = anomaly_failure.1405 } }
+		}
+	}
+}
+
+# League Prison Complex (Uninhabitable Planet)
+anomaly_category = {
+	key = "league_11_cat"
+	desc = "league_uninhabitable_category_desc"
+	picture = GFX_evt_ship_in_orbit
+	level = 1
+	#risk = 30
+	
+	spawn_chance = {		
+		modifier = {
+			add = 10
+			uninhabitable_regular_planet = yes
+			solar_system = { has_star_flag = precursor_3 }
+			FROM = {
+				owner = {
+					is_ai = no
+					NOT = { has_country_flag = first_league_11 }
+					has_country_flag = first_league_intro 
+					has_event_chain = first_league_chain
+				}
+			}
+			FROM = { owner = { is_borg_empire = no is_assimilator = no } }
+		}
+	}
+	
+	on_spawn = {
+		FROM = {
+			owner = { set_country_flag = first_league_11 }
+		}
+	}
+	
+	on_success = {
+	}
+
+	on_fail = {
+		ship_event = { id = anomaly_failure.35 }
+	}
+
+	on_critical_fail = {
+		random_list = {
+			16 = { ship_event = { id = anomaly_failure.1400 } }
+			16 = { ship_event = { id = anomaly_failure.1401 } }
+			16 = { ship_event = { id = anomaly_failure.1402 } }
+			16 = { ship_event = { id = anomaly_failure.1403 } }
+			16 = { ship_event = { id = anomaly_failure.1404 } }
+			16 = { ship_event = { id = anomaly_failure.1405 } }
+		}
+	}
+}
+
+# League Protected Primitive World (Habitable Planet)
+anomaly_category = {
+	key = "league_12_cat"
+	desc = "league_habitable_category_desc"
+	picture = GFX_evt_ship_in_orbit
+	level = 1
+	#risk = 30
+	
+	spawn_chance = {		
+		modifier = {
+			add = 10
+			habitable_planet = yes
+			solar_system = { has_star_flag = precursor_3 }
+			FROM = {
+				owner = {
+					is_ai = no
+					NOT = { has_country_flag = first_league_12 }
+					has_country_flag = first_league_intro 
+					has_event_chain = first_league_chain
+				}
+			}
+			FROM = { owner = { is_borg_empire = no is_assimilator = no } }
+		}
+	}
+	
+	on_spawn = {
+		FROM = {
+			owner = { set_country_flag = first_league_12 }
+		}
+	}
+	
+	on_success = {
+	}
+
+	on_fail = {
+		ship_event = { id = anomaly_failure.35 }
+	}
+
+	on_critical_fail = {
+		random_list = {
+			16 = { ship_event = { id = anomaly_failure.1400 } }
+			16 = { ship_event = { id = anomaly_failure.1401 } }
+			16 = { ship_event = { id = anomaly_failure.1402 } }
+			16 = { ship_event = { id = anomaly_failure.1403 } }
+			16 = { ship_event = { id = anomaly_failure.1404 } }
+			16 = { ship_event = { id = anomaly_failure.1405 } }
+		}
+	}
+}
+
+# League Blockaded World (Habitable Planet)
+anomaly_category = {
+	key = "league_13_cat"
+	desc = "league_habitable_category_desc"
+	picture = GFX_evt_ship_in_orbit
+	level = 1
+	#risk = 30
+	
+	spawn_chance = {		
+		modifier = {
+			add = 10
+			habitable_planet = yes
+			solar_system = { has_star_flag = precursor_3 }
+			FROM = {
+				owner = {
+					is_ai = no
+					NOT = { has_country_flag = first_league_13 }
+					has_country_flag = first_league_intro 
+					has_event_chain = first_league_chain
+				}
+			}
+			FROM = { owner = { is_borg_empire = no is_assimilator = no } }
+		}
+	}
+	
+	on_spawn = {
+		FROM = {
+			owner = { set_country_flag = first_league_13 }
+		}
+	}
+	
+	on_success = {
+	}
+
+	on_fail = {
+		ship_event = { id = anomaly_failure.35 }
+	}
+
+	on_critical_fail = {
+		random_list = {
+			16 = { ship_event = { id = anomaly_failure.1400 } }
+			16 = { ship_event = { id = anomaly_failure.1401 } }
+			16 = { ship_event = { id = anomaly_failure.1402 } }
+			16 = { ship_event = { id = anomaly_failure.1403 } }
+			16 = { ship_event = { id = anomaly_failure.1404 } }
+			16 = { ship_event = { id = anomaly_failure.1405 } }
+		}
+	}
+}
+
+# League Smuggler Asteroid (Asteroid)
+anomaly_category = {
+	key = "league_14_cat"
+	desc = "league_asteroid_category_desc"
+	picture = GFX_evt_mining_station
+	level = 2
+	#risk = 30
+	
+	spawn_chance = {		
+		modifier = {
+			add = 10
+			is_asteroid = yes
+			solar_system = { has_star_flag = precursor_3 }
+			FROM = {
+				owner = {
+					is_ai = no
+					NOT = { has_country_flag = first_league_14 }
+					has_country_flag = first_league_intro 
+					has_event_chain = first_league_chain
+				}
+			}
+			FROM = { owner = { is_borg_empire = no is_assimilator = no } }
+		}
+	}
+	
+	on_spawn = {
+		FROM = {
+			owner = { set_country_flag = first_league_14 }
+		}
+	}
+	
+	on_success = {
+	}
+
+	on_fail = {
+		ship_event = { id = anomaly_failure.35 }
+	}
+
+	on_critical_fail = {
+		random_list = {
+			16 = { ship_event = { id = anomaly_failure.400 } }
+			16 = { ship_event = { id = anomaly_failure.401 } }
+			16 = { ship_event = { id = anomaly_failure.402 } }
+			16 = { ship_event = { id = anomaly_failure.403 } }
+			16 = { ship_event = { id = anomaly_failure.404 } }
+			16 = { ship_event = { id = anomaly_failure.405 } }
+		}
+	}
+}
+
+######################
+# IRASSIAN CONCORDAT #
+######################
+
+# Irassian Quarantined World (Habitable Planet)
+anomaly_category = {
+	key = "irassian_1_cat"
+	desc = "irassian_habitable_category_desc"
+	picture = GFX_evt_ship_in_orbit
+	level = 1
+	#risk = 30
+	
+	spawn_chance = {		
+		modifier = {
+			add = 10
+			habitable_planet = yes
+			solar_system = { has_star_flag = precursor_4 }
+			FROM = {
+				owner = {
+					is_ai = no
+					NOT = { has_country_flag = irassians_1 }
+					has_country_flag = irassian_intro 
+					has_event_chain = irassian_chain
+				}
+			}
+			FROM = { owner = { is_borg_empire = no is_assimilator = no } }
+		}
+	}
+	
+	on_spawn = {
+		FROM = {
+			owner = { set_country_flag = irassians_1 }
+		}
+	}
+	
+	on_success = {
+	}
+
+	on_fail = {
+		ship_event = { id = anomaly_failure.36 }
+	}
+
+	on_critical_fail = {
+		random_list = {
+			16 = { ship_event = { id = anomaly_failure.1400 } }
+			16 = { ship_event = { id = anomaly_failure.1401 } }
+			16 = { ship_event = { id = anomaly_failure.1402 } }
+			16 = { ship_event = { id = anomaly_failure.1403 } }
+			16 = { ship_event = { id = anomaly_failure.1404 } }
+			16 = { ship_event = { id = anomaly_failure.1405 } }
+		}
+	}
+}
+
+# Irassian Purified World (Habitable Planet)
+anomaly_category = {
+	key = "irassian_2_cat"
+	desc = "irassian_habitable_category_desc"
+	picture = GFX_evt_ship_in_orbit
+	level = 1
+	#risk = 30
+	
+	spawn_chance = {		
+		modifier = {
+			add = 10
+			habitable_planet = yes
+			solar_system = { has_star_flag = precursor_4 }
+			FROM = {
+				owner = {
+					is_ai = no
+					NOT = { has_country_flag = irassians_2 }
+					has_country_flag = irassian_intro 
+					has_event_chain = irassian_chain
+				}
+			}
+			FROM = { owner = { is_borg_empire = no is_assimilator = no } }
+		}
+	}
+	
+	on_spawn = {
+		FROM = {
+			owner = { set_country_flag = irassians_2 }
+		}
+	}
+	
+	on_success = {
+	}
+
+	on_fail = {
+		ship_event = { id = anomaly_failure.36 }
+	}
+
+	on_critical_fail = {
+		random_list = {
+			16 = { ship_event = { id = anomaly_failure.1400 } }
+			16 = { ship_event = { id = anomaly_failure.1401 } }
+			16 = { ship_event = { id = anomaly_failure.1402 } }
+			16 = { ship_event = { id = anomaly_failure.1403 } }
+			16 = { ship_event = { id = anomaly_failure.1404 } }
+			16 = { ship_event = { id = anomaly_failure.1405 } }
+		}
+	}
+}
+
+# Irassian Scheming Client Race (Habitable Planet)
+anomaly_category = {
+	key = "irassian_3_cat"
+	desc = "irassian_habitable_category_desc"
+	picture = GFX_evt_ship_in_orbit
+	level = 1
+	#risk = 30
+	
+	spawn_chance = {		
+		modifier = {
+			add = 10
+			habitable_planet = yes
+			solar_system = { has_star_flag = precursor_4 }
+			FROM = {
+				owner = {
+					is_ai = no
+					NOT = { has_country_flag = irassians_3 }
+					has_country_flag = irassian_intro 
+					has_event_chain = irassian_chain
+				}
+			}
+			FROM = { owner = { is_borg_empire = no is_assimilator = no } }
+		}
+	}
+	
+	on_spawn = {
+		FROM = {
+			owner = { set_country_flag = irassians_3 }
+		}
+	}
+	
+	on_success = {
+	}
+
+	on_fail = {
+		ship_event = { id = anomaly_failure.36 }
+	}
+
+	on_critical_fail = {
+		random_list = {
+			16 = { ship_event = { id = anomaly_failure.1400 } }
+			16 = { ship_event = { id = anomaly_failure.1401 } }
+			16 = { ship_event = { id = anomaly_failure.1402 } }
+			16 = { ship_event = { id = anomaly_failure.1403 } }
+			16 = { ship_event = { id = anomaly_failure.1404 } }
+			16 = { ship_event = { id = anomaly_failure.1405 } }
+		}
+	}
+}
+
+# Irassian Destroyed Client Race (Habitable Planet)
+anomaly_category = {
+	key = "irassian_4_cat"
+	desc = "irassian_habitable_category_desc"
+	picture = GFX_evt_ship_in_orbit
+	level = 1
+	#risk = 30
+	
+	spawn_chance = {		
+		modifier = {
+			add = 10
+			habitable_planet = yes
+			solar_system = { has_star_flag = precursor_4 }
+			FROM = {
+				owner = {
+					is_ai = no
+					NOT = { has_country_flag = irassians_4 }
+					has_country_flag = irassian_intro 
+					has_event_chain = irassian_chain
+				}
+			}
+			FROM = { owner = { is_borg_empire = no is_assimilator = no } }
+		}
+	}
+	
+	on_spawn = {
+		FROM = {
+			owner = { set_country_flag = irassians_4 }
+		}
+	}
+	
+	on_success = {
+	}
+
+	on_fail = {
+		ship_event = { id = anomaly_failure.36 }
+	}
+
+	on_critical_fail = {
+		random_list = {
+			16 = { ship_event = { id = anomaly_failure.1400 } }
+			16 = { ship_event = { id = anomaly_failure.1401 } }
+			16 = { ship_event = { id = anomaly_failure.1402 } }
+			16 = { ship_event = { id = anomaly_failure.1403 } }
+			16 = { ship_event = { id = anomaly_failure.1404 } }
+			16 = { ship_event = { id = anomaly_failure.1405 } }
+		}
+	}
+}
+
+# Irassian Dead Colony (Habitable Planet)
+anomaly_category = {
+	key = "irassian_5_cat"
+	desc = "irassian_habitable_category_desc"
+	picture = GFX_evt_ship_in_orbit
+	level = 1
+	#risk = 30
+	
+	spawn_chance = {		
+		modifier = {
+			add = 10
+			habitable_planet = yes
+			solar_system = { has_star_flag = precursor_4 }
+			FROM = {
+				owner = {
+					is_ai = no
+					NOT = { has_country_flag = irassians_5 }
+					has_country_flag = irassian_intro 
+					has_event_chain = irassian_chain
+				}
+			}
+			FROM = { owner = { is_borg_empire = no is_assimilator = no } }
+		}
+	}
+	
+	on_spawn = {
+		FROM = {
+			owner = { set_country_flag = irassians_5 }
+		}
+	}
+	
+	on_success = {
+	}
+
+	on_fail = {
+		ship_event = { id = anomaly_failure.36 }
+	}
+
+	on_critical_fail = {
+		random_list = {
+			16 = { ship_event = { id = anomaly_failure.1400 } }
+			16 = { ship_event = { id = anomaly_failure.1401 } }
+			16 = { ship_event = { id = anomaly_failure.1402 } }
+			16 = { ship_event = { id = anomaly_failure.1403 } }
+			16 = { ship_event = { id = anomaly_failure.1404 } }
+			16 = { ship_event = { id = anomaly_failure.1405 } }
+		}
+	}
+}
+
+# Irassian Dead Mining Base (Uninhabitable Planet)
+anomaly_category = {
+	key = "irassian_6_cat"
+	desc = "irassian_uninhabitable_category_desc"
+	picture = GFX_evt_ship_in_orbit
+	level = 1
+	#risk = 30
+	
+	spawn_chance = {		
+		modifier = {
+			add = 10
+			uninhabitable_regular_planet = yes
+			solar_system = { has_star_flag = precursor_4 }
+			FROM = {
+				owner = {
+					is_ai = no
+					NOT = { has_country_flag = irassians_6 }
+					has_country_flag = irassian_intro 
+					has_event_chain = irassian_chain
+				}
+			}
+			FROM = { owner = { is_borg_empire = no is_assimilator = no } }
+		}
+	}
+	
+	on_spawn = {
+		FROM = {
+			owner = { set_country_flag = irassians_6 }
+		}
+	}
+	
+	on_success = {
+	}
+
+	on_fail = {
+		ship_event = { id = anomaly_failure.36 }
+	}
+
+	on_critical_fail = {
+		random_list = {
+			16 = { ship_event = { id = anomaly_failure.1400 } }
+			16 = { ship_event = { id = anomaly_failure.1401 } }
+			16 = { ship_event = { id = anomaly_failure.1402 } }
+			16 = { ship_event = { id = anomaly_failure.1403 } }
+			16 = { ship_event = { id = anomaly_failure.1404 } }
+			16 = { ship_event = { id = anomaly_failure.1405 } }
+		}
+	}
+}
+
+# Irassian Colony (Habitable Planet)
+anomaly_category = {
+	key = "irassian_7_cat"
+	desc = "irassian_habitable_category_desc"
+	picture = GFX_evt_ship_in_orbit
+	level = 1
+	#risk = 30
+	
+	spawn_chance = {		
+		modifier = {
+			add = 10
+			habitable_planet = yes
+			solar_system = { has_star_flag = precursor_4 }
+			FROM = {
+				owner = {
+					is_ai = no
+					NOT = { has_country_flag = irassians_7 }
+					has_country_flag = irassian_intro 
+					has_event_chain = irassian_chain
+				}
+			}
+			FROM = { owner = { is_borg_empire = no is_assimilator = no } }
+		}
+	}
+	
+	on_spawn = {
+		FROM = {
+			owner = { set_country_flag = irassians_7 }
+		}
+	}
+	
+	on_success = {
+	}
+
+	on_fail = {
+		ship_event = { id = anomaly_failure.36 }
+	}
+
+	on_critical_fail = {
+		random_list = {
+			16 = { ship_event = { id = anomaly_failure.1400 } }
+			16 = { ship_event = { id = anomaly_failure.1401 } }
+			16 = { ship_event = { id = anomaly_failure.1402 } }
+			16 = { ship_event = { id = anomaly_failure.1403 } }
+			16 = { ship_event = { id = anomaly_failure.1404 } }
+			16 = { ship_event = { id = anomaly_failure.1405 } }
+		}
+	}
+}
+
+# Irassian Derelict Ship (Uninhabitable Planet)
+anomaly_category = {
+	key = "irassian_8_cat"
+	desc = "irassian_uninhabitable_category_desc"
+	picture = GFX_evt_ship_in_orbit
+	level = 1
+	#risk = 30
+	
+	spawn_chance = {		
+		modifier = {
+			add = 10
+			uninhabitable_regular_planet = yes
+			solar_system = { has_star_flag = precursor_4 }
+			FROM = {
+				owner = {
+					is_ai = no
+					NOT = { has_country_flag = irassians_8 }
+					has_country_flag = irassian_intro 
+					has_event_chain = irassian_chain
+				}
+			}
+			FROM = { owner = { is_borg_empire = no is_assimilator = no } }
+		}
+	}
+	
+	on_spawn = {
+		FROM = {
+			owner = { set_country_flag = irassians_8 }
+		}
+	}
+	
+	on_success = {
+	}
+
+	on_fail = {
+		ship_event = { id = anomaly_failure.36 }
+	}
+
+	on_critical_fail = {
+		random_list = {
+			16 = { ship_event = { id = anomaly_failure.1400 } }
+			16 = { ship_event = { id = anomaly_failure.1401 } }
+			16 = { ship_event = { id = anomaly_failure.1402 } }
+			16 = { ship_event = { id = anomaly_failure.1403 } }
+			16 = { ship_event = { id = anomaly_failure.1404 } }
+			16 = { ship_event = { id = anomaly_failure.1405 } }
+		}
+	}
+}
+
+# Irassian Disease Control Base (Uninhabitable Planet)
+anomaly_category = {
+	key = "irassian_9_cat"
+	desc = "irassian_uninhabitable_category_desc"
+	picture = GFX_evt_ship_in_orbit
+	level = 1
+	#risk = 30
+	
+	spawn_chance = {		
+		modifier = {
+			add = 10
+			uninhabitable_regular_planet = yes
+			solar_system = { has_star_flag = precursor_4 }
+			FROM = {
+				owner = {
+					is_ai = no
+					NOT = { has_country_flag = irassians_9 }
+					has_country_flag = irassian_intro 
+					has_event_chain = irassian_chain
+				}
+			}
+			FROM = { owner = { is_borg_empire = no is_assimilator = no } }
+		}
+	}
+	
+	on_spawn = {
+		FROM = {
+			owner = { set_country_flag = irassians_9 }
+		}
+	}
+	
+	on_success = {
+	}
+
+	on_fail = {
+		ship_event = { id = anomaly_failure.36 }
+	}
+
+	on_critical_fail = {
+		random_list = {
+			16 = { ship_event = { id = anomaly_failure.1400 } }
+			16 = { ship_event = { id = anomaly_failure.1401 } }
+			16 = { ship_event = { id = anomaly_failure.1402 } }
+			16 = { ship_event = { id = anomaly_failure.1403 } }
+			16 = { ship_event = { id = anomaly_failure.1404 } }
+			16 = { ship_event = { id = anomaly_failure.1405 } }
+		}
+	}
+}
+
+# Irassian Asteroid Listening Post (Asteroid)
+anomaly_category = {
+	key = "irassian_10_cat"
+	desc = "irassian_asteroid_category_desc"
+	picture = GFX_evt_mining_station
+	level = 2
+	#risk = 30
+	
+	spawn_chance = {		
+		modifier = {
+			add = 10
+			is_asteroid = yes
+			solar_system = { has_star_flag = precursor_4 }
+			FROM = {
+				owner = {
+					is_ai = no
+					NOT = { has_country_flag = irassians_10 }
+					has_country_flag = irassian_intro 
+					has_event_chain = irassian_chain
+				}
+			}
+			FROM = { owner = { is_borg_empire = no is_assimilator = no } }
+		}
+	}
+	
+	on_spawn = {
+		FROM = {
+			owner = { set_country_flag = irassians_10 }
+		}
+	}
+	
+	on_success = {
+	}
+
+	on_fail = {
+		ship_event = { id = anomaly_failure.36 }
+	}
+
+	on_critical_fail = {
+		random_list = {
+			16 = { ship_event = { id = anomaly_failure.400 } }
+			16 = { ship_event = { id = anomaly_failure.401 } }
+			16 = { ship_event = { id = anomaly_failure.402 } }
+			16 = { ship_event = { id = anomaly_failure.403 } }
+			16 = { ship_event = { id = anomaly_failure.404 } }
+			16 = { ship_event = { id = anomaly_failure.405 } }
+		}
+	}
+}
+
+# Irassian Concordat (Gas Giant)
+anomaly_category = {
+	key = "irassian_11_cat"
+	desc = "irassian_gasgiant_category_desc"
+	picture = GFX_evt_microscopic_life
+	level = 2
+	#risk = 30
+	
+	spawn_chance = {		
+		modifier = {
+			add = 10
+			is_planet_class = pc_gas_giant
+			solar_system = { has_star_flag = precursor_4 }
+			FROM = {
+				owner = {
+					is_ai = no
+					NOT = { has_country_flag = irassians_11 }
+					has_country_flag = irassian_intro 
+					has_event_chain = irassian_chain
+				}
+			}
+			FROM = { owner = { is_borg_empire = no is_assimilator = no } }
+		}
+	}
+	
+	on_spawn = {
+		FROM = {
+			owner = { set_country_flag = irassians_11 }
+		}
+	}
+	
+	on_success = {
+	}
+
+	on_fail = {
+		ship_event = { id = anomaly_failure.36 }
+	}
+
+	on_critical_fail = {
+		random_list = {
+			16 = { ship_event = { id = anomaly_failure.900 } }
+			16 = { ship_event = { id = anomaly_failure.901 } }
+			16 = { ship_event = { id = anomaly_failure.902 } }
+			16 = { ship_event = { id = anomaly_failure.903 } }
+		}
+	}
+}
+
+##########
+# CYBREX #
+##########
+
+# Cybrex Kuur Homeworld (Habitable Planet)
+anomaly_category = {
+	key = "cybrex_1_cat"
+	desc = "cybrex_habitable_category_desc"
+	picture = GFX_evt_archaeological_dig
+	level = 1
+	#risk = 30
+	
+	spawn_chance = {		
+		modifier = {
+			add = 10
+			habitable_planet = yes
+			solar_system = { has_star_flag = precursor_5 }
+			FROM = {
+				owner = {
+					is_ai = no
+					NOT = { has_country_flag = cybrex_1 }
+					has_country_flag = cybrex_intro
+					has_event_chain = cybrex_chain
+				}
+			}
+			FROM = { owner = { is_borg_empire = no is_assimilator = no } }
+		}
+	}
+	
+	on_spawn = {
+		FROM = {
+			owner = { set_country_flag = cybrex_1 }
+		}
+	}
+	
+	on_success = {
+	}
+
+	on_fail = {
+		ship_event = { id = anomaly_failure.37 }
+	}
+
+	on_critical_fail = {
+		random_list = {
+			16 = { ship_event = { id = anomaly_failure.1400 } }
+			16 = { ship_event = { id = anomaly_failure.1401 } }
+			16 = { ship_event = { id = anomaly_failure.1402 } }
+			16 = { ship_event = { id = anomaly_failure.1403 } }
+			16 = { ship_event = { id = anomaly_failure.1404 } }
+			16 = { ship_event = { id = anomaly_failure.1405 } }
+		}
+	}
+}
+
+# Cybrex Indimak Homeworld (Habitable Planet)
+anomaly_category = {
+	key = "cybrex_2_cat"
+	desc = "cybrex_habitable_category_desc"
+	picture = GFX_evt_archaeological_dig
+	level = 1
+	#risk = 30
+	
+	spawn_chance = {		
+		modifier = {
+			add = 10
+			habitable_planet = yes
+			solar_system = { has_star_flag = precursor_5 }
+			FROM = {
+				owner = {
+					is_ai = no
+					NOT = { has_country_flag = cybrex_2 }
+					has_country_flag = cybrex_intro
+					has_event_chain = cybrex_chain
+				}
+			}
+			FROM = { owner = { is_borg_empire = no is_assimilator = no } }
+		}
+	}
+	
+	on_spawn = {
+		FROM = {
+			owner = { set_country_flag = cybrex_2 }
+		}
+	}
+	
+	on_success = {
+	}
+
+	on_fail = {
+		ship_event = { id = anomaly_failure.37 }
+	}
+
+	on_critical_fail = {
+		random_list = {
+			16 = { ship_event = { id = anomaly_failure.1400 } }
+			16 = { ship_event = { id = anomaly_failure.1401 } }
+			16 = { ship_event = { id = anomaly_failure.1402 } }
+			16 = { ship_event = { id = anomaly_failure.1403 } }
+			16 = { ship_event = { id = anomaly_failure.1404 } }
+			16 = { ship_event = { id = anomaly_failure.1405 } }
+		}
+	}
+}
+
+# Cybrex Broken Warform (Uninhabitable Planet)
+anomaly_category = {
+	key = "cybrex_3_cat"
+	desc = "cybrex_uninhabitable_category_desc"
+	picture = GFX_evt_ship_in_orbit
+	level = 1
+	#risk = 30
+	
+	spawn_chance = {		
+		modifier = {
+			add = 10
+			uninhabitable_regular_planet = yes
+			solar_system = { has_star_flag = precursor_5 }
+			FROM = {
+				owner = {
+					is_ai = no
+					NOT = { has_country_flag = cybrex_3 }
+					has_country_flag = cybrex_intro
+					has_event_chain = cybrex_chain
+				}
+			}
+			FROM = { owner = { is_borg_empire = no is_assimilator = no } }
+		}
+	}
+	
+	on_spawn = {
+		FROM = {
+			owner = { set_country_flag = cybrex_3 }
+		}
+	}
+	
+	on_success = {
+	}
+
+	on_fail = {
+		ship_event = { id = anomaly_failure.37 }
+	}
+
+	on_critical_fail = {
+		random_list = {
+			16 = { ship_event = { id = anomaly_failure.1400 } }
+			16 = { ship_event = { id = anomaly_failure.1401 } }
+			16 = { ship_event = { id = anomaly_failure.1402 } }
+			16 = { ship_event = { id = anomaly_failure.1403 } }
+			16 = { ship_event = { id = anomaly_failure.1404 } }
+			16 = { ship_event = { id = anomaly_failure.1405 } }
+		}
+	}
+}
+
+# Cybrex Invasion (Habitable Planet)
+anomaly_category = {
+	key = "cybrex_4_cat"
+	desc = "cybrex_habitable_category_desc"
+	picture = GFX_evt_archaeological_dig
+	level = 1
+	#risk = 30
+	
+	spawn_chance = {		
+		modifier = {
+			add = 10
+			habitable_planet = yes
+			solar_system = { has_star_flag = precursor_5 }
+			FROM = {
+				owner = {
+					is_ai = no
+					NOT = { has_country_flag = cybrex_4 }
+					has_country_flag = cybrex_intro
+					has_event_chain = cybrex_chain
+				}
+			}
+			FROM = { owner = { is_borg_empire = no is_assimilator = no } }
+		}
+	}
+	
+	on_spawn = {
+		FROM = {
+			owner = { set_country_flag = cybrex_4 }
+		}
+	}
+	
+	on_success = {
+	}
+
+	on_fail = {
+		ship_event = { id = anomaly_failure.37 }
+	}
+
+	on_critical_fail = {
+		random_list = {
+			16 = { ship_event = { id = anomaly_failure.1400 } }
+			16 = { ship_event = { id = anomaly_failure.1401 } }
+			16 = { ship_event = { id = anomaly_failure.1402 } }
+			16 = { ship_event = { id = anomaly_failure.1403 } }
+			16 = { ship_event = { id = anomaly_failure.1404 } }
+			16 = { ship_event = { id = anomaly_failure.1405 } }
+		}
+	}
+}
+
+# Cybrex Ruins (Habitable Planet)
+anomaly_category = {
+	key = "cybrex_5_cat"
+	desc = "cybrex_habitable_category_desc"
+	picture = GFX_evt_archaeological_dig
+	level = 1
+	#risk = 30
+	
+	spawn_chance = {		
+		modifier = {
+			add = 10
+			habitable_planet = yes
+			solar_system = { has_star_flag = precursor_5 }
+			FROM = {
+				owner = {
+					is_ai = no
+					NOT = { has_country_flag = cybrex_5 }
+					has_country_flag = cybrex_intro
+					has_event_chain = cybrex_chain
+				}
+			}
+			FROM = { owner = { is_borg_empire = no is_assimilator = no } }
+		}
+	}
+	
+	on_spawn = {
+		FROM = {
+			owner = { set_country_flag = cybrex_5 }
+		}
+	}
+	
+	on_success = {
+	}
+
+	on_fail = {
+		ship_event = { id = anomaly_failure.37 }
+	}
+
+	on_critical_fail = {
+		random_list = {
+			16 = { ship_event = { id = anomaly_failure.1400 } }
+			16 = { ship_event = { id = anomaly_failure.1401 } }
+			16 = { ship_event = { id = anomaly_failure.1402 } }
+			16 = { ship_event = { id = anomaly_failure.1403 } }
+			16 = { ship_event = { id = anomaly_failure.1404 } }
+			16 = { ship_event = { id = anomaly_failure.1405 } }
+		}
+	}
+}
+
+# Cybrex Listening Post (Asteroid)
+anomaly_category = {
+	key = "cybrex_6_cat"
+	desc = "cybrex_asteroid_category_desc"
+	picture = GFX_evt_mining_station
+	level = 2
+	#risk = 30
+	
+	spawn_chance = {		
+		modifier = {
+			add = 10
+			is_asteroid = yes
+			solar_system = { has_star_flag = precursor_5 }
+			FROM = {
+				owner = {
+					is_ai = no
+					NOT = { has_country_flag = cybrex_6 }
+					has_country_flag = cybrex_intro
+					has_event_chain = cybrex_chain
+				}
+			}
+			FROM = { owner = { is_borg_empire = no is_assimilator = no } }
+		}
+	}
+	
+	on_spawn = {
+		FROM = {
+			owner = { set_country_flag = cybrex_6 }
+		}
+	}
+	
+	on_success = {
+	}
+
+	on_fail = {
+		ship_event = { id = anomaly_failure.37 }
+	}
+
+	on_critical_fail = {
+		random_list = {
+			16 = { ship_event = { id = anomaly_failure.400 } }
+			16 = { ship_event = { id = anomaly_failure.401 } }
+			16 = { ship_event = { id = anomaly_failure.402 } }
+			16 = { ship_event = { id = anomaly_failure.403 } }
+			16 = { ship_event = { id = anomaly_failure.404 } }
+			16 = { ship_event = { id = anomaly_failure.405 } }
+		}
+	}
+}
+
+# Cybrex Refinery (Gas Giant)
+anomaly_category = {
+	key = "cybrex_7_cat"
+	desc = "cybrex_gasgiant_category_desc"
+	picture = GFX_evt_ship_in_orbit
+	level = 2
+	#risk = 30
+	
+	spawn_chance = {		
+		modifier = {
+			add = 10
+			is_planet_class = pc_gas_giant
+			solar_system = { has_star_flag = precursor_5 }
+			FROM = {
+				owner = {
+					is_ai = no
+					NOT = { has_country_flag = cybrex_7 }
+					has_country_flag = cybrex_intro
+					has_event_chain = cybrex_chain
+				}
+			}
+			FROM = { owner = { is_borg_empire = no is_assimilator = no } }
+		}
+	}
+	
+	on_spawn = {
+		FROM = {
+			owner = { set_country_flag = cybrex_7 }
+		}
+	}
+	
+	on_success = {
+	}
+
+	on_fail = {
+		ship_event = { id = anomaly_failure.37 }
+	}
+
+	on_critical_fail = {
+		random_list = {
+			16 = { ship_event = { id = anomaly_failure.900 } }
+			16 = { ship_event = { id = anomaly_failure.901 } }
+			16 = { ship_event = { id = anomaly_failure.902 } }
+			16 = { ship_event = { id = anomaly_failure.903 } }
+		}
+	}
+}
+
+# Cybrex Battle Debris (Uninhabitable Planet)
+anomaly_category = {
+	key = "cybrex_8_cat"
+	desc = "cybrex_uninhabitable_category_desc"
+	picture = GFX_evt_ship_in_orbit
+	level = 1
+	#risk = 30
+	
+	spawn_chance = {		
+		modifier = {
+			add = 10
+			uninhabitable_regular_planet = yes
+			solar_system = { has_star_flag = precursor_5 }
+			FROM = {
+				owner = {
+					is_ai = no
+					NOT = { has_country_flag = cybrex_8 }
+					has_country_flag = cybrex_intro
+					has_event_chain = cybrex_chain
+				}
+			}
+			FROM = { owner = { is_borg_empire = no is_assimilator = no } }
+		}
+	}
+	
+	on_spawn = {
+		FROM = {
+			owner = { set_country_flag = cybrex_8 }
+		}
+	}
+	
+	on_success = {
+	}
+
+	on_fail = {
+		ship_event = { id = anomaly_failure.37 }
+	}
+
+	on_critical_fail = {
+		random_list = {
+			16 = { ship_event = { id = anomaly_failure.1400 } }
+			16 = { ship_event = { id = anomaly_failure.1401 } }
+			16 = { ship_event = { id = anomaly_failure.1402 } }
+			16 = { ship_event = { id = anomaly_failure.1403 } }
+			16 = { ship_event = { id = anomaly_failure.1404 } }
+			16 = { ship_event = { id = anomaly_failure.1405 } }
+		}
+	}
+}
+
+# Cybrex Base Remains (Uninhabitable Planet)
+anomaly_category = {
+	key = "cybrex_9_cat"
+	desc = "cybrex_uninhabitable_category_desc"
+	picture = GFX_evt_ship_in_orbit
+	level = 1
+	#risk = 30
+	
+	spawn_chance = {		
+		modifier = {
+			add = 10
+			uninhabitable_regular_planet = yes
+			solar_system = { has_star_flag = precursor_5 }
+			FROM = {
+				owner = {
+					is_ai = no
+					NOT = { has_country_flag = cybrex_9 }
+					has_country_flag = cybrex_intro
+					has_event_chain = cybrex_chain
+				}
+			}
+			FROM = { owner = { is_borg_empire = no is_assimilator = no } }
+		}
+	}
+	
+	on_spawn = {
+		FROM = {
+			owner = { set_country_flag = cybrex_9 }
+		}
+	}
+	
+	on_success = {
+	}
+
+	on_fail = {
+		ship_event = { id = anomaly_failure.37 }
+	}
+
+	on_critical_fail = {
+		random_list = {
+			16 = { ship_event = { id = anomaly_failure.1400 } }
+			16 = { ship_event = { id = anomaly_failure.1401 } }
+			16 = { ship_event = { id = anomaly_failure.1402 } }
+			16 = { ship_event = { id = anomaly_failure.1403 } }
+			16 = { ship_event = { id = anomaly_failure.1404 } }
+			16 = { ship_event = { id = anomaly_failure.1405 } }
+		}
+	}
+}
+
+# Cybrex Organic Remains (Uninhabitable Planet)
+anomaly_category = {
+	key = "cybrex_10_cat"
+	desc = "cybrex_uninhabitable_category_desc"
+	picture = GFX_evt_ship_in_orbit
+	level = 1
+	#risk = 30
+	
+	spawn_chance = {		
+		modifier = {
+			add = 10
+			uninhabitable_regular_planet = yes
+			solar_system = { has_star_flag = precursor_5 }
+			FROM = {
+				owner = {
+					is_ai = no
+					NOT = { has_country_flag =  cybrex_10 }
+					has_country_flag = cybrex_intro
+					has_event_chain = cybrex_chain
+				}
+			}
+			FROM = { owner = { is_borg_empire = no is_assimilator = no } }
+		}
+	}
+	
+	on_spawn = {
+		FROM = {
+			owner = { set_country_flag = cybrex_10 }
+		}
+	}
+	
+	on_success = {
+	}
+
+	on_fail = {
+		ship_event = { id = anomaly_failure.37 }
+	}
+
+	on_critical_fail = {
+		random_list = {
+			16 = { ship_event = { id = anomaly_failure.1400 } }
+			16 = { ship_event = { id = anomaly_failure.1401 } }
+			16 = { ship_event = { id = anomaly_failure.1402 } }
+			16 = { ship_event = { id = anomaly_failure.1403 } }
+			16 = { ship_event = { id = anomaly_failure.1404 } }
+			16 = { ship_event = { id = anomaly_failure.1405 } }
+		}
+	}
+}
+
+# Cybrex Research Station (Uninhabitable Planet)
+anomaly_category = {
+	key = "cybrex_11_cat"
+	desc = "cybrex_uninhabitable_category_desc"
+	picture = GFX_evt_ship_in_orbit
+	level = 1
+	#risk = 30
+	
+	spawn_chance = {		
+		modifier = {
+			add = 10
+			uninhabitable_regular_planet = yes
+			solar_system = { has_star_flag = precursor_5 }
+			FROM = {
+				owner = {
+					is_ai = no
+					NOT = { has_country_flag = cybrex_11 }
+					has_country_flag = cybrex_intro
+					has_event_chain = cybrex_chain
+				}
+			}
+			FROM = { owner = { is_borg_empire = no is_assimilator = no } }
+		}
+	}
+	
+	on_spawn = {
+		FROM = {
+			owner = { set_country_flag = cybrex_11 }
+		}
+	}
+	
+	on_success = {
+	}
+
+	on_fail = {
+		ship_event = { id = anomaly_failure.37 }
+	}
+
+	on_critical_fail = {
+		random_list = {
+			16 = { ship_event = { id = anomaly_failure.1400 } }
+			16 = { ship_event = { id = anomaly_failure.1401 } }
+			16 = { ship_event = { id = anomaly_failure.1402 } }
+			16 = { ship_event = { id = anomaly_failure.1403 } }
+			16 = { ship_event = { id = anomaly_failure.1404 } }
+			16 = { ship_event = { id = anomaly_failure.1405 } }
+		}
+	}
+}
+
+##############
+# HOMEWORLDS #
+##############
+
+anomaly_category = {
+	key = "VULTAUMAR"
+	desc = "VULTAUMAR_DESC"
+	
+	spawn_chance = {		
+		modifier = {
+			add = 0
+		}
+	}
+	
+}
+
+anomaly_category = {
+	key = "YUHTAAN"
+	desc = "YUHTAAN_DESC"
+	
+	spawn_chance = {		
+		modifier = {
+			add = 0
+		}
+	}
+	
+}
+
+anomaly_category = {
+	key = "FEN_HABBANIS"
+	desc = "FEN_HABBANIS_DESC"
+	
+	spawn_chance = {		
+		modifier = {
+			add = 0
+		}
+	}
+	
+}
+
+anomaly_category = {
+	key = "IRASSIA"
+	desc = "IRASSIA_DESC"
+	
+	spawn_chance = {		
+		modifier = {
+			add = 0
+		}
+	}
+	
+}

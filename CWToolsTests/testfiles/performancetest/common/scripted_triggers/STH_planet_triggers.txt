@@ -1,0 +1,264 @@
+is_gas_giant = {
+	OR = {
+		is_planet_class = pc_gas_giant
+		is_planet_class = pc_i_class
+		is_planet_class = pc_s_class
+		is_planet_class = pc_u_class
+	}
+}
+
+is_m_class = {
+	OR = {
+		is_planet_class = pc_continental
+		is_planet_class = pc_arctic
+		is_planet_class = pc_arid
+		is_planet_class = pc_savannah
+		is_planet_class = pc_tropical
+		is_planet_class = pc_alpine
+		is_planet_class = pc_m1_class
+		is_planet_class = pc_gaia
+		is_planet_class = pc_ocean
+	}	
+}
+
+is_inhabitable_planet = {
+	OR = {
+		is_m_class = yes
+		
+	}
+}
+
+is_rocky_planet = {
+	OR = {
+		is_planet_class = pc_g_class
+		is_planet_class = pc_f_class
+	}
+}
+
+is_habitat_planet = {
+	OR = {
+		is_planet_class = pc_helix
+		is_planet_class = pc_hunters_lodge
+		is_planet_class = pc_unimatrix
+		is_planet_class = pc_starbase_blank_brg
+		is_planet_class = pc_asteroid_prison
+	}
+}
+
+is_asteroid_habitat = {
+	OR = {
+		is_planet_class = pc_hunters_lodge
+		is_planet_class = pc_asteroid_prison
+	}
+}
+
+is_starbase_planet = {
+	OR = {
+		is_planet_class = pc_starbase_blank
+		is_planet_class = pc_starbase_blank_fed
+		is_planet_class = pc_starbase_blank_car
+		is_planet_class = pc_starbase_blank_brg
+	}
+}
+
+is_starship_planet = {
+	OR = {
+		is_planet_class = pc_voth_city_ship
+	}
+}
+
+is_artificial_planet = {
+	OR = {
+		is_planet_class = pc_ringworld_habitable
+		is_habitat_planet = yes
+		is_starbase_planet = yes
+	}
+}
+
+is_assimilated_planet = {
+	OR = {
+		is_planet_class = pc_assimilated
+		is_planet_class = pc_starbase_blank_brg
+		is_planet_class = pc_unimatrix
+	}
+}
+
+has_military_building = {
+	OR = {
+		has_building = "building_starbase_operations_1"
+	}
+}
+
+has_civilian_quarters = {
+	OR = {
+		has_building = "building_starbase_operations_1"
+	}
+}
+
+fit_for_breen_dome = {
+    OR = {
+		is_planet_class = pc_arctic
+		is_planet_class = pc_alpine
+		is_planet_class = pc_ocean
+		is_planet_class = pc_class_q_geo
+		is_planet_class = pc_r_class
+		is_planet_class = pc_nuked
+	}
+}
+
+fit_for_tholian_dome = {
+    OR = {
+		is_planet_class = pc_savannah
+		is_planet_class = pc_desert
+		is_planet_class = pc_tundra
+	}
+}
+
+fit_for_sheliak_dome = {
+    OR = {
+		is_planet_class = pc_arid
+		is_planet_class = pc_savannah
+		is_planet_class = pc_tropical
+		is_planet_class = pc_class_q_variable
+		is_planet_class = pc_y_class
+		is_planet_class = pc_x_class
+	}
+}
+
+has_resource_block = {
+	OR = {
+		has_resource = {
+            type = sr_pergium_5
+            amount > 0
+        }
+		has_resource = {
+            type = sr_tribbles_6
+            amount > 0
+        }
+		has_resource = {
+            type = sr_dilithium_10
+            amount > 0
+        }
+		has_resource = {
+            type = sr_yridium_11
+            amount > 0
+        }
+		has_resource = {
+            type = sr_sodium_12
+            amount > 0
+        }
+		has_resource = {
+            type = sr_brizeen_14
+            amount > 0
+        }
+		has_resource = {
+            type = sr_biosculpting_18
+            amount > 0
+        }
+		has_resource = {
+            type = sr_supersolid_19
+            amount > 0
+        }
+		has_resource = {
+            type = sr_mars_22
+            amount > 0
+        }
+		has_resource = {
+            type = sr_relics_24
+            amount > 0
+        }
+		has_resource = {
+            type = physics_research
+            amount > 0
+        }
+		has_resource = {
+            type = society_research
+            amount > 0
+        }
+		has_resource = {
+            type = engineering_research
+            amount > 0
+        }
+	}
+}
+
+has_valid_tile_blocker = {
+    OR = {
+        has_blocker = tb_mountain_range
+        has_blocker = tb_active_volcano
+        has_blocker = tb_dangerous_wildlife
+        has_blocker = tb_dense_jungle
+        has_blocker = tb_quicksand_basin
+        has_blocker = tb_noxious_swamp
+        has_blocker = tb_massive_glacier
+        has_blocker = tb_toxic_kelp
+        has_blocker = tb_deep_sinkhole
+        has_blocker = tb_radioactive_wasteland
+        has_blocker = tb_city_ruins
+        has_blocker = tb_bomb_crater
+    }
+}
+
+capital_building_0 = {
+    OR = {
+        has_building = building_colony_shelter
+        has_building = building_deployment_post
+        has_building = helix_ops_0
+        has_building = node_hub_0
+        has_building = building_starbase_operations_0
+    }
+}
+
+capital_building_1 = {
+    OR = {
+        has_building = building_capital_1
+        has_building = building_machine_capital_1
+        has_building = helix_ops_1
+        has_building = node_hub_1
+        has_building = building_starbase_operations_1
+    }
+}
+
+capital_building_2 = {
+    OR = {
+        has_building = building_capital_2
+        has_building = building_machine_capital_2
+        has_building = helix_ops_2
+        has_building = node_hub_2
+        has_building = building_starbase_operations_2
+    }
+}
+
+capital_building_3 = {
+    OR = {
+        has_building = building_capital_3
+        has_building = building_machine_capital_3
+        has_building = helix_ops_3
+        has_building = node_hub_3
+        has_building = building_starbase_operations_3
+    }
+}
+
+has_any_capital_building = {
+    OR = {
+        capital_building_0 = yes
+        capital_building_1 = yes
+        capital_building_2 = yes
+        capital_building_3 = yes
+    }
+}
+
+has_at_least_capital_1 = {
+    OR = {
+        capital_building_1 = yes
+        capital_building_2 = yes
+        capital_building_3 = yes
+    }
+}
+
+has_at_least_capital_2 = {
+    OR = {
+        capital_building_2 = yes
+        capital_building_3 = yes
+    }
+}

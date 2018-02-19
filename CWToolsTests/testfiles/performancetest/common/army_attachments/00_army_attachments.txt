@@ -1,0 +1,113 @@
+#F Possible Values:
+#cost, resource table.
+#potential, trigger, scope is army type.
+#allow, trigger, scope is army type.
+#modifier, modifier. applies to army and army ship.
+#ai_weight, default = 100
+
+
+attachment_hunter-killer = {
+      icon = "gfx/interface/icons/army_attachments/attachment_mechanical.dds"
+      cost = { minerals = 50 }
+      modifier = { army_damage_mult = 0.15 }
+      prerequisites = { "tech_assault_armies" }
+   }
+   
+attachment_maco = {
+      icon = "gfx/interface/icons/army_attachments/attachment_special_forces.dds"
+      cost = { minerals = 50 energy = 25 }
+      modifier = { army_damage_mult = 0.3 }
+      prerequisites = { "tech_society_statecraft_931" }
+   }
+   
+attachment_special = {
+      icon = "gfx/interface/icons/army_attachments/attachment_special_forces.dds"
+      cost = { minerals = 50 energy = 25 }
+      modifier = { army_damage_mult = 0.25 }
+      prerequisites = { "tech_society_special_395" }
+   }
+   
+attachment_dimensional = {
+      icon = "gfx/interface/icons/army_attachments/attachment_genetic.dds"
+      cost = { minerals = 50 energy = 25 }
+      modifier = { army_damage_mult = 0.4 army_health = -0.25 }
+      prerequisites = { "tech_physics_elwin_48" }
+   }
+   
+attachment_military = {
+      icon = "gfx/interface/icons/army_attachments/attachment_slaves.dds"
+      cost = { minerals = 50 energy = 25 }
+      modifier = { army_morale = 0.25 }
+      prerequisites = { "tech_society_secret_436" }
+   }
+   
+attachment_thalaron = {
+      icon = "gfx/interface/icons/army_attachments/attachment_genetic.dds"
+      cost = { minerals = 100 energy = 50 }
+      modifier = { army_damage_mult = 0.1 army_morale_damage_mult = 0.4 army_upkeep_mult = 0.15 }
+      prerequisites = { "tech_physics_thalaron_211" }
+   }
+   
+attachment_varon-t = {
+      icon = "gfx/interface/icons/army_attachments/attachment_genetic.dds"
+      cost = { minerals = 100 energy = 50 }
+      modifier = { army_morale_damage_mult = 0.3 army_upkeep_mult = 0.1 }
+      prerequisites = { "tech_physics_varon-t_220" }
+   }
+   
+attachment_shroud = {
+      icon = "gfx/interface/icons/army_attachments/attachment_shield.dds"
+      cost = { minerals = 75 energy = 50 }
+      modifier = { army_health = 0.2 army_morale_damage_mult = 0.1 army_upkeep_mult = 0.15 }
+      prerequisites = { "tech_physics_personal_99" }
+   }
+   
+attachment_tholian = {
+      icon = "gfx/interface/icons/army_attachments/attachment_xeno.dds"
+      cost = { minerals = 50 energy = 50 }
+      modifier = { army_health = 0.35 army_upkeep_mult = 0.15 }
+      prerequisites = { "tech_society_new_worlds_1134" }
+   }
+   
+attachment_breen = {
+      icon = "gfx/interface/icons/army_attachments/attachment_xeno.dds"
+      cost = { minerals = 50 energy = 50 }
+      modifier = { army_health = 0.35 army_upkeep_mult = 0.15 }
+      prerequisites = { "tech_society_new_worlds_1149" }
+   }
+   
+attachment_ground = {
+      icon = "gfx/interface/icons/army_attachments/attachment_shield.dds"
+      cost = { minerals = 50 }
+      modifier = { army_health = 0.1 army_upkeep_mult = -0.1 }
+      prerequisites = { "tech_society_combined_397" }
+   }
+   
+attachment_tactical = {
+      icon = "gfx/interface/icons/army_attachments/attachment_mechanical.dds"
+      cost = { minerals = 50 energy = 50 }
+      modifier = { army_damage_mult = 0.3 army_upkeep_mult = 0.1 }
+      prerequisites = { "tech_society_statecraft_1763" }
+   }
+   
+attachment_armored = {
+      icon = "gfx/interface/icons/army_attachments/attachment_shield.dds"
+      cost = { minerals = 50 energy = 50 }
+      modifier = { army_health = 0.3 army_upkeep_mult = 0.1 }
+      prerequisites = { "tech_society_statecraft_1764" }
+   }
+   
+attachment_modular = {
+      icon = "gfx/interface/icons/army_attachments/attachment_special_forces.dds"
+      cost = { minerals = 50 energy = 50 }
+      modifier = { army_upkeep_mult = -0.2 }
+      prerequisites = { "tech_society_statecraft_1765" }
+   }
+   
+attachment_personal = {
+      icon = "gfx/interface/icons/army_attachments/attachment_shield.dds"
+      cost = { minerals = 75 energy = 25 }
+      modifier = { army_health = 0.3 army_upkeep_mult = 0.1 }
+      prerequisites = { "tech_engineering_materials_1481" }
+   }
+   

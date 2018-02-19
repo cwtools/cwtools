@@ -1,0 +1,118 @@
+# Central Fusion Power Core
+utility_component_template = {
+  key = "REQUIRED_STATION_REACTOR_0"
+  size = small
+  icon = "GFX_ship_part_Required_Station_Reactor_0"
+  icon_frame = 1
+  power = 100
+  cost = 30
+  size_restriction = { military_station_small military_station_medium military_station_large station_listening military_station_tiny }
+  upgrades_to = "REQUIRED_STATION_REACTOR_1"
+  ship_modifier = {     }
+  modifier = {     }
+  ai_weight = { weight = 1 }
+  prerequisites = { "tech_warp_engine" }
+  component_set = "required_station_reactors"
+}
+
+# Electrostatic Fusion Power Core
+utility_component_template = {
+  key = "REQUIRED_STATION_REACTOR_1"
+  size = small
+  icon = "GFX_ship_part_Required_Station_Reactor_1"
+  icon_frame = 1
+  power = 125
+  cost = 40
+  size_restriction = { military_station_small military_station_medium military_station_large station_listening military_station_tiny }
+  upgrades_to = "REQUIRED_STATION_REACTOR_2"
+  ship_modifier = { ship_weapon_range_mult = 0.05  ship_weapon_damage = 0.05 ship_fire_rate_mult = 0.05  }
+  modifier = {     }
+  ai_weight = { weight = 20 }
+  prerequisites = { "tech_physics_inertial_54" }
+  component_set = "required_station_reactors"
+}
+
+# Carbon Reaction Fusion Power Core
+utility_component_template = {
+  key = "REQUIRED_STATION_REACTOR_2"
+  size = small
+  icon = "GFX_ship_part_Required_Station_Reactor_2"
+  icon_frame = 1
+  power = 225
+  cost = 80
+  size_restriction = { military_station_small military_station_medium military_station_large station_listening military_station_tiny }
+  upgrades_to = "REQUIRED_STATION_REACTOR_3"
+  ship_modifier = { ship_weapon_range_mult = 0.1 ship_weapon_damage = 0.1 ship_fire_rate_mult = 0.10  }
+  modifier = {     }
+  ai_weight = { weight = 30 }
+  prerequisites = { "tech_physics_carbon_56" }
+  component_set = "required_station_reactors"
+}
+
+# Deuterium Fusion Power Core
+utility_component_template = {
+  key = "REQUIRED_STATION_REACTOR_3"
+  size = small
+  icon = "GFX_ship_part_Required_Station_Reactor_3"
+  icon_frame = 1
+  power = 350
+  cost = 120
+  size_restriction = { military_station_small military_station_medium military_station_large station_listening military_station_tiny }
+  upgrades_to = "REQUIRED_STATION_REACTOR_4"
+  ship_modifier = { ship_weapon_range_mult = 0.15 ship_weapon_damage = 0.15 ship_fire_rate_mult = 0.15  }
+  modifier = {     }
+  ai_weight = { weight = 40 }
+  prerequisites = { "tech_physics_pure_57" }
+  component_set = "required_station_reactors"
+}
+
+# Fusion Array Power Core
+utility_component_template = {
+  key = "REQUIRED_STATION_REACTOR_4"
+  size = small
+  icon = "GFX_ship_part_Required_Station_Reactor_4"
+  icon_frame = 1
+  power = 425
+  cost = 140
+  size_restriction = { military_station_small military_station_medium military_station_large station_listening military_station_tiny }
+  upgrades_to = "REQUIRED_STATION_REACTOR_5"
+  ship_modifier = { ship_weapon_range_mult = 0.2 ship_weapon_damage = 0.20 ship_fire_rate_mult = 0.20  }
+  modifier = {     }
+  ai_weight = { weight = 50 }
+  prerequisites = { "tech_physics_synchronous_59" }
+  component_set = "required_station_reactors"
+}
+
+# Tetryonic Power Core
+utility_component_template = {
+  key = "REQUIRED_STATION_REACTOR_5"
+  size = small
+  icon = "GFX_ship_part_Required_Station_Reactor_5"
+  icon_frame = 1
+  power = 500
+  cost = 200
+  size_restriction = { military_station_small military_station_medium military_station_large station_listening military_station_tiny }
+  upgrades_to = "REQUIRED_STATION_REACTOR_6"
+  ship_modifier = { ship_weapon_range_mult = 0.25 ship_weapon_damage = 0.25 ship_fire_rate_mult = 0.25  }
+  modifier = {     }
+  ai_weight = { weight = 100 }
+  prerequisites = { "tech_physics_tetryonic_61" }
+  component_set = "required_station_reactors"
+}
+
+# Chroniton Power Core
+utility_component_template = {
+  key = "REQUIRED_STATION_REACTOR_6"
+  size = small
+  icon = "GFX_ship_part_Required_Station_Reactor_6"
+  icon_frame = 1
+  power = 525
+  cost = 230
+  size_restriction = { military_station_small military_station_medium military_station_large station_listening military_station_tiny }
+  
+  ship_modifier = { ship_weapon_range_mult = 0.30 ship_weapon_damage = 0.30 ship_fire_rate_mult = 0.30  }
+  modifier = {     }
+  ai_weight = { weight = 100 }
+  prerequisites = { "tech_physics_field_manipulation_134" }
+  component_set = "required_station_reactors"
+}

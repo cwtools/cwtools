@@ -1,0 +1,13 @@
+
+##############################
+##############################
+### SYNTHETIC DAWN events  ###
+### by Maximilian Olbers,  ###
+### Miranda van den Brink, ###
+### & Dee Majek			   ###
+##############################
+##############################
+
+namespace = syndaw
+
+### Disabled

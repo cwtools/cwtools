@@ -1,0 +1,318 @@
+############################
+#
+# The Skin of Evil
+#
+# Written by Oninoni
+#
+############################
+
+
+namespace = STH_theSkinOfEvil_fail
+
+# ROOT = ship scope
+# FROM = planet scope
+
+# Planet Uncolonizeable
+ship_event = {
+	id = STH_theSkinOfEvil_fail.1
+	title = STH_theSkinOfEvil_fail.1.name
+	desc = "STH_theSkinOfEvil_fail.1.desc"
+	picture =  sth_GFX_evt_theSkinOfEvil3
+	show_sound = event_scanner
+	location = FROM
+	is_triggered_only = yes
+	option = { name = STH_theSkinOfEvil_fail.1.a }
+}
+
+# Planet Uncolonizeable + Ship destroyed
+ship_event = {
+	id = STH_theSkinOfEvil_fail.2
+	title = STH_theSkinOfEvil_fail.2.name
+	desc = "STH_theSkinOfEvil_fail.2.desc"
+	picture = sth_GFX_evt_theSkinOfEvil2
+	show_sound = event_ship_explosion
+	location = FROM
+	is_triggered_only = yes
+	immediate = {
+		kill_leader = { type = scientist show_notification = no }
+		fleet = { destroy_fleet = this }
+	}
+	option = { name = STH_theSkinOfEvil_fail.2.a }
+}
+
+
+namespace = STH_theSkinOfEvil_event
+
+### The Skin of Evil
+
+ship_event = {
+	id = STH_theSkinOfEvil_event.1
+	title = STH_theSkinOfEvil_event.1.name
+	desc = STH_theSkinOfEvil_event.1.desc
+	picture = sth_GFX_evt_theSkinOfEvil4
+	location = FROM
+	is_triggered_only = yes
+	immediate = { 
+		FROM = { set_planet_flag = "skinOfEvilPlanet@Root.Owner" }
+		leader = { save_event_target_as = shipCaptain } 
+	}
+	option = {
+		name = STH_theSkinOfEvil_event.1.a  # Greet in peace
+        trigger = {
+            owner = {
+                OR = {
+                    has_ethic = ethic_fanatic_pacifist
+                    has_ethic = ethic_pacifist
+                }
+            }
+        }
+        hidden_effect = {
+            ship_event = { id = STH_theSkinOfEvil_event.2 }
+		}
+	}
+    option = {
+		name = STH_theSkinOfEvil_event.1.b  # Threaten the Beeing
+        trigger = {
+            owner = {
+                OR = {
+                    has_ethic = ethic_fanatic_militarist
+                    has_ethic = ethic_militarist
+                }
+            }
+        }
+        hidden_effect = {
+            kill_leader = { type = scientist  show_notification = no }
+			random_list = {
+                50 = {
+                    ship_event = { id = STH_theSkinOfEvil_event.10 }
+                }
+                50 = {
+                    modifier = { factor = 1.05 owner = { has_transporters = yes } }
+					ship_event = { id = STH_theSkinOfEvil_event.11 }
+                }
+            }
+		}
+	}
+    option = {
+		name = STH_theSkinOfEvil_event.1.c  # Ask who he is
+        hidden_effect = {
+            ship_event = { id = STH_theSkinOfEvil_event.3 }
+		}
+	}
+}
+
+ship_event = {
+    id = STH_theSkinOfEvil_event.2
+	title = STH_theSkinOfEvil_event.2.name
+	desc = STH_theSkinOfEvil_event.2.desc
+	picture = sth_GFX_evt_theSkinOfEvil4
+	location = FROM
+	is_triggered_only = yes
+	immediate = { leader = { save_event_target_as = shipCaptain } }
+	option = {
+		name = STH_theSkinOfEvil_event.2.a  # Pity
+        hidden_effect = {
+            ship_event = { id = STH_theSkinOfEvil_event.6 }
+		}
+	}
+	option = {
+		name = STH_theSkinOfEvil_event.2.b  # Want to belong?
+        hidden_effect = {
+            ship_event = { id = STH_theSkinOfEvil_event.4 }
+		}
+	}
+	option = {
+		name = STH_theSkinOfEvil_event.2.c  # See negative feelings are not bad
+        hidden_effect = {
+            ship_event = { id = STH_theSkinOfEvil_event.5 }
+		}
+	}
+}
+
+ship_event = {
+    id = STH_theSkinOfEvil_event.3
+	title = STH_theSkinOfEvil_event.3.name
+	desc = STH_theSkinOfEvil_event.3.desc
+	picture = sth_GFX_evt_theSkinOfEvil4
+	location = FROM
+	is_triggered_only = yes
+	immediate = { leader = { save_event_target_as = shipCaptain } }
+	option = {
+		name = STH_theSkinOfEvil_event.3.a  # Pity
+        hidden_effect = {
+            ship_event = { id = STH_theSkinOfEvil_event.6 }
+		}
+	}
+	option = {
+		name = STH_theSkinOfEvil_event.3.b  # See negative feelings are not bad
+        hidden_effect = {
+            ship_event = { id = STH_theSkinOfEvil_event.5 }
+		}
+	}
+}
+
+ship_event = {
+    id = STH_theSkinOfEvil_event.4
+	title = STH_theSkinOfEvil_event.4.name
+	desc = STH_theSkinOfEvil_event.4.desc
+	picture = sth_GFX_evt_theSkinOfEvil4
+	location = FROM
+	is_triggered_only = yes
+	immediate = { leader = { save_event_target_as = shipCaptain } }
+	option = {
+		name = STH_theSkinOfEvil_event.4.a  # Give Shuttle
+        hidden_effect = {
+            ship_event = { id = STH_theSkinOfEvil_event.7 }
+		}
+	}
+	option = {
+		name = STH_theSkinOfEvil_event.4.b  # Deny Shuttle
+        hidden_effect = {
+            ship_event = { id = STH_theSkinOfEvil_event.8 }
+		}
+	}
+}
+
+ship_event = {
+    id = STH_theSkinOfEvil_event.5
+	title = STH_theSkinOfEvil_event.5.name
+	desc = STH_theSkinOfEvil_event.5.desc
+	picture = sth_GFX_evt_theSkinOfEvil4
+	location = FROM
+	is_triggered_only = yes
+	immediate = { leader = { save_event_target_as = shipCaptain } }
+	option = {
+		name = STH_theSkinOfEvil_event.5.a  # Give Shuttle
+        hidden_effect = {
+            ship_event = { id = STH_theSkinOfEvil_event.7 }
+		}
+	}
+	option = {
+		name = STH_theSkinOfEvil_event.5.b  # Deny Shuttle
+        hidden_effect = {
+            ship_event = { id = STH_theSkinOfEvil_event.8 }
+		}
+	}
+}
+
+ship_event = {
+    id = STH_theSkinOfEvil_event.6                          # Pity Result
+	title = STH_theSkinOfEvil_event.6.name0ß
+	desc = {
+		trigger = { owner = { has_transporters = no } }
+		text = STH_theSkinOfEvil_event.6.desc_01
+	}
+	desc = {
+		trigger = { owner = { has_transporters = yes } }
+		text = STH_theSkinOfEvil_event.6.desc_02
+	}
+	picture = sth_GFX_evt_theSkinOfEvil7
+	location = FROM
+	is_triggered_only = yes
+	immediate = { leader = { save_event_target_as = shipCaptain } }
+    option = {
+		name = STH_theSkinOfEvil_event.6.a
+        hidden_effect = {
+            ship_event = { id = STH_theSkinOfEvil_event.9 }
+		}
+    }
+}
+
+ship_event = {
+    id = STH_theSkinOfEvil_event.7                          # Gave Shuttle (Sucess)
+	title = STH_theSkinOfEvil_event.7.name
+	desc = STH_theSkinOfEvil_event.7.desc
+	picture = sth_GFX_evt_theSkinOfEvil9
+	location = FROM
+	is_triggered_only = yes
+	immediate = { leader = { save_event_target_as = shipCaptain } }
+    option = { 
+		name = STH_theSkinOfEvil_event.7.a 
+		owner = {
+			add_society_research = 100
+			add_minerals = -10
+		}
+	}
+}
+
+ship_event = {
+    id = STH_theSkinOfEvil_event.8                          # Denied Shuttle
+	title = STH_theSkinOfEvil_event.8.name
+	desc = {
+		trigger = { owner = { has_transporters = no } }
+		text = STH_theSkinOfEvil_event.8.desc_01
+	}
+	desc = {
+		trigger = { owner = { has_transporters = yes } }
+		text = STH_theSkinOfEvil_event.8.desc_02
+	}
+	picture = sth_GFX_evt_theSkinOfEvil8
+	location = FROM
+	is_triggered_only = yes
+	immediate = { leader = { save_event_target_as = shipCaptain } }
+    option = {
+		name = STH_theSkinOfEvil_event.8.a
+        hidden_effect = {
+            ship_event = { id = STH_theSkinOfEvil_event.9 }
+		}
+    }
+}
+
+ship_event = {
+    id = STH_theSkinOfEvil_event.9                          #Planet Unhabitable
+	title = STH_theSkinOfEvil_event.9.name
+	desc = STH_theSkinOfEvil_event.9.desc
+	picture = sth_GFX_evt_theSkinOfEvil10
+	location = FROM
+	is_triggered_only = yes
+    immediate = {
+		leader = { save_event_target_as = shipCaptain }
+        kill_leader = { type = scientist  show_notification = no }
+        random_planet = {
+			limit = {
+				has_planet_flag = "skinOfEvilPlanet@Root.Owner"
+			}
+			save_event_target_as = skinOfEvilPlanet
+			change_pc = pc_class_d_barren
+		}
+    }
+    option = {
+		name = STH_theSkinOfEvil_event.9.a
+    }
+}
+
+ship_event = {
+    id = STH_theSkinOfEvil_event.10                          # 1b 50% 1 Failure
+	title = STH_theSkinOfEvil_event.10.name
+	desc = {
+		trigger = { owner = { has_transporters = no } }
+		text = STH_theSkinOfEvil_event.10.desc_01
+	}
+	desc = {
+		trigger = { owner = { has_transporters = yes } }
+		text = STH_theSkinOfEvil_event.10.desc_02
+	}
+	picture = sth_GFX_evt_theSkinOfEvil5
+	location = FROM
+	is_triggered_only = yes
+	immediate = { leader = { save_event_target_as = shipCaptain } }
+    option = {
+		name = STH_theSkinOfEvil_event.10.a
+        ship_event = { id = STH_theSkinOfEvil_event.9 }
+    }
+}
+
+ship_event = {
+    id = STH_theSkinOfEvil_event.11                          # 1b 50% 2 Sucess
+	title = STH_theSkinOfEvil_event.11.name
+	desc = STH_theSkinOfEvil_event.11.desc
+	picture = sth_GFX_evt_theSkinOfEvil6
+	location = FROM
+	is_triggered_only = yes
+	immediate = { leader = { save_event_target_as = shipCaptain } }
+    option = {
+		name = STH_theSkinOfEvil_event.11.a
+    }
+}
+
+

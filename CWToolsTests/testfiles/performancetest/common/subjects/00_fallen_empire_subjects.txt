@@ -1,0 +1,186 @@
+# Xenophobe
+thrall = {
+	can_colonize = no
+	can_be_integrated = no
+	joins_overlord_wars = no
+	calls_overlord_to_war = no
+	can_do_diplomacy = yes
+	
+	diplo_threat = 0.75
+	
+	subject_tax_rate = {
+		minerals = 0.25
+		energy = 0.25
+	}
+	
+	potential = {
+		is_country_type = default
+		from = {
+			is_country_type = awakened_fallen_empire
+			has_ethic = ethic_fanatic_xenophobe
+		}
+	}
+	
+	effect = {
+		if = {
+			limit = {
+				from = { 
+					NOT = { is_country_type = awakened_fallen_empire }
+				}
+			}
+			set_subject_of = {
+				who = from
+				subject_type = vassal
+			}
+			else = {
+				if = {
+					limit = {
+						has_global_flag = war_in_heaven_ongoing
+					}
+					join_war = from
+				}				
+			}
+		}				
+	}
+}
+
+# Spiritualist
+dominion = {
+	can_colonize = yes
+	can_be_integrated = no
+	joins_overlord_wars = no
+	calls_overlord_to_war = no
+	can_do_diplomacy = yes
+	
+	diplo_threat = 0.75
+	
+	subject_tax_rate = {
+		minerals = 0.25
+		energy = 0.25
+	}
+	
+	potential = {
+		is_country_type = default
+		from = {
+			is_country_type = awakened_fallen_empire
+			has_ethic = ethic_fanatic_spiritualist
+		}
+	}
+	
+	effect = {
+		if = {
+			limit = {
+				from = { 
+					NOT = { is_country_type = awakened_fallen_empire }
+				}
+			}
+			set_subject_of = {
+				who = from
+				subject_type = vassal
+			}
+			else = {
+				if = {
+					limit = {
+						NOT = { has_ethic = ethic_gestalt_consciousness }
+					}
+					shift_ethic = "ethic_spiritualist"
+					shift_ethic = "ethic_spiritualist"					
+				}
+				if = {
+					limit = {
+						has_global_flag = war_in_heaven_ongoing
+					}
+					join_war = from
+				}				
+			}
+		}				
+	}
+}
+
+# Materialist
+satellite = {
+	can_colonize = yes
+	can_be_integrated = no
+	joins_overlord_wars = no
+	calls_overlord_to_war = no
+	can_do_diplomacy = yes
+	
+	diplo_threat = 0.75
+	
+	subject_tax_rate = {
+		physics_research = 0.33
+		society_research = 0.33
+		engineering_research = 0.33
+	}
+
+	potential = {
+		is_country_type = default
+		from = {
+			is_country_type = awakened_fallen_empire
+			has_ethic = ethic_fanatic_materialist
+		}
+	}
+	
+	effect = {
+		if = {
+			limit = {
+				from = { 
+					NOT = { is_country_type = awakened_fallen_empire }
+				}
+			}
+			set_subject_of = {
+				who = from
+				subject_type = vassal
+			}
+			else = {
+				if = {
+					limit = {
+						has_global_flag = war_in_heaven_ongoing
+					}
+					join_war = from
+				}				
+			}
+		}				
+	}
+}
+
+# Xenophile
+signatory = {
+	can_colonize = yes
+	can_be_integrated = no
+	joins_overlord_wars = no
+	calls_overlord_to_war = yes
+	can_do_diplomacy = no
+	
+	diplo_threat = 0.75
+	
+	potential = {
+		is_country_type = default
+		from = {
+			is_country_type = awakened_fallen_empire
+			has_ethic = ethic_fanatic_xenophile
+		}
+	}
+	
+	effect = {
+		if = {
+			limit = {
+				from = { 
+					NOT = { is_country_type = awakened_fallen_empire }
+				}
+			}
+			set_subject_of = {
+				who = from
+				subject_type = vassal
+			}
+			else = {
+				if = {
+					limit = {
+						has_global_flag = war_in_heaven_ongoing
+					}
+					join_war = from
+				}				
+			}
+		}				
+	}
+}

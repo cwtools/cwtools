@@ -1,0 +1,118 @@
+namespace = sth_submod
+
+event = {
+	id = sth_submod.1
+	hide_window = yes
+	is_triggered_only = yes
+	trigger = { 
+		NOT = { has_global_flag = "STH_main_mod_present" } 
+	}
+	immediate = { 
+		every_country = { 
+			limit = { is_ai = no }
+			country_event = { id = sth_submod.10 days = 7 }
+		}
+		set_global_flag = "STH_main_mod_present"
+	}
+}
+
+
+
+country_event = {
+	id = sth_submod.10
+	title = "sth_submod.10.name"
+	desc = { #BORG
+		trigger = { 
+			AND = {
+				NOR = { has_global_flag = "STH_borg_ui_present" has_global_flag = "STH_borg_ui_notified" }
+				is_species_class = BRG
+			}
+			OR = { has_global_flag = "STH_content_01_present" has_global_flag = "STH_content_01_notified" }
+		}
+		text = "sth_submod.10.desc_borg_ui"
+	}
+	desc = { #DOMINION
+		trigger = { 
+			AND = {
+				NOR = { has_global_flag = "STH_dominion_ui_present" has_global_flag = "STH_dominion_ui_notified" }
+				OR = { is_species_class = DOM is_species_class = VOR is_species_class = JEM }
+			}
+			OR = { has_global_flag = "STH_content_01_present" has_global_flag = "STH_content_01_notified" }
+		}
+		text = "sth_submod.10.desc_dominion_ui"
+	}
+	desc = { #ROMULAN
+		trigger = { 
+			AND = {
+				NOR = { has_global_flag = "STH_romulan_ui_present" has_global_flag = "STH_romulan_ui_notified" }
+				OR = { is_species_class = ROM is_species_class = REM is_species_class = GAR }
+			}
+			OR = { has_global_flag = "STH_content_01_present" has_global_flag = "STH_content_01_notified" }
+		}
+		text = "sth_submod.10.desc_romulan_ui"
+	}
+	desc = { #FEDERATION
+		trigger = { 
+			AND = {
+				NOR = { has_global_flag = "STH_federation_ui_present" has_global_flag = "STH_federation_ui_notified" }
+				is_species_class = FED
+			}
+			OR = { has_global_flag = "STH_content_01_present" has_global_flag = "STH_content_01_notified" }
+		}
+		text = "sth_submod.10.desc_federation_ui"
+	}
+	# desc = { #KLINGON
+		# trigger = { 
+			# AND = {
+				# NOR = { has_global_flag = "STH_klingon_ui_present" has_global_flag = "STH_klingon_ui_notified" }
+				# is_species_class = KDF
+			# }
+			# OR = { has_global_flag = "STH_content_01_present" has_global_flag = "STH_content_01_notified" }
+		# }
+		# text = "sth_submod.10.desc_klingon_ui"
+	# }
+	desc = {
+		trigger = { 
+			NOR = { has_global_flag = "STH_content_01_present" has_global_flag = "STH_content_01_notified" } 
+		}
+		text = "sth_submod.10.desc"
+	}
+	picture = sth_GFX_evt_mainMod1
+	is_triggered_only = yes
+	trigger = {
+		OR = {
+			NOR = { has_global_flag = "STH_content_01_present" has_global_flag = "STH_content_01_notified" }
+			AND = {
+				NOR = { has_global_flag = "STH_borg_ui_present" has_global_flag = "STH_borg_ui_notified" }
+				is_species_class = BRG
+			}
+			AND = {
+				NOR = { has_global_flag = "STH_dominion_ui_present" has_global_flag = "STH_dominion_ui_notified" }
+				OR = { is_species_class = DOM is_species_class = VOR is_species_class = JEM }
+			}
+			AND = {
+				NOR = { has_global_flag = "STH_romulan_ui_present" has_global_flag = "STH_romulan_ui_notified" }
+				OR = { is_species_class = ROM is_species_class = REM is_species_class = GAR }
+			}
+			AND = {
+				NOR = { has_global_flag = "STH_federation_ui_present" has_global_flag = "STH_federation_ui_notified" }
+				is_species_class = FED
+			}
+			# AND = {
+				# NOR = { has_global_flag = "STH_klingon_ui_present" has_global_flag = "STH_klingon_ui_notified" }
+				# is_species_class = KDF
+			# }
+		}
+	}
+	immediate = { 
+		set_country_flag = "STH_content_01_notified"
+		set_country_flag = "STH_borg_ui_notified"
+		set_country_flag = "STH_dominion_ui_notified"
+		set_country_flag = "STH_romulan_ui_notified"
+		set_country_flag = "STH_federation_ui_notified"
+		# set_country_flag = "STH_klingon_ui_notified"
+	}
+	option = {
+		name = sth_submod.10.a
+	}
+}

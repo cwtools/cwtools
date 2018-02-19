@@ -1,0 +1,971 @@
+#########################################
+#
+# Henrik's Test Events
+#
+#########################################
+
+
+namespace = nhTest
+
+country_event = {
+	id = nhTest.1
+	title = nhTest.1.name
+	desc = nhTest.1.desc
+	picture = GFX_evt_smugglers_in_bar
+	is_triggered_only = yes
+	
+	option = {
+		name = "TEST"
+		set_country_flag = test@root
+		set_country_flag = test@root.owner
+		# every_country = {
+			# set_country_flag = test@root
+			# root = { set_country_flag = test@prev.capital_scope }
+		# }
+	}
+	option = {
+		name = "UE Allow"
+		allow = { has_country_flag = united_earth }
+	}
+	option = {
+		name = "UE Not Allow"
+		allow = { NOT = { has_country_flag = united_earth } }
+	}
+}
+
+
+
+country_event = {
+	id = nhTest.2
+	title = nhTest.2.name
+	desc = nhTest.2.desc
+	picture = GFX_evt_smugglers_in_bar
+	is_triggered_only = yes
+	immediate = {
+		random_country = {
+			species = { save_event_target_as = randomSpecies }
+		}
+	}
+	option = {
+		name = "Kill"
+		leader = {
+			kill_leader = { show_notification = no }
+		}
+	}
+	option = {
+		name = "Change Leader"
+		leader = {
+			change_species = event_target:randomSpecies
+		}
+	}
+}
+
+planet_event = {
+	id = nhTest.3
+	title = nhTest.3.name
+	desc = nhTest.3.desc
+	picture = GFX_evt_smugglers_in_bar
+	is_triggered_only = yes
+	option = {
+		name = "TEST"
+		remove_planet = yes
+	}
+}
+
+
+
+country_event = {
+	id = nhTest.5
+	title = nhTest.5.name
+	desc = nhTest.5.desc
+	picture = GFX_evt_smugglers_in_bar
+	is_triggered_only = yes
+	immediate = {
+		random_owned_leader  = {
+			limit = { leader_class = governor }
+			save_event_target_as = ambassadorCandidate1
+		}
+	}
+	option = {
+		name = "[ambassadorCandidate1.GetName]"
+		country_event = { id = nhTest.6 }
+	}
+	option = {
+		name = "New List"
+		country_event = { id = nhTest.5 }
+	}
+}
+
+
+country_event = {
+	id = nhTest.6
+	title = nhTest.6.name
+	desc = nhTest.6.desc
+	picture = GFX_evt_smugglers_in_bar
+	is_triggered_only = yes
+	immediate = {
+		random_neighbor_country  = {
+			limit = { has_communications = root }
+			save_event_target_as = ambassadorTargetCandidate
+		}
+	}
+	option = {
+		name = "[ambassadorCandidate1.GetName] to [ambassadorTargetCandidate.GetName]"
+		event_target:ambassadorCandidate1 = {
+			set_leader_flag = "Ambassador"
+			set_leader_flag = "Ambassador From: @root"
+			set_leader_flag = "Ambassador To: @event_target:ambassadorTargetCandidate"
+		}
+	}
+}
+
+country_event = {
+	id = nhTest.7
+	title = nhTest.7.name
+	desc = nhTest.7.desc
+	picture = GFX_evt_smugglers_in_bar
+	is_triggered_only = yes
+	immediate = {
+		random_owned_leader  = {
+			limit = { has_leader_flag = "Ambassador" }
+			every_country = {
+				root = {
+					random_owned_leader = {
+						limit = { has_leader_flag = "Ambassador To: @prevprev" }
+						save_event_target_as = FoundAmbassador
+						prevprev = { save_event_target_as = FoundAmbassadorCountry }
+					}
+				}
+			}
+		}
+	}
+	option = {
+		name = "[FoundAmbassadorCountry.GetName] [FoundAmbassador.GetName]"
+	}
+}
+
+
+
+country_event = {
+	id = nhTest.8
+	title = nhTest.8.name
+	desc = nhTest.8.desc
+	diplomatic = yes
+	picture_event_data = {
+		portrait = event_target:vedekLeader
+		planet_background = root
+		graphical_culture = root
+		city_level = root
+		room = root
+	}
+	is_triggered_only = yes
+	immediate = {
+		create_country = {
+			name = "Exile"
+			species = random
+			type = exile
+			auto_delete = yes
+			ethos = { }
+			authority = random
+			civics = random
+			flag = random
+			auto_delete = no
+		}
+		last_created_country = {
+			set_country_flag = bajoranReligionCountry
+			save_event_target_as = bajoranReligionCountry
+		}
+		random_owned_leader  = {
+			limit = { leader_class = admiral }
+			set_leader_flag = bajoranKai
+			save_event_target_as = vedekLeader
+			exile_leader_as = vedekLeader
+		}
+		event_target:bajoranReligionCountry = {
+			set_leader = vedekLeader
+			leader = { unassign_leader = this }
+		}
+	}
+	option = {
+		name = "[vedekLeader.GetName] - [vedekLeader.Owner.GetName]"
+		set_country_flag = ownerNew@event_target:vedekLeader.Owner
+	}
+		option = {
+		name = "Turn to Feds"
+		set_country_flag = united_federation_of_planets
+	}
+}
+
+
+
+country_event = {
+	id = nhTest.9
+	title = nhTest.9.name
+	desc = nhTest.9.desc
+	diplomatic = yes
+	picture_event_data = {
+		portrait = event_target:vedekLeader
+		planet_background = root
+		graphical_culture = root
+		city_level = root
+		room = root
+	}
+	is_triggered_only = yes
+	immediate = {
+		random_country = { limit = { has_country_flag = bajoranReligionCountry } save_event_target_as = bajoranReligionCountry }
+		event_target:bajoranReligionCountry = {
+			random_owned_leader = {
+				limit = { has_leader_flag = bajoranVedek }
+				save_event_target_as = vedekLeader
+				kill_leader = { show_notification = no }
+			}
+		}
+		
+	}
+	option = { name = Test }
+}
+
+country_event = {
+	id = nhTest.10
+	title = nhTest.10.name
+	desc = nhTest.10.desc
+	diplomatic = yes
+	picture_event_data = {
+		portrait = event_target:vedekLeader
+		planet_background = root
+		graphical_culture = root
+		city_level = root
+		room = root
+	}
+	is_triggered_only = yes
+	immediate = {
+		random_country = { limit = { has_country_flag = bajoranReligionCountry } save_event_target_as = bajoranReligionCountry }
+		event_target:bajoranReligionCountry = {
+			create_leader = { name = random type = governor species = owner_main_species }
+			last_created_leader = { set_leader_flag = bajoranVedek save_event_target_as = vedekLeader }
+		}
+		
+	}
+	option = { name = Test }
+}
+
+
+country_event = {
+	id = nhTest.11
+	hide_window = yes
+	is_triggered_only = yes
+	immediate = {
+		leader = { kill_leader = { show_notification = no } }
+	}
+}
+
+planet_event = {
+	id = nhTest.12
+	title = nhTest.12.name
+	desc = nhTest.12.desc
+	picture = GFX_evt_smugglers_in_bar
+	is_triggered_only = yes
+	immediate = { }
+	option = { 
+		name = Test
+		create_species = {
+			name = "Xindi-Aquatic"
+			class = XINAQU
+			portrait = xindi_aquatic
+			homeworld = THIS
+			traits = { trait = trait_xindi trait = trait_sedentary trait = trait_natural_engineers trait = trait_industrious ideal_planet_class = "pc_ocean" }
+		}
+		random_tile = {
+			limit = { has_blocker = no has_grown_pop = no has_growing_pop = no }
+			create_pop = { species = last_created_species }
+		}
+	}
+}
+
+country_event = {
+	id = nhTest.13
+	title = nhTest.13.name
+	desc = nhTest.13.desc
+	picture = GFX_evt_smugglers_in_bar
+	is_triggered_only = yes
+	immediate = {
+		every_owned_fleet = {
+			limit = { has_fleet_flag = starbase_megastructure }
+			save_event_target_as = starbase
+		}
+	}
+	option = {
+		name = "[starbase.GetName]"
+	}
+}
+
+country_event = {
+	id = nhTest.20
+	title = nhTest.20.name
+	desc = nhTest.20.desc
+	picture = GFX_evt_smugglers_in_bar
+	is_triggered_only = yes
+	immediate = { }
+	option = {
+		name = "Always"
+		create_fleet = {
+			name = "Altamid Swarm"
+			effect = {
+				set_owner = root
+				create_ship = {
+					name = "Altamid Swarm"
+					design = "Altamid Swarm"
+				}
+				set_location = root.capital_scope
+			}
+		}
+		# give_technology = { tech = tech_xcv330_1 }
+		# create_ship_design = { design = "XCV 330" ftl = warp }
+		# add_ship_design = last_created_design
+		# add_ship_design = "XCV 330"
+	}
+}
+
+country_event = {
+	id = nhTest.21
+	title = nhTest.21.name
+	desc = nhTest.21.desc
+	picture = GFX_evt_smugglers_in_bar
+	is_triggered_only = yes
+	immediate = { }
+	option = { name = "Alpha Beta" trigger = { sth_alphabeta_map = yes } } 
+	option = { name = "Alpha Beta 600" trigger = { sth_alphabeta_600_map = yes } } 
+	option = { name = "Alpha Beta 450" trigger = { sth_alphabeta_450_map = yes } } 
+	option = { name = "Alpha Beta Mirror" trigger = { sth_alphabeta_mirror_map = yes } }
+	option = { name = "Delta" trigger = { sth_delta_map = yes } }
+	option = { name = "Main Map" trigger = { sth_main_map = yes } }
+	option = { name = "Original Map" trigger = { sth_original_map = yes } }
+	option = { name = "Escape" }
+}
+
+country_event = {
+	id = nhTest.22
+	title = nhTest.22.name
+	desc = nhTest.22.desc
+	picture = GFX_evt_smugglers_in_bar
+	is_triggered_only = yes
+	immediate = { 
+		every_owned_leader = {
+			limit = {
+				owner = {
+					research_leader = { 
+						area = physics
+						is_same_value = prevprev
+					}
+				}
+			}
+			save_event_target_as = physicsLeader
+		}
+	}
+	option = { 
+		name = "Unassign"
+		event_target:physicsLeader = { unassign_leader = this }
+	}
+}
+
+
+
+country_event = {
+	id = nhTest.1000
+	title = "Change gfx culture Pt1"
+	desc = "Which?"
+	picture = GFX_evt_smugglers_in_bar
+	is_triggered_only = yes
+	immediate = { }
+	option = {
+		name = "FED ENT"
+		set_graphical_culture = federation_01
+	}
+	option = {
+		name = "FED TOS"
+		set_graphical_culture = federation_02
+	}
+	option = {
+		name = "FED TMP"
+		set_graphical_culture = federation_03
+	}
+	option = {
+		name = "FED TNG"
+		set_graphical_culture = federation_04
+	}
+	option = {
+		name = "FED MU TNG"
+		set_graphical_culture = federation_MU_04
+	}
+	option = {
+		name = "KDF ENT"
+		set_graphical_culture = klingon_01
+	}
+	option = {
+		name = "KDF TOS"
+		set_graphical_culture = klingon_02
+	}
+	option = {
+		name = "KDF TMP"
+		set_graphical_culture = klingon_03
+	}
+	option = {
+		name = "KDF TNG"
+		set_graphical_culture = klingon_04
+	}
+	option = {
+		name = "ROM ENT"
+		set_graphical_culture = romulan_01
+	}
+	option = {
+		name = "ROM TOS"
+		set_graphical_culture = romulan_01
+	}
+	option = {
+		name = "ROM TMP"
+		set_graphical_culture = romulan_01
+	}
+	option = {
+		name = "ROM TNG"
+		set_graphical_culture = romulan_01
+	}
+	option = {
+		name = "Andorian"
+		set_graphical_culture = andorian_01
+	}
+	option = {
+		name = "Borg"
+		set_graphical_culture = borg_01
+	}
+	option = {
+		name = "Borg Red"
+		set_graphical_culture = borg_red_01
+	}
+	option = {
+		name = "Borg Blue"
+		set_graphical_culture = borg_blue_01
+	}
+	option = {
+		name = "Borg Purple"
+		set_graphical_culture = borg_purple_01
+	}
+	option = {
+		name = "Borg Orange"
+		set_graphical_culture = borg_orange_01
+	}
+	option = {
+		name = "Borg Yellow"
+		set_graphical_culture = borg_yellow_01
+	}
+	option = {
+		name = "Cytherian"
+		set_graphical_culture = cytherian_01
+	}	
+}
+
+country_event = {
+	id = nhTest.1001
+	title = "Change gfx culture Pt2"
+	desc = "Which?"
+	picture = GFX_evt_smugglers_in_bar
+	is_triggered_only = yes
+	immediate = { }
+	option = {
+		name = "Breen"
+		set_graphical_culture = breen_01
+	}	
+	option = {
+		name = "Cardassian"
+		set_graphical_culture = cardassian_01
+	}
+	option = {
+		name = "Dominion"
+		set_graphical_culture = dominion_01
+	}		
+	option = {
+		name = "Ferengi"
+		set_graphical_culture = ferengi_01
+	}
+	option = {
+		name = "Generic 01"
+		set_graphical_culture = generic_01
+	}
+	option = {
+		name = "Generic 02"
+		set_graphical_culture = generic_02
+	}
+	option = {
+		name = "Generic 03"
+		set_graphical_culture = generic_03
+	}
+	option = {
+		name = "Generic 04"
+		set_graphical_culture = generic_02
+	}	
+	option = {
+		name = "Husnock"
+		set_graphical_culture = husnock_01
+	}
+	option = {
+		name = "Kazon"
+		set_graphical_culture = kazon_01
+	}	
+	option = {
+		name = "Suliban"
+		set_graphical_culture = suliban_01
+	}	
+	option = {
+		name = "Tellarite"
+		set_graphical_culture = tellarite_01
+	}		
+	option = {
+		name = "Tholian"
+		set_graphical_culture = tholian_01
+	}
+	option = {
+		name = "Sheliak"
+		set_graphical_culture = sheliak_01
+	}
+	option = {
+		name = "Vidiian"
+		set_graphical_culture = vidiian_01
+	}		
+	option = {
+		name = "Voth"
+		set_graphical_culture = voth_01
+	}			
+	option = {
+		name = "Vulcan"
+		set_graphical_culture = vulcan_01
+	}	
+	option = {
+		name = "Xindi"
+		set_graphical_culture = xindi_01
+	}		
+}
+
+
+planet_event = {
+	id = nhTest.101
+	title = nhTest.101.name
+	desc = nhTest.101.desc
+	# picture = GFX_evt_smugglers_in_bar
+	picture = {
+		trigger = { owner = { has_country_flag = united_earth } }
+		picture = GFX_evt_smugglers_in_bar
+	}
+	picture = {
+		trigger = { owner = { NOT = { has_country_flag = united_earth } } }
+		picture = GFX_evt_alien_nature
+	}
+	is_triggered_only = yes
+	immediate = { }
+	option = { 
+		name = "Stuff" 
+		spawn_system = {
+			min_distance = 5
+			max_distance = 10
+			initializer = "lobi_consortium_system"  
+		}
+	}
+}
+
+country_event = {
+	id = nhTest.102
+	title = nhTest.102.name
+	desc = nhTest.102.desc
+	picture = GFX_evt_smugglers_in_bar
+	# picture = {
+		# trigger = { 
+			# random_list = {
+				# 10 = { picture = GFX_evt_smugglers_in_bar }
+				# 10 = { picture = GFX_evt_alien_nature }
+			# }
+		# }
+	# }
+	is_triggered_only = yes
+	immediate = { }
+	option = { 
+		name = "Large Timeline Change" 
+		large_timeline_change = yes
+	}
+}
+
+country_event = {
+	id = nhTest.2000
+	hide_window = yes
+	is_triggered_only = yes
+	immediate = { log = "[Root.GetName] entered war against [From.GetName]" }
+}
+
+country_event = {
+	id = nhTest.2001
+	hide_window = yes
+	is_triggered_only = yes
+	immediate = { 
+		set_country_flag = hate_me
+		random_country = {
+			limit = { is_normal_country = yes } 
+			add_modifier = { modifier = em_rebel_borg_supply days = -1 }
+			log = "Boosted [This.GetName]"
+		}
+	}
+}
+
+country_event = {
+	id = nhTest.2002
+	hide_window = yes
+	is_triggered_only = yes
+	immediate = { 
+		random_country = {
+			limit = { has_modifier = em_rebel_borg_supply } 
+			remove_modifier = em_rebel_borg_supply
+			log = "De-boosted [This.GetName]"
+		}
+	}
+}
+
+country_event = {
+	id = nhTest.2005
+	title = nhTest.102.name
+	desc = nhTest.102.desc
+	picture = GFX_evt_smugglers_in_bar
+	is_triggered_only = yes
+	immediate = { }		
+	option = { 
+		name = "tech_assimilation_1" 
+		give_technology = { tech = tech_assimilation_1 }
+	}
+	option = { 
+		name = "tech_assimilation_2" 
+		give_technology = { tech = tech_assimilation_2 }
+	}
+}
+
+# # Defect request #
+# country_event = {
+# 	id = nhTest.2003
+# 	desc = "test"
+# 	title = TRANSMISSION
+# 	diplomatic = yes
+
+# 	picture_event_data = {
+# 		portrait = root.ruler
+# 		planet_background = root.capital_scope
+# 		#graphical_culture = event_target:book_writer
+# 		city_level = root.capital_scope
+# 		room = root.ruler
+# 	}
+# 	option = {
+# 		name = "TEST"
+# 	}
+# }
+
+# # Defect request #
+# country_event = {
+# 	id = nhTest.2004
+# 	desc = "test"
+# 	title = TRANSMISSION
+# 	diplomatic = yes
+
+# 	picture_event_data = {
+# 		portrait = root.ruler
+# 		room = root
+# 	}
+# 	option = {
+# 		name = "TEST"
+# 	}
+# }
+
+country_event = {
+	id = nhTest.2006
+	title = "Lots of Leader"
+	desc = "Which?"
+	picture = GFX_evt_smugglers_in_bar
+	is_triggered_only = yes
+	option = { 
+		name = "foreign leaders"
+		every_owned_leader = {
+			kill_leader = { show_notification = no }
+		}
+		while = { 
+			count = 100
+			random_country = { 
+				limit = { is_normal_country = yes }
+				species = { save_event_target_as = randomSpecies }
+			}
+			create_leader = { name = random species = event_target:randomSpecies type = random skill = random }
+		}
+	}
+	option = { 
+		name = "domestic leaders"
+		every_owned_leader = {
+			kill_leader = { show_notification = no }
+		}
+		while = { 
+			count = 100
+			create_leader = { name = random species = root type = random skill = random }
+		}
+	}
+}
+
+country_event = {
+	id = nhTest.2007
+	title = "Get Contacts"
+	desc = "Which?"
+	picture = GFX_evt_smugglers_in_bar
+	is_triggered_only = yes
+	option = { 
+		name = "All"
+		every_country = {
+			establish_communications_no_message = root
+		}
+	}
+}
+
+country_event = {
+	id = nhTest.2008
+	title = "Get Observe"
+	desc = "Which?"
+	picture = GFX_evt_smugglers_in_bar
+	is_triggered_only = yes
+	option = { 
+		name = "All"
+		every_country = {
+			set_country_flag = "observe_cheat"
+		}
+	}
+}
+
+country_event = {
+	id = nhTest.2009
+	title = "Get Ship Techs"
+	desc = "Which?"
+	picture = GFX_evt_smugglers_in_bar
+	is_triggered_only = yes
+	option = { 
+		name = "Fed 04"
+		#set_graphical_culture = federation_04
+		give_technology = { tech = tech_phaser_cannon_1 message = no }
+		give_technology = { tech = tech_physics_phaser_158 message = no }
+		give_technology = { tech = tech_engineering_industry_1296 message = no }
+		give_technology = { tech = tech_patrol_frigate message = no }
+		give_technology = { tech = tech_engineering_starship-class_717 message = no }
+		give_technology = { tech = tech_engineering_advanced_547 message = no }
+		give_technology = { tech = tech_engineering_industry_1233 message = no }
+		give_technology = { tech = tech_engineering_destroyer_541 message = no }
+		give_technology = { tech = tech_ship_program message = no }
+		give_technology = { tech = tech_engineering_advanced_711 message = no }
+		give_technology = { tech = tech_engineering_advanced_712 message = no }
+		give_technology = { tech = tech_engineering_advanced_713 message = no }
+		give_technology = { tech = tech_engineering_next-level_548 message = no }
+		give_technology = { tech = tech_engineering_industry_1231 message = no }
+		give_technology = { tech = tech_engineering_cruiser_542 message = no }
+		give_technology = { tech = tech_engineering_chevron_550 message = no }
+		give_technology = { tech = tech_engineering_next-level_549 message = no }
+		give_technology = { tech = tech_physics_particles_340 message = no }
+		give_technology = { tech = tech_engineering_industry_1232 message = no }
+		give_technology = { tech = tech_engineering_battlecruiser_543 message = no }
+		give_technology = { tech = tech_engineering_next-level_718 message = no }
+		give_technology = { tech = tech_physics_particles_328 message = no }
+		#give_technology = { tech = tech_engineering_industry_1264 message = no }
+		give_technology = { tech = tech_engineering_industry_1266 message = no }
+		give_technology = { tech = tech_engineering_battleship_544 message = no }
+		give_technology = { tech = tech_engineering_next-level_719 message = no }
+		give_technology = { tech = tech_physics_particles_334 message = no }
+		give_technology = { tech = tech_physics_particles_407 message = no }
+		give_technology = { tech = tech_engineering_multi-vector_551 message = no }
+		give_technology = { tech = tech_engineering_heavy_545 message = no }
+		give_technology = { tech = tech_engineering_assault_546 message = no }
+	}
+}
+
+country_event = {
+	id = nhTest.2010
+	title = "Get Exploration Warp Techs"
+	desc = "Which?"
+	picture = GFX_evt_smugglers_in_bar
+	is_triggered_only = yes
+	option = { 
+		name = "All Exploration"
+        give_technology = { tech = tech_physics_field_manipulation_136 message = no }
+        give_technology = { tech = tech_physics_gravimetric_65 message = no }
+        give_technology = { tech = tech_physics_exploration_68 message = no }
+        give_technology = { tech = tech_physics_field_manipulation_141 message = no }
+        give_technology = { tech = tech_physics_field_manipulation_142 message = no }
+        give_technology = { tech = tech_physics_dicyclic_73 message = no }
+        give_technology = { tech = tech_physics_tricyclic_76 message = no }
+        give_technology = { tech = tech_physics_isodyanmic_79 message = no }
+	}
+	option = { 
+		name = "T2"
+		give_technology = { tech = tech_physics_gravimetric_65 message = no }
+	}
+	option = { 
+		name = "T4"
+		give_technology = { tech = tech_physics_exploration_68 message = no }
+	}
+	option = { 
+		name = "T6"
+		give_technology = { tech = tech_physics_field_manipulation_141 message = no }
+	}
+	option = { 
+		name = "T8"
+		give_technology = { tech = tech_physics_field_manipulation_142 message = no }
+	}
+	option = { 
+		name = "T10"
+		give_technology = { tech = tech_physics_dicyclic_73 message = no }
+	}
+	option = { 
+		name = "T12"
+		give_technology = { tech = tech_physics_tricyclic_76 message = no }
+	}	
+	option = { 
+		name = "T14"
+		give_technology = { tech = tech_physics_isodyanmic_79 message = no }
+	}							
+}
+
+country_event = {
+	id = nhTest.2011
+	title = "Get Combat Warp Techs"
+	desc = "Which?"
+	picture = GFX_evt_smugglers_in_bar
+	is_triggered_only = yes
+	option = { 
+		name = "All Military"
+        give_technology = { tech = tech_physics_field_manipulation_136 message = no }
+        give_technology = { tech = tech_physics_gravimetric_65 message = no }
+        give_technology = { tech = tech_physics_militarized_69 message = no }
+        give_technology = { tech = tech_physics_dilithium_74 message = no }
+        give_technology = { tech = tech_physics_field_manipulation_151 message = no }
+        give_technology = { tech = tech_physics_field_manipulation_152 message = no }
+        give_technology = { tech = tech_physics_bipolar_77 message = no }
+        give_technology = { tech = tech_physics_hyper-inection_80 message = no }
+	}
+	option = { 
+		name = "T2"
+		give_technology = { tech = tech_physics_gravimetric_65 message = no }
+	}
+	option = { 
+		name = "T4"
+		give_technology = { tech = tech_physics_militarized_69 message = no }
+	}
+	option = { 
+		name = "T6"
+		give_technology = { tech = tech_physics_dilithium_74 message = no }
+	}
+	option = { 
+		name = "T8"
+		give_technology = { tech = tech_physics_field_manipulation_151 message = no }
+	}
+	option = { 
+		name = "T10"
+		give_technology = { tech = tech_physics_field_manipulation_152 message = no }
+	}
+	option = { 
+		name = "T12"
+		give_technology = { tech = tech_physics_bipolar_77 message = no }
+	}	
+	option = { 
+		name = "T14"
+		give_technology = { tech = tech_physics_hyper-inection_80 message = no }
+	}							
+}
+
+
+
+fleet_event = {
+	id = nhTest.10001
+	title = nhTest.10001.name
+	desc = nhTest.10001.desc
+	picture = GFX_evt_smugglers_in_bar
+	is_triggered_only = yes
+	trigger = { 
+		exists = leader
+		leader = {
+			OR = {
+				has_leader_flag = "changeling_infiltrator_for:@event_target:the_dominion"
+				has_leader_flag = "changeling_infiltrator_for:@the_dominion"
+			}
+		}
+	}
+	option = {
+		name = "Test"
+	}
+}
+
+
+country_event = {
+	id = nhTest.10002
+	title = nhTest.10002.name
+	desc = nhTest.10002.desc
+	picture = GFX_evt_smugglers_in_bar
+	is_triggered_only = yes
+	immediate = { }
+	# option = {
+		# name = "Add 250 prosperity"
+		# add_modifier = { modifier = em_sth_policy_ufp_cultural_25 days = -1 }
+	# }
+	option = {
+		name = "[Root.GetName] [Root.variable1]"
+		change_variable = { which = variable1 value = 1 }
+		country_event = { id = nhTest.10002 scopes = { from = from } }
+	}
+	option = {
+		name = "[From.GetName] [From.variable1]"
+		if = {
+			limit = { NOT = { any_country = { check_variable = { which = variable1 value > 0 } } } }
+			random_country = { 
+				limit = { NOT = { is_same_value = Root } }
+				change_variable = { which = variable1 value = 1 } 
+				Root = { country_event = { id = nhTest.10002 scopes = { from = prev } } }
+			}
+			else = {
+				random_country = { 
+					limit = { check_variable = { which = variable1 value > 0 } NOT = { is_same_value = Root } }
+					change_variable = { which = variable1 value = 1 }
+					Root = { country_event = { id = nhTest.10002 scopes = { from = prev } } }
+				}
+			}
+		} 
+		
+	}
+}
+
+country_event = {
+	id = nhTest.10005
+	title = nhTest.10005.name
+	desc = nhTest.10005.desc
+	fire_only_once = yes
+	picture = GFX_evt_smugglers_in_bar
+	is_triggered_only = yes
+	trigger = { 
+		# years_passed > 30
+		# any_country = {
+		# 	NOT = { has_country_flag = the_dominion }
+		# 	any_owned_pop_species = {
+		# 		is_species_class = "VOR"
+		# 	}	 
+		# }
+	}	
+	immediate = { 
+		every_country = {
+			limit = {
+				NOT = { has_country_flag = the_dominion }
+				any_owned_pop_species = {
+					is_species_class = "VOR"
+				}	 
+			}
+			every_owned_pop = {
+				limit = { species = { is_species_class = "VOR" } }
+				kill_pop = yes
+			}				
+		}
+	}
+	option = {
+		name = "purge non dominion vorta"
+	}
+}
+

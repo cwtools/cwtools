@@ -1,0 +1,2044 @@
+# Crew Banks
+utility_component_template = {
+  key = "UTILITY_AUX_CREW_0"
+  size = aux
+  icon = "GFX_ship_part_Utility_Aux_Crew_0"
+  icon_frame = 1
+  power = 0
+  cost = 30
+  upgrades_to = "UTILITY_AUX_CREW_1"
+  ship_modifier = {     }
+  modifier = { ship_auto_repair_add = 0.01    }
+  ai_weight = { weight = 2 }
+  prerequisites = { "tech_society_space_393" }
+  component_set = "UTILITY_AUX_CREW_0"
+}
+
+# Crew Quarters
+utility_component_template = {
+  key = "UTILITY_AUX_CREW_1"
+  size = aux
+  icon = "GFX_ship_part_Utility_Aux_Crew_1"
+  icon_frame = 1
+  power = 0
+  cost = 60
+  upgrades_to = "UTILITY_AUX_CREW_2"
+  ship_modifier = {     }
+  modifier = { ship_auto_repair_add = 0.02    }
+  ai_weight = { weight = 5 }
+  prerequisites = { "tech_society_long-term_401" }
+  component_set = "UTILITY_AUX_CREW_1"
+}
+
+# Exo-Comp Companion
+utility_component_template = {
+  key = "UTILITY_AUX_CREW_2"
+  size = aux
+  icon = "GFX_ship_part_Utility_Aux_Crew_2"
+  icon_frame = 1
+  power = 0
+  cost = 180
+  
+  ship_modifier = {     }
+  modifier = { ship_auto_repair_add = 0.03    }
+  ai_weight = { weight = 10 }
+  prerequisites = { "tech_physics_exo-comps_17" }
+  component_set = "UTILITY_AUX_CREW_2"
+}
+
+# Alcove Bay
+utility_component_template = {
+  key = "UTILITY_AUX_BORG_CREW_0"
+  size = aux
+  icon = "GFX_ship_part_Utility_Aux_Borg_crew_0"
+  icon_frame = 1
+  power = -10
+  cost = 10
+  upgrades_to = "UTILITY_AUX_BORG_CREW_1"
+  ship_modifier = {     }
+  modifier = { ship_auto_repair_add = 0.01    }
+  ai_weight = { weight = 10 }
+  prerequisites = { "tech_cortical_processing" }
+  component_set = "UTILITY_AUX_BORG_CREW_0"
+}
+
+# Alcove Bay II
+utility_component_template = {
+  key = "UTILITY_AUX_BORG_CREW_1"
+  size = aux
+  icon = "GFX_ship_part_Utility_Aux_Borg_crew_1"
+  icon_frame = 1
+  power = -60
+  cost = 80
+  upgrades_to = "UTILITY_AUX_BORG_CREW_2"
+  ship_modifier = {     }
+  modifier = { ship_auto_repair_add = 0.02    }
+  ai_weight = { weight = 10 }
+  prerequisites = { "tech_society_statecraft_985" }
+  component_set = "UTILITY_AUX_BORG_CREW_1"
+}
+
+# Alcove Bay III
+utility_component_template = {
+  key = "UTILITY_AUX_BORG_CREW_2"
+  size = aux
+  icon = "GFX_ship_part_Utility_Aux_Borg_crew_2"
+  icon_frame = 1
+  power = -80
+  cost = 110
+  upgrades_to = "UTILITY_AUX_BORG_CREW_3"
+  ship_modifier = {     }
+  modifier = { ship_auto_repair_add = 0.03    }
+  ai_weight = { weight = 10 }
+  prerequisites = { "tech_society_statecraft_987" }
+  component_set = "UTILITY_AUX_BORG_CREW_2"
+}
+
+# Shielded Recharge Assembly
+utility_component_template = {
+  key = "UTILITY_AUX_BORG_CREW_3"
+  size = aux
+  icon = "GFX_ship_part_Utility_Aux_Borg_crew_3"
+  icon_frame = 1
+  power = -100
+  cost = 140
+  
+  ship_modifier = {     }
+  modifier = { ship_auto_repair_add = 0.04    }
+  ai_weight = { weight = 10 }
+  prerequisites = { "tech_society_statecraft_989" }
+  component_set = "UTILITY_AUX_BORG_CREW_3"
+}
+
+# Gravitic Lateral Sensor Array
+utility_component_template = {
+  key = "UTILITY_AUX_SENSOR_0"
+  size = aux
+  icon = "GFX_ship_part_Utility_Aux_Sensor_0"
+  icon_frame = 1
+  power = -15
+  cost = 20
+  upgrades_to = "UTILITY_AUX_SENSOR_1"
+  ship_modifier = { ship_sensor_range_mult = 0.25 }
+  modifier = {     }
+  ai_weight = { weight = 1 }
+  prerequisites = { "tech_physics_gravitic_31" }
+  component_set = "UTILITY_AUX_SENSOR_0"
+}
+
+# Subspace-wakes Lateral Sensor Array
+utility_component_template = {
+  key = "UTILITY_AUX_SENSOR_1"
+  size = aux
+  icon = "GFX_ship_part_Utility_Aux_Sensor_1"
+  icon_frame = 1
+  power = -40
+  cost = 40
+  upgrades_to = "UTILITY_AUX_SENSOR_2"
+  ship_modifier = { ship_sensor_range_mult = 0.3 }
+  modifier = {     }
+  ai_weight = { weight = 1 }
+  prerequisites = { "tech_physics_subspace_34" }
+  component_set = "UTILITY_AUX_SENSOR_1"
+}
+
+# Tachyon Lateral Sensor Array
+utility_component_template = {
+  key = "UTILITY_AUX_SENSOR_2"
+  size = aux
+  icon = "GFX_ship_part_Utility_Aux_Sensor_2"
+  icon_frame = 1
+  power = -60
+  cost = 60
+  
+  ship_modifier = { ship_sensor_range_mult = 0.35 }
+  modifier = {     }
+  ai_weight = { weight = 1 }
+  prerequisites = { "tech_physics_tachyon_41" }
+  component_set = "UTILITY_AUX_SENSOR_2"
+}
+
+# He3 Fuel Tank
+utility_component_template = {
+  key = "UTILITY_AUX_FUEL_0"
+  size = aux
+  icon = "GFX_ship_part_Utility_Aux_Fuel_0"
+  icon_frame = 1
+  power = 0
+  cost = 30
+  upgrades_to = "UTILITY_AUX_FUEL_1"
+  ship_modifier = { ship_ftl_warp_range_mult = 0.20    }
+  modifier = {     }
+  ai_weight = { weight = 1 }
+  prerequisites = { "tech_physics_gravity_82" }
+  component_set = "UTILITY_AUX_FUEL_0"
+}
+
+# Deuterium Fuel Tank
+utility_component_template = {
+  key = "UTILITY_AUX_FUEL_1"
+  size = aux
+  icon = "GFX_ship_part_Utility_Aux_Fuel_1"
+  icon_frame = 1
+  power = 0
+  cost = 120
+  upgrades_to = "UTILITY_AUX_FUEL_2"
+  ship_modifier = { ship_ftl_warp_range_mult = 0.30    }
+  modifier = {     }
+  ai_weight = { weight = 5 }
+  prerequisites = { "tech_physics_pure_57" }
+  component_set = "UTILITY_AUX_FUEL_1"
+}
+
+# Metallic Hydrogen Compressed Fuel Tank
+utility_component_template = {
+  key = "UTILITY_AUX_FUEL_2"
+  size = aux
+  icon = "GFX_ship_part_Utility_Aux_Fuel_2"
+  icon_frame = 1
+  power = 0
+  cost = 150
+  
+  ship_modifier = { ship_ftl_warp_range_mult = 0.40    }
+  modifier = {     }
+  ai_weight = { weight = 7 }
+  prerequisites = { "tech_physics_synchronous_59" }
+  component_set = "UTILITY_AUX_FUEL_2"
+}
+
+# Secondary Navigational Deflector
+utility_component_template = {
+  key = "UTILITY_AUX_DEFLECTOR_0"
+  size = aux
+  icon = "GFX_ship_part_Utility_Aux_Deflector_0"
+  icon_frame = 1
+  power = -30
+  cost = 30
+  upgrades_to = "UTILITY_AUX_DEFLECTOR_1"
+  ship_modifier = { ship_interstellar_speed_mult = 0.10    }
+  modifier = {     }
+  ai_weight = { weight = 3 }
+  prerequisites = { "tech_physics_exploration_68" }
+  component_set = "UTILITY_AUX_DEFLECTOR_0"
+}
+
+# Graviton-Enriched Navigational Deflector
+utility_component_template = {
+  key = "UTILITY_AUX_DEFLECTOR_1"
+  size = aux
+  icon = "GFX_ship_part_Utility_Aux_Deflector_1"
+  icon_frame = 1
+  power = -35
+  cost = 40
+  upgrades_to = "UTILITY_AUX_DEFLECTOR_2"
+  ship_modifier = { ship_interstellar_speed_mult = 0.15    }
+  modifier = {     }
+  ai_weight = { weight = 3 }
+  prerequisites = { "tech_physics_field_manipulation_146" }
+  component_set = "UTILITY_AUX_DEFLECTOR_1"
+}
+
+# Fermion-Enriched Navigational Deflector
+utility_component_template = {
+  key = "UTILITY_AUX_DEFLECTOR_2"
+  size = aux
+  icon = "GFX_ship_part_Utility_Aux_Deflector_2"
+  icon_frame = 1
+  power = -55
+  cost = 60
+  upgrades_to = "UTILITY_AUX_DEFLECTOR_3"
+  ship_modifier = { ship_interstellar_speed_mult = 0.20    }
+  modifier = {     }
+  ai_weight = { weight = 6 }
+  prerequisites = { "tech_physics_navigational_66" }
+  component_set = "UTILITY_AUX_DEFLECTOR_2"
+}
+
+# Interplexing Navigational Deflector
+utility_component_template = {
+  key = "UTILITY_AUX_DEFLECTOR_3"
+  size = aux
+  icon = "GFX_ship_part_Utility_Aux_Deflector_3"
+  icon_frame = 1
+  power = -75
+  cost = 80
+  
+  ship_modifier = { ship_interstellar_speed_mult = 0.25    }
+  modifier = {     }
+  ai_weight = { weight = 8 }
+  prerequisites = { "tech_physics_field_manipulation_148" }
+  component_set = "UTILITY_AUX_DEFLECTOR_3"
+}
+
+# Emergency Warp Coils
+utility_component_template = {
+  key = "UTILITY_AUX_ESCAPE_0"
+  size = aux
+  icon = "GFX_ship_part_Utility_Aux_Escape_0"
+  icon_frame = 1
+  power = -30
+  cost = 30
+  upgrades_to = "UTILITY_AUX_ESCAPE_1"
+  ship_modifier = { ship_windup_mult = -0.2    }
+  modifier = {     }
+  ai_weight = { weight = 3 }
+  prerequisites = { "tech_physics_militarized_69" }
+  component_set = "UTILITY_AUX_ESCAPE_0"
+}
+
+# Emergency Warp Coils II
+utility_component_template = {
+  key = "UTILITY_AUX_ESCAPE_1"
+  size = aux
+  icon = "GFX_ship_part_Utility_Aux_Escape_1"
+  icon_frame = 1
+  power = -35
+  cost = 40
+  upgrades_to = "UTILITY_AUX_ESCAPE_2"
+  ship_modifier = { ship_windup_mult = -0.25    }
+  modifier = {     }
+  ai_weight = { weight = 6 }
+  prerequisites = { "tech_physics_field_manipulation_155" }
+  component_set = "UTILITY_AUX_ESCAPE_1"
+}
+
+# Emergency Warp Coils III
+utility_component_template = {
+  key = "UTILITY_AUX_ESCAPE_2"
+  size = aux
+  icon = "GFX_ship_part_Utility_Aux_Escape_2"
+  icon_frame = 1
+  power = -55
+  cost = 60
+  upgrades_to = "UTILITY_AUX_ESCAPE_3"
+  ship_modifier = { ship_windup_mult = -0.3    }
+  modifier = {     }
+  ai_weight = { weight = 8 }
+  prerequisites = { "tech_physics_field_manipulation_156" }
+  component_set = "UTILITY_AUX_ESCAPE_2"
+}
+
+# Emergency Static Warp Shell
+utility_component_template = {
+  key = "UTILITY_AUX_ESCAPE_3"
+  size = aux
+  icon = "GFX_ship_part_Utility_Aux_Escape_3"
+  icon_frame = 1
+  power = -75
+  cost = 80
+  
+  ship_modifier = { ship_windup_mult = -0.35    }
+  modifier = {     }
+  ai_weight = { weight = 8 }
+  prerequisites = { "tech_physics_field_manipulation_157" }
+  component_set = "UTILITY_AUX_ESCAPE_3"
+}
+
+# Rapid Shield Infuser
+utility_component_template = {
+  key = "UTILITY_AUX_INFUSER_0"
+  size = aux
+  icon = "GFX_ship_part_Utility_Aux_Infuser_0"
+  icon_frame = 1
+  power = -25
+  cost = 30
+  upgrades_to = "UTILITY_AUX_INFUSER_1"
+  ship_modifier = {     }
+  modifier = { ship_shield_regen_add_perc = 1    }
+  ai_weight = { weight = 1 }
+  prerequisites = { "tech_physics_advanced_84" }
+  component_set = "UTILITY_AUX_INFUSER_0"
+}
+
+# Rapid Shield Infuser II
+utility_component_template = {
+  key = "UTILITY_AUX_INFUSER_1"
+  size = aux
+  icon = "GFX_ship_part_Utility_Aux_Infuser_1"
+  icon_frame = 1
+  power = -50
+  cost = 50
+  upgrades_to = "UTILITY_AUX_INFUSER_2"
+  ship_modifier = {     }
+  modifier = { ship_shield_regen_add_perc = 2    }
+  ai_weight = { weight = 1 }
+  prerequisites = { "tech_physics_field_manipulation_191" }
+  component_set = "UTILITY_AUX_INFUSER_1"
+}
+
+# Meta-Shield Infusion
+utility_component_template = {
+  key = "UTILITY_AUX_INFUSER_2"
+  size = aux
+  icon = "GFX_ship_part_Utility_Aux_Infuser_2"
+  icon_frame = 1
+  power = -70
+  cost = 70
+  
+  ship_modifier = {     }
+  modifier = { ship_shield_regen_add_perc = 3    }
+  ai_weight = { weight = 1 }
+  prerequisites = { "tech_physics_field_manipulation_195" }
+  component_set = "UTILITY_AUX_INFUSER_2"
+}
+
+# Cargo Pods
+utility_component_template = {
+  key = "UTILITY_AUX_CARGO"
+  size = aux
+  icon = "GFX_ship_part_Utility_Aux_Cargo_"
+  icon_frame = 1
+  power = -10
+  cost = 50
+  
+  ship_modifier = {     }
+  modifier = { ship_upkeep_mult = -0.15    }
+  ai_weight = { weight = 10 }
+  prerequisites = { "tech_society_long-term_401" }
+  component_set = "UTILITY_AUX_CARGO"
+}
+
+# Bussard Collector
+utility_component_template = {
+  key = "UTILITY_AUX_RAMSCOOP_0"
+  size = aux
+  icon = "GFX_ship_part_Utility_Aux_Ramscoop_0"
+  icon_frame = 1
+  power = -5
+  cost = 30
+  upgrades_to = "UTILITY_AUX_RAMSCOOP_1"
+  ship_modifier = {     }
+  modifier = { ship_speed_mult = 0.30    }
+  ai_weight = { weight = 3 }
+  prerequisites = { "tech_engineering_inertial_629" }
+  component_set = "UTILITY_AUX_RAMSCOOP_0"
+}
+
+# Bussard Ramscoop
+utility_component_template = {
+  key = "UTILITY_AUX_RAMSCOOP_1"
+  size = aux
+  icon = "GFX_ship_part_Utility_Aux_Ramscoop_1"
+  icon_frame = 1
+  power = -10
+  cost = 60
+  upgrades_to = "UTILITY_AUX_RAMSCOOP_2"
+  ship_modifier = {     }
+  modifier = { ship_speed_mult = 0.40    }
+  ai_weight = { weight = 5 }
+  prerequisites = { "tech_engineering_ramscoop_643" }
+  component_set = "UTILITY_AUX_RAMSCOOP_1"
+}
+
+# Bussard Ramjet
+utility_component_template = {
+  key = "UTILITY_AUX_RAMSCOOP_2"
+  size = aux
+  icon = "GFX_ship_part_Utility_Aux_Ramscoop_2"
+  icon_frame = 1
+  power = -15
+  cost = 100
+  upgrades_to = "UTILITY_AUX_RAMSCOOP_3"
+  ship_modifier = {     }
+  modifier = { ship_speed_mult = 0.50    }
+  ai_weight = { weight = 5 }
+  prerequisites = { "tech_engineering_bussard_644" }
+  component_set = "UTILITY_AUX_RAMSCOOP_2"
+}
+
+# Bussard Scooper
+utility_component_template = {
+  key = "UTILITY_AUX_RAMSCOOP_3"
+  size = aux
+  icon = "GFX_ship_part_Utility_Aux_Ramscoop_3"
+  icon_frame = 1
+  power = -20
+  cost = 130
+  
+  ship_modifier = {     }
+  modifier = { ship_speed_mult = 0.60    }
+  ai_weight = { weight = 8 }
+  prerequisites = { "tech_engineering_materials_1510" }
+  component_set = "UTILITY_AUX_RAMSCOOP_3"
+}
+
+
+
+
+
+
+# Nuclear Reactor
+utility_component_template = {
+  key = "UTILITY_SMALL_REACTOR_0"
+  size=small
+  icon = "GFX_ship_part_Utility_Small_Reactor_0"
+  icon_frame = 1
+  power = 50
+  cost = 25
+  upgrades_to = "UTILITY_SML_REACTOR_1"
+  ship_modifier = {     }
+  modifier = {     }
+  prerequisites = { "tech_fission_power" }
+  component_set = "UTILITY_SML_REACTOR_0"
+}
+# Nuclear Reactor
+utility_component_template = {
+  key = "UTILITY_MEDIUM_REACTOR_0"
+  size=medium
+  icon = "GFX_ship_part_Utility_Medium_Reactor_0"
+  icon_frame = 1
+  power = 50
+  cost = 25
+  upgrades_to = "UTILITY_SML_REACTOR_1"
+  ship_modifier = {     }
+  modifier = {     }
+  prerequisites = { "tech_fission_power" }
+  component_set = "UTILITY_SML_REACTOR_0"
+}
+# Nuclear Reactor
+utility_component_template = {
+  key = "UTILITY_LARGE_REACTOR_0"
+  size=large
+  icon = "GFX_ship_part_Utility_Large_Reactor_0"
+  icon_frame = 1
+  power = 50
+  cost = 25
+  upgrades_to = "UTILITY_SML_REACTOR_1"
+  ship_modifier = {     }
+  modifier = {     }
+  prerequisites = { "tech_fission_power" }
+  component_set = "UTILITY_SML_REACTOR_0"
+}
+
+# Fusion Reactor
+utility_component_template = {
+  key = "UTILITY_SMALL_REACTOR_1"
+  size=small
+  icon = "GFX_ship_part_Utility_Small_Reactor_1"
+  icon_frame = 1
+  power = 55
+  cost = 30
+  upgrades_to = "UTILITY_SML_REACTOR_2"
+  ship_modifier = {     }
+  modifier = {     }
+  prerequisites = { "tech_physics_inertial_54" }
+  component_set = "UTILITY_SML_REACTOR_1"
+}
+# Fusion Reactor
+utility_component_template = {
+  key = "UTILITY_MEDIUM_REACTOR_1"
+  size=medium
+  icon = "GFX_ship_part_Utility_Medium_Reactor_1"
+  icon_frame = 1
+  power = 55
+  cost = 30
+  upgrades_to = "UTILITY_SML_REACTOR_2"
+  ship_modifier = {     }
+  modifier = {     }
+  prerequisites = { "tech_physics_inertial_54" }
+  component_set = "UTILITY_SML_REACTOR_1"
+}
+# Fusion Reactor
+utility_component_template = {
+  key = "UTILITY_LARGE_REACTOR_1"
+  size=large
+  icon = "GFX_ship_part_Utility_Large_Reactor_1"
+  icon_frame = 1
+  power = 55
+  cost = 30
+  upgrades_to = "UTILITY_SML_REACTOR_2"
+  ship_modifier = {     }
+  modifier = {     }
+  prerequisites = { "tech_physics_inertial_54" }
+  component_set = "UTILITY_SML_REACTOR_1"
+}
+
+# PXK Pergium Reactor
+utility_component_template = {
+  key = "UTILITY_SMALL_REACTOR_PERGIUM"
+  size=small
+  icon = "GFX_ship_part_Utility_Small_Reactor_Pergium"
+  icon_frame = 1
+  power = 85
+  cost = 50
+  
+  ship_modifier = { ship_weapon_damage = 0.01    }
+  modifier = {     }
+  prerequisites = { "tech_physics_advanced_55" }
+  component_set = "UTILITY_SML_REACTOR_PERGIUM"
+}
+# PXK Pergium Reactor
+utility_component_template = {
+  key = "UTILITY_MEDIUM_REACTOR_PERGIUM"
+  size=medium
+  icon = "GFX_ship_part_Utility_Medium_Reactor_Pergium"
+  icon_frame = 1
+  power = 85
+  cost = 50
+  
+  ship_modifier = { ship_weapon_damage = 0.01    }
+  modifier = {     }
+  prerequisites = { "tech_physics_advanced_55" }
+  component_set = "UTILITY_SML_REACTOR_PERGIUM"
+}
+# PXK Pergium Reactor
+utility_component_template = {
+  key = "UTILITY_LARGE_REACTOR_PERGIUM"
+  size=large
+  icon = "GFX_ship_part_Utility_Large_Reactor_Pergium"
+  icon_frame = 1
+  power = 85
+  cost = 50
+  
+  ship_modifier = { ship_weapon_damage = 0.01    }
+  modifier = {     }
+  prerequisites = { "tech_physics_advanced_55" }
+  component_set = "UTILITY_SML_REACTOR_PERGIUM"
+}
+
+# Carbon Reaction Fusion Reactor
+utility_component_template = {
+  key = "UTILITY_SMALL_REACTOR_2"
+  size=small
+  icon = "GFX_ship_part_Utility_Small_Reactor_2"
+  icon_frame = 1
+  power = 75
+  cost = 40
+  upgrades_to = "UTILITY_SML_REACTOR_3"
+  ship_modifier = {     }
+  modifier = {     }
+  prerequisites = { "tech_physics_carbon_56" }
+  component_set = "UTILITY_SML_REACTOR_2"
+}
+# Carbon Reaction Fusion Reactor
+utility_component_template = {
+  key = "UTILITY_MEDIUM_REACTOR_2"
+  size=medium
+  icon = "GFX_ship_part_Utility_Medium_Reactor_2"
+  icon_frame = 1
+  power = 75
+  cost = 40
+  upgrades_to = "UTILITY_SML_REACTOR_3"
+  ship_modifier = {     }
+  modifier = {     }
+  prerequisites = { "tech_physics_carbon_56" }
+  component_set = "UTILITY_SML_REACTOR_2"
+}
+# Carbon Reaction Fusion Reactor
+utility_component_template = {
+  key = "UTILITY_LARGE_REACTOR_2"
+  size=large
+  icon = "GFX_ship_part_Utility_Large_Reactor_2"
+  icon_frame = 1
+  power = 75
+  cost = 40
+  upgrades_to = "UTILITY_SML_REACTOR_3"
+  ship_modifier = {     }
+  modifier = {     }
+  prerequisites = { "tech_physics_carbon_56" }
+  component_set = "UTILITY_SML_REACTOR_2"
+}
+
+# Advanced Fusion Reactor
+utility_component_template = {
+  key = "UTILITY_SMALL_REACTOR_3"
+  size=small
+  icon = "GFX_ship_part_Utility_Small_Reactor_3"
+  icon_frame = 1
+  power = 100
+  cost = 50
+  upgrades_to = "UTILITY_SML_REACTOR_4"
+  ship_modifier = {     }
+  modifier = {     }
+  prerequisites = { "tech_physics_pure_57" }
+  component_set = "UTILITY_SML_REACTOR_3"
+}
+# Advanced Fusion Reactor
+utility_component_template = {
+  key = "UTILITY_MEDIUM_REACTOR_3"
+  size=medium
+  icon = "GFX_ship_part_Utility_Medium_Reactor_3"
+  icon_frame = 1
+  power = 100
+  cost = 50
+  upgrades_to = "UTILITY_SML_REACTOR_4"
+  ship_modifier = {     }
+  modifier = {     }
+  prerequisites = { "tech_physics_pure_57" }
+  component_set = "UTILITY_SML_REACTOR_3"
+}
+# Advanced Fusion Reactor
+utility_component_template = {
+  key = "UTILITY_LARGE_REACTOR_3"
+  size=large
+  icon = "GFX_ship_part_Utility_Large_Reactor_3"
+  icon_frame = 1
+  power = 100
+  cost = 50
+  upgrades_to = "UTILITY_SML_REACTOR_4"
+  ship_modifier = {     }
+  modifier = {     }
+  prerequisites = { "tech_physics_pure_57" }
+  component_set = "UTILITY_SML_REACTOR_3"
+}
+
+# Fusion Reactor Array
+utility_component_template = {
+  key = "UTILITY_SMALL_REACTOR_4"
+  size=small
+  icon = "GFX_ship_part_Utility_Small_Reactor_4"
+  icon_frame = 1
+  power = 115
+  cost = 60
+  upgrades_to = "UTILITY_SML_REACTOR_5"
+  ship_modifier = {     }
+  modifier = {     }
+  prerequisites = { "tech_physics_synchronous_59" }
+  component_set = "UTILITY_SML_REACTOR_4"
+}
+# Fusion Reactor Array
+utility_component_template = {
+  key = "UTILITY_MEDIUM_REACTOR_4"
+  size=medium
+  icon = "GFX_ship_part_Utility_Medium_Reactor_4"
+  icon_frame = 1
+  power = 115
+  cost = 60
+  upgrades_to = "UTILITY_SML_REACTOR_5"
+  ship_modifier = {     }
+  modifier = {     }
+  prerequisites = { "tech_physics_synchronous_59" }
+  component_set = "UTILITY_SML_REACTOR_4"
+}
+# Fusion Reactor Array
+utility_component_template = {
+  key = "UTILITY_LARGE_REACTOR_4"
+  size=large
+  icon = "GFX_ship_part_Utility_Large_Reactor_4"
+  icon_frame = 1
+  power = 115
+  cost = 60
+  upgrades_to = "UTILITY_SML_REACTOR_5"
+  ship_modifier = {     }
+  modifier = {     }
+  prerequisites = { "tech_physics_synchronous_59" }
+  component_set = "UTILITY_SML_REACTOR_4"
+}
+
+# Thermionic Reactor
+utility_component_template = {
+  key = "UTILITY_SMALL_REACTOR_5"
+  size=small
+  icon = "GFX_ship_part_Utility_Small_Reactor_5"
+  icon_frame = 1
+  power = 145
+  cost = 85
+  upgrades_to = "UTILITY_SML_REACTOR_6"
+  ship_modifier = { ship_weapon_damage = 0.01    }
+  modifier = {     }
+  prerequisites = { "tech_physics_thermionic_60" }
+  component_set = "UTILITY_SML_REACTOR_5"
+}
+# Thermionic Reactor
+utility_component_template = {
+  key = "UTILITY_MEDIUM_REACTOR_5"
+  size=medium
+  icon = "GFX_ship_part_Utility_Medium_Reactor_5"
+  icon_frame = 1
+  power = 145
+  cost = 85
+  upgrades_to = "UTILITY_SML_REACTOR_6"
+  ship_modifier = { ship_weapon_damage = 0.01    }
+  modifier = {     }
+  prerequisites = { "tech_physics_thermionic_60" }
+  component_set = "UTILITY_SML_REACTOR_5"
+}
+# Thermionic Reactor
+utility_component_template = {
+  key = "UTILITY_LARGE_REACTOR_5"
+  size=large
+  icon = "GFX_ship_part_Utility_Large_Reactor_5"
+  icon_frame = 1
+  power = 145
+  cost = 85
+  upgrades_to = "UTILITY_SML_REACTOR_6"
+  ship_modifier = { ship_weapon_damage = 0.01    }
+  modifier = {     }
+  prerequisites = { "tech_physics_thermionic_60" }
+  component_set = "UTILITY_SML_REACTOR_5"
+}
+
+# Chroniton Reactor
+utility_component_template = {
+  key = "UTILITY_SMALL_REACTOR_6"
+  size=small
+  icon = "GFX_ship_part_Utility_Small_Reactor_6"
+  icon_frame = 1
+  power = 155
+  cost = 100
+  
+  ship_modifier = { ship_weapon_damage = 0.02    }
+  modifier = {     }
+  prerequisites = { "tech_physics_field_manipulation_134" }
+  component_set = "UTILITY_SML_REACTOR_6"
+}
+# Chroniton Reactor
+utility_component_template = {
+  key = "UTILITY_MEDIUM_REACTOR_6"
+  size=medium
+  icon = "GFX_ship_part_Utility_Medium_Reactor_6"
+  icon_frame = 1
+  power = 155
+  cost = 100
+  
+  ship_modifier = { ship_weapon_damage = 0.02    }
+  modifier = {     }
+  prerequisites = { "tech_physics_field_manipulation_134" }
+  component_set = "UTILITY_SML_REACTOR_6"
+}
+# Chroniton Reactor
+utility_component_template = {
+  key = "UTILITY_LARGE_REACTOR_6"
+  size=large
+  icon = "GFX_ship_part_Utility_Large_Reactor_6"
+  icon_frame = 1
+  power = 155
+  cost = 100
+  
+  ship_modifier = { ship_weapon_damage = 0.02    }
+  modifier = {     }
+  prerequisites = { "tech_physics_field_manipulation_134" }
+  component_set = "UTILITY_SML_REACTOR_6"
+}
+
+
+
+
+
+# Spintronic Secondary Computer Core
+utility_component_template = {
+  key = "UTILITY_LARGE_TRACKING_0"
+  size = large
+  icon = "GFX_ship_part_Utility_Large_Tracking_0"
+  icon_frame = 1
+  power = -5
+  cost = 5
+  upgrades_to = "UTILITY_LARGE_TRACKING_1"
+  ship_modifier = { ship_tracking_add = 2    }
+  modifier = {     }
+  prerequisites = { "tech_basic_science_lab_1" }
+  component_set = "UTILITY_LARGE_TRACKING_0"
+  armor_value = 0.001
+}
+
+# Optical Secondary Computer Core
+utility_component_template = {
+  key = "UTILITY_LARGE_TRACKING_1"
+  size = large
+  icon = "GFX_ship_part_Utility_Large_Tracking_1"
+  icon_frame = 1
+  power = -10
+  cost = 10
+  upgrades_to = "UTILITY_LARGE_TRACKING_2"
+  ship_modifier = { ship_tracking_add = 4    }
+  modifier = {     }
+  prerequisites = { "tech_physics_computing_10" }
+  component_set = "UTILITY_LARGE_TRACKING_1"
+  armor_value = 0.001
+}
+
+# Multitronic Secondary Computer Core
+utility_component_template = {
+  key = "UTILITY_LARGE_TRACKING_2"
+  size = large
+  icon = "GFX_ship_part_Utility_Large_Tracking_2"
+  icon_frame = 1
+  power = -20
+  cost = 20
+  upgrades_to = "UTILITY_LARGE_TRACKING_3"
+  ship_modifier = { ship_tracking_add = 6    }
+  modifier = {     }
+  prerequisites = { "tech_physics_multitronic_11" }
+  component_set = "UTILITY_LARGE_TRACKING_2"
+  armor_value = 0.001
+}
+
+# Positronic Secondary Computer Core
+utility_component_template = {
+  key = "UTILITY_LARGE_TRACKING_3"
+  size = large
+  icon = "GFX_ship_part_Utility_Large_Tracking_3"
+  icon_frame = 1
+  power = -40
+  cost = 50
+  
+  ship_modifier = { ship_tracking_add = 8    }
+  modifier = {     }
+  prerequisites = { "tech_physics_positronic_13" }
+  component_set = "UTILITY_LARGE_TRACKING_3"
+  armor_value = 0.001
+}
+
+# Interlink Node
+utility_component_template = {
+  key = "UTILITY_LARGE_BORG_COMPUTER_1"
+  size = large
+  icon = "GFX_ship_part_Utility_Large_Borg_computer_1"
+  icon_frame = 1
+  power = -25
+  cost = 40
+  upgrades_to = "UTILITY_LARGE_BORG_COMPUTER_2"
+  ship_modifier = { ship_tracking_add = 5    }
+  modifier = {     }
+  prerequisites = { "tech_physics_computing_23" }
+  component_set = "UTILITY_LARGE_BORG_COMPUTER_1"
+  armor_value = 0.001
+}
+
+# Interlink Node II
+utility_component_template = {
+  key = "UTILITY_LARGE_BORG_COMPUTER_2"
+  size = large
+  icon = "GFX_ship_part_Utility_Large_Borg_computer_2"
+  icon_frame = 1
+  power = -35
+  cost = 50
+  upgrades_to = "UTILITY_LARGE_BORG_COMPUTER_3"
+  ship_modifier = { ship_tracking_add = 7    }
+  modifier = {     }
+  prerequisites = { "tech_physics_computing_24" }
+  component_set = "UTILITY_LARGE_BORG_COMPUTER_2"
+  armor_value = 0.001
+}
+
+# Interlink Node III
+utility_component_template = {
+  key = "UTILITY_LARGE_BORG_COMPUTER_3"
+  size = large
+  icon = "GFX_ship_part_Utility_Large_Borg_computer_3"
+  icon_frame = 1
+  power = -50
+  cost = 65
+  upgrades_to = "UTILITY_LARGE_BORG_COMPUTER_4"
+  ship_modifier = { ship_tracking_add = 9    }
+  modifier = {     }
+  prerequisites = { "tech_physics_computing_25" }
+  component_set = "UTILITY_LARGE_BORG_COMPUTER_3"
+  armor_value = 0.001
+}
+
+# Interlink Node IV
+utility_component_template = {
+  key = "UTILITY_LARGE_BORG_COMPUTER_4"
+  size = large
+  icon = "GFX_ship_part_Utility_Large_Borg_computer_4"
+  icon_frame = 1
+  power = -55
+  cost = 80
+  
+  ship_modifier = { ship_tracking_add = 11    }
+  modifier = {     }
+  prerequisites = { "tech_physics_computing_26" }
+  component_set = "UTILITY_LARGE_BORG_COMPUTER_4"
+  armor_value = 0.001
+}
+
+# Science Station
+utility_component_template = {
+  key = "UTILITY_LARGE_SCIENCE_STATION"
+  size = large
+  icon = "GFX_ship_part_Utility_Large_Science_station_"
+  icon_frame = 1
+  power = -20
+  cost = 20
+  
+  ship_modifier = { ship_accuracy_add = 1 ship_tracking_add = 1   }
+  modifier = { ship_evasion_add = 1    }
+  prerequisites = { "tech_physics_stellar_35" }
+  component_set = "UTILITY_LARGE_SCIENCE_STATION"
+  armor_value = 0.001
+}
+
+# Inertial Damper
+utility_component_template = {
+  key = "UTILITY_LARGE_DAMPER_0"
+  size = large
+  icon = "GFX_ship_part_Utility_Large_Damper_0"
+  icon_frame = 1
+  power = -10
+  cost = 10
+  upgrades_to = "UTILITY_LARGE_DAMPER_1"
+  ship_modifier = {     }
+  modifier = { ship_evasion_add = 2    }
+  prerequisites = { "tech_physics_advanced_84" }
+  component_set = "UTILITY_LARGE_DAMPER_0"
+  armor_value = 0.001
+}
+
+# Inertial Damper II
+utility_component_template = {
+  key = "UTILITY_LARGE_DAMPER_1"
+  size = large
+  icon = "GFX_ship_part_Utility_Large_Damper_1"
+  icon_frame = 1
+  power = -20
+  cost = 20
+  upgrades_to = "UTILITY_LARGE_DAMPER_2"
+  ship_modifier = {     }
+  modifier = { ship_evasion_add = 3    }
+  prerequisites = { "tech_physics_gravity_121" }
+  component_set = "UTILITY_LARGE_DAMPER_1"
+  armor_value = 0.001
+}
+
+# Inertial Damper III
+utility_component_template = {
+  key = "UTILITY_LARGE_DAMPER_2"
+  size = large
+  icon = "GFX_ship_part_Utility_Large_Damper_2"
+  icon_frame = 1
+  power = -30
+  cost = 30
+  
+  ship_modifier = {     }
+  modifier = { ship_evasion_add = 4    }
+  prerequisites = { "tech_physics_interial_123" }
+  component_set = "UTILITY_LARGE_DAMPER_2"
+  armor_value = 0.001
+}
+
+# Low Profile Signature Stealth Hull
+utility_component_template = {
+  key = "UTILITY_LARGE_STEALTH_0"
+  size = large
+  icon = "GFX_ship_part_Utility_Large_Stealth_0"
+  icon_frame = 1
+  power = 0
+  cost = 20
+  upgrades_to = "UTILITY_LARGE_STEALTH_1"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_mult = -0.07 ship_evasion_add = 5   }
+  prerequisites = { "tech_engineering_low_619" }
+  component_set = "UTILITY_LARGE_STEALTH_0"
+  armor_value = 0.001
+}
+
+# Refractive Stealth Hull
+utility_component_template = {
+  key = "UTILITY_LARGE_STEALTH_1"
+  size = large
+  icon = "GFX_ship_part_Utility_Large_Stealth_1"
+  icon_frame = 1
+  power = 0
+  cost = 30
+  upgrades_to = "UTILITY_LARGE_STEALTH_2"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_mult = -0.08 ship_evasion_add = 6   }
+  prerequisites = { "tech_engineering_refractive_620" }
+  component_set = "UTILITY_LARGE_STEALTH_1"
+  armor_value = 0.001
+}
+
+# Masked Stealth Hull
+utility_component_template = {
+  key = "UTILITY_LARGE_STEALTH_2"
+  size = large
+  icon = "GFX_ship_part_Utility_Large_Stealth_2"
+  icon_frame = 1
+  power = 0
+  cost = 55
+  upgrades_to = "UTILITY_LARGE_STEALTH_3"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_mult = -0.09 ship_evasion_add = 7   }
+  prerequisites = { "tech_engineering_masking_621" }
+  component_set = "UTILITY_LARGE_STEALTH_2"
+  armor_value = 0.001
+}
+
+# Reflective Stealth Hull
+utility_component_template = {
+  key = "UTILITY_LARGE_STEALTH_3"
+  size = large
+  icon = "GFX_ship_part_Utility_Large_Stealth_3"
+  icon_frame = 1
+  power = 0
+  cost = 90
+  
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_mult = -0.10 ship_evasion_add = 8   }
+  prerequisites = { "tech_engineering_materials_1468" }
+  component_set = "UTILITY_LARGE_STEALTH_3"
+  armor_value = 0.001
+}
+
+# Solid-State Afterburner
+utility_component_template = {
+  key = "UTILITY_LARGE_AFTERBURNER_0"
+  size = large
+  icon = "GFX_ship_part_Utility_Large_Afterburner_0"
+  icon_frame = 1
+  power = -5
+  cost = 5
+  upgrades_to = "UTILITY_LARGE_AFTERBURNER_1"
+  ship_modifier = {     }
+  modifier = { ship_combat_speed_mult = 0.25    }
+  prerequisites = { "tech_engineering_inertial_629" }
+  component_set = "UTILITY_LARGE_AFTERBURNER_0"
+  armor_value = 0.001
+}
+
+# Ullage Afterburner
+utility_component_template = {
+  key = "UTILITY_LARGE_AFTERBURNER_1"
+  size = large
+  icon = "GFX_ship_part_Utility_Large_Afterburner_1"
+  icon_frame = 1
+  power = -20
+  cost = 20
+  upgrades_to = "UTILITY_LARGE_AFTERBURNER_2"
+  ship_modifier = {     }
+  modifier = { ship_combat_speed_mult = 0.30    }
+  prerequisites = { "tech_engineering_ullage_640" }
+  component_set = "UTILITY_LARGE_AFTERBURNER_1"
+  armor_value = 0.001
+}
+
+# Impulse Afterburner
+utility_component_template = {
+  key = "UTILITY_LARGE_AFTERBURNER_2"
+  size = large
+  icon = "GFX_ship_part_Utility_Large_Afterburner_2"
+  icon_frame = 1
+  power = -30
+  cost = 30
+  upgrades_to = "UTILITY_LARGE_AFTERBURNER_3"
+  ship_modifier = {     }
+  modifier = { ship_combat_speed_mult = 0.35    }
+  prerequisites = { "tech_engineering_inertial_641" }
+  component_set = "UTILITY_LARGE_AFTERBURNER_2"
+  armor_value = 0.001
+}
+
+# FIB-3 Afterburner
+utility_component_template = {
+  key = "UTILITY_LARGE_AFTERBURNER_3"
+  size = large
+  icon = "GFX_ship_part_Utility_Large_Afterburner_3"
+  icon_frame = 1
+  power = -40
+  cost = 40
+  
+  ship_modifier = {     }
+  modifier = { ship_combat_speed_mult = 0.40    }
+  prerequisites = { "tech_engineering_materials_1500" }
+  component_set = "UTILITY_LARGE_AFTERBURNER_3"
+  armor_value = 0.001
+}
+
+# Operations Center
+utility_component_template = {
+  key = "UTILITY_LARGE_OPERATIONS_0"
+  size = large
+  icon = "GFX_ship_part_Utility_Large_Operations_0"
+  icon_frame = 1
+  power = -5
+  cost = 5
+  upgrades_to = "UTILITY_LARGE_OPERATIONS_1"
+  ship_modifier = { ship_accuracy_add = 1    }
+  modifier = {     }
+  prerequisites = { "tech_society_space_393" }
+  component_set = "UTILITY_LARGE_OPERATIONS_0"
+  armor_value = 0.001
+}
+
+# Holographic Operations Center
+utility_component_template = {
+  key = "UTILITY_LARGE_OPERATIONS_1"
+  size = large
+  icon = "GFX_ship_part_Utility_Large_Operations_1"
+  icon_frame = 1
+  power = -50
+  cost = 60
+  
+  ship_modifier = { ship_accuracy_add = 2    }
+  modifier = {     }
+  prerequisites = { "tech_society_holographic_417" }
+  component_set = "UTILITY_LARGE_OPERATIONS_1"
+  armor_value = 0.001
+}
+
+# Energy Signal Damper
+utility_component_template = {
+  key = "UTILITY_LARGE_SIGNAL_0"
+  size = large
+  icon = "GFX_ship_part_Utility_Large_Signal_0"
+  icon_frame = 1
+  power = -15
+  cost = 15
+  upgrades_to = "UTILITY_LARGE_SIGNAL_1"
+  ship_modifier = {     }
+  modifier = { ship_shield_hp_mult = -0.07 ship_evasion_add = 7   }
+  prerequisites = { "tech_physics_multi-spatial_91" }
+  component_set = "UTILITY_LARGE_SIGNAL_0"
+  armor_value = 0.001
+}
+
+# Energy Signal Damper II
+utility_component_template = {
+  key = "UTILITY_LARGE_SIGNAL_1"
+  size = large
+  icon = "GFX_ship_part_Utility_Large_Signal_1"
+  icon_frame = 1
+  power = -20
+  cost = 20
+  upgrades_to = "UTILITY_LARGE_SIGNAL_2"
+  ship_modifier = {     }
+  modifier = { ship_shield_hp_mult = -0.08 ship_evasion_add = 8   }
+  prerequisites = { "tech_physics_multi-adaptive_92" }
+  component_set = "UTILITY_LARGE_SIGNAL_1"
+  armor_value = 0.001
+}
+
+# Energy Signal Damper II
+utility_component_template = {
+  key = "UTILITY_LARGE_SIGNAL_2"
+  size = large
+  icon = "GFX_ship_part_Utility_Large_Signal_2"
+  icon_frame = 1
+  power = -30
+  cost = 30
+  upgrades_to = "UTILITY_LARGE_SIGNAL_3"
+  ship_modifier = {     }
+  modifier = { ship_shield_hp_mult = -0.09 ship_evasion_add = 9   }
+  prerequisites = { "tech_physics_refractive_93" }
+  component_set = "UTILITY_LARGE_SIGNAL_2"
+  armor_value = 0.001
+}
+
+# Energy Signal Damper IV
+utility_component_template = {
+  key = "UTILITY_LARGE_SIGNAL_3"
+  size = large
+  icon = "GFX_ship_part_Utility_Large_Signal_3"
+  icon_frame = 1
+  power = -40
+  cost = 40
+  
+  ship_modifier = {     }
+  modifier = { ship_shield_hp_mult = -0.10 ship_evasion_add = 10   }
+  prerequisites = { "tech_physics_field_manipulation_196" }
+  component_set = "UTILITY_LARGE_SIGNAL_3"
+  armor_value = 0.001
+}
+
+
+
+
+
+# Armor Plating
+utility_component_template = {
+  key = "UTILITY_SMALL_ARMOR_0"
+  size = small
+  icon = "GFX_ship_part_Utility_Small_Armor_0"
+  icon_frame = 1
+  power = 0
+  cost = 5
+  upgrades_to = "UTILITY_SMALL_ARMOR_1"
+  ship_modifier = {     }
+  modifier = { ship_armor_add = 2    }
+  prerequisites = { "tech_emergency_backup" }
+  component_set = "UTILITY_SMALL_ARMOR_0"
+  armor_value = 0.001
+}
+
+# Heavy Armor Plating
+utility_component_template = {
+  key = "UTILITY_SMALL_ARMOR_1"
+  size = small
+  icon = "GFX_ship_part_Utility_Small_Armor_1"
+  icon_frame = 1
+  power = 0
+  cost = 25
+  upgrades_to = "UTILITY_SMALL_ARMOR_2"
+  ship_modifier = {     }
+  modifier = { ship_armor_add = 4    }
+  prerequisites = { "tech_engineering_materials_1448" }
+  component_set = "UTILITY_SMALL_ARMOR_1"
+  armor_value = 0.001
+}
+
+# Parametallic Armor
+utility_component_template = {
+  key = "UTILITY_SMALL_ARMOR_2"
+  size = small
+  icon = "GFX_ship_part_Utility_Small_Armor_2"
+  icon_frame = 1
+  power = 0
+  cost = 30
+  upgrades_to = "UTILITY_SMALL_ARMOR_3"
+  ship_modifier = {     }
+  modifier = { ship_armor_add = 6    }
+  prerequisites = { "tech_engineering_parametallic_622" }
+  component_set = "UTILITY_SMALL_ARMOR_2"
+  armor_value = 0.001
+}
+
+# Ablative Armor
+utility_component_template = {
+  key = "UTILITY_SMALL_ARMOR_3"
+  size = small
+  icon = "GFX_ship_part_Utility_Small_Armor_3"
+  icon_frame = 1
+  power = 0
+  cost = 80
+  upgrades_to = "UTILITY_SMALL_ARMOR_4"
+  ship_modifier = {     }
+  modifier = { ship_armor_add = 8    }
+  prerequisites = { "tech_engineering_ablative_623" }
+  component_set = "UTILITY_SMALL_ARMOR_3"
+  armor_value = 0.001
+}
+
+# Reflective Armor
+utility_component_template = {
+  key = "UTILITY_SMALL_ARMOR_4"
+  size = small
+  icon = "GFX_ship_part_Utility_Small_Armor_4"
+  icon_frame = 1
+  power = 0
+  cost = 90
+  
+  ship_modifier = {     }
+  modifier = { ship_armor_add = 10    }
+  prerequisites = { "tech_engineering_reflective_624" }
+  component_set = "UTILITY_SMALL_ARMOR_4"
+  armor_value = 0.001
+}
+
+# Living Armor
+utility_component_template = {
+  key = "UTILITY_SMALL_BORG_ARMOR_1"
+  size = small
+  icon = "GFX_ship_part_Utility_Small_Borg_armor_1"
+  icon_frame = 1
+  power = 0
+  cost = 5
+  upgrades_to = "UTILITY_SMALL_BORG_ARMOR_2"
+  ship_modifier = {     }
+  modifier = { ship_armor_add = 3    }
+  prerequisites = { "tech_borg_hull" }
+  component_set = "UTILITY_SMALL_BORG_ARMOR_1"
+  armor_value = 0.001
+}
+
+# Adaptive Armor
+utility_component_template = {
+  key = "UTILITY_SMALL_BORG_ARMOR_2"
+  size = small
+  icon = "GFX_ship_part_Utility_Small_Borg_armor_2"
+  icon_frame = 1
+  power = 0
+  cost = 50
+  upgrades_to = "UTILITY_SMALL_BORG_ARMOR_3"
+  ship_modifier = {     }
+  modifier = { ship_armor_add = 6    }
+  prerequisites = { "tech_engineering_materials_1511" }
+  component_set = "UTILITY_SMALL_BORG_ARMOR_2"
+  armor_value = 0.001
+}
+
+# Regenerative Armor
+utility_component_template = {
+  key = "UTILITY_SMALL_BORG_ARMOR_3"
+  size = small
+  icon = "GFX_ship_part_Utility_Small_Borg_armor_3"
+  icon_frame = 1
+  power = 0
+  cost = 65
+  upgrades_to = "UTILITY_SMALL_BORG_ARMOR_4"
+  ship_modifier = {     }
+  modifier = { ship_armor_add = 9    }
+  prerequisites = { "tech_engineering_materials_1513" }
+  component_set = "UTILITY_SMALL_BORG_ARMOR_3"
+  armor_value = 0.001
+}
+
+# Regenerative Ablative Armor
+utility_component_template = {
+  key = "UTILITY_SMALL_BORG_ARMOR_4"
+  size = small
+  icon = "GFX_ship_part_Utility_Small_Borg_armor_4"
+  icon_frame = 1
+  power = 0
+  cost = 150
+  
+  ship_modifier = {     }
+  modifier = { ship_armor_add = 12    }
+  prerequisites = { "tech_engineering_materials_1521" }
+  component_set = "UTILITY_SMALL_BORG_ARMOR_4"
+  armor_value = 0.001
+}
+
+# Engineering Station
+utility_component_template = {
+  key = "UTILITY_SMALL_STATION_0"
+  size = small
+  icon = "GFX_ship_part_Utility_Small_Station_0"
+  icon_frame = 1
+  power = -5
+  cost = 5
+  upgrades_to = "UTILITY_SMALL_STATION_1"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_mult = 0.01 ship_shield_hp_mult = 0.01 ship_armor_mult = 0.01  }
+  prerequisites = { "tech_society_space_393" }
+  component_set = "UTILITY_SMALL_STATION_0"
+  armor_value = 0.001
+}
+
+# Engineering Station II
+utility_component_template = {
+  key = "UTILITY_SMALL_STATION_1"
+  size = small
+  icon = "GFX_ship_part_Utility_Small_Station_1"
+  icon_frame = 1
+  power = -10
+  cost = 10
+  upgrades_to = "UTILITY_SMALL_STATION_2"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_mult = 0.02 ship_shield_hp_mult = 0.02 ship_armor_mult = 0.02  }
+  prerequisites = { "tech_society_tactical-optimal_399" }
+  component_set = "UTILITY_SMALL_STATION_1"
+  armor_value = 0.001
+}
+
+# Engineering Station III
+utility_component_template = {
+  key = "UTILITY_SMALL_STATION_2"
+  size = small
+  icon = "GFX_ship_part_Utility_Small_Station_2"
+  icon_frame = 1
+  power = -25
+  cost = 25
+  upgrades_to = "UTILITY_SMALL_STATION_3"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_mult = 0.03 ship_shield_hp_mult = 0.03 ship_armor_mult = 0.03  }
+  prerequisites = { "tech_society_statecraft_961" }
+  component_set = "UTILITY_SMALL_STATION_2"
+  armor_value = 0.001
+}
+
+# Engineering Station IV
+utility_component_template = {
+  key = "UTILITY_SMALL_STATION_3"
+  size = small
+  icon = "GFX_ship_part_Utility_Small_Station_3"
+  icon_frame = 1
+  power = -35
+  cost = 35
+  upgrades_to = "UTILITY_SMALL_STATION_4"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_mult = 0.04 ship_shield_hp_mult = 0.04 ship_armor_mult = 0.04  }
+  prerequisites = { "tech_society_modular_407" }
+  component_set = "UTILITY_SMALL_STATION_3"
+  armor_value = 0.001
+}
+
+# Holographic Engineering Station
+utility_component_template = {
+  key = "UTILITY_SMALL_STATION_4"
+  size = small
+  icon = "GFX_ship_part_Utility_Small_Station_4"
+  icon_frame = 1
+  power = -50
+  cost = 60
+  
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_mult = 0.05 ship_shield_hp_mult = 0.05 ship_armor_mult = 0.05  }
+  prerequisites = { "tech_society_holographic_417" }
+  component_set = "UTILITY_SMALL_STATION_4"
+  armor_value = 0.001
+}
+
+# Emergency Forcefields
+utility_component_template = {
+  key = "UTILITY_SMALL_FORCEFIELDS_0"
+  size = small
+  icon = "GFX_ship_part_Utility_Small_Forcefields_0"
+  icon_frame = 1
+  power = -5
+  cost = 5
+  upgrades_to = "UTILITY_SMALL_FORCEFIELDS_1"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_mult = 0.06    }
+  prerequisites = { "tech_physics_gravity_82" }
+  component_set = "UTILITY_SMALL_FORCEFIELDS_0"
+  armor_value = 0.001
+}
+
+# Structural Integrity Field
+utility_component_template = {
+  key = "UTILITY_SMALL_FORCEFIELDS_1"
+  size = small
+  icon = "GFX_ship_part_Utility_Small_Forcefields_1"
+  icon_frame = 1
+  power = -35
+  cost = 35
+  upgrades_to = "UTILITY_SMALL_FORCEFIELDS_2"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_mult = 0.07    }
+  prerequisites = { "tech_engineering_structural_605" }
+  component_set = "UTILITY_SMALL_FORCEFIELDS_1"
+  armor_value = 0.001
+}
+
+# Rotating Structural Integrity Field
+utility_component_template = {
+  key = "UTILITY_SMALL_FORCEFIELDS_2"
+  size = small
+  icon = "GFX_ship_part_Utility_Small_Forcefields_2"
+  icon_frame = 1
+  power = -40
+  cost = 40
+  
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_mult = 0.08    }
+  prerequisites = { "tech_engineering_rotating_606" }
+  component_set = "UTILITY_SMALL_FORCEFIELDS_2"
+  armor_value = 0.001
+}
+
+# Adaptive Structural Integrity Field
+utility_component_template = {
+  key = "UTILITY_SMALL_BORG_FORCEFIELDS_2"
+  size = small
+  icon = "GFX_ship_part_Utility_Small_Borg_Forcefields_2"
+  icon_frame = 1
+  power = -40
+  cost = 60
+  upgrades_to = "UTILITY_SMALL_BORG_FORCEFIELDS_3"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_mult = 0.08    }
+  prerequisites = { "tech_engineering_materials_1517" }
+  component_set = "UTILITY_SMALL_BORG_FORCEFIELDS_2"
+  armor_value = 0.001
+}
+
+# High Level Structural Integrity Field
+utility_component_template = {
+  key = "UTILITY_SMALL_BORG_FORCEFIELDS_3"
+  size = small
+  icon = "GFX_ship_part_Utility_Small_Borg_Forcefields_3"
+  icon_frame = 1
+  power = -50
+  cost = 65
+  
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_mult = 0.09    }
+  prerequisites = { "tech_engineering_materials_1519" }
+  component_set = "UTILITY_SMALL_BORG_FORCEFIELDS_3"
+  armor_value = 0.001
+}
+
+# Hardened Shields
+utility_component_template = {
+  key = "UTILITY_SMALL_HARD_0"
+  size = small
+  icon = "GFX_ship_part_Utility_Small_Hard_0"
+  icon_frame = 1
+  power = -10
+  cost = 10
+  upgrades_to = "UTILITY_SMALL_HARD_1"
+  ship_modifier = {     }
+  modifier = { ship_armor_mult = 0.08    }
+  prerequisites = { "tech_physics_defensive_83" }
+  component_set = "UTILITY_SMALL_HARD_0"
+  armor_value = 0.001
+}
+
+# Hardened Shields II
+utility_component_template = {
+  key = "UTILITY_SMALL_HARD_1"
+  size = small
+  icon = "GFX_ship_part_Utility_Small_Hard_1"
+  icon_frame = 1
+  power = -15
+  cost = 15
+  upgrades_to = "UTILITY_SMALL_HARD_2"
+  ship_modifier = {     }
+  modifier = { ship_armor_mult = 0.10    }
+  prerequisites = { "tech_physics_multi-spatial_91" }
+  component_set = "UTILITY_SMALL_HARD_1"
+  armor_value = 0.001
+}
+
+# Hardened Shields III
+utility_component_template = {
+  key = "UTILITY_SMALL_HARD_2"
+  size = small
+  icon = "GFX_ship_part_Utility_Small_Hard_2"
+  icon_frame = 1
+  power = -20
+  cost = 20
+  upgrades_to = "UTILITY_SMALL_HARD_3"
+  ship_modifier = {     }
+  modifier = { ship_armor_mult = 0.12    }
+  prerequisites = { "tech_physics_multi-adaptive_92" }
+  component_set = "UTILITY_SMALL_HARD_2"
+  armor_value = 0.001
+}
+
+# Hardened Shields IV
+utility_component_template = {
+  key = "UTILITY_SMALL_HARD_3"
+  size = small
+  icon = "GFX_ship_part_Utility_Small_Hard_3"
+  icon_frame = 1
+  power = -30
+  cost = 30
+  upgrades_to = "UTILITY_SMALL_HARD_4"
+  ship_modifier = {     }
+  modifier = { ship_armor_mult = 0.14    }
+  prerequisites = { "tech_physics_refractive_93" }
+  component_set = "UTILITY_SMALL_HARD_3"
+  armor_value = 0.001
+}
+
+# Spatial Shield Refractor
+utility_component_template = {
+  key = "UTILITY_SMALL_HARD_4"
+  size = small
+  icon = "GFX_ship_part_Utility_Small_Hard_4"
+  icon_frame = 1
+  power = -40
+  cost = 40
+  
+  ship_modifier = {     }
+  modifier = { ship_armor_mult = 0.16    }
+  prerequisites = { "tech_physics_field_manipulation_196" }
+  component_set = "UTILITY_SMALL_HARD_4"
+  armor_value = 0.001
+}
+
+# Shield Emitter
+utility_component_template = {
+  key = "UTILITY_SMALL_EMITTER_0"
+  size = small
+  icon = "GFX_ship_part_Utility_Small_Emitter_0"
+  icon_frame = 1
+  power = -10
+  cost = 10
+  upgrades_to = "UTILITY_SMALL_EMITTER_1"
+  ship_modifier = {     }
+  modifier = { ship_shield_regen_mult = 0.10    }
+  prerequisites = { "tech_physics_advanced_84" }
+  component_set = "UTILITY_SMALL_EMITTER_0"
+  armor_value = 0.001
+  can_recharge_shield = yes
+}
+
+# Shield Emitter II
+utility_component_template = {
+  key = "UTILITY_SMALL_EMITTER_1"
+  size = small
+  icon = "GFX_ship_part_Utility_Small_Emitter_1"
+  icon_frame = 1
+  power = -20
+  cost = 20
+  upgrades_to = "UTILITY_SMALL_EMITTER_2"
+  ship_modifier = {     }
+  modifier = { ship_shield_regen_mult = 0.12    }
+  prerequisites = { "tech_physics_shield_88" }
+  component_set = "UTILITY_SMALL_EMITTER_1"
+  armor_value = 0.001
+  can_recharge_shield = yes
+}
+
+# Shield Emitter III
+utility_component_template = {
+  key = "UTILITY_SMALL_EMITTER_2"
+  size = small
+  icon = "GFX_ship_part_Utility_Small_Emitter_2"
+  icon_frame = 1
+  power = -35
+  cost = 35
+  upgrades_to = "UTILITY_SMALL_EMITTER_3"
+  ship_modifier = {     }
+  modifier = { ship_shield_regen_mult = 0.14    }
+  prerequisites = { "tech_physics_shield_90" }
+  component_set = "UTILITY_SMALL_EMITTER_2"
+  armor_value = 0.001
+  can_recharge_shield = yes
+}
+
+# Nano-Shield Capacitor Emitter
+utility_component_template = {
+  key = "UTILITY_SMALL_EMITTER_3"
+  size = small
+  icon = "GFX_ship_part_Utility_Small_Emitter_3"
+  icon_frame = 1
+  power = -45
+  cost = 45
+  
+  ship_modifier = {     }
+  modifier = { ship_shield_regen_mult = 0.16    }
+  prerequisites = { "tech_physics_field_manipulation_218" }
+  component_set = "UTILITY_SMALL_EMITTER_3"
+  armor_value = 0.001
+  can_recharge_shield = yes
+}
+
+# Shield Generator
+utility_component_template = {
+  key = "UTILITY_SMALL_GENERATOR_0"
+  size = small
+  icon = "GFX_ship_part_Utility_Small_Generator_0"
+  icon_frame = 1
+  power = -10
+  cost = 10
+  upgrades_to = "UTILITY_SMALL_GENERATOR_1"
+  ship_modifier = {     }
+  modifier = { ship_shield_hp_add = 400    }
+  prerequisites = { "tech_physics_advanced_84" }
+  component_set = "UTILITY_SMALL_GENERATOR_0"
+  armor_value = 0.001
+}
+
+# Shield Generator II
+utility_component_template = {
+  key = "UTILITY_SMALL_GENERATOR_1"
+  size = small
+  icon = "GFX_ship_part_Utility_Small_Generator_1"
+  icon_frame = 1
+  power = -20
+  cost = 20
+  upgrades_to = "UTILITY_SMALL_GENERATOR_2"
+  ship_modifier = {     }
+  modifier = { ship_shield_hp_add = 600    }
+  prerequisites = { "tech_physics_multi-spectrum_85" }
+  component_set = "UTILITY_SMALL_GENERATOR_1"
+  armor_value = 0.001
+}
+
+# Shield Generator III
+utility_component_template = {
+  key = "UTILITY_SMALL_GENERATOR_2"
+  size = small
+  icon = "GFX_ship_part_Utility_Small_Generator_2"
+  icon_frame = 1
+  power = -35
+  cost = 35
+  upgrades_to = "UTILITY_SMALL_GENERATOR_3"
+  ship_modifier = {     }
+  modifier = { ship_shield_hp_add = 800    }
+  prerequisites = { "tech_physics_multiphasic_86" }
+  component_set = "UTILITY_SMALL_GENERATOR_2"
+  armor_value = 0.001
+}
+
+# Hyper-Phasic Shield Generator
+utility_component_template = {
+  key = "UTILITY_SMALL_GENERATOR_3"
+  size = small
+  icon = "GFX_ship_part_Utility_Small_Generator_3"
+  icon_frame = 1
+  power = -45
+  cost = 45
+  
+  ship_modifier = {     }
+  modifier = { ship_shield_hp_add = 1000    }
+  prerequisites = { "tech_physics_field_manipulation_211" }
+  component_set = "UTILITY_SMALL_GENERATOR_3"
+  armor_value = 0.001
+}
+
+# Emergency Bulkheads
+utility_component_template = {
+  key = "UTILITY_SMALL_BULKHEAD"
+  size = small
+  icon = "GFX_ship_part_Utility_Small_Bulkhead_"
+  icon_frame = 1
+  power = 0
+  cost = 10
+  
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 250    }
+  prerequisites = { "tech_engineering_inertial_629" }
+  component_set = "UTILITY_SMALL_BULKHEAD"
+  armor_value = 0.001
+}
+
+
+
+
+# EPS Conduit
+   utility_component_template = {
+      key = "UTILITY_MEDIUM_EPS_0"
+      size = medium
+      icon = "GFX_ship_part_Utility_Medium_EPS_0"
+      icon_frame = 1
+      power = -5
+      cost = 5
+      upgrades_to = "UTILITY_MEDIUM_EPS_1"
+      ship_modifier = { ship_weapon_damage = 0.02    }
+      modifier = {     }
+      prerequisites = { "tech_physics_particles_300" }
+      component_set = "UTILITY_MEDIUM_EPS_0"
+      armor_value = 0.001
+   }
+   
+# EPS Manifold
+   utility_component_template = {
+      key = "UTILITY_MEDIUM_EPS_1"
+      size = medium
+      icon = "GFX_ship_part_Utility_Medium_EPS_1"
+      icon_frame = 1
+      power = -5
+      cost = 5
+      upgrades_to = "UTILITY_MEDIUM_EPS_2"
+      ship_modifier = { ship_weapon_damage = 0.03    }
+      modifier = {     }
+      prerequisites = { "tech_physics_particles_301" }
+      component_set = "UTILITY_MEDIUM_EPS_1"
+      armor_value = 0.001
+   }
+   
+# EPS Relay
+   utility_component_template = {
+      key = "UTILITY_MEDIUM_EPS_2"
+      size = medium
+      icon = "GFX_ship_part_Utility_Medium_EPS_2"
+      icon_frame = 1
+      power = -10
+      cost = 10
+      upgrades_to = "UTILITY_MEDIUM_EPS_3"
+      ship_modifier = { ship_weapon_damage = 0.04    }
+      modifier = {     }
+      prerequisites = { "tech_physics_phase_131" }
+      component_set = "UTILITY_MEDIUM_EPS_2"
+      armor_value = 0.001
+   }
+   
+# Warp Plasma Infused EPS relay
+   utility_component_template = {
+      key = "UTILITY_MEDIUM_EPS_3"
+      size = medium
+      icon = "GFX_ship_part_Utility_Medium_EPS_3"
+      icon_frame = 1
+      power = -35
+      cost = 35
+      upgrades_to = "UTILITY_MEDIUM_EPS_4"
+      ship_modifier = { ship_weapon_damage = 0.05    }
+      modifier = {     }
+      prerequisites = { "tech_physics_particles_310" }
+      component_set = "UTILITY_MEDIUM_EPS_3"
+      armor_value = 0.001
+   }
+   
+# Magnetic-Wake Warp Plasma Infused EPS relay
+   utility_component_template = {
+      key = "UTILITY_MEDIUM_EPS_4"
+      size = medium
+      icon = "GFX_ship_part_Utility_Medium_EPS_4"
+      icon_frame = 1
+      power = -40
+      cost = 40
+      
+      ship_modifier = { ship_weapon_damage = 0.06    }
+      modifier = {     }
+      prerequisites = { "tech_physics_holographic_141" }
+      component_set = "UTILITY_MEDIUM_EPS_4"
+      armor_value = 0.001
+   }
+   
+# Phase Discriminator
+   utility_component_template = {
+      key = "UTILITY_MEDIUM_PHASE_0"
+      size = medium
+      icon = "GFX_ship_part_Utility_Medium_Phase_0"
+      icon_frame = 1
+      power = -5
+      cost = 5
+      upgrades_to = "UTILITY_MEDIUM_PHASE_1"
+      ship_modifier = { ship_fire_rate_mult = 0.02    }
+      modifier = {     }
+      prerequisites = { "tech_physics_gravity_82" }
+      component_set = "UTILITY_MEDIUM_PHASE_0"
+      armor_value = 0.001
+   }
+   
+# Phase Discriminator II
+   utility_component_template = {
+      key = "UTILITY_MEDIUM_PHASE_1"
+      size = medium
+      icon = "GFX_ship_part_Utility_Medium_Phase_1"
+      icon_frame = 1
+      power = -5
+      cost = 5
+      upgrades_to = "UTILITY_MEDIUM_PHASE_2"
+      ship_modifier = { ship_fire_rate_mult = 0.03    }
+      modifier = {     }
+      prerequisites = { "tech_physics_particles_301" }
+      component_set = "UTILITY_MEDIUM_PHASE_1"
+      armor_value = 0.001
+   }
+   
+# Phase Discriminator III
+   utility_component_template = {
+      key = "UTILITY_MEDIUM_PHASE_2"
+      size = medium
+      icon = "GFX_ship_part_Utility_Medium_Phase_2"
+      icon_frame = 1
+      power = -10
+      cost = 10
+      upgrades_to = "UTILITY_MEDIUM_PHASE_3"
+      ship_modifier = { ship_fire_rate_mult = 0.04    }
+      modifier = {     }
+      prerequisites = { "tech_physics_phase_131" }
+      component_set = "UTILITY_MEDIUM_PHASE_2"
+      armor_value = 0.001
+   }
+   
+# Phase Discriminator IV
+   utility_component_template = {
+      key = "UTILITY_MEDIUM_PHASE_3"
+      size = medium
+      icon = "GFX_ship_part_Utility_Medium_Phase_3"
+      icon_frame = 1
+      power = -35
+      cost = 35
+      upgrades_to = "UTILITY_MEDIUM_PHASE_4"
+      ship_modifier = { ship_fire_rate_mult = 0.05    }
+      modifier = {     }
+      prerequisites = { "tech_physics_particles_310" }
+      component_set = "UTILITY_MEDIUM_PHASE_3"
+      armor_value = 0.001
+   }
+   
+# Multi-Phase Discriminator
+   utility_component_template = {
+      key = "UTILITY_MEDIUM_PHASE_4"
+      size = medium
+      icon = "GFX_ship_part_Utility_Medium_Phase_4"
+      icon_frame = 1
+      power = -40
+      cost = 40
+      
+      ship_modifier = { ship_fire_rate_mult = 0.06    }
+      modifier = {     }
+      prerequisites = { "tech_physics_holographic_141" }
+      component_set = "UTILITY_MEDIUM_PHASE_4"
+      armor_value = 0.001
+   }
+   
+# Targetting Sensor
+   utility_component_template = {
+      key = "UTILITY_MEDIUM_SENSOR"
+      size = medium
+      icon = "GFX_ship_part_Utility_Medium_Sensor_"
+      icon_frame = 1
+      power = -15
+      cost = 15
+      
+      ship_modifier = { SHIP_ARMOR_PENETRATION_MULT = 0.02 SHIP_SHIELD_PENETRATION_MULT = 0.02   }
+      modifier = {     }
+      prerequisites = { "tech_physics_particles_304" }
+      component_set = "UTILITY_MEDIUM_SENSOR"
+      armor_value = 0.001
+   }
+   
+# Phase Inverter
+   utility_component_template = {
+      key = "UTILITY_MEDIUM_INVERTER_0"
+      size = medium
+      icon = "GFX_ship_part_Utility_Medium_Inverter_0"
+      icon_frame = 1
+      power = -25
+      cost = 25
+      upgrades_to = "UTILITY_MEDIUM_INVERTER_1"
+      ship_modifier = { SHIP_ARMOR_PENETRATION_MULT = 0.04    }
+      modifier = {     }
+      prerequisites = { "tech_physics_particles_307" }
+      component_set = "UTILITY_MEDIUM_INVERTER_0"
+      armor_value = 0.001
+   }
+   
+# Phase Inverter II
+   utility_component_template = {
+      key = "UTILITY_MEDIUM_INVERTER_1"
+      size = medium
+      icon = "GFX_ship_part_Utility_Medium_Inverter_1"
+      icon_frame = 1
+      power = -35
+      cost = 35
+      
+      ship_modifier = { SHIP_ARMOR_PENETRATION_MULT = 0.06    }
+      modifier = {     }
+      prerequisites = { "tech_physics_particles_311" }
+      component_set = "UTILITY_MEDIUM_INVERTER_1"
+      armor_value = 0.001
+   }
+   
+# Interphase Modulator
+   utility_component_template = {
+      key = "UTILITY_MEDIUM_MODULATOR_0"
+      size = medium
+      icon = "GFX_ship_part_Utility_Medium_Modulator_0"
+      icon_frame = 1
+      power = -30
+      cost = 30
+      upgrades_to = "UTILITY_MEDIUM_MODULATOR_1"
+      ship_modifier = { SHIP_SHIELD_PENETRATION_MULT = 0.04    }
+      modifier = {     }
+      prerequisites = { "tech_physics_particles_309" }
+      component_set = "UTILITY_MEDIUM_MODULATOR_0"
+      armor_value = 0.001
+   }
+   
+# Interphase Modulator II
+   utility_component_template = {
+      key = "UTILITY_MEDIUM_MODULATOR_1"
+      size = medium
+      icon = "GFX_ship_part_Utility_Medium_Modulator_1"
+      icon_frame = 1
+      power = -40
+      cost = 40
+      
+      ship_modifier = { SHIP_SHIELD_PENETRATION_MULT = 0.06    }
+      modifier = {     }
+      prerequisites = { "tech_physics_particles_313" }
+      component_set = "UTILITY_MEDIUM_MODULATOR_1"
+      armor_value = 0.001
+   }
+   
+# Auxilary Power Banks
+   utility_component_template = {
+      key = "UTILITY_MEDIUM_BANKS"
+      size = medium
+      icon = "GFX_ship_part_Utility_Medium_Banks_"
+      icon_frame = 1
+      power = 0
+      cost = 10
+      
+      ship_modifier = { SHIP_ARMOR_PENETRATION_MULT = 0.01 SHIP_ARMOR_PENETRATION_MULT = 0.01   }
+      modifier = {     }
+      prerequisites = { "tech_society_space_393" }
+      component_set = "UTILITY_MEDIUM_BANKS"
+      armor_value = 0.001
+   }
+   
+# High-Energy Focusing Array
+   utility_component_template = {
+      key = "UTILITY_MEDIUM_FOCUS"
+      size = medium
+      icon = "GFX_ship_part_Utility_Medium_Focus_"
+      icon_frame = 1
+      power = -5
+      cost = 5
+      
+      ship_modifier = { ship_fire_rate_mult = 0.01 ship_weapon_damage = 0.01   }
+      modifier = {     }
+      prerequisites = { "tech_engineering_inertial_629" }
+      component_set = "UTILITY_MEDIUM_FOCUS"
+      armor_value = 0.001
+   }
+   

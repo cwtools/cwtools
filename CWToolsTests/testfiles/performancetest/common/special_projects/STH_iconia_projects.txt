@@ -1,0 +1,22 @@
+# Iconia Special Projects
+
+# Special Project 1
+special_project = {
+	key = "ICONIA_1_PROJECT"
+	cost = 0
+	days_to_research = 360
+	tech_department = engineering_technology
+	picture = sth_GFX_evt_terraPrime7
+	timelimit = 1440
+	event_scope = ship_event
+	requirements = {
+		shipclass_transport = 1
+		leader = general
+	}
+	on_success = { 
+		ship_event = { id = STH_iconia_event.4 } 
+	}
+	on_fail = {	
+		country_event = { id = STH_iconia_event.5 }
+	}
+}

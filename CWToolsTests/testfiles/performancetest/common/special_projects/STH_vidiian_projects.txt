@@ -1,0 +1,86 @@
+# Available requirements:
+#
+#	SKILLS
+#	skill = 2
+#
+#	LEADER
+#	leader = scientist
+#	leader = admiral
+#	leader = general
+#	leader = ruler
+#	leader = governor
+#	
+#	MILITARY SHIPS
+#	shipclass_military = 1
+#	
+#	CIVILIAN SHIPS
+#	shipclass_constructor = 2
+#	shipclass_science_ship = augmentTestColony1
+#	shipclass_colonizer = 2
+#	
+#	ARMIES
+#	shipclass_transport = 1
+#	assault_armies = 2
+#	defense_armies = 1
+#	
+#	STATIONS
+#	research_station = yes
+#	mining_station = yes
+#	observation_station = yes
+#
+#	SCOPES
+#	abort_trigger
+#	this = country (project owner)
+#	from = event scope (planet or ship, MIGHT NOT EXIST)
+#	fromfrom = project creation scope (usually equals location)
+#	
+#	on_success
+#	this = event scope (ship or planet)
+#	from = project creation scope (usually equals location)
+#	
+#	on_fail
+#	this = country (project owner)
+#	from = project creation scope (usually equals location)
+
+#Remove bad virus
+special_project = {
+	key = "THE_PHAGE_PROJECT_1"
+	days_to_research = 480
+	timelimit = -1
+	tech_department = society_technology
+	picture = sth_GFX_evt_thePhageProject1
+	event_scope = planet_event
+	requirements = { }
+	on_success = {
+		owner = {
+			change_variable = { which = "phageCureAttempts" value = 1 }
+			country_event = { id = STH_vidiian_story.2 days = 0 }
+		}
+	}
+	on_fail = { }
+	abort_trigger = {
+		NOT = { any_owned_pop_species = { has_trait = trait_the_phage } }
+	}
+}
+
+
+#Non-Vidiians remove bad virus
+special_project = {
+	key = "THE_PHAGE_PROJECT_2"
+	days_to_research = 480
+	timelimit = -1
+	tech_department = society_technology
+	picture = sth_GFX_evt_thePhageProject1
+	event_scope = planet_event
+	requirements = { }
+	on_success = {
+		owner = {
+			change_variable = { which = "phageCureAttempts" value = 1 }
+			country_event = { id = STH_vidiian_story.2 days = 0 }
+		}
+	}
+	on_fail = { }
+	abort_trigger = {
+		NOT = { any_owned_pop_species = { has_trait = trait_the_phage } }
+	}
+}

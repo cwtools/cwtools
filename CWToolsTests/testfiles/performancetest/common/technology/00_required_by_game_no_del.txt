@@ -1,0 +1,124 @@
+##################
+### TECH COSTS ###
+##################
+#If you change any of these, use replace in files so the values are the same across all files
+
+tech_hyper_drive_1 = {
+   cost = 100
+   area = engineering
+   start_tech = no
+   category = { industry }
+   tier = 0  
+   weight_modifier = { factor = 1 modifier = { factor = 0 always = yes } }
+   ai_weight = { factor = 1 modifier = { factor = 0 always = yes } }   
+}
+
+tech_warp_drive_1 = {
+   cost = 100
+   area = engineering
+   start_tech = no
+   category = { industry }
+   tier = 0  
+   weight_modifier = { factor = 1 modifier = { factor = 0 always = yes } }
+   ai_weight = { factor = 1 modifier = { factor = 0 always = yes } }   
+}
+
+tech_jump_drive_1 = {
+   cost = 100
+   area = engineering
+   start_tech = no
+   category = { industry }
+   tier = 0  
+   weight_modifier = { factor = 1 modifier = { factor = 0 always = yes } }
+   ai_weight = { factor = 1 modifier = { factor = 0 always = yes } }   
+}
+
+tech_wormhole_generation_1 = {
+   cost = 100
+   area = engineering
+   start_tech = no
+   category = { industry }
+   tier = 0  
+   weight_modifier = { factor = 1 modifier = { factor = 0 always = yes } }
+   ai_weight = { factor = 1 modifier = { factor = 0 always = yes } }   
+}
+
+#tech_improved_databank_uplinks = {
+#   cost = 100
+#   area = engineering
+#   start_tech = no
+#   category = { industry }
+#   tier = 0  
+#   weight_modifier = { factor = 1 modifier = { factor = 0 always = yes } }
+#   ai_weight = { factor = 1 modifier = { factor = 0 always = yes } }   
+#}
+
+tech_ship_armor_1 = {
+   cost = 100
+   area = engineering
+   start_tech = no
+   category = { industry }
+   tier = 0  
+   weight_modifier = { factor = 1 modifier = { factor = 0 always = yes } }
+   ai_weight = { factor = 1 modifier = { factor = 0 always = yes } }   
+}
+
+tech_shields_1 = {
+   cost = 100
+   area = engineering
+   start_tech = no
+   category = { industry }
+   tier = 0  
+   weight_modifier = { factor = 1 modifier = { factor = 0 always = yes } }
+   ai_weight = { factor = 1 modifier = { factor = 0 always = yes } }   
+}
+
+tech_solar_panel_network = {
+   cost = 100
+   area = engineering
+   start_tech = no
+   category = { industry }
+   tier = 0  
+   weight_modifier = { factor = 1 modifier = { factor = 0 always = yes } }
+   ai_weight = { factor = 1 modifier = { factor = 0 always = yes } }   
+}
+
+tech_adaptive_bureaucracy = {
+   cost = 100
+   area = engineering
+   start_tech = no
+   category = { industry }
+   tier = 0  
+   weight_modifier = { factor = 1 modifier = { factor = 0 always = yes } }
+   ai_weight = { factor = 1 modifier = { factor = 0 always = yes } }   
+}
+
+tech_biolab_1 = {
+   cost = 100
+   area = engineering
+   start_tech = no
+   category = { industry }
+   tier = 0  
+   weight_modifier = { factor = 1 modifier = { factor = 0 always = yes } }
+   ai_weight = { factor = 1 modifier = { factor = 0 always = yes } }   
+}
+
+tech_engineering_lab_1 = {
+   cost = 100
+   area = engineering
+   start_tech = no
+   category = { industry }
+   tier = 0  
+   weight_modifier = { factor = 1 modifier = { factor = 0 always = yes } }
+   ai_weight = { factor = 1 modifier = { factor = 0 always = yes } }   
+}
+
+tech_physics_lab_1 = {
+   cost = 100
+   area = engineering
+   start_tech = no
+   category = { industry }
+   tier = 0  
+   weight_modifier = { factor = 1 modifier = { factor = 0 always = yes } }
+   ai_weight = { factor = 1 modifier = { factor = 0 always = yes } }   
+}

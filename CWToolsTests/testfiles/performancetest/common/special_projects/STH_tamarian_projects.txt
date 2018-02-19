@@ -1,0 +1,29 @@
+
+special_project = {
+	key = "TAMARIAN_LANGUAGE_PROJECT"
+	cost = 300
+	days_to_research = 0
+	tech_department = society_technology
+	picture = sth_GFX_evt_tamarian1
+	timelimit = -1
+	AI_wait_days = {
+		weight = 80
+		modifier = { weight = 30 has_ethic = ethic_fanatic_xenophile }
+		modifier = { weight = 40 has_ethic = ethic_xenophile }
+		modifier = { weight = 120 has_ethic = ethic_xenophobe }
+		modifier = { weight = 130 has_ethic = ethic_fanatic_xenophobe }
+	}
+	event_scope = planet_event
+	location = no
+	abort_trigger = {
+		NOT = {
+			any_country = {
+				is_species_class = TAM
+				NOT = { reverse_has_relation_flag = { who = THIS flag = "translated" } }
+			}
+		}
+	}
+	on_success = {
+		owner = { country_event = { id = STH_tamarian_flavour.2 } }
+	}
+}

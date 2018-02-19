@@ -1,0 +1,150 @@
+# species_potential_add = {}
+# show the trait to add to species when genemodding or randomizing traits.
+# Scopes are this = species, from = country performing the modification.
+# default = always=yes
+
+# species_possible_remove = {}
+# allow to remove the trait when genemodding.
+# Scopes are this = species, from = country performing the modification.
+# default = always=yes
+
+trait_hive_mind = {
+	cost = 0
+	sorting_priority = 20
+	
+	initial = no
+	randomized = no
+	modification = no
+	forced_happiness = yes
+	alters_species_identity = yes
+	
+	leader_age_min = 10
+	leader_age_max = 20
+	
+	allowed_archetypes = { BIOLOGICAL }
+	ai_weight = {
+		weight = 0
+	}
+
+	icon = "gfx/interface/icons/traits/leader_traits/leader_trait_ruler_hive_mind.dds"
+}
+
+trait_machine_unit = {
+	cost = 0
+	sorting_priority = 20
+	initial = no
+	randomized = no
+	modification = no
+	immortal_leaders = yes
+	icon = "gfx/interface/icons/traits/trait_machine_unit.dds"
+	allowed_archetypes = { MACHINE }
+
+	forced_happiness = yes
+	modifier = {
+		pop_environment_tolerance = 2.0
+		leader_influence_cost = 1
+	}
+}
+
+trait_mechanical = {
+	cost = 0
+	sorting_priority = 20
+	
+	initial = no
+	randomized = no
+	modification = no
+	immortal_leaders = yes
+
+	allowed_archetypes = { ROBOT }
+	
+	modifier = {
+		pop_environment_tolerance = 2.0
+	}
+}
+
+trait_robotic_1 = {
+	cost = 0
+	sorting_priority = 10
+	
+	initial = no
+	randomized = no
+	modification = no
+	forced_happiness = yes
+
+	allowed_archetypes = { ROBOT }
+	
+	modifier = {
+		tile_resource_engineering_research_mult = -0.8
+		tile_resource_physics_research_mult = -0.8
+		tile_resource_society_research_mult = -0.8
+		tile_resource_unity_mult = -0.4
+		tile_resource_energy_mult = -0.4
+		tile_resource_minerals_mult = 0.10
+		pop_consumer_goods_add = 0.5
+	}
+}
+
+trait_robotic_2 = {
+	cost = 0
+	sorting_priority = 10
+	
+	initial = no
+	randomized = no
+	modification = no
+	forced_happiness = yes
+
+	allowed_archetypes = { ROBOT }
+	
+	modifier = {
+		tile_resource_engineering_research_mult = -0.4
+		tile_resource_physics_research_mult = -0.4
+		tile_resource_society_research_mult = -0.4
+		tile_resource_unity_mult = -0.2
+		tile_resource_energy_mult = -0.2
+		tile_resource_minerals_mult = 0.15
+		pop_consumer_goods_add = 0.5
+	}
+}
+
+trait_robotic_3 = {
+	cost = 0
+	sorting_priority = 10
+	
+	initial = no
+	randomized = no
+	modification = no
+
+	allowed_archetypes = { ROBOT }
+	
+	modifier = {
+		tile_resource_engineering_research_mult = 0.20
+		tile_resource_physics_research_mult = 0.20
+		tile_resource_society_research_mult = 0.20
+		tile_resource_unity_mult = 0.20
+		tile_resource_energy_mult = 0.20
+		tile_resource_minerals_mult = 0.20
+		pop_consumer_goods_add = 0.5
+	}
+}
+
+trait_syncretic_proles = {
+	cost = 1
+	opposites = { "trait_intelligent" "trait_erudite" "trait_natural_engineers" "trait_natural_physicists" "trait_natural_sociologists" }
+	initial = no
+	sapient = no
+	modification = no
+	icon = "gfx/interface/icons/traits/trait_primitive.dds"
+	allowed_archetypes = { BIOLOGICAL }
+	modifier = {
+		pop_happiness = 0.10
+		pop_government_ethic_attraction = 0.5
+		tile_resource_minerals_mult = 0.10
+		tile_resource_food_mult = 0.10
+		tile_resource_energy_mult = -0.1
+		tile_resource_physics_research_mult = -0.25
+		tile_resource_engineering_research_mult = -0.25
+		tile_resource_society_research_mult = -0.25
+		species_leader_exp_gain = -0.33
+		leader_skill_levels = -1
+	}
+}

@@ -1,0 +1,96 @@
+﻿### Cravic
+Cravic = {
+	randomized = no
+
+	ship_names = {
+		generic = {
+		"Automated Vessel 11" "Automated Vessel 14" "Automated Vessel 17" "Automated Vessel 20" "Automated Vessel 23" "Automated Vessel 26" "Automated Vessel 29" "Automated Vessel 32" "Automated Vessel 35" "Automated Vessel 38" "Automated Vessel 41" "Automated Vessel 44" "Automated Vessel 47" "Automated Vessel 50" "Automated Vessel 53" "Automated Vessel 56" "Automated Vessel 59" "Automated Vessel 62" "Automated Vessel 65" "Automated Vessel 68" "Automated Vessel 71" "Automated Vessel 74" "Automated Vessel 77" "Automated Vessel 80" "Automated Vessel 83" "Automated Vessel 86" "Automated Vessel 89" "Automated Vessel 92" "Automated Vessel 95" "Automated Vessel 98" "Automated Vessel 101" "Automated Vessel 104" "Automated Vessel 107" "Automated Vessel 110" "Automated Vessel 113" "Automated Vessel 116" "Automated Vessel 119" "Automated Vessel 122" "Automated Vessel 125" "Automated Vessel 128" "Automated Vessel 131" "Automated Vessel 134" "Automated Vessel 137" "Automated Vessel 140" "Automated Vessel 143" "Automated Vessel 146" "Automated Vessel 149" "Automated Vessel 152" "Automated Vessel 155" "Automated Vessel 158" "Automated Vessel 161" "Automated Vessel 164" "Automated Vessel 167" "Automated Vessel 170" "Automated Vessel 173" "Automated Vessel 176" "Automated Vessel 179" "Automated Vessel 182" "Automated Vessel 185" "Automated Vessel 188" "Automated Vessel 191" "Automated Vessel 194" "Automated Vessel 197" "Automated Vessel 200" "Automated Vessel 203" "Automated Vessel 206" "Automated Vessel 209" "Automated Vessel 212" "Automated Vessel 215" "Automated Vessel 218" "Automated Vessel 221" "Automated Vessel 224" "Automated Vessel 227" "Automated Vessel 230" "Automated Vessel 233" "Automated Vessel 236" "Automated Vessel 239" "Automated Vessel 242" "Automated Vessel 245" "Automated Vessel 248" "Automated Vessel 251" "Automated Vessel 254" "Automated Vessel 257" "Automated Vessel 260" "Automated Vessel 263" "Automated Vessel 266" "Automated Vessel 269" "Automated Vessel 272" "Automated Vessel 275" "Automated Vessel 278" "Automated Vessel 281" "Automated Vessel 284" "Automated Vessel 287" "Automated Vessel 290" "Automated Vessel 293" "Automated Vessel 296" "Automated Vessel 299" "Automated Vessel 302" "Automated Vessel 305" "Automated Vessel 308" "Automated Vessel 311" "Automated Vessel 314" "Automated Vessel 317" "Automated Vessel 320" "Automated Vessel 323" "Automated Vessel 326" "Automated Vessel 329" "Automated Vessel 332" "Automated Vessel 335" "Automated Vessel 338" "Automated Vessel 341" "Automated Vessel 344" "Automated Vessel 347" "Automated Vessel 350" "Automated Vessel 353" "Automated Vessel 356" "Automated Vessel 359" "Automated Vessel 362" "Automated Vessel 365" "Automated Vessel 368" "Automated Vessel 371" "Automated Vessel 374" "Automated Vessel 377" "Automated Vessel 380" "Automated Vessel 383" "Automated Vessel 386" "Automated Vessel 389" "Automated Vessel 392" "Automated Vessel 395" "Automated Vessel 398" "Automated Vessel 401" "Automated Vessel 404" "Automated Vessel 407" "Automated Vessel 410" "Automated Vessel 413" "Automated Vessel 416" "Automated Vessel 419" "Automated Vessel 422" "Automated Vessel 425" "Automated Vessel 428" "Automated Vessel 431" "Automated Vessel 434" "Automated Vessel 437" "Automated Vessel 440" "Automated Vessel 443" "Automated Vessel 446" "Automated Vessel 449" "Automated Vessel 452" "Automated Vessel 455" "Automated Vessel 458" "Automated Vessel 461" "Automated Vessel 464" "Automated Vessel 467" "Automated Vessel 470" "Automated Vessel 473" "Automated Vessel 476" "Automated Vessel 479" "Automated Vessel 482" "Automated Vessel 485" "Automated Vessel 488" "Automated Vessel 491" "Automated Vessel 494" "Automated Vessel 497" "Automated Vessel 500" "Automated Vessel 503" "Automated Vessel 506" "Automated Vessel 509" "Automated Vessel 512" "Automated Vessel 515" "Automated Vessel 518" "Automated Vessel 521" "Automated Vessel 524" "Automated Vessel 527" "Automated Vessel 530" "Automated Vessel 533" "Automated Vessel 536" "Automated Vessel 539" "Automated Vessel 542" "Automated Vessel 545" "Automated Vessel 548" "Automated Vessel 551" "Automated Vessel 554" "Automated Vessel 557" "Automated Vessel 560" "Automated Vessel 563" "Automated Vessel 566" "Automated Vessel 569" "Automated Vessel 572" "Automated Vessel 575" "Automated Vessel 578" "Automated Vessel 581" "Automated Vessel 584" "Automated Vessel 587" "Automated Vessel 590" "Automated Vessel 593" "Automated Vessel 596" "Automated Vessel 599" "Automated Vessel 602" "Automated Vessel 605" "Automated Vessel 608" "Automated Vessel 611" "Automated Vessel 614" "Automated Vessel 617" "Automated Vessel 620" "Automated Vessel 623" "Automated Vessel 626" "Automated Vessel 629" "Automated Vessel 632" "Automated Vessel 635" "Automated Vessel 638" "Automated Vessel 641" "Automated Vessel 644" "Automated Vessel 647" "Automated Vessel 650" "Automated Vessel 653" "Automated Vessel 656" "Automated Vessel 659" "Automated Vessel 662" "Automated Vessel 665" "Automated Vessel 668" "Automated Vessel 671" "Automated Vessel 674" "Automated Vessel 677" "Automated Vessel 680" "Automated Vessel 683" "Automated Vessel 686" "Automated Vessel 689" "Automated Vessel 692" "Automated Vessel 695" "Automated Vessel 698" "Automated Vessel 701" "Automated Vessel 704" "Automated Vessel 707" "Automated Vessel 710" "Automated Vessel 713" "Automated Vessel 716" "Automated Vessel 719" "Automated Vessel 722" "Automated Vessel 725" "Automated Vessel 728" "Automated Vessel 731" "Automated Vessel 734" "Automated Vessel 737" "Automated Vessel 740" "Automated Vessel 743" "Automated Vessel 746" "Automated Vessel 749" "Automated Vessel 752" "Automated Vessel 755" "Automated Vessel 758" "Automated Vessel 761" "Automated Vessel 764" "Automated Vessel 767" "Automated Vessel 770" "Automated Vessel 773" "Automated Vessel 776" "Automated Vessel 779" "Automated Vessel 782" "Automated Vessel 785" "Automated Vessel 788" "Automated Vessel 791" "Automated Vessel 794" "Automated Vessel 797" "Automated Vessel 800" "Automated Vessel 803" "Automated Vessel 806" "Automated Vessel 809" "Automated Vessel 812" "Automated Vessel 815" "Automated Vessel 818" "Automated Vessel 821" "Automated Vessel 824" "Automated Vessel 827" "Automated Vessel 830" "Automated Vessel 833" "Automated Vessel 836" "Automated Vessel 839" "Automated Vessel 842" "Automated Vessel 845" "Automated Vessel 848" "Automated Vessel 851" "Automated Vessel 854" "Automated Vessel 857" "Automated Vessel 860" "Automated Vessel 863" "Automated Vessel 866" "Automated Vessel 869" "Automated Vessel 872" "Automated Vessel 875" "Automated Vessel 878" "Automated Vessel 881" "Automated Vessel 884" "Automated Vessel 887" "Automated Vessel 890" "Automated Vessel 893" "Automated Vessel 896" "Automated Vessel 899" "Automated Vessel 902" "Automated Vessel 905" "Automated Vessel 908" "Automated Vessel 911" "Automated Vessel 914" "Automated Vessel 917" "Automated Vessel 920" "Automated Vessel 923" "Automated Vessel 926" "Automated Vessel 929" "Automated Vessel 932" "Automated Vessel 935" "Automated Vessel 938" "Automated Vessel 941" "Automated Vessel 944" "Automated Vessel 947" "Automated Vessel 950" "Automated Vessel 953" "Automated Vessel 956" "Automated Vessel 959" "Automated Vessel 962" "Automated Vessel 965" "Automated Vessel 968" "Automated Vessel 971" "Automated Vessel 974" "Automated Vessel 977" "Automated Vessel 980" "Automated Vessel 983" "Automated Vessel 986" "Automated Vessel 989" "Automated Vessel 992" "Automated Vessel 995" "Automated Vessel 998"
+		}
+		corvette = {
+		}
+		saber = {
+		}
+		sovereign = {
+		}
+		steamrunner = {
+		}		
+		adv_cruiser = {
+		}
+		strike = {
+		}	
+		constructor = {"Assembly Unit 77" "Assembly Unit 86" "Assembly Unit 95" "Assembly Unit 104" "Assembly Unit 113" "Assembly Unit 122" "Assembly Unit 131" "Assembly Unit 140" "Assembly Unit 149" "Assembly Unit 158" "Assembly Unit 167" "Assembly Unit 176" "Assembly Unit 185" "Assembly Unit 194" "Assembly Unit 203" "Assembly Unit 212" "Assembly Unit 221" "Assembly Unit 230" "Assembly Unit 239" "Assembly Unit 248" "Assembly Unit 257" "Assembly Unit 266" "Assembly Unit 275" "Assembly Unit 284" "Assembly Unit 293" "Assembly Unit 302" "Assembly Unit 311" "Assembly Unit 320" "Assembly Unit 329" "Assembly Unit 338" "Assembly Unit 347" "Assembly Unit 356" "Assembly Unit 365" "Assembly Unit 374" "Assembly Unit 383" "Assembly Unit 392" "Assembly Unit 401" "Assembly Unit 410" "Assembly Unit 419" "Assembly Unit 428" "Assembly Unit 437" "Assembly Unit 446" "Assembly Unit 455" "Assembly Unit 464" "Assembly Unit 473" "Assembly Unit 482" "Assembly Unit 491" "Assembly Unit 500" "Assembly Unit 509" "Assembly Unit 518" "Assembly Unit 527" "Assembly Unit 536" "Assembly Unit 545" "Assembly Unit 554" "Assembly Unit 563" "Assembly Unit 572" "Assembly Unit 581" "Assembly Unit 590" "Assembly Unit 599" "Assembly Unit 608" "Assembly Unit 617" "Assembly Unit 626" "Assembly Unit 635" "Assembly Unit 644" "Assembly Unit 653" "Assembly Unit 662" "Assembly Unit 671" "Assembly Unit 680" "Assembly Unit 689" "Assembly Unit 698" "Assembly Unit 707" "Assembly Unit 716" "Assembly Unit 725" "Assembly Unit 734" "Assembly Unit 743" "Assembly Unit 752" "Assembly Unit 761" "Assembly Unit 770" "Assembly Unit 779" "Assembly Unit 788" "Assembly Unit 797" "Assembly Unit 806" "Assembly Unit 815" "Assembly Unit 824" "Assembly Unit 833" "Assembly Unit 842" "Assembly Unit 851" "Assembly Unit 860" "Assembly Unit 869" "Assembly Unit 878" "Assembly Unit 887" "Assembly Unit 896" "Assembly Unit 905" "Assembly Unit 914" "Assembly Unit 923" "Assembly Unit 932" "Assembly Unit 941" "Assembly Unit 950" "Assembly Unit 959" "Assembly Unit 968" "Assembly Unit 977" "Assembly Unit 986"}
+		colonizer = { "Expansion Unit" }
+		science = {"Analysis Unit 44" "Analysis Unit 53" "Analysis Unit 62" "Analysis Unit 71" "Analysis Unit 80" "Analysis Unit 89" "Analysis Unit 98" "Analysis Unit 107" "Analysis Unit 116" "Analysis Unit 125" "Analysis Unit 134" "Analysis Unit 143" "Analysis Unit 152" "Analysis Unit 161" "Analysis Unit 170" "Analysis Unit 179" "Analysis Unit 188" "Analysis Unit 197" "Analysis Unit 206" "Analysis Unit 215" "Analysis Unit 224" "Analysis Unit 233" "Analysis Unit 242" "Analysis Unit 251" "Analysis Unit 260" "Analysis Unit 269" "Analysis Unit 278" "Analysis Unit 287" "Analysis Unit 296" "Analysis Unit 305" "Analysis Unit 314" "Analysis Unit 323" "Analysis Unit 332" "Analysis Unit 341" "Analysis Unit 350" "Analysis Unit 359" "Analysis Unit 368" "Analysis Unit 377" "Analysis Unit 386" "Analysis Unit 395" "Analysis Unit 404" "Analysis Unit 413" "Analysis Unit 422" "Analysis Unit 431" "Analysis Unit 440" "Analysis Unit 449" "Analysis Unit 458" "Analysis Unit 467" "Analysis Unit 476" "Analysis Unit 485" "Analysis Unit 494" "Analysis Unit 503" "Analysis Unit 512" "Analysis Unit 521" "Analysis Unit 530" "Analysis Unit 539" "Analysis Unit 548" "Analysis Unit 557" "Analysis Unit 566" "Analysis Unit 575" "Analysis Unit 584" "Analysis Unit 593" "Analysis Unit 602" "Analysis Unit 611" "Analysis Unit 620" "Analysis Unit 629" "Analysis Unit 638" "Analysis Unit 647" "Analysis Unit 656" "Analysis Unit 665" "Analysis Unit 674" "Analysis Unit 683" "Analysis Unit 692" "Analysis Unit 701" "Analysis Unit 710" "Analysis Unit 719" "Analysis Unit 728" "Analysis Unit 737" "Analysis Unit 746" "Analysis Unit 755" "Analysis Unit 764" "Analysis Unit 773" "Analysis Unit 782" "Analysis Unit 791" "Analysis Unit 800" "Analysis Unit 809" "Analysis Unit 818" "Analysis Unit 827" "Analysis Unit 836" "Analysis Unit 845" "Analysis Unit 854" "Analysis Unit 863" "Analysis Unit 872" "Analysis Unit 881" "Analysis Unit 890" "Analysis Unit 899" "Analysis Unit 908" "Analysis Unit 917" "Analysis Unit 926" "Analysis Unit 935" "Analysis Unit 944" "Analysis Unit 953" }
+		transport = {"Transport Unit"}
+		outpost_station = {
+			sequential_name = "Frontier Outpost %CCC%"
+		}
+	}
+
+	fleet_names = {
+		sequential_name = "Autonomous Fleet %CCC%"
+	}
+	
+	army_names = {
+		defense_army = {
+			sequential_name = "Cravic Defence Unit %CCC%"
+		}
+		assault_army = {
+			sequential_name = "Cravic Assault Unit %CCC%"
+		}
+		slave_army = {
+			sequential_name = "Enslaved Unit %CCC%"
+		}
+		clone_army = { 
+			sequential_name = "Clone Unit %CCC%"
+		}
+		robotic_army = {
+			sequential_name = "Mechanical Unit %CCC%"
+		}
+		android_army = {
+			sequential_name = "Synthetic Unit %CCC%"
+		}
+		psionic_army = { 
+			sequential_name = "Psi Defence Unit %CCC%"
+		}
+		xenomorph_army = {
+			sequential_name = "Bio-Warfare Unit %CCC%"
+		}
+		gene_warrior_army = {
+			sequential_name = "Bio-Engineered Unit %CCC%"
+		}
+	}
+
+	planet_names = {
+		generic = {
+			names = { }
+		}
+	}
+
+
+### CHARACTERS
+
+	character_names = {
+		names1 = {
+			weight = 40
+			first_names_male = {
+			"Automated Unit"
+			}
+			first_names_female = {
+			"Automated Unit"
+			}
+			second_names = {
+			1084 1115 1146 1177 1208 1239 1270 1301 1332 1363 1394 1425 1456 1487 1518 1549 1580 1611 1642 1673 1704 1735 1766 1797 1828 1859 1890 1921 1952 1983 2014 2045 2076 2107 2138 2169 2200 2231 2262 2293 2324 2355 2386 2417 2448 2479 2510 2541 2572 2603 2634 2665 2696 2727 2758 2789 2820 2851 2882 2913 2944 2975 3006 3037 3068 3099 3130 3161 3192 3223 3254 3285 3316 3347 3378 3409 3440 3471 3502 3533 3564 3595 3626 3657 3688 3719 3750 3781 3812 3843 3874 3905 3936 3967 3998 4029 4060 4091 4122 4153 4184 4215 4246 4277 4308 4339 4370 4401 4432 4463 4494 4525 4556 4587 4618 4649 4680 4711 4742 4773 4804 4835 4866 4897 4928 4959 4990 5021 5052 5083 5114 5145 5176 5207 5238 5269 5300 5331 5362 5393 5424 5455 5486 5517 5548 5579 5610 5641 5672 5703 5734 5765 5796 5827 5858 5889 5920 5951 5982 6013 6044 6075 6106 6137 6168 6199 6230 6261 6292 6323 6354 6385 6416 6447 6478 6509 6540 6571 6602 6633 6664 6695 6726 6757 6788 6819 6850 6881 6912 6943 6974 7005 7036 7067 7098 7129 7160 7191 7222 7253 7284 7315 7346 7377 7408 7439 7470 7501 7532 7563 7594 7625 7656 7687 7718 7749 7780 7811 7842 7873 7904 7935 7966 7997 8028 8059 8090 8121 8152 8183 8214 8245 8276 8307 8338 8369 8400 8431 8462 8493 8524 8555 8586 8617 8648 8679 8710 8741 8772 8803 8834 8865 8896 8927 8958 8989 9020 9051 9082 9113 9144 9175 9206 9237 9268 9299 9330 9361 9392 9423 9454 9485 9516 9547 9578 9609 9640 9671 9702 9733 9764 9795 9826 9857 9888 9919 9950 9981
+			}
+			regnal_first_names_male = {
+			"Automated Unit"
+			}
+			regnal_first_names_female = {
+			"Automated Unit"
+			}
+			regnal_second_names = {
+			1084 1115 1146 1177 1208 1239 1270 1301 1332 1363 1394 1425 1456 1487 1518 1549 1580 1611 1642 1673 1704 1735 1766 1797 1828 1859 1890 1921 1952 1983 2014 2045 2076 2107 2138 2169 2200 2231 2262 2293 2324 2355 2386 2417 2448 2479 2510 2541 2572 2603 2634 2665 2696 2727 2758 2789 2820 2851 2882 2913 2944 2975 3006 3037 3068 3099 3130 3161 3192 3223 3254 3285 3316 3347 3378 3409 3440 3471 3502 3533 3564 3595 3626 3657 3688 3719 3750 3781 3812 3843 3874 3905 3936 3967 3998 4029 4060 4091 4122 4153 4184 4215 4246 4277 4308 4339 4370 4401 4432 4463 4494 4525 4556 4587 4618 4649 4680 4711 4742 4773 4804 4835 4866 4897 4928 4959 4990 5021 5052 5083 5114 5145 5176 5207 5238 5269 5300 5331 5362 5393 5424 5455 5486 5517 5548 5579 5610 5641 5672 5703 5734 5765 5796 5827 5858 5889 5920 5951 5982 6013 6044 6075 6106 6137 6168 6199 6230 6261 6292 6323 6354 6385 6416 6447 6478 6509 6540 6571 6602 6633 6664 6695 6726 6757 6788 6819 6850 6881 6912 6943 6974 7005 7036 7067 7098 7129 7160 7191 7222 7253 7284 7315 7346 7377 7408 7439 7470 7501 7532 7563 7594 7625 7656 7687 7718 7749 7780 7811 7842 7873 7904 7935 7966 7997 8028 8059 8090 8121 8152 8183 8214 8245 8276 8307 8338 8369 8400 8431 8462 8493 8524 8555 8586 8617 8648 8679 8710 8741 8772 8803 8834 8865 8896 8927 8958 8989 9020 9051 9082 9113 9144 9175 9206 9237 9268 9299 9330 9361 9392 9423 9454 9485 9516 9547 9578 9609 9640 9671 9702 9733 9764 9795 9826 9857 9888 9919 9950 9981
+			}
+		}
+	}
+}

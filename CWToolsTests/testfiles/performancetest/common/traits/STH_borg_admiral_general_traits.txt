@@ -1,0 +1,96 @@
+# All leaders will have a common trait-point value set in defines, which they use to grab traits
+
+# leader_trait = yes - this tags the trait as a leader-trait and not a species-trait
+# initial = no - if set to no, this trait can not be granted to leaders when they are generated
+# leader_class = { admiral scientist }  -- OR  - if not set, it can be given to all leader-types except Rulers
+# requires_traits = { trait_psionic } -- AND - leader-trait can only be randomly given on generation if the leaders species has this trait
+# requires_governments = { despotic_hegemony ai_overlordship } -- OR - leader-trait can only be randomly given on generation if the Empire has this type of government form
+# prerequisites = { tech_psionic_theory } - AND - leader-trait can only be given if the technology specified has been researched by the Empire
+
+#####################
+# Admiral Traits    #
+#####################
+
+leader_trait_adaptive_combat_routines = {
+	cost = 1
+	modification = no
+	icon = "gfx/interface/icons/traits/leader_traits/leader_trait_adaptive_combat_routines.dds"
+	modifier = {
+		ship_combat_speed_mult = 0.05
+		ship_auto_repair_add = 0.025
+		ship_fire_rate_mult = 0.025
+		army_defense_damage_mult = 0.1
+	}
+	leader_potential_add = {
+		from = { has_authority = auth_cybernetic_consciousness }
+	}
+	leader_trait = yes
+	leader_class = { admiral general }
+	# opposites = { "leader_trait_unyielding" }
+}
+
+leader_trait_defensive_bias = {
+	cost = 1
+	modification = no
+	icon = "gfx/interface/icons/traits/leader_traits/leader_trait_defensive_bias.dds"
+	modifier = {
+		ship_fire_rate_mult = -0.1
+		ship_combat_speed_mult = 0.1
+		army_defense_morale_mult = 0.2
+		army_defense_damage_mult = 0.2
+	}
+	leader_potential_add = {
+		from = { is_drone_authority = no }
+	}
+	leader_trait = yes
+	leader_class = { admiral general }
+	opposites = { "leader_trait_offensive_bias" }
+	initial = no
+	randomized = no
+}
+
+leader_trait_logistics_node = {
+	cost = 1
+	modification = no
+	icon = "gfx/interface/icons/traits/leader_traits/leader_trait_logistics_node.dds"
+	modifier = {
+		ship_upkeep_mult = -0.1
+		army_upkeep_mult = -0.2
+	}
+	leader_potential_add = {
+		from = { has_authority = auth_cybernetic_consciousness }
+	}
+	leader_trait = yes
+	leader_class = { admiral general }
+}
+
+leader_trait_regenerative_subroutines = {
+	cost = 1
+	modification = no
+	icon = "gfx/interface/icons/traits/leader_traits/leader_trait_regenerative_subroutines.dds"
+	modifier = {
+		ship_auto_repair_add = 0.05 # Regenerates 1% ship-health per month
+	}
+	leader_potential_add = {
+		from = { has_authority = auth_cybernetic_consciousness }
+	}
+	leader_trait = yes
+	leader_class = { admiral }
+	prerequisites = { tech_society_space_396 }
+}
+
+leader_trait_offensive_bias = {
+	cost = 1
+	modification = no
+	icon = "gfx/interface/icons/traits/leader_traits/leader_trait_offensive_bias.dds"
+    modifier = {
+		ship_fire_rate_mult = 0.075
+		army_damage_mult = 0.10
+	}
+	leader_potential_add = {
+		from = { has_authority = auth_cybernetic_consciousness }
+	}
+	leader_trait = yes
+	leader_class = { admiral general }
+	opposites = { "leader_trait_defensive_bias" }
+}

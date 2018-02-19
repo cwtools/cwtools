@@ -1,0 +1,270 @@
+
+
+em_dominion_members_1 = {
+	navy_size_mult = 0.05
+	icon_frame = 1
+}
+em_dominion_members_2 = {
+	navy_size_mult = 0.1
+	icon_frame = 1
+}
+em_dominion_members_3 = {
+	navy_size_mult = 0.15
+	icon_frame = 1
+}
+em_dominion_members_4 = {
+	navy_size_mult = 0.2
+	icon_frame = 1
+}
+em_dominion_members_5 = { 
+	navy_size_mult = 0.25
+	icon_frame = 1
+}
+em_dominion_members_6 = {
+	navy_size_mult = 0.3
+	icon_frame = 1
+}
+em_dominion_members_7 = {
+	navy_size_mult = 0.35
+	icon_frame = 1
+}
+em_dominion_members_8 = {
+	navy_size_mult = 0.4
+	icon_frame = 1
+}
+em_dominion_members_9 = {
+	navy_size_mult = 0.45
+	icon_frame = 1
+}
+em_dominion_members_10 = {
+	navy_size_mult = 0.5
+	icon_frame = 1
+}
+
+em_sth_policy_ufp_war_1 = {
+	navy_size_mult = 0.05
+	icon_frame = 1
+}
+em_sth_policy_ufp_war_2 = {
+	navy_size_mult = 0.1
+	icon_frame = 1
+}
+em_sth_policy_ufp_war_3 = {
+	navy_size_mult = 0.15
+	icon_frame = 1
+}
+em_sth_policy_ufp_war_4 = {
+	navy_size_mult = 0.2
+	icon_frame = 1
+}
+em_sth_policy_ufp_war_5 = {
+	navy_size_mult = 0.25
+	icon_frame = 1
+}
+em_sth_policy_ufp_war_6 = {
+	navy_size_mult = 0.3
+	icon_frame = 1
+}
+em_sth_policy_ufp_war_7 = {
+	navy_size_mult = 0.35
+	icon_frame = 1
+}
+em_sth_policy_ufp_war_8 = {
+	navy_size_mult = 0.4
+	icon_frame = 1
+}
+em_sth_policy_ufp_war_9 = {
+	navy_size_mult = 0.45
+	icon_frame = 1
+}
+em_sth_policy_ufp_war_10 = {
+	navy_size_mult = 0.5
+	icon_frame = 1
+}
+
+
+
+em_sth_policy_ufp_humanitarian_1 = {
+	country_resource_unity_mult = 0.05
+	icon_frame = 1
+}
+em_sth_policy_ufp_humanitarian_2 = {
+	country_resource_unity_mult = 0.1
+	icon_frame = 1
+}
+em_sth_policy_ufp_humanitarian_3 = {
+	country_resource_unity_mult = 0.15
+	icon_frame = 1
+}
+em_sth_policy_ufp_humanitarian_4 = {
+	country_resource_unity_mult = 0.2
+	icon_frame = 1
+}
+em_sth_policy_ufp_humanitarian_5 = {
+	country_resource_unity_mult = 0.25
+	icon_frame = 1
+}
+em_sth_policy_ufp_humanitarian_6 = {
+	country_resource_unity_mult = 0.3
+	icon_frame = 1
+}
+em_sth_policy_ufp_humanitarian_7 = {
+	country_resource_unity_mult = 0.35
+	icon_frame = 1
+}
+em_sth_policy_ufp_humanitarian_8 = {
+	country_resource_unity_mult = 0.4
+	icon_frame = 1
+}
+em_sth_policy_ufp_humanitarian_9 = {
+	country_resource_unity_mult = 0.45
+	icon_frame = 1
+}
+em_sth_policy_ufp_humanitarian_10 = {
+	country_resource_unity_mult = 0.5
+	icon_frame = 1
+}
+
+
+em_sth_policy_ufp_economic_1 = {
+	country_resource_minerals_mult = 0.025
+	country_resource_energy_mult = 0.025
+	icon_frame = 1
+}
+em_sth_policy_ufp_economic_2 = {
+	country_resource_minerals_mult = 0.05
+	country_resource_energy_mult = 0.05
+	icon_frame = 1
+}
+em_sth_policy_ufp_economic_3 = {
+	country_resource_minerals_mult = 0.075
+	country_resource_energy_mult = 0.075
+	icon_frame = 1
+}
+em_sth_policy_ufp_economic_4 = {
+	country_resource_minerals_mult = 0.1
+	country_resource_energy_mult = 0.1
+	icon_frame = 1
+}
+em_sth_policy_ufp_economic_5 = {
+	country_resource_minerals_mult = 0.125
+	country_resource_energy_mult = 0.125
+	icon_frame = 1
+}
+em_sth_policy_ufp_economic_6 = {
+	country_resource_minerals_mult = 0.15
+	country_resource_energy_mult = 0.15
+	icon_frame = 1
+}
+em_sth_policy_ufp_economic_7 = {
+	country_resource_minerals_mult = 0.175
+	country_resource_energy_mult = 0.175
+	icon_frame = 1
+}
+em_sth_policy_ufp_economic_8 = {
+	country_resource_minerals_mult = 0.2
+	country_resource_energy_mult = 0.2
+	icon_frame = 1
+}
+em_sth_policy_ufp_economic_9 = {
+	country_resource_minerals_mult = 0.225
+	country_resource_energy_mult = 0.225
+	icon_frame = 1
+}
+em_sth_policy_ufp_economic_10 = {
+	country_resource_minerals_mult = 0.25
+	country_resource_energy_mult = 0.25
+	icon_frame = 1
+}
+
+
+em_sth_policy_ufp_tech_1 = {
+	all_technology_research_speed = 0.025
+	icon_frame = 1
+}
+em_sth_policy_ufp_tech_2 = {
+	all_technology_research_speed = 0.05
+	icon_frame = 1
+}
+em_sth_policy_ufp_tech_3 = {
+	all_technology_research_speed = 0.075
+	icon_frame = 1
+}
+em_sth_policy_ufp_tech_4 = {
+	all_technology_research_speed = 0.1
+	icon_frame = 1
+}
+em_sth_policy_ufp_tech_5 = {
+	all_technology_research_speed = 0.125
+	icon_frame = 1
+}
+em_sth_policy_ufp_tech_6 = {
+	all_technology_research_speed = 0.15
+	icon_frame = 1
+}
+em_sth_policy_ufp_tech_7 = {
+	all_technology_research_speed = 0.175
+	icon_frame = 1
+}
+em_sth_policy_ufp_tech_8 = {
+	all_technology_research_speed = 0.2
+	icon_frame = 1
+}
+em_sth_policy_ufp_tech_9 = {
+	all_technology_research_speed = 0.225
+	icon_frame = 1
+}
+em_sth_policy_ufp_tech_10 = {
+	all_technology_research_speed = 0.25
+	icon_frame = 1
+}
+
+
+
+em_sth_policy_ufp_cultural_1 = {
+	country_resource_sr_prosperity_26_add = 2.5
+	icon_frame = 1
+}
+em_sth_policy_ufp_cultural_2 = {
+	country_resource_sr_prosperity_26_add = 5.0
+	icon_frame = 1
+}
+em_sth_policy_ufp_cultural_3 = {
+	country_resource_sr_prosperity_26_add = 7.5
+	icon_frame = 1
+}
+em_sth_policy_ufp_cultural_4 = {
+	country_resource_sr_prosperity_26_add = 10.0
+	icon_frame = 1
+}
+em_sth_policy_ufp_cultural_5 = {
+	country_resource_sr_prosperity_26_add = 12.5
+	icon_frame = 1
+}
+em_sth_policy_ufp_cultural_6 = {
+	country_resource_sr_prosperity_26_add = 15.0
+	icon_frame = 1
+}
+em_sth_policy_ufp_cultural_7 = {
+	country_resource_sr_prosperity_26_add = 17.5
+	icon_frame = 1
+}
+em_sth_policy_ufp_cultural_8 = {
+	country_resource_sr_prosperity_26_add = 20.0
+	icon_frame = 1
+}
+em_sth_policy_ufp_cultural_9 = {
+	country_resource_sr_prosperity_26_add = 22.5
+	icon_frame = 1
+}
+em_sth_policy_ufp_cultural_10 = {
+	country_resource_sr_prosperity_26_add = 25.0
+	icon_frame = 1
+}
+
+
+
+em_sth_policy_ufp_cultural_25 = {
+	country_resource_sr_prosperity_26_add = 250.0
+	icon_frame = 1
+}

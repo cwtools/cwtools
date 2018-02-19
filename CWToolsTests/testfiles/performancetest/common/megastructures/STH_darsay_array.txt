@@ -1,0 +1,40 @@
+# see README.txt for example
+
+STH_darsay_array_ruined = {
+	entity = "darsay_array_entity"
+	portrait = "GFX_megastructure_darsay_array_background"
+
+	potential = {
+		always = no
+	}
+}
+
+
+# Restored Darsay Array
+STH_darsay_array_restored = {
+	entity = "darsay_array_entity"
+	construction_entity = "darsay_array_entity"
+	portrait = "GFX_megastructure_darsay_array_background"
+	upgrade_from = {
+		STH_darsay_array_ruined
+	}
+	build_time = 1800
+	build_cost = {
+		minerals = 5000
+		energy = 1000
+	}
+	monthly_production = {
+		society_research = 20
+		engineering_research = 2
+		physics_research = 2
+	}
+	maintenance = {
+		energy = 5
+	}
+	possible = {
+		custom_tooltip = {
+			fail_text = darsay_array_must_be_researched
+			has_star_flag = darsay_array_researched
+		}
+	}
+}

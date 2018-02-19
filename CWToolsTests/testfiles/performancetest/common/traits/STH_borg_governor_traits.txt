@@ -1,0 +1,31 @@
+leader_trait_resource_extraction_bias = {
+	cost = 1
+	modification = no
+	icon = "gfx/interface/icons/traits/leader_traits/trait_ruler_resource_extraction_bias.dds"
+	leader_potential_add = {
+		from = { has_authority = auth_cybernetic_consciousness }
+	}
+	modifier = {
+		tile_resource_minerals_mult = 0.1
+		country_resource_minerals_add = 1
+		tile_resource_energy_mult = 0.1
+		country_resource_energy_add = 1
+	}
+	leader_trait = yes
+	leader_class = { governor }
+}
+
+leader_trait_resource_nanite_bias = {
+	cost = 1
+	modification = no
+	icon = "gfx/interface/icons/traits/leader_traits/trait_ruler_resource_nanite_bias.dds"
+	leader_potential_add = {
+		from = { has_authority = auth_cybernetic_consciousness }
+	}
+	modifier = {
+		country_resource_influence_add = 0.25
+		tile_resource_influence_mult = 0.1
+	}
+	leader_trait = yes
+	leader_class = { governor }
+}

@@ -1,0 +1,38 @@
+##############################
+# Storage Factions
+##############################
+
+sth_agency_storage = {
+	election_header = "GFX_faction_header_yellow"
+	guiding_ethic = ethic_materialist
+	unique = yes
+	support_multiplier = 1
+	is_potential = { is_country_type = agency }
+	
+	parameters = {
+		empire = {
+			type = country
+			valid_objects = {
+				is_same_value = root
+			}
+		}
+	}
+	
+	can_join_faction = {
+		always = yes
+	}
+	
+	attraction = {
+		base = 150
+	}
+	
+	leader = {
+		base = 100
+	}
+	
+	on_create = { }
+	
+	on_destroy = { }
+	
+	actions = { }
+}

@@ -1,0 +1,207 @@
+##################
+# Uplifting Event
+##################
+
+# Snakeoids
+anomaly = {
+	event = uplift.6000
+	category = "UPLIFT_SNAKEOID_CAT"
+
+	weight = 1
+
+	potential = {
+		owner = { is_borg_empire = no is_assimilator = no }
+	}
+}
+
+# Generic Ocean 1
+anomaly = {
+	event = uplift.6010
+	category = "UPLIFT_OCEAN_CAT"
+
+	weight = 1
+
+	potential = {
+		owner = { is_borg_empire = no is_assimilator = no }
+	}
+}
+
+# Generic Ocean 2
+anomaly = {
+	event = uplift.6015
+	category = "UPLIFT_OCEAN_CAT"
+
+	weight = 1
+
+	potential = {
+		owner = { is_borg_empire = no is_assimilator = no }
+	}
+}
+
+# Generic Arid 1
+anomaly = {
+	event = uplift.6020
+	category = "UPLIFT_ARID_CAT"
+
+	weight = 1
+
+	potential = {
+		owner = { is_borg_empire = no is_assimilator = no }
+	}
+}
+
+# Generic Arid 2
+anomaly = {
+	event = uplift.6025
+	category = "UPLIFT_ARID_CAT"
+
+	weight = 1
+
+	potential = {
+		owner = { is_borg_empire = no is_assimilator = no }
+	}
+}
+
+# Generic Continental 1
+anomaly = {
+	event = uplift.6030
+	category = "UPLIFT_CONTINENTAL_CAT"
+
+	weight = 1
+
+	potential = {
+		owner = { is_borg_empire = no is_assimilator = no }
+	}
+}
+
+# Generic Continental 2
+anomaly = {
+	event = uplift.6035
+	category = "UPLIFT_CONTINENTAL_CAT"
+
+	weight = 1
+
+	potential = {
+		owner = { is_borg_empire = no is_assimilator = no }
+	}
+}
+
+# Generic Tropical 1
+anomaly = {
+	event = uplift.6040
+	category = "UPLIFT_TROPICAL_CAT"
+
+	weight = 1
+
+	potential = {
+		owner = { is_borg_empire = no is_assimilator = no }
+	}
+}
+
+# Generic Tropical 2
+anomaly = {
+	event = uplift.6045
+	category = "UPLIFT_TROPICAL_CAT"
+
+	weight = 1
+
+	potential = {
+		owner = { is_borg_empire = no is_assimilator = no }
+	}
+}
+
+# Generic Tundra 1
+anomaly = {
+	event = uplift.6050
+	category = "UPLIFT_TUNDRA_CAT"
+
+	weight = 1
+
+	potential = {
+		owner = { is_borg_empire = no is_assimilator = no }
+	}
+}
+
+# Generic Tundra 2
+anomaly = {
+	event = uplift.6055
+	category = "UPLIFT_TUNDRA_CAT"
+
+	weight = 1
+
+	potential = {
+		owner = { is_borg_empire = no is_assimilator = no }
+	}
+}
+
+# Generic Arctic 1 
+anomaly = {
+	event = uplift.6060
+	category = "UPLIFT_ARCTIC_CAT"
+
+	weight = 1
+
+	potential = {
+		owner = { is_borg_empire = no is_assimilator = no }
+	}
+}
+
+# Generic Arctic 2
+anomaly = {
+	event = uplift.6065
+	category = "UPLIFT_ARCTIC_CAT"
+
+	weight = 1
+
+	potential = {
+		owner = { is_borg_empire = no is_assimilator = no }
+	}
+}
+
+# Generic Desert 1
+anomaly = {
+	event = uplift.6070
+	category = "UPLIFT_DESERT_CAT"
+
+	weight = 1
+
+	potential = {
+		owner = { is_borg_empire = no is_assimilator = no }
+	}
+}
+
+# Generic Desert 2
+anomaly = {
+	event = uplift.6075
+	category = "UPLIFT_DESERT_CAT"
+
+	weight = 1
+
+	potential = {
+		owner = { is_borg_empire = no is_assimilator = no }
+	}
+}
+
+# Generic
+anomaly = {
+	event = uplift.6080
+	category = "UPLIFT_GENERIC_CAT"
+
+	weight = 1
+
+	potential = {
+		owner = { is_borg_empire = no is_assimilator = no }
+	}
+}
+
+# Roachoid
+anomaly = {
+	event = uplift.6090
+	category = "UPLIFT_ROACHOID_CAT"
+
+	weight = 1
+
+	potential = {
+		owner = { is_borg_empire = no is_assimilator = no }
+	}
+}

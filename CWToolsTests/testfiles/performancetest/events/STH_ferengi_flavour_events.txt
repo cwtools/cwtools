@@ -1,0 +1,370 @@
+############################
+#
+# Ferengi Flavour Events
+#
+# Written by Walshicus / Kodiak
+#
+############################
+
+namespace = STH_ferengi_flavour
+
+@tier1materialreward = 6
+@tier1materialmin = 100
+@tier1materialmax = 500
+@tier2materialreward = 12
+@tier2materialmin = 150
+@tier2materialmax = 1000
+@tier3materialreward = 18
+@tier3materialmin = 250
+@tier3materialmax = 1500
+@tier4materialreward = 24
+@tier4materialmin = 350
+@tier4materialmax = 2000
+
+@tier1influencereward = 6
+@tier1influencemin = 40
+@tier1influencemax = 100
+@tier2influencereward = 12
+@tier2influencemin = 80
+@tier2influencemax = 175
+@tier3influencereward = 18
+@tier3influencemin = 125
+@tier3influencemax = 250
+@tier4influencereward = 24
+@tier4influencemin = 150
+@tier4influencemax = 300
+
+@tier1researchreward = 6
+@tier1researchmin = 60
+@tier1researchmax = 150
+@tier2researchreward = 12
+@tier2researchmin = 90
+@tier2researchmax = 250
+@tier3researchreward = 18
+@tier3researchmin = 120
+@tier3researchmax = 350
+@tier4researchreward = 24
+@tier4researchmin = 150
+@tier4researchmax = 500
+
+country_event = {
+	id = STH_ferengi_flavour.1
+	title = "STH_ferengi_flavour.1.name"
+	desc = "STH_ferengi_flavour.1.desc"
+	picture = sth_GFX_evt_ferengiDaboWheel
+	trigger = { 
+		is_species_class = FER 
+		has_country_resource = { type = energy amount > 199 }
+	}
+	mean_time_to_happen = {	months = 180 }
+	immediate = { leader = { save_event_target_as = ruler } }
+	option = {
+		trigger = { has_country_resource = { type = energy amount > 99 } }
+		name = STH_ferengi_flavour.1.a
+		add_energy = -100
+		hidden_effect = {
+			random_list = {
+				0 = { country_event = { id = STH_ferengi_flavour.2 } } #Critical success
+				45 = { country_event = { id = STH_ferengi_flavour.3 } } #Success
+				55 = { country_event = { id = STH_ferengi_flavour.4 } } #Failure
+			}
+		}
+	}
+	option = {
+		trigger = { has_country_resource = { type = energy amount > 99 } }
+		name = STH_ferengi_flavour.1.b
+		add_energy = -100
+		hidden_effect = {
+			random_list = {
+				10 = { country_event = { id = STH_ferengi_flavour.2 } } #Critical success
+				30 = { country_event = { id = STH_ferengi_flavour.3 } } #Success
+				60 = { country_event = { id = STH_ferengi_flavour.4 } } #Failure
+			}
+		}
+	}
+	option = {
+		trigger = { has_country_resource = { type = energy amount > 149 } }
+		name = STH_ferengi_flavour.1.c
+		add_energy = -150
+		hidden_effect = {
+			random_list = {
+				0 = { country_event = { id = STH_ferengi_flavour.5 } } #Critical success
+				45 = { country_event = { id = STH_ferengi_flavour.6 } } #Success
+				55 = { country_event = { id = STH_ferengi_flavour.7 } } #Failure
+			}
+		}
+	}
+	option = {
+	trigger = { has_country_resource = { type = energy amount > 149 } }
+		name = STH_ferengi_flavour.1.d
+		add_energy = -150
+		hidden_effect = {
+			random_list = {
+				10 = { country_event = { id = STH_ferengi_flavour.5 } } #Critical success
+				30 = { country_event = { id = STH_ferengi_flavour.6 } } #Success
+				60 = { country_event = { id = STH_ferengi_flavour.7 } } #Failure
+			}
+		}
+	}
+	option = {
+		trigger = { has_country_resource = { type = energy amount > 199 } }
+		name = STH_ferengi_flavour.1.e
+		add_energy = -200
+		hidden_effect = {
+			random_list = {
+				15 = { country_event = { id = STH_ferengi_flavour.8 } } #Critical success
+				10 = { country_event = { id = STH_ferengi_flavour.9 } } #Success
+				75 = { country_event = { id = STH_ferengi_flavour.10 } } #Failure
+			}
+		}
+	}
+	option = { name = STH_ferengi_flavour.1.f }
+}
+
+country_event = {
+	id = STH_ferengi_flavour.2
+	title = STH_ferengi_flavour.2.name
+	desc = STH_ferengi_flavour.2.desc
+	picture = sth_GFX_evt_ferengiDaboWheel
+	location = ROOT
+	is_triggered_only = yes
+	option = {
+		name = STH_ferengi_flavour.2.a
+		add_influence = 10
+		add_energy = 200
+	}
+	option = {
+		trigger = { has_country_resource = { type = energy amount > 99 } }
+		name = STH_ferengi_flavour.2.b
+		add_influence = 10
+		add_energy = 200
+		hidden_effect = { country_event = { id = STH_ferengi_flavour.11 } }
+	}
+}
+country_event = {
+	id = STH_ferengi_flavour.3
+	title = STH_ferengi_flavour.3.name
+	desc = STH_ferengi_flavour.3.desc
+	picture = sth_GFX_evt_ferengiDaboWheel
+	location = ROOT
+	is_triggered_only = yes
+	option = {
+		name = STH_ferengi_flavour.3.a
+		add_influence = 5
+		add_energy = 150
+	}
+	option = {
+		trigger = { has_country_resource = { type = energy amount > 99 } }
+		name = STH_ferengi_flavour.3.b
+		add_influence = 5
+		add_energy = 150
+		hidden_effect = { country_event = { id = STH_ferengi_flavour.11 } }
+	}
+}
+country_event = {
+	id = STH_ferengi_flavour.4
+	title = STH_ferengi_flavour.4.name
+	desc = STH_ferengi_flavour.4.desc
+	picture = sth_GFX_evt_ferengiDaboWheel
+	location = ROOT
+	is_triggered_only = yes
+	option = {
+		name = STH_ferengi_flavour.4.a
+		add_influence = -20
+	}
+	option = {
+		trigger = { has_country_resource = { type = energy amount > 99 } }
+		name = STH_ferengi_flavour.4.b
+		add_influence = -20
+		hidden_effect = { country_event = { id = STH_ferengi_flavour.11 } }
+	}
+}
+
+country_event = {
+	id = STH_ferengi_flavour.5
+	title = STH_ferengi_flavour.5.name
+	desc = STH_ferengi_flavour.5.desc
+	picture = sth_GFX_evt_ferengiDaboWheel
+	location = ROOT
+	is_triggered_only = yes
+	option = {
+		name = STH_ferengi_flavour.5.a
+		add_influence = 15
+		add_energy = 300
+	}
+	option = {
+		trigger = { has_country_resource = { type = energy amount > 99 } }
+		name = STH_ferengi_flavour.5.b
+		add_influence = 15
+		add_energy = 300
+		hidden_effect = { country_event = { id = STH_ferengi_flavour.11 } }
+	}
+}
+country_event = {
+	id = STH_ferengi_flavour.6
+	title = STH_ferengi_flavour.6.name
+	desc = STH_ferengi_flavour.6.desc
+	picture = sth_GFX_evt_ferengiDaboWheel
+	location = ROOT
+	is_triggered_only = yes
+	option = {
+		name = STH_ferengi_flavour.6.a
+		add_influence = 10
+		add_energy = 225
+	}
+	option = {
+		trigger = { has_country_resource = { type = energy amount > 99 } }
+		name = STH_ferengi_flavour.6.b
+		add_influence = 10
+		add_energy = 225
+		hidden_effect = { country_event = { id = STH_ferengi_flavour.11 } }
+	}
+}
+country_event = {
+	id = STH_ferengi_flavour.7
+	title = STH_ferengi_flavour.7.name
+	desc = STH_ferengi_flavour.7.desc
+	picture = sth_GFX_evt_ferengiDaboWheel
+	location = ROOT
+	is_triggered_only = yes
+	option = {
+		name = STH_ferengi_flavour.7.a
+		add_influence = -30
+	}
+	option = {
+		trigger = { has_country_resource = { type = energy amount > 99 } }
+		name = STH_ferengi_flavour.7.b
+		add_influence = -30
+		hidden_effect = { country_event = { id = STH_ferengi_flavour.11 } }
+	}
+}
+
+country_event = {
+	id = STH_ferengi_flavour.8
+	title = STH_ferengi_flavour.8.name
+	desc = STH_ferengi_flavour.8.desc
+	picture = sth_GFX_evt_ferengiDaboWheel
+	location = ROOT
+	is_triggered_only = yes
+	option = {
+		name = STH_ferengi_flavour.8.a
+		add_influence = 25
+		add_energy = 400
+	}
+	option = {
+		trigger = { has_country_resource = { type = energy amount > 99 } }
+		name = STH_ferengi_flavour.8.b
+		add_influence = 25
+		add_energy = 400
+		hidden_effect = { country_event = { id = STH_ferengi_flavour.11 } }
+	}
+}
+country_event = {
+	id = STH_ferengi_flavour.9
+	title = STH_ferengi_flavour.9.name
+	desc = STH_ferengi_flavour.9.desc
+	picture = sth_GFX_evt_ferengiDaboWheel
+	location = ROOT
+	is_triggered_only = yes
+	option = {
+		name = STH_ferengi_flavour.9.a
+		add_influence = 20
+		add_energy = 300
+	}
+	option = {
+		trigger = { has_country_resource = { type = energy amount > 99 } }
+		name = STH_ferengi_flavour.9.b
+		add_influence = 20
+		add_energy = 300
+		hidden_effect = { country_event = { id = STH_ferengi_flavour.11 } }
+	}
+}
+country_event = {
+	id = STH_ferengi_flavour.10
+	title = STH_ferengi_flavour.10.name
+	desc = STH_ferengi_flavour.10.desc
+	picture = sth_GFX_evt_ferengiDaboWheel
+	location = ROOT
+	is_triggered_only = yes
+	option = {
+		name = STH_ferengi_flavour.10.a
+		add_influence = -50
+	}
+	option = {
+		trigger = { has_country_resource = { type = energy amount > 99 } }
+		name = STH_ferengi_flavour.10.b
+		add_influence = -50
+		hidden_effect = { country_event = { id = STH_ferengi_flavour.11 } }
+	}
+}
+
+
+country_event = {
+	id = STH_ferengi_flavour.11
+	title = "STH_ferengi_flavour.11.name"
+	desc = "STH_ferengi_flavour.11.desc"
+	picture = sth_GFX_evt_ferengiDaboWheel
+	is_triggered_only = yes
+	immediate = { leader = { save_event_target_as = ruler } }
+	option = {
+		trigger = { has_country_resource = { type = energy amount > 99 } }
+		name = STH_ferengi_flavour.11.a
+		add_energy = -100
+		hidden_effect = {
+			random_list = {
+				0 = { country_event = { id = STH_ferengi_flavour.2 } } #Critical success
+				45 = { country_event = { id = STH_ferengi_flavour.3 } } #Success
+				55 = { country_event = { id = STH_ferengi_flavour.4 } } #Failure
+			}
+		}
+	}
+	option = {
+		trigger = { has_country_resource = { type = energy amount > 99 } }
+		name = STH_ferengi_flavour.11.b
+		add_energy = -100
+		hidden_effect = {
+			random_list = {
+				10 = { country_event = { id = STH_ferengi_flavour.2 } } #Critical success
+				30 = { country_event = { id = STH_ferengi_flavour.3 } } #Success
+				60 = { country_event = { id = STH_ferengi_flavour.4 } } #Failure
+			}
+		}
+	}
+	option = {
+		trigger = { has_country_resource = { type = energy amount > 149 } }
+		name = STH_ferengi_flavour.11.c
+		add_energy = -150
+		hidden_effect = {
+			random_list = {
+				0 = { country_event = { id = STH_ferengi_flavour.5 } } #Critical success
+				45 = { country_event = { id = STH_ferengi_flavour.6 } } #Success
+				55 = { country_event = { id = STH_ferengi_flavour.7 } } #Failure
+			}
+		}
+	}
+	option = {
+	trigger = { has_country_resource = { type = energy amount > 149 } }
+		name = STH_ferengi_flavour.11.d
+		add_energy = -150
+		hidden_effect = {
+			random_list = {
+				10 = { country_event = { id = STH_ferengi_flavour.5 } } #Critical success
+				30 = { country_event = { id = STH_ferengi_flavour.6 } } #Success
+				60 = { country_event = { id = STH_ferengi_flavour.7 } } #Failure
+			}
+		}
+	}
+	option = {
+		trigger = { has_country_resource = { type = energy amount > 199 } }
+		name = STH_ferengi_flavour.11.e
+		add_energy = -200
+		hidden_effect = {
+			random_list = {
+				15 = { country_event = { id = STH_ferengi_flavour.8 } } #Critical success
+				10 = { country_event = { id = STH_ferengi_flavour.9 } } #Success
+				75 = { country_event = { id = STH_ferengi_flavour.10 } } #Failure
+			}
+		}
+	}
+	option = { name = STH_ferengi_flavour.11.f }
+}

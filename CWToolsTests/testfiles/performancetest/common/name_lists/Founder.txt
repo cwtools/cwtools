@@ -1,0 +1,87 @@
+﻿### Founder
+Founder = {
+	randomized = no
+	
+	ship_names = {
+		generic = { "Attack Ship" "Kaza'kime" "Logano'gar" "Ammut'alar" "Kudak'Etan" "Subek'somac" "Jakar" "Tenak'talar" "Kar'ukal" "Vilak'iklan" "Talan'atar" }
+		corvette = { }
+		saber = { }
+		sovereign = { }
+		steamrunner = { "Battlecruiser" }		
+		adv_cruiser = { "Battleship" }
+		strike = { }			
+		constructor = { "Construction Vessel" }
+		colonizer = { "Colony Vessel" }
+		science = { "Science Vessel" }
+		transport = { "Transport Vessel" }
+		outpost_station = {
+			sequential_name = "Frontier Outpost"
+		}
+	}
+	
+	fleet_names = {
+		sequential_name = "%O% Fleet"
+	}
+	
+	army_names = {
+		defense_army = {
+			sequential_name = "%O% Guard"
+		}
+		assault_army = {
+			sequential_name = "%O% Liberation Force"
+		}
+		slave_army = {
+			sequential_name = "%O% Indentured Defence Force"
+		}
+		clone_army = { 
+			sequential_name = "%O% Clone Defence Force"
+		}
+		robotic_army = {
+			sequential_name = "%O% Mechanical Defence Force"
+		}
+		android_army = {
+			sequential_name = "%O% Synthetic Defence Force"
+		}
+		psionic_army = { 
+			sequential_name = "%O% Psi Defence Force"
+		}
+		xenomorph_army = {
+			sequential_name = "%O% Bio-Warfare Defence Force"
+		}
+		gene_warrior_army = {
+			sequential_name = "%O% Bio-Engineered Defence Force"
+		}
+	}
+
+	planet_names = {
+		generic = {
+			names = {  
+			}
+		}
+	}
+
+	### CHARACTERS
+	character_names = {
+		names1 = {
+			weight = 100
+			first_names_male = {
+				"Founder"
+			}
+			first_names_female = {
+				"Founder"
+			}
+			second_names = {
+				" "
+			}
+			regnal_first_names_male = { 
+				
+			}
+			regnal_first_names_female = { 
+				
+			}
+			regnal_second_names = { 
+				
+			}
+		}
+	}
+}

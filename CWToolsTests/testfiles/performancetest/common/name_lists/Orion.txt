@@ -1,0 +1,98 @@
+﻿### Orion
+Orion = {
+	randomized = no
+
+	ship_names = {
+		generic = {
+			Robber Looter Corsair Warbarge Slavemaster Ravager Pillager Brigand Marauder Despoiler Hijacker Prowler Hunter Cardsharp Buccaneer Jackal Opportunity "Opportune Exploit" Exploiter Escapade Feat Adventure Exploiter Enterprise "Opportune Enterprise" Bazaar Medina Attainer Kingmaker Venture "Errant Venture" Freebooter Cutpurse Endowment Speakeasy Constite Invigorator Innervater Animater Tradesman Ransom Bandit Highwayman Rustler Raider Plunderer Pirate Partisan Banditry Slaver Outlaw Kingpin Brigand Vigilante "Handsome Ransom" "Vile Buccaneer" "Vile Pride" "Wandering Shame" "Belt of Plunder" "Fearful Trident" "Wandering Blade" Footpad Crook Gangster Hooligan Racketeer Ravager Fugitive Pariah Mobster Drifter "Break Even" "Invisible Hand" Vixen Harpy Virago Harridan She-Devil Heartbreaker Slattern Wench Strumpet "Handsome Ransom" "Vile Buccaneer" "Vile Pride" "Wandering Shame" "Belt of Plunder" "Fearful Trident" "Wandering Blade"
+		}
+		corvette = {
+		}
+		saber = {
+		}
+		sovereign = {
+		}
+		steamrunner = {
+		}		
+		adv_cruiser = {
+		}
+		strike = {
+		}	
+		constructor = { }
+		colonizer = { }
+		science = { }
+		transport = { }
+		outpost_station = {
+			sequential_name = "Frontier Outpost"
+		}
+	}
+
+	fleet_names = {
+		sequential_name = "%O% Marauder Fleet"
+	}
+	
+	army_names = {
+		defense_army = {
+			sequential_name = "%O% Orion Blackguard"
+		}
+		assault_army = {
+			sequential_name = "%O% Raiders"
+		}
+		slave_army = {
+			sequential_name = "%O% Enslaved Gladiators"
+		}
+		clone_army = { 
+			sequential_name = "%O% Clone Defence Force"
+		}
+		robotic_army = {
+			sequential_name = "%O% Mechanical Defence Force"
+		}
+		android_army = {
+			sequential_name = "%O% Synthetic Defence Force"
+		}
+		psionic_army = { 
+			sequential_name = "%O% Psi Defence Force"
+		}
+		xenomorph_army = {
+			sequential_name = "%O% Bio-Warfare Defence Force"
+		}
+		gene_warrior_army = {
+			sequential_name = "%O% Bio-Engineered Defence Force"
+		}
+	}
+
+	planet_names = {
+		generic = {
+			names = {
+				Vem'ir Kammzdast Volgas Tini B'Morgia Dav'ir Zchol Syrenya Nolth Vab Thirat Faant Veska Gabok Qualf Daroskelar Gishu Jellor Gevaasiss Saissi Ngozzik Daimmerc Gosrum Vaitto Hege Vesane Givnaalas Thasu Naiddino Mego Tilaa
+			}
+		}
+	}
+
+
+	### CHARACTERS
+
+	character_names = {
+		names1 = {
+			weight = 100
+			first_names_male = {		
+				Arnet Holencas Harrad Harrad-Sar Kai Herrod Nalur Tevar Nallin Hubin Agachi Albrek Arnet Holencas Abnel Barak-Sar Barak Althori Balun Beldav Benara Bilat Cholifir Emark Faktim Gamashes Glachies Heilen Hjulah Holcomb Sorris Isolio Dolun Ignatin Juruh Kerav Keros Lifaq Liktor Mozinphar Nomab Ofish Otram Prochem Simri Sohola Teish Thentak Thylaster Tumbel U'taliis Voltab Wal Yungots
+			}
+			first_names_female = {
+				Navaar Maras D'Nesh D'Navaar Devna Vila Gaila Naila D'Nala Leata Marta Treir Anaria Gaeta Baeta Virilta Jaraas Shanna Zheeggu Shairur Maggoush Vashkinaa Nigella Gegavu Jigulaash Hadillu Shesso Taydaa Dadder Geessu Taiddou Thevissaar Neessosho Thinnouhnu Jevvouvaa Jannousaa Thahnu Mede Hedes Naggolle Seedduhniss Nevuhno Lerouhnar Lennesh Laydish Daini Dehnehnu Hehnovaa
+			}
+			second_names = {
+				" " 
+			}
+			regnal_first_names_male = {
+				Arnet Holencas Harrad Harrad-Sar Kai Herrod Nalur Tevar Nallin Hubin Agachi Albrek Arnet Holencas Abnel Barak-Sar Barak Althori Balun Beldav Benara Bilat Cholifir Emark Faktim Gamashes Glachies Heilen Hjulah Holcomb Sorris Isolio Dolun Ignatin Juruh Kerav Keros Lifaq Liktor Mozinphar Nomab Ofish Otram Prochem Simri Sohola Teish Thentak Thylaster Tumbel U'taliis Voltab Wal Yungots
+			}
+			regnal_first_names_female = {
+				Navaar Maras D'Nesh D'Navaar Devna Vila Gaila Naila D'Nala Leata Marta Treir Anaria Gaeta Baeta Virilta Jaraas Shanna Zheeggu Shairur Maggoush Vashkinaa Nigella Gegavu Jigulaash Hadillu Shesso Taydaa Dadder Geessu Taiddou Thevissaar Neessosho Thinnouhnu Jevvouvaa Jannousaa Thahnu Mede Hedes Naggolle Seedduhniss Nevuhno Lerouhnar Lennesh Laydish Daini Dehnehnu Hehnovaa
+				}
+			regnal_second_names = {
+				" "
+			}
+		}
+	}
+}

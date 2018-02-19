@@ -1,0 +1,41 @@
+############################
+# Faction events
+# Written by Walshicus
+############################
+
+namespace = STH_faction_events
+
+#Oralian Faction
+pop_faction_event = {
+	id = STH_faction_events.1
+	title = STH_faction_events.1.name
+	desc = { text = STH_faction_events.1.desc }
+
+	picture = GFX_evt_galactic_senate
+	show_sound = event_factions
+
+	is_triggered_only = yes
+	
+	trigger = {
+		#NOT = {
+		#	owner = { has_country_flag = first_faction }
+		#}
+	}
+	
+	after = {
+		hidden_effect = { owner = { set_country_flag = first_faction } }
+	}
+
+	option = {
+		name = OK
+		hidden_effect = {
+			owner = {
+				every_owned_planet = {
+					every_owned_pop = {
+						force_faction_evaluation = yes
+					}
+				}
+			}
+		}
+	}
+}

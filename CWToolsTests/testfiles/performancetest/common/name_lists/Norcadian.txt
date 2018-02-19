@@ -1,0 +1,97 @@
+﻿### Norcadian by EHKodiak fighting words mixed with tsunkatse terms
+Norcadian  = {
+	randomized = no
+
+	ship_names = {
+		generic = {
+		"Munkatse Plena" "Nissio" "Ponpa" "Pollice verso" "Pugnare" "Reciper Fertsun" "Ludi" "Tsunkatse" "Sine nitsun" "Spectsun" Essedarikatse Gallkatse Liberatse Manica Murmillo Retiarikatse Rudiarikatse Hoplonachkatse Sannis Thrax Venator Fascia Veteratse Rudis Sica Scutun Victor
+		}
+		corvette = {
+		}
+		saber = {
+		}
+		sovereign = {
+		}
+		steamrunner = {
+		}		
+		adv_cruiser = {
+		}
+		strike = {
+		}	
+		constructor = { }
+		colonizer = { }
+		science = { }
+		transport = { }
+		outpost_station = {
+			sequential_name = "Broadcast Outpost"
+		}
+	}
+
+	fleet_names = {
+		sequential_name = "%O% Fleet"
+	}
+	
+	army_names = {
+		defense_army = {
+			sequential_name = "%O% Guard"
+		}
+		assault_army = {
+			sequential_name = "%O% Gladiators"
+		}
+		slave_army = {
+			sequential_name = "%O% Indentured Gladiators"
+		}
+		clone_army = { 
+			sequential_name = "%O% Clone Gladiators"
+		}
+		robotic_army = {
+			sequential_name = "%O% Mechanised Gladiators"
+		}
+		android_army = {
+			sequential_name = "%O% Synthetic Gladiators"
+		}
+		psionic_army = { 
+			sequential_name = "%O% Psi Gladiators"
+		}
+		xenomorph_army = {
+			sequential_name = "%O% Bio-Warfare Gladiators"
+		}
+		gene_warrior_army = {
+			sequential_name = "%O% Bio-Engineered Gladiators"
+		}
+	}
+
+	planet_names = {
+		generic = {
+			names = { 
+			}
+		}
+	}
+
+
+	### CHARACTERS 
+
+	character_names = {
+		names1 = {
+			weight = 40
+			first_names_male = {
+			Penk Lenk Harank Bulhak Engelbak Urnk Holenk Hork Herk Koin Harrk Nolur Tevor Noll Hubin Ugok Ulbrak Urnk Holen Uben Borok Barok Ulthor Bolunk Beldon Benor Bilot Cholif Emork Foktim Gomosh Gloch Heilen Hjuloh Holcom Sorris Isol Dolun Ignot Juruh Kerov Keros Lifoq Liktor Mozin Nomob Ofis Otrom Prochem Simri Sohol Teish Thentok Thylost Tumbel Utol Voltob Wol Yungots
+			}
+			first_names_female = {
+			Mezoti Nezeti Maraz Nizati Dezna Viti Gaiti Naiti Datzi Lezata Mazta Trezir Aatizia Gazeta Bazeta Viritzita Jaratiz Shanna Zheeggu Shairur Maggizh Vazhkinati Nigelti Gegazu Jigutitizh Haditzilu Shezzo Taydati Dadder Geezzu Taiddi Thezizeti Nezozo Thiza Jezzati Jannizati Thahnu Mede Hedez Naggolle Seedduhtizz Nezuhno Lerihati Lennezh Laydizh Daziti Dehnehnu Hehnozati Kriziti Diziti Anezra Tiziti Mati Maritzi Annitzi Guizepati Rozitzi Roza Angezati Giozititi Terezati Luczati Carmezati Caterizati Francezati Antoniezati Carati Elezati Concezati Rizati Margherizati Frititi Paati Vitozati Ariititi Orizati Nizati Catiti Stefititi Gizezati Catiudzati Lorenzati Gabriezati Izabezati Valezati Lucrezati Dizati Benedezati Piezati
+			}
+			second_names = {
+			""
+			}
+			regnal_first_names_male = {
+			Penk Lenk Harank Bulhak Engelbak Urnk Holenk Hork Herk Koin Harrk Nolur Tevor Noll Hubin Ugok Ulbrak Urnk Holen Uben Borok Barok Ulthor Bolunk Beldon Benor Bilot Cholif Emork Foktim Gomosh Gloch Heilen Hjuloh Holcom Sorris Isol Dolun Ignot Juruh Kerov Keros Lifoq Liktor Mozin Nomob Ofis Otrom Prochem Simri Sohol Teish Thentok Thylost Tumbel Utol Voltob Wol Yungots
+			}
+			regnal_first_names_female = {
+			Mezoti Nezeti Maraz Nizati Dezna Viti Gaiti Naiti Datzi Lezata Mazta Trezir Aatizia Gazeta Bazeta Viritzita Jaratiz Shanna Zheeggu Shairur Maggizh Vazhkinati Nigelti Gegazu Jigutitizh Haditzilu Shezzo Taydati Dadder Geezzu Taiddi Thezizeti Nezozo Thiza Jezzati Jannizati Thahnu Mede Hedez Naggolle Seedduhtizz Nezuhno Lerihati Lennezh Laydizh Daziti Dehnehnu Hehnozati Kriziti Diziti Anezra Tiziti Mati Maritzi Annitzi Guizepati Rozitzi Roza Angezati Giozititi Terezati Luczati Carmezati Caterizati Francezati Antoniezati Carati Elezati Concezati Rizati Margherizati Frititi Paati Vitozati Ariititi Orizati Nizati Catiti Stefititi Gizezati Catiudzati Lorenzati Gabriezati Izabezati Valezati Lucrezati Dizati Benedezati Piezati
+			}
+			regnal_second_names = {
+			""
+			}
+		}
+	}
+}

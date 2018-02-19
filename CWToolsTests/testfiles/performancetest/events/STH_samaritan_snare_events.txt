@@ -1,0 +1,220 @@
+namespace = STH_samaritan_snare_event
+
+ship_event = {
+	id = STH_samaritan_snare_event.1
+	title = STH_samaritan_snare_event.1.name
+	desc = STH_samaritan_snare_event.1.desc
+	picture = sth_GFX_evt_samaritanSnare1
+	location = FROM
+	is_triggered_only = yes
+	immediate = { 
+		fleet = { set_event_locked = yes } 
+		leader = { save_event_target_as = leader }
+	}
+	option = {
+		name = STH_samaritan_snare_event.1.a
+		ship_event = { id = STH_samaritan_snare_event.2 days = 35 }
+	}
+	option = {
+		name = STH_samaritan_snare_event.1.b
+		owner = { add_influence = -25 }
+		hidden_effect = { fleet = { set_event_locked = no } }
+	}
+}
+
+ship_event = {
+	id = STH_samaritan_snare_event.2
+	title = STH_samaritan_snare_event.2.name
+	desc = STH_samaritan_snare_event.2.desc
+	picture = sth_GFX_evt_samaritanSnare1
+	location = FROM
+	is_triggered_only = yes
+	immediate = { leader = { save_event_target_as = leader } }
+	option = {
+		name = STH_samaritan_snare_event.2.a
+		hidden_effect = {
+			random_list = {
+				50 = { ship_event = { id = STH_samaritan_snare_event.3 }}
+				50 = { ship_event = { id = STH_samaritan_snare_event.4 }}
+			}
+		}
+	}
+	option = {
+		name = STH_samaritan_snare_event.2.b
+		ship_event = { id = STH_samaritan_snare_event.5 }
+	}
+}
+
+ship_event = {
+	id = STH_samaritan_snare_event.3
+	title = STH_samaritan_snare_event.3.name
+	desc = STH_samaritan_snare_event.3.desc
+	picture = sth_GFX_evt_samaritanSnare1
+	location = FROM
+	is_triggered_only = yes
+	immediate = { 
+		leader = { save_event_target_as = leader }
+	}
+	option = { 
+		name = STH_samaritan_snare_event.3.a
+	}
+	after = { hidden_effect = { fleet = { set_event_locked = no } } }
+}
+
+ship_event = {
+	id = STH_samaritan_snare_event.4
+	title = STH_samaritan_snare_event.4.name
+	desc = STH_samaritan_snare_event.4.desc
+	picture = sth_GFX_evt_samaritanSnare1
+	location = FROM
+	is_triggered_only = yes
+	immediate = { leader = { save_event_target_as = leader } }
+	option = {
+		name = STH_samaritan_snare_event.4.a
+		ship_event = { id = STH_samaritan_snare_event.6 days = 25 }
+	}
+}
+
+ship_event = {
+	id = STH_samaritan_snare_event.5
+	title = STH_samaritan_snare_event.5.name
+	desc = STH_samaritan_snare_event.5.desc
+	picture = sth_GFX_evt_samaritanSnare1
+	location = FROM
+	is_triggered_only = yes
+	immediate = { leader = { save_event_target_as = leader } }
+	option = {
+		name = STH_samaritan_snare_event.5.a
+		ship_event = { id = STH_samaritan_snare_event.6 days = 25 }
+	}
+}
+
+
+ship_event = {
+	id = STH_samaritan_snare_event.6
+	title = STH_samaritan_snare_event.6.name
+	desc = STH_samaritan_snare_event.6.desc
+	picture = sth_GFX_evt_samaritanSnare1
+	location = FROM
+	is_triggered_only = yes
+	immediate = { leader = { save_event_target_as = leader } }
+	option = {
+		name = STH_samaritan_snare_event.6.a
+		hidden_effect = {
+			random_list = {
+				85 = { ship_event = { id = STH_samaritan_snare_event.7 }}
+				15 = { ship_event = { id = STH_samaritan_snare_event.8 }}
+			}	
+		}
+	}
+	option = {
+		name = STH_samaritan_snare_event.6.b
+		hidden_effect = {
+			random_list = {
+				30 = { ship_event = { id = STH_samaritan_snare_event.9 }}
+				70 = { ship_event = { id = STH_samaritan_snare_event.10 }}
+			}
+		}
+	}
+}
+
+ship_event = {
+	id = STH_samaritan_snare_event.7
+	title = STH_samaritan_snare_event.7.name
+	desc = STH_samaritan_snare_event.7.desc
+	picture = sth_GFX_evt_samaritanSnare1
+	location = FROM
+	is_triggered_only = yes
+	immediate = { leader = { save_event_target_as = leader } }
+	option = {
+		name = STH_samaritan_snare_event.7.a
+		owner = { add_influence = 50 }
+	}
+	after = { hidden_effect = { fleet = { set_event_locked = no } } }
+}
+
+ship_event = {
+	id = STH_samaritan_snare_event.8
+	title = STH_samaritan_snare_event.8.name
+	desc = STH_samaritan_snare_event.8.desc
+	picture = sth_GFX_evt_starshipExplosion
+	location = FROM
+	is_triggered_only = yes
+	immediate = { leader = { save_event_target_as = leader } }
+	option = {
+		name = STH_samaritan_snare_event.8.a
+		leader = { kill_leader = { type = scientist show_notification = no } }
+	}
+	after = { hidden_effect = { fleet = { set_event_locked = no } } }
+}
+
+ship_event = {
+	id = STH_samaritan_snare_event.9
+	title = STH_samaritan_snare_event.9.name
+	desc = STH_samaritan_snare_event.9.desc
+	picture = sth_GFX_evt_samaritanSnare1
+	location = FROM
+	is_triggered_only = yes
+	immediate = { leader = { save_event_target_as = leader } }
+	option = {
+		name = STH_samaritan_snare_event.9.a
+		ship_event = { id = STH_samaritan_snare_event.11 }
+	}
+}
+
+ship_event = {
+	id = STH_samaritan_snare_event.10
+	title = STH_samaritan_snare_event.10.name
+	desc = STH_samaritan_snare_event.10.desc
+	picture = sth_GFX_evt_starshipExplosion
+	location = FROM
+	is_triggered_only = yes
+	immediate = { leader = { save_event_target_as = leader } }
+	option = {
+		name = STH_samaritan_snare_event.10.a
+		leader = { kill_leader = { type = scientist show_notification = no } }
+	}
+	after = { hidden_effect = { fleet = { set_event_locked = no } } }
+}
+
+
+ship_event = {
+	id = STH_samaritan_snare_event.11
+	title = STH_samaritan_snare_event.11.name
+	desc = STH_samaritan_snare_event.11.desc
+	picture = sth_GFX_evt_samaritanSnare1
+	location = FROM
+	is_triggered_only = yes
+	immediate = { leader = { save_event_target_as = leader } }
+	option = {
+		name = STH_samaritan_snare_event.11.a
+		owner = { add_influence = 50 }
+	}
+	option = {
+		name = STH_samaritan_snare_event.11.b
+		owner = { add_minerals = 200 }
+	}
+	option = {
+		name = STH_samaritan_snare_event.11.c
+		owner = {
+			add_physics_research = 75
+			add_engineering_research = 75
+		}
+	}
+	after = { hidden_effect = { fleet = { set_event_locked = no } } }
+}
+
+
+ship_event = {
+	id = STH_samaritan_snare_event.100
+	title = STH_samaritan_snare_event.100.name
+	desc = STH_samaritan_snare_event.100.desc
+	picture = sth_GFX_evt_doomsday_1
+	location = FROM
+	is_triggered_only = yes
+	immediate = { leader = { save_event_target_as = leader } }
+	option = {
+		name = STH_samaritan_snare_event.100.a
+	}
+	after = { hidden_effect = { fleet = { set_event_locked = no } } }
+}

@@ -1,0 +1,113 @@
+@distance = 30
+@base_moon_distance = 10
+
+#Ferengi
+ferengi_homeworld = {
+	name = "Ventarus Idrilon"
+	class = "sc_k"
+	asteroids_distance = 88
+	flags = { ferengi_homeworld }
+	init_effect = { log = "ferengi homeworld" }
+	usage = custom_empire
+	max_instances = 1
+	planet = { name = "Ventarus Idrilon" class = "pc_k_star" orbit_distance = 0 orbit_angle = 1 size = 30 has_ring = no }
+	change_orbit = { min = 20 max = 30}
+	planet = {
+		count = 3
+		orbit_distance = { min = 20 max = 30 }
+		size = { min = 8 max = 12 }
+		class = rl_unhabitable_planets
+		orbit_angle = { min = 90 max = 270 }
+		change_orbit = @base_moon_distance
+		moon = { count = { min = 0 max = 1 } size = { min = 5 max = 8 } class = rl_unhabitable_planets orbit_angle = { min = 90 max = 270 } orbit_distance = 8 }
+	}
+	planet = {
+		name = "Ferenginar"
+		class = pc_m1_class
+		orbit_distance = 20
+		orbit_angle = 220
+		size = { min = 22 max = 25 }
+		starting_planet = yes
+		has_ring = no
+		tile_blockers = none
+		modifiers = none
+		init_effect = { prevent_anomaly = yes }
+		init_effect = {
+			if = {
+				limit = { NOT = { any_country = { has_country_flag = ferengi_alliance } } }
+				create_species = { 
+				    name = "Ferengi" 
+				    class = FER 
+				    portrait = ferengi 
+				    homeworld = THIS 
+				    traits = { 
+				        trait="trait_industrious"
+                    	trait="trait_thrifty"
+                    	trait="trait_wasteful"
+                    	trait="trait_coward"
+						ideal_planet_class = "pc_m1_class" 
+					} 
+				}
+				last_created_species = { save_global_event_target_as = ferengiSpecies }
+				create_country = {
+					name = "NAME_ferengi_alliance"
+					type = default
+					ignore_initial_colony_error = yes
+					civics = { civic = "civic_ritualized_greed" civic = "civic_cutthroat_politics" }
+					authority = auth_oligarchic
+					name_list = "Ferengi"
+					ethos = { ethic = "ethic_egalitarian" ethic = "ethic_fanatic_materialist" }
+					species = event_target:ferengiSpecies
+					flag = {
+						icon = { category = "trek" file = "Ferengi.dds" }
+						background = { category = "backgrounds" file = "00_solid.dds" }
+						colors = { "customcolor1359" "black" "null" "null" }
+					}
+					ship_prefix = "FMS"
+					effect = {
+						set_graphical_culture = ferengi_01
+						set_country_flag = ferengi_alliance
+						set_country_flag = custom_start_screen
+						set_country_flag = generic_ent
+						set_country_flag = alpha_beta_empire
+						set_country_flag = sth_medium_galaxy
+						set_country_flag = init_spawned
+						set_country_flag = botf_major
+						save_global_event_target_as = ferengi_alliance
+					}
+				}
+				create_colony = { owner = event_target:ferengi_alliance species = event_target:ferengiSpecies ethos = owner }
+			}
+			set_planet_flag = ferenginar
+			set_capital = yes
+			random_country = {
+				limit = { has_country_flag = ferengi_alliance }
+				save_global_event_target_as = ferengi_alliance
+				add_appropriate_start_techs = yes
+				give_technology = { tech = "tech_society_rules_376" message = no }
+				species = { save_global_event_target_as = ferengiSpecies }
+            }
+			set_owner = event_target:ferengi_alliance
+			generate_major_empire_start_buildings = yes
+			generate_major_empire_start_pops = yes
+			generate_major_empire_start_fleets = yes
+			set_name = "Ferenginar"
+		}
+	}
+	planet = {
+		count = 2
+		orbit_distance = { min = 25 max = 35 }
+		class = rl_unhabitable_planets
+		orbit_angle = { min = 90 max = 270 }
+		change_orbit = @base_moon_distance
+		moon = { count = { min = 0 max = 1 } class = rl_unhabitable_planets orbit_angle = { min = 90 max = 270 } orbit_distance = 5 }
+	}
+	change_orbit = { min = 25 max = 35 }
+	planet = {
+		count = 1
+		class = rl_unhabitable_planets
+		orbit_angle = { min = 90 max = 270 }
+		init_effect = { orbital_deposit_tile = { clear_deposits = yes add_deposit = d_sr_latinum_29_deposit } }
+		moon = { count = { min = 0 max = 1 } class = rl_unhabitable_planets orbit_angle = { min = 90 max = 270 } orbit_distance = 5 }
+	}
+}

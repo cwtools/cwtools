@@ -1,0 +1,139 @@
+########################
+# STH anomaly List
+########################
+# potential = ship scope
+
+# All discoveries assigned weight 1 unless otherwise stated
+#these are different anomalies that occur in each category.
+
+#Sleeping Dogs
+anomaly = {
+	event = STH_sleepingDogs_event.1
+	category = STH_sleepingDogs_category
+	weight = 1
+	potential = { always = yes }
+}
+
+#Arsenal of Freedom
+anomaly = {
+	event = STH_arsenalOfFreedom_event.1
+	category = STH_arsenalOfFreedom_category
+	weight = 1
+	potential = { always = yes }
+}
+
+#The Terratin Incident
+anomaly = {
+	event = STH_theTerratinIncident_event.1
+	category = STH_theTerratinIncident_category
+	weight = 1
+	potential = { always = yes }
+}
+
+#The Silent Enemy
+anomaly = {
+	event = STH_theSilentEnemy_event.1
+	category = STH_theSilentEnemy_category
+	weight = 1
+	potential = { always = yes }
+}
+
+#Strange New World
+anomaly = {
+	event = STH_strangeNewWorld_event.1
+	category = STH_strangeNewWorld_category
+	weight = 1
+	potential = { always = yes }
+}
+
+#Gamesters of Triskelion
+anomaly = {
+	event = STH_gamestersOfTriskelion_event.3
+	category = STH_gamestersOfTriskelion_category
+	weight = 1
+	potential = { always = yes }
+}
+
+# Mirror, Mirror
+anomaly = {
+	event = STH_mirrorMirror_event.1000
+	category = STH_mirrorMirror_category
+	weight = 1
+	potential = { always = yes }
+}
+
+#The Skin of Evil
+anomaly = {
+    event = STH_theSkinOfEvil_event.1
+    category = STH_theSkinOfEvil_category
+    weight = 1
+    potential = { always = yes }
+}
+
+# Space Seed
+anomaly = {
+	event = STH_space_seed_event.1
+	category = STH_space_seed_category
+	weight = 100
+	potential = { owner = {  NOT = { has_country_flag = STH_space_seed_BotanyBay } } }
+}
+anomaly = {
+	event = STH_space_seed_event.1000
+	category = STH_space_seed_category
+	weight = 200
+	potential = { owner = { NOT = { has_country_flag = STH_space_seed_Bartlet } } }
+}
+anomaly = {
+	event = STH_space_seed_event.2000
+	category = STH_space_seed_category
+	weight = 200
+	potential = { owner = {  NOT = { has_country_flag = STH_space_seed_McGarry } } }
+}
+anomaly = {
+	event = STH_space_seed_event.3000
+	category = STH_space_seed_category
+	weight = 200
+	potential = { owner = {  NOT = { has_country_flag = STH_space_seed_Lyman } } }
+}
+anomaly = {
+	event = STH_space_seed_event.4000
+	category = STH_space_seed_category
+	weight = 200
+	potential = { owner = {  NOT = { has_country_flag = STH_space_seed_Ziegler } } }
+}
+anomaly = {
+	event = STH_space_seed_event.5000
+	category = STH_space_seed_category
+	weight = 200
+	potential = { owner = {  NOT = { has_country_flag = STH_space_seed_Marbury } } }
+}
+anomaly = {
+	event = STH_space_seed_event.10000
+	category = STH_space_seed_category
+	weight = 100
+	potential = { always = yes }
+}
+
+# Terra Nova
+anomaly = {
+	event = STH_terra_nova_event.1
+	category = STH_terra_nova_category
+	weight = 1
+	potential = { owner = { NOT = { has_country_flag = TERRA_NOVA_FLAG } } }
+}
+
+# De Declaratem
+anomaly = {
+	event = STH_deDeclaratem_event.1
+	category = STH_de_declaratem_category
+	weight = 1
+	potential = { always = yes }
+}
+
+# Samaritan Snare
+anomaly = {
+	event = STH_samaritan_snare_event.1
+	category = STH_samaritan_snare_category
+	weight = 1
+	potential = { always = yes }
+}

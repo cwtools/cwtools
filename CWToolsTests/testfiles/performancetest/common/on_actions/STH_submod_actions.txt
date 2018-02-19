@@ -1,0 +1,9 @@
+# Triggers when the game starts
+on_game_start = {
+	events = { sth_submod.1 }
+}
+
+# No scope, like on_game_start
+on_yearly_pulse = {
+	events = { sth_submod.1 }
+}

@@ -1,0 +1,244 @@
+
+set_jem_hadar_characteristics = {
+	change_species_characteristics = {
+		pops_can_reproduce = no
+		pops_can_join_factions = no
+		pops_can_migrate = yes
+		can_generate_leaders = yes
+		pops_can_be_slaves = yes
+		pops_have_happiness = yes
+		consumer_goods = no
+		can_be_modified = yes
+		pops_auto_growth = 1
+		pop_maintenance = 0
+		new_pop_resource_requirement = { type = clone_food value = 10 }
+	}
+}
+
+set_vorta_characteristics = {
+	change_species_characteristics = {
+		pops_can_reproduce = no
+		pops_can_join_factions = yes
+		pops_can_migrate = yes
+		can_generate_leaders = yes
+		pops_can_be_slaves = yes
+		pops_have_happiness = yes
+		consumer_goods = yes
+		can_be_modified = yes
+		pops_auto_growth = 1
+		pop_maintenance = 0
+		new_pop_resource_requirement = { type = clone_food value = 10 }
+	}
+}
+
+set_jem_hadar_name = {
+	random_list = {
+		10 = { set_name = "Duran'Zuma" }
+		10 = { set_name = "Duran'Torax" }
+		10 = { set_name = "Tazen'Agar" }
+		10 = { set_name = "Arak'Kara" }
+		10 = { set_name = "Amat'Iklan" }
+		10 = { set_name = "Duran'Agar" }
+		10 = { set_name = "Meso'Klan" }
+		10 = { set_name = "Omet'Talan" }
+		10 = { set_name = "Talak'Iklan" }
+		10 = { set_name = "Talak'Talan" }
+		10 = { set_name = "Virak'Adar" }
+		10 = { set_name = "Yak'Son" }
+		10 = { set_name = "Lamat'Zuma" }
+		10 = { set_name = "Lamat'Taral" }
+		10 = { set_name = "Ikat'Adar" }
+		10 = { set_name = "Limara'Torax" }
+		10 = { set_name = "Meso'Son" }
+		10 = { set_name = "Temo'Rax" }
+		10 = { set_name = "Goran'Talan" }
+		10 = { set_name = "Meso'Zuma" }
+		10 = { set_name = "Ixtana'Etan" }
+		10 = { set_name = "Toman'Klan" }
+		10 = { set_name = "Omet'Son" }
+		10 = { set_name = "Ixtana'Talon" }
+		10 = { set_name = "Virak'Klan" }
+		10 = { set_name = "Meso'Torax" }
+		10 = { set_name = "Arak'Ika" }
+		10 = { set_name = "Omet'Igan" }
+		10 = { set_name = "Arak'Talan" }
+		10 = { set_name = "Amat'Ika" }
+		10 = { set_name = "Goran'Igan" }
+		10 = { set_name = "Amat'Talon" }
+		10 = { set_name = "Remata'Son" }
+		10 = { set_name = "Tazen'Zuma" }
+		10 = { set_name = "Tazen'Taral" }
+		10 = { set_name = "Temo'Clan" }
+		10 = { set_name = "Omet'Rax" }
+		10 = { set_name = "Temo'Taral" }
+		10 = { set_name = "Remata'Adar" }
+		10 = { set_name = "Virak'Talon" }
+		10 = { set_name = "Goran'Agar" }
+		10 = { set_name = "Limara'Kara" }
+		10 = { set_name = "Talak'Clan" }
+		10 = { set_name = "Meso'Kara" }
+		10 = { set_name = "Ikat'Miro" }
+		10 = { set_name = "Goran'Kara" }
+		10 = { set_name = "Remata'Rax" }
+		10 = { set_name = "Kudak'Klan" }
+		10 = { set_name = "Kudak'Rax" }
+		10 = { set_name = "Meso'Ika" }
+		10 = { set_name = "Yak'Igan" }
+		10 = { set_name = "Limara'Son" }
+		10 = { set_name = "Yak'Zuma" }
+		10 = { set_name = "Virak'Son" }
+		10 = { set_name = "Toman'Taral" }
+		10 = { set_name = "Virak'Ika" }
+		10 = { set_name = "Yak'Iklan" }
+		10 = { set_name = "Omet'Taral" }
+		10 = { set_name = "Duran'Talan" }
+		10 = { set_name = "Toman'Agar" }
+		10 = { set_name = "Toman'Igan" }
+		10 = { set_name = "Ikat'Etan" }
+		10 = { set_name = "Virak'Talan" }
+		10 = { set_name = "Goran'Zuma" }
+		10 = { set_name = "Tazen'Kara" }
+		10 = { set_name = "Ikat'Talan" }
+		10 = { set_name = "Limara'Ukan" }
+		10 = { set_name = "Omet'Kara" }
+		10 = { set_name = "Omet'Zuma" }
+		10 = { set_name = "Meso'Agar" }
+		10 = { set_name = "Meso'Talon" }
+		10 = { set_name = "Ixtana'Agar" }
+		10 = { set_name = "Limara'Klan" }
+		10 = { set_name = "Kudak'Son" }
+		10 = { set_name = "Arak'Agar" }
+		10 = { set_name = "Lamat'Etan" }
+		10 = { set_name = "Talak'Ukan" }
+		10 = { set_name = "Duran'Ika" }
+		10 = { set_name = "Goran'Ika" }
+		10 = { set_name = "Tazen'Klan" }
+		10 = { set_name = "Virak'Agar" }
+		10 = { set_name = "Virak'Rax" }
+		10 = { set_name = "Goran'Clan" }
+		10 = { set_name = "Omet'Iklan" }
+		10 = { set_name = "Ikat'Ika" }
+		10 = { set_name = "Goran'Ukan" }
+		10 = { set_name = "Virak'Taral" }
+		10 = { set_name = "Toman'Clan" }
+		10 = { set_name = "Ikat'Iklan" }
+		10 = { set_name = "Kudak'Etan" }
+		10 = { set_name = "Remata'Etan" }
+		10 = { set_name = "Remata'Klan" }
+		10 = { set_name = "Limara'Talan" }
+		10 = { set_name = "Limara'Clan" }
+		10 = { set_name = "Talak'Klan" }
+		10 = { set_name = "Amat'Agar" }
+		10 = { set_name = "Ixtana'Talan" }
+		10 = { set_name = "Temo'Adar" }
+		10 = { set_name = "Duran'Iklan" }
+		10 = { set_name = "Arak'Igan" }
+	}
+}
+set_borg_name = { 
+	random_list = { 
+		10 = { set_name = "One of Seven" } 
+		10 = { set_name = "Two of Seven" } 
+		10 = { set_name = "Three of Seven" } 
+		10 = { set_name = "Four of Seven" } 
+		10 = { set_name = "Five of Seven" } 
+		10 = { set_name = "Six of Seven" } 
+		10 = { set_name = "Seven of Seven" } 
+		10 = { set_name = "One of Eight" } 
+		10 = { set_name = "Two of Eight" } 
+		10 = { set_name = "Three of Eight" } 
+		10 = { set_name = "Four of Eight" } 
+		10 = { set_name = "Five of Eight" } 
+		10 = { set_name = "Six of Eight" } 
+		10 = { set_name = "Seven of Eight" } 
+		10 = { set_name = "Eight of Eight" } 
+		10 = { set_name = "One of Nine" } 
+		10 = { set_name = "Two of Nine" } 
+		10 = { set_name = "Three of Nine" } 
+		10 = { set_name = "Four of Nine" } 
+		10 = { set_name = "Five of Nine" } 
+		10 = { set_name = "Six of Nine" } 
+		10 = { set_name = "Seven of Nine" } 
+		10 = { set_name = "Eight of Nine" } 
+		10 = { set_name = "Nine of Nine" } 
+		10 = { set_name = "One of Ten" } 
+		10 = { set_name = "Two of Ten" } 
+		10 = { set_name = "Three of Ten" } 
+		10 = { set_name = "Four of Ten" } 
+		10 = { set_name = "Five of Ten" } 
+		10 = { set_name = "Six of Ten" } 
+		10 = { set_name = "Seven of Ten" } 
+		10 = { set_name = "Eight of Ten" } 
+		10 = { set_name = "Nine of Ten" } 
+		10 = { set_name = "Ten of Ten" } 
+		10 = { set_name = "One of Twenty" } 
+		10 = { set_name = "Two of Twenty" } 
+		10 = { set_name = "Three of Twenty" } 
+		10 = { set_name = "Four of Twenty" } 
+		10 = { set_name = "Five of Twenty" } 
+		10 = { set_name = "Six of Twenty" } 
+		10 = { set_name = "Seven of Twenty" } 
+		10 = { set_name = "Eight of Twenty" } 
+		10 = { set_name = "Nine of Twenty" } 
+		10 = { set_name = "Ten of Twenty" } 
+		10 = { set_name = "Eleven of Twenty" } 
+		10 = { set_name = "Twelve of Twenty" } 
+		10 = { set_name = "Thirteen of Twenty" } 
+		10 = { set_name = "Fourteen of Twenty" } 
+		10 = { set_name = "Fifteen of Twenty" } 
+		10 = { set_name = "Sixteen of Twenty" } 
+		10 = { set_name = "Seventeen of Twenty" } 
+		10 = { set_name = "Eighteen of Twenty" } 
+		10 = { set_name = "Nineteen of Twenty" } 
+		10 = { set_name = "Twenty of Twenty" }
+	}
+}
+
+set_darsay_name = {
+	if = {
+		limit = { gender = male }
+		random_list = {
+			10 = { set_name = "Ihat" }
+			10 = { set_name = "Korgano" }
+			10 = { set_name = "Mahat" }
+			10 = { set_name = "Korhat" }
+			10 = { set_name = "Margano" }
+			10 = { set_name = "Marganat" }
+			10 = { set_name = "Igano" }
+			10 = { set_name = "D'Iha" }
+			10 = { set_name = "D'argat" }
+			10 = { set_name = "Korha" }
+			10 = { set_name = "D'Iho" }
+			10 = { set_name = "I'argat" }
+			10 = { set_name = "Gano" }
+			10 = { set_name = "R'gat" }
+			10 = { set_name = "D'ar" }
+			10 = { set_name = "R'Orhan" }
+			10 = { set_name = "Iganor'a" }
+			10 = { set_name = "Margan'Orh" }
+		}
+		else = {
+			random_list = {
+				10 = { set_name = "Masaka" }
+				10 = { set_name = "Iha" }
+				10 = { set_name = "Kora" }
+				10 = { set_name = "Seka" }
+				10 = { set_name = "Lesaka" }
+				10 = { set_name = "Lora" }
+				10 = { set_name = "Makara" }
+				10 = { set_name = "D'Irsa" }
+				10 = { set_name = "D'gana" }
+				10 = { set_name = "Masrana" }
+				10 = { set_name = "Mana" }
+				10 = { set_name = "Masagana" }
+				10 = { set_name = "Lona" }
+				10 = { set_name = "Sekna" }
+				10 = { set_name = "M'Masakaa" }
+				10 = { set_name = "Maoe Ko" }
+				10 = { set_name = "Masak Lor" }
+				10 = { set_name = "Ko'ganna" }
+			}
+		}
+	}
+}
+

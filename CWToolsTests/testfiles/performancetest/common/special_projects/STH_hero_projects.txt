@@ -1,0 +1,195 @@
+# Available requirements:
+#
+#	SKILLS
+#	skill = 2
+#
+#	LEADER
+#	leader = scientist
+#	leader = admiral
+#	leader = general
+#	leader = ruler
+#	leader = governor
+#	
+#	MILITARY SHIPS
+#	shipclass_military = 1
+#	
+#	CIVILIAN SHIPS
+#	shipclass_constructor = 2
+#	shipclass_science_ship = 1
+#	shipclass_colonizer = 2
+#	
+#	ARMIES
+#	shipclass_transport = 1
+#	assault_armies = 2
+#	defense_armies = 1
+#	
+#	STATIONS
+#	research_station = yes
+#	mining_station = yes
+#	observation_station = yes
+#
+#	SCOPES
+#	abort_trigger
+#	this = country (project owner)
+#	from = event scope (planet or ship, MIGHT NOT EXIST)
+#	fromfrom = project creation scope (usually equals location)
+#	
+#	on_success
+#	this = event scope (ship or planet)
+#	from = project creation scope (usually equals location)
+#	
+#	on_fail
+#	this = country (project owner)
+#	from = project creation scope (usually equals location)
+
+#Use Admiral
+
+special_project = {
+	key = "HERO_DIPLOMATIC_MISSION_1_PROJECT"
+	days_to_research = 10
+	timelimit = 1800
+	tech_department = society_technology
+	picture = sth_GFX_evt_heroDiplomacy1
+	icon = "gfx/interface/icons/situation_log/situation_log_quest.dds"
+	event_scope = ship_event	
+	requirements = {
+		shipclass_military = 1
+		leader = admiral
+		has_trait = leader_trait_hero
+	}
+	on_success = {
+		fleet = { 
+			random_list = {
+				10 = { #Terrible
+					modifier = { factor = 2 leader = { has_level < 2 } }
+					fleet_event = { id = STH_hero_mission.2 } 
+				} 
+				15 = { #Bad
+					modifier = { factor = 2 leader = { has_level < 3 } }
+					fleet_event = { id = STH_hero_mission.5 } 
+				} 
+				20 = { #Average
+					modifier = { factor = 2 leader = { has_level > 2 } }
+					fleet_event = { id = STH_hero_mission.8 } 
+				} 
+				15 = { #Good
+					modifier = { factor = 2 leader = { has_level > 3 } }
+					fleet_event = { id = STH_hero_mission.10 } 
+				} 
+				10 = { #Great
+					modifier = { factor = 2 leader = { has_level > 4 } }
+					fleet_event = { id = STH_hero_mission.12 } 
+				} 
+			}
+		}
+	}
+	on_fail = {
+		country_event = { id = STH_hero_mission.18 }
+	}
+}
+
+special_project = {
+	key = "INVESTIGATE_GLENN_PROJECT_1"
+	cost = 0
+	days_to_research = 30
+	tech_department = engineering_technology
+	picture = sth_GFX_evt_ussGlenn
+	event_scope = ship_event
+	requirements = { shipclass_military = 1 leader = admiral }
+	on_success = { 
+		ship_event = { id = STH_federation_story.803 }
+	}
+}
+
+
+
+special_project = {
+	key = "NX_WEAPONS_PROJECT_1"
+	cost = 0
+	days_to_research = 360
+	tech_department = physics_technology
+	picture = sth_GFX_evt_nx01
+	event_scope = ship_event
+	requirements = { shipclass_military = 1 leader = admiral }
+	abort_trigger = { NOT = { exists = FROMFROM } }
+	on_success = { 
+		owner = {
+			if = {
+				limit = { NOT = { has_tech_option = tech_physics_phase_156 } }
+				add_research_option = tech_physics_phase_156
+			}
+			add_tech_progress = { tech = tech_physics_phase_156 progress = 0.33 }
+			if = {
+				limit = { NOT = { has_tech_option = tech_engineering_inertial_629 } }
+				add_research_option = tech_engineering_inertial_629
+			}
+			add_tech_progress = { tech = tech_engineering_inertial_629 progress = 0.33 }
+			if = {
+				limit = { NOT = { has_tech_option = tech_physics_gravimetric_65 } }
+				add_research_option = tech_physics_gravimetric_65
+			}
+			add_tech_progress = { tech = tech_physics_gravimetric_65 progress = 0.33 }
+			if = {
+				limit = { NOT = { has_tech_option = tech_engineering_improved_604 } }
+				add_research_option = tech_engineering_improved_604
+			}
+			add_tech_progress = { tech = tech_engineering_improved_604 progress = 0.33 }
+			if = {
+				limit = { NOT = { has_tech_option = tech_physics_duotronic_4 } }
+				add_research_option = tech_physics_duotronic_4
+			}
+			add_tech_progress = { tech = tech_physics_duotronic_4 progress = 0.33 }
+			if = {
+				limit = { NOT = { has_tech_option = tech_engineering_anti-matter_652 } }
+				add_research_option = tech_engineering_anti-matter_652
+			}
+			add_tech_progress = { tech = tech_engineering_anti-matter_652 progress = 0.33 }
+			
+		}
+	}
+}
+
+special_project = {
+	key = "NX_WEAPONS_PROJECT_2"
+	cost = 0
+	days_to_research = 360
+	tech_department = physics_technology
+	picture = sth_GFX_evt_nx01
+	event_scope = ship_event
+	requirements = { shipclass_military = 1 leader = admiral }
+	abort_trigger = { NOT = { exists = FROMFROM } }
+	on_success = { 
+		owner = {
+			if = {
+				limit = { NOT = { has_tech_option = tech_engineering_advanced_547 } }
+				add_research_option = tech_engineering_advanced_547
+			}
+			add_tech_progress = { tech = tech_engineering_advanced_547 progress = 0.33 }
+			if = {
+				limit = { NOT = { has_tech_option = tech_engineering_destroyer_541 } }
+				add_research_option = tech_engineering_destroyer_541
+			}
+			add_tech_progress = { tech = tech_engineering_destroyer_541 progress = 0.33 }
+			if = {
+				limit = { NOT = { has_tech_option = tech_ship_program } }
+				add_research_option = tech_ship_program
+			}
+			add_tech_progress = { tech = tech_ship_program progress = 0.33 }
+			if = {
+				limit = { NOT = { has_tech_option = tech_society_long-term_401 } }
+				add_research_option = tech_society_long-term_401
+			}
+			add_tech_progress = { tech = tech_society_long-term_401 progress = 0.33 }
+			if = {
+				limit = { NOT = { has_tech_option = tech_physics_gravity_82 } }
+				add_research_option = tech_physics_gravity_82
+			}
+			add_tech_progress = { tech = tech_physics_gravity_82 progress = 0.33 }
+			if = {
+				limit = { NOT = { has_tech_option = tech_physics_gravity_121 } }
+				add_research_option = tech_physics_gravity_121
+			}
+			add_tech_progress = { tech = tech_physics_gravity_121 progress = 0.33 }
+		}
+	}
+}

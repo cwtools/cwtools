@@ -1,0 +1,105 @@
+### Reinforced Hull
+   utility_component_template = {
+      key = "REQUIRED_COLONY_MODULE_HULL_0"
+      size = medium
+      icon_frame = 1
+      icon = "GFX_ship_part_Required_Colony_Module_hull_0"
+      power = 0
+      cost = 5
+      ai_weight = { weight = 1 }
+      prerequisites = { "tech_bureau_colonial" }
+      component_set = "colony_module"
+      modifier = { ship_hitpoints_add = 100   }
+   }
+   
+### Stasis Chambers
+   utility_component_template = {
+      key = "REQUIRED_COLONY_MODULE_STASIS_0"
+      size = medium
+      icon_frame = 1
+      icon = "GFX_ship_part_Required_Colony_Module_stasis_0"
+      power = -50
+      cost = 300
+      ai_weight = { weight = 10 }
+      prerequisites = { "tech_society_new_worlds_1188" }
+      component_set = "colony_module"
+   }
+   
+### Prefrabricated Colony Structures
+   utility_component_template = {
+      key = "REQUIRED_COLONY_MODULE_PREFABRICATED_0"
+      size = medium
+      icon_frame = 1
+      icon = "GFX_ship_part_Required_Colony_Module_prefabricated_0"
+      power = 0
+      cost = 100
+      ai_weight = { weight = 10 }
+      prerequisites = { "tech_society_new_worlds_1117" }
+      component_set = "colony_module"
+   }
+   
+### Armed Contingency
+   utility_component_template = {
+      key = "REQUIRED_COLONY_MODULE_CONTINGENCY_0"
+      size = medium
+      icon_frame = 1
+      icon = "GFX_ship_part_Required_Colony_Module_contingency_0"
+      power = 0
+      cost = 120
+      ai_weight = { weight = 20 }
+      prerequisites = { "tech_society_special_395" }
+      component_set = "colony_module"
+   }
+   
+### Orbital Infastructure
+   utility_component_template = {
+      key = "REQUIRED_COLONY_MODULE_ORBITAL_0"
+      size = medium
+      icon_frame = 1
+      icon = "GFX_ship_part_Required_Colony_Module_orbital_0"
+      power = 0
+      cost = 350
+      ai_weight = { weight = 20 }
+      prerequisites = { "tech_society_new_worlds_1119" }
+      component_set = "colony_module"
+   }
+   
+### Research Team
+   utility_component_template = {
+      key = "REQUIRED_COLONY_MODULE_RESEARCH_0"
+      size = medium
+      icon_frame = 1
+      icon = "GFX_ship_part_Required_Colony_Module_research_0"
+      power = -25
+      cost = 200
+      ai_weight = { weight = 20 }
+      prerequisites = { "tech_society_new_worlds_1187" }
+      component_set = "colony_module"
+   }
+   
+### Hardy Pioneers
+   utility_component_template = {
+      key = "REQUIRED_COLONY_MODULE_PIONEERS_0"
+      size = medium
+      icon_frame = 1
+      icon = "GFX_ship_part_Required_Colony_Module_pioneers_0"
+      power = -25
+      cost = 350
+      ai_weight = { weight = 20 }
+      prerequisites = { "tech_society_new_worlds_1182" }
+      component_set = "colony_module"
+   }
+   
+### Religious Mission
+   utility_component_template = {
+      key = "REQUIRED_COLONY_MODULE_MISSION_0"
+      size = medium
+      icon_frame = 1
+      icon = "GFX_ship_part_Required_Colony_Module_mission_0"
+      power = -25
+      cost = 100
+      ai_weight = { weight = 10 }
+      prerequisites = { "tech_society_new_worlds_1185" }
+      component_set = "colony_module"
+   }
+   

@@ -1,0 +1,3279 @@
+# Available requirements:
+#
+#	SKILLS
+#	skill = 2
+#
+#	LEADER
+#	leader = scientist
+#	leader = admiral
+#	leader = general
+#	leader = ruler
+#	leader = governor
+#	
+#	MILITARY SHIPS
+#	shipclass_military = 1
+#	
+#	CIVILIAN SHIPS
+#	shipclass_constructor = 2
+#	shipclass_science_ship = 1
+#	shipclass_colonizer = 2
+#	
+#	ARMIES
+#	shipclass_transport = 1
+#	assault_armies = 2
+#	defense_armies = 1
+#	
+#	STATIONS
+#	research_station = yes
+#	mining_station = yes
+#	observation_station = yes
+#
+#	SCOPES
+#	abort_trigger
+#	this = country (project owner)
+#	from = event scope (planet or ship, MIGHT NOT EXIST)
+#	fromfrom = project creation scope (usually equals location)
+#	
+#	on_success
+#	this = event scope (ship or planet)
+#	from = project creation scope (usually equals location)
+#	
+#	on_fail
+#	this = country (project owner)
+#	from = project creation scope (usually equals location)
+
+special_project = {
+	key = "GAS_GIANT_BODIES_PROJECT"
+	cost = 0
+	days_to_research = 180
+	tech_department = society_technology
+	picture = GFX_evt_landing_ship
+
+	event_scope = ship_event
+
+	requirements = {
+		shipclass_science_ship = 1
+		leader = scientist
+		skill > 2
+	}
+	
+	on_success = {
+		ship_event = { id = anomaly.2501 }
+	}
+	
+	on_fail = {
+	}
+}
+
+special_project = {
+	key = "SEA_EXPEDITION_PROJECT"
+	cost = 0
+	days_to_research = 180
+	tech_department = society_technology
+	picture = GFX_evt_microscopic_life
+	
+	event_scope = ship_event
+	
+	requirements = {
+		shipclass_science_ship = 1
+		leader = scientist
+		skill > 2
+	}
+	
+	on_success = {
+		random_list = {
+			50 = {
+				ship_event = { id = anomaly.2512 }
+			}
+			50 = {
+				ship_event = { id = anomaly.2513 }
+			}
+		}
+	}
+	
+	on_fail = {
+	}
+}
+
+special_project = {
+	key = "GIGANTIC_SKELETON_PROJECT"
+	cost = 0
+	days_to_research = 180
+	tech_department = physics_technology
+	
+	event_scope = ship_event
+	
+	requirements = {
+		shipclass_science_ship = 1
+		leader = scientist
+		skill > 2
+	}
+	
+	on_success = {
+		random_list = {
+			50 = {
+				ship_event = { id = anomaly.2521 }
+			}
+			50 = {
+				ship_event = { id = anomaly.2522 }
+			}
+		}
+	}
+	
+	on_fail = {
+	}
+}
+
+special_project = {
+	key = "BATTLE_WRECKAGE_PROJECT"
+	cost = 0
+	days_to_research = 180
+	tech_department = engineering_technology
+	
+	event_scope = ship_event
+	
+	requirements = {
+		shipclass_science_ship = 1
+		leader = scientist
+		skill > 2
+	}
+	
+	on_success = {
+		random_list = {
+			50 = {
+				ship_event = { id = anomaly.2531 }
+			}
+			50 = {
+				ship_event = { id = anomaly.2532 }
+			}
+		}
+	}
+	
+	on_fail = {
+	}
+}
+
+special_project = {
+	key = "ABANDONED_TERRAFORMING_1_PROJECT"
+	event_chain = "abandoned_terraforming_chain"
+	cost = 200
+	tech_department = society_technology
+	icon = "gfx/interface/icons/situation_log/situation_log_planet.dds"
+	picture = GFX_evt_alien_nature
+	
+	event_scope = planet_event
+	
+	on_success = {
+		random_list = {
+			25 = {
+				planet_event = { id = colony.104 }
+			}
+			25 = {
+				planet_event = { id = colony.105 }
+			}
+			25 = {
+				planet_event = { id = colony.106 }
+			}
+			25 = {
+				planet_event = { id = colony.107 }
+			}
+		}
+		owner = { end_event_chain = "abandoned_terraforming_chain" }
+	}
+	
+	on_fail = {
+	}
+}
+
+special_project = {
+	key = "ABANDONED_TERRAFORMING_2_PROJECT"
+	event_chain = "abandoned_terraforming_chain"
+	days_to_research = 180
+	tech_department = engineering_technology
+	icon = "gfx/interface/icons/situation_log/situation_log_debris.dds"
+	picture = GFX_evt_archaeological_dig
+	
+	same_option_group_as = { ABANDONED_TERRAFORMING_1_PROJECT }
+	
+	event_scope = planet_event
+	
+	on_success = {
+		planet_event = { id = colony.101 }
+		owner = { end_event_chain = "abandoned_terraforming_chain" }
+	}
+	
+	on_fail = {
+	}
+}
+
+special_project = {
+	key = "MUTANT_STALKER_PROJECT"
+	cost = 200
+	tech_department = society_technology
+	timelimit = 730
+	icon = "gfx/interface/icons/situation_log/situation_log_combat.dds"
+	picture = GFX_evt_colony_settlement
+	
+	event_scope = planet_event
+	
+	requirements = {
+		assault_armies = 2 # Need a generic army trigger - should work with any armies
+	}
+	
+	on_success = {
+		planet_event = { id = colony.110 }
+	}
+	
+	on_fail = {
+		random_list = {
+			50 = {
+				FROM = { planet_event = { id = colony.111 } }
+			}
+			50 = {
+				FROM = { planet_event = { id = colony.112 } }
+			}
+		}
+	}
+}
+
+special_project = {
+	key = "TRANSLATE_MURAL_PROJECT"
+	cost = 0
+	days_to_research = 180
+	tech_department = society_technology
+	
+	event_scope = ship_event
+	
+	requirements = {
+		shipclass_science_ship = 1
+		leader = scientist
+		skill > 0
+	}
+	
+	on_success = {
+		random_list = {
+			50 = {
+				ship_event = { id = anomaly.2541 }
+			}
+			50 = {
+				ship_event = { id = anomaly.2542 }
+			}
+		}
+	}
+	
+	on_fail = {
+	}
+}
+
+special_project = {
+	key = "NUCLEAR_BOMB_PROJECT"
+	cost = 200
+	tech_department = engineering_technology
+	timelimit = 200
+	picture = GFX_evt_colony_settlement
+	icon = "gfx/interface/icons/situation_log/situation_log_planet.dds"
+	
+	event_scope = planet_event
+	
+	on_success = {
+		planet_event = { id = colony.156 }
+	}
+	
+	on_fail = {
+		FROM = { planet_event = { id = colony.157 } }
+	}
+}
+
+special_project = {
+	key = "MIGRATING_FORESTS_1_PROJECT"
+	event_chain = "migrating_forests_chain"
+	cost = 500
+	tech_department = society_technology
+	
+	event_scope = planet_event
+	
+	on_success = {
+		planet_event = { id = colony.2 }
+		owner = { end_event_chain = "migrating_forests_chain" }
+	}
+	
+	on_fail = {
+	}
+}
+
+special_project = {
+	key = "MIGRATING_FORESTS_2_PROJECT"
+	event_chain = "migrating_forests_chain"
+	cost = 500
+	tech_department = engineering_technology
+	
+	same_option_group_as = { MIGRATING_FORESTS_1_PROJECT }
+	
+	event_scope = planet_event
+	
+	on_success = {
+		planet_event = { id = colony.3 }
+		owner = { end_event_chain = "migrating_forests_chain" }
+	}
+	
+	on_fail = {
+	}
+}
+
+special_project = {
+	key = "SEISMIC_DISTURBANCE_1_PROJECT"
+	event_chain = "subterranean_civilization_chain"
+	cost = 100
+	tech_department = society_technology
+	picture = GFX_evt_underground_civilization
+	timelimit = 360
+	
+	event_scope = planet_event
+	
+	on_success = {
+		planet_event = { id = colony.51 }
+		owner = { end_event_chain = "subterranean_civilization_chain" }
+	}
+	
+	on_fail = {
+		end_event_chain = "subterranean_civilization_chain"
+		random_list = {
+			60 = {
+				FROM = { planet_event = { id = colony.54 } }
+			}
+			40 = {
+				FROM = { planet_event = { id = colony.59 } }
+			}
+		}
+	}
+}
+
+special_project = {
+	key = "SEISMIC_DISTURBANCE_2_PROJECT"
+	event_chain = "subterranean_civilization_chain"
+	cost = 100
+	tech_department = engineering_technology
+	picture = GFX_evt_nuclear_explosion
+	timelimit = 360
+	
+	same_option_group_as = { SEISMIC_DISTURBANCE_1_PROJECT }
+	
+	event_scope = planet_event
+	
+	on_success = {
+		planet_event = { id = colony.52 }
+		owner = { end_event_chain = "subterranean_civilization_chain" }
+	}
+	
+	on_fail = {
+	}
+}
+
+special_project = {
+	key = "SEISMIC_DISTURBANCE_3_PROJECT"
+	cost = 200
+	tech_department = engineering_technology
+	picture = GFX_evt_nuclear_explosion
+	
+	event_scope = planet_event
+	
+	on_success = {
+		planet_event = { id = colony.52 }
+	}
+	
+	on_fail = {
+	}
+}
+
+special_project = {
+	key = "UNDERGROUND_VAULT_PROJECT"
+	cost = 200
+	tech_department = engineering_technology
+	picture = GFX_evt_underground_civilization
+	icon = "gfx/interface/icons/situation_log/situation_log_precursor.dds"
+	
+	event_scope = planet_event
+	
+	on_success = {
+		if = {
+			limit = {
+				free_pop_tiles > 2
+			}
+			random_list = {
+				33 = { planet_event = { id = colony.151 } }
+				33 = { planet_event = { id = colony.152 } }
+				33 = { planet_event = { id = colony.153 } }
+			}
+		}
+		if = {
+			limit = {
+				NOT = { free_pop_tiles > 2 }
+			}
+			random_list = {
+				50 = { planet_event = { id = colony.151 } }
+				50 = { planet_event = { id = colony.153 } }
+			}
+		}		
+	}
+	
+	on_fail = {
+	}
+}
+
+special_project = {
+	key = "ORBITAL_DEBRIS_PROJECT"
+	days_to_research = 60
+	tech_department = engineering_technology
+	picture = GFX_evt_satellite_in_orbit
+	icon = "gfx/interface/icons/situation_log/situation_log_planet.dds"
+	
+	event_scope = planet_event
+	
+	requirements = {
+		shipclass_science_ship = 1
+	}
+	
+	on_success = {
+		random_list = {
+			50 = { planet_event = { id = colony.173 } }
+			50 = { planet_event = { id = colony.174 } }
+		}
+	}
+	
+	on_fail = {
+	}
+}
+
+#special_project = {
+#	key = "MUTANT_SURVIVORS_PROJECT"
+#	cost = 1000
+#	tech_department = society_technology
+#	timelimit = 365 # in days
+#	
+#	event_scope = planet_event
+#	
+#	on_success = {
+#		planet_event = { id = colony.301 }
+#	}
+#	
+#	on_fail = {
+#		FROM = { planet_event = { id = colony.302 } }
+#	}
+#}
+#
+#special_project = {
+#	key = "UNDERGROUND_FACILITY_PROJECT"
+#	cost = 1000
+#	tech_department = society_technology
+#	timelimit = 365 # in days
+#	
+#	event_scope = planet_event
+#	
+#	on_success = {
+#		planet_event = { id = colony.401 }
+#	}
+#	
+#	on_fail = {
+#	}
+#}
+#
+#special_project = {
+#	key = "GHOSTLY_SIGHTINGS_PROJECT"
+#	cost = 1000
+#	tech_department = society_technology
+#	timelimit = 365 # in days
+#	
+#	event_scope = planet_event
+#	
+#	on_success = {
+#		planet_event = { id = colony.451 }
+#	}
+#	
+#	on_fail = {
+#	}
+#}
+
+special_project = {
+	key = "AUTOMATED_SHIPYARD_PROJECT"
+	cost = 0
+	days_to_research = 180
+	tech_department = engineering_technology
+	
+	event_scope = ship_event
+	
+	requirements = {
+		shipclass_science_ship = 1
+		leader = scientist
+		skill > 2
+	}
+	
+	on_success = {
+		random_list = {
+			50 = {
+				ship_event = { id = anomaly.2551 }
+			}
+			50 = {
+				ship_event = { id = anomaly.2552 }
+			}
+		}
+	}
+	
+	on_fail = {
+	}
+}
+
+special_project = {
+	key = "GAS_GIANT_SHIP_PROJECT"
+	cost = 0
+	days_to_research = 180
+	tech_department = engineering_technology
+	
+	event_scope = ship_event
+	
+	requirements = {
+		shipclass_science_ship = 1
+		skill > 2
+		leader = scientist
+	}
+	
+	on_success = {
+		random_list = {
+			70 = {
+				ship_event = { id = anomaly.2561 }
+			}
+			30 = {
+				ship_event = { id = anomaly.2562 }
+			}
+		}
+	}
+	
+	on_fail = {
+	}
+}
+
+special_project = {
+	key = "TERMINAL_ORBIT_PROJECT"
+	cost = 0
+	days_to_research = 180
+	tech_department = physics_technology
+	timelimit = 730
+	
+	event_scope = ship_event
+	
+	requirements = {
+		shipclass_science_ship = 1
+		leader = scientist
+		skill > 2
+	}
+	
+	on_success = {
+		ship_event = { id = anomaly.2571 }
+	}
+	
+	on_fail = { ######################################### FIX THIS LATER
+		#ship_event = { id = anomaly.2572 }
+	}
+}
+
+special_project = {
+	key = "GAS_GIANT_SIGNAL"
+	cost = 0
+	days_to_research = 180
+	tech_department = society_technology
+	picture = GFX_evt_gas_giant
+	timelimit = 360 # in days
+	
+	event_scope = ship_event
+	
+	requirements = {
+		shipclass_science_ship = 1
+		leader = scientist
+		skill > 2
+	}
+	
+	on_success = {
+		ship_event = { id = anomaly.5001 }
+	}
+	
+	on_fail = {
+		country_event = { id = anomaly.5002 }
+	}
+}
+
+special_project = {
+	key = "GAS_GIANT_RELOCATION"
+	cost = 0
+	days_to_research = 180
+	tech_department = society_technology
+	picture = GFX_evt_gas_giant
+	timelimit = 730 # in days
+	
+	event_scope = ship_event
+	
+	requirements = {
+		shipclass_science_ship = 1
+		leader = scientist
+		skill > 2
+	}
+	
+	on_success = {
+		ship_event = { id = anomaly.5004 }
+	}
+	
+	on_fail = {
+		country_event = { id = anomaly.5005 }
+	}
+}
+
+special_project = {
+	key = "GAS_GIANT_COLONY"
+	cost = 0
+	days_to_research = 180
+	tech_department = society_technology
+	picture = GFX_evt_gas_giant
+	
+	event_scope = ship_event
+	
+	requirements = {
+		shipclass_science_ship = 1
+		leader = scientist
+		skill > 2
+	}
+	
+	on_success = {
+		ship_event = { id = anomaly.5008 }
+	}
+	
+	on_fail = {
+	}
+}
+
+special_project = {
+	key = "GAS_GIANT_LOST_CONTACT"
+	cost = 0
+	days_to_research = 180
+	tech_department = society_technology
+	picture = GFX_evt_gas_giant
+	
+	event_scope = ship_event
+	
+	requirements = {
+		shipclass_science_ship = 1
+		leader = scientist
+		skill > 2
+	}
+	
+	on_success = {
+		ship_event = { id = anomaly.5012 }
+	}
+	
+	on_fail = {
+	}
+}
+
+special_project = {
+	key = "GAS_GIANT_REVOLT"
+	cost = 0
+	days_to_research = 180
+	tech_department = society_technology
+	picture = GFX_evt_gas_giant
+	
+	event_scope = ship_event
+	
+	requirements = {
+		shipclass_science_ship = 1
+		leader = scientist
+		skill > 2
+	}
+	
+	on_success = {
+		ship_event = { id = anomaly.5015 }
+	}
+	
+	on_fail = {
+	}
+}
+
+special_project = {
+	key = "GAS_GIANT_OCCUPATION"
+	cost = 0
+	days_to_research = 180
+	tech_department = society_technology
+	picture = GFX_evt_gas_giant
+	
+	event_scope = ship_event
+	
+	requirements = {
+		shipclass_science_ship = 1
+		leader = scientist
+		skill > 2
+	}
+	
+	on_success = {
+		ship_event = { id = anomaly.5020 }
+	}
+	
+	on_fail = {
+	}
+}
+
+special_project = {
+	key = "GAS_GIANT_LOST_CHABKY"
+	cost = 0
+	days_to_research = 180
+	tech_department = society_technology
+	picture = GFX_evt_gas_giant
+	
+	event_scope = ship_event
+	
+	requirements = {
+		shipclass_science_ship = 1
+		leader = scientist
+		skill > 2
+	}
+	
+	on_success = {
+		ship_event = { id = anomaly.5010 }
+	}
+	
+	on_fail = {
+	}
+}
+
+special_project = {
+	key = "PRIMITIVE_SHUTTLE_CRASH"
+	cost = 0
+	days_to_research = 180
+	tech_department = society_technology
+	timelimit = 730 # in days
+	
+	event_scope = ship_event
+	
+	requirements = {
+		shipclass_science_ship = 1
+		leader = scientist
+		skill > 2
+	}
+	
+	on_success = {
+		ship_event = { id = observation.37 }
+	}
+	
+	on_fail = {
+		country_event = { id = observation.38 }
+	}
+}
+
+special_project = {
+	key = "EXTRACT_ROGUE_SCIENTIST"
+	cost = 0
+	days_to_research = 180
+	tech_department = society_technology
+	timelimit = 730 # in days
+	
+	event_scope = ship_event
+	
+	requirements = {
+		shipclass_transport = 2
+	}
+	
+	on_success = {
+		ship_event = { id = observation.20 }
+	}
+	
+	on_fail = {
+		owner = {
+			country_event = { id = observation.30 }
+		}
+	}
+}
+
+special_project = {
+	key = "PROBE_ALIENS"
+	cost = 0
+	days_to_research = 180
+	tech_department = society_technology
+	
+	event_scope = ship_event
+	
+	requirements = {
+		shipclass_science_ship = 1
+		leader = scientist
+		skill > 2
+	}
+	
+	on_success = {
+		ship_event = { id = primitive.172 }
+	}
+	
+	on_fail = {
+	}
+}
+
+
+### VULTAUM ARCHEOLOGICAL PROJECTS
+
+# Vultaum Mining Base
+special_project = {
+	key = "VULTAUM_ARCHEOLOGY_1"
+	event_chain = "vultaum_chain"
+	cost = 0
+	days_to_research = 180
+	tech_department = society_technology
+	picture = GFX_evt_archaeological_dig
+	icon = "gfx/interface/icons/situation_log/situation_log_precursor.dds"
+	
+	event_scope = ship_event
+	
+	requirements = {
+		shipclass_science_ship = 1
+		leader = scientist
+		skill > 3
+	}
+	
+	on_success = {
+		ship_event = { id = precursor.6 }
+	}
+	
+	on_fail = {
+	}
+}
+
+# Vultaum Observatory
+special_project = {
+	key = "VULTAUM_ARCHEOLOGY_2"
+	event_chain = "vultaum_chain"
+	cost = 0
+	days_to_research = 180
+	tech_department = society_technology
+	picture = GFX_evt_archaeological_dig
+	icon = "gfx/interface/icons/situation_log/situation_log_precursor.dds"
+	
+	event_scope = ship_event
+	
+	requirements = {
+		shipclass_science_ship = 1
+		leader = scientist
+		skill > 4
+	}
+	
+	on_success = {
+		ship_event = { id = precursor.11 }
+	}
+	
+	on_fail = {
+	}
+}
+
+# Vultaum Colony 1
+special_project = {
+	key = "VULTAUM_ARCHEOLOGY_3"
+	event_chain = "vultaum_chain"
+	cost = 0
+	days_to_research = 180
+	tech_department = society_technology
+	picture = GFX_evt_archaeological_dig
+	icon = "gfx/interface/icons/situation_log/situation_log_precursor.dds"
+	
+	event_scope = ship_event
+	
+	requirements = {
+		shipclass_science_ship = 1
+		leader = scientist
+		skill > 2
+	}
+	
+	on_success = {
+		ship_event = { id = precursor.16 }
+	}
+	
+	on_fail = {
+	}
+}
+
+# Vultaum Colony 2
+special_project = {
+	key = "VULTAUM_ARCHEOLOGY_4"
+	event_chain = "vultaum_chain"
+	cost = 0
+	days_to_research = 180
+	tech_department = society_technology
+	picture = GFX_evt_archaeological_dig
+	icon = "gfx/interface/icons/situation_log/situation_log_precursor.dds"
+	
+	event_scope = ship_event
+	
+	requirements = {
+		shipclass_science_ship = 1
+		leader = scientist
+		skill > 4
+	}
+	
+	on_success = {
+		ship_event = { id = precursor.21 }
+	}
+	
+	on_fail = {
+	}
+}
+
+# Vultaum Colony 3
+special_project = {
+	key = "VULTAUM_ARCHEOLOGY_5"
+	event_chain = "vultaum_chain"
+	cost = 0
+	days_to_research = 180
+	tech_department = society_technology
+	picture = GFX_evt_archaeological_dig
+	icon = "gfx/interface/icons/situation_log/situation_log_precursor.dds"
+	
+	event_scope = ship_event
+	
+	requirements = {
+		shipclass_science_ship = 1
+		leader = scientist
+		skill > 3
+	}
+	
+	on_success = {
+		ship_event = { id = precursor.26 }
+	}
+	
+	on_fail = {
+	}
+}
+
+# Vultaum Gas Giant Base
+special_project = {
+	key = "VULTAUM_ARCHEOLOGY_6"
+	event_chain = "vultaum_chain"
+	cost = 0
+	days_to_research = 180
+	tech_department = society_technology
+	picture = GFX_evt_archaeological_dig
+	icon = "gfx/interface/icons/situation_log/situation_log_precursor.dds"
+	
+	event_scope = ship_event
+	
+	requirements = {
+		shipclass_science_ship = 1
+		leader = scientist
+		skill > 2
+	}
+	
+	on_success = {
+		ship_event = { id = precursor.31 }
+	}
+	
+	on_fail = {
+	}
+}
+
+# Vultaum Trade Post
+special_project = {
+	key = "VULTAUM_ARCHEOLOGY_7"
+	event_chain = "vultaum_chain"
+	cost = 0
+	days_to_research = 180
+	tech_department = society_technology
+	picture = GFX_evt_archaeological_dig
+	icon = "gfx/interface/icons/situation_log/situation_log_precursor.dds"
+	
+	event_scope = ship_event
+	
+	requirements = {
+		shipclass_science_ship = 1
+		leader = scientist
+		skill > 3
+	}
+	
+	on_success = {
+		ship_event = { id = precursor.36 }
+	}
+	
+	on_fail = {
+	}
+}
+
+# Vultaum Satellite
+special_project = {
+	key = "VULTAUM_ARCHEOLOGY_8"
+	event_chain = "vultaum_chain"
+	cost = 0
+	days_to_research = 180
+	tech_department = society_technology
+	picture = GFX_evt_archaeological_dig
+	icon = "gfx/interface/icons/situation_log/situation_log_precursor.dds"
+	
+	event_scope = ship_event
+	
+	requirements = {
+		shipclass_science_ship = 1
+		leader = scientist
+		skill > 4
+	}
+	
+	on_success = {
+		ship_event = { id = precursor.41 }
+	}
+	
+	on_fail = {
+	}
+}
+
+# Vultaum Splinter Colony
+special_project = {
+	key = "VULTAUM_ARCHEOLOGY_9"
+	event_chain = "vultaum_chain"
+	cost = 0
+	days_to_research = 180
+	tech_department = society_technology
+	picture = GFX_evt_archaeological_dig
+	icon = "gfx/interface/icons/situation_log/situation_log_precursor.dds"
+	
+	event_scope = ship_event
+	
+	requirements = {
+		shipclass_science_ship = 1
+		leader = scientist
+		skill > 4
+	}
+	
+	on_success = {
+		ship_event = { id = precursor.46 }
+	}
+	
+	on_fail = {
+	}
+}
+
+# Vultaum Virtual Reality Center
+special_project = {
+	key = "VULTAUM_ARCHEOLOGY_10"
+	event_chain = "vultaum_chain"
+	cost = 0
+	days_to_research = 180
+	tech_department = society_technology
+	picture = GFX_evt_archaeological_dig
+	icon = "gfx/interface/icons/situation_log/situation_log_precursor.dds"
+	
+	event_scope = ship_event
+	
+	requirements = {
+		shipclass_science_ship = 1
+		leader = scientist
+		skill > 2
+	}
+	
+	on_success = {
+		ship_event = { id = precursor.51 }
+	}
+	
+	on_fail = {
+	}
+}
+
+# Vultaum Asteroid Mining Base
+special_project = {
+	key = "VULTAUM_ARCHEOLOGY_11"
+	event_chain = "vultaum_chain"
+	cost = 0
+	days_to_research = 180
+	tech_department = society_technology
+	picture = GFX_evt_archaeological_dig
+	icon = "gfx/interface/icons/situation_log/situation_log_precursor.dds"
+	
+	event_scope = ship_event
+	
+	requirements = {
+		shipclass_science_ship = 1
+		leader = scientist
+		skill > 2
+	}
+	
+	on_success = {
+		ship_event = { id = precursor.56 }
+	}
+	
+	on_fail = {
+	}
+}
+
+### YUHT ARCHEOLOGICAL PROJECTS
+
+# Yuht Hatchery World
+special_project = {
+	key = "YUHT_ARCHEOLOGY_1"
+	event_chain = "yuht_chain"
+	cost = 0
+	days_to_research = 180
+	tech_department = society_technology
+	picture = GFX_evt_archaeological_dig
+	icon = "gfx/interface/icons/situation_log/situation_log_precursor.dds"
+	
+	event_scope = ship_event
+	
+	requirements = {
+		shipclass_science_ship = 1
+		leader = scientist
+		skill > 2
+	}
+	
+	on_success = {
+		ship_event = { id = precursor.506 }
+	}
+	
+	on_fail = {
+	}
+}
+
+# Yuht Listening Post
+special_project = {
+	key = "YUHT_ARCHEOLOGY_2"
+	event_chain = "yuht_chain"
+	cost = 0
+	days_to_research = 180
+	tech_department = society_technology
+	picture = GFX_evt_archaeological_dig
+	icon = "gfx/interface/icons/situation_log/situation_log_precursor.dds"
+	
+	event_scope = ship_event
+	
+	requirements = {
+		shipclass_science_ship = 1
+		leader = scientist
+		skill > 4
+	}
+	
+	on_success = {
+		ship_event = { id = precursor.511 }
+	}
+	
+	on_fail = {
+	}
+}
+
+# Yuht Colony 1
+special_project = {
+	key = "YUHT_ARCHEOLOGY_3"
+	event_chain = "yuht_chain"
+	cost = 0
+	days_to_research = 180
+	tech_department = society_technology
+	picture = GFX_evt_archaeological_dig
+	icon = "gfx/interface/icons/situation_log/situation_log_precursor.dds"
+	
+	event_scope = ship_event
+	
+	requirements = {
+		shipclass_science_ship = 1
+		leader = scientist
+		skill > 4
+	}
+	
+	on_success = {
+		ship_event = { id = precursor.516 }
+	}
+	
+	on_fail = {
+	}
+}
+
+# Yuht Colony 2
+special_project = {
+	key = "YUHT_ARCHEOLOGY_4"
+	event_chain = "yuht_chain"
+	cost = 0
+	days_to_research = 180
+	tech_department = society_technology
+	picture = GFX_evt_archaeological_dig
+	icon = "gfx/interface/icons/situation_log/situation_log_precursor.dds"
+	
+	event_scope = ship_event
+	
+	requirements = {
+		shipclass_science_ship = 1
+		leader = scientist
+		skill > 3
+	}
+	
+	on_success = {
+		ship_event = { id = precursor.521 }
+	}
+	
+	on_fail = {
+	}
+}
+
+# Yuht Colony 3
+special_project = {
+	key = "YUHT_ARCHEOLOGY_5"
+	event_chain = "yuht_chain"
+	cost = 0
+	days_to_research = 180
+	tech_department = society_technology
+	picture = GFX_evt_archaeological_dig
+	icon = "gfx/interface/icons/situation_log/situation_log_precursor.dds"
+	
+	event_scope = ship_event
+	
+	requirements = {
+		shipclass_science_ship = 1
+		leader = scientist
+		skill > 2
+	}
+	
+	on_success = {
+		ship_event = { id = precursor.526 }
+	}
+	
+	on_fail = {
+	}
+}
+
+# Yuht Satellite
+special_project = {
+	key = "YUHT_ARCHEOLOGY_6"
+	event_chain = "yuht_chain"
+	cost = 0
+	days_to_research = 180
+	tech_department = society_technology
+	picture = GFX_evt_archaeological_dig
+	icon = "gfx/interface/icons/situation_log/situation_log_precursor.dds"
+	
+	event_scope = ship_event
+	
+	requirements = {
+		shipclass_science_ship = 1
+		leader = scientist
+		skill > 4
+	}
+	
+	on_success = {
+		ship_event = { id = precursor.531 }
+	}
+	
+	on_fail = {
+	}
+}
+
+# Yuht Cruiser
+special_project = {
+	key = "YUHT_ARCHEOLOGY_7"
+	event_chain = "yuht_chain"
+	cost = 0
+	days_to_research = 180
+	tech_department = society_technology
+	picture = GFX_evt_archaeological_dig
+	icon = "gfx/interface/icons/situation_log/situation_log_precursor.dds"
+	
+	event_scope = ship_event
+	
+	requirements = {
+		shipclass_science_ship = 1
+		leader = scientist
+		skill > 3
+	}
+	
+	on_success = {
+		ship_event = { id = precursor.536 }
+	}
+	
+	on_fail = {
+	}
+}
+
+# Yuht Colony Ship
+special_project = {
+	key = "YUHT_ARCHEOLOGY_8"
+	event_chain = "yuht_chain"
+	cost = 0
+	days_to_research = 180
+	tech_department = society_technology
+	picture = GFX_evt_archaeological_dig
+	icon = "gfx/interface/icons/situation_log/situation_log_precursor.dds"
+	
+	event_scope = ship_event
+	
+	requirements = {
+		shipclass_science_ship = 1
+		leader = scientist
+		skill > 2
+	}
+	
+	on_success = {
+		ship_event = { id = precursor.541 }
+	}
+	
+	on_fail = {
+	}
+}
+
+# Yuht Asteroid Hermit
+special_project = {
+	key = "YUHT_ARCHEOLOGY_9"
+	event_chain = "yuht_chain"
+	cost = 0
+	days_to_research = 180
+	tech_department = society_technology
+	picture = GFX_evt_archaeological_dig
+	icon = "gfx/interface/icons/situation_log/situation_log_precursor.dds"
+	
+	event_scope = ship_event
+	
+	requirements = {
+		shipclass_science_ship = 1
+		leader = scientist
+		skill > 4
+	}
+	
+	on_success = {
+		ship_event = { id = precursor.546 }
+	}
+	
+	on_fail = {
+	}
+}
+
+### FIRST LEAGUE ARCHEOLOGICAL PROJECTS
+
+# League Naval Base
+special_project = {
+	key = "FIRST_LEAGUE_ARCHEOLOGY_1"
+	event_chain = "first_league_chain"
+	cost = 0
+	days_to_research = 180
+	tech_department = society_technology
+	picture = GFX_evt_archaeological_dig
+	icon = "gfx/interface/icons/situation_log/situation_log_precursor.dds"
+	
+	event_scope = ship_event
+	
+	requirements = {
+		shipclass_science_ship = 1
+		leader = scientist
+		skill > 4
+	}
+	
+	on_success = {
+		ship_event = { id = precursor.1006 }
+	}
+	
+	on_fail = {
+	}
+}
+
+# League Cruiser
+special_project = {
+	key = "FIRST_LEAGUE_ARCHEOLOGY_2"
+	event_chain = "first_league_chain"
+	cost = 0
+	days_to_research = 180
+	tech_department = society_technology
+	picture = GFX_evt_archaeological_dig
+	icon = "gfx/interface/icons/situation_log/situation_log_precursor.dds"
+	
+	event_scope = ship_event
+	
+	requirements = {
+		shipclass_science_ship = 1
+		leader = scientist
+		skill > 2
+	}
+	
+	on_success = {
+		ship_event = { id = precursor.1011 }
+	}
+	
+	on_fail = {
+	}
+}
+
+# Khamdai Homeworld
+special_project = {
+	key = "FIRST_LEAGUE_ARCHEOLOGY_3"
+	event_chain = "first_league_chain"
+	cost = 0
+	days_to_research = 180
+	tech_department = society_technology
+	picture = GFX_evt_archaeological_dig
+	icon = "gfx/interface/icons/situation_log/situation_log_precursor.dds"
+	
+	event_scope = ship_event
+	
+	requirements = {
+		shipclass_science_ship = 1
+		leader = scientist
+		skill > 2
+	}
+	
+	on_success = {
+		ship_event = { id = precursor.1016 }
+	}
+	
+	on_fail = {
+	}
+}
+
+# Chassago Homeworld
+special_project = {
+	key = "FIRST_LEAGUE_ARCHEOLOGY_4"
+	event_chain = "first_league_chain"
+	cost = 0
+	days_to_research = 180
+	tech_department = society_technology
+	picture = GFX_evt_archaeological_dig
+	icon = "gfx/interface/icons/situation_log/situation_log_precursor.dds"
+	
+	event_scope = ship_event
+	
+	requirements = {
+		shipclass_science_ship = 1
+		leader = scientist
+		skill > 3
+	}
+	
+	on_success = {
+		ship_event = { id = precursor.1021 }
+	}
+	
+	on_fail = {
+	}
+}
+
+# Migir-Yan Homeworld
+special_project = {
+	key = "FIRST_LEAGUE_ARCHEOLOGY_5"
+	event_chain = "first_league_chain"
+	cost = 0
+	days_to_research = 180
+	tech_department = society_technology
+	picture = GFX_evt_archaeological_dig
+	icon = "gfx/interface/icons/situation_log/situation_log_precursor.dds"
+	
+	event_scope = ship_event
+	
+	requirements = {
+		shipclass_science_ship = 1
+		leader = scientist
+		skill > 4
+	}
+	
+	on_success = {
+		ship_event = { id = precursor.1026 }
+	}
+	
+	on_fail = {
+	}
+}
+
+# V'ropak Homeworld
+special_project = {
+	key = "FIRST_LEAGUE_ARCHEOLOGY_6"
+	event_chain = "first_league_chain"
+	cost = 0
+	days_to_research = 180
+	tech_department = society_technology
+	picture = GFX_evt_archaeological_dig
+	icon = "gfx/interface/icons/situation_log/situation_log_precursor.dds"
+	
+	event_scope = ship_event
+	
+	requirements = {
+		shipclass_science_ship = 1
+		leader = scientist
+		skill > 3
+	}
+	
+	on_success = {
+		ship_event = { id = precursor.1031 }
+	}
+	
+	on_fail = {
+	}
+}
+
+# League Science Base
+special_project = {
+	key = "FIRST_LEAGUE_ARCHEOLOGY_7"
+	event_chain = "first_league_chain"
+	cost = 0
+	days_to_research = 180
+	tech_department = society_technology
+	picture = GFX_evt_archaeological_dig
+	icon = "gfx/interface/icons/situation_log/situation_log_precursor.dds"
+	
+	event_scope = ship_event
+	
+	requirements = {
+		shipclass_science_ship = 1
+		leader = scientist
+		skill > 4
+	}
+	
+	on_success = {
+		ship_event = { id = precursor.1036 }
+	}
+	
+	on_fail = {
+	}
+}
+
+# Joint League Colony
+special_project = {
+	key = "FIRST_LEAGUE_ARCHEOLOGY_8"
+	event_chain = "first_league_chain"
+	cost = 0
+	days_to_research = 180
+	tech_department = society_technology
+	picture = GFX_evt_archaeological_dig
+	icon = "gfx/interface/icons/situation_log/situation_log_precursor.dds"
+	
+	event_scope = ship_event
+	
+	requirements = {
+		shipclass_science_ship = 1
+		leader = scientist
+		skill > 2
+	}
+	
+	on_success = {
+		ship_event = { id = precursor.1041 }
+	}
+	
+	on_fail = {
+	}
+}
+
+# League Trade Center
+special_project = {
+	key = "FIRST_LEAGUE_ARCHEOLOGY_9"
+	event_chain = "first_league_chain"
+	cost = 0
+	days_to_research = 180
+	tech_department = society_technology
+	picture = GFX_evt_archaeological_dig
+	icon = "gfx/interface/icons/situation_log/situation_log_precursor.dds"
+	
+	event_scope = ship_event
+	
+	requirements = {
+		shipclass_science_ship = 1
+		leader = scientist
+		skill > 4
+	}
+	
+	on_success = {
+		ship_event = { id = precursor.1046 }
+	}
+	
+	on_fail = {
+	}
+}
+
+# Battle Wreckage
+special_project = {
+	key = "FIRST_LEAGUE_ARCHEOLOGY_10"
+	event_chain = "first_league_chain"
+	cost = 0
+	days_to_research = 180
+	tech_department = society_technology
+	picture = GFX_evt_archaeological_dig
+	icon = "gfx/interface/icons/situation_log/situation_log_precursor.dds"
+	
+	event_scope = ship_event
+	
+	requirements = {
+		shipclass_science_ship = 1
+		leader = scientist
+		skill > 2
+	}
+	
+	on_success = {
+		ship_event = { id = precursor.1051 }
+	}
+	
+	on_fail = {
+	}
+}
+
+# Prison Complex
+special_project = {
+	key = "FIRST_LEAGUE_ARCHEOLOGY_11"
+	event_chain = "first_league_chain"
+	cost = 0
+	days_to_research = 180
+	tech_department = society_technology
+	picture = GFX_evt_archaeological_dig
+	icon = "gfx/interface/icons/situation_log/situation_log_precursor.dds"
+	
+	event_scope = ship_event
+	
+	requirements = {
+		shipclass_science_ship = 1
+		leader = scientist
+		skill > 3
+	}
+	
+	on_success = {
+		ship_event = { id = precursor.1056 }
+	}
+	
+	on_fail = {
+	}
+}
+
+# Protected Primitive World
+special_project = {
+	key = "FIRST_LEAGUE_ARCHEOLOGY_12"
+	event_chain = "first_league_chain"
+	cost = 0
+	days_to_research = 180
+	tech_department = society_technology
+	picture = GFX_evt_archaeological_dig
+	icon = "gfx/interface/icons/situation_log/situation_log_precursor.dds"
+	
+	event_scope = ship_event
+	
+	requirements = {
+		shipclass_science_ship = 1
+		leader = scientist
+		skill > 3
+	}
+	
+	on_success = {
+		ship_event = { id = precursor.1061 }
+	}
+	
+	on_fail = {
+	}
+}
+
+# Blockaded World
+special_project = {
+	key = "FIRST_LEAGUE_ARCHEOLOGY_13"
+	event_chain = "first_league_chain"
+	cost = 0
+	days_to_research = 180
+	tech_department = society_technology
+	picture = GFX_evt_archaeological_dig
+	icon = "gfx/interface/icons/situation_log/situation_log_precursor.dds"
+	
+	event_scope = ship_event
+	
+	requirements = {
+		shipclass_science_ship = 1
+		leader = scientist
+		skill > 2
+	}
+	
+	on_success = {
+		ship_event = { id = precursor.1066 }
+	}
+	
+	on_fail = {
+	}
+}
+
+# Smuggler Asteroid
+special_project = {
+	key = "FIRST_LEAGUE_ARCHEOLOGY_14"
+	event_chain = "first_league_chain"
+	cost = 0
+	days_to_research = 180
+	tech_department = society_technology
+	picture = GFX_evt_archaeological_dig
+	icon = "gfx/interface/icons/situation_log/situation_log_precursor.dds"
+	
+	event_scope = ship_event
+	
+	requirements = {
+		shipclass_science_ship = 1
+		leader = scientist
+		skill > 2
+	}
+	
+	on_success = {
+		ship_event = { id = precursor.1071 }
+	}
+	
+	on_fail = {
+	}
+}
+
+### IRASSIAN ARCHEOLOGICAL PROJECTS
+
+# Quarantined World
+special_project = {
+	key = "IRASSIAN_ARCHEOLOGY_1"
+	event_chain = "irassian_chain"
+	cost = 0
+	days_to_research = 180
+	tech_department = society_technology
+	picture = GFX_evt_archaeological_dig
+	icon = "gfx/interface/icons/situation_log/situation_log_precursor.dds"
+	
+	event_scope = ship_event
+	
+	requirements = {
+		shipclass_science_ship = 1
+		leader = scientist
+		skill > 4
+	}
+	
+	on_success = {
+		ship_event = { id = precursor.1506 }
+	}
+	
+	on_fail = {
+	}
+}
+
+# Purified World
+special_project = {
+	key = "IRASSIAN_ARCHEOLOGY_2"
+	event_chain = "irassian_chain"
+	cost = 0
+	days_to_research = 180
+	tech_department = society_technology
+	picture = GFX_evt_archaeological_dig
+	icon = "gfx/interface/icons/situation_log/situation_log_precursor.dds"
+	
+	event_scope = ship_event
+	
+	requirements = {
+		shipclass_science_ship = 1
+		leader = scientist
+		skill > 3
+	}
+	
+	on_success = {
+		ship_event = { id = precursor.1511 }
+	}
+	
+	on_fail = {
+	}
+}
+
+# Scheming Client Race
+special_project = {
+	key = "IRASSIAN_ARCHEOLOGY_3"
+	event_chain = "irassian_chain"
+	cost = 0
+	days_to_research = 180
+	tech_department = society_technology
+	picture = GFX_evt_archaeological_dig
+	icon = "gfx/interface/icons/situation_log/situation_log_precursor.dds"
+	
+	event_scope = ship_event
+	
+	requirements = {
+		shipclass_science_ship = 1
+		leader = scientist
+		skill > 2
+	}
+	
+	on_success = {
+		ship_event = { id = precursor.1516 }
+	}
+	
+	on_fail = {
+	}
+}
+
+# Destroyed Client Race
+special_project = {
+	key = "IRASSIAN_ARCHEOLOGY_4"
+	event_chain = "irassian_chain"
+	cost = 0
+	days_to_research = 180
+	tech_department = society_technology
+	picture = GFX_evt_archaeological_dig
+	icon = "gfx/interface/icons/situation_log/situation_log_precursor.dds"
+	
+	event_scope = ship_event
+	
+	requirements = {
+		shipclass_science_ship = 1
+		leader = scientist
+		skill > 4
+	}
+	
+	on_success = {
+		ship_event = { id = precursor.1521 }
+	}
+	
+	on_fail = {
+	}
+}
+
+# Dead Colony
+special_project = {
+	key = "IRASSIAN_ARCHEOLOGY_5"
+	event_chain = "irassian_chain"
+	cost = 0
+	days_to_research = 180
+	tech_department = society_technology
+	picture = GFX_evt_archaeological_dig
+	icon = "gfx/interface/icons/situation_log/situation_log_precursor.dds"
+	
+	event_scope = ship_event
+	
+	requirements = {
+		shipclass_science_ship = 1
+		leader = scientist
+		skill > 2
+	}
+	
+	on_success = {
+		ship_event = { id = precursor.1526 }
+	}
+	
+	on_fail = {
+	}
+}
+
+# Dead Mining Base
+special_project = {
+	key = "IRASSIAN_ARCHEOLOGY_6"
+	event_chain = "irassian_chain"
+	cost = 0
+	days_to_research = 180
+	tech_department = society_technology
+	picture = GFX_evt_archaeological_dig
+	icon = "gfx/interface/icons/situation_log/situation_log_precursor.dds"
+	
+	event_scope = ship_event
+	
+	requirements = {
+		shipclass_science_ship = 1
+		leader = scientist
+		skill > 2
+	}
+	
+	on_success = {
+		ship_event = { id = precursor.1531 }
+	}
+	
+	on_fail = {
+	}
+}
+
+# Point of Outbreak
+special_project = {
+	key = "IRASSIAN_ARCHEOLOGY_7"
+	event_chain = "irassian_chain"
+	cost = 0
+	days_to_research = 180
+	tech_department = society_technology
+	picture = GFX_evt_archaeological_dig
+	icon = "gfx/interface/icons/situation_log/situation_log_precursor.dds"
+	
+	event_scope = ship_event
+	
+	requirements = {
+		shipclass_science_ship = 1
+		leader = scientist
+		skill > 4
+	}
+	
+	on_success = {
+		ship_event = { id = precursor.1536 }
+	}
+	
+	on_fail = {
+	}
+}
+
+# Derelict Ship
+special_project = {
+	key = "IRASSIAN_ARCHEOLOGY_8"
+	event_chain = "irassian_chain"
+	cost = 0
+	days_to_research = 180
+	tech_department = society_technology
+	picture = GFX_evt_archaeological_dig
+	icon = "gfx/interface/icons/situation_log/situation_log_precursor.dds"
+	
+	event_scope = ship_event
+	
+	requirements = {
+		shipclass_science_ship = 1
+		leader = scientist
+		skill > 3
+	}
+	
+	on_success = {
+		ship_event = { id = precursor.1541 }
+	}
+	
+	on_fail = {
+	}
+}
+
+# Disease Control Base
+special_project = {
+	key = "IRASSIAN_ARCHEOLOGY_9"
+	event_chain = "irassian_chain"
+	cost = 0
+	days_to_research = 180
+	tech_department = society_technology
+	picture = GFX_evt_archaeological_dig
+	icon = "gfx/interface/icons/situation_log/situation_log_precursor.dds"
+	
+	event_scope = ship_event
+	
+	requirements = {
+		shipclass_science_ship = 1
+		leader = scientist
+		skill > 4
+	}
+	
+	on_success = {
+		ship_event = { id = precursor.1546 }
+	}
+	
+	on_fail = {
+	}
+}
+
+# Asteroid Listening Post
+special_project = {
+	key = "IRASSIAN_ARCHEOLOGY_10"
+	event_chain = "irassian_chain"
+	cost = 0
+	days_to_research = 180
+	tech_department = society_technology
+	picture = GFX_evt_archaeological_dig
+	icon = "gfx/interface/icons/situation_log/situation_log_precursor.dds"
+	
+	event_scope = ship_event
+	
+	requirements = {
+		shipclass_science_ship = 1
+		leader = scientist
+		skill > 4
+	}
+	
+	on_success = {
+		ship_event = { id = precursor.1551 }
+	}
+	
+	on_fail = {
+	}
+}
+
+# Gas Giant Science Station
+special_project = {
+	key = "IRASSIAN_ARCHEOLOGY_11"
+	event_chain = "irassian_chain"
+	cost = 0
+	days_to_research = 180
+	tech_department = society_technology
+	picture = GFX_evt_archaeological_dig
+	icon = "gfx/interface/icons/situation_log/situation_log_precursor.dds"
+	
+	event_scope = ship_event
+	
+	requirements = {
+		shipclass_science_ship = 1
+		leader = scientist
+		skill > 4
+	}
+	
+	on_success = {
+		ship_event = { id = precursor.1556 }
+	}
+	
+	on_fail = {
+	}
+}
+
+### CYBREX ARCHEOLOGICAL PROJECTS
+
+# Kuur Homeworld
+special_project = {
+	key = "CYBREX_ARCHEOLOGY_1"
+	event_chain = "cybrex_chain"
+	cost = 0
+	days_to_research = 180
+	tech_department = society_technology
+	picture = GFX_evt_archaeological_dig
+	icon = "gfx/interface/icons/situation_log/situation_log_precursor.dds"
+	
+	event_scope = ship_event
+	
+	requirements = {
+		shipclass_science_ship = 1
+		leader = scientist
+		skill > 4
+	}
+	
+	on_success = {
+		ship_event = { id = precursor.2006 }
+	}
+	
+	on_fail = {
+	}
+}
+
+# Indimak Homeworld
+special_project = {
+	key = "CYBREX_ARCHEOLOGY_2"
+	event_chain = "cybrex_chain"
+	cost = 0
+	days_to_research = 180
+	tech_department = society_technology
+	picture = GFX_evt_archaeological_dig
+	icon = "gfx/interface/icons/situation_log/situation_log_precursor.dds"
+	
+	event_scope = ship_event
+	
+	requirements = {
+		shipclass_science_ship = 1
+		leader = scientist
+		skill > 3
+	}
+	
+	on_success = {
+		ship_event = { id = precursor.2011 }
+	}
+	
+	on_fail = {
+	}
+}
+
+# Broken Cybrex Warforms
+special_project = {
+	key = "CYBREX_ARCHEOLOGY_3"
+	event_chain = "cybrex_chain"
+	cost = 0
+	days_to_research = 180
+	tech_department = society_technology
+	picture = GFX_evt_archaeological_dig
+	icon = "gfx/interface/icons/situation_log/situation_log_precursor.dds"
+	
+	event_scope = ship_event
+	
+	requirements = {
+		shipclass_science_ship = 1
+		leader = scientist
+		skill > 2
+	}
+	
+	on_success = {
+		ship_event = { id = precursor.2016 }
+	}
+	
+	on_fail = {
+	}
+}
+
+# Cybrex Invasion
+special_project = {
+	key = "CYBREX_ARCHEOLOGY_4"
+	event_chain = "cybrex_chain"
+	cost = 0
+	days_to_research = 180
+	tech_department = society_technology
+	picture = GFX_evt_archaeological_dig
+	icon = "gfx/interface/icons/situation_log/situation_log_precursor.dds"
+	
+	event_scope = ship_event
+	
+	requirements = {
+		shipclass_science_ship = 1
+		leader = scientist
+		skill > 4
+	}
+	
+	on_success = {
+		ship_event = { id = precursor.2021 }
+	}
+	
+	on_fail = {
+	}
+}
+
+# Cybrex Ruins
+special_project = {
+	key = "CYBREX_ARCHEOLOGY_5"
+	event_chain = "cybrex_chain"
+	cost = 0
+	days_to_research = 180
+	tech_department = society_technology
+	picture = GFX_evt_archaeological_dig
+	icon = "gfx/interface/icons/situation_log/situation_log_precursor.dds"
+	
+	event_scope = ship_event
+	
+	requirements = {
+		shipclass_science_ship = 1
+		leader = scientist
+		skill > 2
+	}
+	
+	on_success = {
+		ship_event = { id = precursor.2026 }
+	}
+	
+	on_fail = {
+	}
+}
+
+# Cybrex Listening Post
+special_project = {
+	key = "CYBREX_ARCHEOLOGY_6"
+	event_chain = "cybrex_chain"
+	cost = 0
+	days_to_research = 180
+	tech_department = society_technology
+	picture = GFX_evt_archaeological_dig
+	icon = "gfx/interface/icons/situation_log/situation_log_precursor.dds"
+	
+	event_scope = ship_event
+	
+	requirements = {
+		shipclass_science_ship = 1
+		leader = scientist
+		skill > 2
+	}
+	
+	on_success = {
+		ship_event = { id = precursor.2031 }
+	}
+	
+	on_fail = {
+	}
+}
+
+# Cybrex Refinery
+special_project = {
+	key = "CYBREX_ARCHEOLOGY_7"
+	event_chain = "cybrex_chain"
+	cost = 0
+	days_to_research = 180
+	tech_department = society_technology
+	picture = GFX_evt_archaeological_dig
+	icon = "gfx/interface/icons/situation_log/situation_log_precursor.dds"
+	
+	event_scope = ship_event
+	
+	requirements = {
+		shipclass_science_ship = 1
+		leader = scientist
+		skill > 4
+	}
+	
+	on_success = {
+		ship_event = { id = precursor.2036 }
+	}
+	
+	on_fail = {
+	}
+}
+
+# Battle Debris
+special_project = {
+	key = "CYBREX_ARCHEOLOGY_8"
+	event_chain = "cybrex_chain"
+	cost = 0
+	days_to_research = 180
+	tech_department = society_technology
+	picture = GFX_evt_archaeological_dig
+	icon = "gfx/interface/icons/situation_log/situation_log_precursor.dds"
+	
+	event_scope = ship_event
+	
+	requirements = {
+		shipclass_science_ship = 1
+		leader = scientist
+		skill > 3
+	}
+	
+	on_success = {
+		ship_event = { id = precursor.2041 }
+	}
+	
+	on_fail = {
+	}
+}
+
+# Ancient Cybrex Base
+special_project = {
+	key = "CYBREX_ARCHEOLOGY_9"
+	event_chain = "cybrex_chain"
+	cost = 0
+	days_to_research = 180
+	tech_department = society_technology
+	picture = GFX_evt_archaeological_dig
+	icon = "gfx/interface/icons/situation_log/situation_log_precursor.dds"
+	
+	event_scope = ship_event
+	
+	requirements = {
+		shipclass_science_ship = 1
+		leader = scientist
+		skill > 4
+	}
+	
+	on_success = {
+		ship_event = { id = precursor.2046 }
+	}
+	
+	on_fail = {
+	}
+}
+
+# Organic Remains
+special_project = {
+	key = "CYBREX_ARCHEOLOGY_10"
+	event_chain = "cybrex_chain"
+	cost = 0
+	days_to_research = 180
+	tech_department = society_technology
+	picture = GFX_evt_archaeological_dig
+	icon = "gfx/interface/icons/situation_log/situation_log_precursor.dds"
+	
+	event_scope = ship_event
+	
+	requirements = {
+		shipclass_science_ship = 1
+		leader = scientist
+		skill > 4
+	}
+	
+	on_success = {
+		ship_event = { id = precursor.2051 }
+	}
+	
+	on_fail = {
+	}
+}
+
+# Cybrex Research Station
+special_project = {
+	key = "CYBREX_ARCHEOLOGY_11"
+	event_chain = "cybrex_chain"
+	cost = 0
+	days_to_research = 180
+	tech_department = society_technology
+	picture = GFX_evt_archaeological_dig
+	icon = "gfx/interface/icons/situation_log/situation_log_precursor.dds"
+	
+	event_scope = ship_event
+	
+	requirements = {
+		shipclass_science_ship = 1
+		leader = scientist
+		skill > 4
+	}
+	
+	on_success = {
+		ship_event = { id = precursor.2056 }
+	}
+	
+	on_fail = {
+	}
+}
+
+### SPECIMEN PROCUREMENT
+
+# The Illusive Tarblac
+special_project = {
+	key = "TARBLAC_PROCUREMENT"
+	event_chain = "specimen_procurement_chain"
+	cost = 0
+	days_to_research = 180
+	tech_department = society_technology
+	
+	event_scope = ship_event
+	
+	requirements = {
+		shipclass_science_ship = 1
+		leader = scientist
+		skill > 2
+	}
+	
+	on_success = {
+		ship_event = { id = country.54 }
+	}
+	
+	on_fail = {
+	}
+}
+
+# The Mighty Tassargoid
+special_project = {
+	key = "TASSARGOID_PROCUREMENT"
+	event_chain = "specimen_procurement_chain"
+	cost = 0
+	days_to_research = 180
+	tech_department = society_technology
+	
+	event_scope = ship_event
+	
+	requirements = {
+		shipclass_science_ship = 1
+		leader = scientist
+		skill > 2
+	}
+	
+	on_success = {
+		ship_event = { id = country.55 }
+	}
+	
+	on_fail = {
+	}
+}
+
+# The Vile Orinthi
+special_project = {
+	key = "ORINTHI_PROCUREMENT"
+	event_chain = "specimen_procurement_chain"
+	cost = 0
+	days_to_research = 180
+	tech_department = society_technology
+	
+	event_scope = ship_event
+	
+	requirements = {
+		shipclass_science_ship = 1
+		leader = scientist
+		skill > 2
+	}
+	
+	on_success = {
+		ship_event = { id = country.56 }
+	}
+	
+	on_fail = {
+	}
+}
+
+# The Insidious Sniran
+special_project = {
+	key = "SNIRAN_PROCUREMENT"
+	event_chain = "specimen_procurement_chain"
+	cost = 0
+	days_to_research = 180
+	tech_department = society_technology
+	
+	event_scope = ship_event
+	
+	requirements = {
+		shipclass_science_ship = 1
+		leader = scientist
+		skill > 2
+	}
+	
+	on_success = {
+		ship_event = { id = country.57 }
+	}
+	
+	on_fail = {
+	}
+}
+
+# The Malleable Goolantha
+special_project = {
+	key = "GOOLANTHA_PROCUREMENT"
+	event_chain = "specimen_procurement_chain"
+	cost = 0
+	days_to_research = 180
+	tech_department = society_technology
+	
+	event_scope = ship_event
+	
+	requirements = {
+		shipclass_science_ship = 1
+		leader = scientist
+		skill > 2
+	}
+	
+	on_success = {
+		ship_event = { id = country.58 }
+	}
+	
+	on_fail = {
+	}
+}
+
+# The Wily Uddloran
+special_project = {
+	key = "UDDLORAN_PROCUREMENT"
+	event_chain = "specimen_procurement_chain"
+	cost = 0
+	days_to_research = 180
+	tech_department = society_technology
+	
+	event_scope = ship_event
+	
+	requirements = {
+		shipclass_science_ship = 1
+		leader = scientist
+		skill > 2
+	}
+	
+	on_success = {
+		ship_event = { id = country.59 }
+	}
+	
+	on_fail = {
+	}
+}
+
+# The Ravenous Zulcor
+special_project = {
+	key = "ZULCOR_PROCUREMENT"
+	event_chain = "specimen_procurement_chain"
+	cost = 0
+	days_to_research = 180
+	tech_department = society_technology
+	
+	event_scope = ship_event
+	
+	requirements = {
+		shipclass_science_ship = 1
+		leader = scientist
+		skill > 2
+	}
+	
+	on_success = {
+		ship_event = { id = country.60 }
+	}
+	
+	on_fail = {
+	}
+}
+
+# Recover Sublight Space Probe
+special_project = {
+	key = "SUBLIGHT_PROBE_PROJECT"
+	event_chain = "sublight_probes_chain"
+	cost = 0
+	days_to_research = 180
+	tech_department = society_technology
+	
+	event_scope = ship_event
+	
+	requirements = {
+		shipclass_science_ship = 1
+		leader = scientist
+		skill > 1
+	}
+	
+	on_success = {
+		ship_event = { id = country.4 }
+	}
+	
+	on_fail = {
+	}
+}
+
+# Board Cult Ship 1
+special_project = {
+	key = "BOARD_CULT_SHIP_1"
+	event_chain = "radical_cult"
+	cost = 0
+	days_to_research = 60
+	tech_department = engineering_technology
+	
+	event_scope = ship_event
+	
+	requirements = {
+		shipclass_military = 1
+	}
+	
+	on_success = {
+		ship_event = { id = country.203 }
+	}
+	
+	on_fail = {
+	}
+}
+
+# Board Cult Ship 2
+special_project = {
+	key = "BOARD_CULT_SHIP_2"
+	event_chain = "radical_cult"
+	cost = 0
+	days_to_research = 60
+	tech_department = society_technology
+	
+	event_scope = ship_event
+	
+	requirements = {
+		shipclass_transport = 1
+	}
+	
+	on_success = {
+		owner = { country_event = { id = country.214 } }
+	}
+	
+	on_fail = {
+	}
+}
+
+# Research Cult debris
+special_project = {
+	key = "CULTIST_DEBRIS"
+	event_chain = "radical_cult"
+	cost = 0
+	days_to_research = 60
+	tech_department = society_technology
+	
+	event_scope = ship_event
+	
+	requirements = {
+		shipclass_science_ship = 1
+	}
+	
+	on_success = {
+		#ship_event = { id = country.208 }
+		owner = { country_event = { id = country.208 } }
+	}
+	
+	on_fail = {
+	}
+}
+
+# Smuggler Raid
+special_project = {
+	key = "SMUGGLER_RAID_PROJECT"
+	cost = 0
+	days_to_research = 60
+	tech_department = society_technology
+	picture = GFX_evt_smugglers_in_bar
+	timelimit = 720
+	
+	event_scope = ship_event
+	
+	requirements = {
+		shipclass_transport = 1
+	}
+	
+	on_success = {
+		ship_event = { id = observation.52 }
+	}
+	
+	on_fail = {
+		country_event = { id = observation.53 }
+	}
+}
+
+# Rogue Agent Orbital Bombardment
+special_project = {
+	key = "ROGUE_BOMBARDMENT_PROJECT"
+	cost = 0
+	days_to_research = 60
+	tech_department = society_technology
+	picture = GFX_evt_smugglers_in_bar
+	timelimit = 720
+	
+	event_scope = ship_event
+	
+	requirements = {
+		shipclass_military = 1
+	}
+	
+	on_success = {
+		ship_event = { id = observation.3114 }
+	}
+	
+	on_fail = {
+		country_event = { id = observation.3113 }
+	}
+}
+
+# Avert Primitive War
+special_project = {
+	key = "AVERT_PRIMITIVE_WAR_PROJECT"
+	cost = 0
+	days_to_research = 60
+	tech_department = society_technology
+	picture = GFX_evt_smugglers_in_bar
+	timelimit = 720
+	
+	event_scope = ship_event
+	
+	requirements = {
+		shipclass_science_ship = 1
+	}
+	
+	on_success = {
+		ship_event = { id = observation.3133 }
+	}
+	
+	on_fail = {
+		country_event = { id = observation.3132 }
+	}
+}
+
+# Fallen Empire Shielded World
+special_project = {
+	key = "FALLEN_SHIELD_PROJECT"
+	days_to_research = 730
+	tech_department = physics_technology
+	picture = GFX_evt_ship_in_orbit
+	
+	event_scope = ship_event
+	
+	requirements = {
+		shipclass_science_ship = 1
+	}
+	
+	on_success = {
+		# random_list = {
+			# 25 = { ship_event = { id = galactic_features.301 } }
+			# 25 = { ship_event = { id = galactic_features.302 } }
+			# 25 = { ship_event = { id = galactic_features.303 } }
+			# 25 = { ship_event = { id = galactic_features.305 } }
+		# }
+		owner = { set_country_flag = shielded_world_opened }
+	}
+	
+	on_fail = {
+	}
+}
+
+# Test Project
+special_project = {
+	key = "TEST_PROJECT"
+	cost = 0
+	days_to_research = 10
+	tech_department = society_technology
+	picture = GFX_evt_smugglers_in_bar
+	timelimit = 10
+	
+	event_scope = ship_event
+	
+	requirements = {
+		shipclass_science_ship = 1
+		leader = scientist
+		is_founder_species = yes
+		has_trait = leader_trait_expertise_voidcraft
+	}
+	
+	on_success = {
+		# ship_event = { id = henrik.252 }
+	}
+	
+	on_fail = {
+		# country_event = { id = henrik.253 }
+	}
+}
+
+# First Contact
+special_project = {
+	key = "ESTABLISH_COMMUNICATIONS"
+	picture = GFX_evt_star_chart
+	icon = "gfx/interface/icons/situation_log/situation_log_radar.dds"
+	cost = 60
+	tech_department = society_technology
+	days_to_research = 0
+	location = no
+	timelimit = -1
+	AI_wait_days = {
+		weight = 80
+		modifier = {
+			weight = 30
+			has_ethic = ethic_fanatic_xenophile
+		}
+		modifier = {
+			weight = 40
+			has_ethic = ethic_xenophile
+		}
+		modifier = {
+			weight = 120
+			has_ethic = ethic_xenophobe
+		}
+		modifier = {
+			weight = 130
+			has_ethic = ethic_fanatic_xenophobe
+		}
+		modifier = {
+			weight = 1000
+			NOT = { has_technology = tech_colonization_1 }
+		}
+		# these are just to add some variance so all AIs don't do it at the same time
+		modifier = {
+			factor = 0.95
+			OR = {
+				has_ethic = ethic_egalitarian
+				has_ethic = ethic_fanatic_egalitarian
+			}
+		}
+		modifier = {
+			factor = 1.1
+			OR = {
+				has_ethic = ethic_authoritarian
+				has_ethic = ethic_fanatic_authoritarian
+			}
+		}
+		modifier = {
+			factor = 0.9
+			OR = {
+				has_ethic = ethic_spiritualist
+				has_ethic = ethic_fanatic_spiritualist
+			}
+		}
+		modifier = {
+			factor = 1.15
+			OR = {
+				has_ethic = ethic_materialist
+				has_ethic = ethic_fanatic_materialist
+			}
+		}
+		modifier = {
+			factor = 0.85
+			OR = {
+				has_ethic = ethic_pacifist
+				has_ethic = ethic_fanatic_pacifist
+			}
+		}
+		modifier = {
+			factor = 1.25
+			OR = {
+				has_ethic = ethic_militarist
+				has_ethic = ethic_fanatic_militarist
+			}
+		}			
+	}
+
+	event_scope = planet_event
+
+	requirements = {
+		#shipclass_science_ship = 1
+		#leader = scientist
+		#skill > 2
+	}
+
+	abort_trigger = {
+		OR = {
+			NOT = { exists = FROMFROM }
+			has_communications = FROMFROM
+		}
+	}
+
+	on_success = {
+		owner = { establish_communications = FROM }
+	}
+
+	on_fail = {
+	}
+}
+
+# Investigate Space Amoeba
+special_project = {
+	key = "INVESTIGATE_SPACE_AMOEBA"
+	picture = GFX_evt_star_chart
+	icon = "gfx/interface/icons/situation_log/situation_log_radar.dds"
+	cost = 60
+	tech_department = society_technology
+	days_to_research = 0
+	location = no
+	timelimit = -1
+
+	event_scope = planet_event
+
+	requirements = {
+	}
+
+	abort_trigger = {
+		#OR = {
+		#	NOT = { exists = FROMFROM }
+		#	has_communications = FROMFROM
+		#}
+	}
+
+	on_success = {
+		owner = {
+			# country_event = { id = story.100 }
+			# country_event = { id = tutorial.61 }
+			#set_country_flag = amoeba_comms
+		}
+	}
+
+	on_fail = {
+	}
+}
+
+# Investigate Crystals
+special_project = {
+	key = "INVESTIGATE_CRYSTALS"
+	picture = GFX_evt_star_chart
+	icon = "gfx/interface/icons/situation_log/situation_log_radar.dds"
+	cost = 60
+	tech_department = society_technology
+	days_to_research = 0
+	location = no
+	timelimit = -1
+
+	event_scope = planet_event
+
+	requirements = {
+	}
+
+	abort_trigger = {
+		#OR = {
+		#	NOT = { exists = FROMFROM }
+		#	has_communications = FROMFROM
+		#}
+	}
+
+	on_success = {
+		owner = {
+			# country_event = { id = story.200 }
+			# country_event = { id = tutorial.61 }
+			#set_country_flag = crystal_comms
+		}
+	}
+
+	on_fail = {
+	}
+}
+# Investigate Drones
+special_project = {
+	key = "INVESTIGATE_DRONES"
+	picture = GFX_evt_star_chart
+	icon = "gfx/interface/icons/situation_log/situation_log_radar.dds"
+	cost = 60
+	tech_department = society_technology
+	days_to_research = 0
+	location = no
+	timelimit = -1
+
+	event_scope = planet_event
+
+	requirements = {
+	}
+
+	abort_trigger = {
+		#OR = {
+		#	NOT = { exists = FROMFROM }
+		#	has_communications = FROMFROM
+		#}
+	}
+
+	on_success = {
+		owner = {
+			# country_event = { id = story.300 }
+			# country_event = { id = tutorial.61 }
+			#set_country_flag = drone_comms
+		}
+	}
+
+	on_fail = {
+	}
+}
+
+# Investigate Void Clouds
+special_project = {
+	key = "INVESTIGATE_SPACE_CLOUDS"
+	picture = GFX_evt_star_chart
+	icon = "gfx/interface/icons/situation_log/situation_log_radar.dds"
+	cost = 60
+	tech_department = society_technology
+	days_to_research = 0
+	location = no
+	timelimit = -1
+
+	event_scope = planet_event
+
+	requirements = {
+	}
+
+	abort_trigger = {
+		#OR = {
+		#	NOT = { exists = FROMFROM }
+		#	has_communications = FROMFROM
+		#}
+	}
+
+	on_success = {
+		owner = {
+			# country_event = { id = story.400 }
+			# country_event = { id = tutorial.61 }
+			#set_country_flag = cloud_comms
+		}
+	}
+
+	on_fail = {
+	}
+}
+
+
+# Investigate Tiyanki
+special_project = {
+	key = "INVESTIGATE_TIYANKI"
+	picture = GFX_evt_star_chart
+	icon = "gfx/interface/icons/situation_log/situation_log_radar.dds"
+	cost = 60
+	tech_department = society_technology
+	days_to_research = 0
+	location = no
+	timelimit = -1
+
+	event_scope = planet_event
+
+	requirements = {
+	}
+
+	abort_trigger = {
+		#OR = {
+		#	NOT = { exists = FROMFROM }
+		#	has_communications = FROMFROM
+		#}
+	}
+
+	on_success = {
+		owner = {
+			# country_event = { id = story.500 }
+			# country_event = { id = tutorial.61 }
+			#set_country_flag = tiyanki_comms
+		}
+	}
+
+	on_fail = {
+	}
+}
+
+# Investigate Pirates
+special_project = {
+	key = "INVESTIGATE_PIRATES"
+	picture = GFX_evt_star_chart
+	icon = "gfx/interface/icons/situation_log/situation_log_radar.dds"
+	cost = 60
+	tech_department = society_technology
+	days_to_research = 0
+	location = no
+	timelimit = -1
+
+	event_scope = planet_event
+
+	requirements = {
+	}
+
+	abort_trigger = {
+		#OR = {
+		#	NOT = { exists = FROMFROM }
+		#	has_communications = FROMFROM
+		#}
+	}
+
+	on_success = {
+		owner = {
+			country_event = { id = pirate.30 }
+			#country_event = { id = tutorial.61 }
+			#set_country_flag = pirate_comms
+		}
+	}
+
+	on_fail = {
+	}
+}
+
+# Board Hyacinth
+special_project = {
+	key = "BOARD_HYACINTH"
+	event_chain = "hunting_hyacinth"
+	cost = 0
+	days_to_research = 60
+	tech_department = society_technology
+	picture = GFX_evt_hangar_bay
+	
+	event_scope = ship_event
+	
+	requirements = {
+		shipclass_science_ship = 1
+	}
+	
+	on_success = {
+		ship_event = { id = country.255 }
+	}
+	
+	on_fail = {
+	}
+}
+
+# Abduct Scientist
+special_project = {
+	key = "ABDUCT_SCIENTIST_PROJECT"
+	cost = 0
+	days_to_research = 60
+	tech_department = society_technology
+	picture = GFX_evt_society_research
+	
+	event_scope = ship_event
+	
+	requirements = {
+		shipclass_science_ship = 1
+	}
+	
+	on_success = {
+		random_list = {
+			75 = { ship_event = { id = observation.1002 } }
+			25 = { ship_event = { id = observation.1003 } }
+		}
+	}
+	
+	on_fail = {
+	}
+}
+
+# Implant Malfunctions
+special_project = {
+	key = "IMPLANT_MALFUNCTIONS_PROJECT"
+	cost = 0
+	days_to_research = 60
+	tech_department = society_technology
+	picture = GFX_evt_cybernetics
+	timelimit = 720
+	
+	event_scope = ship_event
+	
+	requirements = {
+		shipclass_science_ship = 1
+	}
+	
+	on_success = {
+		ship_event = { id = observation.1012 }
+	}
+	
+	on_fail = {
+		country_event = { id = observation.1013 }
+	}
+}
+
+# Defense Force Strike
+special_project = {
+	key = "DEFENSE_FORCE_STRIKE_PROJECT"
+	cost = 0
+	days_to_research = 60
+	tech_department = society_technology
+	picture = GFX_evt_outpost
+	
+	event_scope = ship_event
+	
+	requirements = {
+		shipclass_transport = 1
+	}
+	
+	on_success = {
+		random_list = {
+			70 = { ship_event = { id = observation.1028 } }
+			30 = { ship_event = { id = observation.1029 } }
+		}
+	}
+	
+	on_fail = {
+	}
+}
+
+# Synth Infiltration Project
+special_project = {
+	key = "SYNTH_INFILTRATION_PROJECT"
+	cost = 1000
+	tech_department = society_technology
+	picture = GFX_evt_robot_assembly_plant
+	location = no
+	timelimit = -1
+	
+	event_scope = planet_event
+	
+	requirements = {
+	}
+	
+	on_success = {
+		owner = {
+			# country_event = { id = crisis.2203 }
+		}
+	}
+	
+	on_fail = {
+	}
+}
+
+# Capture Swarm Queen
+special_project = {
+	key = "CAPTURE_QUEEN"
+	event_chain = "prethoryn_scourge_chain"
+	cost = 0
+	days_to_research = 60
+	tech_department = society_technology
+	picture = GFX_evt_society_research
+	
+	event_scope = ship_event
+	
+	requirements = {
+		shipclass_science_ship = 1
+	}
+
+	abort_trigger = {
+		has_country_flag = queen_snatched
+	}
+	
+	on_success = {
+		# ship_event = { id = crisis.105 }
+	}
+	
+	on_fail = {
+	}
+	
+	AI_wait_days = {
+		weight = 180
+		modifier = {
+			factor = 2.0
+			OR = {
+				has_ethic = ethic_egalitarian
+				has_ethic = ethic_fanatic_egalitarian
+			}
+		}
+		modifier = {
+			factor = 1.3
+			OR = {
+				has_ethic = ethic_spiritualist
+				has_ethic = ethic_fanatic_spiritualist
+			}
+		}
+		modifier = {
+			factor = 0.9
+			OR = {
+				has_ethic = ethic_materialist
+				has_ethic = ethic_fanatic_materialist
+			}
+		}
+		modifier = {
+			factor = 1.6
+			OR = {
+				has_ethic = ethic_pacifist
+				has_ethic = ethic_fanatic_pacifist
+			}
+		}
+		modifier = {
+			factor = 0.5
+			OR = {
+				has_ethic = ethic_militarist
+				has_ethic = ethic_fanatic_militarist
+			}
+		}
+	}
+}
+
+# Fleet Maneuvers I
+special_project = {
+	key = "FLEET_MANEUVERS_1_PROJECT"
+	cost = 0
+	days_to_research = 30
+	tech_department = society_technology
+	picture = GFX_evt_unknown_ships
+	timelimit = 1080
+	
+	event_scope = ship_event
+	
+	requirements = {
+		fleet_power > 7999
+		leader = admiral
+	}
+	
+	on_success = {
+		ship_event = { id = diplomatic.1025 }
+	}
+	
+	on_fail = {
+		country_event = { id = diplomatic.1001 }
+	}
+	
+	on_start = {
+		ship_event = { id = diplomatic.1005 }
+	}
+	
+	on_progress_25 = {
+	}
+	
+	on_progress_50 = {
+		ship_event = { id = diplomatic.1010 }
+	}
+	
+	on_progress_75 = {
+	}
+}
+
+# Fleet Maneuvers II
+special_project = {
+	key = "FLEET_MANEUVERS_2_PROJECT"
+	cost = 0
+	days_to_research = 30
+	tech_department = society_technology
+	picture = GFX_evt_unknown_ships
+	timelimit = 1080
+	
+	event_scope = ship_event
+	
+	requirements = {
+		fleet_power > 19999
+		leader = admiral
+	}
+	
+	on_success = {
+		ship_event = { id = diplomatic.1025 }
+	}
+	
+	on_fail = {
+		country_event = { id = diplomatic.1001 }
+	}
+	
+	on_start = {
+		ship_event = { id = diplomatic.1005 }
+	}
+	
+	on_progress_25 = {
+	}
+	
+	on_progress_50 = {
+		ship_event = { id = diplomatic.1010 }
+	}
+	
+	on_progress_75 = {
+	}
+}
+
+# Fleet Maneuvers III
+special_project = {
+	key = "FLEET_MANEUVERS_3_PROJECT"
+	cost = 0
+	days_to_research = 720
+	tech_department = society_technology
+	picture = GFX_evt_unknown_ships
+	timelimit = 1080
+	
+	event_scope = ship_event
+	
+	requirements = {
+		fleet_power > 49999
+		leader = admiral
+	}
+	
+	on_success = {
+		ship_event = { id = diplomatic.1025 }
+	}
+	
+	on_fail = {
+		country_event = { id = diplomatic.1001 }
+	}
+	
+	on_start = {
+		ship_event = { id = diplomatic.1005 }
+	}
+	
+	on_progress_25 = {
+	}
+	
+	on_progress_50 = {
+		ship_event = { id = diplomatic.1010 }
+	}
+	
+	on_progress_75 = {
+	}
+}

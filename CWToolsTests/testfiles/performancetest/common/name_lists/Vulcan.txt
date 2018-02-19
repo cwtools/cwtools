@@ -1,0 +1,93 @@
+﻿### Vulcan High Command
+Vulcan = {
+	randomized = no
+
+	ship_names = {
+		generic = {
+			D'Kyr D'Vahl Ni'Var Nyran Seleya Sh'Raan Tal'Kir Ti'Mur T'Pau T'Plana T'Plana-Hath T'Vran Vaankara Vahklas Yarahla D'Mur D'Var Tal'Vahl Sh'Kyr Sh'Mur Sh'Var Tal'Var Ti'Kyr V'Laak T'Kec Skijy Hyjok Veluk Todith Penn Mol Vuth T'Mi Huk Ivok T'Risik T'Plikang Nil Naal T'Ho T'Pi
+		}
+		corvette = {
+		}
+		saber = {
+		}
+		sovereign = {
+		}
+		steamrunner = {
+		}		
+		adv_cruiser = {
+		}
+		strike = {
+		}		
+		outpost_station = {
+			sequential_name = "Frontier Outpost"
+		}
+	}
+
+	fleet_names = {
+		sequential_name = "%O% Fleet"
+	}
+	
+	army_names = {
+		defense_army = {
+			sequential_name = "%O% Guard"
+		}
+		assault_army = {
+			sequential_name = "%O% Defence Force"
+		}
+		slave_army = {
+			sequential_name = "%O% Indentured Defence Force"
+		}
+		clone_army = { 
+			sequential_name = "%O% Clone Defence Force"
+		}
+		robotic_army = {
+			sequential_name = "%O% Mechanical Defence Force"
+		}
+		android_army = {
+			sequential_name = "%O% Synthetic Defence Force"
+		}
+		psionic_army = { 
+			sequential_name = "%O% Psi Defence Force"
+		}
+		xenomorph_army = {
+			sequential_name = "%O% Bio-Warfare Defence Force"
+		}
+		gene_warrior_army = {
+			sequential_name = "%O% Bio-Engineered Defence Force"
+		}
+	}
+
+	planet_names = {
+		generic = {
+			names = {
+			}
+		}
+	}
+
+
+	### CHARACTERS
+
+	character_names = {
+		names1 = {
+			weight = 100
+			first_names_male = {		
+				Chu'lak Delvok Falor Fer'at Haadok Jossen Kinis Kiri-kin-tha Koss Kov Kuvak Lojal Lorian Lorot Menos Mestral Muroc Nirak Oratt Pola Sakkath Sarek Sasak Satelk Satok Savar Sek Selek Sepek Skon Sofek Solin Solkar Solok Sonak Sopek Soral Soval Spock Stark Stel Stonn Strom Stron Sybok Surak Syrran Syvar Talok Taurik Tavek Tavin Tellus T'Klaas Tok Tolaris Tos Tuvok Vanik Velik V'Las Vorik Voris Yuris
+			}
+			first_names_female = {
+				Asil Saavik Sakonna Selar Senva Sitak Sitar T'Lara T'Hain T'Lar T'Leel T'Les T'Meni T'Mir T'Pan T'Para T'Pau T'Pel T'Penna T'Plana-Hath T'Plana T'Pol T'Pring T'Shanik Valeris V'Lar T'Pring V'Lurre T'Praavur T'Pli Mok V'Loth Fenna T'Maakin Sonnuk T'Pennal Nukon T'Man Nek T'Mek Sar V'Luth T'Shokath T'Haasik T'Preker T'Rovo V'Lekaal Lul Las Mat'h V'Lonvoth T'Silul M'son Nenvan Lalung
+			}
+			second_names = {
+				" "
+			}
+			regnal_first_names_male = {
+				Chu'lak Delvok Falor Fer'at Haadok Jossen Kinis Kiri-kin-tha Koss Kov Kuvak Lojal Lorian Lorot Menos Mestral Muroc Nirak Oratt Pola Sakkath Sarek Sasak Satelk Satok Savar Sek Selek Sepek Skon Sofek Solin Solkar Solok Sonak Sopek Soral Soval Spock Stark Stel Stonn Strom Stron Sybok Surak Syrran Syvar Talok Taurik Tavek Tavin Tellus T'Klaas Tok Tolaris Tos Tuvok Vanik Velik V'Las Vorik Voris Yuris
+			}
+			regnal_first_names_female = {
+				Asil Saavik Sakonna Selar Senva Sitak Sitar T'Lara T'Hain T'Lar T'Leel T'Les T'Meni T'Mir T'Pan T'Para T'Pau T'Pel T'Penna T'Plana-Hath T'Plana T'Pol T'Pring T'Shanik Valeris V'Lar T'Pring V'Lurre T'Praavur T'Pli Mok V'Loth Fenna T'Maakin Sonnuk T'Pennal Nukon T'Man Nek T'Mek Sar V'Luth T'Shokath T'Haasik T'Preker T'Rovo V'Lekaal Lul Las Mat'h V'Lonvoth T'Silul M'son Nenvan Lalung
+			}
+			regnal_second_names = {
+				" "
+			}
+		}
+	}
+}

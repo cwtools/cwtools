@@ -1,0 +1,314 @@
+@attack_range = 8
+@launch_time = 1.5
+@fighter_speed = 5
+@bomber_speed = 4.5
+@count = 8
+@regen = 0.13
+
+strike_craft_component_template = {
+	key = "LARGE_SCOUT_HANGAR_1"
+	size = LARGE
+	entity = "fighter_entity"
+	
+	weapon_type = point_defence
+	projectile_gfx = "scout_laser_1"
+	power = -20
+	cost = 10
+	
+	hidden = yes
+	
+	count = @count
+	regeneration_per_day = @regen
+	launch_time = @launch_time
+	
+	damage = { min = 1 max = 2 }
+	cooldown = 2.5
+	range = 8
+	accuracy = 0.70
+	tracking = 0.10
+	
+	health = 30
+	armor = 0
+	shield = 0
+	evasion = 0.40
+	
+	speed = @fighter_speed
+	rotation_speed = 0.1
+	acceleration = 0.5
+	
+	shield_damage = 1.0
+	shield_penetration = 0
+	armor_penetration = 0
+	
+	ship_behavior = "fighters_behavior"
+	
+	icon = "GFX_ship_part_strike_craft_scout_1"
+	icon_frame = 1
+	component_set = "SCOUT_HANGAR_1"
+	tags = { weapon_type_strike_craft }
+}
+
+strike_craft_component_template = {
+	key = "LARGE_FIGHTERS_HANGAR_1"
+	size = LARGE
+	entity = "fighter_entity"
+	
+	weapon_type = point_defence
+	projectile_gfx = "strike_craft_laser_1"
+	power = -30
+	cost = 20
+	
+	hidden = yes
+	
+	count = @count
+	regeneration_per_day = @regen
+	launch_time = @launch_time
+	
+	damage = { min = 2 max = 3 }
+	cooldown = 2.5
+	range = 10
+	accuracy = 0.70
+	tracking = 0.20
+	
+	health = 40
+	armor = 0
+	shield = 0
+	evasion = 0.60
+	
+	speed = @fighter_speed
+	rotation_speed = 0.1
+	acceleration = 0.5
+	
+	shield_damage = 1.0
+	shield_penetration = 0
+	armor_penetration = 0
+	
+	ship_behavior = "fighters_behavior"
+	
+	icon = "GFX_ship_part_strike_craft_fighter_1"
+	icon_frame = 1
+	component_set = "FIGHTERS_HANGAR_1"
+	#prerequisites = { "tech_strike_craft_1" }
+	tags = { weapon_type_strike_craft }
+	upgrades_to = "LARGE_FIGHTERS_HANGAR_2"
+}
+
+strike_craft_component_template = {
+	key = "LARGE_FIGHTERS_HANGAR_2"
+	size = LARGE
+	entity = "fighter_entity"
+	
+	hidden = yes
+	
+	weapon_type = point_defence
+	projectile_gfx = "strike_craft_laser_2"
+	power = -40
+	cost = 25
+	
+	count = @count
+	regeneration_per_day = @regen
+	launch_time = @launch_time
+	
+	damage = { min = 3 max = 4 }
+	cooldown = 2.5
+	range = 10
+	accuracy = 0.70
+	tracking = 0.30
+	
+	health = 50
+	armor = 0
+	shield = 0
+	evasion = 0.70
+	
+	speed = @fighter_speed
+	rotation_speed = 0.1
+	acceleration = 0.5
+	
+	shield_damage = 1.0
+	shield_penetration = 0
+	armor_penetration = 0
+	
+	ship_behavior = "fighters_behavior"
+	
+	icon = "GFX_ship_part_strike_craft_fighter_2"
+	icon_frame = 1
+	component_set = "FIGHTERS_HANGAR_2"
+	#prerequisites = { "tech_strike_craft_2" }
+	tags = { weapon_type_strike_craft }
+	upgrades_to = "LARGE_FIGHTERS_HANGAR_3"
+}
+
+strike_craft_component_template = {
+	key = "LARGE_FIGHTERS_HANGAR_3"
+	size = LARGE
+	entity = "fighter_entity"
+	
+	weapon_type = point_defence
+	projectile_gfx = "strike_craft_laser_3"
+	power = -50
+	cost = 30
+	
+	hidden = yes
+	
+	count = @count
+	regeneration_per_day = @regen
+	launch_time = @launch_time
+	
+	damage = { min = 4 max = 5 }
+	cooldown = 2.5
+	range = 10
+	accuracy = 0.70
+	tracking = 0.40
+	
+	health = 60
+	armor = 0
+	shield = 0
+	evasion = 0.80
+	
+	speed = @fighter_speed
+	rotation_speed = 0.1
+	acceleration = 0.5
+	
+	shield_damage = 1.0
+	shield_penetration = 0
+	armor_penetration = 0
+	
+	ship_behavior = "fighters_behavior"
+	
+	icon = "GFX_ship_part_strike_craft_fighter_3"
+	icon_frame = 1
+	component_set = "FIGHTERS_HANGAR_3"
+	#prerequisites = { "tech_strike_craft_3" }
+	tags = { weapon_type_strike_craft }
+}
+
+strike_craft_component_template = {
+	key = "LARGE_BOMBERS_HANGAR_1"
+	size = LARGE
+	entity = "bomber_entity"
+	power = -30
+	cost = 20
+		
+	count = @count
+	regeneration_per_day = @regen
+	launch_time = @launch_time
+	
+	hidden = yes
+	
+	damage = { min = 16 max = 24 }
+	cooldown = 10
+	range = 15
+	accuracy = 1.0
+	
+	health = 60
+	armor = 0
+	shield = 0
+	evasion = 0.50
+	
+	speed = @bomber_speed
+	rotation_speed = 0.1
+	acceleration = 0.5
+	
+	shield_damage = 1.0
+	shield_penetration = 1
+	armor_penetration = 0.5
+	
+	ship_behavior = "bombers_behavior"
+	
+	weapon_type = instant
+	projectile_gfx = "scout_laser_1"
+	
+	icon = "GFX_ship_part_strike_craft_bomber_1"
+	icon_frame = 1
+	component_set = "BOMBERS_HANGAR_1"
+	#prerequisites = { "tech_strike_craft_1" }
+	tags = { weapon_type_strike_craft }
+	upgrades_to = "LARGE_BOMBERS_HANGAR_2"
+}
+
+strike_craft_component_template = {
+	key = "LARGE_BOMBERS_HANGAR_2"
+	size = LARGE
+	entity = "bomber_entity"
+	power = -40
+	cost = 25
+	
+	hidden = yes
+		
+	count = @count
+	regeneration_per_day = @regen
+	launch_time = @launch_time
+	
+	damage = { min = 20 max = 30 }
+	cooldown = 10
+	range = 15
+	accuracy = 1.0
+	
+	health = 70
+	armor = 0
+	shield = 0
+	evasion = 0.60
+	
+	speed = @bomber_speed
+	rotation_speed = 0.1
+	acceleration = 0.5
+	
+	shield_damage = 1.0
+	shield_penetration = 1
+	armor_penetration = 0.5
+	
+	ship_behavior = "bombers_behavior"
+	
+	weapon_type = instant
+	projectile_gfx = "scout_laser_1"
+	
+	icon = "GFX_ship_part_strike_craft_bomber_2"
+	icon_frame = 1
+	component_set = "BOMBERS_HANGAR_2"
+	#prerequisites = { "tech_strike_craft_2" }
+	tags = { weapon_type_strike_craft }
+	upgrades_to = "LARGE_BOMBERS_HANGAR_3"
+}
+
+strike_craft_component_template = {
+	key = "LARGE_BOMBERS_HANGAR_3"
+	size = LARGE
+	entity = "bomber_entity"
+	power = -50
+	cost = 30
+		
+	count = @count
+	regeneration_per_day = @regen
+	launch_time = @launch_time
+	
+	damage = { min = 24 max = 36 }
+	cooldown = 10
+	range = 15
+	accuracy = 1.0
+	
+	hidden = yes
+	
+	health = 80
+	armor = 0
+	shield = 0
+	evasion = 0.70
+	
+	speed = @bomber_speed
+	rotation_speed = 0.1
+	acceleration = 0.5
+	
+	shield_damage = 1.0
+	shield_penetration = 1
+	armor_penetration = 0.5
+	
+	ship_behavior = "bombers_behavior"
+	
+	weapon_type = instant
+	projectile_gfx = "scout_laser_1"
+	
+	icon = "GFX_ship_part_strike_craft_bomber_3"
+	icon_frame = 1
+	component_set = "BOMBERS_HANGAR_3"
+	#prerequisites = { "tech_strike_craft_3" }
+	tags = { weapon_type_strike_craft }
+}

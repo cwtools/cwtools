@@ -1,0 +1,1245 @@
+namespace = STH_espionage_mechanic
+
+#Tal Shiar Popup
+event = {
+	id = STH_espionage_mechanic.1
+	hide_window = yes
+	is_triggered_only = yes
+	immediate = {
+		every_country = {
+			limit = { 
+				has_espionage_mechanics = yes
+				NOT = { has_country_flag = recent_espionage_mechanic }
+			}
+			country_event = { id = STH_espionage_mechanic.2 days = 40 }
+		}
+	}
+}
+
+
+#Tal Shiar Oversight Committee
+country_event = {
+	id = STH_espionage_mechanic.2
+	title = "STH_espionage_mechanic.2.name"
+	desc = { trigger = { has_tal_shiar = yes } text = "STH_espionage_mechanic.2.desc_talShiar" }
+	desc = { trigger = { has_obsidian_order = yes } text = "STH_espionage_mechanic.2.desc_obsidianOrder" }
+	desc = { trigger = { has_generic_espionage = yes } text = "STH_espionage_mechanic.2.desc_01" }
+	picture = { trigger = { has_tal_shiar = yes } picture = sth_GFX_evt_romulanCommittee }
+	picture = { trigger = { has_obsidian_order = yes } picture = sth_GFX_evt_cardassianCommittee }
+	picture = { trigger = { has_generic_espionage = yes } picture = sth_GFX_evt_genericEspionage }
+	force_open = yes
+	is_triggered_only = yes
+	trigger = { has_espionage_mechanics = yes }
+	immediate = { 
+		set_timed_country_flag = { flag = recent_espionage_mechanic days = 600 }
+		leader = { save_event_target_as = countryRuler }
+	}
+	option = {
+		#Sabotage Foreign Relations
+		name = STH_espionage_mechanic.2.a
+		trigger = { }
+		hidden_effect = { country_event = { id = STH_espionage_mechanic.3 } }
+	}
+	option = {
+		#Sabotage Foreign Building
+		name = STH_espionage_mechanic.2.c
+		trigger = { }
+		hidden_effect = { country_event = { id = STH_espionage_mechanic.5 } }
+	}
+	option = {
+		#Sabotage Foreign Fleet
+		name = STH_espionage_mechanic.2.d
+		trigger = { }
+		hidden_effect = { country_event = { id = STH_espionage_mechanic.7 } }
+	}
+	option = {
+		#Assassinate Foreign Leader
+		name = STH_espionage_mechanic.2.e
+		allow = { OR = { has_ethic = ethic_authoritarian has_ethic = ethic_fanatic_authoritarian } }
+		hidden_effect = { country_event = { id = STH_espionage_mechanic.9 } }
+	}
+	option = { name = STH_espionage_mechanic.2.f }
+}
+
+#Sabotage Foreign Relations
+country_event = {
+	id = STH_espionage_mechanic.3
+	title = "STH_espionage_mechanic.3.name"
+	desc = "STH_espionage_mechanic.3.desc"
+	picture = { trigger = { has_tal_shiar = yes } picture = sth_GFX_evt_romulanCommittee }
+	picture = { trigger = { has_obsidian_order = yes } picture = sth_GFX_evt_cardassianCommittee }
+	picture = { trigger = { has_generic_espionage = yes } picture = sth_GFX_evt_genericEspionage }
+	force_open = yes
+	is_triggered_only = yes
+	trigger = { has_espionage_mechanics = yes }
+	immediate = { 
+		random_country = {
+			limit = { has_country_flag = "sabotageRelationsCandidate@Root" }
+			save_event_target_as = sabotageRelationsCandidatePrior
+		}
+		random_neighbor_country = {
+			limit = { 
+				valid_diplomacy_espionage_target = yes 
+				NOR = { 
+					AND = { exists = event_target:sabotageRelationsCandidatePrior is_same_value = event_target:sabotageRelationsCandidatePrior }
+					is_same_value = Root
+				}
+			}
+			save_event_target_as = sabotageRelationsCandidate1
+		}
+		random_country = { 
+			limit = { 
+				valid_diplomacy_espionage_target = yes
+				NOR = { 
+					AND = { exists = event_target:sabotageRelationsCandidatePrior is_same_value = event_target:sabotageRelationsCandidatePrior }
+					AND = { exists = event_target:sabotageRelationsCandidate1 is_same_value = event_target:sabotageRelationsCandidate1 }
+					is_same_value = Root
+				}
+			}
+			save_event_target_as = sabotageRelationsCandidate2
+		}
+		random_country = { 
+			limit = {
+				valid_diplomacy_espionage_target = yes
+				NOR = { 
+					AND = { exists = event_target:sabotageRelationsCandidatePrior is_same_value = event_target:sabotageRelationsCandidatePrior }
+					AND = { exists = event_target:sabotageRelationsCandidate1 is_same_value = event_target:sabotageRelationsCandidate1 }
+					AND = { exists = event_target:sabotageRelationsCandidate2 is_same_value = event_target:sabotageRelationsCandidate2 }
+					is_same_value = Root
+				}
+			}
+			save_event_target_as = sabotageRelationsCandidate3
+		}
+		random_country = {
+			limit = {
+				valid_diplomacy_espionage_target = yes
+				NOR = { 
+					AND = { exists = event_target:sabotageRelationsCandidatePrior is_same_value = event_target:sabotageRelationsCandidatePrior }
+					AND = { exists = event_target:sabotageRelationsCandidate1 is_same_value = event_target:sabotageRelationsCandidate1 }
+					AND = { exists = event_target:sabotageRelationsCandidate2 is_same_value = event_target:sabotageRelationsCandidate2 }
+					AND = { exists = event_target:sabotageRelationsCandidate3 is_same_value = event_target:sabotageRelationsCandidate3 }
+					is_same_value = Root
+				}
+			}
+			save_event_target_as = sabotageRelationsCandidate4
+		}
+		random_country = { limit = { has_country_flag = "sabotageRelationsCandidate@Root" } set_country_flag = sabotageRelationsCandidateTemp }
+		every_country = { limit = { has_country_flag = "sabotageRelationsCandidate@Root" } remove_country_flag = "sabotageRelationsCandidate@Root" }
+		random_country = { 
+			limit = { has_country_flag = sabotageRelationsCandidateTemp }
+			remove_country_flag = sabotageRelationsCandidateTemp
+			set_country_flag = "sabotageRelationsCandidate@Root"
+		}
+	}
+	option = {
+		name = STH_espionage_mechanic.3.g
+		trigger = { exists = event_target:sabotageRelationsCandidatePrior }
+		allow = { exists = event_target:sabotageRelationsCandidatePrior }
+		hidden_effect = {
+			event_target:sabotageRelationsCandidatePrior = { set_country_flag = "sabotageRelationsCandidate@Root" }
+			country_event = { id = STH_espionage_mechanic.4 scopes = { from = event_target:sabotageRelationsCandidatePrior } }
+		}
+	}
+	option = {
+		name = STH_espionage_mechanic.3.a
+		trigger = { exists = event_target:sabotageRelationsCandidate1 }
+		allow = { exists = event_target:sabotageRelationsCandidate1 }
+		hidden_effect = {
+			event_target:sabotageRelationsCandidate1 = { set_country_flag = "sabotageRelationsCandidate@Root" }
+			country_event = { id = STH_espionage_mechanic.4 scopes = { from = event_target:sabotageRelationsCandidate1 } }
+		}
+	}
+	option = {
+		name = STH_espionage_mechanic.3.b
+		trigger = { exists = event_target:sabotageRelationsCandidate2 }
+		allow = { exists = event_target:sabotageRelationsCandidate2 }
+		hidden_effect = {
+			event_target:sabotageRelationsCandidate2 = { set_country_flag = "sabotageRelationsCandidate@Root" }
+			country_event = { id = STH_espionage_mechanic.4 scopes = { from = event_target:sabotageRelationsCandidate2 } }
+		}
+	}
+	option = {
+		name = STH_espionage_mechanic.3.c
+		trigger = { exists = event_target:sabotageRelationsCandidate3 }
+		allow = { exists = event_target:sabotageRelationsCandidate3 }
+		hidden_effect = {
+			event_target:sabotageRelationsCandidate3 = { set_country_flag = "sabotageRelationsCandidate@Root" }
+			country_event = { id = STH_espionage_mechanic.4 scopes = { from = event_target:sabotageRelationsCandidate3 } }
+		}
+	}
+	option = {
+		name = STH_espionage_mechanic.3.d
+		trigger = { exists = event_target:sabotageRelationsCandidate4 }
+		allow = { exists = event_target:sabotageRelationsCandidate4 }
+		hidden_effect = {
+			event_target:sabotageRelationsCandidate4 = { set_country_flag = "sabotageRelationsCandidate@Root" }
+			country_event = { id = STH_espionage_mechanic.4 scopes = { from = event_target:sabotageRelationsCandidate4 } }
+		}
+	}
+	option = { 
+		name = STH_espionage_mechanic.3.e 
+		hidden_effect = { country_event = { id = STH_espionage_mechanic.3 } }
+	}
+	option = { 
+		name = STH_espionage_mechanic.3.f
+		hidden_effect = { country_event = { id = STH_espionage_mechanic.2 } }
+	}
+}
+
+#Set Sabotage Relations Investment Rate
+country_event = {
+	id = STH_espionage_mechanic.4
+	title = "STH_espionage_mechanic.4.name"
+	desc = { trigger = { has_tal_shiar = yes } text = "STH_espionage_mechanic.4.desc_talShiar" }
+	desc = { trigger = { has_obsidian_order = yes } text = "STH_espionage_mechanic.4.desc_obsidianOrder" }
+	desc = { trigger = { has_generic_espionage = yes } text = "STH_espionage_mechanic.4.desc_01" }
+	picture = { trigger = { has_tal_shiar = yes } picture = sth_GFX_evt_romulanCommittee }
+	picture = { trigger = { has_obsidian_order = yes } picture = sth_GFX_evt_cardassianCommittee }
+	picture = { trigger = { has_generic_espionage = yes } picture = sth_GFX_evt_genericEspionage }
+	force_open = yes
+	is_triggered_only = yes
+	trigger = { has_espionage_mechanics = yes }
+	immediate = { }
+	option = {
+		name = STH_espionage_mechanic.4.a
+		allow = { exists = from }
+		hidden_effect = {
+			from = {
+				set_timed_country_flag = { flag = relationsSabotaged days = 600 }
+				random_list = {
+					10 = { 
+						modifier = { factor = 0.75 num_pops > 40 }
+						modifier = { factor = 1.25 num_pops < 40 }
+						country_event = { id = STH_espionage_mechanic.12 days = 90 scopes = { from = root } }
+					}
+					10 = {
+						country_event = { id = STH_espionage_mechanic.14 days = 90 scopes = { from = root } }
+					}
+				}
+			}
+		}
+	}
+	option = {
+		name = STH_espionage_mechanic.4.b
+		allow = { 
+			exists = from
+			has_country_resource = { type = energy amount > 199 }
+			has_country_resource = { type = minerals amount > 199 }
+			has_country_resource = { type = influence amount > 99 }
+		}
+		add_energy = -200
+		add_minerals = -200
+		add_influence = -100
+		hidden_effect = { 
+			from = {
+				set_timed_country_flag = { flag = relationsSabotaged days = 600 }
+				random_list = {
+					20 = { 
+						modifier = { factor = 0.75 num_pops > 40 }
+						modifier = { factor = 1.25 num_pops < 40 }
+						country_event = { id = STH_espionage_mechanic.12 days = 90 scopes = { from = root } }
+					}
+					10 = {
+						country_event = { id = STH_espionage_mechanic.14 days = 90 scopes = { from = root } }
+					}
+				}
+			}
+		}
+	}
+	option = {
+		name = STH_espionage_mechanic.4.c
+		allow = { 
+			exists = from
+			has_country_resource = { type = energy amount > 399 }
+			has_country_resource = { type = minerals amount > 399 }
+			has_country_resource = { type = influence amount > 199 }
+		}
+		add_energy = -400
+		add_minerals = -400
+		add_influence = -200
+		hidden_effect = {
+			from = {
+				set_timed_country_flag = { flag = relationsSabotaged days = 600 }
+				random_list = {
+					40 = { 
+						modifier = { factor = 0.75 num_pops > 40 }
+						modifier = { factor = 1.25 num_pops < 40 }
+						country_event = { id = STH_espionage_mechanic.12 days = 90 scopes = { from = root } }
+					}
+					10 = {
+						country_event = { id = STH_espionage_mechanic.14 days = 90 scopes = { from = root } }
+					}
+				}
+			}
+		}
+	}
+	option = { 
+		name = STH_espionage_mechanic.4.d
+		hidden_effect = { country_event = { id = STH_espionage_mechanic.3 } }
+	}
+}
+
+
+#Sabotage Foreign Building
+country_event = {
+	id = STH_espionage_mechanic.5
+	title = "STH_espionage_mechanic.5.name"
+	desc = "STH_espionage_mechanic.5.desc"
+	picture = { trigger = { has_tal_shiar = yes } picture = sth_GFX_evt_romulanCommittee }
+	picture = { trigger = { has_obsidian_order = yes } picture = sth_GFX_evt_cardassianCommittee }
+	picture = { trigger = { has_generic_espionage = yes } picture = sth_GFX_evt_genericEspionage }
+	force_open = yes
+	is_triggered_only = yes
+	trigger = { has_espionage_mechanics = yes }
+	immediate = { 
+		random_country = {
+			limit = { 
+				valid_espionage_target = yes
+				has_country_flag = "sabotageBuildingCandidate@Root"
+			}
+			save_event_target_as = sabotageBuildingCandidatePrior
+		}
+		random_neighbor_country = {
+			limit = { 
+				valid_espionage_target = yes
+				NOR = { 
+					AND = { exists = event_target:sabotageBuildingCandidatePrior is_same_value = event_target:sabotageBuildingCandidatePrior }
+					is_same_value = Root
+				}
+			}
+			save_event_target_as = sabotageBuildingCandidate1
+		}
+		random_country = { 
+			limit = { 
+				valid_espionage_target = yes
+				NOR = { 
+					AND = { exists = event_target:sabotageBuildingCandidatePrior is_same_value = event_target:sabotageBuildingCandidatePrior }
+					AND = { exists = event_target:sabotageBuildingCandidate1 is_same_value = event_target:sabotageBuildingCandidate1 }
+					is_same_value = Root
+				}
+			}
+			save_event_target_as = sabotageBuildingCandidate2
+		}
+		random_country = { 
+			limit = {
+				valid_espionage_target = yes
+				NOR = { 
+					AND = { exists = event_target:sabotageBuildingCandidatePrior is_same_value = event_target:sabotageBuildingCandidatePrior }
+					AND = { exists = event_target:sabotageBuildingCandidate1 is_same_value = event_target:sabotageBuildingCandidate1 }
+					AND = { exists = event_target:sabotageBuildingCandidate2 is_same_value = event_target:sabotageBuildingCandidate2 }
+					is_same_value = Root
+				}
+			}
+			save_event_target_as = sabotageBuildingCandidate3
+		}
+		random_country = {
+			limit = {
+				valid_espionage_target = yes
+				NOR = { 
+					AND = { exists = event_target:sabotageBuildingCandidatePrior is_same_value = event_target:sabotageBuildingCandidatePrior }
+					AND = { exists = event_target:sabotageBuildingCandidate1 is_same_value = event_target:sabotageBuildingCandidate1 }
+					AND = { exists = event_target:sabotageBuildingCandidate2 is_same_value = event_target:sabotageBuildingCandidate2 }
+					AND = { exists = event_target:sabotageBuildingCandidate3 is_same_value = event_target:sabotageBuildingCandidate3 }
+					is_same_value = Root
+				}
+			}
+			save_event_target_as = sabotageBuildingCandidate4
+		}
+		random_country = { limit = { has_country_flag = "sabotageBuildingCandidate@Root" } set_country_flag = sabotageBuildingCandidateTemp }
+		every_country = { limit = { has_country_flag = "sabotageBuildingCandidate@Root" } remove_country_flag = "sabotageBuildingCandidate@Root" }
+		random_country = { 
+			limit = { has_country_flag = sabotageBuildingCandidateTemp }
+			remove_country_flag = sabotageBuildingCandidateTemp
+			set_country_flag = "sabotageBuildingCandidate@Root"
+		}
+	}
+	option = {
+		name = STH_espionage_mechanic.5.g
+		trigger = { exists = event_target:sabotageBuildingCandidatePrior }
+		allow = { exists = event_target:sabotageBuildingCandidatePrior }
+		hidden_effect = {
+			event_target:sabotageBuildingCandidatePrior = { set_country_flag = "sabotageBuildingCandidate@Root" }
+			country_event = { id = STH_espionage_mechanic.6 scopes = { from = event_target:sabotageBuildingCandidatePrior } }
+		}
+	}
+	option = {
+		name = STH_espionage_mechanic.5.a
+		trigger = { exists = event_target:sabotageBuildingCandidate1 }
+		allow = { exists = event_target:sabotageBuildingCandidate1 }
+		hidden_effect = {
+			event_target:sabotageBuildingCandidate1 = { set_country_flag = "sabotageBuildingCandidate@Root" }
+			country_event = { id = STH_espionage_mechanic.6 scopes = { from = event_target:sabotageBuildingCandidate1 } }
+		}
+	}
+	option = {
+		name = STH_espionage_mechanic.5.b
+		trigger = { exists = event_target:sabotageBuildingCandidate2 }
+		allow = { exists = event_target:sabotageBuildingCandidate2 }
+		hidden_effect = {
+			event_target:sabotageBuildingCandidate2 = { set_country_flag = "sabotageBuildingCandidate@Root" }
+			country_event = { id = STH_espionage_mechanic.6 scopes = { from = event_target:sabotageBuildingCandidate2 } }
+		}
+	}
+	option = {
+		name = STH_espionage_mechanic.5.c
+		trigger = { exists = event_target:sabotageBuildingCandidate3 }
+		allow = { exists = event_target:sabotageBuildingCandidate3 }
+		hidden_effect = {
+			event_target:sabotageBuildingCandidate3 = { set_country_flag = "sabotageBuildingCandidate@Root" }
+			country_event = { id = STH_espionage_mechanic.6 scopes = { from = event_target:sabotageBuildingCandidate3 } }
+		}
+	}
+	option = {
+		name = STH_espionage_mechanic.5.d
+		trigger = { exists = event_target:sabotageBuildingCandidate4 }
+		allow = { exists = event_target:sabotageBuildingCandidate4 }
+		hidden_effect = {
+			event_target:sabotageBuildingCandidate4 = { set_country_flag = "sabotageBuildingCandidate@Root" }
+			country_event = { id = STH_espionage_mechanic.6 scopes = { from = event_target:sabotageBuildingCandidate4 } }
+		}
+	}
+	option = { 
+		name = STH_espionage_mechanic.5.e
+		hidden_effect = { country_event = { id = STH_espionage_mechanic.5 } }
+	}
+	option = { 
+		name = STH_espionage_mechanic.5.f 
+		hidden_effect = { country_event = { id = STH_espionage_mechanic.2 } }
+	}
+}
+
+#Set Sabotage Relations Investment Rate
+country_event = {
+	id = STH_espionage_mechanic.6
+	title = "STH_espionage_mechanic.6.name"
+	desc = { trigger = { has_tal_shiar = yes } text = "STH_espionage_mechanic.6.desc_talShiar" }
+	desc = { trigger = { has_obsidian_order = yes } text = "STH_espionage_mechanic.6.desc_obsidianOrder" }
+	desc = { trigger = { has_generic_espionage = yes } text = "STH_espionage_mechanic.6.desc_01" }
+	picture = { trigger = { has_tal_shiar = yes } picture = sth_GFX_evt_romulanCommittee }
+	picture = { trigger = { has_obsidian_order = yes } picture = sth_GFX_evt_cardassianCommittee }
+	picture = { trigger = { has_generic_espionage = yes } picture = sth_GFX_evt_genericEspionage }
+	force_open = yes
+	is_triggered_only = yes
+	trigger = { has_espionage_mechanics = yes }
+	immediate = { }
+	option = {
+		name = STH_espionage_mechanic.6.a
+		allow = { 
+			exists = from
+		}
+		from = {
+			set_timed_country_flag = { flag = buildingSabotaged days = 600 }
+			random_list = {
+				10 = { 
+					modifier = { factor = 0.75 num_pops > 40 }
+					modifier = { factor = 1.25 num_pops < 40 }
+					country_event = { id =  STH_espionage_mechanic.16 days = 90 scopes = { from = root } }
+				}
+				10 = {
+					country_event = { id = STH_espionage_mechanic.18 days = 90 scopes = { from = root } }
+				}
+			}
+		}
+	}
+	option = {
+		name = STH_espionage_mechanic.6.b
+		allow = { 
+			exists = from
+			has_country_resource = { type = energy amount > 199 }
+			has_country_resource = { type = minerals amount > 199 }
+			has_country_resource = { type = influence amount > 99 }
+		}
+		add_energy = -200
+		add_minerals = -200
+		add_influence = -100
+		from = {
+			set_timed_country_flag = { flag = buildingSabotaged days = 600 }
+			random_list = {
+				20 = { 
+					modifier = { factor = 0.75 num_pops > 40 }
+					modifier = { factor = 1.25 num_pops < 40 }
+					country_event = { id = STH_espionage_mechanic.16 days = 90 scopes = { from = root } }
+				}
+				10 = {
+					country_event = { id = STH_espionage_mechanic.18 days = 90 scopes = { from = root } }
+				}
+			}
+		}
+	}
+	option = {
+		name = STH_espionage_mechanic.6.c
+		allow = { 
+			exists = from
+			has_country_resource = { type = energy amount > 399 }
+			has_country_resource = { type = minerals amount > 399 }
+			has_country_resource = { type = influence amount > 299 }
+		}
+		add_energy = -400
+		add_minerals = -400
+		add_influence = -200
+		from = {
+			set_timed_country_flag = { flag = buildingSabotaged days = 600 }
+			random_list = {
+				40 = { 
+					modifier = { factor = 0.75 num_pops > 40 }
+					modifier = { factor = 1.25 num_pops < 40 }
+					country_event = { id = STH_espionage_mechanic.16 days = 90 scopes = { from = root } }
+				}
+				10 = {
+					country_event = { id = STH_espionage_mechanic.18 days = 90 scopes = { from = root } }
+				}
+			}
+		}
+	}
+	option = { 
+		name = STH_espionage_mechanic.6.d
+		hidden_effect = { country_event = { id = STH_espionage_mechanic.5 } }
+	}
+}
+
+#Sabotage Foreign Ship
+country_event = {
+	id = STH_espionage_mechanic.7
+	title = "STH_espionage_mechanic.7.name"
+	desc = "STH_espionage_mechanic.7.desc"
+	picture = { trigger = { has_tal_shiar = yes } picture = sth_GFX_evt_romulanCommittee }
+	picture = { trigger = { has_obsidian_order = yes } picture = sth_GFX_evt_cardassianCommittee }
+	picture = { trigger = { has_generic_espionage = yes } picture = sth_GFX_evt_genericEspionage }
+	force_open = yes
+	is_triggered_only = yes
+	trigger = { has_espionage_mechanics = yes }
+	immediate = { 
+		random_country = {
+			limit = { 
+				valid_espionage_target = yes
+				has_country_flag = "sabotageShipCandidate@Root"
+			}
+			save_event_target_as = sabotageShipCandidatePrior
+		}
+		random_neighbor_country = {
+			limit = { 
+				valid_espionage_target = yes
+				NOR = { 
+					AND = { exists = event_target:sabotageShipCandidatePrior is_same_value = event_target:sabotageShipCandidatePrior }
+					is_same_value = Root
+				}
+			}
+			save_event_target_as = sabotageShipCandidate1
+		}
+		random_country = { 
+			limit = { 
+				valid_espionage_target = yes
+				NOR = { 
+					AND = { exists = event_target:sabotageShipCandidatePrior is_same_value = event_target:sabotageShipCandidatePrior }
+					AND = { exists = event_target:sabotageShipCandidate1 is_same_value = event_target:sabotageShipCandidate1 }
+					is_same_value = Root
+				}
+			}
+			save_event_target_as = sabotageShipCandidate2
+		}
+		random_country = { 
+			limit = {
+				valid_espionage_target = yes
+				NOR = { 
+					AND = { exists = event_target:sabotageShipCandidatePrior is_same_value = event_target:sabotageShipCandidatePrior }
+					AND = { exists = event_target:sabotageShipCandidate1 is_same_value = event_target:sabotageShipCandidate1 }
+					AND = { exists = event_target:sabotageShipCandidate2 is_same_value = event_target:sabotageShipCandidate2 }
+					is_same_value = Root
+				}
+			}
+			save_event_target_as = sabotageShipCandidate3
+		}
+		random_country = {
+			limit = {
+				valid_espionage_target = yes
+				NOR = { 
+					AND = { exists = event_target:sabotageShipCandidatePrior is_same_value = event_target:sabotageShipCandidatePrior }
+					AND = { exists = event_target:sabotageShipCandidate1 is_same_value = event_target:sabotageShipCandidate1 }
+					AND = { exists = event_target:sabotageShipCandidate2 is_same_value = event_target:sabotageShipCandidate2 }
+					AND = { exists = event_target:sabotageShipCandidate3 is_same_value = event_target:sabotageShipCandidate3 }
+					is_same_value = Root
+				}
+			}
+			save_event_target_as = sabotageShipCandidate4
+		}
+		random_country = { limit = { has_country_flag = "sabotageShipCandidate@Root" } set_country_flag = sabotageShipCandidateTemp }
+		every_country = { limit = { has_country_flag = "sabotageShipCandidate@Root" } remove_country_flag = "sabotageShipCandidate@Root" }
+		random_country = { 
+			limit = { has_country_flag = sabotageShipCandidateTemp }
+			remove_country_flag = sabotageShipCandidateTemp
+			set_country_flag = "sabotageShipCandidate@Root"
+		}
+	}
+	option = {
+		name = STH_espionage_mechanic.7.g
+		trigger = { exists = event_target:sabotageShipCandidatePrior }
+		allow = { exists = event_target:sabotageShipCandidatePrior }
+		hidden_effect = {
+			event_target:sabotageShipCandidatePrior = { set_country_flag = "sabotageShipCandidate@Root" }
+			country_event = { id = STH_espionage_mechanic.8 scopes = { from = event_target:sabotageShipCandidatePrior } }
+		}
+	}
+	option = {
+		name = STH_espionage_mechanic.7.a
+		trigger = { exists = event_target:sabotageShipCandidate1 }
+		allow = { exists = event_target:sabotageShipCandidate1 }
+		hidden_effect = {
+			event_target:sabotageShipCandidate1 = { set_country_flag = "sabotageShipCandidate@Root" }
+			country_event = { id = STH_espionage_mechanic.8 scopes = { from = event_target:sabotageShipCandidate1 } }
+		}
+	}
+	option = {
+		name = STH_espionage_mechanic.7.b
+		trigger = { exists = event_target:sabotageShipCandidate2 }
+		allow = { exists = event_target:sabotageShipCandidate2 }
+		hidden_effect = {
+			event_target:sabotageShipCandidate2 = { set_country_flag = "sabotageShipCandidate@Root" }
+			country_event = { id = STH_espionage_mechanic.8 scopes = { from = event_target:sabotageShipCandidate2 } }
+		}
+	}
+	option = {
+		name = STH_espionage_mechanic.7.c
+		trigger = { exists = event_target:sabotageShipCandidate3 }
+		allow = { exists = event_target:sabotageShipCandidate3 }
+		hidden_effect = {
+			event_target:sabotageShipCandidate3 = { set_country_flag = "sabotageShipCandidate@Root" }
+			country_event = { id = STH_espionage_mechanic.8 scopes = { from = event_target:sabotageShipCandidate3 } }
+		}
+	}
+	option = {
+		name = STH_espionage_mechanic.7.d
+		trigger = { exists = event_target:sabotageShipCandidate4 }
+		allow = { exists = event_target:sabotageShipCandidate4 }
+		hidden_effect = {
+			event_target:sabotageShipCandidate4 = { set_country_flag = "sabotageShipCandidate@Root" }
+			country_event = { id = STH_espionage_mechanic.8 scopes = { from = event_target:sabotageShipCandidate4 } }
+		}
+	}
+	option = { 
+		name = STH_espionage_mechanic.7.e 
+		hidden_effect = { country_event = { id = STH_espionage_mechanic.7 } }
+	}
+	option = { 
+		name = STH_espionage_mechanic.7.f 
+		hidden_effect = { country_event = { id = STH_espionage_mechanic.2 } }
+	}
+}
+
+#Set Sabotage Relations Investment Rate
+country_event = {
+	id = STH_espionage_mechanic.8
+	title = "STH_espionage_mechanic.8.name"
+	desc = { trigger = { has_tal_shiar = yes } text = "STH_espionage_mechanic.8.desc_talShiar" }
+	desc = { trigger = { has_obsidian_order = yes } text = "STH_espionage_mechanic.8.desc_obsidianOrder" }
+	desc = { trigger = { has_generic_espionage = yes } text = "STH_espionage_mechanic.8.desc_01" }
+	picture = { trigger = { has_tal_shiar = yes } picture = sth_GFX_evt_romulanCommittee }
+	picture = { trigger = { has_obsidian_order = yes } picture = sth_GFX_evt_cardassianCommittee }
+	picture = { trigger = { has_generic_espionage = yes } picture = sth_GFX_evt_genericEspionage }
+	force_open = yes
+	is_triggered_only = yes
+	trigger = { has_espionage_mechanics = yes }
+	option = {
+		name = STH_espionage_mechanic.8.a
+		allow = { 
+			exists = from
+		}
+		from = {
+			set_timed_country_flag = { flag = shipSabotaged days = 600 }
+			random_list = {
+				10 = { 
+					modifier = { factor = 0.75 num_pops > 40 }
+					modifier = { factor = 1.25 num_pops < 40 }
+					country_event = { id =  STH_espionage_mechanic.20 days = 90 scopes = { from = root } }
+				}
+				10 = {
+					country_event = { id = STH_espionage_mechanic.22 days = 90 scopes = { from = root } }
+				}
+			}
+		}
+	}
+	option = {
+		name = STH_espionage_mechanic.8.b
+		allow = { 
+			exists = from
+			has_country_resource = { type = energy amount > 199 }
+			has_country_resource = { type = minerals amount > 199 }
+			has_country_resource = { type = influence amount > 99 }
+		}
+		add_energy = -200
+		add_minerals = -200
+		add_influence = -100
+		from = {
+			set_timed_country_flag = { flag = shipSabotaged days = 600 }
+			random_list = {
+				20 = { 
+					modifier = { factor = 0.75 num_pops > 40 }
+					modifier = { factor = 1.25 num_pops < 40 }
+					country_event = { id = STH_espionage_mechanic.20 days = 90 scopes = { from = root } }
+				}
+				10 = {
+					country_event = { id = STH_espionage_mechanic.22 days = 90 scopes = { from = root } }
+				}
+			}
+		}
+	}
+	option = {
+		name = STH_espionage_mechanic.8.c
+		allow = { 
+			exists = from
+			has_country_resource = { type = energy amount > 399 }
+			has_country_resource = { type = minerals amount > 399 }
+			has_country_resource = { type = influence amount > 199 }
+		}
+		add_energy = -400
+		add_minerals = -400
+		add_influence = -200
+		from = {
+			set_timed_country_flag = { flag = shipSabotaged days = 600 }
+			random_list = {
+				40 = { 
+					modifier = { factor = 0.75 num_pops > 40 }
+					modifier = { factor = 1.25 num_pops < 40 }
+					country_event = { id = STH_espionage_mechanic.20 days = 90 scopes = { from = root } }
+				}
+				10 = {
+					country_event = { id = STH_espionage_mechanic.22 days = 90 scopes = { from = root } }
+				}
+			}
+		}
+	}
+	option = { 
+		name = STH_espionage_mechanic.8.d
+		hidden_effect = { country_event = { id = STH_espionage_mechanic.7 } }
+	}
+}
+
+#Assassinate Foreign Leader
+country_event = {
+	id = STH_espionage_mechanic.9
+	title = "STH_espionage_mechanic.9.name"
+	desc = "STH_espionage_mechanic.9.desc"
+	picture = { trigger = { has_tal_shiar = yes } picture = sth_GFX_evt_romulanCommittee }
+	picture = { trigger = { has_obsidian_order = yes } picture = sth_GFX_evt_cardassianCommittee }
+	picture = { trigger = { has_generic_espionage = yes } picture = sth_GFX_evt_genericEspionage }
+	force_open = yes
+	is_triggered_only = yes
+	trigger = { has_espionage_mechanics = yes }
+	immediate = { 
+		random_country = {
+			limit = { 
+				valid_espionage_target = yes
+				has_country_flag = "leaderKillCandidate@Root"
+			}
+			save_event_target_as = leaderKillCandidatePrior
+		}
+		random_neighbor_country = {
+			limit = { 
+				valid_espionage_target = yes 
+				NOR = { 
+					AND = { exists = event_target:leaderKillCandidatePrior is_same_value = event_target:leaderKillCandidatePrior }
+					is_same_value = Root
+				}
+			}
+			save_event_target_as = leaderKillCandidate1
+		}
+		random_country = { 
+			limit = { 
+				valid_espionage_target = yes
+				NOR = { 
+					AND = { exists = event_target:leaderKillCandidatePrior is_same_value = event_target:leaderKillCandidatePrior }
+					AND = { exists = event_target:leaderKillCandidate1 is_same_value = event_target:leaderKillCandidate1 }
+					is_same_value = Root
+				}
+			}
+			save_event_target_as = leaderKillCandidate2
+		}
+		random_country = { 
+			limit = {
+				valid_espionage_target = yes
+				NOR = { 
+					AND = { exists = event_target:leaderKillCandidatePrior is_same_value = event_target:leaderKillCandidatePrior }
+					AND = { exists = event_target:leaderKillCandidate1 is_same_value = event_target:leaderKillCandidate1 }
+					AND = { exists = event_target:leaderKillCandidate2 is_same_value = event_target:leaderKillCandidate2 }
+					is_same_value = Root
+				}
+			}
+			save_event_target_as = leaderKillCandidate3
+		}
+		random_country = {
+			limit = {
+				valid_espionage_target = yes
+				NOR = { 
+					AND = { exists = event_target:leaderKillCandidatePrior is_same_value = event_target:leaderKillCandidatePrior }
+					AND = { exists = event_target:leaderKillCandidate1 is_same_value = event_target:leaderKillCandidate1 }
+					AND = { exists = event_target:leaderKillCandidate2 is_same_value = event_target:leaderKillCandidate2 }
+					AND = { exists = event_target:leaderKillCandidate3 is_same_value = event_target:leaderKillCandidate3 }
+					is_same_value = Root
+				}
+			}
+			save_event_target_as = leaderKillCandidate4
+		}
+		random_country = { limit = { has_country_flag = "leaderKillCandidate@Root" } set_country_flag = leaderKillCandidateTemp }
+		every_country = { limit = { has_country_flag = "leaderKillCandidate@Root" } remove_country_flag = "leaderKillCandidate@Root" }
+		random_country = { 
+			limit = { has_country_flag = leaderKillCandidateTemp }
+			remove_country_flag = leaderKillCandidateTemp
+			set_country_flag = "leaderKillCandidate@Root"
+		}
+	}
+	option = {
+		name = STH_espionage_mechanic.9.g
+		trigger = { exists = event_target:leaderKillCandidatePrior }
+		allow = { exists = event_target:leaderKillCandidatePrior }
+		hidden_effect = {
+			event_target:leaderKillCandidatePrior = { set_country_flag = "leaderKillCandidate@Root" }
+			country_event = { id = STH_espionage_mechanic.10 scopes = { from = event_target:leaderKillCandidatePrior } }
+		}
+	}
+	option = {
+		name = STH_espionage_mechanic.9.a
+		trigger = { exists = event_target:leaderKillCandidate1 }
+		allow = { exists = event_target:leaderKillCandidate1 }
+		hidden_effect = {
+			event_target:leaderKillCandidate1 = { set_country_flag = "leaderKillCandidate@Root" }
+			country_event = { id = STH_espionage_mechanic.10 scopes = { from = event_target:leaderKillCandidate1 } }
+		}
+	}
+	option = {
+		name = STH_espionage_mechanic.9.b
+		trigger = { exists = event_target:leaderKillCandidate2 }
+		allow = { exists = event_target:leaderKillCandidate2 }
+		hidden_effect = {
+			event_target:leaderKillCandidate2 = { set_country_flag = "leaderKillCandidate@Root" }
+			country_event = { id = STH_espionage_mechanic.10 scopes = { from = event_target:leaderKillCandidate2 } }
+		}
+	}
+	option = {
+		name = STH_espionage_mechanic.9.c
+		trigger = { exists = event_target:leaderKillCandidate3 }
+		allow = { exists = event_target:leaderKillCandidate3 }
+		hidden_effect = {
+			event_target:leaderKillCandidate3 = { set_country_flag = "leaderKillCandidate@Root" }
+			country_event = { id = STH_espionage_mechanic.10 scopes = { from = event_target:leaderKillCandidate3 } }
+		}
+	}
+	option = {
+		name = STH_espionage_mechanic.9.d
+		trigger = { exists = event_target:leaderKillCandidate4 }
+		allow = { exists = event_target:leaderKillCandidate4 }
+		hidden_effect = {
+			event_target:leaderKillCandidate4 = { set_country_flag = "leaderKillCandidate@Root" }
+			country_event = { id = STH_espionage_mechanic.10 scopes = { from = event_target:leaderKillCandidate4 } }
+		}
+	}
+	option = { 
+		name = STH_espionage_mechanic.9.e 
+		hidden_effect = { country_event = { id = STH_espionage_mechanic.9 } }
+	}
+	option = { 
+		name = STH_espionage_mechanic.9.f 
+		hidden_effect = { country_event = { id = STH_espionage_mechanic.2 } }
+	}
+}
+
+#Set Kill Leader Investment Rate
+country_event = {
+	id = STH_espionage_mechanic.10
+	title = "STH_espionage_mechanic.10.name"
+	desc = { trigger = { has_tal_shiar = yes } text = "STH_espionage_mechanic.10.desc_talShiar" }
+	desc = { trigger = { has_obsidian_order = yes } text = "STH_espionage_mechanic.10.desc_obsidianOrder" }
+	desc = { trigger = { has_generic_espionage = yes } text = "STH_espionage_mechanic.10.desc_01" }
+	picture = { trigger = { has_tal_shiar = yes } picture = sth_GFX_evt_romulanCommittee }
+	picture = { trigger = { has_obsidian_order = yes } picture = sth_GFX_evt_cardassianCommittee }
+	picture = { trigger = { has_generic_espionage = yes } picture = sth_GFX_evt_genericEspionage }
+	force_open = yes
+	is_triggered_only = yes
+	trigger = { has_espionage_mechanics = yes }
+	option = {
+		name = STH_espionage_mechanic.10.a
+		allow = { 
+			exists = from
+		}
+		from = {
+			set_timed_country_flag = { flag = leaderKill days = 600 }
+			random_list = {
+				10 = { 
+					modifier = { factor = 0.75 num_pops > 40 }
+					modifier = { factor = 1.25 num_pops < 40 }
+					country_event = { id =  STH_espionage_mechanic.24 days = 90 scopes = { from = root } }
+				}
+				10 = {
+					country_event = { id = STH_espionage_mechanic.26 days = 90 scopes = { from = root } }
+				}
+			}
+		}
+	}
+	option = {
+		name = STH_espionage_mechanic.10.b
+		allow = { 
+			exists = from
+			has_country_resource = { type = energy amount > 199 }
+			has_country_resource = { type = minerals amount > 199 }
+			has_country_resource = { type = influence amount > 99 }
+		}
+		add_energy = -200
+		add_minerals = -200
+		add_influence = -100
+		from = {
+			set_timed_country_flag = { flag = leaderKill days = 600 }
+			random_list = {
+				20 = { 
+					modifier = { factor = 0.75 num_pops > 40 }
+					modifier = { factor = 1.25 num_pops < 40 }
+					country_event = { id = STH_espionage_mechanic.24 days = 90 scopes = { from = root } }
+				}
+				10 = {
+					country_event = { id = STH_espionage_mechanic.26 days = 90 scopes = { from = root } }
+				}
+			}
+		}
+	}
+	option = {
+		name = STH_espionage_mechanic.10.c
+		allow = { 
+			exists = from
+			has_country_resource = { type = energy amount > 399 }
+			has_country_resource = { type = minerals amount > 399 }
+			has_country_resource = { type = influence amount > 199 }
+		}
+		add_energy = -400
+		add_minerals = -400
+		add_influence = -200
+		from = {
+			set_timed_country_flag = { flag = leaderKill days = 600 }
+			random_list = {
+				40 = { 
+					modifier = { factor = 0.75 num_pops > 40 }
+					modifier = { factor = 1.25 num_pops < 40 }
+					country_event = { id = STH_espionage_mechanic.24 days = 90 scopes = { from = root } }
+				}
+				10 = {
+					country_event = { id = STH_espionage_mechanic.26 days = 90 scopes = { from = root } }
+				}
+			}
+		}
+	}
+	option = { 
+		name = STH_espionage_mechanic.10.d
+		hidden_effect = { country_event = { id = STH_espionage_mechanic.9 } }
+	}
+}
+
+#Relations Sabotaged - Foreigner A Event
+country_event = {
+	id = STH_espionage_mechanic.12
+	title = "STH_espionage_mechanic.12.name"
+	desc = "STH_espionage_mechanic.12.desc"
+	picture = GFX_evt_ship_in_orbit
+	force_open = yes
+	is_triggered_only = yes
+	immediate = { 
+		save_event_target_as = sabotaged_relations_targetted_country
+		sabotage_relations_random_target = yes
+	}
+	option = {
+		name = STH_espionage_mechanic.12.a
+		hidden_effect = { 
+			from = { country_event = { id = STH_espionage_mechanic.13 scopes = { from = root fromfrom = event_target:sabotaged_relations_random_country } } }
+			event_target:sabotaged_relations_random_country = { country_event = { id = STH_espionage_mechanic.28 scopes = { from = root fromfrom = from } } }
+		}
+	}
+}
+#Relations Sabotaged - Romulan Event
+country_event = {
+	id = STH_espionage_mechanic.13
+	title = "STH_espionage_mechanic.13.name"
+	desc = "STH_espionage_mechanic.13.desc"
+	picture = { trigger = { has_tal_shiar = yes } picture = sth_GFX_evt_talShiar }
+	picture = { trigger = { has_obsidian_order = yes } picture = sth_GFX_evt_obsidianOrder }
+	picture = { trigger = { has_generic_espionage = yes } picture = sth_GFX_evt_genericEspionage }
+	force_open = yes
+	is_triggered_only = yes
+	immediate = { }
+	option = {
+		name = STH_espionage_mechanic.13.a
+		add_influence = 25
+	}
+}
+#Relations Sabotaged - Foreigner B Event
+country_event = {
+	id = STH_espionage_mechanic.28
+	title = "STH_espionage_mechanic.28.name"
+	desc = "STH_espionage_mechanic.28.desc"
+	picture = GFX_evt_ship_in_orbit
+	force_open = yes
+	is_triggered_only = yes
+	immediate = { }
+	option = {
+		name = STH_espionage_mechanic.28.a
+	}
+}
+
+#Relations Not Sabotaged - Foreigner Event
+country_event = {
+	id = STH_espionage_mechanic.14
+	title = "STH_espionage_mechanic.14.name"
+	desc = "STH_espionage_mechanic.14.desc"
+	picture = GFX_evt_ship_in_orbit
+	force_open = yes
+	is_triggered_only = yes
+	option = {
+		name = STH_espionage_mechanic.14.a
+		add_opinion_modifier = { who = from modifier = opinion_espionaged }
+		hidden_effect = { from = { country_event = { id = STH_espionage_mechanic.15 scopes = { from = root } } } }
+	}
+}
+#Relations Not Sabotaged - Romulan Event
+country_event = {
+	id = STH_espionage_mechanic.15
+	title = "STH_espionage_mechanic.15.name"
+	desc = "STH_espionage_mechanic.15.desc"
+	picture = { trigger = { has_tal_shiar = yes } picture = sth_GFX_evt_talShiar }
+	picture = { trigger = { has_obsidian_order = yes } picture = sth_GFX_evt_obsidianOrder }
+	picture = { trigger = { has_generic_espionage = yes } picture = sth_GFX_evt_genericEspionage }
+	force_open = yes
+	is_triggered_only = yes
+	immediate = { }
+	option = {
+		name = STH_espionage_mechanic.15.a
+		add_influence = -25
+	}
+}
+
+
+
+#Building Sabotaged - Foreigner A Event
+country_event = {
+	id = STH_espionage_mechanic.16
+	title = "STH_espionage_mechanic.16.name"
+	desc = { 
+		trigger = { exists = event_target:destroyed_random_building_planet }
+		text = STH_espionage_mechanic.16.desc_01
+	}
+	desc = { 
+		trigger = { exists = event_target:destroyed_random_station_planet }
+		text = STH_espionage_mechanic.16.desc_02
+	}
+	picture = sth_GFX_evt_buildingDestroyed
+	force_open = yes
+	is_triggered_only = yes
+	immediate = { 
+		sabotage_random_building = yes
+	}
+	option = {
+		name = STH_espionage_mechanic.16.a
+		hidden_effect = { 
+			if = {
+				limit = { exists = event_target:destroyed_random_building_planet }
+				from = { country_event = { id = STH_espionage_mechanic.17 scopes = { from = root fromfrom = event_target:destroyed_random_building_planet fromfromfrom = root.from } } }
+			}
+			if = {
+				limit = { exists = event_target:destroyed_random_station_planet }
+				from = { country_event = { id = STH_espionage_mechanic.17 scopes = { from = root fromfrom = event_target:destroyed_random_station_planet fromfromfrom = root } } }
+			}			
+		}
+	}
+}
+#Building Sabotaged - Romulan Event
+country_event = {
+	id = STH_espionage_mechanic.17
+	title = "STH_espionage_mechanic.17.name"
+	desc = { 
+		trigger = { is_same_value = fromfromfrom }
+		text = STH_espionage_mechanic.17.desc_01
+	}
+	desc = { 
+		trigger = { NOT = { is_same_value = fromfromfrom } }
+		text = STH_espionage_mechanic.17.desc_02
+	}
+	picture = sth_GFX_evt_buildingDestroyed
+	force_open = yes
+	is_triggered_only = yes
+	immediate = {
+		if = {
+			limit = { is_same_value = fromfromfrom }
+			log = "isGround"
+		}
+		if = {
+			limit = { NOT = { is_same_value = fromfromfrom } }
+			log = "isSpace"
+		}
+	}	
+	option = {
+		name = STH_espionage_mechanic.17.a
+		add_influence = 25
+	}
+}
+
+#Building Not Sabotaged - Foreigner Event
+country_event = {
+	id = STH_espionage_mechanic.18
+	title = "STH_espionage_mechanic.18.name"
+	desc = "STH_espionage_mechanic.18.desc"
+	picture = GFX_evt_ship_in_orbit
+	force_open = yes
+	is_triggered_only = yes
+	option = {
+		name = STH_espionage_mechanic.18.a
+		add_opinion_modifier = { who = from modifier = opinion_espionaged }
+		hidden_effect = { from = { country_event = { id = STH_espionage_mechanic.19 scopes = { from = root } } } }
+	}
+}
+#Building Not Sabotaged - Romulan Event
+country_event = {
+	id = STH_espionage_mechanic.19
+	title = "STH_espionage_mechanic.19.name"
+	desc = "STH_espionage_mechanic.19.desc"
+	picture = { trigger = { has_tal_shiar = yes } picture = sth_GFX_evt_talShiar }
+	picture = { trigger = { has_obsidian_order = yes } picture = sth_GFX_evt_obsidianOrder }
+	picture = { trigger = { has_generic_espionage = yes } picture = sth_GFX_evt_genericEspionage }
+	force_open = yes
+	is_triggered_only = yes
+	option = {
+		name = STH_espionage_mechanic.19.a
+		add_influence = -25
+	}
+}
+
+
+#Starship Sabotaged - Foreigner A Event
+country_event = {
+	id = STH_espionage_mechanic.20
+	title = "STH_espionage_mechanic.20.name"
+	desc = "STH_espionage_mechanic.20.desc"
+	picture = sth_GFX_evt_starshipExplosion
+	force_open = yes
+	is_triggered_only = yes
+	immediate = { 
+		save_event_target_as = sabotaged_starship_targetted_country
+		sabotage_random_starship = yes
+	}
+	option = {
+		name = STH_espionage_mechanic.20.a
+		hidden_effect = { from = { country_event = { id = STH_espionage_mechanic.21 scopes = { from = root fromfrom = event_target:destroyed_random_ship } } } }
+	}
+}
+#Starship Sabotaged - Romulan Event
+country_event = {
+	id = STH_espionage_mechanic.21
+	title = "STH_espionage_mechanic.21.name"
+	desc = "STH_espionage_mechanic.21.desc"
+	picture = sth_GFX_evt_starshipExplosion
+	force_open = yes
+	is_triggered_only = yes
+	immediate = { 
+		from = {
+			fromfrom = { reduce_hp_percent = 200 }
+		}
+	}
+	option = {
+		name = STH_espionage_mechanic.21.a
+		add_influence = 25
+	}
+}
+
+#Starship Not Sabotaged - Foreigner Event
+country_event = {
+	id = STH_espionage_mechanic.22
+	title = "STH_espionage_mechanic.22.name"
+	desc = "STH_espionage_mechanic.22.desc"
+	picture = GFX_evt_ship_in_orbit
+	force_open = yes
+	is_triggered_only = yes
+	immediate = { 
+		save_event_target_as = sabotaged_starship_targetted_country
+		random_country = {
+			limit = { has_country_flag = romulan_star_empire }
+			save_event_target_as = romulan_star_empire
+		}
+	}
+	option = {
+		name = STH_espionage_mechanic.22.a
+		add_opinion_modifier = { who = from modifier = opinion_espionaged }
+		hidden_effect = { from = { country_event = { id = STH_espionage_mechanic.23 scopes = { from = root } } } }
+	}
+}
+#Starship Not Sabotaged - Romulan Event
+country_event = {
+	id = STH_espionage_mechanic.23
+	title = "STH_espionage_mechanic.23.name"
+	desc = "STH_espionage_mechanic.23.desc"
+	picture = { trigger = { has_tal_shiar = yes } picture = sth_GFX_evt_talShiar }
+	picture = { trigger = { has_obsidian_order = yes } picture = sth_GFX_evt_obsidianOrder }
+	picture = { trigger = { has_generic_espionage = yes } picture = sth_GFX_evt_genericEspionage }
+	force_open = yes
+	is_triggered_only = yes
+	option = {
+		name = STH_espionage_mechanic.23.a
+		add_influence = -25
+	}
+}
+
+
+#Leader Assassinated - Foreigner A Event
+country_event = {
+	id = STH_espionage_mechanic.24
+	title = "STH_espionage_mechanic.24.name"
+	desc = "STH_espionage_mechanic.24.desc"
+	picture = sth_GFX_evt_transporterAccident
+	force_open = yes
+	is_triggered_only = yes
+	immediate = { 
+		save_event_target_as = assassinated_leader_targetted_country
+		assassinate_random_leader = yes
+	}
+	option = {
+		name = STH_espionage_mechanic.24.a
+		hidden_effect = { 
+			from = { country_event = { id = STH_espionage_mechanic.25 scopes = { from = root fromfrom = event_target:assassinated_leader } } }
+		}
+	}
+}
+#Leader Assassinated - Romulan Event
+country_event = {
+	id = STH_espionage_mechanic.25
+	title = "STH_espionage_mechanic.25.name"
+	desc = "STH_espionage_mechanic.25.desc"
+	picture = sth_GFX_evt_transporterAccident
+	force_open = yes
+	is_triggered_only = yes
+	immediate = { from = { fromfrom = { kill_leader = { show_notification = no } } } }
+	option = {
+		name = STH_espionage_mechanic.25.a
+		add_influence = 25
+	}
+}
+
+#Leader Not Assassinated - Foreigner Event
+country_event = {
+	id = STH_espionage_mechanic.26
+	title = "STH_espionage_mechanic.26.name"
+	desc = "STH_espionage_mechanic.26.desc"
+	picture = GFX_evt_ship_in_orbit
+	force_open = yes
+	is_triggered_only = yes
+	option = {
+		name = STH_espionage_mechanic.26.a
+		add_opinion_modifier = { who = from modifier = opinion_espionaged }
+		hidden_effect = { from = { country_event = { id = STH_espionage_mechanic.27 scopes = { from = root } } } }
+	}
+}
+#Leader Not Assassinated - Romulan Event
+country_event = {
+	id = STH_espionage_mechanic.27
+	title = "STH_espionage_mechanic.27.name"
+	desc = "STH_espionage_mechanic.27.desc"
+	picture = { trigger = { has_tal_shiar = yes } picture = sth_GFX_evt_talShiar }
+	picture = { trigger = { has_obsidian_order = yes } picture = sth_GFX_evt_obsidianOrder }
+	picture = { trigger = { has_generic_espionage = yes } picture = sth_GFX_evt_genericEspionage }
+	force_open = yes
+	is_triggered_only = yes
+	option = {
+		name = STH_espionage_mechanic.27.a
+		add_influence = -25
+	}
+}

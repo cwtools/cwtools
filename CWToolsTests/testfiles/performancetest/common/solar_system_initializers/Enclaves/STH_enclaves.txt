@@ -1,0 +1,79 @@
+# Game will first pick an initializer using usage_odds, but only use it if it passes the spawn_chance check
+# Even if it fails the spawn_chance check it will still count towards the initializer's max_instances
+
+
+# Ferengi
+lobi_consortium_system = {
+	class = random
+
+	flags = { guardians_traders_system enclave }
+
+	planet = {
+		count = 1
+		class = star
+		orbit_distance = 0
+		orbit_angle = 1
+		size = { min = 20 max = 30 }
+		has_ring = no
+	}
+	
+	change_orbit = 45
+	
+	planet = {
+		count = { min = 2 max = 5 }
+		orbit_distance = 20
+		orbit_angle = { min = 90 max = 270 }
+		
+		change_orbit = @base_moon_distance
+		
+		moon = {
+			count = { min = 0 max = 1 }
+			orbit_angle = { min = 90 max = 270 }
+			orbit_distance = 5
+		}
+
+		init_effect = {
+			if = {
+				limit = { NOT = { exists = event_target:GuardiansTradersPlanet } }
+				save_event_target_as = GuardiansTradersPlanet
+				set_planet_flag = guardians_traders_planet
+				create_species = { name = "Ferengi" class = FER portrait = ferengiLobi homeworld = THIS traits = { trait = "trait_thrifty" trait = "trait_weak" trait = "trait_wasteful" trait = "trait_industrious" ideal_planet_class = "pc_m1_class" } }
+				last_created_species = { save_global_event_target_as = ferengiLobiSpecies }
+				create_country = {
+					name = "NAME_LobiConsortium"
+					type = enclave
+					authority = "auth_oligarchic"
+					civics = { civic = civic_trading_conglomerate }
+					species = event_target:ferengiLobiSpecies
+					flag = {
+						icon = { category = "trek" file = "lobi_crystal_consortium.dds" }
+						background = { category = "backgrounds" file = "00_solid.dds" }
+						colors = { "green" "dark_green" "null" "null" }
+					}
+					ethos = { ethic = ethic_pacifist ethic = ethic_fanatic_materialist }
+					ignore_initial_colony_error = yes
+				}
+				last_created_country = {
+					set_country_flag = trader_enclave_country
+					set_country_flag = trader_enclave_country_1
+					set_country_flag = lobi_crystal_consortium
+					set_graphical_culture = ferengi_01
+					create_fleet = {
+						name = "NAME_LobiConsortium_HQ"
+						settings = { spawn_debris = no }
+						effect = {
+							set_owner = prev
+							create_ship = { name = random design = "NAME_STH_Trader_Enclave_Station" graphical_culture = ferengi_01 }
+							set_location = { target = prevprev distance = 90 }
+							save_event_target_as = CustomCapital
+							prev = { set_custom_capital_location = event_target:CustomCapital }
+							set_fleet_flag = trader_enclave_station
+						}
+					}
+					ensure_male_lobi_leader = yes
+					set_leader = event_target:lobi_leader
+				}
+			}
+		}
+	}
+}

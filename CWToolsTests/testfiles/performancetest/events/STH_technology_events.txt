@@ -1,0 +1,1033 @@
+############################
+#
+# Technology Specialisations
+#
+# Written by Walshicus
+#
+############################
+
+
+namespace = STH_technology
+
+country_event = {
+	id = STH_technology.0
+	hide_window = yes
+	is_triggered_only = yes
+	immediate = { change_variable = { which = techsResearched value = 1 } }
+}
+
+### Master
+country_event = {
+	id = STH_technology.1
+	hide_window = yes
+	is_triggered_only = yes
+	immediate = {		
+		if = { limit = { is_borg_empire = no generic_specialisation = yes last_increased_tech = tech_specialization_warp } country_event = { id = STH_technology.1000 } }
+		if = { limit = { is_borg_empire = no generic_specialisation = yes last_increased_tech = tech_specialization_shield } country_event = { id = STH_technology.1001 } }
+		if = { limit = { is_borg_empire = no generic_specialisation = yes last_increased_tech = tech_specialization_weapon } country_event = { id = STH_technology.1002 } }
+		if = { limit = { is_borg_empire = yes generic_specialisation = yes last_increased_tech = tech_specialization_weapon } country_event = { id = STH_technology.1023 } }
+		if = { limit = { is_borg_empire = no generic_specialisation = yes last_increased_tech = tech_specialization_phaser } country_event = { id = STH_technology.1003 } }
+		if = { limit = { is_borg_empire = no generic_specialisation = yes last_increased_tech = tech_specialization_disruptor } country_event = { id = STH_technology.1004 } }
+		if = { limit = { is_borg_empire = no generic_specialisation = yes last_increased_tech = tech_specialization_plasma_cannon } country_event = { id = STH_technology.1005 } }
+		if = { limit = { is_borg_empire = no generic_specialisation = yes last_increased_tech = tech_specialization_anti } country_event = { id = STH_technology.1006 } }
+		if = { limit = { is_borg_empire = yes generic_specialisation = yes last_increased_tech = tech_specialization_anti } country_event = { id = STH_technology.1021 } }
+		if = { limit = { is_borg_empire = no generic_specialisation = yes last_increased_tech = tech_specialization_polaron_beam } country_event = { id = STH_technology.1007 } }
+		if = { limit = { is_borg_empire = no generic_specialisation = yes last_increased_tech = tech_specialization_tetryon } country_event = { id = STH_technology.1008 } }
+		if = { limit = { is_borg_empire = no generic_specialisation = yes last_increased_tech = tech_specialization_diplomacy } country_event = { id = STH_technology.1009 } }
+		if = { limit = { is_borg_empire = no generic_specialisation = yes last_increased_tech = tech_specialization_frontier } country_event = { id = STH_technology.1010 } }
+		if = { limit = { is_borg_empire = no generic_specialisation = yes last_increased_tech = tech_specialization_hull } country_event = { id = STH_technology.1011 } }
+		if = { limit = { is_borg_empire = no generic_specialisation = yes last_increased_tech = tech_specialization_thruster } country_event = { id = STH_technology.1012 } }
+		if = { limit = { is_borg_empire = no generic_specialisation = yes last_increased_tech = tech_specialization_torpedo } country_event = { id = STH_technology.1014 } } # Photon torpedo
+		if = { limit = { is_borg_empire = no generic_specialisation = yes last_increased_tech = tech_specialization_quantum_torpedo } country_event = { id = STH_technology.1015 } } # Quantum torpedo
+		if = { limit = { is_borg_empire = no generic_specialisation = yes last_increased_tech = tech_specialization_polaron_torpedo } country_event = { id = STH_technology.1016 } } # Polaron torpedo
+		if = { limit = { is_borg_empire = no generic_specialisation = yes last_increased_tech = tech_specialization_plasma_torp } country_event = { id = STH_technology.1018 } }
+		if = { limit = { is_borg_empire = yes generic_specialisation = yes last_increased_tech = tech_specialization_plasma_torp } country_event = { id = STH_technology.1022 } }
+		if = { limit = { is_borg_empire = no generic_specialisation = yes last_increased_tech = tech_ship_program } country_event = { id = STH_technology.1020 } }
+	}
+}
+
+### GENERIC
+#Warp Engine Technology Breakthrough
+country_event = {
+	id = STH_technology.1000
+	title = STH_technology.1000.name
+	desc = { text = STH_technology.1000.desc_01 }
+	diplomatic = yes
+	custom_gui = "enclave_curator_window"
+	picture_event_data = { portrait = event_target:scientist room = generic_science_room }
+	is_triggered_only = yes
+	trigger = { uses_warp_cores = yes }
+	immediate = { 
+		save_physics_scientist = yes	
+	}
+	option = { ### question
+	    name = STH_technology.1000.q 
+	    is_dialog_only = yes 
+	    response_text = STH_technology.1000.q.response 
+	    ai_chance = {
+			factor = 0
+		}
+	} 
+	option = {
+		name = STH_technology.1000.a  # Warp Users
+        allow = {  custom_tooltip = { text = "require_warp_user" uses_warp_cores = yes  } }
+        hidden_effect = { give_technology = { tech = tech_physics_exploration_68 } }
+	}
+    option = {
+		name = STH_technology.1000.b  # Warp Users
+        allow = { custom_tooltip = { text = "require_warp_user" uses_warp_cores = yes  } }
+        hidden_effect = { give_technology = { tech = tech_physics_militarized_69 } }
+	}
+	option = {
+		name = STH_remind_6_months # Remind again in six months
+		default_hide_option = yes
+		hidden_effect = { country_event = { id = STH_technology.1000 days = 180 } }
+		ai_chance = {
+			factor = 0
+		}
+	}
+}
+
+#Shield Technology Breakthrough
+country_event = {
+	id = STH_technology.1001
+	title = STH_technology.1001.name
+	desc = { text = STH_technology.1001.desc_01 }
+	diplomatic = yes
+	custom_gui = "enclave_curator_window"
+	picture_event_data = { portrait = event_target:scientist room = generic_science_room }
+	is_triggered_only = yes
+	immediate = { 
+		save_physics_scientist = yes	
+	}
+	option = { ### question
+	    name = STH_technology.1001.q 
+	    is_dialog_only = yes 
+	    response_text = STH_technology.1001.q.response
+	    ai_chance = {
+			factor = 0
+		}
+	} 
+	option = {
+		name = STH_technology.1001.a  
+        hidden_effect = { give_technology = { tech = tech_physics_covariant_101 } }
+	}
+    option = {
+		name = STH_technology.1001.b  
+        hidden_effect = { give_technology = { tech = tech_physics_regenerative_102 } }
+	}
+	option = {
+		name = STH_remind_6_months # Remind again in six months
+		default_hide_option = yes
+		hidden_effect = { country_event = { id = STH_technology.1001 days = 180 } }
+		ai_chance = {
+			factor = 0
+		}
+	}
+}
+
+#Warp-Age Weaponry Design Breakthrough
+country_event = {
+	id = STH_technology.1002
+	title = STH_technology.1002.name
+	desc = { text = STH_technology.1002.desc_01 }
+	diplomatic = yes
+	custom_gui = "enclave_curator_window"
+	picture_event_data = { portrait = event_target:scientist room = generic_science_room }
+	is_triggered_only = yes
+	immediate = { 
+		save_physics_scientist = yes
+	}
+	option = { ### question
+	    name = STH_technology.1002.q 
+	    is_dialog_only = yes 
+	    response_text = STH_technology.1002.q.response 
+	    ai_chance = {
+			factor = 0
+		}
+	}
+	option = {
+		name = STH_technology.1002.a  # Beam weapon users
+        allow = {  custom_tooltip = { text = "require_beam_user" use_weapon_beam = yes  } }
+        hidden_effect = { give_technology = { tech = tech_physics_beam_132 } }
+	}
+    option = {
+		name = STH_technology.1002.b  # Cannon weapon Users
+        allow = { custom_tooltip = { text = "require_cannon_user" use_weapon_cannon = yes  } }
+        hidden_effect = { give_technology = { tech = tech_physics_cannon_135 } }
+	}
+    option = {
+		name = STH_technology.1002.c  
+        hidden_effect = { give_technology = { tech = tech_physics_explosive_136 } }
+	}
+	option = {
+		name = STH_remind_6_months # Remind again in six months
+		default_hide_option = yes
+		hidden_effect = { country_event = { id = STH_technology.1002 days = 180 } }
+		ai_chance = {
+			factor = 0
+		}
+	}
+}
+
+#Phaser Weaponry Breakthrough
+country_event = {
+	id = STH_technology.1003
+	title = STH_technology.1003.name
+	desc = { text = STH_technology.1003.desc_01 }
+	diplomatic = yes
+	custom_gui = "enclave_curator_window"
+	picture_event_data = { portrait = event_target:scientist room = generic_science_room }
+	is_triggered_only = yes
+	immediate = { 
+		save_physics_scientist = yes
+		
+	}
+	option = { ### question
+	    name = STH_technology.1000.q 
+	    is_dialog_only = yes 
+	    response_text = STH_technology.1003.q.response 
+	    ai_chance = {
+			factor = 0
+		}
+	}
+	option = {
+		name = STH_technology.1003.a  # Federation only
+        allow = {  custom_tooltip = { text = "require_human" is_species_class = FED } }
+        hidden_effect = { give_technology = { tech = tech_physics_modulated_184 } }
+	}
+    option = {
+		name = STH_technology.1003.b  # Not cardassian
+        allow = { custom_tooltip = { text = "require_not_cardassian" NOT = { is_species_class = CAR } } }
+        hidden_effect = { give_technology = { tech = tech_physics_coherent_185 } }
+	}
+    option = {
+		name = STH_technology.1003.c # Not federation
+		allow = { custom_tooltip = { text = "require_not_human" NOT = { is_species_class = FED } } }
+        hidden_effect = { give_technology = { tech = tech_physics_modular_186 } }
+	}
+	option = {
+		name = STH_technology.1003.d # Cardassian only
+		allow = {  custom_tooltip = { text = "require_cardassian" is_species_class = CAR } }
+        hidden_effect = { give_technology = { tech = tech_physics_tunneling_187 } }
+	}
+	option = {
+		name = STH_remind_6_months # Remind again in six months
+		default_hide_option = yes
+		hidden_effect = { country_event = { id = STH_technology.1003 days = 180 } }
+		ai_chance = {
+			factor = 0
+		}
+	}
+}
+
+#Disruptor Weaponry Breakthrough
+country_event = {
+	id = STH_technology.1004
+	title = STH_technology.1004.name
+	desc = { text = STH_technology.1004.desc_01 }
+	diplomatic = yes
+	custom_gui = "enclave_curator_window"
+	picture_event_data = { portrait = event_target:scientist room = generic_science_room }
+	is_triggered_only = yes
+	immediate = { 
+		save_physics_scientist = yes
+		
+	}
+	option = { ### question
+	    name = STH_technology.1000.q 
+	    is_dialog_only = yes 
+	    response_text = STH_technology.1004.q.response 
+	    ai_chance = {
+			factor = 0
+		}
+	} 
+	option = {
+		name = STH_technology.1004.a  # Klingon only
+        allow = {  custom_tooltip = { text = "require_klingon" is_species_class = KDF } }
+        hidden_effect = { give_technology = { tech = tech_physics_tetryonic_224 } }
+	}
+    option = {
+		name = STH_technology.1004.b  # Not Romulan
+        allow = { custom_tooltip = { text = "require_not_romulan" NOT = { is_species_class = ROM } } }
+        hidden_effect = { give_technology = { tech = tech_physics_tetryonic_225 } }
+	}
+    option = {
+		name = STH_technology.1004.c # Not Klingon
+		allow = { custom_tooltip = { text = "require_not_klingon" NOT = { is_species_class = KDF } } }
+        hidden_effect = { give_technology = { tech = tech_physics_plasma_226 } }
+	}
+	option = {
+		name = STH_technology.1004.d # Romulan only
+		allow = {  custom_tooltip = { text = "require_romulan" is_species_class = ROM } }
+        hidden_effect = { give_technology = { tech = tech_physics_plasma_227 } }
+	}
+	option = {
+		name = STH_remind_6_months # Remind again in six months
+		default_hide_option = yes
+		hidden_effect = { country_event = { id = STH_technology.1004 days = 180 } }
+		ai_chance = {
+			factor = 0
+		}
+	}
+}
+
+#Plasma Weaponry Breakthrough
+country_event = {
+	id = STH_technology.1005
+	title = STH_technology.1005.name
+	desc = { text = STH_technology.1005.desc_01 }
+	diplomatic = yes
+	custom_gui = "enclave_curator_window"
+	picture_event_data = { portrait = event_target:scientist room = generic_science_room }
+	is_triggered_only = yes
+	immediate = { 
+		save_physics_scientist = yes
+		
+	}
+	option = { ### question
+	    name = STH_technology.1000.q 
+	    is_dialog_only = yes 
+	    response_text = STH_technology.1005.q.response 
+	    ai_chance = {
+			factor = 0
+		}
+	} 
+	option = {
+		name = STH_technology.1005.a  
+        hidden_effect = { give_technology = { tech = tech_physics_phased_256 } }
+	}
+    option = {
+		name = STH_technology.1005.b  
+        hidden_effect = { give_technology = { tech = tech_physics_compressed_257 } }
+	}
+	option = {
+		name = STH_remind_6_months # Remind again in six months
+		default_hide_option = yes
+		hidden_effect = { country_event = { id = STH_technology.1005 days = 180 } }
+		ai_chance = {
+			factor = 0
+		}
+	}
+}
+
+#Anti-Proton Weaponry Breakthrough - Non-Borg
+country_event = {
+	id = STH_technology.1006
+	title = STH_technology.1006.name
+	desc = { text = STH_technology.1006.desc_01 }
+	diplomatic = yes
+	custom_gui = "enclave_curator_window"
+	picture_event_data = { portrait = event_target:scientist room = generic_science_room }
+	is_triggered_only = yes
+	immediate = { save_physics_scientist = yes }
+	option = { ### question
+	    name = STH_technology.1000.q 
+	    is_dialog_only = yes 
+	    response_text = STH_technology.1006.q.response 
+	    ai_chance = {
+			factor = 0
+		}
+	} 
+	option = {
+		name = STH_technology.1006.a  
+        hidden_effect = { give_technology = { tech = tech_physics_anti-photon_285 } }
+	}
+    option = {
+		name = STH_technology.1006.b  
+        hidden_effect = { give_technology = { tech = tech_physics_proton_286 } }
+	}
+	option = {
+		name = STH_remind_6_months # Remind again in six months
+		default_hide_option = yes
+		hidden_effect = { country_event = { id = STH_technology.1006 days = 180 } }
+		ai_chance = {
+			factor = 0
+		}
+	}
+}
+
+#Polaron Weaponry Breakthrough
+country_event = {
+	id = STH_technology.1007
+	title = STH_technology.1007.name
+	desc = { text = STH_technology.1007.desc_01 }
+	diplomatic = yes
+	custom_gui = "enclave_curator_window"
+	picture_event_data = { portrait = event_target:scientist room = generic_science_room }
+	is_triggered_only = yes
+	immediate = { save_physics_scientist = yes }
+	option = { ### question
+	    name = STH_technology.1000.q 
+	    is_dialog_only = yes 
+	    response_text = STH_technology.1007.q.response
+	    ai_chance = {
+			factor = 0
+		}
+	}
+	option = {
+		name = STH_technology.1007.a  
+        hidden_effect = { give_technology = { tech = tech_physics_phased_310 } }
+	}
+    option = {
+		name = STH_technology.1007.b  
+        hidden_effect = { give_technology = { tech = tech_physics_neutral_311 } }
+	}
+	option = {
+		name = STH_remind_6_months # Remind again in six months
+		default_hide_option = yes
+		hidden_effect = { country_event = { id = STH_technology.1007 days = 180 } }
+		ai_chance = {
+			factor = 0
+		}
+	}
+}
+
+
+#Tetryonic Weaponry Breakthrough
+country_event = {
+	id = STH_technology.1008
+	title = STH_technology.1008.name
+	desc = { text = STH_technology.1008.desc_01 }
+	diplomatic = yes
+	custom_gui = "enclave_curator_window"
+	picture_event_data = { portrait = event_target:scientist room = generic_science_room }
+	is_triggered_only = yes
+	immediate = { save_physics_scientist = yes }
+	option = { ### question
+	    name = STH_technology.1000.q 
+	    is_dialog_only = yes 
+	    response_text = STH_technology.1008.q.response
+	    ai_chance = {
+			factor = 0
+		}
+	}
+	option = {
+		name = STH_technology.1008.a  
+        hidden_effect = { give_technology = { tech = tech_physics_modulated_337 } }
+	}
+    option = {
+		name = STH_technology.1008.b  
+        hidden_effect = { give_technology = { tech = tech_physics_tunneling_338 } }
+	}
+	option = {
+		name = STH_remind_6_months # Remind again in six months
+		default_hide_option = yes
+		hidden_effect = { country_event = { id = STH_technology.1008 days = 180 } }
+		ai_chance = {
+			factor = 0
+		}
+	}
+}
+
+#The Divergent Path
+country_event = {
+	id = STH_technology.1009
+	title = STH_technology.1009.name
+	desc = { text = STH_technology.1009.desc_01 }
+	diplomatic = yes
+	custom_gui = "enclave_curator_window"
+	picture_event_data = { portrait = event_target:scientist room = generic_science_room }
+	is_triggered_only = yes
+	immediate = { save_society_scientist = yes }
+	option = { ### question
+	    name = STH_technology.1000.q 
+	    is_dialog_only = yes 
+	    response_text = STH_technology.1009.q.response
+	    ai_chance = {
+			factor = 0
+		}
+	}
+	option = {
+		name = STH_technology.1009.a  
+		allow = {  
+			custom_tooltip = { text = "require_not_xenophobe" }
+			NOR = {
+				has_ethic = ethic_xenophobe 
+				has_ethic = ethic_fanatic_xenophobe
+			}
+		}
+        hidden_effect = { give_technology = { tech = tech_society_adapting_429 } }
+	}
+    option = {
+		name = STH_technology.1009.b
+		allow = {  
+			custom_tooltip = { text = "require_not_xenophile" }
+			NOR = {
+				has_ethic = ethic_xenophile 
+				has_ethic = ethic_fanatic_xenophile
+			}
+		}
+        hidden_effect = { give_technology = { tech = tech_society_that_487 } }
+	}
+	option = {
+		name = STH_remind_6_months # Remind again in six months
+		default_hide_option = yes
+		hidden_effect = { country_event = { id = STH_technology.1009 days = 180 } }
+		ai_chance = {
+			factor = 0
+		}
+	}
+}
+
+#Frontier Philoshopy
+country_event = {
+	id = STH_technology.1010
+	title = STH_technology.1010.name
+	desc = { text = STH_technology.1010.desc_01 }
+	diplomatic = yes
+	custom_gui = "enclave_curator_window"
+	picture_event_data = { portrait = event_target:scientist room = generic_science_room }
+	is_triggered_only = yes
+	immediate = { save_society_scientist = yes }
+	option = { ### question
+	    name = STH_technology.1000.q 
+	    is_dialog_only = yes 
+	    response_text = STH_technology.1010.q.response
+	    ai_chance = {
+			factor = 0
+		}
+	}
+	option = {
+		name = STH_technology.1010.a  
+		allow = {  
+			custom_tooltip = { text = "require_not_authoritarian" }
+			NOR = {
+				has_ethic = ethic_authoritarian 
+				has_ethic = ethic_fanatic_authoritarian
+			}
+		}
+        hidden_effect = { give_technology = { tech = tech_society_stasis_507 } }
+	}
+    option = {
+		name = STH_technology.1010.b
+		allow = {  
+			custom_tooltip = { text = "require_not_egalitarian" }
+			NOR = {
+				has_ethic = ethic_egalitarian
+				has_ethic = ethic_fanatic_egalitarian
+			}
+		}
+        hidden_effect = { give_technology = { tech = tech_society_new_worlds_1110 } }
+	}
+	option = {
+		name = STH_remind_6_months # Remind again in six months
+		default_hide_option = yes
+		hidden_effect = { country_event = { id = STH_technology.1010 days = 180 } }
+		ai_chance = {
+			factor = 0
+		}
+	}
+}
+
+#Breakthrough in Advanced Materials
+country_event = {
+	id = STH_technology.1011
+	title = STH_technology.1011.name
+	desc = { text = STH_technology.1011.desc_01 }
+	diplomatic = yes
+	custom_gui = "enclave_curator_window"
+	picture_event_data = { portrait = event_target:scientist room = generic_science_room }
+	is_triggered_only = yes
+	immediate = { save_engineering_scientist = yes }
+	option = { ### question
+	    name = STH_technology.1000.q 
+	    is_dialog_only = yes 
+	    response_text = STH_technology.1011.q.response
+	    ai_chance = {
+			factor = 0
+		}
+	}
+	option = {
+		name = STH_technology.1011.a  
+        hidden_effect = { give_technology = { tech = tech_engineering_light_609 } }
+	}
+    option = {
+		name = STH_technology.1011.b  
+        hidden_effect = { give_technology = { tech = tech_engineering_heavy_610 } }
+	}
+	option = {
+		name = STH_remind_6_months # Remind again in six months
+		default_hide_option = yes
+		hidden_effect = { country_event = { id = STH_technology.1011 days = 180 } }
+		ai_chance = {
+			factor = 0
+		}
+	}
+}
+
+#Breakthrough in Propulsion Design
+country_event = {
+	id = STH_technology.1012
+	title = STH_technology.1012.name
+	desc = { text = STH_technology.1012.desc_01 }
+	diplomatic = yes
+	custom_gui = "enclave_curator_window"
+	picture_event_data = { portrait = event_target:scientist room = generic_science_room }
+	is_triggered_only = yes
+	immediate = { save_engineering_scientist = yes }
+	option = { 
+	    name = STH_technology.1000.q 
+	    is_dialog_only = yes 
+	    response_text = STH_technology.1012.q.response
+	    ai_chance = {
+			factor = 0
+		}
+	}
+	option = {
+		name = STH_technology.1012.a  
+        hidden_effect = { give_technology = { tech = tech_engineering_impulse_631 } }
+	    ai_chance = {
+			factor = 10
+		}
+	}
+    option = {
+		name = STH_technology.1012.b  
+        hidden_effect = { give_technology = { tech = tech_engineering_low_632 } }
+		ai_chance = { 
+			factor = 10
+			modifier = {
+				factor = 100
+				uses_cloaks = yes
+			}
+		}
+	}
+	option = {
+		name = STH_remind_6_months # Remind again in six months
+		default_hide_option = yes
+		hidden_effect = { country_event = { id = STH_technology.1012 days = 180 } }
+		ai_chance = {
+			factor = 0
+		}
+	}
+}
+
+#Breakthrough in Advanced Explosives - Photon
+country_event = {
+	id = STH_technology.1014
+	title = STH_technology.1014.name
+	desc = { text = STH_technology.1014.desc_01 }
+	diplomatic = yes
+	custom_gui = "enclave_curator_window"
+	picture_event_data = { portrait = event_target:scientist room = generic_science_room }
+	is_triggered_only = yes
+	immediate = { save_engineering_scientist = yes }
+    option = {
+		name = STH_technology.1014.c  
+        hidden_effect = { give_technology = { tech = tech_engineering_rapid_657 } }
+	}
+	 option = {
+		name = STH_technology.1014.d  
+        hidden_effect = { give_technology = { tech = tech_engineering_high-yield_656 } }
+	}
+	option = {
+		name = STH_remind_6_months # Remind again in six months
+		default_hide_option = yes
+		hidden_effect = { country_event = { id = STH_technology.1014 days = 180 } }
+		ai_chance = {
+			factor = 0
+		}
+	}
+}
+
+#Breakthrough in Advanced Explosives - Quantum
+country_event = {
+	id = STH_technology.1015
+	title = STH_technology.1015.name
+	desc = { text = STH_technology.1015.desc_01 }
+	diplomatic = yes
+	custom_gui = "enclave_curator_window"
+	picture_event_data = { portrait = event_target:scientist room = generic_science_room }
+	is_triggered_only = yes
+	trigger = { uses_quantum_torp = yes }
+	immediate = { save_engineering_scientist = yes }
+	option = {
+		name = STH_technology.1015.a  
+		allow = {  custom_tooltip = { text = "require_quantum_torp" } }
+        hidden_effect = { give_technology = { tech = tech_engineering_armor_670 } }
+	}
+	option = {
+		name = STH_technology.1015.b  
+		allow = {  custom_tooltip = { text = "require_quantum_torp" } }
+        hidden_effect = { give_technology = { tech = tech_engineering_shield_671 } }
+	}
+	option = {
+		name = STH_remind_6_months # Remind again in six months
+		default_hide_option = yes
+		hidden_effect = { country_event = { id = STH_technology.1015 days = 180 } }
+		ai_chance = {
+			factor = 0
+		}
+	}
+}
+
+#Breakthrough in Advanced Explosives - Polaron
+country_event = {
+	id = STH_technology.1016
+	title = STH_technology.1016.name
+	desc = { text = STH_technology.1016.desc_01 }
+	diplomatic = yes
+	custom_gui = "enclave_curator_window"
+	picture_event_data = { portrait = event_target:scientist room = generic_science_room }
+	is_triggered_only = yes
+	trigger = { uses_polaron_torp = yes }
+	immediate = { save_engineering_scientist = yes }
+	option = {
+		name = STH_technology.1014.e 
+		allow = {  custom_tooltip = { text = "require_polaron_torp"  } }
+        hidden_effect = { give_technology = { tech = tech_engineering_heavy_674 } }
+	}
+	option = {
+		name = STH_technology.1014.f 
+		allow = {  custom_tooltip = { text = "require_polaron_torp"  } }
+        hidden_effect = { give_technology = { tech = tech_engineering_rapid_675 } }
+	}
+	option = {
+		name = STH_remind_6_months # Remind again in six months
+		default_hide_option = yes
+		hidden_effect = { country_event = { id = STH_technology.1016 days = 180 } }
+		ai_chance = {
+			factor = 0
+		}
+	}
+}
+
+
+#Breakthrough in Plasmatic Warheads
+country_event = {
+	id = STH_technology.1018
+	title = STH_technology.1018.name
+	desc = { text = STH_technology.1018.desc_01 }
+	diplomatic = yes
+	custom_gui = "enclave_curator_window"
+	picture_event_data = { portrait = event_target:scientist room = generic_science_room }
+	is_triggered_only = yes
+	immediate = { save_engineering_scientist = yes }
+	option = {
+		name = STH_technology.1018.a  
+        hidden_effect = { give_technology = { tech = tech_engineering_phased_691 } }
+	}
+    option = {
+		name = STH_technology.1018.b  
+        hidden_effect = { give_technology = { tech = tech_engineering_enriched_692 } }
+	}
+	option = {
+		name = STH_remind_6_months # Remind again in six months
+		default_hide_option = yes
+		hidden_effect = { country_event = { id = STH_technology.1018 days = 180 } }
+		ai_chance = {
+			factor = 0
+		}
+	}
+}
+
+#Advanced Starship Design
+country_event = {
+	id = STH_technology.1020
+	title = STH_technology.1020.name
+	desc = { text = STH_technology.1020.desc_01 }
+	diplomatic = yes
+	custom_gui = "enclave_curator_window"
+	picture_event_data = { portrait = event_target:scientist room = generic_science_room }
+	is_triggered_only = yes
+	immediate = { save_engineering_scientist = yes }
+	option = { name = STH_technology.1000.q is_dialog_only = yes response_text = STH_technology.1020.q.response } #Question
+	option = { # tactical variant
+		name = STH_technology.1020.a  
+        hidden_effect = { give_technology = { tech = tech_engineering_advanced_711 } }
+ 		ai_chance = {
+			factor = 10
+		}
+	}
+    option = { # engineering variant
+		name = STH_technology.1020.b  
+        hidden_effect = { give_technology = { tech = tech_engineering_advanced_712 } }
+ 		ai_chance = {
+			factor = 10
+		}
+	}
+	option = { # support variant
+		name = STH_technology.1020.c  
+        hidden_effect = { give_technology = { tech = tech_engineering_advanced_713 } }
+		ai_chance = { 
+			factor = 10
+			modifier = {
+				factor = 100
+				uses_cloaks = yes
+			}
+		}
+	}
+	option = {
+		name = STH_remind_6_months # Remind again in six months
+		default_hide_option = yes
+		hidden_effect = { country_event = { id = STH_technology.1020 days = 180 } }
+		ai_chance = {
+			factor = 0
+		}
+	}
+}
+
+####BORG VARIANTS
+
+#Anti-Proton Weaponry Breakthrough - Borg
+country_event = {
+	id = STH_technology.1021
+	title = STH_technology.1006.name
+	desc = { text = STH_technology.1006.desc_borg }
+	diplomatic = yes
+	custom_gui = "enclave_curator_window"
+	picture_event_data = { portrait = event_target:scientist room = borg_room }
+	is_triggered_only = yes
+	immediate = { save_physics_scientist = yes }
+	# option = { ### question
+	    # name = STH_technology.1000.q 
+	    # is_dialog_only = yes 
+	    # response_text = STH_technology.1006.q.response 
+	    # ai_chance = {
+			# factor = 0
+		# }
+	# } 
+	option = {
+		name = STH_technology.1006.a  
+        hidden_effect = { give_technology = { tech = tech_physics_anti-photon_285 } }
+	}
+    option = {
+		name = STH_technology.1006.b  
+        hidden_effect = { give_technology = { tech = tech_physics_proton_286 } }
+	}
+	option = {
+		name = STH_remind_6_months # Remind again in six months
+		default_hide_option = yes
+		hidden_effect = { country_event = { id = STH_technology.1006 days = 180 } }
+		ai_chance = {
+			factor = 0
+		}
+	}
+}
+
+#Breakthrough in Plasmatic Warheads - Borg
+country_event = {
+	id = STH_technology.1022
+	title = STH_technology.1018.name
+	desc = { text = STH_technology.1018.desc_borg }
+	diplomatic = yes
+	custom_gui = "enclave_curator_window"
+	picture_event_data = { portrait = event_target:scientist room = borg_room }
+	is_triggered_only = yes
+	immediate = { save_engineering_scientist = yes }
+	option = {
+		name = STH_technology.1018.a  
+        hidden_effect = { give_technology = { tech = tech_engineering_phased_691 } }
+	}
+    option = {
+		name = STH_technology.1018.b  
+        hidden_effect = { give_technology = { tech = tech_engineering_enriched_692 } }
+	}
+	option = {
+		name = STH_remind_6_months # Remind again in six months
+		default_hide_option = yes
+		hidden_effect = { country_event = { id = STH_technology.1018 days = 180 } }
+		ai_chance = {
+			factor = 0
+		}
+	}
+}
+
+#Warp-Age Weaponry Design Breakthrough - Borg
+country_event = {
+	id = STH_technology.1023
+	title = STH_technology.1002.name
+	desc = { text = STH_technology.1002.desc_borg }
+	diplomatic = yes
+	custom_gui = "enclave_curator_window"
+	picture_event_data = { portrait = event_target:scientist room = borg_room }
+	is_triggered_only = yes
+	immediate = { save_physics_scientist = yes }
+	# option = { ### question
+	    # name = STH_technology.1002.q 
+	    # is_dialog_only = yes 
+	    # response_text = STH_technology.1002.q.response 
+	    # ai_chance = {
+			# factor = 0
+		# }
+	# }
+	option = {
+		name = STH_technology.1002.a  # Beam weapon users
+        allow = {  custom_tooltip = { text = "require_beam_user" use_weapon_beam = yes  } }
+        hidden_effect = { give_technology = { tech = tech_physics_beam_132 } }
+	}
+    option = {
+		name = STH_technology.1002.b  # Cannon weapon Users
+        allow = { custom_tooltip = { text = "require_cannon_user" use_weapon_cannon = yes  } }
+        hidden_effect = { give_technology = { tech = tech_physics_cannon_135 } }
+	}
+    option = {
+		name = STH_technology.1002.c  
+        hidden_effect = { give_technology = { tech = tech_physics_explosive_136 } }
+	}
+	option = {
+		name = STH_remind_6_months # Remind again in six months
+		default_hide_option = yes
+		hidden_effect = { country_event = { id = STH_technology.1002 days = 180 } }
+		ai_chance = {
+			factor = 0
+		}
+	}
+}
+
+### Additional tech-related events
+
+# Grant Telepathy from Garagarin Experiment
+country_event = {
+	id = STH_technology.2000
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		last_increased_tech = tech_society_gagarin_458
+	}
+	
+	immediate = {
+		modify_species = {
+			species = root
+			add_trait = trait_telepathy
+			#change_scoped_species = no
+		}
+		every_owned_pop = {
+			limit = { is_same_species = root }
+			change_species = last_created_species
+		}
+		every_owned_leader = {
+			limit = { is_same_species = root }
+			change_species = last_created_species
+		}
+		every_pool_leader = {
+			limit = { is_same_species = root }
+			change_species = last_created_species
+		}
+		every_owned_army = {
+			limit = {
+				exists = species
+				is_same_species = root
+			}
+			change_species = last_created_species
+		}
+		every_owned_ship = {
+			limit = {
+				is_ship_class = shipclass_colonizer
+				is_same_species = root
+			}
+			change_species = last_created_species
+		}
+	}
+}
+
+# Grant Psionics from tech, removing Telepathy
+country_event = {
+	id = STH_technology.2001
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		last_increased_tech = tech_society_biology_1065
+	}
+	
+	immediate = {
+		modify_species = {
+			species = root
+			remove_trait = trait_telepathy
+			add_trait = trait_psionic_masters
+			#change_scoped_species = no
+		}
+		every_owned_pop = {
+			limit = { is_same_species = root }
+			change_species = last_created_species
+		}
+		every_owned_leader = {
+			limit = { is_same_species = root }
+			change_species = last_created_species
+		}
+		every_pool_leader = {
+			limit = { is_same_species = root }
+			change_species = last_created_species
+		}
+		every_owned_army = {
+			limit = {
+				exists = species
+				is_same_species = root
+			}
+			change_species = last_created_species
+		}
+		every_owned_ship = {
+			limit = {
+				is_ship_class = shipclass_colonizer
+				is_same_species = root
+			}
+			change_species = last_created_species
+		}
+	}
+}
+
+# Activates Faith in Science
+country_event = {
+	id = STH_technology.2002
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		last_increased_tech = tech_physics_computing_16
+	}
+	
+	immediate = { 
+		set_country_flag = faith_in_science
+	}
+}
+
+# Krenim unique advantage - researching major (non-weapon) temporal tech (including chroniton torp)
+country_event = {
+	id = STH_technology.2003
+	title = "STH_technology.2003.name"
+	desc = "STH_technology.2003.desc"
+	picture = sth_GFX_evt_timechamber001
+	show_sound = event_mystic_reveal
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		major_temporal_last_increased_tech = yes
+		has_valid_civic = civic_master_time 
+	}
+	
+	immediate = { }
+	
+	option = {
+		name = STH_technology.2003.c  
+        add_unity = 2500
+	}
+	
+	after = {
+	    random_list = {
+	        20 = { small_timeline_change = yes }
+	        10 = { large_timeline_change  = yes }
+	        70 = {}
+	    }
+	}	
+}
+
+# Krenim unique advantage - researching minor weapon temporal tech (except chroniton torp)
+country_event = {
+	id = STH_technology.2004
+	hide_window = yes
+	is_triggered_only = yes
+	
+	trigger = {
+		minor_temporal_last_increased_tech = yes
+		has_valid_civic = civic_master_time 
+	}
+	
+	immediate = { add_unity = 500 }
+	
+}

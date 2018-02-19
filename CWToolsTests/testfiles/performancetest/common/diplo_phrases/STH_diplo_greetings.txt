@@ -1,0 +1,1704 @@
+greetings = {
+
+	### Generic espionaged ###	
+	GENERIC_ESPIONAGED_GREETING_01 = { #Espionaged 
+		weight = { weight = 10000 }
+		trigger = {
+			has_opinion_modifier = { who = FROM modifier = opinion_espionaged is_reverse = yes }
+			has_espionage_mechanics = yes
+		}
+	}
+	
+
+	### Borg ###
+
+	BRG_HOSTILE_GREETING_01 = {
+		weight = { weight = 1000 }
+		trigger = {
+			is_borg_empire = yes
+			NOT = { is_at_war_with = FROM }
+			OR = { is_hostile_to = FROM is_domineering_to = FROM is_unfriendly_to = FROM }
+		}
+	}
+	BRG_NEUTRAL_GREETING_01 = {
+		weight = { weight = 1000 }
+		trigger = {
+			is_borg_empire = yes
+			NOT = { is_at_war_with = FROM }
+			OR = { is_neutral_to = FROM is_threatened_to = FROM }
+		}
+	}
+	BRG_FRIENDLY_GREETING_01 = {
+		weight = { weight = 1000 }
+		trigger = {
+			is_borg_empire = yes
+			NOT = { is_at_war_with = FROM }
+			OR = { is_friendly_to = FROM is_cordial_to = FROM is_protective_to = FROM }
+		}
+	}
+	BRG_WAR_GREETING_01 = {
+		weight = { weight = 1000 }
+		trigger = {
+			is_borg_empire = yes
+			is_at_war_with = FROM
+		}
+	}
+	### Cardassian ###
+	CAR_HOSTILE_GREETING_01 = {
+		weight = { weight = 1000 }
+		trigger = {
+			is_species_class = CAR
+			NOT = { is_same_species = FROM }
+			NOT = { is_at_war_with = FROM }
+			OR = { is_hostile_to = FROM is_domineering_to = FROM is_unfriendly_to = FROM }
+		}
+	}
+	CAR_HOSTILE_GREETING_SS_01 = {
+		weight = { weight = 1000 }
+		trigger = {
+			is_species_class = CAR
+			is_same_species = FROM
+			NOT = { is_at_war_with = FROM }
+			OR = { is_hostile_to = FROM is_domineering_to = FROM is_unfriendly_to = FROM }
+		}
+	}
+	CAR_NEUTRAL_GREETING_01 = {
+		weight = { weight = 1000 }
+		trigger = {
+			is_species_class = CAR
+			NOT = { is_same_species = FROM }
+			NOT = { is_at_war_with = FROM }
+			OR = { is_neutral_to = FROM is_threatened_to = FROM }
+		}
+	}
+	CAR_NEUTRAL_GREETING_SS_01 = {
+		weight = { weight = 1000 }
+		trigger = {
+			is_species_class = CAR
+			is_same_species = FROM
+			NOT = { is_at_war_with = FROM }
+			OR = { is_neutral_to = FROM is_threatened_to = FROM }
+		}
+	}
+	CAR_FRIENDLY_GREETING_01 = {
+		weight = { weight = 1000 }
+		trigger = {
+			is_species_class = CAR
+			NOT = { is_same_species = FROM }
+			NOT = { is_at_war_with = FROM }
+			OR = { is_friendly_to = FROM is_cordial_to = FROM is_protective_to = FROM }
+		}
+	}
+	CAR_FRIENDLY_GREETING_SS_01 = {
+		weight = { weight = 1000 }
+		trigger = {
+			is_species_class = CAR
+			is_same_species = FROM
+			NOT = { is_at_war_with = FROM }
+			OR = { is_friendly_to = FROM is_cordial_to = FROM is_protective_to = FROM }
+		}
+	}
+	CAR_WAR_GREETING_01 = {
+		weight = { weight = 1000 }
+		trigger = {
+			is_species_class = CAR
+			NOT = { is_same_species = FROM }
+			is_at_war_with = FROM
+		}
+	}
+
+	### Dominion ###
+
+	DOM_HOSTILE_GREETING_01 = {
+		weight = { weight = 1000 }
+		trigger = {
+			is_species_class = DOM
+			NOT = { is_same_species = FROM }
+			NOT = { is_at_war_with = FROM }
+			OR = { is_hostile_to = FROM is_domineering_to = FROM is_unfriendly_to = FROM }
+		}
+	}
+	DOM_HOSTILE_GREETING_SS_01 = {
+		weight = { weight = 1000 }
+		trigger = {
+			is_species_class = DOM
+			is_same_species = FROM
+			NOT = { is_at_war_with = FROM }
+			OR = { is_hostile_to = FROM is_domineering_to = FROM is_unfriendly_to = FROM }
+		}
+	}
+	DOM_NEUTRAL_GREETING_01 = {
+		weight = { weight = 1000 }
+		trigger = {
+			is_species_class = DOM
+			NOT = { is_same_species = FROM }
+			NOT = { is_at_war_with = FROM }
+			OR = { is_neutral_to = FROM is_threatened_to = FROM }
+		}
+	}
+	DOM_NEUTRAL_GREETING_SS_01 = {
+		weight = { weight = 1000 }
+		trigger = {
+			is_species_class = DOM
+			is_same_species = FROM
+			NOT = { is_at_war_with = FROM }
+			OR = { is_neutral_to = FROM is_threatened_to = FROM }
+		}
+	}
+	DOM_FRIENDLY_GREETING_01 = {
+		weight = { weight = 1000 }
+		trigger = {
+			is_species_class = DOM
+			NOT = { is_same_species = FROM }
+			NOT = { is_at_war_with = FROM }
+			OR = { is_friendly_to = FROM is_cordial_to = FROM is_protective_to = FROM }
+		}
+	}
+	DOM_FRIENDLY_GREETING_SS_01 = {
+		weight = { weight = 1000 }
+		trigger = {
+			is_species_class = DOM
+			is_same_species = FROM
+			NOT = { is_at_war_with = FROM }
+			OR = { is_friendly_to = FROM is_cordial_to = FROM is_protective_to = FROM }
+		}
+	}
+	DOM_WAR_GREETING_01 = {
+		weight = { weight = 1000 }
+		trigger = {
+			is_species_class = DOM
+			NOT = { is_same_species = FROM }
+			is_at_war_with = FROM
+		}
+	}
+
+	### Fed ###
+
+	FED_HOSTILE_GREETING_01 = {
+		weight = { weight = 1000 }
+		trigger = {
+			is_species_class = FED
+			NOT = { is_same_species = FROM }
+			NOT = { is_at_war_with = FROM }
+			OR = { is_hostile_to = FROM is_domineering_to = FROM is_unfriendly_to = FROM }
+		}
+	}
+	FED_HOSTILE_GREETING_SS_01 = {
+		weight = { weight = 1000 }
+		trigger = {
+			is_species_class = FED
+			is_same_species = FROM
+			NOT = { is_at_war_with = FROM }
+			OR = { is_hostile_to = FROM is_domineering_to = FROM is_unfriendly_to = FROM }
+		}
+	}
+	FED_NEUTRAL_GREETING_01 = {
+		weight = { weight = 1000 }
+		trigger = {
+			is_species_class = FED
+			NOT = { is_same_species = FROM }
+			NOT = { is_at_war_with = FROM }
+			OR = { is_neutral_to = FROM is_threatened_to = FROM }
+		}
+	}
+	FED_NEUTRAL_GREETING_SS_01 = {
+		weight = { weight = 1000 }
+		trigger = {
+			is_species_class = FED
+			is_same_species = FROM
+			NOT = { is_at_war_with = FROM }
+			OR = { is_neutral_to = FROM is_threatened_to = FROM }
+		}
+	}
+	FED_FRIENDLY_GREETING_01 = {
+		weight = { weight = 1000 }
+		trigger = {
+			is_species_class = FED
+			NOT = { is_same_species = FROM }
+			NOT = { is_at_war_with = FROM }
+			OR = { is_friendly_to = FROM is_cordial_to = FROM is_protective_to = FROM }
+		}
+	}
+	FED_FRIENDLY_GREETING_SS_01 = {
+		weight = { weight = 1000 }
+		trigger = {
+			is_species_class = FED
+			is_same_species = FROM
+			NOT = { is_at_war_with = FROM }
+			OR = { is_friendly_to = FROM is_cordial_to = FROM is_protective_to = FROM }
+		}
+	}
+	FED_WAR_GREETING_01 = {
+		weight = { weight = 1000 }
+		trigger = {
+			is_species_class = FED
+			NOT = { is_same_species = FROM }
+			is_at_war_with = FROM
+		}
+	}
+
+	### Ferengi ###
+
+	FER_HOSTILE_GREETING_01 = {
+		weight = { weight = 1000 }
+		trigger = {
+			is_species_class = FER
+			NOT = { is_same_species = FROM }
+			NOT = { is_at_war_with = FROM }
+			OR = { is_hostile_to = FROM is_domineering_to = FROM is_unfriendly_to = FROM }
+		}
+	}
+	FER_HOSTILE_GREETING_SS_01 = {
+		weight = { weight = 1000 }
+		trigger = {
+			is_species_class = FER
+			is_same_species = FROM
+			NOT = { is_at_war_with = FROM }
+			OR = { is_hostile_to = FROM is_domineering_to = FROM is_unfriendly_to = FROM }
+		}
+	}
+	FER_NEUTRAL_GREETING_01 = {
+		weight = { weight = 1000 }
+		trigger = {
+			is_species_class = FER
+			NOT = { is_same_species = FROM }
+			NOT = { is_at_war_with = FROM }
+			OR = { is_neutral_to = FROM is_threatened_to = FROM }
+		}
+	}
+	FER_FRIENDLY_GREETING_01 = {
+		weight = { weight = 1000 }
+		trigger = {
+			is_species_class = FER
+			NOT = { is_same_species = FROM }
+			NOT = { is_at_war_with = FROM }
+			OR = { is_friendly_to = FROM is_cordial_to = FROM is_protective_to = FROM }
+		}
+	}
+	FER_EVENT_GREETING_01 = { #Xindi Attack Earth
+		weight = { weight = 10000 }
+		trigger = {
+			is_species_class = FER
+			FROM = { has_country_flag = xindi_attack_recent }
+			NOT = { is_at_war_with = FROM }
+			OR = { is_friendly_to = FROM is_cordial_to = FROM is_protective_to = FROM }
+		}
+	}
+	FER_WAR_GREETING_01 = {
+		weight = { weight = 1000 }
+		trigger = {
+			is_species_class = FER
+			NOT = { is_same_species = FROM }
+			is_at_war_with = FROM
+		}
+	}
+	FER_WAR_GREETING_SS_01 = {
+		weight = { weight = 1000 }
+		trigger = {
+			is_species_class = FER
+			is_same_species = FROM
+			is_at_war_with = FROM
+		}
+	}
+
+	### Gorn ###
+
+	GOR_HOSTILE_GREETING_01 = {
+		weight = { weight = 1000 }
+		trigger = {
+			OR = { is_species_class = GOR is_species_class = SEL }
+			NOT = { is_same_species = FROM }
+			NOT = { is_at_war_with = FROM }
+			OR = { is_hostile_to = FROM is_domineering_to = FROM is_unfriendly_to = FROM }
+		}
+	}
+	GOR_HOSTILE_GREETING_SS_01 = {
+		weight = { weight = 1000 }
+		trigger = {
+			OR = { is_species_class = GOR is_species_class = SEL }
+			is_same_species = FROM
+			NOT = { is_at_war_with = FROM }
+			OR = { is_hostile_to = FROM is_domineering_to = FROM is_unfriendly_to = FROM }
+		}
+	}
+	GOR_NEUTRAL_GREETING_01 = {
+		weight = { weight = 1000 }
+		trigger = {
+			OR = { is_species_class = GOR is_species_class = SEL }
+			NOT = { is_same_species = FROM }
+			NOT = { is_at_war_with = FROM }
+			OR = { is_neutral_to = FROM is_threatened_to = FROM }
+		}
+	}
+	GOR_NEUTRAL_GREETING_SS_01 = {
+		weight = { weight = 1000 }
+		trigger = {
+			OR = { is_species_class = GOR is_species_class = SEL }
+			is_same_species = FROM
+			NOT = { is_at_war_with = FROM }
+			OR = { is_neutral_to = FROM is_threatened_to = FROM }
+		}
+	}
+	GOR_FRIENDLY_GREETING_01 = {
+		weight = { weight = 1000 }
+		trigger = {
+			OR = { is_species_class = GOR is_species_class = SEL }
+			NOT = { is_same_species = FROM }
+			NOT = { is_at_war_with = FROM }
+			OR = { is_friendly_to = FROM is_cordial_to = FROM is_protective_to = FROM }
+		}
+	}
+	GOR_FRIENDLY_GREETING_SS_01 = {
+		weight = { weight = 1000 }
+		trigger = {
+			OR = { is_species_class = GOR is_species_class = SEL }
+			is_same_species = FROM
+			NOT = { is_at_war_with = FROM }
+			OR = { is_friendly_to = FROM is_cordial_to = FROM is_protective_to = FROM }
+		}
+	}
+	GOR_WAR_GREETING_01 = {
+		weight = { weight = 1000 }
+		trigger = {
+			OR = { is_species_class = GOR is_species_class = SEL }
+			NOT = { is_same_species = FROM }
+			is_at_war_with = FROM
+		}
+	}
+	GOR_WAR_GREETING_SS_01 = {
+		weight = { weight = 1000 }
+		trigger = {
+			OR = { is_species_class = GOR is_species_class = SEL }
+			is_same_species = FROM
+			is_at_war_with = FROM
+		}
+	}
+
+	### KLingon ###
+
+	KDF_HOSTILE_GREETING_01 = {
+		weight = { weight = 1000 }
+		trigger = {
+			is_species_class = KDF
+			NOT = { is_same_species = FROM }
+			NOT = { is_at_war_with = FROM }
+			OR = { is_hostile_to = FROM is_domineering_to = FROM is_unfriendly_to = FROM }
+		}
+	}
+	KDF_HOSTILE_GREETING_SS_01 = {
+		weight = { weight = 1000 }
+		trigger = {
+			is_species_class = KDF
+			is_same_species = FROM
+			NOT = { is_at_war_with = FROM }
+			OR = { is_hostile_to = FROM is_domineering_to = FROM is_unfriendly_to = FROM }
+		}
+	}
+	KDF_NEUTRAL_GREETING_01 = {
+		weight = { weight = 1000 }
+		trigger = {
+			is_species_class = KDF
+			NOT = { is_same_species = FROM }
+			NOT = { is_at_war_with = FROM }
+			OR = { is_neutral_to = FROM is_threatened_to = FROM }
+		}
+	}
+	KDF_NEUTRAL_GREETING_SS_01 = {
+		weight = { weight = 1000 }
+		trigger = {
+			is_species_class = KDF
+			is_same_species = FROM
+			NOT = { is_at_war_with = FROM }
+			OR = { is_neutral_to = FROM is_threatened_to = FROM }
+		}
+	}
+	KDF_FRIENDLY_GREETING_01 = {
+		weight = { weight = 1000 }
+		trigger = {
+			is_species_class = KDF
+			NOT = { is_same_species = FROM }
+			NOT = { is_at_war_with = FROM }
+			OR = { is_friendly_to = FROM is_cordial_to = FROM is_protective_to = FROM }
+		}
+	}
+	KDF_FRIENDLY_GREETING_SS_01 = {
+		weight = { weight = 1000 }
+		trigger = {
+			is_species_class = KDF
+			is_same_species = FROM
+			NOT = { is_at_war_with = FROM }
+			OR = { is_friendly_to = FROM is_cordial_to = FROM is_protective_to = FROM }
+		}
+	}
+	KDF_WAR_GREETING_01 = {
+		weight = { weight = 1000 }
+		trigger = {
+			is_species_class = KDF
+			NOT = { is_same_species = FROM }
+			is_at_war_with = FROM
+		}
+	}
+	KDF_WAR_GREETING_SS_01 = {
+		weight = { weight = 1000 }
+		trigger = {
+			is_species_class = KDF
+			is_same_species = FROM
+			is_at_war_with = FROM
+		}
+	}
+
+	### Romulan ###
+
+	ROM_HOSTILE_GREETING_01 = {
+		weight = { weight = 1000 }
+		trigger = {
+			is_species_class = ROM
+			NOT = { is_same_species = FROM }
+			NOT = { is_at_war_with = FROM }
+			OR = { is_hostile_to = FROM is_domineering_to = FROM is_unfriendly_to = FROM }
+		}
+	}
+	ROM_HOSTILE_GREETING_SS_01 = {
+		weight = { weight = 1000 }
+		trigger = {
+			is_species_class = ROM
+			is_same_species = FROM
+			NOT = { is_at_war_with = FROM }
+			OR = { is_hostile_to = FROM is_domineering_to = FROM is_unfriendly_to = FROM }
+		}
+	}
+	ROM_NEUTRAL_GREETING_01 = {
+		weight = { weight = 1000 }
+		trigger = {
+			is_species_class = ROM
+			NOT = { is_same_species = FROM }
+			NOT = { is_at_war_with = FROM }
+			OR = { is_neutral_to = FROM is_threatened_to = FROM }
+		}
+	}
+	ROM_NEUTRAL_GREETING_SS_01 = {
+		weight = { weight = 1000 }
+		trigger = {
+			is_species_class = ROM
+			is_same_species = FROM
+			NOT = { is_at_war_with = FROM }
+			OR = { is_neutral_to = FROM is_threatened_to = FROM }
+		}
+	}
+	ROM_FRIENDLY_GREETING_01 = {
+		weight = { weight = 1000 }
+		trigger = {
+			is_species_class = ROM
+			NOT = { is_same_species = FROM }
+			NOT = { is_at_war_with = FROM }
+			OR = { is_friendly_to = FROM is_cordial_to = FROM is_protective_to = FROM }
+		}
+	}
+	ROM_FRIENDLY_GREETING_SS_01 = {
+		weight = { weight = 1000 }
+		trigger = {
+			is_species_class = ROM
+			is_same_species = FROM
+			NOT = { is_at_war_with = FROM }
+			OR = { is_friendly_to = FROM is_cordial_to = FROM is_protective_to = FROM }
+		}
+	}
+	ROM_WAR_GREETING_01 = {
+		weight = { weight = 1000 }
+		trigger = {
+			is_species_class = ROM
+			NOT = { is_same_species = FROM }
+			is_at_war_with = FROM
+		}
+	}
+
+	### Sheliak ###
+
+	SHE_HOSTILE_GREETING_01 = {
+		weight = { weight = 1000 }
+		trigger = {
+			is_species_class = SHE
+			NOT = { is_same_species = FROM }
+			NOT = { is_at_war_with = FROM }
+			OR = { is_hostile_to = FROM is_domineering_to = FROM is_unfriendly_to = FROM }
+		}
+	}
+	SHE_HOSTILE_GREETING_SS_01 = {
+		weight = { weight = 1000 }
+		trigger = {
+			is_species_class = SHE
+			is_same_species = FROM
+			NOT = { is_at_war_with = FROM }
+			OR = { is_hostile_to = FROM is_domineering_to = FROM is_unfriendly_to = FROM }
+		}
+	}
+	SHE_NEUTRAL_GREETING_01 = {
+		weight = { weight = 1000 }
+		trigger = {
+			is_species_class = SHE
+			NOT = { is_same_species = FROM }
+			NOT = { is_at_war_with = FROM }
+			OR = { is_neutral_to = FROM is_threatened_to = FROM }
+		}
+	}
+	SHE_NEUTRAL_GREETING_SS_01 = {
+		weight = { weight = 1000 }
+		trigger = {
+			is_species_class = SHE
+			is_same_species = FROM
+			NOT = { is_at_war_with = FROM }
+			OR = { is_neutral_to = FROM is_threatened_to = FROM }
+		}
+	}
+	SHE_FRIENDLY_GREETING_01 = {
+		weight = { weight = 1000 }
+		trigger = {
+			is_species_class = SHE
+			NOT = { is_same_species = FROM }
+			NOT = { is_at_war_with = FROM }
+			OR = { is_friendly_to = FROM is_cordial_to = FROM is_protective_to = FROM }
+		}
+	}
+	SHE_FRIENDLY_GREETING_SS_01 = {
+		weight = { weight = 1000 }
+		trigger = {
+			is_species_class = SHE
+			is_same_species = FROM
+			NOT = { is_at_war_with = FROM }
+			OR = { is_friendly_to = FROM is_cordial_to = FROM is_protective_to = FROM }
+		}
+	}
+	SHE_WAR_GREETING_01 = {
+		weight = { weight = 1000 }
+		trigger = {
+			is_species_class = SHE
+			NOT = { is_same_species = FROM }
+			is_at_war_with = FROM
+		}
+	}
+	
+	### Tamarian ###
+
+	TAM_HOSTILE_GREETING_UNTRANSLATED_01 = {
+		weight = { weight = 1000 }
+		trigger = {
+			is_species_class = TAM
+			NOT = { reverse_has_relation_flag = { who = FROM flag = translated } }
+			NOT = { is_same_species = FROM }
+			NOT = { is_at_war_with = FROM }
+			OR = { is_hostile_to = FROM is_domineering_to = FROM is_unfriendly_to = FROM }
+		}
+	}
+	TAM_HOSTILE_GREETING_TRANSLATED_01 = {
+		weight = { weight = 1000 }
+		trigger = {
+			is_species_class = TAM
+			reverse_has_relation_flag = { who = FROM flag = translated }
+			NOT = { is_same_species = FROM }
+			NOT = { is_at_war_with = FROM }
+			OR = { is_hostile_to = FROM is_domineering_to = FROM is_unfriendly_to = FROM }
+		}
+	}
+	TAM_HOSTILE_GREETING_SS_01 = {
+		weight = { weight = 1000 }
+		trigger = {
+			is_species_class = TAM
+			is_same_species = FROM
+			NOT = { is_at_war_with = FROM }
+			OR = { is_hostile_to = FROM is_domineering_to = FROM is_unfriendly_to = FROM }
+		}
+	}
+	TAM_NEUTRAL_GREETING_UNTRANSLATED_01 = {
+		weight = { weight = 1000 }
+		trigger = {
+			is_species_class = TAM
+			NOT = { reverse_has_relation_flag = { who = FROM flag = translated } }
+			NOT = { is_same_species = FROM }
+			NOT = { is_at_war_with = FROM }
+			OR = { is_neutral_to = FROM is_threatened_to = FROM }
+		}
+	}
+	TAM_NEUTRAL_GREETING_TRANSLATED_01 = {
+		weight = { weight = 1000 }
+		trigger = {
+			is_species_class = TAM
+			reverse_has_relation_flag = { who = FROM flag = translated }
+			NOT = { is_same_species = FROM }
+			NOT = { is_at_war_with = FROM }
+			OR = { is_neutral_to = FROM is_threatened_to = FROM }
+		}
+	}
+	TAM_NEUTRAL_GREETING_SS_01 = {
+		weight = { weight = 1000 }
+		trigger = {
+			is_species_class = TAM
+			is_same_species = FROM
+			NOT = { is_at_war_with = FROM }
+			OR = { is_neutral_to = FROM is_threatened_to = FROM }
+		}
+	}
+	TAM_FRIENDLY_GREETING_UNTRANSLATED_01 = {
+		weight = { weight = 1000 }
+		trigger = {
+			is_species_class = TAM
+			NOT = { reverse_has_relation_flag = { who = FROM flag = translated } }
+			NOT = { is_same_species = FROM }
+			NOT = { is_at_war_with = FROM }
+			OR = { is_friendly_to = FROM is_cordial_to = FROM is_protective_to = FROM }
+		}
+	}
+	TAM_FRIENDLY_GREETING_TRANSLATED_01 = {
+		weight = { weight = 1000 }
+		trigger = {
+			is_species_class = TAM
+			reverse_has_relation_flag = { who = FROM flag = translated }
+			NOT = { is_same_species = FROM }
+			NOT = { is_at_war_with = FROM }
+			OR = { is_friendly_to = FROM is_cordial_to = FROM is_protective_to = FROM }
+		}
+	}
+	TAM_FRIENDLY_GREETING_SS_01 = {
+		weight = { weight = 1000 }
+		trigger = {
+			is_species_class = TAM
+			is_same_species = FROM
+			NOT = { is_at_war_with = FROM }
+			OR = { is_friendly_to = FROM is_cordial_to = FROM is_protective_to = FROM }
+		}
+	}
+	TAM_WAR_GREETING_UNTRANSLATED_01 = {
+		weight = { weight = 1000 }
+		trigger = {
+			is_species_class = TAM
+			NOT = { reverse_has_relation_flag = { who = FROM flag = translated } }
+			NOT = { is_same_species = FROM }
+			is_at_war_with = FROM
+		}
+	}
+	TAM_WAR_GREETING_TRANSLATED_01 = {
+		weight = { weight = 1000 }
+		trigger = {
+			is_species_class = TAM
+			reverse_has_relation_flag = { who = FROM flag = translated }
+			NOT = { is_same_species = FROM }
+			is_at_war_with = FROM
+		}
+	}
+	TAM_WAR_GREETING_SS_01 = {
+		weight = { weight = 1000 }
+		trigger = {
+			is_species_class = TAM
+			is_same_species = FROM
+			is_at_war_with = FROM
+		}
+	}
+
+	### Tholian ###
+
+	THO_HOSTILE_GREETING_01 = {
+		weight = { weight = 1000 }
+		trigger = {
+			is_species_class = THO
+			NOT = { is_same_species = FROM }
+			NOT = { is_at_war_with = FROM }
+			OR = { is_hostile_to = FROM is_domineering_to = FROM is_unfriendly_to = FROM }
+		}
+	}
+	THO_HOSTILE_GREETING_SS_01 = {
+		weight = { weight = 1000 }
+		trigger = {
+			is_species_class = THO
+			is_same_species = FROM
+			NOT = { is_at_war_with = FROM }
+			OR = { is_hostile_to = FROM is_domineering_to = FROM is_unfriendly_to = FROM }
+		}
+	}
+	THO_NEUTRAL_GREETING_01 = {
+		weight = { weight = 1000 }
+		trigger = {
+			is_species_class = THO
+			NOT = { is_same_species = FROM }
+			NOT = { is_at_war_with = FROM }
+			OR = { is_neutral_to = FROM is_threatened_to = FROM }
+		}
+	}
+	THO_NEUTRAL_GREETING_SS_01 = {
+		weight = { weight = 1000 }
+		trigger = {
+			is_species_class = THO
+			is_same_species = FROM
+			NOT = { is_at_war_with = FROM }
+			OR = { is_neutral_to = FROM is_threatened_to = FROM }
+		}
+	}
+	THO_FRIENDLY_GREETING_01 = {
+		weight = { weight = 1000 }
+		trigger = {
+			is_species_class = THO
+			NOT = { is_same_species = FROM }
+			NOT = { is_at_war_with = FROM }
+			OR = { is_friendly_to = FROM is_cordial_to = FROM is_protective_to = FROM }
+		}
+	}
+	THO_FRIENDLY_GREETING_SS_01 = {
+		weight = { weight = 1000 }
+		trigger = {
+			is_species_class = THO
+			is_same_species = FROM
+			NOT = { is_at_war_with = FROM }
+			OR = { is_friendly_to = FROM is_cordial_to = FROM is_protective_to = FROM }
+		}
+	}
+	THO_WAR_GREETING_01 = {
+		weight = { weight = 1000 }
+		trigger = {
+			is_species_class = THO
+			NOT = { is_same_species = FROM }
+			is_at_war_with = FROM
+		}
+	}
+
+	### Vulcan ###
+
+	VUL_HOSTILE_GREETING_01 = {
+		weight = { weight = 1000 }
+		trigger = {
+			is_species_class = VUL
+			NOT = { is_same_species = FROM }
+			NOT = { is_at_war_with = FROM }
+			OR = { is_hostile_to = FROM is_domineering_to = FROM is_unfriendly_to = FROM }
+		}
+	}
+	VUL_HOSTILE_GREETING_SS_01 = {
+		weight = { weight = 1000 }
+		trigger = {
+			is_species_class = VUL
+			is_same_species = FROM
+			NOT = { is_at_war_with = FROM }
+			OR = { is_hostile_to = FROM is_domineering_to = FROM is_unfriendly_to = FROM }
+		}
+	}
+	VUL_NEUTRAL_GREETING_01 = {
+		weight = { weight = 1000 }
+		trigger = {
+			is_species_class = VUL
+			NOT = { is_same_species = FROM }
+			NOT = { is_at_war_with = FROM }
+			OR = { is_neutral_to = FROM is_threatened_to = FROM }
+		}
+	}
+	VUL_FRIENDLY_GREETING_01 = {
+		weight = { weight = 1000 }
+		trigger = {
+			is_species_class = VUL
+			NOT = { is_same_species = FROM }
+			NOT = { is_at_war_with = FROM }
+			OR = { is_friendly_to = FROM is_cordial_to = FROM is_protective_to = FROM }
+		}
+	}
+	VUL_EVENT_GREETING_01 = { #Xindi Attack Earth
+		weight = { weight = 10000 }
+		trigger = {
+			is_species_class = VUL
+			FROM = { has_country_flag = xindi_attack_recent }
+			NOT = { is_at_war_with = FROM }
+			OR = { is_friendly_to = FROM is_cordial_to = FROM is_protective_to = FROM }
+		}
+	}
+	VUL_WAR_GREETING_01 = {
+		weight = { weight = 1000 }
+		trigger = {
+			is_species_class = VUL
+			NOT = { is_same_species = FROM }
+			is_at_war_with = FROM
+		}
+	}
+	VUL_WAR_GREETING_SS_01 = {
+		weight = { weight = 1000 }
+		trigger = {
+			is_species_class = VUL
+			is_same_species = FROM
+			is_at_war_with = FROM
+		}
+	}
+		
+}
+
+action_declare_war = {
+	select = {	
+
+		### Borg ### 
+
+		BRG_DOW_SELECT_01 = {
+			weight = { weight = 1000 }
+			trigger = {
+				is_borg_empire = yes
+				NOT = { is_same_species = FROM }
+			}
+		}
+		BRG_DOW_SELECT_SS_01 = {
+			weight = { weight = 1000 }
+			trigger = {
+				is_borg_empire = yes
+				is_same_species = FROM
+			}
+		}
+
+		### CAR ### 
+
+		CAR_DOW_SELECT_01 = {
+			weight = { weight = 1000 }
+			trigger = {
+				is_species_class = CAR
+				NOT = { is_same_species = FROM }
+			}
+		}
+		CAR_DOW_SELECT_SS_01 = {
+			weight = { weight = 1000 }
+			trigger = {
+				is_species_class = CAR
+				is_same_species = FROM
+			}
+		}
+
+		### DOM ### 
+
+		DOM_DOW_SELECT_01 = {
+			weight = { weight = 1000 }
+			trigger = {
+				is_species_class = DOM
+				NOT = { is_same_species = FROM }
+			}
+		}
+		DOM_DOW_SELECT_SS_01 = {
+			weight = { weight = 1000 }
+			trigger = {
+				is_species_class = DOM
+				is_same_species = FROM
+			}
+		}
+
+		### FED ### 
+
+		FED_DOW_SELECT_01 = {
+			weight = { weight = 1000 }
+			trigger = {
+				is_species_class = FED
+				NOT = { is_same_species = FROM }
+			}
+		}
+		FED_DOW_SELECT_SS_01 = {
+			weight = { weight = 1000 }
+			trigger = {
+				is_species_class = FED
+				is_same_species = FROM
+			}
+		}
+
+		### FER ### 
+
+		FER_DOW_SELECT_01 = {
+			weight = { weight = 1000 }
+			trigger = {
+				is_species_class = FER
+				NOT = { is_same_species = FROM }
+			}
+		}
+		FER_DOW_SELECT_SS_01 = {
+			weight = { weight = 1000 }
+			trigger = {
+				is_species_class = FER
+				is_same_species = FROM
+			}
+		}
+
+		### DOM ### 
+
+		DOM_DOW_SELECT_01 = {
+			weight = { weight = 1000 }
+			trigger = {
+				is_species_class = DOM
+				NOT = { is_same_species = FROM }
+			}
+		}
+		DOM_DOW_SELECT_SS_01 = {
+			weight = { weight = 1000 }
+			trigger = {
+				is_species_class = DOM
+				is_same_species = FROM
+			}
+		}
+
+
+		### GOR ### 
+
+		GOR_DOW_SELECT_01 = {
+			weight = { weight = 1000 }
+			trigger = {
+				OR = { is_species_class = GOR is_species_class = SEL }
+				NOT = { is_same_species = FROM }
+			}
+		}
+		GOR_DOW_SELECT_SS_01 = {
+			weight = { weight = 1000 }
+			trigger = {
+				OR = { is_species_class = GOR is_species_class = SEL }
+				is_same_species = FROM
+			}
+		}
+
+		### KDF ### 
+
+		KDF_DOW_SELECT_01 = {
+			weight = { weight = 1000 }
+			trigger = {
+				is_species_class = KDF
+				NOT = { is_same_species = FROM }
+			}
+		}
+		KDF_DOW_SELECT_SS_01 = {
+			weight = { weight = 1000 }
+			trigger = {
+				is_species_class = KDF
+				is_same_species = FROM
+			}
+		}
+
+
+		### ROM ### 
+
+		ROM_DOW_SELECT_01 = {
+			weight = { weight = 1000 }
+			trigger = {
+				is_species_class = ROM
+				NOT = { is_same_species = FROM }
+			}
+		}
+		ROM_DOW_SELECT_SS_01 = {
+			weight = { weight = 1000 }
+			trigger = {
+				is_species_class = ROM
+				is_same_species = FROM
+			}
+		}
+
+		### TAM UNTRANSLATED ### 
+
+		TAM_DOW_SELECT_UNTRANSLATED_01 = {
+			weight = { weight = 1000 }
+			trigger = {
+				is_species_class = TAM
+				NOT = { is_same_species = FROM }
+			}
+		}
+		TAM_DOW_SELECT_SS_UNTRANSLATED_01 = {
+			weight = { weight = 1000 }
+			trigger = {
+				is_species_class = TAM
+				is_same_species = FROM
+			}
+		}
+
+		### TAM TRANSLATED ### 
+
+		TAM_DOW_SELECT_TRANSLATED_01 = {
+			weight = { weight = 1000 }
+			trigger = {
+				reverse_has_relation_flag = { who = FROM flag = translated }
+				is_species_class = TAM
+				NOT = { is_same_species = FROM }
+			}
+		}
+		TAM_DOW_SELECT_SS_TRANSLATED_01 = {
+			weight = { weight = 1000 }
+			trigger = {
+				reverse_has_relation_flag = { who = FROM flag = translated }
+				is_species_class = TAM
+				is_same_species = FROM
+			}
+		}
+
+		### THO ### 
+
+		THO_DOW_SELECT_01 = {
+			weight = { weight = 1000 }
+			trigger = {
+				is_species_class = THO
+				NOT = { is_same_species = FROM }
+			}
+		}
+		THO_DOW_SELECT_SS_01 = {
+			weight = { weight = 1000 }
+			trigger = {
+				is_species_class = THO
+				is_same_species = FROM
+			}
+		}
+
+		### VUL ### 
+
+		VUL_DOW_SELECT_01 = {
+			weight = { weight = 1000 }
+			trigger = {
+				is_species_class = VUL
+				NOT = { is_same_species = FROM }
+			}
+		}
+		VUL_DOW_SELECT_SS_01 = {
+			weight = { weight = 1000 }
+			trigger = {
+				is_species_class = VUL
+				is_same_species = FROM
+			}
+		}
+	}
+	
+	propose = {	
+
+		### BRG ###
+
+		BRG_DOW_PROPOSE_01 = {
+			weight = { weight = 1000 }
+			trigger = {
+				is_borg_empire = yes
+			}
+		}
+
+		### CAR ###
+
+		CAR_DOW_PROPOSE_01 = {
+			weight = { weight = 1000 }
+			trigger = {
+				is_species_class = CAR
+			}
+		}
+
+		### DOM ###
+
+		DOM_DOW_PROPOSE_01 = {
+			weight = { weight = 1000 }
+			trigger = {
+				is_species_class = DOM
+			}
+		}
+
+		### FED ###
+
+		FED_DOW_PROPOSE_01 = {
+			weight = { weight = 1000 }
+			trigger = {
+				is_species_class = FED
+			}
+		}
+
+		### FER ###
+
+		FER_DOW_PROPOSE_01 = {
+			weight = { weight = 1000 }
+			trigger = {
+				is_species_class = FER
+			}
+		}
+
+		### GOR ###
+
+		GOR_DOW_PROPOSE_01 = {
+			weight = { weight = 1000 }
+			trigger = {
+				OR = { is_species_class = GOR is_species_class = SEL }
+			}
+		}
+
+		### KDF ###
+
+		KDF_DOW_PROPOSE_01 = {
+			weight = { weight = 1000 }
+			trigger = {
+				is_species_class = KDF
+			}
+		}
+
+		### ROM ###
+
+		ROM_DOW_PROPOSE_01 = {
+			weight = { weight = 1000 }
+			trigger = {
+				is_species_class = ROM
+			}
+		}
+
+		### TAM ###
+
+		TAM_DOW_PROPOSE_UNTRANSLATED_01 = {
+			weight = { weight = 1000 }
+			trigger = {
+				is_species_class = TAM
+			}
+		}
+
+		### TAM ###
+
+		TAM_DOW_PROPOSE_TRANSLATED_01 = {
+			weight = { weight = 1000 }
+			trigger = {
+				reverse_has_relation_flag = { who = FROM flag = translated }
+				is_species_class = TAM
+			}
+		}
+
+		### THO ###
+
+		THO_DOW_PROPOSE_01 = {
+			weight = { weight = 1000 }
+			trigger = {
+				is_species_class = THO
+			}
+		}
+
+		### VUL ###
+
+		VUL_DOW_PROPOSE_01 = {
+			weight = { weight = 1000 }
+			trigger = {
+				is_species_class = VUL
+			}
+		}						
+	}
+
+	accept = {	
+
+		### BRG ###
+
+		BRG_HOSTILE_DOW_ACCEPT_01 = {
+			weight = { weight = 1000 }
+			trigger = {
+				is_borg_empire = yes
+				NOT = { is_same_species = FROM }
+				OR = { is_hostile_to = FROM is_domineering_to = FROM is_unfriendly_to = FROM }
+			}
+		}
+		BRG_HOSTILE_DOW_ACCEPT_SS_01 = {
+			weight = { weight = 1000 }
+			trigger = {
+				is_borg_empire = yes
+				is_same_species = FROM
+				OR = { is_hostile_to = FROM is_domineering_to = FROM is_unfriendly_to = FROM }
+			}
+		}
+		BRG_NEUTRAL_DOW_ACCEPT_01 = {
+			weight = { weight = 1000 }
+			trigger = {
+				is_borg_empire = yes
+				OR = { is_neutral_to = FROM is_threatened_to = FROM }
+			}
+		}
+		BRG_FRIENDLY_DOW_ACCEPT_01 = {
+			weight = { weight = 1000 }
+			trigger = {
+				is_borg_empire = yes
+				OR = { is_friendly_to = FROM is_cordial_to = FROM is_protective_to = FROM }
+			}
+		}
+
+
+		### CAR ###
+		
+		CAR_HOSTILE_DOW_ACCEPT_01 = {
+			weight = { weight = 1000 }
+			trigger = {
+				is_species_class = CAR
+				NOT = { is_same_species = FROM }
+				OR = { is_hostile_to = FROM is_domineering_to = FROM is_unfriendly_to = FROM }
+			}
+		}
+		CAR_HOSTILE_DOW_ACCEPT_SS_01 = {
+			weight = { weight = 1000 }
+			trigger = {
+				is_species_class = CAR
+				is_same_species = FROM
+				OR = { is_hostile_to = FROM is_domineering_to = FROM is_unfriendly_to = FROM }
+			}
+		}
+		CAR_NEUTRAL_DOW_ACCEPT_01 = {
+			weight = { weight = 1000 }
+			trigger = {
+				is_species_class = CAR
+				OR = { is_neutral_to = FROM is_threatened_to = FROM }
+			}
+		}
+		CAR_FRIENDLY_DOW_ACCEPT_01 = {
+			weight = { weight = 1000 }
+			trigger = {
+				is_species_class = CAR
+				OR = { is_friendly_to = FROM is_cordial_to = FROM is_protective_to = FROM }
+			}
+		}
+
+		### DOM ###
+		
+		DOM_HOSTILE_DOW_ACCEPT_01 = {
+			weight = { weight = 1000 }
+			trigger = {
+				is_species_class = DOM
+				NOT = { is_same_species = FROM }
+				OR = { is_hostile_to = FROM is_domineering_to = FROM is_unfriendly_to = FROM }
+			}
+		}
+		DOM_HOSTILE_DOW_ACCEPT_SS_01 = {
+			weight = { weight = 1000 }
+			trigger = {
+				is_species_class = DOM
+				is_same_species = FROM
+				OR = { is_hostile_to = FROM is_domineering_to = FROM is_unfriendly_to = FROM }
+			}
+		}
+		DOM_NEUTRAL_DOW_ACCEPT_01 = {
+			weight = { weight = 1000 }
+			trigger = {
+				is_species_class = DOM
+				OR = { is_neutral_to = FROM is_threatened_to = FROM }
+			}
+		}
+		DOM_FRIENDLY_DOW_ACCEPT_01 = {
+			weight = { weight = 1000 }
+			trigger = {
+				is_species_class = DOM
+				OR = { is_friendly_to = FROM is_cordial_to = FROM is_protective_to = FROM }
+			}
+		}
+
+		### FED ###
+		
+		FED_HOSTILE_DOW_ACCEPT_01 = {
+			weight = { weight = 1000 }
+			trigger = {
+				is_species_class = FED
+				NOT = { is_same_species = FROM }
+				OR = { is_hostile_to = FROM is_domineering_to = FROM is_unfriendly_to = FROM }
+			}
+		}
+		FED_HOSTILE_DOW_ACCEPT_SS_01 = {
+			weight = { weight = 1000 }
+			trigger = {
+				is_species_class = FED
+				is_same_species = FROM
+				OR = { is_hostile_to = FROM is_domineering_to = FROM is_unfriendly_to = FROM }
+			}
+		}
+		FED_NEUTRAL_DOW_ACCEPT_01 = {
+			weight = { weight = 1000 }
+			trigger = {
+				is_species_class = FED
+				OR = { is_neutral_to = FROM is_threatened_to = FROM }
+			}
+		}
+		FED_FRIENDLY_DOW_ACCEPT_01 = {
+			weight = { weight = 1000 }
+			trigger = {
+				is_species_class = FED
+				OR = { is_friendly_to = FROM is_cordial_to = FROM is_protective_to = FROM }
+			}
+		}
+
+		### FER ###
+		
+		FER_HOSTILE_DOW_ACCEPT_01 = {
+			weight = { weight = 1000 }
+			trigger = {
+				is_species_class = FER
+				NOT = { is_same_species = FROM }
+				OR = { is_hostile_to = FROM is_domineering_to = FROM is_unfriendly_to = FROM }
+			}
+		}
+		FER_HOSTILE_DOW_ACCEPT_SS_01 = {
+			weight = { weight = 1000 }
+			trigger = {
+				is_species_class = FER
+				is_same_species = FROM
+				OR = { is_hostile_to = FROM is_domineering_to = FROM is_unfriendly_to = FROM }
+			}
+		}
+		FER_NEUTRAL_DOW_ACCEPT_01 = {
+			weight = { weight = 1000 }
+			trigger = {
+				is_species_class = FER
+				OR = { is_neutral_to = FROM is_threatened_to = FROM }
+			}
+		}
+		FER_FRIENDLY_DOW_ACCEPT_01 = {
+			weight = { weight = 1000 }
+			trigger = {
+				is_species_class = FER
+				OR = { is_friendly_to = FROM is_cordial_to = FROM is_protective_to = FROM }
+			}
+		}
+
+		### GOR ###
+		
+		GOR_HOSTILE_DOW_ACCEPT_01 = {
+			weight = { weight = 1000 }
+			trigger = {
+				OR = { is_species_class = GOR is_species_class = SEL }
+				NOT = { is_same_species = FROM }
+				OR = { is_hostile_to = FROM is_domineering_to = FROM is_unfriendly_to = FROM }
+			}
+		}
+		GOR_HOSTILE_DOW_ACCEPT_SS_01 = {
+			weight = { weight = 1000 }
+			trigger = {
+				OR = { is_species_class = GOR is_species_class = SEL }
+				is_same_species = FROM
+				OR = { is_hostile_to = FROM is_domineering_to = FROM is_unfriendly_to = FROM }
+			}
+		}
+		GOR_NEUTRAL_DOW_ACCEPT_01 = {
+			weight = { weight = 1000 }
+			trigger = {
+				OR = { is_species_class = GOR is_species_class = SEL }
+				OR = { is_neutral_to = FROM is_threatened_to = FROM }
+			}
+		}
+		GOR_FRIENDLY_DOW_ACCEPT_01 = {
+			weight = { weight = 1000 }
+			trigger = {
+				OR = { is_species_class = GOR is_species_class = SEL }
+				OR = { is_friendly_to = FROM is_cordial_to = FROM is_protective_to = FROM }
+			}
+		}
+
+		### KDF ###
+		
+		KDF_HOSTILE_DOW_ACCEPT_01 = {
+			weight = { weight = 1000 }
+			trigger = {
+				is_species_class = KDF
+				NOT = { is_same_species = FROM }
+				OR = { is_hostile_to = FROM is_domineering_to = FROM is_unfriendly_to = FROM }
+			}
+		}
+		KDF_HOSTILE_DOW_ACCEPT_SS_01 = {
+			weight = { weight = 1000 }
+			trigger = {
+				is_species_class = KDF
+				is_same_species = FROM
+				OR = { is_hostile_to = FROM is_domineering_to = FROM is_unfriendly_to = FROM }
+			}
+		}
+		KDF_NEUTRAL_DOW_ACCEPT_01 = {
+			weight = { weight = 1000 }
+			trigger = {
+				is_species_class = KDF
+				OR = { is_neutral_to = FROM is_threatened_to = FROM }
+			}
+		}
+		KDF_FRIENDLY_DOW_ACCEPT_01 = {
+			weight = { weight = 1000 }
+			trigger = {
+				is_species_class = KDF
+				OR = { is_friendly_to = FROM is_cordial_to = FROM is_protective_to = FROM }
+			}
+		}
+
+		### ROM ###
+		
+		ROM_HOSTILE_DOW_ACCEPT_01 = {
+			weight = { weight = 1000 }
+			trigger = {
+				is_species_class = ROM
+				NOT = { is_same_species = FROM }
+				OR = { is_hostile_to = FROM is_domineering_to = FROM is_unfriendly_to = FROM }
+			}
+		}
+		ROM_HOSTILE_DOW_ACCEPT_SS_01 = {
+			weight = { weight = 1000 }
+			trigger = {
+				is_species_class = ROM
+				is_same_species = FROM
+				OR = { is_hostile_to = FROM is_domineering_to = FROM is_unfriendly_to = FROM }
+			}
+		}
+		ROM_NEUTRAL_DOW_ACCEPT_01 = {
+			weight = { weight = 1000 }
+			trigger = {
+				is_species_class = ROM
+				OR = { is_neutral_to = FROM is_threatened_to = FROM }
+			}
+		}
+		ROM_FRIENDLY_DOW_ACCEPT_01 = {
+			weight = { weight = 1000 }
+			trigger = {
+				is_species_class = ROM
+				OR = { is_friendly_to = FROM is_cordial_to = FROM is_protective_to = FROM }
+			}
+		}
+
+		### TAM ###
+		
+		TAM_HOSTILE_DOW_ACCEPT_UNTRANSLATED_01 = {
+			weight = { weight = 1000 }
+			trigger = {
+				is_species_class = TAM
+				NOT = { is_same_species = FROM }
+				OR = { is_hostile_to = FROM is_domineering_to = FROM is_unfriendly_to = FROM }
+			}
+		}
+		TAM_HOSTILE_DOW_ACCEPT_SS_UNTRANSLATED_01 = {
+			weight = { weight = 1000 }
+			trigger = {
+				is_species_class = TAM
+				is_same_species = FROM
+				OR = { is_hostile_to = FROM is_domineering_to = FROM is_unfriendly_to = FROM }
+			}
+		}
+		TAM_NEUTRAL_DOW_ACCEPT_UNTRANSLATED_01 = {
+			weight = { weight = 1000 }
+			trigger = {
+				is_species_class = TAM
+				OR = { is_neutral_to = FROM is_threatened_to = FROM }
+			}
+		}
+		TAM_FRIENDLY_DOW_ACCEPT_UNTRANSLATED_01 = {
+			weight = { weight = 1000 }
+			trigger = {
+				is_species_class = TAM
+				OR = { is_friendly_to = FROM is_cordial_to = FROM is_protective_to = FROM }
+			}
+		}
+
+		### TAM ###
+		
+		TAM_HOSTILE_DOW_ACCEPT_TRANSLATED_01 = {
+			weight = { weight = 1000 }
+			trigger = {
+				is_species_class = TAM
+				NOT = { is_same_species = FROM }
+				OR = { is_hostile_to = FROM is_domineering_to = FROM is_unfriendly_to = FROM }
+				reverse_has_relation_flag = { who = FROM flag = translated }
+			}
+		}
+		TAM_HOSTILE_DOW_ACCEPT_SS_TRANSLATED_01 = {
+			weight = { weight = 1000 }
+			trigger = {
+				is_species_class = TAM
+				is_same_species = FROM
+				OR = { is_hostile_to = FROM is_domineering_to = FROM is_unfriendly_to = FROM }
+				reverse_has_relation_flag = { who = FROM flag = translated }
+			}
+		}
+		TAM_NEUTRAL_DOW_ACCEPT_TRANSLATED_01 = {
+			weight = { weight = 1000 }
+			trigger = {
+				reverse_has_relation_flag = { who = FROM flag = translated }
+				is_species_class = TAM
+				OR = { is_neutral_to = FROM is_threatened_to = FROM }
+			}
+		}
+		TAM_FRIENDLY_DOW_ACCEPT_TRANSLATED_01 = {
+			weight = { weight = 1000 }
+			trigger = {
+				reverse_has_relation_flag = { who = FROM flag = translated }
+				is_species_class = TAM
+				OR = { is_friendly_to = FROM is_cordial_to = FROM is_protective_to = FROM }
+			}
+		}
+
+		### THO ###
+		
+		THO_HOSTILE_DOW_ACCEPT_01 = {
+			weight = { weight = 1000 }
+			trigger = {
+				is_species_class = THO
+				NOT = { is_same_species = FROM }
+				OR = { is_hostile_to = FROM is_domineering_to = FROM is_unfriendly_to = FROM }
+			}
+		}
+		THO_HOSTILE_DOW_ACCEPT_SS_01 = {
+			weight = { weight = 1000 }
+			trigger = {
+				is_species_class = THO
+				is_same_species = FROM
+				OR = { is_hostile_to = FROM is_domineering_to = FROM is_unfriendly_to = FROM }
+			}
+		}
+		THO_NEUTRAL_DOW_ACCEPT_01 = {
+			weight = { weight = 1000 }
+			trigger = {
+				is_species_class = THO
+				OR = { is_neutral_to = FROM is_threatened_to = FROM }
+			}
+		}
+		THO_FRIENDLY_DOW_ACCEPT_01 = {
+			weight = { weight = 1000 }
+			trigger = {
+				is_species_class = THO
+				OR = { is_friendly_to = FROM is_cordial_to = FROM is_protective_to = FROM }
+			}
+		}
+
+		### VUL ###
+		
+		VUL_HOSTILE_DOW_ACCEPT_01 = {
+			weight = { weight = 1000 }
+			trigger = {
+				is_species_class = VUL
+				NOT = { is_same_species = FROM }
+				OR = { is_hostile_to = FROM is_domineering_to = FROM is_unfriendly_to = FROM }
+			}
+		}
+		VUL_HOSTILE_DOW_ACCEPT_SS_01 = {
+			weight = { weight = 1000 }
+			trigger = {
+				is_species_class = VUL
+				is_same_species = FROM
+				OR = { is_hostile_to = FROM is_domineering_to = FROM is_unfriendly_to = FROM }
+			}
+		}
+		VUL_NEUTRAL_DOW_ACCEPT_01 = {
+			weight = { weight = 1000 }
+			trigger = {
+				is_species_class = VUL
+				OR = { is_neutral_to = FROM is_threatened_to = FROM }
+			}
+		}
+		VUL_FRIENDLY_DOW_ACCEPT_01 = {
+			weight = { weight = 1000 }
+			trigger = {
+				is_species_class = VUL
+				OR = { is_friendly_to = FROM is_cordial_to = FROM is_protective_to = FROM }
+			}
+		}
+	}
+
+	propose_vote = {	
+
+		### BRG ###
+
+		BRG_DOW_VOTE_PROPOSE_01 = {
+			weight = { weight = 1000 }
+			trigger = {
+				is_borg_empire = yes
+			}
+		}
+
+		### CAR ###
+
+		CAR_DOW_VOTE_PROPOSE_01 = {
+			weight = { weight = 1000 }
+			trigger = {
+				is_species_class = CAR
+			}
+		}
+
+		### DOM ###
+
+		DOM_DOW_VOTE_PROPOSE_01 = {
+			weight = { weight = 1000 }
+			trigger = {
+				is_species_class = DOM
+			}
+		}		
+		
+		### FED ###
+
+		FED_DOW_VOTE_PROPOSE_01 = {
+			weight = { weight = 1000 }
+			trigger = {
+				is_species_class = FED
+			}
+		}
+		
+		### FER ###
+
+		FER_DOW_VOTE_PROPOSE_01 = {
+			weight = { weight = 1000 }
+			trigger = {
+				is_species_class = FER
+			}
+		}
+		
+		### GOR ###
+
+		GOR_DOW_VOTE_PROPOSE_01 = {
+			weight = { weight = 1000 }
+			trigger = {
+				OR = { is_species_class = GOR is_species_class = SEL }
+			}
+		}
+		
+		### KDF ###
+
+		KDF_DOW_VOTE_PROPOSE_01 = {
+			weight = { weight = 1000 }
+			trigger = {
+				is_species_class = KDF
+			}
+		}
+		
+		### ROM ###
+
+		ROM_DOW_VOTE_PROPOSE_01 = {
+			weight = { weight = 1000 }
+			trigger = {
+				is_species_class = ROM
+			}
+		}
+		
+		### TAM ###
+
+		TAM_DOW_VOTE_PROPOSE_UNTRANSLATED_01 = {
+			weight = { weight = 1000 }
+			trigger = {
+				is_species_class = TAM
+			}
+		}
+		
+		### TAM ###
+
+		TAM_DOW_VOTE_PROPOS_TRANSLATED_01 = {
+			weight = { weight = 1000 }
+			trigger = {
+				is_species_class = TAM
+			}
+		}
+		
+		### THO ###
+
+		THO_DOW_VOTE_PROPOSE_01 = {
+			weight = { weight = 1000 }
+			trigger = {
+				is_species_class = THO
+			}
+		}
+		
+		### VUL ###
+
+		VUL_DOW_VOTE_PROPOSE_01 = {
+			weight = { weight = 1000 }
+			trigger = {
+				is_species_class = VUL
+			}
+		}
+	}
+}	
+
+
+action_insult = {
+	select = {
+		BRG_INSULT = {
+			weight = { weight = 1000 }
+			trigger = { is_borg_empire = yes }
+		}
+	}
+	propose = {
+		BRG_INSULT_PROPOSE = {
+			weight = { weight = 1000 }
+			trigger = { FROM = { is_borg_empire = yes } }
+		}
+	}	
+	accept = {
+		BRG_INSULT_ACCEPT = {
+			weight = { weight = 1000 }
+			trigger = { is_borg_empire = yes }
+		}
+	}	
+}

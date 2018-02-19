@@ -1,0 +1,1252 @@
+namespace = STH_bajoran_story
+
+event = {
+	id = STH_bajoran_story.1
+	hide_window = yes
+	is_triggered_only = yes
+	fire_only_once = yes
+	immediate = {
+		# log = "STH_bajoran_story.1 started"
+		random_country = {
+			limit = { has_country_flag = bajoran_republic }
+			country_event = { id = STH_bajoran_story.2 }
+		}
+	}
+	# after = { log = "STH_bajoran_story.1 ended" }
+}
+
+event = {
+	id = STH_bajoran_story.11
+	hide_window = yes
+	is_triggered_only = yes
+	immediate = {
+		# log = "STH_bajoran_story.11 started"
+		random_country = {
+			limit = { 
+				has_country_flag = bajoran_republic
+				OR = { is_country_type = default is_country_type = minorRace }
+				NOT = { has_country_flag = bajoran_vedek_assembly_effect }
+			}
+			save_event_target_as = bajoran_republic
+			country_event = { id = STH_bajoran_story.100 days = 15 }
+		}
+		ensure_bajoran_religion_country_exists = yes
+		event_target:bajoranReligionCountry = {
+			leader = { set_variable = { which = "vedekCount" value = 0 } }
+			every_owned_leader = {
+				limit = { has_leader_flag = bajoranVedek }
+				prev.leader = { change_variable = { which = "vedekCount" value = 1 } }
+			}
+		}
+	}
+	after = {
+		if = {
+			limit = { exists = event_target:bajoran_republic event_target:bajoranReligionCountry = { leader = { check_variable = { which = "vedekCount" value < 5 } } } }
+			event_target:bajoran_republic = { country_event = { id = STH_bajoran_story.10 days = 30 random = 15 } }
+		}
+		# log = "STH_bajoran_story.11 ended"	
+	}
+}
+
+
+
+
+#Create first Kai and Vedeks
+country_event = {
+	id = STH_bajoran_story.2
+	hide_window = yes
+	is_triggered_only = yes
+	trigger = { has_country_flag = bajoran_republic }
+	immediate = { 
+		# log = "STH_bajoran_story.2 started"
+		ensure_bajoran_religion_country_exists = yes
+		event_target:bajoranReligionCountry = {
+			create_leader = { name = random type = governor species = event_target:bajoran_species }
+			last_created_leader = { 
+				set_leader_flag = bajoranKai
+				random_list = {
+					10 = { set_leader_flag = gives_trait_ruler_fortifier }
+					10 = { set_leader_flag = gives_trait_ruler_architectural_sense }
+					10 = { set_leader_flag = gives_trait_ruler_frontier_spirit }
+					10 = { set_leader_flag = gives_trait_ruler_world_shaper }
+					10 = { set_leader_flag = gives_trait_ruler_eye_for_talent }
+					10 = { set_leader_flag = gives_trait_ruler_champion_of_the_people }
+					10 = { set_leader_flag = gives_trait_ruler_fertility_preacher }
+					10 = { set_leader_flag = gives_trait_ruler_explorer }
+					10 = { set_leader_flag = gives_trait_ruler_space_miner }
+				}
+				save_global_event_target_as = bajoranKai
+			}
+			while = {
+				count = 8
+				create_leader = { name = random type = governor species = event_target:bajoran_species }
+				last_created_leader = { 
+					set_leader_flag = bajoranVedek 
+					random_list = {
+						10 = { 
+							modifier = { factor = 0 event_target:bajoranReligionCountry = { any_owned_leader = { has_leader_flag = gives_trait_ruler_fortifier } } }
+							set_leader_flag = gives_trait_ruler_fortifier 
+						}
+						10 = { 
+							modifier = { factor = 0 event_target:bajoranReligionCountry = { any_owned_leader = { has_leader_flag = gives_trait_ruler_architectural_sense } } }
+							set_leader_flag = gives_trait_ruler_architectural_sense 
+						}
+						10 = { 
+							modifier = { factor = 0 event_target:bajoranReligionCountry = { any_owned_leader = { has_leader_flag = gives_trait_ruler_frontier_spirit } } }
+							set_leader_flag = gives_trait_ruler_frontier_spirit 
+						}
+						10 = { 
+							modifier = { factor = 0 event_target:bajoranReligionCountry = { any_owned_leader = { has_leader_flag = gives_trait_ruler_world_shaper } } }
+							set_leader_flag = gives_trait_ruler_world_shaper 
+						}
+						10 = { 
+							modifier = { factor = 0 event_target:bajoranReligionCountry = { any_owned_leader = { has_leader_flag = gives_trait_ruler_eye_for_talent } } }
+							set_leader_flag = gives_trait_ruler_eye_for_talent 
+						}
+						10 = { 
+							modifier = { factor = 0 event_target:bajoranReligionCountry = { any_owned_leader = { has_leader_flag = gives_trait_ruler_champion_of_the_people } } }
+							set_leader_flag = gives_trait_ruler_champion_of_the_people 
+						}
+						10 = { 
+							modifier = { factor = 0 event_target:bajoranReligionCountry = { any_owned_leader = { has_leader_flag = gives_trait_ruler_fertility_preacher } } }
+							set_leader_flag = gives_trait_ruler_fertility_preacher 
+						}
+						10 = { 
+							modifier = { factor = 0 event_target:bajoranReligionCountry = { any_owned_leader = { has_leader_flag = gives_trait_ruler_explorer } } }
+							set_leader_flag = gives_trait_ruler_explorer 
+						}
+						10 = { 
+							modifier = { factor = 0 event_target:bajoranReligionCountry = { any_owned_leader = { has_leader_flag = gives_trait_ruler_space_miner } } }
+							set_leader_flag = gives_trait_ruler_space_miner 
+						}
+					}
+				}
+			}
+		}
+	}
+	# after = { log = "STH_bajoran_story.2 ended" }
+}
+
+#Kai Dead
+country_event = {
+	id = STH_bajoran_story.3
+	hide_window = yes
+	is_triggered_only = yes
+	trigger = { 
+		has_country_flag = bajoranReligionCountry
+		FROM = { has_leader_flag = bajoranKai }
+	}
+	immediate = { 
+		# log = "STH_bajoran_story.3 started"
+		FROM = { save_event_target_as = deadBajoranKai }
+		random_country = {
+			limit = { has_country_flag = bajoran_republic }
+			save_event_target_as = bajoran_republic
+		}
+	}
+	after = {
+		event_target:bajoran_republic = { country_event = { id = STH_bajoran_story.5 } }
+		# log = "STH_bajoran_story.3 ended"
+	}
+}
+
+#Vedek Dead
+country_event = {
+	id = STH_bajoran_story.4
+	hide_window = yes
+	is_triggered_only = yes
+	trigger = { 
+		has_country_flag = bajoranReligionCountry
+		FROM = { 
+			has_leader_flag = bajoranVedek 
+			NOT = { has_leader_flag = bajoranKai }
+		}
+		any_country = { has_country_flag = bajoran_republic }
+	}
+	immediate = { 
+		# log = "STH_bajoran_story.4 started"
+		FROM = { save_event_target_as = deadBajoranVedek }
+		random_country = {
+			limit = { has_country_flag = bajoran_republic }
+			save_event_target_as = bajoran_republic
+		}
+		leader = { set_variable = { which = "vedekCount" value = 0 } }
+		every_owned_leader = {
+			limit = { has_leader_flag = bajoranVedek }
+			root = {
+				if = {
+					limit = { exists = leader }
+					leader = { change_variable = { which = "vedekCount" value = 1 } }
+				}
+			}
+		}
+	}
+	after = {
+		if = {
+			limit = { exists = leader leader = { check_variable = { which = "vedekCount" value < 8 } } }
+			event_target:bajoran_republic = { country_event = { id = STH_bajoran_story.6 } }
+			else = {
+				event_target:bajoran_republic = { country_event = { id = STH_bajoran_story.7 } }
+			}
+		}
+		# log = "STH_bajoran_story.4 ended"
+	}
+}
+
+#Inform of Kai Death
+country_event = {
+	id = STH_bajoran_story.5
+	title = STH_bajoran_story.5.name
+	desc = STH_bajoran_story.5.desc
+	picture = sth_GFX_evt_vedekAssembly
+	is_triggered_only = yes
+	# immediate = { log = "STH_bajoran_story.5 started" }
+	option = {
+		name = "STH_bajoran_story.5.a"
+	}
+	after = {
+		hidden_effect = { country_event = { id = STH_bajoran_story.8 days = 60 random = 12 } }
+		# log = "STH_bajoran_story.5 ended"
+	}
+}
+
+
+#Create New Vedek and Inform of Death
+country_event = {
+	id = STH_bajoran_story.6
+	title = STH_bajoran_story.6.name
+	desc = STH_bajoran_story.6.desc
+	picture = sth_GFX_evt_vedekAssembly
+	is_triggered_only = yes
+	immediate = {
+		# log = "STH_bajoran_story.6 started"
+		ensure_bajoran_religion_country_exists = yes
+	}
+	option = {
+		name = STH_bajoran_story.6.a
+		hidden_effect = {
+			country_event = { id = STH_bajoran_story.9 days = 30 random = 6 }
+		}
+	}
+	option = {
+		name = STH_bajoran_story.6.b
+		hidden_effect = {
+			country_event = { id = STH_bajoran_story.10 }
+		}
+	}
+	# after = { log = "STH_bajoran_story.6 ended" }
+}
+
+#Inform of Vedek Death
+country_event = {
+	id = STH_bajoran_story.7
+	title = STH_bajoran_story.7.name
+	desc = STH_bajoran_story.7.desc
+	picture = sth_GFX_evt_vedekAssembly
+	is_triggered_only = yes
+	# immediate = { log = "STH_bajoran_story.7 started" }
+	option = {
+		name = "STH_bajoran_story.7.a"
+	}
+	# after = { log = "STH_bajoran_story.7 ended" }
+}
+
+#New Kai Elected
+country_event = {
+	id = STH_bajoran_story.8
+	title = STH_bajoran_story.8.name
+	desc = STH_bajoran_story.8.desc
+	picture = sth_GFX_evt_vedekAssembly
+	is_triggered_only = yes
+	immediate = {
+		# log = "STH_bajoran_story.8 started"
+		ensure_bajoran_religion_country_exists = yes
+		event_target:bajoranReligionCountry = {
+			if = { 
+				limit = { any_owned_leader = { has_leader_flag = bajoranKai } }
+				else = {
+					if = {
+						limit = { any_owned_leader = { has_leader_flag = bajoranVedek } }
+						random_owned_leader = { 
+							limit = { has_leader_flag = bajoranVedek }
+							set_leader_flag = bajoranKai
+							remove_leader_flag = bajoranVedek
+						}
+						else = {
+							create_leader = { name = random type = governor species = event_target:bajoran_species }
+							last_created_leader = { 
+								make_kai = yes
+								random_list = {
+									10 = { set_leader_flag = gives_trait_ruler_fortifier }
+									10 = { set_leader_flag = gives_trait_ruler_architectural_sense }
+									10 = { set_leader_flag = gives_trait_ruler_frontier_spirit }
+									10 = { set_leader_flag = gives_trait_ruler_world_shaper }
+									10 = { set_leader_flag = gives_trait_ruler_eye_for_talent }
+									10 = { set_leader_flag = gives_trait_ruler_champion_of_the_people }
+									10 = { set_leader_flag = gives_trait_ruler_fertility_preacher }
+									10 = { set_leader_flag = gives_trait_ruler_explorer }
+									10 = { set_leader_flag = gives_trait_ruler_space_miner }
+								}
+							}
+						}
+					}
+				}
+			}
+			random_owned_leader = {
+				limit = { has_leader_flag = bajoranKai }
+				save_global_event_target_as = bajoranKai
+			}
+		}
+	}
+	option = { name = STH_bajoran_story.8.a }
+	# after = { log = "STH_bajoran_story.8 ended" }
+}
+
+#New Vedek Elected
+country_event = {
+	id = STH_bajoran_story.9
+	title = STH_bajoran_story.9.name
+	desc = STH_bajoran_story.9.desc
+	picture = sth_GFX_evt_vedekAssembly
+	is_triggered_only = yes
+	immediate = {
+		# log = "STH_bajoran_story.9 started"
+		ensure_bajoran_religion_country_exists = yes
+		event_target:bajoranReligionCountry = {
+			create_leader = { name = random type = governor species = event_target:bajoran_species }
+			last_created_leader = { 
+				make_vedek = yes
+				save_event_target_as = bajoranVedek
+				random_list = {
+					10 = { set_leader_flag = gives_trait_ruler_fortifier }
+					10 = { set_leader_flag = gives_trait_ruler_architectural_sense }
+					10 = { set_leader_flag = gives_trait_ruler_frontier_spirit }
+					10 = { set_leader_flag = gives_trait_ruler_world_shaper }
+					10 = { set_leader_flag = gives_trait_ruler_eye_for_talent }
+					10 = { set_leader_flag = gives_trait_ruler_champion_of_the_people }
+					10 = { set_leader_flag = gives_trait_ruler_fertility_preacher }
+					10 = { set_leader_flag = gives_trait_ruler_explorer }
+					10 = { set_leader_flag = gives_trait_ruler_space_miner }
+				}
+			}
+		}
+	}
+	option = { name = STH_bajoran_story.9.a }
+	# after = { log = "STH_bajoran_story.9 started" } 
+}
+
+#Donate Leader to be Vedek
+country_event = {
+	id = STH_bajoran_story.10
+	title = STH_bajoran_story.10.name
+	desc = STH_bajoran_story.10.desc
+	picture = sth_GFX_evt_vedekAssembly
+	is_triggered_only = yes
+	immediate = {
+		# log = "STH_bajoran_story.10 started"
+		ensure_bajoran_religion_country_exists = yes
+		random_owned_leader = { 
+			save_event_target_as = vedekCandidate1
+		}
+		random_owned_leader = { 
+			limit = { NOT = { is_same_value = event_target:vedekCandidate1 } }
+			save_event_target_as = vedekCandidate2
+		}
+		random_owned_leader = { 
+			limit = {  NOR = { is_same_value = event_target:vedekCandidate1 is_same_value = event_target:vedekCandidate2 } }
+			save_event_target_as = vedekCandidate3
+		}	
+	}
+	option = { 
+		name = STH_bajoran_story.10.a 
+		ai_chance = { factor = 0 }
+		trigger = { exists = event_target:vedekCandidate1 }
+		hidden_effect = { 
+			event_target:vedekCandidate1 = { 
+				make_vedek = yes
+				random_list = {
+					10 = { set_leader_flag = gives_trait_ruler_fortifier }
+					10 = { set_leader_flag = gives_trait_ruler_architectural_sense }
+					10 = { set_leader_flag = gives_trait_ruler_frontier_spirit }
+					10 = { set_leader_flag = gives_trait_ruler_world_shaper }
+					10 = { set_leader_flag = gives_trait_ruler_eye_for_talent }
+					10 = { set_leader_flag = gives_trait_ruler_champion_of_the_people }
+					10 = { set_leader_flag = gives_trait_ruler_fertility_preacher }
+					10 = { set_leader_flag = gives_trait_ruler_explorer }
+					10 = { set_leader_flag = gives_trait_ruler_space_miner }
+				}
+				exile_leader_as = vedekCandidate 
+			}
+			event_target:bajoranReligionCountry = { set_leader = vedekCandidate }
+		}
+		add_unity = 50
+	}
+	option = { 
+		name = STH_bajoran_story.10.b
+		ai_chance = { factor = 0 }
+		trigger = { exists = event_target:vedekCandidate2 }
+		hidden_effect = { 
+			event_target:vedekCandidate2 = { 
+				make_vedek = yes
+				random_list = {
+					10 = { set_leader_flag = gives_trait_ruler_fortifier }
+					10 = { set_leader_flag = gives_trait_ruler_architectural_sense }
+					10 = { set_leader_flag = gives_trait_ruler_frontier_spirit }
+					10 = { set_leader_flag = gives_trait_ruler_world_shaper }
+					10 = { set_leader_flag = gives_trait_ruler_eye_for_talent }
+					10 = { set_leader_flag = gives_trait_ruler_champion_of_the_people }
+					10 = { set_leader_flag = gives_trait_ruler_fertility_preacher }
+					10 = { set_leader_flag = gives_trait_ruler_explorer }
+					10 = { set_leader_flag = gives_trait_ruler_space_miner }
+				}
+				exile_leader_as = vedekCandidate  
+			}
+			event_target:bajoranReligionCountry = { set_leader = vedekCandidate }
+		}
+		add_unity = 50
+	}
+	option = { 
+		name = STH_bajoran_story.10.c
+		ai_chance = { factor = 0 }
+		trigger = { exists = event_target:vedekCandidate3 }
+		hidden_effect = { 
+			event_target:vedekCandidate3 = { 
+				make_vedek = yes
+				random_list = {
+					10 = { set_leader_flag = gives_trait_ruler_fortifier }
+					10 = { set_leader_flag = gives_trait_ruler_architectural_sense }
+					10 = { set_leader_flag = gives_trait_ruler_frontier_spirit }
+					10 = { set_leader_flag = gives_trait_ruler_world_shaper }
+					10 = { set_leader_flag = gives_trait_ruler_eye_for_talent }
+					10 = { set_leader_flag = gives_trait_ruler_champion_of_the_people }
+					10 = { set_leader_flag = gives_trait_ruler_fertility_preacher }
+					10 = { set_leader_flag = gives_trait_ruler_explorer }
+					10 = { set_leader_flag = gives_trait_ruler_space_miner }
+				}
+				exile_leader_as = vedekCandidate  
+			}
+			event_target:bajoranReligionCountry = { set_leader = vedekCandidate }
+		}
+		add_unity = 50
+	}
+	option = { 
+		name = STH_bajoran_story.10.d
+		ai_chance = { factor = 1 }
+		hidden_effect = { country_event = { id = STH_bajoran_story.9 } }
+	}
+	# after = { log = "STH_bajoran_story.10 ended" } 
+}
+
+
+#Vedek Assembly
+country_event = {
+	id = STH_bajoran_story.100
+	title = "STH_bajoran_story.100.name"
+	desc = {
+		trigger = { exists = event_target:bajoranKai }
+		text = "STH_bajoran_story.100.desc_01" #Kai is alive
+	}
+	desc = {
+		trigger = { NOT = { exists = event_target:bajoranKai } exists = event_target:bajoranVedek }
+		text = "STH_bajoran_story.100.desc_02" #Kai is not alive
+	}
+	picture = sth_GFX_evt_vedekAssembly
+	force_open = yes
+	is_triggered_only = yes
+	trigger = { has_country_flag = bajoran_republic }
+	immediate = { 
+		# log = "STH_bajoran_story.100 started"
+		set_timed_country_flag = { flag = bajoran_vedek_assembly_effect days = 600 }
+		ensure_bajoran_religion_country_exists = yes
+		event_target:bajoranReligionCountry = {
+			random_owned_leader = { limit = { has_leader_flag = bajoranKai } save_global_event_target_as = bajoranKai }
+			random_owned_leader = { 
+				limit = { has_leader_flag = bajoranVedek NOT = { is_same_value = event_target:bajoranKai } }
+				save_event_target_as = bajoranVedek
+			}
+		}
+	}
+	option = {
+		#Request Spiritual Support
+		name = STH_bajoran_story.100.a
+		ai_chance = { factor = 1 }
+		hidden_effect = { country_event = { id = STH_bajoran_story.101 } }
+	}
+	option = {
+		#Make A Donation
+		name = STH_bajoran_story.100.b
+		ai_chance = { factor = 1 modifier = { factor = 0 OR = { energy < 50 minerals < 50 } } }
+		hidden_effect = { country_event = { id = STH_bajoran_story.102 } }
+	}
+	option = {
+		#Consult Orb
+		name = STH_bajoran_story.100.c
+		ai_chance = { factor = 1 modifier = { factor = 0 unity < 50 } }
+		hidden_effect = { country_event = { id = STH_bajoran_story.103 } }
+	}
+	option = { 
+		#End Session
+		name = STH_bajoran_story.100.d
+	}
+	# after = { log = "STH_bajoran_story.100 ended" }
+}
+
+#Spiritual Guidance
+country_event = {
+	id = STH_bajoran_story.101
+	title = "STH_bajoran_story.101.name"
+	desc = {
+		text = "STH_bajoran_story.101.desc_01" #Kai is alive, enough Vedeks
+	}
+	picture = sth_GFX_evt_vedekAssembly
+	force_open = yes
+	is_triggered_only = yes
+	trigger = { has_country_flag = bajoran_republic }
+	immediate = { 
+		# log = "STH_bajoran_story.101 started"
+		ensure_bajoran_religion_country_exists = yes
+		event_target:bajoranReligionCountry = {
+			random_owned_leader = { limit = { has_leader_flag = bajoranKai } save_global_event_target_as = bajoranKai }
+			random_owned_leader = { 
+				limit = { has_leader_flag = bajoranVedek NOT = { is_same_value = event_target:bajoranKai } }
+				save_event_target_as = bajoranVedek1
+			}
+			random_owned_leader = { 
+				limit = { has_leader_flag = bajoranVedek NOR = { is_same_value = event_target:bajoranKai is_same_value = event_target:bajoranVedek1 } }
+				save_event_target_as = bajoranVedek2
+			}
+			random_owned_leader = { 
+				limit = { has_leader_flag = bajoranVedek NOR = { is_same_value = event_target:bajoranKai is_same_value = event_target:bajoranVedek1 is_same_value = event_target:bajoranVedek2 } }
+				save_event_target_as = bajoranVedek3
+			}			
+		}
+		
+	}
+	option = {
+		#Request New List
+		name = STH_bajoran_story.101.a
+		ai_chance = { factor = 0 }
+		hidden_effect = { country_event = { id = STH_bajoran_story.101 } }
+		add_influence = -5
+	}
+	option = {
+		#Consult Kai
+		name = STH_bajoran_story.101.b
+		trigger = { exists = event_target:bajoranKai }
+		ai_chance = { factor = 5 modifier = { factor = 0 NOT = { exists = event_target:bajoranKai } } }
+		hidden_effect = { 
+			if = { limit = { exists = event_target:bajoranKai } event_target:bajoranKai = { save_event_target_as = consultedBajoranReligionLeader } } 
+			country_event = { id = STH_bajoran_story.110 } 
+		}
+	}
+	option = {
+		#Consult Vedek 1
+		name = STH_bajoran_story.101.c
+		trigger = { exists = event_target:bajoranVedek1 }
+		ai_chance = { factor = 1  }
+		hidden_effect = { event_target:bajoranVedek1 = { save_event_target_as = consultedBajoranReligionLeader } country_event = { id = STH_bajoran_story.110 } }
+	}
+	option = {
+		#Consult Vedek 2
+		name = STH_bajoran_story.101.d
+		trigger = { exists = event_target:bajoranVedek2 }
+		ai_chance = { factor = 0 }
+		hidden_effect = { event_target:bajoranVedek2 = { save_event_target_as = consultedBajoranReligionLeader } country_event = { id = STH_bajoran_story.110 } }
+	}
+	option = {
+		#Consult Vedek 3
+		name = STH_bajoran_story.101.e
+		trigger = { exists = event_target:bajoranVedek3 }
+		ai_chance = { factor = 0 }
+		hidden_effect = { event_target:bajoranVedek3 = { save_event_target_as = consultedBajoranReligionLeader } country_event = { id = STH_bajoran_story.110 } }
+	}
+	option = { 
+		#Back
+		name = STH_bajoran_story.101.f
+		ai_chance = { factor = 0 modifier = { factor = 1 NOT = { exists = event_target:bajoranKai } } }
+		hidden_effect = { country_event = { id = STH_bajoran_story.100 } }
+	}
+	# after = { log = "STH_bajoran_story.101 ended" }
+}
+
+#Outcome Checker
+country_event = {
+	id = STH_bajoran_story.110
+	hide_window = yes
+	is_triggered_only = yes
+	immediate = {
+		# log = "STH_bajoran_story.110 started"
+		random_list = {
+			20 = {
+				modifier = { factor = 1.05 check_variable = { which = "bajoranPiety" value > 0 } }
+				modifier = { factor = 1.05 check_variable = { which = "bajoranPiety" value > 10 } }
+				modifier = { factor = 1.05 check_variable = { which = "bajoranPiety" value > 20 } }
+				modifier = { factor = 1.05 check_variable = { which = "bajoranPiety" value > 30 } }
+				modifier = { factor = 1.05 check_variable = { which = "bajoranPiety" value > 40 } }
+				modifier = { factor = 1.05 check_variable = { which = "bajoranPiety" value > 50 } }
+				modifier = { factor = 1.05 check_variable = { which = "bajoranPiety" value > 60 } }
+				modifier = { factor = 1.05 check_variable = { which = "bajoranPiety" value > 70 } }
+				modifier = { factor = 1.05 check_variable = { which = "bajoranPiety" value > 80 } }
+				modifier = { factor = 1.05 check_variable = { which = "bajoranPiety" value > 90 } }
+				country_event = { id = STH_bajoran_story.111 }
+				if = {
+					limit = { check_variable = { which = "bajoranPiety" value > 19 } }
+					change_variable = { which = "bajoranPiety" value = -20 }
+					else = {
+						if = {
+							limit = { check_variable = { which = "bajoranPiety" value > 9 } }
+							change_variable = { which = "bajoranPiety" value = -10 }
+						}
+					}
+				}
+			}
+			10 = {
+				modifier = { factor = 1.50 event_target:consultedBajoranReligionLeader = { has_leader_flag = bajoranKai } }
+				country_event = { id = STH_bajoran_story.112 }
+				if = {
+					limit = { check_variable = { which = "bajoranPiety" value > 4 } }
+					change_variable = { which = "bajoranPiety" value = -5 }
+				}
+			}
+		}
+	}
+	# after = { log = "STH_bajoran_story.110 ended" }
+}
+
+#Good Outcome
+country_event = {
+	id = STH_bajoran_story.111
+	title = STH_bajoran_story.111.name
+	desc = {
+		trigger = { event_target:consultedBajoranReligionLeader = { has_leader_flag = gives_trait_ruler_fortifier has_leader_flag = bajoranKai } } text = "STH_bajoran_story.111.desc_01" #Kai fortifier
+	}
+	desc = {	
+		trigger = { event_target:consultedBajoranReligionLeader = { has_leader_flag = gives_trait_ruler_architectural_sense has_leader_flag = bajoranKai } } text = "STH_bajoran_story.111.desc_02" #Kai builder
+	}
+	desc = {
+		trigger = { event_target:consultedBajoranReligionLeader = { has_leader_flag = gives_trait_ruler_frontier_spirit has_leader_flag = bajoranKai } } text = "STH_bajoran_story.111.desc_03" #Kai colony
+	}
+	desc = {	
+		trigger = { event_target:consultedBajoranReligionLeader = { has_leader_flag = gives_trait_ruler_world_shaper has_leader_flag = bajoranKai } } text = "STH_bajoran_story.111.desc_04" #Kai terraform
+	}
+	desc = {		
+		trigger = { event_target:consultedBajoranReligionLeader = { has_leader_flag = gives_trait_ruler_eye_for_talent has_leader_flag = bajoranKai } } text = "STH_bajoran_story.111.desc_05" #Kai talent
+	}
+	desc = {
+		trigger = { event_target:consultedBajoranReligionLeader = { has_leader_flag = gives_trait_ruler_champion_of_the_people has_leader_flag = bajoranKai } } text = "STH_bajoran_story.111.desc_06" #Kai happy
+	}
+	desc = {
+		trigger = { event_target:consultedBajoranReligionLeader = { has_leader_flag = gives_trait_ruler_fertility_preacher has_leader_flag = bajoranKai } } text = "STH_bajoran_story.111.desc_07" #Kai farmer
+	}
+	desc = {
+		trigger = { event_target:consultedBajoranReligionLeader = { has_leader_flag = gives_trait_ruler_explorer has_leader_flag = bajoranKai } } text = "STH_bajoran_story.111.desc_08" #Kai explorer
+	}
+	desc = {
+		trigger = { event_target:consultedBajoranReligionLeader = { has_leader_flag = gives_trait_ruler_space_miner has_leader_flag = bajoranKai } } text = "STH_bajoran_story.111.desc_09" #Kai miner
+	}
+	desc = {	
+		trigger = { event_target:consultedBajoranReligionLeader = { has_leader_flag = gives_trait_ruler_fortifier has_leader_flag = bajoranVedek } } text = "STH_bajoran_story.111.desc51" #Vedek fortifier
+	}
+	desc = {	
+		trigger = { event_target:consultedBajoranReligionLeader = { has_leader_flag = gives_trait_ruler_architectural_sense has_leader_flag = bajoranVedek } } text = "STH_bajoran_story.111.desc52" #Vedek builder
+	}
+	desc = {
+		trigger = { event_target:consultedBajoranReligionLeader = { has_leader_flag = gives_trait_ruler_frontier_spirit has_leader_flag = bajoranVedek } } text = "STH_bajoran_story.111.desc53" #Vedek colony
+	}
+	desc = {
+		trigger = { event_target:consultedBajoranReligionLeader = { has_leader_flag = gives_trait_ruler_world_shaper has_leader_flag = bajoranVedek } } text = "STH_bajoran_story.111.desc54" #Vedek terraform
+	}
+	desc = {
+		trigger = { event_target:consultedBajoranReligionLeader = { has_leader_flag = gives_trait_ruler_eye_for_talent has_leader_flag = bajoranVedek } } text = "STH_bajoran_story.111.desc55" #Vedek talent
+	}
+	desc = {
+		trigger = { event_target:consultedBajoranReligionLeader = { has_leader_flag = gives_trait_ruler_champion_of_the_people has_leader_flag = bajoranVedek } } text = "STH_bajoran_story.111.desc56" #Vedek happy
+	}
+	desc = {
+		trigger = { event_target:consultedBajoranReligionLeader = { has_leader_flag = gives_trait_ruler_fertility_preacher has_leader_flag = bajoranVedek } } text = "STH_bajoran_story.111.desc57" #Vedek farmer
+	}
+	desc = {
+		trigger = { event_target:consultedBajoranReligionLeader = { has_leader_flag = gives_trait_ruler_explorer has_leader_flag = bajoranVedek } } text = "STH_bajoran_story.111.desc58" #Vedek explorer
+	}
+	desc = {
+		trigger = { event_target:consultedBajoranReligionLeader = { has_leader_flag = gives_trait_ruler_space_miner has_leader_flag = bajoranVedek } } text = "STH_bajoran_story.111.desc59" #Vedek miner
+	}
+	diplomatic = yes
+	picture_event_data = {
+		portrait = event_target:consultedBajoranReligionLeader
+		planet_background = root
+		graphical_culture = root
+		city_level = root
+		room = root
+	}
+	force_open = yes
+	is_triggered_only = yes
+	trigger = { has_country_flag = bajoran_republic }
+	# immediate = { log = "STH_bajoran_story.111 started" }
+	option = {
+		name = STH_bajoran_story.111.a
+		response_text = STH_bajoran_story.111.a.response
+		event_target:consultedBajoranReligionLeader = {
+			if = { limit = { has_leader_flag = gives_trait_ruler_fortifier } root.leader = { add_trait = trait_ruler_fortifier } }
+			if = { limit = { has_leader_flag = gives_trait_ruler_architectural_sense } root.leader = { add_trait = trait_ruler_architectural_sense } }
+			if = { limit = { has_leader_flag = gives_trait_ruler_frontier_spirit } root.leader = { add_trait = trait_ruler_frontier_spirit } }
+			if = { limit = { has_leader_flag = gives_trait_ruler_world_shaper } root.leader = { add_trait = trait_ruler_world_shaper } }
+			if = { limit = { has_leader_flag = gives_trait_ruler_eye_for_talent } root.leader = { add_trait = trait_ruler_eye_for_talent } }
+			if = { limit = { has_leader_flag = gives_trait_ruler_champion_of_the_people } root.leader = { add_trait = trait_ruler_champion_of_the_people } }
+			if = { limit = { has_leader_flag = gives_trait_ruler_fertility_preacher } root.leader = { add_trait = trait_ruler_fertility_preacher } }
+			if = { limit = { has_leader_flag = gives_trait_ruler_explorer } root.leader = { add_trait = trait_ruler_explorer } }
+			if = { limit = { has_leader_flag = gives_trait_ruler_space_miner } root.leader = { add_trait = trait_ruler_space_miner } }
+			
+			if = { 
+				limit = { has_leader_flag = bajoranKai } 
+				root = { add_unity = 25 }
+			}
+		}
+	}
+	# after = { log = "STH_bajoran_story.111 ended" }
+}
+
+#Bad Outcome
+country_event = {
+	id = STH_bajoran_story.112
+	title = "STH_bajoran_story.112.name"
+	desc = {
+		text = "STH_bajoran_story.112.desc_01" #Kai is alive
+		trigger = { event_target:consultedBajoranReligionLeader = { has_leader_flag = bajoranKai } }
+	}
+	desc = {
+		text = "STH_bajoran_story.112.desc_02" #Vedek
+		trigger = { event_target:consultedBajoranReligionLeader = { has_leader_flag = bajoranVedek } }
+	}
+	picture = sth_GFX_evt_vedekAssembly
+	force_open = yes
+	is_triggered_only = yes
+	trigger = { has_country_flag = bajoran_republic }
+	# immediate = { log = "STH_bajoran_story.112 started" }
+	option = {
+		name = STH_bajoran_story.112.a
+	}
+	# after = { log = "STH_bajoran_story.112 ended" }
+}
+
+
+
+#Make a donation
+country_event = {
+	id = STH_bajoran_story.102
+	title = "STH_bajoran_story.102.name"
+	desc = {
+		text = "STH_bajoran_story.102.desc_01" #Kai is alive
+	}
+	diplomatic = yes
+	picture_event_data = {
+		portrait = event_target:religiousLeader
+		planet_background = root
+		graphical_culture = root
+		city_level = root
+		room = root
+	}
+	force_open = yes
+	is_triggered_only = yes
+	trigger = { has_country_flag = bajoran_republic }
+	immediate = { 
+		# log = "STH_bajoran_story.102 started"
+		ensure_bajoran_religion_country_exists = yes
+		event_target:bajoranReligionCountry = {
+			if = { 
+				limit = { any_owned_leader = { has_leader_flag = bajoranKai } } 
+				random_owned_leader = { limit = { has_leader_flag = bajoranKai } save_event_target_as = religiousLeader } 
+				else = {
+					random_owned_leader = { limit = { has_leader_flag = bajoranVedek } save_event_target_as = religiousLeader }
+				}
+			}
+		}		
+	}
+	option = {
+		name = STH_bajoran_story.102.a
+		response_text = STH_bajoran_story.102.a.response
+		allow = { energy > 49 minerals > 49 }
+		add_energy = -50
+		add_minerals = -50
+		add_unity = 50
+		hidden_effect = { change_variable = { which = "bajoranPiety" value = 5 } }
+	}
+	option = {
+		name = STH_bajoran_story.102.b
+		response_text = STH_bajoran_story.102.b.response
+		allow = { energy > 199 minerals > 199 }
+		add_energy = -200
+		add_minerals = -200
+		add_unity = 100
+		hidden_effect = { change_variable = { which = "bajoranPiety" value = 10 } }
+	}
+	option = {
+		name = STH_bajoran_story.102.c
+		response_text = STH_bajoran_story.102.c.response
+		allow = { energy > 499 minerals > 499 }
+		add_energy = -500
+		add_minerals = -500
+		add_unity = 200
+		hidden_effect = { change_variable = { which = "bajoranPiety" value = 15 } }
+	}
+	option = {
+		name = STH_bajoran_story.102.d
+		hidden_effect = { country_event = { id = STH_bajoran_story.100 } }
+	}
+	# after = { log = "STH_bajoran_story.102 ended" } 
+}
+
+#Consult an orb
+country_event = {
+	id = STH_bajoran_story.103
+	title = STH_bajoran_story.103.name
+	desc = {
+		text = "STH_bajoran_story.103.desc_01" #Kai is alive
+	}
+	diplomatic = yes
+	picture_event_data = {
+		portrait = event_target:religiousLeader
+		planet_background = root
+		graphical_culture = root
+		city_level = root
+		room = root
+	}
+	force_open = yes
+	is_triggered_only = yes
+	trigger = { has_country_flag = bajoran_republic }
+	immediate = { 
+		# log = "STH_bajoran_story.103 started"
+		ensure_bajoran_religion_country_exists = yes
+		event_target:bajoranReligionCountry = {
+			if = { 
+				limit = { any_owned_leader = { has_leader_flag = bajoranKai } } 
+				random_owned_leader = { limit = { has_leader_flag = bajoranKai } save_event_target_as = religiousLeader } 
+				else = {
+					random_owned_leader = { limit = { has_leader_flag = bajoranVedek } save_event_target_as = religiousLeader }
+				}
+			}
+		}		
+	}
+	option = {
+		name = STH_bajoran_story.103.a
+		response_text = STH_bajoran_story.103.a.response
+		allow = { unity > 49 }
+		add_unity = -50
+		hidden_effect = {
+			random_list = {
+				75 = { 
+					modifier = { factor = 1.1 check_variable = { which = "bajoranPiety" value > 0 } }
+					modifier = { factor = 1.1 check_variable = { which = "bajoranPiety" value > 25 } }
+					modifier = { factor = 1.1 check_variable = { which = "bajoranPiety" value > 50 } }
+					modifier = { factor = 1.1 check_variable = { which = "bajoranPiety" value > 75 } }
+					country_event = { id = STH_bajoran_story.130 } 
+				}
+				25 = { country_event = { id = STH_bajoran_story.131 } }
+			}
+		}
+	}
+	option = {
+		name = STH_bajoran_story.103.b
+		response_text = STH_bajoran_story.103.b.response
+		allow = { unity > 49 }
+		add_unity = -50
+		hidden_effect = {
+			random_list = {
+				75 = { 
+					modifier = { factor = 1.1 check_variable = { which = "bajoranPiety" value > 0 } }
+					modifier = { factor = 1.1 check_variable = { which = "bajoranPiety" value > 25 } }
+					modifier = { factor = 1.1 check_variable = { which = "bajoranPiety" value > 50 } }
+					modifier = { factor = 1.1 check_variable = { which = "bajoranPiety" value > 75 } }
+					country_event = { id = STH_bajoran_story.132 } 
+				}
+				25 = { country_event = { id = STH_bajoran_story.133 } }
+			}
+		}
+	}
+	option = {
+		name = STH_bajoran_story.103.c
+		response_text = STH_bajoran_story.103.c.response
+		allow = { unity > 49 }
+		add_unity = -50
+		hidden_effect = {
+			random_list = {
+				75 = { 
+					modifier = { factor = 1.1 check_variable = { which = "bajoranPiety" value > 0 } }
+					modifier = { factor = 1.1 check_variable = { which = "bajoranPiety" value > 25 } }
+					modifier = { factor = 1.1 check_variable = { which = "bajoranPiety" value > 50 } }
+					modifier = { factor = 1.1 check_variable = { which = "bajoranPiety" value > 75 } }
+					country_event = { id = STH_bajoran_story.134 } 
+				}
+				25 = { country_event = { id = STH_bajoran_story.135 } }
+			}
+		}
+	}
+	option = {
+		name = STH_bajoran_story.103.d
+		response_text = STH_bajoran_story.103.d.response
+		allow = { unity > 49 }
+		add_unity = -50
+		hidden_effect = {
+			random_list = {
+				75 = { 
+					modifier = { factor = 1.1 check_variable = { which = "bajoranPiety" value > 0 } }
+					modifier = { factor = 1.1 check_variable = { which = "bajoranPiety" value > 25 } }
+					modifier = { factor = 1.1 check_variable = { which = "bajoranPiety" value > 50 } }
+					modifier = { factor = 1.1 check_variable = { which = "bajoranPiety" value > 75 } }
+					country_event = { id = STH_bajoran_story.136 } 
+				}
+				25 = { country_event = { id = STH_bajoran_story.137 } }
+			}
+		}
+	}
+	option = {
+		name = STH_bajoran_story.103.e
+		response_text = STH_bajoran_story.103.e.response
+		allow = { unity > 49 }
+		add_unity = -50
+		hidden_effect = {
+			random_list = {
+				75 = { 
+					modifier = { factor = 1.1 check_variable = { which = "bajoranPiety" value > 0 } }
+					modifier = { factor = 1.1 check_variable = { which = "bajoranPiety" value > 25 } }
+					modifier = { factor = 1.1 check_variable = { which = "bajoranPiety" value > 50 } }
+					modifier = { factor = 1.1 check_variable = { which = "bajoranPiety" value > 75 } }
+					country_event = { id = STH_bajoran_story.138 } 
+				}
+				25 = { country_event = { id = STH_bajoran_story.139 } }
+			}
+		}
+	}
+	option = {
+		name = STH_bajoran_story.103.f
+		response_text = STH_bajoran_story.103.f.response
+		allow = { unity > 49 }
+		add_unity = -50
+		hidden_effect = {
+			random_list = {
+				75 = { 
+					modifier = { factor = 1.1 check_variable = { which = "bajoranPiety" value > 0 } }
+					modifier = { factor = 1.1 check_variable = { which = "bajoranPiety" value > 25 } }
+					modifier = { factor = 1.1 check_variable = { which = "bajoranPiety" value > 50 } }
+					modifier = { factor = 1.1 check_variable = { which = "bajoranPiety" value > 75 } }
+					country_event = { id = STH_bajoran_story.140 } 
+				}
+				25 = { country_event = { id = STH_bajoran_story.141 } }
+			}
+		}
+	}
+	option = {
+		name = STH_bajoran_story.103.g
+		response_text = STH_bajoran_story.103.g.response
+		allow = { unity > 49 }
+		add_unity = -50
+		hidden_effect = {
+			random_list = {
+				75 = { 
+					modifier = { factor = 1.1 check_variable = { which = "bajoranPiety" value > 0 } }
+					modifier = { factor = 1.1 check_variable = { which = "bajoranPiety" value > 25 } }
+					modifier = { factor = 1.1 check_variable = { which = "bajoranPiety" value > 50 } }
+					modifier = { factor = 1.1 check_variable = { which = "bajoranPiety" value > 75 } }
+					country_event = { id = STH_bajoran_story.142 } 
+				}
+				25 = { country_event = { id = STH_bajoran_story.143 } }
+			}
+		}
+	}
+	option = {
+		name = STH_bajoran_story.103.h
+		response_text = STH_bajoran_story.103.h.response
+		allow = { unity > 49 }
+		add_unity = -50
+		hidden_effect = {
+			random_list = {
+				75 = { 
+					modifier = { factor = 1.1 check_variable = { which = "bajoranPiety" value > 0 } }
+					modifier = { factor = 1.1 check_variable = { which = "bajoranPiety" value > 25 } }
+					modifier = { factor = 1.1 check_variable = { which = "bajoranPiety" value > 50 } }
+					modifier = { factor = 1.1 check_variable = { which = "bajoranPiety" value > 75 } }
+					country_event = { id = STH_bajoran_story.144 } 
+				}
+				25 = { country_event = { id = STH_bajoran_story.145 } }
+			}
+		}
+	}
+	
+	option = {
+		name = STH_bajoran_story.103.z
+		hidden_effect = { country_event = { id = STH_bajoran_story.100 } }
+	}
+	# after = { log = "STH_bajoran_story.103 ended" }
+}
+
+#Consult Orb of Contemplation
+country_event = {
+	id = STH_bajoran_story.130
+	title = "STH_bajoran_story.130.name"
+	desc = "STH_bajoran_story.130.desc"
+	picture = sth_GFX_evt_vedekAssembly
+	is_triggered_only = yes
+	# immediate = { log = "STH_bajoran_story.130 started" }
+	option = {
+		name = STH_bajoran_story.130.a
+		add_modifier = { modifier = em_orb_contemplation days = 600 }
+	}
+	# after = { log = "STH_bajoran_story.130 ended" }
+}
+country_event = {
+	id = STH_bajoran_story.131
+	title = "STH_bajoran_story.131.name"
+	desc = "STH_bajoran_story.131.desc"
+	picture = sth_GFX_evt_vedekAssembly
+	is_triggered_only = yes
+	# immediate = { log = "STH_bajoran_story.131 started" }
+	option = {
+		name = STH_bajoran_story.131.a
+		add_modifier = { modifier = em_orb_failure days = 100 }
+		hidden_effect = {
+			if = {
+				limit = { check_variable = { which = "bajoranPiety" value > 9 } }
+				change_variable = { which = "bajoranPiety" value = -10 }
+			}
+		}
+	}
+	# after = { log = "STH_bajoran_story.131 ended" }
+}
+
+#Consult Orb of Prophecy and Change
+country_event = {
+	id = STH_bajoran_story.132
+	title = "STH_bajoran_story.132.name"
+	desc = "STH_bajoran_story.132.desc"
+	picture = sth_GFX_evt_vedekAssembly
+	is_triggered_only = yes
+	# immediate = { log = "STH_bajoran_story.132 started" }
+	option = {
+		name = STH_bajoran_story.132.a
+		add_modifier = { modifier = em_orb_prophecy_change days = 600 }
+	}
+	# after = { log = "STH_bajoran_story.132 ended" }
+}
+country_event = {
+	id = STH_bajoran_story.133
+	title = "STH_bajoran_story.133.name"
+	desc = "STH_bajoran_story.133.desc"
+	picture = sth_GFX_evt_vedekAssembly
+	is_triggered_only = yes
+	# immediate = { log = "STH_bajoran_story.133 started" }
+	option = {
+		name = STH_bajoran_story.133.a
+		add_modifier = { modifier = em_orb_failure days = 100 }
+		hidden_effect = {
+			if = {
+				limit = { check_variable = { which = "bajoranPiety" value > 9 } }
+				change_variable = { which = "bajoranPiety" value = -10 }
+			}
+		}
+	}
+	# after = { log = "STH_bajoran_story.133 ended" }
+}
+
+#Consult Orb of Time
+country_event = {
+	id = STH_bajoran_story.134
+	title = "STH_bajoran_story.134.name"
+	desc = "STH_bajoran_story.134.desc"
+	picture = sth_GFX_evt_vedekAssembly
+	is_triggered_only = yes
+	# immediate = { log = "STH_bajoran_story.134 started" }
+	option = {
+		name = STH_bajoran_story.134.a
+		add_modifier = { modifier = em_orb_time days = 600 }
+	}
+	# after = { log = "STH_bajoran_story.134 ended" }
+}
+country_event = {
+	id = STH_bajoran_story.135
+	title = "STH_bajoran_story.135.name"
+	desc = "STH_bajoran_story.135.desc"
+	picture = sth_GFX_evt_vedekAssembly
+	is_triggered_only = yes
+	# immediate = { log = "STH_bajoran_story.135 started" }
+	option = {
+		name = STH_bajoran_story.135.a
+		add_modifier = { modifier = em_orb_failure days = 100 }
+		hidden_effect = {
+			if = {
+				limit = { check_variable = { which = "bajoranPiety" value > 9 } }
+				change_variable = { which = "bajoranPiety" value = -10 }
+			}
+		}
+	}
+	# after = { log = "STH_bajoran_story.135 ended" }
+}
+
+#Consult Orb of Wisdom
+country_event = {
+	id = STH_bajoran_story.136
+	title = "STH_bajoran_story.136.name"
+	desc = "STH_bajoran_story.136.desc"
+	picture = sth_GFX_evt_vedekAssembly
+	is_triggered_only = yes
+	# immediate = { log = "STH_bajoran_story.136 started" }
+	option = {
+		name = STH_bajoran_story.136.a
+		add_modifier = { modifier = em_orb_wisdom days = 600 }
+	}
+	# after = { log = "STH_bajoran_story.136 ended" }
+}
+country_event = {
+	id = STH_bajoran_story.137
+	title = "STH_bajoran_story.137.name"
+	desc = "STH_bajoran_story.137.desc"
+	picture = sth_GFX_evt_vedekAssembly
+	is_triggered_only = yes
+	# immediate = { log = "STH_bajoran_story.137 started" }
+	option = {
+		name = STH_bajoran_story.137.a
+		add_modifier = { modifier = em_orb_failure days = 100 }
+		hidden_effect = {
+			if = {
+				limit = { check_variable = { which = "bajoranPiety" value > 9 } }
+				change_variable = { which = "bajoranPiety" value = -10 }
+			}
+		}
+	}
+	# after = { log = "STH_bajoran_story.137 ended" }
+}
+
+#Consult Orb of Unity
+country_event = {
+	id = STH_bajoran_story.138
+	title = "STH_bajoran_story.138.name"
+	desc = "STH_bajoran_story.138.desc"
+	picture = sth_GFX_evt_vedekAssembly
+	is_triggered_only = yes
+	# immediate = { log = "STH_bajoran_story.138 started" }
+	option = {
+		name = STH_bajoran_story.138.a
+		add_modifier = { modifier = em_orb_unity days = 600 }
+	}
+	# after = { log = "STH_bajoran_story.138 ended" }
+}
+country_event = {
+	id = STH_bajoran_story.139
+	title = "STH_bajoran_story.139.name"
+	desc = "STH_bajoran_story.139.desc"
+	picture = sth_GFX_evt_vedekAssembly
+	is_triggered_only = yes
+	# immediate = { log = "STH_bajoran_story.139 started" }
+	option = {
+		name = STH_bajoran_story.139.a
+		add_modifier = { modifier = em_orb_failure days = 100 }
+		hidden_effect = {
+			if = {
+				limit = { check_variable = { which = "bajoranPiety" value > 9 } }
+				change_variable = { which = "bajoranPiety" value = -10 }
+			}
+		}
+	}
+	# after = { log = "STH_bajoran_story.139 ended" }
+}
+
+#Consult Orb of Souls
+country_event = {
+	id = STH_bajoran_story.140
+	title = "STH_bajoran_story.140.name"
+	desc = "STH_bajoran_story.140.desc"
+	picture = sth_GFX_evt_vedekAssembly
+	is_triggered_only = yes
+	# immediate = { log = "STH_bajoran_story.140 started" }
+	option = {
+		name = STH_bajoran_story.140.a
+		add_modifier = { modifier = em_orb_souls days = 600 }
+	}
+	# after = { log = "STH_bajoran_story.140 ended" }
+}
+country_event = {
+	id = STH_bajoran_story.141
+	title = "STH_bajoran_story.141.name"
+	desc = "STH_bajoran_story.141.desc"
+	picture = sth_GFX_evt_vedekAssembly
+	is_triggered_only = yes
+	# immediate = { log = "STH_bajoran_story.141 started" }
+	option = {
+		name = STH_bajoran_story.141.a
+		add_modifier = { modifier = em_orb_failure days = 100 }
+		hidden_effect = {
+			if = {
+				limit = { check_variable = { which = "bajoranPiety" value > 9 } }
+				change_variable = { which = "bajoranPiety" value = -10 }
+			}
+		}
+	}
+	# after = { log = "STH_bajoran_story.141 ended" }
+}
+
+#Consult Orb of Memory
+country_event = {
+	id = STH_bajoran_story.142
+	title = "STH_bajoran_story.142.name"
+	desc = "STH_bajoran_story.142.desc"
+	picture = sth_GFX_evt_vedekAssembly
+	is_triggered_only = yes
+	# immediate = { log = "STH_bajoran_story.142 started" }
+	option = {
+		name = STH_bajoran_story.142.a
+		add_modifier = { modifier = em_orb_memory days = 600 }
+	}
+	# after = { log = "STH_bajoran_story.142 ended" }
+}
+country_event = {
+	id = STH_bajoran_story.143
+	title = "STH_bajoran_story.143.name"
+	desc = "STH_bajoran_story.143.desc"
+	picture = sth_GFX_evt_vedekAssembly
+	is_triggered_only = yes
+	# immediate = { log = "STH_bajoran_story.143 started" }
+	option = {
+		name = STH_bajoran_story.143.a
+		add_modifier = { modifier = em_orb_failure days = 100 }
+		hidden_effect = {
+			if = {
+				limit = { check_variable = { which = "bajoranPiety" value > 9 } }
+				change_variable = { which = "bajoranPiety" value = -10 }
+			}
+		}
+	}
+	# after = { log = "STH_bajoran_story.143 ended" }
+}
+
+#Consult Orb of Peace
+country_event = {
+	id = STH_bajoran_story.144
+	title = "STH_bajoran_story.144.name"
+	desc = "STH_bajoran_story.144.desc"
+	picture = sth_GFX_evt_vedekAssembly
+	is_triggered_only = yes
+	# immediate = { log = "STH_bajoran_story.144 started" }
+	option = {
+		name = STH_bajoran_story.144.a
+		add_modifier = { modifier = em_orb_peace days = 600 }
+	}
+	# after = { log = "STH_bajoran_story.144 ended" }
+}
+country_event = {
+	id = STH_bajoran_story.145
+	title = "STH_bajoran_story.145.name"
+	desc = "STH_bajoran_story.145.desc"
+	picture = sth_GFX_evt_vedekAssembly
+	is_triggered_only = yes
+	# immediate = { log = "STH_bajoran_story.145 started" }
+	option = {
+		name = STH_bajoran_story.145.a
+		add_modifier = { modifier = em_orb_failure days = 100 }
+		hidden_effect = {
+			if = {
+				limit = { check_variable = { which = "bajoranPiety" value > 9 } }
+				change_variable = { which = "bajoranPiety" value = -10 }
+			}
+		}
+	}
+	# after = { log = "STH_bajoran_story.145 ended" }
+}

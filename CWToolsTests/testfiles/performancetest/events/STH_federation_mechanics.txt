@@ -1,0 +1,3295 @@
+#################################
+#
+# Federation Diplomatic Events
+# by Walshicus and Shaggo
+#
+#################################
+
+@tier1researchreward = 6
+@tier1researchmin = 60
+@tier1researchmax = 150
+@tier2researchreward = 12
+@tier2researchmin = 90
+@tier2researchmax = 250
+@tier3researchreward = 18
+@tier3researchmin = 120
+@tier3researchmax = 350
+@tier4researchreward = 24
+@tier4researchmin = 150
+@tier4researchmax = 500
+
+namespace = theFederation
+
+#Federation Formation Question
+country_event = {
+	id = theFederation.1000
+	title = "theFederation.1000.name"
+	desc = "theFederation.1000.desc"
+	picture = sth_GFX_evt_federationSigned
+	is_triggered_only = yes
+	immediate = { 
+		save_event_target_as = federationQuestionCountry 
+		random_country = {
+			limit = { has_country_flag = federation_leader }
+			save_event_target_as = federationLeader
+		}
+	}
+	option = {
+		name = theFederation.1000.a
+		ai_chance = { 
+			factor = 10
+			modifier = {
+				factor = 100
+				OR = { 
+					has_country_flag = "vulcan_high_command"
+					has_country_flag = "andorian_empire"
+					has_country_flag = "tellarian_technocracy"
+					has_country_flag = "united_earth"
+				}
+			}
+		}
+		
+		hidden_effect = { 
+			set_country_flag = wants_federation
+			every_country = {
+				limit = { is_in_federation_with = root NOT = { is_same_value = root } }
+				country_event = { id = theFederation.1001 }
+			}
+		}
+	}
+	option = {
+		name = theFederation.1000.b
+		ai_chance = { factor = 10 }
+		hidden_effect = {
+			set_country_flag = not_wants_federation
+			every_country = {
+				limit = { is_in_federation_with = root NOT = { is_same_value = root } }
+				country_event = { id = theFederation.1002 }
+			}
+		}
+	}
+}
+country_event = {
+	id = theFederation.1001
+	title = "theFederation.1001.name"
+	desc = "theFederation.1001.desc"
+	picture = sth_GFX_evt_federationSigned
+	is_triggered_only = yes
+	option = {
+		name = theFederation.1001.a
+	}
+}
+country_event = {
+	id = theFederation.1002
+	title = "theFederation.1002.name"
+	desc = "theFederation.1002.desc"
+	picture = sth_GFX_evt_federationSigned
+	is_triggered_only = yes
+	option = {
+		name = theFederation.1002.a
+	}
+}
+
+country_event = {
+	id = theFederation.1003
+	title = "theFederation.1003.name"
+	desc = "theFederation.1003.desc"
+	picture = sth_GFX_evt_federationSigned
+	is_triggered_only = yes
+	immediate = { 
+		random_country = {
+			limit = { has_country_flag = federation_leader }
+			save_event_target_as = federationLeader
+		}
+	}
+	option = {
+		name = theFederation.1003.a
+	}
+}
+
+
+country_event = {
+	id = theFederation.1004
+	hide_window = yes
+	is_triggered_only = yes
+	immediate = {
+		every_country = {
+			limit = {
+				is_in_federation_with = root
+				NOT = { is_same_value = root }
+				NOT = { has_country_flag = considering_federation }
+			}
+			set_country_flag = considering_federation
+			country_event = { id = theFederation.1000 days = 14 random = 7 }
+		}
+		
+		if = {
+			limit = {
+				any_country = {
+					is_in_federation_with = root
+					NOR = {
+						has_country_flag = wants_federation
+						has_country_flag = not_wants_federation
+					}
+				}
+			}
+			country_event = { id = theFederation.1004 days = 28 } 
+			
+			else = {
+				if = {
+					limit = { has_country_flag = united_earth }
+					country_event = { id = theFederation.5 } 
+				}
+				if = {
+					limit = { has_country_flag = vulcan_high_command }
+					country_event = { id = theFederation.9 } 
+				}
+				if = {
+					limit = { has_country_flag = andorian_empire }
+					country_event = { id = theFederation.10 } 
+				}
+				if = {
+					limit = { has_country_flag = tellarian_technocracy }
+					country_event = { id = theFederation.11 } 
+				}
+			}
+			
+		}
+	
+	}
+}
+
+
+country_event = {
+	id = theFederation.1005
+	title = "theFederation.1005.name"
+	desc = "theFederation.1005.desc"
+	picture = sth_GFX_evt_federationSigned
+	is_triggered_only = yes
+	immediate = { 
+		random_country = {
+			limit = { has_country_flag = federation_leader }
+			save_event_target_as = federationLeader
+		}
+	}
+	option = {
+		name = theFederation.1005.a
+	}
+}
+
+#Earth Forms Federation
+country_event = {
+	id = theFederation.1
+	title = "theFederation.1.name"
+	desc = "theFederation.1.desc"
+	picture = sth_GFX_evt_federationEarth
+	trigger = {
+		OR = {
+			has_country_flag = united_earth
+			AND = {
+				has_country_flag = united_human_remnant
+				OR = { has_ethic = "ethic_xenophile" has_ethic = "ethic_fanatic_xenophile" }
+			}
+		}
+		valid_federation_formation = yes
+	}
+	mean_time_to_happen = { months = 24 }
+	option = {
+		name = theFederation.1.a
+		hidden_effect = { 
+			country_event = { id = theFederation.1004 days = 28 }
+			every_country = {
+				limit = { is_in_federation_with = root NOT = { is_same_value = root } }
+				set_country_flag = considering_federation
+				country_event = { id = theFederation.1000 days = 14 random = 7 }
+			}
+			set_country_flag = wants_federation
+			set_country_flag = federation_leader
+			set_global_flag = federation_in_progress
+		}
+	}
+	option = {
+		name = theFederation.1.b
+		hidden_effect = { country_event = { id = theFederation.1 days = 7000 } }
+	}
+}
+#Vulcan Forms Federation
+country_event = {
+	id = theFederation.2
+	title = "theFederation.2.name"
+	desc = "theFederation.2.desc"
+	picture = sth_GFX_evt_federationVulcan
+	trigger = {
+		has_country_flag = vulcan_high_command
+		valid_federation_formation = yes
+	}
+	mean_time_to_happen = { months = 24 }
+	option = {
+		name = theFederation.2.a
+		hidden_effect = { 
+			country_event = { id = theFederation.1004 days = 28 }
+			every_country = {
+				limit = { is_in_federation_with = root NOT = { is_same_value = root } }
+				set_country_flag = considering_federation
+				country_event = { id = theFederation.1000 days = 14 random = 7 }
+			}
+			set_country_flag = wants_federation
+			set_country_flag = federation_leader
+			set_global_flag = federation_in_progress
+		}
+	}
+	option = {
+		name = theFederation.2.b
+		hidden_effect = { country_event = { id = theFederation.2 days = 7000 } }
+	}
+}
+#Andoria Forms Federation
+country_event = {
+	id = theFederation.3
+	title = "theFederation.3.name"
+	desc = "theFederation.3.desc"
+	picture = sth_GFX_evt_federationAndor
+	trigger = {
+		has_country_flag = andorian_empire
+		valid_federation_formation = yes
+	}
+	mean_time_to_happen = { months = 24 }
+	option = {
+		name = theFederation.3.a
+		hidden_effect = { 
+			country_event = { id = theFederation.1004 days = 28 } 
+			every_country = {
+				limit = { is_in_federation_with = root NOT = { is_same_value = root } }
+				set_country_flag = considering_federation
+				country_event = { id = theFederation.1000 days = 14 random = 7 }
+			}
+			set_country_flag = wants_federation
+			set_country_flag = federation_leader
+			set_global_flag = federation_in_progress
+		}
+	}
+	option = {
+		name = theFederation.3.b
+		hidden_effect = { country_event = { id = theFederation.3 days = 7000 } }
+	}
+}
+#Tellar Forms Federation
+country_event = {
+	id = theFederation.4
+	title = "theFederation.4.name"
+	desc = "theFederation.4.desc"
+	picture = sth_GFX_evt_federationTellar
+	trigger = {
+		has_country_flag = tellarian_technocracy
+		valid_federation_formation = yes
+	}
+	mean_time_to_happen = { months = 24 }
+	option = {
+		name = theFederation.4.a
+		hidden_effect = { country_event = { id = theFederation.1004 days = 28 } 
+			every_country = {
+				limit = { is_in_federation_with = root NOT = { is_same_value = root } }
+				set_country_flag = considering_federation
+				country_event = { id = theFederation.1000 days = 14 random = 7 }
+			}
+			set_country_flag = wants_federation
+			set_country_flag = federation_leader
+			set_global_flag = federation_in_progress
+		}
+	}
+	option = {
+		name = theFederation.4.b
+		hidden_effect = { country_event = { id = theFederation.4 days = 7000 } }
+	}
+}
+
+
+
+
+#Federation Signed - Earth
+country_event = {
+	id = theFederation.5
+	title = "theFederation.5.name"
+	desc = "theFederation.5.desc"
+	picture = sth_GFX_evt_federationSigned
+	show_sound = event_anthemUFP
+	is_triggered_only = yes
+	immediate = {
+		save_global_event_target_as = unitedEarth
+		every_country = {
+			limit = { has_country_flag = wants_federation is_ai = yes NOT = { has_country_flag = federation_leader } }
+			federation_accession = yes
+		}
+		every_country = {
+			limit = { has_country_flag = wants_federation is_ai = no NOT = { has_country_flag = federation_leader } }
+			federation_accession_human = yes
+			country_event = { id = theFederation.1003 }
+		}
+		every_country = {
+			limit = { has_country_flag = not_wants_federation is_ai = no NOT = { has_country_flag = federation_leader } }
+			country_event = { id = theFederation.1005 }
+		}
+	}
+	option = {
+		name = theFederation.5.a
+		change_country_flag = {
+			icon = { category="trek" file="Federation4.dds" }
+			background = { category = "backgrounds" file = "00_solid.dds" }
+			colors = { "blue" "black" "null" "null" }
+		}
+		set_country_flag = united_federation_of_planets
+		set_empire_name = "United Federation of Planets"
+		hidden_effect = { 
+			country_event = { id = theFederation.6 } 
+			country_event = { id = theFederation.14 days = 2 }
+		}
+	}
+}
+
+
+#Federation Detail
+country_event = {
+	id = theFederation.6
+	title = "theFederation.6.name"
+	desc = {
+		trigger = { 
+			NOR = { 
+				has_country_flag = vulcan_high_command
+				has_country_flag = andorian_empire
+				has_country_flag = tellarian_technocracy
+			}
+		}
+		text = theFederation.6.desc
+	}
+	desc = {
+		trigger = { 
+			OR = { 
+				has_country_flag = vulcan_high_command
+				has_country_flag = andorian_empire
+				has_country_flag = tellarian_technocracy
+			}
+		}
+		text = theFederation.6.desc.1
+	}
+	picture = sth_GFX_evt_federationSigned
+	is_triggered_only = yes
+	immediate = {
+		add_modifier = { modifier = em_federation_formed days = 3650 }
+		add_modifier = { modifier = em_fed_beacon_of_democracy }
+		every_country = {
+			remove_country_flag = considering_federation
+			remove_country_flag = wants_federation
+			remove_country_flag = not_wants_federation
+			remove_country_flag = federation_leader
+		}
+	}
+	option = {
+		trigger = { has_country_flag = united_earth }
+		name = theFederation.6.a
+	}
+	option = {
+		trigger = { has_country_flag = vulcan_high_command }
+		name = theFederation.6.b
+	}
+	option = {
+		trigger = { has_country_flag = andorian_empire }
+		name = theFederation.6.c
+	}
+	option = {
+		trigger = { has_country_flag = tellarian_technocracy }
+		name = theFederation.6.d
+	}
+	option = {
+		trigger = { 
+			OR = { 
+				has_country_flag = vulcan_high_command
+				has_country_flag = andorian_empire
+				has_country_flag = tellarian_technocracy
+			}
+		}	
+		name = theFederation.6.e
+		ai_chance = { factor = 100 }
+		hidden_effect = { 
+			if = { 
+				limit = { has_country_flag = generic_ent }
+				remove_country_flag = generic_ent
+				set_country_flag = starfleet_ent
+				set_graphical_culture = federation_01
+			}
+			if = { 
+				limit = { has_country_flag = generic_tos }
+				remove_country_flag = generic_tos
+				set_country_flag = starfleet_tos
+				set_graphical_culture = federation_02
+			}
+			if = { 
+				limit = { has_country_flag = generic_tmp }
+				remove_country_flag = generic_tmp
+				set_country_flag = starfleet_tmp
+				set_graphical_culture = federation_03
+			}
+			if = { 
+				limit = { has_country_flag = generic_tng }
+				remove_country_flag = generic_tng
+				set_country_flag = starfleet_tng
+				set_graphical_culture = federation_04
+			}			
+		}		
+	}
+	after = { country_event = { id = sth_q_events.2001 days = 3 } }
+}
+
+
+#Federation Signed - Vulcan
+country_event = {
+	id = theFederation.9
+	title = "theFederation.5.name"
+	desc = "theFederation.5.desc"
+	picture = sth_GFX_evt_federationSigned
+	show_sound = event_anthemUFP
+	is_triggered_only = yes
+	immediate = {
+		save_global_event_target_as = vulcan
+		every_country = {
+			limit = { has_country_flag = united_earth }
+			save_global_event_target_as = unitedEarth
+		}
+		every_country = {
+			limit = { has_country_flag = wants_federation is_ai = yes NOT = { has_country_flag = federation_leader } }
+			federation_accession = yes
+		}
+		every_country = {
+			limit = { has_country_flag = wants_federation is_ai = no NOT = { has_country_flag = federation_leader } }
+			federation_accession_human = yes
+			country_event = { id = theFederation.1003 }
+		}
+		every_country = {
+			limit = { has_country_flag = not_wants_federation is_ai = no NOT = { has_country_flag = federation_leader } }
+			country_event = { id = theFederation.1005 }
+		}
+	}
+	option = {
+		name = theFederation.5.a
+		change_country_flag = {
+			icon = { category="trek" file="Federation4.dds" }
+			background = { category = "backgrounds" file = "00_solid.dds" }
+			colors = { "blue" "black" "null" "null" }
+		}
+		set_empire_name = "United Federation of Planets"
+		set_country_flag = united_federation_of_planets
+		hidden_effect = { 			
+			country_event = { id = theFederation.6 } 
+			country_event = { id = theFederation.14 days = 2 }
+		}
+	}
+}
+
+#Federation Signed - Andoria
+country_event = {
+	id = theFederation.10
+	title = "theFederation.5.name"
+	desc = "theFederation.5.desc"
+	picture = sth_GFX_evt_federationSigned
+	show_sound = event_anthemUFP
+	is_triggered_only = yes
+	immediate = {
+		save_global_event_target_as = andoria
+		every_country = {
+			limit = { has_country_flag = united_earth }
+			save_global_event_target_as = unitedEarth
+		}
+		every_country = {
+			limit = { has_country_flag = wants_federation is_ai = yes NOT = { has_country_flag = federation_leader } }
+			federation_accession = yes
+		}
+		every_country = {
+			limit = { has_country_flag = wants_federation is_ai = no NOT = { has_country_flag = federation_leader } }
+			federation_accession_human = yes
+			country_event = { id = theFederation.1003 }
+		}
+		every_country = {
+			limit = { has_country_flag = not_wants_federation is_ai = no NOT = { has_country_flag = federation_leader } }
+			country_event = { id = theFederation.1005 }
+		}
+	}
+	option = {
+		name = theFederation.5.a
+		set_empire_name = "United Federation of Planets"
+		change_country_flag = {
+			icon = { category="trek" file="Federation4.dds" }
+			background = { category = "backgrounds" file = "00_solid.dds" }
+			colors = { "blue" "black" "null" "null" }
+		}
+		set_country_flag = united_federation_of_planets
+		hidden_effect = { 			
+			country_event = { id = theFederation.6 } 
+			country_event = { id = theFederation.14 days = 2 }
+		}
+	}
+}
+
+#Federation Signed - Tellarite
+country_event = {
+	id = theFederation.11
+	title = "theFederation.5.name"
+	desc = "theFederation.5.desc"
+	picture = sth_GFX_evt_federationSigned
+	show_sound = event_anthemUFP
+	is_triggered_only = yes
+	immediate = {
+		save_global_event_target_as = tellar
+		every_country = {
+			limit = { has_country_flag = united_earth }
+			save_global_event_target_as = unitedEarth
+		}
+		every_country = {
+			limit = { has_country_flag = wants_federation is_ai = yes NOT = { has_country_flag = federation_leader } }
+			federation_accession = yes
+		}
+		every_country = {
+			limit = { has_country_flag = wants_federation is_ai = no NOT = { has_country_flag = federation_leader } }
+			federation_accession_human = yes
+			country_event = { id = theFederation.1003 }
+		}
+		every_country = {
+			limit = { has_country_flag = not_wants_federation is_ai = no NOT = { has_country_flag = federation_leader } }
+			country_event = { id = theFederation.1005 }
+		}
+	}
+	option = {
+		name = theFederation.5.a
+		change_country_flag = {
+			icon = { category="trek" file="Federation4.dds" }
+			background = { category = "backgrounds" file = "00_solid.dds" }
+			colors = { "blue" "black" "null" "null" }
+		}
+		set_empire_name = "United Federation of Planets"
+		set_country_flag = united_federation_of_planets
+		hidden_effect = { 			
+			country_event = { id = theFederation.6 } 
+			country_event = { id = theFederation.14 days = 2 }
+		}
+	}
+}
+
+
+
+
+country_event = {
+	id = theFederation.13
+	title = "theFederation.13.name"
+	desc = "theFederation.13.desc"
+	picture = sth_GFX_evt_federationFlag
+	trigger = {
+		has_country_flag = united_federation_of_planets
+		has_country_resource = { type = influence amount > 99 }
+		any_country  = {
+			is_ai = yes	
+			OR = {
+				is_subject_type = "vassal"
+				is_subject_type = "protectorate"
+			}
+			overlord = {
+				is_same_value = root
+			}
+			opinion = {
+				who = root
+				value > 100
+			}
+			has_country_flag = federationAccessionStage1
+		}
+	}
+	immediate = {
+		random_country = {
+			limit = { 
+				is_ai = yes
+				OR = {
+					is_subject_type = "vassal"
+					is_subject_type = "protectorate"
+				}
+				overlord = {
+					is_same_value = root
+				}
+				opinion = {
+					who = root
+					value > 100
+				}
+				has_country_flag = federationAccessionStage1
+			}
+			save_event_target_as = accessionState
+		}
+	}
+	mean_time_to_happen = { months = 48 }
+	option = {
+		name = theFederation.13.a
+		hidden_effect = { 
+			event_target:accessionState = {
+				if = { 
+					limit = { is_ai = yes }
+					federation_accession = yes
+				}
+				if = { 
+					limit = { is_ai = no }
+					federation_accession_human = yes
+				}
+			}
+		}
+		add_influence = -99
+	}
+	option = {
+		name = theFederation.13.b
+		hidden_effect = { country_event = { id = theFederation.13 days = 1000 } }
+	}
+	option = {
+		name = theFederation.13.c
+		hidden_effect = {  
+			event_target:accessionState = {
+				remove_country_flag = federationAccessionStage1
+				remove_country_flag = federationAccessionStage0
+			}
+		}
+	}
+}
+
+
+#Federation Detail
+country_event = {
+	id = theFederation.14
+	hide_window = yes
+	is_triggered_only = yes
+	immediate = {
+		every_country = {
+			limit = { 
+				has_country_flag = united_federation_of_planets
+				is_country_type = default
+			}
+			save_event_target_as = ufp
+		}
+	
+		every_country = {
+			limit = { is_country_type = ufp_member_world }
+			every_owned_fleet = {
+				limit = {
+					exists = solar_system
+					solar_system = {
+						exists = space_owner
+						space_owner = { 
+							has_country_flag = united_federation_of_planets 
+							is_country_type = default
+						}
+					}
+					OR = {
+						is_ship_class = shipclass_mining_station	
+						is_ship_class = shipclass_research_station
+						is_ship_class = shipclass_terraform_station
+						is_ship_class = shipclass_observation_station
+						is_ship_class = shipclass_military_station
+					}
+				}
+				set_owner = event_target:ufp
+				set_controller = event_target:ufp
+			}
+		}
+	}	
+}
+
+#Federation Council Trigger
+event = {
+	id = theFederation.89
+	hide_window = yes
+	is_triggered_only = yes
+	immediate = {
+		every_country = {
+			limit = { 
+				has_country_flag = united_federation_of_planets
+				is_country_type = default
+				is_ai = no
+				NOT = { has_country_flag = federation_council_effect }
+			}
+			country_event = { id = theFederation.90 days = 40 }
+		}
+	}
+}
+
+
+#Federation Council Meeting
+country_event = {
+	id = theFederation.90
+	title = "theFederation.90.name"
+	desc = { text = "theFederation.90.desc_01" }
+	picture = sth_GFX_evt_federationCouncil
+	force_open = yes
+	is_triggered_only = yes
+	trigger = { 
+		has_country_flag = united_federation_of_planets  
+	}
+	immediate = {
+		set_timed_country_flag = { flag = federation_council_effect days = 600 }
+		leader = { save_event_target_as = federationRuler }
+		random_country = {
+			limit = { is_country_type = ufp_member_world }
+			save_event_target_as = member_world_1 #DO STUFF HERE TO FIX EDGE CASES!
+		}
+		random_country = {
+			limit = { 
+				is_country_type = ufp_member_world 
+				NOT = { is_same_value = event_target:member_world_1 }
+			}
+			save_event_target_as = member_world_2
+		}
+		every_country = { 
+			limit = {
+				NOT = { valid_federation_candidate = yes }
+				has_country_flag = federationAccessionState
+			}
+			remove_country_flag = federationAccessionState
+			set_variable = { which = "accession_progress" value = 0 }
+		}
+		random_country = { 
+			limit = {
+				valid_federation_candidate = yes
+				has_country_flag = federationAccessionState
+			}
+			save_event_target_as = accession_state
+		}
+		
+	}
+	option = {
+		name = theFederation.90.a #New Member
+		allow = { 
+			any_country = { valid_federation_candidate = yes } 
+			NOT = { any_country = { valid_federation_candidate = yes has_country_flag = federationAccessionState } }
+		}
+		trigger = { 
+			any_country = { valid_federation_candidate = yes }
+			NOT = { any_country = { valid_federation_candidate = yes has_country_flag = federationAccessionState } }
+		}
+		hidden_effect = { country_event = { id = theFederation.91 } }
+	}
+	option = {
+		name = theFederation.90.b #Existing Member
+		allow = { exists = event_target:accession_state }
+		trigger = { exists = event_target:accession_state }
+		hidden_effect = { country_event = { id = theFederation.93 scopes = { from = event_target:accession_state } } }
+	}
+	option = {
+		name = theFederation.90.c #Improve relations
+		allow = { 
+			any_neighbor_country = { 
+				has_communications = Root 
+				is_ai = yes
+				NOT = { is_at_war_with = Root is_same_value = Root } 
+				is_normal_country = yes 
+			}
+		}
+		hidden_effect = { country_event = { id = theFederation.95 } }
+	}
+	option = {
+		name = theFederation.90.h #Mediate Dispute
+		allow = {
+			NOR = { has_special_project = "FED_MEDIATE_DISPUTE_PROJECT_1A" has_special_project = "FED_MEDIATE_DISPUTE_PROJECT_1B" }
+			any_country = {
+				is_normal_country = yes
+				is_assimilator = no #REPLACE WITH CAN DIPLOMACY
+				has_communications = ROOT
+				NOT = { is_same_value = ROOT }
+				opinion = { who = ROOT value > 20 }
+				any_country = {
+					is_normal_country = yes
+					is_assimilator = no #REPLACE WITH CAN DIPLOMACY
+					NOR = { is_same_value = ROOT is_same_value = PREV }
+					opinion = { who = PREV value < -20 }
+					has_communications = ROOT
+					has_communications = PREV
+				}
+			}
+		}
+		hidden_effect = { country_event = { id = theFederation.120 } }
+	}
+	option = {
+		name = theFederation.90.d #Condemn War
+		allow = {
+			any_country = {
+				has_communications = Root 
+				is_ai = yes 
+				is_war_leader = yes 
+				NOT = { is_same_value = Root } 
+				is_normal_country = yes 
+			}
+		}
+		hidden_effect = { country_event = { id = theFederation.96 } }
+	}
+	option = {
+		name = theFederation.90.e #Science Stuff
+		hidden_effect = { country_event = { id = theFederation.99 } }
+	}
+	option = {
+		name = theFederation.90.f #Switch Empire modifiers
+		#custom_tooltip = "theFederation.90.f.tooltip" 
+		ai_chance = { factor = 0 }
+		# allow = { has_swapped_tradition = tr_federation_5 NOT = { has_country_flag = empire_modifier_changed } }
+		trigger = { has_swapped_tradition = tr_federation_5 NOT = { has_country_flag = empire_modifier_changed } }
+		hidden_effect = { country_event = { id = theFederation.110 } }
+	}
+	option = { 
+		name = theFederation.90.g
+		ai_chance = { factor = 0 }
+	}
+}
+
+#Accession Candidates
+country_event = {
+	id = theFederation.91
+	title = "theFederation.91.name"
+	desc = "theFederation.91.desc"
+	picture = sth_GFX_evt_federationCouncil
+	force_open = yes
+	is_triggered_only = yes
+	trigger = { has_country_flag = united_federation_of_planets }
+	immediate = { 
+		every_country = { 
+			limit = { has_country_flag = federationAccessionCandidate }
+			remove_country_flag = federationAccessionCandidate
+		}
+		random_country = {
+			limit = { 
+				valid_federation_candidate = yes
+				NOR = { is_same_value = ROOT }
+			}
+			save_event_target_as = candidate1
+		}
+		random_country = { 
+			limit = { 
+				valid_federation_candidate = yes
+				NOR = { 
+					is_country = event_target:candidate1
+					is_same_value = ROOT
+				}
+			}
+			save_event_target_as = candidate2
+		}
+		random_country = { 
+			limit = {
+				valid_federation_candidate = yes
+				NOR = { 
+					is_country = event_target:candidate1
+					is_country = event_target:candidate2
+					is_same_value = ROOT
+				}
+			}
+			save_event_target_as = candidate3
+		}
+		random_country = {
+			limit = {
+				valid_federation_candidate = yes
+				NOR = { 
+					is_country = event_target:candidate1
+					is_country = event_target:candidate2
+					is_country = event_target:candidate3
+					is_same_value = ROOT
+				}
+			}
+			save_event_target_as = candidate4
+		}
+	}
+	option = {
+		name = theFederation.91.a
+		allow = { exists = event_target:candidate1 event_target:candidate1 = { valid_federation_candidate = yes } }
+		trigger = { exists = event_target:candidate1 event_target:candidate1 = { valid_federation_candidate = yes } }
+		hidden_effect = {
+			event_target:candidate1 = { set_country_flag = federationAccessionCandidate }
+			country_event = { id = theFederation.92 scopes = { from = event_target:candidate1 } }
+		}
+	}
+	option = {
+		name = theFederation.91.b
+		allow = { exists = event_target:candidate2 event_target:candidate2 = { valid_federation_candidate = yes } }
+		trigger = { exists = event_target:candidate2 event_target:candidate2 = { valid_federation_candidate = yes } }
+		hidden_effect = {
+			event_target:candidate2 = { set_country_flag = federationAccessionCandidate }
+			country_event = { id = theFederation.92 scopes = { from = event_target:candidate1 } }
+		}
+	}
+	option = {
+		name = theFederation.91.c
+		allow = { exists = event_target:candidate3 event_target:candidate3 = { valid_federation_candidate = yes } }
+		trigger = { exists = event_target:candidate3 event_target:candidate3 = { valid_federation_candidate = yes } }
+		hidden_effect = {
+			event_target:candidate3 = { set_country_flag = federationAccessionCandidate }
+			country_event = { id = theFederation.92 scopes = { from = event_target:candidate1 } }
+		}
+	}
+	option = {
+		name = theFederation.91.d
+		ai_chance = { factor = 0 }
+		allow = { exists = event_target:candidate4 event_target:candidate1 = { valid_federation_candidate = yes } }
+		trigger = { exists = event_target:candidate4 event_target:candidate1 = { valid_federation_candidate = yes } }
+		hidden_effect = {
+			event_target:candidate4 = { set_country_flag = federationAccessionCandidate }
+			country_event = { id = theFederation.92 scopes = { from = event_target:candidate1 } }
+		}
+	}
+	option = { 
+		ai_chance = { factor = 1 modifier = { factor = 10000 NOT = { exists = event_target:candidate1 } } }
+		name = theFederation.91.e 
+		hidden_effect = { country_event = { id = theFederation.90 } }
+	}
+}
+
+#Set Accession Investment Rate
+country_event = {
+	id = theFederation.92
+	title = "theFederation.92.name"
+	desc = "theFederation.92.desc"
+	picture = sth_GFX_evt_federationCouncil
+	force_open = yes
+	is_triggered_only = yes
+	trigger = { has_country_flag = united_federation_of_planets }
+	option = {
+		name = theFederation.92.a
+		allow = { 
+			exists = from 
+			from = { valid_federation_candidate = yes } 
+		}
+		from = {
+			set_country_flag = federationAccessionState
+			federation_accession_progress_from_root = yes
+		}
+	}
+	option = {
+		name = theFederation.92.b
+		allow = {
+			exists = from
+			from = { valid_federation_candidate = yes }
+			OR = {
+				AND = {
+					NOR = { has_swapped_tradition = "tr_federation_4" }
+					has_country_resource = { type = energy amount > 199 }
+					has_country_resource = { type = minerals amount > 199 }
+					has_country_resource = { type = influence amount > 99 }
+				}
+				AND = {
+					OR = { has_swapped_tradition = "tr_federation_4" }
+					has_country_resource = { type = energy amount > 149 }
+					has_country_resource = { type = minerals amount > 149 }
+					has_country_resource = { type = influence amount > 74 }
+				}
+			}
+		}
+		if = {
+			limit = { OR = { has_swapped_tradition = "tr_federation_4" } }
+			add_energy = -150
+			add_minerals = -150
+			add_influence = -75
+			else = {
+				add_energy = -200
+				add_minerals = -200
+				add_influence = -100
+			}
+		}
+		from = {
+			set_country_flag = federationAccessionState
+			federation_accession_progress_from_root = yes
+			federation_accession_progress_from_root = yes
+		}
+	}
+	option = {
+		name = theFederation.92.c
+		allow = { 
+			exists = from
+			from = { valid_federation_candidate = yes }
+			OR = {
+				AND = {
+					NOR = { has_swapped_tradition = "tr_federation_4" }
+					has_country_resource = { type = energy amount > 399 }
+					has_country_resource = { type = minerals amount > 399 }
+					has_country_resource = { type = influence amount > 199 }
+				}
+				AND = {
+					OR = { has_swapped_tradition = "tr_federation_4" }
+					has_country_resource = { type = energy amount > 299 }
+					has_country_resource = { type = minerals amount > 299 }
+					has_country_resource = { type = influence amount > 149 }
+				}
+			}
+		}
+		if = {
+			limit = { OR = { has_swapped_tradition = "tr_federation_4" } }
+			add_energy = -300
+			add_minerals = -300
+			add_influence = -150
+			else = {
+				add_energy = -400
+				add_minerals = -400
+				add_influence = -200
+			}
+		}
+		from = {
+			set_country_flag = federationAccessionState
+			federation_accession_progress_from_root = yes
+			federation_accession_progress_from_root = yes
+			federation_accession_progress_from_root = yes
+		}
+	}
+	option = { 
+		name = theFederation.92.d
+		hidden_effect = { country_event = { id = theFederation.91 } }
+	}
+}
+
+#Candidate Review
+country_event = {
+	id = theFederation.93
+	title = "theFederation.93.name"
+	# desc = "theFederation.93.desc"
+	desc = { trigger = { from = { check_variable = { which = "accession_progress"  value < 20 } } } text = "theFederation.93.desc_01" }
+	desc = { trigger = { from = { check_variable = { which = "accession_progress"  value > 19 } check_variable = { which = "accession_progress"  value < 40 } } } text = "theFederation.93.desc_02" }
+	desc = { trigger = { from = { check_variable = { which = "accession_progress"  value > 39 } check_variable = { which = "accession_progress"  value < 60 } } } text = "theFederation.93.desc_03" }
+	desc = { trigger = { from = { check_variable = { which = "accession_progress"  value > 59 } check_variable = { which = "accession_progress"  value < 80 } } } text = "theFederation.93.desc_04" }
+	desc = { trigger = { from = { check_variable = { which = "accession_progress"  value > 79 } } } text = "theFederation.93.desc_05" }
+	picture = sth_GFX_evt_federationCouncil
+	force_open = yes
+	is_triggered_only = yes
+	trigger = { has_country_flag = united_federation_of_planets }
+	immediate = { }
+	option = {
+		name = theFederation.93.a
+		allow = { exists = from from = { check_variable = { which = "accession_progress"  value > 99 } } }
+		trigger = { exists = from from = { check_variable = { which = "accession_progress"  value > 99 } } }
+		hidden_effect = { country_event = { id = theFederation.94 scopes = { from = from } } }
+	}
+	option = {
+		name = theFederation.93.b
+		allow = { exists = from from = { check_variable = { which = "accession_progress"  value < 100 } } }
+		hidden_effect = { from = { federation_accession_progress_from_root = yes } }
+	}
+	option = {
+		name = theFederation.93.c
+		allow = { 
+			exists = from
+			from = { check_variable = { which = "accession_progress"  value < 100 } }
+			OR = {
+				AND = {
+					NOR = { has_swapped_tradition = "tr_federation_4" }
+					has_country_resource = { type = energy amount > 199 }
+					has_country_resource = { type = minerals amount > 199 }
+					has_country_resource = { type = influence amount > 99 }
+				}
+				AND = {
+					OR = { has_swapped_tradition = "tr_federation_4" }
+					has_country_resource = { type = energy amount > 149 }
+					has_country_resource = { type = minerals amount > 149 }
+					has_country_resource = { type = influence amount > 74 }
+				}
+			}
+		}
+		if = {
+			limit = { OR = { has_swapped_tradition = "tr_federation_4" } }
+			add_energy = -150
+			add_minerals = -150
+			add_influence = -75
+			else = {
+				add_energy = -200
+				add_minerals = -200
+				add_influence = -100
+			}
+		}
+		hidden_effect = {
+			from = { 
+				federation_accession_progress_from_root = yes
+				federation_accession_progress_from_root = yes
+			}
+		}	
+	}
+	option = {
+		name = theFederation.93.d
+		allow = { 
+			exists = from
+			from = { check_variable = { which = "accession_progress"  value < 100 } }
+			OR = {
+				AND = {
+					NOR = { has_swapped_tradition = "tr_federation_4" }
+					has_country_resource = { type = energy amount > 399 }
+					has_country_resource = { type = minerals amount > 399 }
+					has_country_resource = { type = influence amount > 199 }
+				}
+				AND = {
+					OR = { has_swapped_tradition = "tr_federation_4" }
+					has_country_resource = { type = energy amount > 299 }
+					has_country_resource = { type = minerals amount > 299 }
+					has_country_resource = { type = influence amount > 149 }
+				}
+			}
+		}	
+		if = {
+			limit = { OR = { has_swapped_tradition = "tr_federation_4" } }
+			add_energy = -300
+			add_minerals = -300
+			add_influence = -150
+			else = {
+				add_energy = -400
+				add_minerals = -400
+				add_influence = -200
+			}
+		}		
+		hidden_effect = {
+			from = { 
+				federation_accession_progress_from_root = yes
+				federation_accession_progress_from_root = yes
+				federation_accession_progress_from_root = yes
+			}
+		}	
+	}
+	option = { 
+		name = theFederation.93.e
+		hidden_effect = { country_event = { id = theFederation.90 } }
+	}
+}
+
+#State Acceeds
+country_event = {
+	id = theFederation.94
+	title = "theFederation.94.name"
+	desc = "theFederation.94.desc"
+	picture = sth_GFX_evt_federationSigned
+	force_open = yes
+	show_sound = event_anthemUFP
+	is_triggered_only = yes
+	option = {
+		name = theFederation.94.a
+		hidden_effect = { from = { federation_accession = yes } }
+	}
+}
+
+#Stations transfer
+country_event = {
+	id = theFederation.9999
+	hide_window = yes
+	is_triggered_only = yes
+	immediate = {
+		random_country = {
+			limit = { has_country_flag = transfer_mines }
+			mining_transfer = yes
+			set_country_flag = pop_invite #Do better later on?
+		}
+		country_event = { id = theFederation.1010 days = 30 }
+	}
+}
+
+country_event = {
+	id = theFederation.1010
+	title = "theFederation.1010.name"
+	desc = "theFederation.1010.desc"
+	picture = sth_GFX_evt_federationCouncil
+	is_triggered_only = yes
+	immediate = {
+		random_country = { limit = { has_country_flag = pop_invite } }
+	}
+	option = {
+		name = theFederation.1010.a
+		random_country = {
+			limit = { has_country_flag = pop_invite }
+			random_owned_pop = { 
+				save_event_target_as = fedPop
+			}
+			remove_country_flag = pop_invite
+			if = {
+				limit = { root = {  any_owned_planet = { NOT = { is_same_value = from } free_pop_tiles > 0 } } }
+				root = {
+					random_owned_planet = {
+						limit = { 
+							NOT = { is_same_value = from } 
+							free_pop_tiles > 0 
+						}
+						resettle_pop = { pop = event_target:fedPop planet = this }
+					}	
+				}
+				else = {
+					event_target:fedPop = { kill_pop = yes }
+				}
+			}
+		}
+	}
+	option = {
+		name = theFederation.1010.b
+		hidden_effect = {
+			random_country = {
+				limit = { has_country_flag = pop_invite }
+				remove_country_flag = pop_invite
+			}
+		}
+	}
+}
+
+
+
+#Improve Relations List
+country_event = {
+	id = theFederation.95
+	title = "theFederation.95.name"
+	desc = "theFederation.95.desc"
+	picture = sth_GFX_evt_federationCouncil
+	force_open = yes
+	is_triggered_only = yes
+	trigger = { has_country_flag = united_federation_of_planets }
+	immediate = { 
+		random_country = {
+			limit = { is_country_type = ufp_member_world }
+			save_event_target_as = member_world_1
+		}
+		random_neighbor_country = { 
+			limit = {
+				has_communications = Root 
+				is_ai = yes	
+				NOR = {
+					is_at_war_with = Root
+					is_same_value = Root
+				}
+				is_normal_country = yes
+			}
+			save_event_target_as = diplomacy1
+		}
+		random_neighbor_country = { 
+			limit = { 
+				has_communications = Root 
+				is_ai = yes	
+				NOR = { 
+					is_at_war_with = Root
+					is_same_value = Root
+					is_same_value = event_target:diplomacy1
+				}
+				is_normal_country = yes
+			}
+			save_event_target_as = diplomacy2
+		}
+		random_neighbor_country = { 
+			limit = { 
+				has_communications = Root 
+				is_ai = yes	
+				NOR = { 
+					is_at_war_with = Root
+					is_same_value = Root
+					is_same_value = event_target:diplomacy1
+					is_same_value = event_target:diplomacy2
+				}
+				is_normal_country = yes
+			}
+			save_event_target_as = diplomacy3
+		}
+		random_neighbor_country = { 
+			limit = { 
+				has_communications = Root 
+				is_ai = yes	
+				NOR = { 
+					is_at_war_with = Root
+					is_same_value = Root
+					is_same_value = event_target:diplomacy1
+					is_same_value = event_target:diplomacy2
+					is_same_value = event_target:diplomacy3
+				}
+				is_normal_country = yes
+			}
+			save_event_target_as = diplomacy4
+		}
+	}
+	option = {
+		name = theFederation.95.a
+		allow = { exists = event_target:diplomacy1 }
+		trigger = { exists = event_target:diplomacy1 }
+		hidden_effect = {
+			every_country = {
+				limit = { has_country_flag = federationDiplomacyState }
+				remove_country_flag = federationDiplomacyState
+			}
+			event_target:diplomacy1 = { set_country_flag = federationDiplomacyState }
+		}
+		country_event = { id = theFederation.98 scopes = { from = event_target:diplomacy1 } }
+	}
+	option = {
+		name = theFederation.95.b
+		allow = { exists = event_target:diplomacy2 }
+		trigger = { exists = event_target:diplomacy2 }
+		hidden_effect = {
+			every_country = {
+				limit = { has_country_flag = federationDiplomacyState }
+				remove_country_flag = federationDiplomacyState
+			}
+			event_target:diplomacy2 = { set_country_flag = federationDiplomacyState }
+		}
+		country_event = { id = theFederation.98 scopes = { from = event_target:diplomacy2 } }
+	}
+	option = {
+		name = theFederation.95.c
+		allow = { exists = event_target:diplomacy3 }
+		trigger = { exists = event_target:diplomacy3 }
+		hidden_effect = {
+			every_country = {
+				limit = { has_country_flag = federationDiplomacyState }
+				remove_country_flag = federationDiplomacyState
+			}
+			event_target:diplomacy3 = { set_country_flag = federationDiplomacyState }
+		}
+		country_event = { id = theFederation.98 scopes = { from = event_target:diplomacy3 } }
+	}
+	option = {
+		name = theFederation.95.d
+		allow = { exists = event_target:diplomacy4 }
+		trigger = { exists = event_target:diplomacy4 }
+		hidden_effect = {
+			every_country = {
+				limit = { has_country_flag = federationDiplomacyState }
+				remove_country_flag = federationDiplomacyState
+			}
+			event_target:diplomacy4 = { set_country_flag = federationDiplomacyState }
+		}
+		country_event = { id = theFederation.98 scopes = { from = event_target:diplomacy4 } }
+	}
+	option = { 
+		name = theFederation.95.e
+		ai_chance = { factor = 0 }
+		hidden_effect = { country_event = { id = theFederation.95 } }
+	}
+	option = { 
+		name = theFederation.95.f
+		hidden_effect = { country_event = { id = theFederation.90 } }
+	}
+}
+
+
+#Condemn War List
+country_event = {
+	id = theFederation.96
+	title = "theFederation.96.name"
+	desc = "theFederation.96.desc"
+	picture = sth_GFX_evt_federationCouncil
+	force_open = yes
+	is_triggered_only = yes
+	trigger = { has_country_flag = united_federation_of_planets }
+	immediate = { 
+		root = {
+			save_event_target_as = war1a
+			save_event_target_as = war1b
+			save_event_target_as = war2a
+			save_event_target_as = war2b
+			save_event_target_as = war3a
+			save_event_target_as = war3b
+			save_event_target_as = war4a
+			save_event_target_as = war4b
+		}
+		random_country = {
+			limit = {
+				has_communications = Root 
+				is_ai = yes
+				is_war_leader = yes
+				NOT = { is_same_value = Root }
+				is_normal_country = yes
+			}
+			save_event_target_as = war1a
+			save_event_target_as = war1b
+		}
+		random_country = {
+			limit = {
+				exists = event_target:war1a
+				is_ai = yes
+				is_war_leader = yes
+				is_at_war_with = event_target:war1a
+				NOT = { is_same_value = event_target:war1a }
+				minorMajorRebelEmpire = yes
+			}
+			save_event_target_as = war1b
+		}
+		random_country = { 
+			limit = { 
+				has_communications = Root 
+				is_ai = yes
+				is_war_leader = yes
+				NOT = { is_at_war_with = Root }
+				NOT = { is_same_value = Root }
+				NOT = { is_same_value = event_target:war1a }
+				is_normal_country = yes
+			}
+			save_event_target_as = war2a
+			save_event_target_as = war2b
+		}
+		random_country = {
+			limit = {
+				exists = event_target:war2a
+				is_ai = yes
+				is_war_leader = yes
+				is_at_war_with = event_target:war2a
+				NOT = { is_same_value = event_target:war2a }
+				minorMajorRebelEmpire = yes
+			}
+			save_event_target_as = war2b
+		}
+		random_country = { 
+			limit = { 
+				has_communications = Root
+				is_ai = yes
+				is_war_leader = yes
+				NOT = { is_at_war_with = Root }
+				NOT = {	is_same_value = Root }
+				NOT = {	is_same_value = event_target:war1a }
+				NOT = {	is_same_value = event_target:war2a }
+				is_normal_country = yes
+			}
+			save_event_target_as = war3a
+			save_event_target_as = war3b
+		}
+		random_country = {
+			limit = {
+				exists = event_target:war3a
+				is_ai = yes
+				is_war_leader = yes
+				is_at_war_with = event_target:war3a
+				NOT = { is_same_value = event_target:war3a }
+				minorMajorRebelEmpire = yes
+			}
+			save_event_target_as = war3b
+		}
+		random_country = { 
+			limit = { 
+				has_communications = Root 
+				is_ai = yes
+				is_war_leader = yes
+				NOT = { is_at_war_with = Root }
+				NOT = { is_same_value = Root }
+				NOT = { is_same_value = event_target:war1a }
+				NOT = { is_same_value = event_target:war2a }
+				NOT = { is_same_value = event_target:war3a }
+				is_normal_country = yes
+			}
+			save_event_target_as = war4a
+			save_event_target_as = war4b
+		}
+		random_country = {
+			limit = {
+				exists = event_target:war4a
+				is_ai = yes
+				is_war_leader = yes
+				is_at_war_with = event_target:war4a
+				NOT = { is_country = event_target:war4a }
+				minorMajorRebelEmpire = yes
+			}
+			save_event_target_as = war4b
+		}
+	}
+	option = {
+		name = theFederation.96.a
+		allow = { 
+			exists = event_target:war1a 
+			exists = event_target:war1b 
+			NOR = { is_country = event_target:war1a is_country = event_target:war1b }
+			event_target:war1a = { NOT = { is_same_value = event_target:war1b } }
+		}
+		trigger = {
+			exists = event_target:war1a 
+			exists = event_target:war1b 
+			NOR = { is_country = event_target:war1a is_country = event_target:war1b }
+			event_target:war1a = { NOT = { is_same_value = event_target:war1b } }
+		}
+		every_country = {
+			limit = { OR = { has_country_flag = federationCondemnStateA has_country_flag = federationCondemnStateB } }
+			remove_country_flag = federationCondemnStateA remove_country_flag = federationCondemnStateB
+		}
+		event_target:war1a = { set_country_flag = federationCondemnStateA }
+		event_target:war1b = { set_country_flag = federationCondemnStateB }
+		country_event = { id = theFederation.97 scopes = { from = event_target:war1a fromfrom = event_target:war1b } }
+	}
+	option = {
+		name = theFederation.96.b
+		allow = { 
+			exists = event_target:war2a 
+			exists = event_target:war2b 
+			NOR = { is_country = event_target:war2a is_country = event_target:war2b }
+			event_target:war2a = { NOT = { is_same_value = event_target:war2b } }
+		}
+		trigger = {
+			exists = event_target:war2a 
+			exists = event_target:war2b 
+			NOR = { is_country = event_target:war2a is_country = event_target:war2b }
+			event_target:war2a = { NOT = { is_same_value = event_target:war2b } }
+		}
+		every_country = {
+			limit = { OR = { has_country_flag = federationCondemnStateA has_country_flag = federationCondemnStateB } }
+			remove_country_flag = federationCondemnStateA remove_country_flag = federationCondemnStateB
+		}
+		event_target:war2a = { set_country_flag = federationCondemnStateA }
+		event_target:war2b = { set_country_flag = federationCondemnStateB }
+		country_event = { id = theFederation.97 scopes = { from = event_target:war2a fromfrom = event_target:war2b } }
+	}
+	option = {
+		name = theFederation.96.c
+		allow = { 
+			exists = event_target:war3a 
+			exists = event_target:war3b 
+			NOR = { is_country = event_target:war3a is_country = event_target:war3b }
+			event_target:war3a = { NOT = { is_same_value = event_target:war3b } }
+		}
+		trigger = {
+			exists = event_target:war3a 
+			exists = event_target:war3b 
+			NOR = { is_country = event_target:war3a is_country = event_target:war3b }
+			event_target:war3a = { NOT = { is_same_value = event_target:war3b } }
+		}
+		every_country = {
+			limit = { OR = { has_country_flag = federationCondemnStateA has_country_flag = federationCondemnStateB } }
+			remove_country_flag = federationCondemnStateA remove_country_flag = federationCondemnStateB
+		}
+		event_target:war3a = { set_country_flag = federationCondemnStateA }
+		event_target:war3b = { set_country_flag = federationCondemnStateB }
+		country_event = { id = theFederation.97 scopes = { from = event_target:war3a fromfrom = event_target:war3b } }
+	}
+	option = {
+		name = theFederation.96.d
+		allow = { 
+			exists = event_target:war4a 
+			exists = event_target:war4b 
+			NOR = { is_country = event_target:war4a is_country = event_target:war4b }
+			event_target:war4a = { NOT = { is_same_value = event_target:war4b } }
+		}
+		trigger = {
+			exists = event_target:war4a 
+			exists = event_target:war4b 
+			NOR = { is_country = event_target:war4a is_country = event_target:war4b }
+			event_target:war4a = { NOT = { is_same_value = event_target:war4b } }
+		}
+		every_country = {
+			limit = { OR = { has_country_flag = federationCondemnStateA has_country_flag = federationCondemnStateB } }
+			remove_country_flag = federationCondemnStateA remove_country_flag = federationCondemnStateB
+		}
+		event_target:war4a = { set_country_flag = federationCondemnStateA }
+		event_target:war4b = { set_country_flag = federationCondemnStateB }
+		country_event = { id = theFederation.97 scopes = { from = event_target:war4a fromfrom = event_target:war4b } }
+	}
+	option = { 
+		name = theFederation.96.e
+		ai_chance = { factor = 0 }
+		hidden_effect = { country_event = { id = theFederation.96 } }
+	}
+	option = { 
+		name = theFederation.95.f
+		hidden_effect = { country_event = { id = theFederation.90 } }
+	}
+}
+
+#Condemn War List
+country_event = {
+	id = theFederation.97
+	title = "theFederation.97.name"
+	desc = "theFederation.97.desc"
+	picture = sth_GFX_evt_federationCouncil
+	force_open = yes
+	is_triggered_only = yes
+	trigger = { has_country_flag = united_federation_of_planets }
+	option = {
+		name = theFederation.97.a #Condemn A
+		allow = { exists = from exists = fromfrom }
+		trigger = { exists = from exists = fromfrom }
+		from = { add_opinion_modifier = { who = root modifier = opinion_insult } }
+		fromfrom = { add_opinion_modifier = { who = root modifier = opinion_small_boost } }
+		add_influence = 50
+		hidden_effect = { 
+			from = { country_event = { id = theFederation.140 days = 7 scopes = { from = root fromfrom = root.fromfrom } } } #Notifications
+			fromfrom = { country_event = { id = theFederation.141 days = 7 scopes = { from = root fromfrom = root.from } } }
+		}
+	}
+	option = { #Condemn B
+		name = theFederation.97.b
+		allow = { exists = from exists = fromfrom }
+		trigger = { exists = from exists = fromfrom }
+		from = { add_opinion_modifier = { who = root modifier = opinion_small_boost } }
+		fromfrom = { add_opinion_modifier = { who = root modifier = opinion_insult } }
+		add_influence = 50
+		hidden_effect = { 
+			from = { country_event = { id = theFederation.141 days = 7 scopes = { from = root fromfrom = root.fromfrom } } } #Notifications
+			fromfrom = { country_event = { id = theFederation.140 days = 7 scopes = { from = root fromfrom = root.from } } }
+		}
+	}
+	option = { #Condemn Both
+		name = theFederation.97.c
+		allow = { exists = from exists = fromfrom }
+		trigger = { exists = from exists = fromfrom }
+		from = { add_opinion_modifier = { who = root modifier = opinion_insult } }
+		fromfrom = { add_opinion_modifier = { who = root modifier = opinion_insult } }
+		add_influence = 100
+		hidden_effect = { 
+			from = { country_event = { id = theFederation.140 days = 7 scopes = { from = root fromfrom = root.fromfrom } } } #Notifications
+			fromfrom = { country_event = { id = theFederation.140 days = 7 scopes = { from = root fromfrom = root.from } } }
+		}
+	}
+	option = { 
+		name = theFederation.97.d
+		hidden_effect = { country_event = { id = theFederation.96 } }
+	}
+}
+
+
+
+
+
+#Improve Relations Type
+country_event = {
+	id = theFederation.98
+	title = "theFederation.98.name"
+	desc = "theFederation.98.desc"
+	picture = sth_GFX_evt_federationCouncil
+	force_open = yes
+	is_triggered_only = yes
+	trigger = { has_country_flag = united_federation_of_planets }
+	option = {
+		name = theFederation.98.a
+		custom_tooltip = theFederation.98.a.tooltip
+		allow = { exists = from }
+		trigger = { exists = from }
+		hidden_effect = { 
+			from = { 
+				# add_opinion_modifier = { who = root modifier = opinion_small_boost }
+				country_event = { id = theFederation.142 days = 7 scopes = { from = root } }
+			} 
+		}
+	}
+	option = {
+		name = theFederation.98.b
+		custom_tooltip = theFederation.98.b.tooltip
+		allow = { exists = from has_country_resource = { type = influence amount > 149 } }
+		trigger = { exists = from has_country_resource = { type = influence amount > 149 } }
+		hidden_effect = { 
+			add_influence = -150
+			from = { 
+				# add_opinion_modifier = { who = root modifier = opinion_medium_boost } 
+				country_event = { id = theFederation.143 days = 7 scopes = { from = root } }
+			}
+		}
+	}
+	option = {
+		name = theFederation.98.c
+		custom_tooltip = theFederation.98.c.tooltip
+		allow = { exists = from has_country_resource = { type = influence amount > 299 } }
+		trigger = { exists = from has_country_resource = { type = influence amount > 299 } }
+		hidden_effect = { 
+			add_influence = -300
+			from = { 
+				# add_opinion_modifier = { who = root modifier = opinion_large_boost } 
+				country_event = { id = theFederation.144 days = 7 scopes = { from = root } }
+			}
+		}
+	}
+	option = {
+		name = theFederation.98.d
+		hidden_effect = { country_event = { id = theFederation.95 } }
+	}
+}
+
+
+#Research Focus - Stub
+country_event = {
+	id = theFederation.99
+	title = "theFederation.99.name"
+	desc = "theFederation.99.desc"
+	picture = sth_GFX_evt_federationCouncil
+	force_open = yes
+	is_triggered_only = yes
+	trigger = { has_country_flag = united_federation_of_planets }
+	immediate = {
+		random_country = {
+			limit = { is_country_type = ufp_member_world }
+			save_event_target_as = member_world_1
+		}
+	}
+	option = {
+		name = theFederation.99.f
+		ai_chance = { factor = 0 modifier = { factor = 1 energy > 200 influence > 200 } }
+		trigger = { 
+			has_country_resource = { type = energy amount > 149 }
+			has_country_resource = { type = influence amount > 149 }
+			has_swapped_tradition = tr_federation_1
+		}
+		country_event = { id = theFederation.100 }
+	}
+	option = {
+		name = theFederation.99.a
+		add_modifier = { modifier = "em_fed_physics_focus" days = 720 }
+	}
+	option = {
+		name = theFederation.99.b
+		add_modifier = { modifier = "em_fed_society_focus" days = 720 }
+	}
+	option = {
+		name = theFederation.99.c
+		add_modifier = { modifier = "em_fed_engineering_focus" days = 720 }
+	}
+	option = {
+		name = theFederation.99.d
+		country_event = { id = theFederation.90 }
+	}
+}
+
+country_event = {
+	id = theFederation.100
+	title = "theFederation.100.name"
+	desc = "theFederation.100.desc"
+	picture = sth_GFX_evt_federationCouncil
+	force_open = yes
+	is_triggered_only = yes
+	trigger = { has_country_flag = united_federation_of_planets }
+	immediate = {
+		random_country = {
+			limit = { is_country_type = ufp_member_world }
+			save_event_target_as = member_world_1
+		}
+	}
+	option = { #Andorian    Co-Efficient Phasers
+		name = theFederation.100.a
+		allow = { 
+			energy > 149 
+			influence > 149 
+			NOR = { has_technology = tech_andorian_phaser_1 has_tech_option = tech_andorian_phaser_1 } 
+			any_country = { 
+				is_country_type = ufp_member_world 
+				is_subject = yes
+				root = { is_overlord_to = prev }
+				has_country_flag = andorian_empire 
+			} 
+		} 
+		trigger = { 
+			has_country_resource = { type = energy amount > 149 }
+			has_country_resource = { type = influence amount > 149 }
+			NOR = {	has_technology = tech_andorian_phaser_1 has_tech_option = tech_andorian_phaser_1 }
+			any_country = { 
+				is_country_type = ufp_member_world 
+				is_subject = yes
+				root = { is_overlord_to = prev }
+				has_country_flag = andorian_empire 
+			}
+		}
+		add_energy = -150
+		add_influence = -150
+		add_research_option = tech_andorian_phaser_1 	
+ 		add_tech_progress = { tech = tech_andorian_phaser_1 progress = 0.10 }
+	}
+	option = { #Andorian    Ushaan Legalization
+		name = theFederation.100.b
+		allow = { 
+			has_country_resource = { type = energy amount > 149 }
+			has_country_resource = { type = influence amount > 149 }
+			NOR = {	has_technology = tech_society_ushaan_377 has_tech_option = tech_society_ushaan_377 }
+			any_country = { 
+				is_country_type = ufp_member_world 
+				is_subject = yes
+				root = { is_overlord_to = prev }
+				has_country_flag = andorian_empire 
+			}
+		}
+		trigger = { 
+			has_country_resource = { type = energy amount > 149 }
+			has_country_resource = { type = influence amount > 149 }
+			NOR = {	has_technology = tech_society_ushaan_377 has_tech_option = tech_society_ushaan_377 }
+			any_country = { 
+				is_country_type = ufp_member_world 
+				is_subject = yes
+				root = { is_overlord_to = prev }
+				has_country_flag = andorian_empire 
+			}
+		}
+		add_energy = -150
+		add_influence = -150
+		add_research_option = tech_society_ushaan_377
+ 		add_tech_progress = { tech = tech_society_ushaan_377 progress = 0.10 }
+	}
+	option = { #Bajoran    Words of the Prophets 
+		name = theFederation.100.c
+		allow = { 
+			has_country_resource = { type = energy amount > 149 }
+			has_country_resource = { type = influence amount > 149 }
+			NOR = {	has_technology = tech_society_words_379 has_tech_option = tech_society_words_379 }
+			any_country = { 
+				is_country_type = ufp_member_world 
+				is_subject = yes
+				root = { is_overlord_to = prev }
+				has_country_flag = bajoran_republic 
+			}
+		}
+		trigger = { 
+			has_country_resource = { type = energy amount > 149 }
+			has_country_resource = { type = influence amount > 149 }
+			NOR = {	has_technology = tech_society_words_379 has_tech_option = tech_society_words_379 }
+			any_country = { 
+				is_country_type = ufp_member_world 
+				is_subject = yes
+				root = { is_overlord_to = prev }
+				has_country_flag = bajoran_republic 
+			}
+		}
+		add_energy = -150
+		add_influence = -150
+		add_research_option = tech_society_words_379
+ 		add_tech_progress = { tech = tech_society_words_379 progress = 0.10 }
+	}
+	option = { #Benzite    Benzite Efficency
+		name = theFederation.100.d
+		allow = { 
+			has_country_resource = { type = energy amount > 149 }
+			has_country_resource = { type = influence amount > 149 }
+			NOR = {	has_technology = tech_society_benzite_378 has_tech_option = tech_society_benzite_378 }
+			any_country = { 
+				is_country_type = ufp_member_world 
+				is_subject = yes
+				root = { is_overlord_to = prev }
+				has_country_flag = benzarian_commonwealth 
+			}
+		}
+		trigger = { 
+			has_country_resource = { type = energy amount > 149 }
+			has_country_resource = { type = influence amount > 149 }
+			NOR = {	has_technology = tech_society_benzite_378 has_tech_option = tech_society_benzite_378 }
+			any_country = { 
+				is_country_type = ufp_member_world 
+				is_subject = yes
+				root = { is_overlord_to = prev }
+				has_country_flag = benzarian_commonwealth 
+			}
+		}
+		add_energy = -150
+		add_influence = -150
+		add_research_option = tech_society_benzite_378
+ 		add_tech_progress = { tech = tech_society_benzite_378 progress = 0.10 }
+	}	
+	option = { #Bolian    Bolian Economics
+		name = theFederation.100.e
+		allow = { 
+			has_country_resource = { type = energy amount > 149 }
+			has_country_resource = { type = influence amount > 149 }
+			NOR = {	has_technology = tech_society_bank_373 has_tech_option = tech_society_bank_373 }
+			any_country = { 
+				is_country_type = ufp_member_world 
+				is_subject = yes
+				root = { is_overlord_to = prev }
+				has_country_flag = bolian_league 
+			}
+		}
+		trigger = { 
+			has_country_resource = { type = energy amount > 149 }
+			has_country_resource = { type = influence amount > 149 }
+			NOR = {	has_technology = tech_society_bank_373 has_tech_option = tech_society_bank_373 }
+			any_country = { 
+				is_country_type = ufp_member_world 
+				is_subject = yes
+				root = { is_overlord_to = prev }
+				has_country_flag = bolian_league 
+			}
+		}
+		add_energy = -150
+		add_influence = -150
+		add_research_option = tech_society_bank_373
+ 		add_tech_progress = { tech = tech_society_bank_373 progress = 0.10 }
+	}
+	option = { #Cardassian    Efficient Resource Exploitation
+		name = theFederation.100.f
+		allow = { 
+			has_country_resource = { type = energy amount > 149 }
+			has_country_resource = { type = influence amount > 149 }
+			NOR = {	has_technology = tech_society_statecraft_994 has_tech_option = tech_society_statecraft_994 }
+			any_country = { 
+				is_country_type = ufp_member_world 
+				is_subject = yes
+				root = { is_overlord_to = prev }
+				has_country_flag = cardassian_union 
+			}
+		}
+		trigger = { 
+			has_country_resource = { type = energy amount > 149 }
+			has_country_resource = { type = influence amount > 149 }
+			NOR = {	has_technology = tech_society_statecraft_994 has_tech_option = tech_society_statecraft_994 }
+			any_country = { 
+				is_country_type = ufp_member_world 
+				is_subject = yes
+				root = { is_overlord_to = prev }
+				has_country_flag = cardassian_union 
+			}
+		}
+		add_energy = -150
+		add_influence = -150
+		add_research_option = tech_society_statecraft_994
+ 		add_tech_progress = { tech = tech_society_statecraft_994 progress = 0.10 }
+	}
+	option = { #Cardassian    Wave Disruptors
+		name = theFederation.100.g
+		allow = { 
+			has_country_resource = { type = energy amount > 149 }
+			has_country_resource = { type = influence amount > 149 }
+			NOR = {	has_technology = tech_cardassian_phaser_1 has_tech_option = tech_cardassian_phaser_1 }
+			any_country = { 
+				is_country_type = ufp_member_world 
+				is_subject = yes
+				root = { is_overlord_to = prev }
+				has_country_flag = cardassian_union 
+			}
+		}
+		trigger = { 
+			has_country_resource = { type = energy amount > 149 }
+			has_country_resource = { type = influence amount > 149 }
+			NOR = {	has_technology = tech_cardassian_phaser_1 has_tech_option = tech_cardassian_phaser_1 }
+			any_country = { 
+				is_country_type = ufp_member_world 
+				is_subject = yes
+				root = { is_overlord_to = prev }
+				has_country_flag = cardassian_union 
+			}
+		}
+		add_energy = -150
+		add_influence = -150
+		add_research_option = tech_cardassian_phaser_1
+ 		add_tech_progress = { tech = tech_cardassian_phaser_1 progress = 0.10 }
+	}
+	option = { #Ferengi    Rules of Acquisiton 
+		name = theFederation.100.h
+		allow = { 
+			has_country_resource = { type = energy amount > 149 }
+			has_country_resource = { type = influence amount > 149 }
+			NOR = {	has_technology = tech_society_rules_376 has_tech_option = tech_society_rules_376 }
+			any_country = { 
+				is_country_type = ufp_member_world 
+				is_subject = yes
+				root = { is_overlord_to = prev }
+				has_country_flag = ferengi_alliance 
+			}
+		}
+		trigger = { 
+			has_country_resource = { type = energy amount > 149 }
+			has_country_resource = { type = influence amount > 149 }
+			NOR = {	has_technology = tech_society_rules_376 has_tech_option = tech_society_rules_376 }
+			any_country = { 
+				is_country_type = ufp_member_world 
+				is_subject = yes
+				root = { is_overlord_to = prev }
+				has_country_flag = ferengi_alliance 
+			}
+		}
+		add_energy = -150
+		add_influence = -150
+		add_research_option = tech_society_rules_376
+ 		add_tech_progress = { tech = tech_society_rules_376 progress = 0.10 }
+	}
+	option = { #Human    Pulse cannon
+		name = theFederation.100.i
+		allow = { 
+			has_country_resource = { type = energy amount > 149 }
+			has_country_resource = { type = influence amount > 149 }
+			NOR = {	has_technology = tech_phaser_cannon_1 has_tech_option = tech_phaser_cannon_1 }
+			any_country = { 
+				is_country_type = ufp_member_world 
+				is_subject = yes
+				root = { is_overlord_to = prev }
+				has_country_flag = united_earth 
+			}
+		}
+		trigger = { 
+			has_country_resource = { type = energy amount > 149 }
+			has_country_resource = { type = influence amount > 149 }
+			NOR = {	has_technology = tech_phaser_cannon_1 has_tech_option = tech_phaser_cannon_1 }
+			any_country = { 
+				is_country_type = ufp_member_world 
+				is_subject = yes
+				root = { is_overlord_to = prev }
+				has_country_flag = united_earth 
+			}
+		}
+		add_energy = -150
+		add_influence = -150
+		add_research_option = tech_phaser_cannon_1
+ 		add_tech_progress = { tech = tech_phaser_cannon_1 progress = 0.10 }
+	}
+	option = { #Human    Marine Corps
+		name = theFederation.100.j
+		allow = { 
+			has_country_resource = { type = energy amount > 149 }
+			has_country_resource = { type = influence amount > 149 }
+			NOR = {	has_technology = tech_society_statecraft_931 has_tech_option = tech_society_statecraft_931 }
+			any_country = { 
+				is_country_type = ufp_member_world 
+				is_subject = yes
+				root = { is_overlord_to = prev }
+				has_country_flag = united_earth 
+			}
+		}
+		trigger = { 
+			has_country_resource = { type = energy amount > 149 }
+			has_country_resource = { type = influence amount > 149 }
+			NOR = {	has_technology = tech_society_statecraft_931 has_tech_option = tech_society_statecraft_931 }
+			any_country = { 
+				is_country_type = ufp_member_world 
+				is_subject = yes
+				root = { is_overlord_to = prev }
+				has_country_flag = united_earth 
+			}
+		}
+		add_energy = -150
+		add_influence = -150
+		add_research_option = tech_society_statecraft_931
+ 		add_tech_progress = { tech = tech_society_statecraft_931 progress = 0.10 }
+	}		
+	option = { #Klingons    The Story of the Promise
+		name = theFederation.100.k
+		allow = { 
+			has_country_resource = { type = energy amount > 149 }
+			has_country_resource = { type = influence amount > 149 }
+			NOR = {	has_technology = tech_society_the_380 has_tech_option = tech_society_the_380 }
+			any_country = { 
+				is_country_type = ufp_member_world 
+				is_subject = yes
+				root = { is_overlord_to = prev }
+				has_country_flag = klingon_empire 
+			}
+		}
+		trigger = { 
+			has_country_resource = { type = energy amount > 149 }
+			has_country_resource = { type = influence amount > 149 }
+			NOR = {	has_technology = tech_society_the_380 has_tech_option = tech_society_the_380 }
+			any_country = { 
+				is_country_type = ufp_member_world 
+				is_subject = yes
+				root = { is_overlord_to = prev }
+				has_country_flag = klingon_empire 
+			}
+		}
+		add_energy = -150
+		add_influence = -150
+		add_research_option = tech_society_the_380
+ 		add_tech_progress = { tech = tech_society_the_380 progress = 0.10 }
+	}	
+	option = { #Tellarites    Ritualized Debating
+		name = theFederation.100.l
+		allow = { 
+			has_country_resource = { type = energy amount > 149 }
+			has_country_resource = { type = influence amount > 149 }
+			NOR = {	has_technology = tech_society_ritualized_381 has_tech_option = tech_society_ritualized_381 }
+			any_country = { 
+				is_country_type = ufp_member_world 
+				is_subject = yes
+				root = { is_overlord_to = prev }
+				has_country_flag = tellarian_technocracy 
+			}
+		}
+		trigger = { 
+			has_country_resource = { type = energy amount > 149 }
+			has_country_resource = { type = influence amount > 149 }
+			NOR = {	has_technology = tech_society_ritualized_381 has_tech_option = tech_society_ritualized_381 }
+			any_country = { 
+				is_country_type = ufp_member_world 
+				is_subject = yes
+				root = { is_overlord_to = prev }
+				has_country_flag = tellarian_technocracy 
+			}
+		}
+		add_energy = -150
+		add_influence = -150
+		add_research_option = tech_society_ritualized_381
+ 		add_tech_progress = { tech = tech_society_ritualized_381 progress = 0.10 }
+	}
+	option = { #Vulcan    Particle phasers
+		name = theFederation.100.m
+		allow = { 
+			has_country_resource = { type = energy amount > 149 }
+			has_country_resource = { type = influence amount > 149 }
+			NOR = {	has_technology = tech_particle_phaser_1 has_tech_option = tech_particle_phaser_1 }
+			any_country = { 
+				is_country_type = ufp_member_world 
+				is_subject = yes
+				root = { is_overlord_to = prev }
+				has_country_flag = vulcan_high_command 
+			}
+		}
+		trigger = { 
+			has_country_resource = { type = energy amount > 149 }
+			has_country_resource = { type = influence amount > 149 }
+			NOR = {	has_technology = tech_particle_phaser_1 has_tech_option = tech_particle_phaser_1 }
+			any_country = { 
+				is_country_type = ufp_member_world 
+				is_subject = yes
+				root = { is_overlord_to = prev }
+				has_country_flag = vulcan_high_command 
+			}
+		}
+		add_energy = -150
+		add_influence = -150
+		add_research_option = tech_particle_phaser_1
+ 		add_tech_progress = { tech = tech_particle_phaser_1 progress = 0.10 }
+	}
+	option = { #Vulcan    Teaching of Sarek
+		name = theFederation.100.n
+		allow = { 
+			has_country_resource = { type = energy amount > 149 }
+			has_country_resource = { type = influence amount > 149 }
+			NOR = {	has_technology = tech_society_teaching_375 has_tech_option = tech_society_teaching_375 }
+			any_country = { 
+				is_country_type = ufp_member_world 
+				is_subject = yes
+				root = { is_overlord_to = prev }
+				has_country_flag = vulcan_high_command 
+			}
+		}
+		trigger = { 
+			has_country_resource = { type = energy amount > 149 }
+			has_country_resource = { type = influence amount > 149 }
+			NOR = {	has_technology = tech_society_teaching_375 has_tech_option = tech_society_teaching_375 }
+			any_country = { 
+				is_country_type = ufp_member_world 
+				is_subject = yes
+				root = { is_overlord_to = prev }
+				has_country_flag = vulcan_high_command 
+			}
+		}
+		add_energy = -150
+		add_influence = -150
+		add_research_option = tech_society_teaching_375
+ 		add_tech_progress = { tech = tech_society_teaching_375 progress = 0.10 }
+	}
+	option = {
+		name = theFederation.100.zz
+		hidden_effect = { country_event = { id = theFederation.99 } }
+	}
+}
+
+
+
+country_event = {
+	id = theFederation.110
+	title = "theFederation.110.name"
+	desc = "theFederation.110.desc"
+	picture = sth_GFX_evt_federationCouncil
+	force_open = yes
+	is_triggered_only = yes
+	trigger = { has_country_flag = united_federation_of_planets }
+	immediate = { }
+	option = { #Andorian  
+		name = theFederation.110.a
+		custom_tooltip = "theFederation.110.a.tooltip"
+		allow = { 
+			NOT = {	has_modifier = em_construction_and }
+			any_country = { 
+				is_country_type = ufp_member_world 
+				is_subject = yes
+				root = { is_overlord_to = prev }
+				has_country_flag = andorian_empire 
+			}
+		}
+		trigger = { 
+			NOT = {	has_modifier = em_construction_and }
+			any_country = { 
+				is_country_type = ufp_member_world 
+				is_subject = yes
+				root = { is_overlord_to = prev }
+				has_country_flag = andorian_empire 
+			}
+		}
+		hidden_effect = {
+			remove_empire_construction_modifiers = yes
+			set_timed_country_flag = { flag = empire_modifier_changed days = 7500 }
+			add_modifier = { modifier = em_construction_and }
+		}
+	}
+	option = { #Breen  
+		name = theFederation.110.b
+		custom_tooltip = "theFederation.110.b.tooltip"
+		allow = { 
+			NOT = {	has_modifier = em_construction_bre }
+			any_country = { 
+				is_country_type = ufp_member_world 
+				is_subject = yes
+				root = { is_overlord_to = prev }
+				has_country_flag = breen_confederacy 
+			}
+		}
+		trigger = { 
+			NOT = {	has_modifier = em_construction_bre }
+			any_country = { 
+				is_country_type = ufp_member_world 
+				is_subject = yes
+				root = { is_overlord_to = prev }
+				has_country_flag = breen_confederacy 
+			}
+		}
+		hidden_effect = {
+			remove_empire_construction_modifiers = yes
+			set_timed_country_flag = { flag = empire_modifier_changed days = 7500 }
+			add_modifier = { modifier = em_construction_bre }	
+		}
+	}
+	option = { #Cardassian  
+		name = theFederation.110.c
+		custom_tooltip = "theFederation.110.c.tooltip"
+		allow = { 
+			NOT = {	has_modifier = em_construction_car }
+			any_country = { 
+				is_country_type = ufp_member_world 
+				is_subject = yes
+				root = { is_overlord_to = prev }
+				has_country_flag = cardassian_union 
+			}
+		}
+		trigger = { 
+			NOT = {	has_modifier = em_construction_car }
+			any_country = { 
+				is_country_type = ufp_member_world 
+				is_subject = yes
+				root = { is_overlord_to = prev }
+				has_country_flag = cardassian_union 
+			}
+		}
+		hidden_effect = {
+			remove_empire_construction_modifiers = yes
+			set_timed_country_flag = { flag = empire_modifier_changed days = 7500 }
+			add_modifier = { modifier = em_construction_car }
+		}
+	}
+	option = { #Ferengi  
+		name = theFederation.110.d
+		custom_tooltip = "theFederation.110.d.tooltip"
+		allow = { 
+			NOT = {	has_modifier = em_construction_fer }
+			any_country = { 
+				is_country_type = ufp_member_world 
+				is_subject = yes
+				root = { is_overlord_to = prev }
+				has_country_flag = ferengi_alliance 
+			}
+		}
+		trigger = { 
+			NOT = {	has_modifier = em_construction_fer }
+			any_country = { 
+				is_country_type = ufp_member_world 
+				is_subject = yes
+				root = { is_overlord_to = prev }
+				has_country_flag = ferengi_alliance 
+			}
+		}
+		hidden_effect = {
+			remove_empire_construction_modifiers = yes
+			set_timed_country_flag = { flag = empire_modifier_changed days = 7500 }
+			add_modifier = { modifier = em_construction_fer }
+		}
+	}
+	option = { #Dominion  
+		name = theFederation.110.e
+		custom_tooltip = "theFederation.110.e.tooltip"
+		allow = { 
+			NOT = {	has_modifier = em_construction_dom }
+			any_country = { 
+				is_country_type = ufp_member_world 
+				is_subject = yes
+				root = { is_overlord_to = prev }
+				has_country_flag = the_dominion
+			}
+		}
+		trigger = { 
+			NOT = {	has_modifier = em_construction_dom }
+			any_country = { 
+				is_country_type = ufp_member_world 
+				is_subject = yes
+				root = { is_overlord_to = prev }
+				has_country_flag = the_dominion
+			}
+		}
+		hidden_effect = {	
+			remove_empire_construction_modifiers = yes
+			set_timed_country_flag = { flag = empire_modifier_changed days = 7500 }
+			add_modifier = { modifier = em_construction_dom }	
+		}
+	}
+	option = { #Human  
+		name = theFederation.110.f
+		custom_tooltip = "theFederation.110.f.tooltip"
+		allow = { 
+			NOT = {	has_modifier = em_construction_fed }
+			any_country = { 
+				is_country_type = ufp_member_world 
+				is_subject = yes
+				root = { is_overlord_to = prev }
+				has_country_flag = united_earth
+			}
+		}
+		trigger = { 
+			NOT = {	has_modifier = em_construction_fed }
+			any_country = { 
+				is_country_type = ufp_member_world 
+				is_subject = yes
+				root = { is_overlord_to = prev }
+				has_country_flag = united_earth
+			}
+		}
+		hidden_effect = {
+			remove_empire_construction_modifiers = yes
+			set_timed_country_flag = { flag = empire_modifier_changed days = 7500 }
+			add_modifier = { modifier = em_construction_fed }
+		}		
+	}	
+	option = { #Husnock  
+		name = theFederation.110.g
+		custom_tooltip = "theFederation.110.g.tooltip"
+		allow = { 
+			NOT = {	has_modifier = em_construction_hus }
+			any_country = { 
+				is_country_type = ufp_member_world 
+				is_subject = yes
+				root = { is_overlord_to = prev }
+				has_country_flag = husnock_ascendency
+			}
+		}
+		trigger = { 
+			NOT = {	has_modifier = em_construction_hus }
+			any_country = { 
+				is_country_type = ufp_member_world 
+				is_subject = yes
+				root = { is_overlord_to = prev }
+				has_country_flag = husnock_ascendency
+			}
+		}
+		hidden_effect = {
+			remove_empire_construction_modifiers = yes
+			set_timed_country_flag = { flag = empire_modifier_changed days = 7500 }
+			add_modifier = { modifier = em_construction_hus }
+		}		
+	}
+	option = { #Kazon  
+		name = theFederation.110.h
+		custom_tooltip = "theFederation.110.h.tooltip"
+		allow = { 
+			NOT = {	has_modifier = em_construction_kaz }
+			any_country = { 
+				is_country_type = ufp_member_world 
+				is_subject = yes
+				root = { is_overlord_to = prev }
+				has_country_flag = kazon_sects
+			}
+		}
+		trigger = { 
+			NOT = {	has_modifier = em_construction_kaz }
+			any_country = { 
+				is_country_type = ufp_member_world 
+				is_subject = yes
+				root = { is_overlord_to = prev }
+				has_country_flag = kazon_sects
+			}
+		}
+		hidden_effect = {
+			remove_empire_construction_modifiers = yes
+			set_timed_country_flag = { flag = empire_modifier_changed days = 7500 }
+			add_modifier = { modifier = em_construction_kaz }
+		}		
+	}
+	option = { #Klingon  
+		name = theFederation.110.i
+		custom_tooltip = "theFederation.110.i.tooltip"
+		allow = { 
+			NOT = {	has_modifier = em_construction_kdf }
+			any_country = { 
+				is_country_type = ufp_member_world 
+				is_subject = yes
+				root = { is_overlord_to = prev }
+				has_country_flag = klingon_empire
+			}
+		}
+		trigger = { 
+			NOT = {	has_modifier = em_construction_kdf }
+			any_country = { 
+				is_country_type = ufp_member_world 
+				is_subject = yes
+				root = { is_overlord_to = prev }
+				has_country_flag = klingon_empire
+			}
+		}
+		hidden_effect = {
+			remove_empire_construction_modifiers = yes
+			set_timed_country_flag = { flag = empire_modifier_changed days = 7500 }
+			add_modifier = { modifier = em_construction_kdf }	
+		}
+	}
+	option = { #Kobali  
+		name = theFederation.110.j
+		custom_tooltip = "theFederation.110.j.tooltip"
+		allow = { 
+			NOT = {	has_modifier = em_construction_kob }
+			any_country = { 
+				is_country_type = ufp_member_world 
+				is_subject = yes
+				root = { is_overlord_to = prev }
+				has_country_flag = kobali_republic
+			}
+		}
+		trigger = { 
+			NOT = {	has_modifier = em_construction_kob }
+			any_country = { 
+				is_country_type = ufp_member_world 
+				is_subject = yes
+				root = { is_overlord_to = prev }
+				has_country_flag = kobali_republic
+			}
+		}
+		hidden_effect = {
+			remove_empire_construction_modifiers = yes
+			set_timed_country_flag = { flag = empire_modifier_changed days = 7500 }
+			add_modifier = { modifier = em_construction_kob }
+		}
+	}
+	option = { #Orion  
+		name = theFederation.110.k
+		custom_tooltip = "theFederation.110.k.tooltip"
+		allow = { 
+			NOT = {	has_modifier = em_construction_ori }
+			any_country = { 
+				is_country_type = ufp_member_world 
+				is_subject = yes
+				root = { is_overlord_to = prev }
+				has_country_flag = orion_free_states
+			}
+		}
+		trigger = { 
+			NOT = {	has_modifier = em_construction_ori }
+			any_country = { 
+				is_country_type = ufp_member_world 
+				is_subject = yes
+				root = { is_overlord_to = prev }
+				has_country_flag = orion_free_states
+			}
+		}
+		hidden_effect = {
+			remove_empire_construction_modifiers = yes
+			set_timed_country_flag = { flag = empire_modifier_changed days = 7500 }
+			add_modifier = { modifier = em_construction_ori }	
+		}
+	}
+	option = { #Romulan  
+		name = theFederation.110.l
+		custom_tooltip = "theFederation.110.l.tooltip"
+		allow = { 
+			NOT = {	has_modifier = em_construction_rom }
+			any_country = { 
+				is_country_type = ufp_member_world 
+				is_subject = yes
+				root = { is_overlord_to = prev }
+				has_country_flag = romulan_star_empire
+			}
+		}
+		trigger = { 
+			NOT = {	has_modifier = em_construction_rom }
+			any_country = { 
+				is_country_type = ufp_member_world 
+				is_subject = yes
+				root = { is_overlord_to = prev }
+				has_country_flag = romulan_star_empire
+			}
+		}
+		hidden_effect = {
+			remove_empire_construction_modifiers = yes
+			set_timed_country_flag = { flag = empire_modifier_changed days = 7500 }
+			add_modifier = { modifier = em_construction_rom }
+		}		
+	}
+	option = { #Sheliak  
+		name = theFederation.110.m
+		custom_tooltip = "theFederation.110.m.tooltip"
+		allow = { 
+			NOT = {	has_modifier = em_construction_she }
+			any_country = { 
+				is_country_type = ufp_member_world 
+				is_subject = yes
+				root = { is_overlord_to = prev }
+				has_country_flag = sheliak_corporate
+			}
+		}
+		trigger = { 
+			NOT = {	has_modifier = em_construction_she }
+			any_country = { 
+				is_country_type = ufp_member_world 
+				is_subject = yes
+				root = { is_overlord_to = prev }
+				has_country_flag = sheliak_corporate
+			}
+		}
+		hidden_effect = {
+			remove_empire_construction_modifiers = yes
+			set_timed_country_flag = { flag = empire_modifier_changed days = 7500 }
+			add_modifier = { modifier = em_construction_she }
+		}		
+	}
+	option = { #Suliban 
+		name = theFederation.110.n
+		custom_tooltip = "theFederation.110.n.tooltip"
+		allow = { 
+			NOT = {	has_modifier = em_construction_sul }
+			any_country = { 
+				is_country_type = ufp_member_world 
+				is_subject = yes
+				root = { is_overlord_to = prev }
+				has_country_flag = suliban_cabal
+			}
+		}
+		trigger = { 
+			NOT = {	has_modifier = em_construction_sul }
+			any_country = { 
+				is_country_type = ufp_member_world 
+				is_subject = yes
+				root = { is_overlord_to = prev }
+				has_country_flag = suliban_cabal
+			}
+		}
+		hidden_effect = {
+			remove_empire_construction_modifiers = yes
+			set_timed_country_flag = { flag = empire_modifier_changed days = 7500 }
+			add_modifier = { modifier = em_construction_sul }
+		}		
+	}
+	option = { #Tellarite 
+		name = theFederation.110.o
+		custom_tooltip = "theFederation.110.o.tooltip"
+		allow = { 
+			NOT = {	has_modifier = em_construction_tel }
+			any_country = { 
+				is_country_type = ufp_member_world 
+				is_subject = yes
+				root = { is_overlord_to = prev }
+				has_country_flag = tellarian_technocracy
+			}
+		}
+		trigger = { 
+			NOT = {	has_modifier = em_construction_tel }
+			any_country = { 
+				is_country_type = ufp_member_world 
+				is_subject = yes
+				root = { is_overlord_to = prev }
+				has_country_flag = tellarian_technocracy
+			}
+		}
+		hidden_effect = {
+			remove_empire_construction_modifiers = yes
+			set_timed_country_flag = { flag = empire_modifier_changed days = 7500 }
+			add_modifier = { modifier = em_construction_tel }
+		}		
+	}
+	option = { #Tholian 
+		name = theFederation.110.p
+		custom_tooltip = "theFederation.110.p.tooltip"
+		allow = { 
+			NOT = {	has_modifier = em_construction_tho }
+			any_country = { 
+				is_country_type = ufp_member_world 
+				is_subject = yes
+				root = { is_overlord_to = prev }
+				has_country_flag = tholian_assembly
+			}
+		}
+		trigger = { 
+			NOT = {	has_modifier = em_construction_tho }
+			any_country = { 
+				is_country_type = ufp_member_world 
+				is_subject = yes
+				root = { is_overlord_to = prev }
+				has_country_flag = tholian_assembly
+			}
+		}
+		hidden_effect = {
+			remove_empire_construction_modifiers = yes
+			set_timed_country_flag = { flag = empire_modifier_changed days = 7500 }
+			add_modifier = { modifier = em_construction_tho }
+		}		
+	}	
+	option = { #Vidiian
+		name = theFederation.110.q
+		custom_tooltip = "theFederation.110.q.tooltip"
+		allow = { 
+			NOT = {	has_modifier = em_construction_vid }
+			any_country = { 
+				is_country_type = ufp_member_world 
+				is_subject = yes
+				root = { is_overlord_to = prev }
+				has_country_flag = vidiian_sodality
+			}
+		}
+		trigger = { 
+			NOT = {	has_modifier = em_construction_vid }
+			any_country = { 
+				is_country_type = ufp_member_world 
+				is_subject = yes
+				root = { is_overlord_to = prev }
+				has_country_flag = vidiian_sodality
+			}
+		}
+		hidden_effect = {
+			remove_empire_construction_modifiers = yes
+			set_timed_country_flag = { flag = empire_modifier_changed days = 7500 }
+			add_modifier = { modifier = em_construction_vid }
+		}		
+	}
+	option = { #Vulcan
+		name = theFederation.110.r
+		custom_tooltip = "theFederation.110.r.tooltip"
+		allow = { 
+			NOT = {	has_modifier = em_construction_vul }
+			any_country = { 
+				is_country_type = ufp_member_world 
+				is_subject = yes
+				root = { is_overlord_to = prev }
+				has_country_flag = vulcan_high_command
+			}
+		}
+		trigger = { 
+			NOT = {	has_modifier = em_construction_vul }
+			any_country = { 
+				is_country_type = ufp_member_world 
+				is_subject = yes
+				root = { is_overlord_to = prev }
+				has_country_flag = vulcan_high_command
+			}
+		}
+		hidden_effect = {	
+			remove_empire_construction_modifiers = yes
+			set_timed_country_flag = { flag = empire_modifier_changed days = 7500 }
+			add_modifier = { modifier = em_construction_vul }
+		}		
+	}
+	option = { #Xindi
+		name = theFederation.110.s
+		custom_tooltip = "theFederation.110.s.tooltip"
+		allow = { 
+			NOT = {	has_modifier = em_construction_xin }
+			any_country = { 
+				is_country_type = ufp_member_world 
+				is_subject = yes
+				root = { is_overlord_to = prev }
+				has_country_flag = xindi_council
+			}
+		}
+		trigger = { 
+			NOT = {	has_modifier = em_construction_xin }
+			any_country = { 
+				is_country_type = ufp_member_world 
+				is_subject = yes
+				root = { is_overlord_to = prev }
+				has_country_flag = xindi_council
+			}
+		}
+		hidden_effect = {
+			remove_empire_construction_modifiers = yes
+			set_timed_country_flag = { flag = empire_modifier_changed days = 7500 }
+			add_modifier = { modifier = em_construction_xin }
+		}		
+	}						
+	option = {
+		name = theFederation.110.zz
+		hidden_effect = { country_event = { id = theFederation.90 } }
+	}
+}
+
+#Mediate Dispute - First Country
+country_event = {
+	id = theFederation.120
+	title = "theFederation.120.name"
+	desc = "theFederation.120.desc"
+	picture = sth_GFX_evt_federationCouncil
+	force_open = yes
+	is_triggered_only = yes
+	trigger = { has_country_flag = united_federation_of_planets }
+	immediate = { 
+		random_relation = { 
+			limit = {
+				any_neighbor_country = { is_same_value = ROOT }
+				is_normal_country = yes
+				is_assimilator = no #REPLACE WITH CAN DIPLOMACY
+				has_communications = ROOT
+				NOR = { 
+					is_same_value = ROOT 
+					is_at_war_with = ROOT
+				}
+				opinion = { who = ROOT value > 20 }
+				any_country = {
+					is_normal_country = yes
+					NOR = { is_same_value = ROOT is_same_value = PREV }
+					NOT = { opinion = { who = PREV value > -20 } }
+					has_communications = ROOT
+					has_communications = PREV
+				}
+			}
+			save_event_target_as = mediate1
+		}
+		random_relation = { 
+			limit = { 
+				is_normal_country = yes
+				is_assimilator = no #REPLACE WITH CAN DIPLOMACY
+				has_communications = ROOT
+				NOR = { 
+					is_same_value = ROOT
+					AND = {
+						exists = event_target:mediate1
+						is_same_value = event_target:mediate1
+					}
+					is_at_war_with = ROOT
+				}
+				opinion = { who = ROOT value > 20 }
+				any_country = {
+					is_normal_country = yes
+					NOR = { is_same_value = ROOT is_same_value = PREV }
+					NOT = { opinion = { who = PREV value > -20 } }
+					has_communications = ROOT
+					has_communications = PREV
+				}
+			}
+			save_event_target_as = mediate2
+		}
+		random_relation = { 
+			limit = { 
+				is_normal_country = yes
+				is_assimilator = no #REPLACE WITH CAN DIPLOMACY
+				has_communications = ROOT
+				NOR = { 
+					is_same_value = ROOT
+					AND = {
+						exists = event_target:mediate1
+						is_same_value = event_target:mediate1
+					}
+					is_same_value = event_target:mediate2
+					is_at_war_with = ROOT
+				}
+				opinion = { who = ROOT value > 20 }
+				any_country = {
+					is_normal_country = yes
+					NOR = { is_same_value = ROOT is_same_value = PREV }
+					NOT = { opinion = { who = PREV value > -20 } }
+					has_communications = ROOT
+					has_communications = PREV
+				}
+			}
+			save_event_target_as = mediate3
+		}
+		random_relation = { 
+			limit = { 
+				is_normal_country = yes
+				is_assimilator = no #REPLACE WITH CAN DIPLOMACY
+				has_communications = ROOT
+				NOR = { 
+					is_same_value = ROOT
+					AND = {
+						exists = event_target:mediate1
+						is_same_value = event_target:mediate1
+					} 
+					is_same_value = event_target:mediate2
+					is_same_value = event_target:mediate3
+					is_at_war_with = ROOT
+				}
+				opinion = { who = ROOT value > 20 }
+				any_country = {
+					is_normal_country = yes
+					NOR = { is_same_value = ROOT is_same_value = PREV }
+					NOT = { opinion = { who = PREV value > -20 } }
+					has_communications = ROOT
+					has_communications = PREV
+				}
+			}
+			save_event_target_as = mediate4
+		}
+	}
+	option = {
+		name = theFederation.120.a
+		trigger = { exists = event_target:mediate1 }
+		allow = { exists = event_target:mediate1 }
+		country_event = { id = theFederation.121 scopes = { from = event_target:mediate1 } }
+	}
+	option = {
+		name = theFederation.120.b
+		trigger = { exists = event_target:mediate2 }
+		allow = { exists = event_target:mediate2 }
+		country_event = { id = theFederation.121 scopes = { from = event_target:mediate2 } }
+	}
+	option = {
+		name = theFederation.120.c
+		trigger = { exists = event_target:mediate3 }
+		allow = { exists = event_target:mediate3 }
+		country_event = { id = theFederation.121 scopes = { from = event_target:mediate3 } }
+	}
+	option = {
+		name = theFederation.120.d
+		trigger = { exists = event_target:mediate4 }
+		allow = { exists = event_target:mediate4 }
+		country_event = { id = theFederation.121 scopes = { from = event_target:mediate4 } }
+	}
+	option = { 
+		name = theFederation.120.e #New List
+		ai_chance = { factor = 0 }
+		hidden_effect = { country_event = { id = theFederation.120 } }
+	}
+	option = { 
+		name = theFederation.120.f #Back
+		hidden_effect = { country_event = { id = theFederation.90 } }
+	}
+}
+
+#Mediate Dispute
+country_event = {
+	id = theFederation.121
+	title = "theFederation.121.name"
+	desc = "theFederation.121.desc"
+	picture = sth_GFX_evt_federationCouncil
+	force_open = yes
+	is_triggered_only = yes
+	trigger = { has_country_flag = united_federation_of_planets }
+	immediate = { 
+		from = {
+			random_relation = { 
+				limit = {
+					is_normal_country = yes
+					is_assimilator = no #REPLACE WITH CAN DIPLOMACY
+					has_communications = root.from
+					NOR = { 
+						is_same_value = root.from
+						is_same_value = root
+						is_at_war_with = root.from
+					}
+					NOT = { opinion = { who = root.from value > -20 } }
+				}
+				save_event_target_as = mediated1
+			}
+			random_relation = { 
+				limit = {
+					is_normal_country = yes
+					is_assimilator = no #REPLACE WITH CAN DIPLOMACY
+					has_communications = root.from
+					NOR = { 
+						is_same_value = root.from
+						is_same_value = root
+						is_at_war_with = root.from
+						is_same_value = event_target:mediated1
+					}
+					NOT = { opinion = { who = root.from value > -20 } }
+				}
+				save_event_target_as = mediated2
+			}
+			random_relation = { 
+				limit = {
+					is_normal_country = yes
+					is_assimilator = no #REPLACE WITH CAN DIPLOMACY
+					has_communications = root.from
+					NOR = { 
+						is_same_value = root.from
+						is_same_value = root
+						is_at_war_with = root.from
+						is_same_value = event_target:mediated1
+						is_same_value = event_target:mediated2
+					}
+					NOT = { opinion = { who = root.from value > -20 } }
+				}
+				save_event_target_as = mediated3
+			}
+			random_relation = { 
+				limit = {
+					is_normal_country = yes
+					is_assimilator = no #REPLACE WITH CAN DIPLOMACY
+					has_communications = root.from
+					NOR = { 
+						is_same_value = root.from
+						is_same_value = root
+						is_at_war_with = root.from
+						is_same_value = event_target:mediated1
+						is_same_value = event_target:mediated2
+						is_same_value = event_target:mediated3
+					}
+					NOT = { opinion = { who = root.from value > -20 } }
+				}
+				save_event_target_as = mediated4
+			}
+		}
+	}
+	option = {
+		name = theFederation.121.a
+		trigger = { exists = event_target:mediated1 }
+		allow = { exists = event_target:mediated1 }
+		country_event = { id = theFederation.122 scopes = { from = from fromfrom = event_target:mediated1 } }
+	}
+	option = {
+		name = theFederation.121.b
+		trigger = { exists = event_target:mediated2 }
+		allow = { exists = event_target:mediated2 }
+		country_event = { id = theFederation.122 scopes = { from = from fromfrom = event_target:mediated2 } }
+	}
+	option = {
+		name = theFederation.121.c
+		trigger = { exists = event_target:mediated3 }
+		allow = { exists = event_target:mediated3 }
+		country_event = { id = theFederation.122 scopes = { from = from fromfrom = event_target:mediated3 } }
+	}
+	option = {
+		name = theFederation.121.d
+		trigger = { exists = event_target:mediated4 }
+		allow = { exists = event_target:mediated4 }
+		country_event = { id = theFederation.122 scopes = { from = from fromfrom = event_target:mediated4 } }
+	}
+	option = { 
+		name = theFederation.121.e #New List
+		ai_chance = { factor = 0 }
+		hidden_effect = { country_event = { id = theFederation.121 scopes = { from = from } } }
+	}
+	option = { 
+		name = theFederation.121.f #Back
+		hidden_effect = { country_event = { id = theFederation.120 } }
+	}
+}
+
+#Mediate Dispute Commit
+country_event = {
+	id = theFederation.122
+	title = "theFederation.122.name"
+	desc = "theFederation.122.desc"
+	picture = sth_GFX_evt_federationCouncil
+	force_open = yes
+	is_triggered_only = yes
+	trigger = { has_country_flag = united_federation_of_planets }
+	immediate = { }
+	option = {
+		name = theFederation.122.a #Accept from is Feds fromfrom is Country B
+		hidden_effect = { from = { country_event = { id = theFederation.123 days = 7 scopes = { from = root fromfrom = root.fromfrom } } } }
+	}	
+	option = { 
+		name = theFederation.122.b #Back
+		hidden_effect = { country_event = { id = theFederation.121 scopes = { from = from } } }
+	}
+}
+
+#Mediate Country A Notification
+country_event = {
+	id = theFederation.123
+	title = "theFederation.123.name"
+	desc = "theFederation.123.desc"
+	picture = sth_GFX_evt_federationCouncil
+	force_open = yes
+	is_triggered_only = yes
+	trigger = { }
+	immediate = { }
+	option = {
+		name = theFederation.123.a #Accept from is Feds, fromfrom is Country A
+		ai_chance = { factor = 5 }
+		hidden_effect = { fromfrom = { country_event = { id = theFederation.124 days = 7 scopes = { from = root.from fromfrom = root } } } }
+	}	
+	option = { 
+		name = theFederation.123.z #Reject
+		ai_chance = { factor = 1 }
+		hidden_effect = { 
+			from = { country_event = { id = theFederation.125 days = 7 scopes = { from = root fromfrom = root.fromfrom } } } 
+		}
+	}
+}
+
+#Mediate Country B Notification
+country_event = {
+	id = theFederation.124
+	title = "theFederation.124.name"
+	desc = "theFederation.124.desc"
+	picture = sth_GFX_evt_federationCouncil
+	force_open = yes
+	is_triggered_only = yes
+	trigger = { }
+	immediate = { }
+	option = {
+		name = theFederation.124.a #Accept from is Country A, fromfrom is Country B
+		ai_chance = { factor = 5 }
+		hidden_effect = { 
+			from = { country_event = { id = theFederation.126 days = 7 scopes = { from = root.fromfrom fromfrom = root } } } 
+			fromfrom = { country_event = { id = theFederation.133 days = 7 scopes = { from = root.from fromfrom = root } } }
+		}
+	}	
+	option = { 
+		name = theFederation.124.z #Reject
+		ai_chance = { factor = 1 }
+		hidden_effect = { 
+			from = { country_event = { id = theFederation.127 days = 7 scopes = { from = root.fromfrom fromfrom = root } } }
+			fromfrom = { country_event = { id = theFederation.128 days = 7 scopes = { from = root.from fromfrom = root } } }
+		}
+	}
+}
+
+#Country A - Rejected (Feds)
+country_event = {
+	id = theFederation.125
+	title = "theFederation.125.name"
+	desc = "theFederation.125.desc"
+	picture = sth_GFX_evt_federationCouncil
+	force_open = yes
+	is_triggered_only = yes
+	trigger = { }
+	immediate = { }
+	option = { name = theFederation.125.a }	
+}
+#Country B - Rejected (Feds)
+country_event = {
+	id = theFederation.127
+	title = "theFederation.127.name"
+	desc = "theFederation.127.desc"
+	picture = sth_GFX_evt_federationCouncil
+	force_open = yes
+	is_triggered_only = yes
+	trigger = { }
+	immediate = { }
+	option = { name = theFederation.127.a }	
+}
+#Country B - Rejected (Country A)
+country_event = {
+	id = theFederation.128
+	title = "theFederation.128.name"
+	desc = "theFederation.128.desc"
+	picture = sth_GFX_evt_federationCouncil
+	force_open = yes
+	is_triggered_only = yes
+	trigger = { }
+	immediate = { }
+	option = { name = theFederation.128.a }	
+}
+
+#Accepted - Feds
+country_event = {
+	id = theFederation.126
+	title = "theFederation.126.name"
+	desc = "theFederation.126.desc"
+	picture = sth_GFX_evt_federationCouncil
+	force_open = yes
+	is_triggered_only = yes
+	trigger = { }
+	immediate = { 
+		from = { save_global_event_target_as = fedCouncilMediateA }
+		fromfrom = { save_global_event_target_as = fedCouncilMediateB }
+		random_list = {
+			10 = {
+				enable_special_project = { name = "FED_MEDIATE_DISPUTE_PROJECT_1A" owner = ROOT location = from.capital_scope }
+			}
+			10 = {
+				modifier = { factor = 0 fromfrom = { has_closed_borders = root } }
+				enable_special_project = { name = "FED_MEDIATE_DISPUTE_PROJECT_1B" owner = ROOT location = fromfrom.capital_scope }
+			}
+		}
+	}
+	option = { 
+		name = theFederation.126.a
+	}	
+}
+#Accepted - Country A
+country_event = {
+	id = theFederation.133
+	title = "theFederation.133.name"
+	desc = "theFederation.133.desc"
+	picture = sth_GFX_evt_federationCouncil
+	force_open = yes
+	is_triggered_only = yes
+	trigger = { }
+	immediate = { }
+	option = { name = theFederation.133.a }	
+}
+
+#Success
+country_event = {
+	id = theFederation.129
+	title = "theFederation.129.name"
+	desc = "theFederation.129.desc"
+	picture = sth_GFX_evt_federationCouncil
+	force_open = yes
+	is_triggered_only = yes
+	immediate = { 
+		from = { country_event = { id = theFederation.131 scopes = { from = root fromfrom = root.fromfrom } } }
+		fromfrom = { country_event = { id = theFederation.131 scopes = { from = root fromfrom = root.from } } }
+	}
+	option = { 
+		name = theFederation.129.a
+		from = { 
+			add_trust = { amount = 30 who = root.fromfrom } 
+			add_trust = { amount = 10 who = root } 
+		}
+		fromfrom = { add_trust = { amount = 30 who = root.from } add_trust = { amount = 10 who = root } }
+	}
+}
+
+#Failure
+country_event = {
+	id = theFederation.130
+	title = "theFederation.130.name"
+	desc = "theFederation.130.desc"
+	picture = sth_GFX_evt_federationCouncil
+	force_open = yes
+	is_triggered_only = yes
+	immediate = { 
+		from = { country_event = { id = theFederation.132 scopes = { from = root fromfrom = root.fromfrom } } }
+		fromfrom = { country_event = { id = theFederation.132 scopes = { from = root fromfrom = root.from } } }
+	}
+	option = { 
+		name = theFederation.130.a
+		from = { add_trust = { amount = -20 who = root } }
+		fromfrom = { add_trust = { amount = -20 who = root } }
+	}
+}
+
+#Success - Notification
+country_event = {
+	id = theFederation.131
+	title = "theFederation.131.name"
+	desc = "theFederation.131.desc"
+	picture = sth_GFX_evt_federationCouncil
+	force_open = yes
+	is_triggered_only = yes
+	trigger = { }
+	option = { 
+		name = theFederation.131.a
+		tooltip = { add_trust = { amount = 30 who = fromfrom } add_trust = { amount = 10 who = from } }
+	}
+}
+#Failure - Notification
+country_event = {
+	id = theFederation.132
+	title = "theFederation.132.name"
+	desc = "theFederation.132.desc"
+	picture = sth_GFX_evt_federationCouncil
+	force_open = yes
+	is_triggered_only = yes
+	option = { 
+		name = theFederation.132.a
+		tooltip = { add_trust = { amount = -10 who = from } }
+	}
+}
+
+#Condemn War Notificaiton - Negative
+country_event = {
+	id = theFederation.140
+	title = "theFederation.140.name"
+	desc = "theFederation.140.desc"
+	picture = sth_GFX_evt_federationCouncil
+	force_open = yes
+	is_triggered_only = yes
+	option = { 
+		name = theFederation.140.a
+		tooltip = { add_opinion_modifier = { who = from modifier = opinion_insult } }
+	}
+}
+#Condemn War Notificaiton - Positive
+country_event = {
+	id = theFederation.141
+	title = "theFederation.141.name"
+	desc = "theFederation.141.desc"
+	picture = sth_GFX_evt_federationCouncil
+	force_open = yes
+	is_triggered_only = yes
+	option = { 
+		name = theFederation.141.a
+		add_opinion_modifier = { who = from modifier = opinion_small_boost }
+	}
+}
+
+#Small Diplomatic Notification - Country A
+country_event = {
+	id = theFederation.142
+	title = "theFederation.142.name"
+	desc = "theFederation.142.desc"
+	picture = sth_GFX_evt_federationCouncil
+	force_open = yes
+	is_triggered_only = yes
+	option = { 
+		name = theFederation.142.a
+		ai_chance = { factor = 3 }
+		add_opinion_modifier = { who = from modifier = opinion_small_boost }
+		hidden_effect = { from = { country_event = { id = theFederation.145 days = 3 scopes = { from = root } } } }
+	}
+	option = { 
+		name = theFederation.142.b
+		hidden_effect = { from = { country_event = { id = theFederation.148 days = 3 scopes = { from = root } } } }
+	}
+}
+#Medium Diplomatic Notification - Country A
+country_event = {
+	id = theFederation.143
+	title = "theFederation.143.name"
+	desc = "theFederation.143.desc"
+	picture = sth_GFX_evt_federationCouncil
+	force_open = yes
+	is_triggered_only = yes
+	option = { 
+		name = theFederation.143.a
+		ai_chance = { factor = 5 }
+		add_opinion_modifier = { who = from modifier = opinion_medium_boost }
+		hidden_effect = { from = { country_event = { id = theFederation.146 days = 3 scopes = { from = root } } } }
+		add_influence = 90
+	}
+	option = { 
+		name = theFederation.143.b
+		hidden_effect = { from = { country_event = { id = theFederation.148 days = 3 scopes = { from = root } } } }
+		add_influence = 90
+	}
+}
+#Large Diplomatic Notification - Country A
+country_event = {
+	id = theFederation.144
+	title = "theFederation.144.name"
+	desc = "theFederation.144.desc"
+	picture = sth_GFX_evt_federationCouncil
+	force_open = yes
+	is_triggered_only = yes
+	option = { 
+		name = theFederation.144.a
+		ai_chance = { factor = 7 }
+		tooltip = { add_opinion_modifier = { who = from modifier = opinion_large_boost } }
+		hidden_effect = { from = { country_event = { id = theFederation.147 days = 3 scopes = { from = root } } } }
+		add_influence = 200 
+	}
+	option = { 
+		name = theFederation.144.b
+		hidden_effect = { from = { country_event = { id = theFederation.148 days = 3 scopes = { from = root } } } }
+		add_influence = 200 
+	}
+}
+
+#Small Diplomatic Success Notification - Feds
+country_event = {
+	id = theFederation.145
+	title = "theFederation.145.name"
+	desc = "theFederation.145.desc"
+	picture = sth_GFX_evt_federationCouncil
+	force_open = yes
+	is_triggered_only = yes
+	option = { 
+		name = theFederation.145.a
+		tooltip = { from = { add_opinion_modifier = { who = root modifier = opinion_small_boost } } }
+	}
+}
+
+#Medium Diplomatic Success Notification - Feds
+country_event = {
+	id = theFederation.146
+	title = "theFederation.146.name"
+	desc = "theFederation.146.desc"
+	picture = sth_GFX_evt_federationCouncil
+	force_open = yes
+	is_triggered_only = yes
+	option = { 
+		name = theFederation.146.a
+		tooltip = { from = { add_opinion_modifier = { who = root modifier = opinion_medium_boost } } }
+	}
+}
+
+#Large Diplomatic Success Notification - Feds
+country_event = {
+	id = theFederation.147
+	title = "theFederation.147.name"
+	desc = "theFederation.147.desc"
+	picture = sth_GFX_evt_federationCouncil
+	force_open = yes
+	is_triggered_only = yes
+	option = { 
+		name = theFederation.147.a
+		tooltip = { from = { add_opinion_modifier = { who = root modifier = opinion_large_boost } } }
+	}
+}
+
+#Diplomatic Failure Notification - Feds
+country_event = {
+	id = theFederation.148
+	title = "theFederation.148.name"
+	desc = "theFederation.148.desc"
+	picture = sth_GFX_evt_federationCouncil
+	force_open = yes
+	is_triggered_only = yes
+	option = { 
+		name = theFederation.148.a
+	}
+}

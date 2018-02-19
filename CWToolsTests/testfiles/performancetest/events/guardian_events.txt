@@ -1,0 +1,10 @@
+#################################
+### Guardian & Enclave Events ###
+### by Maximilian Olbers	  ###
+### & Niclas Karlsson		  ###
+### & Rufus Tronde			  ###
+### & Henrik Eklund			  ###
+# STNH - Capek 1.8.0 Compat
+#################################
+
+namespace = guardian

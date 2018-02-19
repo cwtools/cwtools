@@ -1,0 +1,301 @@
+@stage_1_research_bonus	= 30
+@stage_2_research_bonus	= 60
+@stage_3_research_bonus	= 90
+@stage_4_research_bonus	= 100
+@entity_x				= 0
+@entity_y 				= -20
+
+
+think_tank_0 = {
+	entity = "construction_platform_entity"
+	construction_entity = "construction_platform_entity"
+	portrait = "GFX_megastructure_construction_background"
+	place_entity_on_planet_plane = no
+
+	place_entity_on_planet_plane = no
+	entity_offset = { x = @entity_x y = @entity_y }
+
+	build_time = 1800
+	build_cost = {
+		minerals = 10000
+		influence = 300
+	}
+
+	maintenance = {
+		energy = 5
+	}
+	
+	potential = {
+		has_ascension_perk = ap_galactic_wonders
+	}
+	
+	possible = {
+		custom_tooltip = {
+			fail_text = "requires_inside_border"
+			is_inside_border = from
+		}
+	}
+	
+	placement_rules = {
+		planet_possible = {
+			custom_tooltip = {
+				fail_text = "requires_no_existing_megastructure"
+				has_any_megastructure = no
+				NOR = {
+					has_planet_flag = megastructure
+					has_planet_flag = has_megastructure
+				}
+			}
+			custom_tooltip = {
+				fail_text = "requires_no_existing_megastructure"
+				NOT = { solar_system = { has_any_megastructure = yes } }
+			}
+			custom_tooltip = {
+				fail_text = "requires_survey_not_habitable"
+				is_surveyed = {			# prevent leaking habitability information
+					who = prev.from
+					status = yes
+				}
+				habitable_planet = no	# prevent the spaceport colliding with the think tank
+				habitable_structure = no
+			}
+			custom_tooltip = {
+				fail_text = "requires_no_anomaly"
+				NOT = { has_anomaly = yes }
+			}
+
+ 			# balance for think tanks
+			custom_tooltip = {
+				fail_text = "requires_not_minor_planetary_body"
+				NOR = {
+					is_asteroid = yes
+					is_moon = yes
+				}
+			}
+			custom_tooltip = {
+				fail_text = "requires_not_star"
+				is_star = no
+			}
+			custom_tooltip = {
+				fail_text = "requires_not_ring_world"
+				is_ringworld = no
+			}
+		} # use these for all non-star megastructures
+	}
+	
+	ai_weight = {
+		factor = 10
+		modifier = {
+			factor = 2.0
+			OR = {
+				has_ethic = ethic_materialist
+				has_ethic = ethic_fanatic_materialist
+			}
+		}
+		
+		modifier = {
+			factor = 0.1
+			has_any_megastructure_in_empire = yes
+		}
+		
+		modifier = {
+			factor = 0
+			any_system_within_border = {
+				OR = {
+					has_megastructure = think_tank_1
+					has_megastructure = think_tank_2
+					has_megastructure = think_tank_3
+					has_megastructure = think_tank_4
+				}
+			}
+		}
+	}
+	
+	on_build_start = {}
+	on_build_cancel = {}
+	on_build_complete = {
+		set_star_flag = think_tank_built
+		fromfrom.planet = {
+			set_planet_flag = has_megastructure
+		}
+	}
+}
+
+think_tank_1 = {
+	entity = "thinktank_phase_01_entity"
+	construction_entity = "thinktank_phase_01_entity"
+	portrait = "GFX_megastructure_construction_background"
+	
+	place_entity_on_planet_plane = no
+	entity_offset = { x = @entity_x y = @entity_y }
+	
+	upgrade_from = {
+		think_tank_0
+	}
+
+	build_time = 2400
+	build_cost = {
+		minerals = 20000
+	}
+	
+	possible = {
+		from = { has_ascension_perk = ap_galactic_wonders }
+	}
+
+	monthly_production = {
+		society_research = @stage_1_research_bonus
+		engineering_research = @stage_1_research_bonus
+		physics_research = @stage_1_research_bonus
+	}
+
+	maintenance = {
+		energy = 8
+	}
+}
+
+think_tank_2 = {
+	entity = "thinktank_phase_02_entity"
+	construction_entity = "thinktank_phase_02_entity"
+	portrait = "GFX_megastructure_construction_background"
+
+	place_entity_on_planet_plane = no
+	entity_offset = { x = @entity_x y = @entity_y }
+	
+	upgrade_from = {
+		think_tank_1
+	}
+
+	build_time = 2400
+	build_cost = {
+		minerals = 20000
+	}
+	
+	possible = {
+		from = { has_ascension_perk = ap_galactic_wonders }
+	}
+	
+	monthly_production = {
+		society_research = @stage_2_research_bonus
+		engineering_research = @stage_2_research_bonus
+		physics_research = @stage_2_research_bonus
+	}
+
+	maintenance = {
+		energy = 12
+	}
+}
+
+think_tank_3 = {
+	entity = "thinktank_phase_03_entity"
+	construction_entity = "thinktank_phase_03_entity"
+	portrait = "GFX_megastructure_think_tank_background"
+
+	place_entity_on_planet_plane = no
+	entity_offset = { x = @entity_x y = @entity_y }
+	
+	upgrade_from = {
+		think_tank_2
+	}
+
+	build_time = 2400
+	build_cost = {
+		minerals = 20000
+	}
+	
+	possible = {
+		from = { has_ascension_perk = ap_galactic_wonders }
+	}
+	
+	monthly_production = {
+		society_research = @stage_3_research_bonus
+		engineering_research = @stage_3_research_bonus
+		physics_research = @stage_3_research_bonus
+	}
+
+	maintenance = {
+		energy = 15
+	}
+}
+
+think_tank_4 = {
+	entity = "thinktank_phase_03_entity"
+	construction_entity = "thinktank_phase_03_entity"
+	portrait = "GFX_megastructure_think_tank_background"
+
+	place_entity_on_planet_plane = no
+	entity_offset = { x = @entity_x y = @entity_y }
+
+	# used from script only
+	upgrade_desc = hide
+	potential = { always = no }
+	
+	upgrade_from = {
+		think_tank_3
+	}
+
+	build_time = 20
+	
+	monthly_production = {
+		society_research = @stage_4_research_bonus
+		engineering_research = @stage_4_research_bonus
+		physics_research = @stage_4_research_bonus
+	}
+
+	maintenance = {
+		energy = @energy_maintenance
+	}
+}
+
+# Ruined Science Nexus
+think_tank_ruined = {
+	entity = "think_tank_destroyed_01_entity"
+	portrait = "GFX_megastructure_construction_background"
+
+	place_entity_on_planet_plane = no
+	entity_offset = { x = @entity_x y = @entity_y }
+
+	potential = {
+		always = no
+	}
+}
+
+# Restored Science Nexus
+think_tank_restored = {
+	entity = "thinktank_phase_03_entity"
+	construction_entity = "thinktank_phase_03_entity"
+	portrait = "GFX_megastructure_think_tank_background"
+
+	place_entity_on_planet_plane = no
+	entity_offset = { x = @entity_x y = @entity_y }
+
+	upgrade_from = {
+		think_tank_ruined
+	}
+	build_time = 3600
+	build_cost = {
+		minerals = 40000
+	}
+
+	monthly_production = {
+		society_research = @stage_3_research_bonus
+		engineering_research = @stage_3_research_bonus
+		physics_research = @stage_3_research_bonus
+	}
+
+	possible = {
+		always = no
+	}
+
+	on_build_start = {
+		fromfrom = {
+			set_graphical_culture = root.from
+		}
+	}
+
+	on_build_complete = {
+		every_system_ambient_object = { destroy_ambient_object = this }
+		from = {
+			country_event = { id = utopia.2013 }
+		}
+	}
+}

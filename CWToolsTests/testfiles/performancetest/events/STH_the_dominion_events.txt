@@ -1,0 +1,62 @@
+########################
+#
+# The Dominion Events
+#
+# Written by Shaggo
+#
+########################
+
+namespace = sth_the_dominion
+#### Dominion
+country_event = {
+    id = sth_the_dominion.1
+    hide_window = yes
+    trigger = {
+        is_ai = yes
+        has_country_flag = the_dominion
+        NOT = { has_country_flag = huge_dominion }
+        years_passed > 150
+        num_pops < 250
+    }
+    immediate = {
+        every_country = {
+        limit = { has_country_flag = the_dominion }
+        save_global_event_target_as = dominion
+        set_country_flag = huge_dominion
+        }
+        every_country = {
+            limit = {
+            is_ai = yes
+                OR = { has_country_flag = karemman_foundation has_country_flag = wadi_emirates has_country_flag = dosi_confederacy has_country_flag = argrathian_commonwealth has_country_flag = rakharian_free_states }
+            }
+            set_subject_of = {
+            who = event_target:dominion
+            subject_type = vassal
+            }
+        }
+    }
+}
+####Start the flow
+
+country_event = {
+    id = sth_the_dominion.100
+    hide_window = yes
+    trigger = {
+    has_country_flag = united_federation_of_planets
+        any_country = {
+        has_country_flag = huge_dominion
+        }
+    }
+    immediate = {
+        random_country = {
+            limit = { has_country_flag = united_federation_of_planets }
+            save_event_target_as = UFP
+        }
+        random_country = {
+            limit = { has_country_flag = the_dominion }
+            save_event_target_as = dominion
+        }
+        event_target:UFP = { establish_communications_no_message = event_target:dominion }
+        event_target:dominion = { establish_communications_no_message = event_target:UFP }
+    }
+}

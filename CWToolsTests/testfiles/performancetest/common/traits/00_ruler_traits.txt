@@ -1,0 +1,523 @@
+# All leaders will have a common trait-point value set in defines, which they use to grab traits
+
+# leader_trait = yes - this tags the trait as a leader-trait and not a species-trait
+# initial = no - if set to no, this trait can not be granted to leaders when they are generated
+# leader_class = { admiral scientist }  -- OR  - if not set, it can be given to all leader-types except Rulers
+# requires_traits = { trait_psionic } -- AND - leader-trait can only be randomly given on generation if the leaders species has this trait
+# requires_governments = { despotic_hegemony ai_overlordship } -- OR - leader-trait can only be randomly given on generation if the Empire has this type of government form
+# prerequisites = { tech_psionic_theory } - AND - leader-trait can only be given if the technology specified has been researched by the Empire
+
+#################
+#  Ruler Traits #
+#################
+
+# Ruler-traits have the same parameters as leader-traits
+# leader_class has to be set to include "ruler" for a ruler to be valid for a trait
+# modifiers granted to rulers are applied to the entire Empire
+
+trait_ruler_corvette_focus = {
+	cost = 1
+	modification = no
+	icon = "gfx/interface/icons/traits/leader_traits/trait_ruler_corvette_focus.dds"
+	leader_potential_add = {
+		from = { is_drone_authority = no }
+	}
+	modifier = {
+		shipsize_corvette_build_cost_mult = -0.2
+	}
+	leader_trait = yes
+	leader_class = { ruler }
+	prerequisites = { tech_spaceport_1 }
+	opposites = { "trait_ruler_destroyer_focus" "trait_ruler_cruiser_focus" "trait_ruler_battleship_focus" }
+}
+
+trait_ruler_destroyer_focus = {
+	cost = 1
+	modification = no
+	icon = "gfx/interface/icons/traits/leader_traits/trait_ruler_destroyer_focus.dds"
+	leader_potential_add = {
+		from = { is_drone_authority = no }
+	}
+	modifier = {
+		shipsize_saber_build_cost_mult = -0.2
+		shipsize_strike_build_cost_mult = -0.2
+	}
+	leader_trait = yes
+	leader_class = { ruler }
+	prerequisites = { tech_engineering_destroyer_541 }
+	opposites = { "trait_ruler_corvette_focus" "trait_ruler_cruiser_focus" "trait_ruler_battleship_focus" }
+}
+
+trait_ruler_cruiser_focus = {
+	cost = 1
+	modification = no
+	icon = "gfx/interface/icons/traits/leader_traits/trait_ruler_cruiser_focus.dds"
+	leader_potential_add = {
+		from = { is_drone_authority = no }
+	}
+	modifier = {
+		shipsize_sovereign_build_cost_mult = -0.2
+		shipsize_steamrunner_build_cost_mult = -0.2
+	}
+	leader_trait = yes
+	leader_class = { ruler }
+	prerequisites = { tech_engineering_cruiser_542 }
+	opposites = { "trait_ruler_corvette_focus" "trait_ruler_destroyer_focus" "trait_ruler_battleship_focus" }
+}
+
+trait_ruler_battleship_focus = {
+	cost = 1
+	modification = no
+	icon = "gfx/interface/icons/traits/leader_traits/trait_ruler_battleship_focus.dds"
+	leader_potential_add = {
+		from = { is_drone_authority = no }
+	}
+	modifier = {
+		shipsize_adv_cruiser_build_cost_mult = -0.2
+		shipsize_assault_cruiser_build_cost_mult = -0.2
+	}
+	leader_trait = yes
+	leader_class = { ruler }
+	prerequisites = { tech_engineering_battleship_544 }
+	opposites = { "trait_ruler_corvette_focus" "trait_ruler_destroyer_focus" "trait_ruler_cruiser_focus" }
+}
+
+trait_ruler_recruiter = {
+	cost = 1
+	modification = no
+	icon = "gfx/interface/icons/traits/leader_traits/trait_ruler_recruiter.dds"
+	leader_potential_add = {
+		from = { is_drone_authority = no }
+	}
+	modifier = {
+		army_morale = 0.2
+		planet_army_build_cost_mult = -0.2
+	}
+	leader_trait = yes
+	leader_class = { ruler }
+	prerequisites = { tech_society_global_394 }
+}
+
+trait_ruler_fortifier = {
+	cost = 1
+	modification = no
+	icon = "gfx/interface/icons/traits/leader_traits/trait_ruler_fortifier.dds"
+	leader_potential_add = {
+		from = { is_drone_authority = no }
+	}
+	modifier = {
+		shipsize_military_station_small_build_cost_mult = -0.2
+		shipsize_military_station_small_upkeep_mult = -0.2
+		shipsize_military_station_medium_build_cost_mult = -0.2
+		shipsize_military_station_medium_upkeep_mult = -0.2
+		shipsize_military_station_large_build_cost_mult = -0.2
+		shipsize_military_station_large_upkeep_mult = -0.2
+	}
+	leader_trait = yes
+	leader_class = { ruler }
+	prerequisites = { tech_engineering_defense_556 }
+}
+
+trait_ruler_logistic_understanding = {
+	cost = 1
+	modification = no
+	icon = "gfx/interface/icons/traits/leader_traits/trait_ruler_logistic_understanding.dds"
+	leader_potential_add = {
+		from = { is_drone_authority = no }
+	}
+	modifier = {
+		ship_upkeep_mult = -0.05
+		army_upkeep_mult = -0.1
+	}
+	leader_trait = yes
+	leader_class = { ruler }
+	prerequisites = { tech_society_space_393 }
+}
+
+trait_ruler_military_pioneer = {
+	cost = 1
+	modification = no
+	icon = "gfx/interface/icons/traits/leader_traits/trait_ruler_military_pioneer.dds"
+	leader_potential_add = {
+		from = { is_drone_authority = no }
+	}
+	modifier = {
+		country_ship_upgrade_cost_mult = -0.35
+		spaceport_ship_build_cost_mult = -0.1
+	}
+	leader_trait = yes
+	leader_class = { ruler }
+	prerequisites = { tech_society_space_393 }
+}
+
+trait_ruler_warlike = {
+	cost = 1
+	modification = no
+	icon = "gfx/interface/icons/traits/leader_traits/leader_trait_fist.dds"
+	leader_potential_add = {
+		from = { is_drone_authority = no }
+	}
+	modifier = {
+		ship_weapon_damage = 0.05
+		army_damage_mult = 0.10
+	}
+	leader_trait = yes
+	leader_class = { ruler }
+}
+
+trait_ruler_architectural_sense = {
+	cost = 1
+	modification = no
+	icon = "gfx/interface/icons/traits/leader_traits/trait_ruler_architectural_sense.dds"
+	leader_potential_add = {
+		from = { is_drone_authority = no }
+	}
+	modifier = {
+		planet_building_cost_mult = -0.1
+	}
+	leader_trait = yes
+	leader_class = { ruler }
+}
+
+trait_ruler_frontier_spirit = {
+	cost = 1
+	modification = no
+	icon = "gfx/interface/icons/traits/leader_traits/trait_ruler_frontier_spirit.dds"
+	leader_potential_add = {
+		from = { is_drone_authority = no }
+	}
+	modifier = {
+		shipsize_colonizer_build_cost_mult = -0.35
+		planet_colony_development_speed_mult = 0.25
+	}
+	leader_trait = yes
+	leader_class = { ruler }
+	prerequisites = { tech_colonization_1 }
+}
+
+trait_ruler_world_shaper = {
+	cost = 1
+	modification = no
+	icon = "gfx/interface/icons/traits/leader_traits/trait_ruler_world_shaper.dds"
+	leader_potential_add = {
+		from = { is_drone_authority = no }
+	}
+	modifier = {
+		terraform_speed_mult = 0.25
+		planet_clear_blocker_cost_mult = -0.15
+	}
+	leader_trait = yes
+	leader_class = { ruler }
+	prerequisites = { tech_terraforming_base_1 }
+}
+
+trait_ruler_home_in_the_sky = {
+	cost = 1
+	modification = no
+	icon = "gfx/interface/icons/traits/leader_traits/trait_ruler_home_in_the_sky.dds"
+	leader_potential_add = {
+		from = { is_drone_authority = no }
+	}
+	modifier = {
+		shipsize_orbital_station_build_cost_mult = -0.2
+		spaceport_module_cost_mult = -0.2
+	}
+	leader_trait = yes
+	leader_class = { ruler }
+}
+
+trait_ruler_industrialist = {
+	cost = 1
+	modification = no
+	icon = "gfx/interface/icons/traits/leader_traits/trait_ruler_industrialist.dds"
+	leader_potential_add = {
+		from = { is_drone_authority = no }
+	}
+	modifier = {
+		tile_resource_minerals_mult = 0.1
+	}
+	leader_trait = yes
+	leader_class = { ruler }
+}
+
+trait_ruler_eye_for_talent = {
+	cost = 1
+	modification = no
+	icon = "gfx/interface/icons/traits/leader_traits/trait_ruler_eye_for_talent.dds"
+	leader_potential_add = {
+		from = { is_drone_authority = no }
+	}
+	modifier = {
+		leader_skill_levels = 1
+		leader_influence_cost = 0.25
+	}
+	leader_trait = yes
+	leader_class = { ruler }
+	prerequisites = { tech_society_statecraft_901 }
+}
+
+trait_ruler_deep_connections = {
+	cost = 1
+	modification = no
+	icon = "gfx/interface/icons/traits/leader_traits/trait_ruler_deep_connections.dds"
+	leader_potential_add = {
+		from = { is_drone_authority = no }
+	}
+	modifier = {
+		country_resource_influence_add = 1
+	}
+	leader_trait = yes
+	leader_class = { ruler }
+}
+
+trait_ruler_charismatic = {
+	cost = 1
+	modification = no
+	icon = "gfx/interface/icons/traits/leader_traits/trait_ruler_charismatic.dds"
+	leader_potential_add = {
+		from = { is_drone_authority = no }
+	}
+	modifier = {
+		edict_influence_cost = -0.2
+		edict_length_mult = 0.25
+	}
+	leader_trait = yes
+	leader_class = { ruler }
+}
+
+trait_ruler_champion_of_the_people = {
+	cost = 1
+	modification = no
+	icon = "gfx/interface/icons/traits/leader_traits/trait_ruler_champion_of_the_people.dds"
+	leader_potential_add = {
+		from = { is_drone_authority = no }
+	}
+	modifier = {
+		pop_happiness = 0.05
+	}
+	leader_trait = yes
+	leader_class = { ruler }
+}
+
+trait_ruler_expansionist = {
+	cost = 1
+	modification = no
+	icon = "gfx/interface/icons/traits/leader_traits/trait_ruler_expansionist.dds"
+	leader_potential_add = {
+		from = { is_drone_authority = no }
+		NOT = { from = { has_valid_civic = civic_nomadic } }
+	}
+	leader_potential_add = {
+		NOR = { 
+			from = { has_ethic = "ethic_gestalt_consciousness" } 
+			from = { is_borg_empire = yes is_assimilator = yes }
+			from = { has_country_flag = suliban_cabal }
+		}
+	}
+	modifier = {
+		shipsize_outpost_station_build_cost_mult = -0.15
+		country_colony_influence_cost_mult = -0.15
+	}
+	leader_trait = yes
+	leader_class = { ruler }
+}
+
+trait_ruler_fertility_preacher = {
+	cost = 1
+	modification = no
+	icon = "gfx/interface/icons/traits/leader_traits/trait_ruler_fertility_preacher.dds"
+	leader_potential_add = {
+		from = { is_drone_authority = no }
+	}
+	modifier = {
+		tile_resource_food_mult = 0.1
+	}
+	leader_trait = yes
+	leader_class = { ruler }
+}
+
+trait_ruler_investor = {
+	cost = 1
+	modification = no
+	icon = "gfx/interface/icons/traits/leader_traits/trait_ruler_investor.dds"
+	leader_potential_add = {
+		from = { is_drone_authority = no }
+	}
+	modifier = {
+		tile_resource_energy_mult = 0.1
+	}
+	leader_trait = yes
+	leader_class = { ruler }
+}
+
+trait_ruler_space_miner = {
+	cost = 1
+	modification = no
+	icon = "gfx/interface/icons/traits/leader_traits/trait_ruler_space_miner.dds"
+	leader_potential_add = {
+		from = { is_drone_authority = no }
+	}
+	modifier = {
+		shipsize_constructor_build_cost_mult = -0.25
+		shipsize_mining_station_build_cost_mult = -0.25
+	}
+	leader_trait = yes
+	leader_class = { ruler }
+}
+
+trait_ruler_explorer = {
+	cost = 1
+	modification = no
+	icon = "gfx/interface/icons/traits/leader_traits/trait_ruler_explorer.dds"
+	leader_potential_add = {
+		from = { is_drone_authority = no }
+	}
+	modifier = {
+		shipsize_science_build_cost_mult = -0.25
+		ship_anomaly_research_speed_mult = 0.33
+	}
+	leader_trait = yes
+	leader_class = { ruler }
+}
+
+leader_trait_fleet_organizer = {
+	cost = 1
+	modification = no
+	icon = "gfx/interface/icons/traits/leader_traits/leader_trait_fleet_organizer.dds"
+	leader_potential_add = {
+		from = { is_drone_authority = no }
+	}
+	modifier = {
+		navy_size_mult = 0.15
+	}
+	leader_trait = yes
+	leader_class = { ruler }
+	prerequisites = { tech_society_space_396 }
+	opposites = { "leader_trait_nervous" }
+}
+
+leader_trait_nervous = {
+	cost = 1
+	modification = no
+	icon = "gfx/interface/icons/traits/leader_traits/leader_trait_nervous.dds"
+	leader_potential_add = {
+		from = { is_drone_authority = no }
+		NOT = { from = { has_country_flag = the_dominion } }
+	}
+	modifier = {
+		navy_size_mult = -0.2
+	}
+	leader_trait = yes
+	leader_class = { ruler }
+	# prerequisites = { tech_doctrine_fleet_size_2 }
+	opposites = { "leader_trait_fleet_organizer" "leader_trait_unyielding" }
+}
+
+leader_trait_hive_mind = {
+	cost = 1
+	modification = no
+	icon = "gfx/interface/icons/traits/leader_traits/leader_trait_fist.dds"
+	leader_potential_add = {
+		from = { is_drone_authority = no }
+	}
+	modifier = {
+		navy_size_add = 40
+	}
+	leader_trait = yes
+	leader_class = { ruler }
+	initial = no
+	randomized = no
+}
+
+leader_trait_reformer = {
+	cost = 1
+	modification = no
+	icon = "gfx/interface/icons/traits/leader_traits/trait_ruler_reformer.dds"
+	leader_potential_add = {
+		from = { is_drone_authority = no }
+	}
+	modifier = {
+		country_resource_unity_mult = 0.10
+	}
+	leader_trait = yes
+	leader_class = { ruler }
+}
+
+leader_trait_ruler_cyborg = {
+	cost = 1
+	modification = no
+	icon = "gfx/interface/icons/traits/leader_traits/leader_trait_cyborg.dds"
+	self_modifier = {
+		leader_age = 40
+	}
+	leader_potential_add = {
+		from = { is_drone_authority = no }
+	}
+	leader_trait = yes
+	leader_class = { ruler }
+	initial = no
+	randomized = no
+}
+
+leader_trait_ruler_synthetic = {
+	cost = 1
+	modification = no
+	icon = "gfx/interface/icons/traits/leader_traits/leader_trait_synthetic.dds"
+	leader_potential_add = {
+		from = { is_drone_authority = no }
+	}
+	leader_trait = yes
+	leader_class = { ruler }
+	initial = no
+	randomized = no
+}
+
+leader_trait_ruler_psionic = {
+	cost = 0
+	modification = no
+	icon = "gfx/interface/icons/traits/leader_traits/leader_trait_psionic_leader.dds"
+	leader_potential_add = {
+		from = { is_drone_authority = no }
+	}
+	modifier = {
+		pop_government_ethic_attraction = 0.10
+		country_resource_influence_add = 0.5
+	}
+	leader_trait = yes
+	leader_class = { ruler }
+	initial = no
+	randomized = no
+}
+
+leader_trait_ruler_chosen = {
+	cost = 0
+	modification = no
+	icon = "gfx/interface/icons/traits/leader_traits/leader_trait_psionic_chosen_one.dds"
+	immortal_leaders = yes
+	leader_potential_add = {
+		from = { is_drone_authority = no }
+	}
+	modifier = {
+		pop_government_ethic_attraction = 0.20
+		country_resource_influence_add = 1
+	}
+	leader_trait = yes
+	leader_class = { ruler }
+	initial = no
+	randomized = no
+}
+
+leader_trait_ruler_hive_mind = {
+	leader_trait = yes
+	leader_class = { ruler }
+
+	cost = 0
+	modification = no
+	initial = no
+	randomized = no
+	
+	icon = "gfx/interface/icons/traits/leader_traits/leader_trait_ruler_hive_mind.dds"
+	
+	immortal_leaders = yes	
+	hide_age = yes
+}

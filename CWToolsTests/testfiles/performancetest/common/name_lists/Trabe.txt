@@ -1,0 +1,96 @@
+﻿### Trabe by EHKodiak
+Trabe = {
+	randomized = no
+
+	ship_names = {
+		generic = { "Regents Pride" "Regents Strength" "Regents Honour" "Regents Victory" "Regents Justice" "Regents Commission" "Regents Law" "Regents Tribune" "Regents Reformer" "Regents Enforcer" "Regents Will" "Viceroys Pride" "Viceroys Strength" "Viceroys Honour" "Viceroys Victory" "Viceroys Justice" "Viceroys Commission" "Viceroys Law" "Viceroys Tribune" "Viceroys Reformer" "Viceroys Enforcer" "Viceroys Will" "Governors Pride" "Governors Strength" "Governors Honour" "Governors Victory" "Governors Justice" "Governors Commission" "Governors Law" "Governors Tribune" "Governors Reformer" "Governors Enforcer" "Governors Will"
+		}
+		corvette = {
+		}
+		saber = {
+		}
+		sovereign = {
+		}
+		steamrunner = {
+		}		
+		adv_cruiser = {
+		}
+		strike = {
+		}	
+		constructor = { }
+		colonizer = { }
+		science = { }
+		transport = { }
+		outpost_station = {
+			sequential_name = "Frontier Outpost"
+		}
+	}
+
+	fleet_names = {
+		sequential_name = "%O% Fleet"
+	}
+	
+	army_names = {
+		defense_army = {
+			sequential_name = "%O% Trabe Guard"
+		}
+		assault_army = {
+			sequential_name = "%O% Trabe Invaders"
+		}
+		slave_army = {
+			sequential_name = "%O% Indentured Forces"
+		}
+		clone_army = { 
+			sequential_name = "%O% Clone Forces"
+		}
+		robotic_army = {
+			sequential_name = "%O% Mechanised Forces"
+		}
+		android_army = {
+			sequential_name = "%O% Synthetic Forces"
+		}
+		psionic_army = { 
+			sequential_name = "%O% Psi Forces"
+		}
+		xenomorph_army = {
+			sequential_name = "%O% Bio-Warfare Forces"
+		}
+		gene_warrior_army = {
+			sequential_name = "%O% Bio-Engineered Forces"
+		}
+	}
+
+	planet_names = {
+		generic = {
+			names = { 
+			}
+		}
+	}
+
+
+	### CHARACTERS 
+
+	character_names = {
+		names1 = {
+			weight = 40
+			first_names_male = {
+			Mabus Albus Arbus Bebus Chabus Chebus Clobus Dabus Elbus Genobus Gerbus Jamarbus Jaquabus Jarabus Jarbus Jerbus Kellbus Kelbus Kebus Latrabus Lobus Marbus Mabus Melbus Perbus Purbus Quantabus Tabus Tebus Trabus Traybus Trebus Yoelbus Marilk Annask Emmask Elizask Margask Minnike Idask Berthask Clarask Alick Annik Florecki Besseeki Grackee Ethesk Sarask Ellask Marthask Nelleeki Mabask
+			}
+			first_names_female = {
+			Maril Annash Emmash Elizash Margash Minniett Idash Berthash Clarash Alicki Anniki Florencki Bessiki Gracki Ethesh Sarash Ellash Marthash Nelliki Mabash Mamel Almel Armel Bemel Chamel Chemel Clomel Damel Elmel Genomel Germel Jamarmel Jaquamel Jaramel Jarmel Jermel Kellmel Kelmel Kemel Latramel Lomel Marmel Mamel Melmel Permel Purmel Quantamel Tamel Temel Tramel Traymel Tremel Yoelmel
+			}
+			second_names = {
+			""
+			}
+			regnal_first_names_male = {
+			Mabus Albus Arbus Bebus Chabus Chebus Clobus Dabus Elbus Genobus Gerbus Jamarbus Jaquabus Jarabus Jarbus Jerbus Kellbus Kelbus Kebus Latrabus Lobus Marbus Mabus Melbus Perbus Purbus Quantabus Tabus Tebus Trabus Traybus Trebus Yoelbus Marilk Annask Emmask Elizask Margask Minnike Idask Berthask Clarask Alick Annik Florecki Besseeki Grackee Ethesk Sarask Ellask Marthask Nelleeki Mabask
+			}
+			regnal_first_names_female = {
+			Maril Annash Emmash Elizash Margash Minniett Idash Berthash Clarash Alicki Anniki Florencki Bessiki Gracki Ethesh Sarash Ellash Marthash Nelliki Mabash Mamel Almel Armel Bemel Chamel Chemel Clomel Damel Elmel Genomel Germel Jamarmel Jaquamel Jaramel Jarmel Jermel Kellmel Kelmel Kemel Latramel Lomel Marmel Mamel Melmel Permel Purmel Quantamel Tamel Temel Tramel Traymel Tremel Yoelmel
+			}
+			regnal_second_names = {
+			""
+			}
+		}
+	}
+}

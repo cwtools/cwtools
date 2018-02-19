@@ -1,0 +1,7 @@
+### DO NOT DELETE - Needed to prevent tile blocker conflicts between vanilla and STNH
+
+# Possible Tile Blocker Variables
+# spawn_chance, tile scope, value will compete with the spawn chance of every other item and there's a constant 100 for no blocker to spawn.
+# cost, resource table, the cost to clear this tile blocker
+# time, amount of days it takes to clear this tile blocker.
+# picture = tb_active_volcano #Use art from tb_active_volcano

@@ -1,0 +1,2924 @@
+#################################
+#
+# Federation Story / Crisis Events
+# by Walshicus
+#
+#################################
+
+
+namespace = STH_federation_story
+
+#Augments
+country_event = {
+	id = STH_federation_story.1
+	title = "STH_federation_story.1.name"
+	desc = "STH_federation_story.1.desc"
+	picture = sth_GFX_evt_Augments1
+	trigger = {
+		is_country_type = default
+		OR = { 
+			enterprise_era = yes
+			franklin_era = yes
+		}
+		#is_crises_allowed = yes
+		check_variable = { which = "enterprise_series_era_crisis" value < 2 }
+		NOR = { 
+			has_country_flag = augments_crisis 
+			has_country_flag = enterprise_era_crisis_ongoing
+			has_country_flag = easy_mode
+		}
+		OR = { 
+			AND = { 
+				has_country_flag = united_federation_of_planets
+				is_species_class = FED
+			}
+			has_country_flag = united_earth
+		}
+		count_owned_ships = {
+			limit = {
+				is_ship_size = research_station
+				NOT = { solar_system = { is_same_value = root.capital_scope.solar_system } }
+			}
+			count > 1
+		}
+	}
+	mean_time_to_happen = { months = 240 }
+	immediate = {
+		set_country_flag = augments_crisis
+		set_timed_country_flag = { flag = enterprise_era_crisis_ongoing days = 2400 }
+		random_list = {
+			75 = { change_variable = { which = "enterprise_series_era_crisis" value = 2 } }
+			25 = { change_variable = { which = "enterprise_series_era_crisis" value = 1 } }
+		}
+		random_owned_ship = {
+			limit = {
+				is_ship_size = research_station
+				NOT = { solar_system = { is_same_value = root.capital_scope.solar_system } }
+			}
+			set_ship_flag = augment_research_target_1
+			orbit = { save_global_event_target_as = augment_research_target_1 set_planet_flag = augment_research_target_1 }
+		}
+		random_owned_ship = {
+			limit = {
+				is_ship_size = research_station
+				NOT = { solar_system = { is_same_value = root.capital_scope.solar_system } }
+				NOT = { orbit = { is_same_value = event_target:augment_research_target_1 } }
+			}
+			set_ship_flag = augment_research_target_2
+			orbit = { save_global_event_target_as = augment_research_target_2 set_planet_flag = augment_research_target_2 }
+		}
+	}
+	option = {
+		name = STH_federation_story.1.a
+		hidden_effect = { country_event = { id = STH_federation_story.2 days = 96 random = 7 } }
+	}
+}
+
+
+
+country_event = {
+	id = STH_federation_story.2
+	title = "STH_federation_story.2.name"
+	desc = "STH_federation_story.2.desc"
+	picture = sth_GFX_evt_Augments2
+	is_triggered_only = yes
+	trigger = { }
+	after = {
+		enable_special_project = { name = "HUMAN_AUGMENTS_PROJECT_1" location = event_target:augment_research_target_1 owner = root }
+	}
+	option = { name = STH_federation_story.2.a }
+}
+
+#Failure
+country_event = {
+	id = STH_federation_story.3
+	title = "STH_federation_story.3.name"
+	desc = "STH_federation_story.3.desc"
+	picture = sth_GFX_evt_Augments2
+	is_triggered_only = yes
+	trigger = { }
+	immediate = {
+		random_owned_ship = {
+			limit = { has_ship_flag = augment_research_target_1 }
+			fleet = { delete_fleet = this }
+		}
+	}
+	after = { 
+		country_event = { id = STH_federation_story.8 days = 360 random = 30 }
+	}
+	option = { name = STH_federation_story.3.a }
+}
+
+#Success
+country_event = {
+	id = STH_federation_story.4
+	title = "STH_federation_story.4.name"
+	desc = "STH_federation_story.4.desc"
+	picture = sth_GFX_evt_Augments2
+	is_triggered_only = yes
+	trigger = { }
+	immediate = {
+		save_global_event_target_as = augmentTargetCountry
+		if = {
+			limit = { any_country = { has_country_flag = klingon_empire } }
+			random_country = { 
+				limit = { has_country_flag = klingon_empire } 
+				save_event_target_as = augmentStolenVesselCountry
+			}
+			else = {
+				random_country = { 
+					limit = { 
+						NOT = { has_country_flag = borg_collective }
+						is_country_type = default 
+					}
+					save_event_target_as = augmentStolenVesselCountry
+				}
+			}
+		}
+		create_species = { 
+			name = "Human Augment" 
+			class = FED portrait = human 
+			traits = { trait = "trait_strong" trait = "trait_resilient" trait = "trait_intelligent" ideal_planet_class = "pc_continental" }
+		}
+		create_country = {
+			name = "Augment Khanate"
+			ship_prefix = "KV"
+			type = augments
+			auto_delete = no
+			species = last_created
+			ignore_initial_colony_error = yes
+			authority = auth_dictatorial
+			civics = random #BANKS CHANGE
+			name_list = "Human"
+			ethos = { ethic = "ethic_xenophobe" ethic = "ethic_collectivist" }
+			flag = random
+		}
+		last_created_country = { 
+			save_global_event_target_as = augmentKhanate 
+			change_country_flag = {
+				icon = { category = "trek" file = "Khanate.dds" }
+				background = { category = "backgrounds" file = "flame_circle.dds" }
+				colors = { "red" "orange" "null" "null" }
+			}
+			establish_communications_no_message = root
+			set_country_flag = AugmentsCountry1
+		}
+	}
+	after = { 
+		hidden_effect = {
+			saveGCulture = yes
+			event_target:augmentStolenVesselCountry = { rootChangeToGCulture = yes }
+			create_military_fleet = {
+				owner = root
+				scaled_size = { base = 0.55 }
+				effect = { set_location = event_target:augment_research_target_1 }
+			}
+			event_target:augmentKhanate = {
+				create_leader = { type = admiral species = owner_main_species name = random skill = random traits = { trait = leader_trait_unyielding } }
+				last_created_leader = { save_event_target_as = augmentAdmiral }
+			}
+			last_created_fleet = {
+				set_name = "Augment Stolen Fleet" 
+				set_owner = event_target:augmentKhanate
+				set_controller = event_target:augmentKhanate
+				fleet_event = {	id = STH_federation_story.6 days = 360 random = 30 }
+				assign_leader = event_target:augmentAdmiral
+			}
+			
+			rootChangeToOrigGCulture = yes
+		}
+	}
+	option = { name = STH_federation_story.4.a }
+}
+
+#Killed the fleet
+country_event = {
+	id = STH_federation_story.5
+	title = "STH_federation_story.5.name"
+	desc = "STH_federation_story.5.desc"
+	picture = sth_GFX_evt_Augments2
+	is_triggered_only = yes
+	trigger = { 
+		exists = from
+		from = { has_country_flag = AugmentsCountry1 }
+	}
+	immediate = {
+		random_planet = {
+			limit = { has_planet_flag = augment_research_target_1 }
+			save_event_target_as = augment_research_target_1
+		}
+	}
+	after = { 
+		from = { destroy_country = yes }
+		set_global_flag = augmentVirusPossible
+		enable_special_project = { name = "HUMAN_AUGMENTS_PROJECT_3" location = event_target:augment_research_target_1 owner = root }
+	}
+	option = { name = STH_federation_story.5.a }
+}
+
+#Didn't Kill the Fleet
+fleet_event = {
+	id = STH_federation_story.6
+	hide_window = yes
+	is_triggered_only = yes
+	trigger = { }
+	immediate = {
+		if = {
+			limit = { is_in_combat = no }
+			delete_fleet = this
+			event_target:augmentTargetCountry = { country_event = { id = STH_federation_story.7 } }
+			owner = { destroy_country = yes }
+			else = { fleet_event = { id = STH_federation_story.6 days = 14 } }
+		}		
+	}
+}
+#Didn't Kill the Fleet Notification
+country_event = {
+	id = STH_federation_story.7
+	title = "STH_federation_story.7.name"
+	desc = "STH_federation_story.7.desc"
+	picture = sth_GFX_evt_Augments2
+	is_triggered_only = yes
+	trigger = { }
+	immediate = {
+		random_planet = {
+			limit = { has_planet_flag = augment_research_target_1 }
+			save_event_target_as = augment_research_target_1
+		}
+	}
+	after = { 
+		country_event = { id = STH_federation_story.8 days = 360 random = 30 }
+	}
+	option = { name = STH_federation_story.7.a }
+}
+
+
+
+#Second station picked
+country_event = {
+	id = STH_federation_story.8
+	title = "STH_federation_story.8.name"
+	desc = { 
+		trigger = { event_target:augment_research_target_2 = { has_research_station = yes } }
+		text = "STH_federation_story.8.desc_01" 
+	}
+	desc = { 
+		trigger = { event_target:augment_research_target_2 = { has_research_station = no } }
+		text = "STH_federation_story.8.desc_02" 
+	}
+	picture = sth_GFX_evt_Augments2
+	is_triggered_only = yes
+	trigger = { }
+	immediate = { 
+	
+	}
+	after = { 
+		enable_special_project = { name = "HUMAN_AUGMENTS_PROJECT_2" location = event_target:augment_research_target_2 owner = root }
+	}
+	option = { name = STH_federation_story.8.a }
+}
+
+#Failure
+country_event = {
+	id = STH_federation_story.9
+	title = "STH_federation_story.9.name"
+	desc = "STH_federation_story.9.desc"
+	picture = sth_GFX_evt_Augments2
+	is_triggered_only = yes
+	trigger = { }
+	immediate = {
+		random_owned_ship = {
+			limit = { has_ship_flag = augment_research_target_2 }
+			fleet = { delete_fleet = this }
+		}
+	}
+	after = { 
+		country_event = { id = STH_federation_story.14 days = 360 random = 30 }
+	}
+	option = { name = STH_federation_story.9.a }
+}
+
+#Success
+country_event = {
+	id = STH_federation_story.10
+	title = "STH_federation_story.10.name"
+	desc = "STH_federation_story.10.desc"
+	picture = sth_GFX_evt_Augments2
+	is_triggered_only = yes
+	trigger = { }
+	immediate = {
+		save_global_event_target_as = augmentTargetCountry
+		if = {
+			limit = { any_country = { has_country_flag = klingon_empire } }
+			random_country = { 
+				limit = { has_country_flag = klingon_empire } 
+				save_event_target_as = augmentStolenVesselCountry
+			}
+			else = {
+				random_country = { 
+					limit = { 
+						NOT = { has_country_flag = borg_collective }
+						is_country_type = default 
+					}
+					save_event_target_as = augmentStolenVesselCountry
+				}
+			}
+		}
+		create_species = { 
+			name = "Human Augment" 
+			class = FED portrait = humanAugment 
+			traits = { trait = "trait_strong" trait = "trait_resilient" trait = "trait_intelligent" ideal_planet_class = "pc_continental" }
+		}
+		create_country = {
+			name = "Augment Khanate"
+			ship_prefix = "KV"
+			type = augments
+			auto_delete = no
+			species = last_created
+			ignore_initial_colony_error = yes
+			authority = auth_dictatorial
+			civics = random #BANKS CHANGE
+			name_list = "Human"
+			ethos = { ethic = "ethic_xenophobe" ethic = "ethic_collectivist" }
+			flag = random
+		}
+		last_created_country = { 
+			save_event_target_as = augmentKhanate 
+			change_country_flag = {
+				icon = { category = "trek" file = "Khanate.dds" }
+				background = { category = "backgrounds" file = "flame_circle.dds" }
+				colors = { "red" "orange" "null" "null" }
+			}
+			establish_communications_no_message = root
+			set_country_flag = AugmentsCountry2
+		}
+	}
+	after = { 
+		hidden_effect = {
+			saveGCulture = yes
+			event_target:augmentStolenVesselCountry = { rootChangeToGCulture = yes }
+			create_military_fleet = {
+				owner = root
+				scaled_size = { base = 0.7 }
+				effect = { set_location = event_target:augment_research_target_2 }
+			}
+			event_target:augmentKhanate = {
+				create_leader = { type = admiral species = owner_main_species name = random skill = random traits = { trait = leader_trait_unyielding } }
+				last_created_leader = { save_event_target_as = augmentAdmiral }
+			}
+			last_created_fleet = {
+				set_name = "Augment Stolen Fleet"
+				set_owner = event_target:augmentKhanate
+				set_controller = event_target:augmentKhanate
+				fleet_event = {	id = STH_federation_story.12 days = 360 random = 30 }
+				assign_leader = event_target:augmentAdmiral
+			}
+			rootChangeToOrigGCulture = yes
+		}
+	}
+	option = { name = STH_federation_story.10.a }
+}
+
+#Killed the fleet
+country_event = {
+	id = STH_federation_story.11
+	title = "STH_federation_story.11.name"
+	desc = "STH_federation_story.11.desc"
+	picture = sth_GFX_evt_Augments2
+	is_triggered_only = yes
+	trigger = { 
+		exists = from
+		from = { has_country_flag = AugmentsCountry2 }
+	}
+	immediate = {
+		random_planet = {
+			limit = { has_planet_flag = augment_research_target_1 }
+			save_event_target_as = augment_research_target_1
+		}
+		random_planet = {
+			limit = { has_planet_flag = augment_research_target_2 }
+			save_event_target_as = augment_research_target_2
+		}
+	}
+	after = { 
+		from = { destroy_country = yes }
+		enable_special_project = { name = "HUMAN_AUGMENTS_PROJECT_3" location = event_target:augment_research_target_2 owner = root }
+		set_global_flag = augmentVirusPossible
+	}
+	option = { name = STH_federation_story.11.a }
+}
+
+#Didn't Kill the Fleet
+fleet_event = {
+	id = STH_federation_story.12
+	hide_window = yes
+	is_triggered_only = yes
+	trigger = { }
+	immediate = {
+		if = {
+			limit = { is_in_combat = no }
+			delete_fleet = this
+			event_target:augmentTargetCountry = { country_event = { id = STH_federation_story.13 } }
+			owner = { destroy_country = yes }
+			else = { fleet_event = { id = STH_federation_story.12 days = 14 } }
+		}		
+	}
+}
+#Didn't Kill the Fleet Notification
+country_event = {
+	id = STH_federation_story.13
+	title = "STH_federation_story.13.name"
+	desc = "STH_federation_story.13.desc"
+	picture = sth_GFX_evt_Augments2
+	is_triggered_only = yes
+	trigger = { }
+	immediate = {
+		random_planet = {
+			limit = { has_planet_flag = augment_research_target_1 }
+			save_event_target_as = augment_research_target_1
+		}
+		random_planet = {
+			limit = { has_planet_flag = augment_research_target_2 }
+			save_event_target_as = augment_research_target_2
+		}
+	}
+	after = { 
+		country_event = { id = STH_federation_story.14 days = 360 random = 30 }
+	}
+	option = { name = STH_federation_story.13.a }
+}
+
+
+#Augment Khanate Spawned
+country_event = {
+	id = STH_federation_story.14
+	title = "STH_federation_story.14.name"
+	desc = "STH_federation_story.14.desc"
+	picture = sth_GFX_evt_Augments3
+	is_triggered_only = yes
+	trigger = { }
+	immediate = {
+		if = {
+			limit = { any_system = { any_planet = { has_planet_flag = augment_research_target_1 } } }
+			random_planet = {
+				limit = { has_planet_flag = augment_research_target_1 }
+				spawn_system = {
+					min_distance = 75
+					max_distance = 125
+					initializer = "augment_system_event_spawn"  
+				}
+			}
+			else = {
+				capital_scope = {
+					spawn_system = {
+						min_distance = 75
+						max_distance = 125
+						initializer = "augment_system_event_spawn"  
+					}
+				}
+			}
+		}
+		random_country = {
+			limit = { has_country_flag = augment_khanate }
+			save_global_event_target_as = augment_khanate
+			establish_communications_no_message = root
+		}
+		every_country = {
+			limit = { has_communications = root NOT = { is_same_value = root } }
+			country_event = { id = STH_federation_story.16 }
+		}
+	}
+	after = { 
+		set_global_flag = augmentVirusPossible
+	}
+	option = { name = STH_federation_story.14.a }
+	option = { 
+		name = STH_federation_story.14.b
+		hidden_effect = {
+			country_event = { id = STH_federation_story.17 }
+		}
+	}
+}
+
+#Option to become Khanate
+country_event = {
+	id = STH_federation_story.17
+	title = "STH_federation_story.17.name"
+	desc = "STH_federation_story.17.desc"
+	picture = sth_GFX_evt_Augments3
+	is_triggered_only = yes
+	trigger = { }
+	after = { }
+	option = { 
+		name = STH_federation_story.17.a 
+	}
+	option = { 
+		name = STH_federation_story.17.b
+		event_target:augment_khanate = { set_player = root }
+	}
+}
+
+#Got some answers from wreckage
+country_event = {
+	id = STH_federation_story.15
+	title = "STH_federation_story.15.name"
+	desc = "STH_federation_story.15.desc"
+	picture = sth_GFX_evt_Augments2
+	is_triggered_only = yes
+	trigger = { }
+	after = { }
+	option = { 
+		name = STH_federation_story.15.a 
+		add_minerals = 100
+		add_engineering_research = 50
+		add_society_research = 250
+	}
+}
+
+#Alien notification
+country_event = {
+	id = STH_federation_story.16
+	title = "STH_federation_story.16.name"
+	desc = "STH_federation_story.16.desc"
+	picture = sth_GFX_evt_Augments3
+	is_triggered_only = yes
+	trigger = { }
+	after = { }
+	option = { name = STH_federation_story.16.a }
+	option = { name = STH_federation_story.16.b }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#Skorr Jihad
+country_event = {
+	id = STH_federation_story.1100
+	title = "STH_federation_story.1100.name"
+	desc = "STH_federation_story.1100.desc"
+	picture = sth_GFX_evt_skorrJihad1
+	trigger = {
+		#is_crises_allowed = yes
+		has_country_flag = united_federation_of_planets
+		NOR = { 
+			has_country_flag = skorr_jihad_crisis 
+			has_country_flag = original_series_era_crisis_ongoing
+		}
+		is_country_type = default
+		original_series_era = yes
+		check_variable = { which = "original_series_era_crisis" value < 2 }
+	}
+	mean_time_to_happen = { months = 24 }
+	immediate = {
+		set_country_flag = skorr_jihad_crisis
+		set_timed_country_flag = { flag = original_series_era_crisis_ongoing days = 2400 }
+		create_species = {
+			name = "Skorr"
+			class = SKO
+			portrait = skorr
+			traits = { 
+				ideal_planet_class = "pc_arid" 
+			}
+		}
+		create_country = {
+			name = "Kingdom of Skorr"
+			ship_prefix = "SV"
+			type = skorr
+			auto_delete = no
+			species = last_created
+			flag = {
+				icon = { category = "zoological" file = "flag_zoological_8.dds" }
+				background = { category = "backgrounds" file = "circle.dds" }
+				colors = { "customcolor1658" "customcolor611" "null" "null" }
+			}
+			ethos = { ethic = "ethic_pacifist" }
+		}
+		last_created_country = { 
+			set_country_flag = kingdom_of_skorr 
+			save_event_target_as = kingdom_of_skorr
+			
+			set_faction_hostility = { set_hostile = no }
+		}
+		random_list = {
+			75 = { change_variable = { which = "original_series_era_crisis" value = 2 } }
+			25 = { change_variable = { which = "original_series_era_crisis" value = 1 } }
+		}
+	}
+	option = {
+		name = STH_federation_story.1100.a
+		hidden_effect = { country_event = { id = STH_federation_story.1101 days = 28 random = 7 } }
+	}
+}
+
+
+#Diplomatic Event
+country_event = {
+	id = STH_federation_story.1101
+	title = "STH_federation_story.1101.name"
+	desc = { 
+		trigger = { exists = event_target:suggestedLeader2 }
+		text = "STH_federation_story.1101.desc_01" 
+	}
+	desc = { 
+		trigger = { NOT = { exists = event_target:suggestedLeader2 } }
+		text = "STH_federation_story.1101.desc_02" 
+	}
+	desc = { 
+		trigger = { NOT = { exists = event_target:suggestedLeader3 } }
+		text = "STH_federation_story.1101.desc_03" 
+	}
+	diplomatic = yes
+	picture_event_data = {
+		portrait = event_target:kingdom_of_skorr
+		planet_background = event_target:kingdom_of_skorr
+		graphical_culture = event_target:kingdom_of_skorr
+		city_level = event_target:kingdom_of_skorr
+		room = event_target:kingdom_of_skorr
+	}
+	is_triggered_only = yes
+	immediate = {
+		random_country = {
+			limit = { has_country_flag = kingdom_of_skorr }
+			save_event_target_as = kingdom_of_skorr
+			establish_communications_no_message = root
+		}
+		random_owned_leader = {
+			limit = { OR = { leader_class = admiral leader_class = general } }
+			save_event_target_as = suggestedLeader1
+		}
+		random_owned_leader = {
+			limit = { 
+				OR = { leader_class = admiral leader_class = general }
+				NOT = { is_same_value = event_target:suggestedLeader1 }
+			}
+			save_event_target_as = suggestedLeader2
+		}
+		capital_scope.solar_system = {
+			closest_system = {
+				min_steps = 10
+				limit = { 
+					any_planet = { is_planet_class = pc_asteroid } 
+					has_access_fleet = root
+				}
+				random_system_planet = {
+					limit = { is_planet_class = pc_asteroid }
+					save_global_event_target_as = skorr_jihad_crisis_asteroid
+				}
+			}
+		}
+	}
+	option = {
+		name = STH_federation_story.1101.a
+		response_text = STH_federation_story.1101.a.response
+		is_dialog_only = yes
+	}
+	option = {
+		name = STH_federation_story.1101.b
+		response_text = STH_federation_story.1101.b.response
+		is_dialog_only = yes
+	}
+	option = {
+		name = STH_federation_story.1101.c
+		response_text = STH_federation_story.1101.c.response
+		is_dialog_only = yes
+	}
+	option = {
+		name = STH_federation_story.1101.d
+		begin_event_chain = { event_chain = "skorr_jihad_chain" target = THIS }
+		enable_special_project = { name = "SKORR_JIHAD_PROJECT_1A" location = event_target:skorr_jihad_crisis_asteroid owner = root }
+		enable_special_project = { name = "SKORR_JIHAD_PROJECT_1B" location = event_target:skorr_jihad_crisis_asteroid owner = root }
+	}
+	option = {
+		name = STH_federation_story.1101.e
+		country_event = { id = STH_federation_story.1144 days = 360 random = 90 }
+	}
+}
+
+#Leader sent on mission
+ship_event = {
+	id = STH_federation_story.1102
+	title = "STH_federation_story.1102.name"
+	desc = "STH_federation_story.1102.desc"
+	picture = sth_GFX_evt_skorrJihad2
+	is_triggered_only = yes
+	immediate = {
+		fleet = { 
+			leader = {
+				change_variable = { which = "skorr_jihad_leader_health" value = 100 }
+				set_leader_flag = skorr_jihad_leader
+				save_global_event_target_as = skorr_jihad_leader
+			}
+			exile_leader_as = skorr_jihad_leader
+		}
+	}
+	option = {
+		name = STH_federation_story.1102.a
+		hidden_effect = { owner = { country_event = { id = STH_federation_story.1103 days = 28 random = 7 } } }
+	}
+}
+
+#First trial
+country_event = {
+	id = STH_federation_story.1103
+	title = "STH_federation_story.1103.name"
+	desc = "STH_federation_story.1103.desc"
+	picture = sth_GFX_evt_skorrJihad3
+	is_triggered_only = yes
+	immediate = { }
+	option = {
+		name = STH_federation_story.1103.a
+		hidden_effect = { 
+			random_list = {
+				60 = { country_event = { id = STH_federation_story.1104 } }
+				20 = { country_event = { id = STH_federation_story.1105 } }
+				20 = { country_event = { id = STH_federation_story.1106 } }
+			}
+		}
+	}
+	option = {
+		name = STH_federation_story.1103.b
+		hidden_effect = { 
+			random_list = {
+				40 = { country_event = { id = STH_federation_story.1107 } }
+				60 = { country_event = { id = STH_federation_story.1108 } }
+			}
+		}
+	}
+}
+country_event = {
+	id = STH_federation_story.1104
+	title = "STH_federation_story.1104.name"
+	desc = "STH_federation_story.1104.desc"
+	picture = sth_GFX_evt_skorrJihad3
+	is_triggered_only = yes
+	option = {
+		name = STH_federation_story.1104.a
+		hidden_effect = { country_event = { id = STH_federation_story.1109 days = 28 random = 7 } }
+	}
+}
+country_event = {
+	id = STH_federation_story.1105
+	title = "STH_federation_story.1105.name"
+	desc = "STH_federation_story.1105.desc"
+	picture = sth_GFX_evt_skorrJihad3
+	is_triggered_only = yes
+	immediate = { change_variable = { which = "skorr_jihad_leader_health" value = -20 } }
+	option = {
+		name = STH_federation_story.1105.a
+		hidden_effect = { country_event = { id = STH_federation_story.1109 days = 28 random = 7 } }
+	}
+}
+country_event = {
+	id = STH_federation_story.1106
+	title = "STH_federation_story.1106.name"
+	desc = "STH_federation_story.1106.desc"
+	picture = sth_GFX_evt_skorrJihad3
+	is_triggered_only = yes
+	immediate = { set_country_flag = skorr_jihad_companion_1_dead }
+	option = {
+		name = STH_federation_story.1106.a
+		hidden_effect = { country_event = { id = STH_federation_story.1109 days = 28 random = 7 } }
+	}
+}
+country_event = {
+	id = STH_federation_story.1107
+	title = "STH_federation_story.1107.name"
+	desc = "STH_federation_story.1107.desc"
+	picture = sth_GFX_evt_skorrJihad3
+	is_triggered_only = yes
+	immediate = { change_variable = { which = "skorr_jihad_leader_health" value = 20 } }
+	option = {
+		name = STH_federation_story.1107.a
+		hidden_effect = { country_event = { id = STH_federation_story.1109 days = 28 random = 7 } }
+	}
+}
+country_event = {
+	id = STH_federation_story.1108
+	title = "STH_federation_story.1108.name"
+	desc = "STH_federation_story.1108.desc"
+	picture = sth_GFX_evt_skorrJihad3
+	is_triggered_only = yes
+	immediate = { change_variable = { which = "skorr_jihad_leader_health" value = -40 } }
+	option = {
+		name = STH_federation_story.1108.a
+		hidden_effect = { country_event = { id = STH_federation_story.1109 days = 28 random = 7 } }
+	}
+}
+
+#Second trial
+country_event = {
+	id = STH_federation_story.1109
+	title = "STH_federation_story.1109.name"
+	desc = "STH_federation_story.1109.desc"
+	picture = sth_GFX_evt_skorrJihad3
+	is_triggered_only = yes
+	immediate = { }
+	option = {
+		name = STH_federation_story.1109.a
+		hidden_effect = { 
+			random_list = {
+				60 = { country_event = { id = STH_federation_story.1110 } }
+				20 = { country_event = { id = STH_federation_story.1111 } }
+				20 = { country_event = { id = STH_federation_story.1112 } }
+			}
+		}
+	}
+	option = {
+		name = STH_federation_story.1109.b
+		hidden_effect = { 
+			random_list = {
+				40 = { country_event = { id = STH_federation_story.1113 } }
+				60 = { country_event = { id = STH_federation_story.1114 } }
+			}
+		}
+	}
+	option = {
+		name = STH_federation_story.1109.c
+		trigger = { NOT = { has_country_flag = skorr_jihad_companion_1_dead } }
+		hidden_effect = { 
+			random_list = {
+				50 = { country_event = { id = STH_federation_story.1115 } }
+				50 = { country_event = { id = STH_federation_story.1116 } }
+			}
+		}
+	}
+}
+country_event = {
+	id = STH_federation_story.1110
+	title = "STH_federation_story.1110.name"
+	desc = "STH_federation_story.1110.desc"
+	picture = sth_GFX_evt_skorrJihad3
+	is_triggered_only = yes
+	option = {
+		name = STH_federation_story.1110.a
+		hidden_effect = { country_event = { id = STH_federation_story.1117 days = 28 random = 7 } }
+	}
+}
+country_event = {
+	id = STH_federation_story.1111
+	title = "STH_federation_story.1111.name"
+	desc = "STH_federation_story.1111.desc"
+	picture = sth_GFX_evt_skorrJihad3
+	is_triggered_only = yes
+	immediate = { change_variable = { which = "skorr_jihad_leader_health" value = -20 } }
+	option = {
+		name = STH_federation_story.1111.a
+		hidden_effect = { country_event = { id = STH_federation_story.1117 days = 28 random = 7 } }
+	}
+}
+country_event = {
+	id = STH_federation_story.1112
+	title = "STH_federation_story.1112.name"
+	desc = "STH_federation_story.1112.desc"
+	picture = sth_GFX_evt_skorrJihad3
+	is_triggered_only = yes
+	immediate = { set_country_flag = skorr_jihad_companion_2_dead }
+	option = {
+		name = STH_federation_story.1112.a
+		hidden_effect = { country_event = { id = STH_federation_story.1117 days = 28 random = 7 } }
+	}
+}
+country_event = {
+	id = STH_federation_story.1113
+	title = "STH_federation_story.1113.name"
+	desc = "STH_federation_story.1113.desc"
+	picture = sth_GFX_evt_skorrJihad3
+	is_triggered_only = yes
+	immediate = { change_variable = { which = "skorr_jihad_leader_health" value = 20 } }
+	option = {
+		name = STH_federation_story.1113.a
+		hidden_effect = { country_event = { id = STH_federation_story.1117 days = 28 random = 7 } }
+	}
+}
+country_event = {
+	id = STH_federation_story.1114
+	title = "STH_federation_story.1114.name"
+	desc = "STH_federation_story.1114.desc"
+	picture = sth_GFX_evt_skorrJihad3
+	is_triggered_only = yes
+	immediate = { change_variable = { which = "skorr_jihad_leader_health" value = -40 } }
+	option = {
+		name = STH_federation_story.1114.a
+		hidden_effect = { country_event = { id = STH_federation_story.1117 days = 28 random = 7 } }
+	}
+}
+country_event = {
+	id = STH_federation_story.1115
+	title = "STH_federation_story.1115.name"
+	desc = "STH_federation_story.1115.desc"
+	picture = sth_GFX_evt_skorrJihad3
+	is_triggered_only = yes
+	immediate = { change_variable = { which = "skorr_jihad_leader_health" value = 20 } }
+	option = {
+		name = STH_federation_story.1115.a
+		hidden_effect = { country_event = { id = STH_federation_story.1117 days = 28 random = 7 } }
+	}
+}
+country_event = {
+	id = STH_federation_story.1116
+	title = "STH_federation_story.1116.name"
+	desc = "STH_federation_story.1116.desc"
+	picture = sth_GFX_evt_skorrJihad3
+	is_triggered_only = yes
+	option = {
+		name = STH_federation_story.1116.a
+		hidden_effect = { country_event = { id = STH_federation_story.1117 days = 28 random = 7 } }
+	}
+}
+
+#Third trial
+country_event = {
+	id = STH_federation_story.1117
+	title = "STH_federation_story.1117.name"
+	desc = "STH_federation_story.1117.desc"
+	picture = sth_GFX_evt_skorrJihad4
+	is_triggered_only = yes
+	immediate = { }
+	option = {
+		name = STH_federation_story.1117.a
+		hidden_effect = { 
+			random_list = {
+				60 = { country_event = { id = STH_federation_story.1118 } }
+				20 = { country_event = { id = STH_federation_story.1119 } }
+			}
+		}
+	}
+	option = {
+		name = STH_federation_story.1117.b
+		hidden_effect = { 
+			random_list = {
+				40 = { country_event = { id = STH_federation_story.1120 } }
+				60 = { country_event = { id = STH_federation_story.1121 } }
+			}
+		}
+	}
+}
+country_event = {
+	id = STH_federation_story.1118
+	title = "STH_federation_story.1118.name"
+	desc = "STH_federation_story.1118.desc"
+	picture = sth_GFX_evt_skorrJihad4
+	is_triggered_only = yes
+	option = {
+		name = STH_federation_story.1118.a
+		hidden_effect = { country_event = { id = STH_federation_story.1122 days = 28 random = 7 } }
+	}
+}
+country_event = {
+	id = STH_federation_story.1119
+	title = "STH_federation_story.1119.name"
+	desc = "STH_federation_story.1119.desc"
+	picture = sth_GFX_evt_skorrJihad4
+	is_triggered_only = yes
+	immediate = { change_variable = { which = "skorr_jihad_leader_health" value = -20 } }
+	option = {
+		name = STH_federation_story.1119.a
+		hidden_effect = { country_event = { id = STH_federation_story.1122 days = 28 random = 7 } }
+	}
+}
+country_event = {
+	id = STH_federation_story.1120
+	title = "STH_federation_story.1120.name"
+	desc = "STH_federation_story.1120.desc"
+	picture = sth_GFX_evt_skorrJihad4
+	is_triggered_only = yes
+	immediate = { change_variable = { which = "skorr_jihad_leader_health" value = 20 } }
+	option = {
+		name = STH_federation_story.1120.a
+		hidden_effect = { country_event = { id = STH_federation_story.1122 days = 28 random = 7 } }
+	}
+}
+country_event = {
+	id = STH_federation_story.1121
+	title = "STH_federation_story.1121.name"
+	desc = "STH_federation_story.1121.desc"
+	picture = sth_GFX_evt_skorrJihad4
+	is_triggered_only = yes
+	immediate = { change_variable = { which = "skorr_jihad_leader_health" value = -40 } }
+	option = {
+		name = STH_federation_story.1121.a
+		hidden_effect = { country_event = { id = STH_federation_story.1122 days = 28 random = 7 } }
+	}
+}
+
+#Fourth trial
+country_event = {
+	id = STH_federation_story.1122
+	title = "STH_federation_story.1122.name"
+	desc = "STH_federation_story.1122.desc"
+	picture = sth_GFX_evt_skorrJihad5
+	is_triggered_only = yes
+	immediate = { }
+	option = {
+		name = STH_federation_story.1122.a
+		hidden_effect = { 
+			random_list = {
+				40 = { country_event = { id = STH_federation_story.1123 } }
+				15 = { country_event = { id = STH_federation_story.1124 } }
+				15 = { country_event = { id = STH_federation_story.1125 } }
+				15 = { country_event = { id = STH_federation_story.1126 } }
+				15 = { country_event = { id = STH_federation_story.1127 } }
+			}
+		}
+	}
+	option = {
+		name = STH_federation_story.1122.b
+		hidden_effect = { 
+			random_list = {
+				75 = { country_event = { id = STH_federation_story.1128 } }
+				25 = { country_event = { id = STH_federation_story.1129 } }
+			}
+		}
+	}
+}
+country_event = {
+	id = STH_federation_story.1123
+	title = "STH_federation_story.1123.name"
+	desc = "STH_federation_story.1123.desc"
+	picture = sth_GFX_evt_skorrJihad5
+	is_triggered_only = yes
+	option = {
+		name = STH_federation_story.1123.a
+		hidden_effect = { country_event = { id = STH_federation_story.1130 days = 28 random = 7 } }
+	}
+}
+country_event = {
+	id = STH_federation_story.1124
+	title = "STH_federation_story.1124.name"
+	desc = "STH_federation_story.1124.desc"
+	picture = sth_GFX_evt_skorrJihad5
+	is_triggered_only = yes
+	immediate = { change_variable = { which = "skorr_jihad_leader_health" value = -20 } }
+	option = {
+		name = STH_federation_story.1124.a
+		hidden_effect = { country_event = { id = STH_federation_story.1130 days = 28 random = 7 } }
+	}
+}
+country_event = {
+	id = STH_federation_story.1125
+	title = "STH_federation_story.1125.name"
+	desc = "STH_federation_story.1125.desc"
+	picture = sth_GFX_evt_skorrJihad5
+	is_triggered_only = yes
+	immediate = { set_country_flag = skorr_jihad_companion_3_dead }
+	option = {
+		name = STH_federation_story.1125.a
+		hidden_effect = { country_event = { id = STH_federation_story.1130 days = 28 random = 7 } }
+	}
+}
+country_event = {
+	id = STH_federation_story.1126
+	title = "STH_federation_story.1126.name"
+	desc = "STH_federation_story.1126.desc"
+	picture = sth_GFX_evt_skorrJihad5
+	is_triggered_only = yes
+	immediate = { set_country_flag = skorr_jihad_companion_4_dead }
+	option = {
+		name = STH_federation_story.1126.a
+		hidden_effect = { country_event = { id = STH_federation_story.1130 days = 28 random = 7 } }
+	}
+}
+country_event = {
+	id = STH_federation_story.1127
+	title = "STH_federation_story.1127.name"
+	desc = "STH_federation_story.1127.desc"
+	picture = sth_GFX_evt_skorrJihad5
+	is_triggered_only = yes
+	immediate = { 
+		set_country_flag = skorr_jihad_companion_3_dead
+		set_country_flag = skorr_jihad_companion_4_dead
+	}
+	option = {
+		name = STH_federation_story.1127.a
+		hidden_effect = { country_event = { id = STH_federation_story.1130 days = 28 random = 7 } }
+	}
+}
+country_event = {
+	id = STH_federation_story.1128
+	title = "STH_federation_story.1128.name"
+	desc = "STH_federation_story.1128.desc"
+	picture = sth_GFX_evt_skorrJihad5
+	is_triggered_only = yes
+	immediate = { change_variable = { which = "skorr_jihad_leader_health" value = -40 } }
+	option = {
+		name = STH_federation_story.1128.a
+		hidden_effect = { country_event = { id = STH_federation_story.1130 days = 28 random = 7 } }
+	}
+}
+country_event = {
+	id = STH_federation_story.1129
+	title = "STH_federation_story.1129.name"
+	desc = "STH_federation_story.1129.desc"
+	picture = sth_GFX_evt_skorrJihad5
+	is_triggered_only = yes
+	immediate = { change_variable = { which = "skorr_jihad_leader_health" value = 20 } }
+	option = {
+		name = STH_federation_story.1129.a
+		hidden_effect = { country_event = { id = STH_federation_story.1130 days = 28 random = 7 } }
+	}
+}
+
+#Soul Chamber 1
+country_event = {
+	id = STH_federation_story.1130
+	title = "STH_federation_story.1130.name"
+	desc = "STH_federation_story.1130.desc"
+	picture = sth_GFX_evt_skorrJihad6
+	is_triggered_only = yes
+	immediate = { }
+	option = {
+		name = STH_federation_story.1130.a
+		trigger = { NOT = { has_country_flag = skorr_jihad_companion_1_dead } }
+		hidden_effect = { 
+			country_event = { id = STH_federation_story.1131 }
+		}
+	}
+	option = {
+		name = STH_federation_story.1130.b
+		trigger = { NOT = { has_country_flag = skorr_jihad_companion_4_dead } }
+		hidden_effect = { 
+			country_event = { id = STH_federation_story.1132 }
+		}
+	}
+	option = {
+		name = STH_federation_story.1130.c
+		hidden_effect = { 
+			random_list = {
+				50 = { 
+					modifier = { factor = 1.5 check_variable = { which = "skorr_jihad_leader_health" value > 50 } }
+					modifier = { factor = 2.0 check_variable = { which = "skorr_jihad_leader_health" value > 100 } }
+					modifier = { factor = 1.25 event_target:skorr_jihad_leader = { has_level = 3 } }
+					modifier = { factor = 1.5 event_target:skorr_jihad_leader = { has_level = 4 } }
+					modifier = { factor = 2 event_target:skorr_jihad_leader = { has_level = 5 } }
+					country_event = { id = STH_federation_story.1133 } 
+				}
+				50 = { 
+					modifier = { factor = 1.5 check_variable = { which = "skorr_jihad_leader_health" value < 75 } }
+					modifier = { factor = 2.0 check_variable = { which = "skorr_jihad_leader_health" value < 50 } }
+					modifier = { factor = 1.25 event_target:skorr_jihad_leader = { has_level = 1 } }
+					country_event = { id = STH_federation_story.1134 } 
+				}
+			}
+		}
+	}
+}
+country_event = {
+	id = STH_federation_story.1131
+	title = "STH_federation_story.1131.name"
+	desc = "STH_federation_story.1131.desc"
+	picture = sth_GFX_evt_skorrJihad6
+	is_triggered_only = yes
+	option = {
+		name = STH_federation_story.1131.a
+		hidden_effect = { country_event = { id = STH_federation_story.1135 } }
+	}
+}
+country_event = {
+	id = STH_federation_story.1132
+	title = "STH_federation_story.1132.name"
+	desc = "STH_federation_story.1132.desc"
+	picture = sth_GFX_evt_skorrJihad6
+	is_triggered_only = yes
+	option = {
+		name = STH_federation_story.1132.a
+		hidden_effect = { country_event = { id = STH_federation_story.1135 } }
+	}
+}
+country_event = {
+	id = STH_federation_story.1133
+	title = "STH_federation_story.1133.name"
+	desc = "STH_federation_story.1133.desc"
+	picture = sth_GFX_evt_skorrJihad6
+	is_triggered_only = yes
+	option = {
+		name = STH_federation_story.1133.a
+		hidden_effect = { country_event = { id = STH_federation_story.1135 } }
+	}
+}
+country_event = {
+	id = STH_federation_story.1134
+	title = "STH_federation_story.1134.name"
+	desc = "STH_federation_story.1134.desc"
+	picture = sth_GFX_evt_skorrJihad6
+	is_triggered_only = yes
+	option = {
+		name = STH_federation_story.1134.a
+		hidden_effect = { country_event = { id = STH_federation_story.1144 days = 360 random = 90 } }
+	}
+}
+
+#Soul Chamber 2
+country_event = {
+	id = STH_federation_story.1135
+	title = "STH_federation_story.1135.name"
+	desc = "STH_federation_story.1135.desc"
+	picture = sth_GFX_evt_skorrJihad7
+	is_triggered_only = yes
+	immediate = { }
+	option = {
+		name = STH_federation_story.1135.a
+		trigger = { NOT = { has_country_flag = skorr_jihad_companion_2_dead } }
+		hidden_effect = { 
+			country_event = { id = STH_federation_story.1136 }
+		}
+	}
+	option = {
+		name = STH_federation_story.1135.b
+		trigger = { NOT = { has_country_flag = skorr_jihad_companion_3_dead } }
+		hidden_effect = { 
+			country_event = { id = STH_federation_story.1137 }
+		}
+	}
+	option = {
+		name = STH_federation_story.1135.c
+		hidden_effect = { 
+			random_list = {
+				50 = { 
+					modifier = { factor = 1.5 check_variable = { which = "skorr_jihad_leader_health" value > 50 } }
+					modifier = { factor = 2.0 check_variable = { which = "skorr_jihad_leader_health" value > 100 } }
+					country_event = { id = STH_federation_story.1138 } 
+				}
+				50 = { 
+					modifier = { factor = 1.5 check_variable = { which = "skorr_jihad_leader_health" value < 75 } }
+					modifier = { factor = 2.0 check_variable = { which = "skorr_jihad_leader_health" value < 50 } }
+					country_event = { id = STH_federation_story.1139 } 
+				}
+			}
+		}
+	}
+}
+country_event = {
+	id = STH_federation_story.1136
+	title = "STH_federation_story.1136.name"
+	desc = "STH_federation_story.1136.desc"
+	picture = sth_GFX_evt_skorrJihad7
+	is_triggered_only = yes
+	option = {
+		name = STH_federation_story.1136.a
+		hidden_effect = { country_event = { id = STH_federation_story.1140 } }
+	}
+}
+country_event = {
+	id = STH_federation_story.1137
+	title = "STH_federation_story.1137.name"
+	desc = "STH_federation_story.1137.desc"
+	picture = sth_GFX_evt_skorrJihad7
+	is_triggered_only = yes
+	option = {
+		name = STH_federation_story.1137.a
+		hidden_effect = { country_event = { id = STH_federation_story.1140 } }
+	}
+}
+country_event = {
+	id = STH_federation_story.1138
+	title = "STH_federation_story.1138.name"
+	desc = "STH_federation_story.1138.desc"
+	picture = sth_GFX_evt_skorrJihad7
+	is_triggered_only = yes
+	option = {
+		name = STH_federation_story.1138.a
+		hidden_effect = { country_event = { id = STH_federation_story.1140 } }
+	}
+}
+country_event = {
+	id = STH_federation_story.1139
+	title = "STH_federation_story.1139.name"
+	desc = "STH_federation_story.1139.desc"
+	picture = sth_GFX_evt_skorrJihad7
+	is_triggered_only = yes
+	option = {
+		name = STH_federation_story.1139.a
+		hidden_effect = { country_event = { id = STH_federation_story.1144 days = 360 random = 90 } }
+	}
+}
+
+#The Soul
+country_event = {
+	id = STH_federation_story.1140
+	title = "STH_federation_story.1140.name"
+	desc = "STH_federation_story.1140.desc"
+	picture = sth_GFX_evt_skorrJihad8
+	is_triggered_only = yes
+	immediate = { }
+	option = {
+		name = STH_federation_story.1140.a
+		hidden_effect = { 
+			random_list = {
+				60 = { 
+					modifier = { factor = 1.5 check_variable = { which = "skorr_jihad_leader_health" value > 50 } }
+					modifier = { factor = 2.0 check_variable = { which = "skorr_jihad_leader_health" value > 100 } }
+					modifier = { factor = 1.25 event_target:skorr_jihad_leader = { has_level = 3 } }
+					modifier = { factor = 1.5 event_target:skorr_jihad_leader = { has_level = 4 } }
+					modifier = { factor = 2 event_target:skorr_jihad_leader = { has_level = 5 } }
+					country_event = { id = STH_federation_story.1141 } 
+				}
+				40 = { 
+					modifier = { factor = 1.5 check_variable = { which = "skorr_jihad_leader_health" value < 75 } }
+					modifier = { factor = 2.0 check_variable = { which = "skorr_jihad_leader_health" value < 50 } }
+					modifier = { factor = 1.25 event_target:skorr_jihad_leader = { has_level = 1 } }
+					country_event = { id = STH_federation_story.1142 } 
+				}
+			}
+		}
+	}
+}
+country_event = {
+	id = STH_federation_story.1141
+	title = "STH_federation_story.1141.name"
+	desc = "STH_federation_story.1141.desc"
+	picture = sth_GFX_evt_skorrJihad9
+	is_triggered_only = yes
+	option = {
+		name = STH_federation_story.1141.a
+		hidden_effect = { country_event = { id = STH_federation_story.1143 days = 28 random = 7 } }
+	}
+}
+country_event = {
+	id = STH_federation_story.1142
+	title = "STH_federation_story.1142.name"
+	desc = "STH_federation_story.1142.desc"
+	picture = sth_GFX_evt_skorrJihad9
+	is_triggered_only = yes
+	option = {
+		name = STH_federation_story.1142.a
+		hidden_effect = { country_event = { id = STH_federation_story.1144 days = 90 random = 30 } }
+	}
+}
+
+
+
+#GET REWARD - Peaceful
+country_event = {
+	id = STH_federation_story.1143
+	title = "STH_federation_story.1143.name"
+	desc = "STH_federation_story.1143.desc"
+	diplomatic = yes
+	picture_event_data = {
+		portrait = event_target:kingdom_of_skorr
+		planet_background = event_target:kingdom_of_skorr
+		graphical_culture = event_target:kingdom_of_skorr
+		city_level = event_target:kingdom_of_skorr
+		room = event_target:kingdom_of_skorr
+	}
+	fire_only_once = yes
+	is_triggered_only = yes
+	immediate = {
+		random_country = {
+			limit = { has_country_flag = kingdom_of_skorr }
+			save_event_target_as = kingdom_of_skorr
+		}
+		set_country_flag = skorr_jihad_crisis_resolved_peacefully 
+		
+		if = {
+			limit = { 
+				event_target:skorr_jihad_leader = {
+					leader_class = admiral
+				}
+			}
+			create_fleet = { name = "Skorr Transport" }
+			last_created_fleet = { 
+				set_owner = root
+				create_ship = { name = "Skorr Transport" design = "Skorr Naval Transport" graphical_culture = "generic_01" }
+				set_location = { target = root.capital_scope distance = 400 angle = random }
+				set_leader = skorr_jihad_leader
+			}
+		}
+		if = {
+			limit = { 
+				event_target:skorr_jihad_leader = {
+					leader_class = general
+				}
+			}
+			create_fleet = { name = "Skorr Transport" }
+			last_created_fleet = { 
+				set_owner = root
+				create_ship = { name = "Skorr Transport" design = "Skorr Army Transport" graphical_culture = "generic_01" }
+				set_location = { target = root.capital_scope distance = 400 angle = random }
+				set_leader = skorr_jihad_leader
+			}
+		}
+		
+	}
+	option = {
+		name = STH_federation_story.1143.a
+		response_text = STH_federation_story.1143.a.response
+		is_dialog_only = yes
+	}
+	option = {
+		name = STH_federation_story.1143.b
+		response_text = STH_federation_story.1143.b.response
+		is_dialog_only = yes
+	}
+	option = {
+		name = STH_federation_story.1143.c
+		add_research_option = tech_society_the_382
+	}
+	option = {
+		name = STH_federation_story.1143.d
+		add_research_option = tech_physics_dervish_149
+	}
+}
+
+#TRIGGER JIHAD
+country_event = {
+	id = STH_federation_story.1144
+	title = "STH_federation_story.1144.name"
+	desc = "STH_federation_story.1144.desc"
+	picture = sth_GFX_evt_skorrJihad1
+	is_triggered_only = yes
+	immediate = {
+		set_country_flag = skorr_jihad_crisis_war
+		create_species = {
+			name = "Skorr"
+			class = SKO
+			portrait = skorr
+			traits = { ideal_planet_class = "pc_arid" }
+		}
+		create_country = {
+			name = "TChar's Rebellion"
+			ship_prefix = "SV"
+			type = skorr
+			auto_delete = no
+			species = last_created
+			flag = {
+				icon = { category = "zoological" file = "flag_zoological_8.dds" }
+				background = { category = "backgrounds" file = "circle.dds" }
+				colors = { "black" "red" "null" "null" }
+			}
+			ethos = { ethic = "ethic_militarist" }
+		}
+		last_created_country = { 
+			set_country_flag = tchars_rebellion 
+			save_event_target_as = tchars_rebellion 
+			every_country = { establish_communications_no_message = prev }
+			set_faction_hostility = { set_hostile = yes }
+		}
+		#Jihad Spawn 1
+		random_planet = {
+			limit = { is_inside_border = root }
+			save_global_event_target_as = jihadSpawn1
+			create_skorr_fleet = yes
+		}
+	}
+	option = {
+		name = STH_federation_story.1144.a
+	}
+}
+
+#Fleet Pathing
+fleet_event = {
+	id = STH_federation_story.1145
+	hide_window = yes
+	trigger = { 
+		owner = { has_country_flag = tchars_rebellion }
+		NOT = { is_in_combat = yes }
+	}
+	mean_time_to_happen = { months = 6 }
+	immediate = {
+		queue_actions = {
+			find_closest_system = {
+				trigger = {
+					id = "STH_federation_story.1145.trigger.1"
+					any_planet = { 
+						exists = owner
+						owner = { is_hostile = root.owner } 
+					}
+					distance = { source = FROMFROM max_distance = 200 min_distance = 0 }
+				}
+				found_system = { move_to = THIS }
+			}
+			find_closest_planet = {
+				trigger = {
+					id = "STH_federation_story.1145.trigger.2"
+					exists = owner
+					owner = { is_hostile = root.owner }
+				}
+				found_planet = { orbit_planet = THIS }
+			}
+		}
+	}
+}
+
+#Enhanced Bombard
+planet_event = {
+	id = STH_federation_story.1146
+	hide_window = yes
+	trigger = { FROM = { is_country_type = skorr } }
+	is_triggered_only = yes
+	immediate = {
+		random_list = {
+			60 = {}
+			20 = { random_pop = { kill_pop = yes } }
+			20 = { random_tile = { remove_building = yes } }
+		}
+	}
+}
+
+
+#Kingdom of Skorr Diplomacy
+country_event = {
+	id = STH_federation_story.1147
+	title = "STH_federation_story.1147.name"
+	desc = { 
+		trigger = { 
+			NOR = { 
+				has_country_flag = skorr_jihad_crisis_resolved_peacefully
+				has_country_flag = skorr_jihad_crisis_resolved_forcefully
+				has_country_flag = skorr_jihad_crisis_war
+			}
+		}
+		text = "STH_federation_story.1147.desc_01"
+	}
+	desc = { 
+		trigger = { has_country_flag = skorr_jihad_crisis_resolved_peacefully }
+		text = "STH_federation_story.1147.desc_02"
+	}
+	desc = { 
+		trigger = { has_country_flag = skorr_jihad_crisis_resolved_forcefully }
+		text = "STH_federation_story.1147.desc_03"
+	}
+	desc = { 
+		trigger = { has_country_flag = skorr_jihad_crisis_war }
+		text = "STH_federation_story.1147.desc_04"
+	}
+	trigger = {
+		from = { has_country_flag = kingdom_of_skorr }
+	}
+	diplomatic = yes
+	picture_event_data = {
+		portrait = event_target:kingdom_of_skorr
+		planet_background = event_target:kingdom_of_skorr
+		graphical_culture = event_target:kingdom_of_skorr
+		city_level = event_target:kingdom_of_skorr
+		room = event_target:kingdom_of_skorr
+	}
+	is_triggered_only = yes
+	immediate = {
+		random_country = {
+			limit = { has_country_flag = kingdom_of_skorr }
+			save_event_target_as = kingdom_of_skorr
+		}
+	}
+	option = {
+		name = STH_federation_story.1147.a
+		trigger = { has_country_flag = skorr_jihad_crisis_resolved_peacefully }
+		response_text = STH_federation_story.1147.a.response
+		is_dialog_only = yes
+	}
+	option = {
+		name = STH_federation_story.1147.c
+		trigger = { has_country_flag = skorr_jihad_crisis_resolved_forcefully }
+		response_text = STH_federation_story.1147.b.response
+		is_dialog_only = yes
+	}
+	option = {
+		name = STH_federation_story.1147.c
+		trigger = { has_country_flag = skorr_jihad_crisis_war }
+		response_text = STH_federation_story.1147.c.response
+		is_dialog_only = yes
+	}
+	option = { name = STH_federation_story.1147.d }
+}
+
+#TChar's Rebellion Crushed
+country_event = {
+	id = STH_federation_story.1148
+	hide_window = yes
+	trigger = {
+		any_country = {
+			has_country_flag = tchars_rebellion
+			count_owned_ships = { count = 0 }
+		}
+	}
+	mean_time_to_happen = { months = 3 }
+	immediate = {
+		random_country = {
+			limit = { OR = { has_country_flag = "united_federation_of_planets" has_country_flag = "united_earth" } }
+			set_country_flag = skorr_jihad_crisis_resolved_forcefully
+			country_event = { id = STH_federation_story.1149 days = 7 }
+		}
+		random_country = { 
+			limit = { has_country_flag = tchars_rebellion }
+			destroy_country = yes 
+		}
+	}
+}
+
+#GET REWARD - Forcefully
+country_event = {
+	id = STH_federation_story.1149
+	title = "STH_federation_story.1149.name"
+	desc = "STH_federation_story.1149.desc"
+	diplomatic = yes
+	picture_event_data = {
+		portrait = event_target:kingdom_of_skorr
+		planet_background = event_target:kingdom_of_skorr
+		graphical_culture = event_target:kingdom_of_skorr
+		city_level = event_target:kingdom_of_skorr
+		room = event_target:kingdom_of_skorr
+	}
+	fire_only_once = yes
+	is_triggered_only = yes
+	immediate = {
+		random_country = {
+			limit = { has_country_flag = kingdom_of_skorr }
+			save_event_target_as = kingdom_of_skorr
+		}
+		set_country_flag = skorr_jihad_crisis_resolved_forcefully 
+		remove_country_flag = skorr_jihad_crisis_war
+	}
+	option = {
+		name = STH_federation_story.1149.a
+		response_text = STH_federation_story.1149.a.response
+		is_dialog_only = yes
+	}
+	option = {
+		name = STH_federation_story.1149.b
+		response_text = STH_federation_story.1149.b.response
+		is_dialog_only = yes
+	}
+	option = {
+		name = STH_federation_story.1149.c
+		add_research_option = tech_society_the_382
+	}
+	option = {
+		name = STH_federation_story.1149.d
+		add_research_option = tech_physics_dervish_149
+	}
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+country_event = {
+	id = STH_federation_story.2200
+	title = "STH_federation_story.2200.name"
+	desc = "STH_federation_story.2200.desc"
+	picture = sth_GFX_evt_whaleprobe1
+	location = event_target:whaleProbeSpawnPlanet
+	trigger = {
+		#is_crises_allowed = yes
+		has_country_flag = united_federation_of_planets
+		any_owned_planet = {
+			has_planet_flag = sol_earth
+		}
+		NOR = {
+			has_country_flag = whale_probe_crisis 
+			has_country_flag = wrath_of_khan_era_crisis_ongoing
+		}
+		is_country_type = default
+		wrath_of_khan_era = yes
+		check_variable = { which = "wrath_of_khan_era_crisis" value < 2 }
+		#Add system count check
+		any_system = {		
+			any_planet = {
+				exists = owner
+				owner = { is_same_value = root }
+			}
+			distance = {
+				source = root.capital_scope.solar_system
+				min_distance = 25
+				max_distance = 500
+			}
+		}
+	}
+	mean_time_to_happen = { months = 24 }
+	immediate = {
+		random_owned_planet = {
+			limit = { 
+				has_planet_flag = sol_earth 
+				is_planet_class = pc_continental
+			}
+			save_event_target_as = earth
+		}
+		set_country_flag = whale_probe_crisis
+		set_timed_country_flag = { flag = wrath_of_khan_era_crisis_ongoing days = 2400 }
+		random_country = { 
+			limit = { 
+				OR = {
+					has_country_flag = united_federation_of_planets 
+					earth_empires = yes
+				}
+			}
+			save_event_target_as = united_federation_of_planets
+		}
+		if = {
+			limit = {
+				any_system = {
+					any_planet = { 
+						exists = owner
+						owner = { is_same_value = root }
+					}
+					any_planet = { 
+						NOT = { exists = owner }
+						is_star = no
+					}
+					distance = {
+						source = root.capital_scope.solar_system
+						min_distance = 25
+						max_distance = 500
+					}
+				}
+			}
+			random_system = {
+				limit = {
+					NOT = { any_planet = { is_capital = yes } }
+					any_planet = { 
+						exists = owner
+						owner = { is_same_value = root }
+					}
+					any_planet = { 
+						NOT = { exists = owner }
+						is_star = no
+					}
+					distance = {
+						source = root.capital_scope.solar_system
+						min_distance = 25
+						max_distance = 500
+					}
+				}
+				save_global_event_target_as = whaleProbeSpawnSystem
+			}
+			else = {
+				random_system = {
+					limit = {
+						NOT = { any_planet = { is_capital = yes } }
+						distance = {
+							source = root.capital_scope.solar_system
+							min_distance = 25
+							max_distance = 100
+						}
+					}
+					save_global_event_target_as = whaleProbeSpawnSystem
+				}
+			}
+		}
+		event_target:whaleProbeSpawnSystem = {
+			random_system_planet = {
+				limit = { 
+					NOT = { exists = owner }
+					is_star = no
+				}
+				save_global_event_target_as = whaleProbeSpawnPlanet
+				create_whale_probe_country = yes
+				event_target:whale_probe_country = {
+					create_fleet = {
+						settings = { spawn_debris = no is_boss = yes }
+						name = "Alien Vessel"
+						effect = {
+							set_owner = event_target:whale_probe_country
+							create_ship = {
+								name = ""
+								design = "Whale Probe"
+							}
+							set_location = event_target:whaleProbeSpawnPlanet
+						}
+					}
+					last_created_fleet = {
+						set_fleet_flag = whale_probe_fleet
+						save_global_event_target_as = whale_probe_fleet
+						fleet_event = { id = STH_federation_story.2202 days = 360 } #REPLACE WITH LONG DURATION
+					}
+				}
+			}
+		}
+		every_country = {
+			limit = { 
+				any_owned_planet = { distance = { source = event_target:whaleProbeSpawnPlanet max_distance = 100 } }
+				NOT = { is_same_value = Root }
+			}
+			country_event = { id = STH_federation_story.2201 }
+		}
+		random_list = {
+			75 = { change_variable = { which = "original_series_era_crisis" value = 2 } }
+			25 = { change_variable = { which = "original_series_era_crisis" value = 1 } }
+		}
+	}
+	option = {
+		name = STH_federation_story.2200.a
+		hidden_effect = { }
+	}
+	option = {
+		name = STH_federation_story.2200.b
+		trigger = {
+			event_target:whaleProbeSpawnSystem = {
+				any_ship_in_system = {
+					owner = { is_same_value = root }
+					is_ship_class = shipclass_science_ship
+				}
+			}
+		}
+		country_event = { id = STH_federation_story.2204 }
+	}
+}
+
+
+#Neighbour Notification
+country_event = {
+	id = STH_federation_story.2201
+	title = "STH_federation_story.2201.name"
+	desc = "STH_federation_story.2201.desc"
+	picture = sth_GFX_evt_whaleprobe1
+	is_triggered_only = yes
+	immediate = { }
+	option = { name = STH_federation_story.2201.a }
+}
+
+
+#Fleet Pathing
+fleet_event = {
+	id = STH_federation_story.2202
+	hide_window = yes
+	trigger = { }
+	is_triggered_only = yes
+	immediate = {
+		random_country = { 
+			limit = { 
+				OR = {
+					has_country_flag = united_federation_of_planets 
+					earth_empires = yes
+				}
+			}
+			save_event_target_as = united_federation_of_planets
+		}
+		queue_actions = {
+			find_closest_system = {
+				trigger = {
+					id = "STH_federation_story.2203.trigger.1"
+					any_planet = { has_planet_flag = sol_earth }
+				}
+				found_system = { move_to = THIS }
+			}
+			find_closest_planet = {
+				trigger = {
+					id = "STH_federation_story.2202.trigger.2"
+					has_planet_flag = sol_earth
+				}
+				found_planet = { orbit_planet = THIS }
+			}
+			effect = {
+				id = "STH_federation_story.2202.effect.1"
+				ROOT = { 
+					fleet_event = { id = STH_federation_story.2209 }
+				}
+			}
+		}
+	}
+}
+
+#Science Ship in same system
+fleet_event = {
+	id = STH_federation_story.2203
+	hide_window = yes
+	trigger = { 
+		is_ship_class = shipclass_science_ship
+		exists = from
+		from = { any_ship_in_system = { fleet = { has_fleet_flag = whale_probe_fleet } } }
+		from = { is_same_value = event_target:whaleProbeSpawnSystem }
+		exists = owner
+		owner = {
+			OR = {
+				has_country_flag = united_federation_of_planets
+				earth_empires = yes
+			}
+		}
+	}
+	is_triggered_only = yes
+	fire_only_once = yes
+	immediate = {
+		save_event_target_as = whaleProbeDiscoveringScienceShip
+		if = { limit = { exists = leader } leader = { save_event_target_as = whaleProbeDiscoveringScienceShipLeader } }
+		owner = { country_event = { id = STH_federation_story.2204 } }
+	}
+}
+
+#Science ship in system
+country_event = {
+	id = STH_federation_story.2204
+	title = "STH_federation_story.2204.name"
+	desc = "STH_federation_story.2204.desc"
+	picture = sth_GFX_evt_whaleprobe1
+	is_triggered_only = yes
+	trigger = { NOT = { has_country_flag = whale_probe_communicated } }
+	immediate = { set_country_flag = whale_probe_communicated }
+	option = { 
+		name = STH_federation_story.2204.a #Talk to whale probe
+		hidden_effect = { country_event = { id = STH_federation_story.2205 days = 2 } }
+	}
+	option = { 
+		name = STH_federation_story.2204.b #Treat as hostile
+		hidden_effect = { 
+			event_target:whale_probe_country = { set_faction_hostility = { set_hostile = yes } }
+		}
+	}
+}
+
+#Science Ship Communicated With Probe - hear whale sounds
+country_event = {
+	id = STH_federation_story.2205
+	title = "STH_federation_story.2205.name"
+	desc = "STH_federation_story.2205.desc"
+	picture = sth_GFX_evt_whaleprobe1
+	is_triggered_only = yes
+	immediate = { }
+	option = { 
+		name = STH_federation_story.2205.a #Try to match in database
+		hidden_effect = { country_event = { id = STH_federation_story.2206 days = 2 } }
+	}
+	option = { 
+		name = STH_federation_story.2205.b #Has XINAQU Leader
+		trigger = { 
+			exists = event_target:whaleProbeDiscoveringScienceShipLeader
+			event_target:whaleProbeDiscoveringScienceShipLeader = {
+				OR = { is_species = "xindi_aquatic" is_species = "Xindi-Aquatic" }
+			}
+		}
+		hidden_effect = { country_event = { id = STH_federation_story.2214 days = 2 } }
+	}
+	option = { 
+		name = STH_federation_story.2205.c #Treat as hostile
+		# hidden_effect = { 
+			event_target:whale_probe_country = { set_faction_hostility = { set_hostile = yes } } 
+		# }
+	}
+}
+
+#Science Ship Talking With Probe
+country_event = {
+	id = STH_federation_story.2206
+	title = "STH_federation_story.2206.name"
+	desc = "STH_federation_story.2206.desc"
+	picture = sth_GFX_evt_whaleprobe1
+	is_triggered_only = yes
+	immediate = { }
+	option = { 
+		name = STH_federation_story.2206.a #Try to match in database
+		add_society_research = 100
+	}
+}
+
+#Science Ship Talking With Probe - Xindi Aquatic
+country_event = {
+	id = STH_federation_story.2214
+	title = "STH_federation_story.2214.name"
+	desc = "STH_federation_story.2214.desc"
+	picture = sth_GFX_evt_whaleprobe1
+	is_triggered_only = yes
+	immediate = { }
+	option = { 
+		name = STH_federation_story.2206.a #Try to match in database
+		add_society_research = 500
+		set_global_flag = xindi_aquatic_whale_probe_interact
+	}
+}
+
+#Whale Probe at Sol
+fleet_event = {
+	id = STH_federation_story.2207
+	hide_window = yes
+	trigger = { 
+		exists = event_target:whale_probe_fleet
+		is_same_value = event_target:whale_probe_fleet
+		exists = from
+		any_country = {
+			OR = {
+				earth_empires = yes #REMOVE LATER
+				has_country_flag = united_federation_of_planets
+			}
+			any_owned_planet = {
+				solar_system = { is_same_value = from }
+				has_planet_flag = sol_earth
+			}
+		}
+	}
+	is_triggered_only = yes
+	fire_only_once = yes
+	immediate = {
+		random_country = { 
+			limit = { 
+				OR = {
+					has_country_flag = united_federation_of_planets 
+					earth_empires = yes
+				}
+			}
+			save_event_target_as = united_federation_of_planets
+			country_event = { id = STH_federation_story.2208 }
+		}
+		owner = { set_faction_hostility = { set_hostile = no } }
+	}
+}
+
+#Federation capital owner notification
+country_event = {
+	id = STH_federation_story.2208
+	title = "STH_federation_story.2208.name"
+	desc = { 
+		trigger = { NOT = { has_country_flag = whale_probe_communicated } }
+		text = "STH_federation_story.2208.desc_01" #No prior contact
+	}
+	desc = { 
+		trigger = { has_country_flag = whale_probe_communicated event_target:whale_probe_country = { is_hostile = root } }
+		text = "STH_federation_story.2208.desc_02" #Prior contact, hostile
+	}
+	desc = { 
+		trigger = { has_country_flag = whale_probe_communicated event_target:whale_probe_country = { NOT = { is_hostile = root } } }
+		text = "STH_federation_story.2208.desc_03" #Prior contact, not hostile
+	}
+	picture = sth_GFX_evt_whaleprobe1
+	is_triggered_only = yes
+	immediate = { }
+	option = { 
+		name = STH_federation_story.2208.a #Try to talk
+		trigger = { NOT = { has_country_flag = whale_probe_communicated } }
+		hidden_effect = {
+			event_target:whale_probe_country = { set_faction_hostility = { set_hostile = no } }
+			country_event = { id = STH_federation_story.2206 days = 2 }
+		}
+	}
+	option = { 
+		name = STH_federation_story.2208.b #Try to talk again
+		trigger = { 
+			has_country_flag = whale_probe_communicated 
+			event_target:whale_probe_country = { NOT = { is_hostile = root } }
+		}
+		hidden_effect = { event_target:whale_probe_country = { set_faction_hostility = { set_hostile = no } } }
+	}
+	option = { 
+		name = STH_federation_story.2208.c #Try to fight again
+		hidden_effect = { event_target:whale_probe_country = { set_faction_hostility = { set_hostile = yes } } }
+	}
+}
+
+
+#Whale Probe at Sol
+fleet_event = {
+	id = STH_federation_story.2209
+	hide_window = yes
+	trigger = { 
+		has_fleet_flag = whale_probe_fleet
+		exists = orbit
+		orbit = {
+			has_planet_flag = sol_earth
+			exists = owner
+			owner = {
+				OR = {
+					earth_empires = yes #REMOVE LATER
+					has_country_flag = united_federation_of_planets
+				}
+			}
+		}
+	}
+	is_triggered_only = yes
+	immediate = {
+		solar_system = {
+			random_system_planet  = {
+				limit = { is_star = yes }
+				set_planet_flag = whaleProbeTimeTravelStar
+				save_event_target_as = timeTravelStar
+			}
+		}
+		orbit = {
+			if = {
+				limit = { check_variable = { which = "whale_probe_search"  value > 99 } }
+				planet_event = { id = STH_federation_story.2212 }
+				else = {
+					random_list = {
+						10 = { planet_event = { id = STH_federation_story.2210 } }
+						10 = { planet_event = { id = STH_federation_story.2211 } }
+					}
+				}
+			}
+			owner = {		
+				if = {
+					limit = { 
+						NOT = { has_special_project = "WHALE_PROBE_1_PROJECT" } 
+						NOT = { has_country_flag = whale_probe_crisis_resolved_peacefully }
+						NOT = { has_country_flag = whale_probe_crisis_resolved_forcefully }
+					}
+					enable_special_project = { name = "WHALE_PROBE_1_PROJECT" location = event_target:timeTravelStar owner = this }
+					country_event = { id = STH_federation_story.2213 days = 1}
+				}
+			}
+		}
+		fleet_event = { id = STH_federation_story.2209 days = 45 random = 30 }
+	}
+}
+
+#Ecological Damage
+planet_event = {
+	id = STH_federation_story.2210
+	title = "STH_federation_story.2210.name"
+	desc = { 
+		trigger = { NOT = { owner = { has_country_flag = whale_probe_communicated } } }
+		text = "STH_federation_story.2210.desc_01" #No prior contact
+	}
+	picture = sth_GFX_evt_whaleprobe2
+	is_triggered_only = yes
+	trigger = { 
+		event_target:whale_probe_fleet = { is_in_combat = no } 
+	}
+	immediate = { 
+		change_variable = { which = "whale_probe_search" value = 10 }
+		random_country = {
+			limit = { has_country_flag = whale_probe_country }
+			save_event_target_as = whale_probe_country
+		}
+	}
+	option = { 
+		name = STH_federation_story.2210.a #Wait for a solution
+		trigger = { event_target:whale_probe_country = { NOT = { is_hostile = root.owner } } }
+		ai_chance = { factor = 0 modifier = { factor = 10 event_target:whale_probe_country = { NOT = { is_hostile = root.owner } } } }
+		hidden_effect = { event_target:whale_probe_country = { set_faction_hostility = { set_hostile = no } } }
+	}
+	option = { 
+		name = STH_federation_story.2210.b #Fight
+		trigger = { event_target:whale_probe_country = { NOT = { is_hostile = root.owner } } }
+		ai_chance = { factor = 0 }
+		hidden_effect = { event_target:whale_probe_country = { set_faction_hostility = { set_hostile = yes } } }
+	}
+	option = { 
+		name = STH_federation_story.2210.c #Keep Fighting
+		ai_chance = { factor = 0 }
+		trigger = { event_target:whale_probe_country = { is_hostile = root.owner } }
+		hidden_effect = { event_target:whale_probe_country = { set_faction_hostility = { set_hostile = yes } } }
+	}
+	option = { 
+		name = STH_federation_story.2210.d #Stand down!
+		ai_chance = { factor = 0 modifier = { factor = 10 event_target:whale_probe_country = { is_hostile = root.owner } } }
+		trigger = { event_target:whale_probe_country = { is_hostile = root.owner } }
+		hidden_effect = { event_target:whale_probe_country = { set_faction_hostility = { set_hostile = no } } }
+	}
+}
+
+#Ecological Damage
+planet_event = {
+	id = STH_federation_story.2211
+	title = "STH_federation_story.2211.name"
+	desc = { 
+		trigger = { NOT = { owner = { has_country_flag = whale_probe_communicated } } }
+		text = "STH_federation_story.2211.desc_01" #No prior contact
+	}
+	picture = sth_GFX_evt_whaleprobe2
+	is_triggered_only = yes
+	trigger = { event_target:whale_probe_fleet = { is_in_combat = no } }
+	immediate = {
+		change_variable = { which = "whale_probe_search" value = 10 }
+		random_list = {
+			10 = {
+				random_tile = {
+					limit = { has_building = yes }
+					set_ruined = yes
+				}
+			}
+			10 = {
+				random_tile = {
+					limit = { has_blocker = no }
+					set_blocker = "tb_crater"
+					kill_pop = yes
+				}
+			}
+		}
+		random_country = {
+			limit = { has_country_flag = whale_probe_country }
+			save_event_target_as = whale_probe_country
+		}
+	}
+	option = { 
+		name = STH_federation_story.2211.a #Wait for a solution
+		trigger = { event_target:whale_probe_country = { NOT = { is_hostile = root.owner } } }
+		ai_chance = { factor = 0 modifier = { factor = 10 event_target:whale_probe_country = { NOT = { is_hostile = root.owner } } } }
+		hidden_effect = { event_target:whale_probe_country = { set_faction_hostility = { set_hostile = no } } }
+	}
+	option = { 
+		name = STH_federation_story.2211.b #Fight
+		trigger = { event_target:whale_probe_country = { NOT = { is_hostile = root.owner } } }
+		ai_chance = { factor = 0 }
+		hidden_effect = { event_target:whale_probe_country = { set_faction_hostility = { set_hostile = yes } } }
+	}
+	option = { 
+		name = STH_federation_story.2211.c #Keep Fighting
+		ai_chance = { factor = 0 }
+		trigger = { event_target:whale_probe_country = { is_hostile = root.owner } }
+		hidden_effect = { event_target:whale_probe_country = { set_faction_hostility = { set_hostile = yes } } }
+	}
+	option = { 
+		name = STH_federation_story.2211.c #Stand down!
+		ai_chance = { factor = 0 modifier = { factor = 10 event_target:whale_probe_country = { is_hostile = root.owner } } }
+		trigger = { event_target:whale_probe_country = { is_hostile = root.owner } }
+		hidden_effect = { event_target:whale_probe_country = { set_faction_hostility = { set_hostile = no } } }
+	}
+}
+
+
+
+#Planet Changed
+planet_event = {
+	id = STH_federation_story.2212
+	title = "STH_federation_story.2212.name"
+	desc = { 
+		trigger = { NOT = { has_country_flag = whale_probe_communicated } }
+		text = "STH_federation_story.2212.desc_01" #No prior contact
+	}
+	picture = sth_GFX_evt_whaleprobe2
+	is_triggered_only = yes
+	trigger = { event_target:whale_probe_fleet = { is_in_combat = no } }
+	immediate = {
+		change_pc = pc_ocean
+		random_list = {
+			20 = {
+				random_tile = {
+					limit = { has_building = yes }
+					set_ruined = yes
+				}
+			}
+			10 = {
+				random_tile = {
+					limit = { has_blocker = no }
+					set_blocker = "tb_crater"
+					kill_pop = yes
+				}
+			}
+		}
+		random_country = {
+			limit = { has_country_flag = whale_probe_country }
+			save_event_target_as = whale_probe_country
+		}
+		event_target:whale_probe_fleet = {
+			queue_actions = {
+				find_closest_system = {
+					found_system = { move_to = THIS }
+				}
+				effect = {
+					id = "STH_federation_story.2212.effect.2"
+					delete_fleet = event_target:whale_probe_fleet
+				}
+			}
+		}
+	}
+	option = { 
+		name = STH_federation_story.2212.a #Allow the probe to leave
+		ai_chance = { factor = 1 }
+		hidden_effect = { event_target:whale_probe_country = { set_faction_hostility = { set_hostile = no } } }
+	}
+	option = { 
+		name = STH_federation_story.2212.b #Fight
+		ai_chance = { factor = 0 }
+		trigger = { event_target:whale_probe_country = { NOT = { is_hostile = root.owner } } }
+		hidden_effect = { event_target:whale_probe_country = { set_faction_hostility = { set_hostile = yes } } }
+	}
+	option = { 
+		name = STH_federation_story.2212.c #Keep Fighting
+		ai_chance = { factor = 0 }
+		trigger = { event_target:whale_probe_country = { is_hostile = root.owner } }
+		event_target:whale_probe_country = { set_faction_hostility = { set_hostile = yes } }
+		hidden_effect = { event_target:whale_probe_country = { set_faction_hostility = { set_hostile = yes } } }
+	}
+}
+
+#Ship prepares to go back in time
+country_event = {
+	id = STH_federation_story.2213
+	title = "STH_federation_story.2213.name"
+	desc = { 
+		text = "STH_federation_story.2213.desc_01" #No prior contact
+	}
+	fire_only_once = yes
+	picture = sth_GFX_evt_whaleprobe1
+	is_triggered_only = yes
+	immediate = { }
+	option = { name = STH_federation_story.2213.a }
+}
+
+
+#Ship prepares to go back in time
+fleet_event = {
+	id = STH_federation_story.2220
+	title = "STH_federation_story.2220.name"
+	desc = { 
+		text = "STH_federation_story.2220.desc_01" #No prior contact
+	}
+	picture = sth_GFX_evt_whaleprobe3
+	is_triggered_only = yes
+	immediate = { 
+	}
+	option = { 
+		name = STH_federation_story.2220.a #Go Back In Time
+		fleet_event = { id = STH_federation_story.2221 }
+	}
+}
+
+#Chooses Time Period
+fleet_event = {
+	id = STH_federation_story.2221
+	title = "STH_federation_story.2221.name"
+	desc = { 
+		text = "STH_federation_story.2221.desc_01" #No prior contact
+	}
+	picture = sth_GFX_evt_whaleprobe3
+	is_triggered_only = yes
+	immediate = { 
+	}
+	option = { 
+		name = STH_federation_story.2221.a #1986
+		fleet_event = { id = STH_federation_story.2222 }
+	}
+}
+
+
+#1986 - pick location
+fleet_event = {
+	id = STH_federation_story.2222
+	title = "STH_federation_story.2222.name"
+	desc = { 
+		text = "STH_federation_story.2222.desc_01" #No prior contact
+	}
+	picture = sth_GFX_evt_whaleprobe8
+	is_triggered_only = yes
+	immediate = { 
+	}
+	option = { 
+		name = STH_federation_story.2222.a #San Francisco
+		fleet_event = { id = STH_federation_story.2223 }
+	}
+	option = { 
+		name = STH_federation_story.2222.b #Greenland
+		fleet_event = { id = STH_federation_story.2230 }
+	}
+}
+
+#1986 - San Francisco Stuff Happens
+fleet_event = {
+	id = STH_federation_story.2223
+	title = "STH_federation_story.2223.name"
+	desc = { text = "STH_federation_story.2223.desc_01" }
+	picture = sth_GFX_evt_whaleprobe4
+	is_triggered_only = yes
+	immediate = { }
+	option = { 
+		name = STH_federation_story.2223.a #High Risk
+		hidden_effect = {
+			random_list = {
+				10 = {
+					modifier = { factor = 1.50 leader = { has_level = 2 } }
+					modifier = { factor = 3.00 leader = { has_level = 3 } }
+					modifier = { factor = 6.00 leader = { has_level = 4 } }
+					fleet_event = { id = STH_federation_story.2224 }
+				}
+				10 = {
+					modifier = { factor = 0.0 leader = { has_level = 5 } }
+					fleet_event = { id = STH_federation_story.2225 }
+				}
+			}
+		}
+	}
+	option = { 
+		name = STH_federation_story.2223.b #Low Risk
+		hidden_effect = {
+			random_list = {
+				10 = {
+					fleet_event = { id = STH_federation_story.2224 }
+				}
+				5 = {
+					modifier = { factor = 0.0 leader = { has_level = 5 } }
+					fleet_event = { id = STH_federation_story.2225 }
+				}
+			}
+		}
+	}
+}
+
+#1986 - San Francisco Whales Acquired
+fleet_event = {
+	id = STH_federation_story.2224
+	title = "STH_federation_story.2224.name"
+	desc = { text = "STH_federation_story.2224.desc_01" }
+	picture = sth_GFX_evt_whaleprobe6
+	is_triggered_only = yes
+	immediate = { }
+	option = { 
+		name = STH_federation_story.2224.a #San Francisco
+		hidden_effect = { fleet_event = { id = STH_federation_story.2226 } }
+	}
+}
+
+
+#1986 - San Francisco Whales Lost - Small Timeline Change
+fleet_event = {
+	id = STH_federation_story.2225
+	title = "STH_federation_story.2225.name"
+	desc = { text = "STH_federation_story.2225.desc_01" }
+	picture = sth_GFX_evt_whaleprobe3
+	is_triggered_only = yes
+	immediate = { }
+	option = { 
+		name = STH_federation_story.2225.a #San Francisco
+		hidden_effect = { 
+			small_timeline_change = yes 
+			enable_special_project = { name = "WHALE_PROBE_1_PROJECT" location = event_target:timeTravelStar owner = root.owner }
+			set_event_locked = no
+		}
+	}
+}
+
+
+
+#1986 - Greenland Stuff Happens
+fleet_event = {
+	id = STH_federation_story.2230
+	title = "STH_federation_story.2230.name"
+	desc = { text = "STH_federation_story.2230.desc_01" }
+	picture = sth_GFX_evt_whaleprobe5
+	is_triggered_only = yes
+	immediate = { }
+	option = { 
+		name = STH_federation_story.2230.a #Greenland
+		hidden_effect = {
+			random_list = {
+				10 = {
+					modifier = { factor = 1.50 leader = { has_level = 2 } }
+					modifier = { factor = 3.00 leader = { has_level = 3 } }
+					modifier = { factor = 6.00 leader = { has_level = 4 } }
+					fleet_event = { id = STH_federation_story.2231 }
+				}
+				15 = {
+					modifier = { factor = 0.0 leader = { has_level = 5 } }
+					fleet_event = { id = STH_federation_story.2232 }
+				}
+			}
+		}
+	}
+	option = { 
+		name = STH_federation_story.2230.b #Greenland
+		hidden_effect = {
+			random_list = {
+				10 = {
+					fleet_event = { id = STH_federation_story.2231 }
+				}
+				10 = {
+					modifier = { factor = 0.0 leader = { has_level = 5 } }
+					fleet_event = { id = STH_federation_story.2232 }
+				}
+			}
+		}
+	}
+}
+
+#1986 - Greenland Whales Acquired
+fleet_event = {
+	id = STH_federation_story.2231
+	title = "STH_federation_story.2231.name"
+	desc = { text = "STH_federation_story.2231.desc_01" }
+	picture = sth_GFX_evt_whaleprobe6
+	is_triggered_only = yes
+	immediate = { }
+	option = { 
+		name = STH_federation_story.2231.a #San Francisco
+		hidden_effect = { fleet_event = { id = STH_federation_story.2226 } }
+	}
+}
+
+
+#1986 - Greenland Whales Lost - Small Timeline Change
+fleet_event = {
+	id = STH_federation_story.2232
+	title = "STH_federation_story.2232.name"
+	desc = { text = "STH_federation_story.2232.desc_01" }
+	picture = sth_GFX_evt_whaleprobe3
+	is_triggered_only = yes
+	immediate = { }
+	option = { 
+		name = STH_federation_story.2232.a #San Francisco
+		hidden_effect = { 
+			small_timeline_change = yes 
+			enable_special_project = { name = "WHALE_PROBE_1_PROJECT" location = event_target:timeTravelStar owner = root.owner }
+		}
+		kill_leader = { type = scientist show_notification = no }
+		set_event_locked = no
+		delete_fleet = this
+	}
+}
+
+
+#1986 - Return to present
+fleet_event = {
+	id = STH_federation_story.2226
+	title = "STH_federation_story.2226.name"
+	desc = { text = "STH_federation_story.2226.desc_01" }
+	picture = sth_GFX_evt_whaleprobe3
+	is_triggered_only = yes
+	immediate = { }
+	option = { 
+		name = STH_federation_story.2226.a
+		hidden_effect = {
+			random_list = {
+				10 = { #NOTHING
+					modifier = { factor = 1.50 leader = { has_level = 2 } }
+					modifier = { factor = 2.00 leader = { has_level = 3 } }
+					modifier = { factor = 3.00 leader = { has_level = 4 } }
+				}
+				10 = {
+					modifier = { factor = 0.0 leader = { has_level = 4 } }
+					modifier = { factor = 0.0 leader = { has_level = 5 } }
+					small_timeline_change = yes
+				}
+				10 = {
+					modifier = { factor = 0.0 leader = { has_level = 5 } }
+					large_timeline_change = yes
+				}
+			}
+			event_target:whale_probe_fleet = { fleet_event = { id = STH_federation_story.2250 days = 7 } }
+			set_event_locked = no
+		}
+	}
+}
+
+
+
+#Fleet Pathing
+fleet_event = {
+	id = STH_federation_story.2250
+	hide_window = yes
+	trigger = { }
+	is_triggered_only = yes
+	immediate = {
+		random_country = {
+			limit = { 
+				OR = {
+					has_country_flag = united_federation_of_planets 
+					earth_empires = yes
+				}
+			}
+			save_event_target_as = united_federation_of_planets
+			country_event = { id = STH_federation_story.2251 }
+		}
+		owner = { 
+			set_faction_hostility = { set_hostile = no } 
+			set_country_flag = whale_probe_resolved
+		}
+		queue_actions = {
+			find_closest_system = { found_system = { move_to = THIS } }
+			effect = {
+				id = "STH_federation_story.2252.effect.2"
+				ROOT = { 
+					delete_fleet = this 
+					owner = { destroy_country = yes }
+				}
+			}
+			effect = {
+				id = "STH_federation_story.2252.effect.3"
+				event_target:united_federation_of_planets = {
+					country_event = { id = STH_federation_story.2252 }
+				}
+			}
+		}
+	}
+}
+
+
+#Probe Leaving
+country_event = {
+	id = STH_federation_story.2251
+	title = "STH_federation_story.2251.name"
+	desc = { text = "STH_federation_story.2251.desc_01" }
+	picture = sth_GFX_evt_whaleprobe1
+	is_triggered_only = yes
+	immediate = { }
+	option = { 
+		name = STH_federation_story.2251.a #San Francisco
+		hidden_effect = { country_event = { id = STH_federation_story.2253 days = 90 random = 9 } }
+	}
+}
+
+#Probe Left
+country_event = {
+	id = STH_federation_story.2252
+	title = "STH_federation_story.2252.name"
+	desc = { text = "STH_federation_story.2252.desc_01" }
+	picture = sth_GFX_evt_whaleprobe1
+	is_triggered_only = yes
+	immediate = { }
+	option = { 
+		name = STH_federation_story.2252.a #San Francisco
+		
+	}
+}
+
+country_event = {
+	id = STH_federation_story.2253
+	title = "STH_federation_story.2253.name"
+	desc = { text = "STH_federation_story.2253.desc_01" }
+	picture = sth_GFX_evt_whaleprobe7
+	is_triggered_only = yes
+	immediate = { 
+		random_planet = {
+			limit = { has_planet_flag = sol_earth }
+			save_event_target_as = sol_earth
+		}
+	}
+	option = { 
+		name = STH_federation_story.2253.a #San Francisco
+		event_target:sol_earth = {
+			add_modifier = { modifier = pm_humpback_whales }
+		}
+		set_country_flag = whale_probe_crisis_resolved_peacefully
+		remove_country_flag = wrath_of_khan_era_crisis_ongoing
+	}
+}
+
+#Whale Probe Destroyed
+country_event = {
+	id = STH_federation_story.2254
+	hide_window = yes
+	is_triggered_only = yes
+	trigger = {
+		exists = from
+		from = { has_country_flag = whale_probe_country }
+		has_country_flag = whale_probe_crisis
+	}
+	immediate = {
+		random_country = {
+			limit = { has_country_flag = whale_probe_crisis }
+			country_event = { id = STH_federation_story.2255 }
+		}
+		from = { destroy_country = yes }
+	}
+}
+
+
+country_event = {
+	id = STH_federation_story.2255
+	title = "STH_federation_story.2255.name"
+	desc = { text = "STH_federation_story.2255.desc_01" }
+	picture = sth_GFX_evt_whaleprobe1
+	is_triggered_only = yes
+	immediate = {
+		random_planet = {
+			limit = { has_planet_flag = "whaleProbeTimeTravelStar" }
+			save_event_target_as = timeTravelStar
+		}
+		if = {
+			limit = { has_special_project = "WHALE_PROBE_1_PROJECT" }
+			abort_special_project = { type = "WHALE_PROBE_1_PROJECT" location = event_target:timeTravelStar }
+		}
+		set_country_flag = whale_probe_crisis_resolved_forcefully
+	}
+	option = { 
+		name = STH_federation_story.2255.a
+		add_engineering_research = 3000
+		add_minerals = 500
+		add_energy = 250
+	}
+}
+
+
+###### DSC ships
+
+### Create Discovery and Glenn
+country_event = {
+	id = STH_federation_story.800
+	title = STH_federation_story.800.name
+	desc = STH_federation_story.800.desc
+	picture = sth_GFX_evt_ussGlenn
+	#mean_time_to_happen = { months = 1 }
+	fire_only_once = yes
+	is_triggered_only = yes
+	immediate = { 
+		capital_scope = { save_event_target_as = capital }
+		create_fleet = { name = "USS Discovery" settings = { can_change_composition = no can_change_leader = yes } }		
+			last_created_fleet = {
+		    set_owner = ROOT
+		    create_ship = { name = "USS Discovery" design = "discovery" graphical_culture = "hero_ships_01" prefix = no } #### Placeholder
+		    last_created_ship = {
+		    	set_disable_at_health = 0.1
+		        set_ship_flag = USS_discovery
+		        add_modifier = { modifier = "herobuff_tos" days = -1 }
+		        #save_global_event_target_as = USS_discovery
+		    }
+		    set_location = {
+		        target = event_target:capital
+		        distance = 5
+		        angle = 0
+		    }
+		}
+		create_fleet = { name = "USS Glenn" settings = { can_change_composition = no can_change_leader = yes } }
+		last_created_fleet = {
+		    set_owner = ROOT
+		    create_ship = { name = "USS Glenn" design = "glenn" graphical_culture = "hero_ships_01" prefix = no } #### Placeholder
+		    last_created_ship = {
+		    	set_disable_at_health = 0.1
+		        set_ship_flag = USS_glenn
+		        add_modifier = { modifier = "herobuff_tos" days = -1 }
+		        add_modifier = { modifier = "sm_spore_drive_navigator" days = -1 }   
+		        #save_global_event_target_as = USS_glenn		     
+		    }
+		    set_location = {
+		        target = event_target:capital
+		        distance = 10
+		        angle = 0
+		    }
+		}
+    }    
+	option = {
+		name = "Awesome"
+	}
+}
+### on_system_enter for discovery
+fleet_event = {
+	id = STH_federation_story.801
+	hide_window = yes
+	is_triggered_only = yes
+	trigger = {
+	    any_owned_ship = {
+	        has_ship_flag = USS_discovery
+		}    
+	}
+	immediate = { 
+	random_owned_ship = { 
+		limit = { has_ship_flag = USS_discovery }
+		owner = { change_variable = { which = "discovery_jumps" value = 1 } }
+		add_modifier = { modifier = "sm_shields_disabled" days = 30 }		
+			if = { 
+				limit = { 
+					has_hp_percentage > 0.16
+				}	
+	            random_list = { 
+	            	10 = {}
+					10 = { reduce_hp_percent = 5 }
+	            	10 = { reduce_hp_percent = 10 }
+	            	10 = { reduce_hp_percent = 15 }
+	            }	
+            }
+			if = { 
+				limit = { 
+					has_hp_percentage < 0.15
+				}	
+	            set_disabled = yes	
+            }            
+	    }
+	}            
+}
+### on_system_enter for glenn
+fleet_event = {
+	id = STH_federation_story.802
+	hide_window = yes
+	is_triggered_only = yes
+	trigger = {
+	    any_owned_ship = {
+		    has_ship_flag = USS_glenn
+		}    
+	}
+	immediate = { 
+		random_owned_ship = { 
+			limit = { has_ship_flag = USS_glenn }		 
+			owner = { change_variable = { which = "glenn_jumps" value = 1 } }
+			add_modifier = { modifier = "sm_shields_disabled" days = 30 }		
+			if = { 
+				limit = { 
+					has_hp_percentage > 0.16
+					owner = { check_variable = { which = "glenn_jumps" value < 3 } }
+				}	
+				random_list = { 
+	            	10 = {}
+					10 = { reduce_hp_percent = 5 }
+	            	10 = { reduce_hp_percent = 10 }
+	            	10 = { reduce_hp_percent = 15 }
+	            }	
+            }
+			if = { 
+				limit = { 
+					owner = { check_variable = { which = "glenn_jumps" value > 3 } }
+				}	
+				save_event_target_as = USS_glenn
+				#remove_modifier = sm_spore_drive_navigator
+				repair_ship = yes
+				reduce_hp_percent = 80
+	            set_disabled = yes	
+	            fleet = { set_event_locked = yes }
+	            ####ship_event = { id = STH_federation_story.803 }
+				####begin_event_chain = { event_chain = "investigate_glenn_chain" target = THIS }
+				enable_special_project = { name = "INVESTIGATE_GLENN_PROJECT_1" location = event_target:USS_glenn owner = root.owner }
+            }            
+	    }
+	}            
+}
+
+### Investigate Glenn Accident
+ship_event = {
+	id = STH_federation_story.803
+	title = STH_federation_story.803.name
+	desc = STH_federation_story.803.desc
+	picture = sth_GFX_evt_ussGlenn
+	#mean_time_to_happen = { months = 1 }
+	location = event_target:USS_glenn
+	is_triggered_only = yes
+	immediate = { 
+		owner = { 
+			random_owned_ship = { 
+				limit = { has_ship_flag = USS_glenn }
+				save_event_target_as = USS_glenn 
+			}
+		}
+    }    
+	option = {
+		name = "Send Away Team"
+		hidden_effect = {
+			random_list = { 
+				80 = { owner = { country_event = { id = STH_federation_story.804 days = 20 random = 10 } } } ### Success, range buff for discovery 
+				20 = { owner = { country_event = { id = STH_federation_story.805 days = 20 random = 10 } } } ### Fail, Away team killed 
+			}
+		}			
+	}
+	option = {
+		name = "Destroy the ship"
+		event_target:USS_glenn = { 
+			delete_ship = this
+	    }
+		owner = {add_minerals = 250 }
+	}
+}
+### Success, range buff for discovery 
+country_event = {
+	id = STH_federation_story.804
+	title = STH_federation_story.804.name
+	desc = STH_federation_story.804.desc #### Navigator for sporedrive found on the glenn, increases discovery jump range
+	picture = sth_GFX_evt_ussGlenn
+	location = event_target:USS_glenn
+	#mean_time_to_happen = { months = 1 }
+	is_triggered_only = yes
+	immediate = { 
+		random_owned_ship = { 
+			limit = { has_ship_flag = USS_glenn }
+			save_event_target_as = USS_glenn 
+		}
+		random_owned_ship = { 
+			limit = { has_ship_flag = USS_discovery }
+			save_event_target_as = USS_discovery 
+		}
+    }    
+	option = {
+		name = "Excellent"
+		add_society_research = 150
+		add_physics_research = 250
+		add_engineering_research = 300
+		event_target:USS_glenn = { 
+			delete_ship = this
+	    }
+		event_target:USS_discovery = { 
+			add_modifier = { modifier = "sm_spore_drive_navigator" days = -1 } 
+	    }
+	}
+}
+### Fail, Away team killed 
+country_event = {
+	id = STH_federation_story.805
+	title = STH_federation_story.805.name
+	desc = STH_federation_story.805.desc #### Crew killed on the Glenn
+	picture = sth_GFX_evt_ussGlenn
+	#mean_time_to_happen = { months = 1 }
+	location = event_target:USS_glenn
+	is_triggered_only = yes
+	immediate = { 
+		random_owned_ship = { 
+			limit = { has_ship_flag = USS_glenn }
+			save_event_target_as = USS_glenn 
+		}
+    }    
+	option = {
+		name = "This is a disaster"
+		add_influence = -50
+		event_target:USS_glenn = { 
+			delete_ship = this
+	    }
+	}
+}
+

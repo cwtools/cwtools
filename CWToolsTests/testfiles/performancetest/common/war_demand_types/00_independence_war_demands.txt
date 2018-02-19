@@ -1,0 +1,243 @@
+# variables:
+# parameters, data containing the specifics, eg which planet we're talking about
+# warscore_cost, scripted value, root is target country, amount of warscore required to push this demand
+# potential, trigger, root and from are main attackers and defenders, war is fromfrom, decides if this demand is listed
+# possible, trigger, root and from are main attackers and defenders, war is fromfrom, fromfromfrom is the target country, decides if this demand can go through
+# proposable, trigger, root and from are main attackers and defenders, war is fromfrom, fromfromfrom is the target country, decides if this demand is ok to propose
+# demandable, trigger, root and from are main attackers and defenders, war is fromfrom, fromfromfrom is the target country, decides if you can send a peace offer demanding ( not surrendering ) the demand.
+# effect, effect, root and main are main attacker and defender, war is fromfrom, fromfromfrom is the target country, effect which executes when the demand is accepted
+# execution_order, integer, defines in which order demands are executed, lower is higher priority, having the same execution order will make the first defined one higher prio
+# monthly_warscore, a descriptor on monthly wargoal score
+#	amount, scripted value, root and from are main attackers and defenders, war is fromfrom, fromfromfrom is the target country
+#   valid, trigger, root and from are main attackers and defenders, war is fromfrom, fromfromfrom is the target country
+
+independence = {
+	execution_order = 1
+	
+	parameters = {
+		country = {
+			type = country
+		}
+	}
+	
+	warscore_cost = {
+		base = 50
+	}
+	
+	potential = {	
+		is_subject = yes
+		overlord = {
+			is_country = from
+		}
+		parameter:country = {
+			is_country = from
+		}		
+	}
+	
+	possible = {
+		always = yes
+	}
+	
+	proposable = {
+		always = yes
+	}
+	
+	monthly_warscore = {
+		amount = {
+			base = 1
+		}
+		valid = {
+			NOT = {
+				any_country = {
+					fromfrom = {
+						is_war_participant = {
+							who = prev
+							side = root
+						}	
+					}				
+					capital_scope = {
+						controller = {
+							fromfrom = {
+								is_war_participant = {
+									who = prev
+									side = parameter:country
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+	
+	effect = {
+		every_country = {
+			limit = {
+				is_subject = yes
+				overlord = { is_same_value = parameter:country }
+				fromfrom = {
+					is_war_participant = {
+						who = prev
+						side = root
+					}	
+				}
+			}
+			set_subject_of = {
+				who = none
+			}
+		}
+	}
+
+	ai_weight = {
+		base = 1000		
+	}
+}
+
+liberate_country = {
+	execution_order = 1
+	
+	parameters = {
+		country = {
+			type = country
+		}
+	}
+	
+	warscore_cost = {
+		base = 50
+	}
+	
+	potential = {
+		is_assimilator = no
+		OR = {
+			is_subject = no
+			NOT = {
+				overlord = {
+					is_same_value = from
+				}
+			}
+		}
+	
+		custom_tooltip = {
+			fail_text = "war_demand_cede_planet_liberation_war"
+			OR = {
+				parameter:country = {
+					is_same_value = root
+				}
+				NOT = { exists = overlord }
+				overlord = {
+					NOT = { is_same_value = from }
+				}
+			}
+		}
+		custom_tooltip = {
+			fail_text = "war_demand_liberate_country_not_vassal"
+			parameter:country = {
+				exists = overlord
+				overlord = {
+					OR = {
+						AND = {
+							exists = fromfrom
+							from = {
+								from = {
+									is_war_participant = {
+										who = prevprev
+										side = prev
+									}
+								}
+							}
+						}
+						AND = {
+							NOT = { exists = fromfrom }
+							would_join_war = {
+								attacker = root
+								defender = from
+								side = from
+							}
+						}
+					}
+				}
+			}
+		}
+		custom_tooltip = {
+			fail_text = "war_demand_cede_planet_no_vassals"
+			OR = {
+				NOT = { exists = overlord }
+				overlord = {
+					is_same_value = from
+				}
+			}
+		}
+	}
+	
+	possible = {
+		hidden:parameter:country = {
+			custom_tooltip = {
+				fail_text = "war_demand_liberate_country_already_vassalized"
+				war_demand_counter = {
+					type = subjugated
+					value < 1
+				}
+			}
+			custom_tooltip = {
+				fail_text = "war_demand_liberate_country_no_planets"
+				war_demand_counter = {
+					type = num_owned_planets
+					value > 0
+				}
+			}
+		}
+	}
+	
+	proposable = {
+		always = yes
+	}
+	
+	effect = {
+		parameter:country = {
+			set_subject_of = {
+				who = none
+			}
+		}
+	}
+	
+	counters = {
+		liberated = {
+			context = parameter:country
+			value = { base = 1 }
+		}
+		liberated_or_vassalized = {
+			context = parameter:country
+			value = { base = 1 }
+		}
+	}
+
+	ai_weight = {
+		base = 50
+		
+		modifier = {
+			factor = 0.1
+			NOT = { 
+				this = { has_ai_personality_behaviour = liberator } 
+			}
+		}
+		
+		modifier = {
+			factor = 2
+			parameter:country = { has_ai_personality_behaviour = liberator }
+		}
+
+		modifier = {
+			factor = 0
+			is_country_type = fallen_empire
+		}
+
+		modifier = {
+			factor = 0
+			parameter:country = {
+				NOT = {
+					is_neighbor_of = root
+				}
+			}
+		}		
+	}
+}

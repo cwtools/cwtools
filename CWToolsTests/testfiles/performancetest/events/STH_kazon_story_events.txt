@@ -1,0 +1,127 @@
+########################
+#
+# Kazon Story Events
+#
+# Written by Walshicus
+#
+########################
+
+namespace = STH_kazon_story
+
+# Kazon Sect Conflict
+country_event = {
+	id = STH_kazon_story.1
+	title = "STH_kazon_story.1.name"
+	desc = "STH_kazon_story.1.desc"
+	picture = sth_GFX_evt_kazonCruiser
+	trigger = {
+		has_country_flag = kazon_sects
+		is_at_war = no
+		NOT = {	has_country_flag = recent_civil_war }
+		any_owned_planet = {
+			NOT = { is_capital = yes }
+		}
+		any_owned_planet = {
+			NOT = { is_capital = yes }
+			NOT = {	is_planet = prev }
+		}
+	}
+	mean_time_to_happen = {	months = 300 }
+	immediate = { 
+		set_timed_country_flag = { flag = recent_civil_war days = 10000 }
+		random_owned_planet = {
+			limit = { NOT = { is_capital = yes } }
+			save_event_target_as = rebelPlanet1
+		}
+		random_owned_planet = {
+			limit = { 
+				NOT = { is_capital = yes }
+				NOT = { is_planet = event_target:rebelPlanet1 } 					
+			}
+			save_event_target_as = rebelPlanet2
+		}
+	}
+	option = {
+		trigger = { has_country_resource = { type = influence amount > 499 } }
+		name = STH_kazon_story.1.a
+		add_influence = -500
+		hidden_effect = {
+			random_list = {
+				25 = { country_event = { id = STH_kazon_story.2 days = 180 random = 20 } }
+				25 = { country_event = { id = STH_kazon_story.3 days = 180 random = 20 } }
+				50 = { country_event = { id = STH_kazon_story.4 days = 180 random = 20 } }
+			}
+		}
+	}
+	option = {
+		trigger = { has_country_resource = { type = influence amount > 249 } }
+		name = STH_kazon_story.1.b
+		add_influence = -250
+		hidden_effect = {
+			random_list = {
+				33 = { country_event = { id = STH_kazon_story.2 days = 180 random = 20 } }
+				33 = { country_event = { id = STH_kazon_story.3 days = 180 random = 20 } }
+				33 = { country_event = { id = STH_kazon_story.4 days = 180 random = 20 } }
+			}
+		}
+	}
+	option = {
+		name = STH_kazon_story.1.c
+		hidden_effect = {
+			random_list = {
+				50 = { country_event = { id = STH_kazon_story.2 days = 180 random = 20 } }
+				50 = { country_event = { id = STH_kazon_story.3 days = 180 random = 20 } }
+			}
+		}
+	}
+}
+
+#Small Rebellion
+country_event = {
+	id = STH_kazon_story.2
+	title = "STH_kazon_story.2.name"
+	desc = "STH_kazon_story.2.desc"
+	picture = sth_GFX_evt_kazonAttack
+	is_triggered_only = yes
+	immediate = {	
+		event_target:rebelPlanet1 = {
+			create_kazon_rebel_country_1 = yes
+			set_owner = last_created_country
+		}
+		last_created_country = { save_event_target_as = rebelCountry1 }
+	}
+	option = { name = STH_kazon_story.2.a }
+}
+
+#Two Rebellions
+country_event = {
+	id = STH_kazon_story.3
+	title = "STH_kazon_story.3.name"
+	desc = "STH_kazon_story.3.desc"
+	picture = sth_GFX_evt_kazonAttack
+	is_triggered_only = yes
+	immediate = {	
+		event_target:rebelPlanet1 = {
+			create_kazon_rebel_country_1 = yes
+			set_owner = last_created_country
+		}
+		last_created_country = { save_event_target_as = rebelCountry1 }
+		event_target:rebelPlanet2 = {
+			create_kazon_rebel_country_2 = yes
+			set_owner = last_created_country
+		}
+		last_created_country = { save_event_target_as = rebelCountry2 }
+	}
+	option = { name = STH_kazon_story.3.a }
+}
+
+#No Rebellion
+country_event = {
+	id = STH_kazon_story.4
+	title = "STH_kazon_story.4.name"
+	desc = "STH_kazon_story.4.desc"
+	picture = sth_GFX_evt_kazonCruiser
+	is_triggered_only = yes
+	immediate = { }
+	option = { name = STH_kazon_story.4.a }
+}

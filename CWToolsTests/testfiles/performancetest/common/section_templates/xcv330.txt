@@ -1,0 +1,15 @@
+#XCV330
+ship_section_template = {
+	key = "XCV330_SCIENCESHIP_SECTION"
+	ship_size = xcv330
+	fits_on_slot = mid
+	entity = "xcv330_entity"
+	icon = "GFX_ship_part_core_mid"
+	
+	cost = 80
+	
+	small_utility_slots = 2
+	medium_utility_slots = 0
+	large_utility_slots = 0
+	aux_utility_slots = 1
+}

@@ -1,0 +1,469 @@
+# Ancient Manufactory, moving
+ship_design = {
+	name = "NAME_Abandoned_Manufactory"
+	ship_size = ancient_drone_station
+	use_design_name = yes
+}
+
+# Automated Shipyard Frigate
+ship_design = {
+	name = "NAME_F79"
+	ship_size = pirate_destroyer
+	
+	section = {
+		template = "PIRATE_DESTROYER_MID_L1S2"
+		slot = "mid"
+		
+		component = {
+			slot = "LARGE_GUN_01"
+			template = "LARGE_DISRUPTOR_1"
+		}
+		component = {
+			slot = "SMALL_GUN_01"
+			template = "SMALL_XRAY_LASER"
+		}
+		component = {
+			slot = "SMALL_GUN_02"
+			template = "SMALL_XRAY_LASER"
+		}
+		component = {
+			slot = "MEDIUM_UTILITY_1"
+			template = "MEDIUM_ANTIMATTER_REACTOR"
+		}
+		component = {
+			slot = "MEDIUM_UTILITY_2"
+			template = "MEDIUM_ANTIMATTER_REACTOR"
+		}
+		component = {
+			slot = "MEDIUM_UTILITY_3"
+			template = "MEDIUM_ANTIMATTER_REACTOR"
+		}
+		component = {
+			slot = "MEDIUM_UTILITY_4"
+			template = "MEDIUM_SHIELD_2"
+		}
+		component = {
+			slot = "SMALL_UTILITY_1"
+			template = "SMALL_ARMOR_2"
+		}
+		component = {
+			slot = "SMALL_UTILITY_2"
+			template = "SMALL_ARMOR_2"
+		}
+		component = {
+			slot = "SMALL_UTILITY_3"
+			template = "SMALL_SHIELD_2"
+		}
+		component = {
+			slot = "SMALL_UTILITY_4"
+			template = "SMALL_SHIELD_2"
+		}
+	}
+	required_component = "WARP_DRIVE_2"
+	required_component = "COMBAT_COMPUTER_AGGRESSIVE_BASIC"
+	required_component = "SHIP_THRUSTER_2"
+	required_component = "SHIP_SENSOR_2"
+}
+
+# Automated Shipyard Raider
+ship_design = {
+	name = "NAME_R44"
+	ship_size = pirate_corvette
+	section = {
+		template = "PIRATE_CORVETTE_MID_M1S1"
+		slot = "mid"
+		
+		component = {
+			slot = "SMALL_GUN_01"
+			template = "SMALL_XRAY_LASER"
+		}
+		component = {
+			slot = "MEDIUM_GUN_01"
+			template = "MEDIUM_DISRUPTOR_1"
+		}
+		component = {
+			slot = "SMALL_UTILITY_1"
+			template = "SMALL_ANTIMATTER_REACTOR"
+		}
+		component = {
+			slot = "SMALL_UTILITY_2"
+			template = "SMALL_ANTIMATTER_REACTOR"
+		}
+		component = {
+			slot = "SMALL_UTILITY_3"
+			template = "SMALL_SHIELD_3"
+		}
+		component = {
+			slot = "MEDIUM_UTILITY_1"
+			template = "MEDIUM_SHIELD_3"
+		}
+		component = {
+			slot = "MEDIUM_UTILITY_2"
+			template = "MEDIUM_ANTIMATTER_REACTOR"
+		}
+	}
+	required_component = "WARP_DRIVE_2"
+	required_component = "COMBAT_COMPUTER_AGGRESSIVE_BASIC"
+	required_component = "SHIP_THRUSTER_2"
+	required_component = "SHIP_SENSOR_2"
+}
+
+# Alien Racing Ship
+ship_design = {
+	name = "NAME_Alien_Ship"
+	ship_size = alien_racing_ship
+
+	section = {
+		template = "alien_racing_section"
+		slot = "mid"
+	}
+	
+	required_component="MEDIUM_SCIENCE_LAB_1"
+	required_component="SHIP_THRUSTER_1"
+	required_component="SHIP_SENSOR_1"
+}
+
+# Prototype Science Ship
+ship_design = {
+	name = "NAME_Prototype"
+	ship_size = science
+
+	section = {
+		template = "DEFAULT_SCIENCESHIP_SECTION"
+		slot = "mid"
+	}
+
+	required_component="MEDIUM_SCIENCE_LAB_1"
+	required_component="SHIP_THRUSTER_1"
+	required_component="SHIP_SENSOR_1"
+}
+
+
+# Salvaged Cruiser
+ship_design = {
+	name = "NAME_Derelict"
+	ship_size = sovereign
+	section = {
+		template = "sovereign_stern_1"
+		slot = "stern"
+		component = { slot = "SMALL_GUN_01" template = "SMALL_BASIC_PHASER_1" }
+		component = { slot = "SMALL_GUN_02" template = "SMALL_BASIC_PHASER_1" }
+		component = { slot = "MEDIUM_GUN_01" template = "MEDIUM_BASIC_PHASER_2" }
+		component = { slot = "SMALL_GUN_1" template = "POINT_DEFENCE_PHOTON_TORPEDO_2" }
+		# component = { slot = "SMALL_GUN_2" template = "POINT_DEFENCE_NUCLEAR_TORPEDO_1" }
+	}
+	section = {
+		template = "sovereign_mid_13"
+		slot = "mid"
+		component = { slot = "SMALL_UTILITY_1" template = "UTILITY_SMALL_HARD_1" }
+		component = { slot = "AUX_UTILITY_1" template = "UTILITY_AUX_RAMSCOOP_1" }
+		component = { slot = "LARGE_UTILITY_1" template = "UTILITY_LARGE_TRACKING_1" }
+	}	
+	required_component="REQUIRED_WARP_1_CR"
+	required_component="REQUIRED_COMPUTER_1_CR"
+	required_component="REQUIRED_THRUSTERS_1A_CR"
+	required_component="Required_Combat_Sensor_skirmisher_2"
+	required_component="REQUIRED_DEFENSE_1_ARMOR_CR"
+	required_component="REQUIRED_HULL_1A_CR"
+}
+
+
+# Used in anomalies
+ship_design = {
+	name = "NAME_Sword"
+	ship_size = eventship_01
+	
+	section = {
+		template = "eventship_01_section"
+		slot = "mid"
+		
+		component = {
+			slot = "SMALL_GUN_01"
+			template = "SMALL_XRAY_LASER"
+		}
+		component = {
+			slot = "SMALL_GUN_02"
+			template = "SMALL_XRAY_LASER"
+		}
+		component = {
+			slot = "SMALL_GUN_03"
+			template = "SMALL_XRAY_LASER"
+		}
+		component = {
+			slot = "MEDIUM_GUN_01"
+			template = "MEDIUM_DISRUPTOR_2"
+		}
+		component = {
+			slot = "MEDIUM_GUN_02"
+			template = "MEDIUM_DISRUPTOR_2"
+		}
+		component = {
+			slot = "LARGE_GUN_01"
+			template = "LARGE_GAMMA_LASER"
+		}
+		component = {
+			slot = "LARGE_UTILITY_1"
+			template = "LARGE_ANTIMATTER_REACTOR"
+		}
+		component = {
+			slot = "LARGE_UTILITY_2"
+			template = "LARGE_ANTIMATTER_REACTOR"
+		}
+		component = {
+			slot = "MEDIUM_UTILITY_1"
+			template = "MEDIUM_ANTIMATTER_REACTOR"
+		}
+		component = {
+			slot = "MEDIUM_UTILITY_2"
+			template = "MEDIUM_SHIELD_3"
+		}
+		component = {
+			slot = "MEDIUM_UTILITY_3"
+			template = "MEDIUM_SHIELD_3"
+		}
+		component = {
+			slot = "SMALL_UTILITY_1"
+			template = "SMALL_ANTIMATTER_REACTOR"
+		}
+		component = {
+			slot = "SMALL_UTILITY_2"
+			template = "SMALL_SHIELD_3"
+		}
+		component = {
+			slot = "SMALL_UTILITY_3"
+			template = "SMALL_SHIELD_3"
+		}
+	}
+	required_component = "WARP_DRIVE_2"
+	required_component = "COMBAT_COMPUTER_AGGRESSIVE_BASIC"
+	required_component = "SHIP_THRUSTER_2"
+	required_component = "SHIP_SENSOR_2"
+}
+
+# Used in anomalies
+ship_design = {
+	name = "NAME_Seeker"
+	ship_size = eventship_02
+	
+	section = {
+		template = "eventship_02_section"
+		slot = "mid"
+		
+		component = {
+			slot = "SMALL_GUN_01"
+			template = "SMALL_PLASMA_2"
+		}
+		component = {
+			slot = "SMALL_GUN_02"
+			template = "SMALL_PLASMA_2"
+		}
+		component = {
+			slot = "MEDIUM_GUN_01"
+			template = "MEDIUM_PLASMA_2"
+		}
+		component = {
+			slot = "MEDIUM_UTILITY_1"
+			template = "MEDIUM_ANTIMATTER_REACTOR"
+		}
+		component = {
+			slot = "SMALL_UTILITY_1"
+			template = "SMALL_ANTIMATTER_REACTOR"
+		}
+		component = {
+			slot = "SMALL_UTILITY_2"
+			template = "SMALL_SHIELD_3"
+		}
+		component = {
+			slot = "SMALL_UTILITY_3"
+			template = "SMALL_SHIELD_3"
+		}
+	}
+	required_component = "WARP_DRIVE_2"
+	required_component = "COMBAT_COMPUTER_AGGRESSIVE_BASIC"
+	required_component = "SHIP_THRUSTER_2"
+	required_component = "SHIP_SENSOR_2"
+}
+
+# Used in anomalies
+ship_design = {
+	name = "NAME_Voidstalker"
+	ship_size = eventship_05
+	
+	section = {
+		template = "eventship_05_section"
+		slot = "mid"
+		
+		component = {
+			slot = "SMALL_GUN_01"
+			template = "SMALL_PLASMA_2"
+		}
+		component = {
+			slot = "SMALL_GUN_02"
+			template = "SMALL_PLASMA_2"
+		}
+		component = {
+			slot = "SMALL_GUN_03"
+			template = "POINT_DEFENCE_2"
+		}
+		component = {
+			slot = "MEDIUM_GUN_01"
+			template = "MEDIUM_PLASMA_2"
+		}
+		component = {
+			slot = "MEDIUM_GUN_02"
+			template = "MEDIUM_PLASMA_2"
+		}
+		component = {
+			slot = "LARGE_GUN_01"
+			template = "LARGE_ARC_EMITTER_1"
+		}
+		component = {
+			slot = "LARGE_UTILITY_1"
+			template = "LARGE_ANTIMATTER_REACTOR"
+		}
+		component = {
+			slot = "LARGE_UTILITY_2"
+			template = "LARGE_ANTIMATTER_REACTOR"
+		}
+		component = {
+			slot = "MEDIUM_UTILITY_1"
+			template = "MEDIUM_ANTIMATTER_REACTOR"
+		}
+		component = {
+			slot = "MEDIUM_UTILITY_2"
+			template = "MEDIUM_SHIELD_3"
+		}
+		component = {
+			slot = "MEDIUM_UTILITY_3"
+			template = "MEDIUM_ARMOR_3"
+		}
+		component = {
+			slot = "SMALL_UTILITY_1"
+			template = "SMALL_ARMOR_3"
+		}
+		component = {
+			slot = "SMALL_UTILITY_2"
+			template = "SMALL_SHIELD_3"
+		}
+		component = {
+			slot = "SMALL_UTILITY_3"
+			template = "SMALL_SHIELD_3"
+		}
+	}
+	required_component = "WARP_DRIVE_2"
+	required_component = "COMBAT_COMPUTER_AGGRESSIVE_BASIC"
+	required_component = "SHIP_THRUSTER_2"
+}
+
+# Used in anomalies
+ship_design = {
+	name = "NAME_Starfang"
+	ship_size = eventship_06
+	
+	section = {
+		template = "eventship_06_section"
+		slot = "mid"
+		
+		component = {
+			slot = "SMALL_GUN_01"
+			template = "SMALL_DISRUPTOR_3"
+		}
+		component = {
+			slot = "SMALL_GUN_02"
+			template = "SMALL_DISRUPTOR_3"
+		}
+		component = {
+			slot = "LARGE_GUN_01"
+			template = "LARGE_GAMMA_LASER"
+		}
+		component = {
+			slot = "SMALL_UTILITY_1"
+			template = "SMALL_SHIELD_2"
+		}
+		component = {
+			slot = "SMALL_UTILITY_2"
+			template = "SMALL_SHIELD_2"
+		}
+		component = {
+			slot = "MEDIUM_UTILITY_1"
+			template = "MEDIUM_SHIELD_2"
+		}
+		component = {
+			slot = "LARGE_UTILITY_1"
+			template = "LARGE_ANTIMATTER_REACTOR"
+		}
+		component = {
+			slot = "AUX_UTILITY_1"
+			template = "SHIELD_RECHARGER"
+		}
+	}
+	required_component = "WARP_DRIVE_2"
+	required_component = "COMBAT_COMPUTER_AGGRESSIVE_BASIC"
+	required_component = "SHIP_THRUSTER_2"
+}
+
+# Used in anomalies
+ship_design = {
+	name = "NAME_Persistent"
+	ship_size = eventship_07
+	
+	section = {
+		template = "eventship_07_section"
+		slot = "mid"
+		
+		component = {
+			slot = "SMALL_GUN_01"
+			template = "SMALL_MASS_DRIVER_3"
+		}
+		component = {
+			slot = "SMALL_GUN_02"
+			template = "SMALL_MASS_DRIVER_3"
+		}
+		component = {
+			slot = "MEDIUM_GUN_01"
+			template = "MEDIUM_AUTOCANNON_2"
+		}
+		component = {
+			slot = "MEDIUM_GUN_02"
+			template = "MEDIUM_AUTOCANNON_2"
+		}
+		component = {
+			slot = "SMALL_UTILITY_1"
+			template = "SMALL_ARMOR_3"
+		}
+		component = {
+			slot = "SMALL_UTILITY_2"
+			template = "SMALL_ARMOR_3"
+		}
+		component = {
+			slot = "MEDIUM_UTILITY_1"
+			template = "MEDIUM_ARMOR_3"
+		}
+		component = {
+			slot = "MEDIUM_UTILITY_2"
+			template = "MEDIUM_ARMOR_3"
+		}
+		component = {
+			slot = "LARGE_UTILITY_1"
+			template = "LARGE_ANTIMATTER_REACTOR"
+		}
+	}
+	required_component = "WARP_DRIVE_2"
+	required_component = "COMBAT_COMPUTER_AGGRESSIVE_BASIC"
+	required_component = "SHIP_THRUSTER_2"
+}
+
+# Prototype Science Ship
+ship_design = {
+	name = "NAME_Returned_Science_Ship"
+	ship_size = science
+
+	section = {
+		template = "DEFAULT_SCIENCESHIP_SECTION"
+		slot = "mid"
+	}
+
+	required_component="MEDIUM_SCIENCE_LAB_1"
+	required_component="SHIP_THRUSTER_1"
+	required_component="SHIP_SENSOR_1"
+}

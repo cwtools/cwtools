@@ -1,0 +1,568 @@
+#########################################
+#
+# Galactic Features Events
+#
+# Written by Walshicus
+#
+#########################################
+
+namespace = STH_hero_mission
+
+#Make Hero
+fleet_event = {
+	id = STH_hero_mission.10000
+	hide_window = yes
+	is_triggered_only = yes
+	immediate = {
+		if = {
+			limit = { exists = leader }
+			leader = { add_trait = leader_trait_hero }
+		}
+	}
+}
+
+
+#Diplomatic Mission
+country_event = {
+	id = STH_hero_mission.1
+	title = "STH_hero_mission.1.name"
+	desc = "STH_hero_mission.1.desc"
+	diplomatic = yes
+	picture_event_data = {
+		portrait = event_target:diplomacyHeroLeader1
+		room = root
+	}
+	trigger = {
+		diplomacy_missions = yes
+		any_owned_leader  = {
+			is_hero = yes
+			NOT = { has_leader_flag = recentDiplomaticMission } 
+		}
+		any_owned_ship = {
+			exists = leader
+			leader = { 
+				is_hero = yes
+				NOT = { has_leader_flag = recentDiplomaticMission } 
+			}
+		}
+		any_neighbor_country = {
+			OR = {
+				is_country_type = default
+				is_country_type = minorRace
+			}
+			NOT = { is_at_war_with = root }
+			capital_scope = { solar_system = { has_access_fleet = root } }
+		}
+	}
+	mean_time_to_happen = {	months = 360 }
+	immediate = {
+		random_owned_leader = {
+			limit = { is_hero = yes }
+			save_event_target_as = diplomacyHeroLeader1
+		}
+		random_owned_fleet = { 
+			limit = { 
+				exists = leader
+				leader = { is_same_value = event_target:diplomacyHeroLeader1 } 
+			}
+			save_event_target_as = diplomacyHeroFleet1
+		}		
+		random_neighbor_country = { 
+			limit = { 
+				has_communications = root 
+				OR = {
+					is_country_type = default
+					is_country_type = minorRace
+				}
+				NOT = { is_at_war_with = root }
+				exists = capital_scope
+				capital_scope = { solar_system = { has_access_fleet = root } }
+			}
+			capital_scope = { save_event_target_as = diplomatic_target1 }
+		}
+	}
+	option = {
+		name = STH_hero_mission.1.a
+		enable_special_project = {
+			name = "HERO_DIPLOMATIC_MISSION_1_PROJECT"
+			location = event_target:diplomatic_target1
+			owner = root
+		}
+		hidden_effect = { event_target:diplomacyHeroLeader1 = { set_timed_leader_flag = { flag = recentDiplomaticMission days = 2000  } } }
+	}
+	option = {
+		name = STH_hero_mission.1.b
+		owner = { add_influence = -25 }
+		hidden_effect = { }
+	}
+}
+
+#Critical Fail
+fleet_event = {
+	id = STH_hero_mission.2
+	title = "STH_hero_mission.2.name"
+	desc = "STH_hero_mission.2.desc"
+	diplomatic = yes
+	picture_event_data = {
+		portrait = event_target:diplomacyHeroLeader1
+		city_level = event_target:diplomatic_target1
+		planet_background = event_target:diplomatic_target1
+		graphical_culture = event_target:diplomatic_target1
+	}
+	is_triggered_only = yes
+	immediate = { leader = { save_event_target_as = diplomacyHeroLeader1 } }
+	option = {
+		name = STH_hero_mission.2.a
+		custom_gui = "STH_red_option"
+		leader = { add_experience = 25 }
+		event_target:diplomatic_target1.owner = {
+			add_opinion_modifier = { who = root.owner modifier = opinion_very_concerned }
+			hidden_effect = { country_event = { id = STH_hero_mission.3 } }
+		}
+	}
+	option = {
+		name = STH_hero_mission.2.b
+		custom_gui = "STH_blue_option"
+		trigger = { 
+			owner = { 
+				has_country_resource = { type = energy amount > 149 }
+				has_country_resource = { type = influence amount > 29 }
+			}
+		}
+		leader = { add_experience = 25 }
+		owner = { add_energy = -150 add_influence = -30 }
+		hidden_effect = { event_target:diplomatic_target1.owner = { country_event = { id = STH_hero_mission.4 } } }
+	}
+	option = {
+		name = STH_hero_mission.2.bfail
+		custom_gui = "STH_blue_option"
+		trigger = { 
+			owner = { 
+				NOT = {
+					has_country_resource = { type = energy amount > 149 }
+					has_country_resource = { type = influence amount > 29 }
+				}
+			}
+		}
+		fleet_event = { id = STH_hero_mission.2 }
+	}
+}
+#Critical Fail - Accepted - 3rd Party
+country_event = {
+	id = STH_hero_mission.3
+	title = "STH_hero_mission.3.name"
+	desc = "STH_hero_mission.3.desc"
+	picture = sth_GFX_evt_heroDiplomacy1
+	is_triggered_only = yes
+	option = { name = STH_hero_mission.3.a }
+}
+#Critical Fail - Salvaged - 3rd Party
+country_event = {
+	id = STH_hero_mission.4
+	title = "STH_hero_mission.4.name"
+	desc = "STH_hero_mission.4.desc"
+	picture = sth_GFX_evt_heroDiplomacy1
+	is_triggered_only = yes
+	option = { 
+		name = STH_hero_mission.4.a
+		add_energy = 150
+		add_influence = 30
+	}
+}
+
+
+#Fail
+fleet_event = {
+	id = STH_hero_mission.5
+	title = "STH_hero_mission.5.name"
+	desc = "STH_hero_mission.5.desc"
+	diplomatic = yes
+	picture_event_data = {
+		portrait = event_target:diplomacyHeroLeader1
+		city_level = event_target:diplomatic_target1
+		planet_background = event_target:diplomatic_target1
+		graphical_culture = event_target:diplomatic_target1
+	}
+	is_triggered_only = yes
+	immediate = { leader = { save_event_target_as = diplomacyHeroLeader1 } }
+	option = {
+		name = STH_hero_mission.5.a
+		custom_gui = "STH_red_option"
+		leader = { add_experience = 50 }
+		event_target:diplomatic_target1.owner = { 
+			hidden_effect = { country_event = { id = STH_hero_mission.6 } }
+			add_opinion_modifier = { who = root.owner modifier = opinion_concerned }
+		}
+	}
+	option = {
+		name = STH_hero_mission.5.b
+		custom_gui = "STH_blue_option"
+		trigger = { 
+			owner = { 
+				has_country_resource = { type = energy amount > 74 }
+				has_country_resource = { type = influence amount > 14 }
+			}
+		}
+		leader = { add_experience = 50 }
+		owner = { add_energy = -75 add_influence = -15 }
+		hidden_effect = { event_target:diplomatic_target1.owner = { country_event = { id = STH_hero_mission.7 } } }
+	}
+	option = {
+		name = STH_hero_mission.5.bfail
+		custom_gui = "STH_blue_option"
+		trigger = { 
+			owner = { 
+				NOT = {
+					has_country_resource = { type = energy amount > 74 }
+					has_country_resource = { type = influence amount > 14 }
+				}
+			}
+		}
+		fleet_event = { id = STH_hero_mission.5 }
+	}
+}
+#Fail - Accepted - 3rd Party
+country_event = {
+	id = STH_hero_mission.6
+	title = "STH_hero_mission.6.name"
+	desc = "STH_hero_mission.6.desc"
+	picture = sth_GFX_evt_heroDiplomacy1
+	is_triggered_only = yes
+	option = { name = STH_hero_mission.6.a }
+}
+#Fail - Salvaged - 3rd Party
+country_event = {
+	id = STH_hero_mission.7
+	title = "STH_hero_mission.7.name"
+	desc = "STH_hero_mission.7.desc"
+	picture = sth_GFX_evt_heroDiplomacy1
+	is_triggered_only = yes
+	option = { 
+		name = STH_hero_mission.7.a
+		add_energy = 75
+		add_influence = 15
+	}
+}
+
+
+#Low Success
+fleet_event = {
+	id = STH_hero_mission.8
+	title = "STH_hero_mission.8.name"
+	desc = "STH_hero_mission.8.desc"
+	diplomatic = yes
+	picture_event_data = {
+		portrait = event_target:diplomacyHeroLeader1
+		city_level = event_target:diplomatic_target1
+		planet_background = event_target:diplomatic_target1
+		graphical_culture = event_target:diplomatic_target1
+	}
+	is_triggered_only = yes
+	immediate = { leader = { save_event_target_as = diplomacyHeroLeader1 } }
+	option = {
+		name = STH_hero_mission.8.a
+		custom_gui = "STH_green_option"
+		leader = { add_experience = 75 }
+		event_target:diplomatic_target1.owner = { 
+			hidden_effect = { country_event = { id = STH_hero_mission.9 } }
+			add_opinion_modifier = { who = root.owner modifier = opinion_very_small_boost }
+		}
+	}
+}
+#Low Success - 3rd Party
+country_event = {
+	id = STH_hero_mission.9
+	title = "STH_hero_mission.9.name"
+	desc = "STH_hero_mission.9.desc"
+	picture = sth_GFX_evt_heroDiplomacy1
+	is_triggered_only = yes
+	option = { name = STH_hero_mission.9.a }
+}
+
+
+
+#Success
+fleet_event = {
+	id = STH_hero_mission.10
+	title = "STH_hero_mission.10.name"
+	desc = "STH_hero_mission.10.desc"
+	diplomatic = yes
+	picture_event_data = {
+		portrait = event_target:diplomacyHeroLeader1
+		city_level = event_target:diplomatic_target1
+		planet_background = event_target:diplomatic_target1
+		graphical_culture = event_target:diplomatic_target1
+	}
+	is_triggered_only = yes
+	immediate = { leader = { save_event_target_as = diplomacyHeroLeader1 } }
+	option = {
+		name = STH_hero_mission.10.a
+		custom_gui = "STH_green_option"
+		leader = { add_experience = 100 }
+		event_target:diplomatic_target1.owner = { 
+			hidden_effect = { country_event = { id = STH_hero_mission.11 } }
+			add_opinion_modifier = { who = root.owner modifier = opinion_small_boost }
+		}
+	}
+}
+#Success - 3rd Party
+country_event = {
+	id = STH_hero_mission.11
+	title = "STH_hero_mission.11.name"
+	desc = "STH_hero_mission.11.desc"
+	picture = sth_GFX_evt_heroDiplomacy1
+	is_triggered_only = yes
+	option = { name = STH_hero_mission.11.a }
+}
+
+
+#High Success
+fleet_event = {
+	id = STH_hero_mission.12
+	title = "STH_hero_mission.12.name"
+	desc = "STH_hero_mission.12.desc"
+	diplomatic = yes
+	picture_event_data = {
+		portrait = event_target:diplomacyHeroLeader1
+		city_level = event_target:diplomatic_target1
+		planet_background = event_target:diplomatic_target1
+		graphical_culture = event_target:diplomatic_target1
+	}
+	is_triggered_only = yes
+	immediate = { leader = { save_event_target_as = diplomacyHeroLeader1 } }
+	option = {
+		name = STH_hero_mission.12.a
+		custom_gui = "STH_green_option"
+		leader = { add_experience = 100 }
+		event_target:diplomatic_target1.owner = { 
+			hidden_effect = { country_event = { id = STH_hero_mission.13 } }
+			add_opinion_modifier = { who = root.owner modifier = opinion_medium_boost }
+		}
+	}
+}
+#High Success - 3rd Party
+country_event = {
+	id = STH_hero_mission.13
+	title = "STH_hero_mission.13.name"
+	desc = "STH_hero_mission.13.desc"
+	picture = sth_GFX_evt_heroDiplomacy1
+	is_triggered_only = yes
+	immediate = { owner_species = { save_event_target_as = heroDiplo1Species } }
+	option = { 
+		name = STH_hero_mission.13.a
+		ai_chance = { 
+			factor = 10
+			modifier = { factor = 20 opinion = { who = event_target:diplomacyHeroLeader1.owner value > 100 } }
+		}
+		event_target:diplomacyHeroLeader1.owner = {
+			random_list = {
+				# 10 = { add_country_trade_good = yes }
+				10 = { 
+					create_leader = { type = scientist species = event_target:heroDiplo1Species name = random skill = 100 traits = { trait = random_trait } } 
+					last_created_leader = { save_event_target_as = giftedLeader }
+					hidden_effect = { country_event = { id = STH_hero_mission.15 } }
+				}
+				10 = { 
+					create_leader = { type = admiral species = event_target:heroDiplo1Species name = random skill = 100 traits = { trait = random_trait } } 
+					last_created_leader = { save_event_target_as = giftedLeader }
+					hidden_effect = { country_event = { id = STH_hero_mission.16 } }
+				}
+				10 = { 
+					create_leader = { type = general species = event_target:heroDiplo1Species name = random skill = 100 traits = { trait = random_trait } } 
+					last_created_leader = { save_event_target_as = giftedLeader }
+					hidden_effect = { country_event = { id = STH_hero_mission.17 } }
+				}
+			}
+		}
+	}
+	option = {
+		name = STH_hero_mission.13.b
+		ai_chance = { factor = 5 }
+	}
+}
+#Gifted Trade Good
+# country_event = {
+	# id = STH_hero_mission.14
+	# title = "STH_hero_mission.14.name"
+	# desc = "STH_hero_mission.14.desc"
+	# picture = sth_GFX_evt_heroDiplomacy1
+	# is_triggered_only = yes
+	# option = { name = STH_hero_mission.14.a }
+# }
+#Gifted Scientist
+country_event = {
+	id = STH_hero_mission.15
+	title = "STH_hero_mission.15.name"
+	desc = "STH_hero_mission.15.desc"
+	picture = sth_GFX_evt_heroDiplomacy1
+	is_triggered_only = yes
+	option = { name = STH_hero_mission.15.a }
+}
+#Gifted Admiral
+country_event = {
+	id = STH_hero_mission.16
+	title = "STH_hero_mission.16.name"
+	desc = "STH_hero_mission.16.desc"
+	picture = sth_GFX_evt_heroDiplomacy1
+	is_triggered_only = yes
+	option = { name = STH_hero_mission.16.a }
+}
+#Gifted General
+country_event = {
+	id = STH_hero_mission.17
+	title = "STH_hero_mission.17.name"
+	desc = "STH_hero_mission.17.desc"
+	picture = sth_GFX_evt_heroDiplomacy1
+	is_triggered_only = yes
+	option = { name = STH_hero_mission.17.a }
+}
+
+
+
+
+#Critical Fail
+country_event = {
+	id = STH_hero_mission.18
+	title = "STH_hero_mission.18.name"
+	desc = "STH_hero_mission.18.desc"
+	diplomatic = yes
+	picture_event_data = {
+		portrait = event_target:diplomatic_target1
+		city_level = event_target:diplomatic_target1
+		planet_background = event_target:diplomatic_target1
+		graphical_culture = event_target:diplomatic_target1
+	}
+	is_triggered_only = yes
+	immediate = { }
+	option = {
+		name = STH_hero_mission.18.a
+		custom_gui = "STH_red_option"
+		event_target:diplomatic_target1.owner = {
+			add_opinion_modifier = { who = root modifier = opinion_very_concerned }
+			hidden_effect = { country_event = { id = STH_hero_mission.19 } }
+		}
+	}
+}
+#Critical Fail - Accepted - 3rd Party
+country_event = {
+	id = STH_hero_mission.19
+	title = "STH_hero_mission.19.name"
+	desc = "STH_hero_mission.19.desc"
+	picture = sth_GFX_evt_heroDiplomacy1
+	is_triggered_only = yes
+	option = { name = STH_hero_mission.19.a }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+country_event = {
+	id = STH_hero_mission.1060
+	title = Test
+	desc = Test
+	
+	trigger = {
+		always = no
+	}
+	
+	diplomatic = yes
+	# custom_gui = "enclave_curator_window"
+
+	picture_event_data = {
+		portrait = event_target:curators
+		room = enclave_curator_room
+	}
+
+	option = {
+		name = guardian.510.a
+		response_text = guardian.535.a.reply
+		is_dialog_only = yes
+		custom_gui = "STH_red_option"
+	}
+	option = {
+		name = guardian.510.c
+		response_text = guardian.535.a.reply
+		is_dialog_only = yes
+		custom_gui = "STH_blue_option"
+	}
+	option = {
+		name = guardian.510.d
+		response_text = guardian.535.a.reply
+		is_dialog_only = yes
+		custom_gui = "STH_green_option"
+	}
+	option = {
+		name = guardian.510.e
+		response_text = guardian.535.a.reply
+		is_dialog_only = yes
+		custom_gui = "STH_purple_option"
+	}
+	option = {
+		name = guardian.510.b
+		response_text = guardian.535.b.reply
+	}
+}
+
+
+country_event = {
+	id = STH_hero_mission.1061
+	title = Test
+	desc = Test
+	picture = GFX_evt_throne_room
+	trigger = {
+		always = no
+	}
+	
+	# diplomatic = yes
+	# custom_gui = "enclave_curator_window"
+
+	# picture_event_data = {
+		# portrait = event_target:curators
+		# room = enclave_curator_room
+	# }
+
+	option = {
+		name = guardian.510.a
+		response_text = guardian.535.a.reply
+		is_dialog_only = yes
+		custom_gui = "STH_red_option_small"
+	}
+	option = {
+		name = guardian.510.c
+		response_text = guardian.535.a.reply
+		is_dialog_only = yes
+		custom_gui = "STH_blue_option"
+	}
+	option = {
+		name = guardian.510.d
+		response_text = guardian.535.a.reply
+		is_dialog_only = yes
+		custom_gui = "STH_green_option"
+	}
+	option = {
+		name = guardian.510.e
+		response_text = guardian.535.a.reply
+		is_dialog_only = yes
+		custom_gui = "STH_purple_option_small"
+	}
+	option = {
+		name = guardian.510.b
+		response_text = guardian.535.b.reply
+	}
+}

@@ -1,0 +1,2794 @@
+#################################
+### Guardian & Enclave Events ###
+### by Maximilian Olbers	  ###
+### & Niclas Karlsson		  ###
+### & Rufus Tronde			  ###
+### & Henrik Eklund			  ###
+### & Walshicus				  ###
+#################################
+
+namespace = STH_enclave_events
+
+@tier1influencecontact = 7
+@tier1influencecontactxenophile = 8
+@tier1influencecontactmin = 20
+@tier1influencecontactmax = 80
+
+@tier2influencecontact = 10
+@tier2influencecontactxenophile = 12
+@tier2influencecontactmin = 40
+@tier2influencecontactmax = 100
+
+@tier1materialreward = 6
+@tier1materialmin = 100
+@tier1materialmax = 500
+@tier2materialreward = 12
+@tier2materialmin = 150
+@tier2materialmax = 1000
+@tier3materialreward = 18
+@tier3materialmin = 250
+@tier3materialmax = 1500
+@tier4materialreward = 24
+@tier4materialmin = 350
+@tier4materialmax = 2000
+@tier5materialreward = 48
+@tier5materialmin = 700
+@tier5materialmax = 4000
+
+@tier1influencereward = 6
+@tier1influencemin = 40
+@tier1influencemax = 100
+@tier2influencereward = 12
+@tier2influencemin = 80
+@tier2influencemax = 175
+@tier3influencereward = 18
+@tier3influencemin = 125
+@tier3influencemax = 250
+@tier4influencereward = 24
+@tier4influencemin = 150
+@tier4influencemax = 300
+@tier5influencereward = 36
+@tier5influencemin = 250
+@tier5influencemax = 500
+@tier6influencereward = 48
+@tier6influencemin = 300
+@tier6influencemax = 600
+
+@tier1researchreward = 6
+@tier1researchmin = 60
+@tier1researchmax = 150
+@tier2researchreward = 12
+@tier2researchmin = 90
+@tier2researchmax = 250
+@tier3researchreward = 18
+@tier3researchmin = 120
+@tier3researchmax = 350
+@tier4researchreward = 24
+@tier4researchmin = 150
+@tier4researchmax = 500
+@tier5researchreward = 48
+@tier5researchmin = 300
+@tier5researchmax = 1000
+
+country_event = {
+	id = STH_enclave_events.1
+	hide_window = yes
+	mean_time_to_happen = { months = 120 }
+	fire_only_once = yes
+	trigger = {
+		has_leviathans = yes
+		years_passed > 10
+		has_country_flag = ferengi_alliance
+	}
+	immediate = { 
+		capital_scope = {
+			spawn_system = { min_distance = 20 max_distance = 100 initializer = "lobi_consortium_system" }
+		}
+	}
+}
+
+
+
+# Enclave Monthly Border Opinion
+event = {
+	id = STH_enclave_events.10
+	hide_window = yes
+	is_triggered_only = yes
+
+	immediate = {
+		every_country = {
+			limit = { is_country_type = enclave }
+			country_event = { id = STH_enclave_events.11 }
+		}
+	}
+}
+
+country_event = {
+	id = STH_enclave_events.11
+	hide_window = yes
+	is_triggered_only = yes
+	immediate = {
+		every_owned_fleet = {
+			limit = {
+				exists = solar_system
+				solar_system = {
+					exists = space_owner
+					space_owner = {
+						OR = {
+							is_country_type = default
+							is_country_type = minorRace
+						}
+					}
+				}
+			}
+			solar_system = { space_owner = { root = { add_trust = { who = prev amount = 1 } } } }
+		}
+	}
+}
+
+#Entering Enclave System First Time
+fleet_event = {
+	id = STH_enclave_events.96
+	title = "action.10.name"
+	desc = "action.15.desc"
+	picture = GFX_evt_star_chart
+	location = FROM
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		owner = {
+			OR = {
+				is_country_type = default
+				is_country_type = minorRace
+			}
+			exists = capital_scope
+		}
+		from = {
+			has_star_flag = enclave
+			any_ship_in_system = {
+				exists = owner
+				owner = {
+					is_country_type = enclave
+					NOR = {
+						has_communications = root.owner
+						reverse_has_relation_flag = {
+							flag = ongoing_enclave_investigation
+							who = root.owner
+						}
+					}
+				}
+			}
+		}
+	}
+
+	immediate = {
+		owner = {
+			capital_scope = { save_event_target_as = pc_home }
+			from = {
+				random_fleet_in_system = {
+					limit = {
+						exists = owner
+						owner = { is_country_type = enclave }
+					}
+					owner = {
+						save_event_target_as = target_enclave
+						country_event = { id = STH_enclave_events.97 days = 300 random = 50 }
+						enable_special_project = {
+							name = "INVESTIGATE_ENCLAVE"
+							location = event_target:pc_home
+							owner = root.owner
+						}
+					}
+				}
+			}
+			set_relation_flag = {
+				flag = ongoing_enclave_investigation
+				who = event_target:target_enclave
+			}
+		}
+	}
+	
+	option = {
+		name = "action.10.a"
+		owner = {
+			tooltip = {
+				enable_special_project = {
+					name = "INVESTIGATE_ENCLAVE"
+					location = event_target:pc_home
+					owner = ROOT
+				}
+			}
+		}
+	}
+}
+
+# Enclaves make contact after 300 days
+country_event = {
+	id = STH_enclave_events.97
+	hide_window = yes
+
+	trigger = {
+		exists = event_target:pc_home
+		event_target:pc_home = {
+			exists = owner
+			owner = {
+				NOT = { has_communications = root }
+				has_relation_flag = {
+					flag = ongoing_enclave_investigation
+					who = root
+				}
+			}
+		}
+	}
+
+	immediate = {
+		event_target:pc_home = {
+			if = {
+				limit = {
+					exists = owner
+					owner = {
+						NOT = {
+							has_communications = root
+						}
+						has_relation_flag = {
+							flag = ongoing_enclave_investigation
+							who = root
+						}
+					}
+				}
+				owner = {
+					root = { establish_communications_no_message = prev }
+					country_event = { id = STH_enclave_events.98 }
+				}
+			}
+		}
+	}
+}
+
+# Enclave Establishes Communications
+country_event = {
+	id = STH_enclave_events.98
+	title = STH_enclave_events.98.name
+	desc = STH_enclave_events.98.desc
+	picture = GFX_evt_throne_room
+	show_sound = event_radio_chatter
+	
+	is_triggered_only = yes
+
+	after = {
+		if = {
+			limit = {
+				OR = {
+					has_ethic = ethic_xenophile
+					has_ethic = ethic_fanatic_xenophile
+				}
+			}
+			add_monthly_resource_mult = {
+				resource = influence
+				value = @tier1influencecontactxenophile
+				min = @tier1influencecontactmin
+				max = @tier1influencecontactmax
+			}
+			else = {
+				add_monthly_resource_mult = {
+					resource = influence
+					value = @tier1influencecontact
+					min = @tier1influencecontactmin
+					max = @tier1influencecontactmax
+				}
+			}
+		}
+		hidden_effect = {
+			if = {
+				limit = {
+					from = { has_country_flag = trader_enclave_country }
+				}
+				from = { country_event = { id = STH_enclave_events.101 } }
+				break = yes
+			}
+			# if = {
+				# limit = { from = { has_country_flag = artist_enclave_country } }
+				# from = { country_event = { id = STH_enclave_events.301 } }
+				# break = yes
+			# }
+			# if = {
+				# limit = { from = { has_country_flag = curator_enclave_country } }
+				# from = { country_event = { id = STH_enclave_events.501 } }
+				# break = yes
+			# }
+		}
+	}
+
+	option = {
+		name = SCUM
+		trigger = {
+			OR = {
+				has_valid_civic = civic_fanatic_purifiers
+				has_valid_civic = civic_hive_devouring_swarm
+			}
+		}
+	}
+
+	option = {
+		name = STH_enclave_events.98.a
+		trigger = {
+			NOR = {
+				has_valid_civic = civic_fanatic_purifiers
+				has_valid_civic = civic_hive_devouring_swarm
+			}
+		}
+	}
+}
+
+# Communication Established
+country_event = {
+	id = STH_enclave_events.99
+	title = "STH_enclave_events.99.name"
+	desc = STH_enclave_events.99.desc
+	picture = GFX_evt_throne_room
+	show_sound = event_radio_chatter
+	
+	is_triggered_only = yes
+
+	immediate = { establish_communications_no_message = FROMFROM }
+
+	after = {
+		if = {
+			limit = {
+				OR = {
+					has_ethic = ethic_xenophile
+					has_ethic = ethic_fanatic_xenophile
+				}
+			}
+			add_monthly_resource_mult = {
+				resource = influence
+				value = @tier2influencecontactxenophile
+				min = @tier2influencecontactmin
+				max = @tier2influencecontactmax
+			}
+			else = {
+				add_monthly_resource_mult = {
+					resource = influence
+					value = @tier2influencecontact
+					min = @tier2influencecontactmin
+					max = @tier2influencecontactmax
+				}
+			}
+		}
+		hidden_effect = {
+			if = {
+				limit = {
+					fromfrom = {
+						has_country_flag = trader_enclave_country
+					}
+				}
+				fromfrom = { country_event = { id = STH_enclave_events.101 } }
+				break = yes
+			}
+			# if = {
+				# limit = {
+					# fromfrom = {
+						# has_country_flag = artist_enclave_country
+					# }
+				# }
+				# fromfrom = {
+					# country_event = { id = STH_enclave_events.301 }
+				# }
+				# set_country_flag = enclave_artist_encountered
+				# break = yes
+			# }
+			# if = {
+				# limit = {
+					# fromfrom = {
+						# has_country_flag = curator_enclave_country
+					# }
+				# }
+				# fromfrom = { country_event = { id = STH_enclave_events.501 } }
+				# break = yes
+			# }
+		}
+	}
+
+	option = {
+		name = SCUM
+		trigger = {
+			OR = {
+				has_valid_civic = civic_fanatic_purifiers
+				has_valid_civic = civic_hive_devouring_swarm
+			}
+		}
+	}
+
+	option = {
+		name = "STH_enclave_events.98.a"
+		trigger = {
+			NOR = {
+				has_valid_civic = civic_fanatic_purifiers
+				has_valid_civic = civic_hive_devouring_swarm
+			}
+		}
+	}
+}
+
+# Traders Main Menu #1 (Initial)
+country_event = {
+	id = STH_enclave_events.100
+	title = STH_enclave_events.100.name
+	desc = STH_enclave_events.100a.desc
+	desc = STH_enclave_events.100b.desc
+	desc = STH_enclave_events.100c.desc
+	desc = STH_enclave_events.100d.desc
+	desc = STH_enclave_events.100e.desc
+	desc = STH_enclave_events.100f.desc
+	
+	is_triggered_only = yes
+	diplomatic = yes
+	custom_gui = "enclave_trader_window"
+	force_open = yes
+
+	picture_event_data = {
+		portrait = event_target:traders
+		room = enclave_trader_room
+	}
+	
+	trigger = {
+		from = {
+			is_country_type = enclave
+			has_country_flag = trader_enclave_country_1
+		}
+		NOT = { has_country_flag = attacked_lobiconsortium }
+		NOT = { has_country_flag = trader_enclave_diplomacy_engaged }
+	}
+
+	immediate = {
+		set_country_flag = trader_enclave_diplomacy_engaged
+		FROM = { 
+			save_event_target_as = traders 
+			leader = { save_event_target_as = traderLeader }
+		}
+	}
+
+	after = {
+		hidden_effect = {
+			remove_country_flag = trader_enclave_diplomacy_engaged
+		}
+	}
+
+	option = {
+		name = SCUM
+		custom_gui = "enclave_trader_option"
+		trigger = {
+			OR = {
+				has_valid_civic = civic_fanatic_purifiers
+				has_valid_civic = civic_hive_devouring_swarm
+			}
+		}
+		hidden_effect = {
+			remove_country_flag = trader_enclave_diplomacy_engaged
+		}
+	}
+
+	option = { # Minerals
+		name = STH_enclave_events.105.a
+		custom_gui = "enclave_trader_option"
+		trigger = {
+			NOR = {
+				has_valid_civic = civic_fanatic_purifiers
+				has_valid_civic = civic_hive_devouring_swarm
+			}
+		}
+		hidden_effect = {
+			country_event = { id = STH_enclave_events.110 }
+		}
+	}
+
+	option = { # Energy
+		name = STH_enclave_events.105.b
+		custom_gui = "enclave_trader_option"
+		trigger = {
+			NOR = {
+				has_valid_civic = civic_fanatic_purifiers
+				has_valid_civic = civic_hive_devouring_swarm
+			}
+		}
+		hidden_effect = {
+			country_event = { id = STH_enclave_events.120 }
+		}
+	}
+
+	option = { # Strategic Resource
+		name = STH_enclave_events.105.c
+		custom_gui = "enclave_trader_option"
+		trigger = {
+			NOR = {
+				has_valid_civic = civic_fanatic_purifiers
+				has_valid_civic = civic_hive_devouring_swarm
+			}
+		}
+		allow = {
+			custom_tooltip = {
+				fail_text = STH_enclave_events.105.c.sr2
+				NOT = { has_modifier = enclave_traders_sr2 }
+			}
+			custom_tooltip = {
+				text = STH_enclave_events.105.c.trust
+				event_target:traders = {
+					trust = {
+						who = root
+						value > 49 
+					}
+				}	
+			}
+		}
+		hidden_effect = {
+			country_event = { id = STH_enclave_events.131 }
+		}
+	}
+
+	option = {
+		name = STH_enclave_events.105.d
+		custom_gui = "enclave_trader_option"
+		trigger = {
+			NOR = {
+				has_valid_civic = civic_fanatic_purifiers
+				has_valid_civic = civic_hive_devouring_swarm
+			}
+		}
+		default_hide_option = yes
+		hidden_effect = {
+			remove_country_flag = trader_enclave_diplomacy_engaged
+		}
+	}
+}
+
+# Traders Main Menu #2 (Initial)
+country_event = {
+	id = STH_enclave_events.103
+	title = STH_enclave_events.103.name
+	desc = STH_enclave_events.103a.desc
+	desc = STH_enclave_events.103b.desc
+	desc = STH_enclave_events.103c.desc
+	desc = STH_enclave_events.103d.desc
+	desc = STH_enclave_events.103e.desc
+	desc = STH_enclave_events.103f.desc
+	
+	is_triggered_only = yes
+	diplomatic = yes
+	custom_gui = "enclave_trader_window"
+	force_open = yes
+
+	picture_event_data = {
+		portrait = event_target:traders
+		room = enclave_trader_room
+	}
+	
+	trigger = {
+		from = {
+			is_country_type = enclave
+			has_country_flag = trader_enclave_country_2
+		}
+		NOT = { has_country_flag = trader_enclave_diplomacy_engaged }
+		NOT = { has_country_flag = attacked_riggans }
+	}
+
+	immediate = {
+		set_country_flag = trader_enclave_diplomacy_engaged
+		FROM = { 
+			save_event_target_as = traders 
+			leader = { save_event_target_as = traderLeader }
+		}
+	}
+
+	after = {
+		hidden_effect = {
+			remove_country_flag = trader_enclave_diplomacy_engaged
+		}
+	}
+
+	option = {
+		name = SCUM
+		custom_gui = "enclave_trader_option"
+		trigger = {
+			OR = {
+				has_valid_civic = civic_fanatic_purifiers
+				has_valid_civic = civic_hive_devouring_swarm
+			}
+		}
+		hidden_effect = {
+			remove_country_flag = trader_enclave_diplomacy_engaged
+		}
+	}
+
+	option = { # Minerals
+		name = STH_enclave_events.105.a
+		custom_gui = "enclave_trader_option"
+		trigger = {
+			NOR = {
+				has_valid_civic = civic_fanatic_purifiers
+				has_valid_civic = civic_hive_devouring_swarm
+			}
+		}
+		hidden_effect = {
+			country_event = { id = STH_enclave_events.110 }
+		}
+	}
+
+	option = { # Energy
+		name = STH_enclave_events.105.b
+		custom_gui = "enclave_trader_option"
+		trigger = {
+			NOR = {
+				has_valid_civic = civic_fanatic_purifiers
+				has_valid_civic = civic_hive_devouring_swarm
+			}
+		}
+		hidden_effect = {
+			country_event = { id = STH_enclave_events.120 }
+		}
+	}
+
+	option = { # Strategic Resource
+		name = STH_enclave_events.105.c
+		custom_gui = "enclave_trader_option"
+		trigger = {
+			NOR = {
+				has_valid_civic = civic_fanatic_purifiers
+				has_valid_civic = civic_hive_devouring_swarm
+			}
+		}
+		allow = {
+			custom_tooltip = {
+				fail_text = STH_enclave_events.105.c.sr1
+				NOT = { has_modifier = enclave_traders_sr1 }
+			}
+			custom_tooltip = {
+				text = STH_enclave_events.105.c.trust
+				event_target:traders = {
+					trust = {
+						who = root
+						value > 49
+					}
+				}
+			}
+		}
+		hidden_effect = {
+			country_event = { id = STH_enclave_events.130 }
+		}
+	}
+
+	option = {
+		name = STH_enclave_events.105.d
+		custom_gui = "enclave_trader_option"
+		trigger = {
+			NOR = {
+				has_valid_civic = civic_fanatic_purifiers
+				has_valid_civic = civic_hive_devouring_swarm
+			}
+		}
+		default_hide_option = yes
+		hidden_effect = {
+			remove_country_flag = trader_enclave_diplomacy_engaged
+		}
+	}
+}
+
+# Traders Main Menu #3 (Initial)
+country_event = {
+	id = STH_enclave_events.104
+	title = STH_enclave_events.104.name
+	desc = STH_enclave_events.104a.desc
+	desc = STH_enclave_events.104b.desc
+	desc = STH_enclave_events.104c.desc
+	desc = STH_enclave_events.104d.desc
+	desc = STH_enclave_events.104e.desc
+	desc = STH_enclave_events.104f.desc
+	
+	is_triggered_only = yes
+	diplomatic = yes
+	custom_gui = "enclave_trader_window"
+	force_open = yes
+
+	picture_event_data = {
+		portrait = event_target:traders
+		room = enclave_trader_room
+	}
+	
+	trigger = {
+		from = {
+			is_country_type = enclave
+			has_country_flag = trader_enclave_country_3
+		}
+		NOT = { has_country_flag = trader_enclave_diplomacy_engaged }
+		NOT = { has_country_flag = attacked_muutagans }
+	}
+
+	immediate = {
+		set_country_flag = trader_enclave_diplomacy_engaged
+		FROM = { 
+			save_event_target_as = traders 
+			leader = { save_event_target_as = traderLeader }
+		}
+	}
+
+	after = {
+		hidden_effect = {
+			remove_country_flag = trader_enclave_diplomacy_engaged
+		}
+	}
+
+	option = {
+		name = SCUM
+		custom_gui = "enclave_trader_option"
+		trigger = {
+			OR = {
+				has_valid_civic = civic_fanatic_purifiers
+				has_valid_civic = civic_hive_devouring_swarm
+			}
+		}
+		hidden_effect = {
+			remove_country_flag = trader_enclave_diplomacy_engaged
+		}
+	}
+
+	option = { # Minerals
+		name = STH_enclave_events.105.a
+		custom_gui = "enclave_trader_option"
+		trigger = {
+			NOR = {
+				has_valid_civic = civic_fanatic_purifiers
+				has_valid_civic = civic_hive_devouring_swarm
+			}
+		}
+		hidden_effect = {
+			country_event = { id = STH_enclave_events.110 }
+		}
+	}
+
+	option = { # Energy
+		name = STH_enclave_events.105.b
+		custom_gui = "enclave_trader_option"
+		trigger = {
+			NOR = {
+				has_valid_civic = civic_fanatic_purifiers
+				has_valid_civic = civic_hive_devouring_swarm
+			}
+		}
+		hidden_effect = {
+			country_event = { id = STH_enclave_events.120 }
+		}
+	}
+
+	option = { # Strategic Resource
+		name = STH_enclave_events.105.c
+		custom_gui = "enclave_trader_option"
+		trigger = {
+			NOR = {
+				has_valid_civic = civic_fanatic_purifiers
+				has_valid_civic = civic_hive_devouring_swarm
+			}
+		}
+		allow = {
+			custom_tooltip = {
+				fail_text = STH_enclave_events.105.c.sr3
+				NOT = { has_modifier = enclave_traders_sr3 }
+			}
+			custom_tooltip = {
+				text = STH_enclave_events.105.c.trust
+				event_target:traders = {
+					trust = { 
+						who = root
+						value > 49 
+					}
+				}	
+			}
+		}
+		hidden_effect = {
+			country_event = { id = STH_enclave_events.132 }
+		}
+	}
+
+	option = {
+		name = STH_enclave_events.105.d
+		custom_gui = "enclave_trader_option"
+		trigger = {
+			NOR = {
+				has_valid_civic = civic_fanatic_purifiers
+				has_valid_civic = civic_hive_devouring_swarm
+			}
+		}
+		default_hide_option = yes
+		hidden_effect = {
+			remove_country_flag = trader_enclave_diplomacy_engaged
+		}
+	}
+}
+
+# Traders Main Menu #1
+country_event = {
+	id = STH_enclave_events.105
+	title = STH_enclave_events.100.name
+	desc = STH_enclave_events.100a.desc
+	desc = STH_enclave_events.100b.desc
+	desc = STH_enclave_events.100c.desc
+	desc = STH_enclave_events.100d.desc
+	desc = STH_enclave_events.100e.desc
+	desc = STH_enclave_events.100f.desc
+	
+	is_triggered_only = yes
+	diplomatic = yes
+	custom_gui = "enclave_trader_window"
+
+	picture_event_data = {
+		portrait = event_target:traders
+		room = enclave_trader_room
+	}
+
+	immediate = {
+		set_country_flag = trader_enclave_diplomacy_engaged
+	}
+
+	after = {
+		hidden_effect = {
+			remove_country_flag = trader_enclave_diplomacy_engaged
+		}
+	}
+
+	option = { # Minerals
+		name = STH_enclave_events.105.a
+		custom_gui = "enclave_trader_option"
+		hidden_effect = {
+			country_event = { id = STH_enclave_events.110 }
+		}
+	}
+
+	option = { # Energy
+		name = STH_enclave_events.105.b
+		custom_gui = "enclave_trader_option"
+		hidden_effect = {
+			country_event = { id = STH_enclave_events.120 }
+		}
+	}
+
+	option = { # Strategic Resource
+		name = STH_enclave_events.105.c
+		custom_gui = "enclave_trader_option"
+		allow = {
+			custom_tooltip = {
+				fail_text = STH_enclave_events.105.c.sr2
+				NOT = { has_modifier = enclave_traders_sr2 }
+			}
+			custom_tooltip = {
+				text = STH_enclave_events.105.c.trust
+				event_target:traders = {
+					trust = { 
+						who = root
+						value > 49 
+					}
+				}	
+			}
+		}
+		hidden_effect = {
+			country_event = { id = STH_enclave_events.131 }
+		}
+	}
+
+	option = {
+		name = STH_enclave_events.105.d
+		default_hide_option = yes
+		custom_gui = "enclave_trader_option"
+		hidden_effect = {
+			remove_country_flag = trader_enclave_diplomacy_engaged
+		}
+	}
+}
+
+# Traders Main Menu #2
+country_event = {
+	id = STH_enclave_events.106
+	title = STH_enclave_events.103.name
+	desc = STH_enclave_events.103a.desc
+	desc = STH_enclave_events.103b.desc
+	desc = STH_enclave_events.103c.desc
+	desc = STH_enclave_events.103d.desc
+	desc = STH_enclave_events.103e.desc
+	desc = STH_enclave_events.103f.desc
+	
+	is_triggered_only = yes
+	diplomatic = yes
+	custom_gui = "enclave_trader_window"
+
+	picture_event_data = {
+		portrait = event_target:traders
+		room = enclave_trader_room
+	}
+
+	immediate = {
+		set_country_flag = trader_enclave_diplomacy_engaged
+	}
+
+	after = {
+		hidden_effect = {
+			remove_country_flag = trader_enclave_diplomacy_engaged
+		}
+	}
+
+	option = { # Minerals
+		name = STH_enclave_events.105.a
+		custom_gui = "enclave_trader_option"
+		hidden_effect = {
+			country_event = { id = STH_enclave_events.110 }
+		}
+	}
+
+	option = { # Energy
+		name = STH_enclave_events.105.b
+		custom_gui = "enclave_trader_option"
+		hidden_effect = {
+			country_event = { id = STH_enclave_events.120 }
+		}
+	}
+
+	option = { # Strategic Resource
+		name = STH_enclave_events.105.c
+		custom_gui = "enclave_trader_option"
+		allow = {
+			custom_tooltip = {
+				fail_text = STH_enclave_events.105.c.sr1
+				NOT = { has_modifier = enclave_traders_sr1 }
+			}
+			custom_tooltip = {
+				text = STH_enclave_events.105.c.trust
+				event_target:traders = {
+					trust = { 
+						who = root
+						value > 49 
+					}
+				}	
+			}
+		}
+		hidden_effect = {
+			country_event = { id = STH_enclave_events.130 }
+		}
+	}
+
+	option = {
+		name = STH_enclave_events.105.d
+		default_hide_option = yes
+		custom_gui = "enclave_trader_option"
+		hidden_effect = {
+			remove_country_flag = trader_enclave_diplomacy_engaged
+		}
+	}
+}
+
+# Traders Main Menu #3
+country_event = {
+	id = STH_enclave_events.107
+	title = STH_enclave_events.104.name
+	desc = STH_enclave_events.104a.desc
+	desc = STH_enclave_events.104b.desc
+	desc = STH_enclave_events.104c.desc
+	desc = STH_enclave_events.104d.desc
+	desc = STH_enclave_events.104e.desc
+	desc = STH_enclave_events.104f.desc
+	
+	is_triggered_only = yes
+	diplomatic = yes
+	custom_gui = "enclave_trader_window"
+
+	picture_event_data = {
+		portrait = event_target:traders
+		room = enclave_trader_room
+	}
+
+	immediate = {
+		set_country_flag = trader_enclave_diplomacy_engaged
+	}
+
+	after = {
+		hidden_effect = {
+			remove_country_flag = trader_enclave_diplomacy_engaged
+		}
+	}
+
+	option = { # Minerals
+		name = STH_enclave_events.105.a
+		custom_gui = "enclave_trader_option"
+		hidden_effect = {
+			country_event = { id = STH_enclave_events.110 }
+		}
+	}
+
+	option = { # Energy
+		name = STH_enclave_events.105.b
+		custom_gui = "enclave_trader_option"
+		hidden_effect = {
+			country_event = { id = STH_enclave_events.120 }
+		}
+	}
+
+	option = { # Strategic Resource
+		name = STH_enclave_events.105.c
+		custom_gui = "enclave_trader_option"
+		allow = {
+			custom_tooltip = {
+				fail_text = STH_enclave_events.105.c.sr3
+				NOT = { has_modifier = enclave_traders_sr3 }
+			}
+			custom_tooltip = {
+				text = STH_enclave_events.105.c.trust
+				event_target:traders = {
+					trust = { 
+						who = root
+						value > 49 
+					}
+				}	
+			}
+		}
+		hidden_effect = {
+			country_event = { id = STH_enclave_events.132 }
+		}
+	}
+
+	option = {
+		name = STH_enclave_events.105.d
+		default_hide_option = yes
+		custom_gui = "enclave_trader_option"
+		hidden_effect = {
+			remove_country_flag = trader_enclave_diplomacy_engaged
+		}
+	}
+}
+
+# Minerals
+country_event = {
+	id = STH_enclave_events.110
+	title = STH_enclave_events.110.name
+	desc = STH_enclave_events.110.desc
+
+	is_triggered_only = yes
+	diplomatic = yes
+	custom_gui = "enclave_trader_window"
+	force_open = yes
+
+	picture_event_data = {
+		portrait = event_target:traders
+		room = enclave_trader_room
+	}
+
+	option = {
+		name = STH_enclave_events.110.a
+		custom_gui = "enclave_trader_option"
+		allow = { 
+			energy > 200 
+			hidden_trigger = {
+				NOT = {
+					AND = {
+						has_country_flag = attacked_lobiconsortium
+						event_target:traders = { has_country_flag = trader_enclave_country_1 }
+					}
+					AND = {
+						has_country_flag = attacked_riggans
+						event_target:traders = { has_country_flag = trader_enclave_country_2 }
+					}
+					AND = {
+						has_country_flag = attacked_muutagans
+						event_target:traders = { has_country_flag = trader_enclave_country_3 }
+					}
+				}
+			}			
+		}
+		is_dialog_only = yes
+		response_text = STH_enclave_events.110.a.reply
+
+		add_minerals = 100
+		add_energy = -200
+		custom_tooltip = opinion1
+		hidden_effect = {
+			event_target:traders = {
+				add_trust = {
+					who = root
+					amount = 1
+				}
+			}
+		}
+	}
+
+	option = {
+		name = STH_enclave_events.110.b
+		custom_gui = "enclave_trader_option"
+		allow = { 
+			energy > 1000 
+			hidden_trigger = {
+				NOT = {
+					AND = {
+						has_country_flag = attacked_lobiconsortium
+						event_target:traders = { has_country_flag = trader_enclave_country_1 }
+					}
+					AND = {
+						has_country_flag = attacked_riggans
+						event_target:traders = { has_country_flag = trader_enclave_country_2 }
+					}
+					AND = {
+						has_country_flag = attacked_muutagans
+						event_target:traders = { has_country_flag = trader_enclave_country_3 }
+					}
+				}
+			}
+		}
+		is_dialog_only = yes
+		response_text = STH_enclave_events.110.b.reply
+
+		add_minerals = 500
+		add_energy = -1000
+		custom_tooltip = opinion7
+		hidden_effect = {
+			event_target:traders = {
+				add_trust = {
+					who = root
+					amount = 7
+				}
+			}
+		}
+	}
+
+	option = {
+		name = STH_enclave_events.110.c
+		custom_gui = "enclave_trader_option"
+		allow = { 
+			energy > 2000
+			hidden_trigger = {
+				NOT = {
+					AND = {
+						has_country_flag = attacked_lobiconsortium
+						event_target:traders = { has_country_flag = trader_enclave_country_1 }
+					}
+					AND = {
+						has_country_flag = attacked_riggans
+						event_target:traders = { has_country_flag = trader_enclave_country_2 }
+					}
+					AND = {
+						has_country_flag = attacked_muutagans
+						event_target:traders = { has_country_flag = trader_enclave_country_3 }
+					}
+				}
+			}
+		}
+		is_dialog_only = yes
+		response_text = STH_enclave_events.110.c.reply
+
+		add_minerals = 1000
+		add_energy = -2000
+		custom_tooltip = opinion15
+		hidden_effect = {
+			event_target:traders = {
+				add_trust = {
+					who = root
+					amount = 15
+				}
+			}
+		}
+	}
+
+	option = {
+		name = STH_enclave_events.110.d
+		custom_gui = "enclave_trader_option"
+		hidden_effect = {
+			if = {
+				limit = { event_target:traders = { has_country_flag = trader_enclave_country_1 } }
+				country_event = { id = STH_enclave_events.105 }
+			}
+			if = {
+				limit = { event_target:traders = { has_country_flag = trader_enclave_country_2 } }
+				country_event = { id = STH_enclave_events.106 }
+			}
+			if = {
+				limit = { event_target:traders = { has_country_flag = trader_enclave_country_3 } }
+				country_event = { id = STH_enclave_events.107 }
+			}
+		}
+	}
+
+	option = {
+		name = STH_enclave_events.110.e
+		custom_gui = "enclave_trader_option"
+		default_hide_option = yes
+		hidden_effect = {
+			remove_country_flag = trader_enclave_diplomacy_engaged
+		}
+	}
+}
+
+# Energy
+country_event = {
+	id = STH_enclave_events.120
+	title = STH_enclave_events.120.name
+	desc = STH_enclave_events.120.desc
+
+	is_triggered_only = yes
+	diplomatic = yes
+	custom_gui = "enclave_trader_window"
+	force_open = yes
+
+	picture_event_data = {
+		portrait = event_target:traders
+		room = enclave_trader_room
+	}
+
+	option = {
+		name = STH_enclave_events.120.a
+		custom_gui = "enclave_trader_option"
+		allow = { 
+			minerals > 200
+			hidden_trigger = {
+				NOT = {
+					AND = {
+						has_country_flag = attacked_lobiconsortium
+						event_target:traders = { has_country_flag = trader_enclave_country_1 }
+					}
+					AND = {
+						has_country_flag = attacked_riggans
+						event_target:traders = { has_country_flag = trader_enclave_country_2 }
+					}
+					AND = {
+						has_country_flag = attacked_muutagans
+						event_target:traders = { has_country_flag = trader_enclave_country_3 }
+					}
+				}
+			}
+		}
+		is_dialog_only = yes
+		response_text = STH_enclave_events.120.a.reply
+
+		add_energy = 100
+		add_minerals = -200
+		custom_tooltip = opinion1
+		hidden_effect = {
+			event_target:traders = {
+				add_trust = {
+					who = root
+					amount = 1
+				}
+			}
+		}
+	}
+
+	option = {
+		name = STH_enclave_events.120.b
+		custom_gui = "enclave_trader_option"
+		allow = { 
+			minerals > 1000 
+			hidden_trigger = {
+				NOT = {
+					AND = {
+						has_country_flag = attacked_lobiconsortium
+						event_target:traders = { has_country_flag = trader_enclave_country_1 }
+					}
+					AND = {
+						has_country_flag = attacked_riggans
+						event_target:traders = { has_country_flag = trader_enclave_country_2 }
+					}
+					AND = {
+						has_country_flag = attacked_muutagans
+						event_target:traders = { has_country_flag = trader_enclave_country_3 }
+					}
+				}
+			}
+		}
+		is_dialog_only = yes
+		response_text = STH_enclave_events.120.b.reply
+
+		add_energy = 500
+		add_minerals = -1000
+		custom_tooltip = opinion7
+		hidden_effect = {
+			event_target:traders = {
+				add_trust = {
+					who = root
+					amount = 7
+				}
+			}
+		}
+	}
+
+	option = {
+		name = STH_enclave_events.120.c
+		custom_gui = "enclave_trader_option"
+		allow = { 
+			minerals > 2000 
+			hidden_trigger = {
+				NOT = {
+					AND = {
+						has_country_flag = attacked_lobiconsortium
+						event_target:traders = { has_country_flag = trader_enclave_country_1 }
+					}
+					AND = {
+						has_country_flag = attacked_riggans
+						event_target:traders = { has_country_flag = trader_enclave_country_2 }
+					}
+					AND = {
+						has_country_flag = attacked_muutagans
+						event_target:traders = { has_country_flag = trader_enclave_country_3 }
+					}
+				}
+			}
+		}
+		is_dialog_only = yes
+		response_text = STH_enclave_events.120.c.reply
+
+		add_energy = 1000
+		add_minerals = -2000
+		custom_tooltip = opinion15
+		hidden_effect = {
+			event_target:traders = {
+				add_trust = {
+					who = root
+					amount = 15
+				}
+			}
+		}
+	}
+
+	option = {
+		name = STH_enclave_events.110.d
+		custom_gui = "enclave_trader_option"
+		hidden_effect = {
+			if = {
+				limit = { event_target:traders = { has_country_flag = trader_enclave_country_1 } }
+				country_event = { id = STH_enclave_events.105 }
+			}
+			if = {
+				limit = { event_target:traders = { has_country_flag = trader_enclave_country_2 } }
+				country_event = { id = STH_enclave_events.106 }
+			}
+			if = {
+				limit = { event_target:traders = { has_country_flag = trader_enclave_country_3 } }
+				country_event = { id = STH_enclave_events.107 }
+			}
+		}
+	}
+
+	option = {
+		name = STH_enclave_events.110.e
+		custom_gui = "enclave_trader_option"
+		default_hide_option = yes
+		hidden_effect = {
+			remove_country_flag = trader_enclave_diplomacy_engaged
+		}
+	}
+}
+
+# Strategic Resource 1
+country_event = {
+	id = STH_enclave_events.130
+	title = STH_enclave_events.103.name
+	desc = STH_enclave_events.130.desc
+
+	is_triggered_only = yes
+	diplomatic = yes
+	custom_gui = "enclave_trader_window"
+	force_open = yes
+
+	picture_event_data = {
+		portrait = event_target:traders
+		room = enclave_trader_room
+	}
+
+	option = {
+		name = STH_enclave_events.130.a
+		custom_gui = "enclave_trader_option"
+		allow = { 
+			energy > 1000 
+			hidden_trigger = {
+				NOT = { has_country_flag = attacked_riggans }
+			}
+		}
+		#response_text = STH_enclave_events.130.a.reply
+		add_energy = -1000
+		custom_tooltip = opinion20
+		add_modifier = {
+			modifier = "enclave_traders_sr1"
+			days = 3600
+		}
+		custom_tooltip = riggan_spice_effect
+		hidden_effect = {
+			event_target:traders = {
+				add_trust = {
+					who = root
+					amount = 20
+				}
+			}
+			set_relation_flag = {
+				who = event_target:traders
+				flag = riggan_trade
+			}
+			country_event = { id = STH_enclave_events.135 days = 3600 }
+			country_event = { id = STH_enclave_events.133 }
+		}
+	}
+	option = {
+		name = STH_enclave_events.110.d
+		custom_gui = "enclave_trader_option"
+		hidden_effect = {
+			if = {
+				limit = { event_target:traders = { has_country_flag = trader_enclave_country_1 } }
+				country_event = { id = STH_enclave_events.105 }
+			}
+			if = {
+				limit = { event_target:traders = { has_country_flag = trader_enclave_country_2 } }
+				country_event = { id = STH_enclave_events.106 }
+			}
+			if = {
+				limit = { event_target:traders = { has_country_flag = trader_enclave_country_3 } }
+				country_event = { id = STH_enclave_events.107 }
+			}
+		}
+	}
+	option = {
+		name = STH_enclave_events.110.e
+		custom_gui = "enclave_trader_option"
+		default_hide_option = yes
+		hidden_effect = {
+			remove_country_flag = trader_enclave_diplomacy_engaged
+		}
+	}
+}
+
+# Strategic Resource 2
+country_event = {
+	id = STH_enclave_events.131
+	title = STH_enclave_events.100.name
+	desc = STH_enclave_events.131.desc
+
+	is_triggered_only = yes
+	diplomatic = yes
+	custom_gui = "enclave_trader_window"
+	force_open = yes
+
+	picture_event_data = {
+		portrait = event_target:traders
+		room = enclave_trader_room
+	}
+
+	option = {
+		name = STH_enclave_events.131.a
+		custom_gui = "enclave_trader_option"
+		allow = { 
+			energy > 1000 
+			hidden_trigger = {
+				NOT = { has_country_flag = attacked_lobiconsortium }
+			}
+		}
+		#response_text = STH_enclave_events.131.a.reply
+		add_energy = -1000
+		custom_tooltip = opinion20
+		add_modifier = {
+			modifier = "enclave_traders_sr2"
+			days = 3600
+		}
+		custom_tooltip = lobi_crystal_effect
+		hidden_effect = {
+			event_target:traders = {
+				add_trust = {
+					who = root
+					amount = 20
+				}
+			}
+			set_relation_flag = {
+				who = event_target:traders
+				flag = lobiconsortium_trade
+			}
+			country_event = { id = STH_enclave_events.136 days = 3600 }
+			country_event = { id = STH_enclave_events.133 }
+		}
+	}
+	option = {
+		name = STH_enclave_events.110.d
+		custom_gui = "enclave_trader_option"
+		hidden_effect = {
+			if = {
+				limit = { event_target:traders = { has_country_flag = trader_enclave_country_1 } }
+				country_event = { id = STH_enclave_events.105 }
+			}
+			if = {
+				limit = { event_target:traders = { has_country_flag = trader_enclave_country_2 } }
+				country_event = { id = STH_enclave_events.106 }
+			}
+			if = {
+				limit = { event_target:traders = { has_country_flag = trader_enclave_country_3 } }
+				country_event = { id = STH_enclave_events.107 }
+			}
+		}
+	}
+	option = {
+		name = STH_enclave_events.110.e
+		custom_gui = "enclave_trader_option"
+		default_hide_option = yes
+		hidden_effect = {
+			remove_country_flag = trader_enclave_diplomacy_engaged
+		}
+	}
+}
+
+# Strategic Resource 3
+country_event = {
+	id = STH_enclave_events.132
+	title = STH_enclave_events.104.name
+	desc = STH_enclave_events.132.desc
+
+	is_triggered_only = yes
+	diplomatic = yes
+	custom_gui = "enclave_trader_window"
+	force_open = yes
+
+	picture_event_data = {
+		portrait = event_target:traders
+		room = enclave_trader_room
+	}
+
+	option = {
+		name = STH_enclave_events.132.a
+		custom_gui = "enclave_trader_option"
+		allow = { 
+			energy > 1000 
+			hidden_trigger = {
+				NOT = { has_country_flag = attacked_muutagans }
+			}
+		}
+		#response_text = STH_enclave_events.132.a.reply
+		add_energy = -1000
+		custom_tooltip = opinion20
+		add_modifier = {
+			modifier = "enclave_traders_sr3"
+			days = 3600
+		}
+		custom_tooltip = muutagan_crystals_effect
+		hidden_effect = {
+			event_target:traders = {
+				add_trust = {
+					who = root
+					amount = 20
+				}
+			}
+			set_relation_flag = {
+				who = event_target:traders
+				flag = muutagan_trade
+			}
+			country_event = { id = STH_enclave_events.137 days = 3600 }
+			country_event = { id = STH_enclave_events.133 }
+		}
+	}
+	option = {
+		name = STH_enclave_events.110.d
+		custom_gui = "enclave_trader_option"
+		hidden_effect = {
+			if = {
+				limit = { event_target:traders = { has_country_flag = trader_enclave_country_1 } }
+				country_event = { id = STH_enclave_events.105 }
+			}
+			if = {
+				limit = { event_target:traders = { has_country_flag = trader_enclave_country_2 } }
+				country_event = { id = STH_enclave_events.106 }
+			}
+			if = {
+				limit = { event_target:traders = { has_country_flag = trader_enclave_country_3 } }
+				country_event = { id = STH_enclave_events.107 }
+			}
+		}
+	}
+	option = {
+		name = STH_enclave_events.110.e
+		custom_gui = "enclave_trader_option"
+		default_hide_option = yes
+		hidden_effect = {
+			remove_country_flag = trader_enclave_diplomacy_engaged
+		}
+	}
+}
+
+# Strategic Resource Reply Event
+country_event = {
+	id = STH_enclave_events.133
+	title = STH_enclave_events.133.name
+	desc = {
+		text = STH_enclave_events.131.a.reply
+		trigger = {
+			event_target:traders = {
+				has_country_flag = trader_enclave_country_1
+			}
+		}
+	}
+	desc = {
+		text = STH_enclave_events.130.a.reply
+		trigger = {
+			event_target:traders = {
+				has_country_flag = trader_enclave_country_2
+			}
+		}
+	}
+	desc = {
+		text = STH_enclave_events.132.a.reply
+		trigger = {
+			event_target:traders = {
+				has_country_flag = trader_enclave_country_3
+			}
+		}
+	}
+
+	is_triggered_only = yes
+	diplomatic = yes
+	custom_gui = "enclave_trader_window"
+	force_open = yes
+
+	picture_event_data = {
+		portrait = event_target:traders
+		room = enclave_trader_room
+	}
+
+
+	option = {
+		name = STH_enclave_events.110.d
+		custom_gui = "enclave_trader_option"
+		hidden_effect = {
+			if = {
+				limit = { event_target:traders = { has_country_flag = trader_enclave_country_1 } }
+				country_event = { id = STH_enclave_events.105 }
+			}
+			if = {
+				limit = { event_target:traders = { has_country_flag = trader_enclave_country_2 } }
+				country_event = { id = STH_enclave_events.106 }
+			}
+			if = {
+				limit = { event_target:traders = { has_country_flag = trader_enclave_country_3 } }
+				country_event = { id = STH_enclave_events.107 }
+			}
+		}
+	}
+	option = {
+		name = STH_enclave_events.110.e
+		custom_gui = "enclave_trader_option"
+		default_hide_option = yes
+		hidden_effect = {
+			remove_country_flag = trader_enclave_diplomacy_engaged
+		}
+	}
+}
+
+# Remove Riggan Trade Relation Flag (HIDDEN)
+country_event = {
+	id = STH_enclave_events.135
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		remove_relation_flag = {
+			who = event_target:traders
+			flag = riggan_trade 
+		}
+		country_event = { id = STH_enclave_events.151 }
+	}
+}
+
+# Remove XuraCorp Trade Relation Flag (HIDDEN)
+country_event = {
+	id = STH_enclave_events.136
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		remove_relation_flag = {
+			who = event_target:traders
+			flag = lobiconsortium_trade 
+		}
+		country_event = { id = STH_enclave_events.150 }
+	}
+}
+
+# Remove Muutagan Trade Relation Flag (HIDDEN)
+country_event = {
+	id = STH_enclave_events.137
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		remove_relation_flag = {
+			who = event_target:traders
+			flag = muutagan_trade 
+		}
+		country_event = { id = STH_enclave_events.152 }
+	}
+}
+
+# Port
+country_event = {
+	id = STH_enclave_events.101
+	hide_window = yes
+	is_triggered_only = yes
+	immediate = {
+		random_owned_ship = {
+			solar_system = { save_event_target_as = trader_system }
+		}
+		from = {
+			country_event = { id = STH_enclave_events.102 }
+		}
+	}
+}
+
+# Trader Introduction
+country_event = {
+	id = STH_enclave_events.102
+	title = STH_enclave_events.102.name
+	
+	desc = {
+		text = STH_enclave_events.102a.desc
+		trigger = {
+			FROM = { has_country_flag = trader_enclave_country_1 }
+		}
+	}
+	desc = {
+		text = STH_enclave_events.102b.desc
+		trigger = {
+			FROM = { has_country_flag = trader_enclave_country_2 }
+		}
+	}
+	desc = {
+		text = STH_enclave_events.102c.desc
+		trigger = {
+			FROM = { has_country_flag = trader_enclave_country_3 }
+		}
+	}
+	
+	is_triggered_only = yes
+	diplomatic = yes
+	custom_gui = "enclave_trader_window"
+
+	picture_event_data = {
+		portrait = from
+		room = enclave_trader_room
+	}
+
+	option = {
+		name = SCUM
+		trigger = {
+			OR = {
+				has_valid_civic = civic_fanatic_purifiers
+				has_valid_civic = civic_hive_devouring_swarm
+			}
+		}
+		custom_gui = "enclave_trader_option"
+	}
+
+	option = {
+		name = STH_enclave_events.102.a
+		trigger = {
+			NOR = {
+				has_valid_civic = civic_fanatic_purifiers
+				has_valid_civic = civic_hive_devouring_swarm
+			}
+		}
+		custom_gui = "enclave_trader_option"
+	}
+}
+
+# Trader Destroyed (HIDDEN)
+country_event = {
+	id = STH_enclave_events.140
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		is_country_type = enclave
+		has_country_flag = trader_enclave_country
+		FROMFROM = { 
+			any_ship = { is_ship_size = enclave_station }
+		}
+	}
+	
+	immediate = {
+		FROMFROM = {
+			solar_system = { save_event_target_as = trader_system }
+		}
+		FROM = { 
+			country_event = { id = STH_enclave_events.141 }
+			save_event_target_as = trader_destroyer
+		}
+		every_country = {
+			limit = {
+				is_country_type = default
+				has_communications = ROOT
+				NOT = { is_country = event_target:trader_destroyer }
+			}
+			if = {
+				limit = {
+					ROOT = { has_country_flag = trader_enclave_country_1 }
+				}
+				country_event = { id = STH_enclave_events.142 }
+			}
+			if = {
+				limit = {
+					ROOT = { has_country_flag = trader_enclave_country_2 }
+				}
+				country_event = { id = STH_enclave_events.143 }
+			}
+			if = {
+				limit = {
+					ROOT = { has_country_flag = trader_enclave_country_3 }
+				}
+				country_event = { id = STH_enclave_events.144 }
+			}
+		}
+	}
+}
+
+# Any Trader Destroyed (Destroyer)
+country_event = {
+	id = STH_enclave_events.141
+	title = "STH_enclave_events.141"
+	desc = "STH_enclave_events.141.desc"
+	picture = GFX_evt_space_debris
+	location = event_target:trader_system
+	show_sound = event_ship_bridge
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		set_country_flag = destroyed_trader
+		if = {
+			limit = { 
+				has_modifier = enclave_traders_sr2
+				has_relation_flag = { 
+					who = FROM
+					flag = lobiconsortium_trade 
+				}
+			}
+			remove_modifier = "enclave_traders_sr2"
+			remove_relation_flag = {
+				who = FROM
+				flag = lobiconsortium_trade 
+			}
+		}
+		if = {
+			limit = { 
+				has_modifier = enclave_traders_sr1
+				has_relation_flag = { 
+					who = FROM
+					flag = riggan_trade 
+				}
+			}
+			remove_modifier = "enclave_traders_sr1"
+			remove_relation_flag = {
+				who = FROM
+				flag = riggan_trade 
+			}
+		}
+		if = {
+			limit = { 
+				has_modifier = enclave_traders_sr3
+				has_relation_flag = { 
+					who = FROM
+					flag = muutagan_trade 
+				}
+			}
+			remove_modifier = "enclave_traders_sr3"
+			remove_relation_flag = {
+				who = FROM
+				flag = muutagan_trade 
+			}
+		}
+	}
+	
+	option = {
+		name = EXCELLENT
+		add_minerals = 2000
+		add_energy = 2000
+	}
+}
+
+# Lobi Consortium Destroyed
+country_event = {
+	id = STH_enclave_events.142
+	title = "STH_enclave_events.141"
+	desc = {
+		text = STH_enclave_events.142.a.desc
+		trigger = {
+			NOT = {
+				has_relation_flag = { 
+					who = FROM
+					flag = lobiconsortium_trade 
+				}
+			}
+			has_communications = event_target:trader_destroyer
+		}
+	}
+	desc = {
+		text = STH_enclave_events.142.b.desc
+		trigger = {
+			NOT = { 
+				has_relation_flag = { 
+					who = FROM
+					flag = lobiconsortium_trade 
+				}
+			}
+			NOT = { has_communications = event_target:trader_destroyer }
+		}
+	}
+	desc = {
+		text = STH_enclave_events.142.c.desc
+		trigger = {
+			has_relation_flag = { 
+				who = FROM
+				flag = lobiconsortium_trade 
+			}
+			has_communications = event_target:trader_destroyer
+		}
+	}
+	desc = {
+		text = STH_enclave_events.142.d.desc
+		trigger = {
+			has_relation_flag = { 
+				who = FROM
+				flag = lobiconsortium_trade 
+			}
+			NOT = { has_communications = event_target:trader_destroyer }
+		}
+	}
+	picture = GFX_evt_exploding_ship
+	location = event_target:trader_system
+	show_sound = event_ship_explosion
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		set_global_flag = xuracorp_destroyed
+		if = {
+			limit = { 
+				has_modifier = enclave_traders_sr2
+				has_relation_flag = { 
+					who = FROM
+					flag = lobiconsortium_trade
+				}
+			}
+			remove_modifier = "enclave_traders_sr2"
+		}
+		if = {
+			limit = {
+				has_relation_flag = { 
+					who = FROM
+					flag = lobiconsortium_trade
+				}
+				is_ai = yes
+			}
+			add_opinion_modifier = {
+				who = event_target:trader_destroyer
+				modifier = opinion_destroyed_trader_sr
+			}
+		}
+		if = {
+			limit = {
+				NOT = {
+					has_relation_flag = { 
+						who = FROM
+						flag = lobiconsortium_trade
+					}
+				}
+				is_ai = yes
+			}
+			add_opinion_modifier = {
+				who = event_target:trader_destroyer
+				modifier = opinion_destroyed_trader
+			}
+		}
+	}
+	
+	option = {
+		name = "STH_enclave_events.142.a"
+		trigger = {
+			NOT = { 
+				has_relation_flag = { 
+					who = FROM
+					flag = lobiconsortium_trade 
+				}
+			}
+		}
+	}
+	option = {
+		name = "STH_enclave_events.142.b"
+		trigger = {
+			has_relation_flag = { 
+				who = FROM
+				flag = lobiconsortium_trade 
+			}
+		}
+		hidden_effect = {
+			remove_relation_flag = {
+				who = FROM
+				flag = lobiconsortium_trade 
+			}
+		}
+	}
+}
+
+# Riggans Destroyed
+country_event = {
+	id = STH_enclave_events.143
+	title = "STH_enclave_events.141"
+	desc = {
+		text = STH_enclave_events.143.a.desc
+		trigger = {
+			NOT = {
+				has_relation_flag = { 
+					who = FROM
+					flag = riggan_trade 
+				}
+			}
+			has_communications = event_target:trader_destroyer
+		}
+	}
+	desc = {
+		text = STH_enclave_events.143.b.desc
+		trigger = {
+			NOT = { 
+				has_relation_flag = { 
+					who = FROM
+					flag = riggan_trade 
+				}
+			}
+			NOT = { has_communications = event_target:trader_destroyer }
+		}
+	}
+	desc = {
+		text = STH_enclave_events.143.c.desc
+		trigger = {
+			has_relation_flag = { 
+				who = FROM
+				flag = riggan_trade 
+			}
+			has_communications = event_target:trader_destroyer
+		}
+	}
+	desc = {
+		text = STH_enclave_events.143.d.desc
+		trigger = {
+			has_relation_flag = { 
+				who = FROM
+				flag = riggan_trade 
+			}
+			NOT = { has_communications = event_target:trader_destroyer }
+		}
+	}
+	picture = GFX_evt_exploding_ship
+	location = event_target:trader_system
+	show_sound = event_ship_explosion
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		set_global_flag = riggans_destroyed
+		if = {
+			limit = { 
+				has_modifier = enclave_traders_sr1
+				has_relation_flag = { 
+					who = FROM
+					flag = riggan_trade
+				}
+			}
+			remove_modifier = "enclave_traders_sr1"
+		}
+		if = {
+			limit = {
+				has_relation_flag = { 
+					who = FROM
+					flag = riggan_trade
+				}
+				is_ai = yes
+			}
+			add_opinion_modifier = {
+				who = event_target:trader_destroyer
+				modifier = opinion_destroyed_trader_sr
+			}
+		}
+		if = {
+			limit = {
+				NOT = {
+					has_relation_flag = { 
+						who = FROM
+						flag = riggan_trade
+					}
+				}
+				is_ai = yes
+			}
+			add_opinion_modifier = {
+				who = event_target:trader_destroyer
+				modifier = opinion_destroyed_trader
+			}
+		}
+	}
+	
+	option = {
+		name = "STH_enclave_events.143.a"
+		trigger = {
+			NOT = { 
+				has_relation_flag = { 
+					who = FROM
+					flag = riggan_trade 
+				}
+			}
+		}
+	}
+	option = {
+		name = "STH_enclave_events.143.b"
+		trigger = {
+			has_relation_flag = { 
+				who = FROM
+				flag = riggan_trade 
+			}
+		}
+		hidden_effect = {
+			remove_relation_flag = {
+				who = FROM
+				flag = riggan_trade 
+			}
+		}
+	}
+}
+
+# Muutagans Destroyed
+country_event = {
+	id = STH_enclave_events.144
+	title = "STH_enclave_events.141"
+	desc = {
+		text = STH_enclave_events.144.a.desc
+		trigger = {
+			NOT = {
+				has_relation_flag = { 
+					who = FROM
+					flag = muutagan_trade 
+				}
+			}
+			has_communications = event_target:trader_destroyer
+		}
+	}
+	desc = {
+		text = STH_enclave_events.144.b.desc
+		trigger = {
+			NOT = { 
+				has_relation_flag = { 
+					who = FROM
+					flag = muutagan_trade 
+				}
+			}
+			NOT = { has_communications = event_target:trader_destroyer }
+		}
+	}
+	desc = {
+		text = STH_enclave_events.144.c.desc
+		trigger = {
+			has_relation_flag = { 
+				who = FROM
+				flag = muutagan_trade 
+			}
+			has_communications = event_target:trader_destroyer
+		}
+	}
+	desc = {
+		text = STH_enclave_events.144.d.desc
+		trigger = {
+			has_relation_flag = { 
+				who = FROM
+				flag = muutagan_trade 
+			}
+			NOT = { has_communications = event_target:trader_destroyer }
+		}
+	}
+	picture = GFX_evt_exploding_ship
+	location = event_target:trader_system
+	show_sound = event_ship_explosion
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		set_global_flag = muutagans_destroyed
+		if = {
+			limit = { 
+				has_modifier = enclave_traders_sr3
+				has_relation_flag = { 
+					who = FROM
+					flag = muutagan_trade
+				}
+			}
+			remove_modifier = "enclave_traders_sr3"
+		}
+		if = {
+			limit = {
+				has_relation_flag = { 
+					who = FROM
+					flag = muutagan_trade
+				}
+				is_ai = yes
+			}
+			add_opinion_modifier = {
+				who = event_target:trader_destroyer
+				modifier = opinion_destroyed_trader_sr
+			}
+		}
+		if = {
+			limit = {
+				NOT = {
+					has_relation_flag = { 
+						who = FROM
+						flag = muutagan_trade
+					}
+				}
+				is_ai = yes
+			}
+			add_opinion_modifier = {
+				who = event_target:trader_destroyer
+				modifier = opinion_destroyed_trader
+			}
+		}
+	}
+	
+	option = {
+		name = "STH_enclave_events.144.a"
+		trigger = {
+			NOT = { 
+				has_relation_flag = { 
+					who = FROM
+					flag = muutagan_trade 
+				}
+			}
+		}
+	}
+	option = {
+		name = "STH_enclave_events.144.b"
+		trigger = {
+			has_relation_flag = { 
+				who = FROM
+				flag = muutagan_trade 
+			}
+		}
+		hidden_effect = {
+			remove_relation_flag = {
+				who = FROM
+				flag = muutagan_trade 
+			}
+		}
+	}
+}
+
+# Continue Trade? (LObi Consortium)
+country_event = {
+	id = STH_enclave_events.150
+	title = STH_enclave_events.100.name
+	desc = STH_enclave_events.150.desc
+
+	is_triggered_only = yes
+	diplomatic = yes
+	custom_gui = "enclave_trader_window"
+
+	picture_event_data = {
+		portrait = event_target:traders
+		room = enclave_trader_room
+	}
+	
+	trigger = {
+		NOT = { has_global_flag = xuracorp_destroyed }
+		event_target:traders = {
+			trust = { 
+				who = root
+				value > 49 
+			}
+		}
+	}
+
+	option = {
+		name = STH_enclave_events.150.a
+		custom_gui = "enclave_trader_option"
+		trigger = { energy > 1000 }
+		add_energy = -1000
+		add_modifier = {
+			modifier = "enclave_traders_sr2"
+			days = 3600
+		}
+		custom_tooltip = lobi_crystal_effect
+		hidden_effect = {
+			event_target:traders = {
+				add_trust = {
+					who = root
+					amount = 20
+				}
+			}
+			set_relation_flag = {
+				who = event_target:traders
+				flag = lobiconsortium_trade
+			}
+			country_event = { id = STH_enclave_events.136 days = 3600 }
+		}
+	}
+	option = {
+		name = STH_enclave_events.150.b
+		custom_gui = "enclave_trader_option"
+		trigger = { energy > 1000 }
+	}
+	option = {
+		name = STH_enclave_events.150.c
+		custom_gui = "enclave_trader_option"
+		trigger = { energy < 1000 }
+	}
+}
+
+# Continue Trade? (Riggans)
+country_event = {
+	id = STH_enclave_events.151
+	title = STH_enclave_events.103.name
+	desc = STH_enclave_events.151.desc
+
+	is_triggered_only = yes
+	diplomatic = yes
+	custom_gui = "enclave_trader_window"
+
+	picture_event_data = {
+		portrait = event_target:traders
+		room = enclave_trader_room
+	}
+	
+	trigger = {
+		NOT = { has_global_flag = riggans_destroyed }
+		event_target:traders = {
+			trust = { 
+				who = root
+				value > 49 
+			}
+		}	
+	}
+
+	option = {
+		name = STH_enclave_events.151.a
+		custom_gui = "enclave_trader_option"
+		trigger = { energy > 1000 }
+		add_energy = -1000
+		add_modifier = {
+			modifier = "enclave_traders_sr1"
+			days = 3600
+		}
+		custom_tooltip = riggan_spice_effect
+		hidden_effect = {
+			event_target:traders = {
+				add_trust = {
+					who = root
+					amount = 20
+				}
+			}
+			set_relation_flag = {
+				who = event_target:traders
+				flag = riggan_trade
+			}
+			country_event = { id = STH_enclave_events.135 days = 3600 }
+		}
+	}
+	option = {
+		name = STH_enclave_events.151.b
+		custom_gui = "enclave_trader_option"
+		trigger = { energy > 1000 }
+	}
+	option = {
+		name = STH_enclave_events.150.c
+		custom_gui = "enclave_trader_option"
+		trigger = { energy < 1000 }
+	}
+}
+
+# Continue Trade? (Muutagans)
+country_event = {
+	id = STH_enclave_events.152
+	title = STH_enclave_events.104.name
+	desc = STH_enclave_events.152.desc
+
+	is_triggered_only = yes
+	diplomatic = yes
+	custom_gui = "enclave_trader_window"
+
+	picture_event_data = {
+		portrait = event_target:traders
+		room = enclave_trader_room
+	}
+	
+	trigger = {
+		NOT = { has_global_flag = muutagans_destroyed }
+		event_target:traders = {
+			trust = { 
+				who = root
+				value > 49 
+			}
+		}	
+	}
+
+	option = {
+		name = STH_enclave_events.152.a
+		custom_gui = "enclave_trader_option"
+		trigger = { energy > 1000 }
+		add_energy = -1000
+		add_modifier = {
+			modifier = "enclave_traders_sr3"
+			days = 3600
+		}
+		custom_tooltip = muutagan_crystals_effect
+		hidden_effect = {
+			event_target:traders = {
+				add_trust = {
+					who = root
+					amount = 20
+				}
+			}
+			set_relation_flag = {
+				who = event_target:traders
+				flag = muutagan_trade
+			}
+			country_event = { id = STH_enclave_events.137 days = 3600 }
+		}
+	}
+	option = {
+		name = STH_enclave_events.152.b
+		custom_gui = "enclave_trader_option"
+		trigger = { energy > 1000 }
+	}
+	option = {
+		name = STH_enclave_events.150.c
+		custom_gui = "enclave_trader_option"
+		trigger = { energy < 1000 }
+	}
+}
+
+# Attacked XuraCorp (HIDDEN)
+country_event = {
+	id = STH_enclave_events.155
+	hide_window = yes
+	is_triggered_only = yes
+	
+	trigger = {
+		is_country_type = default
+		FROM = { has_country_flag = trader_enclave_country_1 }
+	}
+
+	immediate = {
+		FROM = { 
+			save_event_target_as = traders
+			add_trust = {
+				who = ROOT
+				amount = -100
+			}
+		}
+		set_country_flag = attacked_lobiconsortium
+		if = {
+			limit = { has_modifier = enclave_traders_sr2 }
+			remove_modifier = enclave_traders_sr2
+			remove_relation_flag = {
+				who = FROM
+				flag = lobiconsortium_trade
+			}
+			country_event = { id = STH_enclave_events.156 }
+		}
+	}
+}
+
+# Attacked XuraCorp - Trade Agreement Terminated
+country_event = {
+	id = STH_enclave_events.156
+	title = STH_enclave_events.100.name
+	desc = STH_enclave_events.156.desc
+
+	is_triggered_only = yes
+	diplomatic = yes
+	custom_gui = "enclave_trader_window"
+
+	picture_event_data = {
+		portrait = event_target:traders
+		room = enclave_trader_room
+	}
+
+	option = {
+		name = STH_enclave_events.156.a
+		custom_gui = "enclave_trader_option"
+	}
+}
+
+# Attacked XuraCorp - Refuses Communications
+country_event = {
+	id = STH_enclave_events.157
+	title = STH_enclave_events.100.name
+	desc = STH_enclave_events.157a.desc
+	desc = STH_enclave_events.157b.desc
+	desc = STH_enclave_events.157c.desc
+
+	is_triggered_only = yes
+	diplomatic = yes
+	custom_gui = "enclave_trader_window"
+	force_open = yes
+
+	picture_event_data = {
+		portrait = event_target:traders
+		room = enclave_trader_room
+	}
+	
+	trigger = {
+		FROM = {
+			is_country_type = enclave
+			has_country_flag = trader_enclave_country_1
+		}
+		has_country_flag = attacked_lobiconsortium
+		NOT = { has_country_flag = trader_enclave_diplomacy_engaged }
+	}
+	
+	immediate = {
+		set_country_flag = trader_enclave_diplomacy_engaged
+		FROM = { 
+			save_event_target_as = traders 
+			leader = { save_event_target_as = traderLeader }
+		}
+	}
+	
+	after = {
+		hidden_effect = {
+			remove_country_flag = trader_enclave_diplomacy_engaged
+		}
+	}
+
+	option = {
+		name = SCUM
+		trigger = {
+			OR = {
+				has_valid_civic = civic_fanatic_purifiers
+				has_valid_civic = civic_hive_devouring_swarm
+			}
+		}
+		custom_gui = "enclave_trader_option"
+	}
+
+	option = {
+		name = STH_enclave_events.156.a
+		custom_gui = "enclave_trader_option"
+		trigger = {
+			NOR = {
+				has_valid_civic = civic_fanatic_purifiers
+				has_valid_civic = civic_hive_devouring_swarm
+			}
+		}
+		default_hide_option = yes
+	}
+}
+
+# Attacked Riggans (HIDDEN)
+country_event = {
+	id = STH_enclave_events.158
+	hide_window = yes
+	is_triggered_only = yes
+	
+	trigger = {
+		is_country_type = default
+		FROM = { has_country_flag = trader_enclave_country_2 }
+	}
+
+	immediate = {
+		FROM = { 
+			save_event_target_as = traders
+			add_trust = {
+				who = ROOT
+				amount = -100
+			}
+		}
+		set_country_flag = attacked_riggans
+		if = {
+			limit = { has_modifier = enclave_traders_sr1 }
+			remove_modifier = enclave_traders_sr1
+			remove_relation_flag = {
+				who = FROM
+				flag = riggan_trade
+			}
+			country_event = { id = STH_enclave_events.159}
+		}
+	}
+}
+
+# Attacked Riggans - Trade Agreement Terminated
+country_event = {
+	id = STH_enclave_events.159
+	title = STH_enclave_events.103.name
+	desc = STH_enclave_events.159.desc
+
+	is_triggered_only = yes
+	diplomatic = yes
+	custom_gui = "enclave_trader_window"
+
+	picture_event_data = {
+		portrait = event_target:traders
+		room = enclave_trader_room
+	}
+
+	option = {
+		name = STH_enclave_events.156.a
+		custom_gui = "enclave_trader_option"
+	}
+}
+
+# Attacked Riggans - Refuses Communications
+country_event = {
+	id = STH_enclave_events.160
+	title = STH_enclave_events.103.name
+	desc = STH_enclave_events.160a.desc
+	desc = STH_enclave_events.160b.desc
+	desc = STH_enclave_events.160c.desc
+
+	is_triggered_only = yes
+	diplomatic = yes
+	custom_gui = "enclave_trader_window"
+	force_open = yes
+
+	picture_event_data = {
+		portrait = event_target:traders
+		room = enclave_trader_room
+	}
+	
+	trigger = {
+		FROM = {
+			is_country_type = enclave
+			has_country_flag = trader_enclave_country_2
+		}
+		has_country_flag = attacked_riggans
+		NOT = { has_country_flag = trader_enclave_diplomacy_engaged }
+	}
+	
+	immediate = {
+		set_country_flag = trader_enclave_diplomacy_engaged
+		FROM = { 
+			save_event_target_as = traders 
+			leader = { save_event_target_as = traderLeader }
+		}
+	}
+	
+	after = {
+		hidden_effect = {
+			remove_country_flag = trader_enclave_diplomacy_engaged
+		}
+	}
+
+	option = {
+		name = SCUM
+		trigger = {
+			OR = {
+				has_valid_civic = civic_fanatic_purifiers
+				has_valid_civic = civic_hive_devouring_swarm
+			}
+		}
+		custom_gui = "enclave_trader_option"
+	}
+
+	option = {
+		name = STH_enclave_events.156.a
+		custom_gui = "enclave_trader_option"
+		trigger = {
+			NOR = {
+				has_valid_civic = civic_fanatic_purifiers
+				has_valid_civic = civic_hive_devouring_swarm
+			}
+		}
+		default_hide_option = yes
+	}
+}
+
+# Attacked Muutagans (HIDDEN)
+country_event = {
+	id = STH_enclave_events.161
+	hide_window = yes
+	is_triggered_only = yes
+	
+	trigger = {
+		is_country_type = default
+		FROM = { has_country_flag = trader_enclave_country_3 }
+	}
+
+	immediate = {
+		FROM = { 
+			save_event_target_as = traders
+			add_trust = {
+				who = ROOT
+				amount = -100
+			}
+		}
+		set_country_flag = attacked_muutagans
+		if = {
+			limit = { has_modifier = enclave_traders_sr3 }
+			remove_modifier = enclave_traders_sr3
+			remove_relation_flag = {
+				who = FROM
+				flag = muutagan_trade
+			}
+			country_event = { id = STH_enclave_events.162}
+		}
+	}
+}
+
+# Attacked Muutagans - Trade Agreement Terminated
+country_event = {
+	id = STH_enclave_events.162
+	title = STH_enclave_events.104.name
+	desc = STH_enclave_events.162.desc
+
+	is_triggered_only = yes
+	diplomatic = yes
+	custom_gui = "enclave_trader_window"
+
+	picture_event_data = {
+		portrait = event_target:traders
+		room = enclave_trader_room
+	}
+
+	option = {
+		name = STH_enclave_events.156.a
+		custom_gui = "enclave_trader_option"
+	}
+}
+
+# Attacked Muutagans - Refuses Communications
+country_event = {
+	id = STH_enclave_events.163
+	title = STH_enclave_events.104.name
+	desc = STH_enclave_events.163a.desc
+	desc = STH_enclave_events.163b.desc
+	desc = STH_enclave_events.163c.desc
+
+	is_triggered_only = yes
+	diplomatic = yes
+	custom_gui = "enclave_trader_window"
+	force_open = yes
+
+	picture_event_data = {
+		portrait = event_target:traders
+		room = enclave_trader_room
+	}
+	
+	trigger = {
+		FROM = {
+			is_country_type = enclave
+			has_country_flag = trader_enclave_country_3
+		}
+		has_country_flag = attacked_muutagans
+		NOT = { has_country_flag = trader_enclave_diplomacy_engaged }
+	}
+	
+	immediate = {
+		set_country_flag = trader_enclave_diplomacy_engaged
+		FROM = { 
+			save_event_target_as = traders 
+			leader = { save_event_target_as = traderLeader }
+		}
+	}
+	
+	after = {
+		hidden_effect = {
+			remove_country_flag = trader_enclave_diplomacy_engaged
+		}
+	}
+
+	option = {
+		name = SCUM
+		trigger = {
+			OR = {
+				has_valid_civic = civic_fanatic_purifiers
+				has_valid_civic = civic_hive_devouring_swarm
+			}
+		}
+		custom_gui = "enclave_trader_option"
+	}
+
+	option = {
+		name = STH_enclave_events.156.a
+		custom_gui = "enclave_trader_option"
+		trigger = { NOR = { has_valid_civic = civic_fanatic_purifiers has_valid_civic = civic_hive_devouring_swarm } }
+		default_hide_option = yes
+	}
+}

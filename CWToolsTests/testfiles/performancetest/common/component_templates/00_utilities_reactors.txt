@@ -1,0 +1,269 @@
+# Icons set here are the ones show in the actual slot. The reason is so that we can support different icons for different sizes. 
+#############
+#	POWER	#
+#############
+
+@power_S1 = 10
+@power_M1 = 20
+@power_L1 = 40
+            
+@power_S2 = 15
+@power_M2 = 30
+@power_L2 = 60
+            
+@power_S3 = 20
+@power_M3 = 40
+@power_L3 = 80
+            
+@power_S4 = 25
+@power_M4 = 50
+@power_L4 = 100
+            
+@power_S5 = 30
+@power_M5 = 60
+@power_L5 = 120
+
+#############
+#	COST	#
+#############
+
+@cost_S1 = 5
+@cost_M1 = 10
+@cost_L1 = 20
+           
+@cost_S2 = 10
+@cost_M2 = 20
+@cost_L2 = 40
+           
+@cost_S3 = 15
+@cost_M3 = 30
+@cost_L3 = 50
+           
+@cost_S4 = 20
+@cost_M4 = 40
+@cost_L4 = 80
+           
+@cost_S5 = 25
+@cost_M5 = 50
+@cost_L5 = 100
+
+#############
+# UTILITIES #
+#############
+
+### REACTORS
+
+# Fission Reactors
+utility_component_template = {
+	key = "SMALL_FISSION_REACTOR"
+	size = small
+	icon = "GFX_ship_part_reactor_1"
+	icon_frame = 1
+	power = @power_S1
+	cost = @cost_S1
+	hidden = yes
+	
+	#prerequisites = { "tech_fission_power" }
+	component_set = "FISSION_REACTOR"
+	upgrades_to = "SMALL_FUSION_REACTOR"
+}
+
+utility_component_template = {
+	key = "MEDIUM_FISSION_REACTOR"
+	size = medium
+	icon = "GFX_ship_part_reactor_1"
+	icon_frame = 1
+	power = @power_M1
+	cost = @cost_M1
+	hidden = yes
+	
+	#prerequisites = { "tech_fission_power" }
+	component_set = "FISSION_REACTOR"
+	upgrades_to = "MEDIUM_FUSION_REACTOR"
+}
+
+utility_component_template = {
+	key = "LARGE_FISSION_REACTOR"
+	size = large
+	icon = "GFX_ship_part_reactor_1"
+	icon_frame = 1
+	power = @power_L1
+	cost = @cost_L1
+	hidden = yes
+	
+	#prerequisites = { "tech_fission_power" }
+	component_set = "FISSION_REACTOR"
+	upgrades_to = "LARGE_FUSION_REACTOR"
+}
+
+# Fusion Reactors
+utility_component_template = {
+	key = "SMALL_FUSION_REACTOR"
+	size = small
+	icon = "GFX_ship_part_reactor_2"
+	icon_frame = 1
+	power = @power_S2
+	cost = @cost_S2
+	hidden = yes
+	
+	#prerequisites = { "tech_fusion_power" }
+	component_set = "FUSION_REACTOR"
+	upgrades_to = "SMALL_COLD_FUSION_REACTOR"
+}
+
+utility_component_template = {
+	key = "MEDIUM_FUSION_REACTOR"
+	size = medium
+	icon = "GFX_ship_part_reactor_2"
+	icon_frame = 1
+	power = @power_M2
+	cost = @cost_M2
+	hidden = yes
+	
+	#prerequisites = { "tech_fusion_power" }
+	component_set = "FUSION_REACTOR"
+	upgrades_to = "MEDIUM_COLD_FUSION_REACTOR"
+}
+
+utility_component_template = {
+	key = "LARGE_FUSION_REACTOR"
+	size = large
+	icon = "GFX_ship_part_reactor_2"
+	icon_frame = 1
+	power = @power_L2
+	cost = @cost_L2
+	hidden = yes
+	
+	#prerequisites = { "tech_fusion_power" }
+	component_set = "FUSION_REACTOR"
+	upgrades_to = "LARGE_COLD_FUSION_REACTOR"
+}
+
+# Cold Fusion Reactors
+utility_component_template = {
+	key = "SMALL_COLD_FUSION_REACTOR"
+	size = small
+	icon = "GFX_ship_part_reactor_3"
+	icon_frame = 1
+	power = @power_S3
+	cost = @cost_S3
+	hidden = yes
+	
+	#prerequisites = { "tech_cold_fusion_power" }
+	component_set = "COLD_FUSION_REACTOR"
+	upgrades_to = "SMALL_ANTIMATTER_REACTOR"
+}
+
+utility_component_template = {
+	key = "MEDIUM_COLD_FUSION_REACTOR"
+	size = medium
+	icon = "GFX_ship_part_reactor_3"
+	icon_frame = 1
+	power = @power_M3
+	cost = @cost_M3
+	hidden = yes
+	
+	#prerequisites = { "tech_cold_fusion_power" }
+	component_set = "COLD_FUSION_REACTOR"
+	upgrades_to = "MEDIUM_ANTIMATTER_REACTOR"
+}
+
+utility_component_template = {
+	key = "LARGE_COLD_FUSION_REACTOR"
+	size = large
+	icon = "GFX_ship_part_reactor_3"
+	icon_frame = 1
+	power = @power_L3
+	cost = @cost_L3
+	hidden = yes
+	
+	#prerequisites = { "tech_cold_fusion_power" }
+	component_set = "COLD_FUSION_REACTOR"
+	upgrades_to = "LARGE_ANTIMATTER_REACTOR"
+}
+
+# Antimatter Reactors
+utility_component_template = {
+	key = "SMALL_ANTIMATTER_REACTOR"
+	size = small
+	icon = "GFX_ship_part_reactor_4"
+	icon_frame = 1
+	power = @power_S4
+	cost = @cost_S4
+	hidden = yes
+	
+	#prerequisites = { "tech_antimatter_power" }
+	component_set = "ANTIMATTER_REACTOR"
+	upgrades_to = "SMALL_ZERO_POINT_REACTOR"
+}
+
+utility_component_template = {
+	key = "MEDIUM_ANTIMATTER_REACTOR"
+	size = medium
+	icon = "GFX_ship_part_reactor_4"
+	icon_frame = 1
+	power = @power_M4
+	cost = @cost_M4
+	hidden = yes
+	
+	#prerequisites = { "tech_antimatter_power" }
+	component_set = "ANTIMATTER_REACTOR"
+	upgrades_to = "MEDIUM_ZERO_POINT_REACTOR"
+}
+
+utility_component_template = {
+	key = "LARGE_ANTIMATTER_REACTOR"
+	size = large
+	icon = "GFX_ship_part_reactor_4"
+	icon_frame = 1
+	power = @power_L4
+	cost = @cost_L4
+	hidden = yes
+	
+	#prerequisites = { "tech_antimatter_power" }
+	component_set = "ANTIMATTER_REACTOR"
+	upgrades_to = "LARGE_ZERO_POINT_REACTOR"
+}
+
+# Zero-Point Reactors
+utility_component_template = {
+	key = "SMALL_ZERO_POINT_REACTOR"
+	size = small
+	icon = "GFX_ship_part_reactor_5"
+	icon_frame = 1
+	power = @power_S5
+	cost = @cost_S5
+	hidden = yes
+	
+	#prerequisites = { "tech_zero_point_power" }
+	component_set = "ZERO_POINT_REACTOR"
+	upgrades_to = "SMALL_ENIGMATIC_POWER_CORE"
+}
+
+utility_component_template = {
+	key = "MEDIUM_ZERO_POINT_REACTOR"
+	size = medium
+	icon = "GFX_ship_part_reactor_5"
+	icon_frame = 1
+	power = @power_M5
+	cost = @cost_M5
+	hidden = yes
+	
+	#prerequisites = { "tech_zero_point_power" }
+	component_set = "ZERO_POINT_REACTOR"
+	upgrades_to = "MEDIUM_ENIGMATIC_POWER_CORE"
+}
+
+utility_component_template = {
+	key = "LARGE_ZERO_POINT_REACTOR"
+	size = large
+	icon = "GFX_ship_part_reactor_5"
+	icon_frame = 1
+	power = @power_L5
+	cost = @cost_L5
+	hidden = yes
+	
+	#prerequisites = { "tech_zero_point_power"  }
+	component_set = "ZERO_POINT_REACTOR"
+	upgrades_to = "LARGE_ENIGMATIC_POWER_CORE"
+}

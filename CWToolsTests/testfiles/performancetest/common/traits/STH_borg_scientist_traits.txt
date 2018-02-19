@@ -1,0 +1,112 @@
+# All leaders will have a common trait-point value set in defines, which they use to grab traits
+
+# leader_trait = yes - this tags the trait as a leader-trait and not a species-trait
+# initial = no - if set to no, this trait can not be granted to leaders when they are generated
+# leader_class = { admiral scientist }  -- OR  - if not set, it can be given to all leader-types except Rulers
+# requires_traits = { trait_psionic } -- AND - leader-trait can only be randomly given on generation if the leaders species has this trait
+# requires_governments = { despotic_hegemony ai_overlordship } -- OR - leader-trait can only be randomly given on generation if the Empire has this type of government form
+# prerequisites = { tech_psionic_theory } - AND - leader-trait can only be given if the technology specified has been researched by the Empire
+# ai_categories = { survey engineering physics society }
+# ai_weight - standard drop weight modifier, scope = country
+
+###########
+# Balance #
+###########
+#effects on research traits
+@categorybonus = 0.10
+
+####################
+# Scientist Traits #
+####################
+
+leader_trait_recursive_analysis_node = {
+	cost = 1
+	modification = no
+	icon = "gfx/interface/icons/traits/leader_traits/leader_trait_recursive_analysis_node.dds"
+	modifier = {
+		ship_anomaly_fail_risk = -0.10
+	}
+	leader_potential_add = {
+		from = { has_authority = auth_cybernetic_consciousness }
+	}
+	leader_trait = yes
+	leader_class = { scientist }
+	opposites = { "leader_trait_carefree" }
+	
+	ai_categories = {
+		survey
+	}
+	
+	ai_weight = {
+		weight = 50
+	}
+}
+
+leader_trait_adaptive_analysis_node = {
+	cost = 1
+	modification = no
+	icon = "gfx/interface/icons/traits/leader_traits/leader_trait_adaptive_analysis_node.dds"
+	modifier = {
+		ship_anomaly_generation_chance_mult = 0.10
+		ship_anomaly_fail_risk = 0.10
+	}
+	leader_potential_add = {
+		from = { has_authority = auth_cybernetic_consciousness }
+	}
+	leader_trait = yes
+	leader_class = { scientist }
+	opposites = { "leader_trait_carefree" }
+	
+	ai_categories = {
+		survey
+	}
+	
+	ai_weight = {
+		weight = 50
+	}
+}
+
+leader_trait_analysis_subroutines = {
+	cost = 1
+	modification = no
+	icon = "gfx/interface/icons/traits/leader_traits/leader_trait_analysis_subroutines.dds"
+	modifier = {
+		all_technology_research_speed = 0.10
+	}
+	leader_potential_add = {
+		from = { has_authority = auth_cybernetic_consciousness }
+	}
+	leader_trait = yes
+	leader_class = { scientist }
+	# increased chance to discover rare techs (weighted in tech-script)
+	
+	ai_categories = {
+		physics
+		society
+		engineering
+	}
+	
+	ai_weight = {
+		weight = 200
+	}
+}
+
+
+leader_trait_faulty_cortical_processor = {
+	cost = 1
+	modification = no
+	icon = "gfx/interface/icons/traits/leader_traits/leader_trait_faulty_cortical_processor.dds"
+	modifier = {
+		all_technology_research_speed = -0.05
+		ship_anomaly_research_speed_mult = -0.10
+		ship_anomaly_fail_risk = 0.10
+	}
+	leader_potential_add = {
+		from = { has_authority = auth_cybernetic_consciousness }
+	}
+	leader_trait = yes
+	leader_class = { scientist }
+	initial = no
+	randomized = no
+	# increased chance to discover rare techs (weighted in tech-script)
+}

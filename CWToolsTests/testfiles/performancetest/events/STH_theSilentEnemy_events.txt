@@ -1,0 +1,510 @@
+############################
+#
+# The Silent Enemy Events
+#
+# Written by Walshicus
+#
+############################
+
+namespace = STH_theSilentEnemy_event
+
+@tier1materialreward = 6
+@tier1materialmin = 100
+@tier1materialmax = 500
+@tier2materialreward = 12
+@tier2materialmin = 150
+@tier2materialmax = 1000
+@tier3materialreward = 18
+@tier3materialmin = 250
+@tier3materialmax = 1500
+@tier4materialreward = 24
+@tier4materialmin = 350
+@tier4materialmax = 2000
+
+@tier1influencereward = 6
+@tier1influencemin = 40
+@tier1influencemax = 100
+@tier2influencereward = 12
+@tier2influencemin = 80
+@tier2influencemax = 175
+@tier3influencereward = 18
+@tier3influencemin = 125
+@tier3influencemax = 250
+@tier4influencereward = 24
+@tier4influencemin = 150
+@tier4influencemax = 300
+
+@tier1researchreward = 6
+@tier1researchmin = 60
+@tier1researchmax = 150
+@tier2researchreward = 12
+@tier2researchmin = 90
+@tier2researchmax = 250
+@tier3researchreward = 18
+@tier3researchmin = 120
+@tier3researchmax = 350
+@tier4researchreward = 24
+@tier4researchmin = 150
+@tier4researchmax = 500
+
+
+### The Silent Enemy
+ship_event = {
+	id = STH_theSilentEnemy_event.1
+	title = STH_theSilentEnemy_event.1.name
+	desc = STH_theSilentEnemy_event.1.desc
+	picture = sth_GFX_evt_theSilentEnemy1
+	location = FROM
+	is_triggered_only = yes
+	immediate = { }
+	option = {
+		name = STH_theSilentEnemy_event.1.a #Follow the ship
+		hidden_effect = {
+			random_list = {
+				20 = { ship_event = { id = STH_theSilentEnemy_event.2 days = 2 } } #Ship not found
+				80 = { ship_event = { id = STH_theSilentEnemy_event.3 days = 2 } } #Ship found
+			}
+		}
+	}
+	option = {
+		name = STH_theSilentEnemy_event.1.b #Wait in orbit
+		hidden_effect = {
+			random_list = {
+				50 = { ship_event = { id = STH_theSilentEnemy_event.4 days = 2 } } #Ship returns
+				50 = { ship_event = { id = STH_theSilentEnemy_event.5 days = 2 } } #Ship doesn't return
+			}
+		}
+	}
+	option = {
+		name = STH_theSilentEnemy_event.1.c #Give up
+		hidden_effect = {
+			random_list = {
+				90 = { ship_event = { id = STH_theSilentEnemy_event.6 days = 2 } } #Leave orbit
+				10 = { ship_event = { id = STH_theSilentEnemy_event.7 days = 2 } } #Ship returns
+			}
+		}
+	}
+}
+
+ship_event = {
+	id = STH_theSilentEnemy_event.2
+	title = STH_theSilentEnemy_event.2.name
+	desc = STH_theSilentEnemy_event.2.desc
+	picture = { trigger = { owner = { starfleet_empire = yes } } picture = sth_GFX_evt_starfleet_early_ship }
+	picture = { trigger = { owner = { klingon_empires = yes } } picture = sth_GFX_evt_klingon_ship }
+	picture = { trigger = { owner = { cardassian_empires = yes } } picture = sth_GFX_evt_cardassian_ship }
+	picture = { trigger = { owner = { romulan_empires = yes } } picture = sth_GFX_evt_romulan_ship }
+	picture = { trigger = { owner = { is_changeling_empire = yes } } picture = sth_GFX_evt_dominion_ship }
+	picture = { trigger = { owner = { generic_empires = yes } } picture = sth_GFX_evt_generic_ship }
+	location = FROM
+	is_triggered_only = yes
+	option = {
+		name = STH_theSilentEnemy_event.2.a #Ship Not Fund
+		owner = {
+			add_monthly_resource_mult = {
+				resource = physics_research
+				value = @tier2researchreward
+				min = @tier2researchmin
+				max = @tier2researchmax
+			}
+		}
+	}
+}
+
+ship_event = {
+	id = STH_theSilentEnemy_event.3
+	title = STH_theSilentEnemy_event.3.name
+	desc = STH_theSilentEnemy_event.3.desc
+	picture = sth_GFX_evt_theSilentEnemy1
+	location = FROM
+	is_triggered_only = yes
+	option = {
+		name = STH_theSilentEnemy_event.3.a #Hail
+		hidden_effect = {
+			random_list = {
+				20 = { ship_event = { id = STH_theSilentEnemy_event.8 days = 2 } } #Communication
+				30 = { ship_event = { id = STH_theSilentEnemy_event.9 days = 2 } } #Nothing
+				50 = { ship_event = { id = STH_theSilentEnemy_event.10 days = 2 } } #Boarded
+			}
+		}
+	}
+	option = {
+		name = STH_theSilentEnemy_event.3.b #Attack
+		hidden_effect = {
+			#ADD IN SKILL CHECK
+			random_list = {
+				50 = { ship_event = { id = STH_theSilentEnemy_event.11 days = 2 } } #Victory
+				50 = { ship_event = { id = STH_theSilentEnemy_event.12 days = 2 } } #Defeat
+			}
+		}
+	}
+}
+
+ship_event = {
+	id = STH_theSilentEnemy_event.4
+	title = STH_theSilentEnemy_event.4.name
+	desc = STH_theSilentEnemy_event.4.desc
+	picture = sth_GFX_evt_theSilentEnemy1
+	location = FROM
+	is_triggered_only = yes
+	option = {
+		name = STH_theSilentEnemy_event.3.a #Hail
+		hidden_effect = {
+			random_list = {
+				20 = { ship_event = { id = STH_theSilentEnemy_event.8 days = 2 } } #Communication
+				20 = { ship_event = { id = STH_theSilentEnemy_event.9 days = 2 } } #Nothing
+				60 = { ship_event = { id = STH_theSilentEnemy_event.10 days = 2 } } #Boarded
+			}
+		}
+	}
+	option = {
+		name = STH_theSilentEnemy_event.3.b #Attack
+		hidden_effect = {
+			#ADD IN SKILL CHECK
+			random_list = {
+				45 = { ship_event = { id = STH_theSilentEnemy_event.11 days = 2 } } #Victory
+				55 = { ship_event = { id = STH_theSilentEnemy_event.12 days = 2 } } #Defeat
+			}
+		}
+	}
+}
+
+ship_event = {
+	id = STH_theSilentEnemy_event.5
+	title = STH_theSilentEnemy_event.5.name
+	desc = STH_theSilentEnemy_event.5.desc
+	picture = { trigger = { owner = { starfleet_empire = yes } } picture = sth_GFX_evt_starfleet_early_ship }
+	picture = { trigger = { owner = { klingon_empires = yes } } picture = sth_GFX_evt_klingon_ship }
+	picture = { trigger = { owner = { cardassian_empires = yes } } picture = sth_GFX_evt_cardassian_ship }
+	picture = { trigger = { owner = { romulan_empires = yes } } picture = sth_GFX_evt_romulan_ship }
+	picture = { trigger = { owner = { is_changeling_empire = yes } } picture = sth_GFX_evt_dominion_ship }
+	picture = { trigger = { owner = { generic_empires = yes } } picture = sth_GFX_evt_generic_ship }
+	location = FROM
+	is_triggered_only = yes
+	option = {
+		name = STH_theSilentEnemy_event.5.a #Ship Doesn't Return
+		owner = {
+			add_monthly_resource_mult = {
+				resource = physics_research
+				value = @tier2researchreward
+				min = @tier2researchmin
+				max = @tier2researchmax
+			}
+		}
+	}
+}
+
+ship_event = {
+	id = STH_theSilentEnemy_event.6
+	title = STH_theSilentEnemy_event.6.name
+	desc = STH_theSilentEnemy_event.6.desc
+	picture = { trigger = { owner = { starfleet_empire = yes } } picture = sth_GFX_evt_starfleet_early_ship }
+	picture = { trigger = { owner = { klingon_empires = yes } } picture = sth_GFX_evt_klingon_ship }
+	picture = { trigger = { owner = { cardassian_empires = yes } } picture = sth_GFX_evt_cardassian_ship }
+	picture = { trigger = { owner = { romulan_empires = yes } } picture = sth_GFX_evt_romulan_ship }
+	picture = { trigger = { owner = { is_changeling_empire = yes } } picture = sth_GFX_evt_dominion_ship }
+	picture = { trigger = { owner = { generic_empires = yes } } picture = sth_GFX_evt_generic_ship }
+	location = FROM
+	is_triggered_only = yes
+	option = {
+		name = STH_theSilentEnemy_event.6.a #Leave Orbit
+		owner = {
+			add_monthly_resource_mult = {
+				resource = physics_research
+				value = @tier1researchreward
+				min = @tier1researchmin
+				max = @tier1researchmax
+			}
+		}
+	}
+}
+
+ship_event = {
+	id = STH_theSilentEnemy_event.7
+	title = STH_theSilentEnemy_event.7.name
+	desc = STH_theSilentEnemy_event.7.desc
+	picture = sth_GFX_evt_theSilentEnemy1
+	location = FROM
+	is_triggered_only = yes
+	option = {
+		name = STH_theSilentEnemy_event.7.a #Hail
+		hidden_effect = {
+			random_list = {
+				15 = { ship_event = { id = STH_theSilentEnemy_event.8 days = 2 } } #Communication
+				20 = { ship_event = { id = STH_theSilentEnemy_event.9 days = 2 } } #Nothing
+				65 = { ship_event = { id = STH_theSilentEnemy_event.10 days = 2 } } #Boarded
+			}
+		}
+	}
+	option = {
+		name = STH_theSilentEnemy_event.7.b #Hail
+		hidden_effect = {
+			#ADD IN SKILL CHECK
+			random_list = {
+				45 = { ship_event = { id = STH_theSilentEnemy_event.11 days = 2 } } #Victory
+				55 = { ship_event = { id = STH_theSilentEnemy_event.12 days = 2 } } #Defeat
+			}
+		}
+	}
+}
+
+ship_event = {
+	id = STH_theSilentEnemy_event.8
+	title = STH_theSilentEnemy_event.8.name
+	desc = STH_theSilentEnemy_event.8.desc
+	picture = sth_GFX_evt_theSilentEnemy1
+	location = FROM
+	is_triggered_only = yes
+	option = {
+		name = STH_theSilentEnemy_event.8.a #Communication
+		owner = {
+			add_monthly_resource_mult = {
+				resource = society_research
+				value = @tier3researchreward
+				min = @tier3researchmin
+				max = @tier3researchmax
+			}
+		}
+	}
+}
+
+ship_event = {
+	id = STH_theSilentEnemy_event.9
+	title = STH_theSilentEnemy_event.9.name
+	desc = STH_theSilentEnemy_event.9.desc
+	picture = sth_GFX_evt_theSilentEnemy1
+	location = FROM
+	is_triggered_only = yes
+	option = {
+		name = STH_theSilentEnemy_event.9.a #Nothing
+		owner = {
+			add_monthly_resource_mult = {
+				resource = physics_research
+				value = @tier2researchreward
+				min = @tier2researchmin
+				max = @tier2researchmax
+			}
+		}
+	}
+}
+
+ship_event = {
+	id = STH_theSilentEnemy_event.10
+	title = STH_theSilentEnemy_event.10.name
+	desc = STH_theSilentEnemy_event.10.desc
+	picture = sth_GFX_evt_theSilentEnemy2
+	location = FROM
+	is_triggered_only = yes
+	option = {
+		name = STH_theSilentEnemy_event.10.a #Boarded
+		hidden_effect = {
+			random_list = {
+				50 = { ship_event = { id = STH_theSilentEnemy_event.13 days = 2 } } #Fought Back
+				25 = { ship_event = { id = STH_theSilentEnemy_event.14 days = 2 } } #Crew Killed
+				25 = { ship_event = { id = STH_theSilentEnemy_event.15 days = 2 } } #Captain Killed
+			}
+		}
+	}
+	# option = {
+		# name = STH_theSilentEnemy_event.10.a #Boarded
+		# hidden_effect = {
+			# random_list = {
+				# 50 = { ship_event = { id = STH_theSilentEnemy_event.11 days = 2 } } #Fought Back
+				# 25 = { ship_event = { id = STH_theSilentEnemy_event.12 days = 2 } } #Crew Killed
+				# 25 = { ship_event = { id = STH_theSilentEnemy_event.12 days = 2 } } #Captain Killed
+			# }
+		# }
+	# }
+}
+
+ship_event = {
+	id = STH_theSilentEnemy_event.11
+	title = STH_theSilentEnemy_event.11.name
+	desc = STH_theSilentEnemy_event.11.desc
+	picture = sth_GFX_evt_starshipExplosion
+	location = FROM
+	is_triggered_only = yes
+	option = {
+		name = STH_theSilentEnemy_event.11.a #Victory Enemy Destroyed
+		owner = {
+			add_monthly_resource_mult = {
+				resource = engineering_research
+				value = @tier3researchreward
+				min = @tier3researchmin
+				max = @tier3researchmax
+			}
+			add_monthly_resource_mult = {
+				resource = physics_research
+				value = @tier2researchreward
+				min = @tier2researchmin
+				max = @tier2researchmax
+			}
+		}
+	}
+}
+
+ship_event = {
+	id = STH_theSilentEnemy_event.12
+	title = STH_theSilentEnemy_event.12.name
+	desc = STH_theSilentEnemy_event.12.desc
+	picture = sth_GFX_evt_starshipAttacked
+	location = FROM
+	is_triggered_only = yes
+	immediate = {
+		kill_leader = { type = scientist show_notification = no }
+		fleet = { destroy_fleet = this }
+	}
+	option = {
+		name = STH_theSilentEnemy_event.12.a #Ship Destroyed
+
+		owner = {
+			add_influence = -75
+		}
+	}
+}
+
+ship_event = {
+	id = STH_theSilentEnemy_event.13
+	title = STH_theSilentEnemy_event.13.name
+	desc = STH_theSilentEnemy_event.13.desc
+	picture = sth_GFX_evt_theSilentEnemy2
+	location = FROM
+	is_triggered_only = yes
+	option = {
+		name = STH_theSilentEnemy_event.13.a #Boarders Repelled
+		owner = {
+			add_monthly_resource_mult = {
+				resource = physics_research
+				value = @tier2researchreward
+				min = @tier2researchmin
+				max = @tier2researchmax
+			}
+			add_monthly_resource_mult = {
+				resource = engineering_research
+				value = @tier2researchreward
+				min = @tier2researchmin
+				max = @tier2researchmax
+			}
+			add_monthly_resource_mult = {
+				resource = society_research
+				value = @tier1researchreward
+				min = @tier1researchmin
+				max = @tier1researchmax
+			}
+		}
+	}
+}
+
+ship_event = {
+	id = STH_theSilentEnemy_event.14
+	title = STH_theSilentEnemy_event.14.name
+	desc = STH_theSilentEnemy_event.14.desc
+	picture = sth_GFX_evt_theSilentEnemy2
+	location = FROM
+	is_triggered_only = yes
+	option = {
+		name = STH_theSilentEnemy_event.14.a #Crew Killed
+		owner = {
+			add_monthly_resource_mult = {
+				resource = physics_research
+				value = @tier1researchreward
+				min = @tier1researchmin
+				max = @tier1researchmax
+			}
+			add_monthly_resource_mult = {
+				resource = engineering_research
+				value = @tier1researchreward
+				min = @tier1researchmin
+				max = @tier1researchmax
+			}
+			add_monthly_resource_mult = {
+				resource = society_research
+				value = @tier1researchreward
+				min = @tier1researchmin
+				max = @tier1researchmax
+			}
+			add_influence = -50
+		}
+	}
+}
+
+ship_event = {
+	id = STH_theSilentEnemy_event.15
+	title = STH_theSilentEnemy_event.15.name
+	desc = STH_theSilentEnemy_event.15.desc
+	picture = sth_GFX_evt_theSilentEnemy2
+	location = FROM
+	is_triggered_only = yes
+	immediate = {
+		kill_leader = { type = scientist show_notification = no }
+	}
+	option = {
+		name = STH_theSilentEnemy_event.15.a #Captain Killed
+		owner = {
+			add_monthly_resource_mult = {
+				resource = physics_research
+				value = @tier1researchreward
+				min = @tier1researchmin
+				max = @tier1researchmax
+			}
+			add_monthly_resource_mult = {
+				resource = engineering_research
+				value = @tier1researchreward
+				min = @tier1researchmin
+				max = @tier1researchmax
+			}
+			add_monthly_resource_mult = {
+				resource = society_research
+				value = @tier1researchreward
+				min = @tier1researchmin
+				max = @tier1researchmax
+			}
+		}
+	}
+}
+
+
+namespace = STH_theSilentEnemy_fail
+
+# ROOT = ship scope
+# FROM = planet scope
+
+# Shuttle crushed
+ship_event = {
+	id = STH_theSilentEnemy_fail.1
+	title = "DISC_FAILURE"
+	desc = "STH_theSilentEnemy_fail.1.desc"
+	picture = { trigger = { owner = { starfleet_empire = yes } } picture = sth_GFX_evt_starfleet_early_ship }
+	picture = { trigger = { owner = { klingon_empires = yes } } picture = sth_GFX_evt_klingon_ship }
+	picture = { trigger = { owner = { cardassian_empires = yes } } picture = sth_GFX_evt_cardassian_ship }
+	picture = { trigger = { owner = { romulan_empires = yes } } picture = sth_GFX_evt_romulan_ship }
+	picture = { trigger = { owner = { is_changeling_empire = yes } } picture = sth_GFX_evt_dominion_ship }
+	picture = { trigger = { owner = { generic_empires = yes } } picture = sth_GFX_evt_generic_ship }
+	show_sound = event_scanner
+	location = FROM
+	is_triggered_only = yes
+	option = {
+		owner = {
+			add_influence = -50
+		}
+		name = "UNFORTUNATE"
+	}
+}
+
+# Boobytrap
+ship_event = {
+	id = STH_theSilentEnemy_fail.2
+	title = "DISC_FAILURE"
+	desc = "STH_theSilentEnemy_fail.2.desc"
+	picture = sth_GFX_evt_starshipAttacked
+	show_sound = event_ship_explosion
+	location = FROM
+	is_triggered_only = yes
+	immediate = {
+		kill_leader = { type = scientist show_notification = no }
+		fleet = { destroy_fleet = this }
+	}
+	option = {
+		name = "UNFORTUNATE"
+	}
+}

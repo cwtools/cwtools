@@ -1,0 +1,350 @@
+# Available requirements:
+#
+#	SKILLS
+#	skill = 2
+#
+#	LEADER
+#	leader = scientist
+#	leader = admiral
+#	leader = general
+#	leader = ruler
+#	leader = governor
+#	
+#	MILITARY SHIPS
+#	shipclass_military = 1
+#	
+#	CIVILIAN SHIPS
+#	shipclass_constructor = 2
+#	shipclass_science_ship = augmentTestColony1
+#	shipclass_colonizer = 2
+#	
+#	ARMIES
+#	shipclass_transport = 1
+#	assault_armies = 2
+#	defense_armies = 1
+#	
+#	STATIONS
+#	research_station = yes
+#	mining_station = yes
+#	observation_station = yes
+#
+#	SCOPES
+#	abort_trigger
+#	this = country (project owner)
+#	from = event scope (planet or ship, MIGHT NOT EXIST)
+#	fromfrom = project creation scope (usually equals location)
+#	
+#	on_success
+#	this = event scope (ship or planet)
+#	from = project creation scope (usually equals location)
+#	
+#	on_fail
+#	this = country (project owner)
+#	from = project creation scope (usually equals location)
+
+#Make new Vorta
+special_project = {
+	key = "RECREATE_VORTA_PROJECT_1"
+	days_to_research = 480
+	timelimit = -1
+	tech_department = society_technology
+	picture = sth_GFX_evt_empireDominion
+	event_scope = planet_event
+	requirements = { }
+	on_success = {
+		if = {
+			limit = { NOT = { exists = event_target:vortaSpecies } }
+			create_species = {
+				name = "Vorta"
+				plural = "Vorta"
+				class = "VOR"
+				portrait = "vorta"
+				name_list="Vorta"
+				traits = { trait = "trait_skilled_administrator" trait = "trait_telepathy" trait = "trait_clone" trait = "trait_pc_ocean_preference" }
+			}
+			last_created_species = { 
+				set_citizenship_type = { country = root.owner type = citizenship_full }
+				set_military_service_type = { country = root.owner type = military_service_full }
+				save_global_event_target_as = vortaSpecies 
+				set_vorta_characteristics = yes
+			}
+		}
+		random_tile = {
+			limit = { has_blocker = no has_grown_pop = no has_growing_pop = no }
+			create_pop = { species = event_target:vortaSpecies ethos = owner }
+		}
+	}
+	on_fail = { }
+	abort_trigger = {
+		any_owned_pop_species = { is_species_class = VOR }
+	}
+}
+
+
+#Make new Jem Hadar
+special_project = {
+	key = "RECREATE_JEMHADAR_PROJECT_1"
+	days_to_research = 480
+	timelimit = -1
+	tech_department = society_technology
+	picture = sth_GFX_evt_empireDominion
+	event_scope = planet_event
+	requirements = { }
+	on_success = {
+		if = {
+			limit = { NOT = { exists = event_target:jemHadarSpecies } }
+			create_species = {
+				name = "Jem'Hadar"
+				plural = "Jem'Hadar"
+				class = "JEM"
+				portrait = "jem'hadar"
+				name_list="JemHadar"
+				traits = { trait = "trait_clone" trait = "trait_bred_for_war" trait = "trait_ketracel_white_addiction" trait = "trait_pc_ocean_preference" trait = "trait_pop_jem'hadar_1" }
+			}
+			last_created_species = {
+				save_global_event_target_as = jemHadarSpecies
+				set_jem_hadar_characteristics = yes
+				set_citizenship_type = { country = root.owner type = citizenship_full }
+				set_military_service_type = { country = root.owner type = military_service_full }
+			}
+		}
+		random_tile = {
+			limit = { has_blocker = no has_grown_pop = no has_growing_pop = no }
+			create_pop = { species = event_target:jemHadarSpecies ethos = owner }
+		}
+	}
+	on_fail = { }
+	abort_trigger = {
+		any_owned_pop_species = { is_species_class = JEM }
+	}
+}
+
+
+#The Hundred
+special_project = {
+	key = "THE_HUNDRED_PROJECT_1"
+	days_to_research = 480
+	timelimit = -1
+	tech_department = society_technology
+	picture = sth_GFX_evt_empireDominion
+	event_scope = planet_event
+	requirements = { }
+	on_success = {
+		owner = { country_event = { id = STH_dominion_story.2 } }
+	}
+	on_fail = { }
+	abort_trigger = {
+	}
+}
+
+#The Hundred
+special_project = {
+	key = "THE_HUNDRED_PROJECT_2"
+	days_to_research = 90
+	timelimit = -1
+	tech_department = society_technology
+	picture = sth_GFX_evt_the_hundred_1
+	event_scope = ship_event
+	requirements = {
+		shipclass_science_ship = 1
+		leader = scientist
+	}
+	on_success = {
+		print_scope_effect = yes
+		log = "was project"
+		ship_event = { id = STH_dominion_story.102 scopes = { from = fromfrom } }
+	}
+	on_fail = { }
+	abort_trigger = {
+	}
+}
+
+#The Hundred STUDY 1
+special_project = {
+	key = "THE_HUNDRED_PROJECT_3A"
+	days_to_research = 240
+	timelimit = -1
+	tech_department = society_technology
+	picture = sth_GFX_evt_the_hundred_2
+	event_scope = planet_event
+	requirements = { }
+	on_success = {
+		owner = { 
+			country_event = { id = STH_dominion_story.111 } 
+			random_list = {
+				10 = { change_variable = { which = changeling_research value = 10 } }
+				10 = { change_variable = { which = changeling_research value = 5 } }
+				10 = { change_variable = { which = changeling_research value = -5 } }
+			}
+		}
+	}
+	on_fail = { }
+	abort_trigger = {
+	}
+}
+#The Hundred STUDY 1
+special_project = {
+	key = "THE_HUNDRED_PROJECT_3B"
+	days_to_research = 240
+	timelimit = -1
+	tech_department = society_technology
+	picture = sth_GFX_evt_the_hundred_2
+	event_scope = planet_event
+	requirements = { }
+	on_success = {
+		owner = { 
+			country_event = { id = STH_dominion_story.111 } 
+			random_list = {
+				20 = { change_variable = { which = changeling_research value = 15 } }
+				10 = { change_variable = { which = changeling_research value = 10 } }
+				10 = { change_variable = { which = changeling_research value = 0 } }
+			}
+		}
+	}
+	on_fail = { }
+	abort_trigger = {
+	}
+}
+
+#The Hundred STUDY 2
+special_project = {
+	key = "THE_HUNDRED_PROJECT_4A"
+	days_to_research = 300
+	timelimit = -1
+	tech_department = society_technology
+	picture = sth_GFX_evt_the_hundred_2
+	event_scope = planet_event
+	requirements = { }
+	on_success = {
+		owner = { 
+			# country_event = { id = STH_dominion_story.112 }  SKIPPING
+			country_event = { id = STH_dominion_story.113 } 
+			random_list = {
+				10 = { change_variable = { which = changeling_research value = 10 } }
+				10 = { change_variable = { which = changeling_research value = 5 } }
+				10 = { change_variable = { which = changeling_research value = -5 } }
+			}
+		}
+	}
+	on_fail = { }
+	abort_trigger = {
+	}
+}
+#The Hundred STUDY 2
+special_project = {
+	key = "THE_HUNDRED_PROJECT_4B"
+	days_to_research = 300
+	timelimit = -1
+	tech_department = society_technology
+	picture = sth_GFX_evt_the_hundred_2
+	event_scope = planet_event
+	requirements = { }
+	on_success = {
+		owner = { 
+			# country_event = { id = STH_dominion_story.112 }  SKIPPING
+			country_event = { id = STH_dominion_story.113 } 
+			random_list = {
+				20 = { change_variable = { which = changeling_research value = 15 } }
+				10 = { change_variable = { which = changeling_research value = 10 } }
+				10 = { change_variable = { which = changeling_research value = 0 } }
+			}
+		}
+	}
+	on_fail = { }
+	abort_trigger = {
+	}
+}
+
+#The Hundred STUDY 3
+special_project = {
+	key = "THE_HUNDRED_PROJECT_5A"
+	days_to_research = 360
+	timelimit = -1
+	tech_department = society_technology
+	picture = sth_GFX_evt_the_hundred_2
+	event_scope = planet_event
+	requirements = { }
+	on_success = {
+		owner = { 
+			country_event = { id = STH_dominion_story.113 } 
+			random_list = {
+				10 = { change_variable = { which = changeling_research value = 10 } }
+				10 = { change_variable = { which = changeling_research value = 5 } }
+				10 = { change_variable = { which = changeling_research value = -5 } }
+			}
+		}
+	}
+	on_fail = { }
+	abort_trigger = {
+	}
+}
+#The Hundred STUDY 3
+special_project = {
+	key = "THE_HUNDRED_PROJECT_5B"
+	days_to_research = 360
+	timelimit = -1
+	tech_department = society_technology
+	picture = sth_GFX_evt_the_hundred_2
+	event_scope = planet_event
+	requirements = { }
+	on_success = {
+		owner = { 
+			country_event = { id = STH_dominion_story.113 } 
+			random_list = {
+				20 = { change_variable = { which = changeling_research value = 15 } }
+				10 = { change_variable = { which = changeling_research value = 10 } }
+				10 = { change_variable = { which = changeling_research value = 0 } }
+			}
+		}
+	}
+	on_fail = { }
+	abort_trigger = {
+	}
+}
+
+#The Hundred STUDY 4
+special_project = {
+	key = "THE_HUNDRED_PROJECT_6A"
+	days_to_research = 420
+	timelimit = -1
+	tech_department = society_technology
+	picture = sth_GFX_evt_the_hundred_2
+	event_scope = planet_event
+	requirements = { }
+	on_success = {
+		owner = { 
+			country_event = { id = STH_dominion_story.114 } 
+			random_list = {
+				10 = { change_variable = { which = changeling_research value = 10 } }
+				10 = { change_variable = { which = changeling_research value = 5 } }
+				10 = { change_variable = { which = changeling_research value = -5 } }
+			}
+		}
+	}
+	on_fail = { }
+	abort_trigger = {
+	}
+}
+#The Hundred STUDY 4
+special_project = {
+	key = "THE_HUNDRED_PROJECT_6B"
+	days_to_research = 420
+	timelimit = -1
+	tech_department = society_technology
+	picture = sth_GFX_evt_the_hundred_2
+	event_scope = planet_event
+	requirements = { }
+	on_success = {
+		owner = { 
+			country_event = { id = STH_dominion_story.114 } 
+			random_list = {
+				20 = { change_variable = { which = changeling_research value = 15 } }
+				10 = { change_variable = { which = changeling_research value = 10 } }
+				10 = { change_variable = { which = changeling_research value = 0 } }
+			}
+		}
+	}
+	on_fail = { }
+	abort_trigger = {
+	}
+}

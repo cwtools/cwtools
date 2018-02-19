@@ -1,0 +1,57 @@
+# see README.txt for example
+
+STH_great_link_0 = {
+	entity = ""
+	construction_entity = ""
+	place_entity_on_planet_plane = yes
+	entity_offset = { x = 0 y = 0 }
+	build_time = 720
+	build_cost = {
+		energy = 1500
+		influence = 50
+	}
+
+	potential = {
+		has_technology = tech_society_scion_663
+	}
+
+	possible = {
+		custom_tooltip_fail = {
+			text = "requires_inside_border"
+			is_inside_border = from
+		}
+	}
+
+	placement_rules = {
+		planet_possible = {
+			custom_tooltip_fail = {
+				text = "requires_ocean_planet"
+				is_planet_class = pc_ocean
+			}
+		}
+	}
+	
+	ai_weight = {
+		modifier = {
+			weight = 0
+		}
+	}
+	
+	on_build_start = {}
+	on_build_cancel = {}
+	
+	on_build_complete = {
+		from = {
+			every_planet_within_border = {
+				limit = { is_planet_class = pc_thegreatlink }
+				change_pc = pc_ocean
+				set_name = "Discarded Link"
+			}
+		}
+		fromfrom.planet = { 
+			change_pc = pc_thegreatlink
+			set_name = "The New Link"
+		}
+		remove_megastructure = fromfrom
+	}
+  }

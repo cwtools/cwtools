@@ -1,0 +1,1628 @@
+# ###########
+# Habitable Planets
+# ###########
+
+### Class M (Continental)
+pc_continental = {
+	entity = "continental_planet"
+	icon_frame = 4
+	entity_scale = 11
+   
+	atmosphere_color = hsv { 0.59 0.45 0.95 }
+	atmosphere_intensity = 1
+	atmosphere_width = 0.5
+   
+	min_distance_from_sun = 60
+	max_distance_from_sun = 100
+	spawn_odds = 0.5
+	city_color_lut = "gfx/portraits/misc/colorcorrection_continental.dds"
+	extra_orbit_size = 0
+	extra_planet_count = 0
+	chance_of_ring = 0.2
+	planet_size = { min = 12 max = 24 }
+	moon_size = { min = 10 max = 15 }
+	colonizable = yes
+}
+   
+### Class M (Arctic)
+pc_arctic = {
+	entity = "arctic_planet"
+	icon_frame = 7
+	entity_scale = 11
+
+	atmosphere_color = hsv { 0.48 0.15 0.8 }
+	atmosphere_intensity = 1
+	atmosphere_width = 0.5
+
+	min_distance_from_sun = 90
+	max_distance_from_sun = 140
+	spawn_odds = 0.5
+	city_color_lut = "gfx/portraits/misc/colorcorrection_arctic.dds"
+	extra_orbit_size = 0
+	extra_planet_count = 0
+	chance_of_ring = 0.2
+	planet_size = { min = 12 max = 24 }
+	moon_size = { min = 10 max = 15 }
+	colonizable = yes
+}
+   
+### Class M (Arid)
+pc_arid = {
+      entity = "arid_planet"
+      icon_frame = 2
+      entity_scale = 11
+   
+      atmosphere_color = hsv { 0.5 0.3 0.7 }
+      atmosphere_intensity = 1
+      atmosphere_width = 0.5
+   
+      min_distance_from_sun = 45
+      max_distance_from_sun = 90
+      spawn_odds = 3
+      city_color_lut = "gfx/portraits/misc/colorcorrection_arid.dds"
+      extra_orbit_size = 0
+      extra_planet_count = 0
+      chance_of_ring = 0.2
+      planet_size = { min = 12 max = 24 }
+      moon_size = { min = 10 max = 15 }
+      colonizable = yes
+}
+   
+### Class M (Savannah)
+pc_savannah = {
+      entity = "savannah_planet"
+      icon_frame = 20
+      entity_scale = 11
+   
+      atmosphere_color = hsv { 0.5 0.3 0.7 }
+      atmosphere_intensity = 0.5
+      atmosphere_width = 0.5
+   
+      min_distance_from_sun = 50
+      max_distance_from_sun = 100
+      spawn_odds = 3
+      city_color_lut = "gfx/portraits/misc/colorcorrection_savannah.dds"
+      extra_orbit_size = 0
+      extra_planet_count = 0
+      chance_of_ring = 0.2
+      planet_size = { min = 12 max = 24 }
+      moon_size = { min = 10 max = 15 }
+      colonizable = yes
+}
+   
+### Class M (Tropical)
+pc_tropical = {
+      entity = "tropical_planet"
+      icon_frame = 5
+      entity_scale = 11
+   
+      atmosphere_color = hsv { 0.58 0.3 0.7 }
+      atmosphere_intensity = 1
+      atmosphere_width = 0.5
+   
+      min_distance_from_sun = 30
+      max_distance_from_sun = 90
+      spawn_odds = 0.5
+      city_color_lut = "gfx/portraits/misc/colorcorrection_tropical.dds"
+      extra_orbit_size = 0
+      extra_planet_count = 0
+      chance_of_ring = 0.2
+      planet_size = { min = 12 max = 24 }
+      moon_size = { min = 10 max = 15 }
+      colonizable = yes
+}
+   
+### Class M (Alpine)
+pc_alpine = {
+      entity = "alpine_planet"
+      icon_frame = 19
+      entity_scale = 11
+   
+      atmosphere_color = hsv { 0.48 0.15 0.8 }
+      atmosphere_intensity = 1
+      atmosphere_width = 0.5
+   
+      min_distance_from_sun = 80
+      max_distance_from_sun = 120
+      spawn_odds = 0.5
+      city_color_lut = "gfx/portraits/misc/colorcorrection_alpine.dds"
+      extra_orbit_size = 0
+      extra_planet_count = 0
+      chance_of_ring = 0.2
+      planet_size = { min = 12 max = 24 }
+      moon_size = { min = 10 max = 15 }
+      colonizable = yes
+}
+   
+### Class M (Marshland)
+pc_m1_class = {
+      entity = "m1_class_planet"
+      icon_frame = 5
+      entity_scale = 11
+   
+      atmosphere_color = hsv { 0.58 0.3 0.7 }
+      atmosphere_intensity = 1
+      atmosphere_width = 0.5
+   
+      min_distance_from_sun = 50
+      max_distance_from_sun = 90
+      spawn_odds = 0.5
+      city_color_lut = "gfx/portraits/misc/colorcorrection_tropical.dds"
+      extra_orbit_size = 0
+      extra_planet_count = 0
+      chance_of_ring = 0.2
+      planet_size = { min = 12 max = 24 }
+      moon_size = { min = 10 max = 15 }
+      colonizable = yes
+}
+   
+### Class H (Desert)
+pc_desert = {
+      entity = "desert_planet"
+      icon_frame = 1
+      entity_scale = 11
+   
+      atmosphere_color = hsv { 0.5 0.2 0.8 }
+      atmosphere_intensity = 1
+      atmosphere_width = 0.5
+   
+      min_distance_from_sun = 30
+      max_distance_from_sun = 60
+      spawn_odds = 0.75
+      city_color_lut = "gfx/portraits/misc/colorcorrection_desert.dds"
+      extra_orbit_size = 0
+      extra_planet_count = 0
+      chance_of_ring = 0.2
+      planet_size = { min = 10 max = 22 }
+      moon_size = { min = 8 max = 14 }
+      production_spawn_chance = 0.4
+      colonizable = yes
+}
+   
+### Class O (Pelagic)
+pc_ocean = {
+      entity = "ocean_planet"
+      icon_frame = 6
+      entity_scale = 11
+   
+      atmosphere_color = hsv { 0.58 0.5 0.9 }
+      atmosphere_intensity = 1
+      atmosphere_width = 0.5
+   
+      min_distance_from_sun = 60
+      max_distance_from_sun = 100
+      spawn_odds = 0.5
+      city_color_lut = "gfx/portraits/misc/colorcorrection_ocean.dds"
+      extra_orbit_size = 0
+      extra_planet_count = 0
+      chance_of_ring = 0.2
+      planet_size = { min = 10 max = 22 }
+      moon_size = { min = 8 max = 14 }
+      colonizable = yes
+}
+   
+### Class L (Tundra)
+pc_tundra = {
+      entity = "tundra_planet"
+      icon_frame = 3
+      entity_scale = 11
+   
+      atmosphere_color = hsv { 0.58 0.3 0.8 }
+      atmosphere_intensity = 1
+      atmosphere_width = 0.5
+   
+      min_distance_from_sun = 70
+      max_distance_from_sun = 120
+      spawn_odds = 0.75
+      city_color_lut = "gfx/portraits/misc/colorcorrection_tundra.dds"
+      extra_orbit_size = 0
+      extra_planet_count = 0
+      chance_of_ring = 0.2
+      planet_size = { min = 10 max = 22 }
+      moon_size = { min = 8 max = 14 }
+      starting_planet = no
+      colonizable = yes
+}
+   
+### Class L (Rocky)
+pc_l2_class = {
+      entity = "l2_class_planet"
+      icon_frame = 2
+      entity_scale = 11
+   
+      atmosphere_color = hsv { 0.5 0.2 0.8 }
+      atmosphere_intensity = 0.25
+      atmosphere_width = 0.5
+   
+      min_distance_from_sun = 40
+      max_distance_from_sun = 90
+      spawn_odds = 0
+      city_color_lut = "gfx/portraits/misc/colorcorrection_arid.dds"
+      extra_orbit_size = 0
+      extra_planet_count = 0
+      chance_of_ring = 0.2
+      planet_size = { min = 10 max = 22 }
+      moon_size = { min = 8 max = 14 }
+      starting_planet = no
+      colonizable = yes
+}
+   
+### Class P (Glacial)
+pc_frozen = {
+      entity = "frozen_planet"
+      icon_frame = 13
+      entity_scale = 11
+   
+      atmosphere_color = hsv { 0.55 0.15 0.7 }
+      atmosphere_intensity = 1
+      atmosphere_width = 0.5
+   
+      min_distance_from_sun = 80
+      max_distance_from_sun = 130
+      spawn_odds = 0.75
+      city_color_lut = "gfx/portraits/misc/colorcorrection_arctic.dds"
+      extra_orbit_size = 0
+      extra_planet_count = 0
+      chance_of_ring = 0.2
+      planet_size = { min = 10 max = 22 }
+      moon_size = { min = 8 max = 14 }
+      colonizable = yes
+}
+   
+### Class G (Primal)
+pc_g_class = {
+      entity = "g_class_planet"
+      icon_frame = 6
+      entity_scale = 11
+   
+      atmosphere_color = hsv { 0.1 0.95 0.85 }
+      atmosphere_intensity = 1.25
+      atmosphere_width = 0.5
+   
+      min_distance_from_sun = 50
+      max_distance_from_sun = 100
+      spawn_odds = 0.75
+      city_color_lut = "gfx/portraits/misc/colorcorrection_tropical.dds"
+      extra_orbit_size = 0
+      extra_planet_count = 0
+      chance_of_ring = 0.2
+      planet_size = { min = 10 max = 22 }
+      moon_size = { min = 8 max = 14 }
+      starting_planet = no
+      colonizable = yes
+}
+   
+### Class Q (Variable)
+pc_class_q_variable = {
+      entity = "class_q_variable"
+      icon_frame = 5
+      entity_scale = 11
+   
+      picture = pc_gaia
+      tile_set = pc_gaia
+      atmosphere_color = hsv { 0.59 0.45 0.95 }
+      atmosphere_intensity = 1
+      atmosphere_width = 0.5
+   
+      min_distance_from_sun = 50
+      max_distance_from_sun = 150
+      spawn_odds = 0.1
+      city_color_lut = "gfx/portraits/misc/colorcorrection_continental.dds"
+      extra_orbit_size = 0
+      extra_planet_count = 0
+      chance_of_ring = 0.2
+      planet_size = { min = 10 max = 22 }
+      moon_size = { min = 8 max = 14 }
+      starting_planet = no
+      colonizable = yes
+}
+   
+pc_thegreatlink = {
+	entity = "thegreatlink_planet"
+	icon_frame = 40
+	tile_set = pc_thegreatlink
+	
+	entity_scale = 11
+	
+	atmosphere_color 		= hsv { 0.48 0.15 0.8 }		#DONE
+	atmosphere_intensity 	= 1.0
+	atmosphere_width 		= 0.5
+
+	min_distance_from_sun = 40
+	max_distance_from_sun = 200
+	spawn_odds = 0
+	
+	city_color_lut = "gfx/portraits/misc/colorcorrection_arid.dds"
+	
+	extra_orbit_size = 0
+	extra_planet_count = 0
+	
+	chance_of_ring = 0
+	
+	planet_size = { min = 10 max = 22 }
+        moon_size = { min = 8 max = 14 }
+	
+	colonizable = yes
+	show_city = no
+
+}   
+
+### Class Q (Geothermal)
+pc_class_q_geo = {
+      entity = "geothermal_planet"
+      icon_frame = 7
+      entity_scale = 11
+   
+      atmosphere_color = hsv { 0.48 0.15 0.8 }
+      atmosphere_intensity = 1
+      atmosphere_width = 0.5
+   
+      min_distance_from_sun = 100
+      max_distance_from_sun = 200
+      spawn_odds = 0.1
+      city_color_lut = "gfx/portraits/misc/colorcorrection_arctic.dds"
+      extra_orbit_size = 0
+      extra_planet_count = 0
+      chance_of_ring = 0.2
+      planet_size = { min = 10 max = 22 }
+      moon_size = { min = 8 max = 14 }
+      starting_planet = no
+	  colonizable = yes
+}
+   
+### Class R (Rogue)
+pc_r_class = {
+      entity = "r_class_planet"
+      icon_frame = 5
+      entity_scale = 11
+   
+      atmosphere_color = hsv { 0.5 0.3 0.7 }
+      atmosphere_intensity = 1
+      atmosphere_width = 0.5
+   
+      min_distance_from_sun = 200
+      max_distance_from_sun = 400
+      spawn_odds = 0
+      city_color_lut = "gfx/portraits/misc/colorcorrection_savannah.dds"
+      extra_orbit_size = 0
+      extra_planet_count = 0
+      chance_of_ring = 0.2
+      planet_size = { min = 10 max = 22 }
+      moon_size = { min = 8 max = 14 }
+      starting_planet = no
+      colonizable = yes
+}
+   
+### Class F (Geocrystalline)
+pc_f_class = {
+      entity = "class_f_planet"
+      icon_frame = 7
+      entity_scale = 11
+   
+      atmosphere_color = hsv { 0.1 0.95 0.85 }
+      atmosphere_intensity = 1.25
+      atmosphere_width = 0.5
+   
+      min_distance_from_sun = 50
+      max_distance_from_sun = 100
+      spawn_odds = 0.75
+      city_color_lut = "gfx/portraits/misc/colorcorrection_tropical.dds"
+      extra_orbit_size = 5
+      extra_planet_count = 0
+      chance_of_ring = 0.2
+      planet_size = { min = 10 max = 22 }
+      moon_size = { min = 8 max = 14 }
+      starting_planet = no
+      colonizable = yes
+}
+   
+### Class K (Adaptable)
+pc_k_class = {
+      entity = "k_class_planet"
+      icon_frame = 2
+      entity_scale = 11
+   
+      atmosphere_color = hsv { 0.1 0.4 0.7 }
+      atmosphere_intensity = 1.25
+      atmosphere_width = 0.75
+   
+      min_distance_from_sun = 70
+      max_distance_from_sun = 130
+      spawn_odds = 0.75
+      city_color_lut = "gfx/portraits/misc/colorcorrection_desert.dds"
+      extra_orbit_size = 0
+      extra_planet_count = 0
+      chance_of_ring = 0.2
+      planet_size = { min = 10 max = 22 }
+      moon_size = { min = 8 max = 14 }
+      starting_planet = no
+      colonizable = yes
+}
+   
+### Class Y (Demon)
+pc_y_class = {
+      entity = "class_y_planet"
+      icon_frame = 11
+      entity_scale = 11
+   
+      atmosphere_color = hsv { 0.5 0.3 0.7 }
+      atmosphere_intensity = 0.5
+      atmosphere_width = 1
+   
+      min_distance_from_sun = 40
+      max_distance_from_sun = 80
+      spawn_odds = 1.25
+      city_color_lut = "gfx/portraits/misc/colorcorrection_arid.dds"
+      extra_orbit_size = 0
+      extra_planet_count = 0
+      chance_of_ring = 0.2
+      planet_size = { min = 12 max = 25 }
+      moon_size = { min = 10 max = 16 }
+      colonizable = yes
+}
+
+### Class X (Chthonian)
+pc_x_class = {
+      entity = "x_class_planet"
+      icon_frame = 12
+      entity_scale = 11
+      
+      
+      city_color_lut = "gfx/portraits/misc/colorcorrection_arid.dds"
+   
+      picture = pc_class_e
+      atmosphere_color = hsv { 0.5 0.2 0.8 }
+      atmosphere_intensity = 1
+      atmosphere_width = 0.5
+   
+      min_distance_from_sun = 50
+      max_distance_from_sun = 90
+      spawn_odds = 0.75
+      extra_orbit_size = 0
+      extra_planet_count = 0
+      chance_of_ring = 0.2
+      planet_size = { min = 12 max = 24 }
+      moon_size = { min = 10 max = 15 }
+      colonizable = yes
+      starting_planet = no
+}
+   
+########## Non-standard planets   
+   
+### Class A (Geoactive)
+pc_molten = {
+      entity = "molten_planet"
+      icon_frame = 12
+      entity_scale = 11
+   
+      atmosphere_color = hsv { 0.05 0.65 1.4 }
+      atmosphere_intensity = 0.05
+      atmosphere_width = 1
+   
+      min_distance_from_sun = 0   
+      max_distance_from_sun = 60
+      spawn_odds = 5
+      extra_orbit_size = 0
+      extra_planet_count = 0
+      chance_of_ring = 0
+      planet_size = { min = 14 max = 25 }
+      moon_size = { min = 6 max = 12 }
+      colonizable = no
+}
+   
+### Class D (Barren)
+pc_class_d_barren = {
+      entity = "barren_planet"
+      icon_frame = 10
+      entity_scale = 11
+   
+      picture = pc_desert
+      atmosphere_color = hsv { 0.5 0.2 0.8 }
+      atmosphere_intensity = 1
+      atmosphere_width = 0.5
+   
+      min_distance_from_sun = 40
+      max_distance_from_sun = 200
+      spawn_odds = 10
+      extra_orbit_size = 0
+      extra_planet_count = 0
+      chance_of_ring = 0.2
+      planet_size = { min = 12 max = 24 }
+      moon_size = { min = 6 max = 10 }
+      colonizable = no
+}
+   
+### Class E (Geoplastic)
+pc_class_e = {
+      entity = "molten_planet"
+      icon_frame = 11
+      entity_scale = 11
+   
+      atmosphere_color = hsv { 0.05 0.65 1.4 }
+      atmosphere_intensity = 0.05
+      atmosphere_width = 1
+   
+      min_distance_from_sun = 60
+      max_distance_from_sun = 100
+      spawn_odds = 2
+      extra_orbit_size = 0
+      extra_planet_count = 0
+      chance_of_ring = 0.2
+      planet_size = { min = 12 max = 24 }
+      moon_size = { min = 10 max = 15 }
+      colonizable = no
+}
+   
+### Class K (Transjovian)
+pc_class_k_trans = {
+      entity = "class_k_trans_planet"
+      icon_frame = 10
+      entity_scale = 11
+   
+      picture = pc_frozen
+      atmosphere_color = hsv { 0.5 0.3 0.7 }
+      atmosphere_intensity = 1
+      atmosphere_width = 2
+   
+      min_distance_from_sun = 200
+      max_distance_from_sun = 400
+      spawn_odds = 0.5
+      extra_orbit_size = 0
+      extra_planet_count = 0
+      chance_of_ring = 0.2
+      planet_size = { min = 10 max = 22 }
+      moon_size = { min = 8 max = 14 }
+      colonizable = no
+}
+   
+### Class N (Venusian)
+pc_toxic = {
+      entity = "toxic_planet"
+      icon_frame = 11
+      entity_scale = 11
+   
+      atmosphere_color = hsv { 0.19 0.45 0.9 }
+      atmosphere_intensity = 1
+      atmosphere_width = 1.2
+   
+      min_distance_from_sun = 60
+      max_distance_from_sun = 110
+      spawn_odds = 2
+      extra_orbit_size = 0
+      extra_planet_count = 0
+      chance_of_ring = 0.2
+      planet_size = { min = 12 max = 24 }
+      moon_size = { min = 6 max = 10 }
+      colonizable = no
+}
+   
+### Class N (Titanic)
+pc_class_n_titan = {
+      entity = "class_n_titan_planet"
+      icon_frame = 11
+      entity_scale = 11
+   
+      atmosphere_color = hsv { 0.19 0.45 0.9 }
+      atmosphere_intensity = 1
+      atmosphere_width = 1.2
+   
+      min_distance_from_sun = 60
+      max_distance_from_sun = 110
+      spawn_odds = 2
+      extra_orbit_size = 0
+      extra_planet_count = 0
+      chance_of_ring = 0.2
+      planet_size = { min = 12 max = 24 }
+      moon_size = { min = 6 max = 10 }
+      colonizable = no
+}
+   
+### Class O (Nitrous) (This was originally Sulfuric, which explains the initializer name)
+pc_class_o_sulfar = {
+      entity = "class_o_sulfar_planet"
+      icon_frame = 10
+      entity_scale = 11
+   
+      atmosphere_color = hsv { 0.09 0.7 0.7 }
+      atmosphere_intensity = 1
+      atmosphere_width = 1
+   
+      min_distance_from_sun = 60
+      max_distance_from_sun = 110
+      spawn_odds = 2
+      extra_orbit_size = 0
+      extra_planet_count = 0
+      chance_of_ring = 0.2
+      planet_size = { min = 12 max = 24 }
+      moon_size = { min = 6 max = 10 }
+      colonizable = no
+}
+
+pc_machine = {
+	entity = "machine_planet"
+	entity_scale = 11
+	picture = pc_ai
+	tile_set = pc_ai
+	
+	icon_frame = 15
+	
+	atmosphere_color 		= hsv { 0.09 0.8 0.7 }		
+	atmosphere_intensity 	= 0.4
+	atmosphere_width 		= 1.0
+
+	city_color_lut = "gfx/portraits/misc/colorcorrection_neutral.dds"
+	
+	min_distance_from_sun = 40
+	max_distance_from_sun = 1000
+	
+	modifier = {
+		pop_robot_production_output = 0.15
+	}
+	
+	spawn_odds = 0
+	extra_orbit_size = 1
+	extra_planet_count = 2
+	
+	can_be_moon = no
+	chance_of_ring = 0.0
+	
+	planet_size = { min = 12 max = 24 }
+	moon_size = { min = 8 max = 12 }
+	
+	# Non-allowed species classes have 0% habitability
+	allowed_archetypes = { MACHINE ROBOT }
+	
+	colonizable = yes
+	starting_planet = no
+	show_city = no
+}
+   
+### Class Z (Irridiated)
+pc_nuked = {
+      entity = "nuked_planet"
+      icon_frame = 17
+      entity_scale = 11
+   
+      atmosphere_color = hsv { 0.6 0.4 0.6 }
+      atmosphere_intensity = 1
+      atmosphere_width = 0.85
+   
+      min_distance_from_sun = 60
+      max_distance_from_sun = 110
+      spawn_odds = 0.01
+      extra_orbit_size = 0
+      extra_planet_count = 0
+      chance_of_ring = 0.2
+      planet_size = { min = 12 max = 24 }
+      moon_size = { min = 6 max = 10 }
+      starting_planet = no
+      colonizable = yes
+}
+   
+### Class Z (Assimilated)
+pc_assimilated = {
+      entity = "assimilated"
+      icon_frame = 40
+      entity_scale = 11
+   
+      atmosphere_color = hsv { 0.75 0.2 0.7 }
+      atmosphere_intensity = 0.25
+      atmosphere_width = 0.5
+   
+      min_distance_from_sun = 40
+      max_distance_from_sun = 200
+      spawn_odds = 0
+      city_color_lut = "gfx/portraits/misc/colorcorrection_tropical.dds"
+      extra_orbit_size = 0
+      extra_planet_count = 0
+      chance_of_ring = 0.2
+      planet_size = { min = 12 max = 25 }
+      moon_size = { min = 10 max = 15 }
+      production_spawn_chance = 0.4
+      starting_planet = no
+      colonizable = yes
+}
+   
+pc_gaia = {
+	entity = "gaia_planet"
+	entity_scale = 11
+	icon_frame = 8
+	
+	atmosphere_color = hsv { 0.58	0.3 0.7 }
+	atmosphere_intensity = 1.0
+	atmosphere_width = 0.5
+	
+	city_color_lut = "gfx/portraits/misc/colorcorrection_tropical.dds"
+	
+	modifier = {
+		biological_pop_happiness = 0.05
+		tile_resource_unity_mult = 0.15
+	}
+
+	min_distance_from_sun = 60
+	max_distance_from_sun = 95
+	spawn_odds = 0.01
+	
+	extra_orbit_size = 0
+	extra_planet_count = 0
+	
+	chance_of_ring = 0.2
+	
+	planet_size = { min = 12 max = 25 }
+     moon_size = { min = 10 max = 15 }
+	
+	colonizable = yes
+	ideal = yes
+	starting_planet = no
+}
+
+### Class B (Geomorteus)
+pc_b_class = {
+      entity = "molten_planet"
+      icon_frame = 12
+      entity_scale = 11
+   
+      picture = pc_y_class
+      atmosphere_color = hsv { 0.1 0.95 0.85 }
+      atmosphere_intensity = 1.25
+      atmosphere_width = 0.5
+   
+      min_distance_from_sun = 20
+      max_distance_from_sun = 60
+      spawn_odds = 10
+      extra_orbit_size = 5
+      extra_planet_count = 0
+      chance_of_ring = 0.2
+      planet_size = { min = 15 max = 25 }
+      moon_size = { min = 10 max = 15 }
+      colonizable = no
+}
+   
+### Class C (Geoinactive)
+pc_barren_cold = {
+      entity = "cold_barren_planet"
+      icon_frame = 9
+      entity_scale = 11
+   
+      atmosphere_color = hsv { 0.55 0.3 0.75 }
+      atmosphere_intensity = 1
+      atmosphere_width = 0.5
+   
+      min_distance_from_sun = 40
+      max_distance_from_sun = 200
+      spawn_odds = 10
+      extra_orbit_size = 0
+      extra_planet_count = 0
+      chance_of_ring = 0.2
+      planet_size = { min = 10 max = 14 }
+      moon_size = { min = 6 max = 10 }
+      colonizable = no
+}
+   
+### Class D (Asteroid)
+pc_asteroid = {
+      entity = "asteroid"
+      icon_frame = 18
+      entity_scale = 1.5
+   
+      asteroid = yes
+      spawn_odds = 10
+      extra_orbit_size = 0
+      extra_planet_count = 0
+      chance_of_ring = 0
+      planet_size = 5
+      colonizable = no
+      survey_time_factor = 0.5
+}
+
+pc_planet_remnant = { 
+	entity = "asteroid" 
+	icon_frame = 18 
+	entity_scale = 0.5 
+	asteroid = no 
+	spawn_odds = 0 
+	extra_orbit_size = 0 
+	extra_planet_count = 0 
+	chance_of_ring = 0 
+	planet_size = { min = 4 max = 6 } 
+	colonizable = no 
+} 
+   
+### Class D (Planetoid)
+pc_barren = {
+      entity = "barren_planet"
+      icon_frame = 10
+      entity_scale = 11
+   
+      atmosphere_color = hsv { 0.1 0.4 0.7 }
+      atmosphere_intensity = 1
+      atmosphere_width = 0.5
+   
+      min_distance_from_sun = 40
+      max_distance_from_sun = 200
+      spawn_odds = 10
+      extra_orbit_size = 0
+      extra_planet_count = 0
+      chance_of_ring = 0.2
+      planet_size = { min = 8 max = 12 }
+      moon_size = { min = 6 max = 8 }
+      colonizable = no
+}
+   
+### Class J (Gas Giant)
+pc_gas_giant = {
+      entity = "gas_giant"
+      icon_frame = 14
+      entity_scale = 14
+   
+      atmosphere_color = hsv { 0.1 0.15 1.1 }
+      atmosphere_intensity = 1.1
+      atmosphere_width = 0.5
+   
+      min_distance_from_sun = 130
+      max_distance_from_sun = 1000
+      spawn_odds = 15
+      extra_orbit_size = 1
+      extra_planet_count = 2
+      can_be_moon = no
+      chance_of_ring = 0.6
+      planet_size = { min = 15 max = 25 }
+      moon_size = { min = 8 max = 12 }
+      production_spawn_chance = 0.4
+      colonizable = no
+}
+   
+### Class I (Ice Giant)
+pc_i_class = {
+      entity = "gas_giant"
+      icon_frame = 14
+      entity_scale = 14
+   
+      picture = pc_gas_giant
+      atmosphere_color = hsv { 0.1 0.15 1.1 }
+      atmosphere_intensity = 1.1
+      atmosphere_width = 0.5
+   
+      min_distance_from_sun = 130
+      max_distance_from_sun = 1000
+      spawn_odds = 4
+      extra_orbit_size = 1
+      extra_planet_count = 2
+      can_be_moon = no
+      chance_of_ring = 0.6
+      planet_size = { min = 25 max = 30 }
+      moon_size = { min = 8 max = 12 }
+      production_spawn_chance = 0.4
+      colonizable = no
+}
+   
+### Class S (Gas Supergiant)
+pc_s_class = {
+      entity = "gas_giant"
+      icon_frame = 14
+      entity_scale = 14
+   
+      picture = pc_gas_giant
+      atmosphere_color = hsv { 0.1 0.15 1.1 }
+      atmosphere_intensity = 1.1
+      atmosphere_width = 0.5
+   
+      min_distance_from_sun = 140
+      max_distance_from_sun = 1000
+      spawn_odds = 3
+      extra_orbit_size = 1
+      extra_planet_count = 2
+      can_be_moon = no
+      chance_of_ring = 0.5
+      planet_size = { min = 30 max = 35 }
+      moon_size = { min = 12 max = 13 }
+      production_spawn_chance = 0.4
+      colonizable = no
+}
+   
+### Class U (Gas Ultragiant)
+pc_u_class = {
+      entity = "gas_giant"
+      icon_frame = 14
+      entity_scale = 14
+   
+      picture = pc_gas_giant
+      atmosphere_color = hsv { 0.1 0.15 1.1 }
+      atmosphere_intensity = 1.1
+      atmosphere_width = 0.5
+   
+      min_distance_from_sun = 140
+      max_distance_from_sun = 1000
+      spawn_odds = 3
+      extra_orbit_size = 1
+      extra_planet_count = 2
+      can_be_moon = no
+      chance_of_ring = 0.5
+      planet_size = { min = 35 max = 40 }
+      moon_size = { min = 14 max = 15 }
+      production_spawn_chance = 0.4
+      colonizable = no
+}
+   
+### Broken planet
+pc_barren_broken = {
+      entity = "broken_planet"
+      icon_frame = 10
+      entity_scale = 11
+   
+      atmosphere_color = hsv { 0.1 0.4 0.7 }
+      atmosphere_intensity = 1
+      atmosphere_width = 0.5
+   
+      spawn_odds = 0
+      extra_orbit_size = 0
+      extra_planet_count = 0
+      chance_of_ring = 0.2
+      planet_size = { min = 12 max = 25 }
+      moon_size = { min = 6 max = 10 }
+      colonizable = no
+}
+ 
+pc_cybrex = {
+	ringworld = yes
+	entity = "ringworld_habitable_entity"
+	picture = pc_ai
+	icon_frame = 21
+	entity_scale = 1.0
+	enable_tilt = no
+	fixed_entity_scale = yes
+	atmosphere_color 		= hsv { 0.50 0.2 0.8 }		#DONE
+	atmosphere_intensity 	= 1.0
+	atmosphere_width 		= 0.5
+	city_color_lut = "gfx/portraits/misc/colorcorrection_desert.dds"
+	extra_orbit_size = 0
+	extra_planet_count = 0
+	chance_of_ring = 0.0
+	planet_size = 10
+	moon_size = 1
+	colonizable = no
+	show_city = no
+	orbit_lines = no
+	can_be_invaded = no
+} 
+   
+### Infested planet
+pc_infested = {
+      entity = "infested_planet"
+      icon_frame = 16
+      entity_scale = 11
+   
+      picture = pc_infested
+      atmosphere_color = hsv { 0.75 0.2 0.7 }
+      atmosphere_intensity = 0.1
+      atmosphere_width = 1.2
+   
+      min_distance_from_sun = 40
+      max_distance_from_sun = 140
+      spawn_odds = 0
+      city_color_lut = "gfx/portraits/misc/colorcorrection_neutral.dds"
+      extra_orbit_size = 0
+      extra_planet_count = 0
+      chance_of_ring = 0
+      planet_size = { min = 12 max = 25 }
+      moon_size = { min = 10 max = 15 }
+      colonizable = no
+      show_city = no
+}
+   
+### AI planet
+pc_ai = {
+      entity = "ai_planet"
+      icon_frame = 15
+      entity_scale = 11
+   
+      picture = pc_tundra
+      atmosphere_color = hsv { 0.09 0.8 0.7 }
+      atmosphere_intensity = 0.4
+      atmosphere_width = 1
+   
+      min_distance_from_sun = 40
+      max_distance_from_sun = 1000
+      spawn_odds = 0
+      city_color_lut = "gfx/portraits/misc/colorcorrection_neutral.dds"
+      extra_orbit_size = 1
+      extra_planet_count = 2
+      can_be_moon = no
+      chance_of_ring = 0
+      planet_size = { min = 12 max = 25 }
+      moon_size = { min = 10 max = 15 }
+      starting_planet = no
+      colonizable = no
+}
+   
+### Shielded planet
+pc_shielded = {
+      entity = "shielded_planet"
+      icon_frame = 1
+      entity_scale = 11
+   
+      atmosphere_color = hsv { 0.25 0.9 0.8 }
+      atmosphere_intensity = 1
+      atmosphere_width = 1.2
+   
+      min_distance_from_sun = 40
+      max_distance_from_sun = 1000
+      spawn_odds = 0
+      city_color_lut = "gfx/portraits/misc/colorcorrection_desert.dds"
+      extra_orbit_size = 0
+      extra_planet_count = 0
+      chance_of_ring = 0.2
+      planet_size = { min = 12 max = 25 }
+      moon_size = { min = 10 max = 15 }
+      production_spawn_chance = 0.4
+      colonizable = no
+}
+   
+### Portal Planet
+pc_portal = {
+      entity = "portal_planet"
+      icon_frame = 5
+      entity_scale = 11
+   
+      atmosphere_color = hsv { 0.57 0.3 0.7 }
+      max_distance_from_sun = 1
+      spawn_odds = 0
+      city_color_lut = "gfx/portraits/misc/colorcorrection_tropical.dds"
+      extra_orbit_size = 0
+      extra_planet_count = 0
+      chance_of_ring = 0
+      planet_size = { min = 12 max = 25 }
+      moon_size = { min = 10 max = 15 }
+      colonizable = no
+      orbit_lines = no
+}
+   
+### Class A Star
+pc_a_star = {
+      entity = "a_star_class_star_entity"
+      entity_scale = 20
+   
+      picture = pc_a_star
+      atmosphere_color = hsv { 0.56 0.4 0.7 }
+      atmosphere_intensity = 0.5
+      atmosphere_width = 1.2
+   
+      star = yes
+      spawn_odds = 0
+      extra_orbit_size = 0
+      extra_planet_count = 0
+      chance_of_ring = 0
+      planet_size = { min = 20 max = 45 }
+      colonizable = no
+}
+   
+### Class B Star
+pc_b_star = {
+      entity = "b_star_class_star_entity"
+      entity_scale = 20
+   
+      picture = pc_b_star
+      atmosphere_color = hsv { 0.71 0.6 0.7 }
+      atmosphere_intensity = 0.8
+      atmosphere_width = 1.4
+   
+      star = yes
+      spawn_odds = 0
+      extra_orbit_size = 0
+      extra_planet_count = 0
+      chance_of_ring = 0
+      planet_size = { min = 20 max = 45 }
+      colonizable = no
+}
+   
+### Class F star
+pc_f_star = {
+      entity = "f_star_class_star_entity"
+      entity_scale = 20
+   
+      picture = pc_f_star
+      atmosphere_color = hsv { 0.6 0.3 0.6 }
+      atmosphere_intensity = 1
+      atmosphere_width = 0.5
+   
+      star = yes
+      spawn_odds = 0
+      extra_orbit_size = 0
+      extra_planet_count = 0
+      chance_of_ring = 0
+      planet_size = { min = 20 max = 40 }
+      colonizable = no
+}
+   
+### Class G Star
+pc_g_star = {
+      entity = "g_star_class_star_entity"
+      entity_scale = 20
+   
+      picture = pc_g_star
+      atmosphere_color = hsv { 0.09 0.7 0.7 }
+      atmosphere_intensity = 0.5
+      atmosphere_width = 1.9
+   
+      star = yes
+      spawn_odds = 0
+      extra_orbit_size = 0
+      extra_planet_count = 0
+      chance_of_ring = 0
+      planet_size = { min = 20 max = 40 }
+      colonizable = no
+}
+   
+### Class K Star
+pc_k_star = {
+      entity = "k_star_class_star_entity"
+      entity_scale = 20
+   
+      picture = pc_k_star
+      atmosphere_color = hsv { 0.06 0.65 0.7 }
+      atmosphere_intensity = 0.6
+      atmosphere_width = 1.25
+   
+      star = yes
+      spawn_odds = 0
+      extra_orbit_size = 0
+      extra_planet_count = 0
+      chance_of_ring = 0
+      planet_size = { min = 15 max = 40 }
+      colonizable = no
+}
+   
+### Class M Star
+pc_m_star = {
+      entity = "m_star_class_star_entity"
+      entity_scale = 20
+   
+      picture = pc_m_star
+      atmosphere_color = hsv { 0.01 0.9 0.6 }
+      atmosphere_intensity = 0.1
+      atmosphere_width = 1
+   
+      star = yes
+      spawn_odds = 0
+      extra_orbit_size = 0
+      extra_planet_count = 0
+      chance_of_ring = 0
+      planet_size = { min = 10 max = 40 }
+      colonizable = no
+}
+   
+### Black Hole
+pc_black_hole = {
+	entity = "black_hole_entity"
+      entity_scale = 20
+   
+      atmosphere_color = hsv { 0.075 0.13 1.5 }
+      atmosphere_intensity = 1
+      atmosphere_width = 1
+   
+      star = yes
+      spawn_odds = 0
+      extra_orbit_size = 0
+      extra_planet_count = 0
+      chance_of_ring = 0
+      planet_size = { min = 20 max = 35 }
+      colonizable = no
+}
+   
+### Neutron Star
+pc_neutron_star = {
+      entity = "neutron_star_entity"
+      entity_scale = 20
+   
+      star = yes
+      spawn_odds = 0
+      extra_orbit_size = 0
+      extra_planet_count = 0
+      chance_of_ring = 0
+      planet_size = { min = 10 max = 25 }
+      colonizable = no
+}
+   
+### Pulsar
+pc_pulsar = {
+      entity = "pulsar_entity"
+      entity_scale = 20
+   
+      atmosphere_color = hsv { 0.56 0.35 0.7 }
+      atmosphere_intensity = 1
+      atmosphere_width = 0.5
+   
+      star = yes
+      spawn_odds = 0
+      extra_orbit_size = 0
+      extra_planet_count = 0
+      chance_of_ring = 0
+      planet_size = { min = 10 max = 25 }
+      colonizable = no
+}
+   
+### 
+pc_ringworld_habitable = {
+	ringworld = yes
+	entity = "ringworld_habitable_entity"
+	picture = pc_gaia
+	tile_set = pc_gaia
+	icon_frame = 21
+	entity_scale = 1
+	enable_tilt = no
+	fixed_entity_scale = yes
+	picture = pc_tropical
+	atmosphere_color = hsv { 0.5 0.2 0.8 }
+	atmosphere_intensity = 1
+	atmosphere_width = 0.5
+	city_color_lut = "gfx/portraits/misc/colorcorrection_desert.dds"
+	extra_orbit_size = 0
+	extra_planet_count = 0
+	chance_of_ring = 0
+	planet_size = 25
+	moon_size = 1
+	colonizable = yes
+	ideal = yes
+	starting_planet = no
+	orbit_lines = no
+}
+   
+### 
+pc_ringworld_habitable_damaged = {
+	ringworld = yes
+	entity = "ringworld_habitable_damaged_entity"
+	icon_frame = 1
+	entity_scale = 1
+
+	enable_tilt = no
+	fixed_entity_scale = yes
+	picture = pc_tropical
+	atmosphere_color = hsv { 0.5 0.2 0.8 }
+	atmosphere_intensity = 1
+	atmosphere_width = 0.5
+
+	city_color_lut = "gfx/portraits/misc/colorcorrection_desert.dds"
+	extra_orbit_size = 0
+	extra_planet_count = 0
+	chance_of_ring = 0
+	planet_size = 10
+	moon_size = { min = 1 max = 1 }
+	colonizable = no
+	orbit_lines = no
+}
+   
+### 
+pc_ringworld_tech = {
+      ringworld = yes
+      entity = "ringworld_tech_entity"
+      icon_frame = 1
+      entity_scale = 1
+   
+      enable_tilt = no
+      fixed_entity_scale = yes
+      picture = pc_ringworld_section
+      atmosphere_color = hsv { 0.5 0.2 0.8 }
+      atmosphere_intensity = 1
+      atmosphere_width = 0.5
+   
+      city_color_lut = "gfx/portraits/misc/colorcorrection_desert.dds"
+      extra_orbit_size = 0
+      extra_planet_count = 0
+      chance_of_ring = 0
+      planet_size = 10
+      moon_size = { min = 1 max = 1 }
+      colonizable = no
+      orbit_lines = no
+}
+   
+### 
+pc_ringworld_tech_damaged = {
+      ringworld = yes
+      entity = "ringworld_tech_damaged_entity"
+      icon_frame = 1
+      entity_scale = 1
+   
+      enable_tilt = no
+      fixed_entity_scale = yes
+      picture = pc_ringworld_broken
+      atmosphere_color = hsv { 0.5 0.2 0.8 }
+      atmosphere_intensity = 1
+      atmosphere_width = 0.5
+   
+      city_color_lut = "gfx/portraits/misc/colorcorrection_desert.dds"
+      extra_orbit_size = 0
+      extra_planet_count = 0
+      chance_of_ring = 0
+      planet_size = 10
+      moon_size = { min = 1 max = 1 }
+      colonizable = no
+      orbit_lines = no
+}
+   
+### 
+pc_ringworld_seam = {
+      ringworld = yes
+      entity = "ringworld_seam_entity"
+      icon_frame = 1
+      entity_scale = 1
+   
+      enable_tilt = no
+      fixed_entity_scale = yes
+      picture = pc_ringworld_section
+      atmosphere_color = hsv { 0.5 0.2 0.8 }
+      atmosphere_intensity = 1
+      atmosphere_width = 0.5
+   
+      city_color_lut = "gfx/portraits/misc/colorcorrection_desert.dds"
+      extra_orbit_size = 0
+      extra_planet_count = 0
+      chance_of_ring = 0
+      planet_size = 10
+      moon_size = { min = 1 max = 1 }
+      colonizable = no
+      orbit_lines = no
+}
+   
+### 
+pc_ringworld_seam_damaged = {
+      ringworld = yes
+      entity = "ringworld_seam_damaged_entity"
+      icon_frame = 1
+      entity_scale = 1
+   
+      enable_tilt = no
+      fixed_entity_scale = yes
+      picture = pc_ringworld_broken
+      atmosphere_color = hsv { 0.5 0.2 0.8 }
+      atmosphere_intensity = 1
+      atmosphere_width = 0.5
+   
+      city_color_lut = "gfx/portraits/misc/colorcorrection_desert.dds"
+      extra_orbit_size = 0
+      extra_planet_count = 0
+      chance_of_ring = 0
+      planet_size = 10
+      moon_size = 1
+      colonizable = no
+      orbit_lines = no
+}
+
+pc_habitat = {
+	habitat = yes
+	entity = "orbital_habitat"
+	icon_frame = 36
+	entity_scale = 1.0
+	enable_tilt = no
+	fixed_entity_scale = yes
+	place_entity_on_planet_plane = no
+	entity_face_object = no #disable rotation towards sun or planet we orbit around
+	atmosphere_color 		= hsv { 0.0 0.0 1.0 }		#DONE
+	atmosphere_intensity 	= 1.0
+	atmosphere_width 		= 0.5
+	city_color_lut = "gfx/portraits/misc/colorcorrection_continental.dds"
+	extra_orbit_size = 0
+	extra_planet_count = 0
+	chance_of_ring = 0.0
+	planet_size = 25
+	moon_size = 1
+	colonizable = yes
+	ideal = yes
+	starting_planet = no
+	orbit_lines = no
+	can_support_spaceport = no
+}
+
+pc_shrouded = {
+	entity = "shroud_planet"
+	entity_scale = 11
+	icon_frame = 23
+
+	atmosphere_color 		= hsv { 0.0 0.9 0.45	}		#DONE
+	atmosphere_intensity 	= 0.5
+	atmosphere_width 		= 1.5
+	
+	spawn_odds = 0
+	
+	extra_orbit_size = 0
+	extra_planet_count = 0
+	
+	planet_size = { min = 10 max = 25 }
+	moon_size = { min = 6 max = 10 }
+	
+	colonizable = no
+}
+   
+
+random_list = {
+	name = "rl_habitable_normal"
+	planets = {
+         "pc_continental"
+         "pc_arctic"
+         "pc_arid"
+         "pc_savannah"
+         "pc_tropical"
+         "pc_alpine"
+         "pc_m1_class"
+         "pc_desert"
+         "pc_ocean"
+         "pc_tundra"
+         "pc_l2_class"
+         "pc_frozen"
+         "pc_g_class"
+         "pc_class_q_variable"
+         "pc_class_q_geo"
+         "pc_f_class"
+         "pc_k_class"
+         "pc_y_class"
+         "pc_x_class"
+	}
+}
+
+random_list = {
+	name = "rl_habitable_m_class"
+	planets = {
+         "pc_continental"
+         "pc_arctic"
+         "pc_arid"
+         "pc_savannah"
+         "pc_tropical"
+         "pc_alpine"
+         "pc_m1_class"
+         "pc_ocean"
+	}
+}
+
+   
+random_list = {
+	name = "rl_habitable_special"
+	planets = {
+		"pc_gaia"
+	}
+}
+
+#Uninhabitable Planet types
+random_list = {
+	name = "rl_unhabitable_planets"
+	planets = {
+		"pc_molten"
+		"pc_class_d_barren"
+		"pc_class_e"
+		"pc_class_k_trans"
+		"pc_toxic"
+		"pc_class_n_titan"
+		"pc_class_o_sulfar"
+		"pc_b_class"
+		"pc_barren_cold"
+		# "pc_asteroid"
+		"pc_barren"
+		"pc_gas_giant"
+		"pc_i_class"
+		"pc_s_class"
+		"pc_u_class"
+	}
+}
+
+#All Planet types
+random_list = {
+	name = "rl_all_planets"
+	planets = {
+		"pc_continental"
+		"pc_arctic"
+		"pc_arid"
+		"pc_savannah"
+		"pc_tropical"
+		"pc_alpine"
+		"pc_m1_class"
+		"pc_desert"
+		"pc_ocean"
+		"pc_tundra"
+		"pc_l2_class"
+		"pc_frozen"
+		"pc_g_class"
+		"pc_class_q_variable"
+		"pc_class_q_geo"
+		"pc_f_class"
+		"pc_k_class"
+		"pc_y_class"
+		"pc_molten"
+		"pc_class_d_barren"
+		"pc_class_e"
+		"pc_class_k_trans"
+		"pc_toxic"
+		"pc_class_n_titan"
+		"pc_class_o_sulfar"
+		"pc_nuked"
+		"pc_assimilated"
+		"pc_gaia"
+		"pc_b_class"
+		"pc_barren_cold"
+		"pc_asteroid"
+		"pc_barren"
+		"pc_x_class"
+		"pc_gas_giant"
+		"pc_i_class"
+		"pc_s_class"
+		"pc_u_class"
+	}
+}
+
+#Dry planets
+random_list = {
+	name = "rl_dry_planets"
+	planets = {
+		"pc_arid"
+		"pc_desert"
+		"pc_tundra"
+		"pc_l2_class"
+		"pc_barren_cold"
+		"pc_barren"
+	}
+}
+
+#Planet types suitable as moons for inner planets
+random_list = {
+	name = "rl_inner_moons"
+	planets = {
+		"pc_class_d_barren"
+		"pc_barren"
+		"pc_b_class"
+		"pc_molten"
+	}
+}
+
+#Planet types suitable as moons for outer planets
+random_list = {
+	name = "rl_outer_moons"
+	planets = {
+		"pc_class_d_barren"
+		"pc_barren_cold"
+		"pc_barren"
+	}
+}
+
+#Inner uninhabitable planets
+random_list = {
+	name = "rl_inner_unhabitable_planets"
+	planets = {
+		"pc_molten"
+		"pc_class_d_barren"
+		"pc_class_e"
+		"pc_class_k_trans"
+		"pc_toxic"
+		"pc_class_n_titan"
+		"pc_class_o_sulfar"
+		"pc_b_class"
+		"pc_barren"
+		"pc_x_class"
+	}
+}
+
+#Outer uninhabitable planets
+random_list = {
+	name = "rl_outer_unhabitable_planets"
+	planets = {
+		"pc_class_d_barren"
+		"pc_class_e"
+		"pc_class_k_trans"
+		"pc_class_n_titan"
+		"pc_class_o_sulfar"
+		"pc_barren_cold"
+		"pc_barren"
+		"pc_x_class"
+		"pc_gas_giant"
+		"pc_i_class"
+		"pc_s_class"
+		"pc_u_class"
+	}
+}
+
+#Gas Giants
+random_list = {
+	name = "rl_gas_giants"
+	planets = {
+		"pc_gas_giant"
+		"pc_i_class"
+		"pc_s_class"
+		"pc_u_class"
+	}
+}

@@ -1,0 +1,153 @@
+@civilian_ships_combat_speed = 0.5
+
+xindi_probe = {
+	is_space_object = yes
+	max_speed = 1.00
+	rotation_speed = 10
+	combat_max_speed = 1.00
+	combat_rotation_speed = 0.2
+	acceleration = 20
+	modifier = {
+		ship_evasion_mult = -0.3
+		ship_armor_add = 5
+	}
+	max_hitpoints = 2000
+	size_multiplier = 1.5
+	fleet_slot_size = 1
+	section_slots = { "stern" = { locator = "part1" } "mid" = { locator = "part1" } }
+	num_target_locators = 2
+	icon_frame = 5	
+	is_civilian = yes
+	class = shipclass_military
+	is_designable = no
+}
+
+xindi_weapon = {
+	is_space_object = yes
+	max_speed = 1.00
+	rotation_speed = 10
+	combat_max_speed = 1.00
+	combat_rotation_speed = 0.2
+	acceleration = 20
+	modifier = {
+		ship_evasion_mult = -0.35
+		ship_armor_add = 10
+	}
+	max_hitpoints = 5000
+	size_multiplier = 1.5
+	fleet_slot_size = 1
+	section_slots = { "stern" = { locator = "part1" } "mid" = { locator = "part1" } }
+	num_target_locators = 2
+	icon_frame = 5	
+	class = shipclass_military
+	is_designable = no
+    required_component_set = "required_ship_sensors"
+ 	required_component_set = "combat_computers"
+ 	required_component_set = "required_tactical"
+    required_component_set = "required_aura_Battleship"
+ 	required_component_set = "required_warp"
+    required_component_set = "required_thrusters"
+ 	required_component_set = "required_defense"
+ 	required_component_set = "required_hull"
+}
+
+doomsday = {
+	is_space_object = yes
+	graphical_culture = no
+	max_speed = 0.10
+	rotation_speed = 0.01
+	combat_max_speed = 0.10
+	combat_rotation_speed = 0.01
+	acceleration = 5
+	modifier = {
+		ship_evasion_mult = -0.35
+		ship_armor_add = 75
+	}
+	max_hitpoints = 50000
+	size_multiplier = 1.0
+	fleet_slot_size = 1
+	section_slots = { "stern" = { locator = "part1" } "mid" = { locator = "part1" } }
+	num_target_locators = 2
+	icon_frame = 5	
+	class = shipclass_military
+	is_designable = no
+}
+
+whale_probe = {
+	is_space_object = yes
+	graphical_culture = no
+	max_speed = 0.50
+	rotation_speed = 0.01
+	combat_max_speed = 0.50
+	combat_rotation_speed = 0.01
+	acceleration = 5
+	modifier = {
+		ship_evasion_mult = -0.50
+		ship_armor_add = 75
+	}
+	max_hitpoints = 50000
+	size_multiplier = 1.0
+	fleet_slot_size = 1
+	section_slots = { "stern" = { locator = "part1" } "mid" = { locator = "part1" } }
+	num_target_locators = 2
+	icon_frame = 5	
+	class = shipclass_military
+	is_designable = no
+	required_component_set = "whale_aura_components"
+}
+
+xcv330 = {
+	is_space_object = yes
+	graphical_culture = no
+	max_speed = 4.0
+	acceleration = 0.25
+	rotation_speed = 0.15
+	combat_max_speed = @civilian_ships_combat_speed
+	combat_rotation_speed = 0.2
+	modifier = {
+		ship_armor_add = 1
+		ship_evasion_add = 4
+	}
+	max_hitpoints = 250
+	size_multiplier = 1
+	fleet_slot_size = 2
+	section_slots = { "mid" = { locator = "part1" } }
+	num_target_locators = 0
+	is_space_station = no
+	icon_frame = 6
+	base_buildtime = 60	
+	
+	enable_default_design = no	#if yes, countries will have an auto-generated design at start
+	prerequisites = { "tech_xcv330_1" }
+	is_civilian = yes
+	class = shipclass_science_ship
+	required_component_set = "science_labs"
+	required_component_set = "required_warp"
+	required_component_set = "required_thrusters"
+	required_component_set = "required_ship_sensors"
+	required_component_set = "required_defense"
+	required_component_set = "required_hull"
+	valid_target_aggressive_stance = no
+	is_designable = yes
+}
+
+swarmship = {
+	is_space_object = yes
+	graphical_culture = no
+	max_speed = 1
+	rotation_speed = 0.2
+	combat_max_speed = 1.50
+	combat_rotation_speed = 0.2
+	acceleration = 5
+	modifier = {
+		ship_evasion_mult = 0.50
+	}
+	max_hitpoints = 5000
+	size_multiplier = 1.0
+	fleet_slot_size = 1
+	section_slots = { "stern" = { locator = "part1" } "mid" = { locator = "part1" } }
+	num_target_locators = 2
+	icon_frame = 5	
+	class = shipclass_military
+	is_designable = no
+}

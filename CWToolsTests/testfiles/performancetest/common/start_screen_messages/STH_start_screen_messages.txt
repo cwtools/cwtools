@@ -1,0 +1,716 @@
+### PRE-SCRIPTED
+
+# United Earth
+part = {
+	location = 0
+	localization = "START_SCREEN_UFP"
+	trigger = { sth_mirror_maps = no has_country_flag = united_earth }
+}
+# Terran Empire
+part = {
+	location = 0
+	localization = "START_SCREEN_TEM"
+	trigger = {
+		OR = {
+			AND = { sth_mirror_maps = yes has_country_flag = klingon_empire }
+			has_country_flag = terran_empire
+		}
+	}
+}
+
+#Klingon
+part = {
+	location = 0
+	localization = "START_SCREEN_KDF"
+	trigger = { sth_mirror_maps = no has_country_flag = klingon_empire }		
+}
+# Mirror Klingon
+part = {
+	location = 0
+	localization = "START_SCREEN_MKDF"
+	trigger = { 
+		OR = {
+			AND = { sth_mirror_maps = no has_country_flag = klingon_empire }
+			has_country_flag = mirror_klingon_empire
+		}
+	}
+}
+
+#Romulan
+part = {
+	location = 0
+	localization = "START_SCREEN_ROM"
+	trigger = { sth_mirror_maps = no has_country_flag = romulan_star_empire }		
+}
+# Mirror Romulan
+part = {
+	location = 0
+	localization = "START_SCREEN_MROM"
+	trigger = { 
+		OR = {
+			AND = { sth_mirror_maps = yes has_country_flag = romulan_star_empire }
+			has_country_flag = romulan_republic
+		}
+	}
+}
+
+#Cardassian
+part = {
+	location = 0
+	localization = "START_SCREEN_CAR"
+	trigger = { sth_mirror_maps = no has_country_flag = cardassian_union }		
+}
+#Mirror Cardassian
+part = {
+	location = 0
+	localization = "START_SCREEN_MCAR"
+	trigger = { 
+		OR = {
+			AND = { sth_mirror_maps = yes has_country_flag = cardassian_union }
+			has_country_flag = mirror_cardassian_union
+		}
+	}
+}
+
+#Breen
+part = {
+	location = 0
+	localization = "START_SCREEN_BRE"
+	
+	trigger = {
+		has_country_flag = breen_confederacy
+	}		
+}
+
+#Orion
+part = {
+	location = 0
+	localization = "START_SCREEN_ORI"
+	
+	trigger = {
+		has_country_flag = orion_free_states
+	}		
+}
+
+#Ferengi
+part = {
+	location = 0
+	localization = "START_SCREEN_FER"
+	trigger = { sth_mirror_maps = no has_country_flag = ferengi_alliance }		
+}
+#Mirror Ferengi
+part = {
+	location = 0
+	localization = "START_SCREEN_MFER"
+	trigger = { 
+		OR = {
+			AND = { sth_mirror_maps = yes has_country_flag = ferengi_alliance }
+			has_country_flag = ferengi_cooperative
+		}
+	}
+}
+
+#Gorn
+part = {
+	location = 0
+	localization = "START_SCREEN_GOR"
+	
+	trigger = {
+		has_country_flag = gorn_empire
+	}		
+}
+
+#Vulcan
+part = {
+	location = 0
+	localization = "START_SCREEN_VUL"
+	trigger = { sth_mirror_maps = no has_country_flag = vulcan_high_command }		
+}
+#Mirror Vulcan
+part = {
+	location = 0
+	localization = "START_SCREEN_MVUL"
+	trigger = { 
+		OR = {
+			AND = { sth_mirror_maps = yes has_country_flag = vulcan_high_command }
+			has_country_flag = vulcan_rebellion
+		}
+	}
+}
+
+#Andorian
+part = {
+	location = 0
+	localization = "START_SCREEN_ADR"
+	trigger = { sth_mirror_maps = no has_country_flag = andorian_empire }		
+}
+#Mirror Andorian
+part = {
+	location = 0
+	localization = "START_SCREEN_MADR"
+	trigger = { 
+		OR = {
+			AND = { sth_mirror_maps = yes has_country_flag = andorian_empire }
+			has_country_flag = andorian_rebellion
+		}
+	}
+}
+
+#Bajoran
+part = {
+	location = 0
+	localization = "START_SCREEN_BAJ"
+	trigger = { sth_mirror_maps = no has_country_flag = bajoran_republic }		
+}
+#Mirror Bajoran
+part = {
+	location = 0
+	localization = "START_SCREEN_MBAJ"
+	trigger = { 
+		OR = {
+			AND = { sth_mirror_maps = yes has_country_flag = bajoran_republic }
+			has_country_flag = mirror_bajoran_republic
+		}
+	}
+}
+
+#Suliban
+part = {
+	location = 0
+	localization = "START_SCREEN_SUL"
+	
+	trigger = {
+		has_country_flag = suliban_cabal
+	}		
+}
+
+#Kazon
+part = {
+	location = 0
+	localization = "START_SCREEN_KAZ"
+	
+	trigger = {
+		has_country_flag = kazon_sects
+	}		
+}
+
+#Dosi
+part = {
+	location = 0
+	localization = "START_SCREEN_DOS"
+	
+	trigger = {
+		has_country_flag = dosi_confederacy
+	}		
+}
+
+#Bolian
+part = {
+	location = 0
+	localization = "START_SCREEN_BOL"
+	trigger = { sth_mirror_maps = no has_country_flag = bolian_league }		
+}
+#Mirror Bolian
+part = {
+	location = 0
+	localization = "START_SCREEN_MBOL"
+	trigger = { 
+		OR = {
+			AND = { sth_mirror_maps = yes has_country_flag = bolian_league }
+			has_country_flag = mirror_bolian_league
+		}
+	}
+}
+
+
+#Garidian
+part = {
+	location = 0
+	localization = "START_SCREEN_GAR"
+	
+	trigger = {
+		has_country_flag = garidian_republic
+	}		
+}
+
+#Talaxian
+part = {
+	location = 0
+	localization = "START_SCREEN_TAL"
+	
+	trigger = {
+		has_country_flag = talaxian_empire
+	}		
+}
+
+#Benzite
+part = {
+	location = 0
+	localization = "START_SCREEN_BEN"
+	trigger = { sth_mirror_maps = no has_country_flag = benzarian_commonwealth }		
+}
+#Mirror Benzite
+part = {
+	location = 0
+	localization = "START_SCREEN_MBEN"
+	trigger = { 
+		OR = {
+			AND = { sth_mirror_maps = yes has_country_flag = benzarian_commonwealth }
+			has_country_flag = mirror_benzarian_commonwealth
+		}
+	}
+}
+
+#Tamarian
+part = {
+	location = 0
+	localization = "START_SCREEN_TAM"
+	
+	trigger = {
+		has_country_flag = tamarian_unity
+	}		
+}
+
+#Zahl 
+part = {
+	location = 0
+	localization = "START_SCREEN_ZAH"
+	
+	trigger = {
+		has_country_flag = zahl_technocracy
+	}		
+}
+
+#Krenim
+part = {
+	location = 0
+	localization = "START_SCREEN_KRE"
+	
+	trigger = {
+		has_country_flag = krenim_imperium
+	}		
+}
+
+#Dominion
+part = {
+	location = 0
+	localization = "START_SCREEN_DOM"
+	trigger = { sth_mirror_maps = no has_country_flag = the_dominion }		
+}
+#Mirror Dominion
+part = {
+	location = 0
+	localization = "START_SCREEN_MDOM"
+	trigger = { 
+		OR = {
+			AND = { sth_mirror_maps = yes has_country_flag = the_dominion }
+			has_country_flag = mirror_dominion
+		} 
+	}		
+}
+
+#Nausicaan
+part = {
+	location = 0
+	localization = "START_SCREEN_NAU"
+	
+	trigger = {
+		has_country_flag = nausicaan_tribes
+	}		
+}
+
+#Wadi
+part = {
+	location = 0
+	localization = "START_SCREEN_WAD"
+	
+	trigger = {
+		has_country_flag = wadi_emirates
+	}		
+}
+
+#Devorian Solidarity
+part = {
+	location = 0
+	localization = "START_SCREEN_DEV"
+	
+	trigger = {
+		has_country_flag = devorian_solidarity
+	}		
+}
+
+#Rakharian
+part = {
+	location = 0
+	localization = "START_SCREEN_RKR"
+	
+	trigger = {
+		has_country_flag = rakharian_free_states
+	}		
+}
+
+#Lyridians
+part = {
+	location = 0
+	localization = "START_SCREEN_LYR"
+	
+	trigger = {
+		has_country_flag = lyridian_diaspora
+	}		
+}
+
+#Morali
+part = {
+	location = 0
+	localization = "START_SCREEN_MRL"
+	
+	trigger = {
+		has_country_flag = morali_states
+	}		
+}
+
+
+#T'Rogoran
+part = {
+	location = 0
+	localization = "START_SCREEN_TRO"
+	
+	trigger = {
+		has_country_flag = trogoran_empire
+	}		
+}
+
+#Norcadian
+part = {
+	location = 0
+	localization = "START_SCREEN_NDH"
+	
+	trigger = {
+		has_country_flag = norcadian_harmony
+	}		
+}
+
+
+#Voth
+part = {
+	location = 0
+	localization = "START_SCREEN_VOT"
+	
+	trigger = {
+		has_country_flag = voth_theocracy
+	}		
+}
+
+
+#Hur'Q
+part = {
+	location = 0
+	localization = "START_SCREEN_HUQ"
+	
+	trigger = {
+		has_country_flag = hurq_stagnancy
+	}		
+}
+
+
+#Vaadwaur
+part = {
+	location = 0
+	localization = "START_SCREEN_VAA"
+	
+	trigger = {
+		has_country_flag = vaadwaur_supremacy
+	}		
+}
+
+
+#Tellarite
+part = {
+	location = 0
+	localization = "START_SCREEN_TEL"
+	trigger = { sth_mirror_maps = no has_country_flag = tellarian_technocracy }		
+}
+#Mirror Tellarite
+part = {
+	location = 0
+	localization = "START_SCREEN_MTEL"
+	trigger = { 
+		OR = {
+			AND = { sth_mirror_maps = yes has_country_flag = tellarian_technocracy }
+			has_country_flag = tellarite_rebellion
+		} 
+	}		
+}
+
+
+#Tholian
+part = {
+	location = 0
+	localization = "START_SCREEN_THO"
+	trigger = { sth_mirror_maps = no has_country_flag = tholian_assembly }		
+}
+#Mirror Tholian
+part = {
+	location = 0
+	localization = "START_SCREEN_MTHO"
+	trigger = { 
+		OR = {
+			AND = { sth_mirror_maps = yes has_country_flag = tholian_assembly }
+			has_country_flag = mirror_tholian_assembly
+		}
+	}
+}
+	
+
+
+#Flaxian
+part = {
+	location = 0
+	localization = "START_SCREEN_FLA"
+	
+	trigger = {
+		has_country_flag = flaxian_hegemony
+	}		
+}
+
+#Brunali
+part = {
+	location = 0
+	localization = "START_SCREEN_BRU"
+	
+	trigger = {
+		has_country_flag = brunali_empire
+	}		
+}
+
+#Argrathian
+part = {
+	location = 0
+	localization = "START_SCREEN_ARG"
+	
+	trigger = {
+		has_country_flag = argrathian_commonwealth
+	}		
+}
+
+#Fen Domar 
+part = {
+	location = 0
+	localization = "START_SCREEN_FEN"
+	
+	trigger = {
+		has_country_flag = fen_domar_states
+	}		
+}
+
+#Nyberrite
+part = {
+	location = 0
+	localization = "START_SCREEN_NYB"
+	
+	trigger = {
+		has_country_flag = nyberrite_alliance
+	}		
+}
+
+#Sheliak
+part = {
+	location = 0
+	localization = "START_SCREEN_SHE"
+	
+	trigger = {
+		has_country_flag = sheliak_corporate
+	}		
+}
+
+#Karemma
+part = {
+	location = 0
+	localization = "START_SCREEN_KAR"
+	trigger = { has_country_flag = karemman_foundation }		
+}
+
+#Husnock
+part = {
+	location = 0
+	localization = "START_SCREEN_HUS"
+	trigger = { has_country_flag = husnock_ascendency }		
+}
+
+#Hirogen
+part = {
+	location = 0
+	localization = "START_SCREEN_HIR"
+	trigger = { has_country_flag = hirogen_hunters }		
+}
+
+#Trill
+part = {
+	location = 0
+	localization = "START_SCREEN_TRI"
+	trigger = { sth_mirror_maps = no has_country_flag = trill_republic }
+}
+#Mirror Trill
+part = {
+	location = 0
+	localization = "START_SCREEN_MTRI"
+	trigger = { 
+		OR = {
+			AND = { sth_mirror_maps = yes has_country_flag = trill_republic }
+			has_country_flag = mirror_trill_republic
+		}
+	}
+}
+
+#Rigellian
+part = {
+	location = 0
+	localization = "START_SCREEN_RIGEL"
+	trigger = { has_country_flag = rigellian_consortium }		
+}
+
+#Kraylor
+part = {
+	location = 0
+	localization = "START_SCREEN_KRA"
+	trigger = { has_country_flag = kraylor_republic }		
+}
+
+#Denobulan
+part = {
+	location = 0
+	localization = "START_SCREEN_DEN"
+	trigger = { sth_mirror_maps = no has_country_flag = denobulan_unity }		
+}
+#Mirror Denobulan
+part = {
+	location = 0
+	localization = "START_SCREEN_MDEN"
+	trigger = { 
+		OR = {
+			AND = { sth_mirror_maps = yes has_country_flag = denobulan_unity }
+			has_country_flag = mirror_denobulan_unity
+		}
+	}		
+}
+
+#Cheronite
+part = {
+	location = 0
+	localization = "START_SCREEN_CHE"
+	trigger = { has_country_flag = cheronite_nation }		
+}
+
+#Betazoid
+part = {
+	location = 0
+	localization = "START_SCREEN_BET"
+	trigger = { has_country_flag = betazoid_houses }		
+}
+
+#Caitian
+part = {
+	location = 0
+	localization = "START_SCREEN_CAT"
+	trigger = { has_country_flag = caitian_union }		
+}
+
+#Xindi
+part = {
+	location = 0
+	localization = "START_SCREEN_XINMAM"
+	trigger = { has_country_flag = xindi_council }		
+}
+
+#Antican
+part = {
+	location = 0
+	localization = "START_SCREEN_ANT"
+	trigger = { has_country_flag = antican_packs }		
+}
+
+#Selay
+part = {
+	location = 0
+	localization = "START_SCREEN_SEL"
+	trigger = { has_country_flag = selay_clutches }		
+}
+
+#Zakdorn
+part = {
+	location = 0
+	localization = "START_SCREEN_ZAK"
+	trigger = { has_country_flag = zakdorn_alliance }		
+}
+
+#Bynar
+part = {
+	location = 0
+	localization = "START_SCREEN_BYN"
+	trigger = { has_country_flag = bynar_domains }		
+}
+
+#Yaderan
+part = {
+	location = 0
+	localization = "START_SCREEN_YAD"
+	trigger = { has_country_flag = yaderan_republic }		
+}
+
+#Vidiian
+part = {
+	location = 0
+	localization = "START_SCREEN_VID"
+	trigger = { has_country_flag = vidiian_sodality }		
+}
+
+#Borg
+part = {
+	location = 0
+	localization = "START_SCREEN_BRG"
+	trigger = { sth_mirror_maps = no has_country_flag = the_borg_collective }
+}
+#Mirror Borg
+part = {
+    location = 0
+    localization = "START_SCREEN_MBRG"
+	trigger = { 
+		OR = {
+			AND = { sth_mirror_maps = yes has_country_flag = the_borg_collective }
+			has_country_flag = mirror_borg
+		}
+	}
+}
+
+#Kobali
+part = {
+	location = 0
+	localization = "START_SCREEN_KOB"
+	trigger = { has_country_flag = kobali_republic }
+}
+
+#Pralor
+part = {
+	location = 0
+	localization = "START_SCREEN_PRA"
+	trigger = { has_country_flag = pralor_auxiliary }
+}
+
+#Cravic
+part = {
+	location = 0
+	localization = "START_SCREEN_CRA"
+	trigger = { has_country_flag = cravic_imperative }
+}
+
+#Kelpian
+part = {
+	location = 0
+	localization = "START_SCREEN_KEL"
+	trigger = { has_country_flag = kelpian_duchies }
+}
+
+
+
+
+

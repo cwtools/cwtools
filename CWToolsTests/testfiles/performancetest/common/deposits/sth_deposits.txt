@@ -1,0 +1,887 @@
+### STH Deposits ###
+
+#######################################
+######### STRATEGIC RESOURCES #########
+#######################################
+
+
+#############
+# Clustered #
+#############
+
+
+d_sr_trellium_1_deposit = {
+	resources = {
+		minerals = 3
+		sr_trellium_1 = 1
+	}
+	station = shipclass_mining_station
+	orbital_weight = { weight = 20 }
+	drop_weight = {
+		weight = 0
+		modifier = {
+			weight = 1.5
+			planet = {
+				AND = {
+					is_asteroid = yes
+					has_strategic_resource = no
+				}
+			}
+		}
+		modifier = {
+			factor = 5
+			planet = {
+				is_inside_nebula = yes
+			}
+		}
+	}
+}
+
+d_sr_kemocite_2_deposit = {
+	resources = {
+		energy = 3
+		sr_kemocite_2 = 1
+	}
+	station = shipclass_mining_station
+	orbital_weight = { weight = 15 }
+	drop_weight = {
+		weight = 0
+		modifier = {
+			weight = 1
+			planet = {
+				AND = {
+					OR = {
+						is_asteroid = yes
+						is_planet_class = pc_b_class
+						is_planet_class = pc_molten
+						is_planet_class = pc_barren
+						is_planet_class = pc_class_d_barren
+						is_planet_class = pc_barren_cold
+						is_planet_class = pc_class_e
+						is_planet_class = pc_class_k_trans
+						is_planet_class = pc_toxic
+						is_planet_class = pc_class_n_titan
+						is_planet_class = pc_class_o_sulfar
+						is_planet_class = pc_b_class
+					}
+					has_strategic_resource = no
+				}
+			}
+		}
+		modifier = {
+			factor = 3
+			planet = {
+				is_inside_nebula = yes
+			}
+		}
+		modifier = {
+			factor = 0
+			planet = {
+				NOT = { is_in_cluster = resource_cluster_3 }
+			}
+		}
+	}
+}
+
+d_sr_uridium_3_deposit = {
+	resources = {
+		minerals = 3
+		sr_uridium_3 = 1
+	}
+	station = shipclass_mining_station
+	orbital_weight = { weight = 15 }
+	drop_weight = {
+		weight = 0
+		modifier = {
+			weight = 10
+			planet = {
+				AND = {
+					is_asteroid = yes
+					has_strategic_resource = no
+				}
+			}
+		}
+		modifier = {
+			factor = 0
+			planet = {
+				NOT = { is_in_cluster = resource_cluster_5 }
+			}
+		}
+	}
+}
+
+d_sr_gallicite_7_deposit = {
+	resources = {
+		minerals = 3
+		sr_gallicite_7 = 1
+	}
+	station = shipclass_mining_station
+	orbital_weight = { weight = 20 }
+	
+	drop_weight = {
+		weight = 0
+		modifier = {
+			weight = 1.25
+			planet = {
+				AND = {
+					OR = {
+						is_asteroid = yes
+						is_planet_class = pc_b_class
+						is_planet_class = pc_molten
+						is_planet_class = pc_barren
+						is_planet_class = pc_class_d_barren
+						is_planet_class = pc_barren_cold
+						is_planet_class = pc_class_e
+						is_planet_class = pc_class_k_trans
+						is_planet_class = pc_toxic
+						is_planet_class = pc_class_n_titan
+						is_planet_class = pc_class_o_sulfar
+						is_planet_class = pc_b_class
+					}
+					has_strategic_resource = no
+				}
+			}
+		}
+		modifier = {
+			factor = 0
+			planet = {
+				NOT = { is_in_cluster = resource_cluster_4 }
+			}
+		}
+	}
+}
+
+d_sr_metaphasic_15_deposit = {
+	resources = { 
+		physics_research = 3
+		sr_metaphasic_15 = 1
+	}
+	station = shipclass_research_station
+	orbital_weight = { weight = 20 }
+	drop_weight = {
+		weight = 0
+		modifier = {
+			weight = 5
+			planet = {
+				AND = {
+					OR = {
+						is_planet_class = pc_gas_giant
+						is_planet_class = pc_i_class
+						is_planet_class = pc_s_class
+						is_planet_class = pc_u_class
+					}
+					has_strategic_resource = no
+				}
+			}
+		}
+		modifier = {
+			factor = 2
+			planet = {
+				is_inside_nebula = yes
+			}
+		}
+		modifier = {
+			factor = 0
+			planet = {
+				NOT = { is_in_cluster = resource_cluster_1 }
+			}
+		}
+	}
+}
+
+d_sr_cormaline_17_deposit = {
+	resources = {
+		minerals = 3
+		sr_cormaline_17 = 1
+	}
+	station = shipclass_research_station
+	orbital_weight = { weight = 20 }
+	drop_weight = {
+		weight = 0
+		modifier = {
+			weight = 9
+			planet = {
+				AND = {
+					is_asteroid = yes
+					has_strategic_resource = no
+				}
+			}
+		}
+		modifier = {
+			factor = 0
+			planet = {
+				NOT = { is_in_cluster = resource_cluster_5 }
+			}
+		}
+	}
+}
+
+d_sr_jevonite_21_deposit = {
+	resources = {
+		society_research = 3
+		sr_jevonite_21 = 1
+	}
+	station = shipclass_research_station
+	orbital_weight = { weight = 20 }
+	drop_weight = {
+		weight = 0
+		modifier = {
+			weight = 1.5
+			planet = {
+				OR = {
+					is_planet_class = pc_b_class
+					is_planet_class = pc_molten
+					is_planet_class = pc_barren
+					is_planet_class = pc_class_d_barren
+					is_planet_class = pc_barren_cold
+					is_planet_class = pc_class_e
+					is_planet_class = pc_class_k_trans
+					is_planet_class = pc_toxic
+					is_planet_class = pc_class_n_titan
+					is_planet_class = pc_class_o_sulfar
+					is_planet_class = pc_b_class
+				}
+			}
+		}
+		modifier = {
+			factor = 0
+			planet = {
+				NOT = { is_in_cluster = resource_cluster_5 }
+			}
+		}
+	}
+}
+
+d_sr_rodinium_27_deposit = {
+	resources = {
+		minerals = 3
+		sr_rodinium_27 = 1
+	}
+	station = shipclass_mining_station
+	orbital_weight = { weight = 15 }
+	
+	drop_weight = {
+		weight = 0
+		modifier = {
+			weight = 1.5
+			planet = {
+				AND = {
+					OR = {
+						is_asteroid = yes
+						is_planet_class = pc_b_class
+						is_planet_class = pc_molten
+						is_planet_class = pc_barren
+						is_planet_class = pc_class_d_barren
+						is_planet_class = pc_barren_cold
+						is_planet_class = pc_class_e
+						is_planet_class = pc_class_k_trans
+						is_planet_class = pc_toxic
+						is_planet_class = pc_class_n_titan
+						is_planet_class = pc_class_o_sulfar
+						is_planet_class = pc_b_class
+					}
+					has_strategic_resource = no
+				}
+			}
+		}
+		modifier = {
+			factor = 0
+			planet = {
+				NOT = { is_in_cluster = resource_cluster_4 }
+			}
+		}
+	}
+}
+
+d_sr_bilitrium_28_deposit = {
+	resources = {
+		minerals = 3
+		sr_bilitrium_28 = 1
+	}
+	station = shipclass_mining_station
+	orbital_weight = { weight = 10 }
+	
+	drop_weight = {
+		weight = 0
+		modifier = {
+			weight = 1.5
+			planet = {
+				AND = {
+					OR = {
+						is_asteroid = yes
+						is_planet_class = pc_b_class
+						is_planet_class = pc_molten
+						is_planet_class = pc_barren
+						is_planet_class = pc_class_d_barren
+						is_planet_class = pc_barren_cold
+						is_planet_class = pc_class_e
+						is_planet_class = pc_class_k_trans
+						is_planet_class = pc_toxic
+						is_planet_class = pc_class_n_titan
+						is_planet_class = pc_class_o_sulfar
+						is_planet_class = pc_b_class
+					}
+					has_strategic_resource = no
+				}
+			}
+		}
+		modifier = {
+			factor = 0
+			planet = {
+				NOT = { is_in_cluster = resource_cluster_4 }
+			}
+		}
+	}
+}
+
+d_sr_latinum_29_deposit = {
+	resources = {
+		minerals = 3
+		sr_latinum_29 = 1
+	}
+	station = shipclass_mining_station
+	orbital_weight = { weight = 10 }
+	
+	drop_weight = {
+		weight = 0
+		modifier = {
+			weight = 1.5
+			planet = {
+				AND = {
+					OR = {
+						is_asteroid = yes
+						is_planet_class = pc_b_class
+						is_planet_class = pc_molten
+						is_planet_class = pc_barren
+						is_planet_class = pc_class_d_barren
+						is_planet_class = pc_barren_cold
+						is_planet_class = pc_class_e
+						is_planet_class = pc_class_k_trans
+						is_planet_class = pc_toxic
+						is_planet_class = pc_class_n_titan
+						is_planet_class = pc_class_o_sulfar
+						is_planet_class = pc_b_class
+					}
+					has_strategic_resource = no
+				}
+			}
+		}
+		modifier = {
+			factor = 0
+			planet = {
+				NOT = { is_in_cluster = resource_cluster_4 }
+			}
+		}
+	}
+}
+
+#################
+# Non-clustered #
+#################
+
+d_sr_zenite_4_deposit = {
+	resources = { 
+		minerals = 3
+		sr_zenite_4 = 1
+	}
+	station = shipclass_mining_station
+	orbital_weight = { weight = 50 }
+	drop_weight = {
+		weight = 0
+		modifier = {
+			weight = 1.5
+			planet = {
+				OR = {
+					is_planet_class = pc_gas_giant
+					is_planet_class = pc_i_class
+					is_planet_class = pc_s_class
+					is_planet_class = pc_u_class
+				}
+			}
+		}
+		modifier = {
+			factor = 0.25
+			solar_system = {
+				NOT =  {
+					OR = {
+						is_star_class = sc_g
+						is_star_class = sc_k
+						is_star_class = sc_f
+					}
+				}
+			}
+		}
+		modifier = {
+			factor = 0
+			planet = {
+				OR = {
+					has_deposit = "d_immense_mineral_deposit"
+					has_deposit = "d_immense_energy_deposit"
+					has_deposit = "d_immense_society_deposit"
+					has_deposit = "d_immense_physics_deposit"
+					has_deposit = "d_immense_engineering_deposit"
+					has_strategic_resource = yes
+				}
+			}
+		}
+	}
+}
+
+
+
+
+
+d_sr_neutronium_8_deposit = {
+	resources = { 
+		engineering_research = 5
+		sr_neutronium_8 = 1
+	}
+	station = shipclass_research_station
+	orbital_weight = { weight = 50 }
+	drop_weight = {
+		weight = 0
+		modifier = {
+			weight = 100
+			planet = {
+				AND = {
+					is_planet_class = pc_neutron_star
+				}
+			}
+		}
+		modifier = {
+			factor = 2
+			planet = {
+				AND = {
+					is_planet_class = pc_neutron_star
+					is_inside_nebula = yes
+				}
+			}
+		}
+		modifier = {
+			factor = 0
+			planet = {
+				OR = {
+					has_deposit = "d_immense_mineral_deposit"
+					has_deposit = "d_immense_energy_deposit"
+					has_deposit = "d_immense_society_deposit"
+					has_deposit = "d_immense_physics_deposit"
+					has_deposit = "d_immense_engineering_deposit"
+					has_strategic_resource = yes
+				}
+			}
+		}
+	}
+}
+
+d_sr_dark_9_deposit = {
+	resources = {
+		physics_research = 5
+		sr_dark_9 = 1
+	}
+	station = shipclass_research_station 
+	orbital_weight = { weight = 100 }
+	drop_weight = {
+		weight = 0
+		modifier = {
+			weight = 75
+			planet = {
+				AND = {
+					is_planet_class = pc_black_hole
+					has_strategic_resource = no
+				}
+			}
+		}
+		modifier = {
+			factor = 0
+			planet = {
+				OR = {
+					has_deposit = "d_immense_mineral_deposit"
+					has_deposit = "d_immense_energy_deposit"
+					has_deposit = "d_immense_society_deposit"
+					has_deposit = "d_immense_physics_deposit"
+					has_deposit = "d_immense_engineering_deposit"
+				}
+			}
+		}
+	}
+}
+
+d_sr_solanogen_16_deposit = {
+	resources = { 
+		energy = 3
+		sr_solanogen_16 = 1
+	}
+	station = shipclass_research_station
+	orbital_weight = { weight = 220 }
+	drop_weight = {
+		weight = 0
+		modifier = {
+			weight = 75
+			planet = {
+				AND = {
+					OR = {
+						is_planet_class = pc_gas_giant
+						is_planet_class = pc_i_class
+						is_planet_class = pc_s_class
+						is_planet_class = pc_u_class
+					}
+					is_inside_nebula = yes
+				}
+			}			
+		}
+		modifier = {
+			factor = 0
+			planet = {
+				OR = {
+					has_deposit = "d_immense_society_deposit"
+					has_deposit = "d_immense_physics_deposit"
+					has_deposit = "d_immense_engineering_deposit"
+					has_strategic_resource = yes
+				}
+			}
+		}
+		modifier = {
+			weight = 60
+			planet = {
+				AND = {
+					is_planet_class = pc_black_hole
+					has_strategic_resource = no
+				}
+			}
+		}
+	}
+}
+
+
+
+
+#This is dilithium on an orbital tile. See d_sr_dilithium_10_deposit for dilithium on a surface tile.
+d_sr_dilithium_34_deposit = {
+	resources = {
+		minerals = 1
+		sr_dilithium_34 = 1
+	}
+	station = shipclass_mining_station
+	drop_weight = {
+		weight = 0
+		modifier = {
+			weight = 0.15
+			planet = {
+				OR = {
+					is_planet_class = pc_b_class
+					is_planet_class = pc_molten
+					is_planet_class = pc_barren
+					is_planet_class = pc_class_d_barren
+					is_planet_class = pc_barren_cold
+					is_planet_class = pc_class_e
+					is_planet_class = pc_class_k_trans
+					is_planet_class = pc_toxic
+					is_planet_class = pc_class_n_titan
+					is_planet_class = pc_class_o_sulfar
+					is_planet_class = pc_b_class
+					is_asteroid = yes
+				}
+			}
+		}
+	}
+}
+
+##### Ground deposits
+
+d_sr_pergium_5_deposit = {
+	resources = {
+		energy = 1
+		sr_pergium_5 = 1
+	}
+	is_orbital_slot = no
+	drop_weight = {
+		weight = 0
+		modifier = {
+			weight = 1.75
+			planet = {
+				OR = {
+					is_planet_class = pc_gaia
+					is_planet_class = pc_continental
+					is_planet_class = pc_tropical
+					is_planet_class = pc_ocean
+					is_planet_class = pc_arid
+					is_planet_class = pc_desert
+					is_planet_class = pc_tundra
+					is_planet_class = pc_arctic
+					is_planet_class = pc_alpine
+					is_planet_class = pc_savannah
+					is_planet_class = pc_m1_class
+					is_planet_class = pc_frozen
+					is_planet_class = pc_g_class
+					is_planet_class = pc_class_q_variable
+					is_planet_class = pc_class_q_geo
+					is_planet_class = pc_r_class
+					is_planet_class = pc_f_class
+					is_planet_class = pc_k_class
+					is_planet_class = pc_y_class
+					is_planet_class = pc_x_class
+				}
+			}
+		}
+	}
+}
+
+d_sr_tribbles_6_deposit = {
+	resources = {
+		society_research = 3
+		sr_tribbles_6 = 1
+	}
+	is_orbital_slot = no
+	drop_weight = {
+		weight = 0
+		modifier = {
+			weight = 1.75
+			planet = {
+				AND = {
+					OR = {
+						is_planet_class = pc_gaia
+						is_planet_class = pc_continental
+						is_planet_class = pc_tropical
+						is_planet_class = pc_ocean
+						is_planet_class = pc_arid
+						is_planet_class = pc_tundra
+						is_planet_class = pc_arctic
+						is_planet_class = pc_alpine
+						is_planet_class = pc_savannah
+						is_planet_class = pc_m1_class
+						is_planet_class = pc_class_q_variable
+						is_planet_class = pc_class_q_geo
+						is_planet_class = pc_r_class
+					}
+					has_owner = no
+				}
+			}
+		}
+		modifier = {
+			factor = 7
+			planet = {
+				OR = {
+					has_planet_modifier = "pm_lush"
+					has_planet_modifier = "pm_dangerous_wildlife"
+				}
+			}
+		}
+	}
+}
+
+#This is dilithium on a surface tile. See d_sr_dilithium_34_deposit for dilithium on an orbital tile.
+d_sr_dilithium_10_deposit = {
+	resources = {
+		minerals = 1
+		sr_dilithium_10 = 1
+	}
+	is_orbital_slot = no
+	drop_weight = {
+		weight = 0
+		modifier = {
+			weight = 1.25
+			planet = {
+				OR = {
+					is_planet_class = pc_gaia
+					is_planet_class = pc_continental
+					is_planet_class = pc_tropical
+					is_planet_class = pc_ocean
+					is_planet_class = pc_arid
+					is_planet_class = pc_desert
+					is_planet_class = pc_tundra
+					is_planet_class = pc_arctic
+					is_planet_class = pc_alpine
+					is_planet_class = pc_savannah
+					is_planet_class = pc_m1_class
+					is_planet_class = pc_frozen
+					is_planet_class = pc_g_class
+					is_planet_class = pc_class_q_variable
+					is_planet_class = pc_class_q_geo
+					is_planet_class = pc_r_class
+					is_planet_class = pc_f_class
+					is_planet_class = pc_k_class
+					is_planet_class = pc_y_class
+					is_planet_class = pc_x_class
+				}
+				has_owner = no
+			}
+		}
+	}
+}
+
+d_sr_yridium_11_deposit = {
+	resources = {
+		#food = 1
+		sr_yridium_11 = 1
+	}
+	is_orbital_slot = no
+	drop_weight = {
+		weight = 0
+		modifier = {
+			weight = 3
+			planet = {
+				OR = {
+					is_planet_class = pc_gaia
+					is_planet_class = pc_tropical
+					is_planet_class = pc_ocean
+					is_planet_class = pc_savannah
+				}
+			}
+		}
+		modifier = {
+			factor = 10
+			planet = { has_planet_modifier = "pm_lush" }
+		}
+	}
+}
+
+d_sr_sodium_12_deposit = {
+	resources = {
+		#food = 1
+		sr_sodium_12 = 1
+	}
+	is_orbital_slot = no
+	drop_weight = {
+		weight = 0
+		modifier = {
+			weight = 3
+			planet = {
+				OR = {
+					is_planet_class = pc_gaia
+					is_planet_class = pc_tropical
+					is_planet_class = pc_ocean
+					is_planet_class = pc_savannah
+				}
+			}
+		}
+		modifier = {
+			factor = 10
+			planet = { has_planet_modifier = "pm_lush" }
+		}
+	}
+}
+
+d_sr_brizeen_14_deposit = {
+	resources = {
+		society_research = 3
+		sr_brizeen_14 = 1
+	}
+	is_orbital_slot = no
+	drop_weight = {
+		weight = 0
+		modifier = {
+			weight = 5
+			planet = {
+				AND = {
+					OR = {
+						is_planet_class = pc_continental
+						is_planet_class = pc_savannah
+						is_planet_class = pc_tropical
+						is_planet_class = pc_m1_class
+					}
+				}
+			}
+		}
+	}
+}
+
+d_sr_biosculpting_18_deposit = {
+	resources = {
+		society_research = 3
+		sr_biosculpting_18 = 1
+	}
+	is_orbital_slot = no
+	drop_weight = {
+		weight = 0
+		modifier = {
+			weight = 4
+			planet = {
+				AND = {
+					OR = {
+						is_planet_class = pc_continental
+						is_planet_class = pc_savannah
+						is_planet_class = pc_tropical
+						is_planet_class = pc_m1_class
+					}
+				}
+			}
+		}
+	}
+}
+
+d_sr_supersolid_19_deposit = {
+	resources = {
+		society_research = 3
+		sr_supersolid_19 = 1
+	}
+	is_orbital_slot = no
+	drop_weight = {
+		weight = 0
+		modifier = {
+			weight = 4
+			planet = {
+				AND = {
+					OR = {
+                        is_planet_class = pc_arctic
+                        is_planet_class = pc_alpine
+                        is_planet_class = pc_frozen
+                        is_planet_class = pc_class_q_geo	
+					}
+				}
+			}
+		}
+	}
+}
+
+
+
+d_sr_mars_22_deposit = {
+	resources = {
+		sr_mars_22 = 1
+	}
+	is_orbital_slot = no
+	drop_weight = {
+		weight = 0
+	}
+}
+
+d_sr_relics_24_deposit = {
+	resources = {
+		society_research = 3
+		sr_relics_24 = 1
+	}
+	is_orbital_slot = no
+	drop_weight = {
+		weight = 0
+		modifier = {
+			weight = 1.75
+			planet = {
+				AND = {
+					OR = {
+						is_planet_class = pc_gaia
+						is_planet_class = pc_continental
+						is_planet_class = pc_tropical
+						is_planet_class = pc_ocean
+						is_planet_class = pc_arid
+						is_planet_class = pc_desert
+						is_planet_class = pc_tundra
+						is_planet_class = pc_arctic
+						is_planet_class = pc_alpine
+						is_planet_class = pc_savannah
+						is_planet_class = pc_m1_class
+						is_planet_class = pc_frozen
+						is_planet_class = pc_g_class
+						is_planet_class = pc_class_q_variable
+						is_planet_class = pc_class_q_geo
+						is_planet_class = pc_r_class
+						is_planet_class = pc_f_class
+						is_planet_class = pc_k_class
+						is_planet_class = pc_y_class
+						is_planet_class = pc_x_class		
+					}
+					has_owner = no
+				}
+			}
+		}
+	}
+}

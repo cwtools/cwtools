@@ -1,0 +1,97 @@
+# Cait (15 Lyncis)
+# Homeworld of the Catians
+caitian_homeworld = {
+	name = "15 Lyncis"
+	class = sc_f
+	flags = { caitian_homeworld }
+	init_effect = { log = "caitian homeworld" }
+	usage = custom_empire
+	max_instances = 1
+	planet = { name = "Cait" class = star size = 30 orbit_distance = 0 orbit_angle = 1 has_ring = no }
+	change_orbit = { min = 30 max = 40 }
+	planet = { name = "Cait I" class = "pc_b_class" size = 8 orbit_angle = { min = 45 max = 270 } has_ring = no }
+	change_orbit = { min = 20 max = 30}
+	planet = { name = "Cait II" class = "pc_b_class" size = 8 orbit_angle = { min = 45 max = 270 } has_ring = no }
+	change_orbit = { min = 20 max = 30}
+	planet = { name = "Cait III" class = "pc_toxic" size = 8 orbit_angle = { min = 45 max = 270 } has_ring = no }
+	change_orbit = { min = 20 max = 30}
+	planet = { name = "Cait IV" class = "pc_toxic" size = 8 orbit_angle = { min = 45 max = 270 } has_ring = no }
+	change_orbit = 40
+	planet = {
+		name = "Cait"
+		class = "pc_savannah"
+		size = { min = 18 max = 20 }
+		orbit_angle = { min = 45 max = 270 }
+		starting_planet = yes
+		tile_blockers = none
+		has_ring = no
+		init_effect = {
+			prevent_anomaly = yes			
+			if = {
+				limit = { NOT = { any_country = { has_country_flag = caitian_union } } }
+				create_species = { 
+					name = "Caitian" 
+					class = CAT 
+					portrait = caitian 
+					homeworld = THIS 
+					traits = { 
+						trait = "trait_talented" 
+						trait = "trait_slow_breeders" 
+						trait = "trait_industrious" 
+						trait = "trait_solitary" 
+						ideal_planet_class = "pc_savannah" 
+						} 
+					}
+				last_created_species = { save_global_event_target_as = caitianSpecies }
+				create_country = {
+					name = "NAME_caitian_union"
+					type = default
+					ignore_initial_colony_error = yes
+					civics = { civic = "civic_distinguished_admiralty" civic = "civic_nationalistic_zeal" }
+					authority = auth_democratic
+					name_list = "Caitian"
+					ethos = { ethic = "ethic_militarist" ethic = "ethic_xenophile" ethic = "ethic_materialist" }
+					species = event_target:caitianSpecies
+					flag = {
+						icon = { category = "trek" file = "caitian.dds" }
+						background = { category = "backgrounds" file = "00_solid.dds" }
+						colors = { "customcolor1451" "black" "null" "null" }
+					}
+					ship_prefix = "CSV"
+					effect = {
+						set_graphical_culture = generic_03
+						set_country_flag = caitian_union
+						set_country_flag = custom_start_screen
+						set_country_flag = generic_ent
+						set_country_flag = alpha_beta_empire
+						set_country_flag = init_spawned
+						set_country_flag = botf_minor
+						save_global_event_target_as = caitian_union
+					}
+				}
+				create_colony = { owner = event_target:caitian_union species = event_target:caitianSpecies ethos = owner }
+			}
+			set_capital = yes
+			random_country = {
+				limit = { has_country_flag = caitian_union }
+				save_global_event_target_as = caitian_union
+				species = { save_global_event_target_as = caitianSpecies }
+				add_appropriate_start_techs = yes
+				set_country_type = minorRace
+			}
+			set_owner = event_target:caitian_union
+			generate_minor_empire_start_buildings = yes
+			generate_minor_empire_start_pops = yes
+			generate_major_empire_start_fleets = yes
+			set_name = "Cait"
+		}		
+		moon = { name = "Rea" class = "pc_barren_cold" orbit_distance = 12 size = 6 orbit_angle = 90 has_ring = no }
+		moon = { name = "Sura" class = "pc_barren_cold" orbit_distance = 8 size = 3 orbit_angle = 45 has_ring = no }
+	}
+	change_orbit = { min = 20 max = 30}
+	planet = { name = "Cait V" class = "pc_gas_giant" size = 16 orbit_angle = { min = 45 max = 270 } has_ring = yes }
+	change_orbit = { min = 20 max = 30}
+	planet = { name = "Cait VI" class = "pc_gas_giant" size = 25 orbit_angle = { min = 45 max = 270 } has_ring = no }
+	change_orbit = { min = 20 max = 30}
+	planet = { name = "Cait VII" class = "pc_barren_cold" size = 8 orbit_angle = { min = 45 max = 270 } }
+}

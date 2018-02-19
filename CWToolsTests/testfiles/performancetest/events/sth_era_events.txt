@@ -1,0 +1,1035 @@
+#########################################
+#
+# ST Horizons Era Events
+#
+#########################################
+
+namespace = sthera
+
+
+
+
+##### Fed ENT-TOS #####
+
+country_event = {
+	id = sthera.1
+	hide_window = no
+	title = sthera.1.name
+	desc = {
+		trigger = { NOR = { has_country_flag = terran_empire has_country_flag = terra_prime } }
+		text = sthera.1.desc
+	}
+	desc = {
+		trigger = { OR = { has_country_flag = terran_empire has_country_flag = terra_prime } }
+		text = sthera.1.desc_evil
+	}
+	picture = sth_GFX_evt_starfleetTOSEra
+	location = root.capital_scope
+	is_triggered_only = yes
+	trigger = { has_country_flag = starfleet_ent }
+	immediate = {
+	    remove_country_flag = starfleet_ent
+        set_country_flag = starfleet_tos
+        set_graphical_culture = federation_02
+	}
+	option = {
+		name = sthera.1.a
+		custom_tooltip = "sthera.1.a.tooltip"
+		create_species = {
+			name = "Human"
+			class = TREKHEROES
+			portrait = MeiCarterLin
+			traits = random
+		}
+		create_leader = {
+			type = scientist
+			species = last_created
+			name = "Mei Carter-Lin"
+			skill = 1000
+			traits = {
+				trait = leader_trait_spark_of_genius
+				trait = leader_trait_expertise_materials
+			}
+		}
+		if = {
+			limit = { is_ai = no }
+			add_research_option = tech_engineering_battlecruiser_543
+			add_tech_progress = {
+				tech = tech_engineering_battlecruiser_543
+				progress = 0.1
+			}
+		}
+		if = {
+			limit = { is_ai = yes }
+			give_technology = { tech = tech_engineering_battlecruiser_543 message = no }
+		}
+	}
+}
+
+##### Fed TOS-TMP #####
+
+country_event = {
+	id = sthera.2
+	hide_window = no
+	title = sthera.2.name
+	desc = {
+		trigger = { NOR = { has_country_flag = terran_empire has_country_flag = terra_prime } }
+		text = sthera.2.desc
+	}
+	desc = {
+		trigger = { OR = { has_country_flag = terran_empire has_country_flag = terra_prime } }
+		text = sthera.2.desc_evil
+	}
+	picture = sth_GFX_evt_starfleetTMPEra
+	location = root.capital_scope
+	is_triggered_only = yes
+	trigger = { has_country_flag = starfleet_tos }
+	immediate = {
+		remove_country_flag = starfleet_tos
+		set_country_flag = starfleet_tmp
+		set_graphical_culture = federation_03
+	}
+	option = {
+		name = sthera.2.a
+        capital_scope = { save_event_target_as = capital }
+        save_event_target_as = owner_country
+		add_research_option = tech_engineering_battleship_544
+		if = {
+			limit = { is_ai = no }
+			add_research_option = tech_engineering_battleship_544
+			add_tech_progress = {
+				tech = tech_engineering_battleship_544
+				progress = 0.1
+			}
+		}
+		if = {
+			limit = { is_ai = yes }
+			give_technology = { tech = tech_engineering_battleship_544 message = no }
+		}
+		create_species = {
+			name = "Human"
+			class = TREKHEROES
+			portrait = JonathanEsteban
+			traits = random
+		}
+		create_leader = {
+			type = scientist
+			species = last_created
+			name = "Jonathan Esteban"
+			skill = 1000
+			traits = {
+				trait = leader_trait_spark_of_genius
+				trait = leader_trait_expertise_materials
+			}
+		}
+		if = {
+			limit = {
+				OR = {
+					has_country_flag = united_federation_of_planets
+					has_country_flag = united_earth
+					has_country_flag = terra_prime
+					has_country_flag = united_human_remnant
+				}
+			}
+			create_fleet = { name = "USS Grissom" }
+			last_created_fleet = {
+				set_owner = root
+				create_ship_design = {
+					design = "USS_Grissom"
+					ftl = event_target:owner_country
+				}
+				create_ship = {
+					name = "USS Grissom"
+					design = last_created_design
+					graphical_culture = "federation_03"
+					prefix = no
+				}
+				last_created_ship = {
+					add_modifier = {
+						modifier = "herobuff_tmp"
+						days = -1
+					}
+				}
+				assign_leader = last_created_leader
+				set_location = event_target:capital
+			}
+		}
+		if = {
+			limit = { has_country_flag = terran_empire }
+			create_fleet = { name = "ISS Grissom" }
+			last_created_fleet = {
+				set_owner = root
+				create_ship_design = {
+					design = "USS_Grissom"
+					ftl = event_target:owner_country
+				}
+				create_ship = {
+					name = "ISS Grissom"
+					design = last_created_design
+					graphical_culture = "federation_03"
+					prefix = no
+				}
+				last_created_ship = {
+					add_modifier = {
+						modifier = "herobuff_tmp"
+						days = -1
+					}
+				}
+				assign_leader = last_created_leader
+				set_location = event_target:capital
+			}
+		}
+	}
+}
+
+
+##### Fed TMP-TNG #####
+
+country_event = {
+	id = sthera.3
+	hide_window = no
+	title = sthera.3.name
+	desc = {
+		trigger = { NOR = { has_country_flag = terran_empire has_country_flag = terra_prime } }
+		text = sthera.3.desc
+	}
+	desc = {
+		trigger = { OR = { has_country_flag = terran_empire has_country_flag = terra_prime } }
+		text = sthera.3.desc_evil
+	}
+	picture = sth_GFX_evt_starfleetTNGEra
+	location = root.capital_scope
+	is_triggered_only = yes
+	trigger = { has_country_flag = starfleet_tmp }
+	immediate = {
+		remove_country_flag = starfleet_tmp
+		set_country_flag = starfleet_tng
+		if = {
+			limit = {
+				OR = {
+					has_country_flag = united_federation_of_planets
+					has_country_flag = united_earth
+					has_country_flag = terra_prime
+					has_country_flag = united_human_remnant
+				}
+			}
+			set_graphical_culture = federation_04
+		}
+		if = {
+			limit = { has_country_flag = terran_empire }
+			set_graphical_culture = federation_MU_04
+		}
+		if = {
+			limit = { has_country_flag = united_federation_of_planets }
+			create_species = {
+				name = "Vulcan"
+				class = TREKHEROES
+				portrait = Satelk
+				traits = random
+			}
+			create_leader = {
+				type = admiral
+				species = last_created
+				name = "Satelk"
+				skill = 1000
+				traits = {
+					# trait = leader_trait_expertise_new_worlds
+					# trait = leader_trait_carefree
+				}
+			}
+		}
+		if = {
+			limit = { NOT = { has_country_flag = united_federation_of_planets } }
+			create_species = {
+				name = "Human"
+				class = TREKHEROES
+				portrait = MatthewWalsh
+				traits = random
+			}
+			create_leader = {
+				type = admiral
+				species = last_created
+				name = "Matthew Walsh"
+				skill = 500
+				traits = {
+					# trait = leader_trait_expertise_new_worlds
+					# trait = leader_trait_carefree
+				}
+			}
+		}
+		last_created_leader = { save_event_target_as = buranCaptain }
+	}
+	option = {
+		name = sthera.3.a
+        capital_scope = { save_event_target_as = capital }
+        save_event_target_as = owner_country
+		if = {
+			limit = { is_ai = no }
+			add_research_option = tech_engineering_heavy_545
+			add_tech_progress = {
+				tech = tech_engineering_heavy_545
+				progress = 0.1
+			}
+		}
+		if = {
+			limit = { is_ai = yes }
+			give_technology = { tech = tech_engineering_heavy_545 message = no }
+		}
+        if = {
+			limit = {
+				OR = {
+					has_country_flag = united_federation_of_planets
+					has_country_flag = united_earth
+					has_country_flag = terra_prime
+					has_country_flag = united_human_remnant
+				}
+			}
+			create_fleet = { name = "USS Buran" }
+			last_created_fleet = {
+				set_owner = root
+				create_ship_design = {
+					design = "USS_Buran"
+					ftl = event_target:owner_country
+				}
+				create_ship = {
+					name = "USS Buran"
+					design = last_created_design
+					graphical_culture = "federation_04"
+					prefix = no
+				}
+				last_created_ship = {
+					add_modifier = { modifier = "herobuff_tng" days = -1 }
+				}
+				assign_leader = event_target:buranCaptain
+				set_location = event_target:capital
+			}
+		}
+        if = {
+			limit = { has_country_flag = terran_empire }
+			create_fleet = { name = "ISS Buran" }
+			last_created_fleet = {
+				set_owner = root
+				create_ship_design = {
+					design = "USS_Buran"
+					ftl = event_target:owner_country
+				}
+				create_ship = {
+					name = "ISS Buran"
+					design = last_created_design
+					graphical_culture = "federation_MU_04"
+					prefix = no
+				}
+				last_created_ship = {
+					add_modifier = { modifier = "herobuff_tng" days = -1 }
+				}
+				assign_leader = event_target:buranCaptain
+				set_location = event_target:capital
+			}
+		}
+	}
+}
+
+
+
+##### Fed TNG-TNG+ #####
+
+country_event = {
+	id = sthera.4
+	hide_window = no
+	title = sthera.4.name
+	desc = {
+		trigger = { NOR = { has_country_flag = terran_empire has_country_flag = terra_prime } }
+		text = sthera.4.desc
+	}
+	desc = {
+		trigger = { OR = { has_country_flag = terran_empire has_country_flag = terra_prime } }
+		text = sthera.4.desc_evil
+	}
+	picture = sth_GFX_evt_starfleetTNG+Era
+	location = root.capital_scope
+	is_triggered_only = yes
+	trigger = { has_country_flag = starfleet_tng }
+	immediate = {
+		#remove_country_flag = starfleet_tng
+		#set_country_flag = starfleet_tng2
+		#set_graphical_culture = federation_05
+	}
+	option = {
+		name = sthera.4.a
+	}
+}
+
+########## KDF ############
+
+##### Klingon ENT-TOS #####
+
+country_event = {
+	id = sthera.5
+	hide_window = no
+	title = sthera.5.name
+	desc = sthera.5.desc
+	picture = sth_GFX_evt_klingonTOSEra
+	location = root.capital_scope
+	is_triggered_only = yes
+	trigger = { has_country_flag = klingon_ent }
+	immediate = {
+		remove_country_flag = klingon_ent
+		set_country_flag = klingon_tos
+		set_graphical_culture = klingon_02
+	}
+	option = {
+		name = sthera.5.a
+		custom_tooltip = "sthera.5.a.tooltip"
+		create_leader = {
+			type = scientist
+			species = owner_main_species
+			name = "The Shipwright"
+			skill = 1000
+			traits = {
+				trait = leader_trait_spark_of_genius
+				trait = leader_trait_expertise_materials
+			}
+		}
+		if = {
+			limit = { is_ai = no }
+			add_research_option = tech_engineering_battlecruiser_543
+			add_tech_progress = {
+				tech = tech_engineering_battlecruiser_543
+				progress = 0.1
+			}
+		}
+		if = {
+			limit = { is_ai = yes }
+			give_technology = { tech = tech_engineering_battlecruiser_543 message = no }
+		}
+	}
+}
+
+
+##### Klingon TOS-TMP #####
+country_event = {
+	id = sthera.6
+	hide_window = no
+	title = sthera.6.name
+	desc = sthera.6.desc
+	picture = sth_GFX_evt_klingonTMPEra
+	location = root.capital_scope
+	is_triggered_only = yes
+	trigger = { has_country_flag = klingon_tos }
+	immediate = {
+    	remove_country_flag = klingon_tos
+        set_country_flag = klingon_tmp
+        set_graphical_culture = klingon_03
+	}
+	option = {
+		name = sthera.6.a
+		if = {
+			limit = { is_ai = no }
+			add_research_option = tech_engineering_battleship_544
+			add_tech_progress = {
+				tech = tech_engineering_battleship_544
+				progress = 0.1
+			}
+		}
+		if = {
+			limit = { is_ai = yes }
+			give_technology = { tech = tech_engineering_battleship_544 message = no }
+		}
+	}
+}
+
+##### Klingon TMP-TNG #####
+
+country_event = {
+	id = sthera.7
+	hide_window = no
+	title = sthera.7.name
+	desc = sthera.7.desc
+	picture = sth_GFX_evt_klingonTNGEra
+	location = root.capital_scope
+	is_triggered_only = yes
+	trigger = { has_country_flag = klingon_tmp }
+	immediate = {
+		remove_country_flag = klingon_tmp
+		set_country_flag = klingon_tng
+		set_graphical_culture = klingon_04
+	}
+	option = {
+		name = sthera.7.a
+		if = {
+			limit = { is_ai = no }
+			add_research_option = tech_engineering_heavy_545
+			add_tech_progress = {
+				tech = tech_engineering_heavy_545
+				progress = 0.1
+			}
+		}
+		if = {
+			limit = { is_ai = yes }
+			give_technology = { tech = tech_engineering_heavy_545 message = no }
+		}
+		create_leader = {
+			type = admiral
+			species = owner_main_species
+			name = "Grex"
+			skill = 500
+			traits = {
+				# trait = leader_trait_expertise_new_worlds
+				# trait = leader_trait_carefree
+			}
+		}
+		capital_scope = { save_event_target_as = capital }
+        save_event_target_as = owner_country
+        create_fleet = { name = "IKS Vorcha" }
+        last_created_fleet = {
+            set_owner = root
+            create_ship_design = {
+                design = "IKS Vorcha"
+                ftl = event_target:owner_country
+            }
+            create_ship = {
+                name = "IKS Vorcha"
+                design = last_created_design
+                graphical_culture = "klingon_04"
+                prefix = no
+            }
+			last_created_ship = {
+				add_modifier = { modifier = "herobuff_tng" days = -1 }
+            }
+            assign_leader = last_created
+            set_location = event_target:capital
+        }
+	}
+}
+
+
+##### Klingon TNG-TNG+ #####
+
+country_event = {
+	id = sthera.8
+	hide_window = no
+	title = sthera.8.name
+	desc = sthera.8.desc
+	picture = sth_GFX_evt_klingonTNGEra
+	location = root.capital_scope
+	is_triggered_only = yes
+	trigger = { has_country_flag = klingon_tng }
+	immediate = {
+		#remove_country_flag = klingon_tng
+		#set_country_flag = klingon_tng2
+		#set_graphical_culture = klingon_05
+	}
+	option = {
+		name = sthera.8.a
+	}
+}
+
+########## ROM ############
+
+##### Romulan ENT-TOS #####
+
+country_event = {
+	id = sthera.9
+	hide_window = no
+	title = sthera.9.name
+	desc = sthera.9.desc
+	picture = sth_GFX_evt_romulanTOSEra
+	location = root.capital_scope
+	is_triggered_only = yes
+	trigger = { has_country_flag = romulan_ent }
+	immediate = {
+		remove_country_flag = romulan_ent
+		set_country_flag = romulan_tos
+		if = {
+			limit = { has_country_flag = garidian_republic }
+			set_graphical_culture = garidian_02
+			else = {
+				set_graphical_culture = romulan_02
+			}
+		}
+	}
+	option = {
+		name = sthera.9.a
+		custom_tooltip = "sthera.9.a.tooltip"
+		if = {
+			limit = { is_ai = no }
+			add_research_option = tech_engineering_battlecruiser_543
+			add_tech_progress = {
+				tech = tech_engineering_battlecruiser_543
+				progress = 0.1
+			}
+		}
+		if = {
+			limit = { is_ai = yes }
+			give_technology = { tech = tech_engineering_battlecruiser_543 message = no }
+		}
+		create_species = {
+			name = "Flaxian"
+			class = TREKHEROES
+			portrait = Kutaya
+			traits = random
+		}
+		create_leader = {
+			type = scientist
+			species = last_created
+			name = "Kutaya"
+			skill = 1000
+			traits = {
+				trait = leader_trait_spark_of_genius
+				trait = leader_trait_expertise_materials
+			}
+		}
+	}
+	option = {
+		name = sthera.9.b
+		custom_tooltip = "sthera.9.b.tooltip"
+		if = {
+			limit = { is_ai = no }
+			add_research_option = tech_engineering_battlecruiser_543
+			add_tech_progress = {
+				tech = tech_engineering_battlecruiser_543
+				progress = 0.1
+			}
+		}
+		if = {
+			limit = { is_ai = yes }
+			give_technology = { tech = tech_engineering_battlecruiser_543 message = no }
+		}
+		create_species = {
+			name = "Romulan"
+			class = TREKHEROES
+			portrait = Valda
+			traits = random
+		}
+		create_leader = {
+			type = scientist
+			species = last_created
+			name = "Valda"
+			skill = 100
+			traits = {
+				trait = leader_trait_spark_of_genius
+			}
+		}
+	}
+}
+
+##### Romulan TOS-TMP #####
+
+country_event = {
+	id = sthera.10
+	hide_window = no
+	title = sthera.10.name
+	desc = sthera.10.desc
+	picture = sth_GFX_evt_romulanTMPEra
+	location = root.capital_scope
+	is_triggered_only = yes
+	trigger = { has_country_flag = romulan_tos }
+	immediate = {
+		remove_country_flag = romulan_tos
+		set_country_flag = romulan_tmp
+		if = {
+			limit = { has_country_flag = garidian_republic }
+			set_graphical_culture = garidian_03
+			else = {
+				set_graphical_culture = romulan_03
+			}
+		}
+	}
+	option = {
+		name = sthera.10.a
+		if = {
+			limit = { is_ai = no }
+			add_research_option = tech_engineering_battleship_544
+			add_tech_progress = {
+				tech = tech_engineering_battleship_544
+				progress = 0.1
+			}
+		}
+		if = {
+			limit = { is_ai = yes }
+			give_technology = { tech = tech_engineering_battleship_544 message = no }
+		}
+	}
+}
+
+
+##### Romulan TMP-TNG #####
+
+country_event = {
+	id = sthera.11
+	hide_window = no
+	title = sthera.11.name
+	desc = sthera.11.desc
+	picture = sth_GFX_evt_romulanTNGEra
+	location = root.capital_scope
+	is_triggered_only = yes
+	trigger = { has_country_flag = romulan_tmp }
+	immediate = {
+		remove_country_flag = romulan_tmp
+		set_country_flag = romulan_tng
+		if = {
+			limit = { has_country_flag = garidian_republic }
+			set_graphical_culture = garidian_04
+			else = {
+				set_graphical_culture = romulan_04
+			}
+		}
+	}
+	option = {
+		name = sthera.11.a
+		if = {
+			limit = { is_ai = no }
+			add_research_option = tech_engineering_heavy_545
+			add_tech_progress = {
+				tech = tech_engineering_heavy_545
+				progress = 0.1
+			}
+		}
+		if = {
+			limit = { is_ai = yes }
+			give_technology = { tech = tech_engineering_heavy_545 message = no }
+		}
+		create_leader = {
+			type = admiral
+			species = owner_main_species
+			name = "Taldor"
+			skill = 500
+			traits = {
+				# trait = leader_trait_expertise_new_worlds
+				# trait = leader_trait_carefree
+			}
+		}
+		capital_scope = { save_event_target_as = capital }
+        save_event_target_as = owner_country
+        create_fleet = { name = "PWB Koderex" }
+        last_created_fleet = {
+            set_owner = root
+            create_ship_design = {
+                design = "PWB Koderex"
+                ftl = event_target:owner_country
+            }
+            create_ship = {
+                name = "PWB Koderex"
+                design = last_created_design
+                # graphical_culture = "romulan_04"
+                prefix = no
+            }
+			last_created_ship = {
+				add_modifier = { modifier = "herobuff_tng" days = -1 }
+            }
+            assign_leader = last_created
+            set_location = event_target:capital
+        }
+	}
+}
+
+
+##### Romulan TNG-TNG+ #####
+
+country_event = {
+	id = sthera.12
+	hide_window = no
+	title = sthera.12.name
+	desc = sthera.12.desc
+	picture = sth_GFX_evt_romulanTNGEra
+	location = root.capital_scope
+	is_triggered_only = yes
+	trigger = { has_country_flag = romulan_tng }
+	immediate = {
+		#remove_country_flag = romulan_tng
+		#set_country_flag = romulan_tng2
+		#set_graphical_culture = romulan_05
+	}
+	option = {
+		name = sthera.12.a
+	}
+}
+
+##### Generic ENT-TOS #####
+
+country_event = {
+	id = sthera.13
+	hide_window = no
+	title = sthera.13.name
+	desc = sthera.13.desc
+	picture = sth_GFX_evt_genericTOSEra
+	location = root.capital_scope
+	is_triggered_only = yes
+	trigger = { has_country_flag = generic_ent }
+	immediate = {
+		remove_country_flag = generic_ent
+		set_country_flag = generic_tos
+		create_leader = {
+			type = scientist
+			species = owner_main_species
+			name = random
+			skill = 1000
+			traits = {
+				trait = leader_trait_expertise_materials
+			}
+		}
+		last_created_leader = {
+			save_event_target_as = newOfficer
+		}
+	}
+	option = {
+		name = sthera.13.a
+		if = {
+			limit = { is_ai = no }
+			add_research_option = tech_engineering_battlecruiser_543
+			add_tech_progress = {
+				tech = tech_engineering_battlecruiser_543
+				progress = 0.1
+			}
+		}
+		if = {
+			limit = { is_ai = yes }
+			give_technology = { tech = tech_engineering_battlecruiser_543 message = no }
+		}
+	}
+}
+
+##### Generic TOS-TMP #####
+
+country_event = {
+	id = sthera.14
+	hide_window = no
+	title = sthera.14.name
+	desc = sthera.14.desc
+	picture = sth_GFX_evt_genericTMPEra
+	location = root.capital_scope
+	is_triggered_only = yes
+	trigger = { has_country_flag = generic_tos }
+	immediate = {
+		remove_country_flag = generic_tos
+		set_country_flag = generic_tmp
+		create_leader = {
+			type = admiral
+			species = owner_main_species
+			name = random
+			skill = 500
+			traits = { }
+		}
+		last_created_leader = { save_event_target_as = newOfficer }
+		capital_scope = { save_event_target_as = capital }
+        save_event_target_as = owner_country
+        create_fleet = { name = "Experimental Fleet" }
+        last_created_fleet = {
+            set_owner = root
+            create_ship_design = {
+                design = "Generic TMP Era Ship"
+                ftl = event_target:owner_country
+            }
+            create_ship = {
+                name = random
+                design = last_created_design
+                # graphical_culture = "federation_03"
+                prefix = yes
+            }
+			last_created_ship = {
+				add_modifier = { modifier = "herobuff_tmp" days = -1 }
+				save_event_target_as = newShip
+            }
+            assign_leader = last_created_leader
+            set_location = event_target:capital
+        }
+	}
+	option = {
+		name = sthera.14.a
+		if = {
+			limit = { is_ai = no }
+			add_research_option = tech_engineering_battleship_544
+			add_tech_progress = {
+				tech = tech_engineering_battleship_544
+				progress = 0.1
+			}
+		}
+		if = {
+			limit = { is_ai = yes }
+			give_technology = { tech = tech_engineering_battleship_544 message = no }
+		}
+	}
+}
+
+
+##### Generic TMP-TNG #####
+
+country_event = {
+	id = sthera.15
+	hide_window = no
+	title = sthera.15.name
+	desc = sthera.15.desc
+	picture = sth_GFX_evt_genericTNGEra
+	location = root.capital_scope
+	is_triggered_only = yes
+	trigger = { has_country_flag = generic_tmp }
+	immediate = {
+		remove_country_flag = generic_tmp
+		set_country_flag = generic_tng
+		capital_scope = { save_event_target_as = capital }
+        save_event_target_as = owner_country
+		create_leader = {
+			type = admiral
+			species = owner_main_species
+			name = random
+			skill = 500
+			traits = { }
+		}
+		last_created_leader = { save_event_target_as = newOfficer }
+        create_fleet = { name = "Experimental Fleet" }
+        last_created_fleet = {
+            set_owner = root
+            create_ship_design = {
+                design = "Generic TNG Era Ship"
+                ftl = event_target:owner_country
+            }
+            create_ship = {
+                name = random
+                design = last_created_design
+                # graphical_culture = "federation_03"
+                prefix = yes
+            }
+			last_created_ship = {
+				add_modifier = { modifier = "herobuff_tmp" days = -1 }
+				save_event_target_as = newShip
+			}
+            assign_leader = last_created_leader
+            set_location = event_target:capital
+        }
+	}
+	option = {
+		name = sthera.15.a
+		if = {
+			limit = { is_ai = no }
+			add_research_option = tech_engineering_heavy_545
+			add_tech_progress = {
+				tech = tech_engineering_heavy_545
+				progress = 0.1
+			}
+		}
+		if = {
+			limit = { is_ai = yes }
+			give_technology = { tech = tech_engineering_heavy_545 message = no }
+		}
+	}
+}
+
+
+##### Generic TNG-TNG+ #####
+
+country_event = {
+	id = sthera.16
+	hide_window = no
+	title = sthera.16.name
+	desc = sthera.16.desc
+	picture = sth_GFX_evt_genericTNG2Era
+	location = root.capital_scope
+	is_triggered_only = yes
+	trigger = { has_country_flag = generic_tng }
+	immediate = {
+		#remove_country_flag = generic_tng
+		#set_country_flag = generic_tng2
+	}
+	option = { name = sthera.16.a }
+}
+
+##### Borg ENT-TOS #####
+
+country_event = {
+	id = sthera.17
+	hide_window = no
+	title = sthera.17.name
+	desc = sthera.17.desc
+	picture = sth_GFX_evt_borgTOSEra
+	location = root.capital_scope
+	is_triggered_only = yes
+	trigger = { has_country_flag = borg_ent }
+	immediate = {
+		remove_country_flag = borg_ent
+		set_country_flag = borg_tos
+	}
+	option = { name = BORG_UNDERSTOOD }
+}
+
+##### Borg TOS-TMP #####
+
+country_event = {
+	id = sthera.18
+	hide_window = no
+	title = sthera.18.name
+	desc = sthera.18.desc
+	picture = sth_GFX_evt_borgTMPEra
+	location = root.capital_scope
+	is_triggered_only = yes
+	trigger = { has_country_flag = borg_tos }
+	immediate = {
+		remove_country_flag = borg_tos
+		set_country_flag = borg_tmp
+	}
+	option = { name = BORG_UNDERSTOOD }
+}
+
+
+##### Borg TMP-TNG #####
+
+country_event = {
+	id = sthera.19
+	hide_window = no
+	title = sthera.19.name
+	desc = sthera.19.desc
+	picture = sth_GFX_evt_borgTNGEra
+	location = root.capital_scope
+	is_triggered_only = yes
+	trigger = { has_country_flag = borg_tmp }
+	immediate = {
+		remove_country_flag = borg_tmp
+		set_country_flag = borg_tng
+	}
+	option = { name = BORG_UNDERSTOOD }
+}
+
+
+##### Borg TNG-TNG+ #####
+
+country_event = {
+	id = sthera.20
+	hide_window = no
+	title = sthera.20.name
+	desc = sthera.20.desc
+	picture = sth_GFX_evt_borgTNG2Era
+	location = root.capital_scope
+	is_triggered_only = yes
+	trigger = { has_country_flag = borg_tng }
+	immediate = {
+		#remove_country_flag = borg_tng
+		#set_country_flag = borg_tng2
+	}
+	option = { name = BORG_UNDERSTOOD }
+}
+
+
+#Buffs
+namespace = stherabuff
+ship_event = {
+	id = stherabuff.1
+    hide_window = yes
+	is_triggered_only = yes
+	immediate = {
+		if = {
+			limit = { owner = { OR = { has_country_flag = starfleet_tos has_country_flag = klingon_tos has_country_flag = romulan_tos has_country_flag = generic_tos has_country_flag = borg_tos } } }
+			root = { add_modifier = { modifier = "erabuff_tos" days = -1 } }
+		}
+		if = {
+			limit = { owner = { OR = { has_country_flag = starfleet_tmp has_country_flag = klingon_tmp has_country_flag = romulan_tmp has_country_flag = generic_tmp has_country_flag = borg_tmp } } }
+			root = { add_modifier = { modifier = "erabuff_tmp" days = -1 } }
+		}
+		if = {
+			limit = { owner = { OR = { has_country_flag = starfleet_tng has_country_flag = klingon_tng has_country_flag = romulan_tng has_country_flag = generic_tng has_country_flag = borg_tng } } }
+			root = { add_modifier = { modifier = "erabuff_tng" days = -1 } }
+		}
+		if = {
+			limit = { owner = { OR = { has_country_flag = starfleet_tng2 has_country_flag = klingon_tng2 has_country_flag = romulan_tng2 has_country_flag = generic_tng2 has_country_flag = borg_tng2 } } }
+			root = { add_modifier = { modifier = "erabuff_tng2" days = -1 } }
+		}
+	}
+}

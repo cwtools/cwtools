@@ -1,0 +1,1026 @@
+create_klingon_rebel_country_1 = {	
+	random_list = {
+		10 = {	
+			create_rebels = { name = "House of Durel" authority = root civics = root species = root ethos = root flag = random }
+			last_created_country = { create_leader = { type = ruler species = owner_main_species name = "Durel" skill = random traits = { trait = random_trait trait = random_trait } }	}
+		}
+		10 = {
+			create_rebels = { name = "House of Martek" authority = root civics = root species = root ethos = root flag = random }
+			last_created_country = { create_leader = { type = ruler species = owner_main_species name = "Martek" skill = random traits = { trait = random_trait trait = random_trait } } }
+		}
+		10 = {
+			create_rebels = { name = "House of K'pel" authority = root civics = root species = root ethos = root flag = random }
+			last_created_country = { create_leader = { type = ruler species = owner_main_species name = "K'pel" skill = random traits = { trait = random_trait trait = random_trait } } }
+		}
+		10 = {
+			create_rebels = { name = "House of Drax" authority = root civics = root species = root ethos = root flag = random }
+			last_created_country = { create_leader = { type = ruler species = owner_main_species name = "Drax" skill = random traits = { trait = random_trait trait = random_trait } } }
+		}
+		10 = {
+			create_rebels = { name = "House of Grin'sEl" authority = root civics = root species = root ethos = root flag = random }
+			last_created_country = { create_leader = { type = ruler species = owner_main_species name = "Grin'sEl" skill = random traits = { trait = random_trait trait = random_trait } } }
+		}
+		10 = {
+			create_rebels = { name = "House of Sha'goH" authority = root civics = root species = root ethos = root flag = random }
+			last_created_country = { create_leader = { type = ruler species = owner_main_species name = "Sha'goH" skill = random traits = { trait = random_trait trait = random_trait } } }
+		}
+		10 = {
+			create_rebels = { name = "House of ha'Rel" authority = root civics = root species = root ethos = root flag = random }
+			last_created_country = { create_leader = { type = ruler species = owner_main_species name = "ha'Rel" skill = random traits = { trait = random_trait trait = random_trait } }	}
+		}
+	}
+	last_created_country = {
+		change_country_flag = {
+			icon = { category = "trek" file = "Klingon.dds" }
+			background = { category = "backgrounds" file = "diagonal.dds" }
+			colors = { "customcolor1891" "customcolor1452" "null" "null" }
+		}
+		set_country_flag = klingon_rebel_house
+		set_country_type = default
+		assign_leader = last_created_leader
+		set_subject_of = { who = none }
+		declare_war = { who = root name = "Klingon Civil War" }
+		add_war_demand = { type = "cede_planet" parameter:planet = root.capital_scope warscore_cost = 90 target = this enemy = root }
+		root = { add_war_demand = { type = "cede_planet" parameter:planet = last_created_country.capital_scope warscore_cost = 50 target = root enemy = last_created_country } }
+		add_minerals = 1000
+		add_energy = 1000
+		create_fleet = { name = "House Fleet" }
+		last_created_fleet = {
+			set_owner = last_created_country
+			create_ship_design = { design = "House Patrol Frigate" ftl = last_created_country }
+			create_ship = { name = "IKS m'Ra" design = last_created_design prefix = no }
+			create_ship = { name = "IKS Betal" design = last_created_design prefix = no }
+			create_ship = { name = "IKS Rug'H" design = last_created_design prefix = no }
+			create_ship = { name = "IKS Kolaran" design = last_created_design prefix = no }
+			set_location = last_created_country.capital_scope
+		}
+	}
+}
+
+create_klingon_rebel_country_2 = {	
+	random_list = {
+		10 = {	
+			create_rebels = { name = "House of J'nack" authority = root civics = root species = root ethos = root flag = random }
+			last_created_country = { create_leader = { type = ruler species = owner_main_species name = "J'nack" skill = random traits = { trait = random_trait trait = random_trait } }	}
+		}
+		10 = {
+			create_rebels = { name = "House of p'Leb" authority = root civics = root species = root ethos = root flag = random }
+			last_created_country = { create_leader = { type = ruler species = owner_main_species name = "p'Leb" skill = random traits = { trait = random_trait trait = random_trait } } }
+		}
+		10 = {
+			create_rebels = { name = "House of m'Aht" authority = root civics = root species = root ethos = root flag = random }
+			last_created_country = { create_leader = { type = ruler species = owner_main_species name = "m'Aht" skill = random traits = { trait = random_trait trait = random_trait } } }
+		}
+		10 = {
+			create_rebels = { name = "House of m'Tix" authority = root civics = root species = root ethos = root flag = random }
+			last_created_country = { create_leader = { type = ruler species = owner_main_species name = "m'Tix" skill = random traits = { trait = random_trait trait = random_trait } } }
+		}
+		10 = {
+			create_rebels = { name = "House of Qo'sel" authority = root civics = root species = root ethos = root flag = random }
+			last_created_country = { create_leader = { type = ruler species = owner_main_species name = "Qo'sel" skill = random traits = { trait = random_trait trait = random_trait } } }
+		}
+		10 = {
+			create_rebels = { name = "House of Mogh" authority = root civics = root species = root ethos = root flag = random }
+			last_created_country = { create_leader = { type = ruler species = owner_main_species name = "Mogh" skill = random traits = { trait = random_trait trait = random_trait } } }
+		}
+		10 = {
+			create_rebels = { name = "House of Martok" authority = root civics = root species = root ethos = root flag = random }
+			last_created_country = { create_leader = { type = ruler species = owner_main_species name = "Martok" skill = random traits = { trait = random_trait trait = random_trait } }	}
+		}
+	}
+	last_created_country = {
+		change_country_flag = {
+			icon = { category = "trek" file = "Klingon.dds" }
+			background = { category = "backgrounds" file = "diagonal.dds" }
+			colors = { "customcolor1291" "customcolor1452" "null" "null" }
+		}
+		set_country_flag = klingon_rebel_house
+		set_country_type = default
+		assign_leader = last_created_leader
+		set_subject_of = { who = none }
+		declare_war = { who = root name = "Klingon Civil War" }
+		add_war_demand = { type = "cede_planet" parameter:planet = root.capital_scope warscore_cost = 90 target = this enemy = root }
+		root = { add_war_demand = { type = "cede_planet" parameter:planet = last_created_country.capital_scope warscore_cost = 50 target = root enemy = last_created_country } }
+		add_minerals = 1000
+		add_energy = 1000
+		create_fleet = { name = "House Fleet" }
+		last_created_fleet = {
+			set_owner = last_created_country
+			create_ship_design = { design = "House Patrol Frigate" ftl = last_created_country }
+			create_ship = { name = "IKS Kora" design = last_created_design prefix = no }
+			create_ship = { name = "IKS Be'rah" design = last_created_design prefix = no }
+			create_ship = { name = "IKS Mugh" design = last_created_design prefix = no }
+			create_ship = { name = "IKS Rolattan" design = last_created_design prefix = no }
+			set_location = last_created_country.capital_scope
+		}
+	}
+}
+
+
+
+create_kazon_rebel_country_1 = {	
+	random_list = {
+		10 = {	
+			create_rebels = { name = "Kazon-Halik" authority = root civics = root species = root ethos = root flag = random }
+			last_created_country = { create_leader = { type = ruler species = owner_main_species name = random skill = random traits = { trait = random_trait trait = random_trait } }	}
+		}
+		10 = {
+			create_rebels = { name = "Kazon-Hobii" authority = root civics = root species = root ethos = root flag = random }
+			last_created_country = { create_leader = { type = ruler species = owner_main_species name = random skill = random traits = { trait = random_trait trait = random_trait } } }
+		}
+		10 = {
+			create_rebels = { name = "Kazon-Mostral" authority = root civics = root species = root ethos = root flag = random }
+			last_created_country = { create_leader = { type = ruler species = owner_main_species name = random skill = random traits = { trait = random_trait trait = random_trait } } }
+		}
+		10 = {
+			create_rebels = { name = "Kazon-Nistrim" authority = root civics = root species = root ethos = root flag = random }
+			last_created_country = { create_leader = { type = ruler species = owner_main_species name = random skill = random traits = { trait = random_trait trait = random_trait } } }
+		}
+		10 = {
+			create_rebels = { name = "Kazon-Osito" authority = root civics = root species = root ethos = root flag = random }
+			last_created_country = { create_leader = { type = ruler species = owner_main_species name = random skill = random traits = { trait = random_trait trait = random_trait } } }
+		}
+	}
+	last_created_country = {
+		change_country_flag = {
+			icon = { category = "trek" file = "kazon.dds" }
+			background = { category = "backgrounds" file = "diagonal.dds" }
+			colors = { "customcolor1891" "customcolor1452" "null" "null" }
+		}
+		set_country_flag = kazon_rebel_sect
+		set_country_type = default
+		assign_leader = last_created_leader
+		set_subject_of = { who = none }
+		declare_war = { who = root name = "Kazon Civil War" }
+		add_war_demand = { type = "cede_planet" parameter:planet = root.capital_scope warscore_cost = 90 target = this enemy = root }
+		root = { add_war_demand = { type = "cede_planet" parameter:planet = last_created_country.capital_scope warscore_cost = 50 target = root enemy = last_created_country } }
+		add_minerals = 1000
+		add_energy = 1000
+		create_fleet = { name = "Sect Fleet" }
+		last_created_fleet = {
+			set_owner = last_created_country
+			create_ship_design = { design = "Sect Patrol Frigate" ftl = last_created_country }
+			create_ship = { name = random design = last_created_design prefix = yes }
+			create_ship = { name = random design = last_created_design prefix = yes }
+			create_ship = { name = random design = last_created_design prefix = yes }
+			create_ship = { name = random design = last_created_design prefix = yes }
+			set_location = last_created_country.capital_scope
+		}
+	}
+}
+
+create_kazon_rebel_country_2 = {
+	random_list = {
+		10 = {	
+			create_rebels = { name = "Kazon-Ogla" authority = root civics = root species = root ethos = root flag = random }
+			last_created_country = { create_leader = { type = ruler species = owner_main_species name = random skill = random traits = { trait = random_trait trait = random_trait } }	}
+		}
+		10 = {
+			create_rebels = { name = "Kazon-Oglamar" authority = root civics = root species = root ethos = root flag = random }
+			last_created_country = { create_leader = { type = ruler species = owner_main_species name = random skill = random traits = { trait = random_trait trait = random_trait } } }
+		}
+		10 = {
+			create_rebels = { name = "Kazon-Pommar" authority = root civics = root species = root ethos = root flag = random }
+			last_created_country = { create_leader = { type = ruler species = owner_main_species name = random skill = random traits = { trait = random_trait trait = random_trait } } }
+		}
+		10 = {
+			create_rebels = { name = "Kazon-Relora" authority = root civics = root species = root ethos = root flag = random }
+			last_created_country = { create_leader = { type = ruler species = owner_main_species name = random skill = random traits = { trait = random_trait trait = random_trait } } }
+		}
+		10 = {
+			create_rebels = { name = "Kazon-Vistik" authority = root civics = root species = root ethos = root flag = random }
+			last_created_country = { create_leader = { type = ruler species = owner_main_species name = random skill = random traits = { trait = random_trait trait = random_trait } } }
+		}
+	}
+	last_created_country = {
+		change_country_flag = {
+			icon = { category = "trek" file = "kazon.dds" }
+			background = { category = "backgrounds" file = "diagonal.dds" }
+			colors = { "customcolor1291" "customcolor1452" "null" "null" }
+		}
+		set_country_flag = kazon_rebel_sect
+		set_country_type = default
+		assign_leader = last_created_leader
+		set_subject_of = { who = none }
+		declare_war = { who = root name = "Kazon Civil War" }
+		add_war_demand = { type = "cede_planet" parameter:planet = root.capital_scope warscore_cost = 90 target = this enemy = root }
+		root = { add_war_demand = { type = "cede_planet" parameter:planet = last_created_country.capital_scope warscore_cost = 50 target = root enemy = last_created_country } }
+		add_minerals = 1000
+		add_energy = 1000
+		create_fleet = { name = "Sect Fleet" }
+		last_created_fleet = {
+			set_owner = last_created_country
+			create_ship_design = { design = "Sect Patrol Frigate" ftl = last_created_country }
+			create_ship = { name = random design = last_created_design prefix = yes }
+			create_ship = { name = random design = last_created_design prefix = yes }
+			create_ship = { name = random design = last_created_design prefix = yes }
+			create_ship = { name = random design = last_created_design prefix = yes }
+			set_location = last_created_country.capital_scope
+		}
+	}
+}
+
+
+
+become_united_terran_remnant = {
+	set_empire_name = "United Human Remnant"
+	change_country_flag = {
+		icon = { category = "trek" file = "UnitedEarth.dds" }
+		background = { category = "backgrounds" file = "circle.dds" }
+		colors = { "black" "black" "null" "null" }
+	}
+	country_remove_ethic = "ethic_fanatic_xenophile"
+	country_remove_ethic = "ethic_xenophile"
+	country_remove_ethic = "ethic_fanatic_pacifist"
+	country_remove_ethic = "ethic_pacifist"
+	country_add_ethic = "ethic_fanatic_xenophobe"
+	country_add_ethic = "ethic_militarist"
+	remove_country_flag = united_earth
+	set_country_flag = united_human_remnant
+	change_government = { authority = auth_oligarchic }
+	every_owned_pop = {
+		limit = { is_same_species = prev }
+		random_list = {
+			10 = { 
+				pop_change_ethic = "ethic_xenophobe"
+			}
+			10 = { 
+				pop_change_ethic = "ethic_militarist" 
+			}
+		}
+	}
+}
+
+create_undine_fleet = {
+	create_fleet = { 
+		name = "Undine Fleet" 
+		settings = { can_upgrade = no can_change_composition = no can_change_leader = no spawn_debris = no is_boss = yes }
+	}
+	last_created_fleet = {
+		set_owner = event_target:undine
+		create_ship = { name = random design = "Small Bioship" prefix = no }
+		create_ship = { name = random design = "Small Bioship" prefix = no }
+		create_ship = { name = random design = "Small Bioship" prefix = no }
+		create_ship = { name = random design = "Small Bioship" prefix = no }
+		create_ship = { name = random design = "Small Bioship" prefix = no }
+		create_ship = { name = random design = "Small Bioship" prefix = no }
+		create_ship = { name = random design = "Small Bioship" prefix = no }
+		create_ship = { name = random design = "Small Bioship" prefix = no }
+		create_ship = { name = random design = "Small Bioship" prefix = no }
+		create_ship = { name = random design = "Small Bioship" prefix = no }
+		create_ship = { name = random design = "Small Bioship" prefix = no }
+		create_ship = { name = random design = "Small Bioship" prefix = no }
+		create_ship = { name = random design = "Bioship" prefix = no }
+		create_ship = { name = random design = "Bioship" prefix = no }
+		create_ship = { name = random design = "Bioship" prefix = no }
+		create_ship = { name = random design = "Bioship" prefix = no }
+		create_ship = { name = random design = "Bioship" prefix = no }
+		create_ship = { name = random design = "Bioship" prefix = no }
+		create_ship = { name = random design = "Large Bioship" prefix = no }
+		create_ship = { name = random design = "Large Bioship" prefix = no }
+		create_ship = { name = random design = "Large Bioship" prefix = no }
+		set_location = prev
+		owner = {
+			create_leader = {
+				type = admiral
+				species = event_target:undine
+				name = "Bioship Commander"
+				skill = random
+				traits = { trait = random_trait trait = random_trait }
+			}
+		}
+		assign_leader = last_created_leader
+		# set_fleet_stance = aggressive
+		# set_aggro_range = 500
+		# set_aggro_range_measure_from = self
+		fleet_event = { id = STH_undine_crisis.200 }
+	}
+}
+
+create_skorr_fleet = {
+	create_fleet = { 
+		name = "Skorr Rebel Fleet" 
+		settings = { can_upgrade = no can_change_composition = no can_change_leader = no spawn_debris = no is_boss = yes }
+	}
+	last_created_fleet = {
+		set_owner = event_target:tchars_rebellion
+		create_ship = { name = random design = "Skorr Frigate" prefix = no }
+		create_ship = { name = random design = "Skorr Frigate" prefix = no }
+		create_ship = { name = random design = "Skorr Frigate" prefix = no }
+		create_ship = { name = random design = "Skorr Frigate" prefix = no }
+		create_ship = { name = random design = "Skorr Cruiser" prefix = no }
+		create_ship = { name = random design = "Skorr Cruiser" prefix = no }
+		create_ship = { name = random design = "Skorr Cruiser" prefix = no }
+		create_ship = { name = random design = "Skorr Cruiser" prefix = no }
+		create_ship = { name = random design = "Skorr Command Ship" prefix = no }
+		create_ship = { name = random design = "Skorr Command Ship" prefix = no }
+		set_location = prev
+		owner = {
+			create_leader = {
+				type = admiral
+				species = event_target:tchars_rebellion
+				name = "Dervish"
+				skill = random
+				traits = { trait = random_trait trait = random_trait }
+			}
+		}
+		assign_leader = last_created_leader
+		# set_fleet_stance = aggressive
+		# set_aggro_range = 500
+		# set_aggro_range_measure_from = self
+		fleet_event = { id = STH_federation_story.1145 }
+	}
+}
+
+
+create_doomsday_country = {
+	if = {
+		limit = { NOT = { exists = event_target:doomsday_country } }
+		create_country = {
+			name = "Doomsday"
+			type = doomsday
+			flag = {
+				icon = {
+					category = "zoological"
+					file = "flag_zoological_1.dds"
+				}
+				background= {
+					category = "backgrounds"
+					file = "00_solid.dds"
+				}
+				colors={
+					"black"
+					"black"
+					"null"
+					"null"
+				}
+			}
+		}
+		last_created_country = {
+			save_global_event_target_as = doomsday_country
+			set_country_flag = doomsday_country
+		}
+	}
+}
+
+create_whale_probe_country = {
+	if = {
+		limit = { NOT = { exists = event_target:whale_probe_country } }
+		create_country = {
+			name = "Whale Probe"
+			type = whale_probe
+			flag = {
+				icon = { category = "zoological" file = "flag_zoological_1.dds" }
+				background = { category = "backgrounds" file = "00_solid.dds" }
+				colors = { "black" "black" "null" "null" }
+			}
+		}
+		last_created_country = {
+			save_global_event_target_as = whale_probe_country
+			set_country_flag = whale_probe_country
+		}
+	}
+}
+
+
+
+###REMINDER TO REVIEW!
+saveGCulture = {
+	if = { limit = { graphical_culture = klingon_01 } set_country_flag = temp_klingon_01 }
+	if = { limit = { graphical_culture = klingon_02 } set_country_flag = temp_klingon_02 }
+	if = { limit = { graphical_culture = klingon_03 } set_country_flag = temp_klingon_03 }
+	if = { limit = { graphical_culture = klingon_04 } set_country_flag = temp_klingon_04 }
+	if = { limit = { graphical_culture = romulan_01 } set_country_flag = temp_romulan_01 }
+	if = { limit = { graphical_culture = romulan_02 } set_country_flag = temp_romulan_02 }
+	if = { limit = { graphical_culture = romulan_03 } set_country_flag = temp_romulan_03 }
+	if = { limit = { graphical_culture = romulan_04 } set_country_flag = temp_romulan_04 }
+	if = { limit = { graphical_culture = federation_01 } set_country_flag = temp_federation_01 }
+	if = { limit = { graphical_culture = federation_02 } set_country_flag = temp_federation_02 }
+	if = { limit = { graphical_culture = federation_03 } set_country_flag = temp_federation_03 }
+	if = { limit = { graphical_culture = federation_04 } set_country_flag = temp_federation_04 }
+	if = { limit = { graphical_culture = andorian_01 } set_country_flag = temp_andorian_01 }
+	if = { limit = { graphical_culture = breen_01 } set_country_flag = temp_breen_01 }
+	if = { limit = { graphical_culture = borg_01 } set_country_flag = temp_borg_01 }
+	if = { limit = { graphical_culture = cardassian_01 } set_country_flag = temp_cardassian_01 }
+	if = { limit = { graphical_culture = dominion_01 } set_country_flag = temp_dominion_01 }
+	if = { limit = { graphical_culture = ferengi_01 } set_country_flag = temp_ferengi_01 }
+	if = { limit = { graphical_culture = kazon_01 } set_country_flag = temp_kazon_01 }
+	if = { limit = { graphical_culture = tellarite_01 } set_country_flag = temp_tellarite_01 }
+	if = { limit = { graphical_culture = tholian_01 } set_country_flag = temp_tholian_01 }
+	if = { limit = { graphical_culture = xindi_01 } set_country_flag = temp_xindi_01 }
+	if = { limit = { graphical_culture = vulcan_01 } set_country_flag = temp_vulcan_01 }
+	if = { limit = { graphical_culture = undine_01 } set_country_flag = temp_undine_01 }
+	if = { limit = { graphical_culture = generic_01 } set_country_flag = temp_generic_01 }
+	if = { limit = { graphical_culture = generic_02 } set_country_flag = temp_generic_02 }
+}
+rootChangeToGCulture = {
+	if = { limit = { graphical_culture = klingon_01 } root = { set_graphical_culture = klingon_01 } }
+	if = { limit = { graphical_culture = klingon_02 } root = { set_graphical_culture = klingon_02 } }
+	if = { limit = { graphical_culture = klingon_03 } root = { set_graphical_culture = klingon_03 } }
+	if = { limit = { graphical_culture = klingon_04 } root = { set_graphical_culture = klingon_04 } }
+	if = { limit = { graphical_culture = romulan_01 } root = { set_graphical_culture = romulan_01 } }
+	if = { limit = { graphical_culture = romulan_02 } root = { set_graphical_culture = romulan_02 } }
+	if = { limit = { graphical_culture = romulan_03 } root = { set_graphical_culture = romulan_03 } }
+	if = { limit = { graphical_culture = romulan_04 } root = { set_graphical_culture = romulan_04 } }
+	if = { limit = { graphical_culture = federation_01 } root = { set_graphical_culture = federation_01 } }
+	if = { limit = { graphical_culture = federation_02 } root = { set_graphical_culture = federation_02 } }
+	if = { limit = { graphical_culture = federation_03 } root = { set_graphical_culture = federation_03 } }
+	if = { limit = { graphical_culture = federation_04 } root = { set_graphical_culture = federation_04 } }
+	if = { limit = { graphical_culture = andorian_01 } root = { set_graphical_culture = andorian_01 } }
+	if = { limit = { graphical_culture = breen_01 } root = { set_graphical_culture = breen_01 } }
+	if = { limit = { graphical_culture = borg_01 } root = { set_graphical_culture = borg_01 } }
+	if = { limit = { graphical_culture = cardassian_01 } root = { set_graphical_culture = cardassian_01 } }
+	if = { limit = { graphical_culture = dominion_01 } root = { set_graphical_culture = dominion_01 } }
+	if = { limit = { graphical_culture = ferengi_01 } root = { set_graphical_culture = ferengi_01 } }
+	if = { limit = { graphical_culture = kazon_01 } root = { set_graphical_culture = kazon_01 } }
+	if = { limit = { graphical_culture = tellarite_01 } root = { set_graphical_culture = tellarite_01 } }
+	if = { limit = { graphical_culture = tholian_01 } root = { set_graphical_culture = tholian_01 } }
+	if = { limit = { graphical_culture = xindi_01 } root = { set_graphical_culture = xindi_01 } }
+	if = { limit = { graphical_culture = vulcan_01 } root = { set_graphical_culture = vulcan_01 } }
+	if = { limit = { graphical_culture = undine_01 } root = { set_graphical_culture = undine_01 } }
+	if = { limit = { graphical_culture = generic_01 } root = { set_graphical_culture = generic_01 } }
+	if = { limit = { graphical_culture = generic_02 } root = { set_graphical_culture = generic_02 } }
+}
+rootChangeToOrigGCulture = {
+	if = { limit = { has_country_flag = temp_klingon_01 } set_graphical_culture = klingon_01 remove_country_flag = temp_klingon_01 }
+	if = { limit = { has_country_flag = temp_klingon_02 } set_graphical_culture = klingon_02 remove_country_flag = temp_klingon_02 }
+	if = { limit = { has_country_flag = temp_klingon_03 } set_graphical_culture = klingon_03 remove_country_flag = temp_klingon_03 }
+	if = { limit = { has_country_flag = temp_klingon_04 } set_graphical_culture = klingon_04 remove_country_flag = temp_klingon_04 }
+	if = { limit = { has_country_flag = temp_romulan_01 } set_graphical_culture = romulan_01 remove_country_flag = temp_romulan_01 }
+	if = { limit = { has_country_flag = temp_romulan_02 } set_graphical_culture = romulan_02 remove_country_flag = temp_romulan_02 }
+	if = { limit = { has_country_flag = temp_romulan_03 } set_graphical_culture = romulan_03 remove_country_flag = temp_romulan_03 }
+	if = { limit = { has_country_flag = temp_romulan_04 } set_graphical_culture = romulan_04 remove_country_flag = temp_romulan_04 }
+	if = { limit = { has_country_flag = temp_federation_01 } set_graphical_culture = federation_01 remove_country_flag = temp_federation_01 }
+	if = { limit = { has_country_flag = temp_federation_02 } set_graphical_culture = federation_02 remove_country_flag = temp_federation_02 }
+	if = { limit = { has_country_flag = temp_federation_03 } set_graphical_culture = federation_03 remove_country_flag = temp_federation_03 }
+	if = { limit = { has_country_flag = temp_federation_04 } set_graphical_culture = federation_04 remove_country_flag = temp_federation_04 }
+	if = { limit = { has_country_flag = temp_andorian_01 } set_graphical_culture = andorian_01 remove_country_flag = temp_andorian_01 }
+	if = { limit = { has_country_flag = temp_breen_01 } set_graphical_culture = breen_01 remove_country_flag = temp_breen_01 }
+	if = { limit = { has_country_flag = temp_borg_01 } set_graphical_culture = borg_01 remove_country_flag = temp_borg_01 }
+	if = { limit = { has_country_flag = temp_cardassian_01 } set_graphical_culture = cardassian_01 remove_country_flag = temp_cardassian_01 }
+	if = { limit = { has_country_flag = temp_dominion_01 } set_graphical_culture = dominion_01 remove_country_flag = temp_dominion_01 }
+	if = { limit = { has_country_flag = temp_ferengi_01 } set_graphical_culture = ferengi_01 remove_country_flag = temp_ferengi_01 }
+	if = { limit = { has_country_flag = temp_kazon_01 } set_graphical_culture = kazon_01 remove_country_flag = temp_kazon_01 }
+	if = { limit = { has_country_flag = temp_tellarite_01 } set_graphical_culture = tellarite_01 remove_country_flag = temp_tellarite_01 }
+	if = { limit = { has_country_flag = temp_tholian_01 } set_graphical_culture = tholian_01 remove_country_flag = temp_tholian_01 }
+	if = { limit = { has_country_flag = temp_xindi_01 } set_graphical_culture = xindi_01 remove_country_flag = temp_xindi_01 }
+	if = { limit = { has_country_flag = temp_vulcan_01 } set_graphical_culture = vulcan_01 remove_country_flag = temp_vulcan_01 }
+	if = { limit = { has_country_flag = temp_undine_01 } set_graphical_culture = undine_01 remove_country_flag = temp_undine_01 }
+	if = { limit = { has_country_flag = temp_generic_01 } set_graphical_culture = generic_01 remove_country_flag = temp_generic_01 }
+	if = { limit = { has_country_flag = temp_generic_02 } set_graphical_culture = generic_02 remove_country_flag = temp_generic_02 }
+}
+
+
+
+ensure_bajoran_religion_country_exists = {
+	random_country = {
+		limit = { has_country_flag = bajoran_republic }
+		species = { save_event_target_as = bajoran_species }
+	}
+	if = {
+		limit = { any_country = { is_country_type = exile has_country_flag = bajoranReligionCountry } }
+		random_country = { 
+			limit = { is_country_type = exile has_country_flag = bajoranReligionCountry } 
+			save_event_target_as = bajoranReligionCountry
+		}
+		else = {
+			create_country = { name = "Bajoran Religion" species = event_target:bajoran_species type = exile ethos = { } authority = random civics = random flag = random auto_delete = no }
+			last_created_country = { set_country_flag = bajoranReligionCountry save_event_target_as = bajoranReligionCountry }
+		}
+	}
+}
+
+make_vedek = {
+	set_leader_flag = bajoranVedek 
+	# random_list = {
+		# 10 = { set_leader_flag = gives_trait_ruler_fortifier }
+		# 10 = { set_leader_flag = gives_trait_ruler_architectural_sense }
+		# 10 = { set_leader_flag = gives_trait_ruler_frontier_spirit }
+		# 10 = { set_leader_flag = gives_trait_ruler_world_shaper }
+		# 10 = { set_leader_flag = gives_trait_ruler_eye_for_talent }
+		# 10 = { set_leader_flag = gives_trait_ruler_champion_of_the_people }
+		# 10 = { set_leader_flag = gives_trait_ruler_fertility_preacher }
+		# 10 = { set_leader_flag = gives_trait_ruler_explorer }
+		# 10 = { set_leader_flag = gives_trait_ruler_space_miner }
+	# }
+}
+
+make_kai = {
+	set_leader_flag = bajoranKai
+	remove_leader_flag = bajoranVedek
+	# random_list = {
+		# 10 = { set_leader_flag = gives_trait_ruler_fortifier }
+		# 10 = { set_leader_flag = gives_trait_ruler_architectural_sense }
+		# 10 = { set_leader_flag = gives_trait_ruler_frontier_spirit }
+		# 10 = { set_leader_flag = gives_trait_ruler_world_shaper }
+		# 10 = { set_leader_flag = gives_trait_ruler_eye_for_talent }
+		# 10 = { set_leader_flag = gives_trait_ruler_champion_of_the_people }
+		# 10 = { set_leader_flag = gives_trait_ruler_fertility_preacher }
+		# 10 = { set_leader_flag = gives_trait_ruler_explorer }
+		# 10 = { set_leader_flag = gives_trait_ruler_space_miner }
+	# }
+}
+
+# Checks if Pirate country (global event target) exists
+# Creates the country and saves it if it does not
+create_hirogen_country = {
+	if = {
+		limit = {
+			NOT = {
+				exists = event_target:hirogen_country
+			}
+		}
+		create_species = {
+			name = "Hirogen"
+			plural = "Hirogen"
+			class = "HIR"
+			portrait = "hirogen"
+			name_list="Hirogen"
+			traits = { trait = "trait_strong" trait = "trait_talented" trait = "trait_pc_ocean_preference" }
+		}
+		create_country = {
+			name = "Hirogen Hunters"
+			name_list = "Hirogen"
+			species = last_created
+			type = pirate
+			flag = {
+				icon = { category = "trek" file = "hirogen.dds" }
+				background = { category = "backgrounds" file = "00_solid.dds" }
+				colors = { "black" "black" "null" "null" }
+			}
+		}
+		last_created_country = { save_global_event_target_as = hirogen_country }
+	}
+}
+
+
+
+
+### Colony Scoop bonus
+add_colony_scoop_bonus_1 = {
+	add_minerals = 100
+	add_engineering_research = 10
+	add_physics_research = 10
+	add_society_research = 10
+	add_unity = 10
+}	
+
+add_colony_scoop_bonus_2 = {
+	add_minerals = 200
+	add_engineering_research = 20
+	add_physics_research = 20
+	add_society_research = 20
+	add_unity = 20
+}	
+
+add_colony_scoop_bonus_3 = {
+	add_minerals = 300
+	add_engineering_research = 30
+	add_physics_research = 30
+	add_society_research = 30
+	add_unity = 30
+}	
+
+add_colony_scoop_bonus_4 = {
+	add_minerals = 400
+	add_engineering_research = 40
+	add_physics_research = 40
+	add_society_research = 40
+	add_unity = 40
+}	
+
+add_colony_scoop_bonus_5 = {
+	add_minerals = 500
+	add_engineering_research = 50
+	add_physics_research = 50
+	add_society_research = 50
+	add_unity = 50
+}	
+
+add_colony_scoop_bonus_6 = {
+	add_minerals = 600
+	add_engineering_research = 60
+	add_physics_research = 60
+	add_society_research = 60
+	add_unity = 60
+}	
+
+add_colony_scoop_bonus_7 = {
+	add_minerals = 700
+	add_engineering_research = 70
+	add_physics_research = 70
+	add_society_research = 70
+	add_unity = 70
+}	
+
+add_colony_scoop_bonus_8 = {
+	add_minerals = 800
+	add_engineering_research = 80
+	add_physics_research = 80
+	add_society_research = 80
+	add_unity = 80
+}	
+
+add_colony_scoop_bonus_9 = {
+	add_minerals = 900
+	add_engineering_research = 90
+	add_physics_research = 90
+	add_society_research = 90
+	add_unity = 90
+}	
+
+add_colony_scoop_bonus_10 = {
+	add_minerals = 1000
+	add_engineering_research = 100
+	add_physics_research = 100
+	add_society_research = 100
+	add_unity = 100
+}	
+
+add_colony_scoop_bonus_11 = {
+	add_minerals = 1100
+	add_engineering_research = 110
+	add_physics_research = 110
+	add_society_research = 110
+	add_unity = 110
+}	
+
+add_colony_scoop_bonus_12 = {
+	add_minerals = 1200
+	add_engineering_research = 120
+	add_physics_research = 120
+	add_society_research = 120
+	add_unity = 120
+}	
+
+add_colony_scoop_bonus_13 = {
+	add_minerals = 1300
+	add_engineering_research = 130
+	add_physics_research = 130
+	add_society_research = 130
+	add_unity = 130
+}	
+
+add_colony_scoop_bonus_14 = {
+	add_minerals = 1400
+	add_engineering_research = 140
+	add_physics_research = 140
+	add_society_research = 140
+	add_unity = 140
+}	
+
+add_colony_scoop_bonus_15 = {
+	add_minerals = 1500
+	add_engineering_research = 150
+	add_physics_research = 150
+	add_society_research = 150
+	add_unity = 150
+}	
+
+add_colony_scoop_bonus_16 = {
+	add_minerals = 1600
+	add_engineering_research = 160
+	add_physics_research = 160
+	add_society_research = 160
+	add_unity = 160
+}	
+
+add_colony_scoop_bonus_17 = {
+	add_minerals = 1700
+	add_engineering_research = 170
+	add_physics_research = 170
+	add_society_research = 170
+	add_unity = 170
+}	
+
+add_colony_scoop_bonus_18 = {
+	add_minerals = 1800
+	add_engineering_research = 180
+	add_physics_research = 180
+	add_society_research = 180
+	add_unity = 180
+}	
+
+add_colony_scoop_bonus_19 = {
+	add_minerals = 1900
+	add_engineering_research = 190
+	add_physics_research = 190
+	add_society_research = 190
+	add_unity = 190
+}	
+
+add_colony_scoop_bonus_20 = {
+	add_minerals = 2000
+	add_engineering_research = 200
+	add_physics_research = 200
+	add_society_research = 200
+	add_unity = 200
+}	
+
+add_colony_scoop_bonus_21 = {
+	add_minerals = 2100
+	add_engineering_research = 210
+	add_physics_research = 210
+	add_society_research = 210
+	add_unity = 210
+}	
+
+add_colony_scoop_bonus_22 = {
+	add_minerals = 2200
+	add_engineering_research = 220
+	add_physics_research = 220
+	add_society_research = 220
+	add_unity = 220
+}	
+
+add_colony_scoop_bonus_23 = {
+	add_minerals = 2300
+	add_engineering_research = 230
+	add_physics_research = 230
+	add_society_research = 230
+	add_unity = 230
+}	
+
+add_colony_scoop_bonus_24 = {
+	add_minerals = 2400
+	add_engineering_research = 240
+	add_physics_research = 240
+	add_society_research = 240
+	add_unity = 240
+}	
+
+add_colony_scoop_bonus_25 = {
+	add_minerals = 2500
+	add_engineering_research = 250
+	add_physics_research = 250
+	add_society_research = 250
+	add_unity = 250
+}	
+
+add_colony_scoop_bonus_26 = {
+	add_minerals = 2600
+	add_engineering_research = 260
+	add_physics_research = 260
+	add_society_research = 260
+	add_unity = 260
+}
+
+add_colony_scoop_bonus_27 = {
+	add_minerals = 2700
+	add_engineering_research = 270
+	add_physics_research = 270
+	add_society_research = 270
+	add_unity = 270
+}
+
+add_colony_scoop_bonus_28 = {
+	add_minerals = 2800
+	add_engineering_research = 280
+	add_physics_research = 280
+	add_society_research = 280
+	add_unity = 280
+}
+
+add_colony_scoop_bonus_29 = {
+	add_minerals = 2900
+	add_engineering_research = 290
+	add_physics_research = 290
+	add_society_research = 290
+	add_unity = 290
+}
+
+add_colony_scoop_bonus_30 = {
+	add_minerals = 3000
+	add_engineering_research = 300
+	add_physics_research = 300
+	add_society_research = 300
+	add_unity = 300
+}
+
+add_colony_scoop_bonus_31 = {
+	add_minerals = 3100
+	add_engineering_research = 310
+	add_physics_research = 310
+	add_society_research = 310
+	add_unity = 310
+}
+
+add_colony_scoop_bonus_32 = {
+	add_minerals = 3200
+	add_engineering_research = 320
+	add_physics_research = 320
+	add_society_research = 320
+	add_unity = 320
+}
+
+add_colony_scoop_bonus_33 = {
+	add_minerals = 3300
+	add_engineering_research = 330
+	add_physics_research = 330
+	add_society_research = 330
+	add_unity = 330
+}
+
+add_colony_scoop_bonus_34 = {
+	add_minerals = 3400
+	add_engineering_research = 340
+	add_physics_research = 340
+	add_society_research = 340
+	add_unity = 340
+}
+
+add_colony_scoop_bonus_35 = {
+	add_minerals = 3500
+	add_engineering_research = 350
+	add_physics_research = 350
+	add_society_research = 350
+	add_unity = 350
+}
+
+add_colony_scoop_bonus_36 = {
+	add_minerals = 3600
+	add_engineering_research = 360
+	add_physics_research = 360
+	add_society_research = 360
+	add_unity = 360
+}
+
+add_colony_scoop_bonus_37 = {
+	add_minerals = 3700
+	add_engineering_research = 370
+	add_physics_research = 370
+	add_society_research = 370
+	add_unity = 370
+}
+
+add_colony_scoop_bonus_38 = {
+	add_minerals = 3800
+	add_engineering_research = 380
+	add_physics_research = 380
+	add_society_research = 380
+	add_unity = 380
+}
+
+add_colony_scoop_bonus_39 = {
+	add_minerals = 3900
+	add_engineering_research = 390
+	add_physics_research = 390
+	add_society_research = 390
+	add_unity = 390
+}
+
+add_colony_scoop_bonus_40 = {
+	add_minerals = 4000
+	add_engineering_research = 400
+	add_physics_research = 400
+	add_society_research = 400
+	add_unity = 400
+}
+
+add_colony_scoop_bonus_41 = {
+	add_minerals = 4100
+	add_engineering_research = 410
+	add_physics_research = 410
+	add_society_research = 410
+	add_unity = 410
+}
+
+add_colony_scoop_bonus_42 = {
+	add_minerals = 4200
+	add_engineering_research = 420
+	add_physics_research = 420
+	add_society_research = 420
+	add_unity = 420
+}
+
+add_colony_scoop_bonus_43 = {
+	add_minerals = 4300
+	add_engineering_research = 430
+	add_physics_research = 430
+	add_society_research = 430
+	add_unity = 430
+}
+
+add_colony_scoop_bonus_44 = {
+	add_minerals = 4400
+	add_engineering_research = 440
+	add_physics_research = 440
+	add_society_research = 440
+	add_unity = 440
+}
+
+add_colony_scoop_bonus_45 = {
+	add_minerals = 4500
+	add_engineering_research = 450
+	add_physics_research = 450
+	add_society_research = 450
+	add_unity = 450
+}
+
+add_colony_scoop_bonus_46 = {
+	add_minerals = 4600
+	add_engineering_research = 460
+	add_physics_research = 460
+	add_society_research = 460
+	add_unity = 460
+}
+
+add_colony_scoop_bonus_47 = {
+	add_minerals = 4700
+	add_engineering_research = 470
+	add_physics_research = 470
+	add_society_research = 470
+	add_unity = 470
+}
+
+add_colony_scoop_bonus_48 = {
+	add_minerals = 4800
+	add_engineering_research = 480
+	add_physics_research = 480
+	add_society_research = 480
+	add_unity = 480
+}
+
+add_colony_scoop_bonus_49 = {
+	add_minerals = 4900
+	add_engineering_research = 490
+	add_physics_research = 490
+	add_society_research = 490
+	add_unity = 490
+}
+
+add_colony_scoop_bonus_50 = {
+	add_minerals = 5000
+	add_engineering_research = 500
+	add_physics_research = 500
+	add_society_research = 500
+	add_unity = 500
+}
+
+
+steal_research_to_changelingInfiltratorCountry = {
+	if = {
+		limit = { has_country_resource = { type = society_research amount > 1000 } }
+		add_society_research = -100 event_target:changelingInfiltratorCountry = { add_society_research = 50 }
+	}
+	if = {
+		limit = { has_country_resource = { type = society_research amount > 500 } has_country_resource = { type = society_research amount < 1001 } }
+		add_society_research = -50 event_target:changelingInfiltratorCountry = { add_society_research = 25 }
+	}
+	if = {
+		limit = { has_country_resource = { type = society_research amount < 501 } }
+		add_society_research = -25 event_target:changelingInfiltratorCountry = { add_society_research = 10 }
+	}
+	event_target:changelingInfiltratorCountry = { add_society_research = 5 }
+	
+	if = {
+		limit = { has_country_resource = { type = physics_research amount > 1000 } }
+		add_physics_research = -100 event_target:changelingInfiltratorCountry = { add_physics_research = 50 }
+	}
+	if = {
+		limit = { has_country_resource = { type = physics_research amount > 500 } has_country_resource = { type = physics_research amount < 1001 } }
+		add_physics_research = -50 event_target:changelingInfiltratorCountry = { add_physics_research = 25 }
+	}
+	if = {
+		limit = { has_country_resource = { type = physics_research amount < 501 } }
+		add_physics_research = -25 event_target:changelingInfiltratorCountry = { add_physics_research = 10 }
+	}
+	event_target:changelingInfiltratorCountry = { add_physics_research = 5 }
+	
+	if = {
+		limit = { has_country_resource = { type = engineering_research amount > 1000 } }
+		add_engineering_research = -100 event_target:changelingInfiltratorCountry = { add_engineering_research = 50 }
+	}
+	if = {
+		limit = { has_country_resource = { type = engineering_research amount > 500 } has_country_resource = { type = engineering_research amount < 1001 } }
+		add_engineering_research = -50 event_target:changelingInfiltratorCountry = { add_engineering_research = 25 }
+	}
+	if = {
+		limit = { has_country_resource = { type = engineering_research amount < 501 } }
+		add_engineering_research = -25 event_target:changelingInfiltratorCountry = { add_engineering_research = 10 }
+	}
+	event_target:changelingInfiltratorCountry = { add_engineering_research = 5 }
+	
+}
+
+set_bombarded_blocker = {
+	if = {
+		limit = { planet = { is_artificial_planet = yes } }
+		set_blocker = "tb_ruined_station"
+		else = {
+			set_blocker = "tb_bombarded_land"
+		}
+	}
+}
+
+
+
+set_radioactive_blocker = {
+	if = {
+		limit = { planet = { is_artificial_planet = yes } }
+		set_blocker = "tb_ruined_station"
+		else = {
+			set_blocker = "tb_radioactive_wasteland"
+		}
+	}
+}

@@ -1,0 +1,419 @@
+#Krenim
+@base_moon_distance = 10
+krenim_homeworld = {
+	name = "Krenim"
+	class = "rl_standard_stars"
+	asteroids_distance = 115
+	flags = { krenim_homeworld }
+	usage = custom_empire
+	max_instances = 1
+	planet = {
+		class = star
+		name = "Krenim"
+		orbit_distance = 0
+		orbit_angle = 1
+		size = { min = 20 max = 30 }
+		has_ring = no
+	}
+	change_orbit = 50
+	planet = {
+		count = 2
+		orbit_distance = 20
+		class = rl_inner_unhabitable_planets
+		orbit_angle = { min = 90 max = 270 }
+		change_orbit = @base_moon_distance
+		moon = {
+			count = { min = 0 max = 1 }
+			class = rl_inner_moons
+			size = { min = 5 max = 8 }
+			orbit_angle = { min = 90 max = 270 }
+			orbit_distance = { min = 8 max = 10 }
+		}
+	}
+	change_orbit = 25
+	planet = {
+		count = { min = 2 max = 3 }
+		class = random_asteroid
+		orbit_distance = 0
+		orbit_angle = { min = 40 max = 110 }
+	}
+	change_orbit = 30
+	planet = {
+		name = "Krenim Prime"
+		home_planet = yes
+		class = pc_continental
+		name = "Krenim Prime"
+		orbit_distance = 10
+		orbit_angle = { min = 90 max = 270 }
+		size = { min = 22 max = 25 }
+		starting_planet = yes
+		tile_blockers = none
+		modifiers = none
+		init_effect = { prevent_anomaly = yes }
+		init_effect = {
+			set_global_flag = krenim_homeworld_spawned
+			if = {
+				limit = { NOT = { any_country = { has_country_flag = krenim_imperium } } }
+				create_species = { 
+				    name = "Krenim" 
+				    class = KRE 
+				    portrait = krenim 
+				    homeworld = THIS 
+				    traits = { 
+				        trait = "trait_natural_physicists"
+				        trait="trait_industrious"
+				        trait="trait_wasteful"
+				        ideal_planet_class = "pc_continental" 
+					} 
+				}
+				last_created_species = { save_global_event_target_as = krenimSpecies }
+				create_country = {
+					name = "NAME_krenim_imperium"
+					type = default
+					ignore_initial_colony_error = yes
+					civics = { civic = "civic_technocracy" civic = "civic_master_time" }
+					authority = auth_imperial
+					name_list = "Krenim"
+					ethos = { ethic = "ethic_militarist" ethic = "ethic_materialist" ethic = "ethic_authoritarian" }
+					species = event_target:krenimSpecies
+					flag = {
+						icon = { category = "trek" file = "krenim.dds" }
+						background = { category = "backgrounds" file = "00_solid.dds" }
+						colors = { "customcolor1850" "black" "null" "null" }
+					}
+					effect = {
+						set_graphical_culture = generic_01
+						set_country_flag = krenim_imperium
+						set_country_flag = generic_ent
+						set_country_flag = first_alien_life
+						set_country_flag = first_contact_event
+						set_country_flag = delta_empire
+						set_country_flag = init_spawned
+						set_country_flag = sth_medium_galaxy
+						save_global_event_target_as = krenim_imperium
+					}
+				}
+				create_colony = { owner = event_target:krenim_imperium species = event_target:krenimSpecies ethos = owner }
+			}
+			set_capital = yes
+			random_country = {
+				limit = { has_country_flag = krenim_imperium }
+				save_global_event_target_as = krenim_imperium
+				add_appropriate_start_techs = yes
+				give_technology = { tech = "tech_physics_temporal_64" message = no }
+				species = { save_global_event_target_as = krenimSpecies }
+			}
+			set_owner = event_target:krenim_imperium
+			generate_major_empire_start_buildings = yes
+			generate_major_empire_start_pops = yes
+			generate_major_empire_start_fleets = yes
+			set_name = "Krenim Prime" 
+		}
+		change_orbit = @base_moon_distance
+		moon = {
+			count = { min = 0 max = 1 }
+			class = rl_outer_moons
+			orbit_angle = { min = 90 max = 270 }
+			orbit_distance = 5
+		}
+	}
+	planet = {
+		count = { min = 0 max = 2 }
+		orbit_distance = 20
+		class = rl_outer_unhabitable_planets
+		orbit_angle = { min = 90 max = 270 }
+		change_orbit = @base_moon_distance
+		moon = {
+			count = { min = 0 max = 1 }
+			class = rl_outer_moons
+			size = { min = 5 max = 8 }
+			orbit_angle = { min = 90 max = 270 }
+			orbit_distance = { min = 8 max = 12 }
+		}
+	}
+	planet = {
+		count = { min = 1 max = 3 }
+		orbit_distance = 25
+		class = rl_outer_unhabitable_planets
+		orbit_angle = { min = 90 max = 270 }
+		change_orbit = @base_moon_distance
+		moon = {
+			count = { min = 0 max = 1 }
+			class = rl_outer_moons
+			size = { min = 5 max = 8 }
+			orbit_angle = { min = 90 max = 270 }
+			orbit_distance = { min = 8 max = 12 }
+		}
+	}
+	planet = {
+		count = { min = 0 max = 2 }
+		orbit_distance = 20
+		class = pc_gas_giant
+		orbit_angle = { min = 90 max = 270 }
+		change_orbit = @base_moon_distance
+		moon = {
+			count = { min = 0 max = 1 }
+			class = rl_outer_moons
+			size = { min = 5 max = 8 }
+			orbit_angle = { min = 90 max = 270 }
+			orbit_distance = { min = 8 max = 10 }
+		}
+	}
+	planet = {
+		count = { min = 0 max = 2 }
+		orbit_distance = 20
+		class = rl_outer_unhabitable_planets
+		orbit_angle = { min = 90 max = 270 }
+	}
+
+}
+
+# 3 satellites needed
+krenim_satellite_1 = {
+	class = "sc_m"
+	asteroids_distance = 50
+	usage = custom_empire
+	planet = { count = 1 class = star orbit_distance = 0 orbit_angle = 1 size = { min = 20 max = 30 } has_ring = no }
+	change_orbit = 50
+	planet = { count = { min = 1 max = 3 } class = random_asteroid orbit_distance = 0 orbit_angle = { min = 40 max = 100 } }
+	planet = {
+		count = { min = 0 max = 2 }
+		orbit_distance = 20
+		class = rl_inner_unhabitable_planets
+		orbit_angle = { min = 90 max = 270 }
+		change_orbit = @base_moon_distance
+		moon = { 			
+			count = { min = 0 max = 1 }
+			class = rl_inner_moons
+			size = { min = 5 max = 8 }
+			orbit_angle = { min = 90 max = 270 }
+			orbit_distance = { min = 8 max = 10 }
+		}
+	}
+	planet = {
+		count = 1
+		orbit_distance = 20
+		home_planet = yes
+		class = "pc_continental"
+		orbit_angle = { min = 90 max = 270 }
+		size = { min = 12 max = 14 }
+		tile_blockers = none
+		modifiers = none
+		init_effect = { prevent_anomaly = yes }
+		init_effect = {
+			random_country = { 
+				limit = { has_country_flag = krenim_imperium } 
+				save_global_event_target_as = krenim_imperium
+			}
+			if = {
+				limit = { exists = event_target:krenim_imperium }
+				set_owner = event_target:krenim_imperium
+				generate_satellite_start_buildings = yes
+				generate_satellite_start_pops = yes
+				create_correct_spaceport_planetscope = yes
+			}
+		}
+		change_orbit = @base_moon_distance
+		moon = {
+			count = { min = 0 max = 1 }
+			class = rl_outer_moons
+			orbit_angle = { min = 90 max = 270 }
+			orbit_distance = 5
+		}
+	}
+	planet = {
+		count = { min = 2 max = 3 }
+		orbit_distance = 20
+		class = rl_outer_unhabitable_planets
+		orbit_angle = { min = 90 max = 270 }
+		change_orbit = @base_moon_distance
+		moon = {
+			count = { min = 0 max = 1 }
+			class = rl_outer_moons
+			size = { min = 5 max = 8 }
+			orbit_angle = { min = 90 max = 270 }
+			orbit_distance = { min = 8 max = 10 }
+		}
+	}
+	planet = {
+		count = { min = 1 max = 2 }
+		orbit_distance = 20
+		class = pc_gas_giant
+		orbit_angle = { min = 90 max = 270 }
+		change_orbit = @base_moon_distance
+		moon = {
+			count = { min = 0 max = 1 }
+			class = rl_outer_moons
+			size = { min = 5 max = 8 }
+			orbit_angle = { min = 90 max = 270 }
+			orbit_distance = { min = 8 max = 10 }
+		}
+	}
+
+}
+
+krenim_satellite_2 = {
+	class = "sc_k"
+	asteroids_distance = 50
+	usage = custom_empire
+	planet = { count = 1 class = star orbit_distance = 0 orbit_angle = 1 size = { min = 20 max = 30 } has_ring = no }
+	change_orbit = 50
+	planet = { count = { min = 1 max = 3 } class = random_asteroid orbit_distance = 0 orbit_angle = { min = 40 max = 100 } }
+	planet = {
+		count = { min = 0 max = 2 }
+		orbit_distance = 20
+		class = rl_inner_unhabitable_planets
+		orbit_angle = { min = 90 max = 270 }
+		change_orbit = @base_moon_distance
+		moon = {
+			count = { min = 0 max = 1 }
+			class = rl_inner_moons
+			size = { min = 5 max = 8 }
+			orbit_angle = { min = 90 max = 270 }
+			orbit_distance = { min = 8 max = 10 }
+		}
+	}
+	planet = {
+		count = 1
+		orbit_distance = 20
+		home_planet = yes
+		class = "pc_continental"
+		orbit_angle = { min = 90 max = 270 }
+		size = { min = 12 max = 14 }
+		tile_blockers = none
+		modifiers = none
+		init_effect = { prevent_anomaly = yes }
+		init_effect = {
+			random_country = { 
+				limit = { has_country_flag = krenim_imperium } 
+				save_global_event_target_as = krenim_imperium
+			}
+			if = {
+				limit = { exists = event_target:krenim_imperium }
+				set_owner = event_target:krenim_imperium
+				generate_satellite_start_buildings = yes
+				generate_satellite_start_pops = yes
+				create_correct_spaceport_planetscope = yes
+			}
+		}
+		change_orbit = @base_moon_distance
+		moon = {
+			count = { min = 0 max = 1 }
+			class = rl_outer_moons
+			orbit_angle = { min = 90 max = 270 }
+			orbit_distance = 5
+		}
+	}
+	planet = {
+		count = { min = 2 max = 4 }
+		orbit_distance = 20
+		class = rl_outer_unhabitable_planets
+		orbit_angle = { min = 90 max = 270 }
+		change_orbit = @base_moon_distance
+		moon = {
+			count = { min = 0 max = 1 }
+			class = rl_outer_moons
+			size = { min = 5 max = 8 }
+			orbit_angle = { min = 90 max = 270 }
+			orbit_distance = { min = 8 max = 10 }
+		}
+	}
+	planet = {
+		count = { min = 1 max = 2 }
+		orbit_distance = 20
+		class = pc_gas_giant
+		orbit_angle = { min = 90 max = 270 }
+		change_orbit = @base_moon_distance
+		moon = {
+			count = { min = 0 max = 3 }
+			class = rl_outer_moons
+			size = { min = 5 max = 8 }
+			orbit_angle = { min = 90 max = 270 }
+			orbit_distance = { min = 8 max = 10 }
+		}
+	}
+
+}
+
+krenim_satellite_3 = {
+	class = "sc_g"
+	asteroids_distance = 50
+	usage = custom_empire
+	planet = { count = 1 class = star orbit_distance = 0 orbit_angle = 1 size = { min = 20 max = 30 } has_ring = no }
+	change_orbit = 50
+	planet = { count = { min = 1 max = 3 } class = random_asteroid orbit_distance = 0 orbit_angle = { min = 40 max = 100 } }
+	planet = {
+		count = { min = 0 max = 2 }
+		orbit_distance = 20
+		class = rl_inner_unhabitable_planets
+		orbit_angle = { min = 90 max = 270 }
+		change_orbit = @base_moon_distance
+		moon = {
+			count = { min = 0 max = 1 }
+			class = rl_inner_moons
+			size = { min = 5 max = 8 }
+			orbit_angle = { min = 90 max = 270 }
+			orbit_distance = { min = 8 max = 10 }
+		}
+	}
+	planet = {
+		count = 1
+		orbit_distance = 20
+		home_planet = yes
+		class = "pc_continental"
+		orbit_angle = { min = 90 max = 270 }
+		size = { min = 12 max = 14 }
+		tile_blockers = none
+		modifiers = none
+		init_effect = { prevent_anomaly = yes }
+		init_effect = {
+			random_country = { 
+				limit = { has_country_flag = krenim_imperium } 
+				save_global_event_target_as = krenim_imperium
+			}
+			if = {
+				limit = { exists = event_target:krenim_imperium }
+				set_owner = event_target:krenim_imperium
+				generate_satellite_start_buildings = yes
+				generate_satellite_start_pops = yes
+				create_correct_spaceport_planetscope = yes
+			}
+		}
+		change_orbit = @base_moon_distance
+		moon = {
+			count = { min = 0 max = 1 }
+			size = { min = 5 max = 8 }
+			orbit_angle = { min = 90 max = 270 }
+			orbit_distance = { min = 8 max = 12 }
+		}
+	}
+	planet = {
+		count = { min = 2 max = 4 }
+		orbit_distance = 20
+		class = rl_outer_unhabitable_planets
+		orbit_angle = { min = 90 max = 270 }
+		change_orbit = @base_moon_distance
+		moon = {
+			count = { min = 0 max = 1 }
+			class = rl_outer_moons
+			size = { min = 5 max = 8 }
+			orbit_angle = { min = 90 max = 270 }
+			orbit_distance = { min = 8 max = 10 }
+		}
+	}
+	planet = {
+		count = { min = 1 max = 2 }
+		orbit_distance = 20
+		class = pc_gas_giant
+		orbit_angle = { min = 90 max = 270 }
+		change_orbit = @base_moon_distance
+		moon = {
+			count = { min = 0 max = 3 }
+			class = rl_outer_moons
+			size = { min = 5 max = 8 }
+			orbit_angle = { min = 90 max = 270 }
+			orbit_distance = { min = 8 max = 10 }
+		}
+	}
+
+}

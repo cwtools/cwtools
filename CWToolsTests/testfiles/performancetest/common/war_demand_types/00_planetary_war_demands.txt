@@ -1,0 +1,1508 @@
+#### STNH 1.8 comp
+# variables:
+# parameters, data containing the specifics, eg which planet we're talking about
+# warscore_cost (factor = multiplier to current weight, add = added weight), scripted value, root is target country, from is main opponent, amount of warscore required to push this demand
+# potential, trigger, root and from are main attackers and defenders, war is fromfrom, decides if this demand is listed
+# possible, trigger, root and from are main attackers and defenders, war is fromfrom, fromfromfrom is the target country, decides if this demand can go through
+# proposable, trigger, root and from are main attackers and defenders, war is fromfrom, fromfromfrom is the target country, decides if this demand is ok to propose
+# demandable, trigger, root and from are main attackers and defenders, war is fromfrom, fromfromfrom is the target country, decides if you can send a peace offer demanding ( not surrendering ) the demand.
+# effect, effect, root and main are main attacker and defender, war is fromfrom, fromfromfrom is the target country, effect which executes when the demand is accepted
+# execution_order, integer, defines in which order demands are executed, lower is higher priority, having the same execution order will make the first defined one higher prio
+# monthly_warscore, a descriptor on monthly wargoal score
+#	amount, scripted value, root and from are main attackers and defenders, war is fromfrom, fromfromfrom is the target country
+#   valid, trigger, root and from are main attackers and defenders, war is fromfrom, fromfromfrom is the target country
+
+cede_planet = {
+	is_conquest_type = yes
+	execution_order = 0
+	
+	parameters = {
+		planet = {
+			type = planet
+			filter = owned
+		}
+	}
+	
+	warscore_cost = {
+		base = 15
+		
+		modifier = {
+			factor = 2.0
+			custom_tooltip = {
+				text = "DEMAND_CEDE_PLANET_NOT_MAIN_DEFENDER"
+				parameter:planet.owner = {
+					NOR = {
+						is_same_value = from
+						AND = {
+							is_subject = yes
+							overlord = { is_same_value = from }
+						}
+					}
+				}
+			}
+		}
+
+		scaled_modifier = {
+			scope = parameter:planet
+			add = 0.4
+			calc = pop_count
+		}
+	
+		modifier = {
+			factor = 1.25
+			hidden:parameter:planet = {
+				is_capital = yes
+			}
+		}
+		
+		modifier = {
+			factor = 0.8
+			custom_tooltip = {
+				text = "war_demand_cede_planet_our_species"
+				OR = {
+					has_ethic = "ethic_xenophobe"
+					has_ethic = "ethic_fanatic_xenophobe"
+				}
+				parameter:planet = {
+					any_pop = {
+						is_same_species = root
+					}
+				}
+			}
+		}	
+		
+		modifier = {
+			factor = 0.9
+			has_ethic = "ethic_militarist"
+		}
+	
+		modifier = {
+			factor = 0.8
+			has_ethic = "ethic_fanatic_militarist"
+		}
+
+		# Ruler Trait - Warlike
+		modifier = {
+			factor = 0.95
+			custom_tooltip = {
+				text = "war_demand_trait_warlike"
+				exists = ruler
+				ruler = { has_trait = trait_ruler_warlike }
+			}
+		}
+
+		# Ruler Trait - Expansionist
+		modifier = {
+			factor = 0.9
+			custom_tooltip = {
+				text = "war_demand_trait_expansionist"
+				exists = ruler
+				ruler = { has_trait = trait_ruler_expansionist }
+			}
+		}
+
+		# Tech - Interstellar Campaigns
+		modifier = {
+			factor = 0.75
+			custom_tooltip = {
+				text = "war_demand_tech_interstellar_campaigns"
+				has_technology = tech_interstellar_campaigns
+			}
+		}
+
+		# Tech - Galactic Campaigns
+		modifier = {
+			factor = 0.75
+			custom_tooltip = {
+				text = "war_demand_tech_galactic_campaigns"
+				has_technology = tech_galactic_campaigns
+			}
+		}
+		
+		modifier = {
+			factor = 0.9
+			custom_tooltip = {
+				text = "tr_purity_the_chosen"
+				has_swapped_tradition = tr_purity_the_chosen
+			}
+		}
+		
+		modifier = {
+			factor = 0.75
+			custom_tooltip = {
+				text = "tr_purity_age_machines"
+				has_swapped_tradition = tr_purity_age_machines
+				parameter:planet.owner = { is_synthetic_empire = no }
+			}
+		}		
+		
+		# Awakened Fallen Empires
+		modifier = {
+			factor = 0.66
+			is_country_type = awakened_fallen_empire
+		}
+		
+		# Machine FE
+		modifier = {
+			factor = 2.0
+			is_country_type = fallen_empire
+			has_authority = auth_machine_intelligence
+		}	
+	}
+	
+	potential = {
+		is_assimilator = no
+		is_agency_country = no
+		custom_tooltip = {
+			fail_text = "war_demand_cede_planet_no_vassals"
+			OR = {
+				is_subject = no
+				NOT = {
+					overlord = {
+						is_same_value = from
+					}
+				}
+				parameter:planet = {
+					is_original_owner = root
+				}
+			}
+		}	
+		custom_tooltip = {
+			fail_text = "war_demand_cede_planet_liberation_war"
+			OR = {
+				NOT = { exists = overlord }
+				overlord = {
+					NOT = { is_same_value = from }
+				}
+			}
+		}
+		custom_tooltip = {
+			fail_text = "war_demand_cede_planet_belongs_to_opponent"
+			parameter:planet = {
+				owner = {
+					OR = {
+						AND = {
+							exists = fromfrom
+							from = {
+								from = {
+									is_war_participant = {
+										who = prevprev
+										side = prev
+									}
+								}
+							}
+						}
+						AND = {
+							NOT = { exists = fromfrom }
+							would_join_war = {
+								attacker = root
+								defender = from
+								side = from
+							}
+						}
+						
+					}
+				}
+			}
+		}
+	}
+	
+	possible = {
+		is_assimilator = no
+		is_agency_country = no
+		hidden_trigger = {
+			parameter:planet.owner = {
+				OR = {
+					war_demand_counter = {
+						type = num_country_wargoals
+						value < 1
+					}
+					war_demand_counter = {
+						type = num_owned_planets
+						value > 1
+					}					
+				}			
+			}
+		}
+	}
+	
+	proposable = {
+		is_assimilator = no
+		is_agency_country = no
+		custom_tooltip = {
+			fail_text = "war_demand_war_philosophy"
+			OR = {
+				has_policy_flag = unrestricted_wars
+				parameter:planet = {
+					is_original_owner = root
+				}
+				parameter:planet = {
+					is_majority_species = root
+				}
+				parameter:planet = {
+					planet_can_be_liberated_from_owner = no
+				}
+				parameter:planet = {
+					pops_on_planet_can_form_government = no
+				}
+			}	
+		}
+	
+		hidden:parameter:planet = {
+			custom_tooltip = {
+				fail_text = "war_demand_cede_or_liberate"
+				war_demand_counter = {
+					type = ceded_or_liberated
+					value < 1
+				}
+			}
+		}	
+	}
+	
+	demandable = {
+		custom_tooltip = {
+			fail_text = "war_demand_cede_planet_not_under_our_control"
+			parameter:planet = {
+				controller = {
+					OR = {
+						is_country = parameter:planet.owner
+						fromfrom = {
+							is_war_participant = {
+								who = prev
+								side = from
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+	
+	effect = {
+		parameter:planet = {		
+			if = {
+				limit = {
+					NOT = { is_original_owner = fromfromfrom }						
+				}
+				
+				add_threat = {
+					who = fromfromfrom
+					amount = 3 # scales to pops
+				}
+
+				fromfromfrom = {
+					set_timed_country_flag = {
+						flag = imperialist_conquest_timed_flag
+						days = 7200 # 20 years
+					}
+				}	
+
+				conquer = fromfromfrom		# conquer applies the recently conquered malus
+				
+				else = {
+					add_threat = {
+						who = fromfromfrom
+						amount = 1 # scales to pops
+					}					
+				
+					set_owner = fromfromfrom
+				}
+			}		
+		}
+	}
+
+	counters = {
+		num_owned_planets = {
+			context = parameter:planet.owner
+			value = {
+				base = -1
+			}
+		}
+		ceded_or_liberated = {
+			context = parameter:planet
+			value = {
+				base = 1
+			}			
+		}
+	}
+	
+	ai_weight = {
+		base = 100
+		
+		modifier = {
+			factor = 0.5
+			NOT = { 
+				parameter:planet.owner = {
+					is_same_value = from
+				}
+			}
+		}
+		
+		modifier = {
+			factor = 10
+			parameter:planet = {
+				is_original_owner = root
+			}
+		}
+		
+		modifier = {
+			factor = 5
+			parameter:planet = {
+				is_majority_species = root
+			}
+		}
+
+		modifier = {
+			factor = 0
+			root = { is_fallen_machine_empire = yes }
+		}
+		
+		modifier = {
+			factor = 0.1
+			NOR = { 
+				has_ai_personality_behaviour = conqueror 
+				parameter:planet = {
+					is_original_owner = root
+				}
+				parameter:planet = {
+					is_majority_species = root
+				}
+			}
+		}
+
+		scaled_modifier = {
+			scope = parameter:planet
+			div = 2
+			calc = planet_distance_empire
+		}
+	
+		modifier = {
+			factor = 0
+			is_country_type = fallen_empire
+		}
+
+		modifier = {
+			factor = 0
+			NOR = { 
+				is_country_type = awakened_fallen_empire
+				parameter:planet = {
+					owner = {
+						is_neighbor_of = root
+					}
+				}
+			}
+		}
+	}
+	
+	AI_invasion_target = yes
+}
+
+
+liberate_planet = {
+	execution_order = 0
+	
+	parameters = {
+		planet = {
+			type = planet
+			filter = owned
+		}
+	}
+	
+	warscore_cost = {
+		base = 15
+		
+		modifier = {
+			factor = 2.0
+			custom_tooltip = {
+				text = "DEMAND_CEDE_PLANET_NOT_MAIN_DEFENDER"
+				parameter:planet.owner = {
+					NOR = {
+						is_same_value = from
+						AND = {
+							is_subject = yes
+							overlord = { is_same_value = from }
+						}
+					}
+				}
+			}
+		}
+		
+		scaled_modifier = {
+			scope = parameter:planet
+			add = 0.4
+			calc = pop_count
+		}
+		
+		modifier = {
+			factor = 1.25
+			hidden:parameter:planet = {
+				is_capital = yes
+			}
+		}	
+
+		# Ruler Trait - Warlike
+		modifier = {
+			factor = 0.95
+			custom_tooltip = {
+				text = "war_demand_trait_warlike"
+				exists = ruler
+				ruler = { has_trait = trait_ruler_warlike }
+			}
+		}
+
+		# Ruler Trait - Expansionist
+		modifier = {
+			factor = 0.9
+			custom_tooltip = {
+				text = "war_demand_trait_expansionist"
+				exists = ruler
+				ruler = { has_trait = trait_ruler_expansionist }
+			}
+		}
+
+		# Tech - Interstellar Campaigns
+		modifier = {
+			factor = 0.75
+			custom_tooltip = {
+				text = "war_demand_tech_interstellar_campaigns"
+				has_technology = tech_interstellar_campaigns
+			}
+		}
+
+		# Tech - Galactic Campaigns
+		modifier = {
+			factor = 0.75
+			custom_tooltip = {
+				text = "war_demand_tech_galactic_campaigns"
+				has_technology = tech_galactic_campaigns
+			}
+		}
+		
+		modifier = {
+			factor = 0.9
+			custom_tooltip = {
+				text = "tr_purity_the_chosen"
+				has_swapped_tradition = tr_purity_the_chosen
+			}
+		}
+		
+		modifier = {
+			factor = 0.75
+			custom_tooltip = {
+				text = "tr_purity_age_machines"
+				has_swapped_tradition = tr_purity_age_machines
+				parameter:planet.owner = { is_synthetic_empire = no }
+			}
+		}	
+		
+		# Awakened Fallen Empires
+		modifier = {
+			factor = 0.66
+			is_country_type = awakened_fallen_empire
+		}
+		
+		# Machine FE
+		modifier = {
+			factor = 2.0
+			is_country_type = fallen_empire
+			has_authority = auth_machine_intelligence
+		}			
+	}
+	
+	potential = {
+		is_assimilator = no
+		is_agency_country = no
+		NOR = {
+			has_authority = auth_hive_mind
+			has_valid_civic = civic_fanatic_purifiers
+			has_valid_civic = civic_machine_terminator
+		}
+		hidden_trigger = {
+			OR = {
+				is_subject = no
+				is_subject_type = tributary
+				is_subject_type = thrall
+				is_subject_type = dominion
+				is_subject_type = satellite
+			}
+		}
+		parameter:planet = {
+			planet_can_be_liberated_from_owner = yes
+		}
+		
+		custom_tooltip = {
+			fail_text = "war_demand_cede_planet_liberation_war"
+			OR = {
+				NOT = { exists = overlord }
+				overlord = {
+					NOT = { is_same_value = from }
+				}
+			}
+		}
+		custom_tooltip = {
+			fail_text = "war_demand_cede_planet_belongs_to_opponent"
+			parameter:planet = {
+				owner = {
+					OR = {
+						AND = {
+							exists = fromfrom
+							from = {
+								from = {
+									is_war_participant = {
+										who = prevprev
+										side = prev
+									}
+								}
+							}
+						}
+						AND = {
+							NOT = { exists = fromfrom }
+							would_join_war = {
+								attacker = root
+								defender = from
+								side = from
+							}
+						}
+						
+					}
+				}
+			}
+		}
+	}
+	
+	possible = {
+		is_assimilator = no
+		is_agency_country = no
+		parameter:planet = {
+			custom_tooltip = {
+				fail_text = "war_demand_liberate_pops_cant_form_government"
+				pops_on_planet_can_form_government = yes
+			}
+		}
+
+		hidden_trigger = {
+			parameter:planet.owner = {
+				OR = {
+					war_demand_counter = {
+						type = num_country_wargoals
+						value < 1
+					}
+					war_demand_counter = {
+						type = num_owned_planets
+						value > 1
+					}					
+				}			
+			}
+		}
+	}
+	
+	proposable = {
+		is_assimilator = no
+		is_agency_country = no
+		hidden:parameter:planet = {
+			custom_tooltip = {
+				fail_text = "war_demand_cede_or_liberate"
+				war_demand_counter = {
+					type = ceded_or_liberated
+					value < 1
+				}
+			}
+		}
+	}
+	
+	demandable = {
+		custom_tooltip = {
+			fail_text = "war_demand_cede_planet_not_under_our_control"
+			parameter:planet = {
+				controller = {
+					OR = {
+						is_country = parameter:planet.owner
+						fromfrom = {
+							is_war_participant = {
+								who = prev
+								side = from
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+	
+	effect = {
+		parameter:planet = {	
+			hidden_effect = {
+				add_threat = {
+					who = fromfromfrom
+					amount = 1.5 # scales to pops
+				}	
+			}
+		}
+	
+		# Machine intelligence should not enforce its ethic when liberating, because the pops aren't hive mind or machine.
+		# Use the ethics from the planet for the new country in this case.
+		if = { 
+			limit = { fromfromfrom = { impose_authority_on_liberate = yes } }
+			if = { 
+				limit = { exists = parameter:planet.owner }
+				parameter:planet.owner = { save_event_target_as = new_country_ethos }
+				else = {
+					parameter:planet = { save_event_target_as = new_country_ethos }
+				}
+			}
+			else = {
+				fromfromfrom = { save_event_target_as = new_country_ethos }
+			}
+		}
+
+		if = {
+			limit = {
+				any_system = {
+					has_owner = yes
+					any_planet = {
+						has_owner = yes
+						owner = {
+							has_country_flag = timed_liberated_country@fromfromfrom
+							OR = {
+								fromfromfrom = { impose_authority_on_liberate = yes }
+								has_same_ethos = event_target:new_country_ethos
+							}
+						}
+					}
+				}
+			}
+			
+			random_planet = {
+				limit = {
+					has_owner = yes
+					owner = {
+						has_country_flag = timed_liberated_country@fromfromfrom
+						OR = {
+							fromfromfrom = { impose_authority_on_liberate = yes }
+							has_same_ethos = event_target:new_country_ethos
+						}
+					}
+				}		
+				owner = {
+					parameter:planet = {
+						set_owner = prev
+						set_controller = prev
+					}
+					set_country_type = default
+				}
+			}						
+			else = {
+				parameter:planet = {		
+					create_country = {
+						name = random
+						authority = event_target:new_country_ethos
+						released_by_country = fromfromfrom
+						released_from_country = parameter:planet.owner
+						species = parameter:planet
+						ethos = event_target:new_country_ethos
+						flag = random
+						type = minorRace
+						day_zero_contact = no
+						effect = {
+							if = {
+								limit = {
+									fromfromfrom = {
+										OR = {
+											is_country_type = fallen_empire
+											is_country_type = awakened_fallen_empire
+										}
+										NOT = { has_ethic = ethic_gestalt_consciousness }
+									}
+								}
+								shift_ethic = ethic_pacifist
+							}
+							set_timed_country_flag = { flag = timed_liberated_country@fromfromfrom days = 1 }
+							establish_communications_no_message = root
+							establish_communications_no_message = fromfromfrom
+							establish_communications_no_message = parameter:planet.owner
+							establish_contact = { who = root location = parameter:planet }
+							establish_contact = { who = fromfromfrom location = parameter:planet }
+							establish_contact = { who = parameter:planet.owner location = parameter:planet }
+							add_modifier = {
+								modifier = "recently_liberated"
+								days = 7200
+							}
+							parameter:planet = {
+								set_owner = prev
+								set_controller = prev
+							}
+							create_fleet_from_naval_cap = 0.5
+						}
+					}
+				}	
+			}	
+		}
+	}
+
+	counters = {
+		num_owned_planets = {
+			context = parameter:planet.owner
+			value = {
+				base = -1
+			}
+		}
+		ceded_or_liberated = {
+			context = parameter:planet
+			value = {
+				base = 1
+			}			
+		}		
+	}
+	
+	ai_weight = {
+		base = 75
+		
+		modifier = {
+			factor = 0
+			is_subject = yes
+			overlord = { is_country_type = awakened_fallen_empire }
+		}
+
+		modifier = {
+			factor = 0.5
+			NOT = { 
+				parameter:planet.owner = {
+					is_same_value = from
+				}
+			}
+		}
+		
+		modifier = {
+			factor = 0.1
+			parameter:planet = {
+				is_original_owner = root
+			}
+		}		
+		
+		modifier = {
+			factor = 0.1
+			has_ai_personality_behaviour = conqueror			
+		}
+		
+		modifier = {
+			factor = 0.5
+			NOT = { 
+				has_ai_personality_behaviour = liberator
+			}
+		}
+
+		scaled_modifier = {
+			scope = parameter:planet
+			div = 2
+			calc = planet_distance_empire
+		}
+
+		modifier = {
+			factor = 0
+			OR = {
+				is_country_type = fallen_empire
+				is_country_type = awakened_fallen_empire
+			}
+			OR = {
+				NOT = { 
+					this = { has_ai_personality_behaviour = liberator } 
+				}		
+				AND = {
+					is_country_type = fallen_empire
+					parameter:planet = {
+						is_capital = yes
+					}
+				}
+			}
+		}
+	}
+	
+	AI_invasion_target = yes
+}
+
+abandon_planet = {
+	is_conquest_type = yes
+	execution_order = 0
+	
+	parameters = {
+		planet = {
+			type = planet
+			filter = owned
+		}
+	}
+	
+	warscore_cost = {
+		base = 15
+		
+		modifier = {
+			factor = 2.0
+			custom_tooltip = {
+				text = "DEMAND_CEDE_PLANET_NOT_MAIN_DEFENDER"
+				parameter:planet.owner = {
+					NOR = {
+						is_same_value = from
+						AND = {
+							is_subject = yes
+							overlord = { is_same_value = from }
+						}
+					}
+				}
+			}
+		}
+		
+		scaled_modifier = {
+			scope = parameter:planet
+			add = 0.4
+			calc = pop_count
+		}		
+		
+		modifier = {
+			factor = 1.25
+			hidden:parameter:planet = {
+				is_capital = yes
+			}
+		}			
+		
+		# Ruler Trait - Warlike
+		modifier = {
+			factor = 0.95
+			custom_tooltip = {
+				text = "war_demand_trait_warlike"
+				exists = ruler
+				ruler = { has_trait = trait_ruler_warlike }
+			}
+		}
+
+		# Ruler Trait - Expansionist
+		modifier = {
+			factor = 0.9
+			custom_tooltip = {
+				text = "war_demand_trait_expansionist"
+				exists = ruler
+				ruler = { has_trait = trait_ruler_expansionist }
+			}
+		}
+
+		# Tech - Interstellar Campaigns
+		modifier = {
+			factor = 0.75
+			custom_tooltip = {
+				text = "war_demand_tech_interstellar_campaigns"
+				has_technology = tech_interstellar_campaigns
+			}
+		}
+
+		# Tech - Galactic Campaigns
+		modifier = {
+			factor = 0.75
+			custom_tooltip = {
+				text = "war_demand_tech_galactic_campaigns"
+				has_technology = tech_galactic_campaigns
+			}
+		}
+		
+		modifier = {
+			factor = 0.9
+			custom_tooltip = {
+				text = "tr_purity_the_chosen"
+				has_swapped_tradition = tr_purity_the_chosen
+			}
+		}
+		
+		modifier = {
+			factor = 0.75
+			custom_tooltip = {
+				text = "tr_purity_age_machines"
+				has_swapped_tradition = tr_purity_age_machines
+				parameter:planet.owner = { is_synthetic_empire = no }
+			}
+		}			
+				
+		modifier = {
+			factor = 0.75
+			custom_tooltip = {
+				text = "tr_purity_age_machines"
+				has_swapped_tradition = tr_purity_age_machines
+				parameter:planet.owner = { is_synthetic_empire = no }
+			}
+		}			
+		
+		# Awakened Fallen Empires
+		modifier = {
+			factor = 0.66
+			is_country_type = awakened_fallen_empire
+		}
+		
+		# Machine FE
+		modifier = {
+			factor = 2.0
+			is_country_type = fallen_empire
+			has_authority = auth_machine_intelligence
+		}			
+	}
+	
+	proposable = {
+		hidden:parameter:planet = {
+			custom_tooltip = {
+				fail_text = "war_demand_cede_or_liberate"
+				war_demand_counter = {
+					type = ceded_or_liberated
+					value < 1
+				}
+			}
+		}
+	}
+	
+	potential = {
+		is_assimilator = no
+		is_agency_country = no
+		parameter:planet = {
+			NOT = { is_planet_class = pc_habitat }
+		}	
+		hidden_trigger = {
+			OR = {
+				NOT = { is_country_type = fallen_empire }
+				parameter:planet = {
+					is_capital = no
+				}			
+			}
+		}		
+		hidden_trigger = {
+			OR = {
+				is_subject = no
+				is_subject_type = tributary
+				is_subject_type = thrall
+				is_subject_type = dominion
+				is_subject_type = satellite
+			}		
+		}						
+		parameter:planet = {		
+			owner = {
+				OR = {
+					AND = {
+						exists = fromfrom
+						from = {
+							from = {
+								is_war_participant = {
+									who = prevprev
+									side = prev
+								}
+							}
+						}
+					}
+					AND = {
+						NOT = { exists = fromfrom }
+						would_join_war = {
+							attacker = root
+							defender = from
+							side = from
+						}
+					}
+					
+				}
+			}
+		}
+		OR = {
+			NOT = { is_normal_country = yes }
+			has_ethic = ethic_xenophobe	
+			has_ethic = ethic_fanatic_xenophobe
+		}		
+	}
+	
+	possible = {
+		is_assimilator = no
+		is_agency_country = no
+		hidden_trigger = {
+			parameter:planet.owner = {
+				OR = {
+					war_demand_counter = {
+						type = num_country_wargoals
+						value < 1
+					}
+					war_demand_counter = {
+						type = num_owned_planets
+						value > 1
+					}					
+				}			
+			}
+		}
+	}
+	
+	demandable = {
+		is_assimilator = no
+		is_agency_country = no
+		custom_tooltip = {
+			fail_text = "war_demand_cede_planet_not_under_our_control"
+			parameter:planet = {
+				controller = {
+					OR = {
+						is_country = parameter:planet.owner
+						fromfrom = {
+							is_war_participant = {
+								who = prev
+								side = from
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+	
+	effect = {
+		parameter:planet = {	
+			hidden_effect = {
+				add_threat = {
+					who = fromfromfrom
+					amount = 2 # scales to pops
+				}				
+			
+				every_owned_pop = {
+					limit = { 
+						is_robot_pop = no 
+						is_sapient = yes
+						NOT = { has_trait = "trait_hive_mind" }
+					}
+					every_country = {
+						limit = {
+							has_communications = fromfromfrom
+							NOT = { is_country = fromfromfrom }
+							NOT = { is_same_species = PREV }
+						}
+						add_opinion_modifier = { who = fromfromfrom modifier = opinion_genocidal }
+					}
+					every_country = {
+						limit = {
+							has_communications = fromfromfrom
+							NOT = { is_country = fromfromfrom }
+							is_same_species = PREV
+						}
+						add_opinion_modifier = { who = fromfromfrom modifier = opinion_genocidal_our_species }
+					}	
+				}
+			}
+			destroy_colony = { keep_buildings = no }
+		}			
+	}
+
+	counters = {
+		num_owned_planets = {
+			context = parameter:planet.owner
+			value = {
+				base = -1
+			}
+		}
+		ceded_or_liberated = {
+			context = parameter:planet
+			value = {
+				base = 1
+			}			
+		}		
+	}
+	
+	ai_weight = {
+		base = 10
+		
+		modifier = {
+			factor = 0
+			is_subject = yes
+			overlord = { is_country_type = awakened_fallen_empire }
+		}		
+		
+		modifier = {
+			factor = 0.5
+			NOT = { 
+				parameter:planet.owner = {
+					is_same_value = from
+				}
+			}
+		}
+		
+		modifier = {
+			factor = 0.0
+			is_fallen_machine_empire = no
+			parameter:planet = {
+				NOT = { is_neighbor_of = root }
+				OR = {
+					NOT = { owner = { has_ai_personality_behaviour = holy_planets } }
+					NOT = { has_modifier = "holy_planet" }
+				}		
+			}
+		}
+		
+		modifier = {
+			factor = 0.0
+			has_ai_personality_behaviour = demands_clear_borders
+			parameter:planet = {
+				is_capital = yes			
+			}
+		}
+			
+		modifier = {
+			factor = 100.0
+			has_ai_personality_behaviour = demands_clear_borders
+		}		
+		
+		modifier = {
+			factor = 100.0
+			parameter:planet = { has_modifier = "holy_planet" }
+			has_ai_personality_behaviour = holy_planets
+		}
+		
+		scaled_modifier = {
+			scope = parameter:planet
+			div = 2
+			calc = planet_distance_empire
+		}
+		
+		modifier = {
+			factor = 0
+			OR = {
+				has_ai_personality_behaviour = liberator
+				has_ai_personality_behaviour = conqueror
+			}
+		}
+	}
+	
+	AI_invasion_target = yes
+}
+
+dismantle_habitat = {
+	execution_order = 0
+	
+	parameters = {
+		planet = {
+			type = planet
+			filter = owned
+		}
+	}
+	
+	warscore_cost = {
+		base = 15
+		
+		modifier = {
+			factor = 2.0
+			custom_tooltip = {
+				text = "DEMAND_CEDE_PLANET_NOT_MAIN_DEFENDER"
+				parameter:planet.owner = {
+					NOR = {
+						is_same_value = from
+						AND = {
+							is_subject = yes
+							overlord = { is_same_value = from }
+						}
+					}
+				}
+			}
+		}
+		
+		scaled_modifier = {
+			scope = parameter:planet
+			add = 0.4
+			calc = pop_count
+		}		
+		
+		modifier = {
+			factor = 1.25
+			hidden:parameter:planet = {
+				is_capital = yes
+			}
+		}				
+
+		# Ruler Trait - Warlike
+		modifier = {
+			factor = 0.95
+			custom_tooltip = {
+				text = "war_demand_trait_warlike"
+				exists = ruler
+				ruler = { has_trait = trait_ruler_warlike }
+			}
+		}
+
+		# Ruler Trait - Expansionist
+		modifier = {
+			factor = 0.9
+			custom_tooltip = {
+				text = "war_demand_trait_expansionist"
+				exists = ruler
+				ruler = { has_trait = trait_ruler_expansionist }
+			}
+		}
+
+		# Tech - Interstellar Campaigns
+		modifier = {
+			factor = 0.75
+			custom_tooltip = {
+				text = "war_demand_tech_interstellar_campaigns"
+				has_technology = tech_interstellar_campaigns
+			}
+		}
+
+		# Tech - Galactic Campaigns
+		modifier = {
+			factor = 0.75
+			custom_tooltip = {
+				text = "war_demand_tech_galactic_campaigns"
+				has_technology = tech_galactic_campaigns
+			}
+		}
+		
+		modifier = {
+			factor = 0.9
+			custom_tooltip = {
+				text = "tr_purity_the_chosen"
+				has_swapped_tradition = tr_purity_the_chosen
+			}
+		}		
+		
+		modifier = {
+			factor = 0.75
+			custom_tooltip = {
+				text = "tr_purity_age_machines"
+				has_swapped_tradition = tr_purity_age_machines
+				parameter:planet.owner = { is_synthetic_empire = no }
+			}
+		}	
+		
+		# Awakened Fallen Empires
+		modifier = {
+			factor = 0.66
+			is_country_type = awakened_fallen_empire
+		}	
+
+		# Machine FE
+		modifier = {
+			factor = 2.0
+			is_country_type = fallen_empire
+			has_authority = auth_machine_intelligence
+		}			
+	}
+	
+	potential = {
+		is_assimilator = no
+		is_agency_country = no
+		parameter:planet = {
+			is_planet_class = pc_habitat
+		}
+		hidden_trigger = {
+			OR = {
+				NOT = { is_country_type = fallen_empire }
+				parameter:planet = {
+					is_capital = no
+				}			
+			}
+		}
+		hidden_trigger = {
+			OR = {
+				is_subject = no
+				is_subject_type = tributary
+				is_subject_type = thrall
+				is_subject_type = dominion
+				is_subject_type = satellite
+			}		
+		}				
+		parameter:planet = {		
+			owner = {
+				OR = {
+					AND = {
+						exists = fromfrom
+						from = {
+							from = {
+								is_war_participant = {
+									who = prevprev
+									side = prev
+								}
+							}
+						}
+					}
+					AND = {
+						NOT = { exists = fromfrom }
+						would_join_war = {
+							attacker = root
+							defender = from
+							side = from
+						}
+					}
+					
+				}
+			}
+		}
+		parameter:planet = {
+			OR = {
+				is_capital = no
+				AND = {
+					root = { has_ai_personality_behaviour = holy_planets }
+					has_modifier = "holy_planet"
+				}
+			}
+		}
+		OR = {
+			NOT = { is_normal_country = yes }
+			has_ethic = ethic_xenophobe	
+			has_ethic = ethic_fanatic_xenophobe
+		}		
+	}
+	
+	proposable = {
+		is_assimilator = no
+		is_agency_country = no
+		hidden:parameter:planet = {
+			custom_tooltip = {
+				fail_text = "war_demand_cede_or_liberate"
+				war_demand_counter = {
+					type = ceded_or_liberated
+					value < 1
+				}
+			}
+		}
+	}
+	
+	possible = {
+		is_assimilator = no
+		is_agency_country = no
+		hidden_trigger = {
+			parameter:planet.owner = {
+				OR = {
+					war_demand_counter = {
+						type = num_country_wargoals
+						value < 1
+					}
+					war_demand_counter = {
+						type = num_owned_planets
+						value > 1
+					}					
+				}			
+			}
+		}	
+	}
+	
+	demandable = {
+		custom_tooltip = {
+			fail_text = "war_demand_cede_planet_not_under_our_control"
+			parameter:planet = {
+				controller = {
+					OR = {
+						is_country = parameter:planet.owner
+						fromfrom = {
+							is_war_participant = {
+								who = prev
+								side = from
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+	
+	effect = {
+		parameter:planet = {	
+			hidden_effect = {
+				add_threat = {
+					who = fromfromfrom
+					amount = 2 # scales to pops
+				}				
+			
+				every_owned_pop = {
+					limit = { 
+						is_robot_pop = no 
+						is_sapient = yes
+						NOT = { has_trait = "trait_hive_mind" }
+					}
+					every_country = {
+						limit = {
+							has_communications = fromfromfrom
+							NOT = { is_country = fromfromfrom }
+							NOT = { is_same_species = PREV }
+						}
+						add_opinion_modifier = { who = fromfromfrom modifier = opinion_genocidal }
+					}
+					every_country = {
+						limit = {
+							has_communications = fromfromfrom
+							NOT = { is_country = fromfromfrom }
+							is_same_species = PREV
+						}
+						add_opinion_modifier = { who = fromfromfrom modifier = opinion_genocidal_our_species }
+					}	
+				}
+			}
+			destroy_colony = { keep_buildings = no }
+			remove_planet = yes
+		}			
+	}
+
+	counters = {
+		num_owned_planets = {
+			context = parameter:planet.owner
+			value = {
+				base = -1
+			}
+		}
+		ceded_or_liberated = {
+			context = parameter:planet
+			value = {
+				base = 1
+			}			
+		}		
+	}
+	
+	ai_weight = {
+		base = 10
+		
+		modifier = {
+			factor = 0
+			is_subject = yes
+			overlord = { is_country_type = awakened_fallen_empire }
+		}
+		
+		modifier = {
+			factor = 0.5
+			NOT = { 
+				parameter:planet.owner = {
+					is_same_value = from
+				}
+			}
+		}
+		
+		modifier = {
+			factor = 0.0
+			parameter:planet = {
+				NOT = { is_neighbor_of = root }
+				NOT = {
+					AND = {
+						has_modifier = "holy_planet"
+						root = { has_ai_personality_behaviour = holy_planets }
+					}
+				}		
+			}
+		}
+			
+		modifier = {
+			factor = 100.0
+			has_ai_personality_behaviour = demands_clear_borders
+		}		
+		
+		modifier = {
+			factor = 100.0
+			parameter:planet = { has_modifier = "holy_planet" }
+			has_ai_personality_behaviour = holy_planets
+		}
+		
+		scaled_modifier = {
+			scope = parameter:planet
+			div = 2
+			calc = planet_distance_empire
+		}
+		
+		modifier = {
+			factor = 0
+			OR = {
+				has_ai_personality_behaviour = liberator
+				has_ai_personality_behaviour = conqueror
+			}
+		}
+	}
+	
+	AI_invasion_target = yes
+}

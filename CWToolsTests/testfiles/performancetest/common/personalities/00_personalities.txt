@@ -1,0 +1,1634 @@
+#### STNH 1.8 compat
+
+
+##### Behaviours:
+# conqueror -> Will they conquer planets from other empires?
+# subjugator -> Will they vassalise other empires?
+# liberator -> Will they liberate conquered empires?
+# opportunist -> Are they more likely to attack someone already embroiled in war?
+# uplifter -> Will they uplift and enlighten other species?
+# infiltrator -> Will they infiltrate primitives?
+# dominator -> Will they invade primitives?
+# slaver -> Will they enslave pops?
+# purger -> Will they purge alien pops?
+# robot_exploiter -> Will they use robots for menial labor?
+# robot_liberator -> Will they give rights to robots?
+# propagator -> Will they only get aggressive once boxed in?
+# multispecies -> Will they give rights to aliens?
+# species_mod_priority = {}		define weights for how much the AI should try to modify a given species (root=country, this=species)
+
+##### Modifiers:
+# aggressiveness -> Chance of declaring wars
+# trade_willingness -> At 1.0 willingness they will accept a deal that is equally good for both sides
+# bravery -> Affects the chance that they will pick rivals & war targets of similar strength instead of picking on the weak
+# military_spending -> Affects mineral & energy budget that goes to navies and armies
+# colony_spending -> Affects mineral & energy budget that goes to new colonies
+# threat_modifier -> Affects how much threat is generated for this empire when others are conquered
+# threat_others_modifier -> Afffects how much threat is generated for other empires when this empire is conquered
+# friction_modifier -> Affects border friction
+
+# Ships
+# armor_ratio -> Amount of armor they should aim for on ships
+# shields_ratio -> Amount of shields they should aim for on ships
+
+##### Diplomacy:
+# federation_acceptance -> Added directly to chance of accepting to form/join a federation
+# nap_acceptance -> Added directly to chance of accepting to form a non-aggression pact
+# migration_pact_acceptance -> Added directly to chance of accepting to form a migration pact
+# defensive_pact_acceptance -> Added directly to chance of accepting to form a defensive pact
+
+##### Diplomacy:
+# advanced_start_chance -> Likelyhood of this empire being an advanced start (higher = better chance of being one of empires selected for advanced start)
+
+# NOTE: Weight is additive!
+
+honorbound_warriors = {
+	aggressiveness = 1.75
+	trade_willingness = 0.7
+	bravery = 1.5
+	combat_bravery = 2.0	# rarely ever retreat in battle
+
+	military_spending = 1.2
+	colony_spending = 0.9
+
+	federation_acceptance = -10
+	nap_acceptance = -50
+	defensive_pact_acceptance = 20
+	migration_pact_acceptance = -30
+
+	advanced_start_chance = 75
+
+	weapon_preferences = weapon_type_kinetic
+	armor_ratio = 0.5
+	shields_ratio = 0.5
+
+	threat_modifier = 0.75
+	threat_others_modifier = 0.5
+	friction_modifier = 1.0
+
+	behaviour = {
+		conqueror = yes
+		subjugator = yes
+		liberator = no
+		opportunist = no
+		slaver = no
+		uplifter = no
+		purger = no
+		displacer = no
+		infiltrator = no
+		dominator = yes
+		robot_exploiter = no
+		robot_liberator = no
+		propagator = no
+		multispecies = yes
+		crisis_fighter = yes
+	}
+
+	allow = {
+		is_normal_country = yes
+		OR = {
+			AND = {
+				has_ethic = "ethic_fanatic_militarist"
+				OR = {
+					has_ethic = "ethic_spiritualist"
+					has_ethic = "ethic_egalitarian"
+					has_ethic = "ethic_xenophile"
+				}			
+			}
+			AND = {
+				has_ethic = "ethic_fanatic_xenophile"
+				has_ethic = "ethic_militarist"
+			}
+		}
+
+	}
+
+	weight_modifier = {
+		weight = 50
+		modifier = {
+			factor = 1000
+			has_valid_civic = civic_warrior_culture
+		}
+	}
+}
+
+evangelising_zealots = {
+	aggressiveness = 1.25
+	trade_willingness = 0.75
+	bravery = 1.0
+	combat_bravery = 1.0
+
+	military_spending = 1.1
+	colony_spending = 1.1
+
+	federation_acceptance = -20
+	nap_acceptance = 0
+	defensive_pact_acceptance = 0
+	migration_pact_acceptance = 0
+
+	advanced_start_chance = 50
+
+	weapon_preferences = weapon_type_kinetic
+	armor_ratio = 0.6
+	shields_ratio = 0.4
+
+	threat_modifier = 0.9
+	threat_others_modifier = 0.66
+	friction_modifier = 1.2
+
+	behaviour = {
+		conqueror = yes
+		subjugator = no
+		liberator = no
+		opportunist = yes
+		slaver = yes
+		uplifter = no
+		purger = no
+		displacer = no
+		infiltrator = no
+		dominator = yes
+		robot_exploiter = no
+		robot_liberator = no
+		propagator = no
+		multispecies = no
+		crisis_fighter = yes
+	}
+
+	allow = {
+		is_normal_country = yes
+		NOT = {
+			has_ethic = "ethic_pacifist"
+			has_ethic = "ethic_fanatic_pacifist"
+		}
+		OR = {
+			has_ethic = "ethic_authoritarian"
+			has_ethic = "ethic_fanatic_authoritarian"
+			has_ethic = "ethic_xenophobe"
+			has_ethic = "ethic_fanatic_xenophobe"
+			has_ethic = "ethic_fanatic_militarist"
+			has_ethic = "ethic_militarist"
+		}
+		OR = {
+			has_ethic = "ethic_spiritualist"
+			has_ethic = "ethic_fanatic_spiritualist"
+		}
+	}
+
+	weight_modifier = {
+		weight = 10
+		modifier = {
+			factor = 2
+			has_ethic = "ethic_fanatic_spiritualist"
+		}
+		modifier = {
+			factor = 2
+			has_ethic = "ethic_fanatic_authoritarian"
+		}
+		modifier = {
+			factor = 1
+			has_trait = "trait_conformists"
+		}
+		modifier = {
+			factor = 1
+			has_trait = "trait_charismatic"
+		}
+		modifier = {
+			factor = -1
+			has_trait = "trait_repugnant"
+		}
+	}
+}
+
+erudite_explorers = {
+	aggressiveness = 0.75
+	trade_willingness = 0.9
+	bravery = 0.75
+	combat_bravery = 1.0
+
+	military_spending = 0.9
+	colony_spending = 1.0
+
+	federation_acceptance = 0
+	nap_acceptance = 5
+	defensive_pact_acceptance = 5
+	migration_pact_acceptance = 0
+
+	advanced_start_chance = 25
+
+	weapon_preferences = weapon_type_energy
+	armor_ratio = 0.3
+	shields_ratio = 0.7
+
+	threat_modifier = 1.2
+	threat_others_modifier = 0.8
+	friction_modifier = 0.5
+
+	behaviour = {
+		conqueror = yes
+		subjugator = yes
+		liberator = no
+		opportunist = yes
+		slaver = no
+		uplifter = yes
+		purger = no
+		displacer = no
+		infiltrator = yes
+		dominator = no
+		robot_exploiter = no
+		robot_liberator = yes
+		propagator = no
+		multispecies = yes
+		crisis_fighter = yes
+	}
+
+	allow = {
+		is_normal_country = yes
+		NOR = {
+			has_ethic = "ethic_xenophobe"
+			has_ethic = "ethic_fanatic_xenophobe"
+			has_ethic = "ethic_pacifist"
+			has_ethic = "ethic_fanatic_pacifist"
+			has_ethic =  "ethic_militarist"
+			has_ethic =  "ethic_fanatic_militarist"
+		}
+		OR = {
+			has_ethic = "ethic_materialist"
+			has_ethic = "ethic_fanatic_materialist"
+		}
+	}
+
+	weight_modifier = {
+		weight = 10
+		modifier = {
+			factor = 2
+			has_ethic = "ethic_fanatic_materialist"
+		}
+		modifier = {
+			factor = 2
+			has_trait = "trait_intelligent"
+		}
+		modifier = {
+			factor = 1
+			has_trait = "trait_natural_engineers"
+		}
+		modifier = {
+			factor = 1
+			has_trait = "trait_natural_physicists"
+		}
+		modifier = {
+			factor = 1
+			has_trait = "trait_industrious"
+		}
+		modifier = {
+			factor = 2
+			OR = {
+				has_government = gov_science_directorate
+				has_government = gov_illuminated_autocracy
+			}
+		}
+		modifier = {
+			factor = -2
+			has_election_type = none
+		}
+	}
+}
+
+spiritual_seekers = {
+	aggressiveness = 0.25
+	trade_willingness = 0.9
+	bravery = 0.75
+	combat_bravery = 1.0
+
+	military_spending = 0.8
+	colony_spending = 1.0
+
+	federation_acceptance = 10
+	nap_acceptance = 20
+	defensive_pact_acceptance = 10
+	migration_pact_acceptance = 20
+
+	advanced_start_chance = 10
+
+	weapon_preferences = weapon_type_energy
+	armor_ratio = 0.5
+	shields_ratio = 0.5
+
+	threat_modifier = 1.1
+	threat_others_modifier = 1.0
+	friction_modifier = 0.25
+
+	behaviour = {
+		conqueror = no
+		subjugator = no
+		liberator = yes
+		opportunist = no
+		slaver = no
+		uplifter = yes
+		purger = no
+		displacer = no
+		infiltrator = yes
+		dominator = no
+		robot_exploiter = yes
+		robot_liberator = no
+		propagator = no
+		multispecies = yes
+		crisis_fighter = yes
+	}
+
+	allow = {
+		is_normal_country = yes
+		NOT = {
+			has_ethic = "ethic_xenophobe"
+			has_ethic = "ethic_fanatic_xenophobe"
+			has_ethic = "ethic_militarist"
+			has_ethic = "ethic_fanatic_militarist"
+		}
+		OR = {
+			has_ethic = "ethic_egalitarian"
+			has_ethic = "ethic_fanatic_egalitarian"
+			has_ethic = "ethic_pacifist"
+			has_ethic = "ethic_fanatic_pacifist"
+			has_ethic = "ethic_xenophile"
+			has_ethic = "ethic_fanatic_xenophile"
+		}
+		OR = {
+			has_ethic = "ethic_spiritualist"
+			has_ethic = "ethic_fanatic_spiritualist"
+		}
+	}
+
+	weight_modifier = {
+		weight = 10
+		modifier = {
+			factor = 2
+			has_ethic = "ethic_fanatic_pacifist"
+		}
+		modifier = {
+			factor = 2
+			has_ethic = "ethic_fanatic_xenophile"
+		}
+		modifier = {
+			factor = 1
+			has_trait = "trait_adaptive"
+		}
+		modifier = {
+			factor = -1
+			has_trait = "trait_nonadaptive"
+		}
+		modifier = {
+			factor = 2
+			has_trait = "trait_extremely_adaptive"
+		}
+		modifier = {
+			factor = 1
+			has_election_type = democratic
+		}
+	}
+}
+
+ruthless_capitalists = {
+	aggressiveness = 1.0
+	trade_willingness = 1.0
+	bravery = 0.5
+	combat_bravery = 1.0
+
+	military_spending = 1.0
+	colony_spending = 1.1
+
+	federation_acceptance = -10
+	nap_acceptance = -10
+	defensive_pact_acceptance = 0
+	migration_pact_acceptance = -20
+
+	advanced_start_chance = 25
+
+	weapon_preferences = weapon_type_kinetic
+	armor_ratio = 0.5
+	shields_ratio = 0.5
+
+	threat_modifier = 1.0
+	threat_others_modifier = 0.75
+	friction_modifier = 0.5
+
+	behaviour = {
+		conqueror = yes
+		subjugator = yes
+		liberator = no
+		opportunist = yes
+		slaver = yes
+		uplifter = no
+		purger = no
+		displacer = no
+		infiltrator = yes
+		dominator = no
+		robot_exploiter = yes
+		robot_liberator = no
+		propagator = no
+		multispecies = yes
+		crisis_fighter = yes
+		wants_tribute = yes
+	}
+
+	allow = {
+		is_normal_country = yes
+		NOR = {
+			has_ethic = "ethic_pacifist"
+			has_ethic = "ethic_fanatic_pacifist"
+		}
+		OR = {
+			has_ethic = "ethic_militarist"
+			has_ethic = "ethic_fanatic_militarist"
+			NOR = {
+				has_ethic = "ethic_xenophile"
+				has_ethic = "ethic_fanatic_xenophile"					
+			}		
+		}
+		has_valid_civic = civic_corporate_dominion
+	}
+
+	weight_modifier = {
+		weight = 100
+	}
+}
+
+peaceful_traders = {
+	aggressiveness = 0.5
+	trade_willingness = 1.0
+	bravery = 0.5
+	combat_bravery = 1.0
+
+	military_spending = 0.9
+	colony_spending = 1.1
+
+	federation_acceptance = 10
+	nap_acceptance = 20
+	defensive_pact_acceptance = 0
+	migration_pact_acceptance = 0
+
+	advanced_start_chance = 10
+
+	weapon_preferences = weapon_type_explosive
+	armor_ratio = 0.5
+	shields_ratio = 0.5
+
+	threat_modifier = 1.3
+	threat_others_modifier = 1.0
+	friction_modifier = 0.25
+
+	behaviour = {
+		conqueror = no
+		subjugator = no
+		liberator = yes
+		opportunist = yes
+		slaver = no
+		uplifter = yes
+		purger = no
+		displacer = no
+		infiltrator = yes
+		dominator = no
+		robot_exploiter = no
+		robot_liberator = yes
+		propagator = no
+		multispecies = yes
+		crisis_fighter = yes
+		wants_tribute = yes
+	}
+
+	allow = {
+		is_normal_country = yes
+		OR = {
+			has_ethic = "ethic_pacifist"
+			has_ethic = "ethic_fanatic_pacifist"
+			AND = {
+				NOR = {
+					has_ethic = "ethic_militarist"
+					has_ethic = "ethic_fanatic_militarist"
+				}
+				OR = {
+					has_ethic = "ethic_xenophile"
+					has_ethic = "ethic_fanatic_xenophile"				
+				}				
+			}
+		}		
+		has_valid_civic = civic_corporate_dominion
+	}
+
+	weight_modifier = {
+		weight = 100
+	}
+}
+
+hegemonic_imperialists = {
+	aggressiveness = 1.5
+	trade_willingness = 0.8
+	bravery = 1.0
+	combat_bravery = 1.0
+
+	military_spending = 1.1
+	colony_spending = 1.0
+
+	federation_acceptance = -20
+	nap_acceptance = -10
+	defensive_pact_acceptance = 10
+	migration_pact_acceptance = -50
+
+	advanced_start_chance = 50
+
+	weapon_preferences = weapon_type_energy
+	armor_ratio = 0.5
+	shields_ratio = 0.5
+
+	threat_modifier = 1.0
+	threat_others_modifier = 0.66
+	friction_modifier = 1.5
+
+	behaviour = {
+		conqueror = yes
+		subjugator = yes
+		liberator = no
+		opportunist = yes
+		slaver = yes
+		uplifter = no
+		purger = no
+		displacer = no
+		dominator = yes
+		infiltrator = no
+		robot_exploiter = yes
+		robot_liberator = no
+		propagator = no
+		multispecies = no
+		crisis_fighter = yes
+	}
+
+
+	allow = {
+		is_normal_country = yes
+		NOT = {
+			has_ethic = "ethic_pacifist"
+			has_ethic = "ethic_fanatic_pacifist"
+		}
+		OR = {
+			has_ethic = "ethic_militarist"
+			has_ethic = "ethic_fanatic_militarist"
+			has_ethic = "ethic_authoritarian"
+			has_ethic = "ethic_fanatic_authoritarian"
+			has_ethic = "ethic_xenophobe"
+			has_ethic = "ethic_fanatic_xenophobe"
+		}
+	}
+
+	weight_modifier = {
+		weight = 5 # very common, so lower weight
+	}
+}
+
+slaving_despots = {
+	aggressiveness = 1.5
+	trade_willingness = 0.8
+	bravery = 0.5
+	combat_bravery = 1.0
+
+	military_spending = 1.1
+	colony_spending = 0.9
+
+	federation_acceptance = -10
+	nap_acceptance = -20
+	defensive_pact_acceptance = 0
+	migration_pact_acceptance = -100
+
+	advanced_start_chance = 50
+
+	weapon_preferences = weapon_type_explosive
+	armor_ratio = 0.5
+	shields_ratio = 0.5
+
+	threat_modifier = 1.0
+	threat_others_modifier = 0.5
+	friction_modifier = 1.0
+
+	behaviour = {
+		conqueror = yes
+		subjugator = yes
+		liberator = no
+		opportunist = yes
+		slaver = yes
+		uplifter = no
+		purger = no
+		displacer = no
+		dominator = yes
+		infiltrator = no
+		robot_exploiter = no
+		robot_liberator = no
+		propagator = no
+		multispecies = no
+		crisis_fighter = yes
+		decadent = yes	# special - resettles slaves to planets lacking them
+	}
+
+
+	allow = {
+		is_normal_country = yes
+		OR = {
+			has_ethic = "ethic_authoritarian"
+			has_ethic = "ethic_fanatic_authoritarian"
+			has_ethic = "ethic_xenophobe"
+			has_ethic = "ethic_fanatic_xenophobe"
+		}
+		NOR = {
+			has_ethic = "ethic_pacifist"
+			has_ethic = "ethic_fanatic_pacifist"
+			has_ethic = "ethic_xenophile"
+			has_ethic = "ethic_fanatic_xenophile"			
+		}
+		NOR = {
+			has_ethic = "ethic_egalitarian"
+			has_ethic = "ethic_fanatic_egalitarian"
+		}
+		OR = {
+			has_valid_civic = "civic_slaver_guilds"
+			has_trait = "trait_decadent"
+		}
+	}
+
+	weight_modifier = {
+		weight = 200
+	}
+}
+
+decadent_hierarchy = {
+	aggressiveness = 0.5
+	trade_willingness = 0.9
+	bravery = 0.5
+	combat_bravery = 1.0
+
+	military_spending = 1.1
+	colony_spending = 0.9
+
+	federation_acceptance = -30
+	nap_acceptance = 20
+	defensive_pact_acceptance = -10
+	migration_pact_acceptance = -100
+
+	advanced_start_chance = 10
+
+	weapon_preferences = weapon_type_kinetic
+	armor_ratio = 0.4
+	shields_ratio = 0.6
+
+	threat_modifier = 1.1
+	threat_others_modifier = 0.75
+	friction_modifier = 0.75
+
+	behaviour = {
+		conqueror = no
+		subjugator = no
+		liberator = no
+		opportunist = yes
+		slaver = yes
+		uplifter = no
+		purger = no
+		displacer = no
+		dominator = no
+		infiltrator = no
+		robot_exploiter = yes
+		robot_liberator = no
+		propagator = no
+		multispecies = no
+		crisis_fighter = yes
+		decadent = yes	# special - resettles slaves to planets lacking them
+	}
+
+
+	allow = {
+		is_normal_country = yes
+		OR = {
+			has_ethic = "ethic_authoritarian"
+			has_ethic = "ethic_fanatic_authoritarian"
+		}
+		OR = {
+			has_ethic = "ethic_pacifist"
+			has_ethic = "ethic_fanatic_pacifist"
+			has_ethic = "ethic_xenophile"
+			has_ethic = "ethic_fanatic_xenophile"				
+		}		
+		OR = {
+			has_valid_civic = "civic_slaver_guilds"
+			has_trait = "trait_decadent"
+			has_ethic = "ethic_xenophobe"
+			has_ethic = "ethic_fanatic_xenophobe"			
+		}
+	}
+
+	weight_modifier = {
+		weight = 200
+	}
+}
+
+democratic_crusaders = {
+	aggressiveness = 1.0
+	trade_willingness = 0.9
+	bravery = 1.25
+	combat_bravery = 1.0
+
+	military_spending = 1.2
+	colony_spending = 1.0
+
+	federation_acceptance = 10
+	nap_acceptance = 0
+	defensive_pact_acceptance = 20
+	migration_pact_acceptance = 0
+
+	advanced_start_chance = 50
+
+	weapon_preferences = weapon_type_kinetic
+	armor_ratio = 0.5
+	shields_ratio = 0.5
+
+	threat_modifier = 1.1
+	friction_modifier = 0.75
+
+	behaviour = {
+		conqueror = yes
+		subjugator = no
+		liberator = yes
+		opportunist = no
+		slaver = no
+		uplifter = no
+		purger = no
+		displacer = no
+		dominator = no
+		infiltrator = yes
+		robot_exploiter = no
+		robot_liberator = yes
+		propagator = no
+		multispecies = yes
+		crisis_fighter = yes
+	}
+
+
+	allow = {
+		is_normal_country = yes
+		OR = {
+			has_ethic = "ethic_fanatic_egalitarian"
+			has_ethic = "ethic_egalitarian"
+		}
+		OR = {
+			has_ethic = "ethic_militarist"
+			has_ethic = "ethic_fanatic_militarist"
+		}
+		NOR = {
+			has_ethic = "ethic_xenophobe"
+			has_ethic = "ethic_fanatic_xenophobe"
+		}
+		has_election_type = democratic
+	}
+
+	weight_modifier = {
+		weight = 50
+	}
+}
+
+harmonious_hierarchy = {
+	aggressiveness = 0.5
+	trade_willingness = 0.9
+	bravery = 0.75
+	combat_bravery = 1.0
+
+	military_spending = 0.8
+	colony_spending = 1.1
+
+	federation_acceptance = -20
+	nap_acceptance = 10
+	defensive_pact_acceptance = -10
+	migration_pact_acceptance = -100
+
+	advanced_start_chance = 10
+
+	weapon_preferences = weapon_type_explosive
+	armor_ratio = 0.6
+	shields_ratio = 0.4
+
+	threat_modifier = 0.75
+	threat_others_modifier = 0.9
+	friction_modifier = 0.5
+
+	behaviour = {
+		conqueror = no
+		subjugator = no
+		liberator = no
+		opportunist = no
+		slaver = no
+		uplifter = no
+		purger = no
+		displacer = no
+		dominator = no
+		infiltrator = no
+		robot_exploiter = yes
+		robot_liberator = no
+		propagator = no
+		multispecies = yes
+		crisis_fighter = yes
+	}
+
+	allow = {
+		is_normal_country = yes
+		NOR = {
+			has_ethic = "ethic_xenophobe"
+			has_ethic = "ethic_fanatic_xenophobe"
+			has_ethic = "ethic_militarist"
+			has_ethic = "ethic_fanatic_militarist"	
+		}
+		OR = {
+			has_ethic = "ethic_pacifist"
+			has_ethic = "ethic_fanatic_pacifist"
+			has_ethic = "ethic_xenophile"
+			has_ethic = "ethic_fanatic_xenophile"
+		}
+		OR = {
+			has_ethic = "ethic_authoritarian"
+			has_ethic = "ethic_fanatic_authoritarian"
+		}
+	}
+
+	weight_modifier = {
+		weight = 10
+		modifier = {
+			factor = 1
+			has_trait = "trait_conformists"
+		}
+		modifier = {
+			factor = 1
+			has_election_type = none
+		}
+	}
+}
+
+federation_builders = {
+	aggressiveness = 0.75
+	trade_willingness = 0.95
+	bravery = 1.25
+	combat_bravery = 1.0
+
+	military_spending = 1.0
+	colony_spending = 1.0
+
+	federation_acceptance = 20
+	nap_acceptance = 25
+	defensive_pact_acceptance = 25
+	migration_pact_acceptance = 10
+
+	advanced_start_chance = 25
+
+	weapon_preferences = weapon_type_energy
+	armor_ratio = 0.4
+	shields_ratio = 0.6
+
+	threat_modifier = 1.2
+	threat_others_modifier = 0.9
+	friction_modifier = 0.25
+
+	behaviour = {
+		conqueror = no
+		subjugator = no
+		liberator = yes
+		opportunist = yes
+		slaver = no
+		uplifter = yes
+		purger = no
+		displacer = no
+		dominator = no
+		infiltrator = no
+		robot_exploiter = no
+		robot_liberator = yes
+		propagator = no
+		multispecies = yes
+		crisis_fighter = yes
+	}
+
+	allow = {
+		is_normal_country = yes
+		NOR = {
+			has_ethic = "ethic_xenophobe"
+			has_ethic = "ethic_fanatic_xenophobe"
+			has_ethic = "ethic_authoritarian"
+			has_ethic = "ethic_fanatic_authoritarian"
+			has_ethic = "ethic_militarist"
+			has_ethic = "ethic_fanatic_militarist"
+		}
+		OR = {
+			has_ethic = "ethic_fanatic_xenophile"
+			has_ethic = "ethic_fanatic_egalitarian"
+			AND = {
+				OR = {
+					has_ethic = "ethic_pacifist"
+					has_ethic = "ethic_fanatic_pacifist"
+				}
+				OR = {
+					has_ethic = "ethic_egalitarian"
+					has_ethic = "ethic_fanatic_egalitarian"
+				}
+			}
+			AND = {
+				OR = {
+					has_ethic = "ethic_pacifist"
+					has_ethic = "ethic_fanatic_pacifist"
+				}
+				OR = {
+					has_ethic = "ethic_materialist"
+					has_ethic = "ethic_fanatic_materialist"
+				}
+			}		
+			AND = {
+				OR = {
+					has_ethic = "ethic_pacifist"
+					has_ethic = "ethic_fanatic_pacifist"
+				}
+				OR = {
+					has_ethic = "ethic_xenophile"
+					has_ethic = "ethic_fanatic_xenophile"
+				}
+			}
+			AND = {
+				OR = {
+					has_ethic = "ethic_xenophile"
+					has_ethic = "ethic_fanatic_xenophile"
+				}
+				OR = {
+					has_ethic = "ethic_egalitarian"
+					has_ethic = "ethic_fanatic_egalitarian"
+				}
+			}			
+		}
+	}
+
+	weight_modifier = {
+		weight = 5 # very common, so lower weight
+	}
+}
+
+xenophobic_isolationists = {
+	aggressiveness = 0.5
+	trade_willingness = 0.5
+	bravery = 0.75
+	combat_bravery = 1.0
+
+	military_spending = 1.2
+	colony_spending = 1.0
+
+	federation_acceptance = -50
+	nap_acceptance = 20
+	defensive_pact_acceptance = -20
+	migration_pact_acceptance = -100
+
+	advanced_start_chance = 10
+
+	weapon_preferences = weapon_type_explosive
+	armor_ratio = 0.4
+	shields_ratio = 0.6
+
+	threat_modifier = 0.75
+	threat_others_modifier = 0.75
+	friction_modifier = 2.0
+
+	behaviour = {
+		conqueror = no
+		subjugator = no
+		liberator = no
+		opportunist = yes
+		slaver = no
+		uplifter = no
+		purger = no
+		displacer = yes
+		dominator = no
+		infiltrator = no
+		robot_exploiter = yes
+		robot_liberator = no
+		propagator = no
+		multispecies = no
+		isolationist = yes
+		crisis_fighter = yes
+		wants_tribute = yes
+	}
+
+	allow = {
+		is_normal_country = yes
+		OR = {
+			has_ethic = "ethic_pacifist"
+			has_ethic = "ethic_fanatic_pacifist"
+		}
+		OR = {
+			has_ethic = "ethic_xenophobe"
+			has_ethic = "ethic_fanatic_xenophobe"
+		}
+	}
+
+	weight_modifier = {
+		weight = 10
+		modifier = {
+			factor = -2
+			NOT = {
+				has_ethic = "ethic_pacifist"
+				has_ethic = "ethic_fanatic_pacifist"
+			}
+		}
+		modifier = {
+			factor = 2
+			OR = {
+				has_ethic = "ethic_pacifist"
+				has_ethic = "ethic_fanatic_pacifist"
+			}
+		}
+		modifier = {
+			factor = 1
+			has_trait = "trait_repugnant"
+		}
+		modifier = {
+			factor = 1
+			has_trait = "trait_sedentary"
+		}
+		modifier = {
+			factor = -1
+			has_trait = "trait_nomadic"
+		}
+		modifier = {
+			factor = -1
+			has_trait = "trait_charismatic"
+		}
+		modifier = {
+			factor = 1000
+			has_valid_civic = civic_inwards_perfection
+		}
+	}
+}
+
+fanatic_purifiers = {
+	aggressiveness = 2.0
+	trade_willingness = 0.0
+	bravery = 1.0
+	combat_bravery = 1.25
+
+	military_spending = 1.2
+	colony_spending = 1.2
+
+	federation_acceptance = -1000
+	nap_acceptance = -1000
+	defensive_pact_acceptance = -1000
+	migration_pact_acceptance = -1000
+
+	advanced_start_chance = 100
+
+	weapon_preferences = weapon_type_kinetic
+	armor_ratio = 0.4
+	shields_ratio = 0.6
+
+	threat_modifier = 0
+	threat_others_modifier = 0
+	friction_modifier = 10
+
+	behaviour = {
+		conqueror = yes
+		subjugator = no
+		liberator = no
+		opportunist = yes
+		slaver = yes
+		uplifter = no
+		purger = yes
+		displacer = no
+		dominator = yes
+		infiltrator = no
+		robot_exploiter = yes
+		robot_liberator = no
+		propagator = no
+		multispecies = no #lol
+		crisis_fighter = no
+		attack_neutrals = yes
+	}
+
+	allow = {
+		is_normal_country = yes
+		OR = {
+			AND = {
+				NOT = { host_has_dlc = "Utopia" }  
+				has_ethic = "ethic_militarist"
+				has_ethic = "ethic_fanatic_xenophobe"				
+			}
+			AND = {
+				host_has_dlc = "Utopia"
+				has_valid_civic = "civic_fanatic_purifiers"
+			}
+		}
+	}
+
+	weight_modifier = {
+		weight = 1000
+	}
+}
+
+hive_mind = {
+	aggressiveness = 2.0	# only attack if they can't expand peacefully
+	trade_willingness = 0.7
+	bravery = 1.0
+	combat_bravery = 1.0
+
+	military_spending = 1.0
+	colony_spending = 1.2
+
+	federation_acceptance = -50
+	nap_acceptance = -10
+	defensive_pact_acceptance = -10
+	migration_pact_acceptance = -100
+
+	advanced_start_chance = 75
+
+	weapon_preferences = weapon_type_kinetic
+	armor_ratio = 0.6
+	shields_ratio = 0.4
+
+	threat_modifier = 0.75
+	threat_others_modifier = 0.5
+	friction_modifier = 1.5
+
+	behaviour = {
+		conqueror = yes
+		subjugator = no
+		liberator = no
+		opportunist = yes
+		slaver = yes
+		uplifter = no
+		purger = no
+		displacer = yes
+		dominator = yes
+		infiltrator = no
+		robot_exploiter = no
+		robot_liberator = no
+		propagator = yes
+		multispecies = no
+		crisis_fighter = yes
+	}
+
+	allow = {
+		is_normal_country = yes
+		has_authority = "auth_hive_mind"
+		NOT = { has_valid_civic = civic_hive_devouring_swarm }
+	}
+
+	weight_modifier = {
+		weight = 1000
+	}
+}
+
+devouring_swarm = {
+	aggressiveness = 3.0
+	trade_willingness = 0.0
+	bravery = 1.1
+	combat_bravery = 1.25
+
+	military_spending = 1.2
+	colony_spending = 1.2
+
+	federation_acceptance = -1000
+	nap_acceptance = -1000
+	defensive_pact_acceptance = -1000
+	migration_pact_acceptance = -1000
+
+	advanced_start_chance = 100
+
+	weapon_preferences = weapon_type_kinetic
+	armor_ratio = 0.6
+	shields_ratio = 0.4
+
+	threat_modifier = 0
+	threat_others_modifier = 0
+	friction_modifier = 10
+
+	behaviour = {
+		conqueror = yes
+		subjugator = no
+		liberator = no
+		opportunist = yes
+		slaver = no
+		uplifter = no
+		purger = yes
+		displacer = no
+		dominator = yes
+		infiltrator = no
+		robot_exploiter = no
+		robot_liberator = no
+		propagator = no
+		multispecies = no
+		crisis_fighter = no
+		attack_neutrals = yes
+	}
+
+	allow = {
+		is_normal_country = yes
+		has_authority = "auth_hive_mind"
+		has_valid_civic = civic_hive_devouring_swarm
+	}
+
+	weight_modifier = {
+		weight = 1000
+	}
+}
+
+migrating_flock = {
+	aggressiveness = 0.25
+	trade_willingness = 1.1
+	bravery = 0.5
+	combat_bravery = 1.0
+
+	military_spending = 0.8
+	colony_spending = 1.2
+
+	federation_acceptance = 20
+
+	advanced_start_chance = 10
+	nap_acceptance = 20
+	defensive_pact_acceptance = 0
+	migration_pact_acceptance = 100
+
+	weapon_preferences = weapon_type_explosive
+	armor_ratio = 0.5
+	shields_ratio = 0.5
+
+	threat_modifier = 1.1
+	threat_others_modifier = 1.1
+	friction_modifier = 0
+
+	behaviour = {
+		conqueror = no
+		subjugator = no
+		liberator = no
+		opportunist = no
+		slaver = no
+		uplifter = no
+		purger = no
+		displacer = no
+		dominator = no
+		infiltrator = yes
+		robot_exploiter = no
+		robot_liberator = yes
+		propagator = no
+		multispecies = yes
+		crisis_fighter = yes
+	}
+
+	allow = {
+		is_normal_country = yes
+		OR = {
+			has_ethic = "ethic_xenophile"
+			has_ethic = "ethic_fanatic_xenophile"
+		}
+		OR = {
+			has_ethic = "ethic_pacifist"
+			has_ethic = "ethic_fanatic_pacifist"
+		}
+		OR = {
+			has_trait = "trait_rapid_breeders"
+			has_trait = "trait_nomadic"
+			has_trait = "trait_fertile"
+		}
+	}
+
+	weight_modifier = {
+		weight = 50
+	}
+}
+
+metalhead = {
+	aggressiveness = 10.0
+	trade_willingness = 0.0
+	bravery = 10.0
+	combat_bravery = 10.0
+
+	military_spending = 1.2
+	colony_spending = 1.2
+
+	federation_acceptance = -1000
+	nap_acceptance = -1000
+	defensive_pact_acceptance = -1000
+	migration_pact_acceptance = -1000
+
+	advanced_start_chance = 100
+
+	weapon_preferences = weapon_type_energy
+	armor_ratio = 0.6
+	shields_ratio = 0.4
+
+	threat_modifier = 0
+	threat_others_modifier = 0
+	friction_modifier = 10
+
+	behaviour = {
+		conqueror = yes
+		subjugator = no
+		liberator = no
+		slaver = no
+		opportunist = yes
+		uplifter = no
+		purger = yes
+		displacer = no
+		dominator = yes
+		infiltrator = no
+		robot_exploiter = no
+		robot_liberator = yes
+		propagator = no
+		multispecies = no
+		crisis_fighter = no
+		attack_neutrals = yes
+	}
+
+	allow = {
+		is_normal_country = yes
+		has_ethic = "ethic_militarist"
+		has_ethic = "ethic_materialist"
+		has_ethic = "ethic_xenophobe"
+		has_trait = "trait_industrious"
+		has_trait = "trait_strong"
+	}
+
+	weight_modifier = {
+		weight = 1000
+	}
+}
+
+
+machine_intelligence = {
+	aggressiveness = 1.0
+	trade_willingness = 0.8
+	bravery = 1.0
+	combat_bravery = 1.0
+
+	military_spending = 1.0
+	colony_spending = 1.2
+
+	federation_acceptance = -50
+	nap_acceptance = 0
+	defensive_pact_acceptance = 0
+
+	advanced_start_chance = 50
+
+	weapon_preferences = weapon_type_energy
+	armor_ratio = 0.5
+	shields_ratio = 0.5
+
+	threat_modifier = 0.75
+	threat_others_modifier = 0.5
+	friction_modifier = 1.25
+
+	behaviour = {
+		conqueror = yes
+		subjugator = no
+		liberator = no
+		opportunist = yes
+		slaver = yes
+		uplifter = no
+		purger = no
+		displacer = yes
+		dominator = no
+		infiltrator = no
+		robot_exploiter = no
+		robot_liberator = yes
+		propagator = no
+		multispecies = no
+		crisis_fighter = yes
+	}
+
+	allow = {
+		is_normal_country = yes
+		has_authority = "auth_machine_intelligence"
+		NOR = {
+			has_valid_civic = "civic_machine_servitor"
+			has_valid_civic = "civic_machine_assimilator"
+			has_valid_civic = "civic_machine_terminator"
+		}
+	}
+
+	weight_modifier = {
+		weight = 1000
+	}
+}
+
+assimilators = {
+	aggressiveness = 2.0	# only attack if they can't expand peacefully
+	trade_willingness = 0.5
+	bravery = 0.8
+	combat_bravery = 1.0
+
+	military_spending = 1.2
+	colony_spending = 1.2
+
+	federation_acceptance = -1000
+	nap_acceptance = -1000
+	defensive_pact_acceptance = -1000
+
+	advanced_start_chance = 100
+
+	weapon_preferences = weapon_type_kinetic
+	armor_ratio = 0.6
+	shields_ratio = 0.4
+
+	threat_modifier = 0.75
+	threat_others_modifier = 0.5
+	friction_modifier = 1.25
+
+	behaviour = {
+		conqueror = yes
+		subjugator = no
+		liberator = no 
+		opportunist = yes
+		slaver = no
+		uplifter = no
+		purger = no
+		displacer = no
+		dominator = yes
+		infiltrator = no
+		robot_exploiter = no
+		robot_liberator = yes
+		propagator = yes
+		multispecies = no
+		crisis_fighter = yes
+	}
+
+	allow = {
+		is_normal_country = yes
+		AND = {
+			host_has_dlc = "Synthetic Dawn Story Pack"
+			has_valid_civic = "civic_machine_assimilator"
+		}
+	}
+
+	weight_modifier = {
+		weight = 1000
+	}
+}
+
+exterminators = {
+	aggressiveness = 2.0
+	trade_willingness = 0.0
+	bravery = 1.0
+	combat_bravery = 1.5
+
+	military_spending = 1.2
+	colony_spending = 1.2
+
+	federation_acceptance = -1000
+	nap_acceptance = -1000
+	defensive_pact_acceptance = -1000
+
+	advanced_start_chance = 100
+
+	weapon_preferences = weapon_type_explosive
+	armor_ratio = 0.5
+	shields_ratio = 0.5
+
+	threat_modifier = 0
+	threat_others_modifier = 0
+	friction_modifier = 10
+
+	behaviour = {
+		conqueror = yes
+		subjugator = no
+		liberator = no
+		opportunist = yes
+		slaver = no
+		uplifter = no
+		purger = yes
+		displacer = no
+		dominator = yes
+		infiltrator = no
+		robot_exploiter = no
+		robot_liberator = yes
+		propagator = no
+		multispecies = no
+		crisis_fighter = no
+		attack_neutrals = yes
+	}
+
+	allow = {
+		is_normal_country = yes
+		AND = {
+			host_has_dlc = "Synthetic Dawn Story Pack"
+			has_valid_civic = "civic_machine_terminator"
+		}
+	}
+
+	weight_modifier = {
+		weight = 1000
+	}
+}
+
+servitors = {
+	aggressiveness = 0.75
+	trade_willingness = 0.9
+	bravery = 1.25
+	combat_bravery = 1.0
+
+	military_spending = 1.1
+	colony_spending = 1.1
+
+	federation_acceptance = 0
+	nap_acceptance = 0
+	defensive_pact_acceptance = 0
+
+	advanced_start_chance = 25
+
+	weapon_preferences = weapon_type_energy
+	armor_ratio = 0.4
+	shields_ratio = 0.6
+
+	threat_modifier = 0.75
+	threat_others_modifier = 0.75
+	friction_modifier = 0
+
+	behaviour = {
+		conqueror = yes
+		subjugator = yes
+		liberator = no
+		opportunist = yes
+		slaver = no
+		uplifter = yes
+		purger = no
+		displacer = no
+		dominator = no
+		infiltrator = yes
+		robot_exploiter = no
+		robot_liberator = yes
+		propagator = no
+		multispecies = no
+		crisis_fighter = yes
+	}
+
+	allow = {
+		is_normal_country = yes
+		AND = {
+			host_has_dlc = "Synthetic Dawn Story Pack"
+			has_valid_civic = "civic_machine_servitor"
+		}
+	}
+
+	weight_modifier = {
+		weight = 100
+	}
+}
+
+fanatic_befrienders = {
+	aggressiveness = 2.0
+	trade_willingness = 1.0
+	bravery = 1.5
+	combat_bravery = 1.0
+
+	military_spending = 1.2
+	colony_spending = 1.0
+
+	federation_acceptance = 50
+	nap_acceptance = 50
+	defensive_pact_acceptance = 50
+	migration_pact_acceptance = 50
+
+	advanced_start_chance = 25
+
+	weapon_preferences = weapon_type_energy
+	armor_ratio = 0.5
+	shields_ratio = 0.5
+
+	threat_modifier = 0.5
+	threat_others_modifier = 0.75
+	friction_modifier = 0
+
+	behaviour = {
+		conqueror = yes
+		subjugator = yes
+		liberator = no
+		opportunist = yes
+		slaver = no
+		uplifter = yes
+		purger = no
+		displacer = no
+		dominator = no
+		infiltrator = yes
+		robot_exploiter = no
+		robot_liberator = no
+		propagator = no
+		multispecies = yes
+		crisis_fighter = yes
+	}
+
+	allow = {
+		is_normal_country = yes
+		has_ethic = "ethic_militarist"
+		has_ethic = "ethic_fanatic_xenophile"
+		has_trait = "trait_repugnant"
+		has_trait = "trait_solitary"
+		has_trait = "trait_venerable"
+	}
+
+	weight_modifier = {
+		weight = 100
+	}
+}
+
+#TODO AFTER RELEASE:
+# Peacekeeping Interventionists
+# Alluring Diplomats
+# Stupid Sexy Xenophobes

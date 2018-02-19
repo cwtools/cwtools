@@ -1,0 +1,39 @@
+########################
+# STA anomaly List
+# Author: Doot Doot
+########################
+# potential = ship scope
+
+# All discoveries assigned weight 1 unless otherwise stated
+#these are different anomalies that occur in each catagory.
+
+#Second chance Hacky anomaly until I can get special projects to spawn where I want
+anomaly = {
+	event = STA_secondChance_event.1
+	category = "STA_secondChance_category"
+	weight = 1
+	
+	potential = {
+		always = yes
+	}
+}
+
+anomaly = {
+	event = STA_innerLight_event.1
+	category = "STA_innerLight_category"
+	weight = 1
+	
+	potential = {
+		always = yes
+	}
+}
+
+anomaly = {
+	event = STA_silence_event.1
+	category = "STA_silence_category"
+	weight = 1
+	
+	potential = {
+		always = yes
+	}
+}

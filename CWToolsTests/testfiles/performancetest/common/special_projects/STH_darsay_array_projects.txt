@@ -1,0 +1,76 @@
+
+special_project = {
+	key = "DARSAY_ARRAY_DISCOVER_1_PROJECT"
+	# event_chain = "terra_prime_chain"
+	cost = 0
+	days_to_research = 360
+	tech_department = engineering_technology
+	picture = sth_GFX_evt_doomsday_remnant
+	timelimit = -1
+	event_scope = ship_event
+	requirements = {
+		shipclass_science_ship = 1
+		leader = scientist
+	}
+	on_success = { 
+		ship_event = { id = STH_galactic_features.1001 scopes = { from = from } } 
+		# owner = { end_event_chain = "terra_prime_chain" }
+	}
+	on_fail = { }
+}
+
+
+special_project = {
+	key = "DARSAY_ARRAY_REPAIR_1_PROJECT"
+	# event_chain = "terra_prime_chain"
+	cost = 0
+	days_to_research = 360
+	tech_department = engineering_technology
+	picture = sth_GFX_evt_darsayArray1
+	timelimit = -1
+	event_scope = ship_event
+	requirements = {
+		shipclass_science_ship = 1
+		leader = scientist
+	}
+	same_option_group_as = { DARSAY_ARRAY_DISMANTLE_1_PROJECT }
+	on_success = { 
+		if = {
+			limit = { owner = { is_machine_cybernetic_empire = yes } }
+			ship_event = { id = STH_galactic_features.1011 scopes = { from = from } }
+			else = {
+				random_list = {
+					33 = { 
+						modifier = { factor = 10 owner = { has_country_flag = darsay_array_restoration_fail_once } }
+						ship_event = { id = STH_galactic_features.1002 scopes = { from = from } } 
+					}
+					67 = { ship_event = { id = STH_galactic_features.1003 scopes = { from = from } } }
+				}
+				
+			}
+		}
+		owner = { abort_special_project = { type = "DARSAY_ARRAY_DISMANTLE_1_PROJECT" location = event_target:darsay_array_asteroid } }
+		
+	}
+	on_fail = { }
+}
+
+special_project = {
+	key = "DARSAY_ARRAY_DISMANTLE_1_PROJECT"
+	# event_chain = "terra_prime_chain"
+	cost = 0
+	days_to_research = 360
+	tech_department = engineering_technology
+	picture = sth_GFX_evt_darsayArray1
+	timelimit = -1
+	event_scope = ship_event
+	requirements = {
+		shipclass_constructor = 1
+	}
+	same_option_group_as = { DARSAY_ARRAY_REPAIR_1_PROJECT }
+	on_success = { 
+		ship_event = { id = STH_galactic_features.1020 scopes = { from = from } }
+		owner = { abort_special_project = { type = "DARSAY_ARRAY_REPAIR_1_PROJECT" location = event_target:darsay_array_asteroid } }
+	}
+	on_fail = { }
+}

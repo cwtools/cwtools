@@ -1,0 +1,43 @@
+sth_autobuild_build_basic_lab = {
+    if = {
+        limit = {
+            has_resource = {
+                type = physics_research
+                amount > 0
+            }
+        }
+        add_building_construction = building_physics_lab_0
+        else = {
+            if = {
+                limit = {
+                    has_resource = {
+                        type = society_research
+                        amount > 0
+                    }
+                }
+                add_building_construction = building_bio_lab_0
+                else = {
+                    if = {
+                        limit = {
+                            has_resource = {
+                                type = engineering_research
+                                amount > 0
+                            }
+                        }
+                        add_building_construction = building_engineering_facility_0
+						else = {
+							add_building_construction = building_school_0
+						}
+                    }
+                }
+            }
+        }
+    }
+}
+
+st_new_horizons_effect_autobuild = {
+    planet_event = { id = sth_autobuild.1 }
+	planet_event = { id = sth_autobuild.2 }
+	planet_event = { id = sth_autobuild.3 }
+	planet_event = { id = sth_autobuild.4 }
+}

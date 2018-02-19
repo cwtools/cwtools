@@ -1,0 +1,905 @@
+#######################
+#  War Names Variety  #
+#  by ArcaneData      #
+#  Adapted for STNH   #
+#  by EHKodiak        #
+#Used with permission #
+#######################
+
+
+war_name_parts_list = {
+	key = "war_names"
+	parts = {
+		"War" = 1
+		"Dispute" = 1
+		"Conflict" = 2
+		"Engagement" = 1
+	}
+}
+
+war_name_parts_list = {
+	key = "massive_war_names"
+	parts = {
+		"Quadrant War" = 1
+		"War" = 1
+		"Campaign" = 1
+	}
+}
+
+war_name_parts_list = {
+	key = "invasion_names"
+	parts = {
+		"Conquest" = 1
+		"Invasion" = 1
+		"Annexation" = 1
+		"Subjugation" = 1
+		"Pacification" = 1
+	}
+}
+
+war_name_parts_list = {
+	key = "massive_invasion_names"
+	parts = {
+		"Grand Invasion" = 1
+		"Galactic Conquest" = 1		
+	}
+}
+
+war_name_parts_list = {
+	key = "slaughter_names"
+	parts = {
+		"Decimation" = 1
+		"Slaughter" = 1
+		"Annihilation" = 1
+		"Purge" = 1
+		"Razing" = 1
+	}
+}
+
+war_name_parts_list = {
+	key = "onesided_war_names"
+	parts = {
+		"Defiance" = 1
+		"Refusal" = 1
+		"Opposition" = 1
+		"Provocation" = 1
+	}
+}
+
+war_name_parts_list = {
+	key = "freedom_names"
+	parts = {
+		"Battle for Liberty" = 1
+		"War of Independence" = 1
+		"Independence War" = 1
+		"Liberty War" = 1
+		"Emancipation War" = 1
+	}
+}
+
+war_name_parts_list = {
+	key = "rebellion_names"
+	parts = {
+		"Rebellion" = 1
+		"Revolt" = 1
+		"Riot" = 1
+		"Uprising" = 1
+	}
+}
+
+war_name_parts_list = {
+	key = "civil_war_names"
+	parts = {
+		"Civil War" = 1
+	}
+}
+
+war_name_parts_list = {
+	key = "brothers_war_names"
+	parts = {
+		"Civil War" = 1
+	}
+}
+
+war_name_parts_list = {
+	key = "eugenics_war_names"
+	parts = {
+		"Eugenics War" = 1
+		"Succession Crisis" = 1
+
+	}
+}
+
+war_name_parts_list = {
+	key = "reclamation_names"
+	parts = {
+		"Reclamation" = 1
+	}
+}
+
+war_name_parts_list = {
+	key = "reunification_names"
+	parts = {
+		"Reunification" = 1
+	}
+}
+
+war_name_parts_list = {
+	key = "robot_purge_war_names"
+	parts = {
+		"Purge" = 1
+		"Removal" = 1
+		"Deletion" = 1
+	}
+}
+
+war_name_parts_list = {
+	key = "robot_war_names"
+	parts = {
+		"War on Autonomous Machines" = 1
+		"Autonomous Machine War" = 1
+		"Autonomous Unit Crisis" = 1
+		"Autonomous Unit War" = 1
+	}
+}
+
+war_name_parts_list = {
+	key = "war_on_heaven_names"
+	parts = {
+		"War on Heaven" = 1
+		"God-Killers' War" = 1
+		"Giant-Slayers' War" = 1		
+		"Behemoth War" = 1
+	}
+}
+
+war_name_parts_list = {
+	key = "crusade_names"
+	parts = {
+		"Crusade" = 1
+		"Holy War" = 1
+	}
+}
+
+war_name_parts_list = {
+	key = "secular_war_names"
+	parts = {
+		"Infidel's War" = 1
+		"Blasphemy War" = 1
+	}
+}
+
+war_name_parts_list = {
+	key = "religious_war_names"
+	parts = {
+		"War of Gods" = 1
+		"Heaven's War" = 1
+		"Holy War" = 1
+		"War of Spirits" = 1
+		"Avatar War" = 1
+	}
+}
+
+
+
+#--------------------------------------------------------------------- ---------------------#
+	#----------------------------------------------------#
+	#	NAMES BASED ON FEDERATIONS
+	#----------------------------------------------------#	
+#---------------------------------------------------------------------------------------#
+
+
+#---- two federations go to war ----#
+war_name_format = {
+	random_weight = {
+		factor = 0
+		modifier = {
+			add = 1
+			attacker = {
+				has_federation = yes
+			}
+			defender = {
+				has_federation = yes
+			}
+		}
+	}
+	format = "[This.MainAttacker.GetAllianceName] - [This.MainDefender.GetAllianceName] <massive_war_names>"
+}
+war_name_format = {
+	random_weight = {
+		factor = 0
+		modifier = {
+			add = 1
+			attacker = {
+				has_federation = yes
+			}
+			defender = {
+				has_federation = yes
+			}
+		}
+	}
+	format = "[This.MainAttacker.GetAllianceName] <massive_invasion_names> of the [This.MainDefender.GetAllianceName]"
+}
+
+
+#---- federation goes to war with independent empire ----#
+war_name_format = {
+	random_weight = {
+		factor = 0
+		modifier = {
+			add = 1
+			attacker = {
+				has_federation = yes
+			}
+			defender = {
+				has_federation = no
+			}
+		}
+	}
+	format = "[This.MainAttacker.GetAllianceName] <invasion_names> of [This.MainDefender.Capital.System.GetName]"
+}
+
+
+#---- independent empire goes to war with federation ----#
+war_name_format = {
+	random_weight = {
+		factor = 0
+		modifier = {
+			add = 1
+			attacker = {
+				has_federation = no
+			}
+			defender = {
+				has_federation = yes
+			}
+		}
+	}
+	format = "[This.MainAttacker.GetSpeciesName] <onesided_war_names> of the [This.MainDefender.GetAllianceName]"
+}
+
+
+
+#--------------------------------------------------------------------- ---------------------#
+	#----------------------------------------------------------#
+	#	INDEPENDENT EMPIRES GOING TO WAR WITH EACH OTHER
+	#----------------------------------------------------------#	
+#---------------------------------------------------------------------------------------#
+
+
+#---- two independent empires go to war ----#
+war_name_format = {
+	random_weight = {
+		factor = 0
+		modifier = {
+			add = 1
+			attacker = {
+				OR = {
+					NOT = {
+						exists = overlord
+					}
+					root = {
+						NOT = {
+							defender = {
+								is_same_value = prev.attacker.overlord
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+	format = "[This.MainAttacker.GetSpeciesName] - [This.MainDefender.GetSpeciesName] <war_names>"
+}
+war_name_format = {
+	random_weight = {
+		factor = 0
+		modifier = {
+			add = 1
+			attacker = {
+				OR = {
+					NOT = {
+						exists = overlord
+					}
+					root = {
+						NOT = {
+							defender = {
+								is_same_value = prev.attacker.overlord
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+	format = "[This.MainAttacker.GetSpeciesName] <invasion_names> of [This.MainDefender.Capital.System.GetName]"
+}
+
+
+
+#--------------------------------------------------------------------- ---------------------#
+	#----------------------------------------------------------#
+	#	WARS WITH OVERLORDS
+	#----------------------------------------------------------#	
+#---------------------------------------------------------------------------------------#
+
+
+#---- subjects going to war with overlords ----#
+war_name_format = {
+	random_weight = {
+		factor = 0
+		modifier = {
+			add = 1
+			attacker = {
+				exists = overlord
+			}
+			defender = {
+				is_same_value = prev.attacker.overlord
+			}
+		}
+	}
+	format = "[This.MainAttacker.GetSpeciesName] <freedom_names>"
+}
+war_name_format = {
+	random_weight = {
+		factor = 0
+		modifier = {
+			add = 1
+			attacker = {
+				exists = overlord
+			}
+			defender = {
+				is_same_value = prev.attacker.overlord				
+			}
+		}
+	}
+	format = "[This.MainAttacker.GetSpeciesName] <rebellion_names> Against [This.MainDefender.Capital.System.GetName]"
+}
+
+
+#---- overlords going to war with subjects ----#
+war_name_format = {
+	random_weight = {
+		factor = 0
+		modifier = {
+			add = 1
+			defender = {
+				exists = overlord
+			}
+			attacker = {
+				is_same_value = prev.defender.overlord
+			}
+		}
+	}
+	format = "[This.MainAttacker.GetSpeciesName] <reclamation_names> of [This.MainDefender.Capital.System.GetName]"
+}
+war_name_format = {
+	random_weight = {
+		factor = 0
+		modifier = {
+			add = 1
+			defender = {
+				exists = overlord
+			}
+			attacker = {
+				is_same_value = prev.defender.overlord
+			}
+		}
+	}
+	format = "<reunification_names> of [This.MainAttacker.GetName]"
+}
+
+
+
+
+
+#--------------------------------------------------------------------- ---------------------#
+	#----------------------------------------------------------#
+	#	WAR NAMES BASED ON SPECIES
+	#----------------------------------------------------------#	
+#---------------------------------------------------------------------------------------#
+
+#---- war between subspecies ----#
+war_name_format = {
+	random_weight = {
+		factor = 0
+		modifier = {
+			add = 1
+			attacker = {
+			}
+			defender = {
+				is_subspecies = prev.attacker			
+			}
+		}
+	}
+	format = "[This.MainDefender.GetAdj] <eugenics_war_names>"
+}
+
+
+#---- war between members of same species ----#
+war_name_format = {
+	random_weight = {
+		factor = 0
+		modifier = {
+			add = 1
+			attacker = {
+				
+			}
+			defender = {
+				is_same_species = prev.attacker				
+			}
+		}
+	}
+	format = "[This.MainDefender.GetAdj] <brothers_war_names>"
+}
+
+
+#---- war declared against robots ----#
+war_name_format = {
+	random_weight = {
+		factor = 0
+		modifier = {
+			add = 1
+			attacker = {
+				NOT = {
+						has_ethic = ethic_gestalt_consciousness
+					}
+			}
+			defender = {
+						has_ethic = ethic_gestalt_consciousness		
+			}
+		}
+	}
+	format = "[This.MainAttacker.GetSpeciesName] <robot_war_names>"
+}
+
+#---- war declared by robots ----#
+war_name_format = {
+	random_weight = {
+		factor = 0
+		modifier = {
+			add = 1
+			attacker = {
+				has_ethic = ethic_gestalt_consciousness
+			}
+			defender = {
+				NOT = {
+				has_ethic = ethic_gestalt_consciousness
+					}			
+			}
+		}
+	}
+	format = "[This.MainAttacker.GetSpeciesName] <robot_purge_war_names> of [This.MainDefender.Capital.System.GetName]"
+}
+
+
+
+#--------------------------------------------------------------------- ---------------------#
+	#----------------------------------------------------------#
+	#	WARS WITH FALLEN EMPIRES
+	#----------------------------------------------------------#	
+#---------------------------------------------------------------------------------------#
+
+#---- wars declared by independent empires, on fallen or awakened empires ----#
+war_name_format = {
+	random_weight = {
+		factor = 0
+		modifier = {
+			add = 1000
+			attacker = {
+				has_federation = no
+			}
+			defender = {
+				OR = {
+						is_country_type = fallen_empire	
+						is_country_type = awakened_fallen_empire
+					}		
+			}
+		}
+	}
+	format = "[This.MainAttacker.GetSpeciesName] <war_on_heaven_names>"
+}
+
+
+#---- wars declared by fallen empires, on independent empires ----#
+war_name_format = {
+	random_weight = {
+		factor = 0
+		modifier = {
+			add = 1000
+			attacker = {
+				OR = {
+						is_country_type = fallen_empire	
+						is_country_type = awakened_fallen_empire
+					}	
+			}
+			defender = {
+				has_federation = no	
+			}
+		}
+	}
+	format = "[This.MainAttacker.GetAdj] <slaughter_names> of [This.MainDefender.Capital.System.GetName]"
+}
+
+
+#---- wars between fallen / awakened empires, and federations ----#
+war_name_format = {
+	random_weight = {
+		factor = 0
+		modifier = {
+			add = 1000
+			attacker = {
+				OR = {
+						is_country_type = fallen_empire	
+						is_country_type = awakened_fallen_empire
+					}	
+			}
+			defender = {
+				has_federation = yes					
+			}
+		}
+	}
+	format = "[This.MainAttacker.GetAllianceName] - [This.MainDefender.GetAllianceName] <massive_war_names>"
+}
+war_name_format = {
+	random_weight = {
+		factor = 0
+		modifier = {
+			add = 1000
+			attacker = {
+				has_federation = yes		
+			}
+			defender = {
+				OR = {
+						is_country_type = fallen_empire	
+						is_country_type = awakened_fallen_empire
+					}					
+			}
+		}
+	}
+	format = "[This.MainAttacker.GetAllianceName] - [This.MainDefender.GetAllianceName] <massive_war_names>"
+}
+
+
+
+#--------------------------------------------------------------------- ---------------------#
+	#----------------------------------------------------------#
+	#	WARS INVOLVING SPIRITUALIST / MATERIALIST GOVERNMENTS
+	#----------------------------------------------------------#	
+#---------------------------------------------------------------------------------------#
+
+#---- wars declared by spiritualist empires, on non-spiritualists ----#
+war_name_format = {
+	random_weight = {
+		factor = 0
+		modifier = {
+			add = 100
+			attacker = {
+				OR = {						
+						has_government = gov_theocratic_monarchy
+						has_government = gov_theocratic_dictatorship
+						has_government = gov_theocratic_oligarchy
+						has_government = gov_theocratic_republic
+						has_government = gov_celestial_empire
+						has_government = gov_divine_empire
+						has_government = gov_holy_tribunal
+					}	
+			}
+			defender = {
+				NOT = {
+						has_government = gov_theocratic_monarchy
+						has_government = gov_theocratic_dictatorship
+						has_government = gov_theocratic_oligarchy
+						has_government = gov_theocratic_republic
+						has_government = gov_celestial_empire
+						has_government = gov_divine_empire
+						has_government = gov_holy_tribunal
+					}	
+			}
+		}
+	}
+	format = "[This.MainAttacker.GetAdj] <crusade_names> against [This.MainDefender.Capital.System.GetName]"
+}
+
+
+#---- wars declared on non-spiritualist empires, by spiritualists ----#
+war_name_format = {
+	random_weight = {
+		factor = 0
+		modifier = {
+			add = 100
+			attacker = {
+				NOT = {
+						has_government = gov_theocratic_monarchy
+						has_government = gov_theocratic_dictatorship
+						has_government = gov_theocratic_oligarchy
+						has_government = gov_theocratic_republic
+						has_government = gov_celestial_empire
+						has_government = gov_divine_empire
+						has_government = gov_holy_tribunal
+					}
+			}
+			defender = {
+				OR = {
+						has_government = gov_theocratic_monarchy
+						has_government = gov_theocratic_dictatorship
+						has_government = gov_theocratic_oligarchy
+						has_government = gov_theocratic_republic
+						has_government = gov_celestial_empire
+						has_government = gov_divine_empire
+						has_government = gov_holy_tribunal
+					}		
+			}
+		}
+	}
+	format = "[This.MainAttacker.GetSpeciesName] - [This.MainDefender.GetSpeciesName] <secular_war>"
+}
+
+
+#---- Borg Wars ----#
+war_name_format = {
+	random_weight = {
+		factor = 0
+		modifier = {
+			add = 800
+			attacker = {
+				is_assimilator = yes	
+			}
+			defender = {
+				has_federation = no
+			}
+		}
+	}
+	format = "Borg invasion of the [This.MainDefender.GetName]"
+}
+
+war_name_format = {
+	random_weight = {
+		factor = 0
+		modifier = {
+			add = 800
+			attacker = {
+				is_assimilator = yes	
+			}
+			defender = {
+				has_federation = yes
+			}
+		}
+	}
+	format = "Borg invasion of the [This.MainDefender.GetAllianceName]"
+}
+
+
+war_name_format = {
+	random_weight = {
+		factor = 0
+		modifier = {
+			add = 800
+			attacker = {
+				has_federation = no			
+			}
+			defender = {	
+				is_assimilator = yes
+			}
+		}
+	}
+	format = "[This.MainAttacker.GetName] has engaged the Borg"
+}
+
+war_name_format = {
+	random_weight = {
+		factor = 0
+		modifier = {
+			add = 800
+			attacker = {
+				has_federation = yes			
+			}
+			defender = {	
+				is_assimilator = yes
+			}
+		}
+	}
+	format = "[This.MainAttacker.GetAllianceName] have engaged the Borg"
+}
+
+#---- CAR Unique War Names ----#
+
+war_name_format = {
+	random_weight = {
+		factor = 0
+		modifier = {
+			add = 1000
+			attacker = {
+				is_species_class = CAR	
+			}
+			defender = {
+			OR = {
+				is_species_class = CAT
+				is_species_class = BET
+				is_species_class = BYN
+				is_species_class = TRI
+				is_species_class = BAJ
+				}
+			}
+		}
+	}
+	format = "[This.MainAttacker.GetSpeciesName] Occupation of [This.MainDefender.Capital.Planet.GetName]"
+}
+
+
+
+#---- Unique War Names ----#
+war_name_format = {
+	random_weight = {
+		factor = 0
+		modifier = {
+			add = 1000
+			attacker = {
+				is_species_class = VUL	
+			}
+			defender = {
+				is_species_class = ROM
+			}
+		}
+	}
+	format = "[This.MainAttacker.GetSpeciesName] [This.MainDefender.GetSpeciesName] Reunification War"
+}
+
+#---- Unique War Names ----#
+war_name_format = {
+	random_weight = {
+		factor = 0
+		modifier = {
+			add = 1000
+			attacker = {
+			OR = {
+				is_species_class = FED
+				is_species_class = VUL
+				is_species_class = ADR
+				is_species_class = TEL
+				}
+			}
+			defender = {
+				is_species_class = ORI
+			}
+		}
+	}
+	format = "[This.MainAttacker.GetName] - Campaign against Orion Piracy"
+}
+
+war_name_format = {
+	random_weight = {
+		factor = 0
+		modifier = {
+			add = 1000
+			attacker = {
+			OR = {
+				is_species_class = FED
+				is_species_class = VUL
+				is_species_class = ADR
+				is_species_class = TEL
+				}
+			}
+			defender = {
+				is_species_class = NAU
+			}
+		}
+	}
+	format = "[This.MainAttacker.GetName] - Campaign against Nausicaan Raiders"
+}
+
+war_name_format = {
+	random_weight = {
+		factor = 0
+		modifier = {
+			add = 100
+			attacker = {
+			has_country_flag = united_federation_of_planets
+			}
+			defender = {
+			}
+		}
+	}
+	format = "Federation - [This.MainDefender.GetSpeciesName] War"
+}
+
+war_name_format = {
+	random_weight = {
+		factor = 0
+		modifier = {
+			add = 100
+			attacker = {
+			is_species_class = FED
+			NOT = {
+			has_country_flag = united_federation_of_planets
+				}
+			}
+			defender = {
+			}
+		}
+	}
+	format = "[This.MainAttacker.Capital.Planet.GetName] - [This.MainDefender.GetSpeciesName] War"
+}
+
+war_name_format = {
+	random_weight = {
+		factor = 0
+		modifier = {
+			add = 100
+			attacker = {
+			}
+			defender = {
+			is_species_class = FED
+			NOT = {
+			has_country_flag = united_federation_of_planets
+				}
+			}
+		}
+	}
+	format = "[This.MainDefender.Capital.Planet.GetName] - [This.MainAttacker.GetSpeciesName] War"
+}
+
+war_name_format = {
+	random_weight = {
+		factor = 0
+		modifier = {
+			add = 500
+			defender = {
+				exists = overlord
+			}
+			attacker = {
+				is_same_value = prev.defender.overlord
+				is_species_class = DOM
+			}
+		}
+	}
+	format = "Jem'Hadar retaliatory strike against [This.MainDefender.GetName]"
+}
+
+war_name_format = {
+	random_weight = {
+		factor = 0
+		modifier = {
+			add = 100
+			attacker = {
+			OR = {
+				is_species_class = ORI
+				is_species_class = NAU
+				is_species_class = KAZ
+				}
+			}
+			defender = {
+			}
+		}
+	}
+	format = "[This.MainAttacker.GetSpeciesName] raids against [This.MainDefender.GetName]"
+}
+
+war_name_format = {
+	random_weight = {
+		factor = 0
+		modifier = {
+			add = 100
+			attacker = {
+			is_species_class = FER
+			}
+			defender = {
+			}
+		}
+	}
+	format = "[This.MainAttacker.GetSpeciesName] <ferengi_attack_names> [This.MainDefender.GetName]"
+}
+
+war_name_parts_list = {
+	key = "ferengi_attack_names"
+	parts = {
+		"Corporate Takeover of" = 1
+		"Hostile Takeover of" = 1
+		"Acquisition War against" = 1
+		"Liquidation of" = 1
+	}
+}
+
+
+
+
+

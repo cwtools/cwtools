@@ -24,6 +24,7 @@ let getNodeComments (node : Node) =
     let findComments t s (a : Both) =
             match (s, a) with
             | ((b, c), _) when b -> (b, c)
+            | ((_, c), CommentI nc) when nc.StartsWith("#") -> (false, c)
             | ((_, c), CommentI nc) -> (false, nc::c)
             | ((_, c), NodeI n) when n.Key = t -> (true, c)
             | ((_, c), LeafI v) when v.Key = t -> (true, c)

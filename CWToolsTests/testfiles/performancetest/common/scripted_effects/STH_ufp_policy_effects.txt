@@ -1,0 +1,67 @@
+
+remove_ufp_policy_modifiers = {	
+	remove_modifier = em_sth_policy_ufp_war_1
+	remove_modifier = em_sth_policy_ufp_war_2
+	remove_modifier = em_sth_policy_ufp_war_3
+	remove_modifier = em_sth_policy_ufp_war_4
+	remove_modifier = em_sth_policy_ufp_war_5
+	remove_modifier = em_sth_policy_ufp_war_6
+	remove_modifier = em_sth_policy_ufp_war_7
+	remove_modifier = em_sth_policy_ufp_war_8
+	remove_modifier = em_sth_policy_ufp_war_9
+	remove_modifier = em_sth_policy_ufp_war_10
+	remove_modifier = em_sth_policy_ufp_humanitarian_1
+	remove_modifier = em_sth_policy_ufp_humanitarian_2
+	remove_modifier = em_sth_policy_ufp_humanitarian_3
+	remove_modifier = em_sth_policy_ufp_humanitarian_4
+	remove_modifier = em_sth_policy_ufp_humanitarian_5
+	remove_modifier = em_sth_policy_ufp_humanitarian_6
+	remove_modifier = em_sth_policy_ufp_humanitarian_7
+	remove_modifier = em_sth_policy_ufp_humanitarian_8
+	remove_modifier = em_sth_policy_ufp_humanitarian_9
+	remove_modifier = em_sth_policy_ufp_humanitarian_10
+	remove_modifier = em_sth_policy_ufp_economic_1
+	remove_modifier = em_sth_policy_ufp_economic_2
+	remove_modifier = em_sth_policy_ufp_economic_3
+	remove_modifier = em_sth_policy_ufp_economic_4
+	remove_modifier = em_sth_policy_ufp_economic_5
+	remove_modifier = em_sth_policy_ufp_economic_6
+	remove_modifier = em_sth_policy_ufp_economic_7
+	remove_modifier = em_sth_policy_ufp_economic_8
+	remove_modifier = em_sth_policy_ufp_economic_9
+	remove_modifier = em_sth_policy_ufp_economic_10
+	remove_modifier = em_sth_policy_ufp_tech_1
+	remove_modifier = em_sth_policy_ufp_tech_2
+	remove_modifier = em_sth_policy_ufp_tech_3
+	remove_modifier = em_sth_policy_ufp_tech_4
+	remove_modifier = em_sth_policy_ufp_tech_5
+	remove_modifier = em_sth_policy_ufp_tech_6
+	remove_modifier = em_sth_policy_ufp_tech_7
+	remove_modifier = em_sth_policy_ufp_tech_8
+	remove_modifier = em_sth_policy_ufp_tech_9
+	remove_modifier = em_sth_policy_ufp_tech_10
+	remove_modifier = em_sth_policy_ufp_cultural_1
+	remove_modifier = em_sth_policy_ufp_cultural_2
+	remove_modifier = em_sth_policy_ufp_cultural_3
+	remove_modifier = em_sth_policy_ufp_cultural_4
+	remove_modifier = em_sth_policy_ufp_cultural_5
+	remove_modifier = em_sth_policy_ufp_cultural_6
+	remove_modifier = em_sth_policy_ufp_cultural_7
+	remove_modifier = em_sth_policy_ufp_cultural_8
+	remove_modifier = em_sth_policy_ufp_cultural_9
+	remove_modifier = em_sth_policy_ufp_cultural_10		
+}
+
+remove_dominion_members_modifiers = {	
+	remove_modifier = em_dominion_members_1
+	remove_modifier = em_dominion_members_2
+	remove_modifier = em_dominion_members_3
+	remove_modifier = em_dominion_members_4
+	remove_modifier = em_dominion_members_5
+	remove_modifier = em_dominion_members_6
+	remove_modifier = em_dominion_members_7
+	remove_modifier = em_dominion_members_8
+	remove_modifier = em_dominion_members_9
+	remove_modifier = em_dominion_members_10
+}
+

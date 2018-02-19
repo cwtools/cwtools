@@ -1,0 +1,12 @@
+# Icons set here are the ones shown in component editor list.
+
+component_set = { key = "colony_module" required_component_set = yes icon = "GFX_ship_part_Required_Colony" icon_frame = 1 }
+
+component_set = { key = "REQUIRED_COLONY_MODULE_HULL_0" icon = "GFX_ship_part_Required_Colony_Module_hull_0" icon_frame = 1 }
+component_set = { key = "REQUIRED_COLONY_MODULE_STASIS_0" icon = "GFX_ship_part_Required_Colony_Module_stasis_0" icon_frame = 1 }
+component_set = { key = "REQUIRED_COLONY_MODULE_PREFABRICATED_0" icon = "GFX_ship_part_Required_Colony_Module_prefabricated_0" icon_frame = 1 }
+component_set = { key = "REQUIRED_COLONY_MODULE_CONTINGENCY_0" icon = "GFX_ship_part_Required_Colony_Module_contingency_0" icon_frame = 1 }
+component_set = { key = "REQUIRED_COLONY_MODULE_ORBITAL_0" icon = "GFX_ship_part_Required_Colony_Module_orbital_0" icon_frame = 1 }
+component_set = { key = "REQUIRED_COLONY_MODULE_RESEARCH_0" icon = "GFX_ship_part_Required_Colony_Module_research_0" icon_frame = 1 }
+component_set = { key = "REQUIRED_COLONY_MODULE_PIONEERS_0" icon = "GFX_ship_part_Required_Colony_Module_pioneers_0" icon_frame = 1 }
+component_set = { key = "REQUIRED_COLONY_MODULE_MISSION_0" icon = "GFX_ship_part_Required_Colony_Module_mission_0" icon_frame = 1 }

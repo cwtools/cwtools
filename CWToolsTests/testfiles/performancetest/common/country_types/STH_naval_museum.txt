@@ -1,0 +1,21 @@
+naval_museum = {
+	show_in_contacts_list = yes
+	ai = {
+		enabled = yes
+	}
+	faction = {
+		hostile = no
+		needs_border_access = no
+		generate_borders = no
+		needs_colony = no
+	}
+	custom_diplomacy = yes
+	custom_opinion = yes
+	modules = {
+		basic_technology_module = {}
+		standard_event_module = {}
+		exclusive_diplomacy_module = {
+			contact_rule = script_only
+		}
+	}
+}

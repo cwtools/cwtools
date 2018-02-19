@@ -1,0 +1,136 @@
+#Talaxian
+talaxian_homeworld = {
+	name = "Talax"
+	class = "sc_g"
+	flags = { talaxian_homeworld }
+	init_effect = { log = "talaxian homeworld" }
+	usage = custom_empire
+	max_instances = 1
+	planet = { name = "Talax A" class = star orbit_distance = 0 orbit_angle = 1 size = 30 has_ring = no }
+	planet = {
+		count = 3
+		orbit_distance = { min = 25 max = 35 }
+		orbit_angle = { min = 90 max = 270 }
+		moon = { count = { min = 0 max = 2 } class = random_non_colonizable orbit_distance = 5 }
+	}
+	planet = {
+		name = "Talax"
+		class = pc_alpine
+		orbit_distance = 14.5
+		orbit_angle = 220
+		size = { min = 22 max = 25 }
+		starting_planet = yes
+		has_ring = no
+		tile_blockers = none
+		modifiers = none
+		init_effect = { prevent_anomaly = yes }
+		init_effect = {			
+			set_global_flag = talaxian_homeworld_spawned
+			if = {
+				limit = { NOT = { any_country = { has_country_flag = talaxian_empire } } }
+				create_species = {
+					name = "Talaxian"
+					class = TAL
+					portrait = talaxian
+					homeworld = THIS
+					traits = {
+						trait = "trait_communal"
+						trait="trait_nomadic"
+						trait="trait_weak"
+						trait = "trait_quick_learners"
+						ideal_planet_class = "pc_alpine"
+					}
+				}
+				last_created_species = { save_global_event_target_as = talaxianSpecies }
+				create_country = {
+					name = "NAME_talaxian_empire"
+					type = default
+					ignore_initial_colony_error = yes
+					civics = { civic = "civic_agrarian_idyll" civic = "civic_beacon_of_liberty" }
+					authority = auth_democratic
+					name_list = "Talaxian"
+					ethos = { ethic = "ethic_fanatic_pacifist" ethic = "ethic_egalitarian" }
+					species = event_target:talaxianSpecies
+					flag = {
+						icon = { category = "trek" file = "talaxian.dds" }
+						background = { category = "backgrounds" file = "vertical.dds" }
+						colors = { "customcolor2014" "customcolor1555" "null" "null" }
+					}
+					ship_prefix = "TLS"
+					effect = {
+						set_graphical_culture = generic_02
+						set_country_flag = talaxian_empire
+						set_country_flag = custom_start_screen
+						set_country_flag = generic_ent
+						set_country_flag = delta_empire
+						set_country_flag = init_spawned
+						set_country_flag = sth_medium_galaxy
+						save_global_event_target_as = talaxian_empire
+					}
+				}
+				create_colony = { owner = event_target:talaxian_empire species = event_target:talaxianSpecies ethos = owner }
+			}
+			set_capital = yes
+			random_country = {
+				limit = { has_country_flag = talaxian_empire }
+				save_global_event_target_as = talaxian_empire
+				add_appropriate_start_techs = yes
+				species = { save_global_event_target_as = talaxianSpecies }
+			}
+			set_owner = event_target:talaxian_empire
+			generate_major_empire_start_buildings = yes
+			generate_major_empire_start_pops = yes
+			generate_major_empire_start_fleets = yes
+			set_name = "Talax"	
+		}
+		
+		moon = {
+			name = "Rinax"
+			class = "pc_continental"
+			size = { min = 6 max = 8 }
+			orbit_distance = 7
+		}
+	}
+	planet = {
+		count = { min = 0 max = 2 }
+		orbit_distance = { min = 14 max = 25 }
+		class = random_non_colonizable
+		orbit_angle = { min = 90 max = 270 }
+		moon = {
+			count = { min = 0 max = 1 }
+			class = random_non_colonizable
+			orbit_distance = 5
+		}
+	}
+	planet = {
+		count = 1
+		orbit_distance = { min = 18 max = 25 }
+		class = random_non_colonizable
+		orbit_angle = { min = 90 max = 270 }
+		moon = {
+			count = { min = 0 max = 1 }
+			class = random_non_colonizable
+			orbit_angle = { min = 90 max = 270 }
+			orbit_distance = 5
+		}
+	}
+	change_orbit = { min = 20 max = 30 }
+	planet = {
+		name = "Mormo"
+		class = star
+		flags = { secondaryStar }
+		orbit_angle = 190
+		size = { min = 10 max = 15 }
+		has_ring = no
+	}
+	change_orbit = 20
+		planet = {
+		name = "Talax B"
+		class = star
+		flags = { secondaryStar }
+		orbit_angle = 180
+		size = { min = 10 max = 15 }
+		has_ring = no
+	}
+
+}

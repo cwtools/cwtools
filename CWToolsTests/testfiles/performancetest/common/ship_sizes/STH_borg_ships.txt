@@ -1,0 +1,253 @@
+#reloadable with 'reload stats'
+# This file is where you start when you want to configure something new, then go to sections
+ 
+ ##### Borg Sphere ##### SPH
+ borg_sphere = {
+ 	graphical_culture = { "borg_01" "borg_yellow_01" "borg_red_01" "borg_blue_01" "borg_purple_01" "borg_orange_01"  }
+ 	formation_priority = 3
+ 	is_space_object = yes
+ 	max_speed = 3.2
+ 	acceleration = 0.16
+ 	rotation_speed = 0.16
+ 	combat_max_speed = 0.8
+ 	combat_rotation_speed = 0.024
+ 	collision_radius = 11
+ 	modifier = {
+ 		ship_evasion_mult = -0.7
+ 		ship_armor_add = 40
+ 		ship_evasion_add = 12
+ 		ship_upkeep_mult = 0.75	
+  		# ship_shield_hp_mult = 2
+  	}
+  	max_hitpoints = 500
+  	size_multiplier = 26
+ 
+  	fleet_slot_size = 2
+  	section_slots = { "stern" = { locator = "part1" } "mid" = { locator = "part1" } }
+  	num_target_locators = 2
+ 	icon_frame = 4
+ 	is_space_station = no
+ 	base_buildtime = 410
+ 	required_spaceport_level = 2
+ 	can_have_federation_design = yes
+ 	enable_default_design = yes
+ 	
+ 	prerequisites = { "tech_engineering_industry_1251" }
+ 	
+ 	class = shipclass_military
+    required_component_set = "required_ship_sensors"
+ 	required_component_set = "borg_combat_computers"
+    required_component_set = "required_aura_Destroyer"
+    required_component_set = "borg_required_warp"
+ 	required_component_set = "borg_required_thrusters"
+ 	required_component_set = "borg_required_defense"
+ 	required_component_set = "borg_required_hull"
+ }
+ 
+ ##### Borg Diamond ##### DIA 
+ borg_diamond = {
+ 	graphical_culture = { "borg_01" "borg_yellow_01" "borg_red_01" "borg_blue_01" "borg_purple_01" "borg_orange_01"  }
+ 	formation_priority = 4
+ 	is_space_object = yes
+ 	max_speed = 4
+ 	acceleration = 0.2
+ 	rotation_speed = 0.2
+ 	combat_max_speed = 1
+ 	combat_rotation_speed = 0.04
+ 	collision_radius = 14
+ 	modifier = {
+ 		ship_evasion_mult = -0.5
+ 		ship_armor_add = 30
+ 		ship_upkeep_mult = 0.75
+ 		ship_evasion_add = 20
+  		# ship_shield_hp_mult = 4
+  	}
+  	max_hitpoints = 3000
+  	size_multiplier = 30
+  	fleet_slot_size = 2
+ 
+ 
+  	section_slots = { "stern" = { locator = "part1" } "mid" = { locator = "part1" } }
+  	num_target_locators = 2
+  	is_space_station = no
+ 	icon_frame = 13
+ 	base_buildtime = 500
+ 	required_spaceport_level = 4
+ 	can_have_federation_design = yes
+ 	enable_default_design = yes
+ 	
+ 	prerequisites = { "tech_engineering_industry_1252" }
+ 	
+ 	class = shipclass_military
+    required_component_set = "required_ship_sensors"
+ 	required_component_set = "borg_combat_computers"
+    required_component_set = "required_aura_Cruiser"
+    required_component_set = "borg_required_warp"
+ 	required_component_set = "borg_required_thrusters"
+ 	required_component_set = "borg_required_defense"
+    required_component_set = "borg_required_hull"
+ }	
+ 
+ ##### Borg Cube ##### CUB 
+ borg_cube = {
+ 	graphical_culture = { "borg_01" "borg_yellow_01" "borg_red_01" "borg_blue_01" "borg_purple_01" "borg_orange_01"  }
+ 	formation_priority = 3
+ 	is_space_object = yes
+ 	max_speed = 2.6
+ 	acceleration = 0.13
+ 	rotation_speed = 0.13
+ 	combat_max_speed = 0.65
+ 	combat_rotation_speed = 0.012
+ 	collision_radius = 40
+ 	modifier = {
+ 		ship_evasion_mult = -0.85
+ 		ship_armor_add = 48
+ 		ship_evasion_add = 6
+ 		ship_upkeep_mult = 0.75 
+  		# ship_shield_hp_mult = 10
+  	}
+  	max_hitpoints = 1000
+  	size_multiplier = 110
+  	fleet_slot_size = 4
+ 
+ 
+  	section_slots = { "stern" = { locator = "part1" } "mid" = { locator = "part1" } }
+  	num_target_locators = 2
+  	is_space_station = no
+ 	icon_frame = 5
+ 	base_buildtime = 2000 #High build time
+ 	required_spaceport_level = 5
+ 	can_have_federation_design = yes
+ 	enable_default_design = yes
+ 	is_designable = yes
+ 	prerequisites = { "tech_engineering_industry_1253" }
+ 	
+ 	class = shipclass_military
+    required_component_set = "required_ship_sensors"
+ 	required_component_set = "borg_combat_computers"
+    required_component_set = "required_aura_Battleship"
+    required_component_set = "borg_required_warp"
+ 	required_component_set = "borg_required_thrusters"
+ 	required_component_set = "borg_required_defense"
+ 	required_component_set = "borg_required_hull"
+ }
+
+ ##### Borg Tactical Cube ##### TCU
+ borg_tactical = {
+ 	graphical_culture = { "borg_01" "borg_yellow_01" "borg_red_01" "borg_blue_01" "borg_purple_01" "borg_orange_01"  }
+ 	formation_priority = 4
+ 	is_space_object = yes
+ 	max_speed = 2.4
+ 	acceleration = 0.12
+ 	rotation_speed = 0.12
+ 	combat_max_speed = 0.6
+ 	combat_rotation_speed = 0.008
+ 	collision_radius = 40
+ 	modifier = {
+ 		ship_evasion_mult = -0.9
+ 		ship_armor_add = 70
+ 		ship_evasion_add = 4
+ 		ship_upkeep_mult = 0.75 
+  		# ship_shield_hp_mult = 10
+  	}
+  	max_hitpoints = 3000
+  	size_multiplier = 125
+  	fleet_slot_size = 4
+ 
+ 
+  	section_slots = { "stern" = { locator = "part1" } "mid" = { locator = "part1" } }
+  	num_target_locators = 2
+  	is_space_station = no
+	icon_frame = 15
+	base_buildtime = 2300 #High build time
+	required_spaceport_level = 6
+	can_have_federation_design = yes
+	enable_default_design = yes
+	is_designable = yes
+	prerequisites = { "tech_engineering_industry_1254" }
+	
+	class = shipclass_military
+      required_component_set = "required_ship_sensors"
+	  required_component_set = "borg_combat_computers"
+      required_component_set = "required_aura_Battleship"
+      required_component_set = "borg_required_warp"
+	  required_component_set = "borg_required_thrusters"
+	  required_component_set = "borg_required_defense"
+	  required_component_set = "borg_required_hull"
+}
+
+ ##### Omega Cube ##### SC 
+ super_cube = {
+  graphical_culture = { "borg_01" "borg_yellow_01" "borg_red_01" "borg_blue_01" "borg_purple_01" "borg_orange_01"  }
+  formation_priority = 4
+  is_space_object = yes
+  max_speed = 2.2
+  acceleration = 0.11
+  rotation_speed = 0.11
+  combat_max_speed = 0.55
+  combat_rotation_speed = 0.004
+  collision_radius = 100
+  modifier = {
+    ship_evasion_mult = -0.95
+    ship_armor_add = 53
+    ship_evasion_add = 2
+    ship_upkeep_mult = 0.25
+      # ship_shield_hp_mult = 10
+    }
+    max_hitpoints = 3000
+    size_multiplier = 400
+    fleet_slot_size = 4
+ 
+ 
+    section_slots = { "stern" = { locator = "part1" } "mid" = { locator = "part1" } }
+    num_target_locators = 2
+    is_space_station = no
+  icon_frame = 5 # TODO
+  base_buildtime = 12000 #High build time
+  required_spaceport_level = 6
+  can_have_federation_design = no
+  enable_default_design = no
+  is_designable = no
+  prerequisites = { "tech_engineering_industry_1255" }
+  
+  class = shipclass_military
+  required_component_set = "required_ship_sensors"
+  required_component_set = "borg_combat_computers"
+  required_component_set = "borg_required_warp"
+  required_component_set = "borg_required_thrusters"
+  required_component_set = "borg_required_defense"
+  required_component_set = "borg_required_hull"
+ }
+ 
+ ##### Unimatrix Defense #####
+
+borg_unimatrix_defense_small = {
+  max_speed = 0.0
+  acceleration = 0.0
+  rotation_speed = 0.0
+  modifier = {
+    ship_evasion_mult = -1
+    ship_armor_add = 25
+    ship_upkeep_mult = -0.99
+  }
+  max_hitpoints = 40000
+  size_multiplier = 0
+  fleet_slot_size = 2
+  section_slots = { 
+    "west" = { locator = "part1" }
+    "east" = { locator = "part1" }
+  }
+  is_designable = no
+  num_target_locators = 0
+  is_space_station = yes
+  
+  enable_default_design = yes #if yes, countries will have an auto-generated design at start
+  prerequisites = { "tech_cutting_beam_1" }
+  class = shipclass_military_station
+  required_component_set = "required_station_reactors"
+  required_component_set = "required_defense"
+  required_component_set = "required_hull"
+  build_block_radius = 2
+  auto_upgrade = yes
+}
+

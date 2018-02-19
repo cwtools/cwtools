@@ -1,0 +1,799 @@
+namespace = STH_mars
+
+#Fail safe event, yearly pulse
+event = {
+	id = STH_mars.1
+	hide_window = yes
+	is_triggered_only = yes
+	trigger = { any_country = { has_country_strategic_resource = { type = sr_terraforming_23 amount > 0 } } }
+	immediate = {
+		random_country = {
+			limit = {
+				has_country_strategic_resource = { type = sr_terraforming_23 amount > 0 }
+				any_owned_planet = { has_planet_flag = sol_mars }
+			}
+			random_owned_planet = {
+				limit = {
+					has_planet_flag = sol_mars 
+					has_building = building_verteron_array
+				}
+				if = {
+					limit = { 
+						NOR = { 
+							has_planet_flag = mars_terraforming_process
+							has_planet_flag = mars_terraforming_complete
+						}
+					}
+					planet_event = { id = STH_mars.2 days = 10 random = 5 }
+				}
+			}
+		}
+	}
+}
+
+#Fail safe event, stage 2
+planet_event = {
+	id = STH_mars.2
+	title = "STH_mars.101.name"
+	desc = "STH_mars.101.desc"
+	picture = sth_GFX_evt_marsSpace
+	show_sound = event_construction
+	location = root
+	is_triggered_only = yes
+	immediate = { 
+		set_timed_planet_flag = { flag = mars_terraforming_process days = 390 }
+		set_variable = { which = "mars_progress" value = 0 }
+		planet_event = { id = STH_mars.102 days = 30 } # initiate counter loop
+		planet_event = { id = STH_mars.103 days = 360 } # initiate annual event check
+	}
+	option = { name = STH_mars.101.a }
+}
+
+
+# Terraform Mars. Triggered from on_action. Empty event
+planet_event = {
+	id = STH_mars.101
+	title = "STH_mars.101.name"
+	desc = "STH_mars.101.desc"
+	picture = sth_GFX_evt_marsSpace
+	show_sound = event_construction
+	location = root
+	is_triggered_only = yes
+	trigger = {
+		has_planet_flag = sol_mars 
+		NOR = { 
+			has_planet_flag = mars_terraforming_process
+			has_planet_flag = mars_terraforming_complete
+		}
+		from = { has_building = building_verteron_array }
+	}
+	immediate = { 
+		set_timed_planet_flag = { flag = mars_terraforming_process days = 390 }
+		set_variable = { which = "mars_progress" value = 0 }
+		planet_event = { id = STH_mars.102 days = 30 } # initiate counter loop
+		planet_event = { id = STH_mars.103 days = 360 } # initiate annual event check
+	}
+	option = { name = STH_mars.101.a }
+}
+
+# terraforming counter loop
+planet_event = {
+	id = STH_mars.102
+	hide_window = yes
+	is_triggered_only = yes
+	trigger = {
+		has_planet_flag = sol_mars
+		has_planet_flag = mars_terraforming_process
+		NOT = { has_planet_flag = mars_terraforming_complete }
+		check_variable = { which = "mars_progress" value < 1002 }
+	}
+	immediate = {
+		#log = "STH_mars.102 start"
+		if = {
+			limit = { owner = { has_country_strategic_resource = { type = sr_terraforming_23 amount > 0 } } }
+			random_list = {
+				10 = {
+					modifier = { factor = 4 has_planet_flag = terraforming_advantage }
+					change_variable = { which = "mars_progress" value = 18 }
+				}
+				10 = {
+					modifier = { factor = 2 has_planet_flag = terraforming_advantage }
+					change_variable = { which = "mars_progress" value = 14 }
+				}
+				10 = { change_variable = { which = "mars_progress" value = 10 } }
+				10 = {
+					modifier = { factor = 2 has_planet_flag = terraforming_disadvantage }
+					change_variable = { which = "mars_progress" value = 6 }
+				}
+				10 = {
+					modifier = { factor = 4 has_planet_flag = terraforming_disadvantage }
+					change_variable = { which = "mars_progress" value = 2 }
+				}
+				10 = {
+					modifier = { factor = 100 has_planet_flag = terraforming_freeze }
+					change_variable = { which = "mars_progress" value = 1 }
+				}
+			}
+		}
+		planet_event = { id = STH_mars.102 days = 30 random = 5 }
+		set_timed_planet_flag = { flag = mars_terraforming_process days = 390 }
+	}
+}
+
+# terraforming annual event
+planet_event = {
+	id = STH_mars.103
+	title = "STH_mars.103.name"
+	desc = { trigger = { check_variable = { which = "mars_progress"  value < 50 } } text = "STH_mars.103.desc_0" }
+	desc = { trigger = { check_variable = { which = "mars_progress"  value > 49 } check_variable = { which = "mars_progress"  value < 100 } } text = "STH_mars.103.desc_1" }
+	desc = { trigger = { check_variable = { which = "mars_progress"  value > 99 } check_variable = { which = "mars_progress"  value < 150 } } text = "STH_mars.103.desc_2" }
+	desc = { trigger = { check_variable = { which = "mars_progress"  value > 149 } check_variable = { which = "mars_progress"  value < 200 } } text = "STH_mars.103.desc_3" }
+	desc = { trigger = { check_variable = { which = "mars_progress"  value > 199 } check_variable = { which = "mars_progress"  value < 250 } } text = "STH_mars.103.desc_4" }
+	desc = { trigger = { check_variable = { which = "mars_progress"  value > 249 } check_variable = { which = "mars_progress"  value < 300 } } text = "STH_mars.103.desc_5" }
+	desc = { trigger = { check_variable = { which = "mars_progress"  value > 299 } check_variable = { which = "mars_progress"  value < 350 } } text = "STH_mars.103.desc_6" }
+	desc = { trigger = { check_variable = { which = "mars_progress"  value > 349 } check_variable = { which = "mars_progress"  value < 400 } } text = "STH_mars.103.desc_7" }
+	desc = { trigger = { check_variable = { which = "mars_progress"  value > 399 } check_variable = { which = "mars_progress"  value < 450 } } text = "STH_mars.103.desc_8" }
+	desc = { trigger = { check_variable = { which = "mars_progress"  value > 449 } check_variable = { which = "mars_progress"  value < 500 } } text = "STH_mars.103.desc_9" }
+	desc = { trigger = { check_variable = { which = "mars_progress"  value > 499 } check_variable = { which = "mars_progress"  value < 550 } } text = "STH_mars.103.desc_10" }
+	desc = { trigger = { check_variable = { which = "mars_progress"  value > 549 } check_variable = { which = "mars_progress"  value < 600 } } text = "STH_mars.103.desc_11" }
+	desc = { trigger = { check_variable = { which = "mars_progress"  value > 599 } check_variable = { which = "mars_progress"  value < 650 } } text = "STH_mars.103.desc_12" }
+	desc = { trigger = { check_variable = { which = "mars_progress"  value > 649 } check_variable = { which = "mars_progress"  value < 700 } } text = "STH_mars.103.desc_13" }
+	desc = { trigger = { check_variable = { which = "mars_progress"  value > 699 } check_variable = { which = "mars_progress"  value < 750 } } text = "STH_mars.103.desc_14" }
+	desc = { trigger = { check_variable = { which = "mars_progress"  value > 749 } check_variable = { which = "mars_progress"  value < 800 } } text = "STH_mars.103.desc_15" }
+	desc = { trigger = { check_variable = { which = "mars_progress"  value > 799 } check_variable = { which = "mars_progress"  value < 850 } } text = "STH_mars.103.desc_16" }
+	desc = { trigger = { check_variable = { which = "mars_progress"  value > 849 } check_variable = { which = "mars_progress"  value < 900 } } text = "STH_mars.103.desc_17" }
+	desc = { trigger = { check_variable = { which = "mars_progress"  value > 899 } check_variable = { which = "mars_progress"  value < 950 } } text = "STH_mars.103.desc_18" }
+	desc = { trigger = { check_variable = { which = "mars_progress"  value > 949 } } text = "STH_mars.103.desc_19" }
+	picture = sth_GFX_evt_heroDiplomacy1
+	show_sound = event_conversation
+	is_triggered_only = yes
+	trigger = {
+		has_planet_flag = sol_mars
+		has_planet_flag = mars_terraforming_process
+		check_variable = { which = "mars_progress" value < 1001 }
+		NOT = { has_planet_flag = mars_terraforming_complete }
+	}
+	immediate = { 
+		#log = "STH_mars.103 start" 
+		set_timed_planet_flag = { flag = mars_terraforming_process days = 390 }
+	}
+	option = {
+		name = STH_mars.103.a
+		trigger = { owner = { energy > 99 } }
+		owner = { add_energy = -100 }
+		hidden_effect = {
+			planet_event = { id = STH_mars.103 days = 360 }
+			set_timed_planet_flag = { flag = terraforming_advantage days = 360 }
+		}
+	}
+	option = {
+		name = STH_mars.103.b
+		hidden_effect = { planet_event = { id = STH_mars.103 days = 360 } }
+	}
+}
+
+# terraforming counter check - 10%, first story (life/comet strike)
+planet_event = {
+	id = STH_mars.110
+	hide_window = yes
+	trigger = {
+		has_planet_flag = sol_mars
+		check_variable = { which = "mars_progress" value > 100 }
+		NOR = { 
+			has_planet_flag = mars_terraforming_complete
+			has_planet_flag = mars_terraforming_stage_1
+		}	
+		has_planet_flag = mars_terraforming_process
+	}	
+	immediate = { 
+		#log = "STH_mars.110 start"
+		set_planet_flag = mars_terraforming_stage_1
+		random_list = {
+			10 = { planet_event = { id = STH_mars.111 days = 1 } } # positive event
+			10 = { } # nothing happens
+			10 = { planet_event = { id = STH_mars.112 days = 1 } } # negative event
+		}
+	}
+}
+
+# Positive event, find life
+planet_event = {
+	id = STH_mars.111
+	title = "STH_mars.101.name"
+	desc = "STH_mars.111.desc"
+	picture = sth_GFX_evt_viewscreenBeetles
+	show_sound = event_alien_nature
+	is_triggered_only = yes
+	immediate = { 
+		random_tile = { 
+			limit = { has_blocker = tb_mars_canyon } 
+			add_deposit = d_immense_society_deposit
+			remove_blocker = yes
+		}
+		set_planet_flag = mars_development_life
+	}
+	option = { name = STH_mars.111.a }
+}
+
+# Negative event, comet strike
+planet_event = {
+	id = STH_mars.112
+	title = "STH_mars.101.name"
+	desc = "STH_mars.112.desc"
+	picture = GFX_evt_nuclear_explosion
+	show_sound = event_super_explosion
+	location = root
+	is_triggered_only = yes
+	immediate = { 
+		random_tile = { 
+			limit = { 
+				has_blocker = no
+				NOR = { 
+					has_building = building_verteron_array 
+					has_building = building_colony_shelter
+					has_building = building_capital_1
+				}
+			} 
+			set_blocker = "tb_crater" 
+		}
+		random_owned_pop = { kill_pop = yes }
+		set_timed_planet_flag = { flag = terraforming_disadvantage days = 180 }
+	}
+	option = { name = STH_mars.112.a }
+}
+
+# terraforming counter check - 35%, second story (sun mirror/damaged eco-system)
+planet_event = {
+	id = STH_mars.120
+	hide_window = yes
+	trigger = {
+		has_planet_flag = sol_mars
+		check_variable = { which = "mars_progress" value > 350 }
+		NOR = { 
+			has_planet_flag = mars_terraforming_complete
+			has_planet_flag = mars_terraforming_stage_2
+		}
+		has_planet_flag = mars_terraforming_process
+	}
+	immediate = { 
+		set_planet_flag = mars_terraforming_stage_2
+		random_list = {
+			10 = { planet_event = { id = STH_mars.121 days = 1 } } # positive event
+			10 = { } # nothing happens
+			10 = { planet_event = { id = STH_mars.122 days = 1 } } # negative event
+		}
+	}
+}
+
+# Positive event, sun mirror
+planet_event = {
+	id = STH_mars.121
+	title = "STH_mars.101.name"
+	desc = "STH_mars.121.desc"
+	picture = sth_GFX_evt_solarReflector
+	show_sound = event_construction
+	location = root
+	is_triggered_only = yes
+	immediate = {
+		add_modifier = { modifier = "space_mirror" days = -1 }
+		set_planet_flag = mars_sun_mirror
+	}
+	option = { name = STH_mars.121.a }
+}
+
+# Negative event, damaged eco-system
+planet_event = {
+	id = STH_mars.122
+	title = "STH_mars.101.name"
+	desc = "STH_mars.122.desc"
+	picture = GFX_evt_microscopic_life
+	location = root
+	is_triggered_only = yes
+	immediate = {
+		add_modifier = { modifier = "abandoned_terraforming" days = 1800 }
+		set_timed_planet_flag = { flag = terraforming_disadvantage days = 180 }
+	}
+	option = { name = STH_mars.122.a }
+}
+
+# terraforming counter check - 50%, terraform mid-step
+planet_event = {
+	id = STH_mars.130
+	title = "STH_mars.101.name"
+	desc = "STH_mars.130.desc"
+	picture = sth_GFX_evt_marsComet
+	show_sound = event_construction
+	location = root
+	trigger = {
+		has_planet_flag = sol_mars
+		check_variable = { which = "mars_progress" value > 500 }
+		NOR = { 
+			has_planet_flag = mars_terraforming_complete
+			has_planet_flag = mars_terraforming_stage_3
+		}
+		has_planet_flag = mars_terraforming_process
+	}
+	immediate = { 
+		set_planet_flag = mars_terraforming_stage_3
+		change_pc = pc_l2_class
+		change_planet_size = 1
+		remove_modifier = "mars_colony"
+		add_modifier = { modifier = "mars_colony_2" days = -1 }
+		if = {
+			limit = { NOT = { has_planet_flag = mars_development_life } }
+			random_tile = {
+				limit = { has_pop = no has_building = no }
+				set_blocker = tb_mars_canyon
+			}
+		}
+	}
+	option = { name = STH_mars.130.a }
+}
+
+# terraforming counter check - 60%, third story, mars charter. (utopia/ecologist strike, slows down project)
+planet_event = {
+	id = STH_mars.140
+	title = "STH_mars.140.name"
+	desc = "STH_mars.140.desc"
+	picture = sth_GFX_evt_marsColonies
+	show_sound = event_conversation
+	location = root
+	trigger = {
+		has_planet_flag = sol_mars
+		check_variable = { which = "mars_progress" value > 600  }
+		NOR = { 
+			has_planet_flag = mars_terraforming_complete
+			has_planet_flag = mars_terraforming_stage_4
+		}
+		has_planet_flag = mars_terraforming_process
+		any_tile = { has_building = building_verteron_array }
+	}	
+	immediate = { 
+		set_planet_flag = mars_terraforming_stage_4
+		random_list = {
+			10 = { planet_event = { id = STH_mars.141 days = 100 } } # positive event
+			10 = { } # middle event, nothing much happens
+			10 = { planet_event = { id = STH_mars.142 days = 100 } } # negative event
+		}
+	}
+	option = { name = STH_mars.140.a }
+}
+
+# Positive event, utopia planitia
+planet_event = {
+	id = STH_mars.141
+	title = "STH_mars.140.name"
+	desc = "STH_mars.141.desc"
+	picture = sth_GFX_evt_utopiaPlanitia
+	show_sound = event_construction
+	location = root
+	is_triggered_only = yes
+	#trigger = { }
+	immediate = {
+		add_modifier = { modifier = "utopia_planitia" days = -1 }
+		set_planet_flag = mars_utopia_planitia
+	}
+	option = { name = STH_mars.141.a }
+}
+
+# Negative event, eco-terrorist
+planet_event = {
+	id = STH_mars.142
+	title = "STH_mars.140.name"
+	desc = "STH_mars.142.desc"
+	picture = GFX_evt_animal_wildlife
+	show_sound = event_alien_nature
+	location = root
+	is_triggered_only = yes
+	immediate = {
+		add_modifier = { modifier = "eco_terrorists" days = 300 }
+		set_timed_planet_flag = { flag = terraforming_disadvantage days = 1800 }
+	}
+	option = { name = STH_mars.142.a }
+}
+
+planet_event = {
+	id = STH_mars.143
+	title = "STH_mars.140.name"
+	desc = "STH_mars.143.desc"
+	picture = sth_GFX_evt_marsColonies
+	show_sound = event_conversation
+	location = root
+	is_triggered_only = yes
+	option = {
+		name = STH_mars.140.a
+		owner = { add_unity = 100 }
+	}
+}
+
+# terraforming counter check - 75%, fourth and final story, expansion event (daystrom/rebellion - requires transport special project)
+planet_event = {
+	id = STH_mars.150
+	hide_window = yes
+	trigger = {
+		has_planet_flag = sol_mars
+		check_variable = { which = "mars_progress" value > 750 }
+		NOR = { 
+			has_planet_flag = mars_terraforming_complete
+			has_planet_flag = mars_terraforming_stage_5
+		}
+		has_planet_flag = mars_terraforming_process
+		any_tile = { has_building = building_verteron_array }
+	}
+	immediate = { 
+		set_planet_flag = mars_terraforming_stage_5
+		random_list = {
+			10 = { planet_event = { id = STH_mars.151 days = 1 } } # positive event
+			10 = { } # nothing happens
+			10 = { planet_event = { id = STH_mars.152 days = 1 } } # negative event
+		}
+	}
+}
+
+# Positive event, daystrom
+planet_event = {
+	id = STH_mars.151
+	title = "STH_mars.101.name"
+	desc = "STH_mars.151.desc"
+	picture = sth_GFX_evt_daystromInstitute
+	show_sound = event_construction
+	location = root
+	is_triggered_only = yes
+	immediate = {
+		set_planet_flag = mars_daystrom_institute
+		change_planet_size = 1
+		random_tile = {
+			limit = { has_building = no has_blocker = no }
+			set_building = "building_daystrom_institute"
+		}
+	}
+	option = { name = STH_mars.151.a }
+}
+
+# Negative event, rebellion
+planet_event = {
+	id = STH_mars.152
+	title = "STH_mars.101.name"
+	desc = "STH_mars.152.desc"
+	picture = GFX_evt_alien_propaganda
+	show_sound = event_planetary_riot
+	location = root
+	is_triggered_only = yes
+	immediate = {
+		add_modifier = { modifier = "planet_separatist_supporter" days = -1 }
+		set_planet_flag = terraforming_freeze
+	}
+	option = {
+		name = STH_mars.152.a
+		enable_special_project = { name = "MARS_1_PROJECT" owner = root.owner location = root }
+	}
+}
+
+# Rebellion event chain, triggered from special project, triggers 154
+ship_event = {
+	id = STH_mars.153
+	hide_window = yes
+	is_triggered_only = yes
+	immediate = {
+		random_planet = {
+			limit = { has_planet_flag = sol_mars }
+			planet_event = { id = STH_mars.154 days = 1 }
+		}
+	}
+}
+
+# Rebellion event chain, triggered from 153, breaks rebellion
+planet_event = {
+	id = STH_mars.154
+	title = "STH_mars.101.name"
+	desc = "STH_mars.154.desc"
+	picture = GFX_evt_ground_combat
+	show_sound = event_ground_battle
+	location = root
+	is_triggered_only = yes
+	immediate = {
+		remove_modifier = "planet_separatist_supporter" 
+		remove_planet_flag = terraforming_freeze
+	}
+	option = { name = STH_mars.154.a }
+}
+
+# terraforming counter check - 90%, rain on mars, almost done
+planet_event = {
+	id = STH_mars.160
+	title = "STH_mars.160.name"
+	desc = "STH_mars.160.desc"
+	picture = sth_GFX_evt_rainOnMars
+	location = root
+	trigger = {
+		has_planet_flag = sol_mars
+		check_variable = { which = "mars_progress" value > 900 }
+		NOR = { 
+			has_planet_flag = mars_terraforming_complete
+			has_planet_flag = mars_terraforming_stage_6
+		}
+		has_planet_flag = mars_terraforming_process
+		any_tile = { has_building = building_verteron_array }
+	}
+	immediate = { set_planet_flag = mars_terraforming_stage_6 }
+	option = { name = STH_mars.160.a }
+}
+
+# terraforming counter check - 100%, end terraform
+planet_event = {
+	id = STH_mars.170
+	title = "STH_mars.101.name"
+	desc = "STH_mars.170.desc"
+	picture = sth_GFX_evt_marsComet
+	show_sound = event_construction
+	location = root
+	
+	trigger = {
+		has_planet_flag = sol_mars
+		check_variable = {
+			which = "mars_progress" 
+			value > 999 
+		}
+		NOT = { has_planet_flag = mars_terraforming_complete }
+		has_planet_flag = mars_terraforming_process
+		any_tile = { has_building = building_verteron_array }
+	}
+	
+	immediate = { 
+		set_planet_flag = mars_terraforming_complete
+		remove_planet_flag = mars_terraforming_stage_1
+		remove_planet_flag = mars_terraforming_stage_2
+		remove_planet_flag = mars_terraforming_stage_3
+		remove_planet_flag = mars_terraforming_stage_4
+		remove_planet_flag = mars_terraforming_stage_5
+		remove_planet_flag = mars_terraforming_stage_6
+		change_pc = pc_arid
+		set_planet_entity = { entity = "green_mars_entity" }
+		change_planet_size = 1
+		remove_modifier = "mars_colony_2"
+		add_modifier = { modifier = "mars_colony_3" days = -1 }
+		if = {
+			limit = { NOT = { has_planet_flag = mars_development_life } }
+			random_tile = {
+				limit = { has_pop = no has_building = no }
+				set_blocker = tb_mars_canyon
+			}
+		}
+		random_tile = {
+			limit = { has_building = "building_verteron_array" }
+			remove_building = yes
+			clear_deposits = yes
+		}
+	}
+	option = { 
+		name = STH_mars.170.a
+		hidden_effect = { planet_event = { id = STH_mars.180 days = 1800 random = 500 } }
+	}
+}
+
+# loop event, Mars development project
+planet_event = {
+	id = STH_mars.180
+	title = "STH_mars.180.name"
+	desc = "STH_mars.180.desc"
+	picture = sth_GFX_evt_marsColonies
+	location = root
+	is_triggered_only = yes
+	trigger = {
+		NAND = {
+			has_planet_flag = mars_development_life
+			has_planet_flag = mars_sun_mirror
+			has_planet_flag = mars_utopia_planitia
+			has_planet_flag = mars_daystrom_institute
+			has_planet_flag = mars_perimeter
+		}
+	}
+	option = { # technology - daystrom
+		name = STH_mars.180.a
+		trigger = { 
+			owner = { minerals > 499 }
+			NOT = { has_planet_flag = mars_daystrom_institute }
+		}
+		owner = { add_minerals = -500 }		
+		hidden_effect = { 
+		    planet_event = { id = STH_mars.190 days = 500 random = 400 }
+		    planet_event = { id = STH_mars.180 days = 1800 random = 500 }
+		}
+	}
+	option = { # habitability - mirror
+		name = STH_mars.180.b
+		trigger = { 
+			owner = { minerals > 499 }
+			NOT = { has_planet_flag = mars_sun_mirror }
+		}
+		owner = { add_minerals = -500 }
+		hidden_effect = { 
+		    planet_event = { id = STH_mars.191 days = 500 random = 400 }
+		    planet_event = { id = STH_mars.180 days = 1800 random = 500 }
+		}
+	}
+	option = { # shipyard - utopia - planitia
+		name = STH_mars.180.c
+		trigger = { 
+			owner = { minerals > 499 }
+			NOT = { has_planet_flag = mars_utopia_planitia }
+		}
+		owner = { add_minerals = -500 }
+		hidden_effect = { 
+		    planet_event = { id = STH_mars.192 days = 500 random = 400 }
+		    planet_event = { id = STH_mars.180 days = 1800 random = 500 }
+		}
+	}
+	option = { # defense - perimieter
+		name = STH_mars.180.d
+		trigger = { 
+			owner = { minerals > 249 }
+			NOT = { has_planet_flag = mars_perimeter }
+		}
+		owner = { add_minerals = -250 }
+		hidden_effect = { 
+		    planet_event = { id = STH_mars.193 days = 500 random = 400 }
+		    planet_event = { id = STH_mars.180 days = 1800 random = 500 }
+		}
+	}
+	option = { # survey - development life
+		name = STH_mars.180.e
+		trigger = { 
+			owner = { energy > 499 }
+			NOT = { has_planet_flag = mars_development_life }
+		}
+		owner = { add_energy = -500 }
+		hidden_effect = { 
+		    planet_event = { id = STH_mars.194 days = 500 random = 400 }
+		    planet_event = { id = STH_mars.180 days = 1800 random = 500 }
+		}
+	}
+	option = { # nothing, reloop
+		name = STH_mars.180.f
+		hidden_effect = { planet_event = { id = STH_mars.180 days = 1800 random = 500 } }
+	}
+	option = { # don't want even anymore. double-check event
+		name = STH_mars.180.g
+		ai_chance = { factor = 0 }
+		hidden_effect = { planet_event = { id = STH_mars.181 } }
+	}
+}
+
+# are you sure event
+planet_event = {
+	id = STH_mars.181
+	title = "STH_mars.180.name"
+	desc = "STH_mars.181.desc"
+	picture = sth_GFX_evt_marsColonies
+	location = root
+	is_triggered_only = yes
+	option = { # returns you to previous event
+		name = STH_mars.181.a
+		hidden_effect = { planet_event = { id = STH_mars.180 } }
+	}
+	option = { # cancel the project forever
+		name = STH_mars.181.b
+		custom_tooltip = STH_mars.181.b.tooltip
+		owner = { add_influence = 50 }
+	}
+}
+
+planet_event = {
+	id = STH_mars.190
+	title = "STH_mars.180.name"
+	desc = "STH_mars.190.desc"
+	picture = sth_GFX_evt_daystromInstitute
+	show_sound = event_construction
+	location = root
+	is_triggered_only = yes
+	immediate = {
+		set_planet_flag = mars_daystrom_institute
+		change_planet_size = 1
+		random_tile = {
+			limit = { has_building = no has_blocker = no }
+			set_building = "building_daystrom_institute"
+		}
+	}
+	option = {
+		name = STH_mars.151.a
+	}
+}
+
+planet_event = {
+	id = STH_mars.191
+	title = "STH_mars.180.name"
+	desc = "STH_mars.191.desc"
+	picture = sth_GFX_evt_solarReflector
+	show_sound = event_construction
+	location = root
+	is_triggered_only = yes
+	immediate = {
+		add_modifier = { modifier = "space_mirror" days = -1 }
+		set_planet_flag = mars_sun_mirror
+	}
+	option = {
+		name = STH_mars.121.a
+	}
+}
+
+planet_event = {
+	id = STH_mars.192
+	title = "STH_mars.180.name"
+	desc = "STH_mars.192.desc"
+	picture = sth_GFX_evt_utopiaPlanitia
+	show_sound = event_construction
+	location = root
+	is_triggered_only = yes
+	immediate = {
+		add_modifier = { modifier = "utopia_planitia" days = -1 }
+		set_planet_flag = mars_utopia_planitia
+	}
+	option = {
+		name = STH_mars.141.a
+	}
+}
+
+planet_event = {
+	id = STH_mars.193
+	title = "STH_mars.180.name"
+	desc = "STH_mars.193.desc"
+	picture = sth_GFX_evt_marsSpace
+	show_sound = event_construction
+	location = root
+	is_triggered_only = yes
+	immediate = {
+		set_planet_flag = mars_perimeter
+		change_planet_size = 1
+		random_tile = {
+			limit = { 
+				has_building = no
+				has_blocker = no
+			}
+			set_building = "building_mars_perimeter"
+		}
+	}
+	option = {
+		name = STH_mars.193.a
+	}
+}
+
+planet_event = {
+	id = STH_mars.194
+	title = "STH_mars.180.name"
+	desc = "STH_mars.194.desc"
+	picture = sth_GFX_evt_viewscreenBeetles
+	show_sound = event_alien_nature
+	location = root
+	is_triggered_only = yes
+	immediate = { 
+		random_tile = { 
+			limit = { has_blocker = tb_mars_canyon } 
+			add_deposit = d_immense_society_deposit
+			remove_blocker = yes
+		}
+		set_planet_flag = mars_development_life
+	}
+	option = {
+		name = STH_mars.111.a
+	}
+}
+
+# Terraform Mars, in case of destoyed array. Triggered from on_actions. Does nothing but warn the player.
+planet_event = {
+	id = STH_mars.999
+	title = "STH_mars.101.name"
+	desc = "STH_mars.999.desc"
+	picture = sth_GFX_evt_marsComet
+	show_sound = event_red_alert
+	location = root
+	is_triggered_only = yes
+	trigger = {
+		this = { 
+			has_planet_flag = sol_mars 
+			has_planet_flag = mars_terraforming_process
+			NOT = { has_planet_flag = mars_terraforming_complete }
+		}
+		from = { has_prev_building = building_verteron_array }
+	}
+	option = { name = STH_mars.999.a }
+}

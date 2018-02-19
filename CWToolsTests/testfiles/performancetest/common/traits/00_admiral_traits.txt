@@ -1,0 +1,363 @@
+# All leaders will have a common trait-point value set in defines, which they use to grab traits
+
+# leader_trait = yes - this tags the trait as a leader-trait and not a species-trait
+# initial = no - if set to no, this trait can not be granted to leaders when they are generated
+# leader_class = { admiral scientist }  -- OR  - if not set, it can be given to all leader-types except Rulers
+# requires_traits = { trait_psionic } -- AND - leader-trait can only be randomly given on generation if the leaders species has this trait
+# requires_governments = { despotic_hegemony ai_overlordship } -- OR - leader-trait can only be randomly given on generation if the Empire has this type of government form
+# prerequisites = { tech_psionic_theory } - AND - leader-trait can only be given if the technology specified has been researched by the Empire
+
+#####################
+# Admiral Traits    #
+#####################
+
+leader_trait_trickster = {
+	cost = 1
+	modification = no
+	icon = "gfx/interface/icons/traits/leader_traits/leader_trait_trickster.dds"
+	modifier = {
+		ship_combat_speed_mult = 0.20
+		ship_emergency_ftl_mult = -0.50
+	}
+	leader_potential_add = {
+		from = { is_drone_authority = no }
+	}
+	leader_trait = yes
+	leader_class = { admiral }
+	opposites = { "leader_trait_unyielding" }
+}
+
+leader_trait_nervous = {
+	cost = 1
+	modification = no
+	icon = "gfx/interface/icons/traits/leader_traits/leader_trait_nervous.dds"
+	modifier = {
+		ship_fire_rate_mult = -0.1
+	}
+	leader_potential_add = {
+		from = { is_drone_authority = no }
+	}
+	leader_trait = yes
+	leader_class = { ruler }
+	opposites = { "leader_trait_unyielding" }
+	initial = no
+	randomized = no
+}
+
+leader_trait_fleet_logistician = {
+	cost = 1
+	modification = no
+	icon = "gfx/interface/icons/traits/leader_traits/leader_trait_fleet_logistician.dds"
+	modifier = {
+		ship_upkeep_mult = -0.1
+	}
+	leader_potential_add = {
+		from = { is_drone_authority = no }
+	}
+	leader_trait = yes
+	leader_class = { admiral }
+}
+
+leader_trait_engineer = {
+	cost = 1
+	modification = no
+	icon = "gfx/interface/icons/traits/leader_traits/leader_trait_engineer.dds"
+	modifier = {
+		ship_auto_repair_add = 0.02 # Regenerates 1% ship-health per month
+	}
+	leader_potential_add = {
+		from = { is_drone_authority = no }
+	}
+	leader_trait = yes
+	leader_class = { admiral }
+	prerequisites = { tech_society_space_396 }
+}
+
+leader_trait_aggressive = {
+	cost = 1
+	modification = no
+	icon = "gfx/interface/icons/traits/leader_traits/leader_trait_aggressive.dds"
+    modifier = {
+		ship_fire_rate_mult = 0.05
+		ship_combat_speed_mult = 0.1
+	}
+	leader_potential_add = {
+		from = { is_drone_authority = no }
+	}
+	leader_trait = yes
+	leader_class = { admiral }
+	opposites = { "leader_trait_cautious" }
+}
+
+leader_trait_cautious = {
+	cost = 1
+	modification = no
+	icon = "gfx/interface/icons/traits/leader_traits/leader_trait_cautious.dds"
+	modifier = {
+		ship_auto_repair_add = 0.01 # Regenerates 1% ship-health per month
+	}
+	leader_potential_add = {
+		from = { is_drone_authority = no }
+	}
+	leader_trait = yes
+	leader_class = { admiral }
+	opposites = { "leader_trait_aggressive" }
+}
+
+leader_trait_scout = {
+	cost = 1
+	modification = no
+	icon = "gfx/interface/icons/traits/leader_traits/leader_trait_scout.dds"
+	modifier = {
+		ship_sensor_range_mult = 0.25
+		ship_speed_mult = 0.2
+	}
+	leader_potential_add = {
+		from = { is_drone_authority = no }
+	}
+	leader_trait = yes
+	leader_class = { admiral }
+}
+
+leader_trait_unyielding = {
+	cost = 1
+	modification = no
+	icon = "gfx/interface/icons/traits/leader_traits/leader_trait_unyielding.dds"
+	modifier = {
+		ship_hitpoints_mult = 0.1
+	}
+	leader_potential_add = {
+		from = { is_drone_authority = no }
+	}
+	can_retreat = no
+	leader_trait = yes
+	leader_class = { admiral }
+	opposites = { "leader_trait_nervous" "leader_trait_trickster" }
+}
+
+leader_trait_gale_speed = {
+	cost = 1
+	modification = no
+	icon = "gfx/interface/icons/traits/leader_traits/leader_trait_gale_speed.dds"
+	modifier = {
+		ship_evasion_mult = 0.05
+		ship_speed_mult = 0.2
+		ship_combat_speed_mult = 0.2
+	}
+	leader_potential_add = {
+		from = { is_drone_authority = no }
+	}
+	leader_trait = yes
+	leader_class = { admiral }
+	opposites = { "leader_trait_lethargic" }
+}
+
+############################
+# Special Event Traits     #
+############################
+
+leader_trait_lethargic = {
+	cost = 0
+	modification = no
+	icon = "gfx/interface/icons/traits/leader_traits/leader_trait_lethargic.dds"
+	modifier = {
+		ship_evasion_mult = -0.05
+		ship_speed_mult = -0.1
+	}
+	leader_potential_add = {
+		from = { is_drone_authority = no }
+	}
+	leader_trait = yes
+	leader_class = { admiral }
+	opposites = { "leader_trait_gale_speed" }
+	initial = no
+	randomized = no
+}
+
+leader_trait_sentinel = {
+	cost = 1
+	modification = no
+	icon = "gfx/interface/icons/traits/leader_traits/leader_trait_fist.dds"
+	modifier = {
+		damage_vs_country_type_swarm_mult = 0.2
+	}
+	leader_potential_add = {
+		from = { is_drone_authority = no }
+	}
+	leader_trait = yes
+	leader_class = { admiral }
+	initial = no
+	randomized = no
+}
+
+leader_trait_hive_affinity = {
+	cost = 1
+	modification = no
+	icon = "gfx/interface/icons/traits/leader_traits/leader_trait_fist.dds"
+	modifier = {
+		ship_fire_rate_mult = 0.2
+	}
+	leader_potential_add = {
+		from = { is_drone_authority = no }
+	}
+	leader_trait = yes
+	leader_class = { admiral }
+	initial = no
+	randomized = no
+}
+
+leader_trait_void_swimmer = {
+	cost = 1
+	modification = no
+	icon = "gfx/interface/icons/traits/leader_traits/leader_trait_ship.dds"
+	modifier = {
+		ship_speed_mult = 0.2
+		ship_combat_speed_mult = 0.2
+	}
+	leader_potential_add = {
+		from = { is_drone_authority = no }
+	}
+	leader_trait = yes
+	leader_class = { admiral }
+	initial = no
+	randomized = no
+}
+
+leader_trait_ethereal = {
+	cost = 1
+	modification = no
+	icon = "gfx/interface/icons/traits/leader_traits/leader_trait_ship.dds"
+	modifier = {
+		ship_evasion_mult = 0.2
+	}
+	leader_potential_add = {
+		from = { is_drone_authority = no }
+	}
+	leader_trait = yes
+	leader_class = { admiral }
+	initial = no
+	randomized = no
+}
+
+leader_trait_dimensional_stutter = {
+	cost = 1
+	modification = no
+	icon = "gfx/interface/icons/traits/leader_traits/leader_trait_ship.dds"
+	modifier = {
+		ship_speed_mult = 0.2
+		ship_combat_speed_mult = 0.2
+	}
+	leader_potential_add = {
+		from = { is_drone_authority = no }
+	}
+	leader_trait = yes
+	leader_class = { admiral }
+	initial = no
+	randomized = no
+}
+
+leader_trait_dragonslayer = {
+	cost = 1
+	modification = no
+	icon = "gfx/interface/icons/traits/leader_traits/leader_trait_glory_seeker.dds"
+	modifier = {
+		ship_combat_speed_mult = 0.1
+		ship_fire_rate_mult = 0.1
+	}
+	leader_potential_add = {
+		from = { is_drone_authority = no }
+	}
+	leader_trait = yes
+	leader_class = { admiral }
+	initial = no
+	randomized = no
+}
+
+leader_trait_admiral_cyborg = {
+	cost = 1
+	modification = no
+	icon = "gfx/interface/icons/traits/leader_traits/leader_trait_cyborg.dds"
+	self_modifier = {
+		leader_age = 40
+	}
+	modifier = {
+		ship_fire_rate_mult = 0.05
+	}
+	leader_potential_add = {
+		from = { is_drone_authority = no }
+	}
+	leader_trait = yes
+	leader_class = { admiral }
+	initial = no
+	randomized = no
+}
+
+leader_trait_admiral_synthetic = {
+	cost = 0
+	modification = no
+	icon = "gfx/interface/icons/traits/leader_traits/leader_trait_synthetic.dds"
+	modifier = {
+		ship_fire_rate_mult = 0.05
+		ship_weapon_range_mult = 0.10
+	}
+	leader_potential_add = {
+		from = { is_drone_authority = no }
+	}
+	leader_trait = yes
+	leader_class = { admiral }
+	initial = no
+	randomized = no
+}
+
+leader_trait_admiral_psionic = {
+	cost = 0
+	modification = no
+	icon = "gfx/interface/icons/traits/leader_traits/leader_trait_psionic_leader.dds"
+	modifier = {
+		ship_weapon_damage = 0.1
+		ship_evasion_mult = 0.15
+	}
+	leader_potential_add = {
+		from = { is_drone_authority = no }
+	}
+	leader_trait = yes
+	leader_class = { admiral }
+	initial = no
+	randomized = no
+}
+
+leader_trait_admiral_chosen = {
+	cost = 0
+	modification = no
+	icon = "gfx/interface/icons/traits/leader_traits/leader_trait_psionic_chosen_one.dds"
+	immortal_leaders = yes
+	modifier = {
+		ship_weapon_damage = 0.2
+		ship_evasion_mult = 0.3
+	}
+	leader_potential_add = {
+		from = { is_drone_authority = no }
+	}
+	leader_trait = yes
+	leader_class = { admiral }
+	initial = no
+	randomized = no
+}
+
+leader_trait_cybrex = {
+	cost = 1
+	modification = no
+	icon = "gfx/interface/icons/traits/leader_traits/leader_trait_fist.dds"
+	modifier = {
+		damage_vs_country_type_ai_empire_mult = 0.2
+		ship_evasion_mult = 0.1
+		ship_fire_rate_mult = 0.1
+	}
+	leader_potential_add = {
+		from = { is_drone_authority = no }
+	}
+	leader_trait = yes
+	leader_class = { admiral }
+	initial = no
+	randomized = no
+}

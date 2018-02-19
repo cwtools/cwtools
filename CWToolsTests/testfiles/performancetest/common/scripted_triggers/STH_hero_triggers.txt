@@ -1,0 +1,7 @@
+is_hero = { 
+	has_trait = leader_trait_hero
+}
+
+diplomacy_missions = {
+	always = yes
+}

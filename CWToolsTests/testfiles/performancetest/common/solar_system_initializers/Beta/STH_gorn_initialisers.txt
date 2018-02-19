@@ -1,0 +1,100 @@
+@distance = 30
+@base_moon_distance = 10
+
+#Gorn
+gorn_homeworld = {
+	name = "Gorn"
+	class = "sc_k"
+	asteroids_distance = 88
+	flags = { gorn_homeworld }
+	init_effect = { log = "gorn homeworld" }
+	usage = custom_empire
+	max_instances = 1
+	planet = { name = "Gorn" class = "pc_k_star" orbit_distance = 0 orbit_angle = 1 size = 30 has_ring = no }
+	planet = {
+		count = 3
+		orbit_distance = { min = 16 max = 22 }
+		class = random_non_colonizable
+		orbit_angle = { min = 90 max = 270 }
+		change_orbit = @base_moon_distance
+		moon = { count = { min = 0 max = 2 } class = random_non_colonizable orbit_angle = { min = 90 max = 270 } orbit_distance = 5 }
+	}
+	planet = {
+		name = "Gornar"
+		class = "pc_tropical"
+		orbit_distance = 14.5
+		orbit_angle = 220
+		size = { min = 22 max = 25 }
+		starting_planet = yes
+		has_ring = no
+		tile_blockers = none
+		modifiers = none
+		init_effect = { prevent_anomaly = yes }
+		init_effect = {
+			if = {
+				limit = { NOT = { any_country = { has_country_flag = gorn_empire } } }
+				create_species = {
+					name = "Gorn"
+					class = GOR
+					portrait = gorn
+					homeworld = THIS
+					traits = {
+						trait="trait_reptilian"
+						trait="trait_very_strong"
+						trait="trait_repugnant"
+						ideal_planet_class = "pc_tropical"
+					}
+				}
+				last_created_species = { save_global_event_target_as = gornSpecies }
+				create_country = {
+					name = "NAME_gorn_empire"
+					type = default
+					ignore_initial_colony_error = yes
+					civics = { civic = "civic_warrior_culture" civic = "civic_aristocratic_elite" }
+					authority = auth_imperial
+					name_list = "Gorn"
+					ethos = { ethic = "ethic_militarist" ethic = "ethic_materialist" ethic = "ethic_authoritarian" }
+					species = event_target:gornSpecies
+					flag = {
+						icon = { category = "trek" file = "gorn.dds" }
+						background = { category = "backgrounds" file = "circle.dds" }
+						colors = { "customcolor1700" "customcolor1616" "null" "null" }
+					}
+					ship_prefix = "GHS"
+					effect = {
+						set_graphical_culture = generic_01
+						set_country_flag = gorn_empire
+						set_country_flag = custom_start_screen
+						set_country_flag = generic_ent
+						set_country_flag = alpha_beta_empire
+						set_country_flag = init_spawned
+						set_country_flag = sth_medium_galaxy
+						set_country_flag = botf_minor
+						save_global_event_target_as = gorn_empire
+					}
+				}
+				create_colony = { owner = event_target:gorn_empire species = event_target:gornSpecies ethos = owner }
+			}
+			set_capital = yes
+			random_country = {
+				limit = { has_country_flag = gorn_empire }
+				save_global_event_target_as = gorn_empire
+				add_appropriate_start_techs = yes
+				species = { save_global_event_target_as = gornSpecies }
+            }
+			set_owner = event_target:gorn_empire
+			generate_major_empire_start_buildings = yes
+			generate_major_empire_start_pops = yes
+			generate_major_empire_start_fleets = yes
+			set_name = "Gornar"
+		}
+	}
+	planet = {
+		count = 3
+		orbit_distance = { min = 18 max = 25 }
+		class = random_non_colonizable
+		orbit_angle = { min = 90 max = 270 }
+		change_orbit = @base_moon_distance
+		moon = { count = { min = 0 max = 1 } class = random_non_colonizable orbit_angle = { min = 90 max = 270 } orbit_distance = 5 }
+	}
+}

@@ -1,0 +1,309 @@
+# variables:
+# parameters, data containing the specifics, eg which planet we're talking about
+# warscore_cost, scripted value, root is target country, amount of warscore required to push this demand
+# potential, trigger, root and from are main attackers and defenders, war is fromfrom, decides if this demand is listed
+# possible, trigger, root and from are main attackers and defenders, war is fromfrom, fromfromfrom is the target country, decides if this demand can go through
+# proposable, trigger, root and from are main attackers and defenders, war is fromfrom, fromfromfrom is the target country, decides if this demand is ok to propose
+# demandable, trigger, root and from are main attackers and defenders, war is fromfrom, fromfromfrom is the target country, decides if you can send a peace offer demanding ( not surrendering ) the demand.
+# effect, effect, root and main are main attacker and defender, war is fromfrom, fromfromfrom is the target country, effect which executes when the demand is accepted
+# execution_order, integer, defines in which order demands are executed, lower is higher priority, having the same execution order will make the first defined one higher prio
+# monthly_warscore, a descriptor on monthly wargoal score
+#	amount, scripted value, root and from are main attackers and defenders, war is fromfrom, fromfromfrom is the target country
+#   valid, trigger, root and from are main attackers and defenders, war is fromfrom, fromfromfrom is the target country
+
+# For War in Heaven
+total_defeat = {
+	execution_order = 1
+	
+	parameters = {
+		country = {
+			type = country
+		}
+	}
+	
+	warscore_cost = {
+		base = 75
+	}
+	
+	potential = {
+		OR = {
+			is_country_type = awakened_fallen_empire
+			has_country_flag = war_in_heaven_league_leader
+		}
+		parameter:country = {
+			is_country_type = awakened_fallen_empire
+			is_country = from
+		}		
+	}
+	
+	possible = {
+		always = yes
+	}
+	
+	proposable = {
+		always = yes
+	}
+	
+	effect = {	
+		if = {
+			limit = {
+				root = { is_country_type = awakened_fallen_empire }
+			}
+		
+			remove_global_flag = war_in_heaven_ongoing
+			set_global_flag = war_in_heaven_ended
+		
+			# Flag winners & losers		
+			save_event_target_as = WarInHeavenWinnerFE		
+			parameter:country = { save_event_target_as = WarInHeavenLoserFE }		
+			
+			every_country = {
+				limit = {
+					is_subject = yes
+					overlord = { is_same_value = parameter:country } 
+				}		
+				set_country_flag = war_in_heaven_loser
+			}
+			every_country = {
+				limit = {
+					is_subject = yes
+					overlord = { is_same_value = root }
+				}
+				set_country_flag = war_in_heaven_winner
+			}		
+			
+		
+			# Losers are punished, planets are given to nearby winners
+			every_planet = {
+				limit = {
+					has_owner = yes
+					owner = { 
+						has_country_flag = war_in_heaven_loser
+					}
+					is_capital = no
+				}	
+					
+				save_event_target_as = planet_to_cede		
+					
+				# First dibs to countries who originally sided with them
+				random_country = {
+					limit = {
+						has_country_flag = war_in_heaven_winner
+						has_country_flag = war_in_heaven_picked_side
+						event_target:planet_to_cede = { is_neighbor_of = prev }
+					}
+					
+					save_event_target_as = conqueror			
+					event_target:planet_to_cede = {
+						owner = {
+							set_country_flag = war_in_heaven_planet_was_taken
+						}				
+						conquer = event_target:conqueror
+						set_owner = event_target:conqueror
+					}
+					
+					set_country_flag = war_in_heaven_planet_was_given
+					set_global_flag = war_in_heaven_planet_ceded
+				}	
+
+				# May decide to be nice to a late joiner
+				if =  {
+					limit = { NOT = { has_global_flag = war_in_heaven_planet_ceded } }		
+					random = {
+						chance = 50
+						random_country = {
+							limit = {
+								has_country_flag = war_in_heaven_winner
+								NOT = { has_country_flag = war_in_heaven_picked_side }
+								event_target:planet_to_cede = { is_neighbor_of = prev }
+							}
+							
+							save_event_target_as = conqueror			
+							event_target:planet_to_cede = {
+								owner = {
+									set_country_flag = war_in_heaven_planet_was_taken
+								}				
+								conquer = event_target:conqueror
+								set_owner = event_target:conqueror
+							}
+							
+							set_country_flag = war_in_heaven_planet_was_given
+						}					
+					}				
+				}
+				
+				remove_global_flag = war_in_heaven_planet_ceded
+			}
+			
+			# Subjects of losing FE are freed
+			parameter:country = {
+				every_subject = {
+					set_subject_of = {
+						who = none
+					}				
+				}
+			}			
+		
+			# Losing FE is wiped out
+			parameter:country = {
+				every_owned_planet = {
+					destroy_colony = { keep_buildings = yes }
+				}
+			}
+			
+			# Add opinions towards winner
+			every_country = {
+				limit = {
+					has_country_flag = war_in_heaven_winner
+				}
+
+				add_opinion_modifier = { who = root modifier = opinion_war_in_heaven_winner }
+				root = { add_opinion_modifier = { who = prev modifier = opinion_war_in_heaven_winner } }				
+			}	
+			every_country = {
+				limit = {
+					has_country_flag = war_in_heaven_loser
+				}
+
+				remove_opinion_modifier = { who = root modifier = opinion_war_in_heaven_enemy }
+				root = { remove_opinion_modifier = { who = prev modifier = opinion_war_in_heaven_enemy } }				
+			}
+			
+			# War in Heaven victory event	
+			every_country = {
+				limit = {
+					is_ai = no
+				}		
+				
+				# country_event = { id = war_in_heaven.5 }
+				# country_event = { id = war_in_heaven.6 }
+				# country_event = { id = war_in_heaven.7 }
+				# country_event = { id = war_in_heaven.8 }
+				# country_event = { id = war_in_heaven.9 }			
+			}
+			
+			# Cleanup
+			every_country = {
+				limit = {
+					OR = {
+						has_country_flag = war_in_heaven_loser
+						has_country_flag = war_in_heaven_winner
+					}
+				}
+				remove_country_flag = war_in_heaven_winner
+				remove_country_flag = war_in_heaven_loser
+				remove_country_flag = war_in_heaven_planet_was_given
+				remove_country_flag = war_in_heaven_planet_was_taken	
+			}				
+	
+			else = {
+				# Subjects of losing FE are freed
+				parameter:country = {
+					every_subject = {
+						set_subject_of = {
+							who = none
+						}				
+					}
+				}				
+			
+				# Losing FE is wiped out
+				parameter:country = {
+					set_country_flag = silence_destroy_event
+					every_owned_planet = {
+						destroy_colony = { keep_buildings = yes }
+					}
+				}			
+			}
+		}
+	}
+	
+	ai_weight = {
+		base = 1000
+	}
+}
+
+# For Machine Uprising
+total_machine_defeat = {
+	execution_order = 1
+	
+	parameters = {
+		country = {
+			type = country
+		}
+	}
+	
+	warscore_cost = {
+		base = 75
+	}
+	
+	potential = {
+		OR = {
+			AND = {
+				has_country_flag = machine_uprising_country
+				parameter:country = { has_country_flag = machine_uprising_originator }
+			}
+			AND = {
+				has_country_flag = machine_uprising_originator
+				parameter:country = { has_country_flag = machine_uprising_country }
+			}
+		}		
+	}
+	
+	possible = {
+		always = yes
+	}
+	
+	proposable = {
+		always = yes
+	}
+	
+	effect = {
+
+		if = { # host won
+			limit = { root = { has_country_flag = machine_uprising_originator } }
+
+			save_event_target_as = MachineUprisingWinnerOriginator		
+			parameter:country = { save_event_target_as = MachineUprisingLoserCountry }		
+
+			every_planet = {
+				limit = {
+					has_owner = yes
+					owner = { 
+						#has_country_flag = MachineUprisingLoserCountry
+						is_same_value = event_target:MachineUprisingLoserCountry
+					}
+				}
+				
+				conquer = event_target:MachineUprisingWinnerOriginator
+				set_owner = event_target:MachineUprisingWinnerOriginator
+			}
+
+			else = {
+				if = { # machines won
+					limit = { root = { has_country_flag = machine_uprising_country } }
+	
+					save_event_target_as = MachineUprisingWinnerCountry		
+					parameter:country = { save_event_target_as = MachineUprisingLoserOriginator }
+	
+					every_planet = {
+						limit = {
+							has_owner = yes
+							owner = { 
+								#has_country_flag = MachineUprisingLoserOriginator
+								is_same_value = event_target:MachineUprisingLoserOriginator
+							}
+						}
+	
+						conquer = event_target:MachineUprisingWinnerCountry
+						set_owner = event_target:MachineUprisingWinnerCountry
+					}
+				}
+			}
+		}
+	}
+	
+	ai_weight = {
+		base = 1000
+	}
+}
+

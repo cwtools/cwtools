@@ -1,0 +1,176 @@
+destroy_frontier_outpost = {
+	execution_order = 1
+
+	parameters = {
+		system = {
+			type = galactic_object
+		}
+	}
+
+	warscore_cost = {
+		base = 10
+
+		# Ruler Trait - Warlike
+		modifier = {
+			factor = 0.95
+			custom_tooltip = {
+				text = "war_demand_trait_warlike"
+				exists = ruler
+				ruler = { has_trait = trait_ruler_warlike }
+			}
+		}
+
+		# Ruler Trait - Expansionist
+		modifier = {
+			factor = 0.9
+			custom_tooltip = {
+				text = "war_demand_trait_expansionist"
+				exists = ruler
+				ruler = { has_trait = trait_ruler_expansionist }
+			}
+		}
+
+		# Tech - Interstellar Campaigns
+		modifier = {
+			factor = 0.75
+			custom_tooltip = {
+				text = "war_demand_tech_interstellar_campaigns"
+				has_technology = tech_interstellar_campaigns
+			}
+		}
+
+		# Tech - Galactic Campaigns
+		modifier = {
+			factor = 0.75
+			custom_tooltip = {
+				text = "war_demand_tech_galactic_campaigns"
+				has_technology = tech_galactic_campaigns
+			}
+		}
+	}
+
+	potential = {
+		is_assimilator = no
+		custom_tooltip = {
+			fail_text = "war_demand_cede_frontier_outpost_no_stations"
+			parameter:system = {
+				any_ship_in_system = {
+					is_ship_class = shipclass_outpost_station
+					owner = {
+						OR = {
+							AND = {
+								exists = fromfrom 
+								from = {
+									from = {
+										is_war_participant = {
+											who = prevprev
+											side = prev
+										}
+									}
+								}
+							}
+							AND = {
+								NOT = { exists = fromfrom }
+								would_join_war = {
+									attacker = root
+									defender = from
+									side = from
+								}
+							}
+							
+						}
+					}
+				}
+			}
+		}
+	}
+
+	possible = {
+		custom_tooltip = {
+			fail_text = "war_demand_cede_frontier_outpost_no_stations_left"
+			any_relation = {
+				OR = {
+					AND = {
+						exists = fromfrom
+						from = {
+							from = {
+								is_war_participant = {
+									who = prevprev
+									side = prev
+								}
+							}
+						}
+					}
+					AND = {
+						NOT = { exists = fromfrom }
+						would_join_war = {
+							attacker = root
+							defender = from
+							side = from
+						}
+					}
+				}
+				
+				war_demand_counter = {
+					type = num_owned_planets
+					value > 0
+				}
+				parameter:system = {
+					any_ship_in_system = {
+						is_ship_class = shipclass_outpost_station
+						owner = {
+							is_same_value = prevprevprev
+						}
+					}
+				}
+			}
+		}
+	}
+
+	proposable = {
+		always = yes
+	}
+
+	effect = {	
+		parameter:system = {
+			every_fleet_in_system = {
+				limit = {
+					is_ship_class = shipclass_outpost_station
+					owner = {
+						from = {
+							from = {
+								is_war_participant = {
+									who = prevprev
+									side = prev
+								}
+							}
+						}
+					}
+				}
+				destroy_fleet = this
+			}
+		}
+	}
+
+	ai_weight = {
+		base = 10
+		modifier = {
+			factor = 100.0
+			has_ai_personality = fallen_empire_xenophobe
+		}	
+		modifier = {
+			factor = 0
+			NOT = {
+				parameter:system = {
+					any_ship_in_system = {
+						is_ship_class = shipclass_outpost_station	
+						distance_to_empire = {
+							who = root
+							distance = 100
+						}						
+					}
+				}
+			}
+		}
+	}
+}

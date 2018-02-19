@@ -1,0 +1,378 @@
+############################
+#
+# Mirror, Mirror
+#
+# Written by pleb87
+#
+############################
+
+namespace = STH_mirrorMirror_event
+
+# 'Good' or 'Bad' empire?
+ship_event = {
+	id = STH_mirrorMirror_event.1000
+	hide_window = yes
+	is_triggered_only = yes	
+	immediate = {
+		From = { save_event_target_as = mirrorPlanet }
+		owner = {
+			IF = {
+				limit = {
+					OR = {
+						pacifist_country_traditions = yes
+						egalitarian_country_traditions = yes
+					}
+				}
+				prev = { ship_event = { id = STH_mirrorMirror_event.1 } } # 'Good' Transporter Accident
+			}
+			IF = {
+				limit = {
+					NOR = {
+						pacifist_country_traditions = yes
+						egalitarian_country_traditions = yes
+					}
+				}
+				prev = { ship_event = { id = STH_mirrorMirror_event.10 } } # 'Bad' Transporter Accident
+			}
+		}
+	}
+}
+
+# 'Good' Transporter Accident
+ship_event = {
+	id = STH_mirrorMirror_event.1
+	title = STH_mirrorMirror_event.1.name
+	desc = STH_mirrorMirror_event.1.desc
+	picture = sth_GFX_evt_mirrorMirror1
+	show_sound = event_default
+	location = Root
+	is_triggered_only = yes	
+	option = {
+		name = STH_mirrorMirror_event.1.a
+		hidden_effect = {
+			ship_event = { id = STH_mirrorMirror_event.2 days = 2 } # 'Good' Sickbay
+		}
+	}
+	option = {
+		name = STH_mirrorMirror_event.1.b
+		hidden_effect = {
+			random_list = {
+				50 = { ship_event = { id = STH_mirrorMirror_event.3 days = 2 } } # 'Good' Attempted Murder
+				50 = { ship_event = { id = STH_mirrorMirror_event.4 days = 2 } } # 'Good' Murder
+			}
+		}
+	}
+}
+
+# 'Good' Sickbay
+ship_event = {
+	id = STH_mirrorMirror_event.2
+	title = STH_mirrorMirror_event.2.name
+	desc = STH_mirrorMirror_event.2.desc
+	picture = sth_GFX_evt_mirrorMirror2
+	show_sound = event_default
+	location = Root
+	is_triggered_only = yes
+	option = {
+		name = STH_mirrorMirror_event.2.a
+		hidden_effect = {
+			random_list = {
+				50 = { ship_event = { id = STH_mirrorMirror_event.5 days = 2 } } # 'Good' Transporter Success
+				50 = { ship_event = { id = STH_mirrorMirror_event.6 days = 2 } } # 'Good' Transporter Fail
+			}
+		}
+	}
+	option = {
+		name = STH_mirrorMirror_event.2.b
+		hidden_effect = {
+			random_list = {
+				50 = { ship_event = { id = STH_mirrorMirror_event.7 days = 2 } } # 'Good' Jail
+				50 = { ship_event = { id = STH_mirrorMirror_event.8 days = 2 } } # 'Good' Escape
+			}
+		}
+	}
+}
+
+# 'Good' Attempted Murder
+ship_event = {
+	id = STH_mirrorMirror_event.3
+	title = STH_mirrorMirror_event.3.name
+	desc = STH_mirrorMirror_event.3.desc
+	picture = sth_GFX_evt_mirrorMirror3
+	show_sound = event_default
+	location = Root
+	is_triggered_only = yes
+	option = {
+		name = STH_mirrorMirror_event.3.a
+		hidden_effect = {			
+			ship_event = { id = STH_mirrorMirror_event.2 days = 2 } # 'Good' Sickbay
+		}
+	}
+}
+
+# 'Good' Murder
+ship_event = {
+	id = STH_mirrorMirror_event.4
+	title = STH_mirrorMirror_event.4.name
+	desc = STH_mirrorMirror_event.4.desc
+	picture = sth_GFX_evt_mirrorMirror4
+	show_sound = event_default
+	location = Root
+	is_triggered_only = yes
+	option = {
+		name = STH_mirrorMirror_event.4.a
+		hidden_effect = {			
+			ship_event = { id = STH_mirrorMirror_event.2 days = 2 } # 'Good' Sickbay
+		}
+	}
+}
+
+# 'Good' Transporter Success
+ship_event = {
+	id = STH_mirrorMirror_event.5
+	title = STH_mirrorMirror_event.5.name
+	desc = STH_mirrorMirror_event.5.desc
+	picture = sth_GFX_evt_mirrorMirror5
+	show_sound = event_default
+	location = Root
+	is_triggered_only = yes
+	option = {
+		name = STH_mirrorMirror_event.5.a
+		leader = {
+			add_experience = 1000
+		}
+	}
+}
+
+# 'Good' Transporter Fail
+ship_event = {
+	id = STH_mirrorMirror_event.6
+	title = STH_mirrorMirror_event.6.name
+	desc = STH_mirrorMirror_event.6.desc
+	picture = sth_GFX_evt_mirrorMirror6
+	show_sound = event_default
+	location = Root
+	is_triggered_only = yes
+	option = {
+		name = STH_mirrorMirror_event.6.a
+		hidden_effect = {			
+			kill_leader = {
+				type = scientist
+				show_notification = no
+			}
+		}
+	}
+}
+
+# 'Good' Jail
+ship_event = {
+	id = STH_mirrorMirror_event.7
+	title = STH_mirrorMirror_event.7.name
+	desc = STH_mirrorMirror_event.7.desc
+	picture = sth_GFX_evt_mirrorMirror7
+	show_sound = event_default
+	location = Root
+	is_triggered_only = yes
+	option = {
+		name = STH_mirrorMirror_event.7.a
+		hidden_effect = {		
+			kill_leader = {
+				type = scientist
+				show_notification = no
+			}
+		}
+	}
+}
+
+# 'Good' Escape
+ship_event = {
+	id = STH_mirrorMirror_event.8
+	title = STH_mirrorMirror_event.8.name
+	desc = STH_mirrorMirror_event.8.desc
+	picture = sth_GFX_evt_mirrorMirror8
+	show_sound = event_default
+	location = Root
+	is_triggered_only = yes
+	option = {
+		name = STH_mirrorMirror_event.8.a
+		leader = {
+			add_experience = 1000
+		}
+	}
+}
+
+
+# Anomaly Fail
+ship_event = {
+	id = STH_mirrorMirror_event.9
+	title = STH_mirrorMirror_event.9.name
+	desc = STH_mirrorMirror_event.9.desc
+	picture = sth_GFX_evt_mirrorMirror5
+	show_sound = event_default
+	location = Root
+	is_triggered_only = yes
+	option = { name = STH_mirrorMirror_event.9.a }
+}
+
+# 'Bad' Transporter Accident
+ship_event = {
+	id = STH_mirrorMirror_event.10
+	title = STH_mirrorMirror_event.10.name
+	desc = STH_mirrorMirror_event.10.desc
+	picture = sth_GFX_evt_mirrorMirror1
+	show_sound = event_default
+	location = Root
+	is_triggered_only = yes	
+	option = {
+		name = STH_mirrorMirror_event.10.a
+		hidden_effect = {
+			ship_event = { id = STH_mirrorMirror_event.11 days = 2 } # 'Bad' Confrontation
+		}
+	}
+	option = {
+		name = STH_mirrorMirror_event.10.b
+		hidden_effect = {
+			random_list = {
+				50 = { ship_event = { id = STH_mirrorMirror_event.12 days = 2 } } # 'Bad' Attempted Mutiny
+				50 = { ship_event = { id = STH_mirrorMirror_event.13 days = 2 } } # 'Bad' Disobeying Orders
+			}
+		}
+	}
+}
+
+# 'Bad' Confrontation
+ship_event = {
+	id = STH_mirrorMirror_event.11
+	title = STH_mirrorMirror_event.11.name
+	desc = STH_mirrorMirror_event.11.desc
+	picture = sth_GFX_evt_mirrorMirror8
+	show_sound = event_default
+	location = Root
+	is_triggered_only = yes
+	option = {
+		name = STH_mirrorMirror_event.11.a
+		hidden_effect = {
+			random_list = {
+				50 = { ship_event = { id = STH_mirrorMirror_event.14 days = 2 } } # 'Bad' Transporter Success
+				50 = { ship_event = { id = STH_mirrorMirror_event.15 days = 2 } } # 'Bad' Transporter Fail
+			}
+		}
+	}
+	option = {
+		name = STH_mirrorMirror_event.11.b
+		hidden_effect = {
+			random_list = {
+				50 = { ship_event = { id = STH_mirrorMirror_event.16 days = 2 } } # 'Bad' Death
+				50 = { ship_event = { id = STH_mirrorMirror_event.17 days = 2 } } # 'Bad' Escape
+			}
+		}
+	}
+}
+
+# 'Bad' Attempted Mutiny
+ship_event = {
+	id = STH_mirrorMirror_event.12
+	title = STH_mirrorMirror_event.12.name
+	desc = STH_mirrorMirror_event.12.desc
+	picture = sth_GFX_evt_mirrorMirror4
+	show_sound = event_default
+	location = Root
+	is_triggered_only = yes
+	option = {
+		name = STH_mirrorMirror_event.12.a
+		hidden_effect = {			
+			ship_event = { id = STH_mirrorMirror_event.11 days = 2 } # 'Bad' Confrontation
+		}
+	}
+}
+
+# 'Bad' Disobeying Orders
+ship_event = {
+	id = STH_mirrorMirror_event.13
+	title = STH_mirrorMirror_event.13.name
+	desc = STH_mirrorMirror_event.13.desc
+	picture = sth_GFX_evt_mirrorMirror3
+	show_sound = event_default
+	location = Root
+	is_triggered_only = yes
+	option = {
+		name = STH_mirrorMirror_event.13.a
+		hidden_effect = {			
+			ship_event = { id = STH_mirrorMirror_event.11 days = 2 } # 'Bad' Confrontation
+		}
+	}
+}
+
+# 'Bad' Transporter Success
+ship_event = {
+	id = STH_mirrorMirror_event.14
+	title = STH_mirrorMirror_event.14.name
+	desc = STH_mirrorMirror_event.14.desc
+	picture = sth_GFX_evt_mirrorMirror5
+	show_sound = event_default
+	location = Root
+	is_triggered_only = yes
+	option = {
+		name = STH_mirrorMirror_event.14.a
+		leader = {
+			add_experience = 1000
+		}
+	}
+}
+
+# 'Bad' Transporter Fail
+ship_event = {
+	id = STH_mirrorMirror_event.15
+	title = STH_mirrorMirror_event.15.name
+	desc = STH_mirrorMirror_event.15.desc
+	picture = sth_GFX_evt_mirrorMirror6
+	show_sound = event_default
+	location = Root
+	is_triggered_only = yes
+	option = {
+		name = STH_mirrorMirror_event.15.a
+		hidden_effect = {			
+			kill_leader = {
+				type = scientist
+				show_notification = no
+			}
+		}
+	}
+}
+
+# 'Bad' Death
+ship_event = {
+	id = STH_mirrorMirror_event.16
+	title = STH_mirrorMirror_event.16.name
+	desc = STH_mirrorMirror_event.16.desc
+	picture = sth_GFX_evt_mirrorMirror6
+	show_sound = event_default
+	location = Root
+	is_triggered_only = yes
+	option = {
+		name = STH_mirrorMirror_event.16.a
+		hidden_effect = {		
+			kill_leader = {
+				type = scientist
+				show_notification = no
+			}
+		}
+	}
+}
+
+# 'Bad' Escape
+ship_event = {
+	id = STH_mirrorMirror_event.17
+	title = STH_mirrorMirror_event.17.name
+	desc = STH_mirrorMirror_event.17.desc
+	picture = sth_GFX_evt_mirrorMirror5
+	show_sound = event_default
+	location = Root
+	is_triggered_only = yes
+	option = {
+		name = STH_mirrorMirror_event.17.a
+		leader = {
+			add_experience = 1000
+		}
+	}
+}

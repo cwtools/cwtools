@@ -1,0 +1,100 @@
+@distance = 30
+@base_moon_distance = 10
+
+# suliban
+suliban_homeworld = {			
+	name = "Exile"
+	class = "sc_g"
+	flags = { suliban_homeworld helix_built }
+	init_effect = { log = "suliban homeworld" }
+	usage = custom_empire
+	max_instances = 1
+	asteroids_distance = 235
+	planet = { name = "Exile" class = star orbit_distance = 0 orbit_angle = 1 size = 30 has_ring = no }
+	planet = {
+		name = "Haven"
+		class = "pc_gas_giant"
+		orbit_distance = 200
+		orbit_angle = 60
+		size = 35
+		has_ring = yes
+		moon = {
+			name = "Helix 01"
+			class = "pc_helix"
+			orbit_distance = 10
+			orbit_angle = 160
+			size = 22
+			starting_planet = yes
+			has_ring = no
+			tile_blockers = none
+			modifiers = none
+			init_effect = {
+				prevent_anomaly = yes
+				set_planet_entity = { entity = "orbital_habitat_entity" graphical_culture = suliban_01 }
+				set_planet_flag = megastructure
+				set_planet_flag = habitat		
+			}
+			init_effect = {
+				if = {
+					limit = { NOT = { any_country = { has_country_flag = suliban_cabal } } }
+					create_species = {
+						name = "Suliban"
+						class = SUL
+						portrait = suliban
+						homeworld = THIS
+						traits = {
+						trait = "trait_survivor"
+						trait = "trait_repugnant"
+						trait = "trait_sedentary"
+						trait = "trait_master_geneticist"
+						ideal_planet_class = "pc_continental"
+						}
+					}
+					last_created_species = { save_global_event_target_as = sulibanSpecies }
+					create_country = {
+						name = "NAME_suliban_cabal"
+						type = default
+						ignore_initial_colony_error = yes
+						civics = { civic = "civic_nomadic" civic = "civic_technocracy" }
+						authority = auth_dictatorial
+						name_list = "Suliban"
+						ethos = { ethic = "ethic_authoritarian" ethic = "ethic_materialist" ethic = "ethic_xenophobe" }
+						species = event_target:sulibanSpecies
+						flag = {
+							icon = { category = "trek" file = "suliban.dds" }
+							background = { category = "backgrounds" file = "00_solid.dds" }
+							colors = { "brown" "black" "null" "null" }
+						}
+						ship_prefix = "SCS"
+						effect = {
+							set_graphical_culture = suliban_01
+							set_country_flag = suliban_cabal
+							set_country_flag = custom_start_screen
+							set_country_flag = generic_ent
+							set_country_flag = alpha_beta_empire
+							set_country_flag = init_spawned
+							set_country_flag = first_alien_life
+							set_country_flag = first_contact_event
+							set_country_flag = sth_medium_galaxy
+							set_country_flag = botf_minor
+							save_global_event_target_as = suliban_cabal
+						}
+					}
+					create_colony = { owner = event_target:suliban_cabal species = event_target:sulibanSpecies ethos = owner }
+				}
+				set_capital = yes
+				random_country = {
+					limit = { has_country_flag = suliban_cabal }
+					save_global_event_target_as = suliban_cabal
+					add_appropriate_start_techs = yes
+					species = { save_global_event_target_as = sulibanSpecies }
+				}
+				set_owner = event_target:suliban_cabal
+				generate_major_empire_start_buildings_helix = yes
+				generate_major_empire_start_pops = yes
+				generate_major_empire_start_fleets = yes
+				set_name = "Haven"
+			}
+		}	
+	}
+}

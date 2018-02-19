@@ -1,0 +1,313 @@
+########################
+#
+# Borg Story Events
+#
+# Written by Walshicus
+#
+########################
+
+namespace = STH_borg_story
+
+### Rebellion failsave ###
+country_event = {
+	id = STH_borg_story.100
+	title = "STH_borg_story.1.name"
+	desc = "STH_borg_story.1.desc"
+	picture = sth_GFX_evt_borgUnicomplex1
+	trigger = {
+		has_country_flag = the_borg_collective
+		is_at_war = no
+		NOT = {	has_country_flag = recent_civil_war }
+		num_owned_planets > 10
+		galaxy_percentage > 0.2
+		years_passed > 200
+		used_naval_capacity_percent > 0.90
+	}
+	mean_time_to_happen = {	months = 2 }
+	immediate = { 
+		set_timed_country_flag = { flag = recent_civil_war days = 50000 }
+	}
+	option = {
+		trigger = { has_country_resource = { type = unity amount > 499 } }
+		name = STH_borg_story.1.a
+		add_unity = -500
+		hidden_effect = {
+			random_list = {
+				40 = { country_event = { id = STH_borg_story.2 days = 180 random = 20 } }
+				40 = { country_event = { id = STH_borg_story.3 days = 180 random = 20 } }
+				20 = { country_event = { id = STH_borg_story.4 days = 180 random = 20 } }
+			}
+		}
+	}
+	option = {
+		trigger = { has_country_resource = { type = unity amount > 249 } }
+		name = STH_borg_story.1.b
+		add_unity = -250
+		hidden_effect = {
+			random_list = {
+				33 = { country_event = { id = STH_borg_story.2 days = 180 random = 20 } }
+				33 = { country_event = { id = STH_borg_story.3 days = 180 random = 20 } }
+				33 = { country_event = { id = STH_borg_story.4 days = 180 random = 20 } }
+			}
+		}
+	}
+	option = {
+		name = STH_borg_story.1.c
+		hidden_effect = {
+			random_list = {
+				50 = { country_event = { id = STH_borg_story.3 days = 180 random = 20 } }
+				50 = { country_event = { id = STH_borg_story.4 days = 180 random = 20 } }
+			}
+		}
+	}
+}
+
+# Borg Rebellion Split
+country_event = {
+	id = STH_borg_story.1
+	title = "STH_borg_story.1.name"
+	desc = "STH_borg_story.1.desc"
+	picture = sth_GFX_evt_borgUnicomplex1
+	trigger = {
+		has_country_flag = the_borg_collective
+		is_at_war = no
+		NOT = {	has_country_flag = recent_civil_war }
+		num_owned_planets > 10
+		galaxy_percentage > 0.2
+	}
+	mean_time_to_happen = {	months = 600 }
+	immediate = { 
+		set_timed_country_flag = { flag = recent_civil_war days = 50000 }
+	}
+	option = {
+		trigger = { has_country_resource = { type = unity amount > 499 } }
+		name = STH_borg_story.1.a
+		add_unity = -500
+		hidden_effect = {
+			random_list = {
+				40 = { country_event = { id = STH_borg_story.2 days = 180 random = 20 } }
+				40 = { country_event = { id = STH_borg_story.3 days = 180 random = 20 } }
+				20 = { country_event = { id = STH_borg_story.4 days = 180 random = 20 } }
+			}
+		}
+	}
+	option = {
+		trigger = { has_country_resource = { type = unity amount > 249 } }
+		name = STH_borg_story.1.b
+		add_unity = -250
+		hidden_effect = {
+			random_list = {
+				33 = { country_event = { id = STH_borg_story.2 days = 180 random = 20 } }
+				33 = { country_event = { id = STH_borg_story.3 days = 180 random = 20 } }
+				33 = { country_event = { id = STH_borg_story.4 days = 180 random = 20 } }
+			}
+		}
+	}
+	option = {
+		name = STH_borg_story.1.c
+		hidden_effect = {
+			random_list = {
+				50 = { country_event = { id = STH_borg_story.3 days = 180 random = 20 } }
+				50 = { country_event = { id = STH_borg_story.4 days = 180 random = 20 } }
+			}
+		}
+	}
+}
+
+#Small Rebellion
+country_event = {
+	id = STH_borg_story.2
+	title = "STH_borg_story.2.name"
+	desc = "STH_borg_story.2.desc"
+	picture = sth_GFX_evt_borgUnicomplex1
+	is_triggered_only = yes
+	immediate = {	
+		capital_scope = { solar_system = { save_event_target_as = homeSystem } }
+		every_owned_planet = { remove_planet_flag = borgRebelPlanet }
+		every_owned_planet = { 
+			limit = { solar_system = { NOT = { is_same_value = event_target:homeSystem } } }
+			random_list = {
+				20 = { 
+					solar_system = { 
+						every_system_planet = {
+							limit = { has_owner = yes owner = { is_same_value = root } }
+							set_planet_flag = borgRebelPlanet 
+						}
+					}
+				}
+				80 = {}
+			}
+		}
+		random_owned_planet = {
+			limit = { has_planet_flag = borgRebelPlanet }
+			root = {
+				every_owned_fleet = {
+					limit = { has_fleet_flag = "unicomplex_defence_for:@prevprev" }
+					set_owner = last_created_country
+				}
+			}
+			create_borg_rebel_country = yes
+			set_owner = last_created_country
+			set_controller = last_created_country
+			save_event_target_as = fleet_spawn_planet
+		}
+		every_owned_planet = {
+			limit = { has_planet_flag = borgRebelPlanet }
+			root = {
+				every_owned_fleet = {
+					limit = { has_fleet_flag = "unicomplex_defence_for:@prevprev" }
+					set_owner = last_created_country
+				}
+			}
+			set_owner = last_created_country
+			set_controller = last_created_country
+		}
+		last_created_country = { 
+			save_global_event_target_as = borgRebelCountry
+			create_fleet_from_naval_cap = 0.01
+			last_created_fleet = { set_name = random set_location = event_target:fleet_spawn_planet }
+			create_fleet_from_naval_cap = 0.01
+			last_created_fleet = { set_name = random set_location = event_target:fleet_spawn_planet }
+			create_fleet_from_naval_cap = 0.01
+			last_created_fleet = { set_name = random set_location = event_target:fleet_spawn_planet }
+			create_fleet_from_naval_cap = 0.01
+			last_created_fleet = { set_name = random set_location = event_target:fleet_spawn_planet }
+			create_fleet_from_naval_cap = 0.01
+			last_created_fleet = { set_name = random set_location = event_target:fleet_spawn_planet }
+		}
+	}
+	option = { name = STH_borg_story.2.a }
+	option = { name = STH_borg_story.2.b event_target:borgRebelCountry = { set_player = root hidden_effect = { remove_modifier = em_rebel_borg_supply } } }
+}
+
+#Medium Rebellion
+country_event = {
+	id = STH_borg_story.3
+	title = "STH_borg_story.3.name"
+	desc = "STH_borg_story.3.desc"
+	picture = sth_GFX_evt_borgUnicomplex1
+	is_triggered_only = yes
+	immediate = {	
+		capital_scope = { solar_system = { save_event_target_as = homeSystem } }
+		every_owned_planet = { remove_planet_flag = borgRebelPlanet }
+		every_owned_planet = { 
+			limit = { solar_system = { NOT = { is_same_value = event_target:homeSystem } } }
+			random_list = {
+				33 = { 
+					solar_system = { 
+						every_system_planet = {
+							limit = { has_owner = yes owner = { is_same_value = root } }
+							set_planet_flag = borgRebelPlanet 
+						}
+					}
+				}
+				67 = {}
+			}
+		}
+		random_owned_planet = {
+			limit = { has_planet_flag = borgRebelPlanet }
+			root = {
+				every_owned_fleet = {
+					limit = { has_fleet_flag = "unicomplex_defence_for:@prevprev" }
+					set_owner = last_created_country
+				}
+			}
+			create_borg_rebel_country = yes
+			set_owner = last_created_country
+			set_controller = last_created_country
+			save_event_target_as = fleet_spawn_planet
+		}
+		every_owned_planet = {
+			limit = { has_planet_flag = borgRebelPlanet }
+			root = {
+				every_owned_fleet = {
+					limit = { has_fleet_flag = "unicomplex_defence_for:@prevprev" }
+					set_owner = last_created_country
+				}
+			}
+			set_owner = last_created_country
+			set_controller = last_created_country
+		}
+		last_created_country = { 
+			save_global_event_target_as = borgRebelCountry
+			create_fleet_from_naval_cap = 0.02
+			last_created_fleet = { set_name = random set_location = event_target:fleet_spawn_planet }
+			create_fleet_from_naval_cap = 0.02
+			last_created_fleet = { set_name = random set_location = event_target:fleet_spawn_planet }
+			create_fleet_from_naval_cap = 0.02
+			last_created_fleet = { set_name = random set_location = event_target:fleet_spawn_planet }
+			create_fleet_from_naval_cap = 0.02
+			last_created_fleet = { set_name = random set_location = event_target:fleet_spawn_planet }
+			create_fleet_from_naval_cap = 0.02
+			last_created_fleet = { set_name = random set_location = event_target:fleet_spawn_planet }
+		}
+	}
+	option = { name = STH_borg_story.3.a }
+	option = { name = STH_borg_story.3.b event_target:borgRebelCountry = { set_player = root hidden_effect = { remove_modifier = em_rebel_borg_supply } } }
+}
+
+#Large Rebellion
+country_event = {
+	id = STH_borg_story.4
+	title = "STH_borg_story.4.name"
+	desc = "STH_borg_story.4.desc"
+	picture = sth_GFX_evt_borgUnicomplex1
+	is_triggered_only = yes
+	immediate = {	
+		capital_scope = { solar_system = { save_event_target_as = homeSystem } }
+		every_owned_planet = { remove_planet_flag = borgRebelPlanet }
+		every_owned_planet = { 
+			limit = { solar_system = { NOT = { is_same_value = event_target:homeSystem } } }
+			random_list = {
+				50 = { 
+					solar_system = { 
+						every_system_planet = {
+							limit = { has_owner = yes owner = { is_same_value = root } }
+							set_planet_flag = borgRebelPlanet 
+						}
+					}
+				}
+				50 = {}
+			}
+		}
+		random_owned_planet = {
+			limit = { has_planet_flag = borgRebelPlanet }
+			root = {
+				every_owned_fleet = {
+					limit = { has_fleet_flag = "unicomplex_defence_for:@prevprev" }
+					set_owner = last_created_country
+				}
+			}
+			create_borg_rebel_country = yes
+			set_owner = last_created_country
+			set_controller = last_created_country
+			save_event_target_as = fleet_spawn_planet
+		}
+		every_owned_planet = {
+			limit = { has_planet_flag = borgRebelPlanet }
+			root = {
+				every_owned_fleet = {
+					limit = { has_fleet_flag = "unicomplex_defence_for:@prevprev" }
+					set_owner = last_created_country
+				}
+			}
+			set_owner = last_created_country
+			set_controller = last_created_country
+		}
+		last_created_country = { 
+			save_global_event_target_as = borgRebelCountry
+			create_fleet_from_naval_cap = 0.03
+			last_created_fleet = { set_name = random set_location = event_target:fleet_spawn_planet }
+			create_fleet_from_naval_cap = 0.03
+			last_created_fleet = { set_name = random set_location = event_target:fleet_spawn_planet }
+			create_fleet_from_naval_cap = 0.03
+			last_created_fleet = { set_name = random set_location = event_target:fleet_spawn_planet }
+			create_fleet_from_naval_cap = 0.03
+			last_created_fleet = { set_name = random set_location = event_target:fleet_spawn_planet }
+			create_fleet_from_naval_cap = 0.03
+			last_created_fleet = { set_name = random set_location = event_target:fleet_spawn_planet }
+		}
+	}
+	option = { name = STH_borg_story.4.a }
+	option = { name = STH_borg_story.4.b event_target:borgRebelCountry = { set_player = root hidden_effect = { remove_modifier = em_rebel_borg_supply } } }
+}

@@ -1,0 +1,98 @@
+trait_presapient_starborn = {
+      cost = 1
+      icon = "gfx/interface/icons/traits/trait_primitive.dds"
+      opposites = { "trait_presapient_earthbound" "trait_sedentary" }
+      sapient = no
+      allowed_archetypes = { PRESAPIENT }
+      modifier = {
+         pop_migration_speed = 0.5
+         pop_resettlement_cost_mult = -0.25
+         pop_environment_tolerance = 0.1
+      }
+      initial = no
+      randomized = no
+      modification = no
+   }
+   
+trait_presapient_earthbound = {
+      cost = 1
+      icon = "gfx/interface/icons/traits/trait_primitive.dds"
+      opposites = { "trait_presapient_starborn" "trait_sedentary" }
+      sapient = no
+      allowed_archetypes = { PRESAPIENT }
+      modifier = {
+         tile_resource_energy_mult = 0.1
+         garrison_health = 1.0
+         pop_fortification_defense = 0.5
+      }
+      initial = no
+      randomized = no
+      modification = no
+   }
+   
+trait_presapient_natural_intellectuals = {
+      cost = 1
+      icon = "gfx/interface/icons/traits/trait_primitive.dds"
+      opposites = { "trait_presapient_proles" }
+      sapient = no
+      allowed_archetypes = { PRESAPIENT }
+      modifier = {
+         tile_resource_unity_mult = 0.05
+         tile_resource_physics_research_mult = 0.1
+         tile_resource_engineering_research_mult = 0.1
+         tile_resource_society_research_mult = 0.1
+         tile_resource_minerals_mult = -0.1
+      }
+      initial = no
+      randomized = no
+      modification = no
+   }
+   
+trait_presapient_proles = {
+      cost = 1
+      icon = "gfx/interface/icons/traits/trait_primitive.dds"
+      opposites = { "trait_presapient_natural_intellectuals" }
+      sapient = no
+      allowed_archetypes = { PRESAPIENT }
+      modifier = {
+         army_damage_mult = 0.10
+         tile_resource_minerals_mult = 0.10
+         tile_resource_food_mult = 0.10
+         tile_resource_physics_research_mult = -0.15
+         tile_resource_engineering_research_mult = -0.15
+         tile_resource_society_research_mult = -0.15
+      }
+      initial = no
+      randomized = no
+      modification = no
+   }
+   
+trait_presapient_conservative = {
+      cost = 1
+      icon = "gfx/interface/icons/traits/trait_primitive.dds"
+      sapient = no
+      allowed_archetypes = { PRESAPIENT }
+      modifier = {
+         pop_happiness = 0.05
+         pop_government_ethic_attraction = 0.25
+         species_leader_exp_gain = -0.33
+      }
+      initial = no
+      randomized = no
+      modification = no
+   }
+   
+trait_presapient_irradiated = {
+      cost = 1
+      icon = "gfx/interface/icons/traits/trait_primitive.dds"
+      sapient = no
+      allowed_archetypes = { PRESAPIENT }
+      modifier = {
+         pc_nuked_habitability = 1
+         leader_age = 30
+      }
+      initial = no
+      randomized = no
+      modification = no
+   }
+   

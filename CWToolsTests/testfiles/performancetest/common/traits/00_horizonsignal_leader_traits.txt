@@ -1,0 +1,58 @@
+
+
+############################
+# Generic Leader Traits    #
+# (Available For Everyone) #
+############################
+
+leader_trait_haunted= {
+	cost = 0
+	modification = no
+	icon = "gfx/interface/icons/traits/leader_traits/leader_trait_substance_abuser.dds"
+	initial = no
+	randomized = no
+	
+	ai_weight = {
+		weight = 0
+	}
+}
+
+############################
+# Scientist Leader Traits  #
+############################
+
+leader_trait_loop_touched= {
+	cost = 0
+	modification = no
+	icon = "gfx/interface/icons/traits/leader_traits/leader_trait_substance_abuser.dds"
+	leader_trait = yes
+	leader_class = { scientist }
+	initial = no
+	randomized = no
+	
+	ai_weight = {
+		weight = 0
+	}
+}
+
+############################
+# Admiral Leader Traits    #
+############################
+
+leader_trait_foredoomed_to_a_rendezvous = {
+	cost = 1
+	modification = no
+	icon = "gfx/interface/icons/traits/leader_traits/leader_trait_ship.dds"
+	modifier = {
+		ship_speed_mult = 0.25
+		ship_combat_speed_mult = 0.25
+	}
+	leader_trait = yes
+	leader_class = { admiral }
+	initial = no
+	randomized = no
+
+	ai_weight = {
+		weight = 0
+	}
+}

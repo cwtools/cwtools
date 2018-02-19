@@ -1,0 +1,54 @@
+exile = {
+	has_fortifications = yes
+	can_have_orbital_stations = yes
+	has_difficulty_bonuses = yes
+	counts_for_victory = yes
+	pop_growth = yes
+	playable = no
+	shuffle_pop_ethos = yes
+	diplomatic_wars = yes
+	relations = no
+	distant_ftl_cost_mult = 1.0
+	sub_title = "Exile"
+	ai = {
+		enabled = no
+		declare_war = no
+		colonizer = no
+		construction = no
+		internal_policies = no
+		modules = {
+			# military_minister_module
+			# interior_minister_module
+			# foreign_minister_module
+		}
+		ship_data = {
+		}
+		army_data = {
+		}
+	}
+	faction = {
+		needs_colony = no
+		needs_border_access = no
+	}
+	modules = {
+		standard_event_module = {}
+		#standard_economy_module = {}
+		standard_leader_module = {}
+		# exclusive_diplomacy_module = {
+			# can_receive = {
+				# action_declare_war
+				# action_offer_peace
+				# action_offer_trade_deal
+				# action_cancel_trade_deal
+			# }
+			# can_send = {
+				# action_declare_war
+				# action_offer_peace
+				# action_offer_trade_deal
+				# action_cancel_trade_deal
+			# }
+		# }
+		#standard_technology_module = {}
+		#standard_species_rights_module = {}
+	}
+}

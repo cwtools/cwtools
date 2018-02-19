@@ -1,0 +1,97 @@
+﻿### Selay by EHKodiak
+Selay = {
+	randomized = no
+
+	ship_names = {
+		generic = {
+		Erlan Moray Remora Manta Skate "Devil Ray" Lamprey Ray Stingray Conger Condonta Myxini
+		}
+		corvette = {
+		}
+		saber = {
+		}
+		sovereign = {
+		}
+		steamrunner = {
+		}		
+		adv_cruiser = {
+		}
+		strike = {
+		}	
+		constructor = { }
+		colonizer = { }
+		science = { }
+		transport = { }
+		outpost_station = {
+			sequential_name = "Frontier Clutch"
+		}
+	}
+
+	fleet_names = {
+		sequential_name = "%O% Naval Clutch"
+	}
+	
+	army_names = {
+		defense_army = {
+			sequential_name = "%O% Clutch Guardians"
+		}
+		assault_army = {
+			sequential_name = "%O% Assault Clutch"
+		}
+		slave_army = {
+			sequential_name = "%O% Indentured Defence Clutch"
+		}
+		clone_army = { 
+			sequential_name = "%O% Clone Defence Clutch"
+		}
+		robotic_army = {
+			sequential_name = "%O% Mechanical Defence Clutch"
+		}
+		android_army = {
+			sequential_name = "%O% Synthetic Defence Clutch"
+		}
+		psionic_army = { 
+			sequential_name = "%O% Psionic Clutch"
+		}
+		xenomorph_army = {
+			sequential_name = "%O% Bio-Warfare Assault Clutch"
+		}
+		gene_warrior_army = {
+			sequential_name = "%O% Bio-Engineered Defence Clutch"
+		}
+	}
+
+	planet_names = {
+		generic = {
+			names = {
+			}
+		}
+	}
+
+
+	### CHARACTERS
+
+	character_names = {
+		names1 = {
+			weight = 100
+			first_names_male = {		
+				Ssestar Ythiss Athiss Nessh Nesshra Vranssh Ssharvik Sslavna Schranil Lisshrav Losshra Thresshan Tiressh "Arnass'ra" Ssrathil Rasshta Dresshla Ssrova Ssranvik Ssaxildan Ssrog Ssanlan
+			}
+			first_names_female = {
+				Ssestar Ythiss Athiss Nessh Nesshra Vranssh Ssharvik Sslavna Schranil Lisshrav Losshra Thresshan Tiressh "Arnass'ra" Ssrathil Rasshta Dresshla Ssrova Ssranvik Ssaxildan Ssrog Ssanlan
+			}
+			second_names = {
+				" "
+			}
+			regnal_first_names_male = {
+				Ssestar Ythiss Athiss Nessh Nesshra Vranssh Ssharvik Sslavna Schranil Lisshrav Losshra Thresshan Tiressh "Arnass'ra" Ssrathil Rasshta Dresshla Ssrova Ssranvik Ssaxildan Ssrog Ssanlan
+			}
+			regnal_first_names_female = {
+				Ssestar Ythiss Athiss Nessh Nesshra Vranssh Ssharvik Sslavna Schranil Lisshrav Losshra Thresshan Tiressh "Arnass'ra" Ssrathil Rasshta Dresshla Ssrova Ssranvik Ssaxildan Ssrog Ssanlan
+			}
+			regnal_second_names = {
+				" "
+			}
+		}
+	}
+}

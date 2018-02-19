@@ -1,0 +1,1450 @@
+terraform_link = { 
+      from = "pc_arctic"
+      to = "pc_continental"
+      energy = 4000
+      duration = 3600
+      condition = {
+         has_technology = "tech_terraforming_base_1"
+      }
+   }
+   
+terraform_link = { 
+      from = "pc_arid"
+      to = "pc_continental"
+      energy = 4000
+      duration = 3600
+      condition = {
+         has_technology = "tech_terraforming_base_1"
+      }
+   }
+   
+terraform_link = { 
+      from = "pc_savannah"
+      to = "pc_continental"
+      energy = 3000
+      duration = 3600
+      condition = {
+         has_technology = "tech_terraforming_base_1"
+      }
+   }
+   
+terraform_link = { 
+      from = "pc_tropical"
+      to = "pc_continental"
+      energy = 5000
+      duration = 3600
+      condition = {
+         has_technology = "tech_terraforming_base_1"
+      }
+   }
+   
+terraform_link = { 
+      from = "pc_alpine"
+      to = "pc_continental"
+      energy = 3000
+      duration = 3600
+      condition = {
+         has_technology = "tech_terraforming_base_1"
+      }
+   }
+   
+terraform_link = { 
+      from = "pc_m1_class"
+      to = "pc_continental"
+      energy = 4000
+      duration = 3600
+      condition = {
+         has_technology = "tech_terraforming_base_1"
+      }
+   }
+   
+terraform_link = { 
+      from = "pc_ocean"
+      to = "pc_continental"
+      energy = 5000
+      duration = 3600
+      condition = {
+         has_technology = "tech_terraforming_base_1"
+      }
+   }
+   
+terraform_link = { 
+      from = "pc_continental"
+      to = "pc_arctic"
+      energy = 4000
+      duration = 3600
+      condition = {
+         has_technology = "tech_terraforming_base_1"
+      }
+   }
+   
+terraform_link = { 
+      from = "pc_arid"
+      to = "pc_arctic"
+      energy = 4000
+      duration = 3600
+      condition = {
+         has_technology = "tech_terraforming_base_1"
+      }
+   }
+   
+terraform_link = { 
+      from = "pc_savannah"
+      to = "pc_arctic"
+      energy = 5000
+      duration = 3600
+      condition = {
+         has_technology = "tech_terraforming_base_1"
+      }
+   }
+   
+terraform_link = { 
+      from = "pc_tropical"
+      to = "pc_arctic"
+      energy = 5000
+      duration = 3600
+      condition = {
+         has_technology = "tech_terraforming_base_1"
+      }
+   }
+   
+terraform_link = { 
+      from = "pc_alpine"
+      to = "pc_arctic"
+      energy = 3000
+      duration = 3600
+      condition = {
+         has_technology = "tech_terraforming_base_1"
+      }
+   }
+   
+terraform_link = { 
+      from = "pc_m1_class"
+      to = "pc_arctic"
+      energy = 4000
+      duration = 3600
+      condition = {
+         has_technology = "tech_terraforming_base_1"
+      }
+   }
+   
+terraform_link = { 
+      from = "pc_ocean"
+      to = "pc_arctic"
+      energy = 3000
+      duration = 3600
+      condition = {
+         has_technology = "tech_terraforming_base_1"
+      }
+   }
+   
+terraform_link = { 
+      from = "pc_continental"
+      to = "pc_arid"
+      energy = 4000
+      duration = 3600
+      condition = {
+         has_technology = "tech_terraforming_base_1"
+      }
+   }
+   
+terraform_link = { 
+      from = "pc_arctic"
+      to = "pc_arid"
+      energy = 4000
+      duration = 3600
+      condition = {
+         has_technology = "tech_terraforming_base_1"
+      }
+   }
+   
+terraform_link = { 
+      from = "pc_savannah"
+      to = "pc_arid"
+      energy = 3000
+      duration = 3600
+      condition = {
+         has_technology = "tech_terraforming_base_1"
+      }
+   }
+   
+terraform_link = { 
+      from = "pc_tropical"
+      to = "pc_arid"
+      energy = 3000
+      duration = 3600
+      condition = {
+         has_technology = "tech_terraforming_base_1"
+      }
+   }
+   
+terraform_link = { 
+      from = "pc_alpine"
+      to = "pc_arid"
+      energy = 5000
+      duration = 3600
+      condition = {
+         has_technology = "tech_terraforming_base_1"
+      }
+   }
+   
+terraform_link = { 
+      from = "pc_m1_class"
+      to = "pc_arid"
+      energy = 4000
+      duration = 3600
+      condition = {
+         has_technology = "tech_terraforming_base_1"
+      }
+   }
+   
+terraform_link = { 
+      from = "pc_ocean"
+      to = "pc_arid"
+      energy = 5000
+      duration = 3600
+      condition = {
+         has_technology = "tech_terraforming_base_1"
+      }
+   }
+   
+terraform_link = { 
+      from = "pc_continental"
+      to = "pc_savannah"
+      energy = 3000
+      duration = 3600
+      condition = {
+         has_technology = "tech_terraforming_base_1"
+      }
+   }
+   
+terraform_link = { 
+      from = "pc_arctic"
+      to = "pc_savannah"
+      energy = 5000
+      duration = 3600
+      condition = {
+         has_technology = "tech_terraforming_base_1"
+      }
+   }
+   
+terraform_link = { 
+      from = "pc_arid"
+      to = "pc_savannah"
+      energy = 3000
+      duration = 3600
+      condition = {
+         has_technology = "tech_terraforming_base_1"
+      }
+   }
+   
+terraform_link = { 
+      from = "pc_tropical"
+      to = "pc_savannah"
+      energy = 4000
+      duration = 3600
+      condition = {
+         has_technology = "tech_terraforming_base_1"
+      }
+   }
+   
+terraform_link = { 
+      from = "pc_alpine"
+      to = "pc_savannah"
+      energy = 4000
+      duration = 3600
+      condition = {
+         has_technology = "tech_terraforming_base_1"
+      }
+   }
+   
+terraform_link = { 
+      from = "pc_m1_class"
+      to = "pc_savannah"
+      energy = 5000
+      duration = 3600
+      condition = {
+         has_technology = "tech_terraforming_base_1"
+      }
+   }
+   
+terraform_link = { 
+      from = "pc_ocean"
+      to = "pc_savannah"
+      energy = 7000
+      duration = 3600
+      condition = {
+         has_technology = "tech_terraforming_base_1"
+      }
+   }
+   
+terraform_link = { 
+      from = "pc_continental"
+      to = "pc_tropical"
+      energy = 5000
+      duration = 3600
+      condition = {
+         has_technology = "tech_terraforming_base_1"
+      }
+   }
+   
+terraform_link = { 
+      from = "pc_arctic"
+      to = "pc_tropical"
+      energy = 5000
+      duration = 3600
+      condition = {
+         has_technology = "tech_terraforming_base_1"
+      }
+   }
+   
+terraform_link = { 
+      from = "pc_arid"
+      to = "pc_tropical"
+      energy = 3000
+      duration = 3600
+      condition = {
+         has_technology = "tech_terraforming_base_1"
+      }
+   }
+   
+terraform_link = { 
+      from = "pc_savannah"
+      to = "pc_tropical"
+      energy = 4000
+      duration = 3600
+      condition = {
+         has_technology = "tech_terraforming_base_1"
+      }
+   }
+   
+terraform_link = { 
+      from = "pc_alpine"
+      to = "pc_tropical"
+      energy = 7000
+      duration = 3600
+      condition = {
+         has_technology = "tech_terraforming_base_1"
+      }
+   }
+   
+terraform_link = { 
+      from = "pc_m1_class"
+      to = "pc_tropical"
+      energy = 3000
+      duration = 3600
+      condition = {
+         has_technology = "tech_terraforming_base_1"
+      }
+   }
+   
+terraform_link = { 
+      from = "pc_ocean"
+      to = "pc_tropical"
+      energy = 4000
+      duration = 3600
+      condition = {
+         has_technology = "tech_terraforming_base_1"
+      }
+   }
+   
+terraform_link = { 
+      from = "pc_continental"
+      to = "pc_alpine"
+      energy = 3000
+      duration = 3600
+      condition = {
+         has_technology = "tech_terraforming_base_1"
+      }
+   }
+   
+terraform_link = { 
+      from = "pc_arctic"
+      to = "pc_alpine"
+      energy = 3000
+      duration = 3600
+      condition = {
+         has_technology = "tech_terraforming_base_1"
+      }
+   }
+   
+terraform_link = { 
+      from = "pc_arid"
+      to = "pc_alpine"
+      energy = 5000
+      duration = 3600
+      condition = {
+         has_technology = "tech_terraforming_base_1"
+      }
+   }
+   
+terraform_link = { 
+      from = "pc_savannah"
+      to = "pc_alpine"
+      energy = 4000
+      duration = 3600
+      condition = {
+         has_technology = "tech_terraforming_base_1"
+      }
+   }
+   
+terraform_link = { 
+      from = "pc_tropical"
+      to = "pc_alpine"
+      energy = 7000
+      duration = 3600
+      condition = {
+         has_technology = "tech_terraforming_base_1"
+      }
+   }
+   
+terraform_link = { 
+      from = "pc_m1_class"
+      to = "pc_alpine"
+      energy = 5000
+      duration = 3600
+      condition = {
+         has_technology = "tech_terraforming_base_1"
+      }
+   }
+   
+terraform_link = { 
+      from = "pc_ocean"
+      to = "pc_alpine"
+      energy = 4000
+      duration = 3600
+      condition = {
+         has_technology = "tech_terraforming_base_1"
+      }
+   }
+   
+terraform_link = { 
+      from = "pc_continental"
+      to = "pc_m1_class"
+      energy = 4000
+      duration = 3600
+      condition = {
+         has_technology = "tech_terraforming_base_1"
+      }
+   }
+   
+terraform_link = { 
+      from = "pc_arctic"
+      to = "pc_m1_class"
+      energy = 4000
+      duration = 3600
+      condition = {
+         has_technology = "tech_terraforming_base_1"
+      }
+   }
+   
+terraform_link = { 
+      from = "pc_arid"
+      to = "pc_m1_class"
+      energy = 4000
+      duration = 3600
+      condition = {
+         has_technology = "tech_terraforming_base_1"
+      }
+   }
+   
+terraform_link = { 
+      from = "pc_savannah"
+      to = "pc_m1_class"
+      energy = 5000
+      duration = 3600
+      condition = {
+         has_technology = "tech_terraforming_base_1"
+      }
+   }
+   
+terraform_link = { 
+      from = "pc_tropical"
+      to = "pc_m1_class"
+      energy = 3000
+      duration = 3600
+      condition = {
+         has_technology = "tech_terraforming_base_1"
+      }
+   }
+   
+terraform_link = { 
+      from = "pc_alpine"
+      to = "pc_m1_class"
+      energy = 5000
+      duration = 3600
+      condition = {
+         has_technology = "tech_terraforming_base_1"
+      }
+   }
+   
+terraform_link = { 
+      from = "pc_ocean"
+      to = "pc_m1_class"
+      energy = 3000
+      duration = 3600
+      condition = {
+         has_technology = "tech_terraforming_base_1"
+      }
+   }
+   
+terraform_link = { 
+      from = "pc_continental"
+      to = "pc_ocean"
+      energy = 5000
+      duration = 3600
+      condition = {
+         has_technology = "tech_terraforming_base_1"
+      }
+   }
+   
+terraform_link = { 
+      from = "pc_arctic"
+      to = "pc_ocean"
+      energy = 3000
+      duration = 3600
+      condition = {
+         has_technology = "tech_terraforming_base_1"
+      }
+   }
+   
+terraform_link = { 
+      from = "pc_arid"
+      to = "pc_ocean"
+      energy = 5000
+      duration = 3600
+      condition = {
+         has_technology = "tech_terraforming_base_1"
+      }
+   }
+   
+terraform_link = { 
+      from = "pc_savannah"
+      to = "pc_ocean"
+      energy = 7000
+      duration = 3600
+      condition = {
+         has_technology = "tech_terraforming_base_1"
+      }
+   }
+   
+terraform_link = { 
+      from = "pc_tropical"
+      to = "pc_ocean"
+      energy = 4000
+      duration = 3600
+      condition = {
+         has_technology = "tech_terraforming_base_1"
+      }
+   }
+   
+terraform_link = { 
+      from = "pc_alpine"
+      to = "pc_ocean"
+      energy = 4000
+      duration = 3600
+      condition = {
+         has_technology = "tech_terraforming_base_1"
+      }
+   }
+   
+terraform_link = { 
+      from = "pc_m1_class"
+      to = "pc_ocean"
+      energy = 3000
+      duration = 3600
+      condition = {
+         has_technology = "tech_terraforming_base_1"
+      }
+   }
+   
+terraform_link = { 
+      from = "pc_desert"
+      to = "pc_continental"
+      energy = 8000
+      duration = 9000
+      condition = {
+         has_technology = "tech_terraforming_base_2"
+      }
+   }
+   
+terraform_link = { 
+      from = "pc_tundra"
+      to = "pc_continental"
+      energy = 7000
+      duration = 9000
+      condition = {
+         has_technology = "tech_terraforming_base_2"
+      }
+   }
+   
+terraform_link = { 
+      from = "pc_frozen"
+      to = "pc_continental"
+      energy = 11000
+      duration = 9000
+      condition = {
+         has_technology = "tech_terraforming_base_2"
+      }
+   }
+   
+terraform_link = { 
+      from = "pc_g_class"
+      to = "pc_continental"
+      energy = 11000
+      duration = 9000
+      condition = {
+         has_technology = "tech_terraforming_base_2"
+      }
+   }
+   
+terraform_link = { 
+      from = "pc_desert"
+      to = "pc_arctic"
+      energy = 8000
+      duration = 9000
+      condition = {
+         has_technology = "tech_terraforming_base_2"
+      }
+   }
+   
+terraform_link = { 
+      from = "pc_tundra"
+      to = "pc_arctic"
+      energy = 11000
+      duration = 9000
+      condition = {
+         has_technology = "tech_terraforming_base_2"
+      }
+   }
+   
+terraform_link = { 
+      from = "pc_frozen"
+      to = "pc_arctic"
+      energy = 7000
+      duration = 9000
+      condition = {
+         has_technology = "tech_terraforming_base_2"
+      }
+   }
+   
+terraform_link = { 
+      from = "pc_g_class"
+      to = "pc_arctic"
+      energy = 11000
+      duration = 9000
+      condition = {
+         has_technology = "tech_terraforming_base_2"
+      }
+   }
+   
+terraform_link = { 
+      from = "pc_desert"
+      to = "pc_arid"
+      energy = 5000
+      duration = 9000
+      condition = {
+         has_technology = "tech_terraforming_base_2"
+      }
+   }
+   
+terraform_link = { 
+      from = "pc_tundra"
+      to = "pc_arid"
+      energy = 11000
+      duration = 9000
+      condition = {
+         has_technology = "tech_terraforming_base_2"
+      }
+   }
+   
+terraform_link = { 
+      from = "pc_frozen"
+      to = "pc_arid"
+      energy = 11000
+      duration = 9000
+      condition = {
+         has_technology = "tech_terraforming_base_2"
+      }
+   }
+   
+terraform_link = { 
+      from = "pc_g_class"
+      to = "pc_arid"
+      energy = 11000
+      duration = 9000
+      condition = {
+         has_technology = "tech_terraforming_base_2"
+      }
+   }
+   
+terraform_link = { 
+      from = "pc_desert"
+      to = "pc_savannah"
+      energy = 6000
+      duration = 9000
+      condition = {
+         has_technology = "tech_terraforming_base_2"
+      }
+   }
+   
+terraform_link = { 
+      from = "pc_tundra"
+      to = "pc_savannah"
+      energy = 9000
+      duration = 9000
+      condition = {
+         has_technology = "tech_terraforming_base_2"
+      }
+   }
+   
+terraform_link = { 
+      from = "pc_frozen"
+      to = "pc_savannah"
+      energy = 14000
+      duration = 9000
+      condition = {
+         has_technology = "tech_terraforming_base_2"
+      }
+   }
+   
+terraform_link = { 
+      from = "pc_g_class"
+      to = "pc_savannah"
+      energy = 14000
+      duration = 9000
+      condition = {
+         has_technology = "tech_terraforming_base_2"
+      }
+   }
+   
+terraform_link = { 
+      from = "pc_desert"
+      to = "pc_tropical"
+      energy = 6000
+      duration = 9000
+      condition = {
+         has_technology = "tech_terraforming_base_2"
+      }
+   }
+   
+terraform_link = { 
+      from = "pc_tundra"
+      to = "pc_tropical"
+      energy = 14000
+      duration = 9000
+      condition = {
+         has_technology = "tech_terraforming_base_2"
+      }
+   }
+   
+terraform_link = { 
+      from = "pc_frozen"
+      to = "pc_tropical"
+      energy = 14000
+      duration = 9000
+      condition = {
+         has_technology = "tech_terraforming_base_2"
+      }
+   }
+   
+terraform_link = { 
+      from = "pc_g_class"
+      to = "pc_tropical"
+      energy = 9000
+      duration = 9000
+      condition = {
+         has_technology = "tech_terraforming_base_2"
+      }
+   }
+   
+terraform_link = { 
+      from = "pc_desert"
+      to = "pc_alpine"
+      energy = 9000
+      duration = 9000
+      condition = {
+         has_technology = "tech_terraforming_base_2"
+      }
+   }
+   
+terraform_link = { 
+      from = "pc_tundra"
+      to = "pc_alpine"
+      energy = 9000
+      duration = 9000
+      condition = {
+         has_technology = "tech_terraforming_base_2"
+      }
+   }
+   
+terraform_link = { 
+      from = "pc_frozen"
+      to = "pc_alpine"
+      energy = 9000
+      duration = 9000
+      condition = {
+         has_technology = "tech_terraforming_base_2"
+      }
+   }
+   
+terraform_link = { 
+      from = "pc_g_class"
+      to = "pc_alpine"
+      energy = 14000
+      duration = 9000
+      condition = {
+         has_technology = "tech_terraforming_base_2"
+      }
+   }
+   
+terraform_link = { 
+      from = "pc_desert"
+      to = "pc_m1_class"
+      energy = 8000
+      duration = 9000
+      condition = {
+         has_technology = "tech_terraforming_base_2"
+      }
+   }
+   
+terraform_link = { 
+      from = "pc_tundra"
+      to = "pc_m1_class"
+      energy = 11000
+      duration = 9000
+      condition = {
+         has_technology = "tech_terraforming_base_2"
+      }
+   }
+   
+terraform_link = { 
+      from = "pc_frozen"
+      to = "pc_m1_class"
+      energy = 11000
+      duration = 9000
+      condition = {
+         has_technology = "tech_terraforming_base_2"
+      }
+   }
+   
+terraform_link = { 
+      from = "pc_g_class"
+      to = "pc_m1_class"
+      energy = 7000
+      duration = 9000
+      condition = {
+         has_technology = "tech_terraforming_base_2"
+      }
+   }
+   
+terraform_link = { 
+      from = "pc_desert"
+      to = "pc_ocean"
+      energy = 9000
+      duration = 9000
+      condition = {
+         has_technology = "tech_terraforming_base_2"
+      }
+   }
+   
+terraform_link = { 
+      from = "pc_tundra"
+      to = "pc_ocean"
+      energy = 14000
+      duration = 9000
+      condition = {
+         has_technology = "tech_terraforming_base_2"
+      }
+   }
+   
+terraform_link = { 
+      from = "pc_frozen"
+      to = "pc_ocean"
+      energy = 9000
+      duration = 9000
+      condition = {
+         has_technology = "tech_terraforming_base_2"
+      }
+   }
+   
+terraform_link = { 
+      from = "pc_g_class"
+      to = "pc_ocean"
+      energy = 9000
+      duration = 9000
+      condition = {
+         has_technology = "tech_terraforming_base_2"
+      }
+   }
+   
+terraform_link = { 
+      from = "pc_f_class"
+      to = "pc_continental"
+      energy = 17000
+      duration = 12600
+      condition = {
+         has_technology = "tech_terraforming_base_3"
+      }
+   }
+   
+terraform_link = { 
+      from = "pc_k_class"
+      to = "pc_continental"
+      energy = 12000
+      duration = 12600
+      condition = {
+         has_technology = "tech_terraforming_base_3"
+      }
+   }
+   
+terraform_link = { 
+      from = "pc_nuked"
+      to = "pc_continental"
+      energy = 17000
+      duration = 12600
+      condition = {
+         has_technology = "tech_terraforming_base_3"
+      }
+   }
+   
+terraform_link = { 
+      from = "pc_x_class"
+      to = "pc_continental"
+      energy = 17000
+      duration = 12600
+      condition = {
+         has_technology = "tech_terraforming_base_3"
+      }
+   }
+   
+terraform_link = { 
+      from = "pc_f_class"
+      to = "pc_arctic"
+      energy = 17000
+      duration = 12600
+      condition = {
+         has_technology = "tech_terraforming_base_3"
+      }
+   }
+   
+terraform_link = { 
+      from = "pc_k_class"
+      to = "pc_arctic"
+      energy = 17000
+      duration = 12600
+      condition = {
+         has_technology = "tech_terraforming_base_3"
+      }
+   }
+   
+terraform_link = { 
+      from = "pc_nuked"
+      to = "pc_arctic"
+      energy = 12000
+      duration = 12600
+      condition = {
+         has_technology = "tech_terraforming_base_3"
+      }
+   }
+   
+terraform_link = { 
+      from = "pc_x_class"
+      to = "pc_arctic"
+      energy = 17000
+      duration = 12600
+      condition = {
+         has_technology = "tech_terraforming_base_3"
+      }
+   }
+   
+terraform_link = { 
+      from = "pc_f_class"
+      to = "pc_arid"
+      energy = 17000
+      duration = 12600
+      condition = {
+         has_technology = "tech_terraforming_base_3"
+      }
+   }
+   
+terraform_link = { 
+      from = "pc_k_class"
+      to = "pc_arid"
+      energy = 17000
+      duration = 12600
+      condition = {
+         has_technology = "tech_terraforming_base_3"
+      }
+   }
+   
+terraform_link = { 
+      from = "pc_nuked"
+      to = "pc_arid"
+      energy = 17000
+      duration = 12600
+      condition = {
+         has_technology = "tech_terraforming_base_3"
+      }
+   }
+   
+terraform_link = { 
+      from = "pc_x_class"
+      to = "pc_arid"
+      energy = 12000
+      duration = 12600
+      condition = {
+         has_technology = "tech_terraforming_base_3"
+      }
+   }
+   
+terraform_link = { 
+      from = "pc_f_class"
+      to = "pc_savannah"
+      energy = 19000
+      duration = 12600
+      condition = {
+         has_technology = "tech_terraforming_base_3"
+      }
+   }
+   
+terraform_link = { 
+      from = "pc_k_class"
+      to = "pc_savannah"
+      energy = 14000
+      duration = 12600
+      condition = {
+         has_technology = "tech_terraforming_base_3"
+      }
+   }
+   
+terraform_link = { 
+      from = "pc_nuked"
+      to = "pc_savannah"
+      energy = 19000
+      duration = 12600
+      condition = {
+         has_technology = "tech_terraforming_base_3"
+      }
+   }
+   
+terraform_link = { 
+      from = "pc_x_class"
+      to = "pc_savannah"
+      energy = 14000
+      duration = 12600
+      condition = {
+         has_technology = "tech_terraforming_base_3"
+      }
+   }
+   
+terraform_link = { 
+      from = "pc_f_class"
+      to = "pc_tropical"
+      energy = 14000
+      duration = 12600
+      condition = {
+         has_technology = "tech_terraforming_base_3"
+      }
+   }
+   
+terraform_link = { 
+      from = "pc_k_class"
+      to = "pc_tropical"
+      energy = 19000
+      duration = 12600
+      condition = {
+         has_technology = "tech_terraforming_base_3"
+      }
+   }
+   
+terraform_link = { 
+      from = "pc_nuked"
+      to = "pc_tropical"
+      energy = 19000
+      duration = 12600
+      condition = {
+         has_technology = "tech_terraforming_base_3"
+      }
+   }
+   
+terraform_link = { 
+      from = "pc_x_class"
+      to = "pc_tropical"
+      energy = 14000
+      duration = 12600
+      condition = {
+         has_technology = "tech_terraforming_base_3"
+      }
+   }
+   
+terraform_link = { 
+      from = "pc_f_class"
+      to = "pc_alpine"
+      energy = 19000
+      duration = 12600
+      condition = {
+         has_technology = "tech_terraforming_base_3"
+      }
+   }
+   
+terraform_link = { 
+      from = "pc_k_class"
+      to = "pc_alpine"
+      energy = 14000
+      duration = 12600
+      condition = {
+         has_technology = "tech_terraforming_base_3"
+      }
+   }
+   
+terraform_link = { 
+      from = "pc_nuked"
+      to = "pc_alpine"
+      energy = 14000
+      duration = 12600
+      condition = {
+         has_technology = "tech_terraforming_base_3"
+      }
+   }
+   
+terraform_link = { 
+      from = "pc_x_class"
+      to = "pc_alpine"
+      energy = 19000
+      duration = 12600
+      condition = {
+         has_technology = "tech_terraforming_base_3"
+      }
+   }
+   
+terraform_link = { 
+      from = "pc_f_class"
+      to = "pc_m1_class"
+      energy = 12000
+      duration = 12600
+      condition = {
+         has_technology = "tech_terraforming_base_3"
+      }
+   }
+   
+terraform_link = { 
+      from = "pc_k_class"
+      to = "pc_m1_class"
+      energy = 17000
+      duration = 12600
+      condition = {
+         has_technology = "tech_terraforming_base_3"
+      }
+   }
+   
+terraform_link = { 
+      from = "pc_nuked"
+      to = "pc_m1_class"
+      energy = 17000
+      duration = 12600
+      condition = {
+         has_technology = "tech_terraforming_base_3"
+      }
+   }
+   
+terraform_link = { 
+      from = "pc_x_class"
+      to = "pc_m1_class"
+      energy = 17000
+      duration = 12600
+      condition = {
+         has_technology = "tech_terraforming_base_3"
+      }
+   }
+   
+terraform_link = { 
+      from = "pc_f_class"
+      to = "pc_ocean"
+      energy = 14000
+      duration = 12600
+      condition = {
+         has_technology = "tech_terraforming_base_3"
+      }
+   }
+   
+terraform_link = { 
+      from = "pc_k_class"
+      to = "pc_ocean"
+      energy = 19000
+      duration = 12600
+      condition = {
+         has_technology = "tech_terraforming_base_3"
+      }
+   }
+   
+terraform_link = { 
+      from = "pc_nuked"
+      to = "pc_ocean"
+      energy = 14000
+      duration = 12600
+      condition = {
+         has_technology = "tech_terraforming_base_3"
+      }
+   }
+   
+terraform_link = { 
+      from = "pc_x_class"
+      to = "pc_ocean"
+      energy = 19000
+      duration = 12600
+      condition = {
+         has_technology = "tech_terraforming_base_3"
+      }
+   }
+   
+terraform_link = { 
+      from = "pc_assimilated"
+      to = "pc_continental"
+      energy = 30000
+      duration = 14400
+      condition = {
+         has_technology = "tech_terraforming_borg"
+      }
+   }
+   
+terraform_link = { 
+      from = "pc_assimilated"
+      to = "pc_arctic"
+      energy = 30000
+      duration = 14400
+      condition = {
+         has_technology = "tech_terraforming_borg"
+      }
+   }
+   
+terraform_link = { 
+      from = "pc_assimilated"
+      to = "pc_arid"
+      energy = 25000
+      duration = 14400
+      condition = {
+         has_technology = "tech_terraforming_borg"
+      }
+   }
+   
+terraform_link = { 
+      from = "pc_assimilated"
+      to = "pc_savannah"
+      energy = 27000
+      duration = 14400
+      condition = {
+         has_technology = "tech_terraforming_borg"
+      }
+   }
+   
+terraform_link = { 
+      from = "pc_assimilated"
+      to = "pc_tropical"
+      energy = 22000
+      duration = 14400
+      condition = {
+         has_technology = "tech_terraforming_borg"
+      }
+   }
+   
+terraform_link = { 
+      from = "pc_assimilated"
+      to = "pc_alpine"
+      energy = 32000
+      duration = 14400
+      condition = {
+         has_technology = "tech_terraforming_borg"
+      }
+   }
+   
+terraform_link = { 
+      from = "pc_assimilated"
+      to = "pc_m1_class"
+      energy = 25000
+      duration = 14400
+      condition = {
+         has_technology = "tech_terraforming_borg"
+      }
+   }
+   
+terraform_link = { 
+      from = "pc_assimilated"
+      to = "pc_ocean"
+      energy = 27000
+      duration = 14400
+      condition = {
+         has_technology = "tech_terraforming_borg"
+      }
+   }
+   
+terraform_link = { 
+      from = "pc_assimilated"
+      to = "pc_desert"
+      energy = 20000
+      duration = 14400
+      condition = {
+         has_technology = "tech_terraforming_borg"
+      }
+   }
+   
+terraform_link = { 
+      from = "pc_assimilated"
+      to = "pc_frozen"
+      energy = 35000
+      duration = 14400
+      condition = {
+         has_technology = "tech_terraforming_borg"
+      }
+   }
+   
+terraform_link = { 
+      from = "pc_assimilated"
+      to = "pc_y_class"
+      energy = 27000
+      duration = 14400
+      condition = {
+         has_technology = "tech_terraforming_borg"
+      }
+   }
+   
+terraform_link = { 
+      from = "pc_arid"
+      to = "pc_desert"
+      energy = 4000
+      duration = 3600
+      condition = {
+         has_technology = "tech_society_sheliak_517"
+      }
+   }
+   
+terraform_link = { 
+      from = "pc_x_class"
+      to = "pc_desert"
+      energy = 6000
+      duration = 3600
+      condition = {
+         has_technology = "tech_society_sheliak_517"
+      }
+   }
+   
+terraform_link = { 
+      from = "pc_molten"
+      to = "pc_desert"
+      energy = 7000
+      duration = 9000
+      condition = {
+         has_technology = "tech_society_new_worlds_1141"
+      }
+   }
+   
+terraform_link = { 
+      from = "pc_class_d_barren"
+      to = "pc_desert"
+      energy = 7000
+      duration = 9000
+      condition = {
+         has_technology = "tech_society_new_worlds_1141"
+      }
+   }
+   
+terraform_link = { 
+      from = "pc_arctic"
+      to = "pc_frozen"
+      energy = 4000
+      duration = 3600
+      condition = {
+         has_technology = "tech_society_glacier_665"
+      }
+   }
+   
+terraform_link = { 
+      from = "pc_nuked"
+      to = "pc_frozen"
+      energy = 6000
+      duration = 3600
+      condition = {
+         has_technology = "tech_society_glacier_665"
+      }
+   }
+   
+terraform_link = { 
+      from = "pc_barren_cold"
+      to = "pc_frozen"
+      energy = 7000
+      duration = 9000
+      condition = {
+         has_technology = "tech_society_advanced_714"
+      }
+   }
+   
+terraform_link = { 
+      from = "pc_class_k_trans"
+      to = "pc_frozen"
+      energy = 7000
+      duration = 9000
+      condition = {
+         has_technology = "tech_society_advanced_714"
+      }
+   }
+   
+terraform_link = { 
+      from = "pc_savannah"
+      to = "pc_y_class"
+      energy = 7000
+      duration = 3600
+      condition = {
+         has_technology = "tech_society_tholian_514"
+      }
+   }
+   
+terraform_link = { 
+      from = "pc_desert"
+      to = "pc_y_class"
+      energy = 5000
+      duration = 3600
+      condition = {
+         has_technology = "tech_society_tholian_514"
+      }
+   }
+   
+terraform_link = { 
+      from = "pc_tundra"
+      to = "pc_y_class"
+      energy = 8000
+      duration = 3600
+      condition = {
+         has_technology = "tech_society_tholian_514"
+      }
+   }
+   
+terraform_link = { 
+      from = "pc_k_class"
+      to = "pc_y_class"
+      energy = 12000
+      duration = 3600
+      condition = {
+         has_technology = "tech_society_tholian_514"
+      }
+   }
+   
+terraform_link = { 
+      from = "pc_toxic"
+      to = "pc_y_class"
+      energy = 5000
+      duration = 9000
+      condition = {
+         has_technology = "tech_society_new_worlds_1137"
+      }
+   }
+   
+terraform_link = { 
+      from = "pc_class_n_titan"
+      to = "pc_y_class"
+      energy = 5000
+      duration = 9000
+      condition = {
+         has_technology = "tech_society_new_worlds_1137"
+      }
+   }
+   

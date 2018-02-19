@@ -1,0 +1,84 @@
+# Patrol Frigate
+ship_design = {
+	name = "Small Bioship"
+	use_design_name = yes
+	ship_size = corvette
+	section = {
+		template = "corvette_stern_beam"
+		slot = "stern"
+		component = { slot = "SMALL_GUN_01" template = "SMALL_MODULATED_PHASER_4" }
+		component = { slot = "SMALL_GUN_02" template = "SMALL_MODULATED_PHASER_4" }
+		component = { slot = "SMALL_GUN_1" template = "POINT_DEFENCE_PHOTON_TORPEDO_6" }
+	}
+	section = {
+		template = "corvette_mid_17"
+		slot = "mid"
+		component = { slot = "SMALL_UTILITY_1" template = "UTILITY_SMALL_ARMOR_0" }
+		component = { slot = "LARGE_UTILITY_1" template = "UTILITY_LARGE_TRACKING_0" }
+	}	
+	required_component="REQUIRED_WARP_5_COMBAT_PF"
+	required_component="REQUIRED_COMPUTER_4_PF"
+	required_component="REQUIRED_THRUSTERS_4A_PF"
+	required_component="Required_Combat_Sensor_brawler_1"
+	required_component="REQUIRED_DEFENSE_5_SHIELD_A_PF"
+	required_component="REQUIRED_HULL_5A_PF"
+}
+
+
+ship_design = {
+	name = "Bioship"
+	use_design_name = yes
+	ship_size = saber
+	section = {
+		template = "saber_stern_1"
+		slot = "stern"
+		component = { slot = "SMALL_GUN_01" template = "SMALL_MODULATED_PHASER_3" }
+		component = { slot = "SMALL_GUN_02" template = "SMALL_MODULATED_PHASER_3" }
+		component = { slot = "SMALL_GUN_03" template = "SMALL_MODULATED_PHASER_3" }
+		component = { slot = "SMALL_GUN_1" template = "POINT_DEFENCE_PHOTON_TORPEDO_5" }
+		component = { slot = "SMALL_GUN_2" template = "POINT_DEFENCE_PHOTON_TORPEDO_5" }
+	}
+	section = {
+		template = "saber_mid_18"
+		slot = "mid"
+		component = { slot = "SMALL_UTILITY_1" template = "UTILITY_SMALL_ARMOR_2" }
+		component = { slot = "AUX_UTILITY_1" template = "UTILITY_AUX_CREW_1" }
+		component = { slot = "LARGE_UTILITY_1" template = "UTILITY_LARGE_TRACKING_0" }
+	}
+	required_component="REQUIRED_WARP_5_COMBAT_DE"
+	required_component="REQUIRED_COMPUTER_4_DE"
+	required_component="REQUIRED_THRUSTERS_4A_DE"
+	required_component="Required_Combat_Sensor_picket_2"
+	required_component="REQUIRED_DEFENSE_5_SHIELD_A_DE"
+	required_component="REQUIRED_HULL_5A_DE"
+}
+
+ship_design = {
+	name = "Large Bioship"
+	use_design_name = yes
+	ship_size = adv_cruiser
+	section = {
+		template = "adv_cruiser_stern_1"
+		slot = "stern"
+		component = { slot = "MEDIUM_GUN_01" template = "MEDIUM_MODULATED_PHASER_3" }
+		component = { slot = "MEDIUM_GUN_02" template = "MEDIUM_MODULATED_PHASER_3" }
+		component = { slot = "TORPEDO_01" template = "TORPEDO_PHOTON_TORPEDO_4" }
+	}
+	section = {
+		template = "adv_cruiser_mid_18"
+		slot = "mid"
+		component = { slot = "SMALL_UTILITY_1" template = "UTILITY_SMALL_ARMOR_0" }
+		component = { slot = "SMALL_UTILITY_2" template = "UTILITY_SMALL_ARMOR_0" }
+		component = { slot = "AUX_UTILITY_1" template = "UTILITY_AUX_CREW_0" }
+		component = { slot = "LARGE_UTILITY_1" template = "UTILITY_LARGE_TRACKING_0" }
+		component = { slot = "LARGE_UTILITY_2" template = "UTILITY_LARGE_TRACKING_0" }
+		component = { slot = "MEDIUM_UTILITY_1" template = "UTILITY_MEDIUM_EPS_0" }
+		component = { slot = "MEDIUM_UTILITY_2" template = "UTILITY_MEDIUM_EPS_0" }
+	}
+	required_component="REQUIRED_WARP_5_COMBAT_BS"
+	required_component="REQUIRED_COMPUTER_4_BS"
+	required_component="REQUIRED_THRUSTERS_4A_BS"
+	required_component="Required_Combat_Sensor_brawler_1"
+	required_component="REQUIRED_DEFENSE_5_SHIELD_A_BS"
+	required_component="REQUIRED_HULL_5A_BS"
+}

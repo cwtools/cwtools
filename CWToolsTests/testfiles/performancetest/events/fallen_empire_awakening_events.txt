@@ -1,0 +1,274 @@
+############################
+#
+# Fallen Empire 'Awakening' Events
+#
+# Written by Martin Anward
+#
+############################
+
+namespace = fallen_empires_awakening
+
+# Sleepers Awake
+country_event = {
+	id = fallen_empires_awakening.1
+	title = OK
+	desc = OK
+	hide_window = yes
+	trigger = {
+		NOT = { has_global_flag = sleepers_awake_happened }
+		NOT = { has_global_flag = guardians_of_the_galaxy_happened }
+
+		years_passed > 100
+
+		is_country_type = fallen_empire
+		NOT = { has_ethic = ethic_gestalt_consciousness }
+		is_at_war = no
+		fleet_power > 40000
+
+		# Wake up if regular empire is growing too strong or has started to conquer other fallen empires
+		any_country = {
+			is_country_type = default
+			OR = {
+				fleet_power > 50000
+				any_owned_planet = {
+					has_planet_flag = fallen_empire_world
+				}
+			}
+		}
+	}
+
+	mean_time_to_happen = {
+		years = 50
+		modifier = {
+			factor = 0.5
+			any_country = {
+				is_country_type = default
+				fleet_power > 75000
+			}
+		}
+		modifier = {
+			factor = 2
+			num_fallen_empires > 1
+			num_fallen_empires < 3
+		}
+		modifier = {
+			factor = 3
+			num_fallen_empires > 2
+			num_fallen_empires < 4
+		}
+		modifier = {
+			factor = 4
+			num_fallen_empires > 3
+		}
+		modifier = {
+			factor = 0.1
+			any_country = {
+				is_country_type = default
+				any_owned_planet = {
+					has_planet_flag = fallen_empire_world
+					NOT = { is_original_owner = root }
+				}
+			}
+		}
+	}
+
+	immediate = {
+		set_global_flag = sleepers_awake_happened
+
+		country_event = { id = fallen_empires_awakening.3 }
+
+		# Notify players
+		every_country = {
+			limit = {
+				is_ai = no
+			}
+			country_event = { id = fallen_empires_awakening.2 }
+		}
+
+		# War in Heaven
+		if = {
+			limit = { host_has_dlc = "Leviathans Story Pack" always = no }
+			random_list = {
+				40 = { # War in Heaven with Fallen Empire of opposing ethos
+					random_country = {
+							limit = {
+								NOT = { is_same_value = root }
+								is_country_type = fallen_empire
+								NOT = { has_ethic = ethic_gestalt_consciousness }
+								OR = {
+									AND = {
+										has_ethic = ethic_fanatic_xenophobe
+										root = { has_ethic = ethic_fanatic_xenophile }
+									}
+									AND = {
+										has_ethic = ethic_fanatic_xenophile
+										root = { has_ethic = ethic_fanatic_xenophobe }
+									}
+									AND = {
+										has_ethic = ethic_fanatic_spiritualist
+										root = { has_ethic = ethic_fanatic_materialist }
+									}
+									AND = {
+										has_ethic = ethic_fanatic_materialist
+										root = { has_ethic = ethic_fanatic_spiritualist }
+									}
+								}
+							}
+							set_country_flag = sleepers_awake_ancient_rival
+							set_timed_country_flag = { flag = timed_ancient_rival days = 3650 }
+						}
+				}
+				20 = { # War in Heaven with Fallen Empire of different ethos
+					random = {
+						chance = 25
+						random_country = {
+							limit = {
+								NOT = { is_same_value = root }
+								is_country_type = fallen_empire
+								NOT = { has_ethic = ethic_gestalt_consciousness }
+							}
+							set_country_flag = sleepers_awake_ancient_rival
+							set_timed_country_flag = { flag = timed_ancient_rival days = 3650 }
+						}
+					}
+				}
+				40 = { } # No War in Heaven
+			}
+		}
+	}
+}
+
+country_event = {
+	id = fallen_empires_awakening.2
+	title = fallen_empires_awakening.2.name
+	desc = fallen_empires_awakening.2.desc
+	picture = GFX_evt_fallen_empire
+	show_sound = event_alien_signal
+	location = from
+
+	is_triggered_only = yes
+
+	option = {
+		name = fallen_empires_awakening.2.a
+	}
+}
+
+country_event = {
+	id = fallen_empires_awakening.3
+	title = OK
+	desc = OK
+
+	hide_window = yes
+
+	is_triggered_only = yes
+
+	immediate = {
+		set_country_flag = sleepers_awake_first_sleeper
+		set_country_type = awakened_fallen_empire
+		change_government = {
+			civics = {
+				civic = civic_revanchist_fervor
+				civic = civic_ancient_caches_of_technology
+			}
+		}
+
+		# Changing country type resets resources, so give them full stores
+		add_minerals = 20000
+		add_energy = 5000
+		add_influence = 1000
+
+		# Add some more fleet
+		country_event = { id = fallen_empires.13 }
+		if = {
+			limit = {
+				any_country = {
+					is_country_type = default
+					fleet_power > 50000
+				}
+			}
+			country_event = { id = fallen_empires.13 }
+		}
+
+		# Establish communications
+		every_country = {
+			limit = {
+				OR = {
+					is_country_type = default
+					is_country_type = fallen_empire
+					is_country_type = awakened_fallen_empire
+				}
+				NOT = { has_communications = root }
+			}
+
+			establish_communications_no_message = root
+			root = { save_event_target_as = contact_empire }
+			country_event = { id = action.1 }
+		}
+	}
+}
+
+# Guardians of the Galaxy
+country_event = {
+	id = fallen_empires_awakening.4
+	title = OK
+	desc = OK
+
+	hide_window = yes
+
+	trigger = {
+		has_global_flag = galactic_crisis_happened
+		has_country_flag = guardians_of_the_galaxy
+		NOT = { has_global_flag = guardians_of_the_galaxy_happened }
+		NOT = { has_country_flag = timed_guardians_of_the_galaxy }
+	}
+
+	mean_time_to_happen = {
+		years = 5
+		modifier = {
+			factor = 0.01
+			NOT = { has_country_flag = timed_guardians_of_the_galaxy_2 }
+		}
+	}
+
+	immediate = {
+		set_global_flag = guardians_of_the_galaxy_happened
+		country_event = { id = fallen_empires_awakening.3 }
+
+		every_country = {
+			limit = {
+				is_country_type = default
+			}
+			random_list = {
+				33 = { add_opinion_modifier = { who = root modifier = opinion_crisis_fighter } }
+				33 = { add_opinion_modifier = { who = root modifier = opinion_crisis_fighter_small } }
+				33 = { }
+			}
+		}
+
+		# Notify
+		every_country = {
+			limit = {
+				is_ai = no
+			}
+			country_event = { id = fallen_empires_awakening.5 }
+		}
+	}
+}
+
+country_event = {
+	id = fallen_empires_awakening.5
+	title = fallen_empires_awakening.5.name
+	desc = fallen_empires_awakening.5.desc
+	picture = GFX_evt_fallen_empire
+	show_sound = event_alien_signal
+	location = from
+
+	is_triggered_only = yes
+
+	option = {
+		name = fallen_empires_awakening.5.a
+	}
+	option = {
+		name = fallen_empires_awakening.5.b
+	}
+}

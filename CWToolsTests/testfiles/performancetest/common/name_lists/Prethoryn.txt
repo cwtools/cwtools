@@ -1,0 +1,62 @@
+﻿### Borg
+Prethoryn = {
+	selectable = { always = no }
+	randomized = no
+	
+	### SHIPS
+
+	ship_names = {
+
+		generic = {
+			"Tactical Heavy Drone"
+		}
+	
+		small_ship_swarm = {
+			"Assimilator"
+		}
+		
+		large_ship_swarm = {
+			"Sphere"
+		}
+		
+		large_ship_carrier_swarm = {
+			"Cube"
+		}
+		
+		queen_swarm = {
+			Taktischer Kubus 138 Taktischer Kubus 139 Taktischer Kubus 12 Taktischer Kubus 18 Taktischer Kubus 13 Taktischer Kubus 38 Taktischer Kubus 238 Taktischer Kubus 28 Taktischer Kubus 68 Taktischer Kubus 1138 Taktischer Kubus 1383 Taktischer Kubus 1198 Taktischer Kubus 1354 Taktischer Kubus 1380
+			
+		}
+		
+		colony_ship_swarm = {
+			"Cylinder"
+		}
+	}
+
+	fleet_names = {
+		sequential_name = "Unimatrix %O%"
+	}
+
+	### CHARACTERS
+
+	character_names = {
+		default = {
+			full_names = {
+				"Gestalt Pattern 'Hunter'" "Gestalt Pattern 'Stalker'" "Gestalt Pattern 'Devourer'" "Gestalt Pattern 'Slayer'" 
+				"Gestalt Pattern 'Destroyer'" "Gestalt Pattern 'Executioner'" "Gestalt Pattern 'Reaper'" "Gestalt Pattern 'Slaughterer'" 
+				"Gestalt Pattern 'Howler'" "Gestalt Pattern 'Prowler'" "Gestalt Pattern 'Killer'" "Gestalt Pattern 'Mauler'"
+				"Gestalt Pattern 'Seeker'" "Gestalt Pattern 'Butcher'" "Gestalt Pattern 'Corrupter'" "Gestalt Pattern 'Screamer'" 
+				"Gestalt Pattern 'Stinger'" "Gestalt Pattern 'Thresher'" "Gestalt Pattern 'Strider'" "Gestalt Pattern 'Singer'" 
+				"Gestalt Pattern 'Silencer'" "Gestalt Pattern 'Feeder'" "Gestalt Pattern 'Striker'" "Gestalt Pattern 'Smiter'"
+				"Gestalt Pattern 'Watcher'" "Gestalt Pattern 'Observer'" "Gestalt Pattern 'Chaser'" "Gestalt Pattern 'Vanquisher'" 
+				"Gestalt Pattern 'Crusher'" "Gestalt Pattern 'Eater'" "Gestalt Pattern 'Invader'" "Gestalt Pattern 'Interloper'" 
+				"Gestalt Pattern 'Intruder'" "Gestalt Pattern 'Trespasser'" "Gestalt Pattern 'Encroacher'" "Gestalt Pattern 'Ravager'" 
+				"Gestalt Pattern 'Gnawer'" "Gestalt Pattern 'Ruiner'" "Gestalt Pattern 'Wrecker'" "Gestalt Pattern 'Despoiler'" 
+				"Gestalt Pattern 'Pillager'" "Gestalt Pattern 'Tainter'" "Gestalt Pattern 'Depriver'" "Gestalt Pattern 'Reaver'" 
+				"Gestalt Pattern 'Berserker'" "Gestalt Pattern 'Punisher'" "Gestalt Pattern 'Scourer'" "Gestalt Pattern 'Cleanser'" 
+				"Gestalt Pattern 'Shatterer'" "Gestalt Pattern 'Tormenter'" "Gestalt Pattern 'Terrorizer'"
+			}
+			
+		}
+	}
+}

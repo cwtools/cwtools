@@ -1,0 +1,95 @@
+@distance = 30
+@base_moon_distance = 10
+
+#Tamarians
+tamarian_homeworld = {
+	name = "Sigma Tama"
+	class = "rl_standard_stars"
+	usage = custom_empire
+	flags = { tamarian_unity }
+	init_effect = { log = "tamarian homeworld" }
+	planet = { name = "Sigma Tama" class = star orbit_distance = 0 orbit_angle = 1 size = { min = 20 max = 30 } has_ring = no }
+	change_orbit = 50
+	planet = {
+		count = 3
+		orbit_distance = 20
+		class = random_non_colonizable
+		orbit_angle = { min = 90 max = 270 }
+		change_orbit = @base_moon_distance
+		moon = { count = { min = 0 max = 1 } class = random_non_colonizable orbit_angle = { min = 90 max = 270 } orbit_distance = 5 }
+	}
+	change_orbit = 40
+	planet = {
+		name = "Sigma Tama IV"
+		home_planet = yes
+		class = pc_alpine
+		orbit_distance = 0
+		orbit_angle = { min = 90 max = 270 }
+		size = { min = 22 max = 25 }
+		starting_planet = yes
+		tile_blockers = none
+		modifiers = none
+		init_effect = { prevent_anomaly = yes }
+		init_effect = {
+			if = {
+				limit = { NOT = { any_country = { has_country_flag = tamarian_unity } } }
+				create_species = {
+					name = "Tamarian"
+					class = TAM
+					portrait = tamarian
+					homeworld = THIS
+					traits = {
+						trait = "trait_enduring"
+						trait = "trait_communal"
+						trait = "trait_sedentary"
+						trait = "trait_natural_sociologists"
+						ideal_planet_class = "pc_alpine"
+					}
+				}
+				last_created_species = { save_global_event_target_as = tamarianSpecies }
+				create_country = {
+					name = "NAME_tamarian_unity"
+					type = default
+					ignore_initial_colony_error = yes
+					civics = { civic = "civic_inwards_perfection" civic = "civic_philosopher_king" }
+					authority = auth_imperial
+					name_list = "Tamarian"
+					ethos = { ethic = "ethic_pacifist" ethic = "ethic_xenophobe" ethic = "ethic_spiritualist" }
+					species = event_target:tamarianSpecies
+					flag = {
+						icon = { category = "pointy" file = "flag_pointy_16.dds" }
+						background = { category = "backgrounds" file = "00_solid.dds" }
+						colors = { "customcolor1492" "black" "null" "null" }
+					}
+					ship_prefix = ""
+					effect = {
+						set_graphical_culture = generic_02
+						set_country_flag = tamarian_unity
+						set_country_flag = custom_start_screen
+						set_country_flag = generic_ent
+						set_country_flag = alpha_beta_empire
+						set_country_flag = sth_medium_galaxy
+						set_country_flag = init_spawned
+						set_country_flag = botf_minor
+						save_global_event_target_as = tamarian_unity
+					}
+				}
+				create_colony = { owner = event_target:tamarian_unity species = event_target:tamarianSpecies ethos = owner }
+			}
+			set_capital = yes
+			random_country = {
+				limit = { has_country_flag = tamarian_unity }
+				save_global_event_target_as = tamarian_unity
+				add_appropriate_start_techs = yes
+				species = { save_global_event_target_as = tamarianSpecies }
+            }
+			set_owner = event_target:tamarian_unity
+			generate_major_empire_start_buildings = yes
+			generate_major_empire_start_pops = yes
+			generate_major_empire_start_fleets = yes
+			set_name = "Sigma Tama IV"
+		}
+		change_orbit = @base_moon_distance
+		moon = { name = "Sigma Tama IVa" class = random_non_colonizable orbit_angle = { min = 90 max = 270 } orbit_distance = 5 }
+	}
+}	

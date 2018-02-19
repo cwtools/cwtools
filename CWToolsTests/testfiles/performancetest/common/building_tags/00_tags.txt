@@ -1,0 +1,16 @@
+# Building Tags
+#
+# Building Tags are applied to building types and is used to group buildings together for the use of common modifiers.
+#
+
+hydroponics_farm
+mining_network
+power_plant
+military_building
+cultural_building
+academic_building
+housing_construction
+medical_building
+green_building
+commerce_building
+law_building

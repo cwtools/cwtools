@@ -1,0 +1,97 @@
+﻿### Flaxian by EHKodiak
+Flaxian = {
+	randomized = no
+
+	ship_names = {
+		generic = {
+		"Nimaria" "Improbable Cause" "Furtive Trader" "Surreptitious Trader" "Sly Trader" "Cautious Trader" "Crafty Trader" "Shifty Trader" "Private Trader" "Enigmatic Trader" "Cunning Trader" "Underhand Trader" "Wily Trader" "Skulking Trader" "Quiet Trader" "Concealed Trader" "Clandestine Trader" "Veiled Trader" "Furtive Shadow" "Surreptitious Shadow" "Sly Shadow" "Cautious Shadow" "Crafty Shadow" "Shifty Shadow" "Private Shadow" "Enigmatic Shadow" "Cunning Shadow" "Underhanded Shadow" "Wily Shadow" "Skulking Shadow" "Quiet Shadow" "Concealed Shadow" "Veiled Shadow" "Ulterior Shadow" "Buried Shadow" "Clandestine Shadow" "Furtive Venture" "Surreptitious Venture" "Sly Venture" "Cautious Venture" "Crafty Venture" "Shifty Venture" "Private Venture" "Enigmatic Venture" "Cunning Venture" "Underhanded Venture" "Wily Venture" "Skulking Venture" "Quiet Venture" "Concealed Venture" "Veiled Venture" "Ulterior Venture" "Buried Venture" "Clandestine Shadow" "Hidden Blade" "Concealed Blade"
+		}
+		corvette = {
+		}
+		saber = {
+		}
+		sovereign = {
+		}
+		steamrunner = {
+		}		
+		adv_cruiser = {
+		}
+		strike = {
+		}	
+		constructor = { }
+		colonizer = { }
+		science = { }
+		transport = { }
+		outpost_station = {
+			sequential_name = "Traders Outpost"
+		}
+	}
+
+	fleet_names = {
+		sequential_name = "%O% Fleet"
+	}
+	
+	army_names = {
+		defense_army = {
+			sequential_name = "%O% Flaxian Guards"
+		}
+		assault_army = {
+			sequential_name = "%O% Assault Band"
+		}
+		slave_army = {
+			sequential_name = "%O% Indentured Defence Force"
+		}
+		clone_army = { 
+			sequential_name = "%O% Clone Defence Force"
+		}
+		robotic_army = {
+			sequential_name = "%O% Mechanised Defence Force"
+		}
+		android_army = {
+			sequential_name = "%O% Synthetic Defence Force"
+		}
+		psionic_army = { 
+			sequential_name = "%O% Psi Defence Force"
+		}
+		xenomorph_army = {
+			sequential_name = "%O% Bio-Warfare Defence Force"
+		}
+		gene_warrior_army = {
+			sequential_name = "%O% Bio-Engineered Defence Force"
+		}
+	}
+
+	planet_names = {
+		generic = {
+			names = { 
+			}
+		}
+	}
+
+
+	### CHARACTERS Flaxian names are quite soft and italian sounding. 
+
+	character_names = {
+		names1 = {
+			weight = 40
+			first_names_male = {
+			Valderi Retaya Dekora Faldera Falderi Mizael Vidro Calvari Haderi Hadera Vittori Niranya Hiranya Namaha Grinsi Matixi Oninoni Zimpulsi Janaci Kodi Timthehati Kumbi Vaxilda Gilma
+			}
+			first_names_female = {
+			Falleri Fallera Valleri Vallera Vivia Vittori Daykori Faldiri Falliri Mizae Vidri Calviri Haderi Alonzi Alberi Agnese Andri Adri Badri Balbi Fabi Gausti Fausti Flavi Forti Fulva Fiola Niola Miolla Molli Pollina Fideli Elnora Elini Evi Eldi Doratti Doreoni Carini Cicili Claidi Calidi Gratani Kumbi Ravni
+			}
+			second_names = {
+			" "
+			}
+			regnal_first_names_male = {
+			Valderi Retaya Dekora Faldera Falderi Mizael Vidro Calvari Haderi Hadera Vittori Niranya Hiranya Namaha Grinsi Matixi Oninoni Zimpulsi Janaci Kodi Timthehati Kumbi Vaxilda Gilma
+			}
+			regnal_first_names_female = {
+			Falleri Fallera Valleri Vallera Vivia Vittori Daykori Faldiri Falliri Mizae Vidri Calviri Haderi Alonzi Alberi Agnese Andri Adri Badri Balbi Fabi Gausti Fausti Flavi Forti Fulva Fiola Niola Miolla Molli Pollina Fideli Elnora Elini Evi Eldi Doratti Doreoni Carini Cicili Claidi Calidi Gratani Kumbi Ravni
+			}
+			regnal_second_names = {
+			" "
+			}
+		}
+	}
+}

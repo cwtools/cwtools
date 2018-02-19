@@ -1,0 +1,202 @@
+@distance = 30
+@base_moon_distance = 10
+
+
+### Sol - Human start
+human_homeworld = {
+	name = "Sol"
+	class = "sc_g"
+	asteroids_distance = 88
+	flags = { human_homeworld }
+	init_effect = { log = "human homeworld" }
+	usage = custom_empire
+	max_instances = 1
+	planet = { name = "Sol" class = "pc_g_star" orbit_distance = 0 orbit_angle = 1 size = 40 has_ring = no }
+	planet = { name = "Mercury" class = "pc_b_class" orbit_distance = 25 size = 6 has_ring = no }
+	planet = { name = "Venus" class = "pc_toxic" orbit_distance = 15 orbit_angle = 125 size = 15 has_ring = no }
+	planet = {
+		name = "Earth"
+		class = pc_continental
+		orbit_distance = 12
+		orbit_angle = 220
+		size = { min = 22 max = 25 }
+		starting_planet = yes
+		has_ring = no
+		entity = "continental_planet_earth_entity"
+		tile_blockers = none
+		modifiers = none
+		init_effect = { prevent_anomaly = yes set_planet_flag = sol_earth }
+		init_effect = {
+			set_global_flag = human_homeworld_spawned
+			if = {
+				limit = { NOT = { any_country = { has_country_flag = united_earth } } }
+				create_species = { 
+				    name = "Human" 
+				    class = FED 
+				    portrait = human 
+				    homeworld = THIS 
+				    traits = { 
+				        trait = "trait_charismatic" 
+				        trait = "trait_natural_sociologists" 
+				        ideal_planet_class = "pc_continental" 
+					} 
+				}
+				last_created_species = { save_global_event_target_as = humanSpecies }
+				create_country = {
+					name = "NAME_united_earth"
+					ship_prefix = "USS"
+					type = default
+					ignore_initial_colony_error = yes
+					civics = { civic = "civic_post_scarcity" civic = "civic_spirit_exploration" }
+					authority = auth_democratic
+					name_list = "Human"
+					ethos = { ethic = "ethic_pacifist" ethic = "ethic_xenophile" ethic = "ethic_egalitarian" }
+					species = event_target:humanSpecies
+					flag = {
+						icon = { category = "human" file = "flag_human_9.dds" }
+						background = { category = "backgrounds" file = "00_solid.dds" }
+						colors = { "blue" "black" "null" "null" }
+					}
+					effect = {
+						set_graphical_culture = federation_01
+						set_country_flag = united_earth
+						set_country_flag = custom_start_screen
+						set_country_flag = starfleet_ent
+						set_country_flag = federation_founder
+						set_country_flag = alpha_beta_empire
+						set_country_flag = init_spawned
+						set_country_flag = first_alien_life
+						set_country_flag = first_contact_event
+						set_country_flag = sth_medium_galaxy
+						set_country_flag = botf_major
+						save_global_event_target_as = united_earth
+					}
+				}
+				create_colony = { owner = event_target:united_earth species = event_target:humanSpecies ethos = owner }
+			}
+			set_capital = yes
+			random_country = {
+				limit = { has_country_flag = united_earth }
+				save_global_event_target_as = united_earth
+				add_appropriate_start_techs = yes
+				give_technology = { tech = "tech_society_statecraft_931" message = no }
+				species = { save_global_event_target_as = humanSpecies }
+			}
+			set_owner = event_target:united_earth
+			generate_major_empire_start_buildings = yes
+			generate_major_empire_start_pops = yes
+			generate_major_empire_start_fleets = yes
+			set_name = "NAME_earth"
+		}
+		moon = {
+			name = "Luna"
+			class = "pc_barren"
+			size = 7
+			orbit_distance = 7
+			orbit_angle = 0
+			has_ring = no
+			entity = "cold_barren_planet_luna_entity"
+			init_effect = {
+				orbital_deposit_tile = { add_deposit = d_mineral_deposit }
+				set_planet_flag = sol_luna
+			}
+		}
+	}
+	planet = {
+		name = "Mars"
+		class = "pc_k_class"
+		orbit_distance = 19
+		orbit_angle = 220
+		size = 8
+		has_ring = no
+		entity = "barren_planet_mars_entity"
+		modifiers = none
+		tile_blockers = none
+		init_effect = { prevent_anomaly = yes set_planet_flag = sol_mars }
+		init_effect = {
+			if = {
+				limit = { exists = event_target:united_earth }
+				add_modifier = { modifier = "mars_colony" days = -1 }
+				set_owner = event_target:united_earth
+				generate_satellite_start_buildings_mars = yes
+				generate_satellite_start_pops = yes
+				set_name = "Mars"
+			}
+		}
+		moon = { name = "Phobos" class = "pc_barren" size = 1 orbit_distance = 5 orbit_angle = 30 has_ring = no }
+		moon = { name = "Deimos" class = "pc_barren" size = 1 orbit_distance = 2 orbit_angle = 90 has_ring = no }
+	}
+	planet = { name = "Ceres" class = "pc_asteroid" orbit_distance = 21 orbit_angle = -210 size = 2 has_ring = no }
+	planet = { name = "Pallas" class = "pc_asteroid" orbit_distance = 0 orbit_angle = -95 size = 2 has_ring = no }
+	planet = { name = "Juno" class = "pc_asteroid" orbit_distance = 0 orbit_angle = 285 size = 2 has_ring = no }
+	planet = { name = "Vesta" class = "pc_asteroid" orbit_distance = 0 orbit_angle = -80 size = 2 has_ring = no }
+	planet = {
+		name = "Jupiter"
+		class = "pc_gas_giant"
+		orbit_distance = 38
+		orbit_angle = 20
+		size = 35
+		has_ring = no
+		entity = "gas_giant_jupiter_entity"
+		moon = {
+			name = "Amalthea"
+			class = "pc_barren"
+			size = 1
+			orbit_distance = 12
+			orbit_angle = { min = 30 max = 270 }
+			has_ring = no
+			init_effect = { orbital_deposit_tile = { clear_deposits = yes add_deposit = d_sr_dilithium_34_deposit } }
+		}
+		moon = { name = "Io" class = "pc_b_class" size = 5 orbit_distance = 5 orbit_angle = { min = 30 max = 270 } has_ring = no }
+		moon = { name = "Europa" class = "pc_barren" size = 4 orbit_distance = 2 orbit_angle = { min = 30 max = 270 } has_ring = no }
+		moon = { name = "Ganymede" class = "pc_barren" size = 7 orbit_distance = 2 orbit_angle = { min = 30 max = 270 } has_ring = no }
+		moon = { name = "Callisto" class = "pc_barren" size = 6.08 orbit_distance = 4 orbit_angle = { min = 30 max = 270 } has_ring = no }
+	}
+	planet = { 
+		name = "Saturn" 
+		class = "pc_gas_giant" 
+		orbit_distance = 40 
+		orbit_angle = 170 
+		size = 31.83 
+		has_ring = yes 
+		entity = "gas_giant_05_entity" 
+		moon = { name = "Tethys" class = "pc_barren" size = 1.28 orbit_distance = 12 orbit_angle = { min = 30 max = 270 } has_ring = no }
+		moon = { name = "Dione" class = "pc_barren" size = 1.44 orbit_distance = 3 orbit_angle = { min = 30 max = 270 } has_ring = no }
+		moon = { name = "Rhea" class = "pc_barren" size = 1.92 orbit_distance = 3 orbit_angle = { min = 30 max = 270 } has_ring = no }
+		moon = { name = "Titan" class = "pc_barren" size = 6 orbit_distance = 4 orbit_angle = { min = 30 max = 270 } has_ring = no }
+		moon = { name = "Iapetus" class = "pc_barren" size = 2 orbit_distance = 8 orbit_angle = 72 has_ring = no }
+	}
+	planet = {
+		name = "Uranus"
+		class = "pc_i_class"
+		orbit_distance = 60
+		orbit_angle = 125
+		size = 21
+		has_ring = no
+		entity = "gas_giant_03_entity"
+		moon = { name = "Ariel" class = "pc_barren" size = 2 orbit_distance = 12 orbit_angle = 45 has_ring = no }
+		moon = { name = "Umbriel" class = "pc_barren" size = 2 orbit_distance = 3 orbit_angle = { min = 30 max = 270 } has_ring = no }
+		moon = { name = "Titania" class = "pc_barren" size = 2 orbit_distance = 2 orbit_angle = { min = 30 max = 270 } has_ring = no }
+		moon = { name = "Oberon" class = "pc_barren" size = 2 orbit_distance = 2 orbit_angle = { min = 30 max = 270 } has_ring = no }
+	}
+	planet = {
+		name = "Neptune"
+		class = "pc_i_class"
+		orbit_distance = 70
+		orbit_angle = -195
+		size = 21
+		has_ring = no
+		entity = "gas_giant_02_entity"
+		moon = { name = "Triton" class = "pc_barren" size = 3 orbit_distance = 8 orbit_angle = { min = 30 max = 270 } has_ring = no }
+	}
+	planet = {
+		name = "Pluto"
+		class = "pc_barren"
+		orbit_distance = 65
+		orbit_angle = 270
+		size = 3
+		has_ring = no
+		moon = { name = "Charon" class = "pc_barren" size = 2 orbit_distance = 2 orbit_angle = 15 has_ring = no }
+	}
+	planet = { name = "Eris" class = "pc_barren" orbit_distance = 15 orbit_angle = 130 size = 3 has_ring = no }
+}

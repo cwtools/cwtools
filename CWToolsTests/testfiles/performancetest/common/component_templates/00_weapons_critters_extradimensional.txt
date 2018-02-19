@@ -1,0 +1,75 @@
+
+
+# ####################
+#  Critter Weapons - Extradimensional Weapons
+# ####################
+
+@critter_cost_value = 35
+
+weapon_component_template = {
+	key = "SMALL_ED_WEAPON"
+	hidden = yes
+
+	size = small
+	entity = "small_kinetic_gun_entity"
+	type = instant
+	icon = "GFX_ship_part_extradimensional_weapon_1"
+	icon_frame = 1
+	projectile_gfx = "space_whale_weapon"
+	tags = { weapon_type_energy }
+	ai_tags = { weapon_role_anti_armor }
+	
+	component_set = "EXTRADIMENSIONAL_1"
+	#prerequisitess = { "tech_extradimensional_weapon_1" }
+	cost = @critter_cost_value
+}
+
+weapon_component_template = {
+	key = "MEDIUM_ED_WEAPON"
+	hidden = yes
+	size = medium
+	entity = "medium_kinetic_gun_entity"
+	type = instant
+	icon = "GFX_ship_part_extradimensional_weapon_1"
+	icon_frame = 1
+	projectile_gfx = "space_whale_weapon"
+	tags = { weapon_type_energy }
+	ai_tags = { weapon_role_anti_armor }
+	
+	component_set = "EXTRADIMENSIONAL_1"
+	#prerequisitess = { "tech_extradimensional_weapon_1" }
+	cost = @critter_cost_value
+}
+
+weapon_component_template = {
+	key = "LARGE_ED_WEAPON"
+	hidden = yes
+	size = large
+	entity = "large_kinetic_gun_entity"
+	type = instant
+	icon = "GFX_ship_part_extradimensional_weapon_1"
+	icon_frame = 1
+	projectile_gfx = "space_whale_weapon"
+	tags = { weapon_type_energy }
+	ai_tags = { weapon_role_anti_armor }
+	
+	component_set = "EXTRADIMENSIONAL_1"
+	#prerequisitess = { "tech_extradimensional_weapon_1" }
+	cost = @critter_cost_value
+}
+
+weapon_component_template = {
+	key = "MEDIUM_PROBE_LIGHTNING"
+	hidden = yes
+
+	size = medium
+	entity = "medium_probe_lightning_weapon_entity"
+	type = instant
+	icon = "GFX_ship_part_extradimensional_weapon_1"
+	icon_frame = 1
+	projectile_gfx = "arc_emitter"
+	tags = { weapon_type_energy }
+	ai_tags = { weapon_role_anti_armor }
+	
+	cost = @critter_cost_value
+}

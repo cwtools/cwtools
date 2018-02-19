@@ -1,0 +1,97 @@
+﻿### Argrathi by EHKodiak
+Argrathi = {
+	randomized = no
+
+	ship_names = {
+		generic = {
+		Justiciar Jurist Rectium Jurisdiction Bonita Commissar Punishment Lawspeaker Tribunal Penitent Incarcerator Jailer Guard Confiner Reformator Corrector Imprisoner Impounder Cager Sentencer Justice Reformer Keeper Authoritar Decreer Judicator Magistrate Judger Punisher Rehabilitator Enforcer "Peace Keeper" Order Lawbringer
+		}
+		corvette = {
+		}
+		saber = {
+		}
+		sovereign = {
+		}
+		steamrunner = {
+		}		
+		adv_cruiser = {
+		}
+		strike = {
+		}	
+		constructor = { }
+		colonizer = { }
+		science = { }
+		transport = { }
+		outpost_station = {
+			sequential_name = "Frontier Outpost"
+		}
+	}
+
+	fleet_names = {
+		sequential_name = "%O% Fleet"
+	}
+	
+	army_names = {
+		defense_army = {
+			sequential_name = "%O% Military Police"
+		}
+		assault_army = {
+			sequential_name = "%O% Justice Bringers"
+		}
+		slave_army = {
+			sequential_name = "%O% Indentured Defence Force"
+		}
+		clone_army = { 
+			sequential_name = "%O% Clone Defence Force"
+		}
+		robotic_army = {
+			sequential_name = "%O% Mechanical Defence Force"
+		}
+		android_army = {
+			sequential_name = "%O% Synthetic Defence Force"
+		}
+		psionic_army = { 
+			sequential_name = "%O% Telepath Defence Force"
+		}
+		xenomorph_army = {
+			sequential_name = "%O% Bio-Warfare Defence Force"
+		}
+		gene_warrior_army = {
+			sequential_name = "%O% Bio-Engineered Defence Force"
+		}
+	}
+
+	planet_names = {
+		generic = {
+			names = { 
+			}
+		}
+	}
+
+
+	### CHARACTERS
+
+	character_names = {
+		names1 = {
+			weight = 40
+			first_names_male = {
+			"Ee'char" "Lu'char" "Pu'char" "Pi'char" "Ee'char" "Aa'char" "Ii'char" "Oo'char" "Uu'char" "Lu'char" "Pu'char" "Yy'char" "Nu'char" "Mu'char" "Ve'char" "He'char" "Ko'char" "Ha'char" "Wa'char" "Gr'char" "Zo'char"
+			}
+			first_names_female = {
+			"K'par" "Aa'cho" "K'cho" "Aa'par" "Ee'Par" "Aa'Par" "Ii'Par" "Oo'Par" "Uu'par" "Lu'par" "Pu'par" "Yy'par" "Nu'par" "Mu'par" "Ve'par" "He'par" "Ko'par" "Ha'par" "Wa'par" "Gr'par" "Zo'par" "Ee'cho" "Aa'cho" "Ii'cho" "Oo'cho" "Uu'cho" "Lu'cho" "Pu'cho" "Yy'cho" "Nu'cho" "Mu'cho" "Ve'cho" "He'cho" "Ko'cho" "Ha'cho" "Wa'cho" "Gr'cho" "Zo'cho"
+			}
+			second_names = {
+			Rinn Raan Jaan Jinn Daan Dinn Duun Kiin Liin Luun Puun Paan Rann 
+			}
+			regnal_first_names_male = {
+			"Ee'char" "Lu'char" "Pu'char" "Pi'char" "Ee'char" "Aa'char" "Ii'char" "Oo'char" "Uu'char" "Lu'char" "Pu'char" "Yy'char" "Nu'char" "Mu'char" "Ve'char" "He'char" "Ko'char" "Ha'char" "Wa'char" "Gr'char" "Zo'char"
+			}
+			regnal_first_names_female = {
+			"K'par" "Aa'cho" "K'cho" "Aa'par" "Ee'Par" "Aa'Par" "Ii'Par" "Oo'Par" "Uu'par" "Lu'par" "Pu'par" "Yy'par" "Nu'par" "Mu'par" "Ve'par" "He'par" "Ko'par" "Ha'par" "Wa'par" "Gr'par" "Zo'par" "Ee'cho" "Aa'cho" "Ii'cho" "Oo'cho" "Uu'cho" "Lu'cho" "Pu'cho" "Yy'cho" "Nu'cho" "Mu'cho" "Ve'cho" "He'cho" "Ko'cho" "Ha'cho" "Wa'cho" "Gr'cho" "Zo'cho"
+			}
+			regnal_second_names = {
+			Rinn Raan Jaan Jinn Daan Dinn Duun Kiin Liin Luun Puun Paan Rann 
+			}
+		}
+	}
+}

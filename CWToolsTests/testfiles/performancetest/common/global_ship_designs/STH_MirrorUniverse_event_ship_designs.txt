@@ -1,0 +1,198 @@
+ship_design = {
+	name = "Skev"
+	ship_size = saber
+	section = {
+		template = "saber_stern_1"
+		slot = "stern"
+		component = { slot = "SMALL_GUN_01" template = "SMALL_BASIC_PHASER_1" }
+		component = { slot = "SMALL_GUN_02" template = "SMALL_BASIC_PHASER_1" }
+		component = { slot = "SMALL_GUN_03" template = "SMALL_BASIC_PHASER_1" }
+		component = { slot = "SMALL_GUN_1" template = "POINT_DEFENCE_PHOTON_TORPEDO_1" }
+		component = { slot = "SMALL_GUN_2" template = "POINT_DEFENCE_PHOTON_TORPEDO_1" }
+	}
+	section = {
+		template = "saber_mid_18"
+		slot = "mid"
+		component = { slot = "SMALL_UTILITY_1" template = "UTILITY_SMALL_ARMOR_0" }
+		component = { slot = "AUX_UTILITY_1" template = "UTILITY_AUX_CARGO" }
+		component = { slot = "LARGE_UTILITY_1" template = "UTILITY_LARGE_TRACKING_0" }
+	}	
+	required_component="REQUIRED_WARP_1_DE"
+	required_component="REQUIRED_COMPUTER_1_DE"
+	required_component="REQUIRED_THRUSTERS_1A_DE"
+	required_component="Required_Combat_Sensor_picket_2"
+	required_component="REQUIRED_DEFENSE_1_ARMOR_DE"
+	required_component="REQUIRED_HULL_1A_DE"
+}
+
+ship_design = {
+	name = "Kumari"
+	ship_size = saber
+	section = {
+		template = "saber_stern_1"
+		slot = "stern"
+		component = { slot = "SMALL_GUN_01" template = "SMALL_BASIC_PHASER_1" }
+		component = { slot = "SMALL_GUN_02" template = "SMALL_BASIC_PHASER_1" }
+		component = { slot = "SMALL_GUN_03" template = "SMALL_BASIC_PHASER_1" }
+		component = { slot = "SMALL_GUN_1" template = "POINT_DEFENCE_PHOTON_TORPEDO_1" }
+		component = { slot = "SMALL_GUN_2" template = "POINT_DEFENCE_PHOTON_TORPEDO_1" }
+	}
+	section = {
+		template = "saber_mid_18"
+		slot = "mid"
+		component = { slot = "SMALL_UTILITY_1" template = "UTILITY_SMALL_ARMOR_0" }
+		component = { slot = "AUX_UTILITY_1" template = "UTILITY_AUX_CARGO" }
+		component = { slot = "LARGE_UTILITY_1" template = "UTILITY_LARGE_TRACKING_0" }
+	}	
+	required_component="REQUIRED_WARP_1_DE"
+	required_component="REQUIRED_COMPUTER_1_DE"
+	required_component="REQUIRED_THRUSTERS_1A_DE"
+	required_component="Required_Combat_Sensor_picket_2"
+	required_component="REQUIRED_DEFENSE_1_ARMOR_DE"
+	required_component="REQUIRED_HULL_1A_DE"
+}
+
+ship_design = {
+	name = "Seleya"
+	ship_size = saber
+	section = {
+		template = "saber_stern_1"
+		slot = "stern"
+		component = { slot = "SMALL_GUN_01" template = "SMALL_BASIC_PHASER_1" }
+		component = { slot = "SMALL_GUN_02" template = "SMALL_BASIC_PHASER_1" }
+		component = { slot = "SMALL_GUN_03" template = "SMALL_BASIC_PHASER_1" }
+		component = { slot = "SMALL_GUN_1" template = "POINT_DEFENCE_PHOTON_TORPEDO_1" }
+		component = { slot = "SMALL_GUN_2" template = "POINT_DEFENCE_PHOTON_TORPEDO_1" }
+	}
+	section = {
+		template = "saber_mid_18"
+		slot = "mid"
+		component = { slot = "SMALL_UTILITY_1" template = "UTILITY_SMALL_ARMOR_0" }
+		component = { slot = "AUX_UTILITY_1" template = "UTILITY_AUX_CARGO" }
+		component = { slot = "LARGE_UTILITY_1" template = "UTILITY_LARGE_TRACKING_0" }
+	}	
+	required_component="REQUIRED_WARP_1_DE"
+	required_component="REQUIRED_COMPUTER_1_DE"
+	required_component="REQUIRED_THRUSTERS_1A_DE"
+	required_component="Required_Combat_Sensor_picket_2"
+	required_component="REQUIRED_DEFENSE_1_ARMOR_DE"
+	required_component="REQUIRED_HULL_1A_DE"
+}
+
+ship_design = {
+	name = "Constitution"
+	ship_size = sovereign
+	section = {
+		template = "sovereign_stern_1"
+		slot = "stern"
+		component = { slot = "SMALL_GUN_01" template = "SMALL_COHERENT_PHASER_1" }
+		component = { slot = "SMALL_GUN_02" template = "SMALL_COHERENT_PHASER_1" }
+		component = { slot = "SMALL_GUN_03" template = "SMALL_COHERENT_PHASER_1" }
+		component = { slot = "MEDIUM_GUN_01" template = "MEDIUM_COHERENT_PHASER_1" }
+		component = { slot = "SMALL_GUN_1" template = "POINT_DEFENCE_PHOTON_TORPEDO_2" }
+	}
+	section = {
+		template = "sovereign_mid_13"
+		slot = "mid"
+		component = { slot = "SMALL_UTILITY_1" template = "UTILITY_SMALL_ARMOR_2" }
+		component = { slot = "MEDIUM_UTILITY_1" template = "UTILITY_MEDIUM_REACTOR_4" }
+		component = { slot = "AUX_UTILITY_1" template = "UTILITY_AUX_DEFLECTOR_1" }
+		component = { slot = "LARGE_UTILITY_1" template = "UTILITY_LARGE_REACTOR_4" }
+	}	
+	required_component="REQUIRED_WARP_4_EXPLORATION_CR"
+	required_component="REQUIRED_COMPUTER_2_CR"
+	required_component="REQUIRED_THRUSTERS_2A_CR"
+	required_component="Required_Combat_Sensor_skirmisher_2"
+	required_component="REQUIRED_DEFENSE_3_SHIELD_B_CR"
+	required_component="REQUIRED_HULL_2B_CR"
+}
+
+ship_design = {
+	name = "Vulcan Attack Ship"
+	ship_size = corvette
+	section = {
+		template = "corvette_stern_beam"
+		slot = "stern"
+		component = { slot = "SMALL_GUN_01" template = "SMALL_BASIC_PHASER_1" }
+		component = { slot = "SMALL_GUN_02" template = "SMALL_BASIC_PHASER_1" }
+		component = { slot = "SMALL_GUN_1" template = "POINT_DEFENCE_PHOTON_TORPEDO_1" }
+	}
+	section = {
+		template = "corvette_mid_17"
+		slot = "mid"
+	}	
+	required_component="REQUIRED_WARP_1_PF"
+	required_component="REQUIRED_COMPUTER_1_PF"
+	required_component="REQUIRED_THRUSTERS_1A_PF"
+	required_component="Required_Combat_Sensor_brawler_1"
+	required_component="REQUIRED_DEFENSE_1_ARMOR_PF"
+	required_component="REQUIRED_HULL_1A_PF"
+}
+
+ship_design = {
+	name = "Andorian Attack Ship"
+	ship_size = corvette
+	section = {
+		template = "corvette_stern_beam"
+		slot = "stern"
+		component = { slot = "SMALL_GUN_01" template = "SMALL_BASIC_PHASER_1" }
+		component = { slot = "SMALL_GUN_02" template = "SMALL_BASIC_PHASER_1" }
+		component = { slot = "SMALL_GUN_1" template = "POINT_DEFENCE_PHOTON_TORPEDO_1" }
+	}
+	section = {
+		template = "corvette_mid_17"
+		slot = "mid"
+	}	
+	required_component="REQUIRED_WARP_1_PF"
+	required_component="REQUIRED_COMPUTER_1_PF"
+	required_component="REQUIRED_THRUSTERS_1A_PF"
+	required_component="Required_Combat_Sensor_brawler_1"
+	required_component="REQUIRED_DEFENSE_1_ARMOR_PF"
+	required_component="REQUIRED_HULL_1A_PF"
+}
+
+ship_design = {
+	name = "Tellarite Attack Ship"
+	ship_size = corvette
+	section = {
+		template = "corvette_stern_beam"
+		slot = "stern"
+		component = { slot = "SMALL_GUN_01" template = "SMALL_BASIC_PHASER_1" }
+		component = { slot = "SMALL_GUN_02" template = "SMALL_BASIC_PHASER_1" }
+		component = { slot = "SMALL_GUN_1" template = "POINT_DEFENCE_PHOTON_TORPEDO_1" }
+	}
+	section = {
+		template = "corvette_mid_17"
+		slot = "mid"
+	}	
+	required_component="REQUIRED_WARP_1_PF"
+	required_component="REQUIRED_COMPUTER_1_PF"
+	required_component="REQUIRED_THRUSTERS_1A_PF"
+	required_component="Required_Combat_Sensor_brawler_1"
+	required_component="REQUIRED_DEFENSE_1_ARMOR_PF"
+	required_component="REQUIRED_HULL_1A_PF"
+}
+
+ship_design = {
+	name = "Tholian Attack Ship"
+	ship_size = corvette
+	section = {
+		template = "corvette_stern_cannon"
+		slot = "stern"
+		component = { slot = "LARGE_GUN_01" template = "LARGE_PULSE_TETRYON_2" }
+		component = { slot = "LARGE_GUN_02" template = "LARGE_PULSE_TETRYON_2" }
+		component = { slot = "LARGE_GUN_03" template = "LARGE_PULSE_TETRYON_2" }
+		component = { slot = "LARGE_GUN_04" template = "LARGE_PULSE_TETRYON_2" }
+		component = { slot = "SMALL_GUN_1" template = "POINT_DEFENCE_PHOTON_TORPEDO_1" }
+	}
+	section = {
+		template = "corvette_mid_17"
+		slot = "mid"
+	}	
+	required_component="REQUIRED_WARP_1_PF"
+	required_component="REQUIRED_COMPUTER_1_PF"
+	required_component="REQUIRED_THRUSTERS_1A_PF"
+	required_component="Required_Combat_Sensor_brawler_1"
+	required_component="REQUIRED_DEFENSE_1_ARMOR_PF"
+	required_component="REQUIRED_HULL_1A_PF"
+}

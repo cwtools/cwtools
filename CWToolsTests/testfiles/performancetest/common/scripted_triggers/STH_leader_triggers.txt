@@ -1,0 +1,6 @@
+is_medical_leader = { 
+	OR = {
+		has_trait = leader_trait_expertise_biology
+		has_trait = leader_trait_doctor
+	}
+}

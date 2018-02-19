@@ -1,0 +1,284 @@
+namespace = sth_pulse
+
+event = {
+	id = sth_pulse.1
+	hide_window = yes
+	is_triggered_only = yes
+	immediate = {
+		every_country = {
+			limit = {
+				is_ai = yes
+				OR = {	
+					is_difficulty = 1
+					is_difficulty = 2
+					is_difficulty = 3
+				}	
+			}
+			add_modifier = {
+				modifier = "ai_superiority_handicap"
+				days = 360
+			}	
+		}
+		random_country = {
+			limit = {
+				is_ai = yes
+				is_borg_empire = yes
+			}
+			add_modifier = {
+				modifier = "em_ai_borg"
+				days = 360
+			}	
+		}
+	}
+}
+
+#gfxchange pulse
+event = {
+	id = sth_pulse.2
+	hide_window = yes
+	is_triggered_only = yes
+	immediate = {
+		every_country = {
+			limit = { exists = capital_scope }
+			country_event = { id = sth_pulse.5 days = 30 random = 30 }
+			country_event = { id = sth_pulse.6 }
+		}
+	}
+}
+
+## culture change check
+country_event = {
+	id = sth_pulse.5
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		# if = {
+			# limit = { has_country_flag = starfleet_tng has_technology = tech_spaceport_6 }
+			# random_list = {
+				# 10 = { country_event = { id = sthera.4 } }
+				# 90 = { }
+			# }
+		# }
+		if = {
+			limit = { 
+				has_country_flag = starfleet_tmp 
+				has_technology = tech_spaceport_6 
+				NOT = { has_country_flag = new_era_in_progress } 
+			}
+			country_event = { id = sthera.3 days = 360 random = 30 } 
+			#set_timed_country_flag = { flag = new_era_in_progress days = 360 }
+		}
+		if = {
+			limit = { 
+				has_country_flag = starfleet_tos
+				has_technology = tech_spaceport_5
+				NOT = { has_country_flag = new_era_in_progress } 
+			}
+			country_event = { id = sthera.2 days = 360 random = 30 }
+			set_timed_country_flag = { flag = new_era_in_progress days = 3000 }
+		}
+		if = { 
+			limit = { 
+				has_country_flag = starfleet_ent 
+				has_technology = tech_spaceport_4
+				has_technology = tech_engineering_cruiser_542
+				NOT = { has_country_flag = new_era_in_progress } 
+			}				
+			country_event = { id = sthera.1 days = 360 random = 30 } 
+			set_timed_country_flag = { flag = new_era_in_progress days = 3000 }
+		}
+		# if = {
+			# limit = { has_country_flag = klingon_tng has_technology = tech_spaceport_6 }		
+			# random_list = {
+				# 10 = { 
+					# country_event = { id = sthera.8 }
+				# }
+				# 90 = { }
+			# }
+        # }
+		if = {
+			limit = { 
+				has_country_flag = klingon_tmp
+				has_technology = tech_spaceport_6 
+				NOT = { has_country_flag = new_era_in_progress } 
+			}		
+			country_event = { id = sthera.7 days = 360 random = 30 }
+			#set_timed_country_flag = { flag = new_era_in_progress days = 360 }
+        }
+		if = {
+			limit = { 
+				has_country_flag = klingon_tos 
+				has_technology = tech_spaceport_5 
+				NOT = { has_country_flag = new_era_in_progress } 
+			}
+			country_event = { id = sthera.6 days = 360 random = 30 } 
+			set_timed_country_flag = { flag = new_era_in_progress days = 3000 }
+		}
+		if = {
+			limit = { 
+				has_country_flag = klingon_ent 
+				has_technology = tech_spaceport_4 
+				has_technology = tech_engineering_cruiser_542
+				NOT = { has_country_flag = new_era_in_progress } 
+			}
+			country_event = { id = sthera.5 days = 360 random = 30 }
+			set_timed_country_flag = { flag = new_era_in_progress days = 3000 }
+		}
+		# if = {
+			# limit = { has_country_flag = romulan_tng has_technology = tech_spaceport_6 }
+			# random_list = {
+				# 90 = { 
+					# country_event = { id = sthera.12 } 
+				# }
+				# 10 = { }
+			# }
+        # }
+		if = {
+			limit = { 
+				has_country_flag = romulan_tmp 
+				has_technology = tech_spaceport_6 
+				NOT = { has_country_flag = new_era_in_progress } 
+			}
+			country_event = { id = sthera.11 days = 360 random = 30 }
+			#set_timed_country_flag = { flag = new_era_in_progress days = 360 }
+        }
+		if = {
+			limit = { 
+				has_country_flag = romulan_tos 
+				has_technology = tech_spaceport_5 
+				NOT = { has_country_flag = new_era_in_progress } 
+			}
+			country_event = { id = sthera.10 days = 360 random = 30 } 
+			set_timed_country_flag = { flag = new_era_in_progress days = 3000 }
+        }
+		if = {
+			limit = { 
+				has_country_flag = romulan_ent 
+				has_technology = tech_spaceport_4 
+				has_technology = tech_engineering_cruiser_542
+				NOT = { has_country_flag = new_era_in_progress } 
+			}
+			country_event = { id = sthera.9 days = 360 random = 30 }
+			set_timed_country_flag = { flag = new_era_in_progress days = 3000 }
+        }
+		
+		# if = {
+			# limit = { has_country_flag = generic_tng has_technology = tech_spaceport_6 }
+			# random_list = {
+				# 10 = { 
+					# country_event = { id = sthera.16 } 
+				# }						
+				# 90 = { }
+			# }
+		# }
+		if = {
+			limit = { 
+				has_country_flag = generic_tmp 
+				has_technology = tech_spaceport_6 
+				NOT = { has_country_flag = new_era_in_progress } 
+			}
+			country_event = { id = sthera.15 days = 360 random = 30 }
+			#set_timed_country_flag = { flag = new_era_in_progress days = 360 }
+		}	
+		if = {
+			limit = { 
+				has_country_flag = generic_tos 
+				has_technology = tech_spaceport_5 
+				NOT = { has_country_flag = new_era_in_progress } 
+			}
+			country_event = { id = sthera.14 days = 360 random = 30 } 
+			set_timed_country_flag = { flag = new_era_in_progress days = 3000 }
+		}
+		if = {
+			limit = { 
+				has_country_flag = generic_ent 
+				has_technology = tech_spaceport_4 
+				has_technology = tech_engineering_cruiser_542
+				NOT = { has_country_flag = new_era_in_progress } 
+			}
+			country_event = { id = sthera.13 days = 360 random = 30 } 
+			set_timed_country_flag = { flag = new_era_in_progress days = 3000 }
+		}
+		
+		##BORG
+		# if = {
+			# limit = { has_country_flag = borg_tng has_technology = tech_spaceport_6 }
+			# random_list = {
+				# 10 = { 
+					# country_event = { id = sthera.20 } 
+				# }						
+				# 90 = { }
+			# }
+		# }
+		if = {
+			limit = { 
+				has_country_flag = borg_tmp 
+				has_technology = tech_spaceport_6 
+				NOT = { has_country_flag = new_era_in_progress } 
+			}
+			country_event = { id = sthera.19 days = 360 random = 30 }
+			#set_timed_country_flag = { flag = new_era_in_progress days = 360 }
+		}	
+		if = {
+			limit = { 
+				has_country_flag = borg_tos 
+				has_technology = tech_spaceport_5 
+				NOT = { has_country_flag = new_era_in_progress } 
+			}
+			country_event = { id = sthera.18 days = 360 random = 30 } 
+			set_timed_country_flag = { flag = new_era_in_progress days = 3000 }
+		}
+		if = {
+			limit = { 
+				has_country_flag = borg_ent 
+				has_technology = tech_spaceport_4 
+				NOT = { has_country_flag = new_era_in_progress } 
+			}
+			country_event = { id = sthera.17 days = 360 random = 30 } 
+			set_timed_country_flag = { flag = new_era_in_progress days = 3000 }
+		}
+	}
+}
+country_event = {
+	id = sth_pulse.6
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		if = {
+			limit = { 
+				motion_picture_ships_era = yes
+				has_technology = tech_spaceport_4 
+				NOT = { has_technology = tech_spaceport_5 }    
+			}
+			add_research_option = tech_spaceport_5
+		}
+		if = {
+			limit = { 
+				next_gen_ships_era = yes
+				has_technology = tech_spaceport_4 
+				NOT = { has_technology = tech_spaceport_5 }    
+			}
+			add_research_option = tech_spaceport_5
+		}
+		if = {
+			limit = { 
+				next_gen_ships_era = yes
+				has_technology = tech_spaceport_5 
+				NOT = { has_technology = tech_spaceport_6 }    
+			}
+			add_research_option = tech_spaceport_6
+		}
+		if = {
+			limit = { 
+				is_borg_empire = yes
+				NOT = { has_technology = tech_society_biology_1716 }    
+			}
+			add_research_option = tech_society_biology_1716
+		}
+	}	
+}
+

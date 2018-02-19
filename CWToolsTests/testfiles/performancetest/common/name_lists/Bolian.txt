@@ -1,0 +1,96 @@
+﻿### Bolian
+Bolian = {
+	randomized = no
+	
+	ship_names = {
+		generic = {
+			Bolarat Lasnouphat Cestatat Dasmagat Fosmat Heacat Nuateras Esraff Chull Dinann Qann Grogon Nasin Hran Thedaw Chek Nol Vall Zids Xaitt Daids Negit Noxa Belaten Zomar Brosa Zaras Kitt Boreg Nixena Mysia Beladia Cilaha Adiff Sogon Orora Ref Zohino Coramin Rinarass Sinata Xomin Xamm Kranat Kragg Tradin Tratt Sat Rewat Chudd Zadaw
+		}
+		corvette = {
+		}
+		saber = {
+		}
+		sovereign = {
+		}
+		steamrunner = {
+		}		
+		adv_cruiser = {
+		}
+		strike = {
+		}	
+		constructor = { }
+		colonizer = { }
+		science = { }
+		transport = { }
+		outpost_station = {
+			sequential_name = "Frontier Outpost"
+		}
+	}
+
+	fleet_names = {
+		sequential_name = "%O% Fleet"
+	}
+	
+	army_names = {
+		defense_army = {
+			sequential_name = "%O% Bolian Guard"
+		}
+		assault_army = {
+			sequential_name = "%O% Liberation Force"
+		}
+		slave_army = {
+			sequential_name = "%O% Indentured Defence Force"
+		}
+		clone_army = { 
+			sequential_name = "%O% Clone Defence Force"
+		}
+		robotic_army = {
+			sequential_name = "%O% Mechanical Defence Force"
+		}
+		android_army = {
+			sequential_name = "%O% Synthetic Defence Force"
+		}
+		psionic_army = { 
+			sequential_name = "%O% Psi Defence Force"
+		}
+		xenomorph_army = {
+			sequential_name = "%O% Bio-Warfare Defence Force"
+		}
+		gene_warrior_army = {
+			sequential_name = "%O% Bio-Engineered Defence Force"
+		}
+	}
+
+	planet_names = {
+		generic = {
+			names = { 
+				Lasnouphus Cestatus Dasmagus Fosmus Heacus Nuateras Stahevus Blopalus Glorius Slonorus Eslaytus Fafluytus Bugrus Susweshus Duerus Autus Drokus Flonus Phobetorus Torus Koralus Snohetus Qalarus Malus Regus Ororrus Sallus Zidawus Tomus Barus Namsus Qhindus Tragus Zaranus Qekus Rinannus Yedus Toxinus Adoggus Xorus Grosinus Laninus Shogus Arus 
+			}
+		}
+	}
+
+	### CHARACTERS
+	character_names = {
+		names1 = {
+			weight = 100
+			first_names_male = {
+				Sis Zabb Aoll Soxx Toss Zuta Daa Juo Sexx Geso Soqxx Lexx Zass Gess Pobb Aona Eilo Hot Rans Juyss Jast Geo Ais Puwss Diyo Doa Ditt Lul Kito Jul Iox Rarb Dexx Linx Koll Eonx Eert Zatss Zuno Sebb Yed Zinn Grairan Yeq'ra Toxin Odaran Adogg Vriken Gat Raitt Zakk Vriws Zaige Sraken Qhifel Arams Rams Nidar Thedaw Rids Zarr Grill Qhinn "Loq'no" Lomix Nos Raithaw Drige Lawd Brax Maken Rind Odakk Oritix Drinf Safar Hrathaw Mog Maxx Vand Maiman "Moq'no" "Noq'no"
+			}
+			first_names_female = {
+				Lisia Lul Kito Jula Ioxa Rarbra Dexxi Linxa Koll Eonx Eertha Zatssy Zuno Sebb Diyo Doa Ditt Lul Yaxis Zexia Darzana Alba Syldra Belasea Yakis Bykye Lanazila Felyna Kenovria Lenaves Olikena Vyndis Fyzira Sovil Cilamis Seriwia Lymoya Nyvil Binelara Dimis Gydra Vywira Hiatea Qhimis Mykye Eralwat Qenaves Ylexia Kisedra Chedia Oshedes Anawin Qhihya Qhikia Delysina Tiaxea Anawela
+			}
+			second_names = {
+				Asislo Adislo Ardot Broht Brott Haro Domm Hoccu Finn Warr Mott Ludd Pell Grexx Trobbo Hegg Hett Garnn Juffa Kara Gadita Zitratot Rinarr Xadas Xosin Lynall Naten Coragg Corara Moff Drasin Sinadin Sinal Heramm Adisin Hosin Wanat Dinalar Xasin Fog Lagon Nehino Sowat Gadifar Drawas Hoss Chura Hadin Oroten Ziragon Kifit Belasin Esramar Qiradas Mariht Kirr Qal Weraf Feraslo Wawa Belahar Garaff Nalar Ragon Ragon Bronn Charas Tariwat Ornamm Kerag Nawa
+			}
+			regnal_first_names_male = { 
+				Sis Zabb Aoll Soxx Toss Zuta Daa Juo Sexx Geso Soqxx Lexx Zass Gess Pobb Aona Eilo Hot Rans Juyss Jast Geo Ais Puwss Diyo Doa Ditt Lul Kito Jul Iox Rarb Dexx Linx Koll Eonx Eert Zatss Zuno Sebb Yed Zinn Grairan Yeq'ra Toxin Odaran Adogg Vriken Gat Raitt Zakk Vriws Zaige Sraken Qhifel Arams Rams Nidar Thedaw Rids Zarr Grill Qhinn "Loq'no" Lomix Nos Raithaw Drige Lawd Brax Maken Rind Odakk Oritix Drinf Safar Hrathaw Mog Maxx Vand Maiman "Moq'no" "Noq'no"
+			}
+			regnal_first_names_female = { 
+				Lisia Lul Kito Jula Ioxa Rarbra Dexxi Linxa Koll Eonx Eertha Zatssy Zuno Sebb Diyo Doa Ditt Lul Yaxis Zexia Darzana Alba Syldra Belasea Yakis Bykye Lanazila Felyna Kenovria Lenaves Olikena Vyndis Fyzira Sovil Cilamis Seriwia Lymoya Nyvil Binelara Dimis Gydra Vywira Hiatea Qhimis Mykye Eralwat Qenaves Ylexia Kisedra Chedia Oshedes Anawin Qhihya Qhikia Delysina Tiaxea Anawela
+			}
+			regnal_second_names = { 
+				Asislo Adislo Ardot Broht Brott Haro Domm Hoccu Finn Warr Mott Ludd Pell Grexx Trobbo Hegg Hett Garnn Juffa Kara Gadita Zitratot Rinarr Xadas Xosin Lynall Naten Coragg Corara Moff Drasin Sinadin Sinal Heramm Adisin Hosin Wanat Dinalar Xasin Fog Lagon Nehino Sowat Gadifar Drawas Hoss Chura Hadin Oroten Ziragon Kifit Belasin Esramar Qiradas Mariht Kirr Qal Weraf Feraslo Wawa Belahar Garaff Nalar Ragon Ragon Bronn Charas Tariwat Ornamm Kerag Nawa
+			}
+		}
+	}
+}

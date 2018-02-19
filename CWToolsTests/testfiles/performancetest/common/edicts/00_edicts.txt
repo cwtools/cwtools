@@ -1,0 +1,105 @@
+##########################################################################
+# Empire edicts
+##########################################################################
+
+# Cleared
+
+##########################################################################
+# Event edicts
+##########################################################################
+
+country_edict = {
+	name = "crystal_sonar"
+	influence_cost = 0
+	potential = { always = no }
+	ai_weight = { weight = 0 }	
+}
+
+#Greater Crystal Bounty
+country_edict = {
+	name = "greater_crystal_bounty"
+	influence_cost = 1
+	potential = { always = no }
+	ai_weight = { weight = 0 }	
+}
+
+#Crystal Bounty
+country_edict = {
+	name = "crystal_bounty"
+	influence_cost = 1
+	potential = { always = no }
+	ai_weight = { weight = 0 }	
+}
+
+#Droning Optimizations
+country_edict = {
+	name = "droning_optimizations"
+	influence_cost = 1
+	potential = { always = no }
+	ai_weight = { weight = 1 }	
+}
+
+#Droning Bounty
+country_edict = {
+	name = "drone_bounty"
+	influence_cost = 1
+	potential = { always = no }
+	ai_weight = { weight = 0 }
+}
+
+#Masters Wrtings Politics
+country_edict = {
+	name = "masters_writings_politics"
+	influence_cost = 1
+	potential = { always = no }
+	ai_weight = { weight = 1 }	
+}
+
+#Masters Wrtings Diplomacy
+country_edict = {
+	name = "masters_writings_diplomacy"
+	influence_cost = 1
+	potential = { always = no }
+	ai_weight = { weight = 1 }
+}
+
+#Masters Wrtings Philosophy
+country_edict = {
+	name = "masters_writings_philosophy"
+	influence_cost = 1
+	potential = { always = no }
+	ai_weight = { weight = 1 }
+}
+
+#Masters Wrtings War
+country_edict = {
+	name = "masters_writings_war"
+	influence_cost = 1
+	potential = { always = no }
+	ai_weight = { weight = 1 }
+}
+
+#Improved Work Environment
+country_edict = {
+	name = "improved_work_environment"
+	influence_cost = 1
+	potential = { always = no }
+	ai_weight = { weight = 1 }
+}
+
+#Renewable Energy
+country_edict = {
+	name = "renewable_energy"
+	influence_cost = 1
+	potential = { always = no }
+	ai_weight = { weight = 1 }
+}
+
+#Super Sensors
+country_edict = {
+	name = "super_sensors"
+	influence_cost = 1
+	potential = { always = no }
+	ai_weight = { weight = 0 }
+}
+

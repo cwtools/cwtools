@@ -1,0 +1,104 @@
+@distance = 30
+@base_moon_distance = 10
+
+#Tholian
+tholian_homeworld = {
+	name = "Tholia"
+	class = "sc_k"
+	asteroids_distance = 98
+	flags = { tholian_homeworld }
+	init_effect = { log = "tholian homeworld" }
+	usage = custom_empire
+	max_instances = 1
+	planet = { name = "Tholia" class = "pc_k_star" orbit_distance = 0 orbit_angle = 1 size = 30 has_ring = no }
+	planet = {
+		count = 3
+		orbit_distance = { min = 50 max = 70 }
+		class = random_non_colonizable
+		orbit_angle = { min = 90 max = 270 }
+		change_orbit = @base_moon_distance
+		moon = { count = { min = 0 max = 2 } class = random_non_colonizable orbit_angle = { min = 90 max = 270 } orbit_distance = 5 }
+	}
+	planet = {
+		name = "Tholia Prime"
+		class = pc_y_class
+		orbit_distance = 14.5
+		orbit_angle = 220
+		size = { min = 22 max = 25 }
+		starting_planet = yes
+		has_ring = no
+		tile_blockers = none
+		modifiers = none
+		init_effect = { prevent_anomaly = yes }
+		init_effect = {
+			if = {
+				limit = { NOT = { any_country = { has_country_flag = tholian_assembly } } }
+				create_species = {
+					name = "Tholian"
+					class = THO
+					portrait = tholian
+					homeworld = THIS
+					traits = {
+						trait="trait_crystal"
+	                    trait="trait_conformists"
+	                    trait="trait_natural_physicists"
+						ideal_planet_class = "pc_y_class"
+					} 
+				}
+				last_created_species = { save_global_event_target_as = tholianSpecies }
+				create_country = {
+					name = "NAME_tholian_assembly"
+					type = default
+					ignore_initial_colony_error = yes
+					civics = { civic = "civic_perfect_memory" civic = "civic_citizen_service" }
+					authority = auth_oligarchic
+					name_list = "Tholian"
+					ethos = { 
+						ethic = "ethic_xenophobe"
+						ethic = "ethic_militarist"
+						ethic = "ethic_materialist" 
+					}
+					species = event_target:tholianSpecies
+					flag = {
+						icon = { category = "trek" file = "tholian.dds" }
+						background = { category = "backgrounds" file = "00_solid.dds" }
+						colors = { "customcolor1400" "customcolor908" "null" "null" }
+					}
+					ship_prefix = "TSS"
+					effect = {
+						set_graphical_culture = tholian_01
+						set_country_flag = tholian_assembly
+						set_country_flag = custom_start_screen
+						set_country_flag = generic_ent
+						set_country_flag = alpha_beta_empire
+						set_country_flag = init_spawned
+						set_country_flag = sth_medium_galaxy
+						set_country_flag = botf_minor
+						save_global_event_target_as = tholian_assembly
+					}
+				}
+				create_colony = { owner = event_target:tholian_assembly species = event_target:tholianSpecies ethos = owner }
+			}
+			set_capital = yes
+			random_country = {
+				limit = { has_country_flag = tholian_assembly }
+				save_global_event_target_as = tholian_assembly
+				add_appropriate_start_techs = yes
+				species = { save_global_event_target_as = tholianSpecies }
+            }
+			set_owner = event_target:tholian_assembly
+			generate_major_empire_start_buildings = yes
+			generate_major_empire_start_pops = yes
+			generate_major_empire_start_fleets = yes
+			set_name = "Tholia Prime"
+		}
+	}
+	planet = {
+		count = 3
+		orbit_distance = { min = 18 max = 25 }
+		class = random_non_colonizable
+		orbit_angle = { min = 90 max = 270 }
+		change_orbit = @base_moon_distance
+		moon = { count = { min = 0 max = 1 } class = random_non_colonizable orbit_angle = { min = 90 max = 270 } orbit_distance = 5 }
+	}
+}

@@ -1,0 +1,55 @@
+# No scope, like on_game_start
+on_monthly_pulse = {
+	events = {
+		STH_enclave_events.10
+	}
+}
+
+# Triggers when trying to open the diplomacy view for countries with custom diplomacy.
+# Country scope
+# This = target country (player)
+# From = source country
+on_custom_diplomacy = {
+	events = {
+		STH_enclave_events.100
+		STH_enclave_events.103
+		STH_enclave_events.104
+		STH_enclave_events.157
+		STH_enclave_events.160
+		STH_enclave_events.163
+	}
+}
+
+
+
+# A fleet has entered a system
+# Scope = Fleet
+# From = System
+on_entering_system_fleet = {
+	events = {
+		STH_enclave_events.96
+	}
+}
+
+
+# This = owner of fleet 1
+# From = owner of fleet 2
+# FromFrom = fleet 1
+# FromFromFrom = fleet 2
+on_entering_battle = {
+	events = {
+		STH_enclave_events.155
+		STH_enclave_events.158
+		STH_enclave_events.161
+	}
+}
+
+# This = owner of ship 1 (destroyed)
+# From = owner of ship 2 (combatant)
+# FromFrom = ship 1
+# FromFromFrom = ship 2
+on_ship_destroyed_victim = {
+	events = {
+		STH_enclave_events.140
+	}
+}

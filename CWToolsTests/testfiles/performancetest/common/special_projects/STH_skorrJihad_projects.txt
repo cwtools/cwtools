@@ -1,0 +1,92 @@
+# Available requirements:
+#
+#	SKILLS
+#	skill = 2
+#
+#	LEADER
+#	leader = scientist
+#	leader = admiral
+#	leader = general
+#	leader = ruler
+#	leader = governor
+#	
+#	MILITARY SHIPS
+#	shipclass_military = 1
+#	
+#	CIVILIAN SHIPS
+#	shipclass_constructor = 2
+#	shipclass_science_ship = 1
+#	shipclass_colonizer = 2
+#	
+#	ARMIES
+#	shipclass_transport = 1
+#	assault_armies = 2
+#	defense_armies = 1
+#	
+#	STATIONS
+#	research_station = yes
+#	mining_station = yes
+#	observation_station = yes
+#
+#	SCOPES
+#	abort_trigger
+#	this = country (project owner)
+#	from = event scope (planet or ship, MIGHT NOT EXIST)
+#	fromfrom = project creation scope (usually equals location)
+#	
+#	on_success
+#	this = event scope (ship or planet)
+#	from = project creation scope (usually equals location)
+#	
+#	on_fail
+#	this = country (project owner)
+#	from = project creation scope (usually equals location)
+
+#Use Admiral
+special_project = {
+	key = "SKORR_JIHAD_PROJECT_1A"
+	event_chain = "skorr_jihad_chain"
+	cost = 0
+	days_to_research = 21
+	timelimit = 360
+	tech_department = society_technology
+	picture = sth_GFX_evt_skorrJihad2
+	event_scope = ship_event
+	requirements = { shipclass_military = 1 leader = admiral }
+	on_success = { 
+		ship_event = { id = STH_federation_story.1102 }
+		owner = { 
+			abort_special_project = { type = "SKORR_JIHAD_PROJECT_1B" location = event_target:skorr_jihad_crisis_asteroid }
+			end_event_chain = "skorr_jihad_chain" 
+		}
+	}
+	on_fail = { 
+		country_event = { id = STH_federation_story.1144 days = 360 random = 90 }
+		abort_special_project = { type = "SKORR_JIHAD_PROJECT_1B" location = event_target:skorr_jihad_crisis_asteroid }
+		end_event_chain = "skorr_jihad_chain" 
+	}
+}
+
+special_project = {
+	key = "SKORR_JIHAD_PROJECT_1B"
+	event_chain = "skorr_jihad_chain"
+	cost = 0
+	days_to_research = 21
+	timelimit = 360
+	tech_department = society_technology
+	picture = sth_GFX_evt_skorrJihad2
+	event_scope = ship_event
+	requirements = { shipclass_transport = 1 leader = general }
+	on_success = { 
+		ship_event = { id = STH_federation_story.1102 } 
+		owner = { 
+			abort_special_project = { type = "SKORR_JIHAD_PROJECT_1A" location = event_target:skorr_jihad_crisis_asteroid }
+			end_event_chain = "skorr_jihad_chain" 
+		}
+	}
+	on_fail = { 
+		country_event = { id = STH_federation_story.1144 days = 360 random = 90 }
+		abort_special_project = { type = "SKORR_JIHAD_PROJECT_1A" location = event_target:skorr_jihad_crisis_asteroid }
+		end_event_chain = "skorr_jihad_chain" 
+	}
+}

@@ -1,0 +1,67 @@
+#Scope layout:
+# this = the country who owns the borders we a re coloring
+# from = the country who we are coloring for, usually the player
+
+#example = {
+#	icon = "GFX_some_icon"		-- which icon to use in the main gui
+#	hardcoded_tooltip = opinion -- override tooltip generation with a hardcoded method. Currently supported: opinion
+#	can_change_point_of_view = yes	-- can the player click on other empires to see the map mode from their point of view?
+#	enable_terra_incognita = yes	-- should terra incognita be rendered when this map mode is active?
+#	
+#	color = {						-- the bread and butter of the map modes. A country will be colored with the first color block who's condition is met
+#		value = rgb { 1.0 0.0 0.0 1.0 }	-- you can also use hsv {...}
+#		custom_tooltip = "SOME_STRING"	-- Tooltip to be shown if this is the selected color. suports [This.GetName] etc
+#		condition = {
+#			...							-- simple AND trigger for evaluation. Will also generate a tooltip if neither hardcoded_tooltip or custom_tooltip is defined
+#		}
+#	}
+#}
+
+#FIX LATER
+power_map_mode = {
+	icon = "GFX_map_mode_power"
+	enable_terra_incognita = yes
+	#shortcut = "CTRL+x"
+	
+	color = { value = hsv { 0.0 0.0 0.8 0.7 } condition = { NOT = { exists = FROM } } custom_tooltip = "MAP_MODE_OBSERVER" }
+	color = {
+        value = hsv { 0.0 1.0 0.0 0.7 }
+        custom_tooltip = "MAP_MODE_NO_CONTACT"
+        condition = { NOT = { has_established_contact = FROM } }
+    }
+	color = {
+		value = hsv { 0.33 1.0 1.0 1.0 }  
+		custom_tooltip = "POWER_MAP_MODE_PATHETIC"
+		condition = {
+			relative_power = { who = from category = fleet value = pathetic }
+		}
+	}
+	color = {
+		value = hsv { 0.25 1.0 1.0 1.0 }
+		custom_tooltip = "POWER_MAP_MODE_INFERIOR"
+		condition = {
+			relative_power = { who = from category = fleet value = inferior }
+		}
+	}
+	color = {
+		value = hsv { 0.17 1.0 1.0 1.0 }
+		custom_tooltip = "POWER_MAP_MODE_EQUIVALENT"
+		condition = {
+			relative_power = { who = from category = fleet value = equivalent }
+		}
+	}
+	color = {
+		value hsv { 0.08 1.0 1.0 1.0 }
+		custom_tooltip = "POWER_MAP_MODE_SUPERIOR"
+		condition = {
+			relative_power = { who = from category = fleet value = superior }
+		}
+	}
+	color = {
+		value hsv { 0.0 1.0 0.6 1.0 }
+		custom_tooltip = "POWER_MAP_MODE_OVERWHELMING"
+		condition = {
+			relative_power = { who = from category = fleet value = overwhelming }
+		}
+	}
+}

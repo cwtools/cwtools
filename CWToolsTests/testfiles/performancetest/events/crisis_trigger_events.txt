@@ -1,0 +1,7 @@
+######################################
+# 
+# Crisis Triggering Events
+# STNH - Capek 1.8.0 Compat
+######################################
+
+namespace = crisis_trigger

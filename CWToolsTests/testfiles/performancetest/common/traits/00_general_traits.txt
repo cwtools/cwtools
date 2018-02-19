@@ -1,0 +1,192 @@
+
+# All leaders will have a common trait-point value set in defines, which they use to grab traits
+
+# leader_trait = yes - this tags the trait as a leader-trait and not a species-trait
+# initial = no - if set to no, this trait can not be granted to leaders when they are generated
+# leader_class = { admiral scientist }  -- OR  - if not set, it can be given to all leader-types except Rulers
+# requires_traits = { trait_psionic } -- AND - leader-trait can only be randomly given on generation if the leaders species has this trait
+# requires_governments = { despotic_hegemony ai_overlordship } -- OR - leader-trait can only be randomly given on generation if the Empire has this type of government form
+# prerequisites = { tech_psionic_theory } - AND - leader-trait can only be given if the technology specified has been researched by the Empire
+
+##################
+# General Traits #
+##################
+
+leader_trait_defender = {
+	cost = 1
+	modification = no
+	icon = "gfx/interface/icons/traits/leader_traits/leader_trait_defender.dds"
+	modifier = {
+		army_defense_morale_mult = 0.2
+		army_defense_damage_mult = 0.2
+	}
+	leader_potential_add = {
+		from = { is_drone_authority = no }
+	}
+	leader_trait = yes
+	leader_class = { general }
+	opposites = { "leader_trait_attacker" }
+}
+
+leader_trait_attacker = {
+	cost = 1
+	modification = no
+	icon = "gfx/interface/icons/traits/leader_traits/leader_trait_attacker.dds"
+	modifier = {
+		army_attack_morale_mult = 0.2
+		army_attack_damage_mult = 0.2
+	}
+	leader_potential_add = {
+		from = { is_drone_authority = no }
+	}
+	leader_trait = yes
+	leader_class = { general }
+	opposites = { "leader_trait_defender" }
+}
+
+leader_trait_charismatic = {
+	cost = 1
+	modification = no
+	icon = "gfx/interface/icons/traits/leader_traits/leader_trait_charismatic.dds"
+	modifier = {
+		army_morale = 0.25
+	}
+	leader_potential_add = {
+		from = { is_drone_authority = no }
+	}
+	leader_trait = yes
+	leader_class = { general }
+}
+
+leader_trait_butcher = {
+	cost = 1
+	modification = no
+	icon = "gfx/interface/icons/traits/leader_traits/leader_trait_butcher.dds"
+	modifier = {
+		army_damage_mult = 0.1
+	}
+	leader_potential_add = {
+		from = { is_drone_authority = no }
+	}
+	leader_trait = yes
+	leader_class = { general }
+	opposites = { "leader_trait_armchair_commander" }
+}
+
+leader_trait_glory_seeker = {
+	cost = 1
+	modification = no
+	icon = "gfx/interface/icons/traits/leader_traits/leader_trait_glory_seeker.dds"
+	modifier = {
+		army_morale = 0.1
+		army_damage_mult = 0.05
+	}
+	leader_potential_add = {
+		from = { is_drone_authority = no }
+	}
+	leader_trait = yes
+	leader_class = { general }
+	opposites = { "leader_trait_armchair_commander" }
+}
+
+leader_trait_armchair_commander = {
+	cost = 1
+	modification = no
+	randomized = no
+	icon = "gfx/interface/icons/traits/leader_traits/leader_trait_armchair_commander.dds"
+	modifier = {
+		army_morale = -0.1
+		army_damage_mult = -0.1
+	}
+	leader_potential_add = {
+		from = { is_drone_authority = no }
+	}
+	leader_trait = yes
+	leader_class = { general }
+	opposites = { "leader_trait_glory_seeker" "leader_trait_butcher" }
+}
+
+leader_trait_army_logistician = {
+	cost = 1
+	modification = no
+	icon = "gfx/interface/icons/traits/leader_traits/leader_trait_army_logistician.dds"
+	modifier = {
+		army_upkeep_mult = -0.2
+	}
+	leader_potential_add = {
+		from = { is_drone_authority = no }
+	}
+	leader_trait = yes
+	leader_class = { general }
+}
+
+leader_trait_general_cyborg = {
+	cost = 1
+	modification = no
+	icon = "gfx/interface/icons/traits/leader_traits/leader_trait_cyborg.dds"
+	self_modifier = {
+		leader_age = 40
+	}
+	modifier = {
+		army_damage_mult = 0.05
+	}
+	leader_potential_add = {
+		from = { is_drone_authority = no }
+	}
+	leader_trait = yes
+	leader_class = { general }
+	initial = no
+	randomized = no
+}
+
+leader_trait_general_synthetic = {
+	cost = 0
+	modification = no
+	icon = "gfx/interface/icons/traits/leader_traits/leader_trait_synthetic.dds"
+	modifier = {
+		army_damage_mult = 0.10
+	}
+	leader_potential_add = {
+		from = { is_drone_authority = no }
+	}
+	leader_trait = yes
+	leader_class = { general }
+	initial = no
+	randomized = no
+}
+
+leader_trait_general_psionic = {
+	cost = 0
+	modification = no
+	icon = "gfx/interface/icons/traits/leader_traits/leader_trait_psionic_leader.dds"
+	modifier = {
+		army_morale = 0.15
+		army_attack_morale_mult = 0.15
+	}
+	leader_potential_add = {
+		from = { is_drone_authority = no }
+	}
+	leader_trait = yes
+	leader_class = { general }
+	initial = no
+	randomized = no
+}
+
+leader_trait_general_chosen = {
+	cost = 0
+	modification = no
+	icon = "gfx/interface/icons/traits/leader_traits/leader_trait_psionic_chosen_one.dds"
+	immortal_leaders = yes
+	modifier = {
+		army_morale = 0.3
+		army_attack_morale_mult = 0.3
+		army_damage_mult = 0.2
+	}
+	leader_potential_add = {
+		from = { is_drone_authority = no }
+	}
+	leader_trait = yes
+	leader_class = { general }
+	initial = no
+	randomized = no
+}

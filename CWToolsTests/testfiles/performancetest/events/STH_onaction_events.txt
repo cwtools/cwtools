@@ -1,0 +1,920 @@
+namespace = STH_onaction
+
+
+
+
+
+#Meet Minor
+country_event = {
+	id = STH_onaction.1
+	title = "action.10.name"
+	desc = "action.15.desc"
+	picture = GFX_evt_star_chart
+	location = FROMFROMFROM
+	is_triggered_only = yes
+	trigger = {
+		is_normal_country = yes
+		exists = capital_scope
+		NOT = { has_country_flag = day_0 }
+		FROM = { NOT = { has_country_flag = day_0 } }
+		FROM = { is_country_type = minorRace }
+	}
+	immediate = {
+		capital_scope = { save_event_target_as = pc_home }
+		FROM = {
+			enable_special_project = {
+				name = "ESTABLISH_COMMUNICATIONS"
+				location = event_target:pc_home
+				owner = ROOT
+			}
+		}
+	}
+	option = {
+		name = "action.10.a"
+		tooltip = {
+			enable_special_project = {
+				name = "ESTABLISH_COMMUNICATIONS"
+				location = event_target:pc_home
+				owner = ROOT
+			}
+		}
+	}
+}
+
+#Meet Borg - DELETE?
+country_event = {
+	id = STH_onaction.2
+	title = "action.10.name"
+	desc = "action.15.desc"
+	picture = GFX_evt_star_chart
+	location = FROMFROMFROM
+	is_triggered_only = yes
+	trigger = {
+		OR = { 
+			is_country_type = default
+			is_country_type = minorRace
+		}
+		exists = capital_scope
+		NOT = { has_country_flag = day_0 }
+		FROM = { NOT = { has_country_flag = day_0 } }
+		FROM = { is_country_type = borg }
+	}
+	immediate = { }
+	option = {
+		name = "action.10.a"
+		establish_communications_no_message = FROM
+	}
+}
+
+#Meet Undine
+country_event = {
+	id = STH_onaction.11
+	title = "action.10.name"
+	desc = "action.15.desc"
+	picture = GFX_evt_star_chart
+	location = FROMFROMFROM
+	is_triggered_only = yes
+	trigger = {
+		OR = { 
+			is_country_type = default
+			is_country_type = minorRace
+		}
+		exists = capital_scope
+		FROM = { is_country_type = undine }
+	}
+	immediate = { 
+		
+	}
+	option = {
+		name = "action.10.a"
+		establish_communications_no_message = FROM
+		country_event = { id = STH_undine_crisis.101 scopes = { from = from fromfrom = fromfrom fromfromfrom = fromfromfrom } }
+	}
+}
+
+
+ship_event = {
+	id = STH_onaction.3
+	hide_window = yes
+	is_triggered_only = yes
+	immediate = { 
+		owner = { country_event = { id = STH_onaction.4 days = 1 } }
+	}
+}
+
+country_event = {
+	id = STH_onaction.4
+	hide_window = yes
+	is_triggered_only = yes
+	trigger = {
+		OR = {
+			is_country_type = minorRace
+			is_country_type = ufp_member_world
+		}
+	}
+	immediate = { 
+		every_owned_fleet = {
+			limit = { 
+				is_ship_class = shipclass_outpost_station
+				owner = {
+					OR = {
+						is_country_type = minorRace
+						is_country_type = ufp_member_world
+					}
+				}
+			}
+			destroy_fleet = this
+			owner = {
+				add_minerals = 170
+			}
+		}
+	}
+}
+
+#Klingon Rebels stop fighting when new wars
+country_event = {
+	id = STH_onaction.5
+	hide_window = yes
+	is_triggered_only = yes
+	trigger = {
+		has_country_flag = klingon_empire
+		FROM = { NOT = { has_country_flag = klingon_rebel_house } }
+		any_country = {	has_country_flag = klingon_rebel_house }
+	}
+	immediate = { 
+		FROM = { save_global_event_target_as = alienCountryKlingonWar }
+		country_event = { id = STH_onaction.6 days = 2 } 
+	}
+}
+
+country_event = {
+	id = STH_onaction.6
+	title = "STH_onaction.6.name"
+	desc = "STH_onaction.6.desc"
+	picture = sth_GFX_evt_qoNos
+	is_triggered_only = yes
+	trigger = {
+		has_country_flag = klingon_empire
+		FROM = { NOT = { has_country_flag = klingon_rebel_house } }
+		any_country = {	has_country_flag = klingon_rebel_house }
+	}
+	immediate = { 
+		random_country = {
+			limit = { has_country_flag = klingon_empire }
+			save_event_target_as = klingon_empire
+		}
+		every_country = {
+			limit = { has_country_flag = klingon_rebel_house }
+			every_owned_planet = { set_owner = event_target:klingon_empire }
+		}
+	}
+	option = { name = "STH_onaction.6.a" }
+}
+
+
+
+#Klingon Rebels win by taking over homeworld
+planet_event = {
+	id = STH_onaction.7
+	title = "STH_onaction.7.name"
+	desc = "STH_onaction.7.desc"
+	picture = sth_GFX_evt_theSwordOfKahless10
+	is_triggered_only = yes
+	trigger = {
+		FROM = { has_country_flag = klingon_empire }
+		FROM.capital_scope = { is_planet = ROOT }
+		FROMFROM = { has_country_flag = klingon_rebel_house }
+	}
+	immediate = {
+		random_country = {
+			limit = { has_country_flag = klingon_empire }
+			save_event_target_as = klingon_empire
+		}
+		FROMFROM = { leader = { save_event_target_as = klingon_rebel_leader } }
+		FROM = {
+			kill_leader = { type = ruler show_notification = no }
+			assign_leader = event_target:klingon_rebel_leader
+			add_influence = -100
+		}
+		FROMFROM = { every_owned_planet = { set_owner = event_target:klingon_empire } }
+	}
+	option = { name = "STH_onaction.7.a" }
+}
+
+
+#Kazon Sects stop fighting when new wars
+country_event = {
+	id = STH_onaction.8
+	hide_window = yes
+	is_triggered_only = yes
+	trigger = {
+		has_country_flag = kazon_sects
+		FROM = { NOT = { has_country_flag = kazon_rebel_sects } }
+		any_country = {	has_country_flag = kazon_rebel_sects }
+	}
+	immediate = { 
+		FROM = { save_global_event_target_as = alienCountryKazonWar }
+		country_event = { id = STH_onaction.9 days = 2 } 
+	}
+}
+
+country_event = {
+	id = STH_onaction.9
+	title = "STH_onaction.9.name"
+	desc = "STH_onaction.9.desc"
+	picture = sth_GFX_evt_kazonCruiser
+	is_triggered_only = yes
+	trigger = {
+		has_country_flag = kazon_sects
+		FROM = { NOT = { has_country_flag = kazon_rebel_sects } }
+		any_country = {	has_country_flag = kazon_rebel_sects }
+	}
+	immediate = { 
+		random_country = {
+			limit = { has_country_flag = kazon_sects }
+			save_event_target_as = kazon_sects
+		}
+		every_country = {
+			limit = { has_country_flag = kazon_rebel_sects }
+			every_owned_planet = { set_owner = event_target:kazon_sects }
+		}
+	}
+	option = { name = "STH_onaction.9.a" }
+}
+
+
+
+#Kazon Sects win by taking over homeworld
+planet_event = {
+	id = STH_onaction.10
+	title = "STH_onaction.10.name"
+	desc = "STH_onaction.10.desc"
+	picture = sth_GFX_evt_kazonAttack
+	is_triggered_only = yes
+	trigger = {
+		FROM = { has_country_flag = kazon_sects }
+		FROM.capital_scope = { is_planet = ROOT }
+		FROMFROM = { has_country_flag = kazon_rebel_sects }
+	}
+	immediate = {
+		random_country = {
+			limit = { has_country_flag = kazon_sects }
+			save_event_target_as = kazon_sects
+		}
+		FROMFROM = { 
+			save_event_target_as = kazon_rebel_sect
+			leader = { save_event_target_as = kazon_rebel_sect_leader }
+		}
+	}
+	option = { 
+		name = "STH_onaction.10.a"
+		FROM = {
+			kill_leader = { type = ruler show_notification = no }
+			assign_leader = event_target:kazon_rebel_sect_leader
+			add_influence = -100
+		}
+		FROMFROM = { every_owned_planet = { set_owner = event_target:kazon_sects } }
+	}
+}
+
+
+
+
+# Kill Amoebas
+event = {
+	id = STH_onaction.100
+	hide_window = yes
+	is_triggered_only = yes
+	trigger = {
+		any_country = { is_country_type = amoeba }
+	}
+	immediate = { 
+		every_country = {
+			limit = { is_country_type = amoeba }
+			destroy_country = yes
+		}
+	}
+}
+
+# Gender Bias Gatekeeper
+event = {
+	id = STH_onaction.199
+	hide_window = yes
+	is_triggered_only = yes
+	trigger = { }
+	immediate = {
+		every_country = {
+			limit = { misogynist = yes }
+			country_event = { id = STH_onaction.200 }
+		}
+		# every_country = {
+			# limit = { misandrist = yes }
+			# country_event = { id = STH_onaction.203 }
+		# }
+		# every_country = {
+			# limit = { femaleScienceMaleSoldier = yes }
+			# country_event = { id = STH_onaction.201 }
+		# }
+	}
+}
+
+# Misogynist and Misandrist Species
+country_event = {
+	id = STH_onaction.200
+	hide_window = yes
+	is_triggered_only = yes
+	trigger = {
+		OR = {
+			misogynist = yes
+			misandrist = yes
+		}
+	}
+	immediate = {
+		if = {
+			limit = { misogynist = yes }
+			every_pool_leader = {
+				limit = { gender = female }
+				set_is_female = no
+				set_name = random
+			}
+			every_owned_leader = {
+				limit = { gender = female }
+				set_is_female = no
+				set_name = random
+			}
+		}
+		if = {
+			limit = { misandrist = yes }
+			every_pool_leader = {
+				limit = { gender = male }
+				set_is_female = yes
+				set_name = random
+			}
+			every_owned_leader = {
+				limit = { gender = male }
+				set_is_female = yes
+				set_name = random
+			}
+		}
+	}
+}
+
+#More female scientists, more male soldiers
+country_event = {
+	id = STH_onaction.201
+	hide_window = yes
+	is_triggered_only = yes
+	trigger = {
+		exists = FROM
+		femaleScienceMaleSoldier = yes
+	}
+	immediate = {		
+		FROM = {
+			if = {
+				limit = { gender = female OR = { leader_class = admiral leader_class = general } }
+				random_list = {
+					10 = { recruitable = no }
+					10 = { }
+				}
+			}
+			if = {
+				limit = { gender = male OR = { leader_class = scientist } }
+				random_list = {
+					10 = { recruitable = no }
+					10 = { }
+				}
+			}
+		}
+	}
+}
+
+#Leader Species Traits
+country_event = {
+	id = STH_onaction.202
+	hide_window = yes
+	is_triggered_only = yes
+	trigger = {
+		OR = { 
+			is_assimilator = yes
+			AND = { is_species_class = VID NOT = { has_global_flag = phageCure } }
+			FROM = { species = { has_trait = trait_darsay_personality } }
+		}
+	}
+	immediate = {
+		if = {
+			limit = { is_assimilator = yes }
+			FROM = {
+				add_trait = leader_trait_assimilated
+				set_borg_name = yes
+			}
+			every_pool_leader = { limit = { NOT = { has_trait = leader_trait_assimilated } } add_trait = leader_trait_assimilated }
+			every_owned_leader = { limit = { NOT = { has_trait = leader_trait_assimilated } } add_trait = leader_trait_assimilated }
+		}
+		if = {
+			limit = { FROM = { species = { has_trait = trait_darsay_personality } } }
+			FROM = { 
+				# add_trait = leader_trait_assimilated
+				set_darsay_name = yes
+			}
+			# every_pool_leader = { limit = { NOT = { has_trait = leader_trait_assimilated } } add_trait = leader_trait_assimilated }
+			# every_owned_leader = { limit = { NOT = { has_trait = leader_trait_assimilated } } add_trait = leader_trait_assimilated }
+		}
+		if = {
+			limit = { is_species_class = VID NOT = { has_global_flag = phageCure } }
+			FROM = { add_trait = leader_trait_the_phage }
+			every_pool_leader = { limit = { NOT = { has_trait = leader_trait_the_phage } } add_trait = leader_trait_the_phage }
+			every_owned_leader = { limit = { NOT = { has_trait = leader_trait_the_phage } } add_trait = leader_trait_the_phage }
+		}
+	}
+}
+
+# Expand Helix
+planet_event = {
+	id = STH_onaction.300
+	hide_window = yes
+	is_triggered_only = yes
+	trigger = { 
+		is_planet_class = pc_helix
+		FROM = { has_blocker = "tb_helix_expansion" }
+	}
+	immediate = {
+		set_variable = { which = "freeTiles" value = 1 }
+		every_tile = {
+			limit = { NOT = { has_blocker = "tb_helix_expansion" } }
+			Root = { change_variable = { which = "freeTiles" value = 1 } }
+		}
+		
+	}
+	after = { 
+		if = {
+			limit = { check_variable = { which = "freeTiles" value = 18 } }
+			set_planet_entity = { entity = "orbital_habitat_grow_8_entity" graphical_culture = suliban_01 }
+		}
+		if = {
+			limit = { check_variable = { which = "freeTiles" value = 16 } }
+			set_planet_entity = { entity = "orbital_habitat_grow_7_entity" graphical_culture = suliban_01 }
+		}
+		if = {
+			limit = { check_variable = { which = "freeTiles" value = 14 } }
+			set_planet_entity = { entity = "orbital_habitat_grow_6_entity" graphical_culture = suliban_01 }
+		}
+		if = {
+			limit = { check_variable = { which = "freeTiles" value = 12 } }
+			set_planet_entity = { entity = "orbital_habitat_grow_5_entity" graphical_culture = suliban_01 }
+		}
+		if = {
+			limit = { check_variable = { which = "freeTiles" value = 10 } }
+			set_planet_entity = { entity = "orbital_habitat_grow_4_entity" graphical_culture = suliban_01 }
+		}
+		if = {
+			limit = { check_variable = { which = "freeTiles" value = 8 } }
+			set_planet_entity = { entity = "orbital_habitat_grow_3_entity" graphical_culture = suliban_01 }
+		}
+		if = {
+			limit = { check_variable = { which = "freeTiles" value = 6 } }
+			set_planet_entity = { entity = "orbital_habitat_grow_2_entity" graphical_culture = suliban_01 }
+		}
+		if = {
+			limit = { check_variable = { which = "freeTiles" value = 4 } }
+			set_planet_entity = { entity = "orbital_habitat_grow_1_entity" graphical_culture = suliban_01 }
+		}
+	}
+}
+
+country_event = {
+	id = STH_onaction.400
+	hide_window = yes
+	is_triggered_only = yes
+	trigger = {
+		exists = From
+		From = {
+			exists = orbit
+			orbit = { is_starbase_planet = yes }
+			has_fleet_flag = starbase_megastructure
+		}
+	}
+	immediate = { 
+		save_event_target_as = buildingCountry
+		if = {
+			limit = { From.Orbit = { is_starbase_planet = yes } }
+			From.Orbit = { destroy_colony = { keep_buildings = no } remove_planet = yes }			
+		}
+	}
+	after = {
+		set_variable = { which = "ds_starbase_count" value = 1 }
+		every_owned_planet  = {
+			limit = { is_starbase_planet = yes }
+			event_target:buildingCountry = { change_variable = { which = "ds_starbase_count" value = 1 } }
+		}
+	}
+}
+
+country_event = {
+	id = STH_onaction.401
+	hide_window = yes
+	is_triggered_only = yes
+	trigger = {
+		exists = FromFrom
+		FromFrom = {
+			exists = orbit
+			orbit = { is_starbase_planet = yes }
+			has_fleet_flag = starbase_megastructure
+		}
+	}
+	immediate = { 
+		save_event_target_as = buildingCountry
+		if = {
+			limit = { FromFrom.Orbit = { is_starbase_planet = yes } }
+			FromFrom.Orbit = { destroy_colony = { keep_buildings = no } remove_planet = yes }
+		}
+	}
+	after = {
+		set_variable = { which = "ds_starbase_count" value = 1 }
+		every_owned_planet  = {
+			limit = { is_starbase_planet = yes }
+			event_target:buildingCountry = { change_variable = { which = "ds_starbase_count" value = 1 } }
+		}
+	}
+}
+
+event = {
+	id = STH_onaction.500
+	hide_window = yes
+	is_triggered_only = yes
+	immediate = { 
+		every_country = {	
+			if = {	
+				limit = { 
+					OR = { 
+						is_country_type = default
+						is_country_type = minorRace
+						is_country_type = ufp_member_world
+					}	
+					NOR = { 
+						has_technology = tech_phaser_cannon_1
+						has_technology = tech_phaser_1
+						has_technology = tech_plasma_disruptor_beam_1
+						has_technology = tech_antiproton_cannon_1
+						has_technology = tech_polaron_beam_1
+						has_technology = tech_tetryon_cannon_1
+						has_technology = tech_disruptor_cannon_1
+						has_technology = tech_plasma_cannon_1
+					}
+					NOR = { 
+						has_technology = tech_engineering_starship-class_717
+						has_technology = tech_engineering_bird-of-prey_716
+					}					
+				}
+			give_technology = { tech = tech_engineering_starship-class_717 message = no }
+			give_technology = { tech = tech_phaser_1 message = no }
+			}
+			if = {	
+				limit = {
+					OR = { 
+						is_country_type = default
+						is_country_type = minorRace
+						is_country_type = ufp_member_world
+					}			
+					NOT = { has_technology = tech_engineering_starship-class_717 }
+					OR = {
+						has_technology = tech_phaser_cannon_1
+						has_technology = tech_phaser_1
+						has_technology = tech_plasma_disruptor_beam_1
+						has_technology = tech_polaron_beam_1
+						has_technology = tech_antiproton_cannon_1
+					}
+				}
+				give_technology = { tech = tech_engineering_starship-class_717 message = no }
+			}
+			if = {	
+				limit = {
+					OR = { 
+						is_country_type = default
+						is_country_type = minorRace
+						is_country_type = ufp_member_world
+					}			
+					NOT = { has_technology = tech_engineering_bird-of-prey_716 }
+					OR = {
+						has_technology = tech_disruptor_cannon_1
+						has_technology = tech_plasma_cannon_1
+						has_technology = tech_tetryon_cannon_1
+					}
+				}	
+				give_technology = { tech = tech_engineering_bird-of-prey_716 message = no }
+			}
+			if = {	
+				limit = { 
+					has_country_flag = starfleet_tos
+					any_country = { has_country_flag = starfleet_naval_museum_country }
+					}
+				set_graphical_culture = federation_02
+			}
+			if = {	
+				limit = { 
+					has_country_flag = starfleet_tmp
+					any_country = { has_country_flag = starfleet_naval_museum_country }
+					}
+				set_graphical_culture = federation_03
+			}
+			if = {	
+				limit = { 
+					has_country_flag = starfleet_tng
+					any_country = { has_country_flag = starfleet_naval_museum_country }
+					}
+				set_graphical_culture = federation_04
+			}				
+		}	
+	}
+}
+
+#Remove Borg subjects
+country_event = {
+	id = STH_onaction.600
+	hide_window = yes
+	trigger = {
+		is_assimilator = yes
+		is_overlord = yes
+	}
+	immediate = {
+		every_subject = { set_subject_of = { who = none } }
+	}
+}
+
+#Leader level up reward to other leaders
+country_event = {
+	id = STH_onaction.700
+	hide_window = yes
+	trigger = {
+		exists = FROM
+		OR = {
+			AND = {
+				has_swapped_tradition = tr_perfection_3
+				FROM = { has_trait = leader_trait_assimilated }
+			}
+			FROM = { species = { is_species_class = DOM } }
+		}
+	}
+	immediate = {
+		if = {
+			limit = { has_swapped_tradition = tr_perfection_3 FROM = { has_trait = leader_trait_assimilated } }
+			every_owned_leader = { 
+				limit = { 
+					NOT = { is_same_value = FROM } 
+					has_trait = leader_trait_assimilated
+				}
+				add_experience = 100
+			}
+		}
+		if = {
+			limit = { FROM = { species = { is_species_class = DOM } } }
+			every_owned_leader = {
+				limit = { 
+					NOT = { is_same_value = FROM } 
+					species = { is_species_class = DOM }
+				}
+				add_experience = 100
+			}
+		}
+	}
+}
+
+#NCC number setting on ship build
+ship_event = {
+	id = STH_onaction.800
+	hide_window = yes  
+	is_triggered_only = yes
+	trigger = {
+		exists = owner
+		owner = { starfleet_empire = yes }
+	}
+	immediate = {
+		owner = { change_variable = { which = "builtShips" value = 1 } }
+		set_name = "NCC_SHIP_NAME"
+	}
+}
+
+#NCC number setting on ship build
+event = {
+	id = STH_onaction.801
+	hide_window = yes  
+	is_triggered_only = yes
+	trigger = {
+	}
+	immediate = {
+		every_country = {
+			limit = { starfleet_empire = yes }
+			every_owned_ship = {
+				limit = {  
+					OR = {
+						is_ship_class = shipclass_military
+						is_ship_class = shipclass_colonizer
+						is_ship_class = shipclass_constructor
+						is_ship_class = shipclass_transport
+						is_ship_class = shipclass_science_ship
+					}
+				}
+				owner = { change_variable = { which = "builtShips" value = 1 } }
+				set_name = "NCC_SHIP_NAME"
+			}
+		}
+	}
+}
+
+
+#Dead Leader Gets Ship Name
+# Executed as a leader has died
+# This = Country
+# From = Leader
+country_event = {
+	id = STH_onaction.900
+	title = STH_onaction.900.name
+	desc = { text = STH_onaction.900.desc }
+	picture = {
+		trigger = { is_species_class = KDF }
+		picture = sth_GFX_evt_leaderDeathKlingon
+	}
+	picture = {
+		trigger = { starfleet_empire = yes }
+		picture = sth_GFX_evt_leaderDeathFederation
+	}
+	picture = {
+		trigger = { NOR = { starfleet_empire = yes is_species_class = KDF } }
+		picture = sth_GFX_evt_leaderDeath
+	}
+	trigger = {
+		is_assimilator = no
+		is_changeling_empire = no
+		exists = FROM
+		FROM = { has_skill > 4 }
+		any_owned_ship = { 
+			is_ship_class = shipclass_military 
+			NOT = { has_ship_flag = renamedInHonour }
+		}
+	}
+	is_triggered_only = yes
+	immediate = {
+		create_leader = { name = random species = Root type = admiral }
+		last_created_leader = {
+			set_name = "NAME_FROM_NAME"
+			save_event_target_as = leaderTarget
+			exile_leader_as = leaderTarget
+		}
+		random_owned_ship = {
+			limit = { 
+				is_ship_class = shipclass_military 
+				NOT = { has_ship_flag = renamedInHonour }
+			}
+			save_event_target_as = shipCandidate1
+		}
+		random_owned_ship = {
+			limit = { 
+				is_ship_class = shipclass_military 
+				NOR = { 
+					has_ship_flag = renamedInHonour 
+					is_same_value = event_target:shipCandidate1
+				}
+			}
+			save_event_target_as = shipCandidate2
+		}
+		random_owned_ship = {
+			limit = { 
+				is_ship_class = shipclass_military 
+				NOR = { 
+					has_ship_flag = renamedInHonour 
+					is_same_value = event_target:shipCandidate1
+					is_same_value = event_target:shipCandidate2
+				}
+			}
+			save_event_target_as = shipCandidate3
+		}
+	}
+	option = {
+		name = STH_onaction.900.a
+		trigger = { exists = event_target:shipCandidate1 }
+		allow = { exists = event_target:shipCandidate1 }
+		hidden_effect = {
+			event_target:shipCandidate1 = {
+				set_ship_flag = renamedInHonour
+				fleet = {
+					create_ship = { name = "" design = NAME_Jem_Hadar_Ship prefix = yes }
+					last_created_ship = { set_name = "NAME_LEADERTARGET_NAME" save_event_target_as = shipTarget }
+				}
+				set_name = "NAME_SHIPTARGET_NAME"
+				if = {
+					limit = { owner = { starfleet_empire = yes } }
+					owner = { change_variable = { which = "builtShips" value = 1 } }
+					set_name = "NCC_SHIP_NAME"
+					add_modifier = { modifier = sh_named_ship days = -1 }
+				}
+				event_target:shipTarget = { delete_ship = this }
+			}
+		}
+	}
+	option = {
+		name = STH_onaction.900.b
+		trigger = { exists = event_target:shipCandidate2 }
+		allow = { exists = event_target:shipCandidate2 }
+		hidden_effect = {
+			event_target:shipCandidate2 = {
+				set_ship_flag = renamedInHonour
+				fleet = {
+					create_ship = { name = "" design = NAME_Jem_Hadar_Ship prefix = yes }
+					last_created_ship = { set_name = "NAME_LEADERTARGET_NAME" save_event_target_as = shipTarget }
+				}
+				set_name = "NAME_SHIPTARGET_NAME"
+				if = {
+					limit = { owner = { starfleet_empire = yes } }
+					owner = { change_variable = { which = "builtShips" value = 1 } }
+					set_name = "NCC_SHIP_NAME"
+					add_modifier = { modifier = sh_named_ship days = -1 }
+				}
+				event_target:shipTarget = { delete_ship = this }
+			}
+		}
+	}
+	option = {
+		name = STH_onaction.900.c
+		trigger = { exists = event_target:shipCandidate3 }
+		allow = { exists = event_target:shipCandidate3 }
+		hidden_effect = {
+			event_target:shipCandidate3 = {
+				set_ship_flag = renamedInHonour
+				fleet = {
+					create_ship = { name = "" design = NAME_Jem_Hadar_Ship prefix = yes }
+					last_created_ship = { set_name = "NAME_LEADERTARGET_NAME" save_event_target_as = shipTarget }
+				}
+				set_name = "NAME_SHIPTARGET_NAME"
+				if = {
+					limit = { owner = { starfleet_empire = yes } }
+					owner = { change_variable = { which = "builtShips" value = 1 } }
+					set_name = "NCC_SHIP_NAME"
+					add_modifier = { modifier = sh_named_ship days = -1 }
+				}
+				event_target:shipTarget = { delete_ship = this }
+			}
+		}
+	}
+	option = {
+		name = STH_onaction.900.z
+	}
+}
+
+
+
+#Set Vassal Status
+event = {
+	id = STH_onaction.1000
+	hide_window = yes  
+	is_triggered_only = yes
+	trigger = {}
+	immediate = {
+		every_country = {
+			limit = { is_subject = yes exists = overlord }
+			overlord = { save_event_target_as = overlordCountry }
+			country_event = { id = STH_onaction.1001 scopes = { from = event_target:overlordCountry } }
+		}
+	}
+}
+
+#Set Vassal Status
+country_event = {
+	id = STH_onaction.1001
+	hide_window = yes  
+	is_triggered_only = yes
+	trigger = { exists = from }
+	immediate = { set_appropriate_vassal_status = yes }
+}
+
+
+
+
+
+
+
+# Give Various Traits as Needed
+country_event = {
+	id = STH_onaction.2000
+	is_triggered_only = yes
+	hide_window = yes
+	trigger = { exists = FROM }
+	immediate = {
+		from = {
+			if = {
+				limit = { species = { has_trait = trait_chromodynamic_power_module } }
+				add_trait = leader_trait_chromodynamic_power_module
+			}
+		}
+		from = {
+			if = {
+				limit = { species = { has_trait = trait_synaptic_processors } }
+				add_trait = leader_trait_synaptic_processors
+			}
+		}
+		from = {
+			if = {
+				limit = { species = { has_trait = trait_shapeshifter } }
+				add_trait = leader_trait_shapeshifter
+			}
+		}		
+	}
+}

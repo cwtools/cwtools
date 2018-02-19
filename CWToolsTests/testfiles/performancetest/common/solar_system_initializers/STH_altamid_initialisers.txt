@@ -1,0 +1,96 @@
+#Xindi Spawn System
+altamid_system_event_spawn = {
+	name = "Ross 973"
+	class = sc_g
+	flags = { altamid_system }
+	planet = {
+		name = "Ross 973"
+		class = star
+		size = 30
+		orbit_distance = 0
+		orbit_angle = 1
+		has_ring = no
+	}
+	change_orbit = { min = 30 max = 40}
+	planet = {
+		name = "Ross 973 I"
+		class = "pc_b_class"
+		size = 8
+		orbit_angle = { min = 45 max = 270 }
+		has_ring = no
+	}
+	change_orbit = { min = 20 max = 30}
+	planet = {
+		name = "Ross 973 II"
+		class = "pc_b_class"
+		size = 8
+		orbit_angle = { min = 45 max = 270 }
+		has_ring = no
+		init_effect = {
+			orbital_deposit_tile = {
+				clear_deposits = yes
+				add_deposit = d_sr_trellium_1_deposit
+			}
+		}
+	}
+	change_orbit = { min = 20 max = 30}
+	planet = {
+		name = "Ross 973 III"
+		flags = { altamid_planet }
+		class = "pc_alpine"
+		size = 20
+		orbit_angle = { min = 45 max = 270 }
+		starting_planet = no
+		tile_blockers = none
+		has_ring = no
+		init_effect = {
+			prevent_anomaly = yes
+			save_global_event_target_as = altamid_planet
+			random_country = {
+				limit = { has_country_flag = altamidMessageReceived }
+				begin_event_chain = {
+					event_chain = altamid_chain
+					target = THIS
+				}
+				create_point_of_interest = {
+					id = altamid_planet_1
+					name = altamid_planet_1_title
+					desc = altamid_planet_1_desc
+					event_chain = altamid_chain
+					location = event_target:altamid_planet
+				}
+			}			
+			random_tile = {
+				limit = { has_blocker = no has_grown_pop = no has_growing_pop = no }
+				set_building = "building_altamid_mine"
+			}
+			random_tile = {
+				limit = { has_blocker = no has_grown_pop = no has_growing_pop = no }
+				set_building = "building_altamid_mine"
+			}
+			random_tile = {
+				limit = { has_blocker = no has_grown_pop = no has_growing_pop = no }
+				set_building = "building_altamid_mine"
+			}
+			random_tile = {
+				limit = { has_blocker = no has_grown_pop = no has_growing_pop = no }
+				set_building = "building_altamid_mine"
+			}
+			random_tile = {
+				limit = { has_blocker = no has_building = no }
+				set_blocker = "tb_city_ruins"
+				add_deposit = d_engineering_deposit	
+			}
+			random_tile = {
+				limit = { has_blocker = no has_building = no }
+				set_blocker = "tb_city_ruins"
+				add_deposit = d_society_deposit			
+			}
+			random_tile = {
+				limit = { has_blocker = no has_building = no }
+				set_blocker = "tb_city_ruins"
+				add_deposit = d_physics_deposit				
+			}			
+		}		
+	}
+}

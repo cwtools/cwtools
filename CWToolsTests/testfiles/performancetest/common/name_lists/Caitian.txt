@@ -1,0 +1,98 @@
+﻿### Caitian by EHKodiak
+Caitian = {
+	randomized = no
+
+	ship_names = {
+		generic = {
+			Atrox Ferox Ferus Torvus Bestialis Aspero Hadir Stalker Huntress Pursuer Hunter Courser Typhus Panthera Lynx Agility Pouncer Intruder Feral "Nine Lives" Scratcher Claw Clawer "Savage Claw" "Savage Bite" "Silent Stalker" Prowler Dralthi Salthi Sartha Gratha Jalthi Hhriss Krant Strakha Bloodfang Gothri Jalkehi Drakhri Grikath Vaktoth Sorthak Bloodfang Paktahn
+		}
+		corvette = {
+		}
+		saber = {
+		}
+		sovereign = {
+		}
+		steamrunner = {
+		}		
+		adv_cruiser = {
+		}
+		strike = {
+		}	
+		constructor = { }
+		colonizer = { }
+		science = { }
+		transport = { }
+		outpost_station = {
+			sequential_name = "Frontier Outpost"
+		}
+	}
+
+	fleet_names = {
+		sequential_name = "%O% Fleet"
+	}
+	
+	army_names = {
+		defense_army = {
+			sequential_name = "%O% Prideguard"
+		}
+		assault_army = {
+			sequential_name = "%O% Attack Pride"
+		}
+		slave_army = {
+			sequential_name = "%O% Indentured Defence Pride"
+		}
+		clone_army = { 
+			sequential_name = "%O% Clone Attack Pride"
+		}
+		robotic_army = {
+			sequential_name = "%O% Mechanical Attack Pride"
+		}
+		android_army = {
+			sequential_name = "%O% Synthetic Assault Pride"
+		}
+		psionic_army = { 
+			sequential_name = "%O% Psionic Pride"
+		}
+		xenomorph_army = {
+			sequential_name = "%O% Bio-Warfare Assault Pride"
+		}
+		gene_warrior_army = {
+			sequential_name = "%O% Bio-Engineered Attack Pride"
+		}
+	}
+
+	planet_names = {
+		generic = {
+			names = {
+				Cait
+			}
+		}
+	}
+
+
+	### CHARACTERS
+
+	character_names = {
+		names1 = {
+			weight = 100
+			first_names_male = {		
+				Dynkorra Shevihh Sunisr Niruo Marril Davarl Deserr Trarren Trren Mengir Eldeer Marari Gedryn Manara Vasura Shara Erovan 
+			}
+			first_names_female = {
+				Caite Dynkirre Kise Trise Tryss Vyss Alirr Bernire Mergi Shuvle Rishe Nesara Shiboline Ghee Greer
+			}
+			second_names = {
+				"C'Raal" "M'Rill" Hriss Hsuuri "M'Relle" "M'Tesint" "M'grash" "M'morr" "M'Nirl" "M'Ress" "M'Roaa" "M'Zeo" Niwara "P'Trell" "R'Miia" Rriarr "S'rrel" "Sh'aow" Ferra Velde Kyona Niwan Rraak "R'mimae" "C'Morra" "C'Tarrsa" "Liow'an" Grinraar Kassraia Ketakr "Lr'rasra" "Lrallsi" "M'reina" "M'relna" "M'Rinna" "M'Roswor" "M'Taztru" "R'caniar" "R'ssatro" "Rrisrak" "S'rria" Satriarr Sraachat "T'rrast"
+			}
+			regnal_first_names_male = {
+				Dynkorra Shevihh Sunisr Niruo Marril Davarl Deserr Trarren Trren Mengir Eldeer Marari Gedryn Manara Vasura Shara Erovan 
+			}
+			regnal_first_names_female = {
+				Caite Dynkirre Kise Trise Tryss Vyss Alirr Bernire Mergi Shuvle Rishe Nesara Shiboline Ghee Greer
+			}
+			regnal_second_names = {
+				"C'Raal" "M'Rill" Hriss Hsuuri "M'Relle" "M'Tesint" "M'grash" "M'morr" "M'Nirl" "M'Ress" "M'Roaa" "M'Zeo" Niwara "P'Trell" "R'Miia" Rriarr "S'rrel" "Sh'aow" Ferra Velde Kyona Niwan Rraak "R'mimae" "C'Morra" "C'Tarrsa" "Liow'an" Grinraar Kassraia Ketakr "Lr'rasra" "Lrallsi" "M'reina" "M'relna" "M'Rinna" "M'Roswor" "M'Taztru" "R'caniar" "R'ssatro" "Rrisrak" "S'rria" Satriarr Sraachat "T'rrast"
+			}
+		}
+	}
+}

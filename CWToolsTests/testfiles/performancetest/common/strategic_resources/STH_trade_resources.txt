@@ -1,0 +1,212 @@
+### System Resources
+# accumulative = yes					- 
+# collect_if_wrong_building = yes/no	- 
+# accumulated_by_sectors = yes/no		- 
+# tradable = yes/no						- 
+# is_rare = yes/no						- Rare resources are shown in strategic resources view.
+# is_global = yes/no					- On orbital tiles only. Collected with station. Can have country modifiers. Aren't necessarily consumed. Can't be planet_local.
+# is_planet_local = yes/no				- On planet tiles only. Collected with building. Are consumed. Can't be global.
+# modifier = {}							- Global resource country modifiers.
+# prerequisites = {}					- Must be fulfilled before resource is shown.
+# modifier_prerequisites = {}			- Must be fulfilled before resource can be used.
+#
+
+### Tholian Silk
+   sr_tholian_silk_100 = {
+      AI_category = strategic_resource
+      tradable = yes
+      is_rare = yes
+      is_global = yes
+      modifier = { pop_happiness = 0.02 }
+      is_planet_local = no
+   }
+   
+### Kanar
+   sr_kanar_101 = {
+      AI_category = strategic_resource
+      tradable = yes
+      is_rare = yes
+      is_global = yes
+      modifier = { pop_happiness = 0.02 }
+      is_planet_local = no
+   }
+   
+### Bloodwine
+   sr_blood_wine_102 = {
+      AI_category = strategic_resource
+      tradable = yes
+      is_rare = yes
+      is_global = yes
+      modifier = { pop_happiness = 0.02 }
+      is_planet_local = no
+   }
+   
+### Bajoran Incense
+   sr_bajoran_incense_103 = {
+      AI_category = strategic_resource
+      tradable = yes
+      is_rare = yes
+      is_global = yes
+      modifier = { pop_happiness = 0.02 }
+      is_planet_local = no
+   }
+   
+### Beetle Snuff
+   sr_beetle_snuff_104 = {
+      AI_category = strategic_resource
+      tradable = yes
+      is_rare = yes
+      is_global = yes
+      modifier = { pop_happiness = 0.02 }
+      is_planet_local = no
+   }
+   
+### Romulan Ale
+   sr_romulan_ale_105 = {
+      AI_category = strategic_resource
+      tradable = yes
+      is_rare = yes
+      is_global = yes
+      modifier = { pop_happiness = 0.02 }
+      is_planet_local = no
+   }
+   
+### Root Beer
+   sr_root_beer_106 = {
+      AI_category = strategic_resource
+      tradable = yes
+      is_rare = yes
+      is_global = yes
+      modifier = { pop_happiness = 0.02 }
+      is_planet_local = no
+   }
+   
+### Bolian Tunic Water
+   sr_bolian_tonic_107 = {
+      AI_category = strategic_resource
+      tradable = yes
+      is_rare = yes
+      is_global = yes
+      modifier = { pop_happiness = 0.02 }
+      is_planet_local = no
+   }
+   
+### Vulcan Plomeek Soup
+   sr_plomeek_soup_108 = {
+      AI_category = strategic_resource
+      tradable = yes
+      is_rare = yes
+      is_global = yes
+      modifier = { pop_happiness = 0.02 }
+      is_planet_local = no
+   }
+   
+### Gorn Meridor
+   sr_meridor_109 = {
+      AI_category = strategic_resource
+      tradable = yes
+      is_rare = yes
+      is_global = yes
+      modifier = { pop_happiness = 0.02 }
+      is_planet_local = no
+   }
+   
+### Andorian Tuber Root
+   sr_andorian_tuber_root_110 = {
+      AI_category = strategic_resource
+      tradable = yes
+      is_rare = yes
+      is_global = yes
+      modifier = { pop_happiness = 0.02 }
+      is_planet_local = no
+   }
+   
+### Vorta Kava Nut
+   sr_kava_nut_111 = {
+      AI_category = strategic_resource
+      tradable = yes
+      is_rare = yes
+      is_global = yes
+      modifier = { pop_happiness = 0.02 }
+      is_planet_local = no
+   }
+   
+### Talaxian Fruit Nectar
+   sr_talaxian_nectar_112 = {
+      AI_category = strategic_resource
+      tradable = yes
+      is_rare = yes
+      is_global = yes
+      modifier = { pop_happiness = 0.02 }
+      is_planet_local = no
+   }
+   
+### Acamarian Parthas
+   sr_acamarian_parthas_113 = {
+      AI_category = strategic_resource
+      tradable = yes
+      is_rare = yes
+      is_global = yes
+      modifier = { pop_happiness = 0.02 }
+      is_planet_local = no
+   }
+   
+### Betazoid Utaberry
+   sr_betazoid_utaberry_114 = {
+      AI_category = strategic_resource
+      tradable = yes
+      is_rare = yes
+      is_global = yes
+      modifier = { pop_happiness = 0.02 }
+      is_planet_local = no
+   }
+   
+### Trill Balso Tonic
+   sr_balso_tonic_115 = {
+      AI_category = strategic_resource
+      tradable = yes
+      is_rare = yes
+      is_global = yes
+      modifier = { pop_happiness = 0.02 }
+      is_planet_local = no
+   }
+   
+### Brunali Poma
+   sr_poma_116 = {
+      AI_category = strategic_resource
+      tradable = yes
+      is_rare = yes
+      is_global = yes
+      modifier = { pop_happiness = 0.02 }
+      is_planet_local = no
+   }
+   
+### Tulaberry wine
+   sr_tulaberry_wine_117 = {
+      AI_category = strategic_resource
+      tradable = yes
+      is_rare = yes
+      is_global = yes
+      modifier = { pop_happiness = 0.02 }
+      is_planet_local = no
+   }
+   
+### Pearl of Hus
+   sr_pearl_of_hus_118 = {
+      AI_category = strategic_resource
+      tradable = yes
+      is_rare = yes
+      is_global = yes
+      modifier = { pop_happiness = 0.02 }
+      is_planet_local = no
+   }
+### Lobi Crystals
+   sr_lobi_crystals_200 = {
+      AI_category = strategic_resource
+      tradable = yes
+      is_rare = yes
+      is_global = yes
+      modifier = { pop_happiness = 0.03 }
+      is_planet_local = no
+   }
+      

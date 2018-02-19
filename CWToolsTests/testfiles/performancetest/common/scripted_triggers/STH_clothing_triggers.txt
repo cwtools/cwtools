@@ -1,0 +1,101 @@
+uses_native_clothes = {
+	uses_starfleet_uniform = no
+	uses_mirror_starfleet_uniform = no
+	uses_borg_prosthetics = no
+}
+
+uses_native_clothes_pop = {
+	uses_borg_prosthetics = no
+	NOT = { has_pop_flag = cowboy_pop }
+}
+
+uses_starfleet_uniform = {
+	exists = owner
+	OR = {
+		owner = { OR = { has_country_flag = united_federation_of_planets has_country_flag = united_earth has_country_flag = united_human_remnant } }
+		has_leader_flag = starfleet_on_loan
+	}
+	uses_special_clothes = no
+}
+uses_mirror_starfleet_uniform = {
+	exists = owner
+	OR = {
+		owner = { OR = { has_country_flag = terran_empire } }
+		has_leader_flag = mirror_starfleet_on_loan
+	}
+	uses_special_clothes = no
+}
+uses_bajoran_uniform = {
+	exists = owner
+	OR = {
+		owner = { OR = { has_country_flag = bajoran_republic } }
+		has_leader_flag = bajoran_on_loan
+	}
+	uses_special_clothes = no
+}
+uses_vulcan_uniform = {
+	exists = owner
+	OR = {
+		owner = { OR = { has_country_flag = vulcan_high_command } }
+		has_leader_flag = vulcan_on_loan
+	}
+	uses_special_clothes = no
+}
+uses_romulan_uniform = {
+	exists = owner
+	OR = {
+		owner = { OR = { has_country_flag = romulan_star_empire } }
+		has_leader_flag = romulan_on_loan
+	}
+	uses_special_clothes = no
+}
+
+uses_borg_prosthetics = {
+	OR = {
+		has_trait = trait_pc_assimilated_preference
+		has_trait = leader_trait_assimilated
+	}
+}
+
+is_ufp = {
+	exists = owner
+	owner = { has_country_flag = united_federation_of_planets }
+}
+
+
+
+
+uses_special_clothes = {
+	OR = {
+		has_leader_flag = ambassador
+		isBajoranReligiousLeader = yes
+	}
+}
+
+uses_starfleet_uniform_pop = {
+	exists = owner
+	owner = {
+		OR = {
+			has_country_flag = united_federation_of_planets
+			has_country_flag = united_earth
+			has_country_flag = united_human_remnant
+		}
+	}
+}
+
+
+uses_mirror_starfleet_uniform_pop = {
+	exists = owner
+	owner = {
+		OR = {
+			has_country_flag = terran_empire
+		}
+	}
+}
+
+isBajoranReligiousLeader = {
+	OR = {
+		has_leader_flag = bajoranVedek
+		has_leader_flag = bajoranKai
+	}
+}

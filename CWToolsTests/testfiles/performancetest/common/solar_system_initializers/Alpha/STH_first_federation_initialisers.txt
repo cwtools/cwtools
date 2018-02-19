@@ -1,0 +1,188 @@
+# First Federation
+first_federation_homeworld = {
+	name = "Fesar"
+	class = "sc_m"
+	flags = { first_federation_homeworld }
+	init_effect = { log = "first federation homeworld" }
+	usage = custom_empire
+	max_instances = 1
+	planet = {
+		class = star
+		name = "Fesar"
+		orbit_distance = 0
+		orbit_angle = 1
+		size = { min = 20 max = 30 }
+		has_ring = no
+		init_effect = {
+			save_event_target_as = first_federation_sun
+			create_ambient_object = { type = "firstfed_cube" location = this } last_created_ambient_object = { set_location = { target = event_target:first_federation_sun distance = 350 angle = 0 } }
+			create_ambient_object = { type = "firstfed_cube" location = this } last_created_ambient_object = { set_location = { target = event_target:first_federation_sun distance = 350 angle = 5 } }
+			create_ambient_object = { type = "firstfed_cube" location = this } last_created_ambient_object = { set_location = { target = event_target:first_federation_sun distance = 350 angle = 10 } }
+			create_ambient_object = { type = "firstfed_cube" location = this } last_created_ambient_object = { set_location = { target = event_target:first_federation_sun distance = 350 angle = 15 } }
+			create_ambient_object = { type = "firstfed_cube" location = this } last_created_ambient_object = { set_location = { target = event_target:first_federation_sun distance = 350 angle = 20 } }
+			create_ambient_object = { type = "firstfed_cube" location = this } last_created_ambient_object = { set_location = { target = event_target:first_federation_sun distance = 350 angle = 25 } }
+			create_ambient_object = { type = "firstfed_cube" location = this } last_created_ambient_object = { set_location = { target = event_target:first_federation_sun distance = 350 angle = 30 } }
+			create_ambient_object = { type = "firstfed_cube" location = this } last_created_ambient_object = { set_location = { target = event_target:first_federation_sun distance = 350 angle = 35 } }
+			create_ambient_object = { type = "firstfed_cube" location = this } last_created_ambient_object = { set_location = { target = event_target:first_federation_sun distance = 350 angle = 40 } }
+			create_ambient_object = { type = "firstfed_cube" location = this } last_created_ambient_object = { set_location = { target = event_target:first_federation_sun distance = 350 angle = 45 } }
+			create_ambient_object = { type = "firstfed_cube" location = this } last_created_ambient_object = { set_location = { target = event_target:first_federation_sun distance = 350 angle = 50 } }
+			create_ambient_object = { type = "firstfed_cube" location = this } last_created_ambient_object = { set_location = { target = event_target:first_federation_sun distance = 350 angle = 55 } }
+			create_ambient_object = { type = "firstfed_cube" location = this } last_created_ambient_object = { set_location = { target = event_target:first_federation_sun distance = 350 angle = 60 } }
+			create_ambient_object = { type = "firstfed_cube" location = this } last_created_ambient_object = { set_location = { target = event_target:first_federation_sun distance = 350 angle = 65 } }
+			create_ambient_object = { type = "firstfed_cube" location = this } last_created_ambient_object = { set_location = { target = event_target:first_federation_sun distance = 350 angle = 70 } }
+			create_ambient_object = { type = "firstfed_cube" location = this } last_created_ambient_object = { set_location = { target = event_target:first_federation_sun distance = 350 angle = 75 } }
+			create_ambient_object = { type = "firstfed_cube" location = this } last_created_ambient_object = { set_location = { target = event_target:first_federation_sun distance = 350 angle = 80 } }
+			create_ambient_object = { type = "firstfed_cube" location = this } last_created_ambient_object = { set_location = { target = event_target:first_federation_sun distance = 350 angle = 85 } }
+			create_ambient_object = { type = "firstfed_cube" location = this } last_created_ambient_object = { set_location = { target = event_target:first_federation_sun distance = 350 angle = 90 } }
+			create_ambient_object = { type = "firstfed_cube" location = this } last_created_ambient_object = { set_location = { target = event_target:first_federation_sun distance = 350 angle = 95 } }
+			create_ambient_object = { type = "firstfed_cube" location = this } last_created_ambient_object = { set_location = { target = event_target:first_federation_sun distance = 350 angle = 100 } }
+			create_ambient_object = { type = "firstfed_cube" location = this } last_created_ambient_object = { set_location = { target = event_target:first_federation_sun distance = 350 angle = 105 } }
+			create_ambient_object = { type = "firstfed_cube" location = this } last_created_ambient_object = { set_location = { target = event_target:first_federation_sun distance = 350 angle = 110 } }
+			create_ambient_object = { type = "firstfed_cube" location = this } last_created_ambient_object = { set_location = { target = event_target:first_federation_sun distance = 350 angle = 115 } }
+			create_ambient_object = { type = "firstfed_cube" location = this } last_created_ambient_object = { set_location = { target = event_target:first_federation_sun distance = 350 angle = 120 } }
+			create_ambient_object = { type = "firstfed_cube" location = this } last_created_ambient_object = { set_location = { target = event_target:first_federation_sun distance = 350 angle = 125 } }
+			create_ambient_object = { type = "firstfed_cube" location = this } last_created_ambient_object = { set_location = { target = event_target:first_federation_sun distance = 350 angle = 130 } }
+			create_ambient_object = { type = "firstfed_cube" location = this } last_created_ambient_object = { set_location = { target = event_target:first_federation_sun distance = 350 angle = 135 } }
+			create_ambient_object = { type = "firstfed_cube" location = this } last_created_ambient_object = { set_location = { target = event_target:first_federation_sun distance = 350 angle = 140 } }
+			create_ambient_object = { type = "firstfed_cube" location = this } last_created_ambient_object = { set_location = { target = event_target:first_federation_sun distance = 350 angle = 145 } }
+			create_ambient_object = { type = "firstfed_cube" location = this } last_created_ambient_object = { set_location = { target = event_target:first_federation_sun distance = 350 angle = 150 } }
+			create_ambient_object = { type = "firstfed_cube" location = this } last_created_ambient_object = { set_location = { target = event_target:first_federation_sun distance = 350 angle = 155 } }
+			create_ambient_object = { type = "firstfed_cube" location = this } last_created_ambient_object = { set_location = { target = event_target:first_federation_sun distance = 350 angle = 160 } }
+			create_ambient_object = { type = "firstfed_cube" location = this } last_created_ambient_object = { set_location = { target = event_target:first_federation_sun distance = 350 angle = 165 } }
+			create_ambient_object = { type = "firstfed_cube" location = this } last_created_ambient_object = { set_location = { target = event_target:first_federation_sun distance = 350 angle = 170 } }
+			create_ambient_object = { type = "firstfed_cube" location = this } last_created_ambient_object = { set_location = { target = event_target:first_federation_sun distance = 350 angle = 175 } }
+			create_ambient_object = { type = "firstfed_cube" location = this } last_created_ambient_object = { set_location = { target = event_target:first_federation_sun distance = 350 angle = 180 } }
+			create_ambient_object = { type = "firstfed_cube" location = this } last_created_ambient_object = { set_location = { target = event_target:first_federation_sun distance = 350 angle = 185 } }
+			create_ambient_object = { type = "firstfed_cube" location = this } last_created_ambient_object = { set_location = { target = event_target:first_federation_sun distance = 350 angle = 190 } }
+			create_ambient_object = { type = "firstfed_cube" location = this } last_created_ambient_object = { set_location = { target = event_target:first_federation_sun distance = 350 angle = 195 } }
+			create_ambient_object = { type = "firstfed_cube" location = this } last_created_ambient_object = { set_location = { target = event_target:first_federation_sun distance = 350 angle = 200 } }
+			create_ambient_object = { type = "firstfed_cube" location = this } last_created_ambient_object = { set_location = { target = event_target:first_federation_sun distance = 350 angle = 205 } }
+			create_ambient_object = { type = "firstfed_cube" location = this } last_created_ambient_object = { set_location = { target = event_target:first_federation_sun distance = 350 angle = 210 } }
+			create_ambient_object = { type = "firstfed_cube" location = this } last_created_ambient_object = { set_location = { target = event_target:first_federation_sun distance = 350 angle = 215 } }
+			create_ambient_object = { type = "firstfed_cube" location = this } last_created_ambient_object = { set_location = { target = event_target:first_federation_sun distance = 350 angle = 220 } }
+			create_ambient_object = { type = "firstfed_cube" location = this } last_created_ambient_object = { set_location = { target = event_target:first_federation_sun distance = 350 angle = 225 } }
+			create_ambient_object = { type = "firstfed_cube" location = this } last_created_ambient_object = { set_location = { target = event_target:first_federation_sun distance = 350 angle = 230 } }
+			create_ambient_object = { type = "firstfed_cube" location = this } last_created_ambient_object = { set_location = { target = event_target:first_federation_sun distance = 350 angle = 235 } }
+			create_ambient_object = { type = "firstfed_cube" location = this } last_created_ambient_object = { set_location = { target = event_target:first_federation_sun distance = 350 angle = 240 } }
+			create_ambient_object = { type = "firstfed_cube" location = this } last_created_ambient_object = { set_location = { target = event_target:first_federation_sun distance = 350 angle = 245 } }
+			create_ambient_object = { type = "firstfed_cube" location = this } last_created_ambient_object = { set_location = { target = event_target:first_federation_sun distance = 350 angle = 250 } }
+			create_ambient_object = { type = "firstfed_cube" location = this } last_created_ambient_object = { set_location = { target = event_target:first_federation_sun distance = 350 angle = 255 } }
+			create_ambient_object = { type = "firstfed_cube" location = this } last_created_ambient_object = { set_location = { target = event_target:first_federation_sun distance = 350 angle = 260 } }
+			create_ambient_object = { type = "firstfed_cube" location = this } last_created_ambient_object = { set_location = { target = event_target:first_federation_sun distance = 350 angle = 265 } }
+			create_ambient_object = { type = "firstfed_cube" location = this } last_created_ambient_object = { set_location = { target = event_target:first_federation_sun distance = 350 angle = 270 } }
+			create_ambient_object = { type = "firstfed_cube" location = this } last_created_ambient_object = { set_location = { target = event_target:first_federation_sun distance = 350 angle = 275 } }
+			create_ambient_object = { type = "firstfed_cube" location = this } last_created_ambient_object = { set_location = { target = event_target:first_federation_sun distance = 350 angle = 280 } }
+			create_ambient_object = { type = "firstfed_cube" location = this } last_created_ambient_object = { set_location = { target = event_target:first_federation_sun distance = 350 angle = 285 } }
+			create_ambient_object = { type = "firstfed_cube" location = this } last_created_ambient_object = { set_location = { target = event_target:first_federation_sun distance = 350 angle = 290 } }
+			create_ambient_object = { type = "firstfed_cube" location = this } last_created_ambient_object = { set_location = { target = event_target:first_federation_sun distance = 350 angle = 295 } }
+			create_ambient_object = { type = "firstfed_cube" location = this } last_created_ambient_object = { set_location = { target = event_target:first_federation_sun distance = 350 angle = 300 } }
+			create_ambient_object = { type = "firstfed_cube" location = this } last_created_ambient_object = { set_location = { target = event_target:first_federation_sun distance = 350 angle = 305 } }
+			create_ambient_object = { type = "firstfed_cube" location = this } last_created_ambient_object = { set_location = { target = event_target:first_federation_sun distance = 350 angle = 310 } }
+			create_ambient_object = { type = "firstfed_cube" location = this } last_created_ambient_object = { set_location = { target = event_target:first_federation_sun distance = 350 angle = 315 } }
+			create_ambient_object = { type = "firstfed_cube" location = this } last_created_ambient_object = { set_location = { target = event_target:first_federation_sun distance = 350 angle = 320 } }
+			create_ambient_object = { type = "firstfed_cube" location = this } last_created_ambient_object = { set_location = { target = event_target:first_federation_sun distance = 350 angle = 325 } }
+			create_ambient_object = { type = "firstfed_cube" location = this } last_created_ambient_object = { set_location = { target = event_target:first_federation_sun distance = 350 angle = 330 } }
+			create_ambient_object = { type = "firstfed_cube" location = this } last_created_ambient_object = { set_location = { target = event_target:first_federation_sun distance = 350 angle = 335 } }
+			create_ambient_object = { type = "firstfed_cube" location = this } last_created_ambient_object = { set_location = { target = event_target:first_federation_sun distance = 350 angle = 340 } }
+			create_ambient_object = { type = "firstfed_cube" location = this } last_created_ambient_object = { set_location = { target = event_target:first_federation_sun distance = 350 angle = 345 } }
+			create_ambient_object = { type = "firstfed_cube" location = this } last_created_ambient_object = { set_location = { target = event_target:first_federation_sun distance = 350 angle = 350 } }
+			create_ambient_object = { type = "firstfed_cube" location = this } last_created_ambient_object = { set_location = { target = event_target:first_federation_sun distance = 350 angle = 355 } }
+		}
+	}
+	change_orbit = 30
+	planet = {
+		home_planet = yes
+		class = pc_gaia
+		name = "The Forum"
+		orbit_distance = 20
+		orbit_angle = { min = 90 max = 270 }
+		size = 25
+		has_ring = yes
+		starting_planet = yes
+		tile_blockers = none
+		modifiers = none
+		init_effect = { prevent_anomaly = yes }
+		init_effect = {
+			# set_global_flag = cytherian_homeworld_spawned
+			if = {
+				limit = { NOT = { any_country = { has_country_flag = first_federation } } }
+				create_species = { 
+					name = "Fesarian"
+					class = FES
+					portrait = fesarian
+					homeworld = THIS 
+					traits = { 
+						trait="trait_venerable"
+	                    trait="trait_intelligent"
+	                    trait="trait_antiquated"
+	                    trait="trait_slow_breeders"
+	                    trait="trait_sedentary"
+						ideal_planet_class = "pc_alpine"
+					} 
+				}
+				last_created_species = { save_global_event_target_as = fesarianSpecies }
+				create_country = {
+					name = "NAME_first_federation"
+					type = fallen_empire
+					ignore_initial_colony_error = yes
+					civics = { civic = "civic_free_haven" civic = "civic_lethargic_democracy" }
+					authority = auth_democratic
+					name_list = "MAM1"
+					ethos = { ethic = "ethic_fanatic_xenophile" ethic = "ethic_materialist" }
+					species = event_target:fesarianSpecies
+					flag = {
+						icon = { category="trek" file="fesarian.dds" }
+						background = { category="backgrounds" file="new_dawn.dds" }
+						colors = { "customcolor657" "customcolor636" "null" "null" }
+					}
+					effect = {
+						set_graphical_culture = fesarian_01
+						set_country_flag = first_federation
+						set_country_flag = custom_start_screen
+						set_country_flag = generic_ent
+						set_country_flag = alpha_beta_empire
+						set_country_flag = init_spawned
+						set_country_flag = first_alien_life
+						set_country_flag = first_contact_event
+						set_country_flag = is_stnh_fallen_empire
+						set_country_flag = sth_medium_galaxy
+						save_global_event_target_as = first_federation
+						}
+				}
+				create_colony = { owner = event_target:first_federation species = event_target:fesarianSpecies ethos = owner }
+			}
+			set_capital = yes
+			random_country = {
+				limit = { has_country_flag = first_federation }
+				save_event_target_as = first_federation
+				add_engineering_research = 8000
+				add_physics_research = 8000
+				add_society_research = 8000
+				add_appropriate_start_techs = yes
+				fallen_empire_techs = yes
+				species = { save_global_event_target_as = fesarianSpecies }
+			}
+			set_owner = event_target:first_federation
+			generate_fallen_empire_start_buildings = yes
+			generate_fallen_empire_start_pops = yes
+			set_name = "The Forum"
+		}
+	}
+	change_orbit = 30
+	planet = {
+		class = pc_gaia
+		name = "Agora"
+		orbit_distance = 50
+		orbit_angle = { min = 90 max = 270 }
+		size = 20
+		tile_blockers = none
+		modifiers = none
+		init_effect = { prevent_anomaly = yes }
+		init_effect = {
+			set_owner = event_target:first_federation
+			generate_fallen_empire_start_buildings = yes
+			generate_fallen_empire_start_pops = yes
+			set_name = "Agora"
+		}
+	}
+}

@@ -1,0 +1,130 @@
+@phase_0_entity_x = -15
+@phase_0_entity_y = -5
+@entity_x = -15
+@entity_y = -15
+argus_build_stage = {
+	entity = "argus_array_entity"
+	construction_entity = "argus_array_entity"
+	portrait = "GFX_megastructure_construction_background"
+	place_entity_on_planet_plane = no
+	entity_offset = { x = @phase_0_entity_x y = @phase_0_entity_y }
+	build_time = 1800
+	
+	build_cost = {
+		minerals = 10000
+		influence = 100
+	}
+
+	maintenance = {
+		energy = 5
+	}
+
+	potential = {
+		has_technology = tech_engineering_industry_1295
+	}
+	
+	possible = {
+		custom_tooltip = {
+			fail_text = "requires_inside_border"
+			is_inside_border = from
+		}
+		custom_tooltip = {
+			fail_text = "requires_surveyed_system"
+			NOT = {
+				any_planet = {
+					is_surveyed = {
+						who = prev.from
+						status = no
+					}
+				}
+			}
+		}
+		custom_tooltip = {
+			fail_text = "requires_no_existing_argus"
+			from = {
+				NOT = {
+					any_owned_megastructure = {
+						OR = {
+							is_megastructure_type = argus_build_stage
+							is_megastructure_type = argus_build_complete
+						}
+					}
+				}
+			}
+		}
+		custom_tooltip = {
+			fail_text = "requires_no_existing_megastructure"
+			NOT = { has_any_megastructure = yes }
+		}
+	}
+	
+	placement_rules = {
+		planet_possible = {
+			custom_tooltip = {
+				fail_text = "requires_survey_not_habitable"
+				is_surveyed = {			
+					who = prev.from
+					status = yes
+				}
+				habitable_planet = no
+				habitable_structure = no
+			}
+			custom_tooltip = {
+				fail_text = "requires_no_anomaly"
+				NOT = { has_anomaly = yes }
+			}
+
+			custom_tooltip = {
+				fail_text = "must_build_around_star"
+				is_star = yes
+			}
+		} 
+	}	
+	
+	ai_weight = {
+		factor = 10
+		modifier = {
+			factor = 2.0
+			OR = {
+				has_ethic = ethic_militarist
+				has_ethic = ethic_fanatic_militarist
+			}
+		}
+	}
+	
+	on_build_start = {}
+	on_build_cancel = {}
+	on_build_complete = {
+		set_star_flag = argus_built
+		from = { save_event_target_as = owner }
+		save_event_target_as = solar_system
+		event_target:owner = { clear_uncharted_space = { from = event_target:solar_system radius = 1000 } }
+	}
+}
+
+argus_build_complete = {
+	entity = "argus_array_entity"
+	construction_entity = "argus_array_entity"
+	portrait = "GFX_megastructure_argus_background"
+	place_entity_on_planet_plane = no
+	entity_offset = { x = @entity_x y = @entity_y }
+	upgrade_from = {
+		argus_build_stage
+	}
+	build_time = 1800
+	build_cost = {
+		minerals = 10000
+	}
+	maintenance = {
+		energy = 25
+	}
+	possible = {
+		from = { has_technology = tech_engineering_industry_1295 }
+	}
+
+	sensor_range = 200
+
+	monthly_production = {
+		physics_research = 50
+	}
+}

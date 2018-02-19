@@ -1,0 +1,97 @@
+﻿### Lyridian by EHKodiak
+Lyridian = {
+	randomized = no
+
+	ship_names = {
+		generic = {
+		Nunehz Vascoh Caboht Carteer Champlahn Columbuh Draak Gamah Hudsoon "Ponce dee Leeon" "Lwis de Claar" Magellaa Pizaarro Sootoo Vespuccih "Zheen Ghe"
+		}
+		corvette = {
+		}
+		saber = {
+		}
+		sovereign = {
+		}
+		steamrunner = {
+		}		
+		adv_cruiser = {
+		}
+		strike = {
+		}	
+		constructor = { }
+		colonizer = { }
+		science = { }
+		transport = { }
+		outpost_station = {
+			sequential_name = "Frontier Outpost"
+		}
+	}
+
+	fleet_names = {
+		sequential_name = "%O% Navigators"
+	}
+	
+	army_names = {
+		defense_army = {
+			sequential_name = "%O% Lyridian Sentinels"
+		}
+		assault_army = {
+			sequential_name = "%O% Lyridian Rangers"
+		}
+		slave_army = {
+			sequential_name = "%O% Indentured Defence Force"
+		}
+		clone_army = { 
+			sequential_name = "%O% Clone Defence Force"
+		}
+		robotic_army = {
+			sequential_name = "%O% Mechanical Defence Force"
+		}
+		android_army = {
+			sequential_name = "%O% Synthetic Defence Force"
+		}
+		psionic_army = { 
+			sequential_name = "%O% Telepath Defence Force"
+		}
+		xenomorph_army = {
+			sequential_name = "%O% Bio-Warfare Defence Force"
+		}
+		gene_warrior_army = {
+			sequential_name = "%O% Bio-Engineered Defence Force"
+		}
+	}
+
+	planet_names = {
+		generic = {
+			names = { 
+			}
+		}
+	}
+
+
+	### CHARACTERS
+
+	character_names = {
+		names1 = {
+			weight = 40
+			first_names_male = {
+			Sabiin Andraas Juroot Retitaan Devinoon Loon Staad Amaan Taam Rennaan Keent Baeloo Cortoo Sarkoo Kojoo Soneek Daal Eushoo Meroon Gartaan Haant Bariin Basiid Praat Piit Truump Kutcheer Ushaa
+			}
+			first_names_female = {
+			Raylah Jaylah Jayloh Kimkah Kayper Milah Julah Deenah Lorellah Ilirrah Ellethah Damirah Drennelah Yulanah Jirellah Molarannah Nerissah Rhonah Mirah Anissinah Gwendah Mallah Rinah Kestrah Xanah Soranah Gagah Beebah Jolee Hudsohn Stefahnii Rihannah Portmah Albah Paltroo 
+			}
+			second_names = {
+			" "
+			}
+			regnal_first_names_male = {
+			Sabiin Andraas Juroot Retitaan Devinoon Loon Staad Amaan Taam Rennaan Keent Baeloo Cortoo Sarkoo Kojoo Soneek Daal Eushoo Meroon Gartaan Haant Bariin Basiid Praat Piit Truump Kutcheer Ushaa Filliohn Nataan Nell Patriik Hariis
+			}
+			regnal_first_names_female = {
+			Raylah Jaylah Jayloh Kimkah Kayper Milah Julah Deenah Lorellah Ilirrah Ellethah Damirah Drennelah Yulanah Jirellah Molarannah Nerissah Rhonah Mirah Anissinah Gwendah Mallah Rinah Kestrah Xanah Soranah Gagah Beebah Jolee Hudsohn Stefahnii Rihannah Portmah Albah Paltroo Felicah
+			}
+			regnal_second_names = {
+			" "
+			}
+		}
+	}
+}

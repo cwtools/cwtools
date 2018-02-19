@@ -1,0 +1,98 @@
+﻿### Breen Confederacy
+Breen = {
+	randomized = no
+
+	ship_names = {
+		generic = {
+			"Plesh Brek" "Plesh Grekk" "Gor Ishtapp" "Plesh Taan" "Chel Grett" "Gor Taan" "Bleth Choas" "Sarr Theln" "Reikin" "Rezreth" "Desna" "Istapp" "Snosk" "Braaktak Gaal" "Gor Korus" "Gor Nivik" "Gor Taboka" "Gor Reikin" "Gor Grett" "Gor Gon" "Gor Mussk" "Gor Tevik" "Megal Taan" "Nistaan Bur" "Reel Gorvaal" "Reel Tivaan" "Reel Bigfisk" "Tykkyk" "Tykk" "Tevil Taan" "Gor Sik" "Gor Lerk" "Gor Lit" "Gor Zul" "Gor Syn" "Gor Log" "Gor Vog"
+		}
+		corvette = {
+		}
+		saber = {
+		}
+		sovereign = {
+		}
+		steamrunner = {
+		}		
+		adv_cruiser = {
+		}
+		strike = {
+		}	
+		constructor = { }
+		colonizer = { }
+		science = { }
+		transport = { }
+		outpost_station = {
+			sequential_name = "Frontier Outpost"
+		}
+	}
+
+	fleet_names = {
+		sequential_name = "%O% Fleet"
+	}
+	
+	army_names = {
+		defense_army = {
+			sequential_name = "%O% Breen Militia"
+		}
+		assault_army = {
+			sequential_name = "%O% Assault Force"
+		}
+		slave_army = {
+			sequential_name = "%O% Indentured Defence Force"
+		}
+		clone_army = { 
+			sequential_name = "%O% Clone Defence Force"
+		}
+		robotic_army = {
+			sequential_name = "%O% Mechanical Defence Force"
+		}
+		android_army = {
+			sequential_name = "%O% Synthetic Defence Force"
+		}
+		psionic_army = { 
+			sequential_name = "%O% Psi Defence Force"
+		}
+		xenomorph_army = {
+			sequential_name = "%O% Bio-Warfare Defence Force"
+		}
+		gene_warrior_army = {
+			sequential_name = "%O% Bio-Engineered Defence Force"
+		}
+	}
+
+	planet_names = {
+		generic = {
+			names = {
+				Dozaria Portas Silwaa Fenrisa Paclu Amonir Vironat Arcturus Celaeno Draconis Scorpii Nihal "V34 Hamal 3" Celbalrai Doradus Wengat Tygas Tonal Verus Sunga Girlu Zoldan Lerkas Rinas Wokas
+			}
+		}
+	}
+
+
+	### CHARACTERS
+
+	character_names = {
+		names1 = {
+			weight = 100
+			first_names_male = {		
+				Gren Gor Kryt Lok Mer Naaz Par Pran Rong Sanh Tol Trel Uhlak Vog Wen Tran Trel Bek Bren Det Gal Gar Gen Jek Jos Kel Kul Kyn Mat Mek Mer Nar Nen Pran Sar Sek Senn Tek Tran Tren Zel Zan Kryn Pak Pek Rek Wat Zot Vur Zir Rarr Redl Sur Geg Tyrn Get Tadn Vydr Ledr Sydl Gut Zidr Lyrr Wudn Pag Rann Vidt Reng Sun Zedn Vurn Wirr Lag Gyr Zonk Tedg Sor Gel Pidl Lirl Zodr Wel Rut Zerr Sat Lyg Rat Rudk
+			}
+			first_names_female = {
+				Gren Gor Kryt Lok Mer Naaz Par Pran Rong Sanh Tol Trel Uhlak Vog Wen Tran Trel Bek Bren Det Gal Gar Gen Jek Jos Kel Kul Kyn Mat Mek Mer Nar Nen Pran Sar Sek Senn Tek Tran Tren Zel Zan Kryn Pak Pek Rek Wat Zot Vur Zir Rarr Redl Sur Geg Tyrn Get Tadn Vydr Ledr Sydl Gut Zidr Lyrr Wudn Pag Rann Vidt Reng Sun Zedn Vurn Wirr Lag Gyr Zonk Tedg Sor Gel Pidl Lirl Zodr Wel Rut Zerr Sat Lyg Rat Rudk
+			}
+			second_names = {
+				" "
+			}
+			regnal_first_names_male = {
+				Gren Gor Kryt Lok Mer Naaz Par Pran Rong Sanh Tol Trel Uhlak Vog Wen Tran Trel Bek Bren Det Gal Gar Gen Jek Jos Kel Kul Kyn Mat Mek Mer Nar Nen Pran Sar Sek Senn Tek Tran Tren Zel Zan Kryn Pak Pek Rek Wat Zot Vur Zir Rarr Redl Sur Geg Tyrn Get Tadn Vydr Ledr Sydl Gut Zidr Lyrr Wudn Pag Rann Vidt Reng Sun Zedn Vurn Wirr Lag Gyr Zonk Tedg Sor Gel Pidl Lirl Zodr Wel Rut Zerr Sat Lyg Rat Rudk
+			}
+			regnal_first_names_female = {
+				Gren Gor Kryt Lok Mer Naaz Par Pran Rong Sanh Tol Trel Uhlak Vog Wen Tran Trel Bek Bren Det Gal Gar Gen Jek Jos Kel Kul Kyn Mat Mek Mer Nar Nen Pran Sar Sek Senn Tek Tran Tren Zel Zan Kryn Pak Pek Rek Wat Zot Vur Zir Rarr Redl Sur Geg Tyrn Get Tadn Vydr Ledr Sydl Gut Zidr Lyrr Wudn Pag Rann Vidt Reng Sun Zedn Vurn Wirr Lag Gyr Zonk Tedg Sor Gel Pidl Lirl Zodr Wel Rut Zerr Sat Lyg Rat Rudk
+			}
+			regnal_second_names = {
+				" "
+			}
+		}
+	}
+}

@@ -1,0 +1,15 @@
+ship_design = {
+	name = "Declaration"
+	ship_size = xcv330
+	section = {
+		template = "XCV330_SCIENCESHIP_SECTION"
+		slot = "mid"
+	}
+	required_component = "REQUIRED_LABS_0"
+	required_component = "REQUIRED_WARP_1_RING_CS"
+	required_component = "REQUIRED_THRUSTERS_0_CS"
+	required_component = "REQUIRED_SENSORS_OPTICAL_0_CIVILIAN"
+	required_component = "REQUIRED_DEFENSE_0_ARMOR_CS"	
+	required_component = "REQUIRED_HULL_0_CS"
+	
+}

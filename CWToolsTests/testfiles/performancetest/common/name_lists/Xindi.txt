@@ -1,0 +1,485 @@
+﻿### Xindi Mam
+XINMAM  = {
+	randomized = no
+
+	ship_names = {
+		generic = {
+			Snake Asp Adder Cascabel Krait Kadru Yarara Garuda Taipan Shiva Sidewinder Naga Cobra Viper Mamba Astika Manasa Boa Keelback Anaconda Python Vasuki Nagaraja Reclaimer Erlan Moray Remora Manta Skate "Devil Ray" Lamprey Ray Stingray Conger Condonta Myxini Sistruus Ateleth Olaen Briostrys Narcine Contortrix
+		}
+		corvette = {
+		}
+		saber = {
+		}
+		sovereign = {
+		}
+		steamrunner = {
+		}		
+		adv_cruiser = {
+		}
+		strike = {
+		}	
+		constructor = { }
+		colonizer = { }
+		science = { }
+		transport = { }
+		outpost_station = {
+			sequential_name = "Frontier Outpost"
+		}
+	}
+
+	fleet_names = {
+		sequential_name = "%O% Fleet"
+	}
+	
+	army_names = {
+		defense_army = {
+			sequential_name = "%O% Xindi Guard"
+		}
+		assault_army = {
+			sequential_name = "%O% Xindi Brigade"
+		}
+		slave_army = {
+			sequential_name = "%O% Indentured Defence Force"
+		}
+		clone_army = { 
+			sequential_name = "%O% Clone Defence Force"
+		}
+		robotic_army = {
+			sequential_name = "%O% Mechanical Defence Force"
+		}
+		android_army = {
+			sequential_name = "%O% Synthetic Defence Force"
+		}
+		psionic_army = { 
+			sequential_name = "%O% Psi Defence Force"
+		}
+		xenomorph_army = {
+			sequential_name = "%O% Bio-Warfare Defence Force"
+		}
+		gene_warrior_army = {
+			sequential_name = "%O% Bio-Engineered Defence Force"
+		}
+	}
+
+	planet_names = {
+		generic = {
+			names = {
+			}
+		}
+	}
+
+
+	### CHARACTERS
+
+	character_names = {
+		names1 = {
+			weight = 100
+			first_names_male = {		
+				"Allina" "Begra" "Chusra" "Enarchi" "Hurra" "Logra" "Naara" "Daara" "Degra" "Allegra" "Logcsa" "Narchi" "Charchi" "Dallina" "Dogra" "Rhucsa"
+			}
+			first_names_female = {
+				"Allina" "Begra" "Chusra" "Enarchi" "Hurra" "Logra" "Naara" "Daara" "Degra" "Allegra" "Logcsa" "Narchi" "Charchi" "Dallina" "Dogra" "Rhucsa" 
+			}
+			second_names = {
+				" "
+			}
+			regnal_first_names_male = {
+				"Allina" "Begra" "Chusra" "Enarchi" "Hurra" "Logra" "Naara" "Daara" "Degra" "Allegra" "Logcsa" "Narchi" "Charchi" "Dallina" "Dogra" "Rhucsa"
+			}
+			regnal_first_names_female = {
+				"Allina" "Begra" "Chusra" "Enarchi" "Hurra" "Logra" "Naara" "Daara" "Degra" "Allegra" "Logcsa" "Narchi" "Charchi" "Dallina" "Dogra" "Rhucsa" 
+			}
+			regnal_second_names = {
+				" "
+			}
+		}
+	}
+}
+
+XINAQU  = {
+	randomized = no
+
+	ship_names = {
+		generic = {
+			Snake Asp Adder Cascabel Krait Kadru Yarara Garuda Taipan Shiva Sidewinder Naga Cobra Viper Mamba Astika Manasa Boa Keelback Anaconda Python Vasuki Nagaraja Reclaimer Erlan Moray Remora Manta Skate "Devil Ray" Lamprey Ray Stingray Conger Condonta Myxini Sistruus Ateleth Olaen Briostrys Narcine Contortrix
+		}
+		corvette = {
+		}
+		saber = {
+		}
+		sovereign = {
+		}
+		steamrunner = {
+		}		
+		adv_cruiser = {
+		}
+		strike = {
+		}	
+		constructor = { }
+		colonizer = { }
+		science = { }
+		transport = { }
+		outpost_station = {
+			sequential_name = "Frontier Outpost"
+		}
+	}
+
+	fleet_names = {
+		sequential_name = "%O% Fleet"
+	}
+	
+	army_names = {
+		defense_army = {
+			sequential_name = "%O% Xindi Guard"
+		}
+		assault_army = {
+			sequential_name = "%O% Xindi Brigade"
+		}
+		slave_army = {
+			sequential_name = "%O% Indentured Defence Force"
+		}
+		clone_army = { 
+			sequential_name = "%O% Clone Defence Force"
+		}
+		robotic_army = {
+			sequential_name = "%O% Mechanical Defence Force"
+		}
+		android_army = {
+			sequential_name = "%O% Synthetic Defence Force"
+		}
+		psionic_army = { 
+			sequential_name = "%O% Psi Defence Force"
+		}
+		xenomorph_army = {
+			sequential_name = "%O% Bio-Warfare Defence Force"
+		}
+		gene_warrior_army = {
+			sequential_name = "%O% Bio-Engineered Defence Force"
+		}
+	}
+
+	planet_names = {
+		generic = {
+			names = {
+			}
+		}
+	}
+
+
+	### CHARACTERS
+
+	character_names = {
+		names1 = {
+			weight = 100
+			first_names_male = {		
+				"Ainsuri" "Amsoti" "Bimmaul" "Ixmuat" "Mizuab" "Muaza" "Phetixa" "Soreb" "Zuain" "Zumamt" "Kiaphet" "Miaphet" "Ixtixa" "Misoti" "Ainsoti" "Ohuaza" "Phoreb"
+			}
+			first_names_female = {
+				"Ainsuri" "Amsoti" "Bimmaul" "Ixmuat" "Mizuab" "Muaza" "Phetixa" "Soreb" "Zuain" "Zumamt" "Kiaphet" "Miaphet" "Ixtixa" "Misoti" "Ainsoti" "Ohuaza" "Phoreb"
+			}
+			second_names = {
+				"Amman'sor" "Sal'mon" "Tun'a" "Ancho'vi" "Her'ring" "Cha'ar" "Poll'ock" "Amman'vi" "Amman'mon" "Amman'a" "Amman'ar" "Sal'mon" "Sal'a" "Sal'vu" "Sal'vo" "Tun'a" "Ancho'vi" "Her'ring" "Her'ar" "Her'sar" "Cha'ar" "Cha'a" "Cha'mon" "Poll'ock" "Poll'ar" "Poll'sar" "Poll'sor" "Poll'vi"
+			}
+			regnal_first_names_male = {
+				"Ainsuri" "Amsoti" "Bimmaul" "Ixmuat" "Mizuab" "Muaza" "Phetixa" "Soreb" "Zuain" "Zumamt" "Kiaphet" "Miaphet" "Ixtixa" "Misoti" "Ainsoti" "Ohuaza" "Phoreb"
+			}
+			regnal_first_names_female = {
+				"Ainsuri" "Amsoti" "Bimmaul" "Ixmuat" "Mizuab" "Muaza" "Phetixa" "Soreb" "Zuain" "Zumamt" "Kiaphet" "Miaphet" "Ixtixa" "Misoti" "Ainsoti" "Ohuaza" "Phoreb"
+			}
+			regnal_second_names = {
+				"Amman'sor" "Sal'mon" "Tun'a" "Ancho'vi" "Her'ring" "Cha'ar" "Poll'ock" "Amman'vi" "Amman'mon" "Amman'a" "Amman'ar" "Sal'mon" "Sal'a" "Sal'vu" "Sal'vo" "Tun'a" "Ancho'vi" "Her'ring" "Her'ar" "Her'sar" "Cha'ar" "Cha'a" "Cha'mon" "Poll'ock" "Poll'ar" "Poll'sar" "Poll'sor" "Poll'vi"
+			}
+		}
+	}
+}
+
+XININS  = {
+	randomized = no
+
+	ship_names = {
+		generic = {
+			Snake Asp Adder Cascabel Krait Kadru Yarara Garuda Taipan Shiva Sidewinder Naga Cobra Viper Mamba Astika Manasa Boa Keelback Anaconda Python Vasuki Nagaraja Reclaimer Erlan Moray Remora Manta Skate "Devil Ray" Lamprey Ray Stingray Conger Condonta Myxini Sistruus Ateleth Olaen Briostrys Narcine Contortrix
+		}
+		corvette = {
+		}
+		saber = {
+		}
+		sovereign = {
+		}
+		steamrunner = {
+		}		
+		adv_cruiser = {
+		}
+		strike = {
+		}	
+		constructor = { }
+		colonizer = { }
+		science = { }
+		transport = { }
+		outpost_station = {
+			sequential_name = "Frontier Outpost"
+		}
+	}
+
+	fleet_names = {
+		sequential_name = "%O% Fleet"
+	}
+	
+	army_names = {
+		defense_army = {
+			sequential_name = "%O% Xindi Guard"
+		}
+		assault_army = {
+			sequential_name = "%O% Xindi Brigade"
+		}
+		slave_army = {
+			sequential_name = "%O% Indentured Defence Force"
+		}
+		clone_army = { 
+			sequential_name = "%O% Clone Defence Force"
+		}
+		robotic_army = {
+			sequential_name = "%O% Mechanical Defence Force"
+		}
+		android_army = {
+			sequential_name = "%O% Synthetic Defence Force"
+		}
+		psionic_army = { 
+			sequential_name = "%O% Psi Defence Force"
+		}
+		xenomorph_army = {
+			sequential_name = "%O% Bio-Warfare Defence Force"
+		}
+		gene_warrior_army = {
+			sequential_name = "%O% Bio-Engineered Defence Force"
+		}
+	}
+
+	planet_names = {
+		generic = {
+			names = {
+			}
+		}
+	}
+
+
+	### CHARACTERS
+
+	character_names = {
+		names1 = {
+			weight = 100
+			first_names_male = {		
+				"Ch'zilti'la" "Ikzi'chik" "K'chik'lak" "Kil'thik'zi" "T'likchik'zi" "Tik'chiki'zi" "Zi'lizch'thik" "Zil'ik'chzi" "Ch'zilti'chik" "Ikzi'lak" "K'chik'thik" "Kil'thik'chzi" "T'likchik'chzi" "Tik'chiki'chzi" "Zi'lizch'chzi" "Zil'ik'lak" "Zil'zilti'la" "Zil'chik" "Zil'chik'lak" "Zil'thik'zi" "Zil'likchik'zi" "Zil'chiki'zi" "Zi'lizch'thik" "T'zilti'la" "T'chik" "T'chik'lak" "T'thik'zi" "T'likchik'zi" "T'chiki'zi" "T'lizch'thik" "T'ik'chzi" "Ch'zilti'la" "Ch'chik" "Ch'chik'lak" "Ch'thik'zi" "Ch'likchik'zi" "Ch'chiki'zi" "Ch'lizch'thik" "Ch'ik'chzi"
+			}
+			first_names_female = {
+				"Ch'zilti'la" "Ikzi'chik" "K'chik'lak" "Kil'thik'zi" "T'likchik'zi" "Tik'chiki'zi" "Zi'lizch'thik" "Zil'ik'chzi" "Ch'zilti'chik" "Ikzi'lak" "K'chik'thik" "Kil'thik'chzi" "T'likchik'chzi" "Tik'chiki'chzi" "Zi'lizch'chzi" "Zil'ik'lak" "Zil'zilti'la" "Zil'chik" "Zil'chik'lak" "Zil'thik'zi" "Zil'likchik'zi" "Zil'chiki'zi" "Zi'lizch'thik" "T'zilti'la" "T'chik" "T'chik'lak" "T'thik'zi" "T'likchik'zi" "T'chiki'zi" "T'lizch'thik" "T'ik'chzi" "Ch'zilti'la" "Ch'chik" "Ch'chik'lak" "Ch'thik'zi" "Ch'likchik'zi" "Ch'chiki'zi" "Ch'lizch'thik" "Ch'ik'chzi"
+			}
+			second_names = {
+				" "
+			}
+			regnal_first_names_male = {
+				"Ch'zilti'la" "Ikzi'chik" "K'chik'lak" "Kil'thik'zi" "T'likchik'zi" "Tik'chiki'zi" "Zi'lizch'thik" "Zil'ik'chzi" "Ch'zilti'chik" "Ikzi'lak" "K'chik'thik" "Kil'thik'chzi" "T'likchik'chzi" "Tik'chiki'chzi" "Zi'lizch'chzi" "Zil'ik'lak" "Zil'zilti'la" "Zil'chik" "Zil'chik'lak" "Zil'thik'zi" "Zil'likchik'zi" "Zil'chiki'zi" "Zi'lizch'thik" "T'zilti'la" "T'chik" "T'chik'lak" "T'thik'zi" "T'likchik'zi" "T'chiki'zi" "T'lizch'thik" "T'ik'chzi" "Ch'zilti'la" "Ch'chik" "Ch'chik'lak" "Ch'thik'zi" "Ch'likchik'zi" "Ch'chiki'zi" "Ch'lizch'thik" "Ch'ik'chzi"
+			}
+			regnal_first_names_female = {
+				"Ch'zilti'la" "Ikzi'chik" "K'chik'lak" "Kil'thik'zi" "T'likchik'zi" "Tik'chiki'zi" "Zi'lizch'thik" "Zil'ik'chzi" "Ch'zilti'chik" "Ikzi'lak" "K'chik'thik" "Kil'thik'chzi" "T'likchik'chzi" "Tik'chiki'chzi" "Zi'lizch'chzi" "Zil'ik'lak" "Zil'zilti'la" "Zil'chik" "Zil'chik'lak" "Zil'thik'zi" "Zil'likchik'zi" "Zil'chiki'zi" "Zi'lizch'thik" "T'zilti'la" "T'chik" "T'chik'lak" "T'thik'zi" "T'likchik'zi" "T'chiki'zi" "T'lizch'thik" "T'ik'chzi" "Ch'zilti'la" "Ch'chik" "Ch'chik'lak" "Ch'thik'zi" "Ch'likchik'zi" "Ch'chiki'zi" "Ch'lizch'thik" "Ch'ik'chzi"
+			}
+			regnal_second_names = {
+				" "
+			}
+		}
+	}
+}
+
+XINREP  = {
+	randomized = no
+
+	ship_names = {
+		generic = {
+			Snake Asp Adder Cascabel Krait Kadru Yarara Garuda Taipan Shiva Sidewinder Naga Cobra Viper Mamba Astika Manasa Boa Keelback Anaconda Python Vasuki Nagaraja Reclaimer Erlan Moray Remora Manta Skate "Devil Ray" Lamprey Ray Stingray Conger Condonta Myxini Sistruus Ateleth Olaen Briostrys Narcine Contortrix
+		}
+		corvette = {
+		}
+		saber = {
+		}
+		sovereign = {
+		}
+		steamrunner = {
+		}		
+		adv_cruiser = {
+		}
+		strike = {
+		}	
+		constructor = { }
+		colonizer = { }
+		science = { }
+		transport = { }
+		outpost_station = {
+			sequential_name = "Frontier Outpost"
+		}
+	}
+
+	fleet_names = {
+		sequential_name = "%O% Fleet"
+	}
+	
+	army_names = {
+		defense_army = {
+			sequential_name = "%O% Xindi Guard"
+		}
+		assault_army = {
+			sequential_name = "%O% Xindi Brigade"
+		}
+		slave_army = {
+			sequential_name = "%O% Indentured Defence Force"
+		}
+		clone_army = { 
+			sequential_name = "%O% Clone Defence Force"
+		}
+		robotic_army = {
+			sequential_name = "%O% Mechanical Defence Force"
+		}
+		android_army = {
+			sequential_name = "%O% Synthetic Defence Force"
+		}
+		psionic_army = { 
+			sequential_name = "%O% Psi Defence Force"
+		}
+		xenomorph_army = {
+			sequential_name = "%O% Bio-Warfare Defence Force"
+		}
+		gene_warrior_army = {
+			sequential_name = "%O% Bio-Engineered Defence Force"
+		}
+	}
+
+	planet_names = {
+		generic = {
+			names = {
+			}
+		}
+	}
+
+
+	### CHARACTERS
+
+	character_names = {
+		names1 = {
+			weight = 100
+			first_names_male = {		
+				"Doimma" "Drolid" "Dolim" "Kolim" "Rolim" "Lokkima" "Dokkima" "Dommadol" "Dommarol" "Loimma" "Najim" "Majiin" "Krolid" "Kimdomma" "Kimo" "Kolrimm" "Mokimro" "Najiin" "Rilromma" "Rokkima" "Rommarol"
+			}
+			first_names_female = {
+				"Doimma" "Drolid" "Dolim" "Kolim" "Rolim" "Lokkima" "Dokkima" "Dommadol" "Dommarol" "Loimma" "Najim" "Majiin" "Krolid" "Kimdomma" "Kimo" "Kolrimm" "Mokimro" "Najiin" "Rilromma" "Rokkima" "Rommarol"
+			}
+			second_names = {
+				" "
+			}
+			regnal_first_names_male = {
+				"Doimma" "Drolid" "Dolim" "Kolim" "Rolim" "Lokkima" "Dokkima" "Dommadol" "Dommarol" "Loimma" "Najim" "Majiin" "Krolid" "Kimdomma" "Kimo" "Kolrimm" "Mokimro" "Najiin" "Rilromma" "Rokkima" "Rommarol"
+			}
+			regnal_first_names_female = {
+				"Doimma" "Drolid" "Dolim" "Kolim" "Rolim" "Lokkima" "Dokkima" "Dommadol" "Dommarol" "Loimma" "Najim" "Majiin" "Krolid" "Kimdomma" "Kimo" "Kolrimm" "Mokimro" "Najiin" "Rilromma" "Rokkima" "Rommarol"
+			}
+			regnal_second_names = {
+				" "
+			}
+		}
+	}
+}
+
+XINARB  = {
+	randomized = no
+
+	ship_names = {
+		generic = {
+			Snake Asp Adder Cascabel Krait Kadru Yarara Garuda Taipan Shiva Sidewinder Naga Cobra Viper Mamba Astika Manasa Boa Keelback Anaconda Python Vasuki Nagaraja Reclaimer Erlan Moray Remora Manta Skate "Devil Ray" Lamprey Ray Stingray Conger Condonta Myxini Sistruus Ateleth Olaen Briostrys Narcine Contortrix
+		}
+		corvette = {
+		}
+		saber = {
+		}
+		sovereign = {
+		}
+		steamrunner = {
+		}		
+		adv_cruiser = {
+		}
+		strike = {
+		}	
+		constructor = { }
+		colonizer = { }
+		science = { }
+		transport = { }
+		outpost_station = {
+			sequential_name = "Frontier Outpost"
+		}
+	}
+
+	fleet_names = {
+		sequential_name = "%O% Fleet"
+	}
+	
+	army_names = {
+		defense_army = {
+			sequential_name = "%O% Xindi Guard"
+		}
+		assault_army = {
+			sequential_name = "%O% Xindi Brigade"
+		}
+		slave_army = {
+			sequential_name = "%O% Indentured Defence Force"
+		}
+		clone_army = { 
+			sequential_name = "%O% Clone Defence Force"
+		}
+		robotic_army = {
+			sequential_name = "%O% Mechanical Defence Force"
+		}
+		android_army = {
+			sequential_name = "%O% Synthetic Defence Force"
+		}
+		psionic_army = { 
+			sequential_name = "%O% Psi Defence Force"
+		}
+		xenomorph_army = {
+			sequential_name = "%O% Bio-Warfare Defence Force"
+		}
+		gene_warrior_army = {
+			sequential_name = "%O% Bio-Engineered Defence Force"
+		}
+	}
+
+	planet_names = {
+		generic = {
+			names = {
+			}
+		}
+	}
+
+
+	### CHARACTERS
+
+	character_names = {
+		names1 = {
+			weight = 100
+			first_names_male = {		
+				"Celijo" "Jalik" "Kalik" "Ralik" "Kuul" "Suul" "Rartis" "Rettis" "Tuuna" "Kralik" "Kelti" "Kilal" "Ruul" "Sartis" "Settia" "Tuula" "Jannar" "Gralik"
+			}
+			first_names_female = {
+				"Celijo" "Jalik" "Kalik" "Ralik" "Kuul" "Suul" "Rartis" "Rettis" "Tuuna" "Kralik" "Kelti" "Kilal" "Ruul" "Sartis" "Settia" "Tuula" "Jannar" "Gralik"
+			}
+			second_names = {
+				"Durr" "Settra" "Surr" "Aruu" "Trennit" "Tarr" "Krett" "Coji" "Sajita"
+			}
+			regnal_first_names_male = {
+				"Celijo" "Jalik" "Kalik" "Ralik" "Kuul" "Suul" "Rartis" "Rettis" "Tuuna" "Kralik" "Kelti" "Kilal" "Ruul" "Sartis" "Settia" "Tuula" "Jannar" "Gralik"
+			}
+			regnal_first_names_female = {
+				"Celijo" "Jalik" "Kalik" "Ralik" "Kuul" "Suul" "Rartis" "Rettis" "Tuuna" "Kralik" "Kelti" "Kilal" "Ruul" "Sartis" "Settia" "Tuula" "Jannar" "Gralik"
+			}
+			regnal_second_names = {
+				"Durr" "Settra" "Surr" "Aruu" "Trennit" "Tarr" "Krett" "Coji" "Sajita"
+			}
+		}
+	}
+}

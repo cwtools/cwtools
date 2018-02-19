@@ -1,0 +1,10 @@
+# This is a full example of system initializers and initializer trees
+# A system initializer is used to initialize each solar system in the game by creating planets, setting names and values on everything.
+# The system also has a tree structure that allows one initializer decide how neighboring systems should be initialized ( see the 'neighbor_system' part further down ).
+#
+# All numeric values can be scripted as 'x = 10' or 'x = { min = 5 max = 15 }', except within the triggers and effects
+#
+# Useful console commands:
+# 'Draw.Clusters' will toggle clusters on/off. Some clusters are created in the beginning and will be used for placing empires. Clusters can(will) also be created from effects and events
+# 'Draw.SystemInit' will print the initializer used for each system, as well as lines to show which initializer triggered another
+

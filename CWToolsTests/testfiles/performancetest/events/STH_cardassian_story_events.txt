@@ -1,0 +1,280 @@
+namespace = STH_cardassian_story
+
+#Yearly Checks
+event = {
+	id = STH_cardassian_story.0
+	hide_window = yes
+	is_triggered_only = yes
+	immediate = { 
+		random_country = {
+			limit = { has_country_flag = cardassian_union is_normal_country = yes }
+			save_event_target_as = cardassian_country
+			if = {
+				limit = { 
+					recently_lost_war = yes
+					NOT = { has_country_flag = dominionChoice }
+					exists = event_target:the_dominion
+					has_communications = event_target:the_dominion
+					any_neighbor_country = {
+						relative_power = { who = event_target:cardassian_country category = all value > equivalent }
+						NOT = { is_same_value = event_target:the_dominion }
+					}
+				}
+				random_list = {
+					10 = { country_event = { id = STH_cardassian_story.500 days = 80 random = 36 } set_country_flag = dominionChoice }
+					10 = { set_country_flag = dominionChoice }
+				}
+			}
+		}
+	}
+}
+
+country_event = {
+	id = STH_cardassian_story.500
+	title = "STH_cardassian_story.500.name"
+	desc = "STH_cardassian_story.500.desc"
+	picture = sth_GFX_evt_cardassiaDominion1
+	force_open = yes
+	is_triggered_only = yes
+	trigger = { exists = event_target:the_dominion } 
+	immediate = { 
+		random_neighbor_country = {
+			limit = {
+				relative_power = { who = root category = all value > equivalent }
+				NOT = { is_same_value = event_target:the_dominion }
+			}
+			save_event_target_as = threateningCountry
+		}
+	}
+	option = {
+		name = STH_cardassian_story.500.a #Pursue Dominion Join
+		hidden_effect = {
+			event_target:the_dominion = { country_event = { id = STH_cardassian_story.501 days = 30 random = 7 scopes = { from = root fromfrom = event_target:threateningCountry } } }
+		}
+
+	}
+	option = {
+		name = STH_cardassian_story.500.b #Reject Dominion Join
+	}
+}
+
+country_event = {
+	id = STH_cardassian_story.501
+	title = "STH_cardassian_story.501.name"
+	desc = "STH_cardassian_story.501.desc"
+	picture = sth_GFX_evt_cardassiaDominion1
+	force_open = yes
+	is_triggered_only = yes
+	trigger = { exists = from } 
+	option = {
+		name = STH_cardassian_story.501.a #Accept Offer
+		from = { country_event = { id = STH_cardassian_story.502 days = 7 random = 3 scopes = { from = root fromfrom = fromfrom } } }
+	}
+	option = {
+		name = STH_cardassian_story.501.b #Reject Offer
+		allow = { is_ai = no }
+		from = { country_event = { id = STH_cardassian_story.505 days = 7 random = 3 scopes = { from = root fromfrom = fromfrom } } }
+	}
+}
+
+#Join
+country_event = {
+	id = STH_cardassian_story.502
+	title = "STH_cardassian_story.502.name"
+	desc = "STH_cardassian_story.502.desc"
+	picture = sth_GFX_evt_cardassiaDominion2
+	force_open = yes
+	is_triggered_only = yes
+	trigger = { exists = from } 
+	option = { name = STH_cardassian_story.502.a } # For Cardassia
+	option = { name = STH_cardassian_story.502.b } # For The Dominion
+	after = {
+		if = {
+			limit = { is_ai = no }
+			set_subject_of = { who = event_target:the_dominion subject_type = dominion_member_human }
+			else = { set_subject_of = { who = event_target:the_dominion subject_type = dominion_member } }
+			#Add Unhappy Pops Modifier
+		}
+		hidden_effect = {
+			every_country = {
+				limit = { has_communications = root is_assimilator = no NOR = { is_same_value = root is_same_value = from } }
+				country_event = { id = STH_cardassian_story.503 scopes = { from = root fromfrom = from fromfromfrom = fromfrom } }
+			}
+			from = { country_event = { id = STH_cardassian_story.504 scopes = { from = root } } }
+		}
+	}
+}
+
+#Galaxy Notification
+country_event = {
+	id = STH_cardassian_story.503
+	title = "STH_cardassian_story.503.name"
+	desc = {
+		trigger = { has_communications = fromfrom }
+		text = "STH_cardassian_story.503.desc_01"
+	}
+	desc = {
+		trigger = { NOT = { has_communications = fromfrom } }
+		text = "STH_cardassian_story.503.desc_02"
+	}
+	picture = sth_GFX_evt_cardassiaDominion2
+	force_open = yes
+	is_triggered_only = yes
+	trigger = { exists = from exists = fromfrom } 
+	option = {
+		name = STH_cardassian_story.503.a #Worrying
+	}
+	option = {
+		name = STH_cardassian_story.503.b #Does not concern us
+	}
+}
+
+#Dominion Notification
+country_event = {
+	id = STH_cardassian_story.504
+	title = "STH_cardassian_story.504.name"
+	desc = { text = "STH_cardassian_story.504.desc" }
+	picture = sth_GFX_evt_cardassiaDominion2
+	force_open = yes
+	is_triggered_only = yes
+	trigger = { exists = from } 
+	option = {
+		name = STH_cardassian_story.504.a #The Dominion will prevail
+	}
+}
+
+#Dominion rejection
+country_event = {
+	id = STH_cardassian_story.505
+	title = "STH_cardassian_story.505.name"
+	desc = "STH_cardassian_story.505.desc"
+	picture = sth_GFX_evt_cardassiaDominion1
+	force_open = yes
+	is_triggered_only = yes
+	trigger = { exists = from } 
+	option = { name = STH_cardassian_story.505.a } # We will prevail
+	# option = { name = STH_cardassian_story.502.b } # For The Dominion
+}
+
+
+#Hebitian Restoration
+country_event = {
+	id = STH_cardassian_story.1000
+	title = "STH_cardassian_story.1000.name"
+	desc = "STH_cardassian_story.1000.desc"
+	picture = sth_GFX_evt_hebitianRestoration
+	force_open = yes
+	is_triggered_only = yes
+	immediate = { save_event_target_as = cardassian_country }
+	option = {
+		name = STH_cardassian_story.1000.a
+		custom_tooltip = "STH_cardassian_story.1000.a.tooltip"
+		trigger = { 
+			has_country_flag = cardassian_union
+			NOT = { any_country = { has_country_flag = hebitian_union } } 
+		}
+		ai_chance = {
+			factor = 0
+			modifier = { factor = 1 has_country_flag = cardassian_union NOT = { any_country = { has_country_flag = hebitian_union } } }
+		}
+		hidden_effect = { 
+			become_hebitian_union = yes
+			every_country = {
+				limit = { is_species_class = CAR NOT = { is_same_value = root has_country_flag = hebitian_country } }
+				country_event = { id = STH_cardassian_story.1001 days = 1 }
+			}
+			every_country = {
+				limit = { 
+					NOR = { is_species_class = CAR is_same_value = root }
+					has_established_contact = root
+				}
+				country_event = { id = STH_cardassian_story.1002 days = 7 random = 3 }
+			}
+		}
+	}
+	option = {
+		name = STH_cardassian_story.1000.b
+		custom_tooltip = "STH_cardassian_story.1000.b.tooltip"
+		trigger = { NOT = { has_country_flag = cardassian_union } }
+		ai_chance = {
+			factor = 0
+			modifier = { factor = 1 NOT = { has_country_flag = cardassian_union } }
+		}
+		hidden_effect = { 
+			become_hebitian_country = yes 
+			every_country = {
+				limit = { is_species_class = CAR NOT = { is_same_value = root has_country_flag = hebitian_country } }
+				country_event = { id = STH_cardassian_story.1001 days = 0 }
+			}
+		}
+	}
+	option = {
+		name = STH_cardassian_story.1000.c
+		hidden_effect = { }
+	}
+}
+
+
+
+#Accept or reject Hebitian species name
+country_event = {
+	id = STH_cardassian_story.1001
+	title = "STH_cardassian_story.1001.name"
+	desc = "STH_cardassian_story.1001.desc"
+	picture = sth_GFX_evt_hebitianRestoration
+	force_open = yes
+	is_triggered_only = yes
+	trigger = {
+		is_species_class = CAR
+	}
+	option = {
+		name = STH_cardassian_story.1001.a #Accept
+		ai_chance = {
+			factor = 0
+			modifier = { factor = 1 NOT = { has_country_flag = cardassian_union } }
+		}
+	}
+	option = {
+		name = STH_cardassian_story.1001.b #We are Cardassian!
+		ai_chance = { factor = 1 }
+		hidden_effect = {
+			if = {
+				limit = { any_country = { is_species_class = CAR any_owned_pop = { is_species = "Cardassian" } } }
+				random_country = { 
+					limit = { is_species_class = CAR any_owned_pop = { is_species = "Cardassian" } } 
+					random_owned_pop = {
+						limit = { is_species = "Cardassian" }
+						species = { save_event_target_as = cardassian_species }
+					}
+				}
+				every_owned_pop = {
+					limit = { is_species = "Hebitian" }
+					change_species = event_target:cardassian_species
+				}
+				change_dominant_species = { species = event_target:cardassian_species }
+				else = {
+					modify_species = { species = this add_trait = trait_pc_nuked_preference }
+					species = { rename_species = { name_list = cardassian_name } save_event_target_as = cardassian_species }
+					modify_species = { species = this remove_trait = trait_pc_nuked_preference }
+				}
+			}
+		}
+		change_dominant_species = { species = event_target:cardassian_species }
+	}
+}
+
+
+
+#Notification to neighbours
+country_event = {
+	id = STH_cardassian_story.1002
+	title = "STH_cardassian_story.1002.name"
+	desc = "STH_cardassian_story.1002.desc"
+	picture = sth_GFX_evt_hebitianRestoration
+	force_open = yes
+	is_triggered_only = yes
+	trigger = { }
+	option = {
+		name = STH_cardassian_story.1002.a
+	}
+}

@@ -1,0 +1,259 @@
+# Optical Sensor Array (Civilian Ships)
+utility_component_template = {
+  key = "REQUIRED_SENSORS_OPTICAL_0_CIVILIAN"
+  size = small
+  icon = "GFX_ship_part_Required_Sensors__0"
+  icon_frame = 1
+  power = -5
+  cost = 5
+  sensor_range = 20
+  class_restriction = { shipclass_constructor shipclass_colonizer shipclass_science_ship shipclass_transport }
+  upgrades_to = "REQUIRED_SENSORS_GRAVITIC_1A_CIVILIAN"
+  ship_modifier = {     }
+  modifier = {     }
+  ai_weight = { weight = 1 }
+  prerequisites = { "tech_optical_sensor" }
+  component_set = "required_civilian_sensors"
+}
+# Optical Sensor Array (Military Stations)
+utility_component_template = {
+  key = "REQUIRED_SENSORS_OPTICAL_0_MILITARY"
+  size = small
+  icon = "GFX_ship_part_Required_Sensors__0"
+  icon_frame = 1
+  power = -10
+  cost = 10
+  sensor_range = 25
+  size_restriction = { military_station_small military_station_medium }
+  upgrades_to = "REQUIRED_SENSORS_GRAVITIC_1A_MILITARY"
+  ship_modifier = { ship_tracking_add = 5    }
+  modifier = {     }
+  ai_weight = { weight = 1 }
+  prerequisites = { "tech_optical_sensor" }
+  component_set = "required_military_station_sensors"
+}
+# Optical Sensor Array (Listening Depot)
+utility_component_template = {
+  key = "REQUIRED_SENSORS_OPTICAL_0_ARRAY"
+  size = small
+  icon = "GFX_ship_part_Required_Sensors__0"
+  icon_frame = 1
+  power = -45
+  cost = 1
+  sensor_range = 40
+  size_restriction = { station_listening }
+  upgrades_to = "REQUIRED_SENSORS_GRAVITIC_1A_ARRAY"
+  ship_modifier = {     }
+  modifier = {     }
+  ai_weight = { weight = 1 }
+  prerequisites = { "tech_optical_sensor" }
+  component_set = "required_listening_sensors"
+}
+
+# Gravitic Sensor Array (Civilian Ships)
+utility_component_template = {
+  key = "REQUIRED_SENSORS_GRAVITIC_1A_CIVILIAN"
+  size = small
+  icon = "GFX_ship_part_Required_Sensors__1"
+  icon_frame = 1
+  power = -10
+  cost = 10
+  sensor_range = 25
+  class_restriction = { shipclass_constructor shipclass_colonizer shipclass_science_ship shipclass_transport }
+  upgrades_to = "REQUIRED_SENSORS_SUBSPACE_2A_CIVILIAN"
+  ship_modifier = {     }
+  modifier = {     }
+  ai_weight = { weight = 20 }
+  prerequisites = { "tech_physics_gravitic_31" }
+  component_set = "required_civilian_sensors"
+}
+# Gravitic Sensor Array (Military Stations)
+utility_component_template = {
+  key = "REQUIRED_SENSORS_GRAVITIC_1A_MILITARY"
+  size = small
+  icon = "GFX_ship_part_Required_Sensors__1"
+  icon_frame = 1
+  power = -20
+  cost = 20
+  sensor_range = 35
+  size_restriction = { military_station_small military_station_medium }
+  upgrades_to = "REQUIRED_SENSORS_SUBSPACE_2A_MILITARY"
+  ship_modifier = { ship_tracking_add = 10    }
+  modifier = {     }
+  ai_weight = { weight = 20 }
+  prerequisites = { "tech_physics_gravitic_31" }
+  component_set = "required_military_station_sensors"
+}
+# Gravitic Sensor Array (Listening Depot)
+utility_component_template = {
+  key = "REQUIRED_SENSORS_GRAVITIC_1A_ARRAY"
+  size = small
+  icon = "GFX_ship_part_Required_Sensors__1"
+  icon_frame = 1
+  power = -80
+  cost = 20
+  sensor_range = 55
+  size_restriction = { station_listening }
+  upgrades_to = "REQUIRED_SENSORS_SUBSPACE_2A_ARRAY"
+  ship_modifier = {     }
+  modifier = {     }
+  ai_weight = { weight = 20 }
+  prerequisites = { "tech_physics_gravitic_31" }
+  component_set = "required_listening_sensors"
+}
+
+# Subspace Sensor Array (Civilian Ships)
+utility_component_template = {
+  key = "REQUIRED_SENSORS_SUBSPACE_2A_CIVILIAN"
+  size = small
+  icon = "GFX_ship_part_Required_Sensors__2"
+  icon_frame = 1
+  power = -10
+  cost = 10
+  sensor_range = 30
+  class_restriction = { shipclass_constructor shipclass_colonizer shipclass_science_ship shipclass_transport }
+  upgrades_to = "REQUIRED_SENSORS_INVERSE_3A_CIVILIAN"
+  ship_modifier = {     }
+  modifier = {     }
+  ai_weight = { weight = 30 }
+  prerequisites = { "tech_physics_subspace_34" }
+  component_set = "required_civilian_sensors"
+}
+# Subspace Sensor Array (Military Stations)
+utility_component_template = {
+  key = "REQUIRED_SENSORS_SUBSPACE_2A_MILITARY"
+  size = small
+  icon = "GFX_ship_part_Required_Sensors__2"
+  icon_frame = 1
+  power = -30
+  cost = 30
+  sensor_range = 45
+  size_restriction = { military_station_small military_station_medium }
+  upgrades_to = "REQUIRED_SENSORS_INVERSE_3A_MILITARY"
+  ship_modifier = { ship_tracking_add = 15    }
+  modifier = {     }
+  ai_weight = { weight = 30 }
+  prerequisites = { "tech_physics_subspace_34" }
+  component_set = "required_military_station_sensors"
+}
+# Subspace Sensor Array (Listening Depot)
+utility_component_template = {
+  key = "REQUIRED_SENSORS_SUBSPACE_2A_ARRAY"
+  size = small
+  icon = "GFX_ship_part_Required_Sensors__2"
+  icon_frame = 1
+  power = -125
+  cost = 30
+  sensor_range = 70
+  size_restriction = { station_listening }
+  upgrades_to = "REQUIRED_SENSORS_INVERSE_3A_ARRAY"
+  ship_modifier = {     }
+  modifier = {     }
+  ai_weight = { weight = 30 }
+  prerequisites = { "tech_physics_subspace_34" }
+  component_set = "required_listening_sensors"
+}
+
+# Inverse Tachyon Sensor Array (Civilian Ships)
+utility_component_template = {
+  key = "REQUIRED_SENSORS_INVERSE_3A_CIVILIAN"
+  size = small
+  icon = "GFX_ship_part_Required_Sensors__3"
+  icon_frame = 1
+  power = -15
+  cost = 15
+  sensor_range = 35
+  class_restriction = { shipclass_constructor shipclass_colonizer shipclass_science_ship shipclass_transport }
+  upgrades_to = "REQUIRED_SENSORS_MULTIPHASIC_4_CIVILIAN"
+  ship_modifier = {     }
+  modifier = {     }
+  ai_weight = { weight = 40 }
+  prerequisites = { "tech_physics_tachyon_41" }
+  component_set = "required_civilian_sensors"
+}
+# Inverse Tachyon Sensor Array (Military Stations)
+utility_component_template = {
+  key = "REQUIRED_SENSORS_INVERSE_3A_MILITARY"
+  size = small
+  icon = "GFX_ship_part_Required_Sensors__3"
+  icon_frame = 1
+  power = -45
+  cost = 45
+  sensor_range = 55
+  size_restriction = { military_station_small military_station_medium }
+  upgrades_to = "REQUIRED_SENSORS_MULTIPHASIC_4_MILITARY"
+  ship_modifier = { ship_tracking_add = 20    }
+  modifier = {     }
+  ai_weight = { weight = 40 }
+  prerequisites = { "tech_physics_tachyon_41" }
+  component_set = "required_military_station_sensors"
+}
+# Inverse Tachyon Sensor Array (Listening Depot)
+utility_component_template = {
+  key = "REQUIRED_SENSORS_INVERSE_3A_ARRAY"
+  size = small
+  icon = "GFX_ship_part_Required_Sensors__3"
+  icon_frame = 1
+  power = -180
+  cost = 40
+  sensor_range = 85
+  size_restriction = { station_listening }
+  upgrades_to = "REQUIRED_SENSORS_MULTIPHASIC_4_ARRAY"
+  ship_modifier = {     }
+  modifier = {     }
+  ai_weight = { weight = 40 }
+  prerequisites = { "tech_physics_tachyon_41" }
+  component_set = "required_listening_sensors"
+}
+
+# Multiphasic Sensor Array (Civilian Ships)
+utility_component_template = {
+  key = "REQUIRED_SENSORS_MULTIPHASIC_4_CIVILIAN"
+  size = small
+  icon = "GFX_ship_part_Required_Sensors__4"
+  icon_frame = 1
+  power = -20
+  cost = 20
+  sensor_range = 40
+  class_restriction = { shipclass_constructor shipclass_colonizer shipclass_science_ship shipclass_transport }
+  
+  ship_modifier = {     }
+  modifier = {     }
+  ai_weight = { weight = 50 }
+  prerequisites = { "tech_physics_multiphasic_43" }
+  component_set = "required_civilian_sensors"
+}
+# Multiphasic Sensor Array (Military Stations)
+utility_component_template = {
+  key = "REQUIRED_SENSORS_MULTIPHASIC_4_MILITARY"
+  size = small
+  icon = "GFX_ship_part_Required_Sensors__4"
+  icon_frame = 1
+  power = -60
+  cost = 60
+  sensor_range = 65
+  size_restriction = { military_station_small military_station_medium }
+  
+  ship_modifier = { ship_tracking_add = 25    }
+  modifier = {     }
+  ai_weight = { weight = 50 }
+  prerequisites = { "tech_physics_multiphasic_43" }
+  component_set = "required_military_station_sensors"
+}
+# Multiphasic Sensor Array (Listening Depot)
+utility_component_template = {
+  key = "REQUIRED_SENSORS_MULTIPHASIC_4_ARRAY"
+  size = small
+  icon = "GFX_ship_part_Required_Sensors__4"
+  icon_frame = 1
+  power = -245
+  cost = 50
+  sensor_range = 100
+  size_restriction = { station_listening }
+  
+  ship_modifier = {     }
+  modifier = {     }
+  ai_weight = { weight = 50 }
+  prerequisites = { "tech_physics_multiphasic_43" }
+  component_set = "required_listening_sensors"
+}

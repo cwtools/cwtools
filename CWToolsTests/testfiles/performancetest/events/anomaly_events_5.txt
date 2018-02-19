@@ -1,0 +1,5830 @@
+############################
+#
+# Anomaly Events
+#
+# Written by Niclas Karlsson
+# STNH - Capek 1.8.0 Compat
+############################
+
+namespace = anomaly
+
+@tier1influencecontact = 7
+@tier1influencecontactxenophile = 8
+@tier1influencecontactmin = 20
+@tier1influencecontactmax = 80
+
+@tier2influencecontact = 10
+@tier2influencecontactxenophile = 12
+@tier2influencecontactmin = 40
+@tier2influencecontactmax = 100
+
+@tier1materialreward = 6
+@tier1materialmin = 100
+@tier1materialmax = 500
+@tier2materialreward = 12
+@tier2materialmin = 150
+@tier2materialmax = 1000
+@tier3materialreward = 18
+@tier3materialmin = 250
+@tier3materialmax = 1500
+@tier4materialreward = 24
+@tier4materialmin = 350
+@tier4materialmax = 2000
+@tier5materialreward = 48
+@tier5materialmin = 700
+@tier5materialmax = 4000
+
+@tier1influencereward = 6
+@tier1influencemin = 40
+@tier1influencemax = 100
+@tier2influencereward = 12
+@tier2influencemin = 80
+@tier2influencemax = 175
+@tier3influencereward = 18
+@tier3influencemin = 125
+@tier3influencemax = 250
+@tier4influencereward = 24
+@tier4influencemin = 150
+@tier4influencemax = 300
+@tier5influencereward = 36
+@tier5influencemin = 250
+@tier5influencemax = 500
+@tier6influencereward = 48
+@tier6influencemin = 300
+@tier6influencemax = 600
+
+@tier1researchreward = 6
+@tier1researchmin = 60
+@tier1researchmax = 150
+@tier2researchreward = 12
+@tier2researchmin = 90
+@tier2researchmax = 250
+@tier3researchreward = 18
+@tier3researchmin = 120
+@tier3researchmax = 350
+@tier4researchreward = 24
+@tier4researchmin = 150
+@tier4researchmax = 500
+@tier5researchreward = 48
+@tier5researchmin = 300
+@tier5researchmax = 1000
+
+# ROOT = ship scope
+# FROM = planet scope
+
+### Lethal Tropical Wildlife #############################################################################
+#story3
+ship_event = {
+	id = anomaly.4000
+	title = "anomaly.4000.name"
+	desc = "anomaly.4000.desc"
+	picture = GFX_evt_alien_nature
+	show_sound = event_alien_nature
+	location = FROM
+	
+	is_triggered_only = yes
+
+	immediate = {
+		hidden_effect = {
+			from = {
+				orbital_deposit_tile = { clear_deposits = yes }
+			}
+			owner = {
+				country_event = { id = story.5 days = 30 }
+			}
+		}
+	}
+
+	option = {
+		name = EXCELLENT
+		custom_tooltip = "anomaly.4000.a.tooltip"
+		hidden_effect = {
+			owner = {
+				country_event = { id = story.3 days = 30 }
+			}
+			FROM = {
+				add_modifier = {
+					modifier = "acid_jungles"
+					days = -1
+				}
+				random_tile = {
+					limit = {
+						has_blocker = no
+					}
+					set_blocker = tb_noxious_swamp
+				}
+				random_tile = {
+					limit = {
+						has_blocker = no
+					}
+					set_blocker = tb_noxious_swamp
+				}
+				random_tile = {
+					limit = {
+						has_blocker = no
+					}
+					set_blocker = tb_noxious_swamp
+				}
+				orbital_deposit_tile = {
+					add_deposit = d_vast_society_deposit
+				}
+			}
+		}
+
+	}
+}
+
+### Rich Asteroid Ex-Planet ###############################################################################
+#story1
+ship_event = {
+	id = anomaly.4005
+	title = "anomaly.4005.name"
+	desc = "anomaly.4005.desc"
+	picture = GFX_evt_mining_station
+	show_sound = event_construction
+	location = FROM
+	
+	is_triggered_only = yes
+
+	immediate = {
+		hidden_effect = {
+			owner = {
+				country_event = { id = story.1 days = 30 }
+			}
+			from = {
+				orbital_deposit_tile = { clear_deposits = yes }
+			}
+		}
+	}
+
+	option = {
+		name = AMAZING
+		custom_tooltip = "anomaly.4005.a.tooltip"
+		hidden_effect = {
+			FROM = {
+				add_modifier = {
+					modifier = "ex_planet"
+					days = -1
+				}
+				orbital_deposit_tile = {
+					add_deposit = d_rich_mineral_deposit
+					add_deposit = d_vast_mineral_deposit
+				}
+			}
+		}
+	}
+}
+
+### Derelict Ship #########################################################################################
+ship_event = {
+	id = anomaly.4010
+	title = "anomaly.4010.name"
+	desc = "anomaly.4010.desc"
+	picture = GFX_evt_ship_in_orbit
+	show_sound = event_airlock
+	location = FROM
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		hidden_effect = { owner = { country_event = { id = story.5 days = 15 } } }
+	}
+	
+	option = {
+		name = INTRIGUING
+		hidden_effect = {
+			from = { set_planet_flag = derelict_ship_planet }
+			create_ambient_object = {
+					type = "derelict_ship_object"
+					location = from
+			}
+			last_created_ambient_object = {
+				save_event_target_as = DerelictShipLocation
+			}
+		}
+		event_target:DerelictShipLocation = {
+			enable_special_project = {
+				name = "DERELICT_SHIP_PROJECT"
+				owner = root
+				location = this
+			}
+		}
+	}
+	option = {
+		name = NOTIME
+	}
+}
+
+# Derelict Ship Special Project
+ship_event = {
+	id = anomaly.4011
+	title = PROJECT_COMPLETE
+	desc = "anomaly.4011.desc"
+	picture = GFX_evt_ship_in_orbit
+	show_sound = event_airlock
+	location = FROM
+	
+	is_triggered_only = yes
+
+	immediate = {
+		fromfrom = { save_event_target_as = derelict_ship_location }
+	}
+	option = {
+		name = OK
+		owner = {
+			add_monthly_resource_mult = {
+				resource = society_research
+				value = @tier1researchreward
+				min = @tier1researchmin
+				max = @tier1researchmax
+			}
+		}
+		hidden_effect = {
+			fromfrom = {
+				destroy_ambient_object = this
+			}
+		}
+	}
+}
+#story8
+ship_event = {
+	id = anomaly.4012
+	title = PROJECT_COMPLETE
+	desc = "anomaly.4012.desc"
+	picture = GFX_evt_smugglers_in_bar
+	show_sound = event_conversation
+	location = FROM
+	
+	is_triggered_only = yes
+
+	immediate = {
+		hidden_effect = {
+			owner = {
+				save_event_target_as = MyCountry
+			}
+			fromfromfrom = {
+				remove_planet_flag = derelict_ship_planet
+				closest_system = {
+					limit = {
+						exists = space_owner
+						space_owner = {
+							is_country_type = default
+							NOT = {
+								is_same_value = event_target:MyCountry
+								has_established_contact = event_target:MyCountry
+							}
+						}
+					}
+					min_steps = 10
+					space_owner = {
+						save_event_target_as = contact_empire
+					}
+				}
+			}
+		}
+	}
+
+	option = {
+		name = anomaly.4012.a
+		custom_tooltip = anomaly.4012.a.tooltip
+		hidden_effect = {
+			event_target:contact_empire = {
+				set_timed_relation_flag = { flag = no_coms who = event_target:MyCountry days = 90 }
+				add_opinion_modifier = {
+					who = event_target:MyCountry
+					modifier = opinion_crew_saved
+				}
+			}
+			owner = {
+				set_timed_country_flag = { flag = day_0 days = 7 }
+				#establish_contact = { who = event_target:contact_empire } 
+				establish_communications = event_target:contact_empire 
+				country_event = { id = action.1 days = 1 }
+			}
+			fromfrom = {
+				destroy_ambient_object = this
+			}
+		}
+	}
+	option = {
+		name = anomaly.4012.b
+		hidden_effect = {
+			fromfrom = {
+				destroy_ambient_object = this
+			}
+		}
+	}
+}
+### Corpse in Space ######################################################################################
+#story5
+ship_event = {
+	id = anomaly.4015
+	title = "anomaly.4015.name"
+	desc = "anomaly.4015.desc"
+	picture = GFX_evt_ship_in_orbit
+	show_sound = event_airlock
+	location = FROM
+	
+	is_triggered_only = yes
+
+	immediate = {
+		owner = { country_event = { id = story.5 days = 30 } }
+	}
+	
+	option = {
+		name = "anomaly.4015.a"
+		owner = {
+			add_monthly_resource_mult = {
+				resource = society_research
+				value = @tier2researchreward
+				min = @tier2researchmin
+				max = @tier2researchmax
+			}
+		}
+	}
+	option = {
+		trigger = {
+			owner = {
+				NOT = { has_ethic = "ethic_fanatic_xenophile" }
+			}
+		}
+		name = "anomaly.4015.b"
+		owner = {
+			add_monthly_resource_mult = {
+				resource = physics_research
+				value = @tier1researchreward
+				min = @tier1researchmin
+				max = @tier1researchmax
+			}
+			add_monthly_resource_mult = {
+				resource = society_research
+				value = @tier1researchreward
+				min = @tier1researchmin
+				max = @tier1researchmax
+			}
+			add_monthly_resource_mult = {
+				resource = engineering_research
+				value = @tier1researchreward
+				min = @tier1researchmin
+				max = @tier1researchmax
+			}
+		}
+		hidden_effect = {
+			owner = {
+				country_event = {
+					id = anomaly.4018
+				}
+			}
+		}
+	}
+	option = {
+		trigger = {
+			owner = {
+				has_ethic = "ethic_fanatic_xenophile"
+			}
+		}
+		name = "anomaly.4015.phile"
+		owner = {
+			add_monthly_resource_mult = {
+				resource = physics_research
+				value = @tier1researchreward
+				min = @tier1researchmin
+				max = @tier1researchmax
+			}
+			add_monthly_resource_mult = {
+				resource = society_research
+				value = @tier1researchreward
+				min = @tier1researchmin
+				max = @tier1researchmax
+			}
+			add_monthly_resource_mult = {
+				resource = engineering_research
+				value = @tier1researchreward
+				min = @tier1researchmin
+				max = @tier1researchmax
+			}
+		}
+		hidden_effect = {
+			owner = {
+				country_event = {
+					id = anomaly.4018
+				}
+			}
+		}
+	}
+}
+#Corpse in Space - Find relevant nation and set flag
+country_event = {
+	id = anomaly.4018
+	hide_window = yes
+	is_triggered_only = yes
+
+	immediate = {
+		set_country_flag = me
+		FROM = { solar_system = { save_event_target_as = anomaly_planet } }
+		random_planet = {
+			limit = {
+				distance = {
+					source = event_target:anomaly_planet
+					max_distance = 120
+					min_distance = 1
+				}
+				has_owner = yes
+				owner = {
+					is_country_type = "default"
+					NOT = {
+						has_country_flag = me
+						has_established_contact = root
+					}
+				}
+			}
+			owner = {
+				set_relation_flag = {
+					who = root
+					flag = DefiledCorpseTrue
+				}
+			}
+		}
+		remove_country_flag = me
+	}
+}
+#Corpse in Space - Check for relation on first contact
+country_event = {
+	id = anomaly.4016
+	hide_window = yes
+
+	is_triggered_only = yes
+	trigger = {
+		from = {
+			has_relation_flag = { who = root flag = DefiledCorpseTrue }
+		}
+	}
+	immediate = {
+		from = {
+			save_event_target_as = DefiledCountry
+		}
+		country_event = {
+			id = anomaly.4017 days = 5
+		}
+	}
+}
+
+#Corpse in Space - Caught Red Handed
+country_event = {
+	id = anomaly.4017
+	title = "anomaly.4016.name"
+	desc = "anomaly.4016.desc"
+	picture = GFX_evt_ship_in_orbit
+	show_sound = event_planetary_riot
+	location = FROM
+	
+	is_triggered_only = yes
+	diplomatic = yes
+	
+	picture_event_data = {
+		portrait = event_target:DefiledCountry
+		planet_background = event_target:DefiledCountry
+		graphical_culture = event_target:DefiledCountry
+		city_level = event_target:DefiledCountry
+		room = event_target:DefiledCountry.ruler
+	}
+	
+	option = {
+		name = "anomaly.4016.a"
+		custom_tooltip = "anomaly.4016.tooltip"
+		trigger = { 
+			root = { NOT = {has_ethic = ethic_fanatic_spiritualist }}
+		}
+		hidden_effect = {
+			fromfrom = {
+				add_opinion_modifier = {who = root modifier = opinion_graverobber_1}
+			}
+		}
+	}
+	option = {
+		name = "anomaly.4016.c.spirit"
+		custom_tooltip = "anomaly.4016.tooltip"
+		trigger = {
+			root = { has_ethic = ethic_fanatic_spiritualist }
+		}
+		hidden_effect = {
+			fromfrom = {
+				add_opinion_modifier = {who = root modifier = opinion_graverobber_1}
+			}
+		}
+	}
+	option = {
+		name = "anomaly.4016.b"
+		custom_tooltip = "anomaly.4016.tooltip"
+		trigger = { 
+			root = { NOT = {has_ethic = ethic_fanatic_xenophobe }}
+		}
+		hidden_effect = {
+			fromfrom = {
+				add_opinion_modifier = {who = root modifier = opinion_graverobber_2}
+			}
+		}
+	}
+	option = {
+		name = "anomaly.4016.d.phobe"
+		custom_tooltip = "anomaly.4016.tooltip"
+		trigger = { 
+			root = { has_ethic = ethic_fanatic_xenophobe }
+		}
+		hidden_effect = {
+			fromfrom = {
+				add_opinion_modifier = {who = root modifier = opinion_graverobber_3}
+			}
+		}
+	}
+}
+
+### Ship Graveyard ######################################################################################
+#story5
+ship_event = {
+	id = anomaly.4020
+	title = "anomaly.4020.name"
+	picture = GFX_evt_big_landing_ship
+	show_sound = event_mystic_reveal
+	location = FROM
+	desc = {
+		text = "anomaly.4020.rocket.desc"
+		trigger = {
+			leader = {
+				has_trait = leader_trait_expertise_rocketry
+			}
+		}
+	}
+	desc = {
+		text = "anomaly.4020.desc"
+		trigger = {
+			leader = {
+				NOT = { has_trait = leader_trait_expertise_rocketry }
+			}
+		}
+	}
+	
+	is_triggered_only = yes
+
+	immediate = { owner = { country_event = { id = story.5 days = 30 } } }
+
+	option = {
+		trigger = {
+			leader = { has_trait = leader_trait_expertise_rocketry }
+		}	
+		name = anomaly.4020.b
+		custom_tooltip = "anomaly.4020.a.tooltip"
+		hidden_effect = {
+			FROM = {
+				add_modifier = {
+					modifier = "ship_graveyard"
+					days = -1
+				}
+				orbital_deposit_tile = {
+					add_deposit = d_vast_mineral_deposit
+				}
+			}
+		}
+	}
+	option = {
+		trigger = {
+			leader = {
+					NOT = { has_trait = leader_trait_expertise_rocketry }
+			}
+		}
+		name = anomaly.4020.a
+		custom_tooltip = "anomaly.4020.a.tooltip"
+		hidden_effect = {
+			FROM = {
+				add_modifier = {
+					modifier = "ship_graveyard"
+					days = -1
+				}
+				orbital_deposit_tile = {
+					add_deposit = d_vast_mineral_deposit
+				}
+			}
+		}
+	}
+}
+
+### Distant Survey Data ####################################################################################
+#story5
+ship_event = {
+	id = anomaly.4025
+	title = "anomaly.4025.name"
+	desc = "anomaly.4025.desc"
+	picture = GFX_evt_ship_in_orbit
+	show_sound = event_airlock
+	location = event_target:target_location
+
+	is_triggered_only = yes
+	immediate = {
+		hidden_effect = { owner = { country_event = { id = story.5 days = 30 } } }
+		random_system = {
+			limit = {
+				NOT = {
+					has_star_flag = anomaly_system
+				}
+				distance = {
+					source = root.solar_system
+					max_distance = 120
+					min_distance = 1
+				}
+				any_planet = {
+					is_surveyed = { who = root.owner status = no }
+					has_owner = no
+				}
+			}
+			save_event_target_as = us_target_system
+			root.owner = {
+				clear_uncharted_space = {
+					from = event_target:us_target_system
+					radius = 5
+				}
+			}
+			random_system_planet = {
+				limit = {
+					is_star = yes
+				}
+				save_event_target_as = target_location
+			}
+			every_system_planet = {
+				surveyed = {
+					set_surveyed = yes
+					surveyor = root.owner
+				}
+			}
+		}
+	}
+	option = {
+		name = INTERESTING
+		custom_tooltip = "anomaly.4025.a.tooltip"
+	}
+}
+
+### AI Admiral ###########################################################################################
+#story5
+ship_event = {
+	id = anomaly.4030
+	title = "anomaly.4030.name"
+	desc = "anomaly.4030.desc"
+	picture = GFX_evt_archaeological_dig
+	show_sound = event_sensor_ping
+	location = FROM
+
+	is_triggered_only = yes
+
+	trigger = {
+		owner = {
+			NOT = {
+				has_country_flag = ai_admiral_found
+			}
+		}
+	}
+
+	immediate = {
+		hidden_effect = {
+			owner = {
+				set_country_flag = ai_admiral_found
+				country_event = { id = story.5 days = 30 }
+			}
+		}
+	}
+
+	option = {
+		name = "anomaly.4030.a"
+		FROM = {
+			enable_special_project = {
+				name = "AI_ADMIRAL_PROJECT"
+				owner = root
+				location = this
+			}
+		}
+	}
+	option = {
+		name = "anomaly.4030.b"
+		custom_tooltip = "anomaly.4030.b.tooltip"
+		hidden_effect = {
+			FROM = {
+				add_modifier = {
+					modifier = "ai_fleet"
+					days = -1
+				}
+				orbital_deposit_tile = {
+					add_deposit = d_vast_engineering_deposit
+				}
+			}
+		}
+	}
+}
+#Special project completed
+ship_event = {
+	id = anomaly.4031
+	title = PROJECT_COMPLETE
+	desc = "anomaly.4031.desc"
+	picture = GFX_evt_sapient_AI
+	show_sound = event_sensor_ping
+	location = FROMFROMFROM
+
+	is_triggered_only = yes
+
+	option = {
+		name = EXCELLENT
+		owner = {
+			create_species = {
+				name = "NAME_AI"
+				class = RANDOMTREK
+				portrait = random
+				traits = random
+			}
+			create_leader = {
+				type = admiral
+				species = last_created
+				name = "NAME_0101010111"
+				skill = 400
+				traits = {
+					trait = leader_trait_aggressive
+					trait = leader_trait_fleet_logistician
+				}
+				event_leader = yes
+			}
+			last_created_leader = {
+				set_age = 1
+			}
+		}
+	}
+}
+
+
+
+### Odd Star ##############################################################################################
+ship_event = {
+	id = anomaly.4035
+	title = "anomaly.4035.name"
+	desc = "anomaly.4035.desc"
+	picture = GFX_evt_star_yellow
+	show_sound = event_mystic_reveal
+	location = FROM
+	
+	is_triggered_only = yes
+
+	trigger = {
+		owner = {
+			NOT = {
+				has_technology = tech_physics_zero_58
+			}
+		}
+	}
+
+	option = {
+		name = "anomaly.4035.a"
+		owner = {
+			begin_event_chain = {
+				event_chain = "star_power_chain"
+				target = root
+			}
+		}
+		hidden_effect = {
+			solar_system = {
+				set_star_flag = current_system
+				random_system_planet = {
+					limit = {
+						is_star = yes
+					}
+					save_event_target_as = anomaly_star
+				}
+			}
+			random_system = {
+				limit = {
+					distance = {
+						source = event_target:anomaly_star
+						max_distance = 80
+						min_distance = 40
+					}
+					NOT = {
+						has_star_flag = current_system
+						has_star_flag = hostile_system
+					}
+					is_pirate_system = no
+					has_owner = no
+				}
+				save_event_target_as = some_system_1
+				set_star_flag = some_system_1
+			}
+			random_system = {
+				limit = {
+					distance = {
+						source = event_target:anomaly_star
+						max_distance = 80
+						min_distance = 25
+					}
+					NOT = {
+						has_star_flag = current_system
+						has_star_flag = hostile_system
+						has_star_flag = some_system_1
+					}
+					is_pirate_system = no
+					has_owner = no
+				}
+				save_event_target_as = some_system_2
+				set_star_flag = some_system_2
+			}
+			create_point_of_interest = {
+				id = anomaly.4035.poi.1
+				name = "anomaly.4035.poi_1"
+				desc = "anomaly.4035.poi.desc"
+				event_chain = star_power_chain
+				location = event_target:some_system_1
+			}
+			create_point_of_interest = {
+				id = anomaly.4035.poi.2
+				name = "anomaly.4035.poi_2"
+				desc = "anomaly.4035.poi.desc"
+				event_chain = star_power_chain
+				location = event_target:some_system_2
+			}
+		solar_system = { remove_star_flag = current_system }
+		}
+	}
+	option = {
+		name = NOTIME
+	}
+}
+#TRIGGERED WHEN ENTERING ONE OF THE POI SYSTEMS
+ship_event = {
+	id = anomaly.4036
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		owner = { has_event_chain = "star_power_chain" }
+		FROM = {
+			OR = {
+				has_star_flag = some_system_1
+				has_star_flag = some_system_2
+			}
+		}
+	}
+	immediate = {
+		if = {
+			limit = { FROM = { has_star_flag = some_system_1 } }
+			FROM = { remove_star_flag = some_system_1 }
+			owner = {
+				remove_point_of_interest = anomaly.4035.poi.1
+			}
+			random_list = {
+				40 = {
+					ship_event = { id = anomaly.4037 }
+					random_system = {
+						limit = {
+							has_star_flag = some_system_2
+						}
+						remove_star_flag = some_system_2
+					}
+					owner = {
+						remove_point_of_interest = anomaly.4035.poi.2
+						set_country_flag = finished_star_power_chain
+					}
+				}	
+				60 = {
+					owner = {
+						add_event_chain_counter = { 
+							event_chain = "star_power_chain" 
+							counter = "systems_visited_poi" 
+							amount = 1 
+						}
+					}
+					if = {
+						limit = {
+							owner = {
+								NOT = {
+									has_completed_event_chain_counter = {event_chain = star_power_chain counter = systems_visited_poi}
+								}
+							}
+						}
+						ship_event = { id = anomaly_failure.4037 }
+					}
+					if = {
+						limit = {
+							owner = {
+								NOT = {
+									has_country_flag = finished_star_power_chain
+								}
+								has_completed_event_chain_counter = {
+									event_chain = star_power_chain
+									counter = systems_visited_poi
+								}
+							}
+						}
+						owner = {
+							set_country_flag = finished_star_power_chain
+						}
+						ship_event = { id = anomaly.4037 }
+					}
+				}
+			}
+		}	
+		if = {
+			limit = { FROM = { has_star_flag = some_system_2 } }
+			FROM = { remove_star_flag = some_system_2 }
+			owner = {
+				remove_point_of_interest = anomaly.4035.poi.2
+			}
+			random_list = {
+				40 = {
+					ship_event = { id = anomaly.4037 }
+					random_system = {
+						limit = {
+							has_star_flag = some_system_1
+						}
+						remove_star_flag = some_system_1
+					}
+					owner = {
+						remove_point_of_interest = anomaly.4035.poi.1
+						set_country_flag = finished_star_power_chain
+					}
+				}
+				60 = {
+					owner = {
+						add_event_chain_counter = { 
+							event_chain = "star_power_chain" 
+							counter = "systems_visited_poi" 
+							amount = 1 
+						}
+					}
+					if = {
+						limit = {
+							owner = {
+								NOT = {
+									has_completed_event_chain_counter = {event_chain = star_power_chain counter = systems_visited_poi}
+								}
+							}
+						}
+						ship_event = { id = anomaly_failure.4037 }
+					}
+					if = {
+						limit = {
+							owner = {
+								NOT = {
+									has_country_flag = finished_star_power_chain
+								}
+								has_completed_event_chain_counter = {
+									event_chain = star_power_chain
+									counter = systems_visited_poi
+								}
+							}
+						}
+						owner = {
+							set_country_flag = finished_star_power_chain
+						}
+						ship_event = { id = anomaly.4037 }
+					}
+				}
+			}
+		}
+	}
+}
+
+# FINDING THE PLACE
+ship_event = {
+	id = anomaly.4037
+	title = "anomaly.4035.name"
+	desc = "anomaly.4037.desc"
+	picture = GFX_evt_star_yellow
+	show_sound = event_scanner
+	location = event_target:planet_1
+
+	is_triggered_only = yes
+
+	immediate = {
+		solar_system = {
+			random_system_planet = {
+				limit = {
+					is_star = yes
+				}
+				save_event_target_as = planet_1
+			}
+		}
+	}
+
+	option = {
+		name = "OK"
+		event_target:planet_1 = {
+			enable_special_project = {
+				name = "ODD_STAR_PROJECT"
+				location = this
+				owner = root
+			}
+		}
+	}
+}
+
+#Final event triggered from special project
+ship_event = {
+	id = anomaly.4038
+	title = "anomaly.4035.name"
+	desc = {
+		trigger = {
+			hidden:owner = {
+				switch = {
+					trigger = has_technology
+					tech_physics_zero_58 = { text = anomaly.4038.maxed.desc }
+					default = { text = anomaly.4038.upg.desc }
+				}
+			}
+		}
+	}
+	picture = GFX_evt_star_yellow
+	show_sound = event_ship_thrusters
+	location = FROM
+
+	is_triggered_only = yes
+
+	option = {
+		name = "anomaly.4038.a"
+		trigger = {
+			owner = {
+				OR = {
+					has_technology = tech_physics_zero_58
+				}
+			}
+		}
+		owner = {
+			end_event_chain = "star_power_chain"
+			add_monthly_resource_mult = {
+				resource = influence
+				value = @tier4influencereward
+				min = @tier4influencemin
+				max = @tier4influencemax
+			}
+			hidden_effect = { remove_country_flag = finished_star_power_chain }
+		}
+	}
+	option = {
+		name = "anomaly.4038.b"
+		trigger = {
+			owner = {
+				NOT = {
+					has_technology = tech_fission_power
+				}
+			}
+		}
+		owner = {
+			end_event_chain = "star_power_chain"
+			if = {
+				limit = {
+					has_tech_option = tech_fission_power
+				}
+				add_tech_progress = {
+					tech = tech_fission_power
+					progress = 0.80
+				}
+				else = {
+					add_research_option = tech_fission_power
+					add_tech_progress = {
+						tech = tech_fission_power
+						progress = 0.40
+					}
+				}
+			}
+			hidden_effect = { remove_country_flag = finished_star_power_chain }
+		}
+	}
+	option = {
+		name = "anomaly.4038.b"
+		trigger = {
+			owner = {
+				has_technology = tech_fission_power
+				NOT = {
+					has_technology = tech_physics_inertial_54
+				}
+			}
+		}
+		owner = {
+			end_event_chain = "star_power_chain"
+			if = {
+				limit = {
+					has_tech_option = tech_physics_inertial_54
+				}
+				add_tech_progress = {
+					tech = tech_physics_inertial_54
+					progress = 0.75
+				}
+				else = {
+					add_research_option = tech_physics_inertial_54
+					add_tech_progress = {
+						tech = tech_physics_inertial_54
+						progress = 0.37
+					}
+				}
+			}
+			hidden_effect = { remove_country_flag = finished_star_power_chain }
+		}
+	}
+	option = {
+		name = "anomaly.4038.b"
+		trigger = {
+			owner = {
+				has_technology = tech_physics_inertial_54
+				NOT = {
+					has_technology = tech_physics_inertial_54
+				}
+			}
+		}
+		owner = {
+			end_event_chain = "star_power_chain"
+			if = {
+				limit = {
+					has_tech_option = tech_physics_inertial_54
+				}
+				add_tech_progress = {
+					tech = tech_physics_inertial_54
+					progress = 0.70
+				}
+				else = {
+					add_research_option = tech_physics_inertial_54
+					add_tech_progress = {
+						tech = tech_physics_inertial_54
+						progress = 0.35
+					}
+				}
+			}
+			hidden_effect = { remove_country_flag = finished_star_power_chain }
+		}
+	}
+	option = {
+		name = "anomaly.4038.b"
+		trigger = {
+			owner = {
+				has_technology = tech_physics_inertial_54
+				NOT = {
+					has_technology = tech_physics_inertial_54
+				}
+			}
+		}
+		owner = {
+			end_event_chain = "star_power_chain"
+			if = {
+				limit = {
+					has_tech_option = tech_physics_inertial_54
+				}
+				add_tech_progress = {
+					tech = tech_physics_inertial_54
+					progress = 0.60
+				}
+				else = {
+					add_research_option = tech_physics_inertial_54
+					add_tech_progress = {
+						tech = tech_physics_inertial_54
+						progress = 0.30
+					}
+				}
+			}
+			hidden_effect = { remove_country_flag = finished_star_power_chain }
+		}
+	}
+	option = {
+		name = "anomaly.4038.b"
+		trigger = {
+			owner = {
+				has_technology = tech_physics_inertial_54
+				NOT = {
+					has_technology = tech_physics_zero_58
+				}
+			}
+		}
+		owner = {
+			end_event_chain = "star_power_chain"
+			if = {
+				limit = {
+					has_tech_option = tech_physics_zero_58
+				}
+				add_tech_progress = {
+					tech = tech_physics_zero_58
+					progress = 0.50
+				}
+				else = {
+					add_research_option = tech_physics_zero_58
+					add_tech_progress = {
+						tech = tech_physics_zero_58
+						progress = 0.25
+					}
+				}
+			}	
+			hidden_effect = { remove_country_flag = finished_star_power_chain }
+		}
+	}
+}
+
+### Sins of a Sun ##########################################################################################
+ship_event = {
+	id = anomaly.4040
+	title = "anomaly.4040.name"
+	desc = "anomaly.4040.desc"
+	picture = GFX_evt_nuclear_explosion
+	show_sound = event_super_explosion
+	location = FROM
+	
+	is_triggered_only = yes
+
+	immediate = { from = { orbital_deposit_tile = { clear_deposits = yes } } }
+
+	option = {
+		name = CURIOUS
+		custom_tooltip = "anomaly.4040.a.tooltip"
+		hidden_effect = {
+			FROM = {
+				add_modifier = {
+					modifier = "irradiated_wasteland"
+					days = -1
+				}
+				random_tile = {
+					limit = {
+						has_blocker = no
+					}
+					set_blocker = tb_radioactive_wasteland
+				}
+				random_tile = {
+					limit = {
+						has_blocker = no
+					}
+					set_blocker = tb_radioactive_wasteland
+				}
+				random_tile = {
+					limit = {
+						has_blocker = no
+					}
+					set_blocker = tb_radioactive_wasteland
+				}
+				random_tile = {
+					limit = {
+						has_blocker = no
+					}
+					set_blocker = tb_radioactive_wasteland
+				}
+				random_tile = {
+					limit = {
+						has_blocker = no
+					}
+					set_blocker = tb_radioactive_wasteland
+				}
+				random_tile = {
+					limit = {
+						has_blocker = no
+					}
+					set_blocker = tb_radioactive_wasteland
+				}
+				orbital_deposit_tile = {
+					add_deposit = d_immense_physics_deposit
+				}
+			}
+		}
+	}
+}
+
+### Echoes from the Deep #################################################################################
+ship_event = {
+	id = anomaly.4045
+	title = "anomaly.4045.name"
+	desc = "anomaly.4045.desc"
+	picture = GFX_evt_ocean
+	show_sound = event_ship_bridge
+	location = FROM
+	
+	is_triggered_only = yes
+	
+	immediate = { from = { orbital_deposit_tile = { clear_deposits = yes } } }
+
+	option = {
+		trigger = {
+			leader = {
+				OR = {
+					has_trait = leader_trait_meticulous
+					has_trait = leader_trait_spark_of_genius
+				}
+			}
+		}
+		name = "anomaly.4045.a"
+		hidden_effect = {
+			ship_event = { id = anomaly.4046 }
+		}
+	}
+	option = {
+		trigger = {
+			leader = { has_trait = leader_trait_paranoid }
+		}
+		name = "anomaly.4045.b"
+		hidden_effect = {
+			ship_event = { id = anomaly.4049 }
+		}
+	}
+	option = {
+		name = "anomaly.4045.c"
+		hidden_effect = {
+			ship_event = { id = anomaly.4051 }
+		}
+	}
+	option = {
+		name = "anomaly.4045.d"
+		hidden_effect = {
+			ship_event = { id = anomaly.4052 }
+		}
+	}
+}
+
+#If stroke of genius you find source
+#story4
+ship_event = {
+	id = anomaly.4046
+	title = "anomaly.4045.name"
+	desc = "anomaly.4046.desc"
+	picture = GFX_evt_unspeakable_horror
+	show_sound = event_mystic_reveal
+	location = FROMFROM
+	
+	is_triggered_only = yes
+
+	immediate = {
+		hidden_effect = { owner = { country_event = { id = story.4 days = 30 } } }
+		fromfrom = {
+			add_modifier = {
+				modifier = "hostile_environment"
+				days = -1
+			}
+			add_modifier = {
+				modifier = "ancient_one"
+				days = -1
+			}
+		}
+		owner = {
+			######## Gain NEGATIVE Press Coverage ########
+			##############################################
+			if = {
+				limit = {
+					has_modifier = media_coverage_negative_high
+				}
+				remove_modifier = "media_coverage_negative_high"
+				add_modifier = {
+					modifier = media_coverage_negative_high
+					days = 7200
+				}
+			}
+			if = {
+				limit = {
+					has_modifier = media_coverage_negative_medium
+				}
+				remove_modifier = "media_coverage_negative_medium"
+				add_modifier = {
+					modifier = media_coverage_negative_high
+					days = 7200
+				}
+			}
+			if = {
+				limit = {
+					has_modifier = media_coverage_negative_low
+				}
+				remove_modifier = "media_coverage_negative_low"
+				add_modifier = {
+					modifier = media_coverage_negative_medium
+					days = 7200
+				}
+			}
+			if = {
+				limit = {
+					NOR = {
+						has_modifier = media_coverage_positive_high
+						has_modifier = media_coverage_positive_medium
+						has_modifier = media_coverage_positive_low
+						has_modifier = media_coverage_negative_low
+						has_modifier = media_coverage_negative_medium
+						has_modifier = media_coverage_negative_high
+					}
+				}
+				add_modifier = {
+					modifier = media_coverage_negative_low
+					days = 7200
+				}
+			}
+			if = {
+				limit = {
+					has_modifier = media_coverage_positive_low
+				}
+				remove_modifier = "media_coverage_positive_low"
+			}
+			if = {
+				limit = {
+					has_modifier = media_coverage_positive_medium
+				}
+				remove_modifier = "media_coverage_positive_medium"
+				add_modifier = {
+					modifier = media_coverage_positive_low
+					days = 7200
+				}
+			}
+			if = {
+				limit = {
+					has_modifier = media_coverage_positive_high
+				}
+				remove_modifier = "media_coverage_positive_high"
+				add_modifier = {
+					modifier = media_coverage_positive_medium
+					days = 7200
+				}
+			}
+			##### End of Gain NEGATIVE Press Coverage #####
+			###############################################
+		}
+	}
+
+	option = { #contact the beast
+		name = "anomaly.4046.a"
+		hidden_effect = {
+			ship_event = { id = anomaly.4047}
+		}
+		hidden_effect = {
+			fromfrom = {
+				remove_modifier = "hostile_environment"
+			}
+		}
+	}
+	option = { #try to kill the beast
+		name = "anomaly.4046.b"
+		hidden_effect = {
+			fromfrom = {
+				remove_modifier = "ancient_one"
+			}
+			ship_event = { id = anomaly.4048}
+		}
+	}
+	option = { #leave it alone
+		name = "anomaly.4046.c"
+		custom_tooltip = "anomaly.4046.c.tooltip"
+		hidden_effect = {
+			fromfrom = {
+				orbital_deposit_tile = {
+					add_deposit = d_immense_society_deposit
+					add_deposit = d_society_deposit
+				}
+			}
+		}
+	}
+}
+ship_event = {
+	id = anomaly.4047
+	title = "anomaly.4045.name"
+	desc = "anomaly.4047.desc"
+	picture = GFX_evt_unspeakable_horror
+	show_sound = event_mystic_reveal
+	location = FROMFROMFROM
+	
+	is_triggered_only = yes
+
+	option = {
+		name = anomaly.4047.a
+		custom_tooltip = "anomaly.4047.a.tooltip"
+		hidden_effect = {
+			FROM = {
+				fromfrom = {
+					orbital_deposit_tile = {
+						add_deposit = d_immense_society_deposit
+						add_deposit = d_society_deposit
+					}
+				}
+			}
+		}
+	}
+}
+ship_event = {
+	id = anomaly.4048
+	title = "anomaly.4045.name"
+	desc = "anomaly.4048.desc"
+	picture = GFX_evt_unspeakable_horror
+	show_sound = event_mystic_reveal
+	location = FROMFROMFROM
+	
+	is_triggered_only = yes
+
+	immediate = {
+		FROM = {
+			fromfrom = {
+				change_pc = pc_toxic
+				reset_planet = yes
+			}
+		}
+	}
+
+	option = {
+		name = "anomaly.4048.a"
+		custom_tooltip = "anomaly.4048.a.tooltip"
+		hidden_effect = {
+			FROM = {
+				fromfrom = {
+					orbital_deposit_tile = {
+						add_deposit = d_immense_society_deposit
+						add_deposit = d_society_deposit
+					}
+				}
+			}
+		}
+	}
+}
+#If paranoid - leader finds source and gets stuff 
+#story4
+ship_event = {
+	id = anomaly.4049 
+	title = "anomaly.4045.name"
+	desc = "anomaly.4049.desc"
+	picture = GFX_evt_unspeakable_horror
+	show_sound = event_mystic_reveal
+	location = FROMFROMFROM
+	
+	is_triggered_only = yes
+
+	immediate = {
+		hidden_effect = { owner = { country_event = { id = story.4 days = 30 } } }
+		leader = {
+			add_trait = leader_trait_maniacal
+		}
+	}
+
+	option = {
+		name = "anomaly.4049.a"
+		custom_tooltip = "anomaly.4049.a.tooltip"
+		hidden_effect = {
+			ship_event = {id = anomaly.4050 days = 7}
+			set_disabled = no
+		}
+	}
+	option = {
+		name = "anomaly.4049.b"
+		custom_tooltip = "anomaly.4049.b.tooltip"
+		hidden_effect = {
+			fleet = {
+				kill_leader = { type = scientist show_notification = no}
+			}
+			set_disabled = no
+		}
+	}
+}
+#If paranoid - leader finds source and gets stuff
+#story 4
+ship_event = {
+	id = anomaly.4050
+	title = "anomaly.4045.name"
+	desc = "anomaly.4050.desc"
+	picture = GFX_evt_psionics
+	show_sound = event_mystic_reveal
+	location = FROM
+	
+	is_triggered_only = yes
+
+	immediate = {
+		hidden_effect = {
+			leader = {
+				add_trait = leader_trait_expertise_psionics
+				add_experience = 100
+			}
+		}
+	}
+
+	option = {
+		name = "anomaly.4050.a"
+		custom_tooltip = "anomaly.4050.a.tooltip"
+	}
+	option = {
+		name = "anomaly.4050.b"
+		custom_tooltip = "anomaly.4050.a.tooltip"
+	}
+}
+#If abandoning for crews sake
+ship_event = {
+	id = anomaly.4051
+	title = "anomaly.4045.name"
+	desc = "anomaly.4051.desc"
+	picture = GFX_evt_metropolis
+	show_sound = event_radio_chatter
+	location = FROMFROMFROM
+	
+	is_triggered_only = yes
+
+	immediate = {
+		owner = {
+			add_modifier = {
+				modifier = scientist_team_well_treated
+				days = 7200
+			}
+		}
+		######## Gain POSITIVE Press Coverage ########
+		##############################################
+		if = {
+			limit = {
+				owner = {
+					OR = {
+						has_modifier = media_coverage_positive_high
+					}
+				}
+			}
+			owner = {
+				remove_modifier = media_coverage_positive_high
+				add_modifier = {
+					modifier = media_coverage_positive_high
+					days = 7200
+				}
+			}
+		}
+		if = {
+			limit = {
+				owner = {
+					OR = {
+						has_modifier = media_coverage_positive_medium
+					}
+				}
+			}
+			owner = {
+				remove_modifier = media_coverage_positive_medium
+				add_modifier = {
+					modifier = media_coverage_positive_high
+					days = 7200
+				}
+			}
+		}
+		if = {
+			limit = {
+				owner = {
+					has_modifier = media_coverage_positive_low
+				}
+			}
+			owner = {
+				remove_modifier = media_coverage_positive_low
+				add_modifier = {
+					modifier = media_coverage_positive_medium
+					days = 7200
+				}
+			}
+		}
+		if = {
+			limit = {
+				owner = {
+					NOT = {
+						has_modifier = media_coverage_negative_high
+						has_modifier = media_coverage_negative_medium
+						has_modifier = media_coverage_negative_low
+						has_modifier = media_coverage_positive_low
+						has_modifier = media_coverage_positive_medium
+						has_modifier = media_coverage_positive_high
+					}
+				}
+			}
+			owner = {
+				add_modifier = {
+					modifier = media_coverage_positive_low
+					days = 7200
+				}
+			}
+		}
+		if = {
+			limit = {
+				owner = {
+					has_modifier = media_coverage_negative_low
+				}
+			}
+			owner = {
+				remove_modifier = media_coverage_negative_low
+			}
+		}
+		if = {
+			limit = {
+				owner = {
+					has_modifier = media_coverage_negative_medium
+				}
+			}
+			owner = {
+				remove_modifier = media_coverage_negative_medium
+				add_modifier = {
+					modifier = media_coverage_negative_low
+					days = 7200
+				}
+			}
+		}
+		if = {
+			limit = {
+				owner = {
+					has_modifier = media_coverage_negative_high
+				}
+			}
+			owner = {
+				remove_modifier = media_coverage_negative_high
+				add_modifier = {
+					modifier = media_coverage_negative_medium
+					days = 7200
+				}
+			}
+		}
+		##### End of Gain POSITIVE Press Coverage #####
+		###############################################
+	}
+
+	option = {
+		name = "anomaly.4051.a"
+		custom_tooltip = "anomaly.4051.a.tooltip"
+		trigger = {
+			owner = {
+				has_country_flag = edict_improved_work_environment
+			}
+		}
+	}
+	option = {
+		name = "anomaly.4051.a"
+		custom_tooltip = "anomaly.4051.b.tooltip"
+		trigger = {
+			owner = {
+				NOT = { has_country_flag = edict_improved_work_environment }
+			}
+		}
+		hidden_effect = {
+			owner = {
+				set_country_flag = edict_improved_work_environment
+			}
+		}
+	}
+	option = {
+		name = "anomaly.4051.b"
+		custom_tooltip = "anomaly.4051.a.tooltip"
+		trigger = {
+			owner = {
+				has_country_flag = edict_improved_work_environment
+			}
+		}
+	}
+	option = {
+		name = "anomaly.4051.b"
+		custom_tooltip = "anomaly.4051.b.tooltip"
+		trigger = {
+			owner = {
+				NOT = { has_country_flag = edict_improved_work_environment }
+			}
+		}
+		hidden_effect = {
+			owner = {
+				set_country_flag = edict_improved_work_environment
+			}
+		}
+	}
+}
+#If keep going on anyway
+#story4
+ship_event = {
+	id = anomaly.4052
+	title = "anomaly.4045.name"
+	desc = "anomaly.4052.desc"
+	picture = GFX_evt_ocean
+	show_sound = event_mystic_reveal
+	location = FROMFROMFROM
+	
+	is_triggered_only = yes
+
+	immediate = {
+		hidden_effect = { owner = { country_event = { id = story.4 days = 30 } } }
+		owner = {
+			add_modifier = {
+				modifier = health_discovery
+				days = 7200
+			}
+		}
+		######## Gain NEGATIVE Press Coverage ########
+		##############################################
+		if = {
+			limit = {
+				owner = {
+					has_modifier = media_coverage_negative_high
+				}
+			}
+			owner = {
+				remove_modifier = media_coverage_negative_high
+				add_modifier = {
+					modifier = media_coverage_negative_high
+					days = 7200
+				}
+			}
+		}
+		if = {
+			limit = {
+				owner = {
+					has_modifier = media_coverage_negative_medium
+				}
+			}
+			owner = {
+				remove_modifier = media_coverage_negative_medium
+				add_modifier = {
+					modifier = media_coverage_negative_high
+					days = 7200
+				}
+			}
+		}
+		if = {
+			limit = {
+				owner = {
+					has_modifier = media_coverage_negative_low
+				}
+			}
+			owner = {
+				remove_modifier = media_coverage_negative_low
+				add_modifier = {
+					modifier = media_coverage_negative_medium
+					days = 7200
+				}
+			}
+		}
+		if = {
+			limit = {
+				owner = {
+					NOT = {
+						has_modifier = media_coverage_positive_high
+						has_modifier = media_coverage_positive_medium
+						has_modifier = media_coverage_positive_low
+						has_modifier = media_coverage_negative_low
+						has_modifier = media_coverage_negative_medium
+						has_modifier = media_coverage_negative_high
+					}
+				}
+			}
+			owner = {
+				add_modifier = {
+					modifier = media_coverage_negative_low
+					days = 7200
+				}
+			}
+		}
+		if = {
+			limit = {
+				owner = {
+					has_modifier = media_coverage_positive_low
+				}
+			}
+			owner = {
+				remove_modifier = media_coverage_positive_low
+			}
+		}
+		if = {
+			limit = {
+				owner = {
+					has_modifier = media_coverage_positive_medium
+				}
+			}
+			owner = {
+				remove_modifier = media_coverage_positive_medium
+				add_modifier = {
+					modifier = media_coverage_positive_low
+					days = 7200
+				}
+			}
+		}
+		if = {
+			limit = {
+				owner = {
+					has_modifier = media_coverage_positive_high
+				}
+			}
+			owner = {
+				remove_modifier = media_coverage_positive_high
+				add_modifier = {
+					modifier = media_coverage_positive_medium
+					days = 7200
+				}
+			}
+		}
+		##### End of Gain NEGATIVE Press Coverage #####
+		###############################################
+	}
+
+	option = {
+		name = OK
+		custom_tooltip = "anomaly.4052.a.tooltip"
+		hidden_effect = {
+			FROM = {
+				fromfrom = {
+					orbital_deposit_tile = {
+						add_deposit = d_vast_society_deposit
+					}
+				}
+			}
+		}
+	}
+}
+
+### Diamond in the Rough ##################################################################################
+ship_event = {
+	id = anomaly.4055
+	title = "anomaly.4055.name"
+	desc = "anomaly.4055.desc"
+	picture = GFX_evt_physics_research
+	show_sound = event_laboratory_sound
+	location = FROM
+
+	is_triggered_only = yes
+
+	immediate = { from = { orbital_deposit_tile = { clear_deposits = yes } } }
+
+	option = {
+		name = anomaly.4055.a
+		custom_tooltip = "anomaly.4055.a.tooltip"
+		hidden_effect = {
+			owner = {
+				create_leader = {
+					type = scientist
+					species = owner_main_species
+					name = random
+				}
+				last_created_leader = {
+					add_experience = 200
+					if = {
+						limit = {
+							NOT = {
+								has_trait = leader_trait_spark_of_genius
+							}
+						}
+						add_trait = leader_trait_spark_of_genius
+					}
+				}
+			}
+			FROM = {
+				orbital_deposit_tile = {
+					add_deposit = d_rich_physics_deposit
+					add_deposit = d_immense_physics_deposit
+				}
+			}
+		}
+	}
+	option = {
+		name = anomaly.4055.b
+		custom_tooltip = "anomaly.4055.b.tooltip"
+		hidden_effect = {
+			root = {
+				add_modifier = {
+					modifier = protege_onboard
+					days = 7200
+				}
+			}
+			FROM = {
+				orbital_deposit_tile = {
+					add_deposit = d_rich_physics_deposit
+					add_deposit = d_immense_physics_deposit
+				}
+			}
+		}
+	}	
+}
+
+### Improbable Teapot ####################################################################################
+ship_event = {
+	id = anomaly.4060
+	title = "anomaly.4060.name"
+	desc = "anomaly.4060.desc"
+	picture = GFX_evt_star_yellow
+	show_sound = event_solar_fusion
+	location = FROM
+
+	is_triggered_only = yes
+
+	option = {
+		name = anomaly.4060.a
+		enable_special_project = {
+			name = "IMPROBABLE_TEAPOT_PROJECT"
+			owner = root
+			location = from
+		}
+	}
+	option = {
+		name = anomaly.4060.b
+		trigger = {
+			owner = {
+				NOT = {
+					has_ethic = ethic_fanatic_spiritualist
+					has_ethic = ethic_spiritualist
+				}
+			}
+		}
+		owner = {
+			add_monthly_resource_mult = {
+				resource = influence
+				value = @tier1influencereward
+				min = @tier1influencemin
+				max = @tier1influencemax
+			}
+		}
+	}
+	option = {
+		name = anomaly.4060.spirit.b
+		trigger = {
+			owner = {
+				OR = {
+					has_ethic = ethic_fanatic_spiritualist
+					has_ethic = ethic_spiritualist
+				}
+			}
+		}
+		owner = {
+			add_monthly_resource_mult = {
+				resource = influence
+				value = @tier2influencereward
+				min = @tier2influencemin
+				max = @tier2influencemax
+			}
+		}
+	}
+}
+#Special project completed
+ship_event = {
+	id = anomaly.4061
+	title = PROJECT_COMPLETE
+	desc = "anomaly.4061.desc"
+	picture = GFX_evt_star_yellow
+	show_sound = event_solar_fusion
+	location = FROMFROM
+
+	is_triggered_only = yes
+
+	option = {
+		name = anomaly.4061.a
+		custom_tooltip = "anomaly.4061.a.tooltip"
+		owner = {
+			add_monthly_resource_mult = {
+				resource = influence
+				value = @tier4influencereward
+				min = @tier4influencemin
+				max = @tier4influencemax
+			}		
+		}
+	}
+}
+#Special project completed
+ship_event = {
+	id = anomaly.4062
+	title = PROJECT_COMPLETE
+	desc = {
+		trigger = {
+			hidden:owner = {
+				switch = {
+					trigger = has_ethic
+					ethic_fanatic_spiritualist = { text = anomaly.4062.spirit.desc }
+					ethic_spiritualist = { text = anomaly.4062.spirit.desc }
+					default = { text = anomaly.4062.desc }
+				}
+			}
+		}
+	}
+	picture = GFX_evt_star_yellow
+	show_sound = event_solar_fusion
+	location = FROMFROM
+
+	is_triggered_only = yes
+
+	option = {
+		name = BREAKTHROUGH
+		trigger = {
+			owner = {
+				NOT = {
+					has_ethic = ethic_fanatic_spiritualist
+					has_ethic = ethic_spiritualist
+				}
+			}
+		}
+		owner = { 
+			add_modifier = {
+				modifier = forth_dimension_knowledge
+				days = 7200
+			}
+		}
+	}
+	option = {
+		name = anomaly.4062.spirit.a
+		trigger = {
+			owner = {
+				OR = {
+					has_ethic = ethic_fanatic_spiritualist
+					has_ethic = ethic_spiritualist
+				}
+			}
+		}
+		owner = { 
+			add_modifier = {
+				modifier = forth_dimension_knowledge
+				days = 7200
+			}
+		}
+	}
+}
+
+### Ancient Mining Gear ##################################################################################
+#story5
+ship_event = {
+	id = anomaly.4065
+	title = "anomaly.4065.name"
+	desc = "anomaly.4065.desc"
+	picture = GFX_evt_mining_station
+	show_sound = event_scanner
+	location = FROM
+
+	is_triggered_only = yes
+
+	immediate = { hidden_effect = { owner = { country_event = { id = story.5 days = 30 } } } }
+
+	option = {
+		name = anomaly.4065.a
+		enable_special_project = {
+			name = "MINING_GEAR_PROJECT"
+			owner = root
+			location = from
+		}
+	}
+	option = {
+		name = SCRAPIT
+		owner = {
+			add_monthly_resource_mult = {
+				resource = minerals
+				value = @tier2materialreward
+				min = @tier2materialmin
+				max = @tier2materialmax
+			}
+		}
+	}
+}
+#Special Project Succeded
+ship_event = {
+	id = anomaly.4066
+	title = PROJECT_COMPLETE
+	desc = {
+		trigger = {
+			hidden:owner = {
+				switch = {
+					trigger = has_technology
+					tech_engineering_gouge_578 = { text = anomaly.4066.res.desc }
+					default = { text = anomaly.4066.upg.desc }
+				}
+			}
+		}
+	}
+	picture = GFX_evt_mining_station
+	show_sound = event_scanner
+	location = FROMFROM
+
+	is_triggered_only = yes
+
+	option = {
+		name = EXCELLENT
+		trigger = {
+			owner = {
+				NOT = {
+					has_technology = tech_engineering_gouge_578
+				}
+			}
+		}
+		owner = {
+			if = {
+				limit = {
+					has_tech_option = tech_engineering_gouge_578
+				}
+				add_tech_progress = {
+					tech = tech_engineering_gouge_578
+					progress = 0.5
+				}
+				else = {
+					add_research_option = tech_engineering_gouge_578
+					add_tech_progress = {
+						tech = tech_engineering_gouge_578
+						progress = 0.25
+					}
+				}
+			}
+		}
+	}
+	option = {
+		name = EXCELLENT
+		trigger = {
+			owner = {
+				has_technology = tech_engineering_gouge_578
+				NOT = {
+					has_technology = tech_engineering_gouge_578
+				}
+			}
+		}
+		owner = {
+			if = {
+				limit = {
+					has_tech_option = tech_engineering_gouge_578
+				}
+				add_tech_progress = {
+					tech = tech_engineering_gouge_578
+					progress = 0.4
+				}
+				else = {
+					add_research_option = tech_engineering_gouge_578
+					add_tech_progress = {
+						tech = tech_engineering_gouge_578
+						progress = 0.2
+					}
+				}
+			}
+		}
+	}
+	option = {
+		name = OK
+		custom_tooltip = "anomaly.4066.b.tooltip"
+		trigger = {
+			owner = {
+				has_technology = tech_engineering_gouge_578
+			}
+		}
+		from = {
+			fromfrom = {
+				hidden_effect = {
+					orbital_deposit_tile = {
+						add_deposit = d_immense_mineral_deposit
+					}
+				}
+			}
+		}
+	}
+}
+
+### Nutricious Fruit #####################################################################################
+ship_event = {
+	id = anomaly.4070
+	title = "anomaly.4070.name"
+	desc = "anomaly.4070.desc"
+	picture = GFX_evt_alien_nature
+	show_sound = event_alien_nature
+	location = FROM
+
+	is_triggered_only = yes
+
+	option = {
+		name = "anomaly.4070.a"
+		from = {
+			add_modifier = {
+				modifier = food_rich_planet
+				days = -1
+			}
+		}
+	}
+}
+
+### Shield Bacteria #####################################################################################
+#story1
+ship_event = {
+	id = anomaly.4075
+	title = "anomaly.4075.name"
+	desc = "anomaly.4075.desc"
+	picture = GFX_evt_microscopic_life
+	show_sound = event_mystic_reveal
+	location = FROM
+
+	is_triggered_only = yes
+
+	trigger = {
+		owner = {
+			NOT = { has_policy_flag = interference_passive }
+		}
+	}
+
+	immediate = { hidden_effect = { owner = { country_event = { id = story.1 days = 30 } } } }
+
+	option = {
+		name = anomaly.4075.a
+		custom_tooltip = "anomaly.4075.a.tooltip"
+		hidden_effect = {
+			owner = {
+				country_event = {id = anomaly.4076 days = 5}
+			}
+		}
+	}
+	option = {
+		name = anomaly.4075.b
+		custom_tooltip = "anomaly.4075.a.tooltip"
+		trigger = {
+			owner = {
+				NOT = {
+					has_technology = tech_physics_advanced_84
+				}
+			}
+		}
+		hidden_effect = {
+			owner = {
+				country_event = {id = anomaly.4077 days = 5}
+			}
+		}
+	}
+}
+country_event = {
+	id = anomaly.4076
+	title = "anomaly.4075.name"
+	desc = "anomaly.4076.desc"
+	picture = GFX_evt_microscopic_life
+	show_sound = event_default
+	location = FROMFROM
+
+	is_triggered_only = yes
+
+	option = {
+		name = MARVELOUS
+		root = {
+			add_modifier = {
+				modifier = solar_harvesting_bacteria
+				days = -1
+			}
+		}
+	}
+}
+country_event = {
+	id = anomaly.4077
+	title = "anomaly.4075.name"
+	desc = "anomaly.4077.desc"
+	picture = GFX_evt_microscopic_life
+	show_sound = event_default
+	location = FROMFROM
+
+	is_triggered_only = yes
+
+	option = {
+		name = MARVELOUS
+		trigger = {
+			root = {
+				NOT = {
+					has_technology = tech_physics_advanced_84
+				}
+			}
+		}
+		root = {
+			if = {
+				limit = {
+					has_tech_option = tech_physics_advanced_84
+				}
+				add_tech_progress = {
+					tech = tech_physics_advanced_84
+					progress = 0.8
+				}
+				else = {
+					add_research_option = tech_physics_advanced_84
+					add_tech_progress = {
+						tech = tech_physics_advanced_84
+						progress = 0.4
+					}
+				}
+			}
+		}
+	}
+	option = {
+		name = MARVELOUS
+		trigger = {
+			root = {
+				has_technology = tech_physics_advanced_84
+				NOT = {
+					has_technology = tech_physics_advanced_84
+				}
+			}
+		}
+		root = {
+			if = {
+				limit = {
+					has_tech_option = tech_physics_advanced_84
+				}
+				add_tech_progress = {
+					tech = tech_physics_advanced_84
+					progress = 0.6
+				}
+				else = {
+					add_research_option = tech_physics_advanced_84
+					add_tech_progress = {
+						tech = tech_physics_advanced_84
+						progress = 0.3
+					}
+				}
+			}
+		}
+	}
+	option = {
+		name = MARVELOUS
+		trigger = {
+			root = {
+				has_technology = tech_physics_advanced_84
+				NOT = {
+					has_technology = tech_physics_advanced_84
+				}
+			}
+		}
+		root = {
+			if = {
+				limit = {
+					has_tech_option = tech_physics_advanced_84
+				}
+				add_tech_progress = {
+					tech = tech_physics_advanced_84
+					progress = 0.5
+				}
+				else = {
+					add_research_option = tech_physics_advanced_84
+					add_tech_progress = {
+						tech = tech_physics_advanced_84
+						progress = 0.25
+					}
+				}
+			}
+		}
+	}
+	option = {
+		name = MARVELOUS
+		trigger = {
+			root = {
+				has_technology = tech_physics_advanced_84
+				NOT = {
+					has_technology = tech_physics_advanced_84
+				}
+			}
+		}
+		root = {
+			if = {
+				limit = {
+					has_tech_option = tech_physics_advanced_84
+				}
+				add_tech_progress = {
+					tech = tech_physics_advanced_84
+					progress = 0.4
+				}
+				else = {
+					add_research_option = tech_physics_advanced_84
+					add_tech_progress = {
+						tech = tech_physics_advanced_84
+						progress = 0.2
+					}
+				}
+			}
+		}
+	}
+}
+
+### Abandoned Sensor Array ###############################################################################
+#story5
+ship_event = {
+	id = anomaly.4080
+	title = "anomaly.4080.name"
+	desc = "anomaly.4080.desc"
+	picture = GFX_evt_star_chart
+	show_sound = event_sensor_ping
+	location = from
+
+	is_triggered_only = yes
+
+	immediate = { hidden_effect = { owner = { country_event = { id = story.5 days = 30 } } } }
+
+	option = {
+		name = anomaly.4080.a
+		enable_special_project = {
+			name = "ABANDONED_ARRAY_PROJECT"
+			owner = root
+			location = from
+		}
+	}
+	option = {
+		name = anomaly.4080.b
+		trigger = {
+			owner = { NOT = { has_technology = tech_physics_orbital_37 } }
+		}
+		owner = {
+			if = {
+				limit = {
+					has_tech_option = tech_physics_orbital_37
+				}
+				add_tech_progress = {
+					tech = tech_physics_orbital_37
+					progress = 0.50
+				}
+				else = {
+					add_research_option = tech_physics_orbital_37
+				}
+			}
+		}
+	}
+	option = {
+		trigger = {
+			owner = { has_technology = tech_physics_orbital_37 }
+		}
+		name = SCRAPIT
+		owner = {
+			add_monthly_resource_mult = {
+				resource = minerals
+				value = @tier2materialreward
+				min = @tier2materialmin
+				max = @tier2materialmax
+			}
+		}
+	}
+	option = {
+		name = anomaly.4080.c
+		trigger = {
+			owner = {
+				OR = {
+					has_ethic = ethic_fanatic_pacifist
+					has_ethic = ethic_pacifist
+					has_ethic = ethic_fanatic_authoritarian
+					has_ethic = ethic_authoritarian
+				}
+				NOT = {
+					has_ethic = ethic_fanatic_xenophobe
+					has_ethic = ethic_xenophobe
+				}
+			}
+		}
+		owner = {
+			add_monthly_resource_mult = {
+				resource = influence
+				value = @tier3influencereward
+				min = @tier3influencemin
+				max = @tier3influencemax
+			}
+		}
+	}
+}
+#Special Project completed
+ship_event = {
+	id = anomaly.4081
+	title = PROJECT_COMPLETE
+	desc = "anomaly.4081.desc"
+	picture = GFX_evt_star_chart
+	show_sound = event_sensor_ping
+	location = fromfromfrom
+
+	is_triggered_only = yes
+
+	option = {
+		trigger = {
+			owner = {
+				has_country_flag = edict_super_sensors
+			}
+		}
+		name = SPLENDID
+		custom_tooltip = anomaly.4081.a.tooltip
+		hidden_effect = {
+			from = {
+				fromfrom = {
+					add_modifier = {
+						modifier = super_sensor_array
+						days = -1
+					}
+				}
+			}
+		}
+	}
+	option = {
+		trigger = {
+			owner = {
+				NOT = { has_country_flag = edict_super_sensors }
+			}
+		}
+		name = SPLENDID
+		custom_tooltip = anomaly.4081.b.tooltip
+		hidden_effect = {
+			owner = {
+				set_country_flag = edict_super_sensors
+			}
+			from = {
+				fromfrom = {
+					add_modifier = {
+						modifier = super_sensor_array
+						days = -1
+					}
+				}
+			}
+		}
+	}
+}
+
+### Grand Theft Orbit ####################################################################################
+#story5
+ship_event = {
+	id = anomaly.4085
+	title = "anomaly.4085.name"
+	desc = "anomaly.4085.desc"
+	picture = GFX_evt_ship_in_orbit
+	show_sound = event_ship_thrusters
+	location = from
+
+	is_triggered_only = yes
+
+	immediate = { hidden_effect = { owner = { country_event = { id = story.5 days = 30 } } } }
+
+	option = {
+		name = INTRIGUING
+		enable_special_project = {
+			name = "ALIEN_RACER_PROJECT"
+			owner = root
+			location = from
+		}
+	}
+	option = {
+		name = SCRAPIT
+		owner = {
+			add_monthly_resource_mult = {
+				resource = minerals
+				value = @tier2materialreward
+				min = @tier2materialmin
+				max = @tier2materialmax
+			}
+		}
+	}
+}
+# Special Project Completed
+ship_event = {
+	id = anomaly.4086
+	title = PROJECT_COMPLETE
+	desc = "anomaly.4086.desc"
+	picture = GFX_evt_ship_in_orbit
+	show_sound = event_ship_thrusters
+	location = fromfromfrom
+
+	is_triggered_only = yes
+
+	option = {
+		name = "anomaly.4086.a"
+		custom_tooltip = "anomaly.4086.a.tooltip"
+		hidden_effect = {
+			from = {
+				owner = {
+					save_event_target_as = "me"
+				}
+			}
+			create_fleet = {
+				name = "NAME_Alien_Ship"
+				effect = {
+					set_owner = event_target:me
+					create_ship_design = {
+						design = "NAME_Alien_Ship"
+						ftl = event_target:me
+					}
+					create_ship = {
+						name = "NAME_Gallant_Dawn"
+						design = last_created_design
+						upgradable = no
+					}
+					set_location = fromfromfrom
+					add_modifier = {
+						modifier = ship_survey_boost
+						days = -1
+					}
+				}
+			}
+		}
+	}
+	option = {
+		name = "anomaly.4086.b"
+		custom_tooltip = "anomaly.4086.b.tooltip"
+		hidden_effect = {
+			fromfrom = {
+				owner = {
+					add_modifier = {
+						modifier = army_speed_boost
+						days = -1
+					}
+				}
+			}
+		}
+	}
+}
+
+### Refugees #############################################################################################
+#story8
+ship_event = {
+	id = anomaly.4090
+	title = "anomaly.4090.name"
+	desc = "anomaly.4090.desc"
+	picture = GFX_evt_ship_in_orbit
+	show_sound = event_ship_thrusters
+	location = from
+
+	is_triggered_only = yes
+
+	immediate = {
+		owner = {
+			set_country_flag = me
+			save_event_target_as = me
+		}
+		from = {
+			save_event_target_as = anomaly_planet
+		}
+		create_country = {
+			name = "NAME_Refugees"
+			type = faction
+			auto_delete = yes
+		}
+		create_species = {
+			name = random
+			class = RANDOMTREK
+			portrait = random
+			traits = random
+			homeworld = from
+		}
+		last_created_species = {
+			save_event_target_as = RefugeeAliens
+		}
+		#Find some available planets
+		owner = {
+			random_owned_planet = {
+				limit = {
+					NOR = {
+						free_pop_tiles < 1
+						has_planet_flag = refugee_planet_2
+						has_planet_flag = refugee_planet_3
+						has_planet_flag = refugee_planet_4
+					}
+					habitability = { who = event_target:RefugeeAliens value > 0.5 }
+				}
+				save_event_target_as = refugee_planet_1
+				set_planet_flag = refugee_planet_1
+				owner = {
+					set_country_flag = has_space_for_refugees
+				}
+			}
+			random_owned_planet = {
+				limit = {
+					NOR = {
+						free_pop_tiles < 1
+						has_planet_flag = refugee_planet_1
+						has_planet_flag = refugee_planet_3
+						has_planet_flag = refugee_planet_4
+					}
+					habitability = { who = event_target:RefugeeAliens value > 0.5 }
+				}
+				save_event_target_as = refugee_planet_2
+				set_planet_flag = refugee_planet_2
+				owner = {
+					set_country_flag = has_space_for_refugees
+				}
+			}
+			random_owned_planet = {
+				limit = {
+					NOR = {
+						free_pop_tiles < 1
+						has_planet_flag = refugee_planet_1
+						has_planet_flag = refugee_planet_2
+						has_planet_flag = refugee_planet_4
+					}
+					habitability = { who = event_target:RefugeeAliens value > 0.5 }
+				}
+				save_event_target_as = refugee_planet_3
+				set_planet_flag = refugee_planet_3
+				owner = {
+					set_country_flag = has_space_for_refugees
+				}
+			}
+			random_owned_planet = {
+				limit = {
+					NOR = {
+						free_pop_tiles < 1
+						has_planet_flag = refugee_planet_1
+						has_planet_flag = refugee_planet_2
+						has_planet_flag = refugee_planet_3
+					}
+					habitability = { who = event_target:RefugeeAliens value > 0.5 }
+				}
+				save_event_target_as = refugee_planet_4
+				set_planet_flag = refugee_planet_4
+				owner = {
+					set_country_flag = has_space_for_refugees
+				}
+			}
+		}
+	}
+
+	option = {
+		name = "anomaly.4090.a"
+		trigger = {
+			exists = event_target:refugee_planet_1
+			event_target:refugee_planet_1 = {
+				exists = owner
+				owner = { is_same_value = root.owner }
+			}
+		}
+		allow = {
+			exists = event_target:refugee_planet_1
+			event_target:refugee_planet_1 = {
+				exists = owner
+				owner = { is_same_value = root.owner }
+			}
+		}
+		event_target:refugee_planet_1 = {
+			random_tile = {
+				limit = {
+					AND = {
+						has_grown_pop = no
+						has_growing_pop = no
+					 	has_blocker = no
+					}
+				}
+				create_pop = {
+					species = event_target:RefugeeAliens
+					ethos = {
+						ethic = "ethic_egalitarian"			
+					}
+				}
+			}
+		}
+		owner = {
+			remove_country_flag = has_space_for_refugees
+			every_owned_planet = {
+				remove_planet_flag = refugee_planet_1
+				remove_planet_flag = refugee_planet_2
+				remove_planet_flag = refugee_planet_3
+				remove_planet_flag = refugee_planet_4
+			}
+		}
+	}
+	option = {
+		name = "anomaly.4090.b"
+		trigger = {
+			exists = event_target:refugee_planet_2
+			event_target:refugee_planet_2 = {
+				exists = owner
+				owner = { is_same_value = root.owner }
+			}
+		}
+		allow = {
+			exists = event_target:refugee_planet_2
+			event_target:refugee_planet_2 = {
+				exists = owner
+				owner = { is_same_value = root.owner }
+			}
+		}
+		event_target:refugee_planet_2 = {
+			random_tile = {
+				limit = {
+					AND = {
+						has_grown_pop = no
+						has_growing_pop = no
+					 	has_blocker = no
+					}
+				}
+				create_pop = {
+					species = event_target:RefugeeAliens
+					ethos = {
+						ethic = "ethic_egalitarian"			
+					}
+				}
+			}
+		}
+		owner = {
+			remove_country_flag = has_space_for_refugees
+			every_owned_planet = {
+				remove_planet_flag = refugee_planet_1
+				remove_planet_flag = refugee_planet_2
+				remove_planet_flag = refugee_planet_3
+				remove_planet_flag = refugee_planet_4
+			}
+		}
+	}
+	option = {
+		name = "anomaly.4090.c"
+		trigger = {
+			exists = event_target:refugee_planet_3
+			event_target:refugee_planet_3 = {
+				exists = owner
+				owner = { is_same_value = root.owner }
+			}
+		}
+		allow = {
+			exists = event_target:refugee_planet_3
+			event_target:refugee_planet_3 = {
+				exists = owner
+				owner = { is_same_value = root.owner }
+			}
+		}
+		event_target:refugee_planet_3 = {
+			random_tile = {
+				limit = {
+					AND = {
+						has_grown_pop = no
+						has_growing_pop = no
+					 	has_blocker = no
+					}
+				}
+				create_pop = {
+					species = event_target:RefugeeAliens
+					ethos = {
+						ethic = "ethic_egalitarian"			
+					}
+				}
+			}
+		}
+		owner = {
+			remove_country_flag = has_space_for_refugees
+			every_owned_planet = {
+				remove_planet_flag = refugee_planet_1
+				remove_planet_flag = refugee_planet_2
+				remove_planet_flag = refugee_planet_3
+				remove_planet_flag = refugee_planet_4
+			}
+		}
+	}
+	option = {
+		name = "anomaly.4090.d"
+		trigger = {
+			exists = event_target:refugee_planet_4
+			event_target:refugee_planet_4 = {
+				exists = owner
+				owner = { is_same_value = root.owner }
+			}
+		}
+		allow = {
+			exists = event_target:refugee_planet_4
+			event_target:refugee_planet_4 = {
+				exists = owner
+				owner = { is_same_value = root.owner }
+			}
+		}
+		event_target:refugee_planet_4 = {
+			random_tile = {
+				limit = {
+					AND = {
+						has_grown_pop = no
+						has_growing_pop = no
+					 	has_blocker = no
+					}
+				}
+				create_pop = {
+					species = event_target:RefugeeAliens
+					ethos = {
+						ethic = "ethic_egalitarian"			
+					}
+				}
+			}
+		}
+		owner = {
+			remove_country_flag = has_space_for_refugees
+			every_owned_planet = {
+				remove_planet_flag = refugee_planet_1
+				remove_planet_flag = refugee_planet_2
+				remove_planet_flag = refugee_planet_3
+				remove_planet_flag = refugee_planet_4
+			}
+		}
+	}
+	option = {
+		name = "anomaly.4090.e"
+		trigger = {
+			owner = {
+				NOT = { has_country_flag = has_space_for_refugees }
+			}
+		}
+		hidden_effect = {
+			owner = {
+				every_owned_planet = {
+					remove_planet_flag = refugee_planet_1
+					remove_planet_flag = refugee_planet_2
+					remove_planet_flag = refugee_planet_3
+					remove_planet_flag = refugee_planet_4
+				}
+				country_event = { id = anomaly.4091 days = 1 } 
+			}
+		}
+	}
+	option = {
+		name = "anomaly.4090.f"
+		trigger = {
+			owner = {
+				has_country_flag = has_space_for_refugees
+				NOR = {
+					has_ethic = "ethic_xenophobe"
+					has_ethic = "ethic_fanatic_xenophobe"
+				}
+			}
+		}
+		hidden_effect = {
+			owner = {
+				every_owned_planet = {
+					remove_planet_flag = refugee_planet_1
+					remove_planet_flag = refugee_planet_2
+					remove_planet_flag = refugee_planet_3
+					remove_planet_flag = refugee_planet_4
+				}
+				country_event = { id = anomaly.4091 days = 1 } 
+			}
+		}
+	}
+	option = {
+		name = "anomaly.4090.g"
+		trigger = {
+			owner = {
+				OR = {
+					has_ethic = "ethic_xenophobe"
+					has_ethic = "ethic_fanatic_xenophobe"
+				}
+			}
+		}
+		hidden_effect = {
+			owner = {
+				every_owned_planet = {
+					remove_planet_flag = refugee_planet_1
+					remove_planet_flag = refugee_planet_2
+					remove_planet_flag = refugee_planet_3
+					remove_planet_flag = refugee_planet_4
+				}
+				country_event = { id = anomaly.4091 days = 1 } 
+			}
+		}
+	}
+}
+country_event = {
+	id = anomaly.4091
+	hide_window = yes
+	is_triggered_only = yes
+
+	immediate = {
+		fromfrom = {
+			closest_system = {
+				limit = {
+					has_owner = no
+					is_surveyed = {
+						who = root
+						status = no
+					}
+					NOT = {
+						any_country = { intel_level = { level > low system = prev } }
+					}
+					any_planet = {
+						habitable_planet = yes
+					}
+				}
+				min_steps = 0
+				max_steps = 15
+				random_planet = {
+					limit = {
+						has_owner = no
+						habitable_planet = yes
+					}
+				#fromfrom = {
+					save_event_target_as = RefugeeAliensPlanet
+					set_planet_flag = refugee_planet
+					create_species = {
+						name = random
+						class = RANDOMTREK
+						portrait = random
+						traits = random
+						homeworld = event_target:RefugeeAliensPlanet
+					}
+					last_created_species = {
+						save_event_target_as = RefugeeAliens
+					}
+					create_country = {
+						name = random
+						type = default
+						ethos = {
+							ethic = "ethic_fanatic_xenophile"
+							ethic = "ethic_militarist"
+						}
+						authority = random
+						civics = random
+						species = event_target:RefugeeAliens
+						flag = random
+					}
+					last_created_country = {
+						save_event_target_as = RefugeeCountry
+						set_relation_flag = {
+							who = root
+							flag = AbandonedRefugees
+						}
+					}
+					random_tile = {
+						limit = {
+							AND = {
+								has_grown_pop = no
+								has_growing_pop = no
+							 	has_blocker = no
+							}
+						}
+						create_pop = {
+							species = event_target:RefugeeAliens
+						}
+					}
+					random_tile = {
+						limit = {
+							AND = {
+								has_grown_pop = no
+								has_growing_pop = no
+							 	has_blocker = no
+							}
+						}
+						create_pop = {
+							species = event_target:RefugeeAliens
+						}
+					}
+					random_tile = {
+						limit = { has_blocker = no has_building = no }
+						set_building = "building_capital_1"
+						random_neighboring_tile = {
+							limit = { has_blocker = no has_building = no }
+							set_building = "building_hydroponics_farm_1"
+						}
+					}
+				}
+			}
+		}
+	}
+}
+country_event = {
+	id = anomaly.4092
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		#is_ai = no
+		from = {
+			has_relation_flag = { who = root flag = AbandonedRefugees }
+		}
+	}
+
+	immediate = {
+		country_event = { id = anomaly.4093	}
+	}
+}
+country_event = {
+	id = anomaly.4093
+	title = "anomaly.4093.name"
+	desc = "anomaly.4093.desc"
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		random_planet = {
+			limit = {
+				has_planet_flag = refugee_planet
+			}
+			save_event_target_as = RefugeeAliensPlanet
+			owner = {
+				save_event_target_as = RefugeeAliensNation
+			}
+		}
+	}
+
+	diplomatic = yes
+	
+	picture_event_data = {
+		portrait = event_target:RefugeeAliensNation
+		planet_background = event_target:RefugeeAliensPlanet
+		graphical_culture = event_target:RefugeeAliensPlanet
+		city_level = event_target:RefugeeAliensPlanet
+		room = event_target:RefugeeAliensPlanet.ruler
+	}
+	
+	option = {
+		name = anomaly.4093.a
+		trigger = {
+			OR = {
+				has_ethic = ethic_fanatic_xenophile
+				has_ethic = ethic_xenophile
+			}
+			NOT = {
+				has_country_flag = refugees_insult
+				has_country_flag = refugees_apology
+				has_country_flag = refugees_neutral
+			}
+		}
+		hidden_effect = {
+			set_country_flag = refugees_apology
+			country_event = { id = anomaly.4094 }
+		}
+	}
+	option = {
+		name = anomaly.4093.b
+		trigger = {
+			OR = {
+				has_ethic = ethic_fanatic_egalitarian
+				has_ethic = ethic_egalitarian
+			}
+			NOT = {
+				has_country_flag = refugees_insult
+				has_country_flag = refugees_apology
+				has_country_flag = refugees_neutral
+			}
+		}
+		hidden_effect = {
+			set_country_flag = refugees_insult
+			country_event = { id = anomaly.4094 }
+		}
+	}
+	option = {
+		name = anomaly.4093.c
+		trigger = {
+			NOT = {
+				has_country_flag = refugees_insult
+				has_country_flag = refugees_apology
+				has_country_flag = refugees_neutral
+			}
+		}
+		hidden_effect = {
+			set_country_flag = refugees_neutral
+			country_event = { id = anomaly.4094 }
+		}
+	}
+	option = {
+		name = anomaly.4093.d
+		trigger = {
+			OR = {
+				has_ethic = ethic_fanatic_xenophobe
+				has_ethic = ethic_xenophobe
+			}
+			NOT = {
+				has_country_flag = refugees_insult
+				has_country_flag = refugees_apology
+				has_country_flag = refugees_neutral
+			}
+		}
+		hidden_effect = {
+			set_country_flag = refugees_insult_xeno
+			country_event = { id = anomaly.4094 }
+		}
+	}
+}
+country_event = {
+	id = anomaly.4094
+	title = "anomaly.4093.name"
+	desc = {
+		trigger = {
+			switch = {
+				trigger = has_country_flag
+				refugees_neutral = { text = anomaly.4094.neutral.desc }
+				refugees_apology = { text = anomaly.4094.apology.desc }
+				refugees_insult = { text = anomaly.4094.insult.desc }
+				refugees_insult_xeno = { text = anomaly.4094.xenophobe.desc }
+				default = { text = "OK" }
+			}
+		}
+	}
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		random_planet = {
+			limit = {
+				has_planet_flag = refugee_planet
+			}
+			remove_planet_flag = refugee_planet
+		}
+	}
+
+	diplomatic = yes
+	
+	picture_event_data = {
+		portrait = event_target:RefugeeAliensNation
+		planet_background = event_target:RefugeeAliensPlanet
+		graphical_culture = event_target:RefugeeAliensPlanet
+		city_level = event_target:RefugeeAliensPlanet
+		room = event_target:RefugeeAliensPlanet.ruler
+	}
+	
+	option = {
+		name = anomaly.4094.a
+		trigger = {
+			has_country_flag = refugees_apology
+		}
+		hidden_effect = {
+			remove_country_flag = has_space_for_refugees
+			remove_country_flag = refugees_apology
+			remove_country_flag = refugees_insult
+			remove_country_flag = refugees_neutral
+		}
+		event_target:RefugeeAliensNation = {
+			add_opinion_modifier = {
+				who = from
+				modifier = opinion_abandoned_apology
+			}
+		}
+	}
+	option = {
+		name = anomaly.4094.a
+		trigger = {
+			OR = {
+				has_country_flag = refugees_insult
+				has_country_flag = refugees_insult_xeno
+			}
+		}
+		hidden_effect = {
+			remove_country_flag = has_space_for_refugees
+			remove_country_flag = refugees_apology
+			remove_country_flag = refugees_insult
+			remove_country_flag = refugees_neutral
+		}
+		event_target:RefugeeAliensNation = {
+			add_opinion_modifier = {
+				who = from
+				modifier = opinion_abandoned_insult
+			}
+		}
+	}
+	option = {
+		name = anomaly.4094.a
+		trigger = {
+			has_country_flag = refugees_neutral
+		}
+		hidden_effect = {
+			remove_country_flag = has_space_for_refugees
+			remove_country_flag = refugees_apology
+			remove_country_flag = refugees_insult
+			remove_country_flag = refugees_neutral
+		}
+		event_target:RefugeeAliensNation = {
+			add_opinion_modifier = {
+				who = from
+				modifier = opinion_abandoned
+			}
+		}
+	}
+}
+### Lush Planet #############################################################################################
+ship_event = {
+	id = anomaly.4095
+	title = "anomaly.4095.name"
+	desc = "anomaly.4095.desc"
+	picture = GFX_evt_continental
+	show_sound = event_alien_nature
+	location = from
+
+	is_triggered_only = yes
+
+	option = {
+		name = EXCELLENT
+		custom_tooltip = "anomaly.4095.a.tooltip"
+		hidden_effect = {
+			from = {
+				add_modifier = {
+					modifier = "lush_planet"
+					days = -1
+				}
+			}
+		}
+	}
+}
+
+### Psionic Horses #########################################################################################
+#story3
+ship_event = {
+	id = anomaly.4100
+	title = "anomaly.4100.name"
+		desc = {
+		text = "anomaly.4100.desc"
+		trigger = {
+			leader = {
+				NOT = {
+					has_trait = leader_trait_careful
+					has_trait = leader_trait_expertise_statecraft
+					has_trait = leader_trait_expertise_biology
+				}
+			}
+		}
+	}
+	desc = {
+		text = "anomaly.4100.expert.desc"
+		trigger = {
+			leader = {
+				OR = {
+					has_trait = leader_trait_careful
+					has_trait = leader_trait_expertise_statecraft
+					has_trait = leader_trait_expertise_biology
+				}
+			}
+		}
+	}
+	picture = GFX_evt_continental
+	show_sound = event_alien_nature
+	location = from
+
+	is_triggered_only = yes
+
+	immediate = { hidden_effect = { owner = { country_event = { id = story.3 days = 30 } } } }
+	
+	#Study the animals
+	option = {
+		name = anomaly.4100.a
+		trigger = {
+			owner = {
+				NOT = {
+					has_policy_flag = interference_passive
+				}
+			}
+		}
+		enable_special_project = {
+			name = "PSIONIC_HORSES_PROJECT"
+			owner = root
+			location = from
+		}
+	}
+	#Domesticate the animals
+	option = {
+		name = anomaly.4100.b
+		trigger = {
+			owner = {
+				NOT = {
+					has_policy_flag = interference_passive
+				}
+			}
+		}
+		hidden_effect = {
+			if = {
+				limit = {
+					owner = {
+						OR = {
+							has_ethic = "ethic_fanatic_xenophobe"
+							has_ethic = "ethic_fanatic_militarist"
+							has_ethic = "ethic_fanatic_egalitarian"
+							has_ethic = "ethic_xenophobe"
+							has_ethic = "ethic_militarist"
+						}
+					}
+				}
+				owner = {
+					country_event = {id = anomaly.4103 days = 14}
+				}
+			}
+			if = {
+				limit = {
+					owner = {
+						NOT = {
+							has_ethic = "ethic_fanatic_xenophobe"
+							has_ethic = "ethic_fanatic_militarist"
+							has_ethic = "ethic_fanatic_egalitarian"
+							has_ethic = "ethic_xenophobe"
+							has_ethic = "ethic_militarist"
+						}
+					}
+				}
+				owner = {
+					country_event = {id = anomaly.4104 days = 14}
+				}
+			}
+		}
+	}
+	#Leave the animals alone
+	option = {
+		name = anomaly.4100.c
+		trigger = {
+			owner = {
+				has_policy_flag = interference_passive
+			}
+		}
+		from = {
+			add_modifier = {
+				modifier = society_animal_life
+				days = 1000
+			}
+		}
+	}
+}
+#IF a bad guy and studying
+#The animals run away and fight back. Giving us a boost in X studies for a limited time
+ship_event = {
+	id = anomaly.4101
+	title = "anomaly.4100.name"
+	desc = "anomaly.4101.desc"
+	picture = GFX_evt_continental
+	show_sound = event_alien_nature
+	location = fromfromfrom
+
+	is_triggered_only = yes
+
+	option = {
+		name = anomaly.4101.a
+		#custom_tooltip = "anomaly.4100.a.tooltip"
+		fromfromfrom = {
+			add_modifier = {
+				modifier = hostile_animal_life
+				days = -1
+			}
+			add_modifier = {
+				modifier = society_animal_life
+				days = 1000
+			}
+		}
+	}
+}
+#IF a good guy and studying
+#Gain good press, the animals become willing to aid you if you share their land justly 
+ship_event = {
+	id = anomaly.4102
+	title = "anomaly.4100.name"
+	desc = "anomaly.4102.desc"
+	picture = GFX_evt_continental
+	show_sound = event_alien_nature
+	location = fromfrom
+
+	is_triggered_only = yes
+
+	option = {
+		name = SPLENDID
+		fromfrom = {
+			add_modifier = {
+				modifier = horse_powered_factories_high
+				days = -1
+			}
+		}
+
+		######## Gain POSITIVE Press Coverage ########
+		##############################################
+		if = {
+			limit = {
+				owner = {
+					OR = {
+						has_modifier = media_coverage_positive_high
+					}
+				}
+			}
+			owner = {
+				remove_modifier = media_coverage_positive_high
+				add_modifier = {
+					modifier = media_coverage_positive_high
+					days = 7200
+				}
+			}
+		}
+		if = {
+			limit = {
+				owner = {
+					OR = {
+						has_modifier = media_coverage_positive_medium
+					}
+				}
+			}
+			owner = {
+				remove_modifier = media_coverage_positive_medium
+				add_modifier = {
+					modifier = media_coverage_positive_high
+					days = 7200
+				}
+			}
+		}
+		if = {
+			limit = {
+				owner = {
+					has_modifier = media_coverage_positive_low
+				}
+			}
+			owner = {
+				remove_modifier = media_coverage_positive_low
+				add_modifier = {
+					modifier = media_coverage_positive_medium
+					days = 7200
+				}
+			}
+		}
+		if = {
+			limit = {
+				owner = {
+					NOT = {
+						has_modifier = media_coverage_negative_high
+						has_modifier = media_coverage_negative_medium
+						has_modifier = media_coverage_negative_low
+						has_modifier = media_coverage_positive_low
+						has_modifier = media_coverage_positive_medium
+						has_modifier = media_coverage_positive_high
+					}
+				}
+			}
+			owner = {
+				add_modifier = {
+					modifier = media_coverage_positive_low
+					days = 7200
+				}
+			}
+		}
+		if = {
+			limit = {
+				owner = {
+					has_modifier = media_coverage_negative_low
+				}
+			}
+			owner = {
+				remove_modifier = media_coverage_negative_low
+			}
+		}
+		if = {
+			limit = {
+				owner = {
+					has_modifier = media_coverage_negative_medium
+				}
+			}
+			owner = {
+				remove_modifier = media_coverage_negative_medium
+				add_modifier = {
+					modifier = media_coverage_negative_low
+					days = 7200
+				}
+			}
+		}
+		if = {
+			limit = {
+				owner = {
+					has_modifier = media_coverage_negative_high
+				}
+			}
+			owner = {
+				remove_modifier = media_coverage_negative_high
+				add_modifier = {
+					modifier = media_coverage_negative_medium
+					days = 7200
+				}
+			}
+		}
+		##### End of Gain POSITIVE Press Coverage #####
+		###############################################
+	}
+
+	option = {
+		name = anomaly.4102.b
+		######## Gain POSITIVE Press Coverage ########
+		##############################################
+		if = {
+			limit = {
+				owner = {
+					OR = {
+						has_modifier = media_coverage_positive_high
+					}
+				}
+			}
+			owner = {
+				remove_modifier = media_coverage_positive_high
+				add_modifier = {
+					modifier = media_coverage_positive_high
+					days = 7200
+				}
+			}
+		}
+		if = {
+			limit = {
+				owner = {
+					OR = {
+						has_modifier = media_coverage_positive_medium
+					}
+				}
+			}
+			owner = {
+				remove_modifier = media_coverage_positive_medium
+				add_modifier = {
+					modifier = media_coverage_positive_high
+					days = 7200
+				}
+			}
+		}
+		if = {
+			limit = {
+				owner = {
+					has_modifier = media_coverage_positive_low
+				}
+			}
+			owner = {
+				remove_modifier = media_coverage_positive_low
+				add_modifier = {
+					modifier = media_coverage_positive_medium
+					days = 7200
+				}
+			}
+		}
+		if = {
+			limit = {
+				owner = {
+					NOT = {
+						has_modifier = media_coverage_negative_high
+						has_modifier = media_coverage_negative_medium
+						has_modifier = media_coverage_negative_low
+						has_modifier = media_coverage_positive_low
+						has_modifier = media_coverage_positive_medium
+						has_modifier = media_coverage_positive_high
+					}
+				}
+			}
+			owner = {
+				add_modifier = {
+					modifier = media_coverage_positive_low
+					days = 7200
+				}
+			}
+		}
+		if = {
+			limit = {
+				owner = {
+					has_modifier = media_coverage_negative_low
+				}
+			}
+			owner = {
+				remove_modifier = media_coverage_negative_low
+			}
+		}
+		if = {
+			limit = {
+				owner = {
+					has_modifier = media_coverage_negative_medium
+				}
+			}
+			owner = {
+				remove_modifier = media_coverage_negative_medium
+				add_modifier = {
+					modifier = media_coverage_negative_low
+					days = 7200
+				}
+			}
+		}
+		if = {
+			limit = {
+				owner = {
+					has_modifier = media_coverage_negative_high
+				}
+			}
+			owner = {
+				remove_modifier = media_coverage_negative_high
+				add_modifier = {
+					modifier = media_coverage_negative_medium
+					days = 7200
+				}
+			}
+		}
+		##### End of Gain POSITIVE Press Coverage #####
+		###############################################
+	}
+}
+#IF a bad guy and domesticating
+#The animals don't want to work, most run away, and the captured ones fight back and work very inefficiently
+country_event = {
+	id = anomaly.4103
+	title = "anomaly.4100.name"
+	desc = "anomaly.4103.desc"
+	picture = GFX_evt_continental
+	show_sound = event_alien_nature
+	location = fromfrom
+
+	is_triggered_only = yes
+
+	option = {
+		name = anomaly.4103.a
+		fromfrom = {
+			add_modifier = {
+				modifier = horse_powered_factories_low
+				days = -1
+			}
+		}
+	}
+}
+#IF a good guy and domesticating
+#Gain bad press, the horses work, but rejectingly so.
+country_event = {
+	id = anomaly.4104
+	title = "anomaly.4100.name"
+	desc = "anomaly.4104.desc"
+	picture = GFX_evt_continental
+	show_sound = event_alien_nature
+	location = fromfrom
+
+	is_triggered_only = yes
+
+	option = {
+		name = anomaly.4104.a
+		fromfrom = {
+			add_modifier = {
+				modifier = horse_powered_factories_medium
+				days = -1
+			}
+		}
+
+		######## Gain NEGATIVE Press Coverage ########
+		##############################################
+		if = {
+			limit = {
+				has_modifier = media_coverage_negative_high
+			}
+			remove_modifier = "media_coverage_negative_high"
+			add_modifier = {
+				modifier = media_coverage_negative_high
+				days = 7200
+			}
+		}
+		if = {
+			limit = {
+				has_modifier = media_coverage_negative_medium
+			}
+			remove_modifier = "media_coverage_negative_medium"
+			add_modifier = {
+				modifier = media_coverage_negative_high
+				days = 7200
+			}
+		}
+		if = {
+			limit = {
+				has_modifier = media_coverage_negative_low
+			}
+			remove_modifier = "media_coverage_negative_low"
+			add_modifier = {
+				modifier = media_coverage_negative_medium
+				days = 7200
+			}
+		}
+		if = {
+			limit = {
+				NOT = {
+					has_modifier = media_coverage_positive_high
+					has_modifier = media_coverage_positive_medium
+					has_modifier = media_coverage_positive_low
+					has_modifier = media_coverage_negative_low
+					has_modifier = media_coverage_negative_medium
+					has_modifier = media_coverage_negative_high
+				}
+			}
+			add_modifier = {
+				modifier = media_coverage_negative_low
+				days = 7200
+			}
+		}
+		if = {
+			limit = {
+				has_modifier = media_coverage_positive_low
+			}
+			remove_modifier = media_coverage_positive_low
+		}
+		if = {
+			limit = {
+				has_modifier = media_coverage_positive_medium
+			}
+			remove_modifier = media_coverage_positive_medium
+			add_modifier = {
+				modifier = media_coverage_positive_low
+				days = 7200
+			}
+		}
+		if = {
+			limit = {
+				has_modifier = media_coverage_positive_high
+			}
+			remove_modifier = media_coverage_positive_high
+			add_modifier = {
+				modifier = media_coverage_positive_medium
+				days = 7200
+			}
+		}
+		##### End of Gain NEGATIVE Press Coverage #####
+		###############################################
+	}
+}
+
+### Giant Roombas ##########################################################################################
+#story5
+ship_event = {
+	id = anomaly.4105
+	title = "anomaly.4105.name"
+	desc = "anomaly.4105.desc"
+	picture = GFX_evt_toxic
+	show_sound = event_ghost_town
+	location = from
+
+	is_triggered_only = yes
+
+	immediate = {
+		leader = {
+			add_trait = leader_trait_expertise_rocketry
+		}
+		hidden_effect = {
+			owner = { country_event = { id = story.5 days = 30 } }
+		}
+		from = { orbital_deposit_tile = { clear_deposits = yes } }
+	}
+
+	option = {
+		trigger = {
+			owner = {
+				has_country_flag = edict_renewable_energy
+			}
+		}
+		name = SCRAPIT
+		custom_tooltip = "anomaly.4105.a.tooltip"
+		hidden_effect = {
+			from = {
+				orbital_deposit_tile = {
+					add_deposit = d_immense_engineering_deposit
+					add_deposit = d_rich_engineering_deposit
+				}
+				add_modifier = {
+					modifier = fallen_robots
+					days = -1
+				}
+			}
+		}
+	}
+	option = {
+		trigger = {
+			owner = {
+				NOT = { has_country_flag = edict_renewable_energy }
+			}
+		}
+		name = anomaly.4105.a
+		custom_tooltip = "anomaly.4105.b.tooltip"
+		hidden_effect = {
+			owner = {
+				set_country_flag = edict_renewable_energy
+			}
+			from = {
+				orbital_deposit_tile = {
+					add_deposit = d_immense_engineering_deposit
+					add_deposit = d_rich_engineering_deposit
+				}
+				add_modifier = {
+					modifier = fallen_robots
+					days = -1
+				}
+			}
+		}
+	}
+	#option = {
+	#	trigger = {
+	#		leader = {
+	#			OR = {
+	#				has_trait = leader_trait_expertise_rocketry
+	#				has_trait = leader_trait_roamer
+	#				has_trait = leader_trait_carefree
+	#			}
+	#			NOT = {
+	#				has_trait = leader_trait_careful
+	#			}
+	#		}
+	#	}
+	#	name = anomaly.4105.robot
+	#	enable_special_project = {
+	#		name = "ROBOT_CLEANERS_PROJECT"
+	#		owner = root
+	#		location = from
+	#	}
+	#}
+}
+#Special Project Completed
+ship_event = {
+	id = anomaly.4106
+	title = PROJECT_COMPLETE
+	desc = "anomaly.4106.desc"
+	picture = GFX_evt_toxic
+	show_sound = event_activating_unknown_technology
+	location = fromfromfrom
+
+	is_triggered_only = yes
+
+	immediate = {
+		hidden_effect = {
+			fromfromfrom = {
+				change_pc = pc_continental
+				reset_planet = yes
+				
+				add_modifier = {
+					modifier = fallen_robots
+					days = -1
+				}
+
+				orbital_deposit_tile = {
+					add_deposit = d_immense_engineering_deposit
+				}
+
+				random_tile = {
+					limit = {
+						has_blocker = no
+					}
+					set_blocker = tb_bomb_crater
+				}
+				random_tile = {
+					limit = {
+						has_blocker = no
+					}
+					set_blocker = tb_bomb_crater
+				}
+				random_tile = {
+					limit = {
+						has_blocker = no
+					}
+					set_blocker = tb_city_ruins
+				}
+				random_tile = {
+					limit = {
+						has_blocker = no
+					}
+					set_blocker = tb_city_ruins
+				}
+				random_tile = {
+					limit = {
+						has_blocker = no
+					}
+					set_blocker = tb_city_ruins
+				}
+				#random_tile = {
+				#	limit = {
+				#		has_blocker = no
+				#	}
+				#	set_building = building_robotics_assembly_plant
+				#}
+			}
+		}
+	}
+
+	option = {
+		name = AMAZING
+		custom_tooltip = "anomaly.4106.a.tooltip"
+		trigger = {
+			owner = {
+				has_country_flag = edict_renewable_energy
+			}
+		}
+	}
+	option = {
+		name = AMAZING
+		custom_tooltip = "anomaly.4106.b.tooltip"
+		trigger = {
+			owner = {
+				NOT = { has_country_flag = edict_renewable_energy }
+			}
+		}
+		hidden_effect = {
+			owner = {
+				set_country_flag = edict_renewable_energy
+			}
+		}
+	}
+}
+
+### Shifting Sands ##########################################################################################
+ship_event = {
+	id = anomaly.4110
+	title = "anomaly.4110.name"
+	desc = {
+		trigger = {
+			leader = {
+				OR = {
+					has_trait = leader_trait_spark_of_genius
+					has_trait = leader_trait_expertise_new_worlds
+				}
+			}
+		}
+		text = "anomaly.4110.success.desc"
+	}
+	desc = {
+		trigger = {
+			leader = {
+				NOT = {
+					has_trait = leader_trait_spark_of_genius
+					has_trait = leader_trait_expertise_new_worlds
+				}
+			}
+		}
+		text = "anomaly.4110.fail.desc"
+	}
+	picture = GFX_evt_desert
+	show_sound = event_construction
+	location = from
+
+	is_triggered_only = yes
+
+	immediate = { from = { orbital_deposit_tile = { clear_deposits = yes } } }
+
+	option = {
+		trigger = {
+			leader = {
+				OR = {
+					has_trait = leader_trait_spark_of_genius
+					has_trait = leader_trait_expertise_new_worlds
+				}
+			}
+		}
+		name = SPLENDID
+		custom_tooltip = "anomaly.4110.a.tooltip"
+		hidden_effect = {
+			from = {
+				add_modifier = {
+					modifier = liquid_sands
+					days = -1
+				}
+				random_tile = {
+					limit = {
+						has_blocker = no
+					}
+					set_blocker = tb_quicksand_basin
+				}
+				random_tile = {
+					limit = {
+						has_blocker = no
+					}
+					set_blocker = tb_quicksand_basin
+				}
+				random_tile = {
+					limit = {
+						has_blocker = no
+					}
+					set_blocker = tb_quicksand_basin
+				}
+				random_tile = {
+					limit = {
+						has_blocker = no
+					}
+					set_blocker = tb_quicksand_basin
+				}
+				random_tile = {
+					limit = {
+						has_blocker = no
+					}
+					set_blocker = tb_quicksand_basin
+				}
+				orbital_deposit_tile = {
+					add_deposit = d_vast_physics_deposit
+					add_deposit = d_vast_physics_deposit
+				}
+			}
+		}
+	}
+	option = {
+		trigger = {
+			leader = {
+				NOT = {
+					has_trait = leader_trait_spark_of_genius
+					has_trait = leader_trait_expertise_new_worlds
+				}
+			}
+		}
+		name = UNFORTUNATE
+		custom_tooltip = "anomaly.4110.b.tooltip"
+		hidden_effect = {
+			from = {
+				add_modifier = {
+					modifier = shifting_sands
+					days = 1500
+				}
+				add_modifier = {
+					modifier = liquid_sands
+					days = -1
+				}
+				random_tile = {
+					limit = {
+						has_blocker = no
+					}
+					set_blocker = tb_quicksand_basin
+				}
+				random_tile = {
+					limit = {
+						has_blocker = no
+					}
+					set_blocker = tb_quicksand_basin
+				}
+				random_tile = {
+					limit = {
+						has_blocker = no
+					}
+					set_blocker = tb_quicksand_basin
+				}
+				random_tile = {
+					limit = {
+						has_blocker = no
+					}
+					set_blocker = tb_quicksand_basin
+				}
+				random_tile = {
+					limit = {
+						has_blocker = no
+					}
+					set_blocker = tb_quicksand_basin
+				}
+				random_tile = {
+					limit = {
+						has_blocker = no
+					}
+					set_blocker = tb_quicksand_basin
+				}
+				random_tile = {
+					limit = {
+						has_blocker = no
+					}
+					set_blocker = tb_quicksand_basin
+				}
+				orbital_deposit_tile = {
+					add_deposit = d_vast_physics_deposit
+				}
+			}
+		}
+	}
+}
+
+### Monsters on a Ship ######################################################################################
+#story3
+ship_event = {
+	id = anomaly.4115
+	title = "anomaly.4115.name"
+	desc = "anomaly.4115.desc"
+	picture = GFX_evt_interior_battle
+	show_sound = event_swarm
+	location = root
+
+	is_triggered_only = yes
+
+	immediate = {
+		hidden_effect = { owner = { country_event = { id = story.3 days = 30 } } }
+		root = {
+			hidden_effect = {
+				set_disabled = yes
+				fleet = { set_fleet_flag = monster_infested_ship }
+			}
+		}
+	}
+
+	option = {
+		name = anomaly.4115.a
+		enable_special_project = {
+			name = "ALIEN_MONSTER_ON_SHIP"
+			owner = root
+			location = root
+		}
+	}
+
+	option = {
+		name = anomaly.4115.b
+		custom_tooltip = "anomaly.4115.b.tooltip"
+		hidden_effect = {
+			fleet = {
+				kill_leader = { type = scientist show_notification = no}
+				destroy_fleet = this
+			}
+		}
+	}
+}
+# Project Success
+ship_event = {
+	id = anomaly.4116
+	title = "anomaly.4115.name"
+	desc = "anomaly.4116.desc"
+	picture = GFX_evt_ship_in_orbit
+	show_sound = event_ground_battle
+	location = fromfrom
+
+	is_triggered_only = yes
+
+	option = {
+		name = anomaly.4116.a
+		custom_tooltip = "anomaly.4116.a.tooltip"
+		hidden_effect = {
+			owner = {
+				random_owned_ship = {
+					limit = {
+						fleet = {
+							has_fleet_flag = monster_infested_ship
+						}
+					}
+					set_disabled = no
+					fleet = { remove_fleet_flag = monster_infested_ship }
+				}
+				add_modifier = {
+					modifier = army_inspiration
+					days = 360
+				}
+			}
+		}
+	}
+}
+ship_event = {
+	id = anomaly.4117
+	title = "anomaly.4115.name"
+	desc = "anomaly.4117.desc"
+	picture = GFX_evt_interior_battle
+	show_sound = event_ground_battle
+	location = fromfrom
+
+	is_triggered_only = yes
+
+	option = {
+		name = UNFORTUNATE
+		custom_tooltip = "anomaly.4117.a.tooltip"
+		hidden_effect = {
+			owner = {
+				random_owned_ship = {
+					limit = {
+						fleet = {
+							has_fleet_flag = monster_infested_ship
+						}
+					}
+					set_disabled = no
+					kill_leader = { type = scientist show_notification = no}
+					fleet = { remove_fleet_flag = monster_infested_ship }
+				}
+				add_modifier = {
+					modifier = army_inspiration
+					days = 360
+				}
+			}
+		}
+	}
+}
+### Explosions in the Sky ###############################################################################
+ship_event = {
+	id = anomaly.4120
+	title = "anomaly.4120.name"
+	desc = "anomaly.4120.desc"
+	picture = GFX_evt_atmospheric_entry
+	show_sound = event_sensor_ping
+	location = from
+
+	is_triggered_only = yes
+
+	option = {
+		name = AMAZING
+		owner = {
+			add_modifier = {
+				modifier = science_inspiration
+				days = 3600
+			}
+		}
+	}
+}
+
+### Repurpose Mining Station #############################################################################
+#story5
+ship_event = {
+	id = anomaly.4125
+	title = "anomaly.4125.name"
+	desc = {
+		trigger = {
+			leader = {
+				NOT = { has_trait = leader_trait_expertise_voidcraft }
+			}
+		}
+		text = "anomaly.4125.desc"
+	}
+	desc = {
+		trigger = {
+			leader = {
+				has_trait = leader_trait_expertise_voidcraft
+			}
+		}
+		text = "anomaly.4125.zerog.desc"
+	}
+	picture = GFX_evt_satellite_in_orbit
+	show_sound = event_sensor_ping
+	location = from
+
+	is_triggered_only = yes
+
+	immediate = {
+		hidden_effect = {
+			owner = { country_event = { id = story.5 days = 30 } }
+			from = { orbital_deposit_tile = { clear_deposits = yes } }
+		}
+	}
+
+	option = {
+		trigger = {
+			leader = {
+				NOT = { has_trait = leader_trait_expertise_voidcraft }
+			}
+		}
+		name = anomaly.4125.a
+		custom_tooltip = "anomaly.4125.a.tooltip"
+		hidden_effect = {
+			from = {
+				orbital_deposit_tile = {
+					add_deposit = d_immense_energy_deposit
+				}
+				create_mining_station = {
+					owner = ROOT
+				}
+				add_modifier = {
+					modifier = abandoned_mining
+					days = -1
+				}
+			}
+		}
+	}
+	option = {
+		trigger = {
+			leader = {
+				has_trait = leader_trait_expertise_voidcraft
+			}
+		}
+		name = anomaly.4125.a
+		custom_tooltip = "anomaly.4125.b.tooltip"
+		hidden_effect = {
+			from = {
+				orbital_deposit_tile = {
+					add_deposit = d_immense_energy_deposit
+				}
+				create_mining_station = {
+					owner = ROOT
+				}
+				add_modifier = {
+					modifier = abandoned_mining
+					days = -1
+				}
+			}
+			owner = {
+				add_modifier = {
+					modifier = zero_gravity_revelation
+					days = -1
+				}
+			}
+		}
+	}
+	option = {
+		name = SCRAPIT
+		owner = {
+			add_monthly_resource_mult = {
+				resource = minerals
+				value = @tier2materialreward
+				min = @tier2materialmin
+				max = @tier2materialmax
+			}
+		}
+	}
+}
+
+### Fountain of Youth #############################################################################
+ship_event = {
+	id = anomaly.4130
+	title = "anomaly.4130.name"
+	desc = "anomaly.4130.desc"
+	picture = GFX_evt_satellite_in_orbit
+	show_sound = event_sensor_ping
+	location = event_target:MonsterLocation
+
+	is_triggered_only = yes
+
+	immediate = {
+		from = { set_planet_flag = current_planet }
+		solar_system  = {
+			random_system_planet = {
+				limit = {
+					NOT = {
+						has_planet_flag = current_planet
+					}
+				}
+				save_event_target_as = MonsterLocation
+				create_amoeba_country = yes
+				event_target:amoeba_country = {
+					create_fleet = {
+						name = "NAME_Life_Tree_Protectors"
+						effect = {
+							set_owner = prev
+							create_ship = {
+								name = "NAME_Life_Tree_Protector"
+								design = "NAME_Large_Space_Organism_Orange"
+							}
+							create_ship = {
+								name = "NAME_Life_Tree_Protector"
+								design = "NAME_Large_Space_Organism_Orange"
+							}
+							create_ship = {
+								name = "NAME_Life_Tree_Protector"
+								design = "NAME_Large_Space_Organism_Orange"
+							}
+							set_location = event_target:MonsterLocation
+							set_fleet_stance = aggressive
+							set_aggro_range_measure_from = self
+							set_aggro_range = 1000
+							queue_actions = {
+								wait = {
+									duration = 10
+									random = 3
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+
+	option = {
+		name = anomaly.4130.a
+		#custom_tooltip = "anomaly.4130.a.tooltip"
+		enable_special_project = {
+			name = "TREE_OF_LIFE"
+			owner = root
+			location = from
+		}
+	}
+}
+# Follow up
+ship_event = {
+	id = anomaly.4131
+	title = "PROJECT_COMPLETE"
+	desc = "anomaly.4131.desc"
+	picture = GFX_evt_psionics
+	show_sound = event_mystic_reveal
+	location = from
+
+	is_triggered_only = yes
+
+	option = {
+		name = anomaly.4131.a
+		owner = {
+			add_modifier = {
+				modifier = youthful_elite
+				days = -1
+			}
+		}
+	}
+	option = {
+		name = anomaly.4131.b
+		owner = {
+			add_modifier = {
+				modifier = youthful_people
+				days = -1
+			}
+		}
+	}
+	option = {
+		name = anomaly.4131.c
+	}
+}
+
+### Master's Writings - Politics #############################################################################
+#story5
+ship_event = {
+	id = anomaly.4135
+	title = "anomaly.4135.name"
+	desc = "anomaly.4135.desc"
+	picture = GFX_evt_archaeological_dig
+	show_sound = event_scanner
+	location = from
+
+	is_triggered_only = yes
+
+	trigger = {
+		owner = {
+			NOT = {
+				has_country_flag = masters_writings_politics_found
+			}
+		}
+	}
+
+	immediate = {
+		hidden_effect = { owner = { country_event = { id = story.5 days = 30 } } }
+		owner = {
+			set_country_flag = masters_writings_politics_found
+			random_owned_planet ={
+				limit = {
+					is_capital = yes
+				}
+				save_event_target_as = HomePlanet
+			}
+		}
+	}
+	option = {
+		name = RESEARCHIT
+		event_target:HomePlanet = {
+			enable_special_project = {
+				name = "MASTERS_WRITINGS_POLITICS"
+				owner = root
+				location = this
+			}
+		}
+	}
+	option = {
+		name = anomaly.4135.b
+		owner = {
+			add_monthly_resource_mult = {
+				resource = energy
+				value = @tier2materialreward
+				min = @tier2materialmin
+				max = @tier2materialmax
+			}
+			add_monthly_resource_mult = {
+				resource = minerals
+				value = @tier2materialreward
+				min = @tier2materialmin
+				max = @tier2materialmax
+			}
+		}
+	}
+}
+# Follow-Up
+country_event = {
+	id = anomaly.4136
+	title = "PROJECT_COMPLETE"
+	desc = {
+		text = "anomaly.4136.found.desc"
+		trigger = {
+			OR = {
+					has_country_flag = masters_writings_philosophy_found
+					has_country_flag = masters_writings_diplomacy_found
+					has_country_flag = masters_writings_war_found
+			}
+		}
+	}
+	desc = {
+		text = "anomaly.4136.desc"
+		trigger = {
+			NOT = {
+				has_country_flag = masters_writings_philosophy_found
+				has_country_flag = masters_writings_diplomacy_found
+				has_country_flag = masters_writings_war_found
+			}
+		}
+	}
+	picture = GFX_evt_star_chart
+	show_sound = event_administrative_work
+
+	is_triggered_only = yes
+
+	option = {
+		name = SPLENDID
+		custom_tooltip = "anomaly.4136.a.tooltip"
+		hidden_effect = {
+			set_country_flag = edict_masters_writings_politics
+		}
+	}
+}
+
+### Master's Writings - Philosophy #########################################################################
+#story5
+ship_event = {
+	id = anomaly.4140
+	title = "anomaly.4140.name"
+	desc = "anomaly.4140.desc"
+	picture = GFX_evt_archaeological_dig
+	show_sound = event_scanner
+	location = from
+
+	is_triggered_only = yes
+
+	trigger = {
+		owner = {
+			NOT = {
+				has_country_flag = masters_writings_philosophy_found
+			}
+		}
+	}
+
+	immediate = {
+		hidden_effect = { owner = { country_event = { id = story.5 days = 30 } } }
+		owner = {
+			set_country_flag = masters_writings_philosophy_found
+			random_owned_planet ={
+				limit = {
+					is_capital = yes
+				}
+				save_event_target_as = HomePlanet
+			}
+		}
+	}
+
+	option = {
+		name = RESEARCHIT
+		event_target:HomePlanet = {
+			enable_special_project = {
+				name = "MASTERS_WRITINGS_PHILOSOPHY"
+				owner = root
+				location = this
+			}
+		}
+	}
+	option = {
+		name = anomaly.4135.b
+		owner = {
+			add_monthly_resource_mult = {
+				resource = energy
+				value = @tier2materialreward
+				min = @tier2materialmin
+				max = @tier2materialmax
+			}
+			add_monthly_resource_mult = {
+				resource = minerals
+				value = @tier2materialreward
+				min = @tier2materialmin
+				max = @tier2materialmax
+			}
+		}
+	}
+}
+# Follow-Up
+country_event = {
+	id = anomaly.4141
+	title = "PROJECT_COMPLETE"
+	desc = {
+		text = "anomaly.4141.found.desc"
+		trigger = {
+			OR = {
+					has_country_flag = masters_writings_politics_found
+					has_country_flag = masters_writings_diplomacy_found
+					has_country_flag = masters_writings_war_found
+			}
+		}
+	}
+	desc = {
+		text = "anomaly.4141.desc"
+		trigger = {
+			NOT = {
+				has_country_flag = masters_writings_politics_found
+				has_country_flag = masters_writings_diplomacy_found
+				has_country_flag = masters_writings_war_found
+			}
+		}
+	}
+	picture = GFX_evt_star_chart
+	show_sound = event_administrative_work
+
+	is_triggered_only = yes
+
+	option = {
+		name = SPLENDID
+		custom_tooltip = "anomaly.4141.a.tooltip"
+		hidden_effect = {
+			set_country_flag = edict_masters_writings_philosophy
+		}
+	}
+}
+
+### Master's Teachings - Diplomacy ###########################################################################
+#story5
+ship_event = {
+	id = anomaly.4150
+	title = "anomaly.4150.name"
+	desc = "anomaly.4150.desc"
+	picture = GFX_evt_archaeological_dig
+	show_sound = event_scanner
+	location = from
+
+	is_triggered_only = yes
+
+	trigger = {
+		owner = {
+			NOT = {
+				has_country_flag = masters_writings_diplomacy_found
+			}
+		}
+	}
+
+	immediate = {
+		hidden_effect = { owner = { country_event = { id = story.5 days = 30 } } }	
+		owner = {
+			set_country_flag = masters_writings_diplomacy_found
+			random_owned_planet ={
+				limit = {
+					is_capital = yes
+				}
+				save_event_target_as = HomePlanet
+			}
+		}
+	}
+
+	option = {
+		name = RESEARCHIT
+		event_target:HomePlanet = {
+			enable_special_project = {
+				name = "MASTERS_WRITINGS_DIPLOMACY"
+				owner = root
+				location = this
+			}
+		}
+	}
+	option = {
+		name = anomaly.4135.b
+		owner = {
+			add_monthly_resource_mult = {
+				resource = energy
+				value = @tier2materialreward
+				min = @tier2materialmin
+				max = @tier2materialmax
+			}
+			add_monthly_resource_mult = {
+				resource = minerals
+				value = @tier2materialreward
+				min = @tier2materialmin
+				max = @tier2materialmax
+			}
+		}
+	}
+}
+#Follow-up
+country_event = {
+	id = anomaly.4151
+	title = "PROJECT_COMPLETE"
+	desc = {
+		text = "anomaly.4151.found.desc"
+		trigger = {
+			OR = {
+					has_country_flag = masters_writings_politics_found
+					has_country_flag = masters_writings_philosophy_found
+					has_country_flag = masters_writings_war_found
+			}
+		}
+	}
+	desc = {
+		text = "anomaly.4151.desc"
+		trigger = {
+			NOT = {
+				has_country_flag = masters_writings_politics_found
+				has_country_flag = masters_writings_philosophy_found
+				has_country_flag = masters_writings_war_found
+			}
+		}
+	}
+	picture = GFX_evt_smugglers_in_bar
+	show_sound = event_administrative_work
+	location = from
+
+	is_triggered_only = yes
+
+	option = {
+		name = SPLENDID
+		custom_tooltip = "anomaly.4151.a.tooltip"
+		hidden_effect = {
+			set_country_flag = edict_masters_writings_diplomacy
+		}
+	}
+}
+
+### Underground Vault #####################################################################################
+ship_event = {
+	id = anomaly.4155
+	title = "anomaly.4155.name"
+	desc = "anomaly.4155.desc"
+	picture = GFX_evt_alien_ruins
+	show_sound = event_scanner
+	location = from
+
+	is_triggered_only = yes
+
+	option = {
+		name = anomaly.4155.a
+		from = {
+			enable_special_project = {
+				name = "CRYOPOD_FOUND_PROJECT"
+				owner = root
+				location = this
+			}
+			hidden_effect = {
+				set_planet_flag = cryo_pod_planet
+			}
+		}
+	}
+	option = {
+		name = anomaly.4155.b
+		trigger = {
+			owner = {
+				has_ethic = ethic_fanatic_spiritualist
+				has_ethic = ethic_spiritualist
+			}
+		}
+		owner = {
+			add_monthly_resource_mult = {
+				resource = influence
+				value = @tier3influencereward
+				min = @tier3influencemin
+				max = @tier3influencemax
+			}
+		}
+	}
+}
+#Follow up 1
+ship_event = {
+	id = anomaly.4156
+	title = "anomaly.4155.name"
+	desc = "anomaly.4156.desc"
+	picture = GFX_evt_archaeological_dig
+	show_sound = event_mystic_reveal
+	location = fromfromfrom
+
+	is_triggered_only = yes
+
+	immediate = {
+		owner = {
+			random_owned_planet = {
+				limit = {
+					is_capital = yes
+				}
+				save_event_target_as = HomePlanet
+			}
+		}
+	}
+
+	option = {
+		name = RESEARCHIT
+		event_target:HomePlanet = {
+			enable_special_project = {
+				name = "CRYOPOD_OPENING_PROJECT"
+				owner = root
+				location = this
+			}
+		}
+	}
+	option = {
+		name = anomaly.4156.b
+		owner = {
+			add_monthly_resource_mult = {
+				resource = influence
+				value = @tier3influencereward
+				min = @tier3influencemin
+				max = @tier3influencemax
+			}
+		}
+	}
+}
+#Follow up 2 - Dialogue Begins
+#story5
+country_event = {
+	id = anomaly.4157
+	title = "anomaly.4157.name"
+	desc = "anomaly.4157.desc"
+	location = from
+	
+	is_triggered_only = yes
+	diplomatic = yes
+
+	immediate = {
+		country_event = { id = story.5 days = 30 }
+		from = {
+			save_event_target_as = HomePlanet
+			owner = {
+				save_event_target_as = HomeCountry
+			}
+		}
+		random_planet ={
+			limit = {
+				has_planet_flag = cryo_pod_planet
+			}
+			save_event_target_as = WarriorHomePlanet
+		}
+		
+		create_species = {
+			name = random
+			class = RANDOMTREK
+			portrait = random
+			traits = random
+			homeworld = event_target:WarriorHomePlanet
+		}
+
+		last_created_species = {
+			save_event_target_as = AlienWarriorSpecies
+		}
+	}
+
+	picture_event_data = {
+		portrait = event_target:AlienWarriorSpecies
+		planet_background = event_target:HomePlanet
+		graphical_culture = event_target:HomePlanet
+		city_level = event_target:HomePlanet
+		room = event_target:AlienWarriorSpecies.ruler
+	}
+
+	option = {
+		name = anomaly.4157.a
+		hidden_effect = {
+			country_event = {id = anomaly.4158 }
+			set_country_flag = suspected_angels
+		}
+		trigger = {
+			OR = {
+				has_ethic = ethic_fanatic_xenophile
+				has_ethic = ethic_xenophile
+				has_ethic = ethic_fanatic_spiritualist
+				has_ethic = ethic_fanatic_pacifist
+				has_ethic = ethic_pacifist
+			}
+			NOT = {
+				has_ethic = ethic_fanatic_materialist
+				has_ethic = ethic_fanatic_militarist
+				has_ethic = ethic_militarist
+			}
+		}
+	}
+	option = {
+		name = anomaly.4157.b
+		hidden_effect = {
+			country_event = {id = anomaly.4158 }
+		}
+	}
+	option = {
+		name = anomaly.4157.c
+		hidden_effect = {
+			country_event = {id = anomaly.4159 }
+			set_country_flag = suspected_assholes
+		}
+		trigger = {
+			OR = {
+				has_ethic = ethic_fanatic_xenophobe
+				has_ethic = ethic_xenophobe
+				has_ethic = ethic_fanatic_militarist
+				has_ethic = ethic_militarist
+				has_ethic = ethic_fanatic_egalitarian
+				has_ethic = ethic_fanatic_materialist
+			}
+			NOT = {
+				has_ethic = ethic_fanatic_spiritualist
+				has_ethic = ethic_fanatic_pacifist
+				has_ethic = ethic_pacifist
+			}
+		}
+	}
+}
+country_event = {
+	id = anomaly.4158
+	title = "anomaly.4157.name"
+	desc = "anomaly.4158.desc"
+	location = event_target:HomePlanet
+	
+	is_triggered_only = yes
+	diplomatic = yes
+
+	picture_event_data = {
+		portrait = event_target:AlienWarriorSpecies
+		planet_background = event_target:HomePlanet
+		graphical_culture = event_target:HomePlanet
+		city_level = event_target:HomePlanet
+		room = event_target:AlienWarriorSpecies.ruler
+	}
+
+	option = {
+		name = anomaly.4158.a
+		response_text = anomaly.4158.a.response
+		is_dialog_only = yes
+	}
+	option = {
+		name = anomaly.4158.b
+		response_text = anomaly.4158.b.response
+		is_dialog_only = yes
+		trigger = {
+			NOT = {
+				has_ethic = ethic_fanatic_spiritualist
+				has_ethic = ethic_spiritualist
+				has_ethic = ethic_fanatic_militarist
+				has_ethic = ethic_militarist
+				has_ethic = ethic_fanatic_xenophobe
+				has_ethic = ethic_xenophobe
+			}
+		}
+	}
+	option = {
+		name = anomaly.4158.militant.b
+		response_text = anomaly.4158.b.response
+		is_dialog_only = yes
+		trigger = {
+			OR = {
+				has_ethic = ethic_fanatic_militarist
+				has_ethic = ethic_militarist
+			}
+			NOT = {
+				has_ethic = ethic_fanatic_spiritualist
+				has_ethic = ethic_spiritualist
+				has_ethic = ethic_fanatic_xenophobe
+				has_ethic = ethic_xenophobe
+			}
+		}
+	}
+	option = {
+		name = anomaly.4158.spiritual.b
+		response_text = anomaly.4158.b.response
+		is_dialog_only = yes
+		trigger = {
+			OR = {
+				has_ethic = ethic_fanatic_spiritualist
+				has_ethic = ethic_spiritualist
+			}
+			NOT = {
+				has_ethic = ethic_fanatic_militarist
+				has_ethic = ethic_militarist
+				has_ethic = ethic_fanatic_xenophobe
+				has_ethic = ethic_xenophobe
+			}
+		}
+	}
+	option = {
+		name = anomaly.4158.c
+		response_text = anomaly.4158.c.response
+		is_dialog_only = yes
+		trigger = {
+			NOT = {
+				has_ethic = ethic_fanatic_xenophobe
+				has_ethic = ethic_xenophobe
+			}
+		}
+	}
+	option = { # Rejecting
+		name = anomaly.4158.d
+		trigger = {
+			NOT = {
+				has_ethic = ethic_fanatic_spiritualist
+				has_ethic = ethic_spiritualist
+				has_ethic = ethic_pacifist
+				has_ethic = ethic_fanatic_militarist
+				has_ethic = ethic_fanatic_materialist
+			}
+		}
+		hidden_effect = {
+			country_event = {id = anomaly.4161 }
+		}
+	}
+	option = { # Joins you
+		name = anomaly.4158.d
+		trigger = {
+			OR = {
+				has_country_flag = suspected_angels
+				NOT = {
+					has_country_flag = suspected_assholes
+				}
+			}
+			OR = {
+				has_ethic = ethic_fanatic_spiritualist
+				has_ethic = ethic_spiritualist
+				has_ethic = ethic_pacifist
+			}
+			NOT = {
+				has_ethic = ethic_fanatic_militarist
+				has_ethic = ethic_fanatic_materialist
+				has_ethic = ethic_fanatic_pacifist
+				has_ethic = ethic_fanatic_xenophobe
+				has_ethic = ethic_xenophobe
+			}
+		}
+		hidden_effect = {
+			country_event = {id = anomaly.4160 }
+		}
+	}
+	option = { # Kills researcher
+		name = anomaly.4158.d
+		trigger = {
+			OR = {
+				has_country_flag = suspected_assholes
+				NOT = {
+					has_country_flag = suspected_angels
+				}
+			}
+			OR = {
+				has_ethic = ethic_fanatic_militarist
+				has_ethic = ethic_fanatic_materialist
+			}
+			NOT = {
+				has_ethic = ethic_fanatic_spiritualist
+				has_ethic = ethic_spiritualist
+				has_ethic = ethic_fanatic_pacifist
+				has_ethic = ethic_pacifist
+			}
+		}
+		hidden_effect = {
+			country_event = {id = anomaly.4162 }
+		}
+	}
+
+	option = {
+		name = anomaly.4158.f
+		trigger = {
+			NOT = {
+				has_ethic = ethic_fanatic_xenophobe
+			}
+		}
+		hidden_effect = {
+			country_event = {id = anomaly.4163 }
+		}
+	}
+	option = {
+		name = anomaly.4158.xenophobe.f
+		trigger = {
+			has_ethic = ethic_fanatic_xenophobe
+		}
+		hidden_effect = {
+			country_event = {id = anomaly.4163 }
+		}
+	}
+}
+#Dialogue Follow-up COPY OF PREVIOUS FOR "REASONS"
+country_event = {
+	id = anomaly.4159
+	title = "anomaly.4157.name"
+	desc = "anomaly.4159.desc"
+	location = event_target:HomePlanet
+	
+	is_triggered_only = yes
+	diplomatic = yes
+
+	picture_event_data = {
+		portrait = event_target:AlienWarriorSpecies
+		planet_background = event_target:HomePlanet
+		graphical_culture = event_target:HomePlanet
+		city_level = event_target:HomePlanet
+		room = event_target:AlienWarriorSpecies.ruler
+	}
+
+	option = {
+		name = anomaly.4158.a
+		response_text = anomaly.4158.a.response
+		is_dialog_only = yes
+	}
+	option = {
+		name = anomaly.4158.b
+		response_text = anomaly.4158.b.response
+		is_dialog_only = yes
+		trigger = {
+			NOT = {
+				has_ethic = ethic_fanatic_spiritualist
+				has_ethic = ethic_spiritualist
+				has_ethic = ethic_fanatic_militarist
+				has_ethic = ethic_militarist
+				has_ethic = ethic_fanatic_xenophobe
+				has_ethic = ethic_xenophobe
+			}
+		}
+	}
+	option = {
+		name = anomaly.4158.militant.b
+		response_text = anomaly.4158.b.response
+		is_dialog_only = yes
+		trigger = {
+			OR = {
+				has_ethic = ethic_fanatic_militarist
+				has_ethic = ethic_militarist
+			}
+			NOT = {
+				has_ethic = ethic_fanatic_spiritualist
+				has_ethic = ethic_spiritualist
+				has_ethic = ethic_fanatic_xenophobe
+				has_ethic = ethic_xenophobe
+			}
+		}
+	}
+	option = {
+		name = anomaly.4158.spiritual.b
+		response_text = anomaly.4158.b.response
+		is_dialog_only = yes
+		trigger = {
+			OR = {
+				has_ethic = ethic_fanatic_spiritualist
+				has_ethic = ethic_spiritualist
+			}
+			NOT = {
+				has_ethic = ethic_fanatic_militarist
+				has_ethic = ethic_militarist
+				has_ethic = ethic_fanatic_xenophobe
+				has_ethic = ethic_xenophobe
+			}
+		}
+	}
+	option = {
+		name = anomaly.4158.c
+		response_text = anomaly.4158.c.response
+		is_dialog_only = yes
+		trigger = {
+			NOT = {
+				has_ethic = ethic_fanatic_xenophobe
+				has_ethic = ethic_xenophobe
+			}
+		}
+	}
+	option = { # Rejecting
+		name = anomaly.4158.d
+		trigger = {
+			NOT = {
+				has_ethic = ethic_fanatic_spiritualist
+				has_ethic = ethic_spiritualist
+				has_ethic = ethic_pacifist
+				has_ethic = ethic_fanatic_militarist
+				has_ethic = ethic_fanatic_materialist
+			}
+		}
+		hidden_effect = {
+			country_event = {id = anomaly.4161 }
+		}
+	}
+	option = { # Joins you
+		name = anomaly.4158.d
+		trigger = {
+			OR = {
+				has_country_flag = suspected_angels
+				NOT = {
+					has_country_flag = suspected_assholes
+				}
+			}
+			OR = {
+				has_ethic = ethic_fanatic_spiritualist
+				has_ethic = ethic_spiritualist
+				has_ethic = ethic_pacifist
+			}
+			NOT = {
+				has_ethic = ethic_fanatic_militarist
+				has_ethic = ethic_fanatic_materialist
+				has_ethic = ethic_fanatic_pacifist
+				has_ethic = ethic_fanatic_xenophobe
+				has_ethic = ethic_xenophobe
+			}
+		}
+		hidden_effect = {
+			country_event = {id = anomaly.4160 }
+		}
+	}
+	option = { # Kills researcher
+		name = anomaly.4158.d
+		trigger = {
+			OR = {
+				has_country_flag = suspected_assholes
+				NOT = {
+					has_country_flag = suspected_angels
+				}
+			}
+			OR = {
+				has_ethic = ethic_fanatic_militarist
+				has_ethic = ethic_fanatic_materialist
+			}
+			NOT = {
+				has_ethic = ethic_fanatic_spiritualist
+				has_ethic = ethic_spiritualist
+				has_ethic = ethic_fanatic_pacifist
+				has_ethic = ethic_pacifist
+			}
+		}
+		hidden_effect = {
+			country_event = {id = anomaly.4162 }
+		}
+	}
+
+	option = {
+		name = anomaly.4158.f
+		trigger = {
+			NOT = {
+				has_ethic = ethic_fanatic_xenophobe
+			}
+		}
+		hidden_effect = {
+			country_event = {id = anomaly.4163 }
+		}
+	}
+	option = {
+		name = anomaly.4158.xenophobe.f
+		trigger = {
+			has_ethic = ethic_fanatic_xenophobe
+		}
+		hidden_effect = {
+			country_event = {id = anomaly.4163 }
+		}
+	}
+}
+#Dialogue End Gain New General
+country_event = {
+	id = anomaly.4160
+	title = "anomaly.4157.name"
+	desc = "anomaly.4160.desc"
+	location = event_target:HomePlanet
+	
+	is_triggered_only = yes
+	diplomatic = yes
+
+	picture_event_data = {
+		portrait = event_target:AlienWarriorSpecies
+		planet_background = event_target:HomePlanet
+		graphical_culture = event_target:HomePlanet
+		city_level = event_target:HomePlanet
+		room = event_target:AlienWarriorSpecies.ruler
+	}
+
+	immediate = {
+		hidden_effect = {
+			random_planet ={
+				limit = {
+					has_planet_flag = cryo_pod_planet
+				}
+				remove_planet_flag = cryo_pod_planet
+			}
+		}
+	}
+
+	option = {
+		name = EXCELLENT
+		create_leader = {
+			type = general
+			species = event_target:AlienWarriorSpecies
+			name = "NAME_Majula_the_Bearer"
+			skill = 1000
+			traits = {
+				trait = leader_trait_defender
+				trait = leader_trait_charismatic
+			}
+			event_leader = yes
+		}
+	}
+}
+#Dialogue End Naaaaaaah
+country_event = {
+	id = anomaly.4161
+	title = "anomaly.4157.name"
+	desc = "anomaly.4161.desc"
+	location = event_target:HomePlanet
+	
+	is_triggered_only = yes
+	diplomatic = yes
+
+	picture_event_data = {
+		portrait = event_target:AlienWarriorSpecies
+		planet_background = event_target:HomePlanet
+		graphical_culture = event_target:HomePlanet
+		city_level = event_target:HomePlanet
+		room = event_target:AlienWarriorSpecies.ruler
+	}
+
+	immediate = {
+		hidden_effect = {
+			random_planet ={
+				limit = {
+					has_planet_flag = cryo_pod_planet
+				}
+				remove_planet_flag = cryo_pod_planet
+			}
+			remove_country_flag = suspected_assholes
+			remove_country_flag = suspected_angels
+		}
+	}
+
+	option = {
+		name = anomaly.4161.a
+	}
+	option = {
+		name = anomaly.4161.b
+		trigger = {
+			NOT = {
+				has_ethic = ethic_fanatic_pacifist
+				has_ethic = ethic_pacifist
+				has_ethic = ethic_fanatic_xenophile
+				has_ethic = ethic_xenophile
+			}
+		}
+	}
+}
+# Dialogue End OH HELL NO!
+country_event = {
+	id = anomaly.4162
+	title = "anomaly.4157.name"
+	desc = "anomaly.4162.desc"
+	location = event_target:HomePlanet
+	
+	is_triggered_only = yes
+	diplomatic = yes
+
+	picture_event_data = {
+		portrait = event_target:AlienWarriorSpecies
+		planet_background = event_target:HomePlanet
+		graphical_culture = event_target:HomePlanet
+		city_level = event_target:HomePlanet
+		room = event_target:AlienWarriorSpecies.ruler
+	}
+
+	immediate = {
+		random_owned_leader = {
+			limit = {
+				OR = {
+					is_researching_area = engineering 
+					is_researching_area = physics 
+					is_researching_area = society
+				}
+			}
+			kill_leader = { 
+				show_notification = no 
+				type = scientist 
+			}
+		}
+		hidden_effect = {
+			random_planet ={
+				limit = {
+					has_planet_flag = cryo_pod_planet
+				}
+				remove_planet_flag = cryo_pod_planet
+			}
+			remove_country_flag = suspected_assholes
+			remove_country_flag = suspected_angels
+		}
+	}
+
+	option = {
+		name = CURSES
+	}
+}
+#Dialogue End Let Go
+country_event = {
+	id = anomaly.4163
+	title = "anomaly.4157.name"
+	desc = "anomaly.4163.desc"
+	location = event_target:HomePlanet
+	
+	is_triggered_only = yes
+	diplomatic = yes
+
+	picture_event_data = {
+		portrait = event_target:AlienWarriorSpecies
+		planet_background = event_target:HomePlanet
+		graphical_culture = event_target:HomePlanet
+		city_level = event_target:HomePlanet
+		room = event_target:AlienWarriorSpecies.ruler
+	}
+
+	immediate = {
+		hidden_effect = {
+			random_planet ={
+				limit = {
+					has_planet_flag = cryo_pod_planet
+				}
+				remove_planet_flag = cryo_pod_planet
+			}
+			remove_country_flag = suspected_assholes
+			remove_country_flag = suspected_angels
+		}
+	}
+
+	option = {
+		name = anomaly.4163.a
+		trigger = {
+			NOT = {
+				has_ethic = ethic_fanatic_xenophobe
+				has_ethic = ethic_xenophobe
+			}
+		}
+	}
+	option = {
+		name = anomaly.4163.b
+		trigger = {
+			has_ethic = ethic_fanatic_xenophobe
+			has_ethic = ethic_xenophobe
+		}
+	}
+}
+#### Master's Teachings - War ######################################################################################
+ship_event = {
+	id = anomaly.4165
+	title = "anomaly.4165.name"
+	desc = "anomaly.4165.desc"
+	picture = GFX_evt_alien_ruins
+	show_sound = event_scanner
+	location = from
+	
+	is_triggered_only = yes
+
+	trigger = {
+		owner = {
+			NOT = {
+				has_country_flag = masters_writings_war_found
+			}
+		}
+	}
+
+	immediate = {
+		owner = {
+			set_country_flag = masters_writings_war_found
+			random_owned_planet = {
+				limit = {
+					is_capital = yes
+				}
+				save_event_target_as = HomePlanet
+			}
+		}
+	}
+
+	option = {
+		name = RESEARCHIT
+		event_target:HomePlanet = {
+			enable_special_project = {
+				name = "MASTERS_WRITINGS_WAR"
+				owner = root
+				location = this
+			}
+		}
+	}
+	option = {
+		name = anomaly.4135.b
+		owner = {
+			add_monthly_resource_mult = {
+				resource = energy
+				value = @tier2materialreward
+				min = @tier2materialmin
+				max = @tier2materialmax
+			}
+			add_monthly_resource_mult = {
+				resource = minerals
+				value = @tier2materialreward
+				min = @tier2materialmin
+				max = @tier2materialmax
+			}
+		}
+	}
+}
+#Follow-up
+country_event = {
+	id = anomaly.4166
+	title = "PROJECT_COMPLETE"
+	desc = {
+		text = "anomaly.4166.found.desc"
+		trigger = {
+			OR = {
+				has_country_flag = masters_writings_politics_found
+				has_country_flag = masters_writings_philosophy_found
+				has_country_flag = masters_writings_diplomacy_found
+			}
+		}
+	}
+	desc = {
+		text = "anomaly.4166.desc"
+		trigger = {
+			NOT = {
+				has_country_flag = masters_writings_politics_found
+				has_country_flag = masters_writings_philosophy_found
+				has_country_flag = masters_writings_diplomacy_found
+			}
+		}
+	}
+	picture = GFX_evt_small_space_battle
+	show_sound = event_administrative_work
+	location = from
+
+	is_triggered_only = yes
+
+	option = {
+		trigger = {
+			OR = {
+				has_ethic = "ethic_fanatic_militarist"
+				has_ethic = "ethic_militarist"
+			}
+		}
+		name = SPLENDID
+		custom_tooltip = "anomaly.4166.a.tooltip"
+		hidden_effect = {
+			set_country_flag = edict_masters_writings_war
+		}
+	}
+	option = {
+		trigger = {
+			NOT = {
+				has_ethic = "ethic_fanatic_militarist"
+				has_ethic = "ethic_militarist"
+			}
+		}
+		name = anomaly.4166.a
+		custom_tooltip = "anomaly.4166.a.tooltip"
+		hidden_effect = {
+			set_country_flag = edict_masters_writings_war
+		}
+	}
+}
+
+#### Rich Gas Mining ##########################################################################################
+ship_event = {
+	id = anomaly.4170
+	title = "anomaly.4170.name"
+	desc = {
+		text = "anomaly.4170.material.desc"
+		trigger = {
+			root = {
+				owner = {
+					OR = {
+						has_ethic = ethic_materialist
+						has_ethic = ethic_fanatic_materialist
+					}
+				}
+			}
+		}
+	}
+	desc = {
+		text = "anomaly.4170.basic.desc"
+		trigger = {
+			root = {
+				owner = {
+					NOT = {
+						has_ethic = ethic_materialist
+						has_ethic = ethic_fanatic_materialist
+					}
+				}
+			}
+		}
+	}
+	picture = GFX_evt_arid
+	show_sound = event_scanner
+	location = from
+	is_triggered_only = yes
+
+	immediate = {
+		hidden_effect = {
+			from = {
+				add_modifier = {
+					modifier = gas_rich_planet
+					days = -1
+				}
+				orbital_deposit_tile = {
+					clear_deposits = yes
+				}
+			}
+			root = {
+				owner = {
+					set_country_flag = limited_modifier_gas_rich_planet
+				}
+			}
+		}
+	}
+	option = {
+		name = anomaly.4170.a
+		custom_tooltip = anomaly.4170.a.tooltip
+	}
+	option = {
+		trigger = {
+			owner = {
+				NOT = {
+					has_ethic = ethic_fanatic_materialist
+				}
+			}
+		}
+		name = anomaly.4170.b
+		custom_tooltip = anomaly.4170.b.tooltip
+		hidden_effect = {
+			root = {
+				owner = {
+					remove_country_flag = limited_modifier_gas_rich_planet
+					add_monthly_resource_mult = {
+						resource = influence
+						value = @tier1influencereward
+						min = @tier1influencemin
+						max = @tier1influencemax
+					}
+				}
+			}
+			from = {
+				remove_modifier = gas_rich_planet
+				add_modifier = {
+					modifier = gas_responsible_mining
+					days = -1
+				}
+				orbital_deposit_tile = {
+					add_deposit = d_immense_energy_deposit
+					add_deposit = d_energy_deposit
+				}
+			}
+		}
+	}
+}
+#Hidden effect event triggered on colonization
+planet_event = {
+	id = anomaly.4171
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		has_modifier = "gas_rich_planet"
+		owner = {
+			has_country_flag = limited_modifier_gas_rich_planet
+		}
+	}
+	immediate = {
+		hidden_effect = {
+			remove_modifier = gas_rich_planet
+			add_modifier = {
+				modifier = gas_rich_planet_fo_realz
+				days = 730
+			}
+			random_list = {
+				30 = {
+					planet_event = { id = anomaly_failure.4170 days = 360 }
+				}
+				70 = {
+					planet_event = { id = anomaly.4172 days = 720 }
+				}
+			}
+		}
+	}
+}
+#Follow-up when resources expire
+planet_event = {
+	id = anomaly.4172
+	title = "anomaly.4170.name"
+	desc = {
+		text = "anomaly.4172.owner.desc"
+		trigger = {
+			owner = {
+				has_country_flag = limited_modifier_gas_rich_planet
+			}
+		}
+	}
+	desc = {
+		text = "anomaly.4172.conqueror.desc"
+		trigger = {
+			owner = {
+				NOT = { has_country_flag = limited_modifier_gas_rich_planet }
+			}
+		}
+	}
+	picture = GFX_evt_metropolis
+	show_sound = event_default
+	location = from
+	is_triggered_only = yes
+
+	option = {
+		name = OK
+		trigger = {
+			owner = {
+				has_country_flag = limited_modifier_gas_rich_planet
+			}
+		}
+		owner = {
+			remove_country_flag = limited_modifier_gas_rich_planet
+		}
+	}
+	option = {
+		name = OK
+		trigger = {
+			owner = {
+				NOT = { has_country_flag = limited_modifier_gas_rich_planet }
+			}
+		}
+	}
+}
+

@@ -1,0 +1,101 @@
+# Icons set here are the ones show in the actual slot. 
+
+### Point Defence 1
+weapon_component_template = {
+	key = "POINT_DEFENCE_1"
+	size = point_defence
+	entity = "turret_point_defence_entity"
+	hidden = yes
+	
+	icon = "GFX_ship_part_point_defense_1"
+	icon_frame = 1
+	
+	#prerequisites = { "tech_pd_tracking_1" }
+	component_set = "POINT_DEFENCE_1"
+	type = point_defence
+	projectile_gfx = "red_laser_pd"
+	tags = { weapon_type_point_defense weapon_type_kinetic }
+	ai_tags = { weapon_role_point_defense }
+	upgrades_to = "POINT_DEFENCE_2"
+}
+
+### Point Defence 2
+weapon_component_template = {
+	key = "POINT_DEFENCE_2"
+	size = point_defence
+	entity = "turret_point_defence_entity"
+	hidden = yes
+	
+	icon = "GFX_ship_part_point_defense_2"
+	icon_frame = 1
+	
+	#prerequisites = { "tech_pd_tracking_2" }
+	component_set = "POINT_DEFENCE_2"
+	type = point_defence
+	projectile_gfx = "blue_laser_pd"
+	tags = { weapon_type_point_defense weapon_type_kinetic }
+	ai_tags = { weapon_role_point_defense }
+	upgrades_to = "POINT_DEFENCE_3"
+}
+
+### Point Defence 3
+weapon_component_template = {
+	key = "POINT_DEFENCE_3"
+	size = point_defence
+	entity = "turret_point_defence_entity"
+	hidden = yes
+	
+	icon = "GFX_ship_part_point_defense_3"
+	icon_frame = 1
+	
+	#prerequisites = { "tech_pd_tracking_3" }
+	component_set = "POINT_DEFENCE_3"
+	type = point_defence
+	projectile_gfx = "white_laser_pd"
+	tags = { weapon_type_point_defense weapon_type_kinetic }
+	ai_tags = { weapon_role_point_defense }
+}
+
+
+#####################
+#  Flak Battery
+#####################
+
+### Flak Battery 1
+weapon_component_template = {
+	type = point_defence
+	
+	key = "FLAK_BATTERY_1"
+	size = point_defence
+	entity = "small_kinetic_gun_entity"
+	hidden = yes
+	
+	icon = "GFX_ship_part_flak_batteries_1"
+	icon_frame = 1
+	
+	#prerequisites = { "tech_flak_batteries_1" }
+	component_set = "FLAK_BATTERY_1"
+	projectile_gfx = "mass_driver_m"
+	tags = { weapon_type_point_defense weapon_type_kinetic }
+	ai_tags = { weapon_role_point_defense weapon_role_short_range }
+	upgrades_to = "FLAK_BATTERY_2"
+}
+
+### Flak Battery 2
+weapon_component_template = {
+	type = point_defence
+	
+	key = "FLAK_BATTERY_2"
+	size = point_defence
+	entity = "small_kinetic_gun_entity"
+	hidden = yes
+	
+	icon = "GFX_ship_part_flak_batteries_2"
+	icon_frame = 1
+	
+	#prerequisites = { "tech_flak_batteries_2" }
+	component_set = "FLAK_BATTERY_2"
+	projectile_gfx = "mass_driver_m"
+	tags = { weapon_type_point_defense weapon_type_kinetic }
+	ai_tags = { weapon_role_point_defense weapon_role_short_range }
+}

@@ -1,0 +1,86 @@
+@distance = 30
+@base_moon_distance = 10
+
+# Denobulan Homeworld
+denobulan_homeworld = {
+	name = "Iota Bootis"
+	class = sc_g
+	flags = { denobulan_homeworld }
+	init_effect = { log = "denobulan homeworld" }
+	usage = custom_empire
+	max_instances = 1
+	planet = { name = "Denobula Triaxa" class = star size = 41 orbit_distance = 0 orbit_angle = 1 has_ring = no }
+	planet = {
+		name = "Denobula"
+		class = "pc_continental"
+		size = { min = 18 max = 20 }
+		starting_planet = yes
+		orbit_distance = 65
+		orbit_angle = 185
+		tile_blockers = none
+		modifiers = none
+		has_ring = no
+		init_effect = {
+			prevent_anomaly = yes			
+			if = {
+				limit = { NOT = { any_country = { has_country_flag = denobulan_unity } } }
+				create_species = { 
+					name = "Denobulan"
+					class = DEN
+					portrait = denobulan
+					homeworld = THIS
+					traits = {
+						trait="trait_quick_learners"
+						trait="trait_charismatic"
+						trait="trait_complex_family_structures"
+						trait="trait_slow_breeders"
+						ideal_planet_class = "pc_continental"
+					}
+				}
+				last_created_species = { save_global_event_target_as = denobulanSpecies }
+				create_country = {
+					name = "NAME_denobulan_unity"
+					type = default
+					ignore_initial_colony_error = yes
+					civics = { civic = "civic_philomaths" civic = "civic_beacon_of_liberty" }
+					authority = auth_democratic
+					name_list = "Denobulan"
+					ethos = { ethic = "ethic_xenophile" ethic = "ethic_egalitarian" ethic = "ethic_pacifist" }
+					species = event_target:denobulanSpecies
+					flag = {
+						icon = { category = "trek" file = "denobula.dds" }
+						background = { category = "backgrounds" file = "double_hemispheres.dds" }
+						colors = { "customcolor1600" "customcolor223" "null" "null" }
+					}
+					ship_prefix=""
+					effect = {
+						set_graphical_culture = generic_01
+						set_country_flag = denobulan_unity
+						set_country_flag = custom_start_screen
+						set_country_flag = generic_ent
+						set_country_flag = alpha_beta_empire
+						set_country_flag = init_spawned
+						set_country_flag = botf_minor
+						save_global_event_target_as = denobulan_unity
+					}
+				}
+				create_colony = { owner = event_target:denobulan_unity species = event_target:denobulanSpecies ethos = owner }
+			}
+			set_capital = yes
+			random_country = {
+				limit = { has_country_flag = denobulan_unity }
+				save_global_event_target_as = denobulan_unity
+				species = { save_global_event_target_as = denobulanSpecies }
+				add_appropriate_start_techs = yes
+				set_country_type = minorRace
+			}
+			set_owner = event_target:denobulan_unity
+			generate_minor_empire_start_buildings = yes
+			generate_minor_empire_start_pops = yes
+			generate_major_empire_start_fleets = yes
+			set_name = "Denobula"
+		}		
+	}
+	planet = { name = "Iota Bootis B" class = star size = 32 orbit_distance = 150 orbit_angle = 45 has_ring = no }
+	planet = { name = "Iota Bootis C" class = star size = 21 orbit_distance = 90 orbit_angle = 270 has_ring = no }
+}

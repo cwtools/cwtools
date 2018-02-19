@@ -1,0 +1,1354 @@
+#########################################
+#
+# Events concerning Primitive Aliens
+#
+# Written by Henrik Eklund
+# STNH - Capek 1.8.0 Compat
+#########################################
+
+namespace = primitive
+
+@tier1influencecontact = 7
+@tier1influencecontactxenophile = 8
+@tier1influencecontactmin = 20
+@tier1influencecontactmax = 80
+
+@tier2influencecontact = 10
+@tier2influencecontactxenophile = 12
+@tier2influencecontactmin = 40
+@tier2influencecontactmax = 100
+
+@tier1materialreward = 6
+@tier1materialmin = 100
+@tier1materialmax = 500
+@tier2materialreward = 12
+@tier2materialmin = 150
+@tier2materialmax = 1000
+@tier3materialreward = 18
+@tier3materialmin = 250
+@tier3materialmax = 1500
+@tier4materialreward = 24
+@tier4materialmin = 350
+@tier4materialmax = 2000
+@tier5materialreward = 48
+@tier5materialmin = 700
+@tier5materialmax = 4000
+
+@tier1influencereward = 6
+@tier1influencemin = 40
+@tier1influencemax = 100
+@tier2influencereward = 12
+@tier2influencemin = 80
+@tier2influencemax = 175
+@tier3influencereward = 18
+@tier3influencemin = 125
+@tier3influencemax = 250
+@tier4influencereward = 24
+@tier4influencemin = 150
+@tier4influencemax = 300
+@tier5influencereward = 36
+@tier5influencemin = 250
+@tier5influencemax = 500
+@tier6influencereward = 48
+@tier6influencemin = 300
+@tier6influencemax = 600
+
+@tier1researchreward = 6
+@tier1researchmin = 60
+@tier1researchmax = 150
+@tier2researchreward = 12
+@tier2researchmin = 90
+@tier2researchmax = 250
+@tier3researchreward = 18
+@tier3researchmin = 120
+@tier3researchmax = 350
+@tier4researchreward = 24
+@tier4researchmin = 150
+@tier4researchmax = 500
+@tier5researchreward = 48
+@tier5researchmin = 300
+@tier5researchmax = 1000
+
+### Industrial Technology Progress Events
+
+# Radio Signals (HIDDEN)
+country_event = {
+	id = primitive.10
+	hide_window = yes
+
+	trigger = {
+		is_country_type = primitive
+		has_country_flag = industrial_age
+		NOT = { has_country_flag = recently_advanced }
+	}
+
+	mean_time_to_happen = {
+		years = 100
+	}
+
+	immediate = {
+		set_timed_country_flag = {
+			flag = recently_advanced
+			days = 2160 #60yrs
+		}
+		remove_country_flag = industrial_age
+		set_country_flag = machine_age
+		set_primitive_age = machine_age
+		home_planet = {
+			create_army = {
+				name = "NAME_Industrial_Army"
+				owner = root
+				species = root
+				type = "industrial_army"
+			}
+			random_tile = {
+				limit = {
+					has_blocker = no
+					has_building = no
+					has_grown_pop = no
+				}
+				set_building = "building_primitive_factory"
+				create_pop = {
+					species = owner
+				}
+				clear_deposits = yes
+				add_deposit = d_mineral_deposit
+			}
+			observation_outpost_owner = {
+				country_event = { id = primitive.11 }
+			}
+		}
+	}
+}
+
+# Radio Signals
+country_event = {
+	id = primitive.11
+	title = "primitive.11.name"
+	desc = "primitive.11.desc"
+	picture = GFX_evt_metropolis
+	location = FROM
+
+	is_triggered_only = yes
+
+	option = {
+		name = primitive.11.a
+	}
+}
+
+# Splitting the Atom (HIDDEN)
+country_event = {
+	id = primitive.12
+	hide_window = yes
+
+	trigger = {
+		is_country_type = primitive
+		has_country_flag = machine_age
+		NOT = { has_country_flag = recently_advanced }
+	}
+
+	mean_time_to_happen = {
+		years = 100
+
+		modifier = {
+			factor = 0.6
+			has_country_flag = acquired_tech
+		}
+	}
+
+	immediate = {
+		set_timed_country_flag = {
+			flag = recently_advanced
+			days = 2160 #60yrs
+		}
+		remove_country_flag = machine_age
+		set_country_flag = atomic_age
+		set_primitive_age = atomic_age
+		home_planet = {
+			remove_all_armies = yes
+			while = {
+				count = 4
+				create_army = {
+					name = "NAME_Post-Atomic_Army"
+					owner = root
+					species = root
+					type = "postatomic_army"
+				}
+			}
+			observation_outpost_owner = {
+				country_event = { id = primitive.13 }
+			}
+		}
+	}
+}
+
+# Splitting the Atom
+country_event = {
+	id = primitive.13
+	title = "primitive.13.name"
+	desc = "primitive.13.desc"
+	picture = GFX_evt_metropolis
+	location = FROM
+
+	is_triggered_only = yes
+
+	option = {
+		name = primitive.13.a
+	}
+}
+
+# First Satellite (HIDDEN)
+country_event = {
+	id = primitive.14
+	hide_window = yes
+
+	trigger = {
+		is_country_type = primitive
+		has_country_flag = atomic_age
+		NOT = { has_country_flag = recently_advanced }
+	}
+
+	mean_time_to_happen = {
+		years = 100
+
+		modifier = {
+			factor = 0.6
+			has_country_flag = acquired_tech
+		}
+	}
+
+	immediate = {
+		set_timed_country_flag = {
+			flag = recently_advanced
+			days = 2160 #60yrs
+		}
+		remove_country_flag = atomic_age
+		set_country_flag = early_space_age
+		set_primitive_age = early_space_age
+		home_planet = {
+			remove_all_armies = yes
+			create_army = {
+				name = "NAME_Post-Atomic_Army"
+				owner = root
+				species = root
+				type = "postatomic_army"
+			}
+			create_fleet = {
+				name = "NAME_Space_Station"
+				effect = {
+					set_owner = root
+					create_ship = {
+						name = "NAME_Space_Station"
+						design = "NAME_Space_Station"
+					}
+					set_location = PREV
+				}
+			}
+			random_tile = {
+				limit = {
+					has_blocker = no
+					has_building = no
+					has_grown_pop = no
+				}
+				set_building = "building_primitive_factory"
+				create_pop = {
+					species = owner
+				}
+				clear_deposits = yes
+				add_deposit = d_mineral_deposit
+			}
+			observation_outpost_owner = {
+				country_event = { id = primitive.15 }
+			}
+		}
+	}
+}
+
+# First Satellite
+country_event = {
+	id = primitive.15
+	title = "primitive.15.name"
+	desc = "primitive.15.desc"
+	picture = GFX_evt_satellite_in_orbit
+	location = FROM
+
+	is_triggered_only = yes
+
+	option = {
+		name = primitive.15.a
+	}
+}
+
+# Space Station (HIDDEN)
+country_event = {
+	id = primitive.18
+	hide_window = yes
+
+	trigger = {
+		is_country_type = primitive
+		has_country_flag = early_space_age
+		home_planet = {
+			has_observation_outpost = yes
+		}
+		NOT = {
+			any_owned_ship = {
+				is_ship_size = primitive_space_station
+			}
+			has_country_flag = recently_advanced
+		}
+	}
+
+	mean_time_to_happen = {
+		years = 60
+
+		modifier = {
+			factor = 0.6
+			has_country_flag = acquired_tech
+		}
+	}
+
+	immediate = {
+		set_timed_country_flag = {
+			flag = recently_advanced
+			days = 2160 #60yrs
+		}
+		home_planet = {
+			create_fleet = {
+				name = "NAME_Space_Station"
+				effect = {
+					set_owner = ROOT
+					create_ship = {
+						name = "NAME_Space_Station"
+						design = "NAME_Space_Station"
+					}
+					set_location = PREV
+				}
+			}
+			observation_outpost_owner = {
+				country_event = { id = primitive.19 }
+			}
+		}
+	}
+}
+
+# Space Station
+country_event = {
+	id = primitive.19
+	title = "primitive.19.name"
+	desc = "primitive.19.desc"
+	picture = GFX_evt_satellite_in_orbit
+	location = FROM
+
+	is_triggered_only = yes
+
+	option = {
+		name = primitive.19.a
+	}
+}
+
+# Entering Space Age (HIDDEN)
+country_event = {
+	id = primitive.16
+	hide_window = yes
+
+	trigger = {
+		is_country_type = primitive
+		has_country_flag = early_space_age
+		#NOT = { has_country_flag = recently_advanced }
+		OR = {
+			AND = {
+				exists = from
+				from = {
+					OR = {
+						is_normal_country = yes
+						is_country_type = awakened_fallen_empire
+					}
+				}
+			}
+			years_passed > 25
+		}
+	}
+
+	mean_time_to_happen = {
+		years = 100
+
+		modifier = {
+			factor = 0.6
+			has_country_flag = acquired_tech
+		}
+	}
+
+	immediate = {
+		remove_country_flag = early_space_age
+		set_country_type = minorRace
+		add_modifier = { modifier = "em_minor_race_borders" }
+		change_country_flag = random
+		random_list = {
+			10 = { set_graphical_culture = generic_01 }
+			10 = { set_graphical_culture = generic_02 }
+		}
+		change_government = {
+			authority = random
+			civics = random
+		}
+		set_name = random
+		if = {
+			limit = {
+				home_planet = {
+					has_observation_outpost = yes
+				}
+			}
+			home_planet = {
+				observation_outpost_owner = {
+					country_event = { id = primitive.17 }
+				}
+			}
+		}
+		add_minerals = 1000 # enough for a spaceport and then some
+		add_energy = 500
+		add_influence = 300
+		capital_scope = {
+			every_tile = {
+				limit = {
+					has_blocker = yes
+					NOR = {
+						has_blocker = tb_decrepit_dwellings
+						has_blocker = tb_failing_infrastructure
+					}
+				}
+				remove_blocker = yes
+			}
+			while = {
+				limit = { 
+					num_pops < 8
+					any_tile = {
+						has_grown_pop = no
+						has_growing_pop = no
+						has_blocker = no
+					}
+				}
+				random_tile = {
+					limit = {
+						has_grown_pop = no
+						has_growing_pop = no
+						has_blocker = no
+					}
+					create_pop = {
+						species = owner
+					}
+				}
+			}
+			random_tile = {
+				limit = {
+					has_grown_pop = yes
+					OR = {
+						has_building = "building_primitive_farm"
+						has_building = "building_primitive_factory"
+						has_building = no
+					}
+				}
+				clear_deposits = yes
+				add_deposit = d_energy_deposit
+				set_building = "building_capital_2"
+			}
+			random_tile = {
+				limit = {
+					has_grown_pop = yes
+					OR = {
+						has_building = "building_primitive_farm"
+						has_building = "building_primitive_factory"
+						has_building = no
+					}
+				}
+				clear_deposits = yes
+				add_deposit = d_mineral_deposit
+				set_building = "building_mining_network_1"
+			}
+			random_tile = {
+				limit = {
+					has_grown_pop = yes
+					OR = {
+						has_building = "building_primitive_farm"
+						has_building = "building_primitive_factory"
+						has_building = no
+					}
+				}
+				clear_deposits = yes
+				add_deposit = d_mineral_deposit
+				set_building = "building_mining_network_1"
+			}
+			random_tile = {
+				limit = {
+					has_grown_pop = yes
+					OR = {
+						has_building = "building_primitive_farm"
+						has_building = "building_primitive_factory"
+						has_building = no
+					}
+				}
+				clear_deposits = yes
+				add_deposit = d_farmland_deposit
+				set_building = "building_hydroponics_farm_1"
+			}
+			random_tile = {
+				limit = {
+					has_grown_pop = yes
+					OR = {
+						has_building = "building_primitive_farm"
+						has_building = "building_primitive_factory"
+						has_building = no
+					}
+				}
+				clear_deposits = yes
+				add_deposit = d_farmland_deposit
+				set_building = "building_hydroponics_farm_1"
+			}
+			random_tile = {
+				limit = {
+					has_grown_pop = yes
+					OR = {
+						has_building = "building_primitive_farm"
+						has_building = "building_primitive_factory"
+						has_building = no
+					}
+				}
+				clear_deposits = yes
+				add_deposit = d_energy_deposit
+				set_building = "building_power_plant_1"
+			}
+			random_tile = {
+				limit = {
+					has_grown_pop = yes
+					OR = {
+						has_building = "building_primitive_farm"
+						has_building = "building_primitive_factory"
+						has_building = no
+					}
+				}
+				clear_deposits = yes
+				add_deposit = d_energy_deposit
+				set_building = "building_power_plant_1"
+			}
+			random_tile = {
+				limit = {
+					has_grown_pop = yes
+					OR = {
+						has_building = "building_primitive_farm"
+						has_building = "building_primitive_factory"
+						has_building = no
+					}
+				}
+				clear_deposits = yes
+				add_deposit = d_energy_deposit
+				set_building = "building_power_plant_1"
+			}
+			remove_all_armies = yes
+			create_army = {
+				name = random
+				owner = PREV
+				species = owner_main_species
+				type = "defense_army"
+			}
+			create_army = {
+				name = random
+				owner = PREV
+				species = owner_main_species
+				type = "defense_army"
+			}
+			create_army = {
+				name = random
+				owner = PREV
+				species = owner_main_species
+				type = "defense_army"
+			}
+			create_army = {
+				name = random
+				owner = PREV
+				species = owner_main_species
+				type = "defense_army"
+			}
+		}
+		random_owned_ship = {
+			limit = { is_ship_size = primitive_space_station }
+			fleet = { destroy_fleet = THIS }
+		}
+	}
+}
+
+# Entering Space Age
+country_event = {
+	id = primitive.17
+	title = "primitive.17.name"
+	desc = "primitive.17.desc"
+	picture = GFX_evt_satellite_in_orbit
+	location = FROM
+
+	is_triggered_only = yes
+
+
+	immediate = {
+		FROM = {
+			home_planet = {
+				observation_outpost = {
+					dismantle = yes
+				}
+			}
+		}
+	}
+
+	option = {
+		name = primitive.15.a
+	}
+}
+
+### Medieval Technology Progress Events
+
+# Iron Age (HIDDEN)
+country_event = {
+	id = primitive.20
+	hide_window = yes
+
+	trigger = {
+		is_country_type = primitive
+		has_country_flag = bronze_age
+		NOT = { has_country_flag = recently_advanced }
+	}
+
+	mean_time_to_happen = {
+		years = 160
+	}
+
+	immediate = {
+		if = {
+			limit = {
+				any_owned_planet = {
+					has_observation_outpost = yes
+					observation_outpost_owner = {
+						is_country_type = default
+					}
+					observation_outpost = {
+						OR = {
+							has_mission = technological_enlightenment_1
+							has_mission = technological_enlightenment_2
+							has_mission = technological_enlightenment_3
+							has_mission = technological_enlightenment_4
+							has_mission = technological_enlightenment_5
+							has_mission = technological_enlightenment_6
+							has_mission = technological_enlightenment_7
+							has_mission = technological_enlightenment_8
+							has_mission = technological_enlightenment_9
+						}
+					}
+				}
+			}
+			set_country_flag = was_bronze
+		}
+		set_timed_country_flag = {
+			flag = recently_advanced
+			days = 2160 #60yrs
+		}
+		remove_country_flag = bronze_age
+		change_government = {
+			civics = {
+				civic = civic_landed_nobility
+				civic = civic_flat_world_theory
+			}
+		}
+		set_country_flag = iron_age
+		set_primitive_age = iron_age
+		home_planet = {
+			create_army = {
+				name = "NAME_Primitive_Army"
+				owner = root
+				species = root
+				type = "primitive_army"
+			}
+			random_tile = {
+				limit = {
+					has_blocker = no
+					has_building = no
+					has_grown_pop = no
+				}
+				create_pop = {
+					species = owner
+				}
+				clear_deposits = yes
+				add_deposit = d_farmland_deposit
+				set_building = "building_primitive_farm"
+			}
+			observation_outpost_owner = {
+				country_event = { id = primitive.21 }
+			}
+		}
+	}
+}
+
+# Iron Age
+country_event = {
+	id = primitive.21
+	title = "primitive.21.name"
+	desc = "primitive.21.desc"
+	picture = GFX_evt_medieval_alien_civilization
+	location = FROM
+
+	is_triggered_only = yes
+
+	option = {
+		name = primitive.21.a
+	}
+}
+
+# Printing Press (HIDDEN)
+country_event = {
+	id = primitive.22
+	hide_window = yes
+
+	trigger = {
+		is_country_type = primitive
+		has_country_flag = iron_age
+		NOT = { has_country_flag = recently_advanced }
+	}
+
+	mean_time_to_happen = {
+		years = 160
+	}
+
+	immediate = {
+		set_timed_country_flag = {
+			flag = recently_advanced
+			days = 2160 #60yrs
+		}
+		remove_country_flag = iron_age
+		set_country_flag = late_medieval_age
+		set_primitive_age = late_medieval_age
+		home_planet = {
+			create_army = {
+				name = "NAME_Primitive_Army"
+				owner = root
+				species = root
+				type = "primitive_army"
+			}
+			observation_outpost_owner = {
+				country_event = { id = primitive.23 }
+			}
+		}
+	}
+}
+
+# Printing Press
+country_event = {
+	id = primitive.23
+	title = "primitive.23.name"
+	desc = "primitive.23.desc"
+	picture = GFX_evt_medieval_alien_civilization
+	location = FROM
+
+	is_triggered_only = yes
+
+	option = {
+		name = primitive.23.a
+	}
+}
+
+# Gunpowder (HIDDEN)
+country_event = {
+	id = primitive.24
+	hide_window = yes
+
+	trigger = {
+		is_country_type = primitive
+		has_country_flag = late_medieval_age
+		NOT = { has_country_flag = recently_advanced }
+	}
+
+	mean_time_to_happen = {
+		years = 160
+	}
+
+	immediate = {
+		set_timed_country_flag = {
+			flag = recently_advanced
+			days = 2160 #60yrs
+		}
+		remove_country_flag = late_medieval_age
+		set_country_flag = renaissance_age
+		set_primitive_age = renaissance_age
+		home_planet = {
+			create_army = {
+				name = "NAME_Primitive_Army"
+				owner = root
+				species = root
+				type = "primitive_army"
+			}
+			random_tile = {
+				limit = {
+					has_blocker = no
+					has_building = no
+					has_grown_pop = no
+				}
+				set_building = "building_primitive_farm"
+				create_pop = {
+					species = owner
+				}
+				clear_deposits = yes
+				add_deposit = d_farmland_deposit
+			}
+			observation_outpost_owner = {
+				country_event = { id = primitive.25 }
+			}
+		}
+	}
+}
+
+# Gunpowder
+country_event = {
+	id = primitive.25
+	title = "primitive.25.name"
+	desc = "primitive.25.desc"
+	picture = GFX_evt_medieval_alien_civilization
+	location = FROM
+
+	is_triggered_only = yes
+
+	option = {
+		name =  primitive.25.a
+	}
+}
+
+# Steam Engine (HIDDEN)
+country_event = {
+	id = primitive.26
+	hide_window = yes
+
+	trigger = {
+		is_country_type = primitive
+		has_country_flag = renaissance_age
+		NOT = { has_country_flag = recently_advanced }
+	}
+
+	mean_time_to_happen = {
+		years = 160
+	}
+
+	immediate = {
+		set_timed_country_flag = {
+			flag = recently_advanced
+			days = 2160 #60yrs
+		}
+		remove_country_flag = renaissance_age
+		set_country_flag = steam_age
+		set_primitive_age = steam_age
+		home_planet = {
+			remove_all_armies = yes
+			while = {
+				count = 3
+				create_army = {
+					name = "NAME_Industrial_Army"
+					owner = root
+					species = root
+					type = "industrial_army"
+				}
+			}
+			random_tile = {
+				limit = {
+					has_blocker = no
+					has_building = no
+					has_grown_pop = no
+				}
+				create_pop = {
+					species = owner
+				}
+				clear_deposits = yes
+				add_deposit = d_mineral_deposit
+				set_building = "building_primitive_factory"
+			}
+			observation_outpost_owner = {
+				country_event = { id = primitive.27 }
+			}
+		}
+	}
+}
+
+# Steam Engine
+country_event = {
+	id = primitive.27
+	title = "primitive.27.name"
+	desc = "primitive.27.desc"
+	picture = GFX_evt_medieval_alien_civilization
+	location = FROM
+
+	is_triggered_only = yes
+
+	option = {
+		name = primitive.27.a
+	}
+}
+
+# Entering Industrial Age (HIDDEN)
+country_event = {
+	id = primitive.28
+	hide_window = yes
+
+	trigger = {
+		is_country_type = primitive
+		has_country_flag = steam_age
+		NOT = { has_country_flag = recently_advanced }
+	}
+
+	mean_time_to_happen = {
+		years = 100
+	}
+
+	immediate = {
+		set_timed_country_flag = {
+			flag = recently_advanced
+			days = 2160 #60yrs
+		}
+		remove_country_flag = steam_age
+		change_government = {
+			civics = {
+				civic = civic_increasing_urbanization
+				civic = civic_atmospheric_pollution
+			}
+		}
+		set_country_flag = industrial_age
+		set_primitive_age = industrial_age
+		set_graphical_culture = industrial_01
+		home_planet = {
+			create_army = {
+				name = "NAME_Industrial_Army"
+				owner = root
+				species = root
+				type = "industrial_army"
+			}
+			every_tile = {
+				limit = {
+					has_blocker = yes
+				}
+				remove_blocker = yes
+			}
+			while = {
+				count = 3
+				random_tile = {
+					limit = {
+						has_blocker = no
+						has_building = no
+						has_grown_pop = no
+					}
+					set_blocker = tb_decrepit_dwellings
+				}
+				random_tile = {
+					limit = {
+						has_blocker = no
+						has_building = no
+						has_grown_pop = no
+					}
+					set_blocker = tb_failing_infrastructure
+				}
+			}
+			random_tile = {
+				limit = {
+					has_blocker = no
+					has_building = no
+					has_grown_pop = no
+				}
+				create_pop = {
+					species = owner
+				}
+				clear_deposits = yes
+				add_deposit = d_mineral_deposit
+				set_building = "building_primitive_factory"
+			}
+			observation_outpost_owner = {
+				country_event = { id = primitive.29 }
+			}
+		}
+	}
+}
+
+# Entering Industrial Age
+country_event = {
+	id = primitive.29
+	title = "primitive.29.name"
+	desc = "primitive.29.desc"
+	picture = GFX_evt_medieval_alien_civilization
+	location = FROM
+
+	is_triggered_only = yes
+
+	option = {
+		name = primitive.29.a
+	}
+}
+
+# Bronze Age (HIDDEN)
+country_event = {
+	id = primitive.30
+	hide_window = yes
+
+	trigger = {
+		is_country_type = primitive
+		has_country_flag = stone_age
+		NOT = { has_country_flag = recently_advanced }
+	}
+
+	mean_time_to_happen = {
+		years = 160
+	}
+
+	immediate = {
+		if = {
+			limit = {
+				any_owned_planet = {
+					has_observation_outpost = yes
+					observation_outpost_owner = {
+						is_country_type = default
+					}
+					observation_outpost = {
+						OR = {
+							has_mission = technological_enlightenment_1
+							has_mission = technological_enlightenment_2
+							has_mission = technological_enlightenment_3
+							has_mission = technological_enlightenment_4
+							has_mission = technological_enlightenment_5
+							has_mission = technological_enlightenment_6
+							has_mission = technological_enlightenment_7
+							has_mission = technological_enlightenment_8
+							has_mission = technological_enlightenment_9
+						}
+					}
+				}
+			}
+			set_country_flag = was_stone
+		}
+		set_timed_country_flag = {
+			flag = recently_advanced
+			days = 2160 #60yrs
+		}
+		remove_country_flag = stone_age
+		set_country_flag = bronze_age
+		set_primitive_age = bronze_age
+		home_planet = {
+			random_tile = {
+				limit = { 
+					has_blocker = no 
+					has_building = no 
+					has_grown_pop = yes
+				}
+				set_building = "building_primitive_farm"
+			}
+			random_tile = {
+				limit = { 
+					has_blocker = no 
+					has_building = no 
+					has_grown_pop = yes
+				}
+				set_building = "building_primitive_farm"
+			}			
+			observation_outpost_owner = {
+				country_event = { id = primitive.31 }
+			}
+		}
+	}
+}
+
+# Bronze Age
+country_event = {
+	id = primitive.31
+	title = "primitive.31.name"
+	desc = "primitive.31.desc"
+	picture = GFX_evt_medieval_alien_civilization
+	location = FROM
+
+	is_triggered_only = yes
+
+	option = {
+		name = primitive.31.a
+	}
+}
+
+### Nuclear War Scenarios
+
+# Nuclear War Breaks Out (HIDDEN)
+planet_event = {
+	id = primitive.130
+	hide_window = yes
+
+	trigger = {
+		is_artificial_planet = no
+		has_owner = yes
+		owner = {
+			is_country_type = primitive
+			OR = {
+				has_country_flag = atomic_age
+				has_country_flag = early_space_age
+			}
+		}
+		OR = {
+			has_observation_outpost = no
+			AND = {
+				has_observation_outpost = yes
+				observation_outpost = { has_mission = passive_observation }
+			}
+			AND = {
+				has_observation_outpost = yes
+				observation_outpost = { has_mission = native_indoctrination }
+			}			
+			AND = {
+				has_observation_outpost = yes
+				observation_outpost = { has_mission = specimen_collection }
+			}
+		}
+	}
+
+	mean_time_to_happen = {
+		years = 100
+		modifier = {
+			factor = 0.75
+			has_observation_outpost = yes
+			observation_outpost = { has_mission = specimen_collection }
+		}
+		modifier = {
+			factor = 0.5
+			has_observation_outpost = yes
+			observation_outpost = { has_mission = native_indoctrination }
+		}
+	}
+
+	immediate = {
+		owner = {
+			random_owned_ship = {
+				limit = { is_ship_size = primitive_space_station }
+				fleet = { destroy_fleet = THIS }
+			}
+		}
+		if = {
+			limit = {
+				has_observation_outpost = yes
+			}
+			observation_outpost_owner = {
+				random_list = {
+					25 = { country_event = { id = primitive.131 } }
+					75 = { country_event = { id = primitive.133 } }
+				}
+			}	
+			else = {
+				owner = {
+					random_list = {
+						25 = { country_event = { id = primitive.131 } }
+						75 = { country_event = { id = primitive.133 } }
+					}				
+				}		
+			}
+		}	
+	}
+}
+
+# Nuclear War (Planet Rendered Uninhabitable)
+country_event = {
+	id = primitive.131
+	title = "primitive.131.name"
+	desc = "primitive.131.desc"
+	picture = GFX_evt_nuclear_explosion
+	location = FROM
+
+	is_triggered_only = yes
+
+	immediate = {
+		FROM = {
+			nuke_primitives_toxic_effect = yes
+		}
+	}
+
+	option = {
+		name = primitive.131.a
+		if = {
+			limit = {
+				from = { has_observation_outpost = yes }
+			}		
+			from = {
+				observation_outpost = {
+					dismantle = yes
+				}
+			}
+		}
+	}
+}
+
+# Nuclear War (Entire Population Died)
+country_event = {
+	id = primitive.133
+	title = "primitive.131.name"
+	desc = "primitive.133.desc"
+	picture = GFX_evt_nuclear_explosion
+	location = FROM
+
+	is_triggered_only = yes
+
+	immediate = {
+		FROM = {
+			nuke_primitives_effect = yes
+		}
+	}
+
+	option = {
+		name = primitive.131.a
+		if = {
+			limit = {
+				from = { has_observation_outpost = yes }
+			}		
+			from = {
+				observation_outpost = {
+					dismantle = yes
+				}
+			}
+		}
+	}
+}
+
+### Alien Abductions
+
+# Alien Abductions (HIDDEN)
+planet_event = {
+	id = primitive.170
+	hide_window = yes
+
+	trigger = {
+		has_observation_outpost = yes
+		observation_outpost = { has_mission = specimen_collection }
+		observation_outpost_owner = {
+			AND = {
+				NOT = { has_country_flag = alien_abductions_country }
+				is_ai = no
+			}
+		}
+		owner = {
+			is_country_type = primitive
+			OR = {
+				has_country_flag = machine_age
+				has_country_flag = atomic_age
+				has_country_flag = early_space_age
+			}
+		}
+	}
+
+	mean_time_to_happen = {
+		years = 100
+	}
+
+	immediate = {
+		observation_outpost_owner = {
+			limit = {
+				is_ai = no
+				NOT = { has_country_flag = alien_abductions_country }
+			}
+			set_country_flag = alien_abductions_country
+			country_event = { id = primitive.171 }
+		}
+	}
+}
+
+# Alien Abductions
+country_event = {
+	id = primitive.171
+	title = "primitive.171.name"
+	desc = "primitive.171.desc"
+	picture = GFX_evt_landing_ship
+	location = FROM
+
+	is_triggered_only = yes
+
+	option = {
+		name = "primitive.171.a"
+		from = {
+			enable_special_project = {
+				name = "PROBE_ALIENS"
+				location = this
+				owner = root
+			}
+		}
+	}
+	option = {
+		name = "primitive.171.b"
+	}
+}
+
+# Abductions Finished
+ship_event = {
+	id = primitive.172
+	title = "PROJECT_COMPLETE"
+	desc = "primitive.172.desc"
+	picture = GFX_evt_landing_ship
+	location = FROMFROM
+
+	is_triggered_only = yes
+
+	option = {
+		name = "primitive.172.a"
+		owner = {
+			add_monthly_resource_mult = {
+				resource = society_research
+				value = @tier3researchreward
+				min = @tier3researchmin
+				max = @tier3researchmax
+			}
+		}
+	}
+}
+
+# Diplomatic Objection (HIDDEN)
+country_event = {
+	id = primitive.173
+	hide_window = yes
+
+	trigger = {
+		is_ai = yes
+		is_primitive = no
+		any_country = {
+			#reverse_has_opinion_modifier = {
+			#	who = ROOT
+			#	modifier = opinion_abducted_aliens
+			#}
+		}
+		NOT = { has_country_flag = abducted_aliens_objection }
+		has_country_flag = BLABLA_REMOVEME
+	}
+
+	mean_time_to_happen = {
+		months = 240
+	}
+
+	immediate = {
+		set_country_flag = abducted_aliens_objection
+		random_country = {
+			#limit = {
+			#	reverse_has_opinion_modifier = {
+			#		who = ROOT
+			#		modifier = opinion_abducted_aliens
+			#	}
+			#}
+			country_event = { id = primitive.174 }
+		}
+	}
+}
+
+# Diplomatic Objection
+country_event = {
+	id = primitive.174
+	title = "TRANSMISSION_NAME"
+	desc = "primitive.174.desc"
+
+	diplomatic = yes
+	is_triggered_only = yes
+
+	option = {
+		name = "primitive.174.a"
+		trigger = { energy > 99 }
+		response_text = "primitive.174.a.response"
+		add_energy = -100
+	}
+	option = {
+		name = "primitive.174.b"
+		response_text = "primitive.174.b.response"
+	}
+}

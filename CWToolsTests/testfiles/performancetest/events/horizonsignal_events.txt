@@ -1,0 +1,3945 @@
+############################################
+# HORIZON SIGNAL - THE WORM-IN-WAITING	   #
+# Written and designed by Alexis Kennedy   #
+# Scripted and edited by Maximilian Olbers #
+# STNH - Capek 1.8.0 Compat
+############################################
+
+namespace = akx
+
+@tier1unityreward = 6
+@tier1unitymin = 100
+@tier1unitymax = 500
+@tier2unityreward = 12
+@tier2unitymin = 150
+@tier2unitymax = 1000
+@tier3unityreward = 18
+@tier3unitymin = 250
+@tier3unitymax = 1500
+@tier4unityreward = 24
+@tier4unitymin = 350
+@tier4unitymax = 2000
+@tier5unityreward = 48
+@tier5unitymin = 700
+@tier5unitymax = 4000
+
+fleet_event = {
+	id = akx.8888
+	title = akx.9000.name
+	desc = {
+		trigger = {
+			text = "DEBUG"
+			text = newline
+			text = akx.9000.desc
+		}
+	}
+	picture = GFX_evt_black_hole
+	show_sound = event_alien_signal
+	location = event_target:horizonsignal_black_hole
+
+	trigger = { always = no }
+
+	immediate = {
+		set_global_flag = akx.9000.fired
+		solar_system = {
+			set_star_flag = horizonsignal_system
+			random_system_planet = {
+				limit = {
+					is_star = yes
+				}
+				save_global_event_target_as = horizonsignal_black_hole
+			}
+			save_global_event_target_as = horizonsignal_system
+		}
+	}
+
+	option = {
+		name = OK
+		solar_system = {
+			random_system_planet = {
+				limit = {
+					is_star = yes
+				}
+				enable_special_project = {
+					name  = HORIZON_SIGNAL_PROJECT
+					location = this
+					owner = root.owner
+				}
+			}
+		}
+	}
+}
+
+# triggered by on_entering_system_fleet
+# chance to trigger the first time a player enters a black hole system
+fleet_event = {
+	id = akx.9000
+	title = akx.9000.name
+	desc = akx.9000.desc
+	picture = GFX_evt_black_hole
+	show_sound = event_alien_signal
+	location = event_target:horizonsignal_black_hole
+
+	is_triggered_only = yes
+
+	fire_only_once = yes
+
+	trigger = {
+		NOT = { has_global_flag = akx.9000.fired }
+		owner = {
+			is_ai = no
+			NOT = { has_ethic = ethic_gestalt_consciousness }
+		}
+		from = { # solar system scope
+			is_star_class = sc_black_hole
+			NOT = { has_star_flag = guardian }
+		}
+		exists = leader
+		leader = {
+			leader_class = scientist
+		}
+	}
+
+	immediate = {
+		set_global_flag = akx.9000.fired
+		solar_system = {
+			set_star_flag = horizonsignal_system
+			random_system_planet = {
+				limit = {
+					is_star = yes
+				}
+				save_global_event_target_as = horizonsignal_black_hole
+			}
+			save_global_event_target_as = horizonsignal_system
+		}
+	}
+
+	option = {
+		name = OK
+		from = {
+			random_system_planet = {
+				limit = {
+					is_star = yes
+				}
+				enable_special_project = {
+					name  = HORIZON_SIGNAL_PROJECT
+					location = this
+					owner = root.owner
+				}
+			}
+		}
+	}
+}
+
+ship_event = {
+	id = akx.9001
+	title = akx.9001.name
+	desc = akx.9001.desc
+	picture = GFX_evt_black_hole
+	show_sound = event_radio_chatter
+	location = this
+
+	is_triggered_only = yes
+
+	immediate = {
+		leader = {
+			save_event_target_as = horizonsignal_firstleader
+		}
+	}
+
+	option = {
+		name = akx.9001.a
+		begin_event_chain = {
+			event_chain = WORM_CHAIN_1
+			target = root.owner
+		}
+		hidden_effect = {
+			ship_event = { id = akx.9005 }
+		}
+	}
+
+	option = {
+		name = akx.9001.b
+		custom_tooltip = akx.9001.b.tooltip
+		hidden_effect = { ship_event = { id = akx.9006 } }
+	}
+}
+
+ship_event = {
+	id = akx.9005
+	title = akx.9005.name
+	desc = akx.9005.desc
+	picture = GFX_evt_black_hole
+	show_sound = event_activating_unknown_technology
+	location = this
+
+	is_triggered_only = yes
+
+	immediate = {
+		fleet = {
+			set_event_locked = yes
+			leader = { save_global_event_target_as = horizonsignal_firstleader }
+			exile_leader_as = exiled_horizonsignal_firstleader
+		}
+	}
+
+	after = {
+		owner = {
+			add_monthly_resource_mult = {
+				resource = physics_research
+				value = 36
+				min = 600
+				max = 3000
+			}
+			hidden_effect = {
+				country_event = { id = akx.9010 days = 320 random = 40 }
+			}
+		}
+		fleet = {
+			hidden_effect = { set_event_locked = no }
+			delete_fleet = this
+		}
+	}
+
+	option = {
+		name = akx.9005.a.spiritualist
+		trigger = {
+			owner = {
+				OR = {
+					has_ethic = ethic_fanatic_spiritualist
+					has_ethic = ethic_spiritualist
+				}
+			}
+		}
+	}
+
+	option = {
+		name = akx.9005.a.materialist
+		trigger = {
+			owner = {
+				OR = {
+					has_ethic = ethic_fanatic_materialist
+					has_ethic = ethic_materialist
+				}
+			}
+		}
+	}
+
+	option = {
+		name = akx.9005.a.neutral
+		trigger = {
+			owner = {
+				NOR = {
+					has_ethic = ethic_fanatic_spiritualist
+					has_ethic = ethic_spiritualist
+					has_ethic = ethic_fanatic_materialist
+					has_ethic = ethic_materialist
+				}
+			}
+		}
+	}
+}
+
+ship_event = {
+	id = akx.9006
+	title = akx.9006.name
+	desc = akx.9006.desc
+	picture = GFX_evt_throne_room
+	show_sound = event_ship_bridge
+	location = this
+
+	is_triggered_only = yes
+
+	after = {
+		owner = {
+			add_monthly_resource_mult = {
+				resource = physics_research
+				value = 6
+				min = 200
+				max = 500
+			}
+		}
+		leader = {
+			if = {
+				limit = {
+					leader_class = scientist
+				}
+				add_trait = leader_trait_expertise_field_manipulation
+			}
+			add_trait = leader_trait_substance_abuser
+		}
+	}
+
+	option = {
+		name = akx.9006.a
+	}
+
+	option = {
+		name = akx.9006.b
+	}
+}
+
+country_event = {
+	id = akx.9010
+	title = akx.9010.name
+	desc = akx.9010.desc
+	picture = GFX_evt_black_hole
+	show_sound = event_ship_bridge
+	location = event_target:horizonsignal_system
+
+	is_triggered_only = yes
+
+	trigger = {
+		any_owned_leader = {
+			NOT = {
+				leader_class = ruler
+			}
+		}
+	}
+
+	immediate = {
+		random_owned_leader = {
+			limit = {
+				NOT = {
+					leader_class = ruler
+				}
+			}
+			set_leader_flag = horizonsignal_secondleader
+			save_global_event_target_as = horizonsignal_secondleader
+		}
+	}
+
+	option = {
+		name = akx.9010.a.collective
+		custom_tooltip = akx.9010.a.tooltip
+		trigger = {
+			OR = {
+				has_ethic = ethic_fanatic_authoritarian
+				has_ethic = ethic_authoritarian
+			}
+		}
+		# Update event chain with PoI
+		hidden_effect = {
+			set_country_flag = secondleader_sent
+			event_target:horizonsignal_secondleader = {
+				exile_leader_as = exiled_horizonsignal_secondleader
+			}
+			country_event = { id = akx.9011 days = 30 }
+		}
+	}
+
+	option = {
+		name = akx.9010.a.notcollective
+		custom_tooltip = akx.9010.a.tooltip
+		trigger = {
+			NOR = {
+				has_ethic = ethic_fanatic_authoritarian
+				has_ethic = ethic_authoritarian
+			}
+		}
+		# Update event chain with PoI
+		hidden_effect = {
+			set_country_flag = secondleader_sent
+			event_target:horizonsignal_secondleader = {
+				exile_leader_as = exiled_horizonsignal_secondleader
+			}
+			country_event = { id = akx.9011 days = 30 }
+		}
+	}
+
+	option = {
+		name = akx.9010.b.collective
+		custom_tooltip = akx.9010.a.tooltip
+		trigger = {
+			OR = {
+				has_ethic = ethic_fanatic_authoritarian
+				has_ethic = ethic_authoritarian
+			}
+		}
+		# Update event chain with PoI
+		hidden_effect = {
+			set_country_flag = secondleader_bomb
+			event_target:horizonsignal_secondleader = {
+				exile_leader_as = exiled_horizonsignal_secondleader
+			}
+			country_event = { id = akx.9012 days = 30 }
+		}
+	}
+
+	option = {
+		name = akx.9010.b.notcollective
+		custom_tooltip = akx.9010.a.tooltip
+		trigger = {
+			NOR = {
+				has_ethic = ethic_fanatic_authoritarian
+				has_ethic = ethic_authoritarian
+			}
+		}
+		# Update event chain with PoI
+		hidden_effect = {
+			set_country_flag = secondleader_bomb
+			event_target:horizonsignal_secondleader = {
+				exile_leader_as = exiled_horizonsignal_secondleader
+			}
+			country_event = { id = akx.9012 days = 30 }
+		}
+	}
+
+	option = {
+		name = akx.9010.c
+		hidden_effect = {
+			country_event = { id = akx.9013 }
+		}
+	}
+}
+
+
+country_event = {
+	id = akx.9011
+	title = akx.9011.name
+	desc = akx.9011.desc
+	picture = GFX_evt_black_hole
+	show_sound = event_ship_bridge
+	location = event_target:horizonsignal_system
+
+	is_triggered_only = yes
+
+	immediate = {
+		
+	}
+
+	after = {
+		hidden_effect = { country_event = { id = akx.9020 days = 320 random = 40 } }
+	}
+
+	option = {
+		name = akx.9011.a
+	}
+	option = {
+		name = akx.9011.b
+	}
+	option = {
+		name = akx.9011.c
+	}
+}
+
+country_event = {
+	id = akx.9012
+	title = akx.9012.name
+	desc = akx.9012.desc
+	picture = GFX_evt_debris
+	show_sound = event_ship_explosion
+	location = event_target:horizonsignal_system
+
+	is_triggered_only = yes
+
+	immediate = {
+		event_target:horizonsignal_system = {
+			create_ambient_object = {
+				type = loop_debris_01_object
+				location = this
+			}
+		}
+		last_created_ambient_object = {
+			save_event_target_as = horizon_debris_object_1
+		}
+		capital_scope = {
+			planet_event = { id = akx.9100 days = 320 random = 40 }
+		}
+	}
+
+	after = {
+		event_target:horizon_debris_object_1 = {
+			enable_special_project = {
+				name = HORIZON_DEBRIS_PROJECT
+				location = this
+				owner = root
+			}
+		}
+	}
+
+	option = {
+		name = akx.9012.a
+	}
+}
+
+# Debris research project followup, 10% entropic recursion
+ship_event = {
+	id = akx.9095
+	title = akx.9095.name
+	desc = akx.9095.desc
+	picture = GFX_evt_metropolis
+	show_sound = event_ship_bridge
+	location = root
+
+	is_triggered_only = yes
+
+	immediate = {
+		fromfrom = {
+			destroy_ambient_object = this
+		}
+	}
+
+	option = {
+		name = OK
+		owner = {
+			if = {
+				limit = {
+					has_technology = tech_akx_worm_1
+				}
+				else = {
+					if = {
+						limit = {
+							NOT = {
+								has_tech_option = tech_akx_worm_1
+							}
+						}
+						add_research_option = tech_akx_worm_1
+					}
+					add_tech_progress = {
+						tech = tech_akx_worm_1
+						progress = 0.1
+					}
+				}
+			}
+		}
+	}
+}
+
+country_event = {
+	id = akx.9013
+	title = akx.9013.name
+	desc = akx.9013.desc
+	picture = GFX_evt_black_hole
+	show_sound = event_ship_bridge
+	location = root.capital_scope
+
+	is_triggered_only = yes
+
+	after = {
+		end_event_chain = WORM_CHAIN_1
+		add_monthly_resource_mult = {
+			resource = physics_research
+			value = 6
+			min = 200
+			max = 500
+		}
+		event_target:horizonsignal_secondleader = {
+			if = {
+				limit = {
+					leader_class = scientist
+				}
+				add_trait = leader_trait_expertise_field_manipulation
+			}
+			add_trait = leader_trait_substance_abuser
+		}
+	}
+
+	option = {
+		name = akx.9013.a
+	}
+
+	option = {
+		name = akx.9013.b
+	}
+}
+
+country_event = {
+	id = akx.9020
+	title = akx.9020.name
+	desc = akx.9020.desc
+	picture = GFX_evt_black_hole
+	show_sound = event_mystic_reveal
+	location = event_target:horizonsignal_black_hole
+
+	is_triggered_only = yes
+
+	immediate = {
+		random_owned_leader = {
+			limit = { NOT = { leader_class = ruler } }
+			save_global_event_target_as = horizonsignal_thirdleader
+		}
+	}
+
+	option = {
+		name = akx.9020.a
+		custom_tooltip = akx.9020.a.tooltip
+		hidden_effect = {
+			set_country_flag = thirdleader_sent
+			event_target:horizonsignal_thirdleader = {
+				exile_leader_as = exiled_horizonsignal_thirdleader
+			}
+			country_event = { id = akx.9021 days = 30 }
+		}
+	}
+
+	option = {
+		name = akx.9020.b
+		custom_tooltip = akx.9020.a.tooltip
+		hidden_effect = {
+			set_country_flag = thirdleader_bomb
+			event_target:horizonsignal_thirdleader = {
+				exile_leader_as = exiled_horizonsignal_thirdleader
+			}
+			country_event = { id = akx.9022 days = 30 }
+		}
+	}
+
+	option = {
+		name = akx.9020.c
+		hidden_effect = {
+			country_event = { id = akx.9023 }
+		}
+	}
+}
+
+country_event = {
+	id = akx.9021
+	title = akx.9021.name
+	desc = akx.9021.desc
+	picture = GFX_evt_black_hole
+	show_sound = event_ship_bridge
+	location = event_target:horizonsignal_black_hole
+
+	is_triggered_only = yes
+
+	immediate = {
+		capital_scope = {
+			planet_event = { id = akx.9100 days = 320 random = 40 }
+		}
+	}
+
+	option = {
+		name = akx.9021.a
+		if = {
+			limit = {
+				has_technology = tech_akx_worm_1
+			}
+			else = {
+				if = {
+					limit = {
+						NOT = {
+							has_tech_option = tech_akx_worm_1
+						}
+					}
+					add_research_option = tech_akx_worm_1
+				}
+				add_tech_progress = {
+					tech = tech_akx_worm_1
+					progress = 0.10
+				}
+			}
+		}
+		# physics bump
+		create_fleet = {
+			name = NAME_Foundling
+			settings = { spawn_debris = no }
+			effect = {
+				set_owner = root
+				create_ship_design = {
+					design = "NAME_Returned_Science_Ship"
+					ftl = root
+				}
+				create_ship = {
+					name = NAME_Foundling
+					design = last_created_design
+					graphical_culture = root
+					upgradable = no
+				}
+				set_location = {
+					target = event_target:horizonsignal_black_hole
+					distance = 50
+				}
+			}
+		}
+	}
+}
+
+country_event = {
+	id = akx.9022
+	title = akx.9022.name
+	desc = akx.9022.desc
+	picture = GFX_evt_debris
+	show_sound = event_ship_explosion
+	location = event_target:horizonsignal_system
+
+	is_triggered_only = yes
+
+	immediate = {
+		capital_scope = {
+			planet_event = { id = akx.9100 days = 320 random = 40 }
+		}
+		event_target:horizonsignal_system = {
+			create_ambient_object = {
+				type = loop_debris_01_object
+				location = this
+			}
+		}
+		last_created_ambient_object = {
+			set_ambient_object_flag = horizon_debris_2
+			save_event_target_as = debris_2
+		}
+	}
+
+	option = {
+		name = akx.9022.a
+		event_target:debris_2 = {
+			enable_special_project = {
+				name = HORIZON_DEBRIS_PROJECT
+				location = this
+				owner = root
+			}
+		}
+	}
+}
+
+country_event = {
+	id = akx.9023
+	title = akx.9023.name
+	desc = akx.9023.desc
+	picture = GFX_evt_metropolis
+	show_sound = event_ship_bridge
+	location = root.capital_scope
+
+	is_triggered_only = yes
+
+	after = {
+		end_event_chain = WORM_CHAIN_1
+		add_monthly_resource_mult = {
+			resource = physics_research
+			value = 6
+			min = 200
+			max = 500
+		}
+		event_target:horizonsignal_thirdleader = {
+			if = {
+				limit = {
+					leader_class = scientist
+				}
+				add_trait = leader_trait_expertise_field_manipulation
+			}
+			if = {
+				limit = {
+					NOT = { has_trait = leader_trait_substance_abuser }
+				}
+				add_trait = leader_trait_substance_abuser
+			}
+		}
+	}
+
+	option = {
+		name = akx.9013.b
+	}
+
+	option = {
+		name = akx.9006.b
+	}
+}
+
+planet_event = {
+	id = akx.9100
+	title = akx.9100.name
+	desc = akx.9100.desc
+	picture = GFX_evt_in_the_dark
+	show_sound = event_mystic_reveal
+	location = root
+
+	is_triggered_only = yes
+
+	after = {
+		enable_special_project = {
+			name = LOOP_TEMPLE_PROJECT
+			location = this
+			owner = root.owner
+		}
+	}
+
+	option = {
+		name = akx.9100.spiritual.a
+		trigger = {
+			owner = {
+				OR = {
+					has_ethic = ethic_fanatic_spiritualist
+					has_ethic = ethic_spiritualist
+				}
+			}
+		}
+	}
+
+	option = {
+		name = akx.9100.neutral.a
+		trigger = {
+			owner = {
+				NOR = {
+					has_ethic = ethic_fanatic_spiritualist
+					has_ethic = ethic_spiritualist
+				}
+			}
+		}
+	}
+
+	option = {
+		name = akx.9100.b
+	}
+}
+
+planet_event = {
+	id = akx.9101
+	title = akx.9101.name
+	desc = akx.9101.desc
+	picture = GFX_evt_metropolis
+	show_sound = event_ship_bridge
+	location = root
+
+	is_triggered_only = yes
+
+	option = {
+		name = akx.9101.a.notspiritual
+		custom_tooltip = akx.9101.a.notspiritual.tooltip
+		trigger = {
+			owner = {
+				NOR = {
+					has_ethic = ethic_fanatic_spiritualist
+					has_ethic = ethic_spiritualist
+				}
+			}
+		}
+		add_modifier = {
+			modifier = happy_with_open_loop_temple
+			days = -1
+		}
+		owner = {
+			hidden_effect = {
+				set_country_flag = worm_events_available
+			}
+			if = {
+				limit = {
+					has_technology = tech_akx_worm_2
+				}
+				break = yes
+			}
+			if = {
+				limit = {
+					NOT = {
+						has_tech_option = tech_akx_worm_2
+					}
+				}
+				add_research_option = tech_akx_worm_2
+			}
+			add_tech_progress = {
+				tech = tech_akx_worm_2
+				progress = 0.20
+			}
+		}
+	}
+
+	option = {
+		name = akx.9101.a.spiritual
+		custom_tooltip = akx.9101.a.spiritual.tooltip
+		trigger = {
+			owner = {
+				OR = {
+					has_ethic = ethic_fanatic_spiritualist
+					has_ethic = ethic_spiritualist
+				}
+			}
+		}
+		add_modifier = {
+			modifier = spiritual_happy_with_open_loop_temple
+			days = -1
+		}
+		owner = {
+			hidden_effect = {
+				set_country_flag = worm_events_available
+			}
+			if = {
+				limit = {
+					has_technology = tech_akx_worm_2
+				}
+				break = yes
+			}
+			if = {
+				limit = {
+					NOT = {
+						has_tech_option = tech_akx_worm_2
+					}
+				}
+				add_research_option = tech_akx_worm_2
+			}
+			add_tech_progress = {
+				tech = tech_akx_worm_2
+				progress = 0.20
+			}
+		}
+	}
+
+	option = {
+		name = akx.9101.b
+		custom_tooltip = akx.9101.b.tooltip
+		owner = {
+			add_monthly_resource_mult = {
+				resource = society_research
+				value = 4
+				min = 300
+				max = 2000
+			}
+			hidden_effect = {
+				set_country_flag = worm_events_available
+			}
+			if = {
+				limit = {
+					has_technology = tech_akx_worm_2
+				}
+				break = yes
+			}
+			if = {
+				limit = {
+					NOT = {
+						has_tech_option = tech_akx_worm_2
+					}
+				}
+				add_research_option = tech_akx_worm_2
+			}
+			add_tech_progress = {
+				tech = tech_akx_worm_2
+				progress = 0.20
+			}
+		}
+	}
+
+	option = {
+		name = akx.9101.c
+		custom_tooltip = akx.9101.c.tooltip
+		owner = {
+			end_event_chain = WORM_CHAIN_1
+			add_monthly_resource_mult = {
+				resource = influence
+				value = 3
+				min = 100
+				max = 600
+			}
+		}
+	}
+}
+
+# on_entering_system
+fleet_event = {
+	id = akx.9200
+	title = akx.9200.name
+	desc = akx.9200.desc
+	picture = GFX_evt_space_debris
+	show_sound = event_ship_bridge
+	location = event_target:horizon_pod
+
+	is_triggered_only = yes
+
+	trigger = {
+		owner = {
+			is_ai = no
+			has_country_flag = worm_events_available
+			NOT = { has_country_flag = messenger_pod_found }
+		}
+		from = {
+			NOR = {
+				has_star_flag = guardian
+				has_star_flag = hostile_system
+			}
+		}
+	}
+
+	immediate = {
+		owner = { set_country_flag = messenger_pod_found }
+		create_ambient_object = {
+			type = loop_debris_02_object
+			location = from
+		}
+		last_created_ambient_object = {
+			save_event_target_as = horizon_pod	
+		}
+	}
+
+	option = {
+		name = INTERESTING
+		event_target:horizon_pod = {
+			enable_special_project = {
+				name = MESSENGER_POD_PROJECT_1
+				location = this
+				owner = root.owner
+			}
+		}
+	}
+}
+
+country_event = {
+	id = akx.9201
+	title = akx.9201.name
+	desc = akx.9201.desc
+	picture = GFX_evt_throne_room
+	location = root
+
+	is_triggered_only = yes
+
+	immediate = {
+		if = {
+			limit = {
+				any_owned_leader = {
+					OR = {
+						is_researching_area = society
+					}
+					is_same_species = root
+				}
+			}
+			random_owned_leader = {
+				limit = {
+					is_researching_area = society
+					is_same_species = root
+				}
+				save_global_event_target_as = researchingscientist
+			}
+			else = {
+				if = {
+					limit = {
+						any_owned_leader = {
+							is_researching_area = society
+						}
+					}
+					random_owned_leader = {
+						limit = {
+							is_researching_area = society
+						}
+						save_global_event_target_as = researchingscientist
+					}
+					else = {
+						random_owned_leader = {
+							limit = {
+								leader_class = scientist
+							}
+							save_global_event_target_as = researchingscientist
+						}
+					}
+				}
+			}
+		}
+	}
+
+	option = {
+		name = akx.9201.militarist.a
+		#custom_tooltip = 9201.militarist.a.tooltip
+		trigger = {
+			OR = {
+				has_ethic = ethic_fanatic_militarist
+				has_ethic = ethic_militarist
+			}
+		}
+		capital_scope = {
+			enable_special_project = {
+				name = MESSENGER_POD_PROJECT_2_UNLEASHED
+				location = this
+				owner = root
+			}
+		}
+		if = {
+			limit = {
+				has_technology = tech_society_genome_447
+			}
+			break = yes
+			else = {
+				if = {
+					limit = {
+						NOT = { has_tech_option = tech_society_genome_447 }
+					}
+					add_research_option = tech_society_genome_447
+				}
+				add_tech_progress = {
+					tech = tech_society_genome_447
+					progress = 0.15
+				}
+			}
+		}
+	}
+
+	option = {
+		name = akx.9201.notmilitarist.b
+		capital_scope = {
+			enable_special_project = {
+				name = MESSENGER_POD_PROJECT_2_LEASHED
+				location = this
+				owner = root
+			}
+		}
+		if = {
+			limit = {
+				has_technology = tech_society_genome_447
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				NOT = { has_tech_option = tech_society_genome_447 }
+			}
+			add_research_option = tech_society_genome_447
+		}
+		add_tech_progress = {
+			tech = tech_society_genome_447
+			progress = 0.15
+		}
+	}
+
+	option = {
+		name = akx.9201.c
+		custom_tooltip = akx.9201.c.tooltip
+		if = {
+			limit = {
+				has_technology = tech_society_genome_447
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				NOT = { has_tech_option = tech_society_genome_447 }
+			}
+			add_research_option = tech_society_genome_447
+		}
+		add_tech_progress = {
+			tech = tech_society_genome_447
+			progress = 0.30
+		}
+	}
+}
+
+country_event = {
+	id = akx.9210
+	title = akx.9210.name
+	desc = akx.9210.desc
+	picture = GFX_evt_metropolis
+	show_sound = event_ship_bridge
+	location = capital_scope
+
+	is_triggered_only = yes
+
+	immediate = {
+		if = {
+			limit = { exists = event_target:researchingscientist }
+			else = {
+				random_owned_leader = {
+					limit = { leader_class = scientist }
+					save_global_event_target_as = researchingscientist
+				}
+			}
+		}
+		event_target:researchingscientist = {
+			make_unleashed_messenger = yes
+		}
+	}
+
+	option = {
+		name = akx.9210.a
+		event_target:researchingscientist = {
+			kill_leader = { show_notification = no }
+		}
+		if = {
+			limit = {
+				has_technology = tech_akx_worm_2
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				NOT = {
+					has_tech_option = tech_akx_worm_2
+				}
+			}
+			add_research_option = tech_akx_worm_2
+		}
+		add_tech_progress = {
+			tech = tech_akx_worm_2
+			progress = 0.20
+		}
+	}
+
+	option = {
+		name = akx.9210.b
+		event_target:researchingscientist = {
+			kill_leader = { show_notification = no }
+		}
+	}
+
+	option = {
+		name = akx.9210.c
+		hidden_effect = { country_event = { id = akx.9211 days = 320 random = 40 } }
+		if = {
+			limit = {
+				has_technology = tech_akx_worm_2
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				NOT = {
+					has_tech_option = tech_akx_worm_2
+				}
+			}
+			add_research_option = tech_akx_worm_2
+		}
+		add_tech_progress = {
+			tech = tech_akx_worm_2
+			progress = 0.20
+		}
+	}
+}
+
+country_event = {
+	id = akx.9211
+	title = akx.9211.name
+	desc = akx.9211.desc
+	picture = GFX_evt_genetic_modification
+	location = capital_scope
+
+	is_triggered_only = yes
+
+	immediate = {
+		if = {
+			limit = { exists = event_target:researchingscientist }
+			else = {
+				random_owned_leader = {
+					limit = { leader_class = scientist }
+					save_global_event_target_as = researchingscientist
+				}
+				event_target:researchingscientist = {
+					make_unleashed_messenger = yes
+				}
+			}
+		}
+	}
+
+	option = {
+		name = akx.9211.a
+		custom_tooltip = akx.9211.a.tooltip
+		hidden_effect = {
+			capital_scope = {
+				every_owned_pop = {
+					limit = { is_same_species = root }
+					wipe_pop_ethos = yes
+					make_intelligent = yes
+					make_unleashed_messenger = yes
+					pop_change_ethic = ethic_pacifist
+					set_timed_pop_flag = { flag = changed_pop days = 2 }
+				}
+				random_owned_pop = {
+					limit = { has_pop_flag = changed_pop }
+					root = { change_dominant_species = { species = prev } }
+				}
+			}
+		}
+	}
+
+	option = {
+		name = akx.9211.b
+		custom_tooltip = akx.9211.b.tooltip
+		trigger = {
+			OR = {
+				has_ethic = ethic_authoritarian
+				has_ethic = ethic_fanatic_authoritarian
+			}
+		}
+		hidden_effect = {
+			capital_scope = {
+				while = {
+					limit = {
+						count_owned_pops = {
+							limit = { is_same_species = root }
+							count > 1
+						}
+					}
+					random_owned_pop = {
+						kill_pop = yes
+					}
+				}
+			}
+		}
+	}
+
+	option = {
+		name = akx.9211.c
+		custom_tooltip = akx.9211.c.tooltip
+		hidden_effect = {
+			every_owned_leader = {
+				limit = { is_same_species = root }
+				make_unleashed_messenger = yes
+			}
+			every_owned_pop = {
+				limit = { is_same_species = root }
+				wipe_pop_ethos = yes
+				make_unleashed_messenger = yes
+				make_intelligent = yes
+				pop_change_ethic = ethic_pacifist
+				set_timed_pop_flag = { flag = changed_pop days = 2 }
+			}
+			random_owned_pop = {
+				limit = { has_pop_flag = changed_pop }
+				root = { change_dominant_species = { species = prev } }
+			}
+		}
+	}
+}
+
+country_event = {
+	id = akx.9220
+	title = akx.9220.name
+	desc = akx.9220.desc
+	picture = GFX_evt_metropolis
+	show_sound = event_ship_bridge
+	location = capital_scope
+
+	is_triggered_only = yes
+
+	immediate = {
+		if = {
+			limit = { exists = event_target:researchingscientist }
+			event_target:researchingscientist = {
+				save_global_event_target_as = researchingscientist9220
+			}
+			else = {
+				random_owned_leader = {
+					limit = { leader_class = scientist }
+					save_global_event_target_as = researchingscientist9220
+				}
+			}
+		}
+		event_target:researchingscientist9220 = {
+			make_leashed_messenger = yes
+		}
+	}
+
+	option = {
+		name = akx.9220.a
+		event_target:researchingscientist9220 = {
+			kill_leader = { show_notification = no }
+		}
+		if = {
+			limit = {
+				has_technology = tech_akx_worm_2
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				NOT = {
+					has_tech_option = tech_akx_worm_2
+				}
+			}
+			add_research_option = tech_akx_worm_2
+		}
+		add_tech_progress = {
+			tech = tech_akx_worm_2
+			progress = 0.20
+		}
+	}
+
+	option = {
+		name = akx.9220.b
+		event_target:researchingscientist9220 = {
+			kill_leader = { show_notification = no }
+		}
+	}
+
+	option = {
+		name = akx.9220.c
+		hidden_effect = { country_event = { id = akx.9221 days = 320 random = 40 } }
+		if = {
+			limit = {
+				has_technology = tech_akx_worm_2
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				NOT = {
+					has_tech_option = tech_akx_worm_2
+				}
+			}
+			add_research_option = tech_akx_worm_2
+		}
+		add_tech_progress = {
+			tech = tech_akx_worm_2
+			progress = 0.20
+		}
+	}
+}
+
+country_event = {
+	id = akx.9221
+	title = akx.9221.name
+	desc = akx.9221.desc
+	picture = GFX_evt_genetic_modification
+	location = capital_scope
+
+	is_triggered_only = yes
+
+	immediate = {
+		if = {
+			limit = { exists = event_target:researchingscientist9220 }
+			else = {
+				random_owned_leader = {
+					limit = { leader_class = scientist }
+					save_global_event_target_as = researchingscientist9220
+				}
+				event_target:researchingscientist9220 = {
+					make_leashed_messenger = yes
+				}
+			}
+		}
+	}
+
+	option = {
+		name = akx.9221.a
+		custom_tooltip = akx.9221.a.tooltip
+		hidden_effect = {
+			capital_scope = {
+				every_owned_pop = {
+					limit = { is_same_species = root }
+					wipe_pop_ethos = yes
+					make_resilient = yes
+					make_leashed_messenger = yes
+					pop_change_ethic = ethic_militarist
+					set_timed_pop_flag = { flag = changed_pop days = 2 }
+				}
+				random_owned_pop = {
+					limit = { has_pop_flag = changed_pop }
+					root = { change_dominant_species = { species = prev } }
+				}
+			}
+		}
+	}
+
+	option = {
+		name = akx.9221.b
+		custom_tooltip = akx.9221.b.tooltip
+		trigger = {
+			OR = {
+				has_ethic = ethic_authoritarian
+				has_ethic = ethic_fanatic_authoritarian
+			}
+		}
+		hidden_effect = {
+			capital_scope = {
+				while = {
+					limit = {
+						count_owned_pops = {
+							limit = { is_same_species = root }
+							count > 1
+						}
+					}
+					random_owned_pop = {
+						kill_pop = yes
+					}
+				}
+			}
+		}
+	}
+
+	option = {
+		name = akx.9221.c
+		custom_tooltip = akx.9221.c.tooltip
+		hidden_effect = {
+			every_owned_leader = {
+				limit = { is_same_species = root }
+				make_leashed_messenger = yes
+			}
+			every_owned_pop = {
+				limit = { is_same_species = root }
+				wipe_pop_ethos = yes
+				make_leashed_messenger = yes
+				make_intelligent = yes
+				pop_change_ethic = ethic_militarist
+				set_timed_pop_flag = { flag = changed_pop days = 2 }
+			}
+			random_owned_pop = {
+				limit = { has_pop_flag = changed_pop }
+				root = { change_dominant_species = { species = prev } }
+			}
+		}
+	}
+}
+
+# on fleet entering system
+fleet_event = {
+	id = akx.9300
+	title = akx.9300.name
+	desc = akx.9300.desc
+	picture = GFX_evt_metropolis
+	show_sound = event_ship_bridge
+	location = root
+
+	is_triggered_only = yes
+
+	trigger = {
+		owner = {
+			has_country_flag = worm_events_available
+			NOT = { has_country_flag = syzygy_encountered }
+			any_owned_leader = {
+				leader_class = admiral
+			}
+		}
+	}
+
+	immediate = {
+		from = { save_global_event_target_as = syzygy_system }
+		owner = {
+			random_owned_leader = {
+				limit = {
+					leader_class = admiral
+				}
+				save_global_event_target_as = mirrored_syzygy_admiral
+			}
+			set_country_flag = syzygy_encountered
+		}
+	}
+
+	option = {
+		name = akx.9300.a.admiralabsent
+		custom_tooltip = akx.9300.a.admiralabsent.tooltip
+		trigger = {
+			NOT = {
+				leader = {
+					is_same_value = event_target:mirrored_syzygy_admiral
+				}
+			}
+		}
+		hidden_effect = {
+			owner = { country_event = { id = akx.9310 } }
+		}
+	}
+
+	option = {
+		name = akx.9300.a.admiralpresent
+		custom_tooltip = akx.9300.a.admiralabsent.tooltip
+		trigger = {
+			exists = leader
+			leader = {
+				is_same_value = event_target:mirrored_syzygy_admiral
+			}
+		}
+		hidden_effect = {
+			owner = { country_event = { id = akx.9310 } }
+		}
+	}
+
+	option = {
+		name = akx.9300.b
+		hidden_effect = {
+			owner = { country_event = { id = akx.9315 } }
+		}
+	}
+}
+
+country_event = {
+	id = akx.9310
+	title = akx.9310.name
+	desc = akx.9310.desc
+	diplomatic = yes
+	
+	is_triggered_only = yes
+
+	picture_event_data = {
+		portrait = event_target:mirrored_syzygy_admiral
+		room = ethic_spaceship_room
+	}
+
+	option = {
+		name = akx.9310.a
+		#custom_tooltip = akx.9310.a.tooltip
+		is_dialog_only = yes
+		response_text = akx.9310.a.response
+		if = {
+			limit = {
+				NOT = {
+					has_country_flag = akx.9310.a.flag
+				}
+			}
+			add_monthly_resource_mult = {
+				resource = physics_research
+				value = 6
+				min = 150
+				max = 800
+			}
+			hidden_effect = {
+				set_country_flag = akx.9310.a.flag
+				if = {
+					limit = {
+						NOT = {
+							has_country_flag = worm_rendezvous_first_response_complete
+						}
+					}
+					set_country_flag = worm_rendezvous_first_response_complete
+				}
+			}
+		}
+	}
+
+	option = {
+		name = akx.9310.b
+		#custom_tooltip = akx.9310.b.tooltip
+		is_dialog_only = yes
+		response_text = akx.9310.b.response
+		if = {
+			limit = {
+				NOT = {
+					has_country_flag = akx.9310.b.flag
+				}
+			}
+			add_monthly_resource_mult = {
+				resource = society_research
+				value = 6
+				min = 150
+				max = 800
+			}
+			hidden_effect = {
+				set_country_flag = akx.9310.b.flag
+				if = {
+					limit = {
+						NOT = {
+							has_country_flag = worm_rendezvous_first_response_complete
+						}
+					}
+					set_country_flag = worm_rendezvous_first_response_complete
+				}
+			}
+		}
+	}
+
+	option = {
+		name = akx.9310.c
+		is_dialog_only = yes
+		response_text = akx.9310.c.response
+		if = {
+			limit = {
+				NOT = {
+					has_country_flag = akx.9310.c.flag
+				}
+			}
+			add_monthly_resource_mult = {
+				resource = physics_research
+				value = 6
+				min = 150
+				max = 800
+			}
+			hidden_effect = {
+				set_country_flag = akx.9310.c.flag
+				if = {
+					limit = {
+						NOT = {
+							has_country_flag = worm_rendezvous_second_response_complete
+						}
+					}
+					set_country_flag = worm_rendezvous_second_response_complete
+				}
+			}
+		}
+	}
+
+	option = {
+		name = akx.9310.d.notpacifist
+		#is_dialog_only = yes
+		response_text = akx.9310.d.notpacifist.response
+		trigger = {
+			NOR = {
+				has_ethic = ethic_fanatic_pacifist
+				has_ethic = ethic_pacifist
+			}
+		}
+		hidden_effect = {
+			if = {
+				limit = {
+					NOT = {
+						has_country_flag = worm_rendezvous_second_response_complete
+					}
+				}
+				set_country_flag = worm_rendezvous_second_response_complete
+			}
+			country_event = { id = akx.9315 }
+		}
+	}
+
+	option = {
+		name = akx.9310.d.fanaticpacifist
+		#custom_tooltip = akx.9310.d.fanaticpacifist.tooltip
+		#is_dialog_only = yes
+		response_text = akx.9310.d.fanaticpacifist.response
+		trigger = {
+			has_ethic = ethic_fanatic_pacifist
+		}
+		hidden_effect = {
+			if = {
+				limit = {
+					NOT = {
+						has_country_flag = worm_rendezvous_second_response_complete
+					}
+				}
+				set_country_flag = worm_rendezvous_second_response_complete
+			}
+			create_fleet = {
+				name = "NAME_Reclaimed_Ship"
+				settings = { spawn_debris = no }
+				effect = {
+					set_owner = root
+					create_ship_design = {
+						design = NAME_Corsair
+						ftl = root
+					}
+					create_ship = {
+						design = last_created_design
+						graphical_culture = pirate_01
+						name = NAME_Syzygy
+						upgradable = no
+					}
+				}
+			}
+		}
+	}
+
+	option = {
+		name = akx.9310.e
+		response_text = akx.9310.e.response
+		hidden_effect = {
+			if = {
+				limit = {
+					NOT = {
+						has_country_flag = worm_rendezvous_second_response_complete
+					}
+				}
+				set_country_flag = worm_rendezvous_second_response_complete
+			}
+			country_event = { id = akx.9315 }
+		}
+	}
+
+	option = {
+		name = akx.9310.e.materialistic
+		response_text = akx.9310.e.materialistic.response
+		trigger = {
+			OR = {
+				has_ethic = ethic_materialist
+				has_ethic = ethic_fanatic_materialist
+			}
+		}
+		add_monthly_resource_mult = {
+			resource = physics_research
+			value = 6
+			min = 150
+			max = 800
+		}
+		hidden_effect = {
+			if = {
+				limit = {
+					NOT = {
+						has_country_flag = worm_rendezvous_second_response_complete
+					}
+				}
+				set_country_flag = worm_rendezvous_second_response_complete
+			}
+			country_event = { id = akx.9315 }
+		}
+	}
+
+	option = {
+		name = akx.9310.e.spiritual
+		response_text = akx.9310.e.spiritual.response
+		trigger = {
+			OR = {
+				has_ethic = ethic_spiritualist
+				has_ethic = ethic_fanatic_spiritualist
+			}
+		}
+		add_monthly_resource_mult = {
+			resource = society_research
+			value = 6
+			min = 150
+			max = 800
+		}
+		hidden_effect = {
+			if = {
+				limit = {
+					NOT = {
+						has_country_flag = worm_rendezvous_second_response_complete
+					}
+				}
+				set_country_flag = worm_rendezvous_second_response_complete
+			}
+			country_event = { id = akx.9315 }
+		}
+	}
+
+	option = {
+		name = akx.9310.e.militarist
+		response_text = akx.9310.e.militarist.response
+		trigger = {
+			OR = {
+				has_ethic = ethic_militarist
+				has_ethic = ethic_fanatic_militarist
+			}
+		}
+		add_monthly_resource_mult = {
+			resource = influence
+			value = 6
+			min = 150
+			max = 300
+		}
+		hidden_effect = {
+			if = {
+				limit = {
+					NOT = {
+						has_country_flag = worm_rendezvous_second_response_complete
+					}
+				}
+				set_country_flag = worm_rendezvous_second_response_complete
+			}
+			country_event = { id = akx.9315 }
+		}
+	}
+
+	option = {
+		name = akx.9310.e.fanaticauthoritarian
+		#response_text = akx.9310.e.fanaticauthoritarian.response
+		trigger = {
+			has_ethic = ethic_fanatic_authoritarian
+		}
+		hidden_effect = {
+			if = {
+				limit = {
+					NOT = {
+						has_country_flag = worm_rendezvous_second_response_complete
+					}
+				}
+				set_country_flag = worm_rendezvous_second_response_complete
+			}
+			country_event = { id = akx.9312 }
+		}
+	}
+
+	option = {
+		name = akx.9310.f
+		custom_tooltip = akx.9310.f.tooltip
+		hidden_effect = {
+			if = {
+				limit = {
+					NOT = {
+						has_country_flag = worm_rendezvous_second_response_complete
+					}
+				}
+				set_country_flag = worm_rendezvous_second_response_complete
+			}
+			country_event = { id = akx.9315 }
+		}
+	}
+}
+
+country_event = {
+	id = akx.9312
+	title = akx.9310.name
+	desc = akx.9310.e.fanaticauthoritarian.response
+
+	is_triggered_only = yes
+	
+	diplomatic = yes
+
+	picture_event_data = {
+		portrait = event_target:mirrored_syzygy_admiral
+		room = ethic_spaceship_room
+	}
+
+	option = {
+		name = "..."
+		hidden_effect = {
+			country_event = { id = akx.9315 }
+		}
+	}
+}
+
+country_event = {
+	id = akx.9315
+	title = akx.9315.name
+	desc = akx.9315.desc
+	picture = GFX_evt_metropolis
+	show_sound = event_ship_bridge
+	location = event_target:syzygy_system
+
+	is_triggered_only = yes
+
+	immediate = {
+		event_target:syzygy_system = {
+			random_system_planet = {
+				limit = { is_star = yes }
+				save_event_target_as = syzygy_spawn_location
+			}
+		}
+		create_country = {
+			name = "NAME_Looped_Syzygy"
+			type = faction
+			auto_delete = no
+			flag = {
+				icon= {
+					category = "special"
+					file = "extradimensional_02.dds"
+				}
+				background= {
+					category = "backgrounds"
+					file = "circle.dds"
+				}
+				colors={
+					"black"
+					"red"
+					"null"
+					"null"
+				}
+			}
+			effect = {
+				set_country_flag = syzygy_country
+				establish_communications_no_message = root
+				create_fleet = {
+					name = "NAME_Looped_Syzygy"
+					settings = { spawn_debris = no }
+					effect = {
+						set_owner = prev
+						create_ship = {
+							name = "NAME_Syzygy"
+							design = NAME_Corsair
+						}
+						set_location = {
+							target = event_target:syzygy_spawn_location
+							distance = 50
+						}
+						set_fleet_stance = aggressive
+						set_aggro_range_measure_from = self
+						set_aggro_range = 20
+					}
+				}
+				set_faction_hostility = { set_hostile = yes }
+			}
+		}
+	}
+
+	option = {
+		name = BATTLESTATIONS
+	}
+}
+
+#on_fleet_destroyed_perp
+country_event = {
+	id = akx.9318
+	hide_window = yes
+
+	is_triggered_only = yes
+
+	trigger = {
+		#has_country_flag = worm_events_available
+		from = {
+			has_country_flag = syzygy_country
+		}
+	}
+
+	immediate = {
+		if = {
+			limit = {
+				has_country_flag = worm_events_available
+				fromfrom = {
+					OR = {
+						NOT = { exists = leader }
+						AND = {
+							exists = leader
+							leader = { NOT = { is_same_value = event_target:mirrored_syzygy_admiral } }
+						}
+					}
+				}
+			}
+			country_event = { id = akx.9321 }
+			else = {
+				if = {
+					limit = {
+						has_country_flag = worm_events_available
+						fromfrom = {
+							exists = leader
+							leader = {
+								is_same_value = event_target:mirrored_syzygy_admiral
+							}
+						}
+					}
+					country_event = { id = akx.9320 }
+					else = {
+						random_country = {
+							limit = {
+								has_country_flag = worm_events_available
+							}
+							root.fromfrom.solar_system = {
+								random_system_planet = {
+									limit = { is_star = no }
+									save_event_target_as = syzygy_location
+								}
+							}
+							country_event = { id = akx.9319 }
+						}
+					}
+				}
+			}
+		}
+		from = { destroy_country = yes }
+	}
+}
+
+country_event = {
+	id = akx.9319
+	title = akx.9319.name
+	desc = akx.9319.desc
+	picture = GFX_evt_debris
+	location = event_target:syzygy_location
+
+	is_triggered_only = yes
+
+	immediate = {
+		event_target:syzygy_location = {
+			create_ambient_object = {
+				type = "NAME_Syzygy_Remains"
+				location = this
+			}
+		}
+		last_created_ambient_object = {
+			save_event_target_as = syzygy_debris_01
+		}
+	}
+
+	after = {
+		event_target:syzygy_debris_01 = {
+			enable_special_project = {
+				name = SYZYGY_DEBRIS_PROJECT
+				location = this
+				owner = root
+			}
+		}
+	}
+
+	option = {
+		name = OK
+	}
+}
+
+country_event = {
+	id = akx.9320
+	title = akx.9320.name
+	desc = akx.9320.desc
+	picture = GFX_evt_metropolis
+	show_sound = event_ship_bridge
+	location = fromfromfrom
+
+	is_triggered_only = yes
+
+	option = {
+		name = OK
+		event_target:mirrored_syzygy_admiral = {
+			add_trait = leader_trait_foredoomed_to_a_rendezvous
+			add_experience = 900
+		}
+	}
+}
+
+country_event = {
+	id = akx.9321
+	title = akx.9321.name
+	desc = akx.9321.desc
+	picture = GFX_evt_metropolis
+	show_sound = event_ship_bridge
+	location = fromfromfrom
+
+	is_triggered_only = yes
+
+	after = {
+		event_target:mirrored_syzygy_admiral = {
+			add_trait = leader_trait_foredoomed_to_a_rendezvous
+		}
+	}
+
+	option = {
+		name = akx.9321.a
+	}
+	option = {
+		name = akx.9321.b
+	}
+}
+
+# on leader death
+country_event = {
+	id = akx.9330
+	title = akx.9330.name
+	desc = akx.9330.desc
+	picture = GFX_evt_star_chart
+
+	is_triggered_only = yes
+
+	trigger = {
+		has_country_flag = worm_events_available
+		from = {
+			has_trait = leader_trait_foredoomed_to_a_rendezvous
+		}
+	}
+
+	option = {
+		name = akx.9330.a
+	}
+	option = {
+		name = akx.9330.b
+	}
+}
+
+# syzygy debris project followup
+ship_event = {
+	id = akx.9340
+	title = akx.9340.name
+	desc = akx.9340.desc
+	picture = GFX_evt_metropolis
+	show_sound = event_ship_bridge
+
+	is_triggered_only = yes
+
+	option = {
+		name = OK
+		owner = {
+			if = {
+				limit = {
+					NOT = { has_technology = tech_akx_worm_1 }
+				}
+				if = {
+					limit = {
+						NOT = { has_tech_option = tech_akx_worm_1 }
+					}
+					add_research_option = tech_akx_worm_1
+				}
+				add_tech_progress = {
+					tech = tech_akx_worm_1
+					progress = 0.20
+				}
+			}
+		}
+	}
+}
+
+# observation missions
+planet_event = {
+	id = akx.9399
+	hide_window = yes
+	
+	trigger = {
+		has_observation_outpost = yes
+		exists = owner
+		owner = {
+			is_country_type = primitive
+			OR = {
+				has_country_flag = renaissance_age
+				has_country_flag = steam_age
+				has_country_flag = industrial_age
+				has_country_flag = machine_age
+				has_country_flag = atomic_age 
+				has_country_flag = early_space_age
+			}
+		}
+		observation_outpost_owner = {
+			is_ai = no
+			has_country_flag = worm_events_available
+			NOT = { has_country_flag = coils_of_god }
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 600
+	}
+
+	immediate = {
+		save_global_event_target_as = coils_planet
+		observation_outpost_owner = {
+			set_country_flag = coils_of_god
+			country_event = { id = akx.9400 }
+		}
+	}
+}
+
+
+# observation missions
+country_event = {
+	id = akx.9400
+	title = akx.9400.name
+	desc = akx.9400.desc
+	picture = GFX_evt_medieval_alien_civilization
+	show_sound = event_ship_bridge
+	location = from
+
+	is_triggered_only = yes
+
+	option = {
+		name = akx.9400.a
+		hidden_effect = {
+			random_list = {
+				75 = { country_event = { id = akx.9410 days = 360 } }
+				25 = { country_event = { id = akx.9420 days = 360 } }
+			}
+		}
+	}
+
+	option = {
+		name = akx.9400.b
+		add_monthly_resource_mult = {
+			resource = society_research
+			value = 6
+			min = 100
+			max = 600
+		}
+		hidden_effect = { country_event = { id = akx.9450 days = 360 } }
+	}
+}
+
+country_event = {
+	id = akx.9410
+	title = akx.9410.name
+	desc = akx.9410.desc
+	picture = GFX_evt_medieval_alien_civilization
+	show_sound = event_ship_bridge
+	location = event_target:coils_planet
+
+	is_triggered_only = yes
+
+	trigger = {
+		event_target:coils_planet = {
+			exists = owner
+			owner = {
+				is_country_type = primitive
+			}
+		}
+	}
+
+	option = {
+		name = OK
+	}
+}
+
+country_event = {
+	id = akx.9420
+	title = akx.9420.name
+	desc = akx.9420.desc
+	picture = GFX_evt_medieval_alien_civilization
+	show_sound = event_ship_bridge
+	location = event_target:coils_planet
+
+	is_triggered_only = yes
+
+	trigger = {
+		event_target:coils_planet = {
+			exists = owner
+			owner = {
+				is_country_type = primitive
+			}
+		}
+	}
+
+	option = {
+		name = OK
+		hidden_effect = {
+			country_event = { id = akx.9450 days = 320 random = 40 }
+		}
+	}
+}
+
+country_event = {
+	id = akx.9450
+	title = akx.9450.name
+	desc = akx.9450.desc
+	picture = GFX_evt_medieval_alien_civilization
+	location = event_target:coils_planet
+
+	is_triggered_only = yes
+
+	trigger = {
+		event_target:coils_planet = {
+			exists = owner
+			owner = {
+				is_country_type = primitive
+			}
+		}
+	}
+
+	option = {
+		name = akx.9450.a
+		#custom_tooltip = akx.9450.a.tooltip
+		event_target:coils_planet = {
+			enable_special_project = {
+				name = COILS_GOD_PROJECT_DISRUPT
+				location = this
+				owner = root
+			}
+		}
+	}
+
+	option = {
+		name = akx.9450.b
+		#custom_tooltip = akx.9450.b.tooltip
+		event_target:coils_planet = {
+			enable_special_project = {
+				name = COILS_GOD_PROJECT_PREVENT
+				location = this
+				owner = root
+			}
+		}
+	}
+
+	option = {
+		name = akx.9450.c
+		#custom_tooltip = akx.9450.c.tooltip
+		event_target:coils_planet = {
+			enable_special_project = {
+				name = COILS_GOD_PROJECT_PARTICIPATE
+				location = this
+				owner = root
+			}
+		}
+	}
+
+	option = {
+		name = akx.9450.d
+		custom_tooltip = akx.9450.d.tooltip
+		hidden_effect = { country_event = { id = akx.9490 days = 360 } }
+	}
+}
+
+country_event = {
+	id = akx.9460
+	title = akx.9460.name
+	desc = akx.9460.desc
+	picture = GFX_evt_medieval_alien_civilization
+	location = event_target:coils_planet
+
+	is_triggered_only = yes
+
+	trigger = {
+		event_target:coils_planet = {
+			exists = owner
+			owner = {
+				is_country_type = primitive
+			}
+		}
+	}
+
+	immediate = {
+		set_country_flag = coils_god_halted
+	}
+
+	after = {
+		if = {
+			limit = {
+				has_technology = tech_akx_worm_2
+			}
+			break = yes
+			else = {
+				if = {
+					limit = {
+						NOT = {
+							has_tech_option = tech_akx_worm_2
+						}
+					}
+					add_research_option = tech_akx_worm_2
+				}
+				add_tech_progress = {
+					tech = tech_akx_worm_2
+					progress = 0.1
+				}
+			}
+		}
+	}
+
+	option = {
+		name = akx.9460.a
+	}
+	option = {
+		name = akx.9460.b
+	}
+}
+
+country_event = {
+	id = akx.9465
+	title = akx.9465.name
+	desc = akx.9465.desc
+	picture = GFX_evt_medieval_alien_civilization
+	location = event_target:coils_planet
+
+	is_triggered_only = yes
+
+	trigger = {
+		event_target:coils_planet = {
+			exists = owner
+			owner = {
+				is_country_type = primitive
+			}
+		}
+	}
+
+	after = {
+		if = {
+			limit = {
+				has_technology = tech_akx_worm_2
+			}
+			break = yes
+			else = {
+				if = {
+					limit = {
+						NOT = {
+							has_tech_option = tech_akx_worm_2
+						}
+					}
+					add_research_option = tech_akx_worm_2
+				}
+				add_tech_progress = {
+					tech = tech_akx_worm_2
+					progress = 0.1
+				}
+			}
+		}
+	}
+
+	option = {
+		name = akx.9465.a
+	}
+
+	option = {
+		name = akx.9465.b
+	}
+}
+
+country_event = {
+	id = akx.9470
+	title = akx.9470.name
+	desc = akx.9470.desc
+	picture = GFX_evt_medieval_alien_civilization
+	location = event_target:coils_planet
+
+	is_triggered_only = yes
+
+	trigger = {
+		event_target:coils_planet = {
+			exists = owner
+			owner = {
+				is_country_type = primitive
+			}
+		}
+	}
+
+	immediate = {
+		set_country_flag = coils_god_halted
+	}
+
+	after = {
+		event_target:coils_planet = {
+			observation_outpost = {
+				if = {
+					limit = {
+						mission_progress > 0.1
+					}
+					add_mission_progress = -0.5
+				}
+			}
+		}
+		if = {
+			limit = {
+				has_technology = tech_akx_worm_2
+			}
+			break = yes
+			else = {
+				if = {
+					limit = {
+						NOT = {
+							has_tech_option = tech_akx_worm_2
+						}
+					}
+					add_research_option = tech_akx_worm_2
+				}
+				add_tech_progress = {
+					tech = tech_akx_worm_2
+					progress = 0.1
+				}
+			}
+		}
+	}
+
+	option = {
+		name = akx.9470.a
+	}
+
+	option = {
+		name = akx.9470.b
+	}
+}
+
+country_event = {
+	id = akx.9480
+	title = akx.9480.name
+	desc = akx.9480.desc
+	picture = GFX_evt_medieval_alien_civilization
+	location = event_target:coils_planet
+
+	is_triggered_only = yes
+
+	trigger = {
+		event_target:coils_planet = {
+			exists = owner
+			owner = {
+				is_country_type = primitive
+			}
+		}
+	}
+
+	immediate = {
+		fromfrom = {
+			save_event_target_as = coils_planet
+			every_owned_pop = {
+				limit = {
+					owner = {
+						is_same_value = event_target:coils_planet.owner
+					}
+				}
+				kill_pop = yes
+			}
+			observation_outpost = {
+				dismantle = yes
+			}
+			owner = {
+				destroy_country = yes
+			}
+		}
+		from = {
+			leader = {
+				kill_leader = { type = scientist show_notification = no }
+			}
+			fleet = {
+				delete_fleet = this
+			}
+		}
+	}
+
+	after = {
+		if = {
+			limit = {
+				has_technology = tech_akx_worm_2
+			}
+			else = {
+				if = {
+					limit = {
+						NOT = {
+							has_tech_option = tech_akx_worm_2
+						}
+					}
+					add_research_option = tech_akx_worm_2
+				}
+				add_tech_progress = {
+					tech = tech_akx_worm_2
+					progress = 0.3
+				}
+			}
+		}
+	}
+
+	option = {
+		name = akx.9480.a
+		custom_tooltip = akx.9480.a.tooltip
+	}
+
+	option = {
+		name = akx.9480.b
+		custom_tooltip = akx.9480.a.tooltip
+	}
+}
+
+
+country_event = {
+	id = akx.9490
+	title = akx.9490.name
+	desc = akx.9490.desc
+	picture = GFX_evt_medieval_alien_civilization
+	location = event_target:coils_planet
+
+	is_triggered_only = yes
+
+	trigger = {
+		NOT = {
+			has_country_flag = coils_god_halted
+		}
+		event_target:coils_planet = {
+			exists = owner
+			owner = {
+				is_country_type = primitive
+			}
+		}
+	}
+
+	after = {
+		add_monthly_resource_mult = {
+			resource = society_research
+			value = 12
+			min = 600
+			max = 3000
+		}
+		hidden_effect = {
+			event_target:coils_planet = {
+				every_pop = {
+					limit = {
+						owner = {
+							is_same_value = event_target:coils_planet.owner
+						}
+					}
+					kill_pop = yes
+				}
+				observation_outpost = {
+					dismantle = yes
+				}
+				owner = {
+					destroy_country = yes
+				}
+			}
+		}
+	}
+
+	option = {
+		name = akx.9490.a
+		custom_tooltip = 9490.a.tooltip
+	}
+
+	option = {
+		name = akx.9490.b
+		custom_tooltip = 9490.a.tooltip
+	}
+}
+
+# on colonized
+planet_event = {
+	id = akx.9499
+	hide_window = yes
+	
+	is_triggered_only = yes
+
+	trigger = {
+		NOR = {
+			is_planet_class = pc_habitat
+			is_planet_class = pc_ringworld_habitable
+		}
+		exists = owner
+		owner = {
+			has_country_flag = worm_events_available
+			NOT = {
+				has_country_flag = waiting_world
+			}
+		}
+	}
+
+	immediate = {
+		owner = {
+			set_country_flag = waiting_world
+		}
+		planet_event = { id = akx.9500 days = 30 }
+	}
+}
+
+planet_event = {
+	id = akx.9500
+	title = akx.9500.name
+	desc = akx.9500.desc
+	picture = GFX_evt_colony_settlement
+	location = root
+
+	is_triggered_only = yes
+
+	immediate = {
+		save_global_event_target_as = waiting_world
+		while = {
+			count = 2
+			random_tile = {
+				limit = {
+					has_building = no
+					has_blocker = no
+					has_deposit = no
+				}
+				set_building = building_worm_farm
+				set_ruined = yes
+			}
+			random_tile = {
+				limit = {
+					has_building = no
+					has_blocker = no
+					has_deposit = no
+				}
+				set_building = building_worm_mine
+				set_ruined = yes
+			}
+		}
+	}
+
+	option = {
+		name = akx.9500.a
+		trigger = {
+			owner = {
+				minerals > 100
+			}
+		}
+		owner = { add_minerals = -100 }
+		hidden_effect = {
+			every_tile = {
+				limit = {
+					has_building = yes
+					is_ruined = yes
+				}
+				set_ruined = no
+			}
+			planet_event = { id = akx.9510 days = 360 }
+		}
+	}
+
+	option = {
+		name = akx.9500.b
+		custom_tooltip = akx.9500.b.tooltip
+		hidden_effect = { planet_event = { id = akx.9505 } }
+	}
+}
+
+planet_event = {
+	id = akx.9505
+	title = akx.9505.name
+	desc = akx.9505.desc
+	picture = GFX_evt_colony_settlement
+	location = root
+
+	is_triggered_only = yes
+
+	immediate = {
+		every_tile = {
+			limit = {
+				OR = {
+					has_building = building_worm_mine
+					has_building = building_worm_farm
+				}
+			}
+			remove_building = yes
+		}
+	}
+
+	after = {
+		add_modifier = {
+			modifier = waiting_world_ruins
+			days = -1
+		}
+	}
+
+	option = {
+		name = akx.9505.a
+		custom_tooltip = akx.9505.a.tooltip
+	}
+	option = {
+		name = akx.9505.b
+		custom_tooltip = akx.9505.a.tooltip
+	}
+	option = {
+		name = akx.9505.c
+		custom_tooltip = akx.9505.a.tooltip
+	}
+}
+
+planet_event = {
+	id = akx.9510
+	title = akx.9510.name
+	desc = akx.9510.desc
+	picture = GFX_evt_colony_settlement
+	location = root
+
+	is_triggered_only = yes
+
+	option = {
+		name = akx.9510.a
+		hidden_effect = {
+			planet_event = { id = akx.9520 days = 360 }
+		}
+	}
+
+	option = {
+		name = akx.9510.b
+		custom_tooltip = akx.9510.b.tooltip
+		hidden_effect = {
+			planet_event = { id = akx.9505 }
+		}
+	}
+}
+
+planet_event = {
+	id = akx.9520
+	title = akx.9520.name
+	desc = akx.9520.desc
+	picture = GFX_evt_colony_settlement
+	location = root
+
+	is_triggered_only = yes
+
+	trigger = {
+		free_pop_tiles > 1
+	}
+
+	immediate = {
+		if = {
+			limit = {
+				free_pop_tiles > 1
+			}
+			random_owned_pop = {
+				limit = {
+					exists = planet
+					planet = { is_same_value = root }
+				}
+				root = {
+					best_tile_for_pop = {
+						create_pop = { 
+							species = prevprev
+						}
+					}
+				}
+			}
+		}
+	}
+
+	option = {
+		name = akx.9520.a
+		custom_tooltip = akx.9510.b.tooltip
+		hidden_effect = {
+			planet_event = { id = akx.9505 }
+		}
+	}
+
+	option = {
+		name = akx.9520.b
+		hidden_effect = {
+			planet_event = { id = akx.9525 days = 360 }
+		}
+	}
+}
+
+planet_event = {
+	id = akx.9525
+	title = akx.9525.name
+	desc = akx.9525.desc
+	picture = GFX_evt_colony_settlement
+	location = root
+
+	is_triggered_only = yes
+
+	trigger = {
+		free_pop_tiles > 1
+	}
+
+	immediate = {
+		if = {
+			limit = {
+				free_pop_tiles > 1
+			}
+			random_owned_pop = {
+				limit = {
+					exists = planet
+					planet = { is_same_value = root }
+				}
+				root = {
+					best_tile_for_pop = {
+						create_pop = { 
+							species = prevprev
+						}
+					}
+					best_tile_for_pop = {
+						create_pop = { 
+							species = prevprev
+						}
+					}
+				}
+			}
+		}
+	}
+
+	option = {
+		name = akx.9525.a
+		#custom_tooltip = akx.9510.a.tooltip
+		hidden_effect = {
+			planet_event = { id = akx.9505 }
+		}
+	}
+
+	option = {
+		name = akx.9525.b
+		hidden_effect = {
+			random_list = {
+				25 = { planet_event = { id = akx.9530 days = 360 } }
+				75 = { planet_event = { id = akx.9540 days = 360 } }
+			}
+		}
+	}
+}
+
+planet_event = {
+	id = akx.9530
+	title = akx.9530.name
+	desc = akx.9530.desc
+	picture = GFX_evt_colony_settlement
+	location = root
+
+	is_triggered_only = yes
+
+	after = {
+		hidden_effect = {
+			every_tile = {
+				if = {
+					limit = {
+						has_building = yes
+					}
+					remove_building = yes
+				}
+				if = {
+					limit = { has_growing_pop = yes }
+					kill_pop = yes
+				}
+				if = {
+					limit = {
+						exists = spaceport
+					}
+					spaceport = {
+						fleet = {
+							destroy_fleet = this
+						}
+					}
+				}
+			}
+			every_owned_pop = {
+				kill_pop = yes
+			}
+		}
+	}
+
+	option = {
+		name = akx.9530.a
+		enable_special_project = {
+			name = WAITING_WORLD_DISAPPEARANCE
+			location = this
+			owner = root.owner
+		}
+	}
+
+	option = {
+		name = akx.9530.b
+		custom_tooltip = akx.9530.b.tooltip
+		add_modifier = {
+			modifier = worm_quarantined
+			days = -1
+		}
+		owner = {
+			add_monthly_resource_mult = {
+				resource = influence
+				value = 24
+				min = 200
+				max = 1000
+			}
+		}
+	}
+}
+
+ship_event = {
+	id = akx.9535
+	title = akx.9535.name
+	desc = akx.9535.desc
+	picture = GFX_evt_colony_settlement
+	location = fromfrom
+
+	is_triggered_only = yes
+
+	option = {
+		name = OK
+		owner = {
+			add_monthly_resource_mult = {
+				resource = physics_research
+				value = 8
+				min = 200
+				max = 1000
+			}
+			if = {
+				limit = {
+					has_technology = tech_akx_worm_1
+				}
+				break = yes
+				else = {
+					if = {
+						limit = {
+							NOT = {
+								has_tech_option = tech_akx_worm_1
+							}
+						}
+						add_research_option = tech_akx_worm_1
+					}
+					add_tech_progress = {
+						tech = tech_akx_worm_1
+						progress = 0.1
+					}
+				}
+			}
+		}
+	}
+}
+
+planet_event = {
+	id = akx.9540
+	title = akx.9540.name
+	desc = akx.9540.desc
+	picture = GFX_evt_colony_settlement
+	location = root
+
+	is_triggered_only = yes
+
+	option = {
+		name = akx.9540.a
+		custom_tooltip = akx.9540.a.tooltip
+		hidden_effect = {
+			create_country = {
+				type = default
+				released_by_country = root.owner
+				released_from_country = root.owner
+				name = "NAME_Rising_Manifold"
+				name_list = root.owner
+				ship_prefix = root.owner
+				species = root.owner
+				flag = random
+				ethos = {
+					ethic = random
+					ethic = random
+				}
+				authority = random
+				civics = random
+				effect = {
+					save_global_event_target_as = manifold_country
+					root = {
+						set_owner = prev
+						set_controller = prev
+					}
+				}
+			}
+		}
+	}
+
+	option = {
+		name = akx.9540.b
+		trigger = {
+			owner = {
+				OR = {
+					has_ethic = ethic_authoritarian
+					has_ethic = ethic_fanatic_authoritarian
+					has_ethic = ethic_xenophobe
+					has_ethic = ethic_fanatic_xenophobe
+				}
+			}
+		}
+		enable_special_project = {
+			name = WAITING_WORLD_PURGE
+			location = this
+			owner = root.owner
+		}
+	}
+
+	option = {
+		name = akx.9540.c
+		enable_special_project = {
+			name = WAITING_WORLD_HYPERAPPEARANCE
+			location = this
+			owner = root.owner
+		}
+	}
+}
+
+planet_event = {
+	id = akx.9541
+	title = akx.9541.name
+	desc = akx.9541.desc
+	picture = GFX_evt_colony_settlement
+	location = root
+
+	is_triggered_only = yes
+
+	immediate = {
+		# Other empires react to purge according to action.21
+		random_owned_pop = {
+			limit = {
+				exists = planet
+				planet = { is_same_value = root }
+			}
+			save_event_target_as = purged_species
+		}
+		every_country = {
+			limit = {
+				has_communications = root.owner
+				NOT = { is_country = root.owner }
+				NOT = { is_same_species = root.owner }
+				NOT = { has_ai_personality_behaviour = purger }
+				OR = {
+					is_country_type = default
+					has_ai_personality = awakened_fallen_empire_xenophile		
+				}
+			}
+			add_opinion_modifier = { who = root.owner modifier = opinion_genocidal }
+		}
+		every_country = {
+			limit = {
+				has_communications = root.owner
+				NOT = { is_country = root.owner }
+				is_same_species = event_target:purged_species
+			}
+			add_opinion_modifier = { who = root.owner modifier = opinion_genocidal_our_species }
+		}
+	}
+
+	after = {
+		every_tile = {
+			if = {
+				limit = { has_building = yes }
+				remove_building = yes
+			}
+			if = {
+				limit = { has_growing_pop = yes }
+				kill_pop = yes
+			}
+			if = {
+				limit = {
+					exists = spaceport
+				}
+				spaceport = {
+					fleet = {
+						destroy_fleet = this
+					}
+				}
+			}
+		}
+		destroy_colony = { keep_buildings = no }
+	}
+
+	option = {
+		name = akx.9541.a
+		owner = {
+			add_monthly_resource_mult = {
+				resource = unity
+				value = @tier3unityreward
+			}
+		}
+	}
+
+	option = {
+		name = akx.9541.b
+		owner = {
+			add_monthly_resource_mult = {
+				resource = influence
+				value = 24
+				min = 200
+				max = 1000
+			}
+			add_modifier = {
+				modifier = unity_reduction_akx_9541
+				days = 1800
+			}
+		}
+	}
+}
+
+planet_event = {
+	id = akx.9545
+	title = akx.9545.name
+	desc = akx.9545.desc
+	picture = GFX_evt_colony_settlement
+	location = root
+
+	is_triggered_only = yes
+
+	after = {
+		owner = {
+			add_monthly_resource_mult = {
+				resource = physics_research
+				value = 8
+				min = 200
+				max = 1000
+			}
+			if = {
+				limit = {
+					has_technology = tech_akx_worm_1
+				}
+				break = yes
+				else = {
+					if = {
+						limit = {
+							NOT = {
+								has_tech_option = tech_akx_worm_1
+							}
+						}
+						add_research_option = tech_akx_worm_1
+					}
+					add_tech_progress = {
+						tech = tech_akx_worm_1
+						progress = 0.1
+					}
+				}
+			}
+		}
+	}
+
+	option = {
+		name = akx.9545.a
+	}
+	option = {
+		name = akx.9545.b
+	}
+}
+
+# The Retainer
+
+# on fleet entering technosphere system
+fleet_event = {
+	id = akx.9600
+	title = akx.9600.name
+	desc = akx.9600.desc
+	location = root
+	is_triggered_only = yes
+	diplomatic = yes
+
+	trigger = {
+		owner = {
+			is_ai = no
+			has_country_flag = worm_events_available
+			from = {
+				any_ship_in_system = {
+					exists = owner
+					owner = {
+						is_country_type = guardian_sphere
+					}
+				}
+			}
+			NOR = {
+				has_country_flag = retainer_conversation
+				has_country_flag = retainer_first_convo_concluded
+			}
+		}
+	}
+
+	picture_event_data = {
+		room = technosphere_room
+	}
+
+	option = {
+		name = akx.9600.a
+		trigger = {
+			owner = {
+				NOT = { has_country_flag = retainer_questioned_brief }
+			}
+		}
+		hidden_effect = {
+			owner = { set_country_flag = retainer_questioned_brief }
+			fleet_event = { id = akx.9601 }
+		}
+	}
+
+	option = {
+		name = akx.9600.b
+		trigger = {
+			owner = {
+				NOT = { has_country_flag = retainer_questioned_loop }
+			}
+		}
+		hidden_effect = {
+			owner = { set_country_flag = retainer_questioned_loop }
+			fleet_event = { id = akx.9602 }
+		}
+	}
+
+	option = {
+		name = akx.9600.c
+		allow = {
+			owner = {
+				energy > 800
+				minerals > 800
+			}
+		}
+		owner = {
+			add_energy = -800
+			add_minerals = -800
+		}
+		hidden_effect = {
+			fleet_event = { id = akx.9620 }
+		}
+	}
+
+	option = {
+		name = akx.9600.d
+		response_text = akx.9600.d.response
+		default_hide_option = yes
+		hidden_effect = {
+			owner = {
+				remove_country_flag = retainer_conversation
+				set_country_flag = retainer_first_convo_concluded
+			}
+		}
+	}
+
+	option = {
+		name = akx.9600.e
+		response_text = akx.9600.e.response
+		hidden_effect = {
+			owner = {
+				remove_country_flag = retainer_conversation
+				set_country_flag = retainer_first_convo_concluded
+			}
+		}
+	}
+}
+
+fleet_event = {
+	id = akx.9601
+	title = akx.9600.name
+	desc = akx.9600.a.response
+	location = root
+
+	is_triggered_only = yes
+	diplomatic = yes
+
+	picture_event_data = {
+		room = no_video_feed_room
+	}
+
+	immediate = {
+		owner = {
+			set_country_flag = retainer_conversation
+		}
+	}
+
+	option = {
+		name = akx.9600.a
+		trigger = {
+			owner = {
+				NOT = { has_country_flag = retainer_questioned_brief }
+			}
+		}
+		hidden_effect = {
+			owner = { set_country_flag = retainer_questioned_brief }
+			fleet_event = { id = akx.9601 }
+		}
+	}
+
+	option = {
+		name = akx.9600.b
+		trigger = {
+			owner = {
+				NOT = { has_country_flag = retainer_questioned_loop }
+			}
+		}
+		hidden_effect = {
+			owner = { set_country_flag = retainer_questioned_loop }
+			fleet_event = { id = akx.9602 }
+		}
+	}
+
+	option = {
+		name = akx.9600.c
+		allow = {
+			owner = {
+				energy > 800
+				minerals > 800
+			}
+		}
+		owner = {
+			add_energy = -800
+			add_minerals = -800
+		}
+		hidden_effect = {
+			fleet_event = { id = akx.9620 }
+		}
+	}
+
+	option = {
+		name = akx.9600.d
+		response_text = akx.9600.d.response
+		default_hide_option = yes
+		hidden_effect = {
+			owner = {
+				remove_country_flag = retainer_conversation
+				set_country_flag = retainer_first_convo_concluded
+			}
+		}
+	}
+
+	option = {
+		name = akx.9600.e
+		response_text = akx.9600.e.response
+		hidden_effect = {
+			owner = {
+				remove_country_flag = retainer_conversation
+				set_country_flag = retainer_first_convo_concluded
+			}
+		}
+	}
+}
+
+fleet_event = {
+	id = akx.9602
+	title = akx.9600.name
+	desc = akx.9600.b.response
+	location = root
+	is_triggered_only = yes
+	diplomatic = yes
+
+	picture_event_data = {
+		room = technosphere_room
+	}
+
+	option = {
+		name = akx.9600.a
+		trigger = {
+			owner = {
+				NOT = { has_country_flag = retainer_questioned_brief }
+			}
+		}
+		hidden_effect = {
+			owner = { set_country_flag = retainer_questioned_brief }
+			fleet_event = { id = akx.9601 }
+		}
+	}
+
+	option = {
+		name = akx.9600.b
+		trigger = {
+			owner = {
+				NOT = { has_country_flag = retainer_questioned_loop }
+			}
+		}
+		hidden_effect = {
+			owner = { set_country_flag = retainer_questioned_loop }
+			fleet_event = { id = akx.9602 }
+		}
+	}
+
+	option = {
+		name = akx.9600.c
+		allow = {
+			owner = {
+				energy > 800
+				minerals > 800
+			}
+		}
+		owner = {
+			add_energy = -800
+			add_minerals = -800
+		}
+		hidden_effect = {
+			fleet_event = { id = akx.9620 }
+		}
+	}
+
+	option = {
+		name = akx.9600.d
+		response_text = akx.9600.d.response
+		default_hide_option = yes
+		hidden_effect = {
+			owner = {
+				remove_country_flag = retainer_conversation
+				set_country_flag = retainer_first_convo_concluded
+			}
+		}
+	}
+
+	option = {
+		name = akx.9600.e
+		response_text = akx.9600.e.response
+		hidden_effect = {
+			owner = {
+				remove_country_flag = retainer_conversation
+				set_country_flag = retainer_first_convo_concluded
+			}
+		}
+	}
+}
+
+# again, on fleet entering technosphere system
+fleet_event = {
+	id = akx.9610
+	title = akx.9610.name
+	desc = akx.9610.desc
+	location = root
+	is_triggered_only = yes
+	diplomatic = yes
+
+	trigger = {
+		from = {
+			any_ship_in_system = {
+				exists = owner
+				owner = {
+					is_country_type = guardian_sphere
+				}
+			}
+		}
+		owner = {
+			has_country_flag = worm_events_available
+			NOT = {
+				has_country_flag = retainer_conversation
+			}
+			has_country_flag = retainer_first_convo_concluded
+		}
+	}
+
+	picture_event_data = {
+		room = technosphere_room
+	}
+
+	option = {
+		name = akx.9610.a
+		allow = {
+			owner = {
+				energy > 800
+				minerals > 800
+			}
+		}
+		owner = {
+			add_energy = -800
+			add_minerals = -800
+		}
+		hidden_effect = {
+			fleet_event = { id = akx.9620 }
+		}
+	}
+
+	option = {
+		name = akx.9610.b
+		response_text = akx.9610.b.response
+		default_hide_option = yes
+		hidden_effect = {
+			owner = {
+				remove_country_flag = retainer_conversation
+			}
+		}
+	}
+
+	option = {
+		name = akx.9610.c
+		response_text = akx.9610.c.response
+		hidden_effect = {
+			owner = {
+				remove_country_flag = retainer_conversation
+			}
+		}
+	}
+}
+
+fleet_event = {
+	id = akx.9620
+	title = akx.9620.name
+	desc = akx.9620.desc
+	picture = GFX_evt_technosphere
+	location = root
+
+	is_triggered_only = yes
+
+	immediate = {
+		solar_system = {
+			random_system_planet = {
+				limit = { is_star = yes }
+				save_event_target_as = hole_pets
+			}
+		}
+	}
+
+	option = {
+		name = akx.9620.a
+		hidden_effect = {
+			event_target:technosphere_ship = {
+				# explosion ambient object?
+				destroy_fleet = this
+			}
+		}
+		event_target:hole_pets = {
+			orbital_deposit_tile = {
+				# add_deposit = d_worm_deposit
+			}
+		}
+	}
+}
+
+# Conclusion
+
+# on omega alignment building complete
+planet_event = {
+	id = akx.10000
+	title = akx.10000.name
+	desc = akx.10000.desc
+	picture = GFX_evt_metropolis
+	show_sound = event_ship_bridge
+	location = root
+
+	is_triggered_only = yes
+
+	trigger = {
+		owner = {
+			is_ai = no
+			has_event_chain = WORM_CHAIN_1
+			NOT = { has_country_flag = alignment_built }
+		}
+		from = {
+			has_building = building_akx_worm_3
+		}
+	}
+
+	immediate = {
+		owner = {
+			set_country_flag = alignment_built
+		}
+	}
+
+	after = {
+		owner = {
+			end_event_chain = WORM_CHAIN_1
+			begin_event_chain = {
+				event_chain = WORM_CHAIN_2
+				target = this
+			}
+		}
+		enable_special_project = {
+			name = WORM_ENTRY_POINT
+			location = this
+			owner = root.owner
+		}
+	}
+
+	option = {
+		name = akx.10000.a
+	}
+	option = {
+		name = akx.10000.b
+	}
+}
+
+planet_event = {
+	id = akx.10010
+	title = akx.10010.name
+	desc = akx.10010.desc
+	picture = GFX_evt_dimensional_horror
+	location = root
+
+	is_triggered_only = yes
+
+	option = {
+		name = akx.10010.a
+		hidden_effect = {
+			planet_event = { id = akx.10020 }
+		}
+	}
+
+	option = {
+		name = akx.10010.b
+		hidden_effect = {
+			solar_system = {
+				random_system_planet = {
+					limit = { is_star = yes }
+					save_event_target_as = local_star
+				}
+				create_country = {
+					name = "NAME_The_Loop"
+					type = faction
+					auto_delete = no
+					flag = {
+						icon= {
+							category = "special"
+							file = "extradimensional_02.dds"
+						}
+						background= {
+							category = "backgrounds"
+							file = "circle.dds"
+						}
+						colors={
+							"black"
+							"red"
+							"null"
+							"null"
+						}
+					}
+					effect = {
+						add_modifier = {
+							modifier = worm_manifestation
+							days = -1
+						}
+						establish_communications_no_message = root.owner
+						save_global_event_target_as = worm_enemy
+						create_fleet = {
+							name = "TIME IS SIGHT GRAVITY IS DESIRE"
+							settings = { spawn_debris = no }
+							effect = {
+								set_owner = event_target:worm_enemy
+								create_ship_design = {
+									design = "NAME_Dimensional_Horror"
+								}
+								create_ship = {
+									design = last_created_design
+									name = "NAME_Worm-in-Waiting"
+								}
+								set_location = {
+									target = event_target:local_star
+									distance = 30
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+planet_event = {
+	id = akx.10020
+	title = akx.10020.name
+	desc = akx.10020.desc
+	picture = GFX_evt_black_hole
+	show_sound = event_activating_unknown_technology
+	location = root
+
+	is_triggered_only = yes
+
+	trigger = { owner = { is_ai = no } }
+
+	immediate = {
+		solar_system = {
+			every_system_planet = {
+				limit = {
+					NOR = {
+						is_asteroid = yes
+						is_planet_class = pc_gas_giant
+						is_planet_class = pc_ringworld_habitable
+						is_planet_class = pc_ringworld_habitable_damaged
+						is_planet_class = pc_ringworld_tech
+						is_planet_class = pc_ringworld_tech_damaged
+						is_planet_class = pc_ringworld_seam
+						is_planet_class = pc_ringworld_seam_damaged
+						is_planet_class = pc_habitat
+						is_star = yes
+					}
+					planet_size > 9
+					planet_size < 26
+				}
+				every_owned_pop = {
+					limit = {
+						is_robot_pop = no
+						is_sapient = yes
+					}
+					if = {
+						limit = {
+							NOT = { has_trait = trait_natural_physicists }
+						}
+						modify_species = {
+							species = this
+							add_trait = trait_natural_physicists
+						}
+					}
+					if = {
+						limit = {
+							NOT = { has_trait = trait_repugnant }
+						}
+						modify_species = {
+							species = this
+							add_trait = trait_repugnant
+						}
+					}
+					# if = {
+						# limit = {
+							# has_trait = trait_pc_nuked_preference
+						# }
+						# modify_species = {
+							# species = this
+							# remove_trait = trait_pc_nuked_preference
+						# }
+					# }
+					if = {
+						limit = {
+							has_trait = trait_pc_desert_preference
+						}
+						modify_species = {
+							species = this
+							remove_trait = trait_pc_desert_preference
+						}
+					}
+					if = {
+						limit = {
+							has_trait = trait_pc_arid_preference
+						}
+						modify_species = {
+							species = this
+							remove_trait = trait_pc_arid_preference
+						}
+					}
+					if = {
+						limit = {
+							has_trait = trait_pc_savannah_preference
+						}
+						modify_species = {
+							species = this
+							remove_trait = trait_pc_savannah_preference
+						}
+					}
+					if = {
+						limit = {
+							has_trait = trait_pc_tropical_preference
+						}
+						modify_species = {
+							species = this
+							remove_trait = trait_pc_tropical_preference
+						}
+					}
+					if = {
+						limit = {
+							has_trait = trait_pc_ocean_preference
+						}
+						modify_species = {
+							species = this
+							remove_trait = trait_pc_ocean_preference
+						}
+					}
+					if = {
+						limit = {
+							has_trait = trait_pc_arctic_preference
+						}
+						modify_species = {
+							species = this
+							remove_trait = trait_pc_arctic_preference
+						}
+					}
+					if = {
+						limit = {
+							has_trait = trait_pc_tundra_preference
+						}
+						modify_species = {
+							species = this
+							remove_trait = trait_pc_tundra_preference
+						}
+					}
+					if = {
+						limit = {
+							has_trait = trait_pc_alpine_preference
+						}
+						modify_species = {
+							species = this
+							remove_trait = trait_pc_alpine_preference
+						}
+					}
+					if = {
+						limit = {
+							has_trait = trait_pc_continental_preference
+						}
+						modify_species = {
+							species = this
+							remove_trait = trait_pc_continental_preference
+						}
+					}
+					# if = {
+						# limit = {
+							# has_trait = trait_pc_ai_preference
+						# }
+						# modify_species = {
+							# species = this
+							# remove_trait = trait_pc_ai_preference
+						# }
+					# }
+					if = {
+						limit = {
+							has_trait = trait_pc_gaia_preference
+						}
+						modify_species = {
+							species = this
+							remove_trait = trait_pc_gaia_preference
+						}
+					}
+					# if = {
+						# limit = {
+							# has_trait = trait_pc_ringworld_habitable_preference
+						# }
+						# modify_species = {
+							# species = this
+							# remove_trait = trait_pc_ringworld_habitable_preference
+						# }
+					# }
+					modify_species = {
+						species = this
+						add_trait = trait_pc_y_class_preference
+					}
+				}
+				change_pc = pc_nuked
+			}
+			random_system_planet = {
+				limit = { is_star = yes }
+				# explosion ambient object
+				change_pc = pc_black_hole
+			}
+		}
+	}
+
+	after = {
+		hidden_effect = {
+			owner = {
+				remove_country_flag = worm_events_available
+				set_country_flag = worm_awaited
+				set_country_flag = worm_tomb_ending
+			}
+		}
+	}
+
+	option = {
+		name = akx.10020.a
+		owner = { end_event_chain = WORM_CHAIN_2 }
+	}
+}
+
+# on fleet destroyed perp
+country_event = {
+	id = akx.10030
+	title = akx.10021.name
+	desc = akx.10021.desc
+	picture = GFX_evt_metropolis
+	show_sound = event_celebration
+	location = root
+
+	is_triggered_only = yes
+
+	trigger = {
+		has_country_flag = worm_events_available
+		exists = event_target:worm_enemy
+		from = {
+			is_same_value = event_target:worm_enemy
+		}
+	}
+
+	immediate = {
+		event_target:worm_enemy = {
+			destroy_country = yes
+		}
+	}
+
+	after = {
+		hidden_effect = {
+			remove_country_flag = worm_events_available
+			set_country_flag = worm_awaited
+		}
+	}
+
+	option = {
+		name = akx.10021.a
+		end_event_chain = WORM_CHAIN_2
+		add_monthly_resource_mult = {
+			resource = energy
+			value = 24
+			min = 1500
+			max = 3000
+		}
+		add_monthly_resource_mult = {
+			resource = physics_research
+			value = 36
+			min = 1000
+			max = 8000
+		}
+	}
+}

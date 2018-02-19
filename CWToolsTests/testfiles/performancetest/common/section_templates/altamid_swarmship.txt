@@ -1,0 +1,35 @@
+# Swarmship
+
+	ship_section_template = {	
+		key = "swarmship_stern_starship_1"	
+		ship_size = swarmship	
+		fits_on_slot = stern	
+		entity = "swarmship_entity"	
+		icon = "GFX_ship_part_core_mid"	
+		icon_frame = 1	
+		ai_weight = { factor = 10 }
+		component_slot = { name = "SMALL_GUN_01" slot_size = small slot_type = weapon locatorname = "small_gun_01" }
+		component_slot = { name = "SMALL_GUN_02" slot_size = small slot_type = weapon locatorname = "small_gun_02" }
+		small_utility_slots = 0	
+		medium_utility_slots = 0	
+		large_utility_slots = 0	
+		aux_utility_slots = 0	
+		cost = 60
+	}
+	
+# doomsday # Secondary Hull# base	
+	ship_section_template = {	
+		key = "swarmship_mid_secondary_1"	
+		ship_size = swarmship	
+		fits_on_slot = mid	
+		entity = "swarmship_frame_entity"	
+		icon = "GFX_ship_part_core_mid"	
+		icon_frame = 1	
+		prerequisites = {   }	
+		ai_weight = { factor = 10 }	
+		small_utility_slots = 2	
+		medium_utility_slots = 2	
+		large_utility_slots = 2	
+		aux_utility_slots = 1	
+		cost = 60	
+	}

@@ -1,0 +1,229 @@
+##################
+### TECH COSTS ###
+##################
+#If you change any of these, use replace in files so the values are the same across all files
+
+@tier1cost1 = 360
+@tier1cost2 = 480
+@tier1cost3 = 600
+@tier1cost4 = 720
+
+@tier2cost1 = 1000
+@tier2cost2 = 1400
+@tier2cost3 = 1800
+@tier2cost4 = 2200
+
+@tier3cost1 = 3000
+@tier3cost2 = 4000
+@tier3cost3 = 5000
+@tier3cost4 = 6000
+
+@tier4cost1 = 10000
+
+####################
+### TECH WEIGHTS ###
+####################
+
+@tier1weight1 = 100
+@tier1weight2 = 95
+@tier1weight3 = 90
+@tier1weight4 = 85
+
+@tier2weight1 = 75
+@tier2weight2 = 70
+@tier2weight3 = 65
+@tier2weight4 = 60
+
+@tier3weight1 = 50
+@tier3weight2 = 45
+@tier3weight3 = 40
+@tier3weight4 = 35
+
+@tier4weight1 = 30
+
+#Robotic Workers
+tech_robotic_workers = {
+	cost = @tier1cost3
+	area = engineering
+	tier = 1
+	category = { industry }
+	weight = 0
+	
+		
+	## unlock robot POP lvl 1
+	
+	weight_modifier = {
+	}
+	
+	ai_weight = {
+		weight = 0
+	}
+}
+
+#Droids
+tech_droid_workers = {
+	cost = @tier2cost2
+	area = engineering
+	tier = 2
+	category = { industry }
+	weight = 0
+	
+	gateway = robotics
+	
+	## unlock robot POP lvl 2, robot Army lvl 1
+
+	weight_modifier = {
+	}
+	
+	ai_weight = {
+		weight = 0
+	}
+}
+
+#Synthetics
+tech_synthetic_workers = {
+	cost = @tier3cost2
+	area = engineering
+	tier = 3
+	category = { industry }
+	
+	is_rare = yes
+	is_dangerous = yes
+	weight = 0
+
+	## unlock robot POP lvl 3, robot Army lvl 2
+	
+	weight_modifier = {
+	}
+	
+	ai_weight = {
+		weight = 0
+	}
+}
+
+#Frontier Health
+tech_frontier_health = {
+	cost = @tier1cost2
+	area = society
+	tier = 1
+	category = { biology }
+	
+	weight = 0
+	
+	weight_modifier = {
+	}
+}
+
+#Global Energy Management
+tech_power_hub_1 = {
+	cost = @tier1cost1
+	area = physics
+	tier = 1
+	category = { industry }
+	weight = 0
+		
+	# unlock power hub 1
+	modifier = {
+		max_energy = 2500
+	}
+	
+	weight_modifier = {
+	}
+	
+	ai_weight = {
+	}
+}
+
+#Mineral Processing
+tech_mineral_processing_1 = {
+	cost = @tier1cost1
+	area = engineering
+	tier = 1
+	category = { industry }	
+	weight = 0
+		
+	# unlock mineral processing plant 1
+	
+	weight_modifier = {
+	}
+	
+	ai_weight = {
+	}
+}
+
+#Xenology
+tech_alien_life_studies = {
+	cost = @tier1cost2
+	area = society
+	tier = 1
+	category = { biology }
+	weight = 0
+	
+	weight_modifier = {	
+	}
+	
+	ai_weight = {
+	}
+}
+
+#Neural Implants
+tech_neural_implants = {
+	cost = @tier1cost3
+	area = society
+	tier = 1
+	category = { statecraft }
+	weight = 0
+	
+	# unlocks slave processing plant, slave armies
+	
+	weight_modifier = {
+	}
+	
+	ai_weight = {
+	}
+}
+
+tech_cultural_heritage = {
+	cost = 0
+	area = society
+	start_tech = yes
+	category = { statecraft }
+	tier = 0
+	
+	weight_modifier = {
+	}
+	
+	ai_weight = {
+	}
+}
+
+tech_hypercomms_forum = {
+	cost = @tier2cost2
+	area = society
+	category = { statecraft }
+	tier = 2
+	
+	weight = 0
+	
+	weight_modifier = {
+	}
+	
+	ai_weight = {
+	}
+}
+
+#Betharian Refining
+tech_mine_betharian = {
+	cost = @tier1cost1
+	area = engineering
+	tier = 1
+	category = { industry }
+	
+	weight = 0
+	
+	weight_modifier = {
+	}
+	
+	ai_weight = {
+	}	
+}

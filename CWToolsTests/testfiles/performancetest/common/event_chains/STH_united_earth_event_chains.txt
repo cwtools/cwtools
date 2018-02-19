@@ -1,0 +1,18 @@
+# Event chains.
+
+# counter, counters that can be increased and checked from effects and triggers
+#
+# Loclizaton needed:
+# event_chain_chainnkey_title, a title to show in the situation log.
+# event_chain_chainnkey_desc, a description to show in the situation log.
+
+
+xindi_event_chain = {
+	icon = "gfx/interface/icons/situation_log/situation_log_precursor.dds"
+	picture = sth_GFX_evt_xindiProbe1
+}
+
+terra_prime_chain = {
+	icon = "gfx/interface/icons/situation_log/situation_log_precursor.dds"
+	picture = sth_GFX_evt_terraPrime7
+}

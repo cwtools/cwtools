@@ -1,0 +1,70 @@
+# A planet has been colonized.
+# Scope = Planet
+on_colonized = {
+	events = {
+		STH_components.101
+	}
+}
+
+
+# A ship has been built
+# Root = Ship
+# From = Planet
+on_ship_built = {
+	events = {
+		STH_components.100
+	}
+}
+
+
+# A ship has been upgraded
+#  Root = Ship
+on_ship_upgraded = {
+	events = {
+		STH_components.100
+	}
+}
+
+
+#From = Planet scope
+#This = Fleet scope
+on_fleet_enter_orbit = {
+	events = {
+		
+	}
+}
+
+# No scope, like on_game_start
+on_monthly_pulse = {
+	events = {
+		STH_components.1000
+	}
+}
+
+# A ship has surveyed a planet.
+# Scope = Ship
+# From = Planet
+on_survey = {
+	events = {
+		STH_components.1100
+	}
+}
+
+# This = owner of ship 1 (destroyed)
+# From = owner of ship 2 (combatant)
+# FromFrom = ship 1
+# FromFromFrom = ship 2
+on_ship_destroyed_victim = {
+	events = {
+		STH_components.1300
+	}
+}
+
+# A planet is being bombarded
+# This = planet under bombardment
+# From = bombarding empire
+on_monthly_orbital_bombardment = {
+	events = {
+		STH_components.1400
+	}
+}

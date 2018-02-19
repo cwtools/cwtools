@@ -1,0 +1,7681 @@
+### STNH 1.8 Compatible ###
+
+#	Example:
+#
+#	example_effect = {
+#		add_energy = -100
+#	}
+#
+#
+#	In a script file:
+#
+#	effect = {
+#		example_effect = yes
+#	}
+#
+
+# Debug scope printing
+print_scope_effect = {
+	log = "------------------------------"
+	log = "- Printing the current scopes (trigger) -"
+	log = "- This: [This.GetName]"
+	log = "- Root: [Root.GetName]"
+	log = "- Prev: [Prev.GetName]"
+	log = "- PrevPrev: [Prev.Prev.GetName]"
+	log = "- PrevPrevPrev: [Prev.Prev.Prev.GetName]"
+	log = "- PrevPrevPrevPrev: [Prev.Prev.Prev.Prev.GetName]"
+	log = "- From: [From.GetName]"
+	log = "- FromFrom: [From.From.GetName]"
+	log = "- FromFromFrom: [From.From.From.GetName]"
+	log = "- FromFromFromFrom: [From.From.From.From.GetName]"
+	log = "- This's Orbit: [This.Orbit.GetName]"
+	log = "- This's Solar System: [This.GetStarName]"
+	log = "- This's Planet: [This.Planet.GetName]"
+	log = "- This's Sector: [This.Sector.GetName]"
+	log = "- Root's Solar System: [Root.GetStarName]"
+	log = "- Root's Owner's Name: [Root.Owner.GetName]"
+	log = "- Root's Owner's Capital's Name: [Root.Owner.Capital.GetName]"
+	log = "------------------------------"
+	log = "- FROMFROM's Leaders's Name: [From.From.Leader.GetName]"
+	log = "------------------------------"
+}
+
+# Checks if Crystalline Entity country (global event target) exists
+# Creates the country and saves it if it does not
+create_crystal_country = {
+	if = {
+		limit = {
+			NOT = {
+				exists = event_target:crystal_country
+			}
+		}
+		create_country = {
+			name = "NAME_Prism"
+			type = crystal
+			flag = {
+				icon = {
+					category = "zoological"
+					file = "flag_zoological_1.dds"
+				}
+				background= {
+					category = "backgrounds"
+					file = "00_solid.dds"
+				}
+				colors={
+					"black"
+					"black"
+					"null"
+					"null"
+				}
+			}
+		}
+		last_created_country = {
+			save_global_event_target_as = crystal_country
+		}
+	}
+}
+
+# Checks if Void Cloud country (global event target) exists
+# Creates the country and saves it if it does not
+create_cloud_country = {
+	if = {
+		limit = { NOT = { exists = event_target:cloud_country } }
+		create_country = {
+			name = "NAME_Enigmatic_Energy"
+			type = cloud
+			flag = {
+				icon = {
+					category = "zoological"
+					file = "flag_zoological_1.dds"
+				}
+				background= {
+					category = "backgrounds"
+					file = "00_solid.dds"
+				}
+				colors={
+					"black"
+					"black"
+					"null"
+					"null"
+				}
+			}
+		}
+		last_created_country = {
+			save_global_event_target_as = cloud_country
+		}
+	}
+}
+
+# Checks if Space Amoeba country (global event target) exists
+# Creates the country and saves it if it does not
+create_amoeba_country = {
+	if = {
+		limit = { NOT = { exists = event_target:amoeba_country } }
+		create_country = {
+			name = "NAME_Spaceborne_Organics"
+			type = amoeba
+			flag = {
+				icon = {
+					category = "zoological"
+					file = "flag_zoological_1.dds"
+				}
+				background= {
+					category = "backgrounds"
+					file = "00_solid.dds"
+				}
+				colors={
+					"black"
+					"black"
+					"null"
+					"null"
+				}
+			}
+		}
+		last_created_country = {
+			save_global_event_target_as = amoeba_country
+		}
+	}
+}
+
+# Checks if Mining Drone country (global event target) exists
+# Creates the country and saves it if it does not
+create_drone_country = {
+	if = {
+		limit = { NOT = { exists = event_target:drone_country } }
+		create_country = {
+			name = "NAME_Mineral_Extraction_Operation"
+			type = drone
+			flag = {
+				icon = {
+					category = "zoological"
+					file = "flag_zoological_1.dds"
+				}
+				background= {
+					category = "backgrounds"
+					file = "00_solid.dds"
+				}
+				colors={
+					"black"
+					"black"
+					"null"
+					"null"
+				}
+			}
+		}
+		last_created_country = {
+			save_global_event_target_as = drone_country
+			set_graphical_culture = ancient_drone_01
+		}
+	}
+}
+
+# Checks if Tiyanki country (global event target) exists
+# Creates the country and saves it if it does not
+create_tiyanki_country = {
+	if = {
+		limit = { NOT = { exists = event_target:tiyanki_country } }
+		create_country = {
+			name = "NAME_Placid_Leviathans"
+			type = tiyanki
+			flag = {
+				icon = {
+					category = "zoological"
+					file = "flag_zoological_1.dds"
+				}
+				background= {
+					category = "backgrounds"
+					file = "00_solid.dds"
+				}
+				colors={
+					"black"
+					"black"
+					"null"
+					"null"
+				}
+			}
+		}
+		last_created_country = {
+			save_global_event_target_as = tiyanki_country
+		}
+	}
+}
+
+# Checks if Pirate country (global event target) exists
+# Creates the country and saves it if it does not
+create_pirate_country = {
+	if = {
+		limit = {
+			NOT = {
+				exists = event_target:pirate_country
+			}
+		}
+		random_list = {
+			50 = {
+				create_country = {
+					name = "NAME_Privateers"
+					name_list = "PRT1"
+					species = random
+					type = pirate
+					flag = {
+						icon = {
+							category = "zoological"
+							file = "flag_zoological_1.dds"
+						}
+						background= {
+							category = "backgrounds"
+							file = "00_solid.dds"
+						}
+						colors={
+							"black"
+							"black"
+							"null"
+							"null"
+						}
+					}
+				}
+				last_created_country = {
+					save_global_event_target_as = pirate_country
+				}
+			}
+			50 = {
+				create_country = {
+					name = "NAME_Privateers"
+					name_list = "PRT2"
+					species = random
+					type = pirate
+					flag = {
+						icon = {
+							category = "zoological"
+							file = "flag_zoological_1.dds"
+						}
+						background= {
+							category = "backgrounds"
+							file = "00_solid.dds"
+						}
+						colors={
+							"black"
+							"black"
+							"null"
+							"null"
+						}
+					}
+				}
+				last_created_country = {
+					save_global_event_target_as = pirate_country
+				}
+			}
+		}
+	}
+}
+
+swarm_vanguard = {
+	
+	random_list = {
+		10 = {
+			create_leader = {
+				type = admiral
+				species = last_created
+				name = random
+				skill = 500
+				set_age = 3452
+				traits = {
+					trait = leader_trait_void_swimmer
+				}
+			}
+		}
+		10 = {
+			create_leader = {
+				type = admiral
+				species = last_created
+				name = random
+				skill = 500
+				set_age = 2967
+				traits = {
+					trait = leader_trait_void_swimmer
+				}
+			}
+		}
+		10 = {
+			create_leader = {
+				type = admiral
+				species = last_created
+				name = random
+				skill = 500
+				set_age = 4126
+				traits = {
+					trait = leader_trait_void_swimmer
+				}
+			}
+		}
+		10 = {
+			create_leader = {
+				type = admiral
+				species = last_created
+				name = random
+				skill = 500
+				set_age = 756
+				traits = {
+					trait = leader_trait_void_swimmer
+				}
+			}
+		}
+		10 = {
+			create_leader = {
+				type = admiral
+				species = last_created
+				name = random
+				skill = 500
+				set_age = 1007
+				traits = {
+					trait = leader_trait_void_swimmer
+				}
+			}
+		}
+		10 = {
+			create_leader = {
+				type = admiral
+				species = last_created
+				name = random
+				skill = 500
+				set_age = 2510
+				traits = {
+					trait = leader_trait_void_swimmer
+				}
+			}
+		}
+		10 = {
+			create_leader = {
+				type = admiral
+				species = last_created
+				name = random
+				skill = 500
+				set_age = 4831
+				traits = {
+					trait = leader_trait_void_swimmer
+				}
+			}
+		}
+		10 = {
+			create_leader = {
+				type = admiral
+				species = last_created
+				name = random
+				skill = 500
+				set_age = 3367
+				traits = {
+					trait = leader_trait_void_swimmer
+				}
+			}
+		}
+		10 = {
+			create_leader = {
+				type = admiral
+				species = last_created
+				name = random
+				skill = 500
+				set_age = 987
+				traits = {
+					trait = leader_trait_void_swimmer
+				}
+			}
+		}
+		10 = {
+			create_leader = {
+				type = admiral
+				species = last_created
+				name = random
+				skill = 500
+				set_age = 4517
+				traits = {
+					trait = leader_trait_void_swimmer
+				}
+			}
+		}
+	}
+
+	create_fleet = {
+		name = "NAME_Prethoryn_Vanguard"
+		effect = {
+			set_owner = PREV
+			create_ship = {
+				name = random
+				design = "NAME_Swarm_Small"
+				graphical_culture = "swarm_01"
+			}
+			assign_leader = last_created_leader
+			while = {
+				count = 46
+				create_ship = {
+					name = random
+					design = "NAME_Swarm_Small"
+					graphical_culture = "swarm_01"
+				}
+			}
+			set_location = {
+				target = PREVPREV
+				distance = 35
+				angle = random 
+			}
+			set_fleet_stance = aggressive
+			set_aggro_range = 500
+			set_aggro_range_measure_from = self
+		}
+	}
+}
+
+swarm_brood = {
+	random_list = {
+		75 = {
+			create_leader = {
+				type = admiral
+				species = event_target:prethoryn_species
+				name = random
+				skill = 500
+				set_age = 1125
+			}
+		}
+		25 = {
+			create_leader = {
+				type = admiral
+				species = event_target:prethoryn_species
+				name = random
+				skill = 500
+				set_age = 1125
+				traits = {
+					trait = leader_trait_hive_affinity
+				}
+			}
+		}
+	}
+	create_fleet = {
+		name = "NAME_Prethoryn_Star_Brood"
+		effect = {
+			set_owner = event_target:prethoryn
+			create_ship = {
+				name = random
+				design = "NAME_Swarm_Queen"
+				graphical_culture = "swarm_01"
+			}
+			assign_leader = last_created_leader
+			while = {
+				count = 15
+				create_ship = {
+					name = random
+					design = "NAME_Swarm_Large"
+					graphical_culture = "swarm_01"
+				}
+			}
+			while = {
+				count = 13
+				create_ship = {
+					name = random
+					design = "NAME_Swarm_Carrier"
+					graphical_culture = "swarm_01"
+				}
+			}
+			while = {
+				count = 63
+				create_ship = {
+					name = random
+					design = "NAME_Swarm_Small"
+					graphical_culture = "swarm_01"
+				}
+			}
+			set_location = prevprev
+			set_fleet_stance = aggressive
+			set_aggro_range = 500
+			set_aggro_range_measure_from = self
+		}
+	}
+}
+
+swarm_armies = {
+	create_fleet = {
+		name = "NAME_Prethoryn_Armies"
+		effect = {
+			set_owner = event_target:prethoryn
+			while = {
+				count = 20
+				create_army_transport = {
+					ship_name = "NAME_Prethoryn_Transport"
+					graphical_culture = "swarm_01"
+					army_name = "NAME_Prethoryn_Invaders"
+					army_type = "swarm_army"
+					species = event_target:prethoryn_species
+				}
+			}
+			set_location = {
+				target = PREVPREV
+				distance = 20
+				angle = random 
+			}
+		}
+	}
+}
+
+### Changes a pops ethic one level to the opposite
+##Checks for the following flags, make sure to set them before you run the effect:
+#ethic_diverge_from_militarist
+#ethic_diverge_from_pacifist
+#ethic_diverge_from_materialist
+#ethic_diverge_from_spiritualist
+#ethic_diverge_from_authoritarian
+#ethic_diverge_from_egalitarian
+##Also check pops for the pop_changed_ethics flag so you don't redo it on the same pop again.
+pop_diverge_ethic = {
+	if = {
+		limit = {
+			has_ethic = ethic_militarist
+			has_pop_flag = ethic_diverge_from_militarist
+			NOT = { has_pop_flag = pop_changed_ethics }
+		}
+		pop_remove_ethic = ethic_militarist
+		set_timed_pop_flag = { flag = pop_changed_ethics days = 7 }
+	}
+	if = {
+		limit = {
+			NOT = {
+				has_ethic = ethic_militarist
+			}
+			has_pop_flag = ethic_diverge_from_militarist
+			NOT = { has_pop_flag = pop_changed_ethics }
+		}
+		pop_change_ethic = ethic_pacifist
+		set_timed_pop_flag = { flag = pop_changed_ethics days = 7 }
+	}
+	if = {
+		limit = {
+			has_ethic = ethic_pacifist
+			has_pop_flag = ethic_diverge_from_pacifist
+			NOT = { has_pop_flag = pop_changed_ethics }
+		}
+		pop_remove_ethic = ethic_pacifist
+		set_timed_pop_flag = { flag = pop_changed_ethics days = 7 }
+	}
+	if = {
+		limit = {
+			NOT = {
+				has_ethic = ethic_pacifist
+			}
+			has_pop_flag = ethic_diverge_from_pacifist
+			NOT = { has_pop_flag = pop_changed_ethics }
+		}
+		pop_change_ethic = ethic_militarist
+		set_timed_pop_flag = { flag = pop_changed_ethics days = 7 }
+	}
+	if = {
+		limit = {
+			has_ethic = ethic_materialist
+			has_pop_flag = ethic_diverge_from_materialist
+			NOT = { has_pop_flag = pop_changed_ethics }
+		}
+		pop_remove_ethic = ethic_materialist
+		set_timed_pop_flag = { flag = pop_changed_ethics days = 7 }
+	}
+	if = {
+		limit = {
+			NOT = {
+				has_ethic = ethic_materialist
+			}
+			has_pop_flag = ethic_diverge_from_materialist
+			NOT = { has_pop_flag = pop_changed_ethics }
+		}
+		pop_change_ethic = ethic_pacifist
+		set_timed_pop_flag = { flag = pop_changed_ethics days = 7 }
+	}
+	if = {
+		limit = {
+			has_ethic = ethic_spiritualist
+			has_pop_flag = ethic_diverge_from_spiritualist
+			NOT = { has_pop_flag = pop_changed_ethics }
+		}
+		pop_remove_ethic = ethic_spiritualist
+		set_timed_pop_flag = { flag = pop_changed_ethics days = 7 }
+	}
+	if = {
+		limit = {
+			NOT = {
+				has_ethic = ethic_spiritualist
+			}
+			has_pop_flag = ethic_diverge_from_spiritualist
+			NOT = { has_pop_flag = pop_changed_ethics }
+		}
+		pop_change_ethic = ethic_militarist
+		set_timed_pop_flag = { flag = pop_changed_ethics days = 7 }
+	}
+	if = {
+		limit = {
+			has_ethic = ethic_authoritarian
+			has_pop_flag = ethic_diverge_from_authoritarian
+			NOT = { has_pop_flag = pop_changed_ethics }
+		}
+		pop_remove_ethic = ethic_authoritarian
+		set_timed_pop_flag = { flag = pop_changed_ethics days = 7 }
+	}
+	if = {
+		limit = {
+			NOT = {
+				has_ethic = ethic_authoritarian
+			}
+			has_pop_flag = ethic_diverge_from_authoritarian
+			NOT = { has_pop_flag = pop_changed_ethics }
+		}
+		pop_change_ethic = ethic_egalitarian
+		set_timed_pop_flag = { flag = pop_changed_ethics days = 7 }
+	}
+	if = {
+		limit = {
+			has_ethic = ethic_egalitarian
+			has_pop_flag = ethic_diverge_from_egalitarian
+			NOT = { has_pop_flag = pop_changed_ethics }
+		}
+		pop_remove_ethic = ethic_egalitarian
+		set_timed_pop_flag = { flag = pop_changed_ethics days = 7 }
+	}
+	if = {
+		limit = {
+			NOT = {
+				has_ethic = ethic_egalitarian
+			}
+			has_pop_flag = ethic_diverge_from_egalitarian
+			NOT = { has_pop_flag = pop_changed_ethics }
+		}
+		pop_change_ethic = ethic_authoritarian
+		set_timed_pop_flag = { flag = pop_changed_ethics days = 7 }
+	}
+}
+
+
+# Adds a trait to a leader
+add_random_leader_trait = {
+	if = { #Is a science ship commander
+		limit = {
+			leader_class = scientist
+			NOT = {
+				is_researching_area = society
+				is_researching_area = engineering
+				is_researching_area = physics
+			}
+		}
+		while = {
+			limit = {
+				NOT = { has_leader_flag = has_gained_trait }
+			}
+			random_list = {
+				5 = {
+					if = {
+						limit = {
+							NOT = { has_trait = leader_trait_adaptable }
+							NOT = { owner = { has_ethic = "ethic_gestalt_consciousness" } }
+						}
+						add_trait = leader_trait_adaptable
+						set_timed_leader_flag = { flag = gained_leader_trait_adaptable days = 7 }
+						set_timed_leader_flag = { flag = has_gained_trait days = 7 }
+					}
+				}
+				5 = {
+					if = {
+						limit = {
+							NOT = { has_trait = leader_trait_resilient }
+							NOT = { owner = { has_ethic = "ethic_gestalt_consciousness" } }
+						}
+						add_trait = leader_trait_resilient
+						set_timed_leader_flag = { flag = gained_leader_trait_resilient days = 7 }
+						set_timed_leader_flag = { flag = has_gained_trait days = 7 }
+					}
+				}
+				5 = {
+					if = {
+						limit = {
+							NOR = { 
+								has_trait = leader_trait_stubborn 
+								has_trait = leader_trait_rigid_programming
+								owner = { has_authority = "auth_hive_mind" }
+							}
+						}
+						if = {
+							limit = {
+								owner = {
+									NOT = { has_authority = "auth_machine_intelligence" }
+								}
+							}
+							add_trait = leader_trait_stubborn
+							set_timed_leader_flag = { flag = gained_leader_trait_stubborn days = 7 }
+						}
+						if = {
+							limit = {
+								owner = { has_authority = "auth_machine_intelligence" }
+							}
+							add_trait = leader_trait_rigid_programming
+							set_timed_leader_flag = { flag = gained_leader_trait_rigid_programming days = 7 }
+						}
+						set_timed_leader_flag = { flag = has_gained_trait days = 7 }
+					}
+				}
+				5 = {
+					if = {
+						limit = {
+							NOT = { has_trait = leader_trait_substance_abuser }
+							NOT = { owner = { has_ethic = "ethic_gestalt_consciousness" } }
+						}
+						add_trait = leader_trait_substance_abuser
+						set_timed_leader_flag = { flag = gained_leader_trait_substance_abuser days = 7 }
+						set_timed_leader_flag = { flag = has_gained_trait days = 7 }
+					}
+				}
+				5 = {
+					if = {
+						limit = {
+							NOT = { has_trait = leader_trait_arrested_development  }
+						}
+						add_trait = leader_trait_arrested_development
+						set_timed_leader_flag = { flag = gained_leader_trait_arrested_development days = 7 }
+						set_timed_leader_flag = { flag = has_gained_trait days = 7 }
+					}
+				}
+				5 = {
+					if = {
+						limit = {
+							NOT = { has_trait = leader_trait_meticulous }
+						}
+						add_trait = leader_trait_meticulous
+						set_timed_leader_flag = { flag = gained_leader_trait_meticulous days = 7 }
+						set_timed_leader_flag = { flag = has_gained_trait days = 7 }
+					}
+				}
+				5 = {
+					if = {
+						limit = {
+							NOT = { has_trait = leader_trait_careful }
+						}
+						add_trait = leader_trait_careful
+						set_timed_leader_flag = { flag = gained_leader_trait_careful days = 7 }
+						set_timed_leader_flag = { flag = has_gained_trait days = 7 }
+					}
+				}
+				5 = {
+					if = {
+						limit = {
+							NOT = { has_trait = leader_trait_spark_of_genius }
+						}
+						add_trait = leader_trait_spark_of_genius
+						set_timed_leader_flag = { flag = gained_leader_trait_spark_of_genius days = 7 }
+						set_timed_leader_flag = { flag = has_gained_trait days = 7 }
+					}
+				}
+				5 = {
+					if = {
+						limit = {
+							NOT = { has_trait = leader_trait_carefree }
+						}
+						add_trait = leader_trait_carefree
+						set_timed_leader_flag = { flag = gained_leader_trait_carefree days = 7 }
+						set_timed_leader_flag = { flag = has_gained_trait days = 7 }
+					}
+				}
+				5 = {
+					if = {
+						limit = {
+							NOR = { 
+								has_trait = leader_trait_roamer 
+								has_trait = leader_trait_cataloger
+							}
+						}
+						if = {
+							limit = {
+								owner = {
+									NOT = { has_authority = "auth_machine_intelligence" }
+								}
+							}
+							add_trait = leader_trait_roamer 
+							set_timed_leader_flag = { flag = gained_leader_trait_roamer days = 7 }
+						}
+						if = {
+							limit = {
+								owner = { has_authority = "auth_machine_intelligence" }
+							}
+							add_trait = leader_trait_cataloger
+							set_timed_leader_flag = { flag = gained_leader_trait_cataloger days = 7 }
+						}
+						set_timed_leader_flag = { flag = has_gained_trait days = 7 }
+					}
+				}
+				5 = {
+					if = {
+						limit = {
+							NOT = { has_trait = leader_trait_archaeologist }
+						}
+						add_trait = leader_trait_archaeologist
+						set_timed_leader_flag = { flag = gained_leader_trait_archaeologist days = 7 }
+						set_timed_leader_flag = { flag = has_gained_trait days = 7 }
+					}
+				}
+				5 = {
+					if = {
+						limit = {
+							NOT = { has_trait = leader_trait_maniacal }
+						}
+						add_trait = leader_trait_maniacal
+						set_timed_leader_flag = { flag = gained_leader_trait_maniacal days = 7 }
+						set_timed_leader_flag = { flag = has_gained_trait days = 7 }
+					}
+				}
+				5 = {
+					if = {
+						limit = {
+							NOT = { has_trait = leader_trait_custom_AI_assistant }
+							NOT = { owner = { has_ethic = "ethic_gestalt_consciousness" } }
+						}
+						add_trait = leader_trait_custom_AI_assistant
+						set_timed_leader_flag = { flag = gained_leader_trait_custom_AI_assistant days = 7 }
+						set_timed_leader_flag = { flag = has_gained_trait days = 7 }
+					}
+				}
+				5 = {
+					if = {
+						limit = {
+							NOT = { has_trait = leader_trait_expertise_materials }
+						}
+						add_trait = leader_trait_expertise_materials
+						set_timed_leader_flag = { flag = gained_leader_trait_expertise_materials days = 7 }
+						set_timed_leader_flag = { flag = has_gained_trait days = 7 }
+					}
+				}
+				5 = {
+					if = {
+						limit = {
+							NOT = { has_trait = leader_trait_expertise_rocketry }
+						}
+						add_trait = leader_trait_expertise_rocketry
+						set_timed_leader_flag = { flag = gained_leader_trait_expertise_rocketry days = 7 }
+						set_timed_leader_flag = { flag = has_gained_trait days = 7 }
+					}
+				}
+				5 = {
+					if = {
+						limit = {
+							NOT = { has_trait = leader_trait_expertise_voidcraft }
+						}
+						add_trait = leader_trait_expertise_voidcraft
+						set_timed_leader_flag = { flag = gained_leader_trait_expertise_voidcraft days = 7 }
+						set_timed_leader_flag = { flag = has_gained_trait days = 7 }
+					}
+				}
+				5 = {
+					if = {
+						limit = {
+							NOT = { has_trait = leader_trait_expertise_industry }
+						}
+						add_trait = leader_trait_expertise_industry
+						set_timed_leader_flag = { flag = gained_leader_trait_expertise_industry days = 7 }
+						set_timed_leader_flag = { flag = has_gained_trait days = 7 }
+					}
+				}
+				5 = {
+					if = {
+						limit = {
+							NOT = { has_trait = leader_trait_expertise_field_manipulation }
+						}
+						add_trait = leader_trait_expertise_field_manipulation
+						set_timed_leader_flag = { flag = gained_leader_trait_expertise_field_manipulation days = 7 }
+						set_timed_leader_flag = { flag = has_gained_trait days = 7 }
+					}
+				}
+				5 = {
+					if = {
+						limit = {
+							NOT = { has_trait = leader_trait_expertise_particles }
+						}
+						add_trait = leader_trait_expertise_particles
+						set_timed_leader_flag = { flag = gained_leader_trait_expertise_particles days = 7 }
+						set_timed_leader_flag = { flag = has_gained_trait days = 7 }
+					}
+				}
+				5 = {
+					if = {
+						limit = {
+							NOT = { has_trait = leader_trait_expertise_computing }
+						}
+						add_trait = leader_trait_expertise_computing
+						set_timed_leader_flag = { flag = gained_leader_trait_expertise_computing days = 7 }
+						set_timed_leader_flag = { flag = has_gained_trait days = 7 }
+					}
+				}
+				5 = {
+					if = {
+						limit = {
+							NOT = { has_trait = leader_trait_expertise_psionics }
+						}
+						add_trait = leader_trait_expertise_psionics
+						set_timed_leader_flag = { flag = gained_leader_trait_expertise_psionics days = 7 }
+						set_timed_leader_flag = { flag = has_gained_trait days = 7 }
+					}
+				}
+				5 = {
+					if = {
+						limit = {
+							NOT = { has_trait = leader_trait_expertise_new_worlds }
+						}
+						add_trait = leader_trait_expertise_new_worlds
+						set_timed_leader_flag = { flag = gained_leader_trait_expertise_new_worlds days = 7 }
+						set_timed_leader_flag = { flag = has_gained_trait days = 7 }
+					}
+				}
+				5 = {
+					if = {
+						limit = {
+							NOT = { has_trait = leader_trait_expertise_statecraft }
+						}
+						add_trait = leader_trait_expertise_statecraft
+						set_timed_leader_flag = { flag = gained_leader_trait_expertise_statecraft days = 7 }
+						set_timed_leader_flag = { flag = has_gained_trait days = 7 }
+					}
+				}
+				5 = {
+					if = {
+						limit = {
+							NOT = { has_trait = leader_trait_expertise_biology }
+						}
+						add_trait = leader_trait_expertise_biology
+						set_timed_leader_flag = { flag = gained_leader_trait_expertise_biology days = 7 }
+						set_timed_leader_flag = { flag = has_gained_trait days = 7 }
+					}
+				}
+				5 = {
+					if = {
+						limit = {
+							NOT = { has_trait = leader_trait_expertise_military_theory }
+						}
+						add_trait = leader_trait_expertise_military_theory
+						set_timed_leader_flag = { flag = gained_leader_trait_expertise_military_theory days = 7 }
+						set_timed_leader_flag = { flag = has_gained_trait days = 7 }
+					}
+				}
+				5 = {
+					if = {
+						limit = {
+							NOT = { has_trait = leader_trait_paranoid }
+						}
+						add_trait = leader_trait_paranoid
+						set_timed_leader_flag = { flag = gained_leader_trait_paranoid days = 7 }
+						set_timed_leader_flag = { flag = has_gained_trait days = 7 }
+					}
+				}
+			}
+		}
+		owner = { country_event = { id = leader.21} }
+	}
+	if = {
+		limit = {
+			leader_class = admiral
+		}
+		while = {
+			limit = {
+				NOT = { has_leader_flag = has_gained_trait }
+			}
+			random_list = {
+				5 = {
+					if = {
+						limit = {
+							NOT = { has_trait = leader_trait_adaptable }
+							NOT = { owner = { has_ethic = "ethic_gestalt_consciousness" } }
+						}
+						add_trait = leader_trait_adaptable
+						set_timed_leader_flag = { flag = gained_leader_trait_adaptable days = 7 }
+						set_timed_leader_flag = { flag = has_gained_trait days = 7 }
+					}
+				}
+				5 = {
+					if = {
+						limit = {
+							NOT = { has_trait = leader_trait_resilient }
+							NOT = { owner = { has_ethic = "ethic_gestalt_consciousness" } }
+						}
+						add_trait = leader_trait_resilient
+						set_timed_leader_flag = { flag = gained_leader_trait_resilient days = 7 }
+						set_timed_leader_flag = { flag = has_gained_trait days = 7 }
+					}
+				}
+				5 = {
+					if = {
+						limit = {
+							NOR = { 
+								has_trait = leader_trait_stubborn 
+								has_trait = leader_trait_rigid_programming
+								owner = { has_authority = "auth_hive_mind" }
+							}
+						}
+						if = {
+							limit = {
+								owner = {
+									NOT = { has_authority = "auth_machine_intelligence" }
+								}
+							}
+							add_trait = leader_trait_stubborn
+							set_timed_leader_flag = { flag = gained_leader_trait_stubborn days = 7 }
+						}
+						if = {
+							limit = {
+								owner = { has_authority = "auth_machine_intelligence" }
+							}
+							add_trait = leader_trait_rigid_programming
+							set_timed_leader_flag = { flag = gained_leader_trait_rigid_programming days = 7 }
+						}
+						set_timed_leader_flag = { flag = has_gained_trait days = 7 }
+					}
+				}
+				5 = {
+					if = {
+						limit = {
+							NOT = { has_trait = leader_trait_substance_abuser }
+							NOT = { owner = { has_ethic = "ethic_gestalt_consciousness" } }
+						}
+						add_trait = leader_trait_substance_abuser
+						set_timed_leader_flag = { flag = gained_leader_trait_substance_abuser days = 7 }
+						set_timed_leader_flag = { flag = has_gained_trait days = 7 }
+					}
+				}
+				5 = {
+					if = {
+						limit = {
+							NOT = { has_trait = leader_trait_arrested_development  }
+						}
+						add_trait = leader_trait_arrested_development
+						set_timed_leader_flag = { flag = gained_leader_trait_arrested_development days = 7 }
+						set_timed_leader_flag = { flag = has_gained_trait days = 7 }
+					}
+				}
+				5 = {
+					if = {
+						limit = {
+							NOT = { has_trait = leader_trait_trickster }
+						}
+						add_trait = leader_trait_trickster
+						set_timed_leader_flag = { flag = gained_leader_trait_trickster days = 7 }
+						set_timed_leader_flag = { flag = has_gained_trait days = 7 }
+					}
+				}
+				5 = {
+					if = {
+						limit = {
+							NOR = { 
+								has_trait = leader_trait_fleet_logistician
+								has_trait = leader_trait_maintenance_loop
+							}
+						}
+						if = {
+							limit = {
+								owner = {
+									NOT = { has_authority = "auth_machine_intelligence" }
+								}
+							}
+							add_trait = leader_trait_fleet_logistician
+							set_timed_leader_flag = { flag = gained_leader_trait_fleet_logistician days = 7 }
+						}
+						if = {
+							limit = {
+								owner = { has_authority = "auth_machine_intelligence" }
+							}
+							add_trait = leader_trait_maintenance_loop
+							set_timed_leader_flag = { flag = gained_leader_trait_maintenance_loop days = 7 }
+						}
+						set_timed_leader_flag = { flag = has_gained_trait days = 7 }
+					}
+				}
+				5 = {
+					if = {
+						limit = {
+							NOT = { has_trait = leader_trait_engineer }
+						}
+						add_trait = leader_trait_engineer
+						set_timed_leader_flag = { flag = gained_leader_trait_engineer days = 7 }
+						set_timed_leader_flag = { flag = has_gained_trait days = 7 }
+					}
+				}
+				5 = {
+					if = {
+						limit = {
+							NOT = { has_trait = leader_trait_aggressive }
+						}
+						add_trait = leader_trait_aggressive
+						set_timed_leader_flag = { flag = gained_leader_trait_aggressive days = 7 }
+						set_timed_leader_flag = { flag = has_gained_trait days = 7 }
+					}
+				}
+				5 = {
+					if = {
+						limit = {
+							NOT = { has_trait = leader_trait_cautious }
+						}
+						add_trait = leader_trait_cautious
+						set_timed_leader_flag = { flag = gained_leader_trait_cautious days = 7 }
+						set_timed_leader_flag = { flag = has_gained_trait days = 7 }
+					}
+				}
+				5 = {
+					if = {
+						limit = {
+							NOT = { has_trait = leader_trait_scout }
+						}
+						add_trait = leader_trait_scout
+						set_timed_leader_flag = { flag = gained_leader_trait_scout days = 7 }
+						set_timed_leader_flag = { flag = has_gained_trait days = 7 }
+					}
+				}
+				5 = {
+					if = {
+						limit = {
+							NOT = { has_trait = leader_trait_unyielding }
+						}
+						add_trait = leader_trait_unyielding
+						set_timed_leader_flag = { flag = gained_leader_trait_unyielding days = 7 }
+						set_timed_leader_flag = { flag = has_gained_trait days = 7 }
+					}
+				}
+				5 = {
+					if = {
+						limit = {
+							NOT = { has_trait = leader_trait_gale_speed }
+						}
+						add_trait = leader_trait_gale_speed
+						set_timed_leader_flag = { flag = gained_leader_trait_gale_speed days = 7 }
+						set_timed_leader_flag = { flag = has_gained_trait days = 7 }
+					}
+				}
+				5 = {
+					if = {
+						limit = {
+							NOT = { has_trait = leader_trait_lethargic }
+						}
+						add_trait = leader_trait_lethargic
+						set_timed_leader_flag = { flag = gained_leader_trait_lethargic days = 7 }
+						set_timed_leader_flag = { flag = has_gained_trait days = 7 }
+					}
+				}
+			}
+		}
+		owner = { country_event = { id = leader.22} }
+	}
+	if = {
+		limit = {
+			leader_class = governor
+		}
+		while = {
+			limit = {
+				NOT = { has_leader_flag = has_gained_trait }
+			}
+			random_list = {
+				5 = {
+					if = {
+						limit = {
+							NOT = { has_trait = leader_trait_adaptable }
+							NOT = { owner = { has_ethic = "ethic_gestalt_consciousness" } }
+						}
+						add_trait = leader_trait_adaptable
+						set_timed_leader_flag = { flag = gained_leader_trait_adaptable days = 7 }
+						set_timed_leader_flag = { flag = has_gained_trait days = 7 }
+					}
+				}
+				5 = {
+					if = {
+						limit = {
+							NOT = { has_trait = leader_trait_resilient }
+							NOT = { owner = { has_ethic = "ethic_gestalt_consciousness" } }
+						}
+						add_trait = leader_trait_resilient
+						set_timed_leader_flag = { flag = gained_leader_trait_resilient days = 7 }
+						set_timed_leader_flag = { flag = has_gained_trait days = 7 }
+					}
+				}
+				5 = {
+					if = {
+						limit = {
+							NOR = { 
+								has_trait = leader_trait_stubborn 
+								has_trait = leader_trait_rigid_programming
+								owner = { has_authority = "auth_hive_mind" }
+							}
+						}
+						if = {
+							limit = {
+								owner = {
+									NOT = { has_authority = "auth_machine_intelligence" }
+								}
+							}
+							add_trait = leader_trait_stubborn
+							set_timed_leader_flag = { flag = gained_leader_trait_stubborn days = 7 }
+						}
+						if = {
+							limit = {
+								owner = { has_authority = "auth_machine_intelligence" }
+							}
+							add_trait = leader_trait_rigid_programming
+							set_timed_leader_flag = { flag = gained_leader_trait_rigid_programming days = 7 }
+						}
+						set_timed_leader_flag = { flag = has_gained_trait days = 7 }
+					}
+				}
+				5 = {
+					if = {
+						limit = {
+							NOT = { has_trait = leader_trait_substance_abuser }
+							NOT = { owner = { has_ethic = "ethic_gestalt_consciousness" } }
+						}
+						add_trait = leader_trait_substance_abuser
+						set_timed_leader_flag = { flag = gained_leader_trait_substance_abuser days = 7 }
+						set_timed_leader_flag = { flag = has_gained_trait days = 7 }
+					}
+				}
+				5 = {
+					if = {
+						limit = {
+							NOT = { has_trait = leader_trait_arrested_development  }
+						}
+						add_trait = leader_trait_arrested_development
+						set_timed_leader_flag = { flag = gained_leader_trait_arrested_development days = 7 }
+						set_timed_leader_flag = { flag = has_gained_trait days = 7 }
+					}
+				}
+				5 = {
+					if = {
+						limit = {
+							NOR = {
+								has_trait = leader_trait_iron_fist
+								owner = { allows_slavery = no }
+								owner = { has_authority = "auth_machine_intelligence" }
+							}
+						}
+						add_trait = leader_trait_iron_fist
+						set_timed_leader_flag = { flag = gained_leader_trait_iron_fist days = 7 }
+						set_timed_leader_flag = { flag = has_gained_trait days = 7 }
+					}
+				}
+				5 = {
+					if = {
+						limit = {
+							NOT = { has_trait = leader_trait_architectural_interest }
+						}
+						add_trait = leader_trait_architectural_interest
+						set_timed_leader_flag = { flag = gained_leader_trait_architectural_interest days = 7 }
+						set_timed_leader_flag = { flag = has_gained_trait days = 7 }
+					}
+				}
+				5 = {
+					if = {
+						limit = {
+							NOR = { 
+								has_trait = leader_trait_intellectual 
+								has_trait = leader_trait_analytical
+							}
+						}
+						if = {
+							limit = {
+								owner = {
+									NOT = { has_authority = "auth_machine_intelligence" }
+								}
+							}
+							add_trait = leader_trait_intellectual 
+							set_timed_leader_flag = { flag = gained_leader_trait_intellectual days = 7 }
+						}
+						if = {
+							limit = {
+								owner = { has_authority = "auth_machine_intelligence" }
+							}
+							add_trait = leader_trait_analytical
+							set_timed_leader_flag = { flag = gained_leader_trait_analytical days = 7 }
+						}
+						set_timed_leader_flag = { flag = has_gained_trait days = 7 }
+					}
+				}
+				5 = {
+					if = {
+						limit = {
+							NOR = { 
+								has_trait = leader_trait_environmental_engineer 
+								has_trait = leader_trait_bulldozer
+							}
+						}
+						if = {
+							limit = {
+								owner = {
+									NOT = { has_authority = "auth_machine_intelligence" }
+								}
+							}
+							add_trait = leader_trait_environmental_engineer 
+							set_timed_leader_flag = { flag = gained_leader_trait_environmental_engineer days = 7 }
+						}
+						if = {
+							limit = {
+								owner = { has_authority = "auth_machine_intelligence" }
+							}
+							add_trait = leader_trait_bulldozer
+							set_timed_leader_flag = { flag = gained_leader_trait_bulldozer days = 7 }
+						}
+						set_timed_leader_flag = { flag = has_gained_trait days = 7 }
+					}
+				}
+			}
+		}
+		owner = { country_event = { id = leader.23} }
+	}
+	if = {
+		limit = {
+			leader_class = general
+		}
+		while = {
+			limit = {
+				NOT = { has_leader_flag = has_gained_trait }
+			}
+			random_list = {
+				5 = {
+					if = {
+						limit = {
+							NOT = { has_trait = leader_trait_adaptable }
+							NOT = { owner = { has_ethic = "ethic_gestalt_consciousness" } }
+						}
+						add_trait = leader_trait_adaptable
+						set_timed_leader_flag = { flag = gained_leader_trait_adaptable days = 7 }
+						set_timed_leader_flag = { flag = has_gained_trait days = 7 }
+					}
+				}
+				5 = {
+					if = {
+						limit = {
+							NOT = { has_trait = leader_trait_resilient }
+							NOT = { owner = { has_ethic = "ethic_gestalt_consciousness" } }
+						}
+						add_trait = leader_trait_resilient
+						set_timed_leader_flag = { flag = gained_leader_trait_resilient days = 7 }
+						set_timed_leader_flag = { flag = has_gained_trait days = 7 }
+					}
+				}
+				5 = {
+					if = {
+						limit = {
+							NOR = { 
+								has_trait = leader_trait_stubborn 
+								has_trait = leader_trait_rigid_programming
+								owner = { has_authority = "auth_hive_mind" }
+							}
+						}
+						if = {
+							limit = {
+								owner = {
+									NOT = { has_authority = "auth_machine_intelligence" }
+								}
+							}
+							add_trait = leader_trait_stubborn
+							set_timed_leader_flag = { flag = gained_leader_trait_stubborn days = 7 }
+						}
+						if = {
+							limit = {
+								owner = { has_authority = "auth_machine_intelligence" }
+							}
+							add_trait = leader_trait_rigid_programming
+							set_timed_leader_flag = { flag = gained_leader_trait_rigid_programming days = 7 }
+						}
+						set_timed_leader_flag = { flag = has_gained_trait days = 7 }
+					}
+				}
+				5 = {
+					if = {
+						limit = {
+							NOT = { has_trait = leader_trait_substance_abuser }
+							NOT = { owner = { has_ethic = "ethic_gestalt_consciousness" } }
+						}
+						add_trait = leader_trait_substance_abuser
+						set_timed_leader_flag = { flag = gained_leader_trait_substance_abuser days = 7 }
+						set_timed_leader_flag = { flag = has_gained_trait days = 7 }
+					}
+				}
+				5 = {
+					if = {
+						limit = {
+							NOT = { has_trait = leader_trait_arrested_development  }
+						}
+						add_trait = leader_trait_arrested_development
+						set_timed_leader_flag = { flag = gained_leader_trait_arrested_development days = 7 }
+						set_timed_leader_flag = { flag = has_gained_trait days = 7 }
+					}
+				}
+				5 = {
+					if = {
+						limit = {
+							NOT = { has_trait = leader_trait_defender }
+						}
+						add_trait = leader_trait_defender
+						set_timed_leader_flag = { flag = gained_leader_trait_defender days = 7 }
+						set_timed_leader_flag = { flag = has_gained_trait days = 7 }
+					}
+				}
+				5 = {
+					if = {
+						limit = {
+							NOT = { has_trait = leader_trait_attacker }
+						}
+						add_trait = leader_trait_attacker
+						set_timed_leader_flag = { flag = gained_leader_trait_attacker days = 7 }
+						set_timed_leader_flag = { flag = has_gained_trait days = 7 }
+					}
+				}
+				5 = {
+					if = {
+						limit = {
+							NOR = { 
+								has_trait = leader_trait_charismatic 
+								has_trait = leader_trait_demoralizer
+							}
+						}
+						if = {
+							limit = {
+								owner = {
+									NOT = { has_authority = "auth_machine_intelligence" }
+								}
+							}
+							add_trait = leader_trait_charismatic 
+							set_timed_leader_flag = { flag = gained_leader_trait_charismatic days = 7 }
+						}
+						if = {
+							limit = {
+								owner = { has_authority = "auth_machine_intelligence" }
+							}
+							add_trait = leader_trait_demoralizer
+							set_timed_leader_flag = { flag = gained_leader_trait_demoralizer days = 7 }
+						}
+						set_timed_leader_flag = { flag = has_gained_trait days = 7 }
+					}
+				}
+				5 = {
+					if = {
+						limit = {
+							NOT = { has_trait = leader_trait_butcher }
+						}
+						add_trait = leader_trait_butcher
+						set_timed_leader_flag = { flag = gained_leader_trait_butcher days = 7 }
+						set_timed_leader_flag = { flag = has_gained_trait days = 7 }
+					}
+				}
+				5 = {
+					if = {
+						limit = {
+							NOR = { 
+								has_trait = leader_trait_glory_seeker
+								has_trait = leader_trait_demoralizer
+							}
+						}
+						if = {
+							limit = {
+								owner = {
+									NOT = { has_authority = "auth_machine_intelligence" }
+								}
+							}
+							add_trait = leader_trait_glory_seeker
+							set_timed_leader_flag = { flag = gained_leader_trait_glory_seeker days = 7 }
+						}
+						if = {
+							limit = {
+								owner = { has_authority = "auth_machine_intelligence" }
+							}
+							add_trait = leader_trait_demoralizer
+							set_timed_leader_flag = { flag = gained_leader_trait_demoralizer days = 7 }
+						}
+						set_timed_leader_flag = { flag = has_gained_trait days = 7 }
+					}
+				}
+				5 = {
+					if = {
+						limit = {
+							NOR = { 
+								has_trait = leader_trait_armchair_commander 
+								has_trait = leader_trait_erratic_morality_core
+							}
+						}
+						if = {
+							limit = {
+								owner = {
+									NOT = { has_authority = "auth_machine_intelligence" }
+								}
+							}
+							add_trait = leader_trait_armchair_commander 
+							set_timed_leader_flag = { flag = gained_leader_trait_armchair_commander days = 7 }
+						}
+						if = {
+							limit = {
+								owner = { has_authority = "auth_machine_intelligence" }
+							}
+							add_trait = leader_trait_erratic_morality_core
+							set_timed_leader_flag = { flag = gained_leader_trait_erratic_morality_core days = 7 }
+						}
+						set_timed_leader_flag = { flag = has_gained_trait days = 7 }
+					}
+				}
+				5 = {
+					if = {
+						limit = {
+							NOR = { 
+								has_trait = leader_trait_army_logistician 
+								has_trait = leader_trait_parts_cannibalizer
+							}
+						}
+						if = {
+							limit = {
+								owner = {
+									NOT = { has_authority = "auth_machine_intelligence" }
+								}
+							}
+							add_trait = leader_trait_army_logistician 
+							set_timed_leader_flag = { flag = gained_leader_trait_army_logistician days = 7 }
+						}
+						if = {
+							limit = {
+								owner = { has_authority = "auth_machine_intelligence" }
+							}
+							add_trait = leader_trait_parts_cannibalizer
+							set_timed_leader_flag = { flag = gained_leader_trait_parts_cannibalizer days = 7 }
+						}
+						set_timed_leader_flag = { flag = has_gained_trait days = 7 }
+					}
+				}
+			}
+		}
+		owner = { country_event = { id = leader.24} }
+	}
+	if = {
+		limit = {
+			leader_class = ruler
+		}
+		while = {
+			limit = {
+				NOT = { has_leader_flag = has_gained_trait }
+			}
+			random_list = {
+				5 = {
+					if = {
+						limit = {
+							NOT = { has_trait = leader_trait_adaptable }
+						}
+						add_trait = leader_trait_adaptable
+						set_timed_leader_flag = { flag = gained_leader_trait_adaptable days = 7 }
+						set_timed_leader_flag = { flag = has_gained_trait days = 7 }
+					}
+				}
+				5 = {
+					if = {
+						limit = {
+							NOT = { has_trait = leader_trait_resilient }
+						}
+						add_trait = leader_trait_resilient
+						set_timed_leader_flag = { flag = gained_leader_trait_resilient days = 7 }
+						set_timed_leader_flag = { flag = has_gained_trait days = 7 }
+					}
+				}
+				5 = {
+					if = {
+						limit = {
+							NOR = { 
+								has_trait = leader_trait_stubborn 
+								has_trait = leader_trait_rigid_programming
+								owner = { has_authority = "auth_hive_mind" }
+							}
+						}
+						if = {
+							limit = {
+								owner = {
+									NOT = { has_authority = "auth_machine_intelligence" }
+								}
+							}
+							add_trait = leader_trait_stubborn
+							set_timed_leader_flag = { flag = gained_leader_trait_stubborn days = 7 }
+						}
+						if = {
+							limit = {
+								owner = { has_authority = "auth_machine_intelligence" }
+							}
+							add_trait = leader_trait_rigid_programming
+							set_timed_leader_flag = { flag = gained_leader_trait_rigid_programming days = 7 }
+						}
+						set_timed_leader_flag = { flag = has_gained_trait days = 7 }
+					}
+				}
+				5 = {
+					if = {
+						limit = {
+							NOT = { has_trait = leader_trait_substance_abuser }
+						}
+						add_trait = leader_trait_substance_abuser
+						set_timed_leader_flag = { flag = gained_leader_trait_substance_abuser days = 7 }
+						set_timed_leader_flag = { flag = has_gained_trait days = 7 }
+					}
+				}
+				5 = {
+					if = {
+						limit = {
+							NOT = { has_trait = leader_trait_arrested_development }
+						}
+						add_trait = leader_trait_arrested_development
+						set_timed_leader_flag = { flag = gained_leader_trait_arrested_development days = 7 }
+						set_timed_leader_flag = { flag = has_gained_trait days = 7 }
+					}
+				}
+				5 = {
+					if = {
+						limit = {
+							NOT = { has_trait = trait_ruler_corvette_focus }
+						}
+						add_trait = trait_ruler_corvette_focus
+						set_timed_leader_flag = { flag = gained_trait_ruler_corvette_focus days = 7 }
+						set_timed_leader_flag = { flag = has_gained_trait days = 7 }
+					}
+				}
+				5 = {
+					if = {
+						limit = {
+							NOT = { has_trait = trait_ruler_destroyer_focus }
+						}
+						add_trait = trait_ruler_destroyer_focus
+						set_timed_leader_flag = { flag = gained_trait_ruler_destroyer_focus days = 7 }
+						set_timed_leader_flag = { flag = has_gained_trait days = 7 }
+					}
+				}
+				5 = {
+					if = {
+						limit = {
+							NOT = { has_trait = trait_ruler_cruiser_focus }
+						}
+						add_trait = trait_ruler_cruiser_focus
+						set_timed_leader_flag = { flag = gained_trait_ruler_cruiser_focus days = 7 }
+						set_timed_leader_flag = { flag = has_gained_trait days = 7 }
+					}
+				}
+				5 = {
+					if = {
+						limit = {
+							NOT = { has_trait = trait_ruler_battleship_focus }
+						}
+						add_trait = trait_ruler_battleship_focus
+						set_timed_leader_flag = { flag = gained_trait_ruler_battleship_focus days = 7 }
+						set_timed_leader_flag = { flag = has_gained_trait days = 7 }
+					}
+				}
+				5 = {
+					if = {
+						limit = {
+							NOT = { has_trait = trait_ruler_recruiter }
+						}
+						add_trait = trait_ruler_recruiter
+						set_timed_leader_flag = { flag = gained_trait_ruler_recruiter days = 7 }
+						set_timed_leader_flag = { flag = has_gained_trait days = 7 }
+					}
+				}
+				5 = {
+					if = {
+						limit = {
+							NOT = { has_trait = trait_ruler_fortifier }
+						}
+						add_trait = trait_ruler_fortifier
+						set_timed_leader_flag = { flag = gained_trait_ruler_fortifier days = 7 }
+						set_timed_leader_flag = { flag = has_gained_trait days = 7 }
+					}
+				}
+				5 = {
+					if = {
+						limit = {
+							NOT = { has_trait = trait_ruler_logistic_understanding }
+						}
+						add_trait = trait_ruler_logistic_understanding
+						set_timed_leader_flag = { flag = gained_trait_ruler_logistic_understanding days = 7 }
+						set_timed_leader_flag = { flag = has_gained_trait days = 7 }
+					}
+				}
+				5 = {
+					if = {
+						limit = {
+							NOT = { has_trait = trait_ruler_military_pioneer }
+						}
+						add_trait = trait_ruler_military_pioneer
+						set_timed_leader_flag = { flag = gained_trait_ruler_military_pioneer days = 7 }
+						set_timed_leader_flag = { flag = has_gained_trait days = 7 }
+					}
+				}
+				5 = {
+					if = {
+						limit = {
+							NOT = { has_trait = trait_ruler_warlike }
+						}
+						add_trait = trait_ruler_warlike
+						set_timed_leader_flag = { flag = gained_trait_ruler_warlike days = 7 }
+						set_timed_leader_flag = { flag = has_gained_trait days = 7 }
+					}
+				}
+				5 = {
+					if = {
+						limit = {
+							NOT = { has_trait = trait_ruler_architectural_sense }
+						}
+						add_trait = trait_ruler_architectural_sense
+						set_timed_leader_flag = { flag = gained_trait_ruler_architectural_sense days = 7 }
+						set_timed_leader_flag = { flag = has_gained_trait days = 7 }
+					}
+				}
+				5 = {
+					if = {
+						limit = {
+							NOT = { has_trait = trait_ruler_frontier_spirit }
+						}
+						add_trait = trait_ruler_frontier_spirit
+						set_timed_leader_flag = { flag = gained_trait_ruler_frontier_spirit days = 7 }
+						set_timed_leader_flag = { flag = has_gained_trait days = 7 }
+					}
+				}
+				5 = {
+					if = {
+						limit = {
+							NOT = { has_trait = trait_ruler_world_shaper }
+						}
+						add_trait = trait_ruler_world_shaper
+						set_timed_leader_flag = { flag = gained_trait_ruler_world_shaper days = 7 }
+						set_timed_leader_flag = { flag = has_gained_trait days = 7 }
+					}
+				}
+				5 = {
+					if = {
+						limit = {
+							NOT = { has_trait = trait_ruler_home_in_the_sky }
+						}
+						add_trait = trait_ruler_home_in_the_sky
+						set_timed_leader_flag = { flag = gained_trait_ruler_home_in_the_sky days = 7 }
+						set_timed_leader_flag = { flag = has_gained_trait days = 7 }
+					}
+				}
+				5 = {
+					if = {
+						limit = {
+							NOT = { has_trait = trait_ruler_industrialist }
+						}
+						add_trait = trait_ruler_industrialist
+						set_timed_leader_flag = { flag = gained_trait_ruler_industrialist days = 7 }
+						set_timed_leader_flag = { flag = has_gained_trait days = 7 }
+					}
+				}
+				100 = {
+					if = {
+						limit = {
+							NOT = { has_trait = trait_ruler_eye_for_talent }
+						}
+						add_trait = trait_ruler_eye_for_talent
+						set_timed_leader_flag = { flag = gained_trait_ruler_eye_for_talent days = 7 }
+						set_timed_leader_flag = { flag = has_gained_trait days = 7 }
+					}
+				}
+				5 = {
+					if = {
+						limit = {
+							NOT = { has_trait = trait_ruler_deep_connections }
+						}
+						add_trait = trait_ruler_deep_connections
+						set_timed_leader_flag = { flag = gained_trait_ruler_deep_connections days = 7 }
+						set_timed_leader_flag = { flag = has_gained_trait days = 7 }
+					}
+				}
+				5 = {
+					if = {
+						limit = {
+							NOT = { has_trait = trait_ruler_champion_of_the_people }
+						}
+						add_trait = trait_ruler_champion_of_the_people
+						set_timed_leader_flag = { flag = gained_trait_ruler_champion_of_the_people days = 7 }
+						set_timed_leader_flag = { flag = has_gained_trait days = 7 }
+					}
+				}
+				5 = {
+					if = {
+						limit = {
+							NOT = { has_trait = trait_ruler_expansionist }
+						}
+						add_trait = trait_ruler_expansionist
+						set_timed_leader_flag = { flag = gained_trait_ruler_expansionist days = 7 }
+						set_timed_leader_flag = { flag = has_gained_trait days = 7 }
+					}
+				}
+				5 = {
+					if = {
+						limit = {
+							NOT = { has_trait = trait_ruler_fertility_preacher }
+						}
+						add_trait = trait_ruler_fertility_preacher
+						set_timed_leader_flag = { flag = gained_trait_ruler_fertility_preacher days = 7 }
+						set_timed_leader_flag = { flag = has_gained_trait days = 7 }
+					}
+				}
+				5 = {
+					if = {
+						limit = {
+							NOT = { has_trait = trait_ruler_investor }
+						}
+						add_trait = trait_ruler_investor
+						set_timed_leader_flag = { flag = gained_trait_ruler_investor days = 7 }
+						set_timed_leader_flag = { flag = has_gained_trait days = 7 }
+					}
+				}
+				5 = {
+					if = {
+						limit = {
+							NOT = { has_trait = trait_ruler_explorer }
+						}
+						add_trait = trait_ruler_explorer
+						set_timed_leader_flag = { flag = gained_trait_ruler_explorer days = 7 }
+						set_timed_leader_flag = { flag = has_gained_trait days = 7 }
+					}
+				}
+				5 = {
+					if = {
+						limit = {
+							NOT = { has_trait = leader_trait_fleet_organizer }
+						}
+						add_trait = leader_trait_fleet_organizer
+						set_timed_leader_flag = { flag = gained_leader_trait_fleet_organizer days = 7 }
+						set_timed_leader_flag = { flag = has_gained_trait days = 7 }
+					}
+				}
+			}
+		}
+		owner = { country_event = { id = leader.25} }
+	}
+}
+
+# Change planet class one step up in temperature
+increase_planet_temperature = {
+	if = {
+		limit = {
+			is_planet_class = pc_barren
+		}
+		change_pc = pc_molten
+		reroll_planet = yes
+		clear_blockers = yes
+		else = {
+			if = {
+				limit = {
+					is_planet_class = pc_desert
+				}
+				change_pc = pc_molten
+				reroll_planet = yes
+				clear_blockers = yes
+				else = {
+					if = {
+						limit = {
+							is_planet_class = pc_arid
+						}
+						change_pc = pc_barren
+						reroll_planet = yes
+						clear_blockers = yes
+						else = {
+							if = {
+								limit = {
+									is_planet_class = pc_savannah
+								}
+								change_pc = pc_barren
+								reroll_planet = yes
+								clear_blockers = yes
+								else = {
+									if = {
+										limit = {
+											is_planet_class = pc_ocean
+										}
+										change_pc = pc_desert
+										clear_blockers = yes
+										else = {
+											if = {
+												limit = {
+													is_planet_class = pc_continental
+												}
+												change_pc = pc_arid
+												clear_blockers = yes
+												else = {
+													if = {
+														limit = {
+															is_planet_class = pc_tropical
+														}
+														change_pc = pc_savannah
+														clear_blockers = yes
+														else = {
+															if = {
+																limit = {
+																	is_planet_class = pc_arctic
+																}
+																change_pc = pc_ocean
+																clear_blockers = yes
+																else = {
+																	if = {
+																		limit = {
+																			is_planet_class = pc_alpine
+																		}
+																		change_pc = pc_continental
+																		clear_blockers = yes
+																		else = {
+																			if = {
+																				limit = {
+																					is_planet_class = pc_tundra
+																				}
+																				change_pc = pc_tropical
+																				clear_blockers = yes
+																				else = {
+																					if = {
+																						limit = {
+																							is_planet_class = pc_barren_cold
+																						}
+																						change_pc = pc_tundra
+																						reroll_planet = yes
+																						clear_blockers = yes
+																						else = {
+																							if = {
+																								limit = {
+																									is_planet_class = pc_frozen
+																								}
+																								change_pc = pc_arctic
+																								reroll_planet = yes
+																								clear_blockers = yes
+																							}
+																						}
+																					}
+																				}
+																			}
+																		}
+																	}
+																}
+															}
+														}
+													}
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}
+# Change planet class one step down in temperature
+decrease_planet_temperature = {
+	if = {
+		limit = {
+			is_planet_class = pc_molten
+		}
+		change_pc = pc_desert
+		reroll_planet = yes
+		clear_blockers = yes
+		else = {
+			if = {
+				limit = {
+					is_planet_class = pc_barren
+				}
+				change_pc = pc_arid
+				reroll_planet = yes
+				clear_blockers = yes
+				else = {
+					if = {
+						limit = {
+							is_planet_class = pc_desert
+						}
+						change_pc = pc_ocean
+						clear_blockers = yes
+						else = {
+							if = {
+								limit = {
+									is_planet_class = pc_arid
+								}
+								change_pc = pc_continental
+								clear_blockers = yes
+								else = {
+									if = {
+										limit = {
+											is_planet_class = pc_savannah
+										}
+										change_pc = pc_tropical
+										clear_blockers = yes
+										else = {
+											if = {
+												limit = {
+													is_planet_class = pc_ocean
+												}
+												change_pc = pc_arctic
+												clear_blockers = yes
+												else = {
+													if = {
+														limit = {
+															is_planet_class = pc_continental
+														}
+														change_pc = pc_alpine
+														clear_blockers = yes
+														else = {
+															if = {
+																limit = {
+																	is_planet_class = pc_tropical
+																}
+																change_pc = pc_tundra
+																clear_blockers = yes
+																else = {
+																	if = {
+																		limit = {
+																			is_planet_class = pc_arctic
+																		}
+																		change_pc = pc_frozen
+																		reroll_planet = yes
+																		clear_blockers = yes
+																		else = {
+																			if = {
+																				limit = {
+																					is_planet_class = pc_alpine
+																				}
+																				change_pc = pc_frozen
+																				reroll_planet = yes
+																				clear_blockers = yes
+																				else = {
+																					if = {
+																						limit = {
+																							is_planet_class = pc_tundra
+																						}
+																						random_list = {
+																							50 = { change_pc = pc_frozen }
+																							50 = { change_pc = pc_barren_cold }
+																						}
+																						reroll_planet = yes
+																						clear_blockers = yes
+																					}
+																				}
+																			}
+																		}
+																	}
+																}
+															}
+														}
+													}
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+spawn_sun_temperature_effect = {
+	if = {
+		limit = {
+			OR = {
+				is_planet_class = pc_g_star
+			}
+		}
+		create_ambient_object = {
+			location = this
+			type = yellow_sun_grow_particle_object
+			duration = 1
+			
+			use_3d_location= yes
+			
+			entity_offset = { min = 0 max = 0 }
+			entity_offset_angle = { min = 0 max = 360 }
+			entity_offset_height = { min = 0 max = 0 }
+			
+			entity_scale_to_size = yes
+			scale = 0.01
+		}
+		else = {
+			if = {
+				limit = {
+					OR = {
+						is_planet_class = pc_k_star
+						is_planet_class = pc_m_star
+					}
+				}
+				create_ambient_object = {
+					location = this
+					type = red_sun_grow_particle_object
+					duration = 1
+					
+					use_3d_location= yes
+					
+					entity_offset = { min = 0 max = 0 }
+					entity_offset_angle = { min = 0 max = 360 }
+					entity_offset_height = { min = 0 max = 0 }
+					
+					entity_scale_to_size = yes
+					scale = 0.01
+				}
+				else = {
+					if = {
+						limit = {
+							OR = {
+								is_planet_class = pc_b_star
+								is_planet_class = pc_a_star
+								is_planet_class = pc_f_star
+								is_planet_class = pc_pulsar
+								is_planet_class = pc_neutron_star
+							}
+						}
+						create_ambient_object = {
+							location = this
+							type = blue_sun_grow_particle_object
+							duration = 1
+							
+							use_3d_location= yes
+							
+							entity_offset = { min = 0 max = 0 }
+							entity_offset_angle = { min = 0 max = 360 }
+							entity_offset_height = { min = 0 max = 0 }
+							
+							entity_scale_to_size = yes
+							scale = 0.01
+						}
+					}
+				}
+			}		
+		}
+	}
+	
+	
+}
+spawn_planet_temperature_effect = {
+	create_ambient_object = {
+		location = this
+		type = planet_heat_up_particle_object
+		duration = 30
+		
+		use_3d_location= yes
+		base_angle_towards = star
+		entity_face_object = star
+		
+		entity_offset = { min = 0 max = 0 }
+		
+		entity_scale_to_size = yes
+		scale = 0.15
+	}
+}
+
+guardian_difficulty = {
+	if = {
+		limit = {
+			is_difficulty = 2
+		}
+		add_modifier = {
+			modifier = guardian_insane
+			days = -1
+		}
+		else = {
+			if = {
+				limit = {
+					is_difficulty = 1
+				}
+				add_modifier = {
+					modifier = guardian_hard
+					days = -1
+				}
+			}
+		}
+	}
+}
+
+end_curator_chain = {
+	if = {
+		limit = {
+			has_event_chain = curator_poi_chain
+			NOR = {
+				has_point_of_interest = { poi = curator_poi_dragon }
+				has_point_of_interest = { poi = curator_poi_technosphere }
+				has_point_of_interest = { poi = curator_poi_wraith }
+				has_point_of_interest = { poi = curator_poi_horror }
+				has_point_of_interest = { poi = curator_poi_fortress }
+				has_point_of_interest = { poi = curator_poi_hiver }
+				has_point_of_interest = { poi = curator_poi_stellarite }
+				has_point_of_interest = { poi = curator_poi_dreadnought }
+			}
+		}
+		end_event_chain = curator_poi_chain
+	}
+}
+
+make_intelligent = {
+	if = {
+		limit = { pop_has_trait = trait_intelligent }
+		else = {
+			modify_species = {
+				species = this
+				add_trait = trait_intelligent
+			}
+		}
+	}
+}
+
+make_resilient = {
+	if = {
+		limit = {
+			pop_has_trait = trait_resilient
+		}
+		else = {
+			modify_species = {
+				species = this
+				add_trait = trait_resilient
+			}
+		}
+	}
+}
+
+ ##create a subspecies with the Intelligent and Fanatically Pacifist traits, and remove Militarist or Fanatically Militarist
+make_unleashed_messenger = {
+	if = {
+		limit = {
+			root = { is_species_class = ART }
+		}
+		if = {
+			limit = {
+				NOT = {
+					root = { species_portrait = art11 }
+				}
+			}
+			modify_species = {
+				portrait = art11
+			}
+			else = {
+				modify_species = {
+					portrait = art10
+				}
+			}
+		}
+	}
+	if = {
+		limit = {
+			root = { is_species_class = MAM }
+		}
+		if = {
+			limit = {
+				NOT = {
+					root = { species_portrait = mam10 }
+				}
+			}
+			modify_species = {
+				portrait = mam10
+			}
+			else = {
+				modify_species = {
+					portrait = mam13
+				}
+			}
+		}
+	}
+	if = {
+		limit = {
+			root = { is_species_class = FUN }
+		}
+		if = {
+			limit = {
+				NOT = {
+					root = { species_portrait = fun12 }
+				}
+			}
+			modify_species = {
+				portrait = fun12
+			}
+			else = {
+				modify_species = {
+					portrait = fun10
+				}
+			}
+		}
+	}
+	if = {
+		limit = {
+			root = { is_species_class = HUM }
+		}
+		if = {
+			limit = {
+				NOT = {
+					root = { species_portrait = humanoid_04 }
+				}
+			}
+			modify_species = {
+				portrait = humanoid_04
+			}
+			else = {
+				modify_species = {
+					portrait = humanoid_03
+				}
+			}
+		}
+	}
+	if = {
+		limit = {
+			root = { is_species_class = MOL }
+		}
+		if = {
+			limit = {
+				NOT = {
+					root = { species_portrait = mol11 }
+				}
+			}
+			modify_species = {
+				portrait = mol11
+			}
+			else = {
+				modify_species = {
+					portrait = mol12
+				}
+			}
+		}
+	}
+	if = {
+		limit = {
+			root = { is_species_class = PLANT }
+		}
+		if = {
+			limit = {
+				NOT = {
+					root = { species_portrait = pla15 }
+				}
+			}
+			modify_species = {
+				portrait = pla15
+			}
+			else = {
+				modify_species = {
+					portrait = pla10
+				}
+			}
+		}
+	}
+	if = {
+		limit = {
+			root = { is_species_class = REP }
+		}
+		if = {
+			limit = {
+				NOT = {
+					root = { species_portrait = rep8 }
+				}
+			}
+			modify_species = {
+				portrait = rep8
+			}
+			else = {
+				modify_species = {
+					portrait = rep4
+				}
+			}
+		}
+	}
+}
+
+make_leashed_messenger = {
+	if = {
+		limit = {
+			root = { is_species_class = ART }
+		}
+		if = {
+			limit = {
+				NOT = {
+					root = { species_portrait = art11 }
+				}
+			}
+			modify_species = {
+				portrait = art11
+			}
+			else = {
+				modify_species = {
+					portrait = art10
+				}
+			}
+		}
+	}
+	if = {
+		limit = {
+			root = { is_species_class = MAM }
+		}
+		if = {
+			limit = {
+				NOT = {
+					root = { species_portrait = mam10 }
+				}
+			}
+			modify_species = {
+				portrait = mam10
+			}
+			else = {
+				modify_species = {
+					portrait = mam13
+				}
+			}
+		}
+	}
+	if = {
+		limit = {
+			root = { is_species_class = FUN }
+		}
+		if = {
+			limit = {
+				NOT = {
+					root = { species_portrait = fun12 }
+				}
+			}
+			modify_species = {
+				portrait = fun12
+			}
+			else = {
+				modify_species = {
+					portrait = fun10
+				}
+			}
+		}
+	}
+	if = {
+		limit = {
+			root = { is_species_class = HUM }
+		}
+		if = {
+			limit = {
+				NOT = {
+					root = { species_portrait = humanoid_04 }
+				}
+			}
+			modify_species = {
+				portrait = humanoid_04
+			}
+			else = {
+				modify_species = {
+					portrait = humanoid_03
+				}
+			}
+		}
+	}
+	if = {
+		limit = {
+			root = { is_species_class = MOL }
+		}
+		if = {
+			limit = {
+				NOT = {
+					root = { species_portrait = mol11 }
+				}
+			}
+			modify_species = {
+				portrait = mol11
+			}
+			else = {
+				modify_species = {
+					portrait = mol12
+				}
+			}
+		}
+	}
+	if = {
+		limit = {
+			root = { is_species_class = PLANT }
+		}
+		if = {
+			limit = {
+				NOT = {
+					root = { species_portrait = pla15 }
+				}
+			}
+			modify_species = {
+				portrait = pla15
+			}
+			else = {
+				modify_species = {
+					portrait = pla10
+				}
+			}
+		}
+	}
+	if = {
+		limit = {
+			root = { is_species_class = REP }
+		}
+		if = {
+			limit = {
+				NOT = {
+					root = { species_portrait = rep8 }
+				}
+			}
+			modify_species = {
+				portrait = rep8
+			}
+			else = {
+				modify_species = {
+					portrait = rep4
+				}
+			}
+		}
+	}
+}
+
+wipe_pop_ethos = {
+	if = {
+		limit = { pop_has_ethic = ethic_fanatic_egalitarian }
+		pop_remove_ethic = ethic_fanatic_egalitarian
+	}
+	if = {
+		limit = { pop_has_ethic = ethic_fanatic_authoritarian }
+		pop_remove_ethic = ethic_fanatic_authoritarian
+	}
+	if = {
+		limit = { pop_has_ethic = ethic_fanatic_pacifist }
+		pop_remove_ethic = ethic_fanatic_pacifist
+	}
+	if = {
+		limit = { pop_has_ethic = ethic_fanatic_militarist }
+		pop_remove_ethic = ethic_fanatic_militarist
+	}
+	if = {
+		limit = { pop_has_ethic = ethic_fanatic_xenophobe }
+		pop_remove_ethic = ethic_fanatic_xenophobe
+	}
+	if = {
+		limit = { pop_has_ethic = ethic_fanatic_xenophile }
+		pop_remove_ethic = ethic_fanatic_xenophile
+	}
+	if = {
+		limit = { pop_has_ethic = ethic_fanatic_materialist }
+		pop_remove_ethic = ethic_fanatic_materialist
+	}
+	if = {
+		limit = { pop_has_ethic = ethic_fanatic_spiritualist }
+		pop_remove_ethic = ethic_fanatic_spiritualist
+	}
+	if = {
+		limit = { pop_has_ethic = ethic_egalitarian }
+		pop_remove_ethic = ethic_egalitarian
+	}
+	if = {
+		limit = { pop_has_ethic = ethic_authoritarian }
+		pop_remove_ethic = ethic_authoritarian
+	}
+	if = {
+		limit = { pop_has_ethic = ethic_pacifist }
+		pop_remove_ethic = ethic_pacifist
+	}
+	if = {
+		limit = { pop_has_ethic = ethic_militarist }
+		pop_remove_ethic = ethic_militarist
+	}
+	if = {
+		limit = { pop_has_ethic = ethic_xenophobe }
+		pop_remove_ethic = ethic_xenophobe
+	}
+	if = {
+		limit = { pop_has_ethic = ethic_xenophile }
+		pop_remove_ethic = ethic_xenophile
+	}
+	if = {
+		limit = { pop_has_ethic = ethic_materialist }
+		pop_remove_ethic = ethic_materialist
+	}
+	if = {
+		limit = { pop_has_ethic = ethic_spiritualist }
+		pop_remove_ethic = ethic_spiritualist
+	}
+}
+spawn_vultaum_anomaly = {
+	if = {
+		limit = {
+			NOT = { has_country_flag = vultaum_1 }
+			any_system_within_border = {
+				has_star_flag = precursor_1
+				any_planet = {
+					uninhabitable_regular_planet = yes
+					NOT = { has_planet_flag = precursor_world }
+					has_owner = no
+					has_anomaly = no
+					is_surveyed = {
+						who = ROOT
+						status = yes
+					}
+				}
+			}
+		}
+		random_system_within_border = {
+			limit = {
+				has_star_flag = precursor_1
+				any_planet = { 
+					uninhabitable_regular_planet = yes
+					NOT = { has_planet_flag = precursor_world }
+					has_owner = no
+					has_anomaly = no
+					is_surveyed = {
+						who = ROOT
+						status = yes
+					}
+				}
+			}
+			random_system_planet = {
+				limit = { 
+					uninhabitable_regular_planet = yes
+					NOT = { has_planet_flag = precursor_world }
+					has_owner = no
+					has_anomaly = no
+					is_surveyed = {
+						who = ROOT
+						status = yes
+					}
+				}
+				save_event_target_as = precursor_planet
+				surveyed = {
+					set_surveyed = no
+					surveyor = ROOT
+				}
+				add_anomaly = vultaum_1_cat
+			}
+		}
+		set_country_flag = vultaum_1
+		break = yes
+	}
+	if = {
+		limit = {
+			NOT = { has_country_flag = vultaum_2 }
+			any_system_within_border = {
+				has_star_flag = precursor_1
+				any_planet = {
+					uninhabitable_regular_planet = yes
+					NOT = { has_planet_flag = precursor_world }
+					has_owner = no
+					has_anomaly = no
+					is_surveyed = {
+						who = ROOT
+						status = yes
+					}
+				}
+			}
+		}
+		random_system_within_border = {
+			limit = {
+				has_star_flag = precursor_1
+				any_planet = { 
+					uninhabitable_regular_planet = yes
+					NOT = { has_planet_flag = precursor_world }
+					has_owner = no
+					has_anomaly = no
+					is_surveyed = {
+						who = ROOT
+						status = yes
+					}
+				}
+			}
+			random_system_planet = {
+				limit = { 
+					uninhabitable_regular_planet = yes
+					NOT = { has_planet_flag = precursor_world }
+					has_owner = no
+					has_anomaly = no
+					is_surveyed = {
+						who = ROOT
+						status = yes
+					}
+				}
+				save_event_target_as = precursor_planet
+				surveyed = {
+					set_surveyed = no
+					surveyor = ROOT
+				}
+				add_anomaly = vultaum_2_cat
+			}
+		}
+		set_country_flag = vultaum_2
+		break = yes
+	}
+	if = {
+		limit = {
+			NOT = { has_country_flag = vultaum_3 }
+			any_system_within_border = {
+				has_star_flag = precursor_1
+				any_planet = {
+					habitable_planet = yes
+					NOT = { has_planet_flag = precursor_world }
+					has_owner = no
+					has_anomaly = no
+					is_surveyed = {
+						who = ROOT
+						status = yes
+					}
+				}
+			}
+		}
+		random_system_within_border = {
+			limit = {
+				has_star_flag = precursor_1
+				any_planet = { 
+					habitable_planet = yes
+					NOT = { has_planet_flag = precursor_world }
+					has_owner = no
+					has_anomaly = no
+					is_surveyed = {
+						who = ROOT
+						status = yes
+					}
+				}
+			}
+			random_system_planet = {
+				limit = { 
+					habitable_planet = yes
+					NOT = { has_planet_flag = precursor_world }
+					has_owner = no
+					has_anomaly = no
+					is_surveyed = {
+						who = ROOT
+						status = yes
+					}
+				}
+				save_event_target_as = precursor_planet
+				add_anomaly = vultaum_3_cat
+			}
+		}
+		set_country_flag = vultaum_3
+		break = yes
+	}
+	if = {
+		limit = {
+			NOT = { has_country_flag = vultaum_4 }
+			any_system_within_border = {
+				has_star_flag = precursor_1
+				any_planet = {
+					habitable_planet = yes
+					NOT = { has_planet_flag = precursor_world }
+					has_owner = no
+					has_anomaly = no
+					is_surveyed = {
+						who = ROOT
+						status = yes
+					}
+				}
+			}
+		}
+		random_system_within_border = {
+			limit = {
+				has_star_flag = precursor_1
+				any_planet = { 
+					habitable_planet = yes
+					NOT = { has_planet_flag = precursor_world }
+					has_owner = no
+					has_anomaly = no
+					is_surveyed = {
+						who = ROOT
+						status = yes
+					}
+				}
+			}
+			random_system_planet = {
+				limit = { 
+					habitable_planet = yes
+					NOT = { has_planet_flag = precursor_world }
+					has_owner = no
+					has_anomaly = no
+					is_surveyed = {
+						who = ROOT
+						status = yes
+					}
+				}
+				save_event_target_as = precursor_planet
+				add_anomaly = vultaum_4_cat
+			}
+		}
+		set_country_flag = vultaum_4
+		break = yes
+	}
+	if = {
+		limit = {
+			NOT = { has_country_flag = vultaum_5 }
+			any_system_within_border = {
+				has_star_flag = precursor_1
+				any_planet = {
+					habitable_planet = yes
+					NOT = { has_planet_flag = precursor_world }
+					has_owner = no
+					has_anomaly = no
+					is_surveyed = {
+						who = ROOT
+						status = yes
+					}
+				}
+			}
+		}
+		random_system_within_border = {
+			limit = {
+				has_star_flag = precursor_1
+				any_planet = { 
+					habitable_planet = yes
+					NOT = { has_planet_flag = precursor_world }
+					has_owner = no
+					has_anomaly = no
+					is_surveyed = {
+						who = ROOT
+						status = yes
+					}
+				}
+			}
+			random_system_planet = {
+				limit = { 
+					habitable_planet = yes
+					NOT = { has_planet_flag = precursor_world }
+					has_owner = no
+					has_anomaly = no
+					is_surveyed = {
+						who = ROOT
+						status = yes
+					}
+				}
+				save_event_target_as = precursor_planet
+				add_anomaly = vultaum_5_cat
+			}
+		}
+		set_country_flag = vultaum_5
+		break = yes
+	}
+	if = {
+		limit = {
+			NOT = { has_country_flag = vultaum_6 }
+			any_system_within_border = {
+				has_star_flag = precursor_1
+				any_planet = {
+					is_planet_class = pc_gas_giant
+					NOT = { has_planet_flag = precursor_world }
+					has_owner = no
+					has_anomaly = no
+					is_surveyed = {
+						who = ROOT
+						status = yes
+					}
+				}
+			}
+		}
+		random_system_within_border = {
+			limit = {
+				has_star_flag = precursor_1
+				any_planet = { 
+					is_planet_class = pc_gas_giant
+					NOT = { has_planet_flag = precursor_world }
+					has_owner = no
+					has_anomaly = no
+					is_surveyed = {
+						who = ROOT
+						status = yes
+					}
+				}
+			}
+			random_system_planet = {
+				limit = { 
+					is_planet_class = pc_gas_giant
+					NOT = { has_planet_flag = precursor_world }
+					has_owner = no
+					has_anomaly = no
+					is_surveyed = {
+						who = ROOT
+						status = yes
+					}
+				}
+				save_event_target_as = precursor_planet
+				add_anomaly = vultaum_6_cat
+			}
+		}
+		set_country_flag = vultaum_6
+		break = yes
+	}
+	if = {
+		limit = {
+			NOT = { has_country_flag = vultaum_7 }
+			any_system_within_border = {
+				has_star_flag = precursor_1
+				any_planet = {
+					uninhabitable_regular_planet = yes
+					NOT = { has_planet_flag = precursor_world }
+					has_owner = no
+					has_anomaly = no
+					is_surveyed = {
+						who = ROOT
+						status = yes
+					}
+				}
+			}
+		}
+		random_system_within_border = {
+			limit = {
+				has_star_flag = precursor_1
+				any_planet = { 
+					uninhabitable_regular_planet = yes
+					NOT = { has_planet_flag = precursor_world }
+					has_owner = no
+					has_anomaly = no
+					is_surveyed = {
+						who = ROOT
+						status = yes
+					}
+				}
+			}
+			random_system_planet = {
+				limit = { 
+					uninhabitable_regular_planet = yes
+					NOT = { has_planet_flag = precursor_world }
+					has_owner = no
+					has_anomaly = no
+					is_surveyed = {
+						who = ROOT
+						status = yes
+					}
+				}
+				save_event_target_as = precursor_planet
+				add_anomaly = vultaum_7_cat
+			}
+		}
+		set_country_flag = vultaum_7
+		break = yes
+	}
+	if = {
+		limit = {
+			NOT = { has_country_flag = vultaum_8 }
+			any_system_within_border = {
+				has_star_flag = precursor_1
+				any_planet = {
+					uninhabitable_regular_planet = yes
+					NOT = { has_planet_flag = precursor_world }
+					has_owner = no
+					has_anomaly = no
+					is_surveyed = {
+						who = ROOT
+						status = yes
+					}
+				}
+			}
+		}
+		random_system_within_border = {
+			limit = {
+				has_star_flag = precursor_1
+				any_planet = { 
+					uninhabitable_regular_planet = yes
+					NOT = { has_planet_flag = precursor_world }
+					has_owner = no
+					has_anomaly = no
+					is_surveyed = {
+						who = ROOT
+						status = yes
+					}
+				}
+			}
+			random_system_planet = {
+				limit = { 
+					uninhabitable_regular_planet = yes
+					NOT = { has_planet_flag = precursor_world }
+					has_owner = no
+					has_anomaly = no
+					is_surveyed = {
+						who = ROOT
+						status = yes
+					}
+				}
+				save_event_target_as = precursor_planet
+				add_anomaly = vultaum_8_cat
+			}
+		}
+		set_country_flag = vultaum_8
+		break = yes
+	}
+	if = {
+		limit = {
+			NOT = { has_country_flag = vultaum_9 }
+			any_system_within_border = {
+				has_star_flag = precursor_1
+				any_planet = {
+					habitable_planet = yes
+					NOT = { has_planet_flag = precursor_world }
+					has_owner = no
+					has_anomaly = no
+					is_surveyed = {
+						who = ROOT
+						status = yes
+					}
+				}
+			}
+		}
+		random_system_within_border = {
+			limit = {
+				has_star_flag = precursor_1
+				any_planet = { 
+					habitable_planet = yes
+					NOT = { has_planet_flag = precursor_world }
+					has_owner = no
+					has_anomaly = no
+					is_surveyed = {
+						who = ROOT
+						status = yes
+					}
+				}
+			}
+			random_system_planet = {
+				limit = { 
+					habitable_planet = yes
+					NOT = { has_planet_flag = precursor_world }
+					has_owner = no
+					has_anomaly = no
+					is_surveyed = {
+						who = ROOT
+						status = yes
+					}
+				}
+				save_event_target_as = precursor_planet
+				add_anomaly = vultaum_9_cat
+			}
+		}
+		set_country_flag = vultaum_9
+		break = yes
+	}
+	if = {
+		limit = {
+			NOT = { has_country_flag = vultaum_10 }
+			any_system_within_border = {
+				has_star_flag = precursor_1
+				any_planet = {
+					uninhabitable_regular_planet = yes
+					NOT = { has_planet_flag = precursor_world }
+					has_owner = no
+					has_anomaly = no
+					is_surveyed = {
+						who = ROOT
+						status = yes
+					}
+				}
+			}
+		}
+		random_system_within_border = {
+			limit = {
+				has_star_flag = precursor_1
+				any_planet = { 
+					uninhabitable_regular_planet = yes
+					NOT = { has_planet_flag = precursor_world }
+					has_owner = no
+					has_anomaly = no
+					is_surveyed = {
+						who = ROOT
+						status = yes
+					}
+				}
+			}
+			random_system_planet = {
+				limit = { 
+					uninhabitable_regular_planet = yes
+					NOT = { has_planet_flag = precursor_world }
+					has_owner = no
+					has_anomaly = no
+					is_surveyed = {
+						who = ROOT
+						status = yes
+					}
+				}
+				save_event_target_as = precursor_planet
+				add_anomaly = vultaum_10_cat
+			}
+		}
+		set_country_flag = vultaum_10
+		break = yes
+	}
+}
+		
+spawn_yuht_anomaly = {
+	if = {
+		limit = {
+			NOT = { has_country_flag = yuht_1 }
+			any_system_within_border = {
+				has_star_flag = precursor_2
+				any_planet = {
+					habitable_planet = yes
+					NOT = { has_planet_flag = precursor_world }
+					has_owner = no
+					has_anomaly = no
+					is_surveyed = {
+						who = ROOT
+						status = yes
+					}
+				}
+			}
+		}
+		random_system_within_border = {
+			limit = {
+				has_star_flag = precursor_2
+				any_planet = { 
+					habitable_planet = yes
+					NOT = { has_planet_flag = precursor_world }
+					has_owner = no
+					has_anomaly = no
+					is_surveyed = {
+						who = ROOT
+						status = yes
+					}
+				}
+			}
+			random_system_planet = {
+				limit = { 
+					habitable_planet = yes
+					NOT = { has_planet_flag = precursor_world }
+					has_owner = no
+					has_anomaly = no
+					is_surveyed = {
+						who = ROOT
+						status = yes
+					}
+				}
+				save_event_target_as = precursor_planet
+				add_anomaly = yuht_1_cat
+			}
+		}
+		set_country_flag = yuht_1
+		break = yes
+	}
+	if = {
+		limit = {
+			NOT = { has_country_flag = yuht_2 }
+			any_system_within_border = {
+				has_star_flag = precursor_2
+				any_planet = {
+					uninhabitable_regular_planet = yes
+					NOT = { has_planet_flag = precursor_world }
+					has_owner = no
+					has_anomaly = no
+					is_surveyed = {
+						who = ROOT
+						status = yes
+					}
+				}
+			}
+		}
+		random_system_within_border = {
+			limit = {
+				has_star_flag = precursor_2
+				any_planet = { 
+					uninhabitable_regular_planet = yes
+					NOT = { has_planet_flag = precursor_world }
+					has_owner = no
+					has_anomaly = no
+					is_surveyed = {
+						who = ROOT
+						status = yes
+					}
+				}
+			}
+			random_system_planet = {
+				limit = { 
+					uninhabitable_regular_planet = yes
+					NOT = { has_planet_flag = precursor_world }
+					has_owner = no
+					has_anomaly = no
+					is_surveyed = {
+						who = ROOT
+						status = yes
+					}
+				}
+				save_event_target_as = precursor_planet
+				add_anomaly = yuht_2_cat
+			}
+		}
+		set_country_flag = yuht_2
+		break = yes
+	}
+	if = {
+		limit = {
+			NOT = { has_country_flag = yuht_3 }
+			any_system_within_border = {
+				has_star_flag = precursor_2
+				any_planet = {
+					habitable_planet = yes
+					NOT = { has_planet_flag = precursor_world }
+					has_owner = no
+					has_anomaly = no
+					is_surveyed = {
+						who = ROOT
+						status = yes
+					}
+				}
+			}
+		}
+		random_system_within_border = {
+			limit = {
+				has_star_flag = precursor_2
+				any_planet = { 
+					habitable_planet = yes
+					NOT = { has_planet_flag = precursor_world }
+					has_owner = no
+					has_anomaly = no
+					is_surveyed = {
+						who = ROOT
+						status = yes
+					}
+				}
+			}
+			random_system_planet = {
+				limit = { 
+					habitable_planet = yes
+					NOT = { has_planet_flag = precursor_world }
+					has_owner = no
+					has_anomaly = no
+					is_surveyed = {
+						who = ROOT
+						status = yes
+					}
+				}
+				save_event_target_as = precursor_planet
+				add_anomaly = yuht_3_cat
+			}
+		}
+		set_country_flag = yuht_3
+		break = yes
+	}
+	if = {
+		limit = {
+			NOT = { has_country_flag = yuht_4 }
+			any_system_within_border = {
+				has_star_flag = precursor_2
+				any_planet = {
+					habitable_planet = yes
+					NOT = { has_planet_flag = precursor_world }
+					has_owner = no
+					has_anomaly = no
+					is_surveyed = {
+						who = ROOT
+						status = yes
+					}
+				}
+			}
+		}
+		random_system_within_border = {
+			limit = {
+				has_star_flag = precursor_2
+				any_planet = { 
+					habitable_planet = yes
+					NOT = { has_planet_flag = precursor_world }
+					has_owner = no
+					has_anomaly = no
+					is_surveyed = {
+						who = ROOT
+						status = yes
+					}
+				}
+			}
+			random_system_planet = {
+				limit = { 
+					habitable_planet = yes
+					NOT = { has_planet_flag = precursor_world }
+					has_owner = no
+					has_anomaly = no
+					is_surveyed = {
+						who = ROOT
+						status = yes
+					}
+				}
+				save_event_target_as = precursor_planet
+				add_anomaly = yuht_4_cat
+			}
+		}
+		set_country_flag = yuht_4
+		break = yes
+	}
+	if = {
+		limit = {
+			NOT = { has_country_flag = yuht_5 }
+			any_system_within_border = {
+				has_star_flag = precursor_2
+				any_planet = {
+					habitable_planet = yes
+					NOT = { has_planet_flag = precursor_world }
+					has_owner = no
+					has_anomaly = no
+					is_surveyed = {
+						who = ROOT
+						status = yes
+					}
+				}
+			}
+		}
+		random_system_within_border = {
+			limit = {
+				has_star_flag = precursor_2
+				any_planet = { 
+					habitable_planet = yes
+					NOT = { has_planet_flag = precursor_world }
+					has_owner = no
+					has_anomaly = no
+					is_surveyed = {
+						who = ROOT
+						status = yes
+					}
+				}
+			}
+			random_system_planet = {
+				limit = { 
+					habitable_planet = yes
+					NOT = { has_planet_flag = precursor_world }
+					has_owner = no
+					has_anomaly = no
+					is_surveyed = {
+						who = ROOT
+						status = yes
+					}
+				}
+				save_event_target_as = precursor_planet
+				add_anomaly = yuht_5_cat
+			}
+		}
+		set_country_flag = yuht_5
+		break = yes
+	}
+	if = {
+		limit = {
+			NOT = { has_country_flag = yuht_6 }
+			any_system_within_border = {
+				has_star_flag = precursor_2
+				any_planet = {
+					is_planet_class = pc_gas_giant
+					NOT = { has_planet_flag = precursor_world }
+					has_owner = no
+					has_anomaly = no
+					is_surveyed = {
+						who = ROOT
+						status = yes
+					}
+				}
+			}
+		}
+		random_system_within_border = {
+			limit = {
+				has_star_flag = precursor_2
+				any_planet = { 
+					is_planet_class = pc_gas_giant
+					NOT = { has_planet_flag = precursor_world }
+					has_owner = no
+					has_anomaly = no
+					is_surveyed = {
+						who = ROOT
+						status = yes
+					}
+				}
+			}
+			random_system_planet = {
+				limit = { 
+					is_planet_class = pc_gas_giant
+					NOT = { has_planet_flag = precursor_world }
+					has_owner = no
+					has_anomaly = no
+					is_surveyed = {
+						who = ROOT
+						status = yes
+					}
+				}
+				save_event_target_as = precursor_planet
+				add_anomaly = yuht_6_cat
+			}
+		}
+		set_country_flag = yuht_6
+		break = yes
+	}
+	if = {
+		limit = {
+			NOT = { has_country_flag = yuht_7 }
+			any_system_within_border = {
+				has_star_flag = precursor_2
+				any_planet = {
+					uninhabitable_regular_planet = yes
+					NOT = { has_planet_flag = precursor_world }
+					has_owner = no
+					has_anomaly = no
+					is_surveyed = {
+						who = ROOT
+						status = yes
+					}
+				}
+			}
+		}
+		random_system_within_border = {
+			limit = {
+				has_star_flag = precursor_2
+				any_planet = { 
+					uninhabitable_regular_planet = yes
+					NOT = { has_planet_flag = precursor_world }
+					has_owner = no
+					has_anomaly = no
+					is_surveyed = {
+						who = ROOT
+						status = yes
+					}
+				}
+			}
+			random_system_planet = {
+				limit = { 
+					uninhabitable_regular_planet = yes
+					NOT = { has_planet_flag = precursor_world }
+					has_owner = no
+					has_anomaly = no
+					is_surveyed = {
+						who = ROOT
+						status = yes
+					}
+				}
+				save_event_target_as = precursor_planet
+				add_anomaly = yuht_7_cat
+			}
+		}
+		set_country_flag = yuht_7
+		break = yes
+	}
+	if = {
+		limit = {
+			NOT = { has_country_flag = yuht_8 }
+			any_system_within_border = {
+				has_star_flag = precursor_2
+				any_planet = {
+					uninhabitable_regular_planet = yes
+					NOT = { has_planet_flag = precursor_world }
+					has_owner = no
+					has_anomaly = no
+					is_surveyed = {
+						who = ROOT
+						status = yes
+					}
+				}
+			}
+		}
+		random_system_within_border = {
+			limit = {
+				has_star_flag = precursor_2
+				any_planet = { 
+					uninhabitable_regular_planet = yes
+					NOT = { has_planet_flag = precursor_world }
+					has_owner = no
+					has_anomaly = no
+					is_surveyed = {
+						who = ROOT
+						status = yes
+					}
+				}
+			}
+			random_system_planet = {
+				limit = { 
+					uninhabitable_regular_planet = yes
+					NOT = { has_planet_flag = precursor_world }
+					has_owner = no
+					has_anomaly = no
+					is_surveyed = {
+						who = ROOT
+						status = yes
+					}
+				}
+				save_event_target_as = precursor_planet
+				add_anomaly = yuht_8_cat
+			}
+		}
+		set_country_flag = yuht_8
+		break = yes
+	}
+}
+
+spawn_league_anomaly = {
+	if = {
+		limit = {
+			NOT = { has_country_flag = first_league_1 }
+			any_system_within_border = {
+				has_star_flag = precursor_3
+				any_planet = {
+					uninhabitable_regular_planet = yes
+					NOT = { has_planet_flag = precursor_world }
+					has_owner = no
+					has_anomaly = no
+					is_surveyed = {
+						who = ROOT
+						status = yes
+					}
+				}
+			}
+		}
+		random_system_within_border = {
+			limit = {
+				has_star_flag = precursor_3
+				any_planet = { 
+					uninhabitable_regular_planet = yes
+					NOT = { has_planet_flag = precursor_world }
+					has_owner = no
+					has_anomaly = no
+					is_surveyed = {
+						who = ROOT
+						status = yes
+					}
+				}
+			}
+			random_system_planet = {
+				limit = { 
+					uninhabitable_regular_planet = yes
+					NOT = { has_planet_flag = precursor_world }
+					has_owner = no
+					has_anomaly = no
+					is_surveyed = {
+						who = ROOT
+						status = yes
+					}
+				}
+				save_event_target_as = precursor_planet
+				add_anomaly = league_1_cat
+			}
+		}
+		set_country_flag = first_league_1
+		break = yes
+	}
+	if = {
+		limit = {
+			NOT = { has_country_flag = first_league_2 }
+			any_system_within_border = {
+				has_star_flag = precursor_3
+				any_planet = {
+					is_planet_class = pc_gas_giant
+					NOT = { has_planet_flag = precursor_world }
+					has_owner = no
+					has_anomaly = no
+					is_surveyed = {
+						who = ROOT
+						status = yes
+					}
+				}
+			}
+		}
+		random_system_within_border = {
+			limit = {
+				has_star_flag = precursor_3
+				any_planet = { 
+					is_planet_class = pc_gas_giant
+					NOT = { has_planet_flag = precursor_world }
+					has_owner = no
+					has_anomaly = no
+					is_surveyed = {
+						who = ROOT
+						status = yes
+					}
+				}
+			}
+			random_system_planet = {
+				limit = { 
+					is_planet_class = pc_gas_giant
+					NOT = { has_planet_flag = precursor_world }
+					has_owner = no
+					has_anomaly = no
+					is_surveyed = {
+						who = ROOT
+						status = yes
+					}
+				}
+				save_event_target_as = precursor_planet
+				add_anomaly = league_2_cat
+			}
+		}
+		set_country_flag = first_league_2
+		break = yes
+	}
+	if = {
+		limit = {
+			NOT = { has_country_flag = first_league_3 }
+			any_system_within_border = {
+				has_star_flag = precursor_3
+				any_planet = {
+					habitable_planet = yes
+					NOT = { has_planet_flag = precursor_world }
+					has_owner = no
+					has_anomaly = no
+					is_surveyed = {
+						who = ROOT
+						status = yes
+					}
+				}
+			}
+		}
+		random_system_within_border = {
+			limit = {
+				has_star_flag = precursor_3
+				any_planet = { 
+					habitable_planet = yes
+					NOT = { has_planet_flag = precursor_world }
+					has_owner = no
+					has_anomaly = no
+					is_surveyed = {
+						who = ROOT
+						status = yes
+					}
+				}
+			}
+			random_system_planet = {
+				limit = { 
+					habitable_planet = yes
+					NOT = { has_planet_flag = precursor_world }
+					has_owner = no
+					has_anomaly = no
+					is_surveyed = {
+						who = ROOT
+						status = yes
+					}
+				}
+				save_event_target_as = precursor_planet
+				add_anomaly = league_3_cat
+			}
+		}
+		set_country_flag = first_league_3
+		break = yes
+	}
+	if = {
+		limit = {
+			NOT = { has_country_flag = first_league_4 }
+			any_system_within_border = {
+				has_star_flag = precursor_3
+				any_planet = {
+					habitable_planet = yes
+					NOT = { has_planet_flag = precursor_world }
+					has_owner = no
+					has_anomaly = no
+					is_surveyed = {
+						who = ROOT
+						status = yes
+					}
+				}
+			}
+		}
+		random_system_within_border = {
+			limit = {
+				has_star_flag = precursor_3
+				any_planet = { 
+					habitable_planet = yes
+					NOT = { has_planet_flag = precursor_world }
+					has_owner = no
+					has_anomaly = no
+					is_surveyed = {
+						who = ROOT
+						status = yes
+					}
+				}
+			}
+			random_system_planet = {
+				limit = { 
+					habitable_planet = yes
+					NOT = { has_planet_flag = precursor_world }
+					has_owner = no
+					has_anomaly = no
+					is_surveyed = {
+						who = ROOT
+						status = yes
+					}
+				}
+				save_event_target_as = precursor_planet
+				add_anomaly = league_4_cat
+			}
+		}
+		set_country_flag = first_league_4
+		break = yes
+	}
+	if = {
+		limit = {
+			NOT = { has_country_flag = first_league_5 }
+			any_system_within_border = {
+				has_star_flag = precursor_3
+				any_planet = {
+					habitable_planet = yes
+					NOT = { has_planet_flag = precursor_world }
+					has_owner = no
+					has_anomaly = no
+					is_surveyed = {
+						who = ROOT
+						status = yes
+					}
+				}
+			}
+		}
+		random_system_within_border = {
+			limit = {
+				has_star_flag = precursor_3
+				any_planet = { 
+					habitable_planet = yes
+					NOT = { has_planet_flag = precursor_world }
+					has_owner = no
+					has_anomaly = no
+					is_surveyed = {
+						who = ROOT
+						status = yes
+					}
+				}
+			}
+			random_system_planet = {
+				limit = { 
+					habitable_planet = yes
+					NOT = { has_planet_flag = precursor_world }
+					has_owner = no
+					has_anomaly = no
+					is_surveyed = {
+						who = ROOT
+						status = yes
+					}
+				}
+				save_event_target_as = precursor_planet
+				add_anomaly = league_5_cat
+			}
+		}
+		set_country_flag = first_league_5
+		break = yes
+	}
+	if = {
+		limit = {
+			NOT = { has_country_flag = first_league_6 }
+			any_system_within_border = {
+				has_star_flag = precursor_3
+				any_planet = {
+					habitable_planet = yes
+					NOT = { has_planet_flag = precursor_world }
+					has_owner = no
+					has_anomaly = no
+					is_surveyed = {
+						who = ROOT
+						status = yes
+					}
+				}
+			}
+		}
+		random_system_within_border = {
+			limit = {
+				has_star_flag = precursor_3
+				any_planet = { 
+					habitable_planet = yes
+					NOT = { has_planet_flag = precursor_world }
+					has_owner = no
+					has_anomaly = no
+					is_surveyed = {
+						who = ROOT
+						status = yes
+					}
+				}
+			}
+			random_system_planet = {
+				limit = { 
+					habitable_planet = yes
+					NOT = { has_planet_flag = precursor_world }
+					has_owner = no
+					has_anomaly = no
+					is_surveyed = {
+						who = ROOT
+						status = yes
+					}
+				}
+				save_event_target_as = precursor_planet
+				add_anomaly = league_6_cat
+			}
+		}
+		set_country_flag = first_league_6
+		break = yes
+	}
+	if = {
+		limit = {
+			NOT = { has_country_flag = first_league_7 }
+			any_system_within_border = {
+				has_star_flag = precursor_3
+				any_planet = {
+					uninhabitable_regular_planet = yes
+					NOT = { has_planet_flag = precursor_world }
+					has_owner = no
+					has_anomaly = no
+					is_surveyed = {
+						who = ROOT
+						status = yes
+					}
+				}
+			}
+		}
+		random_system_within_border = {
+			limit = {
+				has_star_flag = precursor_3
+				any_planet = { 
+					uninhabitable_regular_planet = yes
+					NOT = { has_planet_flag = precursor_world }
+					has_owner = no
+					has_anomaly = no
+					is_surveyed = {
+						who = ROOT
+						status = yes
+					}
+				}
+			}
+			random_system_planet = {
+				limit = { 
+					uninhabitable_regular_planet = yes
+					NOT = { has_planet_flag = precursor_world }
+					has_owner = no
+					has_anomaly = no
+					is_surveyed = {
+						who = ROOT
+						status = yes
+					}
+				}
+				save_event_target_as = precursor_planet
+				add_anomaly = league_7_cat
+			}
+		}
+		set_country_flag = first_league_7
+		break = yes
+	}
+	if = {
+		limit = {
+			NOT = { has_country_flag = first_league_8 }
+			any_system_within_border = {
+				has_star_flag = precursor_3
+				any_planet = {
+					habitable_planet = yes
+					NOT = { has_planet_flag = precursor_world }
+					has_owner = no
+					has_anomaly = no
+					is_surveyed = {
+						who = ROOT
+						status = yes
+					}
+				}
+			}
+		}
+		random_system_within_border = {
+			limit = {
+				has_star_flag = precursor_3
+				any_planet = { 
+					habitable_planet = yes
+					NOT = { has_planet_flag = precursor_world }
+					has_owner = no
+					has_anomaly = no
+					is_surveyed = {
+						who = ROOT
+						status = yes
+					}
+				}
+			}
+			random_system_planet = {
+				limit = { 
+					habitable_planet = yes
+					NOT = { has_planet_flag = precursor_world }
+					has_owner = no
+					has_anomaly = no
+					is_surveyed = {
+						who = ROOT
+						status = yes
+					}
+				}
+				save_event_target_as = precursor_planet
+				add_anomaly = league_8_cat
+			}
+		}
+		set_country_flag = first_league_8
+		break = yes
+	}
+	if = {
+		limit = {
+			NOT = { has_country_flag = first_league_9 }
+			any_system_within_border = {
+				has_star_flag = precursor_3
+				any_planet = {
+					habitable_planet = yes
+					NOT = { has_planet_flag = precursor_world }
+					has_owner = no
+					has_anomaly = no
+					is_surveyed = {
+						who = ROOT
+						status = yes
+					}
+				}
+			}
+		}
+		random_system_within_border = {
+			limit = {
+				has_star_flag = precursor_3
+				any_planet = { 
+					habitable_planet = yes
+					NOT = { has_planet_flag = precursor_world }
+					has_owner = no
+					has_anomaly = no
+					is_surveyed = {
+						who = ROOT
+						status = yes
+					}
+				}
+			}
+			random_system_planet = {
+				limit = { 
+					habitable_planet = yes
+					NOT = { has_planet_flag = precursor_world }
+					has_owner = no
+					has_anomaly = no
+					is_surveyed = {
+						who = ROOT
+						status = yes
+					}
+				}
+				save_event_target_as = precursor_planet
+				add_anomaly = league_9_cat
+			}
+		}
+		set_country_flag = first_league_9
+		break = yes
+	}
+	if = {
+		limit = {
+			NOT = { has_country_flag = first_league_10 }
+			any_system_within_border = {
+				has_star_flag = precursor_3
+				any_planet = {
+					uninhabitable_regular_planet = yes
+					NOT = { has_planet_flag = precursor_world }
+					has_owner = no
+					has_anomaly = no
+					is_surveyed = {
+						who = ROOT
+						status = yes
+					}
+				}
+			}
+		}
+		random_system_within_border = {
+			limit = {
+				has_star_flag = precursor_3
+				any_planet = { 
+					uninhabitable_regular_planet = yes
+					NOT = { has_planet_flag = precursor_world }
+					has_owner = no
+					has_anomaly = no
+					is_surveyed = {
+						who = ROOT
+						status = yes
+					}
+				}
+			}
+			random_system_planet = {
+				limit = { 
+					uninhabitable_regular_planet = yes
+					NOT = { has_planet_flag = precursor_world }
+					has_owner = no
+					has_anomaly = no
+					is_surveyed = {
+						who = ROOT
+						status = yes
+					}
+				}
+				save_event_target_as = precursor_planet
+				add_anomaly = league_10_cat
+			}
+		}
+		set_country_flag = first_league_10
+		break = yes
+	}
+	if = {
+		limit = {
+			NOT = { has_country_flag = first_league_11 }
+			any_system_within_border = {
+				has_star_flag = precursor_3
+				any_planet = {
+					uninhabitable_regular_planet = yes
+					NOT = { has_planet_flag = precursor_world }
+					has_owner = no
+					has_anomaly = no
+					is_surveyed = {
+						who = ROOT
+						status = yes
+					}
+				}
+			}
+		}
+		random_system_within_border = {
+			limit = {
+				has_star_flag = precursor_3
+				any_planet = { 
+					uninhabitable_regular_planet = yes
+					NOT = { has_planet_flag = precursor_world }
+					has_owner = no
+					has_anomaly = no
+					is_surveyed = {
+						who = ROOT
+						status = yes
+					}
+				}
+			}
+			random_system_planet = {
+				limit = { 
+					uninhabitable_regular_planet = yes
+					NOT = { has_planet_flag = precursor_world }
+					has_owner = no
+					has_anomaly = no
+					is_surveyed = {
+						who = ROOT
+						status = yes
+					}
+				}
+				save_event_target_as = precursor_planet
+				add_anomaly = league_11_cat
+			}
+		}
+		set_country_flag = first_league_11
+		break = yes
+	}
+	if = {
+		limit = {
+			NOT = { has_country_flag = first_league_12 }
+			any_system_within_border = {
+				has_star_flag = precursor_3
+				any_planet = {
+					habitable_planet = yes
+					NOT = { has_planet_flag = precursor_world }
+					has_owner = no
+					has_anomaly = no
+					is_surveyed = {
+						who = ROOT
+						status = yes
+					}
+				}
+			}
+		}
+		random_system_within_border = {
+			limit = {
+				has_star_flag = precursor_3
+				any_planet = { 
+					habitable_planet = yes
+					NOT = { has_planet_flag = precursor_world }
+					has_owner = no
+					has_anomaly = no
+					is_surveyed = {
+						who = ROOT
+						status = yes
+					}
+				}
+			}
+			random_system_planet = {
+				limit = { 
+					habitable_planet = yes
+					NOT = { has_planet_flag = precursor_world }
+					has_owner = no
+					has_anomaly = no
+					is_surveyed = {
+						who = ROOT
+						status = yes
+					}
+				}
+				save_event_target_as = precursor_planet
+				add_anomaly = league_12_cat
+			}
+		}
+		set_country_flag = first_league_12
+		break = yes
+	}
+	if = {
+		limit = {
+			NOT = { has_country_flag = first_league_13 }
+			any_system_within_border = {
+				has_star_flag = precursor_3
+				any_planet = {
+					habitable_planet = yes
+					NOT = { has_planet_flag = precursor_world }
+					has_owner = no
+					has_anomaly = no
+					is_surveyed = {
+						who = ROOT
+						status = yes
+					}
+				}
+			}
+		}
+		random_system_within_border = {
+			limit = {
+				has_star_flag = precursor_3
+				any_planet = { 
+					habitable_planet = yes
+					NOT = { has_planet_flag = precursor_world }
+					has_owner = no
+					has_anomaly = no
+					is_surveyed = {
+						who = ROOT
+						status = yes
+					}
+				}
+			}
+			random_system_planet = {
+				limit = { 
+					habitable_planet = yes
+					NOT = { has_planet_flag = precursor_world }
+					has_owner = no
+					has_anomaly = no
+					is_surveyed = {
+						who = ROOT
+						status = yes
+					}
+				}
+				save_event_target_as = precursor_planet
+				add_anomaly = league_13_cat
+			}
+		}
+		set_country_flag = first_league_13
+		break = yes
+	}
+}
+
+spawn_irassian_anomaly = {
+	if = {
+		limit = {
+			NOT = { has_country_flag = irassians_1 }
+			any_system_within_border = {
+				has_star_flag = precursor_4
+				any_planet = {
+					habitable_planet = yes
+					NOT = { has_planet_flag = precursor_world }
+					has_owner = no
+					has_anomaly = no
+					is_surveyed = {
+						who = ROOT
+						status = yes
+					}
+				}
+			}
+		}
+		random_system_within_border = {
+			limit = {
+				has_star_flag = precursor_4
+				any_planet = { 
+					habitable_planet = yes
+					NOT = { has_planet_flag = precursor_world }
+					has_owner = no
+					has_anomaly = no
+					is_surveyed = {
+						who = ROOT
+						status = yes
+					}
+				}
+			}
+			random_system_planet = {
+				limit = { 
+					habitable_planet = yes
+					NOT = { has_planet_flag = precursor_world }
+					has_owner = no
+					has_anomaly = no
+					is_surveyed = {
+						who = ROOT
+						status = yes
+					}
+				}
+				save_event_target_as = precursor_planet
+				add_anomaly = irassian_1_cat
+			}
+		}
+		set_country_flag = irassians_1
+		break = yes
+	}
+	if = {
+		limit = {
+			NOT = { has_country_flag = irassians_2 }
+			any_system_within_border = {
+				has_star_flag = precursor_4
+				any_planet = {
+					habitable_planet = yes
+					NOT = { has_planet_flag = precursor_world }
+					has_owner = no
+					has_anomaly = no
+					is_surveyed = {
+						who = ROOT
+						status = yes
+					}
+				}
+			}
+		}
+		random_system_within_border = {
+			limit = {
+				has_star_flag = precursor_4
+				any_planet = { 
+					habitable_planet = yes
+					NOT = { has_planet_flag = precursor_world }
+					has_owner = no
+					has_anomaly = no
+					is_surveyed = {
+						who = ROOT
+						status = yes
+					}
+				}
+			}
+			random_system_planet = {
+				limit = { 
+					habitable_planet = yes
+					NOT = { has_planet_flag = precursor_world }
+					has_owner = no
+					has_anomaly = no
+					is_surveyed = {
+						who = ROOT
+						status = yes
+					}
+				}
+				save_event_target_as = precursor_planet
+				add_anomaly = irassian_2_cat
+			}
+		}
+		set_country_flag = irassians_2
+		break = yes
+	}
+	if = {
+		limit = {
+			NOT = { has_country_flag = irassians_3 }
+			any_system_within_border = {
+				has_star_flag = precursor_4
+				any_planet = {
+					habitable_planet = yes
+					NOT = { has_planet_flag = precursor_world }
+					has_owner = no
+					has_anomaly = no
+					is_surveyed = {
+						who = ROOT
+						status = yes
+					}
+				}
+			}
+		}
+		random_system_within_border = {
+			limit = {
+				has_star_flag = precursor_4
+				any_planet = { 
+					habitable_planet = yes
+					NOT = { has_planet_flag = precursor_world }
+					has_owner = no
+					has_anomaly = no
+					is_surveyed = {
+						who = ROOT
+						status = yes
+					}
+				}
+			}
+			random_system_planet = {
+				limit = { 
+					habitable_planet = yes
+					NOT = { has_planet_flag = precursor_world }
+					has_owner = no
+					has_anomaly = no
+					is_surveyed = {
+						who = ROOT
+						status = yes
+					}
+				}
+				save_event_target_as = precursor_planet
+				add_anomaly = irassian_3_cat
+			}
+		}
+		set_country_flag = irassians_3
+		break = yes
+	}
+	if = {
+		limit = {
+			NOT = { has_country_flag = irassians_4 }
+			any_system_within_border = {
+				has_star_flag = precursor_4
+				any_planet = {
+					habitable_planet = yes
+					NOT = { has_planet_flag = precursor_world }
+					has_owner = no
+					has_anomaly = no
+					is_surveyed = {
+						who = ROOT
+						status = yes
+					}
+				}
+			}
+		}
+		random_system_within_border = {
+			limit = {
+				has_star_flag = precursor_4
+				any_planet = { 
+					habitable_planet = yes
+					NOT = { has_planet_flag = precursor_world }
+					has_owner = no
+					has_anomaly = no
+					is_surveyed = {
+						who = ROOT
+						status = yes
+					}
+				}
+			}
+			random_system_planet = {
+				limit = { 
+					habitable_planet = yes
+					NOT = { has_planet_flag = precursor_world }
+					has_owner = no
+					has_anomaly = no
+					is_surveyed = {
+						who = ROOT
+						status = yes
+					}
+				}
+				save_event_target_as = precursor_planet
+				add_anomaly = irassian_4_cat
+			}
+		}
+		set_country_flag = irassians_4
+		break = yes
+	}
+	if = {
+		limit = {
+			NOT = { has_country_flag = irassians_5 }
+			any_system_within_border = {
+				has_star_flag = precursor_4
+				any_planet = {
+					habitable_planet = yes
+					NOT = { has_planet_flag = precursor_world }
+					has_owner = no
+					has_anomaly = no
+					is_surveyed = {
+						who = ROOT
+						status = yes
+					}
+				}
+			}
+		}
+		random_system_within_border = {
+			limit = {
+				has_star_flag = precursor_4
+				any_planet = { 
+					habitable_planet = yes
+					NOT = { has_planet_flag = precursor_world }
+					has_owner = no
+					has_anomaly = no
+					is_surveyed = {
+						who = ROOT
+						status = yes
+					}
+				}
+			}
+			random_system_planet = {
+				limit = { 
+					habitable_planet = yes
+					NOT = { has_planet_flag = precursor_world }
+					has_owner = no
+					has_anomaly = no
+					is_surveyed = {
+						who = ROOT
+						status = yes
+					}
+				}
+				save_event_target_as = precursor_planet
+				add_anomaly = irassian_5_cat
+			}
+		}
+		set_country_flag = irassians_5
+		break = yes
+	}
+	if = {
+		limit = {
+			NOT = { has_country_flag = irassians_6 }
+			any_system_within_border = {
+				has_star_flag = precursor_4
+				any_planet = {
+					uninhabitable_regular_planet = yes
+					NOT = { has_planet_flag = precursor_world }
+					has_owner = no
+					has_anomaly = no
+					is_surveyed = {
+						who = ROOT
+						status = yes
+					}
+				}
+			}
+		}
+		random_system_within_border = {
+			limit = {
+				has_star_flag = precursor_4
+				any_planet = { 
+					uninhabitable_regular_planet = yes
+					NOT = { has_planet_flag = precursor_world }
+					has_owner = no
+					has_anomaly = no
+					is_surveyed = {
+						who = ROOT
+						status = yes
+					}
+				}
+			}
+			random_system_planet = {
+				limit = { 
+					uninhabitable_regular_planet = yes
+					NOT = { has_planet_flag = precursor_world }
+					has_owner = no
+					has_anomaly = no
+					is_surveyed = {
+						who = ROOT
+						status = yes
+					}
+				}
+				save_event_target_as = precursor_planet
+				add_anomaly = irassian_6_cat
+			}
+		}
+		set_country_flag = irassians_6
+		break = yes
+	}
+	if = {
+		limit = {
+			NOT = { has_country_flag = irassians_7 }
+			any_system_within_border = {
+				has_star_flag = precursor_4
+				any_planet = {
+					habitable_planet = yes
+					NOT = { has_planet_flag = precursor_world }
+					has_owner = no
+					has_anomaly = no
+					is_surveyed = {
+						who = ROOT
+						status = yes
+					}
+				}
+			}
+		}
+		random_system_within_border = {
+			limit = {
+				has_star_flag = precursor_4
+				any_planet = { 
+					habitable_planet = yes
+					NOT = { has_planet_flag = precursor_world }
+					has_owner = no
+					has_anomaly = no
+					is_surveyed = {
+						who = ROOT
+						status = yes
+					}
+				}
+			}
+			random_system_planet = {
+				limit = { 
+					habitable_planet = yes
+					NOT = { has_planet_flag = precursor_world }
+					has_owner = no
+					has_anomaly = no
+					is_surveyed = {
+						who = ROOT
+						status = yes
+					}
+				}
+				save_event_target_as = precursor_planet
+				add_anomaly = irassian_7_cat
+			}
+		}
+		set_country_flag = irassians_7
+		break = yes
+	}
+	if = {
+		limit = {
+			NOT = { has_country_flag = irassians_8 }
+			any_system_within_border = {
+				has_star_flag = precursor_4
+				any_planet = {
+					uninhabitable_regular_planet = yes
+					NOT = { has_planet_flag = precursor_world }
+					has_owner = no
+					has_anomaly = no
+					is_surveyed = {
+						who = ROOT
+						status = yes
+					}
+				}
+			}
+		}
+		random_system_within_border = {
+			limit = {
+				has_star_flag = precursor_4
+				any_planet = { 
+					uninhabitable_regular_planet = yes
+					NOT = { has_planet_flag = precursor_world }
+					has_owner = no
+					has_anomaly = no
+					is_surveyed = {
+						who = ROOT
+						status = yes
+					}
+				}
+			}
+			random_system_planet = {
+				limit = { 
+					uninhabitable_regular_planet = yes
+					NOT = { has_planet_flag = precursor_world }
+					has_owner = no
+					has_anomaly = no
+					is_surveyed = {
+						who = ROOT
+						status = yes
+					}
+				}
+				save_event_target_as = precursor_planet
+				add_anomaly = irassian_8_cat
+			}
+		}
+		set_country_flag = irassians_8
+		break = yes
+	}
+	if = {
+		limit = {
+			NOT = { has_country_flag = irassians_9 }
+			any_system_within_border = {
+				has_star_flag = precursor_4
+				any_planet = {
+					uninhabitable_regular_planet = yes
+					NOT = { has_planet_flag = precursor_world }
+					has_owner = no
+					has_anomaly = no
+					is_surveyed = {
+						who = ROOT
+						status = yes
+					}
+				}
+			}
+		}
+		random_system_within_border = {
+			limit = {
+				has_star_flag = precursor_4
+				any_planet = { 
+					uninhabitable_regular_planet = yes
+					NOT = { has_planet_flag = precursor_world }
+					has_owner = no
+					has_anomaly = no
+					is_surveyed = {
+						who = ROOT
+						status = yes
+					}
+				}
+			}
+			random_system_planet = {
+				limit = { 
+					uninhabitable_regular_planet = yes
+					NOT = { has_planet_flag = precursor_world }
+					has_owner = no
+					has_anomaly = no
+					is_surveyed = {
+						who = ROOT
+						status = yes
+					}
+				}
+				save_event_target_as = precursor_planet
+				add_anomaly = irassian_9_cat
+			}
+		}
+		set_country_flag = irassians_9
+		break = yes
+	}
+	if = {
+		limit = {
+			NOT = { has_country_flag = irassians_10 }
+			any_system_within_border = {
+				has_star_flag = precursor_4
+				any_planet = {
+					is_planet_class = pc_gas_giant
+					NOT = { has_planet_flag = precursor_world }
+					has_owner = no
+					has_anomaly = no
+					is_surveyed = {
+						who = ROOT
+						status = yes
+					}
+				}
+			}
+		}
+		random_system_within_border = {
+			limit = {
+				has_star_flag = precursor_4
+				any_planet = { 
+					is_planet_class = pc_gas_giant
+					NOT = { has_planet_flag = precursor_world }
+					has_owner = no
+					has_anomaly = no
+					is_surveyed = {
+						who = ROOT
+						status = yes
+					}
+				}
+			}
+			random_system_planet = {
+				limit = { 
+					is_planet_class = pc_gas_giant
+					NOT = { has_planet_flag = precursor_world }
+					has_owner = no
+					has_anomaly = no
+					is_surveyed = {
+						who = ROOT
+						status = yes
+					}
+				}
+				save_event_target_as = precursor_planet
+				add_anomaly = irassian_10_cat
+			}
+		}
+		set_country_flag = irassians_10
+		break = yes
+	}
+}
+
+spawn_cybrex_anomaly = {
+	if = {
+		limit = {
+			NOT = { has_country_flag = cybrex_1 }
+			any_system_within_border = {
+				has_star_flag = precursor_5
+				any_planet = {
+					habitable_planet = yes
+					NOT = { has_planet_flag = precursor_world }
+					has_owner = no
+					has_anomaly = no
+					is_surveyed = {
+						who = ROOT
+						status = yes
+					}
+				}
+			}
+		}
+		random_system_within_border = {
+			limit = {
+				has_star_flag = precursor_5
+				any_planet = { 
+					habitable_planet = yes
+					NOT = { has_planet_flag = precursor_world }
+					has_owner = no
+					has_anomaly = no
+					is_surveyed = {
+						who = ROOT
+						status = yes
+					}
+				}
+			}
+			random_system_planet = {
+				limit = { 
+					habitable_planet = yes
+					NOT = { has_planet_flag = precursor_world }
+					has_owner = no
+					has_anomaly = no
+					is_surveyed = {
+						who = ROOT
+						status = yes
+					}
+				}
+				save_event_target_as = precursor_planet
+				add_anomaly = cybrex_1_cat
+			}
+		}
+		set_country_flag = cybrex_1
+		break = yes
+	}
+	if = {
+		limit = {
+			NOT = { has_country_flag = cybrex_2 }
+			any_system_within_border = {
+				has_star_flag = precursor_5
+				any_planet = {
+					habitable_planet = yes
+					NOT = { has_planet_flag = precursor_world }
+					has_owner = no
+					has_anomaly = no
+					is_surveyed = {
+						who = ROOT
+						status = yes
+					}
+				}
+			}
+		}
+		random_system_within_border = {
+			limit = {
+				has_star_flag = precursor_5
+				any_planet = { 
+					habitable_planet = yes
+					NOT = { has_planet_flag = precursor_world }
+					has_owner = no
+					has_anomaly = no
+					is_surveyed = {
+						who = ROOT
+						status = yes
+					}
+				}
+			}
+			random_system_planet = {
+				limit = { 
+					habitable_planet = yes
+					NOT = { has_planet_flag = precursor_world }
+					has_owner = no
+					has_anomaly = no
+					is_surveyed = {
+						who = ROOT
+						status = yes
+					}
+				}
+				save_event_target_as = precursor_planet
+				add_anomaly = cybrex_2_cat
+			}
+		}
+		set_country_flag = cybrex_2
+		break = yes
+	}
+	if = {
+		limit = {
+			NOT = { has_country_flag = cybrex_3 }
+			any_system_within_border = {
+				has_star_flag = precursor_5
+				any_planet = {
+					uninhabitable_regular_planet = yes
+					NOT = { has_planet_flag = precursor_world }
+					has_owner = no
+					has_anomaly = no
+					is_surveyed = {
+						who = ROOT
+						status = yes
+					}
+				}
+			}
+		}
+		random_system_within_border = {
+			limit = {
+				has_star_flag = precursor_5
+				any_planet = { 
+					uninhabitable_regular_planet = yes
+					NOT = { has_planet_flag = precursor_world }
+					has_owner = no
+					has_anomaly = no
+					is_surveyed = {
+						who = ROOT
+						status = yes
+					}
+				}
+			}
+			random_system_planet = {
+				limit = { 
+					uninhabitable_regular_planet = yes
+					NOT = { has_planet_flag = precursor_world }
+					has_owner = no
+					has_anomaly = no
+					is_surveyed = {
+						who = ROOT
+						status = yes
+					}
+				}
+				save_event_target_as = precursor_planet
+				add_anomaly = cybrex_3_cat
+			}
+		}
+		set_country_flag = cybrex_3
+		break = yes
+	}
+	if = {
+		limit = {
+			NOT = { has_country_flag = cybrex_4 }
+			any_system_within_border = {
+				has_star_flag = precursor_5
+				any_planet = {
+					habitable_planet = yes
+					NOT = { has_planet_flag = precursor_world }
+					has_owner = no
+					has_anomaly = no
+					is_surveyed = {
+						who = ROOT
+						status = yes
+					}
+				}
+			}
+		}
+		random_system_within_border = {
+			limit = {
+				has_star_flag = precursor_5
+				any_planet = { 
+					habitable_planet = yes
+					NOT = { has_planet_flag = precursor_world }
+					has_owner = no
+					has_anomaly = no
+					is_surveyed = {
+						who = ROOT
+						status = yes
+					}
+				}
+			}
+			random_system_planet = {
+				limit = { 
+					habitable_planet = yes
+					NOT = { has_planet_flag = precursor_world }
+					has_owner = no
+					has_anomaly = no
+					is_surveyed = {
+						who = ROOT
+						status = yes
+					}
+				}
+				save_event_target_as = precursor_planet
+				add_anomaly = cybrex_4_cat
+			}
+		}
+		set_country_flag = cybrex_4
+		break = yes
+	}
+	if = {
+		limit = {
+			NOT = { has_country_flag = cybrex_5 }
+			any_system_within_border = {
+				has_star_flag = precursor_5
+				any_planet = {
+					habitable_planet = yes
+					NOT = { has_planet_flag = precursor_world }
+					has_owner = no
+					has_anomaly = no
+					is_surveyed = {
+						who = ROOT
+						status = yes
+					}
+				}
+			}
+		}
+		random_system_within_border = {
+			limit = {
+				has_star_flag = precursor_5
+				any_planet = { 
+					habitable_planet = yes
+					NOT = { has_planet_flag = precursor_world }
+					has_owner = no
+					has_anomaly = no
+					is_surveyed = {
+						who = ROOT
+						status = yes
+					}
+				}
+			}
+			random_system_planet = {
+				limit = { 
+					habitable_planet = yes
+					NOT = { has_planet_flag = precursor_world }
+					has_owner = no
+					has_anomaly = no
+					is_surveyed = {
+						who = ROOT
+						status = yes
+					}
+				}
+				save_event_target_as = precursor_planet
+				add_anomaly = cybrex_5_cat
+			}
+		}
+		set_country_flag = cybrex_5
+		break = yes
+	}
+	if = {
+		limit = {
+			NOT = { has_country_flag = cybrex_7 }
+			any_system_within_border = {
+				has_star_flag = precursor_5
+				any_planet = {
+					is_planet_class = pc_gas_giant
+					NOT = { has_planet_flag = precursor_world }
+					has_owner = no
+					has_anomaly = no
+					is_surveyed = {
+						who = ROOT
+						status = yes
+					}
+				}
+			}
+		}
+		random_system_within_border = {
+			limit = {
+				has_star_flag = precursor_5
+				any_planet = { 
+					is_planet_class = pc_gas_giant
+					NOT = { has_planet_flag = precursor_world }
+					has_owner = no
+					has_anomaly = no
+					is_surveyed = {
+						who = ROOT
+						status = yes
+					}
+				}
+			}
+			random_system_planet = {
+				limit = { 
+					is_planet_class = pc_gas_giant
+					NOT = { has_planet_flag = precursor_world }
+					has_owner = no
+					has_anomaly = no
+					is_surveyed = {
+						who = ROOT
+						status = yes
+					}
+				}
+				save_event_target_as = precursor_planet
+				add_anomaly = cybrex_7_cat
+			}
+		}
+		set_country_flag = cybrex_7
+		break = yes
+	}
+	if = {
+		limit = {
+			NOT = { has_country_flag = cybrex_8 }
+			any_system_within_border = {
+				has_star_flag = precursor_5
+				any_planet = {
+					uninhabitable_regular_planet = yes
+					NOT = { has_planet_flag = precursor_world }
+					has_owner = no
+					has_anomaly = no
+					is_surveyed = {
+						who = ROOT
+						status = yes
+					}
+				}
+			}
+		}
+		random_system_within_border = {
+			limit = {
+				has_star_flag = precursor_5
+				any_planet = { 
+					uninhabitable_regular_planet = yes
+					NOT = { has_planet_flag = precursor_world }
+					has_owner = no
+					has_anomaly = no
+					is_surveyed = {
+						who = ROOT
+						status = yes
+					}
+				}
+			}
+			random_system_planet = {
+				limit = { 
+					uninhabitable_regular_planet = yes
+					NOT = { has_planet_flag = precursor_world }
+					has_owner = no
+					has_anomaly = no
+					is_surveyed = {
+						who = ROOT
+						status = yes
+					}
+				}
+				save_event_target_as = precursor_planet
+				add_anomaly = cybrex_8_cat
+			}
+		}
+		set_country_flag = cybrex_8
+		break = yes
+	}
+	if = {
+		limit = {
+			NOT = { has_country_flag = cybrex_9 }
+			any_system_within_border = {
+				has_star_flag = precursor_5
+				any_planet = {
+					uninhabitable_regular_planet = yes
+					NOT = { has_planet_flag = precursor_world }
+					has_owner = no
+					has_anomaly = no
+					is_surveyed = {
+						who = ROOT
+						status = yes
+					}
+				}
+			}
+		}
+		random_system_within_border = {
+			limit = {
+				has_star_flag = precursor_5
+				any_planet = { 
+					uninhabitable_regular_planet = yes
+					NOT = { has_planet_flag = precursor_world }
+					has_owner = no
+					has_anomaly = no
+					is_surveyed = {
+						who = ROOT
+						status = yes
+					}
+				}
+			}
+			random_system_planet = {
+				limit = { 
+					uninhabitable_regular_planet = yes
+					NOT = { has_planet_flag = precursor_world }
+					has_owner = no
+					has_anomaly = no
+					is_surveyed = {
+						who = ROOT
+						status = yes
+					}
+				}
+				save_event_target_as = precursor_planet
+				add_anomaly = cybrex_9_cat
+			}
+		}
+		set_country_flag = cybrex_9
+		break = yes
+	}
+	if = {
+		limit = {
+			NOT = { has_country_flag = cybrex_10 }
+			any_system_within_border = {
+				has_star_flag = precursor_5
+				any_planet = {
+					uninhabitable_regular_planet = yes
+					NOT = { has_planet_flag = precursor_world }
+					has_owner = no
+					has_anomaly = no
+					is_surveyed = {
+						who = ROOT
+						status = yes
+					}
+				}
+			}
+		}
+		random_system_within_border = {
+			limit = {
+				has_star_flag = precursor_5
+				any_planet = { 
+					uninhabitable_regular_planet = yes
+					NOT = { has_planet_flag = precursor_world }
+					has_owner = no
+					has_anomaly = no
+					is_surveyed = {
+						who = ROOT
+						status = yes
+					}
+				}
+			}
+			random_system_planet = {
+				limit = { 
+					uninhabitable_regular_planet = yes
+					NOT = { has_planet_flag = precursor_world }
+					has_owner = no
+					has_anomaly = no
+					is_surveyed = {
+						who = ROOT
+						status = yes
+					}
+				}
+				save_event_target_as = precursor_planet
+				add_anomaly = cybrex_10_cat
+			}
+		}
+		set_country_flag = cybrex_10
+		break = yes
+	}
+	if = {
+		limit = {
+			NOT = { has_country_flag = cybrex_11 }
+			any_system_within_border = {
+				has_star_flag = precursor_5
+				any_planet = {
+					uninhabitable_regular_planet = yes
+					NOT = { has_planet_flag = precursor_world }
+					has_owner = no
+					has_anomaly = no
+					is_surveyed = {
+						who = ROOT
+						status = yes
+					}
+				}
+			}
+		}
+		random_system_within_border = {
+			limit = {
+				has_star_flag = precursor_5
+				any_planet = { 
+					uninhabitable_regular_planet = yes
+					NOT = { has_planet_flag = precursor_world }
+					has_owner = no
+					has_anomaly = no
+					is_surveyed = {
+						who = ROOT
+						status = yes
+					}
+				}
+			}
+			random_system_planet = {
+				limit = { 
+					uninhabitable_regular_planet = yes
+					NOT = { has_planet_flag = precursor_world }
+					has_owner = no
+					has_anomaly = no
+					is_surveyed = {
+						who = ROOT
+						status = yes
+					}
+				}
+				save_event_target_as = precursor_planet
+				add_anomaly = cybrex_11_cat
+			}
+		}
+		set_country_flag = cybrex_11
+		break = yes
+	}
+}
+
+reset_planet = {
+	clear_planet_modifiers = yes
+	reroll_deposits = yes
+}
+
+clear_blockers = {
+	every_tile = {
+		limit = { has_blocker = yes }
+		remove_blocker = yes
+	}
+}
+
+reroll_planet = {
+	reroll_deposits = yes
+	reroll_blockers = yes
+	reroll_planet_modifiers = yes
+}
+
+remove_shroud_flags = {
+	hidden_effect = {
+		remove_country_flag = high.1
+		remove_country_flag = high.2
+		remove_country_flag = high.3
+		remove_country_flag = high.4
+		remove_country_flag = high.5
+		remove_country_flag = high.6
+		remove_country_flag = high.7
+		remove_country_flag = high.8
+		remove_country_flag = high.9
+		remove_country_flag = high.10
+		remove_country_flag = high.11
+		remove_country_flag = high.12
+		remove_country_flag = high.13
+		remove_country_flag = high.14
+		remove_country_flag = high.15
+		remove_country_flag = high.16
+		remove_country_flag = medium.1
+		remove_country_flag = medium.2
+		remove_country_flag = medium.3
+		remove_country_flag = medium.4
+		remove_country_flag = medium.5
+		remove_country_flag = medium.6
+		remove_country_flag = medium.7
+		remove_country_flag = medium.8
+		remove_country_flag = medium.9
+		remove_country_flag = medium.10
+		remove_country_flag = medium.11
+		remove_country_flag = medium.12
+		remove_country_flag = medium.13
+		remove_country_flag = medium.14
+		remove_country_flag = medium.15
+		remove_country_flag = medium.16
+		remove_country_flag = low.1
+		remove_country_flag = low.2
+		remove_country_flag = low.3
+		remove_country_flag = low.4
+		remove_country_flag = low.5
+		remove_country_flag = low.6
+		remove_country_flag = low.7
+		remove_country_flag = low.8
+		remove_country_flag = low.9
+		remove_country_flag = low.10
+		remove_country_flag = low.11
+		remove_country_flag = low.12
+		remove_country_flag = low.13
+		remove_country_flag = low.14
+		remove_country_flag = low.15
+		remove_country_flag = low.16
+	}
+}
+
+randomize_shroud_flags = {
+	random_list = {
+		25 = { set_country_flag = high.1 }
+		25 = { set_country_flag = high.2 }
+		25 = { set_country_flag = high.3 }
+		25 = { set_country_flag = high.4 }
+		25 = { set_country_flag = high.5 }
+		25 = { set_country_flag = high.6 }
+		25 = { set_country_flag = high.7 }
+		25 = { set_country_flag = high.8 }
+		25 = { set_country_flag = high.9 }
+		25 = { set_country_flag = high.10 }
+		25 = { set_country_flag = high.11 }
+		25 = { set_country_flag = high.12 }
+		25 = { set_country_flag = high.13 }
+		25 = { set_country_flag = high.14 }
+		25 = { set_country_flag = high.15 }
+		25 = { 
+			if = {
+				limit = {
+					count_owned_ships = {
+						limit = { is_ship_size = psionic_avatar }
+						count < 1
+					}
+					count_armies = {
+						limit = { army_type = shroud_army }
+						count < 1
+					}
+				}
+				set_country_flag = high.16
+				else = { set_country_flag = high.1 }
+			}
+		}
+		200 = {}
+	}
+	random_list = {
+		25 = { 
+			if = {
+				limit = { NOT = { has_country_flag = high.1 } }
+				set_country_flag = medium.1 
+				else = { set_country_flag = medium.2 }
+			}
+		}
+		25 = { 
+			if = {
+				limit = { NOT = { has_country_flag = high.2 } }
+				set_country_flag = medium.2 
+				else = { set_country_flag = medium.3 }
+			}
+		}
+		25 = { 
+			if = {
+				limit = { NOT = { has_country_flag = high.3 } }
+				set_country_flag = medium.3 
+				else = { set_country_flag = medium.4 }
+			}
+		}
+		25 = { 
+			if = {
+				limit = { NOT = { has_country_flag = high.4 } }
+				set_country_flag = medium.4 
+				else = { set_country_flag = medium.5 }
+			}
+		}
+		25 = { 
+			if = {
+				limit = { NOT = { has_country_flag = high.5 } }
+				set_country_flag = medium.5 
+				else = { set_country_flag = medium.6 }
+			}
+		}
+		25 = { 
+			if = {
+				limit = { NOT = { has_country_flag = high.6 } }
+				set_country_flag = medium.6
+				else = { set_country_flag = medium.7 }
+			}
+		}
+		25 = { 
+			if = {
+				limit = { NOT = { has_country_flag = high.7 } }
+				set_country_flag = medium.7 
+				else = { set_country_flag = medium.8 }
+			}
+		}
+		25 = { 
+			if = {
+				limit = { NOT = { has_country_flag = high.8 } }
+				set_country_flag = medium.8 
+				else = { set_country_flag = medium.9 }
+			}
+		}
+		25 = { 
+			if = {
+				limit = { NOT = { has_country_flag = high.9 } }
+				set_country_flag = medium.9 
+				else = { set_country_flag = medium.10 }
+			}
+		}
+		25 = { 
+			if = {
+				limit = { NOT = { has_country_flag = high.10 } }
+				set_country_flag = medium.10 
+				else = { set_country_flag = medium.11 }
+			}
+		}
+		25 = { 
+			if = {
+				limit = { NOT = { has_country_flag = high.11 } }
+				set_country_flag = medium.11 
+				else = { set_country_flag = medium.12 }
+			}
+		}
+		25 = { 
+			if = {
+				limit = { NOT = { has_country_flag = high.12 } }
+				set_country_flag = medium.12
+				else = { set_country_flag = medium.13 }
+			}
+		}
+		25 = { 
+			if = {
+				limit = { NOT = { has_country_flag = high.13 } }
+				set_country_flag = medium.13 
+				else = { set_country_flag = medium.14 }
+			}
+		}
+		25 = { 
+			if = {
+				limit = { NOT = { has_country_flag = high.14 } }
+				set_country_flag = medium.14 
+				else = { set_country_flag = medium.15 }
+			}
+		}
+		25 = { 
+			if = {
+				limit = { NOT = { has_country_flag = high.15 } }
+				set_country_flag = medium.15
+				else = { set_country_flag = medium.16 }
+			}
+		}
+		25 = { 
+			if = {
+				limit = { 
+					NOT = { has_country_flag = high.16 } 
+					count_owned_ships = {
+						limit = { is_ship_size = psionic_avatar }
+						count < 1
+					}
+					count_armies = {
+						limit = { army_type = shroud_army }
+						count < 1
+					}
+				}
+				set_country_flag = medium.16
+				else = { set_country_flag = medium.1 }
+			}
+		}
+		150 = {}
+	}
+	random_list = {
+		25 = { 
+			if = {
+				limit = { 
+					NOT = { 
+						has_country_flag = high.1 
+						has_country_flag = medium.1 
+					} 
+				}
+				set_country_flag = low.1 
+				else = { 
+					if = {
+						limit = {
+							NOT = { 
+								has_country_flag = high.2 
+								has_country_flag = medium.2 
+							} 
+						}
+						set_country_flag = low.2 
+						else = { set_country_flag = low.3 }
+					}
+				}
+			}
+		}
+		25 = { 
+			if = {
+				limit = { 
+					NOT = { 
+						has_country_flag = high.2 
+						has_country_flag = medium.2 
+					} 
+				}
+				set_country_flag = low.2 
+				else = { 
+					if = {
+						limit = {
+							NOT = { 
+								has_country_flag = high.3
+								has_country_flag = medium.3 
+							} 
+						}
+						set_country_flag = low.3 
+						else = { set_country_flag = low.4 }
+					}
+				}
+			}
+		}
+		25 = { 
+			if = {
+				limit = { 
+					NOT = { 
+						has_country_flag = high.3 
+						has_country_flag = medium.3 
+					} 
+				}
+				set_country_flag = low.3 
+				else = { 
+					if = {
+						limit = {
+							NOT = { 
+								has_country_flag = high.4 
+								has_country_flag = medium.4 
+							} 
+						}
+						set_country_flag = low.4 
+						else = { set_country_flag = low.5 }
+					}
+				}
+			}
+		}
+		25 = { 
+			if = {
+				limit = { 
+					NOT = { 
+						has_country_flag = high.4 
+						has_country_flag = medium.4 
+					} 
+				}
+				set_country_flag = low.4 
+				else = { 
+					if = {
+						limit = {
+							NOT = { 
+								has_country_flag = high.5 
+								has_country_flag = medium.5 
+							} 
+						}
+						set_country_flag = low.5 
+						else = { set_country_flag = low.6 }
+					}
+				}
+			}
+		}
+		25 = { 
+			if = {
+				limit = { 
+					NOT = { 
+						has_country_flag = high.5 
+						has_country_flag = medium.5 
+					} 
+				}
+				set_country_flag = low.5
+				else = { 
+					if = {
+						limit = {
+							NOT = { 
+								has_country_flag = high.6 
+								has_country_flag = medium.6 
+							} 
+						}
+						set_country_flag = low.6 
+						else = { set_country_flag = low.7 }
+					}
+				}
+			}
+		}
+		25 = { 
+			if = {
+				limit = { 
+					NOT = { 
+						has_country_flag = high.6 
+						has_country_flag = medium.6 
+					} 
+				}
+				set_country_flag = low.6 
+				else = { 
+					if = {
+						limit = {
+							NOT = { 
+								has_country_flag = high.7 
+								has_country_flag = medium.7 
+							} 
+						}
+						set_country_flag = low.7 
+						else = { set_country_flag = low.8 }
+					}
+				}
+			}
+		}
+		25 = { 
+			if = {
+				limit = { 
+					NOT = { 
+						has_country_flag = high.7 
+						has_country_flag = medium.7 
+					} 
+				}
+				set_country_flag = low.7 
+				else = { 
+					if = {
+						limit = {
+							NOT = { 
+								has_country_flag = high.8 
+								has_country_flag = medium.8 
+							} 
+						}
+						set_country_flag = low.8 
+						else = { set_country_flag = low.9 }
+					}
+				}
+			}
+		}
+		25 = { 
+			if = {
+				limit = { 
+					NOT = { 
+						has_country_flag = high.8 
+						has_country_flag = medium.8 
+					} 
+				}
+				set_country_flag = low.8 
+				else = { 
+					if = {
+						limit = {
+							NOT = { 
+								has_country_flag = high.9 
+								has_country_flag = medium.9 
+							} 
+						}
+						set_country_flag = low.9 
+						else = { set_country_flag = low.10 }
+					}
+				}
+			}
+		}
+		25 = { 
+			if = {
+				limit = { 
+					NOT = { 
+						has_country_flag = high.9 
+						has_country_flag = medium.9
+					} 
+				}
+				set_country_flag = low.9 
+				else = { 
+					if = {
+						limit = {
+							NOT = { 
+								has_country_flag = high.10 
+								has_country_flag = medium.10 
+							} 
+						}
+						set_country_flag = low.10 
+						else = { set_country_flag = low.11 }
+					}
+				}
+			}
+		}
+		25 = { 
+			if = {
+				limit = { 
+					NOT = { 
+						has_country_flag = high.10
+						has_country_flag = medium.10
+					} 
+				}
+				set_country_flag = low.10 
+				else = { 
+					if = {
+						limit = {
+							NOT = { 
+								has_country_flag = high.11 
+								has_country_flag = medium.11 
+							} 
+						}
+						set_country_flag = low.11 
+						else = { set_country_flag = low.12 }
+					}
+				}
+			}
+		}
+		25 = { 
+			if = {
+				limit = { 
+					NOT = { 
+						has_country_flag = high.11 
+						has_country_flag = medium.11 
+					} 
+				}
+				set_country_flag = low.11 
+				else = { 
+					if = {
+						limit = {
+							NOT = { 
+								has_country_flag = high.12 
+								has_country_flag = medium.12 
+							} 
+						}
+						set_country_flag = low.12 
+						else = { set_country_flag = low.13 }
+					}
+				}
+			}
+		}
+		25 = { 
+			if = {
+				limit = { 
+					NOT = { 
+						has_country_flag = high.12 
+						has_country_flag = medium.12 
+					} 
+				}
+				set_country_flag = low.12 
+				else = { 
+					if = {
+						limit = {
+							NOT = { 
+								has_country_flag = high.13 
+								has_country_flag = medium.13 
+							} 
+						}
+						set_country_flag = low.13 
+						else = { set_country_flag = low.14 }
+					}
+				}
+			}
+		}
+		25 = { 
+			if = {
+				limit = { 
+					NOT = { 
+						has_country_flag = high.13 
+						has_country_flag = medium.13 
+					} 
+				}
+				set_country_flag = low.13 
+				else = { 
+					if = {
+						limit = {
+							NOT = { 
+								has_country_flag = high.14 
+								has_country_flag = medium.14 
+							} 
+						}
+						set_country_flag = low.14 
+						else = { set_country_flag = low.15 }
+					}
+				}
+			}
+		}
+		25 = { 
+			if = {
+				limit = { 
+					NOT = { 
+						has_country_flag = high.14 
+						has_country_flag = medium.14 
+					} 
+				}
+				set_country_flag = low.14 
+				else = { 
+					if = {
+						limit = {
+							NOT = { 
+								has_country_flag = high.15 
+								has_country_flag = medium.15 
+							} 
+						}
+						set_country_flag = low.15 
+						else = { set_country_flag = low.16 }
+					}
+				}
+			}
+		}
+		25 = { 
+			if = {
+				limit = { 
+					NOT = { 
+						has_country_flag = high.15 
+						has_country_flag = medium.15 
+					} 
+				}
+				set_country_flag = low.15 
+				else = { 
+					if = {
+						limit = {
+							NOT = { 
+								has_country_flag = high.16
+								has_country_flag = medium.16
+							} 
+						}
+						set_country_flag = low.16 
+						else = { set_country_flag = low.1 }
+					}
+				}
+			}
+		}
+		25 = { 
+			if = {
+				limit = { 
+					NOT = { 
+						has_country_flag = high.16 
+						has_country_flag = medium.16 
+					} 
+				}
+				set_country_flag = low.16 
+				else = { 
+					if = {
+						limit = {
+							NOT = { 
+								has_country_flag = high.1 
+								has_country_flag = medium.1 
+							}
+							count_owned_ships = {
+								limit = { is_ship_size = psionic_avatar }
+								count < 1
+							}
+							count_armies = {
+								limit = { army_type = shroud_army }
+								count < 1
+							}
+						}
+						set_country_flag = low.1 
+						else = { set_country_flag = low.2 }
+					}
+				}
+			}
+		}
+	}
+}
+
+happiness_shroud_high = { 
+	hidden_effect = {
+		random_list = {
+			70 = { country_event = { id = utopia.3030 }}
+			20 = { country_event = { id = utopia.3045 }}
+			10 = { country_event = { id = utopia.3050 }}
+		}
+	}
+}
+happiness_shroud_medium = {
+	hidden_effect = {
+		random_list = {
+			50 = { country_event = { id = utopia.3030 }}
+			30 = { country_event = { id = utopia.3045 }}
+			20 = { country_event = { id = utopia.3050 }}
+		}
+	}
+}
+happiness_shroud_low = {
+	hidden_effect = {
+		random_list = {
+			30 = { country_event = { id = utopia.3030 }}
+			40 = { country_event = { id = utopia.3045 }}
+			30 = { country_event = { id = utopia.3050 }}
+		}
+	}
+}
+upkeep_shroud_high = { 
+	hidden_effect = {
+		random_list = {
+			70 = { country_event = { id = utopia.3031 }}
+			20 = { country_event = { id = utopia.3045 }}
+			10 = { country_event = { id = utopia.3051 }}
+		}
+	}
+}
+upkeep_shroud_medium = { 
+	hidden_effect = {
+		random_list = {
+			50 = { country_event = { id = utopia.3031 }}
+			30 = { country_event = { id = utopia.3045 }}
+			20 = { country_event = { id = utopia.3051 }}
+		}
+	}
+}
+upkeep_shroud_low = { 
+	hidden_effect = {
+		random_list = {
+			30 = { country_event = { id = utopia.3031 }}
+			40 = { country_event = { id = utopia.3045 }}
+			30 = { country_event = { id = utopia.3051 }}
+		}
+	}
+}
+research_shroud_high = { 
+	hidden_effect = {
+		random_list = {
+			70 = { country_event = { id = utopia.3032 }}
+			20 = { country_event = { id = utopia.3045 }}
+			10 = { country_event = { id = utopia.3052 }}
+		}
+	}
+}
+research_shroud_medium = { 
+	hidden_effect = {
+		random_list = {
+			50 = { country_event = { id = utopia.3032 }}
+			30 = { country_event = { id = utopia.3045 }}
+			20 = { country_event = { id = utopia.3052 }}
+		}
+	}
+}
+research_shroud_low = { 
+	hidden_effect = {
+		random_list = {
+			30 = { country_event = { id = utopia.3032 }}
+			40 = { country_event = { id = utopia.3045 }}
+			30 = { country_event = { id = utopia.3052 }}
+		}
+	}
+}
+shields_shroud_high = { 
+	hidden_effect = {
+		random_list = {
+			70 = { country_event = { id = utopia.3033 }}
+			20 = { country_event = { id = utopia.3045 }}
+			10 = { country_event = { id = utopia.3053 }}
+		}
+	}
+}
+shields_shroud_medium = { 
+	hidden_effect = {
+		random_list = {
+			50 = { country_event = { id = utopia.3033 }}
+			30 = { country_event = { id = utopia.3045 }}
+			20 = { country_event = { id = utopia.3053 }}
+		}
+	}
+}
+shields_shroud_low = { 
+	hidden_effect = {
+		random_list = {
+			30 = { country_event = { id = utopia.3033 }}
+			40 = { country_event = { id = utopia.3045 }}
+			30 = { country_event = { id = utopia.3053 }}
+		}
+	}
+}
+weapons_shroud_high = { 
+	hidden_effect = {
+		random_list = {
+			70 = { country_event = { id = utopia.3034 }}
+			20 = { country_event = { id = utopia.3045 }}
+			10 = { country_event = { id = utopia.3054 }}
+		}
+	}
+}
+weapons_shroud_medium = { 
+	hidden_effect = {
+		random_list = {
+			50 = { country_event = { id = utopia.3034 }}
+			30 = { country_event = { id = utopia.3045 }}
+			20 = { country_event = { id = utopia.3054 }}
+		}
+	}
+}
+weapons_shroud_low = { 
+	hidden_effect = {
+		random_list = {
+			30 = { country_event = { id = utopia.3034 }}
+			40 = { country_event = { id = utopia.3045 }}
+			30 = { country_event = { id = utopia.3054 }}
+		}
+	}
+}
+firingrate_shroud_high = { 
+	hidden_effect = {
+		random_list = {
+			70 = { country_event = { id = utopia.3035 }}
+			20 = { country_event = { id = utopia.3045 }}
+			10 = { country_event = { id = utopia.3055 }}
+		}
+	}
+}
+firingrate_shroud_medium = { 
+	hidden_effect = {
+		random_list = {
+			50 = { country_event = { id = utopia.3035 }}
+			30 = { country_event = { id = utopia.3045 }}
+			20 = { country_event = { id = utopia.3055 }}
+		}
+	}
+}
+firingrate_shroud_low = { 
+	hidden_effect = {
+		random_list = {
+			30 = { country_event = { id = utopia.3035 }}
+			40 = { country_event = { id = utopia.3045 }}
+			30 = { country_event = { id = utopia.3055 }}
+		}
+	}
+}
+ethics_shroud_high = { 
+	hidden_effect = {
+		random_list = {
+			70 = { country_event = { id = utopia.3036 }}
+			20 = { country_event = { id = utopia.3045 }}
+			10 = { country_event = { id = utopia.3056 }}
+		}
+	}
+}
+ethics_shroud_medium = { 
+	hidden_effect = {
+		random_list = {
+			50 = { country_event = { id = utopia.3036 }}
+			30 = { country_event = { id = utopia.3045 }}
+			20 = { country_event = { id = utopia.3056 }}
+		}
+	}
+}
+ethics_shroud_low = { 
+	hidden_effect = {
+		random_list = {
+			30 = { country_event = { id = utopia.3036 }}
+			40 = { country_event = { id = utopia.3045 }}
+			30 = { country_event = { id = utopia.3056 }}
+		}
+	}
+}
+influence_shroud_high = { 
+	hidden_effect = {
+		random_list = {
+			70 = { country_event = { id = utopia.3037 }}
+			20 = { country_event = { id = utopia.3045 }}
+			10 = { country_event = { id = utopia.3057 }}
+		}
+	}
+}
+influence_shroud_medium = { 
+	hidden_effect = {
+		random_list = {
+			50 = { country_event = { id = utopia.3037 }}
+			30 = { country_event = { id = utopia.3045 }}
+			20 = { country_event = { id = utopia.3057 }}
+		}
+	}
+}
+influence_shroud_low = { 
+	hidden_effect = {
+		random_list = {
+			30 = { country_event = { id = utopia.3037 }}
+			40 = { country_event = { id = utopia.3045 }}
+			30 = { country_event = { id = utopia.3057 }}
+		}
+	}
+}
+unity_shroud_high = { 
+	hidden_effect = {
+		random_list = {
+			70 = { country_event = { id = utopia.3038 }}
+			20 = { country_event = { id = utopia.3045 }}
+			10 = { country_event = { id = utopia.3058 }}
+		}
+	}
+}
+unity_shroud_medium = { 
+	hidden_effect = {
+		random_list = {
+			50 = { country_event = { id = utopia.3038 }}
+			30 = { country_event = { id = utopia.3045 }}
+			20 = { country_event = { id = utopia.3058 }}
+		}
+	}
+}
+unity_shroud_low = { 
+	hidden_effect = {
+		random_list = {
+			30 = { country_event = { id = utopia.3038 }}
+			40 = { country_event = { id = utopia.3045 }}
+			30 = { country_event = { id = utopia.3058 }}
+		}
+	}
+}
+evasion_shroud_high = { 
+	hidden_effect = {
+		random_list = {
+			70 = { country_event = { id = utopia.3039 }}
+			20 = { country_event = { id = utopia.3045 }}
+			10 = { country_event = { id = utopia.3059 }}
+		}
+	}
+}
+evasion_shroud_medium = { 
+	hidden_effect = {
+		random_list = {
+			50 = { country_event = { id = utopia.3039 }}
+			30 = { country_event = { id = utopia.3045 }}
+			20 = { country_event = { id = utopia.3059 }}
+		}
+	}
+}
+evasion_shroud_low = { 
+	hidden_effect = {
+		random_list = {
+			30 = { country_event = { id = utopia.3039 }}
+			40 = { country_event = { id = utopia.3045 }}
+			30 = { country_event = { id = utopia.3059 }}
+		}
+	}
+}
+repair_shroud_high = { 
+	hidden_effect = {
+		random_list = {
+			70 = { country_event = { id = utopia.3040 }}
+			20 = { country_event = { id = utopia.3045 }}
+			10 = { country_event = { id = utopia.3050 }}
+		}
+	}
+}
+repair_shroud_medium = { 
+	hidden_effect = {
+		random_list = {
+			50 = { country_event = { id = utopia.3040 }}
+			30 = { country_event = { id = utopia.3045 }}
+			20 = { country_event = { id = utopia.3051 }}
+		}
+	}
+}	
+repair_shroud_low = { 
+	hidden_effect = {
+		random_list = {
+			30 = { country_event = { id = utopia.3040 }}
+			40 = { country_event = { id = utopia.3045 }}
+			30 = { country_event = { id = utopia.3052 }}
+		}
+	}
+}
+lifespan_shroud_high = { 
+	hidden_effect = {
+		random_list = {
+			70 = { country_event = { id = utopia.3041 }}
+			20 = { country_event = { id = utopia.3045 }}
+			10 = { country_event = { id = utopia.3053 }}
+		}
+	}
+}
+lifespan_shroud_medium = { 
+	hidden_effect = {
+		random_list = {
+			50 = { country_event = { id = utopia.3041 }}
+			30 = { country_event = { id = utopia.3045 }}
+			20 = { country_event = { id = utopia.3054 }}
+		}
+	}
+}	
+lifespan_shroud_low = { 
+	hidden_effect = {
+		random_list = {
+			30 = { country_event = { id = utopia.3041 }}
+			40 = { country_event = { id = utopia.3045 }}
+			30 = { country_event = { id = utopia.3055 }}
+		}
+	}
+}
+speed_shroud_high = { 
+	hidden_effect = {
+		random_list = {
+			70 = { country_event = { id = utopia.3042 }}
+			20 = { country_event = { id = utopia.3045 }}
+			10 = { country_event = { id = utopia.3056 }}
+		}
+	}
+}
+speed_shroud_medium = { 
+	hidden_effect = {
+		random_list = {
+			50 = { country_event = { id = utopia.3042 }}
+			30 = { country_event = { id = utopia.3045 }}
+			20 = { country_event = { id = utopia.3057 }}
+		}
+	}
+}
+speed_shroud_low = { 
+	hidden_effect = {
+		random_list = {
+			30 = { country_event = { id = utopia.3042 }}
+			40 = { country_event = { id = utopia.3045 }}
+			30 = { country_event = { id = utopia.3058 }}
+		}
+	}
+}
+morale_shroud_high = { 
+	hidden_effect = {
+		random_list = {
+			70 = { country_event = { id = utopia.3043 }}
+			20 = { country_event = { id = utopia.3045 }}
+			10 = { country_event = { id = utopia.3059 }}
+		}
+	}
+}
+morale_shroud_medium = { 
+	hidden_effect = {
+		random_list = {
+			50 = { country_event = { id = utopia.3043 }}
+			30 = { country_event = { id = utopia.3045 }}
+			20 = { country_event = { id = utopia.3050 }}
+		}
+	}
+}
+morale_shroud_low = { 
+	hidden_effect = {
+		random_list = {
+			30 = { country_event = { id = utopia.3043 }}
+			40 = { country_event = { id = utopia.3045 }}
+			30 = { country_event = { id = utopia.3051 }}
+		}
+	}
+}
+sensor_shroud_high = { 
+	hidden_effect = {
+		random_list = {
+			70 = { country_event = { id = utopia.3044 }}
+			20 = { country_event = { id = utopia.3045 }}
+			10 = { country_event = { id = utopia.3052 }}
+		}
+	}
+}
+sensor_shroud_medium = { 
+	hidden_effect = {
+		random_list = {
+			50 = { country_event = { id = utopia.3044 }}
+			30 = { country_event = { id = utopia.3045 }}
+			20 = { country_event = { id = utopia.3053 }}
+		}
+	}
+}
+sensor_shroud_low = { 
+	hidden_effect = {
+		random_list = {
+			30 = { country_event = { id = utopia.3044 }}
+			40 = { country_event = { id = utopia.3045 }}
+			30 = { country_event = { id = utopia.3054 }}
+		}
+	}
+}
+avatar_shroud_high = { 
+	hidden_effect = {
+		random_list = {
+			38 = { country_event = { id = utopia.3020 }}
+			38 = { country_event = { id = utopia.3021 }}
+			20 = { country_event = { id = utopia.3022 }}
+			10 = { country_event = { id = utopia.3023 }}
+		}
+	}
+}
+avatar_shroud_medium = { 
+	hidden_effect = {
+		random_list = {
+			25 = { country_event = { id = utopia.3020 }}
+			25 = { country_event = { id = utopia.3021 }}
+			30 = { country_event = { id = utopia.3022 }}
+			20 = { country_event = { id = utopia.3023 }}
+		}
+	}
+}
+avatar_shroud_low = { 
+	hidden_effect = {
+		random_list = {
+			15 = { country_event = { id = utopia.3020 }}
+			15 = { country_event = { id = utopia.3021 }}
+			40 = { country_event = { id = utopia.3022 }}
+			30 = { country_event = { id = utopia.3023 }}
+		}
+	}
+}
+
+give_fe_tech = {
+	# if = {
+	# 	limit = {
+	# 		NOT = { has_technology = tech_mine_living_metal }
+	# 	}
+	# 	give_technology = { tech = tech_mine_living_metal }
+	# 	break = yes
+	# }
+	# if = {
+	# 	limit = {
+	# 		NOT = { has_technology = tech_mine_dark_matter }
+	# 	}
+	# 	give_technology = { tech = tech_mine_dark_matter }
+	# 	break = yes
+	# }
+	# if = {
+	# 	limit = {
+	# 		NOT = { has_technology = tech_mine_neutronium }
+	# 	}
+	# 	give_technology = { tech = tech_mine_neutronium }
+	# 	break = yes
+	# }
+	# if = {
+	# 	limit = {
+	# 		NOT = { has_technology = tech_ship_armor_5 }
+	# 	}
+	# 	give_technology = { tech = tech_ship_armor_5 }
+	# 	break = yes
+	# }
+	# if = {
+	# 	limit = {
+	# 		NOT = { has_technology = tech_antimatter_power }
+	# 	}
+	# 	give_technology = { tech = tech_antimatter_power }
+	# 	break = yes
+	# }
+	# if = {
+	# 	limit = {
+	# 		NOT = { has_technology = tech_zero_point_power }
+	# 	}
+	# 	give_technology = { tech = tech_zero_point_power }
+	# 	break = yes
+	# }
+	# if = {
+	# 	limit = {
+	# 		NOT = { has_technology = tech_climate_restoration }
+	# 	}
+	# 	give_technology = { tech = tech_climate_restoration }
+	# 	break = yes
+	# }
+	# if = {
+	# 	limit = {
+	# 		NOT = { has_technology = tech_gaia_creation }
+	# 	}
+	# 	give_technology = { tech = tech_gaia_creation }
+	# 	break = yes
+	# }
+	# if = {
+	# 	limit = {
+	# 		NOT = { has_technology = tech_nutrient_replication }
+	# 	}
+	# 	give_technology = { tech = tech_nutrient_replication }
+	# 	break = yes
+	# }
+	# give_technology = { tech = tech_repeatable_improved_tile_energy_output }
+}
+
+shroud_energy_cost = {
+}
+
+# Given a species, create a mod with trait_cybernetic and apply to all pops, leaders
+# and armies that have the original species and the same owner as the scope object.
+# Scope: Something that has a species and an owner
+create_cybernetic_species_mod = {
+	species = {
+		save_event_target_as = changing_species
+
+		create_species = {
+			is_mod = yes
+			name = this
+			plural = this
+			class = this
+			portrait = this
+			traits = this
+			traits = {
+				trait = trait_cybernetic
+			}
+			homeworld = this
+		}
+	}
+
+	owner = {
+		every_owned_pop = {
+			limit = { is_same_species = event_target:changing_species }
+			change_species = last_created
+		}
+		every_owned_leader = {
+			limit = { is_same_species = event_target:changing_species }
+			change_species = last_created
+		}
+		every_pool_leader = {
+			limit = { is_same_species = event_target:changing_species }
+			change_species = last_created
+		}
+		every_owned_army = {
+			limit = {
+				exists = species
+				is_same_species = event_target:changing_species
+			}
+			change_species = last_created
+		}
+		every_owned_ship = {
+			limit = {
+				is_ship_class = shipclass_colonizer
+				is_same_species = event_target:changing_species
+			}
+			change_species = last_created
+		}
+	}
+}
+
+set_all_comms_surveyed = {
+	every_country = {
+		limit = {
+			has_communications = from
+		}
+		prev = {
+			surveyed = {
+  				set_surveyed = yes
+   				surveyor = Prev
+   			}
+    	}
+	}
+}
+
+# AI Crisis Planet Defense plus Armies
+create_ai_planet_defense = {
+	create_fleet = {
+		name = "NAME_AI_Core"
+		effect = {
+			set_owner = event_target:AI_crisis
+			create_ship = {
+				name = random
+				design = "NAME_AI_Core"
+				graphical_culture = "ai_01"
+			}
+			set_location = {
+				target = root
+				distance = 10
+				angle = random
+			}
+		}
+	}
+	owner = {
+		create_leader = {
+			type = admiral
+			species = owner_main_species
+			name = random
+			skill = 800
+		}
+		last_created_leader = { set_age = 0 }
+	}
+	create_fleet = {
+		effect = {
+			set_owner = event_target:AI_crisis
+			while = {
+				count = 40
+				create_ship = {
+					name = random
+					design = "NAME_Euthanizer"
+					graphical_culture = "ai_01"
+				}
+			}
+			assign_leader = last_created_leader
+			while = {
+				count = 80
+				create_ship = {
+					name = random
+					design = "NAME_Sterilizer"
+					graphical_culture = "ai_01"
+				}
+			}
+			set_location = {
+				target = root
+				distance = 45
+				angle = random
+			}
+		}
+		settings = {
+			garrison = yes
+		}
+	}
+	create_fleet = {
+		effect = {
+			set_owner = event_target:AI_crisis
+			while = {
+				count = 20 
+				create_army_transport = {
+					graphical_culture = "ai_01"
+					army_type = "android_army"
+				}
+			}
+			set_location = {
+				target = root
+				distance = 45
+				angle = random
+			}
+		}
+	}
+	create_fleet = {
+		effect = {
+			set_owner = event_target:AI_crisis
+			create_ship = {
+				name = random
+				design = "NAME_AI_Constructor"
+				graphical_culture = "ai_01"
+			}
+			set_location = {
+				target = root
+				distance = 45
+				angle = random
+			}
+		}
+	}
+	create_fleet = {
+		effect = {
+			set_owner = event_target:AI_crisis
+			create_ship = {
+				name = random
+				design = "NAME_AI_Constructor"
+				graphical_culture = "ai_01"
+			}
+			set_location = {
+				target = root
+				distance = 45
+				angle = random
+			}
+		}
+	}
+	create_fleet = {
+		effect = {
+			set_owner = event_target:AI_crisis
+			create_ship = {
+				name = random
+				design = "NAME_AI_Constructor"
+				graphical_culture = "ai_01"
+			}
+			set_location = {
+				target = root
+				distance = 45
+				angle = random
+			}
+		}
+	}
+}
+
+create_ai_armies = {
+	if = {
+		limit = {
+			event_target:AI_crisis = {
+				count_armies = {
+					limit = { army_type = android_army }
+					count < 80
+				}
+			}
+		}
+		create_fleet = {
+			effect = {
+				set_owner = event_target:AI_crisis
+				while = {
+					count = 20 
+					create_army_transport = {
+						graphical_culture = "ai_01"
+						army_type = "android_army"
+					}
+				}
+				set_location = {
+					target = root
+					distance = 45
+					angle = random
+				}
+			}
+		}
+	}
+}
+
+create_ai_constructors = {
+	if = {
+		limit = {
+			event_target:AI_crisis = {
+				count_owned_ships = {
+					limit = { is_ship_size = construction_ship_ai }
+					count < 5
+				}
+			}
+		}
+		create_fleet = {
+			effect = {
+				set_owner = event_target:AI_crisis
+				create_ship = {
+					name = random
+					design = "NAME_AI_Constructor"
+					graphical_culture = "ai_01"
+				}
+				set_location = {
+					target = root
+					distance = 45
+					angle = random
+				}
+			}
+		}
+	}
+}
+
+create_ai_fleet = {
+	owner = {
+		create_leader = {
+			type = admiral
+			species = owner_main_species
+			name = random
+			skill = 400
+		}
+		last_created_leader = { set_age = 0 }
+	}
+	create_fleet = {
+		effect = {
+			set_owner = event_target:AI_crisis
+			while = {
+				count = 16
+				create_ship = {
+					name = random
+					design = "NAME_Euthanizer"
+					graphical_culture = "ai_01"
+				}
+			}
+			assign_leader = last_created_leader
+			while = {
+				count = 38
+				create_ship = {
+					name = random
+					design = "NAME_Sterilizer"
+					graphical_culture = "ai_01"
+				}
+			}
+			set_location = {
+				target = root
+				distance = 45
+				angle = random
+			}
+		}
+	}
+}
+
+awaken_fallen_machine_empire = {
+	every_country = {
+		limit = {
+			is_country_type = fallen_empire
+			has_authority = auth_machine_intelligence
+		}
+		
+		# country_event = { id = fallen_machine_empire.1 days = 30 random = 30 }
+	}
+}
+
+awaken_guardians_of_the_galaxy = {
+	random_list = {
+		60 = { # Awaken one
+			random_country = {
+				limit = {
+					is_country_type = fallen_empire
+					OR = {
+						has_ethic = ethic_fanatic_materialist
+						has_ethic = ethic_fanatic_xenophile
+					}
+					fleet_power > 40000
+				}
+				set_country_flag = guardians_of_the_galaxy
+				set_timed_country_flag = { flag = timed_guardians_of_the_galaxy days = 1825 }
+				set_timed_country_flag = { flag = timed_guardians_of_the_galaxy_2 days = 3650 }
+			}
+		}
+		15 = { # Awaken both!
+			every_country = {
+				limit = {
+					is_country_type = fallen_empire
+					OR = {
+						has_ethic = ethic_fanatic_materialist
+						has_ethic = ethic_fanatic_xenophile
+					}
+					fleet_power > 40000
+				}
+				set_country_flag = guardians_of_the_galaxy
+				set_timed_country_flag = { flag = timed_guardians_of_the_galaxy days = 1825 }
+				set_timed_country_flag = { flag = timed_guardians_of_the_galaxy_2 days = 3650 }
+			}
+		}
+		25 = {} # No awakening
+	}
+}
+
+create_fallen_empire_large_station = {
+	if = {
+		limit = {
+			owner = { has_authority = auth_machine_intelligence }
+		}
+		create_ship = {
+			name = random
+			design = "NAME_Omega"
+			graphical_culture = owner
+		}						
+	}					
+	if = {
+		limit = {
+			owner = { has_ethic = ethic_fanatic_materialist }
+		}
+		create_ship = {
+			name = random
+			design = "NAME_Obscurer"
+			graphical_culture = owner
+		}						
+	}
+	if = {
+		limit = {
+			owner = { has_ethic = ethic_fanatic_spiritualist }
+		}
+		create_ship = {
+			name = random
+			design = "NAME_Bulwark"
+			graphical_culture = owner
+		}						
+	}
+	if = {
+		limit = {
+			owner = { has_ethic = ethic_fanatic_xenophobe }
+		}
+		create_ship = {
+			name = random
+			design = "NAME_Reaper"
+			graphical_culture = owner
+		}						
+	}
+	if = {
+		limit = {
+			owner = { has_ethic = ethic_fanatic_xenophile }
+		}
+		create_ship = {
+			name = random
+			design = "NAME_Sentinel"
+			graphical_culture = owner
+		}						
+	}
+}
+
+create_fallen_empire_small_station = {
+	# if = {
+		# limit = {
+			# owner = { has_authority = auth_machine_intelligence }
+		# }
+		# create_ship = {
+			# name = random
+			# design = "NAME_Sigma"
+			# graphical_culture = owner
+		# }						
+	# }					
+	# if = {
+		# limit = {
+			# owner = { has_ethic = ethic_fanatic_materialist }
+		# }
+		# create_ship = {
+			# name = random
+			# design = "NAME_Cloaker"
+			# graphical_culture = owner
+		# }						
+	# }
+	# if = {
+		# limit = {
+			# owner = { has_ethic = ethic_fanatic_spiritualist }
+		# }
+		# create_ship = {
+			# name = random
+			# design = "NAME_Faith"
+			# graphical_culture = owner
+		# }						
+	# }
+	# if = {
+		# limit = {
+			# owner = { has_ethic = ethic_fanatic_xenophobe }
+		# }
+		# create_ship = {
+			# name = random
+			# design = "NAME_Devastator"
+			# graphical_culture = owner
+		# }						
+	# }
+	# if = {
+		# limit = {
+			# owner = { has_ethic = ethic_fanatic_xenophile }
+		# }
+		# create_ship = {
+			# name = random
+			# design = "NAME_Watcher"
+			# graphical_culture = owner
+		# }						
+	# }
+}
+
+create_fallen_empire_titan = {
+	# if = {
+		# limit = {
+			# owner = { has_authority = auth_machine_intelligence }
+		# }
+		# create_ship = {
+			# name = random
+			# design = "NAME_Alpha"
+			# graphical_culture = owner
+		# }						
+	# }					
+	# if = {
+		# limit = {
+			# owner = { has_ethic = ethic_fanatic_materialist }
+		# }
+		# create_ship = {
+			# name = random
+			# design = "NAME_Savant"
+			# graphical_culture = owner
+		# }						
+	# }
+	# if = {
+		# limit = {
+			# owner = { has_ethic = ethic_fanatic_spiritualist }
+		# }
+		# create_ship = {
+			# name = random
+			# design = "NAME_Eternal"
+			# graphical_culture = owner
+		# }						
+	# }
+	# if = {
+		# limit = {
+			# owner = { has_ethic = ethic_fanatic_xenophobe }
+		# }
+		# create_ship = {
+			# name = random
+			# design = "NAME_Imperium"
+			# graphical_culture = owner
+		# }						
+	# }
+	# if = {
+		# limit = {
+			# owner = { has_ethic = ethic_fanatic_xenophile }
+		# }
+		# create_ship = {
+			# name = random
+			# design = "NAME_Keeper"
+			# graphical_culture = owner
+		# }						
+	# }
+}
+
+create_fallen_empire_large_ship = {
+	# if = {
+		# limit = {
+			# owner = { has_authority = auth_machine_intelligence }
+		# }
+		# create_ship = {
+			# name = random
+			# design = "NAME_Beta"
+			# graphical_culture = owner
+		# }						
+	# }					
+	# if = {
+		# limit = {
+			# owner = { has_ethic = ethic_fanatic_materialist }
+		# }
+		# create_ship = {
+			# name = random
+			# design = "NAME_Scholar"
+			# graphical_culture = owner
+		# }						
+	# }
+	# if = {
+		# limit = {
+			# owner = { has_ethic = ethic_fanatic_spiritualist }
+		# }
+		# create_ship = {
+			# name = random
+			# design = "NAME_Avatar"
+			# graphical_culture = owner
+		# }						
+	# }
+	# if = {
+		# limit = {
+			# owner = { has_ethic = ethic_fanatic_xenophobe }
+		# }
+		# create_ship = {
+			# name = random
+			# design = "NAME_Supremacy"
+			# graphical_culture = owner
+		# }						
+	# }
+	# if = {
+		# limit = {
+			# owner = { has_ethic = ethic_fanatic_xenophile }
+		# }
+		# create_ship = {
+			# name = random
+			# design = "NAME_Custodian"
+			# graphical_culture = owner
+		# }						
+	# }
+}
+
+create_fallen_empire_small_ship = {
+	# if = {
+		# limit = {
+			# owner = { has_authority = auth_machine_intelligence }
+		# }
+		# create_ship = {
+			# name = random
+			# design = "NAME_Gamma"
+			# graphical_culture = owner
+		# }						
+	# }					
+	# if = {
+		# limit = {
+			# owner = { has_ethic = ethic_fanatic_materialist }
+		# }
+		# create_ship = {
+			# name = random
+			# design = "NAME_Sage"
+			# graphical_culture = owner
+		# }						
+	# }
+	# if = {
+		# limit = {
+			# owner = { has_ethic = ethic_fanatic_spiritualist }
+		# }
+		# create_ship = {
+			# name = random
+			# design = "NAME_Zealot"
+			# graphical_culture = owner
+		# }						
+	# }
+	# if = {
+		# limit = {
+			# owner = { has_ethic = ethic_fanatic_xenophobe }
+		# }
+		# create_ship = {
+			# name = random
+			# design = "NAME_Glory"
+			# graphical_culture = owner
+		# }						
+	# }
+	# if = {
+		# limit = {
+			# owner = { has_ethic = ethic_fanatic_xenophile }
+		# }
+		# create_ship = {
+			# name = random
+			# design = "NAME_Warden"
+			# graphical_culture = owner
+		# }						
+	# }
+}
+
+create_fallen_empire_construction_ship = {
+	# if = {
+		# limit = {
+			# owner = { has_authority = auth_machine_intelligence }
+		# }
+		# create_ship = {
+			# name = random
+			# design = "NAME_Theta"
+			# graphical_culture = owner
+		# }						
+	# }					
+	# if = {
+		# limit = {
+			# owner = { has_ethic = ethic_fanatic_materialist }
+		# }
+		# create_ship = {
+			# name = random
+			# design = "NAME_Librarian"
+			# graphical_culture = owner
+		# }						
+	# }
+	# if = {
+		# limit = {
+			# owner = { has_ethic = ethic_fanatic_spiritualist }
+		# }
+		# create_ship = {
+			# name = random
+			# design = "NAME_Penitent"
+			# graphical_culture = owner
+		# }						
+	# }
+	# if = {
+		# limit = {
+			# owner = { has_ethic = ethic_fanatic_xenophobe }
+		# }
+		# create_ship = {
+			# name = random
+			# design = "NAME_Servitor"
+			# graphical_culture = owner
+		# }						
+	# }
+	# if = {
+		# limit = {
+			# owner = { has_ethic = ethic_fanatic_xenophile }
+		# }
+		# create_ship = {
+			# name = random
+			# design = "NAME_Builder"
+			# graphical_culture = owner
+		# }						
+	# }
+}
+
+
+create_fallen_empire_reinforcements = {
+	create_fleet = {
+		effect = {
+			set_owner = prev.owner
+			while = {
+				count = 5
+				create_fallen_empire_large_ship = yes
+			}
+			while = {
+				count = 10
+				create_fallen_empire_small_ship = yes
+			}
+			random_list = {
+				25 = {
+					set_location = {
+						target = prev
+						distance = 30
+						angle = random 
+					}				
+				}
+				25 = {
+					set_location = {
+						target = prev
+						distance = 45
+						angle = random 
+					}				
+				}
+				25 = {
+					set_location = {
+						target = prev
+						distance = 60
+						angle = random 
+					}				
+				}
+				25 = {
+					set_location = {
+						target = prev
+						distance = 75
+						angle = random 
+					}				
+				}				
+			}
+		}
+	}					
+}
+
+
+create_fallen_empire_fleet = {
+	create_fleet = {
+		effect = {
+			set_owner = prev.owner
+			while = {
+				count = 10
+				create_fallen_empire_large_ship = yes
+			}
+			while = {
+				count = 20
+				create_fallen_empire_small_ship = yes
+			}
+			random_list = {
+				25 = {
+					set_location = {
+						target = prev
+						distance = 30
+						angle = random 
+					}				
+				}
+				25 = {
+					set_location = {
+						target = prev
+						distance = 45
+						angle = random 
+					}				
+				}
+				25 = {
+					set_location = {
+						target = prev
+						distance = 60
+						angle = random 
+					}				
+				}
+				25 = {
+					set_location = {
+						target = prev
+						distance = 75
+						angle = random 
+					}				
+				}				
+			}
+		}
+	}					
+}
+
+create_fallen_empire_starting_navy = {
+	create_fallen_empire_fleet = yes
+	create_fallen_empire_fleet = yes
+	random = {
+		chance = 33			
+		create_fallen_empire_fleet = yes
+	}
+	random = {
+		chance = 10
+		create_fleet = {
+			effect = {
+				set_owner = prev.owner
+				create_fallen_empire_titan = yes
+				set_location = {
+					target = prev
+					distance = 20
+					angle = random 
+				}					
+			}
+		}
+	}
+	create_fleet = {
+		effect = {
+			set_owner = prev.owner
+			create_fallen_empire_construction_ship = yes
+			set_location = {
+				target = prev
+				distance = 60
+				angle = random 
+			}				
+		}
+	}
+	create_fleet = {
+		effect = {
+			set_owner = prev.owner
+			create_fallen_empire_construction_ship = yes
+			set_location = {
+				target = prev
+				distance = 80
+				angle = random 
+			}				
+		}
+	}				
+	create_fleet = {
+		effect = {
+			set_owner = prev.owner
+			create_fallen_empire_construction_ship = yes
+			set_location = {
+				target = prev
+				distance = 100
+				angle = random 
+			}				
+		}
+	}
+}
+
+# root = planet scope
+# this = country (owner) scope being split
+flag_split_empire = {
+	switch = {
+
+		trigger = num_owned_planets
+
+		60 > {
+			root = {
+				while = {
+					count = 29
+					closest_system = {
+						limit = {
+							#NOT = { has_star_flag = machup_system_flip@root.owner }
+							NOT = { has_star_flag = machup_system_flip }
+							any_planet = {
+								exists = owner
+								exists = controller
+								owner = { is_same_value = root.owner }
+								controller = { is_same_value = root.owner }
+								is_capital = no
+							}
+						}
+						#set_star_flag = machup_system_flip@root.owner
+						set_star_flag = machup_system_flip
+					}
+				}
+			}
+		}
+
+		50 > {
+			root = {
+				while = {
+					count = 24
+					closest_system = {
+						limit = {
+							#NOT = { has_star_flag = machup_system_flip@root.owner }
+							NOT = { has_star_flag = machup_system_flip }
+							any_planet = {
+								exists = owner
+								exists = controller
+								owner = { is_same_value = root.owner }
+								controller = { is_same_value = root.owner }
+								is_capital = no
+							}
+						}
+						#set_star_flag = machup_system_flip@root.owner
+						set_star_flag = machup_system_flip
+					}
+				}
+			}
+		}
+
+		40 > {
+			root = {
+				while = {
+					count = 19
+					closest_system = {
+						limit = {
+							#NOT = { has_star_flag = machup_system_flip@root.owner }
+							NOT = { has_star_flag = machup_system_flip }
+							any_planet = {
+								exists = owner
+								exists = controller
+								owner = { is_same_value = root.owner }
+								controller = { is_same_value = root.owner }
+							}
+						}
+						#set_star_flag = machup_system_flip@root.owner
+						set_star_flag = machup_system_flip
+					}
+				}
+			}
+		}
+
+		30 > {
+			root = {
+				while = {
+					count = 29
+					closest_system = {
+						limit = {
+							#NOT = { has_star_flag = machup_system_flip@root.owner }
+							NOT = { has_star_flag = machup_system_flip }
+							any_planet = {
+								exists = owner
+								exists = controller
+								owner = { is_same_value = root.owner }
+								controller = { is_same_value = root.owner }
+							}
+						}
+						#set_star_flag = machup_system_flip@root.owner
+						set_star_flag = machup_system_flip
+					}
+				}
+			}
+		}
+		
+		20 > {
+			root = {
+				while = {
+					count = 9
+					closest_system = {
+						limit = {
+							#NOT = { has_star_flag = machup_system_flip@root.owner }
+							NOT = { has_star_flag = machup_system_flip }
+							any_planet = {
+								exists = owner
+								exists = controller
+								owner = { is_same_value = root.owner }
+								controller = { is_same_value = root.owner }
+							}
+						}
+						#set_star_flag = machup_system_flip@root.owner
+						set_star_flag = machup_system_flip
+					}
+				}
+			}
+		}
+		
+		10 > {
+			root = {
+				while = {
+					count = 4
+					closest_system = {
+						limit = {
+							#NOT = { has_star_flag = machup_system_flip@root.owner }
+							NOT = { has_star_flag = machup_system_flip }
+							any_planet = {
+								exists = owner
+								exists = controller
+								owner = { is_same_value = root.owner }
+								controller = { is_same_value = root.owner }
+							}
+						}
+						#set_star_flag = machup_system_flip@root.owner
+						set_star_flag = machup_system_flip
+					}
+				}
+			}
+		}
+		
+		5 > {
+			root = {
+				while = {
+					count = 3
+					closest_system = {
+						limit = {
+							#NOT = { has_star_flag = machup_system_flip@root.owner }
+							NOT = { has_star_flag = machup_system_flip }
+							any_planet = {
+								exists = owner
+								exists = controller
+								owner = { is_same_value = root.owner }
+								controller = { is_same_value = root.owner }
+							}
+						}
+						#set_star_flag = machup_system_flip@root.owner
+						set_star_flag = machup_system_flip
+					}
+				}
+			}
+		}
+
+		6 < {
+			root = {
+				#while = {
+				#	count = 1
+					closest_system = {
+						limit = {
+							#NOT = { has_star_flag = machup_system_flip@root.owner }
+							NOT = { has_star_flag = machup_system_flip }
+							any_planet = {
+								exists = owner
+								exists = controller
+								owner = { is_same_value = root.owner }
+								controller = { is_same_value = root.owner }
+							}
+						}
+						#set_star_flag = machup_system_flip@root.owner
+						set_star_flag = machup_system_flip
+					}
+				#}
+			}
+		}
+	}
+}
+
+# this = country
+add_100_unity_per_year_passed = {
+	switch = {
+		trigger = years_passed
+		400 > { add_unity = 40000 }
+		350 > { add_unity = 35000 }
+		300 > { add_unity = 30000 }
+		250 > { add_unity = 25000 }
+		200 > { add_unity = 20000 }
+		190 > { add_unity = 19000 }
+		180 > { add_unity = 18000 }
+		170 > { add_unity = 17000 }
+		160 > { add_unity = 16000 }
+		150 > { add_unity = 15000 }
+		140 > { add_unity = 14000 }
+		130 > { add_unity = 13000 }
+		120 > { add_unity = 12000 }
+		110 > { add_unity = 11000 }
+		100 > { add_unity = 10000 }
+		90 > { add_unity = 9000 }
+		80 > { add_unity = 8000 }
+		70 > { add_unity = 7000 }
+		60 > { add_unity = 6000 }
+		50 > { add_unity = 5000 }
+		40 > { add_unity = 4000 }
+		30 > { add_unity = 3000 }
+		20 > { add_unity = 2000 }
+		10 > { add_unity = 1000 }
+		0 > { add_unity = 500 }
+	}
+}
+
+set_crisis_stage_1 = {
+	set_global_flag = crisis_stage_1
+	remove_global_flag = crisis_stage_2
+	remove_global_flag = crisis_stage_3
+	remove_global_flag = crisis_stage_4
+}
+
+set_crisis_stage_2 = {
+	remove_global_flag = crisis_stage_1
+	set_global_flag = crisis_stage_2
+	remove_global_flag = crisis_stage_3
+	remove_global_flag = crisis_stage_4
+}
+
+set_crisis_stage_3 = {
+	remove_global_flag = crisis_stage_1
+	remove_global_flag = crisis_stage_2
+	set_global_flag = crisis_stage_3
+	remove_global_flag = crisis_stage_4
+}
+
+set_crisis_stage_4 = {
+	remove_global_flag = crisis_stage_1
+	remove_global_flag = crisis_stage_2
+	remove_global_flag = crisis_stage_3
+	set_global_flag = crisis_stage_4
+}
+
+end_crisis = {
+	remove_global_flag = crisis_stage_1
+	remove_global_flag = crisis_stage_2
+	remove_global_flag = crisis_stage_3
+	remove_global_flag = crisis_stage_4
+}
+
+# this = pop
+# root = country
+remove_hive_minded = {
+	if = {
+		limit = { has_trait = trait_hive_mind }
+		modify_species = {
+			species = this
+			remove_trait = trait_hive_mind
+			change_scoped_species = yes
+			# change only this pop's species
+		}
+	}
+}
+
+# this = pop
+# root = country
+remove_self_modified = {
+	if = {
+		limit = { has_trait = trait_self_modified }
+		modify_species = {
+			species = this
+			remove_trait = trait_self_modified
+			change_scoped_species = yes
+			# change only this pop's species
+		}
+	}
+}
+
+# modify a species to behave like robots concerning maintenance and growth
+# this = species
+apply_robotic_pop_growth_behavior = {
+	change_species_characteristics = {
+		pop_maintenance = 1
+
+		pops_can_reproduce = no
+		new_pop_resource_requirement = {
+			type = robot_food
+			value = 30.0
+		}
+		pops_auto_growth = 1.0
+	}
+}
+
+refugee_pop_effect = {
+	remove_modifier = "pop_recently_conquered"
+	owner = {
+		save_event_target_as = RefugeeEscapedFrom
+		random_relation = {
+			limit = {
+				is_country_type = default
+				NOT = { has_policy_flag = refugees_not_allowed } 
+				root = {
+					OR = { 
+						has_citizenship_type = { type = citizenship_full country = prev }
+						has_citizenship_type = { type = citizenship_caste_system country = prev }
+						AND = {
+							has_citizenship_type = { type = citizenship_limited country = prev }
+							has_citizenship_type = { type = citizenship_caste_system_limited country = prev }
+							prev = { has_policy_flag = refugees_allowed }
+						}	
+					}		
+				}				
+			}
+			random_owned_planet = {
+				limit = {
+					habitability = { who = root value > 0.2 }
+					any_tile = {
+						has_blocker = no
+						has_pop = no
+					}					
+				}
+				resettle_pop = {
+					pop = root
+					planet = this
+				}
+				root = { add_modifier = { modifier = recent_refugee days = 3600 } }
+				if = {
+					limit = {
+						NOT = {
+							owner = {
+								any_owned_planet = {
+									any_owned_pop = {
+										NOT = { is_same_value = root }
+										is_same_species = root
+									}
+								}
+							}
+						}				
+					}		
+					root = { pop_event = { id = refugees.1 } }
+				}	
+				add_organic_sanctuaries = yes
+			}
+		}		
+	}		
+}
+
+clear_organic_sanctuaries = {
+}
+
+add_organic_sanctuaries = {
+}
+
+upgrade_organic_sanctuaries = {
+}
+
+generate_start_buildings_and_blockers = {
+	random_tile = {
+		limit = { has_blocker = no has_building = no num_adjacent_tiles > 3 }
+		set_building = "building_capital_1"
+		set_deposit = d_energy_deposit				
+		random_neighboring_tile = {
+			limit = { has_blocker = no has_building = no }
+			set_building = "building_hydroponics_farm_1"
+			set_deposit = d_rich_farmland_deposit						
+		}
+		random_neighboring_tile = {
+			limit = { has_blocker = no has_building = no }
+			set_building = "building_hydroponics_farm_1"
+			set_deposit = d_rich_farmland_deposit						
+		}
+		random_neighboring_tile = {
+			limit = { has_blocker = no has_building = no }
+			set_building = "building_power_plant_1"
+			set_deposit = d_rich_energy_deposit					
+		}
+		random_neighboring_tile = {
+			limit = { has_blocker = no has_building = no }
+			set_building = "building_mining_network_1"
+			set_deposit = d_rich_mineral_deposit
+		}				
+	}
+	random_tile = {
+		limit = { has_blocker = no has_building = no }
+		set_building = "building_mining_network_1"
+		set_deposit = d_mineral_deposit					
+	}				
+	random_tile = {
+		limit = { has_blocker = no has_building = no }
+		set_blocker = "tb_failing_infrastructure"
+		set_deposit = d_engineering_deposit			
+	}
+	random_tile = {
+		limit = { has_blocker = no has_building = no }
+		set_blocker = "tb_failing_infrastructure"
+		set_deposit = d_society_deposit			
+	}
+	random_tile = {
+		limit = { has_blocker = no has_building = no }
+		set_blocker = "tb_failing_infrastructure"
+		set_deposit = d_physics_deposit			
+	}
+	random_tile = {
+		limit = { has_blocker = no has_building = no }
+		set_blocker = "tb_decrepit_dwellings"
+		set_deposit = d_rich_energy_deposit				
+	}
+	random_tile = {
+		limit = { has_blocker = no has_building = no }
+		set_blocker = "tb_decrepit_dwellings"
+		set_deposit = d_rich_farmland_deposit				
+	}
+	random_tile = {
+		limit = { has_blocker = no has_building = no }
+		set_blocker = "tb_decrepit_dwellings"
+		set_deposit = d_rich_mineral_deposit			
+	}
+	random_tile = {
+		limit = { has_blocker = no has_building = no }
+		set_building = "building_power_plant_1"
+		set_deposit = d_rich_energy_deposit			
+	}	
+}
+
+calculate_servitor_morale = {
+	# if = { # >40%
+		# limit = {
+			# pop_percentage = {
+				# percentage > 0.39
+				# limit = {
+					# has_living_standard = {
+						# country = prev
+						# type = living_standard_organic_trophy
+					# }
+				# }
+			# }
+		# }
+		# if = {
+			# limit = {
+				# NOT = { has_modifier = servitor_morale_40 }
+			# }
+			# add_modifier = {
+				# modifier = servitor_morale_40
+				# days = -1
+			# }
+		# }
+		# switch = {
+			# trigger = has_modifier
+			# servitor_morale_30 = { remove_modifier = servitor_morale_30 }
+			# servitor_morale_20 = { remove_modifier = servitor_morale_20 }
+			# servitor_morale_10 = { remove_modifier = servitor_morale_10 }
+			# servitor_morale_0 = { remove_modifier = servitor_morale_0 }
+		# }
+		# else = {
+			# if = { # >30%
+				# limit = {
+					# pop_percentage = {
+						# percentage > 0.29
+						# limit = {
+							# has_living_standard = {
+								# country = prev
+								# type = living_standard_organic_trophy
+							# }
+						# }
+					# }
+				# }
+				# if = {
+					# limit = {
+						# NOT = { has_modifier = servitor_morale_30 }
+					# }
+					# add_modifier = {
+						# modifier = servitor_morale_30
+						# days = -1
+					# }
+				# }
+				# switch = {
+					# trigger = has_modifier
+					# servitor_morale_40 = { remove_modifier = servitor_morale_40 }
+					# servitor_morale_20 = { remove_modifier = servitor_morale_20 }
+					# servitor_morale_10 = { remove_modifier = servitor_morale_10 }
+					# servitor_morale_0 = { remove_modifier = servitor_morale_0 }
+				# }
+				# else = {
+					# if = { # >20%
+						# limit = {
+							# pop_percentage = {
+								# percentage > 0.19
+								# limit = {
+									# has_living_standard = {
+										# country = prev
+										# type = living_standard_organic_trophy
+									# }
+								# }
+							# }
+						# }
+						# if = {
+							# limit = {
+								# NOT = { has_modifier = servitor_morale_20 }
+							# }
+							# add_modifier = {
+								# modifier = servitor_morale_20
+								# days = -1
+							# }
+						# }
+						# switch = {
+							# trigger = has_modifier
+							# servitor_morale_40 = { remove_modifier = servitor_morale_40 }
+							# servitor_morale_30 = { remove_modifier = servitor_morale_30 }
+							# servitor_morale_10 = { remove_modifier = servitor_morale_10 }
+							# servitor_morale_0 = { remove_modifier = servitor_morale_0 }
+						# }
+						# else = {
+							# if = { # >10%
+								# limit = {
+									# pop_percentage = {
+										# percentage > 0.09
+										# limit = {
+											# has_living_standard = {
+												# country = prev
+												# type = living_standard_organic_trophy
+											# }
+										# }
+									# }
+								# }
+								# if = {
+									# limit = {
+										# NOT = { has_modifier = servitor_morale_10 }
+									# }
+									# add_modifier = {
+										# modifier = servitor_morale_10
+										# days = -1
+									# }
+								# }
+								# switch = {
+									# trigger = has_modifier
+									# servitor_morale_40 = { remove_modifier = servitor_morale_40 }
+									# servitor_morale_30 = { remove_modifier = servitor_morale_30 }
+									# servitor_morale_20 = { remove_modifier = servitor_morale_20 }
+									# servitor_morale_0 = { remove_modifier = servitor_morale_0 }
+								# }
+								# else = {
+									# if = { # <1%
+										# limit = {
+											# pop_percentage = {
+												# percentage < 0.01
+												# limit = {
+													# has_living_standard = {
+														# country = prev
+														# type = living_standard_organic_trophy
+													# }
+												# }
+											# }
+										# }
+										# switch = {
+											# trigger = has_modifier
+											# servitor_morale_40 = { remove_modifier = servitor_morale_40 }
+											# servitor_morale_30 = { remove_modifier = servitor_morale_30 }
+											# servitor_morale_20 = { remove_modifier = servitor_morale_20 }
+											# servitor_morale_10 = { remove_modifier = servitor_morale_10 }
+										# }
+										# if = {
+											# limit = {
+												# NOT = { has_modifier = servitor_morale_0 }
+											# }
+											# add_modifier = {
+												# modifier = servitor_morale_0
+												# days = -1
+											# }
+										# }												
+									# }
+								# }
+							# }
+						# }
+					# }
+				# }
+			# }
+		# }
+	# }
+}
+
+remove_culture_shock = {
+	if = { 
+		limit = { has_modifier = culture_shock_stone_age } 
+		remove_modifier = culture_shock_stone_age
+	}
+	if = { 
+		limit = { has_modifier = culture_shock_bronze_age } 
+		remove_modifier = culture_shock_bronze_age
+	}
+	if = { 
+		limit = { has_modifier = culture_shock_iron_age } 
+		remove_modifier = culture_shock_iron_age
+	}
+	if = { 
+		limit = { has_modifier = culture_shock_late_medieval_age } 
+		remove_modifier = culture_shock_late_medieval_age
+	}
+	if = { 
+		limit = { has_modifier = culture_shock_renaissance_age } 
+		remove_modifier = culture_shock_renaissance_age
+	}
+	if = { 
+		limit = { has_modifier = culture_shock_steam_age } 
+		remove_modifier = culture_shock_steam_age
+	}
+	if = { 
+		limit = { has_modifier = culture_shock_industrial_age } 
+		remove_modifier = culture_shock_industrial_age
+	}
+	if = { 
+		limit = { has_modifier = culture_shock_machine_age } 
+		remove_modifier = culture_shock_machine_age
+	}
+	if = { 
+		limit = { has_modifier = culture_shock_atomic_age } 
+		remove_modifier = culture_shock_atomic_age
+	}
+	if = { 
+		limit = { has_modifier = culture_shock_early_space_age } 
+		remove_modifier = culture_shock_early_space_age
+	}
+}
+
+nuke_primitives_effect = {
+	destroy_colony = { keep_buildings = no }
+	set_planet_flag = primitives_nuked_themselves
+	change_pc = pc_nuked
+	reroll_planet = yes
+	every_tile = {
+		limit = { has_building = yes }
+		if = {
+			limit = {
+				has_building = "building_primitive_farm"
+			}
+			remove_building = yes
+			else = {
+				set_ruined = yes
+			}			
+		}
+	}
+}
+
+nuke_primitives_toxic_effect = {
+	destroy_colony = { keep_buildings = no }
+	change_pc = pc_toxic
+	reset_planet = yes
+	add_modifier = {
+		modifier = "nuclear_devastation"
+		days = -1
+	}
+	random_tile = {
+		limit = {
+			is_orbital_tile = yes
+		}
+		set_deposit = d_vast_society_deposit
+	}
+}

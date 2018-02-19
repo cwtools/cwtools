@@ -1,0 +1,410 @@
+########################
+##ANOMALY EVENTS ###
+########################
+#potential = ship scope
+
+#All discoveries assigned weight 1
+
+# Lethal Tropical Wildlife
+anomaly = {
+	event = anomaly.4000
+	category = "TROP_BIOLOGY_CAT"
+	
+	weight = 1
+	
+	potential = {
+		owner = { is_borg_empire = no is_assimilator = no }
+	}
+}
+
+# Mineral Rich Asteroid
+anomaly = {
+	event = anomaly.4005
+	category = "AST_MINING_CAT"
+	
+	weight = 1
+	
+	potential = {
+		owner = { is_borg_empire = no is_assimilator = no }
+	}
+}
+
+# Derelict Ship
+anomaly = {
+	event = anomaly.4010
+	category = "GEN_DERELICT_SHIP_CAT"
+	
+	weight = 1
+	
+	potential = {
+		owner = { is_borg_empire = no is_assimilator = no }
+	}
+}
+
+# Corpse in Space
+anomaly = {
+	event = anomaly.4015
+	category = "GEN_LOST_CARGO_CAT"
+	
+	weight = 1
+	
+	potential = {
+		owner = { is_borg_empire = no is_assimilator = no }
+	}
+}
+
+# Ship Graveyard
+anomaly = {
+	event = anomaly.4020
+	category = "GEN_OLD_WAR_CAT"
+	
+	weight = 1
+	
+	potential = {
+		owner = { is_borg_empire = no is_assimilator = no }
+	}
+}
+
+# Distant Survey Data
+anomaly = {
+	event = anomaly.4025
+	category = "GEN_SURVEY_CAT"
+
+
+	potential = {
+		owner = { is_borg_empire = no is_assimilator = no }
+	}
+}
+
+# AI Admiral
+anomaly = {
+	event = anomaly.4030
+	category = "DES_BURIED_CAT"
+
+	weight = 1
+
+	potential = {
+		owner = { is_borg_empire = no is_assimilator = no }
+	}
+}
+
+# Odd Star
+anomaly = {
+	event = anomaly.4035
+	category = "SUN_RAYS_CAT"
+
+	weight = 1
+
+	potential = {
+		owner = { is_borg_empire = no is_assimilator = no }
+	}
+}
+# Sins of a Sun
+anomaly = {
+	event = anomaly.4040
+	category = "SUN_RAYS_CAT"
+
+	weight = 1
+
+	potential = {
+		owner = { is_borg_empire = no is_assimilator = no }
+	}
+}
+
+# Water Planet
+anomaly = {
+	event = anomaly.4045
+	category = "WAT_PLANET_CAT"
+
+	weight = 1
+
+	potential = {
+		owner = { is_borg_empire = no is_assimilator = no }
+	}
+}
+
+# Diamond in the Rough
+anomaly = {
+	event = anomaly.4055
+	category = "COLD_RESEARCH_CAT"
+
+	weight = 1
+
+	potential = {
+		owner = { is_borg_empire = no is_assimilator = no }
+	}
+}
+
+# Improbable Teapot
+anomaly = {
+	event = anomaly.4060
+	category = "SUN_TEAPOT_CAT"
+
+	weight = 1
+
+	potential = {
+		owner = { is_borg_empire = no is_assimilator = no }
+	}
+}
+
+# Ancient Mining Gear
+anomaly = {
+	event = anomaly.4065
+	category = "AST_GEAR_CAT"
+	
+	weight = 1
+	
+	potential = {
+		owner = { is_borg_empire = no is_assimilator = no }
+	}
+}
+
+# Nutricious Fruit
+anomaly = {
+	event = anomaly.4070
+	category = "TROP_CONDITIONS_CAT"
+	
+	weight = 1
+	
+	potential = {
+		owner = { is_borg_empire = no is_assimilator = no }
+	}
+}
+
+# Shield Bacteria
+anomaly = {
+	event = anomaly.4075
+	category = "COLD_RESEARCH_CAT"
+	
+	weight = 1
+	
+	potential = {
+		owner = { is_borg_empire = no is_assimilator = no }
+	}
+}
+
+# Abandoned Sensor Array
+anomaly = {
+	event = anomaly.4080
+	category = "ARID_SENSOR_CAT"
+	
+	weight = 1
+	
+	potential = {
+		owner = { is_borg_empire = no is_assimilator = no }
+	}
+}
+
+# Drifting Speed Ship
+anomaly = {
+	event = anomaly.4085
+	category = "GEN_LOST_CARGO_CAT"
+	
+	weight = 1
+	
+	potential = {
+		owner = { is_borg_empire = no is_assimilator = no }
+	}
+}
+
+# Refugees
+anomaly = {
+	event = anomaly.4090
+	category = "GEN_REFUGEES_CAT"
+	
+	weight = 1
+	
+	potential = {
+		owner = { is_borg_empire = no is_assimilator = no }
+	}
+}
+
+# NEW STUFF
+anomaly = {
+	event = anomaly.4095
+	category = "CON_BIOLOGY_CAT"
+	
+	weight = 1
+	
+	potential = {
+		owner = { is_borg_empire = no is_assimilator = no }
+	}
+}
+
+# Psionic Horses
+anomaly = {
+	event = anomaly.4100
+	category = "CON_BIOLOGY_CAT"
+	
+	weight = 1
+	
+	potential = {
+		owner = { is_borg_empire = no is_assimilator = no }
+	}
+}
+
+# Giant Roombas
+anomaly = {
+	event = anomaly.4105
+	category = "TOX_PLANET_CAT"
+	
+	weight = 1
+	
+	potential = {
+		owner = { is_borg_empire = no is_assimilator = no }
+	}
+}
+
+# Quicksand
+anomaly = {
+	event = anomaly.4110
+	category = "DES_PLANET_CAT"
+	
+	weight = 1
+	
+	potential = {
+		owner = { is_borg_empire = no is_assimilator = no }
+	}
+}
+
+# Monsters on a Ship
+anomaly = {
+	event = anomaly.4115
+	category = "CON_BIOLOGY_CAT"
+	
+	weight = 1
+	
+	potential = {
+		owner = { is_borg_empire = no is_assimilator = no }
+	}
+}
+
+# Explosions in the Sky
+anomaly = {
+	event = anomaly.4120
+	category = "COLD_RESEARCH_CAT"
+	
+	weight = 1
+	
+	potential = {
+		owner = { is_borg_empire = no is_assimilator = no }
+	}
+}
+
+# Repurpose Mining Station
+anomaly = {
+	event = anomaly.4125
+	category = "MOL_PLANET_CAT"
+	
+	weight = 1
+	
+	potential = {
+		owner = { is_borg_empire = no is_assimilator = no }
+	}
+}
+
+# Fountain of Youth
+anomaly = {
+	event = anomaly.4130
+	category = "GEN_MYSTICAL_CAT"
+	
+	weight = 1
+	
+	potential = {
+		owner = { is_borg_empire = no is_assimilator = no }
+	}
+}
+
+# Master's Teachings: Politics
+anomaly = {
+	event = anomaly.4135
+	category = "DES_BURIED_CAT"
+	
+	weight = 1
+	
+	potential = {
+		owner = { is_borg_empire = no is_assimilator = no }
+	}
+}
+
+# Master's Teachings: Philosophy
+anomaly = {
+	event = anomaly.4140
+	category = "COLD_RESEARCH_CAT"
+	
+	weight = 1
+	
+	potential = {
+		owner = { is_borg_empire = no is_assimilator = no }
+	}
+}
+
+# Master's Teachings: Diplomacy
+anomaly = {
+	event = anomaly.4150
+	category = "CON_BIOLOGY_CAT"
+	
+	weight = 1
+	
+	potential = {
+		owner = { is_borg_empire = no is_assimilator = no }
+	}
+}
+
+# Underground Vault
+anomaly = {
+	event = anomaly.4155
+	category = "NUKE_PLANET_CAT"
+	
+	weight = 1
+	
+	potential = {
+		owner = { is_borg_empire = no is_assimilator = no }
+	}
+}
+
+# Master's Teachings: War
+anomaly = {
+	event = anomaly.4165
+	category = "GEN_OLD_WAR_CAT"
+	
+	weight = 1
+	
+	potential = {
+		owner = { is_borg_empire = no is_assimilator = no }
+	}
+}
+
+# Rich Gas Mining
+anomaly = {
+	event = anomaly.4170
+	category = "ARID_PLANET_CAT"
+	
+	weight = 1
+	
+	potential = {
+		owner = { is_borg_empire = no is_assimilator = no }
+	}
+}
+
+# NEW
+#anomaly = {
+#	event = anomaly.5000
+#	category = "GEN_CAT"
+#	
+#	weight = 1
+#	
+#	potential = {
+#		owner = { is_borg_empire = no is_assimilator = no }
+#	}
+#}
+#anomaly = {
+#	event = anomaly.4175
+#	category = "GEN_TEST_CAT"
+#	
+#	weight = 1
+#	
+#	potential = {
+#		owner = { is_borg_empire = no is_assimilator = no }
+#	}
+#}

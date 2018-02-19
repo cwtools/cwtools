@@ -1,0 +1,99 @@
+﻿### Trogoran by EHKodiak tirnanog influence
+Trogoran = {
+	randomized = no
+
+	ship_names = {
+		generic = {
+		Abarta Abcan Abean Abgatiacus Aed Aengus Ailill Alastir Ai Balor "Bodb Dearg" Brea Bres Iuchar Buarainech Cian Cichol Conand Corb Credne "Crom Cruach" "Crom Dubh" Dagda Daire Delbaeth "Dian Cecht" Donn Ecne Egobail Elatha Elcmar Goibniu Len Lir Luchtain Lug Mac Cuill "Manannan" Miach Midir "Mug Ruith" Nechtan Neit Nuadha Oghma Seonaidh Tethra Tuireann Aoibheall Aimend Aife aine AnandAnu Beag Befhionn "Be Chuille" Beira Birog Boinn Brighid Caer Caillech Canola Cessair Cethlenn Clidna "Crob Derg" Danand "Danu Eriu" Ernmas Etain Ethniu Fand Fionnuala Flidais Fodla Liban Macha Medb "Medb Lethderg" Mongfhionn Morrighan "Mor Mumhan" Nemhain Niamh "Nic Naomhin" "Plor na mBan" "Sheela na Gig" Scathach Tailtiu
+		}
+		corvette = {
+		}
+		saber = {
+		}
+		sovereign = {
+		}
+		steamrunner = {
+		}		
+		adv_cruiser = {
+		}
+		strike = {
+		}	
+		constructor = { }
+		colonizer = { }
+		science = { }
+		transport = { }
+		outpost_station = {
+			sequential_name = "Frontier Outpost"
+		}
+	}
+
+	fleet_names = {
+		sequential_name = "%O% Fleet"
+	}
+	
+	army_names = {
+		defense_army = {
+			sequential_name = "%O% Guard"
+		}
+		assault_army = {
+			sequential_name = "%O% Defence Force"
+		}
+		slave_army = {
+			sequential_name = "%O% Indentured Defence Force"
+		}
+		clone_army = { 
+			sequential_name = "%O% Clone Defence Force"
+		}
+		robotic_army = {
+			sequential_name = "%O% Mechanised Defence Force"
+		}
+		android_army = {
+			sequential_name = "%O% Synthetic Defence Force"
+		}
+		psionic_army = { 
+			sequential_name = "%O% Psi Defence Force"
+		}
+		xenomorph_army = {
+			sequential_name = "%O% Bio-Warfare Defence Force"
+		}
+		gene_warrior_army = {
+			sequential_name = "%O% Bio-Engineered Defence Force"
+		}
+	}
+
+	planet_names = {
+		generic = {
+			names = { 
+			}
+		}
+	}
+
+
+	### CHARACTERS 
+
+	character_names = {
+		names1 = {
+			weight = 40
+			first_names_male = {
+			Ailde Ailean Ailpein Airril Amhalghaidh Angaidh Aodh Aodhagan Aodhan Aoidhean Aonghas Aonghasan Armadal Art Artagan Artair Athairne Baodan Baoithein Barra Bearach Bearchan Beatan Beathan Beisdean Blar Blathan Boisil Bran Branan Brandubh Breandan Breannan Brian Brianan Cailean Cairbre Caireall Camran Caoilte Caorall Carmag Catan Cathal Cathalan Ce Ceallach Cesan Ciaran Coinneach Coireall Coll Colla Comhall Comhan Conall Conan Conchar Conn Corc Cormag Cosgrach Cuirealan Curadan Dan Diarmad Diocail Dobharcu Dolaidh Domhnallaidh Domhnallan Donaidh Donnach Donnan Donnchadh Donnchaidh Donnghail Drostan Dubh Dubhagan Dubhshith Dubhthach Dughall Dughlas Duibhne Dunleibhe Eachainn Eachann Eacharn Eadan Earc Earnan Eircheard Eochagan Eochaidh Eogan Eoghanan Eoghann Eoghnaidh Eonan Eoran Failbhe Faolagan Faolan Fearchar Feargan Fearghas Finnean Fionan Fionghan Fionn Fionnchan Fionnghal Fionnlagan Fionnlagh Fionntan Flaithbheartach Flannagan Fotadh Friseal Gabhran Garbhan Gilleanndrais Gilleasbachan Gilleasbaig Gilleasp Gilleathain Gillebhrighde Gillechriosd Gilliosa Gordan Gormal Guaire Guinnein Guirmean Huisdean Iurnan Lachaidh Lachann Lachlainn Lachlann Laise Latharn Luag Lulach Macbeatha Machar Macrath Madadh Manachan Maoilios Maoldomhnaich Maolmoire Maolsneachta Maon Mariubhe Moireach Muireach Muireachan Mungan Murchadh Murdaigean Naoghas Naoise Naomhan Neachdainn Neas Neasan Niall Niallghas Nilidh Ninean Ninnidh Odhran Oisean Oisian Onchu Osgar Rodachan Rodaidh Roidh Roithridh Ronan Ros Ruairidh Ruarachan Scotaidh Sealbhach Searc Seitheach Sionn Solas Suibhne Taog Taraghlan Taran Tearlach Tearlaidh Torradan Truinnean Uallas Ualraig Uisdean
+
+			}
+			first_names_female = {
+			Beathag Borgach Brianag Brighde Caitir Caoimhe Caointiorn Ceana Ceanag Dearbhail Dearshul Doileag Dolidh Eamhhair Eimhir Eithne Fionnaghal Fionnghuala Gormal Grainne Greudach Latharna Malamhin Malmhin Meadhbh Mor Morag Mordag Muireall Muirne Oighrig Ros Searlaid Sidheag Sileas Slaine Slainidh Slainte Sorcha Tearlag Una
+			}
+			second_names = {
+			""
+			}
+			regnal_first_names_male = {
+			Ailde Ailean Ailpein Airril Amhalghaidh Angaidh Aodh Aodhagan Aodhan Aoidhean Aonghas Aonghasan Armadal Art Artagan Artair Athairne Baodan Baoithein Barra Bearach Bearchan Beatan Beathan Beisdean Blar Blathan Boisil Bran Branan Brandubh Breandan Breannan Brian Brianan Cailean Cairbre Caireall Camran Caoilte Caorall Carmag Catan Cathal Cathalan Ce Ceallach Cesan Ciaran Coinneach Coireall Coll Colla Comhall Comhan Conall Conan Conchar Conn Corc Cormag Cosgrach Cuirealan Curadan Dan Diarmad Diocail Dobharcu Dolaidh Domhnallaidh Domhnallan Donaidh Donnach Donnan Donnchadh Donnchaidh Donnghail Drostan Dubh Dubhagan Dubhshith Dubhthach Dughall Dughlas Duibhne Dunleibhe Eachainn Eachann Eacharn Eadan Earc Earnan Eircheard Eochagan Eochaidh Eogan Eoghanan Eoghann Eoghnaidh Eonan Eoran Failbhe Faolagan Faolan Fearchar Feargan Fearghas Finnean Fionan Fionghan Fionn Fionnchan Fionnghal Fionnlagan Fionnlagh Fionntan Flaithbheartach Flannagan Fotadh Friseal Gabhran Garbhan Gilleanndrais Gilleasbachan Gilleasbaig Gilleasp Gilleathain Gillebhrighde Gillechriosd Gilliosa Gordan Gormal Guaire Guinnein Guirmean Huisdean Iurnan Lachaidh Lachann Lachlainn Lachlann Laise Latharn Luag Lulach Macbeatha Machar Macrath Madadh Manachan Maoilios Maoldomhnaich Maolmoire Maolsneachta Maon Mariubhe Moireach Muireach Muireachan Mungan Murchadh Murdaigean Naoghas Naoise Naomhan Neachdainn Neas Neasan Niall Niallghas Nilidh Ninean Ninnidh Odhran Oisean Oisian Onchu Osgar Rodachan Rodaidh Roidh Roithridh Ronan Ros Ruairidh Ruarachan Scotaidh Sealbhach Searc Seitheach Sionn Solas Suibhne Taog Taraghlan Taran Tearlach Tearlaidh Torradan Truinnean Uallas Ualraig Uisdean
+
+			}
+			regnal_first_names_female = {
+			Beathag Borgach Brianag Brighde Caitir Caoimhe Caointiorn Ceana Ceanag Dearbhail Dearshul Doileag Dolidh Eamhhair Eimhir Eithne Fionnaghal Fionnghuala Gormal Grainne Greudach Latharna Malamhin Malmhin Meadhbh Mor Morag Mordag Muireall Muirne Oighrig Ros Searlaid Sidheag Sileas Slaine Slainidh Slainte Sorcha Tearlag Una
+			}
+			regnal_second_names = {
+			""
+			}
+		}
+	}
+}

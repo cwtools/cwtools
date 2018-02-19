@@ -1,0 +1,712 @@
+############################
+#
+# Ship Component Events
+#
+# Written by Walshicus
+#
+############################
+
+
+namespace = STH_components
+
+
+### 100 series = Colonisers
+ship_event = {
+	id = STH_components.100
+	hide_window = yes
+	is_triggered_only = yes
+	trigger = { 
+		exists = species 
+		exists = owner
+		owner = { is_normal_country = yes }
+	}
+	immediate = { 
+		#Clear Traits On Upgrade
+		owner = {
+			random_owned_pop = {
+				limit = { is_same_species = root }
+				save_event_target_as = tempSpecies
+				root = { change_species = event_target:tempSpecies }
+			}
+		}
+		#Extra Pop
+		if = {
+			limit = { has_component = REQUIRED_COLONY_MODULE_STASIS_0 }
+			owner = {
+				random_owned_pop = {
+					limit = { is_same_species = root }
+					modify_species = { species = this add_trait = colony_trait_stasis_pods change_scoped_species = yes }
+					save_event_target_as = tempSpecies
+					root = { change_species = event_target:tempSpecies }
+					modify_species = { species = this remove_trait = colony_trait_stasis_pods change_scoped_species = yes }
+				}
+			}
+		}
+		#Free Buildings
+		if = {
+			limit = { has_component = REQUIRED_COLONY_MODULE_PREFABRICATED_0 }
+			owner = {
+				random_owned_pop = {
+					limit = { is_same_species = root }
+					modify_species = { species = this add_trait = colony_trait_prefabricated_structures change_scoped_species = yes }
+					save_event_target_as = tempSpecies
+					root = { change_species = event_target:tempSpecies }
+					modify_species = { species = this remove_trait = colony_trait_prefabricated_structures change_scoped_species = yes }
+				}
+			}
+		}
+		#Extra Armies
+		if = {
+			limit = { has_component = REQUIRED_COLONY_MODULE_CONTINGENCY_0 }
+			owner = {
+				random_owned_pop = {
+					limit = { is_same_species = root }
+					modify_species = { species = this add_trait = colony_trait_armed_contingency change_scoped_species = yes }
+					save_event_target_as = tempSpecies
+					root = { change_species = event_target:tempSpecies }
+					modify_species = { species = this remove_trait = colony_trait_armed_contingency change_scoped_species = yes }
+				}
+			}
+		}
+		#Spaceport
+		if = {
+			limit = { has_component = REQUIRED_COLONY_MODULE_ORBITAL_0 }
+			owner = {
+				random_owned_pop = {
+					limit = { is_same_species = root }
+					modify_species = { species = this add_trait = colony_trait_orbital_infrastructure change_scoped_species = yes }
+					save_event_target_as = tempSpecies
+					root = { change_species = event_target:tempSpecies }
+					modify_species = { species = this remove_trait = colony_trait_orbital_infrastructure change_scoped_species = yes }
+				}
+			}
+		}
+		#Research
+		if = {
+			limit = { has_component = REQUIRED_COLONY_MODULE_RESEARCH_0 }
+			owner = {
+				random_owned_pop = {
+					limit = { is_same_species = root }
+					modify_species = { species = this add_trait = colony_trait_research_team change_scoped_species = yes }
+					save_event_target_as = tempSpecies
+					root = { change_species = event_target:tempSpecies }
+					modify_species = { species = this remove_trait = colony_trait_research_team change_scoped_species = yes }
+				}
+			}
+		}
+		#Pioneers
+		if = {
+			limit = { has_component = REQUIRED_COLONY_MODULE_PIONEERS_0 }
+			owner = {
+				random_owned_pop = {
+					limit = { is_same_species = root }
+					modify_species = { species = this add_trait = colony_trait_hardy_pioneers change_scoped_species = yes }
+					save_event_target_as = tempSpecies
+					root = { change_species = event_target:tempSpecies }
+					modify_species = { species = this remove_trait = colony_trait_hardy_pioneers change_scoped_species = yes }
+				}
+			}
+		}
+		#Religious types
+		if = {
+			limit = { has_component = REQUIRED_COLONY_MODULE_MISSION_0 }
+			owner = {
+				random_owned_pop = {
+					limit = { is_same_species = root }
+					modify_species = { species = this add_trait = colony_trait_religious_mission change_scoped_species = yes }
+					save_event_target_as = tempSpecies
+					root = { change_species = event_target:tempSpecies }
+					modify_species = { species = this remove_trait = colony_trait_religious_mission change_scoped_species = yes }
+				}
+			}
+		}
+	}
+}
+
+#Does Stuff
+planet_event = {
+	id = STH_components.101
+	hide_window = yes
+	is_triggered_only = yes
+	immediate = { 
+		#Stasis Pods
+		random_pop = {
+			limit = { has_trait = colony_trait_stasis_pods }
+			planet = { 
+				random_tile = { 
+					limit = { has_blocker = no has_grown_pop = no has_growing_pop = no } 
+					create_pop = { species = prevprev }
+				}
+				every_owned_pop = { modify_species = { species = this remove_trait = colony_trait_stasis_pods change_scoped_species = yes } }
+			}
+		}
+		#Prefabricated
+		random_pop = {
+			limit = { has_trait = colony_trait_prefabricated_structures }
+			planet = { 
+				if = {
+					limit = { any_tile = { has_building = no has_blocker = no has_resource = { type = minerals amount > 0 } } }
+					random_tile = { 
+						limit = { has_building = no has_blocker = no has_resource = { type = minerals amount > 0 } } 
+						tile_add_appropriate_mining_building = yes
+					}
+					else = {
+						random_tile = { 
+							limit = { has_building = no has_blocker = no } 
+							tile_add_appropriate_mining_building = yes
+						}
+					}
+				}
+				if = {
+					limit = { any_tile = { has_building = no has_blocker = no has_resource = { type = energy amount > 0 } } }
+					random_tile = { 
+						limit = { has_building = no has_blocker = no has_resource = { type = energy amount > 0 } } 
+						tile_add_appropriate_energy_building = yes
+					}
+					else = {
+						random_tile = { 
+							limit = { has_building = no has_blocker = no } 
+							tile_add_appropriate_energy_building = yes
+						}
+					}
+				}
+				if = {
+					limit = { any_tile = { has_building = no has_blocker = no has_resource = { type = food amount > 0 } } }
+					random_tile = { 
+						limit = { has_building = no has_blocker = no has_resource = { type = food amount > 0 } } 
+						tile_add_appropriate_farm_building = yes
+					}
+					else = {
+						random_tile = { 
+							limit = { has_building = no has_blocker = no } 
+							tile_add_appropriate_farm_building = yes
+						}
+					}
+				}
+				every_owned_pop = { modify_species = { species = this remove_trait = colony_trait_prefabricated_structures change_scoped_species = yes } }
+			}
+		}
+		#Armed Contingency
+		random_pop = {
+			limit = { has_trait = colony_trait_armed_contingency }
+			planet = { 
+				while = {
+					count = 5
+					create_army = { name = random owner = root.owner species = root.owner type = "defense_army" } #REPLACE!
+				}
+				every_owned_pop = { modify_species = { species = this remove_trait = colony_trait_armed_contingency change_scoped_species = yes } }
+			}
+		}
+		#Orbital Infrastructure
+		random_pop = {
+			limit = { has_trait = colony_trait_orbital_infrastructure }
+			planet = { 
+				create_correct_spaceport_planetscope = yes
+				every_owned_pop = { modify_species = { species = this remove_trait = colony_trait_orbital_infrastructure change_scoped_species = yes } }
+			}
+		}
+		#Research Team
+		random_pop = {
+			limit = { has_trait = colony_trait_research_team }
+			planet = { 
+				if = {
+					limit = { 
+						any_tile = { 
+							OR = { has_resource = { type = society_research amount > 0 } has_resource = { type = physics_research amount > 0 } has_resource = { type = engineering_research amount > 0 } } 
+						}
+					}
+					random_tile = {
+						limit = { has_resource = no }
+						random_list = {
+							10 = { add_deposit = d_society_deposit }
+							10 = { add_deposit = d_physics_deposit }
+							10 = { add_deposit = d_engineering_deposit }
+						}
+					}
+				}
+				if = {
+					limit = { any_tile = { has_building = no has_blocker = no has_resource = { type = society_research amount > 0 } } }
+					random_tile = { 
+						limit = { has_building = no has_blocker = no has_resource = { type = society_research amount > 0 } } 
+						tile_add_appropriate_society_building = yes
+					}
+				}
+				if = {
+					limit = { any_tile = { has_building = no has_blocker = no has_resource = { type = physics_research amount > 0 } } }
+					random_tile = { 
+						limit = { has_building = no has_blocker = no has_resource = { type = physics_research amount > 0 } } 
+						tile_add_appropriate_physics_building = yes
+					}
+				}
+				if = {
+					limit = { any_tile = { has_building = no has_blocker = no has_resource = { type = engineering_research amount > 0 } } }
+					random_tile = { 
+						limit = { has_building = no has_blocker = no has_resource = { type = engineering_research amount > 0 } } 
+						tile_add_appropriate_engineering_building = yes
+					}
+				}
+				
+				every_owned_pop = { modify_species = { species = this remove_trait = colony_trait_research_team change_scoped_species = yes } }
+			}
+		}
+		#Hardy Pioneers
+		random_pop = {
+			limit = { has_trait = colony_trait_hardy_pioneers }
+			planet = { 
+				while = {
+					count = 3
+					random_tile = { 
+						limit = { has_blocker = yes } 
+						remove_blocker = yes
+					}
+				}
+				every_owned_pop = { modify_species = { species = this remove_trait = colony_trait_hardy_pioneers change_scoped_species = yes } }
+			}
+		}
+		#Religious Mission
+		random_pop = {
+			limit = { has_trait = colony_trait_religious_mission }
+			planet = {
+				owner = { add_unity = 150 }
+				every_owned_pop = { modify_species = { species = this remove_trait = colony_trait_religious_mission change_scoped_species = yes } }
+			}
+		}
+	}
+}
+
+#No scope precheck
+event = {
+	id = STH_components.1000
+	hide_window = yes
+	is_triggered_only = yes
+	immediate = {
+		every_country = {
+			limit = { is_normal_country = yes }
+			every_owned_fleet = {
+				limit = { is_ship_class = shipclass_science_ship }
+				fleet_event = { id = STH_components.1001 }
+			}
+		}
+	}
+}
+
+#Monthly Check
+fleet_event = {
+	id = STH_components.1001
+	hide_window = yes
+	is_triggered_only = yes
+	trigger = { 
+		# print_scope_trigger = yes
+		exists = orbit
+		any_owned_ship = {
+			OR = {
+				has_component = REQUIRED_SCIENCE_MODULE_MEDICAL_0
+				has_component = REQUIRED_SCIENCE_MODULE_RELIGIOUS_0
+				has_component = REQUIRED_SCIENCE_MODULE_PRISON_0
+				has_component = REQUIRED_SCIENCE_MODULE_GAMBLING_0
+				has_component = REQUIRED_SCIENCE_MODULE_DIPLOMATIC_0
+				has_component = REQUIRED_SCIENCE_MODULE_HUNTING_0
+			}
+		}
+	}
+	immediate = { 
+		if = {
+			limit = { orbit = { has_owner = yes owner = { OR = { is_same_value = root.owner NOT = { is_at_war_with = root.owner } } } } } #Owned or Friendly Planet
+			if = {
+				limit = { any_owned_ship = { has_component = REQUIRED_SCIENCE_MODULE_MEDICAL_0 } }
+				orbit = { remove_modifier = pl_medical_module add_modifier = { modifier = pl_medical_module days = 40 } }
+			}
+			if = {
+				limit = { any_owned_ship = { has_component = REQUIRED_SCIENCE_MODULE_RELIGIOUS_0 } }
+				orbit = { remove_modifier = pl_religious_module add_modifier = { modifier = pl_religious_module days = 40 } }
+			}
+			if = {
+				limit = { any_owned_ship = { has_component = REQUIRED_SCIENCE_MODULE_PRISON_0 } }
+				orbit = { remove_modifier = pl_prison_module add_modifier = { modifier = pl_prison_module days = 40 } }
+			}
+		}
+		if = {
+			limit = { orbit = { has_owner = yes owner = { NOR = { is_same_value = root.owner is_at_war_with = root.owner } } } } #Friendly Planet Not Yours
+			if = {
+				limit = { any_owned_ship = { has_component = REQUIRED_SCIENCE_MODULE_GAMBLING_0 } }
+				owner = {
+					random_list = {
+						10 = { add_energy = 10 }
+						10 = { add_energy = 5 }
+						10 = { add_energy = 1 }
+						10 = { add_energy = -5 }
+					}
+				}
+				orbit = { remove_modifier = pl_gambling_module add_modifier = { modifier = pl_gambling_module days = 40 } }
+			}
+			if = {
+				limit = { any_owned_ship = { has_component = REQUIRED_SCIENCE_MODULE_DIPLOMATIC_0 } }
+				orbit = { 
+					owner = { add_trust = { amount = 0.40 who = root.owner } } 
+					remove_modifier = pl_diplomacy_module add_modifier = { modifier = pl_diplomacy_module days = 40 }
+				}
+			}
+		}
+		if = {
+			limit = { orbit = { has_owner = yes owner = { is_country_type = primitive } } } #Friendly Planet Not Yours
+			if = {
+				limit = { any_owned_ship = { has_component = REQUIRED_SCIENCE_MODULE_HUNTING_0 } owner = { exists = capital_scope } }
+				owner = {
+					random_list = {
+						2 = { 
+							random_owned_planet = {  
+								if = {
+									limit = { count_planet_army = { count < 20 } }
+									create_army = { name = random owner = root.owner species = root.owner type = "hirogen_hunters_army" }
+								}
+							} 
+						}
+						98 = {}
+					}
+				}
+			}
+		}
+	}
+}
+
+# Medical
+fleet_event = {
+	id = STH_components.1050
+	title = "theFederation.1050.name"
+	desc = "theFederation.1050.desc"
+	picture = sth_GFX_evt_medicalComponent
+	is_triggered_only = yes
+	option = { name = UNDERSTOOD }
+}
+# Religious
+fleet_event = {
+	id = STH_components.1051
+	title = "theFederation.1051.name"
+	desc = "theFederation.1051.desc"
+	picture = sth_GFX_evt_religiousComponent
+	is_triggered_only = yes
+	option = { name = UNDERSTOOD }
+}
+# Prison
+fleet_event = {
+	id = STH_components.1052
+	title = "theFederation.1052.name"
+	desc = "theFederation.1052.desc"
+	picture = sth_GFX_evt_prisonComponent
+	is_triggered_only = yes
+	option = { name = UNDERSTOOD }
+}
+# Gambling
+fleet_event = {
+	id = STH_components.1053
+	title = "theFederation.1053.name"
+	desc = "theFederation.1053.desc"
+	picture = sth_GFX_evt_gamblingComponent
+	is_triggered_only = yes
+	option = { name = UNDERSTOOD }
+}
+# Diplomatic
+fleet_event = {
+	id = STH_components.1054
+	title = "theFederation.1054.name"
+	desc = "theFederation.1054.desc"
+	picture = sth_GFX_evt_diplomaticComponent
+	is_triggered_only = yes
+	option = { name = UNDERSTOOD }
+}
+# Diplomatic
+fleet_event = {
+	id = STH_components.1055
+	title = "theFederation.1055.name"
+	desc = "theFederation.1055.desc"
+	picture = sth_GFX_evt_huntingComponent
+	is_triggered_only = yes
+	option = { name = UNDERSTOOD }
+}
+
+# A ship has surveyed a planet.
+# Scope = Ship
+# From = Planet
+# Survey Component Events
+ship_event = {
+	id = STH_components.1100
+	hide_window = yes
+	is_triggered_only = yes
+	trigger = { 
+		OR = {
+			has_component = REQUIRED_SCIENCE_MODULE_PROSPECTOR_0
+			has_component = REQUIRED_SCIENCE_MODULE_XENOBIOLOGY_0
+		}
+	}
+	immediate = { 
+		if = {
+			limit = { has_component = REQUIRED_SCIENCE_MODULE_PROSPECTOR_0 }
+			FROM = {
+				random_tile = {
+					limit = { is_orbital_tile = yes }
+					if = {
+						limit = { has_resource = { type = minerals amount > 0 } }
+						ROOT.owner = { add_minerals = 5 }
+					}
+				}
+				if = {
+					limit = { has_strategic_resource = yes }
+					ROOT.owner = { add_minerals = 25 }
+				}
+			}
+		}
+		if = {
+			limit = { has_component = REQUIRED_SCIENCE_MODULE_XENOBIOLOGY_0 }
+			FROM = {
+				every_tile = {
+					limit = { has_resource = { type = society_research amount > 0 } }
+					ROOT.owner = { add_society_research = 5 }
+				}
+			}
+		}
+	}
+}
+
+#MTTH Component Events
+fleet_event = {
+	id = STH_components.1200
+	title = STH_components.1200.name
+    desc = STH_components.1200.desc
+    picture = sth_GFX_evt_childGenius
+	mean_time_to_happen = {
+		years = 10
+		# months = 1
+		modifier = { factor = 10.0 owner = { any_owned_leader = { has_leader_flag = childGenius } } }
+	}
+	trigger = { 
+		any_owned_ship = {
+			OR = {
+				has_component = REQUIRED_SCIENCE_MODULE_SCHOOL_0
+			}
+		}
+	}
+	immediate = {
+		random_owned_ship = {
+			limit = { has_component = REQUIRED_SCIENCE_MODULE_SCHOOL_0 }
+			save_event_target_as = schoolShip
+		}
+		owner = { 
+			random_owned_pop_species = { save_event_target_as = childGeniusSpecies } 
+			create_leader = {
+				name = random
+				type = scientist
+				species = event_target:childGeniusSpecies
+				traits = { trait = leader_trait_spark_of_genius trait = leader_trait_carefree }
+				skill = 1500
+			}
+			last_created_leader = { 
+				set_child_genius_age = yes
+				set_leader_flag = childGenius
+				save_event_target_as = childGenius
+			}
+		}		
+	}
+    option = { name = STH_components.1200.a }
+	option = { 
+		name = STH_components.1200.b 
+		owner = { add_influence = 25 }
+		hidden_effect = { event_target:childGenius = { kill_leader = { show_notification = no } } }
+	}
+}
+
+
+
+# This = owner of ship 1 (destroyed)
+# From = owner of ship 2 (combatant)
+# FromFrom = ship 1
+# FromFromFrom = ship 2
+country_event = {
+	id = STH_components.1300
+	hide_window = yes
+	is_triggered_only = yes
+	trigger = { 
+		exists = FROMFROM
+		FROMFROM = {
+			has_component = REQUIRED_SCIENCE_MODULE_ESCAPE_0
+			exists = leader
+		}
+	}
+	immediate = {
+		random_list = {
+			75 = { 
+				country_event = { id = STH_components.1301 scopes = { from = FROMFROM.leader } } 
+			}
+			25 = {}
+		}
+	}
+}
+
+country_event = {
+	id = STH_components.1301
+	title = STH_components.1301.name
+    desc = STH_components.1301.desc
+    picture = sth_GFX_evt_escapePods
+	is_triggered_only = yes
+	trigger = { exists = FROM }
+	immediate = { }
+    option = { 
+		name = STH_components.1301.a 
+		add_influence = 40
+	}
+}
+
+
+# A planet is being bombarded
+# This = planet under bombardment
+# From = bombarding empire
+planet_event = {
+	id = STH_components.1400
+	hide_window = yes
+	is_triggered_only = yes
+	trigger = { 
+		exists = FROM
+		FROM = {
+			any_owned_fleet = {
+				exists = orbit
+				orbit = { is_same_value = root }
+				any_owned_ship = {
+					OR = {
+						has_component = REQUIRED_TACTICAL_RAIDING
+						has_component = REQUIRED_TACTICAL_SLAVERS
+						has_component = REQUIRED_TACTICAL_MARINE
+						has_component = REQUIRED_TACTICAL_AID
+					}
+				}
+			}
+		}
+	}
+	immediate = {
+		FROM = { save_event_target_as = bombardingEmpire }
+		event_target:bombardingEmpire = {
+			#Raiding Module
+			if = {
+				limit = {
+					any_owned_fleet = {
+						exists = orbit
+						orbit = { is_same_value = root }
+						any_owned_ship = { has_component = REQUIRED_TACTICAL_RAIDING }
+					}
+				}
+				ROOT = {
+					random_list = {
+						2 = {
+							random_tile = {
+								limit = { has_building = yes }
+								set_ruined = yes
+								event_target:bombardingEmpire = { add_energy = 30 add_minerals = 30 }
+							}
+						}
+						2 = {
+							random_tile = {
+								limit = { has_building = yes }
+								set_ruined = yes
+								event_target:bombardingEmpire = { add_energy = 20 add_minerals = 20 }
+							}
+						}
+						2 = {
+							random_tile = {
+								limit = { has_building = yes }
+								set_ruined = yes
+								event_target:bombardingEmpire = { add_energy = 10 add_minerals = 10 }
+							}
+						}
+						94 = {}
+					}
+				}
+			}
+			#Slaver Module
+			if = {
+				limit = {
+					any_owned_planet = { free_pop_tiles > 0 }
+					any_owned_fleet = {
+						exists = orbit
+						orbit = { is_same_value = root }
+						any_owned_ship = { has_component = REQUIRED_TACTICAL_SLAVERS }
+					}
+				}
+				random_owned_planet = {
+					limit = { free_pop_tiles > 0 }
+					save_event_target_as = bombardingEmpirePlanet
+				}
+				ROOT = {
+					random_list = {
+						5 = {
+							random_pop = {
+								resettle_pop = { pop = this planet = event_target:bombardingEmpirePlanet }
+								event_target:bombardingEmpire = { add_threat = { who = this amount = 0.2 } }
+							}
+						}
+						95 = {}
+					}
+				}
+			}
+			#Marine Unit
+			if = {
+				limit = {
+					any_owned_fleet = {
+						exists = orbit
+						orbit = { is_same_value = root }
+						any_owned_ship = { 
+							has_component = REQUIRED_TACTICAL_MARINE 
+							NOT = { has_ship_flag = recentTacticalUse }
+						}
+					}
+				}
+				ROOT = {
+					random_list = {
+						5 = {
+							create_army = { name = random owner = event_target:bombardingEmpire species = event_target:bombardingEmpire type = "marine_army" }
+						}
+						95 = {}
+					}
+				}
+			}
+			#Humanitarian Aid
+			if = {
+				limit = {
+					any_owned_planet = { free_pop_tiles > 0 }
+					any_owned_fleet = {
+						exists = orbit
+						orbit = { is_same_value = root }
+						has_ground_support_stance = light
+						any_owned_ship = { has_component = REQUIRED_TACTICAL_AID }
+					}
+					ROOT = {
+						any_owned_pop = { 
+							OR = {
+								is_enslaved = yes 
+								happiness < 20
+							}
+						}
+					}
+				}
+				random_owned_planet = {
+					limit = { free_pop_tiles > 0 }
+					save_event_target_as = bombardingEmpirePlanet
+				}
+				ROOT = {
+					random_list = {
+						5 = {
+							random_pop = {
+								limit = {
+									OR = {
+										is_enslaved = yes 
+										happiness < 20
+									}
+								}
+								add_modifier = { modifier = pop_liberation_fever days = 360 }
+								resettle_pop = { pop = this planet = event_target:bombardingEmpirePlanet }
+							}
+						}
+						95 = {}
+					}
+				}
+			}
+		}
+	}
+}

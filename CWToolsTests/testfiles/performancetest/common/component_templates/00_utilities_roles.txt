@@ -1,0 +1,765 @@
+#############
+# UTILITIES ROLES #
+#############
+
+utility_component_template = {
+	key = "COMBAT_COMPUTER_DEFAULT"
+	size = small
+	icon = "GFX_ship_part_computer_default"
+	icon_frame = 1
+	power = 0
+	cost = 1
+	ship_behavior = "default"
+	hidden = yes
+	
+	class_restriction = { shipclass_military }	
+	component_set = "combat_computers"
+	
+	ai_weight = {
+		weight = 1
+	}
+}
+
+utility_component_template = {
+	key = "COMBAT_COMPUTER_AGGRESSIVE_BASIC"
+	size = small
+	icon = "GFX_ship_part_computer_aggressive_basic"
+	icon_frame = 1
+	power = -5
+	cost = 2
+	ship_behavior = "aggressive"
+	hidden = yes
+	
+	class_restriction = { shipclass_military }
+	size_restriction = { corvette cruiser }
+	component_set = "combat_computers"
+	
+	modifier = {
+		ship_evasion_add = 5
+		ship_combat_speed_mult = 0.10
+	}
+	ship_modifier = {
+		ship_weapon_damage = 0.05
+	}
+	
+	ai_weight = {
+		weight = 10
+		modifier = {
+			factor = 2
+			has_country_flag = ai_flag_aggressive_personality
+		}
+	}
+}
+
+utility_component_template = {
+	key = "COMBAT_COMPUTER_DEFENSIVE_BASIC"
+	size = small
+	icon = "GFX_ship_part_computer_defensive_basic"
+	icon_frame = 1
+	power = -5
+	cost = 2
+	ship_behavior = "defensive"
+	hidden = yes
+
+	class_restriction = { shipclass_military }
+	component_set = "combat_computers"
+	
+	ship_modifier = {
+		ship_accuracy_add = 3
+		ship_fire_rate_mult = 0.05
+		ship_weapon_range_mult = 0.10
+	}
+	
+	ai_weight = {
+		weight = 10
+		modifier = {
+			factor = 2
+			has_country_flag = ai_flag_defensive_personality
+		}
+	}
+}
+
+utility_component_template = {
+	key = "COMBAT_COMPUTER_AGGRESSIVE_ADVANCED"
+	size = small
+	icon = "GFX_ship_part_computer_aggressive_advanced"
+	icon_frame = 1
+	power = -10
+	cost = 4
+	ship_behavior = "aggressive"
+	hidden = yes
+	
+	class_restriction = { shipclass_military }
+	component_set = "combat_computers"
+	
+	modifier = {
+		ship_evasion_add = 10
+		ship_combat_speed_mult = 0.20
+	}
+	ship_modifier = {
+		ship_weapon_damage = 0.10
+	}
+	
+	ai_weight = {
+		weight = 100
+		modifier = {
+			factor = 2
+			has_country_flag = ai_flag_aggressive_personality
+		}
+	}
+}
+
+utility_component_template = {
+	key = "COMBAT_COMPUTER_DEFENSIVE_ADVANCED"
+	size = small
+	icon = "GFX_ship_part_computer_defensive_advanced"
+	icon_frame = 1
+	power = -10
+	cost = 4
+	ship_behavior = "defensive"
+	hidden = yes
+
+	class_restriction = { shipclass_military }
+	component_set = "combat_computers"
+	
+	ship_modifier = {
+		ship_accuracy_add = 6
+		ship_fire_rate_mult = 0.10
+		ship_weapon_range_mult = 0.20
+	}
+	
+	ai_weight = {
+		weight = 100
+		modifier = {
+			factor = 2
+			has_country_flag = ai_flag_defensive_personality
+		}
+	}
+}
+
+utility_component_template = {
+	key = "COMBAT_COMPUTER_SAPIENT"
+	size = small
+	icon = "GFX_ship_part_computer_sapient"
+	icon_frame = 1
+	power = -20
+	cost = 6
+	ship_behavior = "default"
+	hidden = yes
+	
+	class_restriction = { shipclass_military }
+	component_set = "combat_computers"
+	
+	ship_modifier = {
+		ship_accuracy_add = 6
+		ship_fire_rate_mult = 0.10
+		ship_weapon_damage = 0.10
+	}
+	modifier = {
+		ship_evasion_add = 8
+		ship_combat_speed_mult = 0.10
+	}
+	
+	valid_for_country = {
+		modifier = {
+			factor = 0
+			has_policy_flag = ai_outlawed
+		}
+	}
+	
+	ai_weight = {
+		weight = 500
+		modifier = {
+			factor = 2
+			OR = {
+				has_ethic = "ethic_materialist"
+				has_ethic = "ethic_fanatic_materialist"
+			}
+		}
+		modifier = {
+			factor = 0.1
+			OR = {
+				has_ethic = "ethic_spiritualist"
+				has_ethic = "ethic_fanatic_spiritualist"
+			}
+		}
+	}
+}
+
+utility_component_template = {
+	key = "COMBAT_COMPUTER_PRECOG"
+	size = small
+	icon = "GFX_ship_part_computer_pregoc"
+	icon_frame = 1
+	power = -20
+	cost = 6
+	ship_behavior = "default"
+	hidden = yes
+	
+	class_restriction = { shipclass_military }
+	component_set = "combat_computers"
+	
+	modifier = {
+		ship_evasion_add = 10
+		ship_combat_speed_mult = 0.15
+	}	
+	ship_modifier = {
+		ship_accuracy_add = 4
+		ship_fire_rate_mult = 0.08
+		ship_weapon_damage = 0.08
+		ship_weapon_range_mult = 0.15
+	}
+	
+	ai_weight = {
+		weight = 500
+		modifier = {
+			factor = 2
+			OR = {
+				has_ethic = "ethic_spiritualist"
+				has_ethic = "ethic_fanatic_spiritualist"
+			}
+		}
+		modifier = {
+			factor = 0.1
+			OR = {
+				has_ethic = "ethic_materialist"
+				has_ethic = "ethic_fanatic_materialist"
+			}
+		}
+	}
+}
+
+utility_component_template = {
+	key = "CORVETTE_COMBAT_COMPUTER_1"
+	size = small
+	icon = "GFX_ship_part_computer_default"
+	icon_frame = 1
+	power = 0
+	cost = 1
+	hidden = yes
+	class_restriction = { shipclass_military }
+	size_restriction = { corvette }
+	component_set = "combat_computers"
+	ship_behavior = "corvette_default"
+	upgrades_to = "CORVETTE_COMBAT_COMPUTER_2"
+	
+	ai_weight = {
+		weight = 1
+	}
+}
+
+utility_component_template = {
+	key = "CORVETTE_COMBAT_COMPUTER_2"
+	size = small
+	icon = "GFX_ship_part_computer_aggressive_basic"
+	icon_frame = 1
+	power = -5
+	cost = 2
+	hidden = yes
+	class_restriction = { shipclass_military }
+	size_restriction = { corvette }
+	component_set = "combat_computers"
+	ship_behavior = "corvette_default"
+	#prerequisites = { "tech_combat_computers_1" }
+	upgrades_to = "CORVETTE_COMBAT_COMPUTER_3"
+	
+	modifier = {
+		ship_evasion_add = 3
+		ship_combat_speed_mult = 0.10
+	}
+	
+	ai_weight = {
+		weight = 2
+	}
+}
+
+utility_component_template = {
+	key = "CORVETTE_COMBAT_COMPUTER_3"
+	size = small
+	icon = "GFX_ship_part_computer_aggressive_advanced"
+	icon_frame = 1
+	power = -10
+	cost = 4
+	hidden = yes
+	class_restriction = { shipclass_military }
+	size_restriction = { corvette }
+	component_set = "combat_computers"
+	ship_behavior = "corvette_default"
+	#prerequisites = { "tech_combat_computers_2" }
+	
+	modifier = {
+		ship_evasion_add = 6
+		ship_combat_speed_mult = 0.20
+	}
+	
+	ai_weight = {
+		weight = 3
+	}	
+}
+
+utility_component_template = {
+	key = "CORVETTE_COMBAT_COMPUTER_4"
+	size = small
+	icon = "GFX_ship_part_computer_sapient"
+	icon_frame = 1
+	power = -20
+	cost = 6
+	hidden = yes
+	class_restriction = { shipclass_military }
+	size_restriction = { corvette }
+	component_set = "combat_computers"
+	ship_behavior = "corvette_default"
+	#prerequisites = { "tech_combat_computers_3" }
+	
+	valid_for_country = {
+		modifier = {
+			factor = 0
+			has_policy_flag = ai_outlawed
+		}
+	}
+	
+	modifier = {
+		ship_evasion_add = 8
+		ship_combat_speed_mult = 0.20
+	}
+	ship_modifier = {
+		ship_accuracy_add = 5
+	}
+	
+	ai_weight = {
+		weight = 5
+	}
+}
+
+utility_component_template = {
+	key = "CORVETTE_COMBAT_COMPUTER_PRECOG"
+	size = small
+	icon = "GFX_ship_part_computer_pregoc"
+	icon_frame = 1
+	power = -20
+	cost = 6
+	hidden = yes
+	class_restriction = { shipclass_military }
+	size_restriction = { corvette }
+	component_set = "combat_computers"
+	ship_behavior = "corvette_default"
+	#prerequisites = { "tech_precognition_interface" }
+	
+	modifier = {
+		ship_evasion_add = 11
+		ship_combat_speed_mult = 0.20
+	}
+	
+	ai_weight = {
+		weight = 4
+	}
+}
+
+utility_component_template = {
+	key = "DESTROYER_COMBAT_COMPUTER_1"
+	size = small
+	icon = "GFX_ship_part_computer_default"
+	icon_frame = 1
+	power = 0
+	cost = 1
+	hidden = yes
+	class_restriction = { shipclass_military }
+	size_restriction = { destroyer }
+	component_set = "combat_computers"
+	ship_behavior = "destroyer_default"
+	upgrades_to = "DESTROYER_COMBAT_COMPUTER_2"
+		
+	ship_modifier = {
+		ship_tracking_add = 10
+	}
+	
+	ai_weight = {
+		weight = 1
+	}	
+}
+
+utility_component_template = {
+	key = "DESTROYER_COMBAT_COMPUTER_2"
+	size = small
+	icon = "GFX_ship_part_computer_defensive_basic"
+	icon_frame = 1
+	power = -5
+	cost = 2
+	hidden = yes
+	class_restriction = { shipclass_military }
+	size_restriction = { destroyer }
+	component_set = "combat_computers"
+	ship_behavior = "destroyer_default"
+	#prerequisites = { "tech_combat_computers_1" }
+	upgrades_to = "DESTROYER_COMBAT_COMPUTER_3"
+		
+	ship_modifier = {
+		ship_tracking_add = 12
+	}
+	modifier = {
+		ship_evasion_add = 2
+	}
+	
+	ai_weight = {
+		weight = 2
+	}	
+}
+
+utility_component_template = {
+	key = "DESTROYER_COMBAT_COMPUTER_3"
+	size = small
+	icon = "GFX_ship_part_computer_defensive_advanced"
+	icon_frame = 1
+	power = -10
+	cost = 4
+	hidden = yes
+	class_restriction = { shipclass_military }
+	size_restriction = { destroyer }
+	component_set = "combat_computers"
+	ship_behavior = "destroyer_default"
+	#prerequisites = { "tech_combat_computers_2" }
+		
+	ship_modifier = {
+		ship_tracking_add = 14
+	}
+	modifier = {
+		ship_evasion_add = 4
+	}
+	
+	ai_weight = {
+		weight = 3
+	}	
+}
+
+utility_component_template = {
+	key = "DESTROYER_COMBAT_COMPUTER_4"
+	size = small
+	icon = "GFX_ship_part_computer_sapient"
+	icon_frame = 1
+	power = -20
+	cost = 6
+	hidden = yes
+	class_restriction = { shipclass_military }
+	size_restriction = { destroyer }
+	component_set = "combat_computers"
+	ship_behavior = "destroyer_default"
+	#prerequisites = { "tech_combat_computers_3" }
+	
+	valid_for_country = {
+		modifier = {
+			factor = 0
+			has_policy_flag = ai_outlawed
+		}
+	}
+		
+	ship_modifier = {
+		ship_tracking_add = 14
+		ship_accuracy_add = 5
+	}
+	modifier = {
+		ship_evasion_add = 6
+	}
+	
+	ai_weight = {
+		weight = 4
+	}	
+}
+
+utility_component_template = {
+	key = "DESTROYER_COMBAT_COMPUTER_PRECOG"
+	size = small
+	icon = "GFX_ship_part_computer_pregoc"
+	icon_frame = 1
+	power = -20
+	cost = 6
+	hidden = yes
+	class_restriction = { shipclass_military }
+	size_restriction = { destroyer }
+	component_set = "combat_computers"
+	ship_behavior = "destroyer_default"
+	#prerequisites = { "tech_precognition_interface" }
+		
+	ship_modifier = {
+		ship_tracking_add = 14
+	}
+	modifier = {
+		ship_evasion_add = 9
+	}
+	
+	ai_weight = {
+		weight = 5
+	}	
+}
+
+utility_component_template = {
+	key = "CRUISER_COMBAT_COMPUTER_1"
+	size = small
+	icon = "GFX_ship_part_computer_default"
+	icon_frame = 1
+	power = 0
+	cost = 1
+	hidden = yes
+	class_restriction = { shipclass_military }
+	size_restriction = { cruiser }
+	component_set = "combat_computers"
+	ship_behavior = "cruiser_default"
+	upgrades_to = "CRUISER_COMBAT_COMPUTER_2"
+	
+	ai_weight = {
+		weight = 1
+	}	
+}
+
+utility_component_template = {
+	key = "CRUISER_COMBAT_COMPUTER_2"
+	size = small
+	icon = "GFX_ship_part_computer_aggressive_basic"
+	icon_frame = 1
+	power = -5
+	cost = 2
+	hidden = yes
+	class_restriction = { shipclass_military }
+	size_restriction = { cruiser }
+	component_set = "combat_computers"
+	ship_behavior = "cruiser_default"
+	#prerequisites = { "tech_combat_computers_1" }
+	upgrades_to = "CRUISER_COMBAT_COMPUTER_3"
+	
+	ship_modifier = {
+		ship_accuracy_add = 2
+		ship_fire_rate_mult = 0.05
+	}
+	
+	ai_weight = {
+		weight = 2
+	}	
+}
+
+utility_component_template = {
+	key = "CRUISER_COMBAT_COMPUTER_3"
+	size = small
+	icon = "GFX_ship_part_computer_aggressive_advanced"
+	icon_frame = 1
+	power = -10
+	cost = 4
+	hidden = yes
+	class_restriction = { shipclass_military }
+	size_restriction = { cruiser }
+	component_set = "combat_computers"
+	ship_behavior = "cruiser_default"
+	#prerequisites = { "tech_combat_computers_2" }
+
+	ship_modifier = {
+		ship_accuracy_add = 4
+		ship_fire_rate_mult = 0.10
+	}
+	
+	ai_weight = {
+		weight = 3
+	}	
+}
+
+utility_component_template = {
+	key = "CRUISER_COMBAT_COMPUTER_4"
+	size = small
+	icon = "GFX_ship_part_computer_sapient"
+	icon_frame = 1
+	power = -20
+	cost = 6
+	hidden = yes
+	class_restriction = { shipclass_military }
+	size_restriction = { cruiser }
+	component_set = "combat_computers"
+	ship_behavior = "cruiser_default"
+	#prerequisites = { "tech_combat_computers_3" }
+
+	valid_for_country = {
+		modifier = {
+			factor = 0
+			has_policy_flag = ai_outlawed
+		}
+	}
+
+	ship_modifier = {
+		ship_accuracy_add = 4
+		ship_fire_rate_mult = 0.15
+	}
+	modifier = {
+		ship_evasion_add = 2
+	}
+	
+	ai_weight = {
+		weight = 5
+	}	
+}
+
+utility_component_template = {
+	key = "CRUISER_COMBAT_COMPUTER_PRECOG"
+	size = small
+	icon = "GFX_ship_part_computer_pregoc"
+	icon_frame = 1
+	power = -20
+	cost = 6
+	hidden = yes
+	class_restriction = { shipclass_military }
+	size_restriction = { cruiser }
+	component_set = "combat_computers"
+	ship_behavior = "cruiser_default"
+	#prerequisites = { "tech_precognition_interface" }
+
+	ship_modifier = {
+		ship_accuracy_add = 4
+		ship_fire_rate_mult = 0.10
+	}
+	modifier = {
+		ship_evasion_add = 5
+	}
+	
+	ai_weight = {
+		weight = 4
+	}	
+}
+
+utility_component_template = {
+	key = "BATTLESHIP_COMBAT_COMPUTER_1"
+	size = small
+	icon = "GFX_ship_part_computer_default"
+	icon_frame = 1
+	power = 0
+	cost = 1
+	hidden = yes
+	class_restriction = { shipclass_military }
+	size_restriction = { battleship }
+	component_set = "combat_computers"
+	ship_behavior = "battleship_sniper"
+	upgrades_to = "BATTLESHIP_COMBAT_COMPUTER_2"
+	
+	ai_weight = {
+		weight = 1
+	}	
+}
+
+utility_component_template = {
+	key = "BATTLESHIP_COMBAT_COMPUTER_2"
+	size = small
+	icon = "GFX_ship_part_computer_defensive_basic"
+	icon_frame = 1
+	power = -5
+	cost = 2
+	hidden = yes
+	class_restriction = { shipclass_military }
+	size_restriction = { battleship }
+	component_set = "combat_computers"
+	ship_behavior = "battleship_sniper"
+	#prerequisites = { "tech_combat_computers_1" }
+	upgrades_to = "BATTLESHIP_COMBAT_COMPUTER_3"
+	
+	ship_modifier = {
+		ship_weapon_damage = 0.05
+	}
+	
+	ai_weight = {
+		weight = 2
+	}	
+}
+
+utility_component_template = {
+	key = "BATTLESHIP_COMBAT_COMPUTER_3"
+	size = small
+	icon = "GFX_ship_part_computer_defensive_advanced"
+	icon_frame = 1
+	power = -10
+	cost = 4
+	hidden = yes
+	class_restriction = { shipclass_military }
+	size_restriction = { battleship }
+	component_set = "combat_computers"
+	ship_behavior = "battleship_sniper"
+	#prerequisites = { "tech_combat_computers_2" }
+
+	ship_modifier = {
+		ship_weapon_damage = 0.10
+	}
+	
+	ai_weight = {
+		weight = 3
+	}	
+}
+
+utility_component_template = {
+	key = "BATTLESHIP_COMBAT_COMPUTER_4"
+	size = small
+	icon = "GFX_ship_part_computer_sapient"
+	icon_frame = 1
+	power = -20
+	cost = 6
+	hidden = yes
+	class_restriction = { shipclass_military }
+	size_restriction = { battleship }
+	component_set = "combat_computers"
+	ship_behavior = "battleship_sniper"
+	#prerequisites = { "tech_combat_computers_3" }
+	
+	valid_for_country = {
+		modifier = {
+			factor = 0
+			has_policy_flag = ai_outlawed
+		}
+	}
+
+	ship_modifier = {
+		ship_weapon_damage = 0.10
+		ship_fire_rate_mult = 0.05
+	}
+	
+	ai_weight = {
+		weight = 5
+	}	
+}
+
+utility_component_template = {
+	key = "BATTLESHIP_COMBAT_COMPUTER_PRECOG"
+	size = small
+	icon = "GFX_ship_part_computer_pregoc"
+	icon_frame = 1
+	power = -20
+	cost = 6
+	hidden = yes
+	class_restriction = { shipclass_military }
+	size_restriction = { battleship }
+	component_set = "combat_computers"
+	ship_behavior = "battleship_sniper"
+	#prerequisites = { "tech_precognition_interface" }
+
+	ship_modifier = {
+		ship_weapon_damage = 0.05
+		ship_accuracy_add = 5
+		ship_tracking_add = 5
+	}
+	
+	ai_weight = {
+		weight = 4
+	}	
+}
+
+utility_component_template = {
+	key = "STELLARITE_COMBAT_COMPUTER"
+	size = small
+	icon = "GFX_ship_part_computer_default"
+	icon_frame = 1
+	power = -20
+	cost = 6
+	hidden = yes
+	class_restriction = { shipclass_military }
+	size_restriction = { stellarite }
+	ship_behavior = "stellarite_default"
+
+	ship_modifier = {
+		ship_accuracy_add = 4
+		ship_fire_rate_mult = 0.10
+	}
+	
+	ai_weight = {
+		weight = 0
+	}	
+}

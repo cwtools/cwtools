@@ -1,0 +1,1087 @@
+### STNH 1.8 Compatible ###
+
+trait_agrarian = {
+      cost = 2
+      allowed_archetypes = { BIOLOGICAL }
+      modifier = {
+         tile_resource_food_mult = 0.15
+      }
+   }
+   
+trait_thrifty = {
+      cost = 2
+      allowed_archetypes = { BIOLOGICAL }
+      modifier = {
+         tile_resource_energy_mult = 0.15
+      }
+   }
+
+trait_highly_industrious = {
+      cost = 4
+	  icon = "gfx/interface/icons/traits/trait_industrious.dds"
+      allowed_archetypes = { BIOLOGICAL }
+      modifier = {
+         tile_resource_minerals_mult = 0.25
+      }
+	  randomized = no
+      modification = no
+   }
+   
+trait_industrious = {
+      cost = 2
+      allowed_archetypes = { BIOLOGICAL }
+      modifier = {
+         tile_resource_minerals_mult = 0.15
+      }
+   }
+   
+trait_intelligent = {
+      cost = 2
+      opposites = { "trait_nerve_stapled" "trait_erudite" }
+      allowed_archetypes = { BIOLOGICAL }
+      modifier = {
+         tile_resource_engineering_research_mult = 0.1
+         tile_resource_physics_research_mult = 0.1
+         tile_resource_society_research_mult = 0.1
+      }
+   }
+   
+trait_natural_engineers = {
+      cost = 1
+      opposites = { "trait_nerve_stapled" "trait_natural_physicists" "trait_natural_sociologists" }
+      allowed_archetypes = { BIOLOGICAL }
+      modifier = {
+         tile_resource_engineering_research_mult = 0.15
+      }
+   }
+   
+trait_natural_physicists = {
+      cost = 1
+      opposites = { "trait_nerve_stapled" "trait_natural_engineers" "trait_natural_sociologists" }
+      allowed_archetypes = { BIOLOGICAL }
+      modifier = {
+         tile_resource_physics_research_mult = 0.15
+      }
+   }
+   
+trait_natural_sociologists = {
+      cost = 1
+      opposites = { "trait_nerve_stapled" "trait_natural_engineers" "trait_natural_physicists" }
+      allowed_archetypes = { BIOLOGICAL }
+      modifier = {
+         tile_resource_society_research_mult = 0.15
+      }
+   }
+   
+trait_extremely_adaptive = {
+      cost = 4
+      opposites = { "trait_nonadaptive" "trait_adaptive" "trait_robust" }
+      allowed_archetypes = { BIOLOGICAL }
+      modifier = {
+         pop_environment_tolerance = 0.20
+      }
+   }
+   
+trait_adaptive = {
+      cost = 2
+      opposites = { "trait_nonadaptive" "trait_extremely_adaptive" "trait_robust" }
+      allowed_archetypes = { BIOLOGICAL }
+      modifier = {
+         pop_environment_tolerance = 0.10
+      }
+   }
+   
+trait_nonadaptive = {
+      cost = -2
+      opposites = { "trait_extremely_adaptive" "trait_adaptive" "trait_robust" }
+      allowed_archetypes = { BIOLOGICAL }
+      modifier = {
+         pop_environment_tolerance = -0.10
+      }
+      ai_weight = { weight =0 }
+   }
+   
+trait_rapid_breeders = {
+      cost = 1
+      opposites = { "trait_slow_breeders" "trait_fertile" }
+      allowed_archetypes = { BIOLOGICAL }
+      modifier = {
+         pop_growth_speed = 0.20
+      }
+   }
+   
+trait_slow_breeders = {
+      cost = -1
+      opposites = { "trait_rapid_breeders" "trait_fertile" }
+      allowed_archetypes = { BIOLOGICAL }
+      modifier = {
+         pop_growth_speed = -0.20
+      }
+   }
+   
+trait_talented = {
+      cost = 1
+      opposites = { "trait_highly_talented" }
+      allowed_archetypes = { BIOLOGICAL }
+      modifier = {
+         leader_skill_levels = 1
+      }
+   }
+   
+trait_quick_learners = {
+      cost = 1
+      opposites = { "trait_slow_learners" }
+      allowed_archetypes = { BIOLOGICAL }
+      modifier = {
+         species_leader_exp_gain = 0.25
+      }
+   }
+   
+trait_slow_learners = {
+      cost = -1
+      opposites = { "trait_quick_learners" }
+      allowed_archetypes = { BIOLOGICAL }
+      modifier = {
+         species_leader_exp_gain = -0.25
+      }
+      ai_weight = { weight =0 }
+   }
+   
+trait_very_strong = {
+      cost = 3
+      opposites = { "trait_weak" "trait_strong" }
+      allowed_archetypes = { BIOLOGICAL }
+      modifier = {
+         army_damage_mult = 0.40
+         tile_resource_minerals_mult = 0.10
+      }
+   }
+   
+trait_strong = {
+      cost = 1
+      opposites = { "trait_very_strong" "trait_weak" }
+      allowed_archetypes = { BIOLOGICAL }
+      modifier = {
+         army_damage_mult = 0.20
+         tile_resource_minerals_mult = 0.05
+      }
+   }
+   
+trait_weak = {
+      cost = -1
+      opposites = { "trait_very_strong" "trait_strong" }
+      allowed_archetypes = { BIOLOGICAL }
+      modifier = {
+         army_damage_mult = -0.20
+         tile_resource_minerals_mult = -0.05
+      }
+      ai_weight = { weight =0 }
+   }
+   
+trait_nomadic = {
+      cost = 1
+      opposites = { "trait_sedentary" "trait_hive_mind" "trait_machine_unit" }
+      allowed_archetypes = { BIOLOGICAL }
+      modifier = {
+         pop_migration_speed = 0.5
+         pop_resettlement_cost_mult = -0.25
+      }
+   }
+   
+trait_sedentary = {
+      cost = -1
+      opposites = { "trait_nomadic" "trait_hive_mind" "trait_machine_unit" }
+      allowed_archetypes = { BIOLOGICAL }
+      modifier = {
+         pop_migration_speed = -0.5
+         pop_resettlement_cost_mult = 0.25
+      }
+      ai_weight = { weight =0 }
+   }
+   
+trait_communal = {
+      cost = 1
+      opposites = { "trait_solitary" "trait_hive_mind" "trait_machine_unit" }
+      allowed_archetypes = { BIOLOGICAL }
+      modifier = {
+         pop_happiness = 0.05
+      }
+   }
+   
+trait_solitary = {
+      cost = -1
+      opposites = { "trait_communal" "trait_hive_mind" "trait_machine_unit" }
+      allowed_archetypes = { BIOLOGICAL }
+      modifier = {
+         pop_happiness = -0.05
+      }
+      ai_weight = { weight =0 }
+   }
+   
+trait_charismatic = {
+      cost = 1
+      opposites = { "trait_repugnant" }
+      allowed_archetypes = { BIOLOGICAL }
+      modifier = {
+         pop_other_species_owner_happiness = 0.05
+      }
+      custom_tooltip = TRAIT_charismatic_EFFECT
+   }
+   
+trait_repugnant = {
+      cost = -1
+      opposites = { "trait_charismatic" }
+      allowed_archetypes = { BIOLOGICAL }
+      modifier = {
+         pop_other_species_owner_happiness = -0.05
+      }
+      ai_weight = { weight =0 }
+      custom_tooltip = TRAIT_repugnant_EFFECT
+   }
+   
+trait_uplifted = {
+      cost = 0
+      allowed_archetypes = { BIOLOGICAL }
+      modifier = {
+      }
+      
+      randomized = no
+      modification = no
+      ai_weight = { weight =0 }
+   }
+   
+trait_conformists = {
+      cost = 2
+      opposites = { "trait_deviants" "trait_hive_mind" "trait_machine_unit" }
+      allowed_archetypes = { BIOLOGICAL }
+      modifier = {
+         pop_government_ethic_attraction = 0.30
+      }
+   }
+   
+trait_deviants = {
+      cost = -1
+      opposites = { "trait_conformists" "trait_hive_mind" "trait_machine_unit" }
+      allowed_archetypes = { BIOLOGICAL }
+      modifier = {
+         pop_government_ethic_attraction = -0.15
+      }
+      ai_weight = { weight =0 }
+   }
+   
+trait_venerable = {
+      cost = 4
+      opposites = { "trait_enduring" "trait_fleeting" }
+      allowed_archetypes = { BIOLOGICAL }
+      modifier = {
+         leader_age = 80
+      }
+   }
+   
+trait_enduring = {
+      cost = 1
+      opposites = { "trait_venerable" "trait_fleeting" }
+      allowed_archetypes = { BIOLOGICAL }
+      modifier = {
+         leader_age = 20
+      }
+   }
+   
+trait_fleeting = {
+      cost = -1
+      opposites = { "trait_venerable" "trait_enduring" }
+      allowed_archetypes = { BIOLOGICAL }
+      modifier = {
+         leader_age = -10
+      }
+      ai_weight = { weight =0 }
+   }
+
+trait_short_lived = {
+      cost = -2
+	  icon = "gfx/interface/icons/traits/trait_fleeting.dds"
+      allowed_archetypes = { BIOLOGICAL }
+      modifier = {
+         leader_age = -30
+      }
+      ai_weight = { weight =0 }
+   }   
+ 
+trait_decadent = {
+      cost = -1
+      allowed_archetypes = { BIOLOGICAL }
+      modifier = {
+         pop_eff_wo_slaves = -0.1
+      }
+      ai_weight = { weight =0 }
+   }
+   
+trait_resilient = {
+      cost = 1
+      allowed_archetypes = { BIOLOGICAL }
+      modifier = {
+         garrison_health = 1.0
+         pop_fortification_defense = 0.5
+      }
+   }
+   
+trait_conservational = {
+      cost = 1
+      opposites = { "trait_wasteful" }
+      allowed_archetypes = { BIOLOGICAL }
+      modifier = {
+         pop_consumer_goods_mult = -0.15
+      }
+   }
+   
+trait_wasteful = {
+      cost = -1
+      opposites = { "trait_conservational" }
+      allowed_archetypes = { BIOLOGICAL }
+      modifier = {
+         pop_consumer_goods_mult = 0.15
+      }
+      ai_weight = { weight =0 }
+   }
+   
+trait_cybernetic = {
+      cost = 0
+      allowed_archetypes = { BIOLOGICAL }
+      modifier = {
+         pop_environment_tolerance = 0.20
+         army_damage_mult = 0.1
+         leader_age = 40
+      }
+      
+      randomized = no
+      modification = no
+      alters_species_identity = yes
+      ai_weight = { weight =0 }
+   }
+   
+trait_latent_psionic = {
+      cost = 0
+      icon = "gfx/interface/icons/traits/trait_psionic_species.dds"
+      allowed_archetypes = { BIOLOGICAL }
+      modifier = {
+         tile_resource_engineering_research_mult = 0.05
+         tile_resource_physics_research_mult = 0.05
+         tile_resource_society_research_mult = 0.05
+         tile_resource_energy_mult = 0.05
+      }
+      
+      randomized = no
+      modification = no
+   }
+   
+trait_psionic = {
+      cost = 0
+      icon = "gfx/interface/icons/traits/trait_psionic_species.dds"
+      allowed_archetypes = { BIOLOGICAL }
+      modifier = {
+         tile_resource_engineering_research_mult = 0.10
+         tile_resource_physics_research_mult = 0.10
+         tile_resource_society_research_mult = 0.10
+         tile_resource_energy_mult = 0.10
+         pop_happiness = 0.05
+      }
+      
+      randomized = no
+      modification = no
+   }
+   
+trait_self_modified = {
+      cost = 0
+      icon = "gfx/interface/icons/traits/trait_cybernetic.dds"
+      allowed_archetypes = { BIOLOGICAL }
+      modifier = {
+      }
+      
+      randomized = no
+      modification = no
+   }
+   
+trait_delicious = {
+      cost = 2
+      allowed_archetypes = { BIOLOGICAL }
+      modifier = {
+         pop_food_mult = 0.5
+      }
+      
+      randomized = no
+      advanced_trait = yes
+   }
+   
+trait_nerve_stapled = {
+      cost = 3
+      opposites = { "trait_intelligent" "trait_erudite" "trait_natural_engineers" "trait_natural_physicists" "trait_natural_sociologists" "trait_communal" "trait_solitary" }
+      allowed_archetypes = { BIOLOGICAL }
+      modifier = {
+         tile_resource_minerals_mult = 0.1
+         tile_resource_food_mult = 0.1
+         tile_resource_unity_mult = -0.5
+         tile_resource_energy_mult = -0.5
+         tile_resource_physics_research_mult = -0.75
+         tile_resource_engineering_research_mult = -0.75
+         tile_resource_society_research_mult = -0.75
+      }
+      
+      randomized = no
+      advanced_trait = yes
+      forced_happiness = yes
+   }
+   
+trait_fertile = {
+      cost = 3
+      opposites = { "trait_slow_breeders" "trait_rapid_breeders" }
+      allowed_archetypes = { BIOLOGICAL }
+      modifier = {
+         pop_growth_speed = 0.3
+         pop_happiness = 0.05
+      }
+      
+      randomized = no
+      advanced_trait = yes
+   }
+   
+trait_erudite = {
+      cost = 4
+      opposites = { "trait_nerve_stapled" "trait_intelligent" }
+      allowed_archetypes = { BIOLOGICAL }
+      modifier = {
+         tile_resource_engineering_research_mult = 0.2
+         tile_resource_physics_research_mult = 0.2
+         tile_resource_society_research_mult = 0.2
+         leader_skill_levels = 1
+      }
+      
+      randomized = no
+      advanced_trait = yes
+   }
+   
+trait_robust = {
+      cost = 6
+      opposites = { "trait_nonadaptive" "trait_extremely_adaptive" "trait_adaptive" }
+      allowed_archetypes = { BIOLOGICAL }
+      modifier = {
+         pop_environment_tolerance = 0.30
+         leader_age = 40
+      }
+      
+      randomized = no
+      advanced_trait = yes
+   }
+      
+### Gives access to advanced genetic techs
+trait_master_geneticist = {
+	cost = 0
+	allowed_archetypes = { BIOLOGICAL }
+	species_potential_add = { 
+		OR = { 
+			is_species_class = DOM 
+			is_species_class = SUL 
+			is_species_class = VID 
+			is_species_class = BRU 
+		} 
+	}
+	modifier = { }
+	
+	randomized = no
+	modification = no
+}
+   
+trait_survivor = {
+	cost = 4
+	allowed_archetypes = { BIOLOGICAL }
+	species_potential_add = { 
+		OR = { 
+			is_species_class = SUL 
+			is_species_class = XINMAM 
+			is_species_class = XINREP 
+			is_species_class = XININS 
+			is_species_class = XINAQU
+			is_species_class = XINARB
+		} 
+	}
+	modifier = {
+		leader_skill_levels = 2
+	}
+	
+	randomized = no
+	modification = no
+}
+   
+trait_chosen_people = {
+	cost = 1
+	allowed_archetypes = { BIOLOGICAL }
+	species_potential_add = { 
+		OR = { 
+			is_species_class = BAJ
+		}
+	}
+	modifier = {
+		pop_government_ethic_attraction = 0.1
+		pop_happiness = 0.05
+	}
+	
+	randomized = no
+	modification = no
+}
+   
+trait_highly_talented = {
+	cost = 4
+	opposites = { "trait_talented" }
+	allowed_archetypes = { BIOLOGICAL }
+	modifier = {
+		leader_skill_levels = 2
+	}
+	advanced_trait = yes
+}
+   
+### Unique Founder trait
+trait_shapeshifter = {
+	cost = 0
+	allowed_archetypes = { CHANGELING }
+	modifier = {
+		leader_age = 928
+		pop_growth_req = 1000
+		leader_influence_cost = 3.00
+	}
+	modification = no
+}
+      
+trait_xindi = {
+	cost = 0
+	allowed_archetypes = { BIOLOGICAL }
+	species_potential_add = { 
+		OR = { 
+			is_species_class = XINMAM 
+			is_species_class = XINREP 
+			is_species_class = XININS 
+			is_species_class = XINAQU
+			is_species_class = XINARB
+		} 
+	}
+	modifier = { }
+	
+	randomized = no
+	modification = no
+}
+      
+trait_skilled_administrator = {
+	cost = 0
+	allowed_archetypes = { BIOLOGICAL VORTA }
+	modifier = {
+		tile_resource_engineering_research_mult = 0.05
+		tile_resource_physics_research_mult = 0.05
+		tile_resource_society_research_mult = 0.05
+	}
+	
+	randomized = no
+	modification = no
+}
+
+trait_complex_family_structures = {
+	cost = 1
+	allowed_archetypes = { BIOLOGICAL }
+	species_potential_add = { 
+		OR = { 
+			is_species_class = DEN
+		}
+	}
+	modifier = {
+	    pop_happiness = 0.08
+	}
+	
+	randomized = no
+	modification = no
+}
+
+trait_reptilian = {
+	cost = 0
+	allowed_archetypes = { BIOLOGICAL }
+	species_potential_add = { 
+		OR = { 
+			is_species_class = GOR
+			is_species_class = VOT
+			is_species_class = SEL
+			is_species_class = XINREP
+		}
+	}
+	modifier = {
+	    pop_growth_speed = 0.20
+		pop_environment_tolerance = -0.05
+	    army_health = 0.1
+	}
+	
+	randomized = no
+	modification = no
+}
+   
+### Unique Romulan trait, has a negative opinion modifier as well
+trait_cunning = {
+	cost = 1
+	allowed_archetypes = { BIOLOGICAL }
+	species_potential_add = { 
+		OR = { 
+			is_species_class = ROM 
+			is_species_class = GAR
+		}
+	}
+	modifier = {
+		tile_resource_engineering_research_mult = 0.1
+		tile_resource_physics_research_mult = 0.1
+		tile_resource_society_research_mult = 0.1
+	}
+	
+	randomized = no
+	modification = no
+	custom_tooltip = TRAIT_cunning_EFFECT
+}
+   
+### Unique Tholian trait, has unique terraforming chains as well
+trait_crystal = {
+	cost = -1
+    allowed_archetypes = { CRYSTALINE }
+	modifier = {
+		pop_consumer_goods_mult = -0.2
+		tile_resource_minerals_mult = 0.15
+		pop_environment_tolerance = -0.1
+		pop_growth_speed = -0.33
+	}
+	modification = no
+	custom_tooltip = TRAIT_crystal_EFFECT
+}
+   
+### Unique Sheliak trait, has unique terraforming chains as well
+trait_silicon = {
+	cost = 2
+    allowed_archetypes = { SILICOID }
+	modifier = {
+		 pop_environment_tolerance = 0.1
+		 army_health = 0.25
+		 leader_age = 20
+		 pop_growth_speed = -0.33
+	}
+	modification = no
+	custom_tooltip = TRAIT_silicon_EFFECT
+}
+
+### Unique Breen trait, has unique terraforming chains as well
+trait_environment_suit_dependency = {
+	cost = 0
+    allowed_archetypes = { BIOLOGICAL }
+	modifier = {
+		 army_health = 0.1
+	}
+    species_potential_add = { 
+		OR = { 
+			is_species_class = BRE 
+		}
+	}
+	modification = no
+	custom_tooltip = TRAIT_suit_EFFECT
+}
+   
+   
+### Unique Vidiian modifier
+trait_the_phage = {
+	cost = -2
+    allowed_archetypes = { BIOLOGICAL }
+	species_potential_add = { 
+		OR = { 
+			is_species_class = VID 
+		}
+	}
+	modifier = {
+		leader_age = -15
+		pop_growth_speed = -0.1
+	}
+	
+	randomized = no
+	modification = no
+}
+   
+### Telepathy, serves as latent psionic. Can be upgraded to psionics masters trait via the psionics tech branch
+trait_telepathy = {
+	cost = 0
+	allowed_archetypes = { BIOLOGICAL VORTA }
+	modifier = {
+		pop_happiness = 0.01
+	}
+    
+	randomized = no
+	modification = no
+}
+   
+trait_psionic_masters = {
+	cost = 0
+	allowed_archetypes = { BIOLOGICAL }
+	modifier = {
+		tile_resource_engineering_research_mult = 0.05
+		tile_resource_physics_research_mult = 0.05
+		tile_resource_society_research_mult = 0.05
+		pop_happiness = 0.02
+	}
+	
+	randomized = no
+	modification = no
+}
+   
+trait_stubborn = {
+	cost = -1
+    allowed_archetypes = { BIOLOGICAL }
+	modifier = {
+		tile_resource_society_research_mult = -0.15
+	}
+	
+	randomized = no
+	modification = no
+}
+   
+trait_fragmented = {
+	cost = -1
+    allowed_archetypes = { BIOLOGICAL }
+	modifier = {
+		pop_government_ethic_attraction = -0.2
+	}
+	
+	randomized = no
+	modification = no
+}
+   
+trait_symbiont = {
+	cost = 3
+	allowed_archetypes = { BIOLOGICAL }
+	species_potential_add = { 
+		OR = { 
+			is_species_class = TRI 
+		}
+	}
+	modifier = {
+		leader_skill_levels = 1
+		species_leader_exp_gain = 0.33
+		leader_age = 100
+	}
+	
+	randomized = no
+	modification = no
+}
+   
+trait_consummate_warriors = {
+	cost = 2
+    allowed_archetypes = { BIOLOGICAL }
+	modifier = {
+		army_damage_mult = 0.33
+		army_morale = 0.1
+	}
+	
+	randomized = no
+	modification = no
+}
+   
+trait_skilled_hunters = {
+	cost = 1
+	allowed_archetypes = { BIOLOGICAL }
+	modifier = {
+		army_damage_mult = 0.10
+		tile_resource_food_mult = 0.05
+	}
+	
+	randomized = no
+	modification = no
+}
+   
+trait_antiquated = {
+	cost = -2
+	allowed_archetypes = { BIOLOGICAL }
+	modifier = {
+		tile_resource_unity_mult = -0.5
+	}
+	
+	randomized = no
+	modification = no
+}
+      
+trait_synaptic_processors = {
+	cost = 4
+	allowed_archetypes = { CYBORG }
+	modifier = {
+		tile_resource_physics_research_mult = 0.25
+		tile_resource_engineering_research_mult = 0.25
+		pop_government_ethic_attraction = 0.25
+	}
+	modification = no
+}
+   
+trait_necrogenesis = {
+	cost = -2
+	allowed_archetypes = { BIOLOGICAL }
+	modifier = {
+		pop_other_species_happiness = -0.2
+		leader_skill_levels = 1
+		species_leader_exp_gain = 0.10
+		leader_age = 20
+		pop_growth_req = 60
+	}
+	
+	randomized = no
+	modification = no
+}
+   
+trait_coward = {
+	cost = -1
+    allowed_archetypes = { BIOLOGICAL }
+	modifier = {
+		army_morale = -0.25
+	}
+	
+	randomized = no
+	modification = no
+}
+   
+trait_rigid = {
+	cost = -1
+	icon = "gfx/interface/icons/traits/trait_antiquated.dds"
+	allowed_archetypes = { BIOLOGICAL }
+	modifier = {
+		tile_resource_unity_mult = -0.25
+	}
+	
+	randomized = no
+	modification = no
+}
+   
+trait_reclusive = {
+	cost = -2
+	allowed_archetypes = { BIOLOGICAL }
+	modifier = {
+		pop_migration_speed = -0.75
+		pop_resettlement_cost_mult = 1
+	}
+	
+	randomized = no
+	modification = no
+}
+   
+trait_heightened_senses = {
+	cost = 2
+	allowed_archetypes = { BIOLOGICAL }
+	modifier = {
+		leader_skill_levels = 1
+		leader_age = 20
+	}
+	
+	randomized = no
+	modification = no
+}
+
+trait_untrustworthy = {
+      cost = -1
+      allowed_archetypes = { BIOLOGICAL }
+      modifier = {
+          country_trust_cap_add = -25
+      }
+   }
+   
+#####################################   
+### Jem'Hadar and Vorta unique traits
+#####################################
+
+trait_clone = {
+	cost = 0
+	allowed_archetypes = { JEMHADAR VORTA }
+	modifier = { }
+	
+	randomized = no
+	modification = no
+	forced_happiness = yes
+}
+
+trait_jem_super_metabolism = {
+	cost = 0
+	allowed_archetypes = { JEMHADAR VORTA }
+	modifier = { 
+		pop_robot_build_cost_mult = -0.25
+	}
+}
+
+trait_ketracel_white_addiction = {
+	cost = 0
+	allowed_archetypes = { JEMHADAR }
+	modifier = { 
+		tile_resource_sr_ketracel_13_add = -1
+	}
+	
+	randomized = no
+	modification = no
+}
+
+trait_bred_for_war = { ### Removing for sake of streamlining and genetic engineering, moving all modifiers to the jemhadar trait
+      cost = 0
+      allowed_archetypes = { JEMHADAR }
+      modifier = {
+      }
+      
+      randomized = no
+      modification = no
+   }
+ 
+trait_pop_jem'hadar_1 = {
+	cost = 0
+    allowed_archetypes = { JEMHADAR }
+
+	modifier = {
+		army_damage_mult = 0.40
+        garrison_health = 1.0
+		pop_fortification_defense = 0.5
+		tile_resource_engineering_research_mult = -0.90
+		tile_resource_physics_research_mult = -0.90
+		tile_resource_society_research_mult = -0.90
+		tile_resource_minerals_mult = 0.10
+		tile_resource_energy_mult = 0.10
+		leader_age = -40
+	}
+	
+	randomized = no
+	modification = no
+}
+   
+trait_pop_alpha_2 = { ### Keep for possible future support
+	cost = 0
+	allowed_archetypes = { JEMHADAR }
+	modifier = {
+	}
+	
+	randomized = no
+	modification = no
+}
+
+trait_revered_elders = {
+	cost = 0
+    allowed_archetypes = { JEMHADAR }
+	icon = "gfx/interface/icons/traits/trait_vor_optimised.dds"
+	modifier = {
+		leader_age = 30
+	}
+}
+
+trait_jem_low_light = {
+	cost = 1
+
+	allowed_archetypes = { JEMHADAR }
+
+	modifier = {
+		tile_resource_minerals_mult = 0.10
+	}
+}
+
+trait_jem_cognitive_reasoning = {
+	cost = 1
+
+	allowed_archetypes = { JEMHADAR }
+
+	modifier = {
+		tile_resource_energy_mult = 0.10
+	}
+}
+
+trait_jem_high_endurance = {
+	cost = 1
+
+	allowed_archetypes = { JEMHADAR }
+
+	modifier = {
+		 army_health = 0.1
+	}
+}
+
+trait_jem_spartan_life = {
+	cost = 1
+	
+	allowed_archetypes = { JEMHADAR }
+
+	modifier = {
+		pop_consumer_goods_mult = -0.75
+	}
+}
+
+trait_jem_terror_battle = {
+	cost = 1
+	
+    allowed_archetypes = { JEMHADAR }
+	modifier = {
+		army_morale = 0.25
+		army_morale_damage_mult = 0.25
+	}
+}
+
+trait_vor_green_thumb = {
+	cost = 1
+
+	allowed_archetypes = { VORTA }
+
+	modifier = {
+		tile_resource_food_mult = 0.10
+	}
+}
+
+trait_vor_creativity = {
+	cost = 1
+
+	allowed_archetypes = { VORTA }
+
+	modifier = {
+		tile_resource_society_research_mult = 0.05
+		tile_resource_physics_research_mult = 0.05
+		tile_resource_engineering_research_mult = 0.05
+	}
+}
+
+trait_vor_voice_founder = {
+	cost = 1
+
+	allowed_archetypes = { VORTA }
+
+	modifier = {
+		tile_resource_unity_mult = 0.15
+	}
+}
+
+trait_vor_lithe = {
+	cost = 1
+
+	allowed_archetypes = { VORTA }
+
+	modifier = {
+		pop_resettlement_cost_mult = -0.75
+	}
+}
+
+trait_vor_marsupial_cunning = {
+	cost = 1
+
+	allowed_archetypes = { VORTA }
+	
+	modifier = {
+		species_leader_exp_gain = 0.25
+	}
+}
+
+trait_vor_optimised = {
+	cost = 0
+    allowed_archetypes = { VORTA }
+	modifier = {
+		leader_age = 40
+	}
+}
+
+trait_darsay_personality = {
+	cost = 0
+	initial = no
+	randomized = no
+	modifier = {
+		tile_resource_society_research_mult = 0.1
+		species_leader_exp_gain = -0.25
+	}
+}

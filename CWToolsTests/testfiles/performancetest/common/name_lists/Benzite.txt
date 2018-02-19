@@ -1,0 +1,97 @@
+﻿### Benzite
+Benzite = {
+	randomized = no
+
+	ship_names = {
+		generic = {
+			Gelkot Andross Belross Bepsot Belross Chandock Panzor Galmut Chadock Dathet Entoss Entock Gelkoss Gelkot Grevan Gral Farkoss Freptas Lartak Lorveth Lustoss Mantoss Methot Mordoss Morneth Panthak Renas Entock Gelkot Grevan Ker Mantoss Mordoss Panthoss Renas Toruk Tarkat Tarkoss Tekross Tekra Tatock Tatoss Toruk Wipvoss Wipvuk Utva Pheradon Merria Herti Dwora
+		}
+		corvette = {
+		}
+		saber = {
+		}
+		sovereign = {
+		}
+		steamrunner = {
+		}		
+		adv_cruiser = {
+		}
+		strike = {
+		}	
+		constructor = { }
+		colonizer = { }
+		science = { }
+		transport = { }
+		outpost_station = {
+			sequential_name = "Frontier Outpost"
+		}
+	}
+
+	fleet_names = {
+		sequential_name = "%O% Fleet"
+	}
+	
+	army_names = {
+		defense_army = {
+			sequential_name = "%O% Benzite Guard"
+		}
+		assault_army = {
+			sequential_name = "%O% Benzite Army"
+		}
+		slave_army = {
+			sequential_name = "%O% Indentured Defence Force"
+		}
+		clone_army = { 
+			sequential_name = "%O% Clone Defence Force"
+		}
+		robotic_army = {
+			sequential_name = "%O% Mechanical Defence Force"
+		}
+		android_army = {
+			sequential_name = "%O% Synthetic Defence Force"
+		}
+		psionic_army = { 
+			sequential_name = "%O% Psi Defence Force"
+		}
+		xenomorph_army = {
+			sequential_name = "%O% Bio-Warfare Defence Force"
+		}
+		gene_warrior_army = {
+			sequential_name = "%O% Bio-Engineered Defence Force"
+		}
+	}
+
+	planet_names = {
+		generic = {
+			names = { Renvar Quzdez Kertar Tonrer Vurbod Pundick Dotto Qupix Zoheqe Givvex Daxxoth Muzu Razze Kappine Tappog Puzrut Rirqeg Vurtik Tanred Rendar Pirron Middin Korsen Bojoth Jogox Jexxa Dacceyo Vacciq Gepeth Pakko Vaqqe Gottoth Kutino Zoyo Tuketh
+			}
+		}
+	}
+
+
+	### CHARACTERS
+
+	character_names = {
+		names1 = {
+			weight = 40
+			first_names_male = {
+			Mordock Mendon Laporin Mendon Oorv Pirk Gari Culer Nenap Canut Huro Yunnel Pizann Paluh Curak Roriy Gihen Dobet Mosap Tined Polik Gazed Dupey Cripbar Bamiz Marin Hoydock Mendock Dolin Sabin Cirdock Hobock Cecin Gapin Sohin Gizin Pizin Kadig Borek Qantot Derjit Bundat Tenvag Derqak Qunguz Tarvackad Judet Vanrinad Tozrok Purlaz Qandanar Vanrinad Virgoz Girjug Purack Kurrod Monden Murked Venroz Birbog Terjugab Kangiz Gozgag Rorbick Dongen Bardot Rurrinun Pirhod Rarluz Cirhig Kedet Tirsaz Jurvor Zorjuz Morkor Zozgug
+			}
+			first_names_female = {
+			Marya Hoya Nonin Dolah Sabah Cira Hubo Ceza Cecir Gapy Sohiz Gizy Piza Nuzza Kidii Mecia Tonuo Sinuo Busia Rucez Zukel Canoh Dezako Zoni Yunna Morda Lapora Menda Oorva Pirkah Gara Culah Nenah Canuh Hury Yunny Pizah Palah Curah Rorah Gihah Dobor Mosir Ravon Vizoth Gudi Peppin Cojaq Jeceth Cixith Qappen Redey Jocino Jixi Jalu Geros Dipu Bavon Jugey Qayex Daddetha Medix Rizin Gaddana Qibug Tenger Pundun Gortud Qargog Kidanob Guzzock Verjig Kuzgot Pogoq Mevvu Kiggax Cuge Karres Coqqix Keyeq Jivith Kevvinu Zurriza
+			}
+			second_names = {
+				" "
+			}
+			regnal_first_names_male = {
+			Mordock Mendon Laporin Mendon Oorv Pirk Gari Culer Nenap Canut Huro Yunnel Pizann Paluh Curak Roriy Gihen Dobet Mosap Tined Polik Gazed Dupey Cripbar Bamiz Marin Hoydock Mendock Dolin Sabin Cirdock Hobock Cecin Gapin Sohin Gizin Pizin Kadig Borek Qantot Derjit Bundat Tenvag Derqak Qunguz Tarvackad Judet Vanrinad Tozrok Purlaz Qandanar Vanrinad Virgoz Girjug Purack Kurrod Monden Murked Venroz Birbog Terjugab Kangiz Gozgag Rorbick Dongen Bardot Rurrinun Pirhod Rarluz Cirhig Kedet Tirsaz Jurvor Zorjuz Morkor Zozgug
+			}
+			regnal_first_names_female = {
+			Marya Hoya Nonin Dolah Sabah Cira Hubo Ceza Cecir Gapy Sohiz Gizy Piza Nuzza Kidii Mecia Tonuo Sinuo Busia Rucez Zukel Canoh Dezako Zoni Yunna Morda Lapora Menda Oorva Pirkah Gara Culah Nenah Canuh Hury Yunny Pizah Palah Curah Rorah Gihah Dobor Mosir Ravon Vizoth Gudi Peppin Cojaq Jeceth Cixith Qappen Redey Jocino Jixi Jalu Geros Dipu Bavon Jugey Qayex Daddetha Medix Rizin Gaddana Qibug Tenger Pundun Gortud Qargog Kidanob Guzzock Verjig Kuzgot Pogoq Mevvu Kiggax Cuge Karres Coqqix Keyeq Jivith Kevvinu Zurriza
+			}
+			regnal_second_names = {
+				" "
+			}
+		}
+	}
+}

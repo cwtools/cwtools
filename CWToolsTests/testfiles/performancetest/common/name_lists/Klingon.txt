@@ -1,0 +1,93 @@
+﻿### Klingon Empire
+Klingon = {
+	randomized = no
+
+	ship_names = {
+		generic = {
+			Sha'go Grin'zel Swi'tsel Wah'sHiqus Ma'tix Bortras Amar B'Moth Bortas Buruk Ch'Tang Drovana Gr'oth Hor'Cha Ki'tang Klothos Koraga Korinar Maht-H'a Malpara Negh'Var Ning'tao Orantho Pagh Par'tok P'Rang Qu'Vat Somraw Slivin T'Acog Toh'Kaht Vor'nak Y'tem Ya'Vang K'vort Charghwl' K'T'Inga Ll'wl May'Duj B'rel DughDuy Dughjup Dughla' DughQu' Dughro' DughwoQ DughyaS Etam GhungDol Ghunglom GhungQa' GhungQogh Hegh'ta Hembu' HemDuy Hemghol Hemlom Hovpeng M'Char NaSbutlh NaSDol NaSDup NaSgho NaSghong NaStaj Rotarran Vorn QaDwI' SuDwI' ChungwI' ChavwI' VangwI' Chu'wI' VaQwI' GhuHwI' QeHwI' NuQwI' GhoHwI' HIvwI' QabwI' QImwI' ChopwI' BotwI' JaqwI' MeQwI' MolwI' JonwI' QengwI' CharghwI' SeHwI' QughwI' HubwI' PejwI' HeghwI' Qaw'wI' VerghwI' YotwI' Aktuh Azetbur B'iJik Chang Divok Fek'lhr Gi'ral Gorkon J'Ddan Kahless Kang K'Ehleyr Klag K'mpec K'nera Korris Konmel K'Ratak Koloth Koord Kor K'Temoc Kurn Kruge L'Kor Lorgh Maltz Melota Morath Nu'Daq DajDuS Dajghol Dajghu' Dochbeq Dochqup DoqbaS Doqcha DoqghuH DoqHegh DoqHo' DoqmaS Doqram HurghSan Husghaj Le'batlh Le'chav Le'Hov Le'qorDu' Qanmang Qanvaj QIjbaS QIjcha QIjHegh QIjHo' QIjmaS QIjram Qutbe' QutHol Qutqempa' QutSa' BIvwI' BoQwI' BoSwI' BuvwI' ChelwI' ChenwI' ChoHwI' ChovwI' DaqwI' GhorwI' HeQwI' HujwI' LI'wI' LoHwI' MIywI' MobwI' NajwI' NgIlwI' NgongwI' QaHwI' QemwI' QeSwI' QIchwI' Qochbe'wI' QolwI' SepwI' Ta'wI' TaymoHwI' TlheDwI' VI'wI' BoHcha BoHDol BoHDegh BoHDuS BoHtIq BoHpeng BoHyaS Ngojcha NgojDegh NgojDol NgojDuS Ngojpeng Ngojporgh Ngotlhbe' NgotlhchoH NgotlhDa' NgotlhDol Ngotlhpuq Noycha'puj NoyDaS NoyDuj Noyqech NoyvI' VaQbach VaQDoch VaQDol VaQDup VaQpeng VaQto' VaQyaS BIrHegh BIrHom BIrruv BochbaS BochHeH BochHov BochlIy Bochqut Bochtev HoSbatlh HoSbegh HoSDuj HoSjagh HoSloD HoSmu' HoSqempa' Jaqbach Jaqbeq Jaqbutlh JaqDup JaqHoq JaqtIq QarbeH QarchetvI' QarDuS QarHIch QarmIn QarnuH Qarpeng Boreth DighreS Drovna Erikang Gre'thor Khitomer Kirom Kri'stak Lursor Morska No'Mat P'Rang Praxis QalIa'pe' Quin'lat QuprIp Qui'Tu Ro'kegh T'Ong VorcaS Vor'cha Vornak Yavang
+		}
+		corvette = {
+		}
+		saber = {
+		}
+		sovereign = {
+		}
+		steamrunner = {
+		}		
+		adv_cruiser = {
+		}
+		strike = {
+		}		
+		outpost_station = {
+			sequential_name = "Frontier Outpost"
+		}
+	}
+
+	fleet_names = {
+		sequential_name = "%O% Fleet"
+	}
+	
+	army_names = {
+		defense_army = {
+			sequential_name = "%O% Planetary Guard"
+		}
+		assault_army = {
+			sequential_name = "%O% Expeditionary Force"
+		}
+		slave_army = {
+			sequential_name = "%O% Indentured Rifles"
+		}
+		clone_army = { 
+			sequential_name = "%O% Clone Army"
+		}
+		robotic_army = {
+			sequential_name = "%O% Hunter-Killer Group"
+		}
+		android_army = {
+			sequential_name = "%O% Synthetic Rangers"
+		}
+		psionic_army = { 
+			sequential_name = "%O% Psi Commando"
+		}
+		xenomorph_army = {
+			sequential_name = "%O% Bio-Warfare Division"
+		}
+		gene_warrior_army = {
+			sequential_name = "%O% Bio-Engineered Squadron"
+		}
+	}
+
+	planet_names = {
+		generic = {
+			names = {
+			}
+		}
+	}
+
+
+	### CHARACTERS
+
+	character_names = {
+		names1 = {
+			weight = 100
+			first_names_male = {
+				Worf Martok Gowron Amar Antaak A'trom Atul Bar'el Barot Korath Koral Kor K'mpec Ortakin Mogh Koth Kolor Chang Darok Rodek Pahash M'Rek
+			}
+			first_names_female = {
+				Sirella B'Elanna Ba'el B'Etor Grilka L'Kor Larna Leskit Linkasa Shenara Karana Mara Kerla Vixis Azetbur Tavana
+			}
+			second_names = {
+				" "
+			}
+			regnal_first_names_male = {
+				Worf Martok Gowron Amar Antaak A'trom Atul Bar'el Barot Korath Koral Kor K'mpec Ortakin Mogh Koth Kolor Chang Darok Rodek Pahash M'Rek
+			}
+			regnal_first_names_female = {
+				Sirella B'Elanna Ba'el B'Etor Grilka L'Kor Larna Leskit Linkasa Shenara Karana Mara Kerla Vixis Azetbur Tavana
+			}
+			regnal_second_names = {
+				" "
+			}
+		}
+	}
+}

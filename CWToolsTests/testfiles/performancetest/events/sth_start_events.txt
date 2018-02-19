@@ -1,0 +1,913 @@
+namespace = sth_start
+
+country_event = {
+	id = sth_start.10000
+	hide_window = yes
+	is_triggered_only = yes
+	immediate = { 
+		set_global_flag = game_started 
+		country_event = { id = sth_start.10001 days = 1 }
+	}
+}
+country_event = {
+	id = sth_start.10001
+	hide_window = yes
+	is_triggered_only = yes
+	immediate = { 
+		set_global_flag = game_started_day_1
+	}
+}
+
+
+#Master event trigger
+event = {
+	id = sth_start.1
+	hide_window = yes
+	is_triggered_only = yes
+	immediate = {
+		random_country = { limit = { is_country_type = default } country_event = { id = sth_start.10000 days = 1 } } #Set Start Flag
+		every_country = { country_event = { id = sth_start.10 days = 0 } } #Set Starting Contacts
+		every_country = { country_event = { id = sth_start.11 days = 2 } } #Set Starting Flags
+		every_country = { country_event = { id = sth_start.12 days = 0 } } #Set Homeworlds
+		every_country = { limit = { is_normal_country = yes } country_event = { id = sth_start.14 days = 0 } } #Set Species rights
+		every_country = { country_event = { id = sth_start.15 days = 0 } } #Set Ship Names
+		every_country = { country_event = { id = sth_start.18 days = 0 } } #Set Policies
+		every_country = { every_owned_planet = { planet_event = { id = sth_start.19 days = 0 scopes = { from = prev } } } } #Set Starports
+		every_country = { 
+			if = { limit = { is_ai = no } country_event = { id = sth_start.21 days = 0 } }
+			if = { limit = { is_ai = yes } country_event = { id = sth_start.21 days = 1 } }
+		} #Set Slave Pops
+		every_country = { 
+			if = { limit = { is_ai = no } country_event = { id = sth_start.22 days = 0 } }
+			if = { limit = { is_ai = yes } country_event = { id = sth_start.22 days = 1 } }
+		} #Set Pops
+		
+		set_global_flag = star_trek_new_horizons
+		
+		if = {
+			limit = { sth_static_map = no }
+			every_country = { limit = { is_ai = no } country_event = { id = sth_start.13 days = 0 } } #Set map FYI
+		}
+	}
+}
+
+#Set Starting System Surveyed + Kill Unwanted Countries In Each Map
+event = {
+	id = sth_start.2
+	hide_window = yes
+	is_triggered_only = yes
+	immediate = {
+		every_country = { country_event = { id = sth_start.20 } }
+		if = {
+			limit = { sth_alphabeta_maps = yes }
+			every_country = {
+				limit = {
+					is_normal_country = yes
+					NOR = { 
+						has_country_flag = alpha_beta_empire
+					}
+					is_ai = yes
+				}
+				erase_invalid_spawn_system = yes
+			}
+		}
+		if = {
+			limit = { sth_delta_maps = yes }
+			every_country = {
+				limit = {
+					is_normal_country = yes
+					NOT = { has_country_flag = delta_empire }
+					is_ai = yes
+				}
+				erase_invalid_spawn_system = yes
+			}
+		}
+		if = {
+			limit = { sth_gamma_maps = yes }
+			every_country = {
+				limit = {
+					is_normal_country = yes
+					NOT = { has_country_flag = gamma_empire }
+					is_ai = yes
+				}
+				erase_invalid_spawn_system = yes
+			}
+		}
+		if = {
+			limit = { sth_medium_galaxy_maps = yes }
+			every_country = {
+				limit = {
+					is_normal_country = yes
+					NOT = { has_country_flag = sth_medium_galaxy }
+					is_ai = yes
+				}
+				erase_invalid_spawn_system = yes
+			}
+		}
+		if = {
+			limit = { sth_botf_maps = yes }
+			every_country = {
+				limit = {
+					is_normal_country = yes
+					NOT = { has_country_flag = botf_major }
+					NOT = { has_country_flag = botf_minor }
+					is_ai = yes
+				}
+				erase_invalid_spawn_system = yes
+			}
+		}
+		if = {
+			limit = { sth_botf_maps = yes }
+			every_country = {
+				limit = {
+					has_country_flag = botf_minor
+					is_ai = yes
+				}
+				set_country_type = minorRace
+			}
+		}
+		every_country = {
+			limit = { 
+				has_country_flag = xindi_council 
+				is_ai = yes
+				any_country = { has_country_flag = united_earth is_ai = no }
+			}
+			erase_invalid_spawn_system = yes
+		}
+		every_country = {
+			limit = { has_country_flag = no_spawn is_ai = yes }
+			erase_invalid_spawn_system = yes
+		}
+		every_country = {
+			limit = { 
+				STH_starting_country = no
+				is_normal_country = yes 
+				is_ai = yes 
+			}
+			erase_invalid_spawn_system = yes
+		}
+		# random_country = {
+			# limit = { is_ai = no }
+			# country_event = { id = sth_start.4 days = 7 }
+		# }
+	}
+}
+
+#Set Starting System Surveyed + Kill Unwanted Countries In Each Map
+# country_event = {
+	# id = sth_start.4
+	# hide_window = yes
+	# is_triggered_only = yes
+	# immediate = {
+		# if = {
+			# limit = { sth_alphabeta_maps = yes }
+			# every_country = {
+				# limit = {
+					# is_normal_country = yes
+					# NOR = { 
+						# has_country_flag = alpha_beta_empire
+					# }
+					# is_ai = yes
+				# }
+				# erase_invalid_spawn_system = yes
+			# }
+		# }
+		# if = {
+			# limit = { sth_delta_maps = yes }
+			# every_country = {
+				# limit = {
+					# is_normal_country = yes
+					# NOT = { has_country_flag = delta_empire }
+					# is_ai = yes
+				# }
+				# erase_invalid_spawn_system = yes
+			# }
+		# }
+		# if = {
+			# limit = { sth_gamma_maps = yes }
+			# every_country = {
+				# limit = {
+					# is_normal_country = yes
+					# NOT = { has_country_flag = gamma_empire }
+					# is_ai = yes
+				# }
+				# erase_invalid_spawn_system = yes
+			# }
+		# }
+		# if = {
+			# limit = { sth_botf_maps = yes }
+			# every_country = {
+				# limit = {
+					# is_normal_country = yes
+					# NOT = { has_country_flag = botf_major }
+					# NOT = { has_country_flag = botf_minor }
+					# is_ai = yes
+				# }
+				# erase_invalid_spawn_system = yes
+			# }
+		# }
+		# every_country = {
+			# limit = { 
+				# has_country_flag = xindi_council 
+				# any_country = { has_country_flag = united_earth is_ai = no }
+			# }
+			# erase_invalid_spawn_system = yes
+		# }
+		# every_country = {
+			# limit = { has_country_flag = no_spawn is_ai = yes }
+			# erase_invalid_spawn_system = yes
+		# }
+	# }
+# }
+
+
+#Alpha Beta Warning Event Trigger
+event = {
+	id = sth_start.3
+	hide_window = yes
+	is_triggered_only = yes
+	fire_only_once = yes 
+	immediate = {
+		if = {
+			limit = { sth_alphabeta_maps = yes }
+			every_country = {
+				limit = {
+					NOT = {
+						has_country_flag = alpha_beta_empire
+					}
+				}
+				country_event = { id = sth_start.5 }	
+			}
+		}
+		if = {
+			limit = { sth_delta_maps = yes }
+			every_country = {
+				limit = {
+					NOT = { has_country_flag = delta_empire }
+				}
+				country_event = { id = sth_start.16 }	
+			}
+		}
+		if = {
+			limit = { sth_gamma_maps = yes }
+			every_country = {
+				limit = {
+					NOT = { has_country_flag = gamma_empire }
+				}
+				country_event = { id = sth_start.17 }	
+			}
+		}
+		if = {
+			limit = { sth_medium_galaxy_maps = yes }
+			every_country = {
+				limit = {
+					NOT = { has_country_flag = sth_medium_galaxy }
+				}
+				country_event = { id = sth_start.23 }	
+			}
+		}
+	}
+}
+
+
+#Alpha Beta Warning
+country_event = {
+	id = sth_start.5
+	title = sth_start.5.name
+	desc = sth_start.5.desc
+	picture = GFX_evt_ship_in_orbit
+	fire_only_once = yes 
+	is_triggered_only = yes		
+	option = {
+		name = sth_start.5.b
+		custom_tooltip = sth_start.5.b.tooltip
+	}
+}
+#Delta Warning
+country_event = {
+	id = sth_start.16
+	title = sth_start.16.name
+	desc = sth_start.16.desc
+	picture = GFX_evt_ship_in_orbit
+	fire_only_once = yes 
+	is_triggered_only = yes		
+	option = {
+		name = sth_start.16.a
+		custom_tooltip = sth_start.16.a.tooltip
+	}
+}
+#Gamma Warning
+country_event = {
+	id = sth_start.17
+	title = sth_start.17.name
+	desc = sth_start.17.desc
+	picture = GFX_evt_ship_in_orbit
+	fire_only_once = yes 
+	is_triggered_only = yes		
+	option = {
+		name = sth_start.17.a
+		custom_tooltip = sth_start.17.a.tooltip
+	}
+}
+#Small Galaxy Warning
+country_event = {
+	id = sth_start.23
+	title = sth_start.23.name
+	desc = sth_start.23.desc
+	picture = GFX_evt_ship_in_orbit
+	fire_only_once = yes 
+	is_triggered_only = yes		
+	option = {
+		name = sth_start.23.a
+		custom_tooltip = sth_start.23.a.tooltip
+	}
+}
+
+#Set minorRace borders and resources
+event = {
+	id = sth_start.6
+	hide_window = yes
+	is_triggered_only = yes	
+	immediate = {
+		every_country = {
+			limit = { is_country_type = minorRace }
+			if = { 
+				limit = { is_ai = no } 
+				set_country_type = default 
+				else = { add_modifier = { modifier = "em_minor_race_borders" } }
+			}
+			if = { 
+				limit = { has_country_resource = { type = minerals amount < 1 } has_country_resource = { type = energy amount < 1 } } 
+				set_starting_resources = yes
+			}
+		}
+	}	
+}
+
+
+
+event = {
+	id = sth_start.66
+	hide_window = yes
+	is_triggered_only = yes	
+	immediate = {
+		every_country = {
+			limit = { 
+				is_sth_fallen_empire = yes
+				is_ai = yes 
+			}
+			set_country_type = fallen_empire
+			add_modifier = { modifier = "em_fallen_empire" }
+			fallen_empire_techs = yes
+			every_owned_planet = {				
+				generate_fallen_empire_start_buildings = yes
+			}
+			every_owned_planet = {
+				limit = { is_capital = yes }	
+				generate_fallen_empire_start_fleets = yes
+			}
+			if = { 
+				limit = { has_country_resource = { type = minerals amount < 1 } has_country_resource = { type = energy amount < 1 } } 
+				set_fallen_starting_resources = yes
+			}
+		}
+	    every_country = { 
+	      limit = { NOT = { is_country_type = fallen_empire } } 
+	      remove_modifier = "em_fallen_empire"
+		}
+	}	
+}
+
+
+
+#Fix for random map issue
+event = {
+	id = sth_start.7
+	hide_window = yes
+	fire_only_once = yes 
+	is_triggered_only = yes	
+	trigger = {
+		any_country = {
+			NOR = {
+				has_technology = tech_engineering_bird-of-prey_716
+				has_technology = tech_engineering_starship-class_717
+			}
+		}	
+	}	
+	immediate = {
+		every_country = {
+			if = {	
+				limit = {
+					NOT = { has_technology = tech_engineering_starship-class_717 }
+					OR = {
+						has_technology = tech_phaser_cannon_1
+						has_technology = tech_phaser_1
+						has_technology = tech_plasma_disruptor_beam_1
+						has_technology = tech_polaron_beam_1
+						has_technology = tech_antiproton_cannon_1
+					}
+				}
+				give_technology = { tech = tech_engineering_starship-class_717 message = no }
+			}
+			if = {	
+				limit = {
+					NOT = { has_technology = tech_engineering_bird-of-prey_716 }
+					OR = {
+						has_technology = tech_disruptor_cannon_1
+						has_technology = tech_plasma_cannon_1
+						has_technology = tech_tetryon_cannon_1
+					}
+				}	
+				give_technology = { tech = tech_engineering_bird-of-prey_716 message = no }
+			}
+		}
+	}
+}
+
+
+#Set Suliban habitability preference and remove erroneous Borg pops, fix Founder names
+event = {
+	id = sth_start.9
+	hide_window = yes
+	is_triggered_only = yes	
+	immediate = {
+		random_country = {
+			limit = { has_country_flag = suliban_cabal }
+			modify_species = {
+				species = this
+				remove_trait = trait_pc_helix_preference
+				add_trait = trait_pc_continental_preference
+			}
+		}
+		every_country = {
+			limit = { species = { OR = { has_trait = trait_pc_assimilated_preference has_trait = trait_pc_unimatrix_preference } } is_borg_empire = no }
+			modify_species = {
+				species = this
+				remove_trait = trait_pc_assimilated_preference
+				remove_trait = trait_pc_unimatrix_preference
+				add_trait = trait_pc_continental_preference
+			}
+			every_owned_planet = {
+				limit = { is_planet_class = pc_assimilated }
+				change_pc = pc_continental
+			}
+			every_owned_planet = {
+				limit = { is_planet_class = pc_unimatrix }
+				change_pc = pc_continental
+			}
+		}
+		every_country = {
+			limit = { has_country_flag = the_dominion }
+			every_owned_leader = {
+				limit = { is_same_species = prev }
+				set_name = "Founder"
+			}
+			every_pool_leader = {
+				limit = { is_same_species = prev }
+				set_name = "Founder"
+			}
+		}
+	}
+}
+
+country_event = {
+	id = sth_start.10
+	hide_window = yes
+	is_triggered_only = yes
+	trigger = {  }
+	immediate = {
+		random_country = { limit = { has_country_flag = united_earth } save_event_target_as = united_earth }
+		random_country = { limit = { has_country_flag = vulcan_high_command } save_event_target_as = vulcan_high_command }
+		random_country = { limit = { has_country_flag = andorian_empire } save_event_target_as = andorian_empire }
+		random_country = { limit = { has_country_flag = romulan_star_empire } save_event_target_as = romulan_star_empire }
+		random_country = { limit = { has_country_flag = pralor_auxiliary } save_event_target_as = pralor_auxiliary }
+		random_country = { limit = { has_country_flag = cravic_imperative } save_event_target_as = cravic_imperative }
+		random_country = { limit = { has_country_flag = kazon_sects } save_event_target_as = kazon_sects }
+		random_country = { limit = { has_country_flag = trabe_alliance } save_event_target_as = trabe_alliance }
+		
+		if = {
+			limit = { sth_random_map = no sth_botf_map = no sth_mirror_maps = no }
+			#Set Contacts
+			if = {
+				limit = { exists = event_target:vulcan_high_command exists = event_target:united_earth }
+				event_target:vulcan_high_command = { establish_communications_no_message = event_target:united_earth }
+			}
+			if = {
+				limit = { exists = event_target:vulcan_high_command exists = event_target:united_earth }
+				event_target:vulcan_high_command = { establish_communications_no_message = event_target:andorian_empire }
+			}
+		}
+		if = {
+			limit = { sth_random_map = no sth_botf_map = no }
+			if = {
+				limit = { exists = event_target:pralor_auxiliary exists = event_target:cravic_imperative }
+				event_target:pralor_auxiliary = { establish_communications_no_message = event_target:cravic_imperative }
+			}
+		}
+		if = {
+			limit = { sth_random_map = no sth_botf_map = no }
+			#Set Trabe / Kazon Status
+			if = {
+				limit = { exists = event_target:trabe_alliance exists = event_target:kazon_sects }
+				event_target:trabe_alliance = { establish_communications_no_message = event_target:kazon_sects }
+				if = {
+					limit = { event_target:trabe_alliance = { is_ai = no } event_target:kazon_sects = { is_ai = yes } }
+					event_target:kazon_sects = { 
+						every_owned_planet = { set_owner = event_target:trabe_alliance } 
+						every_owned_fleet = { destroy_fleet = this }
+					}
+					else = {
+						event_target:kazon_sects = {
+							leader = { set_name = "Sankur" }
+							declare_war = { who = event_target:trabe_alliance name = "Kazon War of Independence" }
+							add_war_demand = { type = "cede_planet" parameter:planet = event_target:trabe_alliance.capital_scope warscore_cost = 90 target = this enemy = event_target:trabe_alliance }
+						}	
+						event_target:trabe_alliance = {
+							add_war_demand = { type = "cede_planet" parameter:planet = event_target:kazon_sects.capital_scope warscore_cost = 90 target = this enemy = event_target:kazon_sects }
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+country_event = {
+	id = sth_start.11
+	hide_window = yes
+	is_triggered_only = yes
+	trigger = {
+		any_country = { 
+			has_established_contact = root 
+			NOT = { is_same_value = root }
+			is_normal_country = yes
+		}
+	}
+	immediate = {
+		set_country_flag = has_encountered_other_empire
+	}
+}
+
+country_event = {
+    id = sth_start.12
+	hide_window = yes
+    is_triggered_only = yes
+	trigger = {
+		exists = capital_scope
+	}
+    immediate = { 		
+		species = {
+			set_species_homeworld = root.capital_scope
+		}
+    }
+}
+
+country_event = {
+	id = sth_start.13
+	title = sth_start.13.name
+	desc = sth_start.13.desc
+	picture = GFX_evt_ship_in_orbit
+	is_triggered_only = yes		
+	option = { name = sth_start.13.a }
+}
+
+# set species rights, and homeworlds, as well as empire modifiers
+country_event = {
+    id = sth_start.14
+	hide_window = yes
+    is_triggered_only = yes
+    immediate = { 		
+		every_country = {
+			limit = { is_country_type = default }
+			if = { 	
+				limit = { 
+					OR = { 
+						xenophile_country_traditions = yes
+						pacifist_country_traditions = yes
+						egalitarian_country_traditions = yes
+					}
+				}				
+				every_owned_pop_species = {
+					limit = { 
+						NOT = { is_species_class = "JEM" }
+					}
+					set_citizenship_type = { country = root type = citizenship_full cooldown = no }
+					set_living_standard = { country = root type = living_standard_normal cooldown = no }
+				}
+				else = {
+					every_owned_pop_species = {
+						limit = { 
+							NOT = { is_species_class = "JEM" }
+						}
+						set_living_standard = { country = root type = living_standard_normal cooldown = no }
+					}			
+				}
+			}
+		}
+	}	
+	after = {
+		random_country = { 
+			limit = { has_country_flag = husnock_ascendency }
+			every_owned_pop_species = {
+				limit = { 
+					OR = {
+						is_species = "B'rinn"
+						is_species = "Neryj"
+						is_species = "Durnen"
+					}
+				}
+				set_citizenship_type = { 
+					country = root 
+					type = citizenship_slavery
+					cooldown = no
+				}
+				set_living_standard = { 
+					country = root 
+					type = living_standard_poor
+					cooldown = no 
+				}
+			}
+			set_policy = {
+				policy = core_worlds
+				option = core_worlds_citizens_and_slaves
+				cooldown = no
+			}
+		}
+		random_country = { 
+			limit = { has_country_flag = romulan_star_empire }
+			every_owned_pop_species = {
+				limit = { is_species = "Reman" }
+				set_citizenship_type = { 
+					country = root 
+					type = citizenship_slavery
+					cooldown = no
+				}
+				set_living_standard = { 
+					country = root 
+					type = living_standard_poor
+					cooldown = no 
+				}
+			}
+			set_policy = {
+				policy = core_worlds
+				option = core_worlds_citizens_and_slaves
+				cooldown = no
+			}
+		}
+		random_country = { 
+			limit = { has_country_flag = the_dominion }
+			set_policy = {
+				policy = artificial_intelligence_policy
+				option = ai_servitude
+				cooldown = no
+			}
+		}
+		
+		every_country = {
+			limit = { has_country_flag = united_earth }
+			add_modifier = { modifier = "em_construction_fed"  }	
+		}
+		every_country = {
+			limit = { has_country_flag = klingon_empire }
+			add_modifier = { modifier = "em_construction_kdf"  }	
+		}
+		every_country = {
+			limit = { has_country_flag = the_dominion }
+			add_modifier = { modifier = "em_construction_dom"  }	
+		}
+		every_country = {
+			limit = { has_country_flag = cardassian_union }
+			add_modifier = { modifier = "em_construction_car"  }	
+		}
+		every_country = {
+			limit = { OR = { has_country_flag = romulan_star_empire has_country_flag = garidian_republic } }
+			add_modifier = { modifier = "em_construction_rom"  }	
+		}
+		every_country = {
+			limit = { has_country_flag = ferengi_alliance }
+			add_modifier = { modifier = "em_construction_fer"  }	
+		}
+		every_country = {
+			limit = { has_country_flag = vulcan_high_command }
+			add_modifier = { modifier = "em_construction_vul"  }	
+		}
+		every_country = {
+			limit = { has_country_flag = andorian_empire }
+			add_modifier = { modifier = "em_construction_and"  }	
+		}
+		every_country = {
+			limit = { has_country_flag = tellarite_technocracy }
+			add_modifier = { modifier = "em_construction_tel"  }	
+		}
+		every_country = {
+			limit = { has_country_flag = breen_confederacy }
+			add_modifier = { modifier = "em_construction_bre"  }	
+		}
+		every_country = {
+			limit = { has_country_flag = husnock_ascendency }
+			add_modifier = { modifier = "em_construction_hus"  }	
+		}
+		every_country = {
+			limit = { has_country_flag = kazon_sects }
+			add_modifier = { modifier = "em_construction_kaz"  }	
+		}
+		every_country = {
+			limit = { has_country_flag = suliban_cabal }
+			add_modifier = { modifier = "em_construction_sul"  }	
+		}
+		every_country = {
+			limit = { has_country_flag = tholian_assembly }
+			add_modifier = { modifier = "em_construction_tho"  }	
+		}
+		every_country = {
+			limit = { has_country_flag = vidiian_sodality }
+			add_modifier = { modifier = "em_construction_vid"  }	
+		}
+		every_country = {
+			limit = { has_country_flag = orion_free_states }
+			add_modifier = { modifier = "em_construction_ori"  }	
+		}
+		every_country = {
+			limit = { has_country_flag = xindi_council }
+			add_modifier = { modifier = "em_construction_xin"  }	
+		}
+		every_country = {
+			limit = { has_country_flag = the_borg_collective }
+			add_modifier = { modifier = "em_construction_brg"  }	
+		}
+		every_country = {
+			limit = { has_country_flag = sheliak_corporate }
+			add_modifier = { modifier = "em_construction_she"  }	
+		}
+		every_country = {
+			limit = { has_country_flag = voth_theocracy }
+			add_modifier = { modifier = "em_construction_vot"  }	
+		}
+		every_country = {
+			limit = { has_country_flag = kobali_republic }
+			add_modifier = { modifier = "em_construction_kob"  }	
+		}
+    }
+}
+
+
+# set famous science ship names
+country_event = {
+    id = sth_start.15
+	hide_window = yes
+    is_triggered_only = yes
+    immediate = { 		
+		if = {
+			limit = { has_country_flag = united_earth sth_mirror_maps = no }
+			random_owned_ship = {
+				limit = { is_ship_size = science }
+				set_name = "USS Franklin"
+				fleet = { 
+					set_name = "USS Franklin" 
+					set_fleet_flag = "USS_Franklin"
+				}
+			}
+		}
+		if = {
+			limit = { 
+				OR = { 
+					has_country_flag = united_earth 
+					has_country_flag = terran_empire 
+				}
+				sth_mirror_maps = yes
+			}
+			random_owned_ship = {
+				limit = { is_ship_size = science }
+				set_name = "ISS Franklin"
+				fleet = { 
+					set_name = "ISS Franklin" 
+					set_fleet_flag = "ISS_Franklin"
+				}
+			}
+		}
+	}	
+}
+
+country_event = {
+	id = sth_start.18
+	hide_window = yes
+	is_triggered_only = yes
+	immediate = {
+		if = {
+			limit = { is_borg_empire = yes }
+			set_policy = { policy = "war_philosophy" option = "unrestricted_wars" cooldown = no }
+			set_policy = { policy = "purge" option = "purge_allowed" cooldown = no }
+			set_policy = { policy = "orbital_bombardment" option = "orbital_bombardment_full" cooldown = no }
+			set_policy = { policy = "interference" option = "interference_full" cooldown = no }
+			set_policy = { policy = "resettlement" option = "resettlement_allowed" cooldown = no }
+			set_policy = { policy = "artificial_intelligence_policy" option = "ai_servitude" cooldown = no }
+			set_policy = { policy = "pre_sapients" option = "pre_sapients_purge" cooldown = no }
+			set_policy = { policy = "core_worlds" option = "core_worlds_all" cooldown = no }
+			set_policy = { policy = "refugees" option = "refugees_not_allowed" cooldown = no }
+		}
+		if = {
+			limit = { is_borg_empire = yes is_ai = yes }
+			add_unity = 5000
+		}
+	}
+}
+
+#Make Spaceprots
+planet_event = {
+	id = sth_start.19
+	hide_window = yes
+	is_triggered_only = yes
+	trigger = { 
+		has_owner = yes
+		owner = { has_country_flag = delta_empire }
+		has_spaceport = no
+	}
+	immediate = {
+		create_correct_spaceport = yes
+	}
+}
+
+#Set Homesystem Survey
+country_event = {
+	id = sth_start.20
+	hide_window = yes
+	is_triggered_only = yes
+	immediate = {
+		every_owned_planet = {
+			solar_system = {
+				every_system_planet = {
+					surveyed = {
+						set_surveyed = yes
+						surveyor = ROOT
+					}
+				}
+			}
+		}
+	}
+}
+
+#Set Hur'q Slaves
+country_event = {
+	id = sth_start.21
+	hide_window = yes
+	is_triggered_only = yes
+	immediate = {
+		if = {
+			limit = { has_country_flag = hurq_stagnancy }
+			set_policy = { policy = core_worlds option = core_worlds_citizens_and_slaves cooldown = no }
+			if = {
+				limit = { NOT = { exists = event_target:klingonSpecies } }
+				create_species = { 
+					name = "Klingon"
+					name_list = "Klingon"
+					class = KDF 
+					portrait = klingon 
+					homeworld = THIS 
+					traits = { trait = "trait_consummate_warriors"  trait="trait_communal" trait="trait_stubborn" ideal_planet_class = "pc_tropical" }
+				}
+				last_created_species = { save_global_event_target_as = klingonSpecies }
+			}
+			every_owned_planet = {
+				limit = { is_capital = yes } 
+				random_tile = { limit = { has_blocker = no has_grown_pop = no has_growing_pop = no } create_pop = { species = event_target:klingonSpecies } }
+				random_tile = { limit = { has_blocker = no has_grown_pop = no has_growing_pop = no } create_pop = { species = event_target:klingonSpecies } }
+				random_tile = { limit = { has_blocker = no has_grown_pop = no has_growing_pop = no } create_pop = { species = event_target:klingonSpecies } }
+			}
+			event_target:klingonSpecies = {
+				set_citizenship_type = { country = root type = citizenship_slavery cooldown = no }
+				set_living_standard = { country = root type = living_standard_poor cooldown = no }
+			}
+		}
+	}
+}
+
+#Ensure Homeworld Pops
+country_event = {
+	id = sth_start.22
+	hide_window = yes
+	is_triggered_only = yes
+	trigger = {
+		is_normal_country = yes
+	}
+	immediate = {
+		random_country = { species = { save_event_target_as = randomSpecies } }
+		every_owned_planet = {
+			limit = { is_homeworld = yes }
+			while = {
+				limit = { num_pops < 11 free_pop_tiles > 0 }
+				create_pop = { species = owner_main_species }
+			}
+		}
+		if = {
+			limit = { is_borg_empire = yes }
+			every_owned_planet = {
+				limit = { is_homeworld = yes }
+				while = {
+					limit = { num_pops < 25 free_pop_tiles > 0 }
+					create_pop = { species = owner_main_species }
+				}
+			}
+		}	
+
+	}
+}

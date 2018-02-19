@@ -1,0 +1,312 @@
+# Icons set here are the ones show in the actual slot. The reason is so that we can support different icons for different sizes. 
+
+#############
+#	ARMOR	#
+#############
+
+@armor_1S = 2
+@armor_1M = 4
+@armor_1L = 6
+
+@armor_2S = 2.5
+@armor_2M = 5
+@armor_2L = 7.5
+
+@armor_3S = 3
+@armor_3M = 6
+@armor_3L = 12
+
+@armor_4S = 3.5
+@armor_4M = 7
+@armor_4L = 14
+
+@armor_5S = 4
+@armor_5M = 8
+@armor_5L = 16
+
+#############
+#	COST	#
+#############
+
+@cost_1S = 2
+@cost_1M = 4
+@cost_1L = 8
+
+@cost_2S = 4
+@cost_2M = 8
+@cost_2L = 16
+
+@cost_3S = 6
+@cost_3M = 12
+@cost_3L = 24
+
+@cost_4S = 8
+@cost_4M = 16
+@cost_4L = 32
+
+@cost_5S = 10
+@cost_5M = 20
+@cost_5L = 40
+
+@ftl1 = 5
+@ftl2 = 10
+@ftl3 = 15
+@ftl4 = 30
+
+#############
+#	 FTL	#
+#############
+
+@power1 = -5
+@power2 = -7.5
+@power3 = -10
+@power4 = -10
+
+# Dragonscale Armor
+utility_component_template = {
+	key = "SMALL_DRAGON_ARMOR"
+	size = small
+	icon = "GFX_ship_part_dragon_armor"
+	icon_frame = 1
+	power = 0
+	cost = 7.5
+	armor_value = 4.5
+	hidden = yes
+	
+	#prerequisites = { "tech_dragon_armor" }
+	component_set = "DRAGON_ARMOR"
+}
+
+utility_component_template = {
+	key = "MEDIUM_DRAGON_ARMOR"
+	size = medium
+	icon = "GFX_ship_part_dragon_armor"
+	icon_frame = 1
+	power = 0
+	cost = 15
+	armor_value = 9
+	hidden = yes
+	
+	#prerequisites = { "tech_dragon_armor" }
+	component_set = "DRAGON_ARMOR"
+}
+
+utility_component_template = {
+	key = "LARGE_DRAGON_ARMOR"
+	size = large
+	icon = "GFX_ship_part_dragon_armor"
+	icon_frame = 1
+	power = 0
+	cost = 30
+	armor_value = 18
+	hidden = yes
+	
+	#prerequisites = { "tech_dragon_armor" }
+	component_set = "DRAGON_ARMOR"
+}
+
+utility_component_template = {
+	key = "GUARDIAN_WARP"
+	hidden = yes
+	size = small
+	icon = "GFX_ship_part_warp_drive_3"
+	icon_frame = 1
+	power = @power3
+	cost = @ftl3
+	ftl = warp
+	ship_modifier = {
+		ship_ftl_warp_range_mult = 2.0
+		ship_interstellar_speed_mult = 0.25
+		ship_winddown_mult = -4
+	}
+	
+	ai_weight = {
+		weight = 3
+	}
+
+	class_restriction = { shipclass_military shipclass_constructor shipclass_colonizer shipclass_science_ship shipclass_transport }
+}
+
+########################
+# Enigmatic Fortress
+########################
+
+# Enigmatic Deflectors
+utility_component_template = {
+	key = "SMALL_ENIGMATIC_SHIELD"
+	size = small
+	icon = "GFX_ship_part_enigmatic_shield"
+	icon_frame = 1
+	power = -15
+	cost = 7.5
+	hidden = yes
+	modifier = {
+		ship_shield_hp_add = 150
+		ship_shield_regen_add = 4.6 #Regeneration per day
+	}
+	#prerequisites = { "tech_enigmatic_deflector" }
+	component_set = "ENIGMATIC_SHIELD"
+}
+
+utility_component_template = {
+	key = "MEDIUM_ENIGMATIC_SHIELD"
+	size = medium
+	icon = "GFX_ship_part_enigmatic_shield"
+	icon_frame = 1
+	power = -30
+	cost = 15
+	hidden = yes
+	modifier = {
+		ship_shield_hp_add = 300
+		ship_shield_regen_add = 6.6 #Regeneration per day
+	}
+	#prerequisites = { "tech_enigmatic_deflector" }
+	component_set = "ENIGMATIC_SHIELD"
+}
+
+utility_component_template = {
+	key = "LARGE_ENIGMATIC_SHIELD"
+	size = large
+	icon = "GFX_ship_part_enigmatic_shield"
+	icon_frame = 1
+	power = -60
+	cost = 30
+	hidden = yes
+	modifier = {
+		ship_shield_hp_add = 600
+		ship_shield_regen_add = 8.6 #Regeneration per day
+	}
+	#prerequisites = { "tech_enigmatic_deflector" }
+	component_set = "ENIGMATIC_SHIELD"
+}
+
+# Zero-Point Reactors
+utility_component_template = {
+	key = "SMALL_ENIGMATIC_POWER_CORE"
+	size = small
+	icon = "GFX_ship_part_enigmatic_power_core"
+	icon_frame = 1
+	power = 35
+	cost = 30
+	
+	hidden = yes
+	#prerequisites = { "tech_enigmatic_power_core" }
+	component_set = "ENIGMATIC_POWER_CORE"
+}
+
+utility_component_template = {
+	key = "MEDIUM_ENIGMATIC_POWER_CORE"
+	size = medium
+	icon = "GFX_ship_part_enigmatic_power_core"
+	icon_frame = 1
+	power = 70
+	cost = 60
+	
+	hidden = yes
+	#prerequisites = { "tech_enigmatic_power_core" }
+	component_set = "ENIGMATIC_POWER_CORE"
+}
+
+utility_component_template = {
+	key = "LARGE_ENIGMATIC_POWER_CORE"
+	size = large
+	icon = "GFX_ship_part_enigmatic_power_core"
+	icon_frame = 1
+	power = 140
+	cost = 120
+	
+	hidden = yes
+	#prerequisites = { "tech_enigmatic_power_core"  }
+	component_set = "ENIGMATIC_POWER_CORE"
+}
+
+utility_component_template = {
+	key = "ENIGMATIC_DECODER"
+	size = aux
+	icon = "GFX_ship_part_enigmatic_decoder"
+	icon_frame = 1
+	power = -10
+	cost = 5
+	
+	hidden = yes
+	#prerequisites = { tech_enigmatic_decoder }
+	component_set = "ENIGMATIC_DECODER"
+
+	ship_modifier = {
+		ship_tracking_add = 5
+		ship_accuracy_add = 5
+	}
+	
+	ai_weight = {
+		weight = 10
+		modifier = {
+			factor = 2
+			is_preferred_weapons = weapon_type_explosive
+		}
+	}
+}
+
+utility_component_template = {
+	key = "ENIGMATIC_ENCODER"
+	size = aux
+	icon = "GFX_ship_part_enigmatic_encoder"
+	icon_frame = 1
+	power = -10
+	cost = 5
+	
+	hidden = yes
+	#prerequisites = { tech_enigmatic_encoder }
+	component_set = "ENIGMATIC_ENCODER"
+
+	modifier = {
+		ship_evasion_mult = 0.15
+	}
+	
+	ai_weight = {
+		weight = 10
+		modifier = {
+			factor = 2
+			is_preferred_weapons = weapon_type_kinetic
+		}
+	}
+}
+
+utility_component_template = {
+	key = "ENIGMATIC_DISRUPTION_FIELD"
+	size = medium
+	icon = "GFX_ship_part_enigmatic_disruption_field"
+	icon_frame = 1
+	power = 0
+	cost = 0
+	hidden = yes
+	#prerequisites = { tech_enigmatic_disruption_field }
+	
+	component_set = "ENIGMATIC_DISRUPTION_FIELD"
+	
+	hostile_aura = {
+		name = "aura_shield_dampener"
+		radius = 120
+		apply_on = ships
+		
+		stack_info = {			#A ship can only be affected by one aura of a certain id. If multiple auras have the same ID the one with the highest priority will be applied.
+			id = hostile_inhibitor_aura
+			priority = 1
+		}
+		
+		modifier = {
+			ship_shield_regen_add_perc = -0.10
+			ship_fire_rate_mult = -0.20
+		}
+		
+		graphics = {
+			area_effect = {
+				entity = "circle_area_entity"
+				dynamic_scale = yes
+			}
+			ship_effect = {
+				entity = "ship_aura_negative_entity"
+				dynamic_scale = no
+			}
+		}
+	}
+}

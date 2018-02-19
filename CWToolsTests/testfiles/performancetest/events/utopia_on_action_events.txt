@@ -1,0 +1,2215 @@
+###########################
+# Utopia On-Action Events #
+# STNH - Capek 1.8.0 Compat
+###########################
+
+namespace = utopia
+
+@tier1unityreward = 6
+@tier1unitymin = 100
+@tier1unitymax = 500
+@tier2unityreward = 12
+@tier2unitymin = 150
+@tier2unitymax = 1000
+@tier3unityreward = 18
+@tier3unitymin = 250
+@tier3unitymax = 1500
+
+### Withdrawal added when Unblissed
+pop_event = {
+	id = utopia.91
+	hide_window = yes
+	is_triggered_only = yes
+ 
+	trigger = {
+		former_living_standard_type = living_standard_chemical_bliss
+		NOT = {
+			has_living_standard = {
+				country = owner
+				type = living_standard_chemical_bliss
+			}
+		}
+	}
+ 
+	immediate = {
+		if = {
+			limit = { has_modifier = withdrawal_symptoms }
+			remove_modifier = withdrawal_symptoms
+		}
+		add_modifier = {
+			modifier = withdrawal_symptoms
+			days = 1800 # 5 years
+		}
+	}
+}
+
+# Hive Mind ruler gets Hive Mind trait to make them immortal
+country_event = {
+	id = utopia.6000
+	is_triggered_only = yes
+	hide_window = yes
+
+	trigger = {
+		has_authority = auth_hive_mind
+		FROM = { leader_class = ruler }
+	}
+
+	immediate = {
+		from = {
+			add_trait = leader_trait_ruler_hive_mind
+		}
+	}
+}
+
+# Hive Mind stops purging and sets rights for integrated species
+country_event = {
+	id = utopia.6001
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		has_authority = auth_hive_mind
+		from = { has_trait = trait_hive_mind }
+	}
+
+	immediate = {
+		from = { # modified species
+			if = {
+				limit = {
+					NOT = {
+						has_citizenship_type = {
+							type = citizenship_full
+							country = root
+						}
+					}
+				}
+				set_citizenship_type = {
+					country = root
+					type = citizenship_full
+					cooldown = yes
+				}
+			}
+		}
+	}
+}
+
+# Mind Over Matter: Give another species in your empire latent_psionics_trait #
+country_event = {
+	id = utopia.200
+	title = utopia.200.name
+	desc = {
+		trigger = {
+			NOT = { has_country_flag = partially_awakened_species }
+		}
+		text = utopia.200.desc.a
+	}
+	desc = {
+		trigger = {
+			has_country_flag = partially_awakened_species
+		}
+		text = utopia.200.desc.b
+	}
+	picture = GFX_evt_psionics
+	show_sound = event_mind_over_matter
+	location = event_target:target_species.planet
+	
+	mean_time_to_happen = { years = 20 }
+
+	trigger = {
+		any_owned_planet = {
+			any_owned_pop = {
+				NOR = {
+					is_same_species = owner_species
+					has_trait = "trait_robotic_1"
+   					has_trait = "trait_robotic_2"
+  					has_trait = "trait_robotic_3"
+					has_trait = trait_latent_psionic
+					has_trait = trait_psionic
+					has_trait = trait_cybernetic
+					has_trait = trait_mechanical
+					has_trait = trait_machine_unit
+				}
+			}
+		}
+		has_ascension_perk = ap_transcendence
+		NOT = { has_country_flag = awakening_in_progress } # Only one chain active.
+		is_country_type = default
+	}
+
+	immediate = {
+		random_owned_planet = {
+			limit = {
+				any_owned_pop = {
+					NOR = {
+						is_same_value = owner_species
+						has_trait = "trait_robotic_1"
+   						has_trait = "trait_robotic_2"
+  						has_trait = "trait_robotic_3"
+						has_trait = trait_latent_psionic
+						has_trait = trait_psionic
+						has_trait = trait_cybernetic
+						has_trait = trait_mechanical
+						has_trait = trait_machine_unit
+					}
+					is_sapient = yes
+				}
+			}
+			random_owned_pop = {
+				limit = {
+					NOR = {
+						is_same_value = owner_species
+						has_trait = "trait_robotic_1"
+   						has_trait = "trait_robotic_2"
+  						has_trait = "trait_robotic_3"
+						has_trait = trait_latent_psionic
+						has_trait = trait_psionic
+						has_trait = trait_cybernetic
+						has_trait = trait_mechanical
+						has_trait = trait_machine_unit
+					}
+					is_sapient = yes
+				}
+				species = { save_event_target_as = target_species }
+			}
+		}
+		#country_event = { id = utopia.201 }
+		save_event_target_as = target_country
+		set_country_flag = awakening_in_progress
+		remove_country_flag = got_notification
+
+		# Finding another country with the same species and saving that species as an event target.
+
+		random_country = {
+			limit = {
+				NOT = {
+					is_same_value = root
+				}
+				any_owned_planet = {
+					any_owned_pop = {
+						is_same_species = event_target:target_species
+					}
+				}
+			}
+			random_owned_planet = {
+				limit = {
+					any_owned_pop = {
+						is_same_species = event_target:target_species
+					}
+				}
+				random_owned_pop = {
+					limit = { is_same_species = event_target:target_species }
+					save_event_target_as = original_species
+				}
+			}
+		}
+	}
+	option = {
+		name = utopia.200.a
+		custom_tooltip = utopia.200.a.tooltip
+		hidden_effect = {
+		random_owned_pop = {
+			limit = { is_same_species = event_target:target_species }
+			create_species = {
+				is_mod = yes
+				name = this
+				plural = this
+				class = this
+				portrait = this
+				traits = this
+				traits = {
+					trait = trait_latent_psionic
+				}
+				homeworld = this
+			}
+		}
+		every_owned_pop = {
+			limit = { is_same_species = event_target:target_species }
+			change_species = last_created
+		}
+		every_owned_leader = {
+			limit = { is_same_species = event_target:target_species }
+			change_species = last_created
+		}
+		every_pool_leader = {
+			limit = { is_same_species = event_target:target_species }
+			change_species = last_created
+		}
+		country_event = { id = utopia.203 days = 360 random = 50 }
+		set_country_flag = partially_awakened_species
+		}
+	}
+	option = {
+		name = utopia.200.b
+		hidden_effect = { remove_country_flag = awakening_in_progress }
+	}
+}
+
+# Full psionics for another species in your empire
+country_event = {
+	id = utopia.203
+	title = "utopia.203.name"
+	desc = { 
+		trigger = {
+			NOT = { has_country_flag = has_awakened_species }
+		}
+		text = "utopia.203.desc.a"
+	}
+
+	desc = { 
+		trigger = {
+			has_country_flag = has_awakened_species
+		}
+		text = "utopia.203.desc.a"
+	}
+	picture = GFX_evt_psionics
+	show_sound = event_the_great_awakening
+	location = event_target:target_species.planet
+	
+	is_triggered_only = yes
+
+	trigger = {
+		any_owned_planet = {
+			any_owned_pop = {
+				NOR = {
+					is_same_species = owner_species
+					has_trait = "trait_robotic_1"
+   					has_trait = "trait_robotic_2"
+  					has_trait = "trait_robotic_3"
+					has_trait = trait_psionic
+					has_trait = trait_cybernetic
+  					has_trait = trait_mechanical
+					has_trait = trait_machine_unit
+				}
+				is_sapient = yes
+				has_trait = trait_latent_psionic
+				is_same_species = event_target:target_species
+			}
+		}
+	}
+	
+	option = {
+		name = "utopia.203.a"
+		custom_tooltip = utopia.203.a.tooltip
+		hidden_effect = {
+			set_country_flag = has_awakened_species
+			#Modify species in own empire
+			random_owned_pop = {
+				limit = { 
+					NOR = {
+						is_same_species = owner_species
+						has_trait = "trait_robotic_1"
+						has_trait = "trait_robotic_2"
+						has_trait = "trait_robotic_3"
+						has_trait = trait_psionic
+						has_trait = trait_cybernetic
+						has_trait = trait_mechanical
+						has_trait = trait_machine_unit
+					}
+					is_sapient = yes
+					has_trait = trait_latent_psionic
+					is_same_species = event_target:target_species 
+				}
+				create_species = {
+					is_mod = yes
+					name = this
+					plural = this
+					class = this
+					portrait = this
+					traits = this
+					traits = {
+						trait = trait_psionic
+					}
+					homeworld = this
+				}
+			}
+			modify_species = {
+				species = last_created_species
+				remove_trait = trait_latent_psionic
+				change_scoped_species = no
+			}
+			every_owned_pop = {
+				limit = { is_same_species = event_target:target_species }
+				change_species = last_created
+			}
+			every_owned_leader = {
+				limit = { is_same_species = event_target:target_species }
+				change_species = last_created
+			}
+			every_pool_leader = {
+				limit = { is_same_species = event_target:target_species }
+				change_species = last_created
+			}	
+		
+			#Finding countries with same species in other empires. 
+			every_country = {
+				limit = {
+					NOT = { is_same_value = root }
+					any_owned_pop = {
+						is_same_species = event_target:original_species
+						NOT = {
+							has_trait = trait_cybernetic
+		  					has_trait = trait_mechanical
+							has_trait = trait_machine_unit
+							has_trait = trait_latent_psionic
+							has_trait = trait_psionic
+						}
+					}
+				}	
+				country_event = { id = utopia.204 days = 10 random = 10 }
+			}
+			if = {
+				limit = {
+					NOT = {
+						any_country = {
+							NOT = { is_same_value = root }
+							any_owned_pop = {
+								is_same_species = event_target:original_species
+								NOT = {
+									has_trait = trait_cybernetic
+				  					has_trait = trait_mechanical
+									has_trait = trait_machine_unit
+									has_trait = trait_latent_psionic
+									has_trait = trait_psionic
+								}
+							}
+						}
+					}
+				}
+				remove_country_flag = awakening_in_progress
+			}
+		}
+	}
+	option = {
+		name = utopia.203.b
+		hidden_effect = { remove_country_flag = awakening_in_progress }
+	}
+
+	option = {
+		name = utopia.203.c
+		hidden_effect = { remove_country_flag = awakening_in_progress }
+	}
+}
+
+# Notify neighbors that some individuals belonging the changed species, residing in their country get psionics too.
+country_event = {
+	id = utopia.204
+	title = "utopia.204.name"
+	desc = {
+		trigger = {
+			has_communications = event_target:target_country
+		}
+		text = "utopia.204.desc.a"
+	}
+	desc = {
+		trigger = {
+			NOT = { has_communications = event_target:target_country }
+		}
+		text = "utopia.204.desc.b"
+	}
+	picture = GFX_evt_psionics
+	show_sound = event_the_great_awakening
+	location = event_target:pop.planet
+	
+	is_triggered_only = yes
+
+	immediate = {
+		random_owned_pop = {
+			limit = {
+				is_same_species = event_target:original_species
+				NOT = {
+					has_trait = "trait_robotic_1"
+   					has_trait = "trait_robotic_2"
+  					has_trait = "trait_robotic_3"
+  					has_trait = trait_cybernetic
+    				has_trait = trait_mechanical
+					has_trait = trait_machine_unit
+  					has_trait = trait_latent_psionic
+					has_trait = trait_psionic
+  				}
+			}
+			create_species = {
+				is_mod = yes
+				name = this
+				plural = this
+				class = this
+				portrait = this
+				traits = this
+				traits = {
+					trait = trait_latent_psionic
+				}
+				homeworld = this
+			}
+		}
+
+		random_owned_pop = {
+				limit = {
+					is_same_species = event_target:original_species
+					NOT = {
+						has_trait = "trait_robotic_1"
+   						has_trait = "trait_robotic_2"
+  						has_trait = "trait_robotic_3"
+  						has_trait = trait_cybernetic
+  	  					has_trait = trait_mechanical
+						has_trait = trait_machine_unit
+  						has_trait = trait_latent_psionic
+						has_trait = trait_psionic
+  					}
+				}
+				change_species = last_created
+				save_event_target_as = pop
+			}
+		while = {
+			count = 3
+			limit = {
+				any_owned_pop = {
+					is_same_species = event_target:original_species
+					NOT = {
+						has_trait = "trait_robotic_1"
+   						has_trait = "trait_robotic_2"
+  						has_trait = "trait_robotic_3"
+  						has_trait = trait_cybernetic
+  	  					has_trait = trait_mechanical
+						has_trait = trait_machine_unit
+  						has_trait = trait_latent_psionic
+						has_trait = trait_psionic
+  					}
+				}
+			}
+			random_owned_pop = {
+				limit = {
+					is_same_species = event_target:original_species
+					NOT = {
+						has_trait = "trait_robotic_1"
+   						has_trait = "trait_robotic_2"
+  						has_trait = "trait_robotic_3"
+  						has_trait = trait_cybernetic
+  	  					has_trait = trait_mechanical
+						has_trait = trait_machine_unit
+  						has_trait = trait_latent_psionic
+						has_trait = trait_psionic
+  					}
+				}
+				change_species = last_created
+			}
+		}
+		
+		event_target:target_country = {
+			country_event = { id = utopia.205 }
+			set_country_flag = got_notification
+		}
+
+		if = {
+			limit = {
+				NOT = { has_communications = event_target:target_country }
+			}
+			establish_communications_no_message = event_target:target_country
+		}
+		save_event_target_as = other_country
+	}
+	option = {
+		name = INTERESTING
+		custom_tooltip = utopia.204.a.tooltip
+	}
+}
+
+country_event = {
+	id = utopia.205
+	title = "utopia.205.name"
+	desc = "utopia.205.desc"
+	picture = GFX_evt_psionics
+	show_sound = event_the_great_awakening
+	location = event_target:original_species.planet
+	
+	is_triggered_only = yes
+
+	trigger = {
+		NOT = {
+			has_country_flag = got_notification
+		}
+	}
+
+	option = {
+		name = INTERESTING
+		hidden_effect = {
+			remove_country_flag = awakening_in_progress
+		}
+	}
+}
+
+#country_event = {
+#	id = utopia.205
+#	title = "utopia.205.name"
+#	desc = "utopia.205.desc"
+#	picture = GFX_evt_psionics
+#	show_sound = event_the_great_awakening
+#	location = event_target:target_species.planet
+#	
+#	is_triggered_only = yes
+#
+#	trigger = {
+#		any_owned_planet = {
+#			any_owned_pop = {
+#				NOR = {
+#					is_same_species = owner_species
+#					is_species = "ROBOT_POP_SPECIES_1"
+#   					is_species = "ROBOT_POP_SPECIES_2"
+#  					is_species = "ROBOT_POP_SPECIES_3"
+#					has_trait = trait_psionic
+#				}
+#				has_trait = trait_latent_psionic
+#				is_same_species = event_target:target_species
+#			}
+#		}
+#		NOT = { has_country_flag = reject_transcedence }
+#	}
+#	
+#	option = {
+#		name = "utopia.203.a"
+#		hidden_effect = {
+#			set_country_flag = has_awakened_species
+#			every_owned_pop = {
+#				limit = { is_same_species = event_target:target_species }
+#				modify_species = {
+#					species = event_target:target_species
+#					remove_trait = trait_latent_psionic
+#					add_trait = trait_psionic
+#				}
+#			}
+#		}
+#	}
+#}
+
+#Purity government: purging pops yields unity
+planet_event = {
+	id = utopia.180
+	hide_window = yes
+	is_triggered_only = yes
+	
+	trigger = {
+		FROM = {
+			OR = {
+				has_valid_civic = civic_fanatic_purifiers
+				has_swapped_tradition = tr_purity_natural_order			
+			}
+		}
+		FROMFROM = {
+			is_robot_pop = no
+			NOT = {
+				is_same_species = owner_species
+			}
+		}
+		is_controlled_by = FROM
+	}
+	
+	immediate = {
+		FROM = {
+			add_monthly_resource_mult = {
+				resource = unity
+				value = 1
+				min = 5
+				max = 50
+			}
+		}
+	}
+}
+
+#Purity government: purging pops yields unity
+planet_event = {
+	id = utopia.181
+	hide_window = yes
+	is_triggered_only = yes
+	
+	trigger = {
+		FROM = {
+			has_valid_civic = civic_hive_devouring_swarm
+		}
+		FROMFROM = {
+			is_robot_pop = no
+			NOT = {
+				is_same_species = owner_species
+			}
+		}
+		is_controlled_by = FROM
+	}
+	
+	immediate = {
+		FROM = {
+			add_monthly_resource_mult = {
+				resource = society_research
+				value = 0.5
+				min = 1
+				max = 25
+			}
+		}
+	}
+}
+
+### Withdrawal removed when Blissed
+pop_event = {
+	id = utopia.90
+	hide_window = yes
+	is_triggered_only = yes
+ 
+	trigger = {
+		has_living_standard = {
+			country = owner
+			type = living_standard_chemical_bliss
+		}
+	}
+ 
+	immediate = {
+		if = {
+			limit = { has_modifier = withdrawal_symptoms }
+			remove_modifier = withdrawal_symptoms
+		}
+	}
+}
+
+### ASCENSION PERKS
+
+# Engineered Evolution
+country_event = {
+	id = utopia.2700
+	title = "utopia.2700.name"
+	desc = "utopia.2700.desc"
+	picture = GFX_evt_genetic_modification
+	show_sound = event_engineered_evolution
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EXCELLENT
+	}
+}
+
+# Evolutionary Mastery
+country_event = {
+	id = utopia.2703
+	title = "utopia.2703.name"
+	desc = "utopia.2703.desc"
+	picture = GFX_evt_genetic_modification
+	show_sound = event_evolution_mastery
+	
+	is_triggered_only = yes
+
+	option = {
+		name = EXCELLENT
+	}
+}
+
+# The Flesh is Weak
+country_event = {
+	id = utopia.2500
+	title = "utopia.2500.name"
+	desc = "utopia.2500.desc"
+	picture = GFX_evt_cybernetics
+	show_sound = event_laboratory_sound
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "utopia.2500.a"
+		capital_scope = {
+			enable_special_project = {
+				name = "FLESH_IS_WEAK_PROJECT"
+				location = this
+				owner = root
+			}
+		}
+	}
+}
+
+# A Cybernetic Revolution
+country_event = {
+	id = utopia.2501
+	title = "utopia.2501.name"
+	desc = "utopia.2501.desc"
+	picture = GFX_evt_cybernetics
+	show_sound = event_the_flesh_is_weak
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		set_country_flag = flesh_weakened
+		random_owned_pop = {
+			limit = { is_same_species = root }
+			create_cybernetic_species_mod = yes
+		}
+		change_dominant_species = { species = last_created }
+		
+		while = {
+			limit = {
+				any_owned_pop = {
+					is_sapient = yes
+					species = {
+						NOR = {
+							has_trait = trait_cybernetic
+		  					has_trait = trait_mechanical
+							has_trait = trait_machine_unit
+							has_trait = leader_trait_curator
+						}
+					}
+				}
+			}
+			random_owned_pop = {
+				limit = {
+					is_sapient = yes
+					species = {
+						NOR = {
+							has_trait = trait_cybernetic
+		  					has_trait = trait_mechanical
+							has_trait = trait_machine_unit
+							has_trait = leader_trait_curator
+						}
+					}
+				}
+				create_cybernetic_species_mod = yes
+			}
+		}
+		
+		while = {
+			limit = {
+				any_owned_leader = {
+					species = {
+						NOR = {
+							has_trait = trait_cybernetic
+		  					has_trait = trait_mechanical
+							has_trait = trait_machine_unit
+							has_trait = leader_trait_curator
+						}
+					}
+				}
+			}
+			random_owned_leader = {
+				limit = {
+					species = {
+						NOR = {
+							has_trait = trait_cybernetic
+		  					has_trait = trait_mechanical
+							has_trait = trait_machine_unit
+							has_trait = leader_trait_curator
+						}
+					}
+				}
+				create_cybernetic_species_mod = yes
+			}
+		}
+		
+		while = {
+			limit = {
+				any_pool_leader = {
+					species = {
+						NOR = {
+							has_trait = trait_cybernetic
+		  					has_trait = trait_mechanical
+							has_trait = trait_machine_unit
+						}
+					}
+				}
+			}
+			random_pool_leader = {
+				limit = {
+					species = {
+						NOR = {
+							has_trait = trait_cybernetic
+		  					has_trait = trait_mechanical
+							has_trait = trait_machine_unit
+						}
+					}
+				}
+				create_cybernetic_species_mod = yes
+			}
+		}
+		
+		while = {
+			limit = {
+				any_owned_army = {
+					exists = species
+					species = {
+						NOR = {
+							has_trait = trait_cybernetic
+		  					has_trait = trait_mechanical
+							has_trait = trait_machine_unit
+						}
+					}
+				}
+			}
+			random_owned_army = {
+				limit = {
+					exists = species
+					species = {
+						NOR = {
+							has_trait = trait_cybernetic
+		  					has_trait = trait_mechanical
+							has_trait = trait_machine_unit
+						}
+					}
+				}
+				create_cybernetic_species_mod = yes
+			}
+		}
+
+		every_owned_ship = {
+			limit = {
+				is_ship_class = shipclass_colonizer
+				species = {
+					NOR = {
+						has_trait = trait_cybernetic
+	  					has_trait = trait_mechanical
+						has_trait = trait_machine_unit
+					}
+				}
+			}
+			create_cybernetic_species_mod = yes
+		}
+
+		every_owned_leader = {
+			limit = {
+				species = { has_trait = trait_cybernetic }
+				NOR = {
+					has_trait = leader_trait_admiral_cyborg
+					has_trait = leader_trait_general_cyborg
+					has_trait = leader_trait_governor_cyborg
+					has_trait = leader_trait_scientist_cyborg
+					has_trait = leader_trait_ruler_cyborg
+					has_trait = leader_trait_curator
+				}
+			}
+			if = {
+				limit = { leader_class = admiral }
+				add_trait = leader_trait_admiral_cyborg
+				add_ruler_trait = leader_trait_ruler_cyborg
+			}
+			if = {
+				limit = { leader_class = general }
+				add_trait = leader_trait_general_cyborg
+				add_ruler_trait = leader_trait_ruler_cyborg
+			}
+			if = {
+				limit = { leader_class = governor }
+				add_trait = leader_trait_governor_cyborg
+				add_ruler_trait = leader_trait_ruler_cyborg
+			}
+			if = {
+				limit = { leader_class = scientist }
+				add_trait = leader_trait_scientist_cyborg
+				add_ruler_trait = leader_trait_ruler_cyborg
+			}
+			if = {
+				limit = { leader_class = ruler }
+				add_trait = leader_trait_ruler_cyborg
+			}
+		}
+		
+		every_pool_leader = {
+			limit = {
+				species = { has_trait = trait_cybernetic }
+				NOR = {
+					has_trait = leader_trait_admiral_cyborg
+					has_trait = leader_trait_general_cyborg
+					has_trait = leader_trait_governor_cyborg
+					has_trait = leader_trait_scientist_cyborg
+					has_trait = leader_trait_ruler_cyborg
+				}
+			}
+			if = {
+				limit = { leader_class = admiral }
+				add_trait = leader_trait_admiral_cyborg
+				add_ruler_trait = leader_trait_ruler_cyborg
+			}
+			if = {
+				limit = { leader_class = general }
+				add_trait = leader_trait_general_cyborg
+				add_ruler_trait = leader_trait_ruler_cyborg
+			}
+			if = {
+				limit = { leader_class = governor }
+				add_trait = leader_trait_governor_cyborg
+				add_ruler_trait = leader_trait_ruler_cyborg
+			}
+			if = {
+				limit = { leader_class = scientist }
+				add_trait = leader_trait_scientist_cyborg
+				add_ruler_trait = leader_trait_ruler_cyborg
+			}
+			if = {
+				limit = { leader_class = ruler }
+				add_trait = leader_trait_ruler_cyborg
+			}
+		}
+		
+		every_country = {
+			limit = {
+				is_ai = no
+				NOT = { is_same_value = root }
+				has_communications = root
+			}
+			country_event = { id = utopia.2505 days = 5 }
+		}
+	}
+	
+	option = {
+		name = "utopia.2501.a"
+		custom_tooltip = CYBORG_ASSIMILATION_CITIZENSHIP_ENABLED
+	}
+}
+
+# Notification for Other Nations
+country_event = {
+	id = utopia.2505
+	title = "utopia.2505.name"
+	desc = {
+		text = utopia.2505.1.desc
+		trigger = {
+			NOR = {
+				has_ethic = ethic_fanatic_spiritualist
+				has_ethic = ethic_spiritualist
+			}
+		}
+	}
+	desc = {
+		text = utopia.2505.2.desc
+		trigger = {
+			OR = {
+				has_ethic = ethic_fanatic_spiritualist
+				has_ethic = ethic_spiritualist
+			}
+		}
+	}
+	picture = GFX_evt_cybernetics
+	show_sound = event_the_flesh_is_weak
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "DISCONCERTING"
+		trigger = {
+			NOR = {
+				has_ethic = ethic_fanatic_spiritualist
+				has_ethic = ethic_spiritualist
+			}
+		}
+	}
+	option = {
+		name = "utopia.2505.b"
+		trigger = {
+			OR = {
+				has_ethic = ethic_fanatic_spiritualist
+				has_ethic = ethic_spiritualist
+			}
+		}
+	}
+}
+
+# New Leaders Get Cyborg Trait
+country_event = {
+	id = utopia.2510
+	is_triggered_only = yes
+	hide_window = yes
+
+	trigger = {
+		from = {
+			species = { has_trait = trait_cybernetic }
+		}
+	}
+
+	immediate = {
+		from = {
+			if = {
+				limit = { leader_class = admiral }
+				add_trait = leader_trait_admiral_cyborg
+				add_ruler_trait = leader_trait_ruler_cyborg
+				break = yes
+			}
+			if = {
+				limit = { leader_class = general }
+				add_trait = leader_trait_general_cyborg
+				add_ruler_trait = leader_trait_ruler_cyborg
+				break = yes
+			}
+			if = {
+				limit = { leader_class = governor }
+				add_trait = leader_trait_governor_cyborg
+				add_ruler_trait = leader_trait_ruler_cyborg
+				break = yes
+			}
+			if = {
+				limit = { leader_class = scientist }
+				add_trait = leader_trait_scientist_cyborg
+				add_ruler_trait = leader_trait_ruler_cyborg
+				break = yes
+			}
+			if = {
+				limit = { leader_class = ruler }
+				add_trait = leader_trait_ruler_cyborg
+				add_ruler_trait = leader_trait_ruler_cyborg
+				break = yes
+			}
+		}
+	}
+}
+
+# Ruler gets normal class trait if one hasn't been assigned
+country_event = {
+	id = utopia.2511
+	is_triggered_only = yes
+	hide_window = yes
+
+	trigger = {
+		from = {
+			species = { has_trait = trait_cybernetic }
+			NOR = {
+				has_trait = leader_trait_admiral_cyborg
+				has_trait = leader_trait_general_cyborg
+				has_trait = leader_trait_governor_cyborg
+				has_trait = leader_trait_scientist_cyborg
+			}
+		}
+	}
+
+	immediate = {
+		from = {
+			if = {
+				limit = { leader_class = admiral }
+				add_trait = leader_trait_admiral_cyborg
+				break = yes
+			}
+			if = {
+				limit = { leader_class = general }
+				add_trait = leader_trait_general_cyborg
+				break = yes
+			}
+			if = {
+				limit = { leader_class = governor }
+				add_trait = leader_trait_governor_cyborg
+				break = yes
+			}
+			if = {
+				limit = { leader_class = scientist }
+				add_trait = leader_trait_scientist_cyborg
+				break = yes
+			}
+		}
+	}
+}
+
+# Synthetic Evolution
+country_event = {
+	id = utopia.2550
+	title = "utopia.2550.name"
+	desc = "utopia.2550.desc"
+	picture = GFX_evt_robot_assembly_plant
+	show_sound = event_laboratory_sound
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "utopia.2550.a"
+		capital_scope = {
+			enable_special_project = {
+				name = "SYNTHETIC_EVOLUTION_PROJECT"
+				location = this
+				owner = root
+			}
+		}
+	}
+}
+
+# The Synthetic Age
+country_event = {
+	id = utopia.2551
+	title = "utopia.2551.name"
+	desc = "utopia.2551.desc"
+	picture = GFX_evt_robot_assembly_plant
+	show_sound = event_synthetic_evolution
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		set_country_flag = synthetic_empire	
+		create_species = {
+			is_mod = yes
+			name = this
+			namelist = this
+			plural = this
+			class = "ROBOT"
+			portrait = "default_robot"
+			traits = {
+				trait = "trait_mechanical"
+				trait = "trait_robotic_3"
+			}
+			
+			new_pop_resource_requirement = {
+				type = robot_food
+				value = 30.0
+			}
+			pops_auto_growth = 1.0
+			
+			pops_can_be_colonizers = yes
+			pops_can_migrate = yes
+			pops_can_reproduce = no
+			pops_can_join_factions = yes
+			pop_maintenance = 1
+			can_generate_leaders = yes
+			pops_can_be_slaves = yes
+			pops_have_happiness = yes
+			pop_ethics = random	#can also be pop_ethics = { some_ethic some_other_ethic etc }
+			
+			effect = {
+				if = { limit = { host_has_dlc = "Synthetic Dawn Story Pack" }
+					prev = {
+						switch = {
+							trigger = is_species_class
+							HUM = { prev = { change_species_characteristics = { portrait = "sd_hum_robot" } } }
+							MAM = { prev = { change_species_characteristics = { portrait = "sd_mam_robot" } } }
+							REP = { prev = { change_species_characteristics = { portrait = "sd_rep_robot" } } }
+							AVI = { prev = { change_species_characteristics = { portrait = "sd_avi_robot" } } }
+							ART = { prev = { change_species_characteristics = { portrait = "sd_art_robot" } } }
+							MOL = { prev = { change_species_characteristics = { portrait = "sd_mol_robot" } } }
+							FUN = { prev = { change_species_characteristics = { portrait = "sd_fun_robot" } } }
+							PLANT = { prev = { change_species_characteristics = { portrait = "sd_pla_robot" } } }
+						}
+					}
+				}
+
+				rename_species = {
+					prompt_country = prev #If targeted country is a player they will get a popup asking for a name/plural/adjective combo. Otherwise the species will get a random name from the specified name_list
+					name_list = robots_test #TODO[DE] Make sure this points to a release-quality list
+				}
+			}
+		}
+		every_owned_pop = {
+			limit = {
+				species = {
+					has_trait = trait_cybernetic 
+				}
+			}
+			change_species = last_created
+			tile = {
+				if = {
+					limit = { has_building = building_basic_farm }
+					set_building = building_basic_power_plant
+				}
+				if = {
+					limit = { has_building = building_hydroponics_farm_1 }
+					set_building = building_power_plant_1
+				}
+				if = {
+					limit = { has_building = building_hydroponics_farm_2 }
+					set_building = building_power_plant_2
+				}
+				if = {
+					limit = { has_building = building_hydroponics_farm_3 }
+					set_building = building_power_plant_3
+				}
+				if = {
+					limit = { has_building = building_hydroponics_farm_4 }
+					set_building = building_power_plant_4
+				}		
+				if = {
+					limit = { has_building = building_hydroponics_farm_5 }
+					set_building = building_power_plant_5
+				}
+			}
+		}
+
+		every_owned_ship = {
+			limit = {
+				is_ship_class = shipclass_colonizer
+				species = {
+					has_trait = trait_cybernetic
+				}
+			}
+			change_species = last_created
+		}
+
+		every_owned_army = {
+			limit = {
+				exists = species
+				exists = planet
+				species = {
+					has_trait = trait_cybernetic
+				}
+			}
+			planet = {
+				create_army = {
+					name = random
+					owner = root
+					type = "android_army"
+					species = none
+				}
+			}
+			remove_army = yes
+		}
+		
+		every_owned_leader = {
+			limit = { 
+				OR = {
+					has_trait = leader_trait_admiral_cyborg
+					has_trait = leader_trait_general_cyborg
+					has_trait = leader_trait_governor_cyborg
+					has_trait = leader_trait_scientist_cyborg
+					has_trait = leader_trait_ruler_cyborg
+					has_trait = leader_trait_admiral_synthetic
+					has_trait = leader_trait_ruler_synthetic
+					has_trait = leader_trait_general_synthetic
+					has_trait = leader_trait_governor_synthetic
+					has_trait = leader_trait_scientist_synthetic
+				}
+			}
+			change_species = last_created
+			change_leader_portrait = species
+		}
+		every_pool_leader = {
+			limit = { 
+				OR = {
+					has_trait = leader_trait_admiral_cyborg
+					has_trait = leader_trait_general_cyborg
+					has_trait = leader_trait_governor_cyborg
+					has_trait = leader_trait_scientist_cyborg
+					has_trait = leader_trait_ruler_cyborg
+					has_trait = leader_trait_admiral_synthetic
+					has_trait = leader_trait_ruler_synthetic
+					has_trait = leader_trait_general_synthetic
+					has_trait = leader_trait_governor_synthetic
+					has_trait = leader_trait_scientist_synthetic
+				}
+			}
+			change_species = last_created
+			change_leader_portrait = species
+		}
+		change_dominant_species = { species = last_created }
+		
+		every_owned_leader = {
+			limit = {
+				species = { has_trait = trait_robotic_3 }
+				NOR = {
+					has_trait = leader_trait_admiral_synthetic
+					has_trait = leader_trait_general_synthetic
+					has_trait = leader_trait_governor_synthetic
+					has_trait = leader_trait_scientist_synthetic
+					has_trait = leader_trait_ruler_synthetic
+				}
+			}
+			if = {
+				limit = { leader_class = admiral }
+				add_trait = leader_trait_admiral_synthetic
+				add_ruler_trait = leader_trait_ruler_synthetic
+				remove_trait = leader_trait_admiral_cyborg
+				remove_ruler_trait = leader_trait_ruler_cyborg
+			}
+			if = {
+				limit = { leader_class = general }
+				add_trait = leader_trait_general_synthetic
+				add_ruler_trait = leader_trait_ruler_synthetic
+				remove_trait = leader_trait_general_cyborg
+				remove_ruler_trait = leader_trait_ruler_cyborg
+			}
+			if = {
+				limit = { leader_class = governor }
+				add_trait = leader_trait_governor_synthetic
+				add_ruler_trait = leader_trait_ruler_synthetic
+				remove_trait = leader_trait_governor_cyborg
+				remove_ruler_trait = leader_trait_ruler_cyborg
+			}
+			if = {
+				limit = { leader_class = scientist }
+				add_trait = leader_trait_scientist_synthetic
+				add_ruler_trait = leader_trait_ruler_synthetic
+				remove_trait = leader_trait_scientist_cyborg
+				remove_ruler_trait = leader_trait_ruler_cyborg
+			}
+			if = {
+				limit = { leader_class = ruler }
+				add_trait = leader_trait_ruler_synthetic
+				remove_trait = leader_trait_ruler_cyborg
+			}
+		}
+		every_pool_leader = {
+			limit = {
+				species = { has_trait = trait_robotic_3 }
+				NOR = {
+					has_trait = leader_trait_admiral_synthetic
+					has_trait = leader_trait_general_synthetic
+					has_trait = leader_trait_governor_synthetic
+					has_trait = leader_trait_scientist_synthetic
+					has_trait = leader_trait_ruler_synthetic
+				}
+			}
+			if = {
+				limit = { leader_class = admiral }
+				add_trait = leader_trait_admiral_synthetic
+				add_ruler_trait = leader_trait_ruler_synthetic
+				remove_trait = leader_trait_admiral_cyborg
+				remove_ruler_trait = leader_trait_ruler_cyborg
+			}
+			if = {
+				limit = { leader_class = general }
+				add_trait = leader_trait_general_synthetic
+				add_ruler_trait = leader_trait_ruler_synthetic
+				remove_trait = leader_trait_general_cyborg
+				remove_ruler_trait = leader_trait_ruler_cyborg
+			}
+			if = {
+				limit = { leader_class = governor }
+				add_trait = leader_trait_governor_synthetic
+				add_ruler_trait = leader_trait_ruler_synthetic
+				remove_trait = leader_trait_governor_cyborg
+				remove_ruler_trait = leader_trait_ruler_cyborg
+			}
+			if = {
+				limit = { leader_class = scientist }
+				add_trait = leader_trait_scientist_synthetic
+				add_ruler_trait = leader_trait_ruler_synthetic
+				remove_trait = leader_trait_scientist_cyborg
+				remove_ruler_trait = leader_trait_ruler_cyborg
+			}
+			if = {
+				limit = { leader_class = ruler }
+				add_trait = leader_trait_ruler_synthetic
+				remove_trait = leader_trait_ruler_cyborg
+			}
+		}
+		
+		every_country = {
+			limit = { 
+				is_ai = no 
+				NOT = { is_same_value = root }
+				has_communications = root
+			}
+			country_event = { id = utopia.2555 days = 5 }
+			country_event = { id = utopia.2556 days = 10 }
+		}
+		if = {
+			limit = {
+				any_country = {
+					AND = {
+						OR = {
+							is_country_type = fallen_empire
+							is_country_type = awakened_fallen_empire
+						}
+						has_ethic = ethic_fanatic_spiritualist
+					}
+				}
+			}
+			random_country = {
+				limit = {
+					OR = {
+						is_country_type = fallen_empire
+						is_country_type = awakened_fallen_empire
+					}
+					has_ethic = ethic_fanatic_spiritualist
+				}
+				country_event = { id = utopia.2557 days = 15 }
+			}
+			else = {
+				random_country = {
+					limit = {
+						is_country_type = default
+						has_ethic = ethic_fanatic_spiritualist
+						NOT = { is_same_value = root }
+					}
+					country_event = { id = utopia.2557 days = 15 }
+				}
+			}
+		}
+
+		ROOT = {
+			set_country_flag = synthetic_age
+		}
+	}
+	
+	option = {
+		name = "utopia.2551.a"
+		custom_tooltip = SYNTH_ASSIMILATION_CITIZENSHIP_ENABLED
+	}
+}
+
+# Notification for Other Nations
+country_event = {
+	id = utopia.2555
+	title = "utopia.2550.name"
+	desc = {
+		text = utopia.2555.1.desc
+		trigger = {
+			NOR = {
+				has_ethic = ethic_fanatic_spiritualist
+				has_ethic = ethic_spiritualist
+			}
+		}
+	}
+	desc = {
+		text = utopia.2555.2.desc
+		trigger = {
+			OR = {
+				has_ethic = ethic_fanatic_spiritualist
+				has_ethic = ethic_spiritualist
+			}
+		}
+	}
+	picture = GFX_evt_cybernetics
+	show_sound = event_synthetic_evolution
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "utopia.2555.a"
+		trigger = {
+			NOR = {
+				has_ethic = ethic_fanatic_spiritualist
+				has_ethic = ethic_spiritualist
+			}
+		}
+	}
+	option = {
+		name = "utopia.2555.b"
+		trigger = {
+			OR = {
+				has_ethic = ethic_fanatic_spiritualist
+				has_ethic = ethic_spiritualist
+			}
+		}
+	}
+}
+
+# Diplomatic Announcement
+country_event = {
+	id = utopia.2556
+	title = TRANSMISSION
+	desc = "utopia.2556.desc"
+	
+	diplomatic = yes
+	
+	is_triggered_only = yes
+	
+	picture_event_data = {
+		portrait = from
+		room = from.ruler
+	}
+	
+	option = {
+		name = utopia.2556.a
+		trigger = {
+			OR = {
+				has_ethic = ethic_fanatic_materialist
+				has_ethic = ethic_materialist
+			}
+			NOT = { is_at_war_with = from }
+		}
+	}
+	option = {
+		name = utopia.2556.b
+		trigger = {
+			OR = {
+				has_ethic = ethic_fanatic_spiritualist
+				has_ethic = ethic_spiritualist
+			}
+			NOT = { is_at_war_with = from }
+		}
+	}
+	option = {
+		name = utopia.2556.c
+		trigger = {
+			is_at_war_with = from
+		}
+	}
+	option = {
+		name = utopia.2556.d
+		trigger = {
+			NOT = { 
+				is_at_war_with = from 
+				has_ethic = ethic_fanatic_materialist
+				has_ethic = ethic_materialist
+				has_ethic = ethic_fanatic_spiritualist
+				has_ethic = ethic_spiritualist
+			}
+		}
+	}
+}
+
+# Diplomatic Response (HIDDEN)
+country_event = {
+	id = utopia.2557
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		from = {
+			country_event = { id = utopia.2558 }
+		}
+	}
+}
+
+# Diplomatic Response
+country_event = {
+	id = utopia.2558
+	title = TRANSMISSION
+	desc = "utopia.2558.desc"
+	
+	diplomatic = yes
+	
+	is_triggered_only = yes
+	
+	picture_event_data = {
+		portrait = from
+		room = from.ruler
+	}
+	
+	option = {
+		name = utopia.2558.a
+	}
+}
+
+# New Leaders Get Synthetic Trait (Should also work on "normal" Synthetics)
+country_event = {
+	id = utopia.2560
+	is_triggered_only = yes
+	hide_window = yes
+
+	trigger = {
+		from = {
+			species = { has_trait = trait_robotic_3 }
+		}
+	}
+
+	immediate = {
+		from = {
+			if = {
+				limit = { leader_class = admiral }
+				add_trait = leader_trait_admiral_synthetic
+				add_ruler_trait = leader_trait_ruler_synthetic
+				break = yes
+			}
+			if = {
+				limit = { leader_class = general }
+				add_trait = leader_trait_general_synthetic
+				add_ruler_trait = leader_trait_ruler_synthetic
+				break = yes
+			}
+			if = {
+				limit = { leader_class = governor }
+				add_trait = leader_trait_governor_synthetic
+				add_ruler_trait = leader_trait_ruler_synthetic
+				break = yes
+			}
+			if = {
+				limit = { leader_class = scientist }
+				add_trait = leader_trait_scientist_synthetic
+				add_ruler_trait = leader_trait_ruler_synthetic
+				break = yes
+			}
+			if = {
+				limit = { leader_class = ruler }
+				add_trait = leader_trait_ruler_synthetic
+				break = yes
+			}
+		}
+	}
+}
+
+# Ruler gets normal class trait if one hasn't been assigned
+country_event = {
+	id = utopia.2561
+	is_triggered_only = yes
+	hide_window = yes
+
+	trigger = {
+		from = {
+			species = { has_trait = trait_robotic_3 }
+			NOR = {
+				has_trait = leader_trait_admiral_synthetic
+				has_trait = leader_trait_general_synthetic
+				has_trait = leader_trait_governor_synthetic
+				has_trait = leader_trait_scientist_synthetic
+			}
+		}
+	}
+
+	immediate = {
+		from = {
+			if = {
+				limit = { leader_class = admiral }
+				add_trait = leader_trait_admiral_synthetic
+				remove_trait = leader_trait_admiral_cyborg
+				break = yes
+			}
+			if = {
+				limit = { leader_class = general }
+				add_trait = leader_trait_general_synthetic
+				remove_trait = leader_trait_general_cyborg
+				break = yes
+			}
+			if = {
+				limit = { leader_class = governor }
+				add_trait = leader_trait_governor_synthetic
+				remove_trait = leader_trait_governor_cyborg
+				break = yes
+			}
+			if = {
+				limit = { leader_class = scientist }
+				add_trait = leader_trait_scientist_synthetic
+				remove_trait = leader_trait_scientist_cyborg
+				break = yes
+			}
+		}
+	}
+}
+
+# Mind over Matter
+country_event = {
+	id = utopia.2600
+	title = "utopia.2600.name"
+	desc = "utopia.2600.desc"
+	picture = GFX_evt_psionics
+	show_sound = event_mind_over_matter
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "utopia.2600.a"
+		modify_species = {
+			species = this
+			add_trait = trait_latent_psionic
+		}
+		custom_tooltip = ALLOW_PSI_CORPS
+		custom_tooltip = ALLOW_PSI_ARMIES
+		hidden_effect = {
+			every_country = {
+				limit = { 
+					is_ai = no
+					has_communications = root
+					NOT = { is_same_value = root }
+				}
+				country_event = { id = utopia.2602 }
+			}
+		}
+	}
+}
+
+# New Leaders Get Psionic Trait (Latent Psionic)
+country_event = {
+	id = utopia.2601
+	is_triggered_only = yes
+	hide_window = yes
+
+	trigger = {
+		from = {
+			species = { has_trait = trait_latent_psionic }
+		}
+	}
+
+	immediate = {
+		from = {
+			if = {
+				limit = { leader_class = admiral }
+				add_trait = leader_trait_admiral_psionic
+				add_ruler_trait = leader_trait_ruler_psionic
+				break = yes
+			}
+			if = {
+				limit = { leader_class = general }
+				add_trait = leader_trait_general_psionic
+				add_ruler_trait = leader_trait_ruler_psionic
+				break = yes
+			}
+			if = {
+				limit = { leader_class = governor }
+				add_trait = leader_trait_governor_psionic
+				add_ruler_trait = leader_trait_ruler_psionic
+				break = yes
+			}
+			if = {
+				limit = { leader_class = scientist }
+				add_trait = leader_trait_scientist_psionic
+				add_ruler_trait = leader_trait_ruler_psionic
+				break = yes
+			}
+			if = {
+				limit = { leader_class = ruler }
+				add_trait = leader_trait_ruler_psionic
+				break = yes
+			}
+		}
+	}
+}
+
+# Notification for other empires
+country_event = {
+	id = utopia.2602
+	title = "utopia.2602.name"
+	desc = {
+		text = utopia.2602.1.desc
+		trigger = {
+			NOR = {
+				any_owned_pop = { is_same_species = from }
+				any_owned_leader = { is_same_species = from }
+			}
+		}
+	}
+	desc = {
+		text = utopia.2602.2.desc
+		trigger = {
+			OR = {
+				any_owned_pop = { is_same_species = from }
+				any_owned_leader = { is_same_species = from }
+			}
+		}
+	}
+	picture = GFX_evt_psionics
+	show_sound = event_laboratory_sound
+	location = from.capital_scope
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "utopia.2602.a"
+		trigger = {
+			NOT = {
+				has_ethic = ethic_materialist
+				has_ethic = ethic_fanatic_materialist
+				is_at_war_with = from
+				species = { has_trait = trait_psionic }
+			}
+		}
+	}
+	option = {
+		name = "utopia.2602.b"
+		trigger = {
+			AND = {
+				OR = {
+					has_ethic = ethic_materialist
+					has_ethic = ethic_fanatic_materialist
+				}
+				NOT = {
+					is_at_war_with = from
+					species = { has_trait = trait_psionic }
+				}
+			}
+		}
+	}
+	option = {
+		name = "utopia.2602.c"
+		trigger = {
+			is_at_war_with = from
+			NOT = { species = { has_trait = trait_psionic } }
+		}
+	}
+	option = {
+		name = "utopia.2602.d"
+		trigger = {
+			species = { has_trait = trait_psionic }
+		}
+	}
+}
+
+# Psychic Identified
+country_event = {
+	id = utopia.2605
+	title = "utopia.2605.name"
+	desc = "utopia.2605.desc"
+	picture = GFX_evt_psionics
+	show_sound = event_psionic
+
+	trigger = {
+		owner_species = {
+			has_trait = trait_latent_psionic
+		}
+		any_owned_leader = {
+			is_same_species = owner_species
+			NOT = {
+				OR = {
+					has_trait = leader_trait_admiral_psionic
+					has_trait = leader_trait_general_psionic
+					has_trait = leader_trait_governor_psionic
+					has_trait = leader_trait_scientist_psionic
+					has_trait = leader_trait_ruler_psionic
+					has_trait = leader_trait_admiral_chosen
+					has_trait = leader_trait_general_chosen
+					has_trait = leader_trait_governor_chosen
+					has_trait = leader_trait_scientist_chosen
+					has_trait = leader_trait_ruler_chosen
+				}
+			}
+		}
+	}
+
+	mean_time_to_happen = {
+		months = 220
+	}
+
+	immediate = {
+		random_owned_leader = {
+			limit = { 
+				is_same_species = owner_species
+				NOT = { 
+					OR = {
+						has_trait = leader_trait_admiral_psionic
+						has_trait = leader_trait_general_psionic
+						has_trait = leader_trait_governor_psionic
+						has_trait = leader_trait_scientist_psionic
+						has_trait = leader_trait_ruler_psionic
+						has_trait = leader_trait_admiral_chosen
+						has_trait = leader_trait_general_chosen
+						has_trait = leader_trait_governor_chosen
+						has_trait = leader_trait_scientist_chosen
+						has_trait = leader_trait_ruler_chosen
+					}
+				}
+			}
+			save_event_target_as = psionic_leader
+		}
+	}
+	
+	option = {
+		name = "utopia.2605.a"
+		event_target:psionic_leader = {
+			if = {
+				limit = { leader_class = admiral }
+				add_trait = leader_trait_admiral_psionic
+				add_ruler_trait = leader_trait_ruler_psionic
+				break = yes
+			}
+			if = {
+				limit = { leader_class = general }
+				add_trait = leader_trait_general_psionic
+				add_ruler_trait = leader_trait_ruler_psionic
+				break = yes
+			}
+			if = {
+				limit = { leader_class = governor }
+				add_trait = leader_trait_governor_psionic
+				add_ruler_trait = leader_trait_ruler_psionic
+				break = yes
+			}
+			if = {
+				limit = { leader_class = scientist }
+				add_trait = leader_trait_scientist_psionic
+				add_ruler_trait = leader_trait_ruler_psionic
+				break = yes
+			}
+			if = {
+				limit = { leader_class = ruler }
+				add_trait = leader_trait_ruler_psionic
+				break = yes
+			}
+		}
+	}
+}
+
+# Transcendence
+country_event = {
+	id = utopia.2650
+	title = "utopia.2650.name"
+	desc = "utopia.2650.desc"
+	picture = GFX_evt_psionics
+	show_sound = event_the_great_awakening
+	
+	is_triggered_only = yes
+
+	immediate = {
+		modify_species = {
+			species = this
+			remove_trait = trait_latent_psionic
+			add_trait = trait_psionic
+		}
+		owner_species = { save_event_target_as = psionic_species }
+	}
+	
+	option = {
+		name = "utopia.2650.a"
+		hidden_effect = {
+			every_country = {
+				limit = {
+					OR = {
+						is_country_type = default
+						is_country_type = fallen_empire
+						is_country_type = awakened_fallen_empire
+					}
+				}
+				every_owned_leader = {
+					limit = {
+						species = { 
+							has_trait = trait_psionic
+							is_same_value = event_target:psionic_species
+						}
+						NOR = {
+							has_trait =	leader_trait_admiral_psionic
+							has_trait =	leader_trait_general_psionic
+							has_trait =	leader_trait_governor_psionic
+							has_trait =	leader_trait_scientist_psionic
+							has_trait =	leader_trait_ruler_psionic
+						}
+					}
+					if = {
+						limit = { leader_class = admiral }
+						add_trait = leader_trait_admiral_psionic
+						add_ruler_trait = leader_trait_ruler_psionic
+					}
+					if = {
+						limit = { leader_class = general }
+						add_trait = leader_trait_general_psionic
+						add_ruler_trait = leader_trait_ruler_psionic
+					}
+					if = {
+						limit = { leader_class = governor }
+						add_trait = leader_trait_governor_psionic
+						add_ruler_trait = leader_trait_ruler_psionic
+					}
+					if = {
+						limit = { leader_class = scientist }
+						add_trait = leader_trait_scientist_psionic
+						add_ruler_trait = leader_trait_ruler_psionic
+					}
+					if = {
+						limit = { leader_class = ruler }
+						add_trait = leader_trait_ruler_psionic
+					}
+				}
+				every_pool_leader = {
+					limit = {
+						species = { 
+							has_trait = trait_psionic
+							is_same_value = event_target:psionic_species
+						}
+						NOR = {
+							has_trait = leader_trait_admiral_psionic
+							has_trait = leader_trait_general_psionic
+							has_trait = leader_trait_governor_psionic
+							has_trait = leader_trait_scientist_psionic
+							has_trait = leader_trait_ruler_psionic
+						}
+					}
+					if = {
+						limit = { leader_class = admiral }
+						add_trait = leader_trait_admiral_psionic
+						add_ruler_trait = leader_trait_ruler_psionic
+					}
+					if = {
+						limit = { leader_class = general }
+						add_trait = leader_trait_general_psionic
+						add_ruler_trait = leader_trait_ruler_psionic
+					}
+					if = {
+						limit = { leader_class = governor }
+						add_trait = leader_trait_governor_psionic
+						add_ruler_trait = leader_trait_ruler_psionic
+					}
+					if = {
+						limit = { leader_class = scientist }
+						add_trait = leader_trait_scientist_psionic
+						add_ruler_trait = leader_trait_ruler_psionic
+					}
+					if = {
+						limit = { leader_class = ruler }
+						add_trait = leader_trait_ruler_psionic
+					}
+				}
+			}
+			every_country = {
+				limit = { 
+					is_ai = no
+					has_communications = root
+					NOT = { is_same_value = root }
+				}
+				country_event = { id = utopia.2652 }
+			}
+			country_event = { id = utopia.2655 days = 30 random = 20 }
+		}
+	}
+}
+
+# New Leaders Get Psionic Trait
+country_event = {
+	id = utopia.2651
+	is_triggered_only = yes
+	hide_window = yes
+
+	trigger = {
+		from = {
+			species = { has_trait = trait_psionic }
+		}
+	}
+
+	immediate = {
+		from = {
+			if = {
+				limit = { leader_class = admiral }
+				add_trait = leader_trait_admiral_psionic
+				add_ruler_trait = leader_trait_ruler_psionic
+				break = yes
+			}
+			if = {
+				limit = { leader_class = general }
+				add_trait = leader_trait_general_psionic
+				add_ruler_trait = leader_trait_ruler_psionic
+				break = yes
+			}
+			if = {
+				limit = { leader_class = governor }
+				add_trait = leader_trait_governor_psionic
+				add_ruler_trait = leader_trait_ruler_psionic
+				break = yes
+			}
+			if = {
+				limit = { leader_class = scientist }
+				add_trait = leader_trait_scientist_psionic
+				add_ruler_trait = leader_trait_ruler_psionic
+				break = yes
+			}
+			if = {
+				limit = { leader_class = ruler }
+				add_trait = leader_trait_ruler_psionic
+				break = yes
+			}
+		}
+	}
+}
+
+# Notification for other empires
+country_event = {
+	id = utopia.2652
+	title = "utopia.2652.name"
+	desc = "utopia.2652.desc"
+	picture = GFX_evt_psionics
+	show_sound = event_the_great_awakening
+	
+	is_triggered_only = yes
+
+	option = {
+		name = AMAZING
+		trigger = {
+			NOT = {
+				has_ethic = ethic_materialist
+				has_ethic = ethic_fanatic_materialist
+				is_at_war_with = from
+				species = { has_trait = trait_psionic }
+			}
+		}
+	}
+	option = {
+		name = "utopia.2652.b"
+		trigger = {
+			AND = {
+				OR = {
+					has_ethic = ethic_materialist
+					has_ethic = ethic_fanatic_materialist
+				}
+				NOT = {
+					is_at_war_with = from
+					species = { has_trait = trait_psionic }
+				}
+			}
+		}
+	}
+	option = {
+		name = "utopia.2652.c"
+		trigger = {
+			is_at_war_with = from
+			NOT = { species = { has_trait = trait_psionic } }
+		}
+	}
+	option = {
+		name = "utopia.2652.d"
+		trigger = {
+			species = { has_trait = trait_psionic }
+		}
+	}
+}
+
+# Ruler gets normal class trait if one hasn't been assigned
+country_event = {
+	id = utopia.2653
+	is_triggered_only = yes
+	hide_window = yes
+
+	trigger = {
+		from = {
+			OR = {
+				species = { has_trait = trait_psionic }
+				has_ruler_trait = leader_trait_ruler_psionic
+			}
+			NOR = {
+				has_trait = leader_trait_admiral_psionic
+				has_trait = leader_trait_general_psionic
+				has_trait = leader_trait_governor_psionic
+				has_trait = leader_trait_scientist_psionic
+			}
+		}
+	}
+
+	immediate = {
+		from = {
+			if = {
+				limit = { leader_class = admiral }
+				add_trait = leader_trait_admiral_psionic
+				break = yes
+			}
+			if = {
+				limit = { leader_class = general }
+				add_trait = leader_trait_general_psionic
+				break = yes
+			}
+			if = {
+				limit = { leader_class = governor }
+				add_trait = leader_trait_governor_psionic
+				break = yes
+			}
+			if = {
+				limit = { leader_class = scientist }
+				add_trait = leader_trait_scientist_psionic
+				break = yes
+			}
+		}
+	}
+}
+
+# The Shroud
+country_event = {
+	id = utopia.2655
+	title = "utopia.2655.name"
+	desc = "utopia.2655.desc"
+	picture = GFX_evt_psionics
+	show_sound = event_psionic
+	
+	is_triggered_only = yes
+
+	option = {
+		name = "utopia.2655.a"
+		capital_scope = {
+			enable_special_project = {
+				name = "BREACHING_SHROUD_PROJECT"
+				location = this
+				owner = root
+			}
+		}
+	}
+}
+
+# The Seance
+country_event = {
+	id = utopia.2656
+	title = "utopia.2656.name"
+	desc = "utopia.2656.desc"
+	picture = GFX_evt_psionics
+	show_sound = event_psionic
+	
+	is_triggered_only = yes
+
+	immediate = {
+		random_country = {
+			limit = { is_country_type = shroud }
+			save_event_target_as = the_shroud
+		}
+	}
+
+	option = {
+		name = "utopia.2656.a"
+		establish_communications_no_message = event_target:the_shroud
+		hidden_effect = {
+			set_country_flag = shroud_intro
+			country_event = { id = utopia.3000 }
+		}
+	}
+}
+

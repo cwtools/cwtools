@@ -1,0 +1,275 @@
+############################
+#
+# Arsenal of Freedom Events
+#
+# Written by Walshicus
+#
+############################
+
+namespace = STH_arsenalOfFreedom_event
+
+@tier1materialreward = 6
+@tier1materialmin = 100
+@tier1materialmax = 500
+@tier2materialreward = 12
+@tier2materialmin = 150
+@tier2materialmax = 1000
+@tier3materialreward = 18
+@tier3materialmin = 250
+@tier3materialmax = 1500
+@tier4materialreward = 24
+@tier4materialmin = 350
+@tier4materialmax = 2000
+
+@tier1influencereward = 6
+@tier1influencemin = 40
+@tier1influencemax = 100
+@tier2influencereward = 12
+@tier2influencemin = 80
+@tier2influencemax = 175
+@tier3influencereward = 18
+@tier3influencemin = 125
+@tier3influencemax = 250
+@tier4influencereward = 24
+@tier4influencemin = 150
+@tier4influencemax = 300
+
+@tier1researchreward = 6
+@tier1researchmin = 60
+@tier1researchmax = 150
+@tier2researchreward = 12
+@tier2researchmin = 90
+@tier2researchmax = 250
+@tier3researchreward = 18
+@tier3researchmin = 120
+@tier3researchmax = 350
+@tier4researchreward = 24
+@tier4researchmin = 150
+@tier4researchmax = 500
+
+
+### Sleeping Dogs
+ship_event = {
+	id = STH_arsenalOfFreedom_event.1
+	title = STH_arsenalOfFreedom_event.1.name
+	desc = STH_arsenalOfFreedom_event.1.desc
+	picture = sth_GFX_evt_arsenalOfFreedom2
+	location = FROM
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		from = { 
+			orbital_deposit_tile = {
+				clear_deposits = yes
+			} 
+		} 
+	}
+
+	option = {
+		name = STH_arsenalOfFreedom_event.1.a
+		hidden_effect = {
+			random_list = {
+				10 = { ship_event = { id = STH_arsenalOfFreedom_event.2 days = 2 scopes = { from = from } } }
+				60 = { ship_event = { id = STH_arsenalOfFreedom_event.3 days = 2 scopes = { from = from } } }
+				30 = { ship_event = { id = STH_arsenalOfFreedom_event.4 days = 2 scopes = { from = from } } }
+			}
+		}
+	}
+	option = {
+		name = STH_arsenalOfFreedom_event.1.b
+		trigger = { owner = { minerals > 999 } }
+		owner = { add_minerals = -1000 }
+        hidden_effect = {
+			random_list = {
+				50 = { ship_event = { id = STH_arsenalOfFreedom_event.5 days = 2 scopes = { from = from } } }
+				50 = { ship_event = { id = STH_arsenalOfFreedom_event.6 days = 2 scopes = { from = from } } }
+			}
+		}
+	}
+	option = {
+		name = STH_arsenalOfFreedom_event.1.bf
+		trigger = { owner = { minerals < 1000 } }
+		hidden_effect = {
+			ship_event = { id = STH_arsenalOfFreedom_event.1 scopes = { from = from } }
+		}
+	}
+	option = {
+		name = STH_arsenalOfFreedom_event.1.c
+		hidden_effect = {
+			random_list = {
+				10 = { ship_event = { id = STH_arsenalOfFreedom_event.7 days = 2 scopes = { from = from } } }
+				90 = { ship_event = { id = STH_arsenalOfFreedom_event.8 days = 2 scopes = { from = from } } }
+			}
+		}
+	}
+}
+
+ship_event = {
+	id = STH_arsenalOfFreedom_event.2
+	title = STH_arsenalOfFreedom_event.2.name
+	desc = STH_arsenalOfFreedom_event.2.desc
+	picture = sth_GFX_evt_arsenalOfFreedom3
+	location = FROM
+	is_triggered_only = yes
+	option = {
+		name = STH_arsenalOfFreedom_event.2.a
+		fromfrom = {
+			random_tile = {	set_building = "building_war_factory" }
+		}
+	}
+}
+
+ship_event = {
+	id = STH_arsenalOfFreedom_event.3
+	title = STH_arsenalOfFreedom_event.3.name
+	desc = STH_arsenalOfFreedom_event.3.desc
+	picture = sth_GFX_evt_arsenalOfFreedom3
+	location = FROM
+	is_triggered_only = yes
+	option = {
+		name = STH_arsenalOfFreedom_event.3.a
+		owner = {
+			add_physics_research = 150
+		}
+	}
+}
+
+ship_event = {
+	id = STH_arsenalOfFreedom_event.4
+	title = STH_arsenalOfFreedom_event.4.name
+	desc = STH_arsenalOfFreedom_event.4.desc
+	picture = sth_GFX_evt_arsenalOfFreedom3
+	location = FROM
+	is_triggered_only = yes
+	option = {
+		name = STH_arsenalOfFreedom_event.4.a
+		kill_leader = { 
+			type = scientist 
+			show_notification = no 
+		}
+		
+	}
+}
+
+ship_event = {
+	id = STH_arsenalOfFreedom_event.5
+	title = STH_arsenalOfFreedom_event.5.name
+	desc = STH_arsenalOfFreedom_event.5.desc
+	picture = sth_GFX_evt_arsenalOfFreedom2
+	location = FROM
+	is_triggered_only = yes
+	option = {
+		name = STH_arsenalOfFreedom_event.5.a
+		owner = {
+			add_physics_research = 250
+		}
+		from = {
+			random_tile = {
+				set_building = "building_war_factory"
+			}
+		}
+	}
+}
+
+ship_event = {
+	id = STH_arsenalOfFreedom_event.6
+	title = STH_arsenalOfFreedom_event.6.name
+	desc = STH_arsenalOfFreedom_event.6.desc
+	picture = sth_GFX_evt_arsenalOfFreedom2
+	location = FROM
+	is_triggered_only = yes
+	option = {
+		name = STH_arsenalOfFreedom_event.6.a
+		owner = {
+			add_minerals = 250
+		}
+		from = {
+			random_tile = {
+				set_building = "building_war_factory"
+			}
+		}
+	}
+}
+
+ship_event = {
+	id = STH_arsenalOfFreedom_event.7
+	title = STH_arsenalOfFreedom_event.7.name
+	desc = STH_arsenalOfFreedom_event.7.desc
+	picture = sth_GFX_evt_starshipExplosion
+	location = FROM
+	is_triggered_only = yes
+	option = {
+		name = STH_arsenalOfFreedom_event.6.a
+		kill_leader = { 
+			type = scientist 
+			show_notification = no 
+		}
+		fleet = { 
+			destroy_fleet = this 
+		}
+		
+	}
+}
+
+ship_event = {
+	id = STH_arsenalOfFreedom_event.8
+	title = STH_arsenalOfFreedom_event.8.name
+	desc = STH_arsenalOfFreedom_event.8.desc
+	picture = sth_GFX_evt_arsenalOfFreedom1
+	location = FROM
+	is_triggered_only = yes
+	option = {
+		name = STH_arsenalOfFreedom_event.8.a
+		owner = {
+			add_physics_research = 150
+		}
+	}
+}
+
+namespace = STH_arsenalOfFreedom_fail
+
+# ROOT = ship scope
+# FROM = planet scope
+
+# Ran Away
+ship_event = {
+	id = STH_arsenalOfFreedom_fail.1
+	title = "DISC_FAILURE"
+	desc = "STH_arsenalOfFreedom_fail.1.desc"
+	picture = sth_GFX_evt_starshipExplosion
+	show_sound = event_ship_explosion
+	location = FROM
+	is_triggered_only = yes
+	immediate = {
+		owner = {
+			add_influence = -25
+		}
+	}
+	option = {
+		name = "UNFORTUNATE"
+	}
+}
+
+# Boobytrap
+ship_event = {
+	id = STH_arsenalOfFreedom_fail.2
+	title = "DISC_FAILURE"
+	desc = "STH_arsenalOfFreedom_fail.2.desc"
+	picture = sth_GFX_evt_starshipExplosion
+	show_sound = event_scanner
+	location = FROM
+	is_triggered_only = yes
+	immediate = {
+		kill_leader = { 
+			type = scientist 
+			show_notification = yes
+		}
+		fleet = { 
+			destroy_fleet = this 
+		}
+	}
+	option = {
+		name = "UNFORTUNATE"
+	}
+}

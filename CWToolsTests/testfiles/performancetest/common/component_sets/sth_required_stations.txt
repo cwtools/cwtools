@@ -1,0 +1,11 @@
+# Icons set here are the ones shown in compnent editor list.
+
+component_set = { key = "required_station_reactors" required_component_set = yes icon = "GFX_ship_part_thruster_1" icon_frame = 1 }
+
+component_set = { key = "REQUIRED_STATION_REACTOR_0" icon = "GFX_ship_part_Station_Reactor_0" icon_frame = 1 }
+component_set = { key = "REQUIRED_STATION_REACTOR_1" icon = "GFX_ship_part_Station_Reactor_1" icon_frame = 1 }
+component_set = { key = "REQUIRED_STATION_REACTOR_2" icon = "GFX_ship_part_Station_Reactor_2" icon_frame = 1 }
+component_set = { key = "REQUIRED_STATION_REACTOR_3" icon = "GFX_ship_part_Station_Reactor_3" icon_frame = 1 }
+component_set = { key = "REQUIRED_STATION_REACTOR_4" icon = "GFX_ship_part_Station_Reactor_4" icon_frame = 1 }
+component_set = { key = "REQUIRED_STATION_REACTOR_5" icon = "GFX_ship_part_Station_Reactor_5" icon_frame = 1 }
+component_set = { key = "REQUIRED_STATION_REACTOR_6" icon = "GFX_ship_part_Station_Reactor_6" icon_frame = 1 }

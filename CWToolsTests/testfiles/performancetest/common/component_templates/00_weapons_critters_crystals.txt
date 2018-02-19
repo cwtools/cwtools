@@ -1,0 +1,416 @@
+
+
+# ####################
+#  Critter Weapons - Crystal Entity Weapons
+# ####################
+
+@critter_cost_value = 35
+
+weapon_component_template = {
+	key = "SMALL_CRYSTAL_SHIP_BLUE_LIGHTNING"
+
+	size = small
+	entity = "small_crystal_ship_weapon_entity"
+	type = instant
+	icon = "GFX_ship_part_blue_crystal_weapon_1"
+	icon_frame = 1
+	projectile_gfx = "crystal_ship_projectile"
+	tags = { weapon_type_kinetic }
+	ai_tags = { weapon_role_anti_armor }
+	hidden = yes
+		
+	component_set = "BLUE_CRYSTAL_WEAPON_1"
+	#prerequisitess = { "tech_blue_crystal_weapon_1" }
+	
+	cost = @critter_cost_value
+}
+
+weapon_component_template = {
+	key = "MEDIUM_CRYSTAL_SHIP_BLUE_LIGHTNING"
+
+	size = medium
+	entity = "medium_crystal_ship_weapon_entity"
+	type = instant
+	icon = "GFX_ship_part_blue_crystal_weapon_1"
+	icon_frame = 1
+	projectile_gfx = "crystal_ship_projectile"
+	tags = { weapon_type_kinetic }
+	ai_tags = { weapon_role_anti_armor }
+	hidden = yes
+			
+	component_set = "BLUE_CRYSTAL_WEAPON_1"
+	#prerequisitess = { "tech_blue_crystal_weapon_1" }
+	cost = @critter_cost_value
+}
+
+weapon_component_template = {
+	key = "LARGE_CRYSTAL_SHIP_BLUE_LIGHTNING"
+
+	size = large
+	entity = "large_crystal_ship_weapon_entity"
+	type = instant
+	icon = "GFX_ship_part_blue_crystal_weapon_1"
+	icon_frame = 1
+	projectile_gfx = "crystal_ship_projectile"
+	tags = { weapon_type_kinetic }
+	ai_tags = { weapon_role_anti_armor }
+	hidden = yes
+			
+	component_set = "BLUE_CRYSTAL_WEAPON_1"
+	#prerequisitess = { "tech_blue_crystal_weapon_1" }
+	cost = @critter_cost_value
+}
+
+weapon_component_template = {
+	key = "SMALL_CRYSTAL_SHIP_GREEN_LIGHTNING"
+
+	size = small
+	entity = "small_crystal_ship_weapon_entity"
+	type = instant
+	icon = "GFX_ship_part_green_crystal_weapon_1"
+	icon_frame = 1
+	projectile_gfx = "green_crystal_ship_projectile"
+	tags = { weapon_type_kinetic }
+	ai_tags = { weapon_role_anti_armor }
+	hidden = yes
+			
+	component_set = "GREEN_CRYSTAL_WEAPON_1"
+	#prerequisitess = { "tech_green_crystal_weapon_1" }
+	cost = @critter_cost_value
+}
+
+weapon_component_template = {
+	key = "MEDIUM_CRYSTAL_SHIP_GREEN_LIGHTNING"
+
+	size = medium
+	entity = "medium_crystal_ship_weapon_entity"
+	type = instant
+	icon = "GFX_ship_part_green_crystal_weapon_1"
+	icon_frame = 1
+	projectile_gfx = "green_crystal_ship_projectile"
+	tags = { weapon_type_kinetic }
+	ai_tags = { weapon_role_anti_armor }
+	hidden = yes
+				
+	component_set = "GREEN_CRYSTAL_WEAPON_1"
+	#prerequisitess = { "tech_green_crystal_weapon_1" }
+	cost = @critter_cost_value
+}
+
+weapon_component_template = {
+	key = "LARGE_CRYSTAL_SHIP_GREEN_LIGHTNING"
+
+	size = large
+	entity = "large_crystal_ship_weapon_entity"
+	type = instant
+	icon = "GFX_ship_part_green_crystal_weapon_1"
+	icon_frame = 1
+	projectile_gfx = "green_crystal_ship_projectile"
+	tags = { weapon_type_kinetic }
+	ai_tags = { weapon_role_anti_armor }
+	hidden = yes
+				
+	component_set = "GREEN_CRYSTAL_WEAPON_1"
+	#prerequisitess = { "tech_green_crystal_weapon_1" }
+	cost = @critter_cost_value
+}
+
+weapon_component_template = {
+	key = "SMALL_CRYSTAL_SHIP_YELLOW_LIGHTNING"
+
+	size = small
+	entity = "small_crystal_ship_weapon_entity"
+	type = instant
+	icon = "GFX_ship_part_yellow_crystal_weapon_1"
+	icon_frame = 1
+	projectile_gfx = "yellow_crystal_ship_projectile"
+	tags = { weapon_type_kinetic }
+	ai_tags = { weapon_role_anti_armor }
+	hidden = yes
+				
+	component_set = "YELLOW_CRYSTAL_WEAPON_1"
+	#prerequisitess = { "tech_yellow_crystal_weapon_1" }
+	cost = @critter_cost_value
+}
+
+weapon_component_template = {
+	key = "MEDIUM_CRYSTAL_SHIP_YELLOW_LIGHTNING"
+
+	size = medium
+	entity = "medium_crystal_ship_weapon_entity"
+	type = instant
+	icon = "GFX_ship_part_yellow_crystal_weapon_1"
+	icon_frame = 1
+	projectile_gfx = "yellow_crystal_ship_projectile"
+	tags = { weapon_type_kinetic }
+	ai_tags = { weapon_role_anti_armor }
+	hidden = yes
+				
+	component_set = "YELLOW_CRYSTAL_WEAPON_1"
+	#prerequisitess = { "tech_yellow_crystal_weapon_1" }
+	cost = @critter_cost_value
+}
+
+weapon_component_template = {
+	key = "LARGE_CRYSTAL_SHIP_YELLOW_LIGHTNING"
+
+	size = large
+	entity = "large_crystal_ship_weapon_entity"
+	type = instant
+	icon = "GFX_ship_part_yellow_crystal_weapon_1"
+	icon_frame = 1
+	projectile_gfx = "yellow_crystal_ship_projectile"
+	tags = { weapon_type_kinetic }
+	ai_tags = { weapon_role_anti_armor }
+	hidden = yes
+				
+	component_set = "YELLOW_CRYSTAL_WEAPON_1"
+	#prerequisitess = { "tech_yellow_crystal_weapon_1" }
+	cost = @critter_cost_value
+}
+
+weapon_component_template = {
+	key = "SMALL_CRYSTAL_SHIP_RED_LIGHTNING"
+
+	size = small
+	entity = "small_crystal_ship_weapon_entity"
+	type = instant
+	icon = "GFX_ship_part_red_crystal_weapon_1"
+	icon_frame = 1
+	projectile_gfx = "red_crystal_ship_projectile"
+	tags = { weapon_type_kinetic }
+	ai_tags = { weapon_role_anti_armor }
+	hidden = yes
+				
+	component_set = "RED_CRYSTAL_WEAPON_1"
+	#prerequisitess = { "tech_red_crystal_weapon_1" }
+	cost = @critter_cost_value
+}
+
+weapon_component_template = {
+	key = "MEDIUM_CRYSTAL_SHIP_RED_LIGHTNING"
+
+	size = medium
+	entity = "medium_crystal_ship_weapon_entity"
+	type = instant
+	icon = "GFX_ship_part_red_crystal_weapon_1"
+	icon_frame = 1
+	projectile_gfx = "red_crystal_ship_projectile"
+	tags = { weapon_type_kinetic }
+	ai_tags = { weapon_role_anti_armor }
+	hidden = yes
+				
+	component_set = "RED_CRYSTAL_WEAPON_1"
+	#prerequisitess = { "tech_red_crystal_weapon_1" }
+	cost = @critter_cost_value
+}
+
+weapon_component_template = {
+	key = "LARGE_CRYSTAL_SHIP_RED_LIGHTNING"
+
+	size = large
+	entity = "large_crystal_ship_weapon_entity"
+	type = instant
+	icon = "GFX_ship_part_red_crystal_weapon_1"
+	icon_frame = 1
+	projectile_gfx = "red_crystal_ship_projectile"
+	tags = { weapon_type_kinetic }
+	ai_tags = { weapon_role_anti_armor }
+	hidden = yes
+				
+	component_set = "RED_CRYSTAL_WEAPON_1"
+	#prerequisitess = { "tech_red_crystal_weapon_1" }
+	cost = @critter_cost_value
+}
+
+weapon_component_template = {
+	key = "SMALL_CRYSTAL_SHIP_BLUE_ELITE_LIGHTNING"
+	hidden = yes
+
+	size = small
+	entity = "small_crystal_ship_weapon_entity"
+	type = instant
+	icon = "GFX_ship_part_blue_crystal_weapon_1"
+	icon_frame = 1
+	projectile_gfx = "crystal_ship_projectile"
+	tags = { weapon_type_kinetic }
+	ai_tags = { weapon_role_anti_armor }
+	
+	cost = @critter_cost_value
+}
+
+weapon_component_template = {
+	key = "MEDIUM_CRYSTAL_SHIP_BLUE_ELITE_LIGHTNING"
+	hidden = yes
+
+	size = medium
+	entity = "medium_crystal_ship_weapon_entity"
+	type = instant
+	icon = "GFX_ship_part_blue_crystal_weapon_1"
+	icon_frame = 1
+	projectile_gfx = "crystal_ship_projectile"
+	tags = { weapon_type_kinetic }
+	ai_tags = { weapon_role_anti_armor }
+	
+	cost = @critter_cost_value
+}
+
+weapon_component_template = {
+	key = "LARGE_CRYSTAL_SHIP_BLUE_ELITE_LIGHTNING"
+	hidden = yes
+
+	size = large
+	entity = "large_crystal_ship_weapon_entity"
+	type = instant
+	icon = "GFX_ship_part_blue_crystal_weapon_1"
+	icon_frame = 1
+	projectile_gfx = "crystal_ship_projectile"
+	tags = { weapon_type_kinetic }
+	ai_tags = { weapon_role_anti_armor }
+	
+	cost = @critter_cost_value
+}
+
+weapon_component_template = {
+	key = "SMALL_CRYSTAL_SHIP_GREEN_ELITE_LIGHTNING"
+	hidden = yes
+
+	size = small
+	entity = "small_crystal_ship_weapon_entity"
+	type = instant
+	icon = "GFX_ship_part_green_crystal_weapon_1"
+	icon_frame = 1
+	projectile_gfx = "green_crystal_ship_projectile"
+	tags = { weapon_type_kinetic }
+	ai_tags = { weapon_role_anti_armor }
+	
+	cost = @critter_cost_value
+}
+
+weapon_component_template = {
+	key = "MEDIUM_CRYSTAL_SHIP_GREEN_ELITE_LIGHTNING"
+	hidden = yes
+
+	size = medium
+	entity = "medium_crystal_ship_weapon_entity"
+	type = instant
+	icon = "GFX_ship_part_green_crystal_weapon_1"
+	icon_frame = 1
+	projectile_gfx = "green_crystal_ship_projectile"
+	tags = { weapon_type_kinetic }
+	ai_tags = { weapon_role_anti_armor }
+	
+	cost = @critter_cost_value
+}
+
+weapon_component_template = {
+	key = "LARGE_CRYSTAL_SHIP_GREEN_ELITE_LIGHTNING"
+	hidden = yes
+
+	size = large
+	entity = "large_crystal_ship_weapon_entity"
+	type = instant
+	icon = "GFX_ship_part_green_crystal_weapon_1"
+	icon_frame = 1
+	projectile_gfx = "green_crystal_ship_projectile"
+	tags = { weapon_type_kinetic }
+	ai_tags = { weapon_role_anti_armor }
+	
+	cost = @critter_cost_value
+}
+
+weapon_component_template = {
+	key = "SMALL_CRYSTAL_SHIP_YELLOW_ELITE_LIGHTNING"
+	hidden = yes
+
+	size = small
+	entity = "small_crystal_ship_weapon_entity"
+	type = instant
+	icon = "GFX_ship_part_yellow_crystal_weapon_1"
+	icon_frame = 1
+	projectile_gfx = "yellow_crystal_ship_projectile"
+	tags = { weapon_type_kinetic }
+	ai_tags = { weapon_role_anti_armor }
+	
+	cost = @critter_cost_value
+}
+
+weapon_component_template = {
+	key = "MEDIUM_CRYSTAL_SHIP_YELLOW_ELITE_LIGHTNING"
+	hidden = yes
+
+	size = medium
+	entity = "medium_crystal_ship_weapon_entity"
+	type = instant
+	icon = "GFX_ship_part_yellow_crystal_weapon_1"
+	icon_frame = 1
+	projectile_gfx = "yellow_crystal_ship_projectile"
+	tags = { weapon_type_kinetic }
+	ai_tags = { weapon_role_anti_armor }
+	
+	cost = @critter_cost_value
+}
+
+weapon_component_template = {
+	key = "LARGE_CRYSTAL_SHIP_YELLOW_ELITE_LIGHTNING"
+	hidden = yes
+
+	size = large
+	entity = "large_crystal_ship_weapon_entity"
+	type = instant
+	icon = "GFX_ship_part_yellow_crystal_weapon_1"
+	icon_frame = 1
+	projectile_gfx = "yellow_crystal_ship_projectile"
+	tags = { weapon_type_kinetic }
+	ai_tags = { weapon_role_anti_armor }
+	
+	cost = @critter_cost_value
+}
+
+weapon_component_template = {
+	key = "SMALL_CRYSTAL_SHIP_RED_ELITE_LIGHTNING"
+	hidden = yes
+
+	size = small
+	entity = "small_crystal_ship_weapon_entity"
+	type = instant
+	icon = "GFX_ship_part_red_crystal_weapon_1"
+	icon_frame = 1
+	projectile_gfx = "red_crystal_ship_projectile"
+	tags = { weapon_type_kinetic }
+	ai_tags = { weapon_role_anti_armor }
+	
+	cost = @critter_cost_value
+}
+
+weapon_component_template = {
+	key = "MEDIUM_CRYSTAL_SHIP_RED_ELITE_LIGHTNING"
+	hidden = yes
+
+	size = medium
+	entity = "medium_crystal_ship_weapon_entity"
+	type = instant
+	icon = "GFX_ship_part_red_crystal_weapon_1"
+	icon_frame = 1
+	projectile_gfx = "red_crystal_ship_projectile"
+	tags = { weapon_type_kinetic }
+	ai_tags = { weapon_role_anti_armor }
+	
+	cost = @critter_cost_value
+}
+
+weapon_component_template = {
+	key = "LARGE_CRYSTAL_SHIP_RED_ELITE_LIGHTNING"
+	hidden = yes
+
+	size = large
+	entity = "large_crystal_ship_weapon_entity"
+	type = instant
+	icon = "GFX_ship_part_red_crystal_weapon_1"
+	icon_frame = 1
+	projectile_gfx = "red_crystal_ship_projectile"
+	tags = { weapon_type_kinetic }
+	ai_tags = { weapon_role_anti_armor }
+	
+	cost = @critter_cost_value
+}

@@ -1,0 +1,66 @@
+# Whale probe Aura
+utility_component_template = {
+	key = "SHIP_AURA_WHALE_PROBE_1"
+	size = medium
+	icon = "GFX_ship_part_aura_quantum_destabilizer_1" # change accordingly
+	icon_frame = 1
+	power = -10
+	cost = 10
+	component_set = "whale_aura_components"
+	hostile_aura = {
+		name = "aura_whale_probe"
+		radius = 50
+		apply_on = ships
+		stack_info = {
+			id = hostile_inhibitor_aura
+			priority = 100
+		}
+		damage_per_day = {
+			accuracy = 1.0
+			damage = { min = 5 max = 20 }
+			shield_damage = 10.0
+			shield_penetration = 0.1
+			armor_penetration = 0.50
+		}
+		modifier = { 
+			ship_fire_rate_mult = -0.50
+			ship_weapon_damage = -0.50
+			ship_combat_speed_mult = -0.95
+		}
+		graphics = {
+			area_effect = {
+				entity = "circle_area_entity"
+				dynamic_scale = yes
+			}
+			ship_effect = {
+				entity = "ship_aura_negative_entity" 
+				dynamic_scale = no
+			}
+		}
+	}
+	ai_weight = { weight = 0 }
+}
+### Spore Drive
+utility_component_template = {
+	key = "SPORE_DRIVE_1"
+	size = small
+	icon = "GFX_ship_part_Required_Warp_Spore_"
+	icon_frame = 1
+	power = 900
+	cost = 250
+	ftl = jumpdrive
+	hidden = yes
+	
+	ai_weight = {
+		weight = 5
+	}
+	
+	ship_modifier = {
+		#ship_ftl_jumpdrive_range_mult = 0.50
+		ship_windup_mult = 1.0
+	}
+
+	class_restriction = { shipclass_military shipclass_constructor shipclass_colonizer shipclass_science_ship shipclass_transport }
+	#prerequisites = { "tech_psi_jump_drive_1" }
+	component_set = "ftl_components"
+}

@@ -1,0 +1,388 @@
+############################
+#
+# The Terratin Incident Events
+#
+# Written by Walshicus
+#
+############################
+
+namespace = STH_theTerratinIncident_event
+
+@tier1materialreward = 6
+@tier1materialmin = 100
+@tier1materialmax = 500
+@tier2materialreward = 12
+@tier2materialmin = 150
+@tier2materialmax = 1000
+@tier3materialreward = 18
+@tier3materialmin = 250
+@tier3materialmax = 1500
+@tier4materialreward = 24
+@tier4materialmin = 350
+@tier4materialmax = 2000
+
+@tier1influencereward = 6
+@tier1influencemin = 40
+@tier1influencemax = 100
+@tier2influencereward = 12
+@tier2influencemin = 80
+@tier2influencemax = 175
+@tier3influencereward = 18
+@tier3influencemin = 125
+@tier3influencemax = 250
+@tier4influencereward = 24
+@tier4influencemin = 150
+@tier4influencemax = 300
+
+@tier1researchreward = 6
+@tier1researchmin = 60
+@tier1researchmax = 150
+@tier2researchreward = 12
+@tier2researchmin = 90
+@tier2researchmax = 250
+@tier3researchreward = 18
+@tier3researchmin = 120
+@tier3researchmax = 350
+@tier4researchreward = 24
+@tier4researchmin = 150
+@tier4researchmax = 500
+
+
+### The Terratin Incident
+ship_event = {
+	id = STH_theTerratinIncident_event.1
+	title = STH_theTerratinIncident_event.1.name
+	desc = STH_theTerratinIncident_event.1.desc
+	picture = sth_GFX_evt_theTerratinIncident4
+	location = FROM
+	is_triggered_only = yes
+	immediate = {
+		from = { 
+			orbital_deposit_tile = { clear_deposits = yes } 
+		} 
+	}
+	option = {
+		name = STH_theTerratinIncident_event.1.a
+		hidden_effect = {
+			random_list = {
+				10 = { ship_event = { id = STH_theTerratinIncident_event.2 days = 2 } }
+				60 = { ship_event = { id = STH_theTerratinIncident_event.3 days = 2 } }
+				30 = { ship_event = { id = STH_theTerratinIncident_event.4 days = 2 } }
+			}
+		}
+	}
+	option = {
+		name = STH_theTerratinIncident_event.1.b
+		hidden_effect = {
+			random_list = {
+				80 = { ship_event = { id = STH_theTerratinIncident_event.5 days = 2 } }
+				20 = { ship_event = { id = STH_theTerratinIncident_event.10 days = 2 } }
+			}
+		}
+	}
+	option = {
+		name = STH_theTerratinIncident_event.1.c
+		hidden_effect = {
+			random_list = {
+				100 = { ship_event = { id = STH_theTerratinIncident_event.13 days = 2 } }
+			}
+		}
+	}
+}
+
+ship_event = {
+	id = STH_theTerratinIncident_event.2
+	title = STH_theTerratinIncident_event.2.name
+	desc = STH_theTerratinIncident_event.2.desc
+	picture = sth_GFX_evt_starshipExplosion
+	location = FROM
+	is_triggered_only = yes
+	option = {
+		name = STH_theTerratinIncident_event.2.a
+		kill_leader = { 
+			type = scientist 
+			show_notification = no 
+		}
+		fleet = { 
+			destroy_fleet = this 
+		}
+	}
+}
+
+ship_event = {
+	id = STH_theTerratinIncident_event.3
+	title = STH_theTerratinIncident_event.3.name
+	desc = STH_theTerratinIncident_event.3.desc
+	picture = sth_GFX_evt_theTerratinIncident4
+	location = FROM
+	is_triggered_only = yes
+	option = {
+		name = STH_theTerratinIncident_event.3.a
+		owner = {
+			add_influence = -50
+			add_physics_research = 100
+		}
+	}
+}
+
+ship_event = {
+	id = STH_theTerratinIncident_event.4
+	title = STH_theTerratinIncident_event.4.name
+	desc = STH_theTerratinIncident_event.4.desc
+	picture = sth_GFX_evt_theTerratinIncident4
+	location = FROM
+	is_triggered_only = yes
+	option = {
+		name = STH_theTerratinIncident_event.4.a
+		owner = { 
+			add_influence = -50 
+			add_physics_research = 100
+		}
+		leader = { add_trait = leader_trait_substance_abuser }		
+	}
+}
+
+ship_event = {
+	id = STH_theTerratinIncident_event.5
+	title = STH_theTerratinIncident_event.5.name
+	desc = STH_theTerratinIncident_event.5.desc
+	picture = sth_GFX_evt_theTerratinIncident2
+	location = FROM
+	is_triggered_only = yes
+	option = {
+		name = STH_theTerratinIncident_event.5.a
+		hidden_effect = {
+			random_list = {
+				90 = { ship_event = { id = STH_theTerratinIncident_event.6 days = 2 } }
+				10 = { ship_event = { id = STH_theTerratinIncident_event.7 days = 2 } }
+			}
+		}
+	}
+	option = {
+		name = STH_theTerratinIncident_event.5.b
+		hidden_effect = {
+			random_list = {
+				100 = { ship_event = { id = STH_theTerratinIncident_event.8 days = 2 } }
+			}
+		}
+	}
+	option = {
+		name = STH_theTerratinIncident_event.5.c
+		hidden_effect = {
+			random_list = {
+				100 = { ship_event = { id = STH_theTerratinIncident_event.9 days = 2 } }
+			}
+		}
+	}
+}
+
+ship_event = {
+	id = STH_theTerratinIncident_event.6
+	title = STH_theTerratinIncident_event.6.name
+	desc = STH_theTerratinIncident_event.6.desc
+	picture = sth_GFX_evt_theTerratinIncident3
+	location = FROM
+	is_triggered_only = yes
+	option = {
+		name = STH_theTerratinIncident_event.6.a
+		owner = {
+			random_owned_planet  = {
+				limit = { NOT = { has_planet_flag = terratinColonyTarget } }
+				hidden_effect = {
+					set_planet_flag = terratinColonyTarget
+					save_event_target_as = terratinColonyTarget
+				}
+				enable_special_project = {
+					name = "THE_TERRATIN_INCIDENT_PROJECT"
+					location = event_target:terratinColonyTarget
+				}
+			}
+		}
+	}
+}
+
+ship_event = {
+	id = STH_theTerratinIncident_event.7
+	title = STH_theTerratinIncident_event.7.name
+	desc = STH_theTerratinIncident_event.7.desc
+	picture = sth_GFX_evt_theTerratinIncident4
+	location = FROM
+	is_triggered_only = yes
+	option = {
+		name = STH_theTerratinIncident_event.7.a
+		owner = {
+			add_influence = -50
+			add_physics_research = 50
+		}
+	}
+}
+
+ship_event = {
+	id = STH_theTerratinIncident_event.8
+	title = STH_theTerratinIncident_event.8.name
+	desc = STH_theTerratinIncident_event.8.desc
+	picture = sth_GFX_evt_theTerratinIncident4
+	location = FROM
+	is_triggered_only = yes
+	option = {
+		name = STH_theTerratinIncident_event.8.a
+		owner = {
+			add_influence = -75
+			add_physics_research = 50
+		}
+	}
+}
+
+ship_event = {
+	id = STH_theTerratinIncident_event.9
+	title = STH_theTerratinIncident_event.9.name
+	desc = STH_theTerratinIncident_event.9.desc
+	picture = sth_GFX_evt_theTerratinIncident1
+	location = FROM
+	is_triggered_only = yes
+	option = {
+		name = STH_theTerratinIncident_event.9.a
+		owner = {
+			add_influence = -150
+			add_physics_research = 50
+		}
+	}
+}
+
+ship_event = {
+	id = STH_theTerratinIncident_event.10
+	title = STH_theTerratinIncident_event.10.name
+	desc = STH_theTerratinIncident_event.10.desc
+	picture = sth_GFX_evt_theTerratinIncident4
+	location = FROM
+	is_triggered_only = yes
+	option = {
+		name = STH_theTerratinIncident_event.10.a
+		hidden_effect = {
+			random_list = {
+				50 = { ship_event = { id = STH_theTerratinIncident_event.11 days = 2 } }
+				50 = { ship_event = { id = STH_theTerratinIncident_event.12 days = 2 } }
+			}
+		}
+	}
+	option = {
+		name = STH_theTerratinIncident_event.10.b
+		hidden_effect = {
+			random_list = {
+				50 = { ship_event = { id = STH_theTerratinIncident_event.3 days = 2 } }
+				40 = { ship_event = { id = STH_theTerratinIncident_event.4 days = 2 } }
+				10 = { ship_event = { id = STH_theTerratinIncident_event.2 days = 2 } }
+			}
+		}
+	}
+}
+
+ship_event = {
+	id = STH_theTerratinIncident_event.11
+	title = STH_theTerratinIncident_event.11.name
+	desc = STH_theTerratinIncident_event.11.desc
+	picture = sth_GFX_evt_theTerratinIncident4
+	location = FROM
+	is_triggered_only = yes
+	option = {
+		name = STH_theTerratinIncident_event.11.a
+		kill_leader = { 
+			type = scientist 
+			show_notification = no 
+		}
+		owner = {
+			add_influence = -50
+			add_physics_research = 75
+		}
+	}
+}
+
+ship_event = {
+	id = STH_theTerratinIncident_event.12
+	title = STH_theTerratinIncident_event.12.name
+	desc = STH_theTerratinIncident_event.12.desc
+	picture = sth_GFX_evt_theTerratinIncident4
+	location = FROM
+	is_triggered_only = yes
+	option = {
+		name = STH_theTerratinIncident_event.12.a
+	}
+}
+
+ship_event = {
+	id = STH_theTerratinIncident_event.13
+	title = STH_theTerratinIncident_event.13.name
+	desc = STH_theTerratinIncident_event.13.desc
+	picture = sth_GFX_evt_starshipExplosion
+	location = FROM
+	is_triggered_only = yes
+	option = {
+		name = STH_theTerratinIncident_event.13.a
+		kill_leader = { 
+			type = scientist 
+			show_notification = no 
+		}
+		fleet = { 
+			destroy_fleet = this 
+		}
+	}
+}
+
+ship_event = {
+	id = STH_theTerratinIncident_event.14
+	title = STH_theTerratinIncident_event.14.name
+	desc = STH_theTerratinIncident_event.14.desc
+	picture = sth_GFX_evt_theTerratinIncident3
+	location = FROM
+	is_triggered_only = yes
+	option = {
+		name = STH_theTerratinIncident_event.14.a
+		fromfrom = {
+			add_modifier  = {
+				modifier = "miniature_population"
+				days = -1
+			}
+		}
+	}
+}
+
+
+namespace = STH_theTerratinIncident_fail
+
+# ROOT = ship scope
+# FROM = planet scope
+
+# Shuttle crushed
+ship_event = {
+	id = STH_theTerratinIncident_fail.1
+	title = "DISC_FAILURE"
+	desc = "STH_theTerratinIncident_fail.1.desc"
+	picture =  sth_GFX_evt_theTerratinIncident1
+	show_sound = event_scanner
+	location = FROM
+	is_triggered_only = yes
+	option = {
+		owner = {
+			add_influence = -50
+		}
+		name = "UNFORTUNATE"
+	}
+}
+
+# Boobytrap
+ship_event = {
+	id = STH_theTerratinIncident_fail.2
+	title = "DISC_FAILURE"
+	desc = "STH_theTerratinIncident_fail.2.desc"
+	picture = sth_GFX_evt_starshipExplosion
+	show_sound = event_ship_explosion
+	location = FROM
+	is_triggered_only = yes
+	immediate = {
+		kill_leader = { type = scientist show_notification = no }
+		fleet = { destroy_fleet = this }
+	}
+	option = {
+		name = "UNFORTUNATE"
+	}
+}

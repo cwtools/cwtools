@@ -1,0 +1,104 @@
+@distance = 30
+@base_moon_distance = 10
+
+
+#Garidian
+garidian_homeworld = {
+	name = "Garid"
+	class = "sc_m"
+	flags = { garidian_homeworld }
+	init_effect = { log = "garidian homeworld" }
+	usage = custom_empire
+	max_instances = 1
+	planet = { name = "Garid" class = star orbit_distance = 0 orbit_angle = 1 size = 20 has_ring = no }
+	planet = { count = 4 orbit_distance = { min = 20 max = 35 } size = { min = 5 max = 12 } orbit_angle = { min = 90 max = 270 } change_orbit = @base_moon_distance }
+	planet = {
+		name = "Garid"
+		class = pc_continental
+		orbit_distance = 20
+		orbit_angle = 220
+		size = { min = 18 max = 20 }
+		starting_planet = yes
+		has_ring = no
+		tile_blockers = none
+		modifiers = none
+		init_effect = { prevent_anomaly = yes }
+		init_effect = {
+			if = {
+				limit = { NOT = { any_country = { has_country_flag = garidian_republic } } }
+				create_species = {
+				    name = "Garidian"
+				    class = GAR
+				    portrait = garidian
+				    homeworld = THIS
+				    traits = {
+				        trait = "trait_enduring"
+				        trait="trait_intelligent"
+				        trait="trait_slow_breeders"
+				        ideal_planet_class = "pc_continental"
+					}
+				}
+				last_created_species = { save_global_event_target_as = garidianSpecies }
+				create_country = {
+					name = "NAME_garidian_republic"
+					type = default
+					ignore_initial_colony_error = yes
+					civics = { civic = "civic_meritocracy" civic = "civic_exalted_priesthood" }
+					authority = auth_oligarchic
+					name_list = "Romulan"
+					ethos = { ethic = "ethic_militarist" ethic = "ethic_authoritarian" ethic = "ethic_spiritualist" }
+					species = event_target:garidianSpecies
+					flag = {
+						icon = { category = "zoological" file = "flag_zoological_6.dds" }
+						background = { category = "backgrounds" file = "circle.dds" }
+						colors = { "customcolor1304" "customcolor1365" "null" "null" }
+					}
+					ship_prefix = "GRS"
+					effect = {
+						set_graphical_culture = romulan_01
+						set_country_flag = garidian_republic
+						set_country_flag = custom_start_screen
+						set_country_flag = romulan_ent
+						set_country_flag = alpha_beta_empire
+						set_country_flag = init_spawned
+						set_country_flag = first_alien_life
+						set_country_flag = first_contact_event 
+						set_country_flag = botf_minor
+						save_global_event_target_as = garidian_republic
+					}
+				}
+				create_colony = { owner = event_target:garidian_republic species = event_target:garidianSpecies ethos = owner }
+			}
+			set_capital = yes
+			random_country = {
+				limit = { has_country_flag = garidian_republic }
+				save_global_event_target_as = garidian_republic
+				add_appropriate_start_techs = yes
+				give_technology = { tech = "tech_physics_artificial_70" message = no }
+				species = { save_global_event_target_as = garidianSpecies }
+				set_country_type = minorRace
+			}
+			if = {
+				limit = { exists = event_target:romulan_star_empire }
+				event_target:garidian_republic = {				
+					establish_communications_no_message = event_target:romulan_star_empire
+					set_subject_of = { who = event_target:romulan_star_empire subject_type = vassal }
+				}
+			}
+			set_owner = event_target:garidian_republic
+			generate_minor_empire_start_buildings = yes
+			generate_minor_empire_start_pops = yes
+			generate_major_empire_start_fleets = yes
+			set_name = "Garid"
+		}
+	}
+	planet = {
+		count = { min = 0 max = 5 }
+		orbit_distance = { min = 25 max = 30 }
+		class = random_non_colonizable
+		orbit_angle = { min = 90 max = 270 }
+		change_orbit = @base_moon_distance
+		moon = { count = { min = 0 max = 1 } class = random_non_colonizable orbit_angle = { min = 90 max = 270 } orbit_distance = 5 }
+	}
+
+}

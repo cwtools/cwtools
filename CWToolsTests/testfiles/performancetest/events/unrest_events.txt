@@ -1,0 +1,2122 @@
+# STNH - Capek 1.8.0 Compat
+
+namespace = unrest
+
+@unrestlevel1 = 10
+@unrestlevel2 = 50
+@unrestlevel3 = 80
+
+
+
+# Unrest: Terror
+planet_event = {
+	id = unrest.101
+	title = unrest.101.name
+	desc = unrest.101.desc
+	picture = GFX_evt_burning_settlement
+	show_sound = event_air_raid_siren
+	location = root
+
+	trigger = {
+		exists = owner
+		owner = { 
+			is_normal_country = yes
+			is_borg_empire = no			
+		}
+		controller = { is_same_value = root.owner }
+		has_ground_combat = no
+		unrest > @unrestlevel2
+		NOT = {
+			has_planet_flag = recent_unrest_event
+			OR = {
+				has_modifier = riots_averted
+				has_modifier = spiritualist_unrest
+				has_modifier = authoritarian_unrest
+				has_modifier = materialist_unrest
+				has_modifier = xenophobe_unrest
+				has_modifier = xenophile_unrest
+				has_modifier = pacifist_unrest
+				has_modifier = militarist_unrest
+				has_modifier = authoritarian_unrest
+				has_modifier = egalitarian_unrest
+				has_modifier = major_terrorist_action
+				has_modifier = minor_terrorist_action
+			}
+		}
+	}
+
+	mean_time_to_happen = {
+		years = 50
+		modifier = {
+			factor = 0.8
+			unrest > @unrestlevel2
+		}	
+		modifier = {
+			factor = 0.8
+			unrest > @unrestlevel3
+		}
+	}
+
+	immediate = {
+		add_modifier = {
+			modifier = minor_terrorist_action
+			days = 7200 # 20 years
+		}
+		set_timed_planet_flag = {
+			flag = recent_unrest_event
+			days = 720
+		}
+	}
+
+	option = {
+		name = UNFORTUNATE
+		tooltip = {
+			add_modifier = {
+				modifier = minor_terrorist_action
+				days = 7200 # 20 years
+			}
+		}
+	}
+}
+
+# calc_true_if check for having too many modifiers?
+
+# Unrest: Severe Terror
+planet_event = {
+	id = unrest.105
+	title = unrest.105.name
+	desc = unrest.105.desc
+	picture = GFX_evt_burning_settlement
+	show_sound = event_air_raid_siren
+	location = root
+
+	trigger = {
+		exists = owner
+		owner = { 
+			is_normal_country = yes
+			is_borg_empire = no			
+		}
+		controller = { is_same_value = root.owner }
+		has_planet_flag = unrest_terror
+		unrest > @unrestlevel2
+		has_ground_combat = no
+	}
+
+	mean_time_to_happen = {
+		years = 50
+		modifier = {
+			factor = 0.8
+			unrest > @unrestlevel2
+		}	
+		modifier = {
+			factor = 0.8
+			unrest > @unrestlevel3
+		}
+		modifier = {
+			factor = 0.8
+			has_planet_flag = unrest_terror 
+		}
+	}
+
+	immediate = {
+		add_modifier = {
+			modifier = major_terrorist_action
+			days = 3600 # 10 years
+		}
+		set_timed_planet_flag = {
+			flag = recent_unrest_event
+			days = 720
+		}
+	}
+
+	option = {
+		name = UNFORTUNATE
+		tooltip = {
+			add_modifier = {
+				modifier = major_terrorist_action
+				days = 3600 # 10 years
+			}
+		}
+	}
+}
+
+# Unrest : Keeping the Peace
+planet_event = {
+	id = unrest.110
+	title = unrest.110.name
+	desc = unrest.110.desc
+	picture = GFX_evt_colony_settlement
+	show_sound = event_celebration
+	location = root
+
+	trigger = {
+		has_ground_combat = no
+		exists = owner
+		owner = { 
+			is_normal_country = yes
+			is_borg_empire = no			
+		}
+		controller = { is_same_value = root.owner }
+		unrest > @unrestlevel2
+		unrest < @unrestlevel3
+		NOT = {
+			has_planet_flag = recent_unrest_event
+			OR = {
+				has_modifier = riots_averted
+				has_modifier = spiritualist_unrest
+				has_modifier = authoritarian_unrest
+				has_modifier = materialist_unrest
+				has_modifier = xenophobe_unrest
+				has_modifier = xenophile_unrest
+				has_modifier = pacifist_unrest
+				has_modifier = militarist_unrest
+				has_modifier = authoritarian_unrest
+				has_modifier = egalitarian_unrest
+				has_modifier = major_terrorist_action
+				has_modifier = minor_terrorist_action
+			}
+		}
+	}
+
+	mean_time_to_happen = {
+		years = 50
+		modifier = {
+			factor = 0.8
+			unrest > @unrestlevel2
+		}	
+		modifier = {
+			factor = 0.8
+			unrest > @unrestlevel3
+		}
+	}
+
+	immediate = {
+		add_modifier = {
+			modifier = riots_averted
+			days = 7200 # 20 years
+		}
+		set_timed_planet_flag = {
+			flag = recent_unrest_event
+			days = 720
+		}
+	}
+
+	option = {
+		name = OK
+		tooltip = {
+			add_modifier = { 
+				modifier = riots_averted
+				days = 7200 # 20 years
+			}
+		}
+	}
+}
+# Unrest: Hallowed
+planet_event = {
+	id = unrest.115
+	title = unrest.115.name
+	desc = unrest.115.desc
+	picture = GFX_evt_psionics
+	show_sound = event_mystic_reveal
+	location = root
+
+	trigger = {
+		has_ground_combat = no
+		exists = owner
+		owner = { 
+			is_normal_country = yes
+			is_borg_empire = no			
+		}
+		controller = { is_same_value = root.owner }
+		unrest > @unrestlevel2
+		NOT = {
+			has_planet_flag = recent_unrest_event
+			OR = {
+				has_modifier = riots_averted
+				has_modifier = spiritualist_unrest
+				has_modifier = authoritarian_unrest
+				has_modifier = materialist_unrest
+				has_modifier = xenophobe_unrest
+				has_modifier = xenophile_unrest
+				has_modifier = pacifist_unrest
+				has_modifier = militarist_unrest
+				has_modifier = authoritarian_unrest
+				has_modifier = egalitarian_unrest
+				has_modifier = major_terrorist_action
+				has_modifier = minor_terrorist_action
+			}
+		}
+	}
+
+	mean_time_to_happen = {
+		years = 50
+		modifier = {
+			factor = 0.8
+			unrest > @unrestlevel2
+		}	
+		modifier = {
+			factor = 0.8
+			unrest > @unrestlevel3
+		}
+	}
+
+	immediate = {
+		add_modifier = {
+			modifier = spiritualist_unrest
+			days = 7200 # 20 years
+		}
+		set_timed_planet_flag = {
+			flag = recent_unrest_event
+			days = 720
+		}
+	}
+
+	option = {
+		name = OK
+		tooltip = {
+			add_modifier = {
+				modifier = spiritualist_unrest
+				days = 7200 # 20 years
+			}
+		}
+	}
+}
+
+planet_event = {
+	id = unrest.120
+	title = unrest.120.name
+	desc = unrest.120.desc
+	picture = GFX_evt_alien_propaganda
+	show_sound = event_celebration
+	location = root
+
+	trigger = {
+		has_ground_combat = no
+		exists = owner
+		owner = { 
+			is_normal_country = yes
+			is_borg_empire = no			
+		}
+		controller = { is_same_value = root.owner }
+		unrest > @unrestlevel2
+		NOT = {
+			has_planet_flag = recent_unrest_event
+			OR = {
+				has_modifier = riots_averted
+				has_modifier = spiritualist_unrest
+				has_modifier = authoritarian_unrest
+				has_modifier = materialist_unrest
+				has_modifier = xenophobe_unrest
+				has_modifier = xenophile_unrest
+				has_modifier = pacifist_unrest
+				has_modifier = militarist_unrest
+				has_modifier = authoritarian_unrest
+				has_modifier = egalitarian_unrest
+				has_modifier = major_terrorist_action
+				has_modifier = minor_terrorist_action
+			}
+		}
+	}
+
+	mean_time_to_happen = {
+		years = 50
+		modifier = {
+			factor = 0.8
+			unrest > @unrestlevel2
+		}	
+		modifier = {
+			factor = 0.8
+			unrest > @unrestlevel3
+		}
+	}
+
+	immediate = {
+		add_modifier = {
+			modifier = authoritarian_unrest
+			days = 7200 # 20 years
+		}
+		set_timed_planet_flag = {
+			flag = recent_unrest_event
+			days = 720
+		}
+	}
+
+	option = {
+		name = OK
+		tooltip = {
+			add_modifier = {
+				modifier = authoritarian_unrest
+				days = 7200 # 20 years
+			}
+		}
+	}
+}
+
+planet_event = {
+	id = unrest.125
+	title = unrest.125.name
+	desc = unrest.125.desc
+	picture = GFX_evt_alien_segregation
+	show_sound = event_public_unrest
+	location = root
+
+	trigger = {
+		has_ground_combat = no
+		exists = owner
+		owner = { 
+			is_normal_country = yes
+			is_borg_empire = no			
+		}
+		controller = { is_same_value = root.owner }
+		unrest > @unrestlevel2
+		NOT = {
+			has_planet_flag = recent_unrest_event
+			OR = {
+				has_modifier = riots_averted
+				has_modifier = spiritualist_unrest
+				has_modifier = authoritarian_unrest
+				has_modifier = materialist_unrest
+				has_modifier = xenophobe_unrest
+				has_modifier = xenophile_unrest
+				has_modifier = pacifist_unrest
+				has_modifier = militarist_unrest
+				has_modifier = authoritarian_unrest
+				has_modifier = egalitarian_unrest
+				has_modifier = major_terrorist_action
+				has_modifier = minor_terrorist_action
+			}
+		}
+		any_owned_pop = {
+			NOT = {
+				is_same_species = owner
+			}
+		}
+		any_owned_pop = {
+			is_same_species = owner
+		}
+		
+	}
+
+	mean_time_to_happen = {
+		years = 50
+		modifier = {
+			factor = 0.8
+			unrest > @unrestlevel2
+		}	
+		modifier = {
+			factor = 0.8
+			unrest > @unrestlevel3
+		}
+	}
+
+	immediate = {
+		add_modifier = {
+			modifier = xenophobe_unrest
+			days = 7200 # 20 years
+		}
+		set_timed_planet_flag = {
+			flag = recent_unrest_event
+			days = 720
+		}
+	}
+
+	option = {
+		name = OK
+		tooltip = {
+			add_modifier = {
+				modifier = xenophobe_unrest
+				days = 7200 # 20 years
+			}
+		}
+	}
+}
+
+planet_event = {
+	id = unrest.130
+	title = unrest.130.name
+	desc = unrest.130.desc
+	picture = GFX_evt_atmospheric_entry
+	show_sound = event_cityscape
+	location = root
+
+	trigger = {
+		exists = owner
+		owner = { 
+			is_normal_country = yes
+			is_borg_empire = no			
+		}
+		controller = { is_same_value = root.owner }
+		unrest > @unrestlevel2
+		NOT = {
+			has_planet_flag = recent_unrest_event
+			OR = {
+				has_modifier = riots_averted
+				has_modifier = spiritualist_unrest
+				has_modifier = authoritarian_unrest
+				has_modifier = materialist_unrest
+				has_modifier = xenophobe_unrest
+				has_modifier = xenophile_unrest
+				has_modifier = pacifist_unrest
+				has_modifier = militarist_unrest
+				has_modifier = authoritarian_unrest
+				has_modifier = egalitarian_unrest
+				has_modifier = major_terrorist_action
+				has_modifier = minor_terrorist_action
+			}
+		}
+	}
+
+	mean_time_to_happen = {
+		years = 50
+		modifier = {
+			factor = 0.8
+			unrest > @unrestlevel2
+		}	
+		modifier = {
+			factor = 0.8
+			unrest > @unrestlevel3
+		}
+	}
+
+	immediate = {
+		add_modifier = {
+			modifier = materialist_unrest
+			days = 7200 # 20 years
+		}
+		set_timed_planet_flag = {
+			flag = recent_unrest_event
+			days = 720
+		}
+	}
+
+	option = {
+		name = OK
+		tooltip = {
+			add_modifier = {
+				modifier = materialist_unrest
+				days = 7200 # 20 years
+			}
+		}
+	}
+}
+
+planet_event = {
+	id = unrest.135
+	title = unrest.135.name
+	desc = unrest.135.desc
+	picture = GFX_evt_alien_segregation
+	show_sound = event_public_unrest
+	location = root
+
+	trigger = {
+		has_ground_combat = no
+		exists = owner
+		owner = { 
+			is_normal_country = yes
+			is_borg_empire = no			
+		}
+		controller = { is_same_value = root.owner }
+		unrest > @unrestlevel2
+
+		any_owned_pop = {
+			NOT = {
+				is_same_species = owner
+			}
+		}
+		any_owned_pop = {
+			is_same_species = owner
+		}
+		NOT = {
+			has_planet_flag = recent_unrest_event
+			OR = {
+				has_modifier = riots_averted
+				has_modifier = spiritualist_unrest
+				has_modifier = authoritarian_unrest
+				has_modifier = materialist_unrest
+				has_modifier = xenophobe_unrest
+				has_modifier = xenophile_unrest
+				has_modifier = pacifist_unrest
+				has_modifier = militarist_unrest
+				has_modifier = authoritarian_unrest
+				has_modifier = egalitarian_unrest
+				has_modifier = major_terrorist_action
+				has_modifier = minor_terrorist_action
+			}
+		}
+	}
+
+	mean_time_to_happen = {
+		years = 50
+		modifier = {
+			factor = 0.8
+			unrest > @unrestlevel2
+		}	
+		modifier = {
+			factor = 0.8
+			unrest > @unrestlevel3
+		}
+	}
+
+	immediate = {
+		add_modifier = {
+			modifier = xenophile_unrest
+			days = 7200 # 20 years
+		}
+		set_timed_planet_flag = {
+			flag = recent_unrest_event
+			days = 720
+		}
+	}
+
+	option = {
+		name = OK
+		tooltip = {
+			add_modifier = {
+				modifier = xenophile_unrest
+				days = 7200 # 20 years
+			}
+		}
+	}
+}
+
+planet_event = {
+	id = unrest.140
+	title = unrest.140.name
+	desc = unrest.140.desc
+	picture = GFX_evt_colony_settlement
+	show_sound = event_celebration
+	location = root
+
+	trigger = {
+		has_ground_combat = no
+		exists = owner
+		owner = { 
+			is_normal_country = yes
+			is_borg_empire = no			
+		}
+		controller = { is_same_value = root.owner }
+		unrest > @unrestlevel2
+		NOT = {
+			has_planet_flag = recent_unrest_event
+			OR = {
+				has_modifier = riots_averted
+				has_modifier = spiritualist_unrest
+				has_modifier = authoritarian_unrest
+				has_modifier = materialist_unrest
+				has_modifier = xenophobe_unrest
+				has_modifier = xenophile_unrest
+				has_modifier = pacifist_unrest
+				has_modifier = militarist_unrest
+				has_modifier = authoritarian_unrest
+				has_modifier = egalitarian_unrest
+				has_modifier = major_terrorist_action
+				has_modifier = minor_terrorist_action
+			}
+		}
+	}
+
+	mean_time_to_happen = {
+		years = 50
+		modifier = {
+			factor = 0.8
+			unrest > @unrestlevel2
+		}	
+		modifier = {
+			factor = 0.8
+			unrest > @unrestlevel3
+		}
+	}
+
+	immediate = {
+		add_modifier = {
+			modifier = egalitarian_unrest
+			days = 7200 # 20 years
+		}
+		set_timed_planet_flag = {
+			flag = recent_unrest_event
+			days = 720
+		}
+	}
+
+	option = {
+		name = OK
+		every_owned_pop = {
+			tooltip = {
+				add_modifier = {
+					modifier = egalitarian_unrest
+					days = 7200 # 20 years
+				}
+			}
+		}
+	}
+}
+
+planet_event = {
+	id = unrest.145
+	title = unrest.145.name
+	desc = unrest.145.desc
+	picture = GFX_evt_arguing_senate
+	show_sound = event_public_unrest
+	location = root
+
+	trigger = {
+		has_ground_combat = no
+		exists = owner
+		owner = { 
+			is_normal_country = yes
+			is_borg_empire = no			
+		}
+		controller = { is_same_value = root.owner }
+		unrest > @unrestlevel2
+		NOT = {
+			has_planet_flag = recent_unrest_event
+			OR = {
+				has_modifier = riots_averted
+				has_modifier = spiritualist_unrest
+				has_modifier = authoritarian_unrest
+				has_modifier = materialist_unrest
+				has_modifier = xenophobe_unrest
+				has_modifier = xenophile_unrest
+				has_modifier = pacifist_unrest
+				has_modifier = militarist_unrest
+				has_modifier = authoritarian_unrest
+				has_modifier = egalitarian_unrest
+				has_modifier = major_terrorist_action
+				has_modifier = minor_terrorist_action
+			}
+		}
+	}
+
+	mean_time_to_happen = {
+		years = 50
+		modifier = {
+			factor = 0.8
+			unrest > @unrestlevel2
+		}	
+		modifier = {
+			factor = 0.8
+			unrest > @unrestlevel3
+		}
+	}
+
+	immediate = {
+		add_modifier = {
+			modifier = pacifist_unrest
+			days = 7200 # 20 years
+		}
+		set_timed_planet_flag = {
+			flag = recent_unrest_event
+			days = 720
+		}
+	}
+
+	option = {
+		name = OK
+		tooltip = {
+			add_modifier = {
+				modifier = pacifist_unrest
+				days = 7200 # 20 years
+			}
+		}
+	}
+}
+
+planet_event = {
+	id = unrest.150
+	title = unrest.150.name
+	desc = unrest.150.desc
+	picture = GFX_evt_interior_battle
+	show_sound = event_alien_signal
+	location = root
+
+	trigger = {
+		has_ground_combat = no
+		exists = owner
+		owner = { 
+			is_normal_country = yes
+			is_borg_empire = no			
+		}
+		controller = { is_same_value = root.owner }
+		unrest > @unrestlevel2
+		NOT = {
+			has_planet_flag = recent_unrest_event
+			OR = {
+				has_modifier = riots_averted
+				has_modifier = spiritualist_unrest
+				has_modifier = authoritarian_unrest
+				has_modifier = materialist_unrest
+				has_modifier = xenophobe_unrest
+				has_modifier = xenophile_unrest
+				has_modifier = pacifist_unrest
+				has_modifier = militarist_unrest
+				has_modifier = authoritarian_unrest
+				has_modifier = egalitarian_unrest
+				has_modifier = major_terrorist_action
+				has_modifier = minor_terrorist_action
+			}
+		}
+	}
+
+	mean_time_to_happen = {
+		years = 50
+		modifier = {
+			factor = 0.8
+			unrest > @unrestlevel2
+		}	
+		modifier = {
+			factor = 0.8
+			unrest > @unrestlevel3
+		}
+	}
+
+	immediate = {
+		add_modifier = {
+			modifier = militarist_unrest
+			days = 7200 # 20 years
+		}
+		set_timed_planet_flag = {
+			flag = recent_unrest_event
+			days = 720
+		}
+	}
+
+	option = {
+		name = OK
+		tooltip = { 
+			add_modifier = {
+				modifier = militarist_unrest
+				days = 7200 # 20 years
+			}
+		}
+	}
+}
+
+# SLAVE REVOLT CHAIN #
+
+# Stirrings
+planet_event = {
+	id = unrest.155
+	title = unrest.155.name
+	desc = unrest.155.desc
+	picture = GFX_evt_alien_propaganda
+	show_sound = event_planetary_riot
+	location = root
+
+	trigger = {
+		exists = owner
+		owner = { 
+			is_normal_country = yes
+			is_borg_empire = no			
+		}
+		controller = { is_same_value = root.owner }
+		unrest > @unrestlevel1
+		has_ground_combat = no
+ 		any_owned_pop = {
+			NOT = { has_trait = trait_mechanical }
+			is_sapient = yes
+			is_enslaved = yes
+		}
+		NOT = {
+			has_planet_flag = slave_stirring
+			has_planet_flag = recent_unrest_event
+			has_modifier = slave_hunger_strike 
+			has_modifier = slave_riots
+			has_modifier = adding_unrest_slaves
+			has_modifier = revolt_suppressed
+		}
+	}
+
+	mean_time_to_happen = { years = 50 }
+
+	immediate = {
+		add_modifier = {
+			modifier = adding_unrest_slaves
+			days = 7200
+		}
+		set_timed_planet_flag = {
+			flag = recent_unrest_event
+			days = 720
+		}
+		set_planet_flag = slave_revolt_chain_active
+		set_timed_planet_flag = {
+			flag = slave_stirring
+			days = 7200
+		}
+		root.owner = { set_country_flag = slave_revolt_chain_active }
+		save_event_target_as = revolt_planet
+		planet_event = { id = unrest.170 days = 720 random = 10 }
+	}
+
+	option = {
+		name = unrest.155.a
+	}
+}
+
+# Chain Gatekeeper Event
+planet_event = {
+	id = unrest.170
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		exists = owner
+		owner = { 
+			is_normal_country = yes
+			is_borg_empire = no			
+			has_country_flag = slave_revolt_chain_active
+		}
+		controller = { is_same_value = root.owner }
+		has_ground_combat = no
+	}
+	immediate = {
+		# Fire Resistance
+		if = {
+			limit = {
+				unrest > @unrestlevel2
+ 				any_owned_pop = {
+					not = { has_trait = trait_mechanical }
+					is_sapient = yes
+					is_enslaved = yes
+				}
+				has_planet_flag = slave_stirring
+				NOT = {
+					has_planet_flag = slave_resistance
+					has_planet_flag = recent_unrest_event
+				}
+			}
+			planet_event = { id = unrest.158 }
+		}
+		# Fire Riots
+		if = {
+			limit = {
+				unrest > @unrestlevel3
+ 				any_owned_pop = {
+ 					not = { has_trait = trait_mechanical }
+					is_sapient = yes
+					is_enslaved = yes
+				}
+				has_planet_flag = slave_resistance
+				NOT = {
+					has_planet_flag = slave_riots
+					has_planet_flag = recent_unrest_event
+				}
+			}
+			planet_event = { id = unrest.157 }
+		}
+		# Fire Revolt
+		if = {
+			limit = {
+				unrest > @unrestlevel3
+				has_planet_flag = slave_riots
+ 				any_owned_pop = {
+ 					not = { has_trait = trait_mechanical }
+					is_sapient = yes
+					is_enslaved = yes
+				}
+				NOT = { 
+					has_planet_flag = slave_revolt
+					has_planet_flag = recent_unrest_event
+				}
+			}
+			planet_event = { id = unrest.160 }
+		}
+		planet_event = { id = unrest.170 days = 60 }
+	}
+}
+# Resistance gatekeeper event
+planet_event = {
+	id = unrest.158
+	hide_window = yes
+
+	trigger = {
+		exists = owner
+		owner = { 
+			is_normal_country = yes
+			is_borg_empire = no			
+		}
+		controller = { is_same_value = root.owner }
+		unrest > @unrestlevel2
+ 		any_owned_pop = {
+			not = { has_trait = trait_mechanical }
+			is_sapient = yes
+			is_enslaved = yes
+		}
+		has_planet_flag = slave_stirring
+		NOT = {
+			has_planet_flag = slave_resistance
+			has_planet_flag = recent_unrest_event
+		}
+	}
+
+	is_triggered_only = yes
+
+	immediate = {
+		if = {
+			limit = {
+				exists = owner
+				owner = { is_country_type = default }
+				unrest > @unrestlevel2
+				has_modifier = adding_unrest_slaves
+ 				any_owned_pop = {
+					not = { has_trait = trait_mechanical }
+					is_sapient = yes
+					is_enslaved = yes
+				}
+ 				any_tile = {
+					has_building = yes
+					is_ruined = no
+					exists = pop 
+					pop = {
+						is_enslaved = yes
+					}
+				}
+			}
+			random_list = {
+ 				50 = {
+ 					planet_event = { id = unrest.156 }
+ 				}
+ 				50 = {
+ 					planet_event = { id = unrest.159 } 
+ 				}
+ 			}
+ 			else = {
+ 				planet_event = { id = unrest.159 } 
+ 			}
+		}
+		planet_event = { id = unrest.157 days = 720 random = 10 }
+ 	}
+}
+
+# Resistance: Sabotage
+planet_event = {
+	id = unrest.156
+	title = unrest.156.name
+	desc = unrest.156.desc
+	picture = GFX_evt_burning_settlement
+	show_sound = event_ship_explosion
+	location = event_target:revolt_planet
+
+	is_triggered_only = yes
+	trigger = {
+		owner = { 
+			is_normal_country = yes
+			is_borg_empire = no			
+		}
+	}
+	immediate = {
+		while = {
+			count = 3
+			random_tile = {
+				limit = {
+					has_building = yes
+					is_ruined = no
+					exists = pop 
+					pop = {
+						is_enslaved = yes
+					}
+				}
+				set_ruined = yes
+			}	
+		}
+		set_timed_planet_flag = {
+			flag = recent_unrest_event
+			days = 720
+		}
+		set_timed_planet_flag = { 
+			flag = slave_resistance
+			days = 3600
+		}
+	}
+	option = {
+		name = unrest.156.a
+	}
+	option = {
+		name = unrest.156.b
+	}
+}
+# Resistance: hunger strike 
+planet_event = {
+	id = unrest.159
+	title = unrest.159.name
+	desc = unrest.159.desc
+	picture = GFX_evt_burning_settlement
+	show_sound = event_planetary_riot
+	location = root
+
+	is_triggered_only = yes
+	trigger = {
+		owner = { 
+			is_normal_country = yes
+			is_borg_empire = no			
+		}
+	}
+	
+	immediate = {
+		hidden_effect = {
+			set_timed_planet_flag = {
+				flag = recent_unrest_event
+				days = 720
+			}	
+		}
+		add_modifier = {
+			modifier = slave_hunger_strike
+			days = 1800
+		}
+		set_timed_planet_flag = { 
+			flag = slave_resistance
+			days = 3600
+		}
+	}
+
+	option = {
+		name = unrest.159.a
+		tooltip = {
+			add_modifier = {
+			modifier = slave_hunger_strike
+			days = 1800
+			}
+		}
+	}
+	option = {
+		name = unrest.159.b
+		tooltip = {
+			add_modifier = {
+			modifier = slave_hunger_strike
+			days = 1800
+			}
+		}
+	}
+}
+
+# Riots
+planet_event = {
+	id = unrest.157
+	title = unrest.157.name
+	desc = unrest.157.desc
+	picture = GFX_evt_burning_settlement
+	show_sound = event_planetary_riot
+	location = root
+
+	trigger = {
+		exists = owner
+		owner = { 
+			is_normal_country = yes
+			is_borg_empire = no			
+		}
+		controller = { is_same_value = root.owner }
+		unrest > @unrestlevel3
+ 		any_owned_pop = {
+			is_enslaved = yes
+		}
+		has_planet_flag = slave_resistance
+		NOT = {
+			has_planet_flag = slave_riots
+			has_planet_flag = recent_unrest_event
+		}
+	}
+
+	is_triggered_only = yes
+
+	immediate = {
+		set_timed_planet_flag = {
+			flag = recent_unrest_event
+			days = 720
+		}
+		set_timed_planet_flag = {
+			flag = slave_riots
+			days = 3600
+		}
+
+		add_modifier = {
+			modifier = slave_riots
+			days = 3600
+		}
+	}	
+	option = {
+		name = unrest.157.a
+		tooltip = {
+			add_modifier = {
+			modifier = slave_riots
+			days = 3600
+			}
+		}
+	}
+	option = {
+		name = unrest.157.b
+		tooltip = {
+			add_modifier = {
+			modifier = slave_riots
+			days = 3600
+			}
+		}
+	}
+}
+
+# Revolt
+planet_event = {
+	id = unrest.160
+	title = unrest.160.name
+	desc = unrest.160.desc
+	picture = GFX_evt_ground_combat
+	show_sound = event_planetary_riot
+	location = root
+
+	trigger = {
+		exists = owner
+		owner = { 
+			is_normal_country = yes
+			is_borg_empire = no			
+		}
+		controller = { is_same_value = root.owner }
+		unrest > @unrestlevel3
+		has_planet_flag = slave_riots
+ 		any_owned_pop = {
+			is_enslaved = yes
+		}
+		NOT = { 
+			has_planet_flag = slave_revolt
+			has_planet_flag = recent_unrest_event
+		}
+	}
+
+	is_triggered_only = yes
+
+	immediate = {
+		random_owned_pop = {
+			limit = {
+				is_enslaved = yes
+			}
+			save_event_target_as = leader_pop
+		}
+		create_rebels = {
+			name = random
+			ethos = {
+				ethic = "ethic_fanatic_egalitarian"
+				ethic = "ethic_militarist"
+			}
+			authority = auth_democratic
+			civics = random
+			species = event_target:leader_pop.species
+			flag = random
+
+			effect = {
+				set_country_flag = slave_rebels
+				save_event_target_as = rebelling_slaves
+				establish_communications_no_message = root.owner
+				set_relation_flag = {
+					flag = rebelling_slaves_former_owner
+					who = root.owner
+				}
+				root = {
+					owner = {
+						every_relation = {
+							limit = { has_communications = prev }
+							establish_communications_no_message = prevprevprev
+						}
+					}
+					every_planet_army = {
+						limit = { army_type = slave_army }
+						set_owner = event_target:rebelling_slaves
+					}
+					every_owned_pop = {
+						limit = {
+							is_enslaved = yes
+						}
+						planet = {
+							while = {
+								count = 3
+								create_army = {
+									name = "NAME_Freedom_Fighters"
+									owner = event_target:rebelling_slaves
+									species = event_target:leader_pop.species
+									type = "rebel_slave_defense_army"
+								}
+							}
+						}
+					}
+				}
+				create_leader = {
+					type = ruler
+					species = owner_main_species
+					name = random
+					skill = 200
+					traits = {}
+				}
+				assign_leader = last_created_leader
+				ruler = {
+					add_random_leader_trait = yes
+				}
+			}
+		}
+
+		set_planet_flag = slave_revolt
+		set_timed_planet_flag = {
+			flag = recent_unrest_event
+			days = 720
+		}
+	}
+	
+	option = {
+		name = unrest.160.a
+		custom_tooltip = unrest.160.a.tooltip
+	}
+}
+
+# Revolt Suppressed #
+country_event = {
+	id = unrest.161
+	title = unrest.161.name
+	desc = unrest.161.desc
+	picture = GFX_evt_alien_propaganda
+	show_sound = event_celebration
+	location = event_target:revolt_planet
+
+	trigger = {
+		is_normal_country = yes
+		is_borg_empire = no			
+		FromFrom = {
+			has_planet_flag = slave_revolt
+			controller = { is_same_value = root }
+		}
+	}
+
+	is_triggered_only = yes
+
+	immediate = {
+		remove_country_flag = slave_revolt_chain_active
+		FromFrom = {
+			add_modifier = {
+				modifier = revolt_suppressed
+				days = 3600
+			}
+			save_event_target_as = revolt_planet
+			remove_planet_flag = slave_revolt_chain_active
+ 			remove_planet_flag = slave_riots
+			remove_planet_flag = slave_resistance
+			remove_planet_flag = slave_stirring
+			remove_planet_flag = slave_revolt
+			if = {
+				limit = {
+					has_modifier = slave_hunger_strike
+				}
+				remove_modifier = slave_hunger_strike
+			}
+			if = {
+				limit = {
+					has_modifier = adding_unrest_slaves
+				}
+				remove_modifier = adding_unrest_slaves
+			}
+			if = {
+				limit = {
+					has_modifier = slave_riots
+				}
+				remove_modifier = slave_riots
+			}
+		}
+	}
+
+	option = {
+		name = unrest.161.a
+		tooltip = {
+			add_modifier = {
+				modifier = revolt_suppressed
+				days = 3600
+			}
+		}
+		custom_tooltip = unrest.161.a.tooltip
+	}
+}
+
+# Triggers country_event for the defender upon defeat
+# This = country, planet owner
+# From = country, attack leader
+# FromFrom = planet
+# Revolt Lost #
+country_event = {
+	id = unrest.167
+	title = unrest.167.name
+	desc = unrest.167.desc
+	picture = GFX_evt_burning_settlement
+	show_sound = event_air_raid_siren
+	location = event_target:revolt_planet
+
+	is_triggered_only = yes
+
+	trigger = {
+		is_normal_country = yes
+		is_borg_empire = no			
+		From = { is_country_type = rebel }
+		FromFrom = {
+			has_planet_flag = slave_revolt
+		}
+	}
+
+	immediate = {
+		FromFrom = {
+			save_event_target_as = revolt_planet
+			remove_planet_flag = slave_revolt_chain_active
+ 			remove_planet_flag = slave_riots
+			remove_planet_flag = slave_resistance
+			remove_planet_flag = slave_stirring
+			remove_planet_flag = slave_revolt
+			if = {
+				limit = {
+					has_modifier = slave_hunger_strike
+				}
+				remove_modifier = slave_hunger_strike
+			}
+			if = {
+				limit = {
+					has_modifier = adding_unrest_slaves
+				}
+				remove_modifier = adding_unrest_slaves
+			}
+			if = {
+				limit = {
+					has_modifier = slave_riots
+				}
+				remove_modifier = slave_riots
+			}
+
+			kill_leader = { type = governor }
+		}
+		From = { save_event_target_as = rebel_country }
+		remove_country_flag = slave_revolt_chain_active
+		save_event_target_as = old_owner
+		
+		if = {
+			limit = {
+				any_country = {
+					OR = {
+						has_ethic = ethic_fanatic_egalitarian
+						has_ethic = ethic_egalitarian
+					}
+					has_policy_flag = slavery_not_allowed
+					is_country_type = default
+					has_communications = ROOT
+					any_owned_planet = {
+						distance = {
+   							source = FromFrom
+  							max_distance = 300
+  							min_distance = 0
+ 						}
+ 					}
+ 					NOT = {
+ 						is_in_federation_with = ROOT
+ 						is_same_value = ROOT
+ 					}
+				}
+			}
+			random_country = {
+				limit = {
+					OR = {
+						has_ethic = ethic_fanatic_egalitarian
+						has_ethic = ethic_egalitarian
+					}
+					has_policy_flag = slavery_not_allowed
+					has_communications = ROOT
+					is_country_type = default
+					any_owned_planet = {
+						distance = {
+   							source = FromFrom
+  							max_distance = 300
+  							min_distance = 0
+ 						}
+ 					}
+ 					NOT = {
+ 						is_in_federation_with = ROOT
+ 						is_same_value = ROOT
+ 					}
+				}
+				country_event = { id = unrest.168 days = 4 }
+			}
+		}	
+	}
+
+	option = {
+		name = unrest.167.a
+	}
+	option = {
+		name = unrest.167.b
+	}
+}
+
+# Defect request #
+country_event = {
+	id = unrest.168
+	desc = unrest.168.desc
+	location = event_target:revolt_planet
+	title = TRANSMISSION
+	diplomatic = yes
+
+	picture_event_data = {
+		portrait = event_target:rebel_country
+		planet_background = event_target:rebel_country.capital_scope
+		#graphical_culture = event_target:book_writer
+		city_level = event_target:rebel_country.capital_scope
+		room = event_target:rebel_country.ruler
+	}
+
+	immediate = {
+		save_event_target_as = new_owner
+	}
+	trigger = {
+		is_normal_country = yes
+		is_borg_empire = no			
+	}
+	is_triggered_only = yes
+# YES!
+	option = {
+		name = unrest.168.a
+		ai_chance = {
+			factor = 100
+		}
+		event_target:revolt_planet = {
+			set_owner = ROOT
+		}
+		hidden_effect = { 
+			event_target:old_owner = { country_event = { id = unrest.169 } }
+			event_target:rebel_country = { set_country_flag = silence_destroy_event }
+			event_target:rebel_country = { destroy_country = yes }
+		}
+		custom_tooltip = unrest.168.a.tooltip
+		event_target:revolt_planet = {
+			add_modifier = {
+				modifier = slaves_defected 
+				days = 7200
+			}
+		}
+	}
+# NO!
+	option = {
+		name = unrest.168.b
+		ai_chance = {
+			factor = 0
+		}
+	}
+}
+
+# Slaves Defect Diplomatic Message #
+country_event = {
+	id = unrest.169
+	desc = unrest.169.desc
+	location = event_target:revolt_planet
+	title = TRANSMISSION
+	diplomatic = yes
+	
+	picture_event_data = {
+		portrait = from
+		planet_background = from.capital_scope
+		#graphical_culture = event_target:book_writer
+		city_level = from.capital_scope
+		room = from.ruler
+	}
+	
+	trigger = {
+		is_normal_country = yes
+		is_borg_empire = no
+	}
+	is_triggered_only = yes
+
+	option = {
+		name = unrest.169.a
+		add_opinion_modifier = {
+			modifier = opinion_took_in_rebels
+			who = from
+		}
+	}
+	option = {
+		name = unrest.169.b
+		add_opinion_modifier = {
+			modifier = opinion_took_in_rebels
+			who = from
+		}
+	}
+	option = {
+		name = unrest.169.c
+		add_opinion_modifier = {
+			modifier = opinion_took_in_rebels
+			who = from
+		}
+	}
+}
+
+# End chain if no more slaves #
+event = {
+	id = unrest.162
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		any_country = {
+			is_normal_country = yes
+			is_borg_empire = no
+			has_country_flag = slave_revolt_chain_active
+			any_owned_planet = {
+				has_planet_flag = slave_revolt_chain_active
+				controller = { is_same_value = owner }
+			}
+		}
+	}
+
+	immediate = {
+		every_country = {
+			limit = {
+				is_country_type = default
+				has_country_flag = slave_revolt_chain_active
+				any_owned_planet = {
+					has_planet_flag = slave_revolt_chain_active
+				}
+			}
+			every_owned_planet = {
+				limit = {
+					has_planet_flag = slave_revolt_chain_active
+					NOT = {
+						any_owned_pop = {
+							is_enslaved = yes
+						}
+					}
+				}
+				planet_event = { id = unrest.163 }
+			}
+		}
+	}
+}
+
+# Slave Labor Discontinued
+
+planet_event = {
+	id = unrest.163
+	title = unrest.163.name
+	desc = unrest.163.desc
+	picture = GFX_evt_colony_settlement
+	show_sound = event_administrative_work
+	location = root
+	is_triggered_only = yes
+	trigger = {
+		owner = { 
+			is_normal_country = yes
+			is_borg_empire = no			
+		}
+	}
+	immediate = {
+		save_event_target_as = revolt_planet
+		remove_planet_flag = slave_revolt_chain_active
+ 		remove_planet_flag = slave_riots
+		remove_planet_flag = slave_resistance
+		remove_planet_flag = slave_stirring
+		remove_planet_flag = slave_revolt
+		if = {
+				limit = {
+					has_modifier = slave_hunger_strike
+				}
+				remove_modifier = slave_hunger_strike
+			}
+			if = {
+				limit = {
+					has_modifier = adding_unrest_slaves
+				}
+				remove_modifier = adding_unrest_slaves
+			}
+			if = {
+				limit = {
+					has_modifier = slave_riots
+				}
+				remove_modifier = slave_riots
+			}
+		root.owner = { remove_country_flag = slave_revolt_chain_active }
+	}
+	option = {
+		name = EXCELLENT
+	}
+}
+
+# Planet Pacified #
+event = {
+	id = unrest.164
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		any_country = {
+			is_normal_country = yes
+			is_borg_empire = no			
+			has_country_flag = slave_revolt_chain_active
+			any_owned_planet = {
+				has_planet_flag = slave_revolt_chain_active
+				unrest < @unrestlevel1
+				NOT = {
+					has_modifier = slave_hunger_strike
+					has_modifier = adding_unrest_slaves
+					has_modifier = slave_riots
+				}
+			}
+		}
+	}
+
+	immediate = { 
+		every_country = {
+			limit = {
+				is_normal_country = yes
+				is_borg_empire = no			
+				has_country_flag = slave_revolt_chain_active
+				any_owned_planet = {
+					has_planet_flag = slave_revolt_chain_active
+					unrest < @unrestlevel1
+					NOT = {
+						has_modifier = slave_hunger_strike
+						has_modifier = adding_unrest_slaves
+						has_modifier = slave_riots
+					}
+				}
+			}
+			every_owned_planet = {
+				limit = {
+					AND = {
+						has_planet_flag = slave_revolt_chain_active
+						unrest < @unrestlevel1
+						NOT = {
+							has_modifier = slave_hunger_strike
+							has_modifier = adding_unrest_slaves
+							has_modifier = slave_riots
+						}
+					}	
+				}
+				planet_event = { id = unrest.165 }
+			}	 
+		}
+	}
+}
+
+planet_event = {
+	id = unrest.165
+	title = unrest.165.name
+	desc = unrest.165.desc
+	picture = GFX_evt_colony_settlement
+	show_sound = event_administrative_work
+	location = root
+	is_triggered_only = yes
+	trigger = {
+		owner = { 
+			is_normal_country = yes
+			is_borg_empire = no			
+		}
+	}
+	immediate = {
+		save_event_target_as = revolt_planet
+		remove_planet_flag = slave_revolt_chain_active
+ 		remove_planet_flag = slave_riots
+		remove_planet_flag = slave_resistance
+		remove_planet_flag = slave_stirring
+		remove_planet_flag = slave_revolt
+		root.owner = { remove_country_flag = slave_revolt_chain_active }
+	}
+	option = {
+		name = OK
+	}
+}
+
+
+# check if original_owner matches any pop on planet, if so defect to them, otherwise form independent nation
+
+# on battle won check previous_owner and original_owner to determine if they should desire return or independence
+
+planet_event = {
+	id = unrest.4200
+	title = unrest.4200.name
+	desc = {
+		trigger = { has_planet_flag = nationalist_revolt }
+		text = unrest.4200.desc.returner
+	}
+	desc = {
+		trigger = { has_planet_flag = secessionist_revolt }
+		text = unrest.4200.desc.secession
+	}
+	picture = GFX_evt_ground_combat
+	show_sound = event_ground_battle
+	location = root
+
+	mean_time_to_happen = { months = 600 }
+
+	trigger = {
+		exists = owner
+		owner = { 
+			is_normal_country = yes
+			is_borg_empire = no			
+		}
+		unrest > 80
+		NOT = {
+			has_planet_flag = recent_unrest_event 
+			has_planet_flag = slave_stirring
+			has_planet_flag = slave_resistance
+			has_planet_flag = slave_riots
+			has_planet_flag = slave_revolt
+		}
+		has_ground_combat = no
+		controller = { is_same_value = root.owner }
+		#original_owner = no
+		#any_country = {
+		#	NOT = { is_same_value = root.owner }
+		#	root = {
+		#		is_original_owner = prev
+		#		any_owned_pop = {
+		#			is_same_species = prevprev
+		#		}
+		#	}
+		#}
+	}
+
+	immediate = {
+		set_planet_flag = revolt_in_progress
+		if = {
+			limit = { # has original owner
+				original_owner = no
+				any_country = {
+					NOT = { is_same_value = root.owner }
+					is_subject = no
+					is_normal_country = yes
+					is_borg_empire = no
+					root = {
+						is_original_owner = prev
+						any_owned_pop = {
+							is_same_species = prevprev
+						}
+					}
+				}
+			}
+			random_country = {
+				limit = {
+					NOT = { is_same_value = root.owner }
+					is_subject = no
+					is_normal_country = yes
+					is_borg_empire = no								  
+					root = {
+						is_original_owner = prev
+						any_owned_pop = {
+							is_same_species = prevprev
+						}
+					}
+				}
+				save_event_target_as = fatherland
+			}
+			random_owned_pop = {
+				limit = { is_same_species = event_target:fatherland }
+				save_event_target_as = nationalist_pop
+			}
+			create_rebels = {
+				name = random
+				ethos = event_target:fatherland
+				authority = event_target:fatherland
+				#civics = event_target:fatherland
+				civics = random
+				species = event_target:fatherland
+				flag = random
+				effect = {
+					set_country_flag = standard_unrest_rebels
+					save_event_target_as = nationalist_rebels
+					establish_communications_no_message = root.owner
+					establish_communications_no_message = event_target:fatherland
+					root = {
+						owner = {
+							every_relation = {
+								establish_communications_no_message = prevprevprev
+							}
+						}
+					}
+				}
+			}
+			every_owned_pop = {
+				planet = {
+					create_army = {
+						owner = event_target:nationalist_rebels
+						species = event_target:fatherland
+						type = "defense_army"
+					}
+				}
+			}
+			set_planet_flag = nationalist_revolt
+			set_timed_planet_flag = {
+				flag = recent_unrest_event
+				days = 720
+			}
+			else = { # no original owner
+				create_rebels = {
+					species = this
+					ethos = random
+					authority = random
+					name = random
+					flag = random
+					effect = {
+						set_country_flag = standard_unrest_rebels
+						save_event_target_as = secessionist_rebels
+						establish_communications_no_message = root.owner
+						root = {
+							owner = {
+								every_relation = {
+									establish_communications_no_message = prevprevprev
+								}
+							}
+						}
+					}
+				}
+				every_owned_pop = {
+					planet = {
+						create_army = {
+							owner = event_target:secessionist_rebels
+							species = event_target:secessionist_rebels
+							type = "defense_army"
+						}
+					}
+				}
+				set_planet_flag = secessionist_revolt
+				set_timed_planet_flag = {
+					flag = recent_unrest_event
+					days = 720
+				}
+			}
+		}
+	}
+
+	option = {
+		name = UNFORTUNATE
+	}
+}
+
+# Initial rebels manage to take control of the planet, happens before the new owner is set, after the war is created.
+# This = Rebel Country
+# From = Planet
+country_event = {
+	id = unrest.4210
+	hide_window = yes
+
+	is_triggered_only = yes
+
+	trigger = { has_country_flag = standard_unrest_rebels }
+
+	immediate = {
+		From = { remove_planet_flag = revolt_in_progress }
+		create_leader = {
+			type = ruler
+			species = owner_main_species
+			name = random
+			skill = 200
+			traits = {}
+		}
+		assign_leader = last_created_leader
+		ruler = {
+			add_random_leader_trait = yes
+		}
+		from.owner = {
+			save_event_target_as = rebelled_against
+			country_event = { id = unrest.4211 }
+		}
+		from = { 
+			add_modifier = { 
+				modifier = free_at_last 
+				days = 7200
+			}
+		}
+		if = {
+			limit = {
+				from = {
+					has_planet_flag = nationalist_revolt
+				}
+			}
+			random_country = {
+				limit = {
+					from = {
+						is_original_owner = prev
+					}
+				}
+				save_event_target_as = fatherland
+			}
+			event_target:fatherland = {
+				country_event = { id = unrest.4220 days = 5 } # request incorporation
+			}
+			from = { remove_planet_flag = nationalist_revolt }
+			else = {
+				from = { remove_planet_flag = secessionist_revolt }
+			}
+		}
+	}
+}
+
+country_event = { # rebels have broken free notification
+	id = unrest.4211
+	title = unrest.4211.name
+	desc = unrest.4211.desc
+	picture = {
+		picture = GFX_evt_arguing_senate
+		trigger = { NOT = { has_ethic = ethic_gestalt_consciousness } }
+	}
+	picture = {
+		picture = GFX_evt_satellite_in_orbit
+		trigger = { has_ethic = ethic_gestalt_consciousness }
+	}
+	show_sound = event_factions
+	location = fromfrom
+
+	is_triggered_only = yes
+
+	option = {
+		name = UNFORTUNATE
+	}
+}
+
+country_event = {
+	id = unrest.4220
+	title = unrest.4220.name
+	desc = unrest.4220.desc
+	location = fromfrom
+
+	diplomatic = yes
+
+	picture_event_data = {
+		portrait = from
+		planet_background = from.capital_scope
+		#graphical_culture = from
+		city_level = from.capital_scope
+		room = from.ruler
+	}
+
+	is_triggered_only = yes
+
+	option = {
+		name = unrest.4220.b
+		ai_chance = {
+			factor = 100
+		}
+		hidden_effect = {
+			from = {
+				destroy_country = yes
+			}
+			event_target:rebelled_against = {
+				country_event = { id = unrest.4230 } # were annexed notification
+			}
+		}
+		fromfrom = {
+			set_owner = root
+			hidden_effect = {
+				if = {
+					limit = { has_modifier = capital }
+					remove_modifier = capital
+				}
+			}
+		}
+	}
+
+	option = {
+		name = unrest.4220.a
+		trigger = {
+			is_subject = no
+		}
+		ai_chance = {
+			factor = 0
+		}
+		from = {
+			set_subject_of = {
+				who = root
+				subject_type = vassal
+			}
+		}
+		hidden_effect = {
+			event_target:rebelled_against = {
+				country_event = { id = unrest.4225 } # became vassal notification
+			}
+		}
+	}
+
+	option = {
+		name = unrest.4220.c
+		ai_chance = {
+			factor = 0
+		}
+	}
+}
+
+country_event = {
+	id = unrest.4225
+	title = unrest.4225.name
+	desc = unrest.4225.desc
+	picture = GFX_evt_arguing_senate
+	show_sound = event_factions
+	location = fromfromfrom
+
+	is_triggered_only = yes
+
+	option = {
+		name = unrest.4225.a
+		add_opinion_modifier = {
+			modifier = opinion_took_in_rebels
+			who = from
+		}
+	}
+}
+
+country_event = {
+	id = unrest.4230
+	title = unrest.4230.name
+	desc = unrest.4230.desc
+	picture = GFX_evt_arguing_senate
+	show_sound = event_factions
+	location = fromfromfrom
+
+	is_triggered_only = yes
+
+	trigger = {
+		fromfromfrom = {
+			exists = controller
+			controller = { is_same_value = owner }
+		}
+	}
+
+	option = {
+		name = unrest.4230.a
+		add_opinion_modifier = {
+			modifier = opinion_took_in_rebels
+			who = from
+		}
+	}
+}
+
+# This = country, planet owner
+# From = country, attack leader
+# FromFrom = planet
+
+# Revolt Suppressed #
+country_event = {
+	id = unrest.4235
+	title = unrest.4235.name
+	desc = unrest.4235.desc
+	picture = GFX_evt_alien_propaganda
+	show_sound = event_celebration
+	location = FromFrom
+
+	trigger = {
+		is_normal_country = yes
+		is_borg_empire = no			
+		FromFrom = {
+			has_planet_flag = revolt_in_progress
+			controller = { is_same_value = root }
+		}
+
+	}
+
+	is_triggered_only = yes
+
+	immediate = {
+		FromFrom = { remove_planet_flag = revolt_in_progress }
+	}
+
+	option = {
+		name = unrest.4235.a
+		FromFrom = {
+			add_modifier = {
+				modifier = revolt_suppressed_2
+				days = 3600
+			}
+		}
+		custom_tooltip = unrest.161.a.tooltip
+	}
+}

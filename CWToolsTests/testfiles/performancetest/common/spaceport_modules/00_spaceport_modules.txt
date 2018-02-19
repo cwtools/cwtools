@@ -1,0 +1,12 @@
+#ai_weight - checks that required resources are available by AI will be made in code for performance reasons
+
+#modifiers that can be added from modules
+#"modifier", category: MODIFIER_CATEGORY_SPACEPORT. things that affect the builder part of the spaceport. like construction costs and speeds
+#"orbit_modifier", category: MODIFIER_CATEGORY_FLEET | MODIFIER_CATEGORY_SHIP. applied on all orbiting fleets and ships
+#"planet_modifier", category: MODIFIER_CATEGORY_PLANET | MODIFIER_CATEGORY_POP | MODIFIER_CATEGORY_TILE. affects the planet
+#"station_modifier", category: MODIFIER_CATEGORY_FLEET | MODIFIER_CATEGORY_SHIP. affects the ship part of the spaceport. like health and armor
+#"ship_modifier", category: MODIFIER_CATEGORY_SHIP. affects all ships that are built by this space port
+
+
+#REMOVE THESE EVENTUALLY
+

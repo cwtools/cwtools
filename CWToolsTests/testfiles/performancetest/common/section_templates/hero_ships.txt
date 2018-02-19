@@ -1,0 +1,492 @@
+##### Destroyer ##### DE
+
+# ENT_enterprise	
+ship_section_template = {
+	key = "ENT_enterprise_stern"	
+	ship_size = ENT_enterprise	
+	fits_on_slot = stern	
+	entity = "ENT_enterprise_coreA_entity"	
+	icon = "GFX_ship_part_core_mid"	
+	icon_frame = 1	
+	prerequisites = { tech_hero_ships  }	
+	ai_weight = { factor = 0 }	
+		component_slot = {
+		name = "SMALL_GUN_01"
+		slot_size = small
+		slot_type = weapon
+		locatorname = "small_gun_01"
+	}
+	component_slot = {
+		name = "SMALL_GUN_02"
+		slot_size = small
+		slot_type = weapon
+		locatorname = "small_gun_02"
+	}	
+	component_slot = {
+        name = "MEDIUM_GUN_01"
+        slot_size = medium
+        slot_type = weapon
+        locatorname = "medium_gun_01"
+    }	
+	component_slot = {
+    	name = "SMALL_GUN_1"
+    	slot_size = point_defence
+    	slot_type = weapon
+    	locatorname = "large_gun_01"
+    }	
+	small_utility_slots = 0	
+	medium_utility_slots = 0	
+	large_utility_slots = 0	
+	aux_utility_slots = 0	
+	cost = 0	
+}
+ship_section_template = {	
+	key = "ENT_enterprise_mid"	
+	ship_size = ENT_enterprise	
+	fits_on_slot = mid	
+	entity = "ENT_enterprise_entity"	
+	icon = "GFX_ship_part_core_mid"	
+	icon_frame = 1	
+	prerequisites = { tech_hero_ships  }	
+	ai_weight = { factor = 0 }	
+ 	small_utility_slots = 3	
+	medium_utility_slots = 0	
+	large_utility_slots = 1	
+	aux_utility_slots = 1	
+	cost = 0	
+}																																			
+
+##### Cruiser ##### CR
+
+# ENT_enterprise_refit
+ship_section_template = {   
+    key = "ENT_enterprise_refit_stern"  
+    ship_size = ENT_enterprise_refit   
+    fits_on_slot = stern    
+    entity = "ENT_enterprise_refit_coreA_entity"   
+    icon = "GFX_ship_part_core_mid" 
+    icon_frame = 1  
+    prerequisites = { tech_hero_ships  }    
+    ai_weight = { factor = 0 } 
+    component_slot = {
+        name = "SMALL_GUN_01"
+        slot_size = small
+        slot_type = weapon
+        locatorname = "small_gun_01"
+    }
+    component_slot = {
+        name = "SMALL_GUN_02"
+        slot_size = small
+        slot_type = weapon
+        locatorname = "small_gun_02"
+    }   
+    component_slot = {
+        name = "MEDIUM_GUN_01"
+        slot_size = medium
+        slot_type = weapon
+        locatorname = "medium_gun_01"
+    }   
+    component_slot = {
+        name = "SMALL_GUN_1"
+        slot_size = point_defence
+        slot_type = weapon
+        locatorname = "large_gun_01"
+    }
+    component_slot = {
+        name = "SMALL_GUN_2"
+        slot_size = point_defence
+        slot_type = weapon
+        locatorname = "large_gun_02"
+    }   
+    small_utility_slots = 0 
+    medium_utility_slots = 0    
+    large_utility_slots = 0 
+    aux_utility_slots = 0   
+    cost = 0  
+}
+ship_section_template = {   
+    key = "ENT_enterprise_refit_mid"   
+    ship_size = ENT_enterprise_refit   
+    fits_on_slot = mid  
+    entity = "ENT_enterprise_refit_entity" 
+    icon = "GFX_ship_part_core_mid" 
+    icon_frame = 1  
+    prerequisites = { tech_hero_ships  }  
+    ai_weight = { factor = 0 } 
+    small_utility_slots = 4 
+    medium_utility_slots = 1    
+    large_utility_slots = 1 
+    aux_utility_slots = 1   
+    cost = 0  
+}
+
+# ENT_bortas
+ship_section_template = {   
+    key = "ENT_bortas_stern"  
+    ship_size = ENT_bortas   
+    fits_on_slot = stern    
+    entity = "ENT_bortas_coreA_entity"   
+    icon = "GFX_ship_part_core_mid" 
+    icon_frame = 1  
+    prerequisites = { tech_hero_ships  }  
+    ai_weight = { factor = 0 } 
+    component_slot = { #cannons
+        name = "LARGE_GUN_01"
+        slot_size = large
+        slot_type = weapon
+        locatorname = "medium_gun_01"
+    }
+    component_slot = { #cannons
+        name = "LARGE_GUN_02"
+        slot_size = large
+        slot_type = weapon
+        locatorname = "medium_gun_02"
+    }
+    component_slot = { #cannons
+        name = "LARGE_GUN_03"
+        slot_size = large
+        slot_type = weapon
+        locatorname = "medium_gun_03"
+    }
+    component_slot = { #cannons
+        name = "LARGE_GUN_04"
+        slot_size = large
+        slot_type = weapon
+        locatorname = "medium_gun_04"
+    }   
+    component_slot = { #cannons
+        name = "EXTRA_LARGE_01"
+        slot_size = extra_large
+        slot_type = weapon
+        locatorname = "medium_gun_01"
+    }
+    component_slot = { #cannons
+        name = "EXTRA_LARGE_02"
+        slot_size = extra_large
+        slot_type = weapon
+        locatorname = "medium_gun_02"
+    }   
+    component_slot = {
+        name = "SMALL_GUN_1"
+        slot_size = point_defence
+        slot_type = weapon
+        locatorname = "large_gun_01"
+    }   
+    small_utility_slots = 0 
+    medium_utility_slots = 0    
+    large_utility_slots = 0 
+    aux_utility_slots = 0   
+    cost = 0
+}
+ship_section_template = {   
+    key = "ENT_bortas_mid"
+    ship_size = ENT_bortas
+    fits_on_slot = mid
+    entity = "ENT_bortas_entity"
+    icon = "GFX_ship_part_core_mid" 
+    icon_frame = 1  
+    prerequisites = { tech_hero_ships  }  
+    ai_weight = { factor = 0 } 
+    small_utility_slots = 1 
+    medium_utility_slots = 4    
+    large_utility_slots = 1 
+    aux_utility_slots = 1   
+    cost = 0  
+}
+
+# ENT_romulan
+ship_section_template = {   
+    key = "ENT_romulan_stern"  
+    ship_size = ENT_romulan   
+    fits_on_slot = stern    
+    entity = "ENT_romulan_coreA_entity"   
+    icon = "GFX_ship_part_core_mid" 
+    icon_frame = 1  
+    prerequisites = { tech_hero_ships }    
+    ai_weight = { factor = 0 } 
+        component_slot = {
+        name = "SMALL_GUN_01"
+        slot_size = small
+        slot_type = weapon
+        locatorname = "small_gun_01"
+    }
+    component_slot = {
+        name = "SMALL_GUN_02"
+        slot_size = small
+        slot_type = weapon
+        locatorname = "small_gun_02"
+    }   
+    component_slot = {
+        name = "MEDIUM_GUN_01"
+        slot_size = medium
+        slot_type = weapon
+        locatorname = "medium_gun_01"
+    }   
+    component_slot = {
+        name = "SMALL_GUN_1"
+        slot_size = point_defence
+        slot_type = weapon
+        locatorname = "large_gun_01"
+    }
+    component_slot = {
+        name = "SMALL_GUN_2"
+        slot_size = point_defence
+        slot_type = weapon
+        locatorname = "large_gun_02"
+    }   
+    small_utility_slots = 0 
+    medium_utility_slots = 0    
+    large_utility_slots = 0 
+    aux_utility_slots = 0   
+    cost = 0  
+}
+ship_section_template = {   
+    key = "ENT_romulan_mid"  
+    ship_size = ENT_romulan  
+    fits_on_slot = mid  
+    entity = "ENT_romulan_entity"    
+    icon = "GFX_ship_part_core_mid" 
+    icon_frame = 1  
+    prerequisites = { tech_hero_ships  }    
+    ai_weight = { factor = 0 }  
+    small_utility_slots = 1 
+    medium_utility_slots = 1    
+    large_utility_slots = 4 
+    aux_utility_slots = 1   
+    cost = 0    
+}
+
+# ENT_seleya
+ship_section_template = {	
+	key = "ENT_seleya_stern"
+	ship_size = ENT_seleya	
+	fits_on_slot = stern	
+	entity = "ENT_seleya_coreA_entity"
+	icon = "GFX_ship_part_core_mid"	
+	icon_frame = 1
+	prerequisites = { tech_hero_ships  }	
+	ai_weight = { factor = 0 }	
+	component_slot = {
+        name = "MEDIUM_GUN_01"
+        slot_size = medium
+        slot_type = weapon
+        locatorname = "medium_gun_01"
+    }
+	component_slot = {
+		name = "MEDIUM_GUN_02"
+		slot_size = medium
+		slot_type = weapon
+		locatorname = "medium_gun_02"
+	}	
+	component_slot = {
+        name = "SMALL_GUN_1"
+        slot_size = point_defence
+        slot_type = weapon
+        locatorname = "large_gun_01"
+    }	
+	small_utility_slots = 0	
+	medium_utility_slots = 0	
+	large_utility_slots = 0	
+	aux_utility_slots = 0	
+	cost = 0	
+}
+ship_section_template = {	
+	key = "ENT_seleya_mid"	
+	ship_size = ENT_seleya	
+	fits_on_slot = mid	
+	entity = "ENT_seleya_entity"	
+	icon = "GFX_ship_part_core_mid"	
+	icon_frame = 1	
+	prerequisites = { tech_hero_ships  }	
+	ai_weight = { factor = 0 }	
+	small_utility_slots = 1	
+	medium_utility_slots = 1	
+	large_utility_slots = 4	
+	aux_utility_slots = 1	
+	cost = 0	
+}
+
+#ENT_kumari
+ship_section_template = {	
+	key = "ENT_kumari_stern"	
+	ship_size = ENT_kumari	
+	fits_on_slot = stern	
+	entity = "ENT_kumari_coreA_entity"
+	icon = "GFX_ship_part_core_mid"
+	icon_frame = 1
+	prerequisites = { tech_hero_ships }	
+	ai_weight = { factor = 0 }	
+	component_slot = {
+		name = "SMALL_GUN_01"
+		slot_size = small
+		slot_type = weapon
+		locatorname = "small_gun_01"
+	}
+	component_slot = {
+		name = "SMALL_GUN_02"
+		slot_size = small
+		slot_type = weapon
+		locatorname = "small_gun_02"
+	}	
+	component_slot = {
+        name = "MEDIUM_GUN_01"
+        slot_size = medium
+        slot_type = weapon
+        locatorname = "medium_gun_01"
+    }	
+	component_slot = {
+        name = "SMALL_GUN_1"
+        slot_size = point_defence
+        slot_type = weapon
+        locatorname = "large_gun_01"
+    }
+    component_slot = {
+        name = "SMALL_GUN_2"
+        slot_size = point_defence
+        slot_type = weapon
+        locatorname = "large_gun_02"
+    }	
+	small_utility_slots = 0	
+	medium_utility_slots = 0	
+	large_utility_slots = 0	
+	aux_utility_slots = 0	
+	cost = 0	
+}
+ship_section_template = {	
+	key = "ENT_kumari_mid"	
+	ship_size = ENT_kumari	
+	fits_on_slot = mid	
+	entity = "ENT_kumari_entity"	
+	icon = "GFX_ship_part_core_mid"	
+	icon_frame = 1	
+	prerequisites = { tech_hero_ships  }
+	ai_weight = { factor = 0 }
+ 	small_utility_slots = 1
+	medium_utility_slots = 4
+	large_utility_slots = 1
+	aux_utility_slots = 1
+	cost = 0
+}
+
+
+# ENT_enterprise_refit
+ship_section_template = {   
+    key = "DSC_discovery_stern"  
+    ship_size = DSC_discovery  
+    fits_on_slot = stern    
+    entity = "DSC_discovery_coreA_entity"   
+    icon = "GFX_ship_part_core_mid" 
+    icon_frame = 1 
+    prerequisites = { tech_hero_ships  } 
+  cost = 500
+  small_utility_slots = 0
+  medium_utility_slots = 0
+  large_utility_slots = 0
+  aux_utility_slots = 0
+  ai_weight = { factor = 0 }
+  component_slot = {
+    name = "LARGE_GUN_01"
+    slot_size = large
+    slot_type = weapon
+    locatorname = "medium_gun_01"
+  }
+  component_slot = {
+    name = "LARGE_GUN_02"
+    slot_size = large
+    slot_type = weapon
+    locatorname = "medium_gun_02"
+  }
+  component_slot = {
+    name = "LARGE_GUN_03"
+    slot_size = large
+    slot_type = weapon
+    locatorname = "medium_gun_03"
+  }
+  component_slot = {
+    name = "LARGE_GUN_04"
+    slot_size = large
+    slot_type = weapon
+    locatorname = "medium_gun_04"
+  }
+  component_slot = {
+    name = "LARGE_GUN_05"
+    slot_size = large
+    slot_type = weapon
+    locatorname = "medium_gun_05"
+  }
+  component_slot = {
+    name = "LARGE_GUN_06"
+    slot_size = large
+    slot_type = weapon
+    locatorname = "medium_gun_06"
+  }
+  component_slot = {
+    name = "LARGE_GUN_07"
+    slot_size = large
+    slot_type = weapon
+    locatorname = "medium_gun_01"
+  }
+  component_slot = {
+    name = "LARGE_GUN_08"
+    slot_size = large
+    slot_type = weapon
+    locatorname = "medium_gun_02"
+  }
+  component_slot = {
+    name = "LARGE_GUN_09"
+    slot_size = large
+    slot_type = weapon
+    locatorname = "medium_gun_03"
+  }
+  component_slot = {
+    name = "LARGE_GUN_010"
+    slot_size = large
+    slot_type = weapon
+    locatorname = "medium_gun_04"
+  }
+  component_slot = {
+    name = "LARGE_GUN_011"
+    slot_size = large
+    slot_type = weapon
+    locatorname = "medium_gun_05"
+  }
+  component_slot = {
+    name = "LARGE_GUN_012"
+    slot_size = large
+    slot_type = weapon
+    locatorname = "medium_gun_06"
+  }
+  component_slot = {
+    name = "SMALL_GUN_1"
+    slot_size = point_defence
+    slot_type = weapon
+    locatorname = "large_gun_01"
+  }
+  component_slot = {
+    name = "SMALL_GUN_2"
+    slot_size = point_defence
+    slot_type = weapon
+    locatorname = "large_gun_02"
+  }
+  component_slot = {
+    name = "SMALL_GUN_3"
+    slot_size = point_defence
+    slot_type = weapon
+    locatorname = "large_gun_03"
+  }
+}
+ship_section_template = {   
+    key = "DSC_discovery_mid"   
+    ship_size = DSC_discovery   
+    fits_on_slot = mid  
+    entity = "DSC_discovery_entity" 
+    icon = "GFX_ship_part_core_mid" 
+    icon_frame = 1  
+    prerequisites = { tech_hero_ships  }  
+    ai_weight = { factor = 0 } 
+  cost = 320
+  small_utility_slots = 1
+  medium_utility_slots = 1
+  large_utility_slots = 1
+  aux_utility_slots = 2  
+}

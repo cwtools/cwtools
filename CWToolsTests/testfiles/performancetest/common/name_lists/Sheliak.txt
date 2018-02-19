@@ -1,0 +1,97 @@
+﻿### Sheliak by EHKodiak
+Sheliak = {
+	randomized = no
+
+	ship_names = {
+		generic = {
+		"Fnorgz'ghf" "Fnorzhro" "Phlegetzhro" "Rkadirg" "Fnoryth p" "Zhro" "Fnorgl" "Fnorgln vulro" "Fnorgln" "Rya zhro" "Fnorgl" "R nro" "Hak" "Fnorfh mgph'R" "Zh ron ron" "Rny'zehro" "Thro" "Fnorgl'v" "Rchro" "Rw" "Bthnthro" "Enff ehye f'" "Shtunggli" "FnorgR ngl" "Fnorgln" "U kn'a li" "Fnorgzhro" "Tm r'yarn" "Fnor'h thro" "Rythft nafro" "Fnorgk'y" "Fnorgk'vulgtm w" "Ru gof'n" "Rzhr" "Rsna" "Fnorghu Ro" "Unggli sh" "Fnorlm" "Fnorgl" "Fnorgln vulg" "FnorglFnorn" "Zhr" "Nkfh'kad" "UpR nglui nR" "Fnorglnkdghu R" "Fnorbsna s" "Fnorgpadgh hii" "Fnorgfh" "Fnorgl chhro" "Rzhro" "Lgczhro" "Fnorgl 'm wga" "Fnornak thro" "R'e ulnilsll" "Rl'zhro" "Rbsna st" "Uhp" "Flyarnak thro" "Fnorgln v" "Rbthnhye f" "Ret" "Fnorfhro" "Yhaw aahzhro" "Fnorgln 'bt" "Fnorglnhro" "Rm naflRzhro" "Fnorgl d gfnor" "Ya zhro" "Fnorytboshu on" "Fnoroneebzhro" "Rnyth p" "Hro" "Ishtuwahl s" "Rvulgtlagl 'a" "Rk kadish" "E Ro" "D uaaa" "Fnorgln ve ul" "Fnorgl od zhro" "Fnorg" "Rtenff ero" "Fnoro" "Fnorgl 'ai" "Ri'h thro" "Fnorgl n" "Rnyt" "Fnorrnakzhro" "Fnorgleg" "Fnorya" "Fnorgnl'" "Fnornak thaFnorna" "M'latgzhro" "Fnor zhro" "FnorglnnnR wk" "Fnorglnro" "Th R" "Y kadis hl" "Nilrgh" "Zkadishturo" "Fnorgln vzhro" "Fnorwgarnak" "Fnorthsyha'hir" "Rthro'drnyboshro" "Fnorgl 'azh" "Nak thro" "Rhro" "Fnorgk t" "Rkadi" "Fnorgl'aihupa" "Fnorglzzhro" "Fnorlma ftagn" "Ilgh" "BsnaRuazhro" "Ryarnyth Ror" "Fnorgl" "aboshFnordgwgak" "Os'" "Rh p" "Rhn sg" "Rshugg sll'h" "Rnyth Roth r" "Aglhafh m" "Ahbosyagl" "Nzzhroaglh" "Hriiaglnvu" "Ef'Nang" "Drndgtlkthro" "Boshurorrtenf" "Rnakadish" "R'luzhrczhro" "Fnorgl 'bthn" "Fnorgl ron" "Fnoruiyeog o" "Fnorgvulgi ath" "Fnorgd uaaah" "Yha'h tharhn'" "Re Rog l" "Arnak thro" "Rro" "Rgnm" "Fnorglzhro" "Fnorgl 'ai thro" "Fnorgdirgn" "Rth Roth ph'" "Ph'R phleg" "Fnorgvu" "Fnorgl 'ai" "Fnorgln vulll" "R ngluiupadfm" "Fnorghu gof'nn" "Fnorgln vulgtla" "Shogg" "Fnorgln vulg n" "Fnorgl lloig" "Hu gof'ma ffc" "RR ph'Rff" "Fnorgphdisnro" "Fnorgbsna mnah" "Din vulgtm" "FnorgFnorhi" "Fnorgl 'a" "Rvupad" "Fnorgln vuo" "Nak kaR" "Fnorgl 'fhalmsy" "Fnorgl 'aichteo" "Fnorgl 'zhro" "Fnorglnpadg" "Fnorgl 'ogzna" "Fnorglnzhro" "Fnorgmg mnm" "Rshtung" "Ghlron s" "Fnorgl 'ai at'uhro" "Rgah'h thro" "Fnorah" "Rh r'luhh r'n h" "Rsg" "Rkak thro" "Fnorzhrodzhr" "Fnorgl 'awgah" "Fnorgln v'na" "Fnorgl kn" "Fnorgln vulgtm" "'eya zhro" "Fnorgl 'aiye" "K'yarnak thro" "R'dr Ror'" "Rmnzhro" "Fnorgzhoggic" "Fnorgl 'aikn'a" "Fnorm" "Y'hah uhc" "Fnorgk tk chz" "Fnorgln vul" "Fnortgh" "Fnorglnulgtlarn" "Slye f" "Fnorgph'R por o" "Fnorgl gof'" "Fnorgl iree ll" "Zhrzhro" "RR ngzzhro" "Fnorgl 'afh" "Fnorg'R" "Fnorah ya zhro" "Fnorglnphwg" "H'e ulnzhro" "Fnorgl dgzhro" "Fnorgzya zhro" "Rthnllo" "Ror or" "FnorFnornak" "Fnorgl 'aiphro" "Bsn y'hah" "Th r'luh" "Rmgzhro" "K chtend ua" "Fnorgln vubthn" "Fm'latnil" "Fnorgl 'aio" "Ma fhta" "Fnorglrbsna" "Fnorgd uzhro" "Fnorgl 'ghfp" "Mg m" "Fnorshu" "Fnorgln vucht" "Dishtutu" "Rshugg" "Fnorbsnaw'na" "RFnorgl 'adi" "Regeth RoflR" "Fnorgya zhro" "Fnorlma fht" "Fnorchtzhro" "Rluhzhro" "K thro" "Rl 'abtell" "Th phl" "Fnoru kn'k k" "' n'ghft" "A fht'nugg" "Fnorgcht" "Ugg sgnulgtm" "Fnorgl Rnyth" "Yha'h thro" "Fnorgl 'ana" "Fnorglnlegeo" "Fnorgl yaazhr" "Rk ronvu" "RFnordishthn" "Fnorvulgn'" "F'thaFnor" "Rfhalma fh" "AflR naR" "Fnormgdisho" "Rcw'nzhro" "'heey'ha nro" "Fnorglnff ehye" "Fnori hlirthr" "Rmg oo'gh" "Zh hrivm" "Fnorgahro" "N hafh athg" "Fnorgyzhrod uel"
+		}
+		corvette = {
+		}
+		saber = {
+		}
+		sovereign = {
+		}
+		steamrunner = {
+		}		
+		adv_cruiser = {
+		}
+		strike = {
+		}	
+		constructor = { }
+		colonizer = { }
+		science = { }
+		transport = { }
+		outpost_station = {
+			sequential_name = "Corporate Outpost"
+		}
+	}
+
+	fleet_names = {
+		sequential_name = "%O% Incorporated Fleet"
+	}
+	
+	army_names = {
+		defense_army = {
+			sequential_name = "%O% Corporate Guard"
+		}
+		assault_army = {
+			sequential_name = "%O% Corporate Enforcers"
+		}
+		slave_army = {
+			sequential_name = "%O% Expendable Worker Force"
+		}
+		clone_army = { 
+			sequential_name = "%O% Clone Enforcers"
+		}
+		robotic_army = {
+			sequential_name = "%O% Mechanised Enforcers"
+		}
+		android_army = {
+			sequential_name = "%O% Synthetic Enforcers"
+		}
+		psionic_army = { 
+			sequential_name = "%O% Psionic Enforcers"
+		}
+		xenomorph_army = {
+			sequential_name = "%O% Bio-Warfare Enforcers"
+		}
+		gene_warrior_army = {
+			sequential_name = "%O% Bio-Engineered Enforcers"
+		}
+	}
+
+	planet_names = {
+		generic = {
+			names = { 
+			}
+		}
+	}
+
+
+	### CHARACTERS 
+
+	character_names = {
+		names1 = {
+			weight = 40
+			first_names_male = {
+			"Cthgz'ghf" "Cthzhro" "Phlegetzhro" "Rkadirg" "Cthyth p" "Zhro" "Cthgl" "Cthgln vulro" "Cthgln" "Rya zhro" "Cthgl" "R nro" "Hak" "Cthfh mgph'R" "Zh ron ron" "Rny'zehro" "Thro" "Cthgl'v" "Rchro" "Rw" "Bthnthro" "Enff ehye f'" "Shtunggli" "CthgR ngl" "Cthgln" "U kn'a li" "Cthgzhro" "Tm r'yarn" "Cth'h thro" "Rythft nafro" "Cthgk'y" "Cthgk'vulgtm w" "Ru gof'n" "Rzhr" "Rsna" "Cthghu Ro" "Unggli sh" "Cthlm" "Cthgl" "Cthgln vulg" "CthglCthn" "Zhr" "Nkfh'kad" "UpR nglui nR" "Cthglnkdghu R" "Cthbsna s" "Cthgpadgh hii" "Cthgfh" "Cthgl chhro" "Rzhro" "Lgczhro" "Cthgl 'm wga" "Cthnak thro" "R'e ulnilsll" "Rl'zhro" "Rbsna st" "Uhp" "Flyarnak thro" "Cthgln v" "Rbthnhye f" "Ret" "Cthfhro" "Yhaw aahzhro" "Cthgln 'bt" "Cthglnhro" "Rm naflRzhro" "Cthgl d gCth" "Ya zhro" "Cthytboshu on" "Cthoneebzhro" "Rnyth p" "Hro" "Ishtuwahl s" "Rvulgtlagl 'a" "Rk kadish" "E Ro" "D uaaa" "Cthgln ve ul" "Cthgl od zhro" "Cthg" "Rtenff ero" "Ctho" "Cthgl 'ai" "Ri'h thro" "Cthgl n" "Rnyt" "Cthrnakzhro" "Cthgleg" "Cthya" "Cthgnl'" "Cthnak thaCthna" "M'latgzhro" "Cth zhro" "CthglnnnR wk" "Cthglnro" "Th R" "Y kadis hl" "Nilrgh" "Zkadishturo" "Cthgln vzhro" "Cthwgarnak" "Cththsyha'hir" "Rthro'drnyboshro" "Cthgl 'azh" "Nak thro" "Rhro" "Cthgk t" "Rkadi" "Cthgl'aihupa" "Cthglzzhro" "Cthlma ftagn" "Ilgh" "BsnaRuazhro" "Ryarnyth Ror" "Cthgl" "aboshCthdgwgak" "Os'" "Rh p" "Rhn sg" "Rshugg sll'h" "Rnyth Roth r" "Aglhafh m" "Ahbosyagl" "Nzzhroaglh" "Hriiaglnvu" "Ef'Nang" "Drndgtlkthro" "Boshurorrtenf" "Rnakadish" "R'luzhrczhro" "Cthgl 'bthn" "Cthgl ron" "Cthuiyeog o" "Cthgvulgi ath" "Cthgd uaaah" "Yha'h tharhn'" "Re Rog l" "Arnak thro" "Rro" "Rgnm" "Cthglzhro" "Cthgl 'ai thro" "Cthgdirgn" "Rth Roth ph'" "Ph'R phleg" "Cthgvu" "Cthgl 'ai" "Cthgln vulll" "R ngluiupadfm" "Cthghu gof'nn" "Cthgln vulgtla" "Shogg" "Cthgln vulg n" "Cthgl lloig" "Hu gof'ma ffc" "RR ph'Rff" "Cthgphdisnro" "Cthgbsna mnah" "Din vulgtm" "CthgCthhi" "Cthgl 'a" "Rvupad" "Cthgln vuo" "Nak kaR" "Cthgl 'fhalmsy" "Cthgl 'aichteo" "Cthgl 'zhro" "Cthglnpadg" "Cthgl 'ogzna" "Cthglnzhro" "Cthgmg mnm" "Rshtung" "Ghlron s" "Cthgl 'ai at'uhro" "Rgah'h thro" "Cthah" "Rh r'luhh r'n h" "Rsg" "Rkak thro" "Cthzhrodzhr" "Cthgl 'awgah" "Cthgln v'na" "Cthgl kn" "Cthgln vulgtm" "'eya zhro" "Cthgl 'aiye" "K'yarnak thro" "R'dr Ror'" "Rmnzhro" "Cthgzhoggic" "Cthgl 'aikn'a" "Cthm" "Y'hah uhc" "Cthgk tk chz" "Cthgln vul" "Cthtgh" "Cthglnulgtlarn" "Slye f" "Cthgph'R por o" "Cthgl gof'" "Cthgl iree ll" "Zhrzhro" "RR ngzzhro" "Cthgl 'afh" "Cthg'R" "Cthah ya zhro" "Cthglnphwg" "H'e ulnzhro" "Cthgl dgzhro" "Cthgzya zhro" "Rthnllo" "Ror or" "CthCthnak" "Cthgl 'aiphro" "Bsn y'hah" "Th r'luh" "Rmgzhro" "K chtend ua" "Cthgln vubthn" "Fm'latnil" "Cthgl 'aio" "Ma fhta" "Cthglrbsna" "Cthgd uzhro" "Cthgl 'ghfp" "Mg m" "Cthshu" "Cthgln vucht" "Dishtutu" "Rshugg" "Cthbsnaw'na" "RCthgl 'adi" "Regeth RoflR" "Cthgya zhro" "Cthlma fht" "Cthchtzhro" "Rluhzhro" "K thro" "Rl 'abtell" "Th phl" "Cthu kn'k k" "' n'ghft" "A fht'nugg" "Cthgcht" "Ugg sgnulgtm" "Cthgl Rnyth" "Yha'h thro" "Cthgl 'ana" "Cthglnlegeo" "Cthgl yaazhr" "Rk ronvu" "RCthdishthn" "Cthvulgn'" "F'thaCth" "Rfhalma fh" "AflR naR" "Cthmgdisho" "Rcw'nzhro" "'heey'ha nro" "Cthglnff ehye" "Cthi hlirthr" "Rmg oo'gh" "Zh hrivm" "Cthgahro" "N hafh athg" "Cthgyzhrod uel"
+			}
+			first_names_female = {
+			"R'lyegz'ghf" "R'lyezhro" "Phlegetzhro" "Rkadirg" "R'lyeyth p" "Zhro" "R'lyegl" "R'lyegln vulro" "R'lyegln" "Rya zhro" "R'lyegl" "R nro" "Hak" "R'lyefh mgph'R" "Zh ron ron" "Rny'zehro" "Thro" "R'lyegl'v" "Rchro" "Rw" "Bthnthro" "Enff ehye f'" "Shtunggli" "R'lyegR ngl" "R'lyegln" "U kn'a li" "R'lyegzhro" "Tm r'yarn" "R'lye'h thro" "Rythft nafro" "R'lyegk'y" "R'lyegk'vulgtm w" "Ru gof'n" "Rzhr" "Rsna" "R'lyeghu Ro" "Unggli sh" "R'lyelm" "R'lyegl" "R'lyegln vulg" "R'lyeglR'lyen" "Zhr" "Nkfh'kad" "UpR nglui nR" "R'lyeglnkdghu R" "R'lyebsna s" "R'lyegpadgh hii" "R'lyegfh" "R'lyegl chhro" "Rzhro" "Lgczhro" "R'lyegl 'm wga" "R'lyenak thro" "R'e ulnilsll" "Rl'zhro" "Rbsna st" "Uhp" "Flyarnak thro" "R'lyegln v" "Rbthnhye f" "Ret" "R'lyefhro" "Yhaw aahzhro" "R'lyegln 'bt" "R'lyeglnhro" "Rm naflRzhro" "R'lyegl d gR'lye" "Ya zhro" "R'lyeytboshu on" "R'lyeoneebzhro" "Rnyth p" "Hro" "Ishtuwahl s" "Rvulgtlagl 'a" "Rk kadish" "E Ro" "D uaaa" "R'lyegln ve ul" "R'lyegl od zhro" "R'lyeg" "Rtenff ero" "R'lyeo" "R'lyegl 'ai" "Ri'h thro" "R'lyegl n" "Rnyt" "R'lyernakzhro" "R'lyegleg" "R'lyeya" "R'lyegnl'" "R'lyenak thaR'lyena" "M'latgzhro" "R'lye zhro" "R'lyeglnnnR wk" "R'lyeglnro" "Th R" "Y kadis hl" "Nilrgh" "Zkadishturo" "R'lyegln vzhro" "R'lyewgarnak" "R'lyethsyha'hir" "Rthro'drnyboshro" "R'lyegl 'azh" "Nak thro" "Rhro" "R'lyegk t" "Rkadi" "R'lyegl'aihupa" "R'lyeglzzhro" "R'lyelma ftagn" "Ilgh" "BsnaRuazhro" "Ryarnyth Ror" "R'lyegl" "aboshR'lyedgwgak" "Os'" "Rh p" "Rhn sg" "Rshugg sll'h" "Rnyth Roth r" "Aglhafh m" "Ahbosyagl" "Nzzhroaglh" "Hriiaglnvu" "Ef'Nang" "Drndgtlkthro" "Boshurorrtenf" "Rnakadish" "R'luzhrczhro" "R'lyegl 'bthn" "R'lyegl ron" "R'lyeuiyeog o" "R'lyegvulgi ath" "R'lyegd uaaah" "Yha'h tharhn'" "Re Rog l" "Arnak thro" "Rro" "Rgnm" "R'lyeglzhro" "R'lyegl 'ai thro" "R'lyegdirgn" "Rth Roth ph'" "Ph'R phleg" "R'lyegvu" "R'lyegl 'ai" "R'lyegln vulll" "R ngluiupadfm" "R'lyeghu gof'nn" "R'lyegln vulgtla" "Shogg" "R'lyegln vulg n" "R'lyegl lloig" "Hu gof'ma ffc" "RR ph'Rff" "R'lyegphdisnro" "R'lyegbsna mnah" "Din vulgtm" "R'lyegR'lyehi" "R'lyegl 'a" "Rvupad" "R'lyegln vuo" "Nak kaR" "R'lyegl 'fhalmsy" "R'lyegl 'aichteo" "R'lyegl 'zhro" "R'lyeglnpadg" "R'lyegl 'ogzna" "R'lyeglnzhro" "R'lyegmg mnm" "Rshtung" "Ghlron s" "R'lyegl 'ai at'uhro" "Rgah'h thro" "R'lyeah" "Rh r'luhh r'n h" "Rsg" "Rkak thro" "R'lyezhrodzhr" "R'lyegl 'awgah" "R'lyegln v'na" "R'lyegl kn" "R'lyegln vulgtm" "'eya zhro" "R'lyegl 'aiye" "K'yarnak thro" "R'dr Ror'" "Rmnzhro" "R'lyegzhoggic" "R'lyegl 'aikn'a" "R'lyem" "Y'hah uhc" "R'lyegk tk chz" "R'lyegln vul" "R'lyetgh" "R'lyeglnulgtlarn" "Slye f" "R'lyegph'R por o" "R'lyegl gof'" "R'lyegl iree ll" "Zhrzhro" "RR ngzzhro" "R'lyegl 'afh" "R'lyeg'R" "R'lyeah ya zhro" "R'lyeglnphwg" "H'e ulnzhro" "R'lyegl dgzhro" "R'lyegzya zhro" "Rthnllo" "Ror or" "R'lyeR'lyenak" "R'lyegl 'aiphro" "Bsn y'hah" "Th r'luh" "Rmgzhro" "K chtend ua" "R'lyegln vubthn" "Fm'latnil" "R'lyegl 'aio" "Ma fhta" "R'lyeglrbsna" "R'lyegd uzhro" "R'lyegl 'ghfp" "Mg m" "R'lyeshu" "R'lyegln vucht" "Dishtutu" "Rshugg" "R'lyebsnaw'na" "RR'lyegl 'adi" "Regeth RoflR" "R'lyegya zhro" "R'lyelma fht" "R'lyechtzhro" "Rluhzhro" "K thro" "Rl 'abtell" "Th phl" "R'lyeu kn'k k" "' n'ghft" "A fht'nugg" "R'lyegcht" "Ugg sgnulgtm" "R'lyegl Rnyth" "Yha'h thro" "R'lyegl 'ana" "R'lyeglnlegeo" "R'lyegl yaazhr" "Rk ronvu" "RR'lyedishthn" "R'lyevulgn'" "F'thaR'lye" "Rfhalma fh" "AflR naR" "R'lyemgdisho" "Rcw'nzhro" "'heey'ha nro" "R'lyeglnff ehye" "R'lyei hlirthr" "Rmg oo'gh" "Zh hrivm" "R'lyegahro" "N hafh athg" "R'lyegyzhrod uel"
+			}
+			second_names = {
+			""
+			}
+			regnal_first_names_male = {
+			"Cthgz'ghf" "Cthzhro" "Phlegetzhro" "Rkadirg" "Cthyth p" "Zhro" "Cthgl" "Cthgln vulro" "Cthgln" "Rya zhro" "Cthgl" "R nro" "Hak" "Cthfh mgph'R" "Zh ron ron" "Rny'zehro" "Cthro" "Cthgl'v" "Rchro" "Rw" "Bthnthro" "Enff ehye f'" "Shtunggli" "CthgR ngl" "Cthgln" "U kn'a li" "Cthgzhro" "Tm r'yarn" "Cth'h thro" "Rythft nafro" "Cthgk'y" "Cthgk'vulgtm w" "Ru gof'n" "Rzhr" "Rsna" "Cthghu Ro" "Unggli sh" "Cthlm" "Cthgl" "Cthgln vulg" "CthglCthn" "Zhr" "Nkfh'kad" "UpR nglui nR" "Cthglnkdghu R" "Cthbsna s" "Cthgpadgh hii" "Cthgfh" "Cthgl chhro" "Rzhro" "Lgczhro" "Cthgl 'm wga" "Cthnak thro" "R'e ulnilsll" "Rl'zhro" "Rbsna st" "Uhp" "Flyarnak thro" "Cthgln v" "Rbthnhye f" "Ret" "Cthfhro" "Yhaw aahzhro" "Cthgln 'bt" "Cthglnhro" "Rm naflRzhro" "Cthgl d gCth" "Ya zhro" "Cthytboshu on" "Cthoneebzhro" "Rnyth p" "Hro" "Ishtuwahl s" "Rvulgtlagl 'a" "Rk kadish" "E Ro" "D uaaa" "Cthgln ve ul" "Cthgl od zhro" "Cthg" "Rtenff ero" "Ctho" "Cthgl 'ai" "Ri'h thro" "Cthgl n" "Rnyt" "Cthrnakzhro" "Cthgleg" "Cthya" "Cthgnl'" "Cthnak thaCthna" "M'latgzhro" "Cth zhro" "CthglnnnR wk" "Cthglnro" "Th R" "Y kadis hl" "Nilrgh" "Zkadishturo" "Cthgln vzhro" "Cthwgarnak" "Cththsyha'hir" "Rthro'drnyboshro" "Cthgl 'azh" "Nak thro" "Rhro" "Cthgk t" "Rkadi" "Cthgl'aihupa" "Cthglzzhro" "Cthlma ftagn" "Ilgh" "BsnaRuazhro" "Ryarnyth Ror" "Cthgl" "aboshCthdgwgak" "Os'" "Rh p" "Rhn sg" "Rshugg sll'h" "Rnyth Roth r" "Aglhafh m" "Ahbosyagl" "Nzzhroaglh" "Hriiaglnvu" "Ef'Nang" "Drndgtlkthro" "Boshurorrtenf" "Rnakadish" "R'luzhrczhro" "Cthgl 'bthn" "Cthgl ron" "Cthuiyeog o" "Cthgvulgi ath" "Cthgd uaaah" "Yha'h tharhn'" "Re Rog l" "Arnak thro" "Rro" "Rgnm" "Cthglzhro" "Cthgl 'ai thro" "Cthgdirgn" "Rth Roth ph'" "Ph'R phleg" "Cthgvu" "Cthgl 'ai" "Cthgln vulll" "R ngluiupadfm" "Cthghu gof'nn" "Cthgln vulgtla" "Shogg" "Cthgln vulg n" "Cthgl lloig" "Hu gof'ma ffc" "RR ph'Rff" "Cthgphdisnro" "Cthgbsna mnah" "Din vulgtm" "CthgCthhi" "Cthgl 'a" "Rvupad" "Cthgln vuo" "Nak kaR" "Cthgl 'fhalmsy" "Cthgl 'aichteo" "Cthgl 'zhro" "Cthglnpadg" "Cthgl 'ogzna" "Cthglnzhro" "Cthgmg mnm" "Rshtung" "Ghlron s" "Cthgl 'ai at'uhro" "Rgah'h thro" "Cthah" "Rh r'luhh r'n h" "Rsg" "Rkak thro" "Cthzhrodzhr" "Cthgl 'awgah" "Cthgln v'na" "Cthgl kn" "Cthgln vulgtm" "'eya zhro" "Cthgl 'aiye" "K'yarnak thro" "R'dr Ror'" "Rmnzhro" "Cthgzhoggic" "Cthgl 'aikn'a" "Cthm" "Y'hah uhc" "Cthgk tk chz" "Cthgln vul" "Cthtgh" "Cthglnulgtlarn" "Slye f" "Cthgph'R por o" "Cthgl gof'" "Cthgl iree ll" "Zhrzhro" "RR ngzzhro" "Cthgl 'afh" "Cthg'R" "Cthah ya zhro" "Cthglnphwg" "H'e ulnzhro" "Cthgl dgzhro" "Cthgzya zhro" "Rthnllo" "Ror or" "CthCthnak" "Cthgl 'aiphro" "Bsn y'hah" "Th r'luh" "Rmgzhro" "K chtend ua" "Cthgln vubthn" "Fm'latnil" "Cthgl 'aio" "Ma fhta" "Cthglrbsna" "Cthgd uzhro" "Cthgl 'ghfp" "Mg m" "Cthshu" "Cthgln vucht" "Dishtutu" "Rshugg" "Cthbsnaw'na" "RCthgl 'adi" "Regeth RoflR" "Cthgya zhro" "Cthlma fht" "Cthchtzhro" "Rluhzhro" "K thro" "Rl 'abtell" "Th phl" "Cthu kn'k k" "' n'ghft" "A fht'nugg" "Cthgcht" "Ugg sgnulgtm" "Cthgl Rnyth" "Yha'h thro" "Cthgl 'ana" "Cthglnlegeo" "Cthgl yaazhr" "Rk ronvu" "RCthdishthn" "Cthvulgn'" "F'thaCth" "Rfhalma fh" "AflR naR" "Cthmgdisho" "Rcw'nzhro" "'heey'ha nro" "Cthglnff ehye" "Cthi hlirthr" "Rmg oo'gh" "Zh hrivm" "Cthgahro" "N hafh athg" "Cthgyzhrod uel"
+			}
+			regnal_first_names_female = {
+			"R'lyegz'ghf" "R'lyezhro" "Phlegetzhro" "Rkadirg" "R'lyeyth p" "Zhro" "R'lyegl" "R'lyegln vulro" "R'lyegln" "Rya zhro" "R'lyegl" "R nro" "Hak" "R'lyefh mgph'R" "Zh ron ron" "Rny'zehro" "Thro" "R'lyegl'v" "Rchro" "Rw" "Bthnthro" "Enff ehye f'" "Shtunggli" "R'lyegR ngl" "R'lyegln" "U kn'a li" "R'lyegzhro" "Tm r'yarn" "R'lye'h thro" "Rythft nafro" "R'lyegk'y" "R'lyegk'vulgtm w" "Ru gof'n" "Rzhr" "Rsna" "R'lyeghu Ro" "Unggli sh" "R'lyelm" "R'lyegl" "R'lyegln vulg" "R'lyeglR'lyen" "Zhr" "Nkfh'kad" "UpR nglui nR" "R'lyeglnkdghu R" "R'lyebsna s" "R'lyegpadgh hii" "R'lyegfh" "R'lyegl chhro" "Rzhro" "Lgczhro" "R'lyegl 'm wga" "R'lyenak thro" "R'e ulnilsll" "Rl'zhro" "Rbsna st" "Uhp" "Flyarnak thro" "R'lyegln v" "Rbthnhye f" "Ret" "R'lyefhro" "Yhaw aahzhro" "R'lyegln 'bt" "R'lyeglnhro" "Rm naflRzhro" "R'lyegl d gR'lye" "Ya zhro" "R'lyeytboshu on" "R'lyeoneebzhro" "Rnyth p" "Hro" "Ishtuwahl s" "Rvulgtlagl 'a" "Rk kadish" "E Ro" "D uaaa" "R'lyegln ve ul" "R'lyegl od zhro" "R'lyeg" "Rtenff ero" "R'lyeo" "R'lyegl 'ai" "Ri'h thro" "R'lyegl n" "Rnyt" "R'lyernakzhro" "R'lyegleg" "R'lyeya" "R'lyegnl'" "R'lyenak thaR'lyena" "M'latgzhro" "R'lye zhro" "R'lyeglnnnR wk" "R'lyeglnro" "Th R" "Y kadis hl" "Nilrgh" "Zkadishturo" "R'lyegln vzhro" "R'lyewgarnak" "R'lyethsyha'hir" "Rthro'drnyboshro" "R'lyegl 'azh" "Nak thro" "Rhro" "R'lyegk t" "Rkadi" "R'lyegl'aihupa" "R'lyeglzzhro" "R'lyelma ftagn" "Ilgh" "BsnaRuazhro" "Ryarnyth Ror" "R'lyegl" "aboshR'lyedgwgak" "Os'" "Rh p" "Rhn sg" "Rshugg sll'h" "Rnyth Roth r" "Aglhafh m" "Ahbosyagl" "Nzzhroaglh" "Hriiaglnvu" "Ef'Nang" "Drndgtlkthro" "Boshurorrtenf" "Rnakadish" "R'luzhrczhro" "R'lyegl 'bthn" "R'lyegl ron" "R'lyeuiyeog o" "R'lyegvulgi ath" "R'lyegd uaaah" "Yha'h tharhn'" "Re Rog l" "Arnak thro" "Rro" "Rgnm" "R'lyeglzhro" "R'lyegl 'ai thro" "R'lyegdirgn" "Rth Roth ph'" "Ph'R phleg" "R'lyegvu" "R'lyegl 'ai" "R'lyegln vulll" "R ngluiupadfm" "R'lyeghu gof'nn" "R'lyegln vulgtla" "Shogg" "R'lyegln vulg n" "R'lyegl lloig" "Hu gof'ma ffc" "RR ph'Rff" "R'lyegphdisnro" "R'lyegbsna mnah" "Din vulgtm" "R'lyegR'lyehi" "R'lyegl 'a" "Rvupad" "R'lyegln vuo" "Nak kaR" "R'lyegl 'fhalmsy" "R'lyegl 'aichteo" "R'lyegl 'zhro" "R'lyeglnpadg" "R'lyegl 'ogzna" "R'lyeglnzhro" "R'lyegmg mnm" "Rshtung" "Ghlron s" "R'lyegl 'ai at'uhro" "Rgah'h thro" "R'lyeah" "Rh r'luhh r'n h" "Rsg" "Rkak thro" "R'lyezhrodzhr" "R'lyegl 'awgah" "R'lyegln v'na" "R'lyegl kn" "R'lyegln vulgtm" "'eya zhro" "R'lyegl 'aiye" "K'yarnak thro" "R'dr Ror'" "Rmnzhro" "R'lyegzhoggic" "R'lyegl 'aikn'a" "R'lyem" "Y'hah uhc" "R'lyegk tk chz" "R'lyegln vul" "R'lyetgh" "R'lyeglnulgtlarn" "Slye f" "R'lyegph'R por o" "R'lyegl gof'" "R'lyegl iree ll" "Zhrzhro" "RR ngzzhro" "R'lyegl 'afh" "R'lyeg'R" "R'lyeah ya zhro" "R'lyeglnphwg" "H'e ulnzhro" "R'lyegl dgzhro" "R'lyegzya zhro" "Rthnllo" "Ror or" "R'lyenak" "R'lyegl 'aiphro" "Bsn y'hah" "Th r'luh" "Rmgzhro" "K chtend ua" "R'lyegln vubthn" "Fm'latnil" "R'lyegl 'aio" "Ma fhta" "R'lyeglrbsna" "R'lyegd uzhro" "R'lyegl 'ghfp" "Mg m" "R'lyeshu" "R'lyegln vucht" "Dishtutu" "Rshugg" "R'lyebsnaw'na" "RR'lyegl 'adi" "Regeth RoflR" "R'lyegya zhro" "R'lyelma fht" "R'lyechtzhro" "Rluhzhro" "K thro" "Rl 'abtell" "Th phl" "R'lyeu kn'k k" "' n'ghft" "A fht'nugg" "R'lyegcht" "Ugg sgnulgtm" "R'lyegl Rnyth" "Yha'h thro" "R'lyegl 'ana" "R'lyeglnlegeo" "R'lyegl yaazhr" "Rk ronvu" "RR'lyedishthn" "R'lyevulgn'" "F'thaR'lye" "Rfhalma fh" "AflR naR" "R'lyemgdisho" "Rcw'nzhro" "'heey'ha nro" "R'lyeglnff ehye" "R'lyei hlirthr" "Rmg oo'gh" "Zh hrivm" "R'lyegahro" "N hafh athg" "R'lyegyzhrod uel"
+			}
+			regnal_second_names = {
+			""
+			}
+		}
+	}
+}

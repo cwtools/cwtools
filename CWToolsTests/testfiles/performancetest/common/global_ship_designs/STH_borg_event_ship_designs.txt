@@ -1,0 +1,155 @@
+
+# Rogue Drone Station
+ship_design = {
+	name = "NAME_Rogue_Drone_Station"
+	ship_size = pirate_station #CHANGE THIS
+	hide_size = yes
+	section = {
+		template = "PIRATE_STATION_SECTION"
+		slot = "west"
+		
+		component = {
+			slot = "SMALL_GUN_01"
+			template = "SMALL_RED_LASER"
+		}
+		component = {
+			slot = "PD_01"
+			template = "POINT_DEFENCE_1"
+		}
+		component = {
+			slot = "MEDIUM_GUN_01"
+			template = "MEDIUM_RED_LASER"
+		}
+		component = {
+			slot = "LARGE_UTILITY_1"
+			template = "LARGE_FISSION_REACTOR"
+		}
+		component = {
+			slot = "LARGE_UTILITY_2"
+			template = "LARGE_FISSION_REACTOR"
+		}
+		component = {
+			slot = "LARGE_UTILITY_3"
+			template = "LARGE_ARMOR_1"
+		}
+	}
+	required_component="SHIP_SENSOR_1"
+}
+
+ship_design = {
+	name = "NAME_Rogue_Drone_Ship"
+	ship_size = corvette
+	section = {
+		template = "corvette_stern_beam"
+		slot = "stern"
+		component = { slot = "SMALL_GUN_01" template = "SMALL_BORG_ANTI_1" }
+		component = { slot = "SMALL_GUN_02" template = "SMALL_BORG_ANTI_1" }
+		component = { slot = "SMALL_GUN_1" template = "POINT_DEFENCE_BORG_TORPEDO_1" }
+	}
+	section = {
+		template = "corvette_mid_17"
+		slot = "mid"
+		component = { slot = "SMALL_UTILITY_1" template = "UTILITY_SMALL_ARMOR_0" }
+		component = { slot = "LARGE_UTILITY_1" template = "UTILITY_LARGE_TRACKING_0" }
+	}	
+	required_component="REQUIRED_WARP_1_PF"
+	required_component="REQUIRED_COMPUTER_1_PF"
+	required_component="REQUIRED_THRUSTERS_1A_PF"
+	required_component="Required_Combat_Sensor_brawler_1"
+	required_component="REQUIRED_DEFENSE_1_ARMOR_PF"
+	required_component="REQUIRED_HULL_1A_PF"
+}
+
+# Generic Borg Sovereign
+ship_design = {
+	name = "Borg1"
+   	ship_size = steamrunner
+   	section = {
+		template = "steamrunner_stern_10"
+		slot = "stern"
+		component = { slot = "LARGE_GUN_01" template = "MEDIUM_ANTIPROTON_DISRUPTOR_2" }
+		component = { slot = "LARGE_GUN_02" template = "MEDIUM_ANTIPROTON_DISRUPTOR_2" }
+		component = { slot = "LARGE_GUN_03" template = "MEDIUM_ANTIPROTON_DISRUPTOR_2" }
+		component = { slot = "LARGE_GUN_04" template = "MEDIUM_ANTIPROTON_DISRUPTOR_2" }
+		component = { slot = "TORPEDO_01" template = "POINT_DEFENCE_PLASMA_TORPEDO_3b" }
+		component = { slot = "TORPEDO_02" template = "POINT_DEFENCE_PLASMA_TORPEDO_3b" }
+	}
+	section = {
+		template = "steamrunner_mid_19"
+		slot = "mid"
+		component = { slot = "SMALL_UTILITY_1" template = "UTILITY_SMALL_ARMOR_0" }
+		component = { slot = "LARGE_UTILITY_1" template = "UTILITY_LARGE_TRACKING_0" }
+		component = { slot = "AUX_UTILITY_1" template = "UTILITY_AUX_CREW_0" }
+   	}
+   	required_component="REQUIRED_WARP_1_CR"
+   	required_component="REQUIRED_COMPUTER_1_CR"
+   	required_component="REQUIRED_THRUSTERS_1A_CR"
+   	required_component="Required_Combat_Sensor_sniper_2"
+   	required_component="REQUIRED_DEFENSE_2_ARMOR_CR"
+   	required_component="REQUIRED_HULL_1B_CR"
+}
+
+ship_design = {
+	name = "Borg2"
+   	ship_size = steamrunner
+   	section = {
+		template = "steamrunner_stern_10"
+		slot = "stern"
+		component = { slot = "LARGE_GUN_01" template = "MEDIUM_ANTIPROTON_DISRUPTOR_2" }
+		component = { slot = "LARGE_GUN_02" template = "MEDIUM_ANTIPROTON_DISRUPTOR_2" }
+		component = { slot = "LARGE_GUN_03" template = "MEDIUM_ANTIPROTON_DISRUPTOR_2" }
+		component = { slot = "LARGE_GUN_04" template = "MEDIUM_ANTIPROTON_DISRUPTOR_2" }
+		component = { slot = "TORPEDO_01" template = "POINT_DEFENCE_PLASMA_TORPEDO_3b" }
+		component = { slot = "TORPEDO_02" template = "POINT_DEFENCE_PLASMA_TORPEDO_3b" }
+	}
+	section = {
+		template = "steamrunner_mid_19"
+		slot = "mid"
+		component = { slot = "SMALL_UTILITY_1" template = "UTILITY_SMALL_ARMOR_0" }
+		component = { slot = "LARGE_UTILITY_1" template = "UTILITY_LARGE_TRACKING_0" }
+		component = { slot = "AUX_UTILITY_1" template = "UTILITY_AUX_CREW_0" }
+   	}
+   	required_component="REQUIRED_WARP_1_CR"
+   	required_component="REQUIRED_COMPUTER_1_CR"
+   	required_component="REQUIRED_THRUSTERS_1A_CR"
+   	required_component="Required_Combat_Sensor_sniper_2"
+   	required_component="REQUIRED_DEFENSE_2_ARMOR_CR"
+   	required_component="REQUIRED_HULL_1B_CR"
+}
+
+ship_design = {
+	name = "Borg3"
+   	ship_size = steamrunner
+   	section = {
+		template = "steamrunner_stern_10"
+		slot = "stern"
+		component = { slot = "LARGE_GUN_01" template = "MEDIUM_ANTIPROTON_DISRUPTOR_2" }
+		component = { slot = "LARGE_GUN_02" template = "MEDIUM_ANTIPROTON_DISRUPTOR_2" }
+		component = { slot = "LARGE_GUN_03" template = "MEDIUM_ANTIPROTON_DISRUPTOR_2" }
+		component = { slot = "LARGE_GUN_04" template = "MEDIUM_ANTIPROTON_DISRUPTOR_2" }
+		component = { slot = "TORPEDO_01" template = "POINT_DEFENCE_PLASMA_TORPEDO_3b" }
+		component = { slot = "TORPEDO_02" template = "POINT_DEFENCE_PLASMA_TORPEDO_3b" }
+	}
+	section = {
+		template = "steamrunner_mid_19"
+		slot = "mid"
+		component = { slot = "SMALL_UTILITY_1" template = "UTILITY_SMALL_ARMOR_0" }
+		component = { slot = "LARGE_UTILITY_1" template = "UTILITY_LARGE_TRACKING_0" }
+		component = { slot = "AUX_UTILITY_1" template = "UTILITY_AUX_CREW_0" }
+   	}
+   	required_component="REQUIRED_WARP_1_CR"
+   	required_component="REQUIRED_COMPUTER_1_CR"
+   	required_component="REQUIRED_THRUSTERS_1A_CR"
+   	required_component="Required_Combat_Sensor_sniper_2"
+   	required_component="REQUIRED_DEFENSE_2_ARMOR_CR"
+   	required_component="REQUIRED_HULL_1B_CR"
+}
+
+ship_design = {
+	name = "Frontier Outpost"
+   	ship_size = outpost_station
+   	section = {
+		template = "OUTPOST_STATION_SECTION"
+		slot = "mid"
+	}
+}

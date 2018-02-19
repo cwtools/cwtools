@@ -1,0 +1,9 @@
+is_capital_building = {
+	OR = {
+		has_building = "building_capital_1"
+		has_building = "building_capital_2"
+		# has_building = "building_machine_capital_1"
+		# has_building = "building_machine_capital_2"
+		# has_building = "building_machine_capital_3"
+	}
+}

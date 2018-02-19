@@ -1,0 +1,51 @@
+# Doomsday
+
+	ship_section_template = {	
+		key = "doomsday_stern_starship_1"	
+		ship_size = doomsday	
+		fits_on_slot = stern	
+		entity = "doomsday_entity"	
+		icon = "GFX_ship_part_core_mid"	
+		icon_frame = 1	
+		ai_weight = { factor = 10 }	
+		component_slot = {
+			name = "MEDIUM_GUN_01"
+			slot_size = medium
+			slot_type = weapon
+			locatorname = "medium_gun_01"
+		}
+		component_slot = {
+			name = "MEDIUM_GUN_02"
+			slot_size = medium
+			slot_type = weapon
+			locatorname = "medium_gun_02"
+		}	
+		component_slot = {
+			name = "MEDIUM_GUN_03"
+			slot_size = medium
+			slot_type = weapon
+			locatorname = "medium_gun_03"
+		}	
+		small_utility_slots = 0	
+		medium_utility_slots = 0	
+		large_utility_slots = 0	
+		aux_utility_slots = 0	
+		cost = 430	
+	}
+	
+# doomsday # Secondary Hull# base	
+	ship_section_template = {	
+		key = "doomsday_mid_secondary_9"	
+		ship_size = doomsday	
+		fits_on_slot = mid	
+		entity = "doomsday_frame_entity"	
+		icon = "GFX_ship_part_core_mid"	
+		icon_frame = 1	
+		prerequisites = {   }	
+		ai_weight = { factor = 10 }	
+		small_utility_slots = 2	
+		medium_utility_slots = 2	
+		large_utility_slots = 2	
+		aux_utility_slots = 1	
+		cost = 60	
+	}

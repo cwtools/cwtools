@@ -1,0 +1,2 @@
+namespace = STH_romulan_story
+

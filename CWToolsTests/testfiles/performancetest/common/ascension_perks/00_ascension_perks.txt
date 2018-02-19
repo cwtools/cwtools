@@ -1,0 +1,311 @@
+
+### start of real perks
+
+ap_world_shaper = {
+
+	modifier = {
+		terraform_speed_mult = 0.5
+	}
+	
+	potential = {
+		NOT = {
+			has_ascension_perk = ap_world_shaper
+		}
+	}
+	
+	ai_weight = {
+		factor = 10
+		modifier = {
+			factor = 5
+			has_technology = tech_terraforming_base_2
+		}
+		modifier = {
+			factor = 0
+			NOT = { has_technology = tech_terraforming_base_2 }
+		}
+	}
+}
+
+ap_galactic_force_projection = {
+	modifier = {
+		navy_size_add = 75
+	}
+	
+	potential = {
+		NOT = {
+			has_ascension_perk = ap_galactic_force_projection
+		}
+	}
+	
+	ai_weight = {
+		factor = 10
+		modifier = {
+			factor = 2
+			has_ethic = ethic_militarist
+		}
+		modifier = {
+			factor = 3
+			has_ethic = ethic_fanatic_militarist
+		}
+	}
+}
+
+ap_interstellar_dominion = {
+	modifier = {
+		country_border_mult = 0.15
+	}
+	
+	potential = {
+		NOT = {
+			has_ascension_perk = ap_interstellar_dominion
+		}
+	}
+	
+	ai_weight = {
+		factor = 10
+		modifier = {
+			factor = 2
+			has_ethic = ethic_xenophobe
+		}
+		modifier = {
+			factor = 3
+			has_ethic = ethic_fanatic_xenophobe
+		}
+	}
+}
+
+
+ap_technological_ascendancy = {
+	modifier = {
+		all_technology_research_speed = 0.05
+	}
+	
+	potential = {
+		NOT = {
+			has_ascension_perk = ap_technological_ascendancy
+		}
+	}
+	
+	ai_weight = {
+		factor = 10
+		modifier = {
+			factor = 2
+			has_ethic = ethic_materialist
+		}
+		modifier = {
+			factor = 3
+			has_ethic = ethic_fanatic_materialist
+		}
+	}
+}
+
+ap_mind_over_matter = {
+	modifier = {
+		tile_resource_unity_mult = 0.10
+	}
+	
+	potential = {
+		NOT = {
+			has_ascension_perk = ap_mind_over_matter
+		}
+	}
+	
+	ai_weight = {
+		factor = 5
+	}
+}
+
+ap_one_vision = {
+	modifier = {
+		pop_government_ethic_attraction = 0.20
+	}
+	
+	potential = {
+		NOT = {
+			has_ascension_perk = ap_one_vision
+		}
+	}
+	
+	ai_weight = {
+		factor = 10
+		modifier = {
+			factor = 2
+			has_ethic = ethic_authoritarian
+		}
+		modifier = {
+			factor = 3
+			has_ethic = ethic_fanatic_authoritarian
+		}
+		modifier = {
+			factor = 2
+			has_ethic = ethic_spiritualist
+		}
+		modifier = {
+			factor = 3
+			has_ethic = ethic_fanatic_spiritualist
+		}		
+	}
+}
+
+
+ap_mastery_of_nature = {
+	on_enabled = {
+		custom_tooltip = "ap_mastery_of_nature_unlocks"
+		hidden_effect = {
+			give_technology = { message = no tech = tech_tb_mountain_range }
+			give_technology = { message = no tech = tech_tb_volcano }
+			give_technology = { message = no tech = tech_tb_dangerous_wildlife }
+			give_technology = { message = no tech = tech_tb_dense_jungle }
+			give_technology = { message = no tech = tech_tb_quicksand_basin }
+			give_technology = { message = no tech = tech_tb_noxious_swamp }
+			give_technology = { message = no tech = tech_tb_massive_glacier }
+			give_technology = { message = no tech = tech_tb_toxic_kelp }
+			give_technology = { message = no tech = tech_tb_deep_sinkhole }
+		}
+	}
+	modifier = {
+		planet_clear_blocker_cost_mult = -0.5
+	}
+	
+	potential = {
+		NOT = {
+			has_ascension_perk = ap_mastery_of_nature
+		}
+	}
+	
+	ai_weight = {
+		factor = 10
+	}
+}
+
+ap_imperial_prerogative = {
+	modifier = {
+		country_core_sector_system_cap = 2
+	}
+	
+	potential = {
+		NOT = {
+			has_ascension_perk = ap_imperial_prerogative
+		}
+	}
+	
+	ai_weight = {
+		factor = 10
+	}
+	
+	on_enabled = {
+		run_ai_strategic_data = yes
+	}
+}
+
+# Disabled dummy perks
+
+ap_engineered_evolution = {
+	
+	potential = { always = no }
+	
+	ai_weight = {
+		factor = 5
+	}
+}
+
+ap_evolutionary_mastery = {
+
+	potential = { always = no }
+	
+	ai_weight = {
+		factor = 5
+	}
+}
+
+ap_the_flesh_is_weak = {
+
+	potential = { always = no }
+	
+	ai_weight = {
+		factor = 5
+	}
+}
+
+ap_synthetic_evolution = {
+	
+	potential = { always = no }
+	
+	ai_weight = {
+		factor = 5
+	}
+}
+
+ap_transcendence = {
+	
+	potential = { always = no }
+	
+	ai_weight = {
+		factor = 5
+	}
+}
+
+ap_defender_of_the_galaxy = {
+	
+	potential = { always = no }
+	
+	ai_weight = {
+		factor = 5
+	}
+}
+
+ap_master_builders = {
+	
+	potential = { always = no }
+	
+	ai_weight = {
+		factor = 5
+	}
+}
+
+
+ap_galactic_contender = {
+
+	potential = { always = no }
+	
+	ai_weight = {
+		factor = 5
+	}
+}
+
+ap_consecrated_worlds = {
+	
+	potential = { always = no }
+	
+	ai_weight = {
+		factor = 5
+	}
+}
+
+ap_voidborn = {
+	
+	potential = { always = no }
+	
+	ai_weight = {
+		factor = 5
+	}
+}
+
+ap_the_circle_of_life = {
+
+	potential = { always = no }
+	
+	ai_weight = {
+		factor = 5
+	}
+}
+
+ap_galactic_wonders = {
+	
+	potential = { always = no }
+	
+	ai_weight = {
+		factor = 5
+	}
+}
+

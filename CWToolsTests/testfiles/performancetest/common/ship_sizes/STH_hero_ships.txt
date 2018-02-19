@@ -1,0 +1,365 @@
+# reloadable with 'reload stats'
+# This file is where you start when you want to configure something new, then go to sections
+
+# Heroships in order:(All Factions) (Feds for example)
+# ENT: Cruiser                      (NX-01 Refit)
+# DSC: Cruiser                      (NCC-1031)
+# TOS: Cruiser                      (NCC-1701 + A as refit)
+# TMP: Battlecruiser                (NCC-1701 - B)
+# TNG: Battleship                   (NCC-1701 - C/D)
+# TNG+: Assault Cruiser             (NCC-1701 - E)
+
+@ENT_enterprise_sublight_speed = 5
+@ENT_enterprise_combat_speed = 1.25
+@ENT_enterprise_combat_rotation = 0.06
+@ENT_enterprise_collision_radius = 2.5
+@ENT_enterprise_formation_priority = 2
+
+@ENT_hero_cruiser_sublight_speed = 4
+@ENT_hero_cruiser_combat_speed = 1
+@ENT_hero_cruiser_combat_rotation = 0.04
+@ENT_hero_cruiser_collision_radius = 4.0
+@ENT_hero_cruiser_formation_priority = 1
+
+@ENT_bortas_sublight_speed = 4
+@ENT_bortas_combat_speed = 1
+@ENT_bortas_combat_rotation = 0.04
+@ENT_bortas_collision_radius = 4.0
+@ENT_bortas_formation_priority = 1
+
+@ENT_romulan_sublight_speed = 4
+@ENT_romulan_combat_speed = 1
+@ENT_romulan_combat_rotation = 0.04
+@ENT_romulan_collision_radius = 4.0
+@ENT_romulan_formation_priority = 1
+
+@ENT_enterprise_refit_sublight_speed = 4
+@ENT_enterprise_refit_combat_speed = 1
+@ENT_enterprise_refit_combat_rotation = 0.04
+@ENT_enterprise_refit_collision_radius = 4.0
+@ENT_enterprise_refit_formation_priority = 1
+
+@ENT_seleya_sublight_speed = 4
+@ENT_seleya_combat_speed = 1
+@ENT_seleya_combat_rotation = 0.04
+@ENT_seleya_collision_radius = 4.0
+@ENT_seleya_formation_priority = 1
+
+@ENT_kumari_sublight_speed = 4
+@ENT_kumari_combat_speed = 1
+@ENT_kumari_combat_rotation = 0.04
+@ENT_kumari_collision_radius = 4.0
+@ENT_kumari_formation_priority = 1
+
+##### Destroyers ##### DE
+
+# NX 01 (Pre ENT Earth Hero Ship)
+ENT_enterprise = {
+ 	graphical_culture = { "hero_ships_01" }
+ 	formation_priority = @ENT_enterprise_formation_priority
+ 	is_space_object = yes
+ 	max_speed = @ENT_enterprise_sublight_speed
+ 	acceleration = 0.25
+ 	rotation_speed = 0.25
+ 	combat_max_speed = @ENT_enterprise_combat_speed
+ 	combat_rotation_speed = @ENT_enterprise_combat_rotation
+ 	collision_radius = @ENT_enterprise_collision_radius
+ 	modifier = {
+ 		ship_evasion_mult = -0.25
+ 		ship_armor_add = 20
+ 		ship_evasion_add = 30
+ 		ship_upkeep_mult = 0.75	
+  		# ship_shield_hp_mult = 2
+  	}
+  	max_hitpoints = 1500
+  	size_multiplier = 0
+ 
+  	fleet_slot_size = 2
+  	section_slots = { "stern" = { locator = "part1" } "mid" = { locator = "part1" } }
+  	num_target_locators = 2
+ 	icon_frame = 3
+ 	is_space_station = no
+ 	base_buildtime = 165
+ 	required_spaceport_level = 2
+ 	can_have_federation_design = yes
+ 	enable_default_design = yes
+ 	is_designable = no
+ 	
+ 	prerequisites = { "tech_hero_ships" }
+ 	
+ 	class = shipclass_military
+ 	required_component_set = "combat_computers"
+ 	required_component_set = "required_thrusters"
+ 	required_component_set = "required_tactical"		
+ 	required_component_set = "required_ship_sensors"
+ 	required_component_set = "required_warp"
+ 	required_component_set = "required_defense"
+ 	required_component_set = "required_hull"
+}
+
+##### Cruisers ##### CR
+
+# NX-01 Refit (ENT Earth Hero Ship)
+ENT_enterprise_refit = {
+    graphical_culture = { "hero_ships_01" }
+    formation_priority = @ENT_hero_cruiser_formation_priority
+    is_space_object = yes
+    max_speed = @ENT_hero_cruiser_sublight_speed
+    acceleration = 0.2
+    rotation_speed = 0.2
+    combat_max_speed = @ENT_hero_cruiser_combat_speed
+    combat_rotation_speed = @ENT_hero_cruiser_combat_rotation
+    collision_radius = @ENT_hero_cruiser_collision_radius
+    modifier = {
+        ship_evasion_mult = -0.5
+        ship_evasion_add = 20
+        ship_armor_add = 30
+        ship_upkeep_mult = 0.25
+        # ship_shield_hp_mult = 7           
+    }
+    max_hitpoints = 3000
+    size_multiplier = 0
+ 
+    fleet_slot_size = 3
+    section_slots = { "stern" = { locator = "part1" } "mid" = { locator = "part1" } }
+    num_target_locators = 2
+    is_space_station = no
+    icon_frame = 4
+    base_buildtime = 510
+    required_spaceport_level = 3
+    can_have_federation_design = yes
+    enable_default_design = yes
+    is_designable = no
+    
+    prerequisites = { "tech_hero_ships" }
+    
+    class = shipclass_military
+    required_component_set = "combat_computers"
+    required_component_set = "required_thrusters"
+    required_component_set = "required_tactical"        
+    required_component_set = "required_ship_sensors"
+    required_component_set = "required_warp"
+    required_component_set = "required_defense"
+    required_component_set = "required_hull"
+}
+
+# NCC 1031 Discovery (DSC Earth Hero Ship)
+DSC_discovery = {
+    graphical_culture = { "hero_ships_01" }
+    formation_priority = @ENT_hero_cruiser_formation_priority
+    is_space_object = yes
+    max_speed = @ENT_hero_cruiser_sublight_speed
+    acceleration = 0.2
+    rotation_speed = 0.2
+    combat_max_speed = @ENT_hero_cruiser_combat_speed
+    combat_rotation_speed = @ENT_hero_cruiser_combat_rotation
+    collision_radius = @ENT_hero_cruiser_collision_radius
+    modifier = {
+        ship_evasion_mult = -0.5
+        ship_evasion_add = 20
+        ship_armor_add = 30
+        ship_upkeep_mult = 0.25
+        # ship_shield_hp_mult = 7           
+    }
+    max_hitpoints = 3000
+    size_multiplier = 0
+ 
+    fleet_slot_size = 3
+    section_slots = { "stern" = { locator = "part1" } "mid" = { locator = "part1" } }
+    num_target_locators = 2
+    is_space_station = no
+    icon_frame = 4
+    base_buildtime = 510
+    required_spaceport_level = 3
+    can_have_federation_design = yes
+    enable_default_design = yes
+    is_designable = no
+    
+    prerequisites = { "tech_hero_ships" }
+    
+    class = shipclass_military
+    required_component_set = "combat_computers"
+    required_component_set = "required_thrusters"
+    required_component_set = "required_tactical"        
+    required_component_set = "required_ship_sensors"
+    required_component_set = "required_warp"
+    required_component_set = "required_defense"
+    required_component_set = "required_hull"
+}
+
+
+# Bortas (ENT Klingon Hero Ship)
+ENT_bortas = {
+    graphical_culture = { "hero_ships_01" }
+    formation_priority = @ENT_bortas_formation_priority
+    is_space_object = yes
+    max_speed = @ENT_bortas_sublight_speed
+    acceleration = 0.2
+    rotation_speed = 0.2
+    combat_max_speed = @ENT_bortas_combat_speed
+    combat_rotation_speed = @ENT_bortas_combat_rotation
+    collision_radius = @ENT_bortas_collision_radius
+    modifier = {
+        ship_evasion_mult = -0.5
+        ship_evasion_add = 20
+        ship_armor_add = 30
+        ship_upkeep_mult = 0.25
+        # ship_shield_hp_mult = 7           
+    }
+    max_hitpoints = 3000
+    size_multiplier = 0
+ 
+    fleet_slot_size = 3
+    section_slots = { "stern" = { locator = "part1" } "mid" = { locator = "part1" } }
+    num_target_locators = 2
+    is_space_station = no
+    icon_frame = 4
+    base_buildtime = 510
+    required_spaceport_level = 3
+    can_have_federation_design = yes
+    enable_default_design = yes
+    is_designable = no
+    
+    prerequisites = { "tech_hero_ships" }
+    
+    class = shipclass_military
+    required_component_set = "combat_computers"
+    required_component_set = "required_thrusters"
+    required_component_set = "required_tactical"        
+    required_component_set = "required_ship_sensors"
+    required_component_set = "required_warp"
+    required_component_set = "required_defense"
+    required_component_set = "required_hull"
+}
+
+# Devoras (ENT Romulan Hero Ship)
+ENT_romulan = {
+    graphical_culture = { "hero_ships_01" }
+    formation_priority = @ENT_romulan_formation_priority
+    is_space_object = yes
+    max_speed = @ENT_romulan_sublight_speed
+    acceleration = 0.2
+    rotation_speed = 0.2
+    combat_max_speed = @ENT_romulan_combat_speed
+    combat_rotation_speed = @ENT_romulan_combat_rotation
+    collision_radius = @ENT_romulan_collision_radius
+    modifier = {
+        ship_evasion_mult = -0.5
+        ship_evasion_add = 20
+        ship_armor_add = 30
+        ship_upkeep_mult = 0.25
+        # ship_shield_hp_mult = 7           
+    }
+    max_hitpoints = 3000
+    size_multiplier = 0
+ 
+    fleet_slot_size = 3
+    section_slots = { "stern" = { locator = "part1" } "mid" = { locator = "part1" } }
+    num_target_locators = 2
+    is_space_station = no
+    icon_frame = 4
+    base_buildtime = 510
+    required_spaceport_level = 3
+    can_have_federation_design = yes
+    enable_default_design = yes
+    is_designable = no
+    
+    prerequisites = { "tech_hero_ships" }
+    
+    class = shipclass_military
+    required_component_set = "combat_computers"
+    required_component_set = "required_thrusters"
+    required_component_set = "required_tactical"        
+    required_component_set = "required_ship_sensors"
+    required_component_set = "required_warp"
+    required_component_set = "required_defense"
+    required_component_set = "required_hull"
+}
+
+# Seleya (ENT Vulcan Hero Ship)
+ENT_seleya = {
+    graphical_culture = { "hero_ships_01" }
+    formation_priority = @ENT_seleya_formation_priority
+    is_space_object = yes
+    max_speed = @ENT_seleya_sublight_speed
+    acceleration = 0.2
+    rotation_speed = 0.2
+    combat_max_speed = @ENT_seleya_combat_speed
+    combat_rotation_speed = @ENT_seleya_combat_rotation
+    collision_radius = @ENT_seleya_collision_radius
+    modifier = {
+        ship_evasion_mult = -0.5
+        ship_evasion_add = 20
+        ship_armor_add = 30
+        ship_upkeep_mult = 0.25
+        # ship_shield_hp_mult = 7           
+    }
+    max_hitpoints = 3000
+    size_multiplier = 0
+ 
+    fleet_slot_size = 3
+    section_slots = { "stern" = { locator = "part1" } "mid" = { locator = "part1" } }
+    num_target_locators = 2
+    is_space_station = no
+    icon_frame = 4
+    base_buildtime = 510
+    required_spaceport_level = 3
+    can_have_federation_design = yes
+    enable_default_design = yes
+    is_designable = no
+    
+    prerequisites = { "tech_hero_ships" }
+    
+    class = shipclass_military
+    required_component_set = "combat_computers"
+    required_component_set = "required_thrusters"
+    required_component_set = "required_tactical"        
+    required_component_set = "required_ship_sensors"
+    required_component_set = "required_warp"
+    required_component_set = "required_defense"
+    required_component_set = "required_hull"
+}
+
+# Kumari (ENT Andorian Hero Ship)
+ENT_kumari = {
+    graphical_culture = { "hero_ships_01" }
+    formation_priority = @ENT_kumari_formation_priority
+    is_space_object = yes
+    max_speed = @ENT_kumari_sublight_speed
+    acceleration = 0.2
+    rotation_speed = 0.2
+    combat_max_speed = @ENT_kumari_combat_speed
+    combat_rotation_speed = @ENT_kumari_combat_rotation
+    collision_radius = @ENT_kumari_collision_radius
+    modifier = {
+        ship_evasion_mult = -0.5
+        ship_evasion_add = 20
+        ship_armor_add = 30
+        ship_upkeep_mult = 0.25
+        # ship_shield_hp_mult = 7           
+    }
+    max_hitpoints = 3000
+    size_multiplier = 0
+ 
+    fleet_slot_size = 3
+    section_slots = { "stern" = { locator = "part1" } "mid" = { locator = "part1" } }
+    num_target_locators = 2
+    is_space_station = no
+    icon_frame = 4
+    base_buildtime = 510
+    required_spaceport_level = 3
+    can_have_federation_design = yes
+    enable_default_design = yes
+    is_designable = no
+    
+    prerequisites = { "tech_hero_ships" }
+    
+    class = shipclass_military
+    required_component_set = "combat_computers"
+    required_component_set = "required_thrusters"
+    required_component_set = "required_tactical"        
+    required_component_set = "required_ship_sensors"
+    required_component_set = "required_warp"
+    required_component_set = "required_defense"
+    required_component_set = "required_hull"
+}

@@ -1,0 +1,96 @@
+﻿### Krenim
+Krenim = {
+	randomized = no
+
+	ship_names = {
+		generic = {
+			Annorax Ishtar Fate Aion Aeon Chrono Moros Atropos Entropy "Fates Promise" Decima Time Fortuna Millennium Era Epoch Cycle Paradox Kairos Anachronism Chronicle Eternity Ouroboros Infinity Infinite Chroniton
+		}
+		corvette = {
+		}
+		saber = {
+		}
+		sovereign = {
+		}
+		steamrunner = {
+		}		
+		adv_cruiser = {
+		}
+		strike = {
+		}	
+		constructor = { }
+		colonizer = { }
+		science = { }
+		transport = { }
+		outpost_station = {
+			sequential_name = "Frontier Outpost"
+		}
+	}
+
+	fleet_names = {
+		sequential_name = "%O% Fleet"
+	}
+	
+	army_names = {
+		defense_army = {
+			sequential_name = "%O% Krenim Guard"
+		}
+		assault_army = {
+			sequential_name = "%O% Imperium Force"
+		}
+		slave_army = {
+			sequential_name = "%O% Indentured Troopers"
+		}
+		clone_army = { 
+			sequential_name = "%O% Clone Defence Force"
+		}
+		robotic_army = {
+			sequential_name = "%O% Mechanical Defence Force"
+		}
+		android_army = {
+			sequential_name = "%O% Synthetic Defence Force"
+		}
+		psionic_army = { 
+			sequential_name = "%O% Psi Defence Force"
+		}
+		xenomorph_army = {
+			sequential_name = "%O% Bio-Warfare Defence Force"
+		}
+		gene_warrior_army = {
+			sequential_name = "%O% Bio-Engineered Defence Force"
+		}
+	}
+
+	planet_names = {
+		generic = {
+			names = { }
+		}
+	}
+
+
+	### CHARACTERS
+
+	character_names = {
+		names1 = {
+			weight = 100
+			first_names_male = {		
+				Annorax Obrist Kott Pross Soffen Liatax Noarax Etjar Luxa Maxon Olixe Aidoss Benjass Jaffen Logenn Miffel Ennder Jacce Lucce Carst Owenst Wissian Denniel Gabriel Jenry Natjenn Grayso Ryenn Isalk Kale Elin Jaxon Sanual Enndrex Julinn
+			}
+			first_names_female = {
+				Chate Jelen Spela Traala Essa Oliffa Avva Sopyia Isabessa Mia Jarlott Jarper Emill Madis Essaa Lillaat Avera Evelaa Sofaa Araa Cloe Rilaa Essie Karlett Elzaa Ubraa Laala Adisa Greca Zoay Jenaj Mila Toraa Boolyn Noora Sylaa Chare
+			}
+			second_names = {
+				" "
+			}
+			regnal_first_names_male = {
+				Annorax Obrist Kott Pross Soffen Liatax Noarax Etjar Luxa Maxon Olixe Aidoss Benjass Jaffen Logenn Miffel Ennder Jacce Lucce Carst Owenst Wissian Denniel Gabriel Jenry Natjenn Grayso Ryenn Isalk Kale Elin Jaxon Sanual Enndrex Julinn
+			}
+			regnal_first_names_female = {
+				Chate Jelen Spela Traala Essa Oliffa Avva Sopyia Isabessa Mia Jarlott Jarper Emill Madis Essaa Lillaat Avera Evelaa Sofaa Araa Cloe Rilaa Essie Karlett Elzaa Ubraa Laala Adisa Greca Zoay Jenaj Mila Toraa Boolyn Noora Sylaa Chare
+			}
+			regnal_second_names = {
+				" "
+			}
+		}
+	}
+}

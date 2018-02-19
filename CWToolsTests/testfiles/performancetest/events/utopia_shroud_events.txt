@@ -1,0 +1,613 @@
+
+############################
+#
+# Shroud Events
+#
+# Written by Henrik Eklund
+# STNH - Capek 1.8.0 Compat
+############################
+
+# ID 3000 - 3999
+
+namespace = utopia
+
+# The Shroud Lobby
+country_event = {
+	id = utopia.3000
+	hide_window = yes
+	is_triggered_only = yes
+}
+
+# The Shroud Unavailable
+country_event = {
+	id = utopia.3010
+	hide_window = yes
+	is_triggered_only = yes
+}
+
+### Summon Avatar
+
+# Summon Avatar (SUCCESS SHIP)
+country_event = {
+	id = utopia.3020
+	hide_window = yes
+	is_triggered_only = yes
+}
+
+# Summon Avatar (SUCCESS ARMY)
+country_event = {
+	id = utopia.3021
+	hide_window = yes
+	is_triggered_only = yes
+}
+
+# Summon Avatar (FAILURE)
+country_event = {
+	id = utopia.3022
+	hide_window = yes
+	is_triggered_only = yes
+}
+
+# Summon Avatar (CRITICAL FAILURE)
+country_event = {
+	id = utopia.3023
+	hide_window = yes
+	is_triggered_only = yes
+}
+
+# Shroud Incursion
+country_event = {
+	id = utopia.3024
+	hide_window = yes
+	is_triggered_only = yes
+}
+
+# Shroud Avatar Banished (HIDDEN)
+fleet_event = {
+	id = utopia.3025
+	hide_window = yes
+	is_triggered_only = yes
+}
+
+# Shroud Avatar Banished (HIDDEN)
+country_event = {
+	id = utopia.3026
+	hide_window = yes
+	is_triggered_only = yes
+}
+
+### Modifiers
+
+# Happiness (SUCCESS)
+country_event = {
+	id = utopia.3030
+	hide_window = yes
+	is_triggered_only = yes
+}
+
+# Ship Upkeep (SUCCESS)
+country_event = {
+	id = utopia.3031
+	hide_window = yes
+	is_triggered_only = yes
+}
+
+# Research Speed (SUCCESS)
+country_event = {
+	id = utopia.3032
+	hide_window = yes
+	is_triggered_only = yes
+}
+
+# Shield Boost (SUCCESS)
+country_event = {
+	id = utopia.3033
+	hide_window = yes
+	is_triggered_only = yes
+}
+
+# Weapon Boost (SUCCESS)
+country_event = {
+	id = utopia.3034
+	hide_window = yes
+	is_triggered_only = yes
+}
+
+# Firing Rate (SUCCESS)
+country_event = {
+	id = utopia.3035
+	hide_window = yes
+	is_triggered_only = yes
+}
+
+# Ethic Boost (SUCCESS)
+country_event = {
+	id = utopia.3036
+	hide_window = yes
+	is_triggered_only = yes
+}
+
+# Influence Boost (SUCCESS)
+country_event = {
+	id = utopia.3037
+	hide_window = yes
+	is_triggered_only = yes
+}
+
+# Unity Boost (SUCCESS)
+country_event = {
+	id = utopia.3038
+	hide_window = yes
+	is_triggered_only = yes
+}
+
+# Evasion (SUCCESS)
+country_event = {
+	id = utopia.3039
+	hide_window = yes
+	is_triggered_only = yes
+}
+
+# Ship Repair (SUCCESS)
+country_event = {
+	id = utopia.3040
+	hide_window = yes
+	is_triggered_only = yes
+}
+
+# Lifespan (SUCCESS)
+country_event = {
+	id = utopia.3041
+	hide_window = yes
+	is_triggered_only = yes
+}
+
+# Ship Speed (SUCCESS)
+country_event = {
+	id = utopia.3042
+	hide_window = yes
+	is_triggered_only = yes
+}
+
+# Army Morale (SUCCESS)
+country_event = {
+	id = utopia.3043
+	hide_window = yes
+	is_triggered_only = yes
+}
+
+# Sensor Range (SUCCESS)
+country_event = {
+	id = utopia.3044
+	hide_window = yes
+	is_triggered_only = yes
+}
+
+# No Effect (FAILURE)
+country_event = {
+	id = utopia.3045
+	hide_window = yes
+	is_triggered_only = yes
+}
+
+# Negative Happiness (CRITICAL FAILURE)
+country_event = {
+	id = utopia.3050
+	hide_window = yes
+	is_triggered_only = yes
+}
+
+# Negative Ethics Attraction (CRITICAL FAILURE)
+country_event = {
+	id = utopia.3051
+	hide_window = yes
+	is_triggered_only = yes
+}
+
+# Negative Ship Armor (CRITICAL FAILURE)
+country_event = {
+	id = utopia.3052
+	hide_window = yes
+	is_triggered_only = yes
+}
+
+# Negative Population Growth (CRITICAL FAILURE)
+country_event = {
+	id = utopia.3053
+	hide_window = yes
+	is_triggered_only = yes
+}
+
+# Negative Research (CRITICAL FAILURE)
+country_event = {
+	id = utopia.3054
+	hide_window = yes
+	is_triggered_only = yes
+}
+
+# Negative Influence (CRITICAL FAILURE)
+country_event = {
+	id = utopia.3055
+	hide_window = yes
+	is_triggered_only = yes
+}
+
+# Negative Unity (CRITICAL FAILURE)
+country_event = {
+	id = utopia.3056
+	hide_window = yes
+	is_triggered_only = yes
+}
+
+# Negative Ship Speed (CRITICAL FAILURE)
+country_event = {
+	id = utopia.3057
+	hide_window = yes
+	is_triggered_only = yes
+}
+
+# Negative Army Morale (CRITICAL FAILURE)
+country_event = {
+	id = utopia.3058
+	hide_window = yes
+	is_triggered_only = yes
+}
+
+# Negative Sensor Range (CRITICAL FAILURE)
+country_event = {
+	id = utopia.3059
+	hide_window = yes
+	is_triggered_only = yes
+}
+
+
+### VISIONS
+
+# Vision 1
+country_event = {
+	id = utopia.3100
+	hide_window = yes
+	is_triggered_only = yes
+}
+
+# Vision 2
+country_event = {
+	id = utopia.3110
+	hide_window = yes
+	is_triggered_only = yes
+}
+
+# Vision 3
+country_event = {
+	id = utopia.3120
+	hide_window = yes
+	is_triggered_only = yes
+}
+
+# Vision 4
+country_event = {
+	id = utopia.3130
+	hide_window = yes
+	is_triggered_only = yes
+}
+
+# Vision 5
+country_event = {
+	id = utopia.3140
+	hide_window = yes
+	is_triggered_only = yes
+}
+
+# Vision 6 - Fallen Empire
+country_event = {
+	id = utopia.3150
+	hide_window = yes
+	is_triggered_only = yes
+}
+
+# Stole Secrets
+country_event = {
+	id = utopia.3151
+	hide_window = yes
+	is_triggered_only = yes
+}
+
+# Failed to Steal Secrets
+country_event = {
+	id = utopia.3152
+	hide_window = yes
+	is_triggered_only = yes
+}
+
+# Diplomatic Consequences
+country_event = {
+	id = utopia.3153
+	hide_window = yes
+	is_triggered_only = yes
+}
+
+# Vision 7 - Psi Jump Drives
+country_event = {
+	id = utopia.3160
+	hide_window = yes
+	is_triggered_only = yes
+}
+
+# Success
+country_event = {
+	id = utopia.3161
+	hide_window = yes
+	is_triggered_only = yes
+}
+
+# Failure
+country_event = {
+	id = utopia.3162
+	hide_window = yes
+	is_triggered_only = yes
+}
+
+# Vision 8 - Psionic Shield
+country_event = {
+	id = utopia.3170
+	hide_window = yes
+	is_triggered_only = yes
+}
+
+# Shield Penetrated
+country_event = {
+	id = utopia.3171
+	hide_window = yes
+	is_triggered_only = yes
+}
+
+# Failed to Penetrate Shield
+country_event = {
+	id = utopia.3172
+	hide_window = yes
+	is_triggered_only = yes
+}
+
+# Vision 9 - Precognition Interface
+country_event = {
+	id = utopia.3180
+	hide_window = yes
+	is_triggered_only = yes
+}
+
+# Success
+country_event = {
+	id = utopia.3181
+	hide_window = yes
+	is_triggered_only = yes
+}
+
+# Failure
+country_event = {
+	id = utopia.3182
+	hide_window = yes
+	is_triggered_only = yes
+}
+
+# Vision 10
+country_event = {
+	id = utopia.3190
+	hide_window = yes
+	is_triggered_only = yes
+}
+
+# Success
+country_event = {
+	id = utopia.3191
+	hide_window = yes
+	is_triggered_only = yes
+}
+
+# Failure
+country_event = {
+	id = utopia.3192
+	hide_window = yes
+	is_triggered_only = yes
+}
+
+# Critical Failure
+country_event = {
+	id = utopia.3193
+	hide_window = yes
+	is_triggered_only = yes
+}
+
+# Generic Vision
+country_event = {
+	id = utopia.3200
+	hide_window = yes
+	is_triggered_only = yes
+}
+
+# Patron Spirit
+country_event = {
+	id = utopia.3300
+	hide_window = yes
+	is_triggered_only = yes
+}
+
+# Failure
+country_event = {
+	id = utopia.3301
+	hide_window = yes
+	is_triggered_only = yes
+}
+
+# Critical Failure
+country_event = {
+	id = utopia.3302
+	hide_window = yes
+	is_triggered_only = yes
+}
+
+# Pick a Patron to contact
+country_event = {
+	id = utopia.3303
+	hide_window = yes
+	is_triggered_only = yes
+}
+
+# The Whisperers in the Void
+country_event = {
+	id = utopia.3304
+	hide_window = yes
+	is_triggered_only = yes
+}
+
+# The Composer of Strands
+country_event = {
+	id = utopia.3305
+	hide_window = yes
+	is_triggered_only = yes
+}
+
+
+# The Eater of Worlds
+country_event = {
+	id = utopia.3306
+	hide_window = yes
+	is_triggered_only = yes
+}
+
+# The Instrument of Desire
+country_event = {
+	id = utopia.3307
+	hide_window = yes
+	is_triggered_only = yes
+}
+
+# The End of the Cycle
+country_event = {
+	id = utopia.3308
+	hide_window = yes
+	is_triggered_only = yes
+}
+
+# Covenant Sealed
+country_event = {
+	id = utopia.3310
+	hide_window = yes
+	is_triggered_only = yes
+}
+
+# The End of the Cycle: Reckoning
+country_event = {
+	id = utopia.3320
+	hide_window = yes
+	is_triggered_only = yes
+}
+
+country_event = {
+	id = utopia.3321
+	hide_window = yes
+	is_triggered_only = yes
+}
+
+planet_event = {
+	id = utopia.3322
+	hide_window = yes
+	is_triggered_only = yes
+}
+
+fleet_event = {
+	id = utopia.3323
+	hide_window = yes
+	is_triggered_only = yes
+}
+
+planet_event = {
+	id = utopia.3324
+	hide_window = yes
+	is_triggered_only = yes
+}
+
+# Covenant Side Effects - Gatekeeper event
+country_event = {
+	id = utopia.3330
+	hide_window = yes
+	is_triggered_only = yes
+}
+
+# Whisperers - Voices in my Head
+country_event = {
+	id = utopia.3331
+	hide_window = yes
+	is_triggered_only = yes
+}
+
+
+# Whisperers - Suicide
+country_event = {
+	id = utopia.3332
+	hide_window = yes
+	is_triggered_only = yes
+}
+
+# Whisperers - Madness
+country_event = {
+	id = utopia.3333
+	hide_window = yes
+	is_triggered_only = yes
+}
+
+# Whisperers - Psychosis
+country_event = {
+	id = utopia.3334
+	hide_window = yes
+	is_triggered_only = yes
+}
+
+
+# Eater - Peckish
+country_event = {
+	id = utopia.3335
+	hide_window = yes
+	is_triggered_only = yes
+}
+
+# Eater - Hungry
+country_event = {
+	id = utopia.3336
+	hide_window = yes
+	is_triggered_only = yes
+}
+
+# Eater - Ravenous
+country_event = {
+	id = utopia.3337
+	hide_window = yes
+	is_triggered_only = yes
+}
+
+# Instrument - Deviant Planet
+country_event = {
+	id = utopia.3338
+	hide_window = yes
+	is_triggered_only = yes
+}
+
+# Instrument - Deviant Empire
+country_event = {
+	id = utopia.3339
+	hide_window = yes
+	is_triggered_only = yes
+}
+
+# Instrument - Consumer Goods
+country_event = {
+	id = utopia.3340
+	hide_window = yes
+	is_triggered_only = yes
+}
+
+# Composer of Strands does his thing...
+country_event = {
+	id = utopia.3341
+	hide_window = yes
+	is_triggered_only = yes
+}

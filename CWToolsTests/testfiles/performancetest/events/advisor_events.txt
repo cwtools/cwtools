@@ -1,0 +1,539 @@
+############################
+#
+# Advisor Events
+#
+# Written by Henrik Eklund
+#
+############################
+
+
+# namespace = advisor
+
+# Advisor Introduction
+# country_event = {
+	# id = advisor.1
+	# title = advisor.1.name
+	
+	# Generic Democratic Male
+	# desc = {
+		# text = advisor.1.desc_01
+		# show_sound = generic_democratic_male_intro # Good day, Mister President
+		# trigger = {
+			# has_government = indirect_democracy
+			# NOT = { leader = { gender = female } }
+		# }
+	# }
+	
+	# Generic Democratic Female ## NO SUPPORT FOR FEMALES YET ##
+	# desc = {
+		# text = advisor.1.desc_02
+		# show_sound = generic_democratic_female_intro # Good day, Madame President
+		# trigger = {
+			# has_government = indirect_democracy
+			# leader = { gender = female }
+		# }
+	# }
+	
+	# Generic Plutocratic
+	# desc = {
+		# text = advisor.1.desc_03
+		# show_sound = generic_plutocratic_intro # Good day, Chief Executive
+		# trigger = {
+			# has_government = plutocratic_oligarchy
+		# }
+	# }
+	
+	# Generic Autocratic
+	# desc = {
+		# text = advisor.1.desc_04
+		# show_sound = generic_autocratic_intro# Your Imperial Majesty
+		# trigger = {
+			# has_government = despotic_empire
+		# }
+	# }
+	
+	# Democratic Pacifists
+	# desc = {
+		# text = advisor.1.desc_05
+		# show_sound = democratic_pacifist_intro # Peace be with you, Prime Minister
+		# trigger = {
+			# has_government = moral_democracy
+		# }
+	# }
+	
+	# Plutocratic Pacifists
+	# desc = {
+		# text = advisor.1.desc_06
+		# show_sound = plutocratic_pacifist_intro # Peace be with you, Coordinator
+		# trigger = {
+			# has_government = peaceful_bureaucracy
+		# }
+	# }
+	
+	# Autocratic Pacifists
+	# desc = {
+		# text = advisor.1.desc_07
+		# show_sound = autocratic_pacifist_intro # Peace be with you, Your Majesty
+		# trigger = {
+			# has_government = enlightened_monarchy
+		# }
+	# }
+	
+	# Democratic Materialists
+	# desc = {
+		# text = advisor.1.desc_08
+		# show_sound = democratic_materialist_intro # Peace be with you, Chancellor
+		# trigger = {
+			# has_government = direct_democracy
+		# }
+	# }
+	
+	# Plutocratic Materialists
+	# desc = {
+		# text = advisor.1.desc_09
+		# show_sound = plutocratic_materialist_intro # Peace be with you, Director
+		# trigger = {
+			# has_government = science_directorate
+		# }
+	# }
+	
+	# Autocratic Materialists
+	# desc = {
+		# text = advisor.1.desc_10
+		# show_sound = autocratic_materialist_intro # Peace be with you, Overlord
+		# trigger = {
+			# has_government = despotic_hegemony
+		# }
+	# }
+	
+	# Democratic Militarists
+	# desc = {
+		# text = advisor.1.desc_11
+		# show_sound = democratic_militarists_intro # Welcome, Consul
+		# trigger = {
+			# has_government = military_republic
+		# }
+	# }
+	
+	# Plutocratic Militarists
+	# desc = {
+		# text = advisor.1.desc_12
+		# show_sound = plutocratic_militarists_intro # Welcome, Archon
+		# trigger = {
+			# has_government = military_junta
+		# }
+	# }
+	
+	# Autocratic Militarists
+	# desc = {
+		# text = advisor.1.desc_13
+		# show_sound = autocratic_militarists_intro # Welcome, Grand Marshal
+		# trigger = {
+			# has_government = military_dictatorship
+		# }
+	# }
+	
+	# Spiritualists
+	# desc = {
+		# text = advisor.1.desc_14
+		# show_sound = spiritualists_intro # Blessings upon you, Your Holiness
+		# trigger = {
+			# OR = {
+				# has_government = theocratic_republic
+				# has_government = theocratic_oligarchy
+				# has_government = divine_mandate
+			# }
+		# }
+	# }
+	
+	# is_advisor_event = yes
+	# is_triggered_only = yes
+	
+	# trigger = {
+		# is_advisor_active = no
+		# is_tutorial_level > 0
+	# }
+	
+	# immediate = {
+		# set_advisor_active = yes
+		# country_event = { id = advisor.26 days = 120 }
+		# capital_scope = {
+			# solar_system = {
+				# every_system_planet = {
+					# prevent_anomaly = yes
+				# }
+				# random_system_planet = {
+					# limit = {
+						# is_capital = no
+						# is_ringworld = no
+						# is_asteroid = no
+						# is_star = no
+						# NOT = { is_planet_class = pc_gas_giant }
+					# }
+					# prevent_anomaly = no
+					# add_anomaly = TUTORIAL_CAT
+					# set_planet_flag = tutorial_anomaly_planet
+				# }
+			# }
+		# }
+	# }
+	
+	# option = {
+		# name = advisor.1.a
+		# custom_tooltip = full_tutorial
+		# hidden_effect = {
+			# country_event = { id = advisor.2 }
+			# set_tutorial_level = full
+			# set_country_flag = tutorial_level_picked
+		# }
+	# }
+	# option = {
+		# name = advisor.1.b
+		# custom_tooltip = tips_only
+		# hidden_effect = {
+			# country_event = { id = advisor.3 }
+			# set_tutorial_level = medium
+			# set_country_flag = tutorial_level_picked
+		# }
+	# }
+	# option = {
+		# name = advisor.1.c
+		# sound = "no_tut_advior"
+		# custom_tooltip = no_tutorial
+		# trigger = { has_country_flag = recycled_vir }
+		# hidden_effect = {
+			# set_tutorial_level = none
+			# set_country_flag = tutorial_level_picked
+			# capital_scope = {
+				# solar_system = {
+					# random_system_planet = {
+						# limit = {
+							# has_planet_flag = tutorial_anomaly_planet
+						# }
+						# prevent_anomaly = yes
+						# remove_planet_flag = tutorial_anomaly_planet
+					# }
+				# }
+			# }
+		# }
+	# }
+	# option = {
+		# name = advisor.1.c
+		# sound = "no_tut_advior"
+		# custom_tooltip = recycle_vir
+		# custom_tooltip = no_tutorial
+		# trigger = { NOT = { has_country_flag = recycled_vir } }
+		# hidden_effect = {
+			# add_minerals = 2
+			# set_tutorial_level = none
+			# set_country_flag = tutorial_level_picked
+			# capital_scope = {
+				# solar_system = {
+					# random_system_planet = {
+						# limit = {
+							# has_planet_flag = tutorial_anomaly_planet
+						# }
+						# prevent_anomaly = yes
+						# remove_planet_flag = tutorial_anomaly_planet
+					# }
+				# }
+			# }
+		# }
+	# }
+# }
+
+# Full Tutorial
+# country_event = {
+	# id = advisor.2
+	# title = advisor.2.name
+	# desc = advisor.2.desc
+	
+	# is_advisor_event = yes
+	# is_triggered_only = yes
+	# show_sound = full_tut_advisor
+	
+	# option = {
+		# name = advisor.2.a
+		# hidden_effect = {
+			# set_country_flag = advisor_tips
+			# set_advisor_active = yes
+		# }
+	# }
+# }
+
+# Limited Tutorial
+# country_event = {
+	# id = advisor.3
+	# title = advisor.3.name
+	# desc = advisor.3.desc
+	
+	# is_advisor_event = yes
+	# is_triggered_only = yes
+	# show_sound = limited_tut_advisor
+	
+	# option = {
+		# name = advisor.2.a
+		# hidden_effect = {
+			# set_country_flag = advisor_tips
+			# set_country_flag = no_tutorial_windows
+			# set_advisor_active = yes
+		# }
+	# }
+# }
+
+# First Discovery
+# ship_event = {
+	# id = advisor.10
+	# title = advisor.10.name
+	# desc = advisor.10.desc
+	# show_sound = event_first_discovery_advisor
+	
+	# is_advisor_event = yes
+	# is_triggered_only = yes
+	
+	# trigger = {
+		# owner = {
+			# is_ai = no
+			# NOT = { is_tutorial_level = 0 }
+			# NOT = { has_country_flag = advisor_discovery_found }
+		# }
+		# FROM = { has_anomaly = yes }
+	# }
+	
+	# immediate = {
+		# owner = { set_country_flag = advisor_discovery_found }
+	# }
+	
+	# option = {
+		# name = INTERESTING
+	# }
+# }
+
+# Potential Colony
+# ship_event = {
+	# id = advisor.15
+	# title = advisor.15.name
+	# desc = advisor.15.desc
+	# show_sound = event_potential_colony_advisor
+	
+	# is_advisor_event = yes
+	# is_triggered_only = yes
+	
+	# trigger = {
+		# owner = {
+			# is_ai = no
+			# NOT = { is_tutorial_level = 0 }
+			# NOT = { has_country_flag = advisor_potential_colony }
+			# num_owned_planets = 1
+		# }
+		# FROM = { has_planet_flag = freebie_colony }
+	# }
+		
+	# immediate = {
+		# owner = { set_country_flag = advisor_potential_colony }
+	# }
+	
+	# option = {
+		# name = OK
+	# }
+# }
+
+# First Colony
+# planet_event = {
+	# id = advisor.17
+	# title = advisor.17.name
+	# desc = advisor.17.desc
+	# show_sound = event_first_colony_advisor
+	
+	# is_advisor_event = yes
+	# is_triggered_only = yes
+	
+	# trigger = {
+		# owner = {
+			# NOT = { is_tutorial_level = 0 }
+			# NOT = { has_country_flag = advisor_colonization_begun }
+		# }
+	# }
+	
+	# immediate = {
+		# owner = { set_country_flag = advisor_colonization_begun }
+	# }
+	
+	# option = {
+		# name = OK
+	# }
+# }
+
+# Negative Income
+# country_event = {
+	# id = advisor.20
+	# title = advisor.20.name
+	# desc = advisor.20.desc
+	# show_sound = event_negative_income_advisor
+	
+	# is_advisor_event = yes
+	
+	# trigger = {
+		# is_ai = no
+		# NOT = { is_tutorial_level = 0 }
+		# NOT = { has_country_flag = advisor_losing_energy }
+		# running_balance < -1
+	# }
+	
+	# mean_time_to_happen = {
+		# months = 1
+	# }
+	
+	# immediate = {
+		# set_country_flag = advisor_losing_energy
+	# }
+	
+	# option = {
+		# name = OK
+	# }
+# }
+
+# Survey Reminder (HIDDEN)
+# ship_event = {
+	# id = advisor.25
+	# hide_window = yes
+	
+	# is_triggered_only = yes
+	
+	# trigger = {
+		# owner = {
+			# is_ai = no
+			# NOT = { is_tutorial_level = 0 }
+			# NOT = { has_country_flag = advisor_surveyed_world }
+		# }
+	# }
+	
+	# immediate = {
+		# owner = { set_country_flag = advisor_surveyed_world }
+	# }
+# }
+
+# Surveying
+# country_event = {
+	# id = advisor.26
+	# title = advisor.26.name
+	# desc = advisor.26.desc
+	# show_sound = event_surverying_advisor
+	
+	# is_advisor_event = yes
+	# is_triggered_only = yes
+	
+	# trigger = {
+		# is_ai = no
+		# NOT = { is_tutorial_level = 0 }
+		# NOT = { has_country_flag = advisor_surveyed_world }
+	# }
+	
+	# option = {
+		# name = OK
+	# }
+# }
+
+# First Contact
+# country_event = {
+	# id = advisor.27
+	# title = advisor.27.name
+	
+	# Xenophobe
+	# desc = {
+		# text = advisor.27.desc_01
+		# show_sound = event_first_contact_xenophile_advisor
+		# trigger = {
+			# OR = {
+				# has_ethic = "ethic_xenophobe"
+				# has_ethic = "ethic_fanatic_xenophobe"
+			# }
+		# }
+	# }
+	
+	# Xenophile
+	# desc = {
+		# text = advisor.27.desc_02
+		# show_sound = event_first_contact_xenophile_advisor
+		# trigger = {
+			# OR = {
+				# has_ethic = "ethic_xenophile"
+				# has_ethic = "ethic_fanatic_xenophile"
+			# }
+		# }
+	# }
+	
+	# Neutral
+	# desc = {
+		# text = advisor.27.desc_03
+		# show_sound = event_first_contact_neutral_advisor
+		# trigger = {
+			# NOT = {
+				# OR = {
+					# has_ethic = "ethic_xenophobe"
+					# has_ethic = "ethic_fanatic_xenophobe"
+					# has_ethic = "ethic_xenophile"
+					# has_ethic = "ethic_fanatic_xenophile"
+				# }
+			# }
+		# }
+	# }
+	
+	# is_advisor_event = yes
+	# is_triggered_only = yes
+	
+	# trigger = {
+		# is_ai = no
+		# NOT = { is_tutorial_level = 0 }
+		# NOT = { has_country_flag = advisor_first_contact }
+		# FROM = {
+			# NOT = {
+				# is_country_type = fallen_empire
+				# is_country_type = tiyanki
+				# is_country_type = amoeba
+				# is_country_type = crystal
+				# is_country_type = drone
+				# is_country_type = cloud
+			# }
+		# }
+	# }
+	
+	# immediate = {
+		# set_country_flag = advisor_first_contact
+	# }
+	
+	# option = {
+		# name = OK
+	# }
+# }
+
+# Fallen Empire
+# country_event = {
+	# id = advisor.28
+	# title = advisor.28.name
+	# desc = advisor.28.desc
+	# show_sound = event_fallen_empire_advisor
+	
+	# is_advisor_event = yes
+	# is_triggered_only = yes
+	
+	# trigger = {
+		# is_ai = no
+		# NOT = { is_tutorial_level = 0 }
+		# NOT = { has_country_flag = advisor_fallen_empire }
+		# FROM = { 
+			# OR = {
+				# is_country_type = fallen_empire 
+				# is_country_type = awakened_fallen_empire 
+			# }
+		# }
+	# }
+	
+	# immediate = {
+		# set_country_flag = advisor_fallen_empire
+	# }
+	
+	# option = {
+		# name = OK
+	# }
+# }

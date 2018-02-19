@@ -1,0 +1,89 @@
+# Voth Theocracy
+voth_homeworld = {
+	name = "Deep Space"
+	flags = { voth_homeworld }
+	init_effect = { log = "voth homeworld" }
+	usage = custom_empire
+	max_instances = 1
+	class = sc_g
+	max_instances = 1
+	planet = {
+		name = "City Ship"
+		class = pc_voth_city_ship
+		orbit_distance = 0
+		orbit_angle = 0
+		size = 25
+		starting_planet = yes
+		has_ring = no
+		tile_blockers = none
+		modifiers = none
+		init_effect = { 
+			prevent_anomaly = yes 
+			set_planet_entity = { entity = "orbital_habitat_entity" graphical_culture = voth_01 }
+		}
+		init_effect = {
+			set_global_flag = voth_homeworld_spawned
+			if = {
+				limit = { NOT = { any_country = { has_country_flag = voth_theocracy } } }
+				create_species = {
+					name = "Voth"
+					class = VOT
+					portrait = voth
+					homeworld = THIS
+					traits = {
+						trait="trait_reptilian"
+						trait="trait_venerable"
+						trait="trait_natural_physicists"
+						trait="trait_antiquated"
+						trait="trait_sedentary"
+						ideal_planet_class = "pc_voth_city_ship"
+					}
+				}
+				last_created_species = { save_global_event_target_as = vothSpecies }
+				create_country = {
+					name = "NAME_voth_theocracy"
+					type = default
+					ignore_initial_colony_error = yes
+					civics = { civic = "civic_exalted_priesthood" civic = "civic_distant_origins" }
+					authority = auth_oligarchic
+					name_list = "Voth"
+					ethos = { ethic = "ethic_fanatic_spiritualist" ethic = "ethic_xenophobe" }
+					species = event_target:vothSpecies
+					flag = {
+						icon = { category = "trek" file = "voth.dds" }
+						background = { category = "backgrounds" file = "circle.dds" }
+						colors = { "customcolor343" "customcolor1942" "null" "null" }
+					}
+					effect = {
+						set_graphical_culture = voth_01
+						set_country_flag = voth_theocracy
+						set_country_flag = custom_start_screen
+						set_country_flag = generic_ent
+						set_country_flag = delta_empire
+						set_country_flag = init_spawned
+						set_country_flag = first_alien_life
+						set_country_flag = first_contact_event
+						set_country_flag = is_stnh_fallen_empire
+						set_country_flag = sth_medium_galaxy
+						save_global_event_target_as = voth_theocracy
+					}
+				}
+				create_colony = { owner = event_target:voth_theocracy species = event_target:vothSpecies ethos = owner }
+			}
+			set_capital = yes
+			random_country = {
+				limit = { has_country_flag = voth_theocracy }
+				save_event_target_as = voth_theocracy
+				add_appropriate_start_techs = yes
+				species = { save_global_event_target_as = vothSpecies }
+			}
+			set_owner = event_target:voth_theocracy
+			add_modifier = { modifier = "city_ship" days = -1 }
+			generate_major_empire_start_buildings = yes
+			generate_cityship_blockers_voth = yes
+			generate_major_empire_start_pops = yes
+			generate_major_empire_start_fleets = yes
+			set_name = "City Ship"
+		}
+	}
+}

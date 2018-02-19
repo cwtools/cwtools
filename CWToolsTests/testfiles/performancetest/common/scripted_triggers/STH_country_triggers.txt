@@ -1,0 +1,203 @@
+is_xenophobic = {
+	OR = {
+		has_ethic = ethic_xenophobe
+		has_ethic = ethic_fanatic_xenophobe
+	}
+}
+
+
+is_gestalt = {
+	OR = {
+		has_authority = auth_machine_intelligence
+		has_authority = auth_great_link
+		has_authority = auth_cybernetic_consciousness
+		has_authority = auth_ancient_machine_intelligence
+		has_authority = auth_hive_mind
+	} 
+}
+
+###ESPIONAGE BITS - REPLACE WITH CIVICS
+has_espionage_mechanics = {
+	OR = {
+		has_country_flag = romulan_star_empire
+		has_country_flag = cardassian_union
+		has_country_flag = testEspionage
+	}
+}
+has_tal_shiar = {
+	OR = { 
+		has_country_flag = romulan_star_empire
+		has_country_flag = testTalShiar
+	}
+}
+has_obsidian_order = {
+	OR = {
+		has_country_flag = cardassian_union
+		has_country_flag = testObsidianOrder
+	}
+}
+has_generic_espionage = {
+	NOR = { has_tal_shiar = yes has_obsidian_order = yes }
+}
+###
+
+impose_authority_on_liberate = {
+	OR = {
+		has_authority = auth_machine_intelligence
+		has_authority = auth_great_link
+		has_authority = auth_cybernetic_consensus
+		has_authority = auth_federation_sector
+	} 
+}
+
+STH_starting_country = {
+	OR = {
+		has_country_flag = alpha_beta_empire
+		has_country_flag = alpha_empire
+		has_country_flag = beta_empire
+		has_country_flag = gamma_empire
+		has_country_flag = delta_empire
+	}
+}
+
+is_changeling_empire = {
+	OR = {
+		is_species_class = DOM
+		has_country_flag = the_dominion
+	}
+}
+
+misogynist = {
+    OR = { 
+		AND = { 
+			OR = { has_country_flag = ferengi_alliance has_country_flag = lobi_crystal_consortium }
+			NOT = { has_country_flag = gender_equality } 
+		} 
+	}
+}
+
+misandrist = {
+    always = no
+}
+
+femaleScienceMaleSoldier = {
+    OR = { 
+		AND = { 
+		    has_country_flag = cardassian_union 
+		    NOT = { has_country_flag = gender_equality } 
+	    } 
+	}
+}
+
+is_sth_fallen_empire = {
+	OR = {
+		has_country_flag = voth_theocracy
+		has_country_flag = hurq_stagnancy
+		has_country_flag = first_federation
+		has_country_flag = cytherian_enlightenment
+		has_country_flag = metron_consortium
+	}
+}
+
+enslaves_own_species = {
+	OR = {
+		has_country_flag = kazon_sects
+	}
+}
+
+# list all possible four borg empires
+is_borg_empire = {
+	OR = {
+		is_species_class = BRG
+	}
+}
+
+is_assimilator = {
+    has_valid_civic = civic_assimilators
+}
+
+is_normal_country = {
+    OR = { 
+        is_country_type = default 
+        #is_country_type = mediumRace
+        is_country_type = minorRace
+    }
+}
+
+is_agency_country = {
+	OR = { 
+        is_country_type = naval_museum 
+        is_country_type = agency
+        is_country_type = exile
+		is_country_type = ufp_member_world
+    }	
+}
+
+starfleet_empire = { 
+	exists = capital_scope
+	OR = {
+		earth_empires = yes
+		AND = {
+			has_country_flag = united_federation_of_planets
+			federation_no_earth = no
+		}
+	}
+}
+
+federation_no_earth = {
+	has_country_flag = united_federation_of_planets
+	NOR = {
+		earth_empires = yes
+		any_subject = { earth_empires = yes }
+	}
+}
+
+earth_empires = { 
+	exists = capital_scope
+	OR = {
+		has_country_flag = united_earth
+		has_country_flag = terra_prime
+		has_country_flag = terran_empire
+		has_country_flag = united_human_remnant
+	}
+}
+
+is_united_earth = { ### needed for tech gating
+	has_country_flag = united_earth
+	NOR = {
+		has_country_flag = terra_prime
+		has_country_flag = terran_empire
+		has_country_flag = united_human_remnant
+	}
+}
+
+klingon_empires = {
+	exists = capital_scope
+	OR = {
+		has_country_flag = klingon_empire
+		has_country_flag = klingon_rebel_house
+	}
+}
+
+cardassian_empires = {
+	exists = capital_scope
+	OR = {
+		has_country_flag = cardassian_union
+		has_country_flag = hebitian_union
+	}
+}
+
+romulan_empires = {
+	exists = capital_scope
+	OR = {
+		has_country_flag = romulan_star_empire
+	}
+}
+
+generic_empires = {
+	romulan_empires = no
+	cardassian_empires = no
+	is_changeling_empire = no
+	klingon_empires = no
+	starfleet_empire = no
+}

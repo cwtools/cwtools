@@ -1,0 +1,391 @@
+set_correct_spaceport_name_FED = {
+	FROM = { save_event_target_as = buildingCountry }
+	if = {
+		limit = { FROM = { NOT = { any_owned_planet = { has_planet_flag = "DS1:@event_target:buildingCountry" } } } }
+		set_name = "Deep Space One"
+		set_planet_flag = "DS1:@event_target:buildingCountry"
+	else = { if = {
+		limit = { FROM = { NOT = { any_owned_planet = { has_planet_flag = "DS2:@event_target:buildingCountry" } } } }
+		set_name = "Deep Space Two"
+		set_planet_flag = "DS2:@event_target:buildingCountry"
+	else = { if = {
+		limit = { FROM = { NOT = { any_owned_planet = { has_planet_flag = "DS3:@event_target:buildingCountry" } } } }
+		set_name = "Deep Space Three"
+		set_planet_flag = "DS3:@event_target:buildingCountry"
+	else = { if = {
+		limit = { FROM = { NOT = { any_owned_planet = { has_planet_flag = "DS4:@event_target:buildingCountry" } } } }
+		set_name = "Deep Space Four"
+		set_planet_flag = "DS4:@event_target:buildingCountry"
+	else = { if = {
+		limit = { FROM = { NOT = { any_owned_planet = { has_planet_flag = "DS5:@event_target:buildingCountry" } } } }
+		set_name = "Deep Space Five"
+		set_planet_flag = "DS5:@event_target:buildingCountry"
+	else = { if = {
+		limit = { FROM = { NOT = { any_owned_planet = { has_planet_flag = "DS6:@event_target:buildingCountry" } } } }
+		set_name = "Deep Space Six"
+		set_planet_flag = "DS6:@event_target:buildingCountry"
+	else = { if = {
+		limit = { FROM = { NOT = { any_owned_planet = { has_planet_flag = "DS7:@event_target:buildingCountry" } } } }
+		set_name = "Deep Space Seven"
+		set_planet_flag = "DS7:@event_target:buildingCountry"
+	else = { if = {
+		limit = { FROM = { NOT = { any_owned_planet = { has_planet_flag = "DS8:@event_target:buildingCountry" } } } }
+		set_name = "Deep Space Eight"
+		set_planet_flag = "DS8:@event_target:buildingCountry"
+	else = { if = {
+		limit = { FROM = { NOT = { any_owned_planet = { has_planet_flag = "DS9:@event_target:buildingCountry" } } } }
+		set_name = "Deep Space Nine"
+		set_planet_flag = "DS9:@event_target:buildingCountry"
+	else = { if = {
+		limit = { FROM = { NOT = { any_owned_planet = { has_planet_flag = "DS10:@event_target:buildingCountry" } } } }
+		set_name = "Deep Space Ten"
+		set_planet_flag = "DS10:@event_target:buildingCountry"
+	else = {
+		set_name = "Deep Space Station"
+	}
+	} }
+	} }
+	} }
+	} }
+	} }
+	} }
+	} }
+	} }
+	} }	
+	}
+}
+
+set_correct_spaceport_name_CAR = {
+	FROM = { save_event_target_as = buildingCountry }
+	if = {
+		limit = { FROM = { NOT = { any_owned_planet = { has_planet_flag = "DS1:@event_target:buildingCountry" } } } }
+		set_name = "Elpok Nor"
+		set_planet_flag = "DS1:@event_target:buildingCountry"
+	else = { if = {
+		limit = { FROM = { NOT = { any_owned_planet = { has_planet_flag = "DS2:@event_target:buildingCountry" } } } }
+		set_name = "Eemok Nor"
+		set_planet_flag = "DS2:@event_target:buildingCountry"
+	else = { if = {
+		limit = { FROM = { NOT = { any_owned_planet = { has_planet_flag = "DS3:@event_target:buildingCountry" } } } }
+		set_name = "Empok Nor"
+		set_planet_flag = "DS3:@event_target:buildingCountry"
+	else = { if = {
+		limit = { FROM = { NOT = { any_owned_planet = { has_planet_flag = "DS4:@event_target:buildingCountry" } } } }
+		set_name = "Teldak Nor"
+		set_planet_flag = "DS4:@event_target:buildingCountry"
+	else = { if = {
+		limit = { FROM = { NOT = { any_owned_planet = { has_planet_flag = "DS5:@event_target:buildingCountry" } } } }
+		set_name = "Rendok Nor"
+		set_planet_flag = "DS5:@event_target:buildingCountry"
+	else = { if = {
+		limit = { FROM = { NOT = { any_owned_planet = { has_planet_flag = "DS6:@event_target:buildingCountry" } } } }
+		set_name = "Reldak Nor"
+		set_planet_flag = "DS6:@event_target:buildingCountry"
+	else = { if = {
+		limit = { FROM = { NOT = { any_owned_planet = { has_planet_flag = "DS7:@event_target:buildingCountry" } } } }
+		set_name = "Hepnuk Nor"
+		set_planet_flag = "DS7:@event_target:buildingCountry"
+	else = { if = {
+		limit = { FROM = { NOT = { any_owned_planet = { has_planet_flag = "DS8:@event_target:buildingCountry" } } } }
+		set_name = "Aldor Nor"
+		set_planet_flag = "DS8:@event_target:buildingCountry"
+	else = { if = {
+		limit = { FROM = { NOT = { any_owned_planet = { has_planet_flag = "DS9:@event_target:buildingCountry" } } } }
+		set_name = "Terok Nor"
+		set_planet_flag = "DS9:@event_target:buildingCountry"
+	else = { if = {
+		limit = { FROM = { NOT = { any_owned_planet = { has_planet_flag = "DS10:@event_target:buildingCountry" } } } }
+		set_name = "Delnok Nor"
+		set_planet_flag = "DS10:@event_target:buildingCountry"
+	else = {
+		set_name = "Nor Station"
+	}
+	} }
+	} }
+	} }
+	} }
+	} }
+	} }
+	} }
+	} }
+	} }	
+	}
+}
+
+set_correct_spaceport_name_BRG = {
+	FROM = { save_event_target_as = buildingCountry }
+	if = {
+		limit = { FROM = { NOT = { any_owned_planet = { has_planet_flag = "DS1:@event_target:buildingCountry" } } } }
+		set_name = "Subcomplex 01"
+		set_planet_flag = "DS1:@event_target:buildingCountry"
+	else = { if = {
+		limit = { FROM = { NOT = { any_owned_planet = { has_planet_flag = "DS2:@event_target:buildingCountry" } } } }
+		set_name = "Subcomplex 02"
+		set_planet_flag = "DS2:@event_target:buildingCountry"
+	else = { if = {
+		limit = { FROM = { NOT = { any_owned_planet = { has_planet_flag = "DS3:@event_target:buildingCountry" } } } }
+		set_name = "Subcomplex 03"
+		set_planet_flag = "DS3:@event_target:buildingCountry"
+	else = { if = {
+		limit = { FROM = { NOT = { any_owned_planet = { has_planet_flag = "DS4:@event_target:buildingCountry" } } } }
+		set_name = "Subcomplex 04"
+		set_planet_flag = "DS4:@event_target:buildingCountry"
+	else = { if = {
+		limit = { FROM = { NOT = { any_owned_planet = { has_planet_flag = "DS5:@event_target:buildingCountry" } } } }
+		set_name = "Subcomplex 05"
+		set_planet_flag = "DS5:@event_target:buildingCountry"
+	else = { if = {
+		limit = { FROM = { NOT = { any_owned_planet = { has_planet_flag = "DS6:@event_target:buildingCountry" } } } }
+		set_name = "Subcomplex 06"
+		set_planet_flag = "DS6:@event_target:buildingCountry"
+	else = { if = {
+		limit = { FROM = { NOT = { any_owned_planet = { has_planet_flag = "DS7:@event_target:buildingCountry" } } } }
+		set_name = "Subcomplex 07"
+		set_planet_flag = "DS7:@event_target:buildingCountry"
+	else = { if = {
+		limit = { FROM = { NOT = { any_owned_planet = { has_planet_flag = "DS8:@event_target:buildingCountry" } } } }
+		set_name = "Subcomplex 08"
+		set_planet_flag = "DS8:@event_target:buildingCountry"
+	else = { if = {
+		limit = { FROM = { NOT = { any_owned_planet = { has_planet_flag = "DS9:@event_target:buildingCountry" } } } }
+		set_name = "Subcomplex 09"
+		set_planet_flag = "DS9:@event_target:buildingCountry"
+	else = { if = {
+		limit = { FROM = { NOT = { any_owned_planet = { has_planet_flag = "DS10:@event_target:buildingCountry" } } } }
+		set_name = "Subcomplex 10"
+		set_planet_flag = "DS10:@event_target:buildingCountry"
+	else = {
+		set_name = "Subcomplex"
+	}
+	} }
+	} }
+	} }
+	} }
+	} }
+	} }
+	} }
+	} }
+	} }	
+	}
+}
+
+set_correct_spaceport_name_GENERIC = {
+	FROM = { save_event_target_as = buildingCountry }
+	if = {
+		limit = { FROM = { NOT = { any_owned_planet = { has_planet_flag = "DS1:@event_target:buildingCountry" } } } }
+		set_name = "Outpost 01"
+		set_planet_flag = "DS1:@event_target:buildingCountry"
+	else = { if = {
+		limit = { FROM = { NOT = { any_owned_planet = { has_planet_flag = "DS2:@event_target:buildingCountry" } } } }
+		set_name = "Outpost 02"
+		set_planet_flag = "DS2:@event_target:buildingCountry"
+	else = { if = {
+		limit = { FROM = { NOT = { any_owned_planet = { has_planet_flag = "DS3:@event_target:buildingCountry" } } } }
+		set_name = "Outpost 03"
+		set_planet_flag = "DS3:@event_target:buildingCountry"
+	else = { if = {
+		limit = { FROM = { NOT = { any_owned_planet = { has_planet_flag = "DS4:@event_target:buildingCountry" } } } }
+		set_name = "Outpost 04"
+		set_planet_flag = "DS4:@event_target:buildingCountry"
+	else = { if = {
+		limit = { FROM = { NOT = { any_owned_planet = { has_planet_flag = "DS5:@event_target:buildingCountry" } } } }
+		set_name = "Outpost 05"
+		set_planet_flag = "DS5:@event_target:buildingCountry"
+	else = { if = {
+		limit = { FROM = { NOT = { any_owned_planet = { has_planet_flag = "DS6:@event_target:buildingCountry" } } } }
+		set_name = "Outpost 06"
+		set_planet_flag = "DS6:@event_target:buildingCountry"
+	else = { if = {
+		limit = { FROM = { NOT = { any_owned_planet = { has_planet_flag = "DS7:@event_target:buildingCountry" } } } }
+		set_name = "Outpost 07"
+		set_planet_flag = "DS7:@event_target:buildingCountry"
+	else = { if = {
+		limit = { FROM = { NOT = { any_owned_planet = { has_planet_flag = "DS8:@event_target:buildingCountry" } } } }
+		set_name = "Outpost 08"
+		set_planet_flag = "DS8:@event_target:buildingCountry"
+	else = { if = {
+		limit = { FROM = { NOT = { any_owned_planet = { has_planet_flag = "DS9:@event_target:buildingCountry" } } } }
+		set_name = "Outpost 09"
+		set_planet_flag = "DS9:@event_target:buildingCountry"
+	else = { if = {
+		limit = { FROM = { NOT = { any_owned_planet = { has_planet_flag = "DS10:@event_target:buildingCountry" } } } }
+		set_name = "Outpost 10"
+		set_planet_flag = "DS10:@event_target:buildingCountry"
+	else = {
+		set_name = "Outpost Station"
+	}
+	} }
+	} }
+	} }
+	} }
+	} }
+	} }
+	} }
+	} }
+	} }	
+	}
+}
+
+set_correct_spaceport_name = {
+	FROM = {
+		if = {
+			limit = { OR = { has_country_flag = united_earth has_country_flag = terra_prime has_country_flag = united_human_remnant has_country_flag = united_federation_of_planets } }
+			prev = { set_correct_spaceport_name_FED = yes }
+			else = {
+				if = {
+					limit = { OR = { has_country_flag = cardassian_union has_country_flag = hebitian_union } }
+					prev = { set_correct_spaceport_name_CAR = yes }
+					else = {
+						if = {
+							limit = { OR = { is_borg_empire = yes } }
+							prev = { set_correct_spaceport_name_BRG = yes }
+							else = {
+								prev = { set_correct_spaceport_name_GENERIC = yes }
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+
+
+create_correct_spaceport = {
+	if = {
+		limit = { FROM = { uses_polaron_weapons = yes } }
+		create_spaceport = { owner = FROM initial_module = "module_defense_polaron_0_initial" }
+	}
+	if = {
+		limit = { FROM = { uses_tetryon_weapons = yes } }
+		create_spaceport = { owner = FROM initial_module = "module_defense_tetryon_0_initial" }
+	}
+	if = {
+		limit = { FROM = { uses_chroniton_weapons = yes } }
+		create_spaceport = { owner = FROM initial_module = "module_defense_tetryon_0_chroniton" }
+	}
+	if = {
+		limit = { FROM = { uses_thermic_weapons = yes } }
+		create_spaceport = { owner = FROM initial_module = "module_defense_tetryon_0_thermic" }
+	}
+	if = {
+		limit = { FROM = { uses_quantum_resonance_weapons = yes } }
+		create_spaceport = { owner = FROM initial_module = "module_defense_tetryon_0_quantum" }
+	}
+	if = {
+		limit = { FROM = { uses_antiproton_weapons = yes } }
+		create_spaceport = { owner = FROM initial_module = "module_defense_antiproton_0_initial" }
+	}
+	if = {
+		limit = { FROM = { uses_antiproton_weapons_borg = yes } }
+		create_spaceport = { owner = FROM initial_module = "module_defense_antiproton_0_borg" }
+	}
+	if = {
+		limit = { FROM = { uses_plasma_weapons = yes } }
+		create_spaceport = { owner = FROM initial_module = "module_defense_plasma_0_initial" }
+	}
+	if = {
+		limit = { FROM = { uses_disruptor_weapons = yes } }
+		create_spaceport = { owner = FROM initial_module = "module_defense_disruptor_0_initial" }
+	}
+	if = {
+		limit = { FROM = { uses_plasma_disruptor_weapons = yes } }
+		create_spaceport = { owner = FROM initial_module = "module_defense_plasma_disruptor_0_initial" }
+	}
+	if = {
+		limit = { FROM = { uses_disruptor_weapons_klingon = yes } }
+		create_spaceport = { owner = FROM initial_module = "module_defense_disruptor_0_klingon" }
+	}
+	if = {
+		limit = { FROM = { uses_phaser_weapons = yes } }
+		create_spaceport = { owner = FROM initial_module = "module_defense_basic_phaser_0_initial" }
+	}
+	if = {
+		limit = { FROM = { uses_phaser_weapons_fed = yes } }
+		create_spaceport = { owner = FROM initial_module = "module_defense_phaser_0_initial" }
+	}
+	if = {
+		limit = { FROM = { uses_phaser_weapons_cardassian = yes } }
+		create_spaceport = { owner = FROM initial_module = "module_defense_phaser_0_cardassian" }
+	}
+	if = {
+		limit = { FROM = { uses_phaser_weapons_andorian = yes } }
+		create_spaceport = { owner = FROM initial_module = "module_defense_phaser_0_andorian" }
+	}
+	if = {
+		limit = { FROM = { uses_phaser_weapons_particle = yes } }
+		create_spaceport = { owner = FROM initial_module = "module_defense_phaser_0_particle" }
+	}
+}
+
+create_correct_spaceport_planetscope = {
+	if = {
+		limit = { owner = { uses_polaron_weapons = yes } }
+		create_spaceport = { owner = this.owner initial_module = "module_defense_polaron_0_initial" }
+	}
+	if = {
+		limit = { owner = { uses_tetryon_weapons = yes } }
+		create_spaceport = { owner = this.owner initial_module = "module_defense_tetryon_0_initial" }
+	}
+	if = {
+		limit = { owner = { uses_antiproton_weapons = yes } }
+		create_spaceport = { owner = this.owner initial_module = "module_defense_antiproton_0_initial" }
+	}
+	if = {
+		limit = { owner = { uses_antiproton_weapons_borg = yes } }
+		create_spaceport = { owner = this.owner initial_module = "module_defense_antiproton_0_borg" }
+	}
+	if = {
+		limit = { owner = { uses_plasma_weapons = yes } }
+		create_spaceport = { owner = this.owner initial_module = "module_defense_plasma_0_initial" }
+	}
+	if = {
+		limit = { owner = { uses_disruptor_weapons = yes } }
+		create_spaceport = { owner = this.owner initial_module = "module_defense_disruptor_0_initial" }
+	}
+	if = {
+		limit = { owner = { uses_plasma_disruptor_weapons = yes } }
+		create_spaceport = { owner = this.owner initial_module = "module_defense_plasma_disruptor_0_initial" }
+	}
+	if = {
+		limit = { owner = { uses_disruptor_weapons_klingon = yes } }
+		create_spaceport = { owner = this.owner initial_module = "module_defense_disruptor_0_klingon" }
+	}
+	if = {
+		limit = { owner = { uses_phaser_weapons = yes } }
+		create_spaceport = { owner = this.owner initial_module = "module_defense_basic_phaser_0_initial" }
+	}
+	if = {
+		limit = { owner = { uses_phaser_weapons_fed = yes } }
+		create_spaceport = { owner = this.owner initial_module = "module_defense_phaser_0_initial" }
+	}
+	if = {
+		limit = { owner = { uses_phaser_weapons_cardassian = yes } }
+		create_spaceport = { owner = this.owner initial_module = "module_defense_phaser_0_cardassian" }
+	}
+	if = {
+		limit = { owner = { uses_phaser_weapons_andorian = yes } }
+		create_spaceport = { owner = this.owner initial_module = "module_defense_phaser_0_andorian" }
+	}
+	if = {
+		limit = { owner = { uses_phaser_weapons_particle = yes } }
+		create_spaceport = { owner = this.owner initial_module = "module_defense_phaser_0_particle" }
+	}
+}
+
+set_correct_spaceport_planet = {
+	FROM = {
+		switch = {
+			trigger = has_country_flag
+			united_earth = { prev = { change_pc = pc_starbase_blank_fed } }
+			terra_prime = { prev = { change_pc = pc_starbase_blank_fed } }
+			united_human_remnant = { prev = { change_pc = pc_starbase_blank_fed } }
+			united_federation_of_planets = { prev = { change_pc = pc_starbase_blank_fed } }
+			cardassian_union = { prev = { change_pc = pc_starbase_blank_car } }
+			default = { }
+		}
+		# if = { limit = { OR = { has_country_flag = cardassian_union has_country_flag = hebitian_union } } prev = { change_pc = pc_starbase_blank_car } }
+		if = { limit = { is_borg_empire = yes } prev = { change_pc = pc_starbase_blank_brg } }
+	}
+}

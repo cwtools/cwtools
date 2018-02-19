@@ -1,0 +1,25 @@
+# Icons set here are the ones shown in component editor list.
+
+component_set = { key = "required_civilian_sensors" required_component_set = yes icon = "GFX_ship_part_Required_Sensors_Civilian_0" icon_frame = 1	}
+component_set = { key = "required_military_station_sensors" required_component_set = yes icon = "GFX_ship_part_Required_Sensors_Station_0" icon_frame = 1	}
+component_set = { key = "required_listening_sensors" required_component_set = yes icon = "GFX_ship_part_Required_Sensors_Array_0" icon_frame = 1  }
+
+component_set = { key = "REQUIRED_SENSORS_OPTICAL_0_CIVILIAN" icon = "GFX_ship_part_Required_Sensors_Civilian_0" icon_frame = 1 }
+component_set = { key = "REQUIRED_SENSORS_OPTICAL_0_MILITARY" icon = "GFX_ship_part_Required_Sensors_Station_0" icon_frame = 1 }
+component_set = { key = "REQUIRED_SENSORS_OPTICAL_0_ARRAY" icon = "GFX_ship_part_Required_Sensors_Array_0" icon_frame = 1 }
+
+component_set = { key = "REQUIRED_SENSORS_GRAVITIC_1A_CIVILIAN" icon = "GFX_ship_part_Required_Sensors_Civilian_1" icon_frame = 1 }
+component_set = { key = "REQUIRED_SENSORS_GRAVITIC_1A_MILITARY" icon = "GFX_ship_part_Required_Sensors_Station_1" icon_frame = 1 }
+component_set = { key = "REQUIRED_SENSORS_GRAVITIC_1A_ARRAY" icon = "GFX_ship_part_Required_Sensors_Array_1" icon_frame = 1 }
+
+component_set = { key = "REQUIRED_SENSORS_SUBSPACE_2A_CIVILIAN" icon = "GFX_ship_part_Required_Sensors_Civilian_2" icon_frame = 1 }
+component_set = { key = "REQUIRED_SENSORS_SUBSPACE_2A_MILITARY" icon = "GFX_ship_part_Required_Sensors_Station_2" icon_frame = 1 }
+component_set = { key = "REQUIRED_SENSORS_SUBSPACE_2A_ARRAY" icon = "GFX_ship_part_Required_Sensors_Array_2" icon_frame = 1 }
+
+component_set = { key = "REQUIRED_SENSORS_INVERSE_3A_CIVILIAN" icon = "GFX_ship_part_Required_Sensors_Civilian_3" icon_frame = 1 }
+component_set = { key = "REQUIRED_SENSORS_INVERSE_3A_MILITARY" icon = "GFX_ship_part_Required_Sensors_Station_3" icon_frame = 1 }
+component_set = { key = "REQUIRED_SENSORS_INVERSE_3A_ARRAY" icon = "GFX_ship_part_Required_Sensors_Array_3" icon_frame = 1 }
+
+component_set = { key = "REQUIRED_SENSORS_MULTIPHASIC_4_CIVILIAN" icon = "GFX_ship_part_Required_Sensors_Civilian_4" icon_frame = 1 }
+component_set = { key = "REQUIRED_SENSORS_MULTIPHASIC_4_MILITARY" icon = "GFX_ship_part_Required_Sensors_Station_4" icon_frame = 1 }
+component_set = { key = "REQUIRED_SENSORS_MULTIPHASIC_4_ARRAY" icon = "GFX_ship_part_Required_Sensors_Array_4" icon_frame = 1 }

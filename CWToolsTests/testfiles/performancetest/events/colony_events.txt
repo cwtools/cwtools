@@ -1,0 +1,4041 @@
+############################
+#
+# Colony Events
+#
+# Written by Henrik Eklund
+# STNH - Banks 1.8.0 Compat
+############################
+
+namespace = colony
+
+@tier1influencecontact = 7
+@tier1influencecontactxenophile = 8
+@tier1influencecontactmin = 20
+@tier1influencecontactmax = 80
+
+@tier2influencecontact = 10
+@tier2influencecontactxenophile = 12
+@tier2influencecontactmin = 40
+@tier2influencecontactmax = 100
+
+@tier1materialreward = 6
+@tier1materialmin = 100
+@tier1materialmax = 500
+@tier2materialreward = 12
+@tier2materialmin = 150
+@tier2materialmax = 1000
+@tier3materialreward = 18
+@tier3materialmin = 250
+@tier3materialmax = 1500
+@tier4materialreward = 24
+@tier4materialmin = 350
+@tier4materialmax = 2000
+@tier5materialreward = 48
+@tier5materialmin = 700
+@tier5materialmax = 4000
+
+@tier1influencereward = 6
+@tier1influencemin = 40
+@tier1influencemax = 100
+@tier2influencereward = 12
+@tier2influencemin = 80
+@tier2influencemax = 175
+@tier3influencereward = 18
+@tier3influencemin = 125
+@tier3influencemax = 250
+@tier4influencereward = 24
+@tier4influencemin = 150
+@tier4influencemax = 300
+@tier5influencereward = 36
+@tier5influencemin = 250
+@tier5influencemax = 500
+@tier6influencereward = 48
+@tier6influencemin = 300
+@tier6influencemax = 600
+
+@tier1researchreward = 6
+@tier1researchmin = 60
+@tier1researchmax = 150
+@tier2researchreward = 12
+@tier2researchmin = 90
+@tier2researchmax = 250
+@tier3researchreward = 18
+@tier3researchmin = 120
+@tier3researchmax = 350
+@tier4researchreward = 24
+@tier4researchmin = 150
+@tier4researchmax = 500
+@tier5researchreward = 48
+@tier5researchmin = 300
+@tier5researchmax = 1000
+
+
+### Migrating Forests
+planet_event = {
+	id = colony.1
+	title = "colony.1.name"
+	desc = "colony.1.desc"
+	picture = GFX_evt_alien_nature
+	show_sound = event_alien_nature
+	location = ROOT
+	
+	trigger = {
+		has_owner = yes
+		original_owner = yes
+		is_homeworld = no
+		owner = { 
+			is_ai = no
+			NOT = { has_authority = auth_machine_intelligence }
+		}
+		has_ground_combat = no
+		is_occupied_flag = no
+		num_pops > 0
+		is_capital = no
+		OR = {
+			is_planet_class = pc_continental
+			is_planet_class = pc_tropical
+			is_planet_class = pc_arid
+			is_planet_class = pc_tundra
+			is_planet_class = pc_savannah
+		}
+		NOT = { 
+			has_global_flag = migrating_forests_global
+			has_planet_flag = colony_event
+		}
+	}
+
+	is_triggered_only = yes
+	#mean_time_to_happen = {
+	#	months = 640
+	#}
+	
+	immediate = {
+		set_global_flag = migrating_forests_global
+		set_planet_flag = colony_event
+		random_tile = {
+			limit = { 
+				has_blocker = no
+				has_grown_pop = no
+				has_building = no
+				has_building_construction = no
+			}
+			set_blocker = "tb_wandering_forests"
+		}
+		random_tile = {
+			limit = { 
+				has_blocker = no
+				has_grown_pop = no
+				has_building = no
+				has_building_construction = no
+			}
+			set_blocker = "tb_wandering_forests"
+		}
+		random_tile = {
+			limit = { 
+				has_blocker = no
+				has_grown_pop = no
+				has_building = no
+				has_building_construction = no
+			}
+			set_blocker = "tb_wandering_forests"
+		}
+		add_modifier = {
+			modifier = "migrating_forests"
+			days = -1
+		}
+	}
+	
+	option = {
+		name = colony.1.a
+		begin_event_chain = {
+			event_chain = "migrating_forests_chain"
+			target = ROOT
+		}
+		enable_special_project = {
+			name = "MIGRATING_FORESTS_1_PROJECT"
+			location = this
+			owner = root
+		}
+		enable_special_project = {
+			name = "MIGRATING_FORESTS_2_PROJECT"
+			location = this
+			owner = root
+		}
+	}
+}
+
+# Special Project Completed 1
+planet_event = {
+	id = colony.2
+	title = "PROJECT_COMPLETE"
+	desc = "colony.2.desc"
+	picture = GFX_evt_alien_nature
+	show_sound = event_alien_nature
+	location = ROOT
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EXCELLENT
+		remove_modifier = "migrating_forests"
+		custom_tooltip = colony.2.a.tooltip
+		hidden_effect = {
+			set_planet_flag = forest_pheremones
+			add_modifier = {
+				modifier = "migrating_forests_2"
+				days = -1
+			}
+			every_tile = {
+				limit = { has_blocker = "tb_wandering_forests" }
+				remove_blocker = yes
+			}
+			random_tile = {
+				limit = { 
+					has_blocker = no
+					has_grown_pop = no
+					has_building = no
+					has_building_construction = no
+				}
+				set_blocker = "tb_wandering_forest_reserve"
+			}
+		}
+	}
+}
+
+# Special Project Completed 2
+planet_event = {
+	id = colony.3
+	title = "PROJECT_COMPLETE"
+	desc = "colony.3.desc"
+	picture = GFX_evt_alien_planet
+	show_sound = event_alien_nature
+	location = ROOT
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EXCELLENT
+		set_planet_flag = burned_forests
+		remove_modifier = "migrating_forests"
+		hidden_effect = {
+			every_tile = {
+				limit = { has_blocker = "tb_wandering_forests" }
+				remove_blocker = yes
+			}
+		}
+	}
+}
+
+# Rise of the Trees
+planet_event = {
+	id = colony.4
+	title = "colony.4.name"
+	desc = "colony.4.desc"
+	picture = GFX_evt_alien_nature
+	show_sound = event_air_raid_siren
+	location = ROOT
+	
+	auto_opens = yes
+	
+	trigger = {
+		NOT = { has_planet_flag = burned_forests_rampage }
+		has_planet_flag = burned_forests
+		has_owner = yes
+		original_owner = yes
+		is_homeworld = no
+		has_ground_combat = no
+		num_pops > 0
+	}
+	
+	mean_time_to_happen = {
+		months = 240
+	}
+	
+	immediate = {
+		set_planet_flag = burned_forests_rampage
+		set_planet_flag = burned_forests_rampaged_planet
+		owner = { set_country_flag = burned_forests_rampaged_country }
+		create_country = {
+			name = "NAME_Rampaging_Forests"
+			type = faction
+		}
+		create_species = {
+			name = "NAME_Migrating_Trees"
+			class = RANDOMTREK
+			portrait = random
+			traits = random
+		}
+		create_army = {
+			name = "NAME_Rampaging_Forest"
+			owner = last_created
+			species = last_created
+			type = "assault_army"
+		}
+		create_army = {
+			name = "NAME_Rampaging_Forest"
+			owner = last_created
+			species = last_created
+			type = "assault_army"
+		}
+		create_army = {
+			name = "NAME_Rampaging_Forest"
+			owner = last_created
+			species = last_created
+			type = "assault_army"
+		}
+	}
+	
+	option = {
+		name = colony.4.a
+		custom_tooltip = tree_armies
+	}
+}
+
+# Fall of the Trees
+country_event = {
+	id = colony.5
+	title = "colony.5.name"
+	desc = "colony.5.desc"
+	picture = GFX_evt_alien_nature
+	show_sound = event_ground_battle
+	location = FROMFROM
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		has_country_flag = burned_forests_rampaged
+		FROMFROM = { has_planet_flag = burned_forests_rampaged_planet }
+	}
+	
+	immediate = {
+		remove_country_flag = burned_forests_rampaged_country
+		FROMFROM = { remove_planet_flag = burned_forests_rampaged_planet }
+	}
+	
+	option = {
+		name = colony.5.a
+	}
+}
+
+# Mineral Deposits
+planet_event = {
+	id = colony.6
+	title = "colony.6.name"
+	desc = "colony.6.desc"
+	picture = GFX_evt_alien_nature
+	show_sound = event_scanner
+	location = ROOT
+	
+	trigger = {
+		has_planet_flag = burned_forests
+		NOT = {
+			has_planet_flag = burned_forest_precious
+			has_planet_flag = burned_forest_minerals
+		}
+		has_owner = yes
+		original_owner = yes
+		is_homeworld = no
+		has_ground_combat = no
+		num_pops > 0
+	}
+	
+	mean_time_to_happen = {
+		months = 240
+	}
+	
+	immediate = {
+		set_planet_flag = burned_forest_minerals
+	}		
+	
+	option = {
+		name = EXCELLENT
+		owner = {
+			add_monthly_resource_mult = {
+				resource = minerals
+				value = @tier1materialreward
+				min = @tier1materialmin
+				max = @tier1materialmax
+			}
+		}
+	}
+}
+
+# Precious Metal Deposit
+planet_event = {
+	id = colony.7
+	title = "colony.7.name"
+	desc = "colony.7.desc"
+	picture = GFX_evt_alien_nature
+	show_sound = event_scanner
+	location = ROOT
+	
+	trigger = {
+		has_planet_flag = burned_forests
+		NOT = {
+			has_planet_flag = burned_forest_precious
+			has_planet_flag = burned_forest_minerals
+		}
+		has_any_strategic_resource = no
+		has_owner = yes
+		original_owner = yes
+		is_homeworld = no
+		has_ground_combat = no
+		num_pops > 0
+	}
+	
+	mean_time_to_happen = {
+		months = 240
+	}
+	
+	immediate = {
+		set_planet_flag = burned_forest_precious
+	}		
+	
+	option = {
+		name = EXCELLENT
+		owner = {
+			add_monthly_resource_mult = {
+				resource = energy
+				value = @tier1materialreward
+				min = @tier1materialmin
+				max = @tier1materialmax
+			}
+		}
+	}
+}
+
+# Ecological Damage
+planet_event = {
+	id = colony.8
+	title = "colony.8.name"
+	desc = "colony.8.desc"
+	picture = GFX_evt_alien_nature
+	show_sound = event_alien_nature
+	location = ROOT
+	
+	trigger = {
+		has_planet_flag = burned_forests
+		NOT = { has_planet_flag = burned_forest_damage }
+		has_owner = yes
+		original_owner = yes
+		is_homeworld = no
+		has_ground_combat = no
+		num_pops > 0
+	}
+	
+	mean_time_to_happen = {
+		months = 240
+	}
+	
+	immediate = {
+		set_planet_flag = burned_forest_damage
+	}
+	
+	option = {
+		name = UNFORTUNATE
+		add_modifier = {
+			modifier = "damaged_ecology"
+			days = 3600
+		}
+	}
+}
+
+# Forest Adaptation
+planet_event = {
+	id = colony.9
+	title = "colony.9.name"
+	desc = "colony.9.desc"
+	picture = GFX_evt_alien_nature
+	show_sound = event_alien_nature
+	location = ROOT
+	
+	trigger = {
+		has_planet_flag = forest_pheremones
+		is_artificial_planet = no
+		NOT = { is_planet_class = pc_assimilated }
+		NOT = { has_planet_flag = forest_pheremones_adaptation }
+		has_owner = yes
+		original_owner = yes
+		is_homeworld = no
+		has_ground_combat = no
+		num_pops > 0
+	}
+	
+	mean_time_to_happen = {
+		months = 240
+	}
+	
+	immediate = {
+		set_planet_flag = forest_pheremones_adaptation
+	}		
+	
+	option = {
+		name = EXCELLENT
+		add_modifier = {
+			modifier = "friendly_trees"
+			days = 3600
+		}
+	}
+}
+
+# Forest Research
+planet_event = {
+	id = colony.10
+	title = "colony.10.name"
+	desc = "colony.10.desc"
+	picture = GFX_evt_alien_nature
+	show_sound = event_alien_nature
+	location = ROOT
+	
+	trigger = {
+		has_planet_flag = forest_pheremones
+		NOT = { has_planet_flag = forest_pheremones_studies }
+		has_owner = yes
+		original_owner = yes
+		is_homeworld = no
+		has_ground_combat = no
+		num_pops > 0
+	}
+	
+	mean_time_to_happen = {
+		months = 240
+	}
+	
+	immediate = {
+		set_planet_flag = forest_pheremones_studies
+	}		
+	
+	option = {
+		name = EXCELLENT
+		owner = {
+			add_monthly_resource_mult = {
+				resource = society_research
+				value = @tier3researchreward
+				min = @tier3researchmin
+				max = @tier3researchmax
+			}
+		}
+	}
+}
+
+# Forest Fire
+planet_event = {
+	id = colony.11
+	title = "colony.11.name"
+	desc = "colony.11.desc"
+	picture = GFX_evt_alien_nature
+	show_sound = event_air_raid_siren
+	location = ROOT
+	
+	trigger = {
+		has_planet_flag = forest_pheremones
+		NOT = { has_planet_flag = forest_pheremones_fire }
+		has_owner = yes
+		original_owner = yes
+		is_homeworld = no
+		has_ground_combat = no
+		num_pops > 0
+	}
+	
+	mean_time_to_happen = {
+		months = 240
+	}
+	
+	immediate = {
+		set_planet_flag = forest_pheremones_fire
+	}		
+	
+	option = {
+		name = UNFORTUNATE
+		add_modifier = {
+			modifier = "forest_fire"
+			days = 3600
+		}
+	}
+}
+
+# Forests Move
+planet_event = {
+	id = colony.12
+	title = "colony.12.name"
+	desc = "colony.12.desc"
+	picture = GFX_evt_alien_nature
+	show_sound = event_alien_nature
+	location = ROOT
+	
+	trigger = {
+		has_modifier = "migrating_forests"
+	}
+	
+	mean_time_to_happen = {
+		months = 80
+	}
+	
+	immediate = {
+		random_tile = {
+			limit = {
+				has_blocker = "tb_wandering_forests" 
+				any_neighboring_tile = {
+					has_blocker = no
+					has_grown_pop = no
+					has_building = no
+					has_building_construction = no
+				}
+			}
+			remove_blocker = yes
+			random_neighboring_tile = {
+				limit = {
+					has_blocker = no
+					has_grown_pop = no
+					has_building = no
+					has_building_construction = no
+				}
+				set_blocker = "tb_wandering_forests"
+			}
+		}
+	}
+	
+	option = {
+		name = PECULIAR
+	}
+}
+
+### Seismic Disturbances
+planet_event = {
+	id = colony.50
+	title = "colony.50.name"
+	desc = "colony.50.desc"
+	picture = GFX_evt_in_the_dark
+	show_sound = event_air_raid_siren
+	location = ROOT
+	
+	trigger = {
+		has_owner = yes
+		original_owner = yes
+		is_homeworld = no
+		owner = { is_ai = no }
+		owner = { NOT = { has_ethic = ethic_gestalt_consciousness } }
+		has_ground_combat = no
+		is_occupied_flag = no
+		num_pops > 0
+		is_capital = no
+		NOT = {
+			has_global_flag = seismic_disturbance_global
+			has_planet_flag = colony_event
+			is_planet_class = pc_nuked
+		}
+		is_artificial_planet = no
+		NOT = { is_planet_class = pc_assimilated }
+	}
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		owner = { save_event_target_as = subterranean_planet_owner }
+		set_global_flag = seismic_disturbance_global
+		set_planet_flag = seismic_disturbance
+		set_planet_flag = colony_event
+	}
+	
+	option = {
+		name = colony.50.a
+		begin_event_chain = {
+			event_chain = "subterranean_civilization_chain"
+			target = ROOT
+		}
+		enable_special_project = {
+			name = "SEISMIC_DISTURBANCE_1_PROJECT"
+			location = this
+			owner = root
+		}
+		enable_special_project = {
+			name = "SEISMIC_DISTURBANCE_2_PROJECT"
+			location = this
+			owner = root
+		}
+	}
+}
+
+# Special Project Completed 1
+planet_event = {
+	id = colony.51
+	title = "PROJECT_COMPLETE"
+	desc = "colony.51.desc"
+	picture = GFX_evt_underground_civilization
+	show_sound = event_alien_signal
+	location = ROOT
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		set_planet_flag = seismic_disturbance_friendly
+		create_species = {
+			name = random
+			class = RANDOMTREK
+			portrait = random
+			traits = random
+			homeworld = root
+		}
+		create_country = {
+			name = "NAME_Subterranean_Nation"
+			species = last_created
+			type = adversary
+			ethos = random
+			auto_delete = no
+			flag = {
+				icon = {
+					category = "zoological"
+					file = "flag_zoological_10.dds"
+				}
+				background= {
+					category = "backgrounds"
+					file = "new_dawn.dds"
+				}
+				colors={
+					"red"
+					"black"
+					"null"
+					"null"
+				}
+			}
+		}
+		last_created_country = {
+			set_relation_flag = {
+				who = subterranean_planet_owner
+				flag = subterror
+			}
+			set_country_flag = subterranean_nation
+			establish_contact = { who = event_target:subterranean_planet_owner location = root }
+			establish_communications_no_message = event_target:subterranean_planet_owner
+			save_event_target_as = subterranean_nation
+			owner_species = { save_event_target_as = subterranean_species }
+		}
+	}		
+	
+	option = {
+		name = colony.51.a
+		hidden_effect = {
+			owner = { country_event = { id = colony.53 } }
+		}
+	}
+}
+
+# Special Project Completed 2
+planet_event = {
+	id = colony.52
+	title = "PROJECT_COMPLETE"
+	desc = "colony.52.desc"
+	picture = GFX_evt_underground_civilization
+	show_sound = event_structural_collapse
+	location = ROOT
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		set_planet_flag = seismic_disturbance_destroyed
+		remove_planet_flag = seismic_disturbance_war
+	}		
+	
+	option = {
+		name = colony.52.a
+	}
+}
+
+# Subterranean Aliens
+country_event = {
+	id = colony.53
+	title = "colony.53.name"
+	desc = "colony.53.desc"
+	
+	is_triggered_only = yes
+	
+	diplomatic = yes
+	
+	picture_event_data = {
+		room = no_video_feed_room
+	}
+	
+	option = {
+		name = colony.53.a
+		response_text = colony.53.a.response
+		is_dialog_only = yes
+	}
+	option = {
+		name = colony.53.b
+		response_text = colony.53.b.response
+		hidden_effect = {
+			FROM = { set_planet_flag = seismic_disturbance_friendly }
+		}
+		FROM = {
+			add_modifier = {
+				modifier = "subterranean_civilization"
+				days = -1
+			}
+		}
+	}
+	option = {
+		name = colony.53.c
+		response_text = colony.53.c.response
+		hidden_effect = {
+			FROM = { 
+				planet_event = { id = colony.54 days = 35 random = 40 }
+			}
+		}
+	}
+}
+
+# Subterranean Invasion!
+planet_event = {
+	id = colony.54
+	title = "colony.54.name"
+	desc = "colony.54.desc"
+	picture = GFX_evt_ground_combat
+	show_sound = event_ground_battle
+	location = ROOT
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		owner = { set_country_flag = subterranean_invasion_country }
+		set_planet_flag = subterranean_invasion_planet
+		event_target:subterranean_nation = {
+			create_leader = {
+				type = general
+				species = owner_main_species
+				name = random
+				skill = 400
+			}
+		}
+		if = {
+			limit = {
+				event_target:subterranean_nation = {
+					NOT = { has_country_flag = tech_request_approved }
+				}
+			}
+			create_army = {
+				name = "NAME_Invading_Horde"
+				owner = event_target:subterranean_nation
+				species = event_target:subterranean_species
+				type = "industrial_army"
+				leader = last_created_leader
+			}
+			create_army = {
+				name = "NAME_Invading_Horde"
+				owner = event_target:subterranean_nation
+				species = event_target:subterranean_species
+				type = "industrial_army"
+				leader = last_created_leader
+			}
+			create_army = {
+				name = "NAME_Invading_Horde"
+				owner = event_target:subterranean_nation
+				species = event_target:subterranean_species
+				type = "industrial_army"
+				leader = last_created_leader
+			}
+			create_army = {
+				name = "NAME_Invading_Horde"
+				owner = event_target:subterranean_nation
+				species = event_target:subterranean_species
+				type = "industrial_army"
+				leader = last_created_leader
+			}
+			create_army = {
+				name = "NAME_Invading_Horde"
+				owner = event_target:subterranean_nation
+				species = event_target:subterranean_species
+				type = "industrial_army"
+				leader = last_created_leader
+			}
+			create_army = {
+				name = "NAME_Invading_Horde"
+				owner = event_target:subterranean_nation
+				species = event_target:subterranean_species
+				type = "industrial_army"
+				leader = last_created_leader
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				event_target:subterranean_nation = { has_country_flag = tech_request_approved }
+			}
+			create_army = {
+				name = "NAME_Invading_Horde"
+				owner = event_target:subterranean_nation
+				species = event_target:subterranean_species
+				type = "postatomic_army"
+				leader = last_created_leader
+			}
+			create_army = {
+				name = "NAME_Invading_Horde"
+				owner = event_target:subterranean_nation
+				species = event_target:subterranean_species
+				type = "postatomic_army"
+				leader = last_created_leader
+			}
+			create_army = {
+				name = "NAME_Invading_Horde"
+				owner = event_target:subterranean_nation
+				species = event_target:subterranean_species
+				type = "postatomic_army"
+				leader = last_created_leader
+			}
+			create_army = {
+				name = "NAME_Invading_Horde"
+				owner = event_target:subterranean_nation
+				species = event_target:subterranean_species
+				type = "postatomic_army"
+				leader = last_created_leader
+			}
+			create_army = {
+				name = "NAME_Invading_Horde"
+				owner = event_target:subterranean_nation
+				species = event_target:subterranean_species
+				type = "postatomic_army"
+				leader = last_created_leader
+			}
+			create_army = {
+				name = "NAME_Invading_Horde"
+				owner = event_target:subterranean_nation
+				species = event_target:subterranean_species
+				type = "postatomic_army"
+				leader = last_created_leader
+			}
+			break = yes
+		}
+	}		
+	
+	option = {
+		name = colony.54.a
+		custom_tooltip = subterranean_invasion
+	}
+}
+
+# Victory
+country_event = {
+	id = colony.56
+	title = "colony.56.name"
+	desc = "colony.56.desc"
+	picture = GFX_evt_ground_combat
+	show_sound = event_ground_battle
+	location = FROMFROM
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		has_country_flag = subterranean_invasion_country
+		NOT = { has_country_flag = subterraneans_defeated_once }
+		FROMFROM = { has_planet_flag = subterranean_invasion_planet }
+	}
+	
+	immediate = {
+		remove_country_flag = subterranean_invasion_country
+		set_country_flag = subterraneans_defeated_once
+		FROMFROM = {
+			set_planet_flag = seismic_disturbance_war
+			remove_planet_flag = subterranean_invasion_planet
+		}
+	}
+	
+	option = {
+		name = colony.56.a
+		enable_special_project = {
+			name = "SEISMIC_DISTURBANCE_3_PROJECT"
+			location = FROMFROM
+			owner = ROOT
+		}
+	}
+}
+
+# Defeat
+country_event = {
+	id = colony.57
+	title = "colony.57.name"
+	desc = "colony.57.desc"
+	picture = GFX_evt_burning_settlement
+	show_sound = event_alien_signal
+	location = FROMFROM
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		has_country_flag = subterranean_invasion_country
+		FROMFROM = { has_planet_flag = subterranean_invasion_planet }
+		from = { is_country_type = adversary }
+	}
+	
+	immediate = {
+		remove_country_flag = subterranean_invasion_country
+		save_event_target_as = subterranean_former_planet_owner
+		from = {
+			save_event_target_as = subterranean_nation
+			owner_species = { save_event_target_as = subterranean_species }
+		}
+		fromfrom = {
+			create_country = {
+				name = "NAME_Subterranean_Empire"
+				species = event_target:subterranean_species
+				type = default
+				auto_delete = yes
+				ethos = {
+					ethic = ethic_fanatic_militarist
+					ethic = ethic_authoritarian
+				}
+				authority = random
+				civics = random
+				flag = {
+					icon = {
+						category = "zoological"
+						file = "flag_zoological_10.dds"
+					}
+					background= {
+						category = "backgrounds"
+						file = "new_dawn.dds"
+					}
+					colors={
+						"red"
+						"black"
+						"null"
+						"null"
+					}
+				}
+			}
+			last_created_country = {
+				set_relation_flag = {
+					who = subterranean_planet_former_owner
+					flag = subwar
+				}
+				set_country_flag = subterranean_empire
+				establish_communications_no_message = event_target:subterranean_former_planet_owner
+				save_event_target_as = subterranean_empire
+				owner_species = { save_event_target_as = subterranean_species }
+			}
+		}
+		from = { destroy_country = yes }
+		FROMFROM = {
+			remove_planet_flag = subterranean_invasion_planet
+			save_event_target_as = conquered_planet
+			set_owner = event_target:subterranean_empire
+			random_pop = { kill_pop = yes }
+			random_pop = { kill_pop = yes }
+			best_tile_for_pop = {
+				create_pop = { species = owner_main_species }
+			}
+			best_tile_for_pop = {
+				create_pop = { species = owner_main_species }
+			}
+			if = {
+				limit = {
+					any_tile = { has_building = "building_colony_shelter" }
+				}
+				random_tile = {
+					limit = {
+						has_building = "building_colony_shelter"
+					}
+					remove_building = yes
+					set_building = "building_capital_1"
+				}
+			}
+			create_army = {
+				name = "NAME_Loot-Equipped_Army"
+				owner = event_target:subterranean_empire
+				species = event_target:subterranean_species
+				type = "defense_army"
+			}
+			create_army = {
+				name = "NAME_Loot-Equipped_Army"
+				owner = event_target:subterranean_empire
+				species = event_target:subterranean_species
+				type = "defense_army"
+			}
+			if = {
+				limit = { has_spaceport = yes }
+				destroy_fleet = spaceport
+			}
+		}
+	}
+	
+	option = {
+		name = "ONSCREEN"
+		end_event_chain = "subterranean_civilization_chain"
+		country_event = { id = colony.58 }
+	}
+}
+
+# Incoming Transmission
+country_event = {
+	id = colony.58
+	title = TRANSMISSION
+	desc = "colony.58.desc"
+	
+	diplomatic = yes
+	
+	is_triggered_only = yes
+	
+	picture_event_data = {
+		portrait = event_target:subterranean_empire
+		planet_background = event_target:conquered_planet
+		graphical_culture = event_target:conquered_planet
+		graphical_culture = event_target:conquered_planet
+		room = event_target:subterranean_empire.ruler
+	}
+	
+	option = {
+		name = colony.58.a
+	}
+}
+
+# Aliens Surface
+planet_event = {
+	id = colony.59
+	title = "colony.59.name"
+	desc = "colony.59.desc"
+	picture = GFX_evt_alien_cavemen
+	show_sound = event_primitive_civilization
+	location = ROOT
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = colony.59.a
+		owner = {
+			country_event = { id = colony.53 }
+		}
+	}
+}
+
+# Another Invasion
+planet_event = {
+	id = colony.60
+	title = "colony.54.name"
+	desc = "colony.60.desc"
+	picture = GFX_evt_ground_combat
+	show_sound = event_ground_battle
+	location = ROOT
+	
+	trigger = {
+		has_planet_flag = seismic_disturbance_war
+		has_owner = yes
+		original_owner = yes
+		is_homeworld = no
+		has_ground_combat = no
+		num_pops > 0
+	}
+	
+	mean_time_to_happen = {
+		months = 240
+	}
+	
+	immediate = {
+		owner = { set_country_flag = subterranean_invasion_country }
+		set_planet_flag = subterranean_invasion_planet
+		random_country = {
+			limit = {
+				is_country_type = adversary
+				has_country_flag = subterranean_nation
+			}
+			save_event_target_as = subterranean_nation
+			owner_species = { save_event_target_as = subterranean_species }
+			create_leader = {
+				type = general
+				species = event_target:subterranean_species
+				name = random
+				skill = 500
+			}
+		}
+		if = {
+			limit = {
+				event_target:subterranean_nation = {
+					NOT = { has_country_flag = tech_request_approved }
+				}
+			}
+			create_army = {
+				name = "NAME_Invading_Horde"
+				owner = event_target:subterranean_nation
+				species = event_target:subterranean_species
+				type = "industrial_army"
+				leader = last_created_leader
+			}
+			create_army = {
+				name = "NAME_Invading_Horde"
+				owner = event_target:subterranean_nation
+				species = event_target:subterranean_species
+				type = "industrial_army"
+				leader = last_created_leader
+			}
+			create_army = {
+				name = "NAME_Invading_Horde"
+				owner = event_target:subterranean_nation
+				species = event_target:subterranean_species
+				type = "industrial_army"
+				leader = last_created_leader
+			}
+			create_army = {
+				name = "NAME_Invading_Horde"
+				owner = event_target:subterranean_nation
+				species = event_target:subterranean_species
+				type = "industrial_army"
+				leader = last_created_leader
+			}
+			create_army = {
+				name = "NAME_Invading_Horde"
+				owner = event_target:subterranean_nation
+				species = event_target:subterranean_species
+				type = "industrial_army"
+				leader = last_created_leader
+			}
+			create_army = {
+				name = "NAME_Invading_Horde"
+				owner = event_target:subterranean_nation
+				species = event_target:subterranean_species
+				type = "industrial_army"
+				leader = last_created_leader
+			}
+			create_army = {
+				name = "NAME_Invading_Horde"
+				owner = event_target:subterranean_nation
+				species = event_target:subterranean_species
+				type = "industrial_army"
+				leader = last_created_leader
+			}
+			create_army = {
+				name = "NAME_Invading_Horde"
+				owner = event_target:subterranean_nation
+				species = event_target:subterranean_species
+				type = "industrial_army"
+				leader = last_created_leader
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				event_target:subterranean_nation = { has_country_flag = tech_request_approved }
+			}
+			create_army = {
+				name = "NAME_Invading_Horde"
+				owner = event_target:subterranean_nation
+				species = event_target:subterranean_species
+				type = "postatomic_army"
+				leader = last_created_leader
+			}
+			create_army = {
+				name = "NAME_Invading_Horde"
+				owner = event_target:subterranean_nation
+				species = event_target:subterranean_species
+				type = "postatomic_army"
+				leader = last_created_leader
+			}
+			create_army = {
+				name = "NAME_Invading_Horde"
+				owner = event_target:subterranean_nation
+				species = event_target:subterranean_species
+				type = "postatomic_army"
+				leader = last_created_leader
+			}
+			create_army = {
+				name = "NAME_Invading_Horde"
+				owner = event_target:subterranean_nation
+				species = event_target:subterranean_species
+				type = "postatomic_army"
+				leader = last_created_leader
+			}
+			create_army = {
+				name = "NAME_Invading_Horde"
+				owner = event_target:subterranean_nation
+				species = event_target:subterranean_species
+				type = "postatomic_army"
+				leader = last_created_leader
+			}
+			create_army = {
+				name = "NAME_Invading_Horde"
+				owner = event_target:subterranean_nation
+				species = event_target:subterranean_species
+				type = "postatomic_army"
+				leader = last_created_leader
+			}
+			create_army = {
+				name = "NAME_Invading_Horde"
+				owner = event_target:subterranean_nation
+				species = event_target:subterranean_species
+				type = "postatomic_army"
+				leader = last_created_leader
+			}
+			create_army = {
+				name = "NAME_Invading_Horde"
+				owner = event_target:subterranean_nation
+				species = event_target:subterranean_species
+				type = "postatomic_army"
+				leader = last_created_leader
+			}
+			break = yes
+		}
+	}		
+	
+	option = {
+		name = colony.60.a
+		custom_tooltip = subterranean_invasion_2
+	}
+}
+
+# Collapse
+planet_event = {
+	id = colony.61
+	title = "colony.61.name"
+	desc = "colony.61.desc"
+	picture = GFX_evt_underground_civilization
+	show_sound = event_structural_collapse
+	location = ROOT
+	
+	trigger = {
+		has_planet_flag = seismic_disturbance_war
+		NOT = { has_planet_flag = seismic_disturbance_collapse }
+		has_owner = yes
+		original_owner = yes
+		is_homeworld = no
+		has_ground_combat = no
+		has_army = yes
+		num_pops > 0
+	}
+	
+	mean_time_to_happen = {
+		months = 240
+	}
+	
+	immediate = {
+		set_planet_flag = seismic_disturbance_collapse
+	}		
+	
+	option = {
+		name = colony.61.a
+		random_tile = {
+			limit = {
+				has_blocker = no
+				has_grown_pop = no
+				has_building = no
+				has_building_construction = no
+			}
+			set_blocker = "tb_sinkhole_subterraneans"
+		}
+		random_planet_army = { remove_army = yes }
+	}
+}
+
+# Raiding Parties
+planet_event = {
+	id = colony.62
+	title = "colony.62.name"
+	desc = "colony.62.desc"
+	picture = GFX_evt_burning_settlement
+	show_sound = event_ground_battle
+	location = ROOT
+	
+	trigger = {
+		has_planet_flag = seismic_disturbance_war
+		NOT = { has_planet_flag = seismic_disturbance_raid }
+		has_owner = yes
+		original_owner = yes
+		is_homeworld = no
+		has_ground_combat = no
+		num_pops > 0
+		any_tile = {
+			AND = {
+				has_building = yes
+				NOT = { 
+					has_building = "building_colony_shelter"
+					has_building = "building_capital_1"
+					has_building = "building_capital_2"
+					has_building = "building_capital_3"
+				}
+			}
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 240
+	}
+	
+	immediate = {
+		set_planet_flag = seismic_disturbance_raid
+	}		
+	
+	option = {
+		name = colony.62.a
+		random_tile = {
+			limit = { 
+				has_building = yes
+				is_ruined = no
+				NOT = { 
+					has_building = "building_colony_shelter"
+					has_building = "building_capital_1"
+					has_building = "building_capital_2"
+					has_building = "building_capital_3"
+				}
+			}
+			set_ruined = yes #remove_building = yes
+		}
+	}
+}
+
+# Surface Attack
+planet_event = {
+	id = colony.63
+	title = "colony.63.name"
+	desc = "colony.63.desc"
+	picture = GFX_evt_burning_settlement
+	show_sound = event_ground_battle
+	location = ROOT
+	
+	trigger = {
+		has_planet_flag = seismic_disturbance_war
+		NOT = { has_planet_flag = seismic_disturbance_attack }
+		has_owner = yes
+		original_owner = yes
+		is_homeworld = no
+		has_ground_combat = no
+		num_pops > 1
+	}
+	
+	mean_time_to_happen = {
+		months = 240
+	}
+	
+	immediate = {
+		set_planet_flag = seismic_disturbance_attack
+	}		
+	
+	option = {
+		name = colony.63.a
+		random_tile = {
+			limit = { 
+				has_grown_pop = yes
+				has_building = no
+			}
+			set_blocker = "tb_sinkhole_subterraneans"
+		}
+	}
+}
+
+# Survivor Pocket
+planet_event = {
+	id = colony.64
+	title = "colony.64.name"
+	desc = "colony.64.desc"
+	picture = GFX_evt_in_the_dark
+	show_sound = event_scanner
+	location = ROOT
+	
+	trigger = {
+		has_planet_flag = seismic_disturbance_destroyed
+		NOT = { has_planet_flag = seismic_disturbance_pocket }
+		has_owner = yes
+		original_owner = yes
+		is_homeworld = no
+		has_ground_combat = no
+		num_pops > 0
+	}
+	
+	mean_time_to_happen = {
+		months = 240
+	}
+	
+	immediate = {
+		set_planet_flag = seismic_disturbance_pocket
+		create_species = {
+			name = random
+			class = RANDOMTREK
+			portrait = random
+			traits = random
+			homeworld = planet
+		}
+		last_created_species = {
+			save_event_target_as = subterranean_species
+		}
+	}
+	
+	option = {
+		name = colony.64.a
+	}
+	option = {
+		name = colony.64.b
+		trigger = {
+			free_pop_tiles > 1
+			owner = { allows_slavery = yes }
+		}
+		hidden_effect = {
+			best_tile_for_pop = {
+				create_pop = {
+					species = event_target:subterranean_species
+					ethos = {
+						ethic = "ethic_spiritualist"			
+					}
+				}
+			}
+			best_tile_for_pop = {
+				create_pop = {
+					species = event_target:subterranean_species
+					ethos = {
+						ethic = "ethic_spiritualist"		
+					}
+				}
+			}
+			last_created_pop = { set_citizenship_type = { type = citizenship_slavery cooldown = yes } }
+		}
+	}
+}
+
+# Subterranean Expansion
+planet_event = {
+	id = colony.65
+	title = "colony.65.name"
+	desc = "colony.65.desc"
+	picture = GFX_evt_in_the_dark
+	show_sound = event_construction
+	location = ROOT
+	
+	trigger = {
+		has_planet_flag = seismic_disturbance_destroyed
+		NOT = { has_planet_flag = seismic_disturbance_expansion }
+		has_any_strategic_resource = no
+		has_owner = yes
+		original_owner = yes
+		is_homeworld = no
+		has_ground_combat = no
+		num_pops > 0
+		planet_size < 25
+	}
+	
+	mean_time_to_happen = {
+		months = 240
+	}
+	
+	immediate = {
+		set_planet_flag = seismic_disturbance_expansion
+	}		
+	
+	option = {
+		name = EXCELLENT
+		add_modifier = {
+			modifier = "subterranean_expansion"
+			days = -1
+		}
+		change_planet_size > 1
+	}
+}
+
+# Gold!
+planet_event = {
+	id = colony.66
+	title = "colony.66.name"
+	desc = "colony.66.desc"
+	picture = GFX_evt_in_the_dark
+	show_sound = event_mystic_reveal
+	location = ROOT
+	
+	trigger = {
+		has_planet_flag = seismic_disturbance_destroyed
+		NOT = { has_planet_flag = seismic_disturbance_gold }
+		has_owner = yes
+		original_owner = yes
+		is_homeworld = no
+		has_ground_combat = no
+		num_pops > 0
+	}
+	
+	mean_time_to_happen = {
+		months = 240
+	}
+	
+	immediate = {
+		hidden_effect = {
+			set_planet_flag = seismic_disturbance_gold
+		}
+	}		
+	
+	option = {
+		name = EXCELLENT
+		owner = {
+			add_monthly_resource_mult = {
+				resource = energy
+				value = @tier1materialreward
+				min = @tier1materialmin
+				max = @tier1materialmax
+			}
+		}
+	}
+}
+
+# Treasury
+planet_event = {
+	id = colony.67
+	title = "colony.67.name"
+	desc = "colony.67.desc"
+	picture = GFX_evt_in_the_dark
+	show_sound = event_radio_chatter
+	location = ROOT
+	
+	trigger = {
+		has_planet_flag = seismic_disturbance_destroyed
+		NOT = { has_planet_flag = seismic_disturbance_treasury }
+		has_owner = yes
+		original_owner = yes
+		is_homeworld = no
+		has_ground_combat = no
+		num_pops > 0
+	}
+	
+	mean_time_to_happen = {
+		months = 240
+	}
+	
+	immediate = {
+		set_planet_flag = seismic_disturbance_treasury
+	}		
+	
+	option = {
+		name = EXCELLENT
+		owner = {
+			add_monthly_resource_mult = {
+				resource = energy
+				value = @tier1materialreward
+				min = @tier1materialmin
+				max = @tier1materialmax
+			}
+		}
+	}
+}
+
+# Earthquakes 1
+planet_event = {
+	id = colony.68
+	title = "colony.68.name"
+	desc = "colony.68.desc"
+	picture = GFX_evt_burning_settlement
+	show_sound = event_air_raid_siren
+	location = ROOT
+	
+	trigger = {
+		has_planet_flag = seismic_disturbance_destroyed
+		NOT = { has_planet_flag = seismic_disturbance_quake }
+		has_owner = yes
+		original_owner = yes
+		is_homeworld = no
+		has_ground_combat = no
+		num_pops > 0
+	}
+	
+	mean_time_to_happen = {
+		months = 240
+	}
+	
+	immediate = {
+		set_planet_flag = seismic_disturbance_quake
+		
+	}
+	
+	option = {
+		name = UNFORTUNATE
+		random_tile = {
+			limit = { 
+				NOT = { 
+					has_building = "building_colony_shelter"
+					has_building = "building_capital_1"
+					has_building = "building_capital_2"
+					has_building = "building_capital_3"
+				}
+			}
+			set_blocker = "tb_sinkhole_subterraneans"
+		}
+	}
+}
+
+# Famine
+planet_event = {
+	id = colony.69
+	title = "colony.69.name"
+	desc = "colony.69.desc"
+	picture = GFX_evt_alien_cavemen
+	show_sound = event_primitive_civilization
+	location = ROOT
+	
+	trigger = {
+		has_planet_flag = seismic_disturbance_friendly
+		NOT = { has_planet_flag = seismic_disturbance_famine }
+		has_owner = yes
+		original_owner = yes
+		is_homeworld = no
+		has_ground_combat = no
+		num_pops > 0
+	}
+	
+	mean_time_to_happen = {
+		months = 240
+	}
+	
+	immediate = {
+		set_planet_flag = seismic_disturbance_famine
+	}
+	
+	option = {
+		name = colony.69.a
+		trigger = {
+			owner = { energy > 99 }
+		}
+		owner = {
+			add_energy = -100
+		}
+		hidden_effect = {
+			change_variable = { 
+				which = "angry_subterraneans" 
+				value = -1 
+			}
+		}
+		custom_tooltip = subterraneans_pleased
+	}
+	option = {
+		name = colony.69.b
+		hidden_effect = {
+			change_variable = { 
+				which = "angry_subterraneans" 
+				value = 1 
+			}
+		}
+		custom_tooltip = subterraneans_displeased
+	}
+}
+
+# Gift
+planet_event = {
+	id = colony.70
+	title = "colony.70.name"
+	desc = "colony.70.desc"
+	picture = GFX_evt_alien_cavemen
+	show_sound = event_primitive_civilization
+	location = ROOT
+	
+	trigger = {
+		has_planet_flag = seismic_disturbance_friendly
+		NOT = { has_planet_flag = seismic_disturbance_gift }
+		has_owner = yes
+		original_owner = yes
+		is_homeworld = no
+		has_ground_combat = no
+		num_pops > 0
+		check_variable = { 
+			which = "angry_subterraneans" 
+			value < 1 
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 240
+	}
+	
+	immediate = {
+		set_planet_flag = seismic_disturbance_gift
+	}
+	
+	option = {
+		name = colony.70.a
+		owner = {
+			add_monthly_resource_mult = {
+				resource = minerals
+				value = @tier1materialreward
+				min = @tier1materialmin
+				max = @tier1materialmax
+			}
+		}
+	}
+}
+
+# Subterranean Refugees
+planet_event = {
+	id = colony.71
+	title = "colony.71.name"
+	desc = "colony.71.desc"
+	picture = GFX_evt_alien_cavemen
+	show_sound = event_primitive_civilization
+	location = ROOT
+	
+	trigger = {
+		has_planet_flag = seismic_disturbance_friendly
+		NOT = { has_planet_flag = seismic_disturbance_refugees }
+		has_owner = yes
+		original_owner = yes
+		is_homeworld = no
+		has_ground_combat = no
+		num_pops > 0
+	}
+	
+	mean_time_to_happen = {
+		months = 240
+	}
+	
+	immediate = {
+		set_planet_flag = seismic_disturbance_refugees
+		random_country = {
+			limit = {
+				is_country_type = adversary
+				has_country_flag = subterranean_nation
+			}
+			owner_species = { save_event_target_as = subterranean_species }
+		}
+	}
+	
+	option = {
+		name = colony.71.a
+		trigger = {
+			free_pop_tiles > 0
+		}
+		create_pop = {
+			species = event_target:subterranean_species
+			ethos = {
+				ethic = "ethic_spiritualist"			
+			}
+		}
+		hidden_effect = {
+			change_variable = { 
+				which = "angry_subterraneans" 
+				value = 1 
+			}
+		}
+		custom_tooltip = subterraneans_displeased
+	}
+	option = {
+		name = colony.71.b
+		hidden_effect = {
+			change_variable = { 
+				which = "angry_subterraneans" 
+				value = -1 
+			}
+		}
+		custom_tooltip = subterraneans_pleased
+	}
+}
+
+# Xeno Anthropologists
+planet_event = {
+	id = colony.72
+	title = "colony.72.name"
+	desc = "colony.72.desc"
+	picture = GFX_evt_underground_civilization
+	show_sound = event_primitive_civilization
+	location = ROOT
+	
+	trigger = {
+		has_planet_flag = seismic_disturbance_friendly
+		NOT = { has_planet_flag = seismic_disturbance_anthropologists }
+		has_owner = yes
+		original_owner = yes
+		is_homeworld = no
+		has_ground_combat = no
+		num_pops > 0
+		check_variable = {
+			which = "angry_subterraneans"
+			value < 1
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 240
+	}
+	
+	immediate = {
+		set_planet_flag = seismic_disturbance_anthropologists
+	}
+	
+	option = {
+		name = EXCELLENT
+		owner = {
+			add_monthly_resource_mult = {
+				resource = society_research
+				value = @tier3researchreward
+				min = @tier3researchmin
+				max = @tier3researchmax
+			}
+		}
+	}
+}
+
+# Earthquakes 2
+planet_event = {
+	id = colony.73
+	title = "colony.68.name"
+	desc = "colony.73.desc"
+	picture = GFX_evt_underground_civilization
+	show_sound = event_air_raid_siren
+	location = ROOT
+	
+	trigger = {
+		has_planet_flag = seismic_disturbance_friendly
+		NOT = { has_planet_flag = seismic_disturbance_quake2 }
+		has_owner = yes
+		original_owner = yes
+		is_homeworld = no
+		has_ground_combat = no
+		num_pops > 0
+	}
+	
+	mean_time_to_happen = {
+		months = 240
+	}
+	
+	immediate = {
+		set_planet_flag = seismic_disturbance_quake2
+	}
+	
+	option = {
+		name = colony.73.a
+		hidden_effect = {
+			random_tile = {
+				limit = {
+					NOT = {
+						has_building = "building_colony_shelter"
+						has_building = "building_capital_1"
+						has_building = "building_capital_2"
+						has_building = "building_capital_3"
+					}
+				}
+				set_blocker = "tb_sinkhole_subterraneans"
+			}
+		}
+		every_owned_pop = {
+			add_modifier = {
+				modifier = "pop_angry_subterranean"
+				days = 3600
+			}
+		}
+	}
+	option = {
+		name = colony.73.b
+		hidden_effect = {
+			random_tile = {
+				limit = {
+					NOT = {
+						has_building = "building_colony_shelter"
+						has_building = "building_capital_1"
+						has_building = "building_capital_2"
+						has_building = "building_capital_3"
+					}
+				}
+				set_blocker = "tb_sinkhole_subterraneans"
+			}
+			change_variable = {
+				which = "angry_subterraneans"
+				value = 1
+			}
+		}
+		custom_tooltip = subterraneans_displeased
+	}
+}
+
+# Request for Technology
+planet_event = {
+	id = colony.74
+	title = "colony.74.name"
+	desc = "colony.74.desc"
+	picture = GFX_evt_alien_cavemen
+	show_sound = event_primitive_civilization
+	location = ROOT
+	
+	trigger = {
+		has_planet_flag = seismic_disturbance_friendly
+		NOT = { has_planet_flag = seismic_disturbance_tech }
+		has_owner = yes
+		original_owner = yes
+		is_homeworld = no
+		has_ground_combat = no
+		num_pops > 0
+	}
+	
+	mean_time_to_happen = {
+		months = 240
+	}
+	
+	immediate = {
+		set_planet_flag = seismic_disturbance_tech
+	}
+	
+	option = {
+		name = colony.74.a
+		hidden_effect = {
+			change_variable = { 
+				which = "angry_subterraneans" 
+				value = 1
+			}
+		}
+		custom_tooltip = subterraneans_displeased
+	}
+	option = {
+		name = colony.74.b
+		owner = {
+			add_modifier = {
+				modifier = subterranean_tech_transaction
+				days = 3600
+			}
+		}
+		hidden_effect = {
+			change_variable = { 
+				which = "angry_subterraneans" 
+				value = -1
+			}
+			random_country = {
+				limit = {
+					is_country_type = adversary
+					has_country_flag = subterranean_nation
+				}
+				set_country_flag = tech_request_approved
+			}
+		}
+		custom_tooltip = subterraneans_pleased
+	}
+}
+
+# Message Delivered
+planet_event = {
+	id = colony.75
+	title = "colony.75.name"
+	desc = "colony.75.desc"
+	picture = GFX_evt_alien_cavemen
+	show_sound = event_primitive_civilization
+	location = ROOT
+	
+	trigger = {
+		has_planet_flag = seismic_disturbance_friendly
+		has_owner = yes
+		original_owner = yes
+		is_homeworld = no
+		check_variable = {
+			which = "angry_subterraneans"
+			value > 2
+		}
+	}
+	
+	mean_time_to_happen = {
+		days = 20
+	}
+	
+	immediate = {
+		hidden_effect = {
+			remove_planet_flag = seismic_disturbance_friendly
+		}
+	}
+	
+	option = {
+		name = colony.75.a
+		owner = {
+			country_event = { id = colony.76 }
+		}
+	}
+}
+
+# Message
+country_event = {
+	id = colony.76
+	title = "colony.76.name"
+	desc = "colony.76.desc"
+	
+	is_triggered_only = yes
+	
+	diplomatic = yes
+	
+	picture_event_data = {
+		room = no_video_feed_room
+	}
+
+	immediate = {
+		random_country = {
+			limit = {
+				has_country_flag = subterranean_nation
+				is_country_type = adversary
+			}
+			save_event_target_as = subterranean_nation
+		}
+	}
+	
+	option = {
+		name = colony.76.a
+		FROM = {
+			remove_modifier = "subterranean_civilization"
+		}
+		hidden_effect = {
+			FROM = {
+				planet_event = { id = colony.54 days = 35 random = 40 }
+			}
+		}
+	}
+}
+
+### Abandoned Terraforming Equipment
+planet_event = {
+	id = colony.100
+	title = "colony.100.name"
+	desc = "colony.100.desc"
+	picture = GFX_evt_underground_civilization
+	show_sound = event_mystic_reveal
+	location = ROOT
+	
+	trigger = {
+		has_owner = yes
+		original_owner = yes
+		is_homeworld = no
+		owner = { is_ai = no }
+		has_ground_combat = no
+		is_occupied_flag = no
+		num_pops > 0
+		is_capital = no
+		is_artificial_planet = no
+		NOT = { is_planet_class = pc_assimilated }
+		NOR = {
+			has_planet_flag = abandoned_terraforming_planet
+			has_planet_flag = colony_event
+			is_planet_class = pc_nuked
+			is_planet_class = pc_gaia
+
+			owner = { has_country_flag = abandoned_terraforming_country }
+			owner = { has_authority = auth_machine_intelligence }
+			AND = {
+				owner = { ideal_planet_class = pc_arid }
+				is_planet_class = pc_arid
+			}
+			AND = {
+				owner = { ideal_planet_class = pc_desert }
+				is_planet_class = pc_desert
+			}
+			AND = {
+				owner = { ideal_planet_class = pc_tropical }
+				is_planet_class = pc_tropical
+			}
+			AND = {
+				owner = { ideal_planet_class = pc_continental }
+				is_planet_class = pc_continental
+			}
+			AND = {
+				owner = { ideal_planet_class = pc_ocean }
+				is_planet_class = pc_ocean
+			}
+			AND = {
+				owner = { ideal_planet_class = pc_tundra }
+				is_planet_class = pc_tundra
+			}
+			AND = {
+				owner = { ideal_planet_class = pc_arctic }
+				is_planet_class = pc_arctic
+			}
+			AND = {
+				owner = { ideal_planet_class = pc_alpine }
+				is_planet_class = pc_alpine
+			}
+			AND = {
+				owner = { ideal_planet_class = pc_savannah }
+				is_planet_class = pc_savannah
+			}
+		}
+	}
+	
+	is_triggered_only = yes
+	#mean_time_to_happen = {
+	#	months = 640
+	#}
+	
+	immediate = {
+		set_planet_flag = abandoned_terraforming_planet
+		set_planet_flag = colony_event
+		owner = { set_country_flag = abandoned_terraforming_country }
+	}
+	
+	option = {
+		name = colony.100.a
+		hidden_effect = {
+			add_modifier = {
+				modifier = "abandoned_terraforming"
+				days = -1
+			}
+		}
+		begin_event_chain = {
+			event_chain = "abandoned_terraforming_chain"
+			target = ROOT
+		}
+		enable_special_project = {
+			name = "ABANDONED_TERRAFORMING_1_PROJECT"
+			location = this
+			owner = root
+		}
+		enable_special_project = {
+			name = "ABANDONED_TERRAFORMING_2_PROJECT"
+			location = this
+			owner = root
+		}
+	}
+}
+
+# Terraforming Complex Dismantled
+planet_event = {
+	id = colony.101
+	title = "colony.101.name"
+	desc = "colony.101.desc"
+	picture = GFX_evt_society_research
+	show_sound = event_construction
+	location = ROOT
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		set_planet_flag = did_not_terraform
+	}
+	
+	option = {
+		name = EXCELLENT
+		if = {
+			limit = {
+				owner = {
+					NOT = { has_technology = tech_terraforming_base_1 }
+				}
+			}
+			owner = { give_technology = { tech = tech_terraforming_base_1 } }
+			break = yes
+		}
+		if = {
+			limit = {
+				owner = { has_technology = tech_terraforming_base_1 }
+			}
+			owner = {
+				add_monthly_resource_mult = {
+				resource = society_research
+				value = @tier4researchreward
+				min = @tier4researchmin
+				max = @tier4researchmax
+			}
+			}
+			break = yes
+		}
+	}
+}
+
+# Unstable Weather
+planet_event = {
+	id = colony.102
+	title = "colony.102.name"
+	desc = "colony.102.desc"
+	picture = GFX_evt_burning_settlement
+	show_sound = event_air_raid_siren
+	location = ROOT
+	
+	trigger = {
+		has_planet_flag = did_not_terraform
+		is_artificial_planet = no
+		NOT = { is_planet_class = pc_assimilated }
+		NOT = { has_planet_flag = terraforming_unstable_weather }
+		has_owner = yes
+		original_owner = yes
+		is_homeworld = no
+		has_ground_combat = no
+		num_pops > 0
+	}
+	
+	mean_time_to_happen = {
+		months = 240
+	}
+	
+	immediate = {
+		set_planet_flag = terraforming_unstable_weather
+	}
+	
+	option = {
+		name = UNFORTUNATE
+		random_tile = {
+			limit = {
+				has_building = yes
+				is_ruined = no
+				NOT = {
+					has_building = "building_colony_shelter"
+					has_building = "building_capital_1"
+					has_building = "building_capital_2"
+					has_building = "building_capital_3"
+				}
+			}
+			set_ruined = yes #remove_building = yes
+		}
+	}
+}
+
+# Drought
+planet_event = {
+	id = colony.103
+	title = "colony.103.name"
+	desc = "colony.103.desc"
+	picture = GFX_evt_colony_settlement
+	show_sound = event_planetary_riot
+	location = ROOT
+	
+	trigger = {
+		has_planet_flag = did_not_terraform
+		is_artificial_planet = no
+		NOT = { is_planet_class = pc_assimilated }
+		NOT = { has_planet_flag = terraforming_drought }
+		has_owner = yes
+		original_owner = yes
+		is_homeworld = no
+		has_ground_combat = no
+		num_pops > 0
+	}
+	
+	mean_time_to_happen = {
+		months = 240
+	}
+	
+	immediate = {
+		set_planet_flag = terraforming_drought
+	}
+	
+	option = {
+		name = colony.103.a
+		every_owned_pop = {
+			add_modifier = {
+				modifier = "pop_drought"
+				days = 3600
+			}
+		}
+	}
+	option = {
+		name = colony.103.b
+		trigger = {
+			owner = { energy > 49 }
+		}
+		owner = {
+			add_energy = -50
+		}
+	}
+}
+
+# Special Project Completed 1
+planet_event = {
+	id = colony.104
+	title = "PROJECT_COMPLETE"
+	desc = "colony.104.desc"
+	picture = GFX_evt_alien_nature
+	show_sound = event_activating_unknown_technology
+	location = ROOT
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = colony.104.a
+		custom_tooltip = abandoned_terraforming_completed
+		hidden_effect = {
+			remove_modifier = "abandoned_terraforming"
+			switch = {
+				trigger = is_planet_class
+				pc_desert = {
+					random_list = {
+						15 = { change_pc = pc_tropical }
+						15 = { change_pc = pc_arid }
+						15 = { change_pc = pc_continental }
+						15 = { change_pc = pc_ocean }
+						15 = { change_pc = pc_tundra }
+						15 = { change_pc = pc_arctic }
+						15 = { change_pc = pc_alpine }
+						15 = { change_pc = pc_savannah }
+					}
+				}
+				pc_arid = {
+					random_list = {
+						15 = { change_pc = pc_desert }
+						15 = { change_pc = pc_tropical }
+						15 = { change_pc = pc_continental }
+						15 = { change_pc = pc_ocean }
+						15 = { change_pc = pc_tundra }
+						15 = { change_pc = pc_arctic }
+						15 = { change_pc = pc_alpine }
+						15 = { change_pc = pc_savannah }
+					}
+				}
+				pc_savannah = {
+					random_list = {
+						15 = { change_pc = pc_tropical }
+						15 = { change_pc = pc_arid }
+						15 = { change_pc = pc_continental }
+						15 = { change_pc = pc_ocean }
+						15 = { change_pc = pc_tundra }
+						15 = { change_pc = pc_arctic }
+						15 = { change_pc = pc_alpine }
+						15 = { change_pc = pc_desert }
+					}
+				}
+				pc_tropical = {
+					random_list = {
+						15 = { change_pc = pc_desert }
+						15 = { change_pc = pc_arid }
+						15 = { change_pc = pc_continental }
+						15 = { change_pc = pc_ocean }
+						15 = { change_pc = pc_tundra }
+						15 = { change_pc = pc_arctic }
+						15 = { change_pc = pc_alpine }
+						15 = { change_pc = pc_savannah }
+					}
+				}
+				pc_ocean = {
+					random_list = {
+						15 = { change_pc = pc_desert }
+						15 = { change_pc = pc_tropical }
+						15 = { change_pc = pc_continental }
+						15 = { change_pc = pc_arid }
+						15 = { change_pc = pc_tundra }
+						15 = { change_pc = pc_arctic }
+						15 = { change_pc = pc_alpine }
+						15 = { change_pc = pc_savannah }
+					}
+				}
+				pc_continental = {
+					random_list = {
+						15 = { change_pc = pc_desert }
+						15 = { change_pc = pc_tropical }
+						15 = { change_pc = pc_arid }
+						15 = { change_pc = pc_ocean }
+						15 = { change_pc = pc_tundra }
+						15 = { change_pc = pc_arctic }
+						15 = { change_pc = pc_alpine }
+						15 = { change_pc = pc_savannah }
+					}
+				}
+				pc_tundra = {
+					random_list = {
+						15 = { change_pc = pc_desert }
+						15 = { change_pc = pc_tropical }
+						15 = { change_pc = pc_arid }
+						15 = { change_pc = pc_ocean }
+						15 = { change_pc = pc_continental }
+						15 = { change_pc = pc_arctic }
+						15 = { change_pc = pc_alpine }
+						15 = { change_pc = pc_savannah }
+					}
+				}
+				pc_arctic = {
+					random_list = {
+						15 = { change_pc = pc_desert }
+						15 = { change_pc = pc_tropical }
+						15 = { change_pc = pc_arid }
+						15 = { change_pc = pc_ocean }
+						15 = { change_pc = pc_tundra }
+						15 = { change_pc = pc_continental }
+						15 = { change_pc = pc_alpine }
+						15 = { change_pc = pc_savannah }
+					}
+				}
+				pc_alpine = {
+					random_list = {
+						15 = { change_pc = pc_tropical }
+						15 = { change_pc = pc_arid }
+						15 = { change_pc = pc_continental }
+						15 = { change_pc = pc_ocean }
+						15 = { change_pc = pc_tundra }
+						15 = { change_pc = pc_arctic }
+						15 = { change_pc = pc_desert }
+						15 = { change_pc = pc_savannah }
+					}
+				}
+			}
+		}
+	}
+}
+
+# Special Project Completed 2 (Mutated Creatures)
+planet_event = {
+	id = colony.105
+	title = "PROJECT_COMPLETE"
+	desc = "colony.105.desc"
+	picture = GFX_evt_ground_combat
+	show_sound = event_ground_battle
+	location = ROOT
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		hidden_effect = {
+			switch = {
+				trigger = is_planet_class
+				pc_desert = {
+					random_list = {
+						15 = { change_pc = pc_tropical }
+						15 = { change_pc = pc_arid }
+						15 = { change_pc = pc_continental }
+						15 = { change_pc = pc_ocean }
+						15 = { change_pc = pc_tundra }
+						15 = { change_pc = pc_arctic }
+						15 = { change_pc = pc_alpine }
+						15 = { change_pc = pc_savannah }
+					}
+				}
+				pc_arid = {
+					random_list = {
+						15 = { change_pc = pc_desert }
+						15 = { change_pc = pc_tropical }
+						15 = { change_pc = pc_continental }
+						15 = { change_pc = pc_ocean }
+						15 = { change_pc = pc_tundra }
+						15 = { change_pc = pc_arctic }
+						15 = { change_pc = pc_alpine }
+						15 = { change_pc = pc_savannah }
+					}
+				}
+				pc_savannah = {
+					random_list = {
+						15 = { change_pc = pc_tropical }
+						15 = { change_pc = pc_arid }
+						15 = { change_pc = pc_continental }
+						15 = { change_pc = pc_ocean }
+						15 = { change_pc = pc_tundra }
+						15 = { change_pc = pc_arctic }
+						15 = { change_pc = pc_alpine }
+						15 = { change_pc = pc_desert }
+					}
+				}
+				pc_tropical = {
+					random_list = {
+						15 = { change_pc = pc_desert }
+						15 = { change_pc = pc_arid }
+						15 = { change_pc = pc_continental }
+						15 = { change_pc = pc_ocean }
+						15 = { change_pc = pc_tundra }
+						15 = { change_pc = pc_arctic }
+						15 = { change_pc = pc_alpine }
+						15 = { change_pc = pc_savannah }
+					}
+				}
+				pc_ocean = {
+					random_list = {
+						15 = { change_pc = pc_desert }
+						15 = { change_pc = pc_tropical }
+						15 = { change_pc = pc_continental }
+						15 = { change_pc = pc_arid }
+						15 = { change_pc = pc_tundra }
+						15 = { change_pc = pc_arctic }
+						15 = { change_pc = pc_alpine }
+						15 = { change_pc = pc_savannah }
+					}
+				}
+				pc_continental = {
+					random_list = {
+						15 = { change_pc = pc_desert }
+						15 = { change_pc = pc_tropical }
+						15 = { change_pc = pc_arid }
+						15 = { change_pc = pc_ocean }
+						15 = { change_pc = pc_tundra }
+						15 = { change_pc = pc_arctic }
+						15 = { change_pc = pc_alpine }
+						15 = { change_pc = pc_savannah }
+					}
+				}
+				pc_tundra = {
+					random_list = {
+						15 = { change_pc = pc_desert }
+						15 = { change_pc = pc_tropical }
+						15 = { change_pc = pc_arid }
+						15 = { change_pc = pc_ocean }
+						15 = { change_pc = pc_continental }
+						15 = { change_pc = pc_arctic }
+						15 = { change_pc = pc_alpine }
+						15 = { change_pc = pc_savannah }
+					}
+				}
+				pc_arctic = {
+					random_list = {
+						15 = { change_pc = pc_desert }
+						15 = { change_pc = pc_tropical }
+						15 = { change_pc = pc_arid }
+						15 = { change_pc = pc_ocean }
+						15 = { change_pc = pc_tundra }
+						15 = { change_pc = pc_continental }
+						15 = { change_pc = pc_alpine }
+						15 = { change_pc = pc_savannah }
+					}
+				}
+				pc_alpine = {
+					random_list = {
+						15 = { change_pc = pc_tropical }
+						15 = { change_pc = pc_arid }
+						15 = { change_pc = pc_continental }
+						15 = { change_pc = pc_ocean }
+						15 = { change_pc = pc_tundra }
+						15 = { change_pc = pc_arctic }
+						15 = { change_pc = pc_desert }
+						15 = { change_pc = pc_savannah }
+					}
+				}
+			}
+			remove_modifier = "abandoned_terraforming"
+			owner = { set_country_flag = terraforming_mutants_invade_country }
+			set_planet_flag = terraforming_mutants_invade_planet
+			create_country = {
+				name = "NAME_Deformed_Creatures"
+				type = faction
+			}
+			create_army = {
+				name = "NAME_Deformed_Creatures"
+				owner = last_created
+				type = "mutant_army"
+			}
+			create_army = {
+				name = "NAME_Twisted_Beasts"
+				owner = last_created
+				type = "mutant_army"
+			}
+			create_army = {
+				name = "NAME_Mutated_Horrors"
+				owner = last_created
+				type = "mutant_army"
+			}
+		}
+	}
+	
+	option = {
+		name = colony.105.a
+		custom_tooltip = terraforming_mutants_attack
+	}
+}
+
+# Special Project Completed 3 (Gaia World)
+planet_event = {
+	id = colony.106
+	title = "PROJECT_COMPLETE"
+	desc = "colony.106.desc"
+	picture = GFX_evt_alien_nature
+	show_sound = event_activating_unknown_technology
+	location = ROOT
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = MARVELOUS
+		change_pc = pc_gaia
+		add_modifier = {
+			modifier = "gaia_world"
+			days = -1
+		}
+		hidden_effect = {
+			remove_modifier = "abandoned_terraforming"
+		}
+	}
+}
+
+# Special Project Completed 4 (Ammonia)
+planet_event = {
+	id = colony.107
+	title = "PROJECT_COMPLETE"
+	desc = "colony.107.desc"
+	picture = GFX_evt_dead_city
+	show_sound = event_activating_unknown_technology
+	location = ROOT
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = colony.107.a
+		change_pc = pc_toxic
+		destroy_colony = { keep_buildings = no }
+		add_modifier = {
+			modifier = "ammonia_biosphere"
+			days = -1
+		}
+		orbital_deposit_tile = { 
+			add_deposit = d_vast_society_deposit
+		}
+		hidden_effect = {
+			remove_modifier = "abandoned_terraforming"
+		}
+	}
+}
+
+# Victory over Mutants
+country_event = {
+	id = colony.108
+	title = "colony.108.name"
+	desc = "colony.108.desc"
+	picture = GFX_evt_ground_combat
+	show_sound = event_ground_battle
+	location = FROMFROM
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		has_country_flag = terraforming_mutants_invade_country
+		FROMFROM = { has_planet_flag = terraforming_mutants_invade_planet }
+	}
+	
+	immediate = {
+		remove_country_flag = terraforming_mutants_invade_country
+		FROMFROM = {
+			set_planet_flag = terraforming_mutants_defeated
+			remove_planet_flag = terraforming_mutants_invade_planet
+		}
+	}
+	
+	option = {
+		name = EXCELLENT
+		FROMFROM = {
+			random_tile = {
+				limit = {
+					has_blocker = no
+					has_building = no
+				}
+				set_building = "building_mutant_landfill"
+			}
+		}
+	}
+}
+
+# Mutant Stalker
+planet_event = {
+	id = colony.109
+	title = "colony.109.name"
+	desc = "colony.109.desc"
+	picture = GFX_evt_colony_settlement
+	show_sound = event_alien_nature
+	location = ROOT
+	
+	trigger = {
+		has_planet_flag = terraforming_mutants_defeated
+		NOT = { has_planet_flag = terraforming_mutant_stalker }
+		has_owner = yes
+		original_owner = yes
+		is_homeworld = no
+		has_ground_combat = no
+		num_pops > 0
+	}
+	
+	mean_time_to_happen = {
+		months = 240
+	}
+	
+	immediate = {
+		set_planet_flag = terraforming_mutant_stalker
+		add_modifier = {
+			modifier = "mutant_stalker"
+			days = -1
+		}
+	}
+	
+	option = {
+		name = colony.109.a
+		tooltip = {
+			add_modifier = {
+				modifier = "mutant_stalker"
+				days = -1
+			}
+		}
+		enable_special_project = {
+			name = "MUTANT_STALKER_PROJECT"
+			location = this
+			owner = root
+		}
+	}
+}
+
+# Special Project Completed
+planet_event = {
+	id = colony.110
+	title = "PROJECT_COMPLETE"
+	desc = "colony.110.desc"
+	picture = GFX_evt_alien_nature
+	show_sound = event_radio_chatter
+	location = ROOT
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = MARVELOUS
+		remove_modifier = "mutant_stalker"
+		# Armies on planet should gain experience
+	}
+}
+
+# Stalker Died of Old Age
+planet_event = {
+	id = colony.111
+	title = "colony.111.name"
+	desc = "colony.111.desc"
+	picture = GFX_evt_alien_nature
+	show_sound = event_alien_nature
+	location = ROOT
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = colony.111.a
+		remove_modifier = "mutant_stalker"
+		every_owned_pop = {
+			add_modifier = {
+				modifier = "pop_did_not_kill_stalker"
+				days = 3600
+			}
+		}
+	}
+}
+
+# Stalker Multiplied
+planet_event = {
+	id = colony.112
+	title = "colony.112.name"
+	desc = "colony.112.desc"
+	picture = GFX_evt_burning_settlement
+	show_sound = event_ground_battle
+	location = ROOT
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		remove_modifier = "mutant_stalker"
+		create_country = {
+			name = "NAME_Marauding_Creatures"
+			type = faction
+		}
+		create_army = {
+			name = "NAME_Marauding_Swarms"
+			owner = last_created
+			type = "mutant_army"
+		}
+		create_army = {
+			name = "NAME_Marauding_Swarms"
+			owner = last_created
+			type = "mutant_army"
+		}
+	}
+	
+	option = {
+		name = colony.112.a
+		custom_tooltip = terraforming_mutants_attack
+	}
+}
+
+# Defeat fighting Mutants
+country_event = {
+	id = colony.113
+	title = "colony.113.name"
+	desc = "colony.113.desc"
+	picture = GFX_evt_burning_settlement
+	show_sound = event_ghost_town
+	location = FROMFROM
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		has_country_flag = terraforming_mutants_invade_country
+		FROMFROM = { has_planet_flag = terraforming_mutants_invade_planet }
+	}
+	
+	immediate = {
+		FROMFROM = {
+			set_planet_flag = terraforming_mutants_won
+			remove_planet_flag = terraforming_mutants_invade_planet
+			purge = yes
+		}
+	}
+	
+	option = {
+		name = colony.113.a
+	}
+}
+
+# Liberated from Mutants
+country_event = {
+	id = colony.114
+	title = "colony.114.name"
+	desc = "colony.114.desc"
+	picture = GFX_evt_ground_combat
+	show_sound = event_ground_battle
+	location = FROMFROM
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		has_country_flag = terraforming_mutants_invade_country
+		FROMFROM = { has_planet_flag = terraforming_mutants_won }
+	}
+	
+	immediate = {
+		remove_country_flag = terraforming_mutants_invade_country
+		FROMFROM = {
+			set_planet_flag = terraforming_mutants_defeated
+			remove_planet_flag = terraforming_mutants_won
+			set_owner = ROOT
+			purge = no
+			every_owned_pop = {
+				remove_modifier = "pop_recently_conquered"
+				add_modifier = {
+					modifier = "pop_liberation_fever"
+					days = 3600
+				}
+			}
+		}
+	}
+	
+	option = {
+		name = colony.114.a
+	}
+}
+
+### Underground Vault
+planet_event = {
+	id = colony.150
+	title = "colony.150.name"
+	desc = "colony.150.desc"
+	picture = GFX_evt_underground_civilization
+	show_sound = event_mystic_reveal
+	location = ROOT
+	
+	trigger = {
+		NOT = { has_global_flag = underground_vault_global }
+		is_planet_class = pc_nuked
+		NOT = { has_planet_flag = primitives_nuked_themselves }
+		has_owner = yes
+		original_owner = yes
+		is_homeworld = no
+		owner = {
+			is_ai = no
+			NOT = { has_ethic = ethic_gestalt_consciousness }
+		}
+		has_ground_combat = no
+		is_occupied_flag = no
+		num_pops > 0
+		is_capital = no
+		is_artificial_planet = no
+		NOT = { is_planet_class = pc_assimilated }
+	}
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		set_planet_flag = underground_vault_planet
+		set_global_flag = underground_vault_global
+	}
+	
+	option = {
+		name = colony.150.a
+		enable_special_project = {
+			name = "UNDERGROUND_VAULT_PROJECT"
+			location = this
+			owner = root
+		}
+	}
+	option = {
+		name = colony.150.b
+	}
+}
+
+# Special Project Completed (Skeletal Remains)
+planet_event = {
+	id = colony.151
+	title = "PROJECT_COMPLETE"
+	desc = "colony.151.desc"
+	picture = GFX_evt_archaeological_dig
+	show_sound = event_airlock
+	location = ROOT
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = INTERESTING
+		random_tile = {
+			limit = {
+				has_blocker = no
+				has_building = no
+			}
+			set_building = "building_vault"
+		}
+	}
+}
+
+# Special Project Completed (Survivors)
+planet_event = {
+	id = colony.152
+	title = "PROJECT_COMPLETE"
+	desc = "colony.152.desc"
+	picture = GFX_evt_throne_room
+	show_sound = event_airlock
+	location = ROOT
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = colony.152.a
+		trigger = {
+			free_pop_tiles > 0
+		}
+		random_tile = {
+			limit = {
+				has_blocker = no
+				has_building = no
+			}
+			set_building = "building_vault_2"
+		}
+		create_species = {
+			name = random
+			class = RANDOMTREK
+			portrait = random
+			traits = random
+			homeworld = root
+		}
+		random_tile = {
+			limit = {
+				has_blocker = no
+				has_grown_pop = no
+				has_growing_pop = no
+			}
+			create_pop = {
+				species = last_created
+			}
+		}
+		random_tile = {
+			limit = {
+				has_blocker = no
+				has_grown_pop = no
+				has_growing_pop = no
+			}
+			create_pop = {
+				species = last_created
+			}
+		}
+		random_tile = {
+			limit = {
+				has_blocker = no
+				has_grown_pop = no
+				has_growing_pop = no
+			}
+			create_pop = {
+				species = last_created
+			}
+		}
+	}
+	option = {
+		name = colony.152.b
+		trigger = {
+			free_pop_tiles > 0
+			owner = {
+				allows_slavery = yes
+			}
+		}
+		random_tile = {
+			limit = {
+				has_blocker = no
+				has_building = no
+			}
+			set_building = "building_vault_2"
+		}
+		create_species = {
+			name = random
+			class = RANDOMTREK
+			portrait = random
+			traits = random
+		}
+		random_tile = {
+			limit = {
+				has_blocker = no
+				has_grown_pop = no
+				has_growing_pop = no
+			}
+			create_pop = {
+				species = last_created
+			}
+		}
+		random_tile = {
+			limit = {
+				has_blocker = no
+				has_grown_pop = no
+				has_growing_pop = no
+			}
+			create_pop = {
+				species = last_created
+			}
+		}
+		random_tile = {
+			limit = {
+				has_blocker = no
+				has_grown_pop = no
+				has_growing_pop = no
+			}
+			create_pop = {
+				species = last_created
+			}
+		}
+		last_created_pop = { set_citizenship_type = { type = citizenship_slavery cooldown = yes } }
+	}
+	option = {
+		name = colony.152.c
+		trigger = {
+			owner = {
+				OR = {
+					has_ethic = "ethic_xenophobe"
+					has_ethic = "ethic_fanatic_xenophobe"
+				}
+			}
+		}
+	}
+}
+
+# Special Project Completed (Mutant Horrors)
+planet_event = {
+	id = colony.153
+	title = "PROJECT_COMPLETE"
+	desc = "colony.153.desc"
+	picture = GFX_evt_ground_combat
+	show_sound = event_ground_battle
+	location = ROOT
+	
+	is_triggered_only = yes
+
+	immediate = {
+		owner = { set_country_flag = vault_mutants_invade_country }
+		set_planet_flag = vault_mutants_invade_planet
+		create_country = {
+			name = "NAME_Mutant_Horrors"
+			type = faction
+		}
+		create_army = {
+			name = "NAME_Mutant_Horrors"
+			owner = last_created
+			type = "mutant_army"
+		}
+		create_army = {
+			name = "NAME_Mutant_Horrors"
+			owner = last_created
+			type = "mutant_army"
+		}
+		create_army = {
+			name = "NAME_Mutant_Horrors"
+			owner = last_created
+			type = "mutant_army"
+		}
+	}
+	
+	option = {
+		name = colony.153.a
+	}
+}
+
+# Defeat fighting Mutants
+country_event = {
+	id = colony.154
+	title = "colony.113.name"
+	desc = "colony.113.desc"
+	picture = GFX_evt_burning_settlement
+	show_sound = event_ghost_town
+	location = FROMFROM
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		has_country_flag = vault_mutants_invade_country
+		FROMFROM = { has_planet_flag = vault_mutants_invade_planet }
+	}
+	
+	immediate = {
+		FROMFROM = {
+			remove_planet_flag = vault_mutants_invade_planet
+			set_planet_flag = vault_mutants_won
+			purge = yes
+		}
+	}
+	
+	option = {
+		name = colony.113.a
+	}
+}
+
+# Liberated from Mutants
+country_event = {
+	id = colony.158
+	title = "colony.114.name"
+	desc = "colony.114.desc"
+	picture = GFX_evt_ground_combat
+	show_sound = event_ground_battle
+	location = FROMFROM
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		has_country_flag = vault_mutants_invade_country
+		FROMFROM = { has_planet_flag = vault_mutants_won }
+	}
+	
+	immediate = {
+		remove_country_flag = vault_mutants_invade_country
+		FROMFROM = {
+			remove_planet_flag = vault_mutants_won
+			set_owner = ROOT
+			purge = no
+			every_owned_pop = {
+				remove_modifier = "pop_recently_conquered"
+				add_modifier = {
+					modifier = "pop_liberation_fever"
+					days = 3600
+				}
+			}
+		}
+	}
+	
+	option = {
+		name = colony.114.a
+	}
+}
+
+# Nuclear Bomb
+planet_event = {
+	id = colony.155
+	title = "colony.155.name"
+	desc = "colony.155.desc"
+	picture = GFX_evt_colony_settlement
+	show_sound = event_air_raid_siren
+	location = ROOT
+	
+	trigger = {
+		is_planet_class = pc_nuked
+		NOT = { has_planet_flag = wasteland_nuclear_bomb }
+		has_owner = yes
+		original_owner = yes
+		is_homeworld = no
+		owner = { is_ai = no }
+		has_ground_combat = no
+		is_occupied_flag = no
+		num_pops > 0
+		is_capital = no
+		is_artificial_planet = no
+		NOT = { is_planet_class = pc_assimilated }
+	}
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		hidden_effect = {
+			set_planet_flag = wasteland_nuclear_bomb
+		}
+	}
+	
+	option = {
+		name = colony.155.a
+		enable_special_project = {
+			name = "NUCLEAR_BOMB_PROJECT"
+			location = this
+			owner = root
+		}
+	}
+}
+
+# Special Project Completed
+planet_event = {
+	id = colony.156
+	title = "PROJECT_COMPLETE"
+	desc = "colony.156.desc"
+	picture = GFX_evt_colony_settlement
+	show_sound = event_activating_unknown_technology
+	location = ROOT
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = colony.156.a
+	}
+}
+
+# Special Project Failed
+planet_event = {
+	id = colony.157
+	title = "PROJECT_FAILURE"
+	desc = "colony.157.desc"
+	picture = GFX_evt_nuclear_explosion
+	show_sound = event_super_explosion
+	location = ROOT
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		random_tile = {
+			limit = { has_grown_pop = yes }
+			kill_pop = yes
+			set_blocker = "tb_bomb_crater"
+		}
+	}
+	
+	option = {
+		name = colony.157.a
+	}
+}
+
+# Particle Accelerator
+planet_event = {
+	id = colony.160
+	title = "colony.160.name"
+	desc = "colony.160.desc"
+	picture = GFX_evt_physics_research
+	show_sound = event_laboratory_sound
+	location = ROOT
+	
+	trigger = {
+		is_planet_class = pc_nuked
+		NOT = { has_planet_flag = wasteland_particle_accelerator }
+		has_owner = yes
+		original_owner = yes
+		is_homeworld = no
+		owner = { is_ai = no }
+		has_ground_combat = no
+		is_occupied_flag = no
+		num_pops > 0
+		is_capital = no
+		any_tile = {
+			AND = {
+				has_blocker = no
+				has_building = no
+				has_building_construction = no
+			}
+		}
+	}
+	
+	is_triggered_only = yes
+	#mean_time_to_happen = {
+	#	months = 240
+	#}
+	
+	immediate = {
+		set_planet_flag = wasteland_particle_accelerator
+	}
+	
+	option = {
+		name = FASCINATING
+		random_tile = {
+			limit = { 
+				has_blocker = no 
+				has_building = no
+			}
+			set_building = "building_particle_accelerator"
+		}
+	}
+}
+
+# Surviving Infrastructure
+planet_event = {
+	id = colony.161
+	title = "colony.161.name"
+	desc = "colony.161.desc"
+	picture = GFX_evt_city_ruins
+	show_sound = event_administrative_work
+	location = ROOT
+	
+	trigger = {
+		is_planet_class = pc_nuked
+		NOT = { has_planet_flag = wasteland_infrastructure }
+		has_owner = yes
+		original_owner = yes
+		is_homeworld = no
+		owner = { is_ai = no }
+		has_ground_combat = no
+		is_occupied_flag = no
+		num_pops > 0
+		is_capital = no
+	}
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		hidden_effect = {
+			set_planet_flag = wasteland_infrastructure
+		}
+	}
+	
+	option = {
+		name = EXCELLENT
+		add_modifier = {
+			modifier = "wasteland_infrastructure"
+			days = -1
+		}
+	}
+}
+
+# Space Station
+planet_event = {
+	id = colony.162
+	title = "colony.162.name"
+	desc = "colony.162.desc"
+	picture = GFX_evt_satellite_in_orbit
+	show_sound = event_ship_bridge
+	location = ROOT
+	
+	trigger = {
+		is_planet_class = pc_nuked
+		NOT = { has_planet_flag = wasteland_space_station }
+		NOT = { has_planet_flag = primitives_nuked_themselves }
+		has_owner = yes
+		original_owner = yes
+		is_homeworld = no
+		owner = { is_ai = no }
+		has_ground_combat = no
+		is_occupied_flag = no
+		num_pops > 0
+		is_capital = no
+	}
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		hidden_effect = {
+			set_planet_flag = wasteland_space_station
+		}
+	}
+	
+	option = {
+		name = INTRIGUING
+		owner = {
+			add_monthly_resource_mult = {
+				resource = engineering_research
+				value = @tier1researchreward
+				min = @tier1researchmin
+				max = @tier1researchmax
+			}
+		}
+	}
+}
+
+# Wasteland Radiation
+planet_event = {
+	id = colony.163
+	title = "colony.163.name"
+	desc = "colony.163.desc"
+	picture = GFX_evt_colony_settlement
+	show_sound = event_administrative_work
+	location = ROOT
+	
+	trigger = {
+		is_planet_class = pc_nuked
+		NOT = { has_planet_flag = wasteland_radiation }
+		has_owner = yes
+		original_owner = yes
+		is_homeworld = no
+		owner = { is_ai = no }
+		owner = { NOT = { has_ethic = ethic_gestalt_consciousness } }
+		has_ground_combat = no
+		is_occupied_flag = no
+		num_pops > 0
+		is_capital = no
+	}
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		hidden_effect = {
+			set_planet_flag = wasteland_radiation
+		}
+	}
+	
+	option = {
+		name = UNFORTUNATE
+		add_modifier = {
+			modifier = "wasteland_radiation"
+			days = 3600
+		}
+	}
+}
+
+# Pacifist Movement
+planet_event = {
+	id = colony.164
+	title = "colony.164.name"
+	desc = "colony.164.desc"
+	picture = GFX_evt_smugglers_in_bar
+	show_sound = event_administrative_work
+	location = ROOT
+	
+	trigger = {
+		is_planet_class = pc_nuked
+		NOT = { has_planet_flag = wasteland_pacifist_movement }
+		has_owner = yes
+		original_owner = yes
+		is_homeworld = no
+		owner = { is_ai = no }
+		owner = { NOT = { has_ethic = ethic_gestalt_consciousness } }
+		has_ground_combat = no
+		is_occupied_flag = no
+		num_pops > 0
+		is_capital = no
+		any_pop = {
+			NOT = {
+				OR = {
+					has_ethic = "ethic_pacifist"
+					has_ethic = "ethic_fanatic_pacifist"
+				}
+			}
+			is_enslaved = no
+			is_being_purged = no
+		}
+	}
+	
+	is_triggered_only = yes
+	#mean_time_to_happen = {
+	#	months = 240
+	#}
+	
+	immediate = {
+		hidden_effect = {
+			set_planet_flag = wasteland_pacifist_movement
+		}
+	}
+	
+	option = {
+		name = colony.164.a
+		custom_tooltip = colony.164.a.tooltip
+		trigger = {
+			owner = {
+				NOT = {
+					has_ethic = "ethic_militarist"
+					has_ethic = "ethic_fanatic_militarist"
+					has_ethic = "ethic_pacifist"
+					has_ethic = "ethic_fanatic_pacifist"
+				}
+			}
+		}
+		random_pop = {
+			limit = {
+				NOR = {
+					has_ethic = "ethic_pacifist"
+					pop_has_trait = trait_robotic_1
+					pop_has_trait = trait_robotic_2
+				}
+			}
+			pop_change_ethic = ethic_pacifist
+		}
+		random_pop = {
+			limit = {
+				NOR = {
+					has_ethic = "ethic_pacifist"
+					pop_has_trait = trait_robotic_1
+					pop_has_trait = trait_robotic_2
+				}
+			}
+			pop_change_ethic = ethic_pacifist
+		}
+		random_pop = {
+			limit = {
+				NOR = {
+					has_ethic = "ethic_pacifist"
+					pop_has_trait = trait_robotic_1
+					pop_has_trait = trait_robotic_2
+				}
+			}
+			pop_change_ethic = ethic_pacifist
+		}
+	}
+	option = {
+		name = colony.164.b
+		custom_tooltip = colony.164.a.tooltip
+		trigger = {
+			owner = {
+				OR = {
+					has_ethic = "ethic_militarist"
+					has_ethic = "ethic_fanatic_militarist"
+				}
+			}
+		}
+		random_pop = {
+			limit = {
+				NOR = {
+					has_ethic = "ethic_pacifist"
+					pop_has_trait = trait_robotic_1
+					pop_has_trait = trait_robotic_2
+				}
+			}
+			pop_change_ethic = ethic_pacifist
+		}
+		random_pop = {
+			limit = {
+				NOR = {
+					has_ethic = "ethic_pacifist"
+					pop_has_trait = trait_robotic_1
+					pop_has_trait = trait_robotic_2
+				}
+			}
+			pop_change_ethic = ethic_pacifist
+		}
+		random_pop = {
+			limit = {
+				NOR = {
+					has_ethic = "ethic_pacifist"
+					pop_has_trait = trait_robotic_1
+					pop_has_trait = trait_robotic_2
+				}
+			}
+			pop_change_ethic = ethic_pacifist
+		}
+	}
+	option = {
+		name = colony.164.c
+		custom_tooltip = colony.164.a.tooltip
+		trigger = {
+			owner = {
+				OR = {
+					has_ethic = "ethic_pacifist"
+					has_ethic = "ethic_fanatic_pacifist"
+				}
+			}
+		}
+		random_pop = {
+			limit = {
+				NOR = {
+					has_ethic = "ethic_pacifist"
+					pop_has_trait = trait_robotic_1
+					pop_has_trait = trait_robotic_2
+				}
+			}
+			pop_change_ethic = ethic_pacifist
+		}
+		random_pop = {
+			limit = {
+				NOR = {
+					has_ethic = "ethic_pacifist"
+					pop_has_trait = trait_robotic_1
+					pop_has_trait = trait_robotic_2
+				}
+			}
+			pop_change_ethic = ethic_pacifist
+		}
+		random_pop = {
+			limit = {
+				NOR = {
+					has_ethic = "ethic_pacifist"
+					pop_has_trait = trait_robotic_1
+					pop_has_trait = trait_robotic_2
+				}
+			}
+			pop_change_ethic = ethic_pacifist
+		}
+	}
+}
+
+# Orbital Debris
+planet_event = {
+	id = colony.170
+	title = "colony.170.name"
+	desc = "colony.170.desc"
+	picture = GFX_evt_satellite_in_orbit
+	show_sound = event_ship_bridge
+	location = ROOT
+	
+	trigger = {
+		is_planet_class = pc_nuked
+		NOT = { has_planet_flag = wasteland_orbital_debris }
+		NOT = { has_planet_flag = primitives_nuked_themselves }
+		has_owner = yes
+		original_owner = yes
+		is_homeworld = no
+		owner = { is_ai = no }
+		has_ground_combat = no
+		is_occupied_flag = no
+		num_pops > 0
+		is_capital = no
+	}
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		hidden_effect = {
+			set_planet_flag = wasteland_orbital_debris
+		}
+	}
+	
+	option = {
+		name = colony.170.a
+		add_modifier = {
+			modifier = "wasteland_orbital_debris"
+			days = -1
+		}
+		enable_special_project = {
+			name = "ORBITAL_DEBRIS_PROJECT"
+			location = this
+			owner = root
+		}
+	}
+}
+
+# Freighter Crash
+planet_event = {
+	id = colony.171
+	title = "colony.171.name"
+	desc = "colony.171.desc"
+	picture = GFX_evt_atmospheric_entry
+	show_sound = event_ship_explosion
+	location = ROOT
+	
+	trigger = {
+		has_planet_flag = wasteland_orbital_debris
+		has_modifier = wasteland_orbital_debris
+		NOT = { has_planet_flag = wasteland_freighter_crash }
+	}
+	
+	mean_time_to_happen = {
+		months = 240
+	}
+	
+	immediate = {
+		set_planet_flag = wasteland_freighter_crash
+	}
+	
+	option = {
+		name = colony.171.a
+		random_tile = {
+			limit = { has_blocker = no }
+			set_blocker = "tb_crater"
+		}
+	}
+}
+
+# Debris Impact
+planet_event = {
+	id = colony.172
+	title = "colony.172.name"
+	desc = "colony.172.desc"
+	picture = GFX_evt_atmospheric_entry
+	show_sound = event_super_explosion
+	location = ROOT
+	
+	trigger = {
+		has_modifier = wasteland_orbital_debris
+		has_planet_flag = wasteland_orbital_debris
+		NOT = { has_planet_flag = wasteland_debris_impact }
+	}
+	
+	mean_time_to_happen = {
+		months = 240
+	}
+	
+	immediate = {
+		hidden_effect = {
+			set_planet_flag = wasteland_debris_impact
+		}
+	}
+	
+	option = {
+		name = colony.172.a
+		random_pop = {
+			kill_pop = yes
+		}
+	}
+}
+
+# Special Project Completed I
+planet_event = {
+	id = colony.173
+	title = "PROJECT_COMPLETE"
+	desc = "colony.173.desc"
+	picture = GFX_evt_ship_in_orbit
+	show_sound = event_radio_chatter
+	location = ROOT
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EXCELLENT
+		remove_modifier = "wasteland_orbital_debris"
+	}
+}
+
+# Special Project Completed II
+planet_event = {
+	id = colony.174
+	title = "PROJECT_COMPLETE"
+	desc = "colony.174.desc"
+	picture = GFX_evt_ship_in_orbit
+	show_sound = event_radio_chatter
+	location = ROOT
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EXCELLENT
+		remove_modifier = "wasteland_orbital_debris"
+		owner = {
+			add_monthly_resource_mult = {
+				resource = minerals
+				value = @tier1materialreward
+				min = @tier1materialmin
+				max = @tier1materialmax
+			}
+		}
+	}
+}
+
+### Asteroid Sighted
+planet_event = {
+	id = colony.180
+	title = "colony.180.name"
+	desc = "colony.180.desc"
+	picture = GFX_evt_asteroid_approaching_planet
+	show_sound = event_air_raid_siren
+	location = ROOT
+	
+	trigger = {
+		has_owner = yes
+		original_owner = yes
+		is_homeworld = no
+		owner = { 
+			is_ai = no 
+			is_borg_empire = no
+		}
+		has_ground_combat = no
+		is_occupied_flag = no
+		num_pops > 0
+		is_capital = no
+		is_artificial_planet = no
+		NOR = {
+			has_planet_flag = asteroid_sighted
+			has_planet_flag = asteroid_collision
+			has_global_flag = asteroid_sighted_global
+			owner = { has_country_flag = asteroid_sighted_country }
+		}
+	}
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		owner = {
+			set_country_flag = asteroid_sighted_country
+		}
+		set_global_flag = asteroid_sighted_global
+		set_planet_flag = asteroid_sighted
+		create_country = {
+			name = "NAME_Incoming_Asteroid"
+			type = faction
+			auto_delete = no
+			flag = {
+				icon = {
+					category = "zoological"
+					file = "flag_zoological_1.dds"
+				}
+				background= {
+					category = "backgrounds"
+					file = "new_dawn.dds"
+				}
+				colors={
+					"black"
+					"black"
+					"null"
+					"null"
+				}
+			}
+			day_zero_contact = no
+			effect = {
+				establish_communications_no_message = root.owner
+			}
+		}
+		last_created_country = {
+			set_country_flag = incoming_asteroid
+			create_fleet = {
+				name = "NAME_Asteroid"
+				effect = {
+					set_aggro_range = 0
+					set_fleet_stance = aggressive
+					set_aggro_range_measure_from = self
+					set_owner = PREV
+					set_fleet_flag = asteroid_fleet
+					save_event_target_as = asteroid_fleet_target
+					create_ship = {
+						name = "NAME_Asteroid"
+						design = "NAME_Asteroid"
+					}
+					set_location = {
+						target = ROOT
+						distance = 75
+						angle = random
+					}
+					queue_actions = {
+						move_to = ROOT
+						effect = {
+							id = "colony.180.effect.1"
+							ROOT = {
+								planet_event = { id = colony.183 }
+							}
+						}
+					}
+				}
+			}
+			set_relation_flag = {
+				who = root.owner
+				flag = asteroid_enemy
+			}
+		}
+	}
+	
+	option = {
+		name = colony.180.a
+		begin_event_chain = {
+			event_chain = "asteroid_sighted_chain"
+			target = root.owner
+		}
+	}
+}
+
+# Asteroid Destroyed (HIDDEN)
+country_event = {
+	id = colony.181
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		exists = from
+		from = { has_country_flag = incoming_asteroid }
+	}
+
+	immediate = {
+		if = {
+			limit = {
+				has_country_flag = asteroid_sighted_country
+				from = {
+					has_relation_flag = {
+						who = root
+						flag = asteroid_enemy
+					}
+				}
+			}
+			random_owned_planet = {
+				limit = { has_planet_flag = asteroid_sighted }
+				planet_event = { id = colony.182 }
+			}
+			else = {
+				random_country = {
+					limit = {
+						reverse_has_relation_flag = {
+							who = from
+							flag = asteroid_enemy
+						}
+						has_country_flag = asteroid_sighted_country
+					}
+					random_owned_planet = {
+						limit = { has_planet_flag = asteroid_sighted }
+						planet_event = { id = colony.182 }
+					}
+				}
+			}
+		}
+	}
+}
+
+# Asteroid Destroyed
+planet_event = {
+	id = colony.182
+	title = "colony.182.name"
+	desc = "colony.182.desc"
+	picture = GFX_evt_atmospheric_entry
+	show_sound = event_ship_explosion
+	location = ROOT
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		fromfrom = {
+			remove_relation_flag = { who = root.owner flag = asteroid_enemy }
+			destroy_country = yes
+		}
+		remove_global_flag = asteroid_sighted_global
+		remove_planet_flag = asteroid_sighted
+		set_planet_flag = asteroid_collision
+		owner = {
+			add_event_chain_counter = {
+				event_chain = "asteroid_sighted_chain"
+				counter = "asteroid_destroyed"
+				amount = 1
+			}
+		}
+	}
+	
+	option = {
+		name = EXCELLENT
+		owner = {
+			end_event_chain = "asteroid_sighted_chain"
+			add_monthly_resource_mult = {
+				resource = minerals
+				value = @tier2materialreward
+				min = @tier2materialmin
+				max = @tier2materialmax
+			}
+		}
+	}
+}
+
+# Asteroid Impacts Planet
+planet_event = {
+	id = colony.183
+	title = "colony.183.name"
+	desc = "colony.183.desc"
+	picture = GFX_evt_nuclear_explosion
+	show_sound = event_super_explosion
+	location = ROOT
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		owner = {
+			country_event = { id = colony.184 days = 1 }
+		}
+		remove_global_flag = asteroid_sighted_global
+		remove_planet_flag = asteroid_sighted
+		set_planet_flag = asteroid_collision
+		random_tile = {
+			limit = { has_blocker = no }
+			set_blocker = "tb_crater"
+		}
+		owner = { end_event_chain = "asteroid_sighted_chain" }
+	}
+	
+	option = {
+		name = colony.183.a
+		if = {
+			limit = {
+				num_pops < 2
+			}
+			random_owned_pop = { kill_pop = yes }
+			else = {
+				if = {
+					limit = {
+						num_pops > 2
+						num_pops < 6
+					}
+					random_owned_pop = { kill_pop = yes }
+					random_owned_pop = { kill_pop = yes }
+					else = {
+						if = {
+							limit = {
+								num_pops > 6
+							}
+							random_owned_pop = { kill_pop = yes }
+							random_owned_pop = { kill_pop = yes }
+							random_owned_pop = { kill_pop = yes }
+							random_owned_pop = { kill_pop = yes }
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+# Destroy Asteroid after fleet actions have completed and event fired
+country_event = {
+	id = colony.184
+	hide_window = yes
+
+	is_triggered_only = yes
+
+	immediate = {
+
+		random_country = {
+			limit = {
+				has_relation_flag = {
+					who = root
+					flag = asteroid_enemy
+				}
+			}
+			every_owned_ship = {
+				fleet = {
+					destroy_fleet = this
+				}
+			}
+			destroy_country = yes
+		}
+	}
+}

@@ -1,0 +1,108 @@
+@distance = 30
+@base_moon_distance = 10
+
+# Orion Homeworld
+orion_homeworld = {			
+	name = "Orion"		
+	class = sc_f		
+	usage = custom_empire
+	flags = { orion_free_states }
+	init_effect = { log = "orion homeworld" }
+	planet = { name = "Orion A"	class = star orbit_distance = 0 orbit_angle = 1 size = 50 has_ring = no }		
+	change_orbit = { min = 40 max = 50 }
+	planet = { name = "Orion 1" class = "pc_l2_class" size = { min = 5 max = 12 } }		
+	change_orbit = { min = 20 max = 30 }
+	planet = { name = "Orion 2" class = "pc_class_d_barren" size = { min = 14 max = 20 } }
+	change_orbit = { min = 20 max = 30 }	
+	planet = {		
+		name = "Vondem"
+		class = "pc_continental"
+		size = { min = 18 max = 20 }	
+		has_ring = yes
+		modifiers = none
+		tile_blockers = none
+		starting_planet = yes
+		has_ring = no
+		init_effect = { prevent_anomaly = yes }
+		init_effect = {
+			if = {
+				limit = { NOT = { any_country = { has_country_flag = orion_free_states } } }
+				create_species = {
+				    name = "Orion"
+				    class = ORI
+				    portrait = orion
+				    homeworld = THIS
+				    traits = {
+				        trait = "trait_thrifty"
+				        trait = "trait_strong"
+				        trait = "trait_charismatic"
+				        trait = "trait_deviants"
+				        trait = "trait_untrustworthy"
+				        ideal_planet_class = "pc_continental"
+					}
+				}
+				last_created_species = { save_global_event_target_as = orionSpecies }
+				create_country = {
+					name = "NAME_orion_free_states"
+					type = default
+					ignore_initial_colony_error = yes
+					civics = { civic = "civic_shadow_council" civic = "civic_cutthroat_politics" }
+					authority = auth_oligarchic
+					name_list = "Orion"
+					ethos = { ethic = "ethic_militarist" ethic = "ethic_authoritarian" ethic = "ethic_xenophobe" }
+					species = event_target:orionSpecies
+					flag = {
+						icon = { category = "trek" file = "orion.dds" }
+						background = { category = "backgrounds" file = "circle.dds" }
+						colors = { "customcolor1951" "customcolor1915" "null" "null" }
+					}
+					ship_prefix = ""
+					effect = {
+						set_graphical_culture = orion_01
+						set_country_flag = orion_free_states
+						set_country_flag = custom_start_screen
+						set_country_flag = generic_ent
+						set_country_flag = alpha_beta_empire
+						set_country_flag = init_spawned
+						set_country_flag = first_alien_life
+						set_country_flag = first_contact_event
+						set_country_flag = sth_medium_galaxy
+						set_country_flag = botf_minor
+						save_global_event_target_as = orion_free_states
+					}
+				}
+				create_colony = { owner = event_target:orion_free_states species = event_target:orionSpecies ethos = owner }
+			}
+			set_capital = yes
+			random_country = {
+				limit = { has_country_flag = orion_free_states }
+				save_global_event_target_as = orion_free_states
+				add_appropriate_start_techs = yes
+				species = { save_global_event_target_as = orionSpecies }
+            }
+			set_owner = event_target:orion_free_states
+			generate_major_empire_start_buildings = yes
+			generate_major_empire_start_pops = yes
+			generate_major_empire_start_fleets = yes
+			set_name = "Vondem"
+		}
+	}
+	change_orbit = { min = 40 max = 50 }
+	planet = {
+		name = "Orion IV"
+		class = "pc_gas_giant" 
+		size = { min = 20 max = 30 }
+		moon = { name = "Orion IV a" size = {min = 5 max = 10} orbit_distance = { min = 20 max = 25} }
+	}
+	change_orbit = { min = 40 max = 50 }
+	planet = {
+		name = "Orion V"
+		class = "pc_i_class" 
+		size = { min = 20 max = 30 }
+		moon = { name = "Orion V a" size = {min = 5 max = 10} orbit_distance = { min = 20 max = 25} }
+	}
+	change_orbit = { min = 40 max = 50 }
+	planet = { name = "Orion C" class = star flags = { secondaryStar } size = 30 has_ring = no }
+	change_orbit = { min = 40 max = 50 }
+	planet = { name = "Orion C" class = star flags = { secondaryStar } size = 20 has_ring = no }
+}	

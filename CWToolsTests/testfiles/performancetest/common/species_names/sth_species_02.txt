@@ -1,0 +1,895 @@
+# Generated species derive their names from here
+
+BRG = { borg = { name = "Borg" plural = "Borg" home_planet = "Unimatrix One" home_system = "Unimatrix One" name_list = "Borg" } }
+FED = { human = { name = "Human" plural = "Humans" home_planet = "Earth" home_system = "Sol" name_list = "MAM1" } }
+KDF = { klingon = { name = "Klingon" plural = "Klingons" home_planet = "Qo'Nos" home_system = "Qo'Nos" name_list = "Klingon" } }
+ROM = { romulan = { name = "Romulan" plural = "Romulans" home_planet = "Romulus" home_system = "Romulus" name_list = "Romulan" } }
+REM = { reman = { name = "Reman" plural = "Remans" home_planet = "Remus" home_system = "Romulus" name_list = "Romulan" } }
+KAR = {	karemma = { name = "Karemma" plural = "Karemma" home_planet = "Karemma" home_system = "Karemma" name_list = "MAM3" } }
+GAR = { garidian = { name = "Garidian" plural = "Garidians" home_planet = "Garid" home_system = "Garid" name_list = "Romulan" } }
+ZAH = { Zahl = { name = Zahl plural = Zahl home_planet = "Zahl II" home_system = Zahl name_list = MAM2 } }
+ARG = { Argrathian = { name = Argrathi plural = Argrathians home_planet = "Argratha Prime" home_system = Argratha name_list = MAM2 } }
+VUL = { vulcan = { name = Vulcan plural = Vulcans home_planet = Vulcan home_system = "40 Eridani" name_list = Vulcan } }
+CAR = {
+	cardassian = {
+		name = Cardassian
+		plural = Cardassian
+		home_planet = Cardassia
+		home_system = Cardassia
+		name_list = Cardassian
+	}
+}
+ADR = {
+	andorian = {
+		name = Andorian
+		plural = Andorians
+		home_planet = Andoria
+		home_system = Andoria
+		name_list = Andorian
+	}
+}
+AEN = {
+	aenar = {
+		name = Aenar
+		plural = Aenar
+		home_planet = Andoria
+		home_system = Andoria
+		name_list = Andorian
+	}
+}
+VOT = {
+	voth = {
+		name = Voth
+		plural = Voth
+		home_planet = "Voth Prime"
+		home_system = Voth
+		name_list = Voth
+	}
+}
+FER = {
+	ferengi = {
+		name = Ferengi
+		plural = Ferengi
+		home_planet = Ferenginar
+		home_system = "Ventarus Idrilon"
+		name_list = Ferengi
+	}
+}
+TAM = {
+	tamarian = {
+		name = Tamarian
+		plural = Tamarians
+		home_planet = "Sigma Tama IV"
+		home_system = "Sigma Tama"
+		name_list = Tamarian
+	}
+}
+TRI = {
+	trill = {
+		name = Trill
+		plural = Trill
+		home_planet = "Trill Prime"
+		home_system = Trill
+		name_list = "MAM2"
+	}
+}
+DEV = {
+	devore = {
+		name = Devore
+		plural = Devore
+		home_planet = Devore
+		home_system = Devore
+		name_list = MAM2
+	}
+}
+NYB = {
+	nyberrite = {
+		name = Nyberrite
+		plural = Nyberrites
+		home_planet = "Nyberon Prime"
+		home_system = Nyberon
+		name_list = MAM2
+	}
+}
+FEN = {
+	fen_domar = {
+		name = "Fen Domar"
+		plural = "Fen Domar"
+		home_planet = "Fen Domar Prime"
+		home_system = "Fen Domar"
+		name_list = MAM2
+	}
+}
+UND = {
+	undine = {
+		name = "Undine"
+		plural = "Undine"
+		home_planet = Unda
+		home_system = "Fluidic Space"
+		name_list = MAM2
+	}
+}
+BEN = {
+	benzite = {
+		name = "Benzite"
+		plural = "Benzite"
+		home_planet = Benzar
+		home_system = "Delta Pavonis"
+		name_list = Benzite
+	}
+}
+BOL = {
+	bolian = {
+		name = "Bolian"
+		plural = "Bolian"
+		home_planet = Boliax
+		home_system = "Bolarus"
+		name_list = Bolian
+	}
+}
+BRE = {
+	breen = {
+		name = "Breen"
+		plural = "Breen"
+		home_planet = "Breen Prime"
+		home_system = "Breen"
+		name_list = Breen
+	}
+}
+DEN = {
+	denobulan = {
+		name = "Denobulan"
+		plural = "Denobulan"
+		home_planet = Denobula
+		home_system = "Denobula Triaxa"
+		name_list = MAM1
+	}
+}
+GOR = { gorn = { name = "Gorn" plural = "Gorn" home_planet = Gornar home_system = "Gorn" name_list = Gorn } }
+KAZ = {
+	kazon = {
+		name = "Kazon"
+		plural = "Kazon"
+		home_planet = "Kazon Prime"
+		home_system = "Kazon"
+		name_list = Kazon
+	}
+}
+KRE = {
+	krenim = {
+		name = "Krenim"
+		plural = "Krenim"
+		home_planet = "Krenim Prime"
+		home_system = "Krenim"
+		name_list = Krenim
+	}
+}
+NAU = {
+	nausicaan = {
+		name = "Nausicaan"
+		plural = "Nausicaan"
+		home_planet = Nausicaa
+		home_system = "Nausicaa"
+		name_list = Nausicaan
+	}
+}
+TRO = {
+	trogoran = {
+		name = "T'Rogoran"
+		plural = "T'Rogoran"
+		home_planet = "T'Rogoran Prime"
+		home_system = "T'Rogoran Prime"
+		name_list = MAM2
+	}
+}
+HUR = {
+	hurq = {
+		name = "Hur'Q"
+		plural = "Hur'Q"
+		home_planet = "Hur'Q Prime"
+		home_system = "Hur'Q"
+		name_list = MAM2
+	}
+}
+ORI = {
+	orion = {
+		name = "Orion"
+		plural = "Orion"
+		home_planet = Vondem
+		home_system = "Orion"
+		name_list = Orion
+	}
+}
+ANT = {
+	antican = {
+		name = "Antican"
+		plural = "Anticans"
+		home_planet = "Beta Renner VI"
+		home_system = "Beta Renner"
+		name_list = MAM2
+	}
+}
+SEL = {
+	selay = {
+		name = "Selay"
+		plural = "Selay"
+		home_planet = "Beta Renner Secunda IV"
+		home_system = "Beta Renner Secunda"
+		name_list = REP2
+	}
+}
+BYN = {
+	bynar = {
+		name = "Bynar"
+		plural = "Bynar"
+		home_planet = "Bynaus"
+		home_system = "Beta Magellan"
+		name_list = Bynar
+	}
+}
+ZAK = {
+	zakdorn = {
+		name = "Zakdorn"
+		plural = "Zakdorn"
+		home_planet = "Zakdorn"
+		home_system = "Zakdorn"
+		name_list = Zakdorn
+	}
+}
+YAD = {
+	yaderan = {
+		name = "Yaderan"
+		plural = "Yaderans"
+		home_planet = "Yadera Prime"
+		home_system = "Yadera"
+		name_list = MAM1
+	}
+}
+TAL = { talaxian = { name = "Talaxian" plural = "Talaxian" home_planet = Talax home_system = "Talax" name_list = Talaxian } }
+TEL = { tellarite = { name = "Tellarite" plural = "Tellarite" home_planet = Tellarus home_system = "Tellar" name_list = Tellarite } }
+THO = { tholian = { name = "Tholian" plural = "Tholian" home_planet = "Tholia Prime" home_system = "Tholia" name_list = "Tholian" } }
+VOT = { voth = { name = "Voth" plural = "Voth" home_planet = "Voth Prime" home_system = "Voth" name_list = "Voth" } }
+VAA = { vaadwaur = { name = "Vaadwaur" plural = "Vaadwaur" home_planet = "Vaadwaur Prime" home_system = "Vaadwaur" name_list = "Vaadwaur" } }
+DOM = { vorta = { name = "Vorta" plural = "Vorta" home_planet = "Kurill" home_system = "Kurill" name_list = "Vorta" } }
+XINMAM = { xindi_mammalian = { name = "Xindi Primate" plural = "Xindi Primates" home_planet = "Azati Prime" home_system = "Azati" name_list = "XINMAM" } }
+XINREP = { xindi_reptilian = { name = "Xindi Reptilian" plural = "Xindi Reptilian" home_planet = "Azati Prime" home_system = "Azati" name_list = "XINREP" } }
+XININS = { xindi_insectoid = { name = "Xindi Insectoid" plural = "Xindi Insectoid" home_planet = "Azati Prime" home_system = "Azati" name_list = "XININS" } }
+XINARB = { xindi_arboreal = { name = "Xindi Arboreal" plural = "Xindi Arboreal" home_planet = "Azati Prime" home_system = "Azati" name_list = "XINARB" } }
+XINAQU = { xindi_aquatic = { name = "Xindi Aquatic" plural = "Xindi Aquatic" home_planet = "Azati Prime" home_system = "Azati" name_list = "XINAQU" } }
+CAT = { caitian = { name = "Caitian" plural = "Caitians" home_planet = "Cait" home_system = "Cait" name_list = "MAM2" } }
+KRA = { kraylor = { name = "Kraylor" plural = "Kraylor" home_planet = "Kraylora" home_system = "Krayus" name_list = "MAM2" } }
+SKO = { skorr = { name = "Skorr" plural = "Skorr" home_planet = "Skorra" home_system = "Skorrel" name_list = "AVI2" } }
+CHE = { cheronite = { name = "Cheronite" plural = "Cheronites" home_planet = "Cheron" home_system = "83 Leonis" name_list = "MAM2" } }
+HUS = { cheronite = { name = "Husnock" plural = "Husnocks" home_planet = "Hus III" home_system = "Hus" name_list = "MAM2" } }
+NER = { cheronite = { name = "Neryj" plural = "Neryji" home_planet = "Ner" home_system = "Nej" name_list = "MAM2" } }
+DUR = { cheronite = { name = "Durnen" plural = "Durnen" home_planet = "Dulam" home_system = "Dula" name_list = "MAM2" } }
+BRI = { cheronite = { name = "B'rinn" plural = "B'rinns" home_planet = "B'rinn" home_system = "B'lani" name_list = "MAM2" } }
+
+RANDOMTREK = {
+	random = { name = "Ildasian" plural = "Ildasians" home_planet = "Ilda" home_system = "Il" name_list = "MAM2" }
+	ildasian = {
+		name = Ildasian
+		plural = Ildasians
+		home_planet = Ilda
+		home_system = Il
+		name_list = "MAM2"
+	}
+	genari = {
+		name = Genari
+		plural = Genari
+		home_planet = "Fei Lemoth"
+		home_system = "Lemoth"
+		name_list = "MAM2"
+	}
+	creto = {
+		name = Creto
+		plural = Cretos
+		home_planet = Cree
+		home_system = "Nas Sha Eio"
+		name_list = "MAM2"
+	}
+	renzali = {
+		name = Renzali
+		plural = Renzali
+		home_planet = Zali
+		home_system = Umel
+		name_list = "MAM2"
+	}
+	tumbator = {
+		name = Tumbator
+		plural = Tumbatorians
+		home_planet = "Tumbatik Prime"
+		home_system = Tumbatika
+		name_list = "MAM1"
+	}
+	onotach = {
+		name = Onotach
+		plural = Onotachi
+		home_planet = "O'Nota"
+		home_system = "O'Notach"
+		name_list = "MAM2"
+	}
+	yapathi = {
+		name = Yapathi
+		plural = Yapathi
+		home_planet = Yapathi
+		home_system = Yapathinor
+		name_list = "MAM3"
+	}
+	rekthalar = {
+		name = "Rek'Thalar"
+		plural = "Rek'Thalari"
+		home_planet = "Rek'Omak"
+		home_system = "Rek'Thaa"
+		name_list = "MAM3"
+	}
+	zum = {
+		name = Zum
+		plural = Zumi
+		home_planet = Hiffnus
+		home_system = Hiff
+		name_list = "MAM4"
+	}
+	ugarlak = {
+		name = Ugarlak
+		plural = Ugarlaki
+		home_planet = "Ugarlak Nog"
+		home_system = Ugarlall
+		name_list = "MAM5"
+	}
+	glostwerheni = {
+		name = Glost-Werheni
+		plural = Glost-Werheni
+		home_planet = Werheni
+		home_system = "Werheni Sui"
+		name_list = "MAM3"
+	}
+	mekonass = {
+		name = "Meko'Nass"
+		plural = "Meko'Nassi"
+		home_planet = Mekon
+		home_system = "Meko Goldra"
+		name_list = "MAM3"
+	}
+	oklarr = {
+		name = Oklarr
+		plural = Oklarri
+		home_planet = "Oklar Prime"
+		home_system = Sakterokla
+		name_list = "MAM3"
+	}
+	drullperfen = {
+		name = "Drull'Perfen"
+		plural = "Drull'Perfeni"
+		home_planet = Drull
+		home_system = "Drull Ikrel"
+		name_list = "MAM3"
+	}
+	photecian = {
+		name = Photecian
+		plural = Photecians
+		home_planet = Istaci
+		home_system = "Istaccin'uk"
+		name_list = "MAM4"
+	}
+
+	wessari = {
+		name = Wessari
+		plural = Wessari
+		home_planet = "Ugl Mak"
+		home_system = "Ugl Oma'Mak"
+		name_list = "MAM5"
+	}
+	lahtrepian = {
+		name = Lahtrepian
+		plural = Lahtrepians
+		home_planet = Umikandra
+		home_system = "Umikandra Ogatt"
+		name_list = "MAM3"
+	}
+	ekwynian = {
+		name = Ekwynian
+		plural = Ekwynians
+		home_planet = Snotalitvish
+		home_system = "Snotalitvish-Qa"
+		name_list = "MAM3"
+	}
+	ragerian = {
+		name = Ragerian
+		plural = Ragerians
+		home_planet = Aeria
+		home_system = "Aeria Husila"
+		name_list = "MAM3"
+	}
+	pouzjok = {
+		name = Pouz-Jok
+		plural = Pouz-Jokans
+		home_planet = "Pouzjok Prime"
+		home_system = Lokand
+		name_list = "MAM4"
+	}
+	jusstkan = {
+		name = Jusstkan
+		plural = Jusstkans
+		home_planet = Jusstka
+		home_system = Juss
+		name_list = "MAM5"
+	}
+	klaggian = {
+		name = Klaggian
+		plural = Klaggians
+		home_planet = Lyrogg
+		home_system = Lagragga
+		name_list = "MAM3"
+	}
+	uqopraknar = {
+		name = "Uqo'Praknar"
+		plural = "Uqo'Praknarians"
+		home_planet = Qawlogg
+		home_system = "Losstran Peav"
+		name_list = "MAM3"
+	}
+	onedqarak = {
+		name = "Oned'Qarak"
+		plural = "Oned'Qaraki"
+		home_planet = "Ire'Laoman"
+		home_system = "Ire'Laom Jumtra"
+		name_list = "MAM3"
+	}
+	ruphaari = {
+		name = Ruphaari
+		plural = Ruphaari
+		home_planet = Ruphaa
+		home_system = "Rupha'iaa"
+		name_list = "MAM5"
+	}
+	qwepulci = {
+		name = "Qwe'Pulci"
+		plural = "Qwe'Pulcians"
+		home_planet = Uklapp
+		home_system = "Uklapp'Knor"
+		name_list = "MAM4"
+	}
+	groknaploran = {
+		name = Groknaploran
+		plural = Groknaplorans
+		home_planet = Adnor
+		home_system = Adanir
+		name_list = "MAM3"
+	}
+	ktaknor = {
+		name = "K'Taknor"
+		plural = "K'Taknorians"
+		home_planet = "Ufram Puf"
+		home_system = Ufram
+		name_list = "MAM4"
+	}
+	gagassi = {
+		name = Gagassi
+		plural = Gagassi
+		home_planet = Meknassa
+		home_system = "Pultran'Ogg"
+		name_list = "MAM3"
+	}
+	hadadeshi = {
+		name = Hadadeshi
+		plural = Hadadeshi
+		home_planet = Vababa
+		home_system = "Ba'Vababa"
+		name_list = "MAM3"
+	}
+	
+}
+
+RIG = {
+	rigellian = {
+		name = Rigellian
+		plural = Rigellians
+		home_planet = Rigel
+		home_system = "Beta Rigel"
+		name_list = Orion
+	}
+}
+
+KAYLAR = {
+	kaylor = {
+		name = Kaylar
+		plural = Kaylar
+		home_planet = Kaylar
+		home_system = "Beta Rigel"
+		name_list = Orion
+	}
+}
+
+CENTAUR = {
+	centauri = {
+		name = Centauri
+		plural = Centauri
+		home_planet = "Al Rijil"
+		home_system = "Alpha Centauri"
+		name_list = MAM1
+	}
+}
+
+AXA = { axanari = { name = Axanari plural = Axanaris home_planet = "Axanar" home_system = "Epsilon Eridani" name_list = MAM1 } }
+
+KLAHA = {
+	klaha = {
+		name = Klaha
+		plural = Klaha
+		home_planet = "Deneb Kaitos V"
+		home_system = "Deneb Kaitos"
+		name_list = MAM1
+	}
+}
+	
+ARGEL = {
+	argellian = {
+		name = Argellian
+		plural = Argellians
+		home_planet = "Nelphia"
+		home_system = "Iota Leonis"
+		name_list = MAM1
+	}
+}
+
+ALTAIR = {
+	altairian = {
+		name = Altairian
+		plural = Altairians
+		home_planet = "Altair III"
+		home_system = "Altair"
+		name_list = MAM1
+	}
+}
+
+PALKEO = {
+	palkeo = {
+		name = "Palkao Est"
+		plural = "Palkao Est"
+		home_planet = "Altair IV"
+		home_system = "Altair"
+		name_list = MAM1
+	}
+}
+
+ARDANA = {
+	ardana = {
+		name = "Ardanan"
+		plural = "Ardanan"
+		home_planet = "Ardana"
+		home_system = "Mu Leonis"
+		name_list = MAM1
+	}
+}
+
+CORID = {
+	coridian = {
+		name = "Coridian"
+		plural = "Coridian"
+		home_planet = "Coridan III"
+		home_system = "Coridan"
+		name_list = MAM1
+	}
+}
+
+TALAR = {
+	talarian = {
+		name = "Talarian"
+		plural = "Talarians"
+		home_planet = "Talar Prime"
+		home_system = "Talar"
+		name_list = MAM1
+	}
+}
+
+VENTAX = {
+	ventaxian = {
+		name = "Ventaxian"
+		plural = "Ventaxians"
+		home_planet = "Ventax II"
+		home_system = "Ventax"
+		name_list = MAM1
+	}
+}
+
+MALCOR = {
+	malcorian = {
+		name = "Malcorian"
+		plural = "Malcorians"
+		home_planet = "Malcor"
+		home_system = "Mu Ceti"
+		name_list = MAM1
+	}
+}
+
+AKRIT = {
+	akritirian = {
+		name = "Akritirian"
+		plural = "Akritirians"
+		home_planet = "Akritiri Prime"
+		home_system = "Akritiri"
+		name_list = MAM1
+	}
+}
+
+BANEA = {
+	banea = {
+		name = "Banea"
+		plural = "Banea"
+		home_planet = "Banea Prime"
+		home_system = "Banea"
+		name_list = MAM1
+	}
+}
+
+QOMAR = {
+	qomar = {
+		name = "Qomar"
+		plural = "Qomar"
+		home_planet = "Qomar Prime"
+		home_system = "Qomar"
+		name_list = MAM1
+	}
+}
+
+KRESS = {
+	kressarian = {
+		name = "Kressarian"
+		plural = "Kressarians"
+		home_planet = "Kressaria Prime"
+		home_system = "Kressaria"
+		name_list = MAM1
+	}
+}
+
+LORIL = {
+	lorillian = {
+		name = "Lorillian"
+		plural = "Loriallians"
+		home_planet = "Lorilla"
+		home_system = "Gamma Leporis"
+		name_list = MAM1
+	}
+}
+
+ELAS = {
+	elasian = {
+		name = "Elasian"
+		plural = "Elasians"
+		home_planet = "Elas"
+		home_system = "Tellun"
+		name_list = MAM1
+	}
+}
+
+TROY = {
+	troyan = {
+		name = "Troyan"
+		plural = "Troyans"
+		home_planet = "Troyius"
+		home_system = "Tellun"
+		name_list = MAM1
+	}
+}
+
+RISIAN = {
+	risian = {
+		name = "Risian"
+		plural = "Risians"
+		home_planet = "Risa"
+		home_system = "Epsilon Ceti"
+		name_list = MAM1
+	}
+}
+
+TARL = {
+	tarl = {
+		name = "Tarl"
+		plural = "Tarl"
+		home_planet = "Tarl"
+		home_system = "Epsilon Indi"
+		name_list = MAM1
+	}
+}
+
+ONLIES = {
+	onlies = {
+		name = "Onlies"
+		plural = "Onlies"
+		home_planet = "Miri"
+		home_system = "70 Ophiuchi"
+		name_list = MAM1
+	}
+}
+
+MADEN = {
+	madenan = {
+		name = "Madenan"
+		plural = "Madenan"
+		home_planet = "Straleb"
+		home_system = "Omega Sagitta"
+		name_list = MAM1
+	}
+}
+
+VALAK = {
+	valakan = {
+		name = "Valakian"
+		plural = "Valakians"
+		home_planet = "Valakis Prime"
+		home_system = "Valakis"
+		name_list = MAM1
+	}
+}
+
+OCAMPA = {
+	ocampan = {
+		name = "Ocampan"
+		plural = "Ocampans"
+		home_planet = "Ocampa V"
+		home_system = "Ocampa"
+		name_list = MAM1
+	}
+}
+
+DORVAN = {
+	dorvan = {
+		name = "Dorvan"
+		plural = "Dorvans"
+		home_planet = "Dorvan V"
+		home_system = "Dorvan"
+		name_list = MAM1
+	}
+}
+
+EKOS = {
+	ekosian = {
+		name = "Ekosian"
+		plural = "Ekosians"
+		home_planet = "Ekos"
+		home_system = "M43 Alpha"
+		name_list = MAM1
+	}
+}
+
+ZEON = {
+	zeon = {
+		name = "Zeon"
+		plural = "Zeons"
+		home_planet = "Zeon"
+		home_system = "M43 Alpha"
+		name_list = MAM1
+	}
+}
+
+FREMEN = {
+	fremen = {
+		name = "Fremen"
+		plural = "Fremen"
+		home_planet = "Arrakis"
+		home_system = "Canpus"
+		name_list = MAM1
+	}
+}
+
+SELDON = {
+	seldon = {
+		name = "Terminite"
+		plural = "Terminites"
+		home_planet = "Terminus"
+		home_system = "Horbus 504GJ"
+		name_list = MAM1
+	}
+}
+
+VERID = {
+	veridan = {
+		name = "Veridian"
+		plural = "Veridians"
+		home_planet = "Veridian IV"
+		home_system = "Veridian"
+		name_list = MAM1
+	}
+}
+
+IOTIA = {
+	iotian = {
+		name = "Iotian"
+		plural = "Iotians"
+		home_planet = "Iotia"
+		home_system = "Sigma Iotia"
+		name_list = MAM1
+	}
+}
+
+HILL = {
+	hill = {
+		name = "Hill People"
+		plural = "Hill People"
+		home_planet = "Neural"
+		home_system = "Zeta Bootis"
+		name_list = MAM1
+	}
+}
+
+TOROTH = {
+	torothian = {
+		name = "Torothian"
+		plural = "Torothians"
+		home_planet = "Toroth Prime"
+		home_system = "Toroth"
+		name_list = MAM1
+	}
+}
+
+KELIS = {
+	kelis = {
+		name = "Kelis' Species"
+		plural = "Kelis' Species"
+		home_planet = "Kelis Prime"
+		home_system = "Kelis"
+		name_list = MAM1
+	}
+}
+
+CAPELLA = {
+	capellan = {
+		name = "Capellan"
+		plural = "Capellans"
+		home_planet = "Capella"
+		home_system = "Capella"
+		name_list = MAM1
+	}
+}
+
+AKAALI = {
+	akaali = {
+		name = "Akaali"
+		plural = "Akaali"
+		home_planet = "Akaali Prime"
+		home_system = "Akaali"
+		name_list = MAM1
+	}
+}
+
+ACAMAR = {
+	acamar = {
+		name = "Acamaran"
+		plural = "Acamarans"
+		home_planet = "Acamar III"
+		home_system = "Acamar"
+		name_list = MAM1
+	}
+}
+
+ANTAR = {
+	antaran = {
+		name = "Antaran"
+		plural = "Antarans"
+		home_planet = "Antares Prime"
+		home_system = "Antares"
+		name_list = MAM1
+	}
+}
+
+ANTOS = {
+	antosian = {
+		name = "Antosian"
+		plural = "Antosians"
+		home_planet = "Dorafane"
+		home_system = "Kappa Delphini"
+		name_list = MAM1
+	}
+}
+
+ARBAZ = {
+	arbazian = {
+		name = "Arbazian"
+		plural = "Arbazians"
+		home_planet = "Arbazan Prime"
+		home_system = "Arbazan"
+		name_list = MAM1
+	}
+}
+

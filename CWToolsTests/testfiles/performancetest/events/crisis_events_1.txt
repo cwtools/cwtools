@@ -1,0 +1,11 @@
+############################
+#
+# Crisis Events
+#
+# Written by Henrik Eklund
+# STNH - Capek 1.8.0 Compat
+############################
+
+namespace = crisis
+
+### PRETHORYN SCOURGE

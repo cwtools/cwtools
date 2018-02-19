@@ -1,0 +1,36 @@
+############################
+# STH CATEGORIES 
+############################
+# potential = planet scope
+# on_success = ship scope
+# on_fail = ship scope
+# on_critical_fail = ship scope
+# level = level of discovery that is checked against scientist level
+# risk = risk of researching the discovery (defaults to NDefines::NGameplay:anomaly_RISK_DEFAULT)
+
+# For on_success, on_fail, on_critical_fail
+# FROM = planet scope
+# ROOT = ship scope
+# Ex. on_fail, ship_event would have the planet in From.From
+
+# Orbital Signal Source (Planet)
+anomaly_category = {
+	key = "STH_orbital_signal_source_1_category"
+	desc = "STH_orbital_signal_source_1_category_desc"
+	picture = sth_GFX_evt_alienProbe
+	level = 2
+	spawn_chance = {
+		modifier = {
+			add = 1
+			is_asteroid = no
+			is_star = no
+			is_artificial_planet = no
+			from = { owner = { NOT = { has_country_flag = STH_orbital_signal_source_flag } } }			
+			from = { owner = { is_borg_empire = no } }
+		}
+	}
+	on_spawn = { from = { owner = { set_timed_country_flag = { flag = STH_orbital_signal_source_flag days = 3600 } } } }
+	on_success = { }
+	on_fail = { ship_event = { id = STH_minor_anomaly.3} }
+	on_critical_fail = { ship_event = { id = STH_minor_anomaly.4 } }
+}

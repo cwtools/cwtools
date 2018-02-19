@@ -1,0 +1,5241 @@
+########################
+#
+# Precursor Events
+#
+# Written by Henrik Eklund
+# STNH - Capek 1.8.0 Compat
+########################
+
+namespace = precursor
+
+@tier1influencecontact = 7
+@tier1influencecontactxenophile = 8
+@tier1influencecontactmin = 20
+@tier1influencecontactmax = 80
+
+@tier2influencecontact = 10
+@tier2influencecontactxenophile = 12
+@tier2influencecontactmin = 40
+@tier2influencecontactmax = 100
+
+@tier1materialreward = 6
+@tier1materialmin = 100
+@tier1materialmax = 500
+@tier2materialreward = 12
+@tier2materialmin = 150
+@tier2materialmax = 1000
+@tier3materialreward = 18
+@tier3materialmin = 250
+@tier3materialmax = 1500
+@tier4materialreward = 24
+@tier4materialmin = 350
+@tier4materialmax = 2000
+@tier5materialreward = 48
+@tier5materialmin = 700
+@tier5materialmax = 4000
+
+@tier1influencereward = 6
+@tier1influencemin = 40
+@tier1influencemax = 100
+@tier2influencereward = 12
+@tier2influencemin = 80
+@tier2influencemax = 175
+@tier3influencereward = 18
+@tier3influencemin = 125
+@tier3influencemax = 250
+@tier4influencereward = 24
+@tier4influencemin = 150
+@tier4influencemax = 300
+@tier5influencereward = 36
+@tier5influencemin = 250
+@tier5influencemax = 500
+@tier6influencereward = 48
+@tier6influencemin = 300
+@tier6influencemax = 600
+
+@tier1researchreward = 6
+@tier1researchmin = 60
+@tier1researchmax = 150
+@tier2researchreward = 12
+@tier2researchmin = 90
+@tier2researchmax = 250
+@tier3researchreward = 18
+@tier3researchmin = 120
+@tier3researchmax = 350
+@tier4researchreward = 24
+@tier4researchmin = 150
+@tier4researchmax = 500
+@tier5researchreward = 48
+@tier5researchmin = 300
+@tier5researchmax = 1000
+
+### The Vultaum Star Assembly
+
+# Vultaum Introduction
+ship_event = {
+	id = precursor.1
+	title = "precursor.1.name"
+	desc = "precursor.1.desc"
+	picture = GFX_evt_archaeological_dig
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		owner = { is_ai = no }
+		solar_system = { has_star_flag = precursor_1 }
+		solar_system = { NOT = { is_same_value = root.owner.capital_scope.solar_system } }
+		FROM = { 
+			has_anomaly = no 
+			is_star = no
+		}
+		owner = {
+			NOT = { 
+				has_country_flag = vultaum_intro
+				has_country_flag = yuht_intro
+				has_country_flag = first_league_intro
+				has_country_flag = irassian_intro
+				has_country_flag = cybrex_intro
+			}
+		}
+	}
+	
+	immediate = {
+		owner = { set_country_flag = vultaum_intro }
+	}
+	
+	option = {
+		name = INTERESTING
+		hidden_effect = { owner = { country_event = { id = story.5 days = 30 } } }
+		owner = {
+			begin_event_chain = {
+				event_chain = "vultaum_chain"
+				target = THIS
+			}
+		}
+	}
+}
+
+# Mining Base
+ship_event = {
+	id = precursor.5
+	title = "precursor.5.name"
+	desc = "precursor.5.desc"
+	picture = GFX_evt_outpost
+	location = FROM
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		hidden_effect = {
+			owner = { set_country_flag = vultaum_1 }
+		}
+	}
+	
+	option = {
+		name = FASCINATING
+		from = {
+			enable_special_project = {
+				name = "VULTAUM_ARCHEOLOGY_1"
+				location = this
+				owner = root.owner
+			}
+		}
+	}
+}
+
+# Mining Base Project Completed
+ship_event = {
+	id = precursor.6
+	title = "precursor.completed.name"
+	desc = "precursor.6.desc"
+	picture = GFX_evt_archaeological_dig
+	location = FROMFROM
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "precursor.completed.a"
+		owner = {
+			add_event_chain_counter = { 
+				event_chain = "vultaum_chain" 
+				counter = "vultaum_artifacts" 
+				amount = 1 
+			}
+			add_monthly_resource_mult = {
+				resource = engineering_research
+				value = @tier1researchreward
+				min = @tier1researchmin
+				max = @tier1researchmax
+			}
+			hidden_effect = { country_event = { id = precursor.97 } }
+		}
+	}
+}
+
+# Observatory
+ship_event = {
+	id = precursor.10
+	title = "precursor.10.name"
+	desc = "precursor.10.desc"
+	picture = GFX_evt_outpost
+	location = FROM
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		hidden_effect = {
+			owner = { set_country_flag = vultaum_2 }
+		}
+	}
+	
+	option = {
+		name = INTERESTING
+		from = {
+			enable_special_project = {
+				name = "VULTAUM_ARCHEOLOGY_2"
+				location = this
+				owner = root.owner
+			}
+		}
+	}
+}
+
+# Observatory Project Completed
+ship_event = {
+	id = precursor.11
+	title = "precursor.completed.name"
+	desc = "precursor.11.desc"
+	picture = GFX_evt_archaeological_dig
+	location = FROMFROM
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "precursor.completed.a"
+		owner = {
+			add_event_chain_counter = { 
+				event_chain = "vultaum_chain" 
+				counter = "vultaum_artifacts" 
+				amount = 1 
+			}
+			add_monthly_resource_mult = {
+				resource = physics_research
+				value = @tier1researchreward
+				min = @tier1researchmin
+				max = @tier1researchmax
+			}
+			hidden_effect = { country_event = { id = precursor.97 } }
+		}
+	}
+}
+
+# Colony 1
+ship_event = {
+	id = precursor.15
+	title = "precursor.15.name"
+	desc = "precursor.15.desc"
+	picture = GFX_evt_city_ruins
+	location = FROM
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		hidden_effect = {
+			owner = { set_country_flag = vultaum_3 }
+		}
+	}
+	
+	option = {
+		name = INTRIGUING
+		from = {
+			enable_special_project = {
+				name = "VULTAUM_ARCHEOLOGY_3"
+				location = this
+				owner = root.owner
+			}
+		}	
+	}
+}
+
+# Colony 1 Project Completed
+ship_event = {
+	id = precursor.16
+	title = "precursor.completed.name"
+	desc = "precursor.16.desc"
+	picture = GFX_evt_archaeological_dig
+	location = FROMFROM
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "precursor.completed.a"
+		owner = {
+			add_event_chain_counter = { 
+				event_chain = "vultaum_chain" 
+				counter = "vultaum_artifacts" 
+				amount = 1 
+			}
+			add_monthly_resource_mult = {
+				resource = society_research
+				value = @tier1researchreward
+				min = @tier1researchmin
+				max = @tier1researchmax
+			}
+			hidden_effect = { country_event = { id = precursor.97 } }
+		}
+	}
+}
+
+# Colony 2
+ship_event = {
+	id = precursor.20
+	title = "precursor.15.name"
+	desc = "precursor.20.desc"
+	picture = GFX_evt_city_ruins
+	location = FROM
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		hidden_effect = {
+			owner = { set_country_flag = vultaum_4 }
+		}
+	}
+	
+	option = {
+		name = ASTOUNDING
+		from = {
+			enable_special_project = {
+				name = "VULTAUM_ARCHEOLOGY_4"
+				location = this
+				owner = root.owner
+			}
+		}
+	}
+}
+
+# Colony 2 Project Completed
+ship_event = {
+	id = precursor.21
+	title = "precursor.completed.name"
+	desc = "precursor.21.desc"
+	picture = GFX_evt_archaeological_dig
+	location = FROMFROM
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "precursor.completed.a"
+		owner = {
+			add_event_chain_counter = { 
+				event_chain = "vultaum_chain" 
+				counter = "vultaum_artifacts" 
+				amount = 1 
+			}
+			add_monthly_resource_mult = {
+				resource = society_research
+				value = @tier1researchreward
+				min = @tier1researchmin
+				max = @tier1researchmax
+			}
+			hidden_effect = { country_event = { id = precursor.97 } }
+		}
+	}
+}
+
+# Colony 3
+ship_event = {
+	id = precursor.25
+	title = "precursor.15.name"
+	desc = "precursor.25.desc"
+	picture = GFX_evt_city_ruins
+	location = FROM
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		hidden_effect = {
+			owner = { set_country_flag = vultaum_5 }
+		}
+	}
+	
+	option = {
+		name = REMARKABLE
+		from = {
+			enable_special_project = {
+				name = "VULTAUM_ARCHEOLOGY_5"
+				location = this
+				owner = root.owner
+			}
+		}
+	}
+}
+
+# Colony 3 Project Completed
+ship_event = {
+	id = precursor.26
+	title = "precursor.completed.name"
+	desc = "precursor.26.desc"
+	picture = GFX_evt_archaeological_dig
+	location = FROMFROM
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "precursor.completed.a"
+		owner = {
+			add_event_chain_counter = { 
+				event_chain = "vultaum_chain" 
+				counter = "vultaum_artifacts" 
+				amount = 1 
+			}
+			add_monthly_resource_mult = {
+				resource = society_research
+				value = @tier1researchreward
+				min = @tier1researchmin
+				max = @tier1researchmax
+			}
+			hidden_effect = { country_event = { id = precursor.97 } }
+		}
+	}
+}
+
+# Gas Giant Base
+ship_event = {
+	id = precursor.30
+	title = "precursor.30.name"
+	desc = "precursor.30.desc"
+	picture = GFX_evt_ship_in_orbit
+	location = FROM
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		hidden_effect = {
+			owner = { set_country_flag = vultaum_6 }
+		}
+	}
+	
+	option = {
+		name = INTERESTING
+		from = {
+			enable_special_project = {
+				name = "VULTAUM_ARCHEOLOGY_6"
+				location = this
+				owner = root.owner
+			}
+		}
+	}
+}
+
+# Gas Giant Base Project Completed
+ship_event = {
+	id = precursor.31
+	title = "precursor.completed.name"
+	desc = "precursor.31.desc"
+	picture = GFX_evt_ship_in_orbit
+	location = FROMFROM
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "precursor.completed.a"
+		owner = {
+			add_event_chain_counter = { 
+				event_chain = "vultaum_chain" 
+				counter = "vultaum_artifacts" 
+				amount = 1 
+			}
+			add_monthly_resource_mult = {
+				resource = engineering_research
+				value = @tier1researchreward
+				min = @tier1researchmin
+				max = @tier1researchmax
+			}
+			hidden_effect = { country_event = { id = precursor.97 } }
+		}
+	}
+}
+
+# Trade Post
+ship_event = {
+	id = precursor.35
+	title = "precursor.35.name"
+	desc = "precursor.35.desc"
+	picture = GFX_evt_outpost
+	location = FROM
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		hidden_effect = {
+			owner = { set_country_flag = vultaum_7 }
+		}
+	}
+	
+	option = {
+		name = FASCINATING
+		from = {
+			enable_special_project = {
+				name = "VULTAUM_ARCHEOLOGY_7"
+				location = this
+				owner = root.owner
+			}
+		}
+	}
+}
+
+# Trade Post Project Completed
+ship_event = {
+	id = precursor.36
+	title = "precursor.completed.name"
+	desc = "precursor.36.desc"
+	picture = GFX_evt_archaeological_dig
+	location = FROMFROM
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "precursor.completed.a"
+		owner = {
+			add_event_chain_counter = { 
+				event_chain = "vultaum_chain" 
+				counter = "vultaum_artifacts" 
+				amount = 1 
+			}
+			add_monthly_resource_mult = {
+				resource = engineering_research
+				value = @tier1researchreward
+				min = @tier1researchmin
+				max = @tier1researchmax
+			}
+			hidden_effect = { country_event = { id = precursor.97 } }
+		}
+	}
+}
+
+# Satellite
+ship_event = {
+	id = precursor.40
+	title = "precursor.40.name"
+	desc = "precursor.40.desc"
+	picture = GFX_evt_satellite_in_orbit
+	location = FROM
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		hidden_effect = {
+			owner = { set_country_flag = vultaum_8 }
+		}
+	}
+	
+	option = {
+		name = CURIOUS
+		from = {
+			enable_special_project = {
+				name = "VULTAUM_ARCHEOLOGY_8"
+				location = this
+				owner = root.owner
+			}
+		}
+	}
+}
+
+# Satellite Project Completed
+ship_event = {
+	id = precursor.41
+	title = "precursor.completed.name"
+	desc = "precursor.41.desc"
+	picture = GFX_evt_satellite_in_orbit
+	location = FROMFROM
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "precursor.completed.a"
+		owner = {
+			add_event_chain_counter = { 
+				event_chain = "vultaum_chain" 
+				counter = "vultaum_artifacts" 
+				amount = 1 
+			}
+			add_monthly_resource_mult = {
+				resource = engineering_research
+				value = @tier1researchreward
+				min = @tier1researchmin
+				max = @tier1researchmax
+			}
+			hidden_effect = { country_event = { id = precursor.97 } }
+		}
+	}
+}
+
+# Splinter Colony
+ship_event = {
+	id = precursor.45
+	title = "precursor.45.name"
+	desc = "precursor.45.desc"
+	picture = GFX_evt_city_ruins
+	location = FROM
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		hidden_effect = {
+			owner = { set_country_flag = vultaum_9 }
+		}
+	}
+	
+	option = {
+		name = INTRIGUING
+		from = {
+			enable_special_project = {
+				name = "VULTAUM_ARCHEOLOGY_9"
+				location = this
+				owner = root.owner
+			}
+		}	
+	}
+}
+
+# Splinter Colony Project Completed
+ship_event = {
+	id = precursor.46
+	title = "precursor.completed.name"
+	desc = "precursor.46.desc"
+	picture = GFX_evt_archaeological_dig
+	location = FROMFROM
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "precursor.completed.a"
+		owner = {
+			add_event_chain_counter = { 
+				event_chain = "vultaum_chain" 
+				counter = "vultaum_artifacts" 
+				amount = 1 
+			}
+			add_monthly_resource_mult = {
+				resource = engineering_research
+				value = @tier1researchreward
+				min = @tier1researchmin
+				max = @tier1researchmax
+			}
+			hidden_effect = { country_event = { id = precursor.97 } }
+		}
+	}
+}
+
+# Virtual Reality Center
+ship_event = {
+	id = precursor.50
+	title = "precursor.50.name"
+	desc = "precursor.50.desc"
+	picture = GFX_evt_ship_in_orbit
+	location = FROM
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		hidden_effect = {
+			owner = { set_country_flag = vultaum_10 }
+		}
+	}
+	
+	option = {
+		name = INTERESTING
+		from = {
+			enable_special_project = {
+				name = "VULTAUM_ARCHEOLOGY_10"
+				location = this
+				owner = owner.root
+			}
+		}
+	}
+}
+
+# Virtual Reality Center Project Completed
+ship_event = {
+	id = precursor.51
+	title = "precursor.completed.name"
+	desc = "precursor.51.desc"
+	picture = GFX_evt_ship_in_orbit
+	location = FROMFROM
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "precursor.completed.a"
+		owner = {
+			add_event_chain_counter = { 
+				event_chain = "vultaum_chain" 
+				counter = "vultaum_artifacts" 
+				amount = 1 
+			}
+			add_monthly_resource_mult = {
+				resource = physics_research
+				value = @tier1researchreward
+				min = @tier1researchmin
+				max = @tier1researchmax
+			}
+			hidden_effect = { country_event = { id = precursor.97 } }
+		}
+	}
+}
+
+# Asteroid Mining Base
+ship_event = {
+	id = precursor.55
+	title = "precursor.55.name"
+	desc = "precursor.55.desc"
+	picture = GFX_evt_mining_station
+	location = FROM
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = INTERESTING
+		from = {
+			enable_special_project = {
+				name = "VULTAUM_ARCHEOLOGY_11"
+				location = this
+				owner = root.owner
+			}
+		}	
+	}
+}
+
+# Asteroid Mining Base Completed
+ship_event = {
+	id = precursor.56
+	title = "precursor.completed.name"
+	desc = "precursor.56.desc"
+	picture = GFX_evt_mining_station
+	location = FROMFROM
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "precursor.completed.a"
+		owner = {
+			add_event_chain_counter = { 
+				event_chain = "vultaum_chain" 
+				counter = "vultaum_artifacts" 
+				amount = 1 
+			}
+			add_monthly_resource_mult = {
+				resource = engineering_research
+				value = @tier1researchreward
+				min = @tier1researchmin
+				max = @tier1researchmax
+			}
+			hidden_effect = { country_event = { id = precursor.97 } }
+		}
+	}
+}
+
+# Port to Home System events
+country_event = {
+	id = precursor.97
+	hide_window = yes
+	is_triggered_only = yes
+
+	immediate = {
+		if = {
+			limit = {
+				NOT = { 
+					has_global_flag = vultaum_system_discovered 
+					has_country_flag = vultaum_system
+				}
+				has_completed_event_chain_counter = {
+					event_chain = "vultaum_chain" 
+					counter = "vultaum_artifacts" 
+				}
+			}
+			country_event = { id = precursor.98 }
+			else = {
+				if = {
+					limit = {
+						has_global_flag = vultaum_system_discovered
+						NOT = { has_country_flag = vultaum_system }
+						has_completed_event_chain_counter = {
+							event_chain = "vultaum_chain" 
+							counter = "vultaum_artifacts" 
+						}
+					}
+					country_event = { id = precursor.99 }
+				}
+			}
+		}
+	}
+}
+
+# Vultaum Home System Discovered (HIDDEN)
+country_event = {
+	id = precursor.98
+	hide_window = yes
+	
+	fire_only_once = yes
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		set_global_flag = vultaum_system_discovered
+		set_country_flag = vultaum_system
+		random_system = {
+			limit = { has_star_flag = precursor_1 }
+			spawn_system = {
+				min_distance = 20
+				max_distance = 50
+				initializer = "vultaumar_system"
+			}
+		}
+		country_event = { id = precursor.100 days = 2 }
+	}
+}
+
+# Vultaum Home System Discovered (Not First) (HIDDEN)
+country_event = {
+	id = precursor.99
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		set_country_flag = vultaum_system
+		country_event = { id = precursor.100 days = 2 }
+	}
+}
+
+# Vultaum Home System Discovered
+country_event = {
+	id = precursor.100
+	title = "precursor.100.name"
+	desc = "precursor.100.desc"
+	picture = GFX_evt_federation_fleet
+	location = event_target:vultaumar
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		random_system = {
+			limit = { has_star_flag = vultaumar }
+			save_event_target_as = vultaumar
+		}
+	}
+	
+	option = {
+		name = "precursor.100.a"
+		end_event_chain = "vultaum_chain"
+		begin_event_chain = {
+			event_chain = "vultaum_homeworld_chain"
+			target = ROOT
+		}
+		create_point_of_interest = {
+			id = vultaum.1
+			name = "vultaum_1_poi"
+			desc = "vultaum_1_poi_desc"
+			event_chain = vultaum_homeworld_chain
+			location = event_target:vultaumar
+		}
+	}
+}
+
+# Vultaum Homeworld
+ship_event = {
+	id = precursor.101
+	title = "precursor.101.name"
+	desc = "precursor.101.desc"
+	picture = GFX_evt_archaeological_dig
+	location = from
+	
+	is_triggered_only = yes
+
+	trigger = {
+		exists = from 
+		from = { has_planet_flag = vultaum_homeworld }
+		owner = { 
+			is_ai = no 
+			has_country_flag = vultaum_system
+		}
+	}
+
+	immediate = {
+		owner = {
+			set_country_flag = vultaum_world_found
+			set_global_flag = vultaum_homeworld_found
+			if = {
+				limit = { has_event_chain = vultaum_chain }
+				end_event_chain = "vultaum_chain"
+			}
+			if = {
+				limit = { has_event_chain = "vultaum_homeworld_chain" }
+				end_event_chain = "vultaum_homeworld_chain"
+			}
+		}
+	}
+	
+	option = {
+		name = "FASCINATING"
+		owner = {
+			add_monthly_resource_mult = {
+				resource = unity
+				value = 120
+				min = 240
+				max = 9999
+			}
+			add_monthly_resource_mult = {
+				resource = physics_research
+				value = @tier3researchreward
+				min = @tier3researchmin
+				max = @tier3researchmax
+			}
+			add_monthly_resource_mult = {
+				resource = society_research
+				value = @tier3researchreward
+				min = @tier3researchmin
+				max = @tier3researchmax
+			}
+			add_monthly_resource_mult = {
+				resource = engineering_research
+				value = @tier3researchreward
+				min = @tier3researchmin
+				max = @tier3researchmax
+			}
+		}
+	}
+}
+
+# Someone else got there first
+ship_event = {
+	id = precursor.102
+	title = "precursor.102.name"
+	
+	desc = {
+		text = precursor.102.desc.a
+		trigger = {
+			owner = {
+				OR = { 
+					has_event_chain = vultaum_chain
+					has_event_chain = vultaum_homeworld_chain
+				}
+			}
+		}
+	}
+	desc = {
+		text = precursor.102.desc.b
+		trigger = {
+			owner = {
+				NOT = {
+					has_event_chain = vultaum_chain
+					has_event_chain = vultaum_homeworld_chain
+				}
+			}
+		}
+	}
+	
+	location = from
+	picture = GFX_evt_archaeological_dig
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		exists = from
+		from = { has_planet_flag = vultaum_homeworld }
+		owner = { 
+			is_ai = no
+			NOT = { has_country_flag = vultaum_system }
+		}
+		has_global_flag = vultaum_homeworld_found
+	}
+	
+	immediate = {
+		owner = {
+			set_country_flag = vultaum_world_found
+			if = {
+				limit = { has_event_chain = vultaum_chain }
+				end_event_chain = "vultaum_chain"
+			}
+			if = {
+				limit = { has_event_chain = vultaum_homeworld_chain }
+				end_event_chain = "vultaum_homeworld_chain"
+			}
+		}
+	}		
+	
+	option = {
+		name = "UNFORTUNATE"
+	}
+}
+
+### The Yuht Empire
+
+# Yuht Intro
+ship_event = {
+	id = precursor.500
+	title = "precursor.500.name"
+	desc = "precursor.500.desc"
+	picture = GFX_evt_archaeological_dig
+	location = from
+	
+	is_triggered_only = yes 
+	
+	trigger = {
+		solar_system = { has_star_flag = precursor_2 }
+		solar_system = { NOT = { is_same_value = root.owner.capital_scope.solar_system } }
+		owner = { is_ai = no }
+		FROM = { 
+			has_anomaly = no 
+			is_star = no
+		}
+		owner = { 
+			NOT = { 
+				has_country_flag = vultaum_intro
+				has_country_flag = yuht_intro
+				has_country_flag = first_league_intro
+				has_country_flag = irassian_intro
+				has_country_flag = cybrex_intro
+			}
+		}
+	}
+	
+	immediate = {
+		owner = { set_country_flag = yuht_intro }
+	}
+	
+	option = {
+		name = INTERESTING
+		hidden_effect = { owner = { country_event = { id = story.5 days = 30 } } }
+		owner = {
+			begin_event_chain = {
+				event_chain = "yuht_chain"
+				target = THIS
+			}
+		}
+	}
+}
+
+# Hatchery World
+ship_event = {
+	id = precursor.505
+	title = "precursor.505.name"
+	desc = "precursor.505.desc"
+	picture = GFX_evt_alien_nature
+	location = FROM
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		hidden_effect = {
+			owner = { set_country_flag = yuht_1 }
+		}
+	}
+	
+	option = {
+		name = INTERESTING
+		from = {
+			enable_special_project = {
+				name = "YUHT_ARCHEOLOGY_1"
+				location = this
+				owner = root.owner
+			}
+		}
+	}
+}
+
+# Hatchery World Project Completed
+ship_event = {
+	id = precursor.506
+	title = "precursor.completed.name"
+	desc = "precursor.506.desc"
+	picture = GFX_evt_archaeological_dig
+	location = FROMFROM
+	
+	is_triggered_only = yes 
+	
+	option = {
+		name = "precursor.completed.a"
+		owner = {
+			add_event_chain_counter = { 
+				event_chain = "yuht_chain" 
+				counter = "yuht_artifacts" 
+				amount = 1 
+			}
+			add_monthly_resource_mult = {
+				resource = society_research
+				value = @tier1researchreward
+				min = @tier1researchmin
+				max = @tier1researchmax
+			}
+			hidden_effect = { country_event = { id = precursor.597 } }
+		}
+	}
+}
+
+# Listening Post
+ship_event = {
+	id = precursor.510
+	title = "precursor.510.name"
+	desc = "precursor.510.desc"
+	picture = GFX_evt_outpost
+	location = FROM
+	
+	is_triggered_only = yes 
+	
+	immediate = {
+		hidden_effect = {
+			owner = { set_country_flag = yuht_2 }
+		}
+	}
+	
+	option = {
+		name = INTRIGUING
+		from = {
+			enable_special_project = {
+				name = "YUHT_ARCHEOLOGY_2"
+				location = this
+				owner = root.owner
+			}
+		}
+	}
+}
+
+# Listening Post Project Completed
+ship_event = {
+	id = precursor.511
+	title = "precursor.completed.name"
+	desc = "precursor.511.desc"
+	picture = GFX_evt_archaeological_dig
+	location = FROMFROM
+	
+	is_triggered_only = yes 
+	
+	option = {
+		name = "precursor.completed.a"
+		owner = {
+			add_event_chain_counter = { 
+				event_chain = "yuht_chain" 
+				counter = "yuht_artifacts" 
+				amount = 1 
+			}
+			add_monthly_resource_mult = {
+				resource = engineering_research
+				value = @tier1researchreward
+				min = @tier1researchmin
+				max = @tier1researchmax
+			}
+			hidden_effect = { country_event = { id = precursor.597 } }
+		}
+	}
+}
+
+# Colony 1
+ship_event = {
+	id = precursor.515
+	title = "precursor.515.name"
+	desc = "precursor.515.desc"
+	picture = GFX_evt_city_ruins
+	location = FROM
+	
+	is_triggered_only = yes 
+	
+	immediate = {
+		hidden_effect = {
+			owner = { set_country_flag = yuht_3 }
+		}
+	}
+	
+	option = {
+		name = CURIOUS
+		from = {
+			enable_special_project = {
+				name = "YUHT_ARCHEOLOGY_3"
+				location = this
+				owner = root.owner
+			}
+		}
+	}
+}
+
+# Colony 1 Project Completed
+ship_event = {
+	id = precursor.516
+	title = "precursor.completed.name"
+	desc = "precursor.516.desc"
+	picture = GFX_evt_archaeological_dig
+	location = FROMFROM
+	
+	is_triggered_only = yes 
+	
+	option = {
+		name = "precursor.completed.a"
+		owner = {
+			add_event_chain_counter = { 
+				event_chain = "yuht_chain" 
+				counter = "yuht_artifacts" 
+				amount = 1 
+			}
+			add_monthly_resource_mult = {
+				resource = society_research
+				value = @tier1researchreward
+				min = @tier1researchmin
+				max = @tier1researchmax
+			}
+			hidden_effect = { country_event = { id = precursor.597 } }
+		}
+	}
+}
+
+# Colony 2
+ship_event = {
+	id = precursor.520
+	title = "precursor.515.name"
+	desc = "precursor.520.desc"
+	picture = GFX_evt_city_ruins
+	location = FROM
+	
+	is_triggered_only = yes 
+	
+	immediate = {
+		hidden_effect = {
+			owner = { set_country_flag = yuht_4 }
+		}
+	}
+	
+	option = {
+		name = PECULIAR
+		from = {
+			enable_special_project = {
+				name = "YUHT_ARCHEOLOGY_4"
+				location = this
+				owner = root.owner
+			}
+		}
+	}
+}
+
+# Colony 2 Project Completed
+ship_event = {
+	id = precursor.521
+	title = "precursor.completed.name"
+	desc = "precursor.521.desc"
+	picture = GFX_evt_archaeological_dig
+	location = FROMFROM
+	
+	is_triggered_only = yes 
+	
+	option = {
+		name = "precursor.completed.a"
+		owner = {
+			add_event_chain_counter = { 
+				event_chain = "yuht_chain" 
+				counter = "yuht_artifacts" 
+				amount = 1 
+			}
+			add_monthly_resource_mult = {
+				resource = society_research
+				value = @tier1researchreward
+				min = @tier1researchmin
+				max = @tier1researchmax
+			}
+			hidden_effect = { country_event = { id = precursor.597 } }
+		}
+	}
+}
+
+# Colony 3
+ship_event = {
+	id = precursor.525
+	title = "precursor.515.name"
+	desc = "precursor.525.desc"
+	picture = GFX_evt_city_ruins
+	location = FROM
+	
+	is_triggered_only = yes 
+	
+	immediate = {
+		hidden_effect = {
+			owner = { set_country_flag = yuht_5 }
+		}
+	}
+	
+	option = {
+		name = FASCINATING
+		from = {
+			enable_special_project = {
+				name = "YUHT_ARCHEOLOGY_5"
+				location = this
+				owner = root.owner
+			}
+		}
+	}
+}
+
+# Colony 3 Project Completed
+ship_event = {
+	id = precursor.526
+	title = "precursor.completed.name"
+	desc = "precursor.526.desc"
+	picture = GFX_evt_archaeological_dig
+	location = FROMFROM
+	
+	is_triggered_only = yes 
+	
+	option = {
+		name = "precursor.completed.a"
+		owner = {
+			add_event_chain_counter = { 
+				event_chain = "yuht_chain" 
+				counter = "yuht_artifacts" 
+				amount = 1 
+			}
+			add_monthly_resource_mult = {
+				resource = society_research
+				value = @tier1researchreward
+				min = @tier1researchmin
+				max = @tier1researchmax
+			}
+			hidden_effect = { country_event = { id = precursor.597 } }
+		}
+	}
+}
+
+# Satellite
+ship_event = {
+	id = precursor.530
+	title = "precursor.530.name"
+	desc = "precursor.530.desc"
+	picture = GFX_evt_satellite_in_orbit
+	location = FROM
+	
+	is_triggered_only = yes 
+	
+	immediate = {
+		hidden_effect = {
+			owner = { set_country_flag = yuht_6 }
+		}
+	}
+	
+	option = {
+		name = REMARKABLE
+		from = {
+			enable_special_project = {
+				name = "YUHT_ARCHEOLOGY_6"
+				location = this
+				owner = root.owner
+			}
+		}
+	}
+}
+
+# Satellite Project Completed
+ship_event = {
+	id = precursor.531
+	title = "precursor.completed.name"
+	desc = "precursor.531.desc"
+	picture = GFX_evt_satellite_in_orbit
+	location = FROMFROM
+	
+	is_triggered_only = yes 
+	
+	option = {
+		name = "precursor.completed.a"
+		owner = {
+			add_event_chain_counter = { 
+				event_chain = "yuht_chain" 
+				counter = "yuht_artifacts" 
+				amount = 1 
+			}
+			add_monthly_resource_mult = {
+				resource = physics_research
+				value = @tier1researchreward
+				min = @tier1researchmin
+				max = @tier1researchmax
+			}
+			hidden_effect = { country_event = { id = precursor.597 } }
+		}
+	}
+}
+
+# Derelict Cruiser
+ship_event = {
+	id = precursor.535
+	title = "precursor.535.name"
+	desc = "precursor.535.desc"
+	picture = GFX_evt_ship_in_orbit
+	location = FROM
+	
+	is_triggered_only = yes 
+	
+	immediate = {
+		hidden_effect = {
+			owner = { set_country_flag = yuht_7 }
+		}
+	}
+	
+	option = {
+		name = INTRIGUING
+		from = {
+			enable_special_project = {
+				name = "YUHT_ARCHEOLOGY_7"
+				location = this
+				owner = root.owner
+			}
+		}
+	}
+}
+
+# Derelict Cruiser Project Completed
+ship_event = {
+	id = precursor.536
+	title = "precursor.completed.name"
+	desc = "precursor.536.desc"
+	picture = GFX_evt_ship_in_orbit
+	location = FROMFROM
+	
+	is_triggered_only = yes 
+	
+	option = {
+		name = "precursor.completed.a"
+		owner = {
+			add_event_chain_counter = { 
+				event_chain = "yuht_chain" 
+				counter = "yuht_artifacts" 
+				amount = 1 
+			}
+			add_monthly_resource_mult = {
+				resource = engineering_research
+				value = @tier1researchreward
+				min = @tier1researchmin
+				max = @tier1researchmax
+			}
+			hidden_effect = { country_event = { id = precursor.597 } }
+		}
+	}
+}
+
+# Colony Ship
+ship_event = {
+	id = precursor.540
+	title = "precursor.540.name"
+	desc = "precursor.540.desc"
+	picture = GFX_evt_ship_in_orbit
+	location = FROM
+	
+	is_triggered_only = yes 
+	
+	immediate = {
+		hidden_effect = {
+			owner = { set_country_flag = yuht_8 }
+		}
+	}
+	
+	option = {
+		name = CURIOUS
+		from = {
+			enable_special_project = {
+				name = "YUHT_ARCHEOLOGY_8"
+				location = this
+				owner = root.owner
+			}
+		}
+	}
+}
+
+# Colony Ship Project Completed
+ship_event = {
+	id = precursor.541
+	title = "precursor.completed.name"
+	desc = "precursor.541.desc"
+	picture = GFX_evt_ship_in_orbit
+	location = FROMFROM
+	
+	is_triggered_only = yes 
+	
+	option = {
+		name = "precursor.completed.a"
+		owner = {
+			add_event_chain_counter = { 
+				event_chain = "yuht_chain" 
+				counter = "yuht_artifacts" 
+				amount = 1 
+			}
+			add_monthly_resource_mult = {
+				resource = physics_research
+				value = @tier1researchreward
+				min = @tier1researchmin
+				max = @tier1researchmax
+			}
+			hidden_effect = { country_event = { id = precursor.597 } }
+		}
+	}
+}
+
+# Asteroid Dwelling
+ship_event = {
+	id = precursor.545
+	title = "precursor.545.name"
+	desc = "precursor.545.desc"
+	picture = GFX_evt_mining_station
+	location = FROM
+	
+	is_triggered_only = yes 
+	
+	immediate = {
+		hidden_effect = {
+			owner = { set_country_flag = yuht_9 }
+		}
+	}
+	
+	option = {
+		name = CURIOUS
+		from = {
+			enable_special_project = {
+				name = "YUHT_ARCHEOLOGY_9"
+				location = this
+				owner = root.owner
+			}
+		}
+	}
+}
+
+# Asteroid Dwelling Completed
+ship_event = {
+	id = precursor.546
+	title = "precursor.completed.name"
+	desc = "precursor.546.desc"
+	picture = GFX_evt_mining_station
+	location = FROMFROM
+	
+	is_triggered_only = yes 
+	
+	option = {
+		name = "precursor.completed.a"
+		owner = {
+			add_event_chain_counter = { 
+				event_chain = "yuht_chain" 
+				counter = "yuht_artifacts" 
+				amount = 1 
+			}
+			add_monthly_resource_mult = {
+				resource = society_research
+				value = @tier1researchreward
+				min = @tier1researchmin
+				max = @tier1researchmax
+			}
+			hidden_effect = { country_event = { id = precursor.597 } }
+		}
+	}
+}
+
+# Port to Home System events
+country_event = {
+	id = precursor.597
+	hide_window = yes
+	is_triggered_only = yes
+
+	immediate = {
+		if = {
+			limit = {
+				NOT = { has_global_flag = yuht_system_discovered }
+				has_completed_event_chain_counter = {
+					event_chain = "yuht_chain" 
+					counter = "yuht_artifacts" 
+				}
+			}
+			country_event = { id = precursor.598 }
+			else = {
+				if = {
+					limit = {
+						has_global_flag = yuht_system_discovered
+						has_completed_event_chain_counter = {
+							event_chain = "yuht_chain" 
+							counter = "yuht_artifacts" 
+						}
+					}
+					country_event = { id = precursor.599 }
+				}
+			}
+		}
+	}
+}
+
+# Yuht Home System Discovered (HIDDEN)
+country_event = {
+	id = precursor.598
+	hide_window = yes
+	
+	fire_only_once = yes
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		set_global_flag = yuht_system_discovered
+		set_country_flag = yuht_system
+		random_system = {
+			limit = { has_star_flag = precursor_2 }
+			spawn_system = {
+				min_distance = 20
+				max_distance = 50
+				initializer = "yuhtaan_system"
+			}
+		}
+		country_event = { id = precursor.600 days = 2 }
+	}
+}
+
+# Yuht Home System Discovered (Not First) (HIDDEN)
+country_event = {
+	id = precursor.599
+	hide_window = yes
+	
+	fire_only_once = yes
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		set_country_flag = yuht_system
+		country_event = { id = precursor.600 days = 2 }
+	}
+}
+
+# Yuht Home System Discovered
+country_event = {
+	id = precursor.600
+	title = "precursor.600.name"
+	desc = "precursor.600.desc"
+	picture = GFX_evt_federation_fleet
+	location = event_target:yuhtaan
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		random_system = {
+			limit = { has_star_flag = yuhtaan }
+			save_event_target_as = yuhtaan
+		}
+	}
+	
+	option = {
+		name = "precursor.100.a"
+		end_event_chain = "yuht_chain"
+		begin_event_chain = {
+			event_chain = "yuht_homeworld_chain"
+			target = ROOT
+		}
+		create_point_of_interest = {
+			id = yuht.1
+			name = "yuht_1_poi"
+			desc = "yuht_1_poi_desc"
+			event_chain = yuht_homeworld_chain
+			location = event_target:yuhtaan
+		}
+	}
+}
+
+# Yuht Homeworld
+ship_event = {
+	id = precursor.601
+	title = "precursor.601.name"
+	desc = "precursor.601.desc"
+	picture = GFX_evt_archaeological_dig
+	location = from
+	
+	is_triggered_only = yes
+
+	trigger = {
+		exists = from
+		from = { has_planet_flag = yuht_homeworld }
+		owner = { 
+			is_ai = no 
+			has_country_flag = yuht_system
+		}
+	}
+	
+	immediate = {
+		set_global_flag = yuht_homeworld_found
+		owner = {
+			set_country_flag = yuht_world_found
+			end_event_chain = "yuht_homeworld_chain"
+		}
+	}
+	
+	option = {
+		name = "FASCINATING"
+		owner = {
+			add_monthly_resource_mult = {
+				resource = unity
+				value = 120
+				min = 240
+				max = 9999
+			}
+			add_monthly_resource_mult = {
+				resource = energy
+				value = @tier4materialreward
+				min = @tier4materialmin
+				max = @tier4materialmax
+			}
+			add_monthly_resource_mult = {
+				resource = minerals
+				value = @tier4materialreward
+				min = @tier4materialmin
+				max = @tier4materialmax
+			}
+		}
+	}
+}
+
+# Someone else got there first
+ship_event = {
+	id = precursor.602
+	title = "precursor.602.name"
+	
+	desc = {
+		text = precursor.602.desc.a
+		trigger = {
+			owner = {
+				OR = { 
+					has_event_chain = yuht_chain
+					has_event_chain = yuht_homeworld_chain
+				}
+			}
+		}
+	}
+	desc = {
+		text = precursor.602.desc.b
+		trigger = {
+			owner = {
+				NOT = {
+					has_event_chain = yuht_chain
+					has_event_chain = yuht_homeworld_chain
+				}
+			}
+		}
+	}
+	
+	location = from
+	picture = GFX_evt_archaeological_dig
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		exists = from
+		from = { has_planet_flag = yuht_homeworld }
+		owner = { 
+			is_ai = no 
+			NOT = { has_country_flag = yuht_system }
+		}
+		has_global_flag = yuht_homeworld_found
+	}
+	
+	immediate = {
+		owner = {
+			set_country_flag = yuht_world_found
+			if = {
+				limit = { has_event_chain = yuht_chain }
+				end_event_chain = "yuht_chain"
+			}
+			if = {
+				limit = { has_event_chain = yuht_homeworld_chain }
+				end_event_chain = "yuht_homeworld_chain"
+			}
+		}
+	}		
+	
+	option = {
+		name = "UNFORTUNATE"
+	}
+}
+
+### The First League
+
+# First League Notification Event
+ship_event = {
+	id = precursor.1000
+	title = "precursor.1000.name"
+	desc = "precursor.1000.desc"
+	picture = GFX_evt_archaeological_dig
+	
+	is_triggered_only = yes 
+	
+	trigger = {
+		solar_system = { has_star_flag = precursor_3 }
+		solar_system = { NOT = { is_same_value = root.owner.capital_scope.solar_system } }
+		owner = { is_ai = no }
+		FROM = {
+			has_anomaly = no 
+			is_star = no
+		}
+		owner = { 
+			NOT = { 
+				has_country_flag = vultaum_intro
+				has_country_flag = yuht_intro
+				has_country_flag = first_league_intro
+				has_country_flag = irassian_intro
+				has_country_flag = cybrex_intro
+			}
+		}
+	}
+	
+	immediate = {
+		owner = { set_country_flag = first_league_intro }
+	}
+	
+	option = {
+		name = INTERESTING
+		hidden_effect = { owner = { country_event = { id = story.5 days = 30 } } }
+		owner = {
+			begin_event_chain = {
+				event_chain = "first_league_chain"
+				target = THIS
+			}
+		}
+	}
+}
+
+# League Naval Base
+ship_event = {
+	id = precursor.1005
+	title = "precursor.1005.name"
+	desc = "precursor.1005.desc"
+	picture = GFX_evt_ship_in_orbit
+	location = FROM
+	
+	is_triggered_only = yes 
+	
+	immediate = {
+		hidden_effect = {
+			owner = { set_country_flag = first_league_1 }
+		}
+	}
+	
+	option = {
+		name = REMARKABLE
+		from = {
+			enable_special_project = {
+				name = "FIRST_LEAGUE_ARCHEOLOGY_1"
+				location = this
+				owner = root.owner
+			}
+		}
+	}
+}
+
+# League Naval Base Completed
+ship_event = {
+	id = precursor.1006
+	title = "precursor.completed.name"
+	desc = "precursor.1006.desc"
+	picture = GFX_evt_ship_in_orbit
+	location = FROMFROM
+	
+	is_triggered_only = yes 
+	
+	option = {
+		name = "precursor.completed.a"
+		owner = {
+			add_event_chain_counter = { 
+				event_chain = "first_league_chain" 
+				counter = "first_league_artifacts" 
+				amount = 1 
+			}
+			add_monthly_resource_mult = {
+				resource = engineering_research
+				value = @tier1researchreward
+				min = @tier1researchmin
+				max = @tier1researchmax
+			}
+			hidden_effect = { country_event = { id = precursor.1097 } }
+		}
+	}
+}
+
+# League Cruiser
+ship_event = {
+	id = precursor.1010
+	title = "precursor.1010.name"
+	desc = "precursor.1010.desc"
+	picture = GFX_evt_ship_in_orbit
+	location = FROM
+	
+	is_triggered_only = yes 
+	
+	immediate = {
+		hidden_effect = {
+			owner = { set_country_flag = first_league_2 }
+		}
+	}
+	
+	option = {
+		name = INTERESTING
+		from = {
+			enable_special_project = {
+				name = "FIRST_LEAGUE_ARCHEOLOGY_2"
+				location = this
+				owner = root.owner
+			}
+		}
+	}
+}
+
+# League Cruiser Completed
+ship_event = {
+	id = precursor.1011
+	title = "precursor.completed.name"
+	desc = "precursor.1011.desc"
+	picture = GFX_evt_ship_in_orbit
+	location = FROMFROM
+	
+	is_triggered_only = yes 
+	
+	option = {
+		name = "precursor.completed.a"
+		owner = {
+			add_event_chain_counter = { 
+				event_chain = "first_league_chain" 
+				counter = "first_league_artifacts" 
+				amount = 1 
+			}
+			add_monthly_resource_mult = {
+				resource = engineering_research
+				value = @tier1researchreward
+				min = @tier1researchmin
+				max = @tier1researchmax
+			}
+			hidden_effect = { country_event = { id = precursor.1097 } }
+		}
+	}
+}
+
+# Khamdai Homeworld
+ship_event = {
+	id = precursor.1015
+	title = "precursor.1015.name"
+	desc = "precursor.1015.desc"
+	picture = GFX_evt_city_ruins
+	location = FROM
+	
+	is_triggered_only = yes 
+	
+	immediate = {
+		hidden_effect = {
+			owner = { set_country_flag = first_league_3 }
+		}
+	}
+	
+	option = {
+		name = INTRIGUING
+		from = {
+			enable_special_project = {
+				name = "FIRST_LEAGUE_ARCHEOLOGY_3"
+				location = this
+				owner = root.owner
+			}
+		}
+	}
+}
+
+# Khamdai Homeworld Completed
+ship_event = {
+	id = precursor.1016
+	title = "precursor.completed.name"
+	desc = "precursor.1016.desc"
+	picture = GFX_evt_archaeological_dig
+	location = FROMFROM
+	
+	is_triggered_only = yes 
+	
+	option = {
+		name = "precursor.completed.a"
+		owner = {
+			add_event_chain_counter = { 
+				event_chain = "first_league_chain" 
+				counter = "first_league_artifacts" 
+				amount = 1 
+			}
+			add_monthly_resource_mult = {
+				resource = society_research
+				value = @tier1researchreward
+				min = @tier1researchmin
+				max = @tier1researchmax
+			}
+			hidden_effect = { country_event = { id = precursor.1097 } }
+		}
+	}
+}
+
+# Chassago Homeworld
+ship_event = {
+	id = precursor.1020
+	title = "precursor.1020.name"
+	desc = "precursor.1020.desc"
+	picture = GFX_evt_city_ruins
+	location = FROM
+	
+	is_triggered_only = yes 
+	
+	immediate = {
+		hidden_effect = {
+			owner = { set_country_flag = first_league_4 }
+		}
+	}
+	
+	option = {
+		name = CURIOUS
+		from = {
+			enable_special_project = {
+				name = "FIRST_LEAGUE_ARCHEOLOGY_4"
+				location = this
+				owner = root.owner
+			}
+		}
+	}
+}
+
+# Chassago Homeworld Completed
+ship_event = {
+	id = precursor.1021
+	title = "precursor.completed.name"
+	desc = "precursor.1021.desc"
+	picture = GFX_evt_archaeological_dig
+	location = FROMFROM
+	
+	is_triggered_only = yes 
+	
+	option = {
+		name = "precursor.completed.a"
+		owner = {
+			add_event_chain_counter = { 
+				event_chain = "first_league_chain" 
+				counter = "first_league_artifacts" 
+				amount = 1 
+			}
+			add_monthly_resource_mult = {
+				resource = society_research
+				value = @tier1researchreward
+				min = @tier1researchmin
+				max = @tier1researchmax
+			}
+			hidden_effect = { country_event = { id = precursor.1097 } }
+		}
+	}
+}
+
+# Migir-Yan Homeworld
+ship_event = {
+	id = precursor.1025
+	title = "precursor.1025.name"
+	desc = "precursor.1025.desc"
+	picture = GFX_evt_city_ruins
+	location = FROM
+	
+	is_triggered_only = yes 
+	
+	immediate = {
+		hidden_effect = {
+			owner = { set_country_flag = first_league_5 }
+		}
+	}
+	
+	option = {
+		name = FASCINATING
+		from = {
+			enable_special_project = {
+				name = "FIRST_LEAGUE_ARCHEOLOGY_5"
+				location = this
+				owner = root.owner
+			}
+		}
+	}
+}
+
+# Migir-Yan Homeworld Completed
+ship_event = {
+	id = precursor.1026
+	title = "precursor.completed.name"
+	desc = "precursor.1026.desc"
+	picture = GFX_evt_archaeological_dig
+	location = FROMFROM
+	
+	is_triggered_only = yes 
+	
+	option = {
+		name = "precursor.completed.a"
+		owner = {
+			add_event_chain_counter = { 
+				event_chain = "first_league_chain" 
+				counter = "first_league_artifacts" 
+				amount = 1 
+			}
+			add_monthly_resource_mult = {
+				resource = society_research
+				value = @tier1researchreward
+				min = @tier1researchmin
+				max = @tier1researchmax
+			}
+			hidden_effect = { country_event = { id = precursor.1097 } }
+		}
+	}
+}
+
+# V'ropak Homeworld
+ship_event = {
+	id = precursor.1030
+	title = "precursor.1030.name"
+	desc = "precursor.1030.desc"
+	picture = GFX_evt_city_ruins
+	location = FROM
+	
+	is_triggered_only = yes 
+	
+	immediate = {
+		hidden_effect = {
+			owner = { set_country_flag = first_league_6 }
+		}
+	}
+	
+	option = {
+		name = PECULIAR
+		from = {
+			enable_special_project = {
+				name = "FIRST_LEAGUE_ARCHEOLOGY_6"
+				location = this
+				owner = root.owner
+			}
+		}
+	}
+}
+
+# V'ropak Homeworld Completed
+ship_event = {
+	id = precursor.1031
+	title = "precursor.completed.name"
+	desc = "precursor.1031.desc"
+	picture = GFX_evt_archaeological_dig
+	location = FROMFROM
+	
+	is_triggered_only = yes 
+	
+	option = {
+		name = "precursor.completed.a"
+		owner = {
+			add_event_chain_counter = { 
+				event_chain = "first_league_chain" 
+				counter = "first_league_artifacts" 
+				amount = 1 
+			}
+			add_monthly_resource_mult = {
+				resource = society_research
+				value = @tier1researchreward
+				min = @tier1researchmin
+				max = @tier1researchmax
+			}
+			hidden_effect = { country_event = { id = precursor.1097 } }
+		}
+	}
+}
+
+# League Science Base
+ship_event = {
+	id = precursor.1035
+	title = "precursor.1035.name"
+	desc = "precursor.1035.desc"
+	picture = GFX_evt_outpost
+	location = FROM
+	
+	is_triggered_only = yes 
+	
+	immediate = {
+		hidden_effect = {
+			owner = { set_country_flag = first_league_7 }
+		}
+	}
+	
+	option = {
+		name = INTERESTING
+		from = {
+			enable_special_project = {
+				name = "FIRST_LEAGUE_ARCHEOLOGY_7"
+				location = this
+				owner = root.owner
+			}
+		}
+	}
+}
+
+# League Science Base Completed
+ship_event = {
+	id = precursor.1036
+	title = "precursor.completed.name"
+	desc = "precursor.1036.desc"
+	picture = GFX_evt_archaeological_dig
+	location = FROMFROM
+	
+	is_triggered_only = yes 
+	
+	option = {
+		name = "precursor.completed.a"
+		owner = {
+			add_event_chain_counter = { 
+				event_chain = "first_league_chain" 
+				counter = "first_league_artifacts" 
+				amount = 1 
+			}
+			add_monthly_resource_mult = {
+				resource = physics_research
+				value = @tier1researchreward
+				min = @tier1researchmin
+				max = @tier1researchmax
+			}
+			hidden_effect = { country_event = { id = precursor.1097 } }
+		}
+	}
+}
+
+# Joint League Colony
+ship_event = {
+	id = precursor.1040
+	title = "precursor.1040.name"
+	desc = "precursor.1040.desc"
+	picture = GFX_evt_alien_nature
+	location = FROM
+	
+	is_triggered_only = yes 
+	
+	immediate = {
+		hidden_effect = {
+			owner = { set_country_flag = first_league_8 }
+		}
+	}
+	
+	option = {
+		name = FASCINATING
+		from = {
+			enable_special_project = {
+				name = "FIRST_LEAGUE_ARCHEOLOGY_8"
+				location = this
+				owner = root.owner
+			}
+		}
+	}
+}
+
+# Joint League Colony Completed
+ship_event = {
+	id = precursor.1041
+	title = "precursor.completed.name"
+	desc = "precursor.1041.desc"
+	picture = GFX_evt_archaeological_dig
+	location = FROMFROM
+	
+	is_triggered_only = yes 
+	
+	option = {
+		name = "precursor.completed.a"
+		owner = {
+			add_event_chain_counter = { 
+				event_chain = "first_league_chain" 
+				counter = "first_league_artifacts" 
+				amount = 1 
+			}
+			add_monthly_resource_mult = {
+				resource = society_research
+				value = @tier1researchreward
+				min = @tier1researchmin
+				max = @tier1researchmax
+			}
+			hidden_effect = { country_event = { id = precursor.1097 } }
+		}
+	}
+}
+
+# League Trade Center
+ship_event = {
+	id = precursor.1045
+	title = "precursor.1045.name"
+	desc = "precursor.1045.desc"
+	picture = GFX_evt_city_ruins
+	location = FROM
+	
+	is_triggered_only = yes 
+	
+	immediate = {
+		hidden_effect = {
+			owner = { set_country_flag = first_league_9 }
+		}
+	}
+	
+	option = {
+		name = AMAZING
+		from = {
+			enable_special_project = {
+				name = "FIRST_LEAGUE_ARCHEOLOGY_9"
+				location = this
+				owner = root.owner
+			}
+		}
+	}
+}
+
+# League Trade Center Completed
+ship_event = {
+	id = precursor.1046
+	title = "precursor.completed.name"
+	desc = "precursor.1046.desc"
+	picture = GFX_evt_archaeological_dig
+	location = FROMFROM
+	
+	is_triggered_only = yes 
+	
+	option = {
+		name = "precursor.completed.a"
+		owner = {
+			add_event_chain_counter = { 
+				event_chain = "first_league_chain" 
+				counter = "first_league_artifacts" 
+				amount = 1 
+			}
+			add_monthly_resource_mult = {
+				resource = society_research
+				value = @tier1researchreward
+				min = @tier1researchmin
+				max = @tier1researchmax
+			}
+			hidden_effect = { country_event = { id = precursor.1097 } }
+		}
+	}
+}
+
+# Battle Wreckage
+ship_event = {
+	id = precursor.1050
+	title = "precursor.1050.name"
+	desc = "precursor.1050.desc"
+	picture = GFX_evt_ship_in_orbit
+	location = FROM
+	
+	is_triggered_only = yes 
+	
+	immediate = {
+		hidden_effect = {
+			owner = { set_country_flag = first_league_10 }
+		}
+	}
+	
+	option = {
+		name = INTRIGUING
+		from = {
+			enable_special_project = {
+				name = "FIRST_LEAGUE_ARCHEOLOGY_10"
+				location = this
+				owner = root.owner
+			}
+		}
+	}
+}
+
+# Battle Wreckage Completed
+ship_event = {
+	id = precursor.1051
+	title = "precursor.completed.name"
+	desc = "precursor.1051.desc"
+	picture = GFX_evt_ship_in_orbit
+	location = FROMFROM
+	
+	is_triggered_only = yes 
+	
+	option = {
+		name = "precursor.completed.a"
+		owner = {
+			add_event_chain_counter = { 
+				event_chain = "first_league_chain" 
+				counter = "first_league_artifacts" 
+				amount = 1 
+			}
+			add_monthly_resource_mult = {
+				resource = physics_research
+				value = @tier1researchreward
+				min = @tier1researchmin
+				max = @tier1researchmax
+			}
+			hidden_effect = { country_event = { id = precursor.1097 } }
+		}
+	}
+}
+
+# Prison Complex
+ship_event = {
+	id = precursor.1055
+	title = "precursor.1055.name"
+	desc = "precursor.1055.desc"
+	picture = GFX_evt_outpost
+	location = FROM
+	
+	is_triggered_only = yes 
+	
+	immediate = {
+		hidden_effect = {
+			owner = { set_country_flag = first_league_11 }
+		}
+	}
+	
+	option = {
+		name = INTERESTING
+		from = {
+			enable_special_project = {
+				name = "FIRST_LEAGUE_ARCHEOLOGY_11"
+				location = this
+				owner = root.owner
+			}
+		}
+	}
+}
+
+# Prison Complex Completed
+ship_event = {
+	id = precursor.1056
+	title = "precursor.completed.name"
+	desc = "precursor.1056.desc"
+	picture = GFX_evt_archaeological_dig
+	location = FROMFROM
+	
+	is_triggered_only = yes 
+	
+	option = {
+		name = "precursor.completed.a"
+		owner = {
+			add_event_chain_counter = { 
+				event_chain = "first_league_chain" 
+				counter = "first_league_artifacts" 
+				amount = 1 
+			}
+			add_monthly_resource_mult = {
+				resource = physics_research
+				value = @tier1researchreward
+				min = @tier1researchmin
+				max = @tier1researchmax
+			}
+			hidden_effect = { country_event = { id = precursor.1097 } }
+		}
+	}
+}
+
+# Protected Primitive World
+ship_event = {
+	id = precursor.1060
+	title = "precursor.1060.name"
+	desc = "precursor.1060.desc"
+	picture = GFX_evt_alien_nature
+	location = FROM
+	
+	is_triggered_only = yes 
+	
+	immediate = {
+		hidden_effect = {
+			owner = { set_country_flag = first_league_12 }
+		}
+	}
+	
+	option = {
+		name = REMARKABLE
+		from = {
+			enable_special_project = {
+				name = "FIRST_LEAGUE_ARCHEOLOGY_12"
+				location = this
+				owner = root.owner
+			}
+		}
+	}
+}
+
+# Protected Primitive World Completed
+ship_event = {
+	id = precursor.1061
+	title = "precursor.completed.name"
+	desc = "precursor.1061.desc"
+	picture = GFX_evt_archaeological_dig
+	location = FROMFROM
+	
+	is_triggered_only = yes 
+	
+	option = {
+		name = "precursor.completed.a"
+		owner = {
+			add_event_chain_counter = { 
+				event_chain = "first_league_chain" 
+				counter = "first_league_artifacts" 
+				amount = 1 
+			}
+			add_monthly_resource_mult = {
+				resource = society_research
+				value = @tier1researchreward
+				min = @tier1researchmin
+				max = @tier1researchmax
+			}
+			hidden_effect = { country_event = { id = precursor.1097 } }
+		}
+	}
+}
+
+# Blockaded World
+ship_event = {
+	id = precursor.1065
+	title = "precursor.1065.name"
+	desc = "precursor.1065.desc"
+	picture = GFX_evt_city_ruins
+	location = FROM
+	
+	is_triggered_only = yes 
+	
+	immediate = {
+		hidden_effect = {
+			owner = { set_country_flag = first_league_13 }
+		}
+	}
+	
+	option = {
+		name = CURIOUS
+		from = {
+			enable_special_project = {
+				name = "FIRST_LEAGUE_ARCHEOLOGY_13"
+				location = this
+				owner = root.owner
+			}
+		}
+	}
+}
+
+# Blockaded World Completed
+ship_event = {
+	id = precursor.1066
+	title = "precursor.completed.name"
+	desc = "precursor.1066.desc"
+	picture = GFX_evt_archaeological_dig
+	location = FROMFROM
+	
+	is_triggered_only = yes 
+	
+	option = {
+		name = "precursor.completed.a"
+		owner = {
+			add_event_chain_counter = { 
+				event_chain = "first_league_chain" 
+				counter = "first_league_artifacts" 
+				amount = 1 
+			}
+			add_monthly_resource_mult = {
+				resource = physics_research
+				value = @tier1researchreward
+				min = @tier1researchmin
+				max = @tier1researchmax
+			}
+			hidden_effect = { country_event = { id = precursor.1097 } }
+		}
+	}
+}
+
+# Smuggler Asteroid
+ship_event = {
+	id = precursor.1070
+	title = "precursor.1070.name"
+	desc = "precursor.1070.desc"
+	picture = GFX_evt_mining_station
+	location = FROM
+	
+	is_triggered_only = yes 
+	
+	immediate = {
+		hidden_effect = {
+			owner = { set_country_flag = first_league_14 }
+		}
+	}
+	
+	option = {
+		name = CURIOUS
+		from = {
+			enable_special_project = {
+				name = "FIRST_LEAGUE_ARCHEOLOGY_14"
+				location = this
+				owner = root.owner
+			}
+		}
+	}
+}
+
+# Smuggler Asteroid Completed
+ship_event = {
+	id = precursor.1071
+	title = "precursor.completed.name"
+	desc = "precursor.1071.desc"
+	picture = GFX_evt_mining_station
+	location = FROMFROM
+	
+	is_triggered_only = yes 
+	
+	option = {
+		name = "precursor.completed.a"
+		owner = {
+			add_event_chain_counter = { 
+				event_chain = "first_league_chain" 
+				counter = "first_league_artifacts" 
+				amount = 1 
+			}
+			add_monthly_resource_mult = {
+				resource = physics_research
+				value = @tier1researchreward
+				min = @tier1researchmin
+				max = @tier1researchmax
+			}
+			hidden_effect = { country_event = { id = precursor.1097 } }
+		}
+	}
+}
+
+# Port to Home System events
+country_event = {
+	id = precursor.1097
+	hide_window = yes
+	is_triggered_only = yes
+
+	immediate = {
+		if = {
+			limit = {
+				NOT = { 
+					has_global_flag = first_league_system_discovered 
+					has_country_flag = first_league_system
+				}
+				has_completed_event_chain_counter = {
+					event_chain = "first_league_chain" 
+					counter = "first_league_artifacts" 
+				}
+			}
+			country_event = { id = precursor.1098 }
+			else = {
+				if = {
+					limit = {
+						has_global_flag = first_league_system_discovered
+						NOT = { has_country_flag = first_league_system }
+						has_completed_event_chain_counter = {
+							event_chain = "first_league_chain" 
+							counter = "first_league_artifacts" 
+						}
+					}
+					country_event = { id = precursor.1099 }
+				}
+			}
+		}
+	}
+}
+
+# First League Home System Discovered (HIDDEN)
+country_event = {
+	id = precursor.1098
+	hide_window = yes
+	
+	fire_only_once = yes
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		set_global_flag = first_league_discovered
+		set_country_flag = first_league_system
+		random_system = {
+			limit = { has_star_flag = precursor_3 }
+			spawn_system = {
+				min_distance = 20
+				max_distance = 50
+				initializer = "fen_habbanis_system"
+			}
+		}
+		country_event = { id = precursor.1100 days = 2 }
+	}
+}
+
+# First League Home System Discovered (Not First) (HIDDEN)
+country_event = {
+	id = precursor.1099
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		set_country_flag = first_league_system
+		country_event = { id = precursor.1100 days = 2 }
+	}
+}
+
+# First League Home System Discovered
+country_event = {
+	id = precursor.1100
+	title = "precursor.1100.name"
+	desc = "precursor.1100.desc"
+	picture = GFX_evt_federation_fleet
+	location = event_target:fen_habbanis
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		random_system = {
+			limit = { has_star_flag = fen_habbanis }
+			save_event_target_as = fen_habbanis
+		}
+	}
+	
+	option = {
+		name = "precursor.100.a"
+		end_event_chain = "first_league_chain"
+		begin_event_chain = {
+			event_chain = "first_league_homeworld_chain"
+			target = ROOT
+		}
+		create_point_of_interest = {
+			id = first_league.1
+			name = "first_league_1_poi"
+			desc = "first_league_1_poi_desc"
+			event_chain = first_league_homeworld_chain
+			location = event_target:fen_habbanis
+		}
+	}
+}
+
+# First League Homeworld
+ship_event = {
+	id = precursor.1101
+	title = "precursor.1101.name"
+	desc = "precursor.1101.desc"
+	picture = GFX_evt_dead_city
+	location = from
+	
+	is_triggered_only = yes
+
+	trigger = {
+		exists = from
+		from = { has_planet_flag = first_league_homeworld }
+		owner = { 
+			is_ai = no 
+			has_country_flag = first_league_system
+		}
+	}
+
+	immediate = {
+		owner = {
+			set_country_flag = league_world_found
+			set_global_flag = first_league_homeworld_found
+		}
+	}
+
+	after = {
+		owner = {
+			add_monthly_resource_mult = {
+				resource = unity
+				value = 120
+				min = 240
+				max = 9999
+			}
+			add_monthly_resource_mult = {
+				resource = society_research
+				value = @tier4researchreward
+				min = @tier4researchmin
+				max = @tier4researchmax
+			}
+			add_monthly_resource_mult = {
+				resource = influence
+				value = @tier4influencereward
+				min = @tier4influencemin
+				max = @tier4influencemax
+			}
+		}
+	}
+	
+	option = {
+		name = "FASCINATING"
+		trigger = {
+			owner = {
+				has_event_chain = "first_league_homeworld_chain"
+			}
+		}
+		owner = {
+			end_event_chain = "first_league_homeworld_chain"
+		}
+	}
+
+	option = {
+		name = "FASCINATING"
+		trigger = {
+			owner = {
+				NOT = {
+					has_event_chain = "first_league_homeworld_chain"
+				}
+			}
+		}
+	}
+}
+
+# Someone else got there first
+ship_event = {
+	id = precursor.1102
+	title = "precursor.1102.name"
+	
+	desc = {
+		text = precursor.1102.desc.a
+		trigger = {
+			owner = {
+				OR = { 
+					has_event_chain = first_league_chain
+					has_event_chain = first_league_homeworld_chain
+				}
+			}
+		}
+	}
+	desc = {
+		text = precursor.1102.desc.b
+		trigger = {
+			owner = {
+				NOT = {
+					has_event_chain = first_league_chain
+					has_event_chain = first_league_homeworld_chain
+				}
+			}
+		}
+	}
+	
+	location = from
+	picture = GFX_evt_archaeological_dig
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		exists = from
+		from = { has_planet_flag = first_league_homeworld }
+		owner = { 
+			is_ai = no
+			NOT = { has_country_flag = first_league_system }
+		}
+		has_global_flag = first_league_homeworld_found
+	}
+	
+	immediate = {
+		owner = {
+			set_country_flag = league_world_found
+			if = { 
+				limit = { has_event_chain = first_league_chain }
+				end_event_chain = "first_league_chain"
+			}
+			if = {
+				limit = { has_event_chain = first_league_homeworld_chain }
+				end_event_chain = "first_league_homeworld_chain"
+			}
+		}
+	}		
+	
+	option = {
+		name = "UNFORTUNATE"
+	}
+}
+
+### The Irassian Concordat
+
+# Irassian Notification Event
+ship_event = {
+	id = precursor.1500
+	title = "precursor.1500.name"
+	desc = "precursor.1500.desc"
+	picture = GFX_evt_archaeological_dig
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		solar_system = { has_star_flag = precursor_4 }
+		solar_system = { NOT = { is_same_value = root.owner.capital_scope.solar_system } }
+		owner = { is_ai = no }
+		FROM = { 
+			has_anomaly = no 
+			is_star = no
+		}
+		owner = { 
+			NOT = { 
+				has_country_flag = vultaum_intro
+				has_country_flag = yuht_intro
+				has_country_flag = first_league_intro
+				has_country_flag = irassian_intro
+				has_country_flag = cybrex_intro
+			}
+		}
+	}
+	
+	immediate = {
+		owner = { set_country_flag = irassian_intro }
+	}
+	
+	option = {
+		name = INTERESTING
+		hidden_effect = { owner = { country_event = { id = story.5 days = 30 } } }
+		owner = {
+			begin_event_chain = {
+				event_chain = "irassian_chain"
+				target = ROOT
+			}
+		}
+	}
+}
+
+# Quarantined World
+ship_event = {
+	id = precursor.1505
+	title = "precursor.1505.name"
+	desc = "precursor.1505.desc"
+	picture = GFX_evt_landing_ship
+	location = FROM
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		hidden_effect = {
+			owner = { set_country_flag = irassians_1 }
+		}
+	}
+	
+	option = {
+		name = FASCINATING
+		from = {
+			enable_special_project = {
+				name = "IRASSIAN_ARCHEOLOGY_1"
+				location = this
+				owner = root.owner
+			}
+		}
+	}
+}
+
+# Quarantined World Project Completed
+ship_event = {
+	id = precursor.1506
+	title = "precursor.completed.name"
+	desc = "precursor.1506.desc"
+	picture = GFX_evt_archaeological_dig
+	location = FROMFROM
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "precursor.completed.a"
+		owner = {
+			add_event_chain_counter = { 
+				event_chain = "irassian_chain" 
+				counter = "irassian_artifacts" 
+				amount = 1 
+			}
+			add_monthly_resource_mult = {
+				resource = society_research
+				value = @tier1researchreward
+				min = @tier1researchmin
+				max = @tier1researchmax
+			}
+			hidden_effect = { country_event = { id = precursor.1597 } }
+		}
+	}
+}
+
+# Purified World
+ship_event = {
+	id = precursor.1510
+	title = "precursor.1510.name"
+	desc = "precursor.1510.desc"
+	picture = GFX_evt_city_ruins
+	location = FROM
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		hidden_effect = {
+			owner = { set_country_flag = irassians_2 }
+		}
+	}
+	
+	option = {
+		name = REMARKABLE
+		from = {
+			enable_special_project = {
+				name = "IRASSIAN_ARCHEOLOGY_2"
+				location = this
+				owner = root.owner
+			}
+		}
+	}
+}
+
+# Purified World Project Completed
+ship_event = {
+	id = precursor.1511
+	title = "precursor.completed.name"
+	desc = "precursor.1511.desc"
+	picture = GFX_evt_archaeological_dig
+	location = FROMFROM
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "precursor.completed.a"
+		owner = {
+			add_event_chain_counter = { 
+				event_chain = "irassian_chain" 
+				counter = "irassian_artifacts" 
+				amount = 1 
+			}
+			add_monthly_resource_mult = {
+				resource = physics_research
+				value = @tier1researchreward
+				min = @tier1researchmin
+				max = @tier1researchmax
+			}
+			hidden_effect = { country_event = { id = precursor.1597 } }
+		}
+	}
+}
+
+# Scheming Client Race
+ship_event = {
+	id = precursor.1515
+	title = "precursor.1515.name"
+	desc = "precursor.1515.desc"
+	picture = GFX_evt_city_ruins
+	location = FROM
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		hidden_effect = {
+			owner = { set_country_flag = irassians_3 }
+		}
+	}
+	
+	option = {
+		name = INTERESTING
+		from = {
+			enable_special_project = {
+				name = "IRASSIAN_ARCHEOLOGY_3"
+				location = this
+				owner = root.owner
+			}
+		}
+	}
+}
+
+# Scheming Client Race Project Completed
+ship_event = {
+	id = precursor.1516
+	title = "precursor.completed.name"
+	desc = "precursor.1516.desc"
+	picture = GFX_evt_archaeological_dig
+	location = FROMFROM
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "precursor.completed.a"
+		owner = {
+			add_event_chain_counter = { 
+				event_chain = "irassian_chain" 
+				counter = "irassian_artifacts" 
+				amount = 1 
+			}
+			add_monthly_resource_mult = {
+				resource = physics_research
+				value = @tier1researchreward
+				min = @tier1researchmin
+				max = @tier1researchmax
+			}
+			hidden_effect = { country_event = { id = precursor.1597 } }
+		}
+	}
+}
+
+# Destroyed Client Race
+ship_event = {
+	id = precursor.1520
+	title = "precursor.1520.name"
+	desc = "precursor.1520.desc"
+	picture = GFX_evt_city_ruins
+	location = FROM
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		hidden_effect = {
+			owner = { set_country_flag = irassians_4 }
+		}
+	}
+	
+	option = {
+		name = INTRIGUING
+		from = {
+			enable_special_project = {
+				name = "IRASSIAN_ARCHEOLOGY_4"
+				location = this
+				owner = root.owner
+			}
+		}
+	}
+}
+
+# Destroyed Client Race Project Completed
+ship_event = {
+	id = precursor.1521
+	title = "precursor.completed.name"
+	desc = "precursor.1521.desc"
+	picture = GFX_evt_archaeological_dig
+	location = FROMFROM
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "precursor.completed.a"
+		owner = {
+			add_event_chain_counter = { 
+				event_chain = "irassian_chain" 
+				counter = "irassian_artifacts" 
+				amount = 1 
+			}
+			add_monthly_resource_mult = {
+				resource = physics_research
+				value = @tier1researchreward
+				min = @tier1researchmin
+				max = @tier1researchmax
+			}
+			hidden_effect = { country_event = { id = precursor.1597 } }
+		}
+	}
+}
+
+# Dead Colony
+ship_event = {
+	id = precursor.1525
+	title = "precursor.1525.name"
+	desc = "precursor.1525.desc"
+	picture = GFX_evt_city_ruins
+	location = FROM
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		hidden_effect = {
+			owner = { set_country_flag = irassians_5 }
+		}
+	}
+	
+	option = {
+		name = CURIOUS
+		from = {
+			enable_special_project = {
+				name = "IRASSIAN_ARCHEOLOGY_5"
+				location = this
+				owner = root.owner
+			}
+		}
+	}
+}
+
+# Dead Colony Project Completed
+ship_event = {
+	id = precursor.1526
+	title = "precursor.completed.name"
+	desc = "precursor.1526.desc"
+	picture = GFX_evt_archaeological_dig
+	location = FROMFROM
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "precursor.completed.a"
+		owner = {
+			add_event_chain_counter = { 
+				event_chain = "irassian_chain" 
+				counter = "irassian_artifacts" 
+				amount = 1 
+			}
+			add_monthly_resource_mult = {
+				resource = physics_research
+				value = @tier1researchreward
+				min = @tier1researchmin
+				max = @tier1researchmax
+			}
+			hidden_effect = { country_event = { id = precursor.1597 } }
+		}
+	}
+}
+
+# Dead Mining Base
+ship_event = {
+	id = precursor.1530
+	title = "precursor.1530.name"
+	desc = "precursor.1530.desc"
+	picture = GFX_evt_outpost
+	location = FROM
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		hidden_effect = {
+			owner = { set_country_flag = irassians_6 }
+		}
+	}
+	
+	option = {
+		name = PECULIAR
+		from = {
+			enable_special_project = {
+				name = "IRASSIAN_ARCHEOLOGY_6"
+				location = this
+				owner = root.owner
+			}
+		}
+	}
+}
+
+# Dead Mining Base Project Completed
+ship_event = {
+	id = precursor.1531
+	title = "precursor.completed.name"
+	desc = "precursor.1531.desc"
+	picture = GFX_evt_archaeological_dig
+	location = FROMFROM
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "precursor.completed.a"
+		owner = {
+			add_event_chain_counter = { 
+				event_chain = "irassian_chain" 
+				counter = "irassian_artifacts" 
+				amount = 1 
+			}
+			add_monthly_resource_mult = {
+				resource = engineering_research
+				value = @tier1researchreward
+				min = @tier1researchmin
+				max = @tier1researchmax
+			}
+			hidden_effect = { country_event = { id = precursor.1597 } }
+		}
+	}
+}
+
+# Point of Outbreak
+ship_event = {
+	id = precursor.1535
+	title = "precursor.1535.name"
+	desc = "precursor.1535.desc"
+	picture = GFX_evt_alien_nature
+	location = FROM
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		hidden_effect = {
+			owner = { set_country_flag = irassians_7 }
+		}
+	}
+	
+	option = {
+		name = FASCINATING
+		from = {
+			enable_special_project = {
+				name = "IRASSIAN_ARCHEOLOGY_7"
+				location = this
+				owner = root.owner
+			}
+		}
+	}
+}
+
+# Point of Outbreak Project Completed
+ship_event = {
+	id = precursor.1536
+	title = "precursor.completed.name"
+	desc = "precursor.1536.desc"
+	picture = GFX_evt_archaeological_dig
+	location = FROMFROM
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "precursor.completed.a"
+		owner = {
+			add_event_chain_counter = { 
+				event_chain = "irassian_chain" 
+				counter = "irassian_artifacts" 
+				amount = 1 
+			}
+			add_monthly_resource_mult = {
+				resource = society_research
+				value = @tier1researchreward
+				min = @tier1researchmin
+				max = @tier1researchmax
+			}
+			hidden_effect = { country_event = { id = precursor.1597 } }
+		}
+	}
+}
+
+# Derelict Ship
+ship_event = {
+	id = precursor.1540
+	title = "precursor.1540.name"
+	desc = "precursor.1540.desc"
+	picture = GFX_evt_ship_in_orbit
+	location = FROM
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		hidden_effect = {
+			owner = { set_country_flag = irassians_8 }
+		}
+	}
+	
+	option = {
+		name = REMARKABLE
+		from = {
+			enable_special_project = {
+				name = "IRASSIAN_ARCHEOLOGY_8"
+				location = this
+				owner = root.owner
+			}
+		}
+	}
+}
+
+# Derelict Ship Project Completed
+ship_event = {
+	id = precursor.1541
+	title = "precursor.completed.name"
+	desc = "precursor.1541.desc"
+	picture = GFX_evt_ship_in_orbit
+	location = FROMFROM
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "precursor.completed.a"
+		owner = {
+			add_event_chain_counter = { 
+				event_chain = "irassian_chain" 
+				counter = "irassian_artifacts" 
+				amount = 1 
+			}
+			add_monthly_resource_mult = {
+				resource = engineering_research
+				value = @tier1researchreward
+				min = @tier1researchmin
+				max = @tier1researchmax
+			}
+			hidden_effect = { country_event = { id = precursor.1597 } }
+		}
+	}
+}
+
+# Disease Control Base
+ship_event = {
+	id = precursor.1545
+	title = "precursor.1545.name"
+	desc = "precursor.1545.desc"
+	picture = GFX_evt_ship_in_orbit
+	location = FROM
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		hidden_effect = {
+			owner = { set_country_flag = irassians_9 }
+		}
+	}
+	
+	option = {
+		name = INTERESTING
+		from = {
+			enable_special_project = {
+				name = "IRASSIAN_ARCHEOLOGY_9"
+				location = this
+				owner = root.owner
+			}
+		}	
+	}
+}
+
+# Disease Control Base Project Completed
+ship_event = {
+	id = precursor.1546
+	title = "precursor.completed.name"
+	desc = "precursor.1546.desc"
+	picture = GFX_evt_ship_in_orbit
+	location = FROMFROM
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "precursor.completed.a"
+		owner = {
+			add_event_chain_counter = { 
+				event_chain = "irassian_chain" 
+				counter = "irassian_artifacts" 
+				amount = 1 
+			}
+			add_monthly_resource_mult = {
+				resource = engineering_research
+				value = @tier1researchreward
+				min = @tier1researchmin
+				max = @tier1researchmax
+			}
+			hidden_effect = { country_event = { id = precursor.1597 } }
+		}
+	}
+}
+
+# Asteroid Listening Post
+ship_event = {
+	id = precursor.1550
+	title = "precursor.1550.name"
+	desc = "precursor.1550.desc"
+	picture = GFX_evt_ship_in_orbit
+	location = FROM
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		hidden_effect = {
+			owner = { set_country_flag = irassians_10 }
+		}
+	}
+	
+	option = {
+		name = INTERESTING
+		from = {
+			enable_special_project = {
+				name = "IRASSIAN_ARCHEOLOGY_10"
+				location = this
+				owner = root.owner
+			}
+		}
+	}
+}
+
+# Asteroid Listening Post Completed
+ship_event = {
+	id = precursor.1551
+	title = "precursor.completed.name"
+	desc = "precursor.1551.desc"
+	picture = GFX_evt_ship_in_orbit
+	location = FROMFROM
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "precursor.completed.a"
+		owner = {
+			add_event_chain_counter = { 
+				event_chain = "irassian_chain" 
+				counter = "irassian_artifacts" 
+				amount = 1 
+			}
+			add_monthly_resource_mult = {
+				resource = engineering_research
+				value = @tier1researchreward
+				min = @tier1researchmin
+				max = @tier1researchmax
+			}
+			hidden_effect = { country_event = { id = precursor.1597 } }
+		}
+	}
+}
+
+# Gas Giant Research Station
+ship_event = {
+	id = precursor.1555
+	title = "precursor.1555.name"
+	desc = "precursor.1555.desc"
+	picture = GFX_evt_ship_in_orbit
+	location = FROM
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		hidden_effect = {
+			owner = { set_country_flag = irassians_11 }
+		}
+	}
+	
+	option = {
+		name = INTERESTING
+		from = {
+			enable_special_project = {
+				name = "IRASSIAN_ARCHEOLOGY_11"
+				location = this
+				owner = root.owner
+			}
+		}
+	}
+}
+
+# Gas Giant Research Station Completed
+ship_event = {
+	id = precursor.1556
+	title = "precursor.completed.name"
+	desc = "precursor.1556.desc"
+	picture = GFX_evt_ship_in_orbit
+	location = FROMFROM
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "precursor.completed.a"
+		owner = {
+			add_event_chain_counter = { 
+				event_chain = "irassian_chain" 
+				counter = "irassian_artifacts" 
+				amount = 1 
+			}
+			add_monthly_resource_mult = {
+				resource = engineering_research
+				value = @tier1researchreward
+				min = @tier1researchmin
+				max = @tier1researchmax
+			}
+			hidden_effect = { country_event = { id = precursor.1597 } }
+		}
+	}
+}
+
+# Port to Home System events
+country_event = {
+	id = precursor.1597
+	hide_window = yes
+	is_triggered_only = yes
+
+	immediate = {
+		if = {
+			limit = {
+				NOT = { 
+					has_global_flag = irassian_system_discovered 
+					has_country_flag = irassian_system
+				}
+				has_completed_event_chain_counter = {
+					event_chain = "irassian_chain" 
+					counter = "irassian_artifacts" 
+				}
+			}
+			country_event = { id = precursor.1598 }
+			else = {
+				if = {
+					limit = {
+						has_global_flag = irassian_system_discovered
+						NOT = { has_country_flag = irassian_system }
+						has_completed_event_chain_counter = {
+							event_chain = "irassian_chain" 
+							counter = "irassian_artifacts" 
+						}
+					}
+					country_event = { id = precursor.1599 }
+				}
+			}
+		}
+	}
+}
+
+# Irassian Home System Discovered (HIDDEN)
+country_event = {
+	id = precursor.1598
+	hide_window = yes
+	
+	fire_only_once = yes
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		set_global_flag = irassia_discovered
+		set_country_flag = irassian_system
+		random_system = {
+			limit = { has_star_flag = precursor_4 }
+			spawn_system = {
+				min_distance = 20
+				max_distance = 50
+				initializer = "irass_system"
+			}
+		}
+		country_event = { id = precursor.1600 days = 2 }
+	}
+}
+
+# Irassian Home System Discovered (Not First) (HIDDEN)
+country_event = {
+	id = precursor.1599
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		set_country_flag = irassian_system
+		country_event = { id = precursor.1600 days = 2 }
+	}
+}
+
+# Irassian Home System Discovered
+country_event = {
+	id = precursor.1600
+	title = "precursor.1600.name"
+	desc = "precursor.1600.desc"
+	picture = GFX_evt_federation_fleet
+	location = event_target:irass
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		random_system = {
+			limit = { has_star_flag = irass }
+			save_event_target_as = irass
+		}
+	}
+	
+	option = {
+		name = "precursor.100.a"
+		end_event_chain = "irassian_chain"
+		begin_event_chain = {
+			event_chain = "irassian_homeworld_chain"
+			target = ROOT
+		}
+		hidden_effect = {
+			create_point_of_interest = {
+				id = irassian.1
+				name = "irassian_1_poi"
+				desc = "irassian_1_poi_desc"
+				event_chain = irassian_homeworld_chain
+				location = event_target:irass
+			}
+		}
+	}
+}
+
+# Irassian Homeworld
+ship_event = {
+	id = precursor.1601
+	title = "precursor.1601.name"
+	desc = "precursor.1601.desc"
+	picture = GFX_evt_dead_city
+	location = from
+	
+	is_triggered_only = yes
+
+	trigger = {
+		exists = from
+		from = { has_planet_flag = irassian_homeworld }
+		owner = { 
+			is_ai = no 
+			has_country_flag = irassian_system
+		}
+	}
+
+	immediate = {
+		owner = {
+			set_country_flag = irassian_world_found
+			set_global_flag = irassian_homeworld_found
+			if = {
+				limit = { has_event_chain = irassian_chain }
+				end_event_chain = "irassian_chain"
+			}
+			if = {
+				limit = { has_event_chain = irassian_homeworld_chain }
+				end_event_chain = irassian_homeworld_chain
+			}
+		}
+	}
+	
+	option = {
+		name = "FASCINATING"
+		owner = {
+			add_monthly_resource_mult = {
+				resource = unity
+				value = 120
+				min = 240
+				max = 9999
+			}
+			add_monthly_resource_mult = {
+				resource = physics_research
+				value = @tier4researchreward
+				min = @tier4researchmin
+				max = @tier4researchmax
+			}
+			add_monthly_resource_mult = {
+				resource = minerals
+				value = @tier4materialreward
+				min = @tier4materialmin
+				max = @tier4materialmax
+			}
+		}
+	}
+}
+
+# Someone else got there first
+ship_event = {
+	id = precursor.1602
+	title = "precursor.1602.name"
+	
+	desc = {
+		text = precursor.1602.desc.a
+		trigger = {
+			owner = {
+				OR = { 
+					has_event_chain = irassian_chain
+					has_event_chain = irassian_homeworld_chain
+				}
+			}
+		}
+	}
+	desc = {
+		text = precursor.1602.desc.b
+		trigger = {
+			owner = {
+				NOT = {
+					has_event_chain = irassian_chain
+					has_event_chain = irassian_homeworld_chain
+				}
+			}
+		}
+	}
+	
+	location = from
+	picture = GFX_evt_archaeological_dig
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		exists = from
+		from = { has_planet_flag = irassian_homeworld }
+		owner = { 
+			is_ai = no 
+			NOT = { has_country_flag = irassian_system }
+		}
+		has_global_flag = irassian_homeworld_found
+	}
+	
+	immediate = {
+		owner = {
+			set_country_flag = irassian_world_found
+			if = {
+				limit = { has_event_chain = irassian_chain }
+				end_event_chain = "irassian_chain"
+			}
+			if = {
+				limit = { has_event_chain = irassian_homeworld_chain }
+				end_event_chain = "irassian_homeworld_chain"
+			}
+		}
+	}		
+	
+	option = {
+		name = "UNFORTUNATE"
+	}
+}
+
+### The Cybrex
+
+# Cybrex Notification Event
+ship_event = {
+	id = precursor.2000
+	title = "precursor.2000.name"
+	desc = "precursor.2000.desc"
+	picture = GFX_evt_archaeological_dig
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		solar_system = { has_star_flag = precursor_5 }
+		solar_system = { NOT = { is_same_value = root.owner.capital_scope.solar_system } }
+		owner = { is_ai = no }
+		FROM = { 
+			has_anomaly = no 
+			is_star = no
+		}
+		owner = {
+			NOT = { 
+				has_country_flag = vultaum_intro
+				has_country_flag = yuht_intro
+				has_country_flag = first_league_intro
+				has_country_flag = irassian_intro
+				has_country_flag = cybrex_intro
+			}
+		}
+	}
+	
+	immediate = {
+		owner = { set_country_flag = cybrex_intro }
+	}
+	
+	option = {
+		name = INTERESTING
+		hidden_effect = { owner = { country_event = { id = story.5 days = 30 } } }
+		owner = {
+			begin_event_chain = {
+				event_chain = "cybrex_chain"
+				target = ROOT
+			}
+		}
+	}
+}
+
+# Kuur Homeworld
+ship_event = {
+	id = precursor.2005
+	title = "precursor.2005.name"
+	desc = "precursor.2005.desc"
+	picture = GFX_evt_city_ruins
+	location = FROM
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		hidden_effect = {
+			owner = { set_country_flag = cybrex_1 }
+		}
+	}
+	
+	option = {
+		name = FASCINATING
+		from = {
+			enable_special_project = {
+				name = "CYBREX_ARCHEOLOGY_1"
+				location = this
+				owner = root.owner
+			}
+		}	
+	}
+}
+
+# Kuur Homeworld Project Completed
+ship_event = {
+	id = precursor.2006
+	title = "precursor.completed.name"
+	desc = "precursor.2006.desc"
+	picture = GFX_evt_archaeological_dig
+	location = FROMFROM
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "precursor.completed.a"
+		owner = {
+			add_event_chain_counter = { 
+				event_chain = "cybrex_chain" 
+				counter = "cybrex_artifacts" 
+				amount = 1 
+			}
+			add_monthly_resource_mult = {
+				resource = society_research
+				value = @tier1researchreward
+				min = @tier1researchmin
+				max = @tier1researchmax
+			}
+			hidden_effect = { country_event = { id = precursor.2103 } }
+		}
+	}
+}
+
+# Indimak Homeworld
+ship_event = {
+	id = precursor.2010
+	title = "precursor.2010.name"
+	desc = "precursor.2010.desc"
+	picture = GFX_evt_dead_city
+	location = FROM
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		hidden_effect = {
+			owner = { set_country_flag = cybrex_2 }
+		}
+	}
+	
+	option = {
+		name = REMARKABLE
+		from = {
+			enable_special_project = {
+				name = "CYBREX_ARCHEOLOGY_2"
+				location = this
+				owner = root.owner
+			}
+		}
+	}
+}
+
+# Indimak Homeworld Project Completed
+ship_event = {
+	id = precursor.2011
+	title = "precursor.completed.name"
+	desc = "precursor.2011.desc"
+	picture = GFX_evt_archaeological_dig
+	location = FROMFROM
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "precursor.completed.a"
+		owner = {
+			add_event_chain_counter = { 
+				event_chain = "cybrex_chain" 
+				counter = "cybrex_artifacts" 
+				amount = 1 
+			}
+			add_monthly_resource_mult = {
+				resource = physics_research
+				value = @tier1researchreward
+				min = @tier1researchmin
+				max = @tier1researchmax
+			}
+			hidden_effect = { country_event = { id = precursor.2103 } }
+		}
+	}
+}
+
+# Broken Warform
+ship_event = {
+	id = precursor.2015
+	title = "precursor.2015.name"
+	desc = "precursor.2015.desc"
+	picture = GFX_evt_ship_in_orbit
+	location = FROM
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		hidden_effect = {
+			owner = { set_country_flag = cybrex_3 }
+		}
+	}
+	
+	option = {
+		name = INTERESTING
+		from = {
+			enable_special_project = {
+				name = "CYBREX_ARCHEOLOGY_3"
+				location = this
+				owner = root.owner
+			}
+		}
+	}
+}
+
+# Broken Warform Project Completed
+ship_event = {
+	id = precursor.2016
+	title = "precursor.completed.name"
+	desc = "precursor.2016.desc"
+	picture = GFX_evt_ship_in_orbit
+	location = FROMFROM
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "precursor.completed.a"
+		owner = {
+			add_event_chain_counter = { 
+				event_chain = "cybrex_chain" 
+				counter = "cybrex_artifacts" 
+				amount = 1 
+			}
+			add_monthly_resource_mult = {
+				resource = physics_research
+				value = @tier1researchreward
+				min = @tier1researchmin
+				max = @tier1researchmax
+			}
+			hidden_effect = { country_event = { id = precursor.2103 } }
+		}
+	}
+}
+
+# Cybrex Invasion
+ship_event = {
+	id = precursor.2020
+	title = "precursor.2020.name"
+	desc = "precursor.2020.desc"
+	picture = GFX_evt_city_ruins
+	location = FROM
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		hidden_effect = {
+			owner = { set_country_flag = cybrex_4 }
+		}
+	}
+	
+	option = {
+		name = INTRIGUING
+		from = {
+			enable_special_project = {
+				name = "CYBREX_ARCHEOLOGY_4"
+				location = this
+				owner = root.owner
+			}
+		}	
+	}
+}
+
+# Cybrex Invasion Project Completed
+ship_event = {
+	id = precursor.2021
+	title = "precursor.completed.name"
+	desc = "precursor.2021.desc"
+	picture = GFX_evt_archaeological_dig
+	location = FROMFROM
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "precursor.completed.a"
+		owner = {
+			add_event_chain_counter = { 
+				event_chain = "cybrex_chain" 
+				counter = "cybrex_artifacts" 
+				amount = 1 
+			}
+			add_monthly_resource_mult = {
+				resource = physics_research
+				value = @tier1researchreward
+				min = @tier1researchmin
+				max = @tier1researchmax
+			}
+			hidden_effect = { country_event = { id = precursor.2103 } }
+		}
+	}
+}
+
+# Cybrex Colony
+ship_event = {
+	id = precursor.2025
+	title = "precursor.2025.name"
+	desc = "precursor.2025.desc"
+	picture = GFX_evt_dead_city
+	location = FROM
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		hidden_effect = {
+			owner = { set_country_flag = cybrex_5 }
+		}
+	}
+	
+	option = {
+		name = CURIOUS
+		from = {
+			enable_special_project = {
+				name = "CYBREX_ARCHEOLOGY_5"
+				location = this
+				owner = root.owner
+			}
+		}
+	}
+}
+
+# Cybrex Colony Project Completed
+ship_event = {
+	id = precursor.2026
+	title = "precursor.completed.name"
+	desc = "precursor.2026.desc"
+	picture = GFX_evt_archaeological_dig
+	location = FROMFROM
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "precursor.completed.a"
+		owner = {
+			add_event_chain_counter = { 
+				event_chain = "cybrex_chain" 
+				counter = "cybrex_artifacts" 
+				amount = 1 
+			}
+			add_monthly_resource_mult = {
+				resource = physics_research
+				value = @tier1researchreward
+				min = @tier1researchmin
+				max = @tier1researchmax
+			}
+			hidden_effect = { country_event = { id = precursor.2103 } }
+		}
+	}
+}
+
+# Cybrex Listening Post
+ship_event = {
+	id = precursor.2030
+	title = "precursor.2030.name"
+	desc = "precursor.2030.desc"
+	picture = GFX_evt_mining_station
+	location = FROM
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		hidden_effect = {
+			owner = { set_country_flag = cybrex_6 }
+		}
+	}
+	
+	option = {
+		name = PECULIAR
+		from = {
+			enable_special_project = {
+				name = "CYBREX_ARCHEOLOGY_6"
+				location = this
+				owner = root.owner
+			}
+		}
+	}
+}
+
+# Cybrex Listening Post Project Completed
+ship_event = {
+	id = precursor.2031
+	title = "precursor.completed.name"
+	desc = "precursor.2031.desc"
+	picture = GFX_evt_mining_station
+	location = FROMFROM
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "precursor.completed.a"
+		owner = {
+			add_event_chain_counter = { 
+				event_chain = "cybrex_chain" 
+				counter = "cybrex_artifacts" 
+				amount = 1 
+			}
+			add_monthly_resource_mult = {
+				resource = engineering_research
+				value = @tier1researchreward
+				min = @tier1researchmin
+				max = @tier1researchmax
+			}
+			hidden_effect = { country_event = { id = precursor.2103 } }
+		}
+	}
+}
+
+# Cybrex Refinery
+ship_event = {
+	id = precursor.2035
+	title = "precursor.2035.name"
+	desc = "precursor.2035.desc"
+	picture = GFX_evt_ship_in_orbit
+	location = FROM
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		hidden_effect = {
+			owner = { set_country_flag = cybrex_7 }
+		}
+	}
+	
+	option = {
+		name = FASCINATING
+		from = {
+			enable_special_project = {
+				name = "CYBREX_ARCHEOLOGY_7"
+				location = this
+				owner = root.owner
+			}
+		}	
+	}
+}
+
+# Cybrex Refinery Project Completed
+ship_event = {
+	id = precursor.2036
+	title = "precursor.completed.name"
+	desc = "precursor.2036.desc"
+	picture = GFX_evt_ship_in_orbit
+	location = FROMFROM
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "precursor.completed.a"
+		owner = {
+			add_event_chain_counter = { 
+				event_chain = "cybrex_chain" 
+				counter = "cybrex_artifacts" 
+				amount = 1 
+			}
+			add_monthly_resource_mult = {
+				resource = society_research
+				value = @tier1researchreward
+				min = @tier1researchmin
+				max = @tier1researchmax
+			}
+			hidden_effect = { country_event = { id = precursor.2103 } }
+		}
+	}
+}
+
+# Battle Debris
+ship_event = {
+	id = precursor.2040
+	title = "precursor.2040.name"
+	desc = "precursor.2040.desc"
+	picture = GFX_evt_small_space_battle
+	location = FROM
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		hidden_effect = {
+			owner = { set_country_flag = cybrex_8 }
+		}
+	}
+	
+	option = {
+		name = REMARKABLE
+		from = {
+			enable_special_project = {
+				name = "CYBREX_ARCHEOLOGY_8"
+				location = this
+				owner = root.owner
+			}
+		}	
+	}
+}
+
+# Battle Debris Project Completed
+ship_event = {
+	id = precursor.2041
+	title = "precursor.completed.name"
+	desc = "precursor.2041.desc"
+	picture = GFX_evt_small_space_battle
+	location = FROMFROM
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "precursor.completed.a"
+		owner = {
+			add_event_chain_counter = { 
+				event_chain = "cybrex_chain" 
+				counter = "cybrex_artifacts" 
+				amount = 1 
+			}
+			add_monthly_resource_mult = {
+				resource = engineering_research
+				value = @tier1researchreward
+				min = @tier1researchmin
+				max = @tier1researchmax
+			}
+			hidden_effect = { country_event = { id = precursor.2103 } }
+		}
+	}
+}
+
+# Cybrex Base Remains
+ship_event = {
+	id = precursor.2045
+	title = "precursor.2045.name"
+	desc = "precursor.2045.desc"
+	picture = GFX_evt_ship_in_orbit
+	location = FROM
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		hidden_effect = {
+			owner = { set_country_flag = cybrex_9 }
+		}
+	}
+	
+	option = {
+		name = INTERESTING
+		from = {
+			enable_special_project = {
+				name = "CYBREX_ARCHEOLOGY_9"
+				location = this
+				owner = root.owner
+			}
+		}	
+	}
+}
+
+# Cybrex Base Remains Project Completed
+ship_event = {
+	id = precursor.2046
+	title = "precursor.completed.name"
+	desc = "precursor.2046.desc"
+	picture = GFX_evt_archaeological_dig
+	location = FROMFROM
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "precursor.completed.a"
+		owner = {
+			add_event_chain_counter = { 
+				event_chain = "cybrex_chain" 
+				counter = "cybrex_artifacts" 
+				amount = 1 
+			}
+			add_monthly_resource_mult = {
+				resource = engineering_research
+				value = @tier1researchreward
+				min = @tier1researchmin
+				max = @tier1researchmax
+			}
+			hidden_effect = { country_event = { id = precursor.2103 } }
+		}
+	}
+}
+
+# Organic Remains
+ship_event = {
+	id = precursor.2050
+	title = "precursor.2050.name"
+	desc = "precursor.2050.desc"
+	picture = GFX_evt_ship_in_orbit
+	location = FROM
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		hidden_effect = {
+			owner = { set_country_flag = cybrex_10 }
+		}
+	}
+	
+	option = {
+		name = INTERESTING
+		from = {
+			enable_special_project = {
+				name = "CYBREX_ARCHEOLOGY_10"
+				location = this
+				owner = root.owner
+			}
+		}
+	}
+}
+
+# Organic Remains Project Completed
+ship_event = {
+	id = precursor.2051
+	title = "precursor.completed.name"
+	desc = "precursor.2051.desc"
+	picture = GFX_evt_society_research
+	location = FROMFROM
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "precursor.completed.a"
+		owner = {
+			add_event_chain_counter = { 
+				event_chain = "cybrex_chain" 
+				counter = "cybrex_artifacts" 
+				amount = 1 
+			}
+			add_monthly_resource_mult = {
+				resource = engineering_research
+				value = @tier1researchreward
+				min = @tier1researchmin
+				max = @tier1researchmax
+			}
+			hidden_effect = { country_event = { id = precursor.2103 } }
+		}
+	}
+}
+
+# Cybrex Research Station
+ship_event = {
+	id = precursor.2055
+	title = "precursor.2055.name"
+	desc = "precursor.2055.desc"
+	picture = GFX_evt_ship_in_orbit
+	location = FROM
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		hidden_effect = {
+			owner = { set_country_flag = cybrex_11 }
+		}
+	}
+	
+	option = {
+		name = INTERESTING
+		from = {
+			enable_special_project = {
+				name = "CYBREX_ARCHEOLOGY_11"
+				location = this
+				owner = root.owner
+			}
+		}
+	}
+}
+
+# Cybrex Research Station Project Completed
+ship_event = {
+	id = precursor.2056
+	title = "precursor.completed.name"
+	desc = "precursor.2056.desc"
+	picture = GFX_evt_cybernetics
+	location = FROMFROM
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "precursor.completed.a"
+		owner = {
+			add_event_chain_counter = { 
+				event_chain = "cybrex_chain" 
+				counter = "cybrex_artifacts" 
+				amount = 1 
+			}
+			add_monthly_resource_mult = {
+				resource = engineering_research
+				value = @tier1researchreward
+				min = @tier1researchmin
+				max = @tier1researchmax
+			}
+			hidden_effect = { country_event = { id = precursor.2103 } }
+		}
+	}
+}
+
+# Port to Home System events
+country_event = {
+	id = precursor.2103
+	hide_window = yes
+	is_triggered_only = yes
+
+	immediate = {
+		if = {
+			limit = {
+				has_completed_event_chain_counter = {
+					event_chain = "cybrex_chain" 
+					counter = "cybrex_artifacts" 
+				}
+				NOT = { 
+					has_global_flag = cybrex_system_discovered 
+					has_country_flag = cybrex_system
+				}
+			}
+			country_event = { id = precursor.2098 }
+			else = {
+				if = {
+					limit = {
+						has_completed_event_chain_counter = {
+							event_chain = "cybrex_chain" 
+							counter = "cybrex_artifacts" 
+						}
+						has_global_flag = cybrex_system_discovered
+						NOT = { has_country_flag = cybrex_system }
+					}
+					country_event = { id = precursor.2099 }
+				}
+			}
+		}
+	}
+}
+
+# Cybrex Home System Discovered (HIDDEN)
+country_event = {
+	id = precursor.2098
+	hide_window = yes
+	
+	fire_only_once = yes
+
+	is_triggered_only = yes
+	
+	immediate = {
+		set_global_flag = cybrex_discovered
+		set_country_flag = cybrex_system
+		random_system = {
+			limit = { has_star_flag = precursor_5 }
+			spawn_system = {
+				min_distance = 20
+				max_distance = 50
+				initializer = "cybrex_system"
+			}
+		}
+		country_event = { id = precursor.2100 days = 2 }
+	}
+}
+
+# Cybrex Home System Discovered (Not First) (HIDDEN)
+country_event = {
+	id = precursor.2099
+	hide_window = yes
+
+	is_triggered_only = yes
+	
+	immediate = {
+		set_country_flag = cybrex_system
+		country_event = { id = precursor.2100 days = 2 }
+	}
+}
+
+# Cybrex Home System Discovered
+country_event = {
+	id = precursor.2100
+	title = "precursor.2100.name"
+	desc = "precursor.2100.desc"
+	picture = GFX_evt_federation_fleet
+	location = event_target:cybrex
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		random_system = {
+			limit = { has_star_flag = cybrex }
+			save_event_target_as = cybrex
+		}
+	}
+	
+	option = {
+		name = "precursor.100.a"
+		end_event_chain = "cybrex_chain"
+		begin_event_chain = {
+			event_chain = "cybrex_homeworld_chain"
+			target = ROOT
+		}
+		create_point_of_interest = {
+			id = cybrex.1
+			name = "cybrex_1_poi"
+			desc = "cybrex_1_poi_desc"
+			event_chain = cybrex_homeworld_chain
+			location = event_target:cybrex
+		}
+	}
+}
+
+# Cybrex Homeworld
+ship_event = {
+	id = precursor.2101
+	title = "precursor.2101.name"
+	desc = "precursor.2101.desc"
+	picture = GFX_evt_dead_city
+	location = from
+	
+	is_triggered_only = yes
+
+	trigger = {
+		owner = {
+			has_country_flag = cybrex_system
+			NOT = { has_country_flag = cybrex_world_found }
+		}
+		FROM = { has_star_flag = cybrex }
+	}
+
+	immediate = {
+		owner = {
+			set_country_flag = cybrex_world_found
+			if = {
+				limit = { has_event_chain = cybrex_chain }
+				set_country_flag = cybrex_end1
+			}
+			if = {
+				limit = { has_event_chain = cybrex_homeworld_chain }
+				set_country_flag = cybrex_end2
+			}
+		}
+	}
+	
+	option = {
+		name = "FASCINATING"
+		trigger = {
+			owner = {
+				has_country_flag = cybrex_end1
+			}
+		}
+		owner = {
+			add_monthly_resource_mult = {
+				resource = unity
+				value = 120
+				min = 240
+				max = 9999
+			}
+			add_monthly_resource_mult = {
+				resource = engineering_research
+				value = @tier4researchreward
+				min = @tier4researchmin
+				max = @tier4researchmax
+			}
+			add_monthly_resource_mult = {
+				resource = energy
+				value = @tier4materialreward
+				min = @tier4materialmin
+				max = @tier4materialmax
+			}
+			end_event_chain = "cybrex_chain"
+		}
+	}
+
+	option = {
+		name = "FASCINATING"
+		trigger = {
+			owner = {
+				has_country_flag = cybrex_end2
+			}
+		}
+		owner = {
+			add_monthly_resource_mult = {
+				resource = unity
+				value = 120
+				min = 240
+				max = 9999
+			}
+			add_monthly_resource_mult = {
+				resource = engineering_research
+				value = @tier4researchreward
+				min = @tier4researchmin
+				max = @tier4researchmax
+			}
+			add_monthly_resource_mult = {
+				resource = energy
+				value = @tier4materialreward
+				min = @tier4materialmin
+				max = @tier4materialmax
+			}
+			end_event_chain = "cybrex_homeworld_chain"
+		}
+	}
+
+	option = {
+		name = "FASCINATING"
+		trigger = {
+			owner = {
+				NOT = {
+					has_country_flag = cybrex_end1
+					has_country_flag = cybrex_end2
+				}
+			}
+		}
+		owner = {
+			add_monthly_resource_mult = {
+				resource = unity
+				value = 120
+				min = 240
+				max = 9999
+			}
+			add_monthly_resource_mult = {
+				resource = engineering_research
+				value = @tier4researchreward
+				min = @tier4researchmin
+				max = @tier4researchmax
+			}
+			add_monthly_resource_mult = {
+				resource = energy
+				value = @tier4materialreward
+				min = @tier4materialmin
+				max = @tier4materialmax
+			}
+		}
+	}
+}
+
+# Someone else got there first
+ship_event = {
+	id = precursor.2102
+	title = "precursor.2102.name"
+	
+	desc = {
+		text = precursor.2102.desc.a
+		trigger = {
+			owner = {
+				OR = { 
+					has_event_chain = cybrex_chain
+					has_event_chain = cybrex_homeworld_chain
+				}
+			}
+		}
+	}
+	desc = {
+		text = precursor.2102.desc.b
+		trigger = {
+			owner = {
+				NOT = {
+					has_event_chain = cybrex_chain
+					has_event_chain = cybrex_homeworld_chain
+				}
+			}
+		}
+	}
+	
+	location = from
+	picture = GFX_evt_archaeological_dig
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		owner = {
+			is_ai = no
+			NOT = { 
+				has_country_flag = cybrex_system 
+				has_country_flag = cybrex_world_found
+			}
+		}
+		FROM = { has_star_flag = cybrex }
+	}
+	
+	immediate = {
+		owner = {
+			set_country_flag = cybrex_world_found
+			if = {
+				limit = { has_event_chain = cybrex_chain }
+				end_event_chain = "cybrex_chain"
+			}
+			if = {
+				limit = { has_event_chain = cybrex_homeworld_chain }
+				end_event_chain = "cybrex_homeworld_chain"
+			}
+		}
+	}		
+	
+	option = {
+		name = "UNFORTUNATE"
+	}
+}
+
+## You study a Ringworld for the first time, and it spawns resources if none are present 
+#ship_event = {
+#	id = precursor.2200
+#	title = "precursor.2200.name"
+#
+#	desc = {
+#		text = precursor.2200.desc
+#		trigger = {
+#			any_owned_megastructure = {
+#				NOT = {
+#					OR = {
+#						is_megastructure_type = ring_world_1
+#						is_megastructure_type = ring_world_2
+#					}
+#				}
+#			}
+#			NOT = { has_country_flag = finished_ringworld }
+#		}
+#	}
+#	desc = {
+#		text = precursor.2200.desc.b
+#		trigger = {
+#			OR = {
+#				any_owned_megastructure = {
+#					OR = {
+#						is_megastructure_type = ring_world_1
+#						is_megastructure_type = ring_world_2
+#					}
+#				}
+#				has_country_flag = finished_ringworld
+#			}
+#		}
+#	}
+#	
+#	picture = GFX_evt_ringworld
+#	show_sound = event_mystic_reveal
+#
+#	is_triggered_only = yes
+#	
+#	trigger = {
+#		owner = {
+#			NOT = { has_country_flag = living_metal_studied }
+#			is_ai = no
+#		}
+#		from = {
+#			OR = {
+#				is_planet_class = pc_ringworld_tech
+#				is_planet_class = pc_ringworld_tech_damaged
+#				is_planet_class = pc_ringworld_seam
+#				is_planet_class = pc_ringworld_seam_damaged
+#				is_planet_class = pc_ringworld_habitable
+#				is_planet_class = pc_ringworld_habitable_damaged
+#			}
+#			solar_system = {
+#				NOT = { has_star_flag = ring_world_built }
+#			}
+#		}
+#	}
+#	
+#	immediate = {
+#		leader = { save_event_target_as = RogueLeader }
+#		solar_system = {
+#			random_list = {
+#				33 = { set_variable = { which = depositPlacedVar value = 3 } }
+#				34 = { set_variable = { which = depositPlacedVar value = 4 } }
+#				33 = { set_variable = { which = depositPlacedVar value = 5 } }
+#			}
+#			if = {
+#				limit = { NOT = { has_star_flag = ringworld_deposited } }
+#				from = { #First deposit
+#					orbital_deposit_tile = {
+#						clear_deposits = yes
+#						add_deposit = d_living_metal_deposit
+#					}
+#					set_planet_flag = ringworld_section_deposit
+#				}
+#				set_star_flag = ringworld_deposited
+#				random_system_planet = { #Second deposit
+#					limit = {
+#						OR = {
+#							is_planet_class = pc_ringworld_tech
+#							is_planet_class = pc_ringworld_tech_damaged
+#							is_planet_class = pc_ringworld_seam
+#							is_planet_class = pc_ringworld_seam_damaged
+#							is_planet_class = pc_ringworld_habitable
+#							is_planet_class = pc_ringworld_habitable_damaged
+#						}
+#						NOT = { has_planet_flag = ringworld_section_deposit }
+#					}
+#					orbital_deposit_tile = {
+#						clear_deposits = yes
+#						add_deposit = d_living_metal_deposit
+#					}
+#					set_planet_flag = ringworld_section_deposit
+#				}
+#				if = {
+#					limit = {
+#						OR = {
+#							check_variable = { which = depositPlacedVar value = 3 }
+#							check_variable = { which = depositPlacedVar value > 3 }
+#						}
+#					}
+#					random_system_planet = { #Third deposit
+#						limit = {
+#							OR = {
+#								is_planet_class = pc_ringworld_tech
+#								is_planet_class = pc_ringworld_tech_damaged
+#								is_planet_class = pc_ringworld_seam
+#								is_planet_class = pc_ringworld_seam_damaged
+#								is_planet_class = pc_ringworld_habitable
+#								is_planet_class = pc_ringworld_habitable_damaged
+#							}
+#							NOT = { has_planet_flag = ringworld_section_deposit }
+#						}
+#						orbital_deposit_tile = {
+#							clear_deposits = yes
+#							add_deposit = d_living_metal_deposit
+#						}
+#						set_planet_flag = ringworld_section_deposit
+#					}
+#				}
+#				if = {
+#					limit = {
+#						OR = {
+#							check_variable = { which = depositPlacedVar value = 4 }
+#							check_variable = { which = depositPlacedVar value = 5 }
+#						}
+#					}
+#					random_system_planet = { #Fourth deposit
+#						limit = {
+#							OR = {
+#								is_planet_class = pc_ringworld_tech
+#								is_planet_class = pc_ringworld_tech_damaged
+#								is_planet_class = pc_ringworld_seam
+#								is_planet_class = pc_ringworld_seam_damaged
+#								is_planet_class = pc_ringworld_habitable
+#								is_planet_class = pc_ringworld_habitable_damaged
+#								is_planet_class = pc_ringworld_habitable_damaged
+#							}
+#							NOT = { has_planet_flag = ringworld_section_deposit }
+#						}
+#						orbital_deposit_tile = {
+#							clear_deposits = yes
+#							add_deposit = d_living_metal_deposit
+#						}
+#						set_planet_flag = ringworld_section_deposit
+#					}
+#				}
+#				if = {
+#					limit = {
+#						check_variable = { which = depositPlacedVar value = 5 }
+#					}
+#					random_system_planet = { #Fifth deposit
+#						limit = {
+#							OR = {
+#								is_planet_class = pc_ringworld_tech
+#								is_planet_class = pc_ringworld_tech_damaged
+#								is_planet_class = pc_ringworld_seam
+#								is_planet_class = pc_ringworld_seam_damaged
+#								is_planet_class = pc_ringworld_habitable
+#								is_planet_class = pc_ringworld_habitable_damaged
+#							}
+#							NOT = { has_planet_flag = ringworld_section_deposit }
+#						}
+#						orbital_deposit_tile = {
+#							clear_deposits = yes
+#							add_deposit = d_living_metal_deposit
+#						}
+#						set_planet_flag = ringworld_section_deposit
+#					}
+#				}
+#			}
+#		}
+#	}
+#	
+#	option = {
+#		name = AMAZING
+#		owner = {
+#			hidden_effect = {
+#				set_country_flag = living_metal_studied
+#			}
+#			if = {
+#				limit = {
+#					has_tech_option = tech_mine_living_metal
+#				}
+#				add_tech_progress = {
+#					tech = tech_mine_living_metal
+#					progress = 0.25
+#				}
+#				else = {
+#					add_research_option = tech_mine_living_metal
+#				}
+#			}
+#		}
+#	}
+#}
+## You study another Ringworld that has no resources yet and we secretly spawn some  
+#ship_event = {
+#	id = precursor.2201
+#	hide_window = yes	
+#	is_triggered_only = yes
+#	
+#	trigger = {
+#		owner = {
+#			has_country_flag = living_metal_studied
+#			is_ai = no
+#		}
+#		from = {
+#			OR = {
+#				is_planet_class = pc_ringworld_tech
+#				is_planet_class = pc_ringworld_tech_damaged
+#				is_planet_class = pc_ringworld_seam
+#				is_planet_class = pc_ringworld_seam_damaged
+#				is_planet_class = pc_ringworld_habitable
+#				is_planet_class = pc_ringworld_habitable_damaged
+#			}
+#		}
+#		solar_system = {
+#			NOT = { 
+#				has_star_flag = ringworld_deposited 
+#				has_star_flag = ring_world_built
+#			}
+#		}
+#	}
+#	
+#	immediate = {
+#		solar_system = {
+#			random_list = {
+#				33 = { set_variable = { which = depositPlacedVar value = 3 } }
+#				34 = { set_variable = { which = depositPlacedVar value = 4 } }
+#				33 = { set_variable = { which = depositPlacedVar value = 5 } }
+#			}
+#			if = {
+#				limit = { NOT = { has_star_flag = ringworld_deposited } }
+#				from = { #First deposit
+#					orbital_deposit_tile = {
+#						clear_deposits = yes
+#						add_deposit = d_living_metal_deposit
+#					}
+#					set_planet_flag = ringworld_section_deposit
+#				}
+#				set_star_flag = ringworld_deposited
+#				random_system_planet = { #Second deposit
+#					limit = {
+#						OR = {
+#							is_planet_class = pc_ringworld_tech
+#							is_planet_class = pc_ringworld_tech_damaged
+#							is_planet_class = pc_ringworld_seam
+#							is_planet_class = pc_ringworld_seam_damaged
+#							is_planet_class = pc_ringworld_habitable
+#							is_planet_class = pc_ringworld_habitable_damaged
+#						}
+#						NOT = { has_planet_flag = ringworld_section_deposit }
+#					}
+#					orbital_deposit_tile = {
+#						clear_deposits = yes
+#						add_deposit = d_living_metal_deposit
+#					}
+#					set_planet_flag = ringworld_section_deposit
+#				}
+#				if = {
+#					limit = {
+#						OR = {
+#							check_variable = { which = depositPlacedVar value = 3 }
+#							check_variable = { which = depositPlacedVar value > 3 }
+#						}
+#					}
+#					random_system_planet = { #Third deposit
+#						limit = {
+#							OR = {
+#								is_planet_class = pc_ringworld_tech
+#								is_planet_class = pc_ringworld_tech_damaged
+#								is_planet_class = pc_ringworld_seam
+#								is_planet_class = pc_ringworld_seam_damaged
+#								is_planet_class = pc_ringworld_habitable
+#								is_planet_class = pc_ringworld_habitable_damaged
+#							}
+#							NOT = { has_planet_flag = ringworld_section_deposit }
+#						}
+#						orbital_deposit_tile = {
+#							clear_deposits = yes
+#							add_deposit = d_living_metal_deposit
+#						}
+#						set_planet_flag = ringworld_section_deposit
+#					}
+#				}
+#				if = {
+#					limit = {
+#						OR = {
+#							check_variable = { which = depositPlacedVar value = 4 }
+#							check_variable = { which = depositPlacedVar value = 5 }
+#						}
+#					}
+#					random_system_planet = { #Fourth deposit
+#						limit = {
+#							OR = {
+#								is_planet_class = pc_ringworld_tech
+#								is_planet_class = pc_ringworld_tech_damaged
+#								is_planet_class = pc_ringworld_seam
+#								is_planet_class = pc_ringworld_seam_damaged
+#								is_planet_class = pc_ringworld_habitable
+#								is_planet_class = pc_ringworld_habitable_damaged
+#								is_planet_class = pc_ringworld_habitable_damaged
+#							}
+#							NOT = { has_planet_flag = ringworld_section_deposit }
+#						}
+#						orbital_deposit_tile = {
+#							clear_deposits = yes
+#							add_deposit = d_living_metal_deposit
+#						}
+#						set_planet_flag = ringworld_section_deposit
+#					}
+#				}
+#				if = {
+#					limit = {
+#						check_variable = { which = depositPlacedVar value = 5 }
+#					}
+#					random_system_planet = { #Fifth deposit
+#						limit = {
+#							OR = {
+#								is_planet_class = pc_ringworld_tech
+#								is_planet_class = pc_ringworld_tech_damaged
+#								is_planet_class = pc_ringworld_seam
+#								is_planet_class = pc_ringworld_seam_damaged
+#								is_planet_class = pc_ringworld_habitable
+#								is_planet_class = pc_ringworld_habitable_damaged
+#							}
+#							NOT = { has_planet_flag = ringworld_section_deposit }
+#						}
+#						orbital_deposit_tile = {
+#							clear_deposits = yes
+#							add_deposit = d_living_metal_deposit
+#						}
+#						set_planet_flag = ringworld_section_deposit
+#					}
+#				}
+#			}
+#		}
+#	}
+#}
+
+# New Precursor Anomaly Found
+country_event = {
+	id = precursor.301
+	title = "precursor.301.name"
+	desc = "precursor.301.a.desc"
+	desc = "precursor.301.b.desc"
+	desc = "precursor.301.c.desc"
+	desc = "precursor.301.d.desc"
+	picture = GFX_evt_archaeological_dig
+	location = event_target:precursor_planet
+	
+	trigger = {
+		is_ai = no
+		years_passed > 50
+		NOT = { has_country_flag = new_precursor }
+		OR = {
+			AND = {
+				has_event_chain = "vultaum_chain"
+				NOT = {
+					has_completed_event_chain_counter = {
+						event_chain = vultaum_chain
+						counter = vultaum_artifacts
+					}
+				}
+				any_system_within_border = {
+					has_star_flag = precursor_1
+					any_planet = {
+						NOT = { has_planet_flag = precursor_world }
+						uninhabitable_regular_planet = yes
+						has_owner = no
+						has_anomaly = no
+						is_surveyed = {
+							who = ROOT
+							status = yes
+						}
+					}
+				}
+			}
+			AND = {
+				has_event_chain = "yuht_chain"
+				NOT = {
+					has_completed_event_chain_counter = {
+						event_chain = yuht_chain
+						counter = yuht_artifacts
+					}
+				}
+				any_system_within_border = {
+					has_star_flag = precursor_2
+					any_planet = {
+						habitable_planet = yes
+						NOT = { has_planet_flag = precursor_world }
+						has_owner = no
+						has_anomaly = no
+						is_surveyed = {
+							who = ROOT
+							status = yes
+						}
+					}
+				}
+			}
+			AND = { 
+				has_event_chain = "first_league_chain"
+				NOT = {
+					has_completed_event_chain_counter = {
+						event_chain = first_league_chain
+						counter = first_league_artifacts
+					}
+				}
+				any_system_within_border = {
+					has_star_flag = precursor_3
+					any_planet = {
+						uninhabitable_regular_planet = yes
+						NOT = { has_planet_flag = precursor_world }
+						has_owner = no
+						has_anomaly = no
+						is_surveyed = {
+							who = ROOT
+							status = yes
+						}
+					}
+				}
+			}
+			AND = {
+				has_event_chain = "irassian_chain"
+				NOT = {
+					has_completed_event_chain_counter = {
+						event_chain = irassian_chain
+						counter = irassian_artifacts
+					}
+				}
+				any_system_within_border = {
+					has_star_flag = precursor_4
+					any_planet = {
+						habitable_planet = yes
+						NOT = { has_planet_flag = precursor_world }
+						has_owner = no
+						has_anomaly = no
+						is_surveyed = {
+							who = ROOT
+							status = yes
+						}
+					}
+				}
+			}
+			AND = {
+				has_event_chain = "cybrex_chain"
+				NOT = {
+					has_completed_event_chain_counter = {
+						event_chain = cybrex_chain
+						counter = cybrex_artifacts
+					}
+				}
+				any_system_within_border = {
+					has_star_flag = precursor_5
+					any_planet = {
+						habitable_planet = yes
+						NOT = { has_planet_flag = precursor_world }
+						has_owner = no
+						has_anomaly = no
+						is_surveyed = {
+							who = ROOT
+							status = yes
+						}
+					}
+				}
+			}
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 360
+	}
+	
+	immediate = {
+		set_timed_country_flag = { flag = new_precursor days = 1200 }
+		if = {
+			limit = {
+				has_event_chain = "vultaum_chain"
+				any_system_within_border = { 
+					has_star_flag = precursor_1
+				}
+			}
+			spawn_vultaum_anomaly = yes
+			break = yes
+		}
+		if = {
+			limit = {
+				has_event_chain = "yuht_chain"
+				any_system_within_border = { 
+					has_star_flag = precursor_2
+				}
+			}
+			spawn_yuht_anomaly = yes
+			break = yes
+		}
+		if = {
+			limit = {
+				has_event_chain = "first_league_chain"
+				any_system_within_border = { 
+					has_star_flag = precursor_3
+				}
+			}
+			spawn_league_anomaly = yes
+			break = yes
+		}
+		if = {
+			limit = {
+				has_event_chain = "irassian_chain"
+				any_system_within_border = { 
+					has_star_flag = precursor_4
+				}
+			}
+			spawn_irassian_anomaly = yes
+			break = yes
+		}
+		if = {
+			limit = {
+				has_event_chain = "cybrex_chain"
+				any_system_within_border = { 
+					has_star_flag = precursor_5
+				}
+			}
+			spawn_cybrex_anomaly = yes
+			break = yes
+		}
+	}
+	
+	option = {
+		name = precursor.301.a
+		custom_tooltip = new_precursor_anomaly
+	}
+}

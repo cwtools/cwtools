@@ -1,0 +1,170 @@
+# variables:
+# parameters, data containing the specifics, eg which planet we're talking about
+# warscore_cost (factor = multiplier to current weight, add = added weight), scripted value, root is target country, from is main opponent, amount of warscore required to push this demand
+# potential, trigger, root and from are main attackers and defenders, war is fromfrom, decides if this demand is listed
+# possible, trigger, root and from are main attackers and defenders, war is fromfrom, fromfromfrom is the target country, decides if this demand can go through
+# proposable, trigger, root and from are main attackers and defenders, war is fromfrom, fromfromfrom is the target country, decides if this demand is ok to propose
+# demandable, trigger, root and from are main attackers and defenders, war is fromfrom, fromfromfrom is the target country, decides if you can send a peace offer demanding ( not surrendering ) the demand.
+# effect, effect, root and main are main attacker and defender, war is fromfrom, fromfromfrom is the target country, effect which executes when the demand is accepted
+# execution_order, integer, defines in which order demands are executed, lower is higher priority, having the same execution order will make the first defined one higher prio
+# monthly_warscore, a descriptor on monthly wargoal score
+#	amount, scripted value, root and from are main attackers and defenders, war is fromfrom, fromfromfrom is the target country
+#   valid, trigger, root and from are main attackers and defenders, war is fromfrom, fromfromfrom is the target country
+
+assimilate_planet = {
+	is_conquest_type = yes
+	execution_order = 0
+	parameters = {
+		planet = {
+			type = planet
+			filter = owned
+		}
+	}
+	warscore_cost = {
+		base = 25
+		
+		modifier = {
+			factor = 2.0
+			custom_tooltip = {
+				text = "DEMAND_CEDE_PLANET_NOT_MAIN_DEFENDER"
+				parameter:planet.owner = {
+					NOR = {
+						is_same_value = from
+						AND = {
+							is_subject = yes
+							overlord = { is_same_value = from }
+						}
+					}
+				}
+			}
+		}
+
+		scaled_modifier = {
+			scope = parameter:planet
+			add = 0.4
+			calc = pop_count
+		}
+	
+		modifier = {
+			factor = 1.25
+			hidden:parameter:planet = {
+				is_capital = yes
+			}
+		}
+	}
+	
+	potential = {
+		is_assimilator = yes
+		custom_tooltip = {
+			fail_text = "war_demand_assimilate_planet_belongs_to_opponent"
+			parameter:planet = {
+				owner = {
+					OR = {
+						AND = {
+							exists = fromfrom
+							from = {
+								from = {
+									is_war_participant = {
+										who = prevprev
+										side = prev
+									}
+								}
+							}
+						}
+						AND = {
+							NOT = { exists = fromfrom }
+							would_join_war = {
+								attacker = root
+								defender = from
+								side = from
+							}
+						}
+						
+					}
+				}
+			}
+		}
+	}
+	
+	possible = {
+		# hidden_trigger = {
+			# parameter:planet.owner = {
+				# OR = {
+					# war_demand_counter = {
+						# type = num_country_wargoals
+						# value < 1
+					# }
+					# war_demand_counter = {
+						# type = num_owned_planets
+						# value > 1
+					# }					
+				# }			
+			# }
+		# }
+		always = yes
+	}
+	
+	proposable = {
+		always = yes
+	}
+	
+	demandable = {
+		custom_tooltip = {
+			fail_text = "war_demand_assimilate_planet_not_under_our_control"
+			parameter:planet = {
+				controller = {
+					OR = {
+						is_country = parameter:planet.owner
+						fromfrom = {
+							is_war_participant = {
+								who = prev
+								side = from
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+	
+	effect = {
+		parameter:planet = {		
+			add_threat = {
+				who = fromfromfrom
+				amount = 5 # scales to pops
+			}
+			conquer = fromfromfrom
+			assimilate_planet = yes
+			owner = {
+				every_owned_pop = {
+					limit = { planet = { is_planet = parameter:planet } }
+					pop_event = { 
+						id = STH_borg.102 
+						scopes = { from = fromfromfrom }
+						days = 15 random = 90
+					}
+				}
+			}
+		}
+	}
+
+	counters = {
+		num_owned_planets = {
+			context = parameter:planet.owner
+			value = {
+				base = -1
+			}
+		}
+		ceded_or_liberated = {
+			context = parameter:planet
+			value = {
+				base = 1
+			}			
+		}
+	}
+	
+	ai_weight = {
+		base = 100
+	}	
+	AI_invasion_target = yes
+}

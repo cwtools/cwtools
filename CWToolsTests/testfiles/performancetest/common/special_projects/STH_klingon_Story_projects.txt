@@ -1,0 +1,259 @@
+# Available requirements:
+#
+#	SKILLS
+#	skill = 2
+#
+#	LEADER
+#	leader = scientist
+#	leader = admiral
+#	leader = general
+#	leader = ruler
+#	leader = governor
+#	
+#	MILITARY SHIPS
+#	shipclass_military = 1
+#	
+#	CIVILIAN SHIPS
+#	shipclass_constructor = 2
+#	shipclass_science_ship = augmentTestColony1
+#	shipclass_colonizer = 2
+#	
+#	ARMIES
+#	shipclass_transport = 1
+#	assault_armies = 2
+#	defense_armies = 1
+#	
+#	STATIONS
+#	research_station = yes
+#	mining_station = yes
+#	observation_station = yes
+#
+#	SCOPES
+#	abort_trigger
+#	this = country (project owner)
+#	from = event scope (planet or ship, MIGHT NOT EXIST)
+#	fromfrom = project creation scope (usually equals location)
+#	
+#	on_success
+#	this = event scope (ship or planet)
+#	from = project creation scope (usually equals location)
+#	
+#	on_fail
+#	this = country (project owner)
+#	from = project creation scope (usually equals location)
+
+special_project = {
+	key = "THE_SWORD_OF_KAHLESS_PROJECT_1"
+	event_chain = sword_of_kahless_chain
+	cost = 0
+	days_to_research = 180
+	timelimit = -1
+	tech_department = society_technology
+	picture = sth_GFX_evt_theSwordOfKahless3
+	event_scope = ship_event
+	requirements = {
+		shipclass_science_ship = 1
+		leader = scientist
+	}
+	on_success = {
+		owner = {
+			country_event = { id = STH_klingon_story.3 }
+		}
+	}
+	on_fail = {
+	}
+}
+
+special_project = {
+	key = "THE_SWORD_OF_KAHLESS_PROJECT_2"
+	event_chain = sword_of_kahless_chain
+	cost = 0
+	days_to_research = 180
+	timelimit = -1
+	tech_department = society_technology
+	picture = sth_GFX_evt_theSwordOfKahless4
+	event_scope = ship_event
+	requirements = {
+		shipclass_science_ship = 1
+		leader = scientist
+		skill > 1
+	}
+	on_success = {
+		owner = {
+			country_event = { id = STH_klingon_story.5 }
+		}
+	}
+	on_fail = {
+	}
+}
+
+special_project = {
+	key = "THE_SWORD_OF_KAHLESS_PROJECT_3"
+	event_chain = sword_of_kahless_chain
+	cost = 0
+	days_to_research = 180
+	timelimit = -1
+	tech_department = society_technology
+	picture = sth_GFX_evt_theSwordOfKahless5
+	event_scope = ship_event
+	requirements = {
+		shipclass_science_ship = 1
+		leader = scientist
+		skill > 2
+	}
+	on_success = {
+		owner = {
+			country_event = { id = STH_klingon_story.7 }
+		}
+	}
+	on_fail = {
+	}
+}
+
+special_project = {
+	key = "THE_SWORD_OF_KAHLESS_PROJECT_4"
+	event_chain = sword_of_kahless_chain
+	cost = 0
+	days_to_research = 180
+	timelimit = -1
+	tech_department = society_technology
+	picture = sth_GFX_evt_theSwordOfKahless6
+	event_scope = ship_event
+	requirements = {
+		shipclass_science_ship = 1
+		leader = scientist
+		skill > 3
+	}
+	on_success = {
+		owner = {
+			country_event = { id = STH_klingon_story.9 }
+		}
+	}
+	on_fail = {
+	}
+}
+
+special_project = {
+	key = "THE_SWORD_OF_KAHLESS_PROJECT_5"
+	event_chain = sword_of_kahless_chain
+	cost = 0
+	days_to_research = 180
+	timelimit = -1
+	tech_department = society_technology
+	picture = sth_GFX_evt_theSwordOfKahless7
+	event_scope = ship_event
+	requirements = {
+		shipclass_science_ship = 1
+		leader = scientist
+		skill > 4
+	}
+	on_success = {
+		ship_event = { id = STH_klingon_story.11 }
+	}
+	on_fail = {
+	}
+}
+
+
+special_project = {
+	key = "KLINGON_AUGMENTS_PROJECT_1A"
+	event_chain = augmented_realities_chain
+	cost = 500
+	# days_to_research = 480
+	timelimit = -1
+	tech_department = society_technology
+	picture = sth_GFX_evt_klingonAugmentProject
+	event_scope = planet_event
+	requirements = { }
+	on_success = {
+		random_country = {
+			limit = { has_country_flag = klingon_empire }
+			random_list = {
+				10 = {
+					country_event = { id = STH_klingon_story.1005 }
+				}
+				10 = {
+					country_event = { id = STH_klingon_story.1006 }
+				}
+			}	
+		}
+	}
+	on_fail = { }
+}
+
+special_project = {
+	key = "KLINGON_AUGMENTS_PROJECT_1B"
+	event_chain = augmented_realities_chain
+	cost = 750
+	# days_to_research = 480
+	timelimit = -1
+	tech_department = society_technology
+	picture = sth_GFX_evt_klingonAugmentProject
+	event_scope = planet_event
+	requirements = { }
+	on_success = {
+		random_country = {
+			limit = { has_country_flag = klingon_empire }
+			random_list = {
+				5 = {
+					country_event = { id = STH_klingon_story.1005 }
+				}
+				15 = {
+					country_event = { id = STH_klingon_story.1006 }
+				}
+			}	
+		}
+	}
+	on_fail = { }
+}
+
+special_project = {
+	key = "KLINGON_AUGMENTS_PROJECT_2A"
+	event_chain = augmented_realities_chain
+	# cost = 0
+	days_to_research = 30
+	timelimit = 360
+	tech_department = society_technology
+	picture = sth_GFX_evt_klingonShip
+	event_scope = ship_event
+	requirements = {
+		shipclass_military = 3
+	}
+	on_success = {
+		random_country = {
+			limit = { has_country_flag = klingon_empire }
+			random_list = {
+				15 = {
+					country_event = { id = STH_klingon_story.1009 }
+				}
+				5 = {
+					country_event = { id = STH_klingon_story.1010 }
+				}
+			}	
+		}
+	}
+	on_fail = {
+		country_event = { id = STH_klingon_story.1008 }
+	}
+}
+
+
+#Remove bad virus
+special_project = {
+	key = "KLINGON_AUGMENTS_PROJECT_3A"
+	event_chain = augmented_realities_chain
+	cost = 750
+	# days_to_research = 480
+	timelimit = -1
+	tech_department = society_technology
+	picture = sth_GFX_evt_klingonAugmentProject
+	event_scope = planet_event
+	requirements = { }
+	on_success = {
+		random_country = {
+			limit = { has_country_flag = klingon_empire }
+			country_event = { id = STH_klingon_story.1014 }	
+		}
+	}
+	on_fail = { }
+}

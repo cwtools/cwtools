@@ -1,0 +1,112 @@
+﻿### Cardassian Union
+Cardassian = {
+	randomized = no
+
+	ship_names = {
+		generic = {
+			Shagesh Grinsol Swizok Walshaire Matixon Aldara Barkano "Bok Nor" Groumall Kroanak Kornaire Kraxon Prakesh Rabol Ravinok Reklar Trager Vetar Galor Hideki Keldon Kornaire Rabol Ravinok Nerok Netel Ranol Telok Tohond Duden Tudea Magad Digond Motil Romet Gosers Gelor Tilot Bilinm Ruvul Tojarl Bogora Zetebl Tirud Tosedm Tidon Zojia Dusok Tumogd Dacaa Potiss Tujika Sajam Linoa Givetk
+		}
+		corvette = {
+		}
+		saber = {
+		}
+		sovereign = {
+		}
+		steamrunner = {
+		}		
+		adv_cruiser = {
+		}
+		strike = {
+		}		
+		outpost_station = {
+			sequential_name = "Frontier Outpost"
+		}
+		military_station_small = {
+			"Empok Vor" "Terok Vor" "Aldak Vor" "Mirok Vor" "Astana Vor" "Gerok Vor" "Essa Vor" "Valik Vor" "Gurak Vor" "Empi Vor" "Erus Vor" "Faldan Vor"
+		}
+		military_station_medium = { 
+			"Empok Fal" "Terok Fal" "Aldak Fal" "Mirok Fal" "Astana Fal" "Gerok Fal" "Essa Fal" "Valik Fal" "Gurak Fal" "Empi Fal" "Erus Fal" "Faldan Fal"
+		}
+		military_station_large = { 
+			"Empok Nor" "Terok Nor" "Aldak Nor" "Mirok Nor" "Astana Nor" "Gerok Nor" "Essa Nor" "Valik Nor" "Gurak Nor" "Empi Nor" "Erus Nor" "Faldan Nor"
+		}
+	}
+	ship_class_names = {
+		corvette = { Hideki }
+		saber = { Kulinor }
+		sovereign = { Galor }
+		steamrunner = { Keldon }
+		adv_cruiser = { Hutet }
+		strike = { Ocett }
+		science = { Marek }
+	}
+
+	fleet_names = {
+		sequential_name = "%O% Order"
+	}
+	
+	army_names = {
+		defense_army = {
+			sequential_name = "%O% Guard"
+		}
+		assault_army = {
+			sequential_name = "%O% Order"
+		}
+		slave_army = {
+			sequential_name = "%O% Indentured Order"
+		}
+		clone_army = { 
+			sequential_name = "%O% Clone Order"
+		}
+		robotic_army = {
+			sequential_name = "%O% Mechanical Order"
+		}
+		android_army = {
+			sequential_name = "%O% Synthetic Order"
+		}
+		psionic_army = { 
+			sequential_name = "%O% Psi Order"
+		}
+		xenomorph_army = {
+			sequential_name = "%O% Bio-Warfare Order"
+		}
+		gene_warrior_army = {
+			sequential_name = "%O% Bio-Engineered Order"
+		}
+	}
+
+	planet_names = {
+		generic = {
+			names = {
+				Fanehr "New Lakaria" "New Lakat" "New Culat" "New Hebitia" Drav Mador Vorcal Setkar Toleen Girav Rogarin "New Morfan" "New Mekar" Timunl Kihum Rolikt Pagulr Lasara Doar Tijul Tisask Tovir Behon Tutut Livobt Bobit Dikad Dumet Sesajd Demern Zimon "New Lebadr" "New Hadek" Hoced Kalon Tibubn Eodats
+			}
+		}
+	}
+
+
+	### CHARACTERS
+
+	character_names = {
+		names1 = {
+			weight = 100
+			first_names_male = {		
+				Joret Corbin Elim Tekeny Tavor Aamin Crell Kotan Silaran Enabran Koten Unabran Erim Ulim Alim Crull Norbin Darbin Jorat Jurut Tumir Datom Kijemd Tidis Kaheck Pohicn Timal Zikasl Latedt Duvask Tuguls Tosas Setua Hegir Segam Puvum Gemeks Zijacd Dobuld Kudis Denar Godar Litebk Mocud Dodud Dadidm Palim Bebal Zohakd Pimugs Sivogn Tador Gosehr Dojok Lavut Rekom Zelus
+			}
+			first_names_female = {
+				Asha Esha Ulani Rulani Illiana Natima Natim Sanpart Nanpart Jill Rill Gilora Mila Nila Rila Elliena Ullianu Tecil Eihoa Zuduma Latil Badia Suvua Lirul Busua Dahija Bitosa Zavava Mamar Tibel Picia Pibua Mevol Eoto Detan Eosim Eajia Dagugi Eeria Tulam Tatir Lijeta Huvil Zateca Eumaa Titahm
+			}
+			second_names = {
+				Ari Belor Benil Boheeka Borven Broca Bronok Brun Cazanjian Corak Dal Damar Danar Darhe'el Daro Dejar Delgado Dolak Dukat Ekoor Entek Evek Garak Ghemor Goris Hadar Hogue Hovat Iloja Jasad Kamar Kattell Kell Korinas Kovat Krim Lang Lasaran Lemec Lonar Macet Madred Makbar Malor Marayn Marratt Marritza Mavek Mekor Memad Moset Nador Ocett Orra Pa'Dar Parmak Parn Pirak Porania Preloc Prenar Prin Ranor Rejal Rekelen Revok Rusot Russol Seltan Seskal Shoggotth Siana Surjak Tain Tajor Telak Telle Thrax Trepar Tulet Turrel Vorlem Vornar Yaltar Zarale
+			}
+			regnal_first_names_male = {
+				Joret Corbin Elim Tekeny Tavor Aamin Crell Kotan Silaran Enabran Koten Unabran Erim Ulim Alim Crull Norbin Darbin Jorat Jurut Tumir Datom Kijemd Tidis Kaheck Pohicn Timal Zikasl Latedt Duvask Tuguls Tosas Setua Hegir Segam Puvum Gemeks Zijacd Dobuld Kudis Denar Godar Litebk Mocud Dodud Dadidm Palim Bebal Zohakd Pimugs Sivogn Tador Gosehr Dojok Lavut Rekom Zelus
+			}
+			regnal_first_names_female = {
+				Asha Esha Ulani Rulani Illiana Natima Natim Sanpart Nanpart Jill Rill Gilora Mila Nila Rila Elliena Ullianu Tecil Eihoa Zuduma Latil Badia Suvua Lirul Busua Dahija Bitosa Zavava Mamar Tibel Picia Pibua Mevol Eoto Detan Eosim Eajia Dagugi Eeria Tulam Tatir Lijeta Huvil Zateca Eumaa Titahm
+			}
+			regnal_second_names = {
+				Ari Belor Benil Boheeka Borven Broca Bronok Brun Cazanjian Corak Dal Damar Danar Darhe'el Daro Dejar Delgado Dolak Dukat Ekoor Entek Evek Garak Ghemor Goris Hadar Hogue Hovat Iloja Jasad Kamar Kattell Kell Korinas Kovat Krim Lang Lasaran Lemec Lonar Macet Madred Makbar Malor Marayn Marratt Marritza Mavek Mekor Memad Moset Nador Ocett Orra Pa'Dar Parmak Parn Pirak Porania Preloc Prenar Prin Ranor Rejal Rekelen Revok Rusot Russol Seltan Seskal Shoggotth Siana Surjak Tain Tajor Telak Telle Thrax Trepar Tulet Turrel Vorlem Vornar Yaltar Zarale
+			}
+		}
+	}
+}

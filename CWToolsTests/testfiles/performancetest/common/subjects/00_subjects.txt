@@ -1,0 +1,253 @@
+#
+# can_colonize = allowed to colonize planets
+# potential = if possible to select in diplomatic interactions
+# become_vassal = trigger when it converts into a vassal
+# tech_cost_mult = tech cost multiplier if overlord has a tech
+# overlord_influence = extra influence given to overlord
+# joins_overlord_wars = Joins in if overlord goes to war (Defensive or Offensive)
+# calls_overlord_to_war Calls overlord to war (Defensive only)
+# can_do_diplomacy Can do some limited diplomacy
+# overlord_becomes_warleader, if overlord takes over as warleader. Default true
+# gets_sensor(yes): gets overlords sensors
+# gets_access(yes): gets overlords access
+# can_be_integrated(no): the overlord is able to integrate the subject
+# can_switch_to: a list of other subject types this type can switch to.
+# diplo_threat: threat generated from diplomatically vassalizing this type of subject
+# effect: executes when subject relation is created
+
+@protectorate_tech_threshold = 0.4
+@protectorate_tech_switch = 0.5
+
+vassal = {
+	can_colonize = no
+	can_be_integrated = yes
+	
+	research_agreement = no
+	research_sharing = yes	# for domination finisher
+
+	joins_overlord_wars = yes
+	calls_overlord_to_war = yes
+	can_do_diplomacy = no
+	
+	diplo_threat = 1.5
+	
+	subject_tax_rate = {
+		minerals = 0.05
+		energy = 0.05
+	}
+
+	potential = {	
+		from = { is_country_type = default is_assimilator = no }
+		OR = {
+			tech_unlocked_ratio = {
+				who = from
+				ratio > @protectorate_tech_threshold
+			}
+			tech_unlocked_ratio = {
+				who = from
+				ratio = @protectorate_tech_threshold
+			}
+		}
+	}
+	
+	effect = {
+		set_appropriate_vassal_status = yes
+		if = {
+			limit = {
+				from = { has_valid_civic = civic_inwards_perfection }
+			}
+			set_subject_of = {
+				who = from
+				subject_type = tributary
+			}
+		}
+		if = {
+			limit = {
+				from = { 
+					has_valid_civic = civic_hive_devouring_swarm
+				}
+			}
+			set_subject_of = {
+				who = none
+			}
+		}			
+		if = {
+			limit = {
+				NOT = { is_same_species = from }
+				from = { 
+					has_valid_civic = civic_fanatic_purifiers
+				}
+			}
+			set_subject_of = {
+				who = none
+			}
+		}		
+		if = {
+			limit = {
+				from = { 
+					is_country_type = awakened_fallen_empire
+					has_ethic = ethic_fanatic_materialist
+				}
+			}
+			set_subject_of = {
+				who = from
+				subject_type = satellite
+			}
+		}	
+		if = {
+			limit = {
+				from = { 
+					is_country_type = awakened_fallen_empire
+					has_ethic = ethic_fanatic_spiritualist
+				}
+			}
+			set_subject_of = {
+				who = from
+				subject_type = dominion
+			}
+		}
+		if = {
+			limit = {
+				from = { 
+					is_country_type = awakened_fallen_empire
+					has_ethic = ethic_fanatic_xenophile
+				}
+			}
+			set_subject_of = {
+				who = from
+				subject_type = signatory
+			}
+		}
+		if = {
+			limit = {
+				from = { 
+					is_country_type = awakened_fallen_empire
+					has_ethic = ethic_fanatic_xenophobe
+				}
+			}
+			set_subject_of = {
+				who = from
+				subject_type = thrall
+			}
+		}
+	}	
+}
+
+protectorate = {
+	can_colonize = no
+	can_be_integrated = yes
+	
+	research_agreement = no
+
+	joins_overlord_wars = no
+	calls_overlord_to_war = yes
+	can_do_diplomacy = no
+
+	tech_cost_mult = -0.80
+	overlord_influence = 0.25
+	
+	diplo_threat = 0.75
+	
+	subject_tax_rate = {
+		minerals = 0.05
+		energy = 0.05
+	}
+
+	potential = {
+		from = { is_country_type = default is_assimilator = no }
+		tech_unlocked_ratio = {
+			who = from
+			ratio < @protectorate_tech_threshold
+		}
+	}
+	
+	effect = {
+		set_appropriate_vassal_status = yes
+		if = {
+			limit = {
+				from = { has_valid_civic = civic_inwards_perfection }
+			}
+			set_subject_of = {
+				who = from
+				subject_type = tributary
+			}
+		}
+		if = {
+			limit = {
+				from = { 
+					has_valid_civic = civic_hive_devouring_swarm
+				}
+			}
+			set_subject_of = {
+				who = none
+			}
+		}			
+		if = {
+			limit = {
+				NOT = { is_same_species = from }
+				from = { 
+					has_valid_civic = civic_fanatic_purifiers
+				}
+			}
+			set_subject_of = {
+				who = none
+			}
+		}		
+		if = {
+			limit = {
+				from = { 
+					is_country_type = awakened_fallen_empire
+					has_ethic = ethic_fanatic_materialist
+				}
+			}
+			set_subject_of = {
+				who = from
+				subject_type = satellite
+			}
+		}	
+		if = {
+			limit = {
+				from = { 
+					is_country_type = awakened_fallen_empire
+					has_ethic = ethic_fanatic_spiritualist
+				}
+			}
+			set_subject_of = {
+				who = from
+				subject_type = dominion
+			}
+		}
+		if = {
+			limit = {
+				from = { 
+					is_country_type = awakened_fallen_empire
+					has_ethic = ethic_fanatic_xenophile
+				}
+			}
+			set_subject_of = {
+				who = from
+				subject_type = signatory
+			}
+		}
+		if = {
+			limit = {
+				from = { 
+					is_country_type = awakened_fallen_empire
+					has_ethic = ethic_fanatic_xenophobe
+				}
+			}
+			set_subject_of = {
+				who = from
+				subject_type = thrall
+			}
+		}
+
+	}		
+
+	become_vassal = {
+		tech_unlocked_ratio = {
+			who = from
+			ratio > @protectorate_tech_switch
+		}
+	}
+}

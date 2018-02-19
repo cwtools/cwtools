@@ -1,0 +1,1513 @@
+become_terran_empire = {
+	# set_country_flag = terran_empire
+	create_country = {
+		name = "NAME_terran_empire"
+		ship_prefix = "ISS"
+		type = default
+		ignore_initial_colony_error = yes
+		civics = { civic = "civic_slaver_guilds" civic = civic_efficient_bureaucracy }
+		authority = auth_imperial
+		name_list = "Terran"
+		ethos = { ethic = "ethic_fanatic_militarist" ethic = "ethic_authoritarian" }
+		species = event_target:humanSpecies
+		flag = {
+			icon = { category = "trek" file = "TerranEmpire.dds" }
+			background = { category = "backgrounds" file = "00_solid.dds" }
+			colors = { "red" "black" "null" "null" }
+		}
+		effect = {
+			set_graphical_culture = federation_01
+			set_country_flag = terran_empire
+			set_country_flag = mirror_universe_ethics
+			set_country_flag = custom_start_screen
+			set_country_flag = starfleet_ent
+			set_country_flag = alpha_beta_empire
+			set_country_flag = init_spawned
+			set_country_flag = first_alien_life
+			set_country_flag = first_contact_event
+			set_country_flag = sth_medium_galaxy
+			set_country_flag = botf_major
+			save_global_event_target_as = terran_empire
+			species = { rename_species = { name_list = terran_name } }
+			give_technology = { tech = "tech_society_statecraft_931" message = no }
+		}
+	}
+	every_owned_pop = {
+		random_list = {
+			10 = { pop_change_ethic = "ethic_militarist" }
+			10 = { pop_change_ethic = "ethic_authoritarian" }
+		}
+	}
+	every_owned_fleet = {
+		if = {
+			limit = { is_ship_class = shipclass_orbital_station }
+			set_owner = event_target:terran_empire
+			else = {
+				delete_fleet = this
+			}
+		}
+	}
+	every_owned_planet = {
+		set_owner = event_target:terran_empire
+		set_controller = event_target:terran_empire
+		if = {
+			limit = { has_planet_flag = sol_earth }
+			set_capital = yes
+			event_target:terran_empire = { add_appropriate_start_techs = yes }
+		}
+	}
+	event_target:terran_empire = { 
+		set_player = event_target:united_earth
+		create_leader = {
+			type = admiral
+			species = owner_main_species
+			name = random
+			skill = random
+			traits = { trait = random_trait trait = random_trait }
+		}
+		random_owned_leader = {
+			limit = { gender = male leader_class = admiral }
+			random_list = {
+				10 = { set_name = "Jonathan Archer" }
+				10 = { set_name = "Maxwell Forrest" }
+			}
+			save_event_target_as = admiral
+		}
+		random_owned_leader = {
+			limit = { gender = female leader_class = admiral }
+			random_list = {
+				10 = { set_name = "Hoshi Sato" }
+				10 = { set_name = "Erika Hernandez" }
+			}
+			save_event_target_as = admiral
+		}
+		random_owned_fleet = {
+			limit = { fleet_power > 100 }
+			assign_leader = event_target:admiral
+		}
+		random_owned_leader = {
+			limit = { gender = male leader_class = governor }
+			random_list = {
+				10 = { set_name = "William Gardner" }
+				10 = { set_name = "Gregory Black" }
+			}
+		}
+		random_owned_leader = {
+			limit = { gender = female leader_class = governor }
+			random_list = {
+				10 = { set_name = "Gannet Brooks" }
+			}
+		}
+		create_leader = {
+			type = scientist
+			species = event_target:vulcanSpecies
+			name = random
+			skill = random
+			traits = { trait = random_trait trait = random_trait }
+		}
+		last_created_leader = {
+			if = { limit = { gender = female } set_name = "T'Pol" }
+			if = { limit = { gender = male } set_name = "Soval" }
+		}
+		#constructor
+		create_fleet = {
+			effect = {
+				set_owner = prev
+				create_ship = {	name = random random_existing_design = constructor }
+				set_fleet_stance = evasive
+				set_location = prev.capital_scope
+			}
+		}
+		#science
+		create_fleet = {
+			effect = {
+				set_owner = prev
+				create_ship = { name = "ISS Franklin" random_existing_design = science }
+				set_fleet_stance = evasive				
+				set_location = prev.capital_scope
+				owner = { create_leader = { type = scientist sub_type = survey name = random species = owner_main_species } }
+				set_leader = last_created_leader
+			}			
+		}
+		setup_terran_empire = yes
+		if = { limit = { NOT = { has_country_flag = alien_rebellion_begun } } country_event = { id = STH_MirrorUniverse_event.4 days = 365 random = 365 } }
+	}
+}
+
+become_romulan_republic = {
+	set_empire_name = "Romulan Republic"
+	change_country_flag = {
+		icon = { category = "trek" file = "Romulan2.dds" }
+		background = { category = "backgrounds" file = "00_solid.dds" }
+		colors = { "customcolor1720" "black" "null" "null" }
+	}
+	remove_country_flag = romulan_star_empire
+	set_country_flag = romulan_republic
+	set_country_flag = mirror_universe_ethics
+	clear_ethos = yes
+	country_add_ethic = ethic_fanatic_egalitarian
+	country_add_ethic = ethic_pacifist
+	change_government = {
+		authority = "auth_democratic"
+		civics = { civic = "civic_environmentalist" civic = "civic_cutthroat_politics" }
+	}
+	every_owned_pop = {
+		random_list = {
+			10 = { pop_change_ethic = "ethic_pacifist" }
+			10 = { pop_change_ethic = "ethic_egalitarian" }
+		}
+	}
+	modify_species = { species = this remove_trait = trait_decadent add_trait = trait_solitary }
+}
+
+become_ferengi_cooperative = {
+	set_empire_name = "Ferengi Cooperative"
+	remove_country_flag = ferengi_alliance
+	set_country_flag = ferengi_cooperative
+	set_country_flag = mirror_universe_ethics
+	clear_ethos = yes
+	country_add_ethic = ethic_egalitarian
+	country_add_ethic = ethic_pacifist
+	country_add_ethic = ethic_materialist
+	change_government = {
+		authority = "auth_democratic"
+		civics = { civic = "civic_environmentalist" civic = "civic_cutthroat_politics" }
+	}
+	every_owned_pop = {
+		random_list = {
+			10 = { pop_change_ethic = "ethic_pacifist" }
+			10 = { pop_change_ethic = "ethic_egalitarian" }
+			10 = { pop_change_ethic = "ethic_materialist" }
+		}
+	}
+}
+
+become_vulcan_rebellion = {
+	if = {
+		limit = { is_ai = no }
+		set_empire_name = "Vulcan Rebellion"
+		remove_country_flag = vulcan_high_command
+		remove_country_flag = federation_founder
+		set_country_flag = vulcan_rebellion
+		set_country_flag = mirror_universe_ethics
+		clear_ethos = yes
+		country_add_ethic = ethic_xenophile
+		country_add_ethic = ethic_militarist
+		country_add_ethic = ethic_egalitarian
+		change_government = {
+			authority = "auth_democratic"
+			civics = { civic = "civic_police_state" civic = "civic_efficient_bureaucracy" }
+		}
+		every_owned_pop = {
+			random_list = {
+				10 = { pop_change_ethic = "ethic_xenophile" }
+				10 = { pop_change_ethic = "ethic_militarist" }
+				10 = { pop_change_ethic = "ethic_egalitarian" }
+			}
+		}
+	}
+}
+
+become_andorian_rebellion = {
+	if = {
+		limit = { is_ai = no }
+		set_empire_name = "Andorian Rebellion"
+		remove_country_flag = andorian_empire
+		remove_country_flag = federation_founder
+		set_country_flag = andorian_rebellion
+		set_country_flag = mirror_universe_ethics
+		clear_ethos = yes
+		country_add_ethic = ethic_xenophile
+		country_add_ethic = ethic_militarist
+		country_add_ethic = ethic_egalitarian
+		change_government = {
+			authority = "auth_democratic"
+			civics = { civic = "civic_police_state" civic = "civic_efficient_bureaucracy" }
+		}
+		every_owned_pop = {
+			random_list = {
+				10 = { pop_change_ethic = "ethic_xenophile" }
+				10 = { pop_change_ethic = "ethic_militarist" }
+				10 = { pop_change_ethic = "ethic_egalitarian" }
+			}
+		}
+	}
+}
+
+become_tellarite_rebellion = {
+	if = {
+		limit = { is_ai = no }
+		set_empire_name = "Tellarite Rebellion"
+		remove_country_flag = tellarian_technocracy
+		remove_country_flag = federation_founder
+		set_country_flag = tellarite_rebellion
+		set_country_flag = mirror_universe_ethics
+		clear_ethos = yes
+		country_add_ethic = ethic_xenophile
+		country_add_ethic = ethic_militarist
+		country_add_ethic = ethic_egalitarian
+		change_government = {
+			authority = "auth_democratic"
+			civics = { civic = "civic_police_state" civic = "civic_efficient_bureaucracy" }
+		}
+		every_owned_pop = {
+			random_list = {
+				10 = { pop_change_ethic = "ethic_xenophile" }
+				10 = { pop_change_ethic = "ethic_militarist" }
+				10 = { pop_change_ethic = "ethic_egalitarian" }
+			}
+		}
+	}
+}
+
+become_mirror_klingons = {
+	set_country_flag = mirror_klingon_empire
+	set_country_flag = mirror_universe_ethics
+	clear_ethos = yes
+	country_add_ethic = ethic_fanatic_militarist
+	country_add_ethic = ethic_authoritarian
+	every_owned_pop = {
+		random_list = {
+			10 = { pop_change_ethic = "ethic_authoritarian" }
+			10 = { pop_change_ethic = "ethic_militarist" }
+		}
+	}
+	change_government = {
+		authority = "auth_imperial"
+		civics = { civic = "civic_warrior_culture" civic = "civic_aristocratic_elite" }
+	}
+}
+
+become_mirror_cardassians = {
+	set_country_flag = mirror_cardassian_union
+	set_country_flag = mirror_universe_ethics
+}
+
+become_mirror_tholians = {
+	set_country_flag = mirror_tholian_assembly
+	set_country_flag = mirror_universe_ethics
+}
+
+become_mirror_trills = {
+	set_country_flag = mirror_trill_republic
+	set_country_flag = mirror_universe_ethics
+}
+
+become_mirror_denobulans = {
+	set_country_flag = mirror_denobulan_unity
+	set_country_flag = mirror_universe_ethics
+}
+
+become_mirror_benzites = {
+	set_country_flag = mirror_benzarian_commonwealth
+	set_country_flag = mirror_universe_ethics
+	if = {
+		limit = { is_ai = yes }
+		set_country_type = minorRace
+	}
+}
+
+become_mirror_bolians = {
+	set_country_flag = mirror_bolian_league
+	set_country_flag = mirror_universe_ethics
+	if = {
+		limit = { is_ai = yes }
+		set_country_type = minorRace
+	}
+}
+
+become_mirror_bajorans = {
+	set_country_flag = mirror_bajoran_republic
+	set_country_flag = mirror_universe_ethics
+	if = {
+		limit = { is_ai = yes }
+		set_country_type = minorRace
+	}
+}
+
+become_mirror_dominion = {
+	set_country_flag = mirror_dominion
+	set_country_flag = mirror_universe_ethics
+	clear_ethos = yes
+	country_add_ethic = ethic_authoritarian
+	country_add_ethic = ethic_materialist
+	country_add_ethic = ethic_great_link
+	every_owned_pop = {
+		random_list = {
+			10 = { pop_change_ethic = "ethic_authoritarian" }
+			10 = { pop_change_ethic = "ethic_materialist" }
+		}
+	}
+}
+
+become_mirror_other = {
+	set_country_flag = mirror_universe_ethics
+	switch = {
+		trigger = has_ethic
+		ethic_materialist = { shift_ethic = ethic_spiritualist }
+		ethic_spiritualist = { shift_ethic = ethic_materialist }
+		ethic_xenophobe = { shift_ethic = ethic_xenophile }
+		ethic_xenophile = { shift_ethic = ethic_xenophobe }
+		ethic_militarist = { shift_ethic = ethic_pacifist }
+		ethic_pacifist = { shift_ethic = ethic_militarist }
+		ethic_authoritarian = { shift_ethic = ethic_egalitarian change_government = { authority = auth_democratic } }
+		ethic_egalitarian = { shift_ethic = ethic_authoritarian change_government = { authority = auth_oligarchic } }
+	}
+	change_government = { civics = random }
+}
+
+sth_effect_mu_place_terran_pop = {
+	random_owned_pop = {
+		limit = {
+			is_same_species = owner_species
+			exists = tile
+			tile = {
+				has_building = building_capital_1
+			}
+		}
+		change_species = event_target:humanSpecies
+		pop_change_ethic = "ethic_authoritarian"
+	}
+}
+
+sth_effect_mu_place_orion_pop = {
+	random_owned_pop = {
+		limit = {
+			is_same_species = owner_species
+		}
+		change_species = event_target:orion_species
+	}
+}
+
+sth_effect_mu_start_rebel_war = {
+	establish_communications_no_message = event_target:terran_empire
+	set_subject_of = { who = none }
+	add_opinion_modifier = { who = event_target:terran_empire modifier = opinion_terran_oppressors }
+	declare_war = { who = event_target:terran_empire major_war = yes name = "Alien Rebellion" }
+	set_country_flag = alien_rebellion_begun
+	add_war_demand = { type = "cede_planet" parameter:planet = event_target:vulcan_colony warscore_cost = 20 target = this enemy = event_target:terran_empire }
+	if = {
+		limit = {
+			event_target:vulcan_homeworld = {
+				is_owned_by = event_target:terran_empire
+			}
+		}
+		add_war_demand = { type = "cede_planet" parameter:planet = event_target:vulcan_homeworld warscore_cost = 20 target = this enemy = event_target:terran_empire }
+	}
+	if = {
+		limit = {
+			event_target:vulcan_colony = {
+				is_owned_by = event_target:terran_empire
+			}
+		}
+		add_war_demand = { type = "cede_planet" parameter:planet = event_target:vulcan_colony warscore_cost = 20 target = this enemy = event_target:terran_empire }
+	}
+	if = {
+		limit = {
+			event_target:andorian_homeworld = {
+				is_owned_by = event_target:terran_empire
+			}
+		}
+		add_war_demand = { type = "cede_planet" parameter:planet = event_target:andorian_homeworld warscore_cost = 20 target = this enemy = event_target:terran_empire }
+	}
+	if = {
+		limit = {
+			event_target:tellarite_homeworld = {
+				is_owned_by = event_target:terran_empire
+			}
+		}
+		add_war_demand = { type = "cede_planet" parameter:planet = event_target:tellarite_homeworld warscore_cost = 20 target = this enemy = event_target:terran_empire }
+	}
+	add_war_demand = { type = "cede_planet" parameter:planet = event_target:denobulan_homeworld warscore_cost = 20 target = this enemy = event_target:terran_empire }
+	add_war_demand = { type = "liberate_planet" parameter:planet = event_target:terran_homeworld warscore_cost = 10 target = this enemy = event_target:terran_empire }
+	add_war_demand = { type = "liberate_planet" parameter:planet = event_target:terran_colony warscore_cost = 10 target = this enemy = event_target:terran_empire }
+	event_target:terran_empire = {
+		set_country_flag = alien_rebellion_begun
+		add_opinion_modifier = { who = event_target:vulcan_country modifier = opinion_alien_rebels }
+		add_war_demand = { type = "cede_planet" parameter:planet = prev.capital_scope warscore_cost = 50 target = this enemy = prev }
+		country_event = { id = STH_MirrorUniverse_event.5 days = 365 random = 365 }
+	}
+}
+
+sth_effect_mu_rebel_fleet_setup = {
+	set_owner = event_target:alien_rebellion
+	create_ship = { name = random design = "Andorian Attack Ship" graphical_culture = "andorian_01" prefix = no }
+	create_ship = { name = random design = "Andorian Attack Ship" graphical_culture = "andorian_01" prefix = no }
+	create_ship = { name = random design = "Vulcan Attack Ship" graphical_culture = "vulcan_01" prefix = no }
+	create_ship = { name = random design = "Vulcan Attack Ship" graphical_culture = "vulcan_01" prefix = no }
+	create_ship = { name = random design = "Tellarite Attack Ship" graphical_culture = "tellarite_01" prefix = no }
+	create_ship = { name = random design = "Tellarite Attack Ship" graphical_culture = "tellarite_01" prefix = no }
+	assign_leader = last_created_leader
+	set_location = owner.capital_scope
+	set_fleet_stance = aggressive
+	set_aggro_range_measure_from = self
+	set_aggro_range = 150
+}
+
+sth_effect_mu_rebel_fleet_logic = {
+	queue_actions = {
+		repeat = {
+			find_random_system = {
+				trigger = {
+					id = "rebels.1.trigger.1"
+					any_planet = {
+						OR = {
+							is_planet = event_target:vulcan_homeworld
+							is_planet = event_target:andorian_homeworld
+							is_planet = event_target:tellarite_homeworld
+						}
+					}
+				}
+				found_system = {
+					move_to = THIS
+				}
+			}
+			find_closest_planet = {
+				trigger = {
+					id = "rebels.1.trigger.2"
+					OR = {
+						is_planet = event_target:vulcan_homeworld
+						is_planet = event_target:andorian_homeworld
+						is_planet = event_target:tellarite_homeworld
+					}
+				}
+				found_planet = {
+					orbit_planet = THIS
+					wait = {
+						duration = 20
+					}
+				}
+			}
+			find_random_system = {
+				trigger = {
+					id = "rebels.1.trigger.3"
+					any_planet = {
+						is_planet = event_target:alien_rebellion.capital_scope
+					}
+				}
+				found_system = {
+					move_to = THIS
+				}
+			}
+			find_closest_planet = {
+				trigger = {
+					id = "rebels.1.trigger.4"
+					is_planet = event_target:alien_rebellion.capital_scope
+				}
+				found_planet = {
+					orbit_planet = THIS
+					wait = {
+						duration = 200
+						random = 150
+					}
+				}
+			}
+		}
+	}
+
+}
+
+setup_terran_empire = {
+	random_owned_planet = {
+		limit = { is_capital = no }
+		save_global_event_target_as = terran_colony
+	}
+	random_country = {
+		limit = {
+			has_country_flag = vulcan_high_command
+		}
+		save_global_event_target_as = vulcan_country
+		species = { save_event_target_as = vulcan_species }
+		random_owned_planet = {
+			limit = { is_capital = yes }
+			save_global_event_target_as = vulcan_homeworld
+		}
+		random_owned_planet = {
+			limit = { is_capital = no }
+			save_global_event_target_as = vulcan_colony
+		}
+	}
+	random_country = {
+		limit = { has_country_flag = andorian_empire }
+		save_global_event_target_as = andorian_country
+		species = { save_event_target_as = andorian_species }
+		random_owned_planet = {
+			limit = { is_capital = yes }
+			save_global_event_target_as = andorian_homeworld
+		}
+	}
+	random_country = {
+		limit = { has_country_flag = tellarian_technocracy }
+		save_global_event_target_as = tellarite_country
+		species = { save_event_target_as = tellarite_species }
+		random_owned_planet = {
+			limit = { is_capital = yes }
+			save_global_event_target_as = tellarite_homeworld
+		}
+	}
+	random_country = {
+		limit = { has_country_flag = denobulan_unity }
+		save_global_event_target_as = denobulan_country
+		species = { save_event_target_as = denobulan_species }
+		random_owned_planet = {
+			limit = { is_capital = yes }
+			save_global_event_target_as = denobulan_homeworld
+		}
+	}
+	random_country = {
+		limit = { has_country_flag = orion_free_states }
+		save_global_event_target_as = orion_country
+		species = { save_event_target_as = orion_species }
+		random_owned_planet = {
+			limit = { is_capital = yes }
+			save_global_event_target_as = orion_homeworld
+		}
+	}
+	capital_scope = {
+		save_global_event_target_as = terran_homeworld
+		sth_effect_mu_place_orion_pop = yes
+	}
+	# place pops
+	every_country = {
+		limit = {
+			or = {
+				has_country_flag = vulcan_high_command
+				has_country_flag = andorian_empire
+				has_country_flag = denobulan_unity
+				has_country_flag = tellarian_technocracy
+			}
+		}
+		capital_scope = {
+			sth_effect_mu_place_terran_pop = yes
+			sth_effect_mu_place_orion_pop = yes
+		}
+	}
+	# annex if ai
+	every_country = {
+		limit = {
+			is_ai = yes
+			or = {
+				has_country_flag = vulcan_high_command
+				has_country_flag = andorian_empire
+				has_country_flag = denobulan_unity
+				has_country_flag = tellarian_technocracy
+			}
+		}
+		establish_communications_no_message = event_target:terran_empire
+		every_owned_fleet = {
+			limit = { is_ship_class = shipclass_outpost_station }
+			set_owner = event_target:terran_empire
+			set_controller = event_target:terran_empire
+		}
+		capital_scope = {
+			create_fleet = {
+				effect = {
+					set_owner = event_target:terran_empire
+					while = {
+						count = 1
+						create_ship = {
+							name = random
+							random_existing_design = corvette
+						}
+					}
+					set_location = prev
+				}
+			}
+		}
+		every_owned_planet = {
+			set_owner = event_target:terran_empire
+			set_controller = event_target:terran_empire
+		}
+	}
+	# start war if not ai
+	random_country = {
+		limit = {
+			has_country_flag = vulcan_rebellion
+			is_ai = no
+		}
+		every_owned_fleet = {
+			limit = {
+				is_ship_class = shipclass_military
+			}
+			create_ship = {
+				name = random
+				graphical_culture = "andorian_01"
+				random_existing_design = corvette
+			}
+			create_ship = {
+				name = random
+				graphical_culture = "tellarite_01"
+				random_existing_design = corvette
+			}
+		}
+		# annex if vulcan not ai
+		event_target:vulcan_colony = {
+			set_owner = event_target:terran_empire
+		}
+		sth_effect_mu_start_rebel_war = yes
+	}
+	random_country = {
+		limit = {
+			has_country_flag = andorian_rebellion
+			is_ai = no
+		}
+		every_owned_fleet = {
+			limit = {
+				is_ship_class = shipclass_military
+			}
+			create_ship = {
+				name = random
+				graphical_culture = "vulcan_01"
+				random_existing_design = corvette
+			}
+			create_ship = {
+				name = random
+				graphical_culture = "tellarite_01"
+				random_existing_design = corvette
+			}
+		}
+		sth_effect_mu_start_rebel_war = yes
+	}
+	random_country = {
+		limit = {
+			has_country_flag = tellarite_rebellion
+			is_ai = no
+		}
+		every_owned_fleet = {
+			limit = {
+				is_ship_class = shipclass_military
+			}
+			create_ship = {
+				name = random
+				graphical_culture = "andorian_01"
+				random_existing_design = corvette
+			}
+			create_ship = {
+				name = random
+				graphical_culture = "vulcan_01"
+				random_existing_design = corvette
+			}
+		}
+		sth_effect_mu_start_rebel_war = yes
+	}
+	set_policy = {
+		policy = war_philosophy
+		option = unrestricted_wars
+		cooldown = no
+	}
+	set_policy = {
+		policy = food_stockpiling
+		option = food_stockpiling_1
+		cooldown = no
+	}
+	set_policy = {
+		policy = slavery
+		option = slavery_allowed
+		cooldown = no
+	}
+	set_policy = {
+		policy = purge
+		option = purge_allowed
+		cooldown = no
+	}
+	set_policy = {
+		policy = orbital_bombardment
+		option = orbital_bombardment_full
+		cooldown = no
+	}
+	set_policy = {
+		policy = interference
+		option = interference_full
+		cooldown = no
+	}
+	set_policy = {
+		policy = enlightenment
+		option = enlightenment_allowed
+		cooldown = no
+	}
+	set_policy = {
+		policy = resettlement
+		option = resettlement_allowed
+		cooldown = no
+	}
+	set_policy = {
+		policy = leader_enhancement
+		option = leader_enhancement_natural_selection
+		cooldown = no
+	}
+	set_policy = {
+		policy = first_contact_protocol
+		option = first_contact_attack_allowed
+		cooldown = no
+	}
+	set_policy = {
+		policy = artificial_intelligence_policy
+		option = ai_servitude
+		cooldown = no
+	}
+	set_policy = {
+		policy = pre_sapients
+		option = pre_sapients_purge
+		cooldown = no
+	}
+	set_policy = {
+		policy = core_worlds
+		option = core_worlds_all
+		cooldown = no
+	}
+	set_policy = {
+		policy = refugees
+		option = refugees_not_allowed
+		cooldown = no
+	}
+	every_owned_pop = {
+		limit = { is_same_species = owner_species }
+		set_citizenship_type = {
+			country = event_target:terran_empire
+			type = citizenship_full
+			cooldown = no
+		}
+		set_living_standard  = {
+			country = event_target:terran_empire
+			type = living_standard_normal
+			cooldown = no
+		}
+	}
+	# may be need add cooldown to avoid abuse
+	every_owned_pop = {
+		limit = { NOT = { is_same_species = owner_species } }
+		set_citizenship_type = {
+			country = event_target:terran_empire
+			type = citizenship_slavery
+			cooldown = no
+		}
+		set_living_standard  = {
+			country = event_target:terran_empire
+			type = living_standard_subsistence
+			cooldown = no
+		}
+		set_slavery_type  = {
+			country = event_target:terran_empire
+			type = slavery_normal
+			cooldown = no
+		}
+	}
+	every_owned_planet = {
+		solar_system = {
+			every_system_planet = {
+				surveyed = {
+					set_surveyed = yes
+					surveyor = event_target:terran_empire
+				}
+			}
+		}
+	}
+	every_planet_within_border = {
+		solar_system = {
+			every_system_planet = {
+				surveyed = {
+					set_surveyed = yes
+					surveyor = event_target:terran_empire
+				}
+			}
+		}
+	}
+	create_leader = { type = ruler species = owner_main_species name = random skill = random traits = { trait = random_trait trait = random_trait } }
+	last_created_leader = { save_event_target_as = terranEmpireLeader }
+	assign_leader = event_target:terranEmpireLeader
+}
+
+setup_tholian_scout_mission = {
+	random_country = {
+		limit = { has_country_flag = tholian_assembly }
+		save_event_target_as = tholian_country
+		owner_species = { save_event_target_as = tholian_species }
+	}
+	random_country = {
+		limit = { has_country_flag = terran_empire }
+		save_global_event_target_as = terran_empire
+	}
+
+	random_system = {
+		limit = {
+			NOR = { has_star_flag = hostile_system is_star_class = sc_black_hole exists = space_owner }
+			is_pirate_system = no
+			any_planet = { is_star = no is_surveyed = { who = event_target:terran_empire status = no } }
+			distance = { source = event_target:terran_empire.capital_scope max_distance = 60 min_distance = 40 }
+		}
+		save_event_target_as = tholianScoutSystem
+	}
+	if = {
+		limit = { NOT = { exists = event_target:tholianScoutSystem } }
+		random_system = {
+			limit = {
+				NOR = { is_star_class = sc_black_hole exists = space_owner }
+				is_pirate_system = no
+				any_planet = { is_star = no is_surveyed = { who = event_target:terran_empire status = no } }
+				distance = { source = event_target:terran_empire.capital_scope max_distance = 100 min_distance = 20 }
+			}
+			save_event_target_as = tholianScoutSystem
+		}
+	}
+	event_target:tholianScoutSystem = {
+		set_star_flag = tholianScoutLoc
+		random_system_planet = {
+			limit = { is_star = no is_surveyed = { who = event_target:terran_empire status = no } }
+			save_event_target_as = tholianScoutLoc
+		}
+	}
+
+
+	create_country = {
+		name = "Tholian"
+		type = faction
+		species = event_target:tholianSpecies
+		name_list = "Tholian"
+		flag = {
+			icon = {
+				category="trek"
+						 file="tholian.dds"
+			}
+			background = {
+				category = "backgrounds"
+				file = "00_solid.dds"
+			}
+			colors ={
+				"green"
+				"green"
+				"null"
+				"null"
+			}
+		}
+	}
+	last_created_country = {
+		set_graphical_culture = tholian_01
+		save_event_target_as = tholianScoutFaction
+		set_country_flag = tholian_scout_faction
+		establish_communications_no_message = ROOT
+		create_leader = {
+			type = admiral
+			species = event_target:tholianSpecies
+			name = random
+			skill = 100
+		}
+		create_fleet = {
+			name = "Tholian Scout Ship"
+		}
+		last_created_fleet = {
+			set_owner = event_target:tholianScoutFaction
+			create_ship = { name = random design = "Tholian Attack Ship" graphical_culture = "tholian_01" prefix = no }
+			last_created_ship = {
+				set_ship_flag = "tholianScoutShip"
+				set_disable_at_health = 0.2
+			}
+			assign_leader = last_created_leader
+			set_location = event_target:tholianScoutLoc
+			save_event_target_as = tholianScoutPos
+			set_fleet_stance = aggressive
+			set_aggro_range_measure_from = self
+			set_aggro_range = 150
+			queue_actions = {
+				repeat = {
+					find_closest_planet = {
+						trigger = {
+							id = "tholianscout.1.trigger.1"
+							NOT = {
+								is_star = yes
+							}
+						}
+						found_planet = {
+							orbit_planet = THIS
+							wait = {
+								duration = 20
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+	country_event = { id = STH_MirrorUniverse_event.6 }
+	random_country = {
+		limit = {
+			if = { has_country_flag = terran_empire }
+			NOT = { has_country_flag = alien_rebellion_begun }
+		}
+		set_country_flag = alien_rebellion_begun
+	}
+}
+
+setup_tholian_base = {
+	random_country = {
+		limit = { has_country_flag = tholian_assembly }
+		save_event_target_as = tholian_assembly
+		owner_species = { save_event_target_as = tholian_species }
+	}
+	random_country = {
+		limit = { has_country_flag = terran_empire }
+		save_event_target_as = terran_empire
+		random_owned_planet = {
+			limit = { is_capital = yes }
+			save_event_target_as = capital_location
+			solar_system = {
+				set_star_flag = capital_system
+			}
+		}
+	}
+	random_system = {
+		limit = {
+			NOR = { has_star_flag = hostile_system has_star_flag = capital_system is_star_class = sc_black_hole exists = space_owner }
+			is_pirate_system = no
+			any_planet = { is_star = no is_surveyed = { who = event_target:terran_empire status = no } }
+			distance = { source = event_target:capital_location max_distance = 100 min_distance = 80 }
+		}
+		save_event_target_as = tholianBaseSystem
+	}
+	if = {
+		limit = { NOT = { exists = event_target:tholianBaseSystem } }
+		random_system = {
+			limit = {
+				NOR = { has_star_flag = capital_system is_star_class = sc_black_hole exists = space_owner }
+				is_pirate_system = no
+				any_planet = { is_star = no is_surveyed = { who = event_target:terran_empire status = no } }
+				distance = { source = event_target:capital_location max_distance = 140 min_distance = 40 }
+			}
+			save_event_target_as = tholianBaseSystem
+		}
+	}
+	event_target:tholianBaseSystem = {
+		set_star_flag = tholianBaseLoc
+		random_system_planet = {
+			limit = { is_star = no is_surveyed = { who = event_target:terran_empire status = no } }
+			save_event_target_as = tholianBaseLoc
+		}
+	}
+	create_country = {
+		name = "Tholian"
+		type = faction
+		species = event_target:tholianSpecies
+		name_list = "Tholian"
+		flag = {
+			icon = {
+				category="trek"
+						 file="tholian.dds"
+			}
+			background = {
+				category = "backgrounds"
+				file = "00_solid.dds"
+			}
+			colors ={
+				"green"
+				"green"
+				"null"
+				"null"
+			}
+		}
+	}
+	last_created_country = {
+		set_graphical_culture = tholian_01
+		save_event_target_as = tholianBaseFaction
+		set_country_flag = tholian_base_faction
+		establish_communications_no_message = event_target:terran_empire
+		create_leader = {
+			type = admiral
+			species = event_target:tholianSpecies
+			name = random
+			skill = 100
+		}
+		create_fleet = { name = "Tholian Defence Fleet" }
+		last_created_fleet = {
+			set_owner = event_target:tholianBaseFaction
+			create_ship = { name = random design = "Tholian Attack Ship" graphical_culture = "tholian_01" prefix = no }
+			create_ship = { name = random design = "Tholian Attack Ship" graphical_culture = "tholian_01" prefix = no }
+			create_ship = { name = random design = "Tholian Attack Ship" graphical_culture = "tholian_01" prefix = no }
+			create_ship = { name = random design = "Tholian Attack Ship" graphical_culture = "tholian_01" prefix = no }
+			create_ship = { name = random design = "Tholian Attack Ship" graphical_culture = "tholian_01" prefix = no }
+			create_ship = { name = random design = "Tholian Attack Ship" graphical_culture = "tholian_01" prefix = no }
+			assign_leader = last_created_leader
+			set_location = event_target:tholianBaseLoc
+			set_fleet_stance = aggressive
+			set_aggro_range_measure_from = self
+			set_aggro_range = 150
+			queue_actions = {
+				repeat = {
+					find_closest_planet = {
+						trigger = {
+							id = "tholian.1.trigger.1"
+							NOT = {
+								is_star = yes
+							}
+						}
+						found_planet = {
+							orbit_planet = THIS
+							wait = {
+								duration = 20
+							}
+						}
+					}
+				}
+			}
+		}
+		create_fleet = {
+			name = "Tholian Base"
+			effect = {
+				set_owner = event_target:tholianBaseFaction
+				create_ship = {
+					name = "Tholian Base" design = "Pirate Lair" graphical_culture = "pirate_01" prefix = no
+					effect = {
+						set_ship_flag = "tholianBaseStation"
+						set_disable_at_health = 0.2
+					}
+				}
+				set_location = event_target:tholianBaseLoc
+				save_event_target_as = tholianBasePos
+			}
+		}
+	}
+}
+
+mirror_klingon_cardassian_alliance_formation = {
+	random_country = {
+		limit = { has_country_flag = terran_empire }
+		#owner_species = { save_event_target_as = terran_species }
+		random_owned_planet = {
+			limit = { is_capital = yes }
+			save_event_target_as = terran_homeworld
+		}
+	}
+	random_country = {
+		limit = { has_country_flag = mirror_klingon_empire }
+		owner_species = { save_event_target_as = klingon_species }
+		random_owned_planet = {
+			limit = { is_capital = yes }
+			set_planet_flag = klingon_homeworld
+			save_event_target_as = klingon_homeworld
+		}
+	}
+	random_country = {
+		limit = { has_country_flag = mirror_cardassian_union }
+		owner_species = { save_event_target_as = cardassian_species }
+		random_owned_planet = {
+			limit = { is_capital = yes }
+			set_planet_flag = cardassian_homeworld
+			save_event_target_as = cardassian_homeworld
+		}
+	}
+	if = {
+		limit = { has_country_flag = mirror_klingon_empire }
+		event_target:cardassian_country = {
+			every_owned_fleet = {
+				set_owner = root
+			}
+			every_owned_planet = {
+				set_owner = root
+			}
+		}
+	}
+	if = {
+		limit = { has_country_flag = mirror_cardassian_union }
+		event_target:klingon_country = {
+			every_owned_fleet = {
+				set_owner = root
+			}
+			every_owned_planet = {
+				set_owner = root
+			}
+		}
+	}
+	set_empire_name = "Klingon-Cardassian Alliance"
+	change_country_flag = {
+		icon = { category = "trek" file = "Mirror2.dds" }
+		background = { category = "backgrounds" file = "00_solid.dds" }
+		colors = { "blue" "black" "null" "null" }
+	}
+	set_country_flag = mirror_klingon_cardassian_alliance
+	save_event_target_as = alliance_country
+	remove_country_flag = mirror_klingon_empire
+	remove_country_flag = mirror_cardassian_union
+	clear_ethos = yes
+	country_add_ethic = ethic_fanatic_militarist
+	country_add_ethic = ethic_authoritarian
+	change_government = {
+		authority = "auth_imperial"
+		civics = { civic = "civic_slaver_guilds" civic = "civic_cutthroat_politics" }
+	}
+	set_policy = {
+		policy = war_philosophy
+		option = unrestricted_wars
+		cooldown = no
+	}
+	set_policy = {
+		policy = food_stockpiling
+		option = food_stockpiling_1
+		cooldown = no
+	}
+	set_policy = {
+		policy = slavery
+		option = slavery_allowed
+		cooldown = no
+	}
+	set_policy = {
+		policy = purge
+		option = purge_allowed
+		cooldown = no
+	}
+	set_policy = {
+		policy = orbital_bombardment
+		option = orbital_bombardment_full
+		cooldown = no
+	}
+	set_policy = {
+		policy = interference
+		option = interference_full
+		cooldown = no
+	}
+	set_policy = {
+		policy = enlightenment
+		option = enlightenment_allowed
+		cooldown = no
+	}
+	set_policy = {
+		policy = resettlement
+		option = resettlement_allowed
+		cooldown = no
+	}
+	set_policy = {
+		policy = leader_enhancement
+		option = leader_enhancement_natural_selection
+		cooldown = no
+	}
+	set_policy = {
+		policy = first_contact_protocol
+		option = first_contact_attack_allowed
+		cooldown = no
+	}
+	set_policy = {
+		policy = artificial_intelligence_policy
+		option = ai_servitude
+		cooldown = no
+	}
+	set_policy = {
+		policy = pre_sapients
+		option = pre_sapients_purge
+		cooldown = no
+	}
+	set_policy = {
+		policy = core_worlds
+		option = core_worlds_all
+		cooldown = no
+	}
+	set_policy = {
+		policy = refugees
+		option = refugees_not_allowed
+		cooldown = no
+	}
+	every_owned_pop = {
+		limit = {
+			or = {
+				is_same_species = event_target:klingonSpecies
+				is_same_species = event_target:cardassianSpecies
+			}
+		}
+		set_citizenship_type = {
+			country = event_target:alliance_country
+			type = citizenship_full
+			cooldown = no
+		}
+		set_living_standard  = {
+			country = event_target:alliance_country
+			type = living_standard_normal
+			cooldown = no
+		}
+	}
+	every_owned_pop = {
+		limit = {
+			NOR = {
+				is_same_species = klingon_species
+				is_same_species = cardassian_species
+			}
+		}
+		set_citizenship_type = {
+			country = event_target:alliance_country
+			type = citizenship_slavery
+			cooldown = no
+		}
+		set_living_standard  = {
+			country = event_target:alliance_country
+			type = living_standard_subsistence
+			cooldown = no
+		}
+		set_slavery_type  = {
+			country = event_target:alliance_country
+			type = slavery_normal
+			cooldown = no
+		}
+	}
+	declare_war = { who = event_target:terran_empire major_war = yes name = "Alliance-Terran War" }
+	add_war_demand = { type = "cede_planet" parameter:planet = event_target:terran_homeworld warscore_cost = 100 target = this enemy = event_target:terran_empire }
+	event_target:terran_empire = {
+		add_war_demand = { type = "cede_planet" parameter:planet = event_target:klingon_homeworld warscore_cost = 50 target = this enemy = event_target:alliance_country }
+		add_war_demand = { type = "cede_planet" parameter:planet = event_target:cardassian_homeworld warscore_cost = 50 target = this enemy = event_target:alliance_country }
+	}
+	every_country = {
+		limit = {
+			has_established_contact = event_target:alliance_country
+			NOT = { has_country_flag = terran_empire }
+		}
+		country_event = { id = STH_MirrorUniverse_event.60 days = 7 random = 3 }
+	}
+	random_country = {
+		limit = { has_country_flag = terran_empire }
+		country_event = { id = STH_MirrorUniverse_event.59 days = 7 random = 3 }
+	}
+}
+
+create_terran_rebel_country_1 = {
+	random_list = {
+		20 = {
+			create_rebels = { name = "Terran Alliance" authority = root civics = root species = root ethos = root flag = random }
+			last_created_country = { create_leader = { type = ruler species = owner_main_species name = random skill = random traits = { trait = random_trait trait = random_trait } }	}
+		}
+		20 = {
+			create_rebels = { name = "Terran Confederacy" authority = root civics = root species = root ethos = root flag = random }
+			last_created_country = { create_leader = { type = ruler species = owner_main_species name = random skill = random traits = { trait = random_trait trait = random_trait } } }
+		}
+		20 = {
+			create_rebels = { name = "Terran Imperium" authority = root civics = root species = root ethos = root flag = random }
+			last_created_country = { create_leader = { type = ruler species = owner_main_species name = random skill = random traits = { trait = random_trait trait = random_trait } } }
+		}
+		20 = {
+			create_rebels = { name = "Terran Consortium" authority = root civics = root species = root ethos = root flag = random }
+			last_created_country = { create_leader = { type = ruler species = owner_main_species name = random skill = random traits = { trait = random_trait trait = random_trait } } }
+		}
+		20 = {
+			create_rebels = { name = "Terran Commonwealth" authority = root civics = root species = root ethos = root flag = random }
+			last_created_country = { create_leader = { type = ruler species = owner_main_species name = random skill = random traits = { trait = random_trait trait = random_trait } } }
+		}
+	}
+	last_created_country = {
+		change_country_flag = {
+			icon = { category = "trek" file = "TerranEmpire.dds" }
+		}
+		set_country_flag = terran_rebel_country
+		assign_leader = last_created_leader
+		set_subject_of = { who = none }
+		declare_war = { who = root name = "Terran Civil War" }
+		add_war_demand = { type = "cede_planet" parameter:planet = root.capital_scope warscore_cost = 90 target = this enemy = root }
+		root = { add_war_demand = { type = "cede_planet" parameter:planet = last_created_country.capital_scope warscore_cost = 50 target = root enemy = last_created_country } }
+		add_minerals = 1000
+		add_energy = 1000
+		create_fleet = { name = "Rebel Fleet" }
+		last_created_fleet = {
+			set_owner = last_created_country
+			while = {
+				count = 5
+				create_ship = {
+					name = random
+					random_existing_design = corvette
+				}
+			}
+			if = {
+				limit = {
+					event_target:terran_empire = {
+						has_technology = tech_engineering_destroyer_541
+					}
+				}
+				while = {
+					count = 2
+					create_ship = {
+						name = random
+						random_existing_design = saber
+					}
+				}
+			}
+			if = {
+				limit = {
+					event_target:terran_empire = {
+						has_technology = tech_engineering_cruiser_542
+					}
+				}
+				create_ship = {
+					name = random
+					random_existing_design = sovereign
+				}
+			}
+			set_location = last_created_country.capital_scope
+		}
+	}
+}
+
+create_terran_rebel_country_2 = {
+	random_list = {
+		20 = {
+			create_rebels = { name = "Terran Dominion" authority = root civics = root species = root ethos = root flag = random }
+			last_created_country = { create_leader = { type = ruler species = owner_main_species name = random skill = random traits = { trait = random_trait trait = random_trait } }	}
+		}
+		20 = {
+			create_rebels = { name = "Terran Union" authority = root civics = root species = root ethos = root flag = random }
+			last_created_country = { create_leader = { type = ruler species = owner_main_species name = random skill = random traits = { trait = random_trait trait = random_trait } } }
+		}
+		20 = {
+			create_rebels = { name = "Terran Sovereignty" authority = root civics = root species = root ethos = root flag = random }
+			last_created_country = { create_leader = { type = ruler species = owner_main_species name = random skill = random traits = { trait = random_trait trait = random_trait } } }
+		}
+		20 = {
+			create_rebels = { name = "Terran Authority" authority = root civics = root species = root ethos = root flag = random }
+			last_created_country = { create_leader = { type = ruler species = owner_main_species name = random skill = random traits = { trait = random_trait trait = random_trait } } }
+		}
+		20 = {
+			create_rebels = { name = "Terran Supremacy" authority = root civics = root species = root ethos = root flag = random }
+			last_created_country = { create_leader = { type = ruler species = owner_main_species name = random skill = random traits = { trait = random_trait trait = random_trait } } }
+		}
+	}
+	last_created_country = {
+		change_country_flag = {
+			icon = { category = "trek" file = "TerranEmpire.dds" }
+		}
+		set_country_flag = terran_rebel_country
+		assign_leader = last_created_leader
+		set_subject_of = { who = none }
+		declare_war = { who = root name = "Terran Civil War" }
+		add_war_demand = { type = "cede_planet" parameter:planet = root.capital_scope warscore_cost = 90 target = this enemy = root }
+		root = { add_war_demand = { type = "cede_planet" parameter:planet = last_created_country.capital_scope warscore_cost = 50 target = root enemy = last_created_country } }
+		add_minerals = 1000
+		add_energy = 1000
+		create_fleet = { name = "Rebel Fleet" }
+		last_created_fleet = {
+			set_owner = last_created_country
+			while = {
+				count = 5
+				create_ship = {
+					name = random
+					random_existing_design = corvette
+				}
+			}
+			if = {
+				limit = {
+					event_target:terran_empire = {
+						has_technology = tech_engineering_destroyer_541
+					}
+				}
+				while = {
+					count = 2
+					create_ship = {
+						name = random
+						random_existing_design = saber
+					}
+				}
+			}
+			if = {
+				limit = {
+					event_target:terran_empire = {
+						has_technology = tech_engineering_cruiser_542
+					}
+				}
+				create_ship = {
+					name = random
+					random_existing_design = sovereign
+				}
+			}
+			set_location = last_created_country.capital_scope
+		}
+	}
+}
+
+create_terran_rebel_country_3 = {
+	random_list = {
+		20 = {
+			create_rebels = { name = "Terran Regency" authority = root civics = root species = root ethos = root flag = random }
+			last_created_country = { create_leader = { type = ruler species = owner_main_species name = random skill = random traits = { trait = random_trait trait = random_trait } }	}
+		}
+		20 = {
+			create_rebels = { name = "Terran Kingdom" authority = root civics = root species = root ethos = root flag = random }
+			last_created_country = { create_leader = { type = ruler species = owner_main_species name = random skill = random traits = { trait = random_trait trait = random_trait } } }
+		}
+		20 = {
+			create_rebels = { name = "Terran Brotherhood" authority = root civics = root species = root ethos = root flag = random }
+			last_created_country = { create_leader = { type = ruler species = owner_main_species name = random skill = random traits = { trait = random_trait trait = random_trait } } }
+		}
+		20 = {
+			create_rebels = { name = "Terran Collective" authority = root civics = root species = root ethos = root flag = random }
+			last_created_country = { create_leader = { type = ruler species = owner_main_species name = random skill = random traits = { trait = random_trait trait = random_trait } } }
+		}
+		20 = {
+			create_rebels = { name = "Terran Syndicate" authority = root civics = root species = root ethos = root flag = random }
+			last_created_country = { create_leader = { type = ruler species = owner_main_species name = random skill = random traits = { trait = random_trait trait = random_trait } } }
+		}
+	}
+	last_created_country = {
+		change_country_flag = {
+			icon = { category = "trek" file = "TerranEmpire.dds" }
+		}
+		set_country_flag = terran_rebel_country
+		assign_leader = last_created_leader
+		set_subject_of = { who = none }
+		declare_war = { who = root name = "Terran Civil War" }
+		add_war_demand = { type = "cede_planet" parameter:planet = root.capital_scope warscore_cost = 90 target = this enemy = root }
+		root = { add_war_demand = { type = "cede_planet" parameter:planet = last_created_country.capital_scope warscore_cost = 50 target = root enemy = last_created_country } }
+		add_minerals = 1000
+		add_energy = 1000
+		create_fleet = { name = "Rebel Fleet" }
+		last_created_fleet = {
+			set_owner = last_created_country
+			while = {
+				count = 5
+				create_ship = {
+					name = random
+					random_existing_design = corvette
+				}
+			}
+			if = {
+				limit = {
+					event_target:terran_empire = {
+						has_technology = tech_engineering_destroyer_541
+					}
+				}
+				while = {
+					count = 2
+					create_ship = {
+						name = random
+						random_existing_design = saber
+					}
+				}
+			}
+			if = {
+				limit = {
+					event_target:terran_empire = {
+						has_technology = tech_engineering_cruiser_542
+					}
+				}
+				create_ship = {
+					name = random
+					random_existing_design = sovereign
+				}
+			}
+			set_location = last_created_country.capital_scope
+		}
+	}
+}
+
+become_mirror_borg = {
+	set_country_flag = mirror_borg
+	# remove_country_flag = the_borg_collective
+	set_graphical_culture = borg_orange_01
+	change_country_flag = {
+		icon = { category = "trek" file = "Borg.dds" }
+		background = { category = "backgrounds" file = "00_solid.dds" }
+		colors = { "orange" "black" "null" "null" }
+	}
+	kill_leader = { 
+		type = ruler
+		show_notification = no 
+	}
+    create_leader = { 
+      name = NAME_ruler_name_Borg 
+      species = root 
+      type = ruler 
+      skill = random 
+      traits = { trait = random_trait trait = random_trait } 
+    }   
+    last_created_leader = { set_is_female = no }
+    assign_leader = last_created_leader
+	every_owned_planet = { planet_event = { id = STH_borg.1008 } }
+}

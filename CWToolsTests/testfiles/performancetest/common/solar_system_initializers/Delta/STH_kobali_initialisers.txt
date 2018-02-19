@@ -1,0 +1,91 @@
+# Kol
+# Homeworld of the Kobali
+kobali_homeworld = {
+	name = "Kol"
+	class = sc_f
+	flags = { kobali_homeworld }
+	usage = custom_empire
+	max_instances = 1
+	planet = { name = "Samsa" class = star size = 30 orbit_distance = 0 orbit_angle = 1 has_ring = no }
+	change_orbit = { min = 30 max = 40}
+	planet = { name = "Nea" class = "pc_b_class" size = 8 orbit_angle = { min = 45 max = 270 } has_ring = no }
+	change_orbit = { min = 20 max = 30}
+	planet = { name = "Ona" class = "pc_b_class" size = 8 orbit_angle = { min = 45 max = 270 } has_ring = no }
+	change_orbit = { min = 20 max = 30}
+	planet = { name = "Del'ga" class = "pc_toxic" size = 8 orbit_angle = { min = 45 max = 270 } has_ring = no }
+	change_orbit = { min = 20 max = 30}
+	planet = { name = "Korlan" class = "pc_toxic" size = 8 orbit_angle = { min = 45 max = 270 } has_ring = no }
+	change_orbit = 40
+	planet = {
+		name = "Kobal"
+		class = "pc_continental"
+		size = { min = 22 max = 25 }
+		orbit_angle = { min = 45 max = 270 }
+		starting_planet = yes
+		tile_blockers = none
+		has_ring = no
+		init_effect = {
+			prevent_anomaly = yes			
+			if = {
+				limit = { NOT = { any_country = { has_country_flag = kobali_republic } } }
+				create_species = {
+					name = "Kobali"
+					class = KOB
+					portrait = kobali
+					homeworld = THIS
+					traits = {
+						trait = "trait_necrogenesis"
+						trait = "trait_extremely_adaptive"
+						ideal_planet_class = "pc_continental"
+					}
+				}
+				last_created_species = { save_global_event_target_as = kobaliSpecies }
+				create_country = {
+					name = "NAME_Kobali_Republic"
+					type = default
+					ignore_initial_colony_error = yes
+					civics = { civic = "civic_environmentalist" civic = "civic_technocracy" }
+					authority = auth_democratic
+					name_list = "Kobali"
+					ethos = { ethic = "ethic_materialist" ethic = "ethic_xenophile" ethic = "ethic_egalitarian" }
+					species = event_target:kobaliSpecies
+					flag = {
+						icon = { category = "trek" file = "kobali.dds" }
+						background = { category = "backgrounds" file = "horizontal.dds" }
+						colors = { "customcolor1499" "customcolor145" "null" "null" }
+					}
+					ship_prefix = "KSS"
+					effect = {
+						set_graphical_culture = kobali_01
+						set_country_flag = kobali_republic
+						set_country_flag = custom_start_screen
+						set_country_flag = generic_ent
+						set_country_flag = delta_empire
+						set_country_flag = init_spawned
+						set_country_flag = sth_medium_galaxy
+						save_global_event_target_as = kobali_republic
+					}
+				}
+				create_colony = { owner = event_target:kobali_republic species = event_target:kobaliSpecies ethos = owner }
+			}
+			set_capital = yes
+			random_country = {
+				limit = { has_country_flag = kobali_republic }
+				save_global_event_target_as = kobali_republic
+				add_appropriate_start_techs = yes
+				species = { save_global_event_target_as = kobaliSpecies }
+			}
+			set_owner = event_target:kobali_republic
+			generate_major_empire_start_buildings = yes
+			generate_major_empire_start_pops = yes
+			generate_major_empire_start_fleets = yes
+			set_name = "Kobal" 			
+		}		
+	}
+	change_orbit = { min = 20 max = 30}
+	planet = { name = "Kalu" class = "pc_gas_giant" size = 16 orbit_angle = { min = 45 max = 270 } has_ring = yes }
+	change_orbit = { min = 20 max = 30}
+	planet = { name = "Hetan" class = "pc_gas_giant" size = 25 orbit_angle = { min = 45 max = 270 } has_ring = no }
+	change_orbit = { min = 20 max = 30}
+	planet = { name = "Bekae" class = "pc_barren_cold" size = 8 orbit_angle = { min = 45 max = 270 } }
+}

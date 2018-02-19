@@ -1,0 +1,214 @@
+### Science Ship Labs
+
+   ### Basic Labs
+   utility_component_template = {
+      key = "REQUIRED_LABS_0"
+      size = medium
+      icon_frame = 1
+      icon = "GFX_ship_part_Required_Labs_0"
+      power = 0
+      cost = 0
+      science_lab_level = 1
+      science_lab_speed = 1
+      ai_weight = { weight = 1 }
+      prerequisites = { "tech_optical_sensor" }
+      component_set = "science_labs"
+      upgrades_to = "REQUIRED_LABS_1"
+   }
+      
+   ### Nuclear Electronic Labs
+   utility_component_template = {
+      key = "REQUIRED_LABS_1"
+      size = medium
+      icon_frame = 1
+      icon = "GFX_ship_part_Required_Labs_1"
+      power = -25
+      cost = 50
+      science_lab_level = 1
+      science_lab_speed = 1
+      ai_weight = { weight = 20 }
+      prerequisites = { "tech_physics_nuclear_32" }
+      component_set = "science_labs"
+      upgrades_to = "REQUIRED_LABS_2"
+      ship_modifier = { science_ship_survey_speed = 0.10 ship_anomaly_research_speed_mult = 0.10 ship_anomaly_generation_chance_mult = 0.05 ship_anomaly_fail_risk = -0.05 }
+   }
+      
+   ### Stellar cartography Lab
+   utility_component_template = {
+      key = "REQUIRED_LABS_2"
+      size = medium
+      icon_frame = 1
+      icon = "GFX_ship_part_Required_Labs_2"
+      power = -50
+      cost = 100
+      science_lab_level = 1
+      science_lab_speed = 1
+      ai_weight = { weight = 30 }
+      prerequisites = { "tech_physics_stellar_35" }
+      component_set = "science_labs"
+      upgrades_to = "REQUIRED_LABS_3"
+      ship_modifier = { science_ship_survey_speed = 0.20 ship_anomaly_research_speed_mult = 0.20 ship_anomaly_generation_chance_mult = 0.10 ship_anomaly_fail_risk = -0.10 }
+   }
+      
+   ### Astrometrics Labs
+   utility_component_template = {
+      key = "REQUIRED_LABS_3"
+      size = medium
+      icon_frame = 1
+      icon = "GFX_ship_part_Required_Labs_3"
+      power = -75
+      cost = 150
+      science_lab_level = 1
+      science_lab_speed = 1
+      ai_weight = { weight = 40 }
+      prerequisites = { "tech_physics_astrometrics_40" }
+      component_set = "science_labs"
+      ship_modifier = { science_ship_survey_speed = 0.30 ship_anomaly_research_speed_mult = 0.30 ship_anomaly_generation_chance_mult = 0.15 ship_anomaly_fail_risk = -0.15 }
+   }
+      
+### Science Ship Modules
+
+### Reinforced Hull
+   utility_component_template = {
+      key = "REQUIRED_SCIENCE_MODULE_HULL_0"
+      size = medium
+      icon_frame = 1
+      icon = "GFX_ship_part_Required_Science_Module_hull_0"
+      power = 0
+      cost = 5
+      ai_weight = { weight = 1 }
+      prerequisites = { "tech_bureau_colonial" }
+      component_set = "science_module"
+      modifier = { ship_hitpoints_add = 100   }
+   }
+   
+### Medical Bay
+   utility_component_template = {
+      key = "REQUIRED_SCIENCE_MODULE_MEDICAL_0"
+      size = medium
+      icon_frame = 1
+      icon = "GFX_ship_part_Required_Science_Module_medical_0"
+      power = -25
+      cost = 50
+      ai_weight = { weight = 10 }
+      prerequisites = { "tech_society_new_worlds_1182" }
+      component_set = "science_module"
+   }
+   
+### Religious Emissaries
+   utility_component_template = {
+      key = "REQUIRED_SCIENCE_MODULE_RELIGIOUS_0"
+      size = medium
+      icon_frame = 1
+      icon = "GFX_ship_part_Required_Science_Module_religious_0"
+      power = -25
+      cost = 50
+      ai_weight = { weight = 10 }
+      prerequisites = { "tech_society_new_worlds_1185" }
+      component_set = "science_module"
+   }
+   
+### Prison Barge
+   utility_component_template = {
+      key = "REQUIRED_SCIENCE_MODULE_PRISON_0"
+      size = medium
+      icon_frame = 1
+      icon = "GFX_ship_part_Required_Science_Module_prison_0"
+      power = -25
+      cost = 50
+      ai_weight = { weight = 20 }
+      prerequisites = { "tech_society_new_worlds_1184" }
+      component_set = "science_module"
+   }
+   
+### Gambling Den
+   utility_component_template = {
+      key = "REQUIRED_SCIENCE_MODULE_GAMBLING_0"
+      size = medium
+      icon_frame = 1
+      icon = "GFX_ship_part_Required_Science_Module_gambling_0"
+      power = -25
+      cost = 50
+      ai_weight = { weight = 20 }
+      prerequisites = { "tech_society_new_worlds_1183" }
+      component_set = "science_module"
+   }
+   
+### Diplomatic Quarters
+   utility_component_template = {
+      key = "REQUIRED_SCIENCE_MODULE_DIPLOMATIC_0"
+      size = medium
+      icon_frame = 1
+      icon = "GFX_ship_part_Required_Science_Module_diplomatic_0"
+      power = -25
+      cost = 50
+      ai_weight = { weight = 20 }
+      prerequisites = { "tech_society_new_worlds_1186" }
+      component_set = "science_module"
+   }
+   
+### Hunting Party
+   utility_component_template = {
+      key = "REQUIRED_SCIENCE_MODULE_HUNTING_0"
+      size = medium
+      icon_frame = 1
+      icon = "GFX_ship_part_Required_Science_Module_hunting_0"
+      power = -25
+      cost = 50
+      ai_weight = { weight = 20 }
+      prerequisites = { "tech_society_statecraft_1179" }
+      component_set = "science_module"
+   }
+   
+### Onboard School
+   utility_component_template = {
+      key = "REQUIRED_SCIENCE_MODULE_SCHOOL_0"
+      size = medium
+      icon_frame = 1
+      icon = "GFX_ship_part_Required_Science_Module_school_0"
+      power = -25
+      cost = 50
+      ai_weight = { weight = 10 }
+      prerequisites = { "tech_society_new_worlds_1187" }
+      component_set = "science_module"
+   }
+   
+### Prospector Bay
+   utility_component_template = {
+      key = "REQUIRED_SCIENCE_MODULE_PROSPECTOR_0"
+      size = medium
+      icon_frame = 1
+      icon = "GFX_ship_part_Required_Science_Module_prospector_0"
+      power = -25
+      cost = 50
+      ai_weight = { weight = 10 }
+      prerequisites = { "tech_society_new_worlds_1189" }
+      component_set = "science_module"
+   }
+   
+### Xenobiology Lab
+   utility_component_template = {
+      key = "REQUIRED_SCIENCE_MODULE_XENOBIOLOGY_0"
+      size = medium
+      icon_frame = 1
+      icon = "GFX_ship_part_Required_Science_Module_xenobiology_0"
+      power = -25
+      cost = 50
+      ai_weight = { weight = 10 }
+      prerequisites = { "tech_society_new_worlds_1188" }
+      component_set = "science_module"
+   }
+   
+### Escape Pods
+   utility_component_template = {
+      key = "REQUIRED_SCIENCE_MODULE_ESCAPE_0"
+      size = medium
+      icon_frame = 1
+      icon = "GFX_ship_part_Required_Science_Module_escape_0"
+      power = 0
+      cost = 10
+      ai_weight = { weight = 2 }
+      prerequisites = { "tech_physics_nuclear_32" }
+      component_set = "science_module"
+   }
+   

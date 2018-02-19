@@ -1,0 +1,97 @@
+﻿### Rakhari by EHKodiak
+Rakhari = {
+	randomized = no
+
+	ship_names = {
+		generic = {
+		Geminor Microst Serpens Retic Monoc Chamajorn Lacern Horon Arin Caphricoron Chamael Teleo Monocherta Teleon Lacerosh Cornax Leominith Telesh Scorona Caphricornath Canchert Leominorma Sagitharina Geminorma Canismini Hydraco Sagitharies Caeles Caeleomin Caeleominor Caeleo Chanceros Teleomini Chamaeles Caeleon Scornax Teleominoth Cariesh Telescoroth Telescornath Exarch
+		}
+		corvette = {
+		}
+		saber = {
+		}
+		sovereign = {
+		}
+		steamrunner = {
+		}		
+		adv_cruiser = {
+		}
+		strike = {
+		}	
+		constructor = { }
+		colonizer = { }
+		science = { }
+		transport = { }
+		outpost_station = {
+			sequential_name = "Imperium Outpost"
+		}
+	}
+
+	fleet_names = {
+		sequential_name = "%O% Imperial Fleet"
+	}
+	
+	army_names = {
+		defense_army = {
+			sequential_name = "%O% Imperial Watch"
+		}
+		assault_army = {
+			sequential_name = "%O% Exarch's Enforcers"
+		}
+		slave_army = {
+			sequential_name = "%O% Indentured Defence Force"
+		}
+		clone_army = { 
+			sequential_name = "%O% Clone Defence Force"
+		}
+		robotic_army = {
+			sequential_name = "%O% Mechanised Defence Force"
+		}
+		android_army = {
+			sequential_name = "%O% Synthetic Defence Force"
+		}
+		psionic_army = { 
+			sequential_name = "%O% Psi Defence Force"
+		}
+		xenomorph_army = {
+			sequential_name = "%O% Bio-Warfare Defence Force"
+		}
+		gene_warrior_army = {
+			sequential_name = "%O% Bio-Engineered Defence Force"
+		}
+	}
+
+	planet_names = {
+		generic = {
+			names = { 
+			}
+		}
+	}
+
+
+	### CHARACTERS 
+
+	character_names = {
+		names1 = {
+			weight = 40
+			first_names_male = {
+			Croden Hadran Valderen Retayan Dekoren Falderen Falderan Faldan Feldan Mizan Vidron Calvaren Haderen Haderen Vittoren Nirennyan Hirennyan Namaha Grennsin Matixan Oninon Zimpulsan Janacin Kodan Timthehatin Kumbin Falleren Falleren Valleren Valleren Vivin Vittorn Daykoran Faldiren Falliden Mizad Vidren Calviden Hadeden
+			}
+			first_names_female = {
+			Yareth Falith Falleth Vallith Valleth Viviath Vittoth Daykorith Faldith Fallith Mizaeth Vidrith Calvirith Haderinth Alonzinth Alberinth Agneseth Andrinth Adrinth Badrinth Baldith Fadith Gausdith Fausdith Flavi Fordith Fulva Fiola Niolan Miollan Mollith Polinarth Fidorth Elnodath Elininth Evi Eldith Dodath Doreoninth Carininth Cicilorth Claidith Calidith Gdath Kumdith Ravninth Valdereth Retayath Dekoreth Faldereth Faldedath Faldath Feldath Mizath Vidron Calvareth Hadereth Hadeth Vittoth Nireth Nyath Hireth Nyath Namatha Grethn Madith Xath Oninon Zimputh Jathacin Kodath Kumdith Fallereth Fallereth Vallereth Vallereth Vivin Vittorn Daykodath Faldithreth Fallideth Mizath Vidreth Calvideth Hadedeth
+			}
+			second_names = {
+			" "
+			}
+			regnal_first_names_male = {
+			Croden Hadran Valderen Retayan Dekoren Falderen Falderan Faldan Feldan Mizan Vidron Calvaren Haderen Haderen Vittoren Nirennyan Hirennyan Namaha Grennsin Matixan Oninon Zimpulsan Janacin Kodan Timthehatin Kumbin Falleren Falleren Valleren Valleren Vivin Vittorn Daykoran Faldiren Falliden Mizad Vidren Calviden Hadeden
+			}
+			regnal_first_names_female = {
+			Yareth Falith Falleth Vallith Valleth Viviath Vittoth Daykorith Faldith Fallith Mizaeth Vidrith Calvirith Haderinth Alonzinth Alberinth Agneseth Andrinth Adrinth Badrinth Baldith Fadith Gausdith Fausdith Flavi Fordith Fulva Fiola Niolan Miollan Mollith Polinarth Fidorth Elnodath Elininth Evi Eldith Dodath Doreoninth Carininth Cicilorth Claidith Calidith Gdath Kumdith Ravninth Valdereth Retayath Dekoreth Faldereth Faldedath Faldath Feldath Mizath Vidron Calvareth Hadereth Hadeth Vittoth Nireth Nyath Hireth Nyath Namatha Grethn Madith Xath Oninon Zimputh Jathacin Kodath Kumdith Fallereth Fallereth Vallereth Vallereth Vivin Vittorn Daykodath Faldithreth Fallideth Mizath Vidreth Calvideth Hadedeth
+			}
+			regnal_second_names = {
+			" "
+			}
+		}
+	}
+}

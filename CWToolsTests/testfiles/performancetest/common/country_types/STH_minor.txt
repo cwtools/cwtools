@@ -1,0 +1,169 @@
+minorRace = {
+	has_fortifications = yes
+	can_have_orbital_stations = yes
+	has_difficulty_bonuses = yes
+	counts_for_victory = yes
+	pop_growth = yes
+	playable = yes
+	shuffle_pop_ethos = yes
+	diplomatic_wars = yes
+	relations = yes
+	distant_ftl_cost_mult = 1.0
+	ai = {
+		enabled = yes
+		declare_war = yes
+		colonizer = no
+		traditions = yes	
+		internal_policies = yes
+		construction = yes
+		modules = {
+			military_minister_module
+			foreign_minister_module
+			interior_minister_module
+		}
+		
+		ship_data = {
+			constructor = {
+				min = 0
+				max = 1
+			}
+			
+			science	= {
+				min = 0
+				max = 0
+			}
+			outpost_station = { min = 0 max = 0 }
+			colonizer = {
+				min = 0
+				max = 0
+			}
+			assault_cruiser = {
+				fraction = {
+					modifier = { add = 10 has_technology = tech_spaceport_5 }	
+					modifier = { add = 25 has_technology = tech_spaceport_6 }											
+				}
+			}
+			adv_cruiser = {
+				fraction = {
+					modifier = { add = 20 has_technology = tech_spaceport_5 }	
+					modifier = { add = 5 has_technology = tech_spaceport_6 }											
+				}
+			}
+			saber = {
+				fraction = {
+					modifier = {
+						add = 30
+						has_technology = tech_spaceport_2
+					}
+					modifier = {
+						add = -10
+						has_technology = tech_spaceport_4
+					}
+					modifier = {
+						add = -15
+						has_technology = tech_spaceport_5
+					}
+					modifier = {
+						add = -5
+						has_technology = tech_spaceport_6
+					}
+				}
+			}
+
+			sovereign = {
+				fraction = {
+					modifier = {
+						add = 20
+						has_technology = tech_spaceport_3
+					}
+					modifier = {
+						add = 5
+						has_technology = tech_spaceport_4
+					}
+					modifier = {
+						add = -10
+						has_technology = tech_spaceport_5
+					}
+					modifier = {
+						add = -15
+						has_technology = tech_spaceport_6
+					}
+				}
+			}
+
+			steamrunner = {
+				fraction = {
+					modifier = {
+						add = 10
+						has_technology = tech_spaceport_4
+					}
+					modifier = {
+						add = 15
+						has_technology = tech_spaceport_5
+					}
+					modifier = {
+						add = 5
+						has_technology = tech_spaceport_6
+					}
+				}
+			}
+
+			strike = {
+				fraction = {
+					modifier = {
+						add = 10
+						has_technology = tech_spaceport_5
+					}
+					modifier = {
+						add = 5
+						has_technology = tech_spaceport_6
+					}
+				}
+			}
+			corvette = {
+				fraction = {
+					base = 100
+					modifier = {
+						add = -30
+						has_technology = tech_spaceport_2
+					}
+					modifier = {
+						add = -35
+						has_technology = tech_spaceport_3
+					}
+					modifier = {
+						add = -20
+						has_technology = tech_spaceport_4
+					}
+					modifier = {
+						add = -15
+						has_technology = tech_spaceport_5
+					}
+				}
+			}
+		}		
+		
+		army_data = {
+			defense_army = {
+				fraction = {
+					factor = 50
+					modifier = {
+						add = 10
+						OR = {
+							has_ethic = ethic_pacifist
+							has_ethic = ethic_fanatic_pacifist
+						}
+					}
+				}
+			}
+		}
+	}
+	modules = {
+		standard_event_module = {}
+		standard_economy_module = {}
+		standard_leader_module = {}
+		standard_diplomacy_module = {}
+		standard_technology_module = {}
+		standard_species_rights_module = {}
+	}
+}

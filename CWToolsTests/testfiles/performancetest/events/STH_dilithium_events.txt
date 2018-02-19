@@ -1,0 +1,3640 @@
+
+namespace = STH_dilithium
+
+# on_yearly_pulse
+event = {
+	id = STH_dilithium.0
+	hide_window = yes
+	is_triggered_only = yes
+
+	immediate = {
+		every_country = {
+			country_event = {
+				id = STH_dilithium.10
+				days = 1
+				# add ranom to not calc all countries in same time
+				random = 360
+			}
+		}
+	}
+}
+
+
+# add later another on actions for buildings
+
+# main calc event
+country_event = {
+	id = STH_dilithium.10
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		# need specific country type?
+		has_country_strategic_resource = {
+			type = sr_processed_25
+			amount > 0
+		}
+	}
+
+	immediate = {
+		# remove old modifier
+		remove_modifier = sth_dilithium_1
+		remove_modifier = sth_dilithium_2
+		remove_modifier = sth_dilithium_3
+		remove_modifier = sth_dilithium_4
+		remove_modifier = sth_dilithium_5
+		remove_modifier = sth_dilithium_6
+		remove_modifier = sth_dilithium_7
+		remove_modifier = sth_dilithium_8
+		remove_modifier = sth_dilithium_9
+		remove_modifier = sth_dilithium_10
+		remove_modifier = sth_dilithium_11
+		remove_modifier = sth_dilithium_12
+		remove_modifier = sth_dilithium_13
+		remove_modifier = sth_dilithium_14
+		remove_modifier = sth_dilithium_15
+		remove_modifier = sth_dilithium_16
+		remove_modifier = sth_dilithium_17
+		remove_modifier = sth_dilithium_18
+		remove_modifier = sth_dilithium_19
+		remove_modifier = sth_dilithium_20
+		remove_modifier = sth_dilithium_21
+		remove_modifier = sth_dilithium_22
+		remove_modifier = sth_dilithium_23
+		remove_modifier = sth_dilithium_24
+		remove_modifier = sth_dilithium_25
+		remove_modifier = sth_dilithium_26
+		remove_modifier = sth_dilithium_27
+		remove_modifier = sth_dilithium_28
+		remove_modifier = sth_dilithium_29
+		remove_modifier = sth_dilithium_30
+		remove_modifier = sth_dilithium_31
+		remove_modifier = sth_dilithium_32
+		remove_modifier = sth_dilithium_33
+		remove_modifier = sth_dilithium_34
+		remove_modifier = sth_dilithium_35
+		remove_modifier = sth_dilithium_36
+		remove_modifier = sth_dilithium_37
+		remove_modifier = sth_dilithium_38
+		remove_modifier = sth_dilithium_39
+		remove_modifier = sth_dilithium_40
+		remove_modifier = sth_dilithium_41
+		remove_modifier = sth_dilithium_42
+		remove_modifier = sth_dilithium_43
+		remove_modifier = sth_dilithium_44
+		remove_modifier = sth_dilithium_45
+		remove_modifier = sth_dilithium_46
+		remove_modifier = sth_dilithium_47
+		remove_modifier = sth_dilithium_48
+		remove_modifier = sth_dilithium_49
+		remove_modifier = sth_dilithium_50
+		remove_modifier = sth_dilithium_51
+		remove_modifier = sth_dilithium_52
+		remove_modifier = sth_dilithium_53
+		remove_modifier = sth_dilithium_54
+		remove_modifier = sth_dilithium_55
+		remove_modifier = sth_dilithium_56
+		remove_modifier = sth_dilithium_57
+		remove_modifier = sth_dilithium_58
+		remove_modifier = sth_dilithium_59
+		remove_modifier = sth_dilithium_60
+		remove_modifier = sth_dilithium_61
+		remove_modifier = sth_dilithium_62
+		remove_modifier = sth_dilithium_63
+		remove_modifier = sth_dilithium_64
+		remove_modifier = sth_dilithium_65
+		remove_modifier = sth_dilithium_66
+		remove_modifier = sth_dilithium_67
+		remove_modifier = sth_dilithium_68
+		remove_modifier = sth_dilithium_69
+		remove_modifier = sth_dilithium_70
+		remove_modifier = sth_dilithium_71
+		remove_modifier = sth_dilithium_72
+		remove_modifier = sth_dilithium_73
+		remove_modifier = sth_dilithium_74
+		remove_modifier = sth_dilithium_75
+		remove_modifier = sth_dilithium_76
+		remove_modifier = sth_dilithium_77
+		remove_modifier = sth_dilithium_78
+		remove_modifier = sth_dilithium_79
+		remove_modifier = sth_dilithium_80
+		remove_modifier = sth_dilithium_81
+		remove_modifier = sth_dilithium_82
+		remove_modifier = sth_dilithium_83
+		remove_modifier = sth_dilithium_84
+		remove_modifier = sth_dilithium_85
+		remove_modifier = sth_dilithium_86
+		remove_modifier = sth_dilithium_87
+		remove_modifier = sth_dilithium_88
+		remove_modifier = sth_dilithium_89
+		remove_modifier = sth_dilithium_90
+		remove_modifier = sth_dilithium_91
+		remove_modifier = sth_dilithium_92
+		remove_modifier = sth_dilithium_93
+		remove_modifier = sth_dilithium_94
+		remove_modifier = sth_dilithium_95
+		remove_modifier = sth_dilithium_96
+		remove_modifier = sth_dilithium_97
+		remove_modifier = sth_dilithium_98
+		remove_modifier = sth_dilithium_99
+		remove_modifier = sth_dilithium_100
+		remove_modifier = sth_dilithium_101
+		remove_modifier = sth_dilithium_102
+		remove_modifier = sth_dilithium_103
+		remove_modifier = sth_dilithium_104
+		remove_modifier = sth_dilithium_105
+		remove_modifier = sth_dilithium_106
+		remove_modifier = sth_dilithium_107
+		remove_modifier = sth_dilithium_108
+		remove_modifier = sth_dilithium_109
+		remove_modifier = sth_dilithium_110
+		remove_modifier = sth_dilithium_111
+		remove_modifier = sth_dilithium_112
+		remove_modifier = sth_dilithium_113
+		remove_modifier = sth_dilithium_114
+		remove_modifier = sth_dilithium_115
+		remove_modifier = sth_dilithium_116
+		remove_modifier = sth_dilithium_117
+		remove_modifier = sth_dilithium_118
+		remove_modifier = sth_dilithium_119
+		remove_modifier = sth_dilithium_120
+		remove_modifier = sth_dilithium_121
+		remove_modifier = sth_dilithium_122
+		remove_modifier = sth_dilithium_123
+		remove_modifier = sth_dilithium_124
+		remove_modifier = sth_dilithium_125
+		remove_modifier = sth_dilithium_126
+		remove_modifier = sth_dilithium_127
+		remove_modifier = sth_dilithium_128
+		remove_modifier = sth_dilithium_129
+		remove_modifier = sth_dilithium_130
+		remove_modifier = sth_dilithium_131
+		remove_modifier = sth_dilithium_132
+		remove_modifier = sth_dilithium_133
+		remove_modifier = sth_dilithium_134
+		remove_modifier = sth_dilithium_135
+		remove_modifier = sth_dilithium_136
+		remove_modifier = sth_dilithium_137
+		remove_modifier = sth_dilithium_138
+		remove_modifier = sth_dilithium_139
+		remove_modifier = sth_dilithium_140
+		remove_modifier = sth_dilithium_141
+		remove_modifier = sth_dilithium_142
+		remove_modifier = sth_dilithium_143
+		remove_modifier = sth_dilithium_144
+		remove_modifier = sth_dilithium_145
+		remove_modifier = sth_dilithium_146
+		remove_modifier = sth_dilithium_147
+		remove_modifier = sth_dilithium_148
+		remove_modifier = sth_dilithium_149
+		remove_modifier = sth_dilithium_150
+		remove_modifier = sth_dilithium_151
+		remove_modifier = sth_dilithium_152
+		remove_modifier = sth_dilithium_153
+		remove_modifier = sth_dilithium_154
+		remove_modifier = sth_dilithium_155
+		remove_modifier = sth_dilithium_156
+		remove_modifier = sth_dilithium_157
+		remove_modifier = sth_dilithium_158
+		remove_modifier = sth_dilithium_159
+		remove_modifier = sth_dilithium_160
+		remove_modifier = sth_dilithium_161
+		remove_modifier = sth_dilithium_162
+		remove_modifier = sth_dilithium_163
+		remove_modifier = sth_dilithium_164
+		remove_modifier = sth_dilithium_165
+		remove_modifier = sth_dilithium_166
+		remove_modifier = sth_dilithium_167
+		remove_modifier = sth_dilithium_168
+		remove_modifier = sth_dilithium_169
+		remove_modifier = sth_dilithium_170
+		remove_modifier = sth_dilithium_171
+		remove_modifier = sth_dilithium_172
+		remove_modifier = sth_dilithium_173
+		remove_modifier = sth_dilithium_174
+		remove_modifier = sth_dilithium_175
+		remove_modifier = sth_dilithium_176
+		remove_modifier = sth_dilithium_177
+		remove_modifier = sth_dilithium_178
+		remove_modifier = sth_dilithium_179
+		remove_modifier = sth_dilithium_180
+		remove_modifier = sth_dilithium_181
+		remove_modifier = sth_dilithium_182
+		remove_modifier = sth_dilithium_183
+		remove_modifier = sth_dilithium_184
+		remove_modifier = sth_dilithium_185
+		remove_modifier = sth_dilithium_186
+		remove_modifier = sth_dilithium_187
+		remove_modifier = sth_dilithium_188
+		remove_modifier = sth_dilithium_189
+		remove_modifier = sth_dilithium_190
+		remove_modifier = sth_dilithium_191
+		remove_modifier = sth_dilithium_192
+		remove_modifier = sth_dilithium_193
+		remove_modifier = sth_dilithium_194
+		remove_modifier = sth_dilithium_195
+		remove_modifier = sth_dilithium_196
+		remove_modifier = sth_dilithium_197
+		remove_modifier = sth_dilithium_198
+		remove_modifier = sth_dilithium_199
+		remove_modifier = sth_dilithium_200
+
+		# set modifier
+		if = {
+			limit = {
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount > 0
+				}
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount < 2
+				}
+			}
+			add_modifier = {
+				modifier = sth_dilithium_1
+				days = -1
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount > 1
+				}
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount < 3
+				}
+			}
+			add_modifier = {
+				modifier = sth_dilithium_2
+				days = -1
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount > 2
+				}
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount < 4
+				}
+			}
+			add_modifier = {
+				modifier = sth_dilithium_3
+				days = -1
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount > 3
+				}
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount < 5
+				}
+			}
+			add_modifier = {
+				modifier = sth_dilithium_4
+				days = -1
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount > 4
+				}
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount < 6
+				}
+			}
+			add_modifier = {
+				modifier = sth_dilithium_5
+				days = -1
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount > 5
+				}
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount < 7
+				}
+			}
+			add_modifier = {
+				modifier = sth_dilithium_6
+				days = -1
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount > 6
+				}
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount < 8
+				}
+			}
+			add_modifier = {
+				modifier = sth_dilithium_7
+				days = -1
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount > 7
+				}
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount < 9
+				}
+			}
+			add_modifier = {
+				modifier = sth_dilithium_8
+				days = -1
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount > 8
+				}
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount < 10
+				}
+			}
+			add_modifier = {
+				modifier = sth_dilithium_9
+				days = -1
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount > 9
+				}
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount < 11
+				}
+			}
+			add_modifier = {
+				modifier = sth_dilithium_10
+				days = -1
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount > 10
+				}
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount < 12
+				}
+			}
+			add_modifier = {
+				modifier = sth_dilithium_11
+				days = -1
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount > 11
+				}
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount < 13
+				}
+			}
+			add_modifier = {
+				modifier = sth_dilithium_12
+				days = -1
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount > 12
+				}
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount < 14
+				}
+			}
+			add_modifier = {
+				modifier = sth_dilithium_13
+				days = -1
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount > 13
+				}
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount < 15
+				}
+			}
+			add_modifier = {
+				modifier = sth_dilithium_14
+				days = -1
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount > 14
+				}
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount < 16
+				}
+			}
+			add_modifier = {
+				modifier = sth_dilithium_15
+				days = -1
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount > 15
+				}
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount < 17
+				}
+			}
+			add_modifier = {
+				modifier = sth_dilithium_16
+				days = -1
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount > 16
+				}
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount < 18
+				}
+			}
+			add_modifier = {
+				modifier = sth_dilithium_17
+				days = -1
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount > 17
+				}
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount < 19
+				}
+			}
+			add_modifier = {
+				modifier = sth_dilithium_18
+				days = -1
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount > 18
+				}
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount < 20
+				}
+			}
+			add_modifier = {
+				modifier = sth_dilithium_19
+				days = -1
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount > 19
+				}
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount < 21
+				}
+			}
+			add_modifier = {
+				modifier = sth_dilithium_20
+				days = -1
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount > 20
+				}
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount < 22
+				}
+			}
+			add_modifier = {
+				modifier = sth_dilithium_21
+				days = -1
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount > 21
+				}
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount < 23
+				}
+			}
+			add_modifier = {
+				modifier = sth_dilithium_22
+				days = -1
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount > 22
+				}
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount < 24
+				}
+			}
+			add_modifier = {
+				modifier = sth_dilithium_23
+				days = -1
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount > 23
+				}
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount < 25
+				}
+			}
+			add_modifier = {
+				modifier = sth_dilithium_24
+				days = -1
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount > 24
+				}
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount < 26
+				}
+			}
+			add_modifier = {
+				modifier = sth_dilithium_25
+				days = -1
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount > 25
+				}
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount < 27
+				}
+			}
+			add_modifier = {
+				modifier = sth_dilithium_26
+				days = -1
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount > 26
+				}
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount < 28
+				}
+			}
+			add_modifier = {
+				modifier = sth_dilithium_27
+				days = -1
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount > 27
+				}
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount < 29
+				}
+			}
+			add_modifier = {
+				modifier = sth_dilithium_28
+				days = -1
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount > 28
+				}
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount < 30
+				}
+			}
+			add_modifier = {
+				modifier = sth_dilithium_29
+				days = -1
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount > 29
+				}
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount < 31
+				}
+			}
+			add_modifier = {
+				modifier = sth_dilithium_30
+				days = -1
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount > 30
+				}
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount < 32
+				}
+			}
+			add_modifier = {
+				modifier = sth_dilithium_31
+				days = -1
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount > 31
+				}
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount < 33
+				}
+			}
+			add_modifier = {
+				modifier = sth_dilithium_32
+				days = -1
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount > 32
+				}
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount < 34
+				}
+			}
+			add_modifier = {
+				modifier = sth_dilithium_33
+				days = -1
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount > 33
+				}
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount < 35
+				}
+			}
+			add_modifier = {
+				modifier = sth_dilithium_34
+				days = -1
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount > 34
+				}
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount < 36
+				}
+			}
+			add_modifier = {
+				modifier = sth_dilithium_35
+				days = -1
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount > 35
+				}
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount < 37
+				}
+			}
+			add_modifier = {
+				modifier = sth_dilithium_36
+				days = -1
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount > 36
+				}
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount < 38
+				}
+			}
+			add_modifier = {
+				modifier = sth_dilithium_37
+				days = -1
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount > 37
+				}
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount < 39
+				}
+			}
+			add_modifier = {
+				modifier = sth_dilithium_38
+				days = -1
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount > 38
+				}
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount < 40
+				}
+			}
+			add_modifier = {
+				modifier = sth_dilithium_39
+				days = -1
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount > 39
+				}
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount < 41
+				}
+			}
+			add_modifier = {
+				modifier = sth_dilithium_40
+				days = -1
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount > 40
+				}
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount < 42
+				}
+			}
+			add_modifier = {
+				modifier = sth_dilithium_41
+				days = -1
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount > 41
+				}
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount < 43
+				}
+			}
+			add_modifier = {
+				modifier = sth_dilithium_42
+				days = -1
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount > 42
+				}
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount < 44
+				}
+			}
+			add_modifier = {
+				modifier = sth_dilithium_43
+				days = -1
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount > 43
+				}
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount < 45
+				}
+			}
+			add_modifier = {
+				modifier = sth_dilithium_44
+				days = -1
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount > 44
+				}
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount < 46
+				}
+			}
+			add_modifier = {
+				modifier = sth_dilithium_45
+				days = -1
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount > 45
+				}
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount < 47
+				}
+			}
+			add_modifier = {
+				modifier = sth_dilithium_46
+				days = -1
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount > 46
+				}
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount < 48
+				}
+			}
+			add_modifier = {
+				modifier = sth_dilithium_47
+				days = -1
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount > 47
+				}
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount < 49
+				}
+			}
+			add_modifier = {
+				modifier = sth_dilithium_48
+				days = -1
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount > 48
+				}
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount < 50
+				}
+			}
+			add_modifier = {
+				modifier = sth_dilithium_49
+				days = -1
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount > 49
+				}
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount < 51
+				}
+			}
+			add_modifier = {
+				modifier = sth_dilithium_50
+				days = -1
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount > 50
+				}
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount < 52
+				}
+			}
+			add_modifier = {
+				modifier = sth_dilithium_51
+				days = -1
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount > 51
+				}
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount < 53
+				}
+			}
+			add_modifier = {
+				modifier = sth_dilithium_52
+				days = -1
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount > 52
+				}
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount < 54
+				}
+			}
+			add_modifier = {
+				modifier = sth_dilithium_53
+				days = -1
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount > 53
+				}
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount < 55
+				}
+			}
+			add_modifier = {
+				modifier = sth_dilithium_54
+				days = -1
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount > 54
+				}
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount < 56
+				}
+			}
+			add_modifier = {
+				modifier = sth_dilithium_55
+				days = -1
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount > 55
+				}
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount < 57
+				}
+			}
+			add_modifier = {
+				modifier = sth_dilithium_56
+				days = -1
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount > 56
+				}
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount < 58
+				}
+			}
+			add_modifier = {
+				modifier = sth_dilithium_57
+				days = -1
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount > 57
+				}
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount < 59
+				}
+			}
+			add_modifier = {
+				modifier = sth_dilithium_58
+				days = -1
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount > 58
+				}
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount < 60
+				}
+			}
+			add_modifier = {
+				modifier = sth_dilithium_59
+				days = -1
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount > 59
+				}
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount < 61
+				}
+			}
+			add_modifier = {
+				modifier = sth_dilithium_60
+				days = -1
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount > 60
+				}
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount < 62
+				}
+			}
+			add_modifier = {
+				modifier = sth_dilithium_61
+				days = -1
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount > 61
+				}
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount < 63
+				}
+			}
+			add_modifier = {
+				modifier = sth_dilithium_62
+				days = -1
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount > 62
+				}
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount < 64
+				}
+			}
+			add_modifier = {
+				modifier = sth_dilithium_63
+				days = -1
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount > 63
+				}
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount < 65
+				}
+			}
+			add_modifier = {
+				modifier = sth_dilithium_64
+				days = -1
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount > 64
+				}
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount < 66
+				}
+			}
+			add_modifier = {
+				modifier = sth_dilithium_65
+				days = -1
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount > 65
+				}
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount < 67
+				}
+			}
+			add_modifier = {
+				modifier = sth_dilithium_66
+				days = -1
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount > 66
+				}
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount < 68
+				}
+			}
+			add_modifier = {
+				modifier = sth_dilithium_67
+				days = -1
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount > 67
+				}
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount < 69
+				}
+			}
+			add_modifier = {
+				modifier = sth_dilithium_68
+				days = -1
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount > 68
+				}
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount < 70
+				}
+			}
+			add_modifier = {
+				modifier = sth_dilithium_69
+				days = -1
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount > 69
+				}
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount < 71
+				}
+			}
+			add_modifier = {
+				modifier = sth_dilithium_70
+				days = -1
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount > 70
+				}
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount < 72
+				}
+			}
+			add_modifier = {
+				modifier = sth_dilithium_71
+				days = -1
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount > 71
+				}
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount < 73
+				}
+			}
+			add_modifier = {
+				modifier = sth_dilithium_72
+				days = -1
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount > 72
+				}
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount < 74
+				}
+			}
+			add_modifier = {
+				modifier = sth_dilithium_73
+				days = -1
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount > 73
+				}
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount < 75
+				}
+			}
+			add_modifier = {
+				modifier = sth_dilithium_74
+				days = -1
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount > 74
+				}
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount < 76
+				}
+			}
+			add_modifier = {
+				modifier = sth_dilithium_75
+				days = -1
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount > 75
+				}
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount < 77
+				}
+			}
+			add_modifier = {
+				modifier = sth_dilithium_76
+				days = -1
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount > 76
+				}
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount < 78
+				}
+			}
+			add_modifier = {
+				modifier = sth_dilithium_77
+				days = -1
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount > 77
+				}
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount < 79
+				}
+			}
+			add_modifier = {
+				modifier = sth_dilithium_78
+				days = -1
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount > 78
+				}
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount < 80
+				}
+			}
+			add_modifier = {
+				modifier = sth_dilithium_79
+				days = -1
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount > 79
+				}
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount < 81
+				}
+			}
+			add_modifier = {
+				modifier = sth_dilithium_80
+				days = -1
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount > 80
+				}
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount < 82
+				}
+			}
+			add_modifier = {
+				modifier = sth_dilithium_81
+				days = -1
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount > 81
+				}
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount < 83
+				}
+			}
+			add_modifier = {
+				modifier = sth_dilithium_82
+				days = -1
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount > 82
+				}
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount < 84
+				}
+			}
+			add_modifier = {
+				modifier = sth_dilithium_83
+				days = -1
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount > 83
+				}
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount < 85
+				}
+			}
+			add_modifier = {
+				modifier = sth_dilithium_84
+				days = -1
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount > 84
+				}
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount < 86
+				}
+			}
+			add_modifier = {
+				modifier = sth_dilithium_85
+				days = -1
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount > 85
+				}
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount < 87
+				}
+			}
+			add_modifier = {
+				modifier = sth_dilithium_86
+				days = -1
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount > 86
+				}
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount < 88
+				}
+			}
+			add_modifier = {
+				modifier = sth_dilithium_87
+				days = -1
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount > 87
+				}
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount < 89
+				}
+			}
+			add_modifier = {
+				modifier = sth_dilithium_88
+				days = -1
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount > 88
+				}
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount < 90
+				}
+			}
+			add_modifier = {
+				modifier = sth_dilithium_89
+				days = -1
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount > 89
+				}
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount < 91
+				}
+			}
+			add_modifier = {
+				modifier = sth_dilithium_90
+				days = -1
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount > 90
+				}
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount < 92
+				}
+			}
+			add_modifier = {
+				modifier = sth_dilithium_91
+				days = -1
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount > 91
+				}
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount < 93
+				}
+			}
+			add_modifier = {
+				modifier = sth_dilithium_92
+				days = -1
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount > 92
+				}
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount < 94
+				}
+			}
+			add_modifier = {
+				modifier = sth_dilithium_93
+				days = -1
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount > 93
+				}
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount < 95
+				}
+			}
+			add_modifier = {
+				modifier = sth_dilithium_94
+				days = -1
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount > 94
+				}
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount < 96
+				}
+			}
+			add_modifier = {
+				modifier = sth_dilithium_95
+				days = -1
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount > 95
+				}
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount < 97
+				}
+			}
+			add_modifier = {
+				modifier = sth_dilithium_96
+				days = -1
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount > 96
+				}
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount < 98
+				}
+			}
+			add_modifier = {
+				modifier = sth_dilithium_97
+				days = -1
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount > 97
+				}
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount < 99
+				}
+			}
+			add_modifier = {
+				modifier = sth_dilithium_98
+				days = -1
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount > 98
+				}
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount < 100
+				}
+			}
+			add_modifier = {
+				modifier = sth_dilithium_99
+				days = -1
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount > 99
+				}
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount < 101
+				}
+			}
+			add_modifier = {
+				modifier = sth_dilithium_100
+				days = -1
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount > 100
+				}
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount < 102
+				}
+			}
+			add_modifier = {
+				modifier = sth_dilithium_101
+				days = -1
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount > 101
+				}
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount < 103
+				}
+			}
+			add_modifier = {
+				modifier = sth_dilithium_102
+				days = -1
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount > 102
+				}
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount < 104
+				}
+			}
+			add_modifier = {
+				modifier = sth_dilithium_103
+				days = -1
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount > 103
+				}
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount < 105
+				}
+			}
+			add_modifier = {
+				modifier = sth_dilithium_104
+				days = -1
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount > 104
+				}
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount < 106
+				}
+			}
+			add_modifier = {
+				modifier = sth_dilithium_105
+				days = -1
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount > 105
+				}
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount < 107
+				}
+			}
+			add_modifier = {
+				modifier = sth_dilithium_106
+				days = -1
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount > 106
+				}
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount < 108
+				}
+			}
+			add_modifier = {
+				modifier = sth_dilithium_107
+				days = -1
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount > 107
+				}
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount < 109
+				}
+			}
+			add_modifier = {
+				modifier = sth_dilithium_108
+				days = -1
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount > 108
+				}
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount < 110
+				}
+			}
+			add_modifier = {
+				modifier = sth_dilithium_109
+				days = -1
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount > 109
+				}
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount < 111
+				}
+			}
+			add_modifier = {
+				modifier = sth_dilithium_110
+				days = -1
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount > 110
+				}
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount < 112
+				}
+			}
+			add_modifier = {
+				modifier = sth_dilithium_111
+				days = -1
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount > 111
+				}
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount < 113
+				}
+			}
+			add_modifier = {
+				modifier = sth_dilithium_112
+				days = -1
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount > 112
+				}
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount < 114
+				}
+			}
+			add_modifier = {
+				modifier = sth_dilithium_113
+				days = -1
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount > 113
+				}
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount < 115
+				}
+			}
+			add_modifier = {
+				modifier = sth_dilithium_114
+				days = -1
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount > 114
+				}
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount < 116
+				}
+			}
+			add_modifier = {
+				modifier = sth_dilithium_115
+				days = -1
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount > 115
+				}
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount < 117
+				}
+			}
+			add_modifier = {
+				modifier = sth_dilithium_116
+				days = -1
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount > 116
+				}
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount < 118
+				}
+			}
+			add_modifier = {
+				modifier = sth_dilithium_117
+				days = -1
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount > 117
+				}
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount < 119
+				}
+			}
+			add_modifier = {
+				modifier = sth_dilithium_118
+				days = -1
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount > 118
+				}
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount < 120
+				}
+			}
+			add_modifier = {
+				modifier = sth_dilithium_119
+				days = -1
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount > 119
+				}
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount < 121
+				}
+			}
+			add_modifier = {
+				modifier = sth_dilithium_120
+				days = -1
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount > 120
+				}
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount < 122
+				}
+			}
+			add_modifier = {
+				modifier = sth_dilithium_121
+				days = -1
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount > 121
+				}
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount < 123
+				}
+			}
+			add_modifier = {
+				modifier = sth_dilithium_122
+				days = -1
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount > 122
+				}
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount < 124
+				}
+			}
+			add_modifier = {
+				modifier = sth_dilithium_123
+				days = -1
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount > 123
+				}
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount < 125
+				}
+			}
+			add_modifier = {
+				modifier = sth_dilithium_124
+				days = -1
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount > 124
+				}
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount < 126
+				}
+			}
+			add_modifier = {
+				modifier = sth_dilithium_125
+				days = -1
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount > 125
+				}
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount < 127
+				}
+			}
+			add_modifier = {
+				modifier = sth_dilithium_126
+				days = -1
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount > 126
+				}
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount < 128
+				}
+			}
+			add_modifier = {
+				modifier = sth_dilithium_127
+				days = -1
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount > 127
+				}
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount < 129
+				}
+			}
+			add_modifier = {
+				modifier = sth_dilithium_128
+				days = -1
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount > 128
+				}
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount < 130
+				}
+			}
+			add_modifier = {
+				modifier = sth_dilithium_129
+				days = -1
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount > 129
+				}
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount < 131
+				}
+			}
+			add_modifier = {
+				modifier = sth_dilithium_130
+				days = -1
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount > 130
+				}
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount < 132
+				}
+			}
+			add_modifier = {
+				modifier = sth_dilithium_131
+				days = -1
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount > 131
+				}
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount < 133
+				}
+			}
+			add_modifier = {
+				modifier = sth_dilithium_132
+				days = -1
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount > 132
+				}
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount < 134
+				}
+			}
+			add_modifier = {
+				modifier = sth_dilithium_133
+				days = -1
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount > 133
+				}
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount < 135
+				}
+			}
+			add_modifier = {
+				modifier = sth_dilithium_134
+				days = -1
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount > 134
+				}
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount < 136
+				}
+			}
+			add_modifier = {
+				modifier = sth_dilithium_135
+				days = -1
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount > 135
+				}
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount < 137
+				}
+			}
+			add_modifier = {
+				modifier = sth_dilithium_136
+				days = -1
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount > 136
+				}
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount < 138
+				}
+			}
+			add_modifier = {
+				modifier = sth_dilithium_137
+				days = -1
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount > 137
+				}
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount < 139
+				}
+			}
+			add_modifier = {
+				modifier = sth_dilithium_138
+				days = -1
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount > 138
+				}
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount < 140
+				}
+			}
+			add_modifier = {
+				modifier = sth_dilithium_139
+				days = -1
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount > 139
+				}
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount < 141
+				}
+			}
+			add_modifier = {
+				modifier = sth_dilithium_140
+				days = -1
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount > 140
+				}
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount < 142
+				}
+			}
+			add_modifier = {
+				modifier = sth_dilithium_141
+				days = -1
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount > 141
+				}
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount < 143
+				}
+			}
+			add_modifier = {
+				modifier = sth_dilithium_142
+				days = -1
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount > 142
+				}
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount < 144
+				}
+			}
+			add_modifier = {
+				modifier = sth_dilithium_143
+				days = -1
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount > 143
+				}
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount < 145
+				}
+			}
+			add_modifier = {
+				modifier = sth_dilithium_144
+				days = -1
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount > 144
+				}
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount < 146
+				}
+			}
+			add_modifier = {
+				modifier = sth_dilithium_145
+				days = -1
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount > 145
+				}
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount < 147
+				}
+			}
+			add_modifier = {
+				modifier = sth_dilithium_146
+				days = -1
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount > 146
+				}
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount < 148
+				}
+			}
+			add_modifier = {
+				modifier = sth_dilithium_147
+				days = -1
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount > 147
+				}
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount < 149
+				}
+			}
+			add_modifier = {
+				modifier = sth_dilithium_148
+				days = -1
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount > 148
+				}
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount < 150
+				}
+			}
+			add_modifier = {
+				modifier = sth_dilithium_149
+				days = -1
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount > 149
+				}
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount < 151
+				}
+			}
+			add_modifier = {
+				modifier = sth_dilithium_150
+				days = -1
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount > 150
+				}
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount < 152
+				}
+			}
+			add_modifier = {
+				modifier = sth_dilithium_151
+				days = -1
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount > 151
+				}
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount < 153
+				}
+			}
+			add_modifier = {
+				modifier = sth_dilithium_152
+				days = -1
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount > 152
+				}
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount < 154
+				}
+			}
+			add_modifier = {
+				modifier = sth_dilithium_153
+				days = -1
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount > 153
+				}
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount < 155
+				}
+			}
+			add_modifier = {
+				modifier = sth_dilithium_154
+				days = -1
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount > 154
+				}
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount < 156
+				}
+			}
+			add_modifier = {
+				modifier = sth_dilithium_155
+				days = -1
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount > 155
+				}
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount < 157
+				}
+			}
+			add_modifier = {
+				modifier = sth_dilithium_156
+				days = -1
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount > 156
+				}
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount < 158
+				}
+			}
+			add_modifier = {
+				modifier = sth_dilithium_157
+				days = -1
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount > 157
+				}
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount < 159
+				}
+			}
+			add_modifier = {
+				modifier = sth_dilithium_158
+				days = -1
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount > 158
+				}
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount < 160
+				}
+			}
+			add_modifier = {
+				modifier = sth_dilithium_159
+				days = -1
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount > 159
+				}
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount < 161
+				}
+			}
+			add_modifier = {
+				modifier = sth_dilithium_160
+				days = -1
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount > 160
+				}
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount < 162
+				}
+			}
+			add_modifier = {
+				modifier = sth_dilithium_161
+				days = -1
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount > 161
+				}
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount < 163
+				}
+			}
+			add_modifier = {
+				modifier = sth_dilithium_162
+				days = -1
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount > 162
+				}
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount < 164
+				}
+			}
+			add_modifier = {
+				modifier = sth_dilithium_163
+				days = -1
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount > 163
+				}
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount < 165
+				}
+			}
+			add_modifier = {
+				modifier = sth_dilithium_164
+				days = -1
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount > 164
+				}
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount < 166
+				}
+			}
+			add_modifier = {
+				modifier = sth_dilithium_165
+				days = -1
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount > 165
+				}
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount < 167
+				}
+			}
+			add_modifier = {
+				modifier = sth_dilithium_166
+				days = -1
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount > 166
+				}
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount < 168
+				}
+			}
+			add_modifier = {
+				modifier = sth_dilithium_167
+				days = -1
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount > 167
+				}
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount < 169
+				}
+			}
+			add_modifier = {
+				modifier = sth_dilithium_168
+				days = -1
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount > 168
+				}
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount < 170
+				}
+			}
+			add_modifier = {
+				modifier = sth_dilithium_169
+				days = -1
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount > 169
+				}
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount < 171
+				}
+			}
+			add_modifier = {
+				modifier = sth_dilithium_170
+				days = -1
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount > 170
+				}
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount < 172
+				}
+			}
+			add_modifier = {
+				modifier = sth_dilithium_171
+				days = -1
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount > 171
+				}
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount < 173
+				}
+			}
+			add_modifier = {
+				modifier = sth_dilithium_172
+				days = -1
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount > 172
+				}
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount < 174
+				}
+			}
+			add_modifier = {
+				modifier = sth_dilithium_173
+				days = -1
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount > 173
+				}
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount < 175
+				}
+			}
+			add_modifier = {
+				modifier = sth_dilithium_174
+				days = -1
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount > 174
+				}
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount < 176
+				}
+			}
+			add_modifier = {
+				modifier = sth_dilithium_175
+				days = -1
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount > 175
+				}
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount < 177
+				}
+			}
+			add_modifier = {
+				modifier = sth_dilithium_176
+				days = -1
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount > 176
+				}
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount < 178
+				}
+			}
+			add_modifier = {
+				modifier = sth_dilithium_177
+				days = -1
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount > 177
+				}
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount < 179
+				}
+			}
+			add_modifier = {
+				modifier = sth_dilithium_178
+				days = -1
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount > 178
+				}
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount < 180
+				}
+			}
+			add_modifier = {
+				modifier = sth_dilithium_179
+				days = -1
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount > 179
+				}
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount < 181
+				}
+			}
+			add_modifier = {
+				modifier = sth_dilithium_180
+				days = -1
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount > 180
+				}
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount < 182
+				}
+			}
+			add_modifier = {
+				modifier = sth_dilithium_181
+				days = -1
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount > 181
+				}
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount < 183
+				}
+			}
+			add_modifier = {
+				modifier = sth_dilithium_182
+				days = -1
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount > 182
+				}
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount < 184
+				}
+			}
+			add_modifier = {
+				modifier = sth_dilithium_183
+				days = -1
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount > 183
+				}
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount < 185
+				}
+			}
+			add_modifier = {
+				modifier = sth_dilithium_184
+				days = -1
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount > 184
+				}
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount < 186
+				}
+			}
+			add_modifier = {
+				modifier = sth_dilithium_185
+				days = -1
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount > 185
+				}
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount < 187
+				}
+			}
+			add_modifier = {
+				modifier = sth_dilithium_186
+				days = -1
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount > 186
+				}
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount < 188
+				}
+			}
+			add_modifier = {
+				modifier = sth_dilithium_187
+				days = -1
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount > 187
+				}
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount < 189
+				}
+			}
+			add_modifier = {
+				modifier = sth_dilithium_188
+				days = -1
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount > 188
+				}
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount < 190
+				}
+			}
+			add_modifier = {
+				modifier = sth_dilithium_189
+				days = -1
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount > 189
+				}
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount < 191
+				}
+			}
+			add_modifier = {
+				modifier = sth_dilithium_190
+				days = -1
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount > 190
+				}
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount < 192
+				}
+			}
+			add_modifier = {
+				modifier = sth_dilithium_191
+				days = -1
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount > 191
+				}
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount < 193
+				}
+			}
+			add_modifier = {
+				modifier = sth_dilithium_192
+				days = -1
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount > 192
+				}
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount < 194
+				}
+			}
+			add_modifier = {
+				modifier = sth_dilithium_193
+				days = -1
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount > 193
+				}
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount < 195
+				}
+			}
+			add_modifier = {
+				modifier = sth_dilithium_194
+				days = -1
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount > 194
+				}
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount < 196
+				}
+			}
+			add_modifier = {
+				modifier = sth_dilithium_195
+				days = -1
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount > 195
+				}
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount < 197
+				}
+			}
+			add_modifier = {
+				modifier = sth_dilithium_196
+				days = -1
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount > 196
+				}
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount < 198
+				}
+			}
+			add_modifier = {
+				modifier = sth_dilithium_197
+				days = -1
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount > 197
+				}
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount < 199
+				}
+			}
+			add_modifier = {
+				modifier = sth_dilithium_198
+				days = -1
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount > 198
+				}
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount < 200
+				}
+			}
+			add_modifier = {
+				modifier = sth_dilithium_199
+				days = -1
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				has_country_strategic_resource = {
+					type = sr_processed_25
+					amount > 199
+				}
+			}
+			add_modifier = {
+				modifier = sth_dilithium_200
+				days = -1
+			}
+			break = yes
+		}
+	}
+}

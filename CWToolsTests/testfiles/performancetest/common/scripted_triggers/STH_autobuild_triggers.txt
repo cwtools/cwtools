@@ -1,0 +1,51 @@
+# need trigger from main autobuild mod for correctly work
+# autobuild_trigger_local_autoupdate = {
+	# always = yes
+# }
+
+
+sth_trigger_autobuild_tile_has_strategic_res = {
+	log = "123"
+	or = {
+		has_resource = {
+			type = sr_pergium_5
+			amount > 0
+		}
+		has_resource = {
+			type = sr_tribbles_6
+			amount > 0
+		}
+		has_resource = {
+			type = sr_dilithium_10
+			amount > 0
+		}
+		has_resource = {
+			type = sr_yridium_11
+			amount > 0
+		}
+		has_resource = {
+			type = sr_sodium_12
+			amount > 0
+		}
+		has_resource = {
+			type = sr_ketracel_13
+			amount > 0
+		}
+		has_resource = {
+			type = sr_brizeen_14
+			amount > 0
+		}
+		has_resource = {
+			type = sr_biosculpting_18
+			amount > 0
+		}
+		has_resource = {
+			type = sr_supersolid_19
+			amount > 0
+		}
+		has_resource = {
+			type = sr_relics_24
+			amount > 0
+		}
+	}
+}

@@ -1,0 +1,248 @@
+﻿### Borg
+Borg = {
+	randomized = no
+	ship_names = {
+		generic = {
+			"Vessel 0001" "Vessel 0002" "Vessel 0003" "Vessel 0004" "Vessel 0005" "Vessel 0006" "Vessel 0007" "Vessel 0008" "Vessel 0009" "Vessel 0010" "Vessel 0011" "Vessel 0012" "Vessel 0013" "Vessel 0014" "Vessel 0015" "Vessel 0016" "Vessel 0017" "Vessel 0018" "Vessel 0019" "Vessel 0020" "Vessel 0021" "Vessel 0022" "Vessel 0023" "Vessel 0024" "Vessel 0025" "Vessel 0026" "Vessel 0027" "Vessel 0028" "Vessel 0029" "Vessel 0030" "Vessel 0031" "Vessel 0032" "Vessel 0033" "Vessel 0034" "Vessel 0035" "Vessel 0036" "Vessel 0037" "Vessel 0038" "Vessel 0039" "Vessel 0040" "Vessel 0041" "Vessel 0042" "Vessel 0043" "Vessel 0044" "Vessel 0045" "Vessel 0046" "Vessel 0047" "Vessel 0048" "Vessel 0049" "Vessel 0050" "Vessel 0051" "Vessel 0052" "Vessel 0053" "Vessel 0054" "Vessel 0055" "Vessel 0056" "Vessel 0057" "Vessel 0058" "Vessel 0059" "Vessel 0060" "Vessel 0061" "Vessel 0062" "Vessel 0063" "Vessel 0064" "Vessel 0065" "Vessel 0066" "Vessel 0067" "Vessel 0068" "Vessel 0069" "Vessel 0070" "Vessel 0071" "Vessel 0072" "Vessel 0073" "Vessel 0074" "Vessel 0075" "Vessel 0076" "Vessel 0077" "Vessel 0078" "Vessel 0079" "Vessel 0080" "Vessel 0081" "Vessel 0082" "Vessel 0083" "Vessel 0084" "Vessel 0085" "Vessel 0086" "Vessel 0087" "Vessel 0088" "Vessel 0089" "Vessel 0090" "Vessel 0091" "Vessel 0092" "Vessel 0093" "Vessel 0094" "Vessel 0095" "Vessel 0096" "Vessel 0097" "Vessel 0098" "Vessel 0099" "Vessel 0100" "Vessel 0101" "Vessel 0102" "Vessel 0103" "Vessel 0104" "Vessel 0105" "Vessel 0106" "Vessel 0107" "Vessel 0108" "Vessel 0109" "Vessel 0110" "Vessel 0111" "Vessel 0112" "Vessel 0113" "Vessel 0114" "Vessel 0115" "Vessel 0116" "Vessel 0117" "Vessel 0118" "Vessel 0119" "Vessel 0120" "Vessel 0121" "Vessel 0122" "Vessel 0123" "Vessel 0124" "Vessel 0125" "Vessel 0126" "Vessel 0127" "Vessel 0128" "Vessel 0129" "Vessel 0130" "Vessel 0131" "Vessel 0132" "Vessel 0133" "Vessel 0134" "Vessel 0135" "Vessel 0136" "Vessel 0137" "Vessel 0138" "Vessel 0139" "Vessel 0140" "Vessel 0141" "Vessel 0142" "Vessel 0143" "Vessel 0144" "Vessel 0145" "Vessel 0146" "Vessel 0147" "Vessel 0148" "Vessel 0149" "Vessel 0150" "Vessel 0151" "Vessel 0152" "Vessel 0153" "Vessel 0154" "Vessel 0155" "Vessel 0156" "Vessel 0157" "Vessel 0158" "Vessel 0159" "Vessel 0160" "Vessel 0161" "Vessel 0162" "Vessel 0163" "Vessel 0164" "Vessel 0165" "Vessel 0166" "Vessel 0167" "Vessel 0168" "Vessel 0169" "Vessel 0170" "Vessel 0171" "Vessel 0172" "Vessel 0173" "Vessel 0174" "Vessel 0175" "Vessel 0176" "Vessel 0177" "Vessel 0178" "Vessel 0179" "Vessel 0180" "Vessel 0181" "Vessel 0182" "Vessel 0183" "Vessel 0184" "Vessel 0185" "Vessel 0186" "Vessel 0187" "Vessel 0188" "Vessel 0189" "Vessel 0190" "Vessel 0191" "Vessel 0192" "Vessel 0193" "Vessel 0194" "Vessel 0195" "Vessel 0196" "Vessel 0197" "Vessel 0198" "Vessel 0199" "Vessel 0200" "Vessel 0201" "Vessel 0202" "Vessel 0203" "Vessel 0204" "Vessel 0205" "Vessel 0206" "Vessel 0207" "Vessel 0208" "Vessel 0209" "Vessel 0210" "Vessel 0211" "Vessel 0212" "Vessel 0213" "Vessel 0214" "Vessel 0215" "Vessel 0216" "Vessel 0217" "Vessel 0218" "Vessel 0219" "Vessel 0220" "Vessel 0221" "Vessel 0222" "Vessel 0223" "Vessel 0224" "Vessel 0225" "Vessel 0226" "Vessel 0227" "Vessel 0228" "Vessel 0229" "Vessel 0230" "Vessel 0231" "Vessel 0232" "Vessel 0233" "Vessel 0234" "Vessel 0235" "Vessel 0236" "Vessel 0237" "Vessel 0238" "Vessel 0239" "Vessel 0240" "Vessel 0241" "Vessel 0242" "Vessel 0243" "Vessel 0244" "Vessel 0245" "Vessel 0246" "Vessel 0247" "Vessel 0248" "Vessel 0249" "Vessel 0250" "Vessel 0251" "Vessel 0252" "Vessel 0253" "Vessel 0254" "Vessel 0255" "Vessel 0256" "Vessel 0257" "Vessel 0258" "Vessel 0259" "Vessel 0260" "Vessel 0261" "Vessel 0262" "Vessel 0263" "Vessel 0264" "Vessel 0265" "Vessel 0266" "Vessel 0267" "Vessel 0268" "Vessel 0269" "Vessel 0270" "Vessel 0271" "Vessel 0272" "Vessel 0273" "Vessel 0274" "Vessel 0275" "Vessel 0276" "Vessel 0277" "Vessel 0278" "Vessel 0279" "Vessel 0280" "Vessel 0281" "Vessel 0282" "Vessel 0283" "Vessel 0284" "Vessel 0285" "Vessel 0286" "Vessel 0287" "Vessel 0288" "Vessel 0289" "Vessel 0290" "Vessel 0291" "Vessel 0292" "Vessel 0293" "Vessel 0294" "Vessel 0295" "Vessel 0296" "Vessel 0297" "Vessel 0298" "Vessel 0299" "Vessel 0300" "Vessel 0301" "Vessel 0302" "Vessel 0303" "Vessel 0304" "Vessel 0305" "Vessel 0306" "Vessel 0307" "Vessel 0308" "Vessel 0309" "Vessel 0310" "Vessel 0311" "Vessel 0312" "Vessel 0313" "Vessel 0314" "Vessel 0315" "Vessel 0316" "Vessel 0317" "Vessel 0318" "Vessel 0319" "Vessel 0320" "Vessel 0321" "Vessel 0322" "Vessel 0323" "Vessel 0324" "Vessel 0325" "Vessel 0326" "Vessel 0327" "Vessel 0328" "Vessel 0329" "Vessel 0330" "Vessel 0331" "Vessel 0332" "Vessel 0333" "Vessel 0334" "Vessel 0335" "Vessel 0336" "Vessel 0337" "Vessel 0338" "Vessel 0339" "Vessel 0340" "Vessel 0341" "Vessel 0342" "Vessel 0343" "Vessel 0344" "Vessel 0345" "Vessel 0346" "Vessel 0347" "Vessel 0348" "Vessel 0349" "Vessel 0350" "Vessel 0351" "Vessel 0352" "Vessel 0353" "Vessel 0354" "Vessel 0355" "Vessel 0356" "Vessel 0357" "Vessel 0358" "Vessel 0359" "Vessel 0360" "Vessel 0361" "Vessel 0362" "Vessel 0363" "Vessel 0364" "Vessel 0365" "Vessel 0366" "Vessel 0367" "Vessel 0368" "Vessel 0369" "Vessel 0370" "Vessel 0371" "Vessel 0372" "Vessel 0373" "Vessel 0374" "Vessel 0375" "Vessel 0376" "Vessel 0377" "Vessel 0378" "Vessel 0379" "Vessel 0380" "Vessel 0381" "Vessel 0382" "Vessel 0383" "Vessel 0384" "Vessel 0385" "Vessel 0386" "Vessel 0387" "Vessel 0388" "Vessel 0389" "Vessel 0390" "Vessel 0391" "Vessel 0392" "Vessel 0393" "Vessel 0394" "Vessel 0395" "Vessel 0396" "Vessel 0397" "Vessel 0398" "Vessel 0399" "Vessel 0400" "Vessel 0401" "Vessel 0402" "Vessel 0403" "Vessel 0404" "Vessel 0405" "Vessel 0406" "Vessel 0407" "Vessel 0408" "Vessel 0409" "Vessel 0410" "Vessel 0411" "Vessel 0412" "Vessel 0413" "Vessel 0414" "Vessel 0415" "Vessel 0416" "Vessel 0417" "Vessel 0418" "Vessel 0419" "Vessel 0420" "Vessel 0421" "Vessel 0422" "Vessel 0423" "Vessel 0424" "Vessel 0425" "Vessel 0426" "Vessel 0427" "Vessel 0428" "Vessel 0429" "Vessel 0430" "Vessel 0431" "Vessel 0432" "Vessel 0433" "Vessel 0434" "Vessel 0435" "Vessel 0436" "Vessel 0437" "Vessel 0438" "Vessel 0439" "Vessel 0440" "Vessel 0441" "Vessel 0442" "Vessel 0443" "Vessel 0444" "Vessel 0445" "Vessel 0446" "Vessel 0447" "Vessel 0448" "Vessel 0449" "Vessel 0450" "Vessel 0451" "Vessel 0452" "Vessel 0453" "Vessel 0454" "Vessel 0455" "Vessel 0456" "Vessel 0457" "Vessel 0458" "Vessel 0459" "Vessel 0460" "Vessel 0461" "Vessel 0462" "Vessel 0463" "Vessel 0464" "Vessel 0465" "Vessel 0466" "Vessel 0467" "Vessel 0468" "Vessel 0469" "Vessel 0470" "Vessel 0471" "Vessel 0472" "Vessel 0473" "Vessel 0474" "Vessel 0475" "Vessel 0476" "Vessel 0477" "Vessel 0478" "Vessel 0479" "Vessel 0480" "Vessel 0481" "Vessel 0482" "Vessel 0483" "Vessel 0484" "Vessel 0485" "Vessel 0486" "Vessel 0487" "Vessel 0488" "Vessel 0489" "Vessel 0490" "Vessel 0491" "Vessel 0492" "Vessel 0493" "Vessel 0494" "Vessel 0495" "Vessel 0496" "Vessel 0497" "Vessel 0498" "Vessel 0499" "Vessel 0500" "Vessel 0501" "Vessel 0502" "Vessel 0503" "Vessel 0504" "Vessel 0505" "Vessel 0506" "Vessel 0507" "Vessel 0508" "Vessel 0509" "Vessel 0510" "Vessel 0511" "Vessel 0512" "Vessel 0513" "Vessel 0514" "Vessel 0515" "Vessel 0516" "Vessel 0517" "Vessel 0518" "Vessel 0519" "Vessel 0520" "Vessel 0521" "Vessel 0522" "Vessel 0523" "Vessel 0524" "Vessel 0525" "Vessel 0526" "Vessel 0527" "Vessel 0528" "Vessel 0529" "Vessel 0530" "Vessel 0531" "Vessel 0532" "Vessel 0533" "Vessel 0534" "Vessel 0535" "Vessel 0536" "Vessel 0537" "Vessel 0538" "Vessel 0539" "Vessel 0540" "Vessel 0541" "Vessel 0542" "Vessel 0543" "Vessel 0544" "Vessel 0545" "Vessel 0546" "Vessel 0547" "Vessel 0548" "Vessel 0549" "Vessel 0550" "Vessel 0551" "Vessel 0552" "Vessel 0553" "Vessel 0554" "Vessel 0555" "Vessel 0556" "Vessel 0557" "Vessel 0558" "Vessel 0559" "Vessel 0560" "Vessel 0561" "Vessel 0562" "Vessel 0563" "Vessel 0564" "Vessel 0565" "Vessel 0566" "Vessel 0567" "Vessel 0568" "Vessel 0569" "Vessel 0570" "Vessel 0571" "Vessel 0572" "Vessel 0573" "Vessel 0574" "Vessel 0575" "Vessel 0576" "Vessel 0577" "Vessel 0578" "Vessel 0579" "Vessel 0580" "Vessel 0581" "Vessel 0582" "Vessel 0583" "Vessel 0584" "Vessel 0585" "Vessel 0586" "Vessel 0587" "Vessel 0588" "Vessel 0589" "Vessel 0590" "Vessel 0591" "Vessel 0592" "Vessel 0593" "Vessel 0594" "Vessel 0595" "Vessel 0596" "Vessel 0597" "Vessel 0598" "Vessel 0599" "Vessel 0600" "Vessel 0601" "Vessel 0602" "Vessel 0603" "Vessel 0604" "Vessel 0605" "Vessel 0606" "Vessel 0607" "Vessel 0608" "Vessel 0609" "Vessel 0610" "Vessel 0611" "Vessel 0612" "Vessel 0613" "Vessel 0614" "Vessel 0615" "Vessel 0616" "Vessel 0617" "Vessel 0618" "Vessel 0619" "Vessel 0620" "Vessel 0621" "Vessel 0622" "Vessel 0623" "Vessel 0624" "Vessel 0625" "Vessel 0626" "Vessel 0627" "Vessel 0628" "Vessel 0629" "Vessel 0630" "Vessel 0631" "Vessel 0632" "Vessel 0633" "Vessel 0634" "Vessel 0635" "Vessel 0636" "Vessel 0637" "Vessel 0638" "Vessel 0639" "Vessel 0640" "Vessel 0641" "Vessel 0642" "Vessel 0643" "Vessel 0644" "Vessel 0645" "Vessel 0646" "Vessel 0647" "Vessel 0648" "Vessel 0649" "Vessel 0650" "Vessel 0651" "Vessel 0652" "Vessel 0653" "Vessel 0654" "Vessel 0655" "Vessel 0656" "Vessel 0657" "Vessel 0658" "Vessel 0659" "Vessel 0660" "Vessel 0661" "Vessel 0662" "Vessel 0663" "Vessel 0664" "Vessel 0665" "Vessel 0666" "Vessel 0667" "Vessel 0668" "Vessel 0669" "Vessel 0670" "Vessel 0671" "Vessel 0672" "Vessel 0673" "Vessel 0674" "Vessel 0675" "Vessel 0676" "Vessel 0677" "Vessel 0678" "Vessel 0679" "Vessel 0680" "Vessel 0681" "Vessel 0682" "Vessel 0683" "Vessel 0684" "Vessel 0685" "Vessel 0686" "Vessel 0687" "Vessel 0688" "Vessel 0689" "Vessel 0690" "Vessel 0691" "Vessel 0692" "Vessel 0693" "Vessel 0694" "Vessel 0695" "Vessel 0696" "Vessel 0697" "Vessel 0698" "Vessel 0699" "Vessel 0700" "Vessel 0701" "Vessel 0702" "Vessel 0703" "Vessel 0704" "Vessel 0705" "Vessel 0706" "Vessel 0707" "Vessel 0708" "Vessel 0709" "Vessel 0710" "Vessel 0711" "Vessel 0712" "Vessel 0713" "Vessel 0714" "Vessel 0715" "Vessel 0716" "Vessel 0717" "Vessel 0718" "Vessel 0719" "Vessel 0720" "Vessel 0721" "Vessel 0722" "Vessel 0723" "Vessel 0724" "Vessel 0725" "Vessel 0726" "Vessel 0727" "Vessel 0728" "Vessel 0729" "Vessel 0730" "Vessel 0731" "Vessel 0732" "Vessel 0733" "Vessel 0734" "Vessel 0735" "Vessel 0736" "Vessel 0737" "Vessel 0738" "Vessel 0739" "Vessel 0740" "Vessel 0741" "Vessel 0742" "Vessel 0743" "Vessel 0744" "Vessel 0745" "Vessel 0746" "Vessel 0747" "Vessel 0748" "Vessel 0749" "Vessel 0750" "Vessel 0751" "Vessel 0752" "Vessel 0753" "Vessel 0754" "Vessel 0755" "Vessel 0756" "Vessel 0757" "Vessel 0758" "Vessel 0759" "Vessel 0760" "Vessel 0761" "Vessel 0762" "Vessel 0763" "Vessel 0764" "Vessel 0765" "Vessel 0766" "Vessel 0767" "Vessel 0768" "Vessel 0769" "Vessel 0770" "Vessel 0771" "Vessel 0772" "Vessel 0773" "Vessel 0774" "Vessel 0775" "Vessel 0776" "Vessel 0777" "Vessel 0778" "Vessel 0779" "Vessel 0780" "Vessel 0781" "Vessel 0782" "Vessel 0783" "Vessel 0784" "Vessel 0785" "Vessel 0786" "Vessel 0787" "Vessel 0788" "Vessel 0789" "Vessel 0790" "Vessel 0791" "Vessel 0792" "Vessel 0793" "Vessel 0794" "Vessel 0795" "Vessel 0796" "Vessel 0797" "Vessel 0798" "Vessel 0799" "Vessel 0800" "Vessel 0801" "Vessel 0802" "Vessel 0803" "Vessel 0804" "Vessel 0805" "Vessel 0806" "Vessel 0807" "Vessel 0808" "Vessel 0809" "Vessel 0810" "Vessel 0811" "Vessel 0812" "Vessel 0813" "Vessel 0814" "Vessel 0815" "Vessel 0816" "Vessel 0817" "Vessel 0818" "Vessel 0819" "Vessel 0820" "Vessel 0821" "Vessel 0822" "Vessel 0823" "Vessel 0824" "Vessel 0825" "Vessel 0826" "Vessel 0827" "Vessel 0828" "Vessel 0829" "Vessel 0830" "Vessel 0831" "Vessel 0832" "Vessel 0833" "Vessel 0834" "Vessel 0835" "Vessel 0836" "Vessel 0837" "Vessel 0838" "Vessel 0839" "Vessel 0840" "Vessel 0841" "Vessel 0842" "Vessel 0843" "Vessel 0844" "Vessel 0845" "Vessel 0846" "Vessel 0847" "Vessel 0848" "Vessel 0849" "Vessel 0850" "Vessel 0851" "Vessel 0852" "Vessel 0853" "Vessel 0854" "Vessel 0855" "Vessel 0856" "Vessel 0857" "Vessel 0858" "Vessel 0859" "Vessel 0860" "Vessel 0861" "Vessel 0862" "Vessel 0863" "Vessel 0864" "Vessel 0865" "Vessel 0866" "Vessel 0867" "Vessel 0868" "Vessel 0869" "Vessel 0870" "Vessel 0871" "Vessel 0872" "Vessel 0873" "Vessel 0874" "Vessel 0875" "Vessel 0876" "Vessel 0877" "Vessel 0878" "Vessel 0879" "Vessel 0880" "Vessel 0881" "Vessel 0882" "Vessel 0883" "Vessel 0884" "Vessel 0885" "Vessel 0886" "Vessel 0887" "Vessel 0888" "Vessel 0889" "Vessel 0890" "Vessel 0891" "Vessel 0892" "Vessel 0893" "Vessel 0894" "Vessel 0895" "Vessel 0896" "Vessel 0897" "Vessel 0898" "Vessel 0899" "Vessel 0900" "Vessel 0901" "Vessel 0902" "Vessel 0903" "Vessel 0904" "Vessel 0905" "Vessel 0906" "Vessel 0907" "Vessel 0908" "Vessel 0909" "Vessel 0910" "Vessel 0911" "Vessel 0912" "Vessel 0913" "Vessel 0914" "Vessel 0915" "Vessel 0916" "Vessel 0917" "Vessel 0918" "Vessel 0919" "Vessel 0920" "Vessel 0921" "Vessel 0922" "Vessel 0923" "Vessel 0924" "Vessel 0925" "Vessel 0926" "Vessel 0927" "Vessel 0928" "Vessel 0929" "Vessel 0930" "Vessel 0931" "Vessel 0932" "Vessel 0933" "Vessel 0934" "Vessel 0935" "Vessel 0936" "Vessel 0937" "Vessel 0938" "Vessel 0939" "Vessel 0940" "Vessel 0941" "Vessel 0942" "Vessel 0943" "Vessel 0944" "Vessel 0945" "Vessel 0946" "Vessel 0947" "Vessel 0948" "Vessel 0949" "Vessel 0950" "Vessel 0951" "Vessel 0952" "Vessel 0953" "Vessel 0954" "Vessel 0955" "Vessel 0956" "Vessel 0957" "Vessel 0958" "Vessel 0959" "Vessel 0960" "Vessel 0961" "Vessel 0962" "Vessel 0963" "Vessel 0964" "Vessel 0965" "Vessel 0966" "Vessel 0967" "Vessel 0968" "Vessel 0969" "Vessel 0970" "Vessel 0971" "Vessel 0972" "Vessel 0973" "Vessel 0974" "Vessel 0975" "Vessel 0976" "Vessel 0977" "Vessel 0978" "Vessel 0979" "Vessel 0980" "Vessel 0981" "Vessel 0982" "Vessel 0983" "Vessel 0984" "Vessel 0985" "Vessel 0986" "Vessel 0987" "Vessel 0988" "Vessel 0989" "Vessel 0990" "Vessel 0991" "Vessel 0992" "Vessel 0993" "Vessel 0994" "Vessel 0995" "Vessel 0996" "Vessel 0997" "Vessel 0998" "Vessel 0999" "Vessel 1000"
+
+		}		
+		orbital_station = { 
+			Station
+		}
+		mining_station = { 
+			Station
+		}
+		research_station = { 
+			Station
+		}
+		wormhole_station = { 
+			Station
+		}
+		observation_station = { 
+			Station
+		}
+		outpost_station = {
+			Station
+		}
+		military_station_small = {
+			Outpost
+		}
+		military_station_medium = { 
+			Outpost
+		}
+		military_station_large = { 
+			Outpost
+		}
+	}
+	
+	ship_class_names = {
+		generic = { }
+		corvette = { Probe }
+		saber = { }
+		sovereign = { }
+		steamrunner = { }		
+		adv_cruiser = { }
+		strike = { }
+		science = { Survey }
+		constructor = { Assembler }
+		borg_sphere = { Sphere }
+		borg_diamond = { Diamond }
+		borg_cube = { Cube } 
+		borg_tactical = { "Tactical Cube" } 
+		super_cube = { "Omega Cube" } 
+		borg_unimatrix_defense_small = { "Unimatrix Defense Grid" }
+		super_battleship = { "Omega Cube" }
+	}
+
+	fleet_names = {
+		sequential_name = "Offensive Asset %CCC%"
+	}
+	
+	army_names = {
+		defense_army = {
+			sequential_name = "Defensive Unit %CCC%"
+		}
+		assault_army = {
+			sequential_name = "Attack Unit %CCC%"
+		}
+		slave_army = {
+			sequential_name = "Slave Attack Unit %CCC%"
+		}
+		clone_army = { 
+			sequential_name = "Engineered Attack Unit %CCC%"
+		}
+		robotic_army = {
+			sequential_name = "Mechanical Attack Unit %CCC%"
+		}
+		android_army = {
+			sequential_name = "Synthetic Attack Unit %CCC%"
+		}
+		psionic_army = { 
+			sequential_name = "Psionic Attack Unit %CCC%"
+		}
+		xenomorph_army = {
+			sequential_name = "Engineered Attack Unit %CCC%"
+		}
+		gene_warrior_army = {
+			sequential_name = "Engineered Attack Unit %CCC%"
+		}
+	}
+
+	planet_names = {
+		generic = {
+		}
+	}
+
+
+	### CHARACTERS
+
+	character_names = {
+		names1 = {
+			weight = 10
+			first_names_male = {		
+				One Two Three Four Five Six Seven Eight Nine Ten
+			}
+			first_names_female = {
+				One Two Three Four Five Six Seven Eight Nine Ten
+			}
+			second_names = {
+				"of Ten"
+			}
+			regnal_first_names_male = {
+				"Primary"
+			}
+			regnal_first_names_female = {
+				"Primary"
+			}
+			regnal_second_names = {
+				"Leadership Node"
+			}
+		}
+		names2 = {
+			weight = 10
+			first_names_male = {		
+				One Two Three Four Five Six Seven Eight Nine Ten Eleven Twelve
+			}
+			first_names_female = {
+				One Two Three Four Five Six Seven Eight Nine Ten Eleven Twelve
+			}
+			second_names = {
+				"of Twelve"
+			}
+			regnal_first_names_male = {
+				"Primary"
+			}
+			regnal_first_names_female = {
+				"Primary"
+			}
+			regnal_second_names = {
+				"Leadership Node"
+			}
+		}
+		names3 = {
+			weight = 10
+			first_names_male = {		
+				One Two Three Four Five Six Seven Eight Nine Ten Eleven Twelve Thirteen Fourteen Fifteen
+			}
+			first_names_female = {
+				One Two Three Four Five Six Seven Eight Nine Ten Eleven Twelve Thirteen Fourteen Fifteen
+			}
+			second_names = {
+				"of Fifteen"
+			}
+			regnal_first_names_male = {
+				"Primary"
+			}
+			regnal_first_names_female = {
+				"Primary"
+			}
+			regnal_second_names = {
+				"Leadership Node"
+			}
+		}
+		names4 = {
+			weight = 10
+			first_names_male = {		
+				One Two Three Four Five Six Seven Eight Nine Ten Eleven Twelve Thirteen
+			}
+			first_names_female = {
+				One Two Three Four Five Six Seven Eight Nine Ten Eleven Twelve Thirteen
+			}
+			second_names = {
+				"of Thirteen"
+			}
+			regnal_first_names_male = {
+				"Primary"
+			}
+			regnal_first_names_female = {
+				"Primary"
+			}
+			regnal_second_names = {
+				"Leadership Node"
+			}
+		}
+		names5 = {
+			weight = 10
+			first_names_male = {		
+				One Two Three Four Five Six Seven Eight Nine Ten Eleven
+			}
+			first_names_female = {
+				One Two Three Four Five Six Seven Eight Nine Ten Eleven
+			}
+			second_names = {
+				"of Eleven"
+			}
+			regnal_first_names_male = {
+				"Primary"
+			}
+			regnal_first_names_female = {
+				"Primary"
+			}
+			regnal_second_names = {
+				"Leadership Node"
+			}
+		}
+		names6 = {
+			weight = 10
+			first_names_male = {		
+				One Two Three Four Five Six Seven Eight Nine Ten Eleven Twelve Thirteen Fourteen
+			}
+			first_names_female = {
+				One Two Three Four Five Six Seven Eight Nine Ten Eleven Twelve Thirteen Fourteen
+			}
+			second_names = {
+				"of Fourteen"
+			}
+			regnal_first_names_male = {
+				"Primary"
+			}
+			regnal_first_names_female = {
+				"Primary"
+			}
+			regnal_second_names = {
+				"Leadership Node"
+			}
+		}
+		names7 = {
+			weight = 10
+			first_names_male = {		
+				One Two Three Four Five Six Seven Eight Nine Ten Eleven Twelve Thirteen Fourteen Fifteen Sixteen Seventeen
+			}
+			first_names_female = {
+				One Two Three Four Five Six Seven Eight Nine Ten Eleven Twelve Thirteen Fourteen Fifteen Sixteen Seventeen
+			}
+			second_names = {
+				"of Seventeen"
+			}
+			regnal_first_names_male = {
+				"Primary"
+			}
+			regnal_first_names_female = {
+				"Primary"
+			}
+			regnal_second_names = {
+				"Leadership Node"
+			}
+		}
+	}
+}

@@ -1,0 +1,28 @@
+
+
+# ####################
+#  Critter Weapons - Space Cloud
+# ####################
+
+@critter_cost_value = 35
+
+
+### Standard Cloud Weapon
+
+weapon_component_template = {
+	key = "SPACE_CLOUD_LIGHTNING"
+
+	size = medium
+	entity = "large_space_cloud_weapon_entity"
+	type = instant
+	icon = "GFX_ship_part_space_cloud_weapon_1"
+	icon_frame = 1
+	projectile_gfx = "arc_emitter"
+	tags = { weapon_type_energy }
+	ai_tags = { weapon_role_anti_armor }
+	hidden = yes
+	
+	component_set = "SPACE_CLOUD_WEAPON_1"
+	#prerequisites = { "tech_space_cloud_weapon_1" }
+	cost = @critter_cost_value
+}

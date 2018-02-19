@@ -1,0 +1,99 @@
+@distance = 30
+@base_moon_distance = 10
+
+#Karemma
+karemma_homeworld = {
+	name = "Karemma"
+	class = sc_k
+	flags = { karemma_homeworld }
+	init_effect = { log = "karemma homeworld" }
+	usage = custom_empire
+	max_instances = 1
+	planet = { name = "Karemma A" class = star orbit_distance = 0 orbit_angle = 1 size = { min = 30 max = 40 } has_ring = no }
+	change_orbit = { min = 20 max = 30}	
+	planet = {
+		count = 2
+		orbit_distance = { min = 22 max = 26 }
+		class = rl_unhabitable_planets
+		orbit_angle = { min = 90 max = 270 }
+		change_orbit = @base_moon_distance
+		moon = { count = { min = 0 max = 2 } class = rl_inner_moons orbit_angle = { min = 90 max = 270 } orbit_distance = 5 }
+	}
+	planet = {
+		name = "Karemma"
+		class = "pc_tropical"
+		orbit_distance = { min = 20 max = 30}
+		orbit_angle = 220
+		size = { min = 22 max = 25 }
+		starting_planet = yes
+		has_ring = no
+		tile_blockers = none
+		modifiers = none
+		init_effect = { prevent_anomaly = yes }
+		init_effect = {
+			if = {
+				limit = { NOT = { any_country = { has_country_flag = karemman_foundation } } }
+				create_species = { 
+				    name = "Karemma" 
+				    class = KAR 
+				    portrait = karemma 
+				    homeworld = THIS 
+				    traits = { 
+				        trait = "trait_thrifty" 
+				        ideal_planet_class = "pc_tropical" 
+					} 
+				}
+				last_created_species = { save_global_event_target_as = karemmaSpecies }
+				create_country = {
+					name = "NAME_karemman_foundation"
+					type = default
+					ignore_initial_colony_error = yes
+					civics = { civic = "civic_shadow_council" civic = "civic_aristocratic_elite" }
+					authority = auth_oligarchic
+					name_list = "Karemman"
+					ethos = { ethic = "ethic_xenophile" ethic = "ethic_egalitarian" ethic = "ethic_materialist" }
+					species = event_target:karemmaSpecies
+					flag = {
+						icon = { category = "pointy" file = "flag_pointy_12.dds" }
+						background = { category = "backgrounds" file = "00_solid.dds" }
+						colors = { "green" "blue" "null" "null" }
+					}
+					ship_prefix = "KFV"
+					effect = {
+						set_graphical_culture = generic_01
+						set_country_flag = karemman_foundation
+						set_country_flag = custom_start_screen
+						set_country_flag = generic_ent
+						set_country_flag = gamma_empire
+						set_country_flag = init_spawned
+						set_country_flag = sth_medium_galaxy
+						save_global_event_target_as = karemman_foundation
+					}
+				}
+				create_colony = { owner = event_target:karemman_foundation species = event_target:karemmaSpecies ethos = owner }
+			}
+			set_capital = yes
+			random_country = {
+				limit = { has_country_flag = karemman_foundation }
+				save_global_event_target_as = karemman_foundation
+				add_appropriate_start_techs = yes
+				species = { save_global_event_target_as = karemmaSpecies }
+            }
+			set_owner = event_target:karemman_foundation
+			generate_major_empire_start_buildings = yes
+			generate_major_empire_start_pops = yes
+			generate_major_empire_start_fleets = yes
+			set_name = "Karemma"
+		}
+	}
+	planet = {
+		count = 3
+		orbit_distance = { min = 18 max = 25 }
+		class = rl_unhabitable_planets
+		orbit_angle = { min = 90 max = 270 }
+		change_orbit = @base_moon_distance
+		moon = { count = { min = 0 max = 1 } class = rl_outer_moons orbit_angle = { min = 90 max = 270 } orbit_distance = 5 }
+	}
+	change_orbit = { min = 40 max = 50}	
+	planet = { name = "Karemma B" flags = { secondaryStar } class = star flags = { secondaryStar } size = { min = 10 max = 30 } has_ring = no }
+}

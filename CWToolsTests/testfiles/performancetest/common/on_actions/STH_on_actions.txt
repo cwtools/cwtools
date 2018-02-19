@@ -1,0 +1,446 @@
+# Triggers when the game starts
+on_game_start = {
+	events = {
+		sth_start.1
+		sth_start.2
+		sth_start.3
+		sth_start.6
+		sth_start.66
+		sth_start.7
+		sth_start.9
+		sth_q_events.1
+		sth_q_events.20
+		STH_bajoran_story.1
+		STH_borg.1000
+		STH_onaction.801
+	}
+}
+
+# Triggers when trying to open the diplomacy view for countries with custom diplomacy.
+# Country scope
+# This = target country (player)
+# From = source country
+on_custom_diplomacy = {
+	events = {
+		STH_undine_crisis.100
+		STH_federation_story.1147
+		STH_federation_flavour.1000
+	}
+}
+
+#From = Planet scope
+#This = Fleet scope
+on_fleet_enter_orbit = {
+    events = {
+        STH_hero_ship.3
+		STH_galactic_features.105
+    }
+}
+
+# A planet is being bombarded
+# This = planet under bombardment
+# From = bombarding empire
+on_monthly_orbital_bombardment = {
+	events = {
+		STH_undine_crisis.300
+		STH_federation_story.1146
+	}
+}
+
+
+# No scope, like on_game_start
+on_yearly_pulse = {
+	events = {
+		sth_pulse.1
+		sth_pulse.2
+		theFederation.89 #federation council
+		STH_dominion_flavour.1000 #changeling infiltratoin
+		STH_ferengi_story.1
+		STH_bajoran_story.11
+		STH_onaction.199
+		STH_mars.1 # mars event fail-safe
+		sth_start.6 #Check minor empire borders
+		STH_onaction.500
+		STH_borg.1020
+		STH_dilithium.0
+		STH_onaction.100
+		STH_dominion_flavour.0 #Year Pulse for Dom
+		STH_cardassian_story.0 #Year Pulse for Car
+		STH_ufp_policy.0
+	}
+}
+
+
+# No scope, like on_game_start
+on_monthly_pulse = {
+	events = {
+		STH_borg.50
+		STH_onaction.1000
+	}
+}
+
+
+# A planets controller becomes a country not the same as the owner.
+# Root = Planet
+# From = Planet Owner
+# FromFrom = Planet Controller (the one occupying)
+on_planet_occupied = {
+	events = {
+		STH_onaction.7
+		STH_onaction.10
+	}
+}
+
+
+# Triggered when two empires discover each other
+on_first_contact = {
+	events = {
+		STH_onaction.1
+		STH_onaction.2
+		STH_onaction.11
+		STH_galactic_features.10
+		STH_federation_flavour.1050
+		STH_borg.1
+	}
+}
+
+# Triggers country_event for the attacker upon victory
+# This = country, leader attacker
+# From = country, planet owner
+# FromFrom = planet
+on_planet_attackers_win = {
+	events = {
+		# STH_borg.100 
+		STH_borg.300 #DeAssimilate
+	}
+}
+
+
+# Triggered when an Empire has fleets within another Empire's borders.
+# This = receiver
+# From = sender
+# FromFrom = fleet
+# FromFromFrom = system
+on_enforce_borders = {
+	events = {
+		# STH_borg.2
+	}
+}
+
+
+# A planet has been colonized.
+# Scope = Planet
+on_colonized = {
+	events = {
+	}
+}
+
+# This = construction ship
+# From = planet it is built on
+# Fires when construction is complete,
+# immediately before station is created
+on_building_mining_station = {
+	events = {
+		#sth_q_events.99
+	}
+}
+
+#Prevent Member Worlds and Minor Races building outposts
+on_building_outpost_station = {
+	events = {
+		#sth_q_events.99
+		STH_onaction.3
+	}
+}
+
+
+# This = country
+# From = opponent war leader
+on_entering_war = {
+	events = {
+		# Klingon Civil War Ends - common enemy
+		STH_onaction.5
+		STH_onaction.8
+		nhTest.2000
+	}
+}
+
+# This = owner of ship 1 (combatant)
+# From = owner of ship 2 (destroyed)
+# FromFrom = ship 1
+# FromFromFrom = ship 2
+on_fleet_destroyed_perp = {
+	events = {
+		#Xindi Probe Destroyed
+		STH_united_earth_story.10 #Kill Xindi Probe
+		STH_united_earth_story.21 #Kill Xindi Weapon
+		STH_federation_story.1148 #Skorr Jihad TCharr Fleet Destroyed
+		STH_federation_story.2254 #Whale Probe Destroyed
+		STH_galactic_features.7 #Doomsday Destroyed
+		STH_federation_story.5
+		STH_federation_story.11
+		STH_federation_story.4015 #MU 1st Vanguard Destroyed
+		STH_federation_story.4034 #MU 2nd Vanguard Destroyed
+		STH_galactic_features.107 #Altamid Fleet Destroyed
+		STH_borg_flavour.3 #Rogue Drones Destroyed
+		STH_dominion_flavour.3 #Rogue Jem'Hadar Destroyed
+	}
+	random_events = {
+		95 = 0
+		5 = STH_klingon_flavour.8
+	}
+}
+
+# A fleet has entered a system
+# Scope = Fleet
+# From = System
+on_entering_system_fleet = {
+	events = {
+		STH_federation_story.801
+		STH_federation_story.802
+		STH_federation_story.2203
+		STH_federation_story.2207
+		STH_federation_story.4010 #MU First Portal Entered
+		STH_federation_story.4032 #MU Second Portals Entered
+	}
+}
+
+
+#A building construction has been completed.
+# This = Planet
+# From = Tile
+on_building_complete = {
+	events = {
+		STH_mars.101	# starts mars terraforming chain
+		# STH_onaction.300 #Expands Helixes
+		# STH_onaction.301 #TEST
+	}
+}
+# From = Tile
+# This = Planet
+on_blocker_cleared = {
+	events = {
+		# tutorial.16
+		STH_onaction.300
+	}
+}
+
+# A building construction has demolished.
+# This = Planet
+# From = Tile
+on_building_demolished = {
+	events = {
+		STH_mars.999 # in case array is destroyed
+	}
+}
+
+# A building construction has finished, replacing another building.
+# This = Planet
+# From = Tile
+on_building_replaced = {
+	events = {
+		STH_mars.999 # in case array is destroyed
+	}
+}
+
+# A tile building has been ruined
+# This = Planet
+# From = Tile
+on_building_ruined = {
+	events = {
+		STH_mars.999 # in case array is destroyed
+	}
+}
+
+
+# A country has increased the level of a tech, use last_increased_tech trigger to check tech and level.
+# This = Country
+on_tech_increased = {
+	events = {
+		sth_q_events.50
+		sth_q_events.1000
+		sth_q_events.1001
+		sth_q_events.1010
+		sth_q_events.1011
+		sth_q_events.1012
+		sth_q_events.1013
+		sth_q_events.1014
+		sth_q_events.3000
+		sth_q_events.3500
+		STH_technology.2000 # Telepathy
+		STH_technology.2001 # Psionics
+		STH_technology.2002 # faith in science benefit
+		STH_technology.2003 # Krenim unique power - part 1
+		STH_technology.2004 # Krenim unique power - part 2
+		STH_deDeclaratem_event.300 #Add xcv designs
+	}
+}
+
+
+# A pop has been built
+# This = pop
+on_buildable_pop_created = {
+	events = {
+		STH_dominion_flavour.5
+		#STH_dominion_flavour.6 #DEBUG remove later
+	}
+}
+
+# Executed as a leader has died
+# This = Country
+# From = Leader
+on_leader_death = {
+	events = {
+		STH_bajoran_story.3
+		STH_bajoran_story.4
+		STH_borg.2000
+		STH_onaction.900
+		STH_dominion_flavour.3052
+	}
+}
+on_leader_spawned = {
+	events = {
+		STH_dominion_flavour.4
+		STH_onaction.200
+		STH_onaction.201
+		STH_onaction.202
+	}
+}
+on_ruler_removed = {
+	events = {
+	}
+}
+
+# Executed as new ruler has been set
+# This = Country
+# on_ruler_set = {
+	# events = {
+		# STH_borg.2000
+	# }
+# }
+
+# This = owner of fleet
+# From = disbanded fleet
+on_fleet_disbanded = {
+	events = {
+		STH_onaction.400 #RemoveStarbaseDummyPlanet on dismantle
+	}
+}
+# This = owner of fleet 1 (destroyed)
+# From = owner of fleet 2 (combatant)
+# FromFrom = fleet 1
+# FromFromFrom = fleet 2
+on_fleet_destroyed_victim = {
+	events = {
+		STH_onaction.401 #RemoveStarbaseDummyPlanet on destruction
+	}
+}
+
+# A war has been won
+# Root = Winner Warleader
+# From = Loser Warleader
+# FromFrom = War
+on_war_won = {
+	events = {
+		STH_federation_story.4090 #MU Lost
+		STH_federation_story.4091 #MU Won First War
+	}
+}
+
+# A fleet has successfully escaped from combat, executed right before the fleet enters FTL
+# This = escaping fleet
+# From = system escaped from
+# FromFrom = system escaping to
+on_emergency_ftl = {
+	events = {
+	}
+}
+
+# A ship design has been finished
+# Root = Country
+on_ship_designed = {
+	events = {
+		sth_q_events.22
+	}
+}
+
+# called during empire initialization when starting a new game
+# scope: country
+empire_init_add_technologies = {
+	events = {
+		# sth_start.100
+	}
+}
+
+# A ship has been built
+# Root = Ship
+# From = Planet
+on_ship_built = {
+	events = {
+		#STH_hero_ship.9999
+		STH_onaction.800
+	}
+}
+
+#This = destroyed country
+#From = optional, destroyer (country)
+on_country_destroyed = {
+	events = {
+		STH_borg.1006
+	}
+}
+
+
+on_colony_2_years_old = {
+	events = {
+	}
+	random_events = {
+		300 = 0
+
+		### Colony Events & Chains - 14
+		10 = STH_borg_flavour.50 # Fungal Growths
+	}
+}
+
+# A ship has been built
+# Root = Ship
+# From = Planet
+on_ship_built = {
+	events = {
+		stherabuff.1
+	}
+}
+
+# A leader leveled up.
+# Scope = Country
+# From = Leader
+on_leader_level_up = {
+	events = {
+		STH_onaction.700 #Borg leader levels up
+	}
+}
+
+# This = owner of fleet 1
+# From = owner of fleet 2
+# FromFrom = fleet 1
+# FromFromFrom = fleet 2
+on_entering_battle = {
+	events = {
+		STH_dominion_flavour.1070 #Changeling Admiral Bonus
+	}
+}
+
+# A planet is being bombarded
+# This = planet under bombardment
+# From = bombarding empire
+on_monthly_orbital_bombardment = {
+	events = {
+		STH_dominion_flavour.1080 #Changeling General Bonus
+	}
+}
+
+on_system_survey_ship = {
+	events = {
+		sth_q_events.3007
+	}
+}

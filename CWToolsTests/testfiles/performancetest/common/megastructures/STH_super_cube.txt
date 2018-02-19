@@ -1,0 +1,122 @@
+#Borg Unicomplex
+
+#Buildable Temporary Object that spawns all subsections
+STH_supercube_0 = {
+    entity = "borg_01_borg_diamond_coreA_entity"
+    construction_entity = "borg_01_borg_diamond_coreA_entity"
+    portrait = "GFX_megastructure_construction_background"
+    place_entity_on_planet_plane = no
+    build_time = 1500
+    build_cost = {
+        minerals = 10000 
+    }
+
+    potential = {
+        is_borg_empire = yes
+        has_technology = tech_engineering_industry_1255
+    }
+
+    possible = {
+        custom_tooltip = {
+            fail_text = "requires_inside_border"
+            is_inside_border = from
+        }
+        
+        custom_tooltip = {
+            fail_text = "requires_colonies"
+            any_planet = {
+                is_colony = yes
+            }
+        }
+        custom_tooltip = {
+            fail_text = "requires_no_more_super_cube"
+            if = {
+                limit = { from = { has_swapped_tradition = tr_resilience_4 } }
+                NOT = { from = { check_variable = { which = "super_cube_count" value > 4 } } }
+                else = {
+                    NOT = { from = { check_variable = { which = "super_cube_count" value > 1 } } }
+                }
+            }
+        }
+    }
+
+    placement_rules = {
+        planet_possible = {
+            custom_tooltip = {
+                fail_text = "must_build_around_planet"
+                is_star = no
+            }
+            custom_tooltip = {
+                fail_text = "needs_spaceport"
+                has_spaceport = yes
+            }
+        }
+    }
+
+    ai_weight = {
+        factor = 10#TODO
+    }
+
+    
+    on_build_start = {
+        from = { change_variable = { which = "super_cube_count" value = 1 } }
+    }
+    on_build_cancel = {
+        from = { change_variable = { which = "super_cube_count" value = -1 } }}
+    on_build_complete = {}
+}
+
+STH_supercube_1 = {
+    entity = "borg_01_borg_cube_coreA_entity"
+    construction_entity = "borg_01_borg_cube_coreA_entity"
+    portrait = "GFX_megastructure_construction_background"
+    place_entity_on_planet_plane = no
+    upgrade_from = {
+        STH_supercube_0
+    }
+    build_time = 1500
+    build_cost = {
+        minerals = 10000
+    }
+
+    on_build_start = {}
+    on_build_cancel = {}
+    on_build_complete = {}
+}
+
+STH_supercube_2 = {
+    entity = "borg_01_super_cube_coreA_entity"
+    construction_entity = "borg_01_super_cube_coreA_entity"
+    portrait = "GFX_megastructure_construction_background"
+    place_entity_on_planet_plane = no
+    upgrade_from = {
+        STH_supercube_1
+    }
+    build_time = 2000
+    build_cost = {
+        minerals = 20000
+    }
+
+    on_build_start = {}
+    on_build_cancel = {}
+    on_build_complete = {
+        fromfrom = {
+            create_fleet = { name = "Omega Cube" }
+            last_created_fleet = {
+                set_owner = root.owner
+                create_ship = { name = "Omega Cube" design = "NAME_super_cube" graphical_culture = "borg_01" prefix = no }
+                last_created_ship = {
+                    set_ship_flag = omega_cube
+                }
+                set_location = {
+                    target = PREV
+                    distance = 0
+                    angle = 0
+                }
+            }
+        }
+        
+        
+        remove_megastructure = fromfrom
+    }
+}

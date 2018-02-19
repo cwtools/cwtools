@@ -1,0 +1,632 @@
+# Emptied for errors
+
+namespace = sth_q_events
+
+#Intro Event Trigger
+event = {
+	id = sth_q_events.1
+	hide_window = yes
+	is_triggered_only = yes
+	immediate = {
+		every_country = {
+			limit = { is_ai = no }
+			country_event = { id = sth_q_events.2 days = 7 random = 4 }
+            country_event = { id = sth_q_events.3001 days = 170 random = 20 }
+			country_event = { id = sth_q_events.3002 days = 400 random = 20 }
+			country_event = { id = sth_q_events.3006 days = 550 random = 20 }
+		}
+	}
+}
+
+#Intro Event
+country_event = {
+	id = sth_q_events.2
+	title = sth_q_events.2.name
+	desc = sth_q_events.2.desc
+    show_sound = sth_q_events_2
+	is_advisor_event = yes
+	is_triggered_only = yes
+	trigger = { 
+		is_ai = no 
+		#is_tutorial_level > 0
+	}
+	option = { name = sth_q_events.2.a hidden_effect = { set_country_flag = q_tips } add_minerals = 1 }
+	option = { 
+		name = sth_q_events.2.b
+		trigger = {
+			NOR = { 
+				is_difficulty = 1
+				is_difficulty = 2
+				is_difficulty = 3
+			}
+			NOT = {
+				any_country = {
+					is_ai = no
+					NOT = { is_country = Root }
+				}   
+			}
+		}
+		hidden_effect = {country_event = { id = sth_q_events.10 } } 
+	}
+	option = { name = sth_go_away_q hidden_effect = { country_event = { id = sth_q_events.3 } } }
+}
+
+#Easy Mode Event
+country_event = {
+	id = sth_q_events.10
+	title = sth_q_events.10.name
+	desc = sth_q_events.10.desc 
+	show_sound = sth_q_events_10
+
+	is_advisor_event = yes
+	is_triggered_only = yes
+	trigger = { #is_tutorial_level > 0 
+	}
+	option = {
+		name = sth_q_events.10.b
+		hidden_effect = { set_country_flag = easy_mode add_modifier = { modifier = "em_easy_mode" } }
+		add_minerals = 100
+	}
+	option = { name = sth_q_events.10.a}
+}
+
+#Confirm No Q Tips
+country_event = {
+	id = sth_q_events.3
+	title = sth_q_events.3.name
+	desc = sth_q_events.3.desc
+	show_sound = sth_q_events_3
+
+	is_advisor_event = yes
+	is_triggered_only = yes
+	trigger = { #is_tutorial_level > 0 
+	}
+	option = {
+		name = sth_q_events.3.a
+		hidden_effect = { set_country_flag = q_tips }
+	}
+	option = {
+		name = sth_q_events.3.b
+		custom_tooltip = no_q_tutorial
+		hidden_effect = { remove_country_flag = q_tips }
+		#add_minerals = -1
+	}
+}
+
+#Suliban Helix Trigger
+event = {
+	id = sth_q_events.20
+	hide_window = yes
+	immediate = {
+		every_country = {
+			limit = { is_ai = no has_country_flag = suliban_cabal }
+			country_event = { id = sth_q_events.21 days = 60 random = 10 }
+		}
+	}
+}
+#Suliban Helix
+country_event = {
+	id = sth_q_events.21
+	title = sth_q_events.21.name
+	desc = sth_q_events.21.desc
+	show_sound = sth_q_events_21
+
+	is_advisor_event = yes
+	is_triggered_only = yes
+	trigger = {
+		is_ai = no
+		has_country_flag = q_tips
+		#is_tutorial_level > 0
+	}
+	option = { name = sth_understood }
+	option = { name = sth_go_away_q custom_tooltip = no_q_tutorial hidden_effect = { country_event = { id = sth_q_events.3 } } }
+}
+
+#Ship Utilities
+country_event = {
+	id = sth_q_events.22
+	title = sth_q_events.22.name
+	desc = sth_q_events.22.desc
+	show_sound = sth_q_events_22
+
+	is_advisor_event = yes
+	is_triggered_only = yes
+	trigger = {
+		is_ai = no
+		has_country_flag = q_tips
+		NOR = {
+			has_country_flag = QTipShipUtilities
+		}
+		#is_tutorial_level > 0
+	}
+	immediate = {
+		set_country_flag = QTipShipUtilities
+	}
+	option = { name = sth_understood }
+	option = { name = sth_go_away_q custom_tooltip = no_q_tutorial hidden_effect = { country_event = { id = sth_q_events.3 } } }
+}
+
+#Species Buildings
+country_event = {
+    id = sth_q_events.50
+    title = sth_q_events.50.name
+    desc = sth_q_events.50.desc
+    show_sound = sth_q_events_50
+
+    is_advisor_event = yes
+    is_triggered_only = yes
+    trigger = {
+        is_ai = no
+        has_country_flag = q_tips
+		#is_tutorial_level > 0
+        OR = {
+            last_increased_tech = tech_society_tholian_514
+            last_increased_tech = tech_society_sheliak_517
+            last_increased_tech = tech_society_glacier_665
+        }
+    }
+    option = { name = sth_understood }
+    option = { name = sth_go_away_q custom_tooltip = no_q_tutorial hidden_effect = { country_event = { id = sth_q_events.3 } } }
+}
+
+#Dilithium Event
+ship_event = {
+    id = sth_q_events.99
+    hide_window = yes
+    is_triggered_only = yes
+    trigger = {
+        from = {
+            has_resource = {
+                type = sr_dilithium_10
+                amount > 0
+            }
+        }
+		#is_tutorial_level > 0
+    }
+    immediate = { 
+        owner = { country_event = { id = sth_q_events.100 } }
+    }
+}
+country_event = {
+    id = sth_q_events.100
+    title = sth_q_events.100.name
+    desc = sth_q_events.100.desc
+    show_sound = q_flash
+
+    is_advisor_event = yes
+    is_triggered_only = yes
+    trigger = {
+        is_ai = no
+        has_country_flag = q_tips
+        NOR = {
+            has_country_flag = QTipDilithium
+        }
+		#is_tutorial_level > 0
+    }
+    immediate = {
+        set_country_flag = QTipDilithium
+    }
+    option = { name = sth_understood }
+    option = { name = sth_go_away_q custom_tooltip = no_q_tutorial hidden_effect = { country_event = { id = sth_q_events.3 } } }
+}
+
+#Minefield Explanation
+country_event = {
+	id = sth_q_events.1000
+	title = sth_q_events.1000.name
+	desc = sth_q_events.1000.desc
+	show_sound = sth_q_events_1000
+	is_advisor_event = yes
+	is_triggered_only = yes
+	trigger = {
+		is_ai = no
+		has_country_flag = q_tips
+		last_increased_tech = tech_engineering_nuclear_702
+		#is_tutorial_level > 0
+	}
+	option = { name = sth_understood }
+	option = { name = sth_go_away_q custom_tooltip = no_q_tutorial hidden_effect = { country_event = { id = sth_q_events.3 } } }
+}
+
+#Destroyer / 
+country_event = {
+	id = sth_q_events.1001
+	title = sth_q_events.1001.name
+	desc = sth_q_events.1001.desc
+	show_sound = q_flash
+
+	is_advisor_event = yes
+	is_triggered_only = yes
+	trigger = {
+		has_country_flag = q_tips
+		last_increased_tech = tech_engineering_destroyer_541
+		#is_tutorial_level > 0
+	}
+    option = { name = sth_understood }
+	option = { name = sth_q_events.1001.a hidden_effect = { country_event = { id = sth_q_events.1004 } } }
+    option = { name = sth_go_away_q custom_tooltip = no_q_tutorial hidden_effect = { country_event = { id = sth_q_events.3 } } }
+}
+#Ship Explanation
+country_event = {
+    id = sth_q_events.1004
+    title = sth_q_events.1004.name
+    desc = sth_q_events.1004.desc
+    show_sound = q_flash
+
+    is_advisor_event = yes
+    is_triggered_only = yes
+    trigger = { #is_tutorial_level > 0 
+    }
+    option = { name = sth_q_events.1004.a hidden_effect = { country_event = { id = sth_q_events.1002 } } }
+    option = { name = sth_q_events.1004.b hidden_effect = { country_event = { id = sth_q_events.1003 } } }
+}
+#Section Explanation
+country_event = {
+	id = sth_q_events.1002
+	title = sth_q_events.1002.name
+	desc = sth_q_events.1002.desc
+	show_sound = sth_q_events_1002
+
+	is_advisor_event = yes
+	is_triggered_only = yes
+	trigger = { #is_tutorial_level > 0 
+	}
+	option = { name = sth_understood }
+	option = { name = sth_go_away_q custom_tooltip = no_q_tutorial hidden_effect = { country_event = { id = sth_q_events.3 } } }
+}
+#Sad Q
+country_event = {
+	id = sth_q_events.1003
+	title = sth_q_events.1003.name
+	desc = sth_q_events.1003.desc
+	show_sound = sth_q_events_1003
+	trigger = { #is_tutorial_level > 0 
+	}
+	is_advisor_event = yes
+	is_triggered_only = yes
+	option = { name = sth_understood }
+	option = { name = sth_go_away_q custom_tooltip = no_q_tutorial hidden_effect = { country_event = { id = sth_q_events.3 } } }
+}
+#Cruiser
+country_event = {
+    id = sth_q_events.1010
+    title = sth_q_events.1010.name
+    desc = sth_q_events.1010.desc
+    show_sound = q_flash
+
+    is_advisor_event = yes
+    is_triggered_only = yes
+    trigger = {
+        has_country_flag = q_tips
+        last_increased_tech = tech_engineering_cruiser_542
+		#is_tutorial_level > 0
+    }
+    option = { name = sth_understood }
+    option = { name = sth_go_away_q custom_tooltip = no_q_tutorial hidden_effect = { country_event = { id = sth_q_events.3 } } }
+}
+#Battlecruisers
+country_event = {
+	id = sth_q_events.1011
+	title = sth_q_events.1011.name
+	desc = sth_q_events.1011.desc
+	show_sound = q_flash
+
+	is_advisor_event = yes
+	is_triggered_only = yes
+	trigger = {
+		has_country_flag = q_tips
+		last_increased_tech = tech_engineering_battlecruiser_543
+		#is_tutorial_level > 0
+	}
+	option = { name = sth_understood }
+	option = { name = sth_go_away_q custom_tooltip = no_q_tutorial hidden_effect = { country_event = { id = sth_q_events.3 } } }
+}
+#Battleships
+country_event = {
+    id = sth_q_events.1012
+    title = sth_q_events.1012.name
+    desc = sth_q_events.1012.desc
+    show_sound = sth_q_events_1012
+
+    is_advisor_event = yes
+    is_triggered_only = yes
+    trigger = {
+        has_country_flag = q_tips
+        last_increased_tech = tech_engineering_battleship_544
+		#is_tutorial_level > 0
+    }
+    option = { name = sth_understood }
+    option = { name = sth_go_away_q custom_tooltip = no_q_tutorial hidden_effect = { country_event = { id = sth_q_events.3 } } }
+}
+#Heavy Escort
+country_event = {
+    id = sth_q_events.1013
+    title = sth_q_events.1013.name
+    desc = sth_q_events.1013.desc
+    show_sound = q_flash
+
+    is_advisor_event = yes
+    is_triggered_only = yes
+    trigger = {
+        has_country_flag = q_tips
+        last_increased_tech = tech_engineering_heavy_545
+		#is_tutorial_level > 0
+    }
+    option = { name = sth_understood }
+    option = { name = sth_go_away_q custom_tooltip = no_q_tutorial hidden_effect = { country_event = { id = sth_q_events.3 } } }
+}
+#Assault Cruisers
+country_event = {
+    id = sth_q_events.1014
+    title = sth_q_events.1014.name
+    desc = sth_q_events.1014.desc
+    show_sound = sth_q_events_1014
+
+    is_advisor_event = yes
+    is_triggered_only = yes
+    trigger = {
+        has_country_flag = q_tips
+        last_increased_tech = tech_engineering_assault_546
+		#is_tutorial_level > 0
+    }
+    option = { name = sth_understood }
+    option = { name = sth_go_away_q custom_tooltip = no_q_tutorial hidden_effect = { country_event = { id = sth_q_events.3 } } }
+}
+
+#Formed Federation
+country_event = {
+	id = sth_q_events.2001
+	title = sth_q_events.2001.name
+	desc = sth_q_events.2001.desc
+	show_sound = sth_q_events_2001
+
+	is_advisor_event = yes
+	is_triggered_only = yes
+	trigger = { 
+		has_country_flag = q_tips 
+		#is_tutorial_level > 0
+	}
+	option = { name = sth_understood }
+	option = { name = sth_q_events.2001.a hidden_effect = { country_event = { id = sth_q_events.2002 } } }
+	option = { name = sth_q_events.2001.b hidden_effect = { country_event = { id = sth_q_events.2003 } } }
+	option = { name = sth_q_events.2001.c hidden_effect = { country_event = { id = sth_q_events.2004 } } }
+	option = { name = sth_go_away_q custom_tooltip = no_q_tutorial hidden_effect = { country_event = { id = sth_q_events.3 } } }
+}
+#Homeworlds
+country_event = {
+	id = sth_q_events.2002
+	title = sth_q_events.2002.name
+	desc = sth_q_events.2002.desc
+	show_sound = sth_q_events_2002
+
+	is_advisor_event = yes
+	is_triggered_only = yes
+	immediate = {
+		random_country = {
+			limit = { is_country_type = ufp_member_world }
+			save_event_target_as = member_world_1
+		}
+	}
+	option = { name = sth_understood }
+	option = { name = sth_q_events.2001.b hidden_effect = { country_event = { id = sth_q_events.2003 } } }
+	option = { name = sth_q_events.2001.c hidden_effect = { country_event = { id = sth_q_events.2004 } } }
+	option = { name = sth_go_away_q custom_tooltip = no_q_tutorial hidden_effect = { country_event = { id = sth_q_events.3 } } }
+}
+#Federation Council
+country_event = {
+	id = sth_q_events.2003
+	title = sth_q_events.2003.name
+	desc = sth_q_events.2003.desc
+	show_sound = sth_q_events_2003
+
+	is_advisor_event = yes
+	is_triggered_only = yes
+	option = { name = sth_understood }
+	option = { name = sth_q_events.2001.a hidden_effect = { country_event = { id = sth_q_events.2002 } } }
+	option = { name = sth_q_events.2001.c hidden_effect = { country_event = { id = sth_q_events.2004 } } }
+	option = { name = sth_go_away_q custom_tooltip = no_q_tutorial hidden_effect = { country_event = { id = sth_q_events.3 } } }
+}
+#World Integration
+country_event = {
+	id = sth_q_events.2004
+	title = sth_q_events.2004.name
+	desc = sth_q_events.2004.desc
+	show_sound = sth_q_events_2004
+
+	is_advisor_event = yes
+	is_triggered_only = yes
+	option = { name = sth_understood }
+	option = { name = sth_q_events.2001.a hidden_effect = { country_event = { id = sth_q_events.2002 } } }
+	option = { name = sth_q_events.2001.b hidden_effect = { country_event = { id = sth_q_events.2003 } } }
+	option = { name = sth_go_away_q custom_tooltip = no_q_tutorial hidden_effect = { country_event = { id = sth_q_events.3 } } }
+}
+
+#Prosperity
+country_event = {
+    id = sth_q_events.3000
+    title = sth_q_events.3000.name
+    desc = sth_q_events.3000.desc
+    show_sound = q_flash
+
+    is_advisor_event = yes
+    is_triggered_only = yes
+    trigger = {
+        has_country_flag = q_tips
+        last_increased_tech = tech_engineering_materials_1439
+        #is_tutorial_level > 0
+    }
+    option = { name = sth_understood }
+    option = { name = sth_go_away_q custom_tooltip = no_q_tutorial hidden_effect = { country_event = { id = sth_q_events.3 } } }
+}
+
+#Dilithium
+country_event = {
+    id = sth_q_events.3001
+    title = sth_q_events.3001.name
+    desc = sth_q_events.3001.desc
+    show_sound = q_flash
+
+    is_advisor_event = yes
+    is_triggered_only = yes
+    trigger = {
+        has_country_flag = q_tips
+        #is_tutorial_level > 0
+    }
+    option = { name = sth_understood }
+    option = { name = sth_go_away_q custom_tooltip = no_q_tutorial hidden_effect = { country_event = { id = sth_q_events.3 } } }
+}
+
+##Ketracel White
+#country_event = {
+#    id = sth_q_events.3002
+#    title = sth_q_events.3002.name
+#    desc = sth_q_events.3002.desc
+#    show_sound = q_flash
+#
+#    is_advisor_event = yes
+#    is_triggered_only = yes
+#    trigger = {
+#        has_country_flag = q_tips
+#        #is_tutorial_level > 0
+#    }
+#    option = { name = sth_understood }
+#    option = { name = sth_go_away_q custom_tooltip = no_q_tutorial hidden_effect = { country_event = { id = sth_q_events.3 } } }
+#}
+
+#Hospitals
+country_event = {
+    id = sth_q_events.3500
+    title = sth_q_events.3500.name
+    desc = sth_q_events.3500.desc
+    show_sound = q_flash
+
+    is_advisor_event = yes
+    is_triggered_only = yes
+    trigger = {
+        has_country_flag = q_tips
+        last_increased_tech = tech_society_frontier_497
+        #is_tutorial_level > 0
+    }
+    option = { name = sth_understood }
+    option = { name = sth_go_away_q custom_tooltip = no_q_tutorial hidden_effect = { country_event = { id = sth_q_events.3 } } }
+}
+
+country_event = {
+    id = sth_q_events.3002
+    title = sth_q_events.3002.name
+    desc = sth_q_events.3002.desc
+    show_sound = q_flash
+	is_triggered_only = yes
+    is_advisor_event = yes
+    trigger = {
+        is_ai = no
+        has_country_flag = q_tips
+        NOR = {
+            has_country_flag = QTipDSS
+			has_country_flag = hirogen_hunters
+			has_country_flag = the_borg_collective
+			has_country_flag = suliban_cabal
+        }
+		#is_tutorial_level > 0
+    }
+    immediate = {
+        set_country_flag = QTipDSS
+    }
+    option = { name = sth_understood }
+    option = { name = sth_go_away_q custom_tooltip = no_q_tutorial hidden_effect = { country_event = { id = sth_q_events.3 } } }
+}
+
+event = {
+    id = sth_q_events.3004
+	hide_window = yes
+	is_triggered_only = yes
+    trigger = {
+	any_country = { num_armies > 40 }
+    }
+    immediate = {
+        owner = { country_event = { id = sth_q_events.3003 } }
+    }
+}
+
+country_event = {
+    id = sth_q_events.3003
+    title = sth_q_events.3003.name
+    desc = sth_q_events.3003.desc
+    show_sound = q_flash
+	is_triggered_only = yes
+    is_advisor_event = yes
+    trigger = {
+        is_ai = no
+        NOR = {
+            has_country_flag = QTipArmycount
+        }
+		#is_tutorial_level > 0
+    }
+    immediate = {
+        set_country_flag = QTipArmycount
+    }
+    option = { name = sth_understood }
+    option = { name = sth_go_away_q custom_tooltip = no_q_tutorial hidden_effect = { country_event = { id = sth_q_events.3 } } }
+}
+
+event = {
+    id = sth_q_events.3005
+	hide_window = yes
+	is_triggered_only = yes
+    immediate = {
+        owner = { country_event = { id = sth_q_events.3006 days = 270 random = 10 } }
+    }
+}
+
+country_event = {
+    id = sth_q_events.3006
+    title = sth_q_events.3006.name
+    desc = sth_q_events.3006.desc
+    show_sound = q_flash
+	is_triggered_only = yes
+    is_advisor_event = yes
+    trigger = {
+        is_ai = no
+		has_country_flag = q_tips
+        NOT = {
+            has_country_flag = QTipColonyModule
+        }
+		#is_tutorial_level > 0
+    }
+    immediate = {
+        set_country_flag = QTipColonyModule
+    }
+    option = { name = sth_understood }
+    option = { name = sth_go_away_q custom_tooltip = no_q_tutorial hidden_effect = { country_event = { id = sth_q_events.3 } } }
+}
+
+event = {
+    id = sth_q_events.3007
+	hide_window = yes
+	is_triggered_only = yes
+    immediate = {
+        owner = { country_event = { id = sth_q_events.3008 days = 30 random = 10 } }
+    }
+}
+
+country_event = {
+    id = sth_q_events.3008
+    title = sth_q_events.3008.name
+    desc = sth_q_events.3008.desc
+    show_sound = q_flash
+	is_triggered_only = yes
+    is_advisor_event = yes
+    trigger = {
+        is_ai = no
+		has_country_flag = q_tips
+        NOT = {
+            has_country_flag = QTipSciModule
+        }
+		#is_tutorial_level > 0
+    }
+    immediate = {
+        set_country_flag = QTipSciModule
+    }
+    option = { name = sth_understood }
+    option = { name = sth_go_away_q custom_tooltip = no_q_tutorial hidden_effect = { country_event = { id = sth_q_events.3 } } }
+}

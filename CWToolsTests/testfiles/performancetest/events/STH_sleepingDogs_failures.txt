@@ -1,0 +1,47 @@
+############################
+#
+# Anomaly Failure Events
+#
+# Written by Walshicus
+#
+############################
+
+namespace = STH_sleepingDogs_fail
+
+# ROOT = ship scope
+# FROM = planet scope
+
+# Shuttle crushed
+ship_event = {
+	id = STH_sleepingDogs_fail.1
+	title = "DISC_FAILURE"
+	desc = "STH_sleepingDogs_fail.1.desc"
+	picture = GFX_evt_exploding_ship
+	show_sound = event_ship_explosion
+	location = FROM
+	is_triggered_only = yes
+	immediate = {
+		kill_leader = { type = scientist show_notification = no }
+	}
+	option = {
+		name = "UNFORTUNATE"
+	}
+}
+
+# Boobytrap
+ship_event = {
+	id = STH_sleepingDogs_fail.2
+	title = "DISC_FAILURE"
+	desc = "STH_sleepingDogs_fail.2.desc"
+	picture = GFX_evt_small_space_battle
+	show_sound = event_scanner
+	location = FROM
+	is_triggered_only = yes
+	immediate = {
+		kill_leader = { type = scientist show_notification = no }
+		fleet = { destroy_fleet = this }
+	}
+	option = {
+		name = "UNFORTUNATE"
+	}
+}

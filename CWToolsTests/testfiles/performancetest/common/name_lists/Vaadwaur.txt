@@ -1,0 +1,98 @@
+﻿### Vaadwaur
+Vaadwaur = {
+	randomized = no
+
+	ship_names = {
+		generic = {
+			Snake Asp Adder Cascabel Krait Kadru Yarara Garuda Taipan Shiva Sidewinder Naga Cobra Viper Mamba Astika Manasa Boa Keelback Anaconda Python Vasuki Nagaraja Reclaimer
+		}
+		corvette = {
+		}
+		saber = {
+		}
+		sovereign = {
+		}
+		steamrunner = {
+		}		
+		adv_cruiser = {
+		}
+		strike = {
+		}	
+		constructor = { }
+		colonizer = { }
+		science = { }
+		transport = { }
+		outpost_station = {
+			sequential_name = "Frontier Outpost"
+		}
+	}
+
+	fleet_names = {
+		sequential_name = "%O% Fleet"
+	}
+	
+	army_names = {
+		defense_army = {
+			sequential_name = "%O% Guard"
+		}
+		assault_army = {
+			sequential_name = "%O% Vaadwaur Commandos"
+		}
+		slave_army = {
+			sequential_name = "%O% Indentured Defence Force"
+		}
+		clone_army = { 
+			sequential_name = "%O% Clone Defence Force"
+		}
+		robotic_army = {
+			sequential_name = "%O% Mechanical Defence Force"
+		}
+		android_army = {
+			sequential_name = "%O% Synthetic Defence Force"
+		}
+		psionic_army = { 
+			sequential_name = "%O% Psi Defence Force"
+		}
+		xenomorph_army = {
+			sequential_name = "%O% Bio-Warfare Defence Force"
+		}
+		gene_warrior_army = {
+			sequential_name = "%O% Bio-Engineered Defence Force"
+		}
+	}
+
+	planet_names = {
+		generic = {
+			names = {
+				Kartella Nisel Tilinus Devinon 
+			}
+		}
+	}
+
+
+	### CHARACTERS
+
+	character_names = {
+		names1 = {
+			weight = 100
+			first_names_male = {		
+				Galik Garik Gaul Keld Relin Verik Trell Traken Telen Mengin Eldex Marari Gedrin Manasa Vasuka Takshaka
+			}
+			first_names_female = {
+				Jisa Gisa Kisa Trisa Triss Viss Aliss Bernisa Mengis Shukla Risha Rishis Kalisa Marisa Nesara 
+			}
+			second_names = {
+				" "
+			}
+			regnal_first_names_male = {
+				Galik Garik Gaul Keld Relin Verik Trell Traken Telen Mengin Eldex Marari Gedrin Manasa Vasuka Takshaka
+			}
+			regnal_first_names_female = {
+				Jisa Gisa Kisa Trisa Triss Viss Aliss Bernisa Mengis Shukla Risha Rishis Kalisa Marisa Nesara 
+			}
+			regnal_second_names = {
+				" "
+			}
+		}
+	}
+}

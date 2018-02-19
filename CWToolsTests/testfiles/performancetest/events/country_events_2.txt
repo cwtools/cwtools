@@ -1,0 +1,2961 @@
+############################
+#
+# Country Events
+# by Maximilian Olbers
+# STNH - Capek 1.8.0 Compat
+############################
+
+namespace = country
+
+@tier1influencecontact = 7
+@tier1influencecontactxenophile = 8
+@tier1influencecontactmin = 20
+@tier1influencecontactmax = 80
+
+@tier2influencecontact = 10
+@tier2influencecontactxenophile = 12
+@tier2influencecontactmin = 40
+@tier2influencecontactmax = 100
+
+@tier1materialreward = 6
+@tier1materialmin = 100
+@tier1materialmax = 500
+@tier2materialreward = 12
+@tier2materialmin = 150
+@tier2materialmax = 1000
+@tier3materialreward = 18
+@tier3materialmin = 250
+@tier3materialmax = 1500
+@tier4materialreward = 24
+@tier4materialmin = 350
+@tier4materialmax = 2000
+@tier5materialreward = 48
+@tier5materialmin = 700
+@tier5materialmax = 4000
+
+@tier1influencereward = 6
+@tier1influencemin = 40
+@tier1influencemax = 100
+@tier2influencereward = 12
+@tier2influencemin = 80
+@tier2influencemax = 175
+@tier3influencereward = 18
+@tier3influencemin = 125
+@tier3influencemax = 250
+@tier4influencereward = 24
+@tier4influencemin = 150
+@tier4influencemax = 300
+@tier5influencereward = 36
+@tier5influencemin = 250
+@tier5influencemax = 500
+@tier6influencereward = 48
+@tier6influencemin = 300
+@tier6influencemax = 600
+
+@tier1unityreward = 6
+@tier2unityreward = 12
+@tier3unityreward = 18
+@tier4unityreward = 24
+@tier5unityreward = 48
+
+@tier1researchreward = 6
+@tier1researchmin = 60
+@tier1researchmax = 150
+@tier2researchreward = 12
+@tier2researchmin = 90
+@tier2researchmax = 250
+@tier3researchreward = 18
+@tier3researchmin = 120
+@tier3researchmax = 350
+@tier4researchreward = 24
+@tier4researchmin = 150
+@tier4researchmax = 500
+@tier5researchreward = 48
+@tier5researchmin = 300
+@tier5researchmax = 1000
+
+
+# Starting Event gatekeeper
+country_event = {
+	id = country.900
+	hide_window = yes
+
+	is_triggered_only = yes
+
+	trigger = { is_ai = no }
+
+	immediate = {
+		if = {
+			limit = {
+				capital_scope.solar_system = {
+					NOT = {
+						any_planet = {
+							is_surveyed = {
+								who = ROOT
+								status = no
+							}
+						}
+					}
+				}
+			}
+			country_event = { id = country.902 days = 60 random = 20 }
+			else = {
+				country_event = { id = country.901 days = 90 }
+			}
+		}
+	}
+}
+
+# looping check
+country_event = {
+	id = country.901
+	hide_window = yes
+
+	is_triggered_only = yes
+
+	immediate = {
+		if = {
+			limit = {
+				capital_scope = { colony_age > 24 }
+			}
+			country_event = { id = country.902 days = 60 random = 20 }
+			else = {
+				if = {
+					limit = {
+						capital_scope.solar_system = {
+							NOT = {
+								any_planet = {
+									is_surveyed = {
+										who = ROOT
+										status = no
+									}
+								}
+							}
+						}
+					}
+					country_event = { id = country.902 days = 60 random = 20 }
+					else = {
+						country_event = { id = country.901 days = 60 }
+					}
+				}
+			}
+		}
+	}
+}
+
+# switch
+country_event = {
+	id = country.902
+	hide_window = yes
+
+	is_triggered_only = yes
+
+	immediate = {
+		random_list = {
+			# Sublight Probes
+			10 = { country_event = { id = country.258 days = 360 random = 10 } }
+			# Radical Cult
+			10 = { country_event = { id = country.200 days = 30 random = 10 } }
+			# Wanderlust
+			1 = { country_event = { id = country.1000 days = 30 random = 10 } }
+			# Mass Extinction
+			10 = { country_event = { id = country.1100 days = 30 random = 10 } }
+			# No starting event
+			69 = { set_country_flag = starting_event }
+		}
+	}
+}
+
+# Comet Sighted
+country_event = {
+	id = country.999
+	title = "country.999.name"
+	desc = {
+		trigger = { is_assimilator = yes }
+		text = country.999.desc.borg
+	}
+	desc = {
+		trigger = { is_assimilator = no has_ethic = ethic_fanatic_materialist }
+		text = country.999.desc.material
+	}
+	desc = {
+		trigger = { is_assimilator = no has_ethic = ethic_fanatic_spiritualist }
+		text = country.999.desc.spirit
+	}
+	desc = {
+		trigger = { is_assimilator = no has_ethic = ethic_fanatic_militarist }
+		text = country.999.desc.mil
+	}
+	desc = {
+		trigger = { is_assimilator = no has_ethic = ethic_fanatic_pacifist }
+		text = country.999.desc.pac
+	}
+	desc = {
+		trigger = { is_assimilator = no has_ethic = ethic_fanatic_xenophile }
+		text = country.999.desc.phile
+	}
+	desc = {
+		trigger = { is_assimilator = no has_ethic = ethic_fanatic_xenophobe }
+		text = country.999.desc.phobe
+	}
+	desc = {
+		trigger = { is_assimilator = no has_ethic = ethic_fanatic_authoritarian }
+		text = country.999.desc.coll
+	}
+	desc = {
+		trigger = { is_assimilator = no has_ethic = ethic_fanatic_egalitarian }
+		text = country.999.desc.ind
+	}
+	desc = {
+		trigger = { is_assimilator = no NOR = { has_ethic = ethic_fanatic_materialist has_ethic = ethic_fanatic_spiritualist has_ethic = ethic_fanatic_militarist has_ethic = ethic_fanatic_pacifist has_ethic = ethic_fanatic_xenophile has_ethic = ethic_fanatic_xenophobe has_ethic = ethic_fanatic_authoritarian has_ethic = ethic_fanatic_egalitarian } }
+		text = country.999.desc.material
+	}
+	picture = GFX_evt_atmospheric_entry
+	show_sound = event_mystic_reveal
+	mean_time_to_happen = { months = 600 }
+	trigger = {
+		is_normal_country = yes
+		NOT = { has_country_flag = had_comet }
+	}
+	immediate = { set_country_flag = had_comet }
+	option = {
+		name = BORG_UNDERSTOOD
+		trigger = { is_assimilator = yes }
+		add_monthly_resource_mult = { resource = minerals value = @tier1materialreward min = 10 max = 40 }
+	}
+	option = {
+		name = country.999.a
+		trigger = {
+			is_assimilator = no
+			NOR = {
+				has_ethic = ethic_fanatic_pacifist
+				has_ethic = ethic_fanatic_militarist
+				has_ethic = ethic_fanatic_authoritarian
+				has_ethic = ethic_fanatic_egalitarian
+				has_ethic = ethic_fanatic_materialist
+				has_ethic = ethic_fanatic_spiritualist
+				has_ethic = ethic_fanatic_xenophobe
+				has_ethic = ethic_fanatic_xenophile
+			}
+		}
+		add_monthly_resource_mult = {
+			resource = unity
+			value = @tier1unityreward
+			min = 10
+			max = 40
+		}
+	}
+
+	option = {
+		name = country.999.a.pac
+		trigger = { is_assimilator = no has_ethic = ethic_fanatic_pacifist }
+		add_monthly_resource_mult = {
+			resource = unity
+			value = @tier1unityreward
+			min = 10
+			max = 40
+		}
+	}
+
+	option = {
+		name = country.999.a.mil
+		trigger = { is_assimilator = no has_ethic = ethic_fanatic_militarist }
+		capital_scope = {
+			add_modifier = {
+				modifier = comet_sighted_positive
+				days = 1800
+			}
+		}
+	}
+
+	option = {
+		name = country.999.a.spirit
+		trigger = { is_assimilator = no has_ethic = ethic_fanatic_spiritualist }
+		capital_scope = {
+			add_modifier = {
+				modifier = comet_sighted_positive
+				days = 1800
+			}
+		}
+	}
+
+	option = {
+		name = country.999.a.material
+		trigger = { is_assimilator = no has_ethic = ethic_fanatic_materialist }
+	}
+
+	option = {
+		name = country.999.a.phile
+		trigger = { is_assimilator = no has_ethic = ethic_fanatic_xenophile }
+		add_monthly_resource_mult = {
+			resource = unity
+			value = @tier1unityreward
+			min = 10
+			max = 40
+		}
+	}
+
+	option = {
+		name = country.999.a.phobe
+		trigger = { is_assimilator = no has_ethic = ethic_fanatic_xenophobe }
+		capital_scope = {
+			add_modifier = {
+				modifier = comet_sighted_negative
+				days = 1800
+			}
+		}
+	}
+
+	option = {
+		name = country.999.a.coll
+		trigger = { is_assimilator = no has_ethic = ethic_fanatic_authoritarian }
+		capital_scope = {
+			add_modifier = {
+				modifier = comet_sighted_negative
+				days = 1800
+			}
+		}
+	}
+
+	option = {
+		name = country.999.a.ind
+		trigger = { is_assimilator = no has_ethic = ethic_fanatic_egalitarian }
+		capital_scope = {
+			add_modifier = {
+				modifier = comet_sighted_positive
+				days = 1800
+			}
+		}
+	}
+}
+
+############################################
+### Rogue Scientist (Starting Event Chain)
+############################################
+
+# Introducing Scientist
+country_event = {
+	id = country.1000
+	title = "country.1000.name"
+	desc = "country.1000.desc"
+	picture = GFX_evt_hangar_bay
+	show_sound = event_default
+
+	is_triggered_only = yes
+
+	trigger = {
+		is_ai = no
+		NOR = {
+			has_ethic = ethic_gestalt_consciousness
+			has_country_flag = starting_event
+		}
+	}
+
+	immediate = {
+		set_country_flag = starting_event
+		set_country_flag = scientist_country
+		random_owned_leader = {
+			limit = {
+				is_researching_area = physics
+			}
+			kill_leader = {
+				type = scientist
+				show_notification = no
+			}
+		}
+	}
+
+	option = {
+		name = country.1000.a
+		hidden_effect = {
+			country_event = { id = country.1001 days = 30 }
+		}
+	}
+}
+
+# Scientist disappears, enabling PoI
+country_event = {
+	id = country.1001
+	title = "country.1001.name"
+	desc = "country.1001.desc"
+	picture = GFX_evt_ship_in_orbit
+	show_sound = event_scanner
+
+	is_triggered_only = yes
+
+	immediate = {
+		begin_event_chain = {
+			event_chain = "rogue_scientist_1_chain"
+			target = root
+		}
+		hidden_effect = {
+			random_owned_planet = { 
+				limit = { is_capital = yes }
+				save_event_target_as = capital_location
+				solar_system = {
+					set_star_flag = current_scientist_1_system
+					set_star_flag = capital_system
+				}
+			}
+			random_system = {
+				limit = {
+					NOT = {
+						has_star_flag = hostile_system
+						has_star_flag = capital_system
+						has_star_flag = current_scientist_1_system
+						is_star_class = sc_black_hole
+						exists = space_owner
+					}
+					is_pirate_system = no
+					distance = {
+						source = event_target:capital_location
+						max_distance = 60
+						min_distance = 2
+					}
+				}
+				set_star_flag = scientist_system_1
+				save_event_target_as = scientist_system_1
+			}
+			root = {
+				create_point_of_interest = {
+					id = scientist_poi.1
+					name = "scientist_poi_1"
+					desc = "scientist_poi_1_desc"
+					event_chain = "rogue_scientist_1_chain"
+					location = event_target:scientist_system_1
+				}
+			}
+			random_system = {
+				limit = {
+					NOT = {
+						has_star_flag = hostile_system
+						has_star_flag = capital_system
+						has_star_flag = current_scientist_1_system
+						has_star_flag = scientist_system_1
+						is_star_class = sc_black_hole
+						exists = space_owner
+					}
+					is_pirate_system = no
+					distance = {
+						source = event_target:capital_location
+						max_distance = 60
+						min_distance = 2
+					}
+				}
+				set_star_flag = scientist_system_2
+				save_event_target_as = scientist_system_2
+			}
+			root = {
+				create_point_of_interest = {
+					id = scientist_poi.2
+					name = "scientist_poi_2"
+					desc = "scientist_poi_2_desc"
+					event_chain = "rogue_scientist_1_chain"
+					location = event_target:scientist_system_2
+				}
+			}
+			random_system = {
+				limit = {
+					NOT = {
+						has_star_flag = hostile_system
+						has_star_flag = capital_system
+						has_star_flag = current_scientist_1_system
+						has_star_flag = scientist_system_1
+						has_star_flag = scientist_system_2
+						is_star_class = sc_black_hole
+						exists = space_owner
+					}
+					is_pirate_system = no
+					distance = {
+						source = event_target:capital_location
+						max_distance = 60
+						min_distance = 2
+					}
+				}
+				set_star_flag = scientist_system_3
+				save_event_target_as = scientist_system_3
+			}
+			root = {
+				create_point_of_interest = {
+					id = scientist_poi.3
+					name = "scientist_poi_3"
+					desc = "scientist_poi_3_desc"
+					event_chain = "rogue_scientist_1_chain"
+					location = event_target:scientist_system_3
+				}
+			}
+		}
+	}
+
+	option = {
+		name = "country.1001.a"
+		custom_tooltip = country.1001.a.tooltip
+	}
+}
+
+# Entering Rogue Scientist PoI System
+fleet_event = {
+	id = country.1002
+	hide_window = yes
+
+	is_triggered_only = yes
+
+	trigger = {
+		owner = { has_event_chain = "rogue_scientist_1_chain" }
+		from = {
+			OR = {
+				has_star_flag = scientist_system_1
+				has_star_flag = scientist_system_2
+				has_star_flag = scientist_system_3
+			}
+		}
+	}
+
+	immediate = {
+		if = {
+			limit = {
+				from = { has_star_flag = scientist_system_1 }
+				owner = { NOT = { has_country_flag = scisys_1 } }
+			}
+			owner = {
+				set_country_flag = scisys_1
+				remove_point_of_interest = scientist_poi.1
+				add_event_chain_counter = {
+					event_chain = "rogue_scientist_1_chain"
+					counter = "likely_locations_searched"
+					amount = 1
+				}
+			}
+			if = {
+				limit = {
+					owner = {
+						has_completed_event_chain_counter = {
+							event_chain = "rogue_scientist_1_chain"
+							counter = "likely_locations_searched"
+						}
+						NOT = { has_country_flag = completed_rogue_scientist }
+					}
+				}
+				owner = { country_event = { id = country.1005 } }
+			}
+			if = {
+				limit = {
+					owner = {
+						NOT = {
+							has_completed_event_chain_counter = {
+								event_chain = "rogue_scientist_1_chain"
+								counter = "likely_locations_searched"
+							}
+						}
+					}
+				}
+				owner = { country_event = { id = country.1003 } }
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				FROM = { has_star_flag = scientist_system_2 }
+				owner = { NOT = { has_country_flag = scisys_2 } }
+			}
+			owner = {
+				set_country_flag = scisys_2
+				remove_point_of_interest = scientist_poi.2
+				add_event_chain_counter = {
+					event_chain = "rogue_scientist_1_chain"
+					counter = "likely_locations_searched"
+					amount = 1
+				}
+			}
+			if = {
+				limit = {
+					owner = {
+						has_completed_event_chain_counter = {
+							event_chain = "rogue_scientist_1_chain"
+							counter = "likely_locations_searched"
+						}
+						NOT = { has_country_flag = completed_rogue_scientist }
+					}
+				}
+				owner = { country_event = { id = country.1005 } }
+			}
+			if = {
+				limit = {
+					owner = {
+						NOT = {
+							has_completed_event_chain_counter = {
+								event_chain = "rogue_scientist_1_chain"
+								counter = "likely_locations_searched"
+							}
+						}
+					}
+				}
+				owner = { country_event = { id = country.1003 } }
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				FROM = { has_star_flag = scientist_system_3 }
+				owner = { not = { has_country_flag = scisys_3 } }
+			}
+			owner = {
+				set_country_flag = scisys_3
+				remove_point_of_interest = scientist_poi.3
+				add_event_chain_counter = {
+					event_chain = "rogue_scientist_1_chain"
+					counter = "likely_locations_searched"
+					amount = 1
+				}
+			}
+			if = {
+				limit = {
+					owner = {
+						has_completed_event_chain_counter = {
+							event_chain = "rogue_scientist_1_chain"
+							counter = "likely_locations_searched"
+						}
+						NOT = { has_country_flag = completed_rogue_scientist_1 }
+					}
+				}
+				owner = { country_event = { id = country.1005 } }
+				break = yes
+			}
+			if = {
+				limit = {
+					owner = {
+						NOT = {
+							has_completed_event_chain_counter = {
+								event_chain = "rogue_scientist_1_chain"
+								counter = "likely_locations_searched"
+							}
+						}
+					}
+				}
+				owner = { country_event = { id = country.1003 } }
+			}
+			break = yes
+		}
+	}
+}
+
+country_event = {
+	id = country.1003
+	title = "country.1003.name"
+	desc = "country.1003.desc"
+	location = from
+	show_sound = event_scanner
+	picture = GFX_evt_ship_in_orbit
+
+	is_triggered_only = yes
+
+	option = {
+		name = country.1003.a
+	}
+}
+
+# found scientist
+country_event = {
+	id = country.1005
+	title = "country.1005.name"
+	desc = "country.1005.desc"
+	location = from
+	show_sound = event_ship_bridge
+	picture = GFX_evt_ship_in_orbit
+
+	is_triggered_only = yes
+
+	trigger = {
+		has_country_flag = scientist_country
+		NOT = { has_country_flag = completed_rogue_scientist_1 }
+	}
+
+	immediate = {
+		random_owned_leader = {
+			limit = {
+				leader_class = scientist
+			}
+			save_event_target_as = scientist_portrait
+		}
+		set_country_flag = completed_rogue_scientist_1
+		fromfrom = {
+			set_star_flag = current_scientist_2_system
+			save_event_target_as = probe_attack_system
+		}
+	}
+
+	option = {
+		name = country.1005.a
+		end_event_chain = "rogue_scientist_1_chain"
+		hidden_effect = { country_event = { id = country.1010 } }
+	}
+}
+
+# first diplo
+country_event = {
+	id = country.1010
+	title = "country.1010.name"
+	desc = "country.1010.desc"
+	show_sound = event_ship_bridge
+
+	diplomatic = yes
+	is_triggered_only = yes
+
+	picture_event_data = {
+		portrait = event_target:scientist_portrait
+		room = ethic_spaceship_room
+	}
+
+	immediate = { set_country_flag = scientist_probed }
+
+	option = {
+		name = country.1010.a
+		response_text = country.1010.a.response
+		is_dialog_only = yes
+	}
+
+	option = {
+		name = country.1010.b
+		hidden_effect = { country_event = { id = country.1011 } }
+	}
+
+	option = {
+		name = country.1010.c
+		hidden_effect = { country_event = { id = country.1012 } }
+	}
+}
+
+# fed up 1
+country_event = {
+	id = country.1011
+	title = "country.1010.name"
+	desc = "country.1010.b.response"
+
+	diplomatic = yes
+	is_triggered_only = yes
+
+	picture_event_data = {
+		portrait = event_target:scientist_portrait
+		room = ethic_spaceship_room
+	}
+
+	option = {
+		name = country.1010.d
+		hidden_effect = { country_event = { id = country.1015 } }
+	}
+}
+
+# fed up 2
+country_event = {
+	id = country.1012
+	title = "country.1010.name"
+	desc = "country.1010.c.response"
+
+	diplomatic = yes
+	is_triggered_only = yes
+
+	picture_event_data = {
+		portrait = event_target:scientist_portrait
+		room = ethic_spaceship_room
+	}
+
+	option = {
+		name = country.1010.d
+		hidden_effect = { country_event = { id = country.1015 } }
+	}
+}
+
+# probes attack
+country_event = {
+	id = country.1015
+	title = "country.1015.name"
+	desc = "country.1015.desc"
+	show_sound = event_ship_thrusters
+	picture = GFX_evt_ship_in_orbit
+
+	is_triggered_only = yes
+
+	trigger = {
+		is_ai = no
+		has_country_flag = scientist_probed
+	}
+
+	option = {
+		name = BATTLESTATIONS
+		hidden_effect = {
+			event_target:probe_attack_system = {
+				random_system_planet = {
+					limit = { is_star = yes }
+					save_event_target_as = unknown_probe_star
+				}
+			}
+			create_country = {
+				name = "NAME_Scrap_Probes"
+				type = faction
+				effect = {
+					establish_communications_no_message = root
+					establish_contact = { who = root location = event_target:probe_attack_system }
+					set_country_flag = scientist_aggressor_probes
+					save_event_target_as = unknown_probes
+					create_fleet = {
+						name = "NAME_Scrap_Probes"
+						effect = {
+							set_owner = prev
+							set_fleet_flag = scientist_probe_fleet
+							create_ship = {
+								name = "NAME_Junk_Probe_Alpha"
+								design = "NAME_Ancient_Combat_Drone"
+							}
+							create_ship = {
+								name = "NAME_Junk_Probe_Beta"
+								design = "NAME_Ancient_Combat_Drone"
+							}
+							set_location = event_target:unknown_probe_star
+							set_fleet_stance = aggressive
+							set_aggro_range_measure_from = self
+							set_aggro_range = 999
+						}
+					}
+					set_relation_flag = {
+						who = root
+						flag = scientist_probe_relation
+					}
+					set_faction_hostility = { set_hostile = yes }
+				}
+			}
+		}
+	}
+}
+
+# Probes destroyed
+country_event = {
+	id = country.1020
+	title = "country.1020.name"
+	desc = "country.1020.desc"
+	show_sound = event_ship_thrusters
+	picture = GFX_evt_ship_in_orbit
+	location = fromfrom
+
+	is_triggered_only = yes
+	auto_opens = yes
+
+	trigger = {
+		is_ai = no
+		has_country_flag = scientist_probed
+		exists = from
+		FROM = {
+			has_relation_flag = {
+				who = ROOT
+				flag = scientist_probe_relation
+			}
+		}
+	}
+
+	immediate = {
+		FROM = {
+			remove_country_flag = scientist_aggressor_probes
+			remove_relation_flag = {
+				who = root
+				flag = scientist_probe_relation
+			}
+		}
+	}
+
+	option = {
+		name = OK
+		FROMFROM = {
+			solar_system = {
+				random_system_planet = {
+					limit = { is_star = yes }
+					enable_special_project = {
+						name = "ROGUE_SCIENTIST_1_PROJECT"
+						location = this
+						owner = root
+					}
+				}
+			}
+		}
+		hidden_effect = { from = { destroy_country = yes } }
+	}
+}
+
+# Probes destroyed by others (hidden)
+country_event = {
+	id = country.1021
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		has_country_flag = scientist_aggressor_probes
+		NOT = {
+			has_relation_flag = {
+				who = FROM
+				flag = scientist_probe_relation
+			}
+		}
+	}
+	
+	immediate = {
+		FROMFROMFROM = { 
+			solar_system = { save_event_target_as = scientist_probe_system }
+		}
+		random_country = {
+			limit = {
+				reverse_has_relation_flag = {
+					who = ROOT
+					flag = scientist_probe_relation
+				}
+			}
+			country_event = { id = country.1022 }
+		}
+	}
+}
+
+# notification to player that probes are bust
+country_event = {
+	id = country.1022
+	title = "country.1022.name"
+	desc = "country.1022.desc"
+	show_sound = event_ship_thrusters
+	picture = GFX_evt_ship_in_orbit
+	location = event_target:scientist_probe_system
+
+	is_triggered_only = yes
+	auto_opens = yes
+
+	option = {
+		name = OK
+		event_target:scientist_probe_system = {
+			random_system_planet = {
+				limit = { is_star = yes }
+				enable_special_project = {
+					name = "ROGUE_SCIENTIST_1_PROJECT"
+					location = this
+					owner = root
+				}
+			}
+		}
+		hidden_effect = { from = { destroy_country = yes } }
+	}
+}
+
+# Special project completed
+ship_event = {
+	id = country.1025
+	title = "country.1025.name"
+	desc = "country.1025.desc"
+	show_sound = event_ship_thrusters
+	picture = GFX_evt_ship_in_orbit
+
+	is_triggered_only = yes
+
+	trigger = {
+		owner = { has_country_flag = scientist_probed }
+	}
+
+	immediate = {
+		owner = { remove_country_flag = scientist_probed }
+	}
+
+	option = {
+		name = OK
+		owner = {
+			begin_event_chain = {
+				event_chain = "rogue_scientist_2_chain"
+				target = this
+			}
+			hidden_effect = { country_event = { id = country.1026 } }
+		}
+	}
+}
+
+# country scope followup to create PoI
+country_event = {
+	id = country.1026
+	hide_window = yes
+	is_triggered_only = yes
+	trigger = { has_event_chain = rogue_scientist_2_chain }
+
+	immediate = {
+		random_owned_planet = { 
+			limit = { is_capital = yes }
+			save_event_target_as = capital_location
+		}
+		random_system = {
+			limit = {
+				NOT = {
+					has_star_flag = hostile_system
+					has_star_flag = capital_system
+					has_star_flag = current_scientist_1_system
+					has_star_flag = current_scientist_2_system
+					has_star_flag = scientist_system_1
+					has_star_flag = scientist_system_2
+					has_star_flag = scientist_system_3
+					is_star_class = sc_black_hole
+					exists = space_owner
+				}
+				is_pirate_system = no
+				distance = {
+					source = event_target:capital_location
+					max_distance = 120
+					min_distance = 40
+				}
+			}
+			set_star_flag = scientist_system_4
+			save_event_target_as = scientist_system_4
+			root = {
+				create_point_of_interest = {
+					id = scientist_poi.4
+					name = "scientist_poi_4"
+					desc = "scientist_poi_4_desc"
+					event_chain = "rogue_scientist_2_chain"
+					location = event_target:scientist_system_4
+				}
+			}
+		}
+	}
+}
+
+# Entering penultimate system
+ship_event = {
+	id = country.1030
+	title = "country.1030.name"
+	desc = "country.1030.desc"
+	show_sound = event_ship_thrusters
+	picture = GFX_evt_ship_in_orbit
+	location = root
+
+	trigger = {
+		FROM = { has_star_flag = scientist_system_4 }
+		owner = {
+			has_event_chain = rogue_scientist_2_chain
+			NOT = { has_country_flag = scisys_4 }
+		}
+	}
+
+	is_triggered_only = yes
+
+	immediate = {
+		owner = { set_country_flag = scisys_4 }
+		FROM = {
+			set_star_flag = current_scientist_4_system
+			solar_system = {
+				random_system_planet = {
+					limit = { is_star = yes }
+					save_event_target_as = pirate_star
+				}
+			}
+		}
+	}
+
+	option = {
+		name = UNFORTUNATE
+		owner = {
+			hidden_effect = { country_event = { id = country.1031 } }
+		}
+	}
+}
+
+# hidden event to spawn pirates
+country_event = {
+	id = country.1031
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		has_country_flag = scisys_4
+		has_event_chain = rogue_scientist_2_chain
+	}
+
+	immediate = {
+		set_country_flag = scientist_pirated
+		create_country = {
+			name = "NAME_Sunblaster_Pirates"
+			type = neutral_faction
+		}
+		last_created_country = {
+			establish_communications_no_message = root
+			establish_contact = { who = root }
+			set_country_flag = scientist_aggressor_pirates
+			save_event_target_as = scientist_pirates
+			create_fleet = {
+				name = "NAME_Sunblaster_Pirates"
+				effect = {
+					set_owner = event_target:scientist_pirates
+					create_ship = {
+						name = "NAME_Slices"
+						design = "NAME_Dagger"
+						graphical_culture = "pirate_01"
+					}
+					create_ship = {
+						name = "NAME_Dices"
+						design = "NAME_Dagger"
+						graphical_culture = "pirate_01"
+					}
+					set_location = event_target:pirate_star
+				}
+			}
+			set_relation_flag = {
+				who = root
+				flag = scientist_pirate_relation
+			}
+		}
+		#set_relation_flag = {
+		#	who = event_target:scientist_pirates
+		#	flag = scientist_pirate_relation
+		#}
+		remove_point_of_interest = scientist_poi.4
+		add_event_chain_counter = {
+			event_chain = "rogue_scientist_2_chain"
+			counter = "scientist_pursued"
+			amount = 1
+		}
+		end_event_chain = "rogue_scientist_2_chain"
+		random_owned_leader = {
+			limit = {
+				leader_class = scientist
+			}
+			save_event_target_as = scientist_portrait
+		}
+		country_event = { id = country.1035 }
+	}
+}
+
+# 1035 Diplo with scientist
+country_event = {
+	id = country.1035
+	title = "country.1035.name"
+	desc = "country.1035.desc"
+	show_sound = event_ship_bridge
+
+	diplomatic = yes
+
+	picture_event_data = {
+		portrait = event_target:scientist_portrait
+		room = ethic_spaceship_room
+	}
+
+	is_triggered_only = yes
+
+	trigger = {
+		has_country_flag = scisys_4
+	}
+
+	option = {
+		name = country.1035.a
+		response_text = country.1035.a.response
+		is_dialog_only = yes
+	}
+
+	option = {
+		name = country.1035.b
+		response_text = country.1035.b.response
+		is_dialog_only = yes
+	}
+
+	option = {
+		name = country.1035.c
+		hidden_effect = { country_event = { id = country.1040 } }
+	}
+}
+
+# 1040 Diplo with pirates
+country_event = {
+	id = country.1040
+	title = "country.1040.name"
+	desc = "country.1040.desc"
+	show_sound = event_ship_bridge
+
+	diplomatic = yes
+
+	picture_event_data = {
+		room = no_video_feed_room
+	}
+
+	is_triggered_only = yes
+
+	option = {
+		name = country.1040.a
+		trigger = {
+			OR = {
+				has_ethic = "ethic_fanatic_xenophobe"
+				has_ethic = "ethic_xenophobe"
+			}
+		}
+		response_text = country.1040.a.response
+		is_dialog_only = yes
+	}
+
+	option = {
+		name = country.1040.b
+		trigger = {
+			owner = {
+				energy > 149
+				OR = {
+					has_ethic = "ethic_fanatic_pacifist"
+					has_ethic = "ethic_pacifist"
+					has_ethic = "ethic_fanatic_materialist"
+					has_ethic = "ethic_materialist"
+				}
+			}
+		}
+		response_text = country.1040.b.response
+		add_energy = -150
+		hidden_effect = { country_event = { id = country.1041 } }
+	}
+
+	option = {
+		name = country.1040.c
+		hidden_effect = { country_event = { id = country.1042 } }
+	}
+
+	option = {
+		name = country.1040.d
+		response_text = country.1040.d.response
+		is_dialog_only = yes
+	}
+}
+
+# 1041 pirate response to payoff
+country_event = {
+	id = country.1041
+	title = "country.1041.name"
+	desc = "country.1041.desc"
+	show_sound = event_ship_bridge
+
+	diplomatic = yes
+
+	picture_event_data = {
+		room = no_video_feed_room
+	}
+
+	is_triggered_only = yes
+
+	immediate = {
+		random_owned_leader = {
+			limit = {
+				leader_class = scientist
+			}
+			save_event_target_as = scientist_portrait
+		}
+	}
+
+	option = {
+		name = country.1041.a
+		trigger = {
+			OR = {
+				has_ethic = "ethic_fanatic_xenophobe"
+				has_ethic = "ethic_xenophobe"
+			}
+		}
+		hidden_effect = { country_event = { id = country.1044 } }
+	}
+	option = {
+		name = country.1041.b
+		trigger = {
+			OR = {
+				has_ethic = "ethic_fanatic_spiritualist"
+				has_ethic = "ethic_spiritualist"
+			}
+		}
+		hidden_effect = { country_event = { id = country.1044 } }
+	}
+	option = {
+		name = country.1041.c
+		trigger = {
+			OR = {
+				has_ethic = "ethic_fanatic_materialist"
+				has_ethic = "ethic_materialist"
+			}
+		}
+		hidden_effect = { country_event = { id = country.1044 } }
+	}
+	option = {
+		name = country.1041.d
+		hidden_effect = { country_event = { id = country.1044 } }
+	}
+}
+
+# 1042 pirate response to hostility
+country_event = {
+	id = country.1042
+	title = "country.1042.name"
+	desc = "country.1042.desc"
+
+	is_triggered_only = yes
+	diplomatic = yes
+
+	picture_event_data = {
+		room = no_video_feed_room
+	}
+
+	option = {
+		name = country.1042.a
+		hidden_effect = {
+			event_target:scientist_pirates = { set_faction_hostility = { set_hostile = yes } }
+		}
+	}
+}
+
+# 1043 Pirates killed by player, porting to diplo
+country_event = {
+	id = country.1043
+	hide_window = yes
+
+	is_triggered_only = yes
+
+	trigger = {
+		exists = from
+		is_ai = no
+		#has_relation_flag = { who = from flag = scientist_pirate_relation }
+		FROM = {
+			has_relation_flag = {
+				who = ROOT
+				flag = scientist_pirate_relation
+			}
+		}
+	}
+
+	immediate = {
+		FROM = {
+			remove_relation_flag = {
+				who = root
+				flag = scientist_pirate_relation
+			}
+			remove_country_flag = scientist_aggressor_pirates
+			destroy_country = yes
+		}
+		random_owned_leader = {
+			limit = {
+				leader_class = scientist
+			}
+			save_event_target_as = scientist_portrait
+		}
+		country_event = { id = country.1045 }
+	}
+}
+
+# 1044 Situation resolved, pirates paid off 
+# Diplo with scientist
+country_event = {
+	id = country.1044
+	title = "country.1044.name"
+	desc = "country.1044.desc"
+	show_sound = event_ship_bridge
+	
+	is_triggered_only = yes
+
+	diplomatic = yes
+
+	trigger = {
+		has_country_flag = scientist_pirated
+	}
+
+	picture_event_data = {
+		portrait = event_target:scientist_portrait
+		room = ethic_spaceship_room
+	}
+
+	option = {
+		name = country.1045.a
+		response_text = country.1045.a.response
+		is_dialog_only = yes
+	}
+
+	option = {
+		name = country.1045.b
+		response_text = country.1045.b.response
+		hidden_effect = { country_event = { id = country.1046 } }
+	}
+}
+
+# 1045 Situation resolved, pirates killed
+# Diplo with scientist
+country_event = {
+	id = country.1045
+	title = "country.1045.name"
+	desc = "country.1045.desc"
+	show_sound = event_ship_bridge
+
+	diplomatic = yes
+
+	picture_event_data = {
+		portrait = event_target:scientist_portrait
+		room = ethic_spaceship_room
+	}
+
+	is_triggered_only = yes
+
+	trigger = {
+		has_country_flag = scientist_pirated
+	}
+
+	option = {
+		name = country.1045.a
+		response_text = country.1045.a.response
+		is_dialog_only = yes
+	}
+
+	option = {
+		name = country.1045.b
+		hidden_effect = { country_event = { id = country.1046 } }
+	}
+}
+
+# 1046 wait! gain phys research
+country_event = {
+	id = country.1046
+	title = "country.1046.name"
+	desc = "country.1046.desc"
+	show_sound = event_ship_thrusters
+
+	diplomatic = yes
+
+	picture_event_data = {
+		portrait = event_target:scientist_portrait
+		room = ethic_spaceship_room
+	}
+
+	is_triggered_only = yes
+
+	immediate = {
+		add_monthly_resource_mult = {
+			resource = physics_research
+			value = @tier2researchreward
+			min = @tier2researchmin
+			max = @tier2researchmax
+		}
+	}
+
+	option = {
+		name = country.1046.a
+		hidden_effect = { country_event = { id = country.1047 } }
+	}
+}
+
+# sets final PoI
+country_event = {
+	id = country.1047
+	title = "country.1047.name"
+	desc = "country.1047.desc"
+	show_sound = event_scanner
+	picture = GFX_evt_ship_in_orbit
+
+	is_triggered_only = yes
+
+	trigger = {
+		has_country_flag = scientist_pirated
+	}
+
+	immediate = {
+		remove_country_flag = scientist_pirated		
+	}
+
+	option = {
+		name = OK
+		add_monthly_resource_mult = {
+			resource = physics_research
+			value = @tier2researchreward
+			min = @tier2researchmin
+			max = @tier2researchmax
+		}
+		begin_event_chain = {
+			event_chain = "rogue_scientist_3_chain"
+			target = root
+		}
+		hidden_effect = {
+			random_owned_planet = { 
+				limit = { is_capital = yes }
+				save_event_target_as = capital_location
+			}
+			random_system = {
+				limit = {
+					NOT = {
+						has_star_flag = hostile_system
+						has_star_flag = capital_system
+						has_star_flag = current_scientist_1_system
+						has_star_flag = current_scientist_2_system
+						has_star_flag = current_scientist_3_system
+						has_star_flag = scientist_system_1
+						has_star_flag = scientist_system_2
+						has_star_flag = scientist_system_3
+						has_star_flag = scientist_system_4
+						is_star_class = sc_black_hole
+						exists = space_owner
+					}
+					is_pirate_system = no
+					distance = {
+						source = event_target:capital_location
+						max_distance = 160
+						min_distance = 40
+					}
+				}
+				set_star_flag = scientist_system_5
+				save_event_target_as = scientist_system_5
+			}
+			root = {
+				create_point_of_interest = {
+					id = scientist_poi.5
+					name = "scientist_poi_5"
+					desc = "scientist_poi_5_desc"
+					event_chain = "rogue_scientist_3_chain"
+					location = event_target:scientist_system_5
+				}
+			}
+		}
+	}
+}
+
+# 1050 final catchup with scientist
+ship_event = {
+	id = country.1050
+	title = "country.1050.name"
+	desc = "country.1050.desc"
+	show_sound = event_scanner
+	picture = GFX_evt_ship_in_orbit
+	location = root
+
+	is_triggered_only = yes
+
+	trigger = {
+		FROM = { has_star_flag = scientist_system_5 }
+		owner = {
+			has_event_chain = "rogue_scientist_3_chain"
+			NOT = { has_country_flag = scisys_5 }
+		}
+	}
+
+	immediate = {
+		owner = {
+			set_country_flag = scisys_5
+			random_owned_leader = {
+				limit = {
+					leader_class = scientist
+				}
+				save_event_target_as = scientist_portrait
+			}
+		}
+		solar_system = {
+			random_system_planet = {
+				limit = { is_star = yes }
+				save_event_target_as = ship_position
+			}
+		}
+		owner = {
+			save_event_target_as = owner_country
+			remove_point_of_interest = scientist_system_5
+			add_event_chain_counter = {
+				event_chain = "rogue_scientist_3_chain"
+				counter = "scientist_apprehended"
+				amount = 1
+			}
+			create_fleet = {
+				name = "NAME_Burnt-Out_Science_Ship"
+				effect = {
+					set_owner = prev
+					create_ship_design = {
+						design = "NAME_Prototype"
+						ftl = event_target:owner_country
+					}
+					create_ship = {
+						name = "NAME_Research_Expedition_Vessel"
+						prefix = no
+						design = last_created_design
+						graphical_culture = event_target:owner_country
+						upgradable = no
+						effect = {
+							set_ship_flag = wandering_scientist_ship
+							set_disabled = yes
+							save_event_target_as = wandering_ship
+						}
+					}
+					set_fleet_flag = wandering_scientist_fleet_flag
+					set_location = event_target:ship_position
+				}
+			}
+		}
+	}
+
+	option = {
+		name = ONSCREEN
+		hidden_effect = { owner = { country_event = { id = country.1051 } } }
+	}
+}
+
+# 1051 start of final diplo with scientist
+country_event = {
+	id = country.1051
+	title = "country.1051.name"
+	desc = "country.1051.desc"
+
+	diplomatic = yes
+
+	picture_event_data = {
+		portrait = event_target:scientist_portrait
+		room = ethic_spaceship_room
+	}
+
+	is_triggered_only = yes
+
+	option = {
+		name = country.1051.a
+		response_text = country.1051.a.response
+		is_dialog_only = yes
+	}
+
+	option = {
+		name = country.1051.b
+		response_text = country.1051.b.response
+		is_dialog_only = yes
+	}
+
+	option = {
+		name = country.1051.c
+		hidden_effect = { country_event = { id = country.1052 } }
+	}
+}
+
+# 1052
+country_event = {
+	id = country.1052
+	title = "country.1052.name"
+	desc = "country.1052.desc"
+
+	diplomatic = yes
+
+	picture_event_data = {
+		portrait = event_target:scientist_portrait
+		room = ethic_spaceship_room
+	}
+
+	is_triggered_only = yes
+
+	option = {
+		name = country.1052.a
+		hidden_effect = { country_event = { id = country.1053 } }
+	}
+
+	option = {
+		name = country.1052.b
+		hidden_effect = { country_event = { id = country.1053 } }
+	}
+}
+
+# 1053, final message
+country_event = {
+	id = country.1053
+	title = "country.1053.name"
+	desc = "country.1053.desc"
+
+	diplomatic = yes
+	is_triggered_only = yes
+
+	picture_event_data = {
+		portrait = event_target:scientist_portrait
+		room = ethic_spaceship_room
+	}
+
+	option = {
+		name = country.1053.a
+		hidden_effect = {
+			event_target:wandering_ship = {
+				set_disabled = no
+				ship_event = { id = country.1055 days = 4 }
+			}
+		}
+	}
+}
+
+# 1055
+ship_event = {
+	id = country.1055
+	title = "country.1055.name"
+	desc = "country.1055.desc"
+	show_sound = event_mystic_reveal
+	picture = GFX_evt_wormhole
+	location = root
+
+	is_triggered_only = yes
+
+	#trigger = { has_ship_flag = wandering_scientist_ship }
+
+	option = {
+		name = country.1055.a
+		custom_tooltip = country.1055.a.tooltip
+		owner = { end_event_chain = "rogue_scientist_3_chain" }
+		hidden_effect = {
+			set_disabled = no
+			owner = { set_country_flag = completed_rogue_scientist }
+		}
+	}
+}
+
+# Pirates destroyed by others (hidden)
+country_event = {
+	id = country.1060
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		has_country_flag = scientist_aggressor_pirates
+		NOT = {
+			has_relation_flag = {
+				who = FROM
+				flag = scientist_pirate_relation
+			}
+		}
+	}
+	
+	immediate = {
+		FROMFROMFROM = { 
+			solar_system = {
+				random_system_planet = {
+					limit = { is_star = yes}
+					save_event_target_as = pirate_star
+				}
+			}
+		}
+		random_country = {
+			limit = {
+				reverse_has_relation_flag = {
+					who = ROOT
+					flag = scientist_pirate_relation
+				}
+			}
+			country_event = { id = country.1061 }
+		}
+	}
+}
+
+# notification to player that pirates are bust
+country_event = {
+	id = country.1061
+	title = "country.1061.name"
+	desc = "country.1061.desc"
+	show_sound = event_ship_thrusters
+	picture = GFX_evt_ship_in_orbit
+	location = event_target:pirate_star
+
+	is_triggered_only = yes
+
+	option = {
+		name = OK
+		hidden_effect = {
+			FROM = { remove_country_flag = scientist_aggressor_pirates }
+			FROM = { destroy_country = yes }
+			country_event = { id = country.1045 }
+		}
+	}
+}
+
+############################################
+### Rogue Scientist End
+############################################
+
+############################################
+### Mass Extinction Event Chain
+############################################
+
+country_event = {
+	id = country.1100
+	title = "country.1100.name"
+	desc = "country.1100.desc"
+	show_sound = event_scanner
+	picture = GFX_evt_galactic_senate
+	location = root
+
+	#mean_time_to_happen = { months = 40 }
+	is_triggered_only = yes
+
+	trigger = {
+		is_ai = no
+		NOR = {
+			has_ethic = ethic_gestalt_consciousness
+			has_country_flag = starting_event
+		}
+	}
+
+	immediate = { set_country_flag = starting_event }
+
+	option = {
+		name = "country.1100.a"
+		begin_event_chain = {
+			event_chain = "mass_extinction_chain"
+			target = root
+		}
+		hidden_effect = { country_event = { id = country.1101 } }
+	}
+}
+
+# hidden, sets PoIs
+country_event = {
+	id = country.1101
+	hide_window = yes
+
+	is_triggered_only = yes
+	auto_opens = yes
+
+	immediate = {
+		random_owned_planet = { 
+			limit = { is_capital = yes }
+			save_event_target_as = capital_location
+		}
+		random_system = {
+			limit = {
+				NOT = {
+					exists = space_owner
+					has_star_flag = hostile_system
+					is_star_class = sc_black_hole
+					any_planet = {
+						has_planet_flag = massex_1_planet
+						has_planet_flag = massex_2_planet
+						has_planet_flag = massex_3_planet
+						has_planet_flag = massex_4_planet
+						has_planet_flag = massex_5_planet
+					}
+				}
+				is_pirate_system = no
+				any_planet = { is_planet_class = pc_asteroid }
+				distance = {
+					source = event_target:capital_location
+					max_distance = 190
+					min_distance = 5
+				}
+			}
+			random_system_planet = {
+				limit = {
+					is_planet_class = pc_asteroid
+					has_owner = no
+				}
+				set_planet_flag = massex_1_planet
+				prevent_anomaly = yes
+				root = {
+					create_point_of_interest = {
+						id = massex_poi.1
+						name = "massex_poi_1"
+						desc = "massex_poi_1_desc"
+						event_chain = "mass_extinction_chain"
+						location = prev
+					}
+				}
+			}
+		}
+		random_system = {
+			limit = {
+				NOT = {
+					exists = space_owner
+					has_star_flag = hostile_system
+					is_star_class = sc_black_hole
+					any_planet = {
+						has_planet_flag = massex_1_planet
+						has_planet_flag = massex_2_planet
+						has_planet_flag = massex_3_planet
+						has_planet_flag = massex_4_planet
+						has_planet_flag = massex_5_planet
+					}
+				}
+				is_pirate_system = no
+				any_planet = { is_planet_class = pc_molten }
+				distance = {
+					source = event_target:capital_location
+					max_distance = 190
+					min_distance = 5
+				}
+			}
+			random_system_planet = {
+				limit = {
+					is_planet_class = pc_molten
+					has_owner = no
+				}
+				set_planet_flag = massex_2_planet
+				prevent_anomaly = yes
+				root = {
+					create_point_of_interest = {
+						id = massex_poi.2
+						name = "massex_poi_2"
+						desc = "massex_poi_2_desc"
+						event_chain = "mass_extinction_chain"
+						location = prev
+					}
+				}
+			}
+		}
+		random_system = {
+			limit = {
+				NOT = {
+					exists = space_owner
+					has_star_flag = hostile_system
+					is_star_class = sc_black_hole
+					any_planet = {
+						has_planet_flag = massex_1_planet
+						has_planet_flag = massex_2_planet
+						has_planet_flag = massex_3_planet
+						has_planet_flag = massex_4_planet
+						has_planet_flag = massex_5_planet
+					}
+				}
+				is_pirate_system = no
+				any_planet = { is_planet_class = pc_barren }
+				distance = {
+					source = event_target:capital_location
+					max_distance = 190
+					min_distance = 5
+				}
+			}
+			random_system_planet = {
+				limit = {
+					is_planet_class = pc_barren
+					has_owner = no
+				}
+				set_planet_flag = massex_3_planet
+				prevent_anomaly = yes
+				root = {
+					create_point_of_interest = {
+						id = massex_poi.3
+						name = "massex_poi_3"
+						desc = "massex_poi_3_desc"
+						event_chain = "mass_extinction_chain"
+						location = prev
+					}
+				}
+			}
+		}
+		random_system = {
+			limit = {
+				NOT = {
+					exists = space_owner
+					has_star_flag = hostile_system
+					is_star_class = sc_black_hole
+					any_planet = {
+						has_planet_flag = massex_1_planet
+						has_planet_flag = massex_2_planet
+						has_planet_flag = massex_3_planet
+						has_planet_flag = massex_4_planet
+						has_planet_flag = massex_5_planet
+					}
+				}
+				is_pirate_system = no
+				any_planet = { is_planet_class = pc_toxic }
+				distance = {
+					source = event_target:capital_location
+					max_distance = 190
+					min_distance = 5
+				}
+			}
+			random_system_planet = {
+				limit = {
+					is_planet_class = pc_toxic
+					has_owner = no
+				}
+				set_planet_flag = massex_4_planet
+				prevent_anomaly = yes
+				root = {
+					create_point_of_interest = {
+						id = massex_poi.4
+						name = "massex_poi_4"
+						desc = "massex_poi_4_desc"
+						event_chain = "mass_extinction_chain"
+						location = prev
+					}
+				}
+			}
+		}
+		random_system = {
+			limit = {
+				NOT = {
+					exists = space_owner
+					has_star_flag = hostile_system
+					is_star_class = sc_black_hole
+					any_planet = {
+						has_planet_flag = massex_1_planet
+						has_planet_flag = massex_2_planet
+						has_planet_flag = massex_3_planet
+						has_planet_flag = massex_4_planet
+						has_planet_flag = massex_5_planet
+					}
+				}
+				is_pirate_system = no
+				any_planet = { is_planet_class = pc_frozen }
+				distance = {
+					source = event_target:capital_location
+					max_distance = 190
+					min_distance = 5
+				}
+			}
+			random_system_planet = {
+				limit = {
+					is_planet_class = pc_frozen
+					has_owner = no
+				}
+				set_planet_flag = massex_5_planet
+				prevent_anomaly = yes
+				root = {
+					create_point_of_interest = {
+						id = massex_poi.5
+						name = "massex_poi_5"
+						desc = "massex_poi_5_desc"
+						event_chain = "mass_extinction_chain"
+						location = prev
+					}
+				}
+			}
+		}
+	}
+}
+
+# hidden, ship entering PoI system, porting to country event for each PoI
+ship_event = {
+	id = country.1102
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		owner = {
+			is_ai = no
+			has_event_chain = mass_extinction_chain
+		}
+		from = {
+			any_planet = {
+				OR = {
+					has_planet_flag = massex_1_planet
+					has_planet_flag = massex_2_planet
+					has_planet_flag = massex_3_planet
+					has_planet_flag = massex_4_planet
+					has_planet_flag = massex_5_planet
+				}
+			}
+		}
+	}
+
+	immediate = {
+		if = {
+			limit = {
+				from = {
+					any_planet = { has_planet_flag = massex_1_planet }
+				}
+			}
+			owner = { country_event = { id = country.1105 } }
+		}
+		if = {
+			limit = {
+				from = {
+					any_planet = { has_planet_flag = massex_2_planet }
+				}
+			}
+			owner = { country_event = { id = country.1110 } }
+		}
+		if = {
+			limit = {
+				from = {
+					any_planet = { has_planet_flag = massex_3_planet }
+				}
+			}
+			owner = { country_event = { id = country.1115 } }
+		}
+		if = {
+			limit = {
+				from = {
+					any_planet = { has_planet_flag = massex_4_planet }
+				}
+			}
+			owner = { country_event = { id = country.1120 } }
+		}
+		if = {
+			limit = {
+				from = {
+					any_planet = { has_planet_flag = massex_5_planet }
+				}
+			}
+			owner = { country_event = { id = country.1125 } }
+		}
+	}
+}
+
+# asteroid - enables project something broken
+country_event = {
+	id = country.1105
+	title = "country.1105.name"
+	desc = "country.1105.desc"
+	show_sound = event_scanner
+	picture = GFX_evt_mining_station
+	location = from
+
+	is_triggered_only = yes
+
+	trigger = {
+		NOT = {
+			has_country_flag = massex_1_found
+			has_country_flag = massex_1_pending
+		}
+	}
+
+	immediate = {
+		set_country_flag = massex_1_pending
+		if = {
+			limit = {
+				fromfrom = {
+					any_planet = { has_planet_flag = massex_1_planet } 
+					has_access_fleet = root
+				}
+			}
+			set_country_flag = massex_1_found
+			remove_country_flag = massex_1_pending
+			fromfrom = {
+				random_system_planet = {
+					limit = { has_planet_flag = massex_1_planet }
+					prevent_anomaly = yes
+				}
+			}
+		}
+	}
+
+	option = {
+		name = "country.1100.owned"
+		trigger = { NOT = { has_country_flag = massex_1_found } }
+		hidden_effect = {
+			remove_country_flag = massex_1_pending
+			remove_point_of_interest = massex_poi.1
+			fromfrom = {
+				random_planet = {
+					limit = { has_planet_flag = massex_1_planet }
+					remove_planet_flag = massex_1_planet
+				}
+			}
+			capital_scope = { save_event_target_as = capital_location }
+			random_system = {
+				limit = {
+					NOT = {
+						exists = space_owner
+						has_star_flag = hostile_system
+						is_star_class = sc_black_hole
+						any_planet = {
+							has_planet_flag = massex_1_planet
+							has_planet_flag = massex_2_planet
+							has_planet_flag = massex_3_planet
+							has_planet_flag = massex_4_planet
+							has_planet_flag = massex_5_planet
+						}
+					}
+					is_pirate_system = no
+					any_planet = { is_planet_class = pc_asteroid }
+					distance = {
+						source = event_target:capital_location
+						max_distance = 190
+						min_distance = 5
+					}
+				}
+				random_system_planet = {
+					limit = {
+						is_planet_class = pc_asteroid
+						has_owner = no
+					}
+					set_planet_flag = massex_1_planet
+					prevent_anomaly = yes
+					root = {
+						create_point_of_interest = {
+							id = massex_poi.1
+							name = "massex_poi_1"
+							desc = "massex_poi_1_desc"
+							event_chain = "mass_extinction_chain"
+							location = prev
+						}
+					}
+				}
+			}
+		}
+	}
+
+	option = {
+		name = OK
+		trigger = { has_country_flag = massex_1_found }
+		fromfrom = {
+			random_system_planet = {
+				limit = { has_planet_flag = massex_1_planet }
+				root = {
+					enable_special_project = {
+						name = "MASSEX_1_PROJECT"
+						location = prev
+						owner = root
+					}
+					hidden_effect = { remove_point_of_interest = massex_poi.1 }
+				}
+			}
+		}
+	}
+}
+
+# molten - enables project something burned
+country_event = {
+	id = country.1110
+	title = "country.1110.name"
+	desc = "country.1110.desc"
+	show_sound = event_scanner
+	picture = GFX_evt_satellite_in_orbit
+	location = from
+
+	is_triggered_only = yes
+
+	trigger = {
+		NOT = {
+			has_country_flag = massex_2_found
+			has_country_flag = massex_2_pending
+		}
+	}
+
+	immediate = {
+		set_country_flag = massex_2_pending
+		if = {
+			limit = {
+				fromfrom = {
+					any_planet = { has_planet_flag = massex_2_planet } 
+					has_access_fleet = root
+				}
+			}
+			set_country_flag = massex_2_found
+			remove_country_flag = massex_2_pending
+			fromfrom = {
+				random_system_planet = {
+					limit = { has_planet_flag = massex_2_planet }
+					prevent_anomaly = yes
+				}
+			}
+		}
+	}
+
+	option = {
+		name = "country.1100.owned"
+		trigger = { NOT = { has_country_flag = massex_2_found } }
+		hidden_effect = {
+			remove_country_flag = massex_2_pending
+			remove_point_of_interest = massex_poi.2
+			random_planet = {
+				limit = { has_planet_flag = massex_2_planet }
+				remove_planet_flag = massex_2_planet
+			}
+			capital_scope = { save_event_target_as = capital_location }
+			random_system = {
+				limit = {
+					NOT = {
+						exists = space_owner
+						has_star_flag = hostile_system
+						is_star_class = sc_black_hole
+						any_planet = {
+							has_planet_flag = massex_1_planet
+							has_planet_flag = massex_2_planet
+							has_planet_flag = massex_3_planet
+							has_planet_flag = massex_4_planet
+							has_planet_flag = massex_5_planet
+						}
+					}
+					is_pirate_system = no
+					any_planet = { is_planet_class = pc_molten }
+					distance = {
+						source = event_target:capital_location
+						max_distance = 190
+						min_distance = 5
+					}
+				}
+				random_system_planet = {
+					limit = {
+						is_planet_class = pc_molten
+						has_owner = no
+					}
+					set_planet_flag = massex_2_planet
+					prevent_anomaly = yes
+					root = {
+						create_point_of_interest = {
+							id = massex_poi.2
+							name = "massex_poi_2"
+							desc = "massex_poi_2_desc"
+							event_chain = "mass_extinction_chain"
+							location = prev
+						}
+					}
+				}
+			}
+		}
+	}
+
+	option = {
+		name = OK
+		trigger = { has_country_flag = massex_2_found }
+		fromfrom = {
+			random_system_planet = {
+				limit = { has_planet_flag = massex_2_planet }
+				root = {
+					enable_special_project = {
+						name = "MASSEX_2_PROJECT"
+						location = prev
+						owner = root
+					}
+					hidden_effect = { remove_point_of_interest = massex_poi.2 }
+				}
+			}
+		}
+	}
+}
+
+# barren - enables project something blasted
+country_event = {
+	id = country.1115
+	title = "country.1115.name"
+	desc = "country.1115.desc"
+	show_sound = event_scanner
+	picture = GFX_evt_underground_civilization
+	location = from
+
+	is_triggered_only = yes
+
+	trigger = {
+		NOT = {
+			has_country_flag = massex_3_found
+			has_country_flag = massex_3_pending
+		}
+	}
+
+	immediate = {
+		set_country_flag = massex_3_pending
+		if = {
+			limit = {
+				fromfrom = {
+					any_planet = { has_planet_flag = massex_3_planet } 
+					has_access_fleet = root
+				}
+			}
+			set_country_flag = massex_3_found
+			remove_country_flag = massex_3_pending
+			fromfrom = {
+				random_system_planet = {
+					limit = { has_planet_flag = massex_3_planet }
+					prevent_anomaly = yes
+				}
+			}
+		}
+	}
+
+	option = {
+		name = "country.1100.owned"
+		trigger = { NOT = { has_country_flag = massex_3_found } }
+		hidden_effect = {
+			remove_country_flag = massex_3_pending
+			remove_point_of_interest = massex_poi.3
+			random_planet = {
+				limit = { has_planet_flag = massex_3_planet }
+				remove_planet_flag = massex_3_planet
+			}
+			capital_scope = { save_event_target_as = capital_location }
+			random_system = {
+				limit = {
+					NOT = {
+						exists = space_owner
+						has_star_flag = hostile_system
+						is_star_class = sc_black_hole
+						any_planet = {
+							has_planet_flag = massex_1_planet
+							has_planet_flag = massex_2_planet
+							has_planet_flag = massex_3_planet
+							has_planet_flag = massex_4_planet
+							has_planet_flag = massex_5_planet
+						}
+					}
+					is_pirate_system = no
+					any_planet = { is_planet_class = pc_barren }
+					distance = {
+						source = event_target:capital_location
+						max_distance = 190
+						min_distance = 5
+					}
+				}
+				random_system_planet = {
+					limit = {
+						is_planet_class = pc_barren
+						has_owner = no
+					}
+					set_planet_flag = massex_3_planet
+					prevent_anomaly = yes
+					root = {
+						create_point_of_interest = {
+							id = massex_poi.3
+							name = "massex_poi_3"
+							desc = "massex_poi_3_desc"
+							event_chain = "mass_extinction_chain"
+							location = prev
+						}
+					}
+				}
+			}
+		}
+	}
+
+	option = {
+		name = OK
+		trigger = { has_country_flag = massex_3_found }
+		fromfrom = {
+			random_system_planet = {
+				limit = { has_planet_flag = massex_3_planet }
+				root = {
+					enable_special_project = {
+						name = "MASSEX_3_PROJECT"
+						location = prev
+						owner = root
+					}
+					hidden_effect = { remove_point_of_interest = massex_poi.3 }
+				}
+			}
+		}
+	}
+}
+
+# toxic - enables project something envenomed
+country_event = {
+	id = country.1120
+	title = "country.1120.name"
+	desc = "country.1120.desc"
+	show_sound = event_scanner
+	picture = GFX_evt_alien_nature
+	location = from
+
+	is_triggered_only = yes
+
+	trigger = {
+		NOT = {
+			has_country_flag = massex_4_found
+			has_country_flag = massex_4_pending
+		}
+	}
+
+	immediate = {
+		set_country_flag = massex_4_pending
+		if = {
+			limit = {
+				fromfrom = {
+					any_planet = { has_planet_flag = massex_4_planet } 
+					has_access_fleet = root
+				}
+			}
+			set_country_flag = massex_4_found
+			remove_country_flag = massex_4_pending
+			fromfrom = {
+				random_system_planet = {
+					limit = { has_planet_flag = massex_4_planet }
+					prevent_anomaly = yes
+				}
+			}
+		}
+	}
+
+	option = {
+		name = "country.1100.owned"
+		trigger = { NOT = { has_country_flag = massex_4_found } }
+		hidden_effect = {
+			remove_country_flag = massex_4_pending
+			remove_point_of_interest = massex_poi.4
+			random_planet = {
+				limit = { has_planet_flag = massex_4_planet }
+				remove_planet_flag = massex_4_planet
+			}
+			capital_scope = { save_event_target_as = capital_location }
+			random_system = {
+				limit = {
+					NOT = {
+						exists = space_owner
+						has_star_flag = hostile_system
+						is_star_class = sc_black_hole
+						any_planet = {
+							has_planet_flag = massex_1_planet
+							has_planet_flag = massex_2_planet
+							has_planet_flag = massex_3_planet
+							has_planet_flag = massex_4_planet
+							has_planet_flag = massex_5_planet
+						}
+					}
+					is_pirate_system = no
+					any_planet = { is_planet_class = pc_toxic }
+					distance = {
+						source = event_target:capital_location
+						max_distance = 190
+						min_distance = 5
+					}
+				}
+				random_system_planet = {
+					limit = {
+						is_planet_class = pc_toxic
+						has_owner = no
+					}
+					set_planet_flag = massex_4_planet
+					prevent_anomaly = yes
+					root = {
+						create_point_of_interest = {
+							id = massex_poi.4
+							name = "massex_poi_4"
+							desc = "massex_poi_4_desc"
+							event_chain = "mass_extinction_chain"
+							location = prev
+						}
+					}
+				}
+			}
+		}
+	}
+
+	option = {
+		name = OK
+		trigger = { has_country_flag = massex_4_found }
+		fromfrom = {
+			random_system_planet = {
+				limit = { has_planet_flag = massex_4_planet }
+				root = {
+					enable_special_project = {
+						name = "MASSEX_4_PROJECT"
+						location = prev
+						owner = root
+					}
+					hidden_effect = { remove_point_of_interest = massex_poi.4 }
+				}
+			}
+		}
+	}
+}
+
+# frozen - enables project something chilled
+country_event = {
+	id = country.1125
+	title = "country.1125.name"
+	desc = "country.1125.desc"
+	show_sound = event_scanner
+	picture = GFX_evt_outpost
+	location = from
+
+	is_triggered_only = yes
+
+	trigger = {
+		NOT = {
+			has_country_flag = massex_5_found
+			has_country_flag = massex_5_pending
+		}
+	}
+
+	immediate = {
+		set_country_flag = massex_5_pending
+		if = {
+			limit = {
+				fromfrom = {
+					any_planet = { has_planet_flag = massex_5_planet } 
+					has_access_fleet = root
+				}
+			}
+			set_country_flag = massex_5_found
+			remove_country_flag = massex_5_pending
+			fromfrom = {
+				random_system_planet = {
+					limit = { has_planet_flag = massex_5_planet }
+					prevent_anomaly = yes
+				}
+			}
+		}
+	}
+
+	option = {
+		name = "country.1100.owned"
+		trigger = { NOT = { has_country_flag = massex_5_found } }
+		hidden_effect = {
+			remove_country_flag = massex_5_pending
+			remove_point_of_interest = massex_poi.5
+			random_planet = {
+				limit = { has_planet_flag = massex_5_planet }
+				remove_planet_flag = massex_5_planet
+			}
+			capital_scope = { save_event_target_as = capital_location }
+			random_system = {
+				limit = {
+					NOT = {
+						exists = space_owner
+						has_star_flag = hostile_system
+						is_star_class = sc_black_hole
+						any_planet = {
+							has_planet_flag = massex_1_planet
+							has_planet_flag = massex_2_planet
+							has_planet_flag = massex_3_planet
+							has_planet_flag = massex_4_planet
+							has_planet_flag = massex_5_planet
+						}
+					}
+					is_pirate_system = no
+					any_planet = { is_planet_class = pc_frozen }
+					distance = {
+						source = event_target:capital_location
+						max_distance = 190
+						min_distance = 5
+					}
+				}
+				random_system_planet = {
+					limit = {
+						is_planet_class = pc_frozen
+						has_owner = no
+					}
+					set_planet_flag = massex_5_planet
+					prevent_anomaly = yes
+					root = {
+						create_point_of_interest = {
+							id = massex_poi.5
+							name = "massex_poi_5"
+							desc = "massex_poi_5_desc"
+							event_chain = "mass_extinction_chain"
+							location = prev
+						}
+					}
+				}
+			}
+		}
+	}
+
+	option = {
+		name = OK
+		trigger = { has_country_flag = massex_5_found }
+		fromfrom = {
+			random_system_planet = {
+				limit = { has_planet_flag = massex_5_planet }
+				root = {
+					enable_special_project = {
+						name = "MASSEX_5_PROJECT"
+						location = prev
+						owner = root
+					}
+					hidden_effect = { remove_point_of_interest = massex_poi.5 }
+				}
+			}
+		}
+	}
+}
+
+# asteroid - project followup
+ship_event = {
+	id = country.1130
+	title = "country.1130.name"
+	desc = "country.1130.desc"
+	show_sound = event_scanner
+	picture = GFX_evt_mining_station
+	location = root
+
+	is_triggered_only = yes
+	auto_opens = yes
+
+	immediate = {
+		owner = {
+			add_event_chain_counter = {
+				event_chain = "mass_extinction_chain"
+				counter = "massex_analyzed"
+				amount = 1
+			}
+		}
+	}
+
+	option = {
+		trigger = {
+			owner = {
+				has_completed_event_chain_counter = {
+					event_chain = "mass_extinction_chain"
+					counter = "massex_analyzed"
+				}
+			}
+		}
+		name = OK
+		hidden_effect = { owner = { country_event = { id = country.1155 } } }
+	}
+
+	option = {
+		trigger = {
+			owner = {
+				NOT = {
+					has_completed_event_chain_counter = {
+						event_chain = "mass_extinction_chain"
+						counter = "massex_analyzed"
+					}
+				}
+			}
+		}
+		name = OK
+	}
+}
+
+# molten - project followup
+ship_event = {
+	id = country.1135
+	title = "country.1135.name"
+	desc = "country.1135.desc"
+	show_sound = event_scanner
+	picture = GFX_evt_satellite_in_orbit
+	location = root
+
+	is_triggered_only = yes
+	auto_opens = yes
+
+	trigger = {
+		owner = { has_event_chain = "mass_extinction_chain" }
+	}
+
+	immediate = {
+		owner = {
+			add_event_chain_counter = {
+				event_chain = "mass_extinction_chain"
+				counter = "massex_analyzed"
+				amount = 1
+			}
+		}
+	}
+
+	option = {
+		trigger = {
+			owner = {
+				has_completed_event_chain_counter = {
+					event_chain = "mass_extinction_chain"
+					counter = "massex_analyzed"
+				}
+			}
+		}
+		name = OK
+		hidden_effect = { owner = { country_event = { id = country.1155 } } }
+	}
+
+	option = {
+		trigger = {
+			owner = {
+				NOT = {
+					has_completed_event_chain_counter = {
+						event_chain = "mass_extinction_chain"
+						counter = "massex_analyzed"
+					}
+				}
+			}
+		}
+		name = OK
+	}
+}
+
+# barren - project followup
+ship_event = {
+	id = country.1140
+	title = "country.1140.name"
+	desc = "country.1140.desc"
+	show_sound = event_scanner
+	picture = GFX_evt_underground_civilization
+	location = root
+
+	is_triggered_only = yes
+	auto_opens = yes
+
+	immediate = {
+		owner = {
+			add_event_chain_counter = {
+				event_chain = "mass_extinction_chain"
+				counter = "massex_analyzed"
+				amount = 1
+			}
+		}
+	}
+
+	option = {
+		trigger = {
+			owner = {
+				has_completed_event_chain_counter = {
+					event_chain = "mass_extinction_chain"
+					counter = "massex_analyzed"
+				}
+			}
+		}
+		name = OK
+		hidden_effect = { owner = { country_event = { id = country.1155 } } }
+	}
+
+	option = {
+		trigger = {
+			owner = {
+				NOT = {
+					has_completed_event_chain_counter = {
+						event_chain = "mass_extinction_chain"
+						counter = "massex_analyzed"
+					}
+				}
+			}
+		}
+		name = OK
+	}
+}
+
+# toxic - project followup
+ship_event = {
+	id = country.1145
+	title = "country.1145.name"
+	desc = "country.1145.desc"
+	show_sound = event_scanner
+	picture = GFX_evt_alien_nature
+	location = root
+
+	is_triggered_only = yes
+	auto_opens = yes
+
+	immediate = {
+		owner = {
+			add_event_chain_counter = {
+				event_chain = "mass_extinction_chain"
+				counter = "massex_analyzed"
+				amount = 1
+			}
+		}
+	}
+
+	option = {
+		trigger = {
+			owner = {
+				has_completed_event_chain_counter = {
+					event_chain = "mass_extinction_chain"
+					counter = "massex_analyzed"
+				}
+			}
+		}
+		name = OK
+		hidden_effect = { owner = { country_event = { id = country.1155 } } }
+	}
+
+	option = {
+		trigger = {
+			owner = {
+				NOT = {
+					has_completed_event_chain_counter = {
+						event_chain = "mass_extinction_chain"
+						counter = "massex_analyzed"
+					}
+				}
+			}
+		}
+		name = OK
+	}
+}
+
+# frozen - project followup
+ship_event = {
+	id = country.1150
+	title = "country.1150.name"
+	desc = "country.1150.desc"
+	show_sound = event_scanner
+	picture = GFX_evt_outpost
+	location = root
+
+	is_triggered_only = yes
+	auto_opens = yes
+
+	immediate = {
+		owner = {
+			add_event_chain_counter = {
+				event_chain = "mass_extinction_chain"
+				counter = "massex_analyzed"
+				amount = 1
+			}
+		}
+	}
+
+	option = {
+		trigger = {
+			owner = {
+				has_completed_event_chain_counter = {
+					event_chain = "mass_extinction_chain"
+					counter = "massex_analyzed"
+				}
+			}
+		}
+		name = OK
+		hidden_effect = { owner = { country_event = { id = country.1155 } } }
+	}
+
+	option = {
+		trigger = {
+			owner = {
+				NOT = {
+					has_completed_event_chain_counter = {
+						event_chain = "mass_extinction_chain"
+						counter = "massex_analyzed"
+					}
+				}
+			}
+		}
+		name = OK
+	}
+}
+
+# event chain completed
+country_event = {
+	id = country.1155
+	title = "country.1155.name"
+	desc = "country.1155.desc"
+	show_sound = event_cityscape
+	picture = GFX_evt_metropolis
+
+	is_triggered_only = yes
+	auto_opens = yes
+
+	immediate = {
+		remove_country_flag = massex_1_found
+		remove_country_flag = massex_2_found
+		remove_country_flag = massex_3_found
+		remove_country_flag = massex_4_found
+		remove_country_flag = massex_5_found
+		random_planet = {
+			limit = { has_planet_flag = massex_1_planet }
+			remove_planet_flag = massex_1_planet
+		}
+		random_planet = {
+			limit = { has_planet_flag = massex_2_planet }
+			remove_planet_flag = massex_2_planet
+		}
+		random_planet = {
+			limit = { has_planet_flag = massex_3_planet }
+			remove_planet_flag = massex_3_planet
+		}
+		random_planet = {
+			limit = { has_planet_flag = massex_4_planet }
+			remove_planet_flag = massex_4_planet
+		}
+		random_planet = {
+			limit = { has_planet_flag = massex_5_planet }
+			remove_planet_flag = massex_5_planet
+		}		
+	}
+
+	option = {
+		name = country.1155.a
+		end_event_chain = "mass_extinction_chain"
+		add_monthly_resource_mult = {
+			resource = physics_research
+			value = @tier3researchreward
+			min = @tier3researchmin
+			max = @tier3researchmax
+		}
+		add_monthly_resource_mult = {
+			resource = society_research
+			value = @tier3researchreward
+			min = @tier3researchmin
+			max = @tier3researchmax
+		}
+	}
+
+	option = {
+		name = country.1155.b
+		end_event_chain = "mass_extinction_chain"
+		add_monthly_resource_mult = {
+			resource = unity
+			value = @tier2influencereward
+			min = @tier2influencemin
+			max = @tier2influencemax
+		}
+		add_monthly_resource_mult = {
+			resource = unity
+			value = @tier3unityreward
+		}
+	}
+}
+
+############################################
+### Mass Extinction End
+############################################

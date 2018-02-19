@@ -1,0 +1,33 @@
+ship_section_template = {
+	key = "DEFAULT_SCIENCESHIP_SECTION"
+	ship_size = science
+	fits_on_slot = mid
+	entity = "science_ship_entity"
+	icon = "GFX_ship_part_core_mid"
+	
+	cost = 80
+	
+	small_utility_slots = 0
+	medium_utility_slots = 0
+	large_utility_slots = 1
+	aux_utility_slots = 1
+	
+	ai_weight = { factor = 100 }
+}
+
+# Advanced science ship section
+ship_section_template = {
+    key = "science_mid_2"
+    ship_size = science
+    fits_on_slot = mid
+   	entity = "science_ship_entity"
+	icon = "GFX_ship_part_core_mid"
+    prerequisites = { tech_engineering_industry_1201 }
+    cost = 120
+    small_utility_slots = 1
+    medium_utility_slots = 0
+    large_utility_slots = 1
+    aux_utility_slots = 2
+    ai_weight = { factor = 10 }
+}
+

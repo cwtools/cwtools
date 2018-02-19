@@ -1,0 +1,105 @@
+﻿### Vorta
+Vorta = {
+	randomized = no
+	
+	ship_names = {
+		generic = { }
+		corvette = { "Attack Ship" }
+		saber = { "Heavy Attack Ship" }
+		sovereign = { "Attack Cruiser" }
+		steamrunner = { "Battlecruiser" }		
+		adv_cruiser = { "Battleship" }
+		strike = { "Heavy Attack Ship" }			
+		constructor = { "Construction Vessel" }
+		colonizer = { "Colony Vessel" }
+		science = { "Science Vessel" }
+		transport = { "Transport Vessel" }
+		outpost_station = {
+			sequential_name = "Frontier Outpost"
+		}
+	}
+	
+	ship_class_names = {
+		corvette = { "Attack Ship" }
+		saber = { "Heavy Attack Ship" }
+		sovereign = { "Attack Cruiser" }
+		steamrunner = { "Battlecruiser" }
+		adv_cruiser = { "Battleship" }
+		strike = { "Heavy Attack Ship" }
+		assault_cruiser = { "Heavy Assault Cruiser"}
+		constructor = { "Construction Vessel" }
+		colonizer = { "Colony Vessel" }
+		science = { "Science Vessel" }
+		transport = { "Transport Vessel" }
+		super_battleship = { "Advanced Dreadnaught" }
+	}
+
+	fleet_names = {
+		sequential_name = "%O% Fleet"
+	}
+	
+	army_names = {
+		defense_army = {
+			sequential_name = "%O% Guards"
+		}
+		assault_army = {
+			sequential_name = "%O% Battalion"
+		}
+		slave_army = {
+			sequential_name = "%O% Indentured Defence Force"
+		}
+		clone_army = { 
+			sequential_name = "%O% Clone Defence Force"
+		}
+		robotic_army = {
+			sequential_name = "%O% Mechanical Defence Force"
+		}
+		android_army = {
+			sequential_name = "%O% Synthetic Defence Force"
+		}
+		psionic_army = { 
+			sequential_name = "%O% Psi Defence Force"
+		}
+		xenomorph_army = {
+			sequential_name = "%O% Bio-Warfare Defence Force"
+		}
+		gene_warrior_army = {
+			sequential_name = "%O% Bio-Engineered Defence Force"
+		}
+		army_jem'hadar = {
+			sequential_name = "%O% Jem'Hadar Division"
+		}
+	}
+
+	planet_names = {
+		generic = {
+			names = {  
+			}
+		}
+	}
+
+	### CHARACTERS
+	character_names = {
+		names1 = {
+			weight = 100
+			first_names_male = {
+				Borath Deyos Gelnon Keevan Weyoun Yelgrun Methras Rayjik Sejeel Tholun Keyoun Teyoun Deyoun Worath Rayoun Linayon Bonh Lauh Binl Mavn Mininn Linn Kagilal Dolon Deneves Leyin Doteln Logovan Wilel Linn Bogn Banan Eanon Eativol Mauinun Eauovon Konovn Yeyeh Leuin Eeteyn Deul Gouiren Wiroven Kauagan Geuaun Wegl Devan Eayon Yoyl Detouh Marn Wigegn Latirn Winen Eagin Linh Ligeh Gouran Botn
+			}
+			first_names_female = {
+				Eris Kilana Luaran Vannis Aris Erus Erys Muaran Milana Rilana Tilana Kirana Uris Erannis Megens Eiyoyos Wigs Eegolas Lauah Mavigs Yigins Einats Geros Dotanis Beuas Bouaus Yolas Beyones Gonegs Yitives Livis Yavah
+			}
+			second_names = {
+				" "
+			}
+			regnal_first_names_male = {
+			    Borath Deyos Gelnon Keevan Weyoun Yelgrun Methras Rayjik Sejeel Tholun Keyoun Teyoun Deyoun Worath Rayoun Linayon Bonh Lauh Binl Mavn Mininn Linn Kagilal Dolon Deneves Leyin Doteln Logovan Wilel Linn Bogn Banan Eanon Eativol Mauinun Eauovon Konovn Yeyeh Leuin Eeteyn Deul Gouiren Wiroven Kauagan Geuaun Wegl Devan Eayon Yoyl Detouh Marn Wigegn Latirn Winen Eagin Linh Ligeh Gouran Botn 
+			}
+			regnal_first_names_female = {
+				Eris Kilana Luaran Vannis Aris Erus Erys Muaran Milana Rilana Tilana Kirana Uris Erannis Megens Eiyoyos Wigs Eegolas Lauah Mavigs Yigins Einats Geros Dotanis Beuas Bouaus Yolas Beyones Gonegs Yitives Livis Yavah
+			}
+			regnal_second_names = { 
+				
+			}
+		}
+	}
+}

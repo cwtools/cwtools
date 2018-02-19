@@ -1,0 +1,557 @@
+##############################
+# Peaceful Prosperity Faction
+##############################
+
+prosperity = {
+	election_header = "GFX_faction_header_yellow"
+	guiding_ethic = ethic_pacifist
+	
+	unique = yes
+	support_multiplier = 1
+	
+	is_potential = {
+		years_passed > 10
+		has_encountered_other_species = yes
+		NOR = { has_ethic = ethic_gestalt_consciousness is_borg_empire = yes } 
+	}
+	
+	parameters = {
+		empire = {
+			type = country
+			valid_objects = {
+				is_same_value = root
+			}
+		}
+	}
+
+	can_join_faction = {
+		is_enslaved = no
+		is_shackled_robot = no
+		is_being_purged = no
+		has_culture_shock = no
+		NOT = { has_trait = trait_nerve_stapled }
+		has_ethic = ethic_pacifist
+	}
+	
+	attraction = {
+		base = 100
+		
+		modifier = {
+			factor = 1.25
+			exists = from
+			from = {
+				exists = leader
+				leader = { leader_class = ruler }
+			}
+		}
+		
+		modifier = {
+			factor = 0.75
+			exists = from
+			from = {
+				NOT = { exists = leader }
+			}
+		}
+		
+		modifier = {
+			factor = 1.5
+			
+			OR = {
+				has_ethic = ethic_pacifist
+				has_ethic = ethic_fanatic_pacifist
+			}
+		}
+		
+		# Should really check for citizenship instead
+		modifier = {
+			factor = 1.25
+			NOT = { is_same_species = owner_species }
+		}
+	}
+	
+	leader = {
+		base = 100
+		
+		modifier = {
+			factor = 0.0
+			OR = {
+				leader_class = admiral
+				leader_class = general
+			}			
+		}
+		
+		modifier = {
+			factor = 0.0
+			is_event_leader = yes
+		}		
+	}
+
+	demand = {
+		title = "PROSPERITY_LIQUIDITY"
+		unfulfilled_title = "PROSPERITY_NO_LIQUIDITY"
+		desc = "PROSPERITY_LIQUIDITY_DESC"
+
+		fulfilled_effect = 5
+
+		potential = { # TODO get a reasonable trigger for counting colonies?
+			exists = owner
+			owner = {
+				any_owned_planet = {
+					NOT = { is_same_value = root.capital_scope }
+					root = {
+						owner = {
+							any_owned_planet = {
+								NOR = {
+									is_same_value = prevprevprev
+									is_same_value = root.owner.capital_scope
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+
+		trigger = {
+			owner = { energy > 2999 }
+		}
+	}
+
+	demand = { # "PROSPERITY_WANTS_STRATEGIC_RESOURCE1"
+		title = "PROSPERITY_WANTS_STRATEGIC_RESOURCE1"
+		unfulfilled_title = "PROSPERITY_NO_STRATEGIC_RESOURCE1"
+		desc = "PROSPERITY_WANTS_STRATEGIC_RESOURCE_DESC1"
+		
+		fulfilled_effect = 3
+		
+		potential = {
+			exists = owner
+			owner = {
+			NOT = {
+			num_strategic_resources > 9
+				}
+			}
+		}
+		
+		trigger = {
+			owner = {
+				num_strategic_resources > 4
+			}
+		}
+	}
+
+	demand = { # "PROSPERITY_WANTS_STRATEGIC_RESOURCE2"
+		title = "PROSPERITY_WANTS_STRATEGIC_RESOURCE2"
+		unfulfilled_title = "PROSPERITY_NO_STRATEGIC_RESOURCE2"
+		desc = "PROSPERITY_WANTS_STRATEGIC_RESOURCE_DESC2"
+		
+		fulfilled_effect = 5
+		
+		potential = {
+			exists = owner
+			owner = {
+				num_strategic_resources > 9
+				NOT = {
+				num_strategic_resources > 14
+				}
+			}
+		}
+		
+		trigger = {
+			owner = {
+				num_strategic_resources > 9
+			}
+		}
+	}
+
+	demand = { # "PROSPERITY_WANTS_STRATEGIC_RESOURCE3"
+		title = "PROSPERITY_WANTS_STRATEGIC_RESOURCE3"
+		unfulfilled_title = "PROSPERITY_NO_STRATEGIC_RESOURCE3"
+		desc = "PROSPERITY_WANTS_STRATEGIC_RESOURCE_DESC3"
+		
+		fulfilled_effect = 10
+		
+		potential = {
+			exists = owner
+			owner = {
+				num_strategic_resources > 14
+			}
+		}
+		
+		trigger = {
+			owner = {
+				num_strategic_resources > 9
+			}
+		}
+	}
+	
+	on_create = {
+		pop_faction_event = { id = factions.1 }
+	}
+
+	demand = {
+		title = "PROSPERITY_PEACE"
+		unfulfilled_title = "PROSPERITY_NO_PEACE"
+		desc = "PROSPERITY_PEACE_DESC"
+
+		fulfilled_effect = 5
+		unfulfilled_effect = -10
+
+		potential = {
+			exists = owner
+		}
+
+		trigger = {
+			owner = {
+				is_at_war = no
+			}
+		}
+	}
+	
+	demand = {
+		title = "PROSPERITY_TRADITION"
+		unfulfilled_title = "PROSPERITY_NO_TRADITION"
+		desc = "PROSPERITY_TRADITION_DESC"
+
+		fulfilled_effect = 2
+		unfulfilled_effect = -5
+
+		potential = {
+			exists = owner
+			owner = {
+				AND = { 
+				is_assimilator = no 
+				militarist_country_traditions = no 
+				NOT = { 
+				has_authority = auth_machine_intelligence
+				has_country_flag = united_federation_of_planets
+				} 
+			}
+		}
+	}
+
+		trigger = {
+			owner = {
+					has_non_swapped_tradition = tr_prosperity_adopt
+			}
+		}
+	}
+
+
+	demand = {
+		title = "PROSPERITY_NOMADIC_TRADITION"
+		unfulfilled_title = "PROSPERITY_NO_NOMADIC_TRADITION"
+		desc = "PROSPERITY_NOMADIC_TRADITION_DESC"
+
+		fulfilled_effect = 2
+		unfulfilled_effect = -5
+
+		potential = {
+			exists = owner
+			owner = {
+				AND = { 
+				is_assimilator = no 
+				is_habitat_empire = yes
+				NOT = { 
+				has_authority = auth_machine_intelligence 
+				} 
+			}
+		}
+	}
+
+		trigger = {
+			owner = {
+					has_swapped_tradition = tr_roving_adopt
+				}
+			}
+	}
+	
+
+	demand = {
+		title = "PROSPERITY_EXPANSION_TRADITION"
+		unfulfilled_title = "PROSPERITY_NO_EXPANSION_TRADITION"
+		desc = "PROSPERITY_EXPANSION_DESC"
+
+		fulfilled_effect = 2
+		unfulfilled_effect = -5
+
+		potential = {
+			exists = owner
+			owner = {
+				AND = { 
+				is_assimilator = no 
+				is_habitat_empire = no
+				NOT = { 
+				has_authority = auth_machine_intelligence 
+				} 
+			}
+		}
+	}
+
+		trigger = {
+			owner = {
+					has_non_swapped_tradition = tr_expansion_adopt
+			}
+		}
+	}		
+
+	demand = {
+		title = "PROSPERITY_NOT_AGGRESSOR"
+		unfulfilled_title = "PROSPERITY_AGGRESSOR"
+		desc = "PROSPERITY_NOT_AGGRESSOR_DESC"
+
+		unfulfilled_effect = -25
+
+		potential = {
+			exists = owner
+			owner = {
+				num_communications > 2
+			}
+		}
+
+		trigger = {
+			owner = {
+				NOR = {
+					has_country_flag = entered_war_as_attacker
+					any_war = { is_war_participant = { who = prev side = attackers } }
+				}
+			}
+		}
+	}
+	
+	demand = {
+		title = "PROSPERITY_PAIDEDUCATION"
+		unfulfilled_title = "PROSPERITY_NO_PAIDEDUCATION"
+		desc = "PROSPERITY_PAIDEDUCATION_DESC"
+
+		fulfilled_effect = 2
+		unfulfilled_effect = -2
+
+		potential = {
+			exists = owner
+		}
+
+		trigger = {
+			owner = {
+				has_policy_flag = policy_flag_edu_private
+			}
+		}
+	}
+	
+	demand = {
+		title = "PROSPERITY_PAIDHEALTH"
+		unfulfilled_title = "PROSPERITY_NO_PAIDHEALTH"
+		desc = "PROSPERITY_PAIDHEALTH_DESC"
+
+		fulfilled_effect = 2
+		unfulfilled_effect = -2
+
+		potential = {
+			exists = owner
+		}
+
+		trigger = {
+			owner = {
+				has_policy_flag = policy_flag_health_private
+			}
+		}
+	}
+
+	on_destroy = {
+		if = {
+			limit = {
+				has_modifier = promoted_pacifist
+			}
+			remove_modifier = promoted_pacifist
+		}
+		if = {
+			limit = {
+				has_modifier = suppressed_pacifist
+			}
+			remove_modifier = suppressed_pacifist
+		}
+	}
+
+	actions = {
+		embrace_faction = {
+			title = "EMBRACE_FACTION"
+			description = "EMBRACE_FACTION_DESC"
+			
+			cost = {
+				influence = 500
+			}
+			
+			potential = {
+				exists = owner
+				owner = {
+					OR = {
+						is_subject = no
+						NOT = { is_subject_type = dominion }
+					}
+				}
+			}
+			
+			valid = {
+				custom_tooltip = {
+					fail_text = EMBRACE_FACTION_COOLDOWN
+					parameter:empire = {
+						NOT = { has_modifier = embraced_faction_timer }
+					}
+				}
+				support > 0.20
+				parameter:empire = {
+					NOT = { has_ethic = "ethic_fanatic_pacifist" }
+				}
+			}
+
+			effect = {
+				add_modifier = { modifier = embraced_faction days = 3600 }
+				parameter:empire = {
+					shift_ethic = ethic_pacifist
+					hidden_effect = {
+						add_modifier = { modifier = embraced_faction_timer days = 3600 }
+						every_pop_faction = {
+							limit = { NOT = { is_same_value = root } }
+							add_modifier = { modifier = embraced_another_faction days = 3600 }
+						}
+					}
+				}
+				hidden_effect = {
+					save_event_target_as = TargetFaction
+					parameter:empire = {
+						every_relation = {
+							limit = {
+								is_ai = no
+								is_country_type = default			
+								has_communications = prev
+							}
+							country_event = { id = factions.2000 }
+						}
+					}				
+				}				
+			}
+			
+			ai_weight = {
+				base = 1
+				modifier = {
+					factor = 0
+					support < 0.50
+					owner = {
+						has_ethic = ethic_pacifist
+					}
+				}
+				modifier = {
+					factor = 0
+					NOT = { 
+						owner = {
+							exists = ruler
+							ruler = {
+								leader_of_faction = prosperity
+							}
+						}
+					}
+				}
+				modifier = {
+					factor = 0
+					owner = {
+						count_pop_factions = {
+							count < 4
+						}					
+					}
+				}				
+			}
+		}
+		promote_faction = {
+			title = "PROMOTE_FACTION"
+			description = "PROMOTE_FACTION_DESC"
+			
+			potential = {
+				exists = owner
+				parameter:empire = {
+					NOR = {
+						has_ethic = ethic_pacifist
+						has_ethic = ethic_fanatic_pacifist
+					}
+				}
+			}
+
+			effect = {
+				parameter:empire = {
+					add_modifier = { modifier = promoted_pacifist days = -1 }
+				}
+			}
+			
+			ai_weight = {
+				base = 0
+			}
+		}
+		cancel_promote_faction = {
+			title = "CANCEL_PROMOTE_FACTION"
+			description = "CANCEL_PROMOTE_FACTION_DESC"
+			
+			potential = {
+				exists = owner
+				parameter:empire = {
+					has_modifier = promoted_pacifist
+				}
+			}
+
+			effect = {
+				parameter:empire = {
+					remove_modifier = promoted_pacifist
+				}
+			}
+			
+			ai_weight = {
+				base = 0
+			}
+		}
+		suppress_faction = {
+			title = "SUPPRESS_FACTION"
+			description = "SUPPRESS_FACTION_DESC"
+			
+			potential = {
+				exists = owner
+				parameter:empire = {
+					NOR = {
+						has_modifier = suppressed_pacifist
+						has_modifier = promoted_pacifist
+					}
+				}
+			}
+
+			effect = {
+				add_modifier = { modifier = suppressed_faction days = -1 }
+				parameter:empire = {
+					add_modifier = { modifier = suppressed_pacifist days = -1 }
+				}
+			}
+			
+			ai_weight = {
+				base = 0
+			}
+		}
+		cancel_suppress_faction = {
+			title = "CANCEL_SUPPRESS_FACTION"
+			description = "CANCEL_SUPPRESS_FACTION_DESC"
+			
+			potential = {
+				exists = owner
+				parameter:empire = {
+					has_modifier = suppressed_pacifist
+				}
+			}
+
+			effect = {
+				remove_modifier = suppressed_faction
+				parameter:empire = {
+					remove_modifier = suppressed_pacifist
+				}
+			}
+			
+			ai_weight = {
+				base = 0
+			}
+		}
+	}
+}

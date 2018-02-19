@@ -1,0 +1,682 @@
+############################
+#
+# Where Silence Has Lease Events
+#
+# Written by Doot Doot
+# Update by Walshicus
+#
+############################
+
+namespace = STA_silence_event
+
+@tier1materialreward = 6
+@tier1materialmin = 100
+@tier1materialmax = 500
+@tier2materialreward = 12
+@tier2materialmin = 150
+@tier2materialmax = 1000
+@tier3materialreward = 18
+@tier3materialmin = 250
+@tier3materialmax = 1500
+@tier4materialreward = 24
+@tier4materialmin = 350
+@tier4materialmax = 2000
+
+@tier1influencereward = 6
+@tier1influencemin = 40
+@tier1influencemax = 100
+@tier2influencereward = 12
+@tier2influencemin = 80
+@tier2influencemax = 175
+@tier3influencereward = 18
+@tier3influencemin = 125
+@tier3influencemax = 250
+@tier4influencereward = 24
+@tier4influencemin = 150
+@tier4influencemax = 300
+
+@tier1researchreward = 6
+@tier1researchmin = 60
+@tier1researchmax = 150
+@tier2researchreward = 12
+@tier2researchmin = 90
+@tier2researchmax = 250
+@tier3researchreward = 18
+@tier3researchmin = 120
+@tier3researchmax = 350
+@tier4researchreward = 24
+@tier4researchmin = 150
+@tier4researchmax = 500
+
+#Observe void
+ship_event = {
+	id = STA_silence_event.1
+
+	title = STA_silence_event.1.name
+	desc = STA_silence_event.1.desc
+	picture = sth_GFX_evt_blackHole
+	show_sound = event_mystic_reveal
+	location = Root	
+	is_triggered_only = yes
+	# immediate = { print_scope_effect = yes }
+	option = {
+		name = STA_silence_event.1.a
+		hidden_effect = {
+			ship_event = { id = STA_silence_event.2 days = 1 scopes = { from = from } } 
+		}
+	}
+
+}
+
+#Nothing
+ship_event = {
+	id = STA_silence_event.2
+	title = STA_silence_event.2.name
+	desc = STA_silence_event.2.desc
+	picture = sth_GFX_evt_blackHole
+	location = Root
+	# immediate = { print_scope_effect = yes }
+	is_triggered_only = yes	
+	
+	option = {
+		name = STA_silence_event.2.a #Go closer
+		hidden_effect = {
+			ship_event = { id = STA_silence_event.4 scopes = { from = from } } 
+		}
+	}
+	option = {
+		name = STA_silence_event.2.b #Shields up
+		hidden_effect = { ship_event = { id = STA_silence_event.3 scopes = { from = from } } }
+	}
+	option = {
+		name = STA_silence_event.2.c #Study from afar
+		enable_special_project = {
+			name = "SILENCE_PROJECT"
+			location = FROM
+		}
+	}
+}
+
+#Shields Up
+ship_event = {
+	id = STA_silence_event.3
+	title = STA_silence_event.3.name
+	desc = STA_silence_event.3.desc
+	picture = sth_GFX_evt_blackHole
+	show_sound = event_yellow_alert
+	location = Root
+	# immediate = { print_scope_effect = yes }
+	is_triggered_only = yes	
+	
+	option = {
+		name = STA_silence_event.3.a
+		hidden_effect = {
+			ship_event = { id = STA_silence_event.4 scopes = { from = from } } 
+		}
+	}
+	option = {
+		name = STA_silence_event.3.b
+		hidden_effect = {
+			ship_event = { id = STA_silence_event.5 scopes = { from = from } } 
+		}
+	}
+}
+
+#Enveloped
+ship_event = {
+	id = STA_silence_event.4
+	title = STA_silence_event.4.name
+	desc = STA_silence_event.4.desc
+	picture = sth_GFX_evt_blackHole
+	show_sound = event_activating_unknown_technology
+	location = Root
+	# immediate = { print_scope_effect = yes }
+	is_triggered_only = yes	
+	
+	option = {
+		name = STA_silence_event.4.a
+		hidden_effect = {
+			ship_event = { id = STA_silence_event.6 scopes = { from = from } } 
+		}
+	}
+	option = {
+		name = STA_silence_event.4.b
+		hidden_effect = {
+			ship_event = { id = STA_silence_event.7 scopes = { from = from } } 
+		}
+	}
+}
+
+#Nothing...
+ship_event = {
+	id = STA_silence_event.5
+	title = STA_silence_event.5.name
+	desc = STA_silence_event.5.desc
+	picture = sth_GFX_evt_blackHole
+	show_sound = event_ship_bridge
+	location = Root
+	# immediate = { print_scope_effect = yes }
+	is_triggered_only = yes	
+	
+	option = {
+		name = STA_silence_event.5.a
+		hidden_effect = {
+			ship_event = { id = STA_silence_event.4 scopes = { from = from } } 
+		}
+	}
+	option = {
+		name = STA_silence_event.5.b
+		hidden_effect = {
+			#set_event_locked = no
+		}
+		enable_special_project = {
+			name = "SILENCE_PROJECT"
+			location = FROM
+		}
+	}
+}
+
+#Contact...
+ship_event = {
+	id = STA_silence_event.6
+	title = STA_silence_event.6.name
+	desc = STA_silence_event.6.desc
+	picture = sth_GFX_evt_samaritanSnare1
+	show_sound = event_red_alert
+	location = Root
+	# immediate = { print_scope_effect = yes }
+	is_triggered_only = yes	
+	
+	option = {
+		name = STA_silence_event.6.a #THIS NEEDS NEW TARGET
+		hidden_effect = {
+			ship_event = { id = STA_silence_event.7 scopes = { from = from } } 
+		}
+	}
+	option = {
+		name = STA_silence_event.6.b 
+		hidden_effect = {
+			ship_event = { id = STA_silence_event.8 scopes = { from = from } } 
+		}
+	}
+}
+
+#Ready for anything
+ship_event = {
+	id = STA_silence_event.7
+	title = STA_silence_event.7.name
+	desc = STA_silence_event.7.desc
+	picture = sth_GFX_evt_samaritanSnare1
+	show_sound = event_red_alert
+	location = Root
+	# immediate = { print_scope_effect = yes }
+	is_triggered_only = yes	
+	
+	option = {
+		name = STA_silence_event.7.a
+		hidden_effect = {
+			ship_event = { id = STA_silence_event.9 scopes = { from = from } } 
+		}
+	}
+	option = {
+		name = STA_silence_event.7.b
+		hidden_effect = {
+			ship_event = { id = STA_silence_event.10 scopes = { from = from } }
+		}
+	}
+	option = {
+		name = STA_silence_event.7.c
+		hidden_effect = {
+			ship_event = { id = STA_silence_event.8 scopes = { from = from } } 
+		}
+	}
+}
+
+#No Response
+ship_event = {
+	id = STA_silence_event.8
+	title = STA_silence_event.8.name
+	desc = STA_silence_event.8.desc
+	picture = sth_GFX_evt_samaritanSnare1
+	show_sound = event_space_battle
+	location = Root
+	# immediate = { print_scope_effect = yes }
+	is_triggered_only = yes	
+	
+	option = {
+		name = STA_silence_event.8.a
+		hidden_effect = {
+			ship_event = { id = STA_silence_event.9 scopes = { from = from } } 
+		}
+	}
+	option = {
+		name = STA_silence_event.8.b
+		hidden_effect = {
+			ship_event = { id = STA_silence_event.10 scopes = { from = from } } 
+		}
+	}
+}
+
+#boom
+ship_event = {
+	id = STA_silence_event.9
+	title = STA_silence_event.9.name
+	desc = STA_silence_event.9.desc
+	picture = sth_GFX_evt_spaceBattle1
+	show_sound = event_super_explosion
+	location = Root
+	# immediate = { print_scope_effect = yes }
+	is_triggered_only = yes	
+	
+	option = {
+		name = STA_silence_event.9.a
+		hidden_effect = {
+			ship_event = { id = STA_silence_event.11 scopes = { from = from } } 
+		} 
+	}
+	option = {
+		name = STA_silence_event.9.b
+		hidden_effect = {
+			ship_event = { id = STA_silence_event.11 scopes = { from = from } } 
+		}  
+	}
+}
+
+#boom!
+ship_event = {
+	id = STA_silence_event.10
+	title = STA_silence_event.10.name
+	desc = STA_silence_event.10.desc
+	picture = sth_GFX_evt_spaceBattle1
+	show_sound = event_super_explosion
+	location = Root
+	# immediate = { print_scope_effect = yes }
+	is_triggered_only = yes	
+	
+	option = {
+		name = STA_silence_event.10.a
+		hidden_effect = {
+			ship_event = { id = STA_silence_event.11 scopes = { from = from } } 
+		}  
+	}
+	option = {
+		name = STA_silence_event.10.b
+		hidden_effect = {
+			ship_event = { id = STA_silence_event.11 scopes = { from = from } } 
+		}  
+	}
+}
+
+#A Way Out!
+ship_event = {
+	id = STA_silence_event.11
+	title = STA_silence_event.11.name
+	desc = STA_silence_event.11.desc
+	picture = sth_GFX_evt_blackHole
+	show_sound = event_sensor_ping
+	location = Root
+	# immediate = { print_scope_effect = yes }
+	is_triggered_only = yes	
+	
+	option = {
+		name = STA_silence_event.11.a
+		hidden_effect = {
+			ship_event = { id = STA_silence_event.12 scopes = { from = from } } 
+		}  
+	}
+	option = {
+		name = STA_silence_event.11.b
+		hidden_effect = {
+			ship_event = { id = STA_silence_event.13 scopes = { from = from } } 
+		} 
+	}
+}
+
+#Escape!
+ship_event = {
+	id = STA_silence_event.12
+	title = STA_silence_event.12.name
+	desc = STA_silence_event.12.desc
+	picture = sth_GFX_evt_blackHole
+	show_sound = event_sensor_ping
+	location = Root
+	# immediate = { print_scope_effect = yes }
+	is_triggered_only = yes	
+	
+	option = {
+		name = STA_silence_event.12.a
+		hidden_effect = {
+			ship_event = { id = STA_silence_event.12 scopes = { from = from } } 
+		} 
+	}
+	option = {
+		name = STA_silence_event.12.b
+		hidden_effect = {
+			ship_event = { id = STA_silence_event.13 scopes = { from = from } } 
+		} 
+	}
+}
+
+#Rats in a maze
+ship_event = {
+	id = STA_silence_event.13
+	title = STA_silence_event.13.name
+	desc = STA_silence_event.13.desc
+	picture = sth_GFX_evt_blackHole
+	show_sound = event_ship_bridge
+	location = Root
+	# immediate = { print_scope_effect = yes }
+	is_triggered_only = yes	
+	
+	option = {
+		name = STA_silence_event.13.a
+		hidden_effect = {
+			ship_event = { id = STA_silence_event.14 scopes = { from = from } } 
+		}  
+	}
+	option = {
+		name = STA_silence_event.13.b
+		hidden_effect = {
+			ship_event = { id = STA_silence_event.14 scopes = { from = from } } 
+		}  
+	}
+}
+
+
+#Nagilium
+ship_event = {
+	id = STA_silence_event.14
+	title = STA_silence_event.14.name
+	desc = STA_silence_event.14.desc
+	picture = sth_GFX_evt_silenceHasLease1
+	show_sound = event_mystic_reveal_light
+	location = Root
+	# immediate = { print_scope_effect = yes }
+	is_triggered_only = yes	
+	
+	option = {
+		name = STA_silence_event.14.a
+		hidden_effect = {
+			ship_event = { id = STA_silence_event.15 scopes = { from = from } } 
+		}  
+	}
+	option = {
+		name = STA_silence_event.14.b
+		hidden_effect = {
+			ship_event = { id = STA_silence_event.16 scopes = { from = from } } 
+		}  
+	}
+	option = {
+		name = STA_silence_event.14.c
+		hidden_effect = {
+			ship_event = { id = STA_silence_event.17 scopes = { from = from } } 
+		} 
+	}
+}
+
+#Death
+ship_event = {
+	id = STA_silence_event.15
+	title = STA_silence_event.15.name
+	desc = STA_silence_event.15.desc
+	picture = sth_GFX_evt_tholian_destroyed
+	show_sound = event_ship_explosion
+	location = Root
+	# immediate = { print_scope_effect = yes }
+	is_triggered_only = yes	
+	
+	option = {
+		name = STA_silence_event.15.a
+		
+		hidden_effect = {
+			#set_event_locked = no
+			reduce_hp_percent = 101
+		} 
+		
+	}
+}
+
+#boredom
+ship_event = {
+	id = STA_silence_event.16
+	title = STA_silence_event.16.name
+	desc = STA_silence_event.16.desc
+	picture = sth_GFX_evt_silenceHasLease1
+	show_sound = event_ghost_town
+	location = Root
+	# immediate = { print_scope_effect = yes }
+	is_triggered_only = yes	
+	
+	option = {
+		name = STA_silence_event.16.a
+		
+		hidden_effect = {		
+			#set_event_locked = no		
+			reduce_hp_percent = 80
+			leader = {
+				add_experience = 500
+				add_trait = leader_trait_paranoid
+			}
+			
+		}
+	}
+}
+
+#Meeting
+ship_event = {
+	id = STA_silence_event.17
+	title = STA_silence_event.17.name
+	desc = {
+		trigger = { owner = { has_technology = tech_physics_holodeck_26 } }
+		text = STA_silence_event.17.desc_01
+	}
+	desc = {
+		trigger = { owner = { NOT = { has_technology = tech_physics_holodeck_26 } } }
+		text = STA_silence_event.17.desc_02
+	}
+	picture = sth_GFX_evt_silenceHasLease2
+	show_sound = event_conversation
+	location = Root
+	is_triggered_only = yes	
+	# immediate = { print_scope_effect = yes }
+	option = {
+		name = STA_silence_event.17.a		
+		hidden_effect = {
+			random_list = {
+				50 = { ship_event = { id = STA_silence_event.18 scopes = { from = from } } }
+				50 = { ship_event = { id = STA_silence_event.19 scopes = { from = from } } }
+			}
+		}
+	}
+	option = {
+		name = STA_silence_event.17.b
+		allow = { owner = { has_technology = tech_physics_holodeck_26 } }
+		hidden_effect = { 
+			random_list = {
+				50 = { ship_event = { id = STA_silence_event.20 scopes = { from = from } } }
+				50 = { ship_event = { id = STA_silence_event.24 scopes = { from = from } } }
+			}
+		}
+	}
+	option = {
+		name = STA_silence_event.17.c
+		hidden_effect = { ship_event = { id = STA_silence_event.21 scopes = { from = from } } }
+	}
+}
+
+#A Bargain
+ship_event = {
+	id = STA_silence_event.18
+	title = STA_silence_event.18.name
+	desc = STA_silence_event.18.desc
+	picture = sth_GFX_evt_blackHole
+	show_sound = event_ghost_town
+	location = Root
+	# immediate = { print_scope_effect = yes }
+	is_triggered_only = yes	
+	
+	option = {
+		name = STA_silence_event.18.a
+		
+		hidden_effect = {
+			#set_event_locked = no
+			leader = {
+				add_experience = 500
+				add_trait = leader_trait_paranoid
+			}
+			reduce_hp_percent = 80
+		}
+		
+	}
+}
+
+#failed negotiations
+ship_event = {
+	id = STA_silence_event.19
+	title = STA_silence_event.19.name
+	desc = STA_silence_event.19.desc
+	picture = sth_GFX_evt_blackHole
+	show_sound = event_ship_explosion
+	location = Root
+	# immediate = { print_scope_effect = yes }
+	is_triggered_only = yes	
+	
+	option = {
+		name = STA_silence_event.19.a
+		
+		hidden_effect = {
+			#set_event_locked = no
+			reduce_hp_percent = 101
+		}
+	}
+}
+
+#Holodeck fails
+ship_event = {
+	id = STA_silence_event.20
+	title = STA_silence_event.20.name
+	desc = STA_silence_event.20.desc
+	picture = sth_GFX_evt_silenceHasLease3
+	show_sound = event_ship_explosion
+	location = Root
+	# immediate = { print_scope_effect = yes }
+	is_triggered_only = yes	
+	
+	option = {
+		name = STA_silence_event.20.a
+		hidden_effect = {		
+			#set_event_locked = no
+			reduce_hp_percent = 101
+		}
+	}
+}
+
+#Self Destruct
+ship_event = {
+	id = STA_silence_event.21
+	title = STA_silence_event.21.name
+	desc = STA_silence_event.21.desc
+	picture = sth_GFX_evt_silenceHasLease2
+	show_sound = event_red_alert
+	location = Root
+	# immediate = { print_scope_effect = yes }
+	is_triggered_only = yes	
+	
+	option = {
+		name = STA_silence_event.21.a
+		hidden_effect = {
+			ship_event = { id = STA_silence_event.22 scopes = { from = from } } 
+		}
+	}
+	option = {
+		name = STA_silence_event.21.b
+		hidden_effect = {
+			ship_event = { id = STA_silence_event.23 scopes = { from = from } } 
+		}
+	}
+}
+
+#Escape
+ship_event = {
+	id = STA_silence_event.22
+	title = STA_silence_event.22.name
+	desc = STA_silence_event.22.desc
+	picture = sth_GFX_evt_blackHole
+	show_sound = event_celebration
+	location = Root
+	# immediate = { print_scope_effect = yes }
+	is_triggered_only = yes	
+	
+	option = {
+		name = STA_silence_event.22.a
+		hidden_effect = {
+			# set_event_locked = no
+		}
+		leader = {
+			add_experience = 1000
+			add_trait = leader_trait_spark_of_genius
+		}
+	}
+}
+
+#321
+ship_event = {
+	id = STA_silence_event.23
+	title = STA_silence_event.23.name
+	desc = STA_silence_event.23.desc
+	picture = sth_GFX_evt_tholian_destroyed
+	show_sound = event_ship_explosion
+	location = Root
+	is_triggered_only = yes	
+	# immediate = { print_scope_effect = yes }
+	option = {
+		name = STA_silence_event.23.a
+		hidden_effect = {
+			reduce_hp_percent = 101
+		}
+	}
+}
+
+#Holodeck success
+ship_event = {
+	id = STA_silence_event.24
+	title = STA_silence_event.24.name
+	desc = STA_silence_event.24.desc
+	picture = sth_GFX_evt_silenceHasLease3
+	show_sound = event_celebration
+	location = Root
+	is_triggered_only = yes	
+	# immediate = { print_scope_effect = yes }
+	option = {
+		name = STA_silence_event.22.a
+		hidden_effect = {
+			# set_event_locked = no
+		}
+		leader = {
+			add_experience = 500
+			add_trait = leader_trait_spark_of_genius
+		}
+	}
+}
+
+#SPECIAL PROJECT EVENT
+ship_event = {
+	id = STA_silence_event.100
+	title = STA_silence_event.100.name
+	desc = STA_silence_event.100.desc
+	picture = sth_GFX_evt_blackHole
+	show_sound = event_default
+	location = Root
+	# immediate = { print_scope_effect = yes }
+	is_triggered_only = yes	
+	
+	option = {
+		name = STA_silence_event.100.a
+	}
+	option = {
+		name = STA_silence_event.100.b
+		hidden_effect = {
+			ship_event = { id = STA_silence_event.4 scopes = { from = from } } 
+		}
+	}
+}

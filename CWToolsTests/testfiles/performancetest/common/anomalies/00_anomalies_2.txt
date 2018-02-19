@@ -1,0 +1,870 @@
+########################
+### ANOMALY EVENTS ###
+########################
+
+########################
+### changed tech id ###
+########################
+
+#potential = ship scope
+
+#All discoveries assigned weight 1
+
+# Thinking Asteroid
+anomaly = {
+	event = anomaly.75
+	category = "AST_WAVELENGTHS_1_CAT"
+	
+	weight = 1
+	
+	potential = {
+		owner = { is_borg_empire = no is_assimilator = no }
+	}
+}
+
+# Gossiping Planets
+anomaly = {
+	event = anomaly.85
+	category = "HBL_LUSH_PLANET_1_CAT"
+	
+	weight = 1
+	
+	potential = {
+		owner = { is_borg_empire = no is_assimilator = no }
+	}
+}
+
+# Cunning Flora
+anomaly = {
+	event = anomaly.90
+	category = "HBL_LUSH_PLANET_1_CAT"
+	
+	weight = 1
+	
+	potential = {
+		owner = { is_borg_empire = no is_assimilator = no }
+	}
+}
+
+# Pioneer Plaque Aliens
+anomaly = {
+	event = anomaly.95
+	category = "AST_DEBRIS_FIELD_1_CAT"
+
+	weight = 1
+	
+	potential = {
+		#owner = { is_borg_empire = no is_assimilator = no }
+		any_system = {
+			OR = {
+				# Commonwealth of Man NPC system
+				has_star_flag = com_sol
+				# Tomb World
+				has_star_flag = nuked_sol
+			}
+		}
+		# Early Space Age Humans
+		any_country = {
+			is_country_type = primitive
+			has_country_flag = humans_early_space_age
+		}
+		owner = {
+			NOR = {
+				species_portrait = human
+				has_country_flag = human_1
+				has_country_flag = human_2
+				has_country_flag = found_pioneer
+				has_country_flag = found_voyager
+			}
+		}
+	}
+}
+
+# Pioneer Plaque Humans
+anomaly = {
+	event = anomaly.100
+	category = "AST_DEBRIS_FIELD_1_CAT"
+
+	weight = 1
+	
+	potential = {
+		owner = {
+			OR = {
+				has_country_flag = human_1
+				has_country_flag = human_2
+				species_portrait = human
+			}
+			NOT = { has_country_flag = found_pioneer }
+		}
+	}
+}
+
+# Voyager Record Aliens
+anomaly = {
+	event = anomaly.105
+	category = "AST_DEBRIS_FIELD_1_CAT"
+
+	weight = 1
+	
+	potential = {
+		any_system = {
+			OR = {
+				# Commonwealth of Man NPC system
+				has_star_flag = com_sol
+				# Tomb World
+				has_star_flag = nuked_sol
+			}
+		}
+		owner = {
+			NOR = {
+				species_portrait = human
+				has_country_flag = human_1
+				has_country_flag = human_2
+				has_country_flag = found_pioneer
+				has_country_flag = found_voyager
+			}
+		}
+	}
+}
+
+# Voyager Record Humans
+anomaly = {
+	event = anomaly.110
+	category = "HBL_LUSH_PLANET_1_CAT"
+	
+	weight = 1
+
+	potential = {
+		owner = {
+			OR = {
+				has_country_flag = human_1
+				has_country_flag = human_2
+				species_portrait = human
+			}
+			NOT = { has_country_flag = found_voyager }
+		}
+	}
+}
+
+# Genetic Library
+anomaly = {
+	event = anomaly.115
+	category = "AST_WAVELENGTHS_1_CAT"
+	
+	weight = 1
+	
+	potential = {
+		owner = { is_borg_empire = no is_assimilator = no }
+	}
+}
+
+# Monolith Museum
+anomaly = {
+	event = anomaly.120
+	category = "UHB_ANCIENT_RUINS_1_CAT"
+
+	weight = 1
+	
+	potential = {
+		owner = { is_borg_empire = no is_assimilator = no }
+	}
+}
+
+# Derelict Star Chart
+anomaly = {
+	event = anomaly.125
+	category = "UHB_MOLTEN_CHART_CAT"
+	
+	weight = 1
+	
+	potential = {
+		owner = { is_borg_empire = no is_assimilator = no }
+	}
+}
+
+# Transient Gravitational Anomaly
+anomaly = {
+	event = anomaly.130
+	category = "AST_WAVELENGTHS_1_CAT"
+	
+	weight = 1
+	
+	potential = {
+		owner = { is_borg_empire = no is_assimilator = no }
+	}
+}
+
+# Abandoned Playground
+anomaly = {
+	event = anomaly.135
+	category = "GEN_PLAYGROUND_CAT"
+	
+	weight = 1
+	
+	potential = {
+		owner = { is_borg_empire = no is_assimilator = no }
+	}
+}
+
+# Familiar Shrine
+anomaly = {
+	event = anomaly.140
+	category = "AST_SHRINE_1_CAT"
+	
+	weight = 1
+	
+	potential = {
+		owner = { is_borg_empire = no is_assimilator = no }
+	}
+}
+
+# What Music They Make
+anomaly = {
+	event = anomaly.145
+	category = "HBL_MUSIC_1_CAT"
+	
+	weight = 1
+	
+	potential = {
+		owner = {
+			has_technology = tech_society_xenobiology_441
+			NOT = {
+				has_country_flag = HBL_MUSIC_1_FLAG
+				has_technology = tech_society_xenobiology_441
+			}
+		}
+	}
+}
+
+# Below Zro
+anomaly = {
+	event = anomaly.150
+	category = "GAS_ZRO_ICE_CAT"
+	
+	weight = 1
+	
+	potential = {
+		owner = { is_borg_empire = no is_assimilator = no }
+	}
+}
+
+# Illicit Matter
+anomaly = {
+	event = anomaly.155
+	category = "AST_ILLICIT_DARK_CAT"
+	
+	weight = 1
+	
+	potential = {
+		owner = { is_borg_empire = no is_assimilator = no }
+	}
+}
+
+# Purple Rain
+anomaly = {
+	event = anomaly.160
+	category = "TOX_PURPLE_RAIN_CAT"
+	
+	weight = 1
+	
+	potential = {
+		owner = { is_borg_empire = no is_assimilator = no }
+	}
+}
+
+# Ecdysis Project
+anomaly = {
+	event = anomaly.170
+	category = "FROZ_BASE_CAT"
+	
+	weight = 1
+	
+	potential = {
+		owner = { is_borg_empire = no is_assimilator = no }
+	}
+}
+
+# Stellar Salt
+anomaly = {
+	event = anomaly.175
+	category = "FROZ_BASE_CAT"
+	
+	weight = 1
+	
+	potential = {
+		owner = { is_borg_empire = no is_assimilator = no }
+	}
+}
+
+# Nimkip
+anomaly = {
+	event = anomaly.180
+	category = "TROP_PETS_CAT"
+
+	weight = 1
+
+	potential = {
+		owner = { is_borg_empire = no is_assimilator = no }
+	}
+}
+
+# Limbo
+# anomaly = {
+	# event = anomaly.185
+	# category = "BARR_BASE_CAT"
+
+	# weight = 1
+
+	# potential = {
+		# owner = { is_borg_empire = no is_assimilator = no }
+	# }
+# }
+
+# Projecting Moon
+anomaly = {
+	event = anomaly.190
+	category = "PROJ_MOON_CAT"
+
+	weight = 1
+
+	potential = {
+#		owner = { is_borg_empire = no is_assimilator = no }
+		owner = { NOT = { has_country_flag = PROJ_MOON_FLAG } }
+	}
+}
+
+# Misty Shores
+anomaly = {
+	event = anomaly.195
+	category = "SEA_CAT"
+
+	weight = 1
+
+	potential = {
+		owner = { is_borg_empire = no is_assimilator = no }
+	}
+}
+
+# Geothermal
+anomaly = {
+	event = anomaly.200
+	category = "MOLTEN_BASE_CAT"
+
+	weight = 1
+
+	potential = {
+		owner = { is_borg_empire = no is_assimilator = no }
+	}
+}
+
+# Completely Leveled
+anomaly = {
+	event = anomaly.205
+	category = "LEVELED_CAT"
+
+	weight = 1
+
+	potential = {
+		owner = { is_borg_empire = no is_assimilator = no }
+	}
+}
+
+# Dimensional Drift
+anomaly = {
+	event = anomaly.210
+	category = "DIMENSIONAL_POCKET_CAT"
+
+	weight = 1
+
+	potential = {
+		owner = { NOT = { has_country_flag = dimensional_pocketed } }
+	}
+}
+
+# Cornucopia
+anomaly = {
+	event = anomaly.215
+	category = "HAB_CORN_CAT"
+
+	weight = 1
+
+	potential = {
+		owner = { is_borg_empire = no is_assimilator = no }
+	}
+}
+
+# Raw Materials
+anomaly = {
+	event = anomaly.220
+	category = "HAB_MAT_CAT"
+
+	weight = 1
+
+	potential = {
+		owner = { is_borg_empire = no is_assimilator = no }
+	}
+}
+
+# Shadow Play
+anomaly = {
+	event = anomaly.225
+	category = "ATM_ANOMALY_CAT"
+
+	weight = 1
+
+	potential = {
+		owner = { is_borg_empire = no is_assimilator = no }
+	}
+}
+
+# Grimacing
+anomaly = {
+	event = anomaly.230
+	category = "FRBR_GRIMACING_CAT"
+
+	weight = 1
+
+	potential = {
+		owner = { is_borg_empire = no is_assimilator = no }
+	}
+}
+
+# Ice Lit
+anomaly = {
+	event = anomaly.235
+	category = "FROZ_ILLUMINATED_CAT"
+
+	weight = 1
+
+	potential = {
+		owner = { is_borg_empire = no is_assimilator = no }
+	}
+}
+
+# Deceptive Giant
+anomaly = {
+	event = anomaly.240
+	category = "GAS_CLOUDY_CAT"
+
+	weight = 1
+
+	potential = {
+		owner = { is_borg_empire = no is_assimilator = no }
+	}
+}
+
+# Eden Overrun
+anomaly = {
+	event = anomaly.245
+	category = "GAIA_MOVE_CAT"
+
+	weight = 1
+
+	potential = {
+		owner = { is_borg_empire = no is_assimilator = no }
+	}
+}
+
+# Olfactory
+anomaly = {
+	event = anomaly.250
+	category = "FROZ_BOX_CAT"
+
+	weight = 1
+
+	potential = {
+		owner = { is_borg_empire = no is_assimilator = no }
+	}
+}
+
+# Ultimate Weapon
+anomaly = {
+	event = anomaly.255
+	category = "CONT_SIGNS_CAT"
+
+	weight = 1
+
+	potential = {
+		owner = { is_borg_empire = no is_assimilator = no }
+	}
+}
+
+# Mineral Factorial
+anomaly = {
+	event = anomaly.260
+	category = "FROZ_BASE2_CAT"
+
+	weight = 1
+
+	potential = {
+		owner = { is_borg_empire = no is_assimilator = no }
+	}
+}
+
+# Crater Drag Race
+anomaly = {
+	event = anomaly.265
+	category = "AST_CRATER_CAT"
+
+	weight = 1
+
+	potential = {
+		owner = { is_borg_empire = no is_assimilator = no }
+	}
+}
+
+# Artificial Impact
+anomaly = {
+	event = anomaly.270
+	category = "AST_CRATER_CAT"
+
+	weight = 1
+
+	potential = {
+		owner = { is_borg_empire = no is_assimilator = no }
+	}
+}
+
+# Abandoned Thrusters
+anomaly = {
+	event = anomaly.275
+	category = "AST_CRATER_CAT"
+
+	weight = 1
+
+	potential = {
+		owner = { NOT = { has_technology = tech_engineering_inertial_629 } }
+	}
+}
+
+# Colony Tech
+#anomaly = {
+#	event = anomaly.280
+#	category = "BAR_COLONY_CAT"
+#
+#	weight = 1
+#
+#	potential = {
+#		owner = { is_borg_empire = no is_assimilator = no }	
+#	}
+#}
+
+# Unusual Tectonics
+anomaly = {
+	event = anomaly.285
+	category = "BAR_COLONY_CAT"
+
+	weight = 1
+
+	potential = {
+		owner = { is_borg_empire = no is_assimilator = no }	
+	}
+}
+
+# Irradiating Rock
+anomaly = {
+	event = anomaly.290
+	category = "TOX_MAT_CAT"
+
+	weight = 1
+
+	potential = {
+		owner = { is_borg_empire = no is_assimilator = no }	
+	}
+}
+
+# Drifting Gravity Generators
+anomaly = {
+	event = anomaly.295
+	category = "DIMENSIONAL_POCKET_CAT"
+
+	weight = 1
+
+	potential = {
+		owner = { is_borg_empire = no is_assimilator = no }
+	}
+}
+
+# Careless
+anomaly = {
+	event = anomaly.3000
+	category = "AST_CLUSTER_CAT"
+
+	weight = 1
+
+	potential = {
+		leader = {
+			NOT = {
+				has_trait = leader_trait_carefree
+				has_trait = leader_trait_careful
+				has_trait = leader_trait_meticulous
+			}
+		}
+	}
+}
+
+# Zero-G Construct
+anomaly = {
+	event = anomaly.3005
+	category = "AST_CLUSTER_CAT"
+
+	weight = 1
+
+	potential = {
+		leader = {
+			NOT = {
+				has_trait = leader_trait_expertise_voidcraft
+				has_trait = leader_trait_expertise_materials
+				has_trait = leader_trait_expertise_rocketry
+				has_trait = leader_trait_expertise_industry
+				has_trait = leader_trait_expertise_field_manipulation
+				has_trait = leader_trait_expertise_particles
+				has_trait = leader_trait_expertise_psionics
+				has_trait = leader_trait_expertise_computing
+				has_trait = leader_trait_expertise_new_worlds
+				has_trait = leader_trait_expertise_statecraft
+				has_trait = leader_trait_expertise_biology
+				has_trait = leader_trait_expertise_military_theory
+			}
+		}
+	}
+}
+
+# Crystal Codex
+anomaly = {
+	event = anomaly.3010
+	category = "AST_CLUSTER_CAT"
+
+	weight = 1
+
+	potential = {
+		owner = { is_borg_empire = no is_assimilator = no }
+	}
+}
+
+# Alien Barracks
+anomaly = {
+	event = anomaly.3015
+	category = "BAR_COLONY_CAT"
+
+	weight = 1
+
+	potential = {
+		owner = { is_borg_empire = no is_assimilator = no }
+	}
+}
+
+# Checkered Gaea
+anomaly = {
+	event = anomaly.3020
+	category = "GAEA_CHECKERED_CAT"
+
+	weight = 1
+
+	potential = {
+		owner = { is_borg_empire = no is_assimilator = no }
+	}
+}
+
+# Ancient Automata
+anomaly = {
+	event = anomaly.3025
+	category = "HAB_CORN_CAT"
+
+	weight = 1
+
+	potential = {
+		owner = { is_borg_empire = no is_assimilator = no }
+	}
+}
+
+# Parked Ship
+anomaly = {
+	event = anomaly.3030
+	category = "GEN_ABANDONED_SHIP_CAT"
+
+	weight = 1
+
+	potential = {
+		owner = { is_borg_empire = no is_assimilator = no }
+	}
+}
+
+# Taking Stock
+anomaly = {
+	event = anomaly.3035
+	category = "GEN_DESERT_CAT"
+
+	weight = 1
+
+	potential = {
+		AND = {
+			leader = {
+				OR = {
+					has_trait = leader_trait_meticulous
+					has_trait = leader_trait_carefree
+				}
+				NOT = { has_trait = leader_trait_careful }
+			}
+			owner = { energy > 49 }
+		}
+	}
+}
+
+# Exiled Pirates
+anomaly = {
+	event = anomaly.3040
+	category = "AST_DEBRIS_FIELD_1_CAT"
+
+	weight = 1
+
+	potential = {
+		owner = { is_borg_empire = no is_assimilator = no }
+	}
+}
+
+# Grinding Lattice
+anomaly = {
+	event = anomaly.3050
+	category = "TOX_STRUCTURES_CAT"
+
+	weight = 1
+
+	potential = {
+		owner = { is_borg_empire = no is_assimilator = no }
+	}
+}
+
+# Wooden Hegemony
+anomaly = {
+	event = anomaly.3055
+	category = "TROP_WOODS_CAT"
+
+	weight = 1
+
+	potential = {
+		owner = { is_borg_empire = no is_assimilator = no }
+	}
+}
+
+# Head in the Sand
+anomaly = {
+	event = anomaly.3060
+	category = "GEN_DESERT_CAT"
+
+	weight = 1
+
+	potential = {
+		owner = { is_borg_empire = no is_assimilator = no }
+	}
+}
+
+# Comms Post
+anomaly = {
+	event = anomaly.3065
+	category = "AST_WAVELENGTHS_1_CAT"
+
+	weight = 1
+
+	potential = {
+		NOT = { leader = { has_trait = leader_trait_expertise_statecraft } }
+		owner = { has_country_flag = birth_of_piracy }
+	}
+}
+
+# Orbiting Black Hole # can't be unique in category
+anomaly = {
+	event = anomaly.3070
+	category = "HOLE_RADIATION_CAT"
+
+	weight = 1
+
+	potential = {
+		leader = { NOT = { has_trait = leader_trait_paranoid } }
+	}
+}
+
+# Another black hole
+anomaly = {
+	event = anomaly.3075
+	category = "HOLE_RADIATION_CAT"
+
+	weight = 1
+
+	potential = {
+		owner = { is_borg_empire = no is_assimilator = no }
+	}
+}
+
+# Toy Factory
+anomaly = {
+	event = anomaly.3080
+	category = "HBL_MUSIC_1_CAT"
+
+	weight = 1
+
+	potential = {
+		owner = { is_borg_empire = no is_assimilator = no }
+	}
+}
+
+# The Prince
+anomaly = {
+	event = anomaly.3085
+	category = "AST_CLUSTER_CAT"
+
+	weight = 1
+
+	potential = {
+		owner = { num_communications > 1 }
+	}
+}
+
+# The Ransomeers
+anomaly = {
+	event = anomaly.3090
+	category = "UHB_BUOY_CAT"
+
+	weight = 1
+
+	potential = {
+		owner = { is_borg_empire = no is_assimilator = no }
+	}
+}
+
+# Ancient Alliance Armada
+anomaly = {
+	event = anomaly.3110
+	category = "GAIA_RECORD_CAT"
+
+	weight = 1
+
+	potential = {
+		owner = { is_borg_empire = no is_assimilator = no }
+	}
+}
+
+# Crystal Manufactory
+anomaly = {
+	event = anomaly.3125
+	category = "CRYSTAL_MANUFACTORY_CAT"
+
+	weight = 1
+
+	potential = {
+		owner = { is_borg_empire = no is_assimilator = no }
+	}
+}
+
+# Ethos Schism
+anomaly = {
+	event = anomaly.3130
+	category = HBL_LUSH_PLANET_1_CAT
+
+	weight = 1
+
+	potential = {
+		owner.capital_scope = { colony_age > 240 }
+		owner = { NOT = { has_country_flag = SA } }
+	}
+}

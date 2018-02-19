@@ -1,0 +1,20 @@
+named_lists = {
+	hebitian_name = {
+		Hebitian = {
+			name = Hebitian
+			plural = Hebitians
+		}
+	}
+	cardassian_name = {
+		Cardassian = {
+			name = Cardassian
+			plural = Cardassians
+		}
+	}
+	darsay_name = {
+		Darsay = {
+			name = "D'Arsay"
+			plural = "D'Arsay"
+		}
+	}
+}

@@ -1,0 +1,180 @@
+#Planet Scope
+clear_colony_hubs = {
+    every_tile = {
+		limit = { 
+			OR = { 
+				has_building = building_starbase_operations_0
+				has_building = building_starbase_operations_1
+				has_building = building_starbase_operations_2
+				has_building = building_starbase_operations_3
+				has_building = helix_ops_0
+				has_building = helix_ops_1
+				has_building = helix_ops_2
+				has_building = helix_ops_3
+				has_building = building_colony_shelter
+				has_building = building_capital_1
+				has_building = building_capital_2
+				has_building = building_capital_3
+				has_building = building_hab_capital
+			} 
+		}
+		remove_building = yes
+	}
+}
+
+convert_colony_hubs_space = {
+    every_tile = {
+		limit = { 
+			OR = { 
+				has_building = building_starbase_operations_0
+				has_building = building_starbase_operations_1
+				has_building = building_starbase_operations_2
+				has_building = building_starbase_operations_3
+				has_building = helix_ops_0
+				has_building = helix_ops_1
+				has_building = helix_ops_2
+				has_building = helix_ops_3
+				has_building = building_colony_shelter
+				has_building = building_capital_1
+				has_building = building_capital_2
+				has_building = building_capital_3
+				has_building = building_hab_capital
+				
+			} 
+		}
+		set_building = helix_ops_0
+	}
+}
+
+convert_colony_hubs_station = {
+    every_tile = {
+		limit = { 
+			OR = { 
+				has_building = building_starbase_operations_0
+				has_building = building_starbase_operations_1
+				has_building = building_starbase_operations_2
+				has_building = building_starbase_operations_3
+				has_building = helix_ops_0
+				has_building = helix_ops_1
+				has_building = helix_ops_2
+				has_building = helix_ops_3
+				has_building = building_colony_shelter
+				has_building = building_capital_1
+				has_building = building_capital_2
+				has_building = building_capital_3
+				has_building = building_hab_capital
+			} 
+		}
+		set_building = building_starbase_operations_0
+	}
+}
+
+convert_colony_hubs_ground = {
+    every_tile = {
+		limit = { 
+			OR = { 
+				has_building = building_starbase_operations_0
+				has_building = building_starbase_operations_1
+				has_building = building_starbase_operations_2
+				has_building = building_starbase_operations_3
+				has_building = helix_ops_0
+				has_building = helix_ops_1
+				has_building = helix_ops_2
+				has_building = helix_ops_3
+				has_building = building_colony_shelter
+				has_building = building_capital_1
+				has_building = building_capital_2
+				has_building = building_capital_3
+				has_building = building_hab_capital
+			} 
+		}
+		set_building = building_colony_shelter
+	}
+}
+
+tile_add_appropriate_mining_building = {
+	if = {
+		limit = { planet = { is_habitat_planet = yes } }
+		set_building = space_building_basic_mine
+	}
+	if = {
+		limit = { planet = { is_starbase_planet = yes } }
+		set_building = building_starbase_ore_0
+	}
+	if = {
+		limit = { planet = { is_artificial_planet = no } }
+		set_building = building_basic_mine
+	}
+}
+
+tile_add_appropriate_energy_building = {
+	if = {
+		limit = { planet = { is_habitat_planet = yes } }
+		set_building = space_building_basic_power_plant
+	}
+	if = {
+		limit = { planet = { is_starbase_planet = yes } }
+		set_building = building_starbase_promenade_0
+	}
+	if = {
+		limit = { planet = { is_artificial_planet = no } }
+		set_building = building_basic_power_plant
+	}
+}
+
+tile_add_appropriate_farm_building = {
+	if = {
+		limit = { planet = { is_habitat_planet = yes } }
+		set_building = space_building_basic_farm
+	}
+	if = {
+		limit = { planet = { is_starbase_planet = yes } }
+		set_building = building_starbase_arboretum_0
+	}
+	if = {
+		limit = { planet = { is_artificial_planet = no } }
+		set_building = building_basic_farm
+	}
+}
+
+tile_add_appropriate_society_building = {
+    if = {
+		limit = { planet = { is_habitat_planet = yes } }
+		set_building = space_building_bio_lab_0
+	}
+	if = {
+		limit = { planet = { is_starbase_planet = yes } }
+	}
+	if = {
+		limit = { planet = { is_artificial_planet = no } }
+		set_building = building_bio_lab_0
+	}
+}
+
+tile_add_appropriate_physics_building = {
+    if = {
+		limit = { planet = { is_habitat_planet = yes } }
+		set_building = space_building_physics_lab_0
+	}
+	if = {
+		limit = { planet = { is_starbase_planet = yes } }
+	}
+	if = {
+		limit = { planet = { is_artificial_planet = no } }
+		set_building = building_physics_lab_0
+	}
+}
+
+tile_add_appropriate_engineering_building = {
+    if = {
+		limit = { planet = { is_habitat_planet = yes } }
+		set_building = space_building_engineering_facility_0
+	}
+	if = {
+		limit = { planet = { is_starbase_planet = yes } }
+	}
+	if = {
+		limit = { planet = { is_artificial_planet = no } }
+		set_building = building_engineering_facility_0
+	}
+}

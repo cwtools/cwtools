@@ -1,0 +1,192 @@
+﻿### Mammalian 1
+MAM1 = {
+	### SHIPS
+	alias = "MAM4"
+
+	ship_names = {
+
+		generic = {
+			T'Tanak T'Tuda T'Timonok T'Dimik T'Derikam D'Dana D'Vormat D'Kirmik T'Kana T'Tamik D'Tirak T'Komot D'Valam
+			T'Ligam D'Tunak T'Kolbak D'Tuma T'Tollok Y'Tharak Y'Gora Y'Falsek Y'Kono Y'Jargam Y'Lambak Y'Noro Y'Loram
+			Y'Valdim Y'Soram D'Dirim D'Moro D'Farak T'Timin T'Vorg T'Lirmak D'Jolsik Y'Bamta Y'Barra D'Soto T'Ralsak
+			D'Orom D'Oh D'Irim T'Ylgar T'Torga T'Ugana Y'Lesmag Y'Sorom Y'Parga T'Harik T'Sirom Y'Glara D'Naka T'Miri
+			T'Sirma T'Taco D'Targa D'Moro D'Irfa D'Pollog D'Virbo T'Nara T'Migor D'Anara D'Aram T'Talok Y'Ario Y'Maggro
+			D'Varik D'Orang D'Rila T'Tyrik T'Terell T'Tynnia T'Nerok D'Allas T'Vojak T'Nir D'Damma D'Penek D'Irio
+			D'Tarikon D'Saba D'Eviko T'Blirak T'Kanor Y'Pana Y'Viram Y'Kanas Y'Sarik Y'Panjik T'Klea Y'Vardos Y'Caram
+			D'Buris D'Banna D'Kuru D'Marov D'Sagri T'Bomka T'Saris
+		}
+
+		corvette = {
+		}
+		saber = {
+		}
+		sovereign = {
+		}
+		steamrunner = {
+		}		
+		adv_cruiser = {
+		}
+		strike = {
+		}		
+		destroyer = {
+		}
+		
+		cruiser = {
+		}
+		
+		battleship = {
+		}
+		
+		science = {
+		}
+		
+		colonizer = {
+		}
+		
+		constructor = {
+		}
+		
+		
+		mining_station = { }
+		research_station = { }
+		wormhole_station = { }
+		#terraform_station = { }
+		observation_station = { }
+		outpost_station = {
+			#random_names = { }
+			#sequential_name = "Frontier Outpost"
+		}
+
+		military_station_small = {}
+		military_station_medium = {}
+		military_station_large = {}	
+	}
+
+	fleet_names = {
+		random_names = {
+			"Korrim Starfleet" "Rivén Starfleet" "Fortana Starfleet" "Pollimin Starfleet" "Gorodo Starfleet" "Forfan Starfleet" "Cardana Starfleet" "Horoto Starfleet" "Disini Starfleet" "Varnala Starfleet" "Cannala Starfleet" "Shimini Starfleet" "Martano Starfleet" "Fanti Starfleet" "Grungoni Starfleet"
+		}
+		sequential_name = "%O% Starfleet"
+	}
+		
+	### ARMIES
+	army_names = {
+		defense_army = {
+			sequential_name = "%O% Defensive Column"
+		}
+			
+		assault_army = {
+			sequential_name = "%O% Invader Column"
+		}
+		
+		slave_army = {
+			sequential_name = "%O% Correctional Column"
+		}
+		
+		clone_army = { 
+			sequential_name = "Molded Troops %R%"
+		}
+		
+		robotic_army = {
+			sequential_name = "Robotic Infantry %R%"
+		}
+		
+		android_army = {
+			sequential_name = "Android Infantry %R%"
+		}
+		
+		psionic_army = { 
+			sequential_name = "Psionic Infantry %R%"
+		}
+		
+		xenomorph_army = {
+			sequential_name = "Xenomorph Hive %R%"
+		}
+		
+		gene_warrior_army = {
+			sequential_name = "%O% Modified Troopers"
+		}
+	}
+	
+	### PLANETS
+
+	planet_names = {
+
+		generic = {
+			names = {
+				"Korrim" "Caldan's First" "Rivén's Burrow" "Rattia" "Fortana" "Pollimin" "Firren" "Carimal" "Mehrnana" "Finton" "Rorien's Grove" "Fortalia" "Biroi" "Varnia" "Cardilia" "Kormli" "Darpo's Communion" "Dissadia" "Ultia's Shelter" "Mani's Den" "Firtle's Web" "Pottle's Pantry" "Mortin's Marrow" "Tourivale" "Droitandir" "Lavelkor" "Collonia's Homestead" "Uthian's Shrine" "Forfion" "Carnaloa" "Ridlan's Refuge" "Hortle's Haven" "Vilcot's Pursuit" "Ultan" "Baordo" "Nagrim" "Furdest" "Noilan" "Yrdur" "Taminth" "Gordan" "Grongari" "Balitana" "Palitine"
+			}
+		}
+		
+		pc_desert = {
+			names = {
+				"Tillie's Topaz"
+			}
+		}
+		
+		pc_tropical = {
+			names = {
+				"Emmrie's Emerald"
+			}
+		}
+		
+		pc_arid = {
+			names = {
+				"Gildern's Garnet"
+			}
+		}
+		
+		pc_continental = {
+			names = {
+				"Roddle's Ruby"
+			}
+		}
+		
+		pc_ocean = {
+			names = {
+				"Shondana's Saphire" "Philon's Port"
+			}
+		}
+		
+		pc_tundra = {
+			names = {
+				"Charion's Crystal"
+			}
+		}
+		
+		pc_arctic = {
+			names = {
+				"Diona's Diamond"
+			}
+		}
+		
+	}
+
+	### CHARACTERS
+
+	character_names = {
+		default = {
+			# A complete name
+			full_names = {
+			}
+			
+			# Always combined with a second name
+			first_names = {
+				Tig Ser Vak Mor Gan Pud Cal Vir Bur Tan Mik Gor Oro Dim Ban Gar Sok 
+			}
+			
+			# Always combined with a first name
+			second_names = {
+				J'Khanna J'Kir J'Dallot J'Ghor J'Bassim B'Donag B'Than B'Scorak B'Eren B'Torak
+			}
+			
+			regnal_first_names = {
+				J'Khanna J'Kir J'Dallot J'Ghor J'Bassim B'Donag
+			}
+			
+			regnal_second_names = {
+				Sakir
+			}
+		}
+	}
+}

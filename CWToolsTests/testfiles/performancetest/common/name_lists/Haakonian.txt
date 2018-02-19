@@ -1,0 +1,96 @@
+﻿### HaakonianOrder by EHKodiak
+Haakonian = {
+	randomized = no
+
+	ship_names = {
+		generic = { Cascader Penetrater Flooder Deluger Torrenter Avalanche Collapser Diminisher Gravitater Dwindler Regressor Discharger Exuder
+		}
+		corvette = {
+		}
+		saber = {
+		}
+		sovereign = {
+		}
+		steamrunner = {
+		}		
+		adv_cruiser = {
+		}
+		strike = {
+		}	
+		constructor = { }
+		colonizer = { }
+		science = { }
+		transport = { }
+		outpost_station = {
+			sequential_name = "Frontier Outpost"
+		}
+	}
+
+	fleet_names = {
+		sequential_name = "%O% Fleet"
+	}
+	
+	army_names = {
+		defense_army = {
+			sequential_name = "%O% Haakonian Guard"
+		}
+		assault_army = {
+			sequential_name = "%O% Haakonian Assault Division"
+		}
+		slave_army = {
+			sequential_name = "%O% Indentured Forces"
+		}
+		clone_army = { 
+			sequential_name = "%O% Clone Forces"
+		}
+		robotic_army = {
+			sequential_name = "%O% Mechanised Forces"
+		}
+		android_army = {
+			sequential_name = "%O% Synthetic Forces"
+		}
+		psionic_army = { 
+			sequential_name = "%O% Psi Forces"
+		}
+		xenomorph_army = {
+			sequential_name = "%O% Bio-Warfare Forces"
+		}
+		gene_warrior_army = {
+			sequential_name = "%O% Bio-Engineered Forces"
+		}
+	}
+
+	planet_names = {
+		generic = {
+			names = { 
+			}
+		}
+	}
+
+
+	### CHARACTERS 
+
+	character_names = {
+		names1 = {
+			weight = 40
+			first_names_male = {
+			Ma'Bor Al'Bor Ar'Bor Be'Bor Cha'Bor Che'Bor Clo'Bor Da'Bor El'Bor Geno'Bor Ger'Bor Jamar'Bor Jaqua'Bor Jara'Bor Jar'Bor Jer'Bor Kell'Bor Kel'Bor Ke'Bor Latra'Bor Lo'Bor Mar'Bor Ma'Bor Mel'Bor Per'Bor Pur'Bor Quanta'Bor Ta'Bor Te'Bor Tra'Bor Tray'Bor Tre'Bor Yoel'Bor Marilk Enn'Ask Emm'Ask Elin'Ask Marg'Ask Minnake Ad'Ask Barth'Ask Cler'Ask Elick Ennik Floracki Bessaki Grockee Ethask Sar'Ask Ell'Ask Marth'Ask Nelleeki Mab'Ask
+			}
+			first_names_female = {
+			Maril Annash Emmash Elizash Margash Minniett Idash Berthash Clarash Alicki Anniki Florencki Bessiki Gracki Ethesh Sarash Ellash Marthash Nelliki Mabash Mamel Almel Armel Bemel Chamel Chemel Clomel Damel Elmel Genomel Germel Jamarmel Jaquamel Jaramel Jarmel Jermel Kellmel Kelmel Kemel Latramel Lomel Marmel Mamel Melmel Permel Purmel Quantamel Tamel Temel Tramel Traymel Tremel Yoelmel
+			}
+			second_names = {
+			Jetrel Hawrk Peltral Euhla Rultrel Rutral Ruva Entare Envarra Phantera Rova Povari Ruiltrel Pouhtrel Ruar Ciltrel Poiltar Reltar Itarr Chara Enara Pohvar Enova Celtral
+			}
+			regnal_first_names_male = {
+			Ma'Bor Al'Bor Ar'Bor Be'Bor Cha'Bor Che'Bor Clo'Bor Da'Bor El'Bor Geno'Bor Ger'Bor Jamar'Bor Jaqua'Bor Jara'Bor Jar'Bor Jer'Bor Kell'Bor Kel'Bor Ke'Bor Latra'Bor Lo'Bor Mar'Bor Ma'Bor Mel'Bor Per'Bor Pur'Bor Quanta'Bor Ta'Bor Te'Bor Tra'Bor Tray'Bor Tre'Bor Yoel'Bor Marilk Enn'Ask Emm'Ask Elin'Ask Marg'Ask Minnake Ad'Ask Barth'Ask Cler'Ask Elick Ennik Floracki Bessaki Grockee Ethask Sar'Ask Ell'Ask Marth'Ask Nelleeki Mab'Ask
+			}
+			regnal_first_names_female = {
+			Maril Ana'Sha Ema'Sha Eliza'Sha Marga'Sha Minniett Ida'Sha Bert'Sha Clar'Sha Alic'Ki Anni'Ki Flor'Ki Besi'Ki Grac'Ki Ethe'Sha Sar'Sha Ella'Sha Mar'Sha Nelli'Ki Maba'Sha Ma'Mel Al'Mel Ar'Mel Be'Mel Cha'Mel Che'Mel Clo'Mel Da'Mel El'Mel Geno'Mel Ger'Mel Jamar'Mel Jaqua'Mel Jara'Mel Jar'Mel Jer'Mel Kell'Mel Kel'Mel Ke'Mel Latra'Mel Lo'Mel Mar'Mella Mare'Mel Me'Mel Per'Mel Pur'Mel Quanta'Mel Ta'Mel Te'Mel Tra'Mel Tray'Mel Tre'Mel Yoel'Mel
+			}
+			regnal_second_names = {
+			Jetrel Hawrk Peltral Euhla Rultrel Rutral Ruva Entare Envarra Phantera Rova Povari Ruiltrel Pouhtrel Ruar Ciltrel Poiltar Reltar Itarr Chara Enara Pohvar Enova Celtral
+			}
+		}
+	}
+}

@@ -1,0 +1,423 @@
+#########################################
+#
+# orbital_bombardment.txt
+# Effects of orbital bombardment
+#
+# Event is triggered once a month if planet is being orbital bombarded
+#
+# Remember to update the following localization-strings if the effects are changed;
+#
+# GROUND_SUPPORT_STANCE_SOFT_BASE_DESC
+# GROUND_SUPPORT_STANCE_LIMITED_BASE_DESC
+# GROUND_SUPPORT_STANCE_FULL_BASE_DESC
+# STNH - Capek 1.8.0 Compat
+#########################################
+
+namespace = orbital_bombardment
+
+planet_event = {
+	id = orbital_bombardment.1
+	hide_window = yes
+	is_triggered_only = yes
+	
+	immediate = {
+		# Kill a pop
+		random_list = {	
+			2 = {
+				if = {
+					limit = {
+						or = {
+							orbital_bombardment = limited
+							orbital_bombardment = full
+							orbital_bombardment = armageddon
+						}
+					}
+					if = {
+						limit = {
+							count_pops = {
+								count > 1
+								limit = {
+									is_sapient = yes
+									owner = { NOT = { is_country_type = "primitive" } }
+								}
+							}
+						}
+						FROM = {
+							country_event = { id = action.23 }
+						}						
+						random_pop = {
+							limit = {
+								is_sapient = yes
+								owner = { NOT = { is_country_type = "primitive" } }
+							}
+							kill_pop = yes
+						}
+						else = {
+							if = {
+								limit = {
+									count_pops = {
+										count = all
+										limit = {
+											OR = {
+												is_sapient = no
+												owner = { is_country_type = "primitive" }
+											}
+										}
+									}
+								}
+								random_pop = {
+									kill_pop = yes
+								}								
+							}
+						}
+					}
+				}
+			}
+			2 = {
+				if = {
+					limit = {
+						or = {
+							orbital_bombardment = full
+							orbital_bombardment = armageddon
+						}
+					}
+					if = {
+						limit = {
+							count_pops = {
+								count > 1
+								limit = {
+									is_sapient = yes
+									owner = { NOT = { is_country_type = "primitive" } }
+								}
+							}
+						}
+						FROM = {
+							country_event = { id = action.23 }
+						}							
+						random_pop = {
+							limit = {
+								is_sapient = yes
+								owner = { NOT = { is_country_type = "primitive" } }
+							}
+							kill_pop = yes
+						}
+						else = {
+							if = {
+								limit = {
+									count_pops = {
+										count = all
+										limit = {
+											OR = {
+												is_sapient = no
+												owner = { is_country_type = "primitive" }
+											}
+										}
+									}
+								}
+								random_pop = {
+									kill_pop = yes
+								}
+							}
+						}
+					}
+				}
+			}
+			2 = {
+				if = {
+					limit = {
+						orbital_bombardment = armageddon
+					}
+					if = {
+						limit = {	
+							count_pops = {
+								count > 1
+								limit = {
+									is_sapient = yes
+									owner = { NOT = { is_country_type = "primitive" } }
+								}
+							}
+						}
+						FROM = {
+							country_event = { id = action.23 }
+						}							
+						random_pop = {
+							limit = {
+								is_sapient = yes
+								owner = { NOT = { is_country_type = "primitive" } }
+							}
+							kill_pop = yes
+						}
+						else = {
+							if = {
+								limit = {
+									count_pops = {
+										count = all
+										limit = {
+											OR = {
+												is_sapient = no
+												owner = { is_country_type = "primitive" }
+											}
+										}
+									}
+								}
+								random_pop = {
+									kill_pop = yes
+								}
+							}
+						}
+					}
+				}
+			}			
+			94 = {
+			}
+		}
+		
+		# Ruin a building
+		random_list = {
+			5 = {
+				if = {
+					limit = {
+						or = {
+							orbital_bombardment = limited
+							orbital_bombardment = full
+							orbital_bombardment = armageddon
+						}
+					}
+					random_tile = {
+						limit = {
+							has_building = yes
+							is_ruined = no
+						}
+						set_ruined = yes
+					}
+				}
+			}
+			5 = {
+				if = {
+					limit = {
+						or = {
+							orbital_bombardment = full
+							orbital_bombardment = armageddon
+						}
+					}
+					random_tile = {
+						limit = {
+							has_building = yes
+							is_ruined = no
+						}
+						set_ruined = yes
+					}
+				}
+			}
+			5 = {
+				if = {
+					limit = {
+						orbital_bombardment = armageddon
+					}
+					random_tile = {
+						limit = {
+							has_building = yes
+							is_ruined = no
+						}
+						set_ruined = yes
+					}
+				}
+			}			
+			85 = {
+			}
+		}
+
+		# Create tile blocker
+		random_list = {
+			3 = {
+				if = {
+					limit = {
+						or = {
+							orbital_bombardment = full
+							orbital_bombardment = armageddon
+						}
+					}
+					if = {
+						limit = {
+							planet = {
+								OR = {
+									count_pops = {
+										count > 1
+										limit = {
+											is_sapient = yes
+											owner = { NOT = { is_country_type = "primitive" } }
+										}
+									}
+									count_pops = {
+										count = all
+										limit = {
+											OR = {
+												is_sapient = no
+												owner = { is_country_type = "primitive" }
+											}
+										}
+									}
+								}
+							}
+						}
+						random_tile = {
+							limit = {
+								has_blocker = no
+								has_building = no
+							}
+							# set_blocker = "tb_bombarded_land"
+							set_bombarded_blocker = yes
+						}
+						else = {
+							random_tile = {
+								limit = {
+									has_blocker = no
+									has_building = no
+									OR = {
+										NOT = { exists = pop }
+										pop = {
+											OR = {
+												is_sapient = no
+												owner = { is_country_type = "primitive" }
+											}
+										}
+									}
+								}
+								# set_blocker = "tb_bombarded_land"
+								set_bombarded_blocker = yes
+							}
+						}
+					}
+				}
+			}
+			3 = {
+				if = {
+					limit = {
+						orbital_bombardment = armageddon
+					}
+					if = {
+						limit = {
+							planet = {
+								OR = {
+									count_pops = {
+										count > 1
+										limit = {
+											is_sapient = yes
+											owner = { NOT = { is_country_type = "primitive" } }
+										}
+									}
+									count_pops = {
+										count = all
+										limit = {
+											OR = {
+												is_sapient = no
+												owner = { is_country_type = "primitive" }
+											}
+										}
+									}
+								}
+							}
+						}
+						random_tile = {
+							limit = {
+								has_blocker = no
+								has_building = no
+							}
+							# set_blocker = "tb_radioactive_wasteland"
+							set_radioactive_blocker = yes
+						}
+						else = {
+							random_tile = {
+								limit = {
+									has_blocker = no
+									has_building = no
+									OR = {
+										NOT = { exists = pop }
+										pop = {
+											OR = {
+												is_sapient = no
+												owner = { is_country_type = "primitive" }
+											}
+										}
+									}
+								}
+								# set_blocker = "tb_radioactive_wasteland"
+								set_radioactive_blocker = yes
+							}
+						}
+					}
+				}
+			}			
+			94 = {
+			}
+		}
+	}
+}
+
+planet_event = {
+	id = orbital_bombardment.2
+	hide_window = yes
+	is_triggered_only = yes
+	
+	immediate = {
+		if = { limit = { Root = { is_occupied_flag = no } } ### Won't fire if planet is occupied
+			if = { 
+				limit = { any_tile = { has_building = "building_ground_defense_1" is_ruined = no  } }
+					random_list = { ### Chance to miss
+						70 = { ### Random ship in the fleet gets hit
+							From = { 
+								random_owned_ship = {
+									random_list = {
+										25 = { reduce_hp = 900 }
+										25 = { reduce_hp = 1100 }
+										25 = { reduce_hp = 1300 }
+										25 = { reduce_hp = 1500 }
+									}
+								create_ambient_object = { type = explosion_particle_object location = this use_3d_location = yes duration = 20 scale = 2 }
+								}
+							}
+						}
+						30 = { } ### no ship gets hit 
+					}
+				}
+			if = { 
+				limit = { any_tile = { has_building = "building_ground_defense_2" is_ruined = no  } }
+					random_list = { ### Chance to miss
+						75 = { ### Random ship in the fleet gets hit
+							From = { 
+								random_owned_ship = {
+									random_list = {
+										25 = { reduce_hp = 1750 }
+										25 = { reduce_hp = 2000 }
+										25 = { reduce_hp = 2250 }
+										25 = { reduce_hp = 2500 }
+									}
+								create_ambient_object = { type = explosion_particle_object location = this use_3d_location = yes duration = 20 scale = 2 }
+								}
+							}
+						}
+						25 = { } ### no ship gets hit 
+					}
+				}
+			if = { 
+				limit = { any_tile = { has_building = "building_ground_defense_3" is_ruined = no  } }
+					random_list = { ### Chance to miss
+						80 = { ### Random ship in the fleet gets hit
+							From = { 
+								random_owned_ship = {
+									random_list = {
+										25 = { reduce_hp = 2000 }
+										25 = { reduce_hp = 2500 }
+										25 = { reduce_hp = 3000 }
+										25 = { reduce_hp = 3500 }
+									}
+								create_ambient_object = { type = explosion_particle_object location = this use_3d_location = yes duration = 20 scale = 2 }
+								}
+							}
+						}
+						20 = { } ### no ship gets hit 
+					}
+				}
+		}
+	}
+}

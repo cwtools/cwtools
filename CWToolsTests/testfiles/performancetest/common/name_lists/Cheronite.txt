@@ -1,0 +1,97 @@
+﻿### Cheronite by EHKodiak
+Cheronite = {
+	randomized = no
+
+	ship_names = {
+		generic = {
+		Baraqel Mala Neqael Semyaza Urobach Armaro Asura Azmeda Bele Bane Behemo Belphegor Dahaka Demogorg Gibborim Golia Iblis Karnatoth Malor Melchom Orcus Rakshasa Ramakara Rephaim Sammael Sathari Sephiro Thanato Hela Abaddo Abraxi Balam Chamos Golab Nosfera Rahab Sargatanas Tiamat Tumael Barqu Beleth Beast Chemosh Nebiros Ravana
+		}
+		corvette = {
+		}
+		saber = {
+		}
+		sovereign = {
+		}
+		steamrunner = {
+		}		
+		adv_cruiser = {
+		}
+		strike = {
+		}	
+		constructor = { }
+		colonizer = { }
+		science = { }
+		transport = { }
+		outpost_station = {
+			sequential_name = "Purity Outpost"
+		}
+	}
+
+	fleet_names = {
+		sequential_name = "%O% Fleet"
+	}
+	
+	army_names = {
+		defense_army = {
+			sequential_name = "%O% Pure Guard"
+		}
+		assault_army = {
+			sequential_name = "%O% Purifiers"
+		}
+		slave_army = {
+			sequential_name = "%O% Indentured Impure Force"
+		}
+		clone_army = { 
+			sequential_name = "%O% Cloned Purity Force"
+		}
+		robotic_army = {
+			sequential_name = "%O% Mechanical Purifiers"
+		}
+		android_army = {
+			sequential_name = "%O% Synthetic Purifiers"
+		}
+		psionic_army = { 
+			sequential_name = "%O% Psionic Purifiers"
+		}
+		xenomorph_army = {
+			sequential_name = "%O% Bio-Warfare Purifiers"
+		}
+		gene_warrior_army = {
+			sequential_name = "%O% Bio-Engineered Purifiers"
+		}
+	}
+
+	planet_names = {
+		generic = {
+			names = { 
+			}
+		}
+	}
+
+
+	### CHARACTERS
+
+	character_names = {
+		names1 = {
+			weight = 40
+			first_names_male = {
+			Bele Lokai Vaxil Vexha Scanla Kayle Kele Kale Tale Hene Voxai Machai Vord Gilmorai Jare Bala Nele Pikai Gike Asmodai Amon Abrax Abado Aeshe Baphome Malakai Beelze Barbato Bali Cain Thanato
+			}
+			first_names_female = {
+			Vexhalia Scanla Keyle Lethe Kima Lili Bati Empusa Gorgo Medusai Lamas Lamia Lilim Lilitu Sukubai Yukiona Ravana Sathana Rakshasa Tiamaat 
+			}
+			second_names = {
+			" "
+			}
+			regnal_first_names_male = {
+			Bele Lokai Vaxil Vexha Scanla Kayle Kele Kale Tale Hene Voxai Machai Vord Gilmorai Jare Bala Nele Pikai Gike Asmodai Amon Abrax Abado Aeshe Baphome Malakai Beelze Barbato Bali Cain Thanato
+			}
+			regnal_first_names_female = {
+			Vexhalia Scanla Keyle Lethe Kima Lili Bati Empusa Gorgo Medusai Lamas Lamia Lilim Lilitu Sukubai Yukiona Ravana Sathana Rakshasa Tiamaat 
+			}
+			regnal_second_names = {
+			" "
+			}
+		}
+	}
+}

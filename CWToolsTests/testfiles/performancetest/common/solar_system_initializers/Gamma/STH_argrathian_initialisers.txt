@@ -1,0 +1,118 @@
+@distance = 30
+@base_moon_distance = 10
+
+#Argrathian
+ArgrathianHomeworld = {
+	name = "Argratha"
+	class = "sc_g"
+	flags = { argrathian_homeworld }
+	init_effect = { log = "argrathian homeworld" }
+	usage = custom_empire
+	planet = { name = "Argratha" class = star orbit_distance = 0 orbit_angle = 1 size = { min = 20 max = 30 } has_ring = no }
+	change_orbit = 50
+	planet = {
+		count = { min = 1 max = 2 }
+		orbit_distance = 20
+		class = rl_unhabitable_planets
+		orbit_angle = { min = 90 max = 270 }
+		change_orbit = @base_moon_distance
+		moon = { count = { min = 0 max = 1 } class = "rl_inner_moons" orbit_angle = { min = 90 max = 270 } orbit_distance = 10 }
+	}
+	change_orbit = 30
+	planet = {
+		count = 1
+		name = "Argratha Prime"
+		home_planet = yes
+		class = pc_m1_class
+		orbit_distance = 10
+		orbit_angle = { min = 90 max = 270 }
+		size = { min = 22 max = 25 }
+		starting_planet = yes
+		tile_blockers = none
+		modifiers = none
+		init_effect = { prevent_anomaly = yes }
+		init_effect = {
+			if = {
+				limit = { NOT = { any_country = { has_country_flag = argrathian_commonwealth } } }
+				create_species = { 
+				    name = "Argrathian" 
+				    class = ARG 
+				    portrait = argrathian 
+				    homeworld = THIS 
+				    traits = { 
+						trait="trait_enduring"
+						trait="trait_conformists"
+						trait="trait_rigid"
+						ideal_planet_class = "pc_m1_class" 
+	                } 
+				}
+				last_created_species = { save_global_event_target_as = argrathianSpecies }
+				create_country = {
+					name = "NAME_argrathian_commonwealth"
+					type = default
+					ignore_initial_colony_error = yes
+					civics = { civic = "civic_police_state" civic = "civic_shadow_council" }
+					authority = auth_democratic
+					name_list = "Argrathi"
+					ethos = { ethic = "ethic_militarist" ethic = "ethic_xenophobe" ethic = "ethic_egalitarian" }
+					species = event_target:argrathianSpecies
+					flag = {
+						icon = { category = "ornate" file = "flag_ornate_16.dds" }
+						background = { category = "backgrounds" file = "00_solid.dds" }
+						colors = { "customcolor1734" "black" "null" "null" }
+					}
+					ship_prefix = ""
+					effect = {
+						set_graphical_culture = generic_01
+						set_country_flag = argrathian_commonwealth
+						set_country_flag = custom_start_screen
+						set_country_flag = generic_ent
+						set_country_flag = gamma_empire
+						set_country_flag = init_spawned
+						save_global_event_target_as = argrathian_commonwealth
+					}
+				}
+				create_colony = { owner = event_target:argrathian_commonwealth species = event_target:argrathianSpecies ethos = owner }
+			}
+			set_capital = yes
+			random_country = {
+				limit = { has_country_flag = argrathian_commonwealth }
+				save_global_event_target_as = argrathian_commonwealth
+				add_appropriate_start_techs = yes
+				species = { save_global_event_target_as = argrathianSpecies }
+            }
+			set_owner = event_target:argrathian_commonwealth
+			generate_major_empire_start_buildings = yes
+			generate_major_empire_start_pops = yes
+			generate_major_empire_start_fleets = yes
+			set_name = "Argratha Prime"
+		}
+		change_orbit = @base_moon_distance
+		moon = { count = { min = 0 max = 1 } class = "rl_outer_moons" orbit_angle = { min = 90 max = 270 } orbit_distance = 10 }
+	}
+	planet = {
+		count = { min = 0 max = 2 }
+		orbit_distance = 20
+		class = rl_unhabitable_planets
+		orbit_angle = { min = 90 max = 270 }
+		change_orbit = @base_moon_distance
+		moon = { count = { min = 0 max = 1 } class = "rl_outer_moons" orbit_angle = { min = 90 max = 270 } orbit_distance = 10 }
+	}
+	planet = {
+		count = { min = 1 max = 3 }
+		orbit_distance = 25
+		class = rl_unhabitable_planets
+		orbit_angle = { min = 90 max = 270 }
+		change_orbit = @base_moon_distance
+		moon = { count = { min = 0 max = 1 } class = "rl_outer_moons" orbit_angle = { min = 90 max = 270 } orbit_distance = 10 }
+	}
+	planet = {
+		count = { min = 1 max = 2 }
+		orbit_distance = 20
+		class = pc_gas_giant
+		orbit_angle = { min = 90 max = 270 }
+		change_orbit = @base_moon_distance
+		moon = { count = { min = 0 max = 3 } class = "rl_outer_moons" orbit_angle = { min = 90 max = 270 } orbit_distance = 10 }
+	}
+	planet = { count = { min = 0 max = 2 } orbit_distance = 20 class = rl_unhabitable_planets orbit_angle = { min = 90 max = 270 } }
+}

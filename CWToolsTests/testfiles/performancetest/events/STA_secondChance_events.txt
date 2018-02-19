@@ -1,0 +1,267 @@
+############################
+#
+# Second Chance Events
+#
+# Written by Doot Doot
+#
+############################
+
+namespace = STA_secondChance_event
+
+@tier1materialreward = 6
+@tier1materialmin = 100
+@tier1materialmax = 500
+@tier2materialreward = 12
+@tier2materialmin = 150
+@tier2materialmax = 1000
+@tier3materialreward = 18
+@tier3materialmin = 250
+@tier3materialmax = 1500
+@tier4materialreward = 24
+@tier4materialmin = 350
+@tier4materialmax = 2000
+
+@tier1influencereward = 6
+@tier1influencemin = 40
+@tier1influencemax = 100
+@tier2influencereward = 12
+@tier2influencemin = 80
+@tier2influencemax = 175
+@tier3influencereward = 18
+@tier3influencemin = 125
+@tier3influencemax = 250
+@tier4influencereward = 24
+@tier4influencemin = 150
+@tier4influencemax = 300
+
+@tier1researchreward = 6
+@tier1researchmin = 60
+@tier1researchmax = 150
+@tier2researchreward = 12
+@tier2researchmin = 90
+@tier2researchmax = 250
+@tier3researchreward = 18
+@tier3researchmin = 120
+@tier3researchmax = 350
+@tier4researchreward = 24
+@tier4researchmin = 150
+@tier4researchmax = 500
+
+
+#Second chance checks (not working)
+#Yearly Pulse
+event = {
+	id = STA_secondChance_event.100
+	hide_window = yes
+	is_triggered_only = yes
+	
+	immediate = {		
+		#limit = {
+		#	is_ai = no
+        #    any_research_station = { is_owned_by = ROOT }
+		#}
+		enable_special_project = {
+			name = "SECOND_CHANCE_PROJECT"
+			location = random_planet_within_border
+			owner = ROOT
+		}
+	}
+}
+#find abandoned station
+ship_event = {
+	id = STA_secondChance_event.1
+	is_triggered_only = yes
+	title = STA_secondChance_event.1.name
+	desc = STA_secondChance_event.1.desc
+	picture = sth_GFX_evt_secondChances1
+	location = Root
+	is_triggered_only = yes
+	immediate = {
+		owner = {
+			create_leader = {
+				type = admiral
+				species = owner_species
+				name = random
+				skill = 400
+				traits = {
+					trait = leader_trait_cautious
+					trait = leader_trait_trickster
+				}
+			}
+			last_created_leader = {
+				save_event_target_as = transporterClone
+				exile_leader_as = transporterClone
+			}
+		}
+	}
+	option = {
+		name = STA_secondChance_event.1.a
+		hidden_effect = { ship_event = { id = STA_secondChance_event.2 days = 4 } }
+	}
+	option = {
+		name = STA_secondChance_event.1.b
+		trigger = { owner = { OR = { has_ethic = ethic_fanatic_militarist has_ethic = ethic_xenophobe has_ethic = ethic_fanatic_xenophobe } is_changeling_empire = no } }
+		hidden_effect = { ship_event = { id = STA_secondChance_event.3 days = 4 } }
+	}
+	option = {
+		name = STA_secondChance_event.1.c
+		name = asdfa
+		custom_tooltip = "rawfdsf"
+		hidden_effect = { ship_event = { id = STA_secondChance_event.4 days = 1 } }
+	}	
+}
+
+#Failure due to no help
+ship_event = {
+	id = STA_secondChance_event.2
+	is_triggered_only = yes
+	title = STA_secondChance_event.2.name
+	desc = STA_secondChance_event.2.desc
+	picture = sth_GFX_evt_secondChances3
+	location = Root
+	is_triggered_only = yes
+	option = { name = STA_secondChance_event.2.a }
+}
+
+#Failure due to killing it
+ship_event = {
+	id = STA_secondChance_event.3
+	is_triggered_only = yes
+	title = STA_secondChance_event.3.name
+	desc = STA_secondChance_event.3.desc
+	picture = sth_GFX_evt_secondChances3
+	location = Root
+	is_triggered_only = yes
+	option = { name = STA_secondChance_event.3.a }
+}
+
+#The story is true
+ship_event = {
+	id = STA_secondChance_event.4
+	is_triggered_only = yes
+	title = STA_secondChance_event.4.name
+	desc = STA_secondChance_event.4.desc
+	picture = sth_GFX_evt_secondChances2
+	location = Root
+	is_triggered_only = yes
+	option = {
+		name = STA_secondChance_event.4.a
+		hidden_effect = { ship_event = { id = STA_secondChance_event.2 days = 3 } }
+	}
+	option = {
+		name = STA_secondChance_event.4.b
+		hidden_effect = { ship_event = { id = STA_secondChance_event.5 days = 1 } }
+	}
+}
+
+#Dangerous Plan
+ship_event = {
+	id = STA_secondChance_event.5
+	is_triggered_only = yes
+	title = STA_secondChance_event.5.name
+	desc = STA_secondChance_event.5.desc
+	picture = sth_GFX_evt_secondChances3
+	location = Root
+	is_triggered_only = yes
+	option = {
+		name = STA_secondChance_event.5.a
+		hidden_effect = {
+			ship_event = { id = STA_secondChance_event.6 days = 1 } 
+		}
+	}
+	option = {
+		name = STA_secondChance_event.5.b
+		hidden_effect = {
+			random_list = {
+				50 = { ship_event = { id = STA_secondChance_event.7 days = 2 } }
+				50 = { ship_event = { id = STA_secondChance_event.8 days = 2} }
+			}
+		}
+	}
+}
+
+#Over Your Head
+ship_event = {
+	id = STA_secondChance_event.6
+	is_triggered_only = yes
+	title = STA_secondChance_event.6.name
+	desc = STA_secondChance_event.6.desc
+	picture = sth_GFX_evt_secondChances3
+	location = Root
+	is_triggered_only = yes
+	option = {
+		name = STA_secondChance_event.6.a
+		hidden_effect = {
+			random_list = {
+				30 = { 
+					ship_event = { id = STA_secondChance_event.7 days = 2 } 
+				}
+				70 = { 
+					modifier = { factor = 2.00 leader = { has_level = 2 } }
+					modifier = { factor = 3.00 leader = { has_level = 3 } }
+					modifier = { factor = 4.00 leader = { has_level = 4 } }
+					modifier = { factor = 5.00 leader = { has_level = 5 } }
+					ship_event = { id = STA_secondChance_event.9 days = 2 } 
+				}
+			}
+		}
+	}
+
+}
+
+#Failure and death
+ship_event = {
+	id = STA_secondChance_event.7
+	is_triggered_only = yes
+	title = STA_secondChance_event.7.name
+	desc = STA_secondChance_event.7.desc
+	picture = sth_GFX_evt_secondChances4
+	location = Root
+	is_triggered_only = yes
+	option = { name = STA_secondChance_event.7.a }
+}
+
+#Failure and survive
+ship_event = {
+	id = STA_secondChance_event.8
+	is_triggered_only = yes
+	title = STA_secondChance_event.8.name
+	desc = STA_secondChance_event.8.desc
+	picture = sth_GFX_evt_secondChances4
+	location = Root
+	is_triggered_only = yes
+	immediate = { 
+		fleet = {
+			leader = { save_event_target_as = shipLeader  unassign_leader = this } 
+			set_leader = transporterClone
+			assign_leader = event_target:shipLeader
+		}
+	}
+	option = {
+		name = STA_secondChance_event.8.a
+		leader = { add_experience = 200 }
+	}
+}
+
+#Successful mission
+ship_event = {
+	id = STA_secondChance_event.9
+	is_triggered_only = yes
+	title = STA_secondChance_event.9.name
+	desc = STA_secondChance_event.9.desc
+	picture = sth_GFX_evt_secondChances3
+	location = Root
+	is_triggered_only = yes
+	immediate = {
+		fleet = {
+			leader = { save_event_target_as = shipLeader  unassign_leader = this } 
+			set_leader = transporterClone
+			assign_leader = event_target:shipLeader
+		}
+	}
+	option = {
+		name = STA_secondChance_event.9.a
+		leader = { add_experience = 400 }
+		owner = { add_monthly_resource_mult = { resource = society_research value = @tier3researchreward min = @tier3researchmin max = @tier3researchmax } }		
+	}
+}

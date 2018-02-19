@@ -1,0 +1,4803 @@
+# Electromagnetic Deflector (Patrol Frigate)
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_0_ARMOR_PF"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Armor_0"
+   icon_frame = 1
+  power = 0
+  cost = 5
+  size_restriction = { corvette }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_DEFENSE_1_ARMOR_PF"
+  ship_modifier = {     }
+  modifier = {   ship_armor_add = 5  }
+  ai_weight = { weight = 1 }
+  prerequisites = { "tech_artificial_gravity" }
+  component_set = "required_defense"
+}
+# Electromagnetic Deflector (Destroyer)
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_0_ARMOR_DE"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Armor_0"
+  icon_frame = 1
+   power = 0
+  cost = 5
+  size_restriction = { saber }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_DEFENSE_1_ARMOR_DE"
+  ship_modifier = {     }
+  modifier = {   ship_armor_add = 5  }
+  ai_weight = { weight = 1 }
+  prerequisites = { "tech_artificial_gravity" }
+  component_set = "required_defense"
+}
+# Electromagnetic Deflector (Cruiser)
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_0_ARMOR_CR"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Armor_0"
+  icon_frame = 1
+   power = 0
+  cost = 5
+  size_restriction = { sovereign borg_sphere }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_DEFENSE_1_ARMOR_CR"
+  ship_modifier = {     }
+  modifier = {   ship_armor_add = 5  }
+  ai_weight = { weight = 1 }
+  prerequisites = { "tech_artificial_gravity" }
+  component_set = "required_defense"
+}
+# Electromagnetic Deflector (Battlecruiser)
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_0_ARMOR_BC"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Armor_0"
+  icon_frame = 1
+   power = 0
+  cost = 5
+  size_restriction = { steamrunner borg_diamond }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_DEFENSE_1_ARMOR_BC"
+  ship_modifier = {     }
+  modifier = {   ship_armor_add = 5  }
+  ai_weight = { weight = 1 }
+  prerequisites = { "tech_artificial_gravity" }
+  component_set = "required_defense"
+}
+# Electromagnetic Deflector (Battleship)
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_0_ARMOR_BS"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Armor_0"
+  icon_frame = 1
+   power = 0
+  cost = 5
+  size_restriction = { adv_cruiser }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_DEFENSE_1_ARMOR_BS"
+  ship_modifier = {     }
+  modifier = {   ship_armor_add = 5  }
+  ai_weight = { weight = 1 }
+  prerequisites = { "tech_artificial_gravity" }
+  component_set = "required_defense"
+}
+# Electromagnetic Deflector (Heavy Escort)
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_0_ARMOR_HE"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Armor_0"
+  icon_frame = 1
+   power = 0
+  cost = 5
+  size_restriction = { strike }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_DEFENSE_1_ARMOR_HE"
+  ship_modifier = {     }
+  modifier = {   ship_armor_add = 5  }
+  ai_weight = { weight = 1 }
+  prerequisites = { "tech_artificial_gravity" }
+  component_set = "required_defense"
+}
+# Electromagnetic Deflector (Assault Cruiser)
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_0_ARMOR_AC"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Armor_0"
+  icon_frame = 1
+   power = 0
+  cost = 5
+  size_restriction = { assault_cruiser }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_DEFENSE_1_ARMOR_AC"
+  ship_modifier = {     }
+  modifier = {   ship_armor_add = 5  }
+  ai_weight = { weight = 1 }
+  prerequisites = { "tech_artificial_gravity" }
+  component_set = "required_defense"
+}
+# Electromagnetic Deflector (Dreadnaught)
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_0_ARMOR_SB"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Armor_0"
+  icon_frame = 1
+   power = 0
+  cost = 5
+  size_restriction = { super_battleship borg_cube borg_tactical }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_DEFENSE_1_ARMOR_SB"
+  ship_modifier = {     }
+  modifier = {   ship_armor_add = 5  }
+  ai_weight = { weight = 1 }
+  prerequisites = { "tech_artificial_gravity" }
+  component_set = "required_defense"
+}
+# Electromagnetic Deflector ()
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_0_ARMOR_SC"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Armor_0"
+  icon_frame = 1
+   power = 0
+  cost = 5
+  size_restriction = { super_cube }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_DEFENSE_1_ARMOR_SC"
+  ship_modifier = {     }
+  modifier = {   ship_armor_add = 5  }
+  ai_weight = { weight = 1 }
+  prerequisites = { "tech_artificial_gravity" }
+  component_set = "required_defense"
+}
+# Electromagnetic Deflector (Civilian Ships)
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_0_ARMOR_CS"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Armor_0"
+  icon_frame = 1
+   power = 0
+  cost = 5
+  class_restriction = { shipclass_constructor shipclass_colonizer shipclass_science_ship shipclass_transport }
+  upgrades_to = "REQUIRED_DEFENSE_1_ARMOR_CS"
+  ship_modifier = {     }
+  modifier = {   ship_armor_add = 5  }
+  ai_weight = { weight = 1 }
+  prerequisites = { "tech_artificial_gravity" }
+  component_set = "required_defense"
+}
+# Electromagnetic Deflector (Light Military Stations)
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_0_ARMOR_DS"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Armor_0"
+  icon_frame = 1
+   power = 0
+  cost = 5
+  size_restriction = { military_station_small military_station_large station_listening borg_unimatrix_defense_small }
+  upgrades_to = "REQUIRED_DEFENSE_1_ARMOR_DS"
+  ship_modifier = {     }
+  modifier = {   ship_armor_add = 5  }
+  ai_weight = { weight = 1 }
+  prerequisites = { "tech_artificial_gravity" }
+  component_set = "required_defense"
+}
+# Electromagnetic Deflector (Heavy Weapon Platform)
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_0_ARMOR_WP"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Armor_0"
+  icon_frame = 1
+   power = 0
+  cost = 5
+  size_restriction = { military_station_medium }
+  upgrades_to = "REQUIRED_DEFENSE_1_ARMOR_WP"
+  ship_modifier = {     }
+  modifier = {   ship_armor_add = 5  }
+  ai_weight = { weight = 1 }
+  prerequisites = { "tech_artificial_gravity" }
+  component_set = "required_defense"
+}
+
+# Polarized Hull Plating (Patrol Frigate)
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_1_ARMOR_PF"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Armor_1"
+   icon_frame = 1
+  power = -5
+  cost = 10
+  size_restriction = { corvette }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_DEFENSE_2_ARMOR_PF"
+  ship_modifier = {     }
+  modifier = {   ship_armor_add = 15  }
+  ai_weight = { weight = 10 }
+  prerequisites = { "tech_engineering_polarized_603" }
+  component_set = "required_defense"
+}
+# Polarized Hull Plating (Destroyer)
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_1_ARMOR_DE"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Armor_1"
+  icon_frame = 1
+   power = -5
+  cost = 10
+  size_restriction = { saber }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_DEFENSE_2_ARMOR_DE"
+  ship_modifier = {     }
+  modifier = {   ship_armor_add = 15  }
+  ai_weight = { weight = 10 }
+  prerequisites = { "tech_engineering_polarized_603" }
+  component_set = "required_defense"
+}
+# Polarized Hull Plating (Cruiser)
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_1_ARMOR_CR"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Armor_1"
+  icon_frame = 1
+   power = -20
+  cost = 30
+  size_restriction = { sovereign borg_sphere }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_DEFENSE_2_ARMOR_CR"
+  ship_modifier = {     }
+  modifier = {   ship_armor_add = 15  }
+  ai_weight = { weight = 10 }
+  prerequisites = { "tech_engineering_polarized_603" }
+  component_set = "required_defense"
+}
+# Polarized Hull Plating (Battlecruiser)
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_1_ARMOR_BC"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Armor_1"
+  icon_frame = 1
+   power = -10
+  cost = 10
+  size_restriction = { steamrunner borg_diamond }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_DEFENSE_2_ARMOR_BC"
+  ship_modifier = {     }
+  modifier = {   ship_armor_add = 15  }
+  ai_weight = { weight = 10 }
+  prerequisites = { "tech_engineering_polarized_603" }
+  component_set = "required_defense"
+}
+# Polarized Hull Plating (Battleship)
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_1_ARMOR_BS"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Armor_1"
+  icon_frame = 1
+   power = -25
+  cost = 40
+  size_restriction = { adv_cruiser }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_DEFENSE_2_ARMOR_BS"
+  ship_modifier = {     }
+  modifier = {   ship_armor_add = 15  }
+  ai_weight = { weight = 10 }
+  prerequisites = { "tech_engineering_polarized_603" }
+  component_set = "required_defense"
+}
+# Polarized Hull Plating (Heavy Escort)
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_1_ARMOR_HE"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Armor_1"
+  icon_frame = 1
+   power = -15
+  cost = 20
+  size_restriction = { strike }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_DEFENSE_2_ARMOR_HE"
+  ship_modifier = {     }
+  modifier = {   ship_armor_add = 15  }
+  ai_weight = { weight = 10 }
+  prerequisites = { "tech_engineering_polarized_603" }
+  component_set = "required_defense"
+}
+# Polarized Hull Plating (Assault Cruiser)
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_1_ARMOR_AC"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Armor_1"
+  icon_frame = 1
+   power = -25
+  cost = 40
+  size_restriction = { assault_cruiser }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_DEFENSE_2_ARMOR_AC"
+  ship_modifier = {     }
+  modifier = {   ship_armor_add = 15  }
+  ai_weight = { weight = 10 }
+  prerequisites = { "tech_engineering_polarized_603" }
+  component_set = "required_defense"
+}
+# Polarized Hull Plating (Dreadnaught)
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_1_ARMOR_SB"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Armor_1"
+  icon_frame = 1
+   power = -50
+  cost = 75
+  size_restriction = { super_battleship borg_cube borg_tactical }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_DEFENSE_2_ARMOR_SB"
+  ship_modifier = {     }
+  modifier = {   ship_armor_add = 15  }
+  ai_weight = { weight = 10 }
+  prerequisites = { "tech_engineering_polarized_603" }
+  component_set = "required_defense"
+}
+# Polarized Hull Plating ()
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_1_ARMOR_SC"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Armor_1"
+  icon_frame = 1
+   power = -90
+  cost = 135
+  size_restriction = { super_cube }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_DEFENSE_2_ARMOR_SC"
+  ship_modifier = {     }
+  modifier = {   ship_armor_add = 15  }
+  ai_weight = { weight = 10 }
+  prerequisites = { "tech_engineering_polarized_603" }
+  component_set = "required_defense"
+}
+# Polarized Hull Plating (Civilian Ships)
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_1_ARMOR_CS"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Armor_1"
+  icon_frame = 1
+   power = 0
+  cost = 10
+  class_restriction = { shipclass_constructor shipclass_colonizer shipclass_science_ship shipclass_transport }
+  upgrades_to = "REQUIRED_DEFENSE_2_ARMOR_CS"
+  ship_modifier = {     }
+  modifier = {   ship_armor_add = 15  }
+  ai_weight = { weight = 10 }
+  prerequisites = { "tech_engineering_polarized_603" }
+  component_set = "required_defense"
+}
+# Polarized Hull Plating (Light Military Stations)
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_1_ARMOR_DS"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Armor_1"
+  icon_frame = 1
+   power = -5
+  cost = 10
+  size_restriction = { military_station_small military_station_large station_listening borg_unimatrix_defense_small }
+  upgrades_to = "REQUIRED_DEFENSE_2_ARMOR_DS"
+  ship_modifier = {     }
+  modifier = {   ship_armor_add = 15  }
+  ai_weight = { weight = 10 }
+  prerequisites = { "tech_engineering_polarized_603" }
+  component_set = "required_defense"
+}
+# Polarized Hull Plating (Heavy Weapon Platform)
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_1_ARMOR_WP"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Armor_1"
+  icon_frame = 1
+   power = -30
+  cost = 45
+  size_restriction = { military_station_medium }
+  upgrades_to = "REQUIRED_DEFENSE_2_ARMOR_WP"
+  ship_modifier = {     }
+  modifier = {   ship_armor_add = 15  }
+  ai_weight = { weight = 10 }
+  prerequisites = { "tech_engineering_polarized_603" }
+  component_set = "required_defense"
+}
+
+# Polarized Hull Plating Relay (Patrol Frigate)
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_2_ARMOR_PF"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Armor_2"
+   icon_frame = 1
+  power = -10
+  cost = 15
+  size_restriction = { corvette }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_DEFENSE_3_ARMOR_PF"
+  ship_modifier = {     }
+  modifier = {   ship_armor_add = 20  }
+  ai_weight = { weight = 20 }
+  prerequisites = { "tech_engineering_improved_604" }
+  component_set = "required_defense"
+}
+# Polarized Hull Plating Relay (Destroyer)
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_2_ARMOR_DE"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Armor_2"
+  icon_frame = 1
+   power = -15
+  cost = 15
+  size_restriction = { saber }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_DEFENSE_3_ARMOR_DE"
+  ship_modifier = {     }
+  modifier = {   ship_armor_add = 20  }
+  ai_weight = { weight = 20 }
+  prerequisites = { "tech_engineering_improved_604" }
+  component_set = "required_defense"
+}
+# Polarized Hull Plating Relay (Cruiser)
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_2_ARMOR_CR"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Armor_2"
+  icon_frame = 1
+   power = -55
+  cost = 70
+  size_restriction = { sovereign borg_sphere }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_DEFENSE_3_ARMOR_CR"
+  ship_modifier = {     }
+  modifier = {   ship_armor_add = 20  }
+  ai_weight = { weight = 20 }
+  prerequisites = { "tech_engineering_improved_604" }
+  component_set = "required_defense"
+}
+# Polarized Hull Plating Relay (Battlecruiser)
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_2_ARMOR_BC"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Armor_2"
+  icon_frame = 1
+   power = -30
+  cost = 30
+  size_restriction = { steamrunner borg_diamond }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_DEFENSE_3_ARMOR_BC"
+  ship_modifier = {     }
+  modifier = {   ship_armor_add = 20  }
+  ai_weight = { weight = 20 }
+  prerequisites = { "tech_engineering_improved_604" }
+  component_set = "required_defense"
+}
+# Polarized Hull Plating Relay (Battleship)
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_2_ARMOR_BS"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Armor_2"
+  icon_frame = 1
+   power = -75
+  cost = 95
+  size_restriction = { adv_cruiser }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_DEFENSE_3_ARMOR_BS"
+  ship_modifier = {     }
+  modifier = {   ship_armor_add = 20  }
+  ai_weight = { weight = 20 }
+  prerequisites = { "tech_engineering_improved_604" }
+  component_set = "required_defense"
+}
+# Polarized Hull Plating Relay (Heavy Escort)
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_2_ARMOR_HE"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Armor_2"
+  icon_frame = 1
+   power = -45
+  cost = 45
+  size_restriction = { strike }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_DEFENSE_3_ARMOR_HE"
+  ship_modifier = {     }
+  modifier = {   ship_armor_add = 20  }
+  ai_weight = { weight = 20 }
+  prerequisites = { "tech_engineering_improved_604" }
+  component_set = "required_defense"
+}
+# Polarized Hull Plating Relay (Assault Cruiser)
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_2_ARMOR_AC"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Armor_2"
+  icon_frame = 1
+   power = -70
+  cost = 90
+  size_restriction = { assault_cruiser }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_DEFENSE_3_ARMOR_AC"
+  ship_modifier = {     }
+  modifier = {   ship_armor_add = 20  }
+  ai_weight = { weight = 20 }
+  prerequisites = { "tech_engineering_improved_604" }
+  component_set = "required_defense"
+}
+# Polarized Hull Plating Relay (Dreadnaught)
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_2_ARMOR_SB"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Armor_2"
+  icon_frame = 1
+   power = -150
+  cost = 190
+  size_restriction = { super_battleship borg_cube borg_tactical }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_DEFENSE_3_ARMOR_SB"
+  ship_modifier = {     }
+  modifier = {   ship_armor_add = 20  }
+  ai_weight = { weight = 20 }
+  prerequisites = { "tech_engineering_improved_604" }
+  component_set = "required_defense"
+}
+# Polarized Hull Plating Relay ()
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_2_ARMOR_SC"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Armor_2"
+  icon_frame = 1
+   power = -265
+  cost = 330
+  size_restriction = { super_cube }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_DEFENSE_3_ARMOR_SC"
+  ship_modifier = {     }
+  modifier = {   ship_armor_add = 20  }
+  ai_weight = { weight = 20 }
+  prerequisites = { "tech_engineering_improved_604" }
+  component_set = "required_defense"
+}
+# Polarized Hull Plating Relay (Civilian Ships)
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_2_ARMOR_CS"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Armor_2"
+  icon_frame = 1
+   power = -5
+  cost = 15
+  class_restriction = { shipclass_constructor shipclass_colonizer shipclass_science_ship shipclass_transport }
+  upgrades_to = "REQUIRED_DEFENSE_3_ARMOR_CS"
+  ship_modifier = {     }
+  modifier = {   ship_armor_add = 20  }
+  ai_weight = { weight = 20 }
+  prerequisites = { "tech_engineering_improved_604" }
+  component_set = "required_defense"
+}
+# Polarized Hull Plating Relay (Light Military Stations)
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_2_ARMOR_DS"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Armor_2"
+  icon_frame = 1
+   power = -15
+  cost = 20
+  size_restriction = { military_station_small military_station_large station_listening borg_unimatrix_defense_small }
+  upgrades_to = "REQUIRED_DEFENSE_3_ARMOR_DS"
+  ship_modifier = {     }
+  modifier = {   ship_armor_add = 20  }
+  ai_weight = { weight = 20 }
+  prerequisites = { "tech_engineering_improved_604" }
+  component_set = "required_defense"
+}
+# Polarized Hull Plating Relay (Heavy Weapon Platform)
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_2_ARMOR_WP"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Armor_2"
+  icon_frame = 1
+   power = -90
+  cost = 115
+  size_restriction = { military_station_medium }
+  upgrades_to = "REQUIRED_DEFENSE_3_ARMOR_WP"
+  ship_modifier = {     }
+  modifier = {   ship_armor_add = 20  }
+  ai_weight = { weight = 20 }
+  prerequisites = { "tech_engineering_improved_604" }
+  component_set = "required_defense"
+}
+
+# Ablative Generator (Patrol Frigate)
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_3_ARMOR_PF"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Armor_3"
+   icon_frame = 1
+  power = -60
+  cost = 65
+  size_restriction = { corvette }
+  class_restriction = { shipclass_military }
+  
+  ship_modifier = {     }
+  modifier = {   ship_armor_add = 50  }
+  ai_weight = { weight = 30 }
+  prerequisites = { "tech_engineering_ablative_607" }
+  component_set = "required_defense"
+}
+# Ablative Generator (Destroyer)
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_3_ARMOR_DE"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Armor_3"
+  icon_frame = 1
+   power = -120
+  cost = 145
+  size_restriction = { saber }
+  class_restriction = { shipclass_military }
+  
+  ship_modifier = {     }
+  modifier = {   ship_armor_add = 50  }
+  ai_weight = { weight = 30 }
+  prerequisites = { "tech_engineering_ablative_607" }
+  component_set = "required_defense"
+}
+# Ablative Generator (Cruiser)
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_3_ARMOR_CR"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Armor_3"
+  icon_frame = 1
+   power = -420
+  cost = 630
+  size_restriction = { sovereign borg_sphere }
+  class_restriction = { shipclass_military }
+  
+  ship_modifier = {     }
+  modifier = {   ship_armor_add = 50  }
+  ai_weight = { weight = 30 }
+  prerequisites = { "tech_engineering_ablative_607" }
+  component_set = "required_defense"
+}
+# Ablative Generator (Battlecruiser)
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_3_ARMOR_BC"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Armor_3"
+  icon_frame = 1
+   power = -240
+  cost = 290
+  size_restriction = { steamrunner borg_diamond }
+  class_restriction = { shipclass_military }
+  
+  ship_modifier = {     }
+  modifier = {   ship_armor_add = 50  }
+  ai_weight = { weight = 30 }
+  prerequisites = { "tech_engineering_ablative_607" }
+  component_set = "required_defense"
+}
+# Ablative Generator (Battleship)
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_3_ARMOR_BS"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Armor_3"
+  icon_frame = 1
+   power = -600
+  cost = 900
+  size_restriction = { adv_cruiser }
+  class_restriction = { shipclass_military }
+  
+  ship_modifier = {     }
+  modifier = {   ship_armor_add = 50  }
+  ai_weight = { weight = 30 }
+  prerequisites = { "tech_engineering_ablative_607" }
+  component_set = "required_defense"
+}
+# Ablative Generator (Heavy Escort)
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_3_ARMOR_HE"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Armor_3"
+  icon_frame = 1
+   power = -360
+  cost = 430
+  size_restriction = { strike }
+  class_restriction = { shipclass_military }
+  
+  ship_modifier = {     }
+  modifier = {   ship_armor_add = 50  }
+  ai_weight = { weight = 30 }
+  prerequisites = { "tech_engineering_ablative_607" }
+  component_set = "required_defense"
+}
+# Ablative Generator (Assault Cruiser)
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_3_ARMOR_AC"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Armor_3"
+  icon_frame = 1
+   power = -540
+  cost = 810
+  size_restriction = { assault_cruiser }
+  class_restriction = { shipclass_military }
+  
+  ship_modifier = {     }
+  modifier = {   ship_armor_add = 50  }
+  ai_weight = { weight = 30 }
+  prerequisites = { "tech_engineering_ablative_607" }
+  component_set = "required_defense"
+}
+# Ablative Generator (Dreadnaught)
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_3_ARMOR_SB"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Armor_3"
+  icon_frame = 1
+   power = -1200
+  cost = 1800
+  size_restriction = { super_battleship borg_cube borg_tactical }
+  class_restriction = { shipclass_military }
+  
+  ship_modifier = {     }
+  modifier = {   ship_armor_add = 50  }
+  ai_weight = { weight = 30 }
+  prerequisites = { "tech_engineering_ablative_607" }
+  component_set = "required_defense"
+}
+# Ablative Generator ()
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_3_ARMOR_SC"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Armor_3"
+  icon_frame = 1
+   power = -2130
+  cost = 3195
+  size_restriction = { super_cube }
+  class_restriction = { shipclass_military }
+  
+  ship_modifier = {     }
+  modifier = {   ship_armor_add = 50  }
+  ai_weight = { weight = 30 }
+  prerequisites = { "tech_engineering_ablative_607" }
+  component_set = "required_defense"
+}
+# Ablative Generator (Civilian Ships)
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_3_ARMOR_CS"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Armor_3"
+  icon_frame = 1
+   power = -30
+  cost = 25
+  class_restriction = { shipclass_constructor shipclass_colonizer shipclass_science_ship shipclass_transport }
+  
+  ship_modifier = {     }
+  modifier = {   ship_armor_add = 50  }
+  ai_weight = { weight = 30 }
+  prerequisites = { "tech_engineering_ablative_607" }
+  component_set = "required_defense"
+}
+# Ablative Generator (Light Military Stations)
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_3_ARMOR_DS"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Armor_3"
+  icon_frame = 1
+   power = -120
+  cost = 180
+  size_restriction = { military_station_small military_station_large station_listening borg_unimatrix_defense_small }
+  
+  ship_modifier = {     }
+  modifier = {   ship_armor_add = 50  }
+  ai_weight = { weight = 30 }
+  prerequisites = { "tech_engineering_ablative_607" }
+  component_set = "required_defense"
+}
+# Ablative Generator (Heavy Weapon Platform)
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_3_ARMOR_WP"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Armor_3"
+  icon_frame = 1
+   power = -720
+  cost = 1080
+  size_restriction = { military_station_medium }
+  
+  ship_modifier = {     }
+  modifier = {   ship_armor_add = 50  }
+  ai_weight = { weight = 30 }
+  prerequisites = { "tech_engineering_ablative_607" }
+  component_set = "required_defense"
+}
+
+# Adaptive Deflector Field (Patrol Frigate)
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_0_BORG_PF"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Borg_0"
+   icon_frame = 1
+  power = -5
+  cost = 5
+  size_restriction = { corvette }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_DEFENSE_1_BORG_PF"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 100 ship_auto_repair_add = 0.01 ship_armor_add = 10  }
+  ai_weight = { weight = 40 }
+  prerequisites = { "tech_borg_defense" }
+  component_set = "required_defense"
+}
+# Adaptive Deflector Field (Destroyer)
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_0_BORG_DE"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Borg_0"
+  icon_frame = 1
+   power = -10
+  cost = 10
+  size_restriction = { saber }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_DEFENSE_1_BORG_DE"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 200 ship_auto_repair_add = 0.01 ship_armor_add = 10  }
+  ai_weight = { weight = 40 }
+  prerequisites = { "tech_borg_defense" }
+  component_set = "borg_required_defense"
+}
+# Adaptive Deflector Field (Cruiser)
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_0_BORG_CR"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Borg_0"
+  icon_frame = 1
+   power = -35
+  cost = 40
+  size_restriction = { sovereign borg_sphere }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_DEFENSE_1_BORG_CR"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 700 ship_auto_repair_add = 0.01 ship_armor_add = 10  }
+  ai_weight = { weight = 40 }
+  prerequisites = { "tech_borg_defense" }
+  component_set = "borg_required_defense"
+}
+# Adaptive Deflector Field (Battlecruiser)
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_0_BORG_BC"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Borg_0"
+  icon_frame = 1
+   power = -20
+  cost = 20
+  size_restriction = { steamrunner borg_diamond }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_DEFENSE_1_BORG_BC"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 400 ship_auto_repair_add = 0.01 ship_armor_add = 10  }
+  ai_weight = { weight = 40 }
+  prerequisites = { "tech_borg_defense" }
+  component_set = "borg_required_defense"
+}
+# Adaptive Deflector Field (Battleship)
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_0_BORG_BS"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Borg_0"
+  icon_frame = 1
+   power = -50
+  cost = 55
+  size_restriction = { adv_cruiser }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_DEFENSE_1_BORG_BS"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 1000 ship_auto_repair_add = 0.01 ship_armor_add = 10  }
+  ai_weight = { weight = 40 }
+  prerequisites = { "tech_borg_defense" }
+  component_set = "borg_required_defense"
+}
+# Adaptive Deflector Field (Heavy Escort)
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_0_BORG_HE"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Borg_0"
+  icon_frame = 1
+   power = -30
+  cost = 25
+  size_restriction = { strike }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_DEFENSE_1_BORG_HE"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 600 ship_auto_repair_add = 0.01 ship_armor_add = 10  }
+  ai_weight = { weight = 40 }
+  prerequisites = { "tech_borg_defense" }
+  component_set = "borg_required_defense"
+}
+# Adaptive Deflector Field (Assault Cruiser)
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_0_BORG_AC"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Borg_0"
+  icon_frame = 1
+   power = -45
+  cost = 50
+  size_restriction = { assault_cruiser }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_DEFENSE_1_BORG_AC"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 900 ship_auto_repair_add = 0.01 ship_armor_add = 10  }
+  ai_weight = { weight = 40 }
+  prerequisites = { "tech_borg_defense" }
+  component_set = "borg_required_defense"
+}
+# Adaptive Deflector Field (Dreadnaught)
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_0_BORG_SB"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Borg_0"
+  icon_frame = 1
+   power = -100
+  cost = 110
+  size_restriction = { super_battleship borg_cube borg_tactical }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_DEFENSE_1_BORG_SB"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 2000 ship_auto_repair_add = 0.01 ship_armor_add = 10  }
+  ai_weight = { weight = 40 }
+  prerequisites = { "tech_borg_defense" }
+  component_set = "borg_required_defense"
+}
+# Adaptive Deflector Field ()
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_0_BORG_SC"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Borg_0"
+  icon_frame = 1
+   power = -180
+  cost = 200
+  size_restriction = { super_cube }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_DEFENSE_1_BORG_SC"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 3600 ship_auto_repair_add = 0.01 ship_armor_add = 10  }
+  ai_weight = { weight = 40 }
+  prerequisites = { "tech_borg_defense" }
+  component_set = "borg_required_defense"
+}
+# Adaptive Deflector Field (Civilian Ships)
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_0_BORG_CS"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Borg_0"
+  icon_frame = 1
+   power = -5
+  cost = 5
+  class_restriction = { shipclass_constructor shipclass_colonizer shipclass_science_ship shipclass_transport }
+  upgrades_to = "REQUIRED_DEFENSE_1_BORG_CS"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 100 ship_auto_repair_add = 0.01 ship_armor_add = 10  }
+  ai_weight = { weight = 40 }
+  prerequisites = { "tech_borg_defense" }
+  component_set = "required_defense"
+}
+# Adaptive Deflector Field (Light Military Stations)
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_0_BORG_DS"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Borg_0"
+  icon_frame = 1
+   power = -10
+  cost = 10
+  size_restriction = { military_station_small military_station_large station_listening borg_unimatrix_defense_small }
+  upgrades_to = "REQUIRED_DEFENSE_1_BORG_DS"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 200 ship_auto_repair_add = 0.01 ship_armor_add = 10  }
+  ai_weight = { weight = 40 }
+  prerequisites = { "tech_borg_defense" }
+  component_set = "required_defense"
+}
+# Adaptive Deflector Field (Heavy Weapon Platform)
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_0_BORG_WP"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Borg_0"
+  icon_frame = 1
+   power = -60
+  cost = 65
+  size_restriction = { military_station_medium }
+  upgrades_to = "REQUIRED_DEFENSE_1_BORG_WP"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 1200 ship_auto_repair_add = 0.01 ship_armor_add = 10  }
+  ai_weight = { weight = 40 }
+  prerequisites = { "tech_borg_defense" }
+  component_set = "required_defense"
+}
+
+# Neuro-Electric Force Field (Patrol Frigate)
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_1_BORG_PF"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Borg_1"
+   icon_frame = 1
+  power = -35
+  cost = 35
+  size_restriction = { corvette }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_DEFENSE_2_BORG_PF"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 700 ship_auto_repair_add = 0.01 ship_armor_add = 15  }
+  ai_weight = { weight = 50 }
+  prerequisites = { "tech_physics_field_manipulation_220" }
+  component_set = "required_defense"
+}
+# Neuro-Electric Force Field (Destroyer)
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_1_BORG_DE"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Borg_1"
+  icon_frame = 1
+   power = -70
+  cost = 80
+  size_restriction = { saber }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_DEFENSE_2_BORG_DE"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 1400 ship_auto_repair_add = 0.01 ship_armor_add = 15  }
+  ai_weight = { weight = 50 }
+  prerequisites = { "tech_physics_field_manipulation_220" }
+  component_set = "borg_required_defense"
+}
+# Neuro-Electric Force Field (Cruiser)
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_1_BORG_CR"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Borg_1"
+  icon_frame = 1
+   power = -245
+  cost = 345
+  size_restriction = { sovereign borg_sphere }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_DEFENSE_2_BORG_CR"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 4900 ship_auto_repair_add = 0.01 ship_armor_add = 15  }
+  ai_weight = { weight = 50 }
+  prerequisites = { "tech_physics_field_manipulation_220" }
+  component_set = "borg_required_defense"
+}
+# Neuro-Electric Force Field (Battlecruiser)
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_1_BORG_BC"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Borg_1"
+  icon_frame = 1
+   power = -140
+  cost = 155
+  size_restriction = { steamrunner borg_diamond }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_DEFENSE_2_BORG_BC"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 2800 ship_auto_repair_add = 0.01 ship_armor_add = 15  }
+  ai_weight = { weight = 50 }
+  prerequisites = { "tech_physics_field_manipulation_220" }
+  component_set = "borg_required_defense"
+}
+# Neuro-Electric Force Field (Battleship)
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_1_BORG_BS"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Borg_1"
+  icon_frame = 1
+   power = -350
+  cost = 490
+  size_restriction = { adv_cruiser }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_DEFENSE_2_BORG_BS"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 7000 ship_auto_repair_add = 0.01 ship_armor_add = 15  }
+  ai_weight = { weight = 50 }
+  prerequisites = { "tech_physics_field_manipulation_220" }
+  component_set = "borg_required_defense"
+}
+# Neuro-Electric Force Field (Heavy Escort)
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_1_BORG_HE"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Borg_1"
+  icon_frame = 1
+   power = -210
+  cost = 235
+  size_restriction = { strike }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_DEFENSE_2_BORG_HE"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 4200 ship_auto_repair_add = 0.01 ship_armor_add = 15  }
+  ai_weight = { weight = 50 }
+  prerequisites = { "tech_physics_field_manipulation_220" }
+  component_set = "borg_required_defense"
+}
+# Neuro-Electric Force Field (Assault Cruiser)
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_1_BORG_AC"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Borg_1"
+  icon_frame = 1
+   power = -315
+  cost = 440
+  size_restriction = { assault_cruiser }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_DEFENSE_2_BORG_AC"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 6300 ship_auto_repair_add = 0.01 ship_armor_add = 15  }
+  ai_weight = { weight = 50 }
+  prerequisites = { "tech_physics_field_manipulation_220" }
+  component_set = "borg_required_defense"
+}
+# Neuro-Electric Force Field (Dreadnaught)
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_1_BORG_SB"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Borg_1"
+  icon_frame = 1
+   power = -700
+  cost = 980
+  size_restriction = { super_battleship borg_cube borg_tactical }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_DEFENSE_2_BORG_SB"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 14000 ship_auto_repair_add = 0.01 ship_armor_add = 15  }
+  ai_weight = { weight = 50 }
+  prerequisites = { "tech_physics_field_manipulation_220" }
+  component_set = "borg_required_defense"
+}
+# Neuro-Electric Force Field ()
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_1_BORG_SC"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Borg_1"
+  icon_frame = 1
+   power = -1245
+  cost = 1745
+  size_restriction = { super_cube }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_DEFENSE_2_BORG_SC"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 24900 ship_auto_repair_add = 0.01 ship_armor_add = 15  }
+  ai_weight = { weight = 50 }
+  prerequisites = { "tech_physics_field_manipulation_220" }
+  component_set = "borg_required_defense"
+}
+# Neuro-Electric Force Field (Civilian Ships)
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_1_BORG_CS"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Borg_1"
+  icon_frame = 1
+   power = -20
+  cost = 15
+  class_restriction = { shipclass_constructor shipclass_colonizer shipclass_science_ship shipclass_transport }
+  upgrades_to = "REQUIRED_DEFENSE_2_BORG_CS"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 400 ship_auto_repair_add = 0.01 ship_armor_add = 15  }
+  ai_weight = { weight = 50 }
+  prerequisites = { "tech_physics_field_manipulation_220" }
+  component_set = "required_defense"
+}
+# Neuro-Electric Force Field (Light Military Stations)
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_1_BORG_DS"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Borg_1"
+  icon_frame = 1
+   power = -70
+  cost = 100
+  size_restriction = { military_station_small military_station_large station_listening borg_unimatrix_defense_small }
+  upgrades_to = "REQUIRED_DEFENSE_2_BORG_DS"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 1400 ship_auto_repair_add = 0.01 ship_armor_add = 15  }
+  ai_weight = { weight = 50 }
+  prerequisites = { "tech_physics_field_manipulation_220" }
+  component_set = "required_defense"
+}
+# Neuro-Electric Force Field (Heavy Weapon Platform)
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_1_BORG_WP"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Borg_1"
+  icon_frame = 1
+   power = -420
+  cost = 590
+  size_restriction = { military_station_medium }
+  upgrades_to = "REQUIRED_DEFENSE_2_BORG_WP"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 8400 ship_auto_repair_add = 0.01 ship_armor_add = 15  }
+  ai_weight = { weight = 50 }
+  prerequisites = { "tech_physics_field_manipulation_220" }
+  component_set = "required_defense"
+}
+
+# Multi-Regenerative Force Field (Patrol Frigate)
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_2_BORG_PF"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Borg_2"
+   icon_frame = 1
+  power = -50
+  cost = 50
+  size_restriction = { corvette }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_DEFENSE_3_BORG_PF"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 1000 ship_auto_repair_add = 0.01 ship_armor_add = 20  }
+  ai_weight = { weight = 60 }
+  prerequisites = { "tech_physics_field_manipulation_222" }
+  component_set = "required_defense"
+}
+# Multi-Regenerative Force Field (Destroyer)
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_2_BORG_DE"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Borg_2"
+  icon_frame = 1
+   power = -100
+  cost = 110
+  size_restriction = { saber }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_DEFENSE_3_BORG_DE"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 2000 ship_auto_repair_add = 0.01 ship_armor_add = 20  }
+  ai_weight = { weight = 60 }
+  prerequisites = { "tech_physics_field_manipulation_222" }
+  component_set = "borg_required_defense"
+}
+# Multi-Regenerative Force Field (Cruiser)
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_2_BORG_CR"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Borg_2"
+  icon_frame = 1
+   power = -350
+  cost = 490
+  size_restriction = { sovereign borg_sphere }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_DEFENSE_3_BORG_CR"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 7000 ship_auto_repair_add = 0.01 ship_armor_add = 20  }
+  ai_weight = { weight = 60 }
+  prerequisites = { "tech_physics_field_manipulation_222" }
+  component_set = "borg_required_defense"
+}
+# Multi-Regenerative Force Field (Battlecruiser)
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_2_BORG_BC"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Borg_2"
+  icon_frame = 1
+   power = -200
+  cost = 225
+  size_restriction = { steamrunner borg_diamond }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_DEFENSE_3_BORG_BC"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 4000 ship_auto_repair_add = 0.01 ship_armor_add = 20  }
+  ai_weight = { weight = 60 }
+  prerequisites = { "tech_physics_field_manipulation_222" }
+  component_set = "borg_required_defense"
+}
+# Multi-Regenerative Force Field (Battleship)
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_2_BORG_BS"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Borg_2"
+  icon_frame = 1
+   power = -500
+  cost = 700
+  size_restriction = { adv_cruiser }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_DEFENSE_3_BORG_BS"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 10000 ship_auto_repair_add = 0.01 ship_armor_add = 20  }
+  ai_weight = { weight = 60 }
+  prerequisites = { "tech_physics_field_manipulation_222" }
+  component_set = "borg_required_defense"
+}
+# Multi-Regenerative Force Field (Heavy Escort)
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_2_BORG_HE"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Borg_2"
+  icon_frame = 1
+   power = -300
+  cost = 335
+  size_restriction = { strike }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_DEFENSE_3_BORG_HE"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 6000 ship_auto_repair_add = 0.01 ship_armor_add = 20  }
+  ai_weight = { weight = 60 }
+  prerequisites = { "tech_physics_field_manipulation_222" }
+  component_set = "borg_required_defense"
+}
+# Multi-Regenerative Force Field (Assault Cruiser)
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_2_BORG_AC"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Borg_2"
+  icon_frame = 1
+   power = -450
+  cost = 630
+  size_restriction = { assault_cruiser }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_DEFENSE_3_BORG_AC"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 9000 ship_auto_repair_add = 0.01 ship_armor_add = 20  }
+  ai_weight = { weight = 60 }
+  prerequisites = { "tech_physics_field_manipulation_222" }
+  component_set = "borg_required_defense"
+}
+# Multi-Regenerative Force Field (Dreadnaught)
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_2_BORG_SB"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Borg_2"
+  icon_frame = 1
+   power = -1000
+  cost = 1400
+  size_restriction = { super_battleship borg_cube borg_tactical }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_DEFENSE_3_BORG_SB"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 20000 ship_auto_repair_add = 0.01 ship_armor_add = 20  }
+  ai_weight = { weight = 60 }
+  prerequisites = { "tech_physics_field_manipulation_222" }
+  component_set = "borg_required_defense"
+}
+# Multi-Regenerative Force Field ()
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_2_BORG_SC"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Borg_2"
+  icon_frame = 1
+   power = -1775
+  cost = 2485
+  size_restriction = { super_cube }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_DEFENSE_3_BORG_SC"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 35500 ship_auto_repair_add = 0.01 ship_armor_add = 20  }
+  ai_weight = { weight = 60 }
+  prerequisites = { "tech_physics_field_manipulation_222" }
+  component_set = "borg_required_defense"
+}
+# Multi-Regenerative Force Field (Civilian Ships)
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_2_BORG_CS"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Borg_2"
+  icon_frame = 1
+   power = -25
+  cost = 20
+  class_restriction = { shipclass_constructor shipclass_colonizer shipclass_science_ship shipclass_transport }
+  upgrades_to = "REQUIRED_DEFENSE_3_BORG_CS"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 500 ship_auto_repair_add = 0.01 ship_armor_add = 20  }
+  ai_weight = { weight = 60 }
+  prerequisites = { "tech_physics_field_manipulation_222" }
+  component_set = "required_defense"
+}
+# Multi-Regenerative Force Field (Light Military Stations)
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_2_BORG_DS"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Borg_2"
+  icon_frame = 1
+   power = -100
+  cost = 140
+  size_restriction = { military_station_small military_station_large station_listening borg_unimatrix_defense_small }
+  upgrades_to = "REQUIRED_DEFENSE_3_BORG_DS"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 2000 ship_auto_repair_add = 0.01 ship_armor_add = 20  }
+  ai_weight = { weight = 60 }
+  prerequisites = { "tech_physics_field_manipulation_222" }
+  component_set = "required_defense"
+}
+# Multi-Regenerative Force Field (Heavy Weapon Platform)
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_2_BORG_WP"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Borg_2"
+  icon_frame = 1
+   power = -600
+  cost = 840
+  size_restriction = { military_station_medium }
+  upgrades_to = "REQUIRED_DEFENSE_3_BORG_WP"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 12000 ship_auto_repair_add = 0.01 ship_armor_add = 20  }
+  ai_weight = { weight = 60 }
+  prerequisites = { "tech_physics_field_manipulation_222" }
+  component_set = "required_defense"
+}
+
+# Dispersion Force Field (Patrol Frigate)
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_3_BORG_PF"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Borg_3"
+   icon_frame = 1
+  power = -65
+  cost = 65
+  size_restriction = { corvette }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_DEFENSE_4_BORG_PF"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 1300 ship_auto_repair_add = 0.01 ship_armor_add = 25  }
+  ai_weight = { weight = 70 }
+  prerequisites = { "tech_physics_field_manipulation_224" }
+  component_set = "required_defense"
+}
+# Dispersion Force Field (Destroyer)
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_3_BORG_DE"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Borg_3"
+  icon_frame = 1
+   power = -130
+  cost = 145
+  size_restriction = { saber }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_DEFENSE_4_BORG_DE"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 2600 ship_auto_repair_add = 0.01 ship_armor_add = 25  }
+  ai_weight = { weight = 70 }
+  prerequisites = { "tech_physics_field_manipulation_224" }
+  component_set = "borg_required_defense"
+}
+# Dispersion Force Field (Cruiser)
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_3_BORG_CR"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Borg_3"
+  icon_frame = 1
+   power = -455
+  cost = 635
+  size_restriction = { sovereign borg_sphere }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_DEFENSE_4_BORG_CR"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 9100 ship_auto_repair_add = 0.01 ship_armor_add = 25  }
+  ai_weight = { weight = 70 }
+  prerequisites = { "tech_physics_field_manipulation_224" }
+  component_set = "borg_required_defense"
+}
+# Dispersion Force Field (Battlecruiser)
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_3_BORG_BC"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Borg_3"
+  icon_frame = 1
+   power = -260
+  cost = 290
+  size_restriction = { steamrunner borg_diamond }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_DEFENSE_4_BORG_BC"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 5200 ship_auto_repair_add = 0.01 ship_armor_add = 25  }
+  ai_weight = { weight = 70 }
+  prerequisites = { "tech_physics_field_manipulation_224" }
+  component_set = "borg_required_defense"
+}
+# Dispersion Force Field (Battleship)
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_3_BORG_BS"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Borg_3"
+  icon_frame = 1
+   power = -650
+  cost = 910
+  size_restriction = { adv_cruiser }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_DEFENSE_4_BORG_BS"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 13000 ship_auto_repair_add = 0.01 ship_armor_add = 25  }
+  ai_weight = { weight = 70 }
+  prerequisites = { "tech_physics_field_manipulation_224" }
+  component_set = "borg_required_defense"
+}
+# Dispersion Force Field (Heavy Escort)
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_3_BORG_HE"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Borg_3"
+  icon_frame = 1
+   power = -390
+  cost = 435
+  size_restriction = { strike }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_DEFENSE_4_BORG_HE"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 7800 ship_auto_repair_add = 0.01 ship_armor_add = 25  }
+  ai_weight = { weight = 70 }
+  prerequisites = { "tech_physics_field_manipulation_224" }
+  component_set = "borg_required_defense"
+}
+# Dispersion Force Field (Assault Cruiser)
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_3_BORG_AC"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Borg_3"
+  icon_frame = 1
+   power = -585
+  cost = 820
+  size_restriction = { assault_cruiser }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_DEFENSE_4_BORG_AC"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 11700 ship_auto_repair_add = 0.01 ship_armor_add = 25  }
+  ai_weight = { weight = 70 }
+  prerequisites = { "tech_physics_field_manipulation_224" }
+  component_set = "borg_required_defense"
+}
+# Dispersion Force Field (Dreadnaught)
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_3_BORG_SB"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Borg_3"
+  icon_frame = 1
+   power = -1300
+  cost = 1820
+  size_restriction = { super_battleship borg_cube borg_tactical }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_DEFENSE_4_BORG_SB"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 26000 ship_auto_repair_add = 0.01 ship_armor_add = 25  }
+  ai_weight = { weight = 70 }
+  prerequisites = { "tech_physics_field_manipulation_224" }
+  component_set = "borg_required_defense"
+}
+# Dispersion Force Field ()
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_3_BORG_SC"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Borg_3"
+  icon_frame = 1
+   power = -2310
+  cost = 3235
+  size_restriction = { super_cube }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_DEFENSE_4_BORG_SC"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 46200 ship_auto_repair_add = 0.01 ship_armor_add = 25  }
+  ai_weight = { weight = 70 }
+  prerequisites = { "tech_physics_field_manipulation_224" }
+  component_set = "borg_required_defense"
+}
+# Dispersion Force Field (Civilian Ships)
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_3_BORG_CS"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Borg_3"
+  icon_frame = 1
+   power = -35
+  cost = 25
+  class_restriction = { shipclass_constructor shipclass_colonizer shipclass_science_ship shipclass_transport }
+  upgrades_to = "REQUIRED_DEFENSE_4_BORG_CS"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 700 ship_auto_repair_add = 0.01 ship_armor_add = 25  }
+  ai_weight = { weight = 70 }
+  prerequisites = { "tech_physics_field_manipulation_224" }
+  component_set = "required_defense"
+}
+# Dispersion Force Field (Light Military Stations)
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_3_BORG_DS"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Borg_3"
+  icon_frame = 1
+   power = -130
+  cost = 180
+  size_restriction = { military_station_small military_station_large station_listening borg_unimatrix_defense_small }
+  upgrades_to = "REQUIRED_DEFENSE_4_BORG_DS"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 2600 ship_auto_repair_add = 0.01 ship_armor_add = 25  }
+  ai_weight = { weight = 70 }
+  prerequisites = { "tech_physics_field_manipulation_224" }
+  component_set = "required_defense"
+}
+# Dispersion Force Field (Heavy Weapon Platform)
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_3_BORG_WP"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Borg_3"
+  icon_frame = 1
+   power = -780
+  cost = 1090
+  size_restriction = { military_station_medium }
+  upgrades_to = "REQUIRED_DEFENSE_4_BORG_WP"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 15600 ship_auto_repair_add = 0.01 ship_armor_add = 25  }
+  ai_weight = { weight = 70 }
+  prerequisites = { "tech_physics_field_manipulation_224" }
+  component_set = "required_defense"
+}
+
+# Triaxilating Force Field (Patrol Frigate)
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_4_BORG_PF"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Borg_4"
+   icon_frame = 1
+  power = -80
+  cost = 80
+  size_restriction = { corvette }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_DEFENSE_5_BORG_PF"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 1600 ship_auto_repair_add = 0.01 ship_armor_add = 30  }
+  ai_weight = { weight = 80 }
+  prerequisites = { "tech_physics_field_manipulation_226" }
+  component_set = "required_defense"
+}
+# Triaxilating Force Field (Destroyer)
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_4_BORG_DE"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Borg_4"
+  icon_frame = 1
+   power = -160
+  cost = 180
+  size_restriction = { saber }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_DEFENSE_5_BORG_DE"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 3200 ship_auto_repair_add = 0.01 ship_armor_add = 30  }
+  ai_weight = { weight = 80 }
+  prerequisites = { "tech_physics_field_manipulation_226" }
+  component_set = "borg_required_defense"
+}
+# Triaxilating Force Field (Cruiser)
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_4_BORG_CR"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Borg_4"
+  icon_frame = 1
+   power = -560
+  cost = 785
+  size_restriction = { sovereign borg_sphere }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_DEFENSE_5_BORG_CR"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 11200 ship_auto_repair_add = 0.01 ship_armor_add = 30  }
+  ai_weight = { weight = 80 }
+  prerequisites = { "tech_physics_field_manipulation_226" }
+  component_set = "borg_required_defense"
+}
+# Triaxilating Force Field (Battlecruiser)
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_4_BORG_BC"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Borg_4"
+  icon_frame = 1
+   power = -320
+  cost = 360
+  size_restriction = { steamrunner borg_diamond }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_DEFENSE_5_BORG_BC"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 6400 ship_auto_repair_add = 0.01 ship_armor_add = 30  }
+  ai_weight = { weight = 80 }
+  prerequisites = { "tech_physics_field_manipulation_226" }
+  component_set = "borg_required_defense"
+}
+# Triaxilating Force Field (Battleship)
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_4_BORG_BS"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Borg_4"
+  icon_frame = 1
+   power = -800
+  cost = 1120
+  size_restriction = { adv_cruiser }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_DEFENSE_5_BORG_BS"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 16000 ship_auto_repair_add = 0.01 ship_armor_add = 30  }
+  ai_weight = { weight = 80 }
+  prerequisites = { "tech_physics_field_manipulation_226" }
+  component_set = "borg_required_defense"
+}
+# Triaxilating Force Field (Heavy Escort)
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_4_BORG_HE"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Borg_4"
+  icon_frame = 1
+   power = -480
+  cost = 540
+  size_restriction = { strike }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_DEFENSE_5_BORG_HE"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 9600 ship_auto_repair_add = 0.01 ship_armor_add = 30  }
+  ai_weight = { weight = 80 }
+  prerequisites = { "tech_physics_field_manipulation_226" }
+  component_set = "borg_required_defense"
+}
+# Triaxilating Force Field (Assault Cruiser)
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_4_BORG_AC"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Borg_4"
+  icon_frame = 1
+   power = -720
+  cost = 1010
+  size_restriction = { assault_cruiser }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_DEFENSE_5_BORG_AC"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 14400 ship_auto_repair_add = 0.01 ship_armor_add = 30  }
+  ai_weight = { weight = 80 }
+  prerequisites = { "tech_physics_field_manipulation_226" }
+  component_set = "borg_required_defense"
+}
+# Triaxilating Force Field (Dreadnaught)
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_4_BORG_SB"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Borg_4"
+  icon_frame = 1
+   power = -1600
+  cost = 2240
+  size_restriction = { super_battleship borg_cube borg_tactical }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_DEFENSE_5_BORG_SB"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 32000 ship_auto_repair_add = 0.01 ship_armor_add = 30  }
+  ai_weight = { weight = 80 }
+  prerequisites = { "tech_physics_field_manipulation_226" }
+  component_set = "borg_required_defense"
+}
+# Triaxilating Force Field ()
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_4_BORG_SC"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Borg_4"
+  icon_frame = 1
+   power = -2840
+  cost = 3975
+  size_restriction = { super_cube }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_DEFENSE_5_BORG_SC"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 56800 ship_auto_repair_add = 0.01 ship_armor_add = 30  }
+  ai_weight = { weight = 80 }
+  prerequisites = { "tech_physics_field_manipulation_226" }
+  component_set = "borg_required_defense"
+}
+# Triaxilating Force Field (Civilian Ships)
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_4_BORG_CS"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Borg_4"
+  icon_frame = 1
+   power = -40
+  cost = 30
+  class_restriction = { shipclass_constructor shipclass_colonizer shipclass_science_ship shipclass_transport }
+  upgrades_to = "REQUIRED_DEFENSE_5_BORG_CS"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 800 ship_auto_repair_add = 0.01 ship_armor_add = 30  }
+  ai_weight = { weight = 80 }
+  prerequisites = { "tech_physics_field_manipulation_226" }
+  component_set = "required_defense"
+}
+# Triaxilating Force Field (Light Military Stations)
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_4_BORG_DS"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Borg_4"
+  icon_frame = 1
+   power = -160
+  cost = 225
+  size_restriction = { military_station_small military_station_large station_listening borg_unimatrix_defense_small }
+  upgrades_to = "REQUIRED_DEFENSE_5_BORG_DS"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 3200 ship_auto_repair_add = 0.01 ship_armor_add = 30  }
+  ai_weight = { weight = 80 }
+  prerequisites = { "tech_physics_field_manipulation_226" }
+  component_set = "required_defense"
+}
+# Triaxilating Force Field (Heavy Weapon Platform)
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_4_BORG_WP"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Borg_4"
+  icon_frame = 1
+   power = -960
+  cost = 1345
+  size_restriction = { military_station_medium }
+  upgrades_to = "REQUIRED_DEFENSE_5_BORG_WP"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 19200 ship_auto_repair_add = 0.01 ship_armor_add = 30  }
+  ai_weight = { weight = 80 }
+  prerequisites = { "tech_physics_field_manipulation_226" }
+  component_set = "required_defense"
+}
+
+# Neural-Coordinated Triaxilating Field (Patrol Frigate)
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_5_BORG_PF"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Borg_5"
+   icon_frame = 1
+  power = -90
+  cost = 90
+  size_restriction = { corvette }
+  class_restriction = { shipclass_military }
+  
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 1800 ship_auto_repair_add = 0.01 ship_armor_add = 35  }
+  ai_weight = { weight = 90 }
+  prerequisites = { "tech_physics_field_manipulation_228" }
+  component_set = "required_defense"
+}
+# Neural-Coordinated Triaxilating Field (Destroyer)
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_5_BORG_DE"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Borg_5"
+  icon_frame = 1
+   power = -180
+  cost = 200
+  size_restriction = { saber }
+  class_restriction = { shipclass_military }
+  
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 3600 ship_auto_repair_add = 0.01 ship_armor_add = 35  }
+  ai_weight = { weight = 90 }
+  prerequisites = { "tech_physics_field_manipulation_228" }
+  component_set = "borg_required_defense"
+}
+# Neural-Coordinated Triaxilating Field (Cruiser)
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_5_BORG_CR"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Borg_5"
+  icon_frame = 1
+   power = -630
+  cost = 880
+  size_restriction = { sovereign borg_sphere }
+  class_restriction = { shipclass_military }
+  
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 12600 ship_auto_repair_add = 0.01 ship_armor_add = 35  }
+  ai_weight = { weight = 90 }
+  prerequisites = { "tech_physics_field_manipulation_228" }
+  component_set = "borg_required_defense"
+}
+# Neural-Coordinated Triaxilating Field (Battlecruiser)
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_5_BORG_BC"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Borg_5"
+  icon_frame = 1
+   power = -360
+  cost = 405
+  size_restriction = { steamrunner borg_diamond }
+  class_restriction = { shipclass_military }
+  
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 7200 ship_auto_repair_add = 0.01 ship_armor_add = 35  }
+  ai_weight = { weight = 90 }
+  prerequisites = { "tech_physics_field_manipulation_228" }
+  component_set = "borg_required_defense"
+}
+# Neural-Coordinated Triaxilating Field (Battleship)
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_5_BORG_BS"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Borg_5"
+  icon_frame = 1
+   power = -900
+  cost = 1260
+  size_restriction = { adv_cruiser }
+  class_restriction = { shipclass_military }
+  
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 18000 ship_auto_repair_add = 0.01 ship_armor_add = 35  }
+  ai_weight = { weight = 90 }
+  prerequisites = { "tech_physics_field_manipulation_228" }
+  component_set = "borg_required_defense"
+}
+# Neural-Coordinated Triaxilating Field (Heavy Escort)
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_5_BORG_HE"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Borg_5"
+  icon_frame = 1
+   power = -540
+  cost = 605
+  size_restriction = { strike }
+  class_restriction = { shipclass_military }
+  
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 10800 ship_auto_repair_add = 0.01 ship_armor_add = 35  }
+  ai_weight = { weight = 90 }
+  prerequisites = { "tech_physics_field_manipulation_228" }
+  component_set = "borg_required_defense"
+}
+# Neural-Coordinated Triaxilating Field (Assault Cruiser)
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_5_BORG_AC"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Borg_5"
+  icon_frame = 1
+   power = -810
+  cost = 1135
+  size_restriction = { assault_cruiser }
+  class_restriction = { shipclass_military }
+  
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 16200 ship_auto_repair_add = 0.01 ship_armor_add = 35  }
+  ai_weight = { weight = 90 }
+  prerequisites = { "tech_physics_field_manipulation_228" }
+  component_set = "borg_required_defense"
+}
+# Neural-Coordinated Triaxilating Field (Dreadnaught)
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_5_BORG_SB"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Borg_5"
+  icon_frame = 1
+   power = -1800
+  cost = 2520
+  size_restriction = { super_battleship borg_cube borg_tactical }
+  class_restriction = { shipclass_military }
+  
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 36000 ship_auto_repair_add = 0.01 ship_armor_add = 35  }
+  ai_weight = { weight = 90 }
+  prerequisites = { "tech_physics_field_manipulation_228" }
+  component_set = "borg_required_defense"
+}
+# Neural-Coordinated Triaxilating Field ()
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_5_BORG_SC"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Borg_5"
+  icon_frame = 1
+   power = -3195
+  cost = 4475
+  size_restriction = { super_cube }
+  class_restriction = { shipclass_military }
+  
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 63900 ship_auto_repair_add = 0.01 ship_armor_add = 35  }
+  ai_weight = { weight = 90 }
+  prerequisites = { "tech_physics_field_manipulation_228" }
+  component_set = "borg_required_defense"
+}
+# Neural-Coordinated Triaxilating Field (Civilian Ships)
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_5_BORG_CS"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Borg_5"
+  icon_frame = 1
+   power = -45
+  cost = 30
+  class_restriction = { shipclass_constructor shipclass_colonizer shipclass_science_ship shipclass_transport }
+  
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 900 ship_auto_repair_add = 0.01 ship_armor_add = 35  }
+  ai_weight = { weight = 90 }
+  prerequisites = { "tech_physics_field_manipulation_228" }
+  component_set = "required_defense"
+}
+# Neural-Coordinated Triaxilating Field (Light Military Stations)
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_5_BORG_DS"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Borg_5"
+  icon_frame = 1
+   power = -180
+  cost = 250
+  size_restriction = { military_station_small military_station_large station_listening borg_unimatrix_defense_small }
+  
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 3600 ship_auto_repair_add = 0.01 ship_armor_add = 35  }
+  ai_weight = { weight = 90 }
+  prerequisites = { "tech_physics_field_manipulation_228" }
+  component_set = "required_defense"
+}
+# Neural-Coordinated Triaxilating Field (Heavy Weapon Platform)
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_5_BORG_WP"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Borg_5"
+  icon_frame = 1
+   power = -1080
+  cost = 1510
+  size_restriction = { military_station_medium }
+  
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 21600 ship_auto_repair_add = 0.01 ship_armor_add = 35  }
+  ai_weight = { weight = 90 }
+  prerequisites = { "tech_physics_field_manipulation_228" }
+  component_set = "required_defense"
+}
+
+# Shields (Patrol Frigate)
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_1_SHIELD_PF"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Shield_1"
+  can_recharge_shield = yes 
+  icon_frame = 1
+  power = -15
+  cost = 10
+  size_restriction = { corvette }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_DEFENSE_2_SHIELD_A_PF"
+  ship_modifier = {     }
+  modifier = { ship_shield_hp_add = 450 ship_shield_regen_add = 1   }
+  ai_weight = { weight = 100 }
+  prerequisites = { "tech_physics_advanced_84" }
+  component_set = "required_defense"
+}
+# Shields (Destroyer)
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_1_SHIELD_DE"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Shield_1"
+  icon_frame = 1
+  can_recharge_shield = yes 
+  power = -30
+  cost = 25
+  size_restriction = { saber }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_DEFENSE_2_SHIELD_A_DE"
+  ship_modifier = {     }
+  modifier = { ship_shield_hp_add = 900 ship_shield_regen_add = 2   }
+  ai_weight = { weight = 100 }
+  prerequisites = { "tech_physics_advanced_84" }
+  component_set = "required_defense"
+}
+# Shields (Cruiser)
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_1_SHIELD_CR"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Shield_1"
+  icon_frame = 1
+  can_recharge_shield = yes 
+  power = -105
+  cost = 105
+  size_restriction = { sovereign borg_sphere }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_DEFENSE_2_SHIELD_A_CR"
+  ship_modifier = {     }
+  modifier = { ship_shield_hp_add = 3200 ship_shield_regen_add = 7   }
+  ai_weight = { weight = 100 }
+  prerequisites = { "tech_physics_advanced_84" }
+  component_set = "required_defense"
+}
+# Shields (Battlecruiser)
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_1_SHIELD_BC"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Shield_1"
+  icon_frame = 1
+  can_recharge_shield = yes 
+  power = -60
+  cost = 50
+  size_restriction = { steamrunner borg_diamond }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_DEFENSE_2_SHIELD_A_BC"
+  ship_modifier = {     }
+  modifier = { ship_shield_hp_add = 1800 ship_shield_regen_add = 4   }
+  ai_weight = { weight = 100 }
+  prerequisites = { "tech_physics_advanced_84" }
+  component_set = "required_defense"
+}
+# Shields (Battleship)
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_1_SHIELD_BS"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Shield_1"
+  icon_frame = 1
+  can_recharge_shield = yes 
+  power = -150
+  cost = 150
+  size_restriction = { adv_cruiser }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_DEFENSE_2_SHIELD_A_BS"
+  ship_modifier = {     }
+  modifier = { ship_shield_hp_add = 4500 ship_shield_regen_add = 10   }
+  ai_weight = { weight = 100 }
+  prerequisites = { "tech_physics_advanced_84" }
+  component_set = "required_defense"
+}
+# Shields (Heavy Escort)
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_1_SHIELD_HE"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Shield_1"
+  icon_frame = 1
+  can_recharge_shield = yes 
+  power = -90
+  cost = 70
+  size_restriction = { strike }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_DEFENSE_2_SHIELD_A_HE"
+  ship_modifier = {     }
+  modifier = { ship_shield_hp_add = 2700 ship_shield_regen_add = 6   }
+  ai_weight = { weight = 100 }
+  prerequisites = { "tech_physics_advanced_84" }
+  component_set = "required_defense"
+}
+# Shields (Assault Cruiser)
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_1_SHIELD_AC"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Shield_1"
+  icon_frame = 1
+  can_recharge_shield = yes 
+  power = -135
+  cost = 135
+  size_restriction = { assault_cruiser }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_DEFENSE_2_SHIELD_A_AC"
+  ship_modifier = {     }
+  modifier = { ship_shield_hp_add = 4100 ship_shield_regen_add = 9   }
+  ai_weight = { weight = 100 }
+  prerequisites = { "tech_physics_advanced_84" }
+  component_set = "required_defense"
+}
+# Shields (Dreadnaught)
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_1_SHIELD_SB"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Shield_1"
+  icon_frame = 1
+  can_recharge_shield = yes 
+  power = -300
+  cost = 300
+  size_restriction = { super_battleship borg_cube borg_tactical }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_DEFENSE_2_SHIELD_A_SB"
+  ship_modifier = {     }
+  modifier = { ship_shield_hp_add = 9000 ship_shield_regen_add = 20   }
+  ai_weight = { weight = 100 }
+  prerequisites = { "tech_physics_advanced_84" }
+  component_set = "required_defense"
+}
+# Shields ()
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_1_SHIELD_SC"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Shield_1"
+  icon_frame = 1
+  can_recharge_shield = yes 
+  power = -535
+  cost = 535
+  size_restriction = { super_cube }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_DEFENSE_2_SHIELD_A_SC"
+  ship_modifier = {     }
+  modifier = { ship_shield_hp_add = 16000 ship_shield_regen_add = 35.5   }
+  ai_weight = { weight = 100 }
+  prerequisites = { "tech_physics_advanced_84" }
+  component_set = "required_defense"
+}
+# Shields (Civilian Ships)
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_1_SHIELD_CS"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Shield_1"
+  icon_frame = 1
+  can_recharge_shield = yes 
+  power = -10
+  cost = 5
+  class_restriction = { shipclass_constructor shipclass_colonizer shipclass_science_ship shipclass_transport }
+  upgrades_to = "REQUIRED_DEFENSE_2_SHIELD_A_CS"
+  ship_modifier = {     }
+  modifier = { ship_shield_hp_add = 230 ship_shield_regen_add = 0.5   }
+  ai_weight = { weight = 100 }
+  prerequisites = { "tech_physics_advanced_84" }
+  component_set = "required_defense"
+}
+# Shields (Light Military Stations)
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_1_SHIELD_DS"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Shield_1"
+  icon_frame = 1
+  can_recharge_shield = yes 
+  power = -30
+  cost = 30
+  size_restriction = { military_station_small military_station_large station_listening borg_unimatrix_defense_small }
+  upgrades_to = "REQUIRED_DEFENSE_2_SHIELD_A_DS"
+  ship_modifier = {     }
+  modifier = { ship_shield_hp_add = 900 ship_shield_regen_add = 2   }
+  ai_weight = { weight = 100 }
+  prerequisites = { "tech_physics_advanced_84" }
+  component_set = "required_defense"
+}
+# Shields (Heavy Weapon Platform)
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_1_SHIELD_WP"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Shield_1"
+  icon_frame = 1
+  can_recharge_shield = yes 
+  power = -180
+  cost = 180
+  size_restriction = { military_station_medium }
+  upgrades_to = "REQUIRED_DEFENSE_2_SHIELD_A_WP"
+  ship_modifier = {     }
+  modifier = { ship_shield_hp_add = 5400 ship_shield_regen_add = 12   }
+  ai_weight = { weight = 100 }
+  prerequisites = { "tech_physics_advanced_84" }
+  component_set = "required_defense"
+}
+
+# Covariant shields (Patrol Frigate)
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_2_SHIELD_A_PF"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Shield_A_2"
+  can_recharge_shield = yes 
+  icon_frame = 1
+  power = -25
+  cost = 20
+  size_restriction = { corvette }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_DEFENSE_3_SHIELD_A_PF"
+  ship_modifier = {     }
+  modifier = { ship_shield_hp_add = 660 ship_shield_regen_add = 1.5   }
+  ai_weight = { weight = 200 }
+  prerequisites = { "tech_physics_covariant_101" }
+  component_set = "required_defense"
+}
+# Covariant shields (Destroyer)
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_2_SHIELD_A_DE"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Shield_A_2"
+  icon_frame = 1
+  can_recharge_shield = yes 
+  power = -50
+  cost = 40
+  size_restriction = { saber }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_DEFENSE_3_SHIELD_A_DE"
+  ship_modifier = {     }
+  modifier = { ship_shield_hp_add = 1300 ship_shield_regen_add = 3   }
+  ai_weight = { weight = 200 }
+  prerequisites = { "tech_physics_covariant_101" }
+  component_set = "required_defense"
+}
+# Covariant shields (Cruiser)
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_2_SHIELD_A_CR"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Shield_A_2"
+  icon_frame = 1
+  can_recharge_shield = yes 
+  power = -175
+  cost = 175
+  size_restriction = { sovereign borg_sphere }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_DEFENSE_3_SHIELD_A_CR"
+  ship_modifier = {     }
+  modifier = { ship_shield_hp_add = 4600 ship_shield_regen_add = 10.5   }
+  ai_weight = { weight = 200 }
+  prerequisites = { "tech_physics_covariant_101" }
+  component_set = "required_defense"
+}
+# Covariant shields (Battlecruiser)
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_2_SHIELD_A_BC"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Shield_A_2"
+  icon_frame = 1
+  can_recharge_shield = yes 
+  power = -100
+  cost = 80
+  size_restriction = { steamrunner borg_diamond }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_DEFENSE_3_SHIELD_A_BC"
+  ship_modifier = {     }
+  modifier = { ship_shield_hp_add = 2600 ship_shield_regen_add = 6   }
+  ai_weight = { weight = 200 }
+  prerequisites = { "tech_physics_covariant_101" }
+  component_set = "required_defense"
+}
+# Covariant shields (Battleship)
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_2_SHIELD_A_BS"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Shield_A_2"
+  icon_frame = 1
+  can_recharge_shield = yes 
+  power = -250
+  cost = 250
+  size_restriction = { adv_cruiser }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_DEFENSE_3_SHIELD_A_BS"
+  ship_modifier = {     }
+  modifier = { ship_shield_hp_add = 6600 ship_shield_regen_add = 15   }
+  ai_weight = { weight = 200 }
+  prerequisites = { "tech_physics_covariant_101" }
+  component_set = "required_defense"
+}
+# Covariant shields (Heavy Escort)
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_2_SHIELD_A_HE"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Shield_A_2"
+  icon_frame = 1
+  can_recharge_shield = yes 
+  power = -150
+  cost = 120
+  size_restriction = { strike }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_DEFENSE_3_SHIELD_A_HE"
+  ship_modifier = {     }
+  modifier = { ship_shield_hp_add = 4000 ship_shield_regen_add = 9   }
+  ai_weight = { weight = 200 }
+  prerequisites = { "tech_physics_covariant_101" }
+  component_set = "required_defense"
+}
+# Covariant shields (Assault Cruiser)
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_2_SHIELD_A_AC"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Shield_A_2"
+  icon_frame = 1
+  can_recharge_shield = yes 
+  power = -225
+  cost = 225
+  size_restriction = { assault_cruiser }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_DEFENSE_3_SHIELD_A_AC"
+  ship_modifier = {     }
+  modifier = { ship_shield_hp_add = 5900 ship_shield_regen_add = 13.5   }
+  ai_weight = { weight = 200 }
+  prerequisites = { "tech_physics_covariant_101" }
+  component_set = "required_defense"
+}
+# Covariant shields (Dreadnaught)
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_2_SHIELD_A_SB"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Shield_A_2"
+  icon_frame = 1
+  can_recharge_shield = yes 
+  power = -500
+  cost = 500
+  size_restriction = { super_battleship borg_cube borg_tactical }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_DEFENSE_3_SHIELD_A_SB"
+  ship_modifier = {     }
+  modifier = { ship_shield_hp_add = 13200 ship_shield_regen_add = 30   }
+  ai_weight = { weight = 200 }
+  prerequisites = { "tech_physics_covariant_101" }
+  component_set = "required_defense"
+}
+# Covariant shields ()
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_2_SHIELD_A_SC"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Shield_A_2"
+  icon_frame = 1
+  can_recharge_shield = yes 
+  power = -890
+  cost = 890
+  size_restriction = { super_cube }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_DEFENSE_3_SHIELD_A_SC"
+  ship_modifier = {     }
+  modifier = { ship_shield_hp_add = 23400 ship_shield_regen_add = 53.3   }
+  ai_weight = { weight = 200 }
+  prerequisites = { "tech_physics_covariant_101" }
+  component_set = "required_defense"
+}
+# Covariant shields (Civilian Ships)
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_2_SHIELD_A_CS"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Shield_A_2"
+  icon_frame = 1
+  can_recharge_shield = yes 
+  power = -15
+  cost = 10
+  class_restriction = { shipclass_constructor shipclass_colonizer shipclass_science_ship shipclass_transport }
+  upgrades_to = "REQUIRED_DEFENSE_3_SHIELD_A_CS"
+  ship_modifier = {     }
+  modifier = { ship_shield_hp_add = 330 ship_shield_regen_add = 0.8   }
+  ai_weight = { weight = 200 }
+  prerequisites = { "tech_physics_covariant_101" }
+  component_set = "required_defense"
+}
+# Covariant shields (Light Military Stations)
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_2_SHIELD_A_DS"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Shield_A_2"
+  icon_frame = 1
+  can_recharge_shield = yes 
+  power = -50
+  cost = 50
+  size_restriction = { military_station_small military_station_large station_listening borg_unimatrix_defense_small }
+  upgrades_to = "REQUIRED_DEFENSE_3_SHIELD_A_DS"
+  ship_modifier = {     }
+  modifier = { ship_shield_hp_add = 1300 ship_shield_regen_add = 3   }
+  ai_weight = { weight = 200 }
+  prerequisites = { "tech_physics_covariant_101" }
+  component_set = "required_defense"
+}
+# Covariant shields (Heavy Weapon Platform)
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_2_SHIELD_A_WP"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Shield_A_2"
+  icon_frame = 1
+  can_recharge_shield = yes 
+  power = -300
+  cost = 300
+  size_restriction = { military_station_medium }
+  upgrades_to = "REQUIRED_DEFENSE_3_SHIELD_A_WP"
+  ship_modifier = {     }
+  modifier = { ship_shield_hp_add = 7900 ship_shield_regen_add = 18   }
+  ai_weight = { weight = 200 }
+  prerequisites = { "tech_physics_covariant_101" }
+  component_set = "required_defense"
+}
+
+# Covariant shields II (Patrol Frigate)
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_3_SHIELD_A_PF"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Shield_A_3"
+  can_recharge_shield = yes 
+  icon_frame = 1
+  power = -35
+  cost = 25
+  size_restriction = { corvette }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_DEFENSE_4_SHIELD_A_PF"
+  ship_modifier = {     }
+  modifier = { ship_shield_hp_add = 830 ship_shield_regen_add = 2.3   }
+  ai_weight = { weight = 300 }
+  prerequisites = { "tech_physics_field_manipulation_205" }
+  component_set = "required_defense"
+}
+# Covariant shields II (Destroyer)
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_3_SHIELD_A_DE"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Shield_A_3"
+  icon_frame = 1
+  can_recharge_shield = yes 
+  power = -70
+  cost = 55
+  size_restriction = { saber }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_DEFENSE_4_SHIELD_A_DE"
+  ship_modifier = {     }
+  modifier = { ship_shield_hp_add = 1700 ship_shield_regen_add = 4.5   }
+  ai_weight = { weight = 300 }
+  prerequisites = { "tech_physics_field_manipulation_205" }
+  component_set = "required_defense"
+}
+# Covariant shields II (Cruiser)
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_3_SHIELD_A_CR"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Shield_A_3"
+  icon_frame = 1
+  can_recharge_shield = yes 
+  power = -245
+  cost = 245
+  size_restriction = { sovereign borg_sphere }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_DEFENSE_4_SHIELD_A_CR"
+  ship_modifier = {     }
+  modifier = { ship_shield_hp_add = 5800 ship_shield_regen_add = 15.8   }
+  ai_weight = { weight = 300 }
+  prerequisites = { "tech_physics_field_manipulation_205" }
+  component_set = "required_defense"
+}
+# Covariant shields II (Battlecruiser)
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_3_SHIELD_A_BC"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Shield_A_3"
+  icon_frame = 1
+  can_recharge_shield = yes 
+  power = -140
+  cost = 110
+  size_restriction = { steamrunner borg_diamond }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_DEFENSE_4_SHIELD_A_BC"
+  ship_modifier = {     }
+  modifier = { ship_shield_hp_add = 3300 ship_shield_regen_add = 9   }
+  ai_weight = { weight = 300 }
+  prerequisites = { "tech_physics_field_manipulation_205" }
+  component_set = "required_defense"
+}
+# Covariant shields II (Battleship)
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_3_SHIELD_A_BS"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Shield_A_3"
+  icon_frame = 1
+  can_recharge_shield = yes 
+  power = -350
+  cost = 350
+  size_restriction = { adv_cruiser }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_DEFENSE_4_SHIELD_A_BS"
+  ship_modifier = {     }
+  modifier = { ship_shield_hp_add = 8300 ship_shield_regen_add = 22.5   }
+  ai_weight = { weight = 300 }
+  prerequisites = { "tech_physics_field_manipulation_205" }
+  component_set = "required_defense"
+}
+# Covariant shields II (Heavy Escort)
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_3_SHIELD_A_HE"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Shield_A_3"
+  icon_frame = 1
+  can_recharge_shield = yes 
+  power = -210
+  cost = 170
+  size_restriction = { strike }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_DEFENSE_4_SHIELD_A_HE"
+  ship_modifier = {     }
+  modifier = { ship_shield_hp_add = 5000 ship_shield_regen_add = 13.5   }
+  ai_weight = { weight = 300 }
+  prerequisites = { "tech_physics_field_manipulation_205" }
+  component_set = "required_defense"
+}
+# Covariant shields II (Assault Cruiser)
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_3_SHIELD_A_AC"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Shield_A_3"
+  icon_frame = 1
+  can_recharge_shield = yes 
+  power = -315
+  cost = 315
+  size_restriction = { assault_cruiser }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_DEFENSE_4_SHIELD_A_AC"
+  ship_modifier = {     }
+  modifier = { ship_shield_hp_add = 7400 ship_shield_regen_add = 20.3   }
+  ai_weight = { weight = 300 }
+  prerequisites = { "tech_physics_field_manipulation_205" }
+  component_set = "required_defense"
+}
+# Covariant shields II (Dreadnaught)
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_3_SHIELD_A_SB"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Shield_A_3"
+  icon_frame = 1
+  can_recharge_shield = yes 
+  power = -700
+  cost = 700
+  size_restriction = { super_battleship borg_cube borg_tactical }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_DEFENSE_4_SHIELD_A_SB"
+  ship_modifier = {     }
+  modifier = { ship_shield_hp_add = 16500 ship_shield_regen_add = 45   }
+  ai_weight = { weight = 300 }
+  prerequisites = { "tech_physics_field_manipulation_205" }
+  component_set = "required_defense"
+}
+# Covariant shields II ()
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_3_SHIELD_A_SC"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Shield_A_3"
+  icon_frame = 1
+  can_recharge_shield = yes 
+  power = -1245
+  cost = 1245
+  size_restriction = { super_cube }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_DEFENSE_4_SHIELD_A_SC"
+  ship_modifier = {     }
+  modifier = { ship_shield_hp_add = 29300 ship_shield_regen_add = 79.9   }
+  ai_weight = { weight = 300 }
+  prerequisites = { "tech_physics_field_manipulation_205" }
+  component_set = "required_defense"
+}
+# Covariant shields II (Civilian Ships)
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_3_SHIELD_A_CS"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Shield_A_3"
+  icon_frame = 1
+  can_recharge_shield = yes 
+  power = -20
+  cost = 10
+  class_restriction = { shipclass_constructor shipclass_colonizer shipclass_science_ship shipclass_transport }
+  upgrades_to = "REQUIRED_DEFENSE_4_SHIELD_A_CS"
+  ship_modifier = {     }
+  modifier = { ship_shield_hp_add = 410 ship_shield_regen_add = 1.1   }
+  ai_weight = { weight = 300 }
+  prerequisites = { "tech_physics_field_manipulation_205" }
+  component_set = "required_defense"
+}
+# Covariant shields II (Light Military Stations)
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_3_SHIELD_A_DS"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Shield_A_3"
+  icon_frame = 1
+  can_recharge_shield = yes 
+  power = -70
+  cost = 70
+  size_restriction = { military_station_small military_station_large station_listening borg_unimatrix_defense_small }
+  upgrades_to = "REQUIRED_DEFENSE_4_SHIELD_A_DS"
+  ship_modifier = {     }
+  modifier = { ship_shield_hp_add = 1700 ship_shield_regen_add = 4.5   }
+  ai_weight = { weight = 300 }
+  prerequisites = { "tech_physics_field_manipulation_205" }
+  component_set = "required_defense"
+}
+# Covariant shields II (Heavy Weapon Platform)
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_3_SHIELD_A_WP"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Shield_A_3"
+  icon_frame = 1
+  can_recharge_shield = yes 
+  power = -420
+  cost = 420
+  size_restriction = { military_station_medium }
+  upgrades_to = "REQUIRED_DEFENSE_4_SHIELD_A_WP"
+  ship_modifier = {     }
+  modifier = { ship_shield_hp_add = 9900 ship_shield_regen_add = 27   }
+  ai_weight = { weight = 300 }
+  prerequisites = { "tech_physics_field_manipulation_205" }
+  component_set = "required_defense"
+}
+
+# Covariant shields III (Patrol Frigate)
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_4_SHIELD_A_PF"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Shield_A_4"
+  can_recharge_shield = yes 
+  icon_frame = 1
+  power = -45
+  cost = 30
+  size_restriction = { corvette }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_DEFENSE_5_SHIELD_A_PF"
+  ship_modifier = {     }
+  modifier = { ship_shield_hp_add = 990 ship_shield_regen_add = 3   }
+  ai_weight = { weight = 400 }
+  prerequisites = { "tech_physics_radial_103" }
+  component_set = "required_defense"
+}
+# Covariant shields III (Destroyer)
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_4_SHIELD_A_DE"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Shield_A_4"
+  icon_frame = 1
+  can_recharge_shield = yes 
+  power = -90
+  cost = 70
+  size_restriction = { saber }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_DEFENSE_5_SHIELD_A_DE"
+  ship_modifier = {     }
+  modifier = { ship_shield_hp_add = 2000 ship_shield_regen_add = 6   }
+  ai_weight = { weight = 400 }
+  prerequisites = { "tech_physics_radial_103" }
+  component_set = "required_defense"
+}
+# Covariant shields III (Cruiser)
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_4_SHIELD_A_CR"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Shield_A_4"
+  icon_frame = 1
+  can_recharge_shield = yes 
+  power = -315
+  cost = 315
+  size_restriction = { sovereign borg_sphere }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_DEFENSE_5_SHIELD_A_CR"
+  ship_modifier = {     }
+  modifier = { ship_shield_hp_add = 6900 ship_shield_regen_add = 21   }
+  ai_weight = { weight = 400 }
+  prerequisites = { "tech_physics_radial_103" }
+  component_set = "required_defense"
+}
+# Covariant shields III (Battlecruiser)
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_4_SHIELD_A_BC"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Shield_A_4"
+  icon_frame = 1
+  can_recharge_shield = yes 
+  power = -180
+  cost = 145
+  size_restriction = { steamrunner borg_diamond }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_DEFENSE_5_SHIELD_A_BC"
+  ship_modifier = {     }
+  modifier = { ship_shield_hp_add = 4000 ship_shield_regen_add = 12   }
+  ai_weight = { weight = 400 }
+  prerequisites = { "tech_physics_radial_103" }
+  component_set = "required_defense"
+}
+# Covariant shields III (Battleship)
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_4_SHIELD_A_BS"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Shield_A_4"
+  icon_frame = 1
+  can_recharge_shield = yes 
+  power = -450
+  cost = 450
+  size_restriction = { adv_cruiser }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_DEFENSE_5_SHIELD_A_BS"
+  ship_modifier = {     }
+  modifier = { ship_shield_hp_add = 9900 ship_shield_regen_add = 30   }
+  ai_weight = { weight = 400 }
+  prerequisites = { "tech_physics_radial_103" }
+  component_set = "required_defense"
+}
+# Covariant shields III (Heavy Escort)
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_4_SHIELD_A_HE"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Shield_A_4"
+  icon_frame = 1
+  can_recharge_shield = yes 
+  power = -270
+  cost = 215
+  size_restriction = { strike }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_DEFENSE_5_SHIELD_A_HE"
+  ship_modifier = {     }
+  modifier = { ship_shield_hp_add = 5900 ship_shield_regen_add = 18   }
+  ai_weight = { weight = 400 }
+  prerequisites = { "tech_physics_radial_103" }
+  component_set = "required_defense"
+}
+# Covariant shields III (Assault Cruiser)
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_4_SHIELD_A_AC"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Shield_A_4"
+  icon_frame = 1
+  can_recharge_shield = yes 
+  power = -405
+  cost = 405
+  size_restriction = { assault_cruiser }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_DEFENSE_5_SHIELD_A_AC"
+  ship_modifier = {     }
+  modifier = { ship_shield_hp_add = 8900 ship_shield_regen_add = 27   }
+  ai_weight = { weight = 400 }
+  prerequisites = { "tech_physics_radial_103" }
+  component_set = "required_defense"
+}
+# Covariant shields III (Dreadnaught)
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_4_SHIELD_A_SB"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Shield_A_4"
+  icon_frame = 1
+  can_recharge_shield = yes 
+  power = -900
+  cost = 900
+  size_restriction = { super_battleship borg_cube borg_tactical }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_DEFENSE_5_SHIELD_A_SB"
+  ship_modifier = {     }
+  modifier = { ship_shield_hp_add = 19800 ship_shield_regen_add = 60   }
+  ai_weight = { weight = 400 }
+  prerequisites = { "tech_physics_radial_103" }
+  component_set = "required_defense"
+}
+# Covariant shields III ()
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_4_SHIELD_A_SC"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Shield_A_4"
+  icon_frame = 1
+  can_recharge_shield = yes 
+  power = -1600
+  cost = 1600
+  size_restriction = { super_cube }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_DEFENSE_5_SHIELD_A_SC"
+  ship_modifier = {     }
+  modifier = { ship_shield_hp_add = 35100 ship_shield_regen_add = 106.5   }
+  ai_weight = { weight = 400 }
+  prerequisites = { "tech_physics_radial_103" }
+  component_set = "required_defense"
+}
+# Covariant shields III (Civilian Ships)
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_4_SHIELD_A_CS"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Shield_A_4"
+  icon_frame = 1
+  can_recharge_shield = yes 
+  power = -25
+  cost = 15
+  class_restriction = { shipclass_constructor shipclass_colonizer shipclass_science_ship shipclass_transport }
+  upgrades_to = "REQUIRED_DEFENSE_5_SHIELD_A_CS"
+  ship_modifier = {     }
+  modifier = { ship_shield_hp_add = 500 ship_shield_regen_add = 1.5   }
+  ai_weight = { weight = 400 }
+  prerequisites = { "tech_physics_radial_103" }
+  component_set = "required_defense"
+}
+# Covariant shields III (Light Military Stations)
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_4_SHIELD_A_DS"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Shield_A_4"
+  icon_frame = 1
+  can_recharge_shield = yes 
+  power = -90
+  cost = 90
+  size_restriction = { military_station_small military_station_large station_listening borg_unimatrix_defense_small }
+  upgrades_to = "REQUIRED_DEFENSE_5_SHIELD_A_DS"
+  ship_modifier = {     }
+  modifier = { ship_shield_hp_add = 2000 ship_shield_regen_add = 6   }
+  ai_weight = { weight = 400 }
+  prerequisites = { "tech_physics_radial_103" }
+  component_set = "required_defense"
+}
+# Covariant shields III (Heavy Weapon Platform)
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_4_SHIELD_A_WP"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Shield_A_4"
+  icon_frame = 1
+  can_recharge_shield = yes 
+  power = -540
+  cost = 540
+  size_restriction = { military_station_medium }
+  upgrades_to = "REQUIRED_DEFENSE_5_SHIELD_A_WP"
+  ship_modifier = {     }
+  modifier = { ship_shield_hp_add = 11900 ship_shield_regen_add = 36   }
+  ai_weight = { weight = 400 }
+  prerequisites = { "tech_physics_radial_103" }
+  component_set = "required_defense"
+}
+
+# Covariant shields IV (Patrol Frigate)
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_5_SHIELD_A_PF"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Shield_A_5"
+  can_recharge_shield = yes 
+  icon_frame = 1
+  power = -55
+  cost = 40
+  size_restriction = { corvette }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_DEFENSE_6_SHIELD_A_PF"
+  ship_modifier = {     }
+  modifier = { ship_shield_hp_add = 1200 ship_shield_regen_add = 3.8   }
+  ai_weight = { weight = 500 }
+  prerequisites = { "tech_physics_interphased_105" }
+  component_set = "required_defense"
+}
+# Covariant shields IV (Destroyer)
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_5_SHIELD_A_DE"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Shield_A_5"
+  icon_frame = 1
+  can_recharge_shield = yes 
+  power = -110
+  cost = 90
+  size_restriction = { saber }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_DEFENSE_6_SHIELD_A_DE"
+  ship_modifier = {     }
+  modifier = { ship_shield_hp_add = 2300 ship_shield_regen_add = 7.5   }
+  ai_weight = { weight = 500 }
+  prerequisites = { "tech_physics_interphased_105" }
+  component_set = "required_defense"
+}
+# Covariant shields IV (Cruiser)
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_5_SHIELD_A_CR"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Shield_A_5"
+  icon_frame = 1
+  can_recharge_shield = yes 
+  power = -385
+  cost = 385
+  size_restriction = { sovereign borg_sphere }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_DEFENSE_6_SHIELD_A_CR"
+  ship_modifier = {     }
+  modifier = { ship_shield_hp_add = 8100 ship_shield_regen_add = 26.3   }
+  ai_weight = { weight = 500 }
+  prerequisites = { "tech_physics_interphased_105" }
+  component_set = "required_defense"
+}
+# Covariant shields IV (Battlecruiser)
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_5_SHIELD_A_BC"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Shield_A_5"
+  icon_frame = 1
+  can_recharge_shield = yes 
+  power = -220
+  cost = 175
+  size_restriction = { steamrunner borg_diamond }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_DEFENSE_6_SHIELD_A_BC"
+  ship_modifier = {     }
+  modifier = { ship_shield_hp_add = 4600 ship_shield_regen_add = 15   }
+  ai_weight = { weight = 500 }
+  prerequisites = { "tech_physics_interphased_105" }
+  component_set = "required_defense"
+}
+# Covariant shields IV (Battleship)
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_5_SHIELD_A_BS"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Shield_A_5"
+  icon_frame = 1
+  can_recharge_shield = yes 
+  power = -550
+  cost = 550
+  size_restriction = { adv_cruiser }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_DEFENSE_6_SHIELD_A_BS"
+  ship_modifier = {     }
+  modifier = { ship_shield_hp_add = 11600 ship_shield_regen_add = 37.5   }
+  ai_weight = { weight = 500 }
+  prerequisites = { "tech_physics_interphased_105" }
+  component_set = "required_defense"
+}
+# Covariant shields IV (Heavy Escort)
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_5_SHIELD_A_HE"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Shield_A_5"
+  icon_frame = 1
+  can_recharge_shield = yes 
+  power = -330
+  cost = 265
+  size_restriction = { strike }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_DEFENSE_6_SHIELD_A_HE"
+  ship_modifier = {     }
+  modifier = { ship_shield_hp_add = 6900 ship_shield_regen_add = 22.5   }
+  ai_weight = { weight = 500 }
+  prerequisites = { "tech_physics_interphased_105" }
+  component_set = "required_defense"
+}
+# Covariant shields IV (Assault Cruiser)
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_5_SHIELD_A_AC"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Shield_A_5"
+  icon_frame = 1
+  can_recharge_shield = yes 
+  power = -495
+  cost = 495
+  size_restriction = { assault_cruiser }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_DEFENSE_6_SHIELD_A_AC"
+  ship_modifier = {     }
+  modifier = { ship_shield_hp_add = 10400 ship_shield_regen_add = 33.8   }
+  ai_weight = { weight = 500 }
+  prerequisites = { "tech_physics_interphased_105" }
+  component_set = "required_defense"
+}
+# Covariant shields IV (Dreadnaught)
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_5_SHIELD_A_SB"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Shield_A_5"
+  icon_frame = 1
+  can_recharge_shield = yes 
+  power = -1100
+  cost = 1100
+  size_restriction = { super_battleship borg_cube borg_tactical }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_DEFENSE_6_SHIELD_A_SB"
+  ship_modifier = {     }
+  modifier = { ship_shield_hp_add = 23100 ship_shield_regen_add = 75   }
+  ai_weight = { weight = 500 }
+  prerequisites = { "tech_physics_interphased_105" }
+  component_set = "required_defense"
+}
+# Covariant shields IV ()
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_5_SHIELD_A_SC"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Shield_A_5"
+  icon_frame = 1
+  can_recharge_shield = yes 
+  power = -1955
+  cost = 1955
+  size_restriction = { super_cube }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_DEFENSE_6_SHIELD_A_SC"
+  ship_modifier = {     }
+  modifier = { ship_shield_hp_add = 41000 ship_shield_regen_add = 133.1   }
+  ai_weight = { weight = 500 }
+  prerequisites = { "tech_physics_interphased_105" }
+  component_set = "required_defense"
+}
+# Covariant shields IV (Civilian Ships)
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_5_SHIELD_A_CS"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Shield_A_5"
+  icon_frame = 1
+  can_recharge_shield = yes 
+  power = -30
+  cost = 15
+  class_restriction = { shipclass_constructor shipclass_colonizer shipclass_science_ship shipclass_transport }
+  upgrades_to = "REQUIRED_DEFENSE_6_SHIELD_A_CS"
+  ship_modifier = {     }
+  modifier = { ship_shield_hp_add = 580 ship_shield_regen_add = 1.9   }
+  ai_weight = { weight = 500 }
+  prerequisites = { "tech_physics_interphased_105" }
+  component_set = "required_defense"
+}
+# Covariant shields IV (Light Military Stations)
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_5_SHIELD_A_DS"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Shield_A_5"
+  icon_frame = 1
+  can_recharge_shield = yes 
+  power = -110
+  cost = 110
+  size_restriction = { military_station_small military_station_large station_listening borg_unimatrix_defense_small }
+  upgrades_to = "REQUIRED_DEFENSE_6_SHIELD_A_DS"
+  ship_modifier = {     }
+  modifier = { ship_shield_hp_add = 2300 ship_shield_regen_add = 7.5   }
+  ai_weight = { weight = 500 }
+  prerequisites = { "tech_physics_interphased_105" }
+  component_set = "required_defense"
+}
+# Covariant shields IV (Heavy Weapon Platform)
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_5_SHIELD_A_WP"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Shield_A_5"
+  icon_frame = 1
+  can_recharge_shield = yes 
+  power = -660
+  cost = 660
+  size_restriction = { military_station_medium }
+  upgrades_to = "REQUIRED_DEFENSE_6_SHIELD_A_WP"
+  ship_modifier = {     }
+  modifier = { ship_shield_hp_add = 13900 ship_shield_regen_add = 45   }
+  ai_weight = { weight = 500 }
+  prerequisites = { "tech_physics_interphased_105" }
+  component_set = "required_defense"
+}
+
+# Chromodynamic Covariant Mk. V Shields (Patrol Frigate)
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_6_SHIELD_A_PF"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Shield_A_6"
+  can_recharge_shield = yes 
+  icon_frame = 1
+  power = -65
+  cost = 45
+  size_restriction = { corvette }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_DEFENSE_7_SHIELD_A_PF"
+  ship_modifier = {     }
+  modifier = { ship_shield_hp_add = 1300 ship_shield_regen_add = 4.5   }
+  ai_weight = { weight = 600 }
+  prerequisites = { "tech_physics_field_manipulation_208" }
+  component_set = "required_defense"
+}
+# Chromodynamic Covariant Mk. V Shields (Destroyer)
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_6_SHIELD_A_DE"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Shield_A_6"
+  icon_frame = 1
+  can_recharge_shield = yes 
+  power = -130
+  cost = 105
+  size_restriction = { saber }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_DEFENSE_7_SHIELD_A_DE"
+  ship_modifier = {     }
+  modifier = { ship_shield_hp_add = 2600 ship_shield_regen_add = 9   }
+  ai_weight = { weight = 600 }
+  prerequisites = { "tech_physics_field_manipulation_208" }
+  component_set = "required_defense"
+}
+# Chromodynamic Covariant Mk. V Shields (Cruiser)
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_6_SHIELD_A_CR"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Shield_A_6"
+  icon_frame = 1
+  can_recharge_shield = yes 
+  power = -455
+  cost = 455
+  size_restriction = { sovereign borg_sphere }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_DEFENSE_7_SHIELD_A_CR"
+  ship_modifier = {     }
+  modifier = { ship_shield_hp_add = 9200 ship_shield_regen_add = 31.5   }
+  ai_weight = { weight = 600 }
+  prerequisites = { "tech_physics_field_manipulation_208" }
+  component_set = "required_defense"
+}
+# Chromodynamic Covariant Mk. V Shields (Battlecruiser)
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_6_SHIELD_A_BC"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Shield_A_6"
+  icon_frame = 1
+  can_recharge_shield = yes 
+  power = -260
+  cost = 210
+  size_restriction = { steamrunner borg_diamond }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_DEFENSE_7_SHIELD_A_BC"
+  ship_modifier = {     }
+  modifier = { ship_shield_hp_add = 5300 ship_shield_regen_add = 18   }
+  ai_weight = { weight = 600 }
+  prerequisites = { "tech_physics_field_manipulation_208" }
+  component_set = "required_defense"
+}
+# Chromodynamic Covariant Mk. V Shields (Battleship)
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_6_SHIELD_A_BS"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Shield_A_6"
+  icon_frame = 1
+  can_recharge_shield = yes 
+  power = -650
+  cost = 650
+  size_restriction = { adv_cruiser }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_DEFENSE_7_SHIELD_A_BS"
+  ship_modifier = {     }
+  modifier = { ship_shield_hp_add = 13200 ship_shield_regen_add = 45   }
+  ai_weight = { weight = 600 }
+  prerequisites = { "tech_physics_field_manipulation_208" }
+  component_set = "required_defense"
+}
+# Chromodynamic Covariant Mk. V Shields (Heavy Escort)
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_6_SHIELD_A_HE"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Shield_A_6"
+  icon_frame = 1
+  can_recharge_shield = yes 
+  power = -390
+  cost = 310
+  size_restriction = { strike }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_DEFENSE_7_SHIELD_A_HE"
+  ship_modifier = {     }
+  modifier = { ship_shield_hp_add = 7900 ship_shield_regen_add = 27   }
+  ai_weight = { weight = 600 }
+  prerequisites = { "tech_physics_field_manipulation_208" }
+  component_set = "required_defense"
+}
+# Chromodynamic Covariant Mk. V Shields (Assault Cruiser)
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_6_SHIELD_A_AC"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Shield_A_6"
+  icon_frame = 1
+  can_recharge_shield = yes 
+  power = -585
+  cost = 585
+  size_restriction = { assault_cruiser }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_DEFENSE_7_SHIELD_A_AC"
+  ship_modifier = {     }
+  modifier = { ship_shield_hp_add = 11900 ship_shield_regen_add = 40.5   }
+  ai_weight = { weight = 600 }
+  prerequisites = { "tech_physics_field_manipulation_208" }
+  component_set = "required_defense"
+}
+# Chromodynamic Covariant Mk. V Shields (Dreadnaught)
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_6_SHIELD_A_SB"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Shield_A_6"
+  icon_frame = 1
+  can_recharge_shield = yes 
+  power = -1300
+  cost = 1300
+  size_restriction = { super_battleship borg_cube borg_tactical }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_DEFENSE_7_SHIELD_A_SB"
+  ship_modifier = {     }
+  modifier = { ship_shield_hp_add = 26400 ship_shield_regen_add = 90   }
+  ai_weight = { weight = 600 }
+  prerequisites = { "tech_physics_field_manipulation_208" }
+  component_set = "required_defense"
+}
+# Chromodynamic Covariant Mk. V Shields ()
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_6_SHIELD_A_SC"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Shield_A_6"
+  icon_frame = 1
+  can_recharge_shield = yes 
+  power = -2310
+  cost = 2310
+  size_restriction = { super_cube }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_DEFENSE_7_SHIELD_A_SC"
+  ship_modifier = {     }
+  modifier = { ship_shield_hp_add = 46900 ship_shield_regen_add = 159.8   }
+  ai_weight = { weight = 600 }
+  prerequisites = { "tech_physics_field_manipulation_208" }
+  component_set = "required_defense"
+}
+# Chromodynamic Covariant Mk. V Shields (Civilian Ships)
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_6_SHIELD_A_CS"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Shield_A_6"
+  icon_frame = 1
+  can_recharge_shield = yes 
+  power = -35
+  cost = 20
+  class_restriction = { shipclass_constructor shipclass_colonizer shipclass_science_ship shipclass_transport }
+  upgrades_to = "REQUIRED_DEFENSE_7_SHIELD_A_CS"
+  ship_modifier = {     }
+  modifier = { ship_shield_hp_add = 660 ship_shield_regen_add = 2.3   }
+  ai_weight = { weight = 600 }
+  prerequisites = { "tech_physics_field_manipulation_208" }
+  component_set = "required_defense"
+}
+# Chromodynamic Covariant Mk. V Shields (Light Military Stations)
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_6_SHIELD_A_DS"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Shield_A_6"
+  icon_frame = 1
+  can_recharge_shield = yes 
+  power = -130
+  cost = 130
+  size_restriction = { military_station_small military_station_large station_listening borg_unimatrix_defense_small }
+  upgrades_to = "REQUIRED_DEFENSE_7_SHIELD_A_DS"
+  ship_modifier = {     }
+  modifier = { ship_shield_hp_add = 2600 ship_shield_regen_add = 9   }
+  ai_weight = { weight = 600 }
+  prerequisites = { "tech_physics_field_manipulation_208" }
+  component_set = "required_defense"
+}
+# Chromodynamic Covariant Mk. V Shields (Heavy Weapon Platform)
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_6_SHIELD_A_WP"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Shield_A_6"
+  icon_frame = 1
+  can_recharge_shield = yes 
+  power = -780
+  cost = 780
+  size_restriction = { military_station_medium }
+  upgrades_to = "REQUIRED_DEFENSE_7_SHIELD_A_WP"
+  ship_modifier = {     }
+  modifier = { ship_shield_hp_add = 15800 ship_shield_regen_add = 54   }
+  ai_weight = { weight = 600 }
+  prerequisites = { "tech_physics_field_manipulation_208" }
+  component_set = "required_defense"
+}
+
+# Paratrinic Shields (Patrol Frigate)
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_7_SHIELD_A_PF"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Shield_A_7"
+  can_recharge_shield = yes 
+  icon_frame = 1
+  power = -75
+  cost = 65
+  size_restriction = { corvette }
+  class_restriction = { shipclass_military }
+  
+  ship_modifier = {     }
+  modifier = { ship_shield_hp_add = 1500 ship_shield_regen_add = 5.3   }
+  ai_weight = { weight = 800 }
+  prerequisites = { "tech_physics_paratrinic_95" }
+  component_set = "required_defense"
+}
+# Paratrinic Shields (Destroyer)
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_7_SHIELD_A_DE"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Shield_A_7"
+  icon_frame = 1
+  can_recharge_shield = yes 
+  power = -150
+  cost = 145
+  size_restriction = { saber }
+  class_restriction = { shipclass_military }
+  
+  ship_modifier = {     }
+  modifier = { ship_shield_hp_add = 3000 ship_shield_regen_add = 10.5   }
+  ai_weight = { weight = 800 }
+  prerequisites = { "tech_physics_paratrinic_95" }
+  component_set = "required_defense"
+}
+# Paratrinic Shields (Cruiser)
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_7_SHIELD_A_CR"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Shield_A_7"
+  icon_frame = 1
+  can_recharge_shield = yes 
+  power = -525
+  cost = 630
+  size_restriction = { sovereign borg_sphere }
+  class_restriction = { shipclass_military }
+  
+  ship_modifier = {     }
+  modifier = { ship_shield_hp_add = 10400 ship_shield_regen_add = 36.8   }
+  ai_weight = { weight = 800 }
+  prerequisites = { "tech_physics_paratrinic_95" }
+  component_set = "required_defense"
+}
+# Paratrinic Shields (Battlecruiser)
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_7_SHIELD_A_BC"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Shield_A_7"
+  icon_frame = 1
+  can_recharge_shield = yes 
+  power = -300
+  cost = 290
+  size_restriction = { steamrunner borg_diamond }
+  class_restriction = { shipclass_military }
+  
+  ship_modifier = {     }
+  modifier = { ship_shield_hp_add = 5900 ship_shield_regen_add = 21   }
+  ai_weight = { weight = 800 }
+  prerequisites = { "tech_physics_paratrinic_95" }
+  component_set = "required_defense"
+}
+# Paratrinic Shields (Battleship)
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_7_SHIELD_A_BS"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Shield_A_7"
+  icon_frame = 1
+  can_recharge_shield = yes 
+  power = -750
+  cost = 900
+  size_restriction = { adv_cruiser }
+  class_restriction = { shipclass_military }
+  
+  ship_modifier = {     }
+  modifier = { ship_shield_hp_add = 14900 ship_shield_regen_add = 52.5   }
+  ai_weight = { weight = 800 }
+  prerequisites = { "tech_physics_paratrinic_95" }
+  component_set = "required_defense"
+}
+# Paratrinic Shields (Heavy Escort)
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_7_SHIELD_A_HE"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Shield_A_7"
+  icon_frame = 1
+  can_recharge_shield = yes 
+  power = -450
+  cost = 430
+  size_restriction = { strike }
+  class_restriction = { shipclass_military }
+  
+  ship_modifier = {     }
+  modifier = { ship_shield_hp_add = 8900 ship_shield_regen_add = 31.5   }
+  ai_weight = { weight = 800 }
+  prerequisites = { "tech_physics_paratrinic_95" }
+  component_set = "required_defense"
+}
+# Paratrinic Shields (Assault Cruiser)
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_7_SHIELD_A_AC"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Shield_A_7"
+  icon_frame = 1
+  can_recharge_shield = yes 
+  power = -675
+  cost = 810
+  size_restriction = { assault_cruiser }
+  class_restriction = { shipclass_military }
+  
+  ship_modifier = {     }
+  modifier = { ship_shield_hp_add = 13400 ship_shield_regen_add = 47.3   }
+  ai_weight = { weight = 800 }
+  prerequisites = { "tech_physics_paratrinic_95" }
+  component_set = "required_defense"
+}
+# Paratrinic Shields (Dreadnaught)
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_7_SHIELD_A_SB"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Shield_A_7"
+  icon_frame = 1
+  can_recharge_shield = yes 
+  power = -1500
+  cost = 1800
+  size_restriction = { super_battleship borg_cube borg_tactical }
+  class_restriction = { shipclass_military }
+  
+  ship_modifier = {     }
+  modifier = { ship_shield_hp_add = 29700 ship_shield_regen_add = 105   }
+  ai_weight = { weight = 800 }
+  prerequisites = { "tech_physics_paratrinic_95" }
+  component_set = "required_defense"
+}
+# Paratrinic Shields ()
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_7_SHIELD_A_SC"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Shield_A_7"
+  icon_frame = 1
+  can_recharge_shield = yes 
+  power = -2665
+  cost = 3200
+  size_restriction = { super_cube }
+  class_restriction = { shipclass_military }
+  
+  ship_modifier = {     }
+  modifier = { ship_shield_hp_add = 52700 ship_shield_regen_add = 186.4   }
+  ai_weight = { weight = 800 }
+  prerequisites = { "tech_physics_paratrinic_95" }
+  component_set = "required_defense"
+}
+# Paratrinic Shields (Civilian Ships)
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_7_SHIELD_A_CS"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Shield_A_7"
+  icon_frame = 1
+  can_recharge_shield = yes 
+  power = -40
+  cost = 25
+  class_restriction = { shipclass_constructor shipclass_colonizer shipclass_science_ship shipclass_transport }
+  
+  ship_modifier = {     }
+  modifier = { ship_shield_hp_add = 740 ship_shield_regen_add = 2.6   }
+  ai_weight = { weight = 800 }
+  prerequisites = { "tech_physics_paratrinic_95" }
+  component_set = "required_defense"
+}
+# Paratrinic Shields (Light Military Stations)
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_7_SHIELD_A_DS"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Shield_A_7"
+  icon_frame = 1
+  can_recharge_shield = yes 
+  power = -150
+  cost = 180
+  size_restriction = { military_station_small military_station_large station_listening borg_unimatrix_defense_small }
+  
+  ship_modifier = {     }
+  modifier = { ship_shield_hp_add = 3000 ship_shield_regen_add = 10.5   }
+  ai_weight = { weight = 800 }
+  prerequisites = { "tech_physics_paratrinic_95" }
+  component_set = "required_defense"
+}
+# Paratrinic Shields (Heavy Weapon Platform)
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_7_SHIELD_A_WP"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Shield_A_7"
+  icon_frame = 1
+  can_recharge_shield = yes 
+  power = -900
+  cost = 1080
+  size_restriction = { military_station_medium }
+  
+  ship_modifier = {     }
+  modifier = { ship_shield_hp_add = 17800 ship_shield_regen_add = 63   }
+  ai_weight = { weight = 800 }
+  prerequisites = { "tech_physics_paratrinic_95" }
+  component_set = "required_defense"
+}
+
+# Regenerative Shields (Patrol Frigate)
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_2_SHIELD_B_PF"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Shield_B_2"
+  can_recharge_shield = yes 
+  icon_frame = 1
+  power = -25
+  cost = 20
+  size_restriction = { corvette }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_DEFENSE_3_SHIELD_B_PF"
+  ship_modifier = {     }
+  modifier = { ship_shield_hp_add = 540 ship_shield_regen_add = 2.5   }
+  ai_weight = { weight = 200 }
+  prerequisites = { "tech_physics_regenerative_102" }
+  component_set = "required_defense"
+}
+# Regenerative Shields (Destroyer)
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_2_SHIELD_B_DE"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Shield_B_2"
+  icon_frame = 1
+  can_recharge_shield = yes 
+  power = -50
+  cost = 40
+  size_restriction = { saber }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_DEFENSE_3_SHIELD_B_DE"
+  ship_modifier = {     }
+  modifier = { ship_shield_hp_add = 1100 ship_shield_regen_add = 5   }
+  ai_weight = { weight = 200 }
+  prerequisites = { "tech_physics_regenerative_102" }
+  component_set = "required_defense"
+}
+# Regenerative Shields (Cruiser)
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_2_SHIELD_B_CR"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Shield_B_2"
+  icon_frame = 1
+  can_recharge_shield = yes 
+  power = -175
+  cost = 175
+  size_restriction = { sovereign borg_sphere }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_DEFENSE_3_SHIELD_B_CR"
+  ship_modifier = {     }
+  modifier = { ship_shield_hp_add = 3800 ship_shield_regen_add = 17.5   }
+  ai_weight = { weight = 200 }
+  prerequisites = { "tech_physics_regenerative_102" }
+  component_set = "required_defense"
+}
+# Regenerative Shields (Battlecruiser)
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_2_SHIELD_B_BC"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Shield_B_2"
+  icon_frame = 1
+  can_recharge_shield = yes 
+  power = -100
+  cost = 80
+  size_restriction = { steamrunner borg_diamond }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_DEFENSE_3_SHIELD_B_BC"
+  ship_modifier = {     }
+  modifier = { ship_shield_hp_add = 2200 ship_shield_regen_add = 10   }
+  ai_weight = { weight = 200 }
+  prerequisites = { "tech_physics_regenerative_102" }
+  component_set = "required_defense"
+}
+# Regenerative Shields (Battleship)
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_2_SHIELD_B_BS"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Shield_B_2"
+  icon_frame = 1
+  can_recharge_shield = yes 
+  power = -250
+  cost = 250
+  size_restriction = { adv_cruiser }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_DEFENSE_3_SHIELD_B_BS"
+  ship_modifier = {     }
+  modifier = { ship_shield_hp_add = 5400 ship_shield_regen_add = 25   }
+  ai_weight = { weight = 200 }
+  prerequisites = { "tech_physics_regenerative_102" }
+  component_set = "required_defense"
+}
+# Regenerative Shields (Heavy Escort)
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_2_SHIELD_B_HE"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Shield_B_2"
+  icon_frame = 1
+  can_recharge_shield = yes 
+  power = -150
+  cost = 120
+  size_restriction = { strike }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_DEFENSE_3_SHIELD_B_HE"
+  ship_modifier = {     }
+  modifier = { ship_shield_hp_add = 3200 ship_shield_regen_add = 15   }
+  ai_weight = { weight = 200 }
+  prerequisites = { "tech_physics_regenerative_102" }
+  component_set = "required_defense"
+}
+# Regenerative Shields (Assault Cruiser)
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_2_SHIELD_B_AC"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Shield_B_2"
+  icon_frame = 1
+  can_recharge_shield = yes 
+  power = -225
+  cost = 225
+  size_restriction = { assault_cruiser }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_DEFENSE_3_SHIELD_B_AC"
+  ship_modifier = {     }
+  modifier = { ship_shield_hp_add = 4900 ship_shield_regen_add = 22.5   }
+  ai_weight = { weight = 200 }
+  prerequisites = { "tech_physics_regenerative_102" }
+  component_set = "required_defense"
+}
+# Regenerative Shields (Dreadnaught)
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_2_SHIELD_B_SB"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Shield_B_2"
+  icon_frame = 1
+  can_recharge_shield = yes 
+  power = -500
+  cost = 500
+  size_restriction = { super_battleship borg_cube borg_tactical }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_DEFENSE_3_SHIELD_B_SB"
+  ship_modifier = {     }
+  modifier = { ship_shield_hp_add = 10800 ship_shield_regen_add = 50   }
+  ai_weight = { weight = 200 }
+  prerequisites = { "tech_physics_regenerative_102" }
+  component_set = "required_defense"
+}
+# Regenerative Shields ()
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_2_SHIELD_B_SC"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Shield_B_2"
+  icon_frame = 1
+  can_recharge_shield = yes 
+  power = -890
+  cost = 890
+  size_restriction = { super_cube }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_DEFENSE_3_SHIELD_B_SC"
+  ship_modifier = {     }
+  modifier = { ship_shield_hp_add = 19200 ship_shield_regen_add = 88.8   }
+  ai_weight = { weight = 200 }
+  prerequisites = { "tech_physics_regenerative_102" }
+  component_set = "required_defense"
+}
+# Regenerative Shields (Civilian Ships)
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_2_SHIELD_B_CS"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Shield_B_2"
+  icon_frame = 1
+  can_recharge_shield = yes 
+  power = -15
+  cost = 10
+  class_restriction = { shipclass_constructor shipclass_colonizer shipclass_science_ship shipclass_transport }
+  upgrades_to = "REQUIRED_DEFENSE_3_SHIELD_B_CS"
+  ship_modifier = {     }
+  modifier = { ship_shield_hp_add = 270 ship_shield_regen_add = 1.3   }
+  ai_weight = { weight = 200 }
+  prerequisites = { "tech_physics_regenerative_102" }
+  component_set = "required_defense"
+}
+# Regenerative Shields (Light Military Stations)
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_2_SHIELD_B_DS"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Shield_B_2"
+  icon_frame = 1
+  can_recharge_shield = yes 
+  power = -50
+  cost = 50
+  size_restriction = { military_station_small military_station_large station_listening borg_unimatrix_defense_small }
+  upgrades_to = "REQUIRED_DEFENSE_3_SHIELD_B_DS"
+  ship_modifier = {     }
+  modifier = { ship_shield_hp_add = 1100 ship_shield_regen_add = 5   }
+  ai_weight = { weight = 200 }
+  prerequisites = { "tech_physics_regenerative_102" }
+  component_set = "required_defense"
+}
+# Regenerative Shields (Heavy Weapon Platform)
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_2_SHIELD_B_WP"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Shield_B_2"
+  icon_frame = 1
+  can_recharge_shield = yes 
+  power = -300
+  cost = 300
+  size_restriction = { military_station_medium }
+  upgrades_to = "REQUIRED_DEFENSE_3_SHIELD_B_WP"
+  ship_modifier = {     }
+  modifier = { ship_shield_hp_add = 6500 ship_shield_regen_add = 30   }
+  ai_weight = { weight = 200 }
+  prerequisites = { "tech_physics_regenerative_102" }
+  component_set = "required_defense"
+}
+
+# Regenerative Shields II (Patrol Frigate)
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_3_SHIELD_B_PF"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Shield_B_3"
+  can_recharge_shield = yes 
+  icon_frame = 1
+  power = -35
+  cost = 25
+  size_restriction = { corvette }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_DEFENSE_4_SHIELD_B_PF"
+  ship_modifier = {     }
+  modifier = { ship_shield_hp_add = 680 ship_shield_regen_add = 3.8   }
+  ai_weight = { weight = 300 }
+  prerequisites = { "tech_physics_field_manipulation_212" }
+  component_set = "required_defense"
+}
+# Regenerative Shields II (Destroyer)
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_3_SHIELD_B_DE"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Shield_B_3"
+  icon_frame = 1
+  can_recharge_shield = yes 
+  power = -70
+  cost = 55
+  size_restriction = { saber }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_DEFENSE_4_SHIELD_B_DE"
+  ship_modifier = {     }
+  modifier = { ship_shield_hp_add = 1400 ship_shield_regen_add = 7.5   }
+  ai_weight = { weight = 300 }
+  prerequisites = { "tech_physics_field_manipulation_212" }
+  component_set = "required_defense"
+}
+# Regenerative Shields II (Cruiser)
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_3_SHIELD_B_CR"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Shield_B_3"
+  icon_frame = 1
+  can_recharge_shield = yes 
+  power = -245
+  cost = 245
+  size_restriction = { sovereign borg_sphere }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_DEFENSE_4_SHIELD_B_CR"
+  ship_modifier = {     }
+  modifier = { ship_shield_hp_add = 4700 ship_shield_regen_add = 26.3   }
+  ai_weight = { weight = 300 }
+  prerequisites = { "tech_physics_field_manipulation_212" }
+  component_set = "required_defense"
+}
+# Regenerative Shields II (Battlecruiser)
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_3_SHIELD_B_BC"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Shield_B_3"
+  icon_frame = 1
+  can_recharge_shield = yes 
+  power = -140
+  cost = 110
+  size_restriction = { steamrunner borg_diamond }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_DEFENSE_4_SHIELD_B_BC"
+  ship_modifier = {     }
+  modifier = { ship_shield_hp_add = 2700 ship_shield_regen_add = 15   }
+  ai_weight = { weight = 300 }
+  prerequisites = { "tech_physics_field_manipulation_212" }
+  component_set = "required_defense"
+}
+# Regenerative Shields II (Battleship)
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_3_SHIELD_B_BS"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Shield_B_3"
+  icon_frame = 1
+  can_recharge_shield = yes 
+  power = -350
+  cost = 350
+  size_restriction = { adv_cruiser }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_DEFENSE_4_SHIELD_B_BS"
+  ship_modifier = {     }
+  modifier = { ship_shield_hp_add = 6800 ship_shield_regen_add = 37.5   }
+  ai_weight = { weight = 300 }
+  prerequisites = { "tech_physics_field_manipulation_212" }
+  component_set = "required_defense"
+}
+# Regenerative Shields II (Heavy Escort)
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_3_SHIELD_B_HE"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Shield_B_3"
+  icon_frame = 1
+  can_recharge_shield = yes 
+  power = -210
+  cost = 170
+  size_restriction = { strike }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_DEFENSE_4_SHIELD_B_HE"
+  ship_modifier = {     }
+  modifier = { ship_shield_hp_add = 4100 ship_shield_regen_add = 22.5   }
+  ai_weight = { weight = 300 }
+  prerequisites = { "tech_physics_field_manipulation_212" }
+  component_set = "required_defense"
+}
+# Regenerative Shields II (Assault Cruiser)
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_3_SHIELD_B_AC"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Shield_B_3"
+  icon_frame = 1
+  can_recharge_shield = yes 
+  power = -315
+  cost = 315
+  size_restriction = { assault_cruiser }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_DEFENSE_4_SHIELD_B_AC"
+  ship_modifier = {     }
+  modifier = { ship_shield_hp_add = 6100 ship_shield_regen_add = 33.8   }
+  ai_weight = { weight = 300 }
+  prerequisites = { "tech_physics_field_manipulation_212" }
+  component_set = "required_defense"
+}
+# Regenerative Shields II (Dreadnaught)
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_3_SHIELD_B_SB"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Shield_B_3"
+  icon_frame = 1
+  can_recharge_shield = yes 
+  power = -700
+  cost = 700
+  size_restriction = { super_battleship borg_cube borg_tactical }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_DEFENSE_4_SHIELD_B_SB"
+  ship_modifier = {     }
+  modifier = { ship_shield_hp_add = 13500 ship_shield_regen_add = 75   }
+  ai_weight = { weight = 300 }
+  prerequisites = { "tech_physics_field_manipulation_212" }
+  component_set = "required_defense"
+}
+# Regenerative Shields II ()
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_3_SHIELD_B_SC"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Shield_B_3"
+  icon_frame = 1
+  can_recharge_shield = yes 
+  power = -1245
+  cost = 1245
+  size_restriction = { super_cube }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_DEFENSE_4_SHIELD_B_SC"
+  ship_modifier = {     }
+  modifier = { ship_shield_hp_add = 24000 ship_shield_regen_add = 133.1   }
+  ai_weight = { weight = 300 }
+  prerequisites = { "tech_physics_field_manipulation_212" }
+  component_set = "required_defense"
+}
+# Regenerative Shields II (Civilian Ships)
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_3_SHIELD_B_CS"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Shield_B_3"
+  icon_frame = 1
+  can_recharge_shield = yes 
+  power = -20
+  cost = 10
+  class_restriction = { shipclass_constructor shipclass_colonizer shipclass_science_ship shipclass_transport }
+  upgrades_to = "REQUIRED_DEFENSE_4_SHIELD_B_CS"
+  ship_modifier = {     }
+  modifier = { ship_shield_hp_add = 340 ship_shield_regen_add = 1.9   }
+  ai_weight = { weight = 300 }
+  prerequisites = { "tech_physics_field_manipulation_212" }
+  component_set = "required_defense"
+}
+# Regenerative Shields II (Light Military Stations)
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_3_SHIELD_B_DS"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Shield_B_3"
+  icon_frame = 1
+  can_recharge_shield = yes 
+  power = -70
+  cost = 70
+  size_restriction = { military_station_small military_station_large station_listening borg_unimatrix_defense_small }
+  upgrades_to = "REQUIRED_DEFENSE_4_SHIELD_B_DS"
+  ship_modifier = {     }
+  modifier = { ship_shield_hp_add = 1400 ship_shield_regen_add = 7.5   }
+  ai_weight = { weight = 300 }
+  prerequisites = { "tech_physics_field_manipulation_212" }
+  component_set = "required_defense"
+}
+# Regenerative Shields II (Heavy Weapon Platform)
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_3_SHIELD_B_WP"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Shield_B_3"
+  icon_frame = 1
+  can_recharge_shield = yes 
+  power = -420
+  cost = 420
+  size_restriction = { military_station_medium }
+  upgrades_to = "REQUIRED_DEFENSE_4_SHIELD_B_WP"
+  ship_modifier = {     }
+  modifier = { ship_shield_hp_add = 8100 ship_shield_regen_add = 45   }
+  ai_weight = { weight = 300 }
+  prerequisites = { "tech_physics_field_manipulation_212" }
+  component_set = "required_defense"
+}
+
+# Regenerative Shields III (Patrol Frigate)
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_4_SHIELD_B_PF"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Shield_B_4"
+  can_recharge_shield = yes 
+  icon_frame = 1
+  power = -45
+  cost = 30
+  size_restriction = { corvette }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_DEFENSE_5_SHIELD_B_PF"
+  ship_modifier = {     }
+  modifier = { ship_shield_hp_add = 810 ship_shield_regen_add = 5   }
+  ai_weight = { weight = 400 }
+  prerequisites = { "tech_physics_immersion_104" }
+  component_set = "required_defense"
+}
+# Regenerative Shields III (Destroyer)
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_4_SHIELD_B_DE"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Shield_B_4"
+  icon_frame = 1
+  can_recharge_shield = yes 
+  power = -90
+  cost = 70
+  size_restriction = { saber }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_DEFENSE_5_SHIELD_B_DE"
+  ship_modifier = {     }
+  modifier = { ship_shield_hp_add = 1600 ship_shield_regen_add = 10   }
+  ai_weight = { weight = 400 }
+  prerequisites = { "tech_physics_immersion_104" }
+  component_set = "required_defense"
+}
+# Regenerative Shields III (Cruiser)
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_4_SHIELD_B_CR"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Shield_B_4"
+  icon_frame = 1
+  can_recharge_shield = yes 
+  power = -315
+  cost = 315
+  size_restriction = { sovereign borg_sphere }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_DEFENSE_5_SHIELD_B_CR"
+  ship_modifier = {     }
+  modifier = { ship_shield_hp_add = 5700 ship_shield_regen_add = 35   }
+  ai_weight = { weight = 400 }
+  prerequisites = { "tech_physics_immersion_104" }
+  component_set = "required_defense"
+}
+# Regenerative Shields III (Battlecruiser)
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_4_SHIELD_B_BC"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Shield_B_4"
+  icon_frame = 1
+  can_recharge_shield = yes 
+  power = -180
+  cost = 145
+  size_restriction = { steamrunner borg_diamond }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_DEFENSE_5_SHIELD_B_BC"
+  ship_modifier = {     }
+  modifier = { ship_shield_hp_add = 3200 ship_shield_regen_add = 20   }
+  ai_weight = { weight = 400 }
+  prerequisites = { "tech_physics_immersion_104" }
+  component_set = "required_defense"
+}
+# Regenerative Shields III (Battleship)
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_4_SHIELD_B_BS"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Shield_B_4"
+  icon_frame = 1
+  can_recharge_shield = yes 
+  power = -450
+  cost = 450
+  size_restriction = { adv_cruiser }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_DEFENSE_5_SHIELD_B_BS"
+  ship_modifier = {     }
+  modifier = { ship_shield_hp_add = 8100 ship_shield_regen_add = 50   }
+  ai_weight = { weight = 400 }
+  prerequisites = { "tech_physics_immersion_104" }
+  component_set = "required_defense"
+}
+# Regenerative Shields III (Heavy Escort)
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_4_SHIELD_B_HE"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Shield_B_4"
+  icon_frame = 1
+  can_recharge_shield = yes 
+  power = -270
+  cost = 215
+  size_restriction = { strike }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_DEFENSE_5_SHIELD_B_HE"
+  ship_modifier = {     }
+  modifier = { ship_shield_hp_add = 4900 ship_shield_regen_add = 30   }
+  ai_weight = { weight = 400 }
+  prerequisites = { "tech_physics_immersion_104" }
+  component_set = "required_defense"
+}
+# Regenerative Shields III (Assault Cruiser)
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_4_SHIELD_B_AC"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Shield_B_4"
+  icon_frame = 1
+  can_recharge_shield = yes 
+  power = -405
+  cost = 405
+  size_restriction = { assault_cruiser }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_DEFENSE_5_SHIELD_B_AC"
+  ship_modifier = {     }
+  modifier = { ship_shield_hp_add = 7300 ship_shield_regen_add = 45   }
+  ai_weight = { weight = 400 }
+  prerequisites = { "tech_physics_immersion_104" }
+  component_set = "required_defense"
+}
+# Regenerative Shields III (Dreadnaught)
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_4_SHIELD_B_SB"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Shield_B_4"
+  icon_frame = 1
+  can_recharge_shield = yes 
+  power = -900
+  cost = 900
+  size_restriction = { super_battleship borg_cube borg_tactical }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_DEFENSE_5_SHIELD_B_SB"
+  ship_modifier = {     }
+  modifier = { ship_shield_hp_add = 16200 ship_shield_regen_add = 100   }
+  ai_weight = { weight = 400 }
+  prerequisites = { "tech_physics_immersion_104" }
+  component_set = "required_defense"
+}
+# Regenerative Shields III ()
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_4_SHIELD_B_SC"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Shield_B_4"
+  icon_frame = 1
+  can_recharge_shield = yes 
+  power = -1600
+  cost = 1600
+  size_restriction = { super_cube }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_DEFENSE_5_SHIELD_B_SC"
+  ship_modifier = {     }
+  modifier = { ship_shield_hp_add = 28800 ship_shield_regen_add = 177.5   }
+  ai_weight = { weight = 400 }
+  prerequisites = { "tech_physics_immersion_104" }
+  component_set = "required_defense"
+}
+# Regenerative Shields III (Civilian Ships)
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_4_SHIELD_B_CS"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Shield_B_4"
+  icon_frame = 1
+  can_recharge_shield = yes 
+  power = -25
+  cost = 15
+  class_restriction = { shipclass_constructor shipclass_colonizer shipclass_science_ship shipclass_transport }
+  upgrades_to = "REQUIRED_DEFENSE_5_SHIELD_B_CS"
+  ship_modifier = {     }
+  modifier = { ship_shield_hp_add = 410 ship_shield_regen_add = 2.5   }
+  ai_weight = { weight = 400 }
+  prerequisites = { "tech_physics_immersion_104" }
+  component_set = "required_defense"
+}
+# Regenerative Shields III (Light Military Stations)
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_4_SHIELD_B_DS"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Shield_B_4"
+  icon_frame = 1
+  can_recharge_shield = yes 
+  power = -90
+  cost = 90
+  size_restriction = { military_station_small military_station_large station_listening borg_unimatrix_defense_small }
+  upgrades_to = "REQUIRED_DEFENSE_5_SHIELD_B_DS"
+  ship_modifier = {     }
+  modifier = { ship_shield_hp_add = 1600 ship_shield_regen_add = 10   }
+  ai_weight = { weight = 400 }
+  prerequisites = { "tech_physics_immersion_104" }
+  component_set = "required_defense"
+}
+# Regenerative Shields III (Heavy Weapon Platform)
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_4_SHIELD_B_WP"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Shield_B_4"
+  icon_frame = 1
+  can_recharge_shield = yes 
+  power = -540
+  cost = 540
+  size_restriction = { military_station_medium }
+  upgrades_to = "REQUIRED_DEFENSE_5_SHIELD_B_WP"
+  ship_modifier = {     }
+  modifier = { ship_shield_hp_add = 9700 ship_shield_regen_add = 60   }
+  ai_weight = { weight = 400 }
+  prerequisites = { "tech_physics_immersion_104" }
+  component_set = "required_defense"
+}
+
+# Regenerative Shields IV (Patrol Frigate)
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_5_SHIELD_B_PF"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Shield_B_5"
+  can_recharge_shield = yes 
+  icon_frame = 1
+  power = -55
+  cost = 40
+  size_restriction = { corvette }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_DEFENSE_6_SHIELD_B_PF"
+  ship_modifier = {     }
+  modifier = { ship_shield_hp_add = 950 ship_shield_regen_add = 6.3   }
+  ai_weight = { weight = 500 }
+  prerequisites = { "tech_physics_field_manipulation_214" }
+  component_set = "required_defense"
+}
+# Regenerative Shields IV (Destroyer)
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_5_SHIELD_B_DE"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Shield_B_5"
+  icon_frame = 1
+  can_recharge_shield = yes 
+  power = -110
+  cost = 90
+  size_restriction = { saber }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_DEFENSE_6_SHIELD_B_DE"
+  ship_modifier = {     }
+  modifier = { ship_shield_hp_add = 1900 ship_shield_regen_add = 12.5   }
+  ai_weight = { weight = 500 }
+  prerequisites = { "tech_physics_field_manipulation_214" }
+  component_set = "required_defense"
+}
+# Regenerative Shields IV (Cruiser)
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_5_SHIELD_B_CR"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Shield_B_5"
+  icon_frame = 1
+  can_recharge_shield = yes 
+  power = -385
+  cost = 385
+  size_restriction = { sovereign borg_sphere }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_DEFENSE_6_SHIELD_B_CR"
+  ship_modifier = {     }
+  modifier = { ship_shield_hp_add = 6600 ship_shield_regen_add = 43.8   }
+  ai_weight = { weight = 500 }
+  prerequisites = { "tech_physics_field_manipulation_214" }
+  component_set = "required_defense"
+}
+# Regenerative Shields IV (Battlecruiser)
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_5_SHIELD_B_BC"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Shield_B_5"
+  icon_frame = 1
+  can_recharge_shield = yes 
+  power = -220
+  cost = 175
+  size_restriction = { steamrunner borg_diamond }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_DEFENSE_6_SHIELD_B_BC"
+  ship_modifier = {     }
+  modifier = { ship_shield_hp_add = 3800 ship_shield_regen_add = 25   }
+  ai_weight = { weight = 500 }
+  prerequisites = { "tech_physics_field_manipulation_214" }
+  component_set = "required_defense"
+}
+# Regenerative Shields IV (Battleship)
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_5_SHIELD_B_BS"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Shield_B_5"
+  icon_frame = 1
+  can_recharge_shield = yes 
+  power = -550
+  cost = 550
+  size_restriction = { adv_cruiser }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_DEFENSE_6_SHIELD_B_BS"
+  ship_modifier = {     }
+  modifier = { ship_shield_hp_add = 9500 ship_shield_regen_add = 62.5   }
+  ai_weight = { weight = 500 }
+  prerequisites = { "tech_physics_field_manipulation_214" }
+  component_set = "required_defense"
+}
+# Regenerative Shields IV (Heavy Escort)
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_5_SHIELD_B_HE"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Shield_B_5"
+  icon_frame = 1
+  can_recharge_shield = yes 
+  power = -330
+  cost = 265
+  size_restriction = { strike }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_DEFENSE_6_SHIELD_B_HE"
+  ship_modifier = {     }
+  modifier = { ship_shield_hp_add = 5700 ship_shield_regen_add = 37.5   }
+  ai_weight = { weight = 500 }
+  prerequisites = { "tech_physics_field_manipulation_214" }
+  component_set = "required_defense"
+}
+# Regenerative Shields IV (Assault Cruiser)
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_5_SHIELD_B_AC"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Shield_B_5"
+  icon_frame = 1
+  can_recharge_shield = yes 
+  power = -495
+  cost = 495
+  size_restriction = { assault_cruiser }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_DEFENSE_6_SHIELD_B_AC"
+  ship_modifier = {     }
+  modifier = { ship_shield_hp_add = 8500 ship_shield_regen_add = 56.3   }
+  ai_weight = { weight = 500 }
+  prerequisites = { "tech_physics_field_manipulation_214" }
+  component_set = "required_defense"
+}
+# Regenerative Shields IV (Dreadnaught)
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_5_SHIELD_B_SB"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Shield_B_5"
+  icon_frame = 1
+  can_recharge_shield = yes 
+  power = -1100
+  cost = 1100
+  size_restriction = { super_battleship borg_cube borg_tactical }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_DEFENSE_6_SHIELD_B_SB"
+  ship_modifier = {     }
+  modifier = { ship_shield_hp_add = 18900 ship_shield_regen_add = 125   }
+  ai_weight = { weight = 500 }
+  prerequisites = { "tech_physics_field_manipulation_214" }
+  component_set = "required_defense"
+}
+# Regenerative Shields IV ()
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_5_SHIELD_B_SC"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Shield_B_5"
+  icon_frame = 1
+  can_recharge_shield = yes 
+  power = -1955
+  cost = 1955
+  size_restriction = { super_cube }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_DEFENSE_6_SHIELD_B_SC"
+  ship_modifier = {     }
+  modifier = { ship_shield_hp_add = 33500 ship_shield_regen_add = 221.9   }
+  ai_weight = { weight = 500 }
+  prerequisites = { "tech_physics_field_manipulation_214" }
+  component_set = "required_defense"
+}
+# Regenerative Shields IV (Civilian Ships)
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_5_SHIELD_B_CS"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Shield_B_5"
+  icon_frame = 1
+  can_recharge_shield = yes 
+  power = -30
+  cost = 15
+  class_restriction = { shipclass_constructor shipclass_colonizer shipclass_science_ship shipclass_transport }
+  upgrades_to = "REQUIRED_DEFENSE_6_SHIELD_B_CS"
+  ship_modifier = {     }
+  modifier = { ship_shield_hp_add = 470 ship_shield_regen_add = 3.1   }
+  ai_weight = { weight = 500 }
+  prerequisites = { "tech_physics_field_manipulation_214" }
+  component_set = "required_defense"
+}
+# Regenerative Shields IV (Light Military Stations)
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_5_SHIELD_B_DS"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Shield_B_5"
+  icon_frame = 1
+  can_recharge_shield = yes 
+  power = -110
+  cost = 110
+  size_restriction = { military_station_small military_station_large station_listening borg_unimatrix_defense_small }
+  upgrades_to = "REQUIRED_DEFENSE_6_SHIELD_B_DS"
+  ship_modifier = {     }
+  modifier = { ship_shield_hp_add = 1900 ship_shield_regen_add = 12.5   }
+  ai_weight = { weight = 500 }
+  prerequisites = { "tech_physics_field_manipulation_214" }
+  component_set = "required_defense"
+}
+# Regenerative Shields IV (Heavy Weapon Platform)
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_5_SHIELD_B_WP"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Shield_B_5"
+  icon_frame = 1
+  can_recharge_shield = yes 
+  power = -660
+  cost = 660
+  size_restriction = { military_station_medium }
+  upgrades_to = "REQUIRED_DEFENSE_6_SHIELD_B_WP"
+  ship_modifier = {     }
+  modifier = { ship_shield_hp_add = 11300 ship_shield_regen_add = 75   }
+  ai_weight = { weight = 500 }
+  prerequisites = { "tech_physics_field_manipulation_214" }
+  component_set = "required_defense"
+}
+
+# Unimatrix Regenerative Mk. V Shields (Patrol Frigate)
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_6_SHIELD_B_PF"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Shield_B_6"
+  can_recharge_shield = yes 
+  icon_frame = 1
+  power = -65
+  cost = 45
+  size_restriction = { corvette }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_DEFENSE_7_SHIELD_B_PF"
+  ship_modifier = {     }
+  modifier = { ship_shield_hp_add = 1100 ship_shield_regen_add = 7.5   }
+  ai_weight = { weight = 600 }
+  prerequisites = { "tech_physics_unimatrix_106" }
+  component_set = "required_defense"
+}
+# Unimatrix Regenerative Mk. V Shields (Destroyer)
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_6_SHIELD_B_DE"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Shield_B_6"
+  icon_frame = 1
+  can_recharge_shield = yes 
+  power = -130
+  cost = 105
+  size_restriction = { saber }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_DEFENSE_7_SHIELD_B_DE"
+  ship_modifier = {     }
+  modifier = { ship_shield_hp_add = 2200 ship_shield_regen_add = 15   }
+  ai_weight = { weight = 600 }
+  prerequisites = { "tech_physics_unimatrix_106" }
+  component_set = "required_defense"
+}
+# Unimatrix Regenerative Mk. V Shields (Cruiser)
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_6_SHIELD_B_CR"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Shield_B_6"
+  icon_frame = 1
+  can_recharge_shield = yes 
+  power = -455
+  cost = 455
+  size_restriction = { sovereign borg_sphere }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_DEFENSE_7_SHIELD_B_CR"
+  ship_modifier = {     }
+  modifier = { ship_shield_hp_add = 7600 ship_shield_regen_add = 52.5   }
+  ai_weight = { weight = 600 }
+  prerequisites = { "tech_physics_unimatrix_106" }
+  component_set = "required_defense"
+}
+# Unimatrix Regenerative Mk. V Shields (Battlecruiser)
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_6_SHIELD_B_BC"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Shield_B_6"
+  icon_frame = 1
+  can_recharge_shield = yes 
+  power = -260
+  cost = 210
+  size_restriction = { steamrunner borg_diamond }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_DEFENSE_7_SHIELD_B_BC"
+  ship_modifier = {     }
+  modifier = { ship_shield_hp_add = 4300 ship_shield_regen_add = 30   }
+  ai_weight = { weight = 600 }
+  prerequisites = { "tech_physics_unimatrix_106" }
+  component_set = "required_defense"
+}
+# Unimatrix Regenerative Mk. V Shields (Battleship)
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_6_SHIELD_B_BS"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Shield_B_6"
+  icon_frame = 1
+  can_recharge_shield = yes 
+  power = -650
+  cost = 650
+  size_restriction = { adv_cruiser }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_DEFENSE_7_SHIELD_B_BS"
+  ship_modifier = {     }
+  modifier = { ship_shield_hp_add = 10800 ship_shield_regen_add = 75   }
+  ai_weight = { weight = 600 }
+  prerequisites = { "tech_physics_unimatrix_106" }
+  component_set = "required_defense"
+}
+# Unimatrix Regenerative Mk. V Shields (Heavy Escort)
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_6_SHIELD_B_HE"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Shield_B_6"
+  icon_frame = 1
+  can_recharge_shield = yes 
+  power = -390
+  cost = 310
+  size_restriction = { strike }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_DEFENSE_7_SHIELD_B_HE"
+  ship_modifier = {     }
+  modifier = { ship_shield_hp_add = 6500 ship_shield_regen_add = 45   }
+  ai_weight = { weight = 600 }
+  prerequisites = { "tech_physics_unimatrix_106" }
+  component_set = "required_defense"
+}
+# Unimatrix Regenerative Mk. V Shields (Assault Cruiser)
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_6_SHIELD_B_AC"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Shield_B_6"
+  icon_frame = 1
+  can_recharge_shield = yes 
+  power = -585
+  cost = 585
+  size_restriction = { assault_cruiser }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_DEFENSE_7_SHIELD_B_AC"
+  ship_modifier = {     }
+  modifier = { ship_shield_hp_add = 9700 ship_shield_regen_add = 67.5   }
+  ai_weight = { weight = 600 }
+  prerequisites = { "tech_physics_unimatrix_106" }
+  component_set = "required_defense"
+}
+# Unimatrix Regenerative Mk. V Shields (Dreadnaught)
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_6_SHIELD_B_SB"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Shield_B_6"
+  icon_frame = 1
+  can_recharge_shield = yes 
+  power = -1300
+  cost = 1300
+  size_restriction = { super_battleship borg_cube borg_tactical }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_DEFENSE_7_SHIELD_B_SB"
+  ship_modifier = {     }
+  modifier = { ship_shield_hp_add = 21600 ship_shield_regen_add = 150   }
+  ai_weight = { weight = 600 }
+  prerequisites = { "tech_physics_unimatrix_106" }
+  component_set = "required_defense"
+}
+# Unimatrix Regenerative Mk. V Shields ()
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_6_SHIELD_B_SC"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Shield_B_6"
+  icon_frame = 1
+  can_recharge_shield = yes 
+  power = -2310
+  cost = 2310
+  size_restriction = { super_cube }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_DEFENSE_7_SHIELD_B_SC"
+  ship_modifier = {     }
+  modifier = { ship_shield_hp_add = 38300 ship_shield_regen_add = 266.3   }
+  ai_weight = { weight = 600 }
+  prerequisites = { "tech_physics_unimatrix_106" }
+  component_set = "required_defense"
+}
+# Unimatrix Regenerative Mk. V Shields (Civilian Ships)
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_6_SHIELD_B_CS"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Shield_B_6"
+  icon_frame = 1
+  can_recharge_shield = yes 
+  power = -35
+  cost = 20
+  class_restriction = { shipclass_constructor shipclass_colonizer shipclass_science_ship shipclass_transport }
+  upgrades_to = "REQUIRED_DEFENSE_7_SHIELD_B_CS"
+  ship_modifier = {     }
+  modifier = { ship_shield_hp_add = 540 ship_shield_regen_add = 3.8   }
+  ai_weight = { weight = 600 }
+  prerequisites = { "tech_physics_unimatrix_106" }
+  component_set = "required_defense"
+}
+# Unimatrix Regenerative Mk. V Shields (Light Military Stations)
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_6_SHIELD_B_DS"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Shield_B_6"
+  icon_frame = 1
+  can_recharge_shield = yes 
+  power = -130
+  cost = 130
+  size_restriction = { military_station_small military_station_large station_listening borg_unimatrix_defense_small }
+  upgrades_to = "REQUIRED_DEFENSE_7_SHIELD_B_DS"
+  ship_modifier = {     }
+  modifier = { ship_shield_hp_add = 2200 ship_shield_regen_add = 15   }
+  ai_weight = { weight = 600 }
+  prerequisites = { "tech_physics_unimatrix_106" }
+  component_set = "required_defense"
+}
+# Unimatrix Regenerative Mk. V Shields (Heavy Weapon Platform)
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_6_SHIELD_B_WP"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Shield_B_6"
+  icon_frame = 1
+  can_recharge_shield = yes 
+  power = -780
+  cost = 780
+  size_restriction = { military_station_medium }
+  upgrades_to = "REQUIRED_DEFENSE_7_SHIELD_B_WP"
+  ship_modifier = {     }
+  modifier = { ship_shield_hp_add = 13000 ship_shield_regen_add = 90   }
+  ai_weight = { weight = 600 }
+  prerequisites = { "tech_physics_unimatrix_106" }
+  component_set = "required_defense"
+}
+
+# Temporal Shields (Patrol Frigate)
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_7_SHIELD_B_PF"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Shield_B_7"
+  can_recharge_shield = yes 
+  icon_frame = 1
+  power = -75
+  cost = 70
+  size_restriction = { corvette }
+  class_restriction = { shipclass_military }
+  
+  ship_modifier = {     }
+  modifier = { ship_shield_hp_add = 1200 ship_shield_regen_add = 8.8   }
+  ai_weight = { weight = 800 }
+  prerequisites = { "tech_physics_temporal_63" }
+  component_set = "required_defense"
+}
+# Temporal Shields (Destroyer)
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_7_SHIELD_B_DE"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Shield_B_7"
+  icon_frame = 1
+  can_recharge_shield = yes 
+  power = -150
+  cost = 155
+  size_restriction = { saber }
+  class_restriction = { shipclass_military }
+  
+  ship_modifier = {     }
+  modifier = { ship_shield_hp_add = 2400 ship_shield_regen_add = 17.5   }
+  ai_weight = { weight = 800 }
+  prerequisites = { "tech_physics_temporal_63" }
+  component_set = "required_defense"
+}
+# Temporal Shields (Cruiser)
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_7_SHIELD_B_CR"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Shield_B_7"
+  icon_frame = 1
+  can_recharge_shield = yes 
+  power = -525
+  cost = 685
+  size_restriction = { sovereign borg_sphere }
+  class_restriction = { shipclass_military }
+  
+  ship_modifier = {     }
+  modifier = { ship_shield_hp_add = 8500 ship_shield_regen_add = 61.3   }
+  ai_weight = { weight = 800 }
+  prerequisites = { "tech_physics_temporal_63" }
+  component_set = "required_defense"
+}
+# Temporal Shields (Battlecruiser)
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_7_SHIELD_B_BC"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Shield_B_7"
+  icon_frame = 1
+  can_recharge_shield = yes 
+  power = -300
+  cost = 310
+  size_restriction = { steamrunner borg_diamond }
+  class_restriction = { shipclass_military }
+  
+  ship_modifier = {     }
+  modifier = { ship_shield_hp_add = 4900 ship_shield_regen_add = 35   }
+  ai_weight = { weight = 800 }
+  prerequisites = { "tech_physics_temporal_63" }
+  component_set = "required_defense"
+}
+# Temporal Shields (Battleship)
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_7_SHIELD_B_BS"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Shield_B_7"
+  icon_frame = 1
+  can_recharge_shield = yes 
+  power = -750
+  cost = 975
+  size_restriction = { adv_cruiser }
+  class_restriction = { shipclass_military }
+  
+  ship_modifier = {     }
+  modifier = { ship_shield_hp_add = 12200 ship_shield_regen_add = 87.5   }
+  ai_weight = { weight = 800 }
+  prerequisites = { "tech_physics_temporal_63" }
+  component_set = "required_defense"
+}
+# Temporal Shields (Heavy Escort)
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_7_SHIELD_B_HE"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Shield_B_7"
+  icon_frame = 1
+  can_recharge_shield = yes 
+  power = -450
+  cost = 470
+  size_restriction = { strike }
+  class_restriction = { shipclass_military }
+  
+  ship_modifier = {     }
+  modifier = { ship_shield_hp_add = 7300 ship_shield_regen_add = 52.5   }
+  ai_weight = { weight = 800 }
+  prerequisites = { "tech_physics_temporal_63" }
+  component_set = "required_defense"
+}
+# Temporal Shields (Assault Cruiser)
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_7_SHIELD_B_AC"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Shield_B_7"
+  icon_frame = 1
+  can_recharge_shield = yes 
+  power = -675
+  cost = 880
+  size_restriction = { assault_cruiser }
+  class_restriction = { shipclass_military }
+  
+  ship_modifier = {     }
+  modifier = { ship_shield_hp_add = 10900 ship_shield_regen_add = 78.8   }
+  ai_weight = { weight = 800 }
+  prerequisites = { "tech_physics_temporal_63" }
+  component_set = "required_defense"
+}
+# Temporal Shields (Dreadnaught)
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_7_SHIELD_B_SB"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Shield_B_7"
+  icon_frame = 1
+  can_recharge_shield = yes 
+  power = -1500
+  cost = 1950
+  size_restriction = { super_battleship borg_cube borg_tactical }
+  class_restriction = { shipclass_military }
+  
+  ship_modifier = {     }
+  modifier = { ship_shield_hp_add = 24300 ship_shield_regen_add = 175   }
+  ai_weight = { weight = 800 }
+  prerequisites = { "tech_physics_temporal_63" }
+  component_set = "required_defense"
+}
+# Temporal Shields ()
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_7_SHIELD_B_SC"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Shield_B_7"
+  icon_frame = 1
+  can_recharge_shield = yes 
+  power = -2665
+  cost = 3465
+  size_restriction = { super_cube }
+  class_restriction = { shipclass_military }
+  
+  ship_modifier = {     }
+  modifier = { ship_shield_hp_add = 43100 ship_shield_regen_add = 310.6   }
+  ai_weight = { weight = 800 }
+  prerequisites = { "tech_physics_temporal_63" }
+  component_set = "required_defense"
+}
+# Temporal Shields (Civilian Ships)
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_7_SHIELD_B_CS"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Shield_B_7"
+  icon_frame = 1
+  can_recharge_shield = yes 
+  power = -40
+  cost = 25
+  class_restriction = { shipclass_constructor shipclass_colonizer shipclass_science_ship shipclass_transport }
+  
+  ship_modifier = {     }
+  modifier = { ship_shield_hp_add = 610 ship_shield_regen_add = 4.4   }
+  ai_weight = { weight = 800 }
+  prerequisites = { "tech_physics_temporal_63" }
+  component_set = "required_defense"
+}
+# Temporal Shields (Light Military Stations)
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_7_SHIELD_B_DS"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Shield_B_7"
+  icon_frame = 1
+  can_recharge_shield = yes 
+  power = -150
+  cost = 195
+  size_restriction = { military_station_small military_station_large station_listening borg_unimatrix_defense_small }
+  
+  ship_modifier = {     }
+  modifier = { ship_shield_hp_add = 2400 ship_shield_regen_add = 17.5   }
+  ai_weight = { weight = 800 }
+  prerequisites = { "tech_physics_temporal_63" }
+  component_set = "required_defense"
+}
+# Temporal Shields (Heavy Weapon Platform)
+utility_component_template = {
+  key = "REQUIRED_DEFENSE_7_SHIELD_B_WP"
+  size = small
+  icon = "GFX_ship_part_Required_Defense_Shield_B_7"
+  icon_frame = 1
+  can_recharge_shield = yes 
+  power = -900
+  cost = 1170
+  size_restriction = { military_station_medium }
+  
+  ship_modifier = {     }
+  modifier = { ship_shield_hp_add = 14600 ship_shield_regen_add = 105   }
+  ai_weight = { weight = 800 }
+  prerequisites = { "tech_physics_temporal_63" }
+  component_set = "required_defense"
+}
+
+  

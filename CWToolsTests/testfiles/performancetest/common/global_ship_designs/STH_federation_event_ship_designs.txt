@@ -1,0 +1,81 @@
+# USS Grissom
+ship_design = {
+	name = "USS_Grissom"
+	ship_size = science
+	section = {
+		template = "DEFAULT_SCIENCESHIP_SECTION"
+		slot = "mid"
+	}
+	required_component = "REQUIRED_WARP_3_EXPLORATION_CS"
+}
+
+ship_design = {
+	name = "USS_Buran"
+	ship_size = corvette
+	section = {
+		template = "saber_stern_1"
+		slot = "stern"
+	}
+	section = {
+		template = "saber_mid_18"
+		slot = "mid"
+	}
+	required_component="REQUIRED_WARP_3_COMBAT_PF"
+	required_component="REQUIRED_COMPUTER_3_PF"
+	required_component="REQUIRED_THRUSTERS_2A_PF"
+	required_component="Required_Combat_Sensor_brawler_1"
+	required_component="REQUIRED_DEFENSE_1_SHIELD_PF"
+	required_component="REQUIRED_HULL_2A_PF"
+}
+
+# Generic Saber
+ship_design = {
+	name = "Ushaan"
+	ship_size = saber
+	section = {
+		template = "saber_stern_1"
+		slot = "stern"
+		component = { slot = "SMALL_GUN_01" template = "SMALL_COHERENT_PHASER_1" }
+		component = { slot = "SMALL_GUN_02" template = "SMALL_COHERENT_PHASER_1" }
+		component = { slot = "SMALL_GUN_03" template = "SMALL_COHERENT_PHASER_1" }
+		component = { slot = "SMALL_GUN_1" template = "POINT_DEFENCE_PHOTON_TORPEDO_2" }
+		component = { slot = "SMALL_GUN_2" template = "POINT_DEFENCE_PHOTON_TORPEDO_2" }
+	}
+	section = {
+		template = "saber_mid_18"
+		slot = "mid"
+		component = { slot = "SMALL_UTILITY_1" template = "UTILITY_SMALL_ARMOR_0" }
+		component = { slot = "AUX_UTILITY_1" template = "UTILITY_AUX_CREW_0" }
+		component = { slot = "LARGE_UTILITY_1" template = "UTILITY_LARGE_TRACKING_0" }
+	}
+	required_component="REQUIRED_WARP_3_COMBAT_DE"
+	required_component="REQUIRED_COMPUTER_3_DE"
+	required_component="REQUIRED_THRUSTERS_2A_DE"
+	required_component="Required_Combat_Sensor_picket_2"
+	required_component="REQUIRED_DEFENSE_1_SHIELD_DE"
+	required_component="REQUIRED_HULL_2A_DE"
+}
+
+
+# Terra Prime Patrol Frigate
+ship_design = {
+	name = "Terra Prime Patrol Frigate"
+	ship_size = corvette
+	section = {
+		template = "corvette_stern_beam"
+		slot = "stern"
+		component = { slot = "SMALL_GUN_01" template = "SMALL_BASIC_PHASER_1" }
+		component = { slot = "SMALL_GUN_02" template = "SMALL_BASIC_PHASER_1" }
+		component = { slot = "SMALL_GUN_1" template = "POINT_DEFENCE_SPATIAL_TORPEDO_1" }
+	}
+	section = {
+		template = "corvette_mid_17"
+		slot = "mid"
+	}	
+	required_component="REQUIRED_WARP_1_PF"
+	required_component="REQUIRED_COMPUTER_1_PF"
+	required_component="REQUIRED_THRUSTERS_1A_PF"
+	required_component="Required_Combat_Sensor_brawler_1"
+	required_component="REQUIRED_DEFENSE_1_ARMOR_PF"
+	required_component="REQUIRED_HULL_1A_PF"
+}

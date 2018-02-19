@@ -1,0 +1,56 @@
+namespace = test_events
+
+fleet_event =
+{
+    is_triggered_only = yes
+    trigger =
+    {
+        has_fleet_order = yes
+        OWNER = {
+            #error
+            has_fleet_order = yes
+            PREV = {
+                has_fleet_order = yes
+            }
+            OWNER = {
+                #error
+                has_fleet_order = yes
+                PREVPREV = {
+                    has_fleet_order = yes
+                }
+                PREV.PREV = {
+                    has_fleet_order = yes
+                }
+                PREV = {
+                    #error
+                    has_fleet_order = yes
+                }
+            }
+        }
+    }
+
+    immediate = {
+        set_fleet_stance = aggressive
+        OWNER = {
+            #error
+            set_fleet_stance = aggressive
+            PREV = {
+                set_fleet_stance = aggressive
+            }
+            OWNER ={
+                #error
+                set_fleet_stance = aggressive
+                PREVPREV ={
+                    set_fleet_stance = aggressive
+                }
+                PREV.PREV = {
+                    set_fleet_stance = aggressive
+                }
+                PREV  = {
+                    #error
+                    set_fleet_stance = aggressive
+                }
+            }
+        }
+    }
+}

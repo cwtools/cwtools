@@ -1,0 +1,97 @@
+# see README.txt for example
+
+STH_colony_scoop_0 = {
+	entity = "planet_scoop_entity"
+	construction_entity = "planet_scoop_entity"
+	place_entity_on_planet_plane = yes
+	entity_offset = { x = 0 y = 0 }
+	build_time = 360
+	build_cost = {
+		energy = 750
+		influence = 50
+	}
+
+	potential = {
+		is_borg_empire = yes
+		is_assimilator = yes
+		has_swapped_tradition = tr_productivity_adopt
+	}
+
+	possible = {
+	}
+
+	placement_rules = {
+		planet_possible = {
+			custom_tooltip_fail = {
+				text = "requires_colony"
+				has_owner = yes
+			}
+			# custom_tooltip_fail = {
+				# text = "requires_planet"
+				# is_artificial_planet = no
+			# }
+			custom_tooltip_fail = {
+				text = "requires_no_spaceport"
+				has_spaceport = no
+			}
+			custom_tooltip_fail = {
+				text = "requires_nonassimilated_or_underpopped"
+				OR = {
+					AND = {
+						num_pops < 2
+						is_planet_class = pc_assimilated
+					}
+					AND = {
+						NOR = { 
+							is_planet_class = pc_unimatrix
+							is_planet_class = pc_assimilated 
+						}
+					}
+				}
+			}
+		}
+	}
+	
+	ai_weight = {
+		factor = 1	
+		modifier = {
+			factor = 0
+			has_any_megastructure_in_empire = yes
+		}
+	}
+	
+	on_build_start = {
+		if = {
+			limit = { exists = space_owner }
+			space_owner = {
+				if = {
+					limit = { NOT = { is_same_value = FROM } }
+					country_event = { id = STH_borg.1051 days = 1 random = 7 scopes = { from = root fromfrom = from } }
+				}
+			}
+		}
+	}
+	on_build_cancel = {}
+	
+	on_build_complete = {
+		fromfrom.planet = {		
+			if = {
+				limit = { has_owner = yes }
+				owner = {
+					if = {
+						limit = { NOT = { is_same_value = FROM } }
+						country_event = { id = STH_borg.1052 days = 0 scopes = { from = fromfrom.planet fromfrom = from } }
+					}
+				}
+			}
+		}
+		
+		from = {
+			country_event = {
+				id = STH_borg.1050
+				scopes = { from = fromfrom.planet }
+			}
+		}
+		remove_megastructure = fromfrom
+	}
+  }

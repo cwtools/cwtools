@@ -1,0 +1,120 @@
+############################
+# STA CATEGORIES 
+# Author: Doot Doot
+############################
+# potential = planet scope
+# on_success = ship scope
+# on_fail = ship scope
+# on_critical_fail = ship scope
+# level = level of discovery that is checked against scientist level
+# #risk = risk of researching the discovery (defaults to NDefines::NGameplay:anomaly_RISK_DEFAULT)
+
+# For on_success, on_fail, on_critical_fail
+# FROM = planet scope
+# ROOT = ship scope
+# Ex. on_fail, ship_event would have the planet in From.From
+
+anomaly_category = {
+	key = "STA_secondChance_category"
+	desc = "STA_secondChance_category_desc"
+	picture = GFX_evt_society_research
+	level = 1
+	#risk = 0
+	
+	spawn_chance = {
+		modifier = { 
+			add = 3
+			is_star = no
+			is_asteroid = no
+			
+			from = {
+				owner = {
+					NOT = { has_country_flag = STA_secondChance_flag }
+				}
+			}
+			from = { owner = { is_borg_empire = no } }
+		}
+	}
+	on_spawn = {
+		from = {
+			owner = { set_country_flag = STA_secondChance_flag }			
+		}
+	}
+	on_success = {
+	}
+	on_fail = {
+	}
+	on_critical_fail = {
+	}
+}
+
+
+anomaly_category = {
+	key = "STA_innerLight_category"
+	desc = "STA_innerLight_category_desc"
+	picture = GFX_evt_space_station
+	level = 2
+	#risk = 0
+	
+	spawn_chance = {
+		modifier = { 
+			add = 3
+			is_asteroid = no
+			is_star = no
+			from = {
+				owner = {
+					NOT = { has_country_flag = STA_innerLight_flag }
+				}
+			}
+			from = { owner = { is_borg_empire = no } }
+		}
+	}
+	on_spawn = {
+		from = {
+			owner = { set_country_flag = STA_innerLight_flag }			
+		}
+	}
+	on_success = {
+	}
+	on_fail = {
+	}
+	on_critical_fail = {
+	}
+}
+
+anomaly_category = {
+	key = "STA_silence_category"
+	desc = "STA_silence_category_desc"
+	picture = sth_GFX_evt_blackHole
+	level = 3
+	#risk = 0
+	
+	spawn_chance = {
+		modifier = { #only appears on black holes, once
+			add = 50
+			is_star_class = sc_black_hole			
+			
+			from = {
+				owner = {
+					NOT = {
+						has_country_flag = STA_silence_flag
+					}
+				}
+			}
+			from = { owner = { is_borg_empire = no } }
+		}
+	}
+	
+	on_spawn = {
+		from = {
+			owner = { set_country_flag = STA_silence_flag }			
+		}
+	}
+	on_success = {
+		
+	}
+	on_fail = {
+	}
+	on_critical_fail = {
+	}
+}

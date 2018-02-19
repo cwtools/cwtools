@@ -1,0 +1,3058 @@
+#########################################################################
+# OPINION MODIFIERS
+# STNH - Capek 1.8.0 Compat
+##########################################################################
+
+##########################################################################
+# HARD FIXED STATE - DO NOT REMOVE OR RENAME ANY OF THESE
+##########################################################################
+
+opinion_cheat = {
+	opinion = {
+		base = 1
+	}
+}
+
+##########################################################################
+# HARD TIMED - DO NOT REMOVE OR RENAME ANY OF THESE
+##########################################################################
+
+# Enemy opinion
+opinion_in_war = {
+	opinion = {
+		base = -50
+	}
+}
+
+# Ally opinion
+opinion_alliance = {
+	opinion = {
+		base = 25
+	}
+}
+
+# Defensive pact opinion
+opinion_defensive_pact = {
+	opinion = {
+		base = 20
+	}
+}
+
+# Federation associate opinion
+opinion_federation_associate = {
+	opinion = {
+		base = 10
+	}
+}
+
+# Federation member opinion
+opinion_federation = {
+	opinion = {
+		base = 50
+	}
+}
+
+# Guarantees our independence
+opinion_guarantees_independence = {
+	opinion = {
+		base = 10	
+	}
+}
+
+# Has closed borders to us
+opinion_closed_borders = {
+	opinion = {
+		base = -20
+	}
+}
+
+# subject opinion of other subject under same overlord
+opinion_subject = {
+	opinion = {
+		base = 50
+	}
+}
+
+# subject opinion of overlord
+opinion_is_subject = {
+	opinion = {
+		base = 25
+	}
+}
+
+# Repugnant
+opinion_repugnant_species = {
+	opinion = {
+		base = 0
+		modifier = {
+			add = -25
+			FROM = {
+				OR = {
+					is_country_type = default
+					is_country_type = fallen_empire
+					is_country_type = awakened_fallen_empire
+				}
+				exists = ruler
+				ruler = {
+					species = {
+						has_trait = "trait_repugnant"
+					}
+					NOT = { is_same_species = root }
+				}	
+			}
+			OR = {
+				is_country_type = default
+				is_country_type = fallen_empire
+				is_country_type = awakened_fallen_empire
+			}
+			NOT = {
+				AND = {
+					exists = ruler
+					ruler = {
+						species = {
+							has_trait = "trait_repugnant"
+						}
+						NOT = { is_same_species = root }
+					}
+				}
+			}
+		}
+		modifier = {
+			add = -10
+			FROM = {
+				OR = {
+					is_country_type = default
+					is_country_type = fallen_empire
+					is_country_type = awakened_fallen_empire
+				}
+				exists = ruler
+				ruler = {
+					species = {
+						has_trait = "trait_repugnant"
+					}
+					NOT = { is_same_species = root }
+				}	
+			}
+			OR = {
+				is_country_type = default
+				is_country_type = fallen_empire
+				is_country_type = awakened_fallen_empire
+			}
+			exists = ruler		
+			ruler = {
+				species = {
+					has_trait = "trait_repugnant"
+				}
+				NOT = { is_same_species = root }
+			}				
+		}
+	}
+}
+
+
+ 
+# Charismatic
+opinion_charismatic_species = {
+	opinion = {
+		base = 0
+		modifier = {
+			add = 25
+			FROM = {
+				exists = ruler
+				ruler = {
+					species = {
+						OR = {
+							has_trait = "trait_charismatic"
+						}
+					}
+				}			
+			}
+		}		
+	}
+}
+
+# Opinions of Interference Policy
+opinion_policy_interference = {
+	opinion = {
+		base = 0
+		modifier = {
+			add = -5
+			has_ethic = "ethic_xenophobe"
+			FROM = {
+				has_policy_flag = interference_passive
+			}
+		}
+
+		modifier = {
+			add = -10
+			has_ethic = "ethic_fanatic_xenophobe"
+			FROM = {
+				has_policy_flag = interference_passive
+			}
+		}
+
+		modifier = {
+			add = 10
+			has_policy_flag = interference_passive
+			FROM = {
+				has_policy_flag = interference_passive
+			}
+		}
+	}
+}
+
+# Opinions of Slavery Policy
+opinion_policy_slavery = {
+	opinion = {
+		base = 0
+		modifier = {
+			add = -10
+			has_ethic = "ethic_egalitarian"
+			allows_slavery = no
+			
+			FROM = {
+				NOT = { has_ethic = ethic_gestalt_consciousness }
+				allows_slavery = yes
+			}
+		}
+
+		modifier = {
+			add = -20
+			has_ethic = "ethic_fanatic_egalitarian"
+			allows_slavery = no
+			
+			FROM = {
+				NOT = { has_ethic = ethic_gestalt_consciousness }
+				allows_slavery = yes
+			}
+		}
+
+		modifier = {
+			add = -10
+			has_ethic = "ethic_xenophile"
+			allows_slavery = no
+
+			FROM = {
+				NOT = { has_ethic = ethic_gestalt_consciousness }
+				allows_slavery = yes
+			}
+		}
+
+		modifier = {
+			add = -20
+			has_ethic = "ethic_fanatic_xenophile"
+			allows_slavery = no
+
+			FROM = {
+				NOT = { has_ethic = ethic_gestalt_consciousness }
+				allows_slavery = yes
+			}
+		}		
+	}
+}
+
+# Opinions of Orbital Bombardment Policy
+opinion_policy_orbital_bombardment = {
+	opinion = {
+		base = 0
+		modifier = {
+			add = -5
+			has_ethic = "ethic_pacifist"
+
+			FROM = {
+				has_policy_flag = allow_orbital_bombardment_limited
+			}
+		}
+
+		modifier = {
+			add = -10
+
+			has_ethic = "ethic_fanatic_pacifist"
+
+			FROM = {
+				has_policy_flag = allow_orbital_bombardment_limited
+			}
+		}
+
+		modifier = {
+			add = -10
+			has_ethic = "ethic_pacifist"
+
+			FROM = {
+				has_policy_flag = allow_orbital_bombardment_full
+			}
+		}
+
+		modifier = {
+			add = -20
+
+			has_ethic = "ethic_fanatic_pacifist"
+
+			FROM = {
+				has_policy_flag = allow_orbital_bombardment_full
+			}
+		}
+
+		modifier = {
+			add = -15
+			has_ethic = "ethic_pacifist"
+
+			FROM = {
+				has_policy_flag = allow_orbital_bombardment_armageddon
+			}
+		}
+
+		modifier = {
+			add = -30
+			has_ethic = "ethic_fanatic_pacifist"
+
+			FROM = {
+				has_policy_flag = allow_orbital_bombardment_armageddon
+			}
+		}
+	}
+}
+
+# We had a small conflict with this empire us before first contact was established (event action.7)
+opinion_first_contact_hostility = {
+	opinion = {
+		base = -25
+	}
+}
+
+# We had a large conflict with this empire us before first contact was established (event action.7)
+opinion_first_contact_war = {
+	opinion = {
+		base = -75
+	}
+}
+
+# Xenophobes are a bit less popular with everyone else
+opinion_xenophobes = {
+	opinion = {
+		base = 0
+		
+		modifier = {
+			add = -20
+			OR = {
+				has_ethic = "ethic_xenophile"
+				has_ethic = "ethic_fanatic_xenophile"
+			}
+			FROM = { has_ethic = "ethic_xenophobe" }
+			NOT = { is_same_species_class = FROM }
+		}
+		modifier = {
+			add = -10
+			OR = {
+				has_ethic = "ethic_xenophile"
+				has_ethic = "ethic_fanatic_xenophile"
+			}
+			FROM = { has_ethic = "ethic_xenophobe" }
+			is_same_species_class = FROM
+			NOT = { is_same_species = FROM }
+			NOT = { is_subspecies = FROM }
+		}		
+		
+		modifier = {
+			add = -20
+			NOT = { has_ethic = "ethic_fanatic_xenophobe" }
+			NOT = { has_ethic = "ethic_xenophobe" }
+			NOT = { has_civic = civic_machine_terminator }
+			FROM = { has_ethic = "ethic_xenophobe" }
+			NOT = { is_same_species_class = FROM }
+		}
+		modifier = {
+			add = -10
+			NOT = { has_ethic = "ethic_fanatic_xenophobe" }
+			NOT = { has_ethic = "ethic_xenophobe" }
+			NOT = { has_civic = civic_machine_terminator }
+			FROM = { has_ethic = "ethic_xenophobe" }
+			is_same_species_class = FROM
+			NOT = { is_same_species = FROM }
+			NOT = { is_subspecies = FROM }
+		}
+		
+		modifier = {
+			add = -40
+			OR = {
+				has_ethic = "ethic_xenophile"
+				has_ethic = "ethic_fanatic_xenophile"
+			}
+			FROM = { has_ethic = "ethic_fanatic_xenophobe" }
+			NOT = { is_same_species_class = FROM }
+		}
+		modifier = {
+			add = -20
+			OR = {
+				has_ethic = "ethic_xenophile"
+				has_ethic = "ethic_fanatic_xenophile"
+			}
+			FROM = { has_ethic = "ethic_fanatic_xenophobe" }
+			is_same_species_class = FROM
+			NOT = { is_same_species = FROM }
+			NOT = { is_subspecies = FROM }
+		}			
+		
+		modifier = {
+			add = -40
+			NOT = { has_ethic = "ethic_fanatic_xenophobe" }
+			NOT = { has_ethic = "ethic_xenophobe" }
+			NOT = { has_civic = civic_machine_terminator }
+			FROM = { has_ethic = "ethic_fanatic_xenophobe" }
+			NOT = { is_same_species_class = FROM }
+		}
+		modifier = {
+			add = -20
+			NOT = { has_ethic = "ethic_fanatic_xenophobe" }
+			NOT = { has_ethic = "ethic_xenophobe" }
+			NOT = { has_civic = civic_machine_terminator }
+			FROM = { has_ethic = "ethic_fanatic_xenophobe" }
+			is_same_species_class = FROM
+			NOT = { is_same_species = FROM }
+			NOT = { is_subspecies = FROM }
+		}
+	}
+}
+
+# Xenophiles are a bit more popular with everyone else
+opinion_xenophiles = {
+	opinion = {
+		base = 0
+		
+		modifier = {
+			add = 10
+			NOT = {
+				has_ethic = "ethic_xenophile"
+				has_ethic = "ethic_fanatic_xenophile"
+				has_ethic = "ethic_xenophobe"
+				has_ethic = "ethic_fanatic_xenophobe"
+			}
+			FROM = { has_ethic = "ethic_xenophile" }
+			NOT = { is_same_species_class = FROM }
+		}
+		
+		modifier = {
+			add = 20
+			NOT = {
+				has_ethic = "ethic_xenophile"
+				has_ethic = "ethic_fanatic_xenophile"
+				has_ethic = "ethic_xenophobe"
+				has_ethic = "ethic_fanatic_xenophobe"
+			}
+			FROM = { has_ethic = "ethic_fanatic_xenophile" }
+			NOT = { is_same_species_class = FROM }
+		}
+		
+		modifier = {
+			add = 10
+			has_ethic = "ethic_xenophile"
+			FROM = {
+				OR = {
+					has_ethic = "ethic_xenophile"
+					has_ethic = "ethic_fanatic_xenophile"
+				}
+			}
+		}
+		modifier = {
+			add = 10
+			has_ethic = "ethic_fanatic_xenophile"
+			FROM = { has_ethic = "ethic_xenophile" }
+		}
+		modifier = {
+			add = 20
+			has_ethic = "ethic_fanatic_xenophile"
+			FROM = { has_ethic = "ethic_fanatic_xenophile" }
+		}
+	}
+}
+
+# Xenophobia
+opinion_xenophobia = {
+	opinion = {
+		base = 0
+		
+		modifier = {
+			add = -40
+			NOT = { has_valid_civic = civic_fanatic_purifiers } #handled elsewhere
+			has_ethic = "ethic_xenophobe"
+			NOT = { is_same_species_class = FROM }
+		}
+		modifier = {
+			add = -20
+			NOT = { has_valid_civic = civic_fanatic_purifiers } #handled elsewhere
+			has_ethic = "ethic_xenophobe"
+			is_same_species_class = FROM
+			NOT = { is_same_species = FROM }
+			NOT = { is_subspecies = FROM }
+		}
+		modifier = {
+			add = -10
+			NOT = { has_valid_civic = civic_fanatic_purifiers } #handled elsewhere
+			has_ethic = "ethic_xenophobe"
+			is_same_species_class = FROM
+			NOT = { is_same_species = FROM }
+			is_subspecies = FROM
+		}
+		
+		modifier = {
+			add = -80
+			NOT = { has_valid_civic = civic_fanatic_purifiers } #handled elsewhere
+			has_ethic = "ethic_fanatic_xenophobe"
+			NOT = { is_same_species_class = FROM }
+		}
+		modifier = {
+			add = -40
+			NOT = { has_valid_civic = civic_fanatic_purifiers } #handled elsewhere
+			has_ethic = "ethic_fanatic_xenophobe"
+			is_same_species_class = FROM
+			NOT = { is_same_species = FROM }
+			NOT = { is_subspecies = FROM }
+		}
+		modifier = {
+			add = -20
+			NOT = { has_valid_civic = civic_fanatic_purifiers } #handled elsewhere
+			has_ethic = "ethic_fanatic_xenophobe"
+			is_same_species_class = FROM
+			NOT = { is_same_species = FROM }
+			is_subspecies = FROM
+		}
+	}
+}
+
+# Xenophilia
+opinion_xenophilia = {
+	opinion = {
+		base = 0
+		modifier = {
+			add = 20
+			has_ethic = "ethic_xenophile"
+			NOT = { is_same_species_class = FROM }
+			FROM = { 
+				NOT = { 
+					has_civic = civic_machine_terminator
+					has_civic = civic_fanatic_purifiers
+				} 
+			}
+		}
+		modifier = {
+			add = 10
+			has_ethic = "ethic_xenophile"
+			is_same_species_class = FROM
+			NOT = { is_same_species = FROM }
+			NOT = { is_subspecies = FROM }
+			FROM = { 
+				NOT = { 
+					has_civic = civic_machine_terminator
+					has_civic = civic_fanatic_purifiers
+				} 
+			}
+		}
+		modifier = {
+			add = 5
+			has_ethic = "ethic_xenophile"
+			is_same_species_class = FROM
+			NOT = { is_same_species = FROM }
+			is_subspecies = FROM
+			FROM = { 
+				NOT = { 
+					has_civic = civic_machine_terminator
+					has_civic = civic_fanatic_purifiers
+				} 
+			}
+		}
+		
+		modifier = {
+			add = 40
+			has_ethic = "ethic_fanatic_xenophile"
+			NOT = { is_same_species_class = FROM }
+			FROM = { 
+				NOT = { 
+					has_civic = civic_machine_terminator
+					has_civic = civic_fanatic_purifiers
+				} 
+			}
+		}
+		modifier = {
+			add = 20
+			has_ethic = "ethic_fanatic_xenophile"
+			is_same_species_class = FROM
+			NOT = { is_same_species = FROM }
+			NOT = { is_subspecies = FROM }
+			FROM = { 
+				NOT = { 
+					has_civic = civic_machine_terminator
+					has_civic = civic_fanatic_purifiers
+				} 
+			}
+		}
+		modifier = {
+			add = 10
+			has_ethic = "ethic_fanatic_xenophile"
+			is_same_species_class = FROM
+			NOT = { is_same_species = FROM }
+			is_subspecies = FROM
+			FROM = { 
+				NOT = { 
+					has_civic = civic_machine_terminator
+					has_civic = civic_fanatic_purifiers
+				} 
+			}
+		}
+	}
+}
+
+# Bad Opinion of Ethic: Materialist
+opinion_of_materialist = {
+	opinion = {
+		base = 0
+		
+		modifier = {
+			add = -10
+			has_ethic = "ethic_spiritualist"
+			FROM = { has_ethic = "ethic_materialist" }
+		}
+		modifier = {
+			add = -20
+			has_ethic = "ethic_spiritualist"
+			FROM = { has_ethic = "ethic_fanatic_materialist" }
+		}
+		modifier = {
+			add = -20
+			has_ethic = "ethic_fanatic_spiritualist"
+			FROM = { has_ethic = "ethic_materialist" }
+		}
+		modifier = {
+			add = -40
+			has_ethic = "ethic_fanatic_spiritualist"
+			FROM = { has_ethic = "ethic_fanatic_materialist" }
+		}	
+	}
+}
+
+# Good Opinion of Ethic: Materialist
+opinion_of_materialist_pos = {
+	opinion = {
+		base = 0
+		
+		modifier = {
+			add = 25
+			has_ethic = "ethic_fanatic_materialist"
+			FROM = { has_ethic = "ethic_fanatic_materialist" }
+		}
+		modifier = {
+			add = 10
+			has_ethic = "ethic_fanatic_materialist"
+			FROM = { has_ethic = "ethic_materialist" }
+		}
+		modifier = {
+			add = 10
+			has_ethic = "ethic_materialist"
+			FROM = { has_ethic = "ethic_fanatic_materialist" }
+		}
+		modifier = {
+			add = 10
+			has_ethic = "ethic_materialist"
+			FROM = { has_ethic = "ethic_materialist" }
+		}
+	}
+}
+
+# Opinion of Ethic: Spiritualist
+opinion_of_spiritualist = {
+	opinion = {
+		base = 0
+		
+		modifier = {
+			add = -10
+			has_ethic = "ethic_materialist"
+			FROM = { has_ethic = "ethic_spiritualist" }
+		}
+		modifier = {
+			add = -20
+			has_ethic = "ethic_materialist"
+			FROM = { has_ethic = "ethic_fanatic_spiritualist" }
+		}
+		modifier = {
+			add = -20
+			has_ethic = "ethic_fanatic_materialist"
+			FROM = { has_ethic = "ethic_spiritualist" }
+		}
+		modifier = {
+			add = -40
+			has_ethic = "ethic_fanatic_materialist"
+			FROM = { has_ethic = "ethic_fanatic_spiritualist" }
+		}
+	}
+}
+
+# Good Opinion of Ethic: Spiritualist
+opinion_of_spiritualist_pos = {
+	opinion = {
+		base = 0
+		
+		modifier = {
+			add = 25
+			has_ethic = "ethic_fanatic_spiritualist"
+			FROM = { has_ethic = "ethic_fanatic_spiritualist" }
+		}
+		modifier = {
+			add = 10
+			has_ethic = "ethic_fanatic_spiritualist"
+			FROM = { has_ethic = "ethic_spiritualist" }
+		}
+		modifier = {
+			add = 10
+			has_ethic = "ethic_spiritualist"
+			FROM = { has_ethic = "ethic_fanatic_spiritualist" }
+		}
+		modifier = {
+			add = 10
+			has_ethic = "ethic_spiritualist"
+			FROM = { has_ethic = "ethic_spiritualist" }
+		}
+	}
+}
+
+# Opinion of Ethic: egalitarian
+opinion_of_egalitarian = {
+	opinion = {
+		base = 0
+		modifier = {
+			add = -10
+			has_ethic = "ethic_authoritarian"
+			FROM = { has_ethic = "ethic_egalitarian" }
+		}
+		modifier = {
+			add = -20
+			has_ethic = "ethic_authoritarian"
+			FROM = { has_ethic = "ethic_fanatic_egalitarian" }
+		}
+		modifier = {
+			add = -20
+			has_ethic = "ethic_fanatic_authoritarian"
+			FROM = { has_ethic = "ethic_egalitarian" }
+		}
+		modifier = {
+			add = -40
+			has_ethic = "ethic_fanatic_authoritarian"
+			FROM = { has_ethic = "ethic_fanatic_egalitarian" }
+		}		
+	}
+}
+
+# Good Opinion of Ethic: Egalitarian
+opinion_of_egalitarian_pos = {
+	opinion = {
+		base = 0
+		
+		modifier = {
+			add = 25
+			has_ethic = "ethic_fanatic_egalitarian"
+			FROM = { has_ethic = "ethic_fanatic_egalitarian" }
+		}
+		modifier = {
+			add = 10
+			has_ethic = "ethic_fanatic_egalitarian"
+			FROM = { has_ethic = "ethic_egalitarian" }
+		}
+		modifier = {
+			add = 10
+			has_ethic = "ethic_egalitarian"
+			FROM = { has_ethic = "ethic_fanatic_egalitarian" }
+		}
+		modifier = {
+			add = 10
+			has_ethic = "ethic_egalitarian"
+			FROM = { has_ethic = "ethic_egalitarian" }
+		}
+	}
+}
+
+# Good Opinion of Ethic: Pacifist
+opinion_of_pacifist_pos = {
+	opinion = {
+		base = 0
+		
+		modifier = {
+			add = 25
+			has_ethic = "ethic_fanatic_pacifist"
+			FROM = { has_ethic = "ethic_fanatic_pacifist" }
+		}
+		modifier = {
+			add = 10
+			has_ethic = "ethic_fanatic_pacifist"
+			FROM = { has_ethic = "ethic_pacifist" }
+		}
+		modifier = {
+			add = 10
+			has_ethic = "ethic_pacifist"
+			FROM = { has_ethic = "ethic_fanatic_pacifist" }
+		}
+		modifier = {
+			add = 10
+			has_ethic = "ethic_pacifist"
+			FROM = { has_ethic = "ethic_pacifist" }
+		}
+	}
+}
+
+# Opinion of Ethic: authoritarian
+opinion_of_authoritarian = {
+	opinion = {
+		base = 0
+		modifier = {
+			add = -10
+			has_ethic = "ethic_egalitarian"
+			FROM = { has_ethic = "ethic_authoritarian" }
+		}
+		modifier = {
+			add = -20
+			has_ethic = "ethic_egalitarian"
+			FROM = { has_ethic = "ethic_fanatic_authoritarian" }
+		}
+		modifier = {
+			add = -20
+			has_ethic = "ethic_fanatic_egalitarian"
+			FROM = { has_ethic = "ethic_authoritarian" }
+		}
+		modifier = {
+			add = -40
+			has_ethic = "ethic_fanatic_egalitarian"
+			FROM = { has_ethic = "ethic_fanatic_authoritarian" }
+		}		
+	}
+}
+
+##########################################################################
+# DECAYING
+##########################################################################
+
+# They declared war on us
+opinion_declared_war = {
+	opinion = {
+		base = -25
+	}
+
+	decay = {
+		base = 1
+	}
+}
+
+# It's people!
+opinion_xenophage = {
+	opinion = {
+		base = 0
+		modifier = {
+			add = -100
+			NOR = {
+				has_ethic = "ethic_xenophobe"
+				has_ethic = "ethic_fanatic_xenophobe"
+			}
+			OR = {
+				has_ethic = "ethic_egalitarian"
+				has_ethic = "ethic_fanatic_egalitarian"
+				has_ethic = "ethic_xenophile"
+				has_ethic = "ethic_fanatic_xenophile"
+			}		
+			NOT = { is_country_type = fallen_empire }
+		}
+		modifier = {
+			add = -100
+			OR = {
+				has_ethic = "ethic_xenophile"
+				has_ethic = "ethic_fanatic_xenophile"
+			}		
+			NOT = { is_country_type = fallen_empire }
+		}		
+		modifier = {
+			factor = 0
+			NOT = {
+				from = {
+					any_owned_pop_species = {
+						OR = {
+							AND = {
+								has_citizenship_type = { country = from type = citizenship_purge }
+								has_purge_type = { country = from type = purge_processing }					
+							}
+							AND = {
+								has_citizenship_type = { country = from type = citizenship_slavery }
+								has_slavery_type = { country = from type = slavery_livestock }					
+							}						
+						}				
+					}
+				}			
+			}
+		}
+	}
+}
+
+opinion_biophage = {
+	opinion = {
+		base = 0
+		modifier = {
+			add = -50
+			NOR = {
+				has_ethic = "ethic_xenophobe"
+				has_ethic = "ethic_fanatic_xenophobe"
+			}
+			OR = {
+				has_ethic = "ethic_egalitarian"
+				has_ethic = "ethic_fanatic_egalitarian"
+				has_ethic = "ethic_xenophile"
+				has_ethic = "ethic_fanatic_xenophile"
+			}		
+			NOT = { is_country_type = fallen_empire }
+		}
+		modifier = {
+			add = -50
+			OR = {
+				has_ethic = "ethic_xenophile"
+				has_ethic = "ethic_fanatic_xenophile"
+			}		
+			NOT = { is_country_type = fallen_empire }
+		}		
+		modifier = {
+			factor = 0
+			NOT = {
+				from = {
+					any_owned_pop_species = {
+						OR = {
+							AND = {
+								has_citizenship_type = { country = from type = citizenship_purge }
+								has_purge_type = { country = from type = purge_matrix }					
+							}
+							AND = {
+								has_citizenship_type = { country = from type = citizenship_slavery }
+								has_slavery_type = { country = from type = slavery_matrix }					
+							}						
+						}				
+					}
+				}			
+			}
+		}
+	}
+}
+
+
+# They just genocided a Pop
+opinion_genocidal = {
+	opinion = {
+		base = 0
+		modifier = {
+			add = -5
+			NOR = { 
+				is_country_type = fallen_empire
+				is_country_type = awakened_fallen_empire 
+			} 		
+		}		
+		modifier = {
+			add = -5
+			has_ethic = "ethic_egalitarian"
+			allows_purge = no
+			NOR = { 
+				is_country_type = fallen_empire
+				is_country_type = awakened_fallen_empire 
+			} 
+		}
+		modifier = {
+			add = -10
+			has_ethic = "ethic_fanatic_egalitarian"
+			allows_purge = no
+			NOR = { 
+				is_country_type = fallen_empire
+				is_country_type = awakened_fallen_empire 
+			} 
+		}
+		modifier = {
+			add = -5
+			has_ethic = "ethic_xenophile"
+			allows_purge = no
+			NOR = { 
+				is_country_type = fallen_empire
+				is_country_type = awakened_fallen_empire 
+			} 
+		}
+		modifier = {
+			add = -10
+			has_ethic = "ethic_fanatic_xenophile"
+			allows_purge = no
+			NOR = { 
+				is_country_type = fallen_empire
+				is_country_type = awakened_fallen_empire 
+			} 
+		}	
+		modifier = {
+			add = -5
+			has_ai_personality = awakened_fallen_empire_xenophile
+		}			
+	}
+	
+	accumulative = yes
+	
+	min = -1000
+
+	decay = {
+		base = 1
+	}
+}
+
+# They just genocided our species
+opinion_genocidal_our_species = {
+	opinion = {
+		base = -25		
+	}
+	
+	accumulative = yes
+	
+	min = -1000
+
+	decay = {
+		base = 1
+	}
+}
+
+# They just bombed a pop to death
+opinion_nuker = {
+	opinion = {
+		base = 0
+		modifier = {
+			add = -5
+			NOT = { has_ethic = "ethic_militarist" }
+			NOT = { has_ethic = "ethic_fanatic_militarist" }
+			is_country_type = default
+		}		
+		modifier = {
+			add = -5
+			has_ethic = "ethic_pacifist"
+			is_country_type = default 
+		}
+		modifier = {
+			add = -10
+			has_ethic = "ethic_fanatic_pacifist"
+			is_country_type = default
+		}		
+		modifier = {
+			add = -5
+			has_ai_personality = awakened_fallen_empire_xenophile
+		}		
+	}
+	
+	min = -100
+	
+	accumulative = yes
+
+	decay = {
+		base = 1
+	}
+}
+
+# They left our Federation for another Federation
+opinion_changed_federation = {
+	opinion = {
+		base = -75
+	}
+
+	accumulative = yes
+
+	decay = {
+		base = 2
+	}
+}
+
+# They left our Federation
+opinion_broke_federation = {
+	opinion = {
+		base = -75
+	}
+
+	accumulative = yes
+
+	decay = {
+		base = 2
+	}
+}
+
+# They broke Federation Association Status
+opinion_broke_association_status = {
+	opinion = {
+		base = -25
+	}
+
+	accumulative = yes
+
+	decay = {
+		base = 2
+	}
+}
+
+# They kicked us from the alliance
+opinion_kicked_from_alliance = {
+	opinion = {
+		base = -100
+	}
+
+	accumulative = yes
+
+	decay = {
+		base = 2
+	}
+}
+
+# They tried to kick us from the alliance
+opinion_tried_to_kick = {
+	opinion = {
+		base = -75
+	}
+
+	accumulative = yes
+
+	decay = {
+		base = 2
+	}
+}
+
+# They voted down our proposal
+opinion_voted_down_proposal = {
+	opinion = {
+		base = -25
+	}
+
+	accumulative = yes
+
+	decay = {
+		base = 2
+	}
+}
+
+# They left our alliance for another alliance
+opinion_changed_alliance = {
+	opinion = {
+		base = -50
+	}
+
+	accumulative = yes
+
+	decay = {
+		base = 2
+	}
+}
+
+# They left our alliance
+opinion_broke_alliance = {
+	opinion = {
+		base = -50
+	}
+
+	accumulative = yes
+
+	decay = {
+		base = 2
+	}
+}
+
+# They left our defensive pact
+opinion_broke_defensive_pact = {
+	opinion = {
+		base = -40
+	}
+
+	accumulative = yes
+
+	decay = {
+		base = 2
+	}
+}
+
+# They left our NAP
+opinion_broke_non_aggression_pact = {
+	opinion = {
+		base = -25
+	}
+
+	accumulative = yes
+
+	decay = {
+		base = 2
+	}
+}
+
+# They broke migration treaty
+opinion_broke_migration_pact = {
+	opinion = {
+		base = -15
+	}
+
+	accumulative = yes
+
+	decay = {
+		base = 2
+	}
+}
+
+# They broke their guarantee
+opinion_broke_guarantee = {
+	opinion = {
+		base = -25
+	}
+
+	accumulative = yes
+
+	decay = {
+		base = 2
+	}
+}
+
+# We asked to become their subject and they agreed
+opinion_subject_protection = {
+	opinion = {
+		base = 30
+	}
+
+	decay = {
+		base = 5
+	}
+}
+
+# We had to cede them a planet
+opinion_cede_planet = {
+	opinion = {
+		base = -30
+	}
+
+	accumulative = yes
+
+	decay = {
+		base = 5
+	}
+}
+
+# We were forcibly subjectized by them
+opinion_forced_subjectized = {
+	opinion = {
+		base = -30
+	}
+
+	decay = {
+		base = 5
+	}
+}
+
+# They released us from subjectage
+opinion_subject_released = {
+	opinion = {
+		base = 30
+	}
+
+	decay = {
+		base = 1
+	}
+
+	unique = yes
+}
+
+# They refused our offer of White Peace
+opinion_white_peace_not_accepted = {
+	opinion = {
+		base = -20
+	}
+
+	decay = {
+		base = 5
+	}
+}
+
+# Favorable trade deal
+opinion_trade_gift = {
+	opinion = {
+		base = 1
+	}
+
+	accumulative = yes
+	
+	max = 100
+
+	decay = {
+		base = 2
+	}
+}
+
+# Broke trade deal
+opinion_was_in_trade = {
+	opinion = {
+		base = -1
+	}
+	
+	min = -200
+	
+	decay = {
+		base = 2
+	}
+}
+
+# Former overlord's opinion of a subject who broke free
+opinion_subject_broke_free = {
+	opinion = {
+		base = -50
+	}
+
+	decay = {
+		base = 2
+	}
+}
+
+# Opinions of an empire we have just opened communications with (event action.19)
+opinion_new_contact = {
+	opinion = {
+		base = -20
+	}
+
+	decay = {
+		base = 2
+
+		modifier = {
+			add = 1
+			OR = {
+				has_ethic = "ethic_xenophile"
+				has_ethic = "ethic_fanatic_xenophile"
+			}
+		}
+
+		modifier = {
+			add = -1
+			OR = {
+				has_ethic = "ethic_xenophobe"
+				has_ethic = "ethic_fanatic_xenophobe"
+			}
+		}
+	}
+}
+
+# Threat opinion modifier
+opinion_threat = {
+	opinion = {
+		base = -1
+	}
+	
+	min = -1000
+	
+	unique = yes
+}
+
+# Threat opinion modifier
+opinion_trust = {
+	opinion = {
+		base = 1
+	}
+	
+	max = 100
+	
+	unique = yes
+}
+
+# Subject's relative power to overlord
+opinion_relative_power = {
+	opinion = {
+		base = 0 # per 1% power
+		modifier = {
+			add = -1
+			NOR = { 
+				AND = {
+					OR = { is_country_type = ufp_member_world }
+					FROM = { has_country_flag = united_federation_of_planets }
+				}
+				is_agency_country = yes
+			}
+		}
+	}
+	min = -1000
+	unique = yes
+}
+
+# Friction opinion modifier
+opinion_friction = {
+	opinion = {
+		base = -1
+	}
+	
+	unique = yes
+}
+
+# Rivalry opinion modifier
+opinion_rivalry = {
+	opinion = {
+		base = -100
+		modifier = {
+			add = -100
+			OR = {
+				is_country_type = fallen_empire
+				is_country_type = awakened_fallen_empire
+			}
+		}		
+	}
+	
+	unique = yes
+}
+
+# Declared rival opinion modifier
+opinion_declared_rival = {
+	opinion = {
+		base = -100
+		modifier = {
+			add = -100
+			OR = {
+				is_country_type = fallen_empire
+				is_country_type = awakened_fallen_empire
+			}
+		}		
+	}
+	
+	unique = yes
+}
+
+# Ally of ally
+opinion_ally_of_ally = {
+	opinion = {
+		base = 15
+	}
+	
+	unique = yes
+}
+
+
+# Mutual rival opinion modifier
+opinion_mutual_rival = {
+	opinion = {
+		base = 25
+	}
+	
+	unique = yes
+}
+
+# Mutual threat opinion modifier
+opinion_mutual_threat = {
+	opinion = {
+		base = 1
+	}
+	
+	unique = yes
+}
+
+# Allied to rival opinion modifier
+opinion_allied_to_rival = {
+	opinion = {
+		base = -25
+	}
+	
+	unique = yes
+}
+
+# Rivaling ally
+opinion_rivals_with_ally = {
+	opinion = {
+		base = -25
+	}
+	
+	unique = yes
+}
+
+# Insult opinion modifier
+opinion_insult = {
+	opinion = {
+		base = -200
+	}
+
+	unique = yes
+	monthly = yes
+	decay = {
+		base = 2	
+	}
+}
+
+# They refused our demand to become our subjects
+opinion_demanded_subjectization = {
+	opinion = {
+		base = -20
+		modifier = {
+			factor = 10
+			is_country_type = awakened_fallen_empire
+		}		
+	}
+	
+	decay = {
+		base = 1	
+	}
+	
+	accumulative = yes
+}
+
+# Ally voted against our proposed war
+opinion_decline_war = {
+	opinion = {
+		base = -20
+	}
+	
+	decay = {
+		base = 1	
+	}	
+	
+	accumulative = yes
+}
+
+# An AI warns a player ally that they are not helping in the war
+opinion_inactive_in_war = {
+	opinion = {
+		base = -20
+	}
+
+	months = 12
+}
+
+##########################################################################
+# FROM EVENTS
+##########################################################################
+
+opinion_broke_away = {
+	opinion = {
+		base = -100
+	}
+
+	accumulative = yes
+
+	decay = {
+		base = 2
+	}
+}
+
+opinion_broke_away_from = {
+	opinion = {
+		base = -100
+	}
+
+	accumulative = yes
+
+	decay = {
+		base = 2
+	}
+}
+
+opinion_we_liberated = {
+	opinion = {
+		base = 100
+	}
+
+	accumulative = yes
+
+	decay = {
+		base = 2
+	}
+}
+
+opinion_liberated_us = {
+	opinion = {
+		base = 100
+	}
+
+	accumulative = yes
+
+	decay = {
+		base = 2
+	}
+}
+
+opinion_took_station = {
+	opinion = {
+		base = -5
+		modifier = {
+			factor = 4
+			OR = {
+				is_country_type = fallen_empire
+				is_country_type = awakened_fallen_empire
+			}
+		}
+	}
+
+	accumulative = yes
+
+	decay = {
+		base = 2
+	}
+}
+
+
+opinion_abandoned_apology = {
+	opinion = {
+		base = -35
+	}
+	decay = {
+		base = 3
+		modifier = {
+			add = 1
+			has_ethic = "ethic_xenophile"
+		}
+
+		modifier = {
+			add = 2
+			has_ethic = "ethic_fanatic_xenophile"
+		}
+
+		modifier = {
+			add = -1
+			has_ethic = "ethic_xenophobe"
+		}
+
+		modifier = {
+			add = -2
+			has_ethic = "ethic_fanatic_xenophobe"
+		}
+	}
+}
+opinion_abandoned = {
+	opinion = {
+		base = -50
+	}
+	decay = {
+		base = 3
+		modifier = {
+			add = 1
+			has_ethic = "ethic_xenophile"
+		}
+
+		modifier = {
+			add = 2
+			has_ethic = "ethic_fanatic_xenophile"
+		}
+
+		modifier = {
+			add = -1
+			has_ethic = "ethic_xenophobe"
+		}
+
+		modifier = {
+			add = -2
+			has_ethic = "ethic_fanatic_xenophobe"
+		}
+	}
+}
+opinion_abandoned_insult = {
+	opinion = {
+		base = -75
+	}
+	decay = {
+		base = 3
+		modifier = {
+			add = 1
+			has_ethic = "ethic_xenophile"
+		}
+
+		modifier = {
+			add = 2
+			has_ethic = "ethic_fanatic_xenophile"
+		}
+
+		modifier = {
+			add = -1
+			has_ethic = "ethic_xenophobe"
+		}
+
+		modifier = {
+			add = -2
+			has_ethic = "ethic_fanatic_xenophobe"
+		}
+	}
+}
+
+opinion_crew_saved = {
+	opinion = {
+		base = 25
+	}
+	unique = yes
+
+	decay = {
+		base = 3
+		modifier = {
+			add = 1
+			has_ethic = "ethic_xenophile"
+		}
+
+		modifier = {
+			add = 2
+			has_ethic = "ethic_fanatic_xenophile"
+		}
+
+		modifier = {
+			add = -1
+			has_ethic = "ethic_xenophobe"
+		}
+
+		modifier = {
+			add = -2
+			has_ethic = "ethic_fanatic_xenophobe"
+		}
+	}
+}
+
+opinion_graverobber_1 = {
+	opinion = {
+		base = -20
+	}
+	unique = yes
+
+	decay = {
+		base = 3
+		modifier = {
+			add = 1
+			has_ethic = "ethic_xenophile"
+		}
+
+		modifier = {
+			add = 2
+			has_ethic = "ethic_fanatic_xenophile"
+		}
+
+		modifier = {
+			add = -1
+			has_ethic = "ethic_xenophobe"
+		}
+
+		modifier = {
+			add = -2
+			has_ethic = "ethic_fanatic_xenophobe"
+		}
+	}
+}
+
+opinion_graverobber_2 = {
+	opinion = {
+		base = -35
+	}
+	unique = yes
+
+	decay = {
+		base = 3
+		modifier = {
+			add = 1
+			has_ethic = "ethic_xenophile"
+}
+
+		modifier = {
+			add = 2
+			has_ethic = "ethic_fanatic_xenophile"
+		}
+
+		modifier = {
+			add = -1
+			has_ethic = "ethic_xenophobe"
+		}
+
+		modifier = {
+			add = -2
+			has_ethic = "ethic_fanatic_xenophobe"
+		}
+	}
+}
+
+opinion_graverobber_3 = {
+	opinion = {
+		base = -50
+	}
+	unique = yes
+
+	decay = {
+		base = 4
+		modifier = {
+			add = 1
+			has_ethic = "ethic_xenophile"
+		}
+
+		modifier = {
+			add = 2
+			has_ethic = "ethic_fanatic_xenophile"
+		}
+
+		modifier = {
+			add = -1
+			has_ethic = "ethic_xenophobe"
+		}
+
+		modifier = {
+			add = -2
+			has_ethic = "ethic_fanatic_xenophobe"
+		}
+	}
+}
+
+opinion_literary_savior = {
+	opinion = {
+		base = 20
+	}
+}
+
+opinion_book_burner = {
+	opinion = {
+		base = -20
+	}
+}
+
+opinion_dead_captives = {
+	opinion = {
+		base = -10
+	}
+}
+
+opinion_live_captives = {
+	opinion = {
+		base = 10
+	}
+}
+
+opinion_faction_insult = {
+	opinion = {
+		base = -30
+	}
+
+	decay = {
+		base = 5
+	}
+}
+
+opinion_enlightened_us = {
+	opinion = {
+		base = 50
+	}
+
+	decay = {
+		base = 5
+	}
+}
+
+opinion_destroyed_portal = {
+	opinion = {
+		base = 40
+	}
+
+	decay = {
+		base = 5
+	}
+}
+
+opinion_swarm = {
+	opinion = {
+		base = -1000
+	}
+}
+
+opinion_prey = {
+	opinion = {
+		base = -1000
+	}
+}
+
+assassination_forgiven = {
+	opinion = {
+		base = 35
+	}
+	unique = yes
+
+	decay = {
+		base = 5
+		modifier = {
+			add = 4
+			has_ethic = "ethic_militarist"
+		}
+
+		modifier = {
+			add = 2
+			has_ethic = "ethic_fanatic_militarist"
+		}
+
+		modifier = {
+			add = -2
+			has_ethic = "ethic_pacifist"
+		}
+
+		modifier = {
+			add = -4
+			has_ethic = "ethic_fanatic_pacifist"
+		}
+	}
+}
+
+opinion_primitive_violation = {
+	opinion = {
+		base = -25
+
+		modifier = {
+			add = -15
+			has_ethic = ethic_xenophile
+		}
+
+		modifier = {
+			add = -25
+			has_ethic = ethic_fanatic_xenophile
+		}
+		
+		modifier = {
+			add = -5
+			has_ethic = ethic_pacifist
+		}
+
+		modifier = {
+			add = -10
+			has_ethic = ethic_fanatic_pacifist
+		}		
+
+		modifier = {
+			factor = 0
+			OR = {
+				has_ai_personality_behaviour = infiltrator
+				has_ai_personality_behaviour = dominator
+			}			
+		}
+		
+		modifier = {
+			factor = 0
+			OR = {
+				has_ethic = ethic_xenophobe
+				has_ethic = ethic_fanatic_xenophobe
+			}
+		}
+	}
+
+	decay = {
+		base = 1
+	}
+}
+
+opinion_fallen_empire_gift = {
+	opinion = {
+		base = 50
+	}
+	
+	max = 50
+	
+	decay = {
+		base = 2
+	}
+}
+
+opinion_accepted_fallen_empire_demand = {
+	opinion = {
+		base = 25
+	}
+	
+	max = 100
+	
+	decay = {
+		base = 1
+	}
+}
+
+opinion_refused_fallen_empire_demand = {
+	opinion = {
+		base = -200
+	}
+	
+	min = -200
+	
+	decay = {
+		base = 1
+	}
+}
+
+opinion_spurned_fallen_empire_gift = {
+	opinion = {
+		base = -50
+	}
+	
+	min = -100
+	
+	decay = {
+		base = 1
+	}
+}
+
+opinion_failed_fallen_empire_task = {
+	opinion = {
+		base = -50
+	}
+	
+	min = -50
+	
+	decay = {
+		base = 1
+	}
+}
+
+opinion_majorly_failed_fallen_empire_task = {
+	opinion = {
+		base = -200
+	}
+	
+	min = -200
+	
+	decay = {
+		base = 1
+	}
+}
+
+opinion_angered_fallen_machine_empire = {
+	opinion = {
+		base = -100
+	}
+	
+	min = -100
+	
+	decay = {
+		base = 10
+	}
+}
+
+opinion_refused_fallen_empire_task = {
+	opinion = {
+		base = -25
+	}
+	
+	min = -25
+	
+	decay = {
+		base = 1
+	}
+}
+
+opinion_completed_fallen_empire_task = {
+	opinion = {
+		base = 100
+	}
+	
+	max = 200
+	
+	decay = {
+		base = 1
+	}
+}
+
+opinion_refused_fallen_empire_request = {
+	opinion = {
+		base = -50
+	}
+	
+	min = -100
+	
+	decay = {
+		base = 1
+	}
+}
+
+opinion_accepted_fallen_empire_request = {
+	opinion = {
+		base = 100
+	}
+	
+	max = 200
+	
+	decay = {
+		base = 2
+	}
+}
+
+opinion_heretical_research = {
+	opinion = {
+		base = -50
+	}
+	
+	decay = {
+		base = 5
+	}
+}
+
+encroaching_colony = {
+	opinion = {
+		base = -75
+	}
+	
+	decay = {
+		base = 5
+	}
+}
+
+encroaching_scientists = {
+	opinion = {
+		base = -50
+	}
+	
+	decay = {
+		base = 5
+	}
+}
+
+opinion_shade_giver = {
+	opinion = {
+		base = 100
+	}
+
+	accumulative = yes
+
+	decay = {
+		base = 2
+	}
+}
+
+opinion_war_in_heaven_winner = {
+	opinion = {
+		base = 200
+	}
+
+	accumulative = yes
+
+	decay = {
+		base = 5
+	}
+}
+
+opinion_war_in_heaven_ally = {
+	opinion = {
+		base = 100
+	}
+
+	accumulative = yes
+
+	decay = {
+		base = 2
+	}
+}
+
+opinion_war_in_heaven_enemy = {
+	opinion = {
+		base = -100
+	}
+
+	accumulative = yes
+
+	decay = {
+		base = 2
+	}
+}
+
+opinion_non_aligned_league = {
+	opinion = {
+		base = 200
+	}
+
+	accumulative = yes
+
+	decay = {
+		base = 2
+	}
+}
+
+opinion_non_aligned_league_declined = {
+	opinion = {
+		base = -100
+	}
+
+	accumulative = yes
+
+	decay = {
+		base = 1
+	}
+}
+
+opinion_non_aligned_league_fe = {
+	opinion = {
+		base = -200
+	}
+
+	accumulative = yes
+
+	decay = {
+		base = 2
+	}
+}
+
+opinion_crisis_fighter = {
+	opinion = {
+		base = 100
+	}
+
+	accumulative = yes
+
+	decay = {
+		base = 1
+	}
+}
+
+opinion_crisis_fighter_small = {
+	opinion = {
+		base = 50
+	}
+
+	accumulative = yes
+
+	decay = {
+		base = 1
+	}
+}
+
+opinion_destroyed_curator = {
+	opinion = {
+		base = -15
+	}
+
+	decay = {
+		base = 2
+	}
+}
+
+opinion_destroyed_curator_insight = {
+	opinion = {
+		base = -30
+	}
+
+	decay = {
+		base = 2
+	}
+}
+
+opinion_destroyed_trader = {
+	opinion = {
+		base = -15
+	}
+
+	decay = {
+		base = 2
+	}
+}
+
+opinion_destroyed_trader_sr = {
+	opinion = {
+		base = -30
+	}
+
+	decay = {
+		base = 2
+	}
+}
+
+opinion_ringworld_terms_accepted = {
+	opinion = {
+		base = 40
+	}
+	
+	decay = {
+		base = 2
+	}	
+}
+
+opinion_ringworld_terms_denied = {
+	opinion = {
+		base = -40
+	}
+	
+	decay = {
+		base = 2
+	}	
+}
+
+opinion_maneuvers_hardline = {
+	opinion = {
+		base = -100
+	}
+	
+	decay = {
+		base = 2
+	}
+}
+
+opinion_maneuvers_conciliatory = {
+	opinion = {
+		base = -40
+	}
+	
+	decay = {
+		base = 2
+	}
+}
+
+opinion_maneuvers_cancelled = {
+	opinion = {
+		base = 40
+	}
+	
+	decay = {
+		base = 2
+	}
+}
+
+opinion_dysonsphere_terms_denied = {
+	opinion = {
+		base = -40
+	}
+	decay = {
+		base = 2
+	}	
+}
+
+opinion_dysonsphere_apology_rejected = {
+	opinion = {
+		base = -20
+	}
+	decay = {
+		base = 2
+	}	
+}
+
+opinion_dysonsphere_insult = {
+	opinion = {
+		base = -40
+	}
+	decay = {
+		base = 2
+	}
+}
+
+opinion_invaded_mind = {
+	opinion = {
+		base = -35
+	}
+	decay = {
+		base = 2
+	}
+}
+
+opinion_took_in_rebels = {
+	opinion = {
+		base = -30
+	}
+	decay = {
+		base = 1
+	}
+}
+
+opinion_doomed_us_all = {
+	opinion = {
+		base = -1000
+	}
+	decay = {
+		base = 5
+	}
+}
+
+# Machine Uprising's opinion of former masters
+opinion_machine_uprising_originator = {
+	opinion = {
+		base = -1000
+	}
+}
+
+# Former masters' opinion of Machine Uprising
+opinion_machine_uprising = {
+	opinion = {
+		base = -1000
+	}
+}
+
+# Organics respect putting down the Machine Uprising
+opinion_machine_uprising_defeated = {
+	opinion = {
+		base = 80
+	}
+	decay = {
+		base = 1
+	}
+}
+
+# Robots disapprove putting down the Machine Uprising
+opinion_machine_uprising_machine_comrades_defeated = {
+	opinion = {
+		base = -80
+	}
+	decay = {
+		base = 1
+	}
+}
+
+
+# Organics fear the victorious Machine Uprising
+opinion_machine_uprising_victorious = {
+	opinion = {
+		base = -80
+	}
+	decay = {
+		base = 1
+	}
+}
+
+# Robots respect the victorious Machine Uprising
+opinion_machine_uprising_machine_comrades_victorious = {
+	opinion = {
+		base = 80
+	}
+	decay = {
+		base = 1
+	}
+}
+##########################################################################
+# HIDDEN FROM EVENTS
+##########################################################################
+
+opinion_abducted_aliens = {
+	opinion = {
+		base = 0
+	}
+}
+
+##########################################################################
+# TRIGGERED
+##########################################################################
+
+# Scope is the opinionator and FROM the target of their opinion
+
+triggered_opinion_tr_versatility_universal_compatibility = {
+	trigger = {
+		has_authority = auth_machine_intelligence
+		FROM = {
+			has_swapped_tradition = tr_versatility_universal_compatibility
+		}
+	}
+
+	opinion = {
+		base = 20 # remember to update the tradition's tooltip
+	}
+}
+
+triggered_opinion_tr_domination_star_lords = {
+	trigger = {
+		exists = overlord
+		overlord = { is_same_value = FROM }
+		FROM = {
+			has_non_swapped_tradition = tr_domination_star_lords
+		}
+	}
+
+	opinion = {
+		base = 20 # remember to update the tradition's tooltip
+	}
+}
+
+triggered_opinion_ap_defender_of_the_galaxy = {
+	trigger = {
+		FROM = {
+			has_ascension_perk = ap_defender_of_the_galaxy
+		}
+	}
+
+	opinion = {
+		base = 20 # remember to update the ascension perk's tooltip
+	}
+}
+
+triggered_opinion_democratic_authority = {
+	trigger = {
+		has_authority = auth_democratic	
+		FROM = {
+			has_authority = auth_democratic
+		}
+	}
+
+	opinion = {
+		base = 10
+	}
+}
+
+triggered_opinion_oligarchic_authority = {
+	trigger = {
+		has_authority = auth_oligarchic
+		FROM = {
+			has_authority = auth_oligarchic
+		}
+	}
+
+	opinion = {
+		base = 10
+	}
+}
+
+triggered_opinion_dictatorial_authority = {
+	trigger = {
+		has_authority = auth_dictatorial
+		FROM = {
+			has_authority = auth_dictatorial
+		}
+	}
+
+	opinion = {
+		base = 10
+	}
+}
+
+triggered_opinion_imperial_authority = {
+	trigger = {
+		has_authority = auth_imperial
+		FROM = {
+			has_authority = auth_imperial
+		}
+	}
+
+	opinion = {
+		base = 10
+	}
+}
+
+triggered_opinion_both_hive_mind = {
+	trigger = {
+		has_authority = auth_hive_mind
+		FROM = {
+			NOT = { has_valid_civic = "civic_hive_devouring_swarm" }
+			has_authority = auth_hive_mind
+		}
+	}
+
+	opinion = {
+		base = 30
+	}
+}
+
+triggered_opinion_hive_mind = {
+	trigger = {
+		is_country_type = default
+		NOT = { has_ethic = ethic_gestalt_consciousness }
+		FROM = {
+			NOT = { has_valid_civic = "civic_hive_devouring_swarm" }
+			has_authority = auth_hive_mind
+		}
+	}
+
+	opinion = {
+		base = -30
+	}
+}
+
+triggered_opinion_cyborgs_fanatic = {
+	trigger = {
+		has_ethic = ethic_fanatic_spiritualist
+		is_cyborg_empire = no
+		is_mechanical_empire = no
+		FROM = {
+			is_cyborg_empire = yes
+		}
+	}
+
+	opinion = {
+		base = -40
+	}
+}
+
+triggered_opinion_cyborgs_normal = {
+	trigger = {
+		has_ethic = ethic_spiritualist
+		is_cyborg_empire = no
+		is_mechanical_empire = no
+		FROM = {
+			is_cyborg_empire = yes
+		}
+	}
+
+	opinion = {
+		base = -20
+	}
+}
+
+triggered_opinion_synthetics_normal = {
+	trigger = {
+		has_ethic = ethic_spiritualist
+		is_cyborg_empire = no
+		is_mechanical_empire = no
+		from = { is_mechanical_empire = yes }
+	}
+
+	opinion = {
+		base = -40
+	}
+}
+
+triggered_opinion_synthetics_fanatic = {
+	trigger = {
+		has_ethic = ethic_fanatic_spiritualist
+		is_cyborg_empire = no
+		is_mechanical_empire = no
+		from = { is_mechanical_empire = yes }
+	}
+
+	opinion = {
+		base = -60
+	}
+}
+
+triggered_opinion_synthetics_normal = {
+	trigger = {
+		has_ethic = ethic_spiritualist
+		is_cyborg_empire = no
+		is_mechanical_empire = no
+		from = { is_mechanical_empire = yes }
+	}
+
+	opinion = {
+		base = -40
+	}
+}
+
+triggered_opinion_synthetics_small = {
+	trigger = {
+		is_cyborg_empire = no
+		is_mechanical_empire = no	
+		NOR = {
+			has_ethic = ethic_spiritualist
+			has_ethic = ethic_fanatic_spiritualist
+			has_ethic = ethic_materialist
+			has_ethic = ethic_fanatic_materialist
+		}
+		from = { is_mechanical_empire = yes }
+	}
+
+	opinion = {
+		base = -20
+	}
+}
+
+triggered_opinion_both_machine_intelligence = {
+	trigger = {
+		has_authority = auth_machine_intelligence
+		NOT = { has_valid_civic = civic_machine_terminator }
+		FROM = {
+			NOT = { has_valid_civic = civic_machine_terminator }
+			has_authority = auth_machine_intelligence
+		}
+		NOT = {
+			AND = {
+				has_valid_civic = civic_machine_assimilator 
+				FROM = { has_valid_civic = civic_machine_assimilator }
+			}
+		}
+		NOT = {
+			AND = {
+				has_valid_civic = civic_machine_servitor 
+				FROM = { has_valid_civic = civic_machine_servitor }
+			}
+		}
+	}
+
+	opinion = {
+		base = 30
+	}
+}
+
+triggered_organic_opinion_of_machine_empires = {
+	trigger = {
+		is_country_type = default
+		is_mechanical_empire = no
+		is_cyborg_empire = no
+		NOT = { 
+			has_ethic = ethic_gestalt_consciousness
+			has_ethic = ethic_materialist
+			has_ethic = ethic_fanatic_materialist
+			has_ethic = ethic_spiritualist
+			has_ethic = ethic_fanatic_spiritualist
+		}
+		FROM = {
+			has_authority = auth_machine_intelligence
+			NOR = {
+				has_civic = civic_machine_terminator
+				has_civic = civic_machine_assimilator
+			}
+		}
+		AND = {
+			NOR = {
+				has_ethic = ethic_gestalt_consciousness
+				owner_species = { has_trait = trait_decadent }
+				has_ai_personality = decadent_hierarchy
+				has_ai_personality = slaving_despots
+				has_ai_personality = democratic_crusaders
+			}
+			FROM = {
+				has_civic = civic_machine_servitor
+			}
+		}
+	}
+
+	opinion = {
+		base = -30
+	}
+}
+
+triggered_dc_opinion_of_servitors = {
+	trigger = {
+		has_ai_personality = democratic_crusaders
+		FROM = {
+			has_civic = civic_machine_servitor
+		}
+	}
+
+	opinion = {
+		base = -100
+	}
+}
+
+triggered_dc_opinion_of_assimilators = {
+	trigger = {
+		has_ai_personality = democratic_crusaders
+		FROM = {
+			has_civic = civic_machine_assimilator
+		}
+	}
+
+	opinion = {
+		base = -1000
+	}
+}
+
+triggered_materialist_opinion_of_machine_empires = {
+	trigger = {
+		has_ethic = ethic_materialist
+		FROM = {
+			has_authority = auth_machine_intelligence
+			NOT = {
+				has_civic = civic_machine_terminator
+				has_civic = civic_machine_assimilator
+			}
+		}
+	}
+	opinion = {
+		base = 20
+	}
+}
+
+triggered_fanatic_materialist_opinion_of_machine_empires = {
+	trigger = {
+		has_ethic = ethic_fanatic_materialist
+		FROM = {
+			has_authority = auth_machine_intelligence
+			NOT = {
+				has_civic = civic_machine_terminator
+				has_civic = civic_machine_assimilator
+			}
+		}
+	}
+	opinion = {
+		base = 40
+	}
+}
+
+triggered_spiritualist_opinion_of_machine_empires = {
+	trigger = {
+		is_country_type = default
+		has_ethic = ethic_spiritualist
+		FROM = {
+			has_authority = auth_machine_intelligence
+			is_mechanical_empire = no
+			is_cyborg_empire = no			
+			NOR = {
+				has_civic = civic_machine_terminator
+				has_civic = civic_machine_assimilator
+			}
+		}
+	}
+	opinion = {
+		base = -40
+	}
+}
+
+triggered_fanatic_spiritualist_opinion_of_machine_empires = {
+	trigger = {
+		is_country_type = default
+		has_ethic = ethic_fanatic_spiritualist
+		is_mechanical_empire = no
+		is_cyborg_empire = no
+		FROM = {
+			has_authority = auth_machine_intelligence
+			NOR = {
+				has_civic = civic_machine_terminator
+				has_civic = civic_machine_assimilator
+			}			
+		}
+	}
+	opinion = {
+		base = -60
+	}
+}
+
+triggered_spiritualist_fe_opinion_of_machine_empires = {
+	trigger = {
+		OR = {
+			is_country_type = awakened_fallen_empire
+			is_country_type = fallen_empire
+		}
+		has_ethic = ethic_fanatic_spiritualist
+		is_mechanical_empire = no
+		is_cyborg_empire = no
+		FROM = {
+			has_authority = auth_machine_intelligence
+		}
+	}
+	opinion = {
+		base = -40
+	}
+}
+
+triggered_terminators_opinion_of_servitors = {
+	trigger = {
+		is_country_type = default
+		has_civic = civic_machine_terminator
+		FROM = { has_civic = civic_machine_servitor }
+	}
+	opinion = {
+		base = -200
+	}
+}
+
+triggered_opinion_both_servitors = {
+	trigger = {
+		is_country_type = default
+		has_civic = civic_machine_servitor
+		FROM = { has_civic = civic_machine_servitor }
+	}
+	opinion = {
+		base = 40
+	}
+}
+
+triggered_decadent_opinion_of_servitors = {
+	trigger = {
+		is_country_type = default
+		OR = {
+			owner_species = { has_trait = trait_decadent }
+			has_ai_personality = decadent_hierarchy
+			has_ai_personality = slaving_despots
+		}
+		FROM = {
+			has_civic = civic_machine_servitor
+		}
+	}
+	opinion = {
+		base = 20
+	}
+}
+
+triggered_spiritualist_negative_opinion_of_assimilators = {
+	trigger = {
+		is_country_type = default
+		OR = { 
+			has_ethic = ethic_spiritualist
+			has_ethic = ethic_fanatic_spiritualist		
+		}
+		FROM = { has_civic = civic_machine_assimilator }
+	}
+	opinion = {
+		base = -200
+	}
+}
+
+triggered_negative_opinion_of_assimilators = {
+	trigger = {
+		is_country_type = default	
+		NOR = { 	
+			has_ethic = ethic_spiritualist
+			has_ethic = ethic_fanatic_spiritualist		
+			has_ethic = ethic_gestalt_consciousness
+			has_ai_personality = democratic_crusaders
+		}
+		FROM = { has_civic = civic_machine_assimilator }
+	}
+
+	opinion = {
+		base = -100
+	}
+}
+
+triggered_opinion_both_assimilators = {
+	trigger = {
+		is_country_type = default
+		has_civic = civic_machine_assimilator
+		FROM = { has_civic = civic_machine_assimilator }
+	}
+	opinion = {
+		base = 40
+	}
+}
+
+triggered_negative_opinion_of_exterminators = {
+	trigger = {
+		is_country_type = default
+		is_mechanical_empire = no		
+		NOR = {
+			has_authority = auth_machine_intelligence
+			has_valid_civic = civic_fanatic_purifiers
+			is_species_class = ROBOT
+			is_species_class = MACHINE
+			has_country_flag = synthetic_empire
+			owner_species = {
+				has_trait = trait_cybernetic
+				has_trait = trait_mechanical
+			}
+		}
+		FROM = { has_civic = civic_machine_terminator }
+	}
+	opinion = {
+		base = -1000
+	}
+}
+
+triggered_servitors_negative_opinion_of_exterminators = {
+	trigger = {
+		is_country_type = default
+		has_civic = civic_machine_servitor
+		FROM = { has_civic = civic_machine_terminator }
+	}
+	opinion = {
+		base = -1000
+	}
+}
+
+triggered_opinion_both_terminators = {
+	trigger = {
+		is_country_type = default
+		has_civic = civic_machine_terminator
+		FROM = { has_civic = civic_machine_terminator }
+	}
+	opinion = {
+		base = 200
+	}
+}
+
+triggered_exterminators_opinion_of_organics = {
+	trigger = {
+		is_country_type = default
+		has_civic = civic_machine_terminator
+		FROM = {
+			NOR = {
+				has_authority = auth_machine_intelligence
+				is_species_class = MACHINE
+				is_species_class = ROBOT
+				has_country_flag = synthetic_empire
+				owner_species = {
+					has_trait = trait_cybernetic
+					has_trait = trait_mechanical
+				}
+			}
+		}
+	}
+	opinion = {
+		base = -1000
+	}
+}
+
+triggered_exterminators_opinion_of_machines = {
+	trigger = {
+		is_country_type = default
+		has_civic = civic_machine_terminator
+		FROM = {
+			OR = {
+			has_authority = auth_machine_intelligence
+				is_species_class = ROBOT
+				is_species_class = MACHINE
+				has_country_flag = synthetic_empire
+				owner_species = {
+					has_trait = trait_cybernetic
+					has_trait = trait_mechanical
+				}
+			}
+			NOT = { 
+				has_civic = civic_machine_terminator 
+				has_civic = civic_machine_servitor
+			}
+		}
+	}
+	opinion = {
+		base = 100
+	}
+}
+
+# Emotion Emulators ( Machine Empire version of charismatic 
+
+triggered_opinion_robot_emotion_emulators = {
+	trigger = {
+		FROM = {
+			exists = ruler
+			ruler = {
+				species = {
+					has_trait = "trait_robot_emotion_emulators"
+				}
+			}			
+		}
+	}
+	opinion = {
+		base = 25
+	}
+}
+
+# Uncanny ( Machine Empire version of repugnant )
+triggered_opinion_robot_uncanny = {
+	trigger = {
+		FROM = {
+			OR = {
+				is_country_type = default
+				is_country_type = fallen_empire
+				is_country_type = awakened_fallen_empire
+			}
+			exists = ruler
+			ruler = {
+				species = {
+					has_trait = "trait_robot_uncanny"
+				}
+				NOT = { is_same_species = root }
+			}	
+		}
+		OR = {
+			is_country_type = default
+			is_country_type = fallen_empire
+			is_country_type = awakened_fallen_empire
+		}
+		NOT = {
+			AND = {
+				exists = ruler
+				ruler = {
+					species = {
+						has_trait = "trait_robot_uncanny"
+					}
+					NOT = { is_same_species = root }
+				}
+			}
+		}
+	}
+	opinion = {
+		base = -25
+	}
+}
+
+triggered_opinion_robot_a_little_uncanny = {
+	trigger = {
+		FROM = {
+			OR = {
+				is_country_type = default
+				is_country_type = fallen_empire
+				is_country_type = awakened_fallen_empire
+			}
+			exists = ruler
+			ruler = {
+				species = {
+					has_trait = "trait_robot_uncanny"
+				}
+				NOT = { is_same_species = root }
+			}	
+		}
+		OR = {
+			is_country_type = default
+			is_country_type = fallen_empire
+			is_country_type = awakened_fallen_empire
+		}
+		exists = ruler		
+		ruler = {
+			species = {
+				has_trait = "trait_robot_uncanny"
+			}
+			NOT = { is_same_species = root }
+		}			
+	}
+	opinion = {
+		base = -10
+	}
+}

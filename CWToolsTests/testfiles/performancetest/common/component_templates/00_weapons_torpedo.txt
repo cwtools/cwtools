@@ -1,0 +1,151 @@
+### Torpedo Launcher
+weapon_component_template = {
+	key = "TORPEDO_1"
+	size = torpedo
+	entity = "turret_torpedo_entity"
+	
+	icon = "GFX_ship_part_torpedo_1"
+	icon_frame = 1
+	type = missile
+	hidden = yes
+	
+	#prerequisites = { "tech_torpedoes_1" }
+	component_set = "TORPEDO_1"
+	projectile_gfx = "large_torpedo"
+	tags = { weapon_type_explosive }
+	ai_tags = { weapon_role_anti_shield }
+	upgrades_to = "TORPEDO_2"
+	
+	target_weights = {
+		npc_warship_01 = 5000
+		space_dragon_baby = 5000	
+		massive_ship_fallen_empire = 5000
+		large_ship_fallen_empire = 5000	
+		battleship = 5000
+		cruiser = 2500
+		destroyer = 1000
+		small_ship_fallen_empire = 1000	
+	}
+}
+
+### Armored Torpedoes
+weapon_component_template = {
+	key = "TORPEDO_2"
+	size = torpedo
+	entity = "turret_torpedo_entity"
+	
+	icon = "GFX_ship_part_torpedo_2"
+	icon_frame = 1
+	type = missile
+	hidden = yes
+	
+	#prerequisites = { "tech_torpedoes_2" }
+	component_set = "TORPEDO_2"
+	projectile_gfx = "large_torpedo_02"
+	tags = { weapon_type_explosive }
+	ai_tags = { weapon_role_anti_shield }
+	upgrades_to = "TORPEDO_3"
+	
+	target_weights = {
+		npc_warship_01 = 5000
+		space_dragon_baby = 5000	
+		massive_ship_fallen_empire = 5000
+		large_ship_fallen_empire = 5000	
+		battleship = 5000
+		cruiser = 2500
+		destroyer = 1000
+		small_ship_fallen_empire = 1000	
+	}
+}
+
+### Devastator Torpedoes
+weapon_component_template = {
+	key = "TORPEDO_3"
+	size = torpedo
+	entity = "turret_torpedo_entity"
+	
+	icon = "GFX_ship_part_torpedo_3"
+	icon_frame = 1
+	type = missile
+	hidden = yes
+	
+	#prerequisites = { "tech_torpedoes_3" }
+	component_set = "TORPEDO_3"
+	projectile_gfx = "large_torpedo_03"
+	tags = { weapon_type_explosive }
+	ai_tags = { weapon_role_anti_shield }
+	
+	target_weights = {
+		npc_warship_01 = 5000
+		space_dragon_baby = 5000	
+		massive_ship_fallen_empire = 5000
+		large_ship_fallen_empire = 5000	
+		battleship = 5000
+		cruiser = 2500
+		destroyer = 1000
+		small_ship_fallen_empire = 1000	
+	}
+}
+
+# ####################
+#  Energy Torpedoes
+# ####################
+
+# ## Energy Torpedoes
+weapon_component_template = {
+	key = "ENERGY_TORPEDO_1"
+	size = torpedo
+	entity = "turret_energy_torpedo_entity"
+	type = instant
+	
+	icon = "GFX_ship_part_energy_torpedo_1"
+	icon_frame = 1
+	hidden = yes
+	
+	#prerequisites = { "tech_energy_torpedoes_1" }
+	component_set = "ENERGY_TORPEDO_1"
+	projectile_gfx = "proton_torpedoes"
+	tags = { weapon_type_energy }
+	ai_tags = { weapon_role_anti_shield }
+	upgrades_to = "ENERGY_TORPEDO_2"
+	
+	target_weights = {
+		npc_warship_01 = 5000
+		space_dragon_baby = 5000	
+		massive_ship_fallen_empire = 5000
+		large_ship_fallen_empire = 5000	
+		battleship = 5000
+		cruiser = 2500
+		destroyer = 1000
+		small_ship_fallen_empire = 1000	
+	}
+}
+
+# ## Energy Torpedoes 2
+weapon_component_template = {
+	key = "ENERGY_TORPEDO_2"
+	size = torpedo
+	entity = "turret_energy_torpedo_entity"
+	type = instant
+	
+	icon = "GFX_ship_part_energy_torpedo_2"
+	icon_frame = 1
+	hidden = yes
+	
+	#prerequisites = { "tech_energy_torpedoes_2" }
+	component_set = "ENERGY_TORPEDO_2"
+	projectile_gfx = "neutron_torpedoes"
+	tags = { weapon_type_energy }
+	ai_tags = { weapon_role_anti_shield }
+	
+	target_weights = {
+		npc_warship_01 = 5000
+		space_dragon_baby = 5000	
+		massive_ship_fallen_empire = 5000
+		large_ship_fallen_empire = 5000	
+		battleship = 5000
+		cruiser = 2500
+		destroyer = 1000
+		small_ship_fallen_empire = 1000	
+	}
+}

@@ -1,0 +1,378 @@
+#### STNH 1.8 compat
+
+
+##### Behaviours:
+# conqueror -> Will they conquer planets from other empires?
+# subjugator -> Will they vassalise other empires?
+# liberator -> Will they liberate conquered empires?
+# opportunist -> Are they more likely to attack someone already embroiled in war?
+# uplifter -> Will they uplift and enlighten other species?
+# infiltrator -> Will they infiltrate primitives?
+# dominator -> Will they invade primitives?
+# slaver -> Will they enslave pops?
+# purger -> Will they purge alien pops?
+# robot_exploiter -> Will they use robots for menial labor?
+# robot_liberator -> Will they give rights to robots?
+# propagator -> Will they only get aggressive once boxed in?
+# multispecies -> Will they give rights to aliens?
+# species_mod_priority = {}		define weights for how much the AI should try to modify a given species (root=country, this=species)
+
+##### Modifiers:
+# aggressiveness -> Chance of declaring wars
+# trade_willingness -> At 1.0 willingness they will accept a deal that is equally good for both sides
+# bravery -> Affects the chance that they will pick rivals & war targets of similar strength instead of picking on the weak
+# military_spending -> Affects mineral & energy budget that goes to navies and armies
+# colony_spending -> Affects mineral & energy budget that goes to new colonies
+# threat_modifier -> Affects how much threat is generated for this empire when others are conquered
+# threat_others_modifier -> Afffects how much threat is generated for other empires when this empire is conquered
+# friction_modifier -> Affects border friction
+
+# Ships
+# armor_ratio -> Amount of armor they should aim for on ships
+# shields_ratio -> Amount of shields they should aim for on ships
+
+##### Diplomacy:
+# federation_acceptance -> Added directly to chance of accepting to form/join a federation
+# nap_acceptance -> Added directly to chance of accepting to form a non-aggression pact
+# migration_pact_acceptance -> Added directly to chance of accepting to form a migration pact
+# defensive_pact_acceptance -> Added directly to chance of accepting to form a defensive pact
+
+##### Diplomacy:
+# advanced_start_chance -> Likelyhood of this empire being an advanced start (higher = better chance of being one of empires selected for advanced start)
+
+
+#Borg
+genocidal_assimilators = { 
+	aggressiveness = 2.0
+	trade_willingness = 0.0
+	bravery = 0.0
+	
+	military_spending = 1.3
+	colony_spending = 0.8
+	
+	federation_acceptance = -1000
+	nap_acceptance = -1000
+	defensive_pact_acceptance = -1000
+	migration_pact_acceptance = -1000
+	
+	advanced_start_chance = 0
+	
+	threat_modifier = 1.5
+	threat_others_modifier = 2.0
+	friction_modifier = 33.0
+	
+	behaviour = {
+		conqueror = yes
+		subjugator = no
+		liberator = no
+		opportunist = yes
+		slaver = no
+		uplifter = no
+		purger = no
+		infiltrator = no
+		dominator = yes
+		robot_exploiter = no
+		robot_liberator = no
+		propagator = no
+		multispecies = yes
+	}
+	
+	allow = { has_country_flag = the_borg_collective }	
+	weight_modifier = { weight = 100000 }
+}
+
+dominion_founders = { 
+	aggressiveness = 1.5		#quite agressive
+	trade_willingness = 0.6		#isolationist
+	bravery = 1.00				#not so brave keep order
+	
+	military_spending = 1.3		#high militarized
+	colony_spending = 0.9		#founders dont colonize
+	
+	federation_acceptance = -50
+	nap_acceptance = -10
+	defensive_pact_acceptance = -10
+	migration_pact_acceptance = -10
+	
+	threat_modifier = 1.0		#mysterious
+	friction_modifier = 5.5		#isolationist
+	
+	behaviour = {
+		conqueror = yes
+		subjugator = yes
+		liberator = no
+		opportunist = no
+		slaver = no
+		uplifter = no
+		purger = no			#dont kill vorta
+		infiltrator = yes	#changeling
+		dominator = no
+		robot_exploiter = yes #JEM HADAR
+		robot_liberator = no
+		propagator = no
+		multispecies = yes
+	}
+	allow = { has_country_flag = the_dominion }
+	weight_modifier = { weight = 100000 }
+}
+
+#United Earth, Vulcan, Andoria, Tellar
+federation_founders = { 
+	aggressiveness = 0.65
+	trade_willingness = 1.05
+	bravery = 1.25
+	military_spending = 1.0
+	colony_spending = 1.0	
+	federation_acceptance = 15
+	nap_acceptance = 25
+	defensive_pact_acceptance = 25
+	migration_pact_acceptance = 25
+	threat_modifier = 1.2
+	friction_modifier = 0.25
+	behaviour = {
+		conqueror = no
+		subjugator = no
+		liberator = yes
+		opportunist = no
+		slaver = no
+		uplifter = no
+		purger = no
+		dominator = no
+		infiltrator = yes
+		robot_exploiter = no
+		robot_liberator = yes
+		propagator = no
+		multispecies = yes
+	}
+	allow = { has_country_flag = "federation_founder" }
+	weight_modifier = { weight = 100000 }
+}
+
+# Federation Sector Members
+federation_members = { 
+	aggressiveness = 0.6
+	trade_willingness = 1.1
+	bravery = 1
+	military_spending = 1.1
+	colony_spending = 0.1	
+	federation_acceptance = 0
+	nap_acceptance = 0
+	defensive_pact_acceptance = 0
+	migration_pact_acceptance = 25
+	threat_modifier = 1.2
+	friction_modifier = 0.2
+	behaviour = {
+		conqueror = no
+		subjugator = no
+		liberator = yes
+		opportunist = no
+		slaver = no
+		uplifter = no
+		purger = no
+		dominator = no
+		infiltrator = no
+		robot_exploiter = no
+		robot_liberator = no
+		propagator = no
+		multispecies = yes
+	}
+	allow = { has_authority = auth_federation_sector }
+	weight_modifier = { weight = 100000 }
+}
+
+#Ferengi, Wadi
+fanatic_traders = { 
+	aggressiveness = 0.5
+	trade_willingness = 1.0
+	bravery = 0.5
+	military_spending = 1.0
+	colony_spending = 1.1	
+	federation_acceptance = 10
+	nap_acceptance = 10
+	defensive_pact_acceptance = 10
+	migration_pact_acceptance = 10
+	threat_modifier = 1.3
+	friction_modifier = 0.25
+	behaviour = {
+		conqueror = no
+		subjugator = no
+		liberator = no
+		opportunist = yes
+		slaver = no
+		uplifter = yes
+		purger = no
+		infiltrator = yes
+		dominator = no
+		robot_exploiter = yes
+		robot_liberator = no
+		propagator = no
+		multispecies = yes
+	}
+	allow = { 
+		OR = {
+			has_country_flag = "ferengi_alliance"
+			has_country_flag = "wadi_emirates"
+		}
+	}
+	weight_modifier = { weight = 100000 }
+}
+
+#Cardassians, Breen
+slaving_imperialists = {
+	aggressiveness = 1.5
+	trade_willingness = 0.8
+	bravery = 0.5
+	
+	military_spending = 1.2
+	colony_spending = 0.9	
+	
+	federation_acceptance = -20
+	nap_acceptance = -10
+	defensive_pact_acceptance = -10
+	migration_pact_acceptance = -10
+	
+	threat_modifier = 1.0
+	friction_modifier = 1.0
+
+	behaviour = {
+		conqueror = yes
+		subjugator = yes
+		liberator = no
+		opportunist = yes
+		slaver = yes
+		uplifter = no
+		purger = no
+		dominator = yes
+		infiltrator = no
+		robot_exploiter = yes
+		robot_liberator = no
+		propagator = no
+		multispecies = no
+	}
+	allow = { 
+		OR = {
+			has_country_flag = "cardassian_union"
+			has_country_flag = "breen_confederacy"
+		}
+	}
+	weight_modifier = { weight = 100000 }
+}
+
+#Pralor, Cravic
+machine_fanatics = {
+	aggressiveness = 1.5
+	trade_willingness = 0.8
+	bravery = 0.5
+	
+	military_spending = 1.2
+	colony_spending = 0.8
+	
+	federation_acceptance = -50
+	nap_acceptance = -20
+	defensive_pact_acceptance = -20
+	migration_pact_acceptance = -20
+	
+	threat_modifier = 1.0
+	friction_modifier = 1.0
+
+	behaviour = {
+		conqueror = yes
+		subjugator = no
+		liberator = no
+		opportunist = yes
+		slaver = yes
+		uplifter = no
+		purger = no
+		displacer = yes
+		dominator = no
+		infiltrator = no
+		robot_exploiter = no
+		robot_liberator = yes
+		propagator = no
+		multispecies = no
+		crisis_fighter = yes
+	}
+	allow = { 
+		OR = {
+			has_country_flag = "pralor_auxiliary"
+			has_country_flag = "cravic_imperative"
+		}
+	}
+	weight_modifier = { weight = 100000 }
+}
+
+
+
+fallen_empire_pacifist = { 
+	aggressiveness = 0.25
+	trade_willingness = 1.25
+	bravery = 2.0
+	combat_bravery = 1.00
+	
+	threat_modifier = 0.0
+	threat_others_modifier = 0.25
+	friction_modifier = 0.0
+
+	behaviour = {
+		conqueror = no
+		subjugator = no
+		liberator = no
+		opportunist = no
+		slaver = no
+		uplifter = no
+		purger = no
+		dominator = no
+		infiltrator = no
+		robot_exploiter = no
+		robot_liberator = no
+		propagator = no
+		multispecies = yes
+	}
+	
+	allow = {
+		is_country_type = fallen_empire
+		has_ethic = "ethic_fanatic_pacifist"
+	}
+	
+	weight_modifier = {
+		weight = 100	
+	}
+}
+
+awakened_fallen_empire_pacifist = { 
+	aggressiveness = 0.4
+	trade_willingness = 1.25
+	bravery = 2.0
+	combat_bravery = 1.25
+	
+	threat_modifier = 0.75
+	threat_others_modifier = 0.0
+	friction_modifier = 0.0
+
+	behaviour = {
+		conqueror = no
+		subjugator = no
+		liberator = no
+		opportunist = yes
+		slaver = no
+		uplifter = no
+		purger = no
+		dominator = no
+		infiltrator = no
+		robot_exploiter = no
+		robot_liberator = no
+		propagator = no
+		multispecies = yes		# they like other races, but they're not taking orders from them
+		crisis_fighter = yes
+		crisis_leader = yes 	# special for awakened fallen empires
+	}
+	
+	allow = {
+		is_country_type = awakened_fallen_empire
+		has_ethic = "ethic_fanatic_pacifist"
+	}
+	
+	weight_modifier = {
+		weight = 100	
+	}
+}

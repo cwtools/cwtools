@@ -1,0 +1,150 @@
+#Trabe
+trabe_homeworld = {
+	name = "Trabe"
+	class = "sc_k"
+	asteroids_distance = 88
+	flags = { trabe_homeworld }
+	usage = custom_empire
+	max_instances = 1
+	planet = {
+		name = "Trabe"
+		class = "pc_g_star"
+		orbit_distance = 0
+		orbit_angle = 1
+		size = 30
+		has_ring = no
+	}
+	planet = {
+		count = 3
+		orbit_distance = { min = 16 max = 22 }
+		class = random_non_colonizable
+		orbit_angle = { min = 90 max = 270 }
+		change_orbit = @base_moon_distance
+		moon = {
+			count = { min = 0 max = 2 }
+			class = random_non_colonizable
+			orbit_angle = { min = 90 max = 270 }
+			orbit_distance = 5
+		}
+	}
+	planet = {
+		count = 5
+		orbit_distance = { min = 14 max = 25 }
+		class = random_non_colonizable
+		orbit_angle = { min = 90 max = 270 }
+		change_orbit = @base_moon_distance
+		moon = {
+			count = { min = 0 max = 1 }
+			class = random_non_colonizable
+			orbit_angle = { min = 90 max = 270 }
+			orbit_distance = 5
+		}
+	}
+	planet = {
+		name = "Trabe Prime"
+		class = pc_alpine
+		orbit_distance = 14.5
+		orbit_angle = 220
+		size = { min = 22 max = 25 }
+		starting_planet = yes
+		has_ring = no
+		tile_blockers = none
+		modifiers = none
+		init_effect = { prevent_anomaly = yes }
+		init_effect = {
+			set_global_flag = trabe_homeworld_spawned
+			if = {
+				limit = { NOT = { any_country = { has_country_flag = trabe_alliance } } }
+				create_species = {
+					name = "Trabe"
+					class = TRA
+					portrait = trabe
+					homeworld = THIS
+					traits = {
+						trait = "trait_slow_learners"
+						trait="trait_nomadic"
+						trait="trait_adaptive"
+						ideal_planet_class = "pc_alpine"
+					}
+				}
+				last_created_species = { save_global_event_target_as = trabeSpecies }
+				create_country = {
+					name = "NAME_trabe_alliance"
+					ship_prefix = "TNV"
+					type = default
+					ignore_initial_colony_error = yes
+					civics = { civic = "civic_warrior_culture" civic = "civic_cutthroat_politics" }
+					authority = auth_dictatorial
+					name_list = "Trabe"
+					ethos = { ethic = "ethic_militarist" ethic = "ethic_fanatic_authoritarian" }
+					species = event_target:trabeSpecies
+					flag = {
+						icon = { category = "trek" file = "trabe.dds" }
+						background = { category = "backgrounds" file = "circle.dds" }
+						colors = { "customcolor1776" "customcolor1848" "null" "null" }
+					}
+					effect = {
+						set_graphical_culture = trabe_01					
+						set_country_flag = trabe_alliance
+						set_country_flag = custom_start_screen
+						set_country_flag = generic_ent
+						set_country_flag = delta_empire
+						set_country_flag = init_spawned
+						set_country_flag = sth_medium_galaxy
+						save_global_event_target_as = trabe_alliance
+					}
+				}
+				create_colony = { owner = event_target:trabe_alliance species = event_target:trabeSpecies ethos = owner }
+			}
+			set_capital = yes
+			random_country = {
+				limit = { has_country_flag = trabe_alliance }
+				save_global_event_target_as = trabe_alliance
+				add_appropriate_start_techs = yes
+				species = { save_global_event_target_as = trabeSpecies }
+			}
+			if = {
+				limit = { NOT = { exists = event_target:kazonSpecies } }
+				create_species = {
+					name = "Kazon"
+					class = KAZ
+					portrait = kazon
+					traits = { trait = "trait_slow_learners" trait="trait_nomadic" trait="trait_adaptive" ideal_planet_class = "pc_arid" }
+				}
+				last_created_species = { save_global_event_target_as = kazonSpecies }
+			}
+			random_tile = {
+				limit = { has_blocker = no has_grown_pop = no has_growing_pop = no }
+				create_pop = { species = event_target:kazonSpecies }
+			}
+			random_tile = {
+				limit = { has_blocker = no has_grown_pop = no has_growing_pop = no }
+				create_pop = { species = event_target:kazonSpecies }
+			}
+			random_tile = {
+				limit = { has_blocker = no has_grown_pop = no has_growing_pop = no }
+				create_pop = { species = event_target:kazonSpecies }
+			}
+			event_target:trabe_alliance = { event_target:kazonSpecies = { set_citizenship_type = { country = event_target:trabe_alliance type = citizenship_slavery } } }
+			set_owner = event_target:trabe_alliance
+			generate_major_empire_start_buildings = yes
+			generate_major_empire_start_pops = yes
+			generate_major_empire_start_fleets = yes
+			set_name = "Trabe Prime" 
+		}
+	}
+	planet = {
+		count = 1
+		orbit_distance = { min = 18 max = 25 }
+		class = random_non_colonizable
+		orbit_angle = { min = 90 max = 270 }	
+		change_orbit = @base_moon_distance
+		moon = {
+			count = { min = 0 max = 1 }
+			class = random_non_colonizable
+			orbit_angle = { min = 90 max = 270 }
+			orbit_distance = 5
+		}
+	}
+
+}

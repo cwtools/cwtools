@@ -1,0 +1,106 @@
+
+####################
+# Shield Recharger #
+####################
+
+utility_component_template = {
+	can_recharge_shield = yes
+	key = "SHIELD_RECHARGER"
+	size = aux
+	icon = "GFX_ship_part_shield_recharger"
+	icon_frame = 1
+	power = -20
+	cost = 5
+	hidden = yes
+	
+	#prerequisites = { "tech_shield_rechargers_1" }
+	component_set = "SHIELD_RECHARGER"
+	
+	modifier = {
+		ship_shield_regen_mult = 0.5 #Regeneration per day
+	}
+	
+	ai_weight = {
+		weight = 15
+		modifier = {
+			factor = 2.0
+			is_preferred_weapons = weapon_type_energy
+		}
+	}
+}
+
+####################
+# Crystal Plating  #
+####################
+
+utility_component_template = {
+	key = "CRYSTAL_ARMOR_1"
+	size = aux
+	icon = "GFX_ship_part_crystal_armor_1"
+	icon_frame = 1
+	power = 0
+	cost = 10
+	hidden = yes
+	
+	#prerequisites = { "tech_crystal_armor_1" }
+	component_set = "CRYSTAL_ARMOR_1"
+	upgrades_to = "CRYSTAL_ARMOR_2"
+	
+	modifier = {
+		ship_hitpoints_mult = 0.05
+	}
+	
+	ai_weight = {
+		weight = 5
+	}
+}
+
+utility_component_template = {
+	key = "CRYSTAL_ARMOR_2"
+	size = aux
+	icon = "GFX_ship_part_crystal_armor_2"
+	icon_frame = 1
+	power = 0
+	cost = 20
+	hidden = yes
+	
+	#prerequisites = { "tech_crystal_armor_2" }
+	component_set = "CRYSTAL_ARMOR_2"
+	
+	modifier = {
+		ship_hitpoints_mult = 0.10
+	}
+	
+	ai_weight = {
+		weight = 25
+	}
+}
+
+#############################
+# Regenerative Hull Tissue  #
+#############################
+
+utility_component_template = {
+	key = "AUTO_REPAIR"
+	size = aux
+	icon = "GFX_ship_part_auto_repair"
+	icon_frame = 1
+	power = 0
+	cost = 15
+	hidden = yes
+
+	modifier = {
+		ship_auto_repair_add = 0.02 # Regenerates 2% ship-health per month
+	}
+	
+	#prerequisites = { tech_regenerative_hull_tissue }
+	component_set = "AUTO_REPAIR"
+	
+	ai_weight = {
+		weight = 10
+		modifier = {
+			factor = 2.0
+			is_preferred_weapons = weapon_type_explosive
+		}		
+	}
+}

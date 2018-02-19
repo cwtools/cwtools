@@ -1,0 +1,1949 @@
+############################
+#
+# Anomaly Events
+#
+# Written by Henrik Eklund
+# STNH - Banks 1.8.0 Compat
+############################
+
+namespace = anomaly
+
+@tier1influencecontact = 7
+@tier1influencecontactxenophile = 8
+@tier1influencecontactmin = 20
+@tier1influencecontactmax = 80
+
+@tier2influencecontact = 10
+@tier2influencecontactxenophile = 12
+@tier2influencecontactmin = 40
+@tier2influencecontactmax = 100
+
+@tier1materialreward = 6
+@tier1materialmin = 100
+@tier1materialmax = 500
+@tier2materialreward = 12
+@tier2materialmin = 150
+@tier2materialmax = 1000
+@tier3materialreward = 18
+@tier3materialmin = 250
+@tier3materialmax = 1500
+@tier4materialreward = 24
+@tier4materialmin = 350
+@tier4materialmax = 2000
+@tier5materialreward = 48
+@tier5materialmin = 700
+@tier5materialmax = 4000
+
+@tier1influencereward = 6
+@tier1influencemin = 40
+@tier1influencemax = 100
+@tier2influencereward = 12
+@tier2influencemin = 80
+@tier2influencemax = 175
+@tier3influencereward = 18
+@tier3influencemin = 125
+@tier3influencemax = 250
+@tier4influencereward = 24
+@tier4influencemin = 150
+@tier4influencemax = 300
+@tier5influencereward = 36
+@tier5influencemin = 250
+@tier5influencemax = 500
+@tier6influencereward = 48
+@tier6influencemin = 300
+@tier6influencemax = 600
+
+@tier1researchreward = 6
+@tier1researchmin = 60
+@tier1researchmax = 150
+@tier2researchreward = 12
+@tier2researchmin = 90
+@tier2researchmax = 250
+@tier3researchreward = 18
+@tier3researchmin = 120
+@tier3researchmax = 350
+@tier4researchreward = 24
+@tier4researchmin = 150
+@tier4researchmax = 500
+@tier5researchreward = 48
+@tier5researchmin = 300
+@tier5researchmax = 1000
+
+# ROOT = ship scope
+# FROM = planet scope
+
+### Coprolite Asteroid
+ship_event = {
+	id = anomaly.1
+	title = "anomaly.1.name"
+	desc = "anomaly.1.desc"
+	picture = GFX_evt_mining_station
+	show_sound = event_ship_bridge
+	location = FROM
+	
+	is_triggered_only = yes
+			
+	immediate = {
+		from = { orbital_deposit_tile = { clear_deposits = yes } }
+	}
+
+	option = {
+		name = REMARKABLE
+		hidden_effect = {
+			FROM = {
+				add_modifier = {
+					modifier = "asteroid_coprolite"
+					days = -1
+				}
+			}
+		}
+		FROM = { 
+			orbital_deposit_tile = {
+				add_deposit = d_vast_society_deposit
+			}
+		}
+	}
+}
+
+### Pirate Treasure
+ship_event = {
+	id = anomaly.5
+	title = "anomaly.5.name"
+	desc = "anomaly.5.desc"
+	picture = GFX_evt_mining_station
+	show_sound = event_ship_bridge
+	location = FROM
+	
+	is_triggered_only = yes
+
+	immediate = { owner = { country_event = { id = story.5 days = 30 } } }
+	
+	option = {
+		name = anomaly.5.a
+		owner = {
+			add_monthly_resource_mult = {
+				resource = energy
+				value = @tier1materialreward
+				min = @tier1materialmin
+				max = @tier1materialmax
+			}
+		}
+	}
+}
+
+system_event =
+{
+	immediate = {every_system_planet = {
+		# if the planet has an asteroid property
+		if = {
+			limit = {
+				OR = {
+					has_modifier = Large_Asteroid 
+					has_modifier = Asteroid_Moon
+					has_modifier = Metal_Asteroid 
+					has_modifier = Dense_Core 
+					has_modifier = Abandoned_Mining_Platforms 
+				}
+			}
+			#we add +1 to variable
+			change_variable = {
+				which = "pm_number_rich_asteroids" 
+				value = 1
+			}
+		}
+	}}
+}
+
+### Asteroid Fauna
+ship_event = {
+	id = anomaly.10
+	title = "anomaly.10.name"
+	desc = "anomaly.10.desc"
+	picture = GFX_evt_mining_station
+	show_sound = event_ship_bridge
+	location = FROM
+	
+	is_triggered_only = yes
+
+	immediate = {
+		from = { orbital_deposit_tile = { clear_deposits = yes }}
+		owner = { country_event = { id = story.2 days = 30 } }
+	}
+	
+	option = {
+		name = anomaly.10.a	
+		hidden_effect = {
+			FROM = {
+				add_modifier = {
+					modifier = "asteroid_life"
+					days = -1
+				}
+			}
+		}
+		FROM = { 
+			orbital_deposit_tile = { 
+				add_deposit = d_vast_society_deposit
+			}
+		}
+	}
+}
+
+### Asteroid Fossils
+ship_event = {
+	id = anomaly.15
+	title = "anomaly.15.name"
+	desc = "anomaly.15.desc"
+	picture = GFX_evt_mining_station
+	show_sound = event_ship_bridge
+	location = FROM
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = FASCINATING
+		owner = { 
+			add_monthly_resource_mult = {
+				resource = society_research
+				value = @tier1researchreward
+				min = @tier1researchmin
+				max = @tier1researchmax
+			}
+		}
+	}
+}
+
+### Derelict Shipyard
+ship_event = {
+	id = anomaly.25
+	title = "anomaly.25.name"
+	desc = "anomaly.25.desc"
+	picture = GFX_evt_mining_station
+	show_sound = event_ship_bridge
+	location = FROM
+	
+	is_triggered_only = yes
+
+	immediate = {
+		from = { orbital_deposit_tile = { clear_deposits = yes } }
+		owner = { country_event = { id = story.5 days = 30 } }
+	}
+	
+	option = {
+		name = anomaly.25.a
+		hidden_effect = {
+			FROM = {
+				add_modifier = {
+					modifier = "derelict_shipyard"
+					days = -1
+				}
+			}
+		}
+		FROM = { 
+			orbital_deposit_tile = { 
+				add_deposit = d_vast_engineering_deposit
+			}
+		}
+	}
+}
+
+### Junkyard
+ship_event = {
+	id = anomaly.30
+	title = "anomaly.30.name"
+	desc = "anomaly.30.desc"
+	picture = GFX_evt_mining_station
+	show_sound = event_ship_bridge
+	location = FROM
+	
+	is_triggered_only = yes
+
+	immediate = {
+		from = { orbital_deposit_tile = { clear_deposits = yes }}
+		owner = { country_event = { id = story.5 days = 30 } }
+	}
+	
+	option = {
+		name = anomaly.30.a
+		hidden_effect = {
+			FROM = {
+				add_modifier = {
+					modifier = "junkyard"
+					days = -1
+				}
+			}
+		}
+		FROM = { 
+			orbital_deposit_tile = { 
+				add_deposit = d_vast_mineral_deposit
+			}
+		}
+	}
+}
+
+### Crashed Scout Ship
+ship_event = {
+	id = anomaly.35
+	title = "anomaly.35.name"
+	desc = "anomaly.35.desc"
+	picture = GFX_evt_mining_station
+	show_sound = event_ship_bridge
+	location = FROM
+	
+	is_triggered_only = yes
+
+	immediate = { owner = { country_event = { id = story.5 days = 30 } } }
+	
+	option = {
+		name = anomaly.35.a
+		owner = {
+			add_monthly_resource_mult = {
+				resource = engineering_research
+				value = @tier1researchreward
+				min = @tier1researchmin
+				max = @tier1researchmax
+			}
+		}
+	}
+}
+
+### Automated Mining Base
+ship_event = {
+	id = anomaly.40
+	title = "anomaly.40.name"
+	desc = {
+		trigger = {
+			owner = { any_planet_within_border = { is_same_value = event_target:MiningPlanet } }
+		}
+		text = "anomaly.40.desc"
+	}
+	desc = {
+		trigger = {
+			NOT = {
+				owner = { any_planet_within_border = { is_same_value = event_target:MiningPlanet } }
+			}
+		}
+		text = "anomaly.40.desc.alt"
+	}
+	picture = GFX_evt_mining_station
+	show_sound = event_ship_bridge
+	location = FROM 
+	
+	is_triggered_only = yes
+
+	immediate = {
+		owner = {
+			country_event = { id = story.5 days = 30 }
+			save_event_target_as = MyCountry
+		}
+		from = {
+			save_event_target_as = MiningPlanet
+		}
+	}
+	
+	option = {
+		name = EXCELLENT
+		trigger = {
+			owner = {
+				NOT = { any_planet_within_border = { is_same_value = event_target:MiningPlanet } }
+			}
+			from = {
+				orbital_deposit_tile = {
+					has_resource = {
+						type = minerals
+						amount > 0
+					}
+				}
+			}
+		}
+		owner = {
+			add_monthly_resource_mult = {
+				resource = minerals
+				value = @tier1materialreward
+				min = @tier1materialmin
+				max = @tier1materialmax
+			}
+		}
+	}
+	option = {
+		name = EXCELLENT
+		trigger = {
+			owner = {
+				NOT = { any_planet_within_border = { is_same_value = event_target:MiningPlanet } }
+			}
+			from = {
+				orbital_deposit_tile = {
+					has_resource = {
+						type = energy
+						amount > 0
+					}
+				}
+			}
+		}
+		owner = {
+			add_monthly_resource_mult = {
+				resource = energy
+				value = @tier1materialreward
+				min = @tier1materialmin
+				max = @tier1materialmax
+			}
+		}
+	}
+	
+	option = {
+		name = EXCELLENT
+		trigger = {
+			owner = { any_planet_within_border = { is_same_value = event_target:MiningPlanet } }
+		}
+		from = {
+			create_mining_station = {
+				owner = ROOT
+			}
+		}
+	}
+}
+
+### Weapons Target Range
+ship_event = {
+	id = anomaly.50
+	title = "anomaly.50.name"
+	desc = "anomaly.50.desc"
+	picture = GFX_evt_mining_station
+	show_sound = event_ship_bridge
+	location = FROM
+	
+	is_triggered_only = yes
+
+	immediate = {
+		from = { orbital_deposit_tile = { clear_deposits = yes } }
+		owner = { country_event = { id = story.3 days = 30 } }
+	}
+	
+	option = {
+		name = INTERESTING
+		hidden_effect = {
+			FROM = {
+				add_modifier = {
+					modifier = "target_range"
+					days = -1
+				}
+			}
+		}
+		FROM = { 
+			orbital_deposit_tile = { 
+				add_deposit = d_vast_physics_deposit
+			}
+		}
+	}
+}
+
+### Asteroid Collision
+ship_event = {
+	id = anomaly.55
+	title = "anomaly.55.name"
+	desc = "anomaly.55.desc"
+	picture = GFX_evt_mining_station
+	show_sound = event_ship_bridge
+	location = FROM
+	
+	is_triggered_only = yes
+
+	immediate = {
+		from = { orbital_deposit_tile = { clear_deposits = yes } }
+	}
+	
+	option = {
+		name = anomaly.55.a
+		FROM = { 
+			orbital_deposit_tile = { 
+				add_deposit = d_vast_energy_deposit
+			}
+		}
+	}
+}
+
+### Exotic Radiation
+ship_event = {
+	id = anomaly.60
+	title = "anomaly.60.name"
+	desc = "anomaly.60.desc"
+	picture = GFX_evt_mining_station
+	show_sound = event_ship_bridge
+	location = FROM
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = REMARKABLE
+		owner = {
+			add_monthly_resource_mult = {
+				resource = physics_research
+				value = @tier1researchreward
+				min = @tier1researchmin
+				max = @tier1researchmax
+			}
+		}
+	}
+}
+
+### Crashed Ore Freighter
+ship_event = {
+	id = anomaly.65
+	title = "anomaly.65.name"
+	desc = "anomaly.65.desc"
+	picture = GFX_evt_mining_station
+	show_sound = event_ship_bridge
+	location = FROM
+	
+	is_triggered_only = yes
+
+	immediate = {
+		from = { orbital_deposit_tile = { clear_deposits = yes } }
+		owner = { country_event = { id = story.5 days = 30 } }
+	}
+	
+	option = {
+		name = EXCELLENT
+		hidden_effect = {
+			FROM = {
+				add_modifier = {
+					modifier = "ore_freighter"
+					days = -1
+				}
+			}
+		}
+		FROM = { 
+			orbital_deposit_tile = { 
+				add_deposit = d_vast_mineral_deposit
+			}
+		}
+	}
+}
+
+### Atmospheric Ecosystem
+ship_event = {
+	id = anomaly.300
+	title = "anomaly.300.name"
+	desc = "anomaly.300.desc"
+	picture = GFX_evt_microscopic_life
+	show_sound = event_ship_bridge
+	location = FROM
+	
+	is_triggered_only = yes
+
+	immediate = {
+		from = { orbital_deposit_tile = { clear_deposits = yes } }
+		owner = { country_event = { id = story.2 days = 30 } }
+	}
+	
+	option = {
+		name = FASCINATING
+		hidden_effect = {
+			FROM = {
+				add_modifier = {
+					modifier = "atmospheric_ecosystem"
+					days = -1
+				}
+			}
+		}
+		FROM = { 
+			orbital_deposit_tile = { 
+				add_deposit = d_vast_society_deposit
+			}
+		}
+	}
+}
+
+### Abandoned Cargo Pod
+ship_event = {
+	id = anomaly.305
+	title = "anomaly.305.name"
+	desc = "anomaly.305.desc"
+	picture = GFX_evt_ship_in_orbit
+	show_sound = event_ship_bridge
+	location = FROM
+	
+	is_triggered_only = yes
+	
+	immediate = { owner = { country_event = { id = story.5 days = 30 } } }
+
+	option = {
+		name = REMARKABLE
+		owner = {
+			add_monthly_resource_mult = {
+				resource = energy
+				value = @tier1materialreward
+				min = @tier1materialmin
+				max = @tier1materialmax
+			}
+		}
+	}
+}
+
+### Social Experiment
+ship_event = {
+	id = anomaly.310
+	title = "anomaly.310.name"
+	desc = "anomaly.310.desc"
+	picture = GFX_evt_ship_in_orbit
+	show_sound = event_ship_bridge
+	location = FROM
+	
+	is_triggered_only = yes
+
+	immediate = { owner = { country_event = { id = story.5 days = 30 } } }
+	
+	option = {
+		name = INTRIGUING
+		owner = {
+			add_monthly_resource_mult = {
+				resource = society_research
+				value = @tier1researchreward
+				min = @tier1researchmin
+				max = @tier1researchmax
+			}
+		}
+	}
+}
+
+### Aerostat Colonies
+ship_event = {
+	id = anomaly.315
+	title = "anomaly.315.name"
+	desc = "anomaly.315.desc"
+	picture = GFX_evt_ship_in_orbit
+	show_sound = event_ship_bridge
+	location = FROM
+	
+	is_triggered_only = yes
+
+	immediate = {
+		from = { orbital_deposit_tile = { clear_deposits = yes } }
+		owner = { country_event = { id = story.5 days = 30 } }
+	}
+	
+	option = {
+		name = FASCINATING
+		hidden_effect = {
+			FROM = {
+				add_modifier = {
+					modifier = "aerostat_colonies"
+					days = -1
+				}
+			}
+		}
+		FROM = { 
+			orbital_deposit_tile = { 
+				add_deposit = d_vast_engineering_deposit
+			}
+		}
+	}
+}
+
+### Debris Field
+ship_event = {
+	id = anomaly.320
+	title = "anomaly.320.name"
+	desc = "anomaly.320.desc"
+	picture = GFX_evt_ship_in_orbit
+	show_sound = event_ship_bridge
+	location = FROM
+	
+	is_triggered_only = yes
+
+	immediate = {
+		from = { orbital_deposit_tile = { clear_deposits = yes } }
+		owner = { country_event = { id = story.5 days = 30 } }
+	}
+	
+	option = {
+		name = INTERESTING
+		hidden_effect = {
+			FROM = {
+				add_modifier = {
+					modifier = "debris_field"
+					days = -1
+				}
+			}
+		}
+		FROM = { 
+			orbital_deposit_tile = { 
+				add_deposit = d_vast_mineral_deposit
+			}
+		}
+	}
+}
+
+### Crushed Cruiser
+ship_event = {
+	id = anomaly.325
+	title = "anomaly.325.name"
+	desc = "anomaly.325.desc"
+	picture = GFX_evt_ship_in_orbit
+	show_sound = event_ship_bridge
+	location = FROM
+	
+	is_triggered_only = yes
+
+	immediate = { owner = { country_event = { id = story.5 days = 30 } } }
+	
+	option = {
+		name = anomaly.325.a
+		owner = {
+			add_monthly_resource_mult = {
+				resource = engineering_research
+				value = @tier1researchreward
+				min = @tier1researchmin
+				max = @tier1researchmax
+			}
+		}
+	}
+}
+
+### Extreme Storms
+ship_event = {
+	id = anomaly.330
+	title = "anomaly.330.name"
+	desc = "anomaly.330.desc"
+	picture = GFX_evt_ship_in_orbit
+	show_sound = event_ship_bridge
+	location = FROM
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		from = { orbital_deposit_tile = { clear_deposits = yes } }
+	}
+
+	option = {
+		name = INTERESTING
+		hidden_effect = {
+			FROM = {
+				add_modifier = {
+					modifier = "extreme_storms"
+					days = -1
+				}
+			}
+		}
+		FROM = { 
+			orbital_deposit_tile = { 
+				add_deposit = d_vast_physics_deposit
+			}
+		}
+	}
+}
+
+### Energy Signature
+ship_event = {
+	id = anomaly.335
+	title = "anomaly.335.name"
+	desc = "anomaly.335.desc"
+	picture = GFX_evt_ship_in_orbit
+	show_sound = event_ship_bridge
+	location = FROM
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = FASCINATING
+		owner = {
+			add_monthly_resource_mult = {
+				resource = physics_research
+				value = @tier1researchreward
+				min = @tier1researchmin
+				max = @tier1researchmax
+			}
+		}
+	}
+}
+
+### Precious Moon
+ship_event = {
+	id = anomaly.340
+	title = "anomaly.340.name"
+	desc = "anomaly.340.desc"
+	picture = GFX_evt_ship_in_orbit
+	show_sound = event_ship_bridge
+	location = FROM
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		from = { orbital_deposit_tile = { clear_deposits = yes } }
+	}
+
+	option = {
+		name = anomaly.340.a
+		hidden_effect = {
+			FROM = {
+				add_modifier = {
+					modifier = "precious_moon"
+					days = -1
+				}
+			}
+		}
+		FROM = { 
+			orbital_deposit_tile = { 
+				add_deposit = d_vast_energy_deposit
+			}
+		}
+	}
+}
+
+### Asteroid Collision
+ship_event = {
+	id = anomaly.600
+	title = "anomaly.600.name"
+	desc = "anomaly.600.desc"
+	picture = GFX_evt_ship_in_orbit
+	show_sound = event_ship_bridge
+	location = FROM
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		from = { orbital_deposit_tile = { clear_deposits = yes } }
+	}
+
+	option = {
+		name = anomaly.600.a
+		hidden_effect = {
+			FROM = {
+				add_modifier = {
+					modifier = "asteroid_collision"
+					days = -1
+				}
+			}
+		}
+		FROM = { 
+			orbital_deposit_tile = { 
+				add_deposit = d_vast_mineral_deposit
+			}
+		}
+	}
+}
+
+### Warp Impact
+ship_event = {
+	id = anomaly.605
+	title = "anomaly.605.name"
+	desc = "anomaly.605.desc"
+	picture = GFX_evt_ship_in_orbit
+	show_sound = event_ship_bridge
+	location = FROM
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = REMARKABLE
+		owner = {
+			add_monthly_resource_mult = {
+				resource = physics_research
+				value = @tier1researchreward
+				min = @tier1researchmin
+				max = @tier1researchmax
+			}
+		}
+	}
+}
+
+### Microsingularity
+ship_event = {
+	id = anomaly.610
+	title = "anomaly.610.name"
+	desc = "anomaly.610.desc"
+	picture = GFX_evt_ship_in_orbit
+	show_sound = event_ship_bridge
+	location = FROM
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		from = { orbital_deposit_tile = { clear_deposits = yes } }
+	}
+
+	option = {
+		name = FASCINATING
+		hidden_effect = {
+			FROM = {
+				add_modifier = {
+					modifier = "microsingularity"
+					days = -1
+				}
+			}
+		}
+		FROM = { 
+			orbital_deposit_tile = { add_deposit = d_vast_physics_deposit }
+		}
+	}
+}
+
+### Magnetic Reversal
+ship_event = {
+	id = anomaly.615
+	title = "anomaly.615.name"
+	desc = "anomaly.615.desc"
+	picture = GFX_evt_ship_in_orbit
+	show_sound = event_ship_bridge
+	location = FROM
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = INTRIGUING
+		owner = {
+			add_monthly_resource_mult = {
+				resource = physics_research
+				value = @tier1researchreward
+				min = @tier1researchmin
+				max = @tier1researchmax
+			}
+		}
+	}
+}
+
+### Mummified Pilot
+ship_event = {
+	id = anomaly.625
+	title = "anomaly.625.name"
+	desc = "anomaly.625.desc"
+	picture = GFX_evt_ship_in_orbit
+	show_sound = event_ship_bridge
+	location = FROM
+	
+	is_triggered_only = yes
+
+	immediate = { owner = { country_event = { id = story.5 days = 30 } } }
+	
+	option = {
+		name = anomaly.625.a
+		owner = {
+			add_monthly_resource_mult = {
+				resource = society_research
+				value = @tier1researchreward
+				min = @tier1researchmin
+				max = @tier1researchmax
+			}
+		}
+	}
+}
+
+### Ancient Life Pod
+ship_event = {
+	id = anomaly.630
+	title = "anomaly.630.name"
+	desc = "anomaly.630.desc"
+	picture = GFX_evt_ship_in_orbit
+	show_sound = event_ship_bridge
+	location = FROM
+	
+	is_triggered_only = yes
+
+	immediate = { owner = { country_event = { id = story.5 days = 30 } } }
+	
+	option = {
+		name = INTERESTING
+		owner = {
+			add_monthly_resource_mult = {
+				resource = society_research
+				value = @tier1researchreward
+				min = @tier1researchmin
+				max = @tier1researchmax
+			}
+		}
+	}
+}
+
+### Alien Writing
+ship_event = {
+	id = anomaly.635
+	title = "anomaly.635.name"
+	desc = "anomaly.635.desc"
+	picture = GFX_evt_ship_in_orbit
+	show_sound = event_ship_bridge
+	location = FROM
+	
+	is_triggered_only = yes
+
+	immediate = {
+		from = { orbital_deposit_tile = { clear_deposits = yes } }
+		owner = { country_event = { id = story.5 days = 30 } }
+	}
+	
+	option = {
+		name = FASCINATING
+		hidden_effect = {
+			FROM = {
+				add_modifier = {
+					modifier = "alien_writing"
+					days = -1
+				}
+			}
+		}
+		FROM = { 
+			orbital_deposit_tile = { 
+				add_deposit = d_vast_society_deposit
+			}
+		}
+	}
+}
+
+### Solar Sailer
+ship_event = {
+	id = anomaly.650
+	title = "anomaly.650.name"
+	desc = "anomaly.650.desc"
+	picture = GFX_evt_ship_in_orbit
+	show_sound = event_ship_bridge
+	location = FROM
+	
+	is_triggered_only = yes
+
+	immediate = { owner = { country_event = { id = story.5 days = 30 } } }
+	
+	option = {
+		name = anomaly.650.a
+		owner = {
+			add_monthly_resource_mult = {
+				resource = engineering_research
+				value = @tier1researchreward
+				min = @tier1researchmin
+				max = @tier1researchmax
+			}
+		}
+	}
+}
+
+### Glancing Hit
+ship_event = {
+	id = anomaly.655
+	title = "anomaly.655.name"
+	desc = "anomaly.655.desc"
+	picture = GFX_evt_ship_in_orbit
+	show_sound = event_ship_bridge
+	location = FROM
+	
+	is_triggered_only = yes
+
+	immediate = { owner = { country_event = { id = story.5 days = 30 } } }
+	
+	option = {
+		name = INCREDIBLE
+		owner = {
+			add_monthly_resource_mult = {
+				resource = engineering_research
+				value = @tier1researchreward
+				min = @tier1researchmin
+				max = @tier1researchmax
+			}
+		}
+	}
+}
+
+### Towed Asteroid
+ship_event = {
+	id = anomaly.660
+	title = "anomaly.660.name"
+	desc = "anomaly.660.desc"
+	picture = GFX_evt_ship_in_orbit
+	show_sound = event_ship_bridge
+	location = FROM
+	
+	is_triggered_only = yes
+
+	immediate = {
+		from = { orbital_deposit_tile = { clear_deposits = yes } }
+		owner = { country_event = { id = story.5 days = 30 } }
+	}
+	
+	option = {
+		name = INTERESTING
+		hidden_effect = {
+			FROM = {
+				add_modifier = {
+					modifier = "towed_asteroid"
+					days = -1
+				}
+			}
+		}
+		FROM = { 
+			orbital_deposit_tile = { 
+				add_deposit = d_vast_engineering_deposit
+			}
+		}
+	}
+}
+
+### Nuclear Devastation (Toxic)
+ship_event = {
+	id = anomaly.670
+	title = "anomaly.670.name"
+	desc = "anomaly.670.desc"
+	picture = GFX_evt_city_ruins
+	show_sound = event_ship_bridge
+	location = FROM
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		from = { orbital_deposit_tile = { clear_deposits = yes } }
+		owner = { country_event = { id = story.5 days = 30 } }
+	}
+
+	option = {
+		name = anomaly.670.a
+		hidden_effect = {
+			FROM = {
+				add_modifier = {
+					modifier = "nuclear_devastation"
+					days = -1
+				}
+			}
+		}
+		FROM = { 
+			orbital_deposit_tile = { 
+				add_deposit = d_rich_society_deposit
+				add_deposit = d_rich_engineering_deposit
+			}
+		}
+	}
+}
+
+### Runaway Greenhouse Effect
+ship_event = {
+	id = anomaly.685
+	title = "anomaly.685.name"
+	desc = "anomaly.685.desc"
+	picture = GFX_evt_dead_city
+	show_sound = event_ship_bridge
+	location = FROM
+	
+	is_triggered_only = yes
+
+	immediate = {
+		from = { orbital_deposit_tile = { clear_deposits = yes } }
+		owner = { country_event = { id = story.5 days = 30 } }
+	}
+	
+	option = {
+		name = anomaly.670.a
+		hidden_effect = {
+			FROM = {
+				add_modifier = {
+					modifier = "greenhouse_effect"
+					days = -1
+				}
+			}
+		}
+		FROM = { 
+			orbital_deposit_tile = { 
+				add_deposit = d_rich_society_deposit
+				add_deposit = d_rich_physics_deposit
+			}
+		}
+	}
+}
+
+### Ammonia Biosphere
+ship_event = {
+	id = anomaly.690
+	title = "anomaly.690.name"
+	desc = "anomaly.690.desc"
+	picture = GFX_evt_alien_nature
+	show_sound = event_ship_bridge
+	location = FROM
+	
+	is_triggered_only = yes
+
+	immediate = {
+		from = { orbital_deposit_tile = { clear_deposits = yes } }
+		owner = { country_event = { id = story.5 days = 2 } }
+	}
+	
+	option = {
+		name = FASCINATING
+		hidden_effect = {
+			FROM = {
+				add_modifier = {
+					modifier = "ammonia_biosphere"
+					days = -1
+				}
+			}
+		}
+		FROM = { 
+			orbital_deposit_tile = { 
+				add_deposit = d_vast_society_deposit
+			}
+		}
+	}
+}
+
+### Silicon Life Forms
+ship_event = {
+	id = anomaly.695
+	title = "anomaly.695.name"
+	desc = "anomaly.695.desc"
+	picture = GFX_evt_underground_civilization
+	show_sound = event_ship_bridge
+	location = FROM
+	
+	is_triggered_only = yes
+
+	immediate = {
+		from = { orbital_deposit_tile = { clear_deposits = yes } }
+		owner = { country_event = { id = story.2 days = 30 } }
+	}
+	
+	option = {
+		name = INTRIGUING
+		hidden_effect = {
+			FROM = {
+				add_modifier = {
+					modifier = "silicon_lifeforms"
+					days = -1
+				}
+			}
+		}
+		FROM = { 
+			orbital_deposit_tile = { 
+				add_deposit = d_vast_mineral_deposit
+			}
+		}
+	}
+}
+
+### Wildcat Miners
+ship_event = {
+	id = anomaly.700
+	title = "anomaly.700.name"
+	desc = "anomaly.700.desc"
+	picture = GFX_evt_outpost
+	show_sound = event_ship_bridge
+	location = FROM
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = INTERESTING
+		FROM = {
+			create_mining_station = {
+				owner = ROOT
+			}
+		}
+	}
+}
+
+### Ancient Survey Marker
+ship_event = {
+	id = anomaly.705
+	title = "anomaly.705.name"
+	desc = "anomaly.705.desc"
+	picture = GFX_evt_outpost
+	show_sound = event_ship_bridge
+	location = FROM
+	
+	is_triggered_only = yes
+
+	immediate = {
+		from = { orbital_deposit_tile = { clear_deposits = yes } }
+		owner = { country_event = { id = story.5 days = 30 } }
+	}
+	
+	option = {
+		name = FASCINATING
+		FROM = { 
+			orbital_deposit_tile = { 
+				add_deposit = d_immense_mineral_deposit
+			}
+		}
+	}
+}
+
+# Special Project Completed
+ship_event = {
+	id = anomaly.2501
+	title = "PROJECT_COMPLETE"
+	desc = "anomaly.2501.desc"
+	picture = GFX_evt_ship_in_orbit
+	show_sound = event_scanner
+	location = FROMFROMFROM
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = FASCINATING
+		leader = { add_experience = 200 }
+		owner = {
+			add_monthly_resource_mult = {
+				resource = society_research
+				value = @tier2researchreward
+				min = @tier2researchmin
+				max = @tier2researchmax
+			}
+		}
+	}
+}
+
+### Ocean Beneath the Ice
+ship_event = {
+	id = anomaly.2510
+	title = "anomaly.2510.name"
+	desc = "anomaly.2510.desc"
+	picture = GFX_evt_ship_in_orbit
+	show_sound = event_scanner
+	location = FROM
+	
+	is_triggered_only = yes
+
+	immediate = {
+		from = { orbital_deposit_tile = { clear_deposits = yes } }
+		owner = { country_event = { id = story.1 days = 30 } }
+	}
+	
+	option = {
+		name = INTERESTING
+		hidden_effect = {
+			FROM = {
+				add_modifier = {
+					modifier = "subterranean_ocean"
+					days = -1
+				}
+			}
+		}
+		FROM = { 
+			orbital_deposit_tile = { 
+				add_deposit = d_vast_society_deposit
+			}
+			enable_special_project = {
+				name = "SEA_EXPEDITION_PROJECT"
+				location = this
+				owner = root.owner
+			}
+		}
+	}
+}
+
+# Special Project Completed 1
+ship_event = {
+	id = anomaly.2512
+	title = "PROJECT_COMPLETE"
+	desc = "anomaly.2512.desc"
+	picture = GFX_evt_ship_in_orbit
+	show_sound = event_laboratory_sound
+	location = FROMFROM
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = INTERESTING
+		leader = { add_experience = 200 }
+		owner = {
+			add_monthly_resource_mult = {
+				resource = society_research
+				value = @tier2researchreward
+				min = @tier2researchmin
+				max = @tier2researchmax
+			}
+		}
+		FROMFROM = {
+			orbital_deposit_tile = {
+				hidden_effect = { clear_deposits = yes }
+				add_deposit = d_vast_engineering_deposit #d_living_metal_deposit
+			}
+		}
+	}
+}
+
+# Special Project Completed 2
+ship_event = {
+	id = anomaly.2513
+	title = "PROJECT_COMPLETE"
+	desc = "anomaly.2513.desc"
+	picture = GFX_evt_ship_in_orbit
+	show_sound = event_laboratory_sound
+	location = FROMFROM
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = INTERESTING
+		leader = { add_experience = 200 }
+	}
+}
+
+### Gigantic Skeleton
+ship_event = {
+	id = anomaly.2520
+	title = "anomaly.2520.name"
+	desc = "anomaly.2520.desc"
+	picture = GFX_evt_ship_in_orbit
+	show_sound = event_ship_bridge
+	location = FROM
+	
+	is_triggered_only = yes
+
+	immediate = {
+		from = { orbital_deposit_tile = { clear_deposits = yes } }
+		owner = { country_event = { id = story.2 days = 30 } }
+	}
+	
+	option = {
+		name = FASCINATING
+		from = {
+			enable_special_project = {
+				name = "GIGANTIC_SKELETON_PROJECT"
+				location = this
+				owner = root.owner
+			}
+		}
+	}
+}
+
+# Special Project Completed 1
+ship_event = {
+	id = anomaly.2521
+	title = "PROJECT_COMPLETE"
+	desc = "anomaly.2521.desc"
+	picture = GFX_evt_ship_in_orbit
+	show_sound = event_scanner
+	location = FROMFROM
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = INCREDIBLE
+		hidden_effect = {
+			FROMFROM = {
+				add_modifier = {
+					modifier = "organic_starship"
+					days = -1
+				}
+			}
+		}
+		FROMFROM = { 
+			orbital_deposit_tile = { 
+				add_deposit = d_vast_society_deposit
+				add_deposit = d_vast_engineering_deposit
+			}
+		}
+		leader = { add_experience = 200 }
+	}
+}
+
+# Special Project Completed 2
+ship_event = {
+	id = anomaly.2522
+	title = "PROJECT_COMPLETE"
+	desc = "anomaly.2522.desc"
+	picture = GFX_evt_ship_in_orbit
+	show_sound = event_scanner
+	location = FROMFROMFROM
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = ASTOUNDING
+		leader = { add_experience = 200 }
+		owner = {
+			add_monthly_resource_mult = {
+				resource = physics_research
+				value = @tier1researchreward
+				min = @tier1researchmin
+				max = @tier1researchmax
+			}
+		}
+	}
+}
+
+### Signs of Battle
+ship_event = {
+	id = anomaly.2530
+	title = "anomaly.2530.name"
+	desc = "anomaly.2530.desc"
+	picture = GFX_evt_ship_in_orbit
+	show_sound = event_ship_bridge
+	location = FROM
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		from = { orbital_deposit_tile = { clear_deposits = yes }}
+		owner = { country_event = { id = story.5 days = 30 } }
+	}
+
+	option = {
+		name = INTRIGUING
+		from = {
+			enable_special_project = {
+				name = "BATTLE_WRECKAGE_PROJECT"
+				location = this
+				owner = root.owner
+			}
+		}
+	}
+}
+
+# Special Project Completed 1
+ship_event = {
+	id = anomaly.2531
+	title = "PROJECT_COMPLETE"
+	desc = "anomaly.2531.desc"
+	picture = GFX_evt_ship_in_orbit
+	show_sound = event_scanner
+	location = FROMFROM
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EXCELLENT
+		hidden_effect = {
+			FROMFROM = {
+				add_modifier = {
+					modifier = "starship_graveyard"
+					days = -1
+				}
+			}
+		}
+		FROMFROM = { 
+			orbital_deposit_tile = { 
+				add_deposit = d_vast_engineering_deposit
+			}
+		}
+		leader = { add_experience = 200 }
+		owner = {
+			add_monthly_resource_mult = {
+				resource = engineering_research
+				value = @tier3researchreward
+				min = @tier3researchmin
+				max = @tier3researchmax
+			}
+		}
+	}
+}
+
+# Special Project Completed 2
+ship_event = {
+	id = anomaly.2532
+	title = "PROJECT_COMPLETE"
+	desc = "anomaly.2532.desc"
+	picture = GFX_evt_ship_in_orbit
+	show_sound = event_scanner
+	location = FROMFROM
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = INTERESTING
+		hidden_effect = {
+			FROMFROM = {
+				add_modifier = {
+					modifier = "starship_graveyard"
+					days = -1
+				}
+			}
+		}
+		FROMFROM = { 
+			orbital_deposit_tile = { 
+				add_deposit = d_vast_engineering_deposit
+			}
+		}
+		leader = { add_experience = 200 }
+	}
+}
+
+### Alien Mural
+ship_event = {
+	id = anomaly.2540
+	title = "anomaly.2540.name"
+	desc = "anomaly.2540.desc"
+	picture = GFX_evt_alien_ruins
+	show_sound = event_ship_bridge
+	location = FROM
+	
+	is_triggered_only = yes
+
+	immediate = { 
+		from = { orbital_deposit_tile = { clear_deposits = yes }}
+		owner = { country_event = { id = story.5 days = 30 } }
+	}
+	
+	option = {
+		name = FASCINATING
+		from = {
+			enable_special_project = {
+				name = "TRANSLATE_MURAL_PROJECT"
+				location = this
+				owner = root
+			}
+		}
+	}
+}
+
+# Special Project Completed 1
+ship_event = {
+	id = anomaly.2541
+	title = "PROJECT_COMPLETE"
+	desc = "anomaly.2541.desc"
+	picture = GFX_evt_alien_ruins
+	show_sound = event_ship_bridge
+	location = FROMFROMFROM
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = AMAZING
+		leader = { add_experience = 200 }
+		owner = {
+			add_monthly_resource_mult = {
+				resource = engineering_research
+				value = @tier1researchreward
+				min = @tier1researchmin
+				max = @tier1researchmax
+			}
+		}
+	}
+}
+
+# Special Project Completed 2
+ship_event = {
+	id = anomaly.2542
+	title = "PROJECT_COMPLETE"
+	desc = "anomaly.2542.desc"
+	picture = GFX_evt_alien_ruins
+	location = FROMFROMFROM
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = INTRIGUING
+		hidden_effect = {
+			FROMFROM = {
+				add_modifier = {
+					modifier = "alien_mural"
+					days = -1
+				}
+			}
+		}
+		FROMFROM = { 
+			orbital_deposit_tile = { 
+				add_deposit = d_rich_society_deposit
+				add_deposit = d_rich_engineering_deposit
+				add_deposit = d_rich_physics_deposit
+			}
+		}
+		leader = { add_experience = 200 }
+	}
+}
+
+### Automated Shipyard
+ship_event = {
+	id = anomaly.2550
+	title = "anomaly.2550.name"
+	desc = "anomaly.2550.desc"
+	picture = GFX_evt_ship_in_orbit
+	location = FROM
+	
+	is_triggered_only = yes
+
+	immediate = { owner = { country_event = { id = story.5 days = 30 } } }
+	
+	option = {
+		name = INTERESTING
+		from = {
+			enable_special_project = {
+				name = "AUTOMATED_SHIPYARD_PROJECT"
+				location = this
+				owner = root.owner
+			}
+		}
+	}
+}
+
+# Special Project Completed 1
+ship_event = {
+	id = anomaly.2551
+	title = "PROJECT_COMPLETE"
+	desc = "anomaly.2551.desc"
+	picture = GFX_evt_ship_in_orbit
+	location = FROMFROM
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EXCELLENT
+		owner = {
+			save_event_target_as = owner_country
+			create_fleet = {
+				name = "NAME_New_Ships"
+				effect = {
+					set_owner = PREV
+					create_ship_design = {
+						design = "NAME_R44"
+						ftl = event_target:owner_country
+					}
+					create_ship = {
+						name = "NAME_Specter"
+						design = last_created_design
+						graphical_culture = "pirate_01"
+						upgradable = no
+					}
+					create_ship = {
+						name = "NAME_Ghost"
+						design = last_created_design
+						graphical_culture = "pirate_01"
+						upgradable = no
+					}
+					create_ship = {
+						name = "NAME_Wraith"
+						design = last_created_design
+						graphical_culture = "pirate_01"
+						upgradable = no
+					}
+					set_location = FROMFROM
+				}
+			}
+		}
+		leader = { add_experience = 200 }
+	}
+}
+
+# Special Project Completed 2
+ship_event = {
+	id = anomaly.2552
+	title = "PROJECT_COMPLETE"
+	desc = "anomaly.2552.desc"
+	picture = GFX_evt_ship_in_orbit
+	location = FROMFROM
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EXCELLENT
+		owner = {
+			save_event_target_as = owner_country
+			create_fleet = {
+				name = "NAME_New_Ship"
+				effect = {
+					set_owner = PREV
+					create_ship_design = {
+						design = "NAME_F79"
+						ftl = event_target:owner_country
+					}
+					create_ship = {
+						name = "NAME_Dark_Wanderer"
+						design = last_created_design
+						graphical_culture = "pirate_01"
+						upgradable = no
+					}
+					set_location = FROMFROM
+				}
+			}
+		}
+		leader = { add_experience = 200 }
+	}
+}
+
+### Gas Giant Ship
+ship_event = {
+	id = anomaly.2560
+	title = "anomaly.2560.name"
+	desc = "anomaly.2560.desc"
+	picture = GFX_evt_ship_in_orbit
+	location = FROM
+	
+	is_triggered_only = yes
+	
+	immediate = { owner = { country_event = { id = story.5 days = 30 } } }
+
+	option = {
+		name = "anomaly.2560.a"
+		from = {
+			enable_special_project = {
+				name = "GAS_GIANT_SHIP_PROJECT"
+				location = this
+				owner = root.owner
+			}
+		}
+	}
+	option = {
+		name = "anomaly.2560.b"
+	}
+}
+
+# Special Project Completed 1
+ship_event = {
+	id = anomaly.2561
+	title = "PROJECT_COMPLETE"
+	desc = "anomaly.2561.desc"
+	picture = GFX_evt_ship_in_orbit
+	location = FROMFROM
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EXCELLENT
+		owner = {
+			create_fleet = {
+				effect = {
+					set_owner = PREV
+					create_ship_design = {
+						design = "NAME_Derelict"
+						ftl = root.owner
+					}
+					create_ship = {
+						name = "NAME_Salvage"
+						design = last_created_design
+						upgradable = no
+					}
+					set_location = FROMFROM
+				}
+			}
+		}
+		leader = { add_experience = 200 }
+	}
+}
+
+# Special Project Completed 2
+ship_event = {
+	id = anomaly.2562
+	title = "PROJECT_COMPLETE"
+	desc = "anomaly.2562.desc"
+	picture = GFX_evt_ship_in_orbit
+	location = FROMFROM
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = UNFORTUNATE
+		leader = { add_experience = 200 }
+	}
+}
+
+### Terminal Orbit
+ship_event = {
+	id = anomaly.2570
+	title = "anomaly.2570.name"
+	desc = "anomaly.2570.desc"
+	picture = GFX_evt_ship_in_orbit
+	location = FROM
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = FASCINATING
+		from = {
+			enable_special_project = {
+				name = "TERMINAL_ORBIT_PROJECT"
+				location = this
+				owner = root.owner
+			}
+		}
+	}
+}
+
+# Special Project Completed
+ship_event = {
+	id = anomaly.2571
+	title = "PROJECT_COMPLETE"
+	desc = "anomaly.2571.desc"
+	picture = GFX_evt_ship_in_orbit
+	location = FROMFROM
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		fromfrom = {
+			save_event_target_as = CollisionLocation
+		}
+	}
+
+	option = {
+		name = MARVELOUS
+		leader = { add_experience = 200 }
+		owner = {
+			add_monthly_resource_mult = {
+				resource = physics_research
+				value = @tier1researchreward
+				min = @tier1researchmin
+				max = @tier1researchmax
+			}
+		}
+	}
+}
+
+### Terraforming Candidate
+ship_event = {
+	id = anomaly.2575
+	title = "anomaly.2575.name"
+	# desc = {
+		# text = anomaly.2575.desc.1
+		# trigger = { 
+			# NOT = { 
+				# owner = { has_technology = "tech_climate_restoration" } 
+			# }
+		# }
+	# }
+	desc = {
+		text = anomaly.2575.desc.2
+		# trigger = { 
+			# owner = { has_technology = "tech_climate_restoration" }
+		# }
+	}
+	picture = GFX_evt_drilling_for_gas
+	location = FROM
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = FASCINATING
+		custom_tooltip = TERRAFORMING_CANDIDATE_EFFECT
+		hidden_effect = {
+			from = {
+				add_modifier = {
+					modifier = "terraforming_candidate"
+					days = -1
+				}
+			}		
+		}
+	}
+}
+
+### Living Metal
+ship_event = {
+	id = anomaly.2576
+	title = "anomaly.2576.name"
+	desc = "anomaly.2576.desc"
+	picture = GFX_evt_mining_operations
+	location = FROM
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = FASCINATING
+		hidden_effect = {
+			from = {
+				orbital_deposit_tile = {
+					clear_deposits = yes
+				}
+			}
+		}
+		from = {
+			orbital_deposit_tile = {
+				add_deposit = d_vast_engineering_deposit
+			}
+		}
+		# owner = {
+			# if = {
+				# limit = {
+					# has_tech_option = tech_mine_living_metal
+				# }
+				# add_tech_progress = {
+					# tech = tech_mine_living_metal
+					# progress = 0.25
+				# }
+				# else = {
+					# add_research_option = tech_mine_living_metal
+				# }
+			# }
+		# }
+	}
+}

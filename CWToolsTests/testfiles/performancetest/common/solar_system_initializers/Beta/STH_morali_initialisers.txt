@@ -1,0 +1,118 @@
+@distance = 30
+@base_moon_distance = 10
+
+#Morali
+MoraliHomeworld = {
+	name = "Sergane"
+	class = "rl_standard_stars"
+	usage = custom_empire
+	init_effect = { log = "morali homeworld" }
+	planet = { name = "Sergane" class = star orbit_distance = 0 orbit_angle = 1 size = { min = 20 max = 30 } has_ring = no }
+	change_orbit = 50
+	planet = {
+		count = 2
+		orbit_distance = 20
+		class = random_non_colonizable
+		orbit_angle = { min = 90 max = 270 }
+		change_orbit = @base_moon_distance
+		moon = { count = { min = 0 max = 1 } class = random_non_colonizable orbit_angle = { min = 90 max = 270 } orbit_distance = 5 }
+	}
+	change_orbit = 30
+	planet = {
+		name = "Morales"
+		home_planet = yes
+		class = pc_m1_class
+		orbit_distance = 10
+		orbit_angle = { min = 90 max = 270 }
+		size = { min = 18 max = 20 }
+		starting_planet = yes
+		tile_blockers = none
+		modifiers = none
+		init_effect = { prevent_anomaly = yes }
+		init_effect = {
+			if = {
+				limit = { NOT = { any_country = { has_country_flag = morali_states } } }
+				create_species = {
+					name = "Morali"
+					class = MOR
+					portrait = sth_humanoid_02
+					homeworld = THIS
+					traits = {
+						trait = "trait_enduring"
+						trait = "trait_conformists"
+						trait = "trait_natural_engineers"
+						trait = "trait_nonadaptive"
+						ideal_planet_class = "pc_m1_class"
+					}
+				}
+				last_created_species = { save_global_event_target_as = moraliSpecies }
+				create_country = {
+					name = "NAME_morali_states"
+					type = default
+					ignore_initial_colony_error = yes
+					civics = { civic = "civic_inwards_perfection" civic = "civic_idealistic_foundation" }
+					authority = auth_democratic
+					name_list = "Morali"
+					ethos = { ethic = "ethic_pacifist" ethic = "ethic_xenophobe" ethic = "ethic_egalitarian" }
+					species = event_target:moraliSpecies
+					flag = {
+						icon = { category = "human" file = "flag_human_3.dds" }
+						background = { category = "backgrounds" file = "horizontal.dds" }
+						colors = { "customcolor1799" "customcolor1521" "null" "null" }
+					}
+					ship_prefix = ""
+					effect = {
+						set_graphical_culture = generic_04
+						set_country_flag = morali_states
+						set_country_flag = custom_start_screen
+						set_country_flag = generic_ent
+						set_country_flag = alpha_beta_empire
+						set_country_flag = init_spawned
+						set_country_flag = botf_minor
+						save_global_event_target_as = morali_states
+					}
+				}
+				create_colony = { owner = event_target:morali_states species = event_target:moraliSpecies ethos = owner }
+			}
+			set_capital = yes
+			random_country = {
+				limit = { has_country_flag = morali_states }
+				save_global_event_target_as = morali_states
+				add_appropriate_start_techs = yes
+				species = { save_global_event_target_as = moraliSpecies }
+            }
+			set_owner = event_target:morali_states
+			generate_major_empire_start_buildings = yes
+			generate_major_empire_start_pops = yes
+			generate_major_empire_start_fleets = yes
+			set_name = "Morales"
+		}
+		change_orbit = @base_moon_distance
+		moon = { count = { min = 0 max = 1 } class = random_non_colonizable orbit_angle = { min = 90 max = 270 } orbit_distance = 5 }
+	}
+	planet = {
+		count = { min = 0 max = 2 }
+		orbit_distance = 20
+		class = random_non_colonizable
+		orbit_angle = { min = 90 max = 270 }
+		change_orbit = @base_moon_distance
+		moon = { count = { min = 0 max = 1 } class = random_non_colonizable orbit_angle = { min = 90 max = 270 } orbit_distance = 5 }
+	}
+	change_orbit = 25
+	planet = {
+		count = { min = 1 max = 3 }
+		orbit_distance = 25
+		class = random_non_colonizable
+		orbit_angle = { min = 90 max = 270 }
+		change_orbit = @base_moon_distance
+		moon = { count = { min = 0 max = 1 } class = random_non_colonizable orbit_angle = { min = 90 max = 270 } orbit_distance = 5 }
+	}
+	planet = {
+		count = 1
+		orbit_distance = 20
+		class = pc_gas_giant
+		orbit_angle = { min = 90 max = 270 }
+		change_orbit = @base_moon_distance
+		moon = { count = { min = 0 max = 3 } class = random_non_colonizable orbit_angle = { min = 90 max = 270 } orbit_distance = 5 }
+	}
+}

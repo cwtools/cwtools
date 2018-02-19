@@ -1,0 +1,611 @@
+
+component_set = { key = "SPATIAL_TORPEDO_1" icon = "GFX_ship_part_spatial_torpedo_1" icon_frame = 1 }
+
+component_set = { key = "SPATIAL_TORPEDO_2" icon = "GFX_ship_part_spatial_torpedo_2" icon_frame = 1 }
+component_set = { key = "SPATIAL_TORPEDO_3" icon = "GFX_ship_part_spatial_torpedo_3" icon_frame = 1 }
+component_set = { key = "SPATIAL_TORPEDO_4" icon = "GFX_ship_part_spatial_torpedo_4" icon_frame = 1 }
+component_set = { key = "GRAVIMETRIC_TORPEDO_1" icon = "GFX_ship_part_gravimetric_torpedo_1" icon_frame = 1 }
+
+component_set = { key = "GRAVIMETRIC_TORPEDO_2" icon = "GFX_ship_part_gravimetric_torpedo_2" icon_frame = 1 }
+
+component_set = { key = "GRAVIMETRIC_TORPEDO_3" icon = "GFX_ship_part_gravimetric_torpedo_3" icon_frame = 1 }
+
+component_set = { key = "GRAVIMETRIC_TORPEDO_4" icon = "GFX_ship_part_gravimetric_torpedo_4" icon_frame = 1 }
+
+component_set = { key = "GRAVIMETRIC_TORPEDO_5" icon = "GFX_ship_part_gravimetric_torpedo_5" icon_frame = 1 }
+
+component_set = { key = "FUSION_TORPEDO_1" icon = "GFX_ship_part_fusion_torpedo_1" icon_frame = 1 }
+
+component_set = { key = "FUSION_TORPEDO_2" icon = "GFX_ship_part_fusion_torpedo_2" icon_frame = 1 }
+component_set = { key = "FUSION_TORPEDO_3" icon = "GFX_ship_part_fusion_torpedo_3" icon_frame = 1 }
+component_set = { key = "FUSION_TORPEDO_4" icon = "GFX_ship_part_fusion_torpedo_4" icon_frame = 1 }
+component_set = { key = "FUSION_TORPEDO_5" icon = "GFX_ship_part_fusion_torpedo_5" icon_frame = 1 }
+component_set = { key = "FUSION_TORPEDO_6" icon = "GFX_ship_part_fusion_torpedo_6" icon_frame = 1 }
+component_set = { key = "PHOTON_TORPEDO_1" icon = "GFX_ship_part_photon_torpedo_1" icon_frame = 1 }
+
+component_set = { key = "PHOTON_TORPEDO_2" icon = "GFX_ship_part_photon_torpedo_2" icon_frame = 1 }
+
+component_set = { key = "PHOTON_TORPEDO_3" icon = "GFX_ship_part_photon_torpedo_3" icon_frame = 1 }
+
+component_set = { key = "PHOTON_TORPEDO_4" icon = "GFX_ship_part_photon_torpedo_4" icon_frame = 1 }
+
+component_set = { key = "PHOTON_TORPEDO_5" icon = "GFX_ship_part_photon_torpedo_5" icon_frame = 1 }
+
+component_set = { key = "PHOTON_TORPEDO_6" icon = "GFX_ship_part_photon_torpedo_6" icon_frame = 1 }
+
+component_set = { key = "PHOTON_TORPEDO_7a" icon = "GFX_ship_part_photon_torpedo_7a" icon_frame = 1 }
+component_set = { key = "PHOTON_TORPEDO_8a" icon = "GFX_ship_part_photon_torpedo_8a" icon_frame = 1 }
+component_set = { key = "PHOTON_TORPEDO_7b" icon = "GFX_ship_part_photon_torpedo_7b" icon_frame = 1 }
+component_set = { key = "PHOTON_TORPEDO_8b" icon = "GFX_ship_part_photon_torpedo_8b" icon_frame = 1 }
+component_set = { key = "PHOTON_TORPEDO_deep" icon = "GFX_ship_part_photon_torpedo_deep" icon_frame = 1 }
+component_set = { key = "RESONANCE_TORPEDO_1" icon = "GFX_ship_part_resonance_torpedo_1" icon_frame = 1 }
+
+component_set = { key = "RESONANCE_TORPEDO_2" icon = "GFX_ship_part_resonance_torpedo_2" icon_frame = 1 }
+
+component_set = { key = "RESONANCE_TORPEDO_3" icon = "GFX_ship_part_resonance_torpedo_3" icon_frame = 1 }
+
+component_set = { key = "RESONANCE_TORPEDO_4" icon = "GFX_ship_part_resonance_torpedo_4" icon_frame = 1 }
+
+component_set = { key = "RESONANCE_TORPEDO_5" icon = "GFX_ship_part_resonance_torpedo_5" icon_frame = 1 }
+
+component_set = { key = "RESONANCE_TORPEDO_6" icon = "GFX_ship_part_resonance_torpedo_6" icon_frame = 1 }
+
+component_set = { key = "QUANTUM_TORPEDO_1a" icon = "GFX_ship_part_quantum_torpedo_1a" icon_frame = 1 }
+
+component_set = { key = "QUANTUM_TORPEDO_2a" icon = "GFX_ship_part_quantum_torpedo_2a" icon_frame = 1 }
+
+component_set = { key = "QUANTUM_TORPEDO_1b" icon = "GFX_ship_part_quantum_torpedo_1b" icon_frame = 1 }
+
+component_set = { key = "QUANTUM_TORPEDO_2b" icon = "GFX_ship_part_quantum_torpedo_2b" icon_frame = 1 }
+
+component_set = { key = "POLARON_TORPEDO_1" icon = "GFX_ship_part_polaron_torpedo_1" icon_frame = 1 }
+
+component_set = { key = "POLARON_TORPEDO_2" icon = "GFX_ship_part_polaron_torpedo_2" icon_frame = 1 }
+
+component_set = { key = "POLARON_TORPEDO_3" icon = "GFX_ship_part_polaron_torpedo_3" icon_frame = 1 }
+
+component_set = { key = "POLARON_TORPEDO_4" icon = "GFX_ship_part_polaron_torpedo_4" icon_frame = 1 }
+
+component_set = { key = "POLARON_TORPEDO_5" icon = "GFX_ship_part_polaron_torpedo_5" icon_frame = 1 }
+
+component_set = { key = "POLARON_TORPEDO_6" icon = "GFX_ship_part_polaron_torpedo_6" icon_frame = 1 }
+
+component_set = { key = "POLARON_TORPEDO_7a" icon = "GFX_ship_part_polaron_torpedo_7a" icon_frame = 1 }
+component_set = { key = "POLARON_TORPEDO_8a" icon = "GFX_ship_part_polaron_torpedo_8a" icon_frame = 1 }
+component_set = { key = "POLARON_TORPEDO_7b" icon = "GFX_ship_part_polaron_torpedo_7b" icon_frame = 1 }
+component_set = { key = "POLARON_TORPEDO_8b" icon = "GFX_ship_part_polaron_torpedo_8b" icon_frame = 1 }
+component_set = { key = "PLASMA_TORPEDO_1" icon = "GFX_ship_part_plasma_torpedo_1" icon_frame = 1 }
+
+component_set = { key = "PLASMA_TORPEDO_2" icon = "GFX_ship_part_plasma_torpedo_2" icon_frame = 1 }
+
+component_set = { key = "PLASMA_TORPEDO_3a" icon = "GFX_ship_part_plasma_torpedo_3a" icon_frame = 1 }
+
+component_set = { key = "PLASMA_TORPEDO_4a" icon = "GFX_ship_part_plasma_torpedo_4a" icon_frame = 1 }
+
+component_set = { key = "PLASMA_TORPEDO_5a" icon = "GFX_ship_part_plasma_torpedo_5a" icon_frame = 1 }
+
+component_set = { key = "PLASMA_TORPEDO_6a" icon = "GFX_ship_part_plasma_torpedo_6a" icon_frame = 1 }
+
+component_set = { key = "PLASMA_TORPEDO_7a" icon = "GFX_ship_part_plasma_torpedo_7a" icon_frame = 1 }
+
+component_set = { key = "PLASMA_TORPEDO_3b" icon = "GFX_ship_part_plasma_torpedo_3b" icon_frame = 1 }
+
+component_set = { key = "PLASMA_TORPEDO_4b" icon = "GFX_ship_part_plasma_torpedo_4b" icon_frame = 1 }
+
+component_set = { key = "PLASMA_TORPEDO_5b" icon = "GFX_ship_part_plasma_torpedo_5b" icon_frame = 1 }
+
+component_set = { key = "PLASMA_TORPEDO_6b" icon = "GFX_ship_part_plasma_torpedo_6b" icon_frame = 1 }
+
+component_set = { key = "PLASMA_TORPEDO_7b" icon = "GFX_ship_part_plasma_torpedo_7b" icon_frame = 1 }
+
+component_set = { key = "TRICOBALT_TORPEDO_1" icon = "GFX_ship_part_tricobalt_torpedo_1" icon_frame = 1 }
+component_set = { key = "TRICOBALT_TORPEDO_2" icon = "GFX_ship_part_tricobalt_torpedo_2" icon_frame = 1 }
+component_set = { key = "TRICOBALT_TORPEDO_3" icon = "GFX_ship_part_tricobalt_torpedo_3" icon_frame = 1 }
+component_set = { key = "TRICOBALT_TORPEDO_4" icon = "GFX_ship_part_tricobalt_torpedo_4" icon_frame = 1 }
+component_set = { key = "TRICOBALT_TORPEDO_5" icon = "GFX_ship_part_tricobalt_torpedo_5" icon_frame = 1 }
+component_set = { key = "TEMPORAL_TORPEDO_1" icon = "GFX_ship_part_temporal_torpedo_1" icon_frame = 1 }
+
+component_set = { key = "TEMPORAL_TORPEDO_2" icon = "GFX_ship_part_temporal_torpedo_2" icon_frame = 1 }
+
+component_set = { key = "TEMPORAL_TORPEDO_3" icon = "GFX_ship_part_temporal_torpedo_3" icon_frame = 1 }
+
+component_set = { key = "TEMPORAL_TORPEDO_4" icon = "GFX_ship_part_temporal_torpedo_4" icon_frame = 1 }
+
+component_set = { key = "TEMPORAL_TORPEDO_5" icon = "GFX_ship_part_temporal_torpedo_5" icon_frame = 1 }
+
+component_set = { key = "CHRONITON_TORPEDO_1" icon = "GFX_ship_part_chroniton_torpedo_1" icon_frame = 1 }
+component_set = { key = "CHRONITON_TORPEDO_2" icon = "GFX_ship_part_chroniton_torpedo_2" icon_frame = 1 }
+component_set = { key = "CHRONITON_TORPEDO_3" icon = "GFX_ship_part_chroniton_torpedo_3" icon_frame = 1 }
+component_set = { key = "TRANSPHASIC_TORPEDO_0" icon = "GFX_ship_part_transphasic_torpedo_0" icon_frame = 1 }
+
+component_set = { key = "BORG_TORPEDO_1" icon = "GFX_ship_part_borg_torpedo_1" icon_frame = 1 }
+
+component_set = { key = "BORG_TORPEDO_2" icon = "GFX_ship_part_borg_torpedo_2" icon_frame = 1 }
+
+component_set = { key = "BORG_TORPEDO_3" icon = "GFX_ship_part_borg_torpedo_3" icon_frame = 1 }
+
+component_set = { key = "BORG_TORPEDO_4" icon = "GFX_ship_part_borg_torpedo_4" icon_frame = 1 }
+
+component_set = { key = "BORG_TORPEDO_5" icon = "GFX_ship_part_borg_torpedo_5" icon_frame = 1 }
+
+component_set = { key = "BORG_TORPEDO_6" icon = "GFX_ship_part_borg_torpedo_6" icon_frame = 1 }
+
+
+
+
+
+component_set = { key = "PULSE_PHASER_1" icon = "GFX_ship_part_pulse_phaser_1" icon_frame = 1 }
+component_set = { key = "PULSE_PHASER_2" icon = "GFX_ship_part_pulse_phaser_2" icon_frame = 1 }
+
+component_set = { key = "PULSE_PHASER_3" icon = "GFX_ship_part_pulse_phaser_3" icon_frame = 1 }
+
+component_set = { key = "CANNON_PHASER_1" icon = "GFX_ship_part_cannon_phaser_1" icon_frame = 1 }
+component_set = { key = "CANNON_PHASER_2" icon = "GFX_ship_part_cannon_phaser_2" icon_frame = 1 }
+component_set = { key = "ANDORIAN_PHASER_1" icon = "GFX_ship_part_andorian_phaser_1" icon_frame = 1 }
+component_set = { key = "ANDORIAN_PHASER_2" icon = "GFX_ship_part_andorian_phaser_2" icon_frame = 1 }
+
+component_set = { key = "ANDORIAN_PHASER_3" icon = "GFX_ship_part_andorian_phaser_3" icon_frame = 1 }
+
+component_set = { key = "ANDORIAN_PHASER_4" icon = "GFX_ship_part_andorian_phaser_4" icon_frame = 1 }
+
+component_set = { key = "ANDORIAN_PHASER_5" icon = "GFX_ship_part_andorian_phaser_5" icon_frame = 1 }
+
+component_set = { key = "VULCAN_PHASER_1" icon = "GFX_ship_part_vulcan_phaser_1" icon_frame = 1 }
+component_set = { key = "VULCAN_PHASER_2" icon = "GFX_ship_part_vulcan_phaser_2" icon_frame = 1 }
+
+component_set = { key = "PLASMA_PHASER_1" icon = "GFX_ship_part_plasma_phaser_1" icon_frame = 1 }
+component_set = { key = "PLASMA_PHASER_2" icon = "GFX_ship_part_plasma_phaser_2" icon_frame = 1 }
+component_set = { key = "PLASMA_PHASER_3" icon = "GFX_ship_part_plasma_phaser_3" icon_frame = 1 }
+component_set = { key = "PLASMA_PHASER_4" icon = "GFX_ship_part_plasma_phaser_4" icon_frame = 1 }
+component_set = { key = "PLASMA_PHASER_5" icon = "GFX_ship_part_plasma_phaser_5" icon_frame = 1 }
+component_set = { key = "WAVE_DISRUPTOR_PHASER_1" icon = "GFX_ship_part_wave_disruptor_phaser_1" icon_frame = 1 }
+component_set = { key = "WAVE_DISRUPTOR_PHASER_2" icon = "GFX_ship_part_wave_disruptor_phaser_2" icon_frame = 1 }
+
+component_set = { key = "WAVE_DISRUPTOR_PHASER_3" icon = "GFX_ship_part_wave_disruptor_phaser_3" icon_frame = 1 }
+
+component_set = { key = "WAVE_DISRUPTOR_PHASER_4" icon = "GFX_ship_part_wave_disruptor_phaser_4" icon_frame = 1 }
+
+component_set = { key = "WAVE_DISRUPTOR_PHASER_5" icon = "GFX_ship_part_wave_disruptor_phaser_5" icon_frame = 1 }
+
+component_set = { key = "WAVE_DISRUPTOR_PHASER_6" icon = "GFX_ship_part_wave_disruptor_phaser_6" icon_frame = 1 }
+
+component_set = { key = "WAVE_DISRUPTOR_PHASER_7" icon = "GFX_ship_part_wave_disruptor_phaser_7" icon_frame = 1 }
+
+component_set = { key = "WAVE_DISRUPTOR_PHASER_8" icon = "GFX_ship_part_wave_disruptor_phaser_8" icon_frame = 1 }
+
+component_set = { key = "BASIC_PHASER_1" icon = "GFX_ship_part_basic_phaser_1" icon_frame = 1 }
+component_set = { key = "BASIC_PHASER_2" icon = "GFX_ship_part_basic_phaser_2" icon_frame = 1 }
+
+component_set = { key = "TURRET_PHASER_1" icon = "GFX_ship_part_turret_phaser_1" icon_frame = 1 }
+component_set = { key = "TURRET_PHASER_2" icon = "GFX_ship_part_turret_phaser_2" icon_frame = 1 }
+component_set = { key = "TURRET_PHASER_3" icon = "GFX_ship_part_turret_phaser_3" icon_frame = 1 }
+component_set = { key = "TURRET_PHASER_4" icon = "GFX_ship_part_turret_phaser_4" icon_frame = 1 }
+component_set = { key = "TURRET_PHASER_5" icon = "GFX_ship_part_turret_phaser_5" icon_frame = 1 }
+component_set = { key = "ASSAULT_PHASER_1" icon = "GFX_ship_part_assault_phaser_1" icon_frame = 1 }
+component_set = { key = "ASSAULT_PHASER_2" icon = "GFX_ship_part_assault_phaser_2" icon_frame = 1 }
+component_set = { key = "ASSAULT_PHASER_3" icon = "GFX_ship_part_assault_phaser_3" icon_frame = 1 }
+component_set = { key = "ASSAULT_PHASER_4" icon = "GFX_ship_part_assault_phaser_4" icon_frame = 1 }
+component_set = { key = "ASSAULT_PHASER_5" icon = "GFX_ship_part_assault_phaser_5" icon_frame = 1 }
+component_set = { key = "MODULATED_PHASER_1" icon = "GFX_ship_part_modulated_phaser_1" icon_frame = 1 }
+
+component_set = { key = "MODULATED_PHASER_2" icon = "GFX_ship_part_modulated_phaser_2" icon_frame = 1 }
+
+component_set = { key = "MODULATED_PHASER_3" icon = "GFX_ship_part_modulated_phaser_3" icon_frame = 1 }
+
+component_set = { key = "MODULATED_PHASER_4" icon = "GFX_ship_part_modulated_phaser_4" icon_frame = 1 }
+
+component_set = { key = "MODULATED_PHASER_5" icon = "GFX_ship_part_modulated_phaser_5" icon_frame = 1 }
+
+component_set = { key = "COHERENT_PHASER_1" icon = "GFX_ship_part_coherent_phaser_1" icon_frame = 1 }
+
+component_set = { key = "COHERENT_PHASER_2" icon = "GFX_ship_part_coherent_phaser_2" icon_frame = 1 }
+
+component_set = { key = "COHERENT_PHASER_3" icon = "GFX_ship_part_coherent_phaser_3" icon_frame = 1 }
+
+component_set = { key = "COHERENT_PHASER_4" icon = "GFX_ship_part_coherent_phaser_4" icon_frame = 1 }
+
+component_set = { key = "COHERENT_PHASER_5" icon = "GFX_ship_part_coherent_phaser_5" icon_frame = 1 }
+
+component_set = { key = "MODULAR_PHASER_1" icon = "GFX_ship_part_modular_phaser_1" icon_frame = 1 }
+
+component_set = { key = "MODULAR_PHASER_2" icon = "GFX_ship_part_modular_phaser_2" icon_frame = 1 }
+
+component_set = { key = "MODULAR_PHASER_3" icon = "GFX_ship_part_modular_phaser_3" icon_frame = 1 }
+
+component_set = { key = "MODULAR_PHASER_4" icon = "GFX_ship_part_modular_phaser_4" icon_frame = 1 }
+
+component_set = { key = "MODULAR_PHASER_5" icon = "GFX_ship_part_modular_phaser_5" icon_frame = 1 }
+
+component_set = { key = "TUNNELING_PHASER_1" icon = "GFX_ship_part_tunneling_phaser_1" icon_frame = 1 }
+
+component_set = { key = "TUNNELING_PHASER_2" icon = "GFX_ship_part_tunneling_phaser_2" icon_frame = 1 }
+
+component_set = { key = "TUNNELING_PHASER_3" icon = "GFX_ship_part_tunneling_phaser_3" icon_frame = 1 }
+
+component_set = { key = "TUNNELING_PHASER_4" icon = "GFX_ship_part_tunneling_phaser_4" icon_frame = 1 }
+
+component_set = { key = "TUNNELING_PHASER_5" icon = "GFX_ship_part_tunneling_phaser_5" icon_frame = 1 }
+
+
+
+
+
+component_set = { key = "KANG_DISRUPTOR_1" icon = "GFX_ship_part_kang_disruptor_1" icon_frame = 1 }
+component_set = { key = "KANG_DISRUPTOR_2" icon = "GFX_ship_part_kang_disruptor_2" icon_frame = 1 }
+
+component_set = { key = "KANG_BEAM_DISRUPTOR_1" icon = "GFX_ship_part_kang_beam_disruptor_1" icon_frame = 1 }
+
+component_set = { key = "KANG_BEAM_DISRUPTOR_2" icon = "GFX_ship_part_kang_beam_disruptor_2" icon_frame = 1 }
+
+component_set = { key = "KANG_BEAM_DISRUPTOR_3" icon = "GFX_ship_part_kang_beam_disruptor_3" icon_frame = 1 }
+
+component_set = { key = "KANG_BEAM_DISRUPTOR_4" icon = "GFX_ship_part_kang_beam_disruptor_4" icon_frame = 1 }
+
+component_set = { key = "KANG_BEAM_DISRUPTOR_5" icon = "GFX_ship_part_kang_beam_disruptor_5" icon_frame = 1 }
+
+component_set = { key = "KANG_BEAM_DISRUPTOR_6" icon = "GFX_ship_part_kang_beam_disruptor_6" icon_frame = 1 }
+
+component_set = { key = "ANTIPROTON_DISRUPTOR_1" icon = "GFX_ship_part_antiproton_disruptor_1" icon_frame = 1 }
+component_set = { key = "ANTIPROTON_DISRUPTOR_2" icon = "GFX_ship_part_antiproton_disruptor_2" icon_frame = 1 }
+
+component_set = { key = "ANTIPROTON_DISRUPTOR_3" icon = "GFX_ship_part_antiproton_disruptor_3" icon_frame = 1 }
+
+component_set = { key = "ANTIPROTON_DISRUPTOR_4" icon = "GFX_ship_part_antiproton_disruptor_4" icon_frame = 1 }
+
+component_set = { key = "ANTIPROTON_DISRUPTOR_5" icon = "GFX_ship_part_antiproton_disruptor_5" icon_frame = 1 }
+
+component_set = { key = "ANTIPROTON_DISRUPTOR_6" icon = "GFX_ship_part_antiproton_disruptor_6" icon_frame = 1 }
+
+component_set = { key = "ANTIPROTON_DISRUPTOR_7" icon = "GFX_ship_part_antiproton_disruptor_7" icon_frame = 1 }
+
+component_set = { key = "ANTIPROTON_DISRUPTOR_8" icon = "GFX_ship_part_antiproton_disruptor_8" icon_frame = 1 }
+
+component_set = { key = "BASIC_DISRUPTOR_1" icon = "GFX_ship_part_basic_disruptor_1" icon_frame = 1 }
+component_set = { key = "BASIC_DISRUPTOR_2" icon = "GFX_ship_part_basic_disruptor_2" icon_frame = 1 }
+
+component_set = { key = "TURRET_DISRUPTOR_1" icon = "GFX_ship_part_turret_disruptor_1" icon_frame = 1 }
+component_set = { key = "TURRET_DISRUPTOR_2" icon = "GFX_ship_part_turret_disruptor_2" icon_frame = 1 }
+component_set = { key = "TURRET_DISRUPTOR_3" icon = "GFX_ship_part_turret_disruptor_3" icon_frame = 1 }
+component_set = { key = "TURRET_DISRUPTOR_4" icon = "GFX_ship_part_turret_disruptor_4" icon_frame = 1 }
+component_set = { key = "TURRET_DISRUPTOR_5" icon = "GFX_ship_part_turret_disruptor_5" icon_frame = 1 }
+component_set = { key = "ASSAULT_DISRUPTOR_1" icon = "GFX_ship_part_assault_disruptor_1" icon_frame = 1 }
+component_set = { key = "ASSAULT_DISRUPTOR_2" icon = "GFX_ship_part_assault_disruptor_2" icon_frame = 1 }
+component_set = { key = "ASSAULT_DISRUPTOR_3" icon = "GFX_ship_part_assault_disruptor_3" icon_frame = 1 }
+component_set = { key = "ASSAULT_DISRUPTOR_4" icon = "GFX_ship_part_assault_disruptor_4" icon_frame = 1 }
+component_set = { key = "ASSAULT_DISRUPTOR_5" icon = "GFX_ship_part_assault_disruptor_5" icon_frame = 1 }
+component_set = { key = "PHASE_DISRUPTOR_1" icon = "GFX_ship_part_phase_disruptor_1" icon_frame = 1 }
+component_set = { key = "PHASE_DISRUPTOR_2" icon = "GFX_ship_part_phase_disruptor_2" icon_frame = 1 }
+component_set = { key = "PHASE_DISRUPTOR_3" icon = "GFX_ship_part_phase_disruptor_3" icon_frame = 1 }
+component_set = { key = "PHASE_DISRUPTOR_4" icon = "GFX_ship_part_phase_disruptor_4" icon_frame = 1 }
+component_set = { key = "PHASE_DISRUPTOR_5" icon = "GFX_ship_part_phase_disruptor_5" icon_frame = 1 }
+component_set = { key = "TETRYONIC_DISRUPTOR_1" icon = "GFX_ship_part_tetryonic_disruptor_1" icon_frame = 1 }
+
+component_set = { key = "TETRYONIC_DISRUPTOR_2" icon = "GFX_ship_part_tetryonic_disruptor_2" icon_frame = 1 }
+
+component_set = { key = "TETRYONIC_DISRUPTOR_3" icon = "GFX_ship_part_tetryonic_disruptor_3" icon_frame = 1 }
+
+component_set = { key = "TETRYONIC_DISRUPTOR_4" icon = "GFX_ship_part_tetryonic_disruptor_4" icon_frame = 1 }
+
+component_set = { key = "TETRYONIC_DISRUPTOR_5" icon = "GFX_ship_part_tetryonic_disruptor_5" icon_frame = 1 }
+
+component_set = { key = "PULSE_DISRUPTOR_1" icon = "GFX_ship_part_pulse_disruptor_1" icon_frame = 1 }
+
+component_set = { key = "PULSE_DISRUPTOR_2" icon = "GFX_ship_part_pulse_disruptor_2" icon_frame = 1 }
+
+component_set = { key = "PULSE_DISRUPTOR_3" icon = "GFX_ship_part_pulse_disruptor_3" icon_frame = 1 }
+
+component_set = { key = "PULSE_DISRUPTOR_4" icon = "GFX_ship_part_pulse_disruptor_4" icon_frame = 1 }
+
+component_set = { key = "PULSE_DISRUPTOR_5" icon = "GFX_ship_part_pulse_disruptor_5" icon_frame = 1 }
+
+component_set = { key = "PLASMA_CANNON_DISRUPTOR_1" icon = "GFX_ship_part_plasma_cannon_disruptor_1" icon_frame = 1 }
+
+component_set = { key = "PLASMA_CANNON_DISRUPTOR_2" icon = "GFX_ship_part_plasma_cannon_disruptor_2" icon_frame = 1 }
+
+component_set = { key = "PLASMA_CANNON_DISRUPTOR_3" icon = "GFX_ship_part_plasma_cannon_disruptor_3" icon_frame = 1 }
+
+component_set = { key = "PLASMA_CANNON_DISRUPTOR_4" icon = "GFX_ship_part_plasma_cannon_disruptor_4" icon_frame = 1 }
+
+component_set = { key = "PLASMA_CANNON_DISRUPTOR_5" icon = "GFX_ship_part_plasma_cannon_disruptor_5" icon_frame = 1 }
+
+component_set = { key = "PLASMA_BEAM_DISRUPTOR_1" icon = "GFX_ship_part_plasma_beam_disruptor_1" icon_frame = 1 }
+
+component_set = { key = "PLASMA_BEAM_DISRUPTOR_2" icon = "GFX_ship_part_plasma_beam_disruptor_2" icon_frame = 1 }
+
+component_set = { key = "PLASMA_BEAM_DISRUPTOR_3" icon = "GFX_ship_part_plasma_beam_disruptor_3" icon_frame = 1 }
+
+component_set = { key = "PLASMA_BEAM_DISRUPTOR_4" icon = "GFX_ship_part_plasma_beam_disruptor_4" icon_frame = 1 }
+
+component_set = { key = "PLASMA_BEAM_DISRUPTOR_5" icon = "GFX_ship_part_plasma_beam_disruptor_5" icon_frame = 1 }
+
+
+
+
+
+component_set = { key = "PULSAR_PLASMA_1" icon = "GFX_ship_part_pulsar_plasma_1" icon_frame = 1 }
+component_set = { key = "PULSAR_PLASMA_2" icon = "GFX_ship_part_pulsar_plasma_2" icon_frame = 1 }
+
+component_set = { key = "PULSAR_PLASMA_3" icon = "GFX_ship_part_pulsar_plasma_3" icon_frame = 1 }
+
+component_set = { key = "PULSAR_PLASMA_4" icon = "GFX_ship_part_pulsar_plasma_4" icon_frame = 1 }
+
+component_set = { key = "PULSAR_PLASMA_5" icon = "GFX_ship_part_pulsar_plasma_5" icon_frame = 1 }
+
+component_set = { key = "PULSAR_PLASMA_6" icon = "GFX_ship_part_pulsar_plasma_6" icon_frame = 1 }
+
+component_set = { key = "HEAT_PLASMA_1" icon = "GFX_ship_part_heat_plasma_1" icon_frame = 1 }
+component_set = { key = "HEAT_PLASMA_2" icon = "GFX_ship_part_heat_plasma_2" icon_frame = 1 }
+component_set = { key = "HEAT_PLASMA_3" icon = "GFX_ship_part_heat_plasma_3" icon_frame = 1 }
+component_set = { key = "HEAT_PLASMA_4" icon = "GFX_ship_part_heat_plasma_4" icon_frame = 1 }
+component_set = { key = "HEAT_PLASMA_5" icon = "GFX_ship_part_heat_plasma_5" icon_frame = 1 }
+component_set = { key = "HEAT_PLASMA_6" icon = "GFX_ship_part_heat_plasma_6" icon_frame = 1 }
+component_set = { key = "TURRET_PLASMA_1" icon = "GFX_ship_part_turret_plasma_1" icon_frame = 1 }
+component_set = { key = "TURRET_PLASMA_2" icon = "GFX_ship_part_turret_plasma_2" icon_frame = 1 }
+component_set = { key = "TURRET_PLASMA_3" icon = "GFX_ship_part_turret_plasma_3" icon_frame = 1 }
+component_set = { key = "TURRET_PLASMA_4" icon = "GFX_ship_part_turret_plasma_4" icon_frame = 1 }
+component_set = { key = "TURRET_PLASMA_5" icon = "GFX_ship_part_turret_plasma_5" icon_frame = 1 }
+component_set = { key = "WAVE_PLASMA_1" icon = "GFX_ship_part_wave_plasma_1" icon_frame = 1 }
+component_set = { key = "WAVE_PLASMA_2" icon = "GFX_ship_part_wave_plasma_2" icon_frame = 1 }
+component_set = { key = "WAVE_PLASMA_3" icon = "GFX_ship_part_wave_plasma_3" icon_frame = 1 }
+component_set = { key = "PHASED_PLASMA_1" icon = "GFX_ship_part_phased_plasma_1" icon_frame = 1 }
+
+component_set = { key = "PHASED_PLASMA_2" icon = "GFX_ship_part_phased_plasma_2" icon_frame = 1 }
+
+component_set = { key = "PHASED_PLASMA_3" icon = "GFX_ship_part_phased_plasma_3" icon_frame = 1 }
+
+component_set = { key = "PHASED_PLASMA_4" icon = "GFX_ship_part_phased_plasma_4" icon_frame = 1 }
+
+component_set = { key = "PHASED_PLASMA_5" icon = "GFX_ship_part_phased_plasma_5" icon_frame = 1 }
+
+component_set = { key = "COMPRESSED_PLASMA_1" icon = "GFX_ship_part_compressed_plasma_1" icon_frame = 1 }
+
+component_set = { key = "COMPRESSED_PLASMA_2" icon = "GFX_ship_part_compressed_plasma_2" icon_frame = 1 }
+
+component_set = { key = "COMPRESSED_PLASMA_3" icon = "GFX_ship_part_compressed_plasma_3" icon_frame = 1 }
+
+component_set = { key = "COMPRESSED_PLASMA_4" icon = "GFX_ship_part_compressed_plasma_4" icon_frame = 1 }
+
+component_set = { key = "COMPRESSED_PLASMA_5" icon = "GFX_ship_part_compressed_plasma_5" icon_frame = 1 }
+
+
+
+
+
+component_set = { key = "BORG_ANTI_1" icon = "GFX_ship_part_borg_anti_1" icon_frame = 1 }
+
+component_set = { key = "BORG_ANTI_2" icon = "GFX_ship_part_borg_anti_2" icon_frame = 1 }
+
+component_set = { key = "BORG_ANTI_3" icon = "GFX_ship_part_borg_anti_3" icon_frame = 1 }
+
+component_set = { key = "BORG_ANTI_4" icon = "GFX_ship_part_borg_anti_4" icon_frame = 1 }
+
+component_set = { key = "BORG_ANTI_5" icon = "GFX_ship_part_borg_anti_5" icon_frame = 1 }
+
+component_set = { key = "BORG_ANTI_6" icon = "GFX_ship_part_borg_anti_6" icon_frame = 1 }
+
+component_set = { key = "POSITRON_ANTI_1" icon = "GFX_ship_part_positron_anti_1" icon_frame = 1 }
+component_set = { key = "POSITRON_ANTI_2" icon = "GFX_ship_part_positron_anti_2" icon_frame = 1 }
+
+component_set = { key = "POSITRON_CANNON_ANTI_1" icon = "GFX_ship_part_positron_cannon_anti_1" icon_frame = 1 }
+component_set = { key = "POSITRON_CANNON_ANTI_2" icon = "GFX_ship_part_positron_cannon_anti_2" icon_frame = 1 }
+component_set = { key = "POSITRON_CANNON_ANTI_3" icon = "GFX_ship_part_positron_cannon_anti_3" icon_frame = 1 }
+component_set = { key = "POSITRON_CANNON_ANTI_4" icon = "GFX_ship_part_positron_cannon_anti_4" icon_frame = 1 }
+component_set = { key = "POSITRON_CANNON_ANTI_5" icon = "GFX_ship_part_positron_cannon_anti_5" icon_frame = 1 }
+component_set = { key = "POSITRON_CANNON_ANTI_6" icon = "GFX_ship_part_positron_cannon_anti_6" icon_frame = 1 }
+component_set = { key = "POSITRON_ANTI_6" icon = "GFX_ship_part_positron_anti_6" icon_frame = 1 }
+component_set = { key = "SPREAD_ANTI_0" icon = "GFX_ship_part_spread_anti_0" icon_frame = 1 }
+
+component_set = { key = "RAILGUN_ANTI_1" icon = "GFX_ship_part_railgun_anti_1" icon_frame = 1 }
+
+component_set = { key = "RAILGUN_ANTI_2" icon = "GFX_ship_part_railgun_anti_2" icon_frame = 1 }
+
+component_set = { key = "RAILGUN_ANTI_3" icon = "GFX_ship_part_railgun_anti_3" icon_frame = 1 }
+
+component_set = { key = "RAILGUN_ANTI_4" icon = "GFX_ship_part_railgun_anti_4" icon_frame = 1 }
+
+component_set = { key = "RAILGUN_ANTI_5" icon = "GFX_ship_part_railgun_anti_5" icon_frame = 1 }
+
+component_set = { key = "PYLON_ANTI_1" icon = "GFX_ship_part_pylon_anti_1" icon_frame = 1 }
+component_set = { key = "PYLON_ANTI_2" icon = "GFX_ship_part_pylon_anti_2" icon_frame = 1 }
+component_set = { key = "PYLON_ANTI_3" icon = "GFX_ship_part_pylon_anti_3" icon_frame = 1 }
+component_set = { key = "PYLON_ANTI_4" icon = "GFX_ship_part_pylon_anti_4" icon_frame = 1 }
+component_set = { key = "PYLON_ANTI_5" icon = "GFX_ship_part_pylon_anti_5" icon_frame = 1 }
+component_set = { key = "BEAM_ANTI_1" icon = "GFX_ship_part_beam_anti_1" icon_frame = 1 }
+
+component_set = { key = "BEAM_ANTI_2" icon = "GFX_ship_part_beam_anti_2" icon_frame = 1 }
+
+component_set = { key = "BEAM_ANTI_3" icon = "GFX_ship_part_beam_anti_3" icon_frame = 1 }
+
+component_set = { key = "BEAM_ANTI_4" icon = "GFX_ship_part_beam_anti_4" icon_frame = 1 }
+
+component_set = { key = "BEAM_ANTI_5" icon = "GFX_ship_part_beam_anti_5" icon_frame = 1 }
+
+component_set = { key = "PROTON_ANTI_1" icon = "GFX_ship_part_proton_anti_1" icon_frame = 1 }
+
+component_set = { key = "PROTON_ANTI_2" icon = "GFX_ship_part_proton_anti_2" icon_frame = 1 }
+
+component_set = { key = "PROTON_ANTI_3" icon = "GFX_ship_part_proton_anti_3" icon_frame = 1 }
+
+component_set = { key = "PROTON_ANTI_4" icon = "GFX_ship_part_proton_anti_4" icon_frame = 1 }
+
+component_set = { key = "PROTON_ANTI_5" icon = "GFX_ship_part_proton_anti_5" icon_frame = 1 }
+
+
+
+
+
+component_set = { key = "REVERSE_POLARON_1" icon = "GFX_ship_part_reverse_polaron_1" icon_frame = 1 }
+component_set = { key = "REVERSE_POLARON_2" icon = "GFX_ship_part_reverse_polaron_2" icon_frame = 1 }
+
+component_set = { key = "REVERSE_POLARON_3" icon = "GFX_ship_part_reverse_polaron_3" icon_frame = 1 }
+
+component_set = { key = "REVERSE_POLARON_4" icon = "GFX_ship_part_reverse_polaron_4" icon_frame = 1 }
+
+component_set = { key = "REVERSE_POLARON_5" icon = "GFX_ship_part_reverse_polaron_5" icon_frame = 1 }
+
+component_set = { key = "REVERSE_POLARON_6" icon = "GFX_ship_part_reverse_polaron_6" icon_frame = 1 }
+
+component_set = { key = "REVERSE_POLARON_7" icon = "GFX_ship_part_reverse_polaron_7" icon_frame = 1 }
+
+component_set = { key = "REVERSE_POLARON_8" icon = "GFX_ship_part_reverse_polaron_8" icon_frame = 1 }
+
+component_set = { key = "PYLON_POLARON_1" icon = "GFX_ship_part_pylon_polaron_1" icon_frame = 1 }
+component_set = { key = "PYLON_POLARON_2" icon = "GFX_ship_part_pylon_polaron_2" icon_frame = 1 }
+component_set = { key = "PYLON_POLARON_3" icon = "GFX_ship_part_pylon_polaron_3" icon_frame = 1 }
+component_set = { key = "PYLON_POLARON_4" icon = "GFX_ship_part_pylon_polaron_4" icon_frame = 1 }
+component_set = { key = "PYLON_POLARON_5" icon = "GFX_ship_part_pylon_polaron_5" icon_frame = 1 }
+component_set = { key = "PHASED_POLARON_1" icon = "GFX_ship_part_phased_polaron_1" icon_frame = 1 }
+
+component_set = { key = "PHASED_POLARON_2" icon = "GFX_ship_part_phased_polaron_2" icon_frame = 1 }
+
+component_set = { key = "PHASED_POLARON_3" icon = "GFX_ship_part_phased_polaron_3" icon_frame = 1 }
+
+component_set = { key = "PHASED_POLARON_4" icon = "GFX_ship_part_phased_polaron_4" icon_frame = 1 }
+
+component_set = { key = "PHASED_POLARON_5" icon = "GFX_ship_part_phased_polaron_5" icon_frame = 1 }
+
+component_set = { key = "NEUTRAL_POLARON_1" icon = "GFX_ship_part_neutral_polaron_1" icon_frame = 1 }
+
+component_set = { key = "NEUTRAL_POLARON_2" icon = "GFX_ship_part_neutral_polaron_2" icon_frame = 1 }
+
+component_set = { key = "NEUTRAL_POLARON_3" icon = "GFX_ship_part_neutral_polaron_3" icon_frame = 1 }
+
+component_set = { key = "NEUTRAL_POLARON_4" icon = "GFX_ship_part_neutral_polaron_4" icon_frame = 1 }
+
+component_set = { key = "NEUTRAL_POLARON_5" icon = "GFX_ship_part_neutral_polaron_5" icon_frame = 1 }
+
+
+
+
+
+component_set = { key = "PULSE_TETRYON_1" icon = "GFX_ship_part_pulse_tetryon_1" icon_frame = 1 }
+component_set = { key = "PULSE_TETRYON_2" icon = "GFX_ship_part_pulse_tetryon_2" icon_frame = 1 }
+
+component_set = { key = "PULSE_TETRYON_3" icon = "GFX_ship_part_pulse_tetryon_3" icon_frame = 1 }
+
+component_set = { key = "PULSE_TETRYON_4" icon = "GFX_ship_part_pulse_tetryon_4" icon_frame = 1 }
+
+component_set = { key = "PULSE_TETRYON_5" icon = "GFX_ship_part_pulse_tetryon_5" icon_frame = 1 }
+
+component_set = { key = "PULSE_TETRYON_6" icon = "GFX_ship_part_pulse_tetryon_6" icon_frame = 1 }
+
+component_set = { key = "PULSE_TETRYON_7" icon = "GFX_ship_part_pulse_tetryon_7" icon_frame = 1 }
+
+component_set = { key = "GRAVITON_TETRYON_1" icon = "GFX_ship_part_graviton_tetryon_1" icon_frame = 1 }
+component_set = { key = "GRAVITON_TETRYON_2" icon = "GFX_ship_part_graviton_tetryon_2" icon_frame = 1 }
+component_set = { key = "GRAVITON_TETRYON_3" icon = "GFX_ship_part_graviton_tetryon_3" icon_frame = 1 }
+component_set = { key = "GRAVITON_TETRYON_4" icon = "GFX_ship_part_graviton_tetryon_4" icon_frame = 1 }
+component_set = { key = "GRAVITON_TETRYON_5" icon = "GFX_ship_part_graviton_tetryon_5" icon_frame = 1 }
+component_set = { key = "GRAVITON_TETRYON_6" icon = "GFX_ship_part_graviton_tetryon_6" icon_frame = 1 }
+component_set = { key = "TURRET_TETRYON_1" icon = "GFX_ship_part_Turret_tetryon_1" icon_frame = 1 }
+component_set = { key = "TURRET_TETRYON_2" icon = "GFX_ship_part_Turret_tetryon_2" icon_frame = 1 }
+component_set = { key = "TURRET_TETRYON_3" icon = "GFX_ship_part_Turret_tetryon_3" icon_frame = 1 }
+component_set = { key = "TURRET_TETRYON_4" icon = "GFX_ship_part_Turret_tetryon_4" icon_frame = 1 }
+component_set = { key = "TURRET_TETRYON_5" icon = "GFX_ship_part_Turret_tetryon_5" icon_frame = 1 }
+component_set = { key = "MODULATED_TETRYON_1" icon = "GFX_ship_part_modulated_tetryon_1" icon_frame = 1 }
+
+component_set = { key = "MODULATED_TETRYON_2" icon = "GFX_ship_part_modulated_tetryon_2" icon_frame = 1 }
+
+component_set = { key = "MODULATED_TETRYON_3" icon = "GFX_ship_part_modulated_tetryon_3" icon_frame = 1 }
+
+component_set = { key = "MODULATED_TETRYON_4" icon = "GFX_ship_part_modulated_tetryon_4" icon_frame = 1 }
+
+component_set = { key = "MODULATED_TETRYON_5" icon = "GFX_ship_part_modulated_tetryon_5" icon_frame = 1 }
+
+component_set = { key = "TUNNELING_TETRYON_1" icon = "GFX_ship_part_tunneling_tetryon_1" icon_frame = 1 }
+
+component_set = { key = "TUNNELING_TETRYON_2" icon = "GFX_ship_part_tunneling_tetryon_2" icon_frame = 1 }
+
+component_set = { key = "TUNNELING_TETRYON_3" icon = "GFX_ship_part_tunneling_tetryon_3" icon_frame = 1 }
+
+component_set = { key = "TUNNELING_TETRYON_4" icon = "GFX_ship_part_tunneling_tetryon_4" icon_frame = 1 }
+
+component_set = { key = "TUNNELING_TETRYON_5" icon = "GFX_ship_part_tunneling_tetryon_5" icon_frame = 1 }
+
+component_set = { key = "QUANTUM_TETRYON_1" icon = "GFX_ship_part_quantum_tetryon_1" icon_frame = 1 }
+component_set = { key = "QUANTUM_TETRYON_2" icon = "GFX_ship_part_quantum_tetryon_2" icon_frame = 1 }
+
+component_set = { key = "QUANTUM_TETRYON_3" icon = "GFX_ship_part_quantum_tetryon_3" icon_frame = 1 }
+
+component_set = { key = "QUANTUM_TETRYON_4" icon = "GFX_ship_part_quantum_tetryon_4" icon_frame = 1 }
+
+component_set = { key = "QUANTUM_TETRYON_5" icon = "GFX_ship_part_quantum_tetryon_5" icon_frame = 1 }
+
+component_set = { key = "QUANTUM_TETRYON_6" icon = "GFX_ship_part_quantum_tetryon_6" icon_frame = 1 }
+
+component_set = { key = "QUANTUM_TETRYON_7" icon = "GFX_ship_part_quantum_tetryon_7" icon_frame = 1 }
+
+component_set = { key = "QUANTUM_TETRYON_8" icon = "GFX_ship_part_quantum_tetryon_8" icon_frame = 1 }
+
+component_set = { key = "HYPER_TETRYON_1" icon = "GFX_ship_part_hyper_tetryon_1" icon_frame = 1 }
+component_set = { key = "HYPER_TETRYON_2" icon = "GFX_ship_part_hyper_tetryon_2" icon_frame = 1 }
+
+component_set = { key = "HYPER_TETRYON_3" icon = "GFX_ship_part_hyper_tetryon_3" icon_frame = 1 }
+
+component_set = { key = "HYPER_TETRYON_4" icon = "GFX_ship_part_hyper_tetryon_4" icon_frame = 1 }
+
+component_set = { key = "HYPER_TETRYON_5" icon = "GFX_ship_part_hyper_tetryon_5" icon_frame = 1 }
+
+component_set = { key = "HYPER_TETRYON_6" icon = "GFX_ship_part_hyper_tetryon_6" icon_frame = 1 }
+
+component_set = { key = "HYPER_TETRYON_7" icon = "GFX_ship_part_hyper_tetryon_7" icon_frame = 1 }
+
+component_set = { key = "HYPER_TETRYON_8" icon = "GFX_ship_part_hyper_tetryon_8" icon_frame = 1 }
+
+component_set = { key = "CHRONITON_TETRYON_1" icon = "GFX_ship_part_chroniton_tetryon_1" icon_frame = 1 }
+component_set = { key = "CHRONITON_TETRYON_2" icon = "GFX_ship_part_chroniton_tetryon_2" icon_frame = 1 }
+
+component_set = { key = "CHRONITON_TETRYON_3" icon = "GFX_ship_part_chroniton_tetryon_3" icon_frame = 1 }
+
+component_set = { key = "CHRONITON_TETRYON_4" icon = "GFX_ship_part_chroniton_tetryon_4" icon_frame = 1 }
+
+component_set = { key = "CHRONITON_TETRYON_5" icon = "GFX_ship_part_chroniton_tetryon_5" icon_frame = 1 }
+
+component_set = { key = "CHRONITON_TETRYON_6" icon = "GFX_ship_part_chroniton_tetryon_6" icon_frame = 1 }
+
+component_set = { key = "CHRONITON_TETRYON_7" icon = "GFX_ship_part_chroniton_tetryon_7" icon_frame = 1 }
+
+component_set = { key = "CHRONITON_TETRYON_8" icon = "GFX_ship_part_chroniton_tetryon_8" icon_frame = 1 }
+
+
+
+
+
+component_set = { key = "PHASER_SPACEPORT_1" icon = "GFX_ship_part_phaser_spaceport_1" icon_frame = 1 }
+component_set = { key = "PULSE_PHASER_SPACEPORT_1" icon = "GFX_ship_part_pulse_phaser_spaceport_1" icon_frame = 1 }
+component_set = { key = "PARTICLE_PHASER_SPACEPORT_1" icon = "GFX_ship_part_particle_phaser_spaceport_1" icon_frame = 1 }
+component_set = { key = "SPIRAL_PHASER_SPACEPORT_1" icon = "GFX_ship_part_spiral_phaser_spaceport_1" icon_frame = 1 }
+component_set = { key = "ANDORIAN_PHASER_SPACEPORT_1" icon = "GFX_ship_part_andorian_phaser_spaceport_1" icon_frame = 1 }
+component_set = { key = "PHASER_SPACEPORT_2" icon = "GFX_ship_part_phaser_spaceport_2" icon_frame = 1 }
+component_set = { key = "KANG_DISRUPTOR_SPACEPORT_1" icon = "GFX_ship_part_kang_disruptor_spaceport_1" icon_frame = 1 }
+component_set = { key = "PLASMA_DISRUPTOR_SPACEPORT_1" icon = "GFX_ship_part_plasma_disruptor_spaceport_1" icon_frame = 1 }
+component_set = { key = "DISRUPTOR_SPACEPORT_1" icon = "GFX_ship_part_disruptor_spaceport_1" icon_frame = 1 }
+component_set = { key = "DISRUPTOR_SPACEPORT_2" icon = "GFX_ship_part_disruptor_spaceport_2" icon_frame = 1 }
+component_set = { key = "PLASMA_SPACEPORT_1" icon = "GFX_ship_part_plasma_spaceport_1" icon_frame = 1 }
+component_set = { key = "PLASMA_SPACEPORT_2" icon = "GFX_ship_part_plasma_spaceport_2" icon_frame = 1 }
+component_set = { key = "ANTI_SPACEPORT_1" icon = "GFX_ship_part_anti_spaceport_1" icon_frame = 1 }
+component_set = { key = "BORG_SPACEPORT_1" icon = "GFX_ship_part_borg_spaceport_1" icon_frame = 1 }
+component_set = { key = "ANTI_SPACEPORT_2" icon = "GFX_ship_part_anti_spaceport_2" icon_frame = 1 }
+component_set = { key = "POLARON_SPACEPORT_1" icon = "GFX_ship_part_polaron_spaceport_1" icon_frame = 1 }
+component_set = { key = "POLARON_SPACEPORT_2" icon = "GFX_ship_part_polaron_spaceport_2" icon_frame = 1 }
+component_set = { key = "TETRYON_SPACEPORT_1" icon = "GFX_ship_part_tetryon_spaceport_1" icon_frame = 1 }
+component_set = { key = "TETRYON_QUANTUM_SPACEPORT_1" icon = "GFX_ship_part_tetryon_quantum_spaceport_1" icon_frame = 1 }
+component_set = { key = "TETRYON_HYPER_SPACEPORT_1" icon = "GFX_ship_part_tetryon_hyper_spaceport_1" icon_frame = 1 }
+component_set = { key = "TETRYON_CHRONITON_SPACEPORT_1" icon = "GFX_ship_part_tetryon_chroniton_spaceport_1" icon_frame = 1 }
+component_set = { key = "TETRYON_SPACEPORT_2" icon = "GFX_ship_part_tetryon_spaceport_2" icon_frame = 1 }
+component_set = { key = "TORP_PHOTON_SPACEPORT_0" icon = "GFX_ship_part_torp_photon_spaceport_0" icon_frame = 1 }
+component_set = { key = "TORP_QUANTUM_SPACEPORT_0" icon = "GFX_ship_part_torp_quantum_spaceport_0" icon_frame = 1 }
+component_set = { key = "TORP_POLARON_SPACEPORT_0" icon = "GFX_ship_part_torp_polaron_spaceport_0" icon_frame = 1 }
+component_set = { key = "TORP_CHRONITON_SPACEPORT_0" icon = "GFX_ship_part_torp_chroniton_spaceport_0" icon_frame = 1 }
+component_set = { key = "TORP_PLASMA_SPACEPORT_0" icon = "GFX_ship_part_torp_plasma_spaceport_0" icon_frame = 1 }
+
+
+
+
+component_set = { key = "MUON_SPECIAL_0" icon = "GFX_ship_part_muon_special_0" icon_frame = 1 }
+component_set = { key = "QUANTUM_SPECIAL_0" icon = "GFX_ship_part_quantum_special_0" icon_frame = 1 }
+component_set = { key = "MEDEVLAN_SPECIAL_0" icon = "GFX_ship_part_medevlan_special_0" icon_frame = 1 }
+component_set = { key = "SUBATOMIC_CANNON_SPECIAL_0" icon = "GFX_ship_part_subatomic_cannon_special_0" icon_frame = 1 }
+component_set = { key = "SUBATOMIC_BEAM_SPECIAL_0" icon = "GFX_ship_part_subatomic_beam_special_0" icon_frame = 1 }
+component_set = { key = "ISOKINETIC_SPECIAL_0" icon = "GFX_ship_part_isokinetic_special_0" icon_frame = 1 }
+component_set = { key = "DOOMSDAY_0" icon = "GFX_ship_part_doomsday__0" icon_frame = 1 }

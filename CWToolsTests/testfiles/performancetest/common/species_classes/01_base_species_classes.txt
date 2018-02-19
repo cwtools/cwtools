@@ -1,0 +1,381 @@
+### STNH 1.8 Compatible ###
+
+
+# Number of entries controlls amount to choose from in designer  I.E.   "mol1" "mol2" "mol3" "mol4"
+# graphical_culture is connected to the looks used for ships and cities, see "common/graphical_culture/"
+# Portraits here are one you can choose from in the character creater. For prescripted races they are grabbed straight from the .gfx file. 
+# playable=(yes/no)/trigger, default is yes, if this species class can is playable
+# randomized=(yes/no)/trigger, default is yes, if this species class is randomized
+# custom_portraits
+#	randomized = trigger, default is no, to specify if portraits are randomized
+#	playable = trigger, default is yes, to specify if portraits are playable
+#	portraits, list portrait keys
+# species_trait_points: base number of species trait points available for this species class
+# species_max_traits: maximum number of traits that species of this class can have (doesn't count those with cost == 0)
+# possible: ethics/government requirements; see common/governments/readme_requirements.txt
+# gender: yes|no (default: yes). whether the species have a gender
+# portrait_modding: yes|no (default: no). whether the portrait can be modified with genemodding/robomodding
+
+
+MAM = {
+	archetype = BIOLOGICAL
+	playable = { always = no }
+	randomized = no
+
+	portraits = {
+		"mam5"
+		"mam13"
+		"mam10"
+		"mam14"
+		"mam4"
+		"mam9"
+		"mam11"
+		"mam6"
+		"mam3"	
+		"mam12"
+		"mam7"
+		"mam15"
+		"mam2"
+		"mam8"
+		"mam1"
+	}
+	custom_portraits = {#add additional portraits when customizing species
+		portraits = {
+			"mam16"
+		}
+	}
+	
+	custom_portraits = {#add additional portraits when customizing species
+		randomized = { 
+			OR = { 
+				host_has_dlc = "Creatures of the Void Portrait Pack"
+				host_has_dlc = "Anniversary Portraits"
+			}
+		}
+		playable = { 
+			OR = {
+				local_has_dlc = "Creatures of the Void Portrait Pack"
+				local_has_dlc = "Anniversary Portraits"
+			}
+		}
+		portraits = {
+			"mam17"
+		}
+	}
+	
+	graphical_culture = mammalian_01
+	move_pop_sound_effect = "moving_pop_confirmation"
+
+	
+}
+
+REP = {
+	archetype = BIOLOGICAL
+	playable = { always = no }
+	randomized = no
+
+	portraits = {
+		"rep2"		
+		"rep10"		
+		"rep14"		
+		"rep3"		
+		"rep7"		
+		"rep12"
+		"rep9"
+		"rep11"
+		"rep6"
+		"rep13"
+		"rep1"		
+		"rep8"		
+		"rep4"		
+		"rep15"		
+		"rep5"
+	}
+	
+	custom_portraits = {#add additional portraits when customizing species
+		randomized = { host_has_dlc = "Leviathans Story Pack" }
+		playable = { local_has_dlc = "Leviathans Story Pack" }	
+		portraits = {
+			"rep16"
+		}
+	}
+	custom_portraits = {
+		randomized = { host_has_dlc = "Anniversary Portraits" }
+		playable = { local_has_dlc = "Anniversary Portraits" }
+		portraits = {
+			"rep17"
+		}
+	}
+
+	graphical_culture = reptilian_01
+	move_pop_sound_effect = "reptilian_pops_move"
+
+	
+}
+
+AVI = {
+	archetype = BIOLOGICAL
+	playable = { always = no }
+	randomized = no
+	portraits = {
+		"avi1"
+		"avi8"
+		"avi13"		
+		"avi10"		
+		"avi15"
+		"avi4"
+		"avi7"
+		"avi5"
+		"avi9"
+		"avi6"
+		"avi11"		
+		"avi3"		
+		"avi14"		
+		"avi2"		
+		"avi12"
+	}
+	custom_portraits = {#add additional portraits when customizing species
+		playable = { logged_in_to_pdx_account = yes }
+		portraits = {
+			"avi16"
+		}
+	}
+	
+	custom_portraits = {#add additional portraits when customizing species
+		randomized = { 
+			OR = { 
+				host_has_dlc = "Creatures of the Void Portrait Pack"
+				host_has_dlc = "Anniversary Portraits"
+			}
+		}
+		playable = { 
+			OR = {
+				local_has_dlc = "Creatures of the Void Portrait Pack"
+				local_has_dlc = "Anniversary Portraits"
+			}
+		}
+		portraits = {
+			"avi17"
+		}
+	}
+	custom_portraits = {
+		randomized = { host_has_dlc = "Anniversary Portraits" }
+		playable = { local_has_dlc = "Anniversary Portraits" }
+		portraits = {
+			"avi18"
+		}
+	}
+
+	graphical_culture = avian_01
+	move_pop_sound_effect = "avian_pops_move"
+
+	
+}
+
+ART = {
+	archetype = BIOLOGICAL
+	playable = { always = no }
+	randomized = no
+
+	portraits = {
+		"art14"
+		"art7"
+		"art12"
+		"art6"
+		"art1"		
+		"art13"
+		"art8"
+		"art3"		
+		"art5"		
+		"art9"
+		"art10"
+		"art11"
+		"art15"
+	}
+
+	custom_portraits = {#add additional portraits when customizing species
+		randomized = { host_has_dlc = "Leviathans Story Pack" }
+		playable = { local_has_dlc = "Leviathans Story Pack" }	
+		portraits = {
+			"art18"
+		}
+	}	
+	
+	custom_portraits = {#add additional portraits when customizing species
+		randomized = { host_has_dlc = "Arachnoid Portrait Pack" }
+		playable = { local_has_dlc = "Arachnoid Portrait Pack" }
+		portraits = {
+			"art16"
+		}
+	}
+	custom_portraits = {
+		randomized = { host_has_dlc = "Anniversary Portraits" }
+		playable = { local_has_dlc = "Anniversary Portraits" }
+		portraits = {
+			"art20"
+		}
+	}
+	
+	custom_portraits = {#add additional portraits when customizing species
+		randomized = { 
+			OR = { 
+				host_has_dlc = "Creatures of the Void Portrait Pack"
+				host_has_dlc = "Anniversary Portraits"
+			}
+		}
+		playable = { 
+			OR = {
+				local_has_dlc = "Creatures of the Void Portrait Pack"
+				local_has_dlc = "Anniversary Portraits"
+			}
+		}
+		portraits = {
+			"art17"
+		}
+	}
+	
+	graphical_culture = arthropoid_01
+	move_pop_sound_effect = "arthopoid_pops_move"
+
+	
+}
+
+MOL = {
+	archetype = BIOLOGICAL
+	playable = { always = no }
+	randomized = no
+
+	portraits = {
+		"mol3"		# Rendered but not saved
+		"mol7"		
+		"mol13"
+		"mol2"
+		"mol14"		
+		"mol4"
+		"mol8"				
+		"mol1"		
+		"mol11"
+		"mol12"
+		"mol5"
+		"mol6"
+		"mol15"
+	}
+	
+	custom_portraits = {#add additional portraits when customizing species
+		randomized = { 
+			OR = { 
+				host_has_dlc = "Creatures of the Void Portrait Pack"
+				host_has_dlc = "Anniversary Portraits"
+			}
+		}
+		playable = { 
+			OR = {
+				local_has_dlc = "Creatures of the Void Portrait Pack"
+				local_has_dlc = "Anniversary Portraits"
+			}
+		}
+		portraits = {
+			"mol16"
+		}
+	}
+	
+	custom_portraits = {#add additional portraits when customizing species
+		randomized = { host_has_dlc = "Leviathans Story Pack" }
+		playable = { local_has_dlc = "Leviathans Story Pack" }	
+		portraits = {
+			"mol17"
+			"mol18"
+		}
+	}
+
+	graphical_culture = molluscoid_01
+	move_pop_sound_effect = "molluscoid_pops_move"
+
+	
+}
+
+FUN = {
+	archetype = BIOLOGICAL
+	playable = { always = no }
+	randomized = no
+
+	gender = no
+
+	portraits = {		
+		"fun2"
+		"fun4"
+		"fun3"
+		"fun13"
+		"fun12"
+		"fun6"
+		"fun15"
+		"fun7"
+		"fun1"
+		"fun9"		
+		"fun11"		
+		"fun8"		
+		"fun14"
+		"fun10"
+	}
+
+	custom_portraits = {#add additional portraits when customizing species
+		randomized = { 
+			OR = { 
+				host_has_dlc = "Creatures of the Void Portrait Pack"
+				host_has_dlc = "Anniversary Portraits"
+			}
+		}
+		playable = { 
+			OR = {
+				local_has_dlc = "Creatures of the Void Portrait Pack"
+				local_has_dlc = "Anniversary Portraits"
+			}
+		}
+		portraits = {
+			"fun16"
+		}
+	}
+	
+	custom_portraits = {#add additional portraits when customizing species
+		randomized = { host_has_dlc = "Leviathans Story Pack" }
+		playable = { local_has_dlc = "Leviathans Story Pack" }	
+		portraits = {
+			"fun17"
+		}
+	}
+
+	graphical_culture = fungoid_01
+	move_pop_sound_effect = "fungoid_pops_move"
+
+	
+}
+
+PLANT = {
+	archetype = BIOLOGICAL
+	playable = { always = no }
+	randomized = no
+
+	gender = no
+
+	portraits = {
+		"pla2"
+		"pla6"
+		"pla1"
+		"pla11"
+		"pla3"
+		"pla13"
+		"pla7"
+		"pla15"
+		"pla10"
+		"pla5"
+		"pla9"
+		"pla14"
+		"pla4"
+		"pla8"
+		"pla12"
+	}
+
+	graphical_culture = plantoid_01
+
+	
+}

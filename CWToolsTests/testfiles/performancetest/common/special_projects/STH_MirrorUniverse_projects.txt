@@ -1,0 +1,186 @@
+special_project = {
+	key = "CAPTURE_DEFIANT_PROJECT_1"
+	event_chain = "capture_defiant_chain"
+	cost = 0
+	days_to_research = 30
+	tech_department = engineering_technology
+	picture = sth_GFX_evt_tholian_chase
+	event_scope = ship_event
+	requirements = { shipclass_military = 1 leader = admiral }
+	on_success = { 
+		ship_event = { id = STH_MirrorUniverse_event.9 }
+	}
+	on_fail = { 
+		#ship_event = { id = STH_MirrorUniverse_event.7 }
+	}
+}
+
+special_project = {
+	key = "CAPTURE_DEFIANT_PROJECT_2"
+	event_chain = "capture_defiant_chain"
+	cost = 0
+	days_to_research = 50
+	tech_department = engineering_technology
+	picture = sth_GFX_evt_tholian_base
+	event_scope = ship_event
+	requirements = { shipclass_military = 1 leader = admiral }
+	on_success = { 
+		ship_event = { id = STH_MirrorUniverse_event.17 }
+	}
+	on_fail = { 
+		#ship_event = { id = STH_MirrorUniverse_event.16 }
+	}
+}
+
+special_project = {
+	key = "CAPTURE_DEFIANT_PROJECT_3"
+	event_chain = "capture_defiant_chain"
+	cost = 0
+	days_to_research = 50
+	tech_department = engineering_technology
+	picture = sth_GFX_evt_defiant_earth
+	event_scope = ship_event
+	requirements = { shipclass_military = 1 leader = admiral has_trait = leader_trait_defiant_captain }
+	on_success = { 
+		ship_event = { id = STH_MirrorUniverse_event.38 }
+	}
+	on_fail = { 
+		#ship_event = { id = STH_MirrorUniverse_event.36 }
+	}
+	abort_trigger = {
+		NOT = { any_owned_leader = { has_trait = leader_trait_defiant_captain } }
+	}
+}
+
+special_project = {
+	key = "CAPTURE_DEFIANT_PROJECT_4"
+	event_chain = "capture_defiant_chain"
+	cost = 0
+	days_to_research = 50
+	tech_department = engineering_technology
+	picture = sth_GFX_evt_defiant_destroy_vulcans
+	event_scope = ship_event
+	requirements = { shipclass_military = 1 leader = admiral has_trait = leader_trait_defiant_captain }
+	on_success = { 
+		ship_event = { id = STH_MirrorUniverse_event.41 }
+	}
+	on_fail = { 
+		#ship_event = { id = STH_MirrorUniverse_event.37 }
+	}
+	abort_trigger = {
+		NOT = { any_owned_leader = { has_trait = leader_trait_defiant_captain } }
+	}
+}
+
+special_project = {
+	key = "CAPTURE_DEFIANT_PROJECT_5"
+	event_chain = "capture_defiant_chain"
+	cost = 0
+	days_to_research = 50
+	tech_department = engineering_technology
+	picture = sth_GFX_evt_defiant_empire_rebels
+	event_scope = ship_event
+	requirements = { shipclass_military = 1 leader = admiral has_trait = leader_trait_defiant_captain }
+	on_success = { 
+		ship_event = { id = STH_MirrorUniverse_event.40 }
+	}
+	on_fail = { 
+		
+	}
+	abort_trigger = {
+		NOT = { any_owned_leader = { has_trait = leader_trait_defiant_captain } }
+	}
+}
+
+special_project = {
+	key = "CAPTURE_DEFIANT_PROJECT_6"
+	event_chain = "capture_defiant_chain"
+	cost = 0
+	days_to_research = 50
+	tech_department = engineering_technology
+	picture = sth_GFX_evt_defiant_earth
+	event_scope = ship_event
+	requirements = { shipclass_military = 1 leader = admiral has_trait = leader_trait_defiant_captain }
+	on_success = { 
+		ship_event = { id = STH_MirrorUniverse_event.43 }
+	}
+	on_fail = { 
+		#ship_event = { id = STH_MirrorUniverse_event.44 }
+	}
+	abort_trigger = {
+		NOT = { any_owned_leader = { has_trait = leader_trait_defiant_captain } }
+	}
+}
+
+special_project = {
+	key = "CAPTURE_DEFIANT_PROJECT_7"
+	event_chain = "capture_defiant_chain"
+	cost = 0
+	days_to_research = 50
+	tech_department = engineering_technology
+	picture = sth_GFX_evt_defiant_earth
+	event_scope = ship_event
+	requirements = { shipclass_military = 1 leader = admiral has_trait = leader_trait_defiant_captain }
+	on_success = { 
+		ship_event = { id = STH_MirrorUniverse_event.46 }
+	}
+	on_fail = { 
+		#ship_event = { id = STH_MirrorUniverse_event.45 }
+	}
+	abort_trigger = {
+		NOT = { any_owned_leader = { has_trait = leader_trait_defiant_captain } }
+	}
+}
+
+special_project = {
+	key = "TERRAN_MIRRORMIRROR_PROJECT_1"
+	event_chain = "terran_mirrorMirror_chain"
+	cost = 0
+	days_to_research = 60
+	tech_department = society_technology
+	picture = sth_GFX_evt_empire_fleet
+	event_scope = ship_event
+	requirements = { shipclass_military = 1 leader = admiral }
+	on_success = { 
+		ship_event = { id = STH_MirrorUniverse_event.68 }
+	}
+	on_fail = { 
+		
+	}
+}
+
+special_project = {
+	key = "TERRAN_MIRRORMIRROR_PROJECT_2"
+	event_chain = "terran_mirrorMirror_chain"
+	cost = 0
+	days_to_research = 60
+	tech_department = society_technology
+	picture = sth_GFX_evt_empire_fleet
+	event_scope = ship_event
+	requirements = { shipclass_military = 1 leader = admiral has_trait = leader_trait_terran_mirrorMirror_captain_1 }
+	on_success = { 
+		ship_event = { id = STH_MirrorUniverse_event.81 }
+	}
+	on_fail = {}
+	abort_trigger = {
+		NOT = { any_owned_leader = { has_trait = leader_trait_terran_mirrorMirror_captain_1 } }
+	}
+}
+
+special_project = {
+	key = "TERRAN_MIRRORMIRROR_PROJECT_3"
+	event_chain = "terran_mirrorMirror_chain"
+	cost = 0
+	days_to_research = 60
+	tech_department = society_technology
+	picture = sth_GFX_evt_empire_fleet
+	event_scope = ship_event
+	requirements = { shipclass_military = 1 leader = admiral has_trait = leader_trait_terran_mirrorMirror_captain_1 }
+	on_success = { 
+		ship_event = { id = STH_MirrorUniverse_event.82 }
+	}
+	on_fail = { }
+	abort_trigger = {
+		NOT = { any_owned_leader = { has_trait = leader_trait_terran_mirrorMirror_captain_1 } }
+	}
+}

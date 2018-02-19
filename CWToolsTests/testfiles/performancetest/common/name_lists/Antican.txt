@@ -1,0 +1,97 @@
+﻿### Antican by EHKodiak
+Antican = {
+	randomized = no
+
+	ship_names = {
+		generic = {
+			Hound Hunter Poacher Trapper Pack Canis Canem Lupin Lupus Rabid Retriever Hind Howler Howl Bone Obedience Loyalty 
+		}
+		corvette = {
+		}
+		saber = {
+		}
+		sovereign = {
+		}
+		steamrunner = {
+		}		
+		adv_cruiser = {
+		}
+		strike = {
+		}	
+		constructor = { }
+		colonizer = { }
+		science = { }
+		transport = { }
+		outpost_station = {
+			sequential_name = "Frontier Outpost"
+		}
+	}
+
+	fleet_names = {
+		sequential_name = "%O% Fleet"
+	}
+	
+	army_names = {
+		defense_army = {
+			sequential_name = "%O% Pack Wardens"
+		}
+		assault_army = {
+			sequential_name = "%O% Hunting Pack"
+		}
+		slave_army = {
+			sequential_name = "%O% Indentured Assault Pack"
+		}
+		clone_army = { 
+			sequential_name = "%O% Clone Assault Pack"
+		}
+		robotic_army = {
+			sequential_name = "%O% Mechanical Assault Pack"
+		}
+		android_army = {
+			sequential_name = "%O% Synthetic Assault Pack"
+		}
+		psionic_army = { 
+			sequential_name = "%O% Psionic Pack"
+		}
+		xenomorph_army = {
+			sequential_name = "%O% Bio-Warfare Assault Pack"
+		}
+		gene_warrior_army = {
+			sequential_name = "%O% Bio-Engineered Assault Pack"
+		}
+	}
+
+	planet_names = {
+		generic = {
+			names = {
+			}
+		}
+	}
+
+
+	### CHARACTERS
+
+	character_names = {
+		names1 = {
+			weight = 100
+			first_names_male = {		
+				Badar Lavar Hogar Hadar Hodar Lofah Lindar Lorar Larar Nessar Menar Melar Mepar Mecar Doggar Wolfar Dingar Kanar Pomeran Pinscher Span Terr Sennen Normand Corgo
+			}
+			first_names_female = {
+				Badari Lavari Hogari Hadari Hodari Lofahi Lindari Lorari Larari Nessari Menari Melari Mepari Mecari Doggari Wolfari Dingari Kanari Pomerani Pinscheri Spani Terri Sennenu Normandu Corgu
+			}
+			second_names = {
+				"N'D'D" "T'G'G" "N'R'R" "G'R'R" "W'U'F" "Y'A'P" "D'D'G" "T'R'G" "W'O'O'F" "W'L'K'Y'S" "B'T'T" "K'N'L" "K'N'N'L" "T'R'T" "D'D'D" "D'R'D" "N'M'D" "J'M'D" "S'T'O" "H'R'L" "K'O'D" "W'L'S'H" "G'N'S'L" "Z'M'M'P" "N'Ld'R" "Tar'G'N"  
+			}
+			regnal_first_names_male = {
+				Badar Lavar Hogar Hadar Hodar Lofah Lindar Lorar Larar Nessar Menar Melar Mepar Mecar Doggar Wolfar Dingar Kanar Pomeran Pinscher Span Terr Sennen Normand Corgo
+			}
+			regnal_first_names_female = {
+				Badari Lavari Hogari Hadari Hodari Lofahi Lindari Lorari Larari Nessari Menari Melari Mepari Mecari Doggari Wolfari Dingari Kanari Pomerani Pinscheri Spani Terri Sennenu Normandu Corgu
+			}
+			regnal_second_names = {
+				"N'D'D" "T'G'G" "N'R'R" "G'R'R" "W'U'F" "Y'A'P" "D'D'G" "T'R'G" "W'O'O'F" "W'L'K'Y'S" "B'T'T" "K'N'L" "K'N'N'L" "T'R'T" "D'D'D" "D'R'D" "N'M'D" "J'M'D" "S'T'O" "H'R'L" "K'O'D" "W'L'S'H" "G'N'S'L" "Z'M'M'P" "N'Ld'R" "Tar'G'N" 
+			}
+		}
+	}
+}

@@ -1,0 +1,17 @@
+# 
+mirror_universe_fed_portal_system_1 = {
+	class = sc_black_hole
+	planet = { class = star orbit_distance = 0 }
+	init_effect = { set_star_flag = mirror_universe_fed_portal_system_1 }
+}
+
+mirror_universe_fed_portal_system_2a = {
+	class = sc_black_hole
+	planet = { class = star orbit_distance = 0 }
+	init_effect = { set_star_flag = mirror_universe_fed_portal_system_2a }
+}
+mirror_universe_fed_portal_system_2b = {
+	class = sc_black_hole
+	planet = { class = star orbit_distance = 0 }
+	init_effect = { set_star_flag = mirror_universe_fed_portal_system_2b }
+}

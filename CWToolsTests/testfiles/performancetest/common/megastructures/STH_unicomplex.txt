@@ -1,0 +1,235 @@
+#Borg Unicomplex
+
+
+#Buildable Temporary Object that spawns all subsections
+STH_unicomplex = {
+    entity = "borg_01_unicomplex_entity"
+    construction_entity = "unimatrix_ambience_entity"
+    portrait = "GFX_megastructure_construction_background"
+    place_entity_on_planet_plane = no
+    entity_offset = { x = -7 y = -7 }
+    build_time = 1440 # 4 Years
+    build_cost = {
+        minerals = 10000
+        influence = 300
+    }
+
+    potential = {
+		is_assimilator = yes
+    }
+
+    possible = {
+        custom_tooltip = {
+            fail_text = "requires_surveyed_system"
+            NOT = {
+                any_planet = {
+                    is_surveyed = {
+                        who = prev.from
+                        status = no
+                    }
+                }
+            }
+        }
+        custom_tooltip = {
+            fail_text = "requires_no_colonies"
+            NOT = {
+                any_planet = {
+                    is_colony = yes
+                }
+            }
+        }
+        custom_tooltip = {
+            fail_text = "requires_no_black_hole"
+            NOT = { is_star_class = sc_black_hole }
+        }
+        custom_tooltip = {
+            fail_text = "requires_no_existing_megastructure"
+            #NOT = { solar_system = { has_any_megastructure_in_empire = yes } }
+            NOT = { has_any_megastructure = yes }
+        }
+		custom_tooltip = {
+            fail_text = "requires_no_more_unicomplex"
+            from = { 
+				NAND = {
+					NOT = { has_swapped_tradition = tr_assimilation_adopt }
+					check_variable = { which = "unicomplex_count" value > 0 }
+				}
+			}
+        }
+        custom_tooltip = {
+            fail_text = "requires_no_more_unicomplex"
+            from = { NOT = { check_variable = { which = "unicomplex_count" value > 2 } } }
+        }
+    }
+
+    placement_rules = {
+        planet_possible = {
+            custom_tooltip = {
+                fail_text = "must_build_around_star"
+                is_star = yes
+            }
+            custom_tooltip = {
+                fail_text = "requires_no_anomaly"
+                NOT = { has_anomaly = yes }
+            }
+            custom_tooltip = {
+				fail_text = "requires_planets_for_material"
+				hidden:solar_system = { any_planet = { NOT = { is_star = yes } } }
+            }
+        }
+    }
+
+    ai_weight = {
+        factor = 10#TODO
+    }
+
+    
+    on_build_start = {
+        # from = { change_variable = { which = "unicomplex_count" value = 1 } }
+    }
+    on_build_cancel = {
+        # from = { change_variable = { which = "unicomplex_count" value = -1 } }
+	}
+    on_build_complete = {
+        every_system_planet = { 
+            #limit = { is_star = no }
+            remove_planet = yes
+        }
+        asteroids_distance = 0
+        remove_megastructure = fromfrom
+
+        set_star_flag = ring_world_built
+        # set_star_flag = unicomplex_0
+        spawn_megastructure = {
+            name = "NAME_Unicomplex_0"
+            type = "STH_unimatrix_finished"
+            orbit_angle = 0
+            orbit_distance = 0
+            owner = from
+            graphical_culture = fromfrom
+            location = planet
+
+            #add_modifier = { modifier = "em_unicomplex_border" }
+        }
+		from = { change_variable = { which = "unicomplex_count" value = 1 } }
+    }
+}
+
+STH_unimatrix_unfinished = {
+	entity = "borg_01_unicomplex_entity"
+	portrait = "GFX_megastructure_construction_background"
+
+	# used from script only
+	upgrade_desc = hide
+	potential = { always = no }
+}
+
+STH_unimatrix_finished = {
+    entity = "borg_01_unicomplex_entity"
+    construction_entity = "unimatrix_ambience_entity"
+    portrait = "GFX_megastructure_construction_background"
+    upgrade_from = {
+        STH_unimatrix_unfinished
+    }
+    build_time = 720
+    build_cost = {
+        minerals = 5000
+        influence = 40
+    }
+	possible = {
+		from = { is_assimilator = yes }
+		custom_tooltip = {
+			fail_text = "requires_no_more_unicomplex_subsection"
+			OR = {
+				count_planets = { limit = { is_planet_class = pc_unimatrix } count < 3 }
+				AND = {
+					count_planets = { limit = { is_planet_class = pc_unimatrix } count < 5 }
+					from = { has_swapped_tradition = tr_assimilation_4 }
+				}
+			}
+		}
+	}
+
+    on_build_start = {}
+    on_build_cancel = {}
+    on_build_complete = {      
+		from = { save_event_target_as = owner }
+		save_event_target_as = solar_system
+        spawn_planet = {
+            class = "pc_unimatrix"
+            location = fromfrom
+			size = 25
+            init_effect = {
+                save_event_target_as = unicomplexSpawn
+				change_pc = pc_unimatrix
+                set_planet_entity = {
+                    entity = "orbital_habitat_entity"
+                    graphical_culture = borg_01
+                }
+                set_unicomplex_number_flag = yes
+				set_unicomplex_system_number_flag = yes
+				set_unicomplex_name = yes
+                surveyed = {
+                    set_surveyed = yes
+                    surveyor = FROM
+                }
+                set_all_comms_surveyed = yes
+                while = {
+                    limit = { any_tile = { has_blocker = yes } }
+                    random_tile = { limit = { has_blocker = yes } remove_blocker = yes }
+                }
+                unicomplex_tileblockers = yes
+                while = { count = 16 unicomplex_resource = yes }
+				create_colony = { owner = from species = from }
+				random_tile = { limit = { has_building = yes } set_building = "node_hub_1" }
+                trigger_megastructure_icon = yes
+                set_planet_flag = megastructure
+				set_planet_flag = "unicomplexGreen"
+                set_planet_flag = habitat
+                unicomplex_defense_perimeter = yes
+                create_ambient_object = {
+                    type = "borg_unimatrix_structure_01_object"
+                    location = planet
+                    entity_offset = { min = 0 max = 0 }
+                    entity_offset_height = { min = -20 max = -20 }
+					entity_face_object = star
+                }
+            }              
+        }
+		last_created_ambient_object = { 
+			set_ambient_object_flag = "unicomplexAmbientFor:@event_target:unicomplexSpawn" 
+			set_ambient_object_flag = "unicomplexGreen"
+		}
+		event_target:unicomplexSpawn = { planet_event = { id = STH_borg.1008 days = 0 } }
+        remove_megastructure = fromfrom
+		
+		if = {
+            limit = { NOT = { any_planet = { has_planet_flag = unicomplex_part_1 } } }
+            spawn_megastructure = { name = "NAME_Unicomplex_Expansion" type = "STH_unimatrix_unfinished" orbit_angle = 0 orbit_distance = 0 owner = from graphical_culture = fromfrom location = planet }
+			else = {
+				if = {
+					limit = { NOT = { any_planet = { has_planet_flag = unicomplex_part_2 } } }
+					spawn_megastructure = { name = "NAME_Unicomplex_Expansion" type = "STH_unimatrix_unfinished" orbit_angle = 90 orbit_distance = 100 owner = from graphical_culture = fromfrom location = planet }
+					else = {
+						if = {
+							limit = { NOT = { any_planet = { has_planet_flag = unicomplex_part_3 } } }
+							spawn_megastructure = { name = "NAME_Unicomplex_Expansion" type = "STH_unimatrix_unfinished" orbit_angle = 180 orbit_distance = 100 owner = from graphical_culture = fromfrom location = planet }
+							else = {
+								if = {
+									limit = { NOT = { any_planet = { has_planet_flag = unicomplex_part_4 } } }
+									spawn_megastructure = { name = "NAME_Unicomplex_Expansion" type = "STH_unimatrix_unfinished" orbit_angle = 270 orbit_distance = 100 owner = from graphical_culture = fromfrom location = planet }
+									else = {
+										if = {
+											limit = { NOT = { any_planet = { has_planet_flag = unicomplex_part_5 } } }
+											spawn_megastructure = { name = "NAME_Unicomplex_Expansion" type = "STH_unimatrix_unfinished" orbit_angle = 0 orbit_distance = 100 owner = from graphical_culture = fromfrom location = planet }
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+    }
+}

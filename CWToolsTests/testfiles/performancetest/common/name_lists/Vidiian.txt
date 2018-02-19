@@ -1,0 +1,79 @@
+﻿### Vidiian
+Vidiian = {
+	randomized = no
+	
+	ship_names = {
+		generic = { 
+			Niadin SDidin Sidina Nitain Sidasif Nudinn Nudiaw Nudiad Thudin Nediteg Nesixa Gradst Xaggin Lasmin Hcaidat Cediteg Dassin Krogidil Boggin Readsn Nudsma Ninnaw Dadata Nasinn Beddat Regididin Thudag Cedinna Grasit Nerixea Cmilat Bradat Zadsas Boredit Adasit Nosmia Kinnat Tracin Daddst Sidstek Nianaw Thitat Dainat Regixa Zidarat Dasiat Haddat Hrawat Essmat Xacara Boreaia Orahar "Rew Hin" Sommaw Ceggino Orahat Bogoma Hratal Traras Dadagos Chogiat Benoua Tregon "Ges Vat" Chuagg Begawa Krahek Dasma Xaf ChZasin Darads Zarata Xomatt Trarat "Chel Chudit" Zoggat Chawat Tracal Citewat Neramin Xattas "Sixe Thif" Somaidst Groxaw Chewat Sosnat Krohes Orainas Redixaff Nuphul Hewyst Zinorat Zoraina Vatatt Damasal Xolatan Silasmam Vainalff Zogoman Dagoxel Nohelat Xomitatt Bogosas Neffkys Esronat Soratat Saxesmat Orommaw Zeggadin Borastt Negomas Hrast Qaidtatta Troraff Kradarat Rmasinog Cerasat Noloron Orerosm "Reff Bol" Norams "Rel Heff" Krawatt Trarenn Ephudidat Vadannat Saraten Ziawcamw Sonamaw Foraran Relaiatt Thelara "Seit Adatas" "Cef Traidil" Kinnaddan Vatttat Chuphud Xanonasa Qannaten Zoxadawat Foggana Akamanas Hasammin Zogomiatt Resxerain Xarosmat Zasrorat Cenoraiail Granacat Esmiattal Toracaff Comasmat Regohads Regginasin Sal Krahataw Fonnatam "Henaf Sill" Zorostaw Xattedidat Bedixerala Fohullan Mrahenat Sinagogog Nasrasma Hrawaman "Xomadin Xar" Krogoman Bogiallat Hratten "Ren Mrol" Sominahinat Cohinagahit "Herass Xat" Couahenos Benahuphit Xanoradst Chuphuatt Beasratt Oratenor Brargoreg Regadainat Nuaragaro Chuasmago "Tek Darasin" Chanaitagg Nuphuphat Kraradsnaw Cohadinnasn Norogorasm Ditagoxalat Brohekelad ZSogommixef BogReKratt Ollagattat Gratanastt Chefffatan Besaronads Noxeginomag Hrahuphaids Brassassta Mmallagosin Sohenaccaw "Zohall Da" Zasrellatt Zogasraran Xategomatt Xolanateds Tragamatana 
+		}
+		corvette = { }
+		saber = { }
+		sovereign = { }
+		steamrunner = { }		
+		adv_cruiser = { }
+		strike = { }	
+		constructor = { }
+		colonizer = { }
+		science = { }
+		transport = { }
+		outpost_station = {
+			sequential_name = "Frontier Outpost"
+		}
+	}
+
+	fleet_names = {
+		sequential_name = "%O% Fleet"
+	}
+	
+	army_names = {
+		defense_army = {
+			sequential_name = "%O% Vidiian Guard"
+		}
+		assault_army = {
+			sequential_name = "%O% Liberation Force"
+		}
+		slave_army = {
+			sequential_name = "%O% Indentured Defence Force"
+		}
+		clone_army = { 
+			sequential_name = "%O% Clone Defence Force"
+		}
+		robotic_army = {
+			sequential_name = "%O% Mechanical Defence Force"
+		}
+		android_army = {
+			sequential_name = "%O% Synthetic Defence Force"
+		}
+		psionic_army = { 
+			sequential_name = "%O% Psi Defence Force"
+		}
+		xenomorph_army = {
+			sequential_name = "%O% Bio-Warfare Defence Force"
+		}
+		gene_warrior_army = {
+			sequential_name = "%O% Bio-Engineered Defence Force"
+		}
+	}
+
+	planet_names = {
+		generic = {
+			names = { }
+		}
+	}
+
+	### CHARACTERS
+	character_names = {
+		names1 = {
+			weight = 100
+			first_names_male = {
+				Dereth Motura Shmullus Sulan Ereth Sula Sura Moturn Suh Derh Sularot Sulus Motuus Moturaa Dereh Shtura Dera Mon Luss Suls Sulueth Deret Moturh Shmotun Shmulura Motun Shmulan Dertura Shannh
+			}
+			first_names_female = {
+				Danara Mala Denora Daraa Maenora Noorla Mora Dendela Malra Delmala Dea Deeora Damala Lonara Loa Lorra Lonae Lornaora Enor Lodena Olnaolne
+			}
+			second_names = {
+				Pel Euh Rul Rut Ruv Enta Env Pha Rov Pova Ruil Pouh Rua Cil Poil Rel Ita Cha Ena Poh Enov Cel
+			}
+		}
+	}
+}

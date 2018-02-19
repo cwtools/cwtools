@@ -1,0 +1,71 @@
+# colony_trait_free_mine = {
+	# cost = 0
+	# icon = "gfx/interface/icons/traits/colony_traits/colony_trait_free_mine.dds"
+	# allowed_archetypes = { BIOLOGICAL MACHINE }
+	# modification = no
+	# initial = no
+	# randomized = no
+# }
+
+colony_trait_stasis_pods = {
+	cost = 0
+	icon = "gfx/interface/icons/traits/colony_traits/colony_trait_stasis_pods.dds"
+	allowed_archetypes = { BIOLOGICAL MACHINE }
+	modification = no
+	initial = no
+	randomized = no
+}
+
+colony_trait_prefabricated_structures = {
+	cost = 0
+	icon = "gfx/interface/icons/traits/colony_traits/colony_trait_prefabricated_structures.dds"
+	allowed_archetypes = { BIOLOGICAL MACHINE }
+	modification = no
+	initial = no
+	randomized = no
+}
+
+colony_trait_armed_contingency = {
+	cost = 0
+	icon = "gfx/interface/icons/traits/colony_traits/colony_trait_armed_contingency.dds"
+	allowed_archetypes = { BIOLOGICAL MACHINE }
+	modification = no
+	initial = no
+	randomized = no
+}
+
+colony_trait_orbital_infrastructure = {
+	cost = 0
+	icon = "gfx/interface/icons/traits/colony_traits/colony_trait_orbital_infrastructure.dds"
+	allowed_archetypes = { BIOLOGICAL MACHINE }
+	modification = no
+	initial = no
+	randomized = no
+}
+
+colony_trait_research_team = {
+	cost = 0
+	icon = "gfx/interface/icons/traits/colony_traits/colony_trait_research_team.dds"
+	allowed_archetypes = { BIOLOGICAL MACHINE }
+	modification = no
+	initial = no
+	randomized = no
+}
+
+colony_trait_hardy_pioneers = {
+	cost = 0
+	icon = "gfx/interface/icons/traits/colony_traits/colony_trait_hardy_pioneers.dds"
+	allowed_archetypes = { BIOLOGICAL MACHINE }
+	modification = no
+	initial = no
+	randomized = no
+}
+
+colony_trait_religious_mission = {
+	cost = 0
+	icon = "gfx/interface/icons/traits/colony_traits/colony_trait_religious_mission.dds"
+	allowed_archetypes = { BIOLOGICAL MACHINE }
+	modification = no
+	initial = no
+	randomized = no
+}

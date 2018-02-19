@@ -1,0 +1,105 @@
+﻿### Suliban
+Suliban = {
+	randomized = no
+	
+	ship_names = {
+		generic = {
+			"Cell Ship"
+		}
+		corvette = {
+		}
+		saber = {
+		}
+		sovereign = {
+		}
+		steamrunner = {
+		}		
+		adv_cruiser = {
+		}
+		strike = {
+		}	
+		constructor = { "Construction Vessel" }
+		colonizer = { "Colony Vessel" }
+		science = { "Science Vessel" }
+		transport = { "Transport Vessel" }
+		outpost_station = {
+			sequential_name = "Frontier Outpost"
+		}
+	}
+		ship_class_names = {
+		corvette = { "Cell Alpha" }
+		saber = { "Cell Beta" }
+		sovereign = { "Cell Gamma" }
+		steamrunner = { "Cell Delta" }
+		adv_cruiser = { "Cell Epsilon" }
+		strike = { "Cell Eta" }
+		constructor = { "Cell Constructor" }
+		science = { "Cell Survey" }
+		transport = { "Cell Transport" }
+	}
+
+	fleet_names = {
+		sequential_name = "%O% Fleet"
+	}
+	
+	army_names = {
+		defense_army = {
+			sequential_name = "%O% Cell Guard"
+		}
+		assault_army = {
+			sequential_name = "%O% Assault Cell"
+		}
+		slave_army = {
+			sequential_name = "%O% Indentured Defence Cell"
+		}
+		clone_army = { 
+			sequential_name = "%O% Clone Defence Cell"
+		}
+		robotic_army = {
+			sequential_name = "%O% Mechanical Defence Cell"
+		}
+		android_army = {
+			sequential_name = "%O% Synthetic Defence Cell"
+		}
+		psionic_army = { 
+			sequential_name = "%O% Psi Defence Cell"
+		}
+		xenomorph_army = {
+			sequential_name = "%O% Bio-Warfare Defence Cell"
+		}
+		gene_warrior_army = {
+			sequential_name = "%O% Bio-Engineered Defence Cell"
+		}
+	}
+
+	planet_names = {
+		generic = {
+			names = { }
+		}
+	}
+
+	### CHARACTERS
+	character_names = {
+		names1 = {
+			weight = 100
+			first_names_male = {
+				Silik Sajen Danik Raan Dilik Dajen Rajen Rilik Daan Silan Silen Rajik Shajik Walik Kojen Grijen Hadik Janik Kajen
+			}
+			first_names_female = {
+				Sarin Narra Narin Sarra Milin Marra Liren Miran Laan Lanil Neril Faril Piken
+			}
+			second_names = {
+				" "
+			}
+			regnal_first_names_male = { 
+				Silik Sajen Danik Raan Dilik Dajen Rajen Rilik Daan Silan Silen Rajik Shajik Walik Kojen Grijen Hadik Janik Kajen
+			}
+			regnal_first_names_female = { 
+				Sarin Narra Narin Sarra Milin Marra Liren Miran Laan Lanil Neril Faril Piken
+			}
+			regnal_second_names = { 
+				" "
+			}
+		}
+	}
+}

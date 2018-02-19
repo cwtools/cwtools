@@ -1,0 +1,94 @@
+﻿### Bajoran
+Bajoran = {
+	randomized = no
+	
+	ship_names = {
+		generic = {
+			Emissary Prophets Janitza Bestri Janissary Ornathia Perikian Kitara Contemplation "Prophecy and Change" Prophecy Change Time Wisdom Possibilities Destiny Souls Truth Unity Ashalla "Orb of Peace" "Orb of Time" "Orb of Wisdom" "Orb of Prophecy" "Orb of Thought" "Orb of Mystery" "Orb of Unity" "Orb of Souls" "Orb of Memory" "Orb of Truth" Kendra Tozhat Rakantha Lonar Dahkur "Jalanda City" Janir Lasuma Ilvia "B'hala" Calash Iponu Kiessa "Kendra Valley" "Tanis Canyon"
+		}
+		corvette = {
+		}
+		saber = {
+		}
+		sovereign = {
+		}
+		steamrunner = {
+		}		
+		adv_cruiser = {
+		}
+		strike = {
+		}	
+		constructor = { "Orb of Change" }
+		colonizer = { "Orb of Unity" }
+		science = { Bestri }
+		transport = { Janitza }
+		outpost_station = {
+			sequential_name = "Frontier Outpost"
+		}
+	}
+
+	fleet_names = {
+		sequential_name = "%O% Fleet"
+	}
+	
+	army_names = {
+		defense_army = {
+			sequential_name = "%O% Bajoran Irregulars"
+		}
+		assault_army = {
+			sequential_name = "%O% Bajoran Militia"
+		}
+		slave_army = {
+			sequential_name = "%O% Indentured Defence Force"
+		}
+		clone_army = { 
+			sequential_name = "%O% Clone Defence Force"
+		}
+		robotic_army = {
+			sequential_name = "%O% Mechanical Defence Force"
+		}
+		android_army = {
+			sequential_name = "%O% Synthetic Defence Force"
+		}
+		psionic_army = { 
+			sequential_name = "%O% Psi Defence Force"
+		}
+		xenomorph_army = {
+			sequential_name = "%O% Bio-Warfare Defence Force"
+		}
+		gene_warrior_army = {
+			sequential_name = "%O% Bio-Engineered Defence Force"
+		}
+	}
+
+	planet_names = {
+		generic = {
+			names = { "B'hala" Batal Hathon Ilvia Jalanda Janir "Jo'Kala" Lasuma Relliketh Singha Tamulna Tempasa "Free Haven" Golana "New Bajor" "Prophets Landing" Jeraddo Teer Octu Palu Irku Wopu Tako Yod Gomo Krettum Troarece Ikka Orye Zilled Barith Eeyr Nara Shuta Mecac Breeni Wipohl Rhororn Ilo Wevora Taiekra }
+		}
+	}
+
+	### CHARACTERS
+	character_names = {
+		names1 = {
+			weight = 100
+			first_names_male = {
+				Kalem Jillur Jas Jaro Ishan Halb Faren Ermat Dekon Day "Ches'sarro" Brin Benten Basso Bareil Anjohl Akorem Razka Proka Ojuy Mora Marat Lorit Li Lenaris Latha Kubus Kira Keeve Weld Timor Teero Surmak Shakaar Sarish
+			}
+			first_names_female = {
+				Ro Kira Kara Jomat Galis Els Chalan Alenis Marika Luma Winn Varis Vaatrik Trentin Tora Tor Tal Tala Sito Sirco Oset Togi Carpa Gotwe Funu Cotold Seva Irod Selle Jurput Gaallit Dehi Idiji Ume Jacu Leeta
+			}
+			second_names = {
+				Laren Nerys Polus Luson Blin Renora Aroya Grem Wilkarah Rahl Meru Adami Sul Pallra Fala Naprem Nerys Jolan Celes Jaxa "Ch'Ano" Talia Lipo Haize Feyute Hoardi Juxiye Areahu Wexi Gemea Faxi Moala Ahon Apowea Gemea Xihea Glozira Kaihu Airjeto Apren Gueta Holza Essa Chaye Daier Kag Zimm Elig Kannu Seeto Brin Tusk Vek Tromac Antos Tennan Laan Gale Karn Migdal Gel Pol Kobar Akrem Paz Nalas Holem Mabrin Oak Taban Reon Pohl Falor Ram Landi Anaydis Los Ren Edon Rez
+			}
+			regnal_first_names_male = { 
+				Kalem Jillur Jas Jaro Ishan Halb Faren Ermat Dekon Day "Ches'sarro" Brin Benten Basso Bareil Anjohl Akorem Razka Proka Ojuy Mora Marat Lorit Li Lenaris Latha Kubus Kira Keeve Weld Timor Teero Surmak Shakaar Sarish
+			}
+			regnal_first_names_female = { 
+				Ro Kira Kara Jomat Galis Els Chalan Alenis Marika Luma Winn Varis Vaatrik Trentin Tora Tor Tal Tala Sito Sirco Oset Togi Carpa Gotwe Funu Cotold Seva Irod Selle Jurput Gaallit Dehi Idiji Ume Jacu Leeta
+			}
+			regnal_second_names = { 
+				Laren Nerys Polus Luson Blin Renora Aroya Grem Wilkarah Rahl Meru Adami Sul Pallra Fala Naprem Nerys Jolan Celes Jaxa "Ch'Ano" Talia Lipo Haize Feyute Hoardi Juxiye Areahu Wexi Gemea Faxi Moala Ahon Apowea Gemea Xihea Glozira Kaihu Airjeto Apren Gueta Holza Essa Chaye Daier Kag Zimm Elig Kannu Seeto Brin Tusk Vek Tromac Antos Tennan Laan Gale Karn Migdal Gel Pol Kobar Akrem Paz Nalas Holem Mabrin Oak Taban Reon Pohl Falor Ram Landi Anaydis Los Ren Edon Rez
+			}
+		}
+	}
+}

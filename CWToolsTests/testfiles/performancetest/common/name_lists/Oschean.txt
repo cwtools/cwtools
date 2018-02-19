@@ -1,0 +1,194 @@
+﻿### Oschean by EHKodiak
+Oschean = {
+	randomized = no
+
+	ship_names = {
+		generic = {
+		Hunter Predator Carnivore "Beast of Prey" "Hunter Killer" Raptor Marauder Killer Vulture Brute Assailant Tracker Aggressor Stalker Survivor Venator Hunter "Valiant Chase" Pursuer Trapper Ambusher Huntress Apex "Apex Predator" Seeker Huntmaster "Hunter Escort" Baiter
+		}
+		corvette = {
+		}
+		saber = {
+		}
+		sovereign = {
+		}
+		steamrunner = {
+		}		
+		adv_cruiser = {
+		}
+		strike = {
+		}	
+		constructor = { }
+		colonizer = { }
+		science = { }
+		transport = { }
+		outpost_station = {
+			sequential_name = "Frontier Outpost"
+		}
+	}
+
+	fleet_names = {
+		sequential_name = "%O% Fleet"
+	}
+	
+	army_names = {
+		defense_army = {
+			sequential_name = "%O% Guard"
+		}
+		assault_army = {
+			sequential_name = "%O% Hunters"
+		}
+		slave_army = {
+			sequential_name = "%O% Indentured Defence Force"
+		}
+		clone_army = { 
+			sequential_name = "%O% Clone Defence Force"
+		}
+		robotic_army = {
+			sequential_name = "%O% Mechanical Defence Force"
+		}
+		android_army = {
+			sequential_name = "%O% Synthetic Defence Force"
+		}
+		psionic_army = { 
+			sequential_name = "%O% Psi Defence Force"
+		}
+		xenomorph_army = {
+			sequential_name = "%O% Bio-Warfare Defence Force"
+		}
+		gene_warrior_army = {
+			sequential_name = "%O% Bio-Engineered Defence Force"
+		}
+	}
+
+	planet_names = {
+		generic = {
+			names = {
+			}
+		}
+	}
+
+
+	### CHARACTERS
+
+	character_names = {
+		names1 = {
+			weight = 100
+			first_names_male = {		
+			"Dhi'rauta" "Dto" "Dahn'tha-cte" "G'kaun-yte" "Gkei'moun" "Guan" "H'chak" "H'dlak" "H'dui'se" "Halkrath" "Ikthya-de" "Ju'dha" "Kainde" "Kehrite" "Ki'cte" "Kjuhte" "Kwei" "L'ulij-bpe" "Lar'ja" "Luar-ke" "M-di" "H'chak" "M-di" "H'dlak" "Mi" "N'ithya" "K'diak" "Nanku" "Nok" "Nracha-dte" "Ooman" "OPauk" "Pyode" "R'ka" "S'yuitde" "Setg'in" "Te'dqi" "Than-guan" "Thar'n-dha" "Thei-de" "Thwei" "Ui'stbi" "Vayuh'ta" "Yeyin" "Yin'tekai" "z'skuy-de"
+			}
+			first_names_female = {
+			"Dhi'rauta" "Dto" "Dahn'tha-cte" "G'kaun-yte" "Gkei'moun" "Guan" "H'chak" "H'dlak" "H'dui'se" "Halkrath" "Ikthya-de" "Ju'dha" "Kainde" "Kehrite" "Ki'cte" "Kjuhte" "Kwei" "L'ulij-bpe" "Lar'ja" "Luar-ke" "M-di" "H'chak" "M-di" "H'dlak" "Mi" "N'ithya" "K'diak" "Nanku" "Nok" "Nracha-dte" "Ooman" "OPauk" "Pyode" "R'ka" "S'yuitde" "Setg'in" "Te'dqi" "Than-guan" "Thar'n-dha" "Thei-de" "Thwei" "Ui'stbi" "Vayuh'ta" "Yeyin" "Yin'tekai" "z'skuy-de"
+			}
+			second_names = {
+				" "
+			}
+			regnal_first_names_male = {
+			"Dhi'rauta" "Dto" "Dahn'tha-cte" "G'kaun-yte" "Gkei'moun" "Guan" "H'chak" "H'dlak" "H'dui'se" "Halkrath" "Ikthya-de" "Ju'dha" "Kainde" "Kehrite" "Ki'cte" "Kjuhte" "Kwei" "L'ulij-bpe" "Lar'ja" "Luar-ke" "M-di" "H'chak" "M-di" "H'dlak" "Mi" "N'ithya" "K'diak" "Nanku" "Nok" "Nracha-dte" "Ooman" "OPauk" "Pyode" "R'ka" "S'yuitde" "Setg'in" "Te'dqi" "Than-guan" "Thar'n-dha" "Thei-de" "Thwei" "Ui'stbi" "Vayuh'ta" "Yeyin" "Yin'tekai" "z'skuy-de"
+			}
+			regnal_first_names_female = {
+			"Dhi'rauta" "Dto" "Dahn'tha-cte" "G'kaun-yte" "Gkei'moun" "Guan" "H'chak" "H'dlak" "H'dui'se" "Halkrath" "Ikthya-de" "Ju'dha" "Kainde" "Kehrite" "Ki'cte" "Kjuhte" "Kwei" "L'ulij-bpe" "Lar'ja" "Luar-ke" "M-di" "H'chak" "M-di" "H'dlak" "Mi" "N'ithya" "K'diak" "Nanku" "Nok" "Nracha-dte" "Ooman" "OPauk" "Pyode" "R'ka" "S'yuitde" "Setg'in" "Te'dqi" "Than-guan" "Thar'n-dha" "Thei-de" "Thwei" "Ui'stbi" "Vayuh'ta" "Yeyin" "Yin'tekai" "z'skuy-de" 
+			}
+			regnal_second_names = {
+				" "
+			}
+		}
+	}
+}
+
+Tosk = {
+	randomized = no
+
+	ship_names = {
+		generic = {
+		Hunter Predator Carnivore "Beast of Prey" "Hunter Killer" Raptor Marauder Killer Vulture Brute Assailant Tracker Aggressor Stalker Survivor Venator Hunter "Valiant Chase" Pursuer Trapper Ambusher Huntress Apex "Apex Predator" Seeker Huntmaster "Hunter Escort" Baiter
+		}
+		corvette = {
+		}
+		saber = {
+		}
+		sovereign = {
+		}
+		steamrunner = {
+		}		
+		adv_cruiser = {
+		}
+		strike = {
+		}	
+		constructor = { }
+		colonizer = { }
+		science = { }
+		transport = { }
+		outpost_station = {
+			sequential_name = "Frontier Outpost"
+		}
+	}
+
+	fleet_names = {
+		sequential_name = "%O% Fleet"
+	}
+	
+	army_names = {
+		defense_army = {
+			sequential_name = "%O% Guard"
+		}
+		assault_army = {
+			sequential_name = "%O% Hunters"
+		}
+		slave_army = {
+			sequential_name = "%O% Indentured Defence Force"
+		}
+		clone_army = { 
+			sequential_name = "%O% Clone Defence Force"
+		}
+		robotic_army = {
+			sequential_name = "%O% Mechanical Defence Force"
+		}
+		android_army = {
+			sequential_name = "%O% Synthetic Defence Force"
+		}
+		psionic_army = { 
+			sequential_name = "%O% Psi Defence Force"
+		}
+		xenomorph_army = {
+			sequential_name = "%O% Bio-Warfare Defence Force"
+		}
+		gene_warrior_army = {
+			sequential_name = "%O% Bio-Engineered Defence Force"
+		}
+	}
+
+	planet_names = {
+		generic = {
+			names = {
+			}
+		}
+	}
+
+
+	### CHARACTERS
+
+	character_names = {
+		names1 = {
+			weight = 100
+			first_names_male = {		
+			"Tosk"
+			}
+			first_names_female = {
+			"Tosk"
+			}
+			second_names = {
+				" "
+			}
+			regnal_first_names_male = {
+			"Tosk"
+			}
+			regnal_first_names_female = {
+			"Tosk"
+			}
+			regnal_second_names = {
+				" "
+			}
+		}
+	}
+}

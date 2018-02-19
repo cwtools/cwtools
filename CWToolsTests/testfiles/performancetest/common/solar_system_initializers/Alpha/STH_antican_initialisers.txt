@@ -1,0 +1,85 @@
+#Antican Homeworld
+antican_homeworld = {			
+	name = "Beta Renner"		
+	class = "sc_g"
+	flags = { antican_homeworld }
+	init_effect = { log = "antican homeworld" }
+	usage = custom_empire
+	max_instances = 1
+	planet = { name = "Beta Renner" class = star orbit_distance = 0 orbit_angle = 1 size = { min = 20 max = 30 } has_ring = no }		
+	change_orbit = { min = 20 max = 30 }
+	planet = {
+		count = 5
+		orbit_distance = { min = 20 max = 30 }
+		orbit_angle = { min = 90 max = 270 }
+		moon = { count = { min = 0 max = 1 } orbit_angle = { min = 90 max = 270 } orbit_distance = 8 }
+	}	
+	change_orbit = { min = 30 max = 40 }
+	planet = {		
+		name = "Beta Renner VI"	
+		class = "pc_m1_class"	
+		size = { min = 18 max = 20 }
+		starting_planet = yes
+		has_ring = no
+		tile_blockers = none
+		init_effect = {
+			prevent_anomaly = yes			
+			if = {
+				limit = { NOT = { any_country = { has_country_flag = antican_packs } } }
+				create_species = { 
+					name = "Antican"
+					class = ANT
+					portrait = antican
+					homeworld = THIS
+					traits = {
+					    trait= "trait_resilient"
+                    	trait= "trait_skilled_hunters"
+						ideal_planet_class = "pc_m1_class"
+					}
+				}
+				last_created_species = { save_global_event_target_as = anticanSpecies }
+				create_country = {
+					name = "NAME_antican_packs"
+					type = default
+					ignore_initial_colony_error = yes
+					civics = { civic = "civic_warrior_culture" civic = "civic_police_state" }
+					authority = auth_democratic
+					name_list = "Antican"
+					ethos = { ethic = "ethic_xenophobe" ethic = "ethic_militarist" ethic = "ethic_materialist" }
+					species = event_target:anticanSpecies
+					flag = {
+						icon = { category = "zoological" file = "flag_zoological_12.dds" }
+						background = { category = "backgrounds" file="circle.dds" }
+						colors = { "customcolor1707" "customcolor64" "null" "null" }
+					}
+					ship_prefix=""
+					effect = {
+						set_graphical_culture = generic_02
+						set_country_flag = antican_packs
+						set_country_flag = custom_start_screen
+						set_country_flag = generic_ent
+						set_country_flag = alpha_beta_empire
+						set_country_flag = init_spawned
+						set_country_flag = botf_minor
+						save_global_event_target_as = antican_packs
+					}
+				}
+				create_colony = { owner = event_target:antican_packs species = event_target:anticanSpecies ethos = owner }
+			}
+			set_capital = yes
+			random_country = {
+				limit = { has_country_flag = antican_packs }
+				save_global_event_target_as = antican_packs
+				species = { save_global_event_target_as = anticanSpecies }
+				add_appropriate_start_techs = yes
+				set_country_type = minorRace
+			}
+			set_owner = event_target:antican_packs
+			generate_minor_empire_start_buildings = yes
+			generate_minor_empire_start_pops = yes
+			generate_major_empire_start_fleets = yes
+			set_name = "Beta Renner VI"
+		}
+		moon = { count = 2 orbit_angle = { min = 90 max = 270 } orbit_distance = 8 }
+	}
+}

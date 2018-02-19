@@ -1,0 +1,329 @@
+# All leaders will have a common trait-point value set in defines, which they use to grab traits
+
+# leader_trait = yes - this tags the trait as a leader-trait and not a species-trait
+# initial = no - if set to no, this trait can not be granted to leaders when they are generated
+# leader_class = { admiral scientist }  -- OR  - if not set, it can be given to all leader-types except Rulers
+# requires_traits = { trait_psionic } -- AND - leader-trait can only be randomly given on generation if the leaders species has this trait
+# requires_governments = { despotic_hegemony ai_overlordship } -- OR - leader-trait can only be randomly given on generation if the Empire has this type of government form
+# prerequisites = { tech_psionic_theory } - AND - leader-trait can only be given if the technology specified has been researched by the Empire
+
+############################
+# Machine Leader Traits    #
+############################
+
+# All APUs
+leader_trait_chromodynamic_power_module = {
+	leader_trait = yes
+	leader_class = { ruler admiral scientist general governor }
+	sorting_priority = 20
+	cost = 0
+	modification = no
+	initial = no
+	randomized = no
+	icon = "gfx/interface/icons/traits/trait_chromodynamic_power_module.dds"
+	immortal_leaders = yes	
+}
+
+# All Synaptic
+leader_trait_synaptic_processors = {
+	leader_trait = yes
+	leader_class = { ruler admiral scientist general governor }
+	sorting_priority = 20
+	cost = 0
+	modification = no
+	initial = no
+	randomized = no
+	icon = "gfx/interface/icons/traits/trait_synaptic_processors.dds"
+	immortal_leaders = yes	
+}
+
+
+#Ruler
+leader_trait_ruler_flexible_programming = {
+	cost = 1
+	modification = no
+	icon = "gfx/interface/icons/traits/leader_traits/leader_trait_flexible_programming.dds"
+	modifier = {
+		country_resource_engineering_research_mult = 0.025
+		country_resource_physics_research_mult = 0.025
+		country_resource_society_research_mult = 0.025
+	}
+	leader_potential_add = {
+		species = { is_machine_empire = yes }
+	}
+	leader_class = { ruler }
+	opposites = { "leader_trait_ruler_rigid_programming" }
+	leader_trait = yes	
+	ai_weight = {
+		weight = 50
+	}
+}
+leader_trait_ruler_rigid_programming = {
+	cost = 1
+	modification = no
+	icon = "gfx/interface/icons/traits/leader_traits/leader_trait_rigid_programming.dds"
+	modifier = {
+		country_resource_engineering_research_mult = -0.025
+		country_resource_physics_research_mult = -0.025
+		country_resource_society_research_mult = -0.025
+		spaceport_ship_build_speed_mult = 0.05
+		spaceport_ship_build_cost_mult = -0.05
+	}
+	leader_potential_add = {
+		species = { is_machine_empire = yes }
+	}
+	leader_class = { ruler }
+	opposites = { "leader_trait_ruler_flexible_programming" }
+	leader_trait = yes
+	# initial = no
+	# randomized = no
+}
+
+
+
+
+# Generic
+leader_trait_flexible_programming = {
+	cost = 1
+	modification = no
+	icon = "gfx/interface/icons/traits/leader_traits/leader_trait_flexible_programming.dds"
+	self_modifier = {
+		species_leader_exp_gain = 0.25
+	}
+	leader_potential_add = {
+		NOT = { leader_class = ruler}
+		species = { is_machine_empire = yes }
+	}
+	leader_class = { admiral scientist general governor }
+	opposites = { "leader_trait_rigid_programming" }
+	leader_trait = yes
+	
+	ai_categories = {
+		engineering
+		physics
+		society
+		survey
+	}
+	
+	ai_weight = {
+		weight = 50
+	}
+}
+
+leader_trait_rigid_programming = {
+	cost = 1
+	modification = no
+	icon = "gfx/interface/icons/traits/leader_traits/leader_trait_rigid_programming.dds"
+	self_modifier = {
+		species_leader_exp_gain = -0.25
+	}
+	leader_potential_add = {
+		NOT = { leader_class = ruler}
+		species = { is_machine_empire = yes }
+	}
+	leader_class = { admiral scientist general governor }
+	opposites = { "leader_trait_flexible_programming" }
+	leader_trait = yes
+	initial = no
+	randomized = no
+}
+
+leader_trait_newboot = {
+	cost = 1
+	modification = no
+	icon = "gfx/interface/icons/traits/leader_traits/leader_trait_eager.dds"
+	self_modifier = {
+		leader_influence_cost = -0.33
+	}
+	leader_potential_add = {
+		NOT = { leader_class = ruler}
+		species = { is_machine_empire = yes }
+	}
+	leader_class = { admiral scientist general governor }
+	leader_trait = yes
+}
+
+# Governor
+leader_trait_warbot_tinkerer = {
+	cost = 1
+	modification = no
+	icon = "gfx/interface/icons/traits/leader_traits/leader_trait_hammer.dds"
+	modifier = {
+		planet_army_build_speed_mult = 0.2
+		planet_army_build_cost_mult = -0.2
+		garrison_health = 0.5
+	}
+	leader_potential_add = {
+		species = { is_machine_empire = yes }
+	}
+	leader_trait = yes
+	leader_class = { governor }
+	prerequisites = { tech_society_global_394 }
+	opposites = { "leader_trait_ai_aided_design" }
+}
+
+leader_trait_ai_aided_design = {
+	cost = 1
+	modification = no
+	icon = "gfx/interface/icons/traits/leader_traits/leader_trait_retired_fleet_officer.dds"
+	modifier = {
+		spaceport_ship_build_speed_mult = 0.20
+		spaceport_ship_build_cost_mult = -0.10
+		spaceport_module_cost_mult = -0.10
+	}
+	leader_potential_add = {
+		species = { is_machine_empire = yes }
+	}
+	leader_trait = yes
+	leader_class = { governor }
+	prerequisites = { tech_society_interstellar_400 }
+	opposites = { "leader_trait_warbot_tinkerer" }
+}
+
+leader_trait_bulldozer = {
+	cost = 1
+	modification = no
+	icon = "gfx/interface/icons/traits/leader_traits/leader_trait_environmental_engineer.dds"
+	modifier = {
+		planet_clear_blocker_cost_mult = -0.25
+		planet_clear_blocker_time_mult = -0.25
+	}
+	leader_potential_add = {
+		species = { is_machine_empire = yes }
+	}
+	leader_trait = yes
+	leader_class = { governor }
+}
+
+leader_trait_analytical = {
+	cost = 1
+	modification = no
+	icon = "gfx/interface/icons/traits/leader_traits/leader_trait_intellectual.dds"
+	modifier = {
+		tile_resource_engineering_research_mult = 0.10
+		tile_resource_physics_research_mult = 0.10
+		tile_resource_society_research_mult = 0.10
+	}
+	leader_potential_add = {
+		species = { is_machine_empire = yes }
+	}
+	leader_trait = yes
+	leader_class = { governor }
+}
+
+# General
+leader_trait_parts_cannibalizer = {
+	cost = 1
+	modification = no
+	icon = "gfx/interface/icons/traits/leader_traits/leader_trait_army_logistician.dds"
+	modifier = {
+		army_upkeep_mult = -0.2
+	}
+	leader_potential_add = {
+		species = { is_machine_empire = yes }
+	}
+	leader_trait = yes
+	leader_class = { general }
+}
+
+leader_trait_demoralizer = {
+	cost = 1
+	modification = no
+	icon = "gfx/interface/icons/traits/leader_traits/leader_trait_butcher.dds"
+	modifier = {
+		army_attack_morale_mult = 0.3
+	}
+	leader_potential_add = {
+		species = { is_machine_empire = yes }
+	}
+	leader_trait = yes
+	leader_class = { general }
+	opposites = { "leader_trait_erratic_morality_core" }
+}
+
+leader_trait_erratic_morality_core = {
+	cost = 1
+	modification = no
+	randomized = no
+	icon = "gfx/interface/icons/traits/leader_traits/leader_trait_armchair_commander.dds"
+	modifier = {
+		army_damage_mult = -0.1
+	}
+	leader_potential_add = {
+		species = { is_machine_empire = yes }
+	}
+	leader_trait = yes
+	leader_class = { general }
+	opposites = { "leader_trait_demoralizer" }
+}
+
+# Admiral
+leader_trait_maintenance_loop = {
+	cost = 1
+	modification = no
+	icon = "gfx/interface/icons/traits/leader_traits/leader_trait_fleet_logistician.dds"
+	modifier = {
+		ship_upkeep_mult = -0.1
+	}
+	leader_potential_add = {
+		species = { is_machine_empire = yes }
+	}
+	leader_trait = yes
+	leader_class = { admiral }
+}
+
+leader_trait_unstable_code_base = {
+	cost = 1
+	modification = no
+	icon = "gfx/interface/icons/traits/leader_traits/leader_trait_nervous.dds"
+	modifier = {
+		ship_fire_rate_mult = -0.1
+	}
+	leader_potential_add = {
+		species = { is_machine_empire = yes }
+	}
+	leader_trait = yes
+	leader_class = { ruler }
+	opposites = { "leader_trait_unyielding" }
+	initial = no
+	randomized = no
+}
+
+# Scientist
+leader_trait_cataloger = {
+	cost = 1
+	modification = no
+	icon = "gfx/interface/icons/traits/leader_traits/leader_trait_roamer.dds"
+	modifier = {
+		science_ship_survey_speed = 0.25
+	}
+	leader_potential_add = {
+		species = { is_machine_empire = yes }
+	}
+	leader_trait = yes
+	leader_class = { scientist }
+	
+	ai_categories = {
+		survey
+	}
+	
+	ai_weight = {
+		weight = 100
+	}
+}
+
+# Admiral
+leader_trait_restore_point = {
+	cost = 1
+	modification = no
+	icon = "gfx/interface/icons/traits/leader_traits/leader_trait_resilient.dds"
+	leader_potential_add = {
+		host_has_dlc = "Synthetic Dawn Story Pack"
+		OR = {
+			has_trait = trait_mechanical
+			has_trait = trait_machine_unit
+		}
+	}
+	leader_trait = yes
+	leader_class = { admiral }
+}

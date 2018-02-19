@@ -1,0 +1,22 @@
+component_set = { key = "required_tactical" required_component_set = yes icon = "GFX_ship_part_sensor" icon_frame = 1 }
+
+component_set = { key = "REQUIRED_TACTICAL_BACKUP" icon = "GFX_ship_part_Required_Tactical_Backup" icon_frame = 1 }
+component_set = { key = "REQUIRED_TACTICAL_CLOAK" icon = "GFX_ship_part_Required_Tactical_Cloak0" icon_frame = 1 } 
+component_set = { key = "REQUIRED_TACTICAL_CLOAK_1" icon = "GFX_ship_part_Required_Tactical_Cloak1" icon_frame = 1 } 
+component_set = { key = "REQUIRED_TACTICAL_CLOAK_2" icon = "GFX_ship_part_Required_Tactical_Cloak2" icon_frame = 1 }
+component_set = { key = "REQUIRED_TACTICAL_CLOAK_3" icon = "GFX_ship_part_Required_Tactical_Cloak3" icon_frame = 1 }
+component_set = { key = "REQUIRED_TACTICAL_CLOAK_4" icon = "GFX_ship_part_Required_Tactical_Cloak4" icon_frame = 1 }
+component_set = { key = "REQUIRED_TACTICAL_CLOAK_RED" icon = "GFX_ship_part_Required_Tactical_Cloakred" icon_frame = 1 } 
+component_set = { key = "REQUIRED_TACTICAL_SCIENCE" icon = "GFX_ship_part_Required_Tactical_Science" icon_frame = 1 }
+component_set = { key = "REQUIRED_TACTICAL_DERVISH" icon = "GFX_ship_part_Required_Tactical_Dervish" icon_frame = 1 }
+component_set = { key = "REQUIRED_TACTICAL_ENGINEERING" icon = "GFX_ship_part_Required_Tactical_Engineering" icon_frame = 1 }
+component_set = { key = "REQUIRED_TACTICAL_TACTICAL" icon = "GFX_ship_part_Required_Tactical_Tactical" icon_frame = 1 }
+component_set = { key = "REQUIRED_TACTICAL_PRECOG" icon = "GFX_ship_part_Required_Tactical_Precog" icon_frame = 1 }
+component_set = { key = "REQUIRED_TACTICAL_EXOGRAPHIC" icon = "GFX_ship_part_Required_Tactical_Exographic" icon_frame = 1 }
+component_set = { key = "REQUIRED_TACTICAL_RAIDING" icon = "GFX_ship_part_Required_Tactical_raiding" icon_frame = 1 }
+component_set = { key = "REQUIRED_TACTICAL_SLAVERS" icon = "GFX_ship_part_Required_Tactical_slavers" icon_frame = 1 }
+component_set = { key = "REQUIRED_TACTICAL_MARINE" icon = "GFX_ship_part_Required_Tactical_marine" icon_frame = 1 }
+component_set = { key = "REQUIRED_TACTICAL_AID" icon = "GFX_ship_part_Required_Tactical_aid" icon_frame = 1 }
+component_set = { key = "REQUIRED_TACTICAL_SPITFIRE" icon = "GFX_ship_part_Required_Tactical_Spitfire" icon_frame = 1 }
+component_set = { key = "REQUIRED_TACTICAL_TEMPORAL" icon = "GFX_ship_part_Required_Tactical_Temporal" icon_frame = 1 }
+   

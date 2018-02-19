@@ -1,0 +1,742 @@
+### Defense Army
+   defense_army = {
+      prerequisites = { "tech_defense_army" }
+      cost = {
+         minerals = 30
+      }
+      defensive = yes
+      time = 60
+      damage = 1
+      health = 1
+      maintenance = 0.15
+      icon_frame = 1
+   
+   }
+   
+### Assault Army
+   assault_army = {
+      prerequisites = { "tech_assault_armies" }
+      cost = {
+         minerals = 60
+      }
+      time = 90
+      damage = 1.15
+      health = 1.15
+      morale = 1.15
+      maintenance = 0.33
+      icon_frame = 2
+   
+   }
+   
+### Marines
+   marine_army = {
+      defensive = yes
+      potential = { always = no }
+      time = 90
+      damage = 0.5
+      health = 2
+      morale = 2
+      maintenance = 0.75
+      icon_frame = 2
+   
+   }
+   
+### Garrison
+   garrison_army = {
+      garrison = yes
+      potential = { always = no }
+      damage = 0.5
+      health = 0.75
+      icon_frame = 5
+   
+   }
+   
+### Rebel Troops
+   rebel_army = {
+      rebel = yes
+      potential = { always = no }
+      damage = 0.5
+      health = 0.5
+      icon_frame = 3
+   
+   }
+   
+### Rebellious Slaves
+   rebel_slave_defense_army = {
+      defensive = yes
+      potential = { always = no }
+      time = 60
+      damage = 0.8
+      health = 0.8
+      morale = 1.8
+      icon_frame = 3
+   
+   }
+   
+### Bronze-Age Horde
+   primitive_army = {
+      defensive = yes
+      potential = { always = no }
+      damage = 0.1
+      health = 0.5
+      icon_frame = 5
+   
+   }
+   
+### Industrial-Age Army
+   industrial_army = {
+      defensive = yes
+      potential = { always = no }
+      damage = 0.4
+      health = 0.5
+      icon_frame = 5
+   
+   }
+   
+### Pre-Warp Troops
+   postatomic_army = {
+      defensive = yes
+      potential = { always = no }
+      damage = 0.6
+      health = 1
+      icon_frame = 5
+   
+   }
+   
+### Mutant Horrors
+   mutant_army = {
+      has_species = no
+      potential = { always = no }
+      damage = 1.5
+      morale_damage = 1.5
+      health = 2
+      icon_frame = 8
+   
+   }
+   
+### The Swarm
+   swarm_army = {
+      has_species = no
+      potential = { always = no }
+      time = 180
+      damage = 2
+      morale_damage = 2
+      health = 2
+      morale = 2
+      icon_frame = 8
+   
+   }
+   
+### Elite Guard
+   elite_guard_army = {
+      cost = {
+         minerals = 115
+         energy = 15
+      }
+      potential = { always = no }
+      time = 115
+      damage = 1.75
+      health = 1.75
+      morale = 1.75
+      icon_frame = 2
+   
+   }
+   
+### Titanic Guardians
+   titanic_guardian_army = {
+      has_species = no
+      potential = { always = no }
+      time = 5
+      damage = 2
+      health = 8
+      morale = 2
+      maintenance = 1
+      icon_frame = 8
+   
+   }
+   
+### Titanic Troops
+   titanic_assault_army = {
+      cost = {
+         minerals = 250
+         energy = 50
+      }
+      has_species = no
+      potential = { custom_tooltip = { text = titanic_troop_limit_tooltip planet = { has_planet_flag = titanic_life_can_build } owner = { has_country_flag = titanic_life_soldiers } } }
+      allow = { custom_tooltip = { text = titanic_troop_limit_tooltip planet = { has_planet_flag = titanic_life_can_build } owner = { has_country_flag = titanic_life_soldiers NOT = { check_variable = { which = "titanic_life_soldier_count" value = 3 } } } } }
+      on_queued = { owner = { change_variable = { which = "titanic_life_soldier_count" value = 1 } } }
+      on_unqueued = { owner = { change_variable = { which = "titanic_life_soldier_count" value = -1 } } }
+      time = 90
+      damage = 3
+      health = 5
+      morale = 2
+      maintenance = 1
+      icon_frame = 8
+   
+   }
+   
+### The Shroud
+   shroud_army = {
+      has_species = no
+      potential = { always = no }
+      time = 5
+      damage = 2
+      health = 7
+      morale = 4
+      icon_frame = 9
+   
+   }
+   
+### Slave Army
+   slave_army = {
+      cost = {
+         minerals = 20
+      }
+      time = 60
+      damage = 1.15
+      health = 1.15
+      maintenance = 0.25
+      icon_frame = 10
+   
+      potential = {
+         owner = { is_nomadic_empire = no }
+      }
+      allow = { has_building = "building_slave_processing" }
+   }
+   
+### Slave Army
+   slave_army_space = {
+      cost = {
+         minerals = 20
+      }
+      time = 60
+      damage = 1.15
+      health = 1.15
+      maintenance = 0.25
+      icon_frame = 10
+   
+      potential = {
+         owner = { is_nomadic_empire = yes }
+      }
+      allow = { has_building = "space_building_slave_processing" }
+   }
+   
+### Robot Army
+   robotic_army = {
+      cost = {
+         minerals = 15
+         energy = 100
+      }
+      potential = { always = no }
+      time = 90
+      damage = 1.1
+      health = 2
+      maintenance = 0.5
+      icon_frame = 4
+   
+   }
+   
+### Robot Army (disabled)
+   robotic_defense_army = {
+      cost = {
+         minerals = 15
+         energy = 100
+      }
+      defensive = yes
+      potential = { always = no }
+      time = 90
+      damage = 1.1
+      health = 2
+      maintenance = 0.5
+      icon_frame = 4
+   
+   }
+   
+### Tactical Drone Army
+   android_army = {
+      cost = {
+         minerals = 15
+         energy = 100
+      }
+      time = 90
+      damage = 1.1
+      health = 2
+      maintenance = 0.5
+      icon_frame = 4
+   
+      potential = {
+         owner = { has_swapped_tradition = tr_resilience_1 }
+      }
+   }
+   
+### Robot Army (disabled)
+   android_defense_army = {
+      cost = {
+         minerals = 15
+         energy = 100
+      }
+      defensive = yes
+      potential = { always = no }
+      time = 90
+      damage = 1.1
+      health = 2
+      maintenance = 0.5
+      icon_frame = 4
+   
+   }
+   
+### Clone Army
+   clone_army = {
+      prerequisites = { "tech_society_mass_471" }
+      cost = {
+         minerals = 60
+      }
+      time = 30
+      damage = 1.25
+      health = 1.25
+      morale = 1.25
+      maintenance = 0.33
+      icon_frame = 7
+   
+      potential = {
+         owner = { is_nomadic_empire = no }
+      }
+      allow = { has_building = "building_clone_vats" }
+   }
+   
+### Clone Army
+   clone_army_space = {
+      prerequisites = { "tech_society_mass_471" }
+      cost = {
+         minerals = 60
+      }
+      time = 30
+      damage = 1.25
+      health = 1.25
+      morale = 1.25
+      maintenance = 0.33
+      icon_frame = 7
+   
+      potential = {
+         owner = { is_nomadic_empire = yes }
+      }
+      allow = { has_building = "space_building_clone_vats" }
+   }
+   
+### Hirogen Hunters
+   hirogen_hunters_army = {
+      potential = { always = no }
+      time = 180
+      damage = 1.5
+      health = 1.5
+      morale = 1.5
+      maintenance = 0.4
+      icon_frame = 6
+   
+   }
+   
+### Gene Warrior Army
+   gene_warrior_army = {
+      prerequisites = { "tech_society_the_476" }
+      cost = {
+         minerals = 50
+         energy = 350
+      }
+      time = 360
+      damage = 3
+      health = 3
+      morale = 2
+      maintenance = 1
+      icon_frame = 6
+   
+      potential = {
+         owner = { is_nomadic_empire = no }
+      }
+      allow = { has_building = "building_clone_vats" }
+   }
+   
+### Gene Warrior Army
+   gene_warrior_army_space = {
+      prerequisites = { "tech_society_the_476" }
+      cost = {
+         minerals = 50
+         energy = 350
+      }
+      time = 360
+      damage = 3
+      health = 3
+      morale = 2
+      maintenance = 1
+      icon_frame = 6
+   
+      potential = {
+         owner = { is_nomadic_empire = yes }
+      }
+      allow = { has_building = "space_building_clone_vats" }
+   }
+   
+### Psionic Army
+   psionic_army = {
+      prerequisites = { "tech_society_psionics_460" }
+      cost = {
+         minerals = 50
+         energy = 250
+      }
+      time = 360
+      damage = 1.75
+      morale_damage = 1.5
+      health = 1.25
+      morale = 3
+      maintenance = 0.8
+      icon_frame = 9
+   
+   }
+   
+### Xenomorph Army
+   xenomorph_army = {
+      prerequisites = { "tech_society_morphegenic_474" }
+      cost = {
+         minerals = 25
+         energy = 125
+      }
+      time = 360
+      damage = 2.5
+      morale_damage = 1.15
+      health = 2
+      maintenance = 0.75
+      icon_frame = 8
+   
+      potential = {
+         owner = { is_nomadic_empire = no }
+      }
+      allow = { has_building = "building_clone_vats" }
+   }
+   
+### Xenomorph Army
+   xenomorph_army_space = {
+      prerequisites = { "tech_society_morphegenic_474" }
+      cost = {
+         minerals = 25
+         energy = 125
+      }
+      time = 360
+      damage = 2.5
+      morale_damage = 1.15
+      health = 2
+      maintenance = 0.75
+      icon_frame = 8
+   
+      potential = {
+         owner = { is_nomadic_empire = yes }
+      }
+      allow = { has_building = "space_building_clone_vats" }
+   }
+   
+### 23rd Jem'Hadar Division - JEM
+   army_23rd_25 = {
+      cost = {
+         minerals = 115
+         energy = 15
+      }
+      time = 115
+      damage = 1.95
+      health = 1.75
+      morale = 1.95
+      maintenance = 0.5
+      icon_frame = 2
+      built_for_ruler = yes
+      potential = {
+         from = { is_species_class = JEM }
+         planet = { is_capital = yes }
+         owner = {
+            has_country_flag = the_dominion
+            exists = ruler
+            ruler = { NOT = { has_leader_flag = has_23rd_division } }
+         }
+      }
+      allow = {
+         custom_tooltip = {
+            text = 23rd_division_army_trigger_tooltip
+            planet = { is_capital = yes }
+            owner = {
+               has_country_flag = the_dominion
+               exists = ruler
+               ruler = { NOT = { has_leader_flag = has_23rd_division } }
+            }
+         }
+      }
+      on_queued = { owner = { ruler = { set_leader_flag = has_23rd_division } } }
+      on_unqueued = { owner = { ruler = { remove_leader_flag = has_23rd_division } } }
+   }
+   
+### Klingon Honor Guard - KDF
+   army_klingon_26 = {
+      cost = {
+         minerals = 115
+         energy = 15
+      }
+      time = 115
+      damage = 1.95
+      health = 1.75
+      morale = 1.95
+      maintenance = 0.5
+      icon_frame = 2
+      built_for_ruler = yes
+      potential = {
+         from = { is_species_class = KDF }
+         planet = { is_capital = yes }
+         owner = {
+            has_country_flag = klingon_empire
+            exists = ruler
+            ruler = { NOT = { has_leader_flag = has_klingon_honor_guard } }
+         }
+      }
+      allow = {
+         custom_tooltip = {
+            text = klingon_honor_guard_army_trigger_tooltip
+            planet = { is_capital = yes }
+            owner = {
+               has_country_flag = klingon_empire
+               exists = ruler
+               ruler = { NOT = { has_leader_flag = has_klingon_honor_guard } }
+            }
+         }
+      }
+      on_queued = { owner = { ruler = { set_leader_flag = has_klingon_honor_guard } } }
+      on_unqueued = { owner = { ruler = { remove_leader_flag = has_klingon_honor_guard } } }
+   }
+   
+### First Order Battalion - CAR
+   army_first_27 = {
+      cost = {
+         minerals = 115
+         energy = 15
+      }
+      time = 115
+      damage = 1.95
+      health = 1.75
+      morale = 1.95
+      maintenance = 0.5
+      icon_frame = 2
+      built_for_ruler = yes
+      potential = {
+         from = { is_species_class = CAR }
+         planet = { is_capital = yes }
+         owner = {
+            has_country_flag = cardassian_union 
+            exists = ruler
+            ruler = { NOT = { has_leader_flag = has_cardassian_order } }
+         }
+      }
+      allow = {
+         custom_tooltip = {
+            text = cardassian_order_army_trigger_tooltip
+            planet = { is_capital = yes }
+            owner = {
+               has_country_flag = cardassian_union 
+               exists = ruler
+               ruler = { NOT = { has_leader_flag = has_cardassian_order } }
+            }
+         }
+      }
+      on_queued = { owner = { ruler = { set_leader_flag = has_cardassian_order } } }
+      on_unqueued = { owner = { ruler = { remove_leader_flag = has_cardassian_order } } }
+   }
+   
+### Reman Shock Troops - REM
+   army_reman_28 = {
+      cost = {
+         minerals = 115
+         energy = 15
+      }
+      time = 115
+      damage = 1.95
+      morale_damage = 1.25
+      health = 1.75
+      morale = 1.45
+      maintenance = 0.5
+      icon_frame = 2
+      built_for_ruler = yes
+      potential = {
+         from = { is_species_class = REM }
+         planet = { is_capital = yes }
+         owner = {
+            has_country_flag = romulan_star_empire
+            exists = ruler
+            ruler = { NOT = { has_leader_flag = has_reman_shock_troops } }
+         }
+      }
+      allow = {
+         custom_tooltip = {
+            text = reman_shock_troops_army_trigger_tooltip
+            planet = { is_capital = yes }
+            owner = {
+               has_country_flag = romulan_star_empire
+               exists = ruler
+               ruler = { NOT = { has_leader_flag = has_reman_shock_troops } }
+            }
+         }
+      }
+      on_queued = { owner = { ruler = { set_leader_flag = has_reman_shock_troops } } }
+      on_unqueued = { owner = { ruler = { remove_leader_flag = has_reman_shock_troops } } }
+   }
+   
+### Earth Guard - FED
+   army_earth_29 = {
+      cost = {
+         minerals = 115
+         energy = 15
+      }
+      time = 115
+      damage = 2.45
+      health = 1.25
+      morale = 1.95
+      maintenance = 0.5
+      icon_frame = 2
+      built_for_ruler = yes
+      potential = {
+         from = { is_species_class = FED }
+         planet = { is_capital = yes }
+         owner = {
+            has_country_flag = united_earth
+            exists = ruler
+            ruler = { NOT = { has_leader_flag = has_earth_guard } }
+         }
+      }
+      allow = {
+         custom_tooltip = {
+            text = earth_guard_army_trigger_tooltip
+            planet = { is_capital = yes }
+            owner = {
+               has_country_flag = united_earth
+               exists = ruler
+               ruler = { NOT = { has_leader_flag = has_earth_guard } }
+            }
+         }
+      }
+      on_queued = { owner = { ruler = { set_leader_flag = has_earth_guard } } }
+      on_unqueued = { owner = { ruler = { remove_leader_flag = has_earth_guard } } }
+   }
+   
+### Jem'Hadar Army - JEM
+   army_jem'hadar = {
+      prerequisites = { "tech_jem_hadar_cloning" }
+      cost = {
+         minerals = 100
+         energy = 400
+      }
+      time = 180
+      damage = 1.6
+      health = 1.6
+      morale = 1.6
+      maintenance = 1.25
+      icon_frame = 6
+   
+      potential = {
+         from = { is_species_class = JEM }
+      }
+   }
+   
+### Refitted Workbots
+   machine_garrison = {
+      garrison = yes
+      has_species = no
+      potential = { always = no }
+      damage = 0.5
+      health = 0.75
+      morale = 10
+      icon_frame = 12
+   
+   }
+   
+### Hunter-Killer Armies
+   machine_assault_1 = {
+      cost = {
+         minerals = 60
+      }
+      has_species = no
+      potential = { always = no }
+      time = 90
+      damage = 1.15
+      morale_damage = 1.15
+      health = 1.15
+      morale = 10
+      maintenance = 0.33
+      icon_frame = 11
+   
+   }
+   
+### Drone Grid
+   machine_defense_1 = {
+      cost = {
+         minerals = 30
+      }
+      defensive = yes
+      has_species = no
+      potential = { always = no }
+      time = 60
+      damage = 1
+      health = 1
+      morale = 10
+      maintenance = 0.15
+      icon_frame = 12
+   
+   }
+   
+### Battle Frames
+   machine_assault_2 = {
+      cost = {
+         minerals = 150
+         energy = 20
+      }
+      has_species = no
+      potential = { always = no }
+      time = 100
+      damage = 1.5
+      morale_damage = 1.5
+      health = 2.5
+      morale = 10
+      maintenance = 0.6
+      icon_frame = 11
+   
+   }
+   
+### Seeker Grid
+   machine_defense_2 = {
+      cost = {
+         minerals = 75
+         energy = 10
+      }
+      defensive = yes
+      has_species = no
+      potential = { always = no }
+      time = 80
+      damage = 1.5
+      morale_damage = 1.25
+      health = 2.3
+      morale = 10
+      maintenance = 0.45
+      icon_frame = 12
+   
+   }
+   
+### Mega-Warform
+   machine_assault_3 = {
+      cost = {
+         minerals = 250
+         energy = 50
+      }
+      has_species = no
+      time = 360
+      damage = 2
+      morale_damage = 2
+      health = 3
+      morale = 10
+      maintenance = 1
+      icon_frame = 6
+   
+      potential = {
+         owner = { has_swapped_tradition = tr_innovation_3 }
+      }
+   }
+   

@@ -1,0 +1,114 @@
+@distance = 30
+@base_moon_distance = 10
+
+
+#Bolian
+bolian_homeworld = {
+	name = "Bolarus"
+	class = "sc_a"
+	asteroids_distance = 88
+	flags = { bolian_homeworld }
+	init_effect = { log = "bolian homeworld" }
+	usage = custom_empire
+	max_instances = 1
+	planet = { name = "Bolarus" class = "pc_k_star" orbit_distance = 0 orbit_angle = 1 size = 30 has_ring = no }
+	planet = {
+		count = 3
+		orbit_distance = { min = 16 max = 22 }
+		orbit_angle = { min = 90 max = 270 }
+		change_orbit = @base_moon_distance
+		moon = { count = { min = 0 max = 2 } class = random_non_colonizable orbit_angle = { min = 90 max = 270 } orbit_distance = 5 }
+	}
+	planet = {
+		count = 5
+		orbit_distance = { min = 14 max = 25 }
+		orbit_angle = { min = 90 max = 270 }
+		change_orbit = @base_moon_distance
+		moon = { count = { min = 0 max = 1 } class = random_non_colonizable orbit_angle = { min = 90 max = 270 } orbit_distance = 5 }
+	}
+	planet = {
+		name = "Boliax"
+		class = pc_m1_class
+		orbit_distance = 14.5
+		orbit_angle = 220
+		size = { min = 18 max = 20 }
+		starting_planet = yes
+		has_ring = no
+		tile_blockers = none
+		modifiers = none
+		init_effect = { prevent_anomaly = yes }
+		init_effect = {
+			if = {
+				limit = { NOT = { any_country = { has_country_flag = bolian_league } } }
+				create_species = { 
+				    name = "Bolian" 
+				    class = BOL 
+				    portrait = bolian 
+				    homeworld = THIS 
+				    traits = { 
+				        trait = "trait_thrifty" 
+				        trait = "trait_deviants" 
+				        trait = "trait_charismatic" 
+				        ideal_planet_class = "pc_m1_class" 
+					} 
+				}
+				last_created_species = { save_global_event_target_as = bolianSpecies }
+				create_country = {
+					name = "NAME_bolian_league"
+					type = default
+					ignore_initial_colony_error = yes
+					civics = { civic = "civic_beacon_of_liberty" civic = "civic_idealistic_foundation" }
+					authority = auth_democratic
+					name_list = "Bolian"
+					ethos = { ethic = "ethic_pacifist" ethic = "ethic_xenophile" ethic = "ethic_egalitarian" }
+					species = event_target:bolianSpecies
+					flag = {
+						icon = { category="spherical" file="flag_spherical_17.dds" }
+						background = { category="backgrounds" file="circle.dds" }
+						colors = { "indigo" "burgundy" "null" "null" }
+					}
+					ship_prefix = BLS
+				}
+				last_created_country = {
+					set_graphical_culture = generic_02
+					set_country_flag = bolian_league
+					set_country_flag = custom_start_screen
+					set_country_flag = generic_ent
+					set_country_flag = alpha_beta_empire
+					set_country_flag = init_spawned
+					set_country_flag = botf_minor
+					save_global_event_target_as = bolian_league
+					give_technology = { tech = "tech_society_bank_373" message = no }
+					change_country_flag = {
+						icon = { category = "spherical" file = "flag_spherical_17.dds" }
+						background = { category = "backgrounds" file = "circle.dds" }
+						colors = { "indigo" "burgundy" "null" "null" }
+					}
+				}
+				create_colony = { owner = event_target:bolian_league species = event_target:bolianSpecies ethos = owner }
+			}
+			set_capital = yes
+			random_country = {
+				limit = { has_country_flag = bolian_league }
+				save_global_event_target_as = bolian_league
+				add_appropriate_start_techs = yes
+				give_technology = { tech = "tech_society_bank_373" message = no }
+				species = { save_global_event_target_as = bolianSpecies }
+				set_country_type = minorRace
+			}
+			set_owner = event_target:bolian_league
+			generate_minor_empire_start_buildings = yes
+			random_tile = { limit = { has_blocker = no has_building = no } set_deposit = d_society_deposit set_building = "building_bolias_bank" }
+			generate_minor_empire_start_pops = yes
+			generate_major_empire_start_fleets = yes
+			set_name = "Boliax"
+		}
+	}
+	planet = {
+		count = 1
+		orbit_distance = { min = 18 max = 25 }
+		orbit_angle = { min = 90 max = 270 }
+		change_orbit = @base_moon_distance
+		moon = { count = { min = 0 max = 1 } class = random_non_colonizable orbit_angle = { min = 90 max = 270 } orbit_distance = 5 }
+	}
+}

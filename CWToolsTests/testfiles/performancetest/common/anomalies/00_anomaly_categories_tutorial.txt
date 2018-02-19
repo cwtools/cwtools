@@ -1,0 +1,70 @@
+############################
+### ANOMALY CATEGORIES ###
+############################
+# default = planet scope
+# potential = planet scope
+# spawn_chance = planet scope (from = the ship)
+# on_spawn = planet scope (ibid)
+# on_success = ship scope
+# on_fail = ship scope
+# on_critical_fail = ship scope
+# level = level of anomaly that is checked against scientist level
+# risk = risk of researching the anomaly (defaults to NDefines::NGameplay:anomaly_RISK_DEFAULT)
+# add = the weight of the anomaly being triggered among all applicable after the roll for anomaly generation has been successful
+
+#SPAWN CHANCE STUFF
+#orbit = {
+#	has_any_strategic_resource = no
+#}
+#orbit = {
+#	OR = {
+#		is_planet_class = pc_barren
+#		is_planet_class = pc_barren_cold
+#}
+#
+#num_minerals > 0
+#
+#solar_system = { has_star_flag = precursor_1 }
+#NOT = {
+#	FROM = {
+#		owner = { has_country_flag = vultaum_11 }
+#	}
+#}
+#
+#spawn_chance = { 
+#	modifier = {
+#		add = 3
+#		not = {
+#			from = {
+#				owner = {
+#					has_country_flag = this_category
+#				}
+#			}
+#		}
+#	}
+#}
+#on_spawn = { from = { owner = { set_country_flag = this_category } } }
+
+
+#########################################################
+# TUTORIAL
+anomaly_category = {
+	key = "TUTORIAL_CAT"
+	desc = "TUTORIAL_DESC"
+	level = 1
+	#risk = 25
+
+	spawn_chance = {
+		modifier = {
+			add = 3
+			has_planet_flag = tutorial_anomaly_planet
+			FROM = { owner = { is_borg_empire = no is_assimilator = no } }
+		}
+	}
+
+	on_spawn = {
+	}
+
+	on_success = {
+	}
+}

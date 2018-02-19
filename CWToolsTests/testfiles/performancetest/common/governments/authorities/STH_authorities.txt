@@ -1,0 +1,117 @@
+#auth_example = {
+#	potential = {}									# requirements list, see ../readme_requirements.txt
+#	possible = {}									# requirements list, see ../readme_requirements.txt
+#
+#	traits = { trait = tait1 trait = tait2 }		# force listed traits on the founder species (only verified for empire designs, no eefect after game start)
+#
+#	has_heir = yes / no								# default: no; you can either have a hereditary system (has_heir = yes), or an election system (has_heir = no)
+#	election_type = oligarchic / democratic	/ none	# default: none; oligarchic generate candidates only from leaders in the country
+#	election_term_years = 40						# default: 0
+#	election_term_variance = 10						# default: 0; actual election term = election_term_years +/- election_term_variance
+#	re_election_allowed = yes / no					# default: no
+#	can_have_emergency_elections = yes / no			# default: no
+#	emergency_election_cost = 42.5					# default: 0; influence cost for starting an emergency election
+#	max_election_candidates = 5						# default: -1; -1 == no limit
+#	can_reform = yes / no 							# default = yes, whether you can reform into/out of this government type
+#
+#	has_agendas = yes / no							# default: no
+#	uses_mandates = yes / no						# default: no
+#
+#	tags = { <key> <key2> }							# add these translation tags to the description
+#
+
+
+auth_federation_sector = {
+	election_term_years = 10
+	re_election_allowed = yes
+	election_type = democratic
+	valid_for_released_vassal = no
+	can_reform = no
+	potential = { 
+		country_type = { value = ufp_member_world } 
+	}
+}
+
+auth_agency = {
+	has_heir = no
+	election_type = none
+	valid_for_released_vassal = no
+	has_agendas = no
+	uses_mandates = no
+	potential = { 
+		country_type = { value = agency }
+	}
+}
+
+#Cybernetic Imperative
+auth_cybernetic_consciousness = {
+	has_heir = no
+	election_type = none
+	valid_for_released_vassal = no
+	has_agendas = no
+	uses_mandates = no
+	can_reform = no
+	localization_postfix = cybernetic_imperative
+	icon = "gfx/interface/icons/governments/authorities/auth_cybernetic_imperative.dds"
+	
+	potential = { 
+		ethics = {
+			value = ethic_cybernetic_consciousness
+		} 
+	}
+	possible = { 
+		ethics = {
+			value = ethic_cybernetic_consciousness
+		} 
+	}
+}
+
+#Cybernetic Consensus
+auth_cybernetic_consensus = {
+	has_heir = no
+	election_type = none
+	valid_for_released_vassal = no
+	has_agendas = no
+	uses_mandates = no
+	can_reform = no
+	icon = "gfx/interface/icons/governments/authorities/auth_cybernetic_consensus.dds"
+	
+	potential = { 
+		ethics = {
+			value = ethic_cybernetic_consensus
+		} 
+	}
+	possible = { 
+		ethics = {
+			value = ethic_cybernetic_consensus
+		} 
+	}
+}
+
+
+auth_great_link = {
+	has_heir = no
+	has_factions = no
+	election_type = oligarchic	
+	valid_for_released_vassal = no
+	max_election_candidates = 2
+	can_have_emergency_elections = yes
+	emergency_election_cost = 500
+	re_election_allowed = yes
+	can_reform = no
+	localization_postfix = great_link
+    icon = "gfx/interface/icons/governments/authorities/auth_great_link.dds"
+	has_agendas = yes
+	
+	potential = {
+		ethics = {
+			value = ethic_great_link
+		}
+	}
+	possible = {
+		ethics = {
+			value = ethic_great_link
+		}
+	}
+	
+}

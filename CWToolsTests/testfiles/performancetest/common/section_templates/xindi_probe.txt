@@ -1,0 +1,98 @@
+#Xindi_probe
+ship_section_template = {
+	key = "xindi_weapon_stern_1"
+	ship_size = xindi_weapon
+	fits_on_slot = stern
+	entity = "xindi_weapon_entity"
+	icon = "GFX_ship_part_core_mid"
+	
+  cost = 430
+  small_utility_slots = 0
+  medium_utility_slots = 0
+  large_utility_slots = 0
+  aux_utility_slots = 0
+  ai_weight = { factor = 10 }
+  component_slot = {
+    name = "MEDIUM_GUN_01"
+    slot_size = medium
+    slot_type = weapon
+    locatorname = "medium_gun_01"
+  }
+  component_slot = {
+    name = "MEDIUM_GUN_02"
+    slot_size = medium
+    slot_type = weapon
+    locatorname = "medium_gun_02"
+  }
+  component_slot = {
+    name = "TORPEDO_01"
+    slot_size = torpedo
+    slot_type = weapon
+    locatorname = "large_gun_01"
+  }
+}
+
+ship_section_template = {
+  key = "xindi_weapon_mid_2"
+  ship_size = xindi_weapon
+  fits_on_slot = mid
+  entity = "xindi_weapon_entity"
+  icon = "GFX_ship_part_core_mid"
+  icon_frame = 1
+  prerequisites = { tech_engineering_battleship_544 }
+  cost = 360
+  small_utility_slots = 2
+  medium_utility_slots = 2
+  large_utility_slots = 2
+  aux_utility_slots = 1
+  ai_weight = { factor = 10 }
+}
+
+ship_section_template = {
+	key = "xindi_probe_stern_1"
+	ship_size = xindi_probe
+	fits_on_slot = stern
+	entity = "xindi_probe_entity"
+	icon = "GFX_ship_part_core_mid"
+	
+  cost = 430
+  small_utility_slots = 0
+  medium_utility_slots = 0
+  large_utility_slots = 0
+  aux_utility_slots = 0
+  ai_weight = { factor = 10 }
+  component_slot = {
+    name = "MEDIUM_GUN_01"
+    slot_size = medium
+    slot_type = weapon
+    locatorname = "medium_gun_01"
+  }
+  component_slot = {
+    name = "MEDIUM_GUN_02"
+    slot_size = medium
+    slot_type = weapon
+    locatorname = "medium_gun_02"
+  }
+  component_slot = {
+    name = "TORPEDO_01"
+    slot_size = torpedo
+    slot_type = weapon
+    locatorname = "large_gun_01"
+  }
+}
+
+ship_section_template = {
+  key = "xindi_probe_mid_2"
+  ship_size = xindi_probe
+  fits_on_slot = mid
+  entity = "xindi_probe_entity"
+  icon = "GFX_ship_part_core_mid"
+  icon_frame = 1
+  prerequisites = { tech_engineering_battleship_544 }
+  cost = 360
+  small_utility_slots = 2
+  medium_utility_slots = 2
+  large_utility_slots = 2
+  aux_utility_slots = 1
+  ai_weight = { factor = 10 }
+}

@@ -1,0 +1,1047 @@
+############################
+#
+# Dominion Story Events
+#
+# Written by Walshicus
+#
+############################
+
+namespace = STH_dominion_story
+
+
+# The Hundred - Project Start
+country_event = {
+	id = STH_dominion_story.1
+	title = STH_dominion_story.1.name
+    desc = { text = STH_dominion_story.1.desc }
+    picture = sth_GFX_evt_empireDominion
+	mean_time_to_happen = {
+		months = 36
+	}
+	fire_only_once = yes
+	trigger = { 
+		years_passed > 2
+		has_country_flag = the_dominion
+		energy > 199
+		NOT = { has_country_flag = the_hundred_started }
+	}	
+	immediate = {
+	}
+	option = {
+		name = STH_dominion_story.1.a
+		allow = { energy > 199 }
+		enable_special_project = { name = THE_HUNDRED_PROJECT_1 owner = root location = root.capital_scope }
+		set_country_flag = the_hundred_started
+	}
+	option = {
+		name = STH_dominion_story.1.b
+	}
+}
+
+
+# The Hundred - Project Complete
+country_event = {
+	id = STH_dominion_story.2
+	title = STH_dominion_story.2.name
+    desc = { text = STH_dominion_story.2.desc }
+    picture = sth_GFX_evt_empireDominion
+	is_triggered_only = yes
+	trigger = { has_country_flag = the_dominion }
+	immediate = { }
+	option = {
+		name = STH_dominion_story.2.a
+		random_owned_pop = { limit = { is_species_class = DOM } kill_pop = yes }
+		hidden_effect = {
+    		if = {
+    			limit = { count_country = { count > 30 limit = { exists = this is_normal_country = yes } } }
+    			while = {
+    				count = 50
+    				set_the_hundred_anomaly = yes
+    			}
+    			else = {
+    				while = {
+    					count = 25
+    					set_the_hundred_anomaly = yes
+    				}
+    			}
+    		}
+		}
+	}
+	option = {
+		name = STH_dominion_story.2.b
+		hidden_effect = { remove_country_flag = the_hundred_started }
+	}
+}
+
+# The Hundred - Failure!
+ship_event = {
+	id = STH_dominion_story.100
+	title = STH_dominion_story.100.name
+	desc = { 
+		text = STH_dominion_story.100.desc
+	}
+    picture = sth_GFX_evt_the_hundred_1
+	is_triggered_only = yes
+	trigger = { }	
+	immediate = { }
+	option = {
+		name = STH_dominion_story.100.a
+	}
+}
+
+# The Hundred - Found!
+ship_event = {
+	id = STH_dominion_story.101
+	title = STH_dominion_story.101.name
+    desc = { 
+		trigger = { 
+			owner = {
+				is_changeling_empire = no
+				NOT = { any_country = { is_changeling_empire = yes has_communications = root.owner } }
+				NOT = { has_country_flag = found_changeling }
+			}
+		}
+		text = STH_dominion_story.101.desc_01 #Never Met Dominion, never met changelings
+	}
+	desc = { 
+		trigger = { 
+			owner = {
+				is_changeling_empire = no
+				NOT = { any_country = { is_changeling_empire = yes has_communications = root.owner } }
+				has_country_flag = found_changeling
+			}
+		}
+		text = STH_dominion_story.101.desc_02 #Never Met Dominion, have met changelings
+	}
+	desc = { 
+		trigger = { 
+			owner = {
+				is_changeling_empire = no
+				any_country = { is_changeling_empire = yes has_communications = root.owner }
+			}
+		}
+		text = STH_dominion_story.101.desc_03 #Have met Dominion
+	}
+	desc = { 
+		trigger = { owner = { is_changeling_empire = yes } }
+		text = STH_dominion_story.101.desc_04 #Is Dominion
+	}
+    picture = sth_GFX_evt_the_hundred_1
+	is_triggered_only = yes
+	trigger = { }	
+	immediate = { }
+	option = {
+		name = STH_dominion_story.101.a
+		allow = { owner = { energy > 99 } }
+		enable_special_project = { name = THE_HUNDRED_PROJECT_2 owner = root.owner location = from }
+	}
+	option = {
+		name = STH_dominion_story.101.b
+	}
+}
+
+# The Hundred - brought aboard
+ship_event = {
+	id = STH_dominion_story.102
+	title = STH_dominion_story.102.name
+    desc = { 
+		trigger = { 
+			owner = {
+				is_changeling_empire = no
+				NOT = { any_country = { is_changeling_empire = yes has_communications = root.owner } }
+				NOT = { has_country_flag = found_changeling }
+			}
+		}
+		text = STH_dominion_story.102.desc_01 #Never Met Dominion, never met changelings
+	}
+	desc = { 
+		trigger = { 
+			owner = {
+				is_changeling_empire = no
+				NOT = { any_country = { is_changeling_empire = yes has_communications = root.owner } }
+				has_country_flag = found_changeling
+			}
+		}
+		text = STH_dominion_story.102.desc_02 #Never Met Dominion, have met changelings
+	}
+	desc = { 
+		trigger = { 
+			owner = {
+				is_changeling_empire = no
+				any_country = { is_changeling_empire = yes has_communications = root.owner }
+			}
+		}
+		text = STH_dominion_story.102.desc_03 #Have met Dominion
+	}
+	desc = { 
+		trigger = { owner = { is_changeling_empire = yes } }
+		text = STH_dominion_story.102.desc_04 #Is Dominion
+	}
+    picture = sth_GFX_evt_the_hundred_1
+	is_triggered_only = yes
+	trigger = { }	
+	immediate = {
+		random_country = { 
+			limit = { is_changeling_empire = yes has_communications = root.owner }
+			save_event_target_as = changeling_empire
+		}
+	}
+	option = {
+		name = STH_dominion_story.102.a #Study
+		trigger = { owner = { is_changeling_empire = no } }
+		hidden_effect = { owner = { country_event = { id = STH_dominion_story.110 days = 1440 random = 720 scopes = { from = from } } } }
+	}
+	option = { #Gift to Dominion
+		name = STH_dominion_story.102.b
+		trigger = {
+			owner = { is_changeling_empire = no }
+			any_country = { is_changeling_empire = yes has_communications = root.owner }
+		}
+		hidden_effect = { owner = { country_event = { id = STH_dominion_story.120 days = 14 random = 3 scopes = { from = from } } } }
+	}
+	option = { #Ransom to Dominion
+		name = STH_dominion_story.102.c
+		trigger = {
+			owner = { is_changeling_empire = no }
+			any_country = { is_changeling_empire = yes has_communications = root.owner }
+		}
+		hidden_effect = { owner = { country_event = { id = STH_dominion_story.130 days = 14 random = 3 scopes = { from = from } } } }
+	}
+	option = { #Return to the Link
+		name = STH_dominion_story.102.d
+		trigger = { owner = { is_changeling_empire = yes } }
+		hidden_effect = { owner = { country_event = { id = STH_dominion_story.140 days = 14 random = 3 scopes = { from = from } } } }
+	}
+	option = { #Leave it
+		name = STH_dominion_story.102.e 
+		trigger = { owner = { is_changeling_empire = no } }
+	}
+}
+
+
+
+# The Hundred - Studies Begin
+country_event = {
+	id = STH_dominion_story.110
+	title = STH_dominion_story.110.name
+    desc = { 
+		trigger = { 
+			owner = {
+				NOT = { any_country = { is_changeling_empire = yes has_communications = root.owner } }
+				NOT = { has_country_flag = found_changeling }
+			}
+		}
+		text = STH_dominion_story.110.desc_01
+	}
+	desc = { 
+		trigger = { 
+			owner = {
+				OR = { 
+					any_country = { is_changeling_empire = yes has_communications = root.owner } 
+					has_country_flag = found_changeling
+				}
+			}
+		}
+		text = STH_dominion_story.110.desc_02
+	}
+    picture = sth_GFX_evt_the_hundred_2
+	is_triggered_only = yes
+	trigger = { }
+	immediate = { }
+	option = {
+		name = STH_dominion_story.110.a
+		enable_special_project = { name = THE_HUNDRED_PROJECT_3A owner = root location = root.capital_scope }
+	}
+	option = {
+		name = STH_dominion_story.110.b
+		allow = { energy > 199 }
+		enable_special_project = { name = THE_HUNDRED_PROJECT_3B owner = root location = root.capital_scope }
+		add_energy = -200
+	}
+}
+
+# The Hundred - Studies 2
+country_event = {
+	id = STH_dominion_story.111
+	title = STH_dominion_story.111.name
+    desc = { 
+		trigger = { 
+			owner = {
+				NOT = { any_country = { is_changeling_empire = yes has_communications = root.owner } }
+				NOT = { has_country_flag = found_changeling }
+			}
+		}
+		text = STH_dominion_story.111.desc_01
+	}
+	desc = { 
+		trigger = { 
+			owner = {
+				OR = { 
+					any_country = { is_changeling_empire = yes has_communications = root.owner } 
+					has_country_flag = found_changeling
+				}
+			}
+		}
+		text = STH_dominion_story.111.desc_02
+	}
+    picture = sth_GFX_evt_the_hundred_2
+	is_triggered_only = yes
+	trigger = { }
+	immediate = { }
+	option = {
+		name = STH_dominion_story.111.a
+		enable_special_project = { name = THE_HUNDRED_PROJECT_4A owner = root location = root.capital_scope }
+	}
+	option = {
+		name = STH_dominion_story.111.b
+		allow = { minerals > 199 }
+		enable_special_project = { name = THE_HUNDRED_PROJECT_4B owner = root location = root.capital_scope }
+		add_minerals = -200
+	}
+}
+
+# The Hundred - Studies 3
+country_event = {
+	id = STH_dominion_story.112
+	title = STH_dominion_story.112.name
+    desc = { 
+		trigger = { 
+			owner = {
+				NOT = { any_country = { is_changeling_empire = yes has_communications = root.owner } }
+				NOT = { has_country_flag = found_changeling }
+			}
+		}
+		text = STH_dominion_story.112.desc_01
+	}
+	desc = { 
+		trigger = { 
+			owner = {
+				OR = { 
+					any_country = { is_changeling_empire = yes has_communications = root.owner } 
+					has_country_flag = found_changeling
+				}
+			}
+		}
+		text = STH_dominion_story.112.desc_02
+	}
+    picture = sth_GFX_evt_the_hundred_2
+	is_triggered_only = yes
+	trigger = { }
+	immediate = { }
+	option = {
+		name = STH_dominion_story.112.a
+		enable_special_project = { name = THE_HUNDRED_PROJECT_5A owner = root location = root.capital_scope }
+	}
+	option = {
+		name = STH_dominion_story.112.b
+		allow = { minerals > 99 energy > 99 }
+		enable_special_project = { name = THE_HUNDRED_PROJECT_5B owner = root location = root.capital_scope }
+		add_minerals = -100
+		add_energy = -100
+	}
+}
+
+# The Hundred - Studies 4
+country_event = {
+	id = STH_dominion_story.113
+	title = STH_dominion_story.113.name
+    desc = { 
+		trigger = { 
+			owner = {
+				NOT = { any_country = { is_changeling_empire = yes has_communications = root.owner } }
+				NOT = { has_country_flag = found_changeling }
+			}
+		}
+		text = STH_dominion_story.113.desc_01
+	}
+	desc = { 
+		trigger = { 
+			owner = {
+				OR = { 
+					any_country = { is_changeling_empire = yes has_communications = root.owner } 
+					has_country_flag = found_changeling
+				}
+			}
+		}
+		text = STH_dominion_story.113.desc_02
+	}
+    picture = sth_GFX_evt_the_hundred_2
+	is_triggered_only = yes
+	trigger = { }
+	immediate = { }
+	option = {
+		name = STH_dominion_story.113.a
+		enable_special_project = { name = THE_HUNDRED_PROJECT_6A owner = root location = root.capital_scope }
+	}
+	option = {
+		name = STH_dominion_story.113.b
+		allow = { minerals > 199 energy > 199 }
+		enable_special_project = { name = THE_HUNDRED_PROJECT_6B owner = root location = root.capital_scope }
+		add_minerals = -200
+		add_energy = -200
+	}
+}
+
+# The Hundred - Studies finish
+country_event = {
+	id = STH_dominion_story.114
+	title = STH_dominion_story.114.name
+    desc = { 
+		trigger = { 
+			owner = {
+				NOT = { any_country = { is_changeling_empire = yes has_communications = root.owner } }
+				NOT = { has_country_flag = found_changeling }
+			}
+		}
+		text = STH_dominion_story.114.desc_01
+	}
+	desc = { 
+		trigger = { 
+			owner = {
+				OR = { 
+					any_country = { is_changeling_empire = yes has_communications = root.owner } 
+					has_country_flag = found_changeling
+				}
+			}
+		}
+		text = STH_dominion_story.114.desc_02
+	}
+    picture = sth_GFX_evt_the_hundred_2
+	is_triggered_only = yes
+	trigger = { }
+	immediate = { }
+	option = {
+		name = STH_dominion_story.114.a
+		hidden_effect = {
+			random_list = {
+				60 = { 
+					modifier = { factor = 1.5 check_variable = { which = changeling_research value > 15 } }
+					modifier = { factor = 1.75 check_variable = { which = changeling_research value > 30 } }
+					modifier = { factor = 2.0 check_variable = { which = changeling_research value > 50 } }
+					country_event = { id = STH_dominion_story.150 days = 7 random = 2 }
+				}
+				20 = { 
+					modifier = { factor = 0.75 check_variable = { which = changeling_research value > 15 } }
+					country_event = { id = STH_dominion_story.151 days = 7 random = 2 }
+				}
+				20 = { 
+					if = {
+						limit = { NOT = { any_country = { is_changeling_empire = yes has_communications = root.owner } } }
+						country_event = { id = STH_dominion_story.152 days = 7 random = 2 }
+						else = {
+							country_event = { id = STH_dominion_story.153 days = 7 random = 2 }
+						}
+					}
+					
+				}
+			}		
+		}
+	}
+}
+
+
+# The Hundred - RETURN CHANGELING TO DOMINION
+country_event = {
+	id = STH_dominion_story.120
+	title = STH_dominion_story.120.name
+    desc = { 
+		text = STH_dominion_story.120.desc
+	}
+    diplomatic = yes
+	picture_event_data = {
+		portrait = event_target:changeling_empire
+		room = "dominion_room"
+	}
+	is_triggered_only = yes
+	trigger = { }
+	immediate = { 
+		random_country = {
+			limit = { is_changeling_empire = yes }
+			save_event_target_as = changeling_empire
+		}
+	}
+	option = {
+		name = STH_dominion_story.120.a
+		hidden_effect = {
+			event_target:changeling_empire = {
+				country_event = { id = STH_dominion_story.121 scopes = { from = root } days = 1 }
+			}
+		}
+	}
+}
+# The Hundred - RETURN CHANGELING TO DOMINION - Notification
+country_event = {
+	id = STH_dominion_story.121
+	title = STH_dominion_story.121.name
+    desc = { 
+		text = STH_dominion_story.121.desc
+	}
+    picture = sth_GFX_evt_the_hundred_2
+	is_triggered_only = yes
+	trigger = { }
+	immediate = { }
+	option = {
+		name = STH_dominion_story.121.a
+		add_hundred_return_bonus = yes
+		add_opinion_modifier = { modifier = opinion_returned_changeling who = from }
+	}
+	option = {
+		name = STH_dominion_story.121.b
+		add_hundred_return_bonus = yes
+	}
+}
+
+
+# The Hundred - RANSOM CHANGELING TO DOMINION
+country_event = {
+	id = STH_dominion_story.130
+	title = STH_dominion_story.130.name
+    desc = { 
+		text = STH_dominion_story.130.desc
+	}
+    diplomatic = yes
+	picture_event_data = {
+		portrait = event_target:changeling_empire
+		room = "dominion_room"
+	}
+	is_triggered_only = yes
+	trigger = { }
+	immediate = { 
+		random_country = {
+			limit = { is_changeling_empire = yes }
+			save_event_target_as = changeling_empire
+		}
+	}
+	option = {
+		name = STH_dominion_story.130.a #Small Ransom
+		hidden_effect = {
+			event_target:changeling_empire = {
+				country_event = { id = STH_dominion_story.131 scopes = { from = root } }
+			}
+		}
+	}
+	option = {
+		name = STH_dominion_story.130.b #Middling Ransom
+		hidden_effect = {
+			event_target:changeling_empire = {
+				country_event = { id = STH_dominion_story.132 scopes = { from = root } }
+			}
+		}
+	}
+	option = {
+		name = STH_dominion_story.130.c #Large Ransom
+		hidden_effect = {
+			event_target:changeling_empire = {
+				country_event = { id = STH_dominion_story.133 scopes = { from = root } }
+			}
+		}
+	}
+	option = {
+		name = STH_dominion_story.130.d #Gift
+		hidden_effect = {
+			event_target:changeling_empire = {
+				country_event = { id = STH_dominion_story.134 scopes = { from = root } }
+			}
+		}
+	}
+}
+
+
+# The Hundred - Dominion gets small ransom
+country_event = {
+	id = STH_dominion_story.131
+	title = STH_dominion_story.131.name
+    desc = { 
+		text = STH_dominion_story.131.desc
+	}
+    diplomatic = yes
+	picture_event_data = {
+		portrait = from
+		room = from.ruler
+	}
+	is_triggered_only = yes
+	trigger = { }
+	immediate = { }
+	option = {
+		name = STH_dominion_story.131.a #Accept
+		allow = { 
+			minerals > 99
+			energy > 99
+		}
+		ai_chance = { factor = 25 }
+		add_minerals = -100
+		add_energy = -100
+		hidden_effect = {
+			from = {
+				add_minerals = 100
+				add_energy = 100
+				country_event = { id = STH_dominion_story.136 scopes = { from = root } }
+			}
+		}
+	}
+	option = {
+		name = STH_dominion_story.131.b #Declare War!
+		ai_chance = { factor = 5 }
+		hidden_effect = {
+			from = { country_event = { id = STH_dominion_story.137 scopes = { from = root } } }
+		}
+	}
+	option = {
+		name = STH_dominion_story.131.c #Reject Ransom
+		add_influence = -100
+		ai_chance = { factor = 10 }
+		hidden_effect = {
+			from = { country_event = { id = STH_dominion_story.138 scopes = { from = root } } }
+		}
+	}
+}
+
+# The Hundred - Dominion gets medium ransom
+country_event = {
+	id = STH_dominion_story.132
+	title = STH_dominion_story.132.name
+    desc = { 
+		text = STH_dominion_story.132.desc
+	}
+    diplomatic = yes
+	picture_event_data = {
+		portrait = from
+		room = from.ruler
+	}
+	is_triggered_only = yes
+	trigger = { }
+	immediate = { }
+	option = {
+		name = STH_dominion_story.132.a #Accept
+		allow = { 
+			minerals > 249
+			energy > 249
+		}
+		ai_chance = { factor = 15 }
+		add_minerals = -250
+		add_energy = -250
+		hidden_effect = {
+			from = {
+				add_minerals = 250
+				add_energy = 250
+				country_event = { id = STH_dominion_story.136 scopes = { from = root } }
+			}
+		}
+	}
+	option = {
+		name = STH_dominion_story.132.b #Declare War!
+		ai_chance = { factor = 10 }
+		hidden_effect = {
+			from = { country_event = { id = STH_dominion_story.137 scopes = { from = root } } }
+		}
+	}
+	option = {
+		name = STH_dominion_story.132.c #Reject Ransom
+		ai_chance = { factor = 15 }
+		add_influence = -100
+		hidden_effect = {
+			from = { country_event = { id = STH_dominion_story.138 scopes = { from = root } } }
+		}
+	}
+}
+
+# The Hundred - Dominion gets large ransom
+country_event = {
+	id = STH_dominion_story.133
+	title = STH_dominion_story.133.name
+    desc = { 
+		text = STH_dominion_story.133.desc
+	}
+    diplomatic = yes
+	picture_event_data = {
+		portrait = from
+		room = from.ruler
+	}
+	is_triggered_only = yes
+	trigger = { }
+	immediate = { }
+	option = {
+		name = STH_dominion_story.133.a #Accept
+		allow = { 
+			minerals > 499
+			energy > 499
+		}
+		ai_chance = { factor = 10 }
+		add_minerals = -500
+		add_energy = -500
+		hidden_effect = {
+			from = {
+				add_minerals = 500
+				add_energy = 500
+				country_event = { id = STH_dominion_story.136 scopes = { from = root } days = 1 }
+			}
+		}
+	}
+	option = {
+		name = STH_dominion_story.133.b #Declare War!
+		ai_chance = { factor = 15 }
+		hidden_effect = {
+			from = { country_event = { id = STH_dominion_story.137 scopes = { from = root } days = 1 } }
+		}
+	}
+	option = {
+		name = STH_dominion_story.133.c #Reject Ransom
+		ai_chance = { factor = 10 }
+		add_influence = -100
+		hidden_effect = {
+			from = { country_event = { id = STH_dominion_story.138 scopes = { from = root } days = 1 } }
+		}
+	}
+}
+
+# The Hundred - Dominion gets a gift
+country_event = {
+	id = STH_dominion_story.134
+	title = STH_dominion_story.134.name
+    desc = { 
+		text = STH_dominion_story.134.desc
+	}
+    diplomatic = yes
+	picture_event_data = {
+		portrait = from
+		room = from.ruler
+	}
+	is_triggered_only = yes
+	trigger = { }
+	immediate = { }
+	option = { 
+		name = STH_dominion_story.134.a 
+		add_opinion_modifier = { modifier = opinion_returned_changeling who = from }
+	}
+	option = { name = STH_dominion_story.134.b }
+	after = {
+		hidden_effect = { from = { country_event = { id = STH_dominion_story.135 scopes = { from = root } days = 1 } } }
+	}
+}
+
+# The Hundred - Dominion gift response notification
+country_event = {
+	id = STH_dominion_story.135
+	title = STH_dominion_story.135.name
+    desc = { 
+		text = STH_dominion_story.135.desc
+	}
+    diplomatic = yes
+	picture_event_data = {
+		portrait = from
+		room = from.ruler
+	}
+	is_triggered_only = yes
+	trigger = { }
+	immediate = { }
+	option = { name = STH_dominion_story.135.a }
+}
+
+# The Hundred - Ransom Accept Notification
+country_event = {
+	id = STH_dominion_story.136
+	title = STH_dominion_story.136.name
+    desc = { 
+		text = STH_dominion_story.136.desc
+	}
+    diplomatic = yes
+	picture_event_data = {
+		portrait = from
+		room = "dominion_room"
+	}
+	is_triggered_only = yes
+	trigger = { }
+	immediate = { }
+	option = { name = STH_dominion_story.136.a }
+}
+
+# The Hundred - Ransom War Notification
+country_event = {
+	id = STH_dominion_story.137
+	title = STH_dominion_story.137.name
+    desc = { 
+		text = STH_dominion_story.137.desc
+	}
+    diplomatic = yes
+	picture_event_data = {
+		portrait = from
+		room = "dominion_room"
+	}
+	is_triggered_only = yes
+	trigger = { }
+	immediate = { 
+		if = {
+			limit = { from = { can_declare_war = root } }
+			set_relation_flag = { who = root flag = the_hundred_war }
+			declare_war = {
+				who = root
+				major_war = yes
+				name = "NAME_Dominion_War_Of_Reclamation"
+			}
+			add_war_demand = { 
+				type = "humiliate" 
+				parameter:country = event_target:root
+				warscore_cost = 50
+				enemy = root 
+			}
+		}
+	}
+	option = { name = STH_dominion_story.137.a }
+	option = { name = STH_dominion_story.137.b }
+	option = { name = STH_dominion_story.137.c }
+}
+
+
+
+# The Hundred - Ransom Reject Notification
+country_event = {
+	id = STH_dominion_story.138
+	title = STH_dominion_story.138.name
+    desc = { 
+		text = STH_dominion_story.138.desc
+	}
+    diplomatic = yes
+	picture_event_data = {
+		portrait = from
+		room = "dominion_room"
+	}
+	is_triggered_only = yes
+	trigger = { }
+	immediate = { }
+	option = { 
+		name = STH_dominion_story.138.a
+		hidden_effect = { country_event = { id = STH_dominion_story.139 days = 2 random = 1 scopes = { from = from } } }
+	}
+}
+
+#Notification that changeling will now be studied
+country_event = {
+	id = STH_dominion_story.139
+	title = STH_dominion_story.139.name
+    desc = { 
+		text = STH_dominion_story.139.desc
+	}
+	picture = sth_GFX_evt_the_hundred_1
+	is_triggered_only = yes
+	trigger = { }
+	immediate = { 
+	}
+	option = { 
+		name = STH_dominion_story.139.a 
+		hidden_effect = { country_event = { id = STH_dominion_story.110 days = 1440 random = 720 scopes = { from = from } } }
+	}
+}
+
+#Changeling returns to the link
+country_event = {
+	id = STH_dominion_story.140
+	title = STH_dominion_story.140.name
+    desc = { 
+		text = STH_dominion_story.140.desc
+	}
+	picture = sth_GFX_evt_the_hundred_1
+	is_triggered_only = yes
+	trigger = { }
+	immediate = { 
+	}
+	option = { 
+		name = STH_dominion_story.140.a 
+		add_hundred_return_bonus = yes
+	}
+}
+
+# The Hundred - War Won by Dominion
+###DO LATER
+# country_event = {
+	# id = STH_dominion_story.170
+	# title = STH_dominion_story.170.name
+    # desc = { 
+		# text = STH_dominion_story.170.desc
+	# }
+    # diplomatic = yes
+	# picture_event_data = {
+		# portrait = from
+		# room = from.ruler
+	# }
+	# is_triggered_only = yes
+	# trigger = { }
+	# immediate = { }
+	# option = { 
+		# name = STH_dominion_story.170.a
+	# }
+# }
+
+# The Hundred - War Lost by Dominion
+###DO LATER
+# country_event = {
+	# id = STH_dominion_story.171
+	# title = STH_dominion_story.171.name
+    # desc = { 
+		# text = STH_dominion_story.171.desc
+	# }
+    # diplomatic = yes
+	# picture_event_data = {
+		# portrait = from
+		# room = from.ruler
+	# }
+	# is_triggered_only = yes
+	# trigger = { }
+	# immediate = { }
+	# option = { 
+		# name = STH_dominion_story.141.a
+	# }
+# }
+
+
+#Get a Loyal changeling leader
+country_event = {
+	id = STH_dominion_story.150
+	title = STH_dominion_story.150.name
+    desc = { 
+		text = STH_dominion_story.150.desc
+	}
+    diplomatic = yes
+	picture_event_data = {
+		portrait = event_target:changeling_leader
+		room = from.ruler
+	}
+	is_triggered_only = yes
+	trigger = { }
+	immediate = { 
+		create_changeling_leader = yes
+		event_target:changeling_leader = { set_leader_flag = loyal_changeling }
+	}
+	option = { 
+		name = STH_dominion_story.150.a
+		hidden_effect = { 
+			random_list = {
+				35 = { country_event = { id = STH_dominion_story.160 days = 3600 random = 720 scopes = { from = event_target:changeling_leader } } }
+				65 = {}
+			}
+		}
+	}
+}
+
+#Get a changeling leader
+country_event = {
+	id = STH_dominion_story.151
+	title = STH_dominion_story.151.name
+    desc = { 
+		text = STH_dominion_story.151.desc
+	}
+    diplomatic = yes
+	picture_event_data = {
+		portrait = event_target:changeling_leader
+		room = from.ruler
+	}
+	is_triggered_only = yes
+	trigger = { }
+	immediate = { 
+		create_changeling_leader = yes
+	}
+	option = { 
+		name = STH_dominion_story.151.a
+		hidden_effect = { 
+			random_list = {
+				65 = { country_event = { id = STH_dominion_story.160 days = 3600 random = 720 scopes = { from = event_target:changeling_leader } } }
+				35 = {}
+			}
+		}
+	}
+}
+
+#Changeling leaves to explore galaxy
+country_event = {
+	id = STH_dominion_story.152
+	title = STH_dominion_story.152.name
+    desc = { 
+		text = STH_dominion_story.152.desc
+	}
+    diplomatic = yes
+	picture_event_data = {
+		portrait = event_target:changeling_leader
+		room = from.ruler
+	}
+	is_triggered_only = yes
+	trigger = { }
+	immediate = { 
+		create_changeling_leader = yes
+	}
+	option = { 
+		name = STH_dominion_story.152.a
+		hidden_effect = { 
+			event_target:changeling_leader = { exile_leader_as = changeling_leader }
+		}
+	}
+}
+
+
+#Changeling leaves to return to the dominion
+country_event = {
+	id = STH_dominion_story.153
+	title = STH_dominion_story.153.name
+    desc = { 
+		text = STH_dominion_story.153.desc
+	}
+    diplomatic = yes
+	picture_event_data = {
+		portrait = event_target:changeling_leader
+		room = event_target:changeling_leader.ruler
+	}
+	is_triggered_only = yes
+	trigger = { }
+	immediate = { 
+		random_country = {
+			limit = { is_changeling_empire = yes }
+			save_event_target_as = changeling_empire
+			create_changeling_leader = yes
+			hidden_effect = {
+				country_event = { id = STH_dominion_story.154 days = 2 scopes = { from = event_target:changeling_leader fromfrom = root } }
+			}
+		}
+		
+	}
+	option = { 
+		name = STH_dominion_story.153.a
+	}
+}
+
+#Changeling leaves to return to the dominion notification
+country_event = {
+	id = STH_dominion_story.154
+	title = STH_dominion_story.154.name
+    desc = { 
+		text = STH_dominion_story.154.desc
+	}
+    diplomatic = yes
+	picture_event_data = {
+		portrait = from
+		room = root.ruler
+	}
+	is_triggered_only = yes
+	trigger = { }
+	immediate = { }
+	option = { 
+		name = STH_dominion_story.154.a
+		add_hundred_return_bonus = yes
+	}
+}
+
+
+#Changeling can control shape better
+country_event = {
+	id = STH_dominion_story.160
+	title = STH_dominion_story.160.name
+    desc = { 
+		text = STH_dominion_story.160.desc
+	}
+	picture = sth_GFX_evt_the_hundred_2
+	is_triggered_only = yes
+	trigger = { exists = from }
+	immediate = { 
+		from = {
+			change_leader_portrait = root
+		}
+	}
+	option = { name = STH_dominion_story.160.a }
+}

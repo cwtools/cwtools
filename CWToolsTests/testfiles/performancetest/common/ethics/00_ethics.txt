@@ -1,0 +1,2432 @@
+ethic_categories = {
+	col = {}
+	
+	xen = {}
+	
+	mil = {}
+	
+	spi = {}
+	
+	hive = {}
+}
+
+ethic_fanatic_authoritarian = {
+	cost = 2
+	category = "col"
+	category_value = 0
+	
+	use_for_pops = no
+	
+	regular_variant = ethic_authoritarian
+	
+	country_modifier = {
+		country_resource_influence_add = 1
+		pop_slave_resource_output = 0.10
+	}
+	
+	tags = {
+		ETHIC_ALLOWS_CASTE_SYSTEM
+		ETHIC_ONLY_AUTOCRACY
+	}	
+	
+	random_weight = {
+		value = 150
+	}
+}
+
+ethic_authoritarian = {
+	cost = 1
+	category = "col"
+	category_value = 1
+	
+	fanatic_variant = ethic_fanatic_authoritarian
+	
+	country_modifier = {
+		country_resource_influence_add = 0.5
+		pop_slave_resource_output = 0.05
+	}	
+	
+	tags = {
+		ETHIC_ALLOWS_CASTE_SYSTEM
+		ETHIC_NEVER_DEMOCRACY
+	}	
+	
+	random_weight = {
+		value = 100
+	}
+	
+	pop_attraction_tag = {
+		desc = POP_ATTRACTION_AUTHORITARIAN_POS
+		trigger = {
+			OR = {
+				has_ethic = ethic_authoritarian
+				has_ethic = ethic_fanatic_authoritarian
+			}
+		}
+	}
+	
+	pop_attraction_tag = {
+		desc = POP_ATTRACTION_FACTION_POS
+		trigger = {
+			NOR = {
+				has_ethic = ethic_authoritarian
+				has_ethic = ethic_fanatic_authoritarian
+			}
+			has_faction = totalitarian
+		}		
+	}
+
+	pop_attraction_tag = {
+		desc = POP_ATTRACTION_RULER_FACTION_POS
+		trigger = {
+			exists = ruler
+			ruler = { leader_of_faction = totalitarian }
+		}		
+	}
+	
+	pop_attraction_tag = {
+		desc = POP_ATTRACTION_SLAVERY_POS
+		trigger = {
+			any_owned_planet = {
+				any_owned_pop = {
+					is_robot_pop = no
+					is_enslaved = yes
+				}
+			}
+		}
+	}
+	pop_attraction_tag = {
+		desc = POP_ATTRACTION_CONSUMER_GOODS_NEG
+		trigger = {
+			any_owned_planet = {
+				any_owned_pop = {
+					OR = {
+						has_living_standard = { type = living_standard_utopian }
+						has_living_standard = { type = living_standard_good }
+					}
+				}
+			}
+		}
+	}	
+	pop_attraction_tag = {
+		desc = POP_ATTRACTION_AUTOCRATIC_GOV_POS
+		trigger = {
+			has_election_type = none
+		}
+	}
+	pop_attraction_tag = {
+		desc = POP_ATTRACTION_DEMOCRATIC_GOV_NEG
+		trigger = {
+			has_election_type = democratic
+		}
+	}
+
+	pop_attraction_tag = {
+		desc = POP_ATTRACTION_DECADENT_POS
+		trigger = {
+			any_owned_planet = {
+				any_owned_pop = {
+					has_trait = "trait_decadent"
+				}
+			}
+		}
+	}	
+	
+	country_attraction = {
+		value = 1
+		modifier = {
+			factor = 0
+			NOR = {
+				is_country_type = default
+				has_ethic = ethic_authoritarian
+				has_ethic = ethic_fanatic_authoritarian
+				AND = {
+					is_country_type = primitive
+					capital_scope = {
+						has_observation_outpost = yes
+						observation_outpost = {
+							has_mission = native_indoctrination		
+						}
+						observation_outpost_owner = { 
+							OR = {
+								has_ethic = ethic_fanatic_authoritarian
+								has_ethic = ethic_authoritarian
+							}							
+						}				
+					}
+				}				
+			}
+		}
+		# Effects of indoctrination mission
+		modifier = {
+			factor = 10
+			is_country_type = primitive
+			capital_scope = {
+				has_observation_outpost = yes
+				observation_outpost = {
+					has_mission = native_indoctrination		
+				}
+				observation_outpost_owner = { has_ethic = ethic_fanatic_authoritarian }
+			}
+		}
+		modifier = {
+			factor = 5
+			is_country_type = primitive
+			capital_scope = {
+				has_observation_outpost = yes
+				observation_outpost = {
+					has_mission = native_indoctrination		
+				}
+				observation_outpost_owner = { has_ethic = ethic_authoritarian }
+			}
+		}	
+		modifier = {
+			factor = 2
+			NOR = {
+				has_ethic = ethic_authoritarian
+				has_ethic = ethic_fanatic_authoritarian
+			}
+			has_faction = totalitarian	
+		}	
+		modifier = {
+			factor = 1.5
+			exists = ruler
+			ruler = { leader_of_faction = totalitarian }				
+		}
+		modifier = {
+			factor = 2
+			has_ethic = ethic_authoritarian
+		}
+		modifier = {
+			factor = 3
+			has_ethic = ethic_fanatic_authoritarian
+		}
+		modifier = {
+			factor = 1.25
+			has_election_type = none
+		}
+		modifier = {
+			factor = 0.75
+			has_election_type = democratic
+		}	
+	}
+
+	# from = planet
+	pop_attraction = {
+		value = 1
+		
+		modifier = {
+			factor = 0
+			has_trait = trait_hive_mind
+		}	
+		modifier = {
+			factor = 0.25
+			is_enslaved = yes
+		}
+		modifier = {
+			factor = 1.25
+			has_trait = "trait_decadent"
+		}
+		modifier = {
+			factor = 1.5
+			is_enslaved = no
+			from = {
+				any_owned_pop = {
+					is_same_species = root
+					is_robot_pop = no
+					is_enslaved = yes
+				}
+			}
+		}
+		modifier = {
+			factor = 1.25
+			from = {	
+				NOT = {
+					any_owned_pop = {
+						is_same_species = root
+						is_robot_pop = no
+						is_enslaved = yes
+					}				
+				}
+				any_owned_pop = {
+					NOT = { is_same_species = root }
+					is_robot_pop = no
+					is_enslaved = yes
+				}
+			}
+		}
+		modifier = {
+			factor = 0.75
+			OR = {
+				has_living_standard = { type = living_standard_utopian }
+				has_living_standard = { type = living_standard_good }
+			}
+		}			
+	}
+}
+
+ethic_fanatic_egalitarian = {
+	cost = 2
+	category = "col"
+	category_value = 4
+	
+	category_opposite = yes
+	
+	regular_variant = ethic_egalitarian
+	
+	use_for_pops = no
+
+	tags = {
+		ETHIC_ONLY_DEMOCRACY
+		ETHIC_ALLOW_UTOPIA
+		ETHIC_DISALLOW_POVERTY
+	}	
+	
+	country_modifier = {
+		faction_influence_mult = 0.3
+		pop_consumer_goods_mult = -0.2
+	}
+	
+	random_weight = {
+		value = 150
+	}
+}
+
+ethic_egalitarian = {
+	cost = 1
+	category = "col"
+	category_value = 3
+	
+	fanatic_variant = ethic_fanatic_egalitarian
+	
+	category_opposite = yes
+	
+	tags = {
+		ETHIC_NEVER_AUTOCRACY
+		ETHIC_ALLOW_UTOPIA
+		ETHIC_DISALLOW_POVERTY
+	}		
+	
+	country_modifier = {
+		faction_influence_mult = 0.15
+		pop_consumer_goods_mult = -0.1
+	}
+
+	random_weight = {
+		value = 100
+	}
+
+	pop_attraction_tag = {
+		desc = POP_ATTRACTION_EGALITARIAN_POS
+		trigger = {
+			OR = {
+				has_ethic = ethic_egalitarian
+				has_ethic = ethic_fanatic_egalitarian
+			}
+		}
+	}	
+	
+	pop_attraction_tag = {
+		desc = POP_ATTRACTION_FACTION_POS
+		trigger = {
+			NOR = {
+				has_ethic = ethic_egalitarian
+				has_ethic = ethic_fanatic_egalitarian
+			}
+			has_faction = progressive
+		}		
+	}
+	
+	pop_attraction_tag = {
+		desc = POP_ATTRACTION_RULER_FACTION_POS
+		trigger = {
+			exists = ruler
+			ruler = { leader_of_faction = progressive }
+		}		
+	}
+	
+	pop_attraction_tag = {
+		desc = POP_ATTRACTION_CONSUMER_GOODS_POS
+		trigger = {
+			any_owned_planet = {
+				any_owned_pop = {
+					OR = {
+						has_living_standard = { type = living_standard_utopian }
+						has_living_standard = { type = living_standard_good }
+					}
+				}
+			}
+		}
+	}
+
+	pop_attraction_tag = {
+		desc = POP_ATTRACTION_EGALITARIAN_DIPLOMACY_POS
+		trigger = {
+			any_relation = {
+				OR = {
+					AND = {
+						is_subject = no
+						has_migration_access = root
+					}
+					is_in_federation_with = root
+					has_defensive_pact = root
+				}
+				OR = {
+					has_ethic = ethic_egalitarian
+					has_ethic = ethic_fanatic_egalitarian
+				}				
+			}
+		}
+	}	
+
+	pop_attraction_tag = {
+		desc = POP_ATTRACTION_SLAVERY_POS
+		trigger = {
+			any_owned_planet = {
+				any_owned_pop = {
+					is_robot_pop = no
+					is_enslaved = yes
+				}
+			}
+		}
+	}	
+	
+	pop_attraction_tag = {
+		desc = POP_ATTRACTION_DEMOCRATIC_GOV_POS
+		trigger = {
+			has_election_type = democratic
+		}
+	}	
+
+	pop_attraction_tag = {
+		desc = POP_ATTRACTION_AUTOCRATIC_GOV_NEG
+		trigger = {
+			has_election_type = none
+		}
+	}	
+
+	pop_attraction_tag = {
+		desc = POP_ATTRACTION_DECADENT_NEG
+		trigger = {
+			any_owned_planet = {
+				any_owned_pop = {
+					has_trait = "trait_decadent"
+				}
+			}
+		}
+	}		
+	
+	country_attraction = {
+		value = 1
+		modifier = {
+			factor = 0
+			NOR = {
+				is_country_type = default
+				has_ethic = ethic_egalitarian
+				has_ethic = ethic_fanatic_egalitarian
+				AND = {
+					is_country_type = primitive
+					capital_scope = {
+						has_observation_outpost = yes
+						observation_outpost = {
+							has_mission = native_indoctrination		
+						}
+						observation_outpost_owner = { 
+							OR = {
+								has_ethic = ethic_fanatic_egalitarian
+								has_ethic = ethic_egalitarian
+							}							
+						}				
+					}
+				}				
+			}
+		}
+		# Effects of indoctrination mission
+		modifier = {
+			factor = 10
+			is_country_type = primitive
+			capital_scope = {
+				has_observation_outpost = yes
+				observation_outpost = {
+					has_mission = native_indoctrination		
+				}
+				observation_outpost_owner = { has_ethic = ethic_fanatic_xenophile }
+			}
+		}
+		modifier = {
+			factor = 5
+			is_country_type = primitive
+			capital_scope = {
+				has_observation_outpost = yes
+				observation_outpost = {
+					has_mission = native_indoctrination		
+				}
+				observation_outpost_owner = { has_ethic = ethic_xenophile }
+			}
+		}	
+		modifier = {
+			factor = 2
+			NOR = {
+				has_ethic = ethic_egalitarian
+				has_ethic = ethic_fanatic_egalitarian
+			}
+			has_faction = progressive	
+		}	
+		modifier = {
+			factor = 1.5
+			exists = ruler
+			ruler = { leader_of_faction = progressive }				
+		}		
+		modifier = {
+			factor = 2
+			has_ethic = ethic_egalitarian
+		}
+		modifier = {
+			factor = 3
+			has_ethic = ethic_fanatic_egalitarian
+		}
+		modifier = {
+			factor = 0.75
+			is_country_type = default
+			has_election_type = none
+		}
+		modifier = {
+			factor = 1.25
+			is_country_type = default
+			has_election_type = democratic
+		}
+		modifier = {
+			factor = 1.5
+			any_relation = {
+				OR = {
+					is_in_federation_with = root
+					has_defensive_pact = root
+				}
+				OR = {
+					has_ethic = ethic_egalitarian
+					has_ethic = ethic_fanatic_egalitarian
+				}				
+			}
+		}
+		modifier = {
+			factor = 2.0
+			any_relation = {
+				is_subject = no
+				has_migration_access = root
+				OR = {
+					has_ethic = ethic_egalitarian
+					has_ethic = ethic_fanatic_egalitarian
+				}
+			}
+		}		
+	}
+	
+	# from = planet
+	pop_attraction = {
+		value = 1
+		
+		modifier = {
+			factor = 0
+			has_trait = trait_hive_mind
+		}
+		modifier = {
+			factor = 0.5
+			has_trait = "trait_decadent"
+		}		
+		modifier = {
+			factor = 1.5
+			NOR = { 
+				has_citizenship_type = { type = citizenship_full }
+				has_citizenship_type = { type = citizenship_caste_system }
+			}	
+		}		
+		modifier = {
+			factor = 4.0
+			is_enslaved = yes
+		}
+		modifier = {
+			factor = 1.5
+			is_enslaved = no
+			from = {
+				any_owned_pop = {
+					is_robot_pop = no
+					is_enslaved = yes
+				}
+			}
+		}	
+		modifier = {
+			factor = 1.5
+			OR = {
+				has_living_standard = { type = living_standard_utopian }
+				has_living_standard = { type = living_standard_good }
+			}
+		}			
+	}	
+}
+
+ethic_fanatic_xenophobe = {
+	cost = 2
+	category = "xen"
+	category_value = 0
+	
+	use_for_pops = no
+
+	regular_variant = ethic_xenophobe
+	
+	tags = {
+		ETHIC_ALLOWS_PURGE	
+		ETHIC_ALLOWS_SLAVERY
+		ETHIC_REDUCED_DIPLOMACY
+		ETHIC_NEVER_ALIEN_CITIZENSHIP
+		ETHIC_NEVER_ALIEN_MILITARY_SERVICE
+		ETHIC_NO_REFUGEES
+	}
+	
+	country_modifier = {		
+		rivalry_influence_gain = 0.3
+		country_border_mult = 0.3
+	}
+	
+	random_weight = {
+		value = 150
+	}
+}
+
+ethic_xenophobe = {
+	cost = 1
+	category = "xen"
+	category_value = 1
+	
+	fanatic_variant = ethic_fanatic_xenophobe
+	
+	tags = {
+		ETHIC_ALLOWS_PURGE	
+		ETHIC_ALLOWS_SLAVERY
+		ETHIC_REDUCED_DIPLOMACY
+		ETHIC_NEVER_ALIEN_CITIZENSHIP
+		ETHIC_NEVER_ALIEN_MILITARY_SERVICE
+		ETHIC_NO_REFUGEES
+	}	
+	
+	country_modifier = {
+		rivalry_influence_gain = 0.15
+		country_border_mult = 0.15
+	}
+	
+	random_weight = {
+		value = 100
+	}
+	
+	pop_attraction_tag = {
+		desc = POP_ATTRACTION_XENOPHOBE_POS
+		trigger = {
+			OR = {
+				has_ethic = ethic_xenophobe
+				has_ethic = ethic_fanatic_xenophobe
+			}
+		}
+	}
+
+	
+	pop_attraction_tag = {
+		desc = POP_ATTRACTION_FACTION_POS
+		trigger = {
+			NOR = {
+				has_ethic = ethic_xenophobe
+				has_ethic = ethic_fanatic_xenophobe
+			}
+			OR = {
+				has_faction = supremacist
+				has_faction = isolationist
+			}		
+		}		
+	}
+	
+	pop_attraction_tag = {
+		desc = POP_ATTRACTION_FANATIC_PURIFIERS_POS
+		trigger = {
+			has_valid_civic = civic_fanatic_purifiers
+		}
+	}
+	
+	pop_attraction_tag = {
+		desc = POP_ATTRACTION_RULER_FACTION_POS
+		trigger = {
+			exists = ruler
+			ruler = { 
+				OR = {
+					leader_of_faction = supremacist
+					leader_of_faction = isolationist
+				}			
+			}
+		}		
+	}
+	
+	pop_attraction_tag = {
+		desc = POP_ATTRACTION_DEFENSIVE_XENO_WAR_POS
+		trigger = {
+			any_war = {
+				any_defender = {
+					is_same_value = prevprev
+				}
+				any_attacker = {
+					NOT = { is_same_species = root }
+				}
+			}
+		}
+	}	
+
+	pop_attraction_tag = {
+		desc = POP_ATTRACTION_REPUGNANT_POS
+		trigger = {
+			any_owned_planet = {
+				any_owned_pop = {
+					NOT = { has_trait = "trait_repugnant" }
+					is_non_sapient_robot = no
+				}			
+				any_owned_pop = {
+					has_trait = "trait_repugnant"
+				}
+			}
+		}
+	}	
+
+	pop_attraction_tag = {
+		desc = POP_ATTRACTION_XENO_SLAVES_POS
+		trigger = {
+			any_owned_planet = {
+				any_owned_pop = {
+					not = { is_same_species = root }
+					is_robot_pop = no
+					is_enslaved = yes
+				}
+			}
+		}
+	}
+
+	pop_attraction_tag = {
+		desc = POP_ATTRACTION_ENSLAVEMENT_OF_SPECIES_POS
+		trigger = {
+			any_relation = {
+				NOT = { is_same_species = root }
+				any_owned_pop = {
+					is_enslaved = yes
+					is_robot_pop = no
+					is_same_species = root
+				}
+			}
+		}
+	}		
+
+	pop_attraction_tag = {
+		desc = POP_ATTRACTION_PURGING_OF_SPECIES_POS
+		trigger = {
+			any_relation = {
+				has_opinion_modifier = { 
+					who = root 
+					modifier = opinion_genocidal_our_species 
+				} 
+			}
+		}
+	}	
+
+	pop_attraction_tag = {
+		desc = POP_ATTRACTION_XENO_LEADERS_NEG
+		trigger = {
+			allows_alien_leaders = yes
+		}
+	}	
+
+	pop_attraction_tag = {
+		desc = POP_ATTRACTION_FREE_XENOS_NEG
+		trigger = {
+			any_owned_planet = {
+				any_owned_pop = {
+					not = { is_same_species = root }
+					is_enslaved = no
+					is_being_purged = no
+					is_sapient = yes
+					is_robot_pop = no
+					NOT = { has_citizenship_type = { type = citizenship_purge } }
+				}
+			}
+		}
+	}	
+
+	pop_attraction_tag = {
+		desc = POP_ATTRACTION_MIGRATION_TREATIES_NEG
+		trigger = {
+			any_relation = {
+				is_subject = no
+				has_migration_access = root
+			}
+		}
+	}
+	
+	country_attraction = {
+		value = 1
+		modifier = {
+			factor = 0
+			NOR = {
+				is_country_type = default
+				has_ethic = ethic_xenophobe
+				has_ethic = ethic_fanatic_xenophobe
+				AND = {
+					is_country_type = primitive
+					capital_scope = {
+						has_observation_outpost = yes
+						observation_outpost = {
+							has_mission = native_indoctrination		
+						}
+						observation_outpost_owner = { 
+							OR = {
+								has_ethic = ethic_fanatic_xenophobe
+								has_ethic = ethic_xenophobe
+							}							
+						}				
+					}
+				}				
+			}
+		}
+		modifier = {
+			factor = 2
+			NOR = {
+				has_ethic = ethic_xenophobe
+				has_ethic = ethic_fanatic_xenophobe
+			}
+			OR = {
+				has_faction = supremacist
+				has_faction = isolationist
+			}	
+		}
+		modifier = {
+			factor = 1.5
+			exists = ruler
+			ruler = { 
+				OR = {
+					leader_of_faction = supremacist
+					leader_of_faction = isolationist
+				}
+			}				
+		}		
+		modifier = {
+			factor = 2
+			has_ethic = ethic_xenophobe
+		}
+		modifier = {
+			factor = 3
+			has_ethic = ethic_fanatic_xenophobe
+		}
+		modifier = {
+			factor = 1.5
+			has_valid_civic = civic_fanatic_purifiers
+		}
+		modifier = {
+			factor = 0.75
+			any_relation = {
+				is_subject = no
+				has_migration_access = root
+			}
+		}
+		modifier = {
+			factor = 0.75
+			allows_alien_leaders = yes
+		}		
+		modifier = {
+			factor = 3.0
+			any_war = {
+				any_defender = {
+					is_same_value = prevprev
+				}
+				any_attacker = {
+					NOT = { is_same_species = root }
+				}
+			}
+		}
+		modifier = {
+			factor = 2.0
+			is_country_type = default
+			is_same_species = root
+			any_relation = {
+				NOT = { is_same_species = root }
+				any_owned_pop = {
+					is_enslaved = yes
+					is_robot_pop = no
+					is_same_species = root
+				}
+			}
+		}
+		modifier = {
+			factor = 4.0
+			is_country_type = default
+			is_same_species = root
+			any_relation = {
+				has_opinion_modifier = { 
+					who = root 
+					modifier = opinion_genocidal_our_species 
+				} 
+			}
+		}
+		# Effects of indoctrination mission
+		modifier = {
+			factor = 10
+			is_country_type = primitive
+			capital_scope = {
+				has_observation_outpost = yes
+				observation_outpost = {
+					has_mission = native_indoctrination		
+				}
+				observation_outpost_owner = { has_ethic = ethic_fanatic_xenophobe }
+			}
+		}
+		modifier = {
+			factor = 5
+			is_country_type = primitive
+			capital_scope = {
+				has_observation_outpost = yes
+				observation_outpost = {
+					has_mission = native_indoctrination		
+				}
+				observation_outpost_owner = { has_ethic = ethic_xenophobe }
+			}
+		}		
+	}
+	
+	#from = planet
+	pop_attraction = {
+		value = 1		
+
+		modifier = {
+			factor = 0
+			has_trait = trait_hive_mind
+		}			
+		modifier = {
+			factor = 2.0
+			is_enslaved = no
+			is_being_purged = no
+			from = {
+				any_owned_pop = {
+					not = { is_same_species = root }
+					is_robot_pop = no
+					is_enslaved = yes
+				}
+			}
+		}
+		modifier = {
+			factor = 0.5
+			is_enslaved = no
+			is_being_purged = no
+			from = {
+				any_owned_pop = {
+					not = { is_same_species = root }
+					is_enslaved = no
+					is_being_purged = no
+					is_sapient = yes
+					is_robot_pop = no
+					NOT = { has_citizenship_type = { type = citizenship_purge } }
+				}
+			}
+		}			
+		modifier = {
+			factor = 1.5
+			from = {
+				any_pop = {
+					NOT = { is_same_species = root }
+					has_trait = "trait_repugnant"
+				}
+			}
+		}				
+	}
+}
+
+ethic_fanatic_xenophile = {
+	cost = 2
+	category = "xen"
+	category_value = 4
+	
+	category_opposite = yes
+	
+	regular_variant = ethic_xenophile
+	
+	use_for_pops = no
+	
+	tags = {
+		ETHIC_IMPROVED_DIPLOMACY
+		ETHIC_DISALLOW_FULL_NATIVE_TAMPERING
+		ETHIC_ALWAYS_REFUGEES
+		ETHIC_DISALLOWS_DISPLACE
+	}
+	
+	country_modifier = {
+		country_border_friction_mult = -0.5
+		diplomacy_influence_cost = -0.5
+	}
+	
+	random_weight = {
+		value = 100
+	}
+}
+
+ethic_xenophile = {
+	cost = 1
+	category = "xen"
+	category_value = 3
+	
+	category_opposite = yes
+	
+	fanatic_variant = ethic_fanatic_xenophile
+	
+	tags = {
+		ETHIC_IMPROVED_DIPLOMACY
+		ETHIC_DISALLOW_FULL_NATIVE_TAMPERING
+		ETHIC_ALWAYS_REFUGEES
+		ETHIC_DISALLOWS_DISPLACE
+	}
+	
+	country_modifier = {
+		country_border_friction_mult = -0.25
+		diplomacy_influence_cost = -0.25
+	}
+	
+	random_weight = {
+		value = 66
+	}
+	
+	pop_attraction_tag = {
+		desc = POP_ATTRACTION_XENOPHILE_POS
+		trigger = {
+			OR = {
+				has_ethic = ethic_xenophile
+				has_ethic = ethic_fanatic_xenophile
+			}
+		}
+	}
+	
+	pop_attraction_tag = {
+		desc = POP_ATTRACTION_FACTION_POS
+		trigger = {
+			NOR = {
+				has_ethic = ethic_xenophile
+				has_ethic = ethic_fanatic_xenophile
+			}
+			has_faction = xenoist
+		}		
+	}	
+	
+	pop_attraction_tag = {
+		desc = POP_ATTRACTION_RULER_FACTION_POS
+		trigger = {
+			exists = ruler
+			ruler = { leader_of_faction = xenoist }
+		}		
+	}
+	
+	pop_attraction_tag = {
+		desc = POP_ATTRACTION_FREE_XENOS_POS
+		trigger = {
+			any_owned_planet = {
+				any_owned_pop = {
+					not = { is_same_species = root }
+					is_enslaved = no
+					is_being_purged = no
+					is_sapient = yes
+					is_robot_pop = no
+					NOT = { has_citizenship_type = { type = citizenship_purge } }
+				}
+			}
+		}
+	}
+	
+	pop_attraction_tag = {
+		desc = POP_ATTRACTION_XENO_DIPLOMACY_POS
+		trigger = {
+			any_relation = {
+				NOT = { is_same_species = root }
+				OR = {
+					is_in_federation_with = root
+					has_defensive_pact = root
+				}				
+			}
+		}
+	}	
+
+	pop_attraction_tag = {
+		desc = POP_ATTRACTION_MIGRATION_TREATIES_POS
+		trigger = {
+			any_relation = {
+				is_subject = no
+				has_migration_access = root
+				NOT = { is_same_species = root }
+			}
+		}
+	}	
+
+	pop_attraction_tag = {
+		desc = POP_ATTRACTION_CHARISMATIC_POS
+		trigger = {
+			any_owned_planet = {
+				any_owned_pop = {
+					NOT = { has_trait = "trait_charismatic" }
+					is_non_sapient_robot = no
+				}			
+				any_owned_pop = {
+					has_trait = "trait_charismatic"
+				}
+			}
+		}
+	}	
+
+	pop_attraction_tag = {
+		desc = POP_ATTRACTION_ENSLAVEMENT_OF_SPECIES_NEG
+		trigger = {
+			any_relation = {
+				NOT = { is_same_species = root }
+				any_owned_pop = {
+					is_enslaved = yes
+					is_robot_pop = no
+					is_same_species = root
+				}
+			}
+		}
+	}		
+	
+	pop_attraction_tag = {
+		desc = POP_ATTRACTION_PURGING_OF_SPECIES_NEG
+		trigger = {
+			any_relation = {
+				has_opinion_modifier = { 
+					who = root 
+					modifier = opinion_genocidal_our_species 
+				} 
+			}
+		}
+	}		
+	
+	country_attraction = {
+		value = 1
+		modifier = {
+			factor = 0
+			NOR = {
+				is_country_type = default
+				has_ethic = ethic_xenophile
+				has_ethic = ethic_fanatic_xenophile
+				AND = {
+					is_country_type = primitive
+					capital_scope = {
+						has_observation_outpost = yes
+						observation_outpost = {
+							has_mission = native_indoctrination		
+						}
+						observation_outpost_owner = { 
+							OR = {
+								has_ethic = ethic_fanatic_xenophile
+								has_ethic = ethic_xenophile
+							}							
+						}				
+					}
+				}				
+			}
+		}
+		modifier = {
+			factor = 2
+			NOR = {
+				has_ethic = ethic_xenophile
+				has_ethic = ethic_fanatic_xenophile
+			}
+			has_faction = xenoist	
+		}	
+		modifier = {
+			factor = 1.5
+			is_country_type = default
+			exists = ruler
+			ruler = { leader_of_faction = xenoist }				
+		}		
+		modifier = {
+			factor = 2
+			has_ethic = ethic_xenophile
+		}
+		modifier = {
+			factor = 3
+			has_ethic = ethic_fanatic_xenophile
+		}
+		modifier = {
+			factor = 1.5
+			is_country_type = default
+			allows_alien_leaders = yes
+		}
+		modifier = {
+			factor = 1.5
+			any_relation = {
+				NOT = { is_same_species = root }
+				is_subject = no
+				has_migration_access = root
+			}
+		}
+		modifier = {
+			factor = 1.33
+			any_relation = {
+				NOT = { is_same_species = root }
+				OR = {
+					is_in_federation_with = root
+					has_defensive_pact = root
+				}				
+			}
+		}
+		modifier = {
+			factor = 0.25
+			is_same_species = root
+			any_relation = {
+				has_opinion_modifier = { 
+					who = root 
+					modifier = opinion_genocidal_our_species 
+				} 
+			}
+		}
+		modifier = {
+			factor = 0.5
+			is_same_species = root
+			any_relation = {
+				NOT = { is_same_species = root }
+				any_owned_pop = {
+					is_enslaved = yes
+					is_robot_pop = no
+					is_same_species = root
+				}
+			}
+		}
+		# Effects of indoctrination mission
+		modifier = {
+			factor = 10
+			is_country_type = primitive
+			capital_scope = {
+				has_observation_outpost = yes
+				observation_outpost = {
+					has_mission = native_indoctrination		
+				}
+				observation_outpost_owner = { has_ethic = ethic_fanatic_xenophile }
+			}
+		}
+		modifier = {
+			factor = 5
+			is_country_type = primitive
+			capital_scope = {
+				has_observation_outpost = yes
+				observation_outpost = {
+					has_mission = native_indoctrination		
+				}
+				observation_outpost_owner = { has_ethic = ethic_xenophile }
+			}
+		}		
+	}
+	
+	# from = planet
+	pop_attraction = {
+		value = 1		
+		
+		modifier = {
+			factor = 0
+			has_trait = trait_hive_mind
+		}	
+		modifier = {
+			factor = 2
+			not = { is_same_species = root }
+			has_citizenship_rights = no
+			is_enslaved = no
+		}
+		modifier = {
+			factor = 2.0
+			is_enslaved = no
+			fromfrom = {
+				any_owned_pop = {
+					not = { is_same_species = root }
+					is_enslaved = no
+					is_being_purged = no
+					is_sapient = yes
+					is_robot_pop = no
+					NOT = { has_citizenship_type = { type = citizenship_purge } }
+				}
+			}
+		}
+		modifier = {
+			factor = 1.5
+			from = {
+				any_pop = {
+					NOT = { is_same_species = root }
+					has_trait = "trait_charismatic"
+				}
+			}
+		}				
+	}	
+}
+
+ethic_fanatic_militarist = {
+	cost = 2
+	category = "mil"
+	category_value = 0
+	
+	use_for_pops = no
+	
+	regular_variant = ethic_militarist
+	
+	tags = {
+		ETHIC_CHEAPER_WARGOALS
+	}	
+	
+	country_modifier = {
+		army_damage_mult = 0.20
+		ship_fire_rate_mult = 0.20
+	}
+	
+	# more common ethic
+	random_weight = {
+		value = 250
+	}
+}
+
+ethic_militarist = {
+	cost = 1
+	category = "mil"
+	category_value = 1
+	
+	fanatic_variant = ethic_fanatic_militarist
+	
+	tags = {
+		ETHIC_CHEAPER_WARGOALS
+	}		
+	
+	country_modifier = {
+		army_damage_mult = 0.10
+		ship_fire_rate_mult = 0.10
+	}
+	
+	# more common ethic
+	random_weight = {
+		value = 150
+	}
+
+	pop_attraction_tag = {
+		desc = POP_ATTRACTION_MILITARIST_POS
+		trigger = {
+			OR = {
+				has_ethic = ethic_militarist
+				has_ethic = ethic_fanatic_militarist
+			}
+		}
+	}	
+	
+	pop_attraction_tag = {
+		desc = POP_ATTRACTION_FACTION_POS
+		trigger = {
+			NOR = {
+				has_ethic = ethic_militarist
+				has_ethic = ethic_fanatic_militarist
+			}
+			has_faction = imperialist
+		}		
+	}	
+	
+	pop_attraction_tag = {
+		desc = POP_ATTRACTION_RULER_FACTION_POS
+		trigger = {
+			exists = ruler
+			ruler = { leader_of_faction = imperialist }
+		}		
+	}
+	
+	pop_attraction_tag = {
+		desc = POP_ATTRACTION_AT_WAR_POS
+		trigger = {
+			is_at_war = yes
+		}
+	}	
+	
+	pop_attraction_tag = {
+		desc = POP_ATTRACTION_LOST_WAR_POS
+		trigger = {
+			recently_lost_war = yes
+		}
+	}
+
+	pop_attraction_tag = {
+		desc = POP_ATTRACTION_LOST_PLANETS_POS
+		trigger = {
+			any_relation = {
+				any_owned_planet = {
+					is_original_owner = root
+				}
+			}
+		}
+	}	
+
+	pop_attraction_tag = {
+		desc = POP_ATTRACTION_OCCUPIED_PLANET_POS
+		trigger = {
+			any_owned_planet = {
+				NOT = { is_controlled_by = root }
+			}
+		}
+	}	
+
+	pop_attraction_tag = {
+		desc = POP_ATTRACTION_NEIGHBOR_RIVALS_POS
+		trigger = {
+			any_neighbor_country = {
+				OR = {
+					is_hostile_to = from
+					is_domineering_to = from
+					is_rival = from
+				}
+			}
+		}
+	}
+	
+	pop_attraction_tag = {
+		desc = POP_ATTRACTION_STRONG_POS
+		trigger = {
+			any_owned_planet = {
+				any_owned_pop = {
+					OR = {
+						has_trait = "trait_strong"
+						has_trait = "trait_very_strong"
+					}
+				}
+			}
+		}
+	}
+	
+	pop_attraction_tag = {
+		desc = POP_ATTRACTION_EMPIRE_PEACEFUL_NEG
+		trigger = {
+			years_of_peace = {
+				value > 20
+				delay = 50
+			}
+		}
+	}		
+
+	pop_attraction_tag = {
+		desc = POP_ATTRACTION_WEAK_NEG
+		trigger = {
+			any_owned_planet = {
+				any_owned_pop = {
+					has_trait = "trait_weak"
+				}
+			}
+		}
+	}	
+
+	pop_attraction_tag = {
+		desc = POP_ATTRACTION_INWARDS_PERFECTION_NEG
+		trigger = {
+			has_valid_civic = civic_inwards_perfection
+		}
+	}	
+	
+	# from = planet
+	country_attraction = {
+		value = 1
+		modifier = {
+			factor = 0
+			NOR = {
+				is_country_type = default
+				has_ethic = ethic_militarist
+				has_ethic = ethic_fanatic_militarist
+				AND = {
+					is_country_type = primitive
+					capital_scope = {
+						has_observation_outpost = yes
+						observation_outpost = {
+							has_mission = native_indoctrination		
+						}
+						observation_outpost_owner = { 
+							OR = {
+								has_ethic = ethic_fanatic_militarist
+								has_ethic = ethic_militarist
+							}							
+						}				
+					}
+				}				
+			}
+		}
+			
+		modifier = {
+			factor = 2
+			NOR = {
+				has_ethic = ethic_militarist
+				has_ethic = ethic_fanatic_militarist
+			}
+			has_faction = imperialist	
+		}
+			
+		modifier = {
+			factor = 1.5
+			is_country_type = default
+			exists = ruler
+			ruler = { leader_of_faction = imperialist }				
+		}				
+			
+		modifier = {
+			factor = 2
+			has_ethic = ethic_militarist
+		}
+		
+		modifier = {
+			factor = 3
+			has_ethic = ethic_fanatic_militarist
+		}
+		
+		modifier = {
+			factor = 0.33
+			has_valid_civic = civic_inwards_perfection
+		}
+
+		modifier = {
+			factor = 0.75
+			is_country_type = default
+			years_of_peace = {
+				value > 20
+				delay = 50
+			}
+		}
+		modifier = {
+			factor = 0.75
+			is_country_type = default
+			years_of_peace = {
+				value > 40
+				delay = 50
+			}
+		}	
+		modifier = {
+			factor = 0.75
+			is_country_type = default
+			years_of_peace = {
+				value > 60
+				delay = 50
+			}
+		}		
+		modifier = {
+			factor = 0.75
+			is_country_type = default
+			years_of_peace = {
+				value > 80
+				delay = 50
+			}
+		}		
+		modifier = {
+			factor = 0.75
+			is_country_type = default
+			years_of_peace = {
+				value > 100
+				delay = 50
+			}
+		}	
+		# Effects of indoctrination mission
+		modifier = {
+			factor = 10
+			is_country_type = primitive
+			capital_scope = {
+				has_observation_outpost = yes
+				observation_outpost = {
+					has_mission = native_indoctrination		
+				}
+				observation_outpost_owner = { has_ethic = ethic_fanatic_militarist }
+			}
+		}
+		modifier = {
+			factor = 5
+			is_country_type = primitive
+			capital_scope = {
+				has_observation_outpost = yes
+				observation_outpost = {
+					has_mission = native_indoctrination		
+				}
+				observation_outpost_owner = { has_ethic = ethic_militarist }
+			}
+		}		
+	}
+	
+	# from = planet
+	pop_attraction = {
+		value = 1
+		
+		modifier = {
+			factor = 0
+			has_trait = trait_hive_mind
+		}	
+		modifier = {
+			factor = 2.0
+			OR = {
+				has_citizenship_rights = yes
+				can_be_military_leader = yes
+			}
+			from = { owner = { is_at_war = yes } }
+		}
+		modifier = {
+			factor = 2.0
+			OR = {
+				has_citizenship_rights = yes
+				can_be_military_leader = yes
+			}
+			from = { owner = { recently_lost_war = yes } }
+		}
+		modifier = {
+			factor = 1.5
+			OR = {
+				has_citizenship_rights = yes
+				can_be_military_leader = yes
+			}
+			from = {
+				owner = { 
+					any_neighbor_country = {		
+						from = { is_neighbor_of = prev }
+						OR = {
+							is_hostile_to = from.owner
+							is_domineering_to = from.owner
+							is_rival = from.owner						
+						}
+					}
+				}
+			}
+		}
+		modifier = {
+			factor = 1.5
+			OR = {
+				has_citizenship_rights = yes
+				can_be_military_leader = yes
+			}
+			from = {
+				owner = { 
+					any_relation = {
+						any_owned_planet = {
+							is_original_owner = from.owner
+						}
+					}
+				}
+			}
+		}
+		modifier = {
+			factor = 1.1
+			has_trait = "trait_strong"
+		}
+		modifier = {
+			factor = 1.2
+			has_trait = "trait_very_strong"
+		}
+		modifier = {
+			factor = 0.75
+			has_trait = "trait_weak"
+		}
+		modifier = {
+			factor = 3.0
+			from = {
+				NOT = { is_controlled_by = from.owner }
+			}
+		}			
+	}	
+}
+
+ethic_fanatic_pacifist = {
+	cost = 2
+	category = "mil"
+	category_value = 4
+	
+	category_opposite = yes
+	
+	regular_variant = ethic_pacifist
+	
+	use_for_pops = no
+	
+	tags = {
+		ETHIC_DISALLOW_OFFENSIVE_WARS
+	}	
+	
+	country_modifier = {
+		pop_resource_output = 0.10
+		country_core_sector_system_cap = 4
+	}
+	
+	random_weight = {
+		value = 33 		# rare ethic
+	}
+}
+
+ethic_pacifist = {
+	cost = 1
+	category = "mil"
+	category_value = 3
+	
+	category_opposite = yes
+	
+	fanatic_variant = ethic_fanatic_pacifist
+	
+	country_modifier = {
+		pop_resource_output = 0.05
+		country_core_sector_system_cap = 2
+	}
+	
+	tags = {
+		ETHIC_DISALLOW_CONQUEST_WARS
+	}
+	
+	random_weight = {
+		value = 66	# uncommon ethic
+	}
+
+	pop_attraction_tag = {
+		desc = POP_ATTRACTION_PACIFIST_POS
+		trigger = {
+			OR = {
+				has_ethic = ethic_pacifist
+				has_ethic = ethic_fanatic_pacifist
+			}
+		}
+	}	
+	
+	pop_attraction_tag = {
+		desc = POP_ATTRACTION_FACTION_POS
+		trigger = {
+			NOR = {
+				has_ethic = ethic_pacifist
+				has_ethic = ethic_fanatic_pacifist
+			}
+			has_faction = prosperity
+		}		
+	}
+	
+	pop_attraction_tag = {
+		desc = POP_ATTRACTION_RULER_FACTION_POS
+		trigger = {
+			exists = ruler
+			ruler = { leader_of_faction = prosperity }
+		}		
+	}
+	
+	pop_attraction_tag = {
+		desc = POP_ATTRACTION_EMPIRE_PEACEFUL_POS
+		trigger = {
+			years_of_peace = {
+				value > 20
+				delay = 50
+			}
+		}
+	}	
+	
+	pop_attraction_tag = {
+		desc = POP_ATTRACTION_NEIGHBOR_RIVALS_NEG
+		trigger = {
+			any_neighbor_country = {
+				OR = {
+					is_hostile_to = from
+					is_domineering_to = from
+					is_rival = from
+				}
+			}
+		}
+	}	
+	
+	pop_attraction_tag = {
+		desc = POP_ATTRACTION_FANATIC_PURIFIERS_NEG
+		trigger = {
+			has_valid_civic = civic_fanatic_purifiers
+		}
+	}
+	
+	country_attraction = {
+		value = 1
+		modifier = {
+			factor = 0
+			NOR = {
+				is_country_type = default
+				has_ethic = ethic_pacifist
+				has_ethic = ethic_fanatic_pacifist
+				AND = {
+					is_country_type = primitive
+					capital_scope = {
+						has_observation_outpost = yes
+						observation_outpost = {
+							has_mission = native_indoctrination		
+						}
+						observation_outpost_owner = { 
+							OR = {
+								has_ethic = ethic_fanatic_pacifist
+								has_ethic = ethic_pacifist
+							}							
+						}				
+					}
+				}				
+			}
+		}
+		modifier = {
+			factor = 2
+			NOR = {
+				has_ethic = ethic_pacifist
+				has_ethic = ethic_fanatic_pacifist
+			}
+			has_faction = prosperity
+		}
+		modifier = {
+			factor = 0.5
+			has_valid_civic = civic_fanatic_purifiers
+		}		
+		modifier = {
+			factor = 1.5
+			is_country_type = default
+			exists = ruler
+			ruler = { leader_of_faction = prosperity }				
+		}			
+		modifier = {
+			factor = 2
+			has_ethic = ethic_pacifist
+		}
+		modifier = {
+			factor = 3
+			has_ethic = ethic_fanatic_pacifist
+		}
+		modifier = {
+			factor = 1.33
+			is_country_type = default
+			years_of_peace = {
+				value > 20
+				delay = 50
+			}
+		}
+		modifier = {
+			factor = 1.33
+			is_country_type = default
+			years_of_peace = {
+				value > 40
+				delay = 50
+			}
+		}	
+		modifier = {
+			factor = 1.33
+			is_country_type = default
+			years_of_peace = {
+				value > 60
+				delay = 50
+			}
+		}		
+		modifier = {
+			factor = 1.33
+			is_country_type = default
+			years_of_peace = {
+				value > 80
+				delay = 50
+			}
+		}		
+		modifier = {
+			factor = 1.33
+			is_country_type = default
+			years_of_peace = {
+				value > 100
+				delay = 50
+			}
+		}	
+		# Effects of indoctrination mission
+		modifier = {
+			factor = 10
+			is_country_type = primitive
+			capital_scope = {
+				has_observation_outpost = yes
+				observation_outpost = {
+					has_mission = native_indoctrination		
+				}
+				observation_outpost_owner = { has_ethic = ethic_fanatic_pacifist }
+			}
+		}
+		modifier = {
+			factor = 5
+			is_country_type = primitive
+			capital_scope = {
+				has_observation_outpost = yes
+				observation_outpost = {
+					has_mission = native_indoctrination		
+				}
+				observation_outpost_owner = { has_ethic = ethic_pacifist }
+			}
+		}		
+	}
+	
+	# from = planet
+	pop_attraction = {
+		value = 1			
+				
+		modifier = {
+			factor = 0
+			has_trait = trait_hive_mind
+		}	
+		modifier = {
+			factor = 0.5
+			OR = {
+				has_citizenship_rights = yes
+				can_be_military_leader = yes
+			}			
+			from = {
+				owner = { 
+					any_neighbor_country = {		
+						from = { is_neighbor_of = prev }
+						OR = {
+							is_hostile_to = from.owner
+							is_domineering_to = from.owner
+							is_rival = from.owner						
+						}
+					}
+				}
+			}
+		}			
+	}
+}
+
+ethic_fanatic_spiritualist = {
+	cost = 2
+	category = "spi"
+	category_value = 0
+	
+	regular_variant = ethic_spiritualist
+	
+	use_for_pops = no
+
+	tags = {
+	}	
+	
+	country_modifier = {
+		planet_unrest_mult = -0.3
+		pop_government_ethic_attraction = 0.3
+	}
+	
+	random_weight = {
+		value = 150
+	}
+}
+
+ethic_spiritualist = {
+	cost = 1
+	category = "spi"
+	category_value = 1
+	
+	fanatic_variant = ethic_fanatic_spiritualist
+	
+	tags = {
+	}		
+	
+	country_modifier = {
+		planet_unrest_mult = -0.15
+		pop_government_ethic_attraction = 0.15
+	}
+	
+	random_weight = {
+		value = 100		
+	}
+	
+	pop_attraction_tag = {
+		desc = 	POP_ATTRACTION_SPIRITUALIST_POS
+		trigger = {
+			OR = {
+				has_ethic = ethic_spiritualist
+				has_ethic = ethic_fanatic_spiritualist
+			}
+		}
+	}
+	
+	pop_attraction_tag = {
+		desc = POP_ATTRACTION_FACTION_POS
+		trigger = {
+			NOR = {
+				has_ethic = ethic_spiritualist
+				has_ethic = ethic_fanatic_spiritualist
+			}
+			has_faction = traditionalist
+		}		
+	}	
+	
+	pop_attraction_tag = {
+		desc = POP_ATTRACTION_RULER_FACTION_POS
+		trigger = {
+			exists = ruler
+			ruler = { leader_of_faction = traditionalist }
+		}		
+	}
+
+	pop_attraction_tag = {
+		desc = POP_ATTRACTION_SPIRITUALIST_DIPLOMACY_POS
+		trigger = {
+			any_relation = {
+				OR = {
+					is_in_federation_with = root
+					has_defensive_pact = root
+					AND = {
+						is_subject = no
+						has_migration_access = root
+					}
+				}
+				OR = {
+					has_ethic = ethic_spiritualist
+					has_ethic = ethic_fanatic_spiritualist
+				}				
+			}
+		}
+	}
+
+	pop_attraction_tag = {
+		desc = POP_ATTRACTION_SPIRITUALIST_OVERLORD_POS
+		trigger = {
+			is_subject = yes
+			overlord = {
+				OR = {
+					has_ethic = ethic_spiritualist
+					has_ethic = ethic_fanatic_spiritualist
+				}				
+			}
+		}
+	}		
+
+	pop_attraction_tag = {
+		desc = POP_ATTRACTION_ROBOTS_NEG
+		trigger = {
+			any_owned_planet = {
+				any_owned_pop = {
+					is_robot_pop = yes
+				}
+			}
+		}
+	}	
+
+	pop_attraction_tag = {
+		desc = POP_ATTRACTION_ROBOT_RIGHTS_NEG
+		trigger = {
+			has_policy_flag = ai_full_rights
+		}
+	}			
+	
+	country_attraction = {
+		value = 1
+		modifier = {
+			factor = 0
+			NOR = {
+				is_country_type = default
+				has_ethic = ethic_spiritualist
+				has_ethic = ethic_fanatic_spiritualist
+				AND = {
+					is_country_type = primitive
+					capital_scope = {
+						has_observation_outpost = yes
+						observation_outpost = {
+							has_mission = native_indoctrination		
+						}
+						observation_outpost_owner = { 
+							OR = {
+								has_ethic = ethic_fanatic_spiritualist
+								has_ethic = ethic_spiritualist
+							}							
+						}				
+					}
+				}
+			}
+		}
+		# Effects of indoctrination mission
+		modifier = {
+			factor = 10
+			is_country_type = primitive
+			capital_scope = {
+				has_observation_outpost = yes
+				observation_outpost = {
+					has_mission = native_indoctrination		
+				}
+				observation_outpost_owner = { has_ethic = ethic_fanatic_spiritualist }
+			}
+		}
+		modifier = {
+			factor = 5
+			is_country_type = primitive
+			capital_scope = {
+				has_observation_outpost = yes
+				observation_outpost = {
+					has_mission = native_indoctrination		
+				}
+				observation_outpost_owner = { has_ethic = ethic_spiritualist }
+			}
+		}	
+		modifier = {
+			factor = 2
+			NOR = {
+				has_ethic = ethic_spiritualist
+				has_ethic = ethic_fanatic_spiritualist
+			}
+			has_faction = traditionalist	
+		}	
+		modifier = {
+			factor = 1.5
+			is_country_type = default
+			exists = ruler
+			ruler = { leader_of_faction = traditionalist }				
+		}			
+		modifier = {
+			factor = 2
+			has_ethic = ethic_spiritualist
+		}
+		modifier = {
+			factor = 3
+			has_ethic = ethic_fanatic_spiritualist
+		}
+		modifier = {
+			factor = 1.5
+			is_country_type = default
+			has_ascension_perk = ap_mind_over_matter
+		}
+		modifier = {
+			factor = 1.5
+			is_country_type = default
+			has_ascension_perk = ap_transcendence
+		}		
+		modifier = {
+			factor = 0.75
+			is_country_type = default
+			has_policy_flag = ai_full_rights
+		}
+		modifier = {
+			factor = 2.0
+			is_subject = yes
+			overlord = {
+				OR = {
+					has_ethic = ethic_spiritualist
+					has_ethic = ethic_fanatic_spiritualist
+				}
+			}
+		}		
+		modifier = {
+			factor = 1.5
+			any_relation = {
+				OR = {
+					is_in_federation_with = root
+					has_defensive_pact = root
+				}
+				OR = {
+					has_ethic = ethic_spiritualist
+					has_ethic = ethic_fanatic_spiritualist
+				}				
+			}
+		}
+		modifier = {
+			factor = 2.0
+			any_relation = {
+				is_subject = no
+				has_migration_access = root
+				OR = {
+					has_ethic = ethic_spiritualist
+					has_ethic = ethic_fanatic_spiritualist
+				}
+			}
+		}	
+	}
+
+	# from = planet
+	pop_attraction = {
+		value = 1
+		
+		modifier = {
+			factor = 0
+			has_trait = trait_hive_mind
+		}		
+		modifier = {
+			factor = 0.25
+			is_robot_pop = yes
+		}				
+	}		
+}
+
+ethic_fanatic_materialist = {
+	cost = 2
+	category = "spi"
+	category_value = 4
+	
+	regular_variant = ethic_materialist
+	
+	category_opposite = yes
+	
+	use_for_pops = no
+	
+	tags = {
+	}	
+	
+	country_modifier = {
+		all_technology_research_speed = 0.10
+	}
+	
+	random_weight = {
+		value = 150
+	}
+}
+
+ethic_materialist = {
+	cost = 1
+	category = "spi"
+	category_value = 3
+	
+	fanatic_variant = ethic_fanatic_materialist
+	
+	category_opposite = yes
+	
+	tags = {
+	}			
+	
+	country_modifier = {
+		all_technology_research_speed = 0.05
+	}	
+	
+	random_weight = {
+		value = 100
+	}
+	
+	pop_attraction_tag = {
+		desc = POP_ATTRACTION_MATERIALIST_POS
+		trigger = {
+			OR = {
+				has_ethic = ethic_materialist
+				has_ethic = ethic_fanatic_materialist
+			}
+		}
+	}
+	
+	pop_attraction_tag = {
+		desc = POP_ATTRACTION_FACTION_POS
+		trigger = {
+			NOR = {
+				has_ethic = ethic_materialist
+				has_ethic = ethic_fanatic_materialist
+			}
+			has_faction = technologist
+		}		
+	}	
+	
+	pop_attraction_tag = {
+		desc = POP_ATTRACTION_MECHANIST_POS
+		trigger = {
+			has_valid_civic = civic_mechanists
+		}
+	}
+	
+	pop_attraction_tag = {
+		desc = POP_ATTRACTION_RULER_FACTION_POS
+		trigger = {
+			exists = ruler
+			ruler = { leader_of_faction = technologist }
+		}		
+	}
+
+	pop_attraction_tag = {
+		desc = POP_ATTRACTION_CYBORGS_POS
+		trigger = {
+			any_owned_planet = {
+				any_owned_pop = {
+					has_trait = trait_cybernetic
+				}
+			}
+		}
+	}	
+
+	pop_attraction_tag = {
+		desc = POP_ATTRACTION_ROBOTS_POS
+		trigger = {
+			any_owned_planet = {
+				any_owned_pop = {
+					is_robot_pop = yes
+				}
+			}
+		}
+	}	
+
+	pop_attraction_tag = {
+		desc = POP_ATTRACTION_ROBOT_RIGHTS_POS
+		trigger = {
+			has_policy_flag = ai_full_rights
+		}
+	}	
+
+	pop_attraction_tag = {
+		desc = POP_ATTRACTION_MATERIALIST_RESEARCH_POS
+		trigger = {
+			any_relation = {
+				has_research_agreement = root
+				OR = {
+					has_ethic = ethic_materialist
+					has_ethic = ethic_fanatic_materialist
+				}				
+			}
+		}
+	}	
+
+	pop_attraction_tag = {
+		desc = POP_ATTRACTION_NATURAL_SCIENTISTS_POS
+		trigger = {
+			any_owned_planet = {
+				any_owned_pop = {
+					OR = {
+						has_trait = "trait_natural_sociologists"
+						has_trait = "trait_natural_engineers"
+						has_trait = "trait_natural_physicists"		
+					}
+				}
+			}
+		}
+	}		
+
+	country_attraction = {
+		value = 1
+		modifier = {
+			factor = 0
+			NOR = {
+				is_country_type = default
+				has_ethic = ethic_materialist
+				has_ethic = ethic_fanatic_materialist
+				AND = {
+					is_country_type = primitive
+					capital_scope = {
+						has_observation_outpost = yes
+						observation_outpost = {
+							has_mission = native_indoctrination		
+						}
+						observation_outpost_owner = { 
+							OR = {
+								has_ethic = ethic_fanatic_materialist
+								has_ethic = ethic_materialist
+							}							
+						}				
+					}
+				}
+			}
+		}
+		# Effects of indoctrination mission
+		modifier = {
+			factor = 10
+			is_country_type = primitive
+			capital_scope = {
+				has_observation_outpost = yes
+				observation_outpost = {
+					has_mission = native_indoctrination		
+				}
+				observation_outpost_owner = { has_ethic = ethic_fanatic_materialist }
+			}
+		}
+		modifier = {
+			factor = 5
+			is_country_type = primitive
+			capital_scope = {
+				has_observation_outpost = yes
+				observation_outpost = {
+					has_mission = native_indoctrination		
+				}
+				observation_outpost_owner = { has_ethic = ethic_materialist }
+			}
+		}			
+		modifier = {
+			factor = 2
+			NOR = {
+				has_ethic = ethic_materialist
+				has_ethic = ethic_fanatic_materialist
+			}
+			has_faction = technologist
+		}
+		modifier = {
+			factor = 1.5
+			is_country_type = default
+			exists = ruler
+			ruler = { leader_of_faction = technologist }				
+		}		
+		modifier = {
+			factor = 2
+			has_ethic = ethic_materialist
+		}
+		modifier = {
+			factor = 3
+			has_ethic = ethic_fanatic_materialist
+		}
+		modifier = {
+			factor = 1.25
+			has_valid_civic = civic_mechanists
+		}			
+		modifier = {
+			factor = 1.25
+			is_country_type = default
+			has_policy_flag = ai_full_rights
+		}	
+		modifier = {
+			factor = 1.33
+			any_relation = {
+				has_research_agreement = root
+				OR = {
+					has_ethic = ethic_materialist
+					has_ethic = ethic_fanatic_materialist
+				}				
+			}
+		}		
+	}
+	
+	# from = planet
+	pop_attraction = {
+		value = 1	
+		modifier = {
+			factor = 0
+			has_trait = trait_hive_mind
+		}	
+		modifier = {
+			factor = 2.0
+			is_robot_pop = yes
+		}
+		modifier = {
+			factor = 1.5
+			has_trait = "trait_cybernetic"
+		}			
+		modifier = {
+			factor = 1.25
+			is_robot_pop = no
+			from = {
+				any_owned_pop = {
+					is_robot_pop = yes
+				}
+			}
+		}	
+		modifier = {
+			factor = 1.25
+			has_trait = "trait_natural_engineers"
+		}
+		modifier = {
+			factor = 1.25
+			has_trait = "trait_natural_sociologists"
+		}
+		modifier = {
+			factor = 1.25
+			has_trait = "trait_natural_physicists"
+		}	
+	}	
+}
+
+ethic_gestalt_consciousness = {
+	playable = {
+		OR = {
+			host_has_dlc = "Utopia"
+			host_has_dlc = "Synthetic Dawn Story Pack"
+		}
+	}
+
+	cost = 3
+	category = "hive"
+	category_value = 0
+	use_for_pops = no
+	
+	country_modifier = {
+		country_resource_influence_add = 1
+		country_core_sector_system_cap = 2
+	}
+	
+	tags = {
+		ETHIC_GESTALT_CONSCIOUSNESS_NO_TUTORIAL
+		ETHIC_GESTALT_CONSCIOUSNESS_AUTHORITY
+		ETHIC_GESTALT_CONSCIOUSNESS_IMMORTAL_RULER
+		ETHIC_GESTALT_CONSCIOUSNESS_NO_FACTIONS
+		ETHIC_GESTALT_CONSCIOUSNESS_DOMESTIC_POP_SURVIVAL
+	}
+	
+	random_weight = {
+		value = 0
+	}
+}

@@ -1,0 +1,258 @@
+# ####################
+#  Energy Lance
+# ####################
+
+# ## Energy Lance 1
+weapon_component_template = {
+	key = "LARGE_ENERGY_LANCE_1"
+	size = extra_large
+	entity = "invisible_turret_entity"
+	type = instant
+	hidden = yes
+	
+	icon = "GFX_ship_part_energy_lance_1"
+	icon_frame = 1
+	
+	firing_arc = 25.0
+	min_range = 10.0
+	static_rotation = yes
+	use_ship_kill_target = no
+	
+	#prerequisites = { "tech_energy_lance_1" }
+	component_set = "ENERGY_LANCE_1"
+	projectile_gfx = "particle_lance"
+	tags = { weapon_type_energy }
+	ai_tags = { weapon_role_long_range weapon_role_anti_armor }
+	upgrades_to = "LARGE_ENERGY_LANCE_2"
+	
+	target_weights = {
+		npc_warship_01 = 5000
+		space_dragon_baby = 5000	
+		massive_ship_fallen_empire = 5000
+		large_ship_fallen_empire = 5000	
+		battleship = 5000
+		cruiser = 2500
+		destroyer = 1000
+		small_ship_fallen_empire = 1000	
+	}
+}
+
+# ## Energy Lance 2
+weapon_component_template = {
+	key = "LARGE_ENERGY_LANCE_2"
+	size = extra_large
+	entity = "invisible_turret_entity"
+	type = instant
+	hidden = yes
+	
+	icon = "GFX_ship_part_energy_lance_2"
+	icon_frame = 1
+	
+	firing_arc = 25.0
+	min_range = 10.0
+	static_rotation = yes
+	use_ship_kill_target = no
+	
+	#prerequisites = { "tech_energy_lance_2" }
+	component_set = "ENERGY_LANCE_2"
+	projectile_gfx = "tachyon_lance"
+	tags = { weapon_type_energy }
+	ai_tags = { weapon_role_long_range weapon_role_anti_armor }
+	
+	target_weights = {
+		npc_warship_01 = 5000
+		space_dragon_baby = 5000	
+		massive_ship_fallen_empire = 5000
+		large_ship_fallen_empire = 5000	
+		battleship = 5000
+		cruiser = 2500
+		destroyer = 1000
+		small_ship_fallen_empire = 1000	
+	}
+}
+
+# ####################
+#  Arc Emitter
+# ####################
+
+# ## Arc Emitter 1
+weapon_component_template = {
+	key = "LARGE_ARC_EMITTER_1"
+	size = extra_large
+	entity = "invisible_turret_entity"
+	type = instant
+	hidden = yes
+	
+	icon = "GFX_ship_part_arc_emitter_1"
+	icon_frame = 1
+	
+	firing_arc = 25.0
+	min_range = 10.0
+	static_rotation = yes
+	use_ship_kill_target = no
+	
+	#prerequisites = { "tech_arc_emitter_1" }
+	component_set = "ARC_EMITTER_1"
+	projectile_gfx = "arc_emitter"
+	tags = { weapon_type_energy }
+	ai_tags = { weapon_role_long_range weapon_role_anti_shield }
+	upgrades_to = "LARGE_ARC_EMITTER_2"
+	
+	target_weights = {
+		npc_warship_01 = 5000
+		space_dragon_baby = 5000	
+		massive_ship_fallen_empire = 5000
+		large_ship_fallen_empire = 5000	
+		battleship = 5000
+		cruiser = 2500
+		destroyer = 1000
+		small_ship_fallen_empire = 1000	
+	}
+}
+
+# ## Arc Emitter 2
+weapon_component_template = {
+	key = "LARGE_ARC_EMITTER_2"
+	size = extra_large
+	entity = "invisible_turret_entity"
+	type = instant
+	hidden = yes
+	
+	icon = "GFX_ship_part_arc_emitter_2"
+	icon_frame = 1
+	
+	firing_arc = 25.0
+	min_range = 10.0
+	static_rotation = yes
+	use_ship_kill_target = no
+	
+	#prerequisites = { "tech_arc_emitter_2" }
+	component_set = "ARC_EMITTER_2"
+	projectile_gfx = "focused_arc_emitter"
+	tags = { weapon_type_energy }
+	ai_tags = { weapon_role_long_range weapon_role_anti_shield }
+	
+	target_weights = {
+		npc_warship_01 = 5000
+		space_dragon_baby = 5000	
+		massive_ship_fallen_empire = 5000
+		large_ship_fallen_empire = 5000	
+		battleship = 5000
+		cruiser = 2500
+		destroyer = 1000
+		small_ship_fallen_empire = 1000	
+	}
+}
+
+
+# ####################
+#  Mass Accelerator
+# ####################
+
+# ## Mass Accelerator 1
+weapon_component_template = {
+	type = instant
+	
+	key = "LARGE_MASS_ACCELERATOR_1"
+	size = extra_large
+	entity = "invisible_turret_entity"
+	hidden = yes
+	
+	icon = "GFX_ship_part_mass_accelerator_1"
+	icon_frame = 1
+	
+	firing_arc = 25.0
+	min_range = 10.0
+	static_rotation = yes
+	use_ship_kill_target = no
+	
+	#prerequisites = { "tech_mass_accelerator_1" }
+	component_set = "MASS_ACCELERATOR_1"
+	projectile_gfx = "kinetic_artillery"
+	tags = { weapon_type_kinetic }
+	ai_tags = { weapon_role_long_range }
+	upgrades_to = "LARGE_MASS_ACCELERATOR_2"
+	
+	target_weights = {
+		npc_warship_01 = 5000
+		space_dragon_baby = 5000	
+		massive_ship_fallen_empire = 5000
+		large_ship_fallen_empire = 5000	
+		battleship = 5000
+		cruiser = 2500
+		destroyer = 1000
+		small_ship_fallen_empire = 1000	
+	}
+}
+
+# ## Mass Accelerator 2
+weapon_component_template = {
+	type = instant
+	
+	key = "LARGE_MASS_ACCELERATOR_2"
+	size = extra_large
+	entity = "invisible_turret_entity"
+	hidden = yes
+	
+	icon = "GFX_ship_part_mass_accelerator_2"
+	icon_frame = 1
+	
+	firing_arc = 25.0
+	min_range = 10.0
+	static_rotation = yes
+	use_ship_kill_target = no
+	
+	#prerequisites = { "tech_mass_accelerator_2" }
+	component_set = "MASS_ACCELERATOR_2"
+	projectile_gfx = "adv_kinetic_artillery"
+	tags = { weapon_type_kinetic }
+	ai_tags = { weapon_role_long_range }
+	
+	target_weights = {
+		npc_warship_01 = 5000
+		space_dragon_baby = 5000	
+		massive_ship_fallen_empire = 5000
+		large_ship_fallen_empire = 5000	
+		battleship = 5000
+		cruiser = 2500
+		destroyer = 1000
+		small_ship_fallen_empire = 1000	
+	}
+}
+
+# ####################
+#  Titan Laser
+# ####################
+
+# ## Titan Laser
+weapon_component_template = {
+	key = "TITAN_LASER"
+	size = extra_large
+	entity = "invisible_turret_entity"
+	type = instant
+	prio_projectile = yes
+	
+	hidden = yes
+	
+	icon = "GFX_ship_part_energy_lance_2"
+	icon_frame = 1
+	
+	firing_arc = 25.0
+	min_range = 30.0
+	static_rotation = yes
+	use_ship_kill_target = no
+	
+	component_set = "TITAN_LASER"
+	projectile_gfx = "titan_laser"
+	
+	target_weights = {
+		npc_warship_01 = 5000
+		space_dragon_baby = 5000	
+		massive_ship_fallen_empire = 5000
+		large_ship_fallen_empire = 5000	
+		battleship = 5000
+		cruiser = 2500
+		destroyer = 1000
+		small_ship_fallen_empire = 1000	
+	}
+}

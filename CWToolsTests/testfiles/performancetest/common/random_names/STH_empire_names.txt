@@ -1,0 +1,762 @@
+empire_name_format = {
+	random_weight = { factor = 0 modifier = { add = 10000 has_country_flag = the_borg_collective } }
+	format = "format.borg_collective"
+	noun = "[This.GetSpeciesName]"
+}
+empire_name_format = {
+	random_weight = { factor = 0 modifier = { add = 10000 has_country_flag = augment_khanate NOT = { has_government = gov_ufp_sector } } }
+	format = "format.augment_khanate"
+	noun = "Khanate"
+	prefix_format = "K S V"
+}
+empire_name_format = {
+	random_weight = { factor = 0 modifier = { add = 10000 has_government = gov_ufp_sector } }
+	format = "format.ufp_sector"
+	noun = "[This.GetSpeciesName]"
+	prefix_format = "U S S"
+}
+empire_name_format = {
+	random_weight = { factor = 0 modifier = { add = 10000 has_country_flag = united_federation_of_planets NOT = { has_government = gov_ufp_sector } } }
+	format = "format.ufp"
+	noun = "Federation"
+	prefix_format = "U S S"
+}
+empire_name_format = {
+	random_weight = { factor = 0 modifier = { add = 10000 has_country_flag = united_earth NOT = { has_country_flag = united_federation_of_planets } NOT = { has_government = gov_ufp_sector } } }
+	format = "format.united_earth"
+	noun = "[This.GetSpeciesName]"
+	prefix_format = "U S S"
+}
+empire_name_format = {
+	prefix_format = "format.terran_empire"
+	random_weight = { 
+		factor = 0 
+		modifier = { 
+			add = 10000
+			OR = {
+				AND = {
+					has_country_flag = "terran_empire"
+					NOT = { has_government = gov_ufp_sector }
+				}
+				AND = {
+					has_country_flag = "united_earth"
+					sth_mirror_maps = yes
+					years_passed < 1
+					NOT = { has_government = gov_ufp_sector }
+				}
+			}
+		} 
+	}
+	format = "format.terran_empire"
+	noun = "Terran"
+	prefix_format = "I S S"
+}
+empire_name_format = {
+	random_weight = { factor = 0 modifier = { add = 10000 has_country_flag = terra_prime NOT = { has_government = gov_ufp_sector } } }
+	format = "format.terra_prime"
+	noun = "[This.GetSpeciesName]"
+	prefix_format = "U S S"
+}
+empire_name_format = {
+	random_weight = { factor = 0 modifier = { add = 10000 has_country_flag = united_human_remnant NOT = { has_government = gov_ufp_sector } } }
+	format = "format.human_remnant"
+	noun = "[This.GetSpeciesName]"
+	prefix_format = "U S S"
+}
+empire_name_format = {
+	random_weight = { factor = 0 modifier = { add = 10000 has_country_flag = klingon_empire NOT = { has_government = gov_ufp_sector } } }
+	format = "format.klingon_empire"
+	noun = "[This.GetSpeciesName]"
+	prefix_format = "I K S"
+}
+empire_name_format = {
+	random_weight = {
+		factor = 0
+		modifier = {
+			add = 10000
+			has_country_flag = romulan_star_empire
+			NOT = { has_government = gov_ufp_sector }
+		}
+	}
+	format = "format.romulan_star_empire"
+	noun = "[This.GetSpeciesName]"
+}
+empire_name_format = {
+	random_weight = {
+		factor = 0
+		modifier = {
+			add = 10000
+			has_country_flag = cardassian_union
+			NOT = { has_government = gov_ufp_sector }
+		}
+	}
+	format = "format.cardassian_union"
+	noun = "[This.GetSpeciesName]"
+	prefix_format = "C N V"
+}
+empire_name_format = {
+	random_weight = {
+		factor = 0
+		modifier = {
+			add = 10000
+			has_country_flag = hebitian_union
+			NOT = { has_government = gov_ufp_sector }
+		}
+	}
+	format = "format.hebitian_union"
+	noun = "Hebitian"
+	prefix_format = "H N V"
+}
+# Oligarchic Spiritualist 5
+empire_name_format = {
+	random_weight = {
+		factor = 0
+		modifier = {
+			add = 10000
+			has_country_flag = hebitian_country
+		}
+	}
+	format = "format.hebitian_country"
+	noun = "Hebitian"
+	prefix_format = "Hebitian <oligarchic_spi>"
+}
+empire_name_format = {
+	random_weight = {
+		factor = 0
+		modifier = {
+			add = 10000
+			has_country_flag = breen_confederacy
+			NOT = { has_government = gov_ufp_sector }
+		}
+	}
+	format = "format.breen_confederacy"
+	noun = "[This.GetSpeciesName]"
+	prefix_format = "B C V"
+}
+empire_name_format = {
+	random_weight = {
+		factor = 0
+		modifier = {
+			add = 10000
+			has_country_flag = orion_free_states
+			NOT = { has_government = gov_ufp_sector }
+		}
+	}
+	format = "format.orion_free_states"
+	noun = "[This.GetSpeciesName]"
+	prefix_format = "[This.GetSpeciesName] <generic_states>"
+}
+empire_name_format = {
+	random_weight = {
+		factor = 0
+		modifier = {
+			add = 10000
+			has_country_flag = ferengi_alliance
+			NOT = { has_government = gov_ufp_sector }
+		}
+	}
+	format = "format.ferengi_alliance"
+	noun = "[This.GetSpeciesName]"
+	prefix_format = "F M V"
+}
+empire_name_format = {
+	random_weight = {
+		factor = 0
+		modifier = {
+			add = 10000
+			has_country_flag = gorn_empire
+			NOT = { has_government = gov_ufp_sector }
+		}
+	}
+	format = "format.gorn_empire"
+	noun = "[This.GetSpeciesName]"
+	prefix_format = "G H S"
+}
+empire_name_format = {
+	random_weight = {
+		factor = 0
+		modifier = {
+			add = 10000
+			has_country_flag = vulcan_high_command
+			NOT = { has_country_flag = united_federation_of_planets }
+			NOT = { has_government = gov_ufp_sector }
+		}
+	}
+	format = "format.vulcan_high_command"
+	noun = "[This.GetSpeciesName]"
+	prefix_format = "V S S"
+}
+empire_name_format = {
+	random_weight = {
+		factor = 0
+		modifier = {
+			add = 10000
+			has_country_flag = andorian_empire
+			NOT = { has_country_flag = united_federation_of_planets }
+			NOT = { has_government = gov_ufp_sector }
+		}
+	}
+	format = "format.andorian_empire"
+	noun = "[This.GetSpeciesName]"
+	prefix_format = "I G V"
+}
+empire_name_format = {
+	random_weight = {
+		factor = 0
+		modifier = {
+			add = 10000
+			has_country_flag = bajoran_republic
+			NOT = { has_country_flag = united_federation_of_planets }
+			NOT = { has_government = gov_ufp_sector }
+		}
+	}
+	format = "format.bajoran_republic"
+	noun = "[This.GetSpeciesName]"
+	prefix_format = "B R V"
+}
+empire_name_format = {
+	random_weight = {
+		factor = 0
+		modifier = {
+			add = 10000
+			has_country_flag = kazon_sects
+			NOT = { has_government = gov_ufp_sector }
+		}
+	}
+	format = "format.kazon_sects"
+	noun = "[This.GetSpeciesName]"
+}
+empire_name_format = {
+	random_weight = {
+		factor = 0
+		modifier = {
+			add = 10000
+			has_country_flag = trabe_alliance
+			NOT = { has_government = gov_ufp_sector }
+		}
+	}
+	format = "format.trabe_alliance"
+	noun = "[This.GetSpeciesName]"
+	prefix_format = "T N V"
+}
+empire_name_format = {
+	random_weight = {
+		factor = 0
+		modifier = {
+			add = 10000
+			has_country_flag = dosi_confederacy
+			NOT = { has_government = gov_ufp_sector }
+		}
+	}
+	format = "format.dosi_confederacy"
+	noun = "[This.GetSpeciesName]"
+	prefix_format = "D C V"
+}
+empire_name_format = {
+	random_weight = {
+		factor = 0
+		modifier = {
+			add = 10000
+			has_country_flag = bolian_league
+			NOT = { has_country_flag = united_federation_of_planets }
+			NOT = { has_government = gov_ufp_sector }
+		}
+	}
+	format = "format.bolian_league"
+	noun = "[This.GetSpeciesName]"
+	prefix_format = "B L V"
+}
+empire_name_format = {
+	random_weight = {
+		factor = 0
+		modifier = {
+			add = 10000
+			has_country_flag = garidian_republic
+			NOT = { has_government = gov_ufp_sector }
+		}
+	}
+	format = "format.garidian_republic"
+	noun = "[This.GetSpeciesName]"
+	prefix_format = "G R W"
+}
+empire_name_format = {
+	random_weight = {
+		factor = 0
+		modifier = {
+			add = 10000
+			has_country_flag = talaxian_empire
+			NOT = { has_government = gov_ufp_sector }
+		}
+	}
+	format = "format.talaxian_empire"
+	noun = "[This.GetSpeciesName]"
+	prefix_format = "T R V"
+}
+empire_name_format = {
+	random_weight = {
+		factor = 0
+		modifier = {
+			add = 10000
+			has_country_flag = benzarian_commonwealth
+			NOT = { has_government = gov_ufp_sector }
+		}
+	}
+	format = "format.benzarian_commonwealth"
+	noun = "[This.GetSpeciesName]"
+	prefix_format = "B C N V"
+}
+empire_name_format = {
+	random_weight = {
+		factor = 0
+		modifier = {
+			add = 10000
+			has_country_flag = tamarian_unity
+			NOT = { has_government = gov_ufp_sector }
+		}
+	}
+	format = "format.tamarian_unity"
+	noun = "[This.GetSpeciesName]"
+	prefix_format = "T U S"
+}
+empire_name_format = {
+	random_weight = {
+		factor = 0
+		modifier = {
+			add = 10000
+			has_country_flag = zahl_technocracy
+			NOT = { has_government = gov_ufp_sector }
+		}
+	}
+	format = "format.zahl_technocracy"
+	noun = "[This.GetSpeciesName]"
+	prefix_format = "Z N V"
+}
+empire_name_format = {
+	random_weight = {
+		factor = 0
+		modifier = {
+			add = 10000
+			has_country_flag = krenim_imperium
+			NOT = { has_government = gov_ufp_sector }
+		}
+	}
+	format = "format.krenim_imperium"
+	noun = "[This.GetSpeciesName]"
+	prefix_format = "K I V"
+}
+empire_name_format = {
+	random_weight = {
+		factor = 0
+		modifier = {
+			add = 10000
+			has_country_flag = the_dominion
+			NOT = { has_government = gov_ufp_sector }
+		}
+	}
+	format = "format.the_dominion"
+	noun = "[This.GetSpeciesName]"
+	prefix_format = "D N S"
+}
+empire_name_format = {
+	random_weight = {
+		factor = 0
+		modifier = {
+			add = 10000
+			has_country_flag = nausicaan_tribes
+			NOT = { has_government = gov_ufp_sector }
+		}
+	}
+	format = "format.nausicaan_tribes"
+	noun = "[This.GetSpeciesName]"
+	prefix_format = "N T V"
+}
+empire_name_format = {
+	random_weight = {
+		factor = 0
+		modifier = {
+			add = 10000
+			has_country_flag = wadi_emirates
+			NOT = { has_government = gov_ufp_sector }
+		}
+	}
+	format = "format.wadi_emirates"
+	noun = "[This.GetSpeciesName]"
+	prefix_format = "W N V"
+}
+empire_name_format = {
+	random_weight = {
+		factor = 0
+		modifier = {
+			add = 10000
+			has_country_flag = karemman_foundation
+			NOT = { has_government = gov_ufp_sector }
+		}
+	}
+	format = "format.karemman_foundation"
+	noun = "[This.GetSpeciesName]"
+	prefix_format = "K F S"
+}
+empire_name_format = {
+	random_weight = {
+		factor = 0
+		modifier = {
+			add = 10000
+			has_country_flag = devorian_solidarity
+			NOT = { has_government = gov_ufp_sector }
+		}
+	}
+	format = "format.devorian_solidarity"
+	noun = "[This.GetSpeciesName]"
+	prefix_format = "D S N V"
+}
+empire_name_format = {
+	random_weight = {
+		factor = 0
+		modifier = {
+			add = 10000
+			has_country_flag = rakharian_free_states
+			NOT = { has_government = gov_ufp_sector }
+		}
+	}
+	format = "format.rakharian_free_states"
+	noun = "[This.GetSpeciesName]"
+	prefix_format = "R N V"
+}
+empire_name_format = {
+	random_weight = {
+		factor = 0
+		modifier = {
+			add = 10000
+			has_country_flag = lyridian_diaspora
+			NOT = { has_government = gov_ufp_sector }
+		}
+	}
+	format = "format.lyridian_diaspora"
+	noun = "[This.GetSpeciesName]"
+	prefix_format = "L N S"
+}
+empire_name_format = {
+	random_weight = {
+		factor = 0
+		modifier = {
+			add = 10000
+			has_country_flag = morali_states
+			NOT = { has_government = gov_ufp_sector }
+		}
+	}
+	format = "format.morali_states"
+	noun = "[This.GetSpeciesName]"
+	prefix_format = "M N V"
+}
+empire_name_format = {
+	random_weight = {
+		factor = 0
+		modifier = {
+			add = 10000
+			has_country_flag = trogoran_empire
+			NOT = { has_government = gov_ufp_sector }
+		}
+	}
+	format = "format.trogoran_empire"
+	noun = "[This.GetSpeciesName]"
+	prefix_format = "T S"
+}
+empire_name_format = {
+	random_weight = {
+		factor = 0
+		modifier = {
+			add = 10000
+			has_country_flag = norcadian_harmony
+			NOT = { has_government = gov_ufp_sector }
+		}
+	}
+	format = "format.norcadian_harmony"
+	noun = "[This.GetSpeciesName]"
+	prefix_format = "N H V"
+}
+empire_name_format = {
+	random_weight = {
+		factor = 0
+		modifier = {
+			add = 10000
+			has_country_flag = voth_theocracy
+			NOT = { has_government = gov_ufp_sector }
+		}
+	}
+	format = "format.voth_theocracy"
+	noun = "[This.GetSpeciesName]"
+	prefix_format = "V N S"
+}
+empire_name_format = {
+	random_weight = {
+		factor = 0
+		modifier = {
+			add = 10000
+			has_country_flag = hurq_stagnancy
+			NOT = { has_government = gov_ufp_sector }
+		}
+	}
+	format = "format.hurq_stagnancy"
+	noun = "[This.GetSpeciesName]"
+	prefix_format = "H N V"
+}
+empire_name_format = {
+	random_weight = {
+		factor = 0
+		modifier = {
+			add = 10000
+			has_country_flag = vaadwaur_supremacy
+			NOT = { has_government = gov_ufp_sector }
+		}
+	}
+	format = "format.vaadwaur_supremacy"
+	noun = "[This.GetSpeciesName]"
+	prefix_format = "V S V"
+}
+empire_name_format = {
+	random_weight = {
+		factor = 0
+		modifier = {
+			add = 10000
+			has_country_flag = tellarian_technocracy
+			NOT = { has_country_flag = united_federation_of_planets }
+			NOT = { has_government = gov_ufp_sector }
+		}
+	}
+	format = "format.tellarian_technocracy"
+	noun = "[This.GetSpeciesName]"
+	prefix_format = "T T N V"
+}
+empire_name_format = {
+	random_weight = {
+		factor = 0
+		modifier = {
+			add = 10000
+			has_country_flag = tholian_assembly
+			NOT = { has_government = gov_ufp_sector }
+		}
+	}
+	format = "format.tholian_assembly"
+	noun = "[This.GetSpeciesName]"
+	prefix_format = "T A V"
+}
+empire_name_format = {
+	random_weight = {
+		factor = 0
+		modifier = {
+			add = 10000
+			has_country_flag = flaxian_hegemony
+			NOT = { has_government = gov_ufp_sector }
+		}
+	}
+	format = "format.flaxian_hegemony"
+	noun = "[This.GetSpeciesName]"
+	prefix_format = "F H N S"
+}
+empire_name_format = {
+	random_weight = {
+		factor = 0
+		modifier = {
+			add = 10000
+			has_country_flag = brunali_empire
+			NOT = { has_government = gov_ufp_sector }
+		}
+	}
+	format = "format.brunali_empire"
+	noun = "[This.GetSpeciesName]"
+	prefix_format = "I B V"
+}
+empire_name_format = {
+	random_weight = { factor = 0 modifier = { add = 10000 has_country_flag = "argrathian_commonwealth" NOT = { has_government = gov_ufp_sector } } }
+	format = "format.argrathian_commonwealth"
+	noun = "[This.GetSpeciesName]"
+	prefix_format = "A C N S"
+}
+empire_name_format = {
+	random_weight = { factor = 0 modifier = { add = 10000 has_country_flag = "fen_domar_states" NOT = { has_government = gov_ufp_sector } } }
+	format = "format.fen_domar_states"
+	noun = "[This.GetSpeciesName]"
+	prefix_format = "F D V"
+}
+empire_name_format = {
+	random_weight = { factor = 0 modifier = { add = 10000 has_country_flag = "sheliak_corporate" NOT = { has_government = gov_ufp_sector } } }
+	format = "format.sheliak_corporate"
+	noun = "[This.GetSpeciesName]"
+	prefix_format = "S C V"
+}
+empire_name_format = {
+	random_weight = { factor = 0 modifier = { add = 10000 has_country_flag = "nyberrite_alliance" NOT = { has_government = gov_ufp_sector } } }
+	format = "format.nyberrite_alliance"
+	noun = "[This.GetSpeciesName]"
+	prefix_format = "N S S"
+}
+empire_name_format = {
+	random_weight = { factor = 0 modifier = { add = 10000 has_country_flag = "caitian_union" NOT = { has_government = gov_ufp_sector } } }
+	format = "format.caitian_union"
+	noun = "[This.GetSpeciesName]"
+	prefix_format = "C N V"
+}
+empire_name_format = {
+	random_weight = { factor = 0 modifier = { add = 10000 has_country_flag = "cheronite_nation" NOT = { has_government = gov_ufp_sector } } }
+	format = "format.cheronite_nation"
+	noun = "[This.GetSpeciesName]"
+	prefix_format = "C V"
+}
+empire_name_format = {
+	random_weight = { factor = 0 modifier = { add = 10000 has_country_flag = "trill_republic" NOT = { has_government = gov_ufp_sector } } }
+	format = "format.trill_republic"
+	noun = "[This.GetSpeciesName]"
+	prefix_format = ""
+}
+empire_name_format = {
+	random_weight = { factor = 0 modifier = { add = 10000 has_country_flag = "denobulan_unity" NOT = { has_government = gov_ufp_sector } } }
+	format = "format.denobulan_unity"
+	noun = "[This.GetSpeciesName]"
+	prefix_format = ""
+}
+empire_name_format = {
+	random_weight = { factor = 0 modifier = { add = 10000 has_country_flag = "betazoid_houses" NOT = { has_government = gov_ufp_sector } } }
+	format = "format.betazoid_houses"
+	noun = "[This.GetSpeciesName]"
+	prefix_format = ""
+}
+empire_name_format = {
+	random_weight = { factor = 0 modifier = { add = 10000 has_country_flag = "kraylor_republic" NOT = { has_government = gov_ufp_sector } } }
+	format = "format.kraylor_republic"
+	noun = "[This.GetSpeciesName]"
+	prefix_format = "K S V"
+}
+empire_name_format = {
+	random_weight = { factor = 0 modifier = { add = 10000 has_country_flag = "skorr" NOT = { has_government = gov_ufp_sector } } }
+	format = "format.skorr"
+	noun = "[This.GetSpeciesName]"
+	prefix_format = "I S V"
+}
+empire_name_format = {
+	random_weight = { factor = 0 modifier = { add = 10000 has_country_flag = "suliban_cabal" NOT = { has_government = gov_ufp_sector } } }
+	format = "format.suliban_cabal"
+	noun = "[This.GetSpeciesName]"
+	prefix_format = "S C S"
+}
+empire_name_format = {
+	random_weight = { factor = 0 modifier = { add = 10000 has_country_flag = "husnock_ascendency" NOT = { has_government = gov_ufp_sector } } }
+	format = "format.husnock_ascendency"
+	noun = "[This.GetSpeciesName]"
+	prefix_format = "H N V"
+}
+empire_name_format = {
+	random_weight = { factor = 0 modifier = { add = 10000 has_country_flag = "xindi_council" NOT = { has_government = gov_ufp_sector } } }
+	format = "format.xindi_council"
+	noun = "[This.GetSpeciesName]"
+	prefix_format = "X C V"
+}
+empire_name_format = {
+	random_weight = { factor = 0 modifier = { add = 10000 has_country_flag = "rigellian_consortium" NOT = { has_government = gov_ufp_sector } } }
+	format = "format.rigellian_consortium"
+	noun = "[This.GetSpeciesName]"
+	prefix_format = ""
+}
+empire_name_format = {
+	random_weight = { factor = 0 modifier = { add = 10000 has_country_flag = "bynar_domains" NOT = { has_government = gov_ufp_sector } } }
+	format = "format.bynar_domains"
+	noun = "[This.GetSpeciesName]"
+	prefix_format = "B D V"
+}
+empire_name_format = {
+	random_weight = { factor = 0 modifier = { add = 10000 has_country_flag = "zakdorn_alliance" NOT = { has_government = gov_ufp_sector } } }
+	format = "format.zakdorn_alliance"
+	noun = "[This.GetSpeciesName]"
+	prefix_format = "Z V"
+}
+empire_name_format = {
+	random_weight = { factor = 0 modifier = { add = 10000 has_country_flag = "yaderan_republic" NOT = { has_government = gov_ufp_sector } } }
+	format = "format.yaderan_republic"
+	noun = "[This.GetSpeciesName]"
+	prefix_format = "Y R"
+}
+empire_name_format = {
+	random_weight = { factor = 0 modifier = { add = 10000 has_country_flag = "hirogen_hunters" NOT = { has_government = gov_ufp_sector } } }
+	format = "format.hirogen_hunters"
+	noun = "[This.GetSpeciesName]"
+	prefix_format = ""
+}
+empire_name_format = {
+	random_weight = { factor = 0 modifier = { add = 10000 has_country_flag = "antican_packs" NOT = { has_government = gov_ufp_sector } } }
+	format = "format.antican_packs"
+	noun = "[This.GetSpeciesName]"
+	prefix_format = ""
+}
+empire_name_format = {
+	random_weight = { factor = 0 modifier = { add = 10000 has_country_flag = "selay_clutches" NOT = { has_government = gov_ufp_sector } } }
+	format = "format.selay_clutches"
+	noun = "[This.GetSpeciesName]"
+	prefix_format = ""
+}
+empire_name_format = {
+	random_weight = { factor = 0 modifier = { add = 10000 has_country_flag = "vidiian_sodality" NOT = { has_government = gov_ufp_sector } } }
+	format = "format.vidiian_sodality"
+	noun = "[This.GetSpeciesName]"
+	prefix_format = "V S V"
+}
+empire_name_format = {
+	random_weight = { factor = 0 modifier = { add = 10000 has_country_flag = "confederacy_of_s'harien" NOT = { has_government = gov_ufp_sector } } }
+	format = "format.confederacy_of_s'harien"
+	noun = "S'harien"
+	prefix_format = "C S V"
+}
+empire_name_format = {
+	random_weight = { factor = 0 modifier = { add = 10000 has_country_flag = "seleyan_union" NOT = { has_government = gov_ufp_sector } } }
+	format = "format.seleyan_union"
+	noun = "Seleyan"
+	prefix_format = "S U V"
+}
+empire_name_format = {
+	random_weight = { factor = 0 modifier = { add = 10000 OR = { has_country_flag = "klingon_cardassian_alliance" has_country_flag = "mirror_klingon_cardassian_alliance" } NOT = { has_government = gov_ufp_sector } } }
+	format = "format.klingon_cardassian_alliance"
+	noun = "Alliance"
+	prefix_format = "K C N V"
+}
+empire_name_format = {
+	random_weight = { factor = 0 modifier = { add = 10000 has_country_flag = "kobali_republic" NOT = { has_government = gov_ufp_sector } } }
+	format = "format.kobali_republic"
+	noun = "[This.GetSpeciesName]"
+	prefix_format = "K S S"
+}
+empire_name_format = {
+	random_weight = { factor = 0 modifier = { add = 10000 has_country_flag = "pralor_auxiliary" NOT = { has_government = gov_ufp_sector } } }
+	format = "format.pralor_auxiliary"
+	noun = "[This.GetSpeciesName]"
+	prefix_format = "P A U"
+}
+empire_name_format = {
+	random_weight = { factor = 0 modifier = { add = 10000 has_country_flag = "cravic_imperative" NOT = { has_government = gov_ufp_sector } } }
+	format = "format.cravic_imperative"
+	noun = "[This.GetSpeciesName]"
+	prefix_format = "C I U"
+}
+empire_name_format = {
+	random_weight = { factor = 0 modifier = { add = 10000 has_country_flag = "kelpian_duchies" NOT = { has_government = gov_ufp_sector } } }
+	format = "format.kelpian_duchies"
+	noun = "[This.GetSpeciesName]"
+	prefix_format = "K V"
+}
+empire_name_format = {
+	random_weight = { factor = 0 modifier = { add = 10000 has_country_flag = "oschean_hunters" NOT = { has_government = gov_ufp_sector } } }
+	format = "format.oschean_hunters"
+	noun = "[This.GetSpeciesName]"
+	prefix_format = "O H V"
+}
+
+empire_name_format = {
+	random_weight = {
+		factor = 0
+		modifier = {
+			add = 10000
+			is_species_class = RANDOMTREK
+			NOT = { has_government = gov_ufp_sector }
+		}
+	}
+	format = "[This.GetSpeciesName] <generic_states>"
+	noun = "[This.GetSpeciesName]"
+	prefix_format = "[This.GetSpeciesName] V S"
+}

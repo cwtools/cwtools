@@ -1,0 +1,4457 @@
+############################ 
+### Keepers of Knowledge ###
+############################ 
+
+# Massive Ship
+ship_design = {
+	name = "Alpha"
+	ship_size = massive_ship_fallen_empire
+	section = {
+		template = "fallen_empire_massive_warship_key"
+		slot = "mid"
+		
+		component = {
+			slot = "EXTRA_LARGE_01"
+			template = "TITAN_LASER"
+		}
+		component = {
+			slot = "STRIKE_CRAFT_01"
+			template = "LARGE_BOMBERS_HANGAR_3"	
+		}
+		component = {
+			slot = "STRIKE_CRAFT_02"
+			template = "LARGE_BOMBERS_HANGAR_3"	
+		}	
+		component = {
+			slot = "STRIKE_CRAFT_03"
+			template = "LARGE_FIGHTERS_HANGAR_3"	
+		}	
+		component = {
+			slot = "STRIKE_CRAFT_04"
+			template = "LARGE_FIGHTERS_HANGAR_3"	
+		}			
+		component = {
+			slot = "LARGE_GUN_01"
+			template = "LARGE_GAMMA_LASER"
+		}		
+		component = {
+			slot = "LARGE_GUN_02"
+			template = "LARGE_GAMMA_LASER"
+		}		
+		component = {
+			slot = "LARGE_GUN_03"
+			template = "LARGE_GAMMA_LASER"
+		}		
+		component = {
+			slot = "LARGE_GUN_04"
+			template = "LARGE_GAMMA_LASER"
+		}	
+		component = {
+			slot = "LARGE_GUN_05"
+			template = "LARGE_DISRUPTOR_3"
+		}		
+		component = {
+			slot = "LARGE_GUN_06"
+			template = "LARGE_DISRUPTOR_3"
+		}	
+		component = {
+			slot = "LARGE_GUN_07"
+			template = "LARGE_DISRUPTOR_3"
+		}	
+		component = {
+			slot = "LARGE_GUN_08"
+			template = "LARGE_DISRUPTOR_3"
+		}			
+		component = {
+			slot = "MEDIUM_GUN_01"
+			template = "MEDIUM_GAMMA_LASER"
+		}		
+		component = {
+			slot = "MEDIUM_GUN_02"
+			template = "MEDIUM_GAMMA_LASER"
+		}		
+		component = {
+			slot = "MEDIUM_GUN_03"
+			template = "MEDIUM_GAMMA_LASER"
+		}		
+		component = {
+			slot = "MEDIUM_GUN_04"
+			template = "MEDIUM_GAMMA_LASER"
+		}
+		component = {
+			slot = "LARGE_UTILITY_1"
+			template = "LARGE_ZERO_POINT_REACTOR"
+		}
+		component = {
+			slot = "LARGE_UTILITY_2"
+			template = "LARGE_ZERO_POINT_REACTOR"
+		}
+		component = {
+			slot = "LARGE_UTILITY_3"
+			template = "LARGE_ZERO_POINT_REACTOR"
+		}
+		component = {
+			slot = "LARGE_UTILITY_4"
+			template = "LARGE_ZERO_POINT_REACTOR"
+		}
+		component = {
+			slot = "LARGE_UTILITY_5"
+			template = "LARGE_ZERO_POINT_REACTOR"
+		}
+		component = {
+			slot = "LARGE_UTILITY_6"
+			template = "LARGE_ZERO_POINT_REACTOR"
+		}
+		component = {
+			slot = "LARGE_UTILITY_7"
+			template = "LARGE_ZERO_POINT_REACTOR"
+		}
+		component = {
+			slot = "LARGE_UTILITY_8"
+			template = "LARGE_ZERO_POINT_REACTOR"
+		}		
+		component = {
+			slot = "LARGE_UTILITY_9"
+			template = "LARGE_ARMOR_5"
+		}
+		component = {
+			slot = "LARGE_UTILITY_10"
+			template = "LARGE_ARMOR_5"
+		}
+		component = {
+			slot = "LARGE_UTILITY_11"
+			template = "LARGE_ARMOR_5"
+		}
+		component = {
+			slot = "LARGE_UTILITY_12"
+			template = "LARGE_ARMOR_5"
+		}
+		component = {
+			slot = "LARGE_UTILITY_13"
+			template = "LARGE_ARMOR_5"
+		}
+		component = {
+			slot = "LARGE_UTILITY_14"
+			template = "LARGE_ARMOR_5"
+		}
+		component = {
+			slot = "LARGE_UTILITY_15"
+			template = "LARGE_SHIELD_5"
+		}		
+		component = {
+			slot = "LARGE_UTILITY_16"
+			template = "LARGE_SHIELD_5"
+		}
+		component = {
+			slot = "LARGE_UTILITY_17"
+			template = "LARGE_SHIELD_5"
+		}		
+		component = {
+			slot = "LARGE_UTILITY_18"
+			template = "LARGE_SHIELD_5"
+		}		
+		component = {
+			slot = "LARGE_UTILITY_19"
+			template = "LARGE_SHIELD_5"
+		}
+		component = {
+			slot = "LARGE_UTILITY_20"
+			template = "LARGE_SHIELD_5"
+		}
+		component = {
+			slot = "AUX_UTILITY_1"
+			template = "SHIELD_RECHARGER"
+		}
+		component = {
+			slot = "AUX_UTILITY_2"
+			template = "SHIELD_RECHARGER"
+		}	
+		component = {
+			slot = "AUX_UTILITY_3"
+			template = "SHIELD_RECHARGER"
+		}		
+	}
+	required_component="SHIP_SENSOR_4"
+	required_component="JUMP_DRIVE_1"
+	required_component="BATTLESHIP_COMBAT_COMPUTER_4"
+	required_component="SHIP_THRUSTER_4"
+	
+	# For special buildable
+	is_special_buildable = yes
+	allow_buildable_trigger = is_awakened_fallen_empire_materialist
+}
+
+# Large Ship
+ship_design = {
+	name = "Beta"
+	ship_size = large_ship_fallen_empire
+	section = {
+		template = "fallen_empire_large_warship_key"
+		slot = "mid"
+	
+		component = {
+			slot = "STRIKE_CRAFT_01"
+			template = "LARGE_BOMBERS_HANGAR_3"	
+		}		
+		component = {
+			slot = "STRIKE_CRAFT_02"
+			template = "LARGE_FIGHTERS_HANGAR_3"	
+		}	
+		component = {
+			slot = "STRIKE_CRAFT_01"
+			template = "LARGE_BOMBERS_HANGAR_3"	
+		}		
+		component = {
+			slot = "STRIKE_CRAFT_02"
+			template = "LARGE_FIGHTERS_HANGAR_3"	
+		}
+		component = {
+			slot = "EXTRA_LARGE_01"
+			template = "LARGE_ENERGY_LANCE_2"
+		}		
+		component = {
+			slot = "LARGE_GUN_01"
+			template = "LARGE_DISRUPTOR_3"
+		}		
+		component = {
+			slot = "LARGE_GUN_02"
+			template = "LARGE_DISRUPTOR_3"
+		}		
+		component = {
+			slot = "MEDIUM_GUN_01"
+			template = "MEDIUM_GAMMA_LASER"
+		}		
+		component = {
+			slot = "MEDIUM_GUN_02"
+			template = "MEDIUM_GAMMA_LASER"
+		}
+		component = {
+			slot = "MEDIUM_GUN_03"
+			template = "MEDIUM_GAMMA_LASER"
+		}
+		component = {
+			slot = "MEDIUM_GUN_04"
+			template = "MEDIUM_GAMMA_LASER"
+		}
+		component = {
+			slot = "LARGE_UTILITY_1"
+			template = "LARGE_ZERO_POINT_REACTOR"
+		}
+		component = {
+			slot = "LARGE_UTILITY_2"
+			template = "LARGE_ZERO_POINT_REACTOR"
+		}
+		component = {
+			slot = "LARGE_UTILITY_3"
+			template = "LARGE_ZERO_POINT_REACTOR"
+		}
+		component = {
+			slot = "LARGE_UTILITY_4"
+			template = "LARGE_ZERO_POINT_REACTOR"
+		}
+		component = {
+			slot = "LARGE_UTILITY_5"
+			template = "LARGE_ARMOR_5"
+		}
+		component = {
+			slot = "LARGE_UTILITY_6"
+			template = "LARGE_ARMOR_5"
+		}
+		component = {
+			slot = "LARGE_UTILITY_7"
+			template = "LARGE_ARMOR_5"
+		}
+		component = {
+			slot = "LARGE_UTILITY_8"
+			template = "LARGE_SHIELD_5"
+		}		
+		component = {
+			slot = "LARGE_UTILITY_9"
+			template = "LARGE_SHIELD_5"
+		}
+		component = {
+			slot = "LARGE_UTILITY_10"
+			template = "LARGE_SHIELD_5"
+		}
+		component = {
+			slot = "AUX_UTILITY_1"
+			template = "SHIELD_RECHARGER"
+		}
+		component = {
+			slot = "AUX_UTILITY_2"
+			template = "SHIELD_RECHARGER"
+		}		
+	}
+	required_component="SHIP_SENSOR_4"
+	required_component="JUMP_DRIVE_1"
+	required_component="DESTROYER_COMBAT_COMPUTER_4"
+	required_component="SHIP_THRUSTER_4"
+	
+	# For special buildable
+	is_special_buildable = yes
+	allow_buildable_trigger = is_awakened_fallen_empire_materialist
+}
+
+# Small Ship
+ship_design = {
+	name = "Gamma"
+	ship_size = small_ship_fallen_empire
+	section = {
+		template = "fallen_empire_warship_small_key"
+		slot = "mid"
+		
+		component = {
+			slot = "LARGE_GUN_01"
+			template = "LARGE_DISRUPTOR_3"
+		}	
+		component = {
+			slot = "SMALL_GUN_01"
+			template = "SMALL_GAMMA_LASER"
+		}		
+		component = {
+			slot = "SMALL_GUN_02"
+			template = "SMALL_GAMMA_LASER"
+		}
+		component = {
+			slot = "SMALL_GUN_03"
+			template = "SMALL_GAMMA_LASER"
+		}	
+		component = {
+			slot = "SMALL_GUN_04"
+			template = "SMALL_GAMMA_LASER"
+		}			
+		component = {
+			slot = "PD_01"
+			template = "POINT_DEFENCE_3"
+		}	
+		component = {
+			slot = "PD_02"
+			template = "POINT_DEFENCE_3"
+		}	
+		component = {
+			slot = "MEDIUM_UTILITY_1"
+			template = "MEDIUM_ZERO_POINT_REACTOR"
+		}
+		component = {
+			slot = "MEDIUM_UTILITY_2"
+			template = "MEDIUM_ZERO_POINT_REACTOR"
+		}
+		component = {
+			slot = "MEDIUM_UTILITY_3"
+			template = "MEDIUM_ZERO_POINT_REACTOR"
+		}
+		component = {
+			slot = "MEDIUM_UTILITY_4"
+			template = "MEDIUM_ZERO_POINT_REACTOR"
+		}		
+		component = {
+			slot = "MEDIUM_UTILITY_5"
+			template = "MEDIUM_SHIELD_5"
+		}
+		component = {
+			slot = "MEDIUM_UTILITY_6"
+			template = "MEDIUM_SHIELD_5"
+		}
+		component = {
+			slot = "MEDIUM_UTILITY_7"
+			template = "MEDIUM_SHIELD_5"
+		}	
+	
+		component = {
+			slot = "MEDIUM_UTILITY_8"
+			template = "MEDIUM_ARMOR_5"
+		}
+		component = {
+			slot = "MEDIUM_UTILITY_9"
+			template = "MEDIUM_ARMOR_5"
+		}
+		component = {
+			slot = "MEDIUM_UTILITY_10"
+			template = "MEDIUM_ARMOR_5"
+		}
+		component = {
+			slot = "AUX_UTILITY_1"
+			template = "SHIELD_RECHARGER"
+		}		
+	}
+	required_component="SHIP_SENSOR_4"
+	required_component="JUMP_DRIVE_1"
+	required_component="DESTROYER_COMBAT_COMPUTER_4"
+	required_component="SHIP_THRUSTER_4"
+	
+	# For special buildable
+	is_special_buildable = yes
+	allow_buildable_trigger = is_awakened_fallen_empire_materialist
+}
+
+# Large Station
+ship_design = {
+	name = "Omega"
+	ship_size = military_station_large_fallen_empire
+	section = {
+		template = "fallen_empire_station_large_key"
+		slot = "mid"
+		
+		component = {
+			slot = "LARGE_GUN_01"
+			template = "LARGE_DISRUPTOR_3"
+		}
+		component = {
+			slot = "LARGE_GUN_02"
+			template = "LARGE_DISRUPTOR_3"
+		}
+		component = {
+			slot = "LARGE_GUN_03"
+			template = "LARGE_DISRUPTOR_3"
+		}
+		component = {
+			slot = "LARGE_GUN_04"
+			template = "LARGE_DISRUPTOR_3"
+		}
+		component = {
+			slot = "LARGE_GUN_05"
+			template = "LARGE_DISRUPTOR_3"
+		}
+		component = {
+			slot = "LARGE_GUN_06"
+			template = "LARGE_GAMMA_LASER"
+		}
+		component = {
+			slot = "LARGE_GUN_07"
+			template = "LARGE_GAMMA_LASER"
+		}	
+		component = {
+			slot = "LARGE_GUN_08"
+			template = "LARGE_GAMMA_LASER"
+		}	
+		component = {
+			slot = "LARGE_GUN_09"
+			template = "LARGE_GAMMA_LASER"
+		}	
+		component = {
+			slot = "LARGE_GUN_10"
+			template = "LARGE_GAMMA_LASER"
+		}			
+		component = {
+			slot = "MEDIUM_GUN_01"
+			template = "MEDIUM_DISRUPTOR_3"
+		}
+		component = {
+			slot = "MEDIUM_GUN_02"
+			template = "MEDIUM_DISRUPTOR_3"
+		}
+		component = {
+			slot = "MEDIUM_GUN_03"
+			template = "MEDIUM_DISRUPTOR_3"
+		}
+		component = {
+			slot = "MEDIUM_GUN_04"
+			template = "MEDIUM_DISRUPTOR_3"
+		}
+		component = {
+			slot = "MEDIUM_GUN_05"
+			template = "MEDIUM_DISRUPTOR_3"
+		}		
+		component = {
+			slot = "MEDIUM_GUN_06"
+			template = "MEDIUM_GAMMA_LASER"
+		}
+		component = {
+			slot = "MEDIUM_GUN_07"
+			template = "MEDIUM_GAMMA_LASER"
+		}
+		component = {
+			slot = "MEDIUM_GUN_08"
+			template = "MEDIUM_GAMMA_LASER"
+		}	
+		component = {
+			slot = "MEDIUM_GUN_09"
+			template = "MEDIUM_GAMMA_LASER"
+		}	
+		component = {
+			slot = "MEDIUM_GUN_10"
+			template = "MEDIUM_GAMMA_LASER"
+		}			
+		component = {
+			slot = "SMALL_GUN_01"
+			template = "POINT_DEFENCE_3"
+		}
+		component = {
+			slot = "SMALL_GUN_02"
+			template = "POINT_DEFENCE_3"
+		}
+		component = {
+			slot = "SMALL_GUN_03"
+			template = "POINT_DEFENCE_3"
+		}
+		component = {
+			slot = "SMALL_GUN_04"
+			template = "POINT_DEFENCE_3"
+		}		
+		component = {
+			slot = "LARGE_UTILITY_1"
+			template = "LARGE_ZERO_POINT_REACTOR"
+		}
+		component = {
+			slot = "LARGE_UTILITY_2"
+			template = "LARGE_ZERO_POINT_REACTOR"
+		}
+		component = {
+			slot = "LARGE_UTILITY_3"
+			template = "LARGE_ZERO_POINT_REACTOR"
+		}
+		component = {
+			slot = "LARGE_UTILITY_4"
+			template = "LARGE_ZERO_POINT_REACTOR"
+		}
+		component = {
+			slot = "LARGE_UTILITY_5"
+			template = "LARGE_ZERO_POINT_REACTOR"
+		}	
+		component = {
+			slot = "LARGE_UTILITY_6"
+			template = "LARGE_ZERO_POINT_REACTOR"
+		}
+		component = {
+			slot = "LARGE_UTILITY_7"
+			template = "LARGE_ZERO_POINT_REACTOR"
+		}	
+		component = {
+			slot = "LARGE_UTILITY_8"
+			template = "LARGE_ZERO_POINT_REACTOR"
+		}	
+		component = {
+			slot = "LARGE_UTILITY_9"
+			template = "LARGE_ZERO_POINT_REACTOR"
+		}	
+		component = {
+			slot = "LARGE_UTILITY_10"
+			template = "LARGE_ZERO_POINT_REACTOR"
+		}			
+		component = {
+			slot = "LARGE_UTILITY_11"
+			template = "LARGE_SHIELD_5"
+		}
+		component = {
+			slot = "LARGE_UTILITY_12"
+			template = "LARGE_SHIELD_5"
+		}
+		component = {
+			slot = "LARGE_UTILITY_13"
+			template = "LARGE_SHIELD_5"
+		}
+		component = {
+			slot = "LARGE_UTILITY_14"
+			template = "LARGE_SHIELD_5"
+		}		
+		component = {
+			slot = "LARGE_UTILITY_15"
+			template = "LARGE_SHIELD_5"
+		}	
+		component = {
+			slot = "LARGE_UTILITY_16"
+			template = "LARGE_SHIELD_5"
+		}
+		component = {
+			slot = "LARGE_UTILITY_17"
+			template = "LARGE_SHIELD_5"
+		}	
+		component = {
+			slot = "LARGE_UTILITY_18"
+			template = "LARGE_SHIELD_5"
+		}	
+		component = {
+			slot = "LARGE_UTILITY_19"
+			template = "LARGE_SHIELD_5"
+		}	
+		component = {
+			slot = "LARGE_UTILITY_20"
+			template = "LARGE_SHIELD_5"
+		}	
+		component = {
+			slot = "LARGE_UTILITY_21"
+			template = "LARGE_ARMOR_5"
+		}	
+		component = {
+			slot = "LARGE_UTILITY_22"
+			template = "LARGE_ARMOR_5"
+		}	
+		component = {
+			slot = "LARGE_UTILITY_23"
+			template = "LARGE_ARMOR_5"
+		}	
+		component = {
+			slot = "LARGE_UTILITY_24"
+			template = "LARGE_ARMOR_5"
+		}
+		component = {
+			slot = "LARGE_UTILITY_25"
+			template = "LARGE_ARMOR_5"
+		}	
+		component = {
+			slot = "LARGE_UTILITY_26"
+			template = "LARGE_ARMOR_5"
+		}	
+		component = {
+			slot = "LARGE_UTILITY_27"
+			template = "LARGE_ARMOR_5"
+		}	
+		component = {
+			slot = "LARGE_UTILITY_28"
+			template = "LARGE_ARMOR_5"
+		}
+		component = {
+			slot = "LARGE_UTILITY_29"
+			template = "LARGE_ARMOR_5"
+		}	
+		component = {
+			slot = "LARGE_UTILITY_30"
+			template = "LARGE_ARMOR_5"
+		}	
+		component = {
+			slot = "AUX_UTILITY_1"
+			template = "SHIELD_RECHARGER"
+		}
+		component = {
+			slot = "AUX_UTILITY_2"
+			template = "SHIELD_RECHARGER"
+		}	
+		component = {
+			slot = "AUX_UTILITY_3"
+			template = "SHIELD_RECHARGER"
+		}	
+		component = {
+			slot = "AUX_UTILITY_4"
+			template = "SHIELD_RECHARGER"
+		}			
+	}
+	required_component="SHIP_SENSOR_4"
+	
+	# For special buildable
+	is_special_buildable = yes
+	allow_buildable_trigger = is_awakened_fallen_empire_materialist
+}
+
+# Small Station
+ship_design = {
+	name = "Sigma"
+	ship_size = military_station_small_fallen_empire
+	section = {
+		template = "fallen_empire_station_small_key"
+		slot = "mid"
+		
+		component = {
+			slot = "LARGE_GUN_01"
+			template = "LARGE_DISRUPTOR_3"
+		}
+		component = {
+			slot = "LARGE_GUN_02"
+			template = "LARGE_DISRUPTOR_3"
+		}
+		component = {
+			slot = "LARGE_GUN_03"
+			template = "LARGE_DISRUPTOR_3"
+		}
+		component = {
+			slot = "LARGE_GUN_04"
+			template = "LARGE_DISRUPTOR_3"
+		}
+		component = {
+			slot = "LARGE_GUN_05"
+			template = "LARGE_DISRUPTOR_3"
+		}		
+		component = {
+			slot = "MEDIUM_GUN_01"
+			template = "MEDIUM_GAMMA_LASER"
+		}
+		component = {
+			slot = "MEDIUM_GUN_02"
+			template = "MEDIUM_GAMMA_LASER"
+		}
+		component = {
+			slot = "MEDIUM_GUN_03"
+			template = "MEDIUM_GAMMA_LASER"
+		}
+		component = {
+			slot = "MEDIUM_GUN_04"
+			template = "MEDIUM_GAMMA_LASER"
+		}
+		component = {
+			slot = "MEDIUM_GUN_05"
+			template = "MEDIUM_GAMMA_LASER"
+		}		
+		component = {
+			slot = "SMALL_GUN_01"
+			template = "POINT_DEFENCE_3"
+		}
+		component = {
+			slot = "SMALL_GUN_02"
+			template = "POINT_DEFENCE_3"
+		}	
+		component = {
+			slot = "LARGE_UTILITY_1"
+			template = "LARGE_ZERO_POINT_REACTOR"
+		}
+		component = {
+			slot = "LARGE_UTILITY_2"
+			template = "LARGE_ZERO_POINT_REACTOR"
+		}
+		component = {
+			slot = "LARGE_UTILITY_3"
+			template = "LARGE_ZERO_POINT_REACTOR"
+		}	
+		component = {
+			slot = "LARGE_UTILITY_4"
+			template = "LARGE_ZERO_POINT_REACTOR"
+		}	
+		component = {
+			slot = "LARGE_UTILITY_5"
+			template = "LARGE_ZERO_POINT_REACTOR"
+		}			
+		component = {
+			slot = "LARGE_UTILITY_6"
+			template = "LARGE_SHIELD_5"
+		}
+		component = {
+			slot = "LARGE_UTILITY_7"
+			template = "LARGE_SHIELD_5"
+		}
+		component = {
+			slot = "LARGE_UTILITY_8"
+			template = "LARGE_SHIELD_5"
+		}
+		component = {
+			slot = "LARGE_UTILITY_9"
+			template = "LARGE_SHIELD_5"
+		}
+		component = {
+			slot = "LARGE_UTILITY_10"
+			template = "LARGE_SHIELD_5"
+		}		
+		component = {
+			slot = "LARGE_UTILITY_11"
+			template = "LARGE_ARMOR_5"
+		}		
+		component = {
+			slot = "LARGE_UTILITY_12"
+			template = "LARGE_ARMOR_5"
+		}
+		component = {
+			slot = "LARGE_UTILITY_13"
+			template = "LARGE_ARMOR_5"
+		}	
+		component = {
+			slot = "LARGE_UTILITY_14"
+			template = "LARGE_ARMOR_5"
+		}
+		component = {
+			slot = "LARGE_UTILITY_15"
+			template = "LARGE_ARMOR_5"
+		}	
+		component = {
+			slot = "AUX_UTILITY_1"
+			template = "SHIELD_RECHARGER"
+		}
+		component = {
+			slot = "AUX_UTILITY_2"
+			template = "SHIELD_RECHARGER"
+		}			
+	}
+	required_component="SHIP_SENSOR_4"
+	
+	# For special buildable
+	is_special_buildable = yes
+	allow_buildable_trigger = is_awakened_fallen_empire_materialist
+}
+
+# Construction Ship
+ship_design = {
+	name = "Theta"
+	ship_size = constructor
+	section = {
+		template = "DEFAULT_CONSTRUCTION_SECTION"
+		slot = "mid"
+	
+		component = {
+			slot = "SMALL_UTILITY_1"
+			template = "SMALL_ZERO_POINT_REACTOR"
+		}	
+		# component = {
+			# slot = "SMALL_UTILITY_2"
+			# template = "SMALL_ZERO_POINT_REACTOR"
+		# }
+		# component = {
+			# slot = "AUX_UTILITY_1"
+			# template = "SHIELD_RECHARGER"
+		# }		
+	}
+	required_component="JUMP_DRIVE_1"
+	required_component="SHIP_THRUSTER_4"
+	required_component="SHIP_SENSOR_4"
+	
+	# For special buildable
+	is_special_buildable = yes
+	allow_buildable_trigger = is_awakened_fallen_empire_materialist
+}
+
+
+# Colony Ship
+ship_design = {
+	name = "Tau"
+	ship_size = colonizer
+	section = {
+		template = "DEFAULT_COLONIZATION_SECTION"
+		slot = "mid"
+	
+		component = {
+			slot = "SMALL_UTILITY_1"
+			template = "SMALL_ZERO_POINT_REACTOR"
+		}	
+		component = {
+			slot = "SMALL_UTILITY_2"
+			template = "SMALL_ZERO_POINT_REACTOR"
+		}
+		# component = {
+			# slot = "SMALL_UTILITY_3"
+			# template = "SMALL_SHIELD_5"
+		# }
+		# component = {
+			# slot = "SMALL_UTILITY_4"
+			# template = "SMALL_SHIELD_5"
+		# }	
+		component = {
+			slot = "AUX_UTILITY_1"
+			template = "SHIELD_RECHARGER"
+		}	
+	}
+	required_component="JUMP_DRIVE_1"
+	required_component="SHIP_THRUSTER_4"
+	required_component="SHIP_SENSOR_4"
+	
+	# For special buildable
+	is_special_buildable = yes
+	allow_buildable_trigger = is_awakened_fallen_empire_materialist
+}
+
+######################
+### Holy Guardians ###
+######################
+
+# Massive Ship
+ship_design = {
+	name = "Eternal"
+	ship_size = massive_ship_fallen_empire
+	section = {
+		template = "fallen_empire_massive_warship_key"
+		slot = "mid"
+		
+		component = {
+			slot = "EXTRA_LARGE_01"
+			template = "TITAN_LASER"
+		}
+		component = {
+			slot = "STRIKE_CRAFT_01"
+			template = "LARGE_BOMBERS_HANGAR_3"	
+		}
+		component = {
+			slot = "STRIKE_CRAFT_02"
+			template = "LARGE_BOMBERS_HANGAR_3"	
+		}	
+		component = {
+			slot = "STRIKE_CRAFT_03"
+			template = "LARGE_FIGHTERS_HANGAR_3"	
+		}	
+		component = {
+			slot = "STRIKE_CRAFT_04"
+			template = "LARGE_FIGHTERS_HANGAR_3"	
+		}
+		component = {
+			slot = "LARGE_GUN_01"
+			template = "LARGE_MISSILE_5"
+		}		
+		component = {
+			slot = "LARGE_GUN_02"
+			template = "LARGE_MISSILE_5"
+		}		
+		component = {
+			slot = "LARGE_GUN_03"
+			template = "LARGE_MISSILE_5"
+		}		
+		component = {
+			slot = "LARGE_GUN_04"
+			template = "LARGE_MISSILE_5"
+		}	
+		component = {
+			slot = "LARGE_GUN_05"
+			template = "LARGE_MISSILE_5"
+		}		
+		component = {
+			slot = "LARGE_GUN_06"
+			template = "LARGE_MISSILE_5"
+		}	
+		component = {
+			slot = "LARGE_GUN_07"
+			template = "LARGE_MISSILE_5"
+		}	
+		component = {
+			slot = "LARGE_GUN_08"
+			template = "LARGE_MISSILE_5"
+		}			
+		component = {
+			slot = "MEDIUM_GUN_01"
+			template = "MEDIUM_PLASMA_3"
+		}		
+		component = {
+			slot = "MEDIUM_GUN_02"
+			template = "MEDIUM_PLASMA_3"
+		}		
+		component = {
+			slot = "MEDIUM_GUN_03"
+			template = "MEDIUM_PLASMA_3"
+		}		
+		component = {
+			slot = "MEDIUM_GUN_04"
+			template = "MEDIUM_PLASMA_3"
+		}
+		component = {
+			slot = "LARGE_UTILITY_1"
+			template = "LARGE_ZERO_POINT_REACTOR"
+		}
+		component = {
+			slot = "LARGE_UTILITY_2"
+			template = "LARGE_ZERO_POINT_REACTOR"
+		}
+		component = {
+			slot = "LARGE_UTILITY_3"
+			template = "LARGE_ZERO_POINT_REACTOR"
+		}
+		component = {
+			slot = "LARGE_UTILITY_4"
+			template = "LARGE_ZERO_POINT_REACTOR"
+		}
+		component = {
+			slot = "LARGE_UTILITY_5"
+			template = "LARGE_ZERO_POINT_REACTOR"
+		}
+		component = {
+			slot = "LARGE_UTILITY_6"
+			template = "LARGE_ZERO_POINT_REACTOR"
+		}
+		component = {
+			slot = "LARGE_UTILITY_7"
+			template = "LARGE_ZERO_POINT_REACTOR"
+		}
+		component = {
+			slot = "LARGE_UTILITY_8"
+			template = "LARGE_ZERO_POINT_REACTOR"
+		}		
+		component = {
+			slot = "LARGE_UTILITY_9"
+			template = "LARGE_ARMOR_5"
+		}
+		component = {
+			slot = "LARGE_UTILITY_10"
+			template = "LARGE_ARMOR_5"
+		}
+		component = {
+			slot = "LARGE_UTILITY_11"
+			template = "LARGE_ARMOR_5"
+		}
+		component = {
+			slot = "LARGE_UTILITY_12"
+			template = "LARGE_ARMOR_5"
+		}
+		component = {
+			slot = "LARGE_UTILITY_13"
+			template = "LARGE_ARMOR_5"
+		}
+		component = {
+			slot = "LARGE_UTILITY_14"
+			template = "LARGE_ARMOR_5"
+		}
+		component = {
+			slot = "LARGE_UTILITY_15"
+			template = "LARGE_SHIELD_5"
+		}		
+		component = {
+			slot = "LARGE_UTILITY_16"
+			template = "LARGE_SHIELD_5"
+		}
+		component = {
+			slot = "LARGE_UTILITY_17"
+			template = "LARGE_SHIELD_5"
+		}		
+		component = {
+			slot = "LARGE_UTILITY_18"
+			template = "LARGE_SHIELD_5"
+		}		
+		component = {
+			slot = "LARGE_UTILITY_19"
+			template = "LARGE_SHIELD_5"
+		}
+		component = {
+			slot = "LARGE_UTILITY_20"
+			template = "LARGE_SHIELD_5"
+		}
+		component = {
+			slot = "AUX_UTILITY_1"
+			template = "SHIELD_RECHARGER"
+		}
+		component = {
+			slot = "AUX_UTILITY_2"
+			template = "SHIELD_RECHARGER"
+		}	
+		component = {
+			slot = "AUX_UTILITY_3"
+			template = "SHIELD_RECHARGER"
+		}			
+	}
+	required_component="SHIP_SENSOR_4"
+	required_component="PSI_JUMP_DRIVE_1"
+	required_component="BATTLESHIP_COMBAT_COMPUTER_PRECOG"
+	required_component="SHIP_THRUSTER_4"
+	
+	# For special buildable
+	is_special_buildable = yes
+	allow_buildable_trigger = is_awakened_fallen_empire_spiritualist
+}
+
+
+# Large Ship
+ship_design = {
+	name = "Avatar"
+	ship_size = large_ship_fallen_empire
+	section = {
+		template = "fallen_empire_large_warship_key"
+		slot = "mid"
+	
+
+		component = {
+			slot = "STRIKE_CRAFT_01"
+			template = "LARGE_BOMBERS_HANGAR_3"	
+		}		
+		component = {
+			slot = "STRIKE_CRAFT_02"
+			template = "LARGE_FIGHTERS_HANGAR_3"	
+		}	
+		component = {
+			slot = "EXTRA_LARGE_01"
+			template = "LARGE_ARC_EMITTER_2"
+		}
+		component = {
+			slot = "LARGE_GUN_01"
+			template = "LARGE_PLASMA_3"
+		}		
+		component = {
+			slot = "LARGE_GUN_02"
+			template = "LARGE_PLASMA_3"
+		}		
+		component = {
+			slot = "MEDIUM_GUN_01"
+			template = "SWARMER_MISSILE_2"
+		}		
+		component = {
+			slot = "MEDIUM_GUN_02"
+			template = "SWARMER_MISSILE_2"
+		}
+		component = {
+			slot = "MEDIUM_GUN_03"
+			template = "SWARMER_MISSILE_2"
+		}
+		component = {
+			slot = "MEDIUM_GUN_04"
+			template = "SWARMER_MISSILE_2"
+		}
+		component = {
+			slot = "LARGE_UTILITY_1"
+			template = "LARGE_ZERO_POINT_REACTOR"
+		}
+		component = {
+			slot = "LARGE_UTILITY_2"
+			template = "LARGE_ZERO_POINT_REACTOR"
+		}
+		component = {
+			slot = "LARGE_UTILITY_3"
+			template = "LARGE_ZERO_POINT_REACTOR"
+		}
+		component = {
+			slot = "LARGE_UTILITY_4"
+			template = "LARGE_ZERO_POINT_REACTOR"
+		}
+		component = {
+			slot = "LARGE_UTILITY_5"
+			template = "LARGE_ARMOR_5"
+		}
+		component = {
+			slot = "LARGE_UTILITY_6"
+			template = "LARGE_ARMOR_5"
+		}
+		component = {
+			slot = "LARGE_UTILITY_7"
+			template = "LARGE_ARMOR_5"
+		}
+		component = {
+			slot = "LARGE_UTILITY_8"
+			template = "LARGE_SHIELD_5"
+		}		
+		component = {
+			slot = "LARGE_UTILITY_9"
+			template = "LARGE_SHIELD_5"
+		}
+		component = {
+			slot = "LARGE_UTILITY_10"
+			template = "LARGE_SHIELD_5"
+		}
+		component = {
+			slot = "AUX_UTILITY_1"
+			template = "SHIELD_RECHARGER"
+		}
+		component = {
+			slot = "AUX_UTILITY_2"
+			template = "SHIELD_RECHARGER"
+		}			
+	}
+	required_component="SHIP_SENSOR_4"
+	required_component="PSI_JUMP_DRIVE_1"
+	required_component="COMBAT_COMPUTER_PRECOG"
+	required_component="SHIP_THRUSTER_4"
+	
+	# For special buildable
+	is_special_buildable = yes
+	allow_buildable_trigger = is_awakened_fallen_empire_spiritualist
+}
+
+# Small Ship
+ship_design = {
+	name = "Zealot"
+	ship_size = small_ship_fallen_empire
+	section = {
+		template = "fallen_empire_warship_torpedo_key"
+		slot = "mid"
+		
+		component = {
+			slot = "TORPEDO_01"
+			template = "ENERGY_TORPEDO_1"
+		}	
+		component = {
+			slot = "SMALL_GUN_01"
+			template = "SMALL_PLASMA_3"
+		}		
+		component = {
+			slot = "SMALL_GUN_02"
+			template = "SMALL_PLASMA_3"
+		}
+		component = {
+			slot = "SMALL_GUN_03"
+			template = "SMALL_PLASMA_3"
+		}	
+		component = {
+			slot = "SMALL_GUN_04"
+			template = "SMALL_PLASMA_3"
+		}			
+		component = {
+			slot = "PD_01"
+			template = "POINT_DEFENCE_3"
+		}	
+		component = {
+			slot = "PD_02"
+			template = "POINT_DEFENCE_3"
+		}	
+		component = {
+			slot = "MEDIUM_UTILITY_1"
+			template = "MEDIUM_ZERO_POINT_REACTOR"
+		}
+		component = {
+			slot = "MEDIUM_UTILITY_2"
+			template = "MEDIUM_ZERO_POINT_REACTOR"
+		}
+		component = {
+			slot = "MEDIUM_UTILITY_3"
+			template = "MEDIUM_ZERO_POINT_REACTOR"
+		}
+		component = {
+			slot = "MEDIUM_UTILITY_4"
+			template = "MEDIUM_ZERO_POINT_REACTOR"
+		}		
+		component = {
+			slot = "MEDIUM_UTILITY_5"
+			template = "MEDIUM_SHIELD_5"
+		}
+		component = {
+			slot = "MEDIUM_UTILITY_6"
+			template = "MEDIUM_SHIELD_5"
+		}
+		component = {
+			slot = "MEDIUM_UTILITY_7"
+			template = "MEDIUM_SHIELD_5"
+		}		
+		component = {
+			slot = "MEDIUM_UTILITY_8"
+			template = "MEDIUM_ARMOR_5"
+		}
+		component = {
+			slot = "MEDIUM_UTILITY_9"
+			template = "MEDIUM_ARMOR_5"
+		}
+		component = {
+			slot = "MEDIUM_UTILITY_10"
+			template = "MEDIUM_ARMOR_5"
+		}
+		component = {
+			slot = "AUX_UTILITY_1"
+			template = "SHIELD_RECHARGER"
+		}		
+	}
+	required_component="SHIP_SENSOR_4"
+	required_component="PSI_JUMP_DRIVE_1"
+	required_component="COMBAT_COMPUTER_PRECOG"
+	required_component="SHIP_THRUSTER_4"
+	
+	# For special buildable
+	is_special_buildable = yes
+	allow_buildable_trigger = is_awakened_fallen_empire_spiritualist
+}
+
+# Large Station
+ship_design = {
+	name = "Bulwark"
+	ship_size = military_station_large_fallen_empire
+	section = {
+		template = "fallen_empire_station_large_key"
+		slot = "mid"
+		
+		component = {
+			slot = "LARGE_GUN_01"
+			template = "LARGE_MISSILE_5"
+		}
+		component = {
+			slot = "LARGE_GUN_02"
+			template = "LARGE_MISSILE_5"
+		}
+		component = {
+			slot = "LARGE_GUN_03"
+			template = "LARGE_MISSILE_5"
+		}
+		component = {
+			slot = "LARGE_GUN_04"
+			template = "LARGE_MISSILE_5"
+		}
+		component = {
+			slot = "LARGE_GUN_05"
+			template = "LARGE_MISSILE_5"
+		}		
+		component = {
+			slot = "LARGE_GUN_06"
+			template = "LARGE_PLASMA_3"
+		}
+		component = {
+			slot = "LARGE_GUN_07"
+			template = "LARGE_PLASMA_3"
+		}
+		component = {
+			slot = "LARGE_GUN_08"
+			template = "LARGE_PLASMA_3"
+		}
+		component = {
+			slot = "LARGE_GUN_09"
+			template = "LARGE_PLASMA_3"
+		}
+		component = {
+			slot = "LARGE_GUN_10"
+			template = "LARGE_PLASMA_3"
+		}		
+		component = {
+			slot = "MEDIUM_GUN_01"
+			template = "SWARMER_MISSILE_2"
+		}
+		component = {
+			slot = "MEDIUM_GUN_02"
+			template = "SWARMER_MISSILE_2"
+		}
+		component = {
+			slot = "MEDIUM_GUN_03"
+			template = "SWARMER_MISSILE_2"
+		}
+		component = {
+			slot = "MEDIUM_GUN_04"
+			template = "SWARMER_MISSILE_2"
+		}	
+		component = {
+			slot = "MEDIUM_GUN_05"
+			template = "SWARMER_MISSILE_2"
+		}		
+		component = {
+			slot = "MEDIUM_GUN_06"
+			template = "MEDIUM_PLASMA_3"
+		}
+		component = {
+			slot = "MEDIUM_GUN_07"
+			template = "MEDIUM_PLASMA_3"
+		}	
+		component = {
+			slot = "MEDIUM_GUN_08"
+			template = "MEDIUM_PLASMA_3"
+		}	
+		component = {
+			slot = "MEDIUM_GUN_09"
+			template = "MEDIUM_PLASMA_3"
+		}	
+		component = {
+			slot = "MEDIUM_GUN_10"
+			template = "MEDIUM_PLASMA_3"
+		}			
+		component = {
+			slot = "SMALL_GUN_01"
+			template = "POINT_DEFENCE_3"
+		}
+		component = {
+			slot = "SMALL_GUN_02"
+			template = "POINT_DEFENCE_3"
+		}
+		component = {
+			slot = "SMALL_GUN_03"
+			template = "POINT_DEFENCE_3"
+		}
+		component = {
+			slot = "SMALL_GUN_04"
+			template = "POINT_DEFENCE_3"
+		}		
+		component = {
+			slot = "LARGE_UTILITY_1"
+			template = "LARGE_ZERO_POINT_REACTOR"
+		}
+		component = {
+			slot = "LARGE_UTILITY_2"
+			template = "LARGE_ZERO_POINT_REACTOR"
+		}
+		component = {
+			slot = "LARGE_UTILITY_3"
+			template = "LARGE_ZERO_POINT_REACTOR"
+		}
+		component = {
+			slot = "LARGE_UTILITY_4"
+			template = "LARGE_ZERO_POINT_REACTOR"
+		}
+		component = {
+			slot = "LARGE_UTILITY_5"
+			template = "LARGE_ZERO_POINT_REACTOR"
+		}	
+		component = {
+			slot = "LARGE_UTILITY_6"
+			template = "LARGE_ZERO_POINT_REACTOR"
+		}
+		component = {
+			slot = "LARGE_UTILITY_7"
+			template = "LARGE_ZERO_POINT_REACTOR"
+		}	
+		component = {
+			slot = "LARGE_UTILITY_8"
+			template = "LARGE_ZERO_POINT_REACTOR"
+		}	
+		component = {
+			slot = "LARGE_UTILITY_9"
+			template = "LARGE_ZERO_POINT_REACTOR"
+		}	
+		component = {
+			slot = "LARGE_UTILITY_10"
+			template = "LARGE_ZERO_POINT_REACTOR"
+		}			
+		component = {
+			slot = "LARGE_UTILITY_11"
+			template = "LARGE_SHIELD_5"
+		}
+		component = {
+			slot = "LARGE_UTILITY_12"
+			template = "LARGE_SHIELD_5"
+		}
+		component = {
+			slot = "LARGE_UTILITY_13"
+			template = "LARGE_SHIELD_5"
+		}
+		component = {
+			slot = "LARGE_UTILITY_14"
+			template = "LARGE_SHIELD_5"
+		}		
+		component = {
+			slot = "LARGE_UTILITY_15"
+			template = "LARGE_SHIELD_5"
+		}	
+		component = {
+			slot = "LARGE_UTILITY_16"
+			template = "LARGE_SHIELD_5"
+		}
+		component = {
+			slot = "LARGE_UTILITY_17"
+			template = "LARGE_SHIELD_5"
+		}	
+		component = {
+			slot = "LARGE_UTILITY_18"
+			template = "LARGE_SHIELD_5"
+		}	
+		component = {
+			slot = "LARGE_UTILITY_19"
+			template = "LARGE_SHIELD_5"
+		}	
+		component = {
+			slot = "LARGE_UTILITY_20"
+			template = "LARGE_SHIELD_5"
+		}	
+		component = {
+			slot = "LARGE_UTILITY_21"
+			template = "LARGE_ARMOR_5"
+		}	
+		component = {
+			slot = "LARGE_UTILITY_22"
+			template = "LARGE_ARMOR_5"
+		}	
+		component = {
+			slot = "LARGE_UTILITY_23"
+			template = "LARGE_ARMOR_5"
+		}	
+		component = {
+			slot = "LARGE_UTILITY_24"
+			template = "LARGE_ARMOR_5"
+		}
+		component = {
+			slot = "LARGE_UTILITY_25"
+			template = "LARGE_ARMOR_5"
+		}	
+		component = {
+			slot = "LARGE_UTILITY_26"
+			template = "LARGE_ARMOR_5"
+		}	
+		component = {
+			slot = "LARGE_UTILITY_27"
+			template = "LARGE_ARMOR_5"
+		}	
+		component = {
+			slot = "LARGE_UTILITY_28"
+			template = "LARGE_ARMOR_5"
+		}
+		component = {
+			slot = "LARGE_UTILITY_29"
+			template = "LARGE_ARMOR_5"
+		}	
+		component = {
+			slot = "LARGE_UTILITY_30"
+			template = "LARGE_ARMOR_5"
+		}	
+		component = {
+			slot = "AUX_UTILITY_1"
+			template = "SHIELD_RECHARGER"
+		}
+		component = {
+			slot = "AUX_UTILITY_2"
+			template = "SHIELD_RECHARGER"
+		}	
+		component = {
+			slot = "AUX_UTILITY_3"
+			template = "SHIELD_RECHARGER"
+		}	
+		component = {
+			slot = "AUX_UTILITY_4"
+			template = "SHIELD_RECHARGER"
+		}			
+	}
+	required_component="SHIP_SENSOR_4"
+	
+	# For special buildable
+	is_special_buildable = yes
+	allow_buildable_trigger = is_awakened_fallen_empire_spiritualist
+}
+
+# Small Station
+ship_design = {
+	name = "Faith"
+	ship_size = military_station_small_fallen_empire
+	section = {
+		template = "fallen_empire_station_small_key"
+		slot = "mid"
+		
+		component = {
+			slot = "LARGE_GUN_01"
+			template = "LARGE_PLASMA_3"
+		}
+		component = {
+			slot = "LARGE_GUN_02"
+			template = "LARGE_PLASMA_3"
+		}	
+		component = {
+			slot = "LARGE_GUN_03"
+			template = "LARGE_PLASMA_3"
+		}	
+		component = {
+			slot = "LARGE_GUN_04"
+			template = "LARGE_PLASMA_3"
+		}	
+		component = {
+			slot = "LARGE_GUN_05"
+			template = "LARGE_PLASMA_3"
+		}			
+		component = {
+			slot = "MEDIUM_GUN_01"
+			template = "SWARMER_MISSILE_2"
+		}
+		component = {
+			slot = "MEDIUM_GUN_02"
+			template = "SWARMER_MISSILE_2"
+		}
+		component = {
+			slot = "MEDIUM_GUN_03"
+			template = "SWARMER_MISSILE_2"
+		}
+		component = {
+			slot = "MEDIUM_GUN_04"
+			template = "SWARMER_MISSILE_2"
+		}
+		component = {
+			slot = "MEDIUM_GUN_05"
+			template = "SWARMER_MISSILE_2"
+		}		
+		component = {
+			slot = "SMALL_GUN_01"
+			template = "POINT_DEFENCE_3"
+		}
+		component = {
+			slot = "SMALL_GUN_02"
+			template = "POINT_DEFENCE_3"
+		}	
+		component = {
+			slot = "LARGE_UTILITY_1"
+			template = "LARGE_ZERO_POINT_REACTOR"
+		}
+		component = {
+			slot = "LARGE_UTILITY_2"
+			template = "LARGE_ZERO_POINT_REACTOR"
+		}
+		component = {
+			slot = "LARGE_UTILITY_3"
+			template = "LARGE_ZERO_POINT_REACTOR"
+		}	
+		component = {
+			slot = "LARGE_UTILITY_4"
+			template = "LARGE_ZERO_POINT_REACTOR"
+		}	
+		component = {
+			slot = "LARGE_UTILITY_5"
+			template = "LARGE_ZERO_POINT_REACTOR"
+		}			
+		component = {
+			slot = "LARGE_UTILITY_6"
+			template = "LARGE_SHIELD_5"
+		}
+		component = {
+			slot = "LARGE_UTILITY_7"
+			template = "LARGE_SHIELD_5"
+		}
+		component = {
+			slot = "LARGE_UTILITY_8"
+			template = "LARGE_SHIELD_5"
+		}
+		component = {
+			slot = "LARGE_UTILITY_9"
+			template = "LARGE_SHIELD_5"
+		}
+		component = {
+			slot = "LARGE_UTILITY_10"
+			template = "LARGE_SHIELD_5"
+		}		
+		component = {
+			slot = "LARGE_UTILITY_11"
+			template = "LARGE_ARMOR_5"
+		}		
+		component = {
+			slot = "LARGE_UTILITY_12"
+			template = "LARGE_ARMOR_5"
+		}
+		component = {
+			slot = "LARGE_UTILITY_13"
+			template = "LARGE_ARMOR_5"
+		}	
+		component = {
+			slot = "LARGE_UTILITY_14"
+			template = "LARGE_ARMOR_5"
+		}
+		component = {
+			slot = "LARGE_UTILITY_15"
+			template = "LARGE_ARMOR_5"
+		}	
+		component = {
+			slot = "AUX_UTILITY_1"
+			template = "SHIELD_RECHARGER"
+		}
+		component = {
+			slot = "AUX_UTILITY_2"
+			template = "SHIELD_RECHARGER"
+		}			
+	}
+	required_component="SHIP_SENSOR_4"
+	
+	# For special buildable
+	is_special_buildable = yes
+	allow_buildable_trigger = is_awakened_fallen_empire_spiritualist
+}
+
+# Construction Ship
+ship_design = {
+	name = "Penitent"
+	ship_size = constructor
+	section = {
+		template = "DEFAULT_CONSTRUCTION_SECTION"
+		slot = "mid"
+	
+		component = {
+			slot = "SMALL_UTILITY_1"
+			template = "SMALL_ZERO_POINT_REACTOR"
+		}	
+		# component = {
+			# slot = "SMALL_UTILITY_2"
+			# template = "SMALL_ZERO_POINT_REACTOR"
+		# }
+		# component = {
+			# slot = "SMALL_UTILITY_3"
+			# template = "SMALL_SHIELD_5"
+		# }
+		# component = {
+			# slot = "SMALL_UTILITY_4"
+			# template = "SMALL_SHIELD_5"
+		# }	
+		# component = {
+			# slot = "AUX_UTILITY_1"
+			# template = "SHIELD_RECHARGER"
+		# }		
+	}
+	required_component="PSI_JUMP_DRIVE_1"
+	required_component="SHIP_THRUSTER_4"
+	required_component="SHIP_SENSOR_4"
+	
+	# For special buildable
+	is_special_buildable = yes
+	allow_buildable_trigger = is_awakened_fallen_empire_spiritualist
+}
+
+
+# Colony Ship
+ship_design = {
+	name = "Pilgrim"
+	ship_size = colonizer
+	section = {
+		template = "DEFAULT_COLONIZATION_SECTION"
+		slot = "mid"
+	
+		component = {
+			slot = "SMALL_UTILITY_1"
+			template = "SMALL_ZERO_POINT_REACTOR"
+		}	
+		component = {
+			slot = "SMALL_UTILITY_2"
+			template = "SMALL_ZERO_POINT_REACTOR"
+		}
+		# component = {
+			# slot = "SMALL_UTILITY_3"
+			# template = "SMALL_SHIELD_5"
+		# }
+		# component = {
+			# slot = "SMALL_UTILITY_4"
+			# template = "SMALL_SHIELD_5"
+		# }
+		component = {
+			slot = "AUX_UTILITY_1"
+			template = "SHIELD_RECHARGER"
+		}		
+	}
+	required_component="PSI_JUMP_DRIVE_1"
+	required_component="SHIP_THRUSTER_4"
+	required_component="SHIP_SENSOR_4"
+	
+	# For special buildable
+	is_special_buildable = yes
+	allow_buildable_trigger = is_awakened_fallen_empire_spiritualist
+}
+
+
+#############################
+### Militant Isolatonists ###
+#############################
+
+# Massive Ship
+ship_design = {
+	name = "Imperium"
+	ship_size = massive_ship_fallen_empire
+	section = {
+		template = "fallen_empire_massive_warship_key"
+		slot = "mid"
+		
+		component = {
+			slot = "EXTRA_LARGE_01"
+			template = "TITAN_LASER"
+		}
+		component = {
+			slot = "STRIKE_CRAFT_01"
+			template = "LARGE_BOMBERS_HANGAR_3"	
+		}
+		component = {
+			slot = "STRIKE_CRAFT_02"
+			template = "LARGE_BOMBERS_HANGAR_3"	
+		}	
+		component = {
+			slot = "STRIKE_CRAFT_03"
+			template = "LARGE_FIGHTERS_HANGAR_3"	
+		}	
+		component = {
+			slot = "STRIKE_CRAFT_04"
+			template = "LARGE_FIGHTERS_HANGAR_3"	
+		}
+		component = {
+			slot = "LARGE_GUN_01"
+			template = "LARGE_KINETIC_ARTILLERY_2"
+		}		
+		component = {
+			slot = "LARGE_GUN_02"
+			template = "LARGE_KINETIC_ARTILLERY_2"
+		}		
+		component = {
+			slot = "LARGE_GUN_03"
+			template = "LARGE_KINETIC_ARTILLERY_2"
+		}		
+		component = {
+			slot = "LARGE_GUN_04"
+			template = "LARGE_KINETIC_ARTILLERY_2"
+		}	
+		component = {
+			slot = "LARGE_GUN_05"
+			template = "LARGE_KINETIC_ARTILLERY_2"
+		}		
+		component = {
+			slot = "LARGE_GUN_06"
+			template = "LARGE_KINETIC_ARTILLERY_2"
+		}	
+		component = {
+			slot = "LARGE_GUN_07"
+			template = "LARGE_KINETIC_ARTILLERY_2"
+		}	
+		component = {
+			slot = "LARGE_GUN_08"
+			template = "LARGE_KINETIC_ARTILLERY_2"
+		}			
+		component = {
+			slot = "MEDIUM_GUN_01"
+			template = "FLAK_BATTERY_2"
+		}		
+		component = {
+			slot = "MEDIUM_GUN_02"
+			template = "FLAK_BATTERY_2"
+		}		
+		component = {
+			slot = "MEDIUM_GUN_03"
+			template = "FLAK_BATTERY_2"
+		}		
+		component = {
+			slot = "MEDIUM_GUN_04"
+			template = "FLAK_BATTERY_2"
+		}
+		component = {
+			slot = "LARGE_UTILITY_1"
+			template = "LARGE_ZERO_POINT_REACTOR"
+		}
+		component = {
+			slot = "LARGE_UTILITY_2"
+			template = "LARGE_ZERO_POINT_REACTOR"
+		}
+		component = {
+			slot = "LARGE_UTILITY_3"
+			template = "LARGE_ZERO_POINT_REACTOR"
+		}
+		component = {
+			slot = "LARGE_UTILITY_4"
+			template = "LARGE_ZERO_POINT_REACTOR"
+		}
+		component = {
+			slot = "LARGE_UTILITY_5"
+			template = "LARGE_ZERO_POINT_REACTOR"
+		}
+		component = {
+			slot = "LARGE_UTILITY_6"
+			template = "LARGE_ZERO_POINT_REACTOR"
+		}
+		component = {
+			slot = "LARGE_UTILITY_7"
+			template = "LARGE_ZERO_POINT_REACTOR"
+		}
+		component = {
+			slot = "LARGE_UTILITY_8"
+			template = "LARGE_ZERO_POINT_REACTOR"
+		}		
+		component = {
+			slot = "LARGE_UTILITY_9"
+			template = "AFTERBURNER_2"
+		}
+		component = {
+			slot = "LARGE_UTILITY_10"
+			template = "LARGE_ARMOR_5"
+		}
+		component = {
+			slot = "LARGE_UTILITY_11"
+			template = "LARGE_ARMOR_5"
+		}
+		component = {
+			slot = "LARGE_UTILITY_12"
+			template = "LARGE_ARMOR_5"
+		}
+		component = {
+			slot = "LARGE_UTILITY_13"
+			template = "LARGE_ARMOR_5"
+		}
+		component = {
+			slot = "LARGE_UTILITY_14"
+			template = "LARGE_ARMOR_5"
+		}
+		component = {
+			slot = "LARGE_UTILITY_15"
+			template = "LARGE_ARMOR_5"
+		}		
+		component = {
+			slot = "LARGE_UTILITY_16"
+			template = "LARGE_SHIELD_5"
+		}
+		component = {
+			slot = "LARGE_UTILITY_17"
+			template = "LARGE_SHIELD_5"
+		}		
+		component = {
+			slot = "LARGE_UTILITY_18"
+			template = "LARGE_SHIELD_5"
+		}		
+		component = {
+			slot = "LARGE_UTILITY_19"
+			template = "LARGE_SHIELD_5"
+		}
+		component = {
+			slot = "LARGE_UTILITY_20"
+			template = "LARGE_SHIELD_5"
+		}
+		component = {
+			slot = "AUX_UTILITY_1"
+			template = "SHIELD_RECHARGER"
+		}
+		component = {
+			slot = "AUX_UTILITY_2"
+			template = "SHIELD_RECHARGER"
+		}	
+		component = {
+			slot = "AUX_UTILITY_3"
+			template = "SHIELD_RECHARGER"
+		}				
+	}
+	required_component="SHIP_SENSOR_4"
+	required_component="JUMP_DRIVE_1"
+	required_component="BATTLESHIP_COMBAT_COMPUTER_3"
+	required_component="SHIP_THRUSTER_4"
+	
+	# For special buildable
+	is_special_buildable = yes
+	allow_buildable_trigger = is_awakened_fallen_empire_xenophobe
+}
+
+
+# Large Ship
+ship_design = {
+	name = "Supremacy"
+	ship_size = large_ship_fallen_empire
+	section = {
+		template = "fallen_empire_large_warship_key"
+		slot = "mid"
+		
+		
+		component = {
+			slot = "STRIKE_CRAFT_01"
+			template = "LARGE_BOMBERS_HANGAR_3"	
+		}		
+		component = {
+			slot = "STRIKE_CRAFT_02"
+			template = "LARGE_FIGHTERS_HANGAR_3"	
+		}		
+		component = {
+			slot = "EXTRA_LARGE_01"
+			template = "LARGE_MASS_ACCELERATOR_2"
+		}
+		component = {
+			slot = "LARGE_GUN_01"
+			template = "LARGE_KINETIC_ARTILLERY_2"
+		}		
+		component = {
+			slot = "LARGE_GUN_02"
+			template = "LARGE_KINETIC_ARTILLERY_2"
+		}		
+		component = {
+			slot = "MEDIUM_GUN_01"
+			template = "FLAK_BATTERY_2"
+		}		
+		component = {
+			slot = "MEDIUM_GUN_02"
+			template = "FLAK_BATTERY_2"
+		}
+		component = {
+			slot = "MEDIUM_GUN_03"
+			template = "FLAK_BATTERY_2"
+		}
+		component = {
+			slot = "MEDIUM_GUN_04"
+			template = "FLAK_BATTERY_2"
+		}
+		component = {
+			slot = "LARGE_UTILITY_1"
+			template = "LARGE_ZERO_POINT_REACTOR"
+		}
+		component = {
+			slot = "LARGE_UTILITY_2"
+			template = "LARGE_ZERO_POINT_REACTOR"
+		}
+		component = {
+			slot = "LARGE_UTILITY_3"
+			template = "LARGE_ZERO_POINT_REACTOR"
+		}
+		component = {
+			slot = "LARGE_UTILITY_4"
+			template = "LARGE_ZERO_POINT_REACTOR"
+		}
+		component = {
+			slot = "LARGE_UTILITY_5"
+			template = "LARGE_ARMOR_5"
+		}
+		component = {
+			slot = "LARGE_UTILITY_6"
+			template = "LARGE_ARMOR_5"
+		}
+		component = {
+			slot = "LARGE_UTILITY_7"
+			template = "LARGE_ARMOR_5"
+		}
+		component = {
+			slot = "LARGE_UTILITY_8"
+			template = "LARGE_ARMOR_5"
+		}		
+		component = {
+			slot = "LARGE_UTILITY_9"
+			template = "LARGE_SHIELD_5"
+		}
+		component = {
+			slot = "LARGE_UTILITY_10"
+			template = "LARGE_SHIELD_5"
+		}
+		component = {
+			slot = "AUX_UTILITY_1"
+			template = "SHIELD_RECHARGER"
+		}
+		component = {
+			slot = "AUX_UTILITY_2"
+			template = "AFTERBURNER_2"
+		}			
+	}
+	required_component="SHIP_SENSOR_4"
+	required_component="JUMP_DRIVE_1"
+	required_component="CRUISER_COMBAT_COMPUTER_3"
+	required_component="SHIP_THRUSTER_4"
+	
+	# For special buildable
+	is_special_buildable = yes
+	allow_buildable_trigger = is_awakened_fallen_empire_xenophobe
+}
+
+# Small Ship
+ship_design = {
+	name = "Glory"
+	ship_size = small_ship_fallen_empire
+	section = {
+		template = "fallen_empire_warship_small_key"
+		slot = "mid"
+		
+		component = {
+			slot = "LARGE_GUN_01"
+			template = "LARGE_KINETIC_ARTILLERY_2"
+		}	
+		component = {
+			slot = "SMALL_GUN_01"
+			template = "SMALL_AUTOCANNON_3"
+		}		
+		component = {
+			slot = "SMALL_GUN_02"
+			template = "SMALL_AUTOCANNON_3"
+		}
+		component = {
+			slot = "SMALL_GUN_03"
+			template = "SMALL_AUTOCANNON_3"
+		}	
+		component = {
+			slot = "SMALL_GUN_04"
+			template = "SMALL_AUTOCANNON_3"
+		}			
+		component = {
+			slot = "PD_01"
+			template = "POINT_DEFENCE_3"
+		}	
+		component = {
+			slot = "PD_02"
+			template = "POINT_DEFENCE_3"
+		}	
+		component = {
+			slot = "MEDIUM_UTILITY_1"
+			template = "MEDIUM_ZERO_POINT_REACTOR"
+		}
+		component = {
+			slot = "MEDIUM_UTILITY_2"
+			template = "MEDIUM_ZERO_POINT_REACTOR"
+		}
+		component = {
+			slot = "MEDIUM_UTILITY_3"
+			template = "MEDIUM_ZERO_POINT_REACTOR"
+		}
+		component = {
+			slot = "MEDIUM_UTILITY_4"
+			template = "MEDIUM_ZERO_POINT_REACTOR"
+		}		
+		component = {
+			slot = "MEDIUM_UTILITY_5"
+			template = "MEDIUM_SHIELD_5"
+		}
+		component = {
+			slot = "MEDIUM_UTILITY_6"
+			template = "MEDIUM_SHIELD_5"
+		}
+		component = {
+			slot = "MEDIUM_UTILITY_7"
+			template = "MEDIUM_SHIELD_5"
+		}		
+		component = {
+			slot = "MEDIUM_UTILITY_8"
+			template = "MEDIUM_ARMOR_5"
+		}
+		component = {
+			slot = "MEDIUM_UTILITY_9"
+			template = "MEDIUM_ARMOR_5"
+		}
+		component = {
+			slot = "MEDIUM_UTILITY_10"
+			template = "MEDIUM_ARMOR_5"
+		}
+		component = {
+			slot = "AUX_UTILITY_1"
+			template = "AFTERBURNER_2"
+		}		
+	}
+	required_component="SHIP_SENSOR_4"
+	required_component="JUMP_DRIVE_1"
+	required_component="CRUISER_COMBAT_COMPUTER_3"
+	required_component="SHIP_THRUSTER_4"
+	
+	# For special buildable
+	is_special_buildable = yes
+	allow_buildable_trigger = is_awakened_fallen_empire_xenophobe
+}
+
+# Large Station
+ship_design = {
+	name = "Reaper"
+	ship_size = military_station_large_fallen_empire
+	section = {
+		template = "fallen_empire_station_large_key"
+		slot = "mid"
+		
+		component = {
+			slot = "LARGE_GUN_01"
+			template = "LARGE_KINETIC_ARTILLERY_2"
+		}
+		component = {
+			slot = "LARGE_GUN_02"
+			template = "LARGE_KINETIC_ARTILLERY_2"
+		}
+		component = {
+			slot = "LARGE_GUN_03"
+			template = "LARGE_KINETIC_ARTILLERY_2"
+		}
+		component = {
+			slot = "LARGE_GUN_04"
+			template = "LARGE_KINETIC_ARTILLERY_2"
+		}
+		component = {
+			slot = "LARGE_GUN_05"
+			template = "LARGE_KINETIC_ARTILLERY_2"
+		}	
+		component = {
+			slot = "LARGE_GUN_06"
+			template = "LARGE_KINETIC_ARTILLERY_2"
+		}	
+		component = {
+			slot = "LARGE_GUN_07"
+			template = "LARGE_KINETIC_ARTILLERY_2"
+		}	
+		component = {
+			slot = "LARGE_GUN_08"
+			template = "LARGE_KINETIC_ARTILLERY_2"
+		}	
+		component = {
+			slot = "LARGE_GUN_09"
+			template = "LARGE_KINETIC_ARTILLERY_2"
+		}	
+		component = {
+			slot = "LARGE_GUN_10"
+			template = "LARGE_KINETIC_ARTILLERY_2"
+		}			
+		component = {
+			slot = "MEDIUM_GUN_01"
+			template = "FLAK_BATTERY_2"
+		}
+		component = {
+			slot = "MEDIUM_GUN_02"
+			template = "FLAK_BATTERY_2"
+		}
+		component = {
+			slot = "MEDIUM_GUN_03"
+			template = "FLAK_BATTERY_2"
+		}
+		component = {
+			slot = "MEDIUM_GUN_04"
+			template = "FLAK_BATTERY_2"
+		}
+		component = {
+			slot = "MEDIUM_GUN_05"
+			template = "FLAK_BATTERY_2"
+		}	
+		component = {
+			slot = "MEDIUM_GUN_06"
+			template = "FLAK_BATTERY_2"
+		}	
+		component = {
+			slot = "MEDIUM_GUN_07"
+			template = "FLAK_BATTERY_2"
+		}	
+		component = {
+			slot = "MEDIUM_GUN_08"
+			template = "FLAK_BATTERY_2"
+		}	
+		component = {
+			slot = "MEDIUM_GUN_09"
+			template = "FLAK_BATTERY_2"
+		}	
+		component = {
+			slot = "MEDIUM_GUN_10"
+			template = "FLAK_BATTERY_2"
+		}			
+		component = {
+			slot = "SMALL_GUN_01"
+			template = "POINT_DEFENCE_3"
+		}
+		component = {
+			slot = "SMALL_GUN_02"
+			template = "POINT_DEFENCE_3"
+		}
+		component = {
+			slot = "SMALL_GUN_03"
+			template = "POINT_DEFENCE_3"
+		}
+		component = {
+			slot = "SMALL_GUN_04"
+			template = "POINT_DEFENCE_3"
+		}		
+		component = {
+			slot = "LARGE_UTILITY_1"
+			template = "LARGE_ZERO_POINT_REACTOR"
+		}
+		component = {
+			slot = "LARGE_UTILITY_2"
+			template = "LARGE_ZERO_POINT_REACTOR"
+		}
+		component = {
+			slot = "LARGE_UTILITY_3"
+			template = "LARGE_ZERO_POINT_REACTOR"
+		}
+		component = {
+			slot = "LARGE_UTILITY_4"
+			template = "LARGE_ZERO_POINT_REACTOR"
+		}
+		component = {
+			slot = "LARGE_UTILITY_5"
+			template = "LARGE_ZERO_POINT_REACTOR"
+		}	
+		component = {
+			slot = "LARGE_UTILITY_6"
+			template = "LARGE_ZERO_POINT_REACTOR"
+		}
+		component = {
+			slot = "LARGE_UTILITY_7"
+			template = "LARGE_ZERO_POINT_REACTOR"
+		}	
+		component = {
+			slot = "LARGE_UTILITY_8"
+			template = "LARGE_ZERO_POINT_REACTOR"
+		}	
+		component = {
+			slot = "LARGE_UTILITY_9"
+			template = "LARGE_ZERO_POINT_REACTOR"
+		}	
+		component = {
+			slot = "LARGE_UTILITY_10"
+			template = "LARGE_ZERO_POINT_REACTOR"
+		}			
+		component = {
+			slot = "LARGE_UTILITY_11"
+			template = "LARGE_SHIELD_5"
+		}
+		component = {
+			slot = "LARGE_UTILITY_12"
+			template = "LARGE_SHIELD_5"
+		}
+		component = {
+			slot = "LARGE_UTILITY_13"
+			template = "LARGE_SHIELD_5"
+		}
+		component = {
+			slot = "LARGE_UTILITY_14"
+			template = "LARGE_SHIELD_5"
+		}		
+		component = {
+			slot = "LARGE_UTILITY_15"
+			template = "LARGE_SHIELD_5"
+		}	
+		component = {
+			slot = "LARGE_UTILITY_16"
+			template = "LARGE_SHIELD_5"
+		}
+		component = {
+			slot = "LARGE_UTILITY_17"
+			template = "LARGE_SHIELD_5"
+		}	
+		component = {
+			slot = "LARGE_UTILITY_18"
+			template = "LARGE_SHIELD_5"
+		}	
+		component = {
+			slot = "LARGE_UTILITY_19"
+			template = "LARGE_SHIELD_5"
+		}	
+		component = {
+			slot = "LARGE_UTILITY_20"
+			template = "LARGE_SHIELD_5"
+		}	
+		component = {
+			slot = "LARGE_UTILITY_21"
+			template = "LARGE_ARMOR_5"
+		}	
+		component = {
+			slot = "LARGE_UTILITY_22"
+			template = "LARGE_ARMOR_5"
+		}	
+		component = {
+			slot = "LARGE_UTILITY_23"
+			template = "LARGE_ARMOR_5"
+		}	
+		component = {
+			slot = "LARGE_UTILITY_24"
+			template = "LARGE_ARMOR_5"
+		}
+		component = {
+			slot = "LARGE_UTILITY_25"
+			template = "LARGE_ARMOR_5"
+		}	
+		component = {
+			slot = "LARGE_UTILITY_26"
+			template = "LARGE_ARMOR_5"
+		}	
+		component = {
+			slot = "LARGE_UTILITY_27"
+			template = "LARGE_ARMOR_5"
+		}	
+		component = {
+			slot = "LARGE_UTILITY_28"
+			template = "LARGE_ARMOR_5"
+		}
+		component = {
+			slot = "LARGE_UTILITY_29"
+			template = "LARGE_ARMOR_5"
+		}	
+		component = {
+			slot = "LARGE_UTILITY_30"
+			template = "LARGE_ARMOR_5"
+		}
+		component = {
+			slot = "AUX_UTILITY_1"
+			template = "SHIELD_RECHARGER"
+		}
+		component = {
+			slot = "AUX_UTILITY_2"
+			template = "SHIELD_RECHARGER"
+		}	
+		component = {
+			slot = "AUX_UTILITY_3"
+			template = "SHIELD_RECHARGER"
+		}	
+		component = {
+			slot = "AUX_UTILITY_4"
+			template = "SHIELD_RECHARGER"
+		}			
+	}
+	required_component="SHIP_SENSOR_4"
+	
+	# For special buildable
+	is_special_buildable = yes
+	allow_buildable_trigger = is_awakened_fallen_empire_xenophobe
+}
+
+# Small Station
+ship_design = {
+	name = "Devastator"
+	ship_size = military_station_small_fallen_empire
+	section = {
+		template = "fallen_empire_station_small_key"
+		slot = "mid"
+		
+		component = {
+			slot = "LARGE_GUN_01"
+			template = "LARGE_KINETIC_ARTILLERY_2"
+		}
+		component = {
+			slot = "LARGE_GUN_02"
+			template = "LARGE_KINETIC_ARTILLERY_2"
+		}
+		component = {
+			slot = "LARGE_GUN_03"
+			template = "LARGE_KINETIC_ARTILLERY_2"
+		}	
+		component = {
+			slot = "LARGE_GUN_04"
+			template = "LARGE_KINETIC_ARTILLERY_2"
+		}	
+		component = {
+			slot = "LARGE_GUN_05"
+			template = "LARGE_KINETIC_ARTILLERY_2"
+		}			
+		component = {
+			slot = "MEDIUM_GUN_01"
+			template = "FLAK_BATTERY_2"
+		}
+		component = {
+			slot = "MEDIUM_GUN_02"
+			template = "FLAK_BATTERY_2"
+		}
+		component = {
+			slot = "MEDIUM_GUN_03"
+			template = "FLAK_BATTERY_2"
+		}
+		component = {
+			slot = "MEDIUM_GUN_04"
+			template = "FLAK_BATTERY_2"
+		}
+		component = {
+			slot = "MEDIUM_GUN_05"
+			template = "FLAK_BATTERY_2"
+		}		
+		component = {
+			slot = "SMALL_GUN_01"
+			template = "POINT_DEFENCE_3"
+		}
+		component = {
+			slot = "SMALL_GUN_02"
+			template = "POINT_DEFENCE_3"
+		}	
+		component = {
+			slot = "LARGE_UTILITY_1"
+			template = "LARGE_ZERO_POINT_REACTOR"
+		}
+		component = {
+			slot = "LARGE_UTILITY_2"
+			template = "LARGE_ZERO_POINT_REACTOR"
+		}
+		component = {
+			slot = "LARGE_UTILITY_3"
+			template = "LARGE_ZERO_POINT_REACTOR"
+		}	
+		component = {
+			slot = "LARGE_UTILITY_4"
+			template = "LARGE_ZERO_POINT_REACTOR"
+		}	
+		component = {
+			slot = "LARGE_UTILITY_5"
+			template = "LARGE_ZERO_POINT_REACTOR"
+		}			
+		component = {
+			slot = "LARGE_UTILITY_6"
+			template = "LARGE_SHIELD_5"
+		}
+		component = {
+			slot = "LARGE_UTILITY_7"
+			template = "LARGE_SHIELD_5"
+		}
+		component = {
+			slot = "LARGE_UTILITY_8"
+			template = "LARGE_SHIELD_5"
+		}
+		component = {
+			slot = "LARGE_UTILITY_9"
+			template = "LARGE_SHIELD_5"
+		}
+		component = {
+			slot = "LARGE_UTILITY_10"
+			template = "LARGE_SHIELD_5"
+		}		
+		component = {
+			slot = "LARGE_UTILITY_11"
+			template = "LARGE_ARMOR_5"
+		}		
+		component = {
+			slot = "LARGE_UTILITY_12"
+			template = "LARGE_ARMOR_5"
+		}
+		component = {
+			slot = "LARGE_UTILITY_13"
+			template = "LARGE_ARMOR_5"
+		}	
+		component = {
+			slot = "LARGE_UTILITY_14"
+			template = "LARGE_ARMOR_5"
+		}
+		component = {
+			slot = "LARGE_UTILITY_15"
+			template = "LARGE_ARMOR_5"
+		}	
+		component = {
+			slot = "AUX_UTILITY_1"
+			template = "SHIELD_RECHARGER"
+		}
+		component = {
+			slot = "AUX_UTILITY_2"
+			template = "SHIELD_RECHARGER"
+		}			
+	}
+	required_component="SHIP_SENSOR_4"
+	
+	# For special buildable
+	is_special_buildable = yes
+	allow_buildable_trigger = is_awakened_fallen_empire_xenophobe
+}
+
+# Construction Ship
+ship_design = {
+	name = "Servitor"
+	ship_size = constructor
+	section = {
+		template = "DEFAULT_CONSTRUCTION_SECTION"
+		slot = "mid"
+	
+		component = {
+			slot = "SMALL_UTILITY_1"
+			template = "SMALL_ZERO_POINT_REACTOR"
+		}	
+		# component = {
+			# slot = "SMALL_UTILITY_2"
+			# template = "SMALL_ZERO_POINT_REACTOR"
+		# }
+		# component = {
+			# slot = "SMALL_UTILITY_3"
+			# template = "SMALL_SHIELD_5"
+		# }
+		# component = {
+			# slot = "AUX_UTILITY_1"
+			# template = "SHIELD_RECHARGER"
+		# }		
+	}
+	required_component="JUMP_DRIVE_1"
+	required_component="SHIP_THRUSTER_4"
+	required_component="SHIP_SENSOR_4"
+	
+	# For special buildable
+	is_special_buildable = yes
+	allow_buildable_trigger = is_awakened_fallen_empire_xenophobe
+}
+
+
+# Colony Ship
+ship_design = {
+	name = "Destiny"
+	ship_size = colonizer
+	section = {
+		template = "DEFAULT_COLONIZATION_SECTION"
+		slot = "mid"
+	
+		component = {
+			slot = "SMALL_UTILITY_1"
+			template = "SMALL_ZERO_POINT_REACTOR"
+		}	
+		component = {
+			slot = "SMALL_UTILITY_2"
+			template = "SMALL_ZERO_POINT_REACTOR"
+		}
+		component = {
+			slot = "AUX_UTILITY_1"
+			template = "SHIELD_RECHARGER"
+		}		
+	}
+	required_component="JUMP_DRIVE_1"
+	required_component="SHIP_THRUSTER_4"
+	required_component="SHIP_SENSOR_4"
+	
+	# For special buildable
+	is_special_buildable = yes
+	allow_buildable_trigger = is_awakened_fallen_empire_xenophobe
+}
+
+###########################
+### Enigmatic Observers ###
+###########################
+
+# Massive Ship
+ship_design = {
+	name = "Keeper"
+	ship_size = massive_ship_fallen_empire
+	section = {
+		template = "fallen_empire_massive_warship_key"
+		slot = "mid"
+		
+		component = {
+			slot = "EXTRA_LARGE_01"
+			template = "TITAN_LASER"
+		}
+		component = {
+			slot = "STRIKE_CRAFT_01"
+			template = "LARGE_BOMBERS_HANGAR_3"	
+		}
+		component = {
+			slot = "STRIKE_CRAFT_02"
+			template = "LARGE_BOMBERS_HANGAR_3"	
+		}	
+		component = {
+			slot = "STRIKE_CRAFT_03"
+			template = "LARGE_FIGHTERS_HANGAR_3"	
+		}	
+		component = {
+			slot = "STRIKE_CRAFT_04"
+			template = "LARGE_FIGHTERS_HANGAR_3"	
+		}
+		component = {
+			slot = "LARGE_GUN_01"
+			template = "LARGE_KINETIC_ARTILLERY_2"
+		}		
+		component = {
+			slot = "LARGE_GUN_02"
+			template = "LARGE_KINETIC_ARTILLERY_2"
+		}		
+		component = {
+			slot = "LARGE_GUN_03"
+			template = "LARGE_KINETIC_ARTILLERY_2"
+		}		
+		component = {
+			slot = "LARGE_GUN_04"
+			template = "LARGE_KINETIC_ARTILLERY_2"
+		}	
+		component = {
+			slot = "LARGE_GUN_05"
+			template = "LARGE_KINETIC_ARTILLERY_2"
+		}		
+		component = {
+			slot = "LARGE_GUN_06"
+			template = "LARGE_KINETIC_ARTILLERY_2"
+		}	
+		component = {
+			slot = "LARGE_GUN_07"
+			template = "LARGE_KINETIC_ARTILLERY_2"
+		}	
+		component = {
+			slot = "LARGE_GUN_08"
+			template = "LARGE_KINETIC_ARTILLERY_2"
+		}			
+		component = {
+			slot = "MEDIUM_GUN_01"
+			template = "MEDIUM_GAMMA_LASER"
+		}		
+		component = {
+			slot = "MEDIUM_GUN_02"
+			template = "MEDIUM_GAMMA_LASER"
+		}		
+		component = {
+			slot = "MEDIUM_GUN_03"
+			template = "MEDIUM_GAMMA_LASER"
+		}		
+		component = {
+			slot = "MEDIUM_GUN_04"
+			template = "MEDIUM_GAMMA_LASER"
+		}
+		component = {
+			slot = "LARGE_UTILITY_1"
+			template = "LARGE_ZERO_POINT_REACTOR"
+		}
+		component = {
+			slot = "LARGE_UTILITY_2"
+			template = "LARGE_ZERO_POINT_REACTOR"
+		}
+		component = {
+			slot = "LARGE_UTILITY_3"
+			template = "LARGE_ZERO_POINT_REACTOR"
+		}
+		component = {
+			slot = "LARGE_UTILITY_4"
+			template = "LARGE_ZERO_POINT_REACTOR"
+		}
+		component = {
+			slot = "LARGE_UTILITY_5"
+			template = "LARGE_ZERO_POINT_REACTOR"
+		}
+		component = {
+			slot = "LARGE_UTILITY_6"
+			template = "LARGE_ZERO_POINT_REACTOR"
+		}
+		component = {
+			slot = "LARGE_UTILITY_7"
+			template = "LARGE_ZERO_POINT_REACTOR"
+		}
+		component = {
+			slot = "LARGE_UTILITY_8"
+			template = "LARGE_ZERO_POINT_REACTOR"
+		}		
+		component = {
+			slot = "LARGE_UTILITY_9"
+			template = "LARGE_ARMOR_5"
+		}
+		component = {
+			slot = "LARGE_UTILITY_10"
+			template = "LARGE_ARMOR_5"
+		}
+		component = {
+			slot = "LARGE_UTILITY_11"
+			template = "LARGE_ARMOR_5"
+		}
+		component = {
+			slot = "LARGE_UTILITY_12"
+			template = "LARGE_ARMOR_5"
+		}
+		component = {
+			slot = "LARGE_UTILITY_13"
+			template = "LARGE_ARMOR_5"
+		}
+		component = {
+			slot = "LARGE_UTILITY_14"
+			template = "LARGE_ARMOR_5"
+		}
+		component = {
+			slot = "LARGE_UTILITY_15"
+			template = "LARGE_SHIELD_5"
+		}		
+		component = {
+			slot = "LARGE_UTILITY_16"
+			template = "LARGE_SHIELD_5"
+		}
+		component = {
+			slot = "LARGE_UTILITY_17"
+			template = "LARGE_SHIELD_5"
+		}		
+		component = {
+			slot = "LARGE_UTILITY_18"
+			template = "LARGE_SHIELD_5"
+		}		
+		component = {
+			slot = "LARGE_UTILITY_19"
+			template = "LARGE_SHIELD_5"
+		}
+		component = {
+			slot = "LARGE_UTILITY_20"
+			template = "LARGE_SHIELD_5"
+		}
+		component = {
+			slot = "AUX_UTILITY_1"
+			template = "SHIELD_RECHARGER"
+		}
+		component = {
+			slot = "AUX_UTILITY_2"
+			template = "SHIELD_RECHARGER"
+		}	
+		component = {
+			slot = "AUX_UTILITY_3"
+			template = "SHIELD_RECHARGER"
+		}			
+	}
+	required_component="SHIP_SENSOR_4"
+	required_component="JUMP_DRIVE_1"
+	required_component="BATTLESHIP_COMBAT_COMPUTER_3"
+	required_component="SHIP_THRUSTER_4"
+	
+	# For special buildable
+	is_special_buildable = yes
+	allow_buildable_trigger = is_awakened_fallen_empire_xenophile
+}
+
+# Large Ship
+ship_design = {
+	name = "Custodian"
+	ship_size = large_ship_fallen_empire
+	section = {
+		template = "fallen_empire_large_warship_key"
+		slot = "mid"
+		
+		
+		component = {
+			slot = "STRIKE_CRAFT_01"
+			template = "LARGE_BOMBERS_HANGAR_3"	
+		}		
+		component = {
+			slot = "STRIKE_CRAFT_02"
+			template = "LARGE_FIGHTERS_HANGAR_3"	
+		}		
+		component = {
+			slot = "EXTRA_LARGE_01"
+			template = "LARGE_ENERGY_LANCE_2"
+		}
+		component = {
+			slot = "LARGE_GUN_01"
+			template = "LARGE_GAMMA_LASER"
+		}		
+		component = {
+			slot = "LARGE_GUN_02"
+			template = "LARGE_GAMMA_LASER"
+		}		
+		component = {
+			slot = "MEDIUM_GUN_01"
+			template = "MEDIUM_MASS_DRIVER_5"
+		}		
+		component = {
+			slot = "MEDIUM_GUN_02"
+			template = "MEDIUM_MASS_DRIVER_5"
+		}
+		component = {
+			slot = "MEDIUM_GUN_03"
+			template = "MEDIUM_MASS_DRIVER_5"
+		}
+		component = {
+			slot = "MEDIUM_GUN_04"
+			template = "MEDIUM_MASS_DRIVER_5"
+		}
+		component = {
+			slot = "LARGE_UTILITY_1"
+			template = "LARGE_ZERO_POINT_REACTOR"
+		}
+		component = {
+			slot = "LARGE_UTILITY_2"
+			template = "LARGE_ZERO_POINT_REACTOR"
+		}
+		component = {
+			slot = "LARGE_UTILITY_3"
+			template = "LARGE_ZERO_POINT_REACTOR"
+		}
+		component = {
+			slot = "LARGE_UTILITY_4"
+			template = "LARGE_ZERO_POINT_REACTOR"
+		}
+		component = {
+			slot = "LARGE_UTILITY_5"
+			template = "LARGE_ARMOR_5"
+		}
+		component = {
+			slot = "LARGE_UTILITY_6"
+			template = "LARGE_ARMOR_5"
+		}
+		component = {
+			slot = "LARGE_UTILITY_7"
+			template = "LARGE_ARMOR_5"
+		}
+		component = {
+			slot = "LARGE_UTILITY_8"
+			template = "LARGE_SHIELD_5"
+		}		
+		component = {
+			slot = "LARGE_UTILITY_9"
+			template = "LARGE_SHIELD_5"
+		}
+		component = {
+			slot = "LARGE_UTILITY_10"
+			template = "LARGE_SHIELD_5"
+		}
+		component = {
+			slot = "AUX_UTILITY_1"
+			template = "SHIELD_RECHARGER"
+		}
+		component = {
+			slot = "AUX_UTILITY_2"
+			template = "SHIELD_RECHARGER"
+		}			
+	}
+	required_component="SHIP_SENSOR_4"
+	required_component="JUMP_DRIVE_1"
+	required_component="DESTROYER_COMBAT_COMPUTER_3"
+	required_component="SHIP_THRUSTER_4"
+	
+	# For special buildable
+	is_special_buildable = yes
+	allow_buildable_trigger = is_awakened_fallen_empire_xenophile
+}
+
+# Small Ship
+ship_design = {
+	name = "Warden"
+	ship_size = small_ship_fallen_empire
+	section = {
+		template = "fallen_empire_warship_small_key"
+		slot = "mid"
+		
+		component = {
+			slot = "LARGE_GUN_01"
+			template = "LARGE_KINETIC_ARTILLERY_2"
+		}	
+		component = {
+			slot = "SMALL_GUN_01"
+			template = "SMALL_MASS_DRIVER_5"
+		}		
+		component = {
+			slot = "SMALL_GUN_02"
+			template = "SMALL_MASS_DRIVER_5"
+		}
+		component = {
+			slot = "SMALL_GUN_03"
+			template = "SMALL_GAMMA_LASER"
+		}	
+		component = {
+			slot = "SMALL_GUN_04"
+			template = "SMALL_GAMMA_LASER"
+		}			
+		component = {
+			slot = "PD_01"
+			template = "POINT_DEFENCE_3"
+		}	
+		component = {
+			slot = "PD_02"
+			template = "POINT_DEFENCE_3"
+		}	
+		component = {
+			slot = "MEDIUM_UTILITY_1"
+			template = "MEDIUM_ZERO_POINT_REACTOR"
+		}
+		component = {
+			slot = "MEDIUM_UTILITY_2"
+			template = "MEDIUM_ZERO_POINT_REACTOR"
+		}
+		component = {
+			slot = "MEDIUM_UTILITY_3"
+			template = "MEDIUM_ZERO_POINT_REACTOR"
+		}
+		component = {
+			slot = "MEDIUM_UTILITY_4"
+			template = "MEDIUM_ZERO_POINT_REACTOR"
+		}		
+		component = {
+			slot = "MEDIUM_UTILITY_5"
+			template = "MEDIUM_SHIELD_5"
+		}
+		component = {
+			slot = "MEDIUM_UTILITY_6"
+			template = "MEDIUM_SHIELD_5"
+		}
+		component = {
+			slot = "MEDIUM_UTILITY_7"
+			template = "MEDIUM_SHIELD_5"
+		}		
+		component = {
+			slot = "MEDIUM_UTILITY_8"
+			template = "MEDIUM_ARMOR_5"
+		}
+		component = {
+			slot = "MEDIUM_UTILITY_9"
+			template = "MEDIUM_ARMOR_5"
+		}
+		component = {
+			slot = "MEDIUM_UTILITY_10"
+			template = "MEDIUM_ARMOR_5"
+		}		
+		component = {
+			slot = "AUX_UTILITY_1"
+			template = "SHIELD_RECHARGER"
+		}		
+	}
+	required_component="SHIP_SENSOR_4"
+	required_component="JUMP_DRIVE_1"
+	required_component="DESTROYER_COMBAT_COMPUTER_3"
+	required_component="SHIP_THRUSTER_4"
+	
+	# For special buildable
+	is_special_buildable = yes
+	allow_buildable_trigger = is_awakened_fallen_empire_xenophile
+}
+
+# Large Station
+ship_design = {
+	name = "Sentinel"
+	ship_size = military_station_large_fallen_empire
+	section = {
+		template = "fallen_empire_station_large_key"
+		slot = "mid"
+		
+		component = {
+			slot = "LARGE_GUN_01"
+			template = "LARGE_KINETIC_ARTILLERY_2"
+		}
+		component = {
+			slot = "LARGE_GUN_02"
+			template = "LARGE_KINETIC_ARTILLERY_2"
+		}
+		component = {
+			slot = "LARGE_GUN_03"
+			template = "LARGE_KINETIC_ARTILLERY_2"
+		}
+		component = {
+			slot = "LARGE_GUN_04"
+			template = "LARGE_KINETIC_ARTILLERY_2"
+		}
+		component = {
+			slot = "LARGE_GUN_05"
+			template = "LARGE_KINETIC_ARTILLERY_2"
+		}		
+		component = {
+			slot = "LARGE_GUN_06"
+			template = "LARGE_GAMMA_LASER"
+		}
+		component = {
+			slot = "LARGE_GUN_07"
+			template = "LARGE_GAMMA_LASER"
+		}
+		component = {
+			slot = "LARGE_GUN_08"
+			template = "LARGE_GAMMA_LASER"
+		}		
+		component = {
+			slot = "LARGE_GUN_09"
+			template = "LARGE_GAMMA_LASER"
+		}		
+		component = {
+			slot = "LARGE_GUN_10"
+			template = "LARGE_GAMMA_LASER"
+		}				
+		component = {
+			slot = "MEDIUM_GUN_01"
+			template = "MEDIUM_MASS_DRIVER_5"
+		}
+		component = {
+			slot = "MEDIUM_GUN_02"
+			template = "MEDIUM_MASS_DRIVER_5"
+		}
+		component = {
+			slot = "MEDIUM_GUN_03"
+			template = "MEDIUM_MASS_DRIVER_5"
+		}	
+		component = {
+			slot = "MEDIUM_GUN_04"
+			template = "MEDIUM_MASS_DRIVER_5"
+		}
+		component = {
+			slot = "MEDIUM_GUN_05"
+			template = "MEDIUM_MASS_DRIVER_5"
+		}		
+		component = {
+			slot = "MEDIUM_GUN_06"
+			template = "MEDIUM_GAMMA_LASER"
+		}
+		component = {
+			slot = "MEDIUM_GUN_07"
+			template = "MEDIUM_GAMMA_LASER"
+		}
+		component = {
+			slot = "MEDIUM_GUN_08"
+			template = "MEDIUM_GAMMA_LASER"
+		}
+		component = {
+			slot = "MEDIUM_GUN_09"
+			template = "MEDIUM_GAMMA_LASER"
+		}
+		component = {
+			slot = "MEDIUM_GUN_10"
+			template = "MEDIUM_GAMMA_LASER"
+		}		
+		component = {
+			slot = "SMALL_GUN_01"
+			template = "POINT_DEFENCE_3"
+		}
+		component = {
+			slot = "SMALL_GUN_02"
+			template = "POINT_DEFENCE_3"
+		}
+		component = {
+			slot = "SMALL_GUN_03"
+			template = "POINT_DEFENCE_3"
+		}
+		component = {
+			slot = "SMALL_GUN_04"
+			template = "POINT_DEFENCE_3"
+		}		
+		component = {
+			slot = "LARGE_UTILITY_1"
+			template = "LARGE_ZERO_POINT_REACTOR"
+		}
+		component = {
+			slot = "LARGE_UTILITY_2"
+			template = "LARGE_ZERO_POINT_REACTOR"
+		}
+		component = {
+			slot = "LARGE_UTILITY_3"
+			template = "LARGE_ZERO_POINT_REACTOR"
+		}
+		component = {
+			slot = "LARGE_UTILITY_4"
+			template = "LARGE_ZERO_POINT_REACTOR"
+		}
+		component = {
+			slot = "LARGE_UTILITY_5"
+			template = "LARGE_ZERO_POINT_REACTOR"
+		}	
+		component = {
+			slot = "LARGE_UTILITY_6"
+			template = "LARGE_ZERO_POINT_REACTOR"
+		}
+		component = {
+			slot = "LARGE_UTILITY_7"
+			template = "LARGE_ZERO_POINT_REACTOR"
+		}	
+		component = {
+			slot = "LARGE_UTILITY_8"
+			template = "LARGE_ZERO_POINT_REACTOR"
+		}	
+		component = {
+			slot = "LARGE_UTILITY_9"
+			template = "LARGE_ZERO_POINT_REACTOR"
+		}	
+		component = {
+			slot = "LARGE_UTILITY_10"
+			template = "LARGE_ZERO_POINT_REACTOR"
+		}			
+		component = {
+			slot = "LARGE_UTILITY_11"
+			template = "LARGE_SHIELD_5"
+		}
+		component = {
+			slot = "LARGE_UTILITY_12"
+			template = "LARGE_SHIELD_5"
+		}
+		component = {
+			slot = "LARGE_UTILITY_13"
+			template = "LARGE_SHIELD_5"
+		}
+		component = {
+			slot = "LARGE_UTILITY_14"
+			template = "LARGE_SHIELD_5"
+		}		
+		component = {
+			slot = "LARGE_UTILITY_15"
+			template = "LARGE_SHIELD_5"
+		}	
+		component = {
+			slot = "LARGE_UTILITY_16"
+			template = "LARGE_SHIELD_5"
+		}
+		component = {
+			slot = "LARGE_UTILITY_17"
+			template = "LARGE_SHIELD_5"
+		}	
+		component = {
+			slot = "LARGE_UTILITY_18"
+			template = "LARGE_SHIELD_5"
+		}	
+		component = {
+			slot = "LARGE_UTILITY_19"
+			template = "LARGE_SHIELD_5"
+		}	
+		component = {
+			slot = "LARGE_UTILITY_20"
+			template = "LARGE_SHIELD_5"
+		}	
+		component = {
+			slot = "LARGE_UTILITY_21"
+			template = "LARGE_ARMOR_5"
+		}	
+		component = {
+			slot = "LARGE_UTILITY_22"
+			template = "LARGE_ARMOR_5"
+		}	
+		component = {
+			slot = "LARGE_UTILITY_23"
+			template = "LARGE_ARMOR_5"
+		}	
+		component = {
+			slot = "LARGE_UTILITY_24"
+			template = "LARGE_ARMOR_5"
+		}
+		component = {
+			slot = "LARGE_UTILITY_25"
+			template = "LARGE_ARMOR_5"
+		}	
+		component = {
+			slot = "LARGE_UTILITY_26"
+			template = "LARGE_ARMOR_5"
+		}	
+		component = {
+			slot = "LARGE_UTILITY_27"
+			template = "LARGE_ARMOR_5"
+		}	
+		component = {
+			slot = "LARGE_UTILITY_28"
+			template = "LARGE_ARMOR_5"
+		}
+		component = {
+			slot = "LARGE_UTILITY_29"
+			template = "LARGE_ARMOR_5"
+		}	
+		component = {
+			slot = "LARGE_UTILITY_30"
+			template = "LARGE_ARMOR_5"
+		}
+		component = {
+			slot = "AUX_UTILITY_1"
+			template = "SHIELD_RECHARGER"
+		}
+		component = {
+			slot = "AUX_UTILITY_2"
+			template = "SHIELD_RECHARGER"
+		}	
+		component = {
+			slot = "AUX_UTILITY_3"
+			template = "SHIELD_RECHARGER"
+		}	
+		component = {
+			slot = "AUX_UTILITY_4"
+			template = "SHIELD_RECHARGER"
+		}			
+	}
+	required_component="SHIP_SENSOR_4"
+	
+	# For special buildable
+	is_special_buildable = yes
+	allow_buildable_trigger = is_awakened_fallen_empire_xenophile
+}
+
+# Small Station
+ship_design = {
+	name = "Watcher"
+	ship_size = military_station_small_fallen_empire
+	section = {
+		template = "fallen_empire_station_small_key"
+		slot = "mid"
+		
+		component = {
+			slot = "LARGE_GUN_01"
+			template = "LARGE_KINETIC_ARTILLERY_2"
+		}
+		component = {
+			slot = "LARGE_GUN_02"
+			template = "LARGE_KINETIC_ARTILLERY_2"
+		}
+		component = {
+			slot = "LARGE_GUN_03"
+			template = "LARGE_KINETIC_ARTILLERY_2"
+		}
+		component = {
+			slot = "LARGE_GUN_04"
+			template = "LARGE_KINETIC_ARTILLERY_2"
+		}
+		component = {
+			slot = "LARGE_GUN_05"
+			template = "LARGE_KINETIC_ARTILLERY_2"
+		}		
+		component = {
+			slot = "MEDIUM_GUN_01"
+			template = "MEDIUM_GAMMA_LASER"
+		}
+		component = {
+			slot = "MEDIUM_GUN_02"
+			template = "MEDIUM_GAMMA_LASER"
+		}
+		component = {
+			slot = "MEDIUM_GUN_03"
+			template = "MEDIUM_GAMMA_LASER"
+		}
+		component = {
+			slot = "MEDIUM_GUN_04"
+			template = "MEDIUM_GAMMA_LASER"
+		}
+		component = {
+			slot = "MEDIUM_GUN_05"
+			template = "MEDIUM_GAMMA_LASER"
+		}		
+		component = {
+			slot = "SMALL_GUN_01"
+			template = "POINT_DEFENCE_3"
+		}
+		component = {
+			slot = "SMALL_GUN_02"
+			template = "POINT_DEFENCE_3"
+		}	
+		component = {
+			slot = "LARGE_UTILITY_1"
+			template = "LARGE_ZERO_POINT_REACTOR"
+		}
+		component = {
+			slot = "LARGE_UTILITY_2"
+			template = "LARGE_ZERO_POINT_REACTOR"
+		}
+		component = {
+			slot = "LARGE_UTILITY_3"
+			template = "LARGE_ZERO_POINT_REACTOR"
+		}	
+		component = {
+			slot = "LARGE_UTILITY_4"
+			template = "LARGE_ZERO_POINT_REACTOR"
+		}	
+		component = {
+			slot = "LARGE_UTILITY_5"
+			template = "LARGE_ZERO_POINT_REACTOR"
+		}			
+		component = {
+			slot = "LARGE_UTILITY_6"
+			template = "LARGE_SHIELD_5"
+		}
+		component = {
+			slot = "LARGE_UTILITY_7"
+			template = "LARGE_SHIELD_5"
+		}
+		component = {
+			slot = "LARGE_UTILITY_8"
+			template = "LARGE_SHIELD_5"
+		}
+		component = {
+			slot = "LARGE_UTILITY_9"
+			template = "LARGE_SHIELD_5"
+		}
+		component = {
+			slot = "LARGE_UTILITY_10"
+			template = "LARGE_SHIELD_5"
+		}		
+		component = {
+			slot = "LARGE_UTILITY_11"
+			template = "LARGE_ARMOR_5"
+		}		
+		component = {
+			slot = "LARGE_UTILITY_12"
+			template = "LARGE_ARMOR_5"
+		}
+		component = {
+			slot = "LARGE_UTILITY_13"
+			template = "LARGE_ARMOR_5"
+		}	
+		component = {
+			slot = "LARGE_UTILITY_14"
+			template = "LARGE_ARMOR_5"
+		}
+		component = {
+			slot = "LARGE_UTILITY_15"
+			template = "LARGE_ARMOR_5"
+		}	
+		component = {
+			slot = "AUX_UTILITY_1"
+			template = "SHIELD_RECHARGER"
+		}
+		component = {
+			slot = "AUX_UTILITY_2"
+			template = "SHIELD_RECHARGER"
+		}			
+	}
+	required_component="SHIP_SENSOR_4"
+	
+	# For special buildable
+	is_special_buildable = yes
+	allow_buildable_trigger = is_awakened_fallen_empire_xenophile
+}
+
+# Construction Ship
+ship_design = {
+	name = "Builder"
+	ship_size = constructor
+	section = {
+		template = "DEFAULT_CONSTRUCTION_SECTION"
+		slot = "mid"
+	
+		component = {
+			slot = "SMALL_UTILITY_1"
+			template = "SMALL_ZERO_POINT_REACTOR"
+		}	
+		# component = {
+			# slot = "SMALL_UTILITY_2"
+			# template = "SMALL_ZERO_POINT_REACTOR"
+		# }
+		# component = {
+			# slot = "SMALL_UTILITY_3"
+			# template = "SMALL_SHIELD_5"
+		# }
+		# component = {
+			# slot = "AUX_UTILITY_1"
+			# template = "SHIELD_RECHARGER"
+		# }		
+	}
+	required_component="JUMP_DRIVE_1"
+	required_component="SHIP_THRUSTER_4"
+	required_component="SHIP_SENSOR_4"
+	
+	# For special buildable
+	is_special_buildable = yes
+	allow_buildable_trigger = is_awakened_fallen_empire_xenophile
+}
+
+# Colony Ship
+ship_design = {
+	name = "Seeder"
+	ship_size = colonizer
+	section = {
+		template = "DEFAULT_COLONIZATION_SECTION"
+		slot = "mid"
+	
+		component = {
+			slot = "SMALL_UTILITY_1"
+			template = "SMALL_ZERO_POINT_REACTOR"
+		}	
+		component = {
+			slot = "SMALL_UTILITY_2"
+			template = "SMALL_ZERO_POINT_REACTOR"
+		}
+		component = {
+			slot = "AUX_UTILITY_1"
+			template = "SHIELD_RECHARGER"
+		}		
+	}
+	required_component="JUMP_DRIVE_1"
+	required_component="SHIP_THRUSTER_4"
+	required_component="SHIP_SENSOR_4"
+	
+	# For special buildable
+	is_special_buildable = yes
+	allow_buildable_trigger = is_awakened_fallen_empire_xenophile
+}
+
+######################################
+### Extra Designs used for gifting ###
+######################################
+
+# Large Ships
+ship_design = {
+	name = "Surplus Beta I"
+	ship_size = large_ship_fallen_empire
+	section = {
+		template = "fallen_empire_large_warship_key"
+		slot = "mid"
+	
+		component = {
+			slot = "STRIKE_CRAFT_01"
+			template = "LARGE_BOMBERS_HANGAR_2"	
+		}		
+		component = {
+			slot = "STRIKE_CRAFT_02"
+			template = "LARGE_FIGHTERS_HANGAR_2"	
+		}	
+		component = {
+			slot = "STRIKE_CRAFT_01"
+			template = "LARGE_BOMBERS_HANGAR_2"	
+		}		
+		component = {
+			slot = "STRIKE_CRAFT_02"
+			template = "LARGE_FIGHTERS_HANGAR_2"	
+		}
+		component = {
+			slot = "EXTRA_LARGE_01"
+			template = "LARGE_ENERGY_LANCE_1"
+		}	
+		component = {
+			slot = "LARGE_GUN_01"
+			template = "LARGE_DISRUPTOR_3"
+		}		
+		component = {
+			slot = "LARGE_GUN_02"
+			template = "LARGE_DISRUPTOR_3"
+		}		
+		component = {
+			slot = "MEDIUM_GUN_01"
+			template = "MEDIUM_GAMMA_LASER"
+		}		
+		component = {
+			slot = "MEDIUM_GUN_02"
+			template = "MEDIUM_GAMMA_LASER"
+		}
+		component = {
+			slot = "MEDIUM_GUN_03"
+			template = "MEDIUM_GAMMA_LASER"
+		}
+		component = {
+			slot = "MEDIUM_GUN_04"
+			template = "MEDIUM_GAMMA_LASER"
+		}
+		component = {
+			slot = "LARGE_UTILITY_1"
+			template = "LARGE_ZERO_POINT_REACTOR"
+		}
+		component = {
+			slot = "LARGE_UTILITY_2"
+			template = "LARGE_ZERO_POINT_REACTOR"
+		}
+		component = {
+			slot = "LARGE_UTILITY_3"
+			template = "LARGE_ZERO_POINT_REACTOR"
+		}
+		component = {
+			slot = "LARGE_UTILITY_4"
+			template = "LARGE_ZERO_POINT_REACTOR"
+		}
+		component = {
+			slot = "LARGE_UTILITY_5"
+			template = "LARGE_ARMOR_5"
+		}
+		component = {
+			slot = "LARGE_UTILITY_6"
+			template = "LARGE_ARMOR_5"
+		}
+		component = {
+			slot = "LARGE_UTILITY_7"
+			template = "LARGE_ARMOR_5"
+		}
+		component = {
+			slot = "LARGE_UTILITY_8"
+			template = "LARGE_SHIELD_4"
+		}		
+		component = {
+			slot = "LARGE_UTILITY_9"
+			template = "LARGE_SHIELD_4"
+		}
+		component = {
+			slot = "LARGE_UTILITY_10"
+			template = "LARGE_SHIELD_4"
+		}
+		component = {
+			slot = "AUX_UTILITY_1"
+			template = "SHIELD_RECHARGER"
+		}
+		component = {
+			slot = "AUX_UTILITY_2"
+			template = "SHIELD_RECHARGER"
+		}		
+	}
+	required_component="WARP_DRIVE_3"
+	required_component="SHIP_SENSOR_4"
+	required_component="BATTLESHIP_COMBAT_COMPUTER_3"
+	required_component="SHIP_THRUSTER_4"
+}
+
+ship_design = {
+	name = "Surplus Beta II"
+	ship_size = large_ship_fallen_empire
+	section = {
+		template = "fallen_empire_large_warship_key"
+		slot = "mid"
+	
+		component = {
+			slot = "STRIKE_CRAFT_01"
+			template = "LARGE_BOMBERS_HANGAR_2"	
+		}		
+		component = {
+			slot = "STRIKE_CRAFT_02"
+			template = "LARGE_FIGHTERS_HANGAR_2"	
+		}	
+		component = {
+			slot = "STRIKE_CRAFT_01"
+			template = "LARGE_BOMBERS_HANGAR_2"	
+		}		
+		component = {
+			slot = "STRIKE_CRAFT_02"
+			template = "LARGE_FIGHTERS_HANGAR_2"	
+		}
+		component = {
+			slot = "EXTRA_LARGE_01"
+			template = "LARGE_ENERGY_LANCE_1"
+		}	
+		component = {
+			slot = "LARGE_GUN_01"
+			template = "LARGE_DISRUPTOR_3"
+		}		
+		component = {
+			slot = "LARGE_GUN_02"
+			template = "LARGE_DISRUPTOR_3"
+		}		
+		component = {
+			slot = "MEDIUM_GUN_01"
+			template = "MEDIUM_GAMMA_LASER"
+		}		
+		component = {
+			slot = "MEDIUM_GUN_02"
+			template = "MEDIUM_GAMMA_LASER"
+		}
+		component = {
+			slot = "MEDIUM_GUN_03"
+			template = "MEDIUM_GAMMA_LASER"
+		}
+		component = {
+			slot = "MEDIUM_GUN_04"
+			template = "MEDIUM_GAMMA_LASER"
+		}
+		component = {
+			slot = "LARGE_UTILITY_1"
+			template = "LARGE_ZERO_POINT_REACTOR"
+		}
+		component = {
+			slot = "LARGE_UTILITY_2"
+			template = "LARGE_ZERO_POINT_REACTOR"
+		}
+		component = {
+			slot = "LARGE_UTILITY_3"
+			template = "LARGE_ZERO_POINT_REACTOR"
+		}
+		component = {
+			slot = "LARGE_UTILITY_4"
+			template = "LARGE_ZERO_POINT_REACTOR"
+		}
+		component = {
+			slot = "LARGE_UTILITY_5"
+			template = "LARGE_ARMOR_5"
+		}
+		component = {
+			slot = "LARGE_UTILITY_6"
+			template = "LARGE_ARMOR_5"
+		}
+		component = {
+			slot = "LARGE_UTILITY_7"
+			template = "LARGE_ARMOR_5"
+		}
+		component = {
+			slot = "LARGE_UTILITY_8"
+			template = "LARGE_SHIELD_4"
+		}		
+		component = {
+			slot = "LARGE_UTILITY_9"
+			template = "LARGE_SHIELD_4"
+		}
+		component = {
+			slot = "LARGE_UTILITY_10"
+			template = "LARGE_SHIELD_4"
+		}
+		component = {
+			slot = "AUX_UTILITY_1"
+			template = "SHIELD_RECHARGER"
+		}
+		component = {
+			slot = "AUX_UTILITY_2"
+			template = "SHIELD_RECHARGER"
+		}		
+	}
+	required_component="HYPER_DRIVE_3"
+	required_component="SHIP_SENSOR_4"
+	required_component="BATTLESHIP_COMBAT_COMPUTER_3"
+	required_component="SHIP_THRUSTER_4"
+}
+
+ship_design = {
+	name = "Surplus Beta III"
+	ship_size = large_ship_fallen_empire
+	section = {
+		template = "fallen_empire_large_warship_key"
+		slot = "mid"
+	
+		component = {
+			slot = "STRIKE_CRAFT_01"
+			template = "LARGE_BOMBERS_HANGAR_2"	
+		}		
+		component = {
+			slot = "STRIKE_CRAFT_02"
+			template = "LARGE_FIGHTERS_HANGAR_2"	
+		}	
+		component = {
+			slot = "STRIKE_CRAFT_01"
+			template = "LARGE_BOMBERS_HANGAR_2"	
+		}		
+		component = {
+			slot = "STRIKE_CRAFT_02"
+			template = "LARGE_FIGHTERS_HANGAR_2"	
+		}
+		component = {
+			slot = "EXTRA_LARGE_01"
+			template = "LARGE_ENERGY_LANCE_1"
+		}	
+		component = {
+			slot = "LARGE_GUN_01"
+			template = "LARGE_DISRUPTOR_3"
+		}		
+		component = {
+			slot = "LARGE_GUN_02"
+			template = "LARGE_DISRUPTOR_3"
+		}		
+		component = {
+			slot = "MEDIUM_GUN_01"
+			template = "MEDIUM_GAMMA_LASER"
+		}		
+		component = {
+			slot = "MEDIUM_GUN_02"
+			template = "MEDIUM_GAMMA_LASER"
+		}
+		component = {
+			slot = "MEDIUM_GUN_03"
+			template = "MEDIUM_GAMMA_LASER"
+		}
+		component = {
+			slot = "MEDIUM_GUN_04"
+			template = "MEDIUM_GAMMA_LASER"
+		}
+		component = {
+			slot = "LARGE_UTILITY_1"
+			template = "LARGE_ZERO_POINT_REACTOR"
+		}
+		component = {
+			slot = "LARGE_UTILITY_2"
+			template = "LARGE_ZERO_POINT_REACTOR"
+		}
+		component = {
+			slot = "LARGE_UTILITY_3"
+			template = "LARGE_ZERO_POINT_REACTOR"
+		}
+		component = {
+			slot = "LARGE_UTILITY_4"
+			template = "LARGE_ZERO_POINT_REACTOR"
+		}
+		component = {
+			slot = "LARGE_UTILITY_5"
+			template = "LARGE_ARMOR_5"
+		}
+		component = {
+			slot = "LARGE_UTILITY_6"
+			template = "LARGE_ARMOR_5"
+		}
+		component = {
+			slot = "LARGE_UTILITY_7"
+			template = "LARGE_ARMOR_5"
+		}
+		component = {
+			slot = "LARGE_UTILITY_8"
+			template = "LARGE_SHIELD_4"
+		}		
+		component = {
+			slot = "LARGE_UTILITY_9"
+			template = "LARGE_SHIELD_4"
+		}
+		component = {
+			slot = "LARGE_UTILITY_10"
+			template = "LARGE_SHIELD_4"
+		}
+		component = {
+			slot = "AUX_UTILITY_1"
+			template = "SHIELD_RECHARGER"
+		}
+		component = {
+			slot = "AUX_UTILITY_2"
+			template = "SHIELD_RECHARGER"
+		}		
+	}
+	required_component="WORMHOLE_DRIVE"
+	required_component="SHIP_SENSOR_4"
+	required_component="BATTLESHIP_COMBAT_COMPUTER_3"
+	required_component="SHIP_THRUSTER_4"
+}
+
+ship_design = {
+	name = "Surplus Custodian I"
+	ship_size = large_ship_fallen_empire
+	section = {
+		template = "fallen_empire_large_warship_key"
+		slot = "mid"
+		
+		
+		component = {
+			slot = "STRIKE_CRAFT_01"
+			template = "LARGE_BOMBERS_HANGAR_2"	
+		}		
+		component = {
+			slot = "STRIKE_CRAFT_02"
+			template = "LARGE_FIGHTERS_HANGAR_2"	
+		}		
+		component = {
+			slot = "EXTRA_LARGE_01"
+			template = "LARGE_ENERGY_LANCE_1"
+		}
+		component = {
+			slot = "LARGE_GUN_01"
+			template = "LARGE_GAMMA_LASER"
+		}		
+		component = {
+			slot = "LARGE_GUN_02"
+			template = "LARGE_GAMMA_LASER"
+		}		
+		component = {
+			slot = "MEDIUM_GUN_01"
+			template = "MEDIUM_MASS_DRIVER_5"
+		}		
+		component = {
+			slot = "MEDIUM_GUN_02"
+			template = "MEDIUM_MASS_DRIVER_5"
+		}
+		component = {
+			slot = "MEDIUM_GUN_03"
+			template = "MEDIUM_MASS_DRIVER_5"
+		}
+		component = {
+			slot = "MEDIUM_GUN_04"
+			template = "MEDIUM_MASS_DRIVER_5"
+		}
+		component = {
+			slot = "LARGE_UTILITY_1"
+			template = "LARGE_ZERO_POINT_REACTOR"
+		}
+		component = {
+			slot = "LARGE_UTILITY_2"
+			template = "LARGE_ZERO_POINT_REACTOR"
+		}
+		component = {
+			slot = "LARGE_UTILITY_3"
+			template = "LARGE_ZERO_POINT_REACTOR"
+		}
+		component = {
+			slot = "LARGE_UTILITY_4"
+			template = "LARGE_ZERO_POINT_REACTOR"
+		}
+		component = {
+			slot = "LARGE_UTILITY_5"
+			template = "LARGE_ARMOR_5"
+		}
+		component = {
+			slot = "LARGE_UTILITY_6"
+			template = "LARGE_ARMOR_5"
+		}
+		component = {
+			slot = "LARGE_UTILITY_7"
+			template = "LARGE_ARMOR_5"
+		}
+		component = {
+			slot = "LARGE_UTILITY_8"
+			template = "LARGE_SHIELD_4"
+		}		
+		component = {
+			slot = "LARGE_UTILITY_9"
+			template = "LARGE_SHIELD_4"
+		}
+		component = {
+			slot = "LARGE_UTILITY_10"
+			template = "LARGE_SHIELD_4"
+		}
+		component = {
+			slot = "AUX_UTILITY_1"
+			template = "SHIELD_RECHARGER"
+		}
+		component = {
+			slot = "AUX_UTILITY_2"
+			template = "SHIELD_RECHARGER"
+		}			
+	}
+	required_component="WARP_DRIVE_3"
+	required_component="SHIP_SENSOR_4"
+	required_component="BATTLESHIP_COMBAT_COMPUTER_3"
+	required_component="SHIP_THRUSTER_4"
+}
+
+ship_design = {
+	name = "Surplus Custodian II"
+	ship_size = large_ship_fallen_empire
+	section = {
+		template = "fallen_empire_large_warship_key"
+		slot = "mid"
+		
+		
+		component = {
+			slot = "STRIKE_CRAFT_01"
+			template = "LARGE_BOMBERS_HANGAR_2"	
+		}		
+		component = {
+			slot = "STRIKE_CRAFT_02"
+			template = "LARGE_FIGHTERS_HANGAR_2"	
+		}		
+		component = {
+			slot = "EXTRA_LARGE_01"
+			template = "LARGE_ENERGY_LANCE_1"
+		}
+		component = {
+			slot = "LARGE_GUN_01"
+			template = "LARGE_GAMMA_LASER"
+		}		
+		component = {
+			slot = "LARGE_GUN_02"
+			template = "LARGE_GAMMA_LASER"
+		}		
+		component = {
+			slot = "MEDIUM_GUN_01"
+			template = "MEDIUM_MASS_DRIVER_5"
+		}		
+		component = {
+			slot = "MEDIUM_GUN_02"
+			template = "MEDIUM_MASS_DRIVER_5"
+		}
+		component = {
+			slot = "MEDIUM_GUN_03"
+			template = "MEDIUM_MASS_DRIVER_5"
+		}
+		component = {
+			slot = "MEDIUM_GUN_04"
+			template = "MEDIUM_MASS_DRIVER_5"
+		}
+		component = {
+			slot = "LARGE_UTILITY_1"
+			template = "LARGE_ZERO_POINT_REACTOR"
+		}
+		component = {
+			slot = "LARGE_UTILITY_2"
+			template = "LARGE_ZERO_POINT_REACTOR"
+		}
+		component = {
+			slot = "LARGE_UTILITY_3"
+			template = "LARGE_ZERO_POINT_REACTOR"
+		}
+		component = {
+			slot = "LARGE_UTILITY_4"
+			template = "LARGE_ZERO_POINT_REACTOR"
+		}
+		component = {
+			slot = "LARGE_UTILITY_5"
+			template = "LARGE_ARMOR_5"
+		}
+		component = {
+			slot = "LARGE_UTILITY_6"
+			template = "LARGE_ARMOR_5"
+		}
+		component = {
+			slot = "LARGE_UTILITY_7"
+			template = "LARGE_ARMOR_5"
+		}
+		component = {
+			slot = "LARGE_UTILITY_8"
+			template = "LARGE_SHIELD_4"
+		}		
+		component = {
+			slot = "LARGE_UTILITY_9"
+			template = "LARGE_SHIELD_4"
+		}
+		component = {
+			slot = "LARGE_UTILITY_10"
+			template = "LARGE_SHIELD_4"
+		}
+		component = {
+			slot = "AUX_UTILITY_1"
+			template = "SHIELD_RECHARGER"
+		}
+		component = {
+			slot = "AUX_UTILITY_2"
+			template = "SHIELD_RECHARGER"
+		}			
+	}
+	required_component="HYPER_DRIVE_3"
+	required_component="SHIP_SENSOR_4"
+	required_component="BATTLESHIP_COMBAT_COMPUTER_3"
+	required_component="SHIP_THRUSTER_4"
+}
+
+ship_design = {
+	name = "Surplus Custodian III"
+	ship_size = large_ship_fallen_empire
+	section = {
+		template = "fallen_empire_large_warship_key"
+		slot = "mid"
+		
+		
+		component = {
+			slot = "STRIKE_CRAFT_01"
+			template = "LARGE_BOMBERS_HANGAR_2"	
+		}		
+		component = {
+			slot = "STRIKE_CRAFT_02"
+			template = "LARGE_FIGHTERS_HANGAR_2"	
+		}		
+		component = {
+			slot = "EXTRA_LARGE_01"
+			template = "LARGE_ENERGY_LANCE_1"
+		}
+		component = {
+			slot = "LARGE_GUN_01"
+			template = "LARGE_GAMMA_LASER"
+		}		
+		component = {
+			slot = "LARGE_GUN_02"
+			template = "LARGE_GAMMA_LASER"
+		}		
+		component = {
+			slot = "MEDIUM_GUN_01"
+			template = "MEDIUM_MASS_DRIVER_5"
+		}		
+		component = {
+			slot = "MEDIUM_GUN_02"
+			template = "MEDIUM_MASS_DRIVER_5"
+		}
+		component = {
+			slot = "MEDIUM_GUN_03"
+			template = "MEDIUM_MASS_DRIVER_5"
+		}
+		component = {
+			slot = "MEDIUM_GUN_04"
+			template = "MEDIUM_MASS_DRIVER_5"
+		}
+		component = {
+			slot = "LARGE_UTILITY_1"
+			template = "LARGE_ZERO_POINT_REACTOR"
+		}
+		component = {
+			slot = "LARGE_UTILITY_2"
+			template = "LARGE_ZERO_POINT_REACTOR"
+		}
+		component = {
+			slot = "LARGE_UTILITY_3"
+			template = "LARGE_ZERO_POINT_REACTOR"
+		}
+		component = {
+			slot = "LARGE_UTILITY_4"
+			template = "LARGE_ZERO_POINT_REACTOR"
+		}
+		component = {
+			slot = "LARGE_UTILITY_5"
+			template = "LARGE_ARMOR_5"
+		}
+		component = {
+			slot = "LARGE_UTILITY_6"
+			template = "LARGE_ARMOR_5"
+		}
+		component = {
+			slot = "LARGE_UTILITY_7"
+			template = "LARGE_ARMOR_5"
+		}
+		component = {
+			slot = "LARGE_UTILITY_8"
+			template = "LARGE_SHIELD_4"
+		}		
+		component = {
+			slot = "LARGE_UTILITY_9"
+			template = "LARGE_SHIELD_4"
+		}
+		component = {
+			slot = "LARGE_UTILITY_10"
+			template = "LARGE_SHIELD_4"
+		}
+		component = {
+			slot = "AUX_UTILITY_1"
+			template = "SHIELD_RECHARGER"
+		}
+		component = {
+			slot = "AUX_UTILITY_2"
+			template = "SHIELD_RECHARGER"
+		}			
+	}
+	required_component="WORMHOLE_DRIVE"
+	required_component="SHIP_SENSOR_4"
+	required_component="BATTLESHIP_COMBAT_COMPUTER_3"
+	required_component="SHIP_THRUSTER_4"
+}
+
+#Small Ships
+ship_design = {
+	name = "Surplus Gamma I"
+	ship_size = small_ship_fallen_empire
+	section = {
+		template = "fallen_empire_warship_small_key"
+		slot = "mid"
+		
+		component = {
+			slot = "LARGE_GUN_01"
+			template = "LARGE_DISRUPTOR_3"
+		}	
+		component = {
+			slot = "SMALL_GUN_01"
+			template = "SMALL_GAMMA_LASER"
+		}		
+		component = {
+			slot = "SMALL_GUN_02"
+			template = "SMALL_GAMMA_LASER"
+		}
+		component = {
+			slot = "SMALL_GUN_03"
+			template = "SMALL_GAMMA_LASER"
+		}	
+		component = {
+			slot = "SMALL_GUN_04"
+			template = "SMALL_GAMMA_LASER"
+		}			
+		component = {
+			slot = "PD_01"
+			template = "POINT_DEFENCE_3"
+		}	
+		component = {
+			slot = "PD_02"
+			template = "POINT_DEFENCE_3"
+		}	
+		component = {
+			slot = "MEDIUM_UTILITY_1"
+			template = "MEDIUM_ZERO_POINT_REACTOR"
+		}
+		component = {
+			slot = "MEDIUM_UTILITY_2"
+			template = "MEDIUM_ZERO_POINT_REACTOR"
+		}
+		component = {
+			slot = "MEDIUM_UTILITY_3"
+			template = "MEDIUM_ZERO_POINT_REACTOR"
+		}
+		component = {
+			slot = "MEDIUM_UTILITY_4"
+			template = "MEDIUM_ZERO_POINT_REACTOR"
+		}		
+		component = {
+			slot = "MEDIUM_UTILITY_5"
+			template = "MEDIUM_SHIELD_4"
+		}
+		component = {
+			slot = "MEDIUM_UTILITY_6"
+			template = "MEDIUM_SHIELD_4"
+		}
+		component = {
+			slot = "MEDIUM_UTILITY_7"
+			template = "MEDIUM_SHIELD_4"
+		}	
+	
+		component = {
+			slot = "MEDIUM_UTILITY_8"
+			template = "MEDIUM_ARMOR_5"
+		}
+		component = {
+			slot = "MEDIUM_UTILITY_9"
+			template = "MEDIUM_ARMOR_5"
+		}
+		component = {
+			slot = "MEDIUM_UTILITY_10"
+			template = "MEDIUM_ARMOR_5"
+		}
+		component = {
+			slot = "AUX_UTILITY_1"
+			template = "SHIELD_RECHARGER"
+		}		
+	}
+	required_component="WARP_DRIVE_3"
+	required_component="SHIP_SENSOR_4"
+	required_component="DESTROYER_COMBAT_COMPUTER_3"
+	required_component="SHIP_THRUSTER_4"
+}
+
+ship_design = {
+	name = "Surplus Gamma II"
+	ship_size = small_ship_fallen_empire
+	section = {
+		template = "fallen_empire_warship_small_key"
+		slot = "mid"
+		
+		component = {
+			slot = "LARGE_GUN_01"
+			template = "LARGE_DISRUPTOR_3"
+		}	
+		component = {
+			slot = "SMALL_GUN_01"
+			template = "SMALL_GAMMA_LASER"
+		}		
+		component = {
+			slot = "SMALL_GUN_02"
+			template = "SMALL_GAMMA_LASER"
+		}
+		component = {
+			slot = "SMALL_GUN_03"
+			template = "SMALL_GAMMA_LASER"
+		}	
+		component = {
+			slot = "SMALL_GUN_04"
+			template = "SMALL_GAMMA_LASER"
+		}			
+		component = {
+			slot = "PD_01"
+			template = "POINT_DEFENCE_3"
+		}	
+		component = {
+			slot = "PD_02"
+			template = "POINT_DEFENCE_3"
+		}	
+		component = {
+			slot = "MEDIUM_UTILITY_1"
+			template = "MEDIUM_ZERO_POINT_REACTOR"
+		}
+		component = {
+			slot = "MEDIUM_UTILITY_2"
+			template = "MEDIUM_ZERO_POINT_REACTOR"
+		}
+		component = {
+			slot = "MEDIUM_UTILITY_3"
+			template = "MEDIUM_ZERO_POINT_REACTOR"
+		}
+		component = {
+			slot = "MEDIUM_UTILITY_4"
+			template = "MEDIUM_ZERO_POINT_REACTOR"
+		}		
+		component = {
+			slot = "MEDIUM_UTILITY_5"
+			template = "MEDIUM_SHIELD_4"
+		}
+		component = {
+			slot = "MEDIUM_UTILITY_6"
+			template = "MEDIUM_SHIELD_4"
+		}
+		component = {
+			slot = "MEDIUM_UTILITY_7"
+			template = "MEDIUM_SHIELD_4"
+		}	
+	
+		component = {
+			slot = "MEDIUM_UTILITY_8"
+			template = "MEDIUM_ARMOR_5"
+		}
+		component = {
+			slot = "MEDIUM_UTILITY_9"
+			template = "MEDIUM_ARMOR_5"
+		}
+		component = {
+			slot = "MEDIUM_UTILITY_10"
+			template = "MEDIUM_ARMOR_5"
+		}
+		component = {
+			slot = "AUX_UTILITY_1"
+			template = "SHIELD_RECHARGER"
+		}		
+	}
+	required_component="HYPER_DRIVE_3"
+	required_component="SHIP_SENSOR_4"
+	required_component="DESTROYER_COMBAT_COMPUTER_3"
+	required_component="SHIP_THRUSTER_4"
+}
+
+ship_design = {
+	name = "Surplus Gamma III"
+	ship_size = small_ship_fallen_empire
+	section = {
+		template = "fallen_empire_warship_small_key"
+		slot = "mid"
+		
+		component = {
+			slot = "LARGE_GUN_01"
+			template = "LARGE_DISRUPTOR_3"
+		}	
+		component = {
+			slot = "SMALL_GUN_01"
+			template = "SMALL_GAMMA_LASER"
+		}		
+		component = {
+			slot = "SMALL_GUN_02"
+			template = "SMALL_GAMMA_LASER"
+		}
+		component = {
+			slot = "SMALL_GUN_03"
+			template = "SMALL_GAMMA_LASER"
+		}	
+		component = {
+			slot = "SMALL_GUN_04"
+			template = "SMALL_GAMMA_LASER"
+		}			
+		component = {
+			slot = "PD_01"
+			template = "POINT_DEFENCE_3"
+		}	
+		component = {
+			slot = "PD_02"
+			template = "POINT_DEFENCE_3"
+		}	
+		component = {
+			slot = "MEDIUM_UTILITY_1"
+			template = "MEDIUM_ZERO_POINT_REACTOR"
+		}
+		component = {
+			slot = "MEDIUM_UTILITY_2"
+			template = "MEDIUM_ZERO_POINT_REACTOR"
+		}
+		component = {
+			slot = "MEDIUM_UTILITY_3"
+			template = "MEDIUM_ZERO_POINT_REACTOR"
+		}
+		component = {
+			slot = "MEDIUM_UTILITY_4"
+			template = "MEDIUM_ZERO_POINT_REACTOR"
+		}		
+		component = {
+			slot = "MEDIUM_UTILITY_5"
+			template = "MEDIUM_SHIELD_4"
+		}
+		component = {
+			slot = "MEDIUM_UTILITY_6"
+			template = "MEDIUM_SHIELD_4"
+		}
+		component = {
+			slot = "MEDIUM_UTILITY_7"
+			template = "MEDIUM_SHIELD_4"
+		}	
+	
+		component = {
+			slot = "MEDIUM_UTILITY_8"
+			template = "MEDIUM_ARMOR_5"
+		}
+		component = {
+			slot = "MEDIUM_UTILITY_9"
+			template = "MEDIUM_ARMOR_5"
+		}
+		component = {
+			slot = "MEDIUM_UTILITY_10"
+			template = "MEDIUM_ARMOR_5"
+		}
+		component = {
+			slot = "AUX_UTILITY_1"
+			template = "SHIELD_RECHARGER"
+		}		
+	}
+	required_component="WORMHOLE_DRIVE"
+	required_component="SHIP_SENSOR_4"
+	required_component="DESTROYER_COMBAT_COMPUTER_3"
+	required_component="SHIP_THRUSTER_4"
+}
+
+ship_design = {
+	name = "Surplus Warden I"
+	ship_size = small_ship_fallen_empire
+	section = {
+		template = "fallen_empire_warship_small_key"
+		slot = "mid"
+		
+		component = {
+			slot = "LARGE_GUN_01"
+			template = "LARGE_KINETIC_ARTILLERY_2"
+		}	
+		component = {
+			slot = "SMALL_GUN_01"
+			template = "SMALL_MASS_DRIVER_4"
+		}		
+		component = {
+			slot = "SMALL_GUN_02"
+			template = "SMALL_MASS_DRIVER_4"
+		}
+		component = {
+			slot = "SMALL_GUN_03"
+			template = "SMALL_GAMMA_LASER"
+		}	
+		component = {
+			slot = "SMALL_GUN_04"
+			template = "SMALL_GAMMA_LASER"
+		}			
+		component = {
+			slot = "PD_01"
+			template = "POINT_DEFENCE_3"
+		}	
+		component = {
+			slot = "PD_02"
+			template = "POINT_DEFENCE_3"
+		}	
+		component = {
+			slot = "MEDIUM_UTILITY_1"
+			template = "MEDIUM_ZERO_POINT_REACTOR"
+		}
+		component = {
+			slot = "MEDIUM_UTILITY_2"
+			template = "MEDIUM_ZERO_POINT_REACTOR"
+		}
+		component = {
+			slot = "MEDIUM_UTILITY_3"
+			template = "MEDIUM_ZERO_POINT_REACTOR"
+		}
+		component = {
+			slot = "MEDIUM_UTILITY_4"
+			template = "MEDIUM_ZERO_POINT_REACTOR"
+		}		
+		component = {
+			slot = "MEDIUM_UTILITY_5"
+			template = "MEDIUM_SHIELD_4"
+		}
+		component = {
+			slot = "MEDIUM_UTILITY_6"
+			template = "MEDIUM_SHIELD_4"
+		}
+		component = {
+			slot = "MEDIUM_UTILITY_7"
+			template = "MEDIUM_SHIELD_4"
+		}		
+		component = {
+			slot = "MEDIUM_UTILITY_8"
+			template = "MEDIUM_ARMOR_5"
+		}
+		component = {
+			slot = "MEDIUM_UTILITY_9"
+			template = "MEDIUM_ARMOR_5"
+		}
+		component = {
+			slot = "MEDIUM_UTILITY_10"
+			template = "MEDIUM_ARMOR_5"
+		}		
+		component = {
+			slot = "AUX_UTILITY_1"
+			template = "SHIELD_RECHARGER"
+		}		
+	}
+	required_component="WARP_DRIVE_3"
+	required_component="SHIP_SENSOR_4"
+	required_component="DESTROYER_COMBAT_COMPUTER_3"
+	required_component="SHIP_THRUSTER_4"
+}
+
+ship_design = {
+	name = "Surplus Warden II"
+	ship_size = small_ship_fallen_empire
+	section = {
+		template = "fallen_empire_warship_small_key"
+		slot = "mid"
+		
+		component = {
+			slot = "LARGE_GUN_01"
+			template = "LARGE_KINETIC_ARTILLERY_2"
+		}	
+		component = {
+			slot = "SMALL_GUN_01"
+			template = "SMALL_MASS_DRIVER_4"
+		}		
+		component = {
+			slot = "SMALL_GUN_02"
+			template = "SMALL_MASS_DRIVER_4"
+		}
+		component = {
+			slot = "SMALL_GUN_03"
+			template = "SMALL_GAMMA_LASER"
+		}	
+		component = {
+			slot = "SMALL_GUN_04"
+			template = "SMALL_GAMMA_LASER"
+		}			
+		component = {
+			slot = "PD_01"
+			template = "POINT_DEFENCE_3"
+		}	
+		component = {
+			slot = "PD_02"
+			template = "POINT_DEFENCE_3"
+		}	
+		component = {
+			slot = "MEDIUM_UTILITY_1"
+			template = "MEDIUM_ZERO_POINT_REACTOR"
+		}
+		component = {
+			slot = "MEDIUM_UTILITY_2"
+			template = "MEDIUM_ZERO_POINT_REACTOR"
+		}
+		component = {
+			slot = "MEDIUM_UTILITY_3"
+			template = "MEDIUM_ZERO_POINT_REACTOR"
+		}
+		component = {
+			slot = "MEDIUM_UTILITY_4"
+			template = "MEDIUM_ZERO_POINT_REACTOR"
+		}		
+		component = {
+			slot = "MEDIUM_UTILITY_5"
+			template = "MEDIUM_SHIELD_4"
+		}
+		component = {
+			slot = "MEDIUM_UTILITY_6"
+			template = "MEDIUM_SHIELD_4"
+		}
+		component = {
+			slot = "MEDIUM_UTILITY_7"
+			template = "MEDIUM_SHIELD_4"
+		}		
+		component = {
+			slot = "MEDIUM_UTILITY_8"
+			template = "MEDIUM_ARMOR_5"
+		}
+		component = {
+			slot = "MEDIUM_UTILITY_9"
+			template = "MEDIUM_ARMOR_5"
+		}
+		component = {
+			slot = "MEDIUM_UTILITY_10"
+			template = "MEDIUM_ARMOR_5"
+		}		
+		component = {
+			slot = "AUX_UTILITY_1"
+			template = "SHIELD_RECHARGER"
+		}		
+	}
+	required_component="HYPER_DRIVE_3"
+	required_component="SHIP_SENSOR_4"
+	required_component="DESTROYER_COMBAT_COMPUTER_3"
+	required_component="SHIP_THRUSTER_4"
+}
+
+ship_design = {
+	name = "Surplus Warden III"
+	ship_size = small_ship_fallen_empire
+	section = {
+		template = "fallen_empire_warship_small_key"
+		slot = "mid"
+		
+		component = {
+			slot = "LARGE_GUN_01"
+			template = "LARGE_KINETIC_ARTILLERY_2"
+		}	
+		component = {
+			slot = "SMALL_GUN_01"
+			template = "SMALL_MASS_DRIVER_4"
+		}		
+		component = {
+			slot = "SMALL_GUN_02"
+			template = "SMALL_MASS_DRIVER_4"
+		}
+		component = {
+			slot = "SMALL_GUN_03"
+			template = "SMALL_GAMMA_LASER"
+		}	
+		component = {
+			slot = "SMALL_GUN_04"
+			template = "SMALL_GAMMA_LASER"
+		}			
+		component = {
+			slot = "PD_01"
+			template = "POINT_DEFENCE_3"
+		}	
+		component = {
+			slot = "PD_02"
+			template = "POINT_DEFENCE_3"
+		}	
+		component = {
+			slot = "MEDIUM_UTILITY_1"
+			template = "MEDIUM_ZERO_POINT_REACTOR"
+		}
+		component = {
+			slot = "MEDIUM_UTILITY_2"
+			template = "MEDIUM_ZERO_POINT_REACTOR"
+		}
+		component = {
+			slot = "MEDIUM_UTILITY_3"
+			template = "MEDIUM_ZERO_POINT_REACTOR"
+		}
+		component = {
+			slot = "MEDIUM_UTILITY_4"
+			template = "MEDIUM_ZERO_POINT_REACTOR"
+		}		
+		component = {
+			slot = "MEDIUM_UTILITY_5"
+			template = "MEDIUM_SHIELD_4"
+		}
+		component = {
+			slot = "MEDIUM_UTILITY_6"
+			template = "MEDIUM_SHIELD_4"
+		}
+		component = {
+			slot = "MEDIUM_UTILITY_7"
+			template = "MEDIUM_SHIELD_4"
+		}		
+		component = {
+			slot = "MEDIUM_UTILITY_8"
+			template = "MEDIUM_ARMOR_5"
+		}
+		component = {
+			slot = "MEDIUM_UTILITY_9"
+			template = "MEDIUM_ARMOR_5"
+		}
+		component = {
+			slot = "MEDIUM_UTILITY_10"
+			template = "MEDIUM_ARMOR_5"
+		}		
+		component = {
+			slot = "AUX_UTILITY_1"
+			template = "SHIELD_RECHARGER"
+		}		
+	}
+	required_component="WORMHOLE_DRIVE"
+	required_component="SHIP_SENSOR_4"
+	required_component="DESTROYER_COMBAT_COMPUTER_3"
+	required_component="SHIP_THRUSTER_4"
+}

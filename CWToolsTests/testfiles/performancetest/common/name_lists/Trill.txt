@@ -1,0 +1,97 @@
+﻿### Trill by EHKodiak
+Trill = {
+	randomized = no
+
+	ship_names = {
+		generic = {
+Champion Defender Guardian Paladin Protector Exponent Backer Fighter Demagogue Endurance Perpetual Advocate Shield Guard Savior
+		}
+		corvette = {
+		}
+		saber = {
+		}
+		sovereign = {
+		}
+		steamrunner = {
+		}		
+		adv_cruiser = {
+		}
+		strike = {
+		}	
+		constructor = { }
+		colonizer = { }
+		science = { }
+		transport = { }
+		outpost_station = {
+			sequential_name = "Frontier Outpost"
+		}
+	}
+
+	fleet_names = {
+		sequential_name = "%O% Fleet"
+	}
+	
+	army_names = {
+		defense_army = {
+			sequential_name = "%O% Symbiont Guardians"
+		}
+		assault_army = {
+			sequential_name = "%O% Unjoined Assault Corps"
+		}
+		slave_army = {
+			sequential_name = "%O% Indentured Defence Force"
+		}
+		clone_army = { 
+			sequential_name = "%O% Clone Defence Force"
+		}
+		robotic_army = {
+			sequential_name = "%O% Mechanical Defence Force"
+		}
+		android_army = {
+			sequential_name = "%O% Synthetic Defence Force"
+		}
+		psionic_army = { 
+			sequential_name = "%O% Psionic Force"
+		}
+		xenomorph_army = {
+			sequential_name = "%O% Bio-Warfare Assault Force"
+		}
+		gene_warrior_army = {
+			sequential_name = "%O% Bio-Engineered Defence Force"
+		}
+	}
+
+	planet_names = {
+		generic = {
+			names = {
+			}
+		}
+	}
+
+
+	### CHARACTERS
+
+	character_names = {
+		names1 = {
+			weight = 100
+			first_names_male = {		
+			Curzon Darzen Norvo Kareel Kinjer Tobin Torias Sorias Selin Hanor Yanas Bejal Timor Verad Brota Hanir Hadir Lazo Keman Bomad Sabin Taynak Ahstan Sarzin Jothan Tomas Danel Anjo Baili Endar
+			}
+			first_names_female = {
+			Dalis Deka Jadzia Emony Ezri Lela Nilani Lenara Kela Alemony Adjess Ahjess Neema Tyana Ela Henas Lashi Ira Eret Keta Eema Ila Zara Samza Redra Kily Vanna Aranne Nadzia Rozrin Midzia 
+			}
+			second_names = {
+				"Dax" "Tigan" "Perim" "Peers" "Kahn" "Odan" "Otner" "Belar" "Parr" "Janak" "Harel" "Grinsel" "Walsh" "Kodi" "Lox" "Ogar" "Kyl" "Shaggo" "Zimpulse"
+			}
+			regnal_first_names_male = {
+			Curzon Darzen Norvo Kareel Kinjer Tobin Torias Sorias Selin Hanor Yanas Bejal Timor Verad Brota Hanir Hadir Lazo Keman Bomad Sabin Taynak Ahstan Sarzin Jothan Tomas Danel Anjo Baili Endar
+			}
+			regnal_first_names_female = {
+		Dalis Deka Jadzia Emony Ezri Lela Nilani Lenara Kela Alemony Adjess Ahjess Neema Tyana Ela Henas Lashi Ira Eret Keta Eema Ila Zara Samza Redra Kily Vanna Aranne Nadzia Rozrin Midzia 
+			}
+			regnal_second_names = {
+				"Dax" "Tigan" "Perim" "Peers" "Kahn" "Odan" "Otner" "Belar" "Parr" "Janak" "Harel" "Grinsel" "Walsh" "Kodi" "Lox" "Ogar" "Kyl" "Shaggo" "Zimpulse" 
+			}
+		}
+	}
+}

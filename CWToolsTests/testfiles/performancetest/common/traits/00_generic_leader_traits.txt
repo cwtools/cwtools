@@ -1,0 +1,149 @@
+
+# All leaders will have a common trait-point value set in defines, which they use to grab traits
+
+# leader_trait = yes - this tags the trait as a leader-trait and not a species-trait
+# initial = no - if set to no, this trait can not be granted to leaders when they are generated
+# leader_class = { admiral scientist }  -- OR  - if not set, it can be given to all leader-types except Rulers
+# requires_traits = { trait_psionic } -- AND - leader-trait can only be randomly given on generation if the leaders species has this trait
+# requires_governments = { despotic_hegemony ai_overlordship } -- OR - leader-trait can only be randomly given on generation if the Empire has this type of government form
+# prerequisites = { tech_psionic_theory } - AND - leader-trait can only be given if the technology specified has been researched by the Empire
+
+############################
+# Generic Leader Traits    #
+# (Available For Everyone) #
+############################
+
+leader_trait_adaptable = {
+	cost = 1
+	modification = no
+	icon = "gfx/interface/icons/traits/leader_traits/leader_trait_adaptable.dds"
+	self_modifier = {
+		species_leader_exp_gain = 0.25
+	}
+	leader_potential_add = {
+		NOT = { leader_class = ruler}
+		from = { is_drone_authority = no }
+	}
+	leader_class = { admiral scientist general governor }
+	opposites = { "leader_trait_stubborn" }
+	leader_trait = yes
+	
+	ai_categories = {
+		engineering
+		physics
+		society
+		survey
+	}
+	
+	ai_weight = {
+		weight = 50
+	}
+}
+
+leader_trait_stubborn = {
+	cost = 1
+	modification = no
+	icon = "gfx/interface/icons/traits/leader_traits/leader_trait_stubborn.dds"
+	self_modifier = {
+		species_leader_exp_gain = -0.25
+	}
+	leader_potential_add = {
+		NOT = { leader_class = ruler}
+		from = { is_drone_authority = no }
+	}
+	leader_class = { admiral scientist general governor }
+	opposites = { "leader_trait_adaptable" }
+	leader_trait = yes
+	initial = no
+	randomized = no
+}
+
+leader_trait_resilient = {
+	cost = 1
+	modification = no
+	icon = "gfx/interface/icons/traits/leader_traits/leader_trait_resilient.dds"
+	self_modifier = {
+		leader_age = 25
+	}
+	leader_potential_add = {
+		NOT = { leader_class = ruler}
+		from = { is_drone_authority = no }
+	}
+	leader_trait = yes
+	opposites = { "leader_trait_substance_abuser" }
+	
+	ai_categories = {
+		engineering
+		physics
+		society
+		survey
+	}
+	
+	ai_weight = {
+		weight = 50
+	}
+}
+
+leader_trait_substance_abuser = {
+	cost = 1
+	modification = no
+	icon = "gfx/interface/icons/traits/leader_traits/leader_trait_substance_abuser.dds"
+	self_modifier = {
+		leader_age = -20
+	}
+	leader_potential_add = {
+		NOT = { leader_class = ruler}
+		from = { is_drone_authority = no }
+	}
+	leader_trait = yes
+	opposites = { "leader_trait_resilient" }
+	initial = no
+	randomized = no
+}
+
+leader_trait_eager = {
+	cost = 1
+	modification = no
+	icon = "gfx/interface/icons/traits/leader_traits/leader_trait_eager.dds"
+	self_modifier = {
+		leader_influence_cost = -0.33
+	}
+	leader_potential_add = {
+		NOT = { leader_class = ruler}
+		from = { is_drone_authority = no }
+	}
+	leader_class = { admiral scientist general governor }
+	leader_trait = yes
+}
+
+leader_trait_arrested_development = {
+	cost = 1
+	modification = no
+	icon = "gfx/interface/icons/traits/leader_traits/leader_trait_arrested_development.dds"
+	self_modifier = {
+		species_leader_exp_gain = -10
+	}
+	leader_potential_add = {
+		NOT = { leader_class = ruler}
+		from = { is_drone_authority = no }
+	}
+	leader_class = { admiral scientist general governor }
+	leader_trait = yes
+	initial = no
+	randomized = no
+}
+
+leader_trait_shroud_age = {
+	cost = 0
+	modification = no
+	icon = "gfx/interface/icons/traits/leader_traits/leader_trait_resilient.dds"
+	self_modifier = {
+		leader_age = 40
+	}
+	leader_potential_add = {
+		always = no
+	}
+	leader_trait = yes
+	initial = no
+	randomized = no
+}

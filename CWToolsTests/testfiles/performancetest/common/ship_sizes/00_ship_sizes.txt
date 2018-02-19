@@ -1,0 +1,998 @@
+#reloadable with 'reload stats'
+# This file is where you start when you want to configure something new, then go to sections
+
+@civilian_ships_combat_speed = 0.5
+@corvette_sublight_speed = 6
+@corvette_combat_speed = 1.5
+@corvette_combat_rotation = 0.08
+@corvette_collision_radius = 2.0
+@corvette_formation_priority = 1
+
+@saber_sublight_speed = 5
+@saber_combat_speed = 1.25
+@saber_combat_rotation = 0.06
+@saber_collision_radius = 2.5
+
+@sovereign_sublight_speed = 4
+@sovereign_combat_speed = 1
+@sovereign_combat_rotation = 0.04
+@sovereign_collision_radius = 4.0
+
+@steamrunner_sublight_speed = 4.2
+@steamrunner_combat_speed = 1.05
+@steamrunner_combat_rotation = 0.04
+@steamrunner_collision_radius = 4.0
+
+@adv_cruiser_sublight_speed = 3
+@adv_cruiser_combat_speed = 0.75
+@adv_cruiser_combat_rotation = 0.02
+@adv_cruiser_collision_radius = 8
+
+@strike_sublight_speed = 6.5
+@strike_combat_speed = 1.15
+@strike_combat_rotation = 0.09
+@strike_collision_radius = 2.0
+
+@assault_cruiser_sublight_speed = 3.6
+@assault_cruiser_combat_speed = 0.9
+@assault_cruiser_combat_rotation = 0.04
+@assault_cruiser_collision_radius = 3
+
+@super_battleship_sublight_speed = 2.6
+@super_battleship_combat_speed = 0.65
+@super_battleship_combat_rotation = 0.012
+@super_battleship_collision_radius = 4
+
+
+@destroyer_combat_speed = 1.25	 # picket ships
+@destroyer_combat_rotation = 0.05
+@destroyer_collision_radius = 2.5
+@destroyer_formation_priority = 2
+
+@cruiser_combat_speed = 1.25	 # picket/assault ships
+@cruiser_combat_rotation = 0.035
+@cruiser_collision_radius = 3
+@cruiser_formation_priority = 3
+
+@battleship_combat_speed = 0.75	
+@battleship_combat_rotation = 0.025
+@battleship_collision_radius = 3
+@battleship_formation_priority = 4
+
+@build_block_radius_none = 0
+@build_block_radius_tiny = 10
+@build_block_radius_small = 75
+@build_block_radius_large = 125
+
+
+
+##### Patrol Frigate ##### PF 
+corvette = {
+	graphical_culture = { "andorian_01" "borg_01" "borg_yellow_01" "borg_red_01" "borg_blue_01" "borg_purple_01" "borg_orange_01"  "borg_red_01" "breen_01" "cardassian_01" "cytherian_01" "dominion_01" "ferengi_01" "fesarian_01" "federation_01" "federation_02" "federation_03" "federation_04" "federation_MU_04" "generic_01" "generic_02" "generic_03" "generic_04" "karemma_01" "kazon_01" "trabe_01" "klingon_01" "klingon_02" "klingon_03" "klingon_04" "romulan_01" "romulan_02" "romulan_03" "romulan_04" "tellarite_01" "tholian_01" "vulcan_01" "xindi_01" "undine_01" "suliban_01" "husnock_01" "vidiian_01" "kobali_01" "garidian_01" "garidian_02" "garidian_03" "garidian_04" "orion_01" "sheliak_01" "voth_01" "cravic_01" "pralor_01" "hebitian_01" }
+	formation_priority = @corvette_formation_priority
+	is_space_object = yes
+	max_speed = @corvette_sublight_speed
+	acceleration = 0.3
+	rotation_speed = 0.3
+	combat_max_speed = @corvette_combat_speed
+	combat_rotation_speed = @corvette_combat_rotation
+	collision_radius = @corvette_collision_radius
+	modifier = {
+		ship_armor_add = 5 
+		ship_evasion_add = 35
+	}
+
+  	max_hitpoints = 750
+  	size_multiplier = 4
+ 
+  	fleet_slot_size = 1
+  	section_slots = { "stern" = { locator = "part1" } "mid" = { locator = "part1" } }
+  	num_target_locators = 2
+ 	is_space_station = no
+ 	icon_frame = 2
+ 	base_buildtime = 60 #high efficiency and speed of building
+ 	can_have_federation_design = yes
+ 	enable_default_design = yes	#if yes, countries will have an auto-generated design at start	
+ 	prerequisites = { "tech_spaceport_1" }
+ 	class = shipclass_military
+    required_component_set = "required_ship_sensors"
+ 	required_component_set = "combat_computers"
+    required_component_set = "required_warp"
+ 	required_component_set = "required_thrusters"
+ 	required_component_set = "required_defense"
+ 	required_component_set = "required_hull"
+ }
+ 
+ ##### Destroyer ##### DE
+ saber = {
+ 	graphical_culture = { "andorian_01" "borg_01" "borg_yellow_01" "borg_red_01" "borg_blue_01" "borg_purple_01" "borg_orange_01"  "breen_01" "cardassian_01" "cytherian_01" "dominion_01" "ferengi_01" "fesarian_01" "federation_01" "federation_02" "federation_03" "federation_04" "federation_MU_04" "generic_01" "generic_02" "generic_03" "generic_04" "karemma_01" "kazon_01" "trabe_01" "klingon_01" "klingon_02" "klingon_03" "klingon_04" "romulan_01" "romulan_02" "romulan_03" "romulan_04" "tellarite_01" "tholian_01" "vulcan_01" "xindi_01" "undine_01" "suliban_01" "husnock_01" "vidiian_01" "kobali_01" "garidian_01" "garidian_02" "garidian_03" "garidian_04" "orion_01" "sheliak_01" "voth_01" "cravic_01" "pralor_01" "hebitian_01" }
+ 	formation_priority = @destroyer_formation_priority
+ 	is_space_object = yes
+ 	max_speed = @saber_sublight_speed
+ 	acceleration = 0.25
+ 	rotation_speed = 0.25
+ 	combat_max_speed = @saber_combat_speed
+ 	combat_rotation_speed = @saber_combat_rotation
+ 	collision_radius = @saber_collision_radius
+ 	modifier = {
+ 		ship_evasion_mult = -0.25
+ 		ship_armor_add = 18
+ 		ship_evasion_add = 30
+ 		ship_upkeep_mult = 0.75	
+  	}
+  	max_hitpoints = 1500
+  	size_multiplier = 10
+ 
+  	fleet_slot_size = 2
+  	section_slots = { "stern" = { locator = "part1" } "mid" = { locator = "part1" } }
+  	num_target_locators = 2
+ 	icon_frame = 3
+ 	is_space_station = no
+ 	base_buildtime = 190
+ 	required_spaceport_level = 2
+ 	can_have_federation_design = yes
+ 	enable_default_design = yes
+ 	
+ 	prerequisites = { "tech_engineering_destroyer_541" }
+ 	
+ 	class = shipclass_military
+    required_component_set = "required_ship_sensors"
+ 	required_component_set = "combat_computers"
+    required_component_set = "required_tactical"
+    required_component_set = "required_aura_Destroyer"
+    required_component_set = "required_warp"
+ 	required_component_set = "required_thrusters"	
+ 	required_component_set = "required_defense"
+ 	required_component_set = "required_hull"
+ }
+ 
+ ##### Cruiser ##### CS 
+ sovereign = {
+ 	graphical_culture = { "andorian_01" "borg_01" "borg_yellow_01" "borg_red_01" "borg_blue_01" "borg_purple_01" "borg_orange_01"  "breen_01" "cardassian_01" "cytherian_01" "dominion_01" "ferengi_01" "fesarian_01" "federation_01" "federation_02" "federation_03" "federation_04" "federation_MU_04" "generic_01" "generic_02" "generic_03" "generic_04" "karemma_01" "kazon_01" "trabe_01" "klingon_01" "klingon_02" "klingon_03" "klingon_04" "romulan_01" "romulan_02" "romulan_03" "romulan_04" "tellarite_01" "tholian_01" "vulcan_01" "xindi_01" "undine_01" "suliban_01" "husnock_01" "vidiian_01" "kobali_01" "garidian_01" "garidian_02" "garidian_03" "garidian_04" "orion_01" "sheliak_01" "voth_01" "cravic_01" "pralor_01" "hebitian_01" }
+ 	formation_priority = @cruiser_formation_priority
+ 	is_space_object = yes
+ 	max_speed = @sovereign_sublight_speed
+ 	acceleration = 0.2
+ 	rotation_speed = 0.2
+ 	combat_max_speed = @sovereign_combat_speed
+ 	combat_rotation_speed = @sovereign_combat_rotation
+ 	collision_radius = @sovereign_collision_radius
+ 	modifier = {
+ 		ship_evasion_mult = -0.5
+ 		ship_evasion_add = 20
+ 		ship_armor_add = 30
+ 		ship_upkeep_mult = 0.25
+  	}
+  	max_hitpoints = 3000
+  	size_multiplier = 20
+ 
+  	fleet_slot_size = 3
+  	section_slots = { "stern" = { locator = "part1" } "mid" = { locator = "part1" } }
+  	num_target_locators = 2
+ 	is_space_station = no
+ 	icon_frame = 4
+ 	base_buildtime = 600
+ 	required_spaceport_level = 3
+ 	can_have_federation_design = yes
+ 	enable_default_design = yes
+ 	
+ 	prerequisites = { "tech_engineering_cruiser_542" }
+ 	
+ 	class = shipclass_military
+    required_component_set = "required_ship_sensors"
+ 	required_component_set = "combat_computers"
+    required_component_set = "required_tactical"
+    required_component_set = "required_aura_Cruiser"
+    required_component_set = "required_warp"
+ 	required_component_set = "required_thrusters"
+ 	required_component_set = "required_defense"
+ 	required_component_set = "required_hull"
+ }
+ 
+ ##### Battlecruiser ##### BC 
+ steamrunner = {
+ 	graphical_culture = { "andorian_01" "borg_01" "borg_yellow_01" "borg_red_01" "borg_blue_01" "borg_purple_01" "borg_orange_01"  "breen_01" "cardassian_01" "cytherian_01" "dominion_01" "ferengi_01" "fesarian_01" "federation_01" "federation_02" "federation_03" "federation_04" "federation_MU_04" "generic_01" "generic_02" "generic_03" "generic_04" "karemma_01" "kazon_01" "trabe_01" "klingon_01" "klingon_02" "klingon_03" "klingon_04" "romulan_01" "romulan_02" "romulan_03" "romulan_04" "tellarite_01" "tholian_01" "vulcan_01" "xindi_01" "undine_01" "suliban_01" "husnock_01" "vidiian_01" "kobali_01" "garidian_01" "garidian_02" "garidian_03" "garidian_04" "orion_01" "sheliak_01" "voth_01" "cravic_01" "pralor_01" "hebitian_01" }
+ 	formation_priority = @battleship_formation_priority
+ 	is_space_object = yes
+ 	max_speed = @steamrunner_sublight_speed
+ 	acceleration = 0.2
+ 	rotation_speed = 0.2
+ 	combat_max_speed = @steamrunner_combat_speed
+ 	combat_rotation_speed = @steamrunner_combat_rotation
+ 	collision_radius = @steamrunner_collision_radius
+ 	modifier = {
+ 		ship_evasion_mult = -0.45
+ 		ship_armor_add = 28
+ 		ship_upkeep_mult = 0.75
+ 		ship_evasion_add = 22
+  	}
+  	max_hitpoints = 2500
+  	size_multiplier = 22
+  	fleet_slot_size = 2
+ 
+ 
+  	section_slots = { "stern" = { locator = "part1" } "mid" = { locator = "part1" } }
+  	num_target_locators = 2
+  	is_space_station = no
+ 	icon_frame = 13
+ 	base_buildtime = 420
+ 	required_spaceport_level = 4
+ 	can_have_federation_design = yes
+ 	enable_default_design = yes
+ 	
+ 	prerequisites = { "tech_engineering_battlecruiser_543" }
+ 	
+ 	class = shipclass_military
+    required_component_set = "required_ship_sensors"
+ 	required_component_set = "combat_computers"
+ 	required_component_set = "required_tactical"		
+ 	required_component_set = "required_warp"
+    required_component_set = "required_thrusters"
+ 	required_component_set = "required_defense"
+ 	required_component_set = "required_hull"
+ }	
+ 
+ ##### Battleship ##### BS
+ adv_cruiser = {
+ 	graphical_culture = { "andorian_01" "borg_01" "borg_yellow_01" "borg_red_01" "borg_blue_01" "borg_purple_01" "borg_orange_01"  "breen_01" "cardassian_01" "cytherian_01" "dominion_01" "ferengi_01" "fesarian_01" "federation_01" "federation_02" "federation_03" "federation_04" "federation_MU_04" "generic_01" "generic_02" "generic_03" "generic_04" "karemma_01" "kazon_01" "trabe_01" "klingon_01" "klingon_02" "klingon_03" "klingon_04" "romulan_01" "romulan_02" "romulan_03" "romulan_04" "tellarite_01" "tholian_01" "vulcan_01" "xindi_01" "undine_01" "suliban_01" "husnock_01" "vidiian_01" "kobali_01" "garidian_01" "garidian_02" "garidian_03" "garidian_04" "orion_01" "sheliak_01" "voth_01" "cravic_01" "pralor_01" "hebitian_01" }
+ 	formation_priority = @cruiser_formation_priority
+ 	is_space_object = yes
+ 	max_speed = @adv_cruiser_sublight_speed
+ 	acceleration = 0.15
+ 	rotation_speed = 0.15
+ 	combat_max_speed = @adv_cruiser_combat_speed
+ 	combat_rotation_speed = @adv_cruiser_combat_rotation
+ 	collision_radius = @adv_cruiser_collision_radius
+ 	modifier = {
+ 		ship_evasion_mult = -0.75
+ 		ship_armor_add = 43
+ 		ship_evasion_add = 10
+ 		ship_upkeep_mult = 0.25 
+  	}
+  	max_hitpoints = 3000
+  	size_multiplier = 36
+  	fleet_slot_size = 4
+ 
+ 
+  	section_slots = { "stern" = { locator = "part1" } "mid" = { locator = "part1" } }
+  	num_target_locators = 2
+  	is_space_station = no
+ 	icon_frame = 5
+ 	base_buildtime = 1080 #High build time
+ 	required_spaceport_level = 5
+ 	can_have_federation_design = yes
+ 	enable_default_design = yes
+ 	is_designable = yes
+ 	prerequisites = { "tech_engineering_battleship_544" }
+ 	
+ 	class = shipclass_military
+    required_component_set = "required_ship_sensors"
+ 	required_component_set = "combat_computers"
+ 	required_component_set = "required_tactical"
+    required_component_set = "required_aura_Battleship"
+ 	required_component_set = "required_warp"
+    required_component_set = "required_thrusters"
+ 	required_component_set = "required_defense"
+ 	required_component_set = "required_hull"
+ }
+ 
+ ##### Heavy Escort ##### HE 
+ strike = {
+ 	graphical_culture = { "andorian_01" "borg_01" "borg_yellow_01" "borg_red_01" "borg_blue_01" "borg_purple_01" "borg_orange_01"  "breen_01" "cardassian_01" "cytherian_01" "dominion_01" "ferengi_01" "fesarian_01" "federation_01" "federation_02" "federation_03" "federation_04" "federation_MU_04" "generic_01" "generic_02" "generic_03" "generic_04" "karemma_01" "kazon_01" "trabe_01" "klingon_01" "klingon_02" "klingon_03" "klingon_04" "romulan_01" "romulan_02" "romulan_03" "romulan_04" "tellarite_01" "tholian_01" "vulcan_01" "xindi_01" "undine_01" "suliban_01" "husnock_01" "vidiian_01" "kobali_01" "garidian_01" "garidian_02" "garidian_03" "garidian_04" "orion_01" "sheliak_01" "voth_01" "cravic_01" "pralor_01" "hebitian_01" }
+ 	formation_priority = @corvette_formation_priority
+ 	is_space_object = yes
+ 	max_speed = @strike_sublight_speed
+ 	acceleration = 0.35
+ 	rotation_speed = 0.35
+ 	combat_max_speed = @strike_combat_speed
+ 	combat_rotation_speed = @strike_combat_rotation
+ 	collision_radius = @strike_collision_radius
+ 	modifier = {
+ 		ship_evasion_mult = -0.35
+ 		ship_armor_add = 23
+ 		ship_evasion_add = 26
+ 		ship_upkeep_mult = 0.75 
+  	}
+  	max_hitpoints = 2000
+  	size_multiplier = 26
+  	fleet_slot_size = 1
+ 
+ 
+  	section_slots = { "stern" = { locator = "part1" } "mid" = { locator = "part1" } }
+  	num_target_locators = 2
+  	is_space_station = no
+	icon_frame = 14
+	base_buildtime = 500
+	required_spaceport_level = 6
+	can_have_federation_design = yes
+	enable_default_design = yes
+	is_designable = yes
+	prerequisites = { "tech_engineering_heavy_545" }
+	
+	class = shipclass_military
+    required_component_set = "required_ship_sensors"
+	required_component_set = "combat_computers"
+	required_component_set = "required_tactical"
+	required_component_set = "required_warp"
+    required_component_set = "required_thrusters"
+	required_component_set = "required_defense"
+	required_component_set = "required_hull"
+}
+ 
+ ##### Assault Cruiser ##### AC
+ assault_cruiser = {
+ 	graphical_culture = { "andorian_01" "borg_01" "borg_yellow_01" "borg_red_01" "borg_blue_01" "borg_purple_01" "borg_orange_01"  "breen_01" "cardassian_01" "cytherian_01" "dominion_01" "ferengi_01" "fesarian_01" "federation_01" "federation_02" "federation_03" "federation_04" "federation_MU_04" "generic_01" "generic_02" "generic_03" "generic_04" "karemma_01" "kazon_01" "trabe_01" "klingon_01" "klingon_02" "klingon_03" "klingon_04" "romulan_01" "romulan_02" "romulan_03" "romulan_04" "tellarite_01" "tholian_01" "vulcan_01" "xindi_01" "undine_01" "suliban_01" "husnock_01" "vidiian_01" "kobali_01" "garidian_01" "garidian_02" "garidian_03" "garidian_04" "orion_01" "sheliak_01" "voth_01" "cravic_01" "pralor_01" "hebitian_01" }
+ 	formation_priority = @cruiser_formation_priority
+ 	is_space_object = yes
+ 	max_speed = @assault_cruiser_sublight_speed
+ 	acceleration = 0.2
+ 	rotation_speed = 0.2
+ 	combat_max_speed = @assault_cruiser_combat_speed
+ 	combat_rotation_speed = @assault_cruiser_combat_rotation
+ 	collision_radius = @assault_cruiser_collision_radius
+ 	modifier = {
+ 		ship_evasion_mult = -0.6 
+ 		ship_armor_add = 35
+ 		ship_evasion_add = 16
+ 		ship_upkeep_mult = 0.75 
+  	}
+  	max_hitpoints = 3000
+  	size_multiplier = 42
+  	fleet_slot_size = 4
+ 
+ 
+  	section_slots = { "stern" = { locator = "part1" } "mid" = { locator = "part1" } }
+  	num_target_locators = 2
+  	is_space_station = no
+	icon_frame = 15
+	base_buildtime = 1260 #High build time
+	required_spaceport_level = 6
+	can_have_federation_design = yes
+	enable_default_design = yes
+	is_designable = yes
+	prerequisites = { "tech_engineering_assault_546" }
+	
+	class = shipclass_military
+    required_component_set = "required_ship_sensors"
+	required_component_set = "combat_computers"
+	required_component_set = "required_tactical"
+	required_component_set = "required_warp"
+    required_component_set = "required_thrusters"
+	required_component_set = "required_defense"
+	required_component_set = "required_hull"
+}
+
+super_battleship = {
+    graphical_culture = { "borg_01" "borg_yellow_01" "borg_red_01" "borg_blue_01" "borg_purple_01" "borg_orange_01" "dominion_01" }
+    formation_priority = @battleship_formation_priority
+    is_space_object = yes
+    max_speed = @super_battleship_sublight_speed
+    acceleration = 0.13
+    rotation_speed = 0.13
+    combat_max_speed = @super_battleship_combat_speed
+    combat_rotation_speed = @super_battleship_combat_rotation
+    collision_radius = @super_battleship_collision_radius
+    modifier = {
+        ship_evasion_mult = -0.85
+        ship_armor_add = 48
+        ship_evasion_add = 6
+        ship_upkeep_mult = 0.75 
+    }
+    max_hitpoints = 3000
+    size_multiplier = 115
+    fleet_slot_size = 4
+ 
+ 
+    section_slots = { "stern" = { locator = "part1" } "mid" = { locator = "part1" } }
+    num_target_locators = 2
+    is_space_station = no
+    icon_frame = 5
+    base_buildtime = 3450 #High build time
+    required_spaceport_level = 6
+    can_have_federation_design = yes
+    enable_default_design = yes
+    is_designable = no
+    prerequisites = { "tech_engineering_industry_1222" }
+    
+    class = shipclass_military
+    required_component_set = "required_ship_sensors"
+    required_component_set = "combat_computers"
+    required_component_set = "required_tactical"
+    required_component_set = "required_warp"
+    required_component_set = "required_thrusters"
+    required_component_set = "required_defense"
+    required_component_set = "required_hull"
+}
+
+
+
+############
+# STANDARD #
+############
+
+destroyer = {
+	graphical_culture = { "plantoid_01" "mammalian_01" "reptilian_01" "avian_01" "molluscoid_01" "fungoid_01" "arthropoid_01" }
+	formation_priority = @destroyer_formation_priority
+	max_speed = 4.5
+	acceleration = 0.3
+	rotation_speed = 0.2
+	combat_max_speed = @destroyer_combat_speed
+	combat_rotation_speed = @destroyer_combat_rotation
+	collision_radius = @destroyer_collision_radius
+	modifier = {
+		ship_armor_add = 12
+		ship_evasion_add = 10
+	}
+	max_hitpoints = 600
+	size_multiplier = 2
+	fleet_slot_size = 2
+	section_slots = { "bow" = { locator = "part1" } "stern" = { locator = "part2" } }
+	num_target_locators = 4
+	icon_frame = 3
+	is_space_station = no
+	base_buildtime = 120
+	required_spaceport_level = 3
+	can_have_federation_design = no
+	enable_default_design = no	#if yes, countries will have an auto-generated design at start
+	is_designable = no	
+	#prerequisites = { "tech_spaceport_1" }
+	
+	class = shipclass_military
+    required_component_set = "required_ship_sensors"
+	required_component_set = "combat_computers"
+    required_component_set = "ftl_components"
+	required_component_set = "required_thrusters"
+}
+
+cruiser = {
+	graphical_culture = { "plantoid_01" "mammalian_01" "reptilian_01" "avian_01" "molluscoid_01" "fungoid_01" "arthropoid_01" }
+	formation_priority = @cruiser_formation_priority
+	max_speed = 3.75
+	acceleration = 0.25
+	rotation_speed = 0.175
+	combat_max_speed = @cruiser_combat_speed
+	combat_rotation_speed = @cruiser_combat_rotation
+	collision_radius = @cruiser_collision_radius
+	modifier = {
+		ship_armor_add = 30
+		ship_evasion_add = 5
+	}
+	max_hitpoints = 1600
+	size_multiplier = 3
+	fleet_slot_size = 3
+	section_slots = { "bow" = { locator = "part1" } "mid" = { locator = "part2" } "stern" = { locator = "part3" } }
+	num_target_locators = 4
+	is_space_station = no
+	icon_frame = 4
+	base_buildtime = 240
+	required_spaceport_level = 5
+	can_have_federation_design = no
+	enable_default_design = no	#if yes, countries will have an auto-generated design at start
+	is_designable = no	
+	#prerequisites = { "tech_spaceport_1" }
+	
+	class = shipclass_military
+    required_component_set = "required_ship_sensors"
+	required_component_set = "combat_computers"
+    required_component_set = "ftl_components"
+	required_component_set = "required_thrusters"
+}
+
+battleship = {
+	graphical_culture = { "plantoid_01" "mammalian_01" "reptilian_01" "avian_01" "molluscoid_01" "fungoid_01" "arthropoid_01" }
+	formation_priority = @battleship_formation_priority
+	max_speed = 3
+	acceleration = 0.2
+	rotation_speed = 0.15
+	combat_max_speed = @battleship_combat_speed
+	combat_rotation_speed = @battleship_combat_rotation
+	collision_radius = @battleship_collision_radius
+	modifier = {
+		ship_armor_add = 80
+		ship_evasion_add = 5
+	}
+	max_hitpoints = 2400
+	size_multiplier = 8
+	fleet_slot_size = 4
+	section_slots = { "bow" = { locator = "part1" } "mid" = { locator = "part2" } "stern" = { locator = "part3" } }
+	num_target_locators = 4
+	is_space_station = no
+	icon_frame = 5
+	base_buildtime = 480
+	required_spaceport_level = 6
+	can_have_federation_design = no
+	enable_default_design = no	#if yes, countries will have an auto-generated design at start
+	is_designable = no	
+	#prerequisites = { "tech_spaceport_1" }
+	
+	class = shipclass_military
+    required_component_set = "required_ship_sensors"
+    required_component_set = "combat_computers"
+	required_component_set = "ftl_components"
+	required_component_set = "required_thrusters"
+}
+
+##################
+# Civilian Ships #
+##################
+
+constructor = {
+	is_space_object = yes
+	max_speed = 3.75
+	acceleration = 0.3
+	rotation_speed = 0.2
+	combat_max_speed = @civilian_ships_combat_speed
+	combat_rotation_speed = 0.2
+	modifier = {
+		ship_armor_add = 3
+		ship_evasion_add = 5
+	}
+	max_hitpoints = 300
+	size_multiplier = 1
+	fleet_slot_size = 3
+	section_slots = { "mid" = { locator = "part1" } }
+	num_target_locators = 0
+	is_space_station = no
+	icon_frame = 7
+	base_buildtime = 60
+
+	enable_default_design = yes	#if yes, countries will have an auto-generated design at start
+	prerequisites = { "tech_spaceport_1" }
+	is_civilian = yes
+	is_designable = yes
+	class = shipclass_constructor
+    required_component_set = "required_civilian_sensors"
+	required_component_set = "required_warp"
+	required_component_set = "required_thrusters"
+	required_component_set = "required_defense"
+	required_component_set = "required_hull"
+}
+
+colonizer = {
+	is_space_object = yes
+	max_speed = 3.75
+	acceleration = 0.3
+	rotation_speed = 0.2
+	combat_max_speed = @civilian_ships_combat_speed
+	combat_rotation_speed = 0.2
+	max_hitpoints = 300
+	modifier = {
+		ship_armor_add = 3
+		ship_evasion_add = 5
+	}
+	size_multiplier = 1
+	fleet_slot_size = 3
+	section_slots = { "mid" = { locator = "part1" } }
+	num_target_locators = 0
+	is_space_station = no
+	icon_frame = 8
+	base_buildtime = 360
+
+	enable_default_design = yes	#if yes, countries will have an auto-generated design at start
+	prerequisites = { "tech_colonization_1" }
+	is_civilian = yes
+	is_designable = yes
+	class = shipclass_colonizer
+    required_component_set = "required_civilian_sensors"
+	required_component_set = "required_warp"
+	required_component_set = "required_thrusters"
+	required_component_set = "required_defense"
+	required_component_set = "required_hull"
+	required_component_set = "colony_module"
+	valid_target_aggressive_stance = no
+}
+
+science = {
+	is_space_object = yes
+	max_speed = 4.5
+	acceleration = 0.3
+	rotation_speed = 0.2
+	combat_max_speed = @civilian_ships_combat_speed
+	combat_rotation_speed = 0.2
+	modifier = {
+		ship_armor_add = 2
+		ship_evasion_add = 15
+	}
+	max_hitpoints = 300
+	size_multiplier = 1
+	fleet_slot_size = 2
+	section_slots = { "mid" = { locator = "part1" } }
+	num_target_locators = 0
+	is_space_station = no
+	icon_frame = 6
+	base_buildtime = 60	
+	
+	enable_default_design = yes	#if yes, countries will have an auto-generated design at start
+	prerequisites = { "tech_spaceport_1" }
+	is_civilian = yes
+	class = shipclass_science_ship
+	required_component_set = "science_labs"
+    required_component_set = "science_module"
+	required_component_set = "required_civilian_sensors"
+	required_component_set = "required_warp"
+	required_component_set = "required_thrusters"
+	required_component_set = "required_defense"
+	required_component_set = "required_hull"
+	valid_target_aggressive_stance = no
+}
+
+transport = {
+	is_space_object = yes
+	max_speed = 3.75
+	acceleration = 0.3
+	rotation_speed = 0.2
+	combat_max_speed = @civilian_ships_combat_speed
+	combat_rotation_speed = 0.2
+	acceleration = 0.6
+	modifier = {
+		ship_evasion_add = 20
+		ship_armor_add = 5
+	}
+	max_hitpoints = 300
+	size_multiplier = 1
+	fleet_slot_size = 1
+	section_slots = { "mid" = { locator = "part1" } }
+	num_target_locators = 0
+	is_space_station = no
+	icon_frame = 9
+
+	enable_default_design = yes	#if yes, countries will have an auto-generated design at start
+	is_designable = yes
+	class = shipclass_transport
+    required_component_set = "required_civilian_sensors"
+	required_component_set = "required_warp"
+	required_component_set = "required_thrusters"
+	required_component_set = "required_defense"
+	required_component_set = "required_hull"
+	auto_upgrade = yes
+}
+
+################
+# MILITARY STATIONS #
+################
+
+### light defense satellite
+military_station_small = { 
+	graphical_culture = { "andorian_01" "borg_01" "borg_yellow_01" "borg_red_01" "borg_blue_01" "borg_purple_01" "borg_orange_01"  "breen_01" "cardassian_01" "cytherian_01" "dominion_01" "ferengi_01" "fesarian_01" "federation_01" "federation_02" "federation_03" "federation_04" "federation_MU_04" "generic_01" "generic_02" "generic_03" "generic_04" "karemma_01" "kazon_01" "trabe_01" "klingon_01" "klingon_02" "klingon_03" "klingon_04" "romulan_01" "romulan_02" "romulan_03" "romulan_04" "tellarite_01" "tholian_01" "vulcan_01" "xindi_01" "undine_01" "suliban_01" "husnock_01" "vidiian_01" "kobali_01" "garidian_01" "garidian_02" "garidian_03" "garidian_04" "orion_01" "sheliak_01" "voth_01" "cravic_01" "pralor_01" "hebitian_01" }
+	max_speed = 0.0
+	acceleration = 0.0
+	rotation_speed = 0.0
+	modifier = {
+		ship_evasion_mult = -1
+		ship_armor_add = 20
+	}
+	max_hitpoints = 10000
+	size_multiplier = 4
+	fleet_slot_size = 2
+	section_slots = { 
+		"west" = { locator = "part1" }
+		"east" = { locator = "part1" }
+	}
+	is_designable = yes
+	num_target_locators = 0
+	is_space_station = yes
+	
+	enable_default_design = yes	#if yes, countries will have an auto-generated design at start
+	prerequisites = { "tech_engineering_defense_556" }
+	class = shipclass_military_station
+	required_component_set = "required_military_station_sensors"
+    required_component_set = "required_station_reactors"
+    required_component_set = "required_defense"
+    required_component_set = "required_hull"
+	build_block_radius = @build_block_radius_small
+	auto_upgrade = yes
+}
+
+### Heavy weapon platform
+military_station_medium = { 
+	graphical_culture = { "andorian_01" "borg_01" "borg_yellow_01" "borg_red_01" "borg_blue_01" "borg_purple_01" "borg_orange_01"  "breen_01" "cardassian_01" "cytherian_01" "dominion_01" "ferengi_01" "fesarian_01" "federation_01" "federation_02" "federation_03" "federation_04" "federation_MU_04" "generic_01" "generic_02" "generic_03" "generic_04" "karemma_01" "kazon_01" "trabe_01" "klingon_01" "klingon_02" "klingon_03" "klingon_04" "romulan_01" "romulan_02" "romulan_03" "romulan_04" "tellarite_01" "tholian_01" "vulcan_01" "xindi_01" "undine_01" "suliban_01" "husnock_01" "vidiian_01" "kobali_01" "garidian_01" "garidian_02" "garidian_03" "garidian_04" "orion_01" "sheliak_01" "voth_01" "cravic_01" "pralor_01" "hebitian_01" }
+	max_speed = 0.0
+	acceleration = 0.0
+	rotation_speed = 0.0
+	modifier = {
+		ship_evasion_mult = -1
+		ship_armor_add = 50
+	}
+	max_hitpoints = 50000
+	size_multiplier = 8
+	fleet_slot_size = 4
+	section_slots = { 
+		"west" = { locator = "part1" }
+		"east" = { locator = "part1" }
+	}
+	num_target_locators = 0
+	is_space_station = yes
+	
+	enable_default_design = yes	#if yes, countries will have an auto-generated design at start
+	prerequisites = { "tech_engineering_deep_558" }
+	class = shipclass_military_station
+    required_component_set = "required_military_station_sensors"
+    required_component_set = "required_station_reactors"
+    required_component_set = "required_station_reactors"
+    required_component_set = "required_station_reactors"
+    required_component_set = "required_defense"
+    required_component_set = "required_hull"
+	build_block_radius = @build_block_radius_large
+	auto_upgrade = yes
+}
+
+# Drydock
+military_station_large = {
+	graphical_culture = { "andorian_01" "borg_01" "borg_yellow_01" "borg_red_01" "borg_blue_01" "borg_purple_01" "borg_orange_01"  "breen_01" "cardassian_01" "cytherian_01" "dominion_01" "ferengi_01" "fesarian_01" "federation_01" "federation_02" "federation_03" "federation_04" "federation_MU_04" "generic_01" "generic_02" "generic_03" "generic_04" "karemma_01" "kazon_01" "trabe_01" "klingon_01" "klingon_02" "klingon_03" "klingon_04" "romulan_01" "romulan_02" "romulan_03" "romulan_04" "tellarite_01" "tholian_01" "vulcan_01" "xindi_01" "undine_01" "suliban_01" "husnock_01" "vidiian_01" "kobali_01" "garidian_01" "garidian_02" "garidian_03" "garidian_04" "orion_01" "sheliak_01" "voth_01" "cravic_01" "pralor_01" "hebitian_01" }
+	max_speed = 0.0
+	acceleration = 0.0
+	rotation_speed = 0.0
+	modifier = {
+		ship_evasion_mult = -1
+		ship_armor_add = 15
+	}
+	max_hitpoints = 5000
+	size_multiplier = 4
+	fleet_slot_size = 8
+	section_slots = { 
+		#"west" = { locator = "part1" }
+		"east" = { locator = "part1" }
+	}
+	num_target_locators = 0
+	is_space_station = yes
+	enable_default_design = yes
+	prerequisites = { "tech_engineering_deep_563" }
+	class = shipclass_military_station
+	required_component_set = "required_aura_Drydock"
+	required_component_set = "required_station_reactors"
+	required_component_set = "required_defense"
+	required_component_set = "required_hull"
+	build_block_radius = @build_block_radius_large
+	auto_upgrade = yes
+}
+
+# Mine Field
+military_station_tiny = {
+	graphical_culture = { "andorian_01" "borg_01" "borg_yellow_01" "borg_red_01" "borg_blue_01" "borg_purple_01" "borg_orange_01"  "breen_01" "cardassian_01" "cytherian_01" "dominion_01" "ferengi_01" "fesarian_01" "federation_01" "federation_02" "federation_03" "federation_04" "federation_MU_04" "generic_01" "generic_02" "generic_03" "generic_04" "karemma_01" "kazon_01" "trabe_01" "klingon_01" "klingon_02" "klingon_03" "klingon_04" "romulan_01" "romulan_02" "romulan_03" "romulan_04" "tellarite_01" "tholian_01" "vulcan_01" "xindi_01" "undine_01" "suliban_01" "husnock_01" "vidiian_01" "kobali_01" "garidian_01" "garidian_02" "garidian_03" "garidian_04" "orion_01" "sheliak_01" "voth_01" "cravic_01" "pralor_01" "hebitian_01" }
+	max_speed = 0.0
+	acceleration = 0.0
+	rotation_speed = 0.0
+	modifier = {
+		ship_evasion_mult = -1
+		ship_armor_add = 15
+	}
+	max_hitpoints = 7500
+	size_multiplier = 4
+	fleet_slot_size = 2
+	section_slots = { 
+		#"west" = { locator = "part1" }
+		"east" = { locator = "part2" }
+	}
+	is_designable = yes
+	num_target_locators = 0
+	is_space_station = yes
+	
+	enable_default_design = yes	#if yes, countries will have an auto-generated design at start
+	prerequisites = { tech_engineering_nuclear_702 }
+	class = shipclass_military_station
+	required_component_set = "required_aura_Minefield"
+	required_component_set = "required_station_reactors"
+	build_block_radius = @build_block_radius_large
+	auto_upgrade = yes
+}
+
+# Listening Outpost
+station_listening = {
+	graphical_culture = { "andorian_01" "borg_01" "borg_yellow_01" "borg_red_01" "borg_blue_01" "borg_purple_01" "borg_orange_01"  "breen_01" "cardassian_01" "cytherian_01" "dominion_01" "ferengi_01" "fesarian_01" "federation_01" "federation_02" "federation_03" "federation_04" "federation_MU_04" "generic_01" "generic_02" "generic_03" "generic_04" "karemma_01" "kazon_01" "trabe_01" "klingon_01" "klingon_02" "klingon_03" "klingon_04" "romulan_01" "romulan_02" "romulan_03" "romulan_04" "tellarite_01" "tholian_01" "vulcan_01" "xindi_01" "undine_01" "suliban_01" "husnock_01" "vidiian_01" "kobali_01" "garidian_01" "garidian_02" "garidian_03" "garidian_04" "orion_01" "sheliak_01" "voth_01" "cravic_01" "pralor_01" "hebitian_01" }
+	max_speed = 0.0
+	acceleration = 0.0
+	rotation_speed = 0.0
+	modifier = {
+		ship_evasion_mult = -1
+		ship_armor_add = 15
+	}
+	max_hitpoints = 2500
+	size_multiplier = 4
+	fleet_slot_size = 2
+	section_slots = { 
+		#"west" = { locator = "part1" }
+		 "east" = { locator = "part2" }
+	}
+	is_designable = yes
+	num_target_locators = 0
+	is_space_station = yes
+	
+	enable_default_design = yes	#if yes, countries will have an auto-generated design at start
+	prerequisites = { tech_engineering_listening_555 }
+	class = shipclass_military_station
+	required_component_set = "required_listening_sensors"
+	required_component_set = "required_station_reactors"
+	required_component_set = "required_defense"
+	required_component_set = "required_hull"
+	build_block_radius = @build_block_radius_small
+	auto_upgrade = yes
+}
+
+
+################
+# CIVILIAN STATIONS #
+################
+
+orbital_station = {
+	graphical_culture = { "andorian_01" "borg_01" "borg_yellow_01" "borg_red_01" "borg_blue_01" "borg_purple_01" "borg_orange_01"  "breen_01" "cardassian_01" "cytherian_01" "dominion_01" "ferengi_01" "fesarian_01" "federation_01" "federation_02" "federation_03" "federation_04" "federation_MU_04" "generic_01" "generic_02" "generic_03" "generic_04" "karemma_01" "kazon_01" "trabe_01" "klingon_01" "klingon_02" "klingon_03" "klingon_04" "romulan_01" "romulan_02" "romulan_03" "romulan_04" "tellarite_01" "tholian_01" "vulcan_01" "xindi_01" "undine_01" "suliban_01" "husnock_01" "vidiian_01" "kobali_01" "garidian_01" "garidian_02" "garidian_03" "garidian_04" "orion_01" "sheliak_01" "voth_01" "cravic_01" "pralor_01" "hebitian_01" }
+	max_speed = 0.0
+	acceleration = 0.0
+	rotation_speed = 0.0
+	modifier = {
+		ship_evasion_mult = -1
+		ship_weapon_range_mult = 0.20
+	}
+	max_hitpoints = 10000
+	size_multiplier = 8
+	fleet_slot_size = 4
+	section_slots = { 
+		"1" = { locator = "part1" }
+		"2" = { locator = "part2" }
+		"3" = { locator = "part3" }
+		"4" = { locator = "part4" }
+		"5" = { locator = "part5" }
+		"6" = { locator = "part6" }
+		"7" = { locator = "part7" }
+	}
+	num_target_locators = 0
+	is_space_station = yes
+	build_block_radius = @build_block_radius_tiny
+	cost = 300
+	
+	enable_default_design = yes	#if yes, countries will have an auto-generated design at start
+	prerequisites = { "tech_spaceport_1" }
+	class = shipclass_orbital_station
+	is_designable = no
+}
+
+mining_station = {
+	max_speed = 0.0
+	acceleration = 0.0
+	rotation_speed = 0.0
+	modifier = {
+		ship_evasion_mult = -1
+		ship_weapon_range_mult = 0.20
+	}
+	max_hitpoints = 2000
+	section_slots = { "mid" = { locator = "part1" } }
+	num_target_locators = 0
+	is_space_station = yes
+	build_block_radius = @build_block_radius_tiny
+	is_civilian = no
+	cost = 90
+	components_add_to_cost = no
+	
+	enable_default_design = yes	#if yes, countries will have an auto-generated design at start
+	prerequisites = { "tech_space_construction" }
+	class = shipclass_mining_station
+	is_designable = no
+	valid_target_aggressive_stance = no
+	auto_upgrade = yes
+}
+
+research_station = {
+	max_speed = 0.0
+	acceleration = 0.0
+	rotation_speed = 0.0
+	modifier = {
+		ship_evasion_mult = -1
+		ship_weapon_range_mult = 0.20
+	}
+	max_hitpoints = 2000
+	section_slots = { "mid" = { locator = "part1" } }
+	num_target_locators = 1
+	is_space_station = yes
+	build_block_radius = @build_block_radius_tiny
+	is_civilian = no
+	cost = 90
+	components_add_to_cost = no
+	
+	enable_default_design = yes	#if yes, countries will have an auto-generated design at start
+	prerequisites = { "tech_space_construction" }
+	class = shipclass_research_station
+	is_designable = no
+	valid_target_aggressive_stance = no
+	auto_upgrade = yes
+}
+
+wormhole_station = {
+	max_speed = 0.0
+	acceleration = 0.0
+	rotation_speed = 0.0
+	modifier = {
+		ship_evasion_mult = -1
+	}
+	max_hitpoints = 2000
+	num_target_locators = 0
+	is_space_station = yes
+	build_block_radius = @build_block_radius_tiny
+	is_civilian = yes
+	cost = 75
+	components_add_to_cost = no
+	
+	enable_default_design = yes	#if yes, countries will have an auto-generated design at start
+	class = shipclass_wormhole_station
+	is_designable = no
+}
+
+observation_station = {
+	max_speed = 0.0
+	acceleration = 0.0
+	rotation_speed = 0.0
+	modifier = {
+		ship_evasion_mult = -1
+	}
+	max_hitpoints = 2000
+	num_target_locators = 0
+	is_space_station = yes
+	build_block_radius = @build_block_radius_tiny
+	is_civilian = yes
+	cost = 50
+	components_add_to_cost = no
+	
+	enable_default_design = yes	#if yes, countries will have an auto-generated design at start
+	class = shipclass_observation_station
+	is_designable = no
+	valid_target_aggressive_stance = no
+}
+
+outpost_station = {
+	graphical_culture = { "andorian_01" "borg_01" "borg_yellow_01" "borg_red_01" "borg_blue_01" "borg_purple_01" "borg_orange_01"  "breen_01" "cardassian_01" "cytherian_01" "dominion_01" "ferengi_01" "fesarian_01" "federation_01" "federation_02" "federation_03" "federation_04" "federation_MU_04" "generic_01" "generic_02" "generic_03" "generic_04" "karemma_01" "kazon_01" "trabe_01" "klingon_01" "klingon_02" "klingon_03" "klingon_04" "romulan_01" "romulan_02" "romulan_03" "romulan_04" "tellarite_01" "tholian_01" "vulcan_01" "xindi_01" "undine_01" "suliban_01" "husnock_01" "vidiian_01" "kobali_01" "garidian_01" "garidian_02" "garidian_03" "garidian_04" "orion_01" "sheliak_01" "voth_01" "cravic_01" "pralor_01" "hebitian_01" }
+	max_speed = 0.0
+	acceleration = 0.0
+	rotation_speed = 0.0
+	modifier = {
+		ship_evasion_mult = -1
+		ship_armor_add = 70
+		ship_weapon_range_mult = 0.20
+		ship_fire_rate_mult = 0.5
+	}
+	max_hitpoints = 12000
+	size_multiplier = 4
+	fleet_slot_size = 2
+	section_slots = { "mid" = { locator = "part1" } }
+	is_designable = no
+	num_target_locators = 0
+	is_space_station = no
+	can_have_federation_design = yes
+	is_civilian = no
+	components_add_to_cost = no
+	
+	enable_default_design = yes	#if yes, countries will have an auto-generated design at start
+	class = shipclass_outpost_station
+	required_component_set = "border_extruders"
+	
+	build_block_radius = @build_block_radius_tiny
+}
+
+
+# Starfleet Museam
+fed_ent_naval_museum = {
+	graphical_culture = { "federation_01" "federation_02" "federation_03" "federation_04" "federation_MU_04" }
+	max_speed = 0.0
+	acceleration = 0.0
+	rotation_speed = 0.0
+	modifier = {
+		ship_evasion_mult = -1
+		ship_armor_add = 15
+	}
+	max_hitpoints = 5000
+	size_multiplier = 4
+	fleet_slot_size = 8
+	section_slots = { 
+		#"west" = { locator = "part1" }
+		"east" = { locator = "part1" }
+	}
+	num_target_locators = 0
+	is_space_station = yes
+	enable_default_design = yes
+	#prerequisites = { "tech_engineering_deep_563" }
+	is_designable = no
+	class = shipclass_military_station
+	required_component_set = "required_aura_Drydock"
+	required_component_set = "required_station_reactors"
+	required_component_set = "required_defense"
+	required_component_set = "required_hull"
+	build_block_radius = @build_block_radius_large
+	auto_upgrade = yes
+}

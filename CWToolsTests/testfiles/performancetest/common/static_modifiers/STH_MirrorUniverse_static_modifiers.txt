@@ -1,0 +1,23 @@
+em_imperial_starfleet = {
+	icon = "gfx/interface/icons/empire_modifiers/em_terran_empire.dds"
+	navy_size_add = 100
+}
+
+em_imperial_oversight = {
+	icon = "gfx/interface/icons/empire_modifiers/em_terran_empire.dds"
+	country_core_sector_system_cap = 10
+}
+
+em_rebel_advantage = {
+	navy_size_add = 200
+}
+
+
+### Mirror Universe ###
+em_mirror_universe_supply = {
+	country_resource_minerals_add = 1000
+	country_resource_energy_add = 1000
+	country_resource_food_add = 20
+	navy_size_add = 240
+}
+

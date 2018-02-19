@@ -1,0 +1,718 @@
+#########################################
+#										#
+#            Space Seed					#
+#										#
+#    Star Trek - Season 1 Episode 22    #
+#										#
+#         Written by: Janack			#
+#										#
+#########################################
+
+@tier1materialreward = 6
+@tier1materialmin = 100
+@tier1materialmax = 500
+@tier2materialreward = 12
+@tier2materialmin = 150
+@tier2materialmax = 1000
+@tier3materialreward = 18
+@tier3materialmin = 250
+@tier3materialmax = 1500
+@tier4materialreward = 24
+@tier4materialmin = 350
+@tier4materialmax = 2000
+
+@tier1influencereward = 6
+@tier1influencemin = 40
+@tier1influencemax = 100
+@tier2influencereward = 12
+@tier2influencemin = 80
+@tier2influencemax = 175
+@tier3influencereward = 18
+@tier3influencemin = 125
+@tier3influencemax = 250
+@tier4influencereward = 24
+@tier4influencemin = 150
+@tier4influencemax = 300
+
+@tier1researchreward = 6
+@tier1researchmin = 60
+@tier1researchmax = 150
+@tier2researchreward = 12
+@tier2researchmin = 90
+@tier2researchmax = 250
+@tier3researchreward = 18
+@tier3researchmin = 120
+@tier3researchmax = 350
+@tier4researchreward = 24
+@tier4researchmin = 150
+@tier4researchmax = 500
+
+namespace = STH_space_seed_event
+
+# Botany Bay
+ship_event = {
+	id = STH_space_seed_event.1
+	title = STH_space_seed_event.1.name
+	desc = STH_space_seed_event.1.desc
+	picture = sth_GFX_evt_space_seed_1
+	show_sound = event_default
+	location = Root
+	is_triggered_only = yes
+	option = {
+		name = STH_space_seed_event.1.a # Leave it
+		hidden_effect = {
+			ship_event = { id = STH_space_seed_event.2 days = 2 } 
+		}
+	}
+	option = {
+		name = STH_space_seed_event.1.b # Come alongside
+		hidden_effect = {
+			random_list = {
+				75 = { ship_event = { id = STH_space_seed_event.3 days = 1 } } # Crew Random Alive
+				25 = { ship_event = { id = STH_space_seed_event.6 days = 1 } } # Crew Dead
+			}
+		}
+	}
+}
+
+# Leave the ship behind
+ship_event = {
+	id = STH_space_seed_event.2
+	title = STH_space_seed_event.2.name
+	desc = STH_space_seed_event.2.desc
+	picture = sth_GFX_evt_space_seed_1
+	show_sound = event_default
+	location = Root
+	is_triggered_only = yes
+	option = {
+		name = STH_space_seed_event.2.a
+		leader = { add_experience = 50 }
+	}
+}
+
+# Along side of the SS Botany Bay
+ship_event = {
+	id = STH_space_seed_event.3
+	title = STH_space_seed_event.3.name
+	desc = STH_space_seed_event.3.desc
+	picture = sth_GFX_evt_space_seed_1
+	show_sound = event_default
+	location = Root
+	is_triggered_only = yes
+	immediate = { owner = { set_country_flag = STH_space_seed_BotanyBay } }
+	option = {
+		name = STH_space_seed_event.3.a # Send Away Team over
+		hidden_effect = {
+			ship_event = { id = STH_space_seed_event.5 days = 2 } # Crew Alive
+		}
+	}
+}
+
+# SS Botany Bay Crew Alive
+ship_event = {
+	id = STH_space_seed_event.5
+	title = STH_space_seed_event.5.name
+	desc = STH_space_seed_event.5.desc
+	picture = sth_GFX_evt_space_seed_2
+	show_sound = event_default
+	location = Root
+	is_triggered_only = yes
+	option = {
+		name = STH_space_seed_event.5.a # Revive Khan
+		hidden_effect = {
+			ship_event = { id = STH_space_seed_event.7 days = 2 } # Khan Alive
+		}
+	}
+	option = {
+		name = STH_space_seed_event.5.b # Let him die
+		hidden_effect = {
+			ship_event = { id = STH_space_seed_event.8 days = 2 } # Khan Dies
+		}
+	}
+}
+
+# Crew Dead
+ship_event = {
+	id = STH_space_seed_event.6
+	title = STH_space_seed_event.6.name
+	desc = STH_space_seed_event.6.desc
+	picture = sth_GFX_evt_space_seed_2
+	show_sound = event_default
+	location = Root
+	is_triggered_only = yes
+	option = {
+		name = STH_space_seed_event.6.a # Interlude
+	}
+}
+
+# Interlude
+ship_event = {
+	id = STH_space_seed_event.7
+	title = STH_space_seed_event.7.name
+	desc = STH_space_seed_event.7.desc
+	picture = sth_GFX_evt_space_seed_1
+	show_sound = event_default
+	location = Root
+	is_triggered_only = yes
+	option = {
+		name = STH_space_seed_event.7.a # Interlude
+		hidden_effect = {
+			ship_event = { id = STH_space_seed_event.71 days = 2 } # Khan tries to take the ship
+		}
+	}
+}
+
+# Interlude II
+ship_event = {
+	id = STH_space_seed_event.71
+	title = STH_space_seed_event.71.name
+	desc = STH_space_seed_event.71.desc
+	picture = sth_GFX_evt_space_seed_1
+	show_sound = event_default
+	location = Root
+	is_triggered_only = yes
+	immediate = { leader = { save_event_target_as = shipCaptain } }
+	option = {
+		name = STH_space_seed_event.71.a # Troublesome
+		hidden_effect = {
+			ship_event = { id = STH_space_seed_event.72 days = 2 } # Interlude II
+		}
+	}
+}
+
+# Khan Takes the Ship
+ship_event = {
+	id = STH_space_seed_event.72
+	title = STH_space_seed_event.72.name
+	desc = STH_space_seed_event.72.desc
+	picture = sth_GFX_evt_space_seed_3
+	show_sound = event_default
+	location = Root
+	is_triggered_only = yes
+	immediate = { leader = { save_event_target_as = shipCaptain } }
+	option = {
+		name = STH_space_seed_event.72.a
+		hidden_effect = {
+			ship_event = { id = STH_space_seed_event.73 } # Khan takes the ship
+		}
+	}	
+}
+
+ship_event = {
+	id = STH_space_seed_event.73
+	title = STH_space_seed_event.73.name
+	desc = STH_space_seed_event.73.desc
+	picture = sth_GFX_evt_space_seed_3
+	show_sound = event_default
+	location = Root
+	is_triggered_only = yes
+	immediate = { leader = { save_event_target_as = shipCaptain } }
+	option = {
+		name = STH_space_seed_event.73.a # Surrender the ship
+		hidden_effect = { ship_event = { id = STH_space_seed_event.9 days = 2 } } # Khan takes the ship
+	}	
+	option = {
+		name = STH_space_seed_event.73.b # Never Surrender
+		hidden_effect = { ship_event = { id = STH_space_seed_event.10 days = 2 } } # Crew Alive
+	}
+}
+
+
+# Khan Dies, SS Botany towed to Starbase 12
+ship_event ={
+	id = STH_space_seed_event.8
+	title = STH_space_seed_event.8.name
+	desc = STH_space_seed_event.8.desc
+	picture = sth_GFX_evt_space_seed_1
+	show_sound = event_default
+	location = Root
+	is_triggered_only = yes
+	immediate = { leader = { save_event_target_as = shipCaptain } }
+	option = {
+		name = STH_space_seed_event.8.a
+		leader = { add_experience = 500 }
+		owner = { add_monthly_resource_mult = { resource = society_research value = @tier1researchreward min = @tier1researchmin max = @tier1researchmax } }
+	}
+}
+
+# Khan Controls the Ship
+ship_event = {
+	id = STH_space_seed_event.9
+	title = STH_space_seed_event.9.name
+	desc = STH_space_seed_event.9.desc
+	picture = sth_GFX_evt_space_seed_4
+	show_sound = event_default
+	location = Root
+	is_triggered_only = yes
+	immediate = {
+		kill_leader = { type = scientist show_notification = no }
+		fleet = { destroy_fleet = this }
+	}
+	option = {
+		name = "UNFORTUNATE"
+		owner = {
+			add_influence = -75
+		}
+	}
+}
+
+# Khan Controls the Ship
+ship_event = {
+	id = STH_space_seed_event.10
+	title = STH_space_seed_event.10.name
+	desc = STH_space_seed_event.10.desc
+	picture = sth_GFX_evt_space_seed_4
+	show_sound = event_default
+	location = Root
+	is_triggered_only = yes
+	option = {
+		name = STH_space_seed_event.10.a
+		hidden_effect = {
+			ship_event = { id = STH_space_seed_event.101 days = 2 } # Interlude III
+		}
+	}
+}
+
+# Retake the Ship
+ship_event = {
+	id = STH_space_seed_event.101
+	title = STH_space_seed_event.101.name
+	desc = STH_space_seed_event.101.desc
+	picture = sth_GFX_evt_space_seed_4
+	show_sound = event_default
+	location = Root
+	is_triggered_only = yes
+	immediate = { leader = { save_event_target_as = shipCaptain } }
+	option = {
+		name = STH_space_seed_event.101.a # Recruite Khan
+		hidden_effect = {
+			random_list = {
+				15 = { ship_event = { id = STH_space_seed_event.11 days = 2 } } # Khan Accepts
+				85 = { ship_event = { id = STH_space_seed_event.12 days = 2 } } # Khan Refuses
+			}
+		}
+	}
+	option = {
+		name = STH_space_seed_event.101.b # Hold Court-Martial
+		hidden_effect = {
+			ship_event = { id = STH_space_seed_event.13 days = 2 }
+		}
+	}
+}
+
+# Khan Joins the UFP
+ship_event = {
+	id = STH_space_seed_event.11
+	title = STH_space_seed_event.11.name
+	desc = STH_space_seed_event.11.desc
+	picture = sth_GFX_evt_space_seed_4
+	show_sound = event_default
+	location = Root
+	is_triggered_only = yes
+	option = {
+		name = STH_space_seed_event.11.a # Khan joins as governor
+		hidden_effect = { owner = { country_event = { id = STH_space_seed_event.14 } } }
+	}
+	option = {
+		name = STH_space_seed_event.11.b # Khan joins as governor
+		hidden_effect = { owner = { country_event = { id = STH_space_seed_event.15 } } }
+	}
+	option = {
+		name = STH_space_seed_event.11.c # Khan joins as governor
+		hidden_effect = { owner = { country_event = { id = STH_space_seed_event.16 } } }
+	}
+	option = {
+		name = STH_space_seed_event.11.d # Khan joins as governor
+		hidden_effect = { owner = { country_event = { id = STH_space_seed_event.17 } } }
+	}
+	after = { 
+		leader = { add_experience = 1000 }
+		owner = { add_monthly_resource_mult = { resource = society_research value = @tier3researchreward min = @tier3researchmin max = @tier3researchmax } } 
+	}
+}
+
+country_event = {
+	id = STH_space_seed_event.14 #GOVERNOR
+	hide_window = yes
+	is_triggered_only = yes
+	immediate = { ensure_male_khan_governor = yes }
+}
+country_event = {
+	id = STH_space_seed_event.15 #SCIENTIST
+	hide_window = yes
+	is_triggered_only = yes
+	immediate = { ensure_male_khan_scientist = yes }
+}
+country_event = {
+	id = STH_space_seed_event.16 #ADMIRAL
+	hide_window = yes
+	is_triggered_only = yes
+	immediate = { ensure_male_khan_admiral = yes }
+}
+country_event = {
+	id = STH_space_seed_event.17 #GENERAL
+	hide_window = yes
+	is_triggered_only = yes
+	immediate = { ensure_male_khan_general = yes }
+}
+
+# Khan Refuses
+ship_event = {
+	id = STH_space_seed_event.12
+	title = STH_space_seed_event.12.name
+	desc = STH_space_seed_event.12.desc
+	picture = sth_GFX_evt_space_seed_4
+	show_sound = event_default
+	location = Root
+	is_triggered_only = yes
+	option = {
+		name = STH_space_seed_event.12.a # Ceti Alpha V
+		leader = {
+			add_experience = 1000
+		}
+		owner = {
+			add_monthly_resource_mult = {
+				resource = society_research
+				value = @tier2researchreward
+				min = @tier2researchmin
+				max = @tier2researchmax
+			}
+		}
+	}
+}
+
+# Court-Martial
+ship_event = {
+	id = STH_space_seed_event.13
+	title = STH_space_seed_event.13.name
+	desc = STH_space_seed_event.13.desc
+	picture = sth_GFX_evt_space_seed_4
+	show_sound = event_default
+	location = Root
+	is_triggered_only = yes
+	option = {
+		name = STH_space_seed_event.13.a # Ceti Alpha V
+		leader = {
+			add_experience = 1000
+		}
+		owner = {
+			add_monthly_resource_mult = {
+				resource = society_research
+				value = @tier2researchreward
+				min = @tier2researchmin
+				max = @tier2researchmax
+			}
+		}
+	}
+}
+
+# Bartlet
+ship_event = {
+	id = STH_space_seed_event.1000
+	title = STH_space_seed_event.1.name
+	desc = STH_space_seed_event.1.desc
+	picture = sth_GFX_evt_space_seed_1
+	show_sound = event_default
+	location = Root
+	is_triggered_only = yes
+	option = {
+		name = STH_space_seed_event.1.a # Leave it
+		hidden_effect = { ship_event = { id = STH_space_seed_event.2 days = 2 } }
+	}
+	option = {
+		name = STH_space_seed_event.1.b # Come alongside
+		hidden_effect = {
+			random_list = {
+				75 = { ship_event = { id = STH_space_seed_event.1001 days = 1 } } # Crew Random Alive
+				25 = { ship_event = { id = STH_space_seed_event.6 days = 1 } } # Crew Dead
+			}
+		}
+	}
+}
+
+ship_event = {
+	id = STH_space_seed_event.1001
+	title = STH_space_seed_event.1001.name
+	desc = STH_space_seed_event.1001.desc
+	picture = sth_GFX_evt_space_seed_1
+	show_sound = event_default
+	location = Root
+	is_triggered_only = yes
+	immediate = { owner = { set_country_flag = STH_space_seed_Bartlet } }
+	option = {
+		name = STH_space_seed_event.1001.a # Send Away Team over
+		hidden_effect = { ship_event = { id = STH_space_seed_event.1002 days = 2 } }
+	}
+}
+
+ship_event = {
+	id = STH_space_seed_event.1002
+	title = STH_space_seed_event.1002.name
+	desc = STH_space_seed_event.1002.desc
+	picture = sth_GFX_evt_space_seed_1
+	show_sound = event_default
+	location = Root
+	is_triggered_only = yes
+	option = {
+		name = STH_space_seed_event.1002.a # Send Away Team over
+		owner = { add_monthly_resource_mult = { resource = influence value = @tier2influencereward min = @tier2influencemin max = @tier2influencemax } }
+	}
+}
+
+# McGarry
+ship_event = {
+	id = STH_space_seed_event.2000
+	title = STH_space_seed_event.1.name
+	desc = STH_space_seed_event.1.desc
+	picture = sth_GFX_evt_space_seed_1
+	show_sound = event_default
+	location = Root
+	is_triggered_only = yes
+	option = {
+		name = STH_space_seed_event.1.a # Leave it
+		hidden_effect = { ship_event = { id = STH_space_seed_event.2 days = 2 } }
+	}
+	option = {
+		name = STH_space_seed_event.1.b # Come alongside
+		hidden_effect = {
+			random_list = {
+				75 = { ship_event = { id = STH_space_seed_event.2001 days = 1 } } # Crew Random Alive
+				25 = { ship_event = { id = STH_space_seed_event.6 days = 1 } } # Crew Dead
+			}
+		}
+	}
+}
+ship_event = {
+	id = STH_space_seed_event.2001
+	title = STH_space_seed_event.1001.name
+	desc = STH_space_seed_event.1001.desc
+	picture = sth_GFX_evt_space_seed_1
+	show_sound = event_default
+	location = Root
+	is_triggered_only = yes
+	immediate = { owner = { set_country_flag = STH_space_seed_McGarry } }
+	option = {
+		name = STH_space_seed_event.1001.a
+		hidden_effect = { ship_event = { id = STH_space_seed_event.2002 days = 2 } }
+	}
+}
+ship_event = {
+	id = STH_space_seed_event.2002
+	title = STH_space_seed_event.2002.name
+	desc = STH_space_seed_event.2002.desc
+	picture = sth_GFX_evt_space_seed_1
+	show_sound = event_default
+	location = Root
+	is_triggered_only = yes
+	option = {
+		name = STH_space_seed_event.2002.a
+		owner = {
+			add_monthly_resource_mult = { resource = energy value = @tier2materialreward min = @tier2materialmin max = @tier2materialmax }
+			add_monthly_resource_mult = { resource = minerals value = @tier2materialreward min = @tier2materialmin max = @tier2materialmax }
+		}
+	}
+}
+
+# Lyman
+ship_event = {
+	id = STH_space_seed_event.3000
+	title = STH_space_seed_event.1.name
+	desc = STH_space_seed_event.1.desc
+	picture = sth_GFX_evt_space_seed_1
+	show_sound = event_default
+	location = Root
+	is_triggered_only = yes
+	option = {
+		name = STH_space_seed_event.1.a # Leave it
+		hidden_effect = { ship_event = { id = STH_space_seed_event.2 days = 2 } }
+	}
+	option = {
+		name = STH_space_seed_event.1.b # Come alongside
+		hidden_effect = {
+			random_list = {
+				75 = { ship_event = { id = STH_space_seed_event.3001 days = 1 } } # Crew Random Alive
+				25 = { ship_event = { id = STH_space_seed_event.6 days = 1 } } # Crew Dead
+			}
+		}
+	}
+}
+ship_event = {
+	id = STH_space_seed_event.3001
+	title = STH_space_seed_event.1001.name
+	desc = STH_space_seed_event.1001.desc
+	picture = sth_GFX_evt_space_seed_1
+	show_sound = event_default
+	location = Root
+	is_triggered_only = yes
+	immediate = { owner = { set_country_flag = STH_space_seed_Lyman } }
+	option = {
+		name = STH_space_seed_event.1001.a
+		hidden_effect = { ship_event = { id = STH_space_seed_event.2002 days = 2 } }
+	}
+}
+ship_event = {
+	id = STH_space_seed_event.3002
+	title = STH_space_seed_event.3002.name
+	desc = STH_space_seed_event.3002.desc
+	picture = sth_GFX_evt_space_seed_1
+	show_sound = event_default
+	location = Root
+	is_triggered_only = yes
+	option = {
+		name = STH_space_seed_event.3002.a
+		owner = { add_monthly_resource_mult = { resource = engineering_research value = @tier2researchreward min = @tier2researchmin max = @tier2researchmax } }
+	}
+}
+
+# Ziegler
+ship_event = {
+	id = STH_space_seed_event.4000
+	title = STH_space_seed_event.1.name
+	desc = STH_space_seed_event.1.desc
+	picture = sth_GFX_evt_space_seed_1
+	show_sound = event_default
+	location = Root
+	is_triggered_only = yes
+	option = {
+		name = STH_space_seed_event.1.a # Leave it
+		hidden_effect = { ship_event = { id = STH_space_seed_event.2 days = 2 } }
+	}
+	option = {
+		name = STH_space_seed_event.1.b # Come alongside
+		hidden_effect = {
+			random_list = {
+				75 = { ship_event = { id = STH_space_seed_event.4001 days = 1 } } # Crew Random Alive
+				25 = { ship_event = { id = STH_space_seed_event.6 days = 1 } } # Crew Dead
+			}
+		}
+	}
+}
+ship_event = {
+	id = STH_space_seed_event.4001
+	title = STH_space_seed_event.1001.name
+	desc = STH_space_seed_event.1001.desc
+	picture = sth_GFX_evt_space_seed_1
+	show_sound = event_default
+	location = Root
+	is_triggered_only = yes
+	immediate = { owner = { set_country_flag = STH_space_seed_Ziegler } }
+	option = {
+		name = STH_space_seed_event.1001.a
+		hidden_effect = { ship_event = { id = STH_space_seed_event.2002 days = 2 } }
+	}
+}
+ship_event = {
+	id = STH_space_seed_event.4002
+	title = STH_space_seed_event.4002.name
+	desc = STH_space_seed_event.4002.desc
+	picture = sth_GFX_evt_space_seed_1
+	show_sound = event_default
+	location = Root
+	is_triggered_only = yes
+	option = {
+		name = STH_space_seed_event.4002.a
+		owner = { add_monthly_resource_mult = { resource = society_research value = @tier2researchreward min = @tier2researchmin max = @tier2researchmax } }
+	}
+}
+
+# Marbury
+ship_event = {
+	id = STH_space_seed_event.5000
+	title = STH_space_seed_event.1.name
+	desc = STH_space_seed_event.1.desc
+	picture = sth_GFX_evt_space_seed_1
+	show_sound = event_default
+	location = Root
+	is_triggered_only = yes
+	option = {
+		name = STH_space_seed_event.1.a # Leave it
+		hidden_effect = { ship_event = { id = STH_space_seed_event.2 days = 2 } }
+	}
+	option = {
+		name = STH_space_seed_event.1.b # Come alongside
+		hidden_effect = {
+			random_list = {
+				75 = { ship_event = { id = STH_space_seed_event.5001 days = 1 } } # Crew Random Alive
+				25 = { ship_event = { id = STH_space_seed_event.6 days = 1 } } # Crew Dead
+			}
+		}
+	}
+}
+ship_event = {
+	id = STH_space_seed_event.5001
+	title = STH_space_seed_event.1001.name
+	desc = STH_space_seed_event.1001.desc
+	picture = sth_GFX_evt_space_seed_1
+	show_sound = event_default
+	location = Root
+	is_triggered_only = yes
+	immediate = { owner = {  set_country_flag = STH_space_seed_Marbury } }
+	option = {
+		name = STH_space_seed_event.1001.a
+		hidden_effect = { ship_event = { id = STH_space_seed_event.2002 days = 2 } }
+	}
+}
+ship_event = {
+	id = STH_space_seed_event.5002
+	title = STH_space_seed_event.5002.name
+	desc = STH_space_seed_event.5002.desc
+	picture = sth_GFX_evt_space_seed_1
+	show_sound = event_default
+	location = Root
+	is_triggered_only = yes
+	option = {
+		name = STH_space_seed_event.5002.a
+		owner = { add_monthly_resource_mult = { resource = physics_research value = @tier2researchreward min = @tier2researchmin max = @tier2researchmax } }
+	}
+}
+
+# Generic
+ship_event = {
+	id = STH_space_seed_event.10000
+	title = STH_space_seed_event.1.name
+	desc = STH_space_seed_event.10000.desc
+	picture = sth_GFX_evt_space_seed_1
+	show_sound = event_default
+	location = Root
+	is_triggered_only = yes
+	option = {
+		name = STH_space_seed_event.10000.a # Recovery the hull
+		owner = {
+			add_minerals = 50
+			add_engineering_research = 50
+		}
+	}
+}
+
+
+namespace = STH_space_seed_event_fail
+# Failed to Find vessel
+ship_event = {
+	id = STH_space_seed_event_fail.1
+	title = STH_space_seed_event_fail.1.name
+	desc = STH_space_seed_event_fail.1.desc
+	picture = sth_GFX_evt_space_seed_1
+	show_sound = event_default
+	location = Root
+	is_triggered_only = yes
+	option = {
+		name = STH_space_seed_event_fail.1.a
+	}	
+}
+
+# Damage to Ship, can't find vessel
+ship_event = {
+	id = STH_space_seed_event_fail.2
+	title = STH_space_seed_event_fail.2.name
+	desc = STH_space_seed_event_fail.2.desc
+	picture = sth_GFX_evt_space_seed_1
+	show_sound = event_default
+	location = Root
+	is_triggered_only = yes
+	option = {
+		name = STH_space_seed_event_fail.2.a
+		owner = {
+			add_influence = -25
+		}
+	}
+}

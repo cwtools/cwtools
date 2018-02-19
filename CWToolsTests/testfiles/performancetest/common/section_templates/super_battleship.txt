@@ -1,0 +1,323 @@
+####TEMPLATE / REFERENCE CORE FOR SUPER BATTLESHIPS (approximate balance point)
+# ship_section_template = {
+	# key = "SUPER_BATTLESHIP_COREA"
+	# ship_size = super_battleship 
+	# fits_on_slot = mid
+	# entity = "saber_coreA_entity" #?? needs to be changed 
+	# icon = "GFX_ship_part_core_mid" #?? needs to be changed
+	
+	# ai_weight = {
+		# factor = 20
+	# }
+	
+	#Less or more medium phasers is fine
+	# component_slot = {
+		# name = "MEDIUM_GUN_01"
+		# slot_size = medium
+		# slot_type = weapon
+		# locatorname = "medium_gun_01"
+	# }
+
+	# component_slot = {
+		# name = "MEDIUM_GUN_02"
+		# slot_size = medium
+		# slot_type = weapon
+		# locatorname = "medium_gun_02"
+	# }
+
+	# component_slot = {
+		# name = "MEDIUM_GUN_03"
+		# slot_size = medium
+		# slot_type = weapon
+		# locatorname = "medium_gun_03"
+	# }
+
+	# component_slot = {
+		# name = "MEDIUM_GUN_04"
+		# slot_size = medium
+		# slot_type = weapon
+		# locatorname = "medium_gun_04"
+	# }
+
+	# component_slot = {
+		# name = "MEDIUM_GUN_05"
+		# slot_size = medium
+		# slot_type = weapon
+		# locatorname = "medium_gun_05"
+	# }
+
+	# component_slot = {
+		# name = "MEDIUM_GUN_06"
+		# slot_size = medium
+		# slot_type = weapon
+		# locatorname = "medium_gun_06"
+	# }
+
+	# component_slot = {
+		# name = "HULL_IMPROVEMENT_01"
+		# slot_size = torpedo
+		# slot_type = strike_craft
+		# rotation = 90
+		# locatorname = "strike_craft_locator_01"
+	# }
+
+	# component_slot = {
+		# name = "HULL_IMPROVEMENT_02"
+		# slot_size = torpedo
+		# slot_type = strike_craft
+		# rotation = 90
+		# locatorname = "strike_craft_locator_02"
+	# }
+
+	# component_slot = {
+		# name = "HULL_IMPROVEMENT_03"
+		# slot_size = torpedo
+		# slot_type = strike_craft
+		# rotation = 90
+		# locatorname = "strike_craft_locator_03"
+	# }
+
+
+	#Battleships usually have 2-3 torpedos
+	# component_slot = { #Torpedo
+		# name = "LARGE_GUN_01"
+		# slot_size = torpedo
+		# slot_type = weapon
+		# locatorname = "large_gun_01"
+	# }	
+
+	# component_slot = { #Torpedo
+		# name = "LARGE_GUN_02"
+		# slot_size = torpedo
+		# slot_type = weapon
+		# locatorname = "large_gun_02"
+	# }
+
+	# component_slot = { #Torpedo
+		# name = "LARGE_GUN_03"
+		# slot_size = torpedo
+		# slot_type = weapon
+		# locatorname = "large_gun_03"
+	# }
+
+
+	# medium_utility_slots = 4
+	# large_utility_slots = 6
+	# cost = 800 #Really expensive
+# }	
+
+
+# ship_section_template = {
+	# key = "SUPER_BATTLESHIP_COREB"
+	# ship_size = super_battleship 
+	# fits_on_slot = mid
+	# entity = "saber_coreA_entity" #?? needs to be changed 
+	# icon = "GFX_ship_part_core_mid" #?? needs to be changed
+
+	# ai_weight = {
+		# factor = 20
+	# }
+	
+	#Less or more medium phasers is fine
+	# component_slot = {
+		# name = "MEDIUM_GUN_01"
+		# slot_size = medium
+		# slot_type = weapon
+		# locatorname = "medium_gun_01"
+	# }
+
+	# component_slot = {
+		# name = "MEDIUM_GUN_02"
+		# slot_size = medium
+		# slot_type = weapon
+		# locatorname = "medium_gun_02"
+	# }
+
+	# component_slot = {
+		# name = "MEDIUM_GUN_03"
+		# slot_size = medium
+		# slot_type = weapon
+		# locatorname = "medium_gun_03"
+	# }
+
+	# component_slot = {
+		# name = "MEDIUM_GUN_04"
+		# slot_size = medium
+		# slot_type = weapon
+		# locatorname = "medium_gun_04"
+	# }
+
+	# component_slot = {
+		# name = "MEDIUM_GUN_05"
+		# slot_size = medium
+		# slot_type = weapon
+		# locatorname = "medium_gun_05"
+	# }
+
+	# component_slot = {
+		# name = "MEDIUM_GUN_06"
+		# slot_size = medium
+		# slot_type = weapon
+		# locatorname = "medium_gun_06"
+	# }
+
+	# component_slot = {
+		# name = "HULL_IMPROVEMENT_01"
+		# slot_size = torpedo
+		# slot_type = strike_craft
+		# rotation = 90
+		# locatorname = "strike_craft_locator_01"
+	# }
+
+	# component_slot = {
+		# name = "HULL_IMPROVEMENT_02"
+		# slot_size = torpedo
+		# slot_type = strike_craft
+		# rotation = 90
+		# locatorname = "strike_craft_locator_02"
+	# }
+
+	# component_slot = {
+		# name = "HULL_IMPROVEMENT_03"
+		# slot_size = torpedo
+		# slot_type = strike_craft
+		# rotation = 90
+		# locatorname = "strike_craft_locator_03"
+	# }
+
+
+	#Battleships usually have 2-3 torpedos
+	# component_slot = { #Torpedo
+		# name = "LARGE_GUN_01"
+		# slot_size = torpedo
+		# slot_type = weapon
+		# locatorname = "large_gun_01"
+	# }	
+
+	# component_slot = { #Torpedo
+		# name = "LARGE_GUN_02"
+		# slot_size = torpedo
+		# slot_type = weapon
+		# locatorname = "large_gun_02"
+	# }
+
+	# component_slot = { #Torpedo
+		# name = "LARGE_GUN_03"
+		# slot_size = torpedo
+		# slot_type = weapon
+		# locatorname = "large_gun_03"
+	# }
+
+
+	# medium_utility_slots = 4
+	# large_utility_slots = 6
+	# cost = 800 #Really expensive
+# }	
+
+
+# ship_section_template = {
+	# key = "SUPER_BATTLESHIP_COREC"
+	# ship_size = super_battleship 
+	# fits_on_slot = mid
+	# entity = "saber_coreA_entity" #?? needs to be changed 
+	# icon = "GFX_ship_part_core_mid" #?? needs to be changed
+
+	# ai_weight = {
+		# factor = 20
+	# }
+	
+	#Less or more medium phasers is fine
+	# component_slot = {
+		# name = "MEDIUM_GUN_01"
+		# slot_size = medium
+		# slot_type = weapon
+		# locatorname = "medium_gun_01"
+	# }
+
+	# component_slot = {
+		# name = "MEDIUM_GUN_02"
+		# slot_size = medium
+		# slot_type = weapon
+		# locatorname = "medium_gun_02"
+	# }
+
+	# component_slot = {
+		# name = "MEDIUM_GUN_03"
+		# slot_size = medium
+		# slot_type = weapon
+		# locatorname = "medium_gun_03"
+	# }
+
+	# component_slot = {
+		# name = "MEDIUM_GUN_04"
+		# slot_size = medium
+		# slot_type = weapon
+		# locatorname = "medium_gun_04"
+	# }
+
+	# component_slot = {
+		# name = "MEDIUM_GUN_05"
+		# slot_size = medium
+		# slot_type = weapon
+		# locatorname = "medium_gun_05"
+	# }
+
+	# component_slot = {
+		# name = "MEDIUM_GUN_06"
+		# slot_size = medium
+		# slot_type = weapon
+		# locatorname = "medium_gun_06"
+	# }
+
+	# component_slot = {
+		# name = "HULL_IMPROVEMENT_01"
+		# slot_size = torpedo
+		# slot_type = strike_craft
+		# rotation = 90
+		# locatorname = "strike_craft_locator_01"
+	# }
+
+	# component_slot = {
+		# name = "HULL_IMPROVEMENT_02"
+		# slot_size = torpedo
+		# slot_type = strike_craft
+		# rotation = 90
+		# locatorname = "strike_craft_locator_02"
+	# }
+
+	# component_slot = {
+		# name = "HULL_IMPROVEMENT_03"
+		# slot_size = torpedo
+		# slot_type = strike_craft
+		# rotation = 90
+		# locatorname = "strike_craft_locator_03"
+	# }
+
+
+	#Battleships usually have 2-3 torpedos
+	# component_slot = { #Torpedo
+		# name = "LARGE_GUN_01"
+		# slot_size = torpedo
+		# slot_type = weapon
+		# locatorname = "large_gun_01"
+	# }	
+
+	# component_slot = { #Torpedo
+		# name = "LARGE_GUN_02"
+		# slot_size = torpedo
+		# slot_type = weapon
+		# locatorname = "large_gun_02"
+	# }
+
+	# component_slot = { #Torpedo
+		# name = "LARGE_GUN_03"
+		# slot_size = torpedo
+		# slot_type = weapon
+		# locatorname = "large_gun_03"
+	# }
+
+
+	# medium_utility_slots = 4
+	# large_utility_slots = 6
+	# cost = 800 #Really expensive
+# }	

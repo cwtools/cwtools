@@ -1,0 +1,873 @@
+# All global modifiers are here.  They are applied from certain game-features.
+#
+#icon_frame = 1 # green frame
+#icon_frame = 2 # yellow frame
+#icon_frame = 3 # red frame
+# Effects are fully scriptable here.
+
+# The names can NOT be removed or changed since the code references them
+
+
+##########################################################################
+# Star Trek Horizons Modifiers
+##########################################################################
+
+### empire construction modifiers ###
+
+### Starfleet Construction Methods construction method modifier
+   em_construction_fed = {
+      ship_weapon_damage = -0.05
+      ship_hitpoints_mult = 0.2
+      ship_shield_hp_mult = 0.2
+      spaceport_ship_build_cost_mult = 0.1
+   }
+   
+### Klingon Construction Methods construction method modifier
+   em_construction_kdf = {
+      ship_weapon_damage = 0.1
+      ship_hitpoints_mult = -0.1
+      ship_shield_hp_mult = -0.2
+      spaceport_ship_build_cost_mult = -0.1
+   }
+   
+### Dominion Construction Methods construction method modifier
+   em_construction_dom = {
+      ship_weapon_damage = 0.15
+      spaceport_ship_build_cost_mult = 0.1
+   }
+   
+### Cardassian Construction Methods construction method modifier
+   em_construction_car = {
+      ship_weapon_damage = 0.05
+      ship_hitpoints_mult = 0.1
+      ship_shield_hp_mult = -0.1
+      ship_evasion_mult = -0.05
+      spaceport_ship_build_cost_mult = -0.05
+   }
+   
+### Romulan Construction Methods construction method modifier
+   em_construction_rom = {
+      ship_hitpoints_mult = -0.2
+      ship_shield_hp_mult = 0.3
+      ship_evasion_mult = 0.1
+      spaceport_ship_build_cost_mult = 0.1
+   }
+   
+### Ferengi Construction Methods construction method modifier
+   em_construction_fer = {
+      ship_hitpoints_mult = -0.2
+      ship_shield_hp_mult = 0.1
+      ship_evasion_mult = 0.1
+   }
+   
+### Vulcan Construction Methods construction method modifier
+   em_construction_vul = {
+      ship_weapon_damage = 0.05
+      ship_hitpoints_mult = 0.1
+      ship_shield_hp_mult = 0.1
+      spaceport_ship_build_cost_mult = 0.1
+   }
+   
+### Andorian Construction Methods construction method modifier
+   em_construction_and = {
+      ship_weapon_damage = 0.15
+      ship_hitpoints_mult = -0.1
+      ship_shield_hp_mult = -0.1
+   }
+   
+### Tellarite Construction Methods construction method modifier
+   em_construction_tel = {
+      spaceport_ship_build_cost_mult = -0.05
+   }
+   
+### Breen Construction Methods construction method modifier
+   em_construction_bre = {
+      ship_weapon_damage = 0.1
+      ship_hitpoints_mult = -0.1
+   }
+   
+### Tholian Construction Methods construction method modifier
+   em_construction_tho = {
+      ship_weapon_damage = 0.05
+      ship_hitpoints_mult = -0.1
+      ship_shield_hp_mult = 0.1
+   }
+   
+### Husnock Construction Methods construction method modifier
+   em_construction_hus = {
+      ship_weapon_damage = 0.1
+      ship_hitpoints_mult = -0.1
+      ship_shield_penetration_mult = 0.05
+      ship_armor_penetration_mult = 0.05
+      spaceport_ship_build_cost_mult = 0.1
+   }
+   
+### Kazon Construction Methods construction method modifier
+   em_construction_kaz = {
+      ship_weapon_damage = 0.05
+      ship_hitpoints_mult = -0.1
+      ship_shield_hp_mult = -0.1
+      spaceport_ship_build_cost_mult = -0.1
+   }
+   
+### Suliban Construction Methods construction method modifier
+   em_construction_sul = {
+      ship_hitpoints_mult = -0.2
+      ship_shield_hp_mult = 0.1
+      spaceport_ship_build_cost_mult = -0.1
+   }
+   
+### Vidiian Construction Methods construction method modifier
+   em_construction_vid = {
+      ship_shield_penetration_mult = 0.2
+      spaceport_ship_build_cost_mult = 0.15
+   }
+   
+### Orion Construction Methods construction method modifier
+   em_construction_ori = {
+      ship_weapon_damage = 0.05
+      ship_evasion_mult = 0.1
+      spaceport_ship_build_cost_mult = 0.1
+   }
+   
+### Xindi Construction Methods construction method modifier
+   em_construction_xin = {
+      ship_weapon_damage = 0.05
+      ship_hitpoints_mult = -0.1
+      spaceport_ship_build_cost_mult = -0.05
+   }
+   
+### Borg Construction Methods construction method modifier
+   em_construction_brg = {
+      ship_weapon_damage = 0.1
+      ship_shield_penetration_mult = 0.1
+      ship_armor_penetration_mult = 0.1
+      spaceport_ship_build_cost_mult = 0.25
+   }
+   
+### Sheliak Construction Methods construction method modifier
+   em_construction_she = {
+      spaceport_ship_build_cost_mult = -0.05
+   }
+   
+### Voth Construction Methods construction method modifier
+   em_construction_vot = {
+      ship_weapon_damage = -0.05
+      ship_hitpoints_mult = 0.2
+      ship_shield_hp_mult = 0.3
+      spaceport_ship_build_cost_mult = 0.15
+   }
+   
+### Kobali Construction Methods construction method modifier
+   em_construction_kob = {
+      ship_weapon_damage = -0.05
+      spaceport_ship_build_cost_mult = -0.1
+   }
+   
+   
+#### Other static modifiers
+
+#D'Arsay - The Waxing Cycle - Korgano
+em_darsay_korgano = {
+	icon = "gfx/interface/icons/empire_modifiers/em_darsay_korgano.dds"
+	icon_frame = 1 # green frame
+	country_resource_unity_mult = 0.20
+	pop_growth_speed = 0.25
+	country_resource_influence_add = 1
+}
+
+###D'Arsay - The Waxing Cycle - Masaka
+em_darsay_masaka = {
+	icon = "gfx/interface/icons/empire_modifiers/em_darsay_masaka.dds"
+	icon_frame = 1 # green frame
+	ship_fire_rate_mult = 0.33
+	army_damage_mult = 0.33
+	spaceport_ship_build_cost_mult = -0.15
+}
+
+#Mining Boost
+em_ancient_mining_boost = {
+	country_resource_minerals_mult = 0.025
+	country_resource_minerals_add = 2
+}
+
+#AI buff
+em_ai_borg = {
+	ship_upkeep_mult = -0.25
+	tile_resource_minerals_mult = 0.25
+	tile_resource_energy_mult = 0.25
+	tile_resource_physics_research_mult = 0.15
+	tile_resource_society_research_mult = 0.15
+	tile_resource_engineering_research_mult = 0.15
+	country_resource_unity_mult = 1.1
+	navy_size_mult = 1.0
+	pop_growth_speed = 0.9
+}
+ai_superiority_handicap = {
+	tile_resource_minerals_mult = 0.15
+	tile_resource_energy_mult = 0.15
+	tile_resource_physics_research_mult = 0.15
+	tile_resource_society_research_mult = 0.15
+	tile_resource_engineering_research_mult = 0.15
+}
+
+em_easy_mode = {
+	tile_resource_minerals_mult = 0.1
+	tile_resource_energy_mult = 0.1
+	tile_resource_food_mult = 0.1
+	country_resource_unity_mult = 0.1
+	tile_resource_physics_research_mult = 0.1
+	tile_resource_society_research_mult = 0.1
+	tile_resource_engineering_research_mult = 0.1
+	pop_happiness = 0.05
+	navy_size_mult = 0.1
+	shipsize_mining_station_build_cost_mult = -0.1
+	spaceport_ship_build_cost_mult = -0.2
+	planet_building_cost_mult = -0.1
+}
+
+
+#The Terratin Incident Miniature Population
+miniature_population = {
+	tile_resource_society_research_mult = 0.10
+	tile_resource_engineering_research_mult = 0.10
+	tile_resource_physics_research_mult = 0.10
+	icon = "gfx/interface/icons/planet_modifiers/pm_miniature_population.dds"
+	icon_frame = 1
+}
+
+#Humpback Whales
+pm_humpback_whales = {
+	tile_resource_society_research_mult = 0.25
+	pop_happiness = 0.05
+	icon = "gfx/interface/icons/planet_modifiers/pm_humpback_whales.dds"
+	icon_frame = 1
+}
+
+#Sword of Kahless Found - Positive
+em_sword_of_kahless_unifying = {
+	pop_happiness = 0.05
+	tile_resource_society_research_mult = 0.01
+	tile_resource_engineering_research_mult = 0.01
+	tile_resource_physics_research_mult = 0.01
+	tile_resource_minerals_mult = 0.01
+	tile_resource_energy_mult = 0.01
+	icon_frame = 1
+}
+#Sword of Kahless Found - Negative
+em_sword_of_kahless_dividing = {
+	pop_happiness = -0.05
+	tile_resource_society_research_mult = -0.01
+	tile_resource_engineering_research_mult = -0.01
+	tile_resource_physics_research_mult = -0.01
+	icon_frame = 3
+}
+em_augment_virus = {
+	pop_happiness = -0.10
+	icon_frame = 3
+}
+
+#Ferengi FCA
+em_minimal_taxes = {
+	tile_resource_minerals_mult = 0.025
+	tile_resource_energy_mult = 0.025
+	icon_frame = 1
+}
+
+em_low_taxes = {
+	tile_resource_minerals_mult = 0.05
+	tile_resource_energy_mult = 0.05
+	icon_frame = 1
+}
+em_moderate_taxes = {
+	tile_resource_minerals_mult = 0.075
+	tile_resource_energy_mult = 0.075
+	icon_frame = 1
+}
+em_unhappy_taxes = {
+	pop_happiness = -0.10
+	icon_frame = 3
+}
+em_small_energy_loan = {
+	country_resource_energy_add = -11
+	icon_frame = 3
+}
+em_small_minerals_loan = {
+	country_resource_minerals_add = -11
+	icon_frame = 3
+}
+em_small_energy_loan_income = {
+	country_resource_energy_add = 11
+	icon_frame = 3
+}
+em_small_minerals_loan_income = {
+	country_resource_minerals_add = 11
+	icon_frame = 3
+}
+
+em_minimal_intervention = {
+	pop_happiness = -0.025
+	icon_frame = 3
+}
+em_major_intervention = {
+	pop_happiness = -0.05
+	icon_frame = 3
+}
+
+em_great_monetary_collapse = {
+	pop_happiness = -0.15
+	tile_resource_minerals_mult = -0.2
+	tile_resource_energy_mult = -0.2
+	icon_frame = 3
+}
+em_sound_economic_stewardship = {
+	pop_happiness = 0.075
+	tile_resource_minerals_mult = 0.05
+	tile_resource_energy_mult = 0.05
+	icon_frame = 1
+}
+
+
+#Praxis malus
+pm_praxis_debris = {
+	tile_resource_minerals_mult = -0.2
+	tile_resource_energy_mult = -0.2
+	tile_resource_food_mult = -0.2
+	pop_government_ethic_attraction = 0.05
+	icon = "gfx/interface/icons/planet_modifiers/pm_asteroid_belt.dds"
+	icon_frame = 1
+}
+
+#Strange New World malus
+pm_pollen_hallucinogen = {
+	pop_happiness = -0.20
+	tile_resource_society_research_mult = -0.10
+	pop_government_ethic_attraction = -0.10
+	icon = "gfx/interface/icons/planet_modifiers/pm_atmospheric_hallucinogen.dds"
+	icon_frame = 3
+}
+
+#The Never Ending Sacrifice bonus
+em_the_never_ending_sacrifice = {
+	pop_happiness = 0.01
+	pop_government_ethic_attraction = 0.04
+	icon = "gfx/interface/icons/empire_modifiers/em_cardassian_literature.dds"
+	icon_frame = 1
+}
+#The Never Ending Sacrifice bonus
+em_enigma_tales = {
+	pop_happiness = 0.04
+	pop_government_ethic_attraction = 0.01
+	icon = "gfx/interface/icons/empire_modifiers/em_cardassian_literature.dds"
+	icon_frame = 1
+}
+#The Never Ending Sacrifice bonus
+em_meditations_on_a_crimson_shadow = {
+	ship_upkeep_mult = -0.02
+	army_upkeep_mult = -0.02
+	navy_size_mult = 0.05
+	icon = "gfx/interface/icons/empire_modifiers/em_cardassian_literature.dds"
+	icon_frame = 1
+}
+
+
+
+
+#Minor Race
+em_minor_race_borders = {
+	planet_border_mult  = -0.6
+}
+
+em_fallen_empire = {
+	country_resource_minerals_add = 500
+	country_resource_energy_add = 500
+	ship_hitpoints_mult = 0.25
+	ship_armor_add = 15
+    ship_shield_hp_mult = 0.25	
+	ship_weapon_damage = 0.25
+	ship_upkeep_mult = -0.5
+	navy_size_add = 1000
+}
+
+#Sword of Kahless Found - Positive
+em_country_united = {
+	pop_happiness = 0.05
+	tile_resource_society_research_mult = 0.05
+	tile_resource_engineering_research_mult = 0.05
+	tile_resource_physics_research_mult = 0.05
+	tile_resource_minerals_mult = 0.05
+	tile_resource_energy_mult = 0.05
+	icon_frame = 1
+}
+#Sword of Kahless Found - Negative
+em_country_divided = {
+	pop_happiness = -0.05
+	tile_resource_society_research_mult = -0.025
+	tile_resource_engineering_research_mult = -0.025
+	tile_resource_physics_research_mult = -0.025
+	icon_frame = 1
+}
+
+#Opera
+em_great_opera = {
+	pop_happiness = 0.05
+}
+em_good_opera = {
+	pop_happiness = 0.025
+}
+
+
+
+### Federation Integration 
+## generic
+## 30 years
+##num_pops < 40
+federation_integration_1 = {
+	country_resource_influence_mult  = -0.25
+	country_resource_minerals_add = -10
+	country_resource_energy_add = -10
+}
+##num_pops > 40
+federation_integration_1_b = {
+	country_resource_influence_mult  = -0.50
+	country_resource_minerals_add = -20
+	country_resource_energy_add = -20
+}
+##num_pops > 80
+federation_integration_1_c = {
+	country_resource_influence_mult  = -0.75
+	country_resource_minerals_add = -30
+	country_resource_energy_add = -30
+}
+## 15 years
+##num_pops < 40
+federation_integration_2 = {
+	country_resource_influence_mult  = -0.50
+	country_resource_minerals_add = -35
+	country_resource_energy_add = -35
+}
+##num_pops > 40
+federation_integration_2_b = {
+	country_resource_influence_mult  = -0.85
+	country_resource_minerals_add = -70
+	country_resource_energy_add = -70
+}
+##num_pops > 80
+federation_integration_2_c = {
+	country_resource_influence_mult  = -0.90
+	country_resource_minerals_add = -105
+	country_resource_energy_add = -105
+}
+## 5 years
+##num_pops < 40
+federation_integration_3 = {
+	country_resource_influence_mult  = -0.85
+	country_resource_minerals_add = -85
+	country_resource_energy_add = -85
+}
+##num_pops > 40
+federation_integration_3_b = {
+	country_resource_influence_mult  = -1.0
+	country_resource_minerals_add = -170
+	country_resource_energy_add = -170
+}
+##num_pops > 80
+federation_integration_3_c = {
+	country_resource_influence_mult  = -2.0
+	country_resource_minerals_add = -250
+	country_resource_energy_add = -250
+}
+
+
+####Era Buffs#####
+#TOS
+erabuff_tos = {
+    ship_hitpoints_mult = 0.05
+	ship_armor_add = 3
+    ship_shield_hp_mult = 0.05	
+	ship_weapon_damage = 0.05
+}
+#TMP
+erabuff_tmp = {
+    ship_hitpoints_mult = 0.10
+	ship_armor_add = 6
+    ship_shield_hp_mult = 0.10	
+	ship_weapon_damage = 0.10
+}
+#TNG
+erabuff_tng = {
+    ship_hitpoints_mult = 0.20
+	ship_armor_add = 9
+    ship_shield_hp_mult = 0.20	
+	ship_weapon_damage = 0.20
+}
+#TNG2
+erabuff_tng2 = {
+    ship_hitpoints_mult = 0.25
+	ship_armor_add = 12
+    ship_shield_hp_mult = 0.25	
+	ship_weapon_damage = 0.25
+}
+####Era Hero Ship Buffs#####
+#ENT
+herobuff_ent = {
+    ship_hitpoints_mult = 0.03
+	ship_armor_add = 2
+    ship_shield_hp_mult = 0.03	
+	ship_weapon_damage = 0.03
+	ship_upkeep_mult = -1
+}
+#TOS
+herobuff_tos = {
+    ship_hitpoints_mult = 0.08
+	ship_armor_add = 5
+    ship_shield_hp_mult = 0.08	
+	ship_weapon_damage = 0.08
+	ship_upkeep_mult = -1
+}
+#TMP
+herobuff_tmp = {
+    ship_hitpoints_mult = 0.13
+	ship_armor_add = 8
+    ship_shield_hp_mult = 0.13	
+	ship_weapon_damage = 0.13
+	ship_upkeep_mult = -1
+}
+#TNG
+herobuff_tng = {
+    ship_hitpoints_mult = 0.23
+	ship_armor_add = 11
+    ship_shield_hp_mult = 0.23	
+	ship_weapon_damage = 0.23
+	ship_upkeep_mult = -1
+}
+#TNG2
+herobuff_tng2 = {
+    ship_hitpoints_mult = 0.28
+	ship_armor_add = 15
+    ship_shield_hp_mult = 0.28	
+	ship_weapon_damage = 0.28
+	ship_upkeep_mult = -1
+}
+
+#Named Ship
+sh_named_ship = {
+    ship_hitpoints_mult = 0.20
+	ship_armor_add = 10
+    ship_shield_hp_mult = 0.25	
+	ship_weapon_damage = 0.20
+}
+
+#Pop Modifiers
+pop_discrimination = {
+	pop_happiness = -0.3
+}
+pop_nervous = {
+	pop_happiness = -0.1
+}
+
+#Federation Modifiers
+em_fed_physics_focus = {
+	tile_resource_physics_research_mult = 0.05
+}
+em_fed_society_focus = {
+	tile_resource_society_research_mult = 0.05
+}
+em_fed_engineering_focus = {
+	tile_resource_engineering_research_mult = 0.05
+}
+em_fed_beacon_of_democracy = {
+	icon = "gfx/interface/icons/empire_modifiers/em_federation.dds"
+	planet_unrest_add = -10
+}
+#Federation Member
+em_federation_member_world = {
+	planet_border_mult  = -0.4
+}
+#Federation Formed
+em_federation_formed = {
+	country_resource_influence_add = -2
+}
+
+#Terra Nova
+surface_impact = {
+	pop_environment_tolerance = -0.05
+	tile_resource_minerals_mult = 0.05
+	icon = "gfx/interface/icons/planet_modifiers/pm_asteroid_impacts.dds"
+	icon_frame = 2
+}
+
+# Janus VI Colony
+janus_colony = {
+	icon = "gfx/interface/icons/planet_modifiers/pm_red_mars.dds"
+	pop_environment_tolerance = 0.50
+}
+
+# Iconia
+iconia = {
+	pop_environment_tolerance = -0.25
+	pop_happiness = -0.30
+	tile_resource_food_mult = -0.50
+	
+	icon= "gfx/interface/icons/planet_modifiers/pm_irradiated.dds"
+	icon_frame = 3
+}
+
+#Rure Penthe Colony modifier
+rure_colony = {
+    icon = "gfx/interface/icons/planet_modifiers/pm_carbon_world.dds"
+	pop_environment_tolerance = 0.35
+}
+
+#Boreth Colony modifier
+boreth_colony = {
+    icon = "gfx/interface/icons/planet_modifiers/pm_carbon_world.dds"
+	pop_environment_tolerance = 0.6
+}
+
+city_ship = {
+	icon = "gfx/interface/icons/planet_modifiers/pm_planet_from_space.dds"
+	planet_sensor_range_mult = 1.5
+	planet_border_mult = 1.5
+	planet_fortification_strength = 1.5
+}
+
+cytherian_galactic_core = {
+	icon = "gfx/interface/icons/planet_modifiers/pm_planet_from_space.dds"
+	planet_sensor_range_mult = 3
+	planet_border_mult = 3
+}
+
+#Mars and Terraforming
+
+mars_colony = {
+	icon = "gfx/interface/icons/planet_modifiers/pm_red_mars.dds"
+	pop_environment_tolerance = 0.50
+}
+
+mars_colony_2 = {
+	icon = "gfx/interface/icons/planet_modifiers/pm_green_mars.dds"
+	pop_environment_tolerance = 0.70
+}
+mars_colony_3 = {
+	icon = "gfx/interface/icons/planet_modifiers/pm_blue_mars.dds"
+	pop_environment_tolerance = 0.50
+}
+
+space_mirror = {
+	icon = "gfx/interface/icons/planet_modifiers/pm_solar_mirror.dds"
+	pop_environment_tolerance = 0.05
+}
+
+utopia_planitia = {
+	icon = "gfx/interface/icons/planet_modifiers/pm_utopia_planitia.dds"
+	spaceport_ship_build_speed_mult = 0.33
+}
+
+eco_terrorists = {
+	icon = "gfx/interface/icons/planet_modifiers/pm_natural_beauty.dds"
+	pop_happiness = -0.1
+	planet_unrest_add = 10
+}
+
+#Orbs
+em_orb_contemplation = {
+	icon = "gfx/interface/icons/empire_modifiers/em_orb.dds"
+	planet_unrest_add = -10
+}
+em_orb_prophecy_change = {
+	icon = "gfx/interface/icons/empire_modifiers/em_orb.dds"
+	pop_growth_speed = 0.15
+}
+em_orb_time = {
+	icon = "gfx/interface/icons/empire_modifiers/em_orb.dds"
+	country_resource_energy_mult = 0.05
+	country_resource_minerals_mult = 0.05
+}
+em_orb_wisdom = {
+	icon = "gfx/interface/icons/empire_modifiers/em_orb.dds"
+	all_technology_research_speed = 0.10
+}
+em_orb_unity = {
+	icon = "gfx/interface/icons/empire_modifiers/em_orb.dds"
+	country_resource_unity_mult = 0.10
+}
+em_orb_souls = {
+	icon = "gfx/interface/icons/empire_modifiers/em_orb.dds"
+	pop_happiness = 0.05
+}
+em_orb_memory = {
+	icon = "gfx/interface/icons/empire_modifiers/em_orb.dds"
+	country_resource_influence_mult = 0.10
+}
+em_orb_peace = {
+	icon = "gfx/interface/icons/empire_modifiers/em_orb.dds"
+	pop_government_ethic_attraction = 0.33
+}
+em_orb_failure = {
+	icon = "gfx/interface/icons/empire_modifiers/em_orb_fail.dds"
+	country_resource_unity_mult = -0.05
+}
+
+
+#Unimatrix border range
+pm_unimatrix_main = {
+	planet_sensor_range_mult = 1.5
+	planet_border_mult = 1.25
+	icon = "gfx/interface/icons/planet_modifiers/pm_asteroid_belt.dds"
+	icon_frame = 1
+}
+
+
+
+#IME
+em_interspecies_medical_exchange = {
+	country_resource_energy_add = -5
+	country_resource_society_research_add = 5
+	icon_frame = 3
+}
+
+
+### Borg Rebels ###
+em_rebel_borg_supply = {
+	country_resource_minerals_add = 2000
+	country_resource_energy_add = 2000
+}
+
+em_rebel_borg_naval_cap = {
+	navy_size_add = 500
+	ship_upkeep_mult = -0.5
+}
+
+
+em_genetic_tech_1 = {
+	icon = "gfx/interface/icons/trait_points_icon.dds"
+	icon_frame = 1
+
+	BIOLOGICAL_species_trait_points_add = 1
+	HUMANOID_species_trait_points_add = 1
+	CHANGELING_species_trait_points_add = 1
+	CRYSTALINE_species_trait_points_add = 1
+	SILICOID_species_trait_points_add = 1
+	FLUIDIC_species_trait_points_add = 1
+	INSECTOID_species_trait_points_add = 1
+	AQUATIC_species_trait_points_add = 1
+	CYBORG_species_trait_points_add = 1
+}
+ 
+em_genetic_tech_2 = {
+	icon = "gfx/interface/icons/trait_points_icon.dds"
+	icon_frame = 1
+	
+	BIOLOGICAL_species_trait_points_add = 1
+	HUMANOID_species_trait_points_add = 1
+	CHANGELING_species_trait_points_add = 1
+	CRYSTALINE_species_trait_points_add = 1
+	SILICOID_species_trait_points_add = 1
+	FLUIDIC_species_trait_points_add = 1
+	INSECTOID_species_trait_points_add = 1
+	AQUATIC_species_trait_points_add = 1
+	CYBORG_species_trait_points_add = 1
+}
+ 
+em_genetic_tech_3 = {
+	icon = "gfx/interface/icons/trait_points_icon.dds"
+	icon_frame = 1
+	
+	BIOLOGICAL_species_trait_points_add = 1
+	HUMANOID_species_trait_points_add = 1
+	CHANGELING_species_trait_points_add = 1
+	CRYSTALINE_species_trait_points_add = 1
+	SILICOID_species_trait_points_add = 1
+	FLUIDIC_species_trait_points_add = 1
+	INSECTOID_species_trait_points_add = 1
+	AQUATIC_species_trait_points_add = 1
+	CYBORG_species_trait_points_add = 1
+}
+ 
+em_genetic_tech_4 = {
+	icon = "gfx/interface/icons/trait_points_icon.dds"
+	icon_frame = 1
+	
+	BIOLOGICAL_species_trait_points_add = 1
+	HUMANOID_species_trait_points_add = 1
+	CHANGELING_species_trait_points_add = 1
+	CRYSTALINE_species_trait_points_add = 1
+	SILICOID_species_trait_points_add = 1
+	FLUIDIC_species_trait_points_add = 1
+	INSECTOID_species_trait_points_add = 1
+	AQUATIC_species_trait_points_add = 1
+	CYBORG_species_trait_points_add = 1
+}
+
+po_changeling_growth = {
+	icon = "gfx/interface/icons/trait_points_icon.dds"
+	pop_growth_speed = 10
+}
+
+em_changeling_insight = {
+	icon = "gfx/interface/icons/trait_points_icon.dds"
+	country_resource_unity_mult = 0.05
+}
+
+fl_changeling_fleet_discoordination = {
+	icon = "gfx/interface/icons/trait_points_icon.dds"
+	ship_fire_rate_mult = -0.1
+	ship_accuracy_mult = -0.1
+}
+
+ar_changeling_army_discoordination = {
+	icon = "gfx/interface/icons/trait_points_icon.dds"
+	army_health = -0.2
+	army_damage_mult = -0.2
+}
+
+
+sm_shields_disabled = {
+	ship_shield_hp_mult = -1.2
+}
+
+sm_spore_drive_navigator = {
+	ship_ftl_jumpdrive_range_mult = 1.25
+}
+
+em_jemhadar_admiral = {
+	ship_weapon_damage = 0.1
+	ship_hitpoints_mult = 0.1
+	ship_shield_hp_mult = 0.1
+}
+
+em_jemhadar_general = {
+	army_health = 0.33
+	army_damage_mult = 0.33
+}
+
+em_vorta_governor = {
+	country_resource_minerals_mult = 0.15
+	country_resource_energy_mult = 0.15
+}
+
+em_vorta_scientist = {
+	all_technology_research_speed = 0.15
+}
+
+
+em_jemhadar_admiral_human = {
+	ship_weapon_damage = 0.03
+	ship_hitpoints_mult = 0.03
+	ship_shield_hp_mult = 0.03
+}
+
+em_jemhadar_general_human = {
+	army_health = 0.1
+	army_damage_mult = 0.1
+}
+
+em_vorta_governor_human = {
+	country_resource_minerals_mult = 0.05
+	country_resource_energy_mult = 0.05
+}
+
+em_vorta_scientist_human = {
+	all_technology_research_speed = 0.05
+}

@@ -1,0 +1,296 @@
+unicomplex_tileblockers = {
+	while = {
+		count = 4
+		random_tile = {
+			limit = { has_blocker = no has_building = no num_adjacent_tiles = 2 }
+			random_list = {
+				23 = { add_deposit = d_rich_physics_deposit }
+				16 = { add_deposit = d_vast_physics_deposit }
+				15 = { add_deposit = d_rich_society_deposit }
+				8 = { add_deposit = d_vast_society_deposit }
+				23 = { add_deposit = d_rich_engineering_deposit }
+				15 = { add_deposit = d_vast_engineering_deposit }
+			}
+			set_blocker = "tb_unicomplex_expansion_2"
+		}
+	}
+
+	while = {
+		count = 4
+		random_tile = {
+			limit = { has_blocker = no has_building = no num_adjacent_tiles = 3 }
+			random_list = {
+				#25 = { add_deposit = d_energy_deposit }
+				50 = { add_deposit = d_rich_energy_deposit }
+				35 = { add_deposit = d_vast_energy_deposit }
+				15 = { add_deposit = d_immense_energy_deposit }
+			}
+			set_blocker = "tb_unicomplex_expansion_1"
+		}
+	}
+
+	while = {
+		count = 4
+		random_tile = {
+			limit = { has_blocker = no has_building = no num_adjacent_tiles = 3 }
+			random_list = {
+                #25 = { add_deposit = d_mineral_deposit }
+                50 = { add_deposit = d_rich_mineral_deposit }
+                35 = { add_deposit = d_vast_mineral_deposit }
+                15 = { add_deposit = d_immense_mineral_deposit }
+			}
+			set_blocker = "tb_unicomplex_expansion_0"
+		}
+	}
+}
+
+unicomplex_resource = {
+	random_tile = {
+		limit = { 
+			has_blocker = no 
+			has_building = no 
+			NOR = { 
+				has_resource = { type = minerals amount > 1 } 
+				has_resource = { type = energy amount > 1 } 
+				has_resource = { type = food amount > 1 } 
+				has_resource = { type = physics_research amount > 1 }
+				has_resource = { type = society_research amount > 1 }
+				has_resource = { type = engineering_research amount > 1 }								
+			} 
+		}
+		random_list = {
+			7 = { add_deposit = d_rich_physics_deposit }
+			3 = { add_deposit = d_vast_physics_deposit }
+			7 = { add_deposit = d_rich_society_deposit }
+			3 = { add_deposit = d_vast_society_deposit }
+			7 = { add_deposit = d_rich_engineering_deposit }
+			3 = { add_deposit = d_vast_engineering_deposit }
+			#15 = { add_deposit = d_rich_mineral_deposit }
+			10 = { add_deposit = d_rich_mineral_deposit }
+			10 = { add_deposit = d_vast_mineral_deposit }
+			5 = { add_deposit = d_immense_mineral_deposit }
+			#15 = { add_deposit = d_rich_energy_deposit }
+			10 = { add_deposit = d_rich_energy_deposit }
+			10 = { add_deposit = d_vast_energy_deposit }
+			5 = { add_deposit = d_immense_energy_deposit }
+			#20 = { add_deposit = d_rich_farmland_deposit }
+			15 = { add_deposit = d_rich_farmland_deposit }
+			10 = { add_deposit = d_vast_farmland_deposit }
+			5 = { add_deposit = d_immense_farmland_deposit }
+		}
+	}
+}
+
+unicomplex_defense_perimeter = {
+	random_list = {
+		10 = { 
+			create_fleet = {
+				name = "Unimatrix Defense Perimeter"
+				effect = {
+					set_owner = event_target:owner
+					create_ship = { name = random design = "NAME_unimatrix_defense_small" }
+					set_location = { target = fromfrom distance = 35 angle = random }    
+				}
+			}
+		}    
+		10 = {
+			create_fleet = {
+				name = "Unimatrix Defense Perimeter"
+				effect = {
+					set_owner = event_target:owner
+					create_ship = { name = random design = "NAME_unimatrix_defense_small" }
+					set_location = { target = fromfrom distance = 30 angle = random }    
+				}
+			}
+		}    
+		10 = {
+			create_fleet = {
+				name = "Unimatrix Defense Perimeter"
+				effect = {
+					set_owner = event_target:owner
+					create_ship = { name = random design = "NAME_unimatrix_defense_small" }
+					set_location = { target = fromfrom distance = 25 angle = random }    
+				}
+			}
+		}    
+		10 = {
+			create_fleet = {
+				name = "Unimatrix Defense Perimeter"
+				effect = {
+					set_owner = event_target:owner
+					create_ship = { name = random design = "NAME_unimatrix_defense_small" }
+					set_location = { target = fromfrom distance = 20 angle = random }    
+				}
+			}
+		}     
+		10 = {
+			create_fleet = {
+				name = "Unimatrix Defense Perimeter"
+				effect = {
+					set_owner = event_target:owner
+					create_ship = { name = random design = "NAME_unimatrix_defense_small" }
+					set_location = { target = fromfrom distance = 15 angle = random }    
+				}
+			}
+		}    
+		10 = {
+			create_fleet = {
+				name = "Unimatrix Defense Perimeter"
+				effect = {
+					set_owner = event_target:owner
+					create_ship = { name = random design = "NAME_unimatrix_defense_small" }
+					set_location = { target = fromfrom distance = 10 angle = random }    
+				}
+			}
+		}    
+		10 = {
+			create_fleet = {
+				name = "Unimatrix Defense Perimeter"
+				effect = {
+					set_owner = event_target:owner
+					create_ship = { name = random design = "NAME_unimatrix_defense_small" }
+					set_location = { target = fromfrom distance = 5 angle = random }    
+				}
+			}
+		}
+	}
+	last_created_fleet = { set_fleet_flag = "unicomplex_defence_for:@event_target:unicomplexSpawn" }
+}
+
+set_unicomplex_number_flag = {
+	if = {
+		limit = { event_target:unicomplexSpawn= { NOR = { has_planet_flag = "unicomplex_part_1" has_planet_flag = "unicomplex_part_2" has_planet_flag = "unicomplex_part_3" has_planet_flag = "unicomplex_part_4" has_planet_flag = "unicomplex_part_5" } } }
+		event_target:solar_system = {
+			if = {
+				limit = { NOT = { any_planet = { has_planet_flag = "unicomplex_part_1" } } }
+				event_target:unicomplexSpawn = { set_planet_flag = "unicomplex_part_1" }
+				else = {
+					if = {
+						limit = { NOT = { any_planet = { has_planet_flag = "unicomplex_part_2" } } }
+						event_target:unicomplexSpawn = { set_planet_flag = "unicomplex_part_2" }
+						else = {
+							if = {
+								limit = { NOT = { any_planet = { has_planet_flag = "unicomplex_part_3" } } }
+								event_target:unicomplexSpawn = { set_planet_flag = "unicomplex_part_3" }
+								else = {
+									if = {
+										limit = { NOT = { any_planet = { has_planet_flag = "unicomplex_part_4" } } }
+										event_target:unicomplexSpawn = { set_planet_flag = "unicomplex_part_4" }
+										else = {
+											if = {
+												limit = { NOT = { any_planet = { has_planet_flag = "unicomplex_part_5" } } }
+												event_target:unicomplexSpawn = { set_planet_flag = "unicomplex_part_5" }
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+set_unicomplex_system_number_flag = {
+	event_target:solar_system = {
+		if = {
+			limit = { NOR = { has_star_flag = "unicomplex_1:@event_target:owner" has_star_flag = "unicomplex_2:@event_target:owner" has_star_flag = "unicomplex_3:@event_target:owner" has_star_flag = "unicomplex_4:@event_target:owner" has_star_flag = "unicomplex_5:@event_target:owner" } }
+			if = {
+				limit = { NOT = { any_system = { has_star_flag = "unicomplex_1:@event_target:owner" } }	}
+				set_star_flag = "unicomplex_1:@event_target:owner"
+				else = {
+					if = {
+						limit = { NOT = { any_system = { has_star_flag = "unicomplex_2:@event_target:owner" } }	}
+						set_star_flag = "unicomplex_2:@event_target:owner"
+						else = {
+							if = {
+								limit = { NOT = { any_system = { has_star_flag = "unicomplex_3:@event_target:owner" } }	}
+								set_star_flag = "unicomplex_3:@event_target:owner"
+								else = {
+									if = {
+										limit = { NOT = { any_system = { has_star_flag = "unicomplex_4:@event_target:owner" } }	}
+										set_star_flag = "unicomplex_4:@event_target:owner"
+										else = {
+											if = {
+												limit = { NOT = { any_system = { has_star_flag = "unicomplex_5:@event_target:owner" } }	}
+												set_star_flag = "unicomplex_5:@event_target:owner"
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+
+
+
+
+
+
+set_unicomplex_name = {
+	# set_name = "NAME_Unicomplex_Section_Epsilon"
+	if = {
+		limit = { event_target:solar_system = { has_star_flag = "unicomplex_1:@event_target:owner" } }
+		switch = {
+			trigger = has_planet_flag
+			"unicomplex_part_1" = { set_name = "NAME_Unicomplex_01_Alpha" event_target:solar_system = { set_name = "NAME_Unicomplex_01" } }
+			"unicomplex_part_2" = { set_name = "NAME_Unicomplex_01_Beta" event_target:solar_system = { set_name = "NAME_Unicomplex_01" } }
+			"unicomplex_part_3" = { set_name = "NAME_Unicomplex_01_Gamma" event_target:solar_system = { set_name = "NAME_Unicomplex_01" } }
+			"unicomplex_part_4" = { set_name = "NAME_Unicomplex_01_Delta" event_target:solar_system = { set_name = "NAME_Unicomplex_01" } }
+			"unicomplex_part_5" = { set_name = "NAME_Unicomplex_01_Eta" event_target:solar_system = { set_name = "NAME_Unicomplex_01" } }
+		}
+	}
+	if = {
+		limit = { event_target:solar_system = { has_star_flag = "unicomplex_2:@event_target:owner" } }
+		switch = {
+			trigger = has_planet_flag
+			"unicomplex_part_1" = { set_name = "NAME_Unicomplex_02_Alpha" event_target:solar_system = { set_name = "NAME_Unicomplex_02" } }
+			"unicomplex_part_2" = { set_name = "NAME_Unicomplex_02_Beta" event_target:solar_system = { set_name = "NAME_Unicomplex_02" } }
+			"unicomplex_part_3" = { set_name = "NAME_Unicomplex_02_Gamma" event_target:solar_system = { set_name = "NAME_Unicomplex_02" } }
+			"unicomplex_part_4" = { set_name = "NAME_Unicomplex_02_Delta" event_target:solar_system = { set_name = "NAME_Unicomplex_02" } }
+			"unicomplex_part_5" = { set_name = "NAME_Unicomplex_02_Eta" event_target:solar_system = { set_name = "NAME_Unicomplex_02" } }
+		}
+	}
+	if = {
+		limit = { event_target:solar_system = { has_star_flag = "unicomplex_3:@event_target:owner" } }
+		switch = {
+			trigger = has_planet_flag
+			"unicomplex_part_1" = { set_name = "NAME_Unicomplex_03_Alpha" event_target:solar_system = { set_name = "NAME_Unicomplex_03" } }
+			"unicomplex_part_2" = { set_name = "NAME_Unicomplex_03_Beta" event_target:solar_system = { set_name = "NAME_Unicomplex_03" } }
+			"unicomplex_part_3" = { set_name = "NAME_Unicomplex_03_Gamma" event_target:solar_system = { set_name = "NAME_Unicomplex_03" } }
+			"unicomplex_part_4" = { set_name = "NAME_Unicomplex_03_Delta" event_target:solar_system = { set_name = "NAME_Unicomplex_03" } }
+			"unicomplex_part_5" = { set_name = "NAME_Unicomplex_03_Eta" event_target:solar_system = { set_name = "NAME_Unicomplex_03" } }
+		}
+	}
+	if = {
+		limit = { event_target:solar_system = { has_star_flag = "unicomplex_4:@event_target:owner" } }
+		switch = {
+			trigger = has_planet_flag
+			"unicomplex_part_1" = { set_name = "NAME_Unicomplex_04_Alpha" event_target:solar_system = { set_name = "NAME_Unicomplex_04" } }
+			"unicomplex_part_2" = { set_name = "NAME_Unicomplex_04_Beta" event_target:solar_system = { set_name = "NAME_Unicomplex_04" } }
+			"unicomplex_part_3" = { set_name = "NAME_Unicomplex_04_Gamma" event_target:solar_system = { set_name = "NAME_Unicomplex_04" } }
+			"unicomplex_part_4" = { set_name = "NAME_Unicomplex_04_Delta" event_target:solar_system = { set_name = "NAME_Unicomplex_04" } }
+			"unicomplex_part_5" = { set_name = "NAME_Unicomplex_04_Eta" event_target:solar_system = { set_name = "NAME_Unicomplex_04" } }
+		}
+	}
+	if = {
+		limit = { event_target:solar_system = { has_star_flag = "unicomplex_5:@event_target:owner" } }
+		switch = {
+			trigger = has_planet_flag
+			"unicomplex_part_1" = { set_name = "NAME_Unicomplex_05_Alpha" event_target:solar_system = { set_name = "NAME_Unicomplex_05" } }
+			"unicomplex_part_2" = { set_name = "NAME_Unicomplex_05_Beta" event_target:solar_system = { set_name = "NAME_Unicomplex_05" } }
+			"unicomplex_part_3" = { set_name = "NAME_Unicomplex_05_Gamma" event_target:solar_system = { set_name = "NAME_Unicomplex_05" } }
+			"unicomplex_part_4" = { set_name = "NAME_Unicomplex_05_Delta" event_target:solar_system = { set_name = "NAME_Unicomplex_05" } }
+			"unicomplex_part_5" = { set_name = "NAME_Unicomplex_05_Eta" event_target:solar_system = { set_name = "NAME_Unicomplex_05" } }
+		}
+	}
+}
+

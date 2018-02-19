@@ -1,0 +1,450 @@
+############################
+#
+# Pop Events
+#
+# Written by Henrik Eklund
+# STNH - Capek 1.8.0 Compat
+############################
+
+namespace = pop
+
+# Rising Tensions (HIDDEN)
+pop_event = {
+	id = pop.2
+	hide_window = yes
+	
+	fire_only_once = yes
+	
+	trigger = {
+		planet = {
+			has_planet_flag = pop_modification
+			exists = owner
+			owner = { has_country_flag = pop_modification }
+		}
+		has_pop_flag = modified_pop_1
+		is_enslaved = no
+		is_being_purged = no
+		NOT = {
+			has_ethic = ethic_fanatic_pacifist
+			has_ethic = ethic_pacifist
+			has_ethic = ethic_xenophile
+			has_ethic = ethic_fanatic_xenophile
+		}
+		planet = {
+			any_pop = {
+				NOT = { is_pop = ROOT }
+				is_same_species = owner
+				is_enslaved = no
+				is_being_purged = no
+				is_robot_pop = no
+			}
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 220
+	}
+	
+	immediate = {
+		save_event_target_as = modified_pop_1
+		planet = {
+			set_planet_flag = popmod_rising_tensions
+			random_pop = {
+				limit = {
+					NOT = { is_pop = ROOT }
+					is_same_species = owner
+					is_enslaved = no
+					is_being_purged = no
+				}
+				save_event_target_as = non_modified_pop_1
+			}
+		}
+		planet = {
+			planet_event = { id = pop.3 }
+		}
+	}
+}
+
+# Rising Tensions
+planet_event = {
+	id = pop.3
+	title = "pop.3.name"
+	desc = "pop.3.desc"
+	picture = GFX_evt_nuclear_explosion
+
+	is_triggered_only = yes
+	
+	option = {
+		name = WORRYING
+		custom_tooltip = pop.3.a.tooltip
+		hidden_effect = {
+			every_owned_pop = {
+				limit = {
+					is_same_species = FROM
+					NOT = { has_ethic = ethic_xenophobe }
+				}
+				pop_change_ethic = ethic_xenophobe
+			}
+			every_owned_pop = {
+				limit = {
+					is_same_species = owner
+					NOT = { has_ethic = ethic_xenophobe }
+				}
+				pop_change_ethic = ethic_xenophobe
+			}
+		}
+	}
+}
+
+# Increased Fertility (HIDDEN)
+pop_event = {
+	id = pop.5
+	hide_window = yes
+	
+	fire_only_once = yes
+	
+	trigger = {
+		planet = {
+			has_planet_flag = pop_modification
+			has_planet_flag = popmod_rising_tensions
+			NOT = { has_planet_flag = popmod_fertility }
+			owner = { has_country_flag = pop_modification }
+		}
+		has_pop_flag = modified_pop_1
+		is_enslaved = no
+		is_being_purged = no
+		planet = {
+			any_pop = {
+				NOT = { is_pop = ROOT }
+				is_same_species = owner
+				is_enslaved = no
+				is_being_purged = no
+				is_robot_pop = no
+			}
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 220
+	}
+	
+	immediate = {
+		save_event_target_as = modified_pop_1
+		planet = {
+			set_planet_flag = popmod_fertility
+			random_pop = {
+				limit = {
+					NOT = { is_pop = ROOT }
+					is_same_species = owner
+					is_enslaved = no
+					is_being_purged = no
+					is_robot_pop = no
+				}
+				save_event_target_as = non_modified_pop_1
+			}
+		}
+		planet = {
+			planet_event = { id = pop.6 }
+		}
+	}
+}
+
+# Increased Fertility
+planet_event = {
+	id = pop.6
+	title = "pop.6.name"
+	desc = "pop.6.desc"
+	picture = GFX_evt_cybernetics
+
+	is_triggered_only = yes
+	
+	option = {
+		name = WORRYING
+		custom_tooltip = pop.6.tooltip
+		hidden_effect = {
+			modify_species = {
+				species = FROM
+				add_trait = trait_rapid_breeders
+			}
+		}
+	}
+}
+
+# Pureblood attack against Mutants (HIDDEN)
+pop_event = {
+	id = pop.7
+	hide_window = yes
+	
+	fire_only_once = yes
+	
+	trigger = {
+		planet = {
+			has_planet_flag = pop_modification
+			has_planet_flag = popmod_rising_tensions
+			owner = { has_country_flag = pop_modification }
+		}
+		has_pop_flag = modified_pop_1
+		is_enslaved = no
+		is_being_purged = no
+		planet = {
+			any_pop = {
+				NOT = { is_pop = ROOT }
+				is_same_species = owner
+				is_enslaved = no
+				is_being_purged = no
+				is_robot_pop = no
+			}
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 220
+	}
+	
+	immediate = {
+		save_event_target_as = modified_pop_1
+		planet = {
+			random_pop = {
+				limit = {
+					NOT = { is_pop = ROOT }
+					is_same_species = owner
+					is_enslaved = no
+					is_being_purged = no
+					is_robot_pop = no
+				}
+				save_event_target_as = non_modified_pop_1
+			}
+		}
+		planet = {
+			planet_event = { id = pop.8 }
+		}
+	}
+}
+
+# Pureblood attack against Mutants
+planet_event = {
+	id = pop.8
+	title = "pop.8.name"
+	desc = "pop.8.desc"
+	picture = GFX_evt_cybernetics
+
+	is_triggered_only = yes
+	fire_only_once = yes
+	
+	option = {
+		name = WORRYING
+		FROM = { kill_pop = yes }
+	}
+}
+
+# Mutant attack against Purebloods (HIDDEN)
+pop_event = {
+	id = pop.9
+	hide_window = yes
+	
+	fire_only_once = yes
+	
+	trigger = {
+		planet = {
+			has_planet_flag = pop_modification
+			has_planet_flag = popmod_rising_tensions
+			owner = { has_country_flag = pop_modification }
+		}
+		has_pop_flag = non_modified_pop_1
+		is_enslaved = no
+		is_being_purged = no
+		planet = {
+			any_pop = {
+				has_pop_flag = modified_pop_1
+				is_enslaved = no
+				is_being_purged = no
+				is_robot_pop = no
+			}
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 220
+	}
+	
+	immediate = {
+		save_event_target_as = non_modified_pop_1
+		planet = {
+			random_pop = {
+				limit = {
+					has_pop_flag = modified_pop_1
+					is_enslaved = no
+					is_being_purged = no
+					is_robot_pop = no
+				}
+				save_event_target_as = modified_pop_1
+			}
+		}
+		planet = {
+			planet_event = { id = pop.10 }
+		}
+	}
+}
+
+# Mutant attack against Purebloods
+planet_event = {
+	id = pop.10
+	title = "pop.10.name"
+	desc = { text = pop.10a.desc }
+	desc = { text = pop.10b.desc }
+	picture = GFX_evt_cybernetics
+
+	is_triggered_only = yes
+	fire_only_once = yes
+	
+	option = {
+		name = WORRYING
+		FROM = { kill_pop = yes }
+	}
+}
+
+# Mutant representative (HIDDEN)
+pop_event = {
+	id = pop.11
+	hide_window = yes
+	
+	fire_only_once = yes
+	
+	trigger = {
+		planet = {
+			has_planet_flag = pop_modification
+			has_planet_flag = popmod_rising_tensions
+			owner = { has_country_flag = pop_modification }
+		}
+		has_pop_flag = modified_pop_1
+		is_enslaved = no
+		is_being_purged = no
+		planet = {
+			any_pop = {
+				NOT = { is_pop = ROOT }
+				is_same_species = owner
+				is_enslaved = no
+				is_being_purged = no
+				is_robot_pop = no
+			}
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 220
+	}
+	
+	immediate = {
+		save_event_target_as = modified_pop_1
+		planet = {
+			random_pop = {
+				limit = {
+					NOT = { is_pop = ROOT }
+					is_same_species = owner
+					is_enslaved = no
+					is_being_purged = no
+					is_robot_pop = no
+				}
+				save_event_target_as = non_modified_pop_1
+			}
+		}
+		planet = {
+			planet_event = { id = pop.12 }
+		}
+	}
+}
+
+# Mutant representative
+planet_event = {
+	id = pop.12
+	title = "pop.12.name"
+	desc = "pop.12.desc"
+	picture = GFX_evt_cybernetics
+
+	is_triggered_only = yes
+	fire_only_once = yes
+	
+	option = {
+		name = WORRYING
+	}
+}
+
+# Increased Strength (HIDDEN)
+pop_event = {
+	id = pop.13
+	hide_window = yes
+	
+	fire_only_once = yes
+	
+	trigger = {
+		planet = {
+			has_planet_flag = pop_modification
+			has_planet_flag = popmod_rising_tensions
+			NOT = { has_planet_flag = popmod_strength }
+			owner = { has_country_flag = pop_modification }
+		}
+		has_pop_flag = modified_pop_1
+		is_enslaved = no
+		is_being_purged = no
+		planet = {
+			any_pop = {
+				NOT = {
+					is_pop = ROOT
+					has_trait = trait_strong
+				}
+				is_same_species = owner
+				is_enslaved = no
+				is_being_purged = no
+				is_robot_pop = no
+			}
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 220
+	}
+	
+	immediate = {
+		save_event_target_as = modified_pop_1
+		planet = {
+			set_planet_flag = popmod_strength
+			random_pop = {
+				limit = {
+					NOT = {
+						is_pop = ROOT
+						has_trait = trait_strong
+					}
+					is_same_species = owner
+					is_enslaved = no
+					is_being_purged = no
+					is_robot_pop = no
+				}
+				save_event_target_as = non_modified_pop_1
+			}
+		}
+		planet = {
+			planet_event = { id = pop.14 }
+		}
+	}
+}
+
+# Increased Strength
+planet_event = {
+	id = pop.14
+	title = "pop.14.name"
+	desc = "pop.14.desc"
+	picture = GFX_evt_cybernetics
+
+	is_triggered_only = yes
+	
+	option = {
+		name = WORRYING
+		custom_tooltip = pop.14.tooltip
+		hidden_effect = {
+			modify_species = {
+				species = FROM
+				add_trait = trait_strong
+			}
+		}
+	}
+}

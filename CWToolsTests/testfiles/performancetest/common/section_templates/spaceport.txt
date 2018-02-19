@@ -1,0 +1,205 @@
+ship_section_template = {
+	key = "CORE_SPACEPORT_SECTION"
+	ship_size = orbital_station
+	entity = "orbital_station_core_entity"
+	icon = "GFX_ship_part_core_mid"
+	fits_on_slot = "1"
+
+	component_slot = {
+		name = "SMALL_GUN_01"
+		slot_size = small
+		slot_type = weapon
+		locatorname = "small_gun_01"
+	}	
+	component_slot = {
+		name = "SMALL_GUN_02"
+		slot_size = small
+		slot_type = weapon
+		locatorname = "small_gun_02"
+	}
+
+}
+
+ship_section_template = {
+	key = "BEAM_SPACEPORT_SECTION"
+	ship_size = orbital_station
+	entity = "orbital_station_entity"
+	icon = "GFX_ship_part_core_mid"
+	fits_on_slot = "2"
+	fits_on_slot = "3"
+	fits_on_slot = "4"
+	fits_on_slot = "5"
+	fits_on_slot = "6"
+	fits_on_slot = "7"
+
+	component_slot = {
+		name = "SMALL_GUN_03"
+		slot_size = small
+		slot_type = weapon
+		locatorname = "small_gun_03"
+	}	
+	component_slot = {
+		name = "SMALL_GUN_04"
+		slot_size = small
+		slot_type = weapon
+		locatorname = "small_gun_04"
+	}
+
+}
+
+ship_section_template = {
+	key = "CANNON_SPACEPORT_SECTION"
+	ship_size = orbital_station
+	entity = "orbital_station_entity"
+	icon = "GFX_ship_part_core_mid"
+	fits_on_slot = "2"
+	fits_on_slot = "3"
+	fits_on_slot = "4"
+	fits_on_slot = "5"
+	fits_on_slot = "6"
+	fits_on_slot = "7"
+	
+
+	component_slot = {
+		name = "MEDIUM_GUN_01"
+		slot_size = medium
+		slot_type = weapon
+		locatorname = "medium_gun_01"
+	}	
+	component_slot = {
+		name = "MEDIUM_GUN_02"
+		slot_size = medium
+		slot_type = weapon
+		locatorname = "medium_gun_02"
+	}	
+		component_slot = {
+		name = "MEDIUM_GUN_03"
+		slot_size = medium
+		slot_type = weapon
+		locatorname = "medium_gun_03"
+	}	
+	component_slot = {
+		name = "MEDIUM_GUN_04"
+		slot_size = medium
+		slot_type = weapon
+		locatorname = "medium_gun_04"
+	}	
+}
+
+ship_section_template = {
+	key = "TORP_SPACEPORT_SECTION"
+	ship_size = orbital_station
+	entity = "orbital_station_entity"
+	icon = "GFX_ship_part_core_mid"
+	fits_on_slot = "2"
+	fits_on_slot = "3"
+	fits_on_slot = "4"
+	fits_on_slot = "5"
+	fits_on_slot = "6"
+	fits_on_slot = "7"
+	
+	component_slot = {
+		name = "LARGE_GUN_01"
+		slot_size = large
+		slot_type = weapon
+		locatorname = "large_gun_01"
+	}	
+	component_slot = {
+		name = "LARGE_GUN_02"
+		slot_size = large
+		slot_type = weapon
+		locatorname = "large_gun_02"
+	}	
+		component_slot = {
+		name = "LARGE_GUN_03"
+		slot_size = large
+		slot_type = weapon
+		locatorname = "large_gun_03"
+	}	
+	component_slot = {
+		name = "LARGE_GUN_04"
+		slot_size = large
+		slot_type = weapon
+		locatorname = "large_gun_04"
+	}	
+		component_slot = {
+		name = "LARGE_GUN_05"
+		slot_size = large
+		slot_type = weapon
+		locatorname = "large_gun_05"
+	}	
+	component_slot = {
+		name = "LARGE_GUN_06"
+		slot_size = large
+		slot_type = weapon
+		locatorname = "large_gun_06"
+	}	
+}
+
+
+ship_section_template = {
+	key = "ASSEMBLYYARD_SPACEPORT_SECTION"
+	ship_size = orbital_station
+	entity = "orbital_station_assemblyyard_section_entity"
+	icon = "GFX_ship_part_core_mid"
+	fits_on_slot = "2"
+	fits_on_slot = "3"
+	fits_on_slot = "4"
+	fits_on_slot = "5"
+	fits_on_slot = "6"
+	fits_on_slot = "7"
+}
+
+ship_section_template = {
+	key = "REFINERY_SPACEPORT_SECTION"
+	ship_size = orbital_station
+	entity = "orbital_station_refinery_section_entity"
+	icon = "GFX_ship_part_core_mid"
+	fits_on_slot = "2"
+	fits_on_slot = "3"
+	fits_on_slot = "4"
+	fits_on_slot = "5"
+	fits_on_slot = "6"
+	fits_on_slot = "7"
+}
+
+ship_section_template = {
+	key = "SCIENCE_SPACEPORT_SECTION"
+	ship_size = orbital_station
+	entity = "orbital_station_science_section_entity"
+	icon = "GFX_ship_part_core_mid"
+	fits_on_slot = "2"
+	fits_on_slot = "3"
+	fits_on_slot = "4"
+	fits_on_slot = "5"
+	fits_on_slot = "6"
+	fits_on_slot = "7"
+}
+
+ship_section_template = {
+	key = "HANGAR_SPACEPORT_SECTION"
+	ship_size = orbital_station
+	entity = "orbital_station_entity"
+	icon = "GFX_ship_part_core_mid"
+	fits_on_slot = "2"
+	fits_on_slot = "3"
+	fits_on_slot = "4"
+	fits_on_slot = "5"
+	fits_on_slot = "6"
+	fits_on_slot = "7"
+
+	component_slot = {
+		name = "STRIKE_CRAFT_01"
+		slot_size = large
+		slot_type = strike_craft
+		rotation = 0
+		locatorname = "part1"
+	}
+	component_slot = {
+		name = "STRIKE_CRAFT_02"
+		slot_size = large
+		slot_type = strike_craft
+		rotation = 180
+		locatorname = "part2"
+	}
+}

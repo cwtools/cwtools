@@ -1,0 +1,239 @@
+federation_accession_progress_from_root = {
+	if = {
+		limit = { ROOT = { has_swapped_tradition = "tr_federation_4"  } }
+		switch = {
+			trigger = num_owned_planets
+			1 = { change_variable = { which = "accession_progress" value = 21 } }
+			2 = { change_variable = { which = "accession_progress" value = 18 } }
+			3 = { change_variable = { which = "accession_progress" value = 15 } }
+			4 = { change_variable = { which = "accession_progress" value = 13 } }
+			5 = { change_variable = { which = "accession_progress" value = 11 } }
+			6 = { change_variable = { which = "accession_progress" value = 10 } }
+			7 = { change_variable = { which = "accession_progress" value = 9 } }
+			8 = { change_variable = { which = "accession_progress" value = 8 } }
+			9 = { change_variable = { which = "accession_progress" value = 7 } }
+			10 = { change_variable = { which = "accession_progress" value = 6 } }
+			10 > { change_variable = { which = "accession_progress" value = 5 } }
+		}	
+		else = {
+			switch = {
+				trigger = num_owned_planets
+				1 = { change_variable = { which = "accession_progress" value = 18 } }
+				2 = { change_variable = { which = "accession_progress" value = 13 } }
+				3 = { change_variable = { which = "accession_progress" value = 12 } }
+				4 = { change_variable = { which = "accession_progress" value = 11 } }
+				5 = { change_variable = { which = "accession_progress" value = 10 } }
+				6 = { change_variable = { which = "accession_progress" value = 9 } }
+				7 = { change_variable = { which = "accession_progress" value = 8 } }
+				8 = { change_variable = { which = "accession_progress" value = 7 } }
+				9 = { change_variable = { which = "accession_progress" value = 6 } }
+				10 = { change_variable = { which = "accession_progress" value = 5 } }
+				10 > { change_variable = { which = "accession_progress" value = 4 } }
+			}		
+		}
+	}
+}
+
+# set_appropriate_federation_flag = {
+	# if = {
+		# limit = { years_passed <  }
+		# change_country_flag = { icon = { category="trek" file="Federation4.dds" } background = { category = "backgrounds" file = "00_solid.dds" } colors = { "blue" "black" "null" "null" } }
+	# }
+# }
+
+
+federation_accession = {	
+	remove_country_flag = federationAccessionState
+	if = {	
+		limit = { is_country_type = minorRace }
+		remove_modifier = em_minor_race_borders
+	}
+	add_modifier = { modifier = em_federation_member_world }
+	set_country_flag = transfer_mines
+	set_variable = { which = "accession_progress" value = 0 }
+	every_owned_planet = {
+		limit = { 
+			is_capital = no 
+			root = { is_ai = no }
+			owner = { is_ai = yes }
+		}
+		set_owner = root
+	}
+	every_owned_fleet = {
+		limit = { is_ship_class = shipclass_outpost_station	}
+		set_owner = root
+		set_controller = root
+	}
+
+	every_owned_fleet = {
+		limit = { root = { is_ai = yes } }
+		set_owner = root
+		set_controller = root
+	}
+	set_subject_of = { who = root subject_type = member_world }
+	change_country_flag = {
+		icon = { category = "trek" file = "Federation4.dds" }
+		background = { category = "backgrounds" file = "00_solid.dds" }
+		colors = { "blue" "black" "null" "null" }
+	}
+	set_country_type = ufp_member_world
+	change_government = { authority = auth_federation_sector }
+	every_owned_planet = { 
+		limit = { 
+			is_capital = yes 
+			root = { is_ai = no }
+			owner = { is_ai = yes }
+		}		
+	}
+	every_owned_planet = { 
+		limit = { 
+			root = { is_ai = yes }
+			owner = { is_ai = yes }
+		}
+		set_owner = root
+	}
+	root = { country_event = { id = theFederation.9999 days = 1 } }
+}
+
+mining_transfer = {	
+		random_country = {
+			limit = { 
+				has_country_flag = transfer_mines
+			}
+			save_event_target_as = transfer_mines
+		}
+		every_owned_fleet = {
+		limit = {
+			NOT = { is_inside_border = event_target:transfer_mines }
+			OR = {
+				is_ship_class = shipclass_mining_station	
+				is_ship_class = shipclass_research_station
+				is_ship_class = shipclass_terraform_station
+				is_ship_class = shipclass_observation_station
+				is_ship_class = shipclass_military_station
+			}
+		}
+		set_owner = root
+		set_controller = root
+	}
+	event_target:transfer_mines = { remove_country_flag = transfer_mines }
+}
+
+federation_accession_human = {	
+	remove_country_flag = federationAccessionState
+	set_variable = { which = "accession_progress" value = 0 }
+	set_subject_of = { who = root subject_type = member_world_human }
+	change_country_flag = {
+		icon = { category = "trek" file = "Federation4.dds" }
+		background = { category = "backgrounds" file = "00_solid.dds" }
+		colors = { "blue" "black" "null" "null" }
+	}
+	change_government = { authority = auth_federation_sector }
+}
+
+add_small_federation_progress = {
+	if = { limit = { has_swapped_tradition = tr_federation_4 }
+		if = { limit = { num_owned_planets = 1 } change_variable = { which = "accession_progress" value = 30 } }
+		if = { limit = { num_owned_planets = 2 } change_variable = { which = "accession_progress" value = 20 } }
+		if = { limit = { num_owned_planets = 3 } change_variable = { which = "accession_progress" value = 10 } }
+		if = { limit = { num_owned_planets > 4 num_owned_planets < 10 } change_variable = { which = "accession_progress" value = 6 } }
+		if = { limit = { num_owned_planets > 9 } change_variable = { which = "accession_progress" value = 2 } }
+		random_list = {
+			10 = { change_variable = { which = "accession_progress" value = 4 } }
+			10 = {}
+			#10 = { change_variable = { which = "accession_progress" value = -1 } }
+		}
+		else = {	
+			if = { limit = { num_owned_planets = 1 } change_variable = { which = "accession_progress" value = 15 } }
+			if = { limit = { num_owned_planets = 2 } change_variable = { which = "accession_progress" value = 10 } }
+			if = { limit = { num_owned_planets = 3 } change_variable = { which = "accession_progress" value = 5 } }
+			if = { limit = { num_owned_planets > 4 num_owned_planets < 10 } change_variable = { which = "accession_progress" value = 3 } }
+			if = { limit = { num_owned_planets > 9 } change_variable = { which = "accession_progress" value = 1 } }
+			random_list = {
+				10 = { change_variable = { which = "accession_progress" value = 2 } }
+				10 = {}
+				#10 = { change_variable = { which = "accession_progress" value = -1 } }
+			}
+		}
+	}	
+}
+
+add_medium_federation_progress = {
+	if = { limit = { has_swapped_tradition = tr_federation_4 }
+		if = { limit = { num_owned_planets = 1 } change_variable = { which = "accession_progress" value = 40 } }
+		if = { limit = { num_owned_planets = 2 } change_variable = { which = "accession_progress" value = 30 } }
+		if = { limit = { num_owned_planets = 3 } change_variable = { which = "accession_progress" value = 20 } }
+		if = { limit = { num_owned_planets > 4 num_owned_planets < 10 } change_variable = { which = "accession_progress" value = 10 } }
+		if = { limit = { num_owned_planets > 9 } change_variable = { which = "accession_progress" value = 6 } }
+		random_list = {
+			10 = { change_variable = { which = "accession_progress" value = 6 } }
+			10 = {}
+			#10 = { change_variable = { which = "accession_progress" value = -1 } }
+		}
+		else = {
+			if = { limit = { num_owned_planets = 1 } change_variable = { which = "accession_progress" value = 20 } }
+			if = { limit = { num_owned_planets = 2 } change_variable = { which = "accession_progress" value = 15 } }
+			if = { limit = { num_owned_planets = 3 } change_variable = { which = "accession_progress" value = 10 } }
+			if = { limit = { num_owned_planets > 4 num_owned_planets < 10 } change_variable = { which = "accession_progress" value = 5 } }
+			if = { limit = { num_owned_planets > 9 } change_variable = { which = "accession_progress" value = 3 } }
+			random_list = {
+				10 = { change_variable = { which = "accession_progress" value = 3 } }
+				10 = {}
+				#10 = { change_variable = { which = "accession_progress" value = -1 } }
+			}
+		}
+	}		
+}
+
+add_large_federation_progress = {
+	if = { limit = { has_swapped_tradition = tr_federation_4 }
+		if = { limit = { num_owned_planets = 1 } change_variable = { which = "accession_progress" value = 50 } }
+		if = { limit = { num_owned_planets = 2 } change_variable = { which = "accession_progress" value = 40 } }
+		if = { limit = { num_owned_planets = 3 } change_variable = { which = "accession_progress" value = 30 } }
+		if = { limit = { num_owned_planets > 4 num_owned_planets < 10 } change_variable = { which = "accession_progress" value = 16 } }
+		if = { limit = { num_owned_planets > 9 } change_variable = { which = "accession_progress" value = 10 } }
+		random_list = {
+			10 = { change_variable = { which = "accession_progress" value = 10 } }
+			10 = {}
+			#10 = { change_variable = { which = "accession_progress" value = -1 } }
+		}
+		else = {
+			if = { limit = { num_owned_planets = 1 } change_variable = { which = "accession_progress" value = 25 } }
+			if = { limit = { num_owned_planets = 2 } change_variable = { which = "accession_progress" value = 20 } }
+			if = { limit = { num_owned_planets = 3 } change_variable = { which = "accession_progress" value = 15 } }
+			if = { limit = { num_owned_planets > 4 num_owned_planets < 10 } change_variable = { which = "accession_progress" value = 8 } }
+			if = { limit = { num_owned_planets > 9 } change_variable = { which = "accession_progress" value = 5 } }
+			random_list = {
+				10 = { change_variable = { which = "accession_progress" value = 5 } }
+				10 = {}
+				#10 = { change_variable = { which = "accession_progress" value = -1 } }
+			}
+		}
+	}		
+}
+
+
+remove_empire_construction_modifiers = {	
+	remove_modifier = em_construction_fed
+	remove_modifier = em_construction_kdf
+	remove_modifier = em_construction_dom
+	remove_modifier = em_construction_car
+	remove_modifier = em_construction_rom
+	remove_modifier = em_construction_fer
+	remove_modifier = em_construction_vul
+	remove_modifier = em_construction_and
+	remove_modifier = em_construction_tel
+	remove_modifier = em_construction_bre
+	remove_modifier = em_construction_hus
+	remove_modifier = em_construction_kaz
+	remove_modifier = em_construction_sul
+	remove_modifier = em_construction_vid
+	remove_modifier = em_construction_ori
+	remove_modifier = em_construction_tho
+	remove_modifier = em_construction_xin
+	remove_modifier = em_construction_brg
+	remove_modifier = em_construction_she
+	remove_modifier = em_construction_vot
+	remove_modifier = em_construction_kob
+}
+

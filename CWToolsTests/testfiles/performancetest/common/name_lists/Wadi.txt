@@ -1,0 +1,97 @@
+﻿### Wadi by EHKodiak
+Wadi = {
+	randomized = no
+
+	ship_names = {
+		generic = {
+		Chula Arbitrage "Beginner's Luck" "Bank Breaker" "Gambler's Fallacy" "Gambler's Conceit" "High Roller" Holdout "Hole Card" Advantage "Odds Compiler" "Double or Nothing" "Even Money" "Expected Value" "Low Roller" "Loot Box" "Loot Crate" Sweepstake Jackpot "Risk Premium" "Table Limit" "Spread Bet" "Snake Eyes" "House Advantage" 
+		}
+		corvette = {
+		}
+		saber = {
+		}
+		sovereign = {
+		}
+		steamrunner = {
+		}		
+		adv_cruiser = {
+		}
+		strike = {
+		}	
+		constructor = { }
+		colonizer = { }
+		science = { }
+		transport = { }
+		outpost_station = {
+			sequential_name = "Frontier Casino"
+		}
+	}
+
+	fleet_names = {
+		sequential_name = "%O% Fleet"
+	}
+	
+	army_names = {
+		defense_army = {
+			sequential_name = "%O% Gameskeepers"
+		}
+		assault_army = {
+			sequential_name = "%O% Gamesmasters"
+		}
+		slave_army = {
+			sequential_name = "%O% Indentured Defence Force"
+		}
+		clone_army = { 
+			sequential_name = "%O% Clone Defence Force"
+		}
+		robotic_army = {
+			sequential_name = "%O% Mechanised Defence Force"
+		}
+		android_army = {
+			sequential_name = "%O% Synthetic Defence Force"
+		}
+		psionic_army = { 
+			sequential_name = "%O% Psi Defence Force"
+		}
+		xenomorph_army = {
+			sequential_name = "%O% Bio-Warfare Defence Force"
+		}
+		gene_warrior_army = {
+			sequential_name = "%O% Bio-Engineered Defence Force"
+		}
+	}
+
+	planet_names = {
+		generic = {
+			names = { 
+			}
+		}
+	}
+
+
+	### CHARACTERS 
+
+	character_names = {
+		names1 = {
+			weight = 40
+			first_names_male = {
+			Coamis Tellow Drannfa Primmin Falow Valderow Retayow Dekow Faldow Falderow Mizow Vidrow Calvarow Hadow Haderow Vittow Nirow Hirow Namow Grinow Matow Oninow Zimpow Janacow Kodow Timthehati Kumbow Leucow Ichow Manow Remow Yivow Roubbow Teilaw Chivdew Sihaw Saiwantow Utlercaw Raew Intiw Azarpaw Nopew Ronjerew Patew Jaimew Tyriaw New Brebow Ochew Edderew Bachew Lasew Lacow Roucow Ronjaw Olsebaw
+			}
+			first_names_female = {
+			Faldra Fallera Vallera Vividra Vittra Daykra Falra Fallira Midra Vidra Calvira Hadera Alonzi Alberi Agnese Andra Adri Badri Balbi Fabi Gausti Fausti Flavi Forti Fulvra Fiolra Niola Miolla Molli Pollina Fidelri Elnora Elini Evi Eldra Dorattri Doreoni Carindi Cicilri Clairdri Calidri Gratani Kumdi Ravdi Yifra Mafra Kadara Gaikyara Gojera Gokhara Emara Igpara Esyara Oonsara Romfara Amwara Iwara Intirara Lunalara Sasagrara Vikivara Miamalkovara Jynxmara Sunnylera Rilara Asaykira Lexibra Breolsar Remylacra Remyla Evara Jenahara Railara Jenara Facity Illandra Lixidra Larafay 
+			}
+			second_names = {
+			""
+			}
+			regnal_first_names_male = {
+			Coamis Tellow Drannfa Primmin Falow Valderow Retayow Dekow Faldow Falderow Mizow Vidrow Calvarow Hadow Haderow Vittow Nirow Hirow Namow Grinow Matow Oninow Zimpow Janacow Kodow Timthehati Kumbow Leucow Ichow Manow Remow Yivow Roubbow Teilaw Chivdew Sihaw Saiwantow Utlercaw Raew Intiw Azarpaw Nopew Ronjerew Patew Jaimew Tyriaw New Brebow Ochew Edderew Bachew Lasew Lacow Roucow Ronjaw Olsebaw
+			}
+			regnal_first_names_female = {
+			Faldra Fallera Vallera Vividra Vittra Daykra Falra Fallira Midra Vidra Calvira Hadera Alonzi Alberi Agnese Andra Adri Badri Balbi Fabi Gausti Fausti Flavi Forti Fulvra Fiolra Niola Miolla Molli Pollina Fidelri Elnora Elini Evi Eldra Dorattri Doreoni Carindi Cicilri Clairdri Calidri Gratani Kumdi Ravdi Yifra Mafra Kadara Gaikyara Gojera Gokhara Emara Igpara Esyara Oonsara Romfara Amwara Iwara Intirara Lunalara Sasagrara Vikivara Miamalkovara Jynxmara Sunnylera Rilara Asaykira Lexibra Breolsar Remylacra Remyla Evara Jenahara Railara Jenara Facity Illandra Lixidra Larafay
+			}
+			regnal_second_names = {
+			""
+			}
+		}
+	}
+}

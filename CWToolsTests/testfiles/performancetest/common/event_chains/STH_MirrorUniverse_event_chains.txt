@@ -1,0 +1,9 @@
+capture_defiant_chain = {
+	icon = "gfx/interface/icons/situation_log/situation_log_precursor.dds"
+	picture = sth_GFX_evt_defiant_in_base2
+}
+
+terran_mirrorMirror_chain = {
+	icon = "gfx/interface/icons/situation_log/situation_log_precursor.dds"
+	picture = sth_GFX_evt_empire_fleet
+}

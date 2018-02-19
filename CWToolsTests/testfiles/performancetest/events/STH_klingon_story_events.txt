@@ -1,0 +1,1350 @@
+########################
+#
+# Klingon Story Events
+#
+# Written by Walshicus
+#
+########################
+
+namespace = STH_klingon_story
+
+@tier1materialreward = 6
+@tier1materialmin = 100
+@tier1materialmax = 500
+@tier2materialreward = 12
+@tier2materialmin = 150
+@tier2materialmax = 1000
+@tier3materialreward = 18
+@tier3materialmin = 250
+@tier3materialmax = 1500
+@tier4materialreward = 24
+@tier4materialmin = 350
+@tier4materialmax = 2000
+
+@tier1influencereward = 6
+@tier1influencemin = 40
+@tier1influencemax = 100
+@tier2influencereward = 12
+@tier2influencemin = 80
+@tier2influencemax = 175
+@tier3influencereward = 18
+@tier3influencemin = 125
+@tier3influencemax = 250
+@tier4influencereward = 24
+@tier4influencemin = 150
+@tier4influencemax = 300
+
+@tier1researchreward = 6
+@tier1researchmin = 60
+@tier1researchmax = 150
+@tier2researchreward = 12
+@tier2researchmin = 90
+@tier2researchmax = 250
+@tier3researchreward = 18
+@tier3researchmin = 120
+@tier3researchmax = 350
+@tier4researchreward = 24
+@tier4researchmin = 150
+@tier4researchmax = 500
+
+### The Sword of Kahless
+
+# Sword of Kahless Introduction - Drunken storyteller
+country_event = {
+	id = STH_klingon_story.1
+	title = "STH_klingon_story.1.name"
+	desc = "STH_klingon_story.1.desc"
+	picture = sth_GFX_evt_theSwordOfKahless1
+	trigger = {
+		#is_crises_allowed = yes 
+		is_species_class = KDF
+		NOT = {	has_country_flag = sword_of_kahless_intro }
+	}
+	mean_time_to_happen = {	months = 600 }
+	immediate = {
+		spawn_hero_ship_ENT_FED = test
+		set_country_flag = sword_of_kahless_intro
+	}
+	option = {
+		name = STH_klingon_story.1.a
+		hidden_effect = { 
+			country_event = { 
+				id = STH_klingon_story.2
+				days = 30
+			} 
+		}
+		begin_event_chain = {
+			event_chain = "sword_of_kahless_chain"
+			target = THIS
+		}
+	}
+	option = {
+		name = STH_klingon_story.1.b
+		add_influence = 50
+	}
+}
+
+#Look for first clue on Hur'q
+country_event = {
+	id = STH_klingon_story.2
+	title = "STH_klingon_story.2.name"
+	desc = "STH_klingon_story.2.desc"
+	picture = sth_GFX_evt_theSwordOfKahless2
+	is_triggered_only = yes
+	option = {
+		name = STH_klingon_story.2.a
+		random_planet  = {
+			limit = {
+				has_planet_flag = "qonosSystemHurq"
+			}
+			hidden_effect = {
+				save_event_target_as = swordOfKahless1Target
+			}
+			enable_special_project = {
+				name = "THE_SWORD_OF_KAHLESS_PROJECT_1"
+				location = event_target:swordOfKahless1Target
+				owner = root
+			}
+		}
+	}
+}
+
+#Find first clue on Hur'q
+country_event = {
+	id = STH_klingon_story.3
+	title = "STH_klingon_story.3.name"
+	desc = "STH_klingon_story.3.desc"
+	picture = sth_GFX_evt_theSwordOfKahless3
+	is_triggered_only = yes
+	immediate = {
+		add_event_chain_counter = { 
+			event_chain = "sword_of_kahless_chain" 
+			counter = "sword_of_kahless_clues" 
+			amount = 1 
+		}
+	}
+	option = {
+		name = STH_klingon_story.3.a
+		hidden_effect = { 
+			country_event = { 
+				id = STH_klingon_story.4
+				days = 30
+			}
+		}
+		add_monthly_resource_mult = {
+			resource = engineering_research
+			value = @tier2researchreward
+			min = @tier2researchmin
+			max = @tier2researchmax
+		}
+	}
+}
+
+#Set second clue
+country_event = {
+	id = STH_klingon_story.4
+	title = "STH_klingon_story.4.name"
+	desc = "STH_klingon_story.4.desc"
+	picture = sth_GFX_evt_theSwordOfKahless3
+	is_triggered_only = yes
+	immediate = {
+		if = {
+			limit = {
+				any_system = {
+					any_planet = {
+						NOT = {
+							exists = owner
+						}
+						is_planet_class = pc_tropical
+					}
+					distance = {
+						source = root.capital_scope.solar_system
+						min_distance = 50
+						max_distance = 200
+					}
+				}
+			}
+			random_system = {
+				limit = {
+					any_planet = {
+						NOT = {
+							exists = owner
+						}
+						is_planet_class = pc_tropical
+					}
+					distance = {
+						source = root.capital_scope.solar_system
+						min_distance = 50
+						max_distance = 200
+					}
+				}
+				random_system_planet = {
+					limit = {
+						NOT = {
+							exists = owner
+						}
+						is_planet_class = pc_tropical
+					}
+					save_event_target_as = swordOfKahless2Target
+				}
+			}
+			else = {
+				capital_scope.solar_system = {
+					closest_system = {
+						min_steps = 5
+						limit = {
+							any_planet = {
+								is_planet_class = pc_tropical
+							}
+						}
+						random_system_planet = {
+							limit = {
+								is_planet_class = pc_tropical
+							}
+							save_event_target_as = swordOfKahless2Target
+						}
+					}
+				}
+			}
+		}
+	}
+	option = {
+		name = STH_klingon_story.4.a
+		add_monthly_resource_mult = {
+			resource = physics_research
+			value = @tier2researchreward
+			min = @tier2researchmin
+			max = @tier2researchmax
+		}
+		event_target:swordOfKahless2Target = {
+			enable_special_project = {
+				name = "THE_SWORD_OF_KAHLESS_PROJECT_2"
+				location = this
+				owner = root
+			}
+		}
+	}
+}
+
+#Find second clue
+country_event = {
+	id = STH_klingon_story.5
+	title = "STH_klingon_story.5.name"
+	desc = "STH_klingon_story.5.desc"
+	picture = sth_GFX_evt_theSwordOfKahless4
+	is_triggered_only = yes
+	immediate = {
+		add_event_chain_counter = { 
+			event_chain = "sword_of_kahless_chain" 
+			counter = "sword_of_kahless_clues" 
+			amount = 1 
+		}
+	}
+	option = {
+		name = STH_klingon_story.5.a
+		hidden_effect = { 
+			country_event = { 
+				id = STH_klingon_story.6
+				days = 30
+			} 
+		}
+	}
+}
+
+#Set third clue
+country_event = {
+	id = STH_klingon_story.6
+	title = "STH_klingon_story.6.name"
+	desc = "STH_klingon_story.6.desc"
+	picture = sth_GFX_evt_theSwordOfKahless4
+	is_triggered_only = yes
+	immediate = {
+		if = {
+			limit = {
+				any_system = {
+					any_planet = {
+						NOT = {
+							exists = owner
+						}
+						is_planet_class = pc_ocean
+					}
+					distance = {
+						source = root.capital_scope.solar_system
+						min_distance = 50
+						max_distance = 250
+					}
+				}
+			}
+			random_system = {
+				limit = {
+					any_planet = {
+						NOT = {
+							exists = owner
+						}
+						is_planet_class = pc_ocean
+					}
+					distance = {
+						source = root.capital_scope.solar_system
+						min_distance = 50
+						max_distance = 250
+					}
+				}
+				random_system_planet = {
+					limit = {
+						NOT = {
+							exists = owner
+						}
+						is_planet_class = pc_ocean
+					}
+					save_event_target_as = swordOfKahless3Target
+				}
+			}
+			else = {
+				capital_scope.solar_system = {
+					closest_system = {
+						min_steps = 6
+						limit = {
+							any_planet = {
+								is_planet_class = pc_ocean
+							}
+						}
+						random_system_planet = {
+							limit = {
+								is_planet_class = pc_ocean
+							}
+							save_event_target_as = swordOfKahless3Target
+						}
+					}
+				}
+			}
+		}
+	}
+	option = {
+		name = STH_klingon_story.6.a
+		add_monthly_resource_mult = {
+			resource = society_research
+			value = @tier3researchreward
+			min = @tier3researchmin
+			max = @tier3researchmax
+		}
+		event_target:swordOfKahless3Target = {
+			enable_special_project = {
+				name = "THE_SWORD_OF_KAHLESS_PROJECT_3"
+				location = this
+				owner = root
+			}
+		}
+	}
+}
+
+#Find third clue
+country_event = {
+	id = STH_klingon_story.7
+	title = "STH_klingon_story.7.name"
+	desc = "STH_klingon_story.7.desc"
+	picture = sth_GFX_evt_theSwordOfKahless5
+	is_triggered_only = yes
+	immediate = {
+		add_event_chain_counter = { 
+			event_chain = "sword_of_kahless_chain" 
+			counter = "sword_of_kahless_clues" 
+			amount = 1 
+		}
+	}
+	option = {
+		name = STH_klingon_story.7.a
+		hidden_effect = { 
+			country_event = { 
+				id = STH_klingon_story.8
+				days = 30
+			} 
+		}
+	}
+}
+
+#Set fourth clue
+country_event = {
+	id = STH_klingon_story.8
+	title = "STH_klingon_story.8.name"
+	desc = "STH_klingon_story.8.desc"
+	picture = sth_GFX_evt_theSwordOfKahless5
+	is_triggered_only = yes
+	immediate = {
+		if = {
+			limit = {
+				any_system = {
+					any_planet = {
+						NOT = {
+							exists = owner
+						}
+						OR = {
+							is_planet_class = pc_desert
+							is_planet_class = pc_k_class
+						}
+					}
+					distance = {
+						source = root.capital_scope.solar_system
+						min_distance = 75
+						max_distance = 300
+					}
+				}
+			}
+			random_system = {
+				limit = {
+					any_planet = {
+						NOT = {
+							exists = owner
+						}
+						OR = {
+							is_planet_class = pc_desert
+							is_planet_class = pc_k_class
+						}
+					}
+					distance = {
+						source = root.capital_scope.solar_system
+						min_distance = 75
+						max_distance = 300
+					}
+				}
+				random_system_planet = {
+					limit = {
+						NOT = {
+							exists = owner
+						}
+						OR = {
+							is_planet_class = pc_desert
+							is_planet_class = pc_k_class
+						}
+					}
+					save_event_target_as = swordOfKahless4Target
+				}
+			}
+			else = {
+				capital_scope.solar_system = {
+					closest_system = {
+						min_steps = 6
+						limit = {
+							any_planet = {
+								OR = {
+									is_planet_class = pc_desert
+									is_planet_class = pc_k_class
+								}
+							}
+						}
+						random_system_planet = {
+							limit = {
+								OR = {
+									is_planet_class = pc_desert
+									is_planet_class = pc_k_class
+								}
+							}
+							save_event_target_as = swordOfKahless4Target
+						}
+					}
+				}
+			}
+		}
+	}
+	option = {
+		name = STH_klingon_story.8.a
+		add_monthly_resource_mult = {
+			resource = engineering_research
+			value = @tier2researchreward
+			min = @tier2researchmin
+			max = @tier2researchmax
+		}
+		add_monthly_resource_mult = {
+			resource = society_research
+			value = @tier4researchreward
+			min = @tier4researchmin
+			max = @tier4researchmax
+		}
+		event_target:swordOfKahless4Target = {
+			enable_special_project = {
+				name = "THE_SWORD_OF_KAHLESS_PROJECT_4"
+				location = this
+				owner = root
+			}
+		}
+	}
+}
+
+#Find fourth clue
+country_event = {
+	id = STH_klingon_story.9
+	title = "STH_klingon_story.9.name"
+	desc = "STH_klingon_story.9.desc"
+	picture = sth_GFX_evt_theSwordOfKahless6
+	is_triggered_only = yes
+	immediate = {
+		add_event_chain_counter = { 
+			event_chain = "sword_of_kahless_chain" 
+			counter = "sword_of_kahless_clues" 
+			amount = 1 
+		}
+	}
+	option = {
+		name = STH_klingon_story.9.a
+		hidden_effect = { 
+			country_event = { 
+				id = STH_klingon_story.10
+				days = 30
+			} 
+		}
+	}
+}
+
+#Set fifth clue
+country_event = {
+	id = STH_klingon_story.10
+	title = "STH_klingon_story.10.name"
+	desc = "STH_klingon_story.10.desc"
+	picture = sth_GFX_evt_theSwordOfKahless6
+	is_triggered_only = yes
+	immediate = {
+		if = {
+			limit = {
+				any_system = {
+					any_planet = {
+						NOT = {
+							exists = owner
+						}
+						OR = {
+							is_planet_class = pc_y_class
+							is_planet_class = pc_toxic
+						}
+					}
+					distance = {
+						source = root.capital_scope.solar_system
+						min_distance = 100
+						max_distance = 350
+					}
+				}
+			}
+			random_system = {
+				limit = {
+					any_planet = {
+						NOT = {
+							exists = owner
+						}
+						OR = {
+							is_planet_class = pc_y_class
+							is_planet_class = pc_toxic
+						}
+					}
+					distance = {
+						source = root.capital_scope.solar_system
+						min_distance = 100
+						max_distance = 350
+					}
+				}
+				random_system_planet = {
+					limit = {
+						NOT = {
+							exists = owner
+						}
+						OR = {
+							is_planet_class = pc_y_class
+							is_planet_class = pc_toxic
+						}
+					}
+					save_event_target_as = swordOfKahless5Target
+				}
+			}
+			else = {
+				capital_scope.solar_system = {
+					closest_system = {
+						min_steps = 7
+						limit = {
+							any_planet = {
+								OR = {
+									is_planet_class = pc_y_class
+									is_planet_class = pc_toxic
+								}
+							}
+						}
+						random_system_planet = {
+							limit = {
+								OR = {
+									is_planet_class = pc_y_class
+									is_planet_class = pc_toxic
+								}
+							}
+							save_event_target_as = swordOfKahless5Target
+						}
+					}
+				}
+			}
+		}
+	}
+	option = {
+		name = STH_klingon_story.10.a
+		add_monthly_resource_mult = {
+			resource = society_research
+			value = @tier4researchreward
+			min = @tier4researchmin
+			max = @tier4researchmax
+		}
+		event_target:swordOfKahless5Target = {
+			enable_special_project = {
+				name = "THE_SWORD_OF_KAHLESS_PROJECT_5"
+				location = this
+				owner = root
+			}
+		}
+	}
+}
+
+#Find fifth clue
+ship_event = {
+	id = STH_klingon_story.11
+	title = "STH_klingon_story.11.name"
+	desc = "STH_klingon_story.11.desc"
+	picture = sth_GFX_evt_theSwordOfKahless7
+	is_triggered_only = yes
+	immediate = {
+		owner = {
+			add_event_chain_counter = { 
+				event_chain = "sword_of_kahless_chain" 
+				counter = "sword_of_kahless_clues" 
+				amount = 1 
+			}
+		}
+	}
+	option = {
+		name = STH_klingon_story.11.a
+		hidden_effect = { 
+			ship_event = { 
+				id = STH_klingon_story.12
+				days = 5
+			} 
+		}
+	}
+}
+
+
+ship_event = {
+	id = STH_klingon_story.12
+	title = STH_klingon_story.12.name
+	desc = STH_klingon_story.12.desc
+	picture = sth_GFX_evt_theSwordOfKahless8
+	location = FROM
+	is_triggered_only = yes
+	immediate = { }
+	option = {
+		name = STH_klingon_story.12.a #For the Chancellor
+		hidden_effect = {
+			random_list = {
+				75 = { ship_event = { id = STH_klingon_story.13 days = 10 } }
+				25 = { ship_event = { id = STH_klingon_story.14 days = 10 } }
+			}
+		}
+		owner = { end_event_chain = "sword_of_kahless_chain" }
+	}
+	option = {
+		name = STH_klingon_story.12.b #For the Scientist
+		hidden_effect = {
+			random_list = {
+				50 = { ship_event = { id = STH_klingon_story.15 days = 10 } }
+				50 = { ship_event = { id = STH_klingon_story.16 days = 10 } }
+			}
+		}
+		owner = { end_event_chain = "sword_of_kahless_chain" }
+	}
+	option = {
+		name = STH_klingon_story.12.c #For the good of the Empire
+		hidden_effect = {
+			random_list = {
+				100 = { owner = {country_event = { id = STH_klingon_story.17 days = 10 } } }
+			}
+		}
+		owner = { end_event_chain = "sword_of_kahless_chain" }
+	}
+}
+
+#Chancellor gets it, goes well
+ship_event = {
+	id = STH_klingon_story.13
+	title = "STH_klingon_story.13.name"
+	desc = "STH_klingon_story.13.desc"
+	picture = sth_GFX_evt_theSwordOfKahless9
+	is_triggered_only = yes
+	immediate = { }
+	option = {
+		name = STH_klingon_story.13.a
+		owner = {
+			add_modifier = {
+				modifier = em_sword_of_kahless_unifying
+				days = 36000
+			}
+			leader = { add_trait = leader_trait_reverred }
+			add_influence = 200
+		}
+	}
+}
+
+#Chancellor gets it, goes bad
+ship_event = {
+	id = STH_klingon_story.14
+	title = "STH_klingon_story.14.name"
+	desc = "STH_klingon_story.14.desc"
+	picture = sth_GFX_evt_theSwordOfKahless10
+	is_triggered_only = yes
+	immediate = { }
+	option = {
+		name = STH_klingon_story.14.a
+		owner = {
+			add_modifier = {
+				modifier = em_sword_of_kahless_dividing
+				days = 36000
+			}
+			leader = { add_trait = leader_trait_revilled }
+			add_influence = -200
+		}
+	}
+}
+
+#Scientist gets it, goes well
+ship_event = {
+	id = STH_klingon_story.15
+	title = "STH_klingon_story.15.name"
+	desc = "STH_klingon_story.15.desc"
+	picture = sth_GFX_evt_theSwordOfKahless9
+	is_triggered_only = yes
+	immediate = {
+		leader = { save_event_target_as = usurpingOfficer }
+	}
+	option = {
+		name = STH_klingon_story.15.a
+		hidden_effect = { }
+		leader = { add_trait = leader_trait_reverred }
+		owner = {
+			add_modifier = {
+				modifier = em_sword_of_kahless_unifying
+				days = 36000
+			}
+			kill_leader = { 
+				type = ruler
+				show_notification = no 
+			}
+			assign_leader = event_target:usurpingOfficer
+			leader = { add_trait = leader_trait_reverred }
+		}
+	}
+}
+
+#Scientist gets it, goes bad
+ship_event = {
+	id = STH_klingon_story.16
+	title = "STH_klingon_story.16.name"
+	desc = "STH_klingon_story.16.desc"
+	picture = sth_GFX_evt_theSwordOfKahless10
+	is_triggered_only = yes
+	immediate = {
+		leader = { save_event_target_as = usurpingOfficer }
+	}
+	option = {
+		name = STH_klingon_story.16.a
+		hidden_effect = { }
+		leader = { add_trait = leader_trait_revilled }
+		owner = { 
+			add_modifier = {
+				modifier = em_sword_of_kahless_dividing
+				days = 36000
+			}
+			kill_leader = { 
+				type = ruler
+				show_notification = no 
+			}
+			assign_leader = event_target:usurpingOfficer
+			leader = { add_trait = leader_trait_revilled }
+		}
+	}
+}
+
+#Nobody gets it
+country_event = {
+	id = STH_klingon_story.17
+	title = "STH_klingon_story.17.name"
+	desc = "STH_klingon_story.17.desc"
+	picture = sth_GFX_evt_theSwordOfKahless11
+	is_triggered_only = yes
+	immediate = { }
+	option = {
+		name = STH_klingon_story.17.a
+		hidden_effect = { }
+		add_influence = 100
+		add_monthly_resource_mult = {
+			resource = society_research
+			value = @tier3researchreward
+			min = @tier3researchmin
+			max = @tier3researchmax
+		}
+		add_monthly_resource_mult = {
+			resource = engineering_research
+			value = @tier3researchreward
+			min = @tier3researchmin
+			max = @tier3researchmax
+		}
+		add_monthly_resource_mult = {
+			resource = physics_research
+			value = @tier3researchreward
+			min = @tier3researchmin
+			max = @tier3researchmax
+		}
+	}
+}
+
+
+
+
+
+
+# Klingon Civil War
+country_event = {
+	id = STH_klingon_story.50
+	title = "STH_klingon_story.50.name"
+	desc = "STH_klingon_story.50.desc"
+	picture = sth_GFX_evt_qoNos
+	trigger = {
+		has_country_flag = klingon_empire
+		is_at_war = no
+		NOT = {	has_country_flag = recent_civil_war }
+		any_owned_planet = {
+			NOT = { is_capital = yes }
+		}
+		any_owned_planet = {
+			NOT = { is_capital = yes }
+			NOT = { is_planet = prev }
+		}
+		fleet_power > 1500
+	}
+	mean_time_to_happen = {	months = 600 }
+	immediate = { 
+		set_timed_country_flag = { flag = recent_civil_war days = 18000 }
+		random_owned_planet = {
+			limit = { NOT = { is_capital = yes } }
+			save_event_target_as = rebelPlanet1
+		}
+		random_owned_planet = {
+			limit = { 
+				NOT = { is_capital = yes }
+				NOT = { is_planet = event_target:rebelPlanet1 } 					
+			}
+			save_event_target_as = rebelPlanet2
+		}
+	}
+	option = {
+		trigger = { has_country_resource = { type = influence amount > 499 } }
+		name = STH_klingon_story.50.a
+		add_influence = -500
+		hidden_effect = {
+			random_list = {
+				25 = { country_event = { id = STH_klingon_story.51 days = 180 random = 20 } }
+				25 = { country_event = { id = STH_klingon_story.52 days = 180 random = 20 } }
+				50 = { country_event = { id = STH_klingon_story.53 days = 180 random = 20 } }
+			}
+		}
+	}
+	option = {
+		trigger = { has_country_resource = { type = influence amount > 249 } }
+		name = STH_klingon_story.50.b
+		add_influence = -250
+		hidden_effect = {
+			random_list = {
+				33 = { country_event = { id = STH_klingon_story.51 days = 180 random = 20 } }
+				33 = { country_event = { id = STH_klingon_story.52 days = 180 random = 20 } }
+				33 = { country_event = { id = STH_klingon_story.53 days = 180 random = 20 } }
+			}
+		}
+	}
+	option = {
+		name = STH_klingon_story.50.c
+		hidden_effect = {
+			random_list = {
+				50 = { country_event = { id = STH_klingon_story.51 days = 180 random = 20 } }
+				50 = { country_event = { id = STH_klingon_story.52 days = 180 random = 20 } }
+			}
+		}
+	}
+}
+
+#Small Rebellion
+country_event = {
+	id = STH_klingon_story.51
+	title = "STH_klingon_story.51.name"
+	desc = "STH_klingon_story.51.desc"
+	picture = sth_GFX_evt_theSwordOfKahless10
+	is_triggered_only = yes
+	immediate = {	
+		event_target:rebelPlanet1 = {
+			create_klingon_rebel_country_1 = yes
+			set_owner = last_created_country
+		}
+		last_created_country = { save_event_target_as = rebelCountry1 }
+	}
+	option = { name = STH_klingon_story.51.a }
+}
+
+#Two Rebellions
+country_event = {
+	id = STH_klingon_story.52
+	title = "STH_klingon_story.52.name"
+	desc = "STH_klingon_story.52.desc"
+	picture = sth_GFX_evt_theSwordOfKahless10
+	is_triggered_only = yes
+	immediate = {	
+		event_target:rebelPlanet1 = {
+			create_klingon_rebel_country_1 = yes
+			set_owner = last_created_country
+		}
+		last_created_country = { save_event_target_as = rebelCountry1 }
+		event_target:rebelPlanet2 = {
+			create_klingon_rebel_country_2 = yes
+			set_owner = last_created_country
+		}
+		last_created_country = { save_event_target_as = rebelCountry2 }
+	}
+	option = { name = STH_klingon_story.52.a }
+}
+
+#No Rebellion
+country_event = {
+	id = STH_klingon_story.53
+	title = "STH_klingon_story.53.name"
+	desc = "STH_klingon_story.53.desc"
+	picture = sth_GFX_evt_qoNos
+	is_triggered_only = yes
+	immediate = {
+	}
+	option = { name = STH_klingon_story.53.a }
+}
+
+
+#Scientist proposes augment therapy
+country_event = {
+	id = STH_klingon_story.1000
+	title = "STH_klingon_story.1000.name"
+	desc = "STH_klingon_story.1000.desc"
+	diplomatic = yes
+	fire_only_once = yes
+	picture_event_data = {
+		portrait = event_target:antaak
+		planet_background = root
+		graphical_culture = root
+		city_level = root
+		room = root
+	}
+	mean_time_to_happen = { months = 60 }
+	trigger = {
+		has_global_flag = augmentVirusPossible
+		#is_crises_allowed = yes 
+		has_country_flag = klingon_empire
+		NOT = {	has_country_flag = klingonAugmentsCrisis }
+	}
+	immediate = {
+		set_country_flag = klingonAugmentsCrisis
+		create_species = { name = "Klingon" class = TREKHEROES portrait = Antaak traits = { trait = "trait_strong" trait = "trait_resilient" } }
+		ensure_male_antaak = yes
+	}
+	after = { }
+	option = {
+		name = STH_klingon_story.1000.a #Approve project
+		response_text = STH_klingon_story.1000.a.response
+		hidden_effect = {
+			country_event = { id = STH_klingon_story.1002 days = 720 random = 360 }
+			begin_event_chain = { event_chain = "augmented_realities_chain" target = ROOT }
+		}		
+	}
+	option = { 
+		name = STH_klingon_story.1000.b
+		response_text = STH_klingon_story.1000.b.response
+		is_dialog_only = yes
+	}
+	option = { 
+		name = STH_klingon_story.1000.c 
+		response_text = STH_klingon_story.1000.c.response
+		is_dialog_only = yes
+	}
+	option = {
+		name = STH_klingon_story.1000.d #No, but begs again later
+		response_text = STH_klingon_story.1000.d.response
+		country_event = { id = STH_klingon_story.1001 days = 3600 random = 360 }
+	}
+}
+#Second request
+country_event = {
+	id = STH_klingon_story.1001
+	title = "STH_klingon_story.1001.name"
+	desc = "STH_klingon_story.1001.desc"
+	diplomatic = yes
+	picture_event_data = {
+		portrait = event_target:antaak
+		planet_background = root
+		graphical_culture = root
+		city_level = root
+		room = root
+	}
+	is_triggered_only = yes
+	immediate = {
+		if = {
+			limit = { exists = event_target:antaak }
+			else = {
+				create_species = { name = "Klingon" class = TREKHEROES portrait = Antaak traits = { trait = "trait_strong" trait = "trait_resilient" } }
+				ensure_male_antaak = yes
+			}
+		}
+	}
+	option = {
+		name = STH_klingon_story.1001.a #Approve project
+		response_text = STH_klingon_story.1001.a.response
+		hidden_effect = {
+			country_event = { id = STH_klingon_story.1002 days = 720 random = 360 }
+			begin_event_chain = { event_chain = "augmented_realities_chain" target = ROOT }
+		}
+	}
+	option = { 
+		name = STH_klingon_story.1001.b
+		response_text = STH_klingon_story.1001.b.response
+		is_dialog_only = yes
+	}
+	option = { 
+		name = STH_klingon_story.1001.c 
+		response_text = STH_klingon_story.1001.c.response
+		is_dialog_only = yes
+	}
+	option = {
+		name = STH_klingon_story.1001.d #No, final say
+		response_text = STH_klingon_story.1001.d.response
+	}
+}
+
+
+#Colony World Check
+country_event = {
+	id = STH_klingon_story.1002
+	hide_window = yes
+	is_triggered_only = yes
+	immediate = {
+		if = {
+			limit = { any_owned_planet = { solar_system = { NOT = { is_same_value = root.capital_scope.solar_system } } } }
+			country_event = { id = STH_klingon_story.1003 }
+			else = {
+				country_event = { id = STH_klingon_story.1002 days = 60 }
+			}
+		}
+	
+	}
+}
+
+#Project Type Choice
+country_event = {
+	id = STH_klingon_story.1003
+	title = "STH_klingon_story.1003.name"
+	desc = "STH_klingon_story.1003.desc"
+	diplomatic = yes
+	picture_event_data = {
+		portrait = event_target:antaak
+		planet_background = root
+		graphical_culture = root
+		city_level = root
+		room = root
+	}
+	is_triggered_only = yes
+	immediate = {
+		if = {
+			limit = { exists = event_target:antaak }
+			else = {
+				create_species = { name = "Klingon" class = TREKHEROES portrait = Antaak traits = { trait = "trait_strong" trait = "trait_resilient" } }
+				ensure_male_antaak = yes
+			}
+		}
+		random_owned_planet = {
+			limit = { solar_system = { NOT = { is_same_value = root.capital_scope } } }
+			save_event_target_as = augmentTestColony
+		}
+	}
+	option = {
+		name = STH_klingon_story.1003.a #Approve project
+		response_text = STH_klingon_story.1003.a.response
+		enable_special_project = { name = "KLINGON_AUGMENTS_PROJECT_1A" location = event_target:augmentTestColony owner = root }
+	}
+	option = {
+		name = STH_klingon_story.1003.b #Approve project
+		response_text = STH_klingon_story.1003.b.response
+		trigger = { has_country_resource = { type = energy amount > 199 } }
+		add_energy = -200
+		enable_special_project = { name = "KLINGON_AUGMENTS_PROJECT_1B" location = event_target:augmentTestColony owner = root }
+	}
+	option = {
+		name = STH_klingon_story.1003.bf #Approve project
+		trigger = { NOT = {has_country_resource = { type = energy amount > 199 } } }
+		hidden_effect = { country_event = { id = STH_klingon_story.1003 } }
+	}
+	option = {
+		response_text = STH_klingon_story.1003.c.response
+		name = STH_klingon_story.1003.c #No, final say
+	}
+}
+
+
+
+#Project Successful
+country_event = {
+	id = STH_klingon_story.1005
+	title = "STH_klingon_story.1005.name"
+	desc = "STH_klingon_story.1005.desc"
+	diplomatic = yes
+	picture_event_data = {
+		portrait = event_target:antaak
+		planet_background = root
+		graphical_culture = root
+		city_level = root
+		room = root
+	}
+	is_triggered_only = yes
+	immediate = {
+		if = {
+			limit = { exists = event_target:antaak }
+			else = {
+				create_species = { name = "Klingon" class = TREKHEROES portrait = Antaak traits = { trait = "trait_strong" trait = "trait_resilient" } }
+				ensure_male_antaak = yes
+			}
+		}
+	}
+	option = {
+		name = STH_klingon_story.1005.a #Increase Intelligence
+		response_text = STH_klingon_story.1005.a.response
+		hidden_effect = { 
+			set_global_flag = augmentVirus 
+			country_event = { id = STH_klingon_story.1007 days = 360 random = 30 }
+			every_owned_pop = {
+				limit = { is_species_class = KDF }
+				modify_species = {
+					species = this
+					add_trait = trait_intelligent
+				}
+			}
+		}
+	}
+	option = { 
+		name = STH_klingon_story.1005.b #Increase Strength and Reflexes
+		response_text = STH_klingon_story.1005.b.response
+		hidden_effect = {
+			set_global_flag = augmentVirus
+			country_event = { id = STH_klingon_story.1007 days = 360 random = 30 }
+			every_owned_pop = {
+				limit = { is_species_class = KDF }
+				modify_species = {
+					species = this
+					add_trait = trait_very_strong
+					add_trait = trait_quick_learners
+					remove_trait = trait_strong
+				}
+			}
+		}
+	}
+	option = { 
+		name = STH_klingon_story.1005.c #Cosmetic changes?
+		is_dialog_only = yes
+		response_text = STH_klingon_story.1005.c.response
+	}
+	option = { 
+		name = STH_klingon_story.1005.d #Reject
+		response_text = STH_klingon_story.1005.d.response
+	}
+}
+
+#Project Failed
+country_event = {
+	id = STH_klingon_story.1006
+	title = "STH_klingon_story.1006.name"
+	desc = "STH_klingon_story.1006.desc"
+	diplomatic = yes
+	picture_event_data = {
+		portrait = event_target:antaak
+		planet_background = root
+		graphical_culture = root
+		city_level = root
+		room = root
+	}
+	is_triggered_only = yes
+	immediate = {
+		if = {
+			limit = { exists = event_target:antaak }
+			else = {
+				create_species = { name = "Klingon" class = TREKHEROES portrait = Antaak traits = { trait = "trait_strong" trait = "trait_resilient" } }
+				ensure_male_antaak = yes
+			}
+		}
+	}
+	option = {
+		name = STH_klingon_story.1006.a #Destroy Colony
+		response_text = STH_klingon_story.1006.a.response
+		enable_special_project = { name = "KLINGON_AUGMENTS_PROJECT_2A" location = event_target:augmentTestColony owner = root }
+	}
+	option = { 
+		name = STH_klingon_story.1006.b #Accept Results
+		response_text = STH_klingon_story.1006.b.response
+		hidden_effect = { 
+			country_event = { id = STH_klingon_story.1008 days = 30 random = 15 } 
+		}
+	}
+}
+
+#Klingons React
+country_event = {
+	id = STH_klingon_story.1007
+	title = "STH_klingon_story.1007.name"
+	desc = "STH_klingon_story.1007.desc"
+	picture = sth_GFX_evt_qoNos
+	is_triggered_only = yes
+	immediate = { }
+	option = {
+		name = STH_klingon_story.1007.a #Wait And See
+		hidden_effect = {
+			random_list = {
+				10 = { country_event = { id = STH_klingon_story.1011 days = 18 random = 15 } }
+				10 = { country_event = { id = STH_klingon_story.1012 days = 18 random = 15 } }
+			}
+			country_event = { id = STH_klingon_story.1013 days = 18000 random = 6000 }
+		}
+		add_modifier = { modifier = em_augment_virus days = -1 }
+	}
+}
+
+#Didn't Purge Colony
+country_event = {
+	id = STH_klingon_story.1008
+	title = "STH_klingon_story.1008.name"
+	desc = "STH_klingon_story.1008.desc"
+	picture = sth_GFX_evt_qoNos
+	is_triggered_only = yes
+	immediate = { }
+	option = {
+		name = STH_klingon_story.1008.a
+		hidden_effect = {
+			set_global_flag = augmentVirus
+			country_event = { id = STH_klingon_story.1007 days = 180 random = 15 }
+		}
+	}
+}
+
+
+#Virus Stopped
+country_event = {
+	id = STH_klingon_story.1009
+	title = "STH_klingon_story.1009.name"
+	desc = "STH_klingon_story.1009.desc"
+	picture = sth_GFX_evt_klingonAugmentProject
+	is_triggered_only = yes
+	immediate = { 
+		event_target:augmentTestColony = {
+			destroy_colony = { keep_buildings = no }
+		}
+	}
+	option = {
+		name = STH_klingon_story.1009.a
+		add_society_research = 500
+	}
+}
+
+#Virus Escapes Colony Purge
+country_event = {
+	id = STH_klingon_story.1010
+	title = "STH_klingon_story.1010.name"
+	desc = "STH_klingon_story.1010.desc"
+	picture = sth_GFX_evt_klingonAugmentProject
+	is_triggered_only = yes
+	immediate = { 
+		event_target:augmentTestColony = {
+			destroy_colony = { keep_buildings = no }
+		}
+	}
+	option = {
+		name = STH_klingon_story.1010.a
+		hidden_effect = {
+			set_global_flag = augmentVirus
+			country_event = { id = STH_klingon_story.1007 days = 180 random = 15 }
+		}
+	}
+}
+
+#Civil War
+country_event = {
+	id = STH_klingon_story.1011
+	title = "STH_klingon_story.1011.name"
+	desc = { 
+		trigger = { exists = event_target:firstRebel exists = event_target:secondRebel }
+		text = "STH_klingon_story.1011.desc_01" 
+	}
+	desc = { 
+		trigger = { exists = event_target:firstRebel NOT = { exists = event_target:secondRebel } }
+		text = "STH_klingon_story.1011.desc_02" 
+	}
+	desc = { 
+		trigger = { NOT = { exists = event_target:firstRebel } NOT = { exists = event_target:secondRebel } }
+		text = "STH_klingon_story.1011.desc_03" 
+	}
+	picture = sth_GFX_evt_qoNos
+	is_triggered_only = yes
+	immediate = { 
+		random_owned_planet = {
+			limit = { solar_system = { NOT = { is_same_value = root.capital_scope.solar_system } } }
+			save_event_target_as = firstRebel
+			create_klingon_rebel_country_1 = yes
+			set_owner = last_created_country
+		}
+		random_owned_planet = {
+			limit = { solar_system = { NOT = { is_same_value = root.capital_scope.solar_system } } NOT = { is_same_value = event_target:firstRebel } }
+			save_event_target_as = secondRebel
+			create_klingon_rebel_country_1 = yes
+			set_owner = last_created_country
+		}
+	}
+	option = { name = STH_klingon_story.1011.a }
+}
+
+#Authority Preserved
+country_event = {
+	id = STH_klingon_story.1012
+	title = "STH_klingon_story.1012.name"
+	desc = "STH_klingon_story.1012.desc"
+	picture = sth_GFX_evt_qoNos
+	is_triggered_only = yes
+	immediate = { }
+	option = { 
+		name = STH_klingon_story.1012.a 
+		add_influence = 100
+	}
+}
+
+#A Potential Cure
+country_event = {
+	id = STH_klingon_story.1013
+	title = "STH_klingon_story.1013.name"
+	desc = "STH_klingon_story.1013.desc"
+	picture = sth_GFX_evt_klingonAugmentProject
+	is_triggered_only = yes
+	immediate = { }
+	option = { 
+		name = STH_klingon_story.1013.a 
+		enable_special_project = { name = "KLINGON_AUGMENTS_PROJECT_3A" location = root.capital_scope owner = root }
+	}
+}
+country_event = {
+	id = STH_klingon_story.1014
+	title = "STH_klingon_story.1014.name"
+	desc = "STH_klingon_story.1014.desc"
+	picture = sth_GFX_evt_qoNos
+	is_triggered_only = yes
+	immediate = { 
+		remove_global_flag = augmentVirus
+		end_event_chain = augmented_realities_chain
+	}
+	option = { 
+		name = STH_klingon_story.1014.a
+		remove_modifier = em_augment_virus
+		add_influence = 50
+	}
+}

@@ -1,0 +1,91 @@
+#Zakdorn Homeworld
+zakdorn_homeworld = {			
+	name = "Zakdorn"		
+	class = "sc_f"
+	flags = { zakdorn_homeworld }
+	init_effect = { log = "zakdorn homeworld" }
+	usage = custom_empire
+	max_instances = 1
+	planet = { name = "Zakdorn" class = star orbit_distance = 0 orbit_angle = 1 size = { min = 20 max = 30 } has_ring = no }		
+	planet = {
+		count = { min = 1 max = 4 }
+		orbit_distance = { min = 20 max = 30 }
+		orbit_angle = { min = 90 max = 270 }
+		moon = { count = { min = 0 max = 1 } orbit_angle = { min = 90 max = 270 } orbit_distance = 5 }
+	}	
+	planet = {		
+		name = "Zakdorn"	
+		class = "pc_arid"	
+		orbit_distance = 30	
+		size = { min = 18 max = 20 }
+		starting_planet = yes
+		has_ring = no
+		tile_blockers = none
+		init_effect = {
+			prevent_anomaly = yes			
+			if = {
+				limit = { NOT = { any_country = { has_country_flag = zakdorn_alliance } } }
+				create_species = {
+					name = "Zakdorn"
+					class = ZAK
+					portrait = zakdorn
+					homeworld = THIS
+					traits = {
+						trait="trait_highly_talented"
+                    	trait="trait_weak"
+                    	trait="trait_sedentary"
+						ideal_planet_class = "pc_arid"
+					}
+				}
+				last_created_species = { save_global_event_target_as = zakdornSpecies }
+				create_country = {
+					name = "NAME_zakdorn_alliance"
+					type = default
+					ignore_initial_colony_error = yes
+					civics = { civic = "civic_master_strategy" civic = "civic_technocracy" }
+					authority = auth_democratic
+					name_list = "zakdorn"
+					ethos = { ethic = "ethic_militarist" ethic = "ethic_xenophile" ethic = "ethic_materialist" }
+					species = event_target:zakdornSpecies
+					flag = {
+						icon = { category = "trek" file = "zakdorn.dds" }
+						background ={ category="backgrounds" file="00_solid.dds" }
+						colors= { "customcolor1972" "black" "null" "null" }
+					}
+					ship_prefix=""
+					effect = {
+						set_graphical_culture = generic_01
+						set_country_flag = zakdorn_alliance
+						set_country_flag = custom_start_screen
+						set_country_flag = generic_ent
+						set_country_flag = alpha_beta_empire
+						set_country_flag = init_spawned
+						set_country_flag = botf_minor
+						save_global_event_target_as = zakdorn_alliance
+					}
+				}
+				create_colony = { owner = event_target:zakdorn_alliance species = event_target:zakdornSpecies ethos = owner }
+			}
+			set_capital = yes
+			random_country = {
+				limit = { has_country_flag = zakdorn_alliance }
+				save_global_event_target_as = zakdorn_alliance
+				add_appropriate_start_techs = yes
+				species = { save_global_event_target_as = zakdornSpecies }
+				set_country_type = minorRace
+			}
+			set_owner = event_target:zakdorn_alliance
+			generate_minor_empire_start_buildings = yes
+			generate_minor_empire_start_pops = yes
+			generate_major_empire_start_fleets = yes
+			set_name = "Zakdorn"
+		}
+	}
+	change_orbit = 80
+	planet = {
+		count = { min = 1 max = 4 }
+		orbit_distance = { min = 20 max = 30 }
+		orbit_angle = { min = 90 max = 270 }
+		moon = { count = { min = 0 max = 1 } orbit_angle = { min = 90 max = 270 } orbit_distance = 5 }
+	}
+}

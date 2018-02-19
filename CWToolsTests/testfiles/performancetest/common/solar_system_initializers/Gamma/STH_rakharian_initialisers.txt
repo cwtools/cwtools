@@ -1,0 +1,114 @@
+@distance = 30
+@base_moon_distance = 10
+
+
+#Rakhari - Note the correct name is Rakhari, but have left some legacy initializers and flags as Rakharian
+rakharian_homeworld = {
+	name = "Rakhar"
+	class = "sc_k"
+	flags = { rakharian_homeworld }
+	init_effect = { log = "rakharian homeworld" }
+	usage = custom_empire
+	max_instances = 1
+	planet = { name = "Rakhar" class = star orbit_distance = 0 orbit_angle = 1 size = { min = 10 max = 20 } has_ring = no }
+	planet = {
+		count = {min = 1 max = 3}
+		orbit_distance = { min = 23 max = 29 }
+		class = rl_unhabitable_planets
+		orbit_angle = { min = 90 max = 270 }
+		moon = { count = { min = 0 max = 2 } class = rl_inner_moons orbit_angle = { min = 90 max = 270 } orbit_distance = 10 }
+	}
+	planet = {
+		name = "Rakhar Prime"
+		class = pc_arctic
+		orbit_distance = 14.5
+		orbit_angle = 220
+		size = { min = 22 max = 25 }
+		starting_planet = yes
+		has_ring = no
+		tile_blockers = none
+		modifiers = none
+		init_effect = { prevent_anomaly = yes }
+		init_effect = {
+			if = {
+				limit = { NOT = { any_country = { has_country_flag = rakharian_free_states } } }
+				create_species = {
+					name = "Rakhari"
+					class = RAK
+					portrait = rakhari
+					homeworld = THIS
+					traits = {
+						trait = "trait_resilient"
+						trait = "trait_conformists"
+						trait = "trait_solitary"
+						ideal_planet_class = "pc_arctic"
+					}
+				}
+				last_created_species = { save_global_event_target_as = rakhariSpecies }
+				create_country = {
+					name = "NAME_rakharian_free_states"
+					type = default
+					ignore_initial_colony_error = yes
+					civics = { civic = "civic_police_state" civic = "civic_efficient_bureaucracy" }
+					authority = auth_dictatorial
+					name_list = "Rakhari"
+					ethos = { ethic = "ethic_fanatic_xenophobe" ethic = "ethic_authoritarian" }
+					species = event_target:rakhariSpecies
+					flag = {
+						icon = { category = "pirate" file = "flag_pirate_1.dds" }
+						background = { category = "backgrounds" file = "circle.dds" }
+						colors = { "customcolor660" "black" "null" "null" }
+					}
+					ship_prefix = "RFS"
+					effect = {
+						set_graphical_culture = generic_01
+						set_country_flag = rakharian_free_states
+						set_country_flag = custom_start_screen
+						set_country_flag = generic_ent
+						set_country_flag = gamma_empire
+						set_country_flag = init_spawned
+						set_country_flag = sth_medium_galaxy
+						save_global_event_target_as = rakharian_free_states
+					}
+				}
+				create_colony = { owner = event_target:rakharian_free_states species = event_target:rakhariSpecies ethos = owner }
+			}
+			set_capital = yes
+			random_country = {
+				limit = { has_country_flag = rakharian_free_states }
+				save_global_event_target_as = rakharian_free_states
+				add_appropriate_start_techs = yes
+				species = { save_global_event_target_as = rakhariSpecies }
+			}
+			set_owner = event_target:rakharian_free_states
+			generate_major_empire_start_buildings = yes
+			generate_major_empire_start_pops = yes
+			generate_major_empire_start_fleets = yes
+			set_name = "Rakhar Prime"					
+		}
+	}
+	planet = {
+		count = { min = 0 max = 3 }
+		orbit_distance = { min = 14 max = 25 }
+		class = rl_unhabitable_planets
+		orbit_angle = { min = 90 max = 270 }
+		moon = {
+			count = { min = 0 max = 1 }
+			class = rl_outer_moons
+			orbit_angle = { min = 90 max = 270 }
+			orbit_distance = 10
+		}
+	}
+	planet = {
+		count = 1
+		orbit_distance = { min = 18 max = 25 }
+		class = rl_unhabitable_planets
+		orbit_angle = { min = 90 max = 270 }
+		moon = {
+			count = { min = 0 max = 1 }
+			class = rl_outer_moons
+			orbit_angle = { min = 90 max = 270 }
+			orbit_distance = 10
+		}
+	}
+}

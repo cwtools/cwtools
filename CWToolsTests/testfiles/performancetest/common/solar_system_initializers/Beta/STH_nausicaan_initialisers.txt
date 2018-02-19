@@ -1,0 +1,93 @@
+@distance = 30
+@base_moon_distance = 10
+
+#Nausican
+nausicaan_homeworld = {
+	name = "Nausicaa"
+	class = "sc_m"
+	flags = { nausicaan_homeworld }
+	init_effect = { log = "nausicaan homeworld" }
+	usage = custom_empire
+	max_instances = 1
+	planet = { name = "Nausicaa" class = star orbit_distance = 0 orbit_angle = 1 size = 30 has_ring = no }
+	planet = { count = 4 orbit_distance = { min = 20 max = 35 } size = { min = 5 max = 12 } orbit_angle = { min = 90 max = 270 } change_orbit = @base_moon_distance }
+	planet = {
+		name = "Nausicaa"
+		class = pc_tropical
+		orbit_distance = 25
+		orbit_angle = 220
+		size = { min = 18 max = 20 }
+		starting_planet = yes
+		has_ring = no
+		tile_blockers = none
+		modifiers = none
+		init_effect = { prevent_anomaly = yes }
+		init_effect = {
+			if = {
+				limit = { NOT = { any_country = { has_country_flag = nausicaan_tribes } } }
+				create_species = {
+					name = "Nausicaan"
+					class = NAU
+					portrait = nausicaan
+					homeworld = THIS
+						traits = {
+							trait = "trait_very_strong"
+							trait = "trait_wasteful"
+							trait = "trait_repugnant"
+							trait = "trait_resilient"
+							ideal_planet_class = "pc_tropical"
+						}
+					}
+				last_created_species = { save_global_event_target_as = nausicaanSpecies }
+				create_country = {
+					name = "NAME_nausicaan_tribes"
+					type = default
+					ignore_initial_colony_error = yes
+					civics = { civic = "civic_warrior_culture" civic = "civic_shadow_council" }
+					authority = auth_democratic
+					name_list = "Nausicaan"
+					ethos = { ethic = "ethic_fanatic_militarist" ethic = "ethic_xenophobe" }
+					species = event_target:nausicaanSpecies
+					flag = {
+						icon = { category = "pointy" file = "flag_pointy_6.dds" }
+						background = { category = "backgrounds" file = "circle.dds" }
+						colors = { "customcolor1611" "customcolor2001" "null" "null" }
+					}
+					ship_prefix = "NS"
+					effect = {
+						set_graphical_culture = klingon_01
+						set_country_flag = nausicaan_tribes
+						set_country_flag = custom_start_screen
+						set_country_flag = generic_ent
+						set_country_flag = alpha_beta_empire
+						set_country_flag = init_spawned
+						set_country_flag = botf_minor
+						save_global_event_target_as = nausicaan_tribes
+					}
+				}
+				create_colony = { owner = event_target:nausicaan_tribes species = event_target:nausicaanSpecies ethos = owner }
+			}
+			set_capital = yes
+			random_country = {
+				limit = { has_country_flag = nausicaan_tribes }
+				save_global_event_target_as = nausicaan_tribes
+				add_appropriate_start_techs = yes
+				species = { save_global_event_target_as = nausicaanSpecies }
+				set_country_type = minorRace
+            }
+			set_owner = event_target:nausicaan_tribes
+			generate_minor_empire_start_buildings = yes
+			generate_minor_empire_start_pops = yes
+			generate_major_empire_start_fleets = yes
+			set_name = "Nausicaa"
+		}
+	}
+	planet = {
+		count = { min = 0 max = 5 }
+		orbit_distance = { min = 25 max = 30 }
+		class = random_non_colonizable
+		orbit_angle = { min = 90 max = 270 }
+		change_orbit = @base_moon_distance
+		moon = { count = { min = 0 max = 1 } class = random_non_colonizable orbit_angle = { min = 90 max = 270 } orbit_distance = 5 }
+	}
+}

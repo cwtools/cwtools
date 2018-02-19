@@ -1,0 +1,4369 @@
+# Titanium Hull (Patrol Frigate)
+utility_component_template = {
+  key = "REQUIRED_HULL_0_PF"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_0"
+  icon_frame = 1
+  cost = 5
+  size_restriction = { corvette }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_HULL_1A_PF"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 0    }
+  ai_weight = { weight = 1 }
+  prerequisites = { "tech_titanium_hull" }
+  component_set = "required_hull"
+}
+# Titanium Hull (Destroyer)
+utility_component_template = {
+  key = "REQUIRED_HULL_0_DE"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_0"
+  icon_frame = 1
+  cost = 20
+  size_restriction = { saber }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_HULL_1A_DE"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 500    }
+  ai_weight = { weight = 1 }
+  prerequisites = { "tech_titanium_hull" }
+  component_set = "required_hull"
+}
+# Titanium Hull (Destroyer)
+utility_component_template = {
+  key = "REQUIRED_HULL_0_CR"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_0"
+  icon_frame = 1
+  cost = 75
+  size_restriction = { sovereign borg_sphere }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_HULL_1A_CR"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 1500    }
+  ai_weight = { weight = 1 }
+  prerequisites = { "tech_titanium_hull" }
+  component_set = "required_hull"
+}
+# Titanium Hull (Battlecruiser)
+utility_component_template = {
+  key = "REQUIRED_HULL_0_BC"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_0"
+  icon_frame = 1
+  cost = 20
+  size_restriction = { steamrunner borg_diamond }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_HULL_1A_BC"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 500    }
+  ai_weight = { weight = 1 }
+  prerequisites = { "tech_titanium_hull" }
+  component_set = "required_hull"
+}
+# Titanium Hull (Battleship)
+utility_component_template = {
+  key = "REQUIRED_HULL_0_BS"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_0"
+  icon_frame = 1
+  cost = 325
+  size_restriction = { adv_cruiser }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_HULL_1A_BS"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 6500    }
+  ai_weight = { weight = 1 }
+  prerequisites = { "tech_titanium_hull" }
+  component_set = "required_hull"
+}
+# Titanium Hull (Heavy Escort)
+utility_component_template = {
+  key = "REQUIRED_HULL_0_HE"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_0"
+  icon_frame = 1
+  cost = 20
+  size_restriction = { strike }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_HULL_1A_HE"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 500    }
+  ai_weight = { weight = 1 }
+  prerequisites = { "tech_titanium_hull" }
+  component_set = "required_hull"
+}
+# Titanium Hull (Assault Cruiser)
+utility_component_template = {
+  key = "REQUIRED_HULL_0_AC"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_0"
+  icon_frame = 1
+  cost = 125
+  size_restriction = { assault_cruiser }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_HULL_1A_AC"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 2500    }
+  ai_weight = { weight = 1 }
+  prerequisites = { "tech_titanium_hull" }
+  component_set = "required_hull"
+}
+# Titanium Hull (Dreadnaught)
+utility_component_template = {
+  key = "REQUIRED_HULL_0_SB"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_0"
+  icon_frame = 1
+  cost = 1350
+  size_restriction = { super_battleship borg_cube borg_tactical }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_HULL_1A_SB"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 27000    }
+  ai_weight = { weight = 1 }
+  prerequisites = { "tech_titanium_hull" }
+  component_set = "required_hull"
+}
+# Titanium Hull ()
+utility_component_template = {
+  key = "REQUIRED_HULL_0_SC"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_0"
+  icon_frame = 1
+  cost = 3850
+  size_restriction = { super_cube }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_HULL_1A_SC"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 77000    }
+  ai_weight = { weight = 1 }
+  prerequisites = { "tech_titanium_hull" }
+  component_set = "required_hull"
+}
+# Titanium Hull (Civilian Ships)
+utility_component_template = {
+  key = "REQUIRED_HULL_0_CS"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_0"
+  icon_frame = 1
+  cost = 5
+  class_restriction = { shipclass_constructor shipclass_colonizer shipclass_science_ship shipclass_transport }
+  upgrades_to = "REQUIRED_HULL_1A_CS"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 0    }
+  ai_weight = { weight = 1 }
+  prerequisites = { "tech_titanium_hull" }
+  component_set = "required_hull"
+}
+# Titanium Hull (Light Military Stations)
+utility_component_template = {
+  key = "REQUIRED_HULL_0_DS"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_0"
+  icon_frame = 1
+  cost = 50
+  size_restriction = { military_station_small military_station_large station_listening borg_unimatrix_defense_small }
+  upgrades_to = "REQUIRED_HULL_1A_DS"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 1000    }
+  ai_weight = { weight = 1 }
+  prerequisites = { "tech_titanium_hull" }
+  component_set = "required_hull"
+}
+# Titanium Hull (Heavy Weapon Platform)
+utility_component_template = {
+  key = "REQUIRED_HULL_0_WP"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_0"
+  icon_frame = 1
+  cost = 250
+  size_restriction = { military_station_medium }
+  upgrades_to = "REQUIRED_HULL_1A_WP"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 5000    }
+  ai_weight = { weight = 1 }
+  prerequisites = { "tech_titanium_hull" }
+  component_set = "required_hull"
+}
+
+# Electro-Ceramic Hull (Patrol Frigate)
+utility_component_template = {
+  key = "REQUIRED_HULL_1A_PF"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_A_1"
+  icon_frame = 1
+  cost = 10
+  size_restriction = { corvette }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_HULL_2A_PF"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 30 ship_evasion_add = 5   }
+  ai_weight = { weight = 10 }
+  prerequisites = { "tech_engineering_light_609" }
+  component_set = "required_hull"
+}
+# Electro-Ceramic Hull (Destroyer)
+utility_component_template = {
+  key = "REQUIRED_HULL_1A_DE"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_A_1"
+  icon_frame = 1
+  cost = 25
+  size_restriction = { saber }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_HULL_2A_DE"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 570 ship_evasion_add = 5   }
+  ai_weight = { weight = 10 }
+  prerequisites = { "tech_engineering_light_609" }
+  component_set = "required_hull"
+}
+# Electro-Ceramic Hull (Destroyer)
+utility_component_template = {
+  key = "REQUIRED_HULL_1A_CR"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_A_1"
+  icon_frame = 1
+  cost = 85
+  size_restriction = { sovereign borg_sphere }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_HULL_2A_CR"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 1660 ship_evasion_add = 5   }
+  ai_weight = { weight = 10 }
+  prerequisites = { "tech_engineering_light_609" }
+  component_set = "required_hull"
+}
+# Electro-Ceramic Hull (Battlecruiser)
+utility_component_template = {
+  key = "REQUIRED_HULL_1A_BC"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_A_1"
+  icon_frame = 1
+  cost = 25
+  size_restriction = { steamrunner borg_diamond }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_HULL_2A_BC"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 610 ship_evasion_add = 5   }
+  ai_weight = { weight = 10 }
+  prerequisites = { "tech_engineering_light_609" }
+  component_set = "required_hull"
+}
+# Electro-Ceramic Hull (Battleship)
+utility_component_template = {
+  key = "REQUIRED_HULL_1A_BS"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_A_1"
+  icon_frame = 1
+  cost = 350
+  size_restriction = { adv_cruiser }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_HULL_2A_BS"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 6830 ship_evasion_add = 5   }
+  ai_weight = { weight = 10 }
+  prerequisites = { "tech_engineering_light_609" }
+  component_set = "required_hull"
+}
+# Electro-Ceramic Hull (Heavy Escort)
+utility_component_template = {
+  key = "REQUIRED_HULL_1A_HE"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_A_1"
+  icon_frame = 1
+  cost = 25
+  size_restriction = { strike }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_HULL_2A_HE"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 590 ship_evasion_add = 5   }
+  ai_weight = { weight = 10 }
+  prerequisites = { "tech_engineering_light_609" }
+  component_set = "required_hull"
+}
+# Electro-Ceramic Hull (Assault Cruiser)
+utility_component_template = {
+  key = "REQUIRED_HULL_1A_AC"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_A_1"
+  icon_frame = 1
+  cost = 140
+  size_restriction = { assault_cruiser }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_HULL_2A_AC"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 2690 ship_evasion_add = 5   }
+  ai_weight = { weight = 10 }
+  prerequisites = { "tech_engineering_light_609" }
+  component_set = "required_hull"
+}
+# Electro-Ceramic Hull (Dreadnaught)
+utility_component_template = {
+  key = "REQUIRED_HULL_1A_SB"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_A_1"
+  icon_frame = 1
+  cost = 1440
+  size_restriction = { super_battleship borg_cube borg_tactical }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_HULL_2A_SB"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 28050 ship_evasion_add = 5   }
+  ai_weight = { weight = 10 }
+  prerequisites = { "tech_engineering_light_609" }
+  component_set = "required_hull"
+}
+# Electro-Ceramic Hull ()
+utility_component_template = {
+  key = "REQUIRED_HULL_1A_SC"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_A_1"
+  icon_frame = 1
+  cost = 4090
+  size_restriction = { super_cube }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_HULL_2A_SC"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 79800 ship_evasion_add = 5   }
+  ai_weight = { weight = 10 }
+  prerequisites = { "tech_engineering_light_609" }
+  component_set = "required_hull"
+}
+# Electro-Ceramic Hull (Civilian Ships)
+utility_component_template = {
+  key = "REQUIRED_HULL_1A_CS"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_A_1"
+  icon_frame = 1
+  cost = 10
+  class_restriction = { shipclass_constructor shipclass_colonizer shipclass_science_ship shipclass_transport }
+  upgrades_to = "REQUIRED_HULL_2A_CS"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 10 ship_evasion_add = 5   }
+  ai_weight = { weight = 10 }
+  prerequisites = { "tech_engineering_light_609" }
+  component_set = "required_hull"
+}
+# Electro-Ceramic Hull (Light Military Stations)
+utility_component_template = {
+  key = "REQUIRED_HULL_1A_DS"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_A_1"
+  icon_frame = 1
+  cost = 60
+  size_restriction = { military_station_small military_station_large station_listening borg_unimatrix_defense_small }
+  upgrades_to = "REQUIRED_HULL_2A_DS"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 1210 ship_evasion_add = 5   }
+  ai_weight = { weight = 10 }
+  prerequisites = { "tech_engineering_light_609" }
+  component_set = "required_hull"
+}
+# Electro-Ceramic Hull (Heavy Weapon Platform)
+utility_component_template = {
+  key = "REQUIRED_HULL_1A_WP"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_A_1"
+  icon_frame = 1
+  cost = 300
+  size_restriction = { military_station_medium }
+  upgrades_to = "REQUIRED_HULL_2A_WP"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 5880 ship_evasion_add = 5   }
+  ai_weight = { weight = 10 }
+  prerequisites = { "tech_engineering_light_609" }
+  component_set = "required_hull"
+}
+
+# Magensite Hull (Patrol Frigate)
+utility_component_template = {
+  key = "REQUIRED_HULL_2A_PF"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_A_2"
+  icon_frame = 1
+  cost = 15
+  size_restriction = { corvette }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_HULL_3A_PF"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 80 ship_evasion_add = 6   }
+  ai_weight = { weight = 20 }
+  prerequisites = { "tech_engineering_magnesite_611" }
+  component_set = "required_hull"
+}
+# Magensite Hull (Destroyer)
+utility_component_template = {
+  key = "REQUIRED_HULL_2A_DE"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_A_2"
+  icon_frame = 1
+  cost = 30
+  size_restriction = { saber }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_HULL_3A_DE"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 710 ship_evasion_add = 6   }
+  ai_weight = { weight = 20 }
+  prerequisites = { "tech_engineering_magnesite_611" }
+  component_set = "required_hull"
+}
+# Magensite Hull (Destroyer)
+utility_component_template = {
+  key = "REQUIRED_HULL_2A_CR"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_A_2"
+  icon_frame = 1
+  cost = 105
+  size_restriction = { sovereign borg_sphere }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_HULL_3A_CR"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 1970 ship_evasion_add = 6   }
+  ai_weight = { weight = 20 }
+  prerequisites = { "tech_engineering_magnesite_611" }
+  component_set = "required_hull"
+}
+# Magensite Hull (Battlecruiser)
+utility_component_template = {
+  key = "REQUIRED_HULL_2A_BC"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_A_2"
+  icon_frame = 1
+  cost = 35
+  size_restriction = { steamrunner borg_diamond }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_HULL_3A_BC"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 820 ship_evasion_add = 6   }
+  ai_weight = { weight = 20 }
+  prerequisites = { "tech_engineering_magnesite_611" }
+  component_set = "required_hull"
+}
+# Magensite Hull (Battleship)
+utility_component_template = {
+  key = "REQUIRED_HULL_2A_BS"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_A_2"
+  icon_frame = 1
+  cost = 405
+  size_restriction = { adv_cruiser }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_HULL_3A_BS"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 7500 ship_evasion_add = 6   }
+  ai_weight = { weight = 20 }
+  prerequisites = { "tech_engineering_magnesite_611" }
+  component_set = "required_hull"
+}
+# Magensite Hull (Heavy Escort)
+utility_component_template = {
+  key = "REQUIRED_HULL_2A_HE"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_A_2"
+  icon_frame = 1
+  cost = 35
+  size_restriction = { strike }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_HULL_3A_HE"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 760 ship_evasion_add = 6   }
+  ai_weight = { weight = 20 }
+  prerequisites = { "tech_engineering_magnesite_611" }
+  component_set = "required_hull"
+}
+# Magensite Hull (Assault Cruiser)
+utility_component_template = {
+  key = "REQUIRED_HULL_2A_AC"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_A_2"
+  icon_frame = 1
+  cost = 165
+  size_restriction = { assault_cruiser }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_HULL_3A_AC"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 3080 ship_evasion_add = 6   }
+  ai_weight = { weight = 20 }
+  prerequisites = { "tech_engineering_magnesite_611" }
+  component_set = "required_hull"
+}
+# Magensite Hull (Dreadnaught)
+utility_component_template = {
+  key = "REQUIRED_HULL_2A_SB"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_A_2"
+  icon_frame = 1
+  cost = 1630
+  size_restriction = { super_battleship borg_cube borg_tactical }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_HULL_3A_SB"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 30150 ship_evasion_add = 6   }
+  ai_weight = { weight = 20 }
+  prerequisites = { "tech_engineering_magnesite_611" }
+  component_set = "required_hull"
+}
+# Magensite Hull ()
+utility_component_template = {
+  key = "REQUIRED_HULL_2A_SC"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_A_2"
+  icon_frame = 1
+  cost = 4615
+  size_restriction = { super_cube }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_HULL_3A_SC"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 85400 ship_evasion_add = 6   }
+  ai_weight = { weight = 20 }
+  prerequisites = { "tech_engineering_magnesite_611" }
+  component_set = "required_hull"
+}
+# Magensite Hull (Civilian Ships)
+utility_component_template = {
+  key = "REQUIRED_HULL_2A_CS"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_A_2"
+  icon_frame = 1
+  cost = 15
+  class_restriction = { shipclass_constructor shipclass_colonizer shipclass_science_ship shipclass_transport }
+  upgrades_to = "REQUIRED_HULL_3A_CS"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 30 ship_evasion_add = 6   }
+  ai_weight = { weight = 20 }
+  prerequisites = { "tech_engineering_magnesite_611" }
+  component_set = "required_hull"
+}
+# Magensite Hull (Light Military Stations)
+utility_component_template = {
+  key = "REQUIRED_HULL_2A_DS"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_A_2"
+  icon_frame = 1
+  cost = 90
+  size_restriction = { military_station_small military_station_large station_listening borg_unimatrix_defense_small }
+  upgrades_to = "REQUIRED_HULL_3A_DS"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 1630 ship_evasion_add = 6   }
+  ai_weight = { weight = 20 }
+  prerequisites = { "tech_engineering_magnesite_611" }
+  component_set = "required_hull"
+}
+# Magensite Hull (Heavy Weapon Platform)
+utility_component_template = {
+  key = "REQUIRED_HULL_2A_WP"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_A_2"
+  icon_frame = 1
+  cost = 410
+  size_restriction = { military_station_medium }
+  upgrades_to = "REQUIRED_HULL_3A_WP"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 7630 ship_evasion_add = 6   }
+  ai_weight = { weight = 20 }
+  prerequisites = { "tech_engineering_magnesite_611" }
+  component_set = "required_hull"
+}
+
+# Paricium Hull (Patrol Frigate)
+utility_component_template = {
+  key = "REQUIRED_HULL_3A_PF"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_A_3"
+  icon_frame = 1
+  cost = 20
+  size_restriction = { corvette }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_HULL_4A_PF"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 140 ship_evasion_add = 7   }
+  ai_weight = { weight = 30 }
+  prerequisites = { "tech_engineering_materials_1460" }
+  component_set = "required_hull"
+}
+# Paricium Hull (Destroyer)
+utility_component_template = {
+  key = "REQUIRED_HULL_3A_DE"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_A_3"
+  icon_frame = 1
+  cost = 40
+  size_restriction = { saber }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_HULL_4A_DE"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 850 ship_evasion_add = 7   }
+  ai_weight = { weight = 30 }
+  prerequisites = { "tech_engineering_materials_1460" }
+  component_set = "required_hull"
+}
+# Paricium Hull (Destroyer)
+utility_component_template = {
+  key = "REQUIRED_HULL_3A_CR"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_A_3"
+  icon_frame = 1
+  cost = 130
+  size_restriction = { sovereign borg_sphere }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_HULL_4A_CR"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 2290 ship_evasion_add = 7   }
+  ai_weight = { weight = 30 }
+  prerequisites = { "tech_engineering_materials_1460" }
+  component_set = "required_hull"
+}
+# Paricium Hull (Battlecruiser)
+utility_component_template = {
+  key = "REQUIRED_HULL_3A_BC"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_A_3"
+  icon_frame = 1
+  cost = 45
+  size_restriction = { steamrunner borg_diamond }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_HULL_4A_BC"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 1030 ship_evasion_add = 7   }
+  ai_weight = { weight = 30 }
+  prerequisites = { "tech_engineering_materials_1460" }
+  component_set = "required_hull"
+}
+# Paricium Hull (Battleship)
+utility_component_template = {
+  key = "REQUIRED_HULL_3A_BS"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_A_3"
+  icon_frame = 1
+  cost = 465
+  size_restriction = { adv_cruiser }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_HULL_4A_BS"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 8160 ship_evasion_add = 7   }
+  ai_weight = { weight = 30 }
+  prerequisites = { "tech_engineering_materials_1460" }
+  component_set = "required_hull"
+}
+# Paricium Hull (Heavy Escort)
+utility_component_template = {
+  key = "REQUIRED_HULL_3A_HE"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_A_3"
+  icon_frame = 1
+  cost = 45
+  size_restriction = { strike }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_HULL_4A_HE"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 940 ship_evasion_add = 7   }
+  ai_weight = { weight = 30 }
+  prerequisites = { "tech_engineering_materials_1460" }
+  component_set = "required_hull"
+}
+# Paricium Hull (Assault Cruiser)
+utility_component_template = {
+  key = "REQUIRED_HULL_3A_AC"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_A_3"
+  icon_frame = 1
+  cost = 200
+  size_restriction = { assault_cruiser }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_HULL_4A_AC"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 3460 ship_evasion_add = 7   }
+  ai_weight = { weight = 30 }
+  prerequisites = { "tech_engineering_materials_1460" }
+  component_set = "required_hull"
+}
+# Paricium Hull (Dreadnaught)
+utility_component_template = {
+  key = "REQUIRED_HULL_3A_SB"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_A_3"
+  icon_frame = 1
+  cost = 1845
+  size_restriction = { super_battleship borg_cube borg_tactical }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_HULL_4A_SB"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 32250 ship_evasion_add = 7   }
+  ai_weight = { weight = 30 }
+  prerequisites = { "tech_engineering_materials_1460" }
+  component_set = "required_hull"
+}
+# Paricium Hull ()
+utility_component_template = {
+  key = "REQUIRED_HULL_3A_SC"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_A_3"
+  icon_frame = 1
+  cost = 5200
+  size_restriction = { super_cube }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_HULL_4A_SC"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 91000 ship_evasion_add = 7   }
+  ai_weight = { weight = 30 }
+  prerequisites = { "tech_engineering_materials_1460" }
+  component_set = "required_hull"
+}
+# Paricium Hull (Civilian Ships)
+utility_component_template = {
+  key = "REQUIRED_HULL_3A_CS"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_A_3"
+  icon_frame = 1
+  cost = 20
+  class_restriction = { shipclass_constructor shipclass_colonizer shipclass_science_ship shipclass_transport }
+  upgrades_to = "REQUIRED_HULL_4A_CS"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 50 ship_evasion_add = 7   }
+  ai_weight = { weight = 30 }
+  prerequisites = { "tech_engineering_materials_1460" }
+  component_set = "required_hull"
+}
+# Paricium Hull (Light Military Stations)
+utility_component_template = {
+  key = "REQUIRED_HULL_3A_DS"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_A_3"
+  icon_frame = 1
+  cost = 115
+  size_restriction = { military_station_small military_station_large station_listening borg_unimatrix_defense_small }
+  upgrades_to = "REQUIRED_HULL_4A_DS"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 2050 ship_evasion_add = 7   }
+  ai_weight = { weight = 30 }
+  prerequisites = { "tech_engineering_materials_1460" }
+  component_set = "required_hull"
+}
+# Paricium Hull (Heavy Weapon Platform)
+utility_component_template = {
+  key = "REQUIRED_HULL_3A_WP"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_A_3"
+  icon_frame = 1
+  cost = 535
+  size_restriction = { military_station_medium }
+  upgrades_to = "REQUIRED_HULL_4A_WP"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 9380 ship_evasion_add = 7   }
+  ai_weight = { weight = 30 }
+  prerequisites = { "tech_engineering_materials_1460" }
+  component_set = "required_hull"
+}
+
+# Trititanium Hull (Patrol Frigate)
+utility_component_template = {
+  key = "REQUIRED_HULL_4A_PF"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_A_4"
+  icon_frame = 1
+  cost = 25
+  size_restriction = { corvette }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_HULL_5A_PF"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 200 ship_evasion_add = 8   }
+  ai_weight = { weight = 40 }
+  prerequisites = { "tech_engineering_trititanium_613" }
+  component_set = "required_hull"
+}
+# Trititanium Hull (Destroyer)
+utility_component_template = {
+  key = "REQUIRED_HULL_4A_DE"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_A_4"
+  icon_frame = 1
+  cost = 50
+  size_restriction = { saber }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_HULL_5A_DE"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 990 ship_evasion_add = 8   }
+  ai_weight = { weight = 40 }
+  prerequisites = { "tech_engineering_trititanium_613" }
+  component_set = "required_hull"
+}
+# Trititanium Hull (Destroyer)
+utility_component_template = {
+  key = "REQUIRED_HULL_4A_CR"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_A_4"
+  icon_frame = 1
+  cost = 160
+  size_restriction = { sovereign borg_sphere }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_HULL_5A_CR"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 2600 ship_evasion_add = 8   }
+  ai_weight = { weight = 40 }
+  prerequisites = { "tech_engineering_trititanium_613" }
+  component_set = "required_hull"
+}
+# Trititanium Hull (Battlecruiser)
+utility_component_template = {
+  key = "REQUIRED_HULL_4A_BC"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_A_4"
+  icon_frame = 1
+  cost = 60
+  size_restriction = { steamrunner borg_diamond }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_HULL_5A_BC"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 1240 ship_evasion_add = 8   }
+  ai_weight = { weight = 40 }
+  prerequisites = { "tech_engineering_trititanium_613" }
+  component_set = "required_hull"
+}
+# Trititanium Hull (Battleship)
+utility_component_template = {
+  key = "REQUIRED_HULL_4A_BS"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_A_4"
+  icon_frame = 1
+  cost = 535
+  size_restriction = { adv_cruiser }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_HULL_5A_BS"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 8830 ship_evasion_add = 8   }
+  ai_weight = { weight = 40 }
+  prerequisites = { "tech_engineering_trititanium_613" }
+  component_set = "required_hull"
+}
+# Trititanium Hull (Heavy Escort)
+utility_component_template = {
+  key = "REQUIRED_HULL_4A_HE"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_A_4"
+  icon_frame = 1
+  cost = 55
+  size_restriction = { strike }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_HULL_5A_HE"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 1110 ship_evasion_add = 8   }
+  ai_weight = { weight = 40 }
+  prerequisites = { "tech_engineering_trititanium_613" }
+  component_set = "required_hull"
+}
+# Trititanium Hull (Assault Cruiser)
+utility_component_template = {
+  key = "REQUIRED_HULL_4A_AC"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_A_4"
+  icon_frame = 1
+  cost = 235
+  size_restriction = { assault_cruiser }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_HULL_5A_AC"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 3850 ship_evasion_add = 8   }
+  ai_weight = { weight = 40 }
+  prerequisites = { "tech_engineering_trititanium_613" }
+  component_set = "required_hull"
+}
+# Trititanium Hull (Dreadnaught)
+utility_component_template = {
+  key = "REQUIRED_HULL_4A_SB"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_A_4"
+  icon_frame = 1
+  cost = 2080
+  size_restriction = { super_battleship borg_cube borg_tactical }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_HULL_5A_SB"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 34350 ship_evasion_add = 8   }
+  ai_weight = { weight = 40 }
+  prerequisites = { "tech_engineering_trititanium_613" }
+  component_set = "required_hull"
+}
+# Trititanium Hull ()
+utility_component_template = {
+  key = "REQUIRED_HULL_4A_SC"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_A_4"
+  icon_frame = 1
+  cost = 5855
+  size_restriction = { super_cube }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_HULL_5A_SC"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 96600 ship_evasion_add = 8   }
+  ai_weight = { weight = 40 }
+  prerequisites = { "tech_engineering_trititanium_613" }
+  component_set = "required_hull"
+}
+# Trititanium Hull (Civilian Ships)
+utility_component_template = {
+  key = "REQUIRED_HULL_4A_CS"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_A_4"
+  icon_frame = 1
+  cost = 25
+  class_restriction = { shipclass_constructor shipclass_colonizer shipclass_science_ship shipclass_transport }
+  upgrades_to = "REQUIRED_HULL_5A_CS"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 70 ship_evasion_add = 8   }
+  ai_weight = { weight = 40 }
+  prerequisites = { "tech_engineering_trititanium_613" }
+  component_set = "required_hull"
+}
+# Trititanium Hull (Light Military Stations)
+utility_component_template = {
+  key = "REQUIRED_HULL_4A_DS"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_A_4"
+  icon_frame = 1
+  cost = 150
+  size_restriction = { military_station_small military_station_large station_listening borg_unimatrix_defense_small }
+  upgrades_to = "REQUIRED_HULL_5A_DS"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 2470 ship_evasion_add = 8   }
+  ai_weight = { weight = 40 }
+  prerequisites = { "tech_engineering_trititanium_613" }
+  component_set = "required_hull"
+}
+# Trititanium Hull (Heavy Weapon Platform)
+utility_component_template = {
+  key = "REQUIRED_HULL_4A_WP"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_A_4"
+  icon_frame = 1
+  cost = 675
+  size_restriction = { military_station_medium }
+  upgrades_to = "REQUIRED_HULL_5A_WP"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 11130 ship_evasion_add = 8   }
+  ai_weight = { weight = 40 }
+  prerequisites = { "tech_engineering_trititanium_613" }
+  component_set = "required_hull"
+}
+
+# Kelindide Hull (Patrol Frigate)
+utility_component_template = {
+  key = "REQUIRED_HULL_5A_PF"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_A_5"
+  icon_frame = 1
+  cost = 30
+  size_restriction = { corvette }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_HULL_6A_PF"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 250 ship_evasion_add = 9   }
+  ai_weight = { weight = 50 }
+  prerequisites = { "tech_engineering_kelindide_615" }
+  component_set = "required_hull"
+}
+# Kelindide Hull (Destroyer)
+utility_component_template = {
+  key = "REQUIRED_HULL_5A_DE"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_A_5"
+  icon_frame = 1
+  cost = 60
+  size_restriction = { saber }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_HULL_6A_DE"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 1130 ship_evasion_add = 9   }
+  ai_weight = { weight = 50 }
+  prerequisites = { "tech_engineering_kelindide_615" }
+  component_set = "required_hull"
+}
+# Kelindide Hull (Destroyer)
+utility_component_template = {
+  key = "REQUIRED_HULL_5A_CR"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_A_5"
+  icon_frame = 1
+  cost = 190
+  size_restriction = { sovereign borg_sphere }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_HULL_6A_CR"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 2920 ship_evasion_add = 9   }
+  ai_weight = { weight = 50 }
+  prerequisites = { "tech_engineering_kelindide_615" }
+  component_set = "required_hull"
+}
+# Kelindide Hull (Battlecruiser)
+utility_component_template = {
+  key = "REQUIRED_HULL_5A_BC"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_A_5"
+  icon_frame = 1
+  cost = 75
+  size_restriction = { steamrunner borg_diamond }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_HULL_6A_BC"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 1450 ship_evasion_add = 9   }
+  ai_weight = { weight = 50 }
+  prerequisites = { "tech_engineering_kelindide_615" }
+  component_set = "required_hull"
+}
+# Kelindide Hull (Battleship)
+utility_component_template = {
+  key = "REQUIRED_HULL_5A_BS"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_A_5"
+  icon_frame = 1
+  cost = 610
+  size_restriction = { adv_cruiser }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_HULL_6A_BS"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 9490 ship_evasion_add = 9   }
+  ai_weight = { weight = 50 }
+  prerequisites = { "tech_engineering_kelindide_615" }
+  component_set = "required_hull"
+}
+# Kelindide Hull (Heavy Escort)
+utility_component_template = {
+  key = "REQUIRED_HULL_5A_HE"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_A_5"
+  icon_frame = 1
+  cost = 65
+  size_restriction = { strike }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_HULL_6A_HE"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 1290 ship_evasion_add = 9   }
+  ai_weight = { weight = 50 }
+  prerequisites = { "tech_engineering_kelindide_615" }
+  component_set = "required_hull"
+}
+# Kelindide Hull (Assault Cruiser)
+utility_component_template = {
+  key = "REQUIRED_HULL_5A_AC"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_A_5"
+  icon_frame = 1
+  cost = 275
+  size_restriction = { assault_cruiser }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_HULL_6A_AC"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 4230 ship_evasion_add = 9   }
+  ai_weight = { weight = 50 }
+  prerequisites = { "tech_engineering_kelindide_615" }
+  component_set = "required_hull"
+}
+# Kelindide Hull (Dreadnaught)
+utility_component_template = {
+  key = "REQUIRED_HULL_5A_SB"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_A_5"
+  icon_frame = 1
+  cost = 2350
+  size_restriction = { super_battleship borg_cube borg_tactical }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_HULL_6A_SB"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 36450 ship_evasion_add = 9   }
+  ai_weight = { weight = 50 }
+  prerequisites = { "tech_engineering_kelindide_615" }
+  component_set = "required_hull"
+}
+# Kelindide Hull ()
+utility_component_template = {
+  key = "REQUIRED_HULL_5A_SC"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_A_5"
+  icon_frame = 1
+  cost = 6595
+  size_restriction = { super_cube }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_HULL_6A_SC"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 102200 ship_evasion_add = 9   }
+  ai_weight = { weight = 50 }
+  prerequisites = { "tech_engineering_kelindide_615" }
+  component_set = "required_hull"
+}
+# Kelindide Hull (Civilian Ships)
+utility_component_template = {
+  key = "REQUIRED_HULL_5A_CS"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_A_5"
+  icon_frame = 1
+  cost = 30
+  class_restriction = { shipclass_constructor shipclass_colonizer shipclass_science_ship shipclass_transport }
+  upgrades_to = "REQUIRED_HULL_6A_CS"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 90 ship_evasion_add = 9   }
+  ai_weight = { weight = 50 }
+  prerequisites = { "tech_engineering_kelindide_615" }
+  component_set = "required_hull"
+}
+# Kelindide Hull (Light Military Stations)
+utility_component_template = {
+  key = "REQUIRED_HULL_5A_DS"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_A_5"
+  icon_frame = 1
+  cost = 185
+  size_restriction = { military_station_small military_station_large station_listening borg_unimatrix_defense_small }
+  upgrades_to = "REQUIRED_HULL_6A_DS"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 2890 ship_evasion_add = 9   }
+  ai_weight = { weight = 50 }
+  prerequisites = { "tech_engineering_kelindide_615" }
+  component_set = "required_hull"
+}
+# Kelindide Hull (Heavy Weapon Platform)
+utility_component_template = {
+  key = "REQUIRED_HULL_5A_WP"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_A_5"
+  icon_frame = 1
+  cost = 830
+  size_restriction = { military_station_medium }
+  upgrades_to = "REQUIRED_HULL_6A_WP"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 12880 ship_evasion_add = 9   }
+  ai_weight = { weight = 50 }
+  prerequisites = { "tech_engineering_kelindide_615" }
+  component_set = "required_hull"
+}
+
+# Monotanium Hull (Patrol Frigate)
+utility_component_template = {
+  key = "REQUIRED_HULL_6A_PF"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_A_6"
+  icon_frame = 1
+  cost = 35
+  size_restriction = { corvette }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_HULL_7A_PF"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 310 ship_evasion_add = 10   }
+  ai_weight = { weight = 60 }
+  prerequisites = { "tech_engineering_monotanium_617" }
+  component_set = "required_hull"
+}
+# Monotanium Hull (Destroyer)
+utility_component_template = {
+  key = "REQUIRED_HULL_6A_DE"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_A_6"
+  icon_frame = 1
+  cost = 70
+  size_restriction = { saber }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_HULL_7A_DE"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 1270 ship_evasion_add = 10   }
+  ai_weight = { weight = 60 }
+  prerequisites = { "tech_engineering_monotanium_617" }
+  component_set = "required_hull"
+}
+# Monotanium Hull (Destroyer)
+utility_component_template = {
+  key = "REQUIRED_HULL_6A_CR"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_A_6"
+  icon_frame = 1
+  cost = 225
+  size_restriction = { sovereign borg_sphere }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_HULL_7A_CR"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 3230 ship_evasion_add = 10   }
+  ai_weight = { weight = 60 }
+  prerequisites = { "tech_engineering_monotanium_617" }
+  component_set = "required_hull"
+}
+# Monotanium Hull (Battlecruiser)
+utility_component_template = {
+  key = "REQUIRED_HULL_6A_BC"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_A_6"
+  icon_frame = 1
+  cost = 90
+  size_restriction = { steamrunner borg_diamond }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_HULL_7A_BC"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 1660 ship_evasion_add = 10   }
+  ai_weight = { weight = 60 }
+  prerequisites = { "tech_engineering_monotanium_617" }
+  component_set = "required_hull"
+}
+# Monotanium Hull (Battleship)
+utility_component_template = {
+  key = "REQUIRED_HULL_6A_BS"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_A_6"
+  icon_frame = 1
+  cost = 700
+  size_restriction = { adv_cruiser }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_HULL_7A_BS"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 10160 ship_evasion_add = 10   }
+  ai_weight = { weight = 60 }
+  prerequisites = { "tech_engineering_monotanium_617" }
+  component_set = "required_hull"
+}
+# Monotanium Hull (Heavy Escort)
+utility_component_template = {
+  key = "REQUIRED_HULL_6A_HE"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_A_6"
+  icon_frame = 1
+  cost = 80
+  size_restriction = { strike }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_HULL_7A_HE"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 1460 ship_evasion_add = 10   }
+  ai_weight = { weight = 60 }
+  prerequisites = { "tech_engineering_monotanium_617" }
+  component_set = "required_hull"
+}
+# Monotanium Hull (Assault Cruiser)
+utility_component_template = {
+  key = "REQUIRED_HULL_6A_AC"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_A_6"
+  icon_frame = 1
+  cost = 320
+  size_restriction = { assault_cruiser }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_HULL_7A_AC"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 4620 ship_evasion_add = 10   }
+  ai_weight = { weight = 60 }
+  prerequisites = { "tech_engineering_monotanium_617" }
+  component_set = "required_hull"
+}
+# Monotanium Hull (Dreadnaught)
+utility_component_template = {
+  key = "REQUIRED_HULL_6A_SB"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_A_6"
+  icon_frame = 1
+  cost = 2660
+  size_restriction = { super_battleship borg_cube borg_tactical }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_HULL_7A_SB"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 38550 ship_evasion_add = 10   }
+  ai_weight = { weight = 60 }
+  prerequisites = { "tech_engineering_monotanium_617" }
+  component_set = "required_hull"
+}
+# Monotanium Hull ()
+utility_component_template = {
+  key = "REQUIRED_HULL_6A_SC"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_A_6"
+  icon_frame = 1
+  cost = 7435
+  size_restriction = { super_cube }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_HULL_7A_SC"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 107800 ship_evasion_add = 10   }
+  ai_weight = { weight = 60 }
+  prerequisites = { "tech_engineering_monotanium_617" }
+  component_set = "required_hull"
+}
+# Monotanium Hull (Civilian Ships)
+utility_component_template = {
+  key = "REQUIRED_HULL_6A_CS"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_A_6"
+  icon_frame = 1
+  cost = 35
+  class_restriction = { shipclass_constructor shipclass_colonizer shipclass_science_ship shipclass_transport }
+  upgrades_to = "REQUIRED_HULL_7A_CS"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 120 ship_evasion_add = 10   }
+  ai_weight = { weight = 60 }
+  prerequisites = { "tech_engineering_monotanium_617" }
+  component_set = "required_hull"
+}
+# Monotanium Hull (Light Military Stations)
+utility_component_template = {
+  key = "REQUIRED_HULL_6A_DS"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_A_6"
+  icon_frame = 1
+  cost = 230
+  size_restriction = { military_station_small military_station_large station_listening borg_unimatrix_defense_small }
+  upgrades_to = "REQUIRED_HULL_7A_DS"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 3310 ship_evasion_add = 10   }
+  ai_weight = { weight = 60 }
+  prerequisites = { "tech_engineering_monotanium_617" }
+  component_set = "required_hull"
+}
+# Monotanium Hull (Heavy Weapon Platform)
+utility_component_template = {
+  key = "REQUIRED_HULL_6A_WP"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_A_6"
+  icon_frame = 1
+  cost = 1010
+  size_restriction = { military_station_medium }
+  upgrades_to = "REQUIRED_HULL_7A_WP"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 14630 ship_evasion_add = 10   }
+  ai_weight = { weight = 60 }
+  prerequisites = { "tech_engineering_monotanium_617" }
+  component_set = "required_hull"
+}
+
+# Plasticized Tritanium Mesh (Patrol Frigate)
+utility_component_template = {
+  key = "REQUIRED_HULL_7A_PF"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_A_7"
+  icon_frame = 1
+  cost = 40
+  size_restriction = { corvette }
+  class_restriction = { shipclass_military }
+  
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 390 ship_evasion_add = 11   }
+  ai_weight = { weight = 70 }
+  prerequisites = { "tech_engineering_materials_1464" }
+  component_set = "required_hull"
+}
+# Plasticized Tritanium Mesh (Destroyer)
+utility_component_template = {
+  key = "REQUIRED_HULL_7A_DE"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_A_7"
+  icon_frame = 1
+  cost = 90
+  size_restriction = { saber }
+  class_restriction = { shipclass_military }
+  
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 1480 ship_evasion_add = 11   }
+  ai_weight = { weight = 70 }
+  prerequisites = { "tech_engineering_materials_1464" }
+  component_set = "required_hull"
+}
+# Plasticized Tritanium Mesh (Destroyer)
+utility_component_template = {
+  key = "REQUIRED_HULL_7A_CR"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_A_7"
+  icon_frame = 1
+  cost = 285
+  size_restriction = { sovereign borg_sphere }
+  class_restriction = { shipclass_military }
+  
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 3710 ship_evasion_add = 11   }
+  ai_weight = { weight = 70 }
+  prerequisites = { "tech_engineering_materials_1464" }
+  component_set = "required_hull"
+}
+# Plasticized Tritanium Mesh (Battlecruiser)
+utility_component_template = {
+  key = "REQUIRED_HULL_7A_BC"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_A_7"
+  icon_frame = 1
+  cost = 120
+  size_restriction = { steamrunner borg_diamond }
+  class_restriction = { shipclass_military }
+  
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 1970 ship_evasion_add = 11   }
+  ai_weight = { weight = 70 }
+  prerequisites = { "tech_engineering_materials_1464" }
+  component_set = "required_hull"
+}
+# Plasticized Tritanium Mesh (Battleship)
+utility_component_template = {
+  key = "REQUIRED_HULL_7A_BS"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_A_7"
+  icon_frame = 1
+  cost = 860
+  size_restriction = { adv_cruiser }
+  class_restriction = { shipclass_military }
+  
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 11160 ship_evasion_add = 11   }
+  ai_weight = { weight = 70 }
+  prerequisites = { "tech_engineering_materials_1464" }
+  component_set = "required_hull"
+}
+# Plasticized Tritanium Mesh (Heavy Escort)
+utility_component_template = {
+  key = "REQUIRED_HULL_7A_HE"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_A_7"
+  icon_frame = 1
+  cost = 105
+  size_restriction = { strike }
+  class_restriction = { shipclass_military }
+  
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 1730 ship_evasion_add = 11   }
+  ai_weight = { weight = 70 }
+  prerequisites = { "tech_engineering_materials_1464" }
+  component_set = "required_hull"
+}
+# Plasticized Tritanium Mesh (Assault Cruiser)
+utility_component_template = {
+  key = "REQUIRED_HULL_7A_AC"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_A_7"
+  icon_frame = 1
+  cost = 400
+  size_restriction = { assault_cruiser }
+  class_restriction = { shipclass_military }
+  
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 5200 ship_evasion_add = 11   }
+  ai_weight = { weight = 70 }
+  prerequisites = { "tech_engineering_materials_1464" }
+  component_set = "required_hull"
+}
+# Plasticized Tritanium Mesh (Dreadnaught)
+utility_component_template = {
+  key = "REQUIRED_HULL_7A_SB"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_A_7"
+  icon_frame = 1
+  cost = 3210
+  size_restriction = { super_battleship borg_cube borg_tactical }
+  class_restriction = { shipclass_military }
+  
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 41700 ship_evasion_add = 11   }
+  ai_weight = { weight = 70 }
+  prerequisites = { "tech_engineering_materials_1464" }
+  component_set = "required_hull"
+}
+# Plasticized Tritanium Mesh ()
+utility_component_template = {
+  key = "REQUIRED_HULL_7A_SC"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_A_7"
+  icon_frame = 1
+  cost = 8940
+  size_restriction = { super_cube }
+  class_restriction = { shipclass_military }
+  
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 116200 ship_evasion_add = 11   }
+  ai_weight = { weight = 70 }
+  prerequisites = { "tech_engineering_materials_1464" }
+  component_set = "required_hull"
+}
+# Plasticized Tritanium Mesh (Civilian Ships)
+utility_component_template = {
+  key = "REQUIRED_HULL_7A_CS"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_A_7"
+  icon_frame = 1
+  cost = 40
+  class_restriction = { shipclass_constructor shipclass_colonizer shipclass_science_ship shipclass_transport }
+  
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 150 ship_evasion_add = 11   }
+  ai_weight = { weight = 70 }
+  prerequisites = { "tech_engineering_materials_1464" }
+  component_set = "required_hull"
+}
+# Plasticized Tritanium Mesh (Light Military Stations)
+utility_component_template = {
+  key = "REQUIRED_HULL_7A_DS"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_A_7"
+  icon_frame = 1
+  cost = 305
+  size_restriction = { military_station_small military_station_large station_listening borg_unimatrix_defense_small }
+  
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 3940 ship_evasion_add = 11   }
+  ai_weight = { weight = 70 }
+  prerequisites = { "tech_engineering_materials_1464" }
+  component_set = "required_hull"
+}
+# Plasticized Tritanium Mesh (Heavy Weapon Platform)
+utility_component_template = {
+  key = "REQUIRED_HULL_7A_WP"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_A_7"
+  icon_frame = 1
+  cost = 1325
+  size_restriction = { military_station_medium }
+  
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 17250 ship_evasion_add = 11   }
+  ai_weight = { weight = 70 }
+  prerequisites = { "tech_engineering_materials_1464" }
+  component_set = "required_hull"
+}
+
+# Heavy Duranium Hull Construction (Patrol Frigate)
+utility_component_template = {
+  key = "REQUIRED_HULL_1B_PF"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_B_1"
+  icon_frame = 1
+  cost = 10
+  size_restriction = { corvette }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_HULL_2B_PF"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 30 ship_armor_add = 10   }
+  ai_weight = { weight = 10 }
+  prerequisites = { "tech_engineering_heavy_610" }
+  component_set = "required_hull"
+}
+# Heavy Duranium Hull Construction (Destroyer)
+utility_component_template = {
+  key = "REQUIRED_HULL_1B_DE"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_B_1"
+  icon_frame = 1
+  cost = 25
+  size_restriction = { saber }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_HULL_2B_DE"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 570 ship_armor_add = 10   }
+  ai_weight = { weight = 10 }
+  prerequisites = { "tech_engineering_heavy_610" }
+  component_set = "required_hull"
+}
+# Heavy Duranium Hull Construction (Destroyer)
+utility_component_template = {
+  key = "REQUIRED_HULL_1B_CR"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_B_1"
+  icon_frame = 1
+  cost = 85
+  size_restriction = { sovereign borg_sphere }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_HULL_2B_CR"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 1660 ship_armor_add = 10   }
+  ai_weight = { weight = 10 }
+  prerequisites = { "tech_engineering_heavy_610" }
+  component_set = "required_hull"
+}
+# Heavy Duranium Hull Construction (Battlecruiser)
+utility_component_template = {
+  key = "REQUIRED_HULL_1B_BC"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_B_1"
+  icon_frame = 1
+  cost = 25
+  size_restriction = { steamrunner borg_diamond }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_HULL_2B_BC"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 610 ship_armor_add = 10   }
+  ai_weight = { weight = 10 }
+  prerequisites = { "tech_engineering_heavy_610" }
+  component_set = "required_hull"
+}
+# Heavy Duranium Hull Construction (Battleship)
+utility_component_template = {
+  key = "REQUIRED_HULL_1B_BS"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_B_1"
+  icon_frame = 1
+  cost = 350
+  size_restriction = { adv_cruiser }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_HULL_2B_BS"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 6830 ship_armor_add = 10   }
+  ai_weight = { weight = 10 }
+  prerequisites = { "tech_engineering_heavy_610" }
+  component_set = "required_hull"
+}
+# Heavy Duranium Hull Construction (Heavy Escort)
+utility_component_template = {
+  key = "REQUIRED_HULL_1B_HE"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_B_1"
+  icon_frame = 1
+  cost = 25
+  size_restriction = { strike }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_HULL_2B_HE"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 590 ship_armor_add = 10   }
+  ai_weight = { weight = 10 }
+  prerequisites = { "tech_engineering_heavy_610" }
+  component_set = "required_hull"
+}
+# Heavy Duranium Hull Construction (Assault Cruiser)
+utility_component_template = {
+  key = "REQUIRED_HULL_1B_AC"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_B_1"
+  icon_frame = 1
+  cost = 140
+  size_restriction = { assault_cruiser }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_HULL_2B_AC"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 2690 ship_armor_add = 10   }
+  ai_weight = { weight = 10 }
+  prerequisites = { "tech_engineering_heavy_610" }
+  component_set = "required_hull"
+}
+# Heavy Duranium Hull Construction (Dreadnaught)
+utility_component_template = {
+  key = "REQUIRED_HULL_1B_SB"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_B_1"
+  icon_frame = 1
+  cost = 1440
+  size_restriction = { super_battleship borg_cube borg_tactical }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_HULL_2B_SB"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 28050 ship_armor_add = 10   }
+  ai_weight = { weight = 10 }
+  prerequisites = { "tech_engineering_heavy_610" }
+  component_set = "required_hull"
+}
+# Heavy Duranium Hull Construction ()
+utility_component_template = {
+  key = "REQUIRED_HULL_1B_SC"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_B_1"
+  icon_frame = 1
+  cost = 4090
+  size_restriction = { super_cube }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_HULL_2B_SC"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 79800 ship_armor_add = 10   }
+  ai_weight = { weight = 10 }
+  prerequisites = { "tech_engineering_heavy_610" }
+  component_set = "required_hull"
+}
+# Heavy Duranium Hull Construction (Civilian Ships)
+utility_component_template = {
+  key = "REQUIRED_HULL_1B_CS"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_B_1"
+  icon_frame = 1
+  cost = 10
+  class_restriction = { shipclass_constructor shipclass_colonizer shipclass_science_ship shipclass_transport }
+  upgrades_to = "REQUIRED_HULL_2B_CS"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 10 ship_armor_add = 10   }
+  ai_weight = { weight = 10 }
+  prerequisites = { "tech_engineering_heavy_610" }
+  component_set = "required_hull"
+}
+# Heavy Duranium Hull Construction (Light Military Stations)
+utility_component_template = {
+  key = "REQUIRED_HULL_1B_DS"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_B_1"
+  icon_frame = 1
+  cost = 60
+  size_restriction = { military_station_small military_station_large station_listening borg_unimatrix_defense_small }
+  upgrades_to = "REQUIRED_HULL_2B_DS"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 1210 ship_armor_add = 10   }
+  ai_weight = { weight = 10 }
+  prerequisites = { "tech_engineering_heavy_610" }
+  component_set = "required_hull"
+}
+# Heavy Duranium Hull Construction (Heavy Weapon Platform)
+utility_component_template = {
+  key = "REQUIRED_HULL_1B_WP"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_B_1"
+  icon_frame = 1
+  cost = 300
+  size_restriction = { military_station_medium }
+  upgrades_to = "REQUIRED_HULL_2B_WP"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 5880 ship_armor_add = 10   }
+  ai_weight = { weight = 10 }
+  prerequisites = { "tech_engineering_heavy_610" }
+  component_set = "required_hull"
+}
+
+# Duranium Alloy Hull (Patrol Frigate)
+utility_component_template = {
+  key = "REQUIRED_HULL_2B_PF"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_B_2"
+  icon_frame = 1
+  cost = 15
+  size_restriction = { corvette }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_HULL_3B_PF"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 80 ship_armor_add = 12   }
+  ai_weight = { weight = 20 }
+  prerequisites = { "tech_engineering_duranium_612" }
+  component_set = "required_hull"
+}
+# Duranium Alloy Hull (Destroyer)
+utility_component_template = {
+  key = "REQUIRED_HULL_2B_DE"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_B_2"
+  icon_frame = 1
+  cost = 30
+  size_restriction = { saber }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_HULL_3B_DE"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 710 ship_armor_add = 12   }
+  ai_weight = { weight = 20 }
+  prerequisites = { "tech_engineering_duranium_612" }
+  component_set = "required_hull"
+}
+# Duranium Alloy Hull (Destroyer)
+utility_component_template = {
+  key = "REQUIRED_HULL_2B_CR"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_B_2"
+  icon_frame = 1
+  cost = 105
+  size_restriction = { sovereign borg_sphere }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_HULL_3B_CR"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 1970 ship_armor_add = 12   }
+  ai_weight = { weight = 20 }
+  prerequisites = { "tech_engineering_duranium_612" }
+  component_set = "required_hull"
+}
+# Duranium Alloy Hull (Battlecruiser)
+utility_component_template = {
+  key = "REQUIRED_HULL_2B_BC"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_B_2"
+  icon_frame = 1
+  cost = 35
+  size_restriction = { steamrunner borg_diamond }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_HULL_3B_BC"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 820 ship_armor_add = 12   }
+  ai_weight = { weight = 20 }
+  prerequisites = { "tech_engineering_duranium_612" }
+  component_set = "required_hull"
+}
+# Duranium Alloy Hull (Battleship)
+utility_component_template = {
+  key = "REQUIRED_HULL_2B_BS"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_B_2"
+  icon_frame = 1
+  cost = 405
+  size_restriction = { adv_cruiser }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_HULL_3B_BS"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 7500 ship_armor_add = 12   }
+  ai_weight = { weight = 20 }
+  prerequisites = { "tech_engineering_duranium_612" }
+  component_set = "required_hull"
+}
+# Duranium Alloy Hull (Heavy Escort)
+utility_component_template = {
+  key = "REQUIRED_HULL_2B_HE"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_B_2"
+  icon_frame = 1
+  cost = 35
+  size_restriction = { strike }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_HULL_3B_HE"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 760 ship_armor_add = 12   }
+  ai_weight = { weight = 20 }
+  prerequisites = { "tech_engineering_duranium_612" }
+  component_set = "required_hull"
+}
+# Duranium Alloy Hull (Assault Cruiser)
+utility_component_template = {
+  key = "REQUIRED_HULL_2B_AC"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_B_2"
+  icon_frame = 1
+  cost = 165
+  size_restriction = { assault_cruiser }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_HULL_3B_AC"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 3080 ship_armor_add = 12   }
+  ai_weight = { weight = 20 }
+  prerequisites = { "tech_engineering_duranium_612" }
+  component_set = "required_hull"
+}
+# Duranium Alloy Hull (Dreadnaught)
+utility_component_template = {
+  key = "REQUIRED_HULL_2B_SB"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_B_2"
+  icon_frame = 1
+  cost = 1630
+  size_restriction = { super_battleship borg_cube borg_tactical }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_HULL_3B_SB"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 30150 ship_armor_add = 12   }
+  ai_weight = { weight = 20 }
+  prerequisites = { "tech_engineering_duranium_612" }
+  component_set = "required_hull"
+}
+# Duranium Alloy Hull ()
+utility_component_template = {
+  key = "REQUIRED_HULL_2B_SC"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_B_2"
+  icon_frame = 1
+  cost = 4615
+  size_restriction = { super_cube }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_HULL_3B_SC"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 85400 ship_armor_add = 12   }
+  ai_weight = { weight = 20 }
+  prerequisites = { "tech_engineering_duranium_612" }
+  component_set = "required_hull"
+}
+# Duranium Alloy Hull (Civilian Ships)
+utility_component_template = {
+  key = "REQUIRED_HULL_2B_CS"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_B_2"
+  icon_frame = 1
+  cost = 15
+  class_restriction = { shipclass_constructor shipclass_colonizer shipclass_science_ship shipclass_transport }
+  upgrades_to = "REQUIRED_HULL_3B_CS"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 30 ship_armor_add = 12   }
+  ai_weight = { weight = 20 }
+  prerequisites = { "tech_engineering_duranium_612" }
+  component_set = "required_hull"
+}
+# Duranium Alloy Hull (Light Military Stations)
+utility_component_template = {
+  key = "REQUIRED_HULL_2B_DS"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_B_2"
+  icon_frame = 1
+  cost = 90
+  size_restriction = { military_station_small military_station_large station_listening borg_unimatrix_defense_small }
+  upgrades_to = "REQUIRED_HULL_3B_DS"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 1630 ship_armor_add = 12   }
+  ai_weight = { weight = 20 }
+  prerequisites = { "tech_engineering_duranium_612" }
+  component_set = "required_hull"
+}
+# Duranium Alloy Hull (Heavy Weapon Platform)
+utility_component_template = {
+  key = "REQUIRED_HULL_2B_WP"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_B_2"
+  icon_frame = 1
+  cost = 410
+  size_restriction = { military_station_medium }
+  upgrades_to = "REQUIRED_HULL_3B_WP"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 7630 ship_armor_add = 12   }
+  ai_weight = { weight = 20 }
+  prerequisites = { "tech_engineering_duranium_612" }
+  component_set = "required_hull"
+}
+
+# Magnesite-Duranim PolyWeave Hull (Patrol Frigate)
+utility_component_template = {
+  key = "REQUIRED_HULL_3B_PF"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_B_3"
+  icon_frame = 1
+  cost = 20
+  size_restriction = { corvette }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_HULL_4B_PF"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 140 ship_armor_add = 14   }
+  ai_weight = { weight = 30 }
+  prerequisites = { "tech_engineering_materials_1470" }
+  component_set = "required_hull"
+}
+# Magnesite-Duranim PolyWeave Hull (Destroyer)
+utility_component_template = {
+  key = "REQUIRED_HULL_3B_DE"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_B_3"
+  icon_frame = 1
+  cost = 40
+  size_restriction = { saber }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_HULL_4B_DE"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 850 ship_armor_add = 14   }
+  ai_weight = { weight = 30 }
+  prerequisites = { "tech_engineering_materials_1470" }
+  component_set = "required_hull"
+}
+# Magnesite-Duranim PolyWeave Hull (Destroyer)
+utility_component_template = {
+  key = "REQUIRED_HULL_3B_CR"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_B_3"
+  icon_frame = 1
+  cost = 130
+  size_restriction = { sovereign borg_sphere }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_HULL_4B_CR"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 2290 ship_armor_add = 14   }
+  ai_weight = { weight = 30 }
+  prerequisites = { "tech_engineering_materials_1470" }
+  component_set = "required_hull"
+}
+# Magnesite-Duranim PolyWeave Hull (Battlecruiser)
+utility_component_template = {
+  key = "REQUIRED_HULL_3B_BC"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_B_3"
+  icon_frame = 1
+  cost = 45
+  size_restriction = { steamrunner borg_diamond }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_HULL_4B_BC"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 1030 ship_armor_add = 14   }
+  ai_weight = { weight = 30 }
+  prerequisites = { "tech_engineering_materials_1470" }
+  component_set = "required_hull"
+}
+# Magnesite-Duranim PolyWeave Hull (Battleship)
+utility_component_template = {
+  key = "REQUIRED_HULL_3B_BS"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_B_3"
+  icon_frame = 1
+  cost = 465
+  size_restriction = { adv_cruiser }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_HULL_4B_BS"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 8160 ship_armor_add = 14   }
+  ai_weight = { weight = 30 }
+  prerequisites = { "tech_engineering_materials_1470" }
+  component_set = "required_hull"
+}
+# Magnesite-Duranim PolyWeave Hull (Heavy Escort)
+utility_component_template = {
+  key = "REQUIRED_HULL_3B_HE"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_B_3"
+  icon_frame = 1
+  cost = 45
+  size_restriction = { strike }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_HULL_4B_HE"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 940 ship_armor_add = 14   }
+  ai_weight = { weight = 30 }
+  prerequisites = { "tech_engineering_materials_1470" }
+  component_set = "required_hull"
+}
+# Magnesite-Duranim PolyWeave Hull (Assault Cruiser)
+utility_component_template = {
+  key = "REQUIRED_HULL_3B_AC"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_B_3"
+  icon_frame = 1
+  cost = 200
+  size_restriction = { assault_cruiser }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_HULL_4B_AC"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 3460 ship_armor_add = 14   }
+  ai_weight = { weight = 30 }
+  prerequisites = { "tech_engineering_materials_1470" }
+  component_set = "required_hull"
+}
+# Magnesite-Duranim PolyWeave Hull (Dreadnaught)
+utility_component_template = {
+  key = "REQUIRED_HULL_3B_SB"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_B_3"
+  icon_frame = 1
+  cost = 1845
+  size_restriction = { super_battleship borg_cube borg_tactical }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_HULL_4B_SB"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 32250 ship_armor_add = 14   }
+  ai_weight = { weight = 30 }
+  prerequisites = { "tech_engineering_materials_1470" }
+  component_set = "required_hull"
+}
+# Magnesite-Duranim PolyWeave Hull ()
+utility_component_template = {
+  key = "REQUIRED_HULL_3B_SC"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_B_3"
+  icon_frame = 1
+  cost = 5200
+  size_restriction = { super_cube }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_HULL_4B_SC"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 91000 ship_armor_add = 14   }
+  ai_weight = { weight = 30 }
+  prerequisites = { "tech_engineering_materials_1470" }
+  component_set = "required_hull"
+}
+# Magnesite-Duranim PolyWeave Hull (Civilian Ships)
+utility_component_template = {
+  key = "REQUIRED_HULL_3B_CS"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_B_3"
+  icon_frame = 1
+  cost = 20
+  class_restriction = { shipclass_constructor shipclass_colonizer shipclass_science_ship shipclass_transport }
+  upgrades_to = "REQUIRED_HULL_4B_CS"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 50 ship_armor_add = 14   }
+  ai_weight = { weight = 30 }
+  prerequisites = { "tech_engineering_materials_1470" }
+  component_set = "required_hull"
+}
+# Magnesite-Duranim PolyWeave Hull (Light Military Stations)
+utility_component_template = {
+  key = "REQUIRED_HULL_3B_DS"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_B_3"
+  icon_frame = 1
+  cost = 115
+  size_restriction = { military_station_small military_station_large station_listening borg_unimatrix_defense_small }
+  upgrades_to = "REQUIRED_HULL_4B_DS"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 2050 ship_armor_add = 14   }
+  ai_weight = { weight = 30 }
+  prerequisites = { "tech_engineering_materials_1470" }
+  component_set = "required_hull"
+}
+# Magnesite-Duranim PolyWeave Hull (Heavy Weapon Platform)
+utility_component_template = {
+  key = "REQUIRED_HULL_3B_WP"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_B_3"
+  icon_frame = 1
+  cost = 535
+  size_restriction = { military_station_medium }
+  upgrades_to = "REQUIRED_HULL_4B_WP"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 9380 ship_armor_add = 14   }
+  ai_weight = { weight = 30 }
+  prerequisites = { "tech_engineering_materials_1470" }
+  component_set = "required_hull"
+}
+
+# Duranium-Victurium Hull (Patrol Frigate)
+utility_component_template = {
+  key = "REQUIRED_HULL_4B_PF"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_B_4"
+  icon_frame = 1
+  cost = 25
+  size_restriction = { corvette }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_HULL_5B_PF"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 200 ship_armor_add = 16   }
+  ai_weight = { weight = 40 }
+  prerequisites = { "tech_engineering_duranium-victurium_614" }
+  component_set = "required_hull"
+}
+# Duranium-Victurium Hull (Destroyer)
+utility_component_template = {
+  key = "REQUIRED_HULL_4B_DE"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_B_4"
+  icon_frame = 1
+  cost = 50
+  size_restriction = { saber }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_HULL_5B_DE"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 990 ship_armor_add = 16   }
+  ai_weight = { weight = 40 }
+  prerequisites = { "tech_engineering_duranium-victurium_614" }
+  component_set = "required_hull"
+}
+# Duranium-Victurium Hull (Destroyer)
+utility_component_template = {
+  key = "REQUIRED_HULL_4B_CR"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_B_4"
+  icon_frame = 1
+  cost = 160
+  size_restriction = { sovereign borg_sphere }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_HULL_5B_CR"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 2600 ship_armor_add = 16   }
+  ai_weight = { weight = 40 }
+  prerequisites = { "tech_engineering_duranium-victurium_614" }
+  component_set = "required_hull"
+}
+# Duranium-Victurium Hull (Battlecruiser)
+utility_component_template = {
+  key = "REQUIRED_HULL_4B_BC"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_B_4"
+  icon_frame = 1
+  cost = 60
+  size_restriction = { steamrunner borg_diamond }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_HULL_5B_BC"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 1240 ship_armor_add = 16   }
+  ai_weight = { weight = 40 }
+  prerequisites = { "tech_engineering_duranium-victurium_614" }
+  component_set = "required_hull"
+}
+# Duranium-Victurium Hull (Battleship)
+utility_component_template = {
+  key = "REQUIRED_HULL_4B_BS"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_B_4"
+  icon_frame = 1
+  cost = 535
+  size_restriction = { adv_cruiser }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_HULL_5B_BS"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 8830 ship_armor_add = 16   }
+  ai_weight = { weight = 40 }
+  prerequisites = { "tech_engineering_duranium-victurium_614" }
+  component_set = "required_hull"
+}
+# Duranium-Victurium Hull (Heavy Escort)
+utility_component_template = {
+  key = "REQUIRED_HULL_4B_HE"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_B_4"
+  icon_frame = 1
+  cost = 55
+  size_restriction = { strike }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_HULL_5B_HE"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 1110 ship_armor_add = 16   }
+  ai_weight = { weight = 40 }
+  prerequisites = { "tech_engineering_duranium-victurium_614" }
+  component_set = "required_hull"
+}
+# Duranium-Victurium Hull (Assault Cruiser)
+utility_component_template = {
+  key = "REQUIRED_HULL_4B_AC"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_B_4"
+  icon_frame = 1
+  cost = 235
+  size_restriction = { assault_cruiser }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_HULL_5B_AC"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 3850 ship_armor_add = 16   }
+  ai_weight = { weight = 40 }
+  prerequisites = { "tech_engineering_duranium-victurium_614" }
+  component_set = "required_hull"
+}
+# Duranium-Victurium Hull (Dreadnaught)
+utility_component_template = {
+  key = "REQUIRED_HULL_4B_SB"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_B_4"
+  icon_frame = 1
+  cost = 2080
+  size_restriction = { super_battleship borg_cube borg_tactical }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_HULL_5B_SB"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 34350 ship_armor_add = 16   }
+  ai_weight = { weight = 40 }
+  prerequisites = { "tech_engineering_duranium-victurium_614" }
+  component_set = "required_hull"
+}
+# Duranium-Victurium Hull ()
+utility_component_template = {
+  key = "REQUIRED_HULL_4B_SC"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_B_4"
+  icon_frame = 1
+  cost = 5855
+  size_restriction = { super_cube }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_HULL_5B_SC"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 96600 ship_armor_add = 16   }
+  ai_weight = { weight = 40 }
+  prerequisites = { "tech_engineering_duranium-victurium_614" }
+  component_set = "required_hull"
+}
+# Duranium-Victurium Hull (Civilian Ships)
+utility_component_template = {
+  key = "REQUIRED_HULL_4B_CS"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_B_4"
+  icon_frame = 1
+  cost = 25
+  class_restriction = { shipclass_constructor shipclass_colonizer shipclass_science_ship shipclass_transport }
+  upgrades_to = "REQUIRED_HULL_5B_CS"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 70 ship_armor_add = 16   }
+  ai_weight = { weight = 40 }
+  prerequisites = { "tech_engineering_duranium-victurium_614" }
+  component_set = "required_hull"
+}
+# Duranium-Victurium Hull (Light Military Stations)
+utility_component_template = {
+  key = "REQUIRED_HULL_4B_DS"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_B_4"
+  icon_frame = 1
+  cost = 150
+  size_restriction = { military_station_small military_station_large station_listening borg_unimatrix_defense_small }
+  upgrades_to = "REQUIRED_HULL_5B_DS"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 2470 ship_armor_add = 16   }
+  ai_weight = { weight = 40 }
+  prerequisites = { "tech_engineering_duranium-victurium_614" }
+  component_set = "required_hull"
+}
+# Duranium-Victurium Hull (Heavy Weapon Platform)
+utility_component_template = {
+  key = "REQUIRED_HULL_4B_WP"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_B_4"
+  icon_frame = 1
+  cost = 675
+  size_restriction = { military_station_medium }
+  upgrades_to = "REQUIRED_HULL_5B_WP"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 11130 ship_armor_add = 16   }
+  ai_weight = { weight = 40 }
+  prerequisites = { "tech_engineering_duranium-victurium_614" }
+  component_set = "required_hull"
+}
+
+# Polyduranium Weave Hull (Patrol Frigate)
+utility_component_template = {
+  key = "REQUIRED_HULL_5B_PF"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_B_5"
+  icon_frame = 1
+  cost = 30
+  size_restriction = { corvette }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_HULL_6B_PF"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 250 ship_armor_add = 18   }
+  ai_weight = { weight = 50 }
+  prerequisites = { "tech_engineering_polyduranium_616" }
+  component_set = "required_hull"
+}
+# Polyduranium Weave Hull (Destroyer)
+utility_component_template = {
+  key = "REQUIRED_HULL_5B_DE"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_B_5"
+  icon_frame = 1
+  cost = 60
+  size_restriction = { saber }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_HULL_6B_DE"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 1130 ship_armor_add = 18   }
+  ai_weight = { weight = 50 }
+  prerequisites = { "tech_engineering_polyduranium_616" }
+  component_set = "required_hull"
+}
+# Polyduranium Weave Hull (Destroyer)
+utility_component_template = {
+  key = "REQUIRED_HULL_5B_CR"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_B_5"
+  icon_frame = 1
+  cost = 190
+  size_restriction = { sovereign borg_sphere }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_HULL_6B_CR"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 2920 ship_armor_add = 18   }
+  ai_weight = { weight = 50 }
+  prerequisites = { "tech_engineering_polyduranium_616" }
+  component_set = "required_hull"
+}
+# Polyduranium Weave Hull (Battlecruiser)
+utility_component_template = {
+  key = "REQUIRED_HULL_5B_BC"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_B_5"
+  icon_frame = 1
+  cost = 75
+  size_restriction = { steamrunner borg_diamond }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_HULL_6B_BC"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 1450 ship_armor_add = 18   }
+  ai_weight = { weight = 50 }
+  prerequisites = { "tech_engineering_polyduranium_616" }
+  component_set = "required_hull"
+}
+# Polyduranium Weave Hull (Battleship)
+utility_component_template = {
+  key = "REQUIRED_HULL_5B_BS"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_B_5"
+  icon_frame = 1
+  cost = 610
+  size_restriction = { adv_cruiser }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_HULL_6B_BS"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 9490 ship_armor_add = 18   }
+  ai_weight = { weight = 50 }
+  prerequisites = { "tech_engineering_polyduranium_616" }
+  component_set = "required_hull"
+}
+# Polyduranium Weave Hull (Heavy Escort)
+utility_component_template = {
+  key = "REQUIRED_HULL_5B_HE"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_B_5"
+  icon_frame = 1
+  cost = 65
+  size_restriction = { strike }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_HULL_6B_HE"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 1290 ship_armor_add = 18   }
+  ai_weight = { weight = 50 }
+  prerequisites = { "tech_engineering_polyduranium_616" }
+  component_set = "required_hull"
+}
+# Polyduranium Weave Hull (Assault Cruiser)
+utility_component_template = {
+  key = "REQUIRED_HULL_5B_AC"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_B_5"
+  icon_frame = 1
+  cost = 275
+  size_restriction = { assault_cruiser }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_HULL_6B_AC"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 4230 ship_armor_add = 18   }
+  ai_weight = { weight = 50 }
+  prerequisites = { "tech_engineering_polyduranium_616" }
+  component_set = "required_hull"
+}
+# Polyduranium Weave Hull (Dreadnaught)
+utility_component_template = {
+  key = "REQUIRED_HULL_5B_SB"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_B_5"
+  icon_frame = 1
+  cost = 2350
+  size_restriction = { super_battleship borg_cube borg_tactical }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_HULL_6B_SB"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 36450 ship_armor_add = 18   }
+  ai_weight = { weight = 50 }
+  prerequisites = { "tech_engineering_polyduranium_616" }
+  component_set = "required_hull"
+}
+# Polyduranium Weave Hull ()
+utility_component_template = {
+  key = "REQUIRED_HULL_5B_SC"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_B_5"
+  icon_frame = 1
+  cost = 6595
+  size_restriction = { super_cube }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_HULL_6B_SC"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 102200 ship_armor_add = 18   }
+  ai_weight = { weight = 50 }
+  prerequisites = { "tech_engineering_polyduranium_616" }
+  component_set = "required_hull"
+}
+# Polyduranium Weave Hull (Civilian Ships)
+utility_component_template = {
+  key = "REQUIRED_HULL_5B_CS"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_B_5"
+  icon_frame = 1
+  cost = 30
+  class_restriction = { shipclass_constructor shipclass_colonizer shipclass_science_ship shipclass_transport }
+  upgrades_to = "REQUIRED_HULL_6B_CS"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 90 ship_armor_add = 18   }
+  ai_weight = { weight = 50 }
+  prerequisites = { "tech_engineering_polyduranium_616" }
+  component_set = "required_hull"
+}
+# Polyduranium Weave Hull (Light Military Stations)
+utility_component_template = {
+  key = "REQUIRED_HULL_5B_DS"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_B_5"
+  icon_frame = 1
+  cost = 185
+  size_restriction = { military_station_small military_station_large station_listening borg_unimatrix_defense_small }
+  upgrades_to = "REQUIRED_HULL_6B_DS"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 2890 ship_armor_add = 18   }
+  ai_weight = { weight = 50 }
+  prerequisites = { "tech_engineering_polyduranium_616" }
+  component_set = "required_hull"
+}
+# Polyduranium Weave Hull (Heavy Weapon Platform)
+utility_component_template = {
+  key = "REQUIRED_HULL_5B_WP"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_B_5"
+  icon_frame = 1
+  cost = 830
+  size_restriction = { military_station_medium }
+  upgrades_to = "REQUIRED_HULL_6B_WP"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 12880 ship_armor_add = 18   }
+  ai_weight = { weight = 50 }
+  prerequisites = { "tech_engineering_polyduranium_616" }
+  component_set = "required_hull"
+}
+
+# Heavy Duranium Composite Sheeting (Patrol Frigate)
+utility_component_template = {
+  key = "REQUIRED_HULL_6B_PF"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_B_6"
+  icon_frame = 1
+  cost = 35
+  size_restriction = { corvette }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_HULL_7B_PF"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 310 ship_armor_add = 20   }
+  ai_weight = { weight = 60 }
+  prerequisites = { "tech_engineering_materials_1473" }
+  component_set = "required_hull"
+}
+# Heavy Duranium Composite Sheeting (Destroyer)
+utility_component_template = {
+  key = "REQUIRED_HULL_6B_DE"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_B_6"
+  icon_frame = 1
+  cost = 70
+  size_restriction = { saber }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_HULL_7B_DE"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 1270 ship_armor_add = 20   }
+  ai_weight = { weight = 60 }
+  prerequisites = { "tech_engineering_materials_1473" }
+  component_set = "required_hull"
+}
+# Heavy Duranium Composite Sheeting (Destroyer)
+utility_component_template = {
+  key = "REQUIRED_HULL_6B_CR"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_B_6"
+  icon_frame = 1
+  cost = 225
+  size_restriction = { sovereign borg_sphere }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_HULL_7B_CR"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 3230 ship_armor_add = 20   }
+  ai_weight = { weight = 60 }
+  prerequisites = { "tech_engineering_materials_1473" }
+  component_set = "required_hull"
+}
+# Heavy Duranium Composite Sheeting (Battlecruiser)
+utility_component_template = {
+  key = "REQUIRED_HULL_6B_BC"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_B_6"
+  icon_frame = 1
+  cost = 90
+  size_restriction = { steamrunner borg_diamond }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_HULL_7B_BC"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 1660 ship_armor_add = 20   }
+  ai_weight = { weight = 60 }
+  prerequisites = { "tech_engineering_materials_1473" }
+  component_set = "required_hull"
+}
+# Heavy Duranium Composite Sheeting (Battleship)
+utility_component_template = {
+  key = "REQUIRED_HULL_6B_BS"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_B_6"
+  icon_frame = 1
+  cost = 700
+  size_restriction = { adv_cruiser }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_HULL_7B_BS"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 10160 ship_armor_add = 20   }
+  ai_weight = { weight = 60 }
+  prerequisites = { "tech_engineering_materials_1473" }
+  component_set = "required_hull"
+}
+# Heavy Duranium Composite Sheeting (Heavy Escort)
+utility_component_template = {
+  key = "REQUIRED_HULL_6B_HE"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_B_6"
+  icon_frame = 1
+  cost = 80
+  size_restriction = { strike }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_HULL_7B_HE"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 1460 ship_armor_add = 20   }
+  ai_weight = { weight = 60 }
+  prerequisites = { "tech_engineering_materials_1473" }
+  component_set = "required_hull"
+}
+# Heavy Duranium Composite Sheeting (Assault Cruiser)
+utility_component_template = {
+  key = "REQUIRED_HULL_6B_AC"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_B_6"
+  icon_frame = 1
+  cost = 320
+  size_restriction = { assault_cruiser }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_HULL_7B_AC"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 4620 ship_armor_add = 20   }
+  ai_weight = { weight = 60 }
+  prerequisites = { "tech_engineering_materials_1473" }
+  component_set = "required_hull"
+}
+# Heavy Duranium Composite Sheeting (Dreadnaught)
+utility_component_template = {
+  key = "REQUIRED_HULL_6B_SB"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_B_6"
+  icon_frame = 1
+  cost = 2660
+  size_restriction = { super_battleship borg_cube borg_tactical }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_HULL_7B_SB"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 38550 ship_armor_add = 20   }
+  ai_weight = { weight = 60 }
+  prerequisites = { "tech_engineering_materials_1473" }
+  component_set = "required_hull"
+}
+# Heavy Duranium Composite Sheeting ()
+utility_component_template = {
+  key = "REQUIRED_HULL_6B_SC"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_B_6"
+  icon_frame = 1
+  cost = 7435
+  size_restriction = { super_cube }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_HULL_7B_SC"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 107800 ship_armor_add = 20   }
+  ai_weight = { weight = 60 }
+  prerequisites = { "tech_engineering_materials_1473" }
+  component_set = "required_hull"
+}
+# Heavy Duranium Composite Sheeting (Civilian Ships)
+utility_component_template = {
+  key = "REQUIRED_HULL_6B_CS"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_B_6"
+  icon_frame = 1
+  cost = 35
+  class_restriction = { shipclass_constructor shipclass_colonizer shipclass_science_ship shipclass_transport }
+  upgrades_to = "REQUIRED_HULL_7B_CS"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 120 ship_armor_add = 20   }
+  ai_weight = { weight = 60 }
+  prerequisites = { "tech_engineering_materials_1473" }
+  component_set = "required_hull"
+}
+# Heavy Duranium Composite Sheeting (Light Military Stations)
+utility_component_template = {
+  key = "REQUIRED_HULL_6B_DS"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_B_6"
+  icon_frame = 1
+  cost = 230
+  size_restriction = { military_station_small military_station_large station_listening borg_unimatrix_defense_small }
+  upgrades_to = "REQUIRED_HULL_7B_DS"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 3310 ship_armor_add = 20   }
+  ai_weight = { weight = 60 }
+  prerequisites = { "tech_engineering_materials_1473" }
+  component_set = "required_hull"
+}
+# Heavy Duranium Composite Sheeting (Heavy Weapon Platform)
+utility_component_template = {
+  key = "REQUIRED_HULL_6B_WP"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_B_6"
+  icon_frame = 1
+  cost = 1010
+  size_restriction = { military_station_medium }
+  upgrades_to = "REQUIRED_HULL_7B_WP"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 14630 ship_armor_add = 20   }
+  ai_weight = { weight = 60 }
+  prerequisites = { "tech_engineering_materials_1473" }
+  component_set = "required_hull"
+}
+
+# Tetraburnium Hull (Patrol Frigate)
+utility_component_template = {
+  key = "REQUIRED_HULL_7B_PF"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_B_7"
+  icon_frame = 1
+  cost = 40
+  size_restriction = { corvette }
+  class_restriction = { shipclass_military }
+  
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 390 ship_armor_add = 22   }
+  ai_weight = { weight = 70 }
+  prerequisites = { "tech_engineering_tetraburnium_618" }
+  component_set = "required_hull"
+}
+# Tetraburnium Hull (Destroyer)
+utility_component_template = {
+  key = "REQUIRED_HULL_7B_DE"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_B_7"
+  icon_frame = 1
+  cost = 90
+  size_restriction = { saber }
+  class_restriction = { shipclass_military }
+  
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 1480 ship_armor_add = 22   }
+  ai_weight = { weight = 70 }
+  prerequisites = { "tech_engineering_tetraburnium_618" }
+  component_set = "required_hull"
+}
+# Tetraburnium Hull (Destroyer)
+utility_component_template = {
+  key = "REQUIRED_HULL_7B_CR"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_B_7"
+  icon_frame = 1
+  cost = 285
+  size_restriction = { sovereign borg_sphere }
+  class_restriction = { shipclass_military }
+  
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 3710 ship_armor_add = 22   }
+  ai_weight = { weight = 70 }
+  prerequisites = { "tech_engineering_tetraburnium_618" }
+  component_set = "required_hull"
+}
+# Tetraburnium Hull (Battlecruiser)
+utility_component_template = {
+  key = "REQUIRED_HULL_7B_BC"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_B_7"
+  icon_frame = 1
+  cost = 120
+  size_restriction = { steamrunner borg_diamond }
+  class_restriction = { shipclass_military }
+  
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 1970 ship_armor_add = 22   }
+  ai_weight = { weight = 70 }
+  prerequisites = { "tech_engineering_tetraburnium_618" }
+  component_set = "required_hull"
+}
+# Tetraburnium Hull (Battleship)
+utility_component_template = {
+  key = "REQUIRED_HULL_7B_BS"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_B_7"
+  icon_frame = 1
+  cost = 860
+  size_restriction = { adv_cruiser }
+  class_restriction = { shipclass_military }
+  
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 11160 ship_armor_add = 22   }
+  ai_weight = { weight = 70 }
+  prerequisites = { "tech_engineering_tetraburnium_618" }
+  component_set = "required_hull"
+}
+# Tetraburnium Hull (Heavy Escort)
+utility_component_template = {
+  key = "REQUIRED_HULL_7B_HE"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_B_7"
+  icon_frame = 1
+  cost = 105
+  size_restriction = { strike }
+  class_restriction = { shipclass_military }
+  
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 1730 ship_armor_add = 22   }
+  ai_weight = { weight = 70 }
+  prerequisites = { "tech_engineering_tetraburnium_618" }
+  component_set = "required_hull"
+}
+# Tetraburnium Hull (Assault Cruiser)
+utility_component_template = {
+  key = "REQUIRED_HULL_7B_AC"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_B_7"
+  icon_frame = 1
+  cost = 400
+  size_restriction = { assault_cruiser }
+  class_restriction = { shipclass_military }
+  
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 5200 ship_armor_add = 22   }
+  ai_weight = { weight = 70 }
+  prerequisites = { "tech_engineering_tetraburnium_618" }
+  component_set = "required_hull"
+}
+# Tetraburnium Hull (Dreadnaught)
+utility_component_template = {
+  key = "REQUIRED_HULL_7B_SB"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_B_7"
+  icon_frame = 1
+  cost = 3210
+  size_restriction = { super_battleship borg_cube borg_tactical }
+  class_restriction = { shipclass_military }
+  
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 41700 ship_armor_add = 22   }
+  ai_weight = { weight = 70 }
+  prerequisites = { "tech_engineering_tetraburnium_618" }
+  component_set = "required_hull"
+}
+# Tetraburnium Hull ()
+utility_component_template = {
+  key = "REQUIRED_HULL_7B_SC"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_B_7"
+  icon_frame = 1
+  cost = 8940
+  size_restriction = { super_cube }
+  class_restriction = { shipclass_military }
+  
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 116200 ship_armor_add = 22   }
+  ai_weight = { weight = 70 }
+  prerequisites = { "tech_engineering_tetraburnium_618" }
+  component_set = "required_hull"
+}
+# Tetraburnium Hull (Civilian Ships)
+utility_component_template = {
+  key = "REQUIRED_HULL_7B_CS"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_B_7"
+  icon_frame = 1
+  cost = 40
+  class_restriction = { shipclass_constructor shipclass_colonizer shipclass_science_ship shipclass_transport }
+  
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 150 ship_armor_add = 22   }
+  ai_weight = { weight = 70 }
+  prerequisites = { "tech_engineering_tetraburnium_618" }
+  component_set = "required_hull"
+}
+# Tetraburnium Hull (Light Military Stations)
+utility_component_template = {
+  key = "REQUIRED_HULL_7B_DS"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_B_7"
+  icon_frame = 1
+  cost = 305
+  size_restriction = { military_station_small military_station_large station_listening borg_unimatrix_defense_small }
+  
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 3940 ship_armor_add = 22   }
+  ai_weight = { weight = 70 }
+  prerequisites = { "tech_engineering_tetraburnium_618" }
+  component_set = "required_hull"
+}
+# Tetraburnium Hull (Heavy Weapon Platform)
+utility_component_template = {
+  key = "REQUIRED_HULL_7B_WP"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_B_7"
+  icon_frame = 1
+  cost = 1325
+  size_restriction = { military_station_medium }
+  
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 17250 ship_armor_add = 22   }
+  ai_weight = { weight = 70 }
+  prerequisites = { "tech_engineering_tetraburnium_618" }
+  component_set = "required_hull"
+}
+
+# Living Metallic Hull (Patrol Frigate)
+utility_component_template = {
+  key = "REQUIRED_HULL_0_BORG_PF"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_Borg_0"
+  icon_frame = 1
+  cost = 5
+  size_restriction = { corvette }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_HULL_1_BORG_PF"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 0 ship_armor_add = 5   }
+  ai_weight = { weight = 100 }
+  prerequisites = { "tech_borg_hull" }
+  component_set = "required_hull"
+}
+# Living Metallic Hull (Destroyer)
+utility_component_template = {
+  key = "REQUIRED_HULL_0_BORG_DE"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_Borg_0"
+  icon_frame = 1
+  cost = 20
+  size_restriction = { saber }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_HULL_1_BORG_DE"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 500 ship_armor_add = 5   }
+  ai_weight = { weight = 100 }
+  prerequisites = { "tech_borg_hull" }
+  component_set = "borg_required_hull"
+}
+# Living Metallic Hull (Destroyer)
+utility_component_template = {
+  key = "REQUIRED_HULL_0_BORG_CR"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_Borg_0"
+  icon_frame = 1
+  cost = 75
+  size_restriction = { sovereign borg_sphere }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_HULL_1_BORG_CR"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 1500 ship_armor_add = 5   }
+  ai_weight = { weight = 100 }
+  prerequisites = { "tech_borg_hull" }
+  component_set = "borg_required_hull"
+}
+# Living Metallic Hull (Battlecruiser)
+utility_component_template = {
+  key = "REQUIRED_HULL_0_BORG_BC"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_Borg_0"
+  icon_frame = 1
+  cost = 20
+  size_restriction = { steamrunner borg_diamond }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_HULL_1_BORG_BC"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 500 ship_armor_add = 5   }
+  ai_weight = { weight = 100 }
+  prerequisites = { "tech_borg_hull" }
+  component_set = "borg_required_hull"
+}
+# Living Metallic Hull (Battleship)
+utility_component_template = {
+  key = "REQUIRED_HULL_0_BORG_BS"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_Borg_0"
+  icon_frame = 1
+  cost = 325
+  size_restriction = { adv_cruiser }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_HULL_1_BORG_BS"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 6500 ship_armor_add = 5   }
+  ai_weight = { weight = 100 }
+  prerequisites = { "tech_borg_hull" }
+  component_set = "borg_required_hull"
+}
+# Living Metallic Hull (Heavy Escort)
+utility_component_template = {
+  key = "REQUIRED_HULL_0_BORG_HE"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_Borg_0"
+  icon_frame = 1
+  cost = 20
+  size_restriction = { strike }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_HULL_1_BORG_HE"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 500 ship_armor_add = 5   }
+  ai_weight = { weight = 100 }
+  prerequisites = { "tech_borg_hull" }
+  component_set = "borg_required_hull"
+}
+# Living Metallic Hull (Assault Cruiser)
+utility_component_template = {
+  key = "REQUIRED_HULL_0_BORG_AC"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_Borg_0"
+  icon_frame = 1
+  cost = 125
+  size_restriction = { assault_cruiser }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_HULL_1_BORG_AC"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 2500 ship_armor_add = 5   }
+  ai_weight = { weight = 100 }
+  prerequisites = { "tech_borg_hull" }
+  component_set = "borg_required_hull"
+}
+# Living Metallic Hull (Dreadnaught)
+utility_component_template = {
+  key = "REQUIRED_HULL_0_BORG_SB"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_Borg_0"
+  icon_frame = 1
+  cost = 1350
+  size_restriction = { super_battleship borg_cube borg_tactical }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_HULL_1_BORG_SB"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 27000 ship_armor_add = 5   }
+  ai_weight = { weight = 100 }
+  prerequisites = { "tech_borg_hull" }
+  component_set = "borg_required_hull"
+}
+# Living Metallic Hull ()
+utility_component_template = {
+  key = "REQUIRED_HULL_0_BORG_SC"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_Borg_0"
+  icon_frame = 1
+  cost = 3850
+  size_restriction = { super_cube }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_HULL_1_BORG_SC"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 77000 ship_armor_add = 5   }
+  ai_weight = { weight = 100 }
+  prerequisites = { "tech_borg_hull" }
+  component_set = "borg_required_hull"
+}
+# Living Metallic Hull (Civilian Ships)
+utility_component_template = {
+  key = "REQUIRED_HULL_0_BORG_CS"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_Borg_0"
+  icon_frame = 1
+  cost = 5
+  class_restriction = { shipclass_constructor shipclass_colonizer shipclass_science_ship shipclass_transport }
+  upgrades_to = "REQUIRED_HULL_1_BORG_CS"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 0 ship_armor_add = 5   }
+  ai_weight = { weight = 100 }
+  prerequisites = { "tech_borg_hull" }
+  component_set = "required_hull"
+}
+# Living Metallic Hull (Light Military Stations)
+utility_component_template = {
+  key = "REQUIRED_HULL_0_BORG_DS"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_Borg_0"
+  icon_frame = 1
+  cost = 50
+  size_restriction = { military_station_small military_station_large station_listening borg_unimatrix_defense_small }
+  upgrades_to = "REQUIRED_HULL_1_BORG_DS"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 1000 ship_armor_add = 5   }
+  ai_weight = { weight = 100 }
+  prerequisites = { "tech_borg_hull" }
+  component_set = "required_hull"
+}
+# Living Metallic Hull (Heavy Weapon Platform)
+utility_component_template = {
+  key = "REQUIRED_HULL_0_BORG_WP"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_Borg_0"
+  icon_frame = 1
+  cost = 250
+  size_restriction = { military_station_medium }
+  upgrades_to = "REQUIRED_HULL_1_BORG_WP"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 5000 ship_armor_add = 5   }
+  ai_weight = { weight = 100 }
+  prerequisites = { "tech_borg_hull" }
+  component_set = "required_hull"
+}
+
+# Duranium PolyWeave Hull (Patrol Frigate)
+utility_component_template = {
+  key = "REQUIRED_HULL_1_BORG_PF"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_Borg_1"
+  icon_frame = 1
+  cost = 10
+  size_restriction = { corvette }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_HULL_2_BORG_PF"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 170 ship_armor_add = 13   }
+  ai_weight = { weight = 150 }
+  prerequisites = { "tech_engineering_materials_1512" }
+  component_set = "required_hull"
+}
+# Duranium PolyWeave Hull (Destroyer)
+utility_component_template = {
+  key = "REQUIRED_HULL_1_BORG_DE"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_Borg_1"
+  icon_frame = 1
+  cost = 45
+  size_restriction = { saber }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_HULL_2_BORG_DE"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 920 ship_armor_add = 13   }
+  ai_weight = { weight = 150 }
+  prerequisites = { "tech_engineering_materials_1512" }
+  component_set = "borg_required_hull"
+}
+# Duranium PolyWeave Hull (Destroyer)
+utility_component_template = {
+  key = "REQUIRED_HULL_1_BORG_CR"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_Borg_1"
+  icon_frame = 1
+  cost = 155
+  size_restriction = { sovereign borg_sphere }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_HULL_2_BORG_CR"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 2450 ship_armor_add = 13   }
+  ai_weight = { weight = 150 }
+  prerequisites = { "tech_engineering_materials_1512" }
+  component_set = "borg_required_hull"
+}
+# Duranium PolyWeave Hull (Battlecruiser)
+utility_component_template = {
+  key = "REQUIRED_HULL_1_BORG_BC"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_Borg_1"
+  icon_frame = 1
+  cost = 55
+  size_restriction = { steamrunner borg_diamond }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_HULL_2_BORG_BC"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 1130 ship_armor_add = 13   }
+  ai_weight = { weight = 150 }
+  prerequisites = { "tech_engineering_materials_1512" }
+  component_set = "borg_required_hull"
+}
+# Duranium PolyWeave Hull (Battleship)
+utility_component_template = {
+  key = "REQUIRED_HULL_1_BORG_BS"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_Borg_1"
+  icon_frame = 1
+  cost = 530
+  size_restriction = { adv_cruiser }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_HULL_2_BORG_BS"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 8500 ship_armor_add = 13   }
+  ai_weight = { weight = 150 }
+  prerequisites = { "tech_engineering_materials_1512" }
+  component_set = "borg_required_hull"
+}
+# Duranium PolyWeave Hull (Heavy Escort)
+utility_component_template = {
+  key = "REQUIRED_HULL_1_BORG_HE"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_Borg_1"
+  icon_frame = 1
+  cost = 50
+  size_restriction = { strike }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_HULL_2_BORG_HE"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 1030 ship_armor_add = 13   }
+  ai_weight = { weight = 150 }
+  prerequisites = { "tech_engineering_materials_1512" }
+  component_set = "borg_required_hull"
+}
+# Duranium PolyWeave Hull (Assault Cruiser)
+utility_component_template = {
+  key = "REQUIRED_HULL_1_BORG_AC"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_Borg_1"
+  icon_frame = 1
+  cost = 230
+  size_restriction = { assault_cruiser }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_HULL_2_BORG_AC"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 3660 ship_armor_add = 13   }
+  ai_weight = { weight = 150 }
+  prerequisites = { "tech_engineering_materials_1512" }
+  component_set = "borg_required_hull"
+}
+# Duranium PolyWeave Hull (Dreadnaught)
+utility_component_template = {
+  key = "REQUIRED_HULL_1_BORG_SB"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_Borg_1"
+  icon_frame = 1
+  cost = 2080
+  size_restriction = { super_battleship borg_cube borg_tactical }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_HULL_2_BORG_SB"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 33300 ship_armor_add = 13   }
+  ai_weight = { weight = 150 }
+  prerequisites = { "tech_engineering_materials_1512" }
+  component_set = "borg_required_hull"
+}
+# Duranium PolyWeave Hull ()
+utility_component_template = {
+  key = "REQUIRED_HULL_1_BORG_SC"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_Borg_1"
+  icon_frame = 1
+  cost = 5865
+  size_restriction = { super_cube }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_HULL_2_BORG_SC"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 93800 ship_armor_add = 13   }
+  ai_weight = { weight = 150 }
+  prerequisites = { "tech_engineering_materials_1512" }
+  component_set = "borg_required_hull"
+}
+# Duranium PolyWeave Hull (Civilian Ships)
+utility_component_template = {
+  key = "REQUIRED_HULL_1_BORG_CS"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_Borg_1"
+  icon_frame = 1
+  cost = 10
+  class_restriction = { shipclass_constructor shipclass_colonizer shipclass_science_ship shipclass_transport }
+  upgrades_to = "REQUIRED_HULL_2_BORG_CS"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 60 ship_armor_add = 13   }
+  ai_weight = { weight = 150 }
+  prerequisites = { "tech_engineering_materials_1512" }
+  component_set = "required_hull"
+}
+# Duranium PolyWeave Hull (Light Military Stations)
+utility_component_template = {
+  key = "REQUIRED_HULL_1_BORG_DS"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_Borg_1"
+  icon_frame = 1
+  cost = 140
+  size_restriction = { military_station_small military_station_large station_listening borg_unimatrix_defense_small }
+  upgrades_to = "REQUIRED_HULL_2_BORG_DS"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 2260 ship_armor_add = 13   }
+  ai_weight = { weight = 150 }
+  prerequisites = { "tech_engineering_materials_1512" }
+  component_set = "required_hull"
+}
+# Duranium PolyWeave Hull (Heavy Weapon Platform)
+utility_component_template = {
+  key = "REQUIRED_HULL_1_BORG_WP"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_Borg_1"
+  icon_frame = 1
+  cost = 640
+  size_restriction = { military_station_medium }
+  upgrades_to = "REQUIRED_HULL_2_BORG_WP"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 10250 ship_armor_add = 13   }
+  ai_weight = { weight = 150 }
+  prerequisites = { "tech_engineering_materials_1512" }
+  component_set = "required_hull"
+}
+
+# Paricium Memory Foam Alloy Hull (Patrol Frigate)
+utility_component_template = {
+  key = "REQUIRED_HULL_2_BORG_PF"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_Borg_2"
+  icon_frame = 1
+  cost = 15
+  size_restriction = { corvette }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_HULL_3_BORG_PF"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 220 ship_armor_add = 16   }
+  ai_weight = { weight = 200 }
+  prerequisites = { "tech_engineering_materials_1514" }
+  component_set = "required_hull"
+}
+# Paricium Memory Foam Alloy Hull (Destroyer)
+utility_component_template = {
+  key = "REQUIRED_HULL_2_BORG_DE"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_Borg_2"
+  icon_frame = 1
+  cost = 60
+  size_restriction = { saber }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_HULL_3_BORG_DE"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 1060 ship_armor_add = 16   }
+  ai_weight = { weight = 200 }
+  prerequisites = { "tech_engineering_materials_1514" }
+  component_set = "borg_required_hull"
+}
+# Paricium Memory Foam Alloy Hull (Destroyer)
+utility_component_template = {
+  key = "REQUIRED_HULL_2_BORG_CR"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_Borg_2"
+  icon_frame = 1
+  cost = 190
+  size_restriction = { sovereign borg_sphere }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_HULL_3_BORG_CR"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 2760 ship_armor_add = 16   }
+  ai_weight = { weight = 200 }
+  prerequisites = { "tech_engineering_materials_1514" }
+  component_set = "borg_required_hull"
+}
+# Paricium Memory Foam Alloy Hull (Battlecruiser)
+utility_component_template = {
+  key = "REQUIRED_HULL_2_BORG_BC"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_Borg_2"
+  icon_frame = 1
+  cost = 75
+  size_restriction = { steamrunner borg_diamond }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_HULL_3_BORG_BC"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 1340 ship_armor_add = 16   }
+  ai_weight = { weight = 200 }
+  prerequisites = { "tech_engineering_materials_1514" }
+  component_set = "borg_required_hull"
+}
+# Paricium Memory Foam Alloy Hull (Battleship)
+utility_component_template = {
+  key = "REQUIRED_HULL_2_BORG_BS"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_Borg_2"
+  icon_frame = 1
+  cost = 625
+  size_restriction = { adv_cruiser }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_HULL_3_BORG_BS"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 9160 ship_armor_add = 16   }
+  ai_weight = { weight = 200 }
+  prerequisites = { "tech_engineering_materials_1514" }
+  component_set = "borg_required_hull"
+}
+# Paricium Memory Foam Alloy Hull (Heavy Escort)
+utility_component_template = {
+  key = "REQUIRED_HULL_2_BORG_HE"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_Borg_2"
+  icon_frame = 1
+  cost = 65
+  size_restriction = { strike }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_HULL_3_BORG_HE"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 1200 ship_armor_add = 16   }
+  ai_weight = { weight = 200 }
+  prerequisites = { "tech_engineering_materials_1514" }
+  component_set = "borg_required_hull"
+}
+# Paricium Memory Foam Alloy Hull (Assault Cruiser)
+utility_component_template = {
+  key = "REQUIRED_HULL_2_BORG_AC"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_Borg_2"
+  icon_frame = 1
+  cost = 275
+  size_restriction = { assault_cruiser }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_HULL_3_BORG_AC"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 4040 ship_armor_add = 16   }
+  ai_weight = { weight = 200 }
+  prerequisites = { "tech_engineering_materials_1514" }
+  component_set = "borg_required_hull"
+}
+# Paricium Memory Foam Alloy Hull (Dreadnaught)
+utility_component_template = {
+  key = "REQUIRED_HULL_2_BORG_SB"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_Borg_2"
+  icon_frame = 1
+  cost = 2415
+  size_restriction = { super_battleship borg_cube borg_tactical }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_HULL_3_BORG_SB"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 35400 ship_armor_add = 16   }
+  ai_weight = { weight = 200 }
+  prerequisites = { "tech_engineering_materials_1514" }
+  component_set = "borg_required_hull"
+}
+# Paricium Memory Foam Alloy Hull ()
+utility_component_template = {
+  key = "REQUIRED_HULL_2_BORG_SC"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_Borg_2"
+  icon_frame = 1
+  cost = 6775
+  size_restriction = { super_cube }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_HULL_3_BORG_SC"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 99400 ship_armor_add = 16   }
+  ai_weight = { weight = 200 }
+  prerequisites = { "tech_engineering_materials_1514" }
+  component_set = "borg_required_hull"
+}
+# Paricium Memory Foam Alloy Hull (Civilian Ships)
+utility_component_template = {
+  key = "REQUIRED_HULL_2_BORG_CS"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_Borg_2"
+  icon_frame = 1
+  cost = 15
+  class_restriction = { shipclass_constructor shipclass_colonizer shipclass_science_ship shipclass_transport }
+  upgrades_to = "REQUIRED_HULL_3_BORG_CS"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 80 ship_armor_add = 16   }
+  ai_weight = { weight = 200 }
+  prerequisites = { "tech_engineering_materials_1514" }
+  component_set = "required_hull"
+}
+# Paricium Memory Foam Alloy Hull (Light Military Stations)
+utility_component_template = {
+  key = "REQUIRED_HULL_2_BORG_DS"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_Borg_2"
+  icon_frame = 1
+  cost = 185
+  size_restriction = { military_station_small military_station_large station_listening borg_unimatrix_defense_small }
+  upgrades_to = "REQUIRED_HULL_3_BORG_DS"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 2680 ship_armor_add = 16   }
+  ai_weight = { weight = 200 }
+  prerequisites = { "tech_engineering_materials_1514" }
+  component_set = "required_hull"
+}
+# Paricium Memory Foam Alloy Hull (Heavy Weapon Platform)
+utility_component_template = {
+  key = "REQUIRED_HULL_2_BORG_WP"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_Borg_2"
+  icon_frame = 1
+  cost = 820
+  size_restriction = { military_station_medium }
+  upgrades_to = "REQUIRED_HULL_3_BORG_WP"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 12000 ship_armor_add = 16   }
+  ai_weight = { weight = 200 }
+  prerequisites = { "tech_engineering_materials_1514" }
+  component_set = "required_hull"
+}
+
+# Duranium Buckybull Sheeting (Patrol Frigate)
+utility_component_template = {
+  key = "REQUIRED_HULL_3_BORG_PF"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_Borg_3"
+  icon_frame = 1
+  cost = 20
+  size_restriction = { corvette }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_HULL_4_BORG_PF"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 280 ship_armor_add = 19   }
+  ai_weight = { weight = 250 }
+  prerequisites = { "tech_engineering_materials_1515" }
+  component_set = "required_hull"
+}
+# Duranium Buckybull Sheeting (Destroyer)
+utility_component_template = {
+  key = "REQUIRED_HULL_3_BORG_DE"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_Borg_3"
+  icon_frame = 1
+  cost = 70
+  size_restriction = { saber }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_HULL_4_BORG_DE"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 1200 ship_armor_add = 19   }
+  ai_weight = { weight = 250 }
+  prerequisites = { "tech_engineering_materials_1515" }
+  component_set = "borg_required_hull"
+}
+# Duranium Buckybull Sheeting (Destroyer)
+utility_component_template = {
+  key = "REQUIRED_HULL_3_BORG_CR"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_Borg_3"
+  icon_frame = 1
+  cost = 230
+  size_restriction = { sovereign borg_sphere }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_HULL_4_BORG_CR"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 3080 ship_armor_add = 19   }
+  ai_weight = { weight = 250 }
+  prerequisites = { "tech_engineering_materials_1515" }
+  component_set = "borg_required_hull"
+}
+# Duranium Buckybull Sheeting (Battlecruiser)
+utility_component_template = {
+  key = "REQUIRED_HULL_3_BORG_BC"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_Borg_3"
+  icon_frame = 1
+  cost = 95
+  size_restriction = { steamrunner borg_diamond }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_HULL_4_BORG_BC"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 1550 ship_armor_add = 19   }
+  ai_weight = { weight = 250 }
+  prerequisites = { "tech_engineering_materials_1515" }
+  component_set = "borg_required_hull"
+}
+# Duranium Buckybull Sheeting (Battleship)
+utility_component_template = {
+  key = "REQUIRED_HULL_3_BORG_BS"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_Borg_3"
+  icon_frame = 1
+  cost = 735
+  size_restriction = { adv_cruiser }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_HULL_4_BORG_BS"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 9830 ship_armor_add = 19   }
+  ai_weight = { weight = 250 }
+  prerequisites = { "tech_engineering_materials_1515" }
+  component_set = "borg_required_hull"
+}
+# Duranium Buckybull Sheeting (Heavy Escort)
+utility_component_template = {
+  key = "REQUIRED_HULL_3_BORG_HE"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_Borg_3"
+  icon_frame = 1
+  cost = 85
+  size_restriction = { strike }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_HULL_4_BORG_HE"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 1380 ship_armor_add = 19   }
+  ai_weight = { weight = 250 }
+  prerequisites = { "tech_engineering_materials_1515" }
+  component_set = "borg_required_hull"
+}
+# Duranium Buckybull Sheeting (Assault Cruiser)
+utility_component_template = {
+  key = "REQUIRED_HULL_3_BORG_AC"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_Borg_3"
+  icon_frame = 1
+  cost = 330
+  size_restriction = { assault_cruiser }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_HULL_4_BORG_AC"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 4430 ship_armor_add = 19   }
+  ai_weight = { weight = 250 }
+  prerequisites = { "tech_engineering_materials_1515" }
+  component_set = "borg_required_hull"
+}
+# Duranium Buckybull Sheeting (Dreadnaught)
+utility_component_template = {
+  key = "REQUIRED_HULL_3_BORG_SB"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_Borg_3"
+  icon_frame = 1
+  cost = 2815
+  size_restriction = { super_battleship borg_cube borg_tactical }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_HULL_4_BORG_SB"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 37500 ship_armor_add = 19   }
+  ai_weight = { weight = 250 }
+  prerequisites = { "tech_engineering_materials_1515" }
+  component_set = "borg_required_hull"
+}
+# Duranium Buckybull Sheeting ()
+utility_component_template = {
+  key = "REQUIRED_HULL_3_BORG_SC"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_Borg_3"
+  icon_frame = 1
+  cost = 7875
+  size_restriction = { super_cube }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_HULL_4_BORG_SC"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 105000 ship_armor_add = 19   }
+  ai_weight = { weight = 250 }
+  prerequisites = { "tech_engineering_materials_1515" }
+  component_set = "borg_required_hull"
+}
+# Duranium Buckybull Sheeting (Civilian Ships)
+utility_component_template = {
+  key = "REQUIRED_HULL_3_BORG_CS"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_Borg_3"
+  icon_frame = 1
+  cost = 20
+  class_restriction = { shipclass_constructor shipclass_colonizer shipclass_science_ship shipclass_transport }
+  upgrades_to = "REQUIRED_HULL_4_BORG_CS"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 110 ship_armor_add = 19   }
+  ai_weight = { weight = 250 }
+  prerequisites = { "tech_engineering_materials_1515" }
+  component_set = "required_hull"
+}
+# Duranium Buckybull Sheeting (Light Military Stations)
+utility_component_template = {
+  key = "REQUIRED_HULL_3_BORG_DS"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_Borg_3"
+  icon_frame = 1
+  cost = 235
+  size_restriction = { military_station_small military_station_large station_listening borg_unimatrix_defense_small }
+  upgrades_to = "REQUIRED_HULL_4_BORG_DS"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 3100 ship_armor_add = 19   }
+  ai_weight = { weight = 250 }
+  prerequisites = { "tech_engineering_materials_1515" }
+  component_set = "required_hull"
+}
+# Duranium Buckybull Sheeting (Heavy Weapon Platform)
+utility_component_template = {
+  key = "REQUIRED_HULL_3_BORG_WP"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_Borg_3"
+  icon_frame = 1
+  cost = 1030
+  size_restriction = { military_station_medium }
+  upgrades_to = "REQUIRED_HULL_4_BORG_WP"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 13750 ship_armor_add = 19   }
+  ai_weight = { weight = 250 }
+  prerequisites = { "tech_engineering_materials_1515" }
+  component_set = "required_hull"
+}
+
+# Kelindide-Victurium Composite Hull (Patrol Frigate)
+utility_component_template = {
+  key = "REQUIRED_HULL_4_BORG_PF"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_Borg_4"
+  icon_frame = 1
+  cost = 25
+  size_restriction = { corvette }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_HULL_5_BORG_PF"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 340 ship_armor_add = 22   }
+  ai_weight = { weight = 300 }
+  prerequisites = { "tech_engineering_materials_1516" }
+  component_set = "required_hull"
+}
+# Kelindide-Victurium Composite Hull (Destroyer)
+utility_component_template = {
+  key = "REQUIRED_HULL_4_BORG_DE"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_Borg_4"
+  icon_frame = 1
+  cost = 90
+  size_restriction = { saber }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_HULL_5_BORG_DE"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 1340 ship_armor_add = 22   }
+  ai_weight = { weight = 300 }
+  prerequisites = { "tech_engineering_materials_1516" }
+  component_set = "borg_required_hull"
+}
+# Kelindide-Victurium Composite Hull (Destroyer)
+utility_component_template = {
+  key = "REQUIRED_HULL_4_BORG_CR"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_Borg_4"
+  icon_frame = 1
+  cost = 285
+  size_restriction = { sovereign borg_sphere }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_HULL_5_BORG_CR"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 3390 ship_armor_add = 22   }
+  ai_weight = { weight = 300 }
+  prerequisites = { "tech_engineering_materials_1516" }
+  component_set = "borg_required_hull"
+}
+# Kelindide-Victurium Composite Hull (Battlecruiser)
+utility_component_template = {
+  key = "REQUIRED_HULL_4_BORG_BC"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_Borg_4"
+  icon_frame = 1
+  cost = 115
+  size_restriction = { steamrunner borg_diamond }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_HULL_5_BORG_BC"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 1760 ship_armor_add = 22   }
+  ai_weight = { weight = 300 }
+  prerequisites = { "tech_engineering_materials_1516" }
+  component_set = "borg_required_hull"
+}
+# Kelindide-Victurium Composite Hull (Battleship)
+utility_component_template = {
+  key = "REQUIRED_HULL_4_BORG_BS"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_Borg_4"
+  icon_frame = 1
+  cost = 875
+  size_restriction = { adv_cruiser }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_HULL_5_BORG_BS"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 10490 ship_armor_add = 22   }
+  ai_weight = { weight = 300 }
+  prerequisites = { "tech_engineering_materials_1516" }
+  component_set = "borg_required_hull"
+}
+# Kelindide-Victurium Composite Hull (Heavy Escort)
+utility_component_template = {
+  key = "REQUIRED_HULL_4_BORG_HE"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_Borg_4"
+  icon_frame = 1
+  cost = 105
+  size_restriction = { strike }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_HULL_5_BORG_HE"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 1550 ship_armor_add = 22   }
+  ai_weight = { weight = 300 }
+  prerequisites = { "tech_engineering_materials_1516" }
+  component_set = "borg_required_hull"
+}
+# Kelindide-Victurium Composite Hull (Assault Cruiser)
+utility_component_template = {
+  key = "REQUIRED_HULL_4_BORG_AC"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_Borg_4"
+  icon_frame = 1
+  cost = 400
+  size_restriction = { assault_cruiser }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_HULL_5_BORG_AC"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 4810 ship_armor_add = 22   }
+  ai_weight = { weight = 300 }
+  prerequisites = { "tech_engineering_materials_1516" }
+  component_set = "borg_required_hull"
+}
+# Kelindide-Victurium Composite Hull (Dreadnaught)
+utility_component_template = {
+  key = "REQUIRED_HULL_4_BORG_SB"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_Borg_4"
+  icon_frame = 1
+  cost = 3300
+  size_restriction = { super_battleship borg_cube borg_tactical }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_HULL_5_BORG_SB"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 39600 ship_armor_add = 22   }
+  ai_weight = { weight = 300 }
+  prerequisites = { "tech_engineering_materials_1516" }
+  component_set = "borg_required_hull"
+}
+# Kelindide-Victurium Composite Hull ()
+utility_component_template = {
+  key = "REQUIRED_HULL_4_BORG_SC"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_Borg_4"
+  icon_frame = 1
+  cost = 9215
+  size_restriction = { super_cube }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_HULL_5_BORG_SC"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 110600 ship_armor_add = 22   }
+  ai_weight = { weight = 300 }
+  prerequisites = { "tech_engineering_materials_1516" }
+  component_set = "borg_required_hull"
+}
+# Kelindide-Victurium Composite Hull (Civilian Ships)
+utility_component_template = {
+  key = "REQUIRED_HULL_4_BORG_CS"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_Borg_4"
+  icon_frame = 1
+  cost = 25
+  class_restriction = { shipclass_constructor shipclass_colonizer shipclass_science_ship shipclass_transport }
+  upgrades_to = "REQUIRED_HULL_5_BORG_CS"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 130 ship_armor_add = 22   }
+  ai_weight = { weight = 300 }
+  prerequisites = { "tech_engineering_materials_1516" }
+  component_set = "required_hull"
+}
+# Kelindide-Victurium Composite Hull (Light Military Stations)
+utility_component_template = {
+  key = "REQUIRED_HULL_4_BORG_DS"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_Borg_4"
+  icon_frame = 1
+  cost = 295
+  size_restriction = { military_station_small military_station_large station_listening borg_unimatrix_defense_small }
+  upgrades_to = "REQUIRED_HULL_5_BORG_DS"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 3520 ship_armor_add = 22   }
+  ai_weight = { weight = 300 }
+  prerequisites = { "tech_engineering_materials_1516" }
+  component_set = "required_hull"
+}
+# Kelindide-Victurium Composite Hull (Heavy Weapon Platform)
+utility_component_template = {
+  key = "REQUIRED_HULL_4_BORG_WP"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_Borg_4"
+  icon_frame = 1
+  cost = 1290
+  size_restriction = { military_station_medium }
+  upgrades_to = "REQUIRED_HULL_5_BORG_WP"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 15500 ship_armor_add = 22   }
+  ai_weight = { weight = 300 }
+  prerequisites = { "tech_engineering_materials_1516" }
+  component_set = "required_hull"
+}
+
+# Tetraburnium Nano-Weave Hull (Patrol Frigate)
+utility_component_template = {
+  key = "REQUIRED_HULL_5_BORG_PF"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_Borg_5"
+  icon_frame = 1
+  cost = 30
+  size_restriction = { corvette }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_HULL_6_BORG_PF"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 390 ship_armor_add = 25   }
+  ai_weight = { weight = 350 }
+  prerequisites = { "tech_engineering_materials_1518" }
+  component_set = "required_hull"
+}
+# Tetraburnium Nano-Weave Hull (Destroyer)
+utility_component_template = {
+  key = "REQUIRED_HULL_5_BORG_DE"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_Borg_5"
+  icon_frame = 1
+  cost = 110
+  size_restriction = { saber }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_HULL_6_BORG_DE"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 1480 ship_armor_add = 25   }
+  ai_weight = { weight = 350 }
+  prerequisites = { "tech_engineering_materials_1518" }
+  component_set = "borg_required_hull"
+}
+# Tetraburnium Nano-Weave Hull (Destroyer)
+utility_component_template = {
+  key = "REQUIRED_HULL_5_BORG_CR"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_Borg_5"
+  icon_frame = 1
+  cost = 350
+  size_restriction = { sovereign borg_sphere }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_HULL_6_BORG_CR"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 3710 ship_armor_add = 25   }
+  ai_weight = { weight = 350 }
+  prerequisites = { "tech_engineering_materials_1518" }
+  component_set = "borg_required_hull"
+}
+# Tetraburnium Nano-Weave Hull (Battlecruiser)
+utility_component_template = {
+  key = "REQUIRED_HULL_5_BORG_BC"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_Borg_5"
+  icon_frame = 1
+  cost = 150
+  size_restriction = { steamrunner borg_diamond }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_HULL_6_BORG_BC"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 1970 ship_armor_add = 25   }
+  ai_weight = { weight = 350 }
+  prerequisites = { "tech_engineering_materials_1518" }
+  component_set = "borg_required_hull"
+}
+# Tetraburnium Nano-Weave Hull (Battleship)
+utility_component_template = {
+  key = "REQUIRED_HULL_5_BORG_BS"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_Borg_5"
+  icon_frame = 1
+  cost = 1045
+  size_restriction = { adv_cruiser }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_HULL_6_BORG_BS"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 11160 ship_armor_add = 25   }
+  ai_weight = { weight = 350 }
+  prerequisites = { "tech_engineering_materials_1518" }
+  component_set = "borg_required_hull"
+}
+# Tetraburnium Nano-Weave Hull (Heavy Escort)
+utility_component_template = {
+  key = "REQUIRED_HULL_5_BORG_HE"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_Borg_5"
+  icon_frame = 1
+  cost = 130
+  size_restriction = { strike }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_HULL_6_BORG_HE"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 1730 ship_armor_add = 25   }
+  ai_weight = { weight = 350 }
+  prerequisites = { "tech_engineering_materials_1518" }
+  component_set = "borg_required_hull"
+}
+# Tetraburnium Nano-Weave Hull (Assault Cruiser)
+utility_component_template = {
+  key = "REQUIRED_HULL_5_BORG_AC"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_Borg_5"
+  icon_frame = 1
+  cost = 490
+  size_restriction = { assault_cruiser }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_HULL_6_BORG_AC"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 5200 ship_armor_add = 25   }
+  ai_weight = { weight = 350 }
+  prerequisites = { "tech_engineering_materials_1518" }
+  component_set = "borg_required_hull"
+}
+# Tetraburnium Nano-Weave Hull (Dreadnaught)
+utility_component_template = {
+  key = "REQUIRED_HULL_5_BORG_SB"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_Borg_5"
+  icon_frame = 1
+  cost = 3910
+  size_restriction = { super_battleship borg_cube borg_tactical }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_HULL_6_BORG_SB"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 41700 ship_armor_add = 25   }
+  ai_weight = { weight = 350 }
+  prerequisites = { "tech_engineering_materials_1518" }
+  component_set = "borg_required_hull"
+}
+# Tetraburnium Nano-Weave Hull ()
+utility_component_template = {
+  key = "REQUIRED_HULL_5_BORG_SC"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_Borg_5"
+  icon_frame = 1
+  cost = 10895
+  size_restriction = { super_cube }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_HULL_6_BORG_SC"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 116200 ship_armor_add = 25   }
+  ai_weight = { weight = 350 }
+  prerequisites = { "tech_engineering_materials_1518" }
+  component_set = "borg_required_hull"
+}
+# Tetraburnium Nano-Weave Hull (Civilian Ships)
+utility_component_template = {
+  key = "REQUIRED_HULL_5_BORG_CS"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_Borg_5"
+  icon_frame = 1
+  cost = 30
+  class_restriction = { shipclass_constructor shipclass_colonizer shipclass_science_ship shipclass_transport }
+  upgrades_to = "REQUIRED_HULL_6_BORG_CS"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 150 ship_armor_add = 25   }
+  ai_weight = { weight = 350 }
+  prerequisites = { "tech_engineering_materials_1518" }
+  component_set = "required_hull"
+}
+# Tetraburnium Nano-Weave Hull (Light Military Stations)
+utility_component_template = {
+  key = "REQUIRED_HULL_5_BORG_DS"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_Borg_5"
+  icon_frame = 1
+  cost = 370
+  size_restriction = { military_station_small military_station_large station_listening borg_unimatrix_defense_small }
+  upgrades_to = "REQUIRED_HULL_6_BORG_DS"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 3940 ship_armor_add = 25   }
+  ai_weight = { weight = 350 }
+  prerequisites = { "tech_engineering_materials_1518" }
+  component_set = "required_hull"
+}
+# Tetraburnium Nano-Weave Hull (Heavy Weapon Platform)
+utility_component_template = {
+  key = "REQUIRED_HULL_5_BORG_WP"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_Borg_5"
+  icon_frame = 1
+  cost = 1615
+  size_restriction = { military_station_medium }
+  upgrades_to = "REQUIRED_HULL_6_BORG_WP"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 17250 ship_armor_add = 25   }
+  ai_weight = { weight = 350 }
+  prerequisites = { "tech_engineering_materials_1518" }
+  component_set = "required_hull"
+}
+
+# Tritanium Mesh Hull (Patrol Frigate)
+utility_component_template = {
+  key = "REQUIRED_HULL_6_BORG_PF"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_Borg_6"
+  icon_frame = 1
+  cost = 35
+  size_restriction = { corvette }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_HULL_7_BORG_PF"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 450 ship_armor_add = 28   }
+  ai_weight = { weight = 400 }
+  prerequisites = { "tech_engineering_materials_1520" }
+  component_set = "required_hull"
+}
+# Tritanium Mesh Hull (Destroyer)
+utility_component_template = {
+  key = "REQUIRED_HULL_6_BORG_DE"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_Borg_6"
+  icon_frame = 1
+  cost = 140
+  size_restriction = { saber }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_HULL_7_BORG_DE"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 1620 ship_armor_add = 28   }
+  ai_weight = { weight = 400 }
+  prerequisites = { "tech_engineering_materials_1520" }
+  component_set = "borg_required_hull"
+}
+# Tritanium Mesh Hull (Destroyer)
+utility_component_template = {
+  key = "REQUIRED_HULL_6_BORG_CR"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_Borg_6"
+  icon_frame = 1
+  cost = 430
+  size_restriction = { sovereign borg_sphere }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_HULL_7_BORG_CR"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 4020 ship_armor_add = 28   }
+  ai_weight = { weight = 400 }
+  prerequisites = { "tech_engineering_materials_1520" }
+  component_set = "borg_required_hull"
+}
+# Tritanium Mesh Hull (Battlecruiser)
+utility_component_template = {
+  key = "REQUIRED_HULL_6_BORG_BC"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_Borg_6"
+  icon_frame = 1
+  cost = 185
+  size_restriction = { steamrunner borg_diamond }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_HULL_7_BORG_BC"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 2180 ship_armor_add = 28   }
+  ai_weight = { weight = 400 }
+  prerequisites = { "tech_engineering_materials_1520" }
+  component_set = "borg_required_hull"
+}
+# Tritanium Mesh Hull (Battleship)
+utility_component_template = {
+  key = "REQUIRED_HULL_6_BORG_BS"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_Borg_6"
+  icon_frame = 1
+  cost = 1265
+  size_restriction = { adv_cruiser }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_HULL_7_BORG_BS"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 11820 ship_armor_add = 28   }
+  ai_weight = { weight = 400 }
+  prerequisites = { "tech_engineering_materials_1520" }
+  component_set = "borg_required_hull"
+}
+# Tritanium Mesh Hull (Heavy Escort)
+utility_component_template = {
+  key = "REQUIRED_HULL_6_BORG_HE"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_Borg_6"
+  icon_frame = 1
+  cost = 165
+  size_restriction = { strike }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_HULL_7_BORG_HE"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 1900 ship_armor_add = 28   }
+  ai_weight = { weight = 400 }
+  prerequisites = { "tech_engineering_materials_1520" }
+  component_set = "borg_required_hull"
+}
+# Tritanium Mesh Hull (Assault Cruiser)
+utility_component_template = {
+  key = "REQUIRED_HULL_6_BORG_AC"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_Borg_6"
+  icon_frame = 1
+  cost = 600
+  size_restriction = { assault_cruiser }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_HULL_7_BORG_AC"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 5580 ship_armor_add = 28   }
+  ai_weight = { weight = 400 }
+  prerequisites = { "tech_engineering_materials_1520" }
+  component_set = "borg_required_hull"
+}
+# Tritanium Mesh Hull (Dreadnaught)
+utility_component_template = {
+  key = "REQUIRED_HULL_6_BORG_SB"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_Borg_6"
+  icon_frame = 1
+  cost = 4695
+  size_restriction = { super_battleship borg_cube borg_tactical }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_HULL_7_BORG_SB"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 43800 ship_armor_add = 28   }
+  ai_weight = { weight = 400 }
+  prerequisites = { "tech_engineering_materials_1520" }
+  component_set = "borg_required_hull"
+}
+# Tritanium Mesh Hull ()
+utility_component_template = {
+  key = "REQUIRED_HULL_6_BORG_SC"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_Borg_6"
+  icon_frame = 1
+  cost = 13050
+  size_restriction = { super_cube }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_HULL_7_BORG_SC"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 121800 ship_armor_add = 28   }
+  ai_weight = { weight = 400 }
+  prerequisites = { "tech_engineering_materials_1520" }
+  component_set = "borg_required_hull"
+}
+# Tritanium Mesh Hull (Civilian Ships)
+utility_component_template = {
+  key = "REQUIRED_HULL_6_BORG_CS"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_Borg_6"
+  icon_frame = 1
+  cost = 35
+  class_restriction = { shipclass_constructor shipclass_colonizer shipclass_science_ship shipclass_transport }
+  upgrades_to = "REQUIRED_HULL_7_BORG_CS"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 170 ship_armor_add = 28   }
+  ai_weight = { weight = 400 }
+  prerequisites = { "tech_engineering_materials_1520" }
+  component_set = "required_hull"
+}
+# Tritanium Mesh Hull (Light Military Stations)
+utility_component_template = {
+  key = "REQUIRED_HULL_6_BORG_DS"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_Borg_6"
+  icon_frame = 1
+  cost = 465
+  size_restriction = { military_station_small military_station_large station_listening borg_unimatrix_defense_small }
+  upgrades_to = "REQUIRED_HULL_7_BORG_DS"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 4360 ship_armor_add = 28   }
+  ai_weight = { weight = 400 }
+  prerequisites = { "tech_engineering_materials_1520" }
+  component_set = "required_hull"
+}
+# Tritanium Mesh Hull (Heavy Weapon Platform)
+utility_component_template = {
+  key = "REQUIRED_HULL_6_BORG_WP"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_Borg_6"
+  icon_frame = 1
+  cost = 2035
+  size_restriction = { military_station_medium }
+  upgrades_to = "REQUIRED_HULL_7_BORG_WP"
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 19000 ship_armor_add = 28   }
+  ai_weight = { weight = 400 }
+  prerequisites = { "tech_engineering_materials_1520" }
+  component_set = "required_hull"
+}
+
+# Tritanium Shape Memory Alloy Hull (Patrol Frigate)
+utility_component_template = {
+  key = "REQUIRED_HULL_7_BORG_PF"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_Borg_7"
+  icon_frame = 1
+  cost = 45
+  size_restriction = { corvette }
+  class_restriction = { shipclass_military }
+  
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 500 ship_armor_add = 31   }
+  ai_weight = { weight = 450 }
+  prerequisites = { "tech_engineering_materials_1522" }
+  component_set = "required_hull"
+}
+# Tritanium Shape Memory Alloy Hull (Destroyer)
+utility_component_template = {
+  key = "REQUIRED_HULL_7_BORG_DE"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_Borg_7"
+  icon_frame = 1
+  cost = 175
+  size_restriction = { saber }
+  class_restriction = { shipclass_military }
+  
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 1760 ship_armor_add = 31   }
+  ai_weight = { weight = 450 }
+  prerequisites = { "tech_engineering_materials_1522" }
+  component_set = "borg_required_hull"
+}
+# Tritanium Shape Memory Alloy Hull (Destroyer)
+utility_component_template = {
+  key = "REQUIRED_HULL_7_BORG_CR"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_Borg_7"
+  icon_frame = 1
+  cost = 545
+  size_restriction = { sovereign borg_sphere }
+  class_restriction = { shipclass_military }
+  
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 4340 ship_armor_add = 31   }
+  ai_weight = { weight = 450 }
+  prerequisites = { "tech_engineering_materials_1522" }
+  component_set = "borg_required_hull"
+}
+# Tritanium Shape Memory Alloy Hull (Battlecruiser)
+utility_component_template = {
+  key = "REQUIRED_HULL_7_BORG_BC"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_Borg_7"
+  icon_frame = 1
+  cost = 240
+  size_restriction = { steamrunner borg_diamond }
+  class_restriction = { shipclass_military }
+  
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 2390 ship_armor_add = 31   }
+  ai_weight = { weight = 450 }
+  prerequisites = { "tech_engineering_materials_1522" }
+  component_set = "borg_required_hull"
+}
+# Tritanium Shape Memory Alloy Hull (Battleship)
+utility_component_template = {
+  key = "REQUIRED_HULL_7_BORG_BS"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_Borg_7"
+  icon_frame = 1
+  cost = 1560
+  size_restriction = { adv_cruiser }
+  class_restriction = { shipclass_military }
+  
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 12490 ship_armor_add = 31   }
+  ai_weight = { weight = 450 }
+  prerequisites = { "tech_engineering_materials_1522" }
+  component_set = "borg_required_hull"
+}
+# Tritanium Shape Memory Alloy Hull (Heavy Escort)
+utility_component_template = {
+  key = "REQUIRED_HULL_7_BORG_HE"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_Borg_7"
+  icon_frame = 1
+  cost = 210
+  size_restriction = { strike }
+  class_restriction = { shipclass_military }
+  
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 2080 ship_armor_add = 31   }
+  ai_weight = { weight = 450 }
+  prerequisites = { "tech_engineering_materials_1522" }
+  component_set = "borg_required_hull"
+}
+# Tritanium Shape Memory Alloy Hull (Assault Cruiser)
+utility_component_template = {
+  key = "REQUIRED_HULL_7_BORG_AC"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_Borg_7"
+  icon_frame = 1
+  cost = 745
+  size_restriction = { assault_cruiser }
+  class_restriction = { shipclass_military }
+  
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 5970 ship_armor_add = 31   }
+  ai_weight = { weight = 450 }
+  prerequisites = { "tech_engineering_materials_1522" }
+  component_set = "borg_required_hull"
+}
+# Tritanium Shape Memory Alloy Hull (Dreadnaught)
+utility_component_template = {
+  key = "REQUIRED_HULL_7_BORG_SB"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_Borg_7"
+  icon_frame = 1
+  cost = 5740
+  size_restriction = { super_battleship borg_cube borg_tactical }
+  class_restriction = { shipclass_military }
+  
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 45900 ship_armor_add = 31   }
+  ai_weight = { weight = 450 }
+  prerequisites = { "tech_engineering_materials_1522" }
+  component_set = "borg_required_hull"
+}
+# Tritanium Shape Memory Alloy Hull ()
+utility_component_template = {
+  key = "REQUIRED_HULL_7_BORG_SC"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_Borg_7"
+  icon_frame = 1
+  cost = 15925
+  size_restriction = { super_cube }
+  class_restriction = { shipclass_military }
+  
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 127400 ship_armor_add = 31   }
+  ai_weight = { weight = 450 }
+  prerequisites = { "tech_engineering_materials_1522" }
+  component_set = "borg_required_hull"
+}
+# Tritanium Shape Memory Alloy Hull (Civilian Ships)
+utility_component_template = {
+  key = "REQUIRED_HULL_7_BORG_CS"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_Borg_7"
+  icon_frame = 1
+  cost = 40
+  class_restriction = { shipclass_constructor shipclass_colonizer shipclass_science_ship shipclass_transport }
+  
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 190 ship_armor_add = 31   }
+  ai_weight = { weight = 450 }
+  prerequisites = { "tech_engineering_materials_1522" }
+  component_set = "required_hull"
+}
+# Tritanium Shape Memory Alloy Hull (Light Military Stations)
+utility_component_template = {
+  key = "REQUIRED_HULL_7_BORG_DS"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_Borg_7"
+  icon_frame = 1
+  cost = 600
+  size_restriction = { military_station_small military_station_large station_listening borg_unimatrix_defense_small }
+  
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 4780 ship_armor_add = 31   }
+  ai_weight = { weight = 450 }
+  prerequisites = { "tech_engineering_materials_1522" }
+  component_set = "required_hull"
+}
+# Tritanium Shape Memory Alloy Hull (Heavy Weapon Platform)
+utility_component_template = {
+  key = "REQUIRED_HULL_7_BORG_WP"
+  size = small
+  icon = "GFX_ship_part_Required_Hull_Borg_7"
+  icon_frame = 1
+  cost = 2595
+  size_restriction = { military_station_medium }
+  
+  ship_modifier = {     }
+  modifier = { ship_hitpoints_add = 20750 ship_armor_add = 31   }
+  ai_weight = { weight = 450 }
+  prerequisites = { "tech_engineering_materials_1522" }
+  component_set = "required_hull"
+}

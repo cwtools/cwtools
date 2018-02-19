@@ -1,0 +1,2041 @@
+# Spintronic Computer (Patrol Frigate)
+   utility_component_template = {
+      key = "REQUIRED_COMPUTER_0_PF"
+      size = small
+      icon = "GFX_ship_part_Required_Computer_0"
+      icon_frame = 1
+      power = -5
+      cost = 5
+      size_restriction = { corvette }
+      class_restriction = { shipclass_military }
+      upgrades_to = "REQUIRED_COMPUTER_1_PF"
+      ship_modifier = {  ship_tracking_add = 10   }
+      modifier = {     }
+      ai_weight = { weight = 1 }
+      prerequisites = { "tech_basic_science_lab_1" }
+      component_set = "combat_computers"
+   }
+   # Spintronic Computer (Destroyer)
+   utility_component_template = {
+      key = "REQUIRED_COMPUTER_0_DE"
+      size = small
+      icon = "GFX_ship_part_Required_Computer_0"
+      icon_frame = 1
+      power = -10
+      cost = 10
+      size_restriction = { saber }
+      class_restriction = { shipclass_military }
+      upgrades_to = "REQUIRED_COMPUTER_1_DE"
+      ship_modifier = {  ship_tracking_add = 10   }
+      modifier = {     }
+      ai_weight = { weight = 1 }
+      prerequisites = { "tech_basic_science_lab_1" }
+      component_set = "combat_computers"
+   }
+   # Spintronic Computer (Cruiser/Sphere)
+   utility_component_template = {
+      key = "REQUIRED_COMPUTER_0_CR"
+      size = small
+      icon = "GFX_ship_part_Required_Computer_0"
+      icon_frame = 1
+      power = -25
+      cost = 25
+      size_restriction = { sovereign borg_sphere }
+      class_restriction = { shipclass_military }
+      upgrades_to = "REQUIRED_COMPUTER_1_CR"
+      ship_modifier = {  ship_tracking_add = 10   }
+      modifier = {     }
+      ai_weight = { weight = 1 }
+      prerequisites = { "tech_basic_science_lab_1" }
+      component_set = "combat_computers"
+   }
+   # Spintronic Computer (Battlecruiser/Diamond)
+   utility_component_template = {
+      key = "REQUIRED_COMPUTER_0_BC"
+      size = small
+      icon = "GFX_ship_part_Required_Computer_0"
+      icon_frame = 1
+      power = -20
+      cost = 20
+      size_restriction = { steamrunner borg_diamond }
+      class_restriction = { shipclass_military }
+      upgrades_to = "REQUIRED_COMPUTER_1_BC"
+      ship_modifier = {  ship_tracking_add = 10   }
+      modifier = {     }
+      ai_weight = { weight = 1 }
+      prerequisites = { "tech_basic_science_lab_1" }
+      component_set = "combat_computers"
+   }
+   # Spintronic Computer (Battleship)
+   utility_component_template = {
+      key = "REQUIRED_COMPUTER_0_BS"
+      size = small
+      icon = "GFX_ship_part_Required_Computer_0"
+      icon_frame = 1
+      ftl = warp
+      power = -35
+      cost = 205
+      size_restriction = { adv_cruiser }
+      class_restriction = { shipclass_military }
+      upgrades_to = "REQUIRED_COMPUTER_1_BS"
+      ship_modifier = {  ship_tracking_add = 10   }
+      modifier = {     }
+      ai_weight = { weight = 1 }
+      prerequisites = { "tech_basic_science_lab_1" }
+      component_set = "combat_computers"
+   }
+   # Spintronic Computer (Heavy Escort)
+   utility_component_template = {
+      key = "REQUIRED_COMPUTER_0_HE"
+      size = small
+      icon = "GFX_ship_part_Required_Computer_0"
+      icon_frame = 1
+      ftl = warp
+      power = -20
+      cost = 20
+      size_restriction = { strike }
+      class_restriction = { shipclass_military }
+      upgrades_to = "REQUIRED_COMPUTER_1_HE"
+      ship_modifier = {  ship_tracking_add = 10   }
+      modifier = {     }
+      ai_weight = { weight = 1 }
+      prerequisites = { "tech_basic_science_lab_1" }
+      component_set = "combat_computers"
+   }
+   # Spintronic Computer (Assault Cruiser)
+   utility_component_template = {
+      key = "REQUIRED_COMPUTER_0_AC"
+      size = small
+      icon = "GFX_ship_part_Required_Computer_0"
+      icon_frame = 1
+      power = -40
+      cost = 40
+      size_restriction = { assault_cruiser }
+      class_restriction = { shipclass_military }
+      upgrades_to = "REQUIRED_COMPUTER_1_AC"
+      ship_modifier = {  ship_tracking_add = 10   }
+      modifier = {     }
+      ai_weight = { weight = 1 }
+      prerequisites = { "tech_basic_science_lab_1" }
+      component_set = "combat_computers"
+   }
+   # Spintronic Computer (Dreadnought)
+   utility_component_template = {
+      key = "REQUIRED_COMPUTER_0_SB"
+      size = small
+      icon = "GFX_ship_part_Required_Computer_0"
+      icon_frame = 1
+      ftl = warp
+      power = -85
+      cost = 85
+      size_restriction = { super_battleship borg_cube borg_tactical }
+      class_restriction = { shipclass_military }
+      upgrades_to = "REQUIRED_COMPUTER_1_SB"
+      ship_modifier = {  ship_tracking_add = 10   }
+      modifier = {     }
+      ai_weight = { weight = 1 }
+      prerequisites = { "tech_basic_science_lab_1" }
+      component_set = "combat_computers"
+   }
+   # Spintronic Computer (Man-O-War)
+   utility_component_template = {
+      key = "REQUIRED_COMPUTER_0_SC"
+      size = small
+      icon = "GFX_ship_part_Required_Computer_0"
+      icon_frame = 1
+      power = -180
+      cost = 180
+      size_restriction = { super_cube }
+      class_restriction = { shipclass_military }
+      upgrades_to = "REQUIRED_COMPUTER_1_SC"
+      ship_modifier = {  ship_tracking_add = 10   }
+      modifier = {     }
+      ai_weight = { weight = 1 }
+      prerequisites = { "tech_basic_science_lab_1" }
+      component_set = "combat_computers"
+   }
+   
+# Optical Computer (Patrol Frigate)
+   utility_component_template = {
+      key = "REQUIRED_COMPUTER_1_PF"
+      size = small
+      icon = "GFX_ship_part_Required_Computer_1"
+      icon_frame = 1
+      power = -5
+      cost = 5
+      size_restriction = { corvette }
+      class_restriction = { shipclass_military }
+      upgrades_to = "REQUIRED_COMPUTER_2_PF"
+      ship_modifier = { ship_accuracy_add = 1 ship_tracking_add = 15   }
+      modifier = {     }
+      ai_weight = { weight = 10 }
+      prerequisites = { "tech_physics_optical_2" }
+      component_set = "combat_computers"
+   }
+   # Optical Computer (Destroyer)
+   utility_component_template = {
+      key = "REQUIRED_COMPUTER_1_DE"
+      size = small
+      icon = "GFX_ship_part_Required_Computer_1"
+      icon_frame = 1
+      power = -15
+      cost = 15
+      size_restriction = { saber }
+      class_restriction = { shipclass_military }
+      upgrades_to = "REQUIRED_COMPUTER_2_DE"
+      ship_modifier = { ship_accuracy_add = 1 ship_tracking_add = 15   }
+      modifier = {     }
+      ai_weight = { weight = 10 }
+      prerequisites = { "tech_physics_optical_2" }
+      component_set = "combat_computers"
+   }
+   # Optical Computer (Cruiser/Sphere)
+   utility_component_template = {
+      key = "REQUIRED_COMPUTER_1_CR"
+      size = small
+      icon = "GFX_ship_part_Required_Computer_1"
+      icon_frame = 1
+      power = -35
+      cost = 35
+      size_restriction = { sovereign borg_sphere }
+      class_restriction = { shipclass_military }
+      upgrades_to = "REQUIRED_COMPUTER_2_CR"
+      ship_modifier = {  ship_tracking_add = 15   }
+      modifier = {     }
+      ai_weight = { weight = 10 }
+      prerequisites = { "tech_physics_optical_2" }
+      component_set = "combat_computers"
+   }
+   # Optical Computer (Battlecruiser/Diamond)
+   utility_component_template = {
+      key = "REQUIRED_COMPUTER_1_BC"
+      size = small
+      icon = "GFX_ship_part_Required_Computer_1"
+      icon_frame = 1
+      power = -25
+      cost = 25
+      size_restriction = { steamrunner borg_diamond }
+      class_restriction = { shipclass_military }
+      upgrades_to = "REQUIRED_COMPUTER_2_BC"
+      ship_modifier = { ship_accuracy_add = 1 ship_tracking_add = 15   }
+      modifier = {     }
+      ai_weight = { weight = 10 }
+      prerequisites = { "tech_physics_optical_2" }
+      component_set = "combat_computers"
+   }
+   # Optical Computer (Battleship)
+   utility_component_template = {
+      key = "REQUIRED_COMPUTER_1_BS"
+      size = small
+      icon = "GFX_ship_part_Required_Computer_1"
+      icon_frame = 1
+      ftl = warp
+      power = -50
+      cost = 240
+      size_restriction = { adv_cruiser }
+      class_restriction = { shipclass_military }
+      upgrades_to = "REQUIRED_COMPUTER_2_BS"
+      ship_modifier = { ship_accuracy_add = 1 ship_tracking_add = 15   }
+      modifier = {     }
+      ai_weight = { weight = 10 }
+      prerequisites = { "tech_physics_optical_2" }
+      component_set = "combat_computers"
+   }
+   # Optical Computer (Heavy Escort)
+   utility_component_template = {
+      key = "REQUIRED_COMPUTER_1_HE"
+      size = small
+      icon = "GFX_ship_part_Required_Computer_1"
+      icon_frame = 1
+      ftl = warp
+      power = -30
+      cost = 30
+      size_restriction = { strike }
+      class_restriction = { shipclass_military }
+      upgrades_to = "REQUIRED_COMPUTER_2_HE"
+      ship_modifier = { ship_accuracy_add = 1 ship_tracking_add = 15   }
+      modifier = {     }
+      ai_weight = { weight = 10 }
+      prerequisites = { "tech_physics_optical_2" }
+      component_set = "combat_computers"
+   }
+   # Optical Computer (Assault Cruiser)
+   utility_component_template = {
+      key = "REQUIRED_COMPUTER_1_AC"
+      size = small
+      icon = "GFX_ship_part_Required_Computer_1"
+      icon_frame = 1
+      power = -55
+      cost = 55
+      size_restriction = { assault_cruiser }
+      class_restriction = { shipclass_military }
+      upgrades_to = "REQUIRED_COMPUTER_2_AC"
+      ship_modifier = { ship_accuracy_add = 1 ship_tracking_add = 15   }
+      modifier = {     }
+      ai_weight = { weight = 10 }
+      prerequisites = { "tech_physics_optical_2" }
+      component_set = "combat_computers"
+   }
+   # Optical Computer (Dreadnought)
+   utility_component_template = {
+      key = "REQUIRED_COMPUTER_1_SB"
+      size = small
+      icon = "GFX_ship_part_Required_Computer_1"
+      icon_frame = 1
+      ftl = warp
+      power = -120
+      cost = 120
+      size_restriction = { super_battleship borg_cube borg_tactical }
+      class_restriction = { shipclass_military }
+      upgrades_to = "REQUIRED_COMPUTER_2_SB"
+      ship_modifier = { ship_accuracy_add = 1 ship_tracking_add = 15   }
+      modifier = {     }
+      ai_weight = { weight = 10 }
+      prerequisites = { "tech_physics_optical_2" }
+      component_set = "combat_computers"
+   }
+   # Optical Computer (Man-O-War)
+   utility_component_template = {
+      key = "REQUIRED_COMPUTER_1_SC"
+      size = small
+      icon = "GFX_ship_part_Required_Computer_1"
+      icon_frame = 1
+      power = -250
+      cost = 250
+      size_restriction = { super_cube }
+      class_restriction = { shipclass_military }
+      upgrades_to = "REQUIRED_COMPUTER_2_SC"
+      ship_modifier = { ship_accuracy_add = 1 ship_tracking_add = 15   }
+      modifier = {     }
+      ai_weight = { weight = 10 }
+      prerequisites = { "tech_physics_optical_2" }
+      component_set = "combat_computers"
+   }
+   
+# Duotronic Computer (Patrol Frigate)
+   utility_component_template = {
+      key = "REQUIRED_COMPUTER_2_PF"
+      size = small
+      icon = "GFX_ship_part_Required_Computer_2"
+      icon_frame = 1
+      power = -10
+      cost = 10
+      size_restriction = { corvette }
+      class_restriction = { shipclass_military }
+      upgrades_to = "REQUIRED_COMPUTER_3_PF"
+      ship_modifier = { ship_accuracy_add = 4 ship_tracking_add = 20   }
+      modifier = {     }
+      ai_weight = { weight = 20 }
+      prerequisites = { "tech_physics_duotronic_4" }
+      component_set = "combat_computers"
+   }
+   # Duotronic Computer (Destroyer)
+   utility_component_template = {
+      key = "REQUIRED_COMPUTER_2_DE"
+      size = small
+      icon = "GFX_ship_part_Required_Computer_2"
+      icon_frame = 1
+      power = -20
+      cost = 20
+      size_restriction = { saber }
+      class_restriction = { shipclass_military }
+      upgrades_to = "REQUIRED_COMPUTER_3_DE"
+      ship_modifier = { ship_accuracy_add = 4 ship_tracking_add = 20   }
+      modifier = {     }
+      ai_weight = { weight = 20 }
+      prerequisites = { "tech_physics_duotronic_4" }
+      component_set = "combat_computers"
+   }
+   # Duotronic Computer (Cruiser/Sphere)
+   utility_component_template = {
+      key = "REQUIRED_COMPUTER_2_CR"
+      size = small
+      icon = "GFX_ship_part_Required_Computer_2"
+      icon_frame = 1
+      power = -55
+      cost = 55
+      size_restriction = { sovereign borg_sphere }
+      class_restriction = { shipclass_military }
+      upgrades_to = "REQUIRED_COMPUTER_3_CR"
+      ship_modifier = {  ship_tracking_add = 20   }
+      modifier = {     }
+      ai_weight = { weight = 20 }
+      prerequisites = { "tech_physics_duotronic_4" }
+      component_set = "combat_computers"
+   }
+   # Duotronic Computer (Battlecruiser/Diamond)
+   utility_component_template = {
+      key = "REQUIRED_COMPUTER_2_BC"
+      size = small
+      icon = "GFX_ship_part_Required_Computer_2"
+      icon_frame = 1
+      power = -40
+      cost = 40
+      size_restriction = { steamrunner borg_diamond }
+      class_restriction = { shipclass_military }
+      upgrades_to = "REQUIRED_COMPUTER_3_BC"
+      ship_modifier = { ship_accuracy_add = 4 ship_tracking_add = 20   }
+      modifier = {     }
+      ai_weight = { weight = 20 }
+      prerequisites = { "tech_physics_duotronic_4" }
+      component_set = "combat_computers"
+   }
+   # Duotronic Computer (Battleship)
+   utility_component_template = {
+      key = "REQUIRED_COMPUTER_2_BS"
+      size = small
+      icon = "GFX_ship_part_Required_Computer_2"
+      icon_frame = 1
+      ftl = warp
+      power = -85
+      cost = 275
+      size_restriction = { adv_cruiser }
+      class_restriction = { shipclass_military }
+      upgrades_to = "REQUIRED_COMPUTER_3_BS"
+      ship_modifier = { ship_accuracy_add = 4 ship_tracking_add = 20   }
+      modifier = {     }
+      ai_weight = { weight = 20 }
+      prerequisites = { "tech_physics_duotronic_4" }
+      component_set = "combat_computers"
+   }
+   # Duotronic Computer (Heavy Escort)
+   utility_component_template = {
+      key = "REQUIRED_COMPUTER_2_HE"
+      size = small
+      icon = "GFX_ship_part_Required_Computer_2"
+      icon_frame = 1
+      ftl = warp
+      power = -50
+      cost = 50
+      size_restriction = { strike }
+      class_restriction = { shipclass_military }
+      upgrades_to = "REQUIRED_COMPUTER_3_HE"
+      ship_modifier = { ship_accuracy_add = 4 ship_tracking_add = 20   }
+      modifier = {     }
+      ai_weight = { weight = 20 }
+      prerequisites = { "tech_physics_duotronic_4" }
+      component_set = "combat_computers"
+   }
+   # Duotronic Computer (Assault Cruiser)
+   utility_component_template = {
+      key = "REQUIRED_COMPUTER_2_AC"
+      size = small
+      icon = "GFX_ship_part_Required_Computer_2"
+      icon_frame = 1
+      power = -90
+      cost = 90
+      size_restriction = { assault_cruiser }
+      class_restriction = { shipclass_military }
+      upgrades_to = "REQUIRED_COMPUTER_3_AC"
+      ship_modifier = { ship_accuracy_add = 4 ship_tracking_add = 20   }
+      modifier = {     }
+      ai_weight = { weight = 20 }
+      prerequisites = { "tech_physics_duotronic_4" }
+      component_set = "combat_computers"
+   }
+   # Duotronic Computer (Dreadnought)
+   utility_component_template = {
+      key = "REQUIRED_COMPUTER_2_SB"
+      size = small
+      icon = "GFX_ship_part_Required_Computer_2"
+      icon_frame = 1
+      ftl = warp
+      power = -190
+      cost = 190
+      size_restriction = { super_battleship borg_cube borg_tactical }
+      class_restriction = { shipclass_military }
+      upgrades_to = "REQUIRED_COMPUTER_3_SB"
+      ship_modifier = { ship_accuracy_add = 4 ship_tracking_add = 20   }
+      modifier = {     }
+      ai_weight = { weight = 20 }
+      prerequisites = { "tech_physics_duotronic_4" }
+      component_set = "combat_computers"
+   }
+   # Duotronic Computer (Man-O-War)
+   utility_component_template = {
+      key = "REQUIRED_COMPUTER_2_SC"
+      size = small
+      icon = "GFX_ship_part_Required_Computer_2"
+      icon_frame = 1
+      power = -395
+      cost = 395
+      size_restriction = { super_cube }
+      class_restriction = { shipclass_military }
+      upgrades_to = "REQUIRED_COMPUTER_3_SC"
+      ship_modifier = { ship_accuracy_add = 4 ship_tracking_add = 20   }
+      modifier = {     }
+      ai_weight = { weight = 20 }
+      prerequisites = { "tech_physics_duotronic_4" }
+      component_set = "combat_computers"
+   }
+   
+# Isolinear Computer (Patrol Frigate)
+   utility_component_template = {
+      key = "REQUIRED_COMPUTER_3_PF"
+      size = small
+      icon = "GFX_ship_part_Required_Computer_3"
+      icon_frame = 1
+      power = -15
+      cost = 15
+      size_restriction = { corvette }
+      class_restriction = { shipclass_military }
+      upgrades_to = "REQUIRED_COMPUTER_4_PF"
+      ship_modifier = { ship_accuracy_add = 10 ship_tracking_add = 25   }
+      modifier = {     }
+      ai_weight = { weight = 30 }
+      prerequisites = { "tech_physics_isolinear_6" }
+      component_set = "combat_computers"
+   }
+   # Isolinear Computer (Destroyer)
+   utility_component_template = {
+      key = "REQUIRED_COMPUTER_3_DE"
+      size = small
+      icon = "GFX_ship_part_Required_Computer_3"
+      icon_frame = 1
+      power = -35
+      cost = 35
+      size_restriction = { saber }
+      class_restriction = { shipclass_military }
+      upgrades_to = "REQUIRED_COMPUTER_4_DE"
+      ship_modifier = { ship_accuracy_add = 10 ship_tracking_add = 25   }
+      modifier = {     }
+      ai_weight = { weight = 30 }
+      prerequisites = { "tech_physics_isolinear_6" }
+      component_set = "combat_computers"
+   }
+   # Isolinear Computer (Cruiser/Sphere)
+   utility_component_template = {
+      key = "REQUIRED_COMPUTER_3_CR"
+      size = small
+      icon = "GFX_ship_part_Required_Computer_3"
+      icon_frame = 1
+      power = -80
+      cost = 80
+      size_restriction = { sovereign borg_sphere }
+      class_restriction = { shipclass_military }
+      upgrades_to = "REQUIRED_COMPUTER_4_CR"
+      ship_modifier = {  ship_tracking_add = 25   }
+      modifier = {     }
+      ai_weight = { weight = 30 }
+      prerequisites = { "tech_physics_isolinear_6" }
+      component_set = "combat_computers"
+   }
+   # Isolinear Computer (Battlecruiser/Diamond)
+   utility_component_template = {
+      key = "REQUIRED_COMPUTER_3_BC"
+      size = small
+      icon = "GFX_ship_part_Required_Computer_3"
+      icon_frame = 1
+      power = -60
+      cost = 60
+      size_restriction = { steamrunner borg_diamond }
+      class_restriction = { shipclass_military }
+      upgrades_to = "REQUIRED_COMPUTER_4_BC"
+      ship_modifier = { ship_accuracy_add = 10 ship_tracking_add = 25   }
+      modifier = {     }
+      ai_weight = { weight = 30 }
+      prerequisites = { "tech_physics_isolinear_6" }
+      component_set = "combat_computers"
+   }
+   # Isolinear Computer (Battleship)
+   utility_component_template = {
+      key = "REQUIRED_COMPUTER_3_BS"
+      size = small
+      icon = "GFX_ship_part_Required_Computer_3"
+      icon_frame = 1
+      ftl = warp
+      power = -125
+      cost = 475
+      size_restriction = { adv_cruiser }
+      class_restriction = { shipclass_military }
+      upgrades_to = "REQUIRED_COMPUTER_4_BS"
+      ship_modifier = { ship_accuracy_add = 10 ship_tracking_add = 25   }
+      modifier = {     }
+      ai_weight = { weight = 30 }
+      prerequisites = { "tech_physics_isolinear_6" }
+      component_set = "combat_computers"
+   }
+   # Isolinear Computer (Heavy Escort)
+   utility_component_template = {
+      key = "REQUIRED_COMPUTER_3_HE"
+      size = small
+      icon = "GFX_ship_part_Required_Computer_3"
+      icon_frame = 1
+      ftl = warp
+      power = -75
+      cost = 75
+      size_restriction = { strike }
+      class_restriction = { shipclass_military }
+      upgrades_to = "REQUIRED_COMPUTER_4_HE"
+      ship_modifier = { ship_accuracy_add = 10 ship_tracking_add = 25   }
+      modifier = {     }
+      ai_weight = { weight = 30 }
+      prerequisites = { "tech_physics_isolinear_6" }
+      component_set = "combat_computers"
+   }
+   # Isolinear Computer (Assault Cruiser)
+   utility_component_template = {
+      key = "REQUIRED_COMPUTER_3_AC"
+      size = small
+      icon = "GFX_ship_part_Required_Computer_3"
+      icon_frame = 1
+      power = -135
+      cost = 135
+      size_restriction = { assault_cruiser }
+      class_restriction = { shipclass_military }
+      upgrades_to = "REQUIRED_COMPUTER_4_AC"
+      ship_modifier = { ship_accuracy_add = 10 ship_tracking_add = 25   }
+      modifier = {     }
+      ai_weight = { weight = 30 }
+      prerequisites = { "tech_physics_isolinear_6" }
+      component_set = "combat_computers"
+   }
+   # Isolinear Computer (Dreadnought)
+   utility_component_template = {
+      key = "REQUIRED_COMPUTER_3_SB"
+      size = small
+      icon = "GFX_ship_part_Required_Computer_3"
+      icon_frame = 1
+      ftl = warp
+      power = -280
+      cost = 280
+      size_restriction = { super_battleship borg_cube borg_tactical }
+      class_restriction = { shipclass_military }
+      upgrades_to = "REQUIRED_COMPUTER_4_SB"
+      ship_modifier = { ship_accuracy_add = 10 ship_tracking_add = 25   }
+      modifier = {     }
+      ai_weight = { weight = 30 }
+      prerequisites = { "tech_physics_isolinear_6" }
+      component_set = "combat_computers"
+   }
+   # Isolinear Computer (Man-O-War)
+   utility_component_template = {
+      key = "REQUIRED_COMPUTER_3_SC"
+      size = small
+      icon = "GFX_ship_part_Required_Computer_3"
+      icon_frame = 1
+      power = -590
+      cost = 590
+      size_restriction = { super_cube }
+      class_restriction = { shipclass_military }
+      upgrades_to = "REQUIRED_COMPUTER_4_SC"
+      ship_modifier = { ship_accuracy_add = 10 ship_tracking_add = 25   }
+      modifier = {     }
+      ai_weight = { weight = 30 }
+      prerequisites = { "tech_physics_isolinear_6" }
+      component_set = "combat_computers"
+   }
+   
+# Neural Gel Computer (Patrol Frigate)
+   utility_component_template = {
+      key = "REQUIRED_COMPUTER_4_PF"
+      size = small
+      icon = "GFX_ship_part_Required_Computer_4"
+      icon_frame = 1
+      power = -20
+      cost = 20
+      size_restriction = { corvette }
+      class_restriction = { shipclass_military }
+      upgrades_to = "REQUIRED_COMPUTER_5_PF"
+      ship_modifier = { ship_accuracy_add = 12 ship_tracking_add = 30   }
+      modifier = {     }
+      ai_weight = { weight = 40 }
+      prerequisites = { "tech_physics_organic_18" }
+      component_set = "combat_computers"
+   }
+   # Neural Gel Computer (Destroyer)
+   utility_component_template = {
+      key = "REQUIRED_COMPUTER_4_DE"
+      size = small
+      icon = "GFX_ship_part_Required_Computer_4"
+      icon_frame = 1
+      power = -35
+      cost = 35
+      size_restriction = { saber }
+      class_restriction = { shipclass_military }
+      upgrades_to = "REQUIRED_COMPUTER_5_DE"
+      ship_modifier = { ship_accuracy_add = 12 ship_tracking_add = 30   }
+      modifier = {     }
+      ai_weight = { weight = 40 }
+      prerequisites = { "tech_physics_organic_18" }
+      component_set = "combat_computers"
+   }
+   # Neural Gel Computer (Cruiser/Sphere)
+   utility_component_template = {
+      key = "REQUIRED_COMPUTER_4_CR"
+      size = small
+      icon = "GFX_ship_part_Required_Computer_4"
+      icon_frame = 1
+      power = -85
+      cost = 85
+      size_restriction = { sovereign borg_sphere }
+      class_restriction = { shipclass_military }
+      upgrades_to = "REQUIRED_COMPUTER_5_CR"
+      ship_modifier = {  ship_tracking_add = 30   }
+      modifier = {     }
+      ai_weight = { weight = 40 }
+      prerequisites = { "tech_physics_organic_18" }
+      component_set = "combat_computers"
+   }
+   # Neural Gel Computer (Battlecruiser/Diamond)
+   utility_component_template = {
+      key = "REQUIRED_COMPUTER_4_BC"
+      size = small
+      icon = "GFX_ship_part_Required_Computer_4"
+      icon_frame = 1
+      power = -65
+      cost = 65
+      size_restriction = { steamrunner borg_diamond }
+      class_restriction = { shipclass_military }
+      upgrades_to = "REQUIRED_COMPUTER_5_BC"
+      ship_modifier = { ship_accuracy_add = 12 ship_tracking_add = 30   }
+      modifier = {     }
+      ai_weight = { weight = 40 }
+      prerequisites = { "tech_physics_organic_18" }
+      component_set = "combat_computers"
+   }
+   # Neural Gel Computer (Battleship)
+   utility_component_template = {
+      key = "REQUIRED_COMPUTER_4_BS"
+      size = small
+      icon = "GFX_ship_part_Required_Computer_4"
+      icon_frame = 1
+      ftl = warp
+      power = -135
+      cost = 575
+      size_restriction = { adv_cruiser }
+      class_restriction = { shipclass_military }
+      upgrades_to = "REQUIRED_COMPUTER_5_BS"
+      ship_modifier = { ship_accuracy_add = 12 ship_tracking_add = 30   }
+      modifier = {     }
+      ai_weight = { weight = 40 }
+      prerequisites = { "tech_physics_organic_18" }
+      component_set = "combat_computers"
+   }
+   # Neural Gel Computer (Heavy Escort)
+   utility_component_template = {
+      key = "REQUIRED_COMPUTER_4_HE"
+      size = small
+      icon = "GFX_ship_part_Required_Computer_4"
+      icon_frame = 1
+      ftl = warp
+      power = -80
+      cost = 80
+      size_restriction = { strike }
+      class_restriction = { shipclass_military }
+      upgrades_to = "REQUIRED_COMPUTER_5_HE"
+      ship_modifier = { ship_accuracy_add = 12 ship_tracking_add = 30   }
+      modifier = {     }
+      ai_weight = { weight = 40 }
+      prerequisites = { "tech_physics_organic_18" }
+      component_set = "combat_computers"
+   }
+   # Neural Gel Computer (Assault Cruiser)
+   utility_component_template = {
+      key = "REQUIRED_COMPUTER_4_AC"
+      size = small
+      icon = "GFX_ship_part_Required_Computer_4"
+      icon_frame = 1
+      power = -145
+      cost = 145
+      size_restriction = { assault_cruiser }
+      class_restriction = { shipclass_military }
+      upgrades_to = "REQUIRED_COMPUTER_5_AC"
+      ship_modifier = { ship_accuracy_add = 12 ship_tracking_add = 30   }
+      modifier = {     }
+      ai_weight = { weight = 40 }
+      prerequisites = { "tech_physics_organic_18" }
+      component_set = "combat_computers"
+   }
+   # Neural Gel Computer (Dreadnought)
+   utility_component_template = {
+      key = "REQUIRED_COMPUTER_4_SB"
+      size = small
+      icon = "GFX_ship_part_Required_Computer_4"
+      icon_frame = 1
+      ftl = warp
+      power = -305
+      cost = 305
+      size_restriction = { super_battleship borg_cube borg_tactical }
+      class_restriction = { shipclass_military }
+      upgrades_to = "REQUIRED_COMPUTER_5_SB"
+      ship_modifier = { ship_accuracy_add = 12 ship_tracking_add = 30   }
+      modifier = {     }
+      ai_weight = { weight = 40 }
+      prerequisites = { "tech_physics_organic_18" }
+      component_set = "combat_computers"
+   }
+   # Neural Gel Computer (Man-O-War)
+   utility_component_template = {
+      key = "REQUIRED_COMPUTER_4_SC"
+      size = small
+      icon = "GFX_ship_part_Required_Computer_4"
+      icon_frame = 1
+      power = -640
+      cost = 640
+      size_restriction = { super_cube }
+      class_restriction = { shipclass_military }
+      upgrades_to = "REQUIRED_COMPUTER_5_SC"
+      ship_modifier = { ship_accuracy_add = 12 ship_tracking_add = 30   }
+      modifier = {     }
+      ai_weight = { weight = 40 }
+      prerequisites = { "tech_physics_organic_18" }
+      component_set = "combat_computers"
+   }
+   
+# Direct Mind-to-Computer Interface (Patrol Frigate)
+   utility_component_template = {
+      key = "REQUIRED_COMPUTER_5_PF"
+      size = small
+      icon = "GFX_ship_part_Required_Computer_5"
+      icon_frame = 1
+      power = -25
+      cost = 25
+      size_restriction = { corvette }
+      class_restriction = { shipclass_military }
+      
+      ship_modifier = { ship_accuracy_add = 14 ship_tracking_add = 35   }
+      modifier = {     }
+      ai_weight = { weight = 50 }
+      prerequisites = { "tech_physics_computing_9" }
+      component_set = "combat_computers"
+   }
+   # Direct Mind-to-Computer Interface (Destroyer)
+   utility_component_template = {
+      key = "REQUIRED_COMPUTER_5_DE"
+      size = small
+      icon = "GFX_ship_part_Required_Computer_5"
+      icon_frame = 1
+      power = -40
+      cost = 40
+      size_restriction = { saber }
+      class_restriction = { shipclass_military }
+      
+      ship_modifier = { ship_accuracy_add = 14 ship_tracking_add = 35   }
+      modifier = {     }
+      ai_weight = { weight = 50 }
+      prerequisites = { "tech_physics_computing_9" }
+      component_set = "combat_computers"
+   }
+   # Direct Mind-to-Computer Interface (Cruiser/Sphere)
+   utility_component_template = {
+      key = "REQUIRED_COMPUTER_5_CR"
+      size = small
+      icon = "GFX_ship_part_Required_Computer_5"
+      icon_frame = 1
+      power = -95
+      cost = 95
+      size_restriction = { sovereign borg_sphere }
+      class_restriction = { shipclass_military }
+      
+      ship_modifier = {  ship_tracking_add = 35   }
+      modifier = {     }
+      ai_weight = { weight = 50 }
+      prerequisites = { "tech_physics_computing_9" }
+      component_set = "combat_computers"
+   }
+   # Direct Mind-to-Computer Interface (Battlecruiser/Diamond)
+   utility_component_template = {
+      key = "REQUIRED_COMPUTER_5_BC"
+      size = small
+      icon = "GFX_ship_part_Required_Computer_5"
+      icon_frame = 1
+      power = -70
+      cost = 70
+      size_restriction = { steamrunner borg_diamond }
+      class_restriction = { shipclass_military }
+      
+      ship_modifier = { ship_accuracy_add = 14 ship_tracking_add = 35   }
+      modifier = {     }
+      ai_weight = { weight = 50 }
+      prerequisites = { "tech_physics_computing_9" }
+      component_set = "combat_computers"
+   }
+   # Direct Mind-to-Computer Interface (Battleship)
+   utility_component_template = {
+      key = "REQUIRED_COMPUTER_5_BS"
+      size = small
+      icon = "GFX_ship_part_Required_Computer_5"
+      icon_frame = 1
+      ftl = warp
+      power = -145
+      cost = 670
+      size_restriction = { adv_cruiser }
+      class_restriction = { shipclass_military }
+      
+      ship_modifier = { ship_accuracy_add = 14 ship_tracking_add = 35   }
+      modifier = {     }
+      ai_weight = { weight = 50 }
+      prerequisites = { "tech_physics_computing_9" }
+      component_set = "combat_computers"
+   }
+   # Direct Mind-to-Computer Interface (Heavy Escort)
+   utility_component_template = {
+      key = "REQUIRED_COMPUTER_5_HE"
+      size = small
+      icon = "GFX_ship_part_Required_Computer_5"
+      icon_frame = 1
+      ftl = warp
+      power = -85
+      cost = 85
+      size_restriction = { strike }
+      class_restriction = { shipclass_military }
+      
+      ship_modifier = { ship_accuracy_add = 14 ship_tracking_add = 35   }
+      modifier = {     }
+      ai_weight = { weight = 50 }
+      prerequisites = { "tech_physics_computing_9" }
+      component_set = "combat_computers"
+   }
+   # Direct Mind-to-Computer Interface (Assault Cruiser)
+   utility_component_template = {
+      key = "REQUIRED_COMPUTER_5_AC"
+      size = small
+      icon = "GFX_ship_part_Required_Computer_5"
+      icon_frame = 1
+      power = -155
+      cost = 155
+      size_restriction = { assault_cruiser }
+      class_restriction = { shipclass_military }
+      
+      ship_modifier = { ship_accuracy_add = 14 ship_tracking_add = 35   }
+      modifier = {     }
+      ai_weight = { weight = 50 }
+      prerequisites = { "tech_physics_computing_9" }
+      component_set = "combat_computers"
+   }
+   # Direct Mind-to-Computer Interface (Dreadnought)
+   utility_component_template = {
+      key = "REQUIRED_COMPUTER_5_SB"
+      size = small
+      icon = "GFX_ship_part_Required_Computer_5"
+      icon_frame = 1
+      ftl = warp
+      power = -325
+      cost = 325
+      size_restriction = { super_battleship borg_cube borg_tactical }
+      class_restriction = { shipclass_military }
+      
+      ship_modifier = { ship_accuracy_add = 14 ship_tracking_add = 35   }
+      modifier = {     }
+      ai_weight = { weight = 50 }
+      prerequisites = { "tech_physics_computing_9" }
+      component_set = "combat_computers"
+   }
+   # Direct Mind-to-Computer Interface (Man-O-War)
+   utility_component_template = {
+      key = "REQUIRED_COMPUTER_5_SC"
+      size = small
+      icon = "GFX_ship_part_Required_Computer_5"
+      icon_frame = 1
+      power = -685
+      cost = 685
+      size_restriction = { super_cube }
+      class_restriction = { shipclass_military }
+      
+      ship_modifier = { ship_accuracy_add = 14 ship_tracking_add = 35   }
+      modifier = {     }
+      ai_weight = { weight = 50 }
+      prerequisites = { "tech_physics_computing_9" }
+      component_set = "combat_computers"
+   }
+   
+# Interlinked Computional Array (Patrol Frigate)
+   utility_component_template = {
+      key = "REQUIRED_COMPUTER_0_BORG_PF"
+      size = small
+      icon = "GFX_ship_part_Required_Computer_Borg_0"
+      icon_frame = 1
+      power = -5
+      cost = 5
+      size_restriction = { corvette }
+      class_restriction = { shipclass_military }
+      upgrades_to = "REQUIRED_COMPUTER_1_BORG_PF"
+      ship_modifier = {  ship_accuracy_add = 1 ship_tracking_add = 1  }
+      modifier = {     }
+      ai_weight = { weight = 100 }
+      prerequisites = { "tech_interlink_alcove" }
+      component_set = "combat_computers"
+   }
+   # Interlinked Computional Array (Destroyer)
+   utility_component_template = {
+      key = "REQUIRED_COMPUTER_0_BORG_DE"
+      size = small
+      icon = "GFX_ship_part_Required_Computer_Borg_0"
+      icon_frame = 1
+      power = -10
+      cost = 10
+      size_restriction = { saber }
+      class_restriction = { shipclass_military }
+      upgrades_to = "REQUIRED_COMPUTER_1_BORG_DE"
+      ship_modifier = {  ship_accuracy_add = 1 ship_tracking_add = 1  }
+      modifier = {     }
+      ai_weight = { weight = 100 }
+      prerequisites = { "tech_interlink_alcove" }
+      component_set = "borg_combat_computers"
+   }
+   # Interlinked Computional Array (Cruiser/Sphere)
+   utility_component_template = {
+      key = "REQUIRED_COMPUTER_0_BORG_CR"
+      size = small
+      icon = "GFX_ship_part_Required_Computer_Borg_0"
+      icon_frame = 1
+      power = -25
+      cost = 25
+      size_restriction = { sovereign borg_sphere }
+      class_restriction = { shipclass_military }
+      upgrades_to = "REQUIRED_COMPUTER_1_BORG_CR"
+      ship_modifier = {  ship_accuracy_add = 1 ship_tracking_add = 1  }
+      modifier = {     }
+      ai_weight = { weight = 100 }
+      prerequisites = { "tech_interlink_alcove" }
+      component_set = "borg_combat_computers"
+   }
+   # Interlinked Computional Array (Battlecruiser/Diamond)
+   utility_component_template = {
+      key = "REQUIRED_COMPUTER_0_BORG_BC"
+      size = small
+      icon = "GFX_ship_part_Required_Computer_Borg_0"
+      icon_frame = 1
+      power = -20
+      cost = 20
+      size_restriction = { steamrunner borg_diamond }
+      class_restriction = { shipclass_military }
+      upgrades_to = "REQUIRED_COMPUTER_1_BORG_BC"
+      ship_modifier = {  ship_accuracy_add = 1 ship_tracking_add = 1  }
+      modifier = {     }
+      ai_weight = { weight = 100 }
+      prerequisites = { "tech_interlink_alcove" }
+      component_set = "borg_combat_computers"
+   }
+   # Interlinked Computional Array (Battleship)
+   utility_component_template = {
+      key = "REQUIRED_COMPUTER_0_BORG_BS"
+      size = small
+      icon = "GFX_ship_part_Required_Computer_Borg_0"
+      icon_frame = 1
+      ftl = warp
+      power = -35
+      cost = 770
+      size_restriction = { adv_cruiser }
+      class_restriction = { shipclass_military }
+      upgrades_to = "REQUIRED_COMPUTER_1_BORG_BS"
+      ship_modifier = {  ship_accuracy_add = 1   }
+      modifier = {     }
+      ai_weight = { weight = 100 }
+      prerequisites = { "tech_interlink_alcove" }
+      component_set = "borg_combat_computers"
+   }
+   # Interlinked Computional Array (Heavy Escort)
+   utility_component_template = {
+      key = "REQUIRED_COMPUTER_0_BORG_HE"
+      size = small
+      icon = "GFX_ship_part_Required_Computer_Borg_0"
+      icon_frame = 1
+      ftl = warp
+      power = -20
+      cost = 20
+      size_restriction = { strike }
+      class_restriction = { shipclass_military }
+      upgrades_to = "REQUIRED_COMPUTER_1_BORG_HE"
+      ship_modifier = {  ship_accuracy_add = 1 ship_tracking_add = 1  }
+      modifier = {     }
+      ai_weight = { weight = 100 }
+      prerequisites = { "tech_interlink_alcove" }
+      component_set = "borg_combat_computers"
+   }
+   # Interlinked Computional Array (Assault Cruiser)
+   utility_component_template = {
+      key = "REQUIRED_COMPUTER_0_BORG_AC"
+      size = small
+      icon = "GFX_ship_part_Required_Computer_Borg_0"
+      icon_frame = 1
+      power = -40
+      cost = 40
+      size_restriction = { assault_cruiser }
+      class_restriction = { shipclass_military }
+      upgrades_to = "REQUIRED_COMPUTER_1_BORG_AC"
+      ship_modifier = {  ship_accuracy_add = 1 ship_tracking_add = 1  }
+      modifier = {     }
+      ai_weight = { weight = 100 }
+      prerequisites = { "tech_interlink_alcove" }
+      component_set = "borg_combat_computers"
+   }
+   # Interlinked Computional Array (Dreadnought)
+   utility_component_template = {
+      key = "REQUIRED_COMPUTER_0_BORG_SB"
+      size = small
+      icon = "GFX_ship_part_Required_Computer_Borg_0"
+      icon_frame = 1
+      ftl = warp
+      power = -85
+      cost = 85
+      size_restriction = { super_battleship borg_cube borg_tactical }
+      class_restriction = { shipclass_military }
+      upgrades_to = "REQUIRED_COMPUTER_1_BORG_SB"
+      ship_modifier = {  ship_accuracy_add = 1 ship_tracking_add = 1  }
+      modifier = {     }
+      ai_weight = { weight = 100 }
+      prerequisites = { "tech_interlink_alcove" }
+      component_set = "borg_combat_computers"
+   }
+   # Interlinked Computional Array (Man-O-War)
+   utility_component_template = {
+      key = "REQUIRED_COMPUTER_0_BORG_SC"
+      size = small
+      icon = "GFX_ship_part_Required_Computer_Borg_0"
+      icon_frame = 1
+      power = -180
+      cost = 180
+      size_restriction = { super_cube }
+      class_restriction = { shipclass_military }
+      upgrades_to = "REQUIRED_COMPUTER_1_BORG_SC"
+      ship_modifier = { ship_weapon_damage = 0.01 ship_accuracy_add = 1 ship_tracking_add = 1  }
+      modifier = {     }
+      ai_weight = { weight = 100 }
+      prerequisites = { "tech_interlink_alcove" }
+      component_set = "borg_combat_computers"
+   }
+   
+# Interlinked Computional Array II (Patrol Frigate)
+   utility_component_template = {
+      key = "REQUIRED_COMPUTER_1_BORG_PF"
+      size = small
+      icon = "GFX_ship_part_Required_Computer_Borg_1"
+      icon_frame = 1
+      power = -10
+      cost = 15
+      size_restriction = { corvette }
+      class_restriction = { shipclass_military }
+      upgrades_to = "REQUIRED_COMPUTER_2_BORG_PF"
+      ship_modifier = { ship_weapon_damage = 0.01 ship_accuracy_add = 7 ship_tracking_add = 3  }
+      modifier = {     }
+      ai_weight = { weight = 150 }
+      prerequisites = { "tech_physics_computing_72" }
+      component_set = "combat_computers"
+   }
+   # Interlinked Computional Array II (Destroyer)
+   utility_component_template = {
+      key = "REQUIRED_COMPUTER_1_BORG_DE"
+      size = small
+      icon = "GFX_ship_part_Required_Computer_Borg_1"
+      icon_frame = 1
+      power = -25
+      cost = 35
+      size_restriction = { saber }
+      class_restriction = { shipclass_military }
+      upgrades_to = "REQUIRED_COMPUTER_2_BORG_DE"
+      ship_modifier = { ship_weapon_damage = 0.01 ship_accuracy_add = 7 ship_tracking_add = 3  }
+      modifier = {     }
+      ai_weight = { weight = 150 }
+      prerequisites = { "tech_physics_computing_72" }
+      component_set = "borg_combat_computers"
+   }
+   # Interlinked Computional Array II (Cruiser/Sphere)
+   utility_component_template = {
+      key = "REQUIRED_COMPUTER_1_BORG_CR"
+      size = small
+      icon = "GFX_ship_part_Required_Computer_Borg_1"
+      icon_frame = 1
+      power = -65
+      cost = 90
+      size_restriction = { sovereign borg_sphere }
+      class_restriction = { shipclass_military }
+      upgrades_to = "REQUIRED_COMPUTER_2_BORG_CR"
+      ship_modifier = {  ship_accuracy_add = 7 ship_tracking_add = 3  }
+      modifier = {     }
+      ai_weight = { weight = 150 }
+      prerequisites = { "tech_physics_computing_72" }
+      component_set = "borg_combat_computers"
+   }
+   # Interlinked Computional Array II (Battlecruiser/Diamond)
+   utility_component_template = {
+      key = "REQUIRED_COMPUTER_1_BORG_BC"
+      size = small
+      icon = "GFX_ship_part_Required_Computer_Borg_1"
+      icon_frame = 1
+      power = -50
+      cost = 70
+      size_restriction = { steamrunner borg_diamond }
+      class_restriction = { shipclass_military }
+      upgrades_to = "REQUIRED_COMPUTER_2_BORG_BC"
+      ship_modifier = { ship_weapon_damage = 0.02 ship_accuracy_add = 7 ship_tracking_add = 3  }
+      modifier = {     }
+      ai_weight = { weight = 150 }
+      prerequisites = { "tech_physics_computing_72" }
+      component_set = "borg_combat_computers"
+   }
+   # Interlinked Computional Array II (Battleship)
+   utility_component_template = {
+      key = "REQUIRED_COMPUTER_1_BORG_BS"
+      size = small
+      icon = "GFX_ship_part_Required_Computer_Borg_1"
+      icon_frame = 1
+      ftl = warp
+      power = -100
+      cost = 865
+      size_restriction = { adv_cruiser }
+      class_restriction = { shipclass_military }
+      upgrades_to = "REQUIRED_COMPUTER_2_BORG_BS"
+      ship_modifier = { ship_weapon_damage = 0.05 ship_accuracy_add = 7   }
+      modifier = {     }
+      ai_weight = { weight = 150 }
+      prerequisites = { "tech_physics_computing_72" }
+      component_set = "borg_combat_computers"
+   }
+   # Interlinked Computional Array II (Heavy Escort)
+   utility_component_template = {
+      key = "REQUIRED_COMPUTER_1_BORG_HE"
+      size = small
+      icon = "GFX_ship_part_Required_Computer_Borg_1"
+      icon_frame = 1
+      ftl = warp
+      power = -60
+      cost = 85
+      size_restriction = { strike }
+      class_restriction = { shipclass_military }
+      upgrades_to = "REQUIRED_COMPUTER_2_BORG_HE"
+      ship_modifier = { ship_weapon_damage = 0.03 ship_accuracy_add = 7 ship_tracking_add = 3  }
+      modifier = {     }
+      ai_weight = { weight = 150 }
+      prerequisites = { "tech_physics_computing_72" }
+      component_set = "borg_combat_computers"
+   }
+   # Interlinked Computional Array II (Assault Cruiser)
+   utility_component_template = {
+      key = "REQUIRED_COMPUTER_1_BORG_AC"
+      size = small
+      icon = "GFX_ship_part_Required_Computer_Borg_1"
+      icon_frame = 1
+      power = -105
+      cost = 145
+      size_restriction = { assault_cruiser }
+      class_restriction = { shipclass_military }
+      upgrades_to = "REQUIRED_COMPUTER_2_BORG_AC"
+      ship_modifier = { ship_weapon_damage = 0.05 ship_accuracy_add = 7 ship_tracking_add = 3  }
+      modifier = {     }
+      ai_weight = { weight = 150 }
+      prerequisites = { "tech_physics_computing_72" }
+      component_set = "borg_combat_computers"
+   }
+   # Interlinked Computional Array II (Dreadnought)
+   utility_component_template = {
+      key = "REQUIRED_COMPUTER_1_BORG_SB"
+      size = small
+      icon = "GFX_ship_part_Required_Computer_Borg_1"
+      icon_frame = 1
+      ftl = warp
+      power = -225
+      cost = 315
+      size_restriction = { super_battleship borg_cube borg_tactical }
+      class_restriction = { shipclass_military }
+      upgrades_to = "REQUIRED_COMPUTER_2_BORG_SB"
+      ship_modifier = { ship_weapon_damage = 0.11 ship_accuracy_add = 7 ship_tracking_add = 3  }
+      modifier = {     }
+      ai_weight = { weight = 150 }
+      prerequisites = { "tech_physics_computing_72" }
+      component_set = "borg_combat_computers"
+   }
+   # Interlinked Computional Array II (Man-O-War)
+   utility_component_template = {
+      key = "REQUIRED_COMPUTER_1_BORG_SC"
+      size = small
+      icon = "GFX_ship_part_Required_Computer_Borg_1"
+      icon_frame = 1
+      power = -470
+      cost = 660
+      size_restriction = { super_cube }
+      class_restriction = { shipclass_military }
+      upgrades_to = "REQUIRED_COMPUTER_2_BORG_SC"
+      ship_modifier = { ship_weapon_damage = 0.23 ship_accuracy_add = 7 ship_tracking_add = 3  }
+      modifier = {     }
+      ai_weight = { weight = 150 }
+      prerequisites = { "tech_physics_computing_72" }
+      component_set = "borg_combat_computers"
+   }
+   
+# Interlinked Computional Array III (Patrol Frigate)
+   utility_component_template = {
+      key = "REQUIRED_COMPUTER_2_BORG_PF"
+      size = small
+      icon = "GFX_ship_part_Required_Computer_Borg_2"
+      icon_frame = 1
+      power = -10
+      cost = 15
+      size_restriction = { corvette }
+      class_restriction = { shipclass_military }
+      upgrades_to = "REQUIRED_COMPUTER_3_BORG_PF"
+      ship_modifier = { ship_weapon_damage = 0.01 ship_accuracy_add = 9 ship_tracking_add = 5  }
+      modifier = { ship_hitpoints_mult = 0.01    }
+      ai_weight = { weight = 200 }
+      prerequisites = { "tech_physics_computing_23" }
+      component_set = "combat_computers"
+   }
+   # Interlinked Computional Array III (Destroyer)
+   utility_component_template = {
+      key = "REQUIRED_COMPUTER_2_BORG_DE"
+      size = small
+      icon = "GFX_ship_part_Required_Computer_Borg_2"
+      icon_frame = 1
+      power = -30
+      cost = 40
+      size_restriction = { saber }
+      class_restriction = { shipclass_military }
+      upgrades_to = "REQUIRED_COMPUTER_3_BORG_DE"
+      ship_modifier = { ship_weapon_damage = 0.02 ship_accuracy_add = 9 ship_tracking_add = 5  }
+      modifier = { ship_hitpoints_mult = 0.02    }
+      ai_weight = { weight = 200 }
+      prerequisites = { "tech_physics_computing_23" }
+      component_set = "borg_combat_computers"
+   }
+   # Interlinked Computional Array III (Cruiser/Sphere)
+   utility_component_template = {
+      key = "REQUIRED_COMPUTER_2_BORG_CR"
+      size = small
+      icon = "GFX_ship_part_Required_Computer_Borg_2"
+      icon_frame = 1
+      power = -70
+      cost = 100
+      size_restriction = { sovereign borg_sphere }
+      class_restriction = { shipclass_military }
+      upgrades_to = "REQUIRED_COMPUTER_3_BORG_CR"
+      ship_modifier = {  ship_accuracy_add = 9 ship_tracking_add = 5  }
+      modifier = { ship_hitpoints_mult = 0.05    }
+      ai_weight = { weight = 200 }
+      prerequisites = { "tech_physics_computing_23" }
+      component_set = "borg_combat_computers"
+   }
+   # Interlinked Computional Array III (Battlecruiser/Diamond)
+   utility_component_template = {
+      key = "REQUIRED_COMPUTER_2_BORG_BC"
+      size = small
+      icon = "GFX_ship_part_Required_Computer_Borg_2"
+      icon_frame = 1
+      power = -55
+      cost = 75
+      size_restriction = { steamrunner borg_diamond }
+      class_restriction = { shipclass_military }
+      upgrades_to = "REQUIRED_COMPUTER_3_BORG_BC"
+      ship_modifier = { ship_weapon_damage = 0.03 ship_accuracy_add = 9 ship_tracking_add = 5  }
+      modifier = { ship_hitpoints_mult = 0.03    }
+      ai_weight = { weight = 200 }
+      prerequisites = { "tech_physics_computing_23" }
+      component_set = "borg_combat_computers"
+   }
+   # Interlinked Computional Array III (Battleship)
+   utility_component_template = {
+      key = "REQUIRED_COMPUTER_2_BORG_BS"
+      size = small
+      icon = "GFX_ship_part_Required_Computer_Borg_2"
+      icon_frame = 1
+      ftl = warp
+      power = -110
+      cost = 965
+      size_restriction = { adv_cruiser }
+      class_restriction = { shipclass_military }
+      upgrades_to = "REQUIRED_COMPUTER_3_BORG_BS"
+      ship_modifier = { ship_weapon_damage = 0.07 ship_accuracy_add = 9   }
+      modifier = { ship_hitpoints_mult = 0.07    }
+      ai_weight = { weight = 200 }
+      prerequisites = { "tech_physics_computing_23" }
+      component_set = "borg_combat_computers"
+   }
+   # Interlinked Computional Array III (Heavy Escort)
+   utility_component_template = {
+      key = "REQUIRED_COMPUTER_2_BORG_HE"
+      size = small
+      icon = "GFX_ship_part_Required_Computer_Borg_2"
+      icon_frame = 1
+      ftl = warp
+      power = -65
+      cost = 90
+      size_restriction = { strike }
+      class_restriction = { shipclass_military }
+      upgrades_to = "REQUIRED_COMPUTER_3_BORG_HE"
+      ship_modifier = { ship_weapon_damage = 0.04 ship_accuracy_add = 9 ship_tracking_add = 5  }
+      modifier = { ship_hitpoints_mult = 0.04    }
+      ai_weight = { weight = 200 }
+      prerequisites = { "tech_physics_computing_23" }
+      component_set = "borg_combat_computers"
+   }
+   # Interlinked Computional Array III (Assault Cruiser)
+   utility_component_template = {
+      key = "REQUIRED_COMPUTER_2_BORG_AC"
+      size = small
+      icon = "GFX_ship_part_Required_Computer_Borg_2"
+      icon_frame = 1
+      power = -120
+      cost = 170
+      size_restriction = { assault_cruiser }
+      class_restriction = { shipclass_military }
+      upgrades_to = "REQUIRED_COMPUTER_3_BORG_AC"
+      ship_modifier = { ship_weapon_damage = 0.08 ship_accuracy_add = 9 ship_tracking_add = 5  }
+      modifier = {     }
+      ai_weight = { weight = 200 }
+      prerequisites = { "tech_physics_computing_23" }
+      component_set = "borg_combat_computers"
+   }
+   # Interlinked Computional Array III (Dreadnought)
+   utility_component_template = {
+      key = "REQUIRED_COMPUTER_2_BORG_SB"
+      size = small
+      icon = "GFX_ship_part_Required_Computer_Borg_2"
+      icon_frame = 1
+      ftl = warp
+      power = -255
+      cost = 355
+      size_restriction = { super_battleship borg_cube borg_tactical }
+      class_restriction = { shipclass_military }
+      upgrades_to = "REQUIRED_COMPUTER_3_BORG_SB"
+      ship_modifier = { ship_weapon_damage = 0.16 ship_accuracy_add = 9 ship_tracking_add = 5  }
+      modifier = { ship_hitpoints_mult = 0.16    }
+      ai_weight = { weight = 200 }
+      prerequisites = { "tech_physics_computing_23" }
+      component_set = "borg_combat_computers"
+   }
+   # Interlinked Computional Array III (Man-O-War)
+   utility_component_template = {
+      key = "REQUIRED_COMPUTER_2_BORG_SC"
+      size = small
+      icon = "GFX_ship_part_Required_Computer_Borg_2"
+      icon_frame = 1
+      power = -535
+      cost = 750
+      size_restriction = { super_cube }
+      class_restriction = { shipclass_military }
+      upgrades_to = "REQUIRED_COMPUTER_3_BORG_SC"
+      ship_modifier = { ship_weapon_damage = 0.34 ship_accuracy_add = 9 ship_tracking_add = 5  }
+      modifier = { ship_hitpoints_mult = 0.34    }
+      ai_weight = { weight = 200 }
+      prerequisites = { "tech_physics_computing_23" }
+      component_set = "borg_combat_computers"
+   }
+   
+# Interlinked Computional Array IV (Patrol Frigate)
+   utility_component_template = {
+      key = "REQUIRED_COMPUTER_3_BORG_PF"
+      size = small
+      icon = "GFX_ship_part_Required_Computer_Borg_3"
+      icon_frame = 1
+      power = -15
+      cost = 20
+      size_restriction = { corvette }
+      class_restriction = { shipclass_military }
+      upgrades_to = "REQUIRED_COMPUTER_4_BORG_PF"
+      ship_modifier = { ship_weapon_damage = 0.01 ship_accuracy_add = 12 ship_tracking_add = 7  }
+      modifier = { ship_hitpoints_mult = 0.01    }
+      ai_weight = { weight = 300 }
+      prerequisites = { "tech_physics_computing_24" }
+      component_set = "combat_computers"
+   }
+   # Interlinked Computional Array IV (Destroyer)
+   utility_component_template = {
+      key = "REQUIRED_COMPUTER_3_BORG_DE"
+      size = small
+      icon = "GFX_ship_part_Required_Computer_Borg_3"
+      icon_frame = 1
+      power = -35
+      cost = 50
+      size_restriction = { saber }
+      class_restriction = { shipclass_military }
+      upgrades_to = "REQUIRED_COMPUTER_4_BORG_DE"
+      ship_modifier = { ship_weapon_damage = 0.03 ship_accuracy_add = 12 ship_tracking_add = 7  }
+      modifier = { ship_hitpoints_mult = 0.03    }
+      ai_weight = { weight = 300 }
+      prerequisites = { "tech_physics_computing_24" }
+      component_set = "borg_combat_computers"
+   }
+   # Interlinked Computional Array IV (Cruiser/Sphere)
+   utility_component_template = {
+      key = "REQUIRED_COMPUTER_3_BORG_CR"
+      size = small
+      icon = "GFX_ship_part_Required_Computer_Borg_3"
+      icon_frame = 1
+      power = -85
+      cost = 120
+      size_restriction = { sovereign borg_sphere }
+      class_restriction = { shipclass_military }
+      upgrades_to = "REQUIRED_COMPUTER_4_BORG_CR"
+      ship_modifier = {  ship_accuracy_add = 12 ship_tracking_add = 7  }
+      modifier = { ship_hitpoints_mult = 0.07    }
+      ai_weight = { weight = 300 }
+      prerequisites = { "tech_physics_computing_24" }
+      component_set = "borg_combat_computers"
+   }
+   # Interlinked Computional Array IV (Battlecruiser/Diamond)
+   utility_component_template = {
+      key = "REQUIRED_COMPUTER_3_BORG_BC"
+      size = small
+      icon = "GFX_ship_part_Required_Computer_Borg_3"
+      icon_frame = 1
+      power = -60
+      cost = 85
+      size_restriction = { steamrunner borg_diamond }
+      class_restriction = { shipclass_military }
+      upgrades_to = "REQUIRED_COMPUTER_4_BORG_BC"
+      ship_modifier = { ship_weapon_damage = 0.05 ship_accuracy_add = 12 ship_tracking_add = 7  }
+      modifier = { ship_hitpoints_mult = 0.05    }
+      ai_weight = { weight = 300 }
+      prerequisites = { "tech_physics_computing_24" }
+      component_set = "borg_combat_computers"
+   }
+   # Interlinked Computional Array IV (Battleship)
+   utility_component_template = {
+      key = "REQUIRED_COMPUTER_3_BORG_BS"
+      size = small
+      icon = "GFX_ship_part_Required_Computer_Borg_3"
+      icon_frame = 1
+      ftl = warp
+      power = -130
+      cost = 1105
+      size_restriction = { adv_cruiser }
+      class_restriction = { shipclass_military }
+      upgrades_to = "REQUIRED_COMPUTER_4_BORG_BS"
+      ship_modifier = { ship_weapon_damage = 0.11 ship_accuracy_add = 12   }
+      modifier = { ship_hitpoints_mult = 0.11    }
+      ai_weight = { weight = 300 }
+      prerequisites = { "tech_physics_computing_24" }
+      component_set = "borg_combat_computers"
+   }
+   # Interlinked Computional Array IV (Heavy Escort)
+   utility_component_template = {
+      key = "REQUIRED_COMPUTER_3_BORG_HE"
+      size = small
+      icon = "GFX_ship_part_Required_Computer_Borg_3"
+      icon_frame = 1
+      ftl = warp
+      power = -75
+      cost = 105
+      size_restriction = { strike }
+      class_restriction = { shipclass_military }
+      upgrades_to = "REQUIRED_COMPUTER_4_BORG_HE"
+      ship_modifier = { ship_weapon_damage = 0.06 ship_accuracy_add = 12 ship_tracking_add = 7  }
+      modifier = { ship_hitpoints_mult = 0.06    }
+      ai_weight = { weight = 300 }
+      prerequisites = { "tech_physics_computing_24" }
+      component_set = "borg_combat_computers"
+   }
+   # Interlinked Computional Array IV (Assault Cruiser)
+   utility_component_template = {
+      key = "REQUIRED_COMPUTER_3_BORG_AC"
+      size = small
+      icon = "GFX_ship_part_Required_Computer_Borg_3"
+      icon_frame = 1
+      power = -140
+      cost = 195
+      size_restriction = { assault_cruiser }
+      class_restriction = { shipclass_military }
+      upgrades_to = "REQUIRED_COMPUTER_4_BORG_AC"
+      ship_modifier = { ship_weapon_damage = 0.12 ship_accuracy_add = 12 ship_tracking_add = 7  }
+      modifier = {     }
+      ai_weight = { weight = 300 }
+      prerequisites = { "tech_physics_computing_24" }
+      component_set = "borg_combat_computers"
+   }
+   # Interlinked Computional Array IV (Dreadnought)
+   utility_component_template = {
+      key = "REQUIRED_COMPUTER_3_BORG_SB"
+      size = small
+      icon = "GFX_ship_part_Required_Computer_Borg_3"
+      icon_frame = 1
+      ftl = warp
+      power = -295
+      cost = 415
+      size_restriction = { super_battleship borg_cube borg_tactical }
+      class_restriction = { shipclass_military }
+      upgrades_to = "REQUIRED_COMPUTER_4_BORG_SB"
+      ship_modifier = { ship_weapon_damage = 0.25 ship_accuracy_add = 12 ship_tracking_add = 7  }
+      modifier = { ship_hitpoints_mult = 0.25    }
+      ai_weight = { weight = 300 }
+      prerequisites = { "tech_physics_computing_24" }
+      component_set = "borg_combat_computers"
+   }
+   # Interlinked Computional Array IV (Man-O-War)
+   utility_component_template = {
+      key = "REQUIRED_COMPUTER_3_BORG_SC"
+      size = small
+      icon = "GFX_ship_part_Required_Computer_Borg_3"
+      icon_frame = 1
+      power = -615
+      cost = 860
+      size_restriction = { super_cube }
+      class_restriction = { shipclass_military }
+      upgrades_to = "REQUIRED_COMPUTER_4_BORG_SC"
+      ship_modifier = { ship_weapon_damage = 0.52 ship_accuracy_add = 12 ship_tracking_add = 7  }
+      modifier = { ship_hitpoints_mult = 0.52    }
+      ai_weight = { weight = 300 }
+      prerequisites = { "tech_physics_computing_24" }
+      component_set = "borg_combat_computers"
+   }
+   
+# Interlinked Computional Array V (Patrol Frigate)
+   utility_component_template = {
+      key = "REQUIRED_COMPUTER_4_BORG_PF"
+      size = small
+      icon = "GFX_ship_part_Required_Computer_Borg_4"
+      icon_frame = 1
+      power = -20
+      cost = 30
+      size_restriction = { corvette }
+      class_restriction = { shipclass_military }
+      upgrades_to = "REQUIRED_COMPUTER_5_BORG_PF"
+      ship_modifier = { ship_weapon_damage = 0.02 ship_accuracy_add = 14 ship_tracking_add = 9  }
+      modifier = { ship_hitpoints_mult = 0.02    }
+      ai_weight = { weight = 400 }
+      prerequisites = { "tech_physics_computing_73" }
+      component_set = "combat_computers"
+   }
+   # Interlinked Computional Array V (Destroyer)
+   utility_component_template = {
+      key = "REQUIRED_COMPUTER_4_BORG_DE"
+      size = small
+      icon = "GFX_ship_part_Required_Computer_Borg_4"
+      icon_frame = 1
+      power = -35
+      cost = 50
+      size_restriction = { saber }
+      class_restriction = { shipclass_military }
+      upgrades_to = "REQUIRED_COMPUTER_5_BORG_DE"
+      ship_modifier = { ship_weapon_damage = 0.04 ship_accuracy_add = 14 ship_tracking_add = 9  }
+      modifier = { ship_hitpoints_mult = 0.04    }
+      ai_weight = { weight = 400 }
+      prerequisites = { "tech_physics_computing_73" }
+      component_set = "borg_combat_computers"
+   }
+   # Interlinked Computional Array V (Cruiser/Sphere)
+   utility_component_template = {
+      key = "REQUIRED_COMPUTER_4_BORG_CR"
+      size = small
+      icon = "GFX_ship_part_Required_Computer_Borg_4"
+      icon_frame = 1
+      power = -90
+      cost = 125
+      size_restriction = { sovereign borg_sphere }
+      class_restriction = { shipclass_military }
+      upgrades_to = "REQUIRED_COMPUTER_5_BORG_CR"
+      ship_modifier = {  ship_accuracy_add = 14 ship_tracking_add = 9  }
+      modifier = { ship_hitpoints_mult = 0.09    }
+      ai_weight = { weight = 400 }
+      prerequisites = { "tech_physics_computing_73" }
+      component_set = "borg_combat_computers"
+   }
+   # Interlinked Computional Array V (Battlecruiser/Diamond)
+   utility_component_template = {
+      key = "REQUIRED_COMPUTER_4_BORG_BC"
+      size = small
+      icon = "GFX_ship_part_Required_Computer_Borg_4"
+      icon_frame = 1
+      power = -65
+      cost = 90
+      size_restriction = { steamrunner borg_diamond }
+      class_restriction = { shipclass_military }
+      upgrades_to = "REQUIRED_COMPUTER_5_BORG_BC"
+      ship_modifier = { ship_weapon_damage = 0.06 ship_accuracy_add = 14 ship_tracking_add = 9  }
+      modifier = { ship_hitpoints_mult = 0.06    }
+      ai_weight = { weight = 400 }
+      prerequisites = { "tech_physics_computing_73" }
+      component_set = "borg_combat_computers"
+   }
+   # Interlinked Computional Array V (Battleship)
+   utility_component_template = {
+      key = "REQUIRED_COMPUTER_4_BORG_BS"
+      size = small
+      icon = "GFX_ship_part_Required_Computer_Borg_4"
+      icon_frame = 1
+      ftl = warp
+      power = -140
+      cost = 345
+      size_restriction = { adv_cruiser }
+      class_restriction = { shipclass_military }
+      upgrades_to = "REQUIRED_COMPUTER_5_BORG_BS"
+      ship_modifier = { ship_weapon_damage = 0.14 ship_accuracy_add = 14   }
+      modifier = { ship_hitpoints_mult = 0.14    }
+      ai_weight = { weight = 400 }
+      prerequisites = { "tech_physics_computing_73" }
+      component_set = "borg_combat_computers"
+   }
+   # Interlinked Computional Array V (Heavy Escort)
+   utility_component_template = {
+      key = "REQUIRED_COMPUTER_4_BORG_HE"
+      size = small
+      icon = "GFX_ship_part_Required_Computer_Borg_4"
+      icon_frame = 1
+      ftl = warp
+      power = -80
+      cost = 110
+      size_restriction = { strike }
+      class_restriction = { shipclass_military }
+      upgrades_to = "REQUIRED_COMPUTER_5_BORG_HE"
+      ship_modifier = { ship_weapon_damage = 0.08 ship_accuracy_add = 14 ship_tracking_add = 9  }
+      modifier = { ship_hitpoints_mult = 0.08    }
+      ai_weight = { weight = 400 }
+      prerequisites = { "tech_physics_computing_73" }
+      component_set = "borg_combat_computers"
+   }
+   # Interlinked Computional Array V (Assault Cruiser)
+   utility_component_template = {
+      key = "REQUIRED_COMPUTER_4_BORG_AC"
+      size = small
+      icon = "GFX_ship_part_Required_Computer_Borg_4"
+      icon_frame = 1
+      power = -150
+      cost = 210
+      size_restriction = { assault_cruiser }
+      class_restriction = { shipclass_military }
+      upgrades_to = "REQUIRED_COMPUTER_5_BORG_AC"
+      ship_modifier = { ship_weapon_damage = 0.15 ship_accuracy_add = 14 ship_tracking_add = 9  }
+      modifier = {     }
+      ai_weight = { weight = 400 }
+      prerequisites = { "tech_physics_computing_73" }
+      component_set = "borg_combat_computers"
+   }
+   # Interlinked Computional Array V (Dreadnought)
+   utility_component_template = {
+      key = "REQUIRED_COMPUTER_4_BORG_SB"
+      size = small
+      icon = "GFX_ship_part_Required_Computer_Borg_4"
+      icon_frame = 1
+      ftl = warp
+      power = -315
+      cost = 440
+      size_restriction = { super_battleship borg_cube borg_tactical }
+      class_restriction = { shipclass_military }
+      upgrades_to = "REQUIRED_COMPUTER_5_BORG_SB"
+      ship_modifier = { ship_weapon_damage = 0.31 ship_accuracy_add = 14 ship_tracking_add = 9  }
+      modifier = { ship_hitpoints_mult = 0.31    }
+      ai_weight = { weight = 400 }
+      prerequisites = { "tech_physics_computing_73" }
+      component_set = "borg_combat_computers"
+   }
+   # Interlinked Computional Array V (Man-O-War)
+   utility_component_template = {
+      key = "REQUIRED_COMPUTER_4_BORG_SC"
+      size = small
+      icon = "GFX_ship_part_Required_Computer_Borg_4"
+      icon_frame = 1
+      power = -665
+      cost = 930
+      size_restriction = { super_cube }
+      class_restriction = { shipclass_military }
+      upgrades_to = "REQUIRED_COMPUTER_5_BORG_SC"
+      ship_modifier = { ship_weapon_damage = 0.65 ship_accuracy_add = 14 ship_tracking_add = 9  }
+      modifier = { ship_hitpoints_mult = 0.65    }
+      ai_weight = { weight = 400 }
+      prerequisites = { "tech_physics_computing_73" }
+      component_set = "borg_combat_computers"
+   }
+   
+# Vinculum (Patrol Frigate)
+   utility_component_template = {
+      key = "REQUIRED_COMPUTER_5_BORG_PF"
+      size = small
+      icon = "GFX_ship_part_Required_Computer_Borg_5"
+      icon_frame = 1
+      power = -25
+      cost = 35
+      size_restriction = { corvette }
+      class_restriction = { shipclass_military }
+      upgrades_to = "REQUIRED_COMPUTER_6_BORG_PF"
+      ship_modifier = { ship_weapon_damage = 0.03 ship_accuracy_add = 16 ship_tracking_add = 11  }
+      modifier = { ship_hitpoints_mult = 0.03    }
+      ai_weight = { weight = 500 }
+      prerequisites = { "tech_physics_computing_25" }
+      component_set = "combat_computers"
+   }
+   # Vinculum (Destroyer)
+   utility_component_template = {
+      key = "REQUIRED_COMPUTER_5_BORG_DE"
+      size = small
+      icon = "GFX_ship_part_Required_Computer_Borg_5"
+      icon_frame = 1
+      power = -40
+      cost = 55
+      size_restriction = { saber }
+      class_restriction = { shipclass_military }
+      upgrades_to = "REQUIRED_COMPUTER_6_BORG_DE"
+      ship_modifier = { ship_weapon_damage = 0.04 ship_accuracy_add = 16 ship_tracking_add = 11  }
+      modifier = { ship_hitpoints_mult = 0.04    }
+      ai_weight = { weight = 500 }
+      prerequisites = { "tech_physics_computing_25" }
+      component_set = "borg_combat_computers"
+   }
+   # Vinculum (Cruiser/Sphere)
+   utility_component_template = {
+      key = "REQUIRED_COMPUTER_5_BORG_CR"
+      size = small
+      icon = "GFX_ship_part_Required_Computer_Borg_5"
+      icon_frame = 1
+      power = -95
+      cost = 135
+      size_restriction = { sovereign borg_sphere }
+      class_restriction = { shipclass_military }
+      upgrades_to = "REQUIRED_COMPUTER_6_BORG_CR"
+      ship_modifier = {  ship_accuracy_add = 16 ship_tracking_add = 11  }
+      modifier = { ship_hitpoints_mult = 0.11    }
+      ai_weight = { weight = 500 }
+      prerequisites = { "tech_physics_computing_25" }
+      component_set = "borg_combat_computers"
+   }
+   # Vinculum (Battlecruiser/Diamond)
+   utility_component_template = {
+      key = "REQUIRED_COMPUTER_5_BORG_BC"
+      size = small
+      icon = "GFX_ship_part_Required_Computer_Borg_5"
+      icon_frame = 1
+      power = -70
+      cost = 100
+      size_restriction = { steamrunner borg_diamond }
+      class_restriction = { shipclass_military }
+      upgrades_to = "REQUIRED_COMPUTER_6_BORG_BC"
+      ship_modifier = { ship_weapon_damage = 0.08 ship_accuracy_add = 16 ship_tracking_add = 11  }
+      modifier = { ship_hitpoints_mult = 0.08    }
+      ai_weight = { weight = 500 }
+      prerequisites = { "tech_physics_computing_25" }
+      component_set = "borg_combat_computers"
+   }
+   # Vinculum (Battleship)
+   utility_component_template = {
+      key = "REQUIRED_COMPUTER_5_BORG_BS"
+      size = small
+      icon = "GFX_ship_part_Required_Computer_Borg_5"
+      icon_frame = 1
+      ftl = warp
+      power = -150
+      cost = 415
+      size_restriction = { adv_cruiser }
+      class_restriction = { shipclass_military }
+      upgrades_to = "REQUIRED_COMPUTER_6_BORG_BS"
+      ship_modifier = { ship_weapon_damage = 0.17 ship_accuracy_add = 16   }
+      modifier = { ship_hitpoints_mult = 0.17    }
+      ai_weight = { weight = 500 }
+      prerequisites = { "tech_physics_computing_25" }
+      component_set = "borg_combat_computers"
+   }
+   # Vinculum (Heavy Escort)
+   utility_component_template = {
+      key = "REQUIRED_COMPUTER_5_BORG_HE"
+      size = small
+      icon = "GFX_ship_part_Required_Computer_Borg_5"
+      icon_frame = 1
+      ftl = warp
+      power = -90
+      cost = 125
+      size_restriction = { strike }
+      class_restriction = { shipclass_military }
+      upgrades_to = "REQUIRED_COMPUTER_6_BORG_HE"
+      ship_modifier = { ship_weapon_damage = 0.1 ship_accuracy_add = 16 ship_tracking_add = 11  }
+      modifier = { ship_hitpoints_mult = 0.1    }
+      ai_weight = { weight = 500 }
+      prerequisites = { "tech_physics_computing_25" }
+      component_set = "borg_combat_computers"
+   }
+   # Vinculum (Assault Cruiser)
+   utility_component_template = {
+      key = "REQUIRED_COMPUTER_5_BORG_AC"
+      size = small
+      icon = "GFX_ship_part_Required_Computer_Borg_5"
+      icon_frame = 1
+      power = -160
+      cost = 225
+      size_restriction = { assault_cruiser }
+      class_restriction = { shipclass_military }
+      upgrades_to = "REQUIRED_COMPUTER_6_BORG_AC"
+      ship_modifier = { ship_weapon_damage = 0.18 ship_accuracy_add = 16 ship_tracking_add = 11  }
+      modifier = {     }
+      ai_weight = { weight = 500 }
+      prerequisites = { "tech_physics_computing_25" }
+      component_set = "borg_combat_computers"
+   }
+   # Vinculum (Dreadnought)
+   utility_component_template = {
+      key = "REQUIRED_COMPUTER_5_BORG_SB"
+      size = small
+      icon = "GFX_ship_part_Required_Computer_Borg_5"
+      icon_frame = 1
+      ftl = warp
+      power = -340
+      cost = 475
+      size_restriction = { super_battleship borg_cube borg_tactical }
+      class_restriction = { shipclass_military }
+      upgrades_to = "REQUIRED_COMPUTER_6_BORG_SB"
+      ship_modifier = { ship_weapon_damage = 0.38 ship_accuracy_add = 16 ship_tracking_add = 11  }
+      modifier = { ship_hitpoints_mult = 0.38    }
+      ai_weight = { weight = 500 }
+      prerequisites = { "tech_physics_computing_25" }
+      component_set = "borg_combat_computers"
+   }
+   # Vinculum (Man-O-War)
+   utility_component_template = {
+      key = "REQUIRED_COMPUTER_5_BORG_SC"
+      size = small
+      icon = "GFX_ship_part_Required_Computer_Borg_5"
+      icon_frame = 1
+      power = -710
+      cost = 995
+      size_restriction = { super_cube }
+      class_restriction = { shipclass_military }
+      upgrades_to = "REQUIRED_COMPUTER_6_BORG_SC"
+      ship_modifier = { ship_weapon_damage = 0.8 ship_accuracy_add = 16 ship_tracking_add = 11  }
+      modifier = { ship_hitpoints_mult = 0.8    }
+      ai_weight = { weight = 500 }
+      prerequisites = { "tech_physics_computing_25" }
+      component_set = "borg_combat_computers"
+   }
+   
+# Interlinked Vinculum (Patrol Frigate)
+   utility_component_template = {
+      key = "REQUIRED_COMPUTER_6_BORG_PF"
+      size = small
+      icon = "GFX_ship_part_Required_Computer_Borg_6"
+      icon_frame = 1
+      power = -30
+      cost = 40
+      size_restriction = { corvette }
+      class_restriction = { shipclass_military }
+      
+      ship_modifier = { ship_weapon_damage = 0.04 ship_accuracy_add = 19 ship_tracking_add = 13  }
+      modifier = { ship_hitpoints_mult = 0.04    }
+      ai_weight = { weight = 600 }
+      prerequisites = { "tech_physics_computing_26" }
+      component_set = "combat_computers"
+   }
+   # Interlinked Vinculum (Destroyer)
+   utility_component_template = {
+      key = "REQUIRED_COMPUTER_6_BORG_DE"
+      size = small
+      icon = "GFX_ship_part_Required_Computer_Borg_6"
+      icon_frame = 1
+      power = -45
+      cost = 65
+      size_restriction = { saber }
+      class_restriction = { shipclass_military }
+      
+      ship_modifier = { ship_weapon_damage = 0.06 ship_accuracy_add = 19 ship_tracking_add = 13  }
+      modifier = { ship_hitpoints_mult = 0.06    }
+      ai_weight = { weight = 600 }
+      prerequisites = { "tech_physics_computing_26" }
+      component_set = "borg_combat_computers"
+   }
+   # Interlinked Vinculum (Cruiser/Sphere)
+   utility_component_template = {
+      key = "REQUIRED_COMPUTER_6_BORG_CR"
+      size = small
+      icon = "GFX_ship_part_Required_Computer_Borg_6"
+      icon_frame = 1
+      power = -105
+      cost = 145
+      size_restriction = { sovereign borg_sphere }
+      class_restriction = { shipclass_military }
+      
+      ship_modifier = {  ship_accuracy_add = 19 ship_tracking_add = 13  }
+      modifier = { ship_hitpoints_mult = 0.14    }
+      ai_weight = { weight = 600 }
+      prerequisites = { "tech_physics_computing_26" }
+      component_set = "borg_combat_computers"
+   }
+   # Interlinked Vinculum (Battlecruiser/Diamond)
+   utility_component_template = {
+      key = "REQUIRED_COMPUTER_6_BORG_BC"
+      size = small
+      icon = "GFX_ship_part_Required_Computer_Borg_6"
+      icon_frame = 1
+      power = -80
+      cost = 110
+      size_restriction = { steamrunner borg_diamond }
+      class_restriction = { shipclass_military }
+      
+      ship_modifier = { ship_weapon_damage = 0.1 ship_accuracy_add = 19 ship_tracking_add = 13  }
+      modifier = { ship_hitpoints_mult = 0.1    }
+      ai_weight = { weight = 600 }
+      prerequisites = { "tech_physics_computing_26" }
+      component_set = "borg_combat_computers"
+   }
+   # Interlinked Vinculum (Battleship)
+   utility_component_template = {
+      key = "REQUIRED_COMPUTER_6_BORG_BS"
+      size = small
+      icon = "GFX_ship_part_Required_Computer_Borg_6"
+      icon_frame = 1
+      ftl = warp
+      power = -160
+      cost = 485
+      size_restriction = { adv_cruiser }
+      class_restriction = { shipclass_military }
+      
+      ship_modifier = { ship_weapon_damage = 0.21 ship_accuracy_add = 19   }
+      modifier = { ship_hitpoints_mult = 0.21    }
+      ai_weight = { weight = 600 }
+      prerequisites = { "tech_physics_computing_26" }
+      component_set = "borg_combat_computers"
+   }
+   # Interlinked Vinculum (Heavy Escort)
+   utility_component_template = {
+      key = "REQUIRED_COMPUTER_6_BORG_HE"
+      size = small
+      icon = "GFX_ship_part_Required_Computer_Borg_6"
+      icon_frame = 1
+      ftl = warp
+      power = -95
+      cost = 135
+      size_restriction = { strike }
+      class_restriction = { shipclass_military }
+      
+      ship_modifier = { ship_weapon_damage = 0.13 ship_accuracy_add = 19 ship_tracking_add = 13  }
+      modifier = { ship_hitpoints_mult = 0.13    }
+      ai_weight = { weight = 600 }
+      prerequisites = { "tech_physics_computing_26" }
+      component_set = "borg_combat_computers"
+   }
+   # Interlinked Vinculum (Assault Cruiser)
+   utility_component_template = {
+      key = "REQUIRED_COMPUTER_6_BORG_AC"
+      size = small
+      icon = "GFX_ship_part_Required_Computer_Borg_6"
+      icon_frame = 1
+      power = -175
+      cost = 245
+      size_restriction = { assault_cruiser }
+      class_restriction = { shipclass_military }
+      
+      ship_modifier = { ship_weapon_damage = 0.23 ship_accuracy_add = 19 ship_tracking_add = 13  }
+      modifier = {     }
+      ai_weight = { weight = 600 }
+      prerequisites = { "tech_physics_computing_26" }
+      component_set = "borg_combat_computers"
+   }
+   # Interlinked Vinculum (Dreadnought)
+   utility_component_template = {
+      key = "REQUIRED_COMPUTER_6_BORG_SB"
+      size = small
+      icon = "GFX_ship_part_Required_Computer_Borg_6"
+      icon_frame = 1
+      ftl = warp
+      power = -370
+      cost = 520
+      size_restriction = { super_battleship borg_cube borg_tactical }
+      class_restriction = { shipclass_military }
+      
+      ship_modifier = { ship_weapon_damage = 0.49 ship_accuracy_add = 19 ship_tracking_add = 13  }
+      modifier = { ship_hitpoints_mult = 0.49    }
+      ai_weight = { weight = 600 }
+      prerequisites = { "tech_physics_computing_26" }
+      component_set = "borg_combat_computers"
+   }
+   # Interlinked Vinculum (Man-O-War)
+   utility_component_template = {
+      key = "REQUIRED_COMPUTER_6_BORG_SC"
+      size = small
+      icon = "GFX_ship_part_Required_Computer_Borg_6"
+      icon_frame = 1
+      power = -775
+      cost = 1085
+      size_restriction = { super_cube }
+      class_restriction = { shipclass_military }
+      
+      ship_modifier = { ship_weapon_damage = 1.03 ship_accuracy_add = 19 ship_tracking_add = 13  }
+      modifier = { ship_hitpoints_mult = 1.03    }
+      ai_weight = { weight = 600 }
+      prerequisites = { "tech_physics_computing_26" }
+      component_set = "borg_combat_computers"
+   }
+   

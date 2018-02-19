@@ -1,0 +1,132 @@
+component_set = { key = "borg_combat_computers" required_component_set = yes icon = "GFX_ship_part_computer" icon_frame = 1 }
+component_set = { key = "combat_computers" required_component_set = yes icon = "GFX_ship_part_computer" icon_frame = 1 }
+
+component_set = { key = "REQUIRED_COMPUTER_0_PF" icon = "GFX_ship_part_Required_Computer_0_PF" icon_frame = 1 }
+component_set = { key = "REQUIRED_COMPUTER_0_DE" icon = "GFX_ship_part_Required_Computer_0_DE" icon_frame = 1 }
+component_set = { key = "REQUIRED_COMPUTER_0_CR" icon = "GFX_ship_part_Required_Computer_0_CR" icon_frame = 1 }
+component_set = { key = "REQUIRED_COMPUTER_0_BC" icon = "GFX_ship_part_Required_Computer_0_BC" icon_frame = 1 }
+component_set = { key = "REQUIRED_COMPUTER_0_BS" icon = "GFX_ship_part_Required_Computer_0_BS" icon_frame = 1 }
+component_set = { key = "REQUIRED_COMPUTER_0_HE" icon = "GFX_ship_part_Required_Computer_0_HE" icon_frame = 1 }
+component_set = { key = "REQUIRED_COMPUTER_0_AC" icon = "GFX_ship_part_Required_Computer_0_AC" icon_frame = 1 }
+component_set = { key = "REQUIRED_COMPUTER_0_SB" icon = "GFX_ship_part_Required_Computer_0_SB" icon_frame = 1 }
+component_set = { key = "REQUIRED_COMPUTER_0_SC" icon = "GFX_ship_part_Required_Computer_0_SC" icon_frame = 1 }
+
+component_set = { key = "REQUIRED_COMPUTER_1_PF" icon = "GFX_ship_part_Required_Computer_1_PF" icon_frame = 1 }
+component_set = { key = "REQUIRED_COMPUTER_1_DE" icon = "GFX_ship_part_Required_Computer_1_DE" icon_frame = 1 }
+component_set = { key = "REQUIRED_COMPUTER_1_CR" icon = "GFX_ship_part_Required_Computer_1_CR" icon_frame = 1 }
+component_set = { key = "REQUIRED_COMPUTER_1_BC" icon = "GFX_ship_part_Required_Computer_1_BC" icon_frame = 1 }
+component_set = { key = "REQUIRED_COMPUTER_1_BS" icon = "GFX_ship_part_Required_Computer_1_BS" icon_frame = 1 }
+component_set = { key = "REQUIRED_COMPUTER_1_HE" icon = "GFX_ship_part_Required_Computer_1_HE" icon_frame = 1 }
+component_set = { key = "REQUIRED_COMPUTER_1_AC" icon = "GFX_ship_part_Required_Computer_1_AC" icon_frame = 1 }
+component_set = { key = "REQUIRED_COMPUTER_1_SB" icon = "GFX_ship_part_Required_Computer_1_SB" icon_frame = 1 }
+component_set = { key = "REQUIRED_COMPUTER_1_SC" icon = "GFX_ship_part_Required_Computer_1_SC" icon_frame = 1 }
+
+component_set = { key = "REQUIRED_COMPUTER_2_PF" icon = "GFX_ship_part_Required_Computer_2_PF" icon_frame = 1 }
+component_set = { key = "REQUIRED_COMPUTER_2_DE" icon = "GFX_ship_part_Required_Computer_2_DE" icon_frame = 1 }
+component_set = { key = "REQUIRED_COMPUTER_2_CR" icon = "GFX_ship_part_Required_Computer_2_CR" icon_frame = 1 }
+component_set = { key = "REQUIRED_COMPUTER_2_BC" icon = "GFX_ship_part_Required_Computer_2_BC" icon_frame = 1 }
+component_set = { key = "REQUIRED_COMPUTER_2_BS" icon = "GFX_ship_part_Required_Computer_2_BS" icon_frame = 1 }
+component_set = { key = "REQUIRED_COMPUTER_2_HE" icon = "GFX_ship_part_Required_Computer_2_HE" icon_frame = 1 }
+component_set = { key = "REQUIRED_COMPUTER_2_AC" icon = "GFX_ship_part_Required_Computer_2_AC" icon_frame = 1 }
+component_set = { key = "REQUIRED_COMPUTER_2_SB" icon = "GFX_ship_part_Required_Computer_2_SB" icon_frame = 1 }
+component_set = { key = "REQUIRED_COMPUTER_2_SC" icon = "GFX_ship_part_Required_Computer_2_SC" icon_frame = 1 }
+
+component_set = { key = "REQUIRED_COMPUTER_3_PF" icon = "GFX_ship_part_Required_Computer_3_PF" icon_frame = 1 }
+component_set = { key = "REQUIRED_COMPUTER_3_DE" icon = "GFX_ship_part_Required_Computer_3_DE" icon_frame = 1 }
+component_set = { key = "REQUIRED_COMPUTER_3_CR" icon = "GFX_ship_part_Required_Computer_3_CR" icon_frame = 1 }
+component_set = { key = "REQUIRED_COMPUTER_3_BC" icon = "GFX_ship_part_Required_Computer_3_BC" icon_frame = 1 }
+component_set = { key = "REQUIRED_COMPUTER_3_BS" icon = "GFX_ship_part_Required_Computer_3_BS" icon_frame = 1 }
+component_set = { key = "REQUIRED_COMPUTER_3_HE" icon = "GFX_ship_part_Required_Computer_3_HE" icon_frame = 1 }
+component_set = { key = "REQUIRED_COMPUTER_3_AC" icon = "GFX_ship_part_Required_Computer_3_AC" icon_frame = 1 }
+component_set = { key = "REQUIRED_COMPUTER_3_SB" icon = "GFX_ship_part_Required_Computer_3_SB" icon_frame = 1 }
+component_set = { key = "REQUIRED_COMPUTER_3_SC" icon = "GFX_ship_part_Required_Computer_3_SC" icon_frame = 1 }
+
+component_set = { key = "REQUIRED_COMPUTER_4_PF" icon = "GFX_ship_part_Required_Computer_4_PF" icon_frame = 1 }
+component_set = { key = "REQUIRED_COMPUTER_4_DE" icon = "GFX_ship_part_Required_Computer_4_DE" icon_frame = 1 }
+component_set = { key = "REQUIRED_COMPUTER_4_CR" icon = "GFX_ship_part_Required_Computer_4_CR" icon_frame = 1 }
+component_set = { key = "REQUIRED_COMPUTER_4_BC" icon = "GFX_ship_part_Required_Computer_4_BC" icon_frame = 1 }
+component_set = { key = "REQUIRED_COMPUTER_4_BS" icon = "GFX_ship_part_Required_Computer_4_BS" icon_frame = 1 }
+component_set = { key = "REQUIRED_COMPUTER_4_HE" icon = "GFX_ship_part_Required_Computer_4_HE" icon_frame = 1 }
+component_set = { key = "REQUIRED_COMPUTER_4_AC" icon = "GFX_ship_part_Required_Computer_4_AC" icon_frame = 1 }
+component_set = { key = "REQUIRED_COMPUTER_4_SB" icon = "GFX_ship_part_Required_Computer_4_SB" icon_frame = 1 }
+component_set = { key = "REQUIRED_COMPUTER_4_SC" icon = "GFX_ship_part_Required_Computer_4_SC" icon_frame = 1 }
+
+component_set = { key = "REQUIRED_COMPUTER_5_PF" icon = "GFX_ship_part_Required_Computer_5_PF" icon_frame = 1 }
+component_set = { key = "REQUIRED_COMPUTER_5_DE" icon = "GFX_ship_part_Required_Computer_5_DE" icon_frame = 1 }
+component_set = { key = "REQUIRED_COMPUTER_5_CR" icon = "GFX_ship_part_Required_Computer_5_CR" icon_frame = 1 }
+component_set = { key = "REQUIRED_COMPUTER_5_BC" icon = "GFX_ship_part_Required_Computer_5_BC" icon_frame = 1 }
+component_set = { key = "REQUIRED_COMPUTER_5_BS" icon = "GFX_ship_part_Required_Computer_5_BS" icon_frame = 1 }
+component_set = { key = "REQUIRED_COMPUTER_5_HE" icon = "GFX_ship_part_Required_Computer_5_HE" icon_frame = 1 }
+component_set = { key = "REQUIRED_COMPUTER_5_AC" icon = "GFX_ship_part_Required_Computer_5_AC" icon_frame = 1 }
+component_set = { key = "REQUIRED_COMPUTER_5_SB" icon = "GFX_ship_part_Required_Computer_5_SB" icon_frame = 1 }
+component_set = { key = "REQUIRED_COMPUTER_5_SC" icon = "GFX_ship_part_Required_Computer_5_SC" icon_frame = 1 }
+
+component_set = { key = "REQUIRED_COMPUTER_0_BORG_PF" icon = "GFX_ship_part_Required_Computer_Borg_0_PF" icon_frame = 1 }
+component_set = { key = "REQUIRED_COMPUTER_0_BORG_DE" icon = "GFX_ship_part_Required_Computer_Borg_0_DE" icon_frame = 1 }
+component_set = { key = "REQUIRED_COMPUTER_0_BORG_CR" icon = "GFX_ship_part_Required_Computer_Borg_0_CR" icon_frame = 1 }
+component_set = { key = "REQUIRED_COMPUTER_0_BORG_BC" icon = "GFX_ship_part_Required_Computer_Borg_0_BC" icon_frame = 1 }
+component_set = { key = "REQUIRED_COMPUTER_0_BORG_BS" icon = "GFX_ship_part_Required_Computer_Borg_0_BS" icon_frame = 1 }
+component_set = { key = "REQUIRED_COMPUTER_0_BORG_HE" icon = "GFX_ship_part_Required_Computer_Borg_0_HE" icon_frame = 1 }
+component_set = { key = "REQUIRED_COMPUTER_0_BORG_AC" icon = "GFX_ship_part_Required_Computer_Borg_0_AC" icon_frame = 1 }
+component_set = { key = "REQUIRED_COMPUTER_0_BORG_SB" icon = "GFX_ship_part_Required_Computer_Borg_0_SB" icon_frame = 1 }
+component_set = { key = "REQUIRED_COMPUTER_0_BORG_SC" icon = "GFX_ship_part_Required_Computer_Borg_0_SC" icon_frame = 1 }
+
+component_set = { key = "REQUIRED_COMPUTER_1_BORG_PF" icon = "GFX_ship_part_Required_Computer_Borg_1_PF" icon_frame = 1 }
+component_set = { key = "REQUIRED_COMPUTER_1_BORG_DE" icon = "GFX_ship_part_Required_Computer_Borg_1_DE" icon_frame = 1 }
+component_set = { key = "REQUIRED_COMPUTER_1_BORG_CR" icon = "GFX_ship_part_Required_Computer_Borg_1_CR" icon_frame = 1 }
+component_set = { key = "REQUIRED_COMPUTER_1_BORG_BC" icon = "GFX_ship_part_Required_Computer_Borg_1_BC" icon_frame = 1 }
+component_set = { key = "REQUIRED_COMPUTER_1_BORG_BS" icon = "GFX_ship_part_Required_Computer_Borg_1_BS" icon_frame = 1 }
+component_set = { key = "REQUIRED_COMPUTER_1_BORG_HE" icon = "GFX_ship_part_Required_Computer_Borg_1_HE" icon_frame = 1 }
+component_set = { key = "REQUIRED_COMPUTER_1_BORG_AC" icon = "GFX_ship_part_Required_Computer_Borg_1_AC" icon_frame = 1 }
+component_set = { key = "REQUIRED_COMPUTER_1_BORG_SB" icon = "GFX_ship_part_Required_Computer_Borg_1_SB" icon_frame = 1 }
+component_set = { key = "REQUIRED_COMPUTER_1_BORG_SC" icon = "GFX_ship_part_Required_Computer_Borg_1_SC" icon_frame = 1 }
+
+component_set = { key = "REQUIRED_COMPUTER_2_BORG_PF" icon = "GFX_ship_part_Required_Computer_Borg_2_PF" icon_frame = 1 }
+component_set = { key = "REQUIRED_COMPUTER_2_BORG_DE" icon = "GFX_ship_part_Required_Computer_Borg_2_DE" icon_frame = 1 }
+component_set = { key = "REQUIRED_COMPUTER_2_BORG_CR" icon = "GFX_ship_part_Required_Computer_Borg_2_CR" icon_frame = 1 }
+component_set = { key = "REQUIRED_COMPUTER_2_BORG_BC" icon = "GFX_ship_part_Required_Computer_Borg_2_BC" icon_frame = 1 }
+component_set = { key = "REQUIRED_COMPUTER_2_BORG_BS" icon = "GFX_ship_part_Required_Computer_Borg_2_BS" icon_frame = 1 }
+component_set = { key = "REQUIRED_COMPUTER_2_BORG_HE" icon = "GFX_ship_part_Required_Computer_Borg_2_HE" icon_frame = 1 }
+component_set = { key = "REQUIRED_COMPUTER_2_BORG_AC" icon = "GFX_ship_part_Required_Computer_Borg_2_AC" icon_frame = 1 }
+component_set = { key = "REQUIRED_COMPUTER_2_BORG_SB" icon = "GFX_ship_part_Required_Computer_Borg_2_SB" icon_frame = 1 }
+component_set = { key = "REQUIRED_COMPUTER_2_BORG_SC" icon = "GFX_ship_part_Required_Computer_Borg_2_SC" icon_frame = 1 }
+
+component_set = { key = "REQUIRED_COMPUTER_3_BORG_PF" icon = "GFX_ship_part_Required_Computer_Borg_3_PF" icon_frame = 1 }
+component_set = { key = "REQUIRED_COMPUTER_3_BORG_DE" icon = "GFX_ship_part_Required_Computer_Borg_3_DE" icon_frame = 1 }
+component_set = { key = "REQUIRED_COMPUTER_3_BORG_CR" icon = "GFX_ship_part_Required_Computer_Borg_3_CR" icon_frame = 1 }
+component_set = { key = "REQUIRED_COMPUTER_3_BORG_BC" icon = "GFX_ship_part_Required_Computer_Borg_3_BC" icon_frame = 1 }
+component_set = { key = "REQUIRED_COMPUTER_3_BORG_BS" icon = "GFX_ship_part_Required_Computer_Borg_3_BS" icon_frame = 1 }
+component_set = { key = "REQUIRED_COMPUTER_3_BORG_HE" icon = "GFX_ship_part_Required_Computer_Borg_3_HE" icon_frame = 1 }
+component_set = { key = "REQUIRED_COMPUTER_3_BORG_AC" icon = "GFX_ship_part_Required_Computer_Borg_3_AC" icon_frame = 1 }
+component_set = { key = "REQUIRED_COMPUTER_3_BORG_SB" icon = "GFX_ship_part_Required_Computer_Borg_3_SB" icon_frame = 1 }
+component_set = { key = "REQUIRED_COMPUTER_3_BORG_SC" icon = "GFX_ship_part_Required_Computer_Borg_3_SC" icon_frame = 1 }
+
+component_set = { key = "REQUIRED_COMPUTER_4_BORG_PF" icon = "GFX_ship_part_Required_Computer_Borg_4_PF" icon_frame = 1 }
+component_set = { key = "REQUIRED_COMPUTER_4_BORG_DE" icon = "GFX_ship_part_Required_Computer_Borg_4_DE" icon_frame = 1 }
+component_set = { key = "REQUIRED_COMPUTER_4_BORG_CR" icon = "GFX_ship_part_Required_Computer_Borg_4_CR" icon_frame = 1 }
+component_set = { key = "REQUIRED_COMPUTER_4_BORG_BC" icon = "GFX_ship_part_Required_Computer_Borg_4_BC" icon_frame = 1 }
+component_set = { key = "REQUIRED_COMPUTER_4_BORG_BS" icon = "GFX_ship_part_Required_Computer_Borg_4_BS" icon_frame = 1 }
+component_set = { key = "REQUIRED_COMPUTER_4_BORG_HE" icon = "GFX_ship_part_Required_Computer_Borg_4_HE" icon_frame = 1 }
+component_set = { key = "REQUIRED_COMPUTER_4_BORG_AC" icon = "GFX_ship_part_Required_Computer_Borg_4_AC" icon_frame = 1 }
+component_set = { key = "REQUIRED_COMPUTER_4_BORG_SB" icon = "GFX_ship_part_Required_Computer_Borg_4_SB" icon_frame = 1 }
+component_set = { key = "REQUIRED_COMPUTER_4_BORG_SC" icon = "GFX_ship_part_Required_Computer_Borg_4_SC" icon_frame = 1 }
+
+component_set = { key = "REQUIRED_COMPUTER_5_BORG_PF" icon = "GFX_ship_part_Required_Computer_Borg_5_PF" icon_frame = 1 }
+component_set = { key = "REQUIRED_COMPUTER_5_BORG_DE" icon = "GFX_ship_part_Required_Computer_Borg_5_DE" icon_frame = 1 }
+component_set = { key = "REQUIRED_COMPUTER_5_BORG_CR" icon = "GFX_ship_part_Required_Computer_Borg_5_CR" icon_frame = 1 }
+component_set = { key = "REQUIRED_COMPUTER_5_BORG_BC" icon = "GFX_ship_part_Required_Computer_Borg_5_BC" icon_frame = 1 }
+component_set = { key = "REQUIRED_COMPUTER_5_BORG_BS" icon = "GFX_ship_part_Required_Computer_Borg_5_BS" icon_frame = 1 }
+component_set = { key = "REQUIRED_COMPUTER_5_BORG_HE" icon = "GFX_ship_part_Required_Computer_Borg_5_HE" icon_frame = 1 }
+component_set = { key = "REQUIRED_COMPUTER_5_BORG_AC" icon = "GFX_ship_part_Required_Computer_Borg_5_AC" icon_frame = 1 }
+component_set = { key = "REQUIRED_COMPUTER_5_BORG_SB" icon = "GFX_ship_part_Required_Computer_Borg_5_SB" icon_frame = 1 }
+component_set = { key = "REQUIRED_COMPUTER_5_BORG_SC" icon = "GFX_ship_part_Required_Computer_Borg_5_SC" icon_frame = 1 }
+
+component_set = { key = "REQUIRED_COMPUTER_6_BORG_PF" icon = "GFX_ship_part_Required_Computer_Borg_6_PF" icon_frame = 1 }
+component_set = { key = "REQUIRED_COMPUTER_6_BORG_DE" icon = "GFX_ship_part_Required_Computer_Borg_6_DE" icon_frame = 1 }
+component_set = { key = "REQUIRED_COMPUTER_6_BORG_CR" icon = "GFX_ship_part_Required_Computer_Borg_6_CR" icon_frame = 1 }
+component_set = { key = "REQUIRED_COMPUTER_6_BORG_BC" icon = "GFX_ship_part_Required_Computer_Borg_6_BC" icon_frame = 1 }
+component_set = { key = "REQUIRED_COMPUTER_6_BORG_BS" icon = "GFX_ship_part_Required_Computer_Borg_6_BS" icon_frame = 1 }
+component_set = { key = "REQUIRED_COMPUTER_6_BORG_HE" icon = "GFX_ship_part_Required_Computer_Borg_6_HE" icon_frame = 1 }
+component_set = { key = "REQUIRED_COMPUTER_6_BORG_AC" icon = "GFX_ship_part_Required_Computer_Borg_6_AC" icon_frame = 1 }
+component_set = { key = "REQUIRED_COMPUTER_6_BORG_SB" icon = "GFX_ship_part_Required_Computer_Borg_6_SB" icon_frame = 1 }
+component_set = { key = "REQUIRED_COMPUTER_6_BORG_SC" icon = "GFX_ship_part_Required_Computer_Borg_6_SC" icon_frame = 1 }

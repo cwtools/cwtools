@@ -1,0 +1,409 @@
+#civic_example = {
+#	playable = {}								# AND trigger, no scope; use this to prevent the civic from being selectable by the player (UI)
+#	potential = {}								# requirements list, see ../readme_requirements.txt
+#	possible = {}								# requirements list, see ../readme_requirements.txt
+#	pickable_at_start = yes / no				# default: yes
+#	modification = yes / no						# default: yes, set to no to prevent adding or removing this after creation of the empire
+#
+#	random_weight = { base = 1 }				# scriptable weight for randomizing a civic; required, else the civic will not get assigned randomly
+#
+#	modifier = {}								# modifier added to the country if the civic is selected and valid
+#	can_build_ruler_military_station = yes / no	# default: no
+#	can_build_ruler_ship = yes / no				# default: no
+#
+
+civic_nomadic = {
+	modification = no
+	possible = { }
+	pickable_at_start = no
+	random_weight = { base = 0 }
+	modifier = { }
+	description = civic_tooltip_nomadic_effects
+}
+
+civic_imperial_guard = { # unique andorian civic
+	modification = no
+	possible = { }
+	pickable_at_start = no
+	random_weight = { base = 0 }
+	modifier = { 
+	    admiral_skill_levels = 1
+	    ship_fire_rate_mult = 0.05
+	}
+}
+
+civic_attention_detail = { # unique sheliak civic 
+	modification = no
+	possible = { }
+	pickable_at_start = no
+	random_weight = { base = 0 }
+	modifier = { 
+	    planet_building_cost_mult = -0.1
+	    country_core_sector_system_cap = 1
+	    country_leader_pool_size = 1
+	}
+}
+
+civic_stubborn_pride = { # unique tellarite civic 
+	modification = no
+	possible = { }
+	pickable_at_start = no
+	random_weight = { base = 0 }
+	modifier = { 
+	    faction_influence_mult = 0.25
+	    country_resource_influence_add = 1
+	}
+}
+
+
+civic_cult_personality = { ### unique for cyber perfection borg faction
+	modification = no
+	potential = { ethics = { value = ethic_cybernetic_consciousness } } 
+	possible = { }
+	pickable_at_start = no
+	random_weight = { base = 0 }
+	modifier = { 
+	    edict_influence_cost = -0.20
+	    army_damage_mult = 0.20
+	}
+}
+
+civic_cyber_dreamer = { ### unique for unimatrix zero borg faction
+	modification = no
+	potential = { ethics = { value = ethic_cybernetic_consciousness } } 
+	possible = { }
+	pickable_at_start = no
+	random_weight = { base = 0 }
+	modifier = { 
+	    country_resource_unity_mult = 0.25
+	}
+}
+
+civic_cooperative = { ### unique for cooperative borg faction
+	modification = no
+	potential = { ethics = { value = ethic_cybernetic_consciousness } } 
+	possible = { }
+	pickable_at_start = no
+	random_weight = { base = 0 }
+	modifier = { 
+	    planet_migration_all_pull = 0.75
+	}
+}
+
+civic_korgano = { ### Unique civic for the D'Arsay culture
+	modification = no
+	pickable_at_start = no
+	random_weight = { base = 0 }
+	description = civic_tooltip_korgano_effects
+}
+
+civic_masaka = { ### Unique civic for the D'Arsay culture
+	modification = no
+	pickable_at_start = no
+	random_weight = { base = 0 }
+	description = civic_tooltip_masaka_effects
+}
+
+civic_telepath_hunters = {
+	modification = no
+	possible = { }
+	pickable_at_start = no
+	random_weight = { base = 0 }
+	modifier = {
+		planet_unrest_add = -15
+		pop_government_ethic_attraction = 0.15
+	}
+}
+
+civic_born_of_order = {
+	modification = no
+	possible = { }
+	pickable_at_start = no
+	random_weight = { base = 0 }
+	modifier = {
+		planet_unrest_add = -10
+	}
+	description = civic_tooltip_born_of_order_effects
+}
+
+
+civic_prophet_1 = {
+	modification = no
+	possible = { }
+	pickable_at_start = no
+	random_weight = { base = 0 }
+	modifier = {
+		pop_government_ethic_attraction = 0.25
+	}
+}
+
+civic_prophet_2 = {
+	modification = no
+	possible = { }
+	pickable_at_start = no
+	random_weight = { base = 0 }
+	modifier = {
+		pop_resettlement_cost_mult = -0.5
+		army_upkeep_mult = 1
+	}
+	description = civic_tooltip_prophet_2_effects
+}
+
+
+civic_virtuoso = {
+	modification = no
+	possible = { }
+	pickable_at_start = no
+	random_weight = { base = 0 }
+	modifier = { }
+	description = civic_tooltip_virtuoso_effects
+}
+
+civic_unrelenting_struggle = { # for Vidiians
+	modification = no
+	possible = { }
+	pickable_at_start = no
+	random_weight = { base = 0 }
+	modifier = { category_biology_research_speed_mult = 0.5 }
+}
+
+civic_museums = { # for Hur'Q
+	modification = no
+	possible = { }
+	pickable_at_start = no
+	random_weight = { base = 0 }
+	modifier = { category_statecraft_research_speed_mult = 0.5 }
+}
+
+civic_museums_2 = { # for Hur'Q
+	icon = "gfx/interface/icons/governments/civics/civic_museums.dds"
+	modification = no
+	possible = { }
+	pickable_at_start = no
+	random_weight = { base = 0 }
+	modifier = { }
+	description = civic_tooltip_museums_2_effects
+}
+
+civic_distant_origins = { # for Voth
+	modification = no
+	possible = { }
+	pickable_at_start = no
+	random_weight = { base = 0 }
+	modifier = { pop_government_ethic_attraction = 0.25 }
+}
+
+civic_matriarchy = { # for Skreera
+    modification = no
+	possible = { }
+	pickable_at_start = no
+	random_weight = { base = 0 }
+	modifier = { 
+	    ruler_skill_levels = 2
+	    pop_government_ethic_attraction = -0.1
+    }
+}
+
+civic_philomaths = { # for Denobulan
+    modification = no
+	possible = { }
+	pickable_at_start = no
+	random_weight = { base = 0 }
+	modifier = { 
+	    species_leader_exp_gain = 0.2
+    }
+}
+
+civic_convergent_evolution = { # for xindi
+	modification = no
+	possible = { }
+	pickable_at_start = no
+	random_weight = { base = 0 }
+	modifier = { }
+	description = civic_tooltip_convergent_evolution_effects
+}
+
+civic_master_time = { # for Krenim
+	modification = no
+	possible = { }
+	pickable_at_start = no
+	random_weight = { base = 0 }
+	modifier = { }
+	description = civic_tooltip_master_time_effects
+}
+
+civic_master_strategy = { # for zakdorn
+	modification = no
+	possible = { }
+	pickable_at_start = no
+	random_weight = { base = 0 }
+	modifier = { ship_fire_rate_mult = 0.1 }
+}
+
+
+
+civic_great_houses = { # klingon unique
+	potential = { }
+	modification = no
+	pickable_at_start = no
+	possible = { }
+	random_weight = { base = 0 }
+	modifier = {
+		country_leader_cap = 3
+		ship_fire_rate_mult = 0.03
+	}
+}
+
+civic_obsidian_order = { # cardassian unique
+	potential = { }
+	modification = no
+	pickable_at_start = no
+	possible = { }
+	random_weight = { base = 0 }
+	modifier = {
+		country_core_sector_system_cap = 1
+		planet_unrest_add = -10
+	}
+}
+
+civic_river_1 = { # dominion unique
+	potential = { ethics = { value = ethic_great_link } } 
+	modification = no
+	pickable_at_start = no
+	possible = { }
+	random_weight = { base = 0 }
+	modifier = {
+		ruler_skill_levels = 2
+		country_resource_unity_mult = -0.1
+	}
+}
+
+civic_river_2 = { # dominion unique
+	potential = { ethics = { value = ethic_great_link } } 
+	modification = no
+	pickable_at_start = no
+	possible = { }
+	random_weight = { base = 0 }
+	modifier = {
+		country_core_sector_system_cap = 3
+		pop_consumer_goods_mult = -0.30
+		# leader_influence_cost = 1
+	}
+}
+
+civic_black_right_side = { # Chernoite unique
+	potential = { }
+	modification = no
+	pickable_at_start = no
+	possible = { }
+	random_weight = { base = 0 }
+	modifier = {
+		country_leader_cap = 2
+		slave_food_output = 0.10
+		slave_mineral_output = 0.10
+	}
+}
+
+civic_perfect_memory = { # Tholian unique
+	potential = { }
+	modification = no
+	pickable_at_start = no
+	possible = { }
+	random_weight = { base = 0 }
+	modifier = {
+		country_core_sector_system_cap = 1
+		planet_building_cost_mult = -0.15
+	}
+}
+
+civic_the_herd = { # Kelpian unique
+	potential = { }
+	modification = no
+	pickable_at_start = no
+	possible = { }
+	random_weight = { base = 0 }
+	modifier = {
+		ship_evasion_mult = 0.1
+		ship_weapon_damage = -0.05
+	}
+}
+
+civic_duality = { # Bynar unique
+	potential = { }
+	modification = no
+	pickable_at_start = no
+	possible = { }
+	random_weight = { base = 0 }
+	modifier = {
+		army_upkeep_mult = -0.1
+		ship_upkeep_mult = -0.1
+		spaceport_ship_build_cost_mult = -0.1
+		country_ship_upgrade_cost_mult = -0.1
+		planet_building_cost_mult = -0.1
+	}
+}
+
+civic_post_scarcity = { # united earth unique
+	potential = { }
+	modification = no
+	pickable_at_start = no
+	possible = { }
+	random_weight = { base = 0 }
+	modifier = {
+	    country_resource_unity_mult = 0.1
+		pop_consumer_goods_mult = -0.1
+	}
+}
+
+civic_spirit_exploration = { # united earth unique
+	potential = { }
+	modification = no
+	pickable_at_start = no
+	possible = { }
+	random_weight = { base = 0 }
+	modifier = {
+	    science_ship_survey_speed = 0.1
+		ship_anomaly_generation_chance_mult = 0.05
+	}
+}
+
+civic_ritualized_greed = { # Ferengi unique
+	potential = { }
+	modification = no
+	pickable_at_start = no
+	possible = { }
+	random_weight = { base = 0 }
+	modifier = {
+	    leader_skill_levels = 1
+		country_resource_energy_mult = 0.05
+		country_resource_minerals_mult = 0.05
+	}
+}
+
+civic_assimilators = {
+	potential = { ethics = { value = ethic_cybernetic_consciousness } }
+	modification = no
+	possible = { ethics = { value = ethic_cybernetic_consciousness } }
+	pickable_at_start = no
+	random_weight = { base = 0 }
+	modifier = { 
+	    country_resource_unity_mult = -0.75
+	    max_rivalries = -3
+	}
+	description = civic_tooltip_assimilators_effects
+}
+
+### Fallen empire civic variant for First Federation
+civic_lethargic_democracy = {
+	modification = no
+	icon = "gfx/interface/icons/governments/civics/civic_agrarian_idyll.dds"
+	potential = {
+		country_type = { value = fallen_empire }
+		ethics = { NOT = { value = ethic_gestalt_consciousness } }
+	}
+	random_weight = { base = 1 }
+	description = FALLEN_EMPIRE_LETHARGY_1
+	modifier = { 
+		country_resource_influence_add = -1
+	}
+}

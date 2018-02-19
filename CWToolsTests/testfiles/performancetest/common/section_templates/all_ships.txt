@@ -1,0 +1,7538 @@
+
+# Destroyer ( Destroyer )
+ship_section_template = {
+   key = "saber_stern_1"
+   ship_size = saber
+   fits_on_slot = stern
+   entity = "saber_coreA_entity"
+   icon = "GFX_ship_part_core_mid"
+   icon_frame = 1
+   prerequisites = { tech_engineering_starship-class_717 }
+   cost = 140
+   small_utility_slots = 0
+   medium_utility_slots = 0
+   large_utility_slots = 0
+   aux_utility_slots = 0
+   ai_weight = { factor = 10 }
+   component_slot = {
+      name = "SMALL_GUN_01"
+      slot_size = small
+      slot_type = weapon
+      locatorname = "small_gun_01"
+   }
+   component_slot = {
+      name = "SMALL_GUN_02"
+      slot_size = small
+      slot_type = weapon
+      locatorname = "small_gun_02"
+   }
+   component_slot = {
+      name = "SMALL_GUN_03"
+      slot_size = small
+      slot_type = weapon
+      locatorname = "small_gun_03"
+   }
+   component_slot = {
+      name = "SMALL_GUN_1"
+      slot_size = point_defence
+      slot_type = weapon
+      locatorname = "large_gun_01"
+   }
+   component_slot = {
+      name = "SMALL_GUN_2"
+      slot_size = point_defence
+      slot_type = weapon
+      locatorname = "large_gun_02"
+   }
+}
+# Destroyer ( Destroyer )
+ship_section_template = {
+   key = "saber_stern_2"
+   ship_size = saber
+   fits_on_slot = stern
+   entity = "saber_coreA_entity"
+   icon = "GFX_ship_part_core_mid"
+   icon_frame = 1
+   prerequisites = { tech_engineering_bird-of-prey_716 }
+   cost = 140
+   small_utility_slots = 0
+   medium_utility_slots = 0
+   large_utility_slots = 0
+   aux_utility_slots = 0
+   ai_weight = { factor = 10 }
+   component_slot = {
+      name = "LARGE_GUN_01"
+      slot_size = large
+      slot_type = weapon
+      locatorname = "medium_gun_01"
+   }
+   component_slot = {
+      name = "LARGE_GUN_02"
+      slot_size = large
+      slot_type = weapon
+      locatorname = "medium_gun_02"
+   }
+   component_slot = {
+      name = "LARGE_GUN_03"
+      slot_size = large
+      slot_type = weapon
+      locatorname = "medium_gun_03"
+   }
+   component_slot = {
+      name = "LARGE_GUN_04"
+      slot_size = large
+      slot_type = weapon
+      locatorname = "medium_gun_04"
+   }
+   component_slot = {
+      name = "LARGE_GUN_05"
+      slot_size = large
+      slot_type = weapon
+      locatorname = "medium_gun_05"
+   }
+   component_slot = {
+      name = "LARGE_GUN_06"
+      slot_size = large
+      slot_type = weapon
+      locatorname = "medium_gun_06"
+   }
+   component_slot = {
+      name = "SMALL_GUN_1"
+      slot_size = point_defence
+      slot_type = weapon
+      locatorname = "large_gun_01"
+   }
+   component_slot = {
+      name = "SMALL_GUN_2"
+      slot_size = point_defence
+      slot_type = weapon
+      locatorname = "large_gun_02"
+   }
+}
+# Missile Boat ( Destroyer )
+ship_section_template = {
+   key = "saber_stern_3"
+   ship_size = saber
+   fits_on_slot = stern
+   entity = "saber_coreA_entity"
+   icon = "GFX_ship_part_core_mid"
+   icon_frame = 1
+   prerequisites = { tech_engineering_global_650 }
+   cost = 270
+   small_utility_slots = 0
+   medium_utility_slots = 0
+   large_utility_slots = 0
+   aux_utility_slots = 0
+   ai_weight = { factor = 15 }
+   component_slot = {
+      name = "SMALL_GUN_1"
+      slot_size = point_defence
+      slot_type = weapon
+      locatorname = "large_gun_01"
+   }
+   component_slot = {
+      name = "SMALL_GUN_2"
+      slot_size = point_defence
+      slot_type = weapon
+      locatorname = "large_gun_02"
+   }
+   component_slot = {
+      name = "SMALL_GUN_3"
+      slot_size = point_defence
+      slot_type = weapon
+      locatorname = "large_gun_03"
+   }
+   component_slot = {
+      name = "SMALL_GUN_4"
+      slot_size = point_defence
+      slot_type = weapon
+      locatorname = "large_gun_04"
+   }
+}
+# Gun Boat ( Destroyer )
+ship_section_template = {
+   key = "saber_stern_4"
+   ship_size = saber
+   fits_on_slot = stern
+   entity = "saber_coreA_entity"
+   icon = "GFX_ship_part_core_mid"
+   icon_frame = 1
+   prerequisites = { tech_physics_phaser_158 }
+   cost = 270
+   small_utility_slots = 0
+   medium_utility_slots = 0
+   large_utility_slots = 0
+   aux_utility_slots = 0
+   ai_weight = { factor = 15 }
+   component_slot = {
+      name = "LARGE_GUN_01"
+      slot_size = large
+      slot_type = weapon
+      locatorname = "medium_gun_01"
+   }
+   component_slot = {
+      name = "LARGE_GUN_02"
+      slot_size = large
+      slot_type = weapon
+      locatorname = "medium_gun_02"
+   }
+   component_slot = {
+      name = "LARGE_GUN_03"
+      slot_size = large
+      slot_type = weapon
+      locatorname = "medium_gun_03"
+   }
+   component_slot = {
+      name = "LARGE_GUN_04"
+      slot_size = large
+      slot_type = weapon
+      locatorname = "medium_gun_04"
+   }
+   component_slot = {
+      name = "LARGE_GUN_05"
+      slot_size = large
+      slot_type = weapon
+      locatorname = "medium_gun_05"
+   }
+   component_slot = {
+      name = "LARGE_GUN_06"
+      slot_size = large
+      slot_type = weapon
+      locatorname = "medium_gun_06"
+   }
+   component_slot = {
+      name = "LARGE_GUN_07"
+      slot_size = large
+      slot_type = weapon
+      locatorname = "medium_gun_01"
+   }
+   component_slot = {
+      name = "LARGE_GUN_08"
+      slot_size = large
+      slot_type = weapon
+      locatorname = "medium_gun_02"
+   }
+   component_slot = {
+      name = "SMALL_GUN_1"
+      slot_size = point_defence
+      slot_type = weapon
+      locatorname = "large_gun_01"
+   }
+   component_slot = {
+      name = "SMALL_GUN_2"
+      slot_size = point_defence
+      slot_type = weapon
+      locatorname = "large_gun_02"
+   }
+}
+# Bach'Hich Heavy Destroyer ( Destroyer )
+ship_section_template = {
+   key = "saber_stern_5"
+   ship_size = saber
+   fits_on_slot = stern
+   entity = "saber_coreA_entity"
+   icon = "GFX_ship_part_core_mid"
+   icon_frame = 1
+   prerequisites = { tech_physics_space-fitted_205 }
+   cost = 270
+   small_utility_slots = 0
+   medium_utility_slots = 0
+   large_utility_slots = 0
+   aux_utility_slots = 0
+   ai_weight = { factor = 10 }
+   component_slot = {
+      name = "MEDIUM_GUN_01"
+      slot_size = medium
+      slot_type = weapon
+      locatorname = "medium_gun_01"
+   }
+   component_slot = {
+      name = "SMALL_GUN_1"
+      slot_size = point_defence
+      slot_type = weapon
+      locatorname = "large_gun_01"
+   }
+}
+# Phase Disruptor Weapon Retrofit ( Destroyer )
+ship_section_template = {
+   key = "saber_stern_6"
+   ship_size = saber
+   fits_on_slot = stern
+   entity = "saber_coreA_entity"
+   icon = "GFX_ship_part_core_mid"
+   icon_frame = 1
+   prerequisites = { tech_physics_phase-resonance_213 }
+   cost = 120
+   small_utility_slots = 0
+   medium_utility_slots = 0
+   large_utility_slots = 0
+   aux_utility_slots = 0
+   ai_weight = { factor = 5 }
+   component_slot = {
+      name = "MEDIUM_GUN_01"
+      slot_size = medium
+      slot_type = weapon
+      locatorname = "medium_gun_01"
+   }
+}
+# Assault Disruptor Weapon Retrofit ( Destroyer )
+ship_section_template = {
+   key = "saber_stern_7"
+   ship_size = saber
+   fits_on_slot = stern
+   entity = "saber_coreA_entity"
+   icon = "GFX_ship_part_core_mid"
+   icon_frame = 1
+   prerequisites = { tech_physics_type-1_215 }
+   cost = 120
+   small_utility_slots = 0
+   medium_utility_slots = 0
+   large_utility_slots = 0
+   aux_utility_slots = 0
+   ai_weight = { factor = 5 }
+   component_slot = {
+      name = "EXTRA_LARGE_01"
+      slot_size = extra_large
+      slot_type = weapon
+      locatorname = "medium_gun_01"
+   }
+   component_slot = {
+      name = "SMALL_GUN_1"
+      slot_size = point_defence
+      slot_type = weapon
+      locatorname = "large_gun_01"
+   }
+}
+# Magnetic Plasma Beam Weapon Retrofit ( Destroyer )
+ship_section_template = {
+   key = "saber_stern_8"
+   ship_size = saber
+   fits_on_slot = stern
+   entity = "saber_coreA_entity"
+   icon = "GFX_ship_part_core_mid"
+   icon_frame = 1
+   prerequisites = { tech_physics_magnetic-constraint_246 }
+   cost = 120
+   small_utility_slots = 0
+   medium_utility_slots = 0
+   large_utility_slots = 0
+   aux_utility_slots = 0
+   ai_weight = { factor = 5 }
+   component_slot = {
+      name = "MEDIUM_GUN_01"
+      slot_size = medium
+      slot_type = weapon
+      locatorname = "medium_gun_01"
+   }
+}
+# Positron Cannon Weapon Retrofit ( Destroyer )
+ship_section_template = {
+   key = "saber_stern_9"
+   ship_size = saber
+   fits_on_slot = stern
+   entity = "saber_coreA_entity"
+   icon = "GFX_ship_part_core_mid"
+   icon_frame = 1
+   prerequisites = { tech_physics_positron_270 }
+   cost = 120
+   small_utility_slots = 0
+   medium_utility_slots = 0
+   large_utility_slots = 0
+   aux_utility_slots = 0
+   ai_weight = { factor = 5 }
+   component_slot = {
+      name = "EXTRA_LARGE_01"
+      slot_size = extra_large
+      slot_type = weapon
+      locatorname = "medium_gun_01"
+   }
+   component_slot = {
+      name = "SMALL_GUN_1"
+      slot_size = point_defence
+      slot_type = weapon
+      locatorname = "large_gun_01"
+   }
+}
+# Graviton Beam Weapon Retrofit ( Destroyer )
+ship_section_template = {
+   key = "saber_stern_10"
+   ship_size = saber
+   fits_on_slot = stern
+   entity = "saber_coreA_entity"
+   icon = "GFX_ship_part_core_mid"
+   icon_frame = 1
+   prerequisites = { tech_physics_graviton_326 }
+   cost = 120
+   small_utility_slots = 0
+   medium_utility_slots = 0
+   large_utility_slots = 0
+   aux_utility_slots = 0
+   ai_weight = { factor = 5 }
+   component_slot = {
+      name = "MEDIUM_GUN_01"
+      slot_size = medium
+      slot_type = weapon
+      locatorname = "medium_gun_01"
+   }
+}
+# Heavy Beam Emplacement ( Destroyer )
+ship_section_template = {
+   key = "saber_stern_11"
+   ship_size = saber
+   fits_on_slot = stern
+   entity = "saber_coreB_entity"
+   icon = "GFX_ship_part_core_mid"
+   icon_frame = 1
+   prerequisites = { tech_engineering_advanced_547 }
+   cost = 270
+   small_utility_slots = 0
+   medium_utility_slots = 0
+   large_utility_slots = 0
+   aux_utility_slots = 0
+   ai_weight = { factor = 15 }
+   component_slot = {
+      name = "MEDIUM_GUN_01"
+      slot_size = medium
+      slot_type = weapon
+      locatorname = "medium_gun_01"
+   }
+   component_slot = {
+      name = "SMALL_GUN_1"
+      slot_size = point_defence
+      slot_type = weapon
+      locatorname = "large_gun_01"
+   }
+}
+# Heavy Cannon Emplacement ( Destroyer )
+ship_section_template = {
+   key = "saber_stern_12"
+   ship_size = saber
+   fits_on_slot = stern
+   entity = "saber_coreB_entity"
+   icon = "GFX_ship_part_core_mid"
+   icon_frame = 1
+   prerequisites = { tech_engineering_advanced_721 }
+   cost = 270
+   small_utility_slots = 0
+   medium_utility_slots = 0
+   large_utility_slots = 0
+   aux_utility_slots = 0
+   ai_weight = { factor = 15 }
+   component_slot = {
+      name = "EXTRA_LARGE_01"
+      slot_size = extra_large
+      slot_type = weapon
+      locatorname = "medium_gun_01"
+   }
+   component_slot = {
+      name = "SMALL_GUN_1"
+      slot_size = point_defence
+      slot_type = weapon
+      locatorname = "large_gun_01"
+   }
+   component_slot = {
+      name = "SMALL_GUN_2"
+      slot_size = point_defence
+      slot_type = weapon
+      locatorname = "large_gun_02"
+   }
+}
+# Heavy Torpedo Emplacement ( Destroyer )
+ship_section_template = {
+   key = "saber_stern_13"
+   ship_size = saber
+   fits_on_slot = stern
+   entity = "saber_coreB_entity"
+   icon = "GFX_ship_part_core_mid"
+   icon_frame = 1
+   prerequisites = { tech_engineering_advanced_547 }
+   cost = 270
+   small_utility_slots = 0
+   medium_utility_slots = 0
+   large_utility_slots = 0
+   aux_utility_slots = 0
+   ai_weight = { factor = 15 }
+   component_slot = {
+      name = "SMALL_GUN_01"
+      slot_size = small
+      slot_type = weapon
+      locatorname = "small_gun_01"
+   }
+   component_slot = {
+      name = "SMALL_GUN_02"
+      slot_size = small
+      slot_type = weapon
+      locatorname = "small_gun_02"
+   }
+   component_slot = {
+      name = "SMALL_GUN_03"
+      slot_size = small
+      slot_type = weapon
+      locatorname = "small_gun_03"
+   }
+   component_slot = {
+      name = "TORPEDO_01"
+      slot_size = torpedo
+      slot_type = weapon
+      locatorname = "large_gun_01"
+   }
+}
+# Heavy Torpedo Emplacement ( Destroyer )
+ship_section_template = {
+   key = "saber_stern_14"
+   ship_size = saber
+   fits_on_slot = stern
+   entity = "saber_coreB_entity"
+   icon = "GFX_ship_part_core_mid"
+   icon_frame = 1
+   prerequisites = { tech_engineering_advanced_721 }
+   cost = 270
+   small_utility_slots = 0
+   medium_utility_slots = 0
+   large_utility_slots = 0
+   aux_utility_slots = 0
+   ai_weight = { factor = 15 }
+   component_slot = {
+      name = "LARGE_GUN_01"
+      slot_size = large
+      slot_type = weapon
+      locatorname = "medium_gun_01"
+   }
+   component_slot = {
+      name = "LARGE_GUN_02"
+      slot_size = large
+      slot_type = weapon
+      locatorname = "medium_gun_02"
+   }
+   component_slot = {
+      name = "LARGE_GUN_03"
+      slot_size = large
+      slot_type = weapon
+      locatorname = "medium_gun_03"
+   }
+   component_slot = {
+      name = "LARGE_GUN_04"
+      slot_size = large
+      slot_type = weapon
+      locatorname = "medium_gun_04"
+   }
+   component_slot = {
+      name = "LARGE_GUN_05"
+      slot_size = large
+      slot_type = weapon
+      locatorname = "medium_gun_05"
+   }
+   component_slot = {
+      name = "LARGE_GUN_06"
+      slot_size = large
+      slot_type = weapon
+      locatorname = "medium_gun_06"
+   }
+   component_slot = {
+      name = "TORPEDO_01"
+      slot_size = torpedo
+      slot_type = weapon
+      locatorname = "large_gun_01"
+   }
+}
+# Light Torpedo Volley ( Destroyer )
+ship_section_template = {
+   key = "saber_stern_15"
+   ship_size = saber
+   fits_on_slot = stern
+   entity = "saber_coreB_entity"
+   icon = "GFX_ship_part_core_mid"
+   icon_frame = 1
+   prerequisites = { tech_engineering_advanced_547 }
+   cost = 270
+   small_utility_slots = 0
+   medium_utility_slots = 0
+   large_utility_slots = 0
+   aux_utility_slots = 0
+   ai_weight = { factor = 15 }
+   component_slot = {
+      name = "SMALL_GUN_01"
+      slot_size = small
+      slot_type = weapon
+      locatorname = "small_gun_01"
+   }
+   component_slot = {
+      name = "SMALL_GUN_02"
+      slot_size = small
+      slot_type = weapon
+      locatorname = "small_gun_02"
+   }
+   component_slot = {
+      name = "SMALL_GUN_1"
+      slot_size = point_defence
+      slot_type = weapon
+      locatorname = "large_gun_01"
+   }
+   component_slot = {
+      name = "SMALL_GUN_2"
+      slot_size = point_defence
+      slot_type = weapon
+      locatorname = "large_gun_02"
+   }
+   component_slot = {
+      name = "SMALL_GUN_3"
+      slot_size = point_defence
+      slot_type = weapon
+      locatorname = "large_gun_03"
+   }
+}
+# Light Torpedo Volley ( Destroyer )
+ship_section_template = {
+   key = "saber_stern_16"
+   ship_size = saber
+   fits_on_slot = stern
+   entity = "saber_coreB_entity"
+   icon = "GFX_ship_part_core_mid"
+   icon_frame = 1
+   prerequisites = { tech_engineering_advanced_721 }
+   cost = 270
+   small_utility_slots = 0
+   medium_utility_slots = 0
+   large_utility_slots = 0
+   aux_utility_slots = 0
+   ai_weight = { factor = 15 }
+   component_slot = {
+      name = "LARGE_GUN_01"
+      slot_size = large
+      slot_type = weapon
+      locatorname = "medium_gun_01"
+   }
+   component_slot = {
+      name = "LARGE_GUN_02"
+      slot_size = large
+      slot_type = weapon
+      locatorname = "medium_gun_02"
+   }
+   component_slot = {
+      name = "LARGE_GUN_03"
+      slot_size = large
+      slot_type = weapon
+      locatorname = "medium_gun_03"
+   }
+   component_slot = {
+      name = "LARGE_GUN_04"
+      slot_size = large
+      slot_type = weapon
+      locatorname = "medium_gun_04"
+   }
+   component_slot = {
+      name = "SMALL_GUN_1"
+      slot_size = point_defence
+      slot_type = weapon
+      locatorname = "large_gun_01"
+   }
+   component_slot = {
+      name = "SMALL_GUN_2"
+      slot_size = point_defence
+      slot_type = weapon
+      locatorname = "large_gun_02"
+   }
+   component_slot = {
+      name = "SMALL_GUN_3"
+      slot_size = point_defence
+      slot_type = weapon
+      locatorname = "large_gun_03"
+   }
+}
+# Steamrunner-Class ( Destroyer )
+ship_section_template = {
+   key = "saber_stern_17"
+   ship_size = saber
+   fits_on_slot = stern
+   entity = "saber_coreC_entity"
+   icon = "GFX_ship_part_core_mid"
+   icon_frame = 1
+   prerequisites = { tech_engineering_industry_1233 }
+   cost = 600
+   small_utility_slots = 0
+   medium_utility_slots = 0
+   large_utility_slots = 0
+   aux_utility_slots = 0
+   ai_weight = { factor = 25 }
+   component_slot = {
+      name = "SMALL_GUN_01"
+      slot_size = small
+      slot_type = weapon
+      locatorname = "small_gun_01"
+   }
+   component_slot = {
+      name = "SMALL_GUN_02"
+      slot_size = small
+      slot_type = weapon
+      locatorname = "small_gun_02"
+   }
+   component_slot = {
+      name = "MEDIUM_GUN_01"
+      slot_size = medium
+      slot_type = weapon
+      locatorname = "medium_gun_01"
+   }
+   component_slot = {
+      name = "SMALL_GUN_1"
+      slot_size = point_defence
+      slot_type = weapon
+      locatorname = "large_gun_01"
+   }
+}
+# Secondary Hull ( Destroyer )
+ship_section_template = {
+   key = "saber_mid_18"
+   ship_size = saber
+   fits_on_slot = mid
+   entity = "saber_entity"
+   icon = "GFX_ship_part_core_mid"
+   icon_frame = 1
+   prerequisites = { tech_engineering_destroyer_541 }
+   cost = 140
+   small_utility_slots = 1
+   medium_utility_slots = 0
+   large_utility_slots = 1
+   aux_utility_slots = 1
+   ai_weight = { factor = 10 }
+}
+# Tactical Destroyer ( Destroyer )
+ship_section_template = {
+   key = "saber_mid_19"
+   ship_size = saber
+   fits_on_slot = mid
+   entity = "saber_entity"
+   icon = "GFX_ship_part_core_mid"
+   icon_frame = 1
+   prerequisites = { tech_ship_program }
+   cost = 180
+   small_utility_slots = 1
+   medium_utility_slots = 1
+   large_utility_slots = 1
+   aux_utility_slots = 1
+   ai_weight = { factor = 20 }
+}
+# Engineering Destroyer ( Destroyer )
+ship_section_template = {
+   key = "saber_mid_20"
+   ship_size = saber
+   fits_on_slot = mid
+   entity = "saber_entity"
+   icon = "GFX_ship_part_core_mid"
+   icon_frame = 1
+   prerequisites = { tech_ship_program }
+   cost = 180
+   small_utility_slots = 2
+   medium_utility_slots = 0
+   large_utility_slots = 1
+   aux_utility_slots = 1
+   ai_weight = { factor = 20 }
+}
+# Support Destroyer ( Destroyer )
+ship_section_template = {
+   key = "saber_mid_21"
+   ship_size = saber
+   fits_on_slot = mid
+   entity = "saber_entity"
+   icon = "GFX_ship_part_core_mid"
+   icon_frame = 1
+   prerequisites = { tech_ship_program }
+   cost = 180
+   small_utility_slots = 1
+   medium_utility_slots = 0
+   large_utility_slots = 2
+   aux_utility_slots = 1
+   ai_weight = { factor = 20 }
+}
+# Advanced Tactical Destroyer ( Destroyer )
+ship_section_template = {
+   key = "saber_mid_22"
+   ship_size = saber
+   fits_on_slot = mid
+   entity = "saber_entity"
+   icon = "GFX_ship_part_core_mid"
+   icon_frame = 1
+   prerequisites = { tech_engineering_advanced_711 }
+   cost = 360
+   small_utility_slots = 1
+   medium_utility_slots = 2
+   large_utility_slots = 1
+   aux_utility_slots = 1
+   ai_weight = { factor = 30 }
+}
+# Advanced Engineering Destroyer ( Destroyer )
+ship_section_template = {
+   key = "saber_mid_23"
+   ship_size = saber
+   fits_on_slot = mid
+   entity = "saber_entity"
+   icon = "GFX_ship_part_core_mid"
+   icon_frame = 1
+   prerequisites = { tech_engineering_advanced_712 }
+   cost = 360
+   small_utility_slots = 3
+   medium_utility_slots = 0
+   large_utility_slots = 1
+   aux_utility_slots = 1
+   ai_weight = { factor = 30 }
+}
+# Advanced Support Destroyer ( Destroyer )
+ship_section_template = {
+   key = "saber_mid_24"
+   ship_size = saber
+   fits_on_slot = mid
+   entity = "saber_entity"
+   icon = "GFX_ship_part_core_mid"
+   icon_frame = 1
+   prerequisites = { tech_engineering_advanced_713 }
+   cost = 360
+   small_utility_slots = 1
+   medium_utility_slots = 0
+   large_utility_slots = 3
+   aux_utility_slots = 1
+   ai_weight = { factor = 30 }
+}
+   
+
+
+
+
+# Cruiser ( Cruiser )
+ship_section_template = {
+  key = "sovereign_stern_1"
+  ship_size = sovereign
+  fits_on_slot = stern
+  entity = "sovereign_coreA_entity"
+  icon = "GFX_ship_part_core_mid"
+  icon_frame = 1
+  prerequisites = { tech_engineering_starship-class_717 }
+  cost = 280
+  small_utility_slots = 0
+  medium_utility_slots = 0
+  large_utility_slots = 0
+  aux_utility_slots = 0
+  ai_weight = { factor = 10 }
+  component_slot = {
+    name = "SMALL_GUN_01"
+    slot_size = small
+    slot_type = weapon
+    locatorname = "small_gun_01"
+  }
+  component_slot = {
+    name = "SMALL_GUN_02"
+    slot_size = small
+    slot_type = weapon
+    locatorname = "small_gun_02"
+  }
+  component_slot = {
+    name = "SMALL_GUN_03"
+    slot_size = small
+    slot_type = weapon
+    locatorname = "small_gun_03"
+  }
+  component_slot = {
+    name = "MEDIUM_GUN_01"
+    slot_size = medium
+    slot_type = weapon
+    locatorname = "medium_gun_01"
+  }
+  component_slot = {
+    name = "SMALL_GUN_1"
+    slot_size = point_defence
+    slot_type = weapon
+    locatorname = "large_gun_01"
+  }
+}
+# Cruiser ( Cruiser )
+ship_section_template = {
+  key = "sovereign_stern_2"
+  ship_size = sovereign
+  fits_on_slot = stern
+  entity = "sovereign_coreA_entity"
+  icon = "GFX_ship_part_core_mid"
+  icon_frame = 1
+  prerequisites = { tech_engineering_bird-of-prey_716 }
+  cost = 280
+  small_utility_slots = 0
+  medium_utility_slots = 0
+  large_utility_slots = 0
+  aux_utility_slots = 0
+  ai_weight = { factor = 10 }
+  component_slot = {
+    name = "LARGE_GUN_01"
+    slot_size = large
+    slot_type = weapon
+    locatorname = "medium_gun_01"
+  }
+  component_slot = {
+    name = "LARGE_GUN_02"
+    slot_size = large
+    slot_type = weapon
+    locatorname = "medium_gun_02"
+  }
+  component_slot = {
+    name = "LARGE_GUN_03"
+    slot_size = large
+    slot_type = weapon
+    locatorname = "medium_gun_03"
+  }
+  component_slot = {
+    name = "LARGE_GUN_04"
+    slot_size = large
+    slot_type = weapon
+    locatorname = "medium_gun_04"
+  }
+  component_slot = {
+    name = "LARGE_GUN_05"
+    slot_size = large
+    slot_type = weapon
+    locatorname = "medium_gun_05"
+  }
+  component_slot = {
+    name = "LARGE_GUN_06"
+    slot_size = large
+    slot_type = weapon
+    locatorname = "medium_gun_06"
+  }
+  component_slot = {
+    name = "EXTRA_LARGE_01"
+    slot_size = extra_large
+    slot_type = weapon
+    locatorname = "medium_gun_01"
+  }
+  component_slot = {
+    name = "SMALL_GUN_1"
+    slot_size = point_defence
+    slot_type = weapon
+    locatorname = "large_gun_01"
+  }
+  component_slot = {
+    name = "SMALL_GUN_2"
+    slot_size = point_defence
+    slot_type = weapon
+    locatorname = "large_gun_02"
+  }
+}
+# Gun Boat ( Cruiser )
+ship_section_template = {
+  key = "sovereign_stern_3"
+  ship_size = sovereign
+  fits_on_slot = stern
+  entity = "sovereign_coreA_entity"
+  icon = "GFX_ship_part_core_mid"
+  icon_frame = 1
+  prerequisites = { tech_physics_phaser_158 }
+  cost = 500
+  small_utility_slots = 0
+  medium_utility_slots = 0
+  large_utility_slots = 0
+  aux_utility_slots = 0
+  ai_weight = { factor = 15 }
+  component_slot = {
+    name = "LARGE_GUN_01"
+    slot_size = large
+    slot_type = weapon
+    locatorname = "medium_gun_01"
+  }
+  component_slot = {
+    name = "LARGE_GUN_02"
+    slot_size = large
+    slot_type = weapon
+    locatorname = "medium_gun_02"
+  }
+  component_slot = {
+    name = "LARGE_GUN_03"
+    slot_size = large
+    slot_type = weapon
+    locatorname = "medium_gun_03"
+  }
+  component_slot = {
+    name = "LARGE_GUN_04"
+    slot_size = large
+    slot_type = weapon
+    locatorname = "medium_gun_04"
+  }
+  component_slot = {
+    name = "LARGE_GUN_05"
+    slot_size = large
+    slot_type = weapon
+    locatorname = "medium_gun_05"
+  }
+  component_slot = {
+    name = "LARGE_GUN_06"
+    slot_size = large
+    slot_type = weapon
+    locatorname = "medium_gun_06"
+  }
+  component_slot = {
+    name = "LARGE_GUN_07"
+    slot_size = large
+    slot_type = weapon
+    locatorname = "medium_gun_01"
+  }
+  component_slot = {
+    name = "LARGE_GUN_08"
+    slot_size = large
+    slot_type = weapon
+    locatorname = "medium_gun_02"
+  }
+  component_slot = {
+    name = "LARGE_GUN_09"
+    slot_size = large
+    slot_type = weapon
+    locatorname = "medium_gun_03"
+  }
+  component_slot = {
+    name = "LARGE_GUN_010"
+    slot_size = large
+    slot_type = weapon
+    locatorname = "medium_gun_04"
+  }
+  component_slot = {
+    name = "LARGE_GUN_011"
+    slot_size = large
+    slot_type = weapon
+    locatorname = "medium_gun_05"
+  }
+  component_slot = {
+    name = "LARGE_GUN_012"
+    slot_size = large
+    slot_type = weapon
+    locatorname = "medium_gun_06"
+  }
+  component_slot = {
+    name = "SMALL_GUN_1"
+    slot_size = point_defence
+    slot_type = weapon
+    locatorname = "large_gun_01"
+  }
+  component_slot = {
+    name = "SMALL_GUN_2"
+    slot_size = point_defence
+    slot_type = weapon
+    locatorname = "large_gun_02"
+  }
+  component_slot = {
+    name = "SMALL_GUN_3"
+    slot_size = point_defence
+    slot_type = weapon
+    locatorname = "large_gun_03"
+  }
+}
+# Bach'Hich Heavy Cruiser ( Cruiser )
+ship_section_template = {
+  key = "sovereign_stern_4"
+  ship_size = sovereign
+  fits_on_slot = stern
+  entity = "sovereign_coreA_entity"
+  icon = "GFX_ship_part_core_mid"
+  icon_frame = 1
+  prerequisites = { tech_physics_space-fitted_205 }
+  cost = 500
+  small_utility_slots = 0
+  medium_utility_slots = 0
+  large_utility_slots = 0
+  aux_utility_slots = 0
+  ai_weight = { factor = 15 }
+  component_slot = {
+    name = "MEDIUM_GUN_01"
+    slot_size = medium
+    slot_type = weapon
+    locatorname = "medium_gun_01"
+  }
+  component_slot = {
+    name = "LARGE_GUN_01"
+    slot_size = large
+    slot_type = weapon
+    locatorname = "medium_gun_01"
+  }
+  component_slot = {
+    name = "LARGE_GUN_02"
+    slot_size = large
+    slot_type = weapon
+    locatorname = "medium_gun_02"
+  }
+  component_slot = {
+    name = "LARGE_GUN_03"
+    slot_size = large
+    slot_type = weapon
+    locatorname = "medium_gun_03"
+  }
+  component_slot = {
+    name = "LARGE_GUN_04"
+    slot_size = large
+    slot_type = weapon
+    locatorname = "medium_gun_04"
+  }
+  component_slot = {
+    name = "SMALL_GUN_1"
+    slot_size = point_defence
+    slot_type = weapon
+    locatorname = "large_gun_01"
+  }
+  component_slot = {
+    name = "SMALL_GUN_2"
+    slot_size = point_defence
+    slot_type = weapon
+    locatorname = "large_gun_02"
+  }
+}
+# Phase Disruptor Weapon Retrofit ( Cruiser )
+ship_section_template = {
+  key = "sovereign_stern_5"
+  ship_size = sovereign
+  fits_on_slot = stern
+  entity = "sovereign_coreA_entity"
+  icon = "GFX_ship_part_core_mid"
+  icon_frame = 1
+  prerequisites = { tech_physics_phase-resonance_213 }
+  cost = 250
+  small_utility_slots = 0
+  medium_utility_slots = 0
+  large_utility_slots = 0
+  aux_utility_slots = 0
+  ai_weight = { factor = 5 }
+  component_slot = {
+    name = "MEDIUM_GUN_01"
+    slot_size = medium
+    slot_type = weapon
+    locatorname = "medium_gun_01"
+  }
+  component_slot = {
+    name = "SMALL_GUN_1"
+    slot_size = point_defence
+    slot_type = weapon
+    locatorname = "large_gun_01"
+  }
+  component_slot = {
+    name = "SMALL_GUN_2"
+    slot_size = point_defence
+    slot_type = weapon
+    locatorname = "large_gun_02"
+  }
+}
+# Assault Disruptor Weapon Retrofit ( Cruiser )
+ship_section_template = {
+  key = "sovereign_stern_6"
+  ship_size = sovereign
+  fits_on_slot = stern
+  entity = "sovereign_coreA_entity"
+  icon = "GFX_ship_part_core_mid"
+  icon_frame = 1
+  prerequisites = { tech_physics_type-1_215 }
+  cost = 250
+  small_utility_slots = 0
+  medium_utility_slots = 0
+  large_utility_slots = 0
+  aux_utility_slots = 0
+  ai_weight = { factor = 5 }
+  component_slot = {
+    name = "EXTRA_LARGE_01"
+    slot_size = extra_large
+    slot_type = weapon
+    locatorname = "medium_gun_01"
+  }
+  component_slot = {
+    name = "EXTRA_LARGE_02"
+    slot_size = extra_large
+    slot_type = weapon
+    locatorname = "medium_gun_02"
+  }
+  component_slot = {
+    name = "SMALL_GUN_1"
+    slot_size = point_defence
+    slot_type = weapon
+    locatorname = "large_gun_01"
+  }
+}
+# Magnetic Plasma Beam Weapon Retrofit ( Cruiser )
+ship_section_template = {
+  key = "sovereign_stern_7"
+  ship_size = sovereign
+  fits_on_slot = stern
+  entity = "sovereign_coreA_entity"
+  icon = "GFX_ship_part_core_mid"
+  icon_frame = 1
+  prerequisites = { tech_physics_magnetic-constraint_246 }
+  cost = 250
+  small_utility_slots = 0
+  medium_utility_slots = 0
+  large_utility_slots = 0
+  aux_utility_slots = 0
+  ai_weight = { factor = 5 }
+  component_slot = {
+    name = "MEDIUM_GUN_01"
+    slot_size = medium
+    slot_type = weapon
+    locatorname = "medium_gun_01"
+  }
+  component_slot = {
+    name = "SMALL_GUN_1"
+    slot_size = point_defence
+    slot_type = weapon
+    locatorname = "large_gun_01"
+  }
+  component_slot = {
+    name = "SMALL_GUN_2"
+    slot_size = point_defence
+    slot_type = weapon
+    locatorname = "large_gun_02"
+  }
+}
+# Positron Cannon Weapon Retrofit ( Cruiser )
+ship_section_template = {
+  key = "sovereign_stern_8"
+  ship_size = sovereign
+  fits_on_slot = stern
+  entity = "sovereign_coreA_entity"
+  icon = "GFX_ship_part_core_mid"
+  icon_frame = 1
+  prerequisites = { tech_physics_positron_270 }
+  cost = 250
+  small_utility_slots = 0
+  medium_utility_slots = 0
+  large_utility_slots = 0
+  aux_utility_slots = 0
+  ai_weight = { factor = 5 }
+  component_slot = {
+    name = "EXTRA_LARGE_01"
+    slot_size = extra_large
+    slot_type = weapon
+    locatorname = "medium_gun_01"
+  }
+  component_slot = {
+    name = "EXTRA_LARGE_02"
+    slot_size = extra_large
+    slot_type = weapon
+    locatorname = "medium_gun_02"
+  }
+  component_slot = {
+    name = "SMALL_GUN_1"
+    slot_size = point_defence
+    slot_type = weapon
+    locatorname = "large_gun_01"
+  }
+}
+# Graviton Beam Weapon Retrofit ( Cruiser )
+ship_section_template = {
+  key = "sovereign_stern_9"
+  ship_size = sovereign
+  fits_on_slot = stern
+  entity = "sovereign_coreA_entity"
+  icon = "GFX_ship_part_core_mid"
+  icon_frame = 1
+  prerequisites = { tech_physics_graviton_326 }
+  cost = 250
+  small_utility_slots = 0
+  medium_utility_slots = 0
+  large_utility_slots = 0
+  aux_utility_slots = 0
+  ai_weight = { factor = 5 }
+  component_slot = {
+    name = "MEDIUM_GUN_01"
+    slot_size = medium
+    slot_type = weapon
+    locatorname = "medium_gun_01"
+  }
+  component_slot = {
+    name = "SMALL_GUN_1"
+    slot_size = point_defence
+    slot_type = weapon
+    locatorname = "large_gun_01"
+  }
+  component_slot = {
+    name = "SMALL_GUN_2"
+    slot_size = point_defence
+    slot_type = weapon
+    locatorname = "large_gun_02"
+  }
+}
+# Heavy Cruiser ( Cruiser )
+ship_section_template = {
+  key = "sovereign_stern_10"
+  ship_size = sovereign
+  fits_on_slot = stern
+  entity = "sovereign_coreB_entity"
+  icon = "GFX_ship_part_core_mid"
+  icon_frame = 1
+  prerequisites = { tech_engineering_next-level_548 }
+  cost = 500
+  small_utility_slots = 0
+  medium_utility_slots = 0
+  large_utility_slots = 0
+  aux_utility_slots = 0
+  ai_weight = { factor = 20 }
+  component_slot = {
+    name = "MEDIUM_GUN_01"
+    slot_size = medium
+    slot_type = weapon
+    locatorname = "medium_gun_01"
+  }
+  component_slot = {
+    name = "MEDIUM_GUN_02"
+    slot_size = medium
+    slot_type = weapon
+    locatorname = "medium_gun_02"
+  }
+}
+# Heavy Cruiser ( Cruiser )
+ship_section_template = {
+  key = "sovereign_stern_11"
+  ship_size = sovereign
+  fits_on_slot = stern
+  entity = "sovereign_coreB_entity"
+  icon = "GFX_ship_part_core_mid"
+  icon_frame = 1
+  prerequisites = { tech_engineering_next-level_722 }
+  cost = 500
+  small_utility_slots = 0
+  medium_utility_slots = 0
+  large_utility_slots = 0
+  aux_utility_slots = 0
+  ai_weight = { factor = 20 }
+  component_slot = {
+    name = "EXTRA_LARGE_01"
+    slot_size = extra_large
+    slot_type = weapon
+    locatorname = "medium_gun_01"
+  }
+  component_slot = {
+    name = "EXTRA_LARGE_02"
+    slot_size = extra_large
+    slot_type = weapon
+    locatorname = "medium_gun_02"
+  }
+  component_slot = {
+    name = "SMALL_GUN_1"
+    slot_size = point_defence
+    slot_type = weapon
+    locatorname = "large_gun_01"
+  }
+  component_slot = {
+    name = "SMALL_GUN_2"
+    slot_size = point_defence
+    slot_type = weapon
+    locatorname = "large_gun_02"
+  }
+}
+# New Orleans-Class ( Cruiser )
+ship_section_template = {
+  key = "sovereign_stern_12"
+  ship_size = sovereign
+  fits_on_slot = stern
+  entity = "sovereign_coreC_entity"
+  icon = "GFX_ship_part_core_mid"
+  icon_frame = 1
+  prerequisites = { tech_engineering_industry_1231 }
+  cost = 1050
+  small_utility_slots = 0
+  medium_utility_slots = 0
+  large_utility_slots = 0
+  aux_utility_slots = 0
+  ai_weight = { factor = 25 }
+  component_slot = {
+    name = "MEDIUM_GUN_01"
+    slot_size = medium
+    slot_type = weapon
+    locatorname = "medium_gun_01"
+  }
+  component_slot = {
+    name = "MEDIUM_GUN_02"
+    slot_size = medium
+    slot_type = weapon
+    locatorname = "medium_gun_02"
+  }
+  component_slot = {
+    name = "SMALL_GUN_1"
+    slot_size = point_defence
+    slot_type = weapon
+    locatorname = "large_gun_01"
+  }
+}
+# Secondary Hull ( Cruiser )
+ship_section_template = {
+  key = "sovereign_mid_13"
+  ship_size = sovereign
+  fits_on_slot = mid
+  entity = "sovereign_entity"
+  icon = "GFX_ship_part_core_mid"
+  icon_frame = 1
+  prerequisites = { tech_engineering_cruiser_542 }
+  cost = 230
+  small_utility_slots = 1
+  medium_utility_slots = 1
+  large_utility_slots = 1
+  aux_utility_slots = 1
+  ai_weight = { factor = 10 }
+}
+# Tactical Cruiser ( Cruiser )
+ship_section_template = {
+  key = "sovereign_mid_14"
+  ship_size = sovereign
+  fits_on_slot = mid
+  entity = "sovereign_entity"
+  icon = "GFX_ship_part_core_mid"
+  icon_frame = 1
+  prerequisites = { tech_ship_program }
+  cost = 320
+  small_utility_slots = 1
+  medium_utility_slots = 3
+  large_utility_slots = 1
+  aux_utility_slots = 1
+  ai_weight = { factor = 20 }
+}
+# Engineering Cruiser ( Cruiser )
+ship_section_template = {
+  key = "sovereign_mid_15"
+  ship_size = sovereign
+  fits_on_slot = mid
+  entity = "sovereign_entity"
+  icon = "GFX_ship_part_core_mid"
+  icon_frame = 1
+  prerequisites = { tech_ship_program }
+  cost = 320
+  small_utility_slots = 3
+  medium_utility_slots = 1
+  large_utility_slots = 1
+  aux_utility_slots = 1
+  ai_weight = { factor = 20 }
+}
+# Support Cruiser ( Cruiser )
+ship_section_template = {
+  key = "sovereign_mid_16"
+  ship_size = sovereign
+  fits_on_slot = mid
+  entity = "sovereign_entity"
+  icon = "GFX_ship_part_core_mid"
+  icon_frame = 1
+  prerequisites = { tech_ship_program }
+  cost = 320
+  small_utility_slots = 1
+  medium_utility_slots = 1
+  large_utility_slots = 3
+  aux_utility_slots = 1
+  ai_weight = { factor = 20 }
+}
+# Advanced Tactical Destroyer ( Cruiser )
+ship_section_template = {
+  key = "sovereign_mid_17"
+  ship_size = sovereign
+  fits_on_slot = mid
+  entity = "sovereign_entity"
+  icon = "GFX_ship_part_core_mid"
+  icon_frame = 1
+  prerequisites = { tech_engineering_advanced_711 }
+  cost = 600
+  small_utility_slots = 1
+  medium_utility_slots = 4
+  large_utility_slots = 1
+  aux_utility_slots = 1
+  ai_weight = { factor = 30 }
+}
+# Advanced Engineering Destroyer ( Cruiser )
+ship_section_template = {
+  key = "sovereign_mid_18"
+  ship_size = sovereign
+  fits_on_slot = mid
+  entity = "sovereign_entity"
+  icon = "GFX_ship_part_core_mid"
+  icon_frame = 1
+  prerequisites = { tech_engineering_advanced_712 }
+  cost = 600
+  small_utility_slots = 4
+  medium_utility_slots = 1
+  large_utility_slots = 1
+  aux_utility_slots = 1
+  ai_weight = { factor = 30 }
+}
+# Advanced Support Destroyer ( Cruiser )
+ship_section_template = {
+  key = "sovereign_mid_19"
+  ship_size = sovereign
+  fits_on_slot = mid
+  entity = "sovereign_entity"
+  icon = "GFX_ship_part_core_mid"
+  icon_frame = 1
+  prerequisites = { tech_engineering_advanced_713 }
+  cost = 600
+  small_utility_slots = 1
+  medium_utility_slots = 1
+  large_utility_slots = 4
+  aux_utility_slots = 1
+  ai_weight = { factor = 30 }
+}
+# Science Cruiser ( Cruiser )
+ship_section_template = {
+  key = "sovereign_mid_20"
+  ship_size = sovereign
+  fits_on_slot = mid
+  entity = "sovereign_entity"
+  icon = "GFX_ship_part_core_mid"
+  icon_frame = 1
+  prerequisites = { tech_engineering_next-level_548 }
+  cost = 320
+  small_utility_slots = 1
+  medium_utility_slots = 1
+  large_utility_slots = 1
+  aux_utility_slots = 2
+  ai_weight = { factor = 40 }
+}
+# Science Cruiser ( Cruiser )
+ship_section_template = {
+  key = "sovereign_mid_21"
+  ship_size = sovereign
+  fits_on_slot = mid
+  entity = "sovereign_entity"
+  icon = "GFX_ship_part_core_mid"
+  icon_frame = 1
+  prerequisites = { tech_engineering_next-level_722 }
+  cost = 320
+  small_utility_slots = 1
+  medium_utility_slots = 1
+  large_utility_slots = 1
+  aux_utility_slots = 2
+  ai_weight = { factor = 40 }
+}
+# Operations Cruiser ( Cruiser )
+ship_section_template = {
+  key = "sovereign_mid_22"
+  ship_size = sovereign
+  fits_on_slot = mid
+  entity = "sovereign_entity"
+  icon = "GFX_ship_part_core_mid"
+  icon_frame = 1
+  prerequisites = { tech_engineering_next-level_548 }
+  cost = 600
+  small_utility_slots = 2
+  medium_utility_slots = 2
+  large_utility_slots = 2
+  aux_utility_slots = 1
+  ai_weight = { factor = 40 }
+}
+# Operations Cruiser ( Cruiser )
+ship_section_template = {
+  key = "sovereign_mid_23"
+  ship_size = sovereign
+  fits_on_slot = mid
+  entity = "sovereign_entity"
+  icon = "GFX_ship_part_core_mid"
+  icon_frame = 1
+  prerequisites = { tech_engineering_next-level_722 }
+  cost = 600
+  small_utility_slots = 2
+  medium_utility_slots = 2
+  large_utility_slots = 2
+  aux_utility_slots = 1
+  ai_weight = { factor = 40 }
+}
+# Saucer Seperation ( Cruiser )
+ship_section_template = {
+  key = "sovereign_mid_24"
+  ship_size = sovereign
+  fits_on_slot = mid
+  entity = "sovereign_entity"
+  icon = "GFX_ship_part_core_mid"
+  icon_frame = 1
+  prerequisites = { tech_engineering_chevron_550 }
+  cost = 1350
+  small_utility_slots = 2
+  medium_utility_slots = 2
+  large_utility_slots = 2
+  aux_utility_slots = 2
+  ai_weight = { factor = 50 }
+}
+
+
+
+
+
+# Battlecruiser ( Battlecruiser )
+ship_section_template = {
+  key = "steamrunner_stern_1"
+  ship_size = steamrunner
+  fits_on_slot = stern
+  entity = "steamrunner_coreA_entity"
+  icon = "GFX_ship_part_core_mid"
+  icon_frame = 1
+  prerequisites = { tech_engineering_starship-class_717 }
+  cost = 380
+  small_utility_slots = 0
+  medium_utility_slots = 0
+  large_utility_slots = 0
+  aux_utility_slots = 0
+  ai_weight = { factor = 10 }
+  component_slot = {
+    name = "SMALL_GUN_01"
+    slot_size = small
+    slot_type = weapon
+    locatorname = "small_gun_01"
+  }
+  component_slot = {
+    name = "SMALL_GUN_02"
+    slot_size = small
+    slot_type = weapon
+    locatorname = "small_gun_02"
+  }
+  component_slot = {
+    name = "SMALL_GUN_03"
+    slot_size = small
+    slot_type = weapon
+    locatorname = "small_gun_03"
+  }
+  component_slot = {
+    name = "SMALL_GUN_04"
+    slot_size = small
+    slot_type = weapon
+    locatorname = "small_gun_04"
+  }
+  component_slot = {
+    name = "MEDIUM_GUN_01"
+    slot_size = medium
+    slot_type = weapon
+    locatorname = "medium_gun_01"
+  }
+  component_slot = {
+    name = "TORPEDO_01"
+    slot_size = torpedo
+    slot_type = weapon
+    locatorname = "large_gun_01"
+  }
+  component_slot = {
+    name = "SMALL_GUN_1"
+    slot_size = point_defence
+    slot_type = weapon
+    locatorname = "large_gun_01"
+  }
+  component_slot = {
+    name = "SMALL_GUN_2"
+    slot_size = point_defence
+    slot_type = weapon
+    locatorname = "large_gun_02"
+  }
+}
+# Battlecruiser ( Battlecruiser )
+ship_section_template = {
+  key = "steamrunner_stern_2"
+  ship_size = steamrunner
+  fits_on_slot = stern
+  entity = "steamrunner_coreA_entity"
+  icon = "GFX_ship_part_core_mid"
+  icon_frame = 1
+  prerequisites = { tech_engineering_bird-of-prey_716 }
+  cost = 380
+  small_utility_slots = 0
+  medium_utility_slots = 0
+  large_utility_slots = 0
+  aux_utility_slots = 0
+  ai_weight = { factor = 10 }
+  component_slot = {
+    name = "LARGE_GUN_01"
+    slot_size = large
+    slot_type = weapon
+    locatorname = "medium_gun_01"
+  }
+  component_slot = {
+    name = "LARGE_GUN_02"
+    slot_size = large
+    slot_type = weapon
+    locatorname = "medium_gun_02"
+  }
+  component_slot = {
+    name = "LARGE_GUN_03"
+    slot_size = large
+    slot_type = weapon
+    locatorname = "medium_gun_03"
+  }
+  component_slot = {
+    name = "LARGE_GUN_04"
+    slot_size = large
+    slot_type = weapon
+    locatorname = "medium_gun_04"
+  }
+  component_slot = {
+    name = "TORPEDO_01"
+    slot_size = torpedo
+    slot_type = weapon
+    locatorname = "large_gun_01"
+  }
+  component_slot = {
+    name = "EXTRA_LARGE_01"
+    slot_size = extra_large
+    slot_type = weapon
+    locatorname = "medium_gun_01"
+  }
+  component_slot = {
+    name = "EXTRA_LARGE_02"
+    slot_size = extra_large
+    slot_type = weapon
+    locatorname = "medium_gun_02"
+  }
+  component_slot = {
+    name = "SMALL_GUN_1"
+    slot_size = point_defence
+    slot_type = weapon
+    locatorname = "large_gun_01"
+  }
+  component_slot = {
+    name = "SMALL_GUN_2"
+    slot_size = point_defence
+    slot_type = weapon
+    locatorname = "large_gun_02"
+  }
+}
+# Bach'Hich Battlecruiser ( Battlecruiser )
+ship_section_template = {
+  key = "steamrunner_stern_3"
+  ship_size = steamrunner
+  fits_on_slot = stern
+  entity = "steamrunner_coreA_entity"
+  icon = "GFX_ship_part_core_mid"
+  icon_frame = 1
+  prerequisites = { tech_physics_space-fitted_205 }
+  cost = 670
+  small_utility_slots = 0
+  medium_utility_slots = 0
+  large_utility_slots = 0
+  aux_utility_slots = 0
+  ai_weight = { factor = 15 }
+  component_slot = {
+    name = "MEDIUM_GUN_01"
+    slot_size = medium
+    slot_type = weapon
+    locatorname = "medium_gun_01"
+  }
+  component_slot = {
+    name = "MEDIUM_GUN_02"
+    slot_size = medium
+    slot_type = weapon
+    locatorname = "medium_gun_02"
+  }
+  component_slot = {
+    name = "LARGE_GUN_01"
+    slot_size = large
+    slot_type = weapon
+    locatorname = "medium_gun_01"
+  }
+  component_slot = {
+    name = "LARGE_GUN_02"
+    slot_size = large
+    slot_type = weapon
+    locatorname = "medium_gun_02"
+  }
+  component_slot = {
+    name = "TORPEDO_01"
+    slot_size = torpedo
+    slot_type = weapon
+    locatorname = "large_gun_01"
+  }
+  component_slot = {
+    name = "SMALL_GUN_1"
+    slot_size = point_defence
+    slot_type = weapon
+    locatorname = "large_gun_01"
+  }
+}
+# Phase Disruptor Weapon Retrofit ( Battlecruiser )
+ship_section_template = {
+  key = "steamrunner_stern_4"
+  ship_size = steamrunner
+  fits_on_slot = stern
+  entity = "steamrunner_coreA_entity"
+  icon = "GFX_ship_part_core_mid"
+  icon_frame = 1
+  prerequisites = { tech_physics_phase-resonance_213 }
+  cost = 340
+  small_utility_slots = 0
+  medium_utility_slots = 0
+  large_utility_slots = 0
+  aux_utility_slots = 0
+  ai_weight = { factor = 5 }
+  component_slot = {
+    name = "MEDIUM_GUN_01"
+    slot_size = medium
+    slot_type = weapon
+    locatorname = "medium_gun_01"
+  }
+  component_slot = {
+    name = "MEDIUM_GUN_02"
+    slot_size = medium
+    slot_type = weapon
+    locatorname = "medium_gun_02"
+  }
+  component_slot = {
+    name = "TORPEDO_01"
+    slot_size = torpedo
+    slot_type = weapon
+    locatorname = "large_gun_01"
+  }
+}
+# Assault Disruptor Weapon Retrofit ( Battlecruiser )
+ship_section_template = {
+  key = "steamrunner_stern_5"
+  ship_size = steamrunner
+  fits_on_slot = stern
+  entity = "steamrunner_coreA_entity"
+  icon = "GFX_ship_part_core_mid"
+  icon_frame = 1
+  prerequisites = { tech_physics_type-1_215 }
+  cost = 340
+  small_utility_slots = 0
+  medium_utility_slots = 0
+  large_utility_slots = 0
+  aux_utility_slots = 0
+  ai_weight = { factor = 5 }
+  component_slot = {
+    name = "TORPEDO_01"
+    slot_size = torpedo
+    slot_type = weapon
+    locatorname = "large_gun_01"
+  }
+  component_slot = {
+    name = "EXTRA_LARGE_01"
+    slot_size = extra_large
+    slot_type = weapon
+    locatorname = "medium_gun_01"
+  }
+  component_slot = {
+    name = "EXTRA_LARGE_02"
+    slot_size = extra_large
+    slot_type = weapon
+    locatorname = "medium_gun_02"
+  }
+  component_slot = {
+    name = "EXTRA_LARGE_03"
+    slot_size = extra_large
+    slot_type = weapon
+    locatorname = "medium_gun_03"
+  }
+}
+# Magnetic Plasma Beam Weapon Retrofit ( Battlecruiser )
+ship_section_template = {
+  key = "steamrunner_stern_6"
+  ship_size = steamrunner
+  fits_on_slot = stern
+  entity = "steamrunner_coreA_entity"
+  icon = "GFX_ship_part_core_mid"
+  icon_frame = 1
+  prerequisites = { tech_physics_magnetic-constraint_246 }
+  cost = 340
+  small_utility_slots = 0
+  medium_utility_slots = 0
+  large_utility_slots = 0
+  aux_utility_slots = 0
+  ai_weight = { factor = 5 }
+  component_slot = {
+    name = "MEDIUM_GUN_01"
+    slot_size = medium
+    slot_type = weapon
+    locatorname = "medium_gun_01"
+  }
+  component_slot = {
+    name = "MEDIUM_GUN_02"
+    slot_size = medium
+    slot_type = weapon
+    locatorname = "medium_gun_02"
+  }
+  component_slot = {
+    name = "TORPEDO_01"
+    slot_size = torpedo
+    slot_type = weapon
+    locatorname = "large_gun_01"
+  }
+}
+# Positron Cannon Weapon Retrofit ( Battlecruiser )
+ship_section_template = {
+  key = "steamrunner_stern_7"
+  ship_size = steamrunner
+  fits_on_slot = stern
+  entity = "steamrunner_coreA_entity"
+  icon = "GFX_ship_part_core_mid"
+  icon_frame = 1
+  prerequisites = { tech_physics_positron_270 }
+  cost = 340
+  small_utility_slots = 0
+  medium_utility_slots = 0
+  large_utility_slots = 0
+  aux_utility_slots = 0
+  ai_weight = { factor = 5 }
+  component_slot = {
+    name = "TORPEDO_01"
+    slot_size = torpedo
+    slot_type = weapon
+    locatorname = "large_gun_01"
+  }
+  component_slot = {
+    name = "EXTRA_LARGE_01"
+    slot_size = extra_large
+    slot_type = weapon
+    locatorname = "medium_gun_01"
+  }
+  component_slot = {
+    name = "EXTRA_LARGE_02"
+    slot_size = extra_large
+    slot_type = weapon
+    locatorname = "medium_gun_02"
+  }
+  component_slot = {
+    name = "EXTRA_LARGE_03"
+    slot_size = extra_large
+    slot_type = weapon
+    locatorname = "medium_gun_03"
+  }
+}
+# Graviton Beam Weapon Retrofit ( Battlecruiser )
+ship_section_template = {
+  key = "steamrunner_stern_8"
+  ship_size = steamrunner
+  fits_on_slot = stern
+  entity = "steamrunner_coreA_entity"
+  icon = "GFX_ship_part_core_mid"
+  icon_frame = 1
+  prerequisites = { tech_physics_graviton_326 }
+  cost = 340
+  small_utility_slots = 0
+  medium_utility_slots = 0
+  large_utility_slots = 0
+  aux_utility_slots = 0
+  ai_weight = { factor = 5 }
+  component_slot = {
+    name = "MEDIUM_GUN_01"
+    slot_size = medium
+    slot_type = weapon
+    locatorname = "medium_gun_01"
+  }
+  component_slot = {
+    name = "MEDIUM_GUN_02"
+    slot_size = medium
+    slot_type = weapon
+    locatorname = "medium_gun_02"
+  }
+  component_slot = {
+    name = "TORPEDO_01"
+    slot_size = torpedo
+    slot_type = weapon
+    locatorname = "large_gun_01"
+  }
+}
+# Long-Range Heavy Torpedo Artillery ( Battlecruiser )
+ship_section_template = {
+  key = "steamrunner_stern_9"
+  ship_size = steamrunner
+  fits_on_slot = stern
+  entity = "steamrunner_coreB_entity"
+  icon = "GFX_ship_part_core_mid"
+  icon_frame = 1
+  prerequisites = { tech_engineering_next-level_549 }
+  cost = 670
+  small_utility_slots = 0
+  medium_utility_slots = 0
+  large_utility_slots = 0
+  aux_utility_slots = 0
+  ai_weight = { factor = 20 }
+  component_slot = {
+    name = "SMALL_GUN_01"
+    slot_size = small
+    slot_type = weapon
+    locatorname = "small_gun_01"
+  }
+  component_slot = {
+    name = "SMALL_GUN_02"
+    slot_size = small
+    slot_type = weapon
+    locatorname = "small_gun_02"
+  }
+  component_slot = {
+    name = "SMALL_GUN_03"
+    slot_size = small
+    slot_type = weapon
+    locatorname = "small_gun_03"
+  }
+  component_slot = {
+    name = "SMALL_GUN_04"
+    slot_size = small
+    slot_type = weapon
+    locatorname = "small_gun_04"
+  }
+  component_slot = {
+    name = "SMALL_GUN_05"
+    slot_size = small
+    slot_type = weapon
+    locatorname = "small_gun_05"
+  }
+  component_slot = {
+    name = "TORPEDO_01"
+    slot_size = torpedo
+    slot_type = weapon
+    locatorname = "large_gun_01"
+  }
+  component_slot = {
+    name = "TORPEDO_02"
+    slot_size = torpedo
+    slot_type = weapon
+    locatorname = "large_gun_02"
+  }
+  component_slot = {
+    name = "TORPEDO_03"
+    slot_size = torpedo
+    slot_type = weapon
+    locatorname = "large_gun_03"
+  }
+}
+# Long-Range Heavy Torpedo Artillery ( Battlecruiser )
+ship_section_template = {
+  key = "steamrunner_stern_10"
+  ship_size = steamrunner
+  fits_on_slot = stern
+  entity = "steamrunner_coreB_entity"
+  icon = "GFX_ship_part_core_mid"
+  icon_frame = 1
+  prerequisites = { tech_engineering_next-level_723 }
+  cost = 670
+  small_utility_slots = 0
+  medium_utility_slots = 0
+  large_utility_slots = 0
+  aux_utility_slots = 0
+  ai_weight = { factor = 20 }
+  component_slot = {
+    name = "LARGE_GUN_01"
+    slot_size = large
+    slot_type = weapon
+    locatorname = "medium_gun_01"
+  }
+  component_slot = {
+    name = "LARGE_GUN_02"
+    slot_size = large
+    slot_type = weapon
+    locatorname = "medium_gun_02"
+  }
+  component_slot = {
+    name = "LARGE_GUN_03"
+    slot_size = large
+    slot_type = weapon
+    locatorname = "medium_gun_03"
+  }
+  component_slot = {
+    name = "LARGE_GUN_04"
+    slot_size = large
+    slot_type = weapon
+    locatorname = "medium_gun_04"
+  }
+  component_slot = {
+    name = "LARGE_GUN_05"
+    slot_size = large
+    slot_type = weapon
+    locatorname = "medium_gun_05"
+  }
+  component_slot = {
+    name = "LARGE_GUN_06"
+    slot_size = large
+    slot_type = weapon
+    locatorname = "medium_gun_06"
+  }
+  component_slot = {
+    name = "LARGE_GUN_07"
+    slot_size = large
+    slot_type = weapon
+    locatorname = "medium_gun_01"
+  }
+  component_slot = {
+    name = "LARGE_GUN_08"
+    slot_size = large
+    slot_type = weapon
+    locatorname = "medium_gun_02"
+  }
+  component_slot = {
+    name = "LARGE_GUN_09"
+    slot_size = large
+    slot_type = weapon
+    locatorname = "medium_gun_03"
+  }
+  component_slot = {
+    name = "LARGE_GUN_010"
+    slot_size = large
+    slot_type = weapon
+    locatorname = "medium_gun_04"
+  }
+  component_slot = {
+    name = "TORPEDO_01"
+    slot_size = torpedo
+    slot_type = weapon
+    locatorname = "large_gun_01"
+  }
+  component_slot = {
+    name = "TORPEDO_02"
+    slot_size = torpedo
+    slot_type = weapon
+    locatorname = "large_gun_02"
+  }
+  component_slot = {
+    name = "TORPEDO_03"
+    slot_size = torpedo
+    slot_type = weapon
+    locatorname = "large_gun_03"
+  }
+}
+# Light Torpedo Volley ( Battlecruiser )
+ship_section_template = {
+  key = "steamrunner_stern_11"
+  ship_size = steamrunner
+  fits_on_slot = stern
+  entity = "steamrunner_coreB_entity"
+  icon = "GFX_ship_part_core_mid"
+  icon_frame = 1
+  prerequisites = { tech_engineering_next-level_549 }
+  cost = 670
+  small_utility_slots = 0
+  medium_utility_slots = 0
+  large_utility_slots = 0
+  aux_utility_slots = 0
+  ai_weight = { factor = 20 }
+  component_slot = {
+    name = "SMALL_GUN_01"
+    slot_size = small
+    slot_type = weapon
+    locatorname = "small_gun_01"
+  }
+  component_slot = {
+    name = "SMALL_GUN_02"
+    slot_size = small
+    slot_type = weapon
+    locatorname = "small_gun_02"
+  }
+  component_slot = {
+    name = "SMALL_GUN_03"
+    slot_size = small
+    slot_type = weapon
+    locatorname = "small_gun_03"
+  }
+  component_slot = {
+    name = "SMALL_GUN_04"
+    slot_size = small
+    slot_type = weapon
+    locatorname = "small_gun_04"
+  }
+  component_slot = {
+    name = "SMALL_GUN_1"
+    slot_size = point_defence
+    slot_type = weapon
+    locatorname = "large_gun_01"
+  }
+  component_slot = {
+    name = "SMALL_GUN_2"
+    slot_size = point_defence
+    slot_type = weapon
+    locatorname = "large_gun_02"
+  }
+  component_slot = {
+    name = "SMALL_GUN_3"
+    slot_size = point_defence
+    slot_type = weapon
+    locatorname = "large_gun_03"
+  }
+  component_slot = {
+    name = "SMALL_GUN_4"
+    slot_size = point_defence
+    slot_type = weapon
+    locatorname = "large_gun_04"
+  }
+  component_slot = {
+    name = "SMALL_GUN_5"
+    slot_size = point_defence
+    slot_type = weapon
+    locatorname = "large_gun_05"
+  }
+  component_slot = {
+    name = "SMALL_GUN_6"
+    slot_size = point_defence
+    slot_type = weapon
+    locatorname = "large_gun_06"
+  }
+  component_slot = {
+    name = "SMALL_GUN_7"
+    slot_size = point_defence
+    slot_type = weapon
+    locatorname = "large_gun_01"
+  }
+  component_slot = {
+    name = "SMALL_GUN_8"
+    slot_size = point_defence
+    slot_type = weapon
+    locatorname = "large_gun_02"
+  }
+}
+# Light Torpedo Volley ( Battlecruiser )
+ship_section_template = {
+  key = "steamrunner_stern_12"
+  ship_size = steamrunner
+  fits_on_slot = stern
+  entity = "steamrunner_coreB_entity"
+  icon = "GFX_ship_part_core_mid"
+  icon_frame = 1
+  prerequisites = { tech_engineering_next-level_723 }
+  cost = 670
+  small_utility_slots = 0
+  medium_utility_slots = 0
+  large_utility_slots = 0
+  aux_utility_slots = 0
+  ai_weight = { factor = 20 }
+  component_slot = {
+    name = "LARGE_GUN_01"
+    slot_size = large
+    slot_type = weapon
+    locatorname = "medium_gun_01"
+  }
+  component_slot = {
+    name = "LARGE_GUN_02"
+    slot_size = large
+    slot_type = weapon
+    locatorname = "medium_gun_02"
+  }
+  component_slot = {
+    name = "LARGE_GUN_03"
+    slot_size = large
+    slot_type = weapon
+    locatorname = "medium_gun_03"
+  }
+  component_slot = {
+    name = "LARGE_GUN_04"
+    slot_size = large
+    slot_type = weapon
+    locatorname = "medium_gun_04"
+  }
+  component_slot = {
+    name = "LARGE_GUN_05"
+    slot_size = large
+    slot_type = weapon
+    locatorname = "medium_gun_05"
+  }
+  component_slot = {
+    name = "LARGE_GUN_06"
+    slot_size = large
+    slot_type = weapon
+    locatorname = "medium_gun_06"
+  }
+  component_slot = {
+    name = "LARGE_GUN_07"
+    slot_size = large
+    slot_type = weapon
+    locatorname = "medium_gun_01"
+  }
+  component_slot = {
+    name = "LARGE_GUN_08"
+    slot_size = large
+    slot_type = weapon
+    locatorname = "medium_gun_02"
+  }
+  component_slot = {
+    name = "SMALL_GUN_1"
+    slot_size = point_defence
+    slot_type = weapon
+    locatorname = "large_gun_01"
+  }
+  component_slot = {
+    name = "SMALL_GUN_2"
+    slot_size = point_defence
+    slot_type = weapon
+    locatorname = "large_gun_02"
+  }
+  component_slot = {
+    name = "SMALL_GUN_3"
+    slot_size = point_defence
+    slot_type = weapon
+    locatorname = "large_gun_03"
+  }
+  component_slot = {
+    name = "SMALL_GUN_4"
+    slot_size = point_defence
+    slot_type = weapon
+    locatorname = "large_gun_04"
+  }
+  component_slot = {
+    name = "SMALL_GUN_5"
+    slot_size = point_defence
+    slot_type = weapon
+    locatorname = "large_gun_05"
+  }
+  component_slot = {
+    name = "SMALL_GUN_6"
+    slot_size = point_defence
+    slot_type = weapon
+    locatorname = "large_gun_06"
+  }
+  component_slot = {
+    name = "SMALL_GUN_7"
+    slot_size = point_defence
+    slot_type = weapon
+    locatorname = "large_gun_01"
+  }
+  component_slot = {
+    name = "SMALL_GUN_8"
+    slot_size = point_defence
+    slot_type = weapon
+    locatorname = "large_gun_02"
+  }
+}
+# Torpedo Platform Dedicated Section (Beam) ( Battlecruiser )
+ship_section_template = {
+  key = "steamrunner_stern_13"
+  ship_size = steamrunner
+  fits_on_slot = stern
+  entity = "steamrunner_coreC_entity"
+  icon = "GFX_ship_part_core_mid"
+  icon_frame = 1
+  prerequisites = { tech_physics_particles_340 }
+  cost = 980
+  small_utility_slots = 0
+  medium_utility_slots = 0
+  large_utility_slots = 0
+  aux_utility_slots = 0
+  ai_weight = { factor = 30 }
+  component_slot = {
+    name = "SMALL_GUN_01"
+    slot_size = small
+    slot_type = weapon
+    locatorname = "small_gun_01"
+  }
+  component_slot = {
+    name = "SMALL_GUN_02"
+    slot_size = small
+    slot_type = weapon
+    locatorname = "small_gun_02"
+  }
+  component_slot = {
+    name = "SMALL_GUN_03"
+    slot_size = small
+    slot_type = weapon
+    locatorname = "small_gun_03"
+  }
+  component_slot = {
+    name = "TORPEDO_01"
+    slot_size = torpedo
+    slot_type = weapon
+    locatorname = "large_gun_01"
+  }
+  component_slot = {
+    name = "TORPEDO_02"
+    slot_size = torpedo
+    slot_type = weapon
+    locatorname = "large_gun_02"
+  }
+  component_slot = {
+    name = "SMALL_GUN_1"
+    slot_size = point_defence
+    slot_type = weapon
+    locatorname = "large_gun_01"
+  }
+  component_slot = {
+    name = "SMALL_GUN_2"
+    slot_size = point_defence
+    slot_type = weapon
+    locatorname = "large_gun_02"
+  }
+  component_slot = {
+    name = "SMALL_GUN_3"
+    slot_size = point_defence
+    slot_type = weapon
+    locatorname = "large_gun_03"
+  }
+  component_slot = {
+    name = "SMALL_GUN_4"
+    slot_size = point_defence
+    slot_type = weapon
+    locatorname = "large_gun_04"
+  }
+}
+# Torpedo Platform Dedicated Section (Cannon) ( Battlecruiser )
+ship_section_template = {
+  key = "steamrunner_stern_14"
+  ship_size = steamrunner
+  fits_on_slot = stern
+  entity = "steamrunner_coreC_entity"
+  icon = "GFX_ship_part_core_mid"
+  icon_frame = 1
+  prerequisites = { tech_physics_particles_340 }
+  cost = 980
+  small_utility_slots = 0
+  medium_utility_slots = 0
+  large_utility_slots = 0
+  aux_utility_slots = 0
+  ai_weight = { factor = 30 }
+  component_slot = {
+    name = "LARGE_GUN_01"
+    slot_size = large
+    slot_type = weapon
+    locatorname = "medium_gun_01"
+  }
+  component_slot = {
+    name = "LARGE_GUN_02"
+    slot_size = large
+    slot_type = weapon
+    locatorname = "medium_gun_02"
+  }
+  component_slot = {
+    name = "LARGE_GUN_03"
+    slot_size = large
+    slot_type = weapon
+    locatorname = "medium_gun_03"
+  }
+  component_slot = {
+    name = "LARGE_GUN_04"
+    slot_size = large
+    slot_type = weapon
+    locatorname = "medium_gun_04"
+  }
+  component_slot = {
+    name = "LARGE_GUN_05"
+    slot_size = large
+    slot_type = weapon
+    locatorname = "medium_gun_05"
+  }
+  component_slot = {
+    name = "LARGE_GUN_06"
+    slot_size = large
+    slot_type = weapon
+    locatorname = "medium_gun_06"
+  }
+  component_slot = {
+    name = "TORPEDO_01"
+    slot_size = torpedo
+    slot_type = weapon
+    locatorname = "large_gun_01"
+  }
+  component_slot = {
+    name = "TORPEDO_02"
+    slot_size = torpedo
+    slot_type = weapon
+    locatorname = "large_gun_02"
+  }
+  component_slot = {
+    name = "SMALL_GUN_1"
+    slot_size = point_defence
+    slot_type = weapon
+    locatorname = "large_gun_01"
+  }
+  component_slot = {
+    name = "SMALL_GUN_2"
+    slot_size = point_defence
+    slot_type = weapon
+    locatorname = "large_gun_02"
+  }
+  component_slot = {
+    name = "SMALL_GUN_3"
+    slot_size = point_defence
+    slot_type = weapon
+    locatorname = "large_gun_03"
+  }
+  component_slot = {
+    name = "SMALL_GUN_4"
+    slot_size = point_defence
+    slot_type = weapon
+    locatorname = "large_gun_04"
+  }
+}
+# Intrepid-Class ( Battlecruiser )
+ship_section_template = {
+  key = "steamrunner_stern_15"
+  ship_size = steamrunner
+  fits_on_slot = stern
+  entity = "steamrunner_coreC_entity"
+  icon = "GFX_ship_part_core_mid"
+  icon_frame = 1
+  prerequisites = { tech_engineering_industry_1232 }
+  cost = 1320
+  small_utility_slots = 0
+  medium_utility_slots = 0
+  large_utility_slots = 0
+  aux_utility_slots = 0
+  ai_weight = { factor = 35 }
+  component_slot = {
+    name = "MEDIUM_GUN_01"
+    slot_size = medium
+    slot_type = weapon
+    locatorname = "medium_gun_01"
+  }
+  component_slot = {
+    name = "MEDIUM_GUN_02"
+    slot_size = medium
+    slot_type = weapon
+    locatorname = "medium_gun_02"
+  }
+  component_slot = {
+    name = "MEDIUM_GUN_03"
+    slot_size = medium
+    slot_type = weapon
+    locatorname = "medium_gun_03"
+  }
+  component_slot = {
+    name = "SMALL_GUN_1"
+    slot_size = point_defence
+    slot_type = weapon
+    locatorname = "large_gun_01"
+  }
+  component_slot = {
+    name = "SMALL_GUN_2"
+    slot_size = point_defence
+    slot_type = weapon
+    locatorname = "large_gun_02"
+  }
+}
+# Secondary Hull ( Battlecruiser )
+ship_section_template = {
+  key = "steamrunner_mid_16"
+  ship_size = steamrunner
+  fits_on_slot = mid
+  entity = "steamrunner_entity"
+  icon = "GFX_ship_part_core_mid"
+  icon_frame = 1
+  prerequisites = { tech_engineering_battlecruiser_543 }
+  cost = 180
+  small_utility_slots = 1
+  medium_utility_slots = 2
+  large_utility_slots = 0
+  aux_utility_slots = 1
+  ai_weight = { factor = 10 }
+}
+# Tactical Battlecruiser ( Battlecruiser )
+ship_section_template = {
+  key = "steamrunner_mid_17"
+  ship_size = steamrunner
+  fits_on_slot = mid
+  entity = "steamrunner_entity"
+  icon = "GFX_ship_part_core_mid"
+  icon_frame = 1
+  prerequisites = { tech_ship_program }
+  cost = 220
+  small_utility_slots = 1
+  medium_utility_slots = 3
+  large_utility_slots = 0
+  aux_utility_slots = 1
+  ai_weight = { factor = 20 }
+}
+# Engineering Battlecruiser ( Battlecruiser )
+ship_section_template = {
+  key = "steamrunner_mid_18"
+  ship_size = steamrunner
+  fits_on_slot = mid
+  entity = "steamrunner_entity"
+  icon = "GFX_ship_part_core_mid"
+  icon_frame = 1
+  prerequisites = { tech_ship_program }
+  cost = 220
+  small_utility_slots = 2
+  medium_utility_slots = 2
+  large_utility_slots = 0
+  aux_utility_slots = 1
+  ai_weight = { factor = 20 }
+}
+# Support Battlecruiser ( Battlecruiser )
+ship_section_template = {
+  key = "steamrunner_mid_19"
+  ship_size = steamrunner
+  fits_on_slot = mid
+  entity = "steamrunner_entity"
+  icon = "GFX_ship_part_core_mid"
+  icon_frame = 1
+  prerequisites = { tech_ship_program }
+  cost = 220
+  small_utility_slots = 1
+  medium_utility_slots = 2
+  large_utility_slots = 1
+  aux_utility_slots = 1
+  ai_weight = { factor = 20 }
+}
+# Advanced Tactical Battlecruiser ( Battlecruiser )
+ship_section_template = {
+  key = "steamrunner_mid_20"
+  ship_size = steamrunner
+  fits_on_slot = mid
+  entity = "steamrunner_entity"
+  icon = "GFX_ship_part_core_mid"
+  icon_frame = 1
+  prerequisites = { tech_engineering_advanced_711 }
+  cost = 420
+  small_utility_slots = 1
+  medium_utility_slots = 4
+  large_utility_slots = 0
+  aux_utility_slots = 1
+  ai_weight = { factor = 30 }
+}
+# Advanced Engineering Battlecruiser ( Battlecruiser )
+ship_section_template = {
+  key = "steamrunner_mid_21"
+  ship_size = steamrunner
+  fits_on_slot = mid
+  entity = "steamrunner_entity"
+  icon = "GFX_ship_part_core_mid"
+  icon_frame = 1
+  prerequisites = { tech_engineering_advanced_712 }
+  cost = 420
+  small_utility_slots = 3
+  medium_utility_slots = 2
+  large_utility_slots = 0
+  aux_utility_slots = 1
+  ai_weight = { factor = 30 }
+}
+# Advanced Support Battlecruiser ( Battlecruiser )
+ship_section_template = {
+  key = "steamrunner_mid_22"
+  ship_size = steamrunner
+  fits_on_slot = mid
+  entity = "steamrunner_entity"
+  icon = "GFX_ship_part_core_mid"
+  icon_frame = 1
+  prerequisites = { tech_engineering_advanced_713 }
+  cost = 420
+  small_utility_slots = 1
+  medium_utility_slots = 2
+  large_utility_slots = 2
+  aux_utility_slots = 1
+  ai_weight = { factor = 30 }
+}
+
+
+
+
+
+# Battleship ( Battleship )
+ship_section_template = {
+  key = "adv_cruiser_stern_1"
+  ship_size = adv_cruiser
+  fits_on_slot = stern
+  entity = "adv_cruiser_coreA_entity"
+  icon = "GFX_ship_part_core_mid"
+  icon_frame = 1
+  prerequisites = { tech_engineering_starship-class_717 }
+  cost = 430
+  small_utility_slots = 0
+  medium_utility_slots = 0
+  large_utility_slots = 0
+  aux_utility_slots = 0
+  ai_weight = { factor = 10 }
+  component_slot = {
+    name = "MEDIUM_GUN_01"
+    slot_size = medium
+    slot_type = weapon
+    locatorname = "medium_gun_01"
+  }
+  component_slot = {
+    name = "MEDIUM_GUN_02"
+    slot_size = medium
+    slot_type = weapon
+    locatorname = "medium_gun_02"
+  }
+  component_slot = {
+    name = "TORPEDO_01"
+    slot_size = torpedo
+    slot_type = weapon
+    locatorname = "large_gun_01"
+  }
+}
+# Battleship ( Battleship )
+ship_section_template = {
+  key = "adv_cruiser_stern_2"
+  ship_size = adv_cruiser
+  fits_on_slot = stern
+  entity = "adv_cruiser_coreA_entity"
+  icon = "GFX_ship_part_core_mid"
+  icon_frame = 1
+  prerequisites = { tech_engineering_bird-of-prey_716 }
+  cost = 430
+  small_utility_slots = 0
+  medium_utility_slots = 0
+  large_utility_slots = 0
+  aux_utility_slots = 0
+  ai_weight = { factor = 10 }
+  component_slot = {
+    name = "TORPEDO_01"
+    slot_size = torpedo
+    slot_type = weapon
+    locatorname = "large_gun_01"
+  }
+  component_slot = {
+    name = "EXTRA_LARGE_01"
+    slot_size = extra_large
+    slot_type = weapon
+    locatorname = "medium_gun_01"
+  }
+  component_slot = {
+    name = "EXTRA_LARGE_02"
+    slot_size = extra_large
+    slot_type = weapon
+    locatorname = "medium_gun_02"
+  }
+  component_slot = {
+    name = "SMALL_GUN_1"
+    slot_size = point_defence
+    slot_type = weapon
+    locatorname = "large_gun_01"
+  }
+  component_slot = {
+    name = "SMALL_GUN_2"
+    slot_size = point_defence
+    slot_type = weapon
+    locatorname = "large_gun_02"
+  }
+}
+# Bach'Hich Battleship ( Battleship )
+ship_section_template = {
+  key = "adv_cruiser_stern_3"
+  ship_size = adv_cruiser
+  fits_on_slot = stern
+  entity = "adv_cruiser_coreA_entity"
+  icon = "GFX_ship_part_core_mid"
+  icon_frame = 1
+  prerequisites = { tech_physics_space-fitted_205 }
+  cost = 750
+  small_utility_slots = 0
+  medium_utility_slots = 0
+  large_utility_slots = 0
+  aux_utility_slots = 0
+  ai_weight = { factor = 15 }
+  component_slot = {
+    name = "MEDIUM_GUN_01"
+    slot_size = medium
+    slot_type = weapon
+    locatorname = "medium_gun_01"
+  }
+  component_slot = {
+    name = "MEDIUM_GUN_02"
+    slot_size = medium
+    slot_type = weapon
+    locatorname = "medium_gun_02"
+  }
+  component_slot = {
+    name = "LARGE_GUN_01"
+    slot_size = large
+    slot_type = weapon
+    locatorname = "medium_gun_01"
+  }
+  component_slot = {
+    name = "LARGE_GUN_02"
+    slot_size = large
+    slot_type = weapon
+    locatorname = "medium_gun_02"
+  }
+  component_slot = {
+    name = "LARGE_GUN_03"
+    slot_size = large
+    slot_type = weapon
+    locatorname = "medium_gun_03"
+  }
+  component_slot = {
+    name = "LARGE_GUN_04"
+    slot_size = large
+    slot_type = weapon
+    locatorname = "medium_gun_04"
+  }
+  component_slot = {
+    name = "SMALL_GUN_1"
+    slot_size = point_defence
+    slot_type = weapon
+    locatorname = "large_gun_01"
+  }
+  component_slot = {
+    name = "SMALL_GUN_2"
+    slot_size = point_defence
+    slot_type = weapon
+    locatorname = "large_gun_02"
+  }
+}
+# Phase Disruptor Weapon Retrofit ( Battleship )
+ship_section_template = {
+  key = "adv_cruiser_stern_4"
+  ship_size = adv_cruiser
+  fits_on_slot = stern
+  entity = "adv_cruiser_coreA_entity"
+  icon = "GFX_ship_part_core_mid"
+  icon_frame = 1
+  prerequisites = { tech_physics_phase-resonance_213 }
+  cost = 400
+  small_utility_slots = 0
+  medium_utility_slots = 0
+  large_utility_slots = 0
+  aux_utility_slots = 0
+  ai_weight = { factor = 5 }
+  component_slot = {
+    name = "MEDIUM_GUN_01"
+    slot_size = medium
+    slot_type = weapon
+    locatorname = "medium_gun_01"
+  }
+  component_slot = {
+    name = "MEDIUM_GUN_02"
+    slot_size = medium
+    slot_type = weapon
+    locatorname = "medium_gun_02"
+  }
+  component_slot = {
+    name = "SMALL_GUN_1"
+    slot_size = point_defence
+    slot_type = weapon
+    locatorname = "large_gun_01"
+  }
+  component_slot = {
+    name = "SMALL_GUN_2"
+    slot_size = point_defence
+    slot_type = weapon
+    locatorname = "large_gun_02"
+  }
+}
+# Assault Disruptor Weapon Retrofit ( Battleship )
+ship_section_template = {
+  key = "adv_cruiser_stern_5"
+  ship_size = adv_cruiser
+  fits_on_slot = stern
+  entity = "adv_cruiser_coreA_entity"
+  icon = "GFX_ship_part_core_mid"
+  icon_frame = 1
+  prerequisites = { tech_physics_type-1_215 }
+  cost = 400
+  small_utility_slots = 0
+  medium_utility_slots = 0
+  large_utility_slots = 0
+  aux_utility_slots = 0
+  ai_weight = { factor = 5 }
+  component_slot = {
+    name = "EXTRA_LARGE_01"
+    slot_size = extra_large
+    slot_type = weapon
+    locatorname = "medium_gun_01"
+  }
+  component_slot = {
+    name = "EXTRA_LARGE_02"
+    slot_size = extra_large
+    slot_type = weapon
+    locatorname = "medium_gun_02"
+  }
+  component_slot = {
+    name = "EXTRA_LARGE_03"
+    slot_size = extra_large
+    slot_type = weapon
+    locatorname = "medium_gun_03"
+  }
+  component_slot = {
+    name = "SMALL_GUN_1"
+    slot_size = point_defence
+    slot_type = weapon
+    locatorname = "large_gun_01"
+  }
+  component_slot = {
+    name = "SMALL_GUN_2"
+    slot_size = point_defence
+    slot_type = weapon
+    locatorname = "large_gun_02"
+  }
+}
+# Magnetic Plasma Beam Weapon Retrofit ( Battleship )
+ship_section_template = {
+  key = "adv_cruiser_stern_6"
+  ship_size = adv_cruiser
+  fits_on_slot = stern
+  entity = "adv_cruiser_coreA_entity"
+  icon = "GFX_ship_part_core_mid"
+  icon_frame = 1
+  prerequisites = { tech_physics_magnetic-constraint_246 }
+  cost = 400
+  small_utility_slots = 0
+  medium_utility_slots = 0
+  large_utility_slots = 0
+  aux_utility_slots = 0
+  ai_weight = { factor = 5 }
+  component_slot = {
+    name = "MEDIUM_GUN_01"
+    slot_size = medium
+    slot_type = weapon
+    locatorname = "medium_gun_01"
+  }
+  component_slot = {
+    name = "MEDIUM_GUN_02"
+    slot_size = medium
+    slot_type = weapon
+    locatorname = "medium_gun_02"
+  }
+  component_slot = {
+    name = "SMALL_GUN_1"
+    slot_size = point_defence
+    slot_type = weapon
+    locatorname = "large_gun_01"
+  }
+  component_slot = {
+    name = "SMALL_GUN_2"
+    slot_size = point_defence
+    slot_type = weapon
+    locatorname = "large_gun_02"
+  }
+}
+# Positron Cannon Weapon Retrofit ( Battleship )
+ship_section_template = {
+  key = "adv_cruiser_stern_7"
+  ship_size = adv_cruiser
+  fits_on_slot = stern
+  entity = "adv_cruiser_coreA_entity"
+  icon = "GFX_ship_part_core_mid"
+  icon_frame = 1
+  prerequisites = { tech_physics_positron_270 }
+  cost = 400
+  small_utility_slots = 0
+  medium_utility_slots = 0
+  large_utility_slots = 0
+  aux_utility_slots = 0
+  ai_weight = { factor = 5 }
+  component_slot = {
+    name = "EXTRA_LARGE_01"
+    slot_size = extra_large
+    slot_type = weapon
+    locatorname = "medium_gun_01"
+  }
+  component_slot = {
+    name = "EXTRA_LARGE_02"
+    slot_size = extra_large
+    slot_type = weapon
+    locatorname = "medium_gun_02"
+  }
+  component_slot = {
+    name = "EXTRA_LARGE_03"
+    slot_size = extra_large
+    slot_type = weapon
+    locatorname = "medium_gun_03"
+  }
+  component_slot = {
+    name = "SMALL_GUN_1"
+    slot_size = point_defence
+    slot_type = weapon
+    locatorname = "large_gun_01"
+  }
+  component_slot = {
+    name = "SMALL_GUN_2"
+    slot_size = point_defence
+    slot_type = weapon
+    locatorname = "large_gun_02"
+  }
+}
+# Graviton Beam Weapon Retrofit ( Battleship )
+ship_section_template = {
+  key = "adv_cruiser_stern_8"
+  ship_size = adv_cruiser
+  fits_on_slot = stern
+  entity = "adv_cruiser_coreA_entity"
+  icon = "GFX_ship_part_core_mid"
+  icon_frame = 1
+  prerequisites = { tech_physics_graviton_326 }
+  cost = 400
+  small_utility_slots = 0
+  medium_utility_slots = 0
+  large_utility_slots = 0
+  aux_utility_slots = 0
+  ai_weight = { factor = 5 }
+  component_slot = {
+    name = "MEDIUM_GUN_01"
+    slot_size = medium
+    slot_type = weapon
+    locatorname = "medium_gun_01"
+  }
+  component_slot = {
+    name = "MEDIUM_GUN_02"
+    slot_size = medium
+    slot_type = weapon
+    locatorname = "medium_gun_02"
+  }
+  component_slot = {
+    name = "SMALL_GUN_1"
+    slot_size = point_defence
+    slot_type = weapon
+    locatorname = "large_gun_01"
+  }
+  component_slot = {
+    name = "SMALL_GUN_2"
+    slot_size = point_defence
+    slot_type = weapon
+    locatorname = "large_gun_02"
+  }
+}
+# Flagship ( Battleship )
+ship_section_template = {
+  key = "adv_cruiser_stern_9"
+  ship_size = adv_cruiser
+  fits_on_slot = stern
+  entity = "adv_cruiser_coreB_entity"
+  icon = "GFX_ship_part_core_mid"
+  icon_frame = 1
+  prerequisites = { tech_engineering_next-level_718 }
+  cost = 750
+  small_utility_slots = 0
+  medium_utility_slots = 0
+  large_utility_slots = 0
+  aux_utility_slots = 0
+  ai_weight = { factor = 20 }
+  component_slot = {
+    name = "SMALL_GUN_01"
+    slot_size = small
+    slot_type = weapon
+    locatorname = "small_gun_01"
+  }
+  component_slot = {
+    name = "SMALL_GUN_02"
+    slot_size = small
+    slot_type = weapon
+    locatorname = "small_gun_02"
+  }
+  component_slot = {
+    name = "MEDIUM_GUN_01"
+    slot_size = medium
+    slot_type = weapon
+    locatorname = "medium_gun_01"
+  }
+  component_slot = {
+    name = "MEDIUM_GUN_02"
+    slot_size = medium
+    slot_type = weapon
+    locatorname = "medium_gun_02"
+  }
+  component_slot = {
+    name = "SMALL_GUN_1"
+    slot_size = point_defence
+    slot_type = weapon
+    locatorname = "large_gun_01"
+  }
+  component_slot = {
+    name = "SMALL_GUN_2"
+    slot_size = point_defence
+    slot_type = weapon
+    locatorname = "large_gun_02"
+  }
+}
+# Flagship ( Battleship )
+ship_section_template = {
+  key = "adv_cruiser_stern_10"
+  ship_size = adv_cruiser
+  fits_on_slot = stern
+  entity = "adv_cruiser_coreB_entity"
+  icon = "GFX_ship_part_core_mid"
+  icon_frame = 1
+  prerequisites = { tech_engineering_next-level_724 }
+  cost = 750
+  small_utility_slots = 0
+  medium_utility_slots = 0
+  large_utility_slots = 0
+  aux_utility_slots = 0
+  ai_weight = { factor = 20 }
+  component_slot = {
+    name = "LARGE_GUN_01"
+    slot_size = large
+    slot_type = weapon
+    locatorname = "medium_gun_01"
+  }
+  component_slot = {
+    name = "LARGE_GUN_02"
+    slot_size = large
+    slot_type = weapon
+    locatorname = "medium_gun_02"
+  }
+  component_slot = {
+    name = "LARGE_GUN_03"
+    slot_size = large
+    slot_type = weapon
+    locatorname = "medium_gun_03"
+  }
+  component_slot = {
+    name = "LARGE_GUN_04"
+    slot_size = large
+    slot_type = weapon
+    locatorname = "medium_gun_04"
+  }
+  component_slot = {
+    name = "LARGE_GUN_05"
+    slot_size = large
+    slot_type = weapon
+    locatorname = "medium_gun_05"
+  }
+  component_slot = {
+    name = "LARGE_GUN_06"
+    slot_size = large
+    slot_type = weapon
+    locatorname = "medium_gun_06"
+  }
+  component_slot = {
+    name = "LARGE_GUN_07"
+    slot_size = large
+    slot_type = weapon
+    locatorname = "medium_gun_01"
+  }
+  component_slot = {
+    name = "LARGE_GUN_08"
+    slot_size = large
+    slot_type = weapon
+    locatorname = "medium_gun_02"
+  }
+  component_slot = {
+    name = "EXTRA_LARGE_01"
+    slot_size = extra_large
+    slot_type = weapon
+    locatorname = "medium_gun_01"
+  }
+  component_slot = {
+    name = "SMALL_GUN_1"
+    slot_size = point_defence
+    slot_type = weapon
+    locatorname = "large_gun_01"
+  }
+  component_slot = {
+    name = "SMALL_GUN_2"
+    slot_size = point_defence
+    slot_type = weapon
+    locatorname = "large_gun_02"
+  }
+  component_slot = {
+    name = "SMALL_GUN_3"
+    slot_size = point_defence
+    slot_type = weapon
+    locatorname = "large_gun_03"
+  }
+  component_slot = {
+    name = "SMALL_GUN_4"
+    slot_size = point_defence
+    slot_type = weapon
+    locatorname = "large_gun_04"
+  }
+  component_slot = {
+    name = "SMALL_GUN_5"
+    slot_size = point_defence
+    slot_type = weapon
+    locatorname = "large_gun_05"
+  }
+}
+# Heavy Battleship ( Battleship )
+ship_section_template = {
+  key = "adv_cruiser_stern_11"
+  ship_size = adv_cruiser
+  fits_on_slot = stern
+  entity = "adv_cruiser_coreB_entity"
+  icon = "GFX_ship_part_core_mid"
+  icon_frame = 1
+  prerequisites = { tech_engineering_next-level_718 }
+  cost = 750
+  small_utility_slots = 0
+  medium_utility_slots = 0
+  large_utility_slots = 0
+  aux_utility_slots = 0
+  ai_weight = { factor = 20 }
+  component_slot = {
+    name = "SMALL_GUN_01"
+    slot_size = small
+    slot_type = weapon
+    locatorname = "small_gun_01"
+  }
+  component_slot = {
+    name = "SMALL_GUN_02"
+    slot_size = small
+    slot_type = weapon
+    locatorname = "small_gun_02"
+  }
+  component_slot = {
+    name = "SMALL_GUN_03"
+    slot_size = small
+    slot_type = weapon
+    locatorname = "small_gun_03"
+  }
+  component_slot = {
+    name = "SMALL_GUN_04"
+    slot_size = small
+    slot_type = weapon
+    locatorname = "small_gun_04"
+  }
+  component_slot = {
+    name = "TORPEDO_01"
+    slot_size = torpedo
+    slot_type = weapon
+    locatorname = "large_gun_01"
+  }
+  component_slot = {
+    name = "TORPEDO_02"
+    slot_size = torpedo
+    slot_type = weapon
+    locatorname = "large_gun_02"
+  }
+  component_slot = {
+    name = "SMALL_GUN_1"
+    slot_size = point_defence
+    slot_type = weapon
+    locatorname = "large_gun_01"
+  }
+  component_slot = {
+    name = "SMALL_GUN_2"
+    slot_size = point_defence
+    slot_type = weapon
+    locatorname = "large_gun_02"
+  }
+}
+# Heavy Battleship ( Battleship )
+ship_section_template = {
+  key = "adv_cruiser_stern_12"
+  ship_size = adv_cruiser
+  fits_on_slot = stern
+  entity = "adv_cruiser_coreB_entity"
+  icon = "GFX_ship_part_core_mid"
+  icon_frame = 1
+  prerequisites = { tech_engineering_next-level_724 }
+  cost = 750
+  small_utility_slots = 0
+  medium_utility_slots = 0
+  large_utility_slots = 0
+  aux_utility_slots = 0
+  ai_weight = { factor = 20 }
+  component_slot = {
+    name = "LARGE_GUN_01"
+    slot_size = large
+    slot_type = weapon
+    locatorname = "medium_gun_01"
+  }
+  component_slot = {
+    name = "LARGE_GUN_02"
+    slot_size = large
+    slot_type = weapon
+    locatorname = "medium_gun_02"
+  }
+  component_slot = {
+    name = "LARGE_GUN_03"
+    slot_size = large
+    slot_type = weapon
+    locatorname = "medium_gun_03"
+  }
+  component_slot = {
+    name = "LARGE_GUN_04"
+    slot_size = large
+    slot_type = weapon
+    locatorname = "medium_gun_04"
+  }
+  component_slot = {
+    name = "LARGE_GUN_05"
+    slot_size = large
+    slot_type = weapon
+    locatorname = "medium_gun_05"
+  }
+  component_slot = {
+    name = "LARGE_GUN_06"
+    slot_size = large
+    slot_type = weapon
+    locatorname = "medium_gun_06"
+  }
+  component_slot = {
+    name = "LARGE_GUN_07"
+    slot_size = large
+    slot_type = weapon
+    locatorname = "medium_gun_01"
+  }
+  component_slot = {
+    name = "LARGE_GUN_08"
+    slot_size = large
+    slot_type = weapon
+    locatorname = "medium_gun_02"
+  }
+  component_slot = {
+    name = "TORPEDO_01"
+    slot_size = torpedo
+    slot_type = weapon
+    locatorname = "large_gun_01"
+  }
+  component_slot = {
+    name = "TORPEDO_02"
+    slot_size = torpedo
+    slot_type = weapon
+    locatorname = "large_gun_02"
+  }
+  component_slot = {
+    name = "SMALL_GUN_1"
+    slot_size = point_defence
+    slot_type = weapon
+    locatorname = "large_gun_01"
+  }
+  component_slot = {
+    name = "SMALL_GUN_2"
+    slot_size = point_defence
+    slot_type = weapon
+    locatorname = "large_gun_02"
+  }
+}
+# Heavy Beam Platform Dedicated Section ( Battleship )
+ship_section_template = {
+  key = "adv_cruiser_stern_13"
+  ship_size = adv_cruiser
+  fits_on_slot = stern
+  entity = "adv_cruiser_coreC_entity"
+  icon = "GFX_ship_part_core_mid"
+  icon_frame = 1
+  prerequisites = { tech_physics_particles_328 }
+  cost = 1500
+  small_utility_slots = 0
+  medium_utility_slots = 0
+  large_utility_slots = 0
+  aux_utility_slots = 0
+  ai_weight = { factor = 15 }
+  component_slot = {
+    name = "MEDIUM_GUN_01"
+    slot_size = medium
+    slot_type = weapon
+    locatorname = "medium_gun_01"
+  }
+  component_slot = {
+    name = "MEDIUM_GUN_02"
+    slot_size = medium
+    slot_type = weapon
+    locatorname = "medium_gun_02"
+  }
+  component_slot = {
+    name = "MEDIUM_GUN_03"
+    slot_size = medium
+    slot_type = weapon
+    locatorname = "medium_gun_03"
+  }
+  component_slot = {
+    name = "SMALL_GUN_1"
+    slot_size = point_defence
+    slot_type = weapon
+    locatorname = "large_gun_01"
+  }
+}
+# Assault Carrier ( Battleship )
+ship_section_template = {
+  key = "adv_cruiser_stern_14"
+  ship_size = adv_cruiser
+  fits_on_slot = stern
+  entity = "adv_cruiser_coreC_entity"
+  icon = "GFX_ship_part_core_mid"
+  icon_frame = 1
+  prerequisites = { tech_engineering_industry_1264 }
+  cost = 430
+  small_utility_slots = 0
+  medium_utility_slots = 0
+  large_utility_slots = 0
+  aux_utility_slots = 0
+  ai_weight = { factor = 15 }
+  component_slot = {
+    name = "SMALL_GUN_01"
+    slot_size = small
+    slot_type = weapon
+    locatorname = "small_gun_01"
+  }
+  component_slot = {
+    name = "SMALL_GUN_02"
+    slot_size = small
+    slot_type = weapon
+    locatorname = "small_gun_02"
+  }
+  component_slot = {
+    name = "SMALL_GUN_03"
+    slot_size = small
+    slot_type = weapon
+    locatorname = "small_gun_03"
+  }
+  component_slot = {
+    name = "SMALL_GUN_1"
+    slot_size = point_defence
+    slot_type = weapon
+    locatorname = "large_gun_01"
+  }
+  component_slot = {
+    name = "SMALL_GUN_2"
+    slot_size = point_defence
+    slot_type = weapon
+    locatorname = "large_gun_02"
+  }
+  component_slot = {
+    name = "SMALL_GUN_3"
+    slot_size = point_defence
+    slot_type = weapon
+    locatorname = "large_gun_03"
+  }
+  component_slot = {
+    name = "STRIKE_CRAFT_01"
+    slot_size = large
+    slot_type = strike_craft
+    locatorname = "part1"
+  }
+}
+
+# Assault Carrier ( Battleship )
+   ship_section_template = {
+      key = "adv_cruiser_stern_15"
+      ship_size = adv_cruiser
+      fits_on_slot = stern
+      entity = "adv_cruiser_coreC_entity"
+      icon = "GFX_ship_part_core_mid"
+      icon_frame = 1
+      prerequisites = { tech_engineering_industry_1265 }
+      cost = 400
+      small_utility_slots = 0
+      medium_utility_slots = 0
+      large_utility_slots = 0
+      aux_utility_slots = 0
+      ai_weight = { factor = 15 }
+      component_slot = {
+         name = "EXTRA_LARGE_01"
+         slot_size = extra_large
+         slot_type = weapon
+         locatorname = "medium_gun_01"
+      }
+      component_slot = {
+         name = "SMALL_GUN_1"
+         slot_size = point_defence
+         slot_type = weapon
+         locatorname = "large_gun_01"
+      }
+      component_slot = {
+         name = "SMALL_GUN_2"
+         slot_size = point_defence
+         slot_type = weapon
+         locatorname = "large_gun_02"
+      }
+      component_slot = {
+         name = "STRIKE_CRAFT_01"
+         slot_size = large
+         slot_type = strike_craft
+         locatorname = "part1"
+      }
+   }
+   
+# Fleet Carrier ( Battleship )
+   ship_section_template = {
+      key = "adv_cruiser_stern_16"
+      ship_size = adv_cruiser
+      fits_on_slot = stern
+      entity = "adv_cruiser_coreC_entity"
+      icon = "GFX_ship_part_core_mid"
+      icon_frame = 1
+      prerequisites = { tech_engineering_industry_1266 }
+      cost = 1500
+      small_utility_slots = 0
+      medium_utility_slots = 0
+      large_utility_slots = 0
+      aux_utility_slots = 0
+      ai_weight = { factor = 20 }
+      component_slot = {
+         name = "SMALL_GUN_01"
+         slot_size = small
+         slot_type = weapon
+         locatorname = "small_gun_01"
+      }
+      component_slot = {
+         name = "SMALL_GUN_02"
+         slot_size = small
+         slot_type = weapon
+         locatorname = "small_gun_02"
+      }
+      component_slot = {
+         name = "SMALL_GUN_1"
+         slot_size = point_defence
+         slot_type = weapon
+         locatorname = "large_gun_01"
+      }
+      component_slot = {
+         name = "STRIKE_CRAFT_01"
+         slot_size = large
+         slot_type = strike_craft
+         locatorname = "part1"
+      }
+      component_slot = {
+         name = "STRIKE_CRAFT_02"
+         slot_size = large
+         slot_type = strike_craft
+         locatorname = "part1"
+      }
+   }
+   
+# Fleet Carrier ( Battleship )
+   ship_section_template = {
+      key = "adv_cruiser_stern_17"
+      ship_size = adv_cruiser
+      fits_on_slot = stern
+      entity = "adv_cruiser_coreC_entity"
+      icon = "GFX_ship_part_core_mid"
+      icon_frame = 1
+      prerequisites = { tech_engineering_industry_1267 }
+      cost = 1500
+      small_utility_slots = 0
+      medium_utility_slots = 0
+      large_utility_slots = 0
+      aux_utility_slots = 0
+      ai_weight = { factor = 20 }
+      component_slot = {
+         name = "EXTRA_LARGE_01"
+         slot_size = extra_large
+         slot_type = weapon
+         locatorname = "medium_gun_01"
+      }
+      component_slot = {
+         name = "STRIKE_CRAFT_01"
+         slot_size = large
+         slot_type = strike_craft
+         locatorname = "part1"
+      }
+      component_slot = {
+         name = "STRIKE_CRAFT_02"
+         slot_size = large
+         slot_type = strike_craft
+         locatorname = "part1"
+      }
+   }
+# Secondary Hull ( Battleship )
+ship_section_template = {
+  key = "adv_cruiser_mid_18"
+  ship_size = adv_cruiser
+  fits_on_slot = mid
+  entity = "adv_cruiser_entity"
+  icon = "GFX_ship_part_core_mid"
+  icon_frame = 1
+  prerequisites = { tech_engineering_battleship_544 }
+  cost = 360
+  small_utility_slots = 2
+  medium_utility_slots = 2
+  large_utility_slots = 2
+  aux_utility_slots = 1
+  ai_weight = { factor = 10 }
+}
+
+# Tactical Battleship ( Battleship )
+ship_section_template = {
+  key = "adv_cruiser_mid_19"
+  ship_size = adv_cruiser
+  fits_on_slot = mid
+  entity = "adv_cruiser_entity"
+  icon = "GFX_ship_part_core_mid"
+  icon_frame = 1
+  prerequisites = { tech_ship_program }
+  cost = 500
+  small_utility_slots = 2
+  medium_utility_slots = 5
+  large_utility_slots = 2
+  aux_utility_slots = 1
+  ai_weight = { factor = 20 }
+}
+
+# Engineering Battleship ( Battleship )
+ship_section_template = {
+  key = "adv_cruiser_mid_20"
+  ship_size = adv_cruiser
+  fits_on_slot = mid
+  entity = "adv_cruiser_entity"
+  icon = "GFX_ship_part_core_mid"
+  icon_frame = 1
+  prerequisites = { tech_ship_program }
+  cost = 500
+  small_utility_slots = 5
+  medium_utility_slots = 2
+  large_utility_slots = 2
+  aux_utility_slots = 1
+  ai_weight = { factor = 20 }
+}
+# Support Battleship ( Battleship )
+ship_section_template = {
+  key = "adv_cruiser_mid_21"
+  ship_size = adv_cruiser
+  fits_on_slot = mid
+  entity = "adv_cruiser_entity"
+  icon = "GFX_ship_part_core_mid"
+  icon_frame = 1
+  prerequisites = { tech_ship_program }
+  cost = 500
+  small_utility_slots = 2
+  medium_utility_slots = 2
+  large_utility_slots = 5
+  aux_utility_slots = 1
+  ai_weight = { factor = 20 }
+}
+# Advanced Tactical Battleship ( Battleship )
+ship_section_template = {
+  key = "adv_cruiser_mid_22"
+  ship_size = adv_cruiser
+  fits_on_slot = mid
+  entity = "adv_cruiser_entity"
+  icon = "GFX_ship_part_core_mid"
+  icon_frame = 1
+  prerequisites = { tech_engineering_advanced_711 }
+  cost = 900
+  small_utility_slots = 2
+  medium_utility_slots = 6
+  large_utility_slots = 2
+  aux_utility_slots = 1
+  ai_weight = { factor = 30 }
+}
+# Advanced Engineering Battleship ( Battleship )
+ship_section_template = {
+  key = "adv_cruiser_mid_23"
+  ship_size = adv_cruiser
+  fits_on_slot = mid
+  entity = "adv_cruiser_entity"
+  icon = "GFX_ship_part_core_mid"
+  icon_frame = 1
+  prerequisites = { tech_engineering_advanced_712 }
+  cost = 900
+  small_utility_slots = 6
+  medium_utility_slots = 2
+  large_utility_slots = 2
+  aux_utility_slots = 1
+  ai_weight = { factor = 30 }
+}
+# Advanced Support Battleship ( Battleship )
+ship_section_template = {
+  key = "adv_cruiser_mid_24"
+  ship_size = adv_cruiser
+  fits_on_slot = mid
+  entity = "adv_cruiser_entity"
+  icon = "GFX_ship_part_core_mid"
+  icon_frame = 1
+  prerequisites = { tech_engineering_advanced_713 }
+  cost = 900
+  small_utility_slots = 2
+  medium_utility_slots = 2
+  large_utility_slots = 6
+  aux_utility_slots = 1
+  ai_weight = { factor = 30 }
+}
+# Science Battleship ( Battleship )
+ship_section_template = {
+  key = "adv_cruiser_mid_25"
+  ship_size = adv_cruiser
+  fits_on_slot = mid
+  entity = "adv_cruiser_entity"
+  icon = "GFX_ship_part_core_mid"
+  icon_frame = 1
+  prerequisites = { tech_engineering_next-level_718 }
+  cost = 450
+  small_utility_slots = 2
+  medium_utility_slots = 2
+  large_utility_slots = 2
+  aux_utility_slots = 2
+  ai_weight = { factor = 25 }
+}
+# Science Battleship ( Battleship )
+ship_section_template = {
+  key = "adv_cruiser_mid_26"
+  ship_size = adv_cruiser
+  fits_on_slot = mid
+  entity = "adv_cruiser_entity"
+  icon = "GFX_ship_part_core_mid"
+  icon_frame = 1
+  prerequisites = { tech_engineering_next-level_724 }
+  cost = 450
+  small_utility_slots = 2
+  medium_utility_slots = 2
+  large_utility_slots = 2
+  aux_utility_slots = 2
+  ai_weight = { factor = 25 }
+}
+# Operations Battleship ( Battleship )
+ship_section_template = {
+  key = "adv_cruiser_mid_27"
+  ship_size = adv_cruiser
+  fits_on_slot = mid
+  entity = "adv_cruiser_entity"
+  icon = "GFX_ship_part_core_mid"
+  icon_frame = 1
+  prerequisites = { tech_engineering_next-level_718 }
+  cost = 500
+  small_utility_slots = 3
+  medium_utility_slots = 3
+  large_utility_slots = 3
+  aux_utility_slots = 1
+  ai_weight = { factor = 25 }
+}
+# Operations Battleship ( Battleship )
+ship_section_template = {
+  key = "adv_cruiser_mid_28"
+  ship_size = adv_cruiser
+  fits_on_slot = mid
+  entity = "adv_cruiser_entity"
+  icon = "GFX_ship_part_core_mid"
+  icon_frame = 1
+  prerequisites = { tech_engineering_next-level_724 }
+  cost = 500
+  small_utility_slots = 3
+  medium_utility_slots = 3
+  large_utility_slots = 3
+  aux_utility_slots = 1
+  ai_weight = { factor = 25 }
+}
+# Saucer Seperation ( Battleship )
+ship_section_template = {
+  key = "adv_cruiser_mid_29"
+  ship_size = adv_cruiser
+  fits_on_slot = mid
+  entity = "adv_cruiser_entity"
+  icon = "GFX_ship_part_core_mid"
+  icon_frame = 1
+  prerequisites = { tech_engineering_chevron_550 }
+  cost = 1360
+  small_utility_slots = 3
+  medium_utility_slots = 3
+  large_utility_slots = 3
+  aux_utility_slots = 2
+  ai_weight = { factor = 50 }
+}
+
+
+
+
+
+# Escort ( Heavy Escort )
+ship_section_template = {
+  key = "strike_stern_1"
+  ship_size = strike
+  fits_on_slot = stern
+  entity = "strike_coreA_entity"
+  icon = "GFX_ship_part_core_mid"
+  icon_frame = 1
+  prerequisites = { tech_engineering_starship-class_717 }
+  cost = 440
+  small_utility_slots = 0
+  medium_utility_slots = 0
+  large_utility_slots = 0
+  aux_utility_slots = 0
+  ai_weight = { factor = 10 }
+  component_slot = {
+    name = "SMALL_GUN_01"
+    slot_size = small
+    slot_type = weapon
+    locatorname = "small_gun_01"
+  }
+  component_slot = {
+    name = "SMALL_GUN_02"
+    slot_size = small
+    slot_type = weapon
+    locatorname = "small_gun_02"
+  }
+  component_slot = {
+    name = "MEDIUM_GUN_01"
+    slot_size = medium
+    slot_type = weapon
+    locatorname = "medium_gun_01"
+  }
+  component_slot = {
+    name = "MEDIUM_GUN_02"
+    slot_size = medium
+    slot_type = weapon
+    locatorname = "medium_gun_02"
+  }
+  component_slot = {
+    name = "SMALL_GUN_1"
+    slot_size = point_defence
+    slot_type = weapon
+    locatorname = "large_gun_01"
+  }
+  component_slot = {
+    name = "SMALL_GUN_2"
+    slot_size = point_defence
+    slot_type = weapon
+    locatorname = "large_gun_02"
+  }
+  component_slot = {
+    name = "SMALL_GUN_3"
+    slot_size = point_defence
+    slot_type = weapon
+    locatorname = "large_gun_03"
+  }
+  component_slot = {
+    name = "SMALL_GUN_4"
+    slot_size = point_defence
+    slot_type = weapon
+    locatorname = "large_gun_04"
+  }
+}
+# Escort ( Heavy Escort )
+ship_section_template = {
+  key = "strike_stern_2"
+  ship_size = strike
+  fits_on_slot = stern
+  entity = "strike_coreA_entity"
+  icon = "GFX_ship_part_core_mid"
+  icon_frame = 1
+  prerequisites = { tech_engineering_bird-of-prey_716 }
+  cost = 440
+  small_utility_slots = 0
+  medium_utility_slots = 0
+  large_utility_slots = 0
+  aux_utility_slots = 0
+  ai_weight = { factor = 10 }
+  component_slot = {
+    name = "LARGE_GUN_01"
+    slot_size = large
+    slot_type = weapon
+    locatorname = "medium_gun_01"
+  }
+  component_slot = {
+    name = "LARGE_GUN_02"
+    slot_size = large
+    slot_type = weapon
+    locatorname = "medium_gun_02"
+  }
+  component_slot = {
+    name = "LARGE_GUN_03"
+    slot_size = large
+    slot_type = weapon
+    locatorname = "medium_gun_03"
+  }
+  component_slot = {
+    name = "LARGE_GUN_04"
+    slot_size = large
+    slot_type = weapon
+    locatorname = "medium_gun_04"
+  }
+  component_slot = {
+    name = "EXTRA_LARGE_01"
+    slot_size = extra_large
+    slot_type = weapon
+    locatorname = "medium_gun_01"
+  }
+  component_slot = {
+    name = "EXTRA_LARGE_02"
+    slot_size = extra_large
+    slot_type = weapon
+    locatorname = "medium_gun_02"
+  }
+  component_slot = {
+    name = "EXTRA_LARGE_03"
+    slot_size = extra_large
+    slot_type = weapon
+    locatorname = "medium_gun_03"
+  }
+  component_slot = {
+    name = "SMALL_GUN_1"
+    slot_size = point_defence
+    slot_type = weapon
+    locatorname = "large_gun_01"
+  }
+  component_slot = {
+    name = "SMALL_GUN_2"
+    slot_size = point_defence
+    slot_type = weapon
+    locatorname = "large_gun_02"
+  }
+  component_slot = {
+    name = "SMALL_GUN_3"
+    slot_size = point_defence
+    slot_type = weapon
+    locatorname = "large_gun_03"
+  }
+  component_slot = {
+    name = "SMALL_GUN_4"
+    slot_size = point_defence
+    slot_type = weapon
+    locatorname = "large_gun_04"
+  }
+}
+# Bach'Hich Escort ( Heavy Escort )
+ship_section_template = {
+  key = "strike_stern_3"
+  ship_size = strike
+  fits_on_slot = stern
+  entity = "strike_coreA_entity"
+  icon = "GFX_ship_part_core_mid"
+  icon_frame = 1
+  prerequisites = { tech_physics_space-fitted_205 }
+  cost = 770
+  small_utility_slots = 0
+  medium_utility_slots = 0
+  large_utility_slots = 0
+  aux_utility_slots = 0
+  ai_weight = { factor = 15 }
+  component_slot = {
+    name = "MEDIUM_GUN_01"
+    slot_size = medium
+    slot_type = weapon
+    locatorname = "medium_gun_01"
+  }
+  component_slot = {
+    name = "MEDIUM_GUN_02"
+    slot_size = medium
+    slot_type = weapon
+    locatorname = "medium_gun_02"
+  }
+  component_slot = {
+    name = "MEDIUM_GUN_03"
+    slot_size = medium
+    slot_type = weapon
+    locatorname = "medium_gun_03"
+  }
+  component_slot = {
+    name = "LARGE_GUN_01"
+    slot_size = large
+    slot_type = weapon
+    locatorname = "medium_gun_01"
+  }
+  component_slot = {
+    name = "LARGE_GUN_02"
+    slot_size = large
+    slot_type = weapon
+    locatorname = "medium_gun_02"
+  }
+  component_slot = {
+    name = "SMALL_GUN_1"
+    slot_size = point_defence
+    slot_type = weapon
+    locatorname = "large_gun_01"
+  }
+  component_slot = {
+    name = "SMALL_GUN_2"
+    slot_size = point_defence
+    slot_type = weapon
+    locatorname = "large_gun_02"
+  }
+}
+# Phase Disruptor Weapon Retrofit ( Heavy Escort )
+ship_section_template = {
+  key = "strike_stern_4"
+  ship_size = strike
+  fits_on_slot = stern
+  entity = "strike_coreA_entity"
+  icon = "GFX_ship_part_core_mid"
+  icon_frame = 1
+  prerequisites = { tech_physics_phase-resonance_213 }
+  cost = 400
+  small_utility_slots = 0
+  medium_utility_slots = 0
+  large_utility_slots = 0
+  aux_utility_slots = 0
+  ai_weight = { factor = 5 }
+  component_slot = {
+    name = "MEDIUM_GUN_01"
+    slot_size = medium
+    slot_type = weapon
+    locatorname = "medium_gun_01"
+  }
+  component_slot = {
+    name = "MEDIUM_GUN_02"
+    slot_size = medium
+    slot_type = weapon
+    locatorname = "medium_gun_02"
+  }
+  component_slot = {
+    name = "MEDIUM_GUN_03"
+    slot_size = medium
+    slot_type = weapon
+    locatorname = "medium_gun_03"
+  }
+  component_slot = {
+    name = "SMALL_GUN_1"
+    slot_size = point_defence
+    slot_type = weapon
+    locatorname = "large_gun_01"
+  }
+}
+# Assault Disruptor Weapon Retrofit ( Heavy Escort )
+ship_section_template = {
+  key = "strike_stern_5"
+  ship_size = strike
+  fits_on_slot = stern
+  entity = "strike_coreA_entity"
+  icon = "GFX_ship_part_core_mid"
+  icon_frame = 1
+  prerequisites = { tech_physics_type-1_215 }
+  cost = 400
+  small_utility_slots = 0
+  medium_utility_slots = 0
+  large_utility_slots = 0
+  aux_utility_slots = 0
+  ai_weight = { factor = 5 }
+  component_slot = {
+    name = "EXTRA_LARGE_01"
+    slot_size = extra_large
+    slot_type = weapon
+    locatorname = "medium_gun_01"
+  }
+  component_slot = {
+    name = "EXTRA_LARGE_02"
+    slot_size = extra_large
+    slot_type = weapon
+    locatorname = "medium_gun_02"
+  }
+  component_slot = {
+    name = "EXTRA_LARGE_03"
+    slot_size = extra_large
+    slot_type = weapon
+    locatorname = "medium_gun_03"
+  }
+  component_slot = {
+    name = "EXTRA_LARGE_04"
+    slot_size = extra_large
+    slot_type = weapon
+    locatorname = "medium_gun_04"
+  }
+  component_slot = {
+    name = "SMALL_GUN_1"
+    slot_size = point_defence
+    slot_type = weapon
+    locatorname = "large_gun_01"
+  }
+  component_slot = {
+    name = "SMALL_GUN_2"
+    slot_size = point_defence
+    slot_type = weapon
+    locatorname = "large_gun_02"
+  }
+}
+# Magnetic Plasma Beam Weapon Retrofit ( Heavy Escort )
+ship_section_template = {
+  key = "strike_stern_6"
+  ship_size = strike
+  fits_on_slot = stern
+  entity = "strike_coreA_entity"
+  icon = "GFX_ship_part_core_mid"
+  icon_frame = 1
+  prerequisites = { tech_physics_magnetic-constraint_246 }
+  cost = 400
+  small_utility_slots = 0
+  medium_utility_slots = 0
+  large_utility_slots = 0
+  aux_utility_slots = 0
+  ai_weight = { factor = 5 }
+  component_slot = {
+    name = "MEDIUM_GUN_01"
+    slot_size = medium
+    slot_type = weapon
+    locatorname = "medium_gun_01"
+  }
+  component_slot = {
+    name = "MEDIUM_GUN_02"
+    slot_size = medium
+    slot_type = weapon
+    locatorname = "medium_gun_02"
+  }
+  component_slot = {
+    name = "MEDIUM_GUN_03"
+    slot_size = medium
+    slot_type = weapon
+    locatorname = "medium_gun_03"
+  }
+  component_slot = {
+    name = "SMALL_GUN_1"
+    slot_size = point_defence
+    slot_type = weapon
+    locatorname = "large_gun_01"
+  }
+}
+# Positron Cannon Weapon Retrofit ( Heavy Escort )
+ship_section_template = {
+  key = "strike_stern_7"
+  ship_size = strike
+  fits_on_slot = stern
+  entity = "strike_coreA_entity"
+  icon = "GFX_ship_part_core_mid"
+  icon_frame = 1
+  prerequisites = { tech_physics_positron_270 }
+  cost = 400
+  small_utility_slots = 0
+  medium_utility_slots = 0
+  large_utility_slots = 0
+  aux_utility_slots = 0
+  ai_weight = { factor = 5 }
+  component_slot = {
+    name = "EXTRA_LARGE_01"
+    slot_size = extra_large
+    slot_type = weapon
+    locatorname = "medium_gun_01"
+  }
+  component_slot = {
+    name = "EXTRA_LARGE_02"
+    slot_size = extra_large
+    slot_type = weapon
+    locatorname = "medium_gun_02"
+  }
+  component_slot = {
+    name = "EXTRA_LARGE_03"
+    slot_size = extra_large
+    slot_type = weapon
+    locatorname = "medium_gun_03"
+  }
+  component_slot = {
+    name = "EXTRA_LARGE_04"
+    slot_size = extra_large
+    slot_type = weapon
+    locatorname = "medium_gun_04"
+  }
+  component_slot = {
+    name = "SMALL_GUN_1"
+    slot_size = point_defence
+    slot_type = weapon
+    locatorname = "large_gun_01"
+  }
+  component_slot = {
+    name = "SMALL_GUN_2"
+    slot_size = point_defence
+    slot_type = weapon
+    locatorname = "large_gun_02"
+  }
+}
+# Graviton Beam Weapon Retrofit ( Heavy Escort )
+ship_section_template = {
+  key = "strike_stern_8"
+  ship_size = strike
+  fits_on_slot = stern
+  entity = "strike_coreA_entity"
+  icon = "GFX_ship_part_core_mid"
+  icon_frame = 1
+  prerequisites = { tech_physics_graviton_326 }
+  cost = 400
+  small_utility_slots = 0
+  medium_utility_slots = 0
+  large_utility_slots = 0
+  aux_utility_slots = 0
+  ai_weight = { factor = 5 }
+  component_slot = {
+    name = "MEDIUM_GUN_01"
+    slot_size = medium
+    slot_type = weapon
+    locatorname = "medium_gun_01"
+  }
+  component_slot = {
+    name = "MEDIUM_GUN_02"
+    slot_size = medium
+    slot_type = weapon
+    locatorname = "medium_gun_02"
+  }
+  component_slot = {
+    name = "MEDIUM_GUN_03"
+    slot_size = medium
+    slot_type = weapon
+    locatorname = "medium_gun_03"
+  }
+  component_slot = {
+    name = "SMALL_GUN_1"
+    slot_size = point_defence
+    slot_type = weapon
+    locatorname = "large_gun_01"
+  }
+}
+# Gunboat ( Heavy Escort )
+ship_section_template = {
+  key = "strike_stern_9"
+  ship_size = strike
+  fits_on_slot = stern
+  entity = "strike_coreA_entity"
+  icon = "GFX_ship_part_core_mid"
+  icon_frame = 1
+  prerequisites = { tech_engineering_next-level_719 }
+  cost = 770
+  small_utility_slots = 0
+  medium_utility_slots = 0
+  large_utility_slots = 0
+  aux_utility_slots = 0
+  ai_weight = { factor = 15 }
+  component_slot = {
+    name = "SMALL_GUN_01"
+    slot_size = small
+    slot_type = weapon
+    locatorname = "small_gun_01"
+  }
+  component_slot = {
+    name = "SMALL_GUN_02"
+    slot_size = small
+    slot_type = weapon
+    locatorname = "small_gun_02"
+  }
+  component_slot = {
+    name = "SMALL_GUN_03"
+    slot_size = small
+    slot_type = weapon
+    locatorname = "small_gun_03"
+  }
+  component_slot = {
+    name = "SMALL_GUN_04"
+    slot_size = small
+    slot_type = weapon
+    locatorname = "small_gun_04"
+  }
+  component_slot = {
+    name = "SMALL_GUN_05"
+    slot_size = small
+    slot_type = weapon
+    locatorname = "small_gun_05"
+  }
+  component_slot = {
+    name = "MEDIUM_GUN_01"
+    slot_size = medium
+    slot_type = weapon
+    locatorname = "medium_gun_01"
+  }
+  component_slot = {
+    name = "MEDIUM_GUN_02"
+    slot_size = medium
+    slot_type = weapon
+    locatorname = "medium_gun_02"
+  }
+  component_slot = {
+    name = "SMALL_GUN_1"
+    slot_size = point_defence
+    slot_type = weapon
+    locatorname = "large_gun_01"
+  }
+  component_slot = {
+    name = "SMALL_GUN_2"
+    slot_size = point_defence
+    slot_type = weapon
+    locatorname = "large_gun_02"
+  }
+  component_slot = {
+    name = "SMALL_GUN_3"
+    slot_size = point_defence
+    slot_type = weapon
+    locatorname = "large_gun_03"
+  }
+}
+# Gunboat ( Heavy Escort )
+ship_section_template = {
+  key = "strike_stern_10"
+  ship_size = strike
+  fits_on_slot = stern
+  entity = "strike_coreA_entity"
+  icon = "GFX_ship_part_core_mid"
+  icon_frame = 1
+  prerequisites = { tech_engineering_next-level_725 }
+  cost = 770
+  small_utility_slots = 0
+  medium_utility_slots = 0
+  large_utility_slots = 0
+  aux_utility_slots = 0
+  ai_weight = { factor = 15 }
+  component_slot = {
+    name = "LARGE_GUN_01"
+    slot_size = large
+    slot_type = weapon
+    locatorname = "medium_gun_01"
+  }
+  component_slot = {
+    name = "LARGE_GUN_02"
+    slot_size = large
+    slot_type = weapon
+    locatorname = "medium_gun_02"
+  }
+  component_slot = {
+    name = "LARGE_GUN_03"
+    slot_size = large
+    slot_type = weapon
+    locatorname = "medium_gun_03"
+  }
+  component_slot = {
+    name = "LARGE_GUN_04"
+    slot_size = large
+    slot_type = weapon
+    locatorname = "medium_gun_04"
+  }
+  component_slot = {
+    name = "LARGE_GUN_05"
+    slot_size = large
+    slot_type = weapon
+    locatorname = "medium_gun_05"
+  }
+  component_slot = {
+    name = "LARGE_GUN_06"
+    slot_size = large
+    slot_type = weapon
+    locatorname = "medium_gun_06"
+  }
+  component_slot = {
+    name = "LARGE_GUN_07"
+    slot_size = large
+    slot_type = weapon
+    locatorname = "medium_gun_01"
+  }
+  component_slot = {
+    name = "LARGE_GUN_08"
+    slot_size = large
+    slot_type = weapon
+    locatorname = "medium_gun_02"
+  }
+  component_slot = {
+    name = "LARGE_GUN_09"
+    slot_size = large
+    slot_type = weapon
+    locatorname = "medium_gun_03"
+  }
+  component_slot = {
+    name = "LARGE_GUN_010"
+    slot_size = large
+    slot_type = weapon
+    locatorname = "medium_gun_04"
+  }
+  component_slot = {
+    name = "EXTRA_LARGE_01"
+    slot_size = extra_large
+    slot_type = weapon
+    locatorname = "medium_gun_01"
+  }
+  component_slot = {
+    name = "EXTRA_LARGE_02"
+    slot_size = extra_large
+    slot_type = weapon
+    locatorname = "medium_gun_02"
+  }
+  component_slot = {
+    name = "EXTRA_LARGE_03"
+    slot_size = extra_large
+    slot_type = weapon
+    locatorname = "medium_gun_03"
+  }
+  component_slot = {
+    name = "SMALL_GUN_1"
+    slot_size = point_defence
+    slot_type = weapon
+    locatorname = "large_gun_01"
+  }
+  component_slot = {
+    name = "SMALL_GUN_2"
+    slot_size = point_defence
+    slot_type = weapon
+    locatorname = "large_gun_02"
+  }
+  component_slot = {
+    name = "SMALL_GUN_3"
+    slot_size = point_defence
+    slot_type = weapon
+    locatorname = "large_gun_03"
+  }
+}
+# Heavy Escort ( Heavy Escort )
+ship_section_template = {
+  key = "strike_stern_11"
+  ship_size = strike
+  fits_on_slot = stern
+  entity = "strike_coreA_entity"
+  icon = "GFX_ship_part_core_mid"
+  icon_frame = 1
+  prerequisites = { tech_engineering_next-level_719 }
+  cost = 770
+  small_utility_slots = 0
+  medium_utility_slots = 0
+  large_utility_slots = 0
+  aux_utility_slots = 0
+  ai_weight = { factor = 15 }
+  component_slot = {
+    name = "SMALL_GUN_01"
+    slot_size = small
+    slot_type = weapon
+    locatorname = "small_gun_01"
+  }
+  component_slot = {
+    name = "SMALL_GUN_02"
+    slot_size = small
+    slot_type = weapon
+    locatorname = "small_gun_02"
+  }
+  component_slot = {
+    name = "MEDIUM_GUN_01"
+    slot_size = medium
+    slot_type = weapon
+    locatorname = "medium_gun_01"
+  }
+  component_slot = {
+    name = "TORPEDO_01"
+    slot_size = torpedo
+    slot_type = weapon
+    locatorname = "large_gun_01"
+  }
+  component_slot = {
+    name = "SMALL_GUN_1"
+    slot_size = point_defence
+    slot_type = weapon
+    locatorname = "large_gun_01"
+  }
+  component_slot = {
+    name = "SMALL_GUN_2"
+    slot_size = point_defence
+    slot_type = weapon
+    locatorname = "large_gun_02"
+  }
+  component_slot = {
+    name = "SMALL_GUN_3"
+    slot_size = point_defence
+    slot_type = weapon
+    locatorname = "large_gun_03"
+  }
+  component_slot = {
+    name = "SMALL_GUN_4"
+    slot_size = point_defence
+    slot_type = weapon
+    locatorname = "large_gun_04"
+  }
+  component_slot = {
+    name = "SMALL_GUN_5"
+    slot_size = point_defence
+    slot_type = weapon
+    locatorname = "large_gun_05"
+  }
+}
+# Heavy Escort ( Heavy Escort )
+ship_section_template = {
+  key = "strike_stern_12"
+  ship_size = strike
+  fits_on_slot = stern
+  entity = "strike_coreA_entity"
+  icon = "GFX_ship_part_core_mid"
+  icon_frame = 1
+  prerequisites = { tech_engineering_next-level_725 }
+  cost = 770
+  small_utility_slots = 0
+  medium_utility_slots = 0
+  large_utility_slots = 0
+  aux_utility_slots = 0
+  ai_weight = { factor = 15 }
+  component_slot = {
+    name = "TORPEDO_01"
+    slot_size = torpedo
+    slot_type = weapon
+    locatorname = "large_gun_01"
+  }
+  component_slot = {
+    name = "EXTRA_LARGE_01"
+    slot_size = extra_large
+    slot_type = weapon
+    locatorname = "medium_gun_01"
+  }
+  component_slot = {
+    name = "EXTRA_LARGE_02"
+    slot_size = extra_large
+    slot_type = weapon
+    locatorname = "medium_gun_02"
+  }
+  component_slot = {
+    name = "SMALL_GUN_1"
+    slot_size = point_defence
+    slot_type = weapon
+    locatorname = "large_gun_01"
+  }
+  component_slot = {
+    name = "SMALL_GUN_2"
+    slot_size = point_defence
+    slot_type = weapon
+    locatorname = "large_gun_02"
+  }
+  component_slot = {
+    name = "SMALL_GUN_3"
+    slot_size = point_defence
+    slot_type = weapon
+    locatorname = "large_gun_03"
+  }
+  component_slot = {
+    name = "SMALL_GUN_4"
+    slot_size = point_defence
+    slot_type = weapon
+    locatorname = "large_gun_04"
+  }
+  component_slot = {
+    name = "SMALL_GUN_5"
+    slot_size = point_defence
+    slot_type = weapon
+    locatorname = "large_gun_05"
+  }
+}
+# Heavy Cannon Platform Dedicated Section ( Heavy Escort )
+ship_section_template = {
+  key = "strike_stern_13"
+  ship_size = strike
+  fits_on_slot = stern
+  entity = "strike_coreA_entity"
+  icon = "GFX_ship_part_core_mid"
+  icon_frame = 1
+  prerequisites = { tech_physics_particles_334 }
+  cost = 1120
+  small_utility_slots = 0
+  medium_utility_slots = 0
+  large_utility_slots = 0
+  aux_utility_slots = 0
+  ai_weight = { factor = 20 }
+  component_slot = {
+    name = "LARGE_GUN_01"
+    slot_size = large
+    slot_type = weapon
+    locatorname = "medium_gun_01"
+  }
+  component_slot = {
+    name = "LARGE_GUN_02"
+    slot_size = large
+    slot_type = weapon
+    locatorname = "medium_gun_02"
+  }
+  component_slot = {
+    name = "LARGE_GUN_03"
+    slot_size = large
+    slot_type = weapon
+    locatorname = "medium_gun_03"
+  }
+  component_slot = {
+    name = "LARGE_GUN_04"
+    slot_size = large
+    slot_type = weapon
+    locatorname = "medium_gun_04"
+  }
+  component_slot = {
+    name = "EXTRA_LARGE_01"
+    slot_size = extra_large
+    slot_type = weapon
+    locatorname = "medium_gun_01"
+  }
+  component_slot = {
+    name = "EXTRA_LARGE_02"
+    slot_size = extra_large
+    slot_type = weapon
+    locatorname = "medium_gun_02"
+  }
+  component_slot = {
+    name = "EXTRA_LARGE_03"
+    slot_size = extra_large
+    slot_type = weapon
+    locatorname = "medium_gun_03"
+  }
+  component_slot = {
+    name = "EXTRA_LARGE_04"
+    slot_size = extra_large
+    slot_type = weapon
+    locatorname = "medium_gun_04"
+  }
+  component_slot = {
+    name = "SMALL_GUN_1"
+    slot_size = point_defence
+    slot_type = weapon
+    locatorname = "large_gun_01"
+  }
+  component_slot = {
+    name = "SMALL_GUN_2"
+    slot_size = point_defence
+    slot_type = weapon
+    locatorname = "large_gun_02"
+  }
+  component_slot = {
+    name = "SMALL_GUN_3"
+    slot_size = point_defence
+    slot_type = weapon
+    locatorname = "large_gun_03"
+  }
+}
+# Defiant-Class ( Heavy Escort )
+ship_section_template = {
+  key = "strike_stern_14"
+  ship_size = strike
+  fits_on_slot = stern
+  entity = "strike_coreA_entity"
+  icon = "GFX_ship_part_core_mid"
+  icon_frame = 1
+  prerequisites = { tech_physics_particles_407 }
+  cost = 1500
+  small_utility_slots = 0
+  medium_utility_slots = 0
+  large_utility_slots = 0
+  aux_utility_slots = 0
+  ai_weight = { factor = 25 }
+  component_slot = {
+    name = "TORPEDO_01"
+    slot_size = torpedo
+    slot_type = weapon
+    locatorname = "large_gun_01"
+  }
+  component_slot = {
+    name = "EXTRA_LARGE_01"
+    slot_size = extra_large
+    slot_type = weapon
+    locatorname = "medium_gun_01"
+  }
+  component_slot = {
+    name = "EXTRA_LARGE_02"
+    slot_size = extra_large
+    slot_type = weapon
+    locatorname = "medium_gun_02"
+  }
+  component_slot = {
+    name = "EXTRA_LARGE_03"
+    slot_size = extra_large
+    slot_type = weapon
+    locatorname = "medium_gun_03"
+  }
+  component_slot = {
+    name = "EXTRA_LARGE_04"
+    slot_size = extra_large
+    slot_type = weapon
+    locatorname = "medium_gun_04"
+  }
+  component_slot = {
+    name = "SMALL_GUN_1"
+    slot_size = point_defence
+    slot_type = weapon
+    locatorname = "large_gun_01"
+  }
+  component_slot = {
+    name = "SMALL_GUN_2"
+    slot_size = point_defence
+    slot_type = weapon
+    locatorname = "large_gun_02"
+  }
+}
+# Prometheus-Class ( Heavy Escort )
+ship_section_template = {
+  key = "strike_stern_15"
+  ship_size = strike
+  fits_on_slot = stern
+  entity = "strike_coreC_entity"
+  icon = "GFX_ship_part_core_mid"
+  icon_frame = 1
+  prerequisites = { tech_engineering_multi-vector_551 }
+  cost = 1910
+  small_utility_slots = 0
+  medium_utility_slots = 0
+  large_utility_slots = 0
+  aux_utility_slots = 0
+  ai_weight = { factor = 30 }
+  component_slot = {
+    name = "MEDIUM_GUN_01"
+    slot_size = medium
+    slot_type = weapon
+    locatorname = "medium_gun_01"
+  }
+  component_slot = {
+    name = "MEDIUM_GUN_02"
+    slot_size = medium
+    slot_type = weapon
+    locatorname = "medium_gun_02"
+  }
+  component_slot = {
+    name = "MEDIUM_GUN_03"
+    slot_size = medium
+    slot_type = weapon
+    locatorname = "medium_gun_03"
+  }
+  component_slot = {
+    name = "MEDIUM_GUN_04"
+    slot_size = medium
+    slot_type = weapon
+    locatorname = "medium_gun_04"
+  }
+  component_slot = {
+    name = "SMALL_GUN_1"
+    slot_size = point_defence
+    slot_type = weapon
+    locatorname = "large_gun_01"
+  }
+}
+# Secondary Hull ( Heavy Escort )
+ship_section_template = {
+  key = "strike_mid_16"
+  ship_size = strike
+  fits_on_slot = mid
+  entity = "strike_entity"
+  icon = "GFX_ship_part_core_mid"
+  icon_frame = 1
+  prerequisites = { tech_engineering_heavy_545 }
+  cost = 220
+  small_utility_slots = 1
+  medium_utility_slots = 3
+  large_utility_slots = 0
+  aux_utility_slots = 1
+  ai_weight = { factor = 10 }
+}
+# Tactical Escort ( Heavy Escort )
+ship_section_template = {
+  key = "strike_mid_17"
+  ship_size = strike
+  fits_on_slot = mid
+  entity = "strike_entity"
+  icon = "GFX_ship_part_core_mid"
+  icon_frame = 1
+  prerequisites = { tech_ship_program }
+  cost = 250
+  small_utility_slots = 1
+  medium_utility_slots = 4
+  large_utility_slots = 0
+  aux_utility_slots = 1
+  ai_weight = { factor = 20 }
+}
+# Engineering Escort ( Heavy Escort )
+ship_section_template = {
+  key = "strike_mid_18"
+  ship_size = strike
+  fits_on_slot = mid
+  entity = "strike_entity"
+  icon = "GFX_ship_part_core_mid"
+  icon_frame = 1
+  prerequisites = { tech_ship_program }
+  cost = 250
+  small_utility_slots = 2
+  medium_utility_slots = 3
+  large_utility_slots = 0
+  aux_utility_slots = 1
+  ai_weight = { factor = 20 }
+}
+# Support Escort ( Heavy Escort )
+ship_section_template = {
+  key = "strike_mid_19"
+  ship_size = strike
+  fits_on_slot = mid
+  entity = "strike_entity"
+  icon = "GFX_ship_part_core_mid"
+  icon_frame = 1
+  prerequisites = { tech_ship_program }
+  cost = 250
+  small_utility_slots = 1
+  medium_utility_slots = 3
+  large_utility_slots = 1
+  aux_utility_slots = 1
+  ai_weight = { factor = 20 }
+}
+# Advanced Tactical Heavy Escort ( Heavy Escort )
+ship_section_template = {
+  key = "strike_mid_20"
+  ship_size = strike
+  fits_on_slot = mid
+  entity = "strike_entity"
+  icon = "GFX_ship_part_core_mid"
+  icon_frame = 1
+  prerequisites = { tech_engineering_advanced_711 }
+  cost = 480
+  small_utility_slots = 1
+  medium_utility_slots = 5
+  large_utility_slots = 0
+  aux_utility_slots = 1
+  ai_weight = { factor = 30 }
+}
+# Advanced Engineering Heavy Escort ( Heavy Escort )
+ship_section_template = {
+  key = "strike_mid_21"
+  ship_size = strike
+  fits_on_slot = mid
+  entity = "strike_entity"
+  icon = "GFX_ship_part_core_mid"
+  icon_frame = 1
+  prerequisites = { tech_engineering_advanced_712 }
+  cost = 480
+  small_utility_slots = 3
+  medium_utility_slots = 3
+  large_utility_slots = 0
+  aux_utility_slots = 1
+  ai_weight = { factor = 30 }
+}
+# Advanced Support Heavy Escort ( Heavy Escort )
+ship_section_template = {
+  key = "strike_mid_22"
+  ship_size = strike
+  fits_on_slot = mid
+  entity = "strike_entity"
+  icon = "GFX_ship_part_core_mid"
+  icon_frame = 1
+  prerequisites = { tech_engineering_advanced_713 }
+  cost = 480
+  small_utility_slots = 1
+  medium_utility_slots = 3
+  large_utility_slots = 2
+  aux_utility_slots = 1
+  ai_weight = { factor = 30 }
+}
+
+
+
+
+
+# Assault Cruiser ( Assault Cruiser )
+ship_section_template = {
+  key = "assault_cruiser_stern_1"
+  ship_size = assault_cruiser
+  fits_on_slot = stern
+  entity = "assault_cruiser_coreA_entity"
+  icon = "GFX_ship_part_core_mid"
+  icon_frame = 1
+  prerequisites = { tech_engineering_starship-class_717 }
+  cost = 750
+  small_utility_slots = 0
+  medium_utility_slots = 0
+  large_utility_slots = 0
+  aux_utility_slots = 0
+  ai_weight = { factor = 10 }
+  component_slot = {
+    name = "SMALL_GUN_01"
+    slot_size = small
+    slot_type = weapon
+    locatorname = "small_gun_01"
+  }
+  component_slot = {
+    name = "SMALL_GUN_02"
+    slot_size = small
+    slot_type = weapon
+    locatorname = "small_gun_02"
+  }
+  component_slot = {
+    name = "SMALL_GUN_03"
+    slot_size = small
+    slot_type = weapon
+    locatorname = "small_gun_03"
+  }
+  component_slot = {
+    name = "MEDIUM_GUN_01"
+    slot_size = medium
+    slot_type = weapon
+    locatorname = "medium_gun_01"
+  }
+  component_slot = {
+    name = "MEDIUM_GUN_02"
+    slot_size = medium
+    slot_type = weapon
+    locatorname = "medium_gun_02"
+  }
+  component_slot = {
+    name = "MEDIUM_GUN_03"
+    slot_size = medium
+    slot_type = weapon
+    locatorname = "medium_gun_03"
+  }
+  component_slot = {
+    name = "TORPEDO_01"
+    slot_size = torpedo
+    slot_type = weapon
+    locatorname = "large_gun_01"
+  }
+  component_slot = {
+    name = "SMALL_GUN_1"
+    slot_size = point_defence
+    slot_type = weapon
+    locatorname = "large_gun_01"
+  }
+  component_slot = {
+    name = "SMALL_GUN_2"
+    slot_size = point_defence
+    slot_type = weapon
+    locatorname = "large_gun_02"
+  }
+}
+# Assault Cruiser ( Assault Cruiser )
+ship_section_template = {
+  key = "assault_cruiser_stern_2"
+  ship_size = assault_cruiser
+  fits_on_slot = stern
+  entity = "assault_cruiser_coreA_entity"
+  icon = "GFX_ship_part_core_mid"
+  icon_frame = 1
+  prerequisites = { tech_engineering_bird-of-prey_716 }
+  cost = 750
+  small_utility_slots = 0
+  medium_utility_slots = 0
+  large_utility_slots = 0
+  aux_utility_slots = 0
+  ai_weight = { factor = 10 }
+  component_slot = {
+    name = "LARGE_GUN_01"
+    slot_size = large
+    slot_type = weapon
+    locatorname = "medium_gun_01"
+  }
+  component_slot = {
+    name = "LARGE_GUN_02"
+    slot_size = large
+    slot_type = weapon
+    locatorname = "medium_gun_02"
+  }
+  component_slot = {
+    name = "LARGE_GUN_03"
+    slot_size = large
+    slot_type = weapon
+    locatorname = "medium_gun_03"
+  }
+  component_slot = {
+    name = "LARGE_GUN_04"
+    slot_size = large
+    slot_type = weapon
+    locatorname = "medium_gun_04"
+  }
+  component_slot = {
+    name = "LARGE_GUN_05"
+    slot_size = large
+    slot_type = weapon
+    locatorname = "medium_gun_05"
+  }
+  component_slot = {
+    name = "LARGE_GUN_06"
+    slot_size = large
+    slot_type = weapon
+    locatorname = "medium_gun_06"
+  }
+  component_slot = {
+    name = "LARGE_GUN_07"
+    slot_size = large
+    slot_type = weapon
+    locatorname = "medium_gun_01"
+  }
+  component_slot = {
+    name = "LARGE_GUN_08"
+    slot_size = large
+    slot_type = weapon
+    locatorname = "medium_gun_02"
+  }
+  component_slot = {
+    name = "LARGE_GUN_09"
+    slot_size = large
+    slot_type = weapon
+    locatorname = "medium_gun_03"
+  }
+  component_slot = {
+    name = "LARGE_GUN_010"
+    slot_size = large
+    slot_type = weapon
+    locatorname = "medium_gun_04"
+  }
+  component_slot = {
+    name = "TORPEDO_01"
+    slot_size = torpedo
+    slot_type = weapon
+    locatorname = "large_gun_01"
+  }
+  component_slot = {
+    name = "EXTRA_LARGE_01"
+    slot_size = extra_large
+    slot_type = weapon
+    locatorname = "medium_gun_01"
+  }
+  component_slot = {
+    name = "EXTRA_LARGE_02"
+    slot_size = extra_large
+    slot_type = weapon
+    locatorname = "medium_gun_02"
+  }
+  component_slot = {
+    name = "EXTRA_LARGE_03"
+    slot_size = extra_large
+    slot_type = weapon
+    locatorname = "medium_gun_03"
+  }
+  component_slot = {
+    name = "EXTRA_LARGE_04"
+    slot_size = extra_large
+    slot_type = weapon
+    locatorname = "medium_gun_04"
+  }
+  component_slot = {
+    name = "SMALL_GUN_1"
+    slot_size = point_defence
+    slot_type = weapon
+    locatorname = "large_gun_01"
+  }
+  component_slot = {
+    name = "SMALL_GUN_2"
+    slot_size = point_defence
+    slot_type = weapon
+    locatorname = "large_gun_02"
+  }
+}
+# Multi-Mission Cruiser ( Assault Cruiser )
+ship_section_template = {
+  key = "assault_cruiser_stern_3"
+  ship_size = assault_cruiser
+  fits_on_slot = stern
+  entity = "assault_cruiser_coreA_entity"
+  icon = "GFX_ship_part_core_mid"
+  icon_frame = 1
+  prerequisites = { tech_engineering_starship-class_717 }
+  cost = 750
+  small_utility_slots = 0
+  medium_utility_slots = 0
+  large_utility_slots = 0
+  aux_utility_slots = 0
+  ai_weight = { factor = 10 }
+  component_slot = {
+    name = "SMALL_GUN_01"
+    slot_size = small
+    slot_type = weapon
+    locatorname = "small_gun_01"
+  }
+  component_slot = {
+    name = "SMALL_GUN_02"
+    slot_size = small
+    slot_type = weapon
+    locatorname = "small_gun_02"
+  }
+  component_slot = {
+    name = "MEDIUM_GUN_01"
+    slot_size = medium
+    slot_type = weapon
+    locatorname = "medium_gun_01"
+  }
+  component_slot = {
+    name = "MEDIUM_GUN_02"
+    slot_size = medium
+    slot_type = weapon
+    locatorname = "medium_gun_02"
+  }
+  component_slot = {
+    name = "MEDIUM_GUN_03"
+    slot_size = medium
+    slot_type = weapon
+    locatorname = "medium_gun_03"
+  }
+  component_slot = {
+    name = "SMALL_GUN_1"
+    slot_size = point_defence
+    slot_type = weapon
+    locatorname = "large_gun_01"
+  }
+  component_slot = {
+    name = "SMALL_GUN_2"
+    slot_size = point_defence
+    slot_type = weapon
+    locatorname = "large_gun_02"
+  }
+  component_slot = {
+    name = "SMALL_GUN_3"
+    slot_size = point_defence
+    slot_type = weapon
+    locatorname = "large_gun_03"
+  }
+  component_slot = {
+    name = "SMALL_GUN_4"
+    slot_size = point_defence
+    slot_type = weapon
+    locatorname = "large_gun_04"
+  }
+  component_slot = {
+    name = "SMALL_GUN_5"
+    slot_size = point_defence
+    slot_type = weapon
+    locatorname = "large_gun_05"
+  }
+}
+# Multi-Mission Cruiser ( Assault Cruiser )
+ship_section_template = {
+  key = "assault_cruiser_stern_4"
+  ship_size = assault_cruiser
+  fits_on_slot = stern
+  entity = "assault_cruiser_coreA_entity"
+  icon = "GFX_ship_part_core_mid"
+  icon_frame = 1
+  prerequisites = { tech_engineering_bird-of-prey_716 }
+  cost = 750
+  small_utility_slots = 0
+  medium_utility_slots = 0
+  large_utility_slots = 0
+  aux_utility_slots = 0
+  ai_weight = { factor = 10 }
+  component_slot = {
+    name = "LARGE_GUN_01"
+    slot_size = large
+    slot_type = weapon
+    locatorname = "medium_gun_01"
+  }
+  component_slot = {
+    name = "LARGE_GUN_02"
+    slot_size = large
+    slot_type = weapon
+    locatorname = "medium_gun_02"
+  }
+  component_slot = {
+    name = "LARGE_GUN_03"
+    slot_size = large
+    slot_type = weapon
+    locatorname = "medium_gun_03"
+  }
+  component_slot = {
+    name = "LARGE_GUN_04"
+    slot_size = large
+    slot_type = weapon
+    locatorname = "medium_gun_04"
+  }
+  component_slot = {
+    name = "LARGE_GUN_05"
+    slot_size = large
+    slot_type = weapon
+    locatorname = "medium_gun_05"
+  }
+  component_slot = {
+    name = "LARGE_GUN_06"
+    slot_size = large
+    slot_type = weapon
+    locatorname = "medium_gun_06"
+  }
+  component_slot = {
+    name = "LARGE_GUN_07"
+    slot_size = large
+    slot_type = weapon
+    locatorname = "medium_gun_01"
+  }
+  component_slot = {
+    name = "LARGE_GUN_08"
+    slot_size = large
+    slot_type = weapon
+    locatorname = "medium_gun_02"
+  }
+  component_slot = {
+    name = "EXTRA_LARGE_01"
+    slot_size = extra_large
+    slot_type = weapon
+    locatorname = "medium_gun_01"
+  }
+  component_slot = {
+    name = "EXTRA_LARGE_02"
+    slot_size = extra_large
+    slot_type = weapon
+    locatorname = "medium_gun_02"
+  }
+  component_slot = {
+    name = "EXTRA_LARGE_03"
+    slot_size = extra_large
+    slot_type = weapon
+    locatorname = "medium_gun_03"
+  }
+  component_slot = {
+    name = "EXTRA_LARGE_04"
+    slot_size = extra_large
+    slot_type = weapon
+    locatorname = "medium_gun_04"
+  }
+  component_slot = {
+    name = "SMALL_GUN_1"
+    slot_size = point_defence
+    slot_type = weapon
+    locatorname = "large_gun_01"
+  }
+  component_slot = {
+    name = "SMALL_GUN_2"
+    slot_size = point_defence
+    slot_type = weapon
+    locatorname = "large_gun_02"
+  }
+  component_slot = {
+    name = "SMALL_GUN_3"
+    slot_size = point_defence
+    slot_type = weapon
+    locatorname = "large_gun_03"
+  }
+  component_slot = {
+    name = "SMALL_GUN_4"
+    slot_size = point_defence
+    slot_type = weapon
+    locatorname = "large_gun_04"
+  }
+  component_slot = {
+    name = "SMALL_GUN_5"
+    slot_size = point_defence
+    slot_type = weapon
+    locatorname = "large_gun_05"
+  }
+}
+# Bach'Hich Attack Cruiser ( Assault Cruiser )
+ship_section_template = {
+  key = "assault_cruiser_stern_5"
+  ship_size = assault_cruiser
+  fits_on_slot = stern
+  entity = "assault_cruiser_coreA_entity"
+  icon = "GFX_ship_part_core_mid"
+  icon_frame = 1
+  prerequisites = { tech_physics_space-fitted_205 }
+  cost = 750
+  small_utility_slots = 0
+  medium_utility_slots = 0
+  large_utility_slots = 0
+  aux_utility_slots = 0
+  ai_weight = { factor = 15 }
+  component_slot = {
+    name = "MEDIUM_GUN_01"
+    slot_size = medium
+    slot_type = weapon
+    locatorname = "medium_gun_01"
+  }
+  component_slot = {
+    name = "MEDIUM_GUN_02"
+    slot_size = medium
+    slot_type = weapon
+    locatorname = "medium_gun_02"
+  }
+  component_slot = {
+    name = "MEDIUM_GUN_03"
+    slot_size = medium
+    slot_type = weapon
+    locatorname = "medium_gun_03"
+  }
+  component_slot = {
+    name = "MEDIUM_GUN_04"
+    slot_size = medium
+    slot_type = weapon
+    locatorname = "medium_gun_04"
+  }
+  component_slot = {
+    name = "SMALL_GUN_1"
+    slot_size = point_defence
+    slot_type = weapon
+    locatorname = "large_gun_01"
+  }
+  component_slot = {
+    name = "SMALL_GUN_2"
+    slot_size = point_defence
+    slot_type = weapon
+    locatorname = "large_gun_02"
+  }
+  component_slot = {
+    name = "SMALL_GUN_3"
+    slot_size = point_defence
+    slot_type = weapon
+    locatorname = "large_gun_03"
+  }
+}
+# Phase Disruptor Weapon Retrofit ( Assault Cruiser )
+ship_section_template = {
+  key = "assault_cruiser_stern_6"
+  ship_size = assault_cruiser
+  fits_on_slot = stern
+  entity = "assault_cruiser_coreA_entity"
+  icon = "GFX_ship_part_core_mid"
+  icon_frame = 1
+  prerequisites = { tech_physics_phase-resonance_213 }
+  cost = 700
+  small_utility_slots = 0
+  medium_utility_slots = 0
+  large_utility_slots = 0
+  aux_utility_slots = 0
+  ai_weight = { factor = 5 }
+  component_slot = {
+    name = "MEDIUM_GUN_01"
+    slot_size = medium
+    slot_type = weapon
+    locatorname = "medium_gun_01"
+  }
+  component_slot = {
+    name = "MEDIUM_GUN_02"
+    slot_size = medium
+    slot_type = weapon
+    locatorname = "medium_gun_02"
+  }
+  component_slot = {
+    name = "MEDIUM_GUN_03"
+    slot_size = medium
+    slot_type = weapon
+    locatorname = "medium_gun_03"
+  }
+  component_slot = {
+    name = "MEDIUM_GUN_04"
+    slot_size = medium
+    slot_type = weapon
+    locatorname = "medium_gun_04"
+  }
+  component_slot = {
+    name = "SMALL_GUN_1"
+    slot_size = point_defence
+    slot_type = weapon
+    locatorname = "large_gun_01"
+  }
+  component_slot = {
+    name = "SMALL_GUN_2"
+    slot_size = point_defence
+    slot_type = weapon
+    locatorname = "large_gun_02"
+  }
+}
+# Assault Disruptor Weapon Retrofit ( Assault Cruiser )
+ship_section_template = {
+  key = "assault_cruiser_stern_7"
+  ship_size = assault_cruiser
+  fits_on_slot = stern
+  entity = "assault_cruiser_coreA_entity"
+  icon = "GFX_ship_part_core_mid"
+  icon_frame = 1
+  prerequisites = { tech_physics_type-1_215 }
+  cost = 700
+  small_utility_slots = 0
+  medium_utility_slots = 0
+  large_utility_slots = 0
+  aux_utility_slots = 0
+  ai_weight = { factor = 5 }
+  component_slot = {
+    name = "EXTRA_LARGE_01"
+    slot_size = extra_large
+    slot_type = weapon
+    locatorname = "medium_gun_01"
+  }
+  component_slot = {
+    name = "EXTRA_LARGE_02"
+    slot_size = extra_large
+    slot_type = weapon
+    locatorname = "medium_gun_02"
+  }
+  component_slot = {
+    name = "EXTRA_LARGE_03"
+    slot_size = extra_large
+    slot_type = weapon
+    locatorname = "medium_gun_03"
+  }
+  component_slot = {
+    name = "EXTRA_LARGE_04"
+    slot_size = extra_large
+    slot_type = weapon
+    locatorname = "medium_gun_04"
+  }
+  component_slot = {
+    name = "EXTRA_LARGE_05"
+    slot_size = extra_large
+    slot_type = weapon
+    locatorname = "medium_gun_05"
+  }
+  component_slot = {
+    name = "EXTRA_LARGE_06"
+    slot_size = extra_large
+    slot_type = weapon
+    locatorname = "medium_gun_06"
+  }
+  component_slot = {
+    name = "SMALL_GUN_1"
+    slot_size = point_defence
+    slot_type = weapon
+    locatorname = "large_gun_01"
+  }
+  component_slot = {
+    name = "SMALL_GUN_2"
+    slot_size = point_defence
+    slot_type = weapon
+    locatorname = "large_gun_02"
+  }
+}
+# Magnetic Plasma Beam Weapon Retrofit ( Assault Cruiser )
+ship_section_template = {
+  key = "assault_cruiser_stern_8"
+  ship_size = assault_cruiser
+  fits_on_slot = stern
+  entity = "assault_cruiser_coreA_entity"
+  icon = "GFX_ship_part_core_mid"
+  icon_frame = 1
+  prerequisites = { tech_physics_magnetic-constraint_246 }
+  cost = 700
+  small_utility_slots = 0
+  medium_utility_slots = 0
+  large_utility_slots = 0
+  aux_utility_slots = 0
+  ai_weight = { factor = 5 }
+  component_slot = {
+    name = "MEDIUM_GUN_01"
+    slot_size = medium
+    slot_type = weapon
+    locatorname = "medium_gun_01"
+  }
+  component_slot = {
+    name = "MEDIUM_GUN_02"
+    slot_size = medium
+    slot_type = weapon
+    locatorname = "medium_gun_02"
+  }
+  component_slot = {
+    name = "MEDIUM_GUN_03"
+    slot_size = medium
+    slot_type = weapon
+    locatorname = "medium_gun_03"
+  }
+  component_slot = {
+    name = "MEDIUM_GUN_04"
+    slot_size = medium
+    slot_type = weapon
+    locatorname = "medium_gun_04"
+  }
+  component_slot = {
+    name = "SMALL_GUN_1"
+    slot_size = point_defence
+    slot_type = weapon
+    locatorname = "large_gun_01"
+  }
+  component_slot = {
+    name = "SMALL_GUN_2"
+    slot_size = point_defence
+    slot_type = weapon
+    locatorname = "large_gun_02"
+  }
+}
+# Positron Cannon Weapon Retrofit ( Assault Cruiser )
+ship_section_template = {
+  key = "assault_cruiser_stern_9"
+  ship_size = assault_cruiser
+  fits_on_slot = stern
+  entity = "assault_cruiser_coreA_entity"
+  icon = "GFX_ship_part_core_mid"
+  icon_frame = 1
+  prerequisites = { tech_physics_positron_270 }
+  cost = 700
+  small_utility_slots = 0
+  medium_utility_slots = 0
+  large_utility_slots = 0
+  aux_utility_slots = 0
+  ai_weight = { factor = 5 }
+  component_slot = {
+    name = "EXTRA_LARGE_01"
+    slot_size = extra_large
+    slot_type = weapon
+    locatorname = "medium_gun_01"
+  }
+  component_slot = {
+    name = "EXTRA_LARGE_02"
+    slot_size = extra_large
+    slot_type = weapon
+    locatorname = "medium_gun_02"
+  }
+  component_slot = {
+    name = "EXTRA_LARGE_03"
+    slot_size = extra_large
+    slot_type = weapon
+    locatorname = "medium_gun_03"
+  }
+  component_slot = {
+    name = "EXTRA_LARGE_04"
+    slot_size = extra_large
+    slot_type = weapon
+    locatorname = "medium_gun_04"
+  }
+  component_slot = {
+    name = "EXTRA_LARGE_05"
+    slot_size = extra_large
+    slot_type = weapon
+    locatorname = "medium_gun_05"
+  }
+  component_slot = {
+    name = "EXTRA_LARGE_06"
+    slot_size = extra_large
+    slot_type = weapon
+    locatorname = "medium_gun_06"
+  }
+  component_slot = {
+    name = "SMALL_GUN_1"
+    slot_size = point_defence
+    slot_type = weapon
+    locatorname = "large_gun_01"
+  }
+  component_slot = {
+    name = "SMALL_GUN_2"
+    slot_size = point_defence
+    slot_type = weapon
+    locatorname = "large_gun_02"
+  }
+}
+# Graviton Beam Weapon Retrofit ( Assault Cruiser )
+ship_section_template = {
+  key = "assault_cruiser_stern_10"
+  ship_size = assault_cruiser
+  fits_on_slot = stern
+  entity = "assault_cruiser_coreA_entity"
+  icon = "GFX_ship_part_core_mid"
+  icon_frame = 1
+  prerequisites = { tech_physics_graviton_326 }
+  cost = 700
+  small_utility_slots = 0
+  medium_utility_slots = 0
+  large_utility_slots = 0
+  aux_utility_slots = 0
+  ai_weight = { factor = 5 }
+  component_slot = {
+    name = "MEDIUM_GUN_01"
+    slot_size = medium
+    slot_type = weapon
+    locatorname = "medium_gun_01"
+  }
+  component_slot = {
+    name = "MEDIUM_GUN_02"
+    slot_size = medium
+    slot_type = weapon
+    locatorname = "medium_gun_02"
+  }
+  component_slot = {
+    name = "MEDIUM_GUN_03"
+    slot_size = medium
+    slot_type = weapon
+    locatorname = "medium_gun_03"
+  }
+  component_slot = {
+    name = "MEDIUM_GUN_04"
+    slot_size = medium
+    slot_type = weapon
+    locatorname = "medium_gun_04"
+  }
+  component_slot = {
+    name = "SMALL_GUN_1"
+    slot_size = point_defence
+    slot_type = weapon
+    locatorname = "large_gun_01"
+  }
+  component_slot = {
+    name = "SMALL_GUN_2"
+    slot_size = point_defence
+    slot_type = weapon
+    locatorname = "large_gun_02"
+  }
+}
+# Secondary Hull ( Assault Cruiser )
+ship_section_template = {
+  key = "assault_cruiser_mid_11"
+  ship_size = assault_cruiser
+  fits_on_slot = mid
+  entity = "assault_cruiser_entity"
+  icon = "GFX_ship_part_core_mid"
+  icon_frame = 1
+  prerequisites = { tech_engineering_assault_546 }
+  cost = 270
+  small_utility_slots = 1
+  medium_utility_slots = 2
+  large_utility_slots = 1
+  aux_utility_slots = 1
+  ai_weight = { factor = 10 }
+}
+# Tactical Assault Cruiser ( Assault Cruiser )
+ship_section_template = {
+  key = "assault_cruiser_mid_12"
+  ship_size = assault_cruiser
+  fits_on_slot = mid
+  entity = "assault_cruiser_entity"
+  icon = "GFX_ship_part_core_mid"
+  icon_frame = 1
+  prerequisites = { tech_ship_program }
+  cost = 450
+  small_utility_slots = 1
+  medium_utility_slots = 6
+  large_utility_slots = 1
+  aux_utility_slots = 1
+  ai_weight = { factor = 20 }
+}
+# Engineering Assault Cruiser ( Assault Cruiser )
+ship_section_template = {
+  key = "assault_cruiser_mid_13"
+  ship_size = assault_cruiser
+  fits_on_slot = mid
+  entity = "assault_cruiser_entity"
+  icon = "GFX_ship_part_core_mid"
+  icon_frame = 1
+  prerequisites = { tech_ship_program }
+  cost = 450
+  small_utility_slots = 5
+  medium_utility_slots = 2
+  large_utility_slots = 1
+  aux_utility_slots = 1
+  ai_weight = { factor = 20 }
+}
+# Support Assault Cruiser ( Assault Cruiser )
+ship_section_template = {
+  key = "assault_cruiser_mid_14"
+  ship_size = assault_cruiser
+  fits_on_slot = mid
+  entity = "assault_cruiser_entity"
+  icon = "GFX_ship_part_core_mid"
+  icon_frame = 1
+  prerequisites = { tech_ship_program }
+  cost = 450
+  small_utility_slots = 1
+  medium_utility_slots = 2
+  large_utility_slots = 5
+  aux_utility_slots = 1
+  ai_weight = { factor = 20 }
+}
+# Advanced Tactical Assault Cruiser ( Assault Cruiser )
+ship_section_template = {
+  key = "assault_cruiser_mid_15"
+  ship_size = assault_cruiser
+  fits_on_slot = mid
+  entity = "assault_cruiser_entity"
+  icon = "GFX_ship_part_core_mid"
+  icon_frame = 1
+  prerequisites = { tech_engineering_advanced_711 }
+  cost = 820
+  small_utility_slots = 1
+  medium_utility_slots = 7
+  large_utility_slots = 1
+  aux_utility_slots = 1
+  ai_weight = { factor = 30 }
+}
+# Advanced Tactical Assailt Cruiser ( Assault Cruiser )
+ship_section_template = {
+  key = "assault_cruiser_mid_16"
+  ship_size = assault_cruiser
+  fits_on_slot = mid
+  entity = "assault_cruiser_entity"
+  icon = "GFX_ship_part_core_mid"
+  icon_frame = 1
+  prerequisites = { tech_engineering_advanced_712 }
+  cost = 820
+  small_utility_slots = 6
+  medium_utility_slots = 2
+  large_utility_slots = 1
+  aux_utility_slots = 1
+  ai_weight = { factor = 30 }
+}
+# Advanced Support Assault Cruiser ( Assault Cruiser )
+ship_section_template = {
+  key = "assault_cruiser_mid_17"
+  ship_size = assault_cruiser
+  fits_on_slot = mid
+  entity = "assault_cruiser_entity"
+  icon = "GFX_ship_part_core_mid"
+  icon_frame = 1
+  prerequisites = { tech_engineering_advanced_713 }
+  cost = 820
+  small_utility_slots = 1
+  medium_utility_slots = 2
+  large_utility_slots = 6
+  aux_utility_slots = 1
+  ai_weight = { factor = 30 }
+}
+
+
+
+
+
+# Dreadnought ( Dreadnought )
+ship_section_template = {
+  key = "super_battleship_stern_1"
+  ship_size = super_battleship
+  fits_on_slot = stern
+  entity = "super_battleship_coreA_entity"
+  icon = "GFX_ship_part_core_mid"
+  icon_frame = 1
+  prerequisites = { tech_engineering_starship-class_717 }
+  cost = 2080
+  small_utility_slots = 0
+  medium_utility_slots = 0
+  large_utility_slots = 0
+  aux_utility_slots = 0
+  ai_weight = { factor = 10 }
+  component_slot = {
+    name = "SMALL_GUN_01"
+    slot_size = small
+    slot_type = weapon
+    locatorname = "small_gun_01"
+  }
+  component_slot = {
+    name = "SMALL_GUN_02"
+    slot_size = small
+    slot_type = weapon
+    locatorname = "small_gun_02"
+  }
+  component_slot = {
+    name = "SMALL_GUN_03"
+    slot_size = small
+    slot_type = weapon
+    locatorname = "small_gun_03"
+  }
+  component_slot = {
+    name = "MEDIUM_GUN_01"
+    slot_size = medium
+    slot_type = weapon
+    locatorname = "medium_gun_01"
+  }
+  component_slot = {
+    name = "MEDIUM_GUN_02"
+    slot_size = medium
+    slot_type = weapon
+    locatorname = "medium_gun_02"
+  }
+  component_slot = {
+    name = "MEDIUM_GUN_03"
+    slot_size = medium
+    slot_type = weapon
+    locatorname = "medium_gun_03"
+  }
+  component_slot = {
+    name = "MEDIUM_GUN_04"
+    slot_size = medium
+    slot_type = weapon
+    locatorname = "medium_gun_04"
+  }
+  component_slot = {
+    name = "TORPEDO_01"
+    slot_size = torpedo
+    slot_type = weapon
+    locatorname = "large_gun_01"
+  }
+  component_slot = {
+    name = "TORPEDO_02"
+    slot_size = torpedo
+    slot_type = weapon
+    locatorname = "large_gun_02"
+  }
+  component_slot = {
+    name = "TORPEDO_03"
+    slot_size = torpedo
+    slot_type = weapon
+    locatorname = "large_gun_03"
+  }
+  component_slot = {
+    name = "SMALL_GUN_1"
+    slot_size = point_defence
+    slot_type = weapon
+    locatorname = "large_gun_01"
+  }
+  component_slot = {
+    name = "SMALL_GUN_2"
+    slot_size = point_defence
+    slot_type = weapon
+    locatorname = "large_gun_02"
+  }
+  component_slot = {
+    name = "SMALL_GUN_3"
+    slot_size = point_defence
+    slot_type = weapon
+    locatorname = "large_gun_03"
+  }
+  component_slot = {
+    name = "SMALL_GUN_4"
+    slot_size = point_defence
+    slot_type = weapon
+    locatorname = "large_gun_04"
+  }
+}
+# Dreadnought ( Dreadnought )
+ship_section_template = {
+  key = "super_battleship_stern_2"
+  ship_size = super_battleship
+  fits_on_slot = stern
+  entity = "super_battleship_coreA_entity"
+  icon = "GFX_ship_part_core_mid"
+  icon_frame = 1
+  prerequisites = { tech_engineering_bird-of-prey_716 }
+  cost = 2080
+  small_utility_slots = 0
+  medium_utility_slots = 0
+  large_utility_slots = 0
+  aux_utility_slots = 0
+  ai_weight = { factor = 10 }
+  component_slot = {
+    name = "LARGE_GUN_01"
+    slot_size = large
+    slot_type = weapon
+    locatorname = "medium_gun_01"
+  }
+  component_slot = {
+    name = "LARGE_GUN_02"
+    slot_size = large
+    slot_type = weapon
+    locatorname = "medium_gun_02"
+  }
+  component_slot = {
+    name = "LARGE_GUN_03"
+    slot_size = large
+    slot_type = weapon
+    locatorname = "medium_gun_03"
+  }
+  component_slot = {
+    name = "LARGE_GUN_04"
+    slot_size = large
+    slot_type = weapon
+    locatorname = "medium_gun_04"
+  }
+  component_slot = {
+    name = "LARGE_GUN_05"
+    slot_size = large
+    slot_type = weapon
+    locatorname = "medium_gun_05"
+  }
+  component_slot = {
+    name = "LARGE_GUN_06"
+    slot_size = large
+    slot_type = weapon
+    locatorname = "medium_gun_06"
+  }
+  component_slot = {
+    name = "TORPEDO_01"
+    slot_size = torpedo
+    slot_type = weapon
+    locatorname = "large_gun_01"
+  }
+  component_slot = {
+    name = "TORPEDO_02"
+    slot_size = torpedo
+    slot_type = weapon
+    locatorname = "large_gun_02"
+  }
+  component_slot = {
+    name = "TORPEDO_03"
+    slot_size = torpedo
+    slot_type = weapon
+    locatorname = "large_gun_03"
+  }
+  component_slot = {
+    name = "EXTRA_LARGE_01"
+    slot_size = extra_large
+    slot_type = weapon
+    locatorname = "medium_gun_01"
+  }
+  component_slot = {
+    name = "EXTRA_LARGE_02"
+    slot_size = extra_large
+    slot_type = weapon
+    locatorname = "medium_gun_02"
+  }
+  component_slot = {
+    name = "EXTRA_LARGE_03"
+    slot_size = extra_large
+    slot_type = weapon
+    locatorname = "medium_gun_03"
+  }
+  component_slot = {
+    name = "EXTRA_LARGE_04"
+    slot_size = extra_large
+    slot_type = weapon
+    locatorname = "medium_gun_04"
+  }
+  component_slot = {
+    name = "EXTRA_LARGE_05"
+    slot_size = extra_large
+    slot_type = weapon
+    locatorname = "medium_gun_05"
+  }
+  component_slot = {
+    name = "EXTRA_LARGE_06"
+    slot_size = extra_large
+    slot_type = weapon
+    locatorname = "medium_gun_06"
+  }
+  component_slot = {
+    name = "SMALL_GUN_1"
+    slot_size = point_defence
+    slot_type = weapon
+    locatorname = "large_gun_01"
+  }
+  component_slot = {
+    name = "SMALL_GUN_2"
+    slot_size = point_defence
+    slot_type = weapon
+    locatorname = "large_gun_02"
+  }
+  component_slot = {
+    name = "SMALL_GUN_3"
+    slot_size = point_defence
+    slot_type = weapon
+    locatorname = "large_gun_03"
+  }
+  component_slot = {
+    name = "SMALL_GUN_4"
+    slot_size = point_defence
+    slot_type = weapon
+    locatorname = "large_gun_04"
+  }
+}
+# Heavy Carrier ( Dreadnought )
+ship_section_template = {
+  key = "super_battleship_stern_3"
+  ship_size = super_battleship
+  fits_on_slot = stern
+  entity = "super_battleship_coreA_entity"
+  icon = "GFX_ship_part_core_mid"
+  icon_frame = 1
+  prerequisites = { tech_engineering_industry_1264 }
+  cost = 2080
+  small_utility_slots = 0
+  medium_utility_slots = 0
+  large_utility_slots = 0
+  aux_utility_slots = 0
+  ai_weight = { factor = 10 }
+  component_slot = {
+    name = "SMALL_GUN_01"
+    slot_size = small
+    slot_type = weapon
+    locatorname = "small_gun_01"
+  }
+  component_slot = {
+    name = "SMALL_GUN_02"
+    slot_size = small
+    slot_type = weapon
+    locatorname = "small_gun_02"
+  }
+  component_slot = {
+    name = "SMALL_GUN_03"
+    slot_size = small
+    slot_type = weapon
+    locatorname = "small_gun_03"
+  }
+  component_slot = {
+    name = "SMALL_GUN_04"
+    slot_size = small
+    slot_type = weapon
+    locatorname = "small_gun_04"
+  }
+  component_slot = {
+    name = "SMALL_GUN_05"
+    slot_size = small
+    slot_type = weapon
+    locatorname = "small_gun_05"
+  }
+  component_slot = {
+    name = "MEDIUM_GUN_01"
+    slot_size = medium
+    slot_type = weapon
+    locatorname = "medium_gun_01"
+  }
+  component_slot = {
+    name = "MEDIUM_GUN_02"
+    slot_size = medium
+    slot_type = weapon
+    locatorname = "medium_gun_02"
+  }
+  component_slot = {
+    name = "MEDIUM_GUN_03"
+    slot_size = medium
+    slot_type = weapon
+    locatorname = "medium_gun_03"
+  }
+  component_slot = {
+    name = "TORPEDO_01"
+    slot_size = torpedo
+    slot_type = weapon
+    locatorname = "large_gun_01"
+  }
+  component_slot = {
+    name = "SMALL_GUN_1"
+    slot_size = point_defence
+    slot_type = weapon
+    locatorname = "large_gun_01"
+  }
+  component_slot = {
+    name = "SMALL_GUN_2"
+    slot_size = point_defence
+    slot_type = weapon
+    locatorname = "large_gun_02"
+  }
+  component_slot = {
+    name = "SMALL_GUN_3"
+    slot_size = point_defence
+    slot_type = weapon
+    locatorname = "large_gun_03"
+  }
+  component_slot = {
+    name = "STRIKE_CRAFT_01"
+    slot_size = large
+    slot_type = strike_craft
+    locatorname = "part1"
+  }
+  component_slot = {
+    name = "STRIKE_CRAFT_02"
+    slot_size = large
+    slot_type = strike_craft
+    locatorname = "part1"
+  }
+}
+# Heavy Carrier ( Dreadnought )
+ship_section_template = {
+  key = "super_battleship_stern_4"
+  ship_size = super_battleship
+  fits_on_slot = stern
+  entity = "super_battleship_coreA_entity"
+  icon = "GFX_ship_part_core_mid"
+  icon_frame = 1
+  prerequisites = { tech_engineering_industry_1265 }
+  cost = 2080
+  small_utility_slots = 0
+  medium_utility_slots = 0
+  large_utility_slots = 0
+  aux_utility_slots = 0
+  ai_weight = { factor = 10 }
+  component_slot = {
+    name = "LARGE_GUN_01"
+    slot_size = large
+    slot_type = weapon
+    locatorname = "medium_gun_01"
+  }
+  component_slot = {
+    name = "LARGE_GUN_02"
+    slot_size = large
+    slot_type = weapon
+    locatorname = "medium_gun_02"
+  }
+  component_slot = {
+    name = "TORPEDO_01"
+    slot_size = torpedo
+    slot_type = weapon
+    locatorname = "large_gun_01"
+  }
+  component_slot = {
+    name = "EXTRA_LARGE_01"
+    slot_size = extra_large
+    slot_type = weapon
+    locatorname = "medium_gun_01"
+  }
+  component_slot = {
+    name = "EXTRA_LARGE_02"
+    slot_size = extra_large
+    slot_type = weapon
+    locatorname = "medium_gun_02"
+  }
+  component_slot = {
+    name = "EXTRA_LARGE_03"
+    slot_size = extra_large
+    slot_type = weapon
+    locatorname = "medium_gun_03"
+  }
+  component_slot = {
+    name = "EXTRA_LARGE_04"
+    slot_size = extra_large
+    slot_type = weapon
+    locatorname = "medium_gun_04"
+  }
+  component_slot = {
+    name = "EXTRA_LARGE_05"
+    slot_size = extra_large
+    slot_type = weapon
+    locatorname = "medium_gun_05"
+  }
+  component_slot = {
+    name = "EXTRA_LARGE_06"
+    slot_size = extra_large
+    slot_type = weapon
+    locatorname = "medium_gun_06"
+  }
+  component_slot = {
+    name = "SMALL_GUN_1"
+    slot_size = point_defence
+    slot_type = weapon
+    locatorname = "large_gun_01"
+  }
+  component_slot = {
+    name = "SMALL_GUN_2"
+    slot_size = point_defence
+    slot_type = weapon
+    locatorname = "large_gun_02"
+  }
+  component_slot = {
+    name = "STRIKE_CRAFT_01"
+    slot_size = large
+    slot_type = strike_craft
+    locatorname = "part1"
+  }
+  component_slot = {
+    name = "STRIKE_CRAFT_02"
+    slot_size = large
+    slot_type = strike_craft
+    locatorname = "part1"
+  }
+}
+# Armada Carrier ( Dreadnought )
+ship_section_template = {
+  key = "super_battleship_stern_5"
+  ship_size = super_battleship
+  fits_on_slot = stern
+  entity = "super_battleship_coreA_entity"
+  icon = "GFX_ship_part_core_mid"
+  icon_frame = 1
+  prerequisites = { tech_engineering_industry_1266 }
+  cost = 2080
+  small_utility_slots = 0
+  medium_utility_slots = 0
+  large_utility_slots = 0
+  aux_utility_slots = 0
+  ai_weight = { factor = 10 }
+  component_slot = {
+    name = "SMALL_GUN_01"
+    slot_size = small
+    slot_type = weapon
+    locatorname = "small_gun_01"
+  }
+  component_slot = {
+    name = "SMALL_GUN_02"
+    slot_size = small
+    slot_type = weapon
+    locatorname = "small_gun_02"
+  }
+  component_slot = {
+    name = "SMALL_GUN_03"
+    slot_size = small
+    slot_type = weapon
+    locatorname = "small_gun_03"
+  }
+  component_slot = {
+    name = "SMALL_GUN_04"
+    slot_size = small
+    slot_type = weapon
+    locatorname = "small_gun_04"
+  }
+  component_slot = {
+    name = "MEDIUM_GUN_01"
+    slot_size = medium
+    slot_type = weapon
+    locatorname = "medium_gun_01"
+  }
+  component_slot = {
+    name = "SMALL_GUN_1"
+    slot_size = point_defence
+    slot_type = weapon
+    locatorname = "large_gun_01"
+  }
+  component_slot = {
+    name = "SMALL_GUN_2"
+    slot_size = point_defence
+    slot_type = weapon
+    locatorname = "large_gun_02"
+  }
+  component_slot = {
+    name = "SMALL_GUN_3"
+    slot_size = point_defence
+    slot_type = weapon
+    locatorname = "large_gun_03"
+  }
+  component_slot = {
+    name = "SMALL_GUN_4"
+    slot_size = point_defence
+    slot_type = weapon
+    locatorname = "large_gun_04"
+  }
+  component_slot = {
+    name = "STRIKE_CRAFT_01"
+    slot_size = large
+    slot_type = strike_craft
+    locatorname = "part1"
+  }
+  component_slot = {
+    name = "STRIKE_CRAFT_02"
+    slot_size = large
+    slot_type = strike_craft
+    locatorname = "part1"
+  }
+  component_slot = {
+    name = "STRIKE_CRAFT_03"
+    slot_size = large
+    slot_type = strike_craft
+    locatorname = "part1"
+  }
+  component_slot = {
+    name = "STRIKE_CRAFT_04"
+    slot_size = large
+    slot_type = strike_craft
+    locatorname = "part1"
+  }
+}
+# Armada Carrier ( Dreadnought )
+ship_section_template = {
+  key = "super_battleship_stern_6"
+  ship_size = super_battleship
+  fits_on_slot = stern
+  entity = "super_battleship_coreA_entity"
+  icon = "GFX_ship_part_core_mid"
+  icon_frame = 1
+  prerequisites = { tech_engineering_industry_1267 }
+  cost = 2080
+  small_utility_slots = 0
+  medium_utility_slots = 0
+  large_utility_slots = 0
+  aux_utility_slots = 0
+  ai_weight = { factor = 10 }
+  component_slot = {
+    name = "LARGE_GUN_01"
+    slot_size = large
+    slot_type = weapon
+    locatorname = "medium_gun_01"
+  }
+  component_slot = {
+    name = "LARGE_GUN_02"
+    slot_size = large
+    slot_type = weapon
+    locatorname = "medium_gun_02"
+  }
+  component_slot = {
+    name = "LARGE_GUN_03"
+    slot_size = large
+    slot_type = weapon
+    locatorname = "medium_gun_03"
+  }
+  component_slot = {
+    name = "LARGE_GUN_04"
+    slot_size = large
+    slot_type = weapon
+    locatorname = "medium_gun_04"
+  }
+  component_slot = {
+    name = "EXTRA_LARGE_01"
+    slot_size = extra_large
+    slot_type = weapon
+    locatorname = "medium_gun_01"
+  }
+  component_slot = {
+    name = "EXTRA_LARGE_02"
+    slot_size = extra_large
+    slot_type = weapon
+    locatorname = "medium_gun_02"
+  }
+  component_slot = {
+    name = "SMALL_GUN_1"
+    slot_size = point_defence
+    slot_type = weapon
+    locatorname = "large_gun_01"
+  }
+  component_slot = {
+    name = "SMALL_GUN_2"
+    slot_size = point_defence
+    slot_type = weapon
+    locatorname = "large_gun_02"
+  }
+  component_slot = {
+    name = "SMALL_GUN_3"
+    slot_size = point_defence
+    slot_type = weapon
+    locatorname = "large_gun_03"
+  }
+  component_slot = {
+    name = "SMALL_GUN_4"
+    slot_size = point_defence
+    slot_type = weapon
+    locatorname = "large_gun_04"
+  }
+  component_slot = {
+    name = "STRIKE_CRAFT_01"
+    slot_size = large
+    slot_type = strike_craft
+    locatorname = "part1"
+  }
+  component_slot = {
+    name = "STRIKE_CRAFT_02"
+    slot_size = large
+    slot_type = strike_craft
+    locatorname = "part1"
+  }
+  component_slot = {
+    name = "STRIKE_CRAFT_03"
+    slot_size = large
+    slot_type = strike_craft
+    locatorname = "part1"
+  }
+  component_slot = {
+    name = "STRIKE_CRAFT_04"
+    slot_size = large
+    slot_type = strike_craft
+    locatorname = "part1"
+  }
+}
+# Bach'Hich Dreadnought ( Dreadnought )
+ship_section_template = {
+  key = "super_battleship_stern_7"
+  ship_size = super_battleship
+  fits_on_slot = stern
+  entity = "super_battleship_coreA_entity"
+  icon = "GFX_ship_part_core_mid"
+  icon_frame = 1
+  prerequisites = { tech_physics_space-fitted_205 }
+  cost = 750
+  small_utility_slots = 0
+  medium_utility_slots = 0
+  large_utility_slots = 0
+  aux_utility_slots = 0
+  ai_weight = { factor = 15 }
+  component_slot = {
+    name = "MEDIUM_GUN_01"
+    slot_size = medium
+    slot_type = weapon
+    locatorname = "medium_gun_01"
+  }
+  component_slot = {
+    name = "MEDIUM_GUN_02"
+    slot_size = medium
+    slot_type = weapon
+    locatorname = "medium_gun_02"
+  }
+  component_slot = {
+    name = "MEDIUM_GUN_03"
+    slot_size = medium
+    slot_type = weapon
+    locatorname = "medium_gun_03"
+  }
+  component_slot = {
+    name = "MEDIUM_GUN_04"
+    slot_size = medium
+    slot_type = weapon
+    locatorname = "medium_gun_04"
+  }
+  component_slot = {
+    name = "SMALL_GUN_1"
+    slot_size = point_defence
+    slot_type = weapon
+    locatorname = "large_gun_01"
+  }
+  component_slot = {
+    name = "SMALL_GUN_2"
+    slot_size = point_defence
+    slot_type = weapon
+    locatorname = "large_gun_02"
+  }
+  component_slot = {
+    name = "SMALL_GUN_3"
+    slot_size = point_defence
+    slot_type = weapon
+    locatorname = "large_gun_03"
+  }
+}
+# Phase Disruptor Weapon Retrofit ( Dreadnought )
+ship_section_template = {
+  key = "super_battleship_stern_8"
+  ship_size = super_battleship
+  fits_on_slot = stern
+  entity = "super_battleship_coreA_entity"
+  icon = "GFX_ship_part_core_mid"
+  icon_frame = 1
+  prerequisites = { tech_physics_phase-resonance_213 }
+  cost = 700
+  small_utility_slots = 0
+  medium_utility_slots = 0
+  large_utility_slots = 0
+  aux_utility_slots = 0
+  ai_weight = { factor = 5 }
+  component_slot = {
+    name = "MEDIUM_GUN_01"
+    slot_size = medium
+    slot_type = weapon
+    locatorname = "medium_gun_01"
+  }
+  component_slot = {
+    name = "MEDIUM_GUN_02"
+    slot_size = medium
+    slot_type = weapon
+    locatorname = "medium_gun_02"
+  }
+  component_slot = {
+    name = "MEDIUM_GUN_03"
+    slot_size = medium
+    slot_type = weapon
+    locatorname = "medium_gun_03"
+  }
+  component_slot = {
+    name = "MEDIUM_GUN_04"
+    slot_size = medium
+    slot_type = weapon
+    locatorname = "medium_gun_04"
+  }
+  component_slot = {
+    name = "SMALL_GUN_1"
+    slot_size = point_defence
+    slot_type = weapon
+    locatorname = "large_gun_01"
+  }
+  component_slot = {
+    name = "SMALL_GUN_2"
+    slot_size = point_defence
+    slot_type = weapon
+    locatorname = "large_gun_02"
+  }
+}
+# Assault Disruptor Weapon Retrofit ( Dreadnought )
+ship_section_template = {
+  key = "super_battleship_stern_9"
+  ship_size = super_battleship
+  fits_on_slot = stern
+  entity = "super_battleship_coreA_entity"
+  icon = "GFX_ship_part_core_mid"
+  icon_frame = 1
+  prerequisites = { tech_physics_type-1_215 }
+  cost = 700
+  small_utility_slots = 0
+  medium_utility_slots = 0
+  large_utility_slots = 0
+  aux_utility_slots = 0
+  ai_weight = { factor = 5 }
+  component_slot = {
+    name = "EXTRA_LARGE_01"
+    slot_size = extra_large
+    slot_type = weapon
+    locatorname = "medium_gun_01"
+  }
+  component_slot = {
+    name = "EXTRA_LARGE_02"
+    slot_size = extra_large
+    slot_type = weapon
+    locatorname = "medium_gun_02"
+  }
+  component_slot = {
+    name = "EXTRA_LARGE_03"
+    slot_size = extra_large
+    slot_type = weapon
+    locatorname = "medium_gun_03"
+  }
+  component_slot = {
+    name = "EXTRA_LARGE_04"
+    slot_size = extra_large
+    slot_type = weapon
+    locatorname = "medium_gun_04"
+  }
+  component_slot = {
+    name = "EXTRA_LARGE_05"
+    slot_size = extra_large
+    slot_type = weapon
+    locatorname = "medium_gun_05"
+  }
+  component_slot = {
+    name = "EXTRA_LARGE_06"
+    slot_size = extra_large
+    slot_type = weapon
+    locatorname = "medium_gun_06"
+  }
+  component_slot = {
+    name = "SMALL_GUN_1"
+    slot_size = point_defence
+    slot_type = weapon
+    locatorname = "large_gun_01"
+  }
+  component_slot = {
+    name = "SMALL_GUN_2"
+    slot_size = point_defence
+    slot_type = weapon
+    locatorname = "large_gun_02"
+  }
+}
+# Magnetic Plasma Beam Weapon Retrofit ( Dreadnought )
+ship_section_template = {
+  key = "super_battleship_stern_10"
+  ship_size = super_battleship
+  fits_on_slot = stern
+  entity = "super_battleship_coreA_entity"
+  icon = "GFX_ship_part_core_mid"
+  icon_frame = 1
+  prerequisites = { tech_physics_magnetic-constraint_246 }
+  cost = 700
+  small_utility_slots = 0
+  medium_utility_slots = 0
+  large_utility_slots = 0
+  aux_utility_slots = 0
+  ai_weight = { factor = 5 }
+  component_slot = {
+    name = "MEDIUM_GUN_01"
+    slot_size = medium
+    slot_type = weapon
+    locatorname = "medium_gun_01"
+  }
+  component_slot = {
+    name = "MEDIUM_GUN_02"
+    slot_size = medium
+    slot_type = weapon
+    locatorname = "medium_gun_02"
+  }
+  component_slot = {
+    name = "MEDIUM_GUN_03"
+    slot_size = medium
+    slot_type = weapon
+    locatorname = "medium_gun_03"
+  }
+  component_slot = {
+    name = "MEDIUM_GUN_04"
+    slot_size = medium
+    slot_type = weapon
+    locatorname = "medium_gun_04"
+  }
+  component_slot = {
+    name = "SMALL_GUN_1"
+    slot_size = point_defence
+    slot_type = weapon
+    locatorname = "large_gun_01"
+  }
+  component_slot = {
+    name = "SMALL_GUN_2"
+    slot_size = point_defence
+    slot_type = weapon
+    locatorname = "large_gun_02"
+  }
+}
+# Positron Cannon Weapon Retrofit ( Dreadnought )
+ship_section_template = {
+  key = "super_battleship_stern_11"
+  ship_size = super_battleship
+  fits_on_slot = stern
+  entity = "super_battleship_coreA_entity"
+  icon = "GFX_ship_part_core_mid"
+  icon_frame = 1
+  prerequisites = { tech_physics_positron_270 }
+  cost = 700
+  small_utility_slots = 0
+  medium_utility_slots = 0
+  large_utility_slots = 0
+  aux_utility_slots = 0
+  ai_weight = { factor = 5 }
+  component_slot = {
+    name = "EXTRA_LARGE_01"
+    slot_size = extra_large
+    slot_type = weapon
+    locatorname = "medium_gun_01"
+  }
+  component_slot = {
+    name = "EXTRA_LARGE_02"
+    slot_size = extra_large
+    slot_type = weapon
+    locatorname = "medium_gun_02"
+  }
+  component_slot = {
+    name = "EXTRA_LARGE_03"
+    slot_size = extra_large
+    slot_type = weapon
+    locatorname = "medium_gun_03"
+  }
+  component_slot = {
+    name = "EXTRA_LARGE_04"
+    slot_size = extra_large
+    slot_type = weapon
+    locatorname = "medium_gun_04"
+  }
+  component_slot = {
+    name = "EXTRA_LARGE_05"
+    slot_size = extra_large
+    slot_type = weapon
+    locatorname = "medium_gun_05"
+  }
+  component_slot = {
+    name = "EXTRA_LARGE_06"
+    slot_size = extra_large
+    slot_type = weapon
+    locatorname = "medium_gun_06"
+  }
+  component_slot = {
+    name = "SMALL_GUN_1"
+    slot_size = point_defence
+    slot_type = weapon
+    locatorname = "large_gun_01"
+  }
+  component_slot = {
+    name = "SMALL_GUN_2"
+    slot_size = point_defence
+    slot_type = weapon
+    locatorname = "large_gun_02"
+  }
+}
+# Graviton Beam Weapon Retrofit ( Dreadnought )
+ship_section_template = {
+  key = "super_battleship_stern_12"
+  ship_size = super_battleship
+  fits_on_slot = stern
+  entity = "super_battleship_coreA_entity"
+  icon = "GFX_ship_part_core_mid"
+  icon_frame = 1
+  prerequisites = { tech_physics_graviton_326 }
+  cost = 700
+  small_utility_slots = 0
+  medium_utility_slots = 0
+  large_utility_slots = 0
+  aux_utility_slots = 0
+  ai_weight = { factor = 5 }
+  component_slot = {
+    name = "MEDIUM_GUN_01"
+    slot_size = medium
+    slot_type = weapon
+    locatorname = "medium_gun_01"
+  }
+  component_slot = {
+    name = "MEDIUM_GUN_02"
+    slot_size = medium
+    slot_type = weapon
+    locatorname = "medium_gun_02"
+  }
+  component_slot = {
+    name = "MEDIUM_GUN_03"
+    slot_size = medium
+    slot_type = weapon
+    locatorname = "medium_gun_03"
+  }
+  component_slot = {
+    name = "MEDIUM_GUN_04"
+    slot_size = medium
+    slot_type = weapon
+    locatorname = "medium_gun_04"
+  }
+  component_slot = {
+    name = "SMALL_GUN_1"
+    slot_size = point_defence
+    slot_type = weapon
+    locatorname = "large_gun_01"
+  }
+  component_slot = {
+    name = "SMALL_GUN_2"
+    slot_size = point_defence
+    slot_type = weapon
+    locatorname = "large_gun_02"
+  }
+}
+# Secondary Hull ( Dreadnought )
+ship_section_template = {
+  key = "super_battleship_mid_13"
+  ship_size = super_battleship
+  fits_on_slot = mid
+  entity = "super_battleship_entity"
+  icon = "GFX_ship_part_core_mid"
+  icon_frame = 1
+  prerequisites = { tech_engineering_industry_1222 }
+  cost = 770
+  small_utility_slots = 5
+  medium_utility_slots = 5
+  large_utility_slots = 5
+  aux_utility_slots = 1
+  ai_weight = { factor = 10 }
+}
+# Tactical Dreadnought ( Dreadnought )
+ship_section_template = {
+  key = "super_battleship_mid_14"
+  ship_size = super_battleship
+  fits_on_slot = mid
+  entity = "super_battleship_entity"
+  icon = "GFX_ship_part_core_mid"
+  icon_frame = 1
+  prerequisites = { tech_ship_program }
+  cost = 860
+  small_utility_slots = 5
+  medium_utility_slots = 7
+  large_utility_slots = 5
+  aux_utility_slots = 1
+  ai_weight = { factor = 20 }
+}
+# Engineering Dreadnought ( Dreadnought )
+ship_section_template = {
+  key = "super_battleship_mid_15"
+  ship_size = super_battleship
+  fits_on_slot = mid
+  entity = "super_battleship_entity"
+  icon = "GFX_ship_part_core_mid"
+  icon_frame = 1
+  prerequisites = { tech_ship_program }
+  cost = 860
+  small_utility_slots = 7
+  medium_utility_slots = 5
+  large_utility_slots = 5
+  aux_utility_slots = 1
+  ai_weight = { factor = 20 }
+}
+# Support Dreadnought ( Dreadnought )
+ship_section_template = {
+  key = "super_battleship_mid_16"
+  ship_size = super_battleship
+  fits_on_slot = mid
+  entity = "super_battleship_entity"
+  icon = "GFX_ship_part_core_mid"
+  icon_frame = 1
+  prerequisites = { tech_ship_program }
+  cost = 860
+  small_utility_slots = 5
+  medium_utility_slots = 5
+  large_utility_slots = 7
+  aux_utility_slots = 1
+  ai_weight = { factor = 20 }
+}
+# Advanced Tactical Dreadnought ( Dreadnought )
+ship_section_template = {
+  key = "super_battleship_mid_17"
+  ship_size = super_battleship
+  fits_on_slot = mid
+  entity = "super_battleship_entity"
+  icon = "GFX_ship_part_core_mid"
+  icon_frame = 1
+  prerequisites = { tech_engineering_advanced_711 }
+  cost = 1500
+  small_utility_slots = 5
+  medium_utility_slots = 8
+  large_utility_slots = 5
+  aux_utility_slots = 1
+  ai_weight = { factor = 30 }
+}
+# Advanced Tactical Assailt Cruiser ( Dreadnought )
+ship_section_template = {
+  key = "super_battleship_mid_18"
+  ship_size = super_battleship
+  fits_on_slot = mid
+  entity = "super_battleship_entity"
+  icon = "GFX_ship_part_core_mid"
+  icon_frame = 1
+  prerequisites = { tech_engineering_advanced_712 }
+  cost = 1500
+  small_utility_slots = 8
+  medium_utility_slots = 5
+  large_utility_slots = 5
+  aux_utility_slots = 1
+  ai_weight = { factor = 30 }
+}
+# Advanced Support Dreadnought ( Dreadnought )
+ship_section_template = {
+  key = "super_battleship_mid_19"
+  ship_size = super_battleship
+  fits_on_slot = mid
+  entity = "super_battleship_entity"
+  icon = "GFX_ship_part_core_mid"
+  icon_frame = 1
+  prerequisites = { tech_engineering_advanced_713 }
+  cost = 1500
+  small_utility_slots = 5
+  medium_utility_slots = 5
+  large_utility_slots = 8
+  aux_utility_slots = 1
+  ai_weight = { factor = 30 }
+}
+
+
+
+
+
+# Omega Cube Exterior ( Man-O-War )
+ship_section_template = {
+  key = "super_cube_stern_1"
+  ship_size = super_cube
+  fits_on_slot = stern
+  entity = "super_cube_coreA_entity"
+  icon = "GFX_ship_part_core_mid"
+  icon_frame = 1
+  prerequisites = { tech_engineering_industry_1255 }
+  cost = 9430
+  small_utility_slots = 0
+  medium_utility_slots = 0
+  large_utility_slots = 0
+  aux_utility_slots = 0
+  ai_weight = { factor = 10 }
+  component_slot = {
+    name = "MEDIUM_GUN_01"
+    slot_size = medium
+    slot_type = weapon
+    locatorname = "medium_gun_01"
+  }
+  component_slot = {
+    name = "MEDIUM_GUN_02"
+    slot_size = medium
+    slot_type = weapon
+    locatorname = "medium_gun_02"
+  }
+  component_slot = {
+    name = "MEDIUM_GUN_03"
+    slot_size = medium
+    slot_type = weapon
+    locatorname = "medium_gun_03"
+  }
+  component_slot = {
+    name = "MEDIUM_GUN_04"
+    slot_size = medium
+    slot_type = weapon
+    locatorname = "medium_gun_04"
+  }
+  component_slot = {
+    name = "MEDIUM_GUN_05"
+    slot_size = medium
+    slot_type = weapon
+    locatorname = "medium_gun_05"
+  }
+  component_slot = {
+    name = "MEDIUM_GUN_06"
+    slot_size = medium
+    slot_type = weapon
+    locatorname = "medium_gun_06"
+  }
+  component_slot = {
+    name = "MEDIUM_GUN_07"
+    slot_size = medium
+    slot_type = weapon
+    locatorname = "medium_gun_01"
+  }
+  component_slot = {
+    name = "MEDIUM_GUN_08"
+    slot_size = medium
+    slot_type = weapon
+    locatorname = "medium_gun_02"
+  }
+  component_slot = {
+    name = "MEDIUM_GUN_09"
+    slot_size = medium
+    slot_type = weapon
+    locatorname = "medium_gun_03"
+  }
+  component_slot = {
+    name = "TORPEDO_01"
+    slot_size = torpedo
+    slot_type = weapon
+    locatorname = "large_gun_01"
+  }
+  component_slot = {
+    name = "TORPEDO_02"
+    slot_size = torpedo
+    slot_type = weapon
+    locatorname = "large_gun_02"
+  }
+  component_slot = {
+    name = "TORPEDO_03"
+    slot_size = torpedo
+    slot_type = weapon
+    locatorname = "large_gun_03"
+  }
+  component_slot = {
+    name = "TORPEDO_04"
+    slot_size = torpedo
+    slot_type = weapon
+    locatorname = "large_gun_04"
+  }
+  component_slot = {
+    name = "TORPEDO_05"
+    slot_size = torpedo
+    slot_type = weapon
+    locatorname = "large_gun_05"
+  }
+  component_slot = {
+    name = "TORPEDO_06"
+    slot_size = torpedo
+    slot_type = weapon
+    locatorname = "large_gun_06"
+  }
+  component_slot = {
+    name = "TORPEDO_07"
+    slot_size = torpedo
+    slot_type = weapon
+    locatorname = "large_gun_01"
+  }
+  component_slot = {
+    name = "TORPEDO_08"
+    slot_size = torpedo
+    slot_type = weapon
+    locatorname = "large_gun_02"
+  }
+}
+# Omega Cube Interior ( Man-O-War )
+ship_section_template = {
+  key = "super_cube_mid_2"
+  ship_size = super_cube
+  fits_on_slot = mid
+  entity = "super_cube_entity"
+  icon = "GFX_ship_part_core_mid"
+  icon_frame = 1
+  prerequisites = { tech_engineering_industry_1255 }
+  cost = 2500
+  small_utility_slots = 8
+  medium_utility_slots = 8
+  large_utility_slots = 0
+  aux_utility_slots = 2
+  ai_weight = { factor = 10 }
+}
+
+
+
+# Troop Quarters ( Transporter )
+ship_section_template = {
+  key = "transport_mid_1"
+  ship_size = transport
+  fits_on_slot = mid
+  entity = "transport_ship_entity"
+  icon = "GFX_ship_part_core_mid"
+  icon_frame = 1
+  prerequisites = {  }
+  cost = 50
+  small_utility_slots = 1
+  medium_utility_slots = 0
+  large_utility_slots = 1
+  aux_utility_slots = 0
+  ai_weight = { factor = 10 }
+}
+
+# Heavy Cutting Beam Sphere ( Sphere )
+ship_section_template = {
+  key = "borg_sphere_stern_1"
+  ship_size = borg_sphere
+  fits_on_slot = stern
+  entity = "borg_sphere_coreA_entity"
+  icon = "GFX_ship_part_core_mid"
+  icon_frame = 1
+  prerequisites = { tech_engineering_industry_1251 }
+  cost = 320
+  small_utility_slots = 0
+  medium_utility_slots = 0
+  large_utility_slots = 0
+  aux_utility_slots = 0
+  ai_weight = { factor = 10 }
+  component_slot = {
+    name = "MEDIUM_GUN_01"
+    slot_size = medium
+    slot_type = weapon
+    locatorname = "medium_gun_01"
+  }
+  component_slot = {
+    name = "TORPEDO_01"
+    slot_size = torpedo
+    slot_type = weapon
+    locatorname = "large_gun_01"
+  }
+}
+
+# Combat Sphere ( Sphere )
+ship_section_template = {
+  key = "borg_sphere_stern_2"
+  ship_size = borg_sphere
+  fits_on_slot = stern
+  entity = "borg_sphere_coreA_entity"
+  icon = "GFX_ship_part_core_mid"
+  icon_frame = 1
+  prerequisites = { tech_engineering_industry_1251 }
+  cost = 340
+  small_utility_slots = 0
+  medium_utility_slots = 0
+  large_utility_slots = 0
+  aux_utility_slots = 0
+  ai_weight = { factor = 15 }
+  component_slot = {
+    name = "SMALL_GUN_01"
+    slot_size = small
+    slot_type = weapon
+    locatorname = "small_gun_01"
+  }
+  component_slot = {
+    name = "SMALL_GUN_02"
+    slot_size = small
+    slot_type = weapon
+    locatorname = "small_gun_02"
+  }
+  component_slot = {
+    name = "SMALL_GUN_03"
+    slot_size = small
+    slot_type = weapon
+    locatorname = "small_gun_03"
+  }
+  component_slot = {
+    name = "SMALL_GUN_04"
+    slot_size = small
+    slot_type = weapon
+    locatorname = "small_gun_04"
+  }
+  component_slot = {
+    name = "SMALL_GUN_1"
+    slot_size = point_defence
+    slot_type = weapon
+    locatorname = "large_gun_01"
+  }
+  component_slot = {
+    name = "SMALL_GUN_2"
+    slot_size = point_defence
+    slot_type = weapon
+    locatorname = "large_gun_02"
+  }
+  component_slot = {
+    name = "SMALL_GUN_3"
+    slot_size = point_defence
+    slot_type = weapon
+    locatorname = "large_gun_03"
+  }
+  component_slot = {
+    name = "SMALL_GUN_4"
+    slot_size = point_defence
+    slot_type = weapon
+    locatorname = "large_gun_04"
+  }
+}
+# Sphere Interior ( Sphere )
+ship_section_template = {
+  key = "borg_sphere_mid_3"
+  ship_size = borg_sphere
+  fits_on_slot = mid
+  entity = "borg_sphere_entity"
+  icon = "GFX_ship_part_core_mid"
+  icon_frame = 1
+  prerequisites = { tech_engineering_industry_1251 }
+  cost = 460
+  small_utility_slots = 4
+  medium_utility_slots = 4
+  large_utility_slots = 0
+  aux_utility_slots = 1
+  ai_weight = { factor = 10 }
+}
+
+
+
+
+
+# Combat Diamond ( Diamond )
+ship_section_template = {
+  key = "borg_diamond_stern_1"
+  ship_size = borg_diamond
+  fits_on_slot = stern
+  entity = "borg_diamond_coreA_entity"
+  icon = "GFX_ship_part_core_mid"
+  icon_frame = 1
+  prerequisites = { tech_engineering_industry_1252 }
+  cost = 1230
+  small_utility_slots = 0
+  medium_utility_slots = 0
+  large_utility_slots = 0
+  aux_utility_slots = 0
+  ai_weight = { factor = 10 }
+  component_slot = {
+    name = "MEDIUM_GUN_01"
+    slot_size = medium
+    slot_type = weapon
+    locatorname = "medium_gun_01"
+  }
+  component_slot = {
+    name = "MEDIUM_GUN_02"
+    slot_size = medium
+    slot_type = weapon
+    locatorname = "medium_gun_02"
+  }
+  component_slot = {
+    name = "TORPEDO_01"
+    slot_size = torpedo
+    slot_type = weapon
+    locatorname = "large_gun_01"
+  }
+  component_slot = {
+    name = "TORPEDO_02"
+    slot_size = torpedo
+    slot_type = weapon
+    locatorname = "large_gun_02"
+  }
+}
+# Service Diamond ( Diamond )
+ship_section_template = {
+  key = "borg_diamond_stern_2"
+  ship_size = borg_diamond
+  fits_on_slot = stern
+  entity = "borg_diamond_coreA_entity"
+  icon = "GFX_ship_part_core_mid"
+  icon_frame = 1
+  prerequisites = { tech_engineering_industry_1252 }
+  cost = 600
+  small_utility_slots = 0
+  medium_utility_slots = 0
+  large_utility_slots = 0
+  aux_utility_slots = 0
+  ai_weight = { factor = 15 }
+  component_slot = {
+    name = "SMALL_GUN_01"
+    slot_size = small
+    slot_type = weapon
+    locatorname = "small_gun_01"
+  }
+  component_slot = {
+    name = "SMALL_GUN_02"
+    slot_size = small
+    slot_type = weapon
+    locatorname = "small_gun_02"
+  }
+  component_slot = {
+    name = "SMALL_GUN_03"
+    slot_size = small
+    slot_type = weapon
+    locatorname = "small_gun_03"
+  }
+  component_slot = {
+    name = "SMALL_GUN_04"
+    slot_size = small
+    slot_type = weapon
+    locatorname = "small_gun_04"
+  }
+  component_slot = {
+    name = "SMALL_GUN_1"
+    slot_size = point_defence
+    slot_type = weapon
+    locatorname = "large_gun_01"
+  }
+  component_slot = {
+    name = "SMALL_GUN_2"
+    slot_size = point_defence
+    slot_type = weapon
+    locatorname = "large_gun_02"
+  }
+  component_slot = {
+    name = "SMALL_GUN_3"
+    slot_size = point_defence
+    slot_type = weapon
+    locatorname = "large_gun_03"
+  }
+  component_slot = {
+    name = "SMALL_GUN_4"
+    slot_size = point_defence
+    slot_type = weapon
+    locatorname = "large_gun_04"
+  }
+  component_slot = {
+    name = "SMALL_GUN_5"
+    slot_size = point_defence
+    slot_type = weapon
+    locatorname = "large_gun_05"
+  }
+  component_slot = {
+    name = "SMALL_GUN_6"
+    slot_size = point_defence
+    slot_type = weapon
+    locatorname = "large_gun_06"
+  }
+  component_slot = {
+    name = "SMALL_GUN_7"
+    slot_size = point_defence
+    slot_type = weapon
+    locatorname = "large_gun_01"
+  }
+  component_slot = {
+    name = "SMALL_GUN_8"
+    slot_size = point_defence
+    slot_type = weapon
+    locatorname = "large_gun_02"
+  }
+}
+# Diamond Interior ( Diamond )
+ship_section_template = {
+  key = "borg_diamond_mid_3"
+  ship_size = borg_diamond
+  fits_on_slot = mid
+  entity = "borg_cube_entity"
+  icon = "GFX_ship_part_core_mid"
+  icon_frame = 1
+  prerequisites = { tech_engineering_industry_1252 }
+  cost = 630
+  small_utility_slots = 5
+  medium_utility_slots = 5
+  large_utility_slots = 0
+  aux_utility_slots = 1
+  ai_weight = { factor = 10 }
+}
+
+
+
+
+
+# Cube Exterior ( Cube )
+ship_section_template = {
+  key = "borg_cube_stern_1"
+  ship_size = borg_cube
+  fits_on_slot = stern
+  entity = "borg_cube_coreA_entity"
+  icon = "GFX_ship_part_core_mid"
+  icon_frame = 1
+  prerequisites = { tech_engineering_industry_1253 }
+  cost = 2030
+  small_utility_slots = 0
+  medium_utility_slots = 0
+  large_utility_slots = 0
+  aux_utility_slots = 0
+  ai_weight = { factor = 10 }
+  component_slot = {
+    name = "MEDIUM_GUN_01"
+    slot_size = medium
+    slot_type = weapon
+    locatorname = "medium_gun_01"
+  }
+  component_slot = {
+    name = "MEDIUM_GUN_02"
+    slot_size = medium
+    slot_type = weapon
+    locatorname = "medium_gun_02"
+  }
+  component_slot = {
+    name = "MEDIUM_GUN_03"
+    slot_size = medium
+    slot_type = weapon
+    locatorname = "medium_gun_03"
+  }
+  component_slot = {
+    name = "MEDIUM_GUN_04"
+    slot_size = medium
+    slot_type = weapon
+    locatorname = "medium_gun_04"
+  }
+  component_slot = {
+    name = "TORPEDO_01"
+    slot_size = torpedo
+    slot_type = weapon
+    locatorname = "large_gun_01"
+  }
+  component_slot = {
+    name = "TORPEDO_02"
+    slot_size = torpedo
+    slot_type = weapon
+    locatorname = "large_gun_02"
+  }
+  component_slot = {
+    name = "TORPEDO_03"
+    slot_size = torpedo
+    slot_type = weapon
+    locatorname = "large_gun_03"
+  }
+  component_slot = {
+    name = "TORPEDO_04"
+    slot_size = torpedo
+    slot_type = weapon
+    locatorname = "large_gun_04"
+  }
+  component_slot = {
+    name = "TORPEDO_05"
+    slot_size = torpedo
+    slot_type = weapon
+    locatorname = "large_gun_05"
+  }
+}
+# Cube Interior ( Cube )
+ship_section_template = {
+  key = "borg_cube_mid_2"
+  ship_size = borg_cube
+  fits_on_slot = mid
+  entity = "borg_cube_entity"
+  icon = "GFX_ship_part_core_mid"
+  icon_frame = 1
+  prerequisites = { tech_engineering_industry_1253 }
+  cost = 900
+  small_utility_slots = 6
+  medium_utility_slots = 6
+  large_utility_slots = 0
+  aux_utility_slots = 1
+  ai_weight = { factor = 10 }
+}
+
+
+
+
+
+# Armored Cube Exterior ( Tactical Cube )
+ship_section_template = {
+  key = "borg_tactical_stern_1"
+  ship_size = borg_tactical
+  fits_on_slot = stern
+  entity = "borg_tactical_coreA_entity"
+  icon = "GFX_ship_part_core_mid"
+  icon_frame = 1
+  prerequisites = { tech_engineering_industry_1254 }
+  cost = 2430
+  small_utility_slots = 0
+  medium_utility_slots = 0
+  large_utility_slots = 0
+  aux_utility_slots = 0
+  ai_weight = { factor = 10 }
+  component_slot = {
+    name = "MEDIUM_GUN_01"
+    slot_size = medium
+    slot_type = weapon
+    locatorname = "medium_gun_01"
+  }
+  component_slot = {
+    name = "MEDIUM_GUN_02"
+    slot_size = medium
+    slot_type = weapon
+    locatorname = "medium_gun_02"
+  }
+  component_slot = {
+    name = "MEDIUM_GUN_03"
+    slot_size = medium
+    slot_type = weapon
+    locatorname = "medium_gun_03"
+  }
+  component_slot = {
+    name = "MEDIUM_GUN_04"
+    slot_size = medium
+    slot_type = weapon
+    locatorname = "medium_gun_04"
+  }
+  component_slot = {
+    name = "TORPEDO_01"
+    slot_size = torpedo
+    slot_type = weapon
+    locatorname = "large_gun_01"
+  }
+  component_slot = {
+    name = "TORPEDO_02"
+    slot_size = torpedo
+    slot_type = weapon
+    locatorname = "large_gun_02"
+  }
+  component_slot = {
+    name = "TORPEDO_03"
+    slot_size = torpedo
+    slot_type = weapon
+    locatorname = "large_gun_03"
+  }
+  component_slot = {
+    name = "TORPEDO_04"
+    slot_size = torpedo
+    slot_type = weapon
+    locatorname = "large_gun_04"
+  }
+  component_slot = {
+    name = "TORPEDO_05"
+    slot_size = torpedo
+    slot_type = weapon
+    locatorname = "large_gun_05"
+  }
+}
+# Cube Interior ( Tactical Cube )
+ship_section_template = {
+  key = "borg_tactical_mid_2"
+  ship_size = borg_tactical
+  fits_on_slot = mid
+  entity = "borg_tactical_entity"
+  icon = "GFX_ship_part_core_mid"
+  icon_frame = 1
+  prerequisites = { tech_engineering_industry_1254 }
+  cost = 1380
+  small_utility_slots = 7
+  medium_utility_slots = 7
+  large_utility_slots = 0
+  aux_utility_slots = 1
+  ai_weight = { factor = 10 }
+}
+
+### Fallen Empire AI set
+
+# Interdictor ( Interdictor )
+   ship_section_template = {
+      key = "fallen_interdictor_stern_1"
+      ship_size = fallen_interdictor
+      fits_on_slot = stern
+      entity = "fallen_interdictor_coreA_entity"
+      icon = "GFX_ship_part_core_mid"
+      icon_frame = 1
+      prerequisites = { tech_engineering_industry_1298 }
+      cost = 650
+      small_utility_slots = 0
+      medium_utility_slots = 0
+      large_utility_slots = 0
+      aux_utility_slots = 0
+      ai_weight = { factor = 10 }
+      component_slot = {
+         name = "LARGE_GUN_01"
+         slot_size = large
+         slot_type = weapon
+         locatorname = "medium_gun_01"
+      }
+      component_slot = {
+         name = "LARGE_GUN_02"
+         slot_size = large
+         slot_type = weapon
+         locatorname = "medium_gun_02"
+      }
+      component_slot = {
+         name = "LARGE_GUN_03"
+         slot_size = large
+         slot_type = weapon
+         locatorname = "medium_gun_03"
+      }
+      component_slot = {
+         name = "LARGE_GUN_04"
+         slot_size = large
+         slot_type = weapon
+         locatorname = "medium_gun_04"
+      }
+      component_slot = {
+         name = "TORPEDO_01"
+         slot_size = torpedo
+         slot_type = weapon
+         locatorname = "large_gun_01"
+      }
+      component_slot = {
+         name = "TORPEDO_02"
+         slot_size = torpedo
+         slot_type = weapon
+         locatorname = "large_gun_02"
+      }
+      component_slot = {
+         name = "EXTRA_LARGE_01"
+         slot_size = extra_large
+         slot_type = weapon
+         locatorname = "medium_gun_01"
+      }
+      component_slot = {
+         name = "EXTRA_LARGE_02"
+         slot_size = extra_large
+         slot_type = weapon
+         locatorname = "medium_gun_02"
+      }
+   }
+# Secondary Hull ( Interdictor )
+   ship_section_template = {
+      key = "fallen_interdictor_mid_2"
+      ship_size = fallen_interdictor
+      fits_on_slot = mid
+      entity = "fallen_interdictor_entity"
+      icon = "GFX_ship_part_core_mid"
+      icon_frame = 1
+      prerequisites = { tech_engineering_industry_1298 }
+      cost = 540
+      small_utility_slots = 2
+      medium_utility_slots = 2
+      large_utility_slots = 2
+      aux_utility_slots = 1
+      ai_weight = { factor = 10 }
+   }
+
+# Assault Vessel ( Assault Vessel )
+   ship_section_template = {
+      key = "fallen_assault_stern_1"
+      ship_size = fallen_assault
+      fits_on_slot = stern
+      entity = "fallen_assault_coreA_entity"
+      icon = "GFX_ship_part_core_mid"
+      icon_frame = 1
+      prerequisites = { tech_engineering_industry_1299 }
+      cost = 1220
+      small_utility_slots = 0
+      medium_utility_slots = 0
+      large_utility_slots = 0
+      aux_utility_slots = 0
+      ai_weight = { factor = 10 }
+      component_slot = {
+         name = "EXTRA_LARGE_01"
+         slot_size = extra_large
+         slot_type = weapon
+         locatorname = "medium_gun_01"
+      }
+      component_slot = {
+         name = "EXTRA_LARGE_02"
+         slot_size = extra_large
+         slot_type = weapon
+         locatorname = "medium_gun_02"
+      }
+      component_slot = {
+         name = "EXTRA_LARGE_03"
+         slot_size = extra_large
+         slot_type = weapon
+         locatorname = "medium_gun_03"
+      }
+      component_slot = {
+         name = "EXTRA_LARGE_04"
+         slot_size = extra_large
+         slot_type = weapon
+         locatorname = "medium_gun_04"
+      }
+      component_slot = {
+         name = "EXTRA_LARGE_05"
+         slot_size = extra_large
+         slot_type = weapon
+         locatorname = "medium_gun_05"
+      }
+      component_slot = {
+         name = "SMALL_GUN_1"
+         slot_size = point_defence
+         slot_type = weapon
+         locatorname = "large_gun_01"
+      }
+      component_slot = {
+         name = "SMALL_GUN_2"
+         slot_size = point_defence
+         slot_type = weapon
+         locatorname = "large_gun_02"
+      }
+      component_slot = {
+         name = "SMALL_GUN_3"
+         slot_size = point_defence
+         slot_type = weapon
+         locatorname = "large_gun_03"
+      }
+      component_slot = {
+         name = "SMALL_GUN_4"
+         slot_size = point_defence
+         slot_type = weapon
+         locatorname = "large_gun_04"
+      }
+      component_slot = {
+         name = "SMALL_GUN_5"
+         slot_size = point_defence
+         slot_type = weapon
+         locatorname = "large_gun_05"
+      }
+      component_slot = {
+         name = "SMALL_GUN_6"
+         slot_size = point_defence
+         slot_type = weapon
+         locatorname = "large_gun_06"
+      }
+      component_slot = {
+         name = "SMALL_GUN_7"
+         slot_size = point_defence
+         slot_type = weapon
+         locatorname = "large_gun_01"
+      }
+      component_slot = {
+         name = "SMALL_GUN_8"
+         slot_size = point_defence
+         slot_type = weapon
+         locatorname = "large_gun_02"
+      }
+   }
+# Secondary Hull ( Assault Vessel )
+   ship_section_template = {
+      key = "fallen_assault_mid_2"
+      ship_size = fallen_assault
+      fits_on_slot = mid
+      entity = "fallen_assault_entity"
+      icon = "GFX_ship_part_core_mid"
+      icon_frame = 1
+      prerequisites = { tech_engineering_industry_1299 }
+      cost = 900
+      small_utility_slots = 3
+      medium_utility_slots = 3
+      large_utility_slots = 3
+      aux_utility_slots = 1
+      ai_weight = { factor = 10 }
+   }
+
+# Flagship ( Flagship )
+   ship_section_template = {
+      key = "fallen_flagship_stern_1"
+      ship_size = fallen_flagship
+      fits_on_slot = stern
+      entity = "fallen_flagship_coreA_entity"
+      icon = "GFX_ship_part_core_mid"
+      icon_frame = 1
+      prerequisites = { tech_engineering_industry_1300 }
+      cost = 2040
+      small_utility_slots = 0
+      medium_utility_slots = 0
+      large_utility_slots = 0
+      aux_utility_slots = 0
+      ai_weight = { factor = 10 }
+      component_slot = {
+         name = "TORPEDO_01"
+         slot_size = torpedo
+         slot_type = weapon
+         locatorname = "large_gun_01"
+      }
+      component_slot = {
+         name = "TORPEDO_02"
+         slot_size = torpedo
+         slot_type = weapon
+         locatorname = "large_gun_02"
+      }
+      component_slot = {
+         name = "TORPEDO_03"
+         slot_size = torpedo
+         slot_type = weapon
+         locatorname = "large_gun_03"
+      }
+      component_slot = {
+         name = "TORPEDO_04"
+         slot_size = torpedo
+         slot_type = weapon
+         locatorname = "large_gun_04"
+      }
+      component_slot = {
+         name = "EXTRA_LARGE_01"
+         slot_size = extra_large
+         slot_type = weapon
+         locatorname = "medium_gun_01"
+      }
+      component_slot = {
+         name = "EXTRA_LARGE_02"
+         slot_size = extra_large
+         slot_type = weapon
+         locatorname = "medium_gun_02"
+      }
+      component_slot = {
+         name = "EXTRA_LARGE_03"
+         slot_size = extra_large
+         slot_type = weapon
+         locatorname = "medium_gun_03"
+      }
+      component_slot = {
+         name = "EXTRA_LARGE_04"
+         slot_size = extra_large
+         slot_type = weapon
+         locatorname = "medium_gun_04"
+      }
+      component_slot = {
+         name = "EXTRA_LARGE_05"
+         slot_size = extra_large
+         slot_type = weapon
+         locatorname = "medium_gun_05"
+      }
+      component_slot = {
+         name = "EXTRA_LARGE_06"
+         slot_size = extra_large
+         slot_type = weapon
+         locatorname = "medium_gun_06"
+      }
+      component_slot = {
+         name = "EXTRA_LARGE_07"
+         slot_size = extra_large
+         slot_type = weapon
+         locatorname = "medium_gun_01"
+      }
+      component_slot = {
+         name = "EXTRA_LARGE_08"
+         slot_size = extra_large
+         slot_type = weapon
+         locatorname = "medium_gun_02"
+      }
+   }
+# Secondary Hall ( Flagship )
+   ship_section_template = {
+      key = "fallen_flagship_mid_2"
+      ship_size = fallen_flagship
+      fits_on_slot = mid
+      entity = "fallen_flagship_entity"
+      icon = "GFX_ship_part_core_mid"
+      icon_frame = 1
+      prerequisites = { tech_engineering_industry_1300 }
+      cost = 1500
+      small_utility_slots = 4
+      medium_utility_slots = 4
+      large_utility_slots = 4
+      aux_utility_slots = 1
+      ai_weight = { factor = 10 }
+   }

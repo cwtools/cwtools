@@ -1,0 +1,95 @@
+﻿### Andorian Empire
+Andorian = {
+	randomized = no
+
+	ship_names = {
+		generic = {
+			Amdaroth Artorev Ashoka Atlira Atlirith Thris Hristish Charal Docana "Elshani'han" Sevaijen "Gar'Lev" "Ga'roth" Gilinir Ilmarriven "Ka'Thelan Krotus" Kanlee Kinaph Khorval Khyzon "Kree-thai" Kumari Lokune "Lor'Vela" Mhoroth Shalakai "Shantherin th'Clane" Shesh "Shraa'jath" Shras "Tel'ath" Thanatok Tashmaji Thejal Thelanikirak Thelasa-vei Thris Tuonetar "Trenkanshent sh'Lavan" Umarev Vinakthen "Vol'Rala" Weytahn Zabathu Ehranis Ranthris Idranis Lethanis Pavanis Senthris Arantis Shrantis Shora Thora Chela Dila Charia Talev Lethev Pellev Althev Sethev Prenev Thirish Therash Birish Nesh Kelash Mahir Thir Rraath Jesseth Pelleth Shortath
+		} 
+		corvette = {
+		}
+		saber = {
+		}
+		sovereign = {
+		}
+		steamrunner = {
+		}
+		adv_cruiser = {
+		}
+		strike = {
+		}
+		outpost_station = {
+			sequential_name = "Frontier Outpost"
+		}
+	}
+	
+	ship_class_names = {
+		corvette = { Thris }
+		saber = { Charal }
+		sovereign = { Kumari }
+		steamrunner = { Docana }
+		adv_cruiser = { Zabathu }
+		strike = { Khyzon }
+		science = { Atlira }
+	}
+
+	fleet_names = {
+		sequential_name = "%O% Guard"
+	}
+	
+	army_names = {
+		defense_army = {
+			sequential_name = "%O% Home Guard"
+		}
+		assault_army = {
+			sequential_name = "%O% Expeditionary Guard"
+		}
+		slave_army = {
+			sequential_name = "%O% Indentured Guard"
+		}
+		clone_army = { 
+			sequential_name = "%O% Clone Guard"
+		}
+		robotic_army = {
+			sequential_name = "%O% Mechanical Guard"
+		}
+		android_army = {
+			sequential_name = "%O% Synthetic Guard"
+		}
+		psionic_army = { 
+			sequential_name = "%O% Psi Guard"
+		}
+		xenomorph_army = {
+			sequential_name = "%O% Bio-Warfare Guard"
+		}
+		gene_warrior_army = {
+			sequential_name = "%O% Bio-Engineered Guard"
+		}
+	}
+
+	planet_names = {
+		generic = {
+			names = {
+				"New Andoria" Alrond Indarax Lursen Thonalan Threllvia Cimera Antipathy "Beta Prime" Thonolan Lurden Selrat Andarax Andolan Chasinthan Vilan Aranthan Tharian Dilan Silat Vilat Igrilat
+			} 
+		}
+	}
+
+
+	### CHARACTERS
+
+	character_names = {
+		names1 = {
+			weight = 100
+			first_names_male = {
+				Stoy Akoval Shev Ankora Tier Atmin "ch'Berro" Bregev Giered Tavrithinn Chorna Neshaal Shantherin Khenarc Thavanichent Mashish Shras Shelerib Vraath Hjalmar Silash Muav Turath Pov Keval Igrilan Shrall Shanradeskel Zharian Thezalden Sesha Chasinthrof Nisverin Senthofar Finirath Serrosel Ramasanar Gilmesheid Gaalen Rasanis Setheleyis Veni Tharia Zhimen Aranthanien Shelithan Vilashrel Veneth Sanioth Schwin Dilat Shaa Rahendervakell Ortees Tholev Shavras Tharval "Va'Kel" Val Theras Fellaren "Thy'lek" Thanashal Shir Astellet Thirishar Thelin Thortathanal "K'ras"
+			}
+			first_names_female = {
+				"Pava Ek'Noor" Sessethantis Shathrissia Sirta Thali Anishtalla Thrandasar "Phell'nun" Vrathev Kellerasana Pellan Celerasayna Idrani Imaru Jandara Trenkanshent Jessala Vaacith Ezrishar Vanda Lecheb Vinithnel Sherivan Undieela Dal Savaaroa Resthenar Altheria Zharran Chelienal Molsetev Araev Avaranthi Vindizhei Birivallah Trenev Shey Talas Rhiis Kellessar Charivretha Antocadra 
+			}
+			second_names = {
+				Aaraka Akria Aqabaa Arooth Charas Cheen Chun Claness Clev Collev Cray "D'Qua" Dani Dastisar Desma Dhaven Ehra Eddon "v'Elex" Endilev Zharath Ethre Evram Faila Fairoh Fel Fesoan Firro Foch Gesrit Gralev Grelin Hargrev Haslev Ivos Kanin Kebal Kelavar Kentrav Kerrosoth Kor Kovan Krotus "K'Tik" Larn Lavan Lero Vaacith Lesinas Letha Levak Lihwa Lindalan Lothas Lyaas "M'Giia" Mahirn Mai Makesh Menchal Menlich Meris Mezret Mirrin Narv Nayla Neroth Ness Noor Nortron Nras Nuillan Nuillan Okenga Pavarzi Polt Prenni Priil Raazn Ral Ranthi Rasdeth Rassa Refel Regda Ren Retsu Rhettel Revash Rhun Riin Rithsiria Roos Rothress Rraazh Rreev Ruathain Sena Shant Sharad Sharn Shavahar Shelas Shendileth Sheraan Shon Shoras Shran Sonnas Talee Talias Tarash Terren Thane Valrass Thyfon Thonen
+			}
+		}
+	}
+}

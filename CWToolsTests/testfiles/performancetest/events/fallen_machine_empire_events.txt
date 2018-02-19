@@ -1,0 +1,9 @@
+############################
+#
+# Fallen Empire 'Awakening' Events
+#
+# Written by Martin Anward
+# STNH - Capek 1.8.0 Compat
+############################
+
+namespace = fallen_machine_empire

@@ -1,0 +1,141 @@
+########################
+#
+# Iconia Feature Event  
+#   Written by Janack	
+#
+########################
+
+namespace = STH_iconia_event
+
+ship_event = {
+	id = STH_iconia_event.1
+	title = STH_iconia_event.1.name
+	desc = STH_iconia_event.1.desc
+	picture = STH_GFX_evt_iconia_1
+	show_sound = event_ship_thrusters
+	location = from
+	is_triggered_only = yes
+	immediate = {
+		from = {
+			set_country_flag = iconia_home_wolrd
+			set_planet_flag = STH_iconia_flag
+			random_tile = {
+				limit = { has_blocker = no has_building = no num_adjacent_tiles > 3 }
+				set_building = "building_capital_2"
+				set_ruined = yes
+				add_deposit = d_energy_deposit
+				random_neighboring_tile = {
+					limit = { has_building = no }
+					remove_blocker = yes
+					set_building = "building_hydroponics_farm_4"
+					set_ruined = yes
+					add_deposit = d_rich_farmland_deposit
+				}
+				random_neighboring_tile = {
+					limit = { has_building = no }
+					remove_blocker = yes
+					set_building = "building_pergium_power_plant_0"
+					set_ruined = yes
+					add_deposit = d_rich_energy_deposit
+					add_deposit = d_sr_pergium_5_deposit
+				}
+			}
+			random_tile = {
+				limit = { has_building = no }
+				remove_blocker = yes
+				set_building = "building_power_plant_4"
+				set_ruined = yes
+				add_deposit = d_rich_energy_deposit
+				random_neighboring_tile = {
+					limit = { has_building = no }
+					remove_blocker = yes
+					set_building = "building_pergium_power_plant_0"
+					set_ruined = yes
+					add_deposit = d_rich_energy_deposit
+					add_deposit = d_sr_pergium_5_deposit
+				}
+			}
+		}
+	}
+	option = {
+		name = STH_iconia_event.1.a
+		hidden_effect = {
+			ship_event = { id = STH_iconia_event.2 days = 30 } 
+		}
+	}
+}
+
+ship_event = {
+	id = STH_iconia_event.2
+	hide_window = yes
+	is_triggered_only = yes
+	trigger = {
+		exists = from
+		from = { has_country_flag = STH_iconia_flag }
+	}
+	immediate = {
+		if = {
+			limit = {
+				owner = {
+					owner = { has_transporters = yes }
+					energy > 499
+					minerals > 999
+				}
+			}
+			random_planet = {
+				limit = { has_planet_flag = STH_iconia_flag }
+				root.owner = { country_event = { id = STH_iconia_event.3 } }
+			}
+			else = {
+				random_planet = {
+					limit = { has_planet_flag = STH_iconia_flag }
+					root = { owner = { country_event = { id = STH_iconia_event.5 } } }
+				}
+			}
+		}	
+	}
+}
+
+country_event = {
+	id = STH_iconia_event.3
+	title = STH_iconia_event.3.name
+	desc = STH_iconia_event.3.desc
+	picture = sth_GFX_evt_iconia_2
+	location = Root
+	is_triggered_only = yes
+	immediate = { 
+		random_planet = {
+			limit = { has_planet_flag = STH_iconia_flag }
+			save_event_target_as = iconia
+		}
+	}
+	option = {
+		name = EXCELLENT
+		hidden_effect = {
+			owner = { add_minerals = -1000 add_energy = -500 }
+			enable_special_project = { name = "ICONIA_1_PROJECT" location = event_target:iconia }
+		}
+	}
+}
+
+ship_event = {
+	id = STH_iconia_event.4
+	title = STH_iconia_event.4.name
+	desc = STH_iconia_event.4.desc
+	picture = sth_GFX_evt_iconia_2
+	location = Root
+	is_triggered_only = yes
+	immediate = { }
+	option = { }
+}
+
+country_event = {
+	id = STH_iconia_event.5
+	title = STH_iconia_event.5.name
+	desc = STH_iconia_event.5.desc
+	picture = sth_GFX_evt_iconia_2
+	location = Root
+	is_triggered_only = yes
+	immediate = { }
+	option = { 	}
+}

@@ -486,7 +486,7 @@ module STLScopes =
         "PREVPREVPREV", prev >> prev >> prev;
         "PREVPREVPREVPREV", prev >> prev >> prev >> prev
     ]
-    let changeScope (effects : (Effect * bool) list) (triggers : (Effect * bool) list) (key : string) (source : ScopeContext) = 
+    let changeScope (effects : Effect list) (triggers : Effect list) (key : string) (source : ScopeContext) = 
         let key = if key.StartsWith("hidden:") then key.Substring(7) else key
         let keys = key.Split('.')
         let inner (context : ScopeContext) (nextKey : string) =
@@ -495,7 +495,6 @@ module STLScopes =
             | Some (_, f) -> f context, NewScope (f context)
             | None ->
                 let effect = (effects @ triggers) 
-                            |> List.map fst
                             |> List.choose (function | :? ScopedEffect as e -> Some e |_ -> None)
                             |> List.tryFind (fun e -> e.Name.ToLower() = nextKey.ToLower())
                 match effect with

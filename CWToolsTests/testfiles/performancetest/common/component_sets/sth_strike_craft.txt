@@ -1,0 +1,26 @@
+# Icons set here are the ones shown in compnent editor list.
+
+component_set = { key = "HANGAR_STANDARD_1" icon = "GFX_ship_part_HANGAR_STANDARD_1" icon_frame = 1 }
+component_set = { key = "HANGAR_STANDARD_2" icon = "GFX_ship_part_HANGAR_STANDARD_2" icon_frame = 1 }
+component_set = { key = "HANGAR_STANDARD_3" icon = "GFX_ship_part_HANGAR_STANDARD_3" icon_frame = 1 }
+component_set = { key = "HANGAR_STANDARD_4" icon = "GFX_ship_part_HANGAR_STANDARD_4" icon_frame = 1 }
+component_set = { key = "HANGAR_FEDERATION_1" icon = "GFX_ship_part_HANGAR_FEDERATION_1" icon_frame = 1 }
+component_set = { key = "HANGAR_FEDERATION_2" icon = "GFX_ship_part_HANGAR_FEDERATION_2" icon_frame = 1 }
+component_set = { key = "HANGAR_FEDERATION_3" icon = "GFX_ship_part_HANGAR_FEDERATION_3" icon_frame = 1 }
+component_set = { key = "HANGAR_FEDERATION_4" icon = "GFX_ship_part_HANGAR_FEDERATION_4" icon_frame = 1 }
+component_set = { key = "HANGAR_CARDASSIAN_1" icon = "GFX_ship_part_HANGAR_CARDASSIAN_1" icon_frame = 1 }
+component_set = { key = "HANGAR_CARDASSIAN_2" icon = "GFX_ship_part_HANGAR_CARDASSIAN_2" icon_frame = 1 }
+component_set = { key = "HANGAR_CARDASSIAN_3" icon = "GFX_ship_part_HANGAR_CARDASSIAN_3" icon_frame = 1 }
+component_set = { key = "HANGAR_CARDASSIAN_4" icon = "GFX_ship_part_HANGAR_CARDASSIAN_4" icon_frame = 1 }
+component_set = { key = "HANGAR_KLINGON_1" icon = "GFX_ship_part_HANGAR_KLINGON_1" icon_frame = 1 }
+component_set = { key = "HANGAR_KLINGON_2" icon = "GFX_ship_part_HANGAR_KLINGON_2" icon_frame = 1 }
+component_set = { key = "HANGAR_KLINGON_3" icon = "GFX_ship_part_HANGAR_KLINGON_3" icon_frame = 1 }
+component_set = { key = "HANGAR_KLINGON_4" icon = "GFX_ship_part_HANGAR_KLINGON_4" icon_frame = 1 }
+component_set = { key = "HANGAR_ROMULAN_1" icon = "GFX_ship_part_HANGAR_ROMULAN_1" icon_frame = 1 }
+component_set = { key = "HANGAR_ROMULAN_2" icon = "GFX_ship_part_HANGAR_ROMULAN_2" icon_frame = 1 }
+component_set = { key = "HANGAR_ROMULAN_3" icon = "GFX_ship_part_HANGAR_ROMULAN_3" icon_frame = 1 }
+component_set = { key = "HANGAR_ROMULAN_4" icon = "GFX_ship_part_HANGAR_ROMULAN_4" icon_frame = 1 }
+component_set = { key = "HANGAR_DOMINION_1" icon = "GFX_ship_part_HANGAR_DOMINION_1" icon_frame = 1 }
+component_set = { key = "HANGAR_DOMINION_2" icon = "GFX_ship_part_HANGAR_DOMINION_2" icon_frame = 1 }
+component_set = { key = "HANGAR_DOMINION_3" icon = "GFX_ship_part_HANGAR_DOMINION_3" icon_frame = 1 }
+component_set = { key = "HANGAR_DOMINION_4" icon = "GFX_ship_part_HANGAR_DOMINION_4" icon_frame = 1 }

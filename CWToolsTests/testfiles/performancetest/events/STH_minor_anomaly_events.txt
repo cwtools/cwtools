@@ -1,0 +1,97 @@
+############################
+#
+# The Silent Enemy Events
+#
+# Written by Adam Coleman
+#
+############################
+
+namespace = STH_minor_anomaly
+
+
+
+### Ancient Probe
+ship_event = {
+	id = STH_minor_anomaly.1
+	title = "STH_minor_anomaly.1.name"
+	desc = "STH_minor_anomaly.1.desc"
+	picture = sth_GFX_evt_alienProbe
+	show_sound = event_sensor_ping
+	location = FROM
+	is_triggered_only = yes
+	option = {
+		name = STH_minor_anomaly.1.a
+		random_list = {
+			10 = {
+				modifier = { factor = 1.25 leader = { has_level = 2 } }
+				modifier = { factor = 1.50 leader = { has_level = 3 } }
+				modifier = { factor = 1.75 leader = { has_level = 4 } }
+				modifier = { factor = 2.00 leader = { has_level = 5 } }
+				ship_event = { id = STH_minor_anomaly.2 days = 2 }
+			}
+			10 = {
+				ship_event = { id = STH_minor_anomaly.5 days = 2 }
+			}
+		}
+	}
+	option = { 
+		name = STH_minor_anomaly.1.b 
+	}
+}
+
+ship_event ={
+	id = STH_minor_anomaly.2
+	title = "STH_minor_anomaly.2.name"
+	desc = "STH_minor_anomaly.2.desc"
+	picture = sth_GFX_evt_alienProbe
+	location = FROM
+	is_triggered_only = yes
+	option = { 
+		name = STH_minor_anomaly.2.a 
+		owner = { add_physics_research = 100 }
+	}
+}
+
+ship_event = {
+	id = STH_minor_anomaly.3
+	title = "STH_minor_anomaly.3.name"
+	desc = "STH_minor_anomaly.3.desc"
+	picture = sth_GFX_evt_alienProbe
+	location = FROM
+	is_triggered_only = yes
+	option = { name = STH_minor_anomaly.3.a }
+}
+
+ship_event = {
+	id = STH_minor_anomaly.4
+	title = "STH_minor_anomaly.4.name"
+	desc = "STH_minor_anomaly.4.desc"
+	picture = sth_GFX_evt_alienProbe
+	location = FROM
+	is_triggered_only = yes
+	immediate = {
+		create_country = { name = "NAME_Ancient_Probe" type = faction }
+		last_created_country = {
+			establish_communications_no_message = root.owner
+			create_fleet = {
+				name = "NAME_Ancient_Combat_Drone"
+				effect = {
+					set_owner = PREV
+					create_ship = { name = "NAME_Ancient_Combat_Drone" design = "NAME_Ancient_Combat_Drone" }
+					set_location = from
+				}
+			}
+			set_faction_hostility = { set_hostile = yes }
+		}
+	}
+	option = { name = STH_minor_anomaly.4.a }
+}
+
+ship_event = {
+	id = STH_minor_anomaly.5
+	title = "STH_minor_anomaly.5.name"
+	desc = "STH_minor_anomaly.5.desc"
+	picture = sth_GFX_evt_alienProbe
+	is_triggered_only = yes
+	option = { name = STH_minor_anomaly.5.a }
+}

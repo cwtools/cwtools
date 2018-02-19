@@ -1,0 +1,92 @@
+@distance = 30
+@base_moon_distance = 10
+
+#Dosi
+dosi_homeworld = {
+	name = "Dosarus"
+	class = "sc_m"
+	flags = { dosi_homeworld }
+	init_effect = { log = "dosi homeworld" }
+	usage = custom_empire
+	max_instances = 1
+	planet = { name = "Dosarus" class = "pc_m_star" orbit_distance = 0 orbit_angle = 1 size = 20 has_ring = no }
+	change_orbit = { min = 20 max = 30}	
+	planet = { orbit_distance = { min = 20 max = 35 } class = "rl_unhabitable_planets" size = { min = 5 max = 12 } orbit_angle = { min = 90 max = 270 } }
+	change_orbit = { min = 20 max = 30}	
+	planet = {
+		name = "Dosa"
+		class = pc_tropical
+		orbit_distance = 25
+		orbit_angle = 220
+		size = { min = 22 max = 25 }
+		starting_planet = yes
+		has_ring = no
+		tile_blockers = none
+		modifiers = none
+		init_effect = { prevent_anomaly = yes }
+		init_effect = {
+			if = {
+				limit = { NOT = { any_country = { has_country_flag = dosi_confederacy } } }
+				create_species = { 
+				    name = "Dosi" 
+				    class = DOS 
+				    portrait = dosi 
+				    homeworld = THIS 
+				    traits = { 
+				        trait = "trait_very_strong" 
+				        trait = "trait_slow_learners" 
+				        ideal_planet_class = "pc_tropical" 
+					} 
+				}
+				last_created_species = { save_global_event_target_as = dosiSpecies }
+				create_country = {
+					name = "NAME_dosi_confederacy"
+					type = default
+					ignore_initial_colony_error = yes
+					civics = { civic = "civic_warrior_culture" civic = "civic_meritocracy" }
+					authority = auth_oligarchic
+					name_list = "Dosi"
+					ethos = { ethic = "ethic_militarist" ethic = "ethic_materialist" ethic = "ethic_xenophile" }
+					species = event_target:dosiSpecies
+					flag = {
+						icon = { category = "spherical" file = "flag_spherical_4.dds" }
+						background = { category = "backgrounds" file = "stripe.dds" }
+						colors = { "red" "customcolor2050" "null" "null" }
+					}
+					ship_prefix = "DCS"
+					effect = {
+						set_graphical_culture = generic_02
+						set_country_flag = dosi_confederacy
+						set_country_flag = custom_start_screen
+						set_country_flag = generic_ent
+						set_country_flag = gamma_empire
+						set_country_flag = init_spawned
+						set_country_flag = sth_medium_galaxy
+						save_global_event_target_as = dosi_confederacy
+					}
+				}
+				create_colony = { owner = event_target:dosi_confederacy species = event_target:dosiSpecies ethos = owner }
+			}
+			set_capital = yes
+			random_country = {
+				limit = { has_country_flag = dosi_confederacy }
+				save_event_target_as = dosi_confederacy
+				add_appropriate_start_techs = yes
+				species = { save_global_event_target_as = dosiSpecies }
+            }
+			set_owner = event_target:dosi_confederacy
+			generate_major_empire_start_buildings = yes
+			generate_major_empire_start_pops = yes
+			generate_major_empire_start_fleets = yes
+			set_name = "Dosa"
+		}
+	}
+	planet = {
+		count = { min = 3 max = 8 }
+		orbit_distance = { min = 25 max = 30 }
+		class = "rl_unhabitable_planets"
+		orbit_angle = { min = 90 max = 270 }
+		change_orbit = @base_moon_distance
+		moon = { count = { min = 0 max = 1 } class = "rl_outer_moons" orbit_angle = { min = 90 max = 270 } orbit_distance = 5 }
+	}
+}

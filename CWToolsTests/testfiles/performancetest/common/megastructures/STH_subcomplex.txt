@@ -1,0 +1,132 @@
+STH_subcomplex_0 = {
+	entity = ""
+	construction_entity = "orbital_station_core_entity"
+	place_entity_on_planet_plane = yes
+	entity_offset = { x = 0 y = 0 }
+	build_time = 720
+	build_cost = {
+		minerals = 1500
+		influence = 300
+	}
+
+	potential = {
+		is_country_type = default
+		AND = {
+			has_swapped_tradition = tr_assimilation_3
+		}
+	}
+
+	possible = {
+		custom_tooltip_fail = {
+			text = "requires_unowned_system"
+			solar_system = { 
+				OR = {
+					NOT = { exists = space_owner }
+					AND = {
+						is_inside_border = FROM
+						NOT = { any_planet = { exists = owner } }
+					}
+				}
+			}
+		}
+		
+		custom_tooltip_fail = {
+			text = "requires_fewer_starbases"
+			FROM = { 
+				check_variable = { which = "ds_starbase_count" value < 6 }
+				OR = { 
+					has_non_swapped_tradition = tr_expansion_a_new_life
+					has_swapped_tradition = tr_expansion_a_new_life_machine
+					has_swapped_tradition = tr_assimilation_3
+				}
+			}
+		}
+	}
+
+	placement_rules = {
+		planet_possible = {
+			# always = yes
+			NOT = { has_anomaly = yes }
+			custom_tooltip_fail = {
+				text = "requires_no_existing_megastructure"
+				can_build_megastructure_on_planet = yes
+			}
+			custom_tooltip_fail = {
+				text = "requires_no_orbital_station"
+				has_orbital_station = no
+			}
+			custom_tooltip_fail = {
+				text = "requires_survey_not_habitable"
+				is_surveyed = { who = prev.from status = yes }
+				habitable_planet = no
+			}
+			custom_tooltip_fail = {
+				text = "requires_major_planetary_body"
+				is_star = no	
+			}
+		}
+	}
+	
+	ai_weight = { }
+	
+	on_build_start = {}
+	on_build_cancel = {}
+	
+	on_build_complete = {
+		set_star_flag = starbase_built
+		spawn_planet = {
+			class = "pc_starbase_blank_brg"
+			location = fromfrom.planet
+			orbit_location = yes
+			orbit_angle_offset = 45
+			orbit_distance_offset = 9.899
+			size = 5
+			has_ring = no
+		
+			init_effect = {
+				surveyed = {
+					set_surveyed = yes
+					surveyor = FROM
+				}
+				while = {
+					limit = {
+						any_tile = { has_blocker = yes }
+					}
+					random_tile = {
+						limit = { has_blocker = yes }
+						remove_blocker = yes
+					}
+				}
+				create_colony = { owner = FROM species = FROM }
+				random_tile = {
+					limit = { has_building = yes }
+					set_building = "node_hub_0"
+				}
+				create_correct_spaceport = yes
+				set_correct_spaceport_planet = yes
+				last_created_fleet = { set_fleet_flag = starbase_megastructure set_location = prev }
+				set_correct_spaceport_name = yes
+				FROM = { 
+					save_event_target_as = buildingCountry
+					set_variable = { which = "ds_starbase_count" value = 1 }
+					every_owned_planet  = {
+						limit = { is_starbase_planet = yes }
+						event_target:buildingCountry = { change_variable = { which = "ds_starbase_count" value = 1 } }
+					}
+				}
+				
+				copy_orbital_tile = fromfrom.planet
+				set_planet_flag = megastructure
+				set_planet_flag = starbase_megastructure_planet	
+				every_tile = {
+					limit = { has_building = no }
+					random_list = {
+						10 = { set_blocker = "tb_unicomplex_expansion_1" }
+						10 = { set_blocker = "tb_unicomplex_expansion_2" }
+					}
+				}
+			}
+		}
+		remove_megastructure = fromfrom
+	}
+}

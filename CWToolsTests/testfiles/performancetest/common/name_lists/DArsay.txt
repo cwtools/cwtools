@@ -1,0 +1,94 @@
+﻿### Darsay
+Darsay = {
+	randomized = no
+
+	ship_names = {
+		generic = {
+			Amdaroth Artorev Ashoka Atlira Atlirith Thris Hristish Charal Docana "Elshani'han" Sevaijen "Gar'Lev" "Ga'roth" Gilinir Ilmarriven "Ka'Thelan Krotus" Kanlee Kinaph Khorval Khyzon "Kree-thai" Kumari Lokune "Lor'Vela" Mhoroth Shalakai "Shantherin th'Clane" Shesh "Shraa'jath" Shras "Tel'ath" Thanatok Tashmaji Thejal Thelanikirak Thelasa-vei Thris Tuonetar "Trenkanshent sh'Lavan" Umarev Vinakthen "Vol'Rala" Weytahn Zabathu Ehranis Ranthris Idranis Lethanis Pavanis Senthris Arantis Shrantis Shora Thora Chela Dila Charia Talev Lethev Pellev Althev Sethev Prenev Thirish Therash Birish Nesh Kelash Mahir Thir Rraath Jesseth Pelleth Shortath
+		} 
+		corvette = {
+		}
+		saber = {
+		}
+		sovereign = {
+		}
+		steamrunner = {
+		}
+		adv_cruiser = {
+		}
+		strike = {
+		}
+		outpost_station = {
+			sequential_name = "Frontier Outpost"
+		}
+	}
+	
+	ship_class_names = {
+		corvette = { Thris }
+		saber = { Charal }
+		sovereign = { Kumari }
+		steamrunner = { Docana }
+		adv_cruiser = { Zabathu }
+		strike = { Khyzon }
+		science = { Atlira }
+	}
+
+	fleet_names = {
+		sequential_name = "%O% Guard"
+	}
+	
+	army_names = {
+		defense_army = {
+			sequential_name = "%O% Home Guard"
+		}
+		assault_army = {
+			sequential_name = "%O% Expeditionary Guard"
+		}
+		slave_army = {
+			sequential_name = "%O% Indentured Guard"
+		}
+		clone_army = { 
+			sequential_name = "%O% Clone Guard"
+		}
+		robotic_army = {
+			sequential_name = "%O% Mechanical Guard"
+		}
+		android_army = {
+			sequential_name = "%O% Synthetic Guard"
+		}
+		psionic_army = { 
+			sequential_name = "%O% Psi Guard"
+		}
+		xenomorph_army = {
+			sequential_name = "%O% Bio-Warfare Guard"
+		}
+		gene_warrior_army = {
+			sequential_name = "%O% Bio-Engineered Guard"
+		}
+	}
+
+	planet_names = {
+		generic = {
+			names = {
+			} 
+		}
+	}
+
+
+	### CHARACTERS
+
+	character_names = {
+		names1 = {
+			weight = 100
+			first_names_male = {
+				Ihat Korgano Mahat Korhat Margano Marganat Igano "D'Iha" "D'argat" Korha "D'Iho" "I'argat" Gano "R'gat" "D'ar" "R'Orhan" "Iganor'a" "Margan'Orh"
+			}
+			first_names_female = {
+				Masaka Iha Kora Seka Lesaka Lora Makara "D'Irsa" "D'gana" Masrana Mana Masagana Lona Sekna "M'Masakaa" "Maoe Ko" "Masak Lor" "Ko'ganna"
+			}
+			second_names = {
+				""
+			}
+		}
+	}
+}

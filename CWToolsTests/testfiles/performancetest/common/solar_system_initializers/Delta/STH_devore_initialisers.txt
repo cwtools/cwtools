@@ -1,0 +1,106 @@
+@distance = 30
+@base_moon_distance = 10
+
+
+#Devorian
+devorian_homeworld = {
+	name = "Devore"
+	class = "sc_k"
+	asteroids_distance = {min = 70 max = 90}
+	flags = { devorian_homeworld }
+	init_effect = { log = "devore homeworld" }
+	usage = custom_empire
+	max_instances = 1
+	planet = { name = "Devore" class = "pc_k_star" orbit_distance = 0 orbit_angle = 1 size = 30 has_ring = no }
+	planet = {
+		count = {min = 1 max = 3}
+		orbit_distance = { min = 23 max = 29 }
+		class = random_non_colonizable
+		orbit_angle = { min = 90 max = 270 }
+		change_orbit = @base_moon_distance
+		moon = { count = { min = 0 max = 2 } class = random_non_colonizable orbit_angle = { min = 90 max = 270 } orbit_distance = 5 }
+	}
+	planet = {
+		name = "Devore"
+		class = pc_alpine
+		orbit_distance = 14.5
+		orbit_angle = 220
+		size = { min = 22 max = 25 }
+		starting_planet = yes
+		has_ring = no
+		tile_blockers = none
+		modifiers = none
+		init_effect = { prevent_anomaly = yes }
+		init_effect = {
+			if = {
+				limit = { NOT = { any_country = { has_country_flag = devorian_solidarity } } }
+				create_species = { 
+				    name = "Devore" 
+				    class = DEV 
+				    portrait = devore 
+				    homeworld = THIS 
+				    traits = { 
+				        trait = "trait_conformists" 
+				        ideal_planet_class = "pc_alpine" 
+					} 
+				}
+				last_created_species = { save_global_event_target_as = devoreSpecies }
+				create_country = {
+					name = "NAME_devorian_solidarity"
+					type = default
+					ignore_initial_colony_error = yes
+					civics = { civic = "civic_telepath_hunters" civic = "civic_efficient_bureaucracy" }
+					authority = auth_dictatorial
+					name_list = "Devore"
+					ethos = { ethic = "ethic_xenophobe" ethic = "ethic_authoritarian" ethic = "ethic_materialist" }
+					species = event_target:devoreSpecies
+					flag = {
+						icon = { category = "trek" file = "devore.dds" }
+						background = { category = "backgrounds" file = "00_solid.dds" }
+						colors = { "customcolor483" "black" "null" "null" }
+					}
+					ship_prefix=""
+					effect = {
+						set_graphical_culture = generic_01
+						set_country_flag = devorian_solidarity
+						set_country_flag = custom_start_screen
+						set_country_flag = generic_ent
+						set_country_flag = delta_empire
+						set_country_flag = init_spawned
+						set_country_flag = sth_medium_galaxy
+						save_global_event_target_as = devorian_solidarity
+					}
+				}
+				create_colony = { owner = event_target:devorian_solidarity species = event_target:devoreSpecies ethos = owner }
+			}
+			set_capital = yes
+			random_country = {
+				limit = { has_country_flag = devorian_solidarity }
+				save_global_event_target_as = devorian_solidarity
+				add_appropriate_start_techs = yes
+				species = { save_global_event_target_as = devoreSpecies }
+			}
+			set_owner = event_target:devorian_solidarity
+			generate_major_empire_start_buildings = yes
+			generate_major_empire_start_pops = yes
+			generate_major_empire_start_fleets = yes
+			set_name = "Devore" 					
+		}
+	}
+	planet = {
+		count = { min = 0 max = 3 }
+		orbit_distance = { min = 14 max = 25 }
+		class = random_non_colonizable
+		orbit_angle = { min = 90 max = 270 }
+		change_orbit = @base_moon_distance
+		moon = { count = { min = 0 max = 1 } class = random_non_colonizable orbit_angle = { min = 90 max = 270 } orbit_distance = 5 }
+	}
+	planet = {
+		count = 1
+		orbit_distance = { min = 18 max = 25 }
+		class = random_non_colonizable
+		orbit_angle = { min = 90 max = 270 }
+		change_orbit = @base_moon_distance
+		moon = { count = { min = 0 max = 1 } class = random_non_colonizable orbit_angle = { min = 90 max = 270 } orbit_distance = 5 }
+	}
+}

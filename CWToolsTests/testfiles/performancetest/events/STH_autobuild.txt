@@ -1,0 +1,593 @@
+#
+namespace = sth_autobuild
+
+# here you can add more autobuild rules, for now only auto update
+# update
+planet_event = {
+    id = sth_autobuild.1
+    hide_window = yes
+    is_triggered_only = yes
+
+    trigger = {
+        autobuild_trigger_local_autoupdate = yes
+    }
+
+    immediate = {
+        every_tile = {
+            limit = {
+                autobuild_trigger_has_pop = yes
+            }
+            switch = {
+                trigger = has_building
+
+				building_physics_lab_0 = { add_building_construction = building_physics_lab_1 }
+				building_physics_lab_1 = { add_building_construction = building_physics_lab_2 }
+				building_physics_lab_2 = { add_building_construction = building_physics_lab_3 }
+				building_physics_lab_3 = { add_building_construction = building_physics_lab_4 }
+				building_holodeck_1 = { add_building_construction = building_holodeck_2 }
+				building_planetary_shield_2 = { add_building_construction = building_planetary_shield_3 }
+				building_planetary_shield_3 = { add_building_construction = building_planetary_shield_4 }
+				building_planetary_shield_4 = { add_building_construction = building_planetary_shield_5 }
+				building_ground_defense_1 = { add_building_construction = building_ground_defense_2 }
+				building_ground_defense_2 = { add_building_construction = building_ground_defense_3 }
+				building_basic_power_plant = { add_building_construction = building_power_plant_1 }
+				building_power_plant_1 = { add_building_construction = building_power_plant_2 }
+				building_power_plant_2 = { add_building_construction = building_power_plant_3 }
+				building_power_plant_3 = { add_building_construction = building_power_plant_4 }
+				building_power_plant_4 = { add_building_construction = building_power_plant_5 }
+				building_power_hub_1 = { add_building_construction = building_power_hub_2 }
+				building_starport_0 = { add_building_construction = building_starport_a }
+				building_central_plaza_0 = { add_building_construction = building_central_plaza_1 }
+				building_central_plaza_1 = { add_building_construction = building_central_plaza_2 }
+				building_central_plaza_2 = { add_building_construction = building_central_plaza_3 }
+				building_police_1 = { add_building_construction = building_police_2 }
+				building_police_2 = { add_building_construction = building_police_3 }
+				building_police_3 = { add_building_construction = building_police_4 }
+				building_museum_1 = { add_building_construction = building_museum_2 }
+				building_museum_2 = { add_building_construction = building_museum_3 }
+				building_virtual_combat_arena = { add_building_construction = building_virtual_combat_arena_tsunkatse }
+				building_bureau_1 = { add_building_construction = building_bureau_2 }
+				building_secret_order_1 = { add_building_construction = building_secret_order_2 }
+				building_colony_shelter = { add_building_construction = building_capital_1 }
+				building_capital_1 = { add_building_construction = building_capital_2 }
+				building_capital_2 = { add_building_construction = building_capital_3 }
+				building_bio_lab_0 = { add_building_construction = building_bio_lab_1 }
+				building_bio_lab_1 = { add_building_construction = building_bio_lab_2 }
+				building_bio_lab_2 = { add_building_construction = building_bio_lab_3 }
+				building_bio_lab_3 = { add_building_construction = building_bio_lab_4 }
+				building_ketracel_white_synthesis_facility_0 = { add_building_construction = building_ketracel_white_synthesis_facility_1 }
+				building_basic_farm = { add_building_construction = building_hydroponics_farm_1 }
+				building_hydroponics_farm_1 = { add_building_construction = building_hydroponics_farm_2 }
+				building_hydroponics_farm_2 = { add_building_construction = building_hydroponics_farm_3 }
+				building_hydroponics_farm_3 = { add_building_construction = building_hydroponics_farm_4 }
+				building_hydroponics_farm_4 = { add_building_construction = building_hydroponics_farm_5 }
+				building_frontier_clinic_0 = { add_building_construction = building_frontier_clinic_1 }
+				building_frontier_clinic_1 = { add_building_construction = building_frontier_clinic_2 }
+				building_frontier_clinic_2 = { add_building_construction = building_frontier_clinic_3 }
+				building_frontier_clinic_3 = { add_building_construction = building_frontier_clinic_4 }
+				building_engineering_facility_0 = { add_building_construction = building_engineering_facility_1 }
+				building_engineering_facility_1 = { add_building_construction = building_engineering_facility_2 }
+				building_engineering_facility_2 = { add_building_construction = building_engineering_facility_3 }
+				building_engineering_facility_3 = { add_building_construction = building_engineering_facility_4 }
+				building_basic_mine = { add_building_construction = building_mining_network_1 }
+				building_mining_network_1 = { add_building_construction = building_mining_network_2 }
+				building_mining_network_2 = { add_building_construction = building_mining_network_3 }
+				building_mining_network_3 = { add_building_construction = building_mining_network_4 }
+				building_mining_network_4 = { add_building_construction = building_mining_network_5 }
+				building_mineral_silo_0 = { add_building_construction = building_mineral_silo_1 }
+				building_mineral_silo_1 = { add_building_construction = building_mineral_silo_2 }
+				building_mineral_processing_plant_0 = { add_building_construction = building_mineral_processing_plant_1 }
+				building_dilithium_refinery_0 = { add_building_construction = building_dilithium_refinery_2 }
+				building_dilithium_refinery_2 = { add_building_construction = building_dilithium_refinery_3 }
+				building_dilithium_refinery_3 = { add_building_construction = building_dilithium_refinery_4 }
+				building_industrial_fabricator_1 = { add_building_construction = building_industrial_fabricator_2 }
+				building_steam_dome_1 = { add_building_construction = building_steam_dome_2 }
+				building_hypoeronic_generator_1 = { add_building_construction = building_hypoeronic_generator_2 }
+				building_freeze_dome_1 = { add_building_construction = building_freeze_dome_2 }
+				building_arcology_1 = { add_building_construction = building_arcology_2 }
+				building_arcology_2 = { add_building_construction = building_arcology_3 }
+				building_arcology_3 = { add_building_construction = building_arcology_4 }
+				building_arcology_4 = { add_building_construction = building_arcology_5 }
+				space_building_physics_lab_0 = { add_building_construction = space_building_physics_lab_1 }
+				space_building_physics_lab_1 = { add_building_construction = space_building_physics_lab_2 }
+				space_building_physics_lab_2 = { add_building_construction = space_building_physics_lab_3 }
+				space_building_physics_lab_3 = { add_building_construction = space_building_physics_lab_4 }
+				space_building_holodeck_1 = { add_building_construction = space_building_holodeck_2 }
+				space_building_planetary_shield_2 = { add_building_construction = space_building_planetary_shield_3 }
+				space_building_planetary_shield_3 = { add_building_construction = space_building_planetary_shield_4 }
+				space_building_planetary_shield_4 = { add_building_construction = space_building_planetary_shield_5 }
+				space_building_basic_power_plant = { add_building_construction = space_building_power_plant_1 }
+				space_building_power_plant_1 = { add_building_construction = space_building_power_plant_2 }
+				space_building_power_plant_2 = { add_building_construction = space_building_power_plant_3 }
+				space_building_power_plant_3 = { add_building_construction = space_building_power_plant_4 }
+				space_building_power_plant_4 = { add_building_construction = space_building_power_plant_5 }
+				space_building_power_hub_1 = { add_building_construction = space_building_power_hub_2 }
+				space_building_central_plaza_0 = { add_building_construction = space_building_central_plaza_1 }
+				space_building_central_plaza_1 = { add_building_construction = space_building_central_plaza_2 }
+				space_building_central_plaza_2 = { add_building_construction = space_building_central_plaza_3 }
+				space_building_police_1 = { add_building_construction = space_building_police_2 }
+				space_building_police_2 = { add_building_construction = space_building_police_3 }
+				space_building_police_3 = { add_building_construction = space_building_police_4 }
+				space_building_bureau_1 = { add_building_construction = space_building_bureau_2 }
+				space_building_secret_order_1 = { add_building_construction = space_building_secret_order_2 }
+				helix_ops_0 = { add_building_construction = helix_ops_1 }
+				helix_ops_1 = { add_building_construction = helix_ops_2 }
+				helix_ops_2 = { add_building_construction = helix_ops_3 }
+				space_building_bio_lab_0 = { add_building_construction = space_building_bio_lab_1 }
+				space_building_bio_lab_1 = { add_building_construction = space_building_bio_lab_2 }
+				space_building_bio_lab_2 = { add_building_construction = space_building_bio_lab_3 }
+				space_building_bio_lab_3 = { add_building_construction = space_building_bio_lab_4 }
+				space_building_basic_farm = { add_building_construction = space_building_hydroponics_farm_1 }
+				space_building_hydroponics_farm_1 = { add_building_construction = space_building_hydroponics_farm_2 }
+				space_building_hydroponics_farm_2 = { add_building_construction = space_building_hydroponics_farm_3 }
+				space_building_hydroponics_farm_3 = { add_building_construction = space_building_hydroponics_farm_4 }
+				space_building_hydroponics_farm_4 = { add_building_construction = space_building_hydroponics_farm_5 }
+				space_building_frontier_clinic_0 = { add_building_construction = space_building_frontier_clinic_1 }
+				space_building_frontier_clinic_1 = { add_building_construction = space_building_frontier_clinic_2 }
+				space_building_frontier_clinic_2 = { add_building_construction = space_building_frontier_clinic_3 }
+				space_building_frontier_clinic_3 = { add_building_construction = space_building_frontier_clinic_4 }
+				space_building_dilithium_refinery_0 = { add_building_construction = space_building_dilithium_refinery_2 }
+				space_building_dilithium_refinery_2 = { add_building_construction = space_building_dilithium_refinery_3 }
+				space_building_dilithium_refinery_3 = { add_building_construction = space_building_dilithium_refinery_4 }
+				space_building_engineering_facility_0 = { add_building_construction = space_building_engineering_facility_1 }
+				space_building_engineering_facility_1 = { add_building_construction = space_building_engineering_facility_2 }
+				space_building_engineering_facility_2 = { add_building_construction = space_building_engineering_facility_3 }
+				space_building_engineering_facility_3 = { add_building_construction = space_building_engineering_facility_4 }
+				space_building_basic_mine = { add_building_construction = space_building_mining_network_1 }
+				space_building_mining_network_1 = { add_building_construction = space_building_mining_network_2 }
+				space_building_mining_network_2 = { add_building_construction = space_building_mining_network_3 }
+				space_building_mining_network_3 = { add_building_construction = space_building_mining_network_4 }
+				space_building_mining_network_4 = { add_building_construction = space_building_mining_network_5 }
+				space_building_mineral_silo_0 = { add_building_construction = space_building_mineral_silo_1 }
+				space_building_mineral_silo_1 = { add_building_construction = space_building_mineral_silo_2 }
+				space_building_mineral_processing_plant_0 = { add_building_construction = space_building_mineral_processing_plant_1 }
+				space_building_industrial_fabricator_1 = { add_building_construction = space_building_industrial_fabricator_2 }
+				space_building_arcology_1 = { add_building_construction = space_building_arcology_2 }
+				space_building_arcology_2 = { add_building_construction = space_building_arcology_3 }
+				space_building_arcology_3 = { add_building_construction = space_building_arcology_4 }
+				space_building_arcology_4 = { add_building_construction = space_building_arcology_5 }
+				space_building_transwarp_comm_0 = { add_building_construction = space_building_transwarp_comm_1 }
+				space_building_transwarp_comm_1 = { add_building_construction = space_building_transwarp_comm_2 }
+				space_building_queen_0 = { add_building_construction = space_building_queen_1 }
+				space_building_queen_1 = { add_building_construction = space_building_queen_2 }
+				space_building_queen_2 = { add_building_construction = space_building_queen_3 }
+				space_building_queen_3 = { add_building_construction = space_building_queen_4 }
+				space_building_queen_4 = { add_building_construction = space_building_queen_5 }
+				space_building_maturation_0 = { add_building_construction = space_building_maturation_1 }
+				space_building_maturation_1 = { add_building_construction = space_building_maturation_2 }
+				space_building_maturation_2 = { add_building_construction = space_building_maturation_3 }
+				space_building_maturation_3 = { add_building_construction = space_building_maturation_4 }
+				space_building_archive_0 = { add_building_construction = space_building_archive_1 }
+				space_building_archive_1 = { add_building_construction = space_building_archive_2 }
+				building_starbase_operations_0 = { add_building_construction = building_starbase_operations_1 }
+				building_starbase_operations_1 = { add_building_construction = building_starbase_operations_2 }
+				building_starbase_operations_2 = { add_building_construction = building_starbase_operations_3 }
+				building_starbase_consulate_0 = { add_building_construction = building_starbase_consulate_1 }
+				building_starbase_consulate_1 = { add_building_construction = building_starbase_consulate_2 }
+				building_starbase_consulate_2 = { add_building_construction = building_starbase_consulate_3 }
+				building_starbase_civilian_0 = { add_building_construction = building_starbase_civilian_1 }
+				building_starbase_civilian_1 = { add_building_construction = building_starbase_civilian_2 }
+				building_starbase_civilian_2 = { add_building_construction = building_starbase_civilian_3 }
+				building_starbase_cultural_0 = { add_building_construction = building_starbase_cultural_1 }
+				building_starbase_cultural_1 = { add_building_construction = building_starbase_cultural_2 }
+				building_starbase_cultural_2 = { add_building_construction = building_starbase_cultural_3 }
+				building_starbase_promenade_0 = { add_building_construction = building_starbase_promenade_1 }
+				building_starbase_promenade_1 = { add_building_construction = building_starbase_promenade_2 }
+				building_starbase_promenade_2 = { add_building_construction = building_starbase_promenade_3 }
+				building_starbase_colonial_0 = { add_building_construction = building_starbase_colonial_1 }
+				building_starbase_colonial_1 = { add_building_construction = building_starbase_colonial_2 }
+				building_starbase_colonial_2 = { add_building_construction = building_starbase_colonial_3 }
+				building_starbase_arboretum_0 = { add_building_construction = building_starbase_arboretum_1 }
+				building_starbase_arboretum_1 = { add_building_construction = building_starbase_arboretum_2 }
+				building_starbase_arboretum_2 = { add_building_construction = building_starbase_arboretum_3 }
+				building_starbase_shipyard_0 = { add_building_construction = building_starbase_shipyard_1 }
+				building_starbase_shipyard_1 = { add_building_construction = building_starbase_shipyard_2 }
+				building_starbase_shipyard_2 = { add_building_construction = building_starbase_shipyard_3 }
+				building_starbase_science_0 = { add_building_construction = building_starbase_science_1 }
+				building_starbase_science_1 = { add_building_construction = building_starbase_science_2 }
+				building_starbase_science_2 = { add_building_construction = building_starbase_science_3 }
+				building_starbase_ore_0 = { add_building_construction = building_starbase_ore_1 }
+				building_starbase_ore_1 = { add_building_construction = building_starbase_ore_2 }
+				building_starbase_ore_2 = { add_building_construction = building_starbase_ore_3 }
+            }
+        }
+    }
+}
+
+# local autobuild xeno zoo
+planet_event = {
+	id = sth_autobuild.2
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		not = {
+			is_planet_class = pc_habitat
+		}
+		autobuild_trigger_free_from_autobuild_not_spec_planets = no
+		autobuild_trigger_has_any_capital = yes
+		exists = owner
+		owner = {
+			or = {
+				has_country_flag = autobuild_building_xeno_zoo
+				and = {
+					is_ai = yes
+					has_global_flag = autobuild_ai_allowed
+				}
+			}
+			has_technology = tech_society_xenology_445
+			autobuild_trigger_cost = yes
+		}
+		any_tile = {
+			has_resource = sr_tribbles_6
+			not = {
+				has_building = building_xeno_zoo
+			}
+		}
+	}
+
+	immediate = {
+		random_tile = {
+			limit = {
+				not = {
+					has_building = building_xeno_zoo
+				}
+				autobuild_trigger_has_pop = yes
+				has_resource = sr_tribbles_6
+			}
+			add_building_construction = building_xeno_zoo
+		}
+	}
+}
+
+# local autoupdate school
+planet_event = {
+	id = sth_autobuild.3
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		autobuild_trigger_free_from_autoupdate = no
+		autobuild_trigger_has_any_capital = yes
+		has_building = building_school_0
+		exists = owner
+		owner = {
+			or = {
+				has_country_flag = autobuild_5
+				and = {
+					is_ai = yes
+					has_global_flag = autobuild_ai_allowed
+				}
+			}
+			autobuild_trigger_cost = yes
+		}
+	}
+
+	immediate = {
+		if = {
+			limit = {
+				or = {
+					has_modifier = autobuild_planet_labs_physics
+					has_modifier = autobuild_planet_labs_bio
+					has_modifier = autobuild_planet_labs_engineering
+				}
+			}
+			if = {
+				limit = {
+					has_modifier = autobuild_planet_labs_physics
+				}
+				every_tile = {
+					limit = {
+						has_building = building_school_0
+						autobuild_trigger_has_pop = yes
+					}
+					add_building_construction = building_uniwing_2a
+				}
+				break = yes
+			}
+			if = {
+				limit = {
+					has_modifier = autobuild_planet_labs_bio
+				}
+				every_tile = {
+					limit = {
+						has_building = building_school_0
+						autobuild_trigger_has_pop = yes
+					}
+					add_building_construction = building_uniwing_2b
+				}
+				break = yes
+			}
+			if = {
+				limit = {
+					has_modifier = autobuild_planet_labs_engineering
+				}
+				every_tile = {
+					limit = {
+						has_building = building_school_0
+						autobuild_trigger_has_pop = yes
+					}
+					add_building_construction = building_uniwing_2c
+				}
+				break = yes
+			}
+		}
+		if = {
+			limit = {
+				owner = {
+					not = {
+						has_country_flag = autobuild_labs_not_count_planet
+					}
+				}
+				or = {
+					has_modifier = titanic_life #25
+					has_modifier = society_animal_life #25
+					has_modifier = dangerous_wildlife #20
+					has_modifier = wild_storms #20
+					has_modifier = unstable_tectonics #20
+					has_modifier = atmospheric_hallucinogen #10
+					has_modifier = atmospheric_hallucinogen_good #10
+					has_modifier = strong_magnetic_field #5
+				}
+			}
+			if = {
+				limit = {
+					or = {
+						has_modifier = titanic_life #25
+						has_modifier = society_animal_life #25
+						has_modifier = dangerous_wildlife #20
+					}
+				}
+				every_tile = {
+					limit = {
+						has_building = building_school_0
+						autobuild_trigger_has_pop = yes
+					}
+					add_building_construction = building_uniwing_2b
+				}
+				break = yes
+			}
+			if = {
+				limit = {
+					or = {
+						has_modifier = unstable_tectonics #20
+					}
+				}
+				every_tile = {
+					limit = {
+						has_building = building_school_0
+						autobuild_trigger_has_pop = yes
+					}
+					add_building_construction = building_uniwing_2c
+				}
+				break = yes
+			}
+			if = {
+				limit = {
+					or = {
+						has_modifier = atmospheric_hallucinogen #10
+						has_modifier = atmospheric_hallucinogen_good #10
+						has_modifier = subterranean_civilization #10
+					}
+				}
+				every_tile = {
+					limit = {
+						has_building = building_school_0
+						autobuild_trigger_has_pop = yes
+					}
+					add_building_construction = building_uniwing_2b
+				}
+				break = yes
+			}
+			if = {
+				limit = {
+					has_modifier = strong_magnetic_field #5
+				}
+				every_tile = {
+					limit = {
+						has_building = building_school_0
+						autobuild_trigger_has_pop = yes
+					}
+					add_building_construction = building_uniwing_2a
+				}
+				break = yes
+			}
+		}
+		every_tile = {
+			limit = {
+				has_building = building_school_0
+				autobuild_trigger_has_pop = yes
+			}
+			if = {
+				limit = {
+					or = {
+						and = {
+							pop = {
+								has_trait = trait_natural_sociologists
+							}
+							not = {
+								owner = {
+									has_country_flag = autobuild_labs_not_count_trait
+								}
+							}
+						}
+						has_resource = {
+							type = society_research
+							amount > 0
+						}
+					}
+				}
+				add_building_construction = building_uniwing_2b
+				else = {
+					if = {
+						limit = {
+							or = {
+								and = {
+									pop = {
+										has_trait = trait_natural_physicists
+									}
+									not = {
+										owner = {
+											has_country_flag = autobuild_labs_not_count_trait
+										}
+									}
+								}
+								has_resource = {
+									type = physics_research
+									amount > 0
+								}
+							}
+						}
+						add_building_construction = building_uniwing_2a
+						else = {
+							if = {
+								limit = {
+									or = {
+										and = {
+											pop = {
+												has_trait = trait_natural_engineers
+											}
+											not = {
+												owner = {
+													has_country_flag = autobuild_labs_not_count_trait
+												}
+											}
+										}
+										has_resource = {
+											type = engineering_research
+											amount > 0
+										}
+									}
+								}
+								add_building_construction = building_uniwing_2c
+								else = {
+									if = {
+										limit = {
+											not = {
+												owner = {
+													has_country_flag = autobuild_labs_disable_random
+												}
+											}
+										}
+										random_list = {
+											10 = {
+												modifier = {
+													factor = 0
+													owner = {
+														has_country_flag = autobuild_physics_lab_ratio.0
+													}
+												}
+												modifier = {
+													factor = 2
+													owner = {
+														has_country_flag = autobuild_physics_lab_ratio.2
+													}
+												}
+												modifier = {
+													factor = 3
+													owner = {
+														has_country_flag = autobuild_physics_lab_ratio.3
+													}
+												}
+												add_building_construction = building_uniwing_2a
+											}
+											10 = {
+												modifier = {
+													factor = 0
+													owner = {
+														has_country_flag = autobuild_biolab_ratio.0
+													}
+												}
+												modifier = {
+													factor = 2
+													owner = {
+														has_country_flag = autobuild_biolab_ratio.2
+													}
+												}
+												modifier = {
+													factor = 3
+													owner = {
+														has_country_flag = autobuild_biolab_ratio.3
+													}
+												}
+												add_building_construction = building_uniwing_2b
+											}
+											10 = {
+												modifier = {
+													factor = 0
+													owner = {
+														has_country_flag = autobuild_engineering_facility_ratio.0
+													}
+												}
+												modifier = {
+													factor = 2
+													owner = {
+														has_country_flag = autobuild_engineering_facility_ratio.2
+													}
+												}
+												modifier = {
+													factor = 3
+													owner = {
+														has_country_flag = autobuild_engineering_facility_ratio.3
+													}
+												}
+												add_building_construction = building_uniwing_2c
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+# local betharian-pergium
+planet_event = {
+	id = sth_autobuild.4
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		not = {
+			is_planet_class = pc_habitat
+		}
+		autobuild_trigger_free_from_autobuild_not_spec_planets = no
+		autobuild_trigger_has_any_capital = yes
+		exists = owner
+		owner = {
+			or = {
+				has_country_flag = autobuild_3
+				and = {
+					is_ai = yes
+					has_global_flag = autobuild_ai_allowed
+				}
+			}
+			has_technology = tech_engineering_pergium_592
+			autobuild_trigger_cost = yes
+		}
+		any_tile = {
+			has_resource = sr_pergium_5
+			autobuild_trigger_has_pop = yes
+			not = {
+				has_building = building_pergium_power_plant_0
+			}
+		}
+	}
+
+	immediate = {
+		random_tile = {
+			limit = {
+				has_resource = sr_pergium_5
+				autobuild_trigger_has_pop = yes
+				not = {
+					has_building = building_pergium_power_plant_0
+				}
+			}
+			add_building_construction = building_pergium_power_plant_0
+		}
+	}
+}

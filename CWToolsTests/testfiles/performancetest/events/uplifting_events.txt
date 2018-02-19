@@ -1,0 +1,2417 @@
+# STNH - Capek 1.8.0 Compat
+########################
+#
+# Uplift Events
+# by Maximilian Olbers
+#
+########################
+
+namespace = uplift
+
+@tier1influencecontact = 7
+@tier1influencecontactxenophile = 8
+@tier1influencecontactmin = 20
+@tier1influencecontactmax = 80
+
+@tier2influencecontact = 10
+@tier2influencecontactxenophile = 12
+@tier2influencecontactmin = 40
+@tier2influencecontactmax = 100
+
+@tier1unityreward = 6
+@tier1unitymin = 100
+@tier1unitymax = 500
+@tier2unityreward = 12
+@tier2unitymin = 150
+@tier2unitymax = 1000
+@tier3unityreward = 18
+@tier3unitymin = 250
+@tier3unitymax = 1500
+@tier4unityreward = 24
+@tier4unitymin = 350
+@tier4unitymax = 2000
+@tier5unityreward = 48
+@tier5unitymin = 700
+@tier5unitymax = 4000
+
+@tier1materialreward = 6
+@tier1materialmin = 100
+@tier1materialmax = 500
+@tier2materialreward = 12
+@tier2materialmin = 150
+@tier2materialmax = 1000
+@tier3materialreward = 18
+@tier3materialmin = 250
+@tier3materialmax = 1500
+@tier4materialreward = 24
+@tier4materialmin = 350
+@tier4materialmax = 2000
+@tier5materialreward = 48
+@tier5materialmin = 700
+@tier5materialmax = 4000
+
+@tier1influencereward = 6
+@tier1influencemin = 40
+@tier1influencemax = 100
+@tier2influencereward = 12
+@tier2influencemin = 80
+@tier2influencemax = 175
+@tier3influencereward = 18
+@tier3influencemin = 125
+@tier3influencemax = 250
+@tier4influencereward = 24
+@tier4influencemin = 150
+@tier4influencemax = 300
+@tier5influencereward = 36
+@tier5influencemin = 250
+@tier5influencemax = 500
+@tier6influencereward = 48
+@tier6influencemin = 300
+@tier6influencemax = 600
+
+@tier1researchreward = 6
+@tier1researchmin = 60
+@tier1researchmax = 150
+@tier2researchreward = 12
+@tier2researchmin = 90
+@tier2researchmax = 250
+@tier3researchreward = 18
+@tier3researchmin = 120
+@tier3researchmax = 350
+@tier4researchreward = 24
+@tier4researchmin = 150
+@tier4researchmax = 500
+@tier5researchreward = 48
+@tier5researchmin = 300
+@tier5researchmax = 1000
+
+### Uplifting Snakeoids
+ship_event = {
+	id = uplift.6000
+	title = "uplift.6000.name"
+	desc = "uplift.6000.desc"
+	picture = GFX_evt_landing_ship
+	location = FROM
+	show_sound = event_default
+
+	is_triggered_only = yes
+
+	immediate = {
+		owner = { set_country_flag = found_presapients }
+		# owner = { country_event = { id = tutorial.57 days = 5 } }
+		owner = { country_event = { id = story.4 days = 30 } }
+		owner = { set_country_flag = snakeoids }
+		FROM = {
+			if = {
+				limit = { has_modifier = hazardous_weather }
+				remove_modifier = hazardous_weather
+			}
+			if = {
+				limit = { has_modifier = unstable_tectonics }
+				remove_modifier = unstable_tectonics
+			}
+			if = {
+				limit = { has_modifier = asteroid_impacts }
+				remove_modifier = asteroid_impacts
+			}
+			if = {
+				limit = { has_modifier = wild_storms }
+				remove_modifier = wild_storms
+			}
+			if = {
+				limit = { has_modifier = low_gravity }
+				remove_modifier = low_gravity
+			}
+			if = {
+				limit = { has_modifier = high_gravity }
+				remove_modifier = high_gravity
+			}
+			if = {
+				limit = { has_modifier = damaged_ecology }
+				remove_modifier = damaged_ecology
+			}
+			set_planet_flag = snakeoid_planet
+			create_species = {
+				name = "NAME_Snakeoid"
+				class = "PRE_RANDOMTREK"
+				portrait = random
+				traits = {
+					trait = random_presapient_trait
+				}
+				homeworld = FROM
+				sapient = no
+			}
+			while = {
+				limit = {
+					count_pops = {
+						limit = { is_sapient = no }
+						count < 3
+					}
+					free_pop_tiles > 0
+				}
+				best_tile_for_pop = {
+					create_pop = { species = last_created }
+				}
+			}
+		}
+	}
+
+	option = {
+		name = uplift.6000.a
+		trigger = {
+			owner = { has_technology = "tech_epigenetic_triggers" }
+		}
+	}
+
+	option = {
+		name = uplift.6000.b
+		trigger = {
+			owner = { NOT = { has_technology = "tech_epigenetic_triggers" } }
+		}
+	}
+}
+
+### Uplifting Snakeoid Success
+planet_event = {
+	id = uplift.6001
+	title = "uplift.6001.name"
+	desc = "uplift.6001.desc"
+	picture = GFX_evt_society_research
+	location = root
+	show_sound = notification_uplift
+
+	is_triggered_only = yes
+
+	trigger = {
+		has_planet_flag = snakeoid_planet
+	}
+
+	option = {
+		name = uplift.6011.a
+		# hidden_effect = { owner = { country_event = { id = tutorial.58 days = 5 } } }
+		hidden_effect = {
+			remove_planet_flag = snakeoid_planet
+			planet_event = { id = uplift.7199 }
+		}
+	}
+}
+
+### Uplifting Generic Ocean 1 - Arthropoid
+ship_event = {
+	id = uplift.6010
+	title = "uplift.6010.name"
+	desc = "uplift.6010.desc"
+	picture = GFX_evt_ship_in_orbit
+	location = FROM
+	show_sound = event_default
+
+	is_triggered_only = yes
+
+	trigger = {
+		FROM = { is_planet_class = pc_ocean }
+	}
+
+	immediate = {
+		owner = { set_country_flag = found_presapients }
+		# owner = { country_event = { id = tutorial.57 days = 5  } }
+		owner = { country_event = { id = story.4 days = 30 } }
+		FROM = {
+			if = {
+				limit = { has_modifier = hazardous_weather }
+				remove_modifier = hazardous_weather
+			}
+			if = {
+				limit = { has_modifier = unstable_tectonics }
+				remove_modifier = unstable_tectonics
+			}
+			if = {
+				limit = { has_modifier = asteroid_impacts }
+				remove_modifier = asteroid_impacts
+			}
+			if = {
+				limit = { has_modifier = wild_storms }
+				remove_modifier = wild_storms
+			}
+			if = {
+				limit = { has_modifier = low_gravity }
+				remove_modifier = low_gravity
+			}
+			if = {
+				limit = { has_modifier = high_gravity }
+				remove_modifier = high_gravity
+			}
+			if = {
+				limit = { has_modifier = damaged_ecology }
+				remove_modifier = damaged_ecology
+			}
+			create_species = {
+				name = random
+				class = "PRE_RANDOMTREK"
+				portrait = random
+				traits = {
+					trait = random_presapient_trait
+				}
+				homeworld = FROM
+				sapient = no
+			}
+			while = {
+				limit = {
+					count_pops = {
+						limit = { is_sapient = no }
+						count < 3
+					}
+					free_pop_tiles > 0
+				}
+				best_tile_for_pop = {
+					create_pop = { species = last_created }
+				}
+			}
+		}
+	}
+
+	option = {
+		name = uplift.6000.a
+		trigger = {
+			owner = { has_technology = "tech_epigenetic_triggers" }
+		}
+	}
+
+	option = {
+		name = uplift.6000.b
+		trigger = {
+			owner = { NOT = { has_technology = "tech_epigenetic_triggers" } }
+		}
+	}
+}
+
+### Uplifting Generic Ocean 2 - Molluscoid
+ship_event = {
+	id = uplift.6015
+	title = "uplift.6010.name"
+	desc = "uplift.6010.desc"
+	picture = GFX_evt_ship_in_orbit
+	location = FROM
+	show_sound = event_default
+
+	is_triggered_only = yes
+
+	trigger = {
+		FROM = { is_planet_class = pc_ocean }
+	}
+
+	immediate = {
+		owner = { set_country_flag = found_presapients }
+		# owner = { country_event = { id = tutorial.57 days = 5 } }
+		owner = { country_event = { id = story.4 days = 30 } }
+		FROM = {
+			if = {
+				limit = { has_modifier = hazardous_weather }
+				remove_modifier = hazardous_weather
+			}
+			if = {
+				limit = { has_modifier = unstable_tectonics }
+				remove_modifier = unstable_tectonics
+			}
+			if = {
+				limit = { has_modifier = asteroid_impacts }
+				remove_modifier = asteroid_impacts
+			}
+			if = {
+				limit = { has_modifier = wild_storms }
+				remove_modifier = wild_storms
+			}
+			if = {
+				limit = { has_modifier = low_gravity }
+				remove_modifier = low_gravity
+			}
+			if = {
+				limit = { has_modifier = high_gravity }
+				remove_modifier = high_gravity
+			}
+			if = {
+				limit = { has_modifier = damaged_ecology }
+				remove_modifier = damaged_ecology
+			}
+			create_species = {
+				name = random
+				class = "PRE_RANDOMTREK"
+				portrait = random
+				traits = {
+					trait = random_presapient_trait
+				}
+				homeworld = FROM
+				sapient = no
+			}
+			while = {
+				limit = {
+					count_pops = {
+						limit = { is_sapient = no }
+						count < 3
+					}
+					free_pop_tiles > 0
+				}
+				best_tile_for_pop = {
+					create_pop = { species = last_created }
+				}
+			}
+		}
+	}
+
+	option = {
+		name = uplift.6000.a
+		trigger = {
+			owner = { has_technology = "tech_epigenetic_triggers" }
+		}
+	}
+
+	option = {
+		name = uplift.6000.b
+		trigger = {
+			owner = { NOT = { has_technology = "tech_epigenetic_triggers" } }
+		}
+	}
+}
+
+### Uplifting Ocean Success
+planet_event = {
+	id = uplift.6011
+	title = "uplift.6011.name"
+	desc = "uplift.6011.desc"
+	picture = GFX_evt_society_research
+	location = root
+	show_sound = notification_uplift
+
+	is_triggered_only = yes
+
+	trigger = {
+		NOT = { has_planet_flag = upl_ongoing_planet }
+		is_planet_class = pc_ocean
+	}
+
+	option = {
+		name = uplift.6011.a
+		# hidden_effect = { owner = { country_event = { id = tutorial.58 days = 5 } } }
+		hidden_effect = { planet_event = { id = uplift.7199 } }
+	}
+}
+
+
+### Uplifting Generic Arid 1 - Reptilian
+ship_event = {
+	id = uplift.6020
+	title = "uplift.6020.name"
+	desc = "uplift.6020.desc"
+	picture = GFX_evt_underground_civilization
+	location = FROM
+	show_sound = event_default
+
+	is_triggered_only = yes
+
+	trigger = {
+		FROM = { is_planet_class = pc_arid }
+	}
+
+	immediate = {
+		owner = { set_country_flag = found_presapients }
+		# owner = { country_event = { id = tutorial.57 days = 5 } }
+		owner = { country_event = { id = story.4 days = 30 } }
+		FROM = {
+			if = {
+				limit = { has_modifier = hazardous_weather }
+				remove_modifier = hazardous_weather
+			}
+			if = {
+				limit = { has_modifier = unstable_tectonics }
+				remove_modifier = unstable_tectonics
+			}
+			if = {
+				limit = { has_modifier = asteroid_impacts }
+				remove_modifier = asteroid_impacts
+			}
+			if = {
+				limit = { has_modifier = wild_storms }
+				remove_modifier = wild_storms
+			}
+			if = {
+				limit = { has_modifier = low_gravity }
+				remove_modifier = low_gravity
+			}
+			if = {
+				limit = { has_modifier = high_gravity }
+				remove_modifier = high_gravity
+			}
+			if = {
+				limit = { has_modifier = damaged_ecology }
+				remove_modifier = damaged_ecology
+			}
+			create_species = {
+				name = random
+				class = "PRE_RANDOMTREK"
+				portrait = random
+				traits = {
+					trait = random_presapient_trait
+				}
+				homeworld = FROM
+				sapient = no
+			}
+			while = {
+				limit = {
+					count_pops = {
+						limit = { is_sapient = no }
+						count < 3
+					}
+					free_pop_tiles > 0
+				}
+				best_tile_for_pop = {
+					create_pop = { species = last_created }
+				}
+			}
+		}
+	}
+
+	option = {
+		name = uplift.6000.a
+		trigger = {
+			owner = { has_technology = "tech_epigenetic_triggers" }
+		}
+	}
+
+	option = {
+		name = uplift.6000.b
+		trigger = {
+			owner = { NOT = { has_technology = "tech_epigenetic_triggers" } }
+		}
+	}
+}
+
+### Uplifting Generic Arid 2 - Arthropoid
+ship_event = {
+	id = uplift.6025
+	title = "uplift.6020.name"
+	desc = "uplift.6020.desc"
+	picture = GFX_evt_underground_civilization
+	location = FROM
+	show_sound = event_default
+
+	is_triggered_only = yes
+
+	trigger = {
+		FROM = { is_planet_class = pc_arid }
+	}
+
+	immediate = {
+		owner = { set_country_flag = found_presapients }
+		# owner = { country_event = { id = tutorial.57 days = 5 } }
+		owner = { country_event = { id = story.4 days = 30 } }
+		FROM = {
+			if = {
+				limit = { has_modifier = hazardous_weather }
+				remove_modifier = hazardous_weather
+			}
+			if = {
+				limit = { has_modifier = unstable_tectonics }
+				remove_modifier = unstable_tectonics
+			}
+			if = {
+				limit = { has_modifier = asteroid_impacts }
+				remove_modifier = asteroid_impacts
+			}
+			if = {
+				limit = { has_modifier = wild_storms }
+				remove_modifier = wild_storms
+			}
+			if = {
+				limit = { has_modifier = low_gravity }
+				remove_modifier = low_gravity
+			}
+			if = {
+				limit = { has_modifier = high_gravity }
+				remove_modifier = high_gravity
+			}
+			if = {
+				limit = { has_modifier = damaged_ecology }
+				remove_modifier = damaged_ecology
+			}
+			create_species = {
+				name = random
+				class = "PRE_RANDOMTREK"
+				portrait = random
+				traits = {
+					trait = random_presapient_trait
+				}
+				homeworld = FROM
+				sapient = no
+			}
+			while = {
+				limit = {
+					count_pops = {
+						limit = { is_sapient = no }
+						count < 3
+					}
+					free_pop_tiles > 0
+				}
+				best_tile_for_pop = {
+					create_pop = { species = last_created }
+				}
+			}
+		}
+	}
+
+	option = {
+		name = uplift.6000.a
+		trigger = {
+			owner = { has_technology = "tech_epigenetic_triggers" }
+		}
+	}
+
+	option = {
+		name = uplift.6000.b
+		trigger = {
+			owner = { NOT = { has_technology = "tech_epigenetic_triggers" } }
+		}
+	}
+}
+
+### Uplifting Arid Success
+planet_event = {
+	id = uplift.6021
+	title = "uplift.6021.name"
+	desc = "uplift.6021.desc"
+	picture = GFX_evt_society_research
+	location = root
+	show_sound = notification_uplift
+
+	is_triggered_only = yes
+
+	trigger = {
+		NOT = { has_planet_flag = upl_ongoing_planet }
+		is_planet_class = pc_arid
+	}
+
+	option = {
+		name = "uplift.6011.a"
+		# hidden_effect = { owner = { country_event = { id = tutorial.58 days = 5 } } }
+		hidden_effect = { planet_event = { id = uplift.7199 } }
+	}
+}
+
+### Uplifting Generic Continental 1 - Mammalian
+ship_event = {
+	id = uplift.6030
+	title = "uplift.6030.name"
+	desc = "uplift.6030.desc"
+	picture = GFX_evt_big_landing_ship
+	location = FROM
+	show_sound = event_default
+
+	is_triggered_only = yes
+
+	trigger = {
+		FROM = { is_planet_class = pc_continental }
+	}
+
+	immediate = {
+		owner = { set_country_flag = found_presapients }
+		# owner = { country_event = { id = tutorial.57 days = 5 } }
+		owner = { country_event = { id = story.4 days = 30 } }
+		FROM = {
+			if = {
+				limit = { has_modifier = hazardous_weather }
+				remove_modifier = hazardous_weather
+			}
+			if = {
+				limit = { has_modifier = unstable_tectonics }
+				remove_modifier = unstable_tectonics
+			}
+			if = {
+				limit = { has_modifier = asteroid_impacts }
+				remove_modifier = asteroid_impacts
+			}
+			if = {
+				limit = { has_modifier = wild_storms }
+				remove_modifier = wild_storms
+			}
+			if = {
+				limit = { has_modifier = low_gravity }
+				remove_modifier = low_gravity
+			}
+			if = {
+				limit = { has_modifier = high_gravity }
+				remove_modifier = high_gravity
+			}
+			if = {
+				limit = { has_modifier = damaged_ecology }
+				remove_modifier = damaged_ecology
+			}
+			create_species = {
+				name = random
+				class = "PRE_RANDOMTREK"
+				portrait = random
+				traits = {
+					trait = random_presapient_trait
+				}
+				homeworld = FROM
+				sapient = no
+			}
+			while = {
+				limit = {
+					count_pops = {
+						limit = { is_sapient = no }
+						count < 3
+					}
+					free_pop_tiles > 0
+				}
+				best_tile_for_pop = {
+					create_pop = { species = last_created }
+				}
+			}
+		}
+	}
+
+	option = {
+		name = uplift.6000.a
+		trigger = {
+			owner = { has_technology = "tech_epigenetic_triggers" }
+		}
+	}
+
+	option = {
+		name = uplift.6000.b
+		trigger = {
+			owner = { NOT = { has_technology = "tech_epigenetic_triggers" } }
+		}
+	}
+}
+
+### Uplifting Generic Continental 2 - Avian
+ship_event = {
+	id = uplift.6035
+	title = "uplift.6030.name"
+	desc = "uplift.6030.desc"
+	picture = GFX_evt_big_landing_ship
+	location = FROM
+	show_sound = event_default
+
+	is_triggered_only = yes
+
+	trigger = {
+		FROM = { is_planet_class = pc_continental }
+	}
+
+	immediate = {
+		owner = { set_country_flag = found_presapients }
+		# owner = { country_event = { id = tutorial.57 days = 5 } }
+		owner = { country_event = { id = story.4 days = 30 } }
+		FROM = {
+			if = {
+				limit = { has_modifier = hazardous_weather }
+				remove_modifier = hazardous_weather
+			}
+			if = {
+				limit = { has_modifier = unstable_tectonics }
+				remove_modifier = unstable_tectonics
+			}
+			if = {
+				limit = { has_modifier = asteroid_impacts }
+				remove_modifier = asteroid_impacts
+			}
+			if = {
+				limit = { has_modifier = wild_storms }
+				remove_modifier = wild_storms
+			}
+			if = {
+				limit = { has_modifier = low_gravity }
+				remove_modifier = low_gravity
+			}
+			if = {
+				limit = { has_modifier = high_gravity }
+				remove_modifier = high_gravity
+			}
+			if = {
+				limit = { has_modifier = damaged_ecology }
+				remove_modifier = damaged_ecology
+			}
+			create_species = {
+				name = random
+				class = "PRE_RANDOMTREK"
+				portrait = random
+				traits = {
+					trait = random_presapient_trait
+				}
+				homeworld = FROM
+				sapient = no
+			}
+			while = {
+				limit = {
+					count_pops = {
+						limit = { is_sapient = no }
+						count < 3
+					}
+					free_pop_tiles > 0
+				}
+				best_tile_for_pop = {
+					create_pop = { species = last_created }
+				}
+			}
+		}
+	}
+
+	option = {
+		name = uplift.6000.a
+		trigger = {
+			owner = { has_technology = "tech_epigenetic_triggers" }
+		}
+	}
+
+	option = {
+		name = uplift.6000.b
+		trigger = {
+			owner = { NOT = { has_technology = "tech_epigenetic_triggers" } }
+		}
+	}
+}
+
+### Uplifting Continental Success
+planet_event = {
+	id = uplift.6031
+	title = "uplift.6031.name"
+	desc = "uplift.6031.desc"
+	picture = GFX_evt_society_research
+	location = root
+	show_sound = notification_uplift
+
+	is_triggered_only = yes
+
+	trigger = {
+		NOT = { has_planet_flag = upl_ongoing_planet }
+		is_planet_class = pc_continental
+	}
+
+	option = {
+		name = uplift.6011.a
+		# hidden_effect = { owner = { country_event = { id = tutorial.58 days = 5 } } }
+		hidden_effect = { planet_event = { id = uplift.7199 } }
+	}
+}
+
+### Uplifting Generic Tropical 1 - Fungoid
+ship_event = {
+	id = uplift.6040
+	title = "uplift.6040.name"
+	desc = "uplift.6040.desc"
+	picture = GFX_evt_alien_nature
+	location = FROM
+	show_sound = event_default
+
+	is_triggered_only = yes
+
+	trigger = {
+		FROM = { is_planet_class = pc_tropical }
+	}
+
+	immediate = {
+		owner = { set_country_flag = found_presapients }
+		# owner = { country_event = { id = tutorial.57 days = 5 } }
+		owner = { country_event = { id = story.4 days = 30 } }
+		FROM = {
+			if = {
+				limit = { has_modifier = hazardous_weather }
+				remove_modifier = hazardous_weather
+			}
+			if = {
+				limit = { has_modifier = unstable_tectonics }
+				remove_modifier = unstable_tectonics
+			}
+			if = {
+				limit = { has_modifier = asteroid_impacts }
+				remove_modifier = asteroid_impacts
+			}
+			if = {
+				limit = { has_modifier = wild_storms }
+				remove_modifier = wild_storms
+			}
+			if = {
+				limit = { has_modifier = low_gravity }
+				remove_modifier = low_gravity
+			}
+			if = {
+				limit = { has_modifier = high_gravity }
+				remove_modifier = high_gravity
+			}
+			if = {
+				limit = { has_modifier = damaged_ecology }
+				remove_modifier = damaged_ecology
+			}
+			create_species = {
+				name = random
+				class = "PRE_RANDOMTREK"
+				portrait = random
+				traits = {
+					trait = random_presapient_trait
+				}
+				homeworld = FROM
+				sapient = no
+			}
+			while = {
+				limit = {
+					count_pops = {
+						limit = { is_sapient = no }
+						count < 3
+					}
+					free_pop_tiles > 0
+				}
+				best_tile_for_pop = {
+					create_pop = { species = last_created }
+				}
+			}
+		}
+	}
+
+	option = {
+		name = uplift.6000.a
+		trigger = {
+			owner = { has_technology = "tech_epigenetic_triggers" }
+		}
+	}
+
+	option = {
+		name = uplift.6000.b
+		trigger = {
+			owner = { NOT = { has_technology = "tech_epigenetic_triggers" } }
+		}
+	}
+}
+
+### Uplifting Generic Tropical 2 - Molluscoid
+ship_event = {
+	id = uplift.6045
+	title = "uplift.6040.name"
+	desc = "uplift.6040.desc"
+	picture = GFX_evt_alien_nature
+	location = FROM
+	show_sound = event_default
+
+	is_triggered_only = yes
+
+	trigger = {
+		FROM = { is_planet_class = pc_tropical }
+	}
+
+	immediate = {
+		owner = { set_country_flag = found_presapients }
+		# owner = { country_event = { id = tutorial.57 days = 5 } }
+		owner = { country_event = { id = story.4 days = 30 } }
+		FROM = {
+			if = {
+				limit = { has_modifier = hazardous_weather }
+				remove_modifier = hazardous_weather
+			}
+			if = {
+				limit = { has_modifier = unstable_tectonics }
+				remove_modifier = unstable_tectonics
+			}
+			if = {
+				limit = { has_modifier = asteroid_impacts }
+				remove_modifier = asteroid_impacts
+			}
+			if = {
+				limit = { has_modifier = wild_storms }
+				remove_modifier = wild_storms
+			}
+			if = {
+				limit = { has_modifier = low_gravity }
+				remove_modifier = low_gravity
+			}
+			if = {
+				limit = { has_modifier = high_gravity }
+				remove_modifier = high_gravity
+			}
+			if = {
+				limit = { has_modifier = damaged_ecology }
+				remove_modifier = damaged_ecology
+			}
+			create_species = {
+				name = random
+				class = "PRE_RANDOMTREK"
+				portrait = random
+				traits = {
+					trait = random_presapient_trait
+				}
+				homeworld = FROM
+				sapient = no
+			}
+			while = {
+				limit = {
+					count_pops = {
+						limit = { is_sapient = no }
+						count < 3
+					}
+					free_pop_tiles > 0
+				}
+				best_tile_for_pop = {
+					create_pop = { species = last_created }
+				}
+			}
+		}
+	}
+
+	option = {
+		name = uplift.6000.a
+		trigger = {
+			owner = { has_technology = "tech_epigenetic_triggers" }
+		}
+	}
+
+	option = {
+		name = uplift.6000.b
+		trigger = {
+			owner = { NOT = { has_technology = "tech_epigenetic_triggers" } }
+		}
+	}
+}
+
+### Uplifting Tropical Success
+planet_event = {
+	id = uplift.6041
+	title = "uplift.6041.name"
+	desc = "uplift.6041.desc"
+	picture = GFX_evt_society_research
+	location = root
+	show_sound = notification_uplift
+
+	is_triggered_only = yes
+
+	auto_opens = yes
+
+	trigger = {
+		NOT = { has_planet_flag = upl_ongoing_planet }
+		is_planet_class = pc_tropical
+	}
+
+	option = {
+		name = uplift.6011.a
+		# hidden_effect = { owner = { country_event = { id = tutorial.58 days = 5 } } }
+		hidden_effect = { planet_event = { id = uplift.7199 } }
+	}
+}
+
+### Uplifting Generic Tundra 1 - Reptilian
+ship_event = {
+	id = uplift.6050
+	title = "uplift.6050.name"
+	desc = "uplift.6050.desc"
+	picture = GFX_evt_atmospheric_entry
+	location = FROM
+	show_sound = event_default
+
+	is_triggered_only = yes
+
+	trigger = {
+		FROM = { is_planet_class = pc_tundra }
+	}
+
+	immediate = {
+		owner = { set_country_flag = found_presapients }
+		# owner = { country_event = { id = tutorial.57 days = 5 } }
+		owner = { country_event = { id = story.4 days = 30 } }
+		FROM = {
+			if = {
+				limit = { has_modifier = hazardous_weather }
+				remove_modifier = hazardous_weather
+			}
+			if = {
+				limit = { has_modifier = unstable_tectonics }
+				remove_modifier = unstable_tectonics
+			}
+			if = {
+				limit = { has_modifier = asteroid_impacts }
+				remove_modifier = asteroid_impacts
+			}
+			if = {
+				limit = { has_modifier = wild_storms }
+				remove_modifier = wild_storms
+			}
+			if = {
+				limit = { has_modifier = low_gravity }
+				remove_modifier = low_gravity
+			}
+			if = {
+				limit = { has_modifier = high_gravity }
+				remove_modifier = high_gravity
+			}
+			if = {
+				limit = { has_modifier = damaged_ecology }
+				remove_modifier = damaged_ecology
+			}
+			create_species = {
+				name = random
+				class = "PRE_RANDOMTREK"
+				portrait = random
+				traits = {
+					trait = random_presapient_trait
+				}
+				homeworld = FROM
+				sapient = no
+			}
+			while = {
+				limit = {
+					count_pops = {
+						limit = { is_sapient = no }
+						count < 3
+					}
+					free_pop_tiles > 0
+				}
+				best_tile_for_pop = {
+					create_pop = { species = last_created }
+				}
+			}
+		}
+	}
+
+	option = {
+		name = uplift.6000.a
+		trigger = {
+			owner = { has_technology = "tech_epigenetic_triggers" }
+		}
+	}
+
+	option = {
+		name = uplift.6000.b
+		trigger = {
+			owner = { NOT = { has_technology = "tech_epigenetic_triggers" } }
+		}
+	}
+}
+
+### Uplifting Generic Tundra 2 - Arthropoid
+ship_event = {
+	id = uplift.6055
+	title = "uplift.6050.name"
+	desc = "uplift.6050.desc"
+	picture = GFX_evt_atmospheric_entry
+	location = FROM
+	show_sound = event_default
+
+	is_triggered_only = yes
+
+	trigger = {
+		FROM = { is_planet_class = pc_tundra }
+	}
+
+	immediate = {
+		owner = { set_country_flag = found_presapients }
+		# owner = { country_event = { id = tutorial.57 days = 5 } }
+		owner = { country_event = { id = story.4 days = 30 } }
+		FROM = {
+			if = {
+				limit = { has_modifier = hazardous_weather }
+				remove_modifier = hazardous_weather
+			}
+			if = {
+				limit = { has_modifier = unstable_tectonics }
+				remove_modifier = unstable_tectonics
+			}
+			if = {
+				limit = { has_modifier = asteroid_impacts }
+				remove_modifier = asteroid_impacts
+			}
+			if = {
+				limit = { has_modifier = wild_storms }
+				remove_modifier = wild_storms
+			}
+			if = {
+				limit = { has_modifier = low_gravity }
+				remove_modifier = low_gravity
+			}
+			if = {
+				limit = { has_modifier = high_gravity }
+				remove_modifier = high_gravity
+			}
+			if = {
+				limit = { has_modifier = damaged_ecology }
+				remove_modifier = damaged_ecology
+			}
+			create_species = {
+				name = random
+				class = "PRE_RANDOMTREK"
+				portrait = random
+				traits = {
+					trait = random_presapient_trait
+				}
+				homeworld = FROM
+				sapient = no
+			}
+			while = {
+				limit = {
+					count_pops = {
+						limit = { is_sapient = no }
+						count < 3
+					}
+					free_pop_tiles > 0
+				}
+				best_tile_for_pop = {
+					create_pop = { species = last_created }
+				}
+			}
+		}
+	}
+
+	option = {
+		name = uplift.6000.a
+		trigger = {
+			owner = { has_technology = "tech_epigenetic_triggers" }
+		}
+	}
+
+	option = {
+		name = uplift.6000.b
+		trigger = {
+			owner = { NOT = { has_technology = "tech_epigenetic_triggers" } }
+		}
+	}
+}
+
+### Uplifting Tundra Success
+planet_event = {
+	id = uplift.6051
+	title = "uplift.6051.name"
+	desc = "uplift.6051.desc"
+	picture = GFX_evt_society_research
+	location = root
+	show_sound = notification_uplift
+
+	is_triggered_only = yes
+
+	trigger = {
+		NOT = { has_planet_flag = upl_ongoing_planet }
+		is_planet_class = pc_tundra
+	}
+
+	option = {
+		name = uplift.6011.a
+		# hidden_effect = { owner = { country_event = { id = tutorial.58 days = 5 } } }
+		hidden_effect = { planet_event = { id = uplift.7199 } }
+	}
+}
+
+### Uplifting Generic Arctic 1 - Mammalian
+ship_event = {
+	id = uplift.6060
+	title = "uplift.6060.name"
+	desc = "uplift.6060.desc"
+	picture = GFX_evt_atmospheric_entry
+	location = FROM
+	show_sound = event_default
+
+	is_triggered_only = yes
+
+	trigger = {
+		FROM = { is_planet_class = pc_arctic }
+	}
+
+	immediate = {
+		owner = { set_country_flag = found_presapients }
+		# owner = { country_event = { id = tutorial.57 days = 5 } }
+		owner = { country_event = { id = story.4 days = 30 } }
+		FROM = {
+			if = {
+				limit = { has_modifier = hazardous_weather }
+				remove_modifier = hazardous_weather
+			}
+			if = {
+				limit = { has_modifier = unstable_tectonics }
+				remove_modifier = unstable_tectonics
+			}
+			if = {
+				limit = { has_modifier = asteroid_impacts }
+				remove_modifier = asteroid_impacts
+			}
+			if = {
+				limit = { has_modifier = wild_storms }
+				remove_modifier = wild_storms
+			}
+			if = {
+				limit = { has_modifier = low_gravity }
+				remove_modifier = low_gravity
+			}
+			if = {
+				limit = { has_modifier = high_gravity }
+				remove_modifier = high_gravity
+			}
+			if = {
+				limit = { has_modifier = damaged_ecology }
+				remove_modifier = damaged_ecology
+			}
+			create_species = {
+				name = random
+				class = "PRE_RANDOMTREK"
+				portrait = random
+				traits = {
+					trait = random_presapient_trait
+				}
+				homeworld = FROM
+				sapient = no
+			}
+			while = {
+				limit = {
+					count_pops = {
+						limit = { is_sapient = no }
+						count < 3
+					}
+					free_pop_tiles > 0
+				}
+				best_tile_for_pop = {
+					create_pop = { species = last_created }
+				}
+			}
+		}
+	}
+
+	option = {
+		name = uplift.6000.a
+		trigger = {
+			owner = { has_technology = "tech_epigenetic_triggers" }
+		}
+	}
+
+	option = {
+		name = uplift.6000.b
+		trigger = {
+			owner = { NOT = { has_technology = "tech_epigenetic_triggers" } }
+		}
+	}
+}
+
+### Uplifting Generic Arctic 2 - Reptilian
+ship_event = {
+	id = uplift.6065
+	title = "uplift.6060.name"
+	desc = "uplift.6060.desc"
+	picture = GFX_evt_atmospheric_entry
+	location = FROM
+	show_sound = event_default
+
+	is_triggered_only = yes
+
+	trigger = {
+		FROM = { is_planet_class = pc_arctic }
+	}
+
+	immediate = {
+		owner = { set_country_flag = found_presapients }
+		# owner = { country_event = { id = tutorial.57 days = 5 } }
+		owner = { country_event = { id = story.4 days = 30 } }
+		FROM = {
+			if = {
+				limit = { has_modifier = hazardous_weather }
+				remove_modifier = hazardous_weather
+			}
+			if = {
+				limit = { has_modifier = unstable_tectonics }
+				remove_modifier = unstable_tectonics
+			}
+			if = {
+				limit = { has_modifier = asteroid_impacts }
+				remove_modifier = asteroid_impacts
+			}
+			if = {
+				limit = { has_modifier = wild_storms }
+				remove_modifier = wild_storms
+			}
+			if = {
+				limit = { has_modifier = low_gravity }
+				remove_modifier = low_gravity
+			}
+			if = {
+				limit = { has_modifier = high_gravity }
+				remove_modifier = high_gravity
+			}
+			if = {
+				limit = { has_modifier = damaged_ecology }
+				remove_modifier = damaged_ecology
+			}
+			create_species = {
+				name = random
+				class = "PRE_RANDOMTREK"
+				portrait = random
+				traits = {
+					trait = random_presapient_trait
+				}
+				homeworld = FROM
+				sapient = no
+			}
+			while = {
+				limit = {
+					count_pops = {
+						limit = { is_sapient = no }
+						count < 3
+					}
+					free_pop_tiles > 0
+				}
+				best_tile_for_pop = {
+					create_pop = { species = last_created }
+				}
+			}
+		}
+	}
+
+	option = {
+		name = uplift.6000.a
+		trigger = {
+			owner = { has_technology = "tech_epigenetic_triggers" }
+		}
+	}
+
+	option = {
+		name = uplift.6000.b
+		trigger = {
+			owner = { NOT = { has_technology = "tech_epigenetic_triggers" } }
+		}
+	}
+}
+
+### Uplifting Arctic Success
+planet_event = {
+	id = uplift.6061
+	title = "uplift.6061.name"
+	desc = "uplift.6061.desc"
+	picture = GFX_evt_society_research
+	location = root
+	show_sound = notification_uplift
+
+	is_triggered_only = yes
+
+	trigger = {
+		NOT = { has_planet_flag = upl_ongoing_planet }
+		is_planet_class = pc_arctic
+	}
+
+	option = {
+		name = uplift.6011.a
+		# hidden_effect = { owner = { country_event = { id = tutorial.58 days = 5 } } }
+		hidden_effect = { planet_event = { id = uplift.7199 } }
+	}
+}
+
+### Uplifting Generic Desert 1 - Fungoid 
+ship_event = {
+	id = uplift.6070
+	title = "uplift.6070.name"
+	desc = "uplift.6070.desc"
+	picture = GFX_evt_underground_civilization
+	location = FROM
+	show_sound = event_default
+
+	is_triggered_only = yes
+
+	trigger = {
+		FROM = { is_planet_class = pc_desert }
+	}
+
+	immediate = {
+		owner = { set_country_flag = found_presapients }
+		# owner = { country_event = { id = tutorial.57 days = 5 } }
+		owner = { country_event = { id = story.4 days = 30 } }
+		FROM = {
+			if = {
+				limit = { has_modifier = hazardous_weather }
+				remove_modifier = hazardous_weather
+			}
+			if = {
+				limit = { has_modifier = unstable_tectonics }
+				remove_modifier = unstable_tectonics
+			}
+			if = {
+				limit = { has_modifier = asteroid_impacts }
+				remove_modifier = asteroid_impacts
+			}
+			if = {
+				limit = { has_modifier = wild_storms }
+				remove_modifier = wild_storms
+			}
+			if = {
+				limit = { has_modifier = low_gravity }
+				remove_modifier = low_gravity
+			}
+			if = {
+				limit = { has_modifier = high_gravity }
+				remove_modifier = high_gravity
+			}
+			if = {
+				limit = { has_modifier = damaged_ecology }
+				remove_modifier = damaged_ecology
+			}
+			create_species = {
+				name = random
+				class = "PRE_RANDOMTREK"
+				portrait = random
+				traits = {
+					trait = random_presapient_trait
+				}
+				homeworld = FROM
+				sapient = no
+			}
+			while = {
+				limit = {
+					count_pops = {
+						limit = { is_sapient = no }
+						count < 3
+					}
+					free_pop_tiles > 0
+				}
+				best_tile_for_pop = {
+					create_pop = { species = last_created }
+				}
+			}
+		}
+	}
+
+	option = {
+		name = uplift.6000.a
+		trigger = {
+			owner = { has_technology = "tech_epigenetic_triggers" }
+		}
+	}
+
+	option = {
+		name = uplift.6000.b
+		trigger = {
+			owner = { NOT = { has_technology = "tech_epigenetic_triggers" } }
+		}
+	}
+}
+
+### Uplifting Generic Desert 2 - Avian
+ship_event = {
+	id = uplift.6075
+	title = "uplift.6070.name"
+	desc = "uplift.6070.desc"
+	picture = GFX_evt_underground_civilization
+	location = FROM
+	show_sound = event_default
+
+	is_triggered_only = yes
+
+	trigger = {
+		FROM = { is_planet_class = pc_desert }
+	}
+
+	immediate = {
+		owner = { set_country_flag = found_presapients }
+		# owner = { country_event = { id = tutorial.57 days = 5 } }
+		owner = { country_event = { id = story.4 days = 30 } }
+		FROM = {
+			if = {
+				limit = { has_modifier = hazardous_weather }
+				remove_modifier = hazardous_weather
+			}
+			if = {
+				limit = { has_modifier = unstable_tectonics }
+				remove_modifier = unstable_tectonics
+			}
+			if = {
+				limit = { has_modifier = asteroid_impacts }
+				remove_modifier = asteroid_impacts
+			}
+			if = {
+				limit = { has_modifier = wild_storms }
+				remove_modifier = wild_storms
+			}
+			if = {
+				limit = { has_modifier = low_gravity }
+				remove_modifier = low_gravity
+			}
+			if = {
+				limit = { has_modifier = high_gravity }
+				remove_modifier = high_gravity
+			}
+			if = {
+				limit = { has_modifier = damaged_ecology }
+				remove_modifier = damaged_ecology
+			}
+			create_species = {
+				name = random
+				class = "PRE_RANDOMTREK"
+				portrait = random
+				traits = {
+					trait = random_presapient_trait
+				}
+				homeworld = FROM
+				sapient = no
+			}
+			while = {
+				limit = {
+					count_pops = {
+						limit = { is_sapient = no }
+						count < 3
+					}
+					free_pop_tiles > 0
+				}
+				best_tile_for_pop = {
+					create_pop = { species = last_created }
+				}
+			}
+		}
+	}
+
+	option = {
+		name = uplift.6000.a
+		trigger = {
+			owner = { has_technology = "tech_epigenetic_triggers" }
+		}
+	}
+
+	option = {
+		name = uplift.6000.b
+		trigger = {
+			owner = { NOT = { has_technology = "tech_epigenetic_triggers" } }
+		}
+	}
+}
+
+### Uplifting Desert Success
+planet_event = {
+	id = uplift.6071
+	title = "uplift.6071.name"
+	desc = "uplift.6071.desc"
+	picture = GFX_evt_society_research
+	location = root
+	show_sound = notification_uplift
+
+	is_triggered_only = yes
+
+	trigger = {
+		is_planet_class = pc_desert
+		NOT = {
+			has_planet_flag = snakeoid_planet
+			has_planet_flag = upl_ongoing_planet
+		}
+	}
+
+	option = {
+		name = uplift.6011.a
+		# hidden_effect = { owner = { country_event = { id = tutorial.58 days = 5 } } }
+		hidden_effect = { planet_event = { id = uplift.7199 } }
+	}
+}
+
+### Uplifting Generic
+ship_event = {
+	id = uplift.6080
+	title = "uplift.6080.name"
+	desc = "uplift.6080.desc"
+	picture = GFX_evt_microscopic_life
+	location = FROM
+	show_sound = event_default
+
+	is_triggered_only = yes
+
+	immediate = {
+		owner = { set_country_flag = found_presapients }
+		# owner = { country_event = { id = tutorial.57 days = 5 } }
+		owner = { country_event = { id = story.4 days = 30 } }
+		FROM = {
+			if = {
+				limit = { has_modifier = hazardous_weather }
+				remove_modifier = hazardous_weather
+			}
+			if = {
+				limit = { has_modifier = unstable_tectonics }
+				remove_modifier = unstable_tectonics
+			}
+			if = {
+				limit = { has_modifier = asteroid_impacts }
+				remove_modifier = asteroid_impacts
+			}
+			if = {
+				limit = { has_modifier = wild_storms }
+				remove_modifier = wild_storms
+			}
+			if = {
+				limit = { has_modifier = low_gravity }
+				remove_modifier = low_gravity
+			}
+			if = {
+				limit = { has_modifier = high_gravity }
+				remove_modifier = high_gravity
+			}
+			if = {
+				limit = { has_modifier = damaged_ecology }
+				remove_modifier = damaged_ecology
+			}
+			set_planet_flag = upl_ongoing_planet
+			random_list = {
+				15 = {
+					create_species = {
+						name = random
+						class = "PRE_RANDOMTREK"
+						portrait = random
+						traits = {
+							trait = random_presapient_trait
+						}
+						homeworld = FROM
+						sapient = no
+					}
+				}
+				15 = {
+					create_species = {
+						name = random
+						class = "PRE_RANDOMTREK"
+						portrait = random
+						traits = {
+							trait = random_presapient_trait
+						}
+						homeworld = FROM
+						sapient = no
+					}
+				}
+				15 = {
+					create_species = {
+						name = random
+						class = "PRE_RANDOMTREK"
+						portrait = random
+						traits = {
+							trait = random_presapient_trait
+						}
+						homeworld = FROM
+						sapient = no
+					}
+				}
+				15 = {
+					create_species = {
+						name = random
+						class = "PRE_RANDOMTREK"
+						portrait = random
+						traits = {
+							trait = random_presapient_trait
+						}
+						homeworld = FROM
+						sapient = no
+					}
+				}
+				15 = {
+					create_species = {
+						name = random
+						class = "PRE_RANDOMTREK"
+						portrait = random
+						traits = {
+							trait = random_presapient_trait
+						}
+						homeworld = FROM
+						sapient = no
+					}
+				}
+				15 = {
+					create_species = {
+						name = random
+						class = "PRE_RANDOMTREK"
+						portrait = random
+						traits = {
+							trait = random_presapient_trait
+						}
+						homeworld = FROM
+						sapient = no
+					}
+				}
+			}
+			while = {
+				limit = {
+					count_pops = {
+						limit = { is_sapient = no }
+						count < 3
+					}
+					free_pop_tiles > 0
+				}
+				best_tile_for_pop = {
+					create_pop = { species = last_created }
+				}
+			}
+		}
+	}
+
+	option = {
+		name = uplift.6000.a
+		trigger = {
+			owner = { has_technology = "tech_epigenetic_triggers" }
+		}
+	}
+
+	option = {
+		name = uplift.6000.b
+		trigger = {
+			owner = { NOT = { has_technology = "tech_epigenetic_triggers" } }
+		}
+	}
+}
+
+### Uplifting Generic Success
+planet_event = {
+	id = uplift.6081
+	title = "uplift.6081.name"
+	desc = "uplift.6081.desc"
+	picture = GFX_evt_society_research
+	location = root
+	show_sound = notification_uplift
+
+	is_triggered_only = yes
+
+	trigger = {
+		has_planet_flag = upl_ongoing_planet
+		NOT = { has_planet_flag = snakeoid_planet }
+	}
+
+	immediate = {
+		owner = { set_country_flag = found_presapients }
+		remove_planet_flag = upl_ongoing_planet
+		owner = { remove_country_flag = upl_ongoing_generic }
+	}
+
+	option = {
+		name = uplift.6011.a
+		# hidden_effect = { owner = { country_event = { id = tutorial.58 days = 5 } } }
+		hidden_effect = { planet_event = { id = uplift.7199 } }
+	}
+}
+
+### Uplifting Roachoids
+ship_event = {
+	id = uplift.6090
+	title = uplift.6090.name
+	desc = uplift.6090.desc
+	picture = GFX_evt_ship_in_orbit
+	location = from
+
+	is_triggered_only = yes
+
+	immediate = {
+		owner = { set_country_flag = found_presapients }
+		# owner = { country_event = { id = tutorial.57 days = 5 } }
+		owner = { country_event = { id = story.4 days = 30 } }
+		FROM = {
+			if = {
+				limit = { has_modifier = hazardous_weather }
+				remove_modifier = hazardous_weather
+			}
+			if = {
+				limit = { has_modifier = unstable_tectonics }
+				remove_modifier = unstable_tectonics
+			}
+			if = {
+				limit = { has_modifier = asteroid_impacts }
+				remove_modifier = asteroid_impacts
+			}
+			if = {
+				limit = { has_modifier = wild_storms }
+				remove_modifier = wild_storms
+			}
+			if = {
+				limit = { has_modifier = low_gravity }
+				remove_modifier = low_gravity
+			}
+			if = {
+				limit = { has_modifier = high_gravity }
+				remove_modifier = high_gravity
+			}
+			if = {
+				limit = { has_modifier = damaged_ecology }
+				remove_modifier = damaged_ecology
+			}
+			create_species = {
+				name = random
+				class = "PRE_RANDOMTREK"
+				portrait = random
+				name = "Roachoid"
+				traits = {
+					trait = trait_presapient_irradiated
+					#trait = random_presapient_trait
+				}
+				homeworld = FROM
+				sapient = no
+			}
+			while = {
+				limit = {
+					count_pops = {
+						limit = { is_sapient = no }
+						count < 3
+					}
+					free_pop_tiles > 0
+				}
+				best_tile_for_pop = {
+					create_pop = { species = last_created }
+				}
+			}
+			set_planet_flag = roachoid_planet
+		}
+	}
+	option = {
+		name = uplift.6000.a
+		trigger = {
+			owner = { has_technology = "tech_epigenetic_triggers" }
+		}
+	}
+
+	option = {
+		name = uplift.6000.b
+		trigger = {
+			owner = { NOT = { has_technology = "tech_epigenetic_triggers" } }
+		}
+	}
+}
+
+### Uplifting Roachoid Success
+planet_event = {
+	id = uplift.6091
+	title = "uplift.6091.name"
+	desc = "uplift.6091.desc"
+	picture = GFX_evt_society_research
+	location = root
+
+	is_triggered_only = yes
+
+	trigger = { has_planet_flag = roachoid_planet }
+
+	immediate = {
+		remove_planet_flag = roachoid_planet
+	}
+
+	option = {
+		name = uplift.6011.a
+		# hidden_effect = { owner = { country_event = { id = tutorial.58 days = 5 } } }
+		hidden_effect = { planet_event = { id = uplift.7199 } }
+	}
+}
+
+#######################
+# Followup Events
+#######################
+
+planet_event = {
+	id = uplift.7000
+	title = "uplift.7000.name"
+	desc = "uplift.7000.desc"
+	picture = GFX_evt_colony_settlement
+	location = FROM
+
+	is_triggered_only = yes
+
+	option = {
+		name = OK
+	}
+}
+
+planet_event = {
+	id = uplift.7010
+	title = "uplift.7010.name"
+	desc = "uplift.7010.desc"
+	picture = GFX_evt_smugglers_in_bar
+	location = FROM
+
+	is_triggered_only = yes
+
+	option = {
+		name = OK
+		add_modifier = {
+			modifier = uplift_rocky
+			days = 720
+		}
+	}
+}
+
+######################
+# Ethics Events
+######################
+
+# Hidden event firing two random ethics events
+# FROMFROM = uplifted species
+# FROM = planet
+planet_event = {
+	id = uplift.7199
+	location = FROM
+	hide_window = yes
+
+	is_triggered_only = yes
+
+	immediate = {
+		random_list = {
+			30 = { planet_event = { id = uplift.7000 days = 30 } }
+			70 = { planet_event = { id = uplift.7010 days = 30 } }
+		}
+		random_list = {
+			15 = {
+				planet_event = { id = uplift.7200 days = 60 }
+				planet_event = { id = uplift.7205 days = 120 }
+			}
+			15 = {
+				planet_event = { id = uplift.7200 days = 120 }
+				planet_event = { id = uplift.7210 days = 60 }
+			}
+			15 = {
+				planet_event = { id = uplift.7200 days = 60 }
+				planet_event = { id = uplift.7215 days = 120 }
+			}
+			15 = {
+				planet_event = { id = uplift.7205 days = 60 }
+				planet_event = { id = uplift.7210 days = 120 }
+			}
+			15 = {
+				planet_event = { id = uplift.7205 days = 120 }
+				planet_event = { id = uplift.7215 days = 60 }
+			}
+			15 = {
+				planet_event = { id = uplift.7210 days = 60 }
+				planet_event = { id = uplift.7215 days = 120 }
+			}
+		}
+	}
+}
+
+# FROMFROMFROM = uplifted species
+
+# Spiritualist or Materialist
+planet_event = {
+	id = uplift.7200
+	title = "uplift.7200.name"
+	desc = "uplift.7200.desc"
+	picture = GFX_evt_colony_settlement
+	location = root
+	show_sound = event_cityscape
+
+	is_triggered_only = yes
+
+	trigger = {
+		any_pop = {
+			has_trait = trait_uplifted
+			NOT = {
+				has_pop_flag = upl_ethic_spimat
+			}
+		}
+	}
+
+	option = {
+		name = "uplift.7200.a"
+	}
+
+	option = {
+		name = "uplift.7200.b"
+		custom_tooltip = "uplift.7200.b.tooltip"
+		hidden_effect = {
+			every_owned_pop = {
+				limit = { has_trait = trait_uplifted }
+				pop_change_ethic = "ethic_spiritualist"
+				set_pop_flag = upl_ethic_spimat
+			}
+		}
+	}
+		option = {
+		name = "uplift.7200.c"
+		custom_tooltip = "uplift.7200.c.tooltip"
+		hidden_effect = {
+			every_owned_pop = {
+				limit = { has_trait = trait_uplifted }
+				pop_change_ethic = "ethic_materialist"
+				set_pop_flag = upl_ethic_spimat
+			}
+		}
+	}
+}
+
+# Pacifist or Militarist
+planet_event = {
+	id = uplift.7205
+	title = "uplift.7205.name"
+	desc = "uplift.7205.desc"
+	picture = GFX_evt_colony_settlement
+	location = root
+	show_sound = event_cityscape
+
+	is_triggered_only = yes
+
+	trigger = {
+		any_pop = {
+			has_trait = trait_uplifted
+			NOT = {
+				has_pop_flag = upl_ethic_pacmil
+			}
+		}
+	}
+
+	option = {
+		name = "uplift.7205.a"
+	}
+
+	option = {
+		name = "uplift.7205.b"
+		custom_tooltip = "uplift.7205.b.tooltip"
+		hidden_effect = {
+			every_owned_pop = {
+				limit = { has_trait = trait_uplifted }
+				pop_change_ethic = "ethic_pacifist"
+				set_pop_flag = upl_ethic_pacmil
+			}
+		}
+	}
+
+	option = {
+		name = "uplift.7205.c"
+		custom_tooltip = "uplift.7205.c.tooltip"
+		hidden_effect = {
+			every_owned_pop = {
+				limit = { has_trait = trait_uplifted }
+				pop_change_ethic = "ethic_militarist"
+				set_pop_flag = upl_ethic_pacmil
+			}
+		}
+	}
+}
+
+# Xenophile or Xenophobe
+planet_event = {
+	id = uplift.7210
+	title = "uplift.7210.name"
+	desc = "uplift.7210.desc"
+	picture = GFX_evt_colony_settlement
+	location = root
+	show_sound = event_cityscape
+
+	is_triggered_only = yes
+
+	trigger = {
+		any_pop = {
+			has_trait = trait_uplifted
+			NOT = {
+				has_pop_flag = upl_ethic_xenoph
+			}
+		}
+	}
+
+	option = {
+		name = "uplift.7210.a"
+	}
+
+	option = {
+		name = "uplift.7210.b"
+		custom_tooltip = "uplift.7210.b.tooltip"
+		hidden_effect = {
+			every_owned_pop = {
+				limit = { has_trait = trait_uplifted }
+				pop_change_ethic = "ethic_xenophile"
+				set_pop_flag = upl_ethic_xenoph
+			}
+		}
+	}
+
+	option = {
+		name = "uplift.7210.c"
+		custom_tooltip = "uplift.7210.c.tooltip"
+		hidden_effect = {
+			every_owned_pop = {
+				limit = { has_trait = trait_uplifted }
+				pop_change_ethic = "ethic_xenophobe"
+				set_pop_flag = upl_ethic_xenoph
+			}
+		}
+	}
+}
+
+# Authoritarian or Materialist
+planet_event = {
+	id = uplift.7215
+	title = "uplift.7215.name"
+	desc = "uplift.7215.desc"
+	picture = GFX_evt_colony_settlement
+	location = root
+	show_sound = event_cityscape
+
+	is_triggered_only = yes
+
+	trigger = {
+		any_pop = {
+			has_trait = trait_uplifted
+			NOT = {
+				has_pop_flag = upl_ethic_colind
+			}
+		}
+	}
+
+	option = {
+		name = "uplift.7215.a"
+	}
+
+	option = {
+		name = "uplift.7215.b"
+		custom_tooltip = "uplift.7215.b.tooltip"
+		hidden_effect = {
+			every_owned_pop = {
+				limit = { has_trait = trait_uplifted }
+				pop_change_ethic = "ethic_authoritarian"
+				set_pop_flag = upl_ethic_colind
+			}
+		}
+	}
+
+	option = {
+		name = "uplift.7215.c"
+		custom_tooltip = "uplift.7215.c.tooltip"
+		hidden_effect = {
+			random_pop = {
+				limit = { has_trait = trait_uplifted }
+				pop_change_ethic = "ethic_egalitarian"
+				set_pop_flag = upl_ethic_colind
+			}
+		}
+	}
+}
+
+
+#######################################
+# Pre-Sapient Pop Interaction Events
+#######################################
+
+# Pre-Sapients damage currency stores
+planet_event = {
+	id = uplift.7500
+	title = "uplift.7500.name"
+	desc = "uplift.7500.desc"
+	picture = GFX_evt_alien_cavemen
+	location = root
+
+	trigger = {
+		has_owner = yes
+		any_pop = { is_sapient = no }
+		owner = {
+			is_ai = no
+			energy > 299
+		}
+		NOT = { has_planet_flag = chainblocked }
+	}
+
+	mean_time_to_happen = { months = 1200 }
+
+	immediate = { set_planet_flag = chainblocked }
+
+	option = {
+		name = UNFORTUNATE
+		trigger = {
+			owner = {
+				energy > 299
+			}
+		}
+		owner = { add_energy = -300 }
+	}
+
+	option = {
+		name = UNFORTUNATE
+		trigger = {
+			owner = {
+				energy < 299
+			}
+		}
+		owner = { add_energy = -100 }
+	}
+}
+
+# Unethical experiments on pre-sapients
+planet_event = {
+	id = uplift.7510
+	title = "uplift.7510.name"
+	desc = "uplift.7510.desc"
+	picture = GFX_evt_alien_cavemen
+	location = root
+
+	trigger = {
+		has_owner = yes
+		owner = { is_ai = no }
+		any_pop = { is_sapient = no }
+		NOT = { has_planet_flag = unethical_presapient_experiments }
+	}
+
+	mean_time_to_happen = { months = 1200 }
+
+	immediate = { set_planet_flag = unethical_presapient_experiments }
+	
+	option = {
+		name = uplift.7510.a
+		add_modifier = {
+			modifier = unproductive_without_experiments
+			days = 720
+		}
+	}
+
+	option = {
+		name = uplift.7510.b
+		custom_tooltip = uplift.7510.b.tooltip
+		trigger = {
+			owner = {
+				NOT = {
+					has_ethic = "ethic_xenophobe"
+					has_ethic = "ethic_fanatic_xenophobe"
+				}
+			}
+		}
+		owner = {
+			add_monthly_resource_mult = {
+				resource = society_research
+				value = @tier2researchreward
+				min = @tier2researchmin
+				max = @tier2researchmax
+			}
+		}
+		add_modifier = {
+			modifier = unhappy_with_experiments
+			days = 720
+		}
+	}
+
+	option = {
+		name = uplift.7510.c
+		trigger = {
+			owner = {
+				OR = {
+					has_ethic = "ethic_xenophobe"
+					has_ethic = "ethic_fanatic_xenophobe"
+				}
+			}
+		}
+		owner = {
+			add_monthly_resource_mult = {
+				resource = society_research
+				value = @tier2researchreward
+				min = @tier2researchmin
+				max = @tier2researchmax
+			}
+			add_monthly_resource_mult = {
+				resource = influence
+				value = @tier2influencereward
+				min = @tier2influencemin
+				max = @tier2influencemax
+			}
+			if = {
+				limit = {
+					owner = {
+						NOT = {
+							has_ethic = "ethic_fanatic_xenophobe"
+						}
+					}
+				}
+				country_add_ethic = "ethic_fanatic_xenophobe"
+				country_remove_ethic = "ethic_xenophobe"	
+			}
+		}
+	}
+}
+
+# Fidgeting
+planet_event = {
+	id = uplift.7520
+	title = "uplift.7520.name"
+	desc = "uplift.7520.desc"
+	picture = GFX_evt_colony_settlement
+	location = root
+
+	trigger = {
+		has_owner = yes
+		owner = { is_ai = no }
+		any_pop = { is_sapient = no }
+		NOT = { owner = { has_country_flag = fidgeting_natives } }
+	}
+
+	mean_time_to_happen = { months = 5000 }
+	
+	immediate = {
+		owner = { set_country_flag = fidgeting_natives }
+	}
+
+	option = {
+		name = uplift.7520.a
+		trigger = {
+			owner = {
+				NOT = {
+					has_ethic = "ethic_xenophobe"
+					has_ethic = "ethic_fanatic_xenophobe"
+				}
+			}
+		}
+		owner = {
+			add_monthly_resource_mult = {
+				resource = unity
+				value = @tier1unityreward
+			}
+		}
+	}
+
+	option = {
+		name = uplift.7520.b
+		custom_tooltip = uplift.7520.b.tooltip
+		trigger = {
+			owner = {
+				OR = {
+					has_ethic = "ethic_xenophobe"
+					has_ethic = "ethic_fanatic_xenophobe"
+				}
+			}
+		}
+		owner = {
+			add_monthly_resource_mult = {
+				resource = influence
+				value = @tier1influencereward
+				min = @tier1influencemin
+				max = @tier1influencemax
+			}
+		}
+	}
+
+	option = {
+		name = uplift.7520.c
+		trigger = {
+			owner = {
+				OR = {
+					has_ethic = "ethic_xenophile"
+					has_ethic = "ethic_fanatic_xenophile"
+				}
+			}
+		}
+		hidden_effect = { planet_event = { id = uplift.7525 days = 5 } }
+	}
+}
+
+planet_event = {
+	id = uplift.7525
+	title = "uplift.7525.name"
+	desc = "uplift.7525.desc"
+	picture = GFX_evt_colony_settlement
+	location = FROM
+
+	is_triggered_only = yes
+
+	option = {
+		name = FASCINATING
+		owner = {
+			add_monthly_resource_mult = {
+				resource = society_research
+				value = @tier1researchreward
+				min = @tier1researchmin
+				max = @tier1researchmax
+			}
+			add_monthly_resource_mult = {
+				resource = engineering_research
+				value = @tier1researchreward
+				min = @tier1researchmin
+				max = @tier1researchmax
+			}
+		}
+	}
+}
+
+planet_event = {
+	id = uplift.2222
+	hide_window = yes
+	trigger = { always = no }
+
+	immediate = {
+		owner = {
+			random_owned_ship = {
+				ship_event = { id = uplift.6090 }
+			}
+		}
+	}
+}

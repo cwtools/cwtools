@@ -1,0 +1,712 @@
+# Patrol Frigate ( Patrol Frigate )
+   ship_section_template = {
+      key = "corvette_stern_1"
+      ship_size = corvette
+      fits_on_slot = stern
+      entity = "corvette_coreA_entity"
+      icon = "GFX_ship_part_core_mid"
+      icon_frame = 1
+      prerequisites = { tech_legacy_unlock }
+      cost = 70
+      small_utility_slots = 0
+      medium_utility_slots = 0
+      large_utility_slots = 0
+      aux_utility_slots = 0
+      ai_weight = { factor = 100 }
+      component_slot = {
+         name = "SMALL_GUN_01"
+         slot_size = small
+         slot_type = weapon
+         locatorname = "small_gun_01"
+      }
+      component_slot = {
+         name = "SMALL_GUN_02"
+         slot_size = small
+         slot_type = weapon
+         locatorname = "small_gun_02"
+      }
+      component_slot = {
+         name = "SMALL_GUN_1"
+         slot_size = point_defence
+         slot_type = weapon
+         locatorname = "large_gun_01"
+      }
+   }
+# Cutter ( Patrol Frigate )
+   ship_section_template = {
+      key = "corvette_stern_2"
+      ship_size = corvette
+      fits_on_slot = stern
+      entity = "corvette_coreA_entity"
+      icon = "GFX_ship_part_core_mid"
+      icon_frame = 1
+      prerequisites = { tech_legacy_unlock }
+      cost = 70
+      small_utility_slots = 0
+      medium_utility_slots = 0
+      large_utility_slots = 0
+      aux_utility_slots = 0
+      ai_weight = { factor = 100 }
+      component_slot = {
+         name = "SMALL_GUN_01"
+         slot_size = small
+         slot_type = weapon
+         locatorname = "small_gun_01"
+      }
+      component_slot = {
+         name = "SMALL_GUN_02"
+         slot_size = small
+         slot_type = weapon
+         locatorname = "small_gun_02"
+      }
+      component_slot = {
+         name = "SMALL_GUN_1"
+         slot_size = point_defence
+         slot_type = weapon
+         locatorname = "large_gun_01"
+      }
+   }
+# Missile Boat ( Patrol Frigate )
+   ship_section_template = {
+      key = "corvette_stern_3"
+      ship_size = corvette
+      fits_on_slot = stern
+      entity = "corvette_coreA_entity"
+      icon = "GFX_ship_part_core_mid"
+      icon_frame = 1
+      prerequisites = { tech_engineering_global_650 }
+      cost = 100
+      small_utility_slots = 0
+      medium_utility_slots = 0
+      large_utility_slots = 0
+      aux_utility_slots = 0
+      ai_weight = { factor = 90 }
+      component_slot = {
+         name = "LARGE_GUN_01"
+         slot_size = large
+         slot_type = weapon
+         locatorname = "medium_gun_01"
+      }
+      component_slot = {
+         name = "SMALL_GUN_1"
+         slot_size = point_defence
+         slot_type = weapon
+         locatorname = "large_gun_01"
+      }
+      component_slot = {
+         name = "SMALL_GUN_2"
+         slot_size = point_defence
+         slot_type = weapon
+         locatorname = "large_gun_02"
+      }
+   }
+# Gun Boat ( Patrol Frigate )
+   ship_section_template = {
+      key = "corvette_stern_4"
+      ship_size = corvette
+      fits_on_slot = stern
+      entity = "corvette_coreA_entity"
+      icon = "GFX_ship_part_core_mid"
+      icon_frame = 1
+      prerequisites = { tech_physics_phaser_158 }
+      cost = 100
+      small_utility_slots = 0
+      medium_utility_slots = 0
+      large_utility_slots = 0
+      aux_utility_slots = 0
+      ai_weight = { factor = 90 }
+      component_slot = {
+         name = "LARGE_GUN_01"
+         slot_size = large
+         slot_type = weapon
+         locatorname = "medium_gun_01"
+      }
+      component_slot = {
+         name = "LARGE_GUN_02"
+         slot_size = large
+         slot_type = weapon
+         locatorname = "medium_gun_02"
+      }
+      component_slot = {
+         name = "LARGE_GUN_03"
+         slot_size = large
+         slot_type = weapon
+         locatorname = "medium_gun_03"
+      }
+      component_slot = {
+         name = "LARGE_GUN_04"
+         slot_size = large
+         slot_type = weapon
+         locatorname = "medium_gun_04"
+      }
+      component_slot = {
+         name = "LARGE_GUN_05"
+         slot_size = large
+         slot_type = weapon
+         locatorname = "medium_gun_05"
+      }
+      component_slot = {
+         name = "SMALL_GUN_1"
+         slot_size = point_defence
+         slot_type = weapon
+         locatorname = "large_gun_01"
+      }
+   }
+# Heavy Bird of Prey ( Patrol Frigate )
+   ship_section_template = {
+      key = "corvette_stern_5"
+      ship_size = corvette
+      fits_on_slot = stern
+      entity = "corvette_coreA_entity"
+      icon = "GFX_ship_part_core_mid"
+      icon_frame = 1
+      prerequisites = { tech_disruptor_klingon_cannon_1 }
+      cost = 100
+      small_utility_slots = 0
+      medium_utility_slots = 0
+      large_utility_slots = 0
+      aux_utility_slots = 0
+      ai_weight = { factor = 150 }
+      component_slot = {
+         name = "LARGE_GUN_01"
+         slot_size = large
+         slot_type = weapon
+         locatorname = "medium_gun_01"
+      }
+      component_slot = {
+         name = "LARGE_GUN_02"
+         slot_size = large
+         slot_type = weapon
+         locatorname = "medium_gun_02"
+      }
+      component_slot = {
+         name = "LARGE_GUN_03"
+         slot_size = large
+         slot_type = weapon
+         locatorname = "medium_gun_03"
+      }
+      component_slot = {
+         name = "LARGE_GUN_04"
+         slot_size = large
+         slot_type = weapon
+         locatorname = "medium_gun_04"
+      }
+      component_slot = {
+         name = "LARGE_GUN_05"
+         slot_size = large
+         slot_type = weapon
+         locatorname = "medium_gun_05"
+      }
+      component_slot = {
+         name = "SMALL_GUN_1"
+         slot_size = point_defence
+         slot_type = weapon
+         locatorname = "large_gun_01"
+      }
+   }
+# Heavy Assault Probe ( Patrol Frigate )
+   ship_section_template = {
+      key = "corvette_stern_6"
+      ship_size = corvette
+      fits_on_slot = stern
+      entity = "corvette_coreA_entity"
+      icon = "GFX_ship_part_core_mid"
+      icon_frame = 1
+      prerequisites = { tech_cutting_beam_1 }
+      cost = 150
+      small_utility_slots = 0
+      medium_utility_slots = 0
+      large_utility_slots = 0
+      aux_utility_slots = 0
+      ai_weight = { factor = 200 }
+      component_slot = {
+         name = "SMALL_GUN_01"
+         slot_size = small
+         slot_type = weapon
+         locatorname = "small_gun_01"
+      }
+      component_slot = {
+         name = "SMALL_GUN_02"
+         slot_size = small
+         slot_type = weapon
+         locatorname = "small_gun_02"
+      }
+      component_slot = {
+         name = "SMALL_GUN_03"
+         slot_size = small
+         slot_type = weapon
+         locatorname = "small_gun_03"
+      }
+      component_slot = {
+         name = "SMALL_GUN_1"
+         slot_size = point_defence
+         slot_type = weapon
+         locatorname = "large_gun_01"
+      }
+   }
+# Patrol Frigate ( Patrol Frigate )
+   ship_section_template = {
+      key = "corvette_stern_7"
+      ship_size = corvette
+      fits_on_slot = stern
+      entity = "corvette_coreA_entity"
+      icon = "GFX_ship_part_core_mid"
+      icon_frame = 1
+      prerequisites = { tech_legacy_unlock }
+      cost = 70
+      small_utility_slots = 0
+      medium_utility_slots = 0
+      large_utility_slots = 0
+      aux_utility_slots = 0
+      ai_weight = { factor = 100 }
+      component_slot = {
+         name = "SMALL_GUN_01"
+         slot_size = small
+         slot_type = weapon
+         locatorname = "small_gun_01"
+      }
+      component_slot = {
+         name = "SMALL_GUN_02"
+         slot_size = small
+         slot_type = weapon
+         locatorname = "small_gun_02"
+      }
+      component_slot = {
+         name = "SMALL_GUN_1"
+         slot_size = point_defence
+         slot_type = weapon
+         locatorname = "large_gun_01"
+      }
+   }
+# Patrol Frigate ( Patrol Frigate )
+   ship_section_template = {
+      key = "corvette_stern_8"
+      ship_size = corvette
+      fits_on_slot = stern
+      entity = "corvette_coreA_entity"
+      icon = "GFX_ship_part_core_mid"
+      icon_frame = 1
+      prerequisites = { tech_legacy_unlock }
+      cost = 70
+      small_utility_slots = 0
+      medium_utility_slots = 0
+      large_utility_slots = 0
+      aux_utility_slots = 0
+      ai_weight = { factor = 100 }
+      component_slot = {
+         name = "SMALL_GUN_01"
+         slot_size = small
+         slot_type = weapon
+         locatorname = "small_gun_01"
+      }
+      component_slot = {
+         name = "SMALL_GUN_02"
+         slot_size = small
+         slot_type = weapon
+         locatorname = "small_gun_02"
+      }
+      component_slot = {
+         name = "SMALL_GUN_1"
+         slot_size = point_defence
+         slot_type = weapon
+         locatorname = "large_gun_01"
+      }
+   }
+# Persuit Craft ( Patrol Frigate )
+   ship_section_template = {
+      key = "corvette_stern_9"
+      ship_size = corvette
+      fits_on_slot = stern
+      entity = "corvette_coreA_entity"
+      icon = "GFX_ship_part_core_mid"
+      icon_frame = 1
+      prerequisites = { tech_legacy_unlock }
+      cost = 70
+      small_utility_slots = 0
+      medium_utility_slots = 0
+      large_utility_slots = 0
+      aux_utility_slots = 0
+      ai_weight = { factor = 100 }
+      component_slot = {
+         name = "SMALL_GUN_01"
+         slot_size = small
+         slot_type = weapon
+         locatorname = "small_gun_01"
+      }
+      component_slot = {
+         name = "SMALL_GUN_02"
+         slot_size = small
+         slot_type = weapon
+         locatorname = "small_gun_02"
+      }
+      component_slot = {
+         name = "SMALL_GUN_1"
+         slot_size = point_defence
+         slot_type = weapon
+         locatorname = "large_gun_01"
+      }
+   }
+# Bird of Prey ( Patrol Frigate )
+   ship_section_template = {
+      key = "corvette_stern_10"
+      ship_size = corvette
+      fits_on_slot = stern
+      entity = "corvette_coreA_entity"
+      icon = "GFX_ship_part_core_mid"
+      icon_frame = 1
+      prerequisites = { tech_legacy_unlock }
+      cost = 70
+      small_utility_slots = 0
+      medium_utility_slots = 0
+      large_utility_slots = 0
+      aux_utility_slots = 0
+      ai_weight = { factor = 100 }
+      component_slot = {
+         name = "SMALL_GUN_01"
+         slot_size = small
+         slot_type = weapon
+         locatorname = "small_gun_01"
+      }
+      component_slot = {
+         name = "SMALL_GUN_02"
+         slot_size = small
+         slot_type = weapon
+         locatorname = "small_gun_02"
+      }
+      component_slot = {
+         name = "SMALL_GUN_1"
+         slot_size = point_defence
+         slot_type = weapon
+         locatorname = "large_gun_01"
+      }
+   }
+# Cutter ( Patrol Frigate )
+   ship_section_template = {
+      key = "corvette_stern_11"
+      ship_size = corvette
+      fits_on_slot = stern
+      entity = "corvette_coreA_entity"
+      icon = "GFX_ship_part_core_mid"
+      icon_frame = 1
+      prerequisites = { tech_legacy_unlock }
+      cost = 70
+      small_utility_slots = 0
+      medium_utility_slots = 0
+      large_utility_slots = 0
+      aux_utility_slots = 0
+      ai_weight = { factor = 100 }
+      component_slot = {
+         name = "LARGE_GUN_01"
+         slot_size = large
+         slot_type = weapon
+         locatorname = "medium_gun_01"
+      }
+      component_slot = {
+         name = "LARGE_GUN_02"
+         slot_size = large
+         slot_type = weapon
+         locatorname = "medium_gun_02"
+      }
+      component_slot = {
+         name = "LARGE_GUN_03"
+         slot_size = large
+         slot_type = weapon
+         locatorname = "medium_gun_03"
+      }
+      component_slot = {
+         name = "LARGE_GUN_04"
+         slot_size = large
+         slot_type = weapon
+         locatorname = "medium_gun_04"
+      }
+      component_slot = {
+         name = "SMALL_GUN_1"
+         slot_size = point_defence
+         slot_type = weapon
+         locatorname = "large_gun_01"
+      }
+   }
+# Cutter ( Patrol Frigate )
+   ship_section_template = {
+      key = "corvette_stern_12"
+      ship_size = corvette
+      fits_on_slot = stern
+      entity = "corvette_coreA_entity"
+      icon = "GFX_ship_part_core_mid"
+      icon_frame = 1
+      prerequisites = { tech_legacy_unlock }
+      cost = 70
+      small_utility_slots = 0
+      medium_utility_slots = 0
+      large_utility_slots = 0
+      aux_utility_slots = 0
+      ai_weight = { factor = 100 }
+      component_slot = {
+         name = "LARGE_GUN_01"
+         slot_size = large
+         slot_type = weapon
+         locatorname = "medium_gun_01"
+      }
+      component_slot = {
+         name = "LARGE_GUN_02"
+         slot_size = large
+         slot_type = weapon
+         locatorname = "medium_gun_02"
+      }
+      component_slot = {
+         name = "LARGE_GUN_03"
+         slot_size = large
+         slot_type = weapon
+         locatorname = "medium_gun_03"
+      }
+      component_slot = {
+         name = "LARGE_GUN_04"
+         slot_size = large
+         slot_type = weapon
+         locatorname = "medium_gun_04"
+      }
+      component_slot = {
+         name = "SMALL_GUN_1"
+         slot_size = point_defence
+         slot_type = weapon
+         locatorname = "large_gun_01"
+      }
+   }
+# Cutter ( Patrol Frigate )
+   ship_section_template = {
+      key = "corvette_stern_13"
+      ship_size = corvette
+      fits_on_slot = stern
+      entity = "corvette_coreA_entity"
+      icon = "GFX_ship_part_core_mid"
+      icon_frame = 1
+      prerequisites = { tech_legacy_unlock }
+      cost = 70
+      small_utility_slots = 0
+      medium_utility_slots = 0
+      large_utility_slots = 0
+      aux_utility_slots = 0
+      ai_weight = { factor = 100 }
+      component_slot = {
+         name = "SMALL_GUN_01"
+         slot_size = small
+         slot_type = weapon
+         locatorname = "small_gun_01"
+      }
+      component_slot = {
+         name = "SMALL_GUN_02"
+         slot_size = small
+         slot_type = weapon
+         locatorname = "small_gun_02"
+      }
+      component_slot = {
+         name = "SMALL_GUN_1"
+         slot_size = point_defence
+         slot_type = weapon
+         locatorname = "large_gun_01"
+      }
+   }
+# Cutter ( Patrol Frigate )
+   ship_section_template = {
+      key = "corvette_stern_14"
+      ship_size = corvette
+      fits_on_slot = stern
+      entity = "corvette_coreA_entity"
+      icon = "GFX_ship_part_core_mid"
+      icon_frame = 1
+      prerequisites = { tech_legacy_unlock }
+      cost = 70
+      small_utility_slots = 0
+      medium_utility_slots = 0
+      large_utility_slots = 0
+      aux_utility_slots = 0
+      ai_weight = { factor = 100 }
+      component_slot = {
+         name = "SMALL_GUN_01"
+         slot_size = small
+         slot_type = weapon
+         locatorname = "small_gun_01"
+      }
+      component_slot = {
+         name = "SMALL_GUN_02"
+         slot_size = small
+         slot_type = weapon
+         locatorname = "small_gun_02"
+      }
+      component_slot = {
+         name = "SMALL_GUN_1"
+         slot_size = point_defence
+         slot_type = weapon
+         locatorname = "large_gun_01"
+      }
+   }
+# Cutter ( Patrol Frigate )
+   ship_section_template = {
+      key = "corvette_stern_15"
+      ship_size = corvette
+      fits_on_slot = stern
+      entity = "corvette_coreA_entity"
+      icon = "GFX_ship_part_core_mid"
+      icon_frame = 1
+      prerequisites = { tech_legacy_unlock }
+      cost = 70
+      small_utility_slots = 0
+      medium_utility_slots = 0
+      large_utility_slots = 0
+      aux_utility_slots = 0
+      ai_weight = { factor = 100 }
+      component_slot = {
+         name = "LARGE_GUN_01"
+         slot_size = large
+         slot_type = weapon
+         locatorname = "medium_gun_01"
+      }
+      component_slot = {
+         name = "LARGE_GUN_02"
+         slot_size = large
+         slot_type = weapon
+         locatorname = "medium_gun_02"
+      }
+      component_slot = {
+         name = "LARGE_GUN_03"
+         slot_size = large
+         slot_type = weapon
+         locatorname = "medium_gun_03"
+      }
+      component_slot = {
+         name = "LARGE_GUN_04"
+         slot_size = large
+         slot_type = weapon
+         locatorname = "medium_gun_04"
+      }
+      component_slot = {
+         name = "SMALL_GUN_1"
+         slot_size = point_defence
+         slot_type = weapon
+         locatorname = "large_gun_01"
+      }
+   }
+# Yellowstone Runabout ( Patrol Frigate )
+   ship_section_template = {
+      key = "corvette_stern_16"
+      ship_size = corvette
+      fits_on_slot = stern
+      entity = "corvette_coreA_entity"
+      icon = "GFX_ship_part_core_mid"
+      icon_frame = 1
+      prerequisites = { tech_engineering_industry_1296 }
+      cost = 10
+      small_utility_slots = 0
+      medium_utility_slots = 0
+      large_utility_slots = 0
+      aux_utility_slots = 0
+      ai_weight = { factor = 50 }
+      component_slot = {
+         name = "SMALL_GUN_01"
+         slot_size = small
+         slot_type = weapon
+         locatorname = "small_gun_01"
+      }
+      component_slot = {
+         name = "SMALL_GUN_1"
+         slot_size = point_defence
+         slot_type = weapon
+         locatorname = "large_gun_01"
+      }
+   }
+# Patrol Frigate ( Patrol Frigate )
+   ship_section_template = {
+      key = "corvette_stern_beam"
+      ship_size = corvette
+      fits_on_slot = stern
+      entity = "corvette_coreA_entity"
+      icon = "GFX_ship_part_core_mid"
+      icon_frame = 1
+      prerequisites = { tech_engineering_starship-class_717 }
+      cost = 70
+      small_utility_slots = 0
+      medium_utility_slots = 0
+      large_utility_slots = 0
+      aux_utility_slots = 0
+      ai_weight = { factor = 100 }
+      component_slot = {
+         name = "SMALL_GUN_01"
+         slot_size = small
+         slot_type = weapon
+         locatorname = "small_gun_01"
+      }
+      component_slot = {
+         name = "SMALL_GUN_02"
+         slot_size = small
+         slot_type = weapon
+         locatorname = "small_gun_02"
+      }
+      component_slot = {
+         name = "SMALL_GUN_1"
+         slot_size = point_defence
+         slot_type = weapon
+         locatorname = "large_gun_01"
+      }
+   }
+# Patrol Frigate ( Patrol Frigate )
+   ship_section_template = {
+      key = "corvette_stern_cannon"
+      ship_size = corvette
+      fits_on_slot = stern
+      entity = "corvette_coreA_entity"
+      icon = "GFX_ship_part_core_mid"
+      icon_frame = 1
+      prerequisites = { tech_engineering_bird-of-prey_716 }
+      cost = 70
+      small_utility_slots = 0
+      medium_utility_slots = 0
+      large_utility_slots = 0
+      aux_utility_slots = 0
+      ai_weight = { factor = 100 }
+      component_slot = {
+         name = "LARGE_GUN_01"
+         slot_size = large
+         slot_type = weapon
+         locatorname = "medium_gun_01"
+      }
+      component_slot = {
+         name = "LARGE_GUN_02"
+         slot_size = large
+         slot_type = weapon
+         locatorname = "medium_gun_02"
+      }
+      component_slot = {
+         name = "LARGE_GUN_03"
+         slot_size = large
+         slot_type = weapon
+         locatorname = "medium_gun_03"
+      }
+      component_slot = {
+         name = "LARGE_GUN_04"
+         slot_size = large
+         slot_type = weapon
+         locatorname = "medium_gun_04"
+      }
+      component_slot = {
+         name = "SMALL_GUN_1"
+         slot_size = point_defence
+         slot_type = weapon
+         locatorname = "large_gun_01"
+      }
+   }
+# Secondary Hull ( Patrol Frigate )
+   ship_section_template = {
+      key = "corvette_mid_17"
+      ship_size = corvette
+      fits_on_slot = mid
+      entity = "corvette_entity"
+      icon = "GFX_ship_part_core_mid"
+      icon_frame = 1
+      prerequisites = { tech_patrol_frigate }
+      cost = 60
+      small_utility_slots = 1
+      medium_utility_slots = 0
+      large_utility_slots = 1
+      aux_utility_slots = 0
+      ai_weight = { factor = 100 }
+   }

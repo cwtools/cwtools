@@ -1,0 +1,776 @@
+# Icons set here are the ones show in the actual slot. The reason is so that we can support different icons for different sizes. 
+
+# Updated Range on these
+
+# DEFAULT VALUES:
+# is_missile = no
+# is_beam = no
+# is_point_defence = no
+
+#NOTE that values from weapon_components.csv will override values from this file
+
+# ####################
+#  Laser
+# ####################
+
+### Red Lasers
+weapon_component_template = {
+	key = "SMALL_RED_LASER"
+	hidden = yes
+	size = small
+	entity = "small_laser_gun_entity"
+	type = instant
+	icon = "GFX_ship_part_laser_1"
+	icon_frame = 1
+	#prerequisites = { "tech_lasers_1" }
+	component_set = "RED_LASER"
+	projectile_gfx = "infrared_laser_s"
+	tags = { weapon_type_energy }
+	upgrades_to = "SMALL_BLUE_LASER"
+	ai_tags = { weapon_role_anti_armor }	#tags must be pre-registered in common/weapon_tags
+}
+
+
+weapon_component_template = {
+	key = "MEDIUM_RED_LASER"
+	hidden = yes
+	size = medium
+	entity = "medium_laser_gun_entity"
+	type = instant
+	icon = "GFX_ship_part_laser_1"
+	icon_frame = 1
+	#prerequisites = { "tech_lasers_1" }
+	component_set = "RED_LASER"
+	projectile_gfx = "infrared_laser_m"
+	tags = { weapon_type_energy }
+	ai_tags = { weapon_role_anti_armor }
+	upgrades_to = "MEDIUM_BLUE_LASER"
+}
+
+weapon_component_template = {
+	key = "LARGE_RED_LASER"
+	hidden = yes
+	size = large
+	entity = "large_laser_gun_entity"
+	type = instant
+	icon = "GFX_ship_part_laser_1"
+	icon_frame = 1
+	#prerequisites = { "tech_lasers_1" }
+	component_set = "RED_LASER"
+	projectile_gfx = "infrared_laser_l"
+	tags = { weapon_type_energy }
+	ai_tags = { weapon_role_anti_armor }
+	upgrades_to = "LARGE_BLUE_LASER"
+}
+
+
+### Blue Lasers
+weapon_component_template = {
+	key = "SMALL_BLUE_LASER"
+	hidden = yes
+	size = small
+	entity = "small_laser_gun_entity"
+	type = instant
+	icon = "GFX_ship_part_laser_2"
+	icon_frame = 1
+	#prerequisites = { "tech_lasers_2" }
+	component_set = "BLUE_LASER"
+	projectile_gfx = "blue_laser_s"
+	tags = { weapon_type_energy }
+	ai_tags = { weapon_role_anti_armor }
+	upgrades_to = "SMALL_UV_LASER"
+}
+
+weapon_component_template = {
+	key = "MEDIUM_BLUE_LASER"
+	hidden = yes
+	size = medium
+	entity = "medium_laser_gun_entity"
+	type = instant
+	icon = "GFX_ship_part_laser_2"
+	icon_frame = 1
+	#prerequisites = { "tech_lasers_2" }
+	component_set = "BLUE_LASER"
+	projectile_gfx = "blue_laser_m"
+	tags = { weapon_type_energy }
+	ai_tags = { weapon_role_anti_armor }
+	upgrades_to = "MEDIUM_UV_LASER"
+}
+
+weapon_component_template = {
+	key = "LARGE_BLUE_LASER"
+	hidden = yes
+	size = large
+	entity = "large_laser_gun_entity"
+	type = instant
+	icon = "GFX_ship_part_laser_2"
+	icon_frame = 1
+	#prerequisites = { "tech_lasers_2" }
+	component_set = "BLUE_LASER"
+	projectile_gfx = "blue_laser_l"
+	tags = { weapon_type_energy }
+	ai_tags = { weapon_role_anti_armor }
+	upgrades_to = "LARGE_UV_LASER"
+}
+
+### UV Lasers
+weapon_component_template = {
+	key = "SMALL_UV_LASER"
+	hidden = yes
+	size = small
+	entity = "small_laser_gun_entity"
+	type = instant
+	
+	icon = "GFX_ship_part_laser_3"
+	icon_frame = 1
+	#color = { 1.0 0.1 1.0 1 }
+	
+	#prerequisites = { "tech_lasers_3" }
+	component_set = "UV_LASER"
+	projectile_gfx = "uv_laser_s"
+	tags = { weapon_type_energy }
+	ai_tags = { weapon_role_anti_armor }
+	upgrades_to = "SMALL_XRAY_LASER"
+}
+
+weapon_component_template = {
+	key = "MEDIUM_UV_LASER"
+	hidden = yes
+	size = medium
+	entity = "medium_laser_gun_entity"
+	type = instant
+	
+	icon = "GFX_ship_part_laser_3"
+	icon_frame = 1
+	#color = { 1.0 0.1 1.0 1 }
+	
+	#prerequisites = { "tech_lasers_3" }
+	component_set = "UV_LASER"
+	projectile_gfx = "uv_laser_m"
+	tags = { weapon_type_energy }
+	ai_tags = { weapon_role_anti_armor }
+	upgrades_to = "MEDIUM_XRAY_LASER"
+}
+
+weapon_component_template = {
+	key = "LARGE_UV_LASER"
+	hidden = yes
+	size = large
+	entity = "large_laser_gun_entity"
+	accuracy = 1
+	type = instant
+	
+	icon = "GFX_ship_part_laser_3"
+	icon_frame = 1
+	#color = { 1.0 0.1 1.0 1 }
+	
+	#prerequisites = { "tech_lasers_3" }
+	component_set = "UV_LASER"
+	projectile_gfx = "uv_laser_l"
+	tags = { weapon_type_energy }
+	ai_tags = { weapon_role_anti_armor }
+	upgrades_to = "LARGE_XRAY_LASER"
+}
+
+### XRay Lasers
+weapon_component_template = {
+	key = "SMALL_XRAY_LASER"
+	hidden = yes
+	size = small
+	entity = "small_laser_gun_entity"
+	type = instant
+	
+	icon = "GFX_ship_part_laser_4"
+	icon_frame = 1
+	#color = { 1.0 1.0 1.0 1 }
+	
+	#prerequisites = { "tech_lasers_4" }
+	component_set = "XRAY_LASER"
+	projectile_gfx = "xray_laser_s"
+	tags = { weapon_type_energy }
+	ai_tags = { weapon_role_anti_armor }
+	upgrades_to = "SMALL_GAMMA_LASER"
+}
+
+weapon_component_template = {
+	key = "MEDIUM_XRAY_LASER"
+	hidden = yes
+	size = medium
+	entity = "medium_laser_gun_entity"
+	type = instant
+	
+	icon = "GFX_ship_part_laser_4"
+	icon_frame = 1
+	#color = { 1.0 1.0 1.0 1 }
+	
+	#prerequisites = { "tech_lasers_4" }
+	component_set = "XRAY_LASER"
+	projectile_gfx = "xray_laser_m"
+	tags = { weapon_type_energy }
+	ai_tags = { weapon_role_anti_armor }
+	upgrades_to = "MEDIUM_GAMMA_LASER"
+}
+
+weapon_component_template = {
+	key = "LARGE_XRAY_LASER"
+	hidden = yes
+	size = large
+	entity = "large_laser_gun_entity"
+	type = instant
+	
+	icon = "GFX_ship_part_laser_4"
+	icon_frame = 1
+	#color = { 1.0 1.0 1.0 1 }
+	
+	#prerequisites = { "tech_lasers_4" }
+	component_set = "XRAY_LASER"
+	projectile_gfx = "xray_laser_l"
+	tags = { weapon_type_energy }
+	ai_tags = { weapon_role_anti_armor }
+	upgrades_to = "LARGE_GAMMA_LASER"
+}
+
+### Gamma Lasers
+weapon_component_template = {
+	key = "SMALL_GAMMA_LASER"
+	hidden = yes
+	size = small
+	entity = "small_laser_gun_entity"
+	type = instant
+	
+	icon = "GFX_ship_part_laser_5"
+	icon_frame = 1
+	#color = { 0.1 1.0 0.1 1 }
+	
+	#prerequisites = { "tech_lasers_5" }
+	component_set = "GAMMA_LASER"
+	projectile_gfx = "gamma_laser_s"
+	tags = { weapon_type_energy }
+	ai_tags = { weapon_role_anti_armor }
+}
+
+weapon_component_template = {
+	key = "MEDIUM_GAMMA_LASER"
+	hidden = yes
+	size = medium
+	entity = "medium_laser_gun_entity"
+	type = instant
+	
+	icon = "GFX_ship_part_laser_5"
+	icon_frame = 1
+	#color = { 0.1 1.0 0.1 1 }
+	
+	#prerequisites = { "tech_lasers_5" }
+	component_set = "GAMMA_LASER"
+	projectile_gfx = "gamma_laser_m"
+	tags = { weapon_type_energy }
+	ai_tags = { weapon_role_anti_armor }
+}
+
+weapon_component_template = {
+	key = "LARGE_GAMMA_LASER"
+	hidden = yes
+	size = large
+	entity = "large_laser_gun_entity"
+	type = instant
+	
+	icon = "GFX_ship_part_laser_5"
+	icon_frame = 1
+	#color = { 0.1 1.0 0.1 1 }
+	
+	#prerequisites = { "tech_lasers_5" }
+	component_set = "GAMMA_LASER"
+	projectile_gfx = "gamma_laser_l"
+	tags = { weapon_type_energy }
+	ai_tags = { weapon_role_anti_armor }
+}
+
+# ####################
+# Spaceport Laser
+# ####################
+
+weapon_component_template = {
+	key = "SMALL_SPACEPORT_LASER"
+	hidden = yes
+	size = small
+	entity = "small_laser_gun_entity"
+	type = instant
+	icon = "GFX_ship_part_laser_1"
+	icon_frame = 1
+	#color = { 0.1 1.0 0.1 1 }
+	
+	projectile_gfx = "gamma_laser_l"
+	hidden = yes
+	component_set = "SPACEPORT_LASER"
+	tags = { weapon_type_energy }
+}
+
+weapon_component_template = {
+	key = "MEDIUM_SPACEPORT_LASER"
+	hidden = yes
+	size = medium
+	entity = "medium_laser_gun_entity"
+	type = instant
+	icon = "GFX_ship_part_laser_1"
+	icon_frame = 1
+	#color = { 0.1 1.0 0.1 1 }
+	
+	projectile_gfx = "gamma_laser_l"
+	hidden = yes
+	component_set = "SPACEPORT_LASER"
+	tags = { weapon_type_energy }
+}
+
+weapon_component_template = {
+	key = "LARGE_SPACEPORT_LASER"
+	hidden = yes
+	size = large
+	entity = "large_laser_gun_entity"
+	type = instant
+	icon = "GFX_ship_part_laser_1"
+	icon_frame = 1
+	#color = { 0.1 1.0 0.1 1 }
+	
+	projectile_gfx = "gamma_laser_l"
+	hidden = yes
+	component_set = "SPACEPORT_LASER"
+	tags = { weapon_type_energy }
+}
+
+# ###################################
+# Fallen Empire Spaceport Lance
+# ###################################
+
+# ## Fallen Empire Energy Lance
+weapon_component_template = {
+	key = "LARGE_FALLEN_EMPIRE_SPACEPORT_LANCE"
+	size = large
+	entity = "large_laser_gun_entity"
+	type = instant
+	
+	icon = "GFX_ship_part_energy_lance_2"
+	icon_frame = 1
+	#color = { 0.1 1.0 0.1 1 }
+	
+	hidden = yes
+	component_set = "FALLEN_EMPIRE_SPACEPORT_LANCE"
+	projectile_gfx = "tachyon_lance"
+	tags = { weapon_type_energy }
+}
+
+# ####################
+#  Plasma
+# ####################
+
+# ## Plasma 1
+weapon_component_template = {
+	key = "SMALL_PLASMA_1"
+	hidden = yes
+	size = small
+	entity = "small_laser_gun_entity"
+	type = instant
+	
+	icon = "GFX_ship_part_plasma_1"
+	icon_frame = 1
+	#color = { 1.0 1.0 1.0 1 }
+	
+	#prerequisites = { "tech_plasma_1" }
+	component_set = "PLASMA_1"
+	projectile_gfx = "plasma_thrower_s"
+	tags = { weapon_type_energy }
+	ai_tags = { weapon_role_anti_armor }
+	upgrades_to = "SMALL_PLASMA_2"
+}
+
+weapon_component_template = {
+	key = "MEDIUM_PLASMA_1"
+	hidden = yes
+	size = medium
+	entity = "medium_laser_gun_entity"
+	type = instant
+	
+	icon = "GFX_ship_part_plasma_1"
+	icon_frame = 1
+	#color = { 1.0 1.0 1.0 1 }
+	
+	#prerequisites = { "tech_plasma_1" }
+	component_set = "PLASMA_1"
+	projectile_gfx = "plasma_thrower_m"
+	tags = { weapon_type_energy }
+	ai_tags = { weapon_role_anti_armor }
+	upgrades_to = "MEDIUM_PLASMA_2"
+}
+
+weapon_component_template = {
+	key = "LARGE_PLASMA_1"
+	hidden = yes
+	size = large
+	entity = "large_laser_gun_entity"
+	type = instant
+	
+	icon = "GFX_ship_part_plasma_1"
+	icon_frame = 1
+	#color = { 1.0 1.0 1.0 1 }
+	
+	#prerequisites = { "tech_plasma_1" }
+	component_set = "PLASMA_1"
+	projectile_gfx = "plasma_thrower_l"
+	tags = { weapon_type_energy }
+	ai_tags = { weapon_role_anti_armor }
+	upgrades_to = "LARGE_PLASMA_2"
+}
+
+# ## Plasma 2
+weapon_component_template = {
+	key = "SMALL_PLASMA_2"
+	hidden = yes
+	size = small
+	entity = "small_laser_gun_entity"
+	accuracy = 1
+	type = instant
+	
+	icon = "GFX_ship_part_plasma_2"
+	icon_frame = 1
+	#color = { 0.1 1.0 0.1 1 }
+	
+	#prerequisites = { "tech_plasma_2" }
+	component_set = "PLASMA_2"
+	projectile_gfx = "plasma_accelerator_s"
+	tags = { weapon_type_energy }
+	ai_tags = { weapon_role_anti_armor }
+	upgrades_to = "SMALL_PLASMA_3"
+}
+
+weapon_component_template = {
+	key = "MEDIUM_PLASMA_2"
+	hidden = yes
+	size = medium
+	entity = "medium_laser_gun_entity"
+	type = instant
+	
+	icon = "GFX_ship_part_plasma_2"
+	icon_frame = 1
+	#color = { 0.1 1.0 0.1 1 }
+	
+	#prerequisites = { "tech_plasma_2" }
+	component_set = "PLASMA_2"
+	projectile_gfx = "plasma_accelerator_m"
+	tags = { weapon_type_energy }
+	ai_tags = { weapon_role_anti_armor }
+	upgrades_to = "MEDIUM_PLASMA_3"
+}
+
+weapon_component_template = {
+	key = "LARGE_PLASMA_2"
+	hidden = yes
+	size = large
+	entity = "large_laser_gun_entity"
+	type = instant
+	
+	icon = "GFX_ship_part_plasma_2"
+	icon_frame = 1
+	#color = { 0.1 1.0 0.1 1 }
+	
+	#prerequisites = { "tech_plasma_2" }
+	component_set = "PLASMA_2"
+	projectile_gfx = "plasma_accelerator_l"
+	tags = { weapon_type_energy }
+	ai_tags = { weapon_role_anti_armor }
+	upgrades_to = "LARGE_PLASMA_3"
+}
+
+# ## Plasma 3
+weapon_component_template = {
+	key = "SMALL_PLASMA_3"
+	hidden = yes
+	size = small
+	entity = "small_laser_gun_entity"
+	type = instant
+	
+	icon = "GFX_ship_part_plasma_3"
+	icon_frame = 1
+	#color = { 0.1 1.0 0.1 1 }
+	
+	#prerequisites = { "tech_plasma_3" }
+	component_set = "PLASMA_3"
+	projectile_gfx = "plasma_cannon_s"
+	tags = { weapon_type_energy }
+	ai_tags = { weapon_role_anti_armor }
+}
+
+weapon_component_template = {
+	key = "MEDIUM_PLASMA_3"
+	hidden = yes
+	size = medium
+	entity = "medium_laser_gun_entity"
+	type = instant
+	
+	icon = "GFX_ship_part_plasma_3"
+	icon_frame = 1
+	#color = { 0.1 1.0 0.1 1 }
+	
+	#prerequisites = { "tech_plasma_3" }
+	component_set = "PLASMA_3"
+	projectile_gfx = "plasma_cannon_m"
+	tags = { weapon_type_energy }
+	ai_tags = { weapon_role_anti_armor }
+}
+
+weapon_component_template = {
+	key = "LARGE_PLASMA_3"
+	hidden = yes
+	size = large
+	entity = "large_laser_gun_entity"
+	type = instant
+	
+	icon = "GFX_ship_part_plasma_3"
+	icon_frame = 1
+	#color = { 0.1 1.0 0.1 1 }
+	
+	#prerequisites = { "tech_plasma_3" }
+	component_set = "PLASMA_3"
+	projectile_gfx = "plasma_cannon_l"
+	tags = { weapon_type_energy }
+	ai_tags = { weapon_role_anti_armor }
+}
+
+# ####################
+#  Disruptors
+# ####################
+
+# ## Disruptor 1
+weapon_component_template = {
+	key = "SMALL_DISRUPTOR_1"
+	hidden = yes
+	size = small
+	entity = "small_laser_gun_entity"
+	type = instant
+	
+	icon = "GFX_ship_part_disruptor_1"
+	icon_frame = 1
+	#color = { 1.0 1.0 1.0 1 }
+	
+	#prerequisites = { "tech_disruptors_1" }
+	component_set = "DISRUPTOR_1"
+	projectile_gfx = "disruptor_1_small"
+	tags = { weapon_type_energy }
+	ai_tags = { weapon_role_anti_shield }
+	ai_tag_weight = 4
+	upgrades_to = "SMALL_DISRUPTOR_2"
+}
+
+weapon_component_template = {
+	key = "MEDIUM_DISRUPTOR_1"
+	hidden = yes
+	size = medium
+	entity = "medium_laser_gun_entity"
+	type = instant
+	
+	icon = "GFX_ship_part_disruptor_1"
+	icon_frame = 1
+	#color = { 1.0 1.0 1.0 1 }
+	
+	#prerequisites = { "tech_disruptors_1" }
+	component_set = "DISRUPTOR_1"
+	projectile_gfx = "disruptor_1_medium"
+	tags = { weapon_type_energy }
+	ai_tags = { weapon_role_anti_shield }
+	ai_tag_weight = 4
+	upgrades_to = "MEDIUM_DISRUPTOR_2"
+}
+
+weapon_component_template = {
+	key = "LARGE_DISRUPTOR_1"
+	hidden = yes
+	size = large
+	entity = "large_laser_gun_entity"
+	type = instant
+	
+	icon = "GFX_ship_part_disruptor_1"
+	icon_frame = 1
+	#color = { 1.0 1.0 1.0 1 }
+	
+	#prerequisites = { "tech_disruptors_1" }
+	component_set = "DISRUPTOR_1"
+	projectile_gfx = "disruptor_1_large"
+	tags = { weapon_type_energy }
+	ai_tags = { weapon_role_anti_shield }
+	ai_tag_weight = 4
+	upgrades_to = "LARGE_DISRUPTOR_2"
+}
+
+# ## Disruptor 2
+weapon_component_template = {
+	key = "SMALL_DISRUPTOR_2"
+	hidden = yes
+	size = small
+	entity = "small_laser_gun_entity"
+	type = instant
+	
+	icon = "GFX_ship_part_disruptor_2"
+	icon_frame = 1
+	#color = { 0.1 1.0 0.1 1 }
+	
+	#prerequisites = { "tech_disruptors_2" }
+	component_set = "DISRUPTOR_2"
+	projectile_gfx = "disruptor_2_small"
+	tags = { weapon_type_energy }
+	ai_tags = { weapon_role_anti_shield }
+	ai_tag_weight = 4
+	upgrades_to = "SMALL_DISRUPTOR_3"
+}
+
+weapon_component_template = {
+	key = "MEDIUM_DISRUPTOR_2"
+	hidden = yes
+	size = medium
+	entity = "medium_laser_gun_entity"
+	type = instant
+	
+	icon = "GFX_ship_part_disruptor_2"
+	icon_frame = 1
+	#color = { 0.1 1.0 0.1 1 }
+	
+	#prerequisites = { "tech_disruptors_2" }
+	component_set = "DISRUPTOR_2"
+	projectile_gfx = "disruptor_2_medium"
+	tags = { weapon_type_energy }
+	ai_tags = { weapon_role_anti_shield }
+	ai_tag_weight = 4
+	upgrades_to = "MEDIUM_DISRUPTOR_3"
+}
+
+weapon_component_template = {
+	key = "LARGE_DISRUPTOR_2"
+	hidden = yes
+	size = large
+	entity = "large_laser_gun_entity"
+	type = instant
+	
+	icon = "GFX_ship_part_disruptor_2"
+	icon_frame = 1
+	#color = { 0.1 1.0 0.1 1 }
+	
+	#prerequisites = { "tech_disruptors_2" }
+	component_set = "DISRUPTOR_2"
+	projectile_gfx = "disruptor_2_large"
+	tags = { weapon_type_energy }
+	ai_tags = { weapon_role_anti_shield }
+	ai_tag_weight = 4
+	upgrades_to = "LARGE_DISRUPTOR_3"
+}
+
+# ## Disruptor 3
+weapon_component_template = {
+	key = "SMALL_DISRUPTOR_3"
+	hidden = yes
+	size = small
+	entity = "small_laser_gun_entity"
+	type = instant
+	
+	icon = "GFX_ship_part_disruptor_3"
+	icon_frame = 1
+	#color = { 0.1 1.0 0.1 1 }
+	
+	#prerequisites = { "tech_disruptors_3" }
+	component_set = "DISRUPTOR_3"
+	projectile_gfx = "disruptor_3_small"
+	tags = { weapon_type_energy }
+	ai_tags = { weapon_role_anti_shield }
+	ai_tag_weight = 4
+}
+
+weapon_component_template = {
+	key = "MEDIUM_DISRUPTOR_3"
+	hidden = yes
+	size = medium
+	entity = "medium_laser_gun_entity"
+	type = instant
+	
+	icon = "GFX_ship_part_disruptor_3"
+	icon_frame = 1
+	#color = { 0.1 1.0 0.1 1 }
+	
+	#prerequisites = { "tech_disruptors_3" }
+	component_set = "DISRUPTOR_3"
+	projectile_gfx = "disruptor_3_medium"
+	tags = { weapon_type_energy }
+	ai_tags = { weapon_role_anti_shield }
+	ai_tag_weight = 4
+}
+
+weapon_component_template = {
+	key = "LARGE_DISRUPTOR_3"
+	hidden = yes
+	size = large
+	entity = "large_laser_gun_entity"
+	type = instant
+	
+	icon = "GFX_ship_part_disruptor_3"
+	icon_frame = 1
+	#color = { 0.1 1.0 0.1 1 }
+	
+	#prerequisites = { "tech_disruptors_3" }
+	component_set = "DISRUPTOR_3"
+	projectile_gfx = "disruptor_3_large"
+	tags = { weapon_type_energy }
+	ai_tags = { weapon_role_anti_shield }
+	ai_tag_weight = 4
+}
+
+# #####################
+#	Event Asset Lasers
+# #####################
+### Red Lasers
+weapon_component_template = {
+	key = "SMALL_EVENT_UV_LASER"
+	size = small
+	entity = "small_event_laser_gun_entity"
+	type = instant
+	hidden = yes
+	
+	icon = "GFX_ship_part_laser_3"
+	icon_frame = 1
+	#color = { 1.0 0.1 1.0 1 }
+	
+	projectile_gfx = "uv_laser_s"
+	tags = { weapon_type_energy }
+	ai_tags = { weapon_role_anti_armor }
+}
+
+weapon_component_template = {
+	key = "MEDIUM_EVENT_UV_LASER"
+	size = medium
+	entity = "medium_event_laser_gun_entity"
+	type = instant
+	hidden = yes
+	
+	icon = "GFX_ship_part_laser_3"
+	icon_frame = 1
+	#color = { 1.0 0.1 1.0 1 }
+	
+	projectile_gfx = "uv_laser_m"
+	tags = { weapon_type_energy }
+	ai_tags = { weapon_role_anti_armor }
+}
+
+# #####################
+#	Psionic
+# #####################
+
+weapon_component_template = {
+	key = "PSIONIC_BLAST_1"
+	hidden = yes
+
+	size = medium
+	entity = "large_space_cloud_weapon_entity"
+	type = instant
+	icon = "GFX_ship_part_space_cloud_weapon_1"
+	icon_frame = 1
+	projectile_gfx = "arc_emitter"
+	tags = { weapon_type_energy }
+	ai_tags = { weapon_role_anti_armor }
+	
+	component_set = "PSIONIC_BLAST_1"
+	cost = 0
+}

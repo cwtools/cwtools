@@ -1,0 +1,109 @@
+# Omega Cube
+ship_design = {
+    name = "NAME_super_cube"
+    ship_size = super_cube
+    section = {
+        template = "super_cube_stern_1"
+        slot = "stern"
+        component = { slot = "MEDIUM_GUN_01" template = "MEDIUM_BORG_ANTI_6" }
+        component = { slot = "MEDIUM_GUN_02" template = "MEDIUM_BORG_ANTI_6" }
+        component = { slot = "MEDIUM_GUN_03" template = "MEDIUM_BORG_ANTI_6" }
+        component = { slot = "MEDIUM_GUN_04" template = "MEDIUM_BORG_ANTI_6" }
+        component = { slot = "MEDIUM_GUN_05" template = "MEDIUM_BORG_ANTI_6" }
+        component = { slot = "MEDIUM_GUN_06" template = "MEDIUM_BORG_ANTI_6" }
+        component = { slot = "MEDIUM_GUN_07" template = "MEDIUM_BORG_ANTI_6" }
+        component = { slot = "MEDIUM_GUN_08" template = "MEDIUM_BORG_ANTI_6" }
+        component = { slot = "MEDIUM_GUN_09" template = "MEDIUM_BORG_ANTI_6" }
+        component = { slot = "TORPEDO_01" template = "TORPEDO_BORG_TORPEDO_5" }
+        component = { slot = "TORPEDO_02" template = "TORPEDO_GRAVIMETRIC_TORPEDO_5" }
+        component = { slot = "TORPEDO_03" template = "TORPEDO_BORG_TORPEDO_5" }
+        component = { slot = "TORPEDO_04" template = "TORPEDO_GRAVIMETRIC_TORPEDO_5" }
+        component = { slot = "TORPEDO_05" template = "TORPEDO_BORG_TORPEDO_5" }
+        component = { slot = "TORPEDO_06" template = "TORPEDO_GRAVIMETRIC_TORPEDO_5" }
+        component = { slot = "TORPEDO_07" template = "TORPEDO_BORG_TORPEDO_5" }
+        component = { slot = "TORPEDO_08" template = "TORPEDO_GRAVIMETRIC_TORPEDO_5" }
+    }
+    section = {
+        template = "super_cube_mid_2"
+        slot = "mid"
+        component = { slot = "SMALL_UTILITY_1" template = "UTILITY_SMALL_BORG_ARMOR_4" }
+        component = { slot = "SMALL_UTILITY_2" template = "UTILITY_SMALL_BORG_FORCEFIELDS_3" }
+        component = { slot = "SMALL_UTILITY_3" template = "UTILITY_SMALL_BORG_ARMOR_4" }
+        component = { slot = "SMALL_UTILITY_4" template = "UTILITY_SMALL_BORG_FORCEFIELDS_3" }
+        component = { slot = "SMALL_UTILITY_5" template = "UTILITY_SMALL_BORG_ARMOR_4" }
+        component = { slot = "SMALL_UTILITY_6" template = "UTILITY_SMALL_BORG_FORCEFIELDS_3" }
+        component = { slot = "SMALL_UTILITY_7" template = "UTILITY_SMALL_BORG_ARMOR_4" }
+        component = { slot = "SMALL_UTILITY_8" template = "UTILITY_SMALL_BORG_FORCEFIELDS_3" }
+        component = { slot = "MEDIUM_UTILITY_1" template = "UTILITY_MEDIUM_EPS_4" }
+        component = { slot = "MEDIUM_UTILITY_2" template = "UTILITY_MEDIUM_PHASE_4" }
+        component = { slot = "MEDIUM_UTILITY_3" template = "UTILITY_MEDIUM_PHASE_4" }
+        component = { slot = "MEDIUM_UTILITY_4" template = "UTILITY_MEDIUM_EPS_4" }
+        component = { slot = "MEDIUM_UTILITY_5" template = "UTILITY_MEDIUM_PHASE_4" }
+        component = { slot = "MEDIUM_UTILITY_6" template = "UTILITY_MEDIUM_PHASE_4" }
+        component = { slot = "MEDIUM_UTILITY_7" template = "UTILITY_MEDIUM_MODULATOR_1" }
+        component = { slot = "MEDIUM_UTILITY_8" template = "UTILITY_MEDIUM_MODULATOR_1" }
+        component = { slot = "AUX_UTILITY_1" template = "UTILITY_AUX_BORG_CREW_3" }
+        component = { slot = "AUX_UTILITY_2" template = "UTILITY_AUX_BORG_CREW_3" }
+    }
+    required_component="REQUIRED_COMPUTER_6_BORG_SC"
+    required_component="Required_Combat_Sensor_brawler_1"
+    required_component="REQUIRED_THRUSTERS_5_BORG_SC"
+    required_component="REQUIRED_WARP_7_BORG_SC"
+    required_component="REQUIRED_HULL_7_BORG_SC"
+    required_component="REQUIRED_DEFENSE_5_BORG_SC"
+}
+
+# Voth City Ship - buildable by player
+ship_design = {
+    name = "NAME_city_ship"
+    ship_size = super_cube
+    section = {
+        template = "super_cube_stern_1"
+        slot = "stern"
+        component = { slot = "MEDIUM_GUN_01" template = "MEDIUM_GRAVITON_TETRYON_6" }
+        component = { slot = "MEDIUM_GUN_02" template = "MEDIUM_GRAVITON_TETRYON_6" }
+        component = { slot = "MEDIUM_GUN_03" template = "MEDIUM_GRAVITON_TETRYON_6" }
+        component = { slot = "MEDIUM_GUN_04" template = "MEDIUM_GRAVITON_TETRYON_6" }
+        component = { slot = "MEDIUM_GUN_05" template = "MEDIUM_GRAVITON_TETRYON_6" }
+        component = { slot = "MEDIUM_GUN_06" template = "MEDIUM_GRAVITON_TETRYON_6" }
+        component = { slot = "MEDIUM_GUN_07" template = "MEDIUM_GRAVITON_TETRYON_6" }
+        component = { slot = "MEDIUM_GUN_08" template = "MEDIUM_GRAVITON_TETRYON_6" }
+        component = { slot = "MEDIUM_GUN_09" template = "MEDIUM_GRAVITON_TETRYON_6" }
+        component = { slot = "TORPEDO_01" template = "TORPEDO_QUANTUM_TORPEDO_2b" }
+        component = { slot = "TORPEDO_02" template = "TORPEDO_QUANTUM_TORPEDO_2b" }
+        component = { slot = "TORPEDO_03" template = "TORPEDO_QUANTUM_TORPEDO_2b" }
+        component = { slot = "TORPEDO_04" template = "TORPEDO_QUANTUM_TORPEDO_2b" }
+        component = { slot = "TORPEDO_05" template = "TORPEDO_QUANTUM_TORPEDO_2b" }
+        component = { slot = "TORPEDO_06" template = "TORPEDO_QUANTUM_TORPEDO_2b" }
+        component = { slot = "TORPEDO_07" template = "TORPEDO_QUANTUM_TORPEDO_2b" }
+        component = { slot = "TORPEDO_08" template = "TORPEDO_QUANTUM_TORPEDO_2b" }
+    }
+    section = {
+        template = "super_cube_mid_2"
+        slot = "mid"
+        component = { slot = "SMALL_UTILITY_1" template = "UTILITY_SMALL_GENERATOR_3" }
+        component = { slot = "SMALL_UTILITY_2" template = "UTILITY_SMALL_EMITTER_3" }
+        component = { slot = "SMALL_UTILITY_3" template = "UTILITY_SMALL_GENERATOR_3" }
+        component = { slot = "SMALL_UTILITY_4" template = "UTILITY_SMALL_EMITTER_3" }
+        component = { slot = "SMALL_UTILITY_5" template = "UTILITY_SMALL_GENERATOR_3" }
+        component = { slot = "SMALL_UTILITY_6" template = "UTILITY_SMALL_EMITTER_3" }
+        component = { slot = "SMALL_UTILITY_7" template = "UTILITY_SMALL_GENERATOR_3" }
+        component = { slot = "SMALL_UTILITY_8" template = "UTILITY_SMALL_EMITTER_3" }
+        component = { slot = "MEDIUM_UTILITY_1" template = "UTILITY_MEDIUM_EPS_4" }
+        component = { slot = "MEDIUM_UTILITY_2" template = "UTILITY_MEDIUM_PHASE_4" }
+        component = { slot = "MEDIUM_UTILITY_3" template = "UTILITY_MEDIUM_PHASE_4" }
+        component = { slot = "MEDIUM_UTILITY_4" template = "UTILITY_MEDIUM_EPS_4" }
+        component = { slot = "MEDIUM_UTILITY_5" template = "UTILITY_MEDIUM_PHASE_4" }
+        component = { slot = "MEDIUM_UTILITY_6" template = "UTILITY_MEDIUM_PHASE_4" }
+        component = { slot = "MEDIUM_UTILITY_7" template = "UTILITY_MEDIUM_MODULATOR_1" }
+        component = { slot = "MEDIUM_UTILITY_8" template = "UTILITY_MEDIUM_MODULATOR_1" }
+        component = { slot = "AUX_UTILITY_1" template = "UTILITY_AUX_CREW_1" }
+        component = { slot = "AUX_UTILITY_2" template = "UTILITY_AUX_CREW_1" }
+    }
+    required_component="REQUIRED_COMPUTER_5_SC"
+    required_component="Required_Combat_Sensor_brawler_1"
+    required_component="REQUIRED_THRUSTERS_7A_SC"
+    required_component="REQUIRED_WARP_8_EXPLORATION_SC"
+    required_component="REQUIRED_HULL_7A_SC"
+    required_component="REQUIRED_DEFENSE_7_SHIELD_A_SC"
+}

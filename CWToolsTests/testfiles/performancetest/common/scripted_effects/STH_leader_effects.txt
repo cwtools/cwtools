@@ -1,0 +1,286 @@
+root_get_exfiltration_bonus = {
+	if = {
+		limit = { check_variable = { which = years_infiltrating value > 20 } }
+		root = { add_monthly_resource_mult = { resource = society_research value = 4 } }
+	} 
+	if = {
+		limit = { check_variable = { which = years_infiltrating value > 15 } }
+		root = { add_monthly_resource_mult = { resource = society_research value = 4 } }
+	} 
+	if = {
+		limit = { check_variable = { which = years_infiltrating value > 10 } }
+		root = { add_monthly_resource_mult = { resource = society_research value = 4 } }
+	} 
+	if = {
+		limit = { check_variable = { which = years_infiltrating value > 5 } }
+		root = { add_monthly_resource_mult = { resource = society_research value = 4 } }
+	} 
+	if = {
+		limit = { check_variable = { which = years_infiltrating value > 0 } }
+		root = { add_monthly_resource_mult = { resource = society_research value = 2 } }
+	} 
+}
+
+root_get_fleet_exfiltration_bonus = {
+	if = {
+		limit = { check_variable = { which = years_infiltrating value > 20 } }
+		root = { add_monthly_resource_mult = { resource = engineering_research value = 3 } }
+	} 
+	if = {
+		limit = { check_variable = { which = years_infiltrating value > 15 } }
+		root = { add_monthly_resource_mult = { resource = engineering_research value = 3 } }
+	} 
+	if = {
+		limit = { check_variable = { which = years_infiltrating value > 10 } }
+		root = { add_monthly_resource_mult = { resource = engineering_research value = 3 } }
+	} 
+	if = {
+		limit = { check_variable = { which = years_infiltrating value > 5 } }
+		root = { add_monthly_resource_mult = { resource = engineering_research value = 3 } }
+	} 
+	if = {
+		limit = { check_variable = { which = years_infiltrating value > 0 } }
+		log = "get something surely"
+		root = { add_monthly_resource_mult = { resource = engineering_research value = 2 } }
+		root = { add_monthly_resource_mult = { resource = society_research value = 2 } }
+	} 
+}
+
+root_get_army_exfiltration_bonus = {
+	if = {
+		limit = { check_variable = { which = years_infiltrating value > 20 } }
+		root = { add_monthly_resource_mult = { resource = engineering_research value = 3 } }
+	} 
+	if = {
+		limit = { check_variable = { which = years_infiltrating value > 15 } }
+		root = { add_monthly_resource_mult = { resource = engineering_research value = 3 } }
+	} 
+	if = {
+		limit = { check_variable = { which = years_infiltrating value > 10 } }
+		root = { add_monthly_resource_mult = { resource = engineering_research value = 3 } }
+	} 
+	if = {
+		limit = { check_variable = { which = years_infiltrating value > 5 } }
+		root = { add_monthly_resource_mult = { resource = engineering_research value = 3 } }
+	} 
+	if = {
+		limit = { check_variable = { which = years_infiltrating value > 0 } }
+		log = "get something surely"
+		root = { add_monthly_resource_mult = { resource = engineering_research value = 2 } }
+		root = { add_monthly_resource_mult = { resource = society_research value = 2 } }
+	} 
+}
+
+
+set_secondment_flags = {
+	if = {
+		limit = { uses_starfleet_uniform = yes }
+		set_leader_flag = starfleet_on_loan
+	}
+	if = {
+		limit = { uses_mirror_starfleet_uniform = yes }
+		set_leader_flag = mirror_starfleet_on_loan
+	}
+}
+
+
+save_physics_scientist = {
+	every_owned_leader = {
+		limit = { owner = { research_leader = { area = physics is_same_value = prevprev } } }
+		save_event_target_as = physicsLeader
+	}
+	if = {
+		limit = { exists = event_target:physicsLeader }
+		event_target:physicsLeader = { save_event_target_as = scientist }
+		else = {
+			if = {
+				limit = { any_owned_leader = { leader_class = scientist } }
+				random_owned_leader = { limit = { leader_class = scientist } save_event_target_as = scientist }
+				else = {
+					#FALLBACK!
+				}
+			}
+		}
+	}
+}
+save_engineering_scientist = {
+	every_owned_leader = {
+		limit = { owner = { research_leader = { area = engineering is_same_value = prevprev } } }
+		save_event_target_as = physicsLeader
+	}
+	if = {
+		limit = { exists = event_target:physicsLeader }
+		event_target:physicsLeader = { save_event_target_as = scientist }
+		else = {
+			if = {
+				limit = { any_owned_leader = { leader_class = scientist } }
+				random_owned_leader = { limit = { leader_class = scientist } save_event_target_as = scientist }
+				else = {
+					#FALLBACK!
+				}
+			}
+		}
+	}
+}
+save_society_scientist = {
+	every_owned_leader = {
+		limit = { owner = { research_leader = { area = society is_same_value = prevprev } } }
+		save_event_target_as = physicsLeader
+	}
+	if = {
+		limit = { exists = event_target:physicsLeader }
+		event_target:physicsLeader = { save_event_target_as = scientist }
+		else = {
+			if = {
+				limit = { any_owned_leader = { leader_class = scientist } }
+				random_owned_leader = { limit = { leader_class = scientist } save_event_target_as = scientist }
+				else = {
+					#FALLBACK!
+				}
+			}
+		}
+	}
+}
+
+
+
+ensure_male_antaak = {
+	create_leader = { type = scientist species = last_created name = "Antaak" skill = 1000
+		traits = { trait = leader_trait_spark_of_genius trait = leader_trait_carefree trait = leader_trait_expertise_biology }
+	}
+	if = {
+		limit = { last_created_leader = { gender = female } }
+		last_created_leader = {
+			exile_leader_as = delete
+			kill_leader = { type = scientist show_notification = no }
+		}
+		ensure_male_antaak = yes
+		else = {
+			last_created_leader = {
+				set_leader_flag = antaak
+				save_event_target_as = antaak
+				exile_leader_as = antaak
+			}
+		}
+	}
+}
+
+
+ensure_male_lobi_leader = {
+	create_leader = { type = ruler species = event_target:ferengiLobiSpecies name = random skill = 2000 }
+	if = {
+		limit = { last_created_leader = { gender = female } }
+		last_created_leader = {
+			exile_leader_as = delete
+			kill_leader = { type = ruler show_notification = no }
+		}
+		ensure_male_lobi_leader = yes
+		else = { 
+			save_event_target_as = lobi_leader
+		}
+	}
+}
+
+ensure_male_khan_governor = {
+	create_species = { name = "Human" class = TREKHEROES portrait = KhanNoonienSingh traits = random }	
+	create_leader = { type = governor species = last_created_species name = "Khan Noonien Singh" skill = 1000 traits = { trait = leader_trait_army_veteran trait = leader_trait_retired_fleet_officer } }
+	if = {
+		limit = { last_created_leader = { gender = female } }
+		last_created_leader = {
+			exile_leader_as = delete
+			kill_leader = { show_notification = no }
+		}
+		ensure_male_khan_governor = yes
+		else = { last_created_leader = { set_leader_flag = khan_noonien_singh save_global_event_target_as = khan_noonien_singh } }
+	}
+}
+
+ensure_male_khan_scientist = {
+	create_species = { name = "Human" class = TREKHEROES portrait = KhanNoonienSingh traits = random }	
+	create_leader = { type = scientist species = last_created_species name = "Khan Noonien Singh" skill = 1000 traits = { trait = leader_trait_army_veteran trait = leader_trait_retired_fleet_officer } }
+	if = {
+		limit = { last_created_leader = { gender = female } }
+		last_created_leader = {
+			exile_leader_as = delete
+			kill_leader = { show_notification = no }
+		}
+		ensure_male_khan_scientist = yes
+		else = { last_created_leader = { set_leader_flag = khan_noonien_singh save_global_event_target_as = khan_noonien_singh } }
+	}
+}
+
+ensure_male_khan_admiral = {
+	create_species = { name = "Human" class = TREKHEROES portrait = KhanNoonienSingh traits = random }	
+	create_leader = { type = admiral species = last_created_species name = "Khan Noonien Singh" skill = 1000 traits = { trait = leader_trait_army_veteran trait = leader_trait_retired_fleet_officer } }
+	if = {
+		limit = { last_created_leader = { gender = female } }
+		last_created_leader = {
+			exile_leader_as = delete
+			kill_leader = { show_notification = no }
+		}
+		ensure_male_khan_admiral = yes
+		else = { last_created_leader = { set_leader_flag = khan_noonien_singh save_global_event_target_as = khan_noonien_singh } }
+	}
+}
+
+ensure_male_khan_general = {
+	create_species = { name = "Human" class = TREKHEROES portrait = KhanNoonienSingh traits = random }	
+	create_leader = { type = general species = last_created_species name = "Khan Noonien Singh" skill = 1000 traits = { trait = leader_trait_army_veteran trait = leader_trait_retired_fleet_officer } }
+	if = {
+		limit = { last_created_leader = { gender = female } }
+		last_created_leader = {
+			exile_leader_as = delete
+			kill_leader = { show_notification = no }
+		}
+		ensure_male_khan_general = yes
+		else = { last_created_leader = { set_leader_flag = khan_noonien_singh save_global_event_target_as = khan_noonien_singh } }
+	}
+}
+
+
+add_scaling_leader_influence = {
+	switch = {
+		trigger = has_skill
+		1 = { owner = { add_influence = 50 custom_tooltip = influence_gain_50 } }
+		2 = { owner = { add_influence = 60 custom_tooltip = influence_gain_60 } }
+		3 = { owner = { add_influence = 75 custom_tooltip = influence_gain_75 } }
+		4 = { owner = { add_influence = 100 custom_tooltip = influence_gain_100 } }
+		5 = { owner = { add_influence = 125 custom_tooltip = influence_gain_125 } }
+		6 = { owner = { add_influence = 150 custom_tooltip = influence_gain_150 } }
+		7 = { owner = { add_influence = 175 custom_tooltip = influence_gain_175 } }
+		8 = { owner = { add_influence = 200 custom_tooltip = influence_gain_200 } }
+		9 = { owner = { add_influence = 225 custom_tooltip = influence_gain_225 } }
+		10 = { owner = { add_influence = 250 custom_tooltip = influence_gain_250 } }
+	}
+}
+
+
+
+create_changeling_leader = {
+	create_species = { 
+		name = "Changeling" 
+		class = DOM 
+		portrait = changeling 
+		traits = { trait = "trait_conformists" trait = "trait_shapeshifter" trait = "trait_master_geneticist" trait = "trait_pc_thegreatlink_preference" ideal_planet_class = "pc_thegreatlink" } 
+	}
+	last_created_species = { save_event_target_as = changelingSpecies }
+	if = {
+		limit = { exists = event_target:founderSpecies }
+		event_target:changelingSpecies = { set_species_identity = event_target:founderSpecies }
+	}
+	create_leader = { type = random species = event_target:changelingSpecies name = random skill = 500 traits = { trait = leader_trait_shapeshifter } }
+	last_created_leader = {
+		random_list = {
+			50 = {}
+			5 = { set_name = "Odo" }
+			5 = { set_name = "Laas" }
+		}
+		save_event_target_as = changeling_leader
+	}
+}
+
+
+set_child_genius_age = {
+	set_age = 16
+	#USE THIS IN FUTURE TO SUPPORT OCAMPA ETC.
+}

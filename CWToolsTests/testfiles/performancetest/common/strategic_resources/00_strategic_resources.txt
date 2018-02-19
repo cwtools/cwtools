@@ -1,0 +1,429 @@
+### System Resources
+# accumulative = yes					- 
+# collect_if_wrong_building = yes/no	- 
+# accumulated_by_sectors = yes/no		- 
+# tradable = yes/no						- 
+# is_rare = yes/no						- Rare resources are shown in strategic resources view.
+# is_global = yes/no					- On orbital tiles only. Collected with station. Can have country modifiers. Aren't necessarily consumed. Can't be planet_local.
+# is_planet_local = yes/no				- On planet tiles only. Collected with building. Are consumed. Can't be global.
+# modifier = {}							- Global resource country modifiers.
+# prerequisites = {}					- Must be fulfilled before resource is shown.
+# modifier_prerequisites = {}			- Must be fulfilled before resource can be used.
+#
+
+time = {
+}
+
+### Basic Resources
+
+energy = {
+	accumulative = yes
+	collect_if_wrong_building = no
+	accumulated_by_sectors = yes
+	tradable = yes
+	AI_category = energy
+	max = 5000
+	base_income = 7			
+}
+
+minerals = {
+	accumulative = yes
+	collect_if_wrong_building = no
+	accumulated_by_sectors = yes
+	tradable = yes
+	AI_category = minerals
+	max = 5000
+	base_income = 15
+}
+
+food = {
+	accumulative = yes
+	tradable = yes
+	collect_if_wrong_building = no
+	max = 0
+	AI_category = food
+	base_income = 5
+}
+
+physics_research = {
+	accumulative = yes
+	collect_if_wrong_building = no
+	AI_category = physics
+	base_income = 5			
+}
+
+society_research = {
+	accumulative = yes
+	collect_if_wrong_building = no
+	AI_category = society
+	base_income = 5			
+}
+
+engineering_research = {
+	accumulative = yes
+	collect_if_wrong_building = no
+	AI_category = engineering
+	base_income = 5			
+}
+
+influence = {
+	accumulative = yes
+	AI_category = influence
+	max = 1000
+	sector_ignore_cost = yes
+	base_income = 2
+}
+
+unity = {
+	accumulative = yes
+	collect_if_wrong_building = no
+	AI_category = unity
+	base_income = 1
+}
+
+###########################
+## Terraforming Resources #
+###########################
+
+sr_terraform_gases = {
+	AI_category = strategic_resource
+	prerequisites = { "tech_terrestrial_sculpting" }
+	tradable = no
+	is_rare = yes
+	is_global = yes
+	
+	modifier = {	
+		terraforming_cost_mult = -0.25
+	}
+}
+
+sr_terraform_liquids = {
+	AI_category = strategic_resource
+	prerequisites = { "tech_terrestrial_sculpting" }
+	tradable = yes
+	is_rare = yes
+	is_global = yes
+
+	modifier = {	
+		terraforming_cost_mult = -0.25
+	}
+}
+
+###########################
+###   Rare Resources    ###
+###########################
+
+### Trellium-D
+   sr_trellium_1 = {
+      AI_category = strategic_resource
+      prerequisites = { "tech_engineering_materials_1420" }
+      tradable = yes
+      is_rare = yes
+      is_global = yes
+      modifier = { ship_armor_mult = 0.15 }
+   }
+   
+### Kemocite
+   sr_kemocite_2 = {
+      AI_category = strategic_resource
+      prerequisites = { "tech_engineering_mineral_588" }
+      tradable = yes
+      is_rare = yes
+      is_global = yes
+      modifier = { weapon_type_explosive_weapon_damage_mult = 0.10 }
+   }
+   
+### Uridium
+   sr_uridium_3 = {
+      AI_category = strategic_resource
+      prerequisites = { "tech_engineering_advanced_589" }
+      tradable = yes
+      is_rare = yes
+      is_global = yes
+      modifier = { ship_hitpoints_mult = 0.10 }
+   }
+   
+### Zenite
+   sr_zenite_4 = {
+      AI_category = strategic_resource
+      prerequisites = { "tech_engineering_geothermal_590" }
+      tradable = yes
+      is_rare = yes
+      is_global = yes
+      modifier = { pop_environment_tolerance = 0.05 }
+   }
+   
+### Pergium
+   sr_pergium_5 = {
+      AI_category = energy
+      prerequisites = { "tech_engineering_pergium_592" }
+      tradable = no
+      is_rare = yes
+      is_global = no
+      is_planet_local = yes
+   }
+   
+### Tribbles
+   sr_tribbles_6 = {
+      AI_category = strategic_resource
+      prerequisites = { "tech_society_xenology_445" }
+      tradable = no
+      is_rare = yes
+      is_global = no
+      is_planet_local = yes
+   }
+   
+### Gallicite
+   sr_gallicite_7 = {
+      AI_category = strategic_resource
+      prerequisites = { "tech_engineering_materials_1429" }
+      tradable = yes
+      is_rare = yes
+      is_global = yes
+      modifier = { ship_interstellar_speed_mult = 0.25 }
+   }
+   
+### Neutronium
+   sr_neutronium_8 = {
+      AI_category = energy
+      prerequisites = { "tech_engineering_exotic_591" }
+      tradable = yes
+      is_rare = yes
+      is_global = yes
+   }
+   
+### Dark Matter
+   sr_dark_9 = {
+      AI_category = energy
+      prerequisites = { "tech_engineering_exotic_591" }
+      tradable = yes
+      is_rare = yes
+      is_global = yes
+   }
+   
+### Surface Dilithium Deposit
+   sr_dilithium_10 = {
+      AI_category = strategic_resource
+      prerequisites = { "tech_refining_techniques" }
+      is_rare = yes
+	  is_planet_local = yes
+   }
+   
+### Yridium Bicantizine
+   sr_yridium_11 = {
+      AI_category = strategic_resource
+      prerequisites = { "tech_ketracel_white" }
+      is_rare = yes
+	  is_planet_local = yes
+   }
+   
+### Sodium Tetrahydrate
+   sr_sodium_12 = {
+      AI_category = strategic_resource
+      prerequisites = { "tech_ketracel_white" }
+      is_rare = yes
+	  is_planet_local = yes
+   }
+   
+### Ketracel White
+	sr_ketracel_13 = {
+		AI_category = strategic_resource
+		prerequisites = { "tech_ketracel_white" }
+		is_rare = yes
+	    is_planet_local = yes
+		collect_if_wrong_building = yes
+	}
+   
+### Brizeen Nitrate
+   sr_brizeen_14 = {
+      AI_category = strategic_resource
+      prerequisites = { "tech_society_advanced_486" }
+      is_rare = yes
+      is_planet_local = yes
+   }
+   
+### Metaphasic Particulates
+   sr_metaphasic_15 = {
+      AI_category = strategic_resource
+      prerequisites = { "tech_society_radical_453" }
+      tradable = yes
+      is_rare = yes
+      is_global = yes
+      modifier = { leader_age = 20 }
+   }
+   
+### Solanogen
+   sr_solanogen_16 = {
+      AI_category = strategic_resource
+      prerequisites = { "tech_physics_advanced_124" }
+      tradable = yes
+      is_rare = yes
+      is_global = yes
+      modifier = { tile_resource_physics_research_mult = 0.15 }
+   }
+   
+### Cormaline
+   sr_cormaline_17 = {
+      AI_category = strategic_resource
+      prerequisites = { "tech_engineering_materials_1421" }
+      tradable = yes
+      is_rare = yes
+      is_global = yes
+      modifier = { spaceport_ship_build_cost_mult = -0.10 }
+   }
+   
+### Biosculpting Bacteria
+   sr_biosculpting_18 = {
+      AI_category = strategic_resource
+      prerequisites = { "tech_society_new_worlds_1125" }
+      is_rare = yes
+      is_planet_local = yes
+   }
+   
+### Supersolid Ice
+   sr_supersolid_19 = {
+      AI_category = strategic_resource
+      prerequisites = { "tech_society_new_worlds_1125" }
+      is_rare = yes
+      is_planet_local = yes
+   }
+   
+### Fertilizer
+   sr_fertilizer_20 = {
+      AI_category = strategic_resource
+      prerequisites = { "tech_society_advanced_486" }
+      tradable = yes
+      is_rare = yes
+      is_global = yes
+      modifier = { tile_resource_food_mult = 0.1 }
+   }
+   
+### Jevonite
+   sr_jevonite_21 = {
+      AI_category = strategic_resource
+      prerequisites = { "tech_engineering_materials_1427" }
+      tradable = yes
+      is_rare = yes
+      is_global = yes
+      modifier = { pop_happiness = 0.05 }
+   }
+   
+### Mars Terraforming Location
+   sr_mars_22 = {
+      AI_category = strategic_resource
+      prerequisites = { "tech_society_mars_503" }
+      is_rare = yes
+      is_planet_local = yes
+   }
+   
+### Terraforming Progress
+   sr_terraforming_23 = {
+      AI_category = strategic_resource
+      prerequisites = { "tech_society_mars_503" }
+      tradable = no
+      is_rare = yes
+      is_global = no
+   }
+   
+### Relics
+   sr_relics_24 = {
+      AI_category = unity
+      prerequisites = { "tech_society_new_worlds_1169" }
+      is_rare = yes
+      is_planet_local = yes
+   }
+   
+### Processed Dilithium
+   sr_processed_25 = {
+      AI_category = strategic_resource
+      prerequisites = { "tech_refining_techniques" }
+      tradable = no
+      is_rare = yes
+      is_global = yes
+   }
+   
+### Prosperity
+   sr_prosperity_26 = {
+      AI_category = strategic_resource
+      tradable = no
+      is_rare = yes
+      is_global = yes
+   }
+   
+### Rodinium
+   sr_rodinium_27 = {
+      AI_category = strategic_resource
+      prerequisites = { "tech_engineering_materials_1428" }
+      tradable = yes
+      is_rare = yes
+      is_global = yes
+      modifier = { mod_megastructure_build_cost_mult = -0.1        }
+   }
+   
+### Bilitrium
+   sr_bilitrium_28 = {
+      AI_category = strategic_resource
+      prerequisites = { "tech_engineering_materials_1425" }
+      tradable = yes
+      is_rare = yes
+      is_global = yes
+      modifier = { tile_resource_energy_mult = 0.10 }
+   }
+   
+### Latinum
+   sr_latinum_29 = {
+      AI_category = strategic_resource
+      prerequisites = { "tech_society_biology_1021" }
+      tradable = yes
+      is_rare = yes
+      is_global = yes
+      modifier = { pop_government_ethic_attraction = 0.10 }
+   }
+   
+### Purified Water
+   sr_purified_30 = {
+      AI_category = strategic_resource
+      prerequisites = { "tech_society_new_worlds_1125" }
+      tradable = yes
+      is_rare = yes
+      is_global = yes
+      modifier = { terraform_speed_mult = 0.25 }
+   }
+   
+### Soil Enrichment Material
+   sr_soil_31 = {
+      AI_category = strategic_resource
+      prerequisites = { "tech_society_new_worlds_1125" }
+      tradable = yes
+      is_rare = yes
+      is_global = yes
+      modifier = { terraform_speed_mult = 0.25 }
+   }
+   
+### Packaged Yridium Bicantizine
+   sr_packaged_32 = {
+      AI_category = strategic_resource
+      prerequisites = { "tech_ketracel_white" }
+      tradable = no
+      is_rare = yes
+      is_global = yes
+   }
+   
+### Packaged Sodium Tetrahydrate
+   sr_packaged_33 = {
+      AI_category = strategic_resource
+      prerequisites = { "tech_ketracel_white" }
+      tradable = no
+      is_rare = yes
+      is_global = yes
+   }
+   
+### Raw Dilithium
+   sr_dilithium_34 = {
+      AI_category = strategic_resource
+      prerequisites = { "tech_refining_techniques" }
+      tradable = yes
+      is_rare = yes
+      is_global = yes
+   }
+   

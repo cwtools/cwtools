@@ -1,0 +1,3246 @@
+
+################ Utopia Events ################# 
+# STNH - Capek 1.8.0 Compat
+#ID 1 - 1999#
+
+namespace = utopia
+
+@tier1influencecontact = 7
+@tier1influencecontactxenophile = 8
+@tier1influencecontactmin = 20
+@tier1influencecontactmax = 80
+
+@tier2influencecontact = 10
+@tier2influencecontactxenophile = 12
+@tier2influencecontactmin = 40
+@tier2influencecontactmax = 100
+
+@tier1unityreward = 6
+@tier1unitymin = 6
+@tier1unitymax = 6
+@tier2unityreward = 12
+@tier2unitymin = 150
+@tier2unitymax = 1000
+@tier3unityreward = 18
+@tier3unitymin = 250
+@tier3unitymax = 1500
+
+@tier1materialreward = 6
+@tier1materialmin = 100
+@tier1materialmax = 500
+@tier2materialreward = 12
+@tier2materialmin = 150
+@tier2materialmax = 1000
+@tier3materialreward = 18
+@tier3materialmin = 250
+@tier3materialmax = 1500
+@tier4materialreward = 24
+@tier4materialmin = 350
+@tier4materialmax = 2000
+@tier5materialreward = 48
+@tier5materialmin = 700
+@tier5materialmax = 4000
+
+@tier1influencereward = 6
+@tier1influencemin = 40
+@tier1influencemax = 100
+@tier2influencereward = 12
+@tier2influencemin = 80
+@tier2influencemax = 175
+@tier3influencereward = 18
+@tier3influencemin = 125
+@tier3influencemax = 250
+@tier4influencereward = 24
+@tier4influencemin = 150
+@tier4influencemax = 300
+@tier5influencereward = 36
+@tier5influencemin = 250
+@tier5influencemax = 500
+@tier6influencereward = 48
+@tier6influencemin = 300
+@tier6influencemax = 600
+@tier1researchreward = 6
+@tier1researchmin = 60
+@tier1researchmax = 150
+@tier2researchreward = 12
+@tier2researchmin = 90
+@tier2researchmax = 250
+@tier3researchreward = 18
+@tier3researchmin = 120
+@tier3researchmax = 350
+@tier4researchreward = 24
+@tier4researchmin = 150
+@tier4researchmax = 500
+@tier5researchreward = 48
+@tier5researchmin = 300
+@tier5researchmax = 1000
+
+#Diplomatic Event: A neighbor is building a ring world#
+country_event = {
+id = utopia.1
+	title = "utopia.1.name"
+	desc = { 		
+		trigger = {
+			switch = {				
+				trigger = has_ethic 				
+				ethic_fanatic_xenophobe = { text = utopia.1.desc.v1 }
+				ethic_fanatic_xenophile = { text = utopia.1.desc.v2 }
+				ethic_fanatic_materialist = { text = utopia.1.desc.v2 }
+				ethic_fanatic_spiritualist = { text = utopia.1.desc.v4 }
+				ethic_fanatic_authoritarian = { text = utopia.1.desc.v1 }
+				ethic_fanatic_egalitarian = { text = utopia.1.desc.v2 }
+				ethic_fanatic_militarist = { text = utopia.1.desc.v1 }
+				ethic_fanatic_pacifist = { text = utopia.1.desc.v2 }
+			}
+		}	
+	}		
+	picture = GFX_evt_ringworld
+	show_sound = event_conversation	
+	location = event_target:ring_world.capital_scope
+
+	trigger = {
+		is_country_type = default
+		AND = {
+			any_neighbor_country = {
+				any_owned_megastructure = {
+					OR = { 
+						is_megastructure_type = ring_world_1
+						is_megastructure_type = ring_world_2
+					}
+					is_upgrading = yes
+				}
+				is_country_type = default
+				has_communications = root
+				NOR = {
+					has_country_flag = ringworld_diplomatic_event
+					is_at_war_with = ROOT
+					is_subject_type = vassal
+					is_same_value = root
+				}	
+			}
+			OR = {
+				has_ethic = ethic_fanatic_xenophobe
+				has_ethic = ethic_fanatic_xenophile
+				has_ethic = ethic_fanatic_materialist
+				has_ethic = ethic_fanatic_spiritualist
+				has_ethic = ethic_fanatic_authoritarian
+				has_ethic = ethic_fanatic_egalitarian
+				has_ethic = ethic_fanatic_militarist
+				has_ethic = ethic_fanatic_pacifist
+			}
+
+			NOT = { has_country_flag = ringworld_diplomatic_event }		
+		}
+	}
+	mean_time_to_happen = { days = 3600 }
+
+	immediate = {
+		random_neighbor_country = {
+			limit = {
+				any_owned_megastructure = {
+					OR = { 
+						is_megastructure_type = ring_world_1
+						is_megastructure_type = ring_world_2
+					}
+					is_upgrading = yes
+				}
+				NOR = {
+					has_country_flag = ringworld_diplomatic_event
+					is_at_war_with = ROOT
+					is_subject_type = vassal
+					is_same_value = root
+				}
+				is_country_type = default
+				has_communications = root
+			}
+			random_owned_megastructure = {
+				limit = {
+					OR = { 
+						is_megastructure_type = ring_world_1
+						is_megastructure_type = ring_world_2
+					}
+					is_upgrading = yes
+				}
+			save_event_target_as = ring_world
+			}
+			save_event_target_as = ringworld_builder
+			event_target:ringworld_builder = {
+				set_country_flag = ringworld_diplomatic_event
+			}
+		}
+		set_country_flag = ringworld_diplomatic_event
+		switch = {
+			trigger = has_ethic 
+			ethic_fanatic_xenophobe = { set_country_flag = ethic_xenophobe }
+			ethic_fanatic_xenophile = { set_country_flag = ethic_xenophile }
+			ethic_fanatic_materialist = { set_country_flag = ethic_materialist }
+			ethic_fanatic_spiritualist = { set_country_flag = ethic_spiritualist }
+			ethic_fanatic_authoritarian = { set_country_flag = ethic_authoritarian }
+			ethic_fanatic_egalitarian = { set_country_flag = ethic_egalitarian }
+			ethic_fanatic_militarist = { set_country_flag = ethic_militarist }
+			ethic_fanatic_pacifist = { set_country_flag = ethic_pacifist }
+		}
+	}
+
+	option = {
+		name = utopia.1.a
+		ai_chance = {
+			factor = 90
+		}
+		event_target:ringworld_builder = { country_event = { id = utopia.2 days = 5 } }
+	}
+
+	option = {
+		name = utopia.1.b
+		custom_tooltip = utopia.1.b.tooltip
+		ai_chance = {
+			factor = 10
+		}
+		
+		switch = {
+			trigger = has_country_flag 
+			ethic_xenophobe = { 
+				every_owned_pop = {
+				limit = {
+					has_ethic = ethic_xenophobe
+					NOT = {
+					}
+				}		
+				add_modifier = { modifier = megastructure_demands_rejected days = 7200 }
+				}	
+			}
+			ethic_xenophile = { 
+				every_owned_pop = {
+					limit = {
+						has_ethic = ethic_xenophile
+						NOT = {
+							has_modifier = megastructure_demands_rejected 
+						}
+					}		
+				add_modifier = { modifier = megastructure_demands_rejected days = 7200 }
+				}
+			}
+			ethic_materialist = { 
+				every_owned_pop = {
+					limit = {
+						has_ethic = ethic_materialist
+						NOT = {
+							has_modifier = megastructure_demands_rejected 
+						}
+					}		
+				add_modifier = { modifier = megastructure_demands_rejected days = 7200 }
+				}
+			}
+			ethic_spiritualist = { 
+				every_owned_pop = {
+					limit = {
+						has_ethic = ethic_spiritualist
+						NOT = {
+							has_modifier = megastructure_demands_rejected 
+						}
+					}		
+				add_modifier = { modifier = megastructure_demands_rejected days = 7200 }
+				}
+			}
+			ethic_authoritarian = { 
+				every_owned_pop = {
+					limit = {
+						has_ethic = ethic_authoritarian
+						NOT = {
+							has_modifier = megastructure_demands_rejected 
+						}
+					}		
+				add_modifier = { modifier = megastructure_demands_rejected days = 7200 }
+				}
+			}
+			ethic_egalitarian = { 
+				every_owned_pop = {
+					limit = {
+						has_ethic = ethic_egalitarian
+						NOT = {
+							has_modifier = megastructure_demands_rejected 
+						}
+					}		
+				add_modifier = { modifier = megastructure_demands_rejected days = 7200 }
+				}
+			}
+			ethic_militarist = { 
+				every_owned_pop = {
+					limit = {
+						has_ethic = ethic_militarist
+						NOT = {
+							has_modifier = megastructure_demands_rejected 
+						}
+					}		
+				add_modifier = { modifier = megastructure_demands_rejected days = 7200 }
+				}
+			}
+			ethic_pacifist = { 
+				every_owned_pop = {
+					limit = {
+						has_ethic = ethic_pacifist
+						NOT = {
+							has_modifier = megastructure_demands_rejected 
+						}
+					}		
+				add_modifier = { modifier = megastructure_demands_rejected days = 7200 }
+				}
+			}	
+		}
+	}
+}
+
+country_event = {
+	id = utopia.2
+	title = "utopia.2.name"
+	desc = {
+		trigger = {
+			hidden:from = {
+				switch = {
+					trigger = has_ethic
+					ethic_fanatic_xenophobe = { text = utopia.2.desc.v1 }
+					ethic_fanatic_xenophile = { text = utopia.2.desc.v2 }
+					ethic_fanatic_materialist = { text = utopia.2.desc.v2 }
+					ethic_fanatic_spiritualist = { text = utopia.2.desc.v4 }
+					ethic_fanatic_authoritarian = { text = utopia.2.desc.v1 }
+					ethic_fanatic_egalitarian = { text = utopia.2.desc.v2 }
+					ethic_fanatic_militarist = { text = utopia.2.desc.v1 }
+					ethic_fanatic_pacifist = { text = utopia.2.desc.v2 }
+				}
+			}	
+		}
+	}
+	
+	picture = GFX_evt_ringworld
+	show_sound = event_conversation
+	location = from.capital_scope
+
+	is_triggered_only = yes
+
+# Halts the ring world construction
+	option = {
+		name = utopia.2.a
+		custom_tooltip = utopia.2.a.tooltip
+		trigger = {
+			from = {
+				NOR = {
+					has_ethic = ethic_fanatic_xenophile
+					has_ethic = ethic_fanatic_materialist
+					has_ethic = ethic_fanatic_pacifist
+					has_ethic = ethic_fanatic_egalitarian
+				}
+			}
+		}
+		ai_chance = {
+			factor = 10
+		}
+		hidden_effect = {
+			from = { country_event = { id = utopia.3 days = 5 } }
+			from = { country_event = { id = utopia.5 days = 20 } }
+		}
+		from = { add_opinion_modifier = { who = root modifier = opinion_ringworld_terms_accepted } }	
+			
+		every_owned_megastructure = {
+			limit = {
+				OR = {
+					is_megastructure_type = ring_world_1
+					is_megastructure_type = ring_world_2
+				}
+				is_upgrading = yes
+			}
+			set_halted = 20
+		}
+		hidden_effect = { country_event = { id = utopia.6 days = 20 } }
+	}
+
+	option = {
+		name = utopia.2.c
+		trigger = {
+			from = {
+				OR = {
+					has_ethic = ethic_fanatic_xenophile
+					has_ethic = ethic_fanatic_materialist
+					has_ethic = ethic_fanatic_pacifist
+					has_ethic = ethic_fanatic_egalitarian
+				}
+			}
+		}
+
+		ai_chance = {
+			factor = 10
+		}
+		hidden_effect = {
+			from = { country_event = { id = utopia.3 days = 5 } }
+			from = { country_event = { id = utopia.5 days = 20 } }
+			country_event = { id = utopia.6 days = 20 }
+		}
+		from = { add_opinion_modifier = { who = root modifier = opinion_ringworld_terms_accepted } }
+	}
+
+	option = {
+		name = utopia.2.b
+		custom_tooltip = utopia.2.b.tooltip
+		default_hide_option = yes
+		ai_chance = {
+			factor = 90
+			modifier = {
+				factor = 0
+				OR = {
+					#is_country_type = default
+					is_friendly_to = from
+					is_cordial_to = from
+					is_protective_to = from
+					is_loyal_to = from
+					relative_power = {
+						who = from
+						category = all
+					value = pathetic
+					}
+					relative_power = {
+						who = from
+						category = all
+					value = inferior
+					}	
+				}
+			}
+		}
+		hidden_effect = {
+			from = { country_event = { id = utopia.4 days = 5 } } 
+		}
+		from = { add_opinion_modifier = { who = root modifier = opinion_ringworld_terms_denied }}
+	}
+}
+
+country_event = {
+	id = utopia.3
+	title = "utopia.3.name"
+	desc = { 		
+		trigger = {			
+			switch = {				
+				trigger = has_ethic	
+				ethic_fanatic_xenophobe = { text = utopia.3.desc.v1 }	ethic_fanatic_xenophile = { text = utopia.3.desc.v2 }	ethic_fanatic_materialist = { text = utopia.3.desc.v2 }	ethic_fanatic_spiritualist = { text = utopia.3.desc.v4 }
+				ethic_fanatic_authoritarian = { text = utopia.3.desc.v1 }
+				ethic_fanatic_egalitarian = { text = utopia.3.desc.v2 }
+				ethic_fanatic_militarist = { text = utopia.3.desc.v1 }
+				ethic_fanatic_pacifist = { text = utopia.3.desc.v2 }		
+			}		
+		}
+	}
+	picture = GFX_evt_ringworld
+	show_sound = event_conversation
+	location = event_target:ring_world
+
+	is_triggered_only = yes
+
+	option = {
+		name = utopia.3.a
+		#custom_tooltip = utopia.3.a.tooltip
+		tooltip = {
+			from = {
+			add_opinion_modifier = { who = root modifier = opinion_ringworld_terms_accepted }
+			}
+		}
+	}
+}
+
+country_event = {
+	id = utopia.4
+	title = "utopia.4.name"
+	desc = "utopia.4.desc"
+	picture = GFX_evt_ringworld
+	show_sound = event_conversation
+	location = event_target:ring_world
+
+	is_triggered_only = yes
+
+	option = {
+		name = utopia.4.a
+		tooltip = {
+			from = {
+			add_opinion_modifier = { who = root modifier = opinion_ringworld_terms_denied }
+			}
+		}
+	}
+}
+
+# Ringworld project commencing: ringworld builder neighbor
+country_event = {
+	id = "utopia.5"
+	title = "utopia.5.name"
+	desc = { 		
+		trigger = {			
+			switch = {				
+				trigger = has_ethic 				
+				ethic_fanatic_xenophobe = { text = utopia.5.desc.v1 }	ethic_fanatic_xenophile = { text = utopia.5.desc.v2 }	ethic_fanatic_materialist = { text = utopia.5.desc.v2 }	ethic_fanatic_spiritualist = { text = utopia.5.desc.v4 }
+				ethic_fanatic_authoritarian = { text = utopia.5.desc.v1 }
+				ethic_fanatic_egalitarian = { text = utopia.5.desc.v2 }
+				ethic_fanatic_militarist = { text = utopia.5.desc.v1 }
+				ethic_fanatic_pacifist = { text = utopia.5.desc.v2 }	
+			}			
+		}	
+	}
+	picture = GFX_evt_ringworld
+	show_sound = event_conversation
+	location = event_target:ring_world
+
+	is_triggered_only = yes
+
+	option = {
+		name = OK
+		trigger = {
+			NOR = {
+				has_ethic = ethic_fanatic_xenophile
+				has_ethic = ethic_fanatic_materialist
+				has_ethic = ethic_fanatic_pacifist
+				has_ethic = ethic_fanatic_egalitarian
+			}
+		}
+		#custom_tooltip = utopia.3.a.tooltip
+	}
+# gives a science reward to those with the appropriate ethics
+	option = {
+		name = utopia.5.b
+		trigger = {
+			OR = {
+				has_ethic = ethic_fanatic_xenophile
+				has_ethic = ethic_fanatic_materialist
+				has_ethic = ethic_fanatic_pacifist
+				has_ethic = ethic_fanatic_egalitarian
+			}
+		}
+		add_monthly_resource_mult = {
+			resource = engineering_research
+			value = @tier2researchreward
+			min = @tier2researchmin
+			max = @tier2researchmax
+		}
+	}
+}
+
+# Mission complete
+country_event = {
+	id = "utopia.6"
+	title = "utopia.6.name"
+	desc = { 		
+		trigger = {	
+			hidden:fromfrom = {
+				switch = {				
+					trigger = has_ethic
+					ethic_fanatic_xenophobe = { text = utopia.6.desc.v1 }
+					ethic_fanatic_xenophile = { text = utopia.6.desc.v2 }
+					ethic_fanatic_materialist = { text = utopia.6.desc.v2 }
+					ethic_fanatic_spiritualist = { text = utopia.6.desc.v4 }
+					ethic_fanatic_authoritarian = { text = utopia.6.desc.v1 }
+					ethic_fanatic_egalitarian = { text = utopia.6.desc.v2 }
+					ethic_fanatic_militarist = { text = utopia.6.desc.v1 }
+					ethic_fanatic_pacifist = { text = utopia.6.desc.v2 }
+				}			
+			}
+		}	
+	}
+	picture = GFX_evt_ringworld
+	show_sound = event_conversation
+	location = event_target:ring_world
+
+	is_triggered_only = yes
+
+	option = {
+		name = OK
+		trigger = {
+			fromfrom = {
+				NOR = {
+					has_ethic = ethic_fanatic_xenophile
+					has_ethic = ethic_fanatic_materialist
+					has_ethic = ethic_fanatic_pacifist
+					has_ethic = ethic_fanatic_egalitarian
+				}
+			}
+		}
+	}
+
+	option = {
+		name = utopia.5.b
+		trigger = {
+			fromfrom = {
+				OR = {
+					has_ethic = ethic_fanatic_xenophile
+					has_ethic = ethic_fanatic_materialist
+					has_ethic = ethic_fanatic_pacifist
+					has_ethic = ethic_fanatic_egalitarian
+				}
+			}
+		}
+
+		from = {
+			add_monthly_resource_mult = {
+				resource = engineering_research
+				value = @tier2researchreward
+				min = @tier2researchmin
+				max = @tier2researchmax
+			}
+		}
+	}
+}
+
+##Ring World Incident Events
+country_event = {
+	id = utopia.20
+	hide_window = yes
+
+	mean_time_to_happen = { days = 3600 }
+
+	trigger = {
+		NOT = { has_country_flag = event_utopia_20 }
+		any_owned_megastructure = {
+			is_megastructure_type = ring_world_2
+			is_upgrading = yes
+			upgrade_days_left > 200
+		}				
+	}
+
+	immediate = {
+		random_owned_megastructure = {
+			limit = {
+				is_megastructure_type = ring_world_2
+				is_upgrading = yes
+			}
+			save_event_target_as = ring_world
+		}
+		set_country_flag = event_utopia_20 	
+		random_list = {
+			30 = {
+				country_event = { id = utopia.21 }
+			}
+			30 = {
+				country_event = { id = utopia.22 }
+			}
+			30 = {
+				country_event = { id = utopia.27 }
+			}
+		}
+	}
+}
+
+# Boosting the build speed
+country_event = {
+	id = utopia.21	
+	title = "utopia.21.name"
+	desc = "utopia.21.desc"	
+	picture = GFX_evt_ringworld
+	show_sound = event_construction	
+	location = event_target:ring_world
+
+	is_triggered_only = yes
+
+	immediate = {
+		event_target:ring_world = {
+			add_modifier = {
+				modifier = "ms_build_speed_mult"
+				days = -1
+			}
+		}
+	}
+	option = {
+		tooltip = {
+			add_modifier = {
+				modifier = "ms_build_speed_mult"
+				days = -1
+			}
+		}
+		name = OK
+	}
+}
+
+# Halt construction for mineral reward
+country_event = {
+	id = utopia.22
+	title = "utopia.22.name"
+	desc = "utopia.22.desc"
+	picture = GFX_evt_ringworld
+	show_sound = event_construction
+	location = event_target:ring_world
+
+	is_triggered_only = yes
+
+	option = {
+		name = utopia.22.a
+		allow = {
+			any_owned_megastructure = {
+				is_megastructure_type = ring_world_2
+				is_upgrading = yes
+			}
+		}
+		event_target:ring_world = {
+			set_halted = 20
+			add_modifier = {
+				modifier = "ring_world_halted"
+			}
+		}
+		owner = { add_minerals = 500 }
+	}
+
+	option = {
+		name = utopia.22.b
+	}
+}
+
+
+# Halting construction to deal with original inhabitants
+
+
+country_event = {
+	id = utopia.27
+	title = "utopia.27.name"
+	desc = "utopia.27.desc"
+	picture = GFX_evt_ringworld
+	show_sound = event_construction
+	location = event_target:ring_world
+
+	is_triggered_only = yes
+
+	immediate = { 
+		event_target:ring_world = {
+			add_modifier = {
+				modifier = "lower_build_speed_mult"
+				days = 30
+			}
+		}
+	}
+
+	option = {
+		name = utopia.27.a
+		tooltip = {
+			add_modifier = {
+				modifier = "lower_build_speed_mult"
+				days = 30
+			}
+		}
+		country_event = { id = utopia.28 days = 30 } #same as number of days delayed
+	}
+}
+
+country_event = {
+	id = utopia.28
+	title = "utopia.28.name"
+	desc = "utopia.28.desc"
+	picture = GFX_evt_ringworld
+	show_sound = event_construction
+	location = event_target:ring_world
+
+	is_triggered_only = yes
+
+	option = {
+		name = utopia.28.a
+		country_event = { id = utopia.23 days = 20 }
+	}
+}
+
+
+country_event = {
+	id = utopia.23
+	title = "utopia.23.name"
+	desc = "utopia.23.desc"
+	picture = GFX_evt_ringworld
+	show_sound = event_construction
+	location = event_target:ring_world
+
+	is_triggered_only = yes
+	
+	option = {
+		name = utopia.23.a
+		event_target:ring_world = {
+			set_halted = 30
+			hidden_effect = { 
+				add_modifier = {
+				modifier = "ring_world_halted"
+				}
+			}
+		}
+		country_event = { id = utopia.26 days = 30 }		
+	}
+
+	option = {
+		name = utopia.23.b
+		country_event = { id = utopia.25 days = 30 }	
+	}
+}
+
+country_event = {
+	id = utopia.25
+	title = "utopia.25.name"
+	desc = "utopia.25.desc"
+	picture = GFX_evt_ringworld
+	show_sound = event_construction
+	location = event_target:ring_world
+
+	is_triggered_only = yes
+
+	immediate = { 
+		event_target:ring_world = {
+		set_halted = 20
+		}
+	}
+
+	option = {
+		name = utopia.25.a
+	}
+}
+
+country_event = {
+	id = utopia.26
+	title = "utopia.26.name"
+	desc = "utopia.26.desc"
+	picture = GFX_evt_ringworld
+	show_sound = event_construction
+	location = event_target:ring_world
+
+	is_triggered_only = yes
+
+	option = {
+		name = utopia.26.a
+	}
+}
+
+
+# Diplomatic Event: Dyson Sphere
+
+country_event = {
+	id = utopia.29
+	hide_window = yes
+	
+	is_triggered_only = yes
+
+	trigger = {
+		is_country_type = default
+		NOR = {
+			has_country_flag = dysonsphere_diplomatic_event
+			is_subject_type = vassal
+		}
+
+		FROM = {
+			is_megastructure_type = dyson_sphere_0
+		}
+
+		any_neighbor_country = {
+			is_country_type = default
+			has_communications = root
+			NOR = {
+				has_country_flag = dysonsphere_diplomatic_event
+				is_at_war_with = root
+				is_subject_type = vassal
+				is_overlord_to = root
+				is_same_value = root
+				has_global_flag = dyson_diplo_event_global
+				has_ethic = ethic_gestalt_consciousness
+			}
+			is_borg_empire = no
+		}
+	}
+
+	immediate = {
+		fromfromfrom = { save_event_target_as = dyson_system }
+		save_event_target_as = dysonsphere_builder
+		set_country_flag = dysonsphere_diplomatic_event
+		random_neighbor_country = {
+			limit = {
+				is_country_type = default
+				has_communications = root
+				NOR = {
+					has_country_flag = dysonsphere_diplomatic_event
+					is_at_war_with = root
+					is_subject_type = vassal
+					is_overlord_to = root
+					is_same_value = root
+					has_ethic = ethic_gestalt_consciousness
+				}
+				is_borg_empire = no
+			}
+			set_country_flag = dysonsphere_diplomatic_event
+			save_event_target_as = dyson_sphere_neighbor
+		}
+		random_list = {
+			35 = { event_target:dyson_sphere_neighbor = { country_event = { id = 
+			utopia.30 days = 10 random = 7 } } }
+			65 = { }
+		}
+		set_global_flag = dyson_diplo_event_global
+	}
+}
+
+country_event = {
+	id = utopia.30
+	title = "utopia.30.name"
+	desc = "utopia.30.desc.v1"
+	picture = GFX_evt_dyson_sphere
+	show_sound = event_conversation	
+	location = event_target:dyson_sphere
+
+	is_triggered_only = yes
+
+# Demand apology
+	option = {
+		name = utopia.30.a
+		ai_chance = {
+			factor = 90
+			modifier = {
+				factor = 20
+				OR = {
+					#is_country_type = default
+					relative_power = {
+						who = event_target:dysonsphere_builder
+						category = all
+						value = pathetic
+					}
+					relative_power = {
+						who = event_target:dysonsphere_builder
+						category = all
+						value = inferior
+					}	
+				}
+			}
+		}
+		event_target:dysonsphere_builder = { country_event = { id = utopia.31 days = 6 } }
+	}
+# Demand energy
+	option = {
+		name = utopia.30.b
+		#custom_tooltip = utopia.30.b.tooltip
+		
+		ai_chance = {
+			factor = 10
+			modifier = {
+				factor = 0
+				OR = {
+					#is_country_type = default
+					relative_power = {
+						who = event_target:dysonsphere_builder
+						category = all
+						value = pathetic
+					}
+					relative_power = {
+						who = event_target:dysonsphere_builder
+						category = all
+						value = inferior
+					}	
+				}
+			}
+			modifier = {
+				factor = 90
+				income < 0 
+			}
+		}
+
+		if = {
+			limit = { 
+				has_ethic = ethic_fanatic_materialist
+			}
+			add_modifier = {
+				modifier = unity_increase_utopia_30
+				days = 1800
+			}
+		}
+
+		hidden_effect = { event_target:dysonsphere_builder = { country_event = { id = utopia.32 days = 1 } } }
+	}
+# Ignore the demands of your people.
+	option = {
+		name = utopia.30.c
+		ai_chance = {
+			factor = 10
+		}
+		add_modifier = {
+			modifier = unity_reduction_utopia_30
+			days = 1800
+		}
+	}
+}
+
+# Apology Request
+country_event = {
+	id = utopia.31
+	#title = "utopia.31.name"
+	desc = utopia.31.desc
+	#picture = GFX_evt_dyson_sphere
+	#show_sound = event_conversation
+	location = from.capital_scope
+	
+	title = TRANSMISSION
+
+	diplomatic = yes
+
+	picture_event_data = {
+		portrait = from
+		room = from.ruler
+	}
+
+	is_triggered_only = yes
+
+# Apologize
+	option = {
+		name = utopia.31.a
+
+		ai_chance = {
+			factor = 10
+		}
+		hidden_effect = {
+			from = { country_event = { id = utopia.33 days = 7 } }
+		}		
+	}
+# Apologize and offer credits
+	option = {
+		name = utopia.31.b
+
+		trigger = {
+			energy > 1000
+		}
+
+		ai_chance = {
+			factor = 10	
+		}
+		hidden_effect = {
+			from = { country_event = { id = utopia.35 days = 7 } }
+		}
+
+		add_energy = -1000
+	}
+# Don't Apologize
+	option = {
+		name = utopia.31.c
+		#custom_tooltip = utopia.2.b.tooltip
+		default_hide_option = yes
+		ai_chance = {
+			factor = 90
+			modifier = {
+				factor = 0
+				OR = {
+					#is_country_type = default
+					is_friendly_to = event_target:dyson_sphere_neighbor
+					is_cordial_to = event_target:dyson_sphere_neighbor
+					is_protective_to = event_target:dyson_sphere_neighbor
+					is_loyal_to = event_target:dyson_sphere_neighbor
+					relative_power = {
+						who = event_target:dyson_sphere_neighbor
+						category = all
+						value = pathetic
+					}
+					relative_power = {
+						who = event_target:dyson_sphere_neighbor
+						category = all
+						value = inferior
+					}	
+				}
+			}
+		}
+		hidden_effect = {
+			from = { country_event = { id = utopia.34 days = 5 } } 
+		} 
+	}
+}
+
+# Credit Request
+country_event = {
+	id = utopia.32
+	#title = "utopia.32.name"
+	desc = "utopia.32.desc"
+	#picture = GFX_evt_dyson_sphere
+	#show_sound = event_conversation
+	location = from.capital_scope
+	
+	is_triggered_only = yes
+
+	title = TRANSMISSION
+
+	diplomatic = yes
+
+	picture_event_data = {
+		portrait = from
+		room = from.ruler
+	}
+
+# Give Credits
+	option = {
+		name = utopia.32.a
+
+		trigger = {
+			energy > 1000
+		}
+
+		ai_chance = {
+			factor = 5
+		}
+		hidden_effect = {
+			from = { country_event = { id = utopia.35 days = 5 } } 
+		}
+		add_energy = -1000
+	}
+
+# Apologize but don't give credits
+	option = {
+		name = utopia.32.b
+		
+		ai_chance = {
+			factor = 15
+		}
+
+		hidden_effect = {
+			from = { country_event = { id = utopia.36 days = 5 } } 
+		}
+	}
+# Refuse to apologize/give credits
+	option = {
+		name = utopia.32.c
+		ai_chance = {
+			factor = 90
+			modifier = {
+				factor = 0
+				OR = {
+					#is_country_type = default
+					is_friendly_to = event_target:dyson_sphere_neighbor
+					is_cordial_to = event_target:dyson_sphere_neighbor
+					is_protective_to = event_target:dyson_sphere_neighbor
+					is_loyal_to = event_target:dyson_sphere_neighbor
+					relative_power = {
+						who = event_target:dyson_sphere_neighbor
+						category = all
+						value = pathetic
+					}
+					relative_power = {
+						who = event_target:dyson_sphere_neighbor
+						category = all
+						value = inferior
+					}	
+				}
+			}
+		}
+		hidden_effect = {
+			from = { country_event = { id = utopia.34 days = 5 } } 
+		} 
+	}
+}
+
+# Dyson Sphere builder's apology
+country_event = {
+	id = "utopia.33"
+	title = "utopia.33.name"
+	desc = "utopia.33.desc"
+	picture = GFX_evt_dyson_sphere
+	show_sound = event_conversation
+	location = from.capital_scope
+
+	is_triggered_only = yes
+
+	# apology accepted
+
+	option = {
+		name = utopia.33.a
+
+		ai_chance = {
+			factor = 10
+		}
+		hidden_effect = {
+			event_target:dysonsphere_builder = { country_event = { id = utopia.38 days = 5 } } 
+		} 
+	}
+# apology not accepted
+	option = {
+		name = utopia.33.b
+
+		ai_chance = {
+			factor = 10
+			modifier = {
+				factor = 0
+				OR = {
+					#is_country_type = default
+					is_friendly_to = event_target:dysonsphere_builder
+					is_cordial_to = event_target:dysonsphere_builder
+					is_protective_to = event_target:dysonsphere_builder
+					is_loyal_to = event_target:dysonsphere_builder
+					relative_power = {
+						who = event_target:dysonsphere_builder
+						category = all
+						value = pathetic
+					}
+					relative_power = {
+						who = event_target:dysonsphere_builder
+						category = all
+						value = inferior
+					}	
+				}
+			}
+		}
+
+		add_opinion_modifier = { who = event_target:dysonsphere_builder modifier = opinion_dysonsphere_terms_denied }
+
+		tooltip = { event_target:dysonsphere_builder = { add_opinion_modifier = { who = root modifier = opinion_dysonsphere_apology_rejected } } }
+
+		hidden_effect = {
+			event_target:dysonsphere_builder = { country_event = { id = utopia.37 days = 5 } } 
+		}
+	}
+}
+
+# Dyson Sphere builder refuses to give money or apologize
+country_event = {
+	id = "utopia.34"
+	title = "utopia.34.name"
+	desc = "utopia.34.desc"
+	#picture = GFX_evt_dyson_sphere
+	#show_sound = event_conversation
+	location = from.capital_scope
+
+	is_triggered_only = yes
+
+	title = TRANSMISSION
+
+	diplomatic = yes
+
+	picture_event_data = {
+		portrait = from
+		room = from.ruler
+	}
+
+
+# Take the high road
+	option = {
+		name = utopia.34.a
+
+		ai_chance = {
+			factor = 60
+		}
+		add_opinion_modifier = { who = event_target:dysonsphere_builder modifier = opinion_dysonsphere_terms_denied }
+
+		hidden_effect = {
+			event_target:dysonsphere_builder = { country_event = { id = utopia.40 days = 5 } } 
+		}
+	}
+# Insult
+	option = {
+		name = utopia.34.b
+		custom_tooltip = utopia.34.b.tooltip
+		ai_chance = {
+			factor = 40
+			modifier = {
+				factor = 0
+				OR = {
+					#is_country_type = default
+					is_friendly_to = event_target:dysonsphere_builder
+					is_cordial_to = event_target:dysonsphere_builder
+					is_protective_to = event_target:dysonsphere_builder
+					is_loyal_to = event_target:dysonsphere_builder
+					relative_power = {
+						who = event_target:dysonsphere_builder
+						category = all
+						value = pathetic
+					}
+					relative_power = {
+						who = event_target:dysonsphere_builder
+						category = all
+						value = inferior
+					}
+				}
+			}
+		}
+
+		add_opinion_modifier = { who = event_target:dysonsphere_builder modifier = opinion_dysonsphere_terms_denied }
+
+		tooltip = { event_target:dysonsphere_builder = { add_opinion_modifier = { who = root modifier = opinion_dysonsphere_insult } } }
+
+		hidden_effect = {
+			event_target:dysonsphere_builder = { country_event = { id = utopia.39 days = 5 } } 
+		}
+	}
+}
+
+# Dyson Sphere builder gives credits
+country_event = {
+	id = "utopia.35"
+	title = "utopia.35.name"
+	desc = "utopia.35.desc"
+	picture = GFX_evt_dyson_sphere
+	show_sound = event_conversation
+	location = from.capital_scope
+
+	immediate = { event_target:dyson_sphere_neighbor = {
+			add_energy = 1000
+		}
+	}
+
+	is_triggered_only = yes
+
+# Accept the apology
+	option = {
+		name = utopia.35.a
+		ai_chance = {
+			factor = 70
+		}
+		hidden_effect = {
+			event_target:dysonsphere_builder = { country_event = { id = utopia.38 days = 5 } } 
+		}
+	}
+
+# Show displeasure
+	option = {
+		name = utopia.35.b
+		ai_chance = {
+			factor = 30
+			modifier = {
+				factor = 0
+				OR = {
+					#is_country_type = default
+					is_friendly_to = event_target:dysonsphere_builder
+					is_cordial_to = event_target:dysonsphere_builder
+					is_protective_to = event_target:dysonsphere_builder
+					is_loyal_to = event_target:dysonsphere_builder
+					relative_power = {
+						who = event_target:dysonsphere_builder
+						category = all
+						value = pathetic
+					}
+					relative_power = {
+						who = event_target:dysonsphere_builder
+						category = all
+						value = inferior
+					}	
+				}
+			}
+		}
+		
+		add_opinion_modifier = { who = event_target:dysonsphere_builder modifier = opinion_dysonsphere_terms_denied }
+
+		tooltip = { event_target:dysonsphere_builder = { add_opinion_modifier = { who = root modifier = opinion_dysonsphere_apology_rejected } } }
+
+		hidden_effect = {
+			event_target:dysonsphere_builder = { country_event = { id = utopia.37 days = 5 } } 
+		}
+	}
+}
+
+# Dyson Sphere builder apologizes but doesn't give credits
+country_event = {
+	id = "utopia.36"
+	title = "utopia.35.name"
+	desc = "utopia.36.desc"
+	picture = GFX_evt_ringworld
+	show_sound = event_conversation
+	location = from.capital_scope
+
+	is_triggered_only = yes
+
+# Accept the apology
+	option = {
+		name = utopia.36.a
+		
+		ai_chance = {
+			factor = 10
+		}
+		hidden_effect = {
+			event_target:dysonsphere_builder = { country_event = { id = utopia.38 days = 5 } } 
+		}
+	}
+# Show displeasure
+	option = {
+		name = utopia.36.b
+
+		ai_chance = {
+			factor = 90
+			modifier = {
+				factor = 0
+				OR = {
+					#is_country_type = default
+					is_friendly_to = event_target:dysonsphere_builder
+					is_cordial_to = event_target:dysonsphere_builder
+					is_protective_to = event_target:dysonsphere_builder
+					is_loyal_to = event_target:dysonsphere_builder
+					relative_power = {
+						who = event_target:dysonsphere_builder
+						category = all
+						value = pathetic
+					}
+					relative_power = {
+						who = event_target:dysonsphere_builder
+						category = all
+						value = inferior
+					}	
+				}
+			}
+		}
+		add_opinion_modifier = { who = event_target:dysonsphere_builder modifier = opinion_dysonsphere_terms_denied }
+
+		tooltip = { event_target:dysonsphere_builder = { add_opinion_modifier = { who = root modifier = opinion_dysonsphere_apology_rejected } } }
+
+		hidden_effect = {
+			event_target:dysonsphere_builder = { country_event = { id = utopia.37 days = 5 } } 
+		}
+	}
+}
+
+country_event = {
+	id = "utopia.37"
+	title = "utopia.35.name"
+	desc = "utopia.37.desc"
+	picture = GFX_evt_dyson_sphere
+	show_sound = event_conversation
+	location = from.capital_scope
+
+	is_triggered_only = yes
+
+	immediate = {
+		event_target:dysonsphere_builder = { add_opinion_modifier = { who = event_target:dyson_sphere_neighbor modifier = opinion_dysonsphere_apology_rejected } }
+	}
+
+	option = {
+		name = utopia.37.a
+	}
+
+	option = {
+		name = utopia.37.b
+	}
+}
+
+country_event = {
+	id = "utopia.38"
+	title = "utopia.35.name"
+	desc = "utopia.38.desc"
+	picture = GFX_evt_dyson_sphere
+	show_sound = event_conversation
+	location = from.capital_scope
+
+	is_triggered_only = yes
+
+	option = {
+		name = utopia.38.a
+	}
+}
+
+country_event = {
+	id = "utopia.39"
+	#title = "utopia.35.name"
+	desc = "utopia.39.desc"
+	#picture = GFX_evt_dyson_sphere
+	#show_sound = event_conversation
+	location = from.capital_scope
+
+	is_triggered_only = yes
+
+	title = TRANSMISSION
+
+	diplomatic = yes
+
+	picture_event_data = {
+		portrait = from
+		room = from.ruler
+	}
+
+	immediate = {
+		event_target:dysonsphere_builder = { add_opinion_modifier = { who = event_target:dyson_sphere_neighbor modifier = opinion_dysonsphere_insult } }
+	}
+
+	option = {
+		name = utopia.39.a
+	}
+
+	option = {
+		name = utopia.39.b
+	}
+
+	option = {
+		name = utopia.39.c
+	}
+}
+
+country_event = {
+	id = "utopia.40"
+	title = "utopia.35.name"
+	desc = "utopia.40.desc"
+	picture = GFX_evt_dyson_sphere
+	show_sound = event_conversation
+	location = from.capital_scope
+
+	is_triggered_only = yes
+
+	option = {
+		name = utopia.40.a
+		tooltip = {
+			add_opinion_modifier = { who = event_target:dysonsphere_builder modifier = opinion_dysonsphere_terms_denied }
+		}
+	}
+
+	option = {
+		name = utopia.40.b
+		tooltip = {
+			add_opinion_modifier = { who = event_target:dysonsphere_builder modifier = opinion_dysonsphere_terms_denied }
+		}
+	}
+}
+
+# Think Tank Events
+
+event = {
+	id = utopia.50
+	hide_window = yes
+
+	is_triggered_only = yes
+
+	trigger = {
+		any_country = {
+			is_country_type = default
+			any_owned_megastructure = {
+				OR = {
+					is_megastructure_type = think_tank_3
+					is_megastructure_type = think_tank_restored
+				}
+			}
+			NOR = { 
+				has_country_flag = think_tank_event
+				has_ethic = ethic_gestalt_consciousness
+				owner_species = { has_trait = trait_mechanical }
+			}
+		}
+	}
+
+	immediate = {
+		random_country = {
+			limit = {
+				is_country_type = default
+				any_owned_megastructure = {
+					OR = {
+						is_megastructure_type = think_tank_3
+						is_megastructure_type = think_tank_restored
+					}
+				}
+				NOR = { 
+					has_country_flag = think_tank_event 
+					has_ethic = ethic_gestalt_consciousness
+					owner_species = { has_trait = trait_mechanical }
+				}
+			}
+		save_event_target_as = target_country
+		}
+		
+		event_target:target_country = {
+			random_owned_megastructure = {
+				limit = {
+					OR = {
+						is_megastructure_type = think_tank_3
+						is_megastructure_type = think_tank_restored
+					}
+				}
+				save_event_target_as = think_tank_2
+			}
+		}
+		
+		event_target:target_country = {
+			random_list = {
+				# Nothing
+				90 = { }
+				# Fountain of Youth
+				30 = {
+					country_event = { id = utopia.51  days = 60 random = 60 }
+				}
+				# Abducted Leader
+				30 = {
+					country_event = { id = utopia.62 days = 60 random = 60 }
+				}
+				# Neural Bank
+				30 = {
+					country_event = { id = utopia.64 days = 60 random = 60 }
+				}
+			}
+		}
+	}
+}
+
+# Fountain of Youth Event Chain
+country_event = {
+	id = utopia.51
+	title = "utopia.51.name"
+	desc = "utopia.51.desc"
+	picture = GFX_evt_think_tank
+	show_sound = event_administrative_work 
+	location = event_target:think_tank_2
+
+	is_triggered_only = yes
+
+	trigger = {
+		any_country = {
+			is_country_type = default
+			has_communications = root
+			NOT = {
+				has_country_flag = fountain_of_youth 
+				is_same_value = ROOT
+			}
+		}
+		NOT = {
+			has_global_flag = utopia_51
+			has_country_flag = fountain_of_youth 
+		}
+	}
+
+	immediate = {
+		set_country_flag = think_tank_event
+		set_global_flag = utopia_51
+	}
+
+	option = {
+		name = utopia.51.a
+
+		trigger = {
+			OR = {
+			energy > 999
+			}
+		}
+
+		random_country = {
+			limit = {
+				is_country_type = default
+				has_communications = root
+			}
+			save_event_target_as = target_country
+			random_system_within_border = {
+				limit = {
+					any_planet = {
+						is_colony = yes
+					}
+				}
+				save_event_target_as = ointment_name
+			}
+		}
+		add_energy = -1000
+		hidden_effect = {
+			set_global_flag = utopia_51
+		}
+
+		hidden_effect = { country_event = { id = utopia.54 days = 60 random = 20 } }
+	}
+	option = {
+		name = utopia.51.b
+		trigger = {
+			OR = {
+			energy > 999
+			}
+		}
+		hidden_effect = {
+			if = {
+				limit = {
+					any_owned_leader = {
+						leader_class = scientist
+					}
+				}
+				country_event = { id = utopia.59 days = 60 random = 20 } 
+				else = {
+					if = {
+						limit = {
+							NOT = { 
+								any_owned_leader = { leader_class = scientist } 
+							}
+						}
+						country_event = { id = utopia.60 days = 60 random = 20 }	
+					}
+				}
+			}
+		}
+	}
+
+	option = {
+		name = utopia.51.c
+		trigger = {
+			OR = {
+			energy < 1000
+			}
+		}
+			hidden_effect = {
+			if = {
+				limit = {
+					any_owned_leader = {
+						leader_class = scientist
+					}
+				}
+				country_event = { id = utopia.59 days = 60 random = 20 } 
+				else = {
+					if = {
+						limit = {
+							NOT = { 
+								any_owned_leader = { leader_class = scientist } 
+							}
+						}
+						country_event = { id = utopia.60 days = 60 random = 20 }	
+					}
+				}
+			}
+		}
+	}
+}
+
+country_event = {
+	id = utopia.54
+	title = "utopia.54.name"
+	desc = "utopia.54.desc"
+	picture = GFX_evt_think_tank
+	show_sound = event_administrative_work 
+	location = event_target:think_tank_2
+
+	is_triggered_only = yes
+
+
+	option = {
+		name = utopia.54.a
+		hidden_effect = { country_event = { id = utopia.58 days = 60 random = 20 } }
+	}
+
+	option = {
+		name = utopia.54.b
+		trigger = {
+			energy > 499
+		}
+		add_energy = -500
+		hidden_effect = { country_event = { id = utopia.55 days = 60 random = 20 } }	
+	}
+
+	option = {
+		name = utopia.54.c
+		trigger = {
+			OR = {
+			energy < 500
+			}
+		}
+	}
+}
+
+country_event = {
+	id = utopia.55
+	title = "utopia.55.name"
+	desc = "utopia.55.desc"
+	picture = GFX_evt_think_tank
+	show_sound = event_administrative_work
+	location = from
+
+	is_triggered_only = yes
+
+	option = {
+		name = utopia.55.a
+		hidden_effect = { country_event = { id = utopia.56 days = 10 } }
+	}
+
+	option = {
+		name = utopia.55.b
+		custom_tooltip = utopia.55.b.tooltip
+		hidden_effect = { 
+			country_event = { id = utopia.57 days = 60 random = 20 } 
+			set_country_flag = miracle_cream
+		}
+	}
+}
+
+country_event = {
+	id = utopia.56
+	title = "utopia.56.name"
+	desc = "utopia.56.desc"
+	picture = GFX_evt_think_tank
+	show_sound = event_administrative_work  
+	location = from
+
+	is_triggered_only = yes
+
+	option = {
+		name = utopia.56.a
+	}
+
+	option = {
+		name = utopia.56.b
+		add_monthly_resource_mult = {
+   				resource = society_research
+   				value = @tier1researchreward
+   				min = @tier1researchmin
+   				max = @tier1researchmax
+   		}
+	}
+
+	option = {
+		name = utopia.56.c
+	}
+}
+
+country_event = {
+	id = utopia.57
+	title = "utopia.57.name"
+	desc = "utopia.57.desc"
+	picture = GFX_evt_think_tank
+	show_sound = event_administrative_work  
+	location = event_target:think_tank_2
+
+	is_triggered_only = yes
+
+	immediate = {
+		add_modifier = {
+				modifier = "energy_utopia_57"
+  				days = 360
+  		}
+	}
+
+	option = {
+		name = utopia.57.a
+		tooltip = { 
+			add_modifier = {
+				modifier = "energy_utopia_57"
+  				days = 360
+  			}
+  		}
+	}
+}
+
+country_event = {
+	id = utopia.58
+	title = "utopia.58.name"
+	desc = "utopia.58.desc"
+	picture = GFX_evt_think_tank
+	show_sound = event_administrative_work  
+	location = event_target:think_tank_2
+
+	is_triggered_only = yes
+
+	option = {
+		name = utopia.58.a
+	}
+}
+
+country_event = {
+	id = utopia.59
+	title = "utopia.59.name"
+	desc = "utopia.59.desc"
+	picture = GFX_evt_think_tank
+	show_sound = event_administrative_work 
+	location = event_target:think_tank_2
+
+	is_triggered_only = yes
+
+	trigger = {
+		any_owned_leader = {
+			leader_class = scientist
+		}
+	}
+	immediate = {
+		if = {
+			limit = {
+				any_owned_leader = {
+						is_researching_area = engineering 
+				}
+			}
+			random_owned_leader = {
+				limit = {
+					is_researching_area = engineering 
+				}
+				save_event_target_as = volunteer_leader
+			}
+			else = {
+				if = {
+					limit = {
+						any_owned_leader = { leader_class = scientist }
+					}	
+				}
+				random_owned_leader = {
+					limit = {
+						leader_class = scientist
+					}
+					save_event_target_as = volunteer_leader
+				}
+			}
+		}
+	}
+
+	option = {
+		name = utopia.59.a
+		custom_tooltip = utopia.59.a.tooltip
+		event_target:volunteer_leader = {
+			kill_leader = { type = scientist show_notification = no }
+		}
+		#add_modifier = {
+		#	modifier = research_utopia_60
+		#	days = -1
+		#}
+
+		event_target:think_tank_2 = {
+			#limit = {
+			#	is_megastructure_type = think_tank_3
+			#}
+			upgrade_megastructure_to = think_tank_4
+		}
+
+		#hidden_effect = { country_event = { id = utopia.61 days = 1800 random = 100 } }
+	}
+
+	option = {
+		name = utopia.59.b
+	}
+
+	option = {
+		name = utopia.59.c
+	}
+}
+
+country_event = {
+	id = utopia.60
+	title = "utopia.60.name"
+	desc = "utopia.60.desc"
+	picture = GFX_evt_think_tank
+	show_sound = event_administrative_work 
+	location = event_target:think_tank_2
+
+	is_triggered_only = yes
+		
+	option = {
+		name = utopia.60.a
+		trigger = {
+			energy < 1000
+		}
+	}
+
+	option = {
+		name = utopia.60.b
+		trigger = {
+			energy > 999
+		}
+		add_modifier = {
+			modifier = research_utopia_60
+			days = -1
+		}
+		#hidden_effect = { country_event = { id = utopia.61 days = 1800 random = 100 } }	
+	}
+
+	option = {
+		name = utopia.60.c
+		trigger = {
+			energy > 999
+		}
+	}
+}
+
+#country_event = {
+#	id = utopia.61
+#	title = "utopia.61.name"
+#	desc = "utopia.61.desc"
+#	picture = GFX_evt_think_tank
+#	show_sound = event_administrative_work
+#	location = event_target:think_tank_2
+#
+#	immediate = {
+#		remove_modifier = research_utopia_60
+#	}
+#	is_triggered_only = yes
+#		
+#	option = {
+#		name = UNFORTUNATE
+#
+#		tooltip = {
+#			remove_modifier = research_utopia_60
+#		}
+#	}
+#}
+
+# Abducted Scientist
+country_event = {
+	id = utopia.62
+	title = "utopia.62.name"
+	desc = "utopia.62.desc"
+	picture = GFX_evt_think_tank
+	show_sound = event_administrative_work
+	location = event_target:think_tank_2
+
+	is_triggered_only = yes
+
+	trigger = {
+		any_owned_leader = {
+			is_researching_area = physics
+		}
+	}
+
+	immediate = {
+		random_owned_leader = {
+			limit = {
+				is_researching_area = physics 
+			}
+			save_event_target_as = abducted_leader
+			exile_leader_as = exiled_physics_leader
+			add_experience = 400
+			if = {
+				limit = {
+					NOT = { 
+					has_trait = leader_trait_spark_of_genius 
+					}
+				}
+				add_trait = leader_trait_spark_of_genius
+			}
+			if = {
+				limit = {
+					NOT = { 
+					has_trait = leader_trait_maniacal
+					}
+				}
+				add_trait = leader_trait_maniacal
+			}
+		}
+		set_country_flag = think_tank_event
+	}
+	option = {
+		name = utopia.62.a
+		hidden_effect = { country_event = { id = utopia.63 days = 360 random = 20 } }
+	}
+}
+
+country_event = {
+	id = utopia.63
+	title = "utopia.63.name"
+	desc = "utopia.63.desc"
+	picture = GFX_evt_think_tank
+	show_sound = event_administrative_work
+	location = event_target:think_tank_2
+
+	is_triggered_only = yes
+
+	immediate = {
+
+		create_fleet = {
+			name = "NAME_Other_Science_Ship"
+			effect = {
+				set_owner = root
+				create_ship_design = {
+					design = "NAME_Prototype"
+					ftl = root
+				}
+				create_ship = {
+					name = "NAME_From_Beyond"
+					design = last_created_design
+					graphical_culture = "extra_dimensional_01"
+					prefix = no
+					upgradable = no
+				}
+				set_location = from.capital_scope
+				save_event_target_as = deleted_ship
+			}
+		}
+		event_target:deleted_ship = {
+			set_leader = exiled_physics_leader
+			leader = {unassign_leader = this}
+			delete_fleet = this
+		}
+	}
+
+	option = {
+		name = utopia.63.a
+	}
+}
+
+# Neural Bank Event
+country_event = {
+	id = utopia.64
+	title = "utopia.59.name"
+	desc = "utopia.64.desc"
+	picture = GFX_evt_think_tank
+	show_sound = event_administrative_work
+	location = event_target:think_tank_2
+
+	is_triggered_only = yes
+
+	trigger = {
+		any_owned_leader = {
+			leader_class = scientist
+		}
+	}
+	immediate = {
+		if = {
+			limit = {
+				any_owned_leader = {
+						is_researching_area = engineering 
+				}	
+			}
+			random_owned_leader = {
+				limit = {
+					is_researching_area = engineering 
+				}
+				save_event_target_as = volunteer_leader
+			}
+			else = {
+				if = {
+					limit = {
+						any_owned_leader = { leader_class = scientist  }
+					}	
+				}
+				random_owned_leader = {
+					limit = {
+						leader_class = scientist
+					}
+					save_event_target_as = volunteer_leader
+				}
+			}
+		}
+		set_country_flag = think_tank_event
+	}
+
+	option = {
+		name = utopia.59.a
+		custom_tooltip = utopia.59.a.tooltip
+		event_target:volunteer_leader = {
+			kill_leader = { type = scientist show_notification = no }
+		}
+		#add_modifier = {
+		#	modifier = research_utopia_60
+		#	days = -1
+		#}
+		event_target:think_tank_2 = {
+			#limit = {
+			#	is_megastructure_type = think_tank_3
+			#}
+			upgrade_megastructure_to = think_tank_4
+		}
+		#hidden_effect = { country_event = { id = utopia.61 days = 1800 random = 100 } }
+	}
+
+	option = {
+		name = utopia.59.b
+	}
+
+	option = {
+		name = utopia.59.c
+	}
+}
+
+# Science Nexus (Think Tank) Notification Events
+
+# Science Nexus Site Built
+
+country_event = {
+	id = utopia.80
+	title = utopia.80.name
+	desc = utopia.80.desc
+	picture = GFX_evt_think_tank
+	show_sound = event_think_tank_build_start
+	location = FROMFROM
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		FROM = { is_megastructure_type = think_tank_0 }
+	}
+	
+	option = {
+		name = utopia.80.a
+	}
+}
+
+# Science Nexus Site Built Notification (HIDDEN)
+country_event = {
+	id = utopia.81
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		FROM = { is_megastructure_type = think_tank_1 }
+	}
+	
+	immediate = {
+		FROMFROM = { save_event_target_as = think_tank_system }
+		every_relation = {
+			limit = {
+				is_ai = no
+				has_communications = root
+			}
+			country_event = { id = utopia.82 }
+		}
+		if = {
+			limit = {
+				NOT = { has_country_flag = started_first_think_tank }
+			}
+			set_country_flag = started_first_think_tank
+			else = {
+				if = {
+					limit = {
+						has_country_flag = started_first_think_tank
+					}
+					set_country_flag = started_first_think_tank_2
+				}
+			}
+		}
+	}
+}
+
+
+# Neighbor begins building Science Nexus
+country_event = {
+	id = utopia.82
+	title = utopia.82.name
+	desc = {
+		text = utopia.82.desc.a
+		trigger = {
+			FROM = { 
+				has_country_flag = started_first_think_tank
+				NOT = { has_country_flag = started_first_think_tank_2 }
+			}
+		}
+	}
+	desc = {
+		text = utopia.82.desc.b
+		trigger = {
+			FROM = { 
+				has_country_flag = started_first_think_tank_2
+			}
+		}
+	}
+	picture = GFX_evt_think_tank
+	show_sound = event_mega_structure_other_empire_build_start
+	location = event_target:think_tank_system
+	
+	is_triggered_only = yes
+	
+	option = { 
+		name = utopia.82.a
+	}
+	option = { 
+		name = utopia.82.b
+	}
+
+	option = { 
+		name = utopia.82.c
+	}
+}
+
+# Science Nexus Hub built
+country_event = {
+	id = utopia.83
+	title = utopia.83.name
+	desc = utopia.83.desc
+	picture = GFX_evt_think_tank
+	show_sound = event_think_tank_build_upgrade
+	location = FROMFROM
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		FROM = { is_megastructure_type = think_tank_1 }
+	}
+	
+	option = {
+		name = utopia.83.a
+	}
+}
+
+ # Science Nexus Wings First Stage Completed
+country_event = {
+	id = utopia.85
+	title = utopia.85.name
+	desc = utopia.85.desc
+	picture = GFX_evt_think_tank
+	show_sound = event_think_tank_build_upgrade
+	location = FROMFROM
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		FROM = { is_megastructure_type = think_tank_2 }
+	}
+	
+	option = {
+		name = utopia.85.a
+	}
+}
+
+# Science Nexus completed
+country_event = {
+	id = utopia.84
+	title = utopia.84.name
+	desc = {
+		text = utopia.84.desc.a
+		trigger = {
+			NOT = { has_country_flag = finished_think_tank }
+		}
+	}
+	desc = {
+		text = utopia.84.desc.b
+		trigger = {
+			has_country_flag = finished_think_tank
+		}
+	}
+	picture = GFX_evt_think_tank
+	show_sound = event_think_tank_build_complete
+	location = FROMFROM
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		FROM = { is_megastructure_type = think_tank_3 }
+	}
+
+	immediate = {
+		every_relation = {
+			limit = {
+				is_ai = no
+				has_communications = root
+			}
+			country_event = { id = utopia.86 }
+		}
+	}
+
+	after = {
+		hidden_effect = { country_event = { id = utopia.87 days = 5 } }
+	}
+	
+	option = {
+		name = utopia.84.a
+	}
+}
+
+# Science Nexus Flag Event (HIDDEN)
+country_event = {
+	id = utopia.87
+	hide_window = yes
+
+	is_triggered_only = yes
+
+	immediate = {
+		set_country_flag = finished_think_tank
+	}
+}
+
+# Neighbor notification
+country_event = {
+	id = utopia.86
+	title = utopia.86.name
+	desc = utopia.86.desc
+	picture = GFX_evt_think_tank
+	show_sound = event_mega_structure_other_empire_build_complete
+	location = FROMFROMFROM
+
+	is_triggered_only = yes
+
+	option = {
+		name = OK
+	}
+}
+
+# Sentry Array Site, 1, 2, 3, 4
+
+# ID 4000 - 5999
+# Sentry Array Site Built
+country_event = {
+	id = utopia.4100
+	title = utopia.4100.name
+	desc = utopia.4100.desc
+	picture = GFX_evt_spy_orb
+	show_sound = event_spy_orb_build_start
+	location = FROM
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		FROM = { is_megastructure_type = spy_orb_0 }
+	}
+	
+	option = {
+		name = utopia.4100.a
+	}
+}
+
+# Sentry Array Hub Built Notification (HIDDEN)
+country_event = {
+	id = utopia.4101
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		FROM = { is_megastructure_type = spy_orb_1 }
+	}
+	
+	immediate = {
+		FROMFROM = { save_event_target_as = spy_system }
+		every_relation = {
+			limit = {
+				is_ai = no
+				has_communications = root
+			}
+			country_event = { id = utopia.4102 }
+		}
+		if = {
+			limit = {
+				NOT = { has_country_flag = started_first_spy_orb }
+			}
+			set_country_flag = started_first_spy_orb
+			else = {
+				if = {
+					limit = {
+						has_country_flag = started_first_spy_orb
+					}
+					set_country_flag = started_first_spy_orb_2
+				}
+			}
+		}
+	}
+}
+
+# Neighbor begins building Sentry Array
+country_event = {
+	id = utopia.4102
+	title = utopia.4102.name
+	desc = utopia.4102.desc
+	picture = GFX_evt_spy_orb
+	show_sound = event_mega_structure_other_empire_build_start
+	location = event_target:spy_system
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = OK
+	}
+}
+
+# Sentry Array Hub built
+country_event = {
+	id = utopia.4103
+	title = utopia.4103.name
+	desc = utopia.4103.desc
+	picture = GFX_evt_spy_orb
+	show_sound = event_spy_orb_build_upgrade
+	location = FROM
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		FROM = { is_megastructure_type = spy_orb_1 }
+	}
+	
+	option = {
+		name = OK
+	}
+}
+
+# Sentry Array completed
+country_event = {
+	id = utopia.4104
+	title = utopia.4104.name
+	desc = utopia.4104.desc
+	picture = GFX_evt_spy_orb
+	show_sound = event_spy_orb_build_complete
+	location = FROM
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		FROM = { is_megastructure_type = spy_orb_4 }
+	}
+
+	immediate = {
+		set_country_flag = built_sentry_array
+		every_relation = {
+			limit = {
+				is_ai = no
+				has_communications = root
+			}
+			country_event = { id = utopia.4110 }
+		}
+	}
+	
+	option = {
+		name = utopia.4104.a
+		custom_tooltip = utopia.4104.a.tooltip
+	}
+}
+
+# Neighbor notification
+country_event = {
+	id = utopia.4110
+	title = utopia.4110.name
+	desc = utopia.4110.desc
+	picture = GFX_evt_spy_orb
+	show_sound = event_mega_structure_other_empire_build_complete
+	location = FROMFROMFROM
+
+	is_triggered_only = yes
+
+	option = {
+		name = OK
+	}
+}
+
+
+# ID 4000 - 5999
+# Dyson Sphere Site Built
+country_event = {
+	id = utopia.4000
+	title = utopia.4000.name
+	desc = utopia.4000.desc
+	picture = GFX_evt_dyson_sphere
+	show_sound = event_dyson_sphere_build_start
+	location = FROMFROM
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		FROM = { is_megastructure_type = dyson_sphere_0 }
+	}
+	
+	option = {
+		name = utopia.4000.a
+	}
+}
+
+# Dyson Sphere Frame Built Notification (HIDDEN)
+country_event = {
+	id = utopia.4001
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		FROM = { is_megastructure_type = dyson_sphere_1 }
+	}
+	
+	immediate = {
+		FROMFROM = { save_event_target_as = dyson_system }
+		every_relation = {
+			limit = {
+				is_ai = no
+				has_communications = root
+			}
+			country_event = { id = utopia.4002 }
+		}
+		if = {
+			limit = {
+				NOT = { has_country_flag = started_first_dyson_sphere }
+			}
+			set_country_flag = started_first_dyson_sphere
+			else = {
+				if = {
+					limit = {
+						has_country_flag = started_first_dyson_sphere
+					}
+					set_country_flag = started_first_dyson_sphere_2
+				}
+			}
+		}
+	}
+}
+
+# Neighbor begins building Dyson Sphere
+country_event = {
+	id = utopia.4002
+	title = utopia.4002.name
+	desc = {
+		text = utopia.4002.desc.a
+		trigger = {
+			FROM = { 
+				has_country_flag = started_first_dyson_sphere
+				NOT = { has_country_flag = started_first_dyson_sphere_2 }
+			}
+		}
+	}
+	desc = {
+		text = utopia.4002.desc.b
+		trigger = {
+			FROM = { 
+				has_country_flag = started_first_dyson_sphere_2
+			}
+		}
+	}
+	picture = GFX_evt_dyson_sphere
+	show_sound = event_mega_structure_other_empire_build_start
+	location = event_target:dyson_system
+	
+	is_triggered_only = yes
+	
+	option = { # has built own Dyson Sphere
+		trigger = {
+			any_owned_megastructure = {
+				OR = {
+					is_megastructure_type = dyson_sphere_0
+					is_megastructure_type = dyson_sphere_1
+					is_megastructure_type = dyson_sphere_2
+					is_megastructure_type = dyson_sphere_3
+					is_megastructure_type = dyson_sphere_4
+					is_megastructure_type = dyson_sphere_5
+				}
+			}
+		}
+		name = utopia.4002.a
+	}
+	option = { # has no Dyson Sphere
+		trigger = {
+			NOT = {
+				any_owned_megastructure = {
+					OR = {
+						is_megastructure_type = dyson_sphere_0
+						is_megastructure_type = dyson_sphere_1
+						is_megastructure_type = dyson_sphere_2
+						is_megastructure_type = dyson_sphere_3
+						is_megastructure_type = dyson_sphere_4
+						is_megastructure_type = dyson_sphere_5
+					}
+				}
+			}
+		}
+		name = utopia.4002.b
+	}
+}
+
+# Dyson Sphere Frame built
+country_event = {
+	id = utopia.4003
+	title = utopia.4003.name
+	desc = utopia.4003.desc
+	picture = GFX_evt_dyson_sphere
+	show_sound = event_dyson_sphere_build_upgrade_frame
+	location = FROMFROM
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		FROM = { is_megastructure_type = dyson_sphere_1 }
+	}
+	
+	option = {
+		name = utopia.4003.a
+	}
+}
+
+# Dyson Sphere partially completed
+country_event = {
+	id = utopia.4004
+	title = utopia.4004.name
+	desc = utopia.4004.desc
+	picture = GFX_evt_dyson_sphere
+	show_sound = event_dyson_sphere_build_upgrade_panel
+	location = FROMFROM
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		FROM = { is_megastructure_type = dyson_sphere_2 }
+	}
+	
+	option = {
+		name = utopia.4004.a
+	}
+}
+
+# Dyson Sphere completed
+country_event = {
+	id = utopia.4005
+	title = utopia.4005.name
+	desc = utopia.4005.desc
+	picture = GFX_evt_dyson_sphere
+	show_sound = event_dyson_sphere_build_complete
+	location = FROMFROM
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		FROM = { is_megastructure_type = dyson_sphere_5 }
+	}
+
+	immediate = {
+		set_country_flag = built_dyson_sphere
+		every_relation = {
+			limit = {
+				is_ai = no
+				has_communications = root
+			}
+			country_event = { id = utopia.4010 }
+		}
+	}
+	
+	option = {
+		name = utopia.4005.a
+	}
+}
+
+# Neighbor notification
+country_event = {
+	id = utopia.4010
+	title = utopia.4010.name
+	desc = utopia.4010.desc
+	picture = GFX_evt_dyson_sphere
+	show_sound = event_mega_structure_other_empire_build_complete
+	location = FROMFROMFROM
+
+	is_triggered_only = yes
+
+	option = {
+		name = OK
+	}
+}
+
+### RING WORLD
+
+# Initial Ring World Built
+country_event = {
+	id = utopia.2000
+	title = "utopia.2000.name"
+	desc = "utopia.2000.desc"
+	picture = GFX_evt_unknown_ships
+	show_sound = event_ringworld_build_start
+	location = FROMFROM
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		FROM = { is_megastructure_type = ring_world_1 }
+	}
+	
+	option = {
+		name = "utopia.2000.a"
+	}
+}
+
+# Building Skeletal Frame Notification (HIDDEN)
+country_event = {
+	id = utopia.2001
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		FROM = { is_megastructure_type = ring_world_1 }
+	}
+	
+	immediate = {
+		FROMFROM = { save_event_target_as = ringworld_system }
+		every_country = {
+			limit = {
+				is_ai = no
+				NOT = { is_same_value = ROOT }
+			}
+			country_event = { id = utopia.2002 }
+		}
+	}
+	
+	after = {
+		if = {
+			limit = {
+				NOT = { has_country_flag = started_first_ring_world }
+			}
+			set_country_flag = started_first_ring_world
+			break = yes
+		}
+		if = {
+			limit = {
+				has_country_flag = started_first_ring_world
+			}
+			set_country_flag = started_first_ring_world_2
+		}
+	}
+}
+
+# Building Skeletal Frame Notification
+country_event = {
+	id = utopia.2002
+	title = "utopia.2002.name"
+	desc = {
+		text = utopia.2002.desc.a
+		trigger = {
+			FROM = { 
+				has_country_flag = started_first_ring_world 
+				NOT = { has_country_flag = started_first_ring_world_2 }
+			}
+		}
+	}
+	desc = {
+		text = utopia.2002.desc.b
+		trigger = {
+			FROM = { 
+				has_country_flag = started_first_ring_world_2
+			}
+		}
+	}
+	picture = GFX_evt_ringworld
+	show_sound = event_mega_structure_other_empire_build_start
+	location = event_target:ringworld_system
+	
+	is_triggered_only = yes
+	
+	option = { # has built own Ring World
+		trigger = {
+			OR = {
+				any_owned_megastructure = {
+					OR = {
+						is_megastructure_type = ring_world_1
+						is_megastructure_type = ring_world_2
+					}
+				}
+				has_country_flag = finished_ringworld
+			}
+		}
+		name = "utopia.2002.a"
+	}
+	option = { # has no Ring World
+		trigger = {
+			NOT = {
+				any_owned_megastructure = {
+					OR = {
+						is_megastructure_type = ring_world_1
+						is_megastructure_type = ring_world_2
+					}
+				}
+			}
+			NOT = { has_country_flag = finished_ringworld }
+		}
+		name = "utopia.2002.b"
+	}
+}
+
+# Skeletal Frame Built
+country_event = {
+	id = utopia.2003
+	title = "utopia.2003.name"
+	desc = "utopia.2003.desc"
+	picture = GFX_evt_ringworld
+	show_sound = event_ringworld_build_upgrade
+	location = FROMFROM
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		FROM = { is_megastructure_type = ring_world_2_intermediate }
+	}
+	
+	option = {
+		name = "utopia.2003.a"
+	}
+}
+
+# Ring World Completed
+country_event = {
+	id = utopia.2004
+	title = "utopia.2004.name"
+	desc = {
+		text = utopia.2004.desc.a
+		trigger = {
+			NOT = { has_country_flag = finished_ringworld }
+		}
+	}
+	desc = {
+		text = utopia.2004.desc.b
+		trigger = {
+			has_country_flag = finished_ringworld
+		}
+	}
+	picture = GFX_evt_ringworld
+	show_sound = event_ringworld_build_complete
+	location = FROMFROM
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		FROM = { is_megastructure_type = ring_world_3_intermediate }
+		FROMFROM = {
+			NOT = {
+				any_system_megastructure = { is_megastructure_type = ring_world_2 }
+			}
+		}
+	}
+	
+	immediate = {
+		set_country_flag = built_ringworld
+		FROMFROM = { save_event_target_as = completed_ringworld_system }
+		every_country = {
+			limit = {
+				is_ai = no
+				NOT = { is_same_value = ROOT }
+			}
+			country_event = { id = utopia.2005 }
+		}
+	}
+	
+	after = {
+		country_event = { id = utopia.2006 days = 5 }
+	}
+	
+	option = {
+		name = "utopia.2004.a"
+	}
+}
+
+# Ring World Completed (Others)
+country_event = {
+	id = utopia.2005
+	title = "utopia.2005.name"
+	desc = {
+		text = utopia.2005.desc.a
+		trigger = {
+			NOT = { FROM = { has_country_flag = finished_ringworld } }
+		}
+	}
+	desc = {
+		text = utopia.2005.desc.b
+		trigger = {
+			FROM = { has_country_flag = finished_ringworld }
+		}
+	}
+	picture = GFX_evt_ringworld
+	show_sound = event_mega_structure_other_empire_build_complete
+	location = event_target:completed_ringworld_system
+	
+	is_triggered_only = yes
+	
+	option = { # has built own Ring World
+		trigger = {
+			OR = {
+				any_owned_megastructure = {
+					OR = {
+						is_megastructure_type = ring_world_1
+						is_megastructure_type = ring_world_2
+					}
+				}
+				has_country_flag = finished_ringworld
+			}
+		}
+		name = "utopia.2005.a"
+	}
+	option = { # has no Ring World
+		trigger = {
+			any_owned_megastructure = {
+				NOT = {
+					OR = {
+						is_megastructure_type = ring_world_1
+						is_megastructure_type = ring_world_2
+					}
+				}
+			}
+			NOT = { has_country_flag = finished_ringworld }
+		}
+		name = "utopia.2005.b"
+	}
+}
+
+# Ring World Flag Event (HIDDEN)
+country_event = {
+	id = utopia.2006
+	hide_window = yes
+
+	is_triggered_only = yes
+
+	immediate = {
+		set_country_flag = finished_ringworld
+	}
+}
+
+### Ruined Megastructures
+
+# Ruined Dyson Sphere
+ship_event = {
+	id = utopia.2010
+	title = "utopia.2010.name"
+	desc = {
+		trigger = { 
+			# NOT = { owner = { has_technology = tech_mega_engineering } } # removed mega reference
+			always = yes
+		}
+		text = utopia.2010.a.desc
+	}
+	desc = {
+		trigger = { 
+			# owner = { has_technology = tech_mega_engineering } # removed mega reference
+		}
+		text = utopia.2010.b.desc
+	}
+	picture = GFX_evt_space_debris
+	show_sound = event_radio_chatter
+	location = FROM
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		owner = {
+			NOT = { has_country_flag = encountered_ruined_dyson }
+		}
+		FROM = {
+			has_star_flag = ruined_dyson_system
+			any_system_megastructure = { is_megastructure_type = dyson_sphere_ruined }
+		}
+	}
+	
+	immediate = {
+		FROM = { save_event_target_as = dyson_system }
+		owner = { set_country_flag = encountered_ruined_dyson }
+	}		
+	
+	option = {
+		name = "utopia.2010.a"
+		trigger = {
+			owner = {
+				any_owned_megastructure = {
+					OR = {
+						is_megastructure_type = dyson_sphere_1
+						is_megastructure_type = dyson_sphere_2
+						is_megastructure_type = dyson_sphere_3
+						is_megastructure_type = dyson_sphere_4
+						is_megastructure_type = dyson_sphere_5
+					}
+				}
+			}
+		}
+	}
+	option = {
+		name = FASCINATING
+		trigger = {
+			NOT = {
+				owner = {
+					any_owned_megastructure = {
+						OR = {
+							is_megastructure_type = dyson_sphere_1
+							is_megastructure_type = dyson_sphere_2
+							is_megastructure_type = dyson_sphere_3
+							is_megastructure_type = dyson_sphere_4
+							is_megastructure_type = dyson_sphere_5
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+# Ruined Dyson Sphere Restored
+country_event = {
+	id = utopia.2011
+	title = "utopia.2011.name"
+	desc = "utopia.2011.desc"
+	picture = GFX_evt_dyson_sphere
+	show_sound = event_dyson_sphere_build_complete
+	location = FROM
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EXCELLENT
+	}
+}
+
+# Ruined Science Nexus
+ship_event = {
+	id = utopia.2012
+	title = "utopia.2012.name"
+	desc = "utopia.2012.desc"
+	picture = GFX_evt_space_debris
+	show_sound = event_radio_chatter
+	location = FROM
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		owner = {
+			NOT = { has_country_flag = encountered_ruined_nexus }
+		}
+		FROM = {
+			has_star_flag = ruined_nexus_system
+			any_system_megastructure = { is_megastructure_type = think_tank_ruined }
+		}
+	}
+	
+	immediate = {
+		FROM = { save_event_target_as = nexus_system }
+		owner = { set_country_flag = encountered_ruined_nexus }
+	}		
+	
+	option = {
+		name = "utopia.2012.a"
+		trigger = {
+			owner = {
+				OR = {
+					has_megastructure = think_tank_1
+					has_megastructure = think_tank_2
+					has_megastructure = think_tank_3
+					has_megastructure = think_tank_4
+				}
+			}
+		}
+	}
+	option = {
+		name = FASCINATING
+		trigger = {
+			NOT = {
+				owner = { 
+					OR = {
+						has_megastructure = think_tank_1
+						has_megastructure = think_tank_2
+						has_megastructure = think_tank_3
+						has_megastructure = think_tank_4
+					}
+				}
+			}
+		}
+	}
+}
+
+# Ruined Science Nexus Restored
+country_event = {
+	id = utopia.2013
+	title = "utopia.2013.name"
+	desc = "utopia.2013.desc"
+	picture = GFX_evt_think_tank
+	show_sound = event_think_tank_build_complete
+	location = FROM
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EXCELLENT
+	}
+}
+
+# Ruined Sentry Array
+ship_event = {
+	id = utopia.2014
+	title = "utopia.2014.name"
+	desc = "utopia.2014.desc"
+	picture = GFX_evt_space_debris
+	show_sound = event_radio_chatter
+	location = FROM
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		owner = {
+			NOT = { has_country_flag = encountered_ruined_sentry }
+		}
+		FROM = {
+			has_star_flag = ruined_sentry_system
+			any_system_megastructure = { is_megastructure_type = spy_orb_ruined }
+		}
+	}
+	
+	immediate = {
+		FROM = { save_event_target_as = sentry_system }
+		owner = { set_country_flag = encountered_ruined_sentry }
+	}		
+	
+	option = {
+		name = "utopia.2014.a"
+		trigger = {
+			owner = {
+				any_owned_megastructure = {
+					OR = {
+						is_megastructure_type = spy_orb_1
+						is_megastructure_type = spy_orb_2
+						is_megastructure_type = spy_orb_3
+						is_megastructure_type = spy_orb_4
+					}
+				}
+			}
+		}
+	}
+	option = {
+		name = FASCINATING
+		trigger = {
+			NOT = {
+				owner = {
+					any_owned_megastructure = {
+						OR = {
+							is_megastructure_type = spy_orb_1
+							is_megastructure_type = spy_orb_2
+							is_megastructure_type = spy_orb_3
+							is_megastructure_type = spy_orb_4
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+# Ruined Sentry Array Restored
+country_event = {
+	id = utopia.2015
+	title = "utopia.2015.name"
+	desc = "utopia.2015.desc"
+	picture = GFX_evt_spy_orb
+	show_sound = event_spy_orb_build_complete
+	location = FROM
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EXCELLENT
+	}
+}
+
+# Ruined Ring World
+ship_event = {
+	id = utopia.2016
+	title = "utopia.2016.name"
+	desc = "utopia.2016.desc"
+	picture = GFX_evt_space_debris
+	show_sound = event_radio_chatter
+	location = FROM
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		owner = {
+			NOT = { has_country_flag = encountered_ruined_ring }
+		}
+		FROM = {
+			has_star_flag = ruined_ring_system
+			any_system_megastructure = { is_megastructure_type = ring_world_ruined }
+		}
+	}
+	
+	immediate = {
+		FROM = { save_event_target_as = ring_system }
+		owner = { set_country_flag = encountered_ruined_ring }
+	}		
+	
+	option = {
+		name = "utopia.2016.a"
+		trigger = {
+			owner = { has_country_flag = finished_ringworld }
+		}
+	}
+	option = {
+		name = AMAZING
+		trigger = {
+			owner = { NOT = { has_country_flag = finished_ringworld } }
+		}
+	}
+}
+
+# Ruined Ring World Restored
+country_event = {
+	id = utopia.2017
+	title = "utopia.2017.name"
+	desc = "utopia.2017.desc"
+	picture = GFX_evt_ringworld
+	show_sound = event_ringworld_build_complete
+	location = FROM
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EXCELLENT
+	}
+}
+
+# Habitat Complete Notification
+country_event = {
+	id = "utopia.61"
+	title = "utopia.61.name"
+	desc = {
+		trigger = {
+			NOT = { has_country_flag = already_built_habitat }
+		}
+		text = "utopia.61.desc.a"
+	}
+
+	desc = {
+		trigger = {
+			has_country_flag = already_built_habitat
+		}
+		text = "utopia.61.desc.b"
+	}
+	show_sound = event_mystic_reveal
+	picture = GFX_evt_colony_settlement
+	is_triggered_only = yes
+	location = FromFromFrom
+
+	option = {
+		name = EXCELLENT
+		set_country_flag = already_built_habitat
+	}
+}

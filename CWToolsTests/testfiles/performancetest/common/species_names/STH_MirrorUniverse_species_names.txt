@@ -1,0 +1,8 @@
+named_lists = {	
+	terran_name = {
+		Terran = {
+			name = Terran
+			plural = Terrans
+		}	
+	}	
+}

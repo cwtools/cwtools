@@ -1,0 +1,89 @@
+# Cheronite Homeworld
+cheronite_homeworld = {
+	name = "83 Leonis"
+	class = sc_k
+	flags = { cheronite_homeworld }
+	init_effect = { log = "cheronite homeworld" }
+	usage = custom_empire
+	max_instances = 1
+	planet = { name = "Cheron" class = star size = 23 orbit_distance = 0 orbit_angle = 1 has_ring = no }
+	change_orbit = { min = 20 max = 30}
+	planet = { name = "Cheron I" class = "pc_b_class" size = { min = 8 max = 12 } orbit_angle = { min = 45 max = 270 } has_ring = no }
+	change_orbit = { min = 20 max = 30}
+	planet = { name = "Cheron II" class = "pc_toxic" size = { min = 8 max = 12 } orbit_angle = { min = 45 max = 270 } has_ring = no }
+	change_orbit = { min = 20 max = 30}
+	planet = { name = "Cheron III" class = "pc_barren" size = { min = 8 max = 12 } orbit_angle = { min = 45 max = 270 } has_ring = no }
+	change_orbit = { min = 20 max = 30}
+	planet = { name = "Cheron IV" class = "pc_barren" size = { min = 8 max = 12 } orbit_angle = { min = 45 max = 270 } has_ring = no }
+	change_orbit = { min = 20 max = 30}
+	planet = {
+		name = "Cheron Prime"
+		class = "pc_arctic"
+		size = { min = 18 max = 20 }
+		orbit_angle = 185
+		tile_blockers = none
+		starting_planet = yes
+		has_ring = no
+		init_effect = {
+			prevent_anomaly = yes			
+			if = {
+				limit = { NOT = { any_country = { has_country_flag = cheronite_nation } } }
+				create_species = { 
+					name = "Cheronite" 
+					class = CHE 
+					portrait = cheronite 
+					homeworld = THIS 
+					traits = { 
+						trait="trait_venerable"
+						trait="trait_sedentary"		
+						trait="trait_solitary"	
+						ideal_planet_class = "pc_arctic" 
+					} 
+				}
+				last_created_species = { save_global_event_target_as = cheroniteSpecies }
+				create_country = {
+					name = "NAME_cheronite_nation"
+					type = default
+					ignore_initial_colony_error = yes
+					civics = { civic = "civic_black_right_side" civic = "civic_police_state" }
+					authority = auth_oligarchic
+					name_list = "Cheronite"
+					ethos = { ethic = "ethic_authoritarian" ethic = "ethic_xenophobe" ethic = "ethic_materialist" }
+					species = event_target:cheroniteSpecies
+					flag = {
+						icon = { category = "pirate" file = "flag_pirate_4.dds" }
+						background = { category = "backgrounds" file = "vertical.dds" }
+						colors = { "black" "customcolor2050" "null" "null" }
+					}
+					ship_prefix=""
+					effect = {
+						set_graphical_culture = generic_01
+						set_country_flag = cheronite_nation
+						set_country_flag = custom_start_screen
+						set_country_flag = generic_ent
+						set_country_flag = alpha_beta_empire
+						set_country_flag = init_spawned
+						set_country_flag = botf_minor
+						save_global_event_target_as = cheronite_nation
+					}
+				}
+				create_colony = { owner = event_target:cheronite_nation species = event_target:cheroniteSpecies ethos = owner }
+			}
+			set_capital = yes
+			random_country = {
+				limit = { has_country_flag = cheronite_nation }
+				save_global_event_target_as = cheronite_nation
+				add_appropriate_start_techs = yes
+				species = { save_global_event_target_as = cheroniteSpecies }
+				set_country_type = minorRace
+			}
+			set_owner = event_target:cheronite_nation
+			generate_minor_empire_start_buildings = yes
+			generate_minor_empire_start_pops = yes
+			generate_major_empire_start_fleets = yes
+			set_name = "Cheron Prime"
+		}
+	}
+	change_orbit = { min = 30 max = 50}		
+	planet = { name = "Cheron V" class = "pc_i_class" size = { min = 20 max = 35 } orbit_angle = { min = 45 max = 270 } has_ring = yes }
+}

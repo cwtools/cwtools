@@ -1,0 +1,129 @@
+component_set = { key = "UTILITY_AUX_CREW_0" icon = "GFX_ship_part_Utility_Aux_Crew_0" icon_frame = 1 }
+component_set = { key = "UTILITY_AUX_CREW_1" icon = "GFX_ship_part_Utility_Aux_Crew_1" icon_frame = 1 }
+component_set = { key = "UTILITY_AUX_CREW_2" icon = "GFX_ship_part_Utility_Aux_Crew_2" icon_frame = 1 }
+component_set = { key = "UTILITY_AUX_BORG_CREW_0" icon = "GFX_ship_part_Utility_Aux_Borg_crew_0" icon_frame = 1 }
+component_set = { key = "UTILITY_AUX_BORG_CREW_1" icon = "GFX_ship_part_Utility_Aux_Borg_crew_1" icon_frame = 1 }
+component_set = { key = "UTILITY_AUX_BORG_CREW_2" icon = "GFX_ship_part_Utility_Aux_Borg_crew_2" icon_frame = 1 }
+component_set = { key = "UTILITY_AUX_BORG_CREW_3" icon = "GFX_ship_part_Utility_Aux_Borg_crew_3" icon_frame = 1 }
+component_set = { key = "UTILITY_AUX_SENSOR_0" icon = "GFX_ship_part_Utility_Aux_Sensor_0" icon_frame = 1 }
+component_set = { key = "UTILITY_AUX_SENSOR_1" icon = "GFX_ship_part_Utility_Aux_Sensor_1" icon_frame = 1 }
+component_set = { key = "UTILITY_AUX_SENSOR_2" icon = "GFX_ship_part_Utility_Aux_Sensor_2" icon_frame = 1 }
+component_set = { key = "UTILITY_AUX_FUEL_0" icon = "GFX_ship_part_Utility_Aux_Fuel_0" icon_frame = 1 }
+component_set = { key = "UTILITY_AUX_FUEL_1" icon = "GFX_ship_part_Utility_Aux_Fuel_1" icon_frame = 1 }
+component_set = { key = "UTILITY_AUX_FUEL_2" icon = "GFX_ship_part_Utility_Aux_Fuel_2" icon_frame = 1 }
+component_set = { key = "UTILITY_AUX_DEFLECTOR_0" icon = "GFX_ship_part_Utility_Aux_Deflector_0" icon_frame = 1 }
+component_set = { key = "UTILITY_AUX_DEFLECTOR_1" icon = "GFX_ship_part_Utility_Aux_Deflector_1" icon_frame = 1 }
+component_set = { key = "UTILITY_AUX_DEFLECTOR_2" icon = "GFX_ship_part_Utility_Aux_Deflector_2" icon_frame = 1 }
+component_set = { key = "UTILITY_AUX_DEFLECTOR_3" icon = "GFX_ship_part_Utility_Aux_Deflector_3" icon_frame = 1 }
+component_set = { key = "UTILITY_AUX_ESCAPE_0" icon = "GFX_ship_part_Utility_Aux_Escape_0" icon_frame = 1 }
+component_set = { key = "UTILITY_AUX_ESCAPE_1" icon = "GFX_ship_part_Utility_Aux_Escape_1" icon_frame = 1 }
+component_set = { key = "UTILITY_AUX_ESCAPE_2" icon = "GFX_ship_part_Utility_Aux_Escape_2" icon_frame = 1 }
+component_set = { key = "UTILITY_AUX_ESCAPE_3" icon = "GFX_ship_part_Utility_Aux_Escape_3" icon_frame = 1 }
+component_set = { key = "UTILITY_AUX_INFUSER_0" icon = "GFX_ship_part_Utility_Aux_Infuser_0" icon_frame = 1 }
+component_set = { key = "UTILITY_AUX_INFUSER_1" icon = "GFX_ship_part_Utility_Aux_Infuser_1" icon_frame = 1 }
+component_set = { key = "UTILITY_AUX_INFUSER_2" icon = "GFX_ship_part_Utility_Aux_Infuser_2" icon_frame = 1 }
+component_set = { key = "UTILITY_AUX_CARGO" icon = "GFX_ship_part_Utility_Aux_Cargo_" icon_frame = 1 }
+component_set = { key = "UTILITY_AUX_RAMSCOOP_0" icon = "GFX_ship_part_Utility_Aux_Ramscoop_0" icon_frame = 1 }
+component_set = { key = "UTILITY_AUX_RAMSCOOP_1" icon = "GFX_ship_part_Utility_Aux_Ramscoop_1" icon_frame = 1 }
+component_set = { key = "UTILITY_AUX_RAMSCOOP_2" icon = "GFX_ship_part_Utility_Aux_Ramscoop_2" icon_frame = 1 }
+component_set = { key = "UTILITY_AUX_RAMSCOOP_3" icon = "GFX_ship_part_Utility_Aux_Ramscoop_3" icon_frame = 1 }
+
+
+
+
+component_set = { key = "UTILITY_SML_REACTOR_0" icon = "GFX_ship_part_Utility_Reactor_0" icon_frame = 1 }
+component_set = { key = "UTILITY_SML_REACTOR_1" icon = "GFX_ship_part_Utility_Reactor_1" icon_frame = 1 }
+component_set = { key = "UTILITY_SML_REACTOR_PERGIUM" icon = "GFX_ship_part_Utility_Reactor_Pergium" icon_frame = 1 }
+component_set = { key = "UTILITY_SML_REACTOR_2" icon = "GFX_ship_part_Utility_Reactor_2" icon_frame = 1 }
+component_set = { key = "UTILITY_SML_REACTOR_3" icon = "GFX_ship_part_Utility_Reactor_3" icon_frame = 1 }
+component_set = { key = "UTILITY_SML_REACTOR_4" icon = "GFX_ship_part_Utility_Reactor_4" icon_frame = 1 }
+component_set = { key = "UTILITY_SML_REACTOR_5" icon = "GFX_ship_part_Utility_Reactor_5" icon_frame = 1 }
+component_set = { key = "UTILITY_SML_REACTOR_6" icon = "GFX_ship_part_Utility_Reactor_6" icon_frame = 1 }
+
+
+
+
+component_set = { key = "UTILITY_LARGE_TRACKING_0" icon = "GFX_ship_part_Utility_Large_Tracking_0" icon_frame = 1 }
+component_set = { key = "UTILITY_LARGE_TRACKING_1" icon = "GFX_ship_part_Utility_Large_Tracking_1" icon_frame = 1 }
+component_set = { key = "UTILITY_LARGE_TRACKING_2" icon = "GFX_ship_part_Utility_Large_Tracking_2" icon_frame = 1 }
+component_set = { key = "UTILITY_LARGE_TRACKING_3" icon = "GFX_ship_part_Utility_Large_Tracking_3" icon_frame = 1 }
+component_set = { key = "UTILITY_LARGE_BORG_COMPUTER_1" icon = "GFX_ship_part_Utility_Large_Borg_computer_1" icon_frame = 1 }
+component_set = { key = "UTILITY_LARGE_BORG_COMPUTER_2" icon = "GFX_ship_part_Utility_Large_Borg_computer_2" icon_frame = 1 }
+component_set = { key = "UTILITY_LARGE_BORG_COMPUTER_3" icon = "GFX_ship_part_Utility_Large_Borg_computer_3" icon_frame = 1 }
+component_set = { key = "UTILITY_LARGE_BORG_COMPUTER_4" icon = "GFX_ship_part_Utility_Large_Borg_computer_4" icon_frame = 1 }
+component_set = { key = "UTILITY_LARGE_SCIENCE_STATION" icon = "GFX_ship_part_Utility_Large_Science_station_" icon_frame = 1 }
+component_set = { key = "UTILITY_LARGE_DAMPER_0" icon = "GFX_ship_part_Utility_Large_Damper_0" icon_frame = 1 }
+component_set = { key = "UTILITY_LARGE_DAMPER_1" icon = "GFX_ship_part_Utility_Large_Damper_1" icon_frame = 1 }
+component_set = { key = "UTILITY_LARGE_DAMPER_2" icon = "GFX_ship_part_Utility_Large_Damper_2" icon_frame = 1 }
+component_set = { key = "UTILITY_LARGE_STEALTH_0" icon = "GFX_ship_part_Utility_Large_Stealth_0" icon_frame = 1 }
+component_set = { key = "UTILITY_LARGE_STEALTH_1" icon = "GFX_ship_part_Utility_Large_Stealth_1" icon_frame = 1 }
+component_set = { key = "UTILITY_LARGE_STEALTH_2" icon = "GFX_ship_part_Utility_Large_Stealth_2" icon_frame = 1 }
+component_set = { key = "UTILITY_LARGE_STEALTH_3" icon = "GFX_ship_part_Utility_Large_Stealth_3" icon_frame = 1 }
+component_set = { key = "UTILITY_LARGE_AFTERBURNER_0" icon = "GFX_ship_part_Utility_Large_Afterburner_0" icon_frame = 1 }
+component_set = { key = "UTILITY_LARGE_AFTERBURNER_1" icon = "GFX_ship_part_Utility_Large_Afterburner_1" icon_frame = 1 }
+component_set = { key = "UTILITY_LARGE_AFTERBURNER_2" icon = "GFX_ship_part_Utility_Large_Afterburner_2" icon_frame = 1 }
+component_set = { key = "UTILITY_LARGE_AFTERBURNER_3" icon = "GFX_ship_part_Utility_Large_Afterburner_3" icon_frame = 1 }
+component_set = { key = "UTILITY_LARGE_OPERATIONS_0" icon = "GFX_ship_part_Utility_Large_Operations_0" icon_frame = 1 }
+component_set = { key = "UTILITY_LARGE_OPERATIONS_1" icon = "GFX_ship_part_Utility_Large_Operations_1" icon_frame = 1 }
+component_set = { key = "UTILITY_LARGE_SIGNAL_0" icon = "GFX_ship_part_Utility_Large_Signal_0" icon_frame = 1 }
+component_set = { key = "UTILITY_LARGE_SIGNAL_1" icon = "GFX_ship_part_Utility_Large_Signal_1" icon_frame = 1 }
+component_set = { key = "UTILITY_LARGE_SIGNAL_2" icon = "GFX_ship_part_Utility_Large_Signal_2" icon_frame = 1 }
+component_set = { key = "UTILITY_LARGE_SIGNAL_3" icon = "GFX_ship_part_Utility_Large_Signal_3" icon_frame = 1 }
+
+
+
+
+component_set = { key = "UTILITY_SMALL_ARMOR_0" icon = "GFX_ship_part_Utility_Small_Armor_0" icon_frame = 1 }
+component_set = { key = "UTILITY_SMALL_ARMOR_1" icon = "GFX_ship_part_Utility_Small_Armor_1" icon_frame = 1 }
+component_set = { key = "UTILITY_SMALL_ARMOR_2" icon = "GFX_ship_part_Utility_Small_Armor_2" icon_frame = 1 }
+component_set = { key = "UTILITY_SMALL_ARMOR_3" icon = "GFX_ship_part_Utility_Small_Armor_3" icon_frame = 1 }
+component_set = { key = "UTILITY_SMALL_ARMOR_4" icon = "GFX_ship_part_Utility_Small_Armor_4" icon_frame = 1 }
+component_set = { key = "UTILITY_SMALL_BORG_ARMOR_1" icon = "GFX_ship_part_Utility_Small_Borg_armor_1" icon_frame = 1 }
+component_set = { key = "UTILITY_SMALL_BORG_ARMOR_2" icon = "GFX_ship_part_Utility_Small_Borg_armor_2" icon_frame = 1 }
+component_set = { key = "UTILITY_SMALL_BORG_ARMOR_3" icon = "GFX_ship_part_Utility_Small_Borg_armor_3" icon_frame = 1 }
+component_set = { key = "UTILITY_SMALL_BORG_ARMOR_4" icon = "GFX_ship_part_Utility_Small_Borg_armor_4" icon_frame = 1 }
+component_set = { key = "UTILITY_SMALL_STATION_0" icon = "GFX_ship_part_Utility_Small_Station_0" icon_frame = 1 }
+component_set = { key = "UTILITY_SMALL_STATION_1" icon = "GFX_ship_part_Utility_Small_Station_1" icon_frame = 1 }
+component_set = { key = "UTILITY_SMALL_STATION_2" icon = "GFX_ship_part_Utility_Small_Station_2" icon_frame = 1 }
+component_set = { key = "UTILITY_SMALL_STATION_3" icon = "GFX_ship_part_Utility_Small_Station_3" icon_frame = 1 }
+component_set = { key = "UTILITY_SMALL_STATION_4" icon = "GFX_ship_part_Utility_Small_Station_4" icon_frame = 1 }
+component_set = { key = "UTILITY_SMALL_FORCEFIELDS_0" icon = "GFX_ship_part_Utility_Small_Forcefields_0" icon_frame = 1 }
+component_set = { key = "UTILITY_SMALL_FORCEFIELDS_1" icon = "GFX_ship_part_Utility_Small_Forcefields_1" icon_frame = 1 }
+component_set = { key = "UTILITY_SMALL_FORCEFIELDS_2" icon = "GFX_ship_part_Utility_Small_Forcefields_2" icon_frame = 1 }
+component_set = { key = "UTILITY_SMALL_BORG_FORCEFIELDS_2" icon = "GFX_ship_part_Utility_Small_Borg_Forcefields_2" icon_frame = 1 }
+component_set = { key = "UTILITY_SMALL_BORG_FORCEFIELDS_3" icon = "GFX_ship_part_Utility_Small_Borg_Forcefields_3" icon_frame = 1 }
+component_set = { key = "UTILITY_SMALL_HARD_0" icon = "GFX_ship_part_Utility_Small_Hard_0" icon_frame = 1 }
+component_set = { key = "UTILITY_SMALL_HARD_1" icon = "GFX_ship_part_Utility_Small_Hard_1" icon_frame = 1 }
+component_set = { key = "UTILITY_SMALL_HARD_2" icon = "GFX_ship_part_Utility_Small_Hard_2" icon_frame = 1 }
+component_set = { key = "UTILITY_SMALL_HARD_3" icon = "GFX_ship_part_Utility_Small_Hard_3" icon_frame = 1 }
+component_set = { key = "UTILITY_SMALL_HARD_4" icon = "GFX_ship_part_Utility_Small_Hard_4" icon_frame = 1 }
+component_set = { key = "UTILITY_SMALL_EMITTER_0" icon = "GFX_ship_part_Utility_Small_Emitter_0" icon_frame = 1 }
+component_set = { key = "UTILITY_SMALL_EMITTER_1" icon = "GFX_ship_part_Utility_Small_Emitter_1" icon_frame = 1 }
+component_set = { key = "UTILITY_SMALL_EMITTER_2" icon = "GFX_ship_part_Utility_Small_Emitter_2" icon_frame = 1 }
+component_set = { key = "UTILITY_SMALL_EMITTER_3" icon = "GFX_ship_part_Utility_Small_Emitter_3" icon_frame = 1 }
+component_set = { key = "UTILITY_SMALL_GENERATOR_0" icon = "GFX_ship_part_Utility_Small_Generator_0" icon_frame = 1 }
+component_set = { key = "UTILITY_SMALL_GENERATOR_1" icon = "GFX_ship_part_Utility_Small_Generator_1" icon_frame = 1 }
+component_set = { key = "UTILITY_SMALL_GENERATOR_2" icon = "GFX_ship_part_Utility_Small_Generator_2" icon_frame = 1 }
+component_set = { key = "UTILITY_SMALL_GENERATOR_3" icon = "GFX_ship_part_Utility_Small_Generator_3" icon_frame = 1 }
+component_set = { key = "UTILITY_SMALL_BULKHEAD" icon = "GFX_ship_part_Utility_Small_Bulkhead_" icon_frame = 1 }
+
+
+
+
+component_set = { key = "UTILITY_MEDIUM_EPS_0" icon = "GFX_ship_part_Utility_Medium_EPS_0" icon_frame = 1 }
+component_set = { key = "UTILITY_MEDIUM_EPS_1" icon = "GFX_ship_part_Utility_Medium_EPS_1" icon_frame = 1 }
+component_set = { key = "UTILITY_MEDIUM_EPS_2" icon = "GFX_ship_part_Utility_Medium_EPS_2" icon_frame = 1 }
+component_set = { key = "UTILITY_MEDIUM_EPS_3" icon = "GFX_ship_part_Utility_Medium_EPS_3" icon_frame = 1 }
+component_set = { key = "UTILITY_MEDIUM_EPS_4" icon = "GFX_ship_part_Utility_Medium_EPS_4" icon_frame = 1 }
+component_set = { key = "UTILITY_MEDIUM_PHASE_0" icon = "GFX_ship_part_Utility_Medium_Phase_0" icon_frame = 1 }
+component_set = { key = "UTILITY_MEDIUM_PHASE_1" icon = "GFX_ship_part_Utility_Medium_Phase_1" icon_frame = 1 }
+component_set = { key = "UTILITY_MEDIUM_PHASE_2" icon = "GFX_ship_part_Utility_Medium_Phase_2" icon_frame = 1 }
+component_set = { key = "UTILITY_MEDIUM_PHASE_3" icon = "GFX_ship_part_Utility_Medium_Phase_3" icon_frame = 1 }
+component_set = { key = "UTILITY_MEDIUM_PHASE_4" icon = "GFX_ship_part_Utility_Medium_Phase_4" icon_frame = 1 }
+component_set = { key = "UTILITY_MEDIUM_SENSOR" icon = "GFX_ship_part_Utility_Medium_Sensor_" icon_frame = 1 }
+component_set = { key = "UTILITY_MEDIUM_INVERTER_0" icon = "GFX_ship_part_Utility_Medium_Inverter_0" icon_frame = 1 }
+component_set = { key = "UTILITY_MEDIUM_INVERTER_1" icon = "GFX_ship_part_Utility_Medium_Inverter_1" icon_frame = 1 }
+component_set = { key = "UTILITY_MEDIUM_MODULATOR_0" icon = "GFX_ship_part_Utility_Medium_Modulator_0" icon_frame = 1 }
+component_set = { key = "UTILITY_MEDIUM_MODULATOR_1" icon = "GFX_ship_part_Utility_Medium_Modulator_1" icon_frame = 1 }
+component_set = { key = "UTILITY_MEDIUM_BANKS" icon = "GFX_ship_part_Utility_Medium_Banks_" icon_frame = 1 }
+component_set = { key = "UTILITY_MEDIUM_FOCUS" icon = "GFX_ship_part_Utility_Medium_Focus_" icon_frame = 1 }

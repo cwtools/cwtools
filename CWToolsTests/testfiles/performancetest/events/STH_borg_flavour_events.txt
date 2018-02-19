@@ -1,0 +1,480 @@
+########################
+#
+# Borg Flavour Events
+#
+# Written by Walshicus
+#
+########################
+
+namespace = STH_borg_flavour
+
+@tier1influencecontact = 7
+@tier1influencecontactxenophile = 8
+@tier1influencecontactmin = 20
+@tier1influencecontactmax = 80
+
+@tier2influencecontact = 10
+@tier2influencecontactxenophile = 12
+@tier2influencecontactmin = 40
+@tier2influencecontactmax = 100
+
+@tier1materialreward = 6
+@tier1materialmin = 100
+@tier1materialmax = 500
+@tier2materialreward = 12
+@tier2materialmin = 150
+@tier2materialmax = 1000
+@tier3materialreward = 18
+@tier3materialmin = 250
+@tier3materialmax = 1500
+@tier4materialreward = 24
+@tier4materialmin = 350
+@tier4materialmax = 2000
+@tier5materialreward = 48
+@tier5materialmin = 700
+@tier5materialmax = 4000
+
+@tier1influencereward = 6
+@tier1influencemin = 40
+@tier1influencemax = 100
+@tier2influencereward = 12
+@tier2influencemin = 80
+@tier2influencemax = 175
+@tier3influencereward = 18
+@tier3influencemin = 125
+@tier3influencemax = 250
+@tier4influencereward = 24
+@tier4influencemin = 150
+@tier4influencemax = 300
+@tier5influencereward = 36
+@tier5influencemin = 250
+@tier5influencemax = 500
+@tier6influencereward = 48
+@tier6influencemin = 300
+@tier6influencemax = 600
+
+@tier1unityreward = 6
+@tier1unitymin = 100
+@tier1unitymax = 500
+@tier2unityreward = 12
+@tier2unitymin = 150
+@tier2unitymax = 1000
+@tier3unityreward = 18
+@tier3unitymin = 250
+@tier3unitymax = 1500
+@tier4unityreward = 24
+@tier4unitymin = 350
+@tier4unitymax = 2000
+@tier5unityreward = 48
+@tier5unitymin = 700
+@tier5unitymax = 4000
+
+@tier1researchreward = 6
+@tier1researchmin = 60
+@tier1researchmax = 150
+@tier2researchreward = 12
+@tier2researchmin = 90
+@tier2researchmax = 250
+@tier3researchreward = 18
+@tier3researchmin = 120
+@tier3researchmax = 350
+@tier4researchreward = 24
+@tier4researchmin = 150
+@tier4researchmax = 500
+@tier5researchreward = 48
+@tier5researchmin = 300
+@tier5researchmax = 1000
+
+# Birth of Space Piracy
+country_event = {
+	id = STH_borg_flavour.1
+	title = "STH_borg_flavour.1.name"
+	picture = sth_GFX_evt_borgUnicomplex1
+	show_sound = event_space_battle
+	desc = { # Generic
+		text = STH_borg_flavour.1.desc_01
+	}
+	
+	trigger = {
+		NOT = { has_global_flag = rogue_drones_destroyed }
+		is_borg_empire = yes
+		NOT = { has_country_flag = spawned_rogue_drones }
+		exists = capital_scope
+		capital_scope = {
+			solar_system = {
+				ROOT = {
+					any_controlled_planet = {
+						OR = { has_mining_station = yes has_research_station = yes }
+						solar_system = { NOT = { is_same_value = PREVPREVPREV } }
+					}
+				}
+			}
+		}
+	}
+	is_triggered_only = yes
+	immediate = {
+		set_country_flag = spawned_rogue_drones
+		set_country_flag = pirate_encountered
+		every_country = {
+			limit = { is_country_type = pirate has_country_flag = rogue_drones }
+			establish_communications_no_message = root
+		}
+		capital_scope = { save_event_target_as = capital }
+		capital_scope = { solar_system = { save_event_target_as = capital_system } }
+		save_event_target_as = pirate_target
+		owner_species = { save_event_target_as = owner_species }
+		# If Warp or Hyper Drive
+		random_system = {
+			limit = {
+				distance = { source = event_target:capital max_distance = 60 min_distance = 5 }
+				any_planet = { is_asteroid = yes }
+				NOT = { has_star_flag = hostile_system }
+				OR = { has_owner = no is_owned_by = ROOT }
+			}
+			random_system_planet = {
+				limit = { is_asteroid = yes }
+				save_event_target_as = pirate_home
+				create_country = {
+					name = "Rogue Drones"
+					type = pirate
+					species = event_target:owner_species
+					name_list = "Borg"
+					flag = {
+						icon = { category = "trek" file = "borg-rogue.dds" }
+						background = { category = "backgrounds" file = "00_solid.dds" }
+						colors = { "red" "red" "null" "null" }
+					}
+				}
+				last_created_country = {
+					set_graphical_culture = borg_red_01
+					save_event_target_as = pirate_band
+					set_relation_flag = { who = ROOT flag = pirate_relation }
+					set_country_flag = rogue_drones
+					establish_communications_no_message = ROOT	
+					give_technology = { tech = "tech_cutting_beam_1" message = no }
+					give_technology = { tech = "tech_interlink_alcove" message = no }
+					give_technology = { tech = "tech_transwarp_borg" message = no }
+					give_technology = { tech = "tech_engineering_starship-class_717" message = no }
+					give_technology = { tech = "tech_cortical_processing" message = no }
+					give_technology = { tech = "tech_borg_defense" message = no }
+					give_technology = { tech = "tech_borg_hull" message = no }
+					give_technology = { tech = "tech_borg_thruster" message = no }
+					give_technology = { tech = "tech_borg_queen_chamber" message = no }
+					create_fleet = {
+						name = "NAME_Rogue_Drone_Station"
+						effect = {
+							set_owner = PREV
+							create_ship = { name = random design = "NAME_Rogue_Drone_Station" graphical_culture = "borg_01" }
+							set_location = PREVPREV
+						}
+					}
+					create_leader = {
+						type = admiral
+						species = owner_main_species
+						name = random
+						skill = 100
+					}
+					create_fleet = {
+						name = "NAME_Rogue_Drone_Fleet"
+						effect = {
+							set_owner = PREV
+							create_ship_design = { design = "NAME_Rogue_Drone_Ship" ftl = ROOT }
+							while = {
+								count = 4
+								create_ship = {
+									name = random
+									design = last_created_design
+									graphical_culture = "borg_01"
+								}
+							}
+							assign_leader = last_created_leader
+							set_location = PREVPREV
+							set_fleet_stance = aggressive
+							set_aggro_range_measure_from = self
+							set_aggro_range = 150	
+							queue_actions = {
+								repeat = {
+									find_random_system = {
+										trigger = {
+											id = "STH_borg_flavour1.trigger.1"
+											NOT = { has_star_flag = hostile_system is_same_value = event_target:capital_system }
+											any_planet = {
+												OR = { has_mining_station = yes has_research_station = yes }
+												exists = controller
+												controller = { is_same_value = event_target:pirate_target }
+											}
+											distance = { source = PREV max_distance = 100 min_distance = 20 }
+										}
+										found_system = { move_to = THIS }	
+									}
+									find_closest_planet = {
+										trigger = {
+											id = "STH_borg_flavour1.trigger.2"
+											OR = { has_mining_station = yes has_research_station = yes }
+										}
+										found_planet = {
+											orbit_planet = THIS
+											wait = { duration = 20 }
+										}
+									}
+									find_random_system = {
+										trigger = {
+											id = "STH_borg_flavour1.trigger.3"
+											any_planet = { is_planet = event_target:pirate_home }
+										}
+										found_system = { move_to = THIS }	
+									}
+									find_closest_planet = {
+										trigger = {
+											id = "STH_borg_flavour1.trigger.4"
+											is_planet = event_target:pirate_home
+										}
+										found_planet = {
+											orbit_planet = THIS
+											wait = { duration = 200 random = 150 }
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+	option = { name = STH_borg_flavour.1.a }
+}
+
+
+
+# New Ships (HIDDEN)
+country_event = {
+	id = STH_borg_flavour.2
+	hide_window = yes
+	
+	trigger = {
+		NOT = { has_global_flag = privateers_destroyed }
+		is_country_type = pirate
+		has_country_flag = rogue_drones
+		OR = { num_fleets < 2 num_ships < 3 }
+		any_owned_ship = { is_ship_size = pirate_station }
+	}
+	mean_time_to_happen = { months = 100 }
+	immediate = {
+		random_country = {
+			limit = { reverse_has_relation_flag = { flag = pirate_relation who = ROOT } }
+			save_event_target_as = pirate_target
+			capital_scope = { solar_system = { save_event_target_as = capital_system } }
+		}
+		create_leader = { type = admiral species = owner_main_species name = random skill = 100 }
+		random_owned_ship = {
+			limit = { is_ship_size = pirate_station }
+			save_event_target_as = pirate_home
+			if = {
+				limit = { exists = event_target:pirate_target }
+				create_fleet = { name = "NAME_Rogue_Drone_Fleet"
+					effect = {
+						set_owner = ROOT
+						create_ship_design = { design = "NAME_Rogue_Drone_Ship" ftl = event_target:pirate_target }
+						while = {
+							count = 5
+							create_ship = { name = random design = last_created_design graphical_culture = "borg_01" }
+						}
+						assign_leader = last_created_leader
+						set_location = event_target:pirate_home
+						set_fleet_stance = aggressive
+						set_aggro_range_measure_from = self
+						set_aggro_range = 150
+						queue_actions = {
+							repeat = {
+								find_random_system = {
+									trigger = {
+										id = "STH_borg_flavour.2.trigger.1"
+										NOT = { has_star_flag = hostile_system is_same_value = event_target:capital_system }
+										any_planet = {
+											OR = { has_mining_station = yes has_research_station = yes }
+											exists = controller
+											controller = { is_same_value = event_target:pirate_target }
+										}
+										distance = { source = PREV max_distance = 100 min_distance = 20 }
+									}
+									found_system = { move_to = THIS }	
+								}
+								find_closest_planet = {
+									trigger = {
+										id = "STH_borg_flavour.2.trigger.2"
+										OR = { has_mining_station = yes has_research_station = yes }
+									}
+									found_planet = {
+										orbit_planet = THIS
+										wait = { duration = 20 }
+									}
+								}
+								find_random_system = {
+									trigger = {
+										id = "STH_borg_flavour.2.trigger.3"
+										any_planet = { is_planet = event_target:pirate_home }
+									}
+									found_system = { move_to = THIS }	
+								}
+								find_closest_planet = {
+									trigger = {
+										id = "STH_borg_flavour.2.trigger.4"
+										is_planet = event_target:pirate_home
+									}
+									found_planet = {
+										orbit_planet = THIS
+										wait = { duration = 200 random = 150 }
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+# Destroyed Pirate Station
+country_event = {
+	id = STH_borg_flavour.3
+	title = STH_borg_flavour.3.name
+	picture = sth_GFX_evt_borgUnicomplex1
+	desc = STH_borg_flavour.3.desc
+	show_sound = event_space_battle
+	is_triggered_only = yes
+	trigger = {
+		is_borg_empire = yes
+		from = {
+			is_country_type = pirate
+			has_communications = root
+			has_country_flag = rogue_drones
+		}
+		fromfromfrom = { is_ship_size = pirate_station }
+	}
+	immediate = {
+		random_list = {
+			15 = { set_country_flag = big_loot }
+			35 = { set_country_flag = medium_loot }
+			50 = { set_country_flag = small_loot }
+		}
+	}
+	option = {
+		name = BORG_UNDERSTOOD
+		trigger = { has_country_flag = big_loot }
+		add_minerals = 300
+		add_energy = 150
+		add_unity = 150
+		hidden_effect = { remove_country_flag = big_loot }
+	}
+	option = {
+		name = BORG_UNDERSTOOD
+		trigger = { has_country_flag = medium_loot }
+		add_minerals = 180
+		add_energy = 100
+		add_unity = 100
+		hidden_effect = { remove_country_flag = medium_loot }
+	}
+	option = {
+		name = BORG_UNDERSTOOD
+		trigger = { has_country_flag = small_loot }
+		add_minerals = 80
+		add_energy = 50
+		add_unity = 50
+		hidden_effect = { remove_country_flag = small_loot }
+	}
+	option = {
+		name = BORG_UNDERSTOOD
+		trigger = {
+			NOR = {
+				has_country_flag = big_loot
+				has_country_flag = medium_loot
+				has_country_flag = small_loot
+			}
+		}
+		add_minerals = 200
+		add_energy = 200
+		add_unity = 200
+	}
+}
+
+
+
+# First event, spawns a non-mandatory special project the player can research
+planet_event = {
+	id = STH_borg_flavour.50
+	title = "STH_borg_flavour.50.name"
+	desc = {
+		text = "STH_borg_flavour.50.desc"
+	}
+	picture = sth_GFX_evt_borgUnicomplex1
+	location = ROOT
+	trigger = {
+		has_owner = yes
+		original_owner = yes
+		is_homeworld = no
+		is_planet_class = pc_unimatrix
+		owner = {
+			is_ai = no
+			is_borg_empire = yes
+			NOT = { has_country_flag = pheromone_country }
+		}
+		NOR = {
+			has_global_flag = pheromonefrenzy_global
+			has_global_flag = pheromonefrenzy_done_global
+			has_planet_flag = colony_event
+			has_planet_flag = pheromone_planet
+		}
+		has_ground_combat = no
+		is_occupied_flag = no
+		num_pops > 0
+		is_capital = no
+	}
+	is_triggered_only = yes
+	immediate = {
+		set_global_flag = pheromonefrenzy_global
+		set_planet_flag = colony_event
+		set_planet_flag = pheromone_planet
+		owner = { set_country_flag = pheromone_country }
+	}
+	option = {
+		name = BORG_UNDERSTOOD
+		enable_special_project = {
+			name = "POLLEN_BORG_PROJECT"
+			location = root
+			owner = root
+		}
+		hidden_effect = { }
+	}
+}
+
+# Event 1-A, followup event to optional research project. Player gains 600 Society Research.
+planet_event = {
+	id = STH_borg_flavour.51
+	title = "STH_borg_flavour.51.name"
+	desc = "STH_borg_flavour.51.desc"
+	picture = sth_GFX_evt_borgUnicomplex1
+	location = ROOT
+	is_triggered_only = yes
+	trigger = {
+		has_owner = yes
+		original_owner = yes
+		owner = { is_ai = no }
+		has_global_flag = pheromonefrenzy_global
+		has_planet_flag = pheromone_planet
+		has_planet_flag = colony_event
+	}
+
+	option = {
+		name = BORG_UNDERSTOOD
+		owner = {
+			add_monthly_resource_mult = {
+				resource = engineering_research
+				value = @tier1researchreward
+				min = @tier1researchmin
+				max = @tier1researchmax
+			}
+		}
+	}
+}

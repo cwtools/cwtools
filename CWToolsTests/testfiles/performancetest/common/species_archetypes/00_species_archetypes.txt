@@ -1,0 +1,81 @@
+# species_trait_points: base number of species trait points available for this species class
+# species_max_traits: maximum number of traits that species of this class can have (doesn't count those with cost == 0)
+
+#EXAMPLE OF MODDED SPECIES ARCHETYPE
+#Will be able to use traits valid for BIOLOGICAL, ROBOT and BIOLOGICAL2
+#BIOLOGICAL2 = { inherit_traits_from = { BIOLOGICAL ROBOT } }
+
+@robot_trait_points = 0
+@robot_max_traits = 3
+@machine_trait_points = 2
+@machine_max_traits = 4
+@species_trait_points = 2
+@species_max_traits = 5
+
+BIOLOGICAL = {
+	species_trait_points = @species_trait_points
+	species_max_traits = @species_max_traits
+}
+ROBOT = {
+	species_trait_points = @robot_trait_points
+	species_max_traits = @robot_max_traits
+}
+MACHINE = {
+	species_trait_points = @machine_trait_points
+	species_max_traits = @machine_max_traits
+}
+PRESAPIENT = {
+	species_trait_points = @species_trait_points
+	species_max_traits = @species_max_traits
+}
+OTHER = {}
+
+
+HUMANOID = {
+	species_trait_points = @species_trait_points
+	species_max_traits = @species_max_traits
+	inherit_traits_from = { BIOLOGICAL }
+}
+CHANGELING = {
+	species_trait_points = @species_trait_points
+	species_max_traits = @species_max_traits
+	inherit_traits_from = { BIOLOGICAL }
+}
+CRYSTALINE = {
+	species_trait_points = @species_trait_points
+	species_max_traits = @species_max_traits
+	inherit_traits_from = { BIOLOGICAL }
+}
+SILICOID = {
+	species_trait_points = @species_trait_points
+	species_max_traits = @species_max_traits
+	inherit_traits_from = { BIOLOGICAL }
+}
+FLUIDIC = {
+	species_trait_points = @species_trait_points
+	species_max_traits = @species_max_traits
+	inherit_traits_from = { BIOLOGICAL }
+}
+INSECTOID = {
+	species_trait_points = @species_trait_points
+	species_max_traits = @species_max_traits
+	inherit_traits_from = { BIOLOGICAL }
+}
+AQUATIC = {
+	species_trait_points = @species_trait_points
+	species_max_traits = @species_max_traits
+	inherit_traits_from = { BIOLOGICAL }
+}
+CYBORG = {
+	species_trait_points = @species_trait_points
+	species_max_traits = @species_max_traits
+	inherit_traits_from = { BIOLOGICAL }
+}
+JEMHADAR = {
+	species_trait_points = 0
+	species_max_traits = 5
+}
+VORTA = {
+	species_trait_points = 0
+	species_max_traits = 5
+}

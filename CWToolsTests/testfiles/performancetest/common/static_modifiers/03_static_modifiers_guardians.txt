@@ -1,0 +1,130 @@
+#icon_frame = 1 # green frame
+#icon_frame = 2 # yellow frame
+#icon_frame = 3 # red frame
+
+##########################################################################
+# Planet Modifiers
+##########################################################################
+enclave_artist_patron = {
+	icon = "gfx/interface/icons/planet_modifiers/pm_planet_surface.dds"
+	icon_frame = 2
+	country_resource_minerals_add = -25
+	country_resource_energy_add = -25
+}
+
+enclave_artist_festival_outrage = {
+	icon = "gfx/interface/icons/planet_modifiers/pm_planet_surface.dds"
+	icon_frame = 1
+	pop_happiness = -0.20
+	tile_resource_energy_mult = -0.10
+	tile_resource_minerals_mult = 0.10
+}
+
+spectral_residue_studies = {
+	country_physics_tech_research_speed = 0.05
+	weapon_type_energy_weapon_damage_mult = 0.05
+	tile_resource_energy_mult = 0.1
+}
+
+wraith_frequency_sync = {
+	ship_evasion_mult = -1.0
+	ship_armor_add = -50
+}
+
+black_hole_pantagruel = {
+	icon = "gfx/interface/icons/planet_modifiers/pm_assist_research.dds"
+	icon_frame = 1
+}
+##########################################################################
+# Empire Modifiers
+##########################################################################
+enclave_artist_festival = {
+	icon = "gfx/interface/icons/planet_modifiers/pm_planet_surface.dds"
+	icon_frame = 1
+	pop_happiness = 0.15
+	pop_growth_speed = 0.10
+}
+
+enclave_traders_sr1 = {
+	icon = "gfx/interface/icons/modifiers/mod_country_previous_deals.dds"
+	icon_frame = 1
+	# country_resource_sr_riggan_add = 1
+}
+
+enclave_traders_sr2 = {
+	icon = "gfx/interface/icons/modifiers/mod_country_previous_deals.dds"
+	icon_frame = 1
+	country_resource_sr_lobi_crystals_200_add = 2
+}
+
+enclave_traders_sr3 = {
+	icon = "gfx/interface/icons/modifiers/mod_country_previous_deals.dds"
+	icon_frame = 1
+	# country_resource_sr_muutagan_add = 1
+}
+
+draconic_beats = {
+	damage_vs_country_type_guardian_dragon_mult = 0.25
+}
+
+curator_buff_stellarite = {
+	damage_vs_country_type_guardian_stellarite_mult = 0.25
+}
+
+curator_buff_sphere = {
+	damage_vs_country_type_guardian_sphere_mult = 0.25
+}
+
+dimensional_horror_weak_points = {
+	damage_vs_country_type_guardian_horror_mult = 0.25
+}
+
+automated_dreadnought_weak_points = {
+	damage_vs_country_type_guardian_dreadnought_mult = 0.25
+}
+
+asteroid_hive_weak_points = {
+	damage_vs_country_type_guardian_hiver_mult = 0.25
+}
+
+curator_insight = {
+	tile_resource_physics_research_mult = 0.15
+	tile_resource_society_research_mult = 0.15
+	tile_resource_engineering_research_mult = 0.15
+}
+
+infinity_calculations = {
+	country_physics_tech_research_speed = 0.05
+	country_society_tech_research_speed = 0.05
+	country_engineering_tech_research_speed = 0.05
+}
+
+infinity_calculations_hacked = {
+	country_physics_tech_research_speed = 0.03
+	country_society_tech_research_speed = 0.03
+	country_engineering_tech_research_speed = 0.03
+}
+
+black_hole_pantagruel_research = {
+	country_physics_tech_research_speed = 0.10
+	country_society_tech_research_speed = 0.10
+	country_engineering_tech_research_speed = 0.10
+}
+
+technosphere_praising = {
+	pop_happiness = 0.05
+}
+#immature_dragon = {
+#	ship_weapon_damage = -0.30
+#}
+
+### Difficulty
+guardian_hard = {
+	ship_weapon_damage = 0.25
+	ship_hitpoints_mult = 0.25
+}
+
+guardian_insane = {
+	ship_weapon_damage = 0.50
+	ship_hitpoints_mult = 0.50
+}

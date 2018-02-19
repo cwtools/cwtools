@@ -1,0 +1,23 @@
+# Event chains.
+
+# counter, counters that can be increased and checked from effects and triggers
+#
+# Loclizaton needed:
+# event_chain_chainnkey_title, a title to show in the situation log.
+# event_chain_chainnkey_desc, a description to show in the situation log.
+
+
+sword_of_kahless_chain = {
+	icon = "gfx/interface/icons/situation_log/situation_log_precursor.dds"
+	picture = sth_GFX_evt_theSwordOfKahless11
+	counter = {
+		sword_of_kahless_clues = {
+			max = 5
+		}
+	}
+}
+
+augmented_realities_chain = {
+	icon = "gfx/interface/icons/situation_log/situation_log_precursor.dds"
+	picture = sth_GFX_evt_klingonAugmentProject
+}

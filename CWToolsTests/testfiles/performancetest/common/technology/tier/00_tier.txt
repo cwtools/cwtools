@@ -1,0 +1,75 @@
+####
+#	Technology tiers
+#
+#	weight_modifier = {
+#		factor = 1
+#		modifier = {
+#			add = 10
+#			OR = {
+#				has_government = "military_dictatorship"
+#				has_government = "martial_empire"
+#			}
+#		}
+#	}
+####
+
+# The previously_unlocked-value decides how many techs in the previous tier has to be researched before the tier is unlocked
+
+0 = { # Tier 0
+}
+
+1 = { # Tier 1
+	previously_unlocked = 4
+}
+
+2 = { # Tier 2
+	previously_unlocked = 4
+}
+
+3 = { # Tier 3
+	previously_unlocked = 4
+}
+
+4 = { # Tier 4
+	previously_unlocked = 4
+}
+
+5 = { # Tier 5
+	previously_unlocked = 4
+}
+
+6 = { # Tier 6
+	previously_unlocked = 4
+}
+
+7 = { # Tier 7
+	previously_unlocked = 4
+}
+
+8 = { # Tier 8
+	previously_unlocked = 4
+}
+
+9 = { # Tier 9
+	previously_unlocked = 4
+}
+
+10 = { # Tier 10
+	previously_unlocked = 3
+}
+
+11 = { # Tier 11
+	previously_unlocked = 3
+}
+
+12 = { # Tier 12
+	previously_unlocked = 3
+}
+
+13 = { # Tier 13
+	previously_unlocked = 3
+}
+
+14 = { # Tier 14
+	previously_unlocked = 3
+}

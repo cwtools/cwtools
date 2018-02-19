@@ -1,0 +1,300 @@
+is_vanilla_species_class = {
+	OR = {
+		is_species_class = MACHINE
+		is_species_class = HUM
+		is_species_class = MAM
+		is_species_class = REP
+		is_species_class = AVI
+		is_species_class = FUN
+		is_species_class = ART
+		is_species_class = MOL
+		is_species_class = PLANT
+		is_species_class = PLANT
+		is_species_class = AI
+	}
+}
+
+is_drone_authority = {
+	OR = {
+		has_authority = auth_cybernetic_consciousness
+		has_authority = auth_machine_intelligence
+	}
+}
+
+is_machine_empire = { # Used to track Pralor/Cravic DLC species
+	OR = {
+		is_species_class = MACHINE
+		is_species_class = PRA
+		is_species_class = CRA
+	}
+}
+
+is_machine_cybernetic_empire = { # new trigger, disables housing, hospitals and prosperity generation
+    OR = {
+        is_machine_empire = yes
+        is_species_class = BRG
+        is_species_class = BYN
+    }
+}
+
+has_fallen_empire_ships = {
+    OR = {
+        is_species_class = VOT
+        is_species_class = HUR
+		is_species_class = FES # First Federation
+		is_species_class = MET # Metrons
+		is_species_class = CYT # Cytherians
+        has_country_flag = is_stnh_fallen_empire
+    }
+}
+
+has_non_standard_ships = {
+    OR = {
+        is_species_class = BRG
+        has_fallen_empire_ships = yes
+    }
+}
+
+is_habitat_empire = {
+    OR = {
+        is_species_class = SUL
+		is_species_class = HIR
+		has_valid_civic = civic_nomadic
+	}
+}
+
+is_habitat_empire_tradition = { # Duplicate needed for tradition
+    OR = {
+        is_species_class = SUL
+		is_species_class = HIR
+		has_valid_civic = civic_nomadic
+	}
+}
+
+is_nomadic_empire = {
+	OR = {
+		is_habitat_empire = yes
+		is_species_class = BRG
+	}
+}
+
+is_mirror_version_empire = {
+    OR = {
+		has_country_flag = terran_empire
+		has_country_flag = romulan_republic
+		has_country_flag = ferengi_cooperative
+		has_country_flag = vulcan_rebellion
+		has_country_flag = andorian_rebellion
+		has_country_flag = tellarite_rebellion
+		has_country_flag = mirror_klingon_empire
+		has_country_flag = mirror_cardassian_union
+		has_country_flag = mirror_bolian_league
+		has_country_flag = mirror_bajoran_republic
+	}
+}
+
+is_temporal_masters = {
+    OR = {
+        is_species_class = KRE
+        is_species_class = SUL
+        has_country_flag = mirror_tholian_assembly
+    }
+}
+
+has_espionage_agency = {
+	OR = {
+		is_species_class = ROM
+		is_species_class = CAR
+	}
+}
+
+is_master_geneticist = {
+	OR = {
+		has_trait = trait_master_geneticist
+		is_species_class = SUL
+		is_species_class = BRU
+		is_species_class = DOM
+		is_species_class = VOR
+		is_species_class = JEM
+		is_species_class = VID
+	}
+}
+
+has_unique_festival = {
+	OR = {
+		is_species_class = FED
+		is_species_class = KDF
+		is_species_class = BAJ
+		is_species_class = VUL
+		is_species_class = TAL
+		is_species_class = ROM
+		is_drone_authority = yes # used to disable festivals for them
+		is_mechanical_empire = yes # used to disable festivals for them
+	}
+}
+
+is_raiding_empire = { # gets access to raiding bombardment console. List should be tight, consider as a 'special power'
+    OR = {
+		is_species_class = NAU
+		is_species_class = KAZ
+	}
+}
+
+is_slaving_empire = { # gets access to slaving bombardment console. List should be tight, consider as a 'special power'
+    OR = {
+		is_species_class = ORI
+	}
+}
+
+is_telepathic_empire = { 
+	OR = {
+		has_trait = trait_telepathy
+		is_species_class = VUL
+		is_species_class = REM
+		is_species_class = ROM
+	}
+}
+
+no_psionic_potential = {
+	OR = {
+	    is_telepathic_empire = yes # means its past the potential stage
+		is_species_class = DOM
+		is_species_class = SHE
+		is_species_class = THO
+		is_species_class = FER
+		is_drone_authority = yes
+		is_mechanical_empire = yes
+	}
+}
+
+is_non_standard_colonization = { # Can't access colonization tech path
+	OR = {
+		is_nomadic_empire = yes
+		is_species_class = BRE
+		is_species_class = SHE
+		is_species_class = THO
+	}
+}
+
+is_reptilian = {
+	OR = {
+		is_species_class = XINREP
+		is_species_class = GOR
+		is_species_class = SEL
+		is_species_class = VOT
+		is_species_class = HIR
+		is_species_class = JEM
+	}
+}
+
+is_crystalline = {
+	OR = {
+		is_species_class = THO
+	}
+}
+
+is_aquatic = {
+	OR = {
+		is_species_class = XINAQU
+	}
+}
+
+is_insectoid = {
+	OR = {
+		is_species_class = HUR
+		is_species_class = XININS
+	}
+}
+
+is_exotic = {
+	OR = {
+		is_species_class = SHE
+		is_species_class = UND
+		is_species_class = BRG
+	}
+}
+
+is_avian = {
+	OR = {
+		#is_species_class = XINAVI
+		is_species_class = SKO
+	}
+}
+
+is_non_humanoid = { # Used for genetic engineering
+	is_reptilian = yes
+	is_crystalline = yes
+	is_aquatic = yes
+	is_insectoid = yes
+	is_exotic = yes
+	is_avian = yes
+}
+
+is_changeling = { # Seperated from non-humanoid list for genetic engineering comptabiility
+    OR = { 
+        is_species_class = DOM
+    }
+}
+
+has_unique_trade_goods = {
+    OR = {
+        is_species_class = THO
+        is_species_class = CAR
+        is_species_class = KDF
+        is_species_class = BAJ
+        is_species_class = FER
+        is_species_class = ROM
+        is_species_class = FED
+        is_species_class = BOL
+        is_species_class = VUL
+        is_species_class = ADR
+        is_species_class = DOM
+		is_species_class = VOR
+        is_species_class = TAL
+        is_species_class = BET
+        is_species_class = TRI
+        is_species_class = BRU
+        is_species_class = DOS
+        is_species_class = KAR
+    }
+}
+
+is_xindi = {
+	OR = {
+		is_species_class = XINMAM
+		is_species_class = XINREP
+		is_species_class = XININS
+		is_species_class = XINARB
+		is_species_class = XINAQU
+	}
+}
+
+#SPECIES RIGHTS this = species from = country
+is_not_too_alien = {
+	OR = {
+		is_same_species = from
+		from = {
+			NOR = {
+				has_ethic = ethic_xenophobe
+				has_ethic = ethic_fanatic_xenophobe
+			}
+		}
+		AND = { #VOR and JEM with Founders
+			OR = { is_species_class = VOR is_species_class = JEM }
+			from = { is_species_class = DOM }
+		}
+		AND = { #Founders with VOR
+			is_species_class = DOM
+			from = { is_species_class = VOR }
+		}
+		AND = { #ADR and AEN
+			OR = { is_species_class = ADR is_species_class = AEN }
+			from = { is_species_class = ADR is_species_class = AEN }
+		}
+		AND = {
+			is_xindi = yes
+			from = { is_xindi = yes }
+		}
+	}
+}
+

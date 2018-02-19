@@ -1,0 +1,1767 @@
+namespace = STH_ferengi_story
+
+#FCA Popup
+event = {
+	id = STH_ferengi_story.1
+	hide_window = yes
+	is_triggered_only = yes
+	immediate = {
+		every_country = {
+			limit = { 
+				has_country_flag = ferengi_alliance
+				is_country_type = default
+				NOT = { has_country_flag = ferengi_commerce_authority_effect }
+			}
+			country_event = { id = STH_ferengi_story.2 days = 30 }
+		}
+	}
+}
+
+
+#FCA
+country_event = {
+	id = STH_ferengi_story.2
+	title = "STH_ferengi_story.2.name"
+	desc = "STH_ferengi_story.2.desc"
+	picture = sth_GFX_evt_ferengiCommerceAuthority
+	force_open = yes
+	is_triggered_only = yes
+	trigger = { has_country_flag = ferengi_alliance }
+	immediate = { 
+		set_timed_country_flag = { flag = ferengi_commerce_authority_effect days = 600 }
+	}
+	option = {
+		#Offer A Loan
+		name = STH_ferengi_story.2.a
+		ai_chance = { factor = 0 modifier = { factor = 1 energy > 99 minerals > 99 } }
+		hidden_effect = { country_event = { id = STH_ferengi_story.100 } }
+	}
+	option = {
+		#Take A Loan
+		name = STH_ferengi_story.2.b
+		hidden_effect = { country_event = { id = STH_ferengi_story.200 } }
+	}
+	option = {
+		#Temporary Taxes
+		name = STH_ferengi_story.2.c
+		hidden_effect = { country_event = { id = STH_ferengi_story.300 } }
+	}
+	option = {
+		#Hire Privateers
+		name = STH_ferengi_story.2.d
+		ai_chance = { factor = 0 modifier = { factor = 1 energy > 299 minerals > 299 } }
+		hidden_effect = { country_event = { id = STH_ferengi_story.400 } }
+	}
+	option = { 
+		#Study Rules of Acquisition
+		name = STH_ferengi_story.2.e
+		hidden_effect = { country_event = { id = STH_ferengi_story.500 } }
+	}
+	option = { 
+		#End Session
+		name = STH_ferengi_story.2.f
+	}
+}
+
+
+#Loan Target Menu
+country_event = {
+	id = STH_ferengi_story.100
+	title = "STH_ferengi_story.100.name"
+	desc = "STH_ferengi_story.100.desc"
+	picture = sth_GFX_evt_ferengiCommerceAuthority
+	force_open = yes
+	is_triggered_only = yes
+	immediate = { 
+		every_country = { 
+			limit = { has_country_flag = ferengiLoanOfferCandidate }
+			remove_country_flag = ferengiLoanOfferCandidate
+		}
+		random_country = {
+			limit = { valid_loan_target = yes }
+			save_event_target_as = ferengiLoanOfferCandidate1
+		}
+		random_country = { 
+			limit = { 
+				valid_loan_target = yes
+				NOT = { 
+					is_country = event_target:ferengiLoanOfferCandidate1
+					is_country = Root
+				}
+			}
+			save_event_target_as = ferengiLoanOfferCandidate2
+		}
+		random_country = { 
+			limit = {
+				valid_loan_target = yes
+				NOT = { 
+					is_country = event_target:ferengiLoanOfferCandidate1
+					is_country = event_target:ferengiLoanOfferCandidate2
+					is_country = Root
+				}
+			}
+			save_event_target_as = ferengiLoanOfferCandidate3
+		}
+		random_country = {
+			limit = {
+				valid_loan_target = yes
+				NOT = { 
+					is_country = event_target:ferengiLoanOfferCandidate1
+					is_country = event_target:ferengiLoanOfferCandidate2
+					is_country = event_target:ferengiLoanOfferCandidate3
+					is_country = Root
+				}
+			}
+			save_event_target_as = ferengiLoanOfferCandidate4
+		}
+	}
+	option = { 
+		name = STH_ferengi_story.100.a
+		hidden_effect = { country_event = { id = STH_ferengi_story.100 } }
+	}
+	option = {
+		name = STH_ferengi_story.100.b
+		ai_chance = { 
+			factor = 0
+			modifier = { factor = 1 exists = event_target:ferengiLoanOfferCandidate1 }
+		}
+		trigger = { exists = event_target:ferengiLoanOfferCandidate1 }
+		hidden_effect = {
+			if = {
+				limit = { exists = event_target:ferengiLoanOfferCandidate1 }
+				event_target:ferengiLoanOfferCandidate1 = { set_country_flag = ferengiLoanOfferCandidate }
+				country_event = { id = STH_ferengi_story.101 }
+			}
+		}
+	}
+	option = {
+		name = STH_ferengi_story.100.c
+		ai_chance = { 
+			factor = 0
+			modifier = { factor = 1 exists = event_target:ferengiLoanOfferCandidate2 }
+		}
+		trigger = { exists = event_target:ferengiLoanOfferCandidate2 }
+		hidden_effect = {
+			if = {
+				limit = { exists = event_target:ferengiLoanOfferCandidate2 }
+				event_target:ferengiLoanOfferCandidate2 = { set_country_flag = ferengiLoanOfferCandidate }
+				country_event = { id = STH_ferengi_story.101 }
+			}
+		}
+	}
+	option = {
+		name = STH_ferengi_story.100.d
+		ai_chance = { 
+			factor = 0
+			modifier = { factor = 1 exists = event_target:ferengiLoanOfferCandidate3 }
+		}
+		trigger = { exists = event_target:ferengiLoanOfferCandidate3 }
+		hidden_effect = {
+			if = {
+				limit = { exists = event_target:ferengiLoanOfferCandidate3 }
+				event_target:ferengiLoanOfferCandidate3 = { set_country_flag = ferengiLoanOfferCandidate }
+				country_event = { id = STH_ferengi_story.101 }
+			}
+		}
+	}
+	option = {
+		name = STH_ferengi_story.100.e
+		ai_chance = { 
+			factor = 0
+			modifier = { factor = 1 exists = event_target:ferengiLoanOfferCandidate4 }
+		}
+		trigger = { exists = event_target:ferengiLoanOfferCandidate4 }
+		hidden_effect = {
+			if = {
+				limit = { exists = event_target:ferengiLoanOfferCandidate4 }
+				event_target:ferengiLoanOfferCandidate4 = { set_country_flag = ferengiLoanOfferCandidate }
+				country_event = { id = STH_ferengi_story.101 }
+			}
+		}
+	}
+	option = { 
+		name = STH_ferengi_story.100.f
+		hidden_effect = { country_event = { id = STH_ferengi_story.2 } }
+	}
+}
+
+#Loan Type
+country_event = {
+	id = STH_ferengi_story.101
+	title = "STH_ferengi_story.101.name"
+	desc = "STH_ferengi_story.101.desc"
+	picture = sth_GFX_evt_ferengiCommerceAuthority
+	force_open = yes
+	is_triggered_only = yes
+	immediate = {
+		random_country = {
+			limit = { has_country_flag = ferengiLoanOfferCandidate }
+			save_event_target_as = ferengiLoanOfferCandidate
+		}
+	}
+	option = { 
+		name = STH_ferengi_story.101.a #Energy
+		hidden_effect = { 
+			country_event = { id = STH_ferengi_story.102 }
+			event_target:ferengiLoanOfferCandidate = {
+				set_country_flag = ferengiLoanOfferCandidateEnergy
+				remove_country_flag = ferengiLoanOfferCandidateMinerals
+			}
+		}
+	}
+	option = { 
+		name = STH_ferengi_story.101.b #Minerals
+		hidden_effect = { 
+			country_event = { id = STH_ferengi_story.102 } 
+			event_target:ferengiLoanOfferCandidate = {
+				set_country_flag = ferengiLoanOfferCandidateMinerals
+				remove_country_flag = ferengiLoanOfferCandidateEnergy
+			}
+		}
+	}
+	option = { 
+		name = STH_ferengi_story.101.c
+		hidden_effect = { 
+			country_event = { id = STH_ferengi_story.100 } 
+			event_target:ferengiLoanOfferCandidate = {
+				remove_country_flag = ferengiLoanOfferCandidateMinerals
+				remove_country_flag = ferengiLoanOfferCandidateEnergy
+			}
+		}
+	}
+}
+
+country_event = {
+	id = STH_ferengi_story.102
+	title = "STH_ferengi_story.102.name"
+	desc = "STH_ferengi_story.102.desc"
+	picture = sth_GFX_evt_ferengiCommerceAuthority
+	force_open = yes
+	is_triggered_only = yes
+	immediate = {
+		random_country = {
+			limit = { has_country_flag = ferengiLoanOfferCandidate }
+			save_event_target_as = ferengiLoanOfferCandidate
+		}
+	}
+	option = { 
+		name = STH_ferengi_story.102.a #100
+		trigger = {
+			OR = {
+				AND = { event_target:ferengiLoanOfferCandidate = { has_country_flag = ferengiLoanOfferCandidateEnergy } energy > 99 }
+				AND = { event_target:ferengiLoanOfferCandidate = { has_country_flag = ferengiLoanOfferCandidateMinerals } minerals > 99 }
+			}
+		}
+		hidden_effect = { 
+			event_target:ferengiLoanOfferCandidate = {
+				set_variable = { which = "ferengiProposedLoanAmount" value = 100 }
+				country_event = { id = STH_ferengi_story.103 }
+			}
+		}
+	}
+	option = { 
+		name = STH_ferengi_story.102.b #250
+		trigger = {
+			OR = {
+				AND = { event_target:ferengiLoanOfferCandidate = { has_country_flag = ferengiLoanOfferCandidateEnergy } energy > 249 }
+				AND = { event_target:ferengiLoanOfferCandidate = { has_country_flag = ferengiLoanOfferCandidateMinerals } minerals > 249 }
+			}
+		}
+		hidden_effect = { 
+			event_target:ferengiLoanOfferCandidate = {
+				set_variable = { which = "ferengiProposedLoanAmount" value = 250 }
+				country_event = { id = STH_ferengi_story.103 }
+			}
+		}
+	}
+	option = { 
+		name = STH_ferengi_story.102.c #500
+		trigger = {
+			OR = {
+				AND = { event_target:ferengiLoanOfferCandidate = { has_country_flag = ferengiLoanOfferCandidateEnergy } energy > 499 }
+				AND = { event_target:ferengiLoanOfferCandidate = { has_country_flag = ferengiLoanOfferCandidateMinerals } minerals > 499 }
+			}
+		}
+		hidden_effect = { 
+			event_target:ferengiLoanOfferCandidate = {
+				set_variable = { which = "ferengiProposedLoanAmount" value = 500 }
+				country_event = { id = STH_ferengi_story.103 }
+			}
+		}
+	}
+	option = { 
+		name = STH_ferengi_story.102.d #1000
+		trigger = {
+			OR = {
+				AND = { event_target:ferengiLoanOfferCandidate = { has_country_flag = ferengiLoanOfferCandidateEnergy } energy > 999 }
+				AND = { event_target:ferengiLoanOfferCandidate = { has_country_flag = ferengiLoanOfferCandidateMinerals } minerals > 999 }
+			}
+		}
+		hidden_effect = { 
+			event_target:ferengiLoanOfferCandidate = {
+				set_variable = { which = "ferengiProposedLoanAmount" value = 1000 }
+				country_event = { id = STH_ferengi_story.103 }
+			}
+		}
+	}
+	option = { 
+		name = STH_ferengi_story.102.e #Not enough resources
+		trigger = {	OR = { energy < 100 minerals < 100 } }
+		hidden_effect = { 
+			country_event = { id = STH_ferengi_story.101 } 
+			event_target:ferengiLoanOfferCandidate = {
+				remove_country_flag = ferengiLoanOfferCandidateMinerals
+				remove_country_flag = ferengiLoanOfferCandidateEnergy
+			}
+		}
+	}
+	option = { 
+		name = STH_ferengi_story.102.f
+		hidden_effect = { 
+			country_event = { id = STH_ferengi_story.101 } 
+			event_target:ferengiLoanOfferCandidate = {
+				remove_country_flag = ferengiLoanOfferCandidateMinerals
+				remove_country_flag = ferengiLoanOfferCandidateEnergy
+			}
+		}
+	}
+}
+
+#Loan Country Gets a Choice
+country_event = {
+	id = STH_ferengi_story.103
+	title = "STH_ferengi_story.103.name"
+	desc = { 
+		trigger = { has_country_flag = ferengiLoanOfferCandidateEnergy check_variable = { which = "ferengiProposedLoanAmount" value = 100 } }
+		text = "STH_ferengi_story.103.desc_01" 
+	}
+	desc = { 
+		trigger = { has_country_flag = ferengiLoanOfferCandidateEnergy check_variable = { which = "ferengiProposedLoanAmount" value = 250 } }
+		text = "STH_ferengi_story.103.desc_02" 
+	}
+	desc = { 
+		trigger = { has_country_flag = ferengiLoanOfferCandidateEnergy check_variable = { which = "ferengiProposedLoanAmount" value = 500 } }
+		text = "STH_ferengi_story.103.desc_03" 
+	}
+	desc = { 
+		trigger = { has_country_flag = ferengiLoanOfferCandidateEnergy check_variable = { which = "ferengiProposedLoanAmount" value = 1000 } }
+		text = "STH_ferengi_story.103.desc_04" 
+	}
+	desc = { 
+		trigger = { has_country_flag = ferengiLoanOfferCandidateMinerals check_variable = { which = "ferengiProposedLoanAmount" value = 100 } }
+		text = "STH_ferengi_story.103.desc_05" 
+	}
+	desc = { 
+		trigger = { has_country_flag = ferengiLoanOfferCandidateMinerals check_variable = { which = "ferengiProposedLoanAmount" value = 250 } }
+		text = "STH_ferengi_story.103.desc_06" 
+	}
+	desc = { 
+		trigger = { has_country_flag = ferengiLoanOfferCandidateMinerals check_variable = { which = "ferengiProposedLoanAmount" value = 500 } }
+		text = "STH_ferengi_story.103.desc_07" 
+	}
+	desc = { 
+		trigger = { has_country_flag = ferengiLoanOfferCandidateMinerals check_variable = { which = "ferengiProposedLoanAmount" value = 1000 } }
+		text = "STH_ferengi_story.103.desc_08" 
+	}
+	picture = sth_GFX_evt_ferengiCommerceAuthority
+	force_open = yes
+	is_triggered_only = yes
+	immediate = {
+		random_country = {
+			limit = { has_country_flag = ferengi_alliance }
+			save_event_target_as = ferengi_alliance
+		}
+	}
+	option = {
+		name = STH_ferengi_story.103.a #Accept 100 Energy
+		ai_chance = { 
+			factor = 1
+		}
+		if = {
+			limit = {
+				has_country_flag = ferengiLoanOfferCandidateEnergy check_variable = { which = "ferengiProposedLoanAmount" value = 100 }
+				event_target:ferengi_alliance = { energy > 99 } 
+			}
+			hidden_effect = {
+				event_target:ferengi_alliance = { 
+					country_event = { id = STH_ferengi_story.105 } 
+					add_energy = -100 
+					# remove_modifier = em_small_energy_loan_income
+					# add_modifier = { modifier = em_small_energy_loan_income days = 35 }
+				}
+				change_variable = { which = "ferengiEnergyLoanAmount" value = 100 }
+				set_variable = { which = "ferengiProposedLoanAmount" value = 0 }
+				remove_country_flag = ferengiLoanOfferCandidateEnergy
+				remove_country_flag = ferengiLoanOfferCandidateMinerals
+				country_event = { id = STH_ferengi_story.104 days = 30 }
+			}
+			add_energy = 100
+			remove_modifier = em_small_energy_loan
+			add_modifier = { modifier = em_small_energy_loan days = 35 }
+			
+			else = { 
+				if = {
+					limit = { 
+						event_target:ferengi_alliance = { NOT = { energy > 99 } }
+						has_country_flag = ferengiLoanOfferCandidateMinerals check_variable = { which = "ferengiProposedLoanAmount" value = 100 }
+					}
+					hidden_effect = { event_target:ferengi_alliance = { country_event = { id = STH_ferengi_story.106 } } }
+					set_variable = { which = "ferengiProposedLoanAmount" value = 0 }
+					remove_country_flag = ferengiLoanOfferCandidateEnergy
+					remove_country_flag = ferengiLoanOfferCandidateMinerals
+				}
+			}
+		}
+		if = {
+			limit = { 
+				has_country_flag = ferengiLoanOfferCandidateEnergy check_variable = { which = "ferengiProposedLoanAmount" value = 250 }
+				event_target:ferengi_alliance = { energy > 249 } 
+			}
+			hidden_effect = {
+				event_target:ferengi_alliance = { 
+					country_event = { id = STH_ferengi_story.105 } 
+					add_energy = -250 
+					# remove_modifier = em_small_energy_loan_income
+					# add_modifier = { modifier = em_small_energy_loan_income days = 35 }
+				}
+				change_variable = { which = "ferengiEnergyLoanAmount" value = 250 }
+				set_variable = { which = "ferengiProposedLoanAmount" value = 0 }
+				remove_country_flag = ferengiLoanOfferCandidateEnergy
+				remove_country_flag = ferengiLoanOfferCandidateMinerals
+				country_event = { id = STH_ferengi_story.104 days = 30 }
+			}
+			add_energy = 250
+			remove_modifier = em_small_energy_loan
+			add_modifier = { modifier = em_small_energy_loan days = 35 }
+			
+			else = { 
+				if = {
+					limit = { 
+						event_target:ferengi_alliance = { NOT = { energy > 249 } }
+						has_country_flag = ferengiLoanOfferCandidateMinerals check_variable = { which = "ferengiProposedLoanAmount" value = 250 }
+					}
+					hidden_effect = { event_target:ferengi_alliance = { country_event = { id = STH_ferengi_story.106 } } }
+					set_variable = { which = "ferengiProposedLoanAmount" value = 0 }
+					remove_country_flag = ferengiLoanOfferCandidateEnergy
+					remove_country_flag = ferengiLoanOfferCandidateMinerals
+				}
+			}
+		}
+		if = {
+			limit = { 
+				event_target:ferengi_alliance = { energy > 499 } 
+				has_country_flag = ferengiLoanOfferCandidateEnergy check_variable = { which = "ferengiProposedLoanAmount" value = 500 }
+			}
+			hidden_effect = {
+				event_target:ferengi_alliance = { 
+					country_event = { id = STH_ferengi_story.105 } 
+					add_energy = -500 
+					# remove_modifier = em_small_energy_loan_income
+					# add_modifier = { modifier = em_small_energy_loan_income days = 35 }
+				}
+				change_variable = { which = "ferengiEnergyLoanAmount" value = 500 }
+				set_variable = { which = "ferengiProposedLoanAmount" value = 0 }
+				remove_country_flag = ferengiLoanOfferCandidateEnergy
+				remove_country_flag = ferengiLoanOfferCandidateMinerals
+				country_event = { id = STH_ferengi_story.104 days = 30 }
+			}
+			add_energy = 500
+			remove_modifier = em_small_energy_loan
+			add_modifier = { modifier = em_small_energy_loan days = 35 }
+			
+			else = { 
+				if = {
+					limit = { 
+						event_target:ferengi_alliance = { NOT = { energy > 499 } }
+						has_country_flag = ferengiLoanOfferCandidateMinerals check_variable = { which = "ferengiProposedLoanAmount" value = 500 }
+					}
+					hidden_effect = { event_target:ferengi_alliance = { country_event = { id = STH_ferengi_story.106 } } }
+					set_variable = { which = "ferengiProposedLoanAmount" value = 0 }
+					remove_country_flag = ferengiLoanOfferCandidateEnergy
+					remove_country_flag = ferengiLoanOfferCandidateMinerals
+				}
+				
+			}
+		}
+		if = {
+			limit = { 
+				event_target:ferengi_alliance = { energy > 999 } 
+				has_country_flag = ferengiLoanOfferCandidateEnergy check_variable = { which = "ferengiProposedLoanAmount" value = 1000 }
+			}
+			hidden_effect = {
+				event_target:ferengi_alliance = { 
+					country_event = { id = STH_ferengi_story.105 } 
+					add_energy = -1000 
+					# remove_modifier = em_small_energy_loan_income
+					# add_modifier = { modifier = em_small_energy_loan_income days = 35 }
+				}
+				change_variable = { which = "ferengiEnergyLoanAmount" value = 1000 }
+				set_variable = { which = "ferengiProposedLoanAmount" value = 0 }
+				remove_country_flag = ferengiLoanOfferCandidateEnergy
+				remove_country_flag = ferengiLoanOfferCandidateMinerals
+				country_event = { id = STH_ferengi_story.104 days = 30 }
+			}
+			add_energy = 1000
+			remove_modifier = em_small_energy_loan
+			add_modifier = { modifier = em_small_energy_loan days = 35 }
+			
+			else = { 
+				if = {
+					limit = { 
+						event_target:ferengi_alliance = { NOT = { energy > 999 } }
+						has_country_flag = ferengiLoanOfferCandidateMinerals check_variable = { which = "ferengiProposedLoanAmount" value = 1000 }
+					}
+					hidden_effect = { event_target:ferengi_alliance = { country_event = { id = STH_ferengi_story.106 } } }
+					set_variable = { which = "ferengiProposedLoanAmount" value = 0 }
+					remove_country_flag = ferengiLoanOfferCandidateEnergy
+					remove_country_flag = ferengiLoanOfferCandidateMinerals
+				}
+				
+			}
+		}
+		if = {
+			limit = { 
+				event_target:ferengi_alliance = { minerals > 99 } 
+				has_country_flag = ferengiLoanOfferCandidateMinerals check_variable = { which = "ferengiProposedLoanAmount" value = 100 }
+			}
+			hidden_effect = {
+				event_target:ferengi_alliance = { 
+					country_event = { id = STH_ferengi_story.105 } 
+					add_minerals = -100 
+					# remove_modifier = em_small_minerals_loan_income
+					# add_modifier = { modifier = em_small_minerals_loan_income days = 35 }
+				}
+				change_variable = { which = "ferengiMineralsLoanAmount" value = 100 }
+				set_variable = { which = "ferengiProposedLoanAmount" value = 0 }
+				remove_country_flag = ferengiLoanOfferCandidateEnergy
+				remove_country_flag = ferengiLoanOfferCandidateMinerals
+				country_event = { id = STH_ferengi_story.104 days = 30 }
+			}
+			add_minerals = 100
+			remove_modifier = em_small_minerals_loan
+			add_modifier = { modifier = em_small_minerals_loan days = 35 }
+			
+			else = { 
+				if = {
+					limit = { 
+						event_target:ferengi_alliance = { NOT = { minerals > 99 } }
+						has_country_flag = ferengiLoanOfferCandidateMinerals check_variable = { which = "ferengiProposedLoanAmount" value = 100 }
+					}
+					hidden_effect = { event_target:ferengi_alliance = { country_event = { id = STH_ferengi_story.106 } } }
+					set_variable = { which = "ferengiProposedLoanAmount" value = 0 }
+					remove_country_flag = ferengiLoanOfferCandidateEnergy
+					remove_country_flag = ferengiLoanOfferCandidateMinerals
+				}
+				
+			}
+		}
+		if = {
+			limit = { 
+				event_target:ferengi_alliance = { minerals > 249 } 
+				has_country_flag = ferengiLoanOfferCandidateMinerals check_variable = { which = "ferengiProposedLoanAmount" value = 250 }
+			}
+			hidden_effect = {
+				event_target:ferengi_alliance = { 
+					country_event = { id = STH_ferengi_story.105 } 
+					add_minerals = -250 
+					# remove_modifier = em_small_minerals_loan_income
+					# add_modifier = { modifier = em_small_minerals_loan_income days = 35 }
+				}
+				change_variable = { which = "ferengiMineralsLoanAmount" value = 250 }
+				set_variable = { which = "ferengiProposedLoanAmount" value = 0 }
+				remove_country_flag = ferengiLoanOfferCandidateEnergy
+				remove_country_flag = ferengiLoanOfferCandidateMinerals
+				country_event = { id = STH_ferengi_story.104 days = 30 }
+			}
+			add_minerals = 250
+			remove_modifier = em_small_minerals_loan
+			add_modifier = { modifier = em_small_minerals_loan days = 35 }
+			
+			else = { 
+				if = {
+					limit = { 
+						event_target:ferengi_alliance = { NOT = { minerals > 249 } }
+						has_country_flag = ferengiLoanOfferCandidateMinerals check_variable = { which = "ferengiProposedLoanAmount" value = 250 }
+					}
+					hidden_effect = { event_target:ferengi_alliance = { country_event = { id = STH_ferengi_story.106 } } }
+					set_variable = { which = "ferengiProposedLoanAmount" value = 0 }
+					remove_country_flag = ferengiLoanOfferCandidateEnergy
+					remove_country_flag = ferengiLoanOfferCandidateMinerals
+				}
+				
+			}
+		}
+		if = {
+			limit = { 
+				event_target:ferengi_alliance = { minerals > 499 } 
+				has_country_flag = ferengiLoanOfferCandidateMinerals check_variable = { which = "ferengiProposedLoanAmount" value = 500 }			
+			}
+			hidden_effect = {
+				event_target:ferengi_alliance = { 
+					country_event = { id = STH_ferengi_story.105 } 
+					add_minerals = -500 
+					# remove_modifier = em_small_minerals_loan_income
+					# add_modifier = { modifier = em_small_minerals_loan_income days = 35 }
+				}
+				change_variable = { which = "ferengiMineralsLoanAmount" value = 500 }
+				set_variable = { which = "ferengiProposedLoanAmount" value = 0 }
+				remove_country_flag = ferengiLoanOfferCandidateEnergy
+				remove_country_flag = ferengiLoanOfferCandidateMinerals
+				country_event = { id = STH_ferengi_story.104 days = 30 }
+			}
+			add_minerals = 500
+			remove_modifier = em_small_minerals_loan
+			add_modifier = { modifier = em_small_minerals_loan days = 35 }
+			
+			else = { 
+				if = {
+					limit = { 
+						event_target:ferengi_alliance = { NOT = { minerals > 499 } }
+						has_country_flag = ferengiLoanOfferCandidateMinerals check_variable = { which = "ferengiProposedLoanAmount" value = 500 }
+					}
+					hidden_effect = { event_target:ferengi_alliance = { country_event = { id = STH_ferengi_story.106 } } }
+					set_variable = { which = "ferengiProposedLoanAmount" value = 0 }
+					remove_country_flag = ferengiLoanOfferCandidateEnergy
+					remove_country_flag = ferengiLoanOfferCandidateMinerals
+				}
+				
+			}
+		}
+		if = {
+			limit = { 
+				event_target:ferengi_alliance = { minerals > 999 }
+				has_country_flag = ferengiLoanOfferCandidateMinerals check_variable = { which = "ferengiProposedLoanAmount" value = 1000 }
+			}
+			hidden_effect = {
+				event_target:ferengi_alliance = { 
+					country_event = { id = STH_ferengi_story.105 } 
+					add_minerals = -1000 
+					# remove_modifier = em_small_minerals_loan_income
+					# add_modifier = { modifier = em_small_minerals_loan_income days = 35 }
+				}
+				change_variable = { which = "ferengiMineralsLoanAmount" value = 1000 }
+				set_variable = { which = "ferengiProposedLoanAmount" value = 0 }
+				remove_country_flag = ferengiLoanOfferCandidateEnergy
+				remove_country_flag = ferengiLoanOfferCandidateMinerals
+				country_event = { id = STH_ferengi_story.104 days = 30 }
+			}
+			add_minerals = 1000
+			remove_modifier = em_small_minerals_loan
+			add_modifier = { modifier = em_small_minerals_loan days = 35 }
+			
+			else = { 
+				if = {
+					limit = { 
+						event_target:ferengi_alliance = { NOT = { minerals > 999 } }
+						has_country_flag = ferengiLoanOfferCandidateMinerals check_variable = { which = "ferengiProposedLoanAmount" value = 1000 }
+					}
+					hidden_effect = { event_target:ferengi_alliance = { country_event = { id = STH_ferengi_story.106 } } }
+					set_variable = { which = "ferengiProposedLoanAmount" value = 0 }
+					remove_country_flag = ferengiLoanOfferCandidateEnergy
+					remove_country_flag = ferengiLoanOfferCandidateMinerals
+				}
+				
+			}
+		}
+	}
+	option = {
+		name = STH_ferengi_story.103.z #Reject
+		ai_chance = { 
+			factor = 1
+			modifier = {
+				factor = 5
+				OR = { 
+					AND = { has_country_flag = ferengiLoanOfferCandidateMinerals minerals > 1000 }
+					AND = { has_country_flag = ferengiLoanOfferCandidateEnergy energy > 1000 }
+				}
+			}
+			modifier = {
+				factor = 5
+				OR = { 
+					AND = { has_country_flag = ferengiLoanOfferCandidateMinerals minerals > 2000 }
+					AND = { has_country_flag = ferengiLoanOfferCandidateEnergy energy > 2000 }
+				}
+			}
+			modifier = { factor = 0.5 is_at_war = yes }
+		}
+		hidden_effect = {
+			event_target:ferengi_alliance = {
+				country_event = { id = STH_ferengi_story.107 }
+			}
+		}
+	}
+}
+
+#Loan Loop
+country_event = {
+	id = STH_ferengi_story.104
+	hide_window = yes
+	is_triggered_only = yes
+	trigger = {
+		OR = {
+			check_variable = { which = "ferengiEnergyLoanAmount" value > 0 }
+			check_variable = { which = "ferengiMineralsLoanAmount" value > 0 }
+		}
+	}
+	immediate = { 
+		random_country = {
+			limit = { has_country_flag = ferengi_alliance }
+			save_event_target_as = ferengi_alliance
+		}
+		if = {
+			limit = { check_variable = { which = "ferengiEnergyLoanAmount" value > 0 } }
+			if = { 
+				limit = { energy > 10 } 
+				# add_energy = -11
+				remove_modifier = em_small_energy_loan
+				add_modifier = { modifier = em_small_energy_loan days = 35 }
+				change_variable = { which = "ferengiEnergyLoanAmount" value = -10 }
+				event_target:ferengi_alliance = { 
+					# remove_modifier = em_small_energy_loan_income
+					# add_modifier = { modifier = em_small_energy_loan_income days = 35 }
+					add_energy = 11
+				}
+				else = { 
+					change_variable = { which = "ferengiEnergyLoanAmount" value = 2 }
+				}
+			}
+		}
+		if = {
+			limit = { check_variable = { which = "ferengiMineralsLoanAmount" value > 0 } }
+			if = { 
+				limit = { minerals > 10 } 
+				# add_minerals = -11
+				remove_modifier = em_small_minerals_loan
+				add_modifier = { modifier = em_small_minerals_loan days = 35 }
+				change_variable = { which = "ferengiMineralsLoanAmount" value = -10 }
+				event_target:ferengi_alliance = { 
+					# remove_modifier = em_small_minerals_loan_income
+					# add_modifier = { modifier = em_small_minerals_loan_income days = 35 }
+					add_minerals = 11
+				}
+				else = { 
+					change_variable = { which = "ferengiMineralsLoanAmount" value = 2 }
+				}
+			}
+		}
+		country_event = { id = STH_ferengi_story.104 days = 30 }
+	}
+}
+
+#Loan Accepted
+country_event = {
+	id = STH_ferengi_story.105
+	title = "STH_ferengi_story.105.name"
+	desc = "STH_ferengi_story.105.desc"
+	picture = sth_GFX_evt_ferengiCommerceAuthority
+	force_open = yes
+	is_triggered_only = yes
+	trigger = { }
+	immediate = { 
+	}
+	after = { hidden_effect = { event_target:ferengiLoanOfferCandidate = { remove_country_flag = ferengiLoanOfferCandidate } } }
+	option = {
+		name = STH_ferengi_story.105.a
+	}
+}
+
+#Loan Accepted but not enough money
+country_event = {
+	id = STH_ferengi_story.106
+	title = "STH_ferengi_story.106.name"
+	desc = "STH_ferengi_story.106.desc"
+	picture = sth_GFX_evt_ferengiCommerceAuthority
+	force_open = yes
+	is_triggered_only = yes
+	trigger = { }
+	immediate = { }
+	after = { hidden_effect = { event_target:ferengiLoanOfferCandidate = { remove_country_flag = ferengiLoanOfferCandidate } } }
+	option = {
+		name = STH_ferengi_story.106.a
+		hidden_effect = { country_event = { id = STH_ferengi_story.100 } }
+	}
+}
+
+#Loan declined
+country_event = {
+	id = STH_ferengi_story.107
+	title = "STH_ferengi_story.107.name"
+	desc = "STH_ferengi_story.107.desc"
+	picture = sth_GFX_evt_ferengiCommerceAuthority
+	force_open = yes
+	is_triggered_only = yes
+	trigger = { }
+	immediate = { }
+	after = { hidden_effect = { event_target:ferengiLoanOfferCandidate = { remove_country_flag = ferengiLoanOfferCandidate } } }
+	option = {
+		name = STH_ferengi_story.107.a
+		hidden_effect = { country_event = { id = STH_ferengi_story.100 } }
+	}
+}
+
+#Loan for Self
+country_event = {
+	id = STH_ferengi_story.200
+	title = "STH_ferengi_story.200.name"
+	desc = {
+		trigger = { has_country_flag = defaulted_on_loan }
+		text = 	"STH_ferengi_story.200.desc_01"
+	}
+	desc = {
+		trigger = { NOT = { has_country_flag = defaulted_on_loan } }
+		text = 	"STH_ferengi_story.200.desc_02"
+	}
+	picture = sth_GFX_evt_ferengiCommerceAuthority
+	force_open = yes
+	is_triggered_only = yes
+	trigger = { }
+	immediate = { }
+	option = {
+		name = STH_ferengi_story.200.a #Energy
+		ai_chance = { factor = 0 modifier = { factor = 1 NOT = { has_country_flag = defaulted_on_loan } } }
+		trigger = { NOT = { has_country_flag = defaulted_on_loan } }
+		hidden_effect = { country_event = { id = STH_ferengi_story.201 } }
+	}
+	option = {
+		name = STH_ferengi_story.200.b #Minerals
+		ai_chance = { factor = 0 modifier = { factor = 1 NOT = { has_country_flag = defaulted_on_loan } } }
+		trigger = { NOT = { has_country_flag = defaulted_on_loan } }
+		hidden_effect = { country_event = { id = STH_ferengi_story.202 } }
+	}
+	option = {
+		name = STH_ferengi_story.200.c #Back
+		hidden_effect = { country_event = { id = STH_ferengi_story.2 } }
+	}
+}
+
+#Energy Loan Amount
+country_event = {
+	id = STH_ferengi_story.201
+	title = "STH_ferengi_story.201.name"
+	desc = "STH_ferengi_story.201.desc"
+	picture = sth_GFX_evt_ferengiCommerceAuthority
+	force_open = yes
+	is_triggered_only = yes
+	option = {
+		name = STH_ferengi_story.201.a #100
+		ai_chance = { factor = 0 modifier = { factor = 1 NOT = { has_country_flag = defaulted_on_loan } } }
+		hidden_effect = { 
+			set_timed_country_flag = { flag = loan100Energy days = 15 }
+			country_event = { id = STH_ferengi_story.203 days = 7 random = 3 } 
+		}
+	}
+	option = {
+		name = STH_ferengi_story.201.b #250
+		ai_chance = { factor = 0 modifier = { factor = 1 NOT = { has_country_flag = defaulted_on_loan } } }
+		hidden_effect = { 
+			set_timed_country_flag = { flag = loan250Energy days = 15 }
+			country_event = { id = STH_ferengi_story.203 days = 7 random = 3 } 
+		}
+	}
+	option = {
+		name = STH_ferengi_story.201.c #500
+		ai_chance = { factor = 0 modifier = { factor = 1 NOT = { has_country_flag = defaulted_on_loan } } }
+		hidden_effect = { 
+			set_timed_country_flag = { flag = loan500Energy days = 15 }
+			country_event = { id = STH_ferengi_story.203 days = 7 random = 3 } 
+		}
+	}
+	option = {
+		name = STH_ferengi_story.201.d #1000
+		ai_chance = { factor = 0 modifier = { factor = 1 NOT = { has_country_flag = defaulted_on_loan } } }
+		hidden_effect = { 
+			set_timed_country_flag = { flag = loan1000Energy days = 15 }
+			country_event = { id = STH_ferengi_story.203 days = 7 random = 3 } 
+		}
+	}
+	option = {
+		name = STH_ferengi_story.201.e #Back
+		hidden_effect = { country_event = { id = STH_ferengi_story.200 } }
+	}
+}
+
+#Minerals Loan Amount
+country_event = {
+	id = STH_ferengi_story.202
+	title = "STH_ferengi_story.202.name"
+	desc = "STH_ferengi_story.202.desc"
+	picture = sth_GFX_evt_ferengiCommerceAuthority
+	force_open = yes
+	is_triggered_only = yes
+	option = {
+		name = STH_ferengi_story.202.a #100
+		ai_chance = { factor = 0 modifier = { factor = 1 NOT = { has_country_flag = defaulted_on_loan } } }
+		hidden_effect = { 
+			set_timed_country_flag = { flag = loan100Minerals days = 15 }
+			country_event = { id = STH_ferengi_story.203 days = 7 random = 3 } 
+		}
+	}
+	option = {
+		name = STH_ferengi_story.202.b #250
+		ai_chance = { factor = 0 modifier = { factor = 1 NOT = { has_country_flag = defaulted_on_loan } } }
+		hidden_effect = { 
+			set_timed_country_flag = { flag = loan250Minerals days = 15 }
+			country_event = { id = STH_ferengi_story.203 days = 7 random = 3 } 
+		}
+	}
+	option = {
+		name = STH_ferengi_story.202.c #500
+		ai_chance = { factor = 0 modifier = { factor = 1 NOT = { has_country_flag = defaulted_on_loan } } }
+		hidden_effect = { 
+			set_timed_country_flag = { flag = loan500Minerals days = 15 }
+			country_event = { id = STH_ferengi_story.203 days = 7 random = 3 } 
+		}
+	}
+	option = {
+		name = STH_ferengi_story.202.d #1000
+		ai_chance = { factor = 0 modifier = { factor = 1 NOT = { has_country_flag = defaulted_on_loan } } }
+		hidden_effect = { 
+			set_timed_country_flag = { flag = loan1000Minerals days = 15 }
+			country_event = { id = STH_ferengi_story.203 days = 7 random = 3 } 
+		}
+	}
+	option = {
+		name = STH_ferengi_story.202.e #Back
+		hidden_effect = { country_event = { id = STH_ferengi_story.200 } }
+	}
+}
+
+#Loan Accepted
+country_event = {
+	id = STH_ferengi_story.203
+	title = "STH_ferengi_story.203.name"
+	desc = { 
+		trigger = { OR = { has_country_flag = loan100Energy has_country_flag = loan250Energy has_country_flag = loan500Energy has_country_flag = loan1000Energy } }
+		text = "STH_ferengi_story.203.desc_01"
+	}
+	desc = { 
+		trigger = { OR = { has_country_flag = loan100Energy has_country_flag = loan250Energy has_country_flag = loan500Energy has_country_flag = loan1000Energy } }
+		text = "STH_ferengi_story.203.desc_02"
+	}
+	desc = { 
+		trigger = { OR = { has_country_flag = loan100Energy has_country_flag = loan250Energy has_country_flag = loan500Energy has_country_flag = loan1000Energy } }
+		text = "STH_ferengi_story.203.desc_03"
+	}
+	desc = { 
+		trigger = { OR = { has_country_flag = loan100Energy has_country_flag = loan250Energy has_country_flag = loan500Energy has_country_flag = loan1000Energy } }
+		text = "STH_ferengi_story.203.desc_04"
+	}
+	desc = { 
+		trigger = { OR = { has_country_flag = loan100Energy has_country_flag = loan250Energy has_country_flag = loan500Energy has_country_flag = loan1000Energy } }
+		text = "STH_ferengi_story.203.desc_05"
+	}
+	desc = { 
+		trigger = { OR = { has_country_flag = loan100Minerals has_country_flag = loan250Minerals has_country_flag = loan500Minerals has_country_flag = loan1000Minerals } }
+		text = "STH_ferengi_story.203.desc_11" 
+	}
+	desc = { 
+		trigger = { OR = { has_country_flag = loan100Minerals has_country_flag = loan250Minerals has_country_flag = loan500Minerals has_country_flag = loan1000Minerals } }
+		text = "STH_ferengi_story.203.desc_12" 
+	}
+	desc = { 
+		trigger = { OR = { has_country_flag = loan100Minerals has_country_flag = loan250Minerals has_country_flag = loan500Minerals has_country_flag = loan1000Minerals } }
+		text = "STH_ferengi_story.203.desc_13" 
+	}
+	desc = { 
+		trigger = { OR = { has_country_flag = loan100Minerals has_country_flag = loan250Minerals has_country_flag = loan500Minerals has_country_flag = loan1000Minerals } }
+		text = "STH_ferengi_story.203.desc_14" 
+	}
+	desc = { 
+		trigger = { OR = { has_country_flag = loan100Minerals has_country_flag = loan250Minerals has_country_flag = loan500Minerals has_country_flag = loan1000Minerals } }
+		text = "STH_ferengi_story.203.desc_15" 
+	}
+	picture = sth_GFX_evt_ferengiCommerceAuthority
+	force_open = yes
+	is_triggered_only = yes
+	immediate = {
+		if = {
+			limit = { has_country_flag = loan100Energy }
+			add_energy = 100
+			remove_modifier = em_small_energy_loan
+			add_modifier = { modifier = em_small_energy_loan days = 35 }
+			change_variable = { which = "ferengiSelfEnergyLoanAmount" value = 100 }
+		}
+		if = {
+			limit = { has_country_flag = loan250Energy }
+			add_energy = 250
+			remove_modifier = em_small_energy_loan
+			add_modifier = { modifier = em_small_energy_loan days = 35 }
+			change_variable = { which = "ferengiSelfEnergyLoanAmount" value = 250 }
+		}
+		if = {
+			limit = { has_country_flag = loan500Energy }
+			add_energy = 500
+			remove_modifier = em_small_energy_loan
+			add_modifier = { modifier = em_small_energy_loan days = 35 }
+			change_variable = { which = "ferengiSelfEnergyLoanAmount" value = 500 }
+		}
+		if = {
+			limit = { has_country_flag = loan1000Energy }
+			add_energy = 1000
+			remove_modifier = em_small_energy_loan
+			add_modifier = { modifier = em_small_energy_loan days = 35 }
+			change_variable = { which = "ferengiSelfEnergyLoanAmount" value = 1000 }
+		}
+		if = {
+			limit = { has_country_flag = loan100Minerals }
+			add_minerals = 100
+			remove_modifier = em_small_minerals_loan
+			add_modifier = { modifier = em_small_minerals_loan days = 35 }
+			change_variable = { which = "ferengiSelfMineralsLoanAmount" value = 100 }
+		}
+		if = {
+			limit = { has_country_flag = loan250Minerals }
+			add_minerals = 250
+			remove_modifier = em_small_minerals_loan
+			add_modifier = { modifier = em_small_minerals_loan days = 35 }
+			change_variable = { which = "ferengiSelfMineralsLoanAmount" value = 250 }
+		}
+		if = {
+			limit = { has_country_flag = loan500Minerals }
+			add_minerals = 500
+			remove_modifier = em_small_minerals_loan
+			add_modifier = { modifier = em_small_minerals_loan days = 35 }
+			change_variable = { which = "ferengiSelfMineralsLoanAmount" value = 500 }
+		}
+		if = {
+			limit = { has_country_flag = loan1000Minerals }
+			add_minerals = 1000
+			remove_modifier = em_small_minerals_loan
+			add_modifier = { modifier = em_small_minerals_loan days = 35 }
+			change_variable = { which = "ferengiSelfMineralsLoanAmount" value = 1000 }
+		}
+		country_event = { id = STH_ferengi_story.204 days = 30 }
+	}
+	option = {
+		name = STH_ferengi_story.203.a #Accept
+	}
+	after = {
+		hidden_effect = { remove_country_flag = loan100Energy remove_country_flag = loan250Energy remove_country_flag = loan500Energy remove_country_flag = loan1000Energy }
+		hidden_effect = { remove_country_flag = loan100Minerals remove_country_flag = loan250Minerals remove_country_flag = loan500Minerals remove_country_flag = loan1000Minerals }
+	}
+}
+
+#Minerals Loan Amount
+country_event = {
+	id = STH_ferengi_story.204
+	hide_window = yes
+	is_triggered_only = yes
+	trigger = {
+		OR = {
+			check_variable = { which = "ferengiSelfEnergyLoanAmount" value > 0 }
+			check_variable = { which = "ferengiSelfMineralsLoanAmount" value > 0 }
+		}
+	}
+	immediate = { 
+		#log = "STH_ferengi_story.204 start"
+		if = {
+			limit = { check_variable = { which = "ferengiSelfEnergyLoanAmount" value > 0 } }
+			if = { 
+				limit = { energy > 10 } 
+				remove_modifier = em_small_energy_loan
+				add_modifier = { modifier = em_small_energy_loan days = 35 }
+				change_variable = { which = "ferengiSelfEnergyLoanAmount" value = -10 }
+				else = { change_variable = { which = "ferengiSelfEnergyLoanAmount" value = 2 } }
+			}
+		}
+		if = {
+			limit = { check_variable = { which = "ferengiSelfMineralsLoanAmount" value > 0 } }
+			if = { 
+				limit = { minerals > 10 } 
+				remove_modifier = em_small_minerals_loan
+				add_modifier = { modifier = em_small_minerals_loan days = 35 }
+				change_variable = { which = "ferengiSelfMineralsLoanAmount" value = -10 }
+				else = { change_variable = { which = "ferengiSelfMineralsLoanAmount" value = 2 } }
+			}
+		}
+		country_event = { id = STH_ferengi_story.204 days = 30 }
+	}
+}
+
+#Taxes
+country_event = {
+	id = STH_ferengi_story.300
+	title = "STH_ferengi_story.300.name"
+	desc = {
+		trigger = { is_at_war = no }
+		text = 	"STH_ferengi_story.300.desc_01"
+	}
+	desc = {
+		trigger = { is_at_war = yes }
+		text = 	"STH_ferengi_story.300.desc_02"
+	}
+	picture = sth_GFX_evt_ferengiCommerceAuthority
+	force_open = yes
+	is_triggered_only = yes
+	trigger = { }
+	immediate = { }
+	option = {
+		name = STH_ferengi_story.300.a #Low
+		hidden_effect = { 
+			random_list = {
+				20 = { 
+					modifier = { factor = 2 is_at_war = yes }
+					country_event = { id = STH_ferengi_story.301 days = 7 random = 2 } }
+				5 = { country_event = { id = STH_ferengi_story.302 days = 7 random = 2 } }
+			}
+		}
+		add_modifier = { modifier = em_minimal_taxes days = 600 }
+	}
+	option = {
+		name = STH_ferengi_story.300.b #Med
+		hidden_effect = { 
+			random_list = {
+				15 = { 
+					modifier = { factor = 2 is_at_war = yes }
+					country_event = { id = STH_ferengi_story.301 days = 7 random = 2 } 
+				}
+				10 = { country_event = { id = STH_ferengi_story.302 days = 7 random = 2 } }
+			}
+		}
+		add_modifier = { modifier = em_low_taxes days = 600 }
+	}
+	option = {
+		name = STH_ferengi_story.300.c #High
+		hidden_effect = { 
+			random_list = {
+				10 = { 
+					modifier = { factor = 2 is_at_war = yes }
+					country_event = { id = STH_ferengi_story.301 days = 7 random = 2 } 
+				}
+				15 = { country_event = { id = STH_ferengi_story.302 days = 7 random = 2 } }
+			}
+		}
+		add_modifier = { modifier = em_moderate_taxes days = 600 }
+	}
+	option = {
+		name = STH_ferengi_story.300.d
+		hidden_effect = { country_event = { id = STH_ferengi_story.2 } }
+	}
+}
+#People accept
+country_event = {
+	id = STH_ferengi_story.301
+	title = "STH_ferengi_story.301.name"
+	desc = "STH_ferengi_story.301.desc"
+	picture = sth_GFX_evt_ferengiCommerceAuthority
+	force_open = yes
+	is_triggered_only = yes
+	option = { name = STH_ferengi_story.301.a }
+}
+#People unhappy
+country_event = {
+	id = STH_ferengi_story.302
+	title = "STH_ferengi_story.302.name"
+	desc = "STH_ferengi_story.302.desc"
+	picture = sth_GFX_evt_ferengiCommerceAuthority
+	force_open = yes
+	is_triggered_only = yes
+	option = { 
+		name = STH_ferengi_story.302.a 
+		add_modifier = { modifier = em_unhappy_taxes days = 600 }
+	}
+}
+
+
+#Privateers Target Menu
+country_event = {
+	id = STH_ferengi_story.400
+	title = "STH_ferengi_story.400.name"
+	desc = "STH_ferengi_story.400.desc"
+	picture = sth_GFX_evt_ferengiCommerceAuthority
+	force_open = yes
+	is_triggered_only = yes
+	immediate = { 
+		every_country = { 
+			limit = { has_country_flag = ferengiPrivateerTarget }
+			remove_country_flag = ferengiPrivateerTarget
+		}
+		random_country = {
+			limit = { valid_privateer_target = yes }
+			save_event_target_as = ferengiPrivateerTargetCandidate1
+		}
+		random_country = { 
+			limit = { 
+				valid_privateer_target = yes
+				NOT = { 
+					is_country = event_target:ferengiPrivateerTargetCandidate1
+					is_country = Root
+				}
+			}
+			save_event_target_as = ferengiPrivateerTargetCandidate2
+		}
+		random_country = { 
+			limit = {
+				valid_privateer_target = yes
+				NOT = { 
+					is_country = event_target:ferengiPrivateerTargetCandidate1
+					is_country = event_target:ferengiPrivateerTargetCandidate2
+					is_country = Root
+				}
+			}
+			save_event_target_as = ferengiPrivateerTargetCandidate3
+		}
+		random_country = {
+			limit = {
+				valid_privateer_target = yes
+				NOT = { 
+					is_country = event_target:ferengiPrivateerTargetCandidate1
+					is_country = event_target:ferengiPrivateerTargetCandidate2
+					is_country = event_target:ferengiPrivateerTargetCandidate3
+					is_country = Root
+				}
+			}
+			save_event_target_as = ferengiPrivateerTargetCandidate4
+		}
+	}
+	option = { 
+		name = STH_ferengi_story.400.a
+		hidden_effect = { country_event = { id = STH_ferengi_story.400 } }
+	}
+	option = {
+		name = STH_ferengi_story.400.b
+		ai_chance = { 
+			factor = 0
+			modifier = { factor = 1 exists = event_target:ferengiPrivateerTargetCandidate1 }
+		}
+		trigger = { exists = event_target:ferengiPrivateerTargetCandidate1 }
+		hidden_effect = {
+			if = {
+				limit = { exists = event_target:ferengiPrivateerTargetCandidate1 }
+				event_target:ferengiPrivateerTargetCandidate1 = { set_country_flag = ferengiPrivateerTarget }
+				country_event = { id = STH_ferengi_story.401 }
+			}
+		}
+	}
+	option = {
+		name = STH_ferengi_story.400.c
+		ai_chance = { 
+			factor = 0
+			modifier = { factor = 1 exists = event_target:ferengiPrivateerTargetCandidate2 }
+		}
+		trigger = { exists = event_target:ferengiPrivateerTargetCandidate2 }
+		hidden_effect = {
+			if = {
+				limit = { exists = event_target:ferengiPrivateerTargetCandidate2 }
+				event_target:ferengiPrivateerTargetCandidate2 = { set_country_flag = ferengiPrivateerTarget }
+				country_event = { id = STH_ferengi_story.401 }
+			}
+		}
+	}
+	option = {
+		name = STH_ferengi_story.400.d
+		ai_chance = { 
+			factor = 0
+			modifier = { factor = 1 exists = event_target:ferengiPrivateerTargetCandidate3 }
+		}
+		trigger = { exists = event_target:ferengiPrivateerTargetCandidate3 }
+		hidden_effect = {
+			if = {
+				limit = { exists = event_target:ferengiPrivateerTargetCandidate3 }
+				event_target:ferengiPrivateerTargetCandidate3 = { set_country_flag = ferengiPrivateerTarget }
+				country_event = { id = STH_ferengi_story.401 }
+			}
+		}
+	}
+	option = {
+		name = STH_ferengi_story.400.e
+		ai_chance = { 
+			factor = 0
+			modifier = { factor = 1 exists = event_target:ferengiPrivateerTargetCandidate4 }
+		}
+		trigger = { exists = event_target:ferengiPrivateerTargetCandidate4 }
+		hidden_effect = {
+			if = {
+				limit = { exists = event_target:ferengiPrivateerTargetCandidate4 }
+				event_target:ferengiPrivateerTargetCandidate4 = { set_country_flag = ferengiPrivateerTarget }
+				country_event = { id = STH_ferengi_story.401 }
+			}
+		}
+	}
+	option = { 
+		name = STH_ferengi_story.400.f
+		hidden_effect = { country_event = { id = STH_ferengi_story.2 } }
+	}
+}
+
+#Choose Privateers
+country_event = {
+	id = STH_ferengi_story.401
+	title = "STH_ferengi_story.401.name"
+	desc = "STH_ferengi_story.401.desc"
+	picture = sth_GFX_evt_ferengiCommerceAuthority
+	force_open = yes
+	is_triggered_only = yes
+	immediate = { 
+		random_country = { 
+			limit = {has_country_flag = ferengiPrivateerTarget } 
+			save_event_target_as = ferengiPrivateerTarget
+		}
+	}
+	option = {
+		name = STH_ferengi_story.401.a
+		ai_chance = { 
+			factor = 0
+			modifier = { factor = 1 energy > 299 minerals > 299 }
+		}
+		trigger = {	energy > 299 minerals > 299 }
+		add_energy = -300
+		add_minerals = -300
+		hidden_effect = { country_event = { id = STH_ferengi_story.410 days = 7 random = 2 } }
+	}
+	option = {
+		name = STH_ferengi_story.401.b
+		ai_chance = { 
+			factor = 0
+			modifier = { factor = 1 energy > 599 minerals > 299 any_country = { is_species_class = NAU has_communications = Root } }
+		}
+		trigger = {	
+			energy > 599 minerals > 299 
+			any_country = { is_species_class = NAU has_communications = Root }
+		}
+		add_energy = -600
+		add_minerals = -300
+		hidden_effect = { country_event = { id = STH_ferengi_story.411 days = 7 random = 2 } }
+	}
+	option = {
+		name = STH_ferengi_story.401.z
+		trigger = {	OR = { energy < 300 minerals < 300 } }
+		hidden_effect = { country_event = { id = STH_ferengi_story.400 } }
+	}
+	option = {
+		name = STH_ferengi_story.401.zz
+		hidden_effect = { country_event = { id = STH_ferengi_story.400 } }
+	}
+}
+
+country_event = {
+	id = STH_ferengi_story.410
+	title = "STH_ferengi_story.410.name"
+	desc = "STH_ferengi_story.410.desc"
+	picture = sth_GFX_evt_ferengiCommerceAuthority
+	force_open = yes
+	is_triggered_only = yes
+	immediate = { 
+		random_country = { 
+			limit = { has_country_flag = ferengiPrivateerTarget } 
+			save_event_target_as = ferengiPrivateerTarget
+		}
+		event_target:ferengiPrivateerTarget = {
+			if = {
+				limit = { 
+					any_owned_planet = {
+						has_mining_station = yes
+						solar_system = { NOT = { is_same_value = event_target:ferengiPrivateerTarget.capital_scope.solar_system } }
+					}
+				}
+				random_owned_planet = {
+					limit = { 
+						has_mining_station  = yes
+						solar_system = { NOT = { is_same_value = event_target:ferengiPrivateerTarget.capital_scope.solar_system } } 
+					}
+					save_event_target_as = ferengiPrivateerTargetPlanet
+				}
+				else = {
+					if = {
+						limit = { 
+							any_owned_planet = { 
+								has_research_station = yes
+								solar_system = { NOT = { is_same_value = event_target:ferengiPrivateerTarget.capital_scope.solar_system } } 
+							}
+						}
+						random_owned_planet = {
+							limit = { 
+								has_research_station  = yes
+								solar_system = { NOT = { is_same_value = event_target:ferengiPrivateerTarget.capital_scope.solar_system } }
+							}
+							save_event_target_as = ferengiPrivateerTargetPlanet
+						}
+						else = {
+							random_owned_planet = { save_event_target_as = ferengiPrivateerTargetPlanet }
+						}
+					}
+				}
+			}
+		}
+	}
+	option = {
+		name = STH_ferengi_story.410.a
+		hidden_effect = { 
+			event_target:ferengiPrivateerTarget = {
+				spawn_small_ferengi_privateers = yes 
+				remove_country_flag = ferengiPrivateerTarget
+				last_created_fleet = {
+					set_location = { target = event_target:ferengiPrivateerTargetPlanet distance = 400 angle = random }
+					queue_actions = {
+						move_to = event_target:ferengiPrivateerTargetPlanet
+						effect = {
+							id = "STH_ferengi_story.410.effect.1"
+							fleet_event = { id = STH_ferengi_story.420 days = 360 random = 7 }
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+country_event = {
+	id = STH_ferengi_story.411
+	title = "STH_ferengi_story.411.name"
+	desc = "STH_ferengi_story.411.desc"
+	picture = sth_GFX_evt_ferengiCommerceAuthority
+	force_open = yes
+	is_triggered_only = yes
+	immediate = { 
+		random_country = { 
+			limit = { has_country_flag = ferengiPrivateerTarget } 
+			save_event_target_as = ferengiPrivateerTarget
+		}
+		event_target:ferengiPrivateerTarget = {
+			if = {
+				limit = { 
+					any_owned_planet = {
+						has_mining_station = yes
+						solar_system = { NOT = { is_same_value = event_target:ferengiPrivateerTarget.capital_scope.solar_system } }
+					}
+				}
+				random_owned_planet = {
+					limit = { 
+						has_mining_station  = yes
+						solar_system = { NOT = { is_same_value = event_target:ferengiPrivateerTarget.capital_scope.solar_system } } 
+					}
+					save_event_target_as = ferengiPrivateerTargetPlanet
+				}
+				else = {
+					if = {
+						limit = { 
+							any_owned_planet = { 
+								has_research_station = yes
+								solar_system = { NOT = { is_same_value = event_target:ferengiPrivateerTarget.capital_scope.solar_system } } 
+							}
+						}
+						random_owned_planet = {
+							limit = { 
+								has_research_station  = yes
+								solar_system = { NOT = { is_same_value = event_target:ferengiPrivateerTarget.capital_scope.solar_system } }
+							}
+							save_event_target_as = ferengiPrivateerTargetPlanet
+						}
+						else = {
+							random_owned_planet = { save_event_target_as = ferengiPrivateerTargetPlanet }
+						}
+					}
+				}
+			}
+		}
+	}
+	option = {
+		name = STH_ferengi_story.411.a
+		hidden_effect = { 
+			event_target:ferengiPrivateerTarget = {
+				spawn_mid_nausicaan_privateers = yes 
+				remove_country_flag = ferengiPrivateerTarget
+				last_created_fleet = {
+					set_location = { target = event_target:ferengiPrivateerTargetPlanet distance = 400 angle = random }
+					queue_actions = {
+						move_to = event_target:ferengiPrivateerTargetPlanet
+						effect = {
+							id = "STH_ferengi_story.411.effect.1"
+							fleet_event = { id = STH_ferengi_story.420 days = 360 random = 7 }
+						}
+					}
+				}
+			}
+		}
+	}
+}
+# country_event = {
+	# id = STH_ferengi_story.412
+	# title = "STH_ferengi_story.412.name"
+	# desc = "STH_ferengi_story.412.desc"
+	# picture = sth_GFX_evt_ferengiCommerceAuthority
+	# force_open = yes
+	# is_triggered_only = yes
+	# immediate = { random_country = { has_country_flag = ferengiPrivateerTarget } save_event_target_as = ferengiPrivateerTarget }
+	# option = {
+		# name = STH_ferengi_story.412.a
+		# hidden_effect = { 
+			# event_target:ferengiPrivateerTarget = { 
+				# spawn_mid_orion_privateers = yes 
+				# remove_country_flag = ferengiPrivateerTarget
+			# }
+		# }
+	# }
+# }
+
+fleet_event = {
+	id = STH_ferengi_story.420
+	hide_window = yes
+	is_triggered_only = yes
+	immediate = { 
+		if = {
+			limit = { is_in_combat = yes }
+			fleet_event = { id = STH_ferengi_story.420 days = 30 }
+			else = {
+				queue_actions = {
+					find_random_system = {
+						trigger = {
+							id = "STH_ferengi_story.420.trigger.1"
+							distance = { source = event_target:ferengiPrivateerTargetPlanet max_distance = 100 min_distance = 20 }
+						}
+						found_system = { move_to = THIS }	
+					}
+					effect = {
+						id = "STH_ferengi_story.420.effect.1"
+						delete_fleet = this
+					}
+				}
+			}
+		}
+	}
+}
+
+
+
+
+#Rules Of Acquisition Conference
+country_event = {
+	id = STH_ferengi_story.500
+	title = "STH_ferengi_story.500.name"
+	desc = "STH_ferengi_story.500.desc" 
+	picture = sth_GFX_evt_ferengiCommerceAuthority
+	force_open = yes
+	is_triggered_only = yes
+	immediate = {}
+	option = {
+		name = STH_ferengi_story.500.a
+		hidden_effect = { country_event = { id = STH_ferengi_story.501 days = 7 random = 2 } }
+	}
+	option = {
+		name = STH_ferengi_story.500.b
+		ai_chance = { factor = 0 modifier = { factor = 1 energy > 300 } }
+		trigger = { energy > 199 }
+		add_energy = -200
+		hidden_effect = { country_event = { id = STH_ferengi_story.502 days = 7 random = 2 } }
+	}
+	option = {
+		name = STH_ferengi_story.500.c
+		ai_chance = { factor = 0 modifier = { factor = 1 energy > 1000 } }
+		trigger = { energy > 799 }
+		add_energy = -800
+		hidden_effect = { country_event = { id = STH_ferengi_story.503 days = 7 random = 2 } }
+	}
+	option = {
+		name = STH_ferengi_story.500.d
+		hidden_effect = { country_event = { id = STH_ferengi_story.2 } }
+	}
+}
+
+country_event = {
+	id = STH_ferengi_story.501
+	title = "STH_ferengi_story.501.name"
+	desc = "STH_ferengi_story.501.desc_01"
+	desc = "STH_ferengi_story.501.desc_02"
+	desc = "STH_ferengi_story.501.desc_03"
+	desc = "STH_ferengi_story.501.desc_04"
+	desc = "STH_ferengi_story.501.desc_05"
+	picture = sth_GFX_evt_ferengiCommerceAuthority
+	force_open = yes
+	is_triggered_only = yes
+	immediate = { 
+		if = {
+			limit = { exists = leader }
+			leader = { save_event_target_as = leader } 
+		}		
+	}
+	option = {
+		name = STH_ferengi_story.501.a
+		add_influence = 25
+	}
+}
+country_event = {
+	id = STH_ferengi_story.502
+	title = "STH_ferengi_story.502.name"
+	desc = "STH_ferengi_story.502.desc_01"
+	desc = "STH_ferengi_story.502.desc_02"
+	desc = "STH_ferengi_story.502.desc_03"
+	desc = "STH_ferengi_story.502.desc_04"
+	desc = "STH_ferengi_story.502.desc_05"
+	picture = sth_GFX_evt_ferengiCommerceAuthority
+	force_open = yes
+	is_triggered_only = yes
+	immediate = { 
+		if = {
+			limit = { exists = leader }
+			leader = { save_event_target_as = leader } 
+		}		
+	}
+	option = {
+		name = STH_ferengi_story.502.a
+		add_influence = 50
+	}
+}
+country_event = {
+	id = STH_ferengi_story.503
+	title = "STH_ferengi_story.503.name"
+	desc = "STH_ferengi_story.503.desc_01"
+	desc = "STH_ferengi_story.503.desc_02"
+	desc = "STH_ferengi_story.503.desc_03"
+	desc = "STH_ferengi_story.503.desc_04"
+	desc = "STH_ferengi_story.503.desc_05"
+	picture = sth_GFX_evt_ferengiCommerceAuthority
+	force_open = yes
+	is_triggered_only = yes
+	immediate = { 
+		if = {
+			limit = { exists = leader }
+			leader = { save_event_target_as = leader } 
+		}		
+	}
+	option = {
+		name = STH_ferengi_story.503.a
+		add_influence = 75
+	}
+}
+
+
+
+#Ferengi Great Monetary Collapse
+country_event = {
+	id = STH_ferengi_story.1000
+	title = "STH_ferengi_story.1000.name"
+	desc = "STH_ferengi_story.1000.desc_01"
+	desc = "STH_ferengi_story.1000.desc_02"
+	desc = "STH_ferengi_story.1000.desc_03"
+	picture = sth_GFX_evt_ferenginar
+	force_open = yes
+	mean_time_to_happen = { months = 360 }
+	fire_only_once = yes
+	trigger = {
+		years_passed > 100
+		has_country_flag = ferengi_alliance
+	}
+	immediate = {}
+	option = {
+		name = STH_ferengi_story.1000.a #Let the market decide
+		hidden_effect = { 
+			random_list =  {
+				25 = { country_event = { id = STH_ferengi_story.1001 days = 360 random = 60 } } #Works!
+				75 = { country_event = { id = STH_ferengi_story.1002 days = 360 random = 60 } } #Doesn't work!
+			}
+		}
+	}
+	option = {
+		name = STH_ferengi_story.1000.b #Minimal Intervention
+		allow = { energy > 199 minerals > 99 }
+		add_energy = -200
+		add_minerals = -100
+		add_modifier = { modifier = em_minimal_intervention days = 720 }
+		hidden_effect = { 
+			random_list =  {
+				50 = { country_event = { id = STH_ferengi_story.1001 days = 360 random = 60 } } #Works!
+				50 = { country_event = { id = STH_ferengi_story.1002 days = 360 random = 60 } } #Doesn't work!
+			}
+		}
+	}
+	option = {
+		name = STH_ferengi_story.1000.c #Major Intervention
+		allow = { energy > 399 minerals > 199 }
+		add_energy = -400
+		add_minerals = -200
+		add_modifier = { modifier = em_major_intervention days = 720 }
+		hidden_effect = { 
+			random_list =  {
+				75 = { country_event = { id = STH_ferengi_story.1001 days = 360 random = 60 } } #Works!
+				25 = { country_event = { id = STH_ferengi_story.1002 days = 360 random = 60 } } #Doesn't work!
+			}
+		}
+	}
+}
+
+#Works
+country_event = {
+	id = STH_ferengi_story.1001
+	title = "STH_ferengi_story.1001.name"
+	desc = {
+		trigger = { NOR = { has_modifier = em_minimal_intervention has_modifier = em_major_intervention } }
+		text = "STH_ferengi_story.1001.desc_01" 
+	}
+	desc = {
+		trigger = { has_modifier = em_minimal_intervention }
+		text = "STH_ferengi_story.1001.desc_02" 
+	}
+	desc = {
+		trigger = { has_modifier = em_major_intervention }
+		text = "STH_ferengi_story.1001.desc_03" 
+	}
+	picture = sth_GFX_evt_ferenginar
+	is_triggered_only = yes
+	immediate = {}
+	option = {
+		name = STH_ferengi_story.1001.a
+		hidden_effect = {
+			remove_modifier = em_minimal_intervention
+			remove_modifier = em_major_intervention
+		}
+		add_modifier = { modifier = em_sound_economic_stewardship days = 720 }
+	}
+}
+#Fails
+country_event = {
+	id = STH_ferengi_story.1002
+	title = "STH_ferengi_story.1002.name"
+	desc = {
+		trigger = { NOR = { has_modifier = em_minimal_intervention has_modifier = em_major_intervention } }
+		text = "STH_ferengi_story.1002.desc_01" 
+	}
+	desc = {
+		trigger = { has_modifier = em_minimal_intervention }
+		text = "STH_ferengi_story.1002.desc_02" 
+	}
+	desc = {
+		trigger = { has_modifier = em_major_intervention }
+		text = "STH_ferengi_story.1002.desc_03" 
+	}
+	picture = sth_GFX_evt_ferenginar
+	is_triggered_only = yes
+	immediate = {}
+	option = {
+		name = STH_ferengi_story.1002.a
+		add_modifier = { modifier = em_great_monetary_collapse days = 3600 }
+	}
+	option = {
+		name = STH_ferengi_story.1002.b
+		allow = { influence > 99 }
+		add_influence = -100
+		custom_tooltip = STH_ferengi_story.1002.b.tooltip
+		hidden_effect = { leader = { kill_leader = { show_notification = no } } }
+		add_modifier = { modifier = em_great_monetary_collapse days = 1800 }
+	}
+	after = {
+		hidden_effect = {
+			every_country = {
+				limit = { 
+					is_normal_country = yes 
+					is_borg_empire = no
+					has_communications = root
+				}
+				country_event = { id = STH_ferengi_story.1003 scopes = { from = root } days = 7 }
+			}
+		}
+	}
+}
+
+#Neighbour Notification
+country_event = {
+	id = STH_ferengi_story.1003
+	title = "STH_ferengi_story.1003.name"
+	desc = {
+		text = "STH_ferengi_story.1003.desc_01" 
+	}
+	picture = sth_GFX_evt_ferenginar
+	is_triggered_only = yes
+	option = { name = STH_ferengi_story.1003.a }
+	option = { name = STH_ferengi_story.1003.b }
+	option = { name = STH_ferengi_story.1003.c }
+}

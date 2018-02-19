@@ -1,0 +1,582 @@
+### Spaceport
+
+ship_section_template = {
+	key = "DEFAULT_ORBITAL_STATION_SECTION"
+	ship_size = orbital_station
+	fits_on_slot = mid
+	entity = "orbital_station_core_entity"
+	icon = "GFX_ship_part_core_mid"
+	
+	small_utility_slots = 4
+	medium_utility_slots = 2
+	large_utility_slots = 2
+}
+
+### Vanilla Civilian Stations 
+
+
+ship_section_template = {
+	key = "DEFAULT_MINING_STATION_SECTION"
+	ship_size = mining_station
+	fits_on_slot = mid
+	entity = "mining_station_entity"
+	icon = "GFX_ship_part_core_mid"
+	
+   
+	small_utility_slots = 3
+	medium_utility_slots = 0
+	large_utility_slots = 0
+}
+
+ship_section_template = {
+	key = "DEFAULT_RESEARCH_STATION_SECTION"
+	ship_size = research_station
+	fits_on_slot = mid
+	entity = "research_station_entity"
+	icon = "GFX_ship_part_core_mid"
+	
+	small_utility_slots = 3
+	medium_utility_slots = 0
+	large_utility_slots = 0
+}
+
+ship_section_template = {
+	key = "OUTPOST_STATION_SECTION"
+	ship_size = outpost_station
+	
+	fits_on_slot = "mid"
+	entity = "outpost_station_section_entity"
+	icon = "GFX_ship_part_core_mid"
+	
+	
+	small_utility_slots = 4
+	medium_utility_slots = 0
+	large_utility_slots = 0
+}
+
+
+
+### STNH Military Station
+
+# Mine Field - Core Section
+ship_section_template = {
+	key = "military_station_tiny_mid_4"
+	prerequisites = { tech_engineering_nuclear_702 }
+	ship_size = military_station_tiny
+	fits_on_slot = "east"
+	entity = "military_station_section_tiny_entity"
+	icon = "GFX_ship_part_core_mid"
+
+	cost = 550	
+	
+	small_utility_slots = 1	
+	medium_utility_slots = 0	
+	large_utility_slots = 0	
+	aux_utility_slots = 0	
+}
+
+# Listening Post - Base Core Section
+ship_section_template = {
+	key = "station_listening_mid_2"
+	prerequisites = { tech_engineering_listening_555 }
+	ship_size = station_listening
+	
+	fits_on_slot = "east"
+	entity = "station_listening_entity"
+	icon = "GFX_ship_part_core_mid"
+	
+	cost = 690
+	
+	small_utility_slots = 1
+	medium_utility_slots = 0	
+	large_utility_slots = 0
+	aux_utility_slots = 0
+}
+
+# Listening Post - Advanced Core Section
+ship_section_template = {
+	key = "station_listening_mid_3"
+	prerequisites = { tech_engineering_industry_1294 }
+	ship_size = station_listening
+	
+	fits_on_slot = "east"
+	entity = "station_listening_entity"
+	icon = "GFX_ship_part_core_mid"
+	
+	cost = 1450
+	
+	small_utility_slots = 2
+	medium_utility_slots = 0	
+	large_utility_slots = 0
+	aux_utility_slots = 2
+}
+
+# Beam Emplacement ( Light Defense Satellite )
+   ship_section_template = {
+      key = "military_station_small_stern_1"
+      ship_size = military_station_small
+      fits_on_slot = "west"
+      entity = "military_station_small_entity"
+      icon = "GFX_ship_part_core_mid"
+      icon_frame = 1
+      prerequisites = { tech_engineering_starship-class_717 }
+      cost = 230
+      small_utility_slots = 0
+      medium_utility_slots = 0
+      large_utility_slots = 0
+      aux_utility_slots = 0
+      ai_weight = { factor = 15 }
+      component_slot = {
+         name = "SMALL_GUN_01"
+         slot_size = small
+         slot_type = weapon
+         locatorname = "small_gun_01"
+      }
+      component_slot = {
+         name = "SMALL_GUN_02"
+         slot_size = small
+         slot_type = weapon
+         locatorname = "small_gun_02"
+      }
+      component_slot = {
+         name = "SMALL_GUN_03"
+         slot_size = small
+         slot_type = weapon
+         locatorname = "small_gun_03"
+      }
+      component_slot = {
+         name = "SMALL_GUN_1"
+         slot_size = point_defence
+         slot_type = weapon
+         locatorname = "large_gun_01"
+      }
+   }
+   
+# Cannon Emplacement ( Light Defense Satellite )
+   ship_section_template = {
+      key = "military_station_small_stern_2"
+      ship_size = military_station_small
+      fits_on_slot = "west"
+      entity = "military_station_small_entity"
+      icon = "GFX_ship_part_core_mid"
+      icon_frame = 1
+      prerequisites = { tech_engineering_bird-of-prey_716 }
+      cost = 230
+      small_utility_slots = 0
+      medium_utility_slots = 0
+      large_utility_slots = 0
+      aux_utility_slots = 0
+      ai_weight = { factor = 10 }
+      component_slot = {
+         name = "LARGE_GUN_01"
+         slot_size = large
+         slot_type = weapon
+         locatorname = "medium_gun_01"
+      }
+      component_slot = {
+         name = "LARGE_GUN_02"
+         slot_size = large
+         slot_type = weapon
+         locatorname = "medium_gun_02"
+      }
+      component_slot = {
+         name = "LARGE_GUN_03"
+         slot_size = large
+         slot_type = weapon
+         locatorname = "medium_gun_03"
+      }
+      component_slot = {
+         name = "LARGE_GUN_04"
+         slot_size = large
+         slot_type = weapon
+         locatorname = "medium_gun_04"
+      }
+      component_slot = {
+         name = "LARGE_GUN_05"
+         slot_size = large
+         slot_type = weapon
+         locatorname = "medium_gun_05"
+      }
+      component_slot = {
+         name = "LARGE_GUN_06"
+         slot_size = large
+         slot_type = weapon
+         locatorname = "medium_gun_06"
+      }
+      component_slot = {
+         name = "SMALL_GUN_1"
+         slot_size = point_defence
+         slot_type = weapon
+         locatorname = "large_gun_01"
+      }
+   }
+   
+# Reactor Core ( Light Defense Satellite )
+   ship_section_template = {
+      key = "military_station_small_mid_3"
+      ship_size = military_station_small
+      fits_on_slot = "east"
+      entity = "military_station_small_entity"
+      icon = "GFX_ship_part_core_mid"
+      icon_frame = 1
+      prerequisites = { tech_engineering_defense_556 }
+      cost = 190
+      small_utility_slots = 1
+      medium_utility_slots = 1
+      large_utility_slots = 0
+      aux_utility_slots = 0
+      ai_weight = { factor = 10 }
+   }
+   
+# Beam Emplacement ( Heavy Weapon Platform )
+   ship_section_template = {
+      key = "military_station_medium_stern_1"
+      ship_size = military_station_medium
+      fits_on_slot = "west"
+      entity = "military_station_section_medium_entity"
+      icon = "GFX_ship_part_core_mid"
+      icon_frame = 1
+      prerequisites = { tech_engineering_deep_558 }
+      cost = 920
+      small_utility_slots = 0
+      medium_utility_slots = 0
+      large_utility_slots = 0
+      aux_utility_slots = 0
+      ai_weight = { factor = 15 }
+      component_slot = {
+         name = "MEDIUM_GUN_01"
+         slot_size = medium
+         slot_type = weapon
+         locatorname = "medium_gun_01"
+      }
+      component_slot = {
+         name = "MEDIUM_GUN_02"
+         slot_size = medium
+         slot_type = weapon
+         locatorname = "medium_gun_02"
+      }
+      component_slot = {
+         name = "SMALL_GUN_1"
+         slot_size = point_defence
+         slot_type = weapon
+         locatorname = "large_gun_01"
+      }
+      component_slot = {
+         name = "SMALL_GUN_2"
+         slot_size = point_defence
+         slot_type = weapon
+         locatorname = "large_gun_02"
+      }
+   }
+   
+# Cannon Emplacement ( Heavy Weapon Platform )
+   ship_section_template = {
+      key = "military_station_medium_stern_2"
+      ship_size = military_station_medium
+      fits_on_slot = "west"
+      entity = "military_station_section_medium_entity"
+      icon = "GFX_ship_part_core_mid"
+      icon_frame = 1
+      prerequisites = { tech_engineering_deep_558 }
+      cost = 920
+      small_utility_slots = 0
+      medium_utility_slots = 0
+      large_utility_slots = 0
+      aux_utility_slots = 0
+      ai_weight = { factor = 10 }
+      component_slot = {
+         name = "EXTRA_LARGE_01"
+         slot_size = extra_large
+         slot_type = weapon
+         locatorname = "medium_gun_01"
+      }
+      component_slot = {
+         name = "EXTRA_LARGE_02"
+         slot_size = extra_large
+         slot_type = weapon
+         locatorname = "medium_gun_02"
+      }
+      component_slot = {
+         name = "EXTRA_LARGE_03"
+         slot_size = extra_large
+         slot_type = weapon
+         locatorname = "medium_gun_03"
+      }
+      component_slot = {
+         name = "SMALL_GUN_1"
+         slot_size = point_defence
+         slot_type = weapon
+         locatorname = "large_gun_01"
+      }
+      component_slot = {
+         name = "SMALL_GUN_2"
+         slot_size = point_defence
+         slot_type = weapon
+         locatorname = "large_gun_02"
+      }
+   }
+   
+# Light Torpedo Volley ( Heavy Weapon Platform )
+   ship_section_template = {
+      key = "military_station_medium_stern_3"
+      ship_size = military_station_medium
+      fits_on_slot = "west"
+      entity = "military_station_section_medium_entity"
+      icon = "GFX_ship_part_core_mid"
+      icon_frame = 1
+      prerequisites = { tech_engineering_deep_558 }
+      cost = 920
+      small_utility_slots = 0
+      medium_utility_slots = 0
+      large_utility_slots = 0
+      aux_utility_slots = 0
+      ai_weight = { factor = 10 }
+      component_slot = {
+         name = "SMALL_GUN_1"
+         slot_size = point_defence
+         slot_type = weapon
+         locatorname = "large_gun_01"
+      }
+      component_slot = {
+         name = "SMALL_GUN_2"
+         slot_size = point_defence
+         slot_type = weapon
+         locatorname = "large_gun_02"
+      }
+      component_slot = {
+         name = "SMALL_GUN_3"
+         slot_size = point_defence
+         slot_type = weapon
+         locatorname = "large_gun_03"
+      }
+      component_slot = {
+         name = "SMALL_GUN_4"
+         slot_size = point_defence
+         slot_type = weapon
+         locatorname = "large_gun_04"
+      }
+      component_slot = {
+         name = "SMALL_GUN_5"
+         slot_size = point_defence
+         slot_type = weapon
+         locatorname = "large_gun_05"
+      }
+      component_slot = {
+         name = "SMALL_GUN_6"
+         slot_size = point_defence
+         slot_type = weapon
+         locatorname = "large_gun_06"
+      }
+      component_slot = {
+         name = "SMALL_GUN_7"
+         slot_size = point_defence
+         slot_type = weapon
+         locatorname = "large_gun_01"
+      }
+      component_slot = {
+         name = "SMALL_GUN_8"
+         slot_size = point_defence
+         slot_type = weapon
+         locatorname = "large_gun_02"
+      }
+   }
+   
+# Heavy Torpedo Emplacement ( Heavy Weapon Platform )
+   ship_section_template = {
+      key = "military_station_medium_stern_4"
+      ship_size = military_station_medium
+      fits_on_slot = "west"
+      entity = "military_station_section_medium_entity"
+      icon = "GFX_ship_part_core_mid"
+      icon_frame = 1
+      prerequisites = { tech_engineering_deep_558 }
+      cost = 630
+      small_utility_slots = 0
+      medium_utility_slots = 0
+      large_utility_slots = 0
+      aux_utility_slots = 0
+      ai_weight = { factor = 10 }
+      component_slot = {
+         name = "TORPEDO_01"
+         slot_size = torpedo
+         slot_type = weapon
+         locatorname = "large_gun_01"
+      }
+      component_slot = {
+         name = "TORPEDO_02"
+         slot_size = torpedo
+         slot_type = weapon
+         locatorname = "large_gun_02"
+      }
+      component_slot = {
+         name = "TORPEDO_03"
+         slot_size = torpedo
+         slot_type = weapon
+         locatorname = "large_gun_03"
+      }
+   }
+   
+# Fighter Perimeter ( Heavy Weapon Platform )
+   ship_section_template = {
+      key = "military_station_medium_stern_5"
+      ship_size = military_station_medium
+      fits_on_slot = "west"
+      entity = "military_station_section_medium_entity"
+      icon = "GFX_ship_part_core_mid"
+      icon_frame = 1
+      prerequisites = { tech_engineering_industry_1278 }
+      cost = 920
+      small_utility_slots = 0
+      medium_utility_slots = 0
+      large_utility_slots = 0
+      aux_utility_slots = 0
+      ai_weight = { factor = 10 }
+      component_slot = {
+         name = "STRIKE_CRAFT_01"
+         slot_size = large
+         slot_type = strike_craft
+         locatorname = "part1"
+      }
+      component_slot = {
+         name = "STRIKE_CRAFT_02"
+         slot_size = large
+         slot_type = strike_craft
+         locatorname = "part1"
+      }
+   }
+   
+# Reactor Core ( Heavy Weapon Platform )
+   ship_section_template = {
+      key = "military_station_medium_mid_6"
+      ship_size = military_station_medium
+      fits_on_slot = "east"
+      entity = "military_station_section_medium_entity"
+      icon = "GFX_ship_part_core_mid"
+      icon_frame = 1
+      prerequisites = { tech_engineering_deep_558 }
+      cost = 790
+      small_utility_slots = 6
+      medium_utility_slots = 6
+      large_utility_slots = 0
+      aux_utility_slots = 0
+      ai_weight = { factor = 10 }
+   }
+   
+# Drydock - Core section
+ship_section_template = {
+	key = "military_station_large_mid_1"
+	prerequisites = { tech_engineering_deep_563 }
+	ship_size = military_station_large
+	fits_on_slot = "east"
+	entity = "military_station_large_entity"
+	icon = "GFX_ship_part_core_mid"
+	cost = 1600
+	
+ 	small_utility_slots = 6	
+	medium_utility_slots = 0	
+	large_utility_slots = 0	
+	aux_utility_slots = 0	
+
+}
+
+# Starfleet Museaum Core Section
+ship_section_template = {
+	key = "fed_ent_naval_museum"
+	ship_size = fed_ent_naval_museum
+	fits_on_slot = "east"
+	entity = "fed_ent_naval_museum_entity"
+	icon = "GFX_ship_part_core_mid"
+	cost = 1600
+	
+ 	small_utility_slots = 6	
+	medium_utility_slots = 0	
+	large_utility_slots = 0	
+	aux_utility_slots = 0	
+
+}
+
+
+###########################
+## Other
+###########################
+
+ship_section_template = {
+	key = "abandoned_ship_section"
+	ship_size = abandoned_ship
+	fits_on_slot = mid
+	entity = "abandoned_ship_section_entity"
+	icon = "GFX_ship_part_core_mid"
+	
+	component_slot = {
+		name = "LARGE_GUN_01"
+		slot_size = large
+		slot_type = weapon
+		locatorname = "root"
+	}
+	component_slot = {
+		name = "LARGE_GUN_02"
+		slot_size = large
+		slot_type = weapon
+		locatorname = "root"
+	}
+	component_slot = {
+		name = "MEDIUM_GUN_01"
+		slot_size = medium
+		slot_type = weapon
+		locatorname = "root"
+	}
+	component_slot = {
+		name = "MEDIUM_GUN_02"
+		slot_size = medium
+		slot_type = weapon
+		locatorname = "root"
+	}
+	component_slot = {
+		name = "MEDIUM_GUN_03"
+		slot_size = medium
+		slot_type = weapon
+		locatorname = "root"
+	}
+	
+	large_utility_slots = 1
+	medium_utility_slots = 3
+}
+
+ship_section_template = {
+	key = "probe_section"
+	ship_size = probe
+	fits_on_slot = mid
+	entity = "probe_section_entity"
+	icon = "GFX_ship_part_core_mid"
+	
+	component_slot = {
+		name = "MEDIUM_GUN_01"
+		slot_size = medium
+		slot_type = weapon
+		locatorname = "root"
+	}
+	component_slot = {
+		name = "MEDIUM_GUN_02"
+		slot_size = medium
+		slot_type = weapon
+		locatorname = "root"
+	}
+	
+	small_utility_slots = 1
+	medium_utility_slots = 1
+	large_utility_slots = 1
+}
+
+ship_section_template = {
+	key = "alien_racing_section"
+	ship_size = alien_racing_ship
+	fits_on_slot = mid
+	entity = "eventship_06_entity"
+	icon = "GFX_ship_part_core_mid"
+	
+	small_utility_slots = 2
+	medium_utility_slots = 2
+	large_utility_slots = 1
+}
+
+

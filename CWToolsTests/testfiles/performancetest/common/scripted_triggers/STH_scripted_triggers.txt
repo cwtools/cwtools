@@ -1,0 +1,502 @@
+sth_static_map = {
+	OR = {
+		sth_galaxy_maps = yes
+		sth_alphabeta_maps = yes
+		sth_delta_maps = yes
+		sth_gamma_maps = yes
+		sth_medium_galaxy_maps = yes
+		sth_random_maps = yes
+		sth_botf_maps = yes
+	}
+}
+
+sth_galaxy_maps = {
+	OR = {
+		sth_main_map = yes
+		sth_original_map = yes
+		sth_mirror_galaxy_map = yes
+	}
+}
+
+sth_alphabeta_maps = {
+	OR = {
+		sth_alphabeta_map = yes
+		sth_alphabeta_600_map = yes
+		sth_alphabeta_450_map = yes
+		sth_alphabeta_mirror_map = yes
+	}
+}
+
+sth_delta_maps = {
+	OR = {
+		sth_delta_map = yes
+	}
+}
+
+sth_gamma_maps = {
+	OR = {
+		sth_gamma_map = yes
+	}
+}
+
+sth_medium_galaxy_maps = {
+	OR = {
+		sth_medium_galaxy_map = yes
+	}
+}
+
+sth_mirror_maps = {
+	OR = {
+		sth_alphabeta_mirror_map = yes
+		sth_mirror_galaxy_map = yes
+	}
+}
+
+sth_random_maps = {
+	OR = {
+		sth_random_map = yes
+	}
+}
+
+sth_botf_maps = {
+	OR = {
+		sth_botf_map = yes
+	}
+}
+
+sth_main_map = { has_global_flag = sth_main_map }
+sth_original_map = { has_global_flag = sth_original_map }
+sth_alphabeta_map = { has_global_flag = sth_alphabeta_map }
+sth_alphabeta_600_map = { has_global_flag = sth_alphabeta_600_map }
+sth_alphabeta_450_map = { has_global_flag = sth_alphabeta_450_map }
+sth_alphabeta_mirror_map = { has_global_flag = sth_alphabeta_mirror_map }
+sth_mirror_galaxy_map = { has_global_flag = sth_mirror_galaxy_map }
+sth_delta_map = { has_global_flag = sth_delta_map }
+sth_gamma_map = { has_global_flag = sth_gamma_map }
+sth_medium_galaxy_map = { has_global_flag = sth_medium_galaxy_map }
+sth_random_map = { has_global_flag = sth_random_map }
+sth_botf_map = { has_global_flag = sth_botf_map }
+
+enterprise_era = { 
+	years_passed < 15
+}
+franklin_era = { 
+	years_passed > 14
+	years_passed < 50
+}
+kelvin_era = { 
+	years_passed > 49
+	years_passed < 80
+}
+discovery_era = { 
+	years_passed > 79
+	years_passed < 100
+}
+original_series_era = {	
+	years_passed > 99
+	years_passed < 120 
+}
+wrath_of_khan_era = { 
+	years_passed > 119
+	years_passed < 200
+}
+next_generation_era = { 
+	years_passed > 199
+	years_passed < 216
+}
+first_contact_era = { 
+	years_passed > 215
+	years_passed < 240
+}
+all_good_things_era = { 
+	years_passed > 239
+}
+
+enterprise_ships_era = { 
+	OR = { 
+		has_country_flag = starfleet_ent
+		has_country_flag = romulan_ent
+		has_country_flag = klingon_ent
+		has_country_flag = generic_ent
+		has_country_flag = borg_ent
+	}	
+}
+
+original_series_ships_era = { 
+	OR = { 
+		has_country_flag = starfleet_tos
+		has_country_flag = romulan_tos
+		has_country_flag = klingon_tos
+		has_country_flag = generic_tos
+		has_country_flag = borg_tos
+	}	
+}
+
+motion_picture_ships_era = { 
+	OR = { 
+		has_country_flag = starfleet_tmp
+		has_country_flag = romulan_tmp
+		has_country_flag = klingon_tmp
+		has_country_flag = generic_tmp
+		has_country_flag = borg_tmp
+	}	
+}
+
+next_gen_ships_era = { 
+	OR = { 
+		has_country_flag = starfleet_tng
+		has_country_flag = romulan_tng
+		has_country_flag = klingon_tng
+		has_country_flag = generic_tng
+		has_country_flag = borg_tng
+	}	
+}
+
+TOS_era_or_higher = {
+	OR = {
+		original_series_ships_era = yes
+		motion_picture_ships_era = yes
+		next_gen_ships_era = yes
+	}
+}
+
+TMP_era_or_higher = {
+	OR = {
+		motion_picture_ships_era = yes
+		next_gen_ships_era = yes
+	}
+}
+
+		
+has_border_tension = { 
+	exists = capital_scope
+	OR = { 
+		has_country_flag = has_dp
+		has_country_flag = has_dp_2
+		has_country_flag = has_dp_3
+		has_country_flag = has_ga
+		has_country_flag = has_ga_2
+		has_country_flag = has_ga_3	
+		has_country_flag = has_ac
+		has_country_flag = has_ac_2
+		has_country_flag = has_ac_3
+		has_country_flag = has_fed
+		has_country_flag = has_fed_2
+		has_country_flag = has_fed_3
+	}
+}
+
+exists_intimidated_state = {
+	any_country = { 
+		OR = { 
+			has_country_flag = intimidated_state1
+			has_country_flag = intimidated_state2
+			has_country_flag = intimidated_state3
+			has_country_flag = intimidated_state4
+			has_country_flag = intimidated_state5
+			has_country_flag = intimidated_state6
+			has_country_flag = moderately_intimidated_state1
+			has_country_flag = moderately_intimidated_state2
+			has_country_flag = moderately_intimidated_state3
+			has_country_flag = moderately_intimidated_state4
+			has_country_flag = moderately_intimidated_state5
+			has_country_flag = moderately_intimidated_state6
+			has_country_flag = very_intimidated_state1
+			has_country_flag = very_intimidated_state2
+			has_country_flag = very_intimidated_state3
+			has_country_flag = very_intimidated_state4
+			has_country_flag = very_intimidated_state5
+			has_country_flag = very_intimidated_state6
+			has_country_flag = outraged_state1
+			has_country_flag = outraged_state2
+			has_country_flag = outraged_state3
+			has_country_flag = outraged_state4
+			has_country_flag = outraged_state5
+			has_country_flag = outraged_state6
+		}
+	}
+}
+
+
+
+
+
+
+
+### Additional Triggers
+
+is_peaceful_country = { 
+	NOR = {
+		has_ethic = ethic_fanatic_xenophobe
+		has_ethic = ethic_fanatic_militarist
+	}
+}
+
+
+valid_espionage_target = {
+	is_assimilator = no
+	NOT = { has_country_flag = undine }
+	NOT = { has_country_flag = iconian_empire }
+	is_normal_country = yes
+	has_communications = Root
+	NOT = { is_same_value = Root }
+}
+
+valid_diplomacy_espionage_target = {
+	is_assimilator = no
+	NOT = { has_country_flag = undine }
+	NOT = { has_country_flag = iconian_empire }
+	is_normal_country = yes
+	has_communications = Root
+	NOT = { is_same_value = Root }
+	any_country = {
+		is_assimilator = no
+		NOT = { has_country_flag = undine }
+		NOT = { has_country_flag = iconian_empire }
+		NOT = { is_same_value = Root }
+		NOT = { is_same_value = prev }
+		is_normal_country = yes
+		has_communications = prev
+	}
+}
+
+valid_loan_target = {
+	NOT = { has_country_flag = borg_collective }
+	NOT = { has_country_flag = the_borg_collective }
+	NOT = { has_country_flag = undine }
+	NOT = { has_country_flag = iconian_empire }
+	is_normal_country = yes
+	has_communications = Root
+	NOT = { is_country = Root }
+}
+
+
+valid_privateer_target = {
+	NOT = { has_country_flag = borg_collective }
+	NOT = { has_country_flag = the_borg_collective }
+	NOT = { has_country_flag = undine }
+	NOT = { has_country_flag = iconian_empire }
+	is_normal_country = yes
+	has_communications = Root
+	NOT = { is_country = Root }
+}
+
+
+minorMajorEmpire = {
+	is_normal_country = yes
+}
+
+minorMajorRebelEmpire = {
+	OR = {
+		is_country_type = default
+		is_country_type = minorRace
+		is_country_type = rebel
+	}
+}
+
+
+has_very_low_tension = { 
+	OR = {
+		check_variable = { which = border_tension value = 2 }
+		check_variable = { which = border_tension value = 4 }
+		check_variable = { which = border_tension value = 6 }
+		check_variable = { which = border_tension value = 8 }
+		check_variable = { which = border_tension value = 10 }
+	}	
+}
+
+has_low_tension = { 
+	OR = {
+    check_variable = {
+        which = border_tension
+        value = 12
+        }
+    check_variable = {
+        which = border_tension
+        value = 14
+        }
+    check_variable = {
+        which = border_tension
+        value = 16
+        }
+    check_variable = {
+        which = border_tension
+        value = 18
+        }
+    check_variable = {
+        which = border_tension
+        value = 20
+        }
+	}	
+}
+
+has_medium_tension = { 
+	OR = {
+    check_variable = {
+        which = border_tension
+        value = 22
+        }
+    check_variable = {
+        which = border_tension
+        value = 24
+        }
+    check_variable = {
+        which = border_tension
+        value = 26
+        }
+    check_variable = {
+        which = border_tension
+        value = 28
+        }
+    check_variable = {
+        which = border_tension
+        value = 30
+        }
+	}	
+}
+
+has_high_tension = { 
+	OR = {
+    check_variable = {
+        which = border_tension
+        value = 32
+        }
+    check_variable = {
+        which = border_tension
+        value = 34
+        }
+    check_variable = {
+        which = border_tension
+        value = 36
+        }
+    check_variable = {
+        which = border_tension
+        value = 38
+        }
+    check_variable = {
+        which = border_tension
+        value = 40
+        }
+	}	
+}
+
+has_very_high_tension = { 
+	OR = {
+    check_variable = {
+        which = border_tension
+        value = 42
+        }
+    check_variable = {
+        which = border_tension
+        value = 44
+        }
+    check_variable = {
+        which = border_tension
+        value = 46
+        }
+    check_variable = {
+        which = border_tension
+        value = 48
+        }
+    check_variable = {
+        which = border_tension
+        value = 50
+        }
+	}	
+}
+
+can_not_use_cloning = {
+	OR = {
+		has_country_flag = federation_founder
+	    has_country_flag = federation_leader
+	    has_country_flag = united_federation_of_planets
+	}
+}
+
+### species gated traditions
+
+xenophile_country_traditions = {
+	OR = {
+		has_ethic = ethic_fanatic_xenophile
+		has_ethic = ethic_xenophile
+	}
+	NOR = {
+	    has_country_flag = romulan_star_empire
+	    is_assimilator = yes
+    }
+}
+
+pacifist_country_traditions = {
+	OR = {
+		has_ethic = ethic_fanatic_pacifist
+		has_ethic = ethic_pacifist
+	}
+	NOR = {
+	    has_country_flag = the_dominion
+	    is_assimilator = yes
+    }
+}
+
+egalitarian_country_traditions = {
+	OR = {
+		has_ethic = ethic_fanatic_egalitarian
+		has_ethic = ethic_egalitarian
+	}
+}
+
+materialist_country_traditions = {
+	OR = {
+		has_ethic = ethic_fanatic_materialist
+		has_ethic = ethic_materialist
+	}
+	NOR = {
+	    has_country_flag = klingon_empire
+	    is_assimilator = yes
+    }
+}
+
+authoritarian_country_traditions = {
+	OR = {
+		has_ethic = ethic_fanatic_authoritarian
+		has_ethic = ethic_authoritarian
+	}
+}
+
+militarist_country_traditions = {
+	OR = {
+		has_ethic = ethic_fanatic_militarist
+		has_ethic = ethic_militarist
+	}
+	NOR = {
+	    has_country_flag = federation_founder
+	    has_country_flag = federation_leader
+	    has_country_flag = united_federation_of_planets
+	    is_assimilator = yes
+    }
+}
+
+spiritualist_country_traditions = {
+	OR = {
+		has_ethic = ethic_fanatic_spiritualist
+		has_ethic = ethic_spiritualist
+	}
+	NOR = { 
+	    has_country_flag = cardassian_union
+	    is_assimilator = yes
+	    has_country_flag = vulcan_high_command
+	    has_country_flag = klingon_empire
+	    has_country_flag = bajoran_republic
+	    has_country_flag = tamarian_unity
+    }
+}
+
+xenophobe_country_traditions = {
+	OR = {
+		has_ethic = ethic_fanatic_xenophobe
+		has_ethic = ethic_xenophobe
+	}
+	NOR = { 
+	    has_country_flag = ferengi_alliance
+	    is_assimilator = yes
+	}
+}

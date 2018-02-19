@@ -1,0 +1,1282 @@
+#### STNH 1.8 COMPAT
+
+# All global modifiers are here.  They are applied from certain game-features.
+#
+# Effects are fully scriptable here.
+
+# The names can NOT be removed or changed since the code references them
+
+##########################################################################
+# Empire Base
+##########################################################################
+empire_base = {
+	max_rivalries = 3
+}
+
+##########################################################################
+# Defensive War
+##########################################################################
+defensive_war = {
+	pop_consumer_goods_mult = -0.33
+}
+
+##########################################################################
+# Difficulty Modifiers - not applied to vassals of players
+##########################################################################
+
+difficulty_insane_ai = {
+	tile_resource_minerals_mult = 1
+	tile_resource_energy_mult = 1
+	tile_resource_physics_research_mult = 1
+	tile_resource_society_research_mult = 1
+	tile_resource_engineering_research_mult = 1
+	navy_size_mult = 1
+}
+
+difficulty_very_hard_ai = {
+	tile_resource_minerals_mult = 0.5
+	tile_resource_energy_mult = 0.5
+	tile_resource_physics_research_mult = 0.5
+	tile_resource_society_research_mult = 0.5
+	tile_resource_engineering_research_mult = 0.5
+	navy_size_mult = 0.5
+}
+
+
+difficulty_hard_ai = {
+	tile_resource_minerals_mult = 0.25
+	tile_resource_energy_mult = 0.25
+	tile_resource_physics_research_mult = 0.25
+	tile_resource_society_research_mult = 0.25
+	tile_resource_engineering_research_mult = 0.25
+	navy_size_mult = 0.25
+}
+
+difficulty_normal_ai = {
+}
+
+# For non-playable empires, scales to galaxy size
+difficulty_scaled_insane = {
+	ship_weapon_damage = 1.0
+	ship_hitpoints_mult = 1.0
+	ship_shield_hp_mult = 1.0
+}
+
+difficulty_scaled_very_hard = {
+	ship_weapon_damage = 0.75
+	ship_hitpoints_mult = 0.75
+	ship_shield_hp_mult = 0.75
+}
+
+difficulty_scaled_hard = {
+	ship_weapon_damage = 0.66
+	ship_hitpoints_mult = 0.66
+	ship_shield_hp_mult = 0.66
+}
+
+difficulty_scaled_normal = {
+	ship_weapon_damage = 0.5
+	ship_hitpoints_mult = 0.5
+	ship_shield_hp_mult = 0.5
+}
+
+# Awakened Empires grow weaker over time
+awakened_empire_decadence = {
+	pop_resource_output = -0.75
+	country_subject_power_penalty_mult = 2.0
+	ship_weapon_damage = -0.25
+	ship_hitpoints_mult = -0.25
+	ship_shield_hp_mult = -0.25
+}
+
+##########################################################################
+# Pop Modifiers
+##########################################################################
+
+# Base Pop Modifiers
+pop_base = {
+}
+
+# At 0% habitability
+pop_habitability = {
+	pop_happiness = -0.25
+	pop_resource_output = -0.25
+}
+
+# Happiness Levels
+pop_happiness_positive = {
+	pop_non_slave_resource_output = 0.20
+	pop_government_ethic_attraction = 0.20
+}
+
+# Also causes unrest
+pop_happiness_negative = {
+	pop_non_slave_resource_output = -0.20
+	pop_government_ethic_attraction = -0.20
+}
+
+recently_migrated = {
+	pop_happiness = 0.1
+}
+
+recent_refugee = {
+	pop_happiness = 0.2
+}
+
+infiltration_happiness = {
+	pop_happiness = 0.3
+}
+
+occupation = {
+	pop_happiness = -0.30
+	pop_growth_speed = -0.5
+}
+
+pop_was_enslaved = {
+	pop_happiness = -0.10	
+}
+
+pop_enslaved = {
+	pop_happiness = -0.20
+	tile_resource_minerals_mult = 0.10
+	tile_resource_food_mult = 0.10
+	tile_resource_energy_mult = -0.33
+	tile_resource_physics_research_mult = -0.75
+	tile_resource_society_research_mult = -0.75
+	tile_resource_engineering_research_mult = -0.75
+	tile_resource_unity_mult = -0.75
+	pop_resettlement_cost_mult = -0.5
+}
+
+pop_enslaved_domestic = {
+	pop_happiness = -0.20
+	pop_owner_happiness = 0.05
+	tile_resource_energy_mult = -0.33
+	tile_resource_unity_mult = -0.33
+	tile_resource_physics_research_mult = -0.75
+	tile_resource_society_research_mult = -0.75
+	tile_resource_engineering_research_mult = -0.75
+	pop_resettlement_cost_mult = -0.5
+}
+
+pop_enslaved_military = {
+	pop_happiness = -0.10	
+	tile_resource_energy_mult = -0.15
+	tile_resource_physics_research_mult = -0.5
+	tile_resource_society_research_mult = -0.5
+	tile_resource_engineering_research_mult = -0.5
+	tile_resource_unity_mult = -0.5
+	pop_resettlement_cost_mult = -0.5
+}
+
+pop_enslaved_livestock = {
+	pop_happiness = -0.30
+	pop_food_add = 6
+	pop_resettlement_cost_mult = -0.5
+}
+
+pop_enslaved_matrix = {
+	pop_happiness = -0.30
+	pop_energy_add = 6
+	pop_resettlement_cost_mult = -0.5
+}
+
+pop_purging = {
+	pop_happiness = -100
+	pop_resource_output = -100
+	pop_food_req_mult = -100
+	pop_resettlement_cost_mult = -0.5
+}
+
+pop_purging_matrix = {
+	pop_happiness = -100
+	pop_energy_add = 8
+	pop_resettlement_cost_mult = -0.5
+}
+
+pop_purging_neutering = {
+	pop_happiness = -0.30
+}
+
+pop_purging_displacement = {
+	pop_happiness = -0.30
+	pop_resettlement_cost_mult = -0.5
+}
+
+pop_purging_labor_camps = {
+	pop_happiness = -100
+	tile_resource_energy_mult = -100
+	tile_resource_physics_research_mult = -100
+	tile_resource_society_research_mult = -100
+	tile_resource_engineering_research_mult = -100	
+	tile_resource_unity_mult = -100
+	pop_resettlement_cost_mult = -0.5
+}
+
+pop_purging_processing = {
+	pop_happiness = -100
+	pop_food_add = 8
+	pop_resettlement_cost_mult = -0.5
+}
+
+test_happiness = {
+	pop_happiness = 0.5
+}
+
+pop_war_happiness = {
+	pop_happiness = 1.0
+}
+
+pop_peace_happiness = {
+	pop_happiness = 1.0
+}
+
+pop_uplifted = {
+	pop_happiness = 0.1
+}
+
+pop_happiness_from_other_species = {
+	pop_happiness = 1.0
+}
+
+pop_happiness_without_slaves = {
+	pop_happiness = 1.0
+}
+
+pop_citizen_happiness = {
+	pop_happiness = 1.0
+}
+
+pop_owner_happiness = {
+	pop_happiness = 1.0
+}
+
+pop_planet_terraforming = {
+	pop_happiness = -0.2
+}
+
+pop_saved_from_slavery = {
+	pop_happiness = 0.1
+} 
+
+pop_saved_from_purge = {
+	pop_happiness = 0.3
+} 
+
+pop_recently_conquered = {
+	pop_happiness = -0.4
+} 
+
+pop_angry_subterranean = {
+	pop_happiness = -0.2
+}
+
+pop_happiness_cheat = {
+	pop_happiness = 0.01
+}
+
+pop_troubled_succession = {
+	pop_happiness = -0.3
+} 
+
+pop_drought = {
+	pop_happiness = -0.2
+}
+
+pop_did_not_kill_stalker = {
+	pop_happiness = -0.2
+}
+
+pop_synth_paranoia = {
+	pop_happiness = -0.2
+}
+
+pop_liberation_fever = {
+	pop_happiness = 0.3
+}
+
+lost_owned_pop_lesser = {
+	pop_happiness = -0.1
+}
+
+lost_owned_pop = {
+	pop_happiness = -0.2
+}
+
+##########################################################################
+# Generated Planet Modifiers
+##########################################################################
+
+hazardous_weather = {
+	pop_environment_tolerance = -0.10
+	pop_happiness = -0.05
+	tile_resource_energy_mult = 0.20
+	
+	icon = "gfx/interface/icons/planet_modifiers/pm_hazardous_weather.dds"
+	icon_frame = 2
+}
+
+dangerous_wildlife = {
+	pop_environment_tolerance = -0.10
+	pop_happiness = -0.05
+	tile_resource_society_research_mult = 0.20
+
+	icon = "gfx/interface/icons/planet_modifiers/pm_dangerous_wildlife.dds"
+	icon_frame = 2
+}
+
+weak_magnetic_field = {
+	pop_environment_tolerance = -0.05
+	pop_growth_speed = -0.05
+	
+	icon = "gfx/interface/icons/planet_modifiers/pm_weak_magnetic_field.dds"
+	icon_frame = 3
+}
+
+strong_magnetic_field = {
+	tile_resource_energy_mult = 0.05
+	tile_resource_physics_research_mult = 0.05
+	
+	icon = "gfx/interface/icons/planet_modifiers/pm_strong_magnetic_field.dds"
+	icon_frame = 1
+}
+
+unstable_tectonics = {
+	pop_environment_tolerance = -0.10
+	pop_happiness = -0.05
+	tile_resource_engineering_research_mult = 0.20
+	
+	icon = "gfx/interface/icons/planet_modifiers/pm_unstable_tectonics.dds"
+	icon_frame = 3
+}
+
+tidal_locked = {
+	pop_environment_tolerance = -0.10
+	
+	icon = "gfx/interface/icons/planet_modifiers/pm_tidal_locked.dds"
+	icon_frame = 3
+}
+
+chthonian_planet = {
+	
+	icon = "gfx/interface/icons/planet_modifiers/pm_chthonian_planet.dds"
+	icon_frame = 1
+}
+
+asteroid_impacts = {
+	pop_environment_tolerance = -0.05
+	tile_resource_minerals_mult = 0.05
+	
+	icon = "gfx/interface/icons/planet_modifiers/pm_asteroid_impacts.dds"
+	icon_frame = 2
+}
+
+extensive_moon_system = {
+	tile_resource_minerals_mult = 0.10
+	
+	icon = "gfx/interface/icons/planet_modifiers/pm_extensive_moon_system.dds"
+	icon_frame = 1
+}
+
+carbon_world = {
+	tile_resource_minerals_mult = 0.15
+	
+	icon = "gfx/interface/icons/planet_modifiers/pm_carbon_world.dds"
+	icon_frame = 1
+}
+
+wild_storms = {
+	pop_environment_tolerance = -0.05
+	pop_happiness = -0.05
+	tile_resource_physics_research_mult = 0.20
+
+	icon = "gfx/interface/icons/planet_modifiers/pm_wild_storms.dds"
+	icon_frame = 2
+}
+
+mineral_rich = {
+	tile_resource_minerals_mult = 0.15
+	
+	icon = "gfx/interface/icons/planet_modifiers/pm_mineral_rich.dds"
+	icon_frame = 1
+}
+
+ultra_rich = {
+	tile_resource_minerals_mult = 0.25
+	
+	icon = "gfx/interface/icons/planet_modifiers/pm_ultra_rich.dds"
+	icon_frame = 1
+}
+
+mineral_poor = {
+	tile_resource_minerals_mult = -0.25
+	
+	icon = "gfx/interface/icons/planet_modifiers/pm_mineral_poor.dds"
+	icon_frame = 3
+}
+
+titanic_life = {
+	tile_resource_society_research_mult = 0.25
+	
+	icon = "gfx/interface/icons/planet_modifiers/pm_titanic_life.dds"
+	icon_frame = 1
+}
+
+eat_the_titans = {
+	tile_resource_food_mult = 0.5 #So much food!
+	
+	icon = "gfx/interface/icons/planet_modifiers/pm_titanic_life.dds"
+	icon_frame = 1
+}
+
+asteroid_belt = {
+	tile_resource_minerals_mult = 0.10
+	
+	icon = "gfx/interface/icons/planet_modifiers/pm_asteroid_belt.dds"
+	icon_frame = 1
+}
+
+natural_beauty = {
+	pop_happiness = 0.05
+	planet_migration_all_pull = 0.25
+	
+	icon = "gfx/interface/icons/planet_modifiers/pm_natural_beauty.dds"
+	icon_frame = 1
+}
+
+atmospheric_aphrodisiac = {
+	pop_environment_tolerance = 0.05
+	pop_growth_speed = 0.10
+	pop_government_ethic_attraction = -0.20
+	
+	icon = "gfx/interface/icons/planet_modifiers/pm_atmospheric_aphrodisiac.dds"
+	icon_frame = 1
+}
+
+atmospheric_hallucinogen = {
+	biological_pop_happiness = 0.05
+	tile_resource_society_research_mult = 0.10
+	pop_government_ethic_attraction = -0.30
+	
+	icon = "gfx/interface/icons/planet_modifiers/pm_atmospheric_hallucinogen.dds"
+	icon_frame = 2
+}
+
+atmospheric_hallucinogen_good = {
+	pop_happiness = 0.10
+	tile_resource_society_research_mult = 0.10
+	
+	icon = "gfx/interface/icons/planet_modifiers/pm_atmospheric_hallucinogen.dds"
+	icon_frame = 1
+}
+
+lush_planet = {
+	pop_environment_tolerance = 0.10
+	tile_resource_food_mult = 0.20
+	
+	icon = "gfx/interface/icons/planet_modifiers/pm_lush.dds"
+	icon_frame = 1
+}
+
+bleak_planet = {
+	pop_environment_tolerance = -0.05
+	tile_resource_food_mult = -0.10
+	
+	icon = "gfx/interface/icons/planet_modifiers/pm_bleak.dds"
+	icon_frame = 3
+}
+
+irradiated_planet = {
+	pop_environment_tolerance = -0.10
+	biological_pop_happiness = -0.20
+	tile_resource_food_mult = -0.50
+	
+	icon = "gfx/interface/icons/planet_modifiers/pm_irradiated.dds"
+	icon_frame = 3
+}
+
+low_gravity = {
+	planet_building_cost_mult = -0.1
+	pop_environment_tolerance = -0.05
+	
+	icon = "gfx/interface/icons/planet_modifiers/pm_low_gravity.dds"
+	icon_frame = 2
+}
+
+high_gravity = {
+	planet_building_cost_mult = 0.1
+	pop_environment_tolerance = -0.05
+	
+	icon = "gfx/interface/icons/planet_modifiers/pm_high_gravity.dds"
+	icon_frame = 3
+}
+
+##########################################################################
+# Planet Modifiers
+##########################################################################
+
+# Base Planet Modifiers
+planet_base = {
+	pop_government_ethic_attraction = -0.15
+}
+
+starvation = {
+	biological_pop_happiness = -0.20
+}
+
+capital = {
+	pop_government_ethic_attraction = 1
+
+	icon = "gfx/interface/icons/planet_modifiers/capital.dds"
+	icon_frame = 1
+}
+
+# Multiplied by the distance from the Capital solar system
+# Distance 650 is about edge-to-edge in a 600 system map
+distance_from_capital = {
+	pop_government_ethic_attraction = -0.001
+}
+
+managed_by_sector = {
+	pop_government_ethic_attraction = -0.1
+}
+
+migrating_forests = {
+	icon = "gfx/interface/icons/planet_modifiers/pm_lush.dds"
+}
+
+migrating_forests_2 = {
+	icon = "gfx/interface/icons/planet_modifiers/pm_lush.dds"
+}
+
+dead_creatures = {
+	icon = "gfx/interface/icons/planet_modifiers/pm_wasteland.dds"
+}
+
+starship_graveyard = {
+	icon = "gfx/interface/icons/planet_modifiers/pm_asteroid_belt.dds"
+}
+
+organic_starship = {
+	icon = "gfx/interface/icons/planet_modifiers/pm_asteroid_belt.dds"
+}
+
+abandoned_cities = {
+	icon = "gfx/interface/icons/planet_modifiers/pm_factory.dds"
+}
+
+subterranean_ocean = {
+	icon = "gfx/interface/icons/planet_modifiers/pm_wild_storms.dds"
+}
+
+colony_enclaves = {
+	tile_resource_minerals_mult = -0.3
+	icon = "gfx/interface/icons/planet_modifiers/pm_planet_from_space.dds"
+}
+
+primitive_reservation = {
+	tile_resource_minerals_mult = -0.1
+	icon = "gfx/interface/icons/planet_modifiers/pm_planet_from_space.dds"
+}
+
+atmospheric_ecosystem = {
+	icon = "gfx/interface/icons/planet_modifiers/pm_atmospheric_hallucinogen.dds"
+}
+
+asteroid_life = {
+	icon = "gfx/interface/icons/planet_modifiers/pm_asteroid_belt.dds"
+}
+
+asteroid_coprolite = {
+	icon = "gfx/interface/icons/planet_modifiers/pm_asteroid_belt.dds"
+}
+
+derelict_shipyard = {
+	icon = "gfx/interface/icons/planet_modifiers/pm_asteroid_belt.dds"
+}
+
+junkyard = {
+	icon = "gfx/interface/icons/planet_modifiers/pm_asteroid_belt.dds"
+}
+
+target_range = {
+	icon = "gfx/interface/icons/planet_modifiers/pm_asteroid_impacts.dds"
+}
+
+ore_freighter = {
+	icon = "gfx/interface/icons/planet_modifiers/pm_asteroid_belt.dds"
+}
+
+aerostat_colonies = {
+	icon = "gfx/interface/icons/planet_modifiers/pm_atmospheric_hallucinogen.dds"
+}
+
+debris_field = {
+	icon = "gfx/interface/icons/planet_modifiers/pm_asteroid_belt.dds"
+}
+
+extreme_storms = {
+	icon = "gfx/interface/icons/planet_modifiers/pm_wild_storms.dds"
+}
+
+precious_moon = {
+	icon = "gfx/interface/icons/planet_modifiers/pm_extensive_moon_system.dds"
+}
+
+asteroid_collision = {
+	icon = "gfx/interface/icons/planet_modifiers/pm_asteroid_impacts.dds"
+}
+
+microsingularity = {
+	icon = "gfx/interface/icons/planet_modifiers/pm_planet_from_space.dds"
+}
+
+alien_writing = {
+	icon = "gfx/interface/icons/planet_modifiers/pm_planet_from_space.dds"
+}
+
+towed_asteroid = {
+	icon = "gfx/interface/icons/planet_modifiers/pm_asteroid_belt.dds"
+}
+
+nuclear_devastation = {
+	icon = "gfx/interface/icons/planet_modifiers/pm_irradiated.dds"
+}
+
+gamma_ray = {
+	icon = "gfx/interface/icons/planet_modifiers/pm_strong_magnetic_field.dds"
+}
+	
+greenhouse_effect = {
+	icon = "gfx/interface/icons/planet_modifiers/pm_atmospheric_hallucinogen.dds"
+}
+
+ammonia_biosphere = {
+	icon = "gfx/interface/icons/planet_modifiers/pm_atmospheric_hallucinogen.dds"
+}
+
+silicon_lifeforms = {
+	icon = "gfx/interface/icons/planet_modifiers/pm_carbon_world.dds"
+}
+
+colony_ruins = {
+	icon = "gfx/interface/icons/planet_modifiers/pm_factory.dds"
+}
+
+alien_mural = {
+	icon = "gfx/interface/icons/planet_modifiers/pm_planet_from_space.dds"
+}
+
+damaged_ecology = {
+	pop_happiness = -0.2
+	icon = "gfx/interface/icons/planet_modifiers/pm_wasteland.dds"
+	icon_frame = 3
+}
+
+friendly_trees = {
+	pop_happiness = 0.2
+	icon = "gfx/interface/icons/planet_modifiers/pm_lush.dds"
+}
+
+subterranean_civilization = {
+	tile_resource_society_research_mult = 0.1
+	icon = "gfx/interface/icons/planet_modifiers/pm_hollow_planet.dds"
+}
+
+subterranean_expansion = {
+	icon = "gfx/interface/icons/planet_modifiers/pm_hollow_planet.dds"
+}
+
+gas_giant_civ = {
+	icon = "gfx/interface/icons/planet_modifiers/pm_chthonian_planet.dds"
+}
+
+gas_giant_colony = {
+	icon = "gfx/interface/icons/planet_modifiers/pm_chthonian_planet.dds"
+}
+
+abandoned_terraforming = {
+	tile_resource_food_mult = -0.2
+	pop_happiness = -0.1
+	icon = "gfx/interface/icons/planet_modifiers/pm_asteroid_impacts.dds"
+	icon_frame = 3
+}
+
+gaia_world = {
+	pop_growth_speed = 0.20
+	icon = "gfx/interface/icons/planet_modifiers/pm_lush.dds"
+}
+
+mutant_stalker = {
+	pop_happiness = -0.1
+	icon = "gfx/interface/icons/planet_modifiers/pm_dangerous_wildlife.dds"
+	icon_frame = 3
+}
+
+wasteland_infrastructure = {
+	planet_building_cost_mult = -0.25
+	icon = "gfx/interface/icons/planet_modifiers/pm_factory.dds"
+}
+
+wasteland_radiation = {
+	biological_pop_happiness = -0.1
+	icon = "gfx/interface/icons/planet_modifiers/pm_irradiated.dds"
+	icon_frame = 3
+}
+
+wasteland_orbital_debris = {
+	planet_building_cost_mult = 0.1
+	icon = "gfx/interface/icons/planet_modifiers/pm_asteroid_impacts.dds"
+}
+
+upliftable_species = {
+	icon = "gfx/interface/icons/planet_modifiers/pm_planet_from_space.dds"
+}
+
+assist_research = {
+	tile_resource_physics_research_mult = 0.10
+	tile_resource_society_research_mult = 0.10
+	tile_resource_engineering_research_mult = 0.10
+	
+	icon = "gfx/interface/icons/planet_modifiers/pm_assist_research.dds"
+	icon_frame = 1
+}
+
+faith_in_science = {
+	planet_resource_unity_add = 1
+
+	icon = "gfx/interface/icons/planet_modifiers/pm_assist_research.dds"
+	icon_frame = 1
+}
+
+ancient_automation = {
+	icon = "gfx/interface/icons/planet_modifiers/pm_robots.dds"
+	icon_frame = 2
+}
+
+ancient_factory = {
+	icon = "gfx/interface/icons/planet_modifiers/pm_factory.dds"
+	icon_frame = 2
+}
+
+robot_workers = {
+	icon = "gfx/interface/icons/planet_modifiers/pm_robots.dds"
+	icon_frame = 2
+}
+
+ancient_forgeworld = {
+	icon = "gfx/interface/icons/planet_modifiers/pm_factory.dds"
+	icon_frame = 2
+}
+
+ancient_weapon = {
+	icon = "gfx/interface/icons/planet_modifiers/pm_planet_from_space.dds"
+	icon_frame = 2
+}
+
+holy_planet = {
+	icon = "gfx/interface/icons/planet_modifiers/pm_holy_planet.dds"
+	icon_frame = 3
+}
+
+terraforming_candidate = {
+	icon = "gfx/interface/icons/planet_modifiers/pm_planet_from_space.dds"
+	icon_frame = 1
+	important = yes			# if present on a planet, show the planet's nameplate
+}
+
+disconnected_from_sector = {
+	pop_resource_output = -0.25
+	
+	icon = "gfx/interface/icons/planet_modifiers/pm_planet_from_space.dds"
+	icon_frame = 3
+}
+
+planet_uncertain_past = {
+	tile_resource_physics_research_mult = 0.1
+	tile_resource_society_research_mult = 0.1
+	tile_resource_engineering_research_mult = 0.1
+	pop_happiness = -0.15
+
+	icon = "gfx/interface/icons/planet_modifiers/pm_irradiated.dds"
+	icon_frame = 2
+}
+
+recent_quake = {
+	pop_happiness = -0.05
+	
+	icon = "gfx/interface/icons/planet_modifiers/pm_unstable_tectonics.dds"
+	icon_frame = 3
+}
+
+recent_comet = {
+	pop_happiness = 0.1
+	
+	icon = "gfx/interface/icons/planet_modifiers/pm_asteroid_belt.dds"
+	icon_frame = 1
+}
+
+recent_impact = {
+	pop_happiness = -0.05
+	
+	icon = "gfx/interface/icons/planet_modifiers/pm_asteroid_impacts.dds"
+	icon_frame = 3
+}
+
+magnetic_research_boost = {
+	tile_resource_physics_research_mult = 0.2
+	tile_resource_society_research_mult = 0.2
+	tile_resource_engineering_research_mult = 0.2
+	
+	icon = "gfx/interface/icons/planet_modifiers/pm_strong_magnetic_field.dds"
+	icon_frame = 1
+}
+
+magnetic_disruption = {
+	pop_happiness = -0.05
+	tile_resource_physics_research_mult = -0.1
+	tile_resource_society_research_mult = -0.1
+	tile_resource_engineering_research_mult = -0.1
+	
+	icon = "gfx/interface/icons/planet_modifiers/pm_strong_magnetic_field.dds"
+	icon_frame = 3
+}
+
+forest_fire = {
+	tile_resource_food_mult = -0.2
+	icon = "gfx/interface/icons/planet_modifiers/pm_wasteland.dds"
+	icon_frame = 3
+}
+
+nationalist_corruption = {
+	pop_resource_output = -0.1
+	icon = "gfx/interface/icons/planet_modifiers/pm_nationalist_corruption.dds"
+	icon_frame = 3
+}
+
+planet_separatist_strikes = {
+	pop_resource_output = -0.4
+	icon = "gfx/interface/icons/planet_modifiers/pm_planet_separatist_supporter.dds"
+	icon_frame = 3
+}
+
+planet_separatist_supporter = {
+	pop_happiness = -0.1
+	icon = "gfx/interface/icons/planet_modifiers/pm_planet_separatist_supporter.dds"
+	icon_frame = 3
+}
+sector_separatist_supporter = {
+	pop_happiness = -0.1
+	icon_frame = 3
+}
+
+stellarite_high_temp = {
+	pop_happiness = -0.25
+	pop_environment_tolerance = -0.25
+	icon = "gfx/interface/icons/planet_modifiers/pm_unstable_tectonics.dds"
+	icon_frame = 3
+}
+
+stellarite_low_temp = {
+	pop_happiness = -0.25
+	pop_environment_tolerance = -0.25
+	icon = "gfx/interface/icons/planet_modifiers/pm_carbon_world.dds"
+	icon_frame = 3
+}
+
+planet_unrest = {
+	pop_resource_output = -0.5
+	pop_processing_output = -1.0
+}
+
+land_appropriation = {
+	planet_migration_all_pull = 1
+}
+
+##########################################################################
+# Leader Skill Modifiers
+##########################################################################
+
+skill_admiral = {
+	ship_fire_rate_mult = 0.05
+}
+
+skill_general = {
+	army_health = 0.05
+	army_damage_mult = 0.05
+	army_upkeep_mult = -0.05
+}
+
+skill_scientist = {
+	all_technology_research_speed = 0.02
+}
+
+skill_governor = {
+	pop_resource_output = 0.02
+	planet_building_build_speed_mult = 0.05
+	planet_clear_blocker_time_mult = -0.05
+}
+
+skill_ruler = {
+	planet_unrest_add = -10
+	edict_influence_cost = -0.03
+	country_resource_unity_mult = 0.03
+}
+
+leader_skills_spawn = {
+}
+
+##########################################################################
+# Spaceport levels
+##########################################################################
+
+spaceport_level_1 = {
+	ship_armor_add = 50
+	ship_weapon_damage = 2
+}
+
+spaceport_level_2 = {
+	ship_hitpoints_add = 10000
+	ship_armor_add = 55
+	ship_weapon_damage = 2.1
+}
+
+spaceport_level_3 = {
+	ship_hitpoints_add = 20000
+	ship_armor_add = 60
+	ship_weapon_damage = 2.2
+}
+
+spaceport_level_4 = {
+	ship_hitpoints_add = 30000
+	ship_armor_add = 65
+	ship_weapon_damage = 2.3
+}
+
+spaceport_level_5 = {
+	ship_hitpoints_add = 40000
+	ship_armor_add = 70
+	ship_weapon_damage = 2.4
+}
+
+spaceport_level_6 = {
+	ship_hitpoints_add = 50000
+	ship_armor_add = 75
+	ship_weapon_damage = 2.5
+}
+
+
+##########################################################################
+# Country modifiers
+##########################################################################
+mineral_deficit = {
+	ship_armor_mult = -0.5
+	army_damage_mult = -0.5
+	ship_weapon_damage = -0.5
+	all_technology_research_speed = -0.5
+}
+
+influence_deficit = {
+	pop_happiness = -0.20
+}
+
+energy_deficit = {
+	tile_resource_minerals_mult = -0.5
+	all_technology_research_speed = -0.5
+	spaceport_ship_build_speed_mult = -0.5
+	planet_army_build_speed_mult = -0.5
+	ship_shield_hp_mult = -0.5
+	ship_weapon_damage = -0.5
+	pop_robot_non_energy_output = -0.5
+}
+
+inefficient_planet_management = {
+	country_resource_influence_mult = -0.1
+	country_resource_energy_mult = -0.1
+}
+
+inefficient_sector_management = {
+	country_resource_influence_mult = -0.1
+	tile_resource_energy_mult = -0.1
+}
+
+ruler_ship = {
+	ship_weapon_damage = 0.5
+	ship_hitpoints_mult = 0.5
+	ship_shield_hp_mult = 0.5
+	ship_armor_mult = 0.5
+}
+
+ruler_station = {
+	ship_weapon_damage = 0.5
+	ship_hitpoints_mult = 0.5
+	ship_shield_hp_mult = 0.5
+	ship_armor_mult = 0.5
+}
+
+extradimensionals_defeated = {
+	pop_happiness = 0.2
+}
+
+prethoryn_defeated = {
+	pop_happiness = 0.2
+}
+
+subterranean_tech_transaction = {
+	tile_resource_engineering_research_mult = -0.30
+	icon = "gfx/interface/icons/modifiers/tile_resource_engineering_research_mult.dds"
+	icon_frame = 3
+}
+
+sponsored_rebels = {
+	country_resource_minerals_add = 20
+	country_resource_energy_add = 20
+	ship_upkeep_mult = -0.25
+	army_upkeep_mult = -0.5
+	navy_size_mult = 1.0
+	spaceport_ship_build_time_mult = -0.25
+	planet_army_build_cost_mult = -0.25
+	planet_army_build_speed_mult = 1.0
+	country_resource_influence_add = 3
+}
+
+recently_liberated = {
+	pop_government_ethic_attraction = 0.5
+}
+
+ai_strength = {
+	tile_resource_minerals_mult = 10
+	tile_resource_energy_mult = 10
+	tile_resource_physics_research_mult = 5
+	tile_resource_society_research_mult = 5
+	tile_resource_engineering_research_mult = 5
+	navy_size_mult = 1
+}
+
+nomad_strength = {
+	ship_weapon_damage = 1.25
+	ship_hitpoints_mult = 1.25
+}
+
+ed_anchor_buildspeed = {
+	shipsize_anchor_station_construction_speed_mult = -0.9
+}
+
+fleet_maneuvers_recruitment = {
+	icon = "gfx/interface/icons/modifiers/mod_pop_war_happiness.dds"
+	icon_frame = 1
+	ship_upkeep_mult = -0.2
+	spaceport_ship_build_speed_mult = 0.2
+}
+
+fleet_maneuvers = {
+	icon = "gfx/interface/icons/modifiers/mod_fleet_size_add.dds"
+	icon_frame = 1
+	ship_fire_rate_mult = 0.10
+}
+
+maneuvers_cancelled = {
+	icon = "gfx/interface/icons/modifiers/mod_country_insult_efficiency.dds"
+	country_resource_unity_mult = -0.05
+	ship_fire_rate_mult = -0.05
+}
+
+maneuvers_no_protest = {
+	icon = "gfx/interface/icons/modifiers/mod_country_insult_efficiency.dds"
+	country_resource_unity_mult = -0.15
+}
+
+#applied based on the "should_apply_neighbor_rival_modifier" game rule
+#scales with number of rivals that are bordering the country
+per_neighbor_rival = {
+	country_resource_unity_mult = 0.1
+}
+
+# Ghost Signal Pop Modifier
+pop_ghost_signal_5 = {
+	tile_resource_minerals_mult = -0.70
+	tile_resource_energy_mult = -0.70
+	tile_resource_physics_research_mult = -0.70
+	tile_resource_society_research_mult = -0.70
+	tile_resource_engineering_research_mult = -0.70
+	tile_resource_unity_mult = -0.70
+	pop_government_ethic_attraction = -0.70
+}
+
+pop_ghost_signal_4 = {
+	tile_resource_minerals_mult = -0.55
+	tile_resource_energy_mult = -0.55
+	tile_resource_physics_research_mult = -0.55
+	tile_resource_society_research_mult = -0.55
+	tile_resource_engineering_research_mult = -0.55
+	tile_resource_unity_mult = -0.55
+	pop_government_ethic_attraction = -0.55
+}
+
+pop_ghost_signal_3 = {
+	tile_resource_minerals_mult = -0.40
+	tile_resource_energy_mult = -0.40
+	tile_resource_physics_research_mult = -0.40
+	tile_resource_society_research_mult = -0.40
+	tile_resource_engineering_research_mult = -0.40
+	tile_resource_unity_mult = -0.40
+	pop_government_ethic_attraction = -0.40
+}
+
+pop_ghost_signal_2 = {
+	tile_resource_minerals_mult = -0.25
+	tile_resource_energy_mult = -0.25
+	tile_resource_physics_research_mult = -0.25
+	tile_resource_society_research_mult = -0.25
+	tile_resource_engineering_research_mult = -0.25
+	tile_resource_unity_mult = -0.25
+	pop_government_ethic_attraction = -0.25
+}
+
+pop_ghost_signal_1 = {
+	tile_resource_minerals_mult = -0.10
+	tile_resource_energy_mult = -0.10
+	tile_resource_physics_research_mult = -0.10
+	tile_resource_society_research_mult = -0.10
+	tile_resource_engineering_research_mult = -0.10
+	tile_resource_unity_mult = -0.10
+	pop_government_ethic_attraction = -0.10
+}
+
+ship_ghost_signal_5 = {
+	ship_fire_rate_mult = -0.5
+	ship_tracking_add = -5
+}
+
+ship_ghost_signal_4 = {
+	ship_fire_rate_mult = -0.4
+	ship_tracking_add = -4
+}
+
+ship_ghost_signal_3 = {
+	ship_fire_rate_mult = -0.3
+	ship_tracking_add = -3
+}
+
+ship_ghost_signal_2 = {
+	ship_fire_rate_mult = -0.2
+	ship_tracking_add = -2
+}
+
+ship_ghost_signal_1 = {
+	ship_fire_rate_mult = -0.1
+	ship_tracking_add = -1
+}
+
+synth_planet_paranoia = {
+	planet_unrest_add = 20
+	icon_frame = 3
+	icon = "gfx/interface/icons/planet_modifiers/pm_unrest.dds"
+}
+
+pop_ghost_signal_5_machine = {
+	tile_resource_minerals_mult = -0.40
+	tile_resource_energy_mult = -0.40
+	tile_resource_physics_research_mult = -0.40
+	tile_resource_society_research_mult = -0.40
+	tile_resource_engineering_research_mult = -0.40
+}
+
+pop_ghost_signal_4_machine = {
+	tile_resource_minerals_mult = -0.25
+	tile_resource_energy_mult = -0.25
+	tile_resource_physics_research_mult = -0.25
+	tile_resource_society_research_mult = -0.25
+	tile_resource_engineering_research_mult = -0.25
+}
+
+
+
+##########################################################################
+# Fallen Empire Tasks & Requests Modifiers
+##########################################################################
+
+fallen_empire_gift_databanks = {
+	tile_resource_physics_research_mult = 0.25
+	tile_resource_society_research_mult = 0.25
+	tile_resource_engineering_research_mult = 0.25
+}
+
+gave_up_scientist_xenophobe = {
+	pop_happiness = -0.1
+}
+
+gave_up_pop = {
+	pop_happiness = -0.1
+}
+
+gave_up_pop_xenophile = {
+	pop_happiness = -0.05
+}
+
+gave_up_pop_xenophobe = {
+	pop_happiness = -0.2
+}
+
+fe_gift_ship = {
+	ship_upkeep_mult = -0.33
+}
+
+machine_empire_inoculations_xenophobe = {
+	pop_happiness = -0.1
+}
+
+machine_empire_inoculations = {
+	pop_happiness = -0.05
+}
+
+machine_empire_health_boost = {
+	pop_growth_speed = 0.05
+	leader_age = 10
+}
+
+machine_empire_mutations = {
+	leader_age = -10
+	pop_growth_speed = -0.10
+	pop_happiness = -0.20
+}
+
+machine_empire_code_rewrite = {
+	pop_robot_upkeep_mult = 0.10
+}
+
+machine_empire_code_improvements = {
+	pop_robot_production_output = 0.05
+}
+
+machine_empire_code_bugs = {
+	pop_robot_upkeep_mult = 0.05
+	pop_robot_production_output = -0.20
+}
+
+##########################################################################
+# Synth Modifiers
+##########################################################################
+
+pol_ai_outlawed = {
+	tile_resource_engineering_research_mult = -0.4
+	tile_resource_physics_research_mult = -0.4
+	tile_resource_society_research_mult = -0.4
+	tile_resource_unity_mult = -0.2
+	tile_resource_energy_mult = -0.2
+}
+
+pol_ai_servitude = {
+	pop_happiness = -0.3
+	tile_resource_minerals_mult = 0.10
+	tile_resource_food_mult = 0.10
+	tile_resource_engineering_research_mult = -0.2
+	tile_resource_physics_research_mult = -0.2
+	tile_resource_society_research_mult = -0.2
+	tile_resource_unity_mult = -0.1
+	tile_resource_energy_mult = -0.1
+}
+
+pol_ai_full_rights = {
+	pop_consumer_goods_add = 0.5
+}

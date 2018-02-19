@@ -1,0 +1,109 @@
+@distance = 30
+@base_moon_distance = 10
+
+# Banea
+banean_homeworld = {			
+	name = "Banea"		
+	class = sc_f
+	flags = { banean_homeworld }
+	init_effect = { log = "banean homeworld" }
+	usage = custom_empire
+	max_instances = 1
+	planet = {		
+		name = "Banea"	
+		class = star	
+		orbit_distance = 0	
+		orbit_angle = 1	
+		size = { min = 20 max = 40}
+		has_ring = no	
+	}		
+	planet = {		
+		count = { min = 0 max = 4 }
+		orbit_distance = {min = 35 max = 50}	
+		size = { min = 10 max = 20 }	
+		moon = {	
+			count = { min = 0 max = 2 }
+			class = random_non_colonizable
+			orbit_distance = { min = 8 max = 10 }
+			size = { min = 8 max = 10 }
+		}	
+	}		
+	planet = {		
+		name = "Banea Prime"	
+		class = "pc_ocean"	
+		orbit_distance = {min = 35 max = 50}
+		orbit_angle = 120	
+		size = { min = 18 max = 20 }	
+		has_ring = no	
+		modifiers = none	
+		tile_blockers = none
+		init_effect = { prevent_anomaly = yes }
+		init_effect = {
+			if = {
+				limit = { NOT = { any_country = { has_country_flag = united_congress_of_banea } } }
+				create_species = { 
+					name = "Banea"
+					class = BAN
+					portrait = banea
+					homeworld = THIS 
+					traits = { 
+						trait="trait_quick_learners"
+						trait="trait_charismatic"
+						ideal_planet_class = "pc_ocean" 
+					} 
+				}
+				last_created_species = { save_global_event_target_as = baneanSpecies }
+				create_country = {
+					name = "NAME_united_congress_of_banea"
+					type = default
+					ignore_initial_colony_error = yes
+					civics = { civic = "civic_parliamentary_system" civic = "civic_efficient_bureaucracy" }
+					authority = auth_democratic
+					name_list = "Banean"
+					ethos = { ethic = "ethic_egalitarian" ethic = "ethic_xenophile" ethic = "ethic_materialist" }
+					species = event_target:baneanSpecies
+					flag = {
+						icon = { category = "trek" file = "banea.dds" }
+						background = { category = "backgrounds" file = "circle.dds" }
+						colors = { "customcolor1527" "customcolor1844" "null" "null" }
+					}
+					ship_prefix = "CBV"
+					effect = {
+						set_graphical_culture = generic_01
+						set_country_flag = united_congress_of_banea
+						set_country_flag = custom_start_screen
+						set_country_flag = generic_ent
+						set_country_flag = delta_empire
+						set_country_flag = init_spawned
+						save_global_event_target_as = united_congress_of_banea
+					}
+				}
+				create_colony = { owner = event_target:united_congress_of_banea species = event_target:baneanSpecies ethos = owner }
+			}
+			set_capital = yes
+			random_country = {
+				limit = { has_country_flag = united_congress_of_banea }
+				save_global_event_target_as = united_congress_of_banea
+				add_appropriate_start_techs = yes
+				species = { save_global_event_target_as = baneanSpecies }
+				set_country_type = minorRace
+            }
+			set_owner = event_target:united_congress_of_banea
+			generate_minor_empire_start_buildings = yes
+			generate_minor_empire_start_pops = yes
+			generate_major_empire_start_fleets = yes
+			set_name = "Banea"	
+		}
+	}
+	planet = {		
+		count = { min = 0 max = 5 }
+		orbit_distance = {min = 20 max = 30}	
+		size = { min = 10 max = 20 }	
+		moon = {	
+			count = { min = 0 max = 2 }
+			class = random_non_colonizable
+			orbit_distance = { min = 8 max = 10 }
+			size = { min = 8 max = 10 }
+		}	
+	}
+}	

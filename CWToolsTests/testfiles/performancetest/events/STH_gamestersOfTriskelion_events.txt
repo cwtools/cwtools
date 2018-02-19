@@ -1,0 +1,466 @@
+############################
+#
+# Gamesters of Triskelion
+#
+# Written by Walshicus & Captain Sheriden
+#
+############################
+
+namespace = STH_gamestersOfTriskelion_event
+
+@tier1materialreward = 6
+@tier1materialmin = 100
+@tier1materialmax = 500
+@tier2materialreward = 12
+@tier2materialmin = 150
+@tier2materialmax = 1000
+@tier3materialreward = 18
+@tier3materialmin = 250
+@tier3materialmax = 1500
+@tier4materialreward = 24
+@tier4materialmin = 350
+@tier4materialmax = 2000
+
+@tier1influencereward = 6
+@tier1influencemin = 40
+@tier1influencemax = 100
+@tier2influencereward = 12
+@tier2influencemin = 80
+@tier2influencemax = 175
+@tier3influencereward = 18
+@tier3influencemin = 125
+@tier3influencemax = 250
+@tier4influencereward = 24
+@tier4influencemin = 150
+@tier4influencemax = 300
+
+@tier1researchreward = 6
+@tier1researchmin = 60
+@tier1researchmax = 150
+@tier2researchreward = 12
+@tier2researchmin = 90
+@tier2researchmax = 250
+@tier3researchreward = 18
+@tier3researchmin = 120
+@tier3researchmax = 350
+@tier4researchreward = 24
+@tier4researchmin = 150
+@tier4researchmax = 500
+
+
+# Gamesters of Triskelion
+
+#Critical Fail
+ship_event = {
+	id = STH_gamestersOfTriskelion_event.1
+	title = STH_gamestersOfTriskelion_event.1.name
+	desc = STH_gamestersOfTriskelion_event.1.desc
+	picture = sth_GFX_evt_gamestersOfTriskelion1
+	location = FROM
+	is_triggered_only = yes
+	immediate = { }
+	option = {
+		name = STH_gamestersOfTriskelion_event.1.a
+		owner = { add_influence = -50 }
+	}
+}
+#Fail
+ship_event = {
+	id = STH_gamestersOfTriskelion_event.2
+	title = STH_gamestersOfTriskelion_event.2.name
+	desc = STH_gamestersOfTriskelion_event.2.desc
+	picture = sth_GFX_evt_gamestersOfTriskelion1
+	location = FROM
+	is_triggered_only = yes
+	immediate = { }
+	option = {
+		name = STH_gamestersOfTriskelion_event.2.a
+	}
+}
+
+
+#Success
+ship_event = {
+	id = STH_gamestersOfTriskelion_event.3
+	title = STH_gamestersOfTriskelion_event.3.name
+	desc = STH_gamestersOfTriskelion_event.3.desc
+	picture = sth_GFX_evt_gamestersOfTriskelion1
+	location = FROM
+	is_triggered_only = yes
+	immediate = { 
+		fleet = { 
+			set_fleet_flag = triskelion_fleet
+			leader = { save_event_target_as = triskelion_enslaved_leader }
+			exile_leader_as = triskelion_enslaved_leader
+		}
+		FROM = {
+			save_event_target_as = triskelion_original_planet
+		}
+	}
+	option = {
+		name = STH_gamestersOfTriskelion_event.3.a
+		hidden_effect = { owner = { country_event = { id = STH_gamestersOfTriskelion_event.4 } } }
+	}
+}
+
+country_event = {
+	id = STH_gamestersOfTriskelion_event.4
+	title = STH_gamestersOfTriskelion_event.4.name
+	desc = STH_gamestersOfTriskelion_event.4.desc
+	picture = sth_GFX_evt_gamestersOfTriskelion2
+	location = FROM
+	is_triggered_only = yes
+	immediate = { }
+	option = {
+		name = STH_gamestersOfTriskelion_event.4.a #Refuse to serve
+		hidden_effect = { country_event = { id = STH_gamestersOfTriskelion_event.5 days = 1 } }
+	}
+	option = {
+		name = STH_gamestersOfTriskelion_event.4.b #Obey
+		hidden_effect = { country_event = { id = STH_gamestersOfTriskelion_event.7 days = 1 } }
+	}
+}
+
+country_event = {
+	id = STH_gamestersOfTriskelion_event.5
+	title = STH_gamestersOfTriskelion_event.5.name
+	desc = STH_gamestersOfTriskelion_event.5.desc
+	picture = sth_GFX_evt_gamestersOfTriskelion2
+	location = FROM
+	is_triggered_only = yes
+	immediate = { }
+	option = {
+		name = STH_gamestersOfTriskelion_event.5.a
+		add_influence = -25
+		hidden_effect = { country_event = { id = STH_gamestersOfTriskelion_event.7 days = 2 } }
+	}
+	option = {
+		name = STH_gamestersOfTriskelion_event.5.b
+		add_influence = -25
+		hidden_effect = { country_event = { id = STH_gamestersOfTriskelion_event.6 } }
+	}
+}
+
+country_event = {
+	id = STH_gamestersOfTriskelion_event.6
+	title = STH_gamestersOfTriskelion_event.6.name
+	desc = STH_gamestersOfTriskelion_event.6.desc
+	picture = sth_GFX_evt_gamestersOfTriskelion2
+	location = FROM
+	is_triggered_only = yes
+	immediate = { }
+	option = {
+		name = STH_gamestersOfTriskelion_event.6.a
+		add_influence = -75
+		event_target:triskelion_enslaved_leader = {
+			kill_leader = { type = scientist show_notification = yes }
+		}
+	}
+}
+
+country_event = {
+	id = STH_gamestersOfTriskelion_event.7
+	title = STH_gamestersOfTriskelion_event.7.name
+	desc = STH_gamestersOfTriskelion_event.7.desc
+	picture = sth_GFX_evt_gamestersOfTriskelion2
+	location = FROM
+	is_triggered_only = yes
+	immediate = { }
+	option = {
+		name = STH_gamestersOfTriskelion_event.7.a #Try to escape
+		hidden_effect = { country_event = { id = STH_gamestersOfTriskelion_event.8 days = 14 } }
+	}
+	option = {
+		name = STH_gamestersOfTriskelion_event.7.b #Try to escape
+		hidden_effect = { country_event = { id = STH_gamestersOfTriskelion_event.14 days = 14 } }
+	}
+	option = {
+		trigger = {
+			OR = {
+				has_ethic = ethic_fanatic_materialist
+				has_ethic = ethic_materialist
+			}
+		}
+		name = STH_gamestersOfTriskelion_event.7.c #Try to escape
+		hidden_effect = { country_event = { id = STH_gamestersOfTriskelion_event.19 days = 7 } }
+	}
+}
+
+country_event = {
+	id = STH_gamestersOfTriskelion_event.8
+	title = STH_gamestersOfTriskelion_event.8.name
+	desc = STH_gamestersOfTriskelion_event.8.desc
+	picture = sth_GFX_evt_gamestersOfTriskelion3
+	location = FROM
+	is_triggered_only = yes
+	immediate = { }
+	option = {
+		name = STH_gamestersOfTriskelion_event.8.a
+		hidden_effect = { country_event = { id = STH_gamestersOfTriskelion_event.9 days = 4 } }
+	}
+}
+
+country_event = {
+	id = STH_gamestersOfTriskelion_event.9
+	title = STH_gamestersOfTriskelion_event.9.name
+	desc = STH_gamestersOfTriskelion_event.9.desc
+	picture = sth_GFX_evt_gamestersOfTriskelion4
+	location = FROM
+	is_triggered_only = yes
+	immediate = { }
+	option = {
+		name = STH_gamestersOfTriskelion_event.9.a
+		hidden_effect = { 
+			random_list = {
+				10 = { country_event = { id = STH_gamestersOfTriskelion_event.10 days = 2 } } #Landing Party Killed
+				90 = { country_event = { id = STH_gamestersOfTriskelion_event.11 days = 2 } } #Landing Party to Fight
+			}
+		}
+	}
+}
+
+country_event = {
+	id = STH_gamestersOfTriskelion_event.10
+	title = STH_gamestersOfTriskelion_event.10.name
+	desc = STH_gamestersOfTriskelion_event.10.desc
+	picture = sth_GFX_evt_gamestersOfTriskelion4
+	location = FROM
+	is_triggered_only = yes
+	immediate = { }
+	option = {
+		name = STH_gamestersOfTriskelion_event.10.a
+		add_influence = -75
+		event_target:triskelion_enslaved_leader = {
+			kill_leader = { type = scientist show_notification = yes }
+		}
+	}
+}
+
+country_event = {
+	id = STH_gamestersOfTriskelion_event.11
+	title = STH_gamestersOfTriskelion_event.11.name
+	desc = STH_gamestersOfTriskelion_event.11.desc
+	picture = sth_GFX_evt_gamestersOfTriskelion4
+	location = FROM
+	is_triggered_only = yes
+	immediate = { }
+	option = {
+		name = STH_gamestersOfTriskelion_event.11.a
+		hidden_effect = { 
+			random_list = {
+				35 = { country_event = { id = STH_gamestersOfTriskelion_event.12 } } #Landing Party Killed
+				65 = { country_event = { id = STH_gamestersOfTriskelion_event.13 } } #Freedom Won
+			}
+		}
+	}
+}
+
+country_event = {
+	id = STH_gamestersOfTriskelion_event.12
+	title = STH_gamestersOfTriskelion_event.12.name
+	desc = STH_gamestersOfTriskelion_event.12.desc
+	picture = sth_GFX_evt_gamestersOfTriskelion5
+	location = FROM
+	is_triggered_only = yes
+	immediate = { }
+	option = {
+		name = STH_gamestersOfTriskelion_event.12.a
+		add_influence = -75
+		event_target:triskelion_enslaved_leader = {
+			kill_leader = { type = scientist show_notification = yes }
+		}
+	}
+}
+
+country_event = {
+	id = STH_gamestersOfTriskelion_event.13
+	title = STH_gamestersOfTriskelion_event.13.name
+	desc = STH_gamestersOfTriskelion_event.13.desc
+	picture = sth_GFX_evt_gamestersOfTriskelion5
+	location = FROM
+	is_triggered_only = yes
+	immediate = { }
+	option = {
+		name = STH_gamestersOfTriskelion_event.13.a
+		add_influence = 150
+		random_owned_fleet = {
+			limit = { has_fleet_flag = triskelion_fleet }
+			set_leader = triskelion_enslaved_leader
+		}
+		add_monthly_resource_mult = {
+			resource = society_research
+			value = @tier4researchreward
+			min = @tier4researchmin
+			max = @tier4researchmax
+		}
+	}
+}
+
+country_event = {
+	id = STH_gamestersOfTriskelion_event.14
+	title = STH_gamestersOfTriskelion_event.14.name
+	desc = STH_gamestersOfTriskelion_event.14.desc
+	picture = sth_GFX_evt_gamestersOfTriskelion3
+	location = FROM
+	is_triggered_only = yes
+	immediate = { }
+	option = {
+		name = STH_gamestersOfTriskelion_event.14.a
+		hidden_effect = { country_event = { id = STH_gamestersOfTriskelion_event.15 days = 4 } }
+	}
+}
+
+country_event = {
+	id = STH_gamestersOfTriskelion_event.15
+	title = STH_gamestersOfTriskelion_event.15.name
+	desc = STH_gamestersOfTriskelion_event.15.desc
+	picture = sth_GFX_evt_gamestersOfTriskelion4
+	location = FROM
+	is_triggered_only = yes
+	immediate = { }
+	option = {
+		name = STH_gamestersOfTriskelion_event.15.a
+		hidden_effect = { 
+			random_list = {
+				15 = { country_event = { id = STH_gamestersOfTriskelion_event.16 days = 2 } } #Landing Party Killed
+				85 = { country_event = { id = STH_gamestersOfTriskelion_event.17 days = 2 } } #Landing Party to Fight
+			}
+		}
+	}
+}
+
+country_event = {
+	id = STH_gamestersOfTriskelion_event.16
+	title = STH_gamestersOfTriskelion_event.16.name
+	desc = STH_gamestersOfTriskelion_event.16.desc
+	picture = sth_GFX_evt_gamestersOfTriskelion4
+	location = FROM
+	is_triggered_only = yes
+	immediate = { }
+	option = {
+		name = STH_gamestersOfTriskelion_event.16.a
+		add_influence = -75
+		event_target:triskelion_enslaved_leader = {
+			kill_leader = { type = scientist show_notification = yes }
+		}
+	}
+}
+
+country_event = {
+	id = STH_gamestersOfTriskelion_event.17
+	title = STH_gamestersOfTriskelion_event.17.name
+	desc = STH_gamestersOfTriskelion_event.17.desc
+	picture = sth_GFX_evt_gamestersOfTriskelion4
+	location = FROM
+	is_triggered_only = yes
+	immediate = { }
+	option = {
+		name = STH_gamestersOfTriskelion_event.17.a
+		hidden_effect = { 
+			random_list = {
+				25 = { country_event = { id = STH_gamestersOfTriskelion_event.18 } } #Landing Party Killed
+				75 = { country_event = { id = STH_gamestersOfTriskelion_event.13 } } #Freedom Won
+			}
+		}
+	}
+}
+
+country_event = {
+	id = STH_gamestersOfTriskelion_event.18
+	title = STH_gamestersOfTriskelion_event.18.name
+	desc = STH_gamestersOfTriskelion_event.18.desc
+	picture = sth_GFX_evt_gamestersOfTriskelion5
+	location = FROM
+	is_triggered_only = yes
+	immediate = { }
+	option = {
+		name = STH_gamestersOfTriskelion_event.18.a
+		add_influence = -75
+		event_target:triskelion_enslaved_leader = {
+			kill_leader = { type = scientist show_notification = yes }
+		}
+	}
+}
+
+country_event = {
+	id = STH_gamestersOfTriskelion_event.19
+	title = STH_gamestersOfTriskelion_event.19.name
+	desc = STH_gamestersOfTriskelion_event.19.desc
+	picture = sth_GFX_evt_gamestersOfTriskelion4
+	location = FROM
+	is_triggered_only = yes
+	immediate = { }
+	option = {
+		name = STH_gamestersOfTriskelion_event.19.a
+		trigger = { 
+			NOT = { 
+				is_species_class = WAD 
+				is_species_class = FER
+			}
+		}
+		hidden_effect = { country_event = { id = STH_gamestersOfTriskelion_event.20 days = 2 } } #Landing Party Killed
+	}
+	option = {
+		name = STH_gamestersOfTriskelion_event.19.b
+		trigger = { is_species_class = FER }
+		hidden_effect = { country_event = { id = STH_gamestersOfTriskelion_event.21 days = 2 } } #Dabo sold
+	}
+	option = {
+		name = STH_gamestersOfTriskelion_event.19.c
+		trigger = { is_species_class = WAD }
+		hidden_effect = { country_event = { id = STH_gamestersOfTriskelion_event.22 days = 2 } } #Chula sold
+	}
+}
+
+country_event = {
+	id = STH_gamestersOfTriskelion_event.20
+	title = STH_gamestersOfTriskelion_event.20.name
+	desc = STH_gamestersOfTriskelion_event.20.desc
+	picture = sth_GFX_evt_gamestersOfTriskelion4
+	location = FROM
+	is_triggered_only = yes
+	immediate = { }
+	option = {
+		name = STH_gamestersOfTriskelion_event.20.a
+		add_influence = -75
+		event_target:triskelion_enslaved_leader = {
+			kill_leader = { type = scientist show_notification = yes }
+		}
+	}
+}
+
+country_event = {
+	id = STH_gamestersOfTriskelion_event.21
+	title = STH_gamestersOfTriskelion_event.21.name
+	desc = STH_gamestersOfTriskelion_event.21.desc
+	picture = sth_GFX_evt_gamestersOfTriskelion4
+	location = FROM
+	is_triggered_only = yes
+	immediate = { }
+	option = {
+		name = STH_gamestersOfTriskelion_event.21.a
+		add_influence = 150
+		random_owned_fleet = {
+			limit = { has_fleet_flag = triskelion_fleet }
+			set_leader = triskelion_enslaved_leader
+		}
+	}
+}
+
+country_event = {
+	id = STH_gamestersOfTriskelion_event.22
+	title = STH_gamestersOfTriskelion_event.22.name
+	desc = STH_gamestersOfTriskelion_event.22.desc
+	picture = sth_GFX_evt_gamestersOfTriskelion4
+	location = FROM
+	is_triggered_only = yes
+	immediate = { }
+	option = {
+		name = STH_gamestersOfTriskelion_event.22.a
+		add_influence = 150
+		random_owned_fleet = {
+			limit = { has_fleet_flag = triskelion_fleet }
+			set_leader = triskelion_enslaved_leader
+		}
+	}
+}

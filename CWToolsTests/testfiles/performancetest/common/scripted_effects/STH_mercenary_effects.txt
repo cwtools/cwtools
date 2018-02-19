@@ -1,0 +1,87 @@
+spawn_small_ferengi_privateers = {
+	random_country = {
+		limit = { is_species_class = FER }
+		owner_species = { save_event_target_as = ferengi }
+	}
+	random_list = {
+		10 = { 
+			create_country = { name = "Mok's Marauders" type = pirate flag = random species = event_target:ferengi name_list = "ferengi" }
+			last_created_country = {
+				create_fleet = { name = "Mok's Marauders" settings = { can_upgrade = no can_change_composition = no can_change_leader = no spawn_debris = no is_boss = yes } } 
+				create_leader = { type = admiral species = event_target:ferengi name = "Mok" skill = random traits = { trait = random_trait trait = random_trait } } 
+			}
+		}
+		10 = { 
+			create_country = { name = "Muark's Marauders" type = pirate flag = random species = event_target:ferengi name_list = "ferengi" }
+			last_created_country = { 
+				create_fleet = { name = "Muark's Marauders" settings = { can_upgrade = no can_change_composition = no can_change_leader = no spawn_debris = no is_boss = yes } } 
+				create_leader = { type = admiral species = event_target:ferengi name = "Muark" skill = random traits = { trait = random_trait trait = random_trait } } 
+			}
+		}
+		10 = { 
+			create_country = { name = "Pol's Marauders" type = pirate flag = random species = event_target:ferengi name_list = "ferengi" }
+			last_created_country = { 
+				create_fleet = { name = "Pol's Marauders" settings = { can_upgrade = no can_change_composition = no can_change_leader = no spawn_debris = no is_boss = yes } } 
+				create_leader = { type = admiral species = event_target:ferengi name = "Pol" skill = random traits = { trait = random_trait trait = random_trait } } 
+			}
+		}
+		10 = { 
+			create_country = { name = "Kek's Marauders" type = pirate flag = random species = event_target:ferengi name_list = "ferengi" }
+			last_created_country = { 
+				create_fleet = { name = "Kek's Marauders" settings = { can_upgrade = no can_change_composition = no can_change_leader = no spawn_debris = no is_boss = yes } } 
+				create_leader = { type = admiral species = event_target:ferengi name = "Kek" skill = random traits = { trait = random_trait trait = random_trait } } 
+			}
+		}
+	}
+	last_created_fleet = {
+		create_ship = { name = random design = "Ferengi Privateer Corvette" graphical_culture = "ferengi_01" }
+		create_ship = { name = random design = "Ferengi Privateer Corvette" graphical_culture = "ferengi_01" }
+		assign_leader = last_created_leader
+		set_owner = last_created_country
+	}
+}
+
+spawn_mid_nausicaan_privateers = {
+	random_country = {
+		limit = { is_species_class = NAU }
+		owner_species = { save_event_target_as = nausicaan }
+	}
+	random_list = {
+		10 = { 
+			create_country = { name = "Kajen's Crew" type = pirate flag = random species = event_target:nausicaan name_list = "MAM2" }
+			create_fleet = { name = "Kajen's Crew" settings = { can_upgrade = no can_change_composition = no can_change_leader = no spawn_debris = no is_boss = yes } } 
+			last_created_country = { create_leader = { type = admiral species = event_target:nausicaan name = "Kajen" skill = random traits = { trait = random_trait trait = random_trait } } }
+			
+		}
+		10 = { 
+			create_country = { name = "Vrenigar's Crew" type = pirate flag = random species = event_target:nausicaan name_list = "MAM2" }
+			create_fleet = { name = "Vrenigar's Crew" settings = { can_upgrade = no can_change_composition = no can_change_leader = no spawn_debris = no is_boss = yes } } 
+			last_created_country = { create_leader = { type = admiral species = event_target:nausicaan name = "Vrenigar" skill = random traits = { trait = random_trait trait = random_trait } } }
+		}
+		10 = { 
+			create_country = { name = "Krozh's Crew" type = pirate flag = random species = event_target:nausicaan name_list = "MAM2" }
+			create_fleet = { name = "Krozh's Crew" settings = { can_upgrade = no can_change_composition = no can_change_leader = no spawn_debris = no is_boss = yes } } 
+			last_created_country = { create_leader = { type = admiral species = event_target:nausicaan name = "Krozh" skill = random traits = { trait = random_trait trait = random_trait } } }
+		}
+		10 = { 
+			create_country = { name = "Savenikor's Crew" type = pirate flag = random species = event_target:nausicaan name_list = "MAM2" }
+			create_fleet = { name = "Savenikor's Crew" settings = { can_upgrade = no can_change_composition = no can_change_leader = no spawn_debris = no is_boss = yes } } 
+			last_created_country = { create_leader = { type = admiral species = event_target:nausicaan name = "Savenikor" skill = random traits = { trait = random_trait trait = random_trait } } }
+		}
+	}
+	last_created_fleet = {
+		set_owner = last_created_country
+		create_ship = { name = random design = "Nausicaan Privateer Corvette" graphical_culture = "generic_01" }
+		create_ship = { name = random design = "Nausicaan Privateer Corvette" graphical_culture = "generic_01" }
+		create_ship = { name = random design = "Nausicaan Privateer Corvette" graphical_culture = "generic_01" }
+		create_ship = { name = random design = "Nausicaan Privateer Corvette" graphical_culture = "generic_01" }
+		assign_leader = last_created_leader
+		set_owner = last_created_country
+	}
+
+}
+
+spawn_mid_orion_privateers = {
+
+
+}

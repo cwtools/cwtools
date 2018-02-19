@@ -1,0 +1,3 @@
+# Icons set here are the ones shown in compnent editor list.
+
+component_set = { key = "whale_aura_components" required_component_set = yes icon = "GFX_ship_part_thruster_1" icon_frame = 1 }

@@ -1,0 +1,97 @@
+﻿### Rigellian by EHKodiak Turtles all the way down
+Rigellian = {
+	randomized = no
+
+	ship_names = {
+		generic = {
+		Leatherback Snapper Testudinal Loggerhead "Brackish Waters" Carapace Clutch Keel Plastron Scute Hawksbill Archelon Cantorii Softshell Hardshell Apalone Pelomedusa Hydromedusa Trionyx Amyda "Clutch Protector" "Calm Waters" "Stormy Waters"
+		}
+		corvette = {
+		}
+		saber = {
+		}
+		sovereign = {
+		}
+		steamrunner = {
+		}		
+		adv_cruiser = {
+		}
+		strike = {
+		}	
+		constructor = { }
+		colonizer = { }
+		science = { }
+		transport = { }
+		outpost_station = {
+			sequential_name = "Border Clutch"
+		}
+	}
+
+	fleet_names = {
+		sequential_name = "%O% Navy Clutch"
+	}
+	
+	army_names = {
+		defense_army = {
+			sequential_name = "%O% Clutch Guard"
+		}
+		assault_army = {
+			sequential_name = "%O% Attack Clutch"
+		}
+		slave_army = {
+			sequential_name = "%O% Indentured Defence Clutch"
+		}
+		clone_army = { 
+			sequential_name = "%O% Clone Defence Clutch"
+		}
+		robotic_army = {
+			sequential_name = "%O% Mechanised Defence Clutch"
+		}
+		android_army = {
+			sequential_name = "%O% Synthetic Defence Clutch"
+		}
+		psionic_army = { 
+			sequential_name = "%O% Psi Defence Clutch"
+		}
+		xenomorph_army = {
+			sequential_name = "%O% Bio-Warfare Defence Clutch"
+		}
+		gene_warrior_army = {
+			sequential_name = "%O% Bio-Engineered Defence Clutch"
+		}
+	}
+
+	planet_names = {
+		generic = {
+			names = { 
+			}
+		}
+	}
+
+
+	### CHARACTERS 
+
+	character_names = {
+		names1 = {
+			weight = 40
+			first_names_male = {
+			Leonardo Donatello Raphael Michaelangelo Cryptodira Chelydridae Chelydra Macroche Chelonioidea Cheloniidae Carett Caretta Lepidoche Cheloni Chelonia Eretmoche Natator Dermochelyidae Dermoche Kinosternoidea Dermatemydidae Dermatemys Kinosternidae Kinostern Kinosternon Sternotherus Staurotyp Claudius Staurotypus Testudinoidea Emydidae Deirochely Chrysemys Deiroche Graptemys Malaclemys Pseudemys Trachemys Emyd Clemmys Emys Glyptemys Terrapene Geoemydidae Geoemyd Batagur Cuora Cyclemys Geoclemys Geoemyda Hardella Heosemys Leucocephalon Malayemys Mauremys Melanoche Morenia Notoche Orlitia Pangshura Sacalia Siebenrockiella Vijayache Rhinoclemmyd Rhinoclemmys Platysternidae Kodiakidae Platysternon Testudinidae Aldabrache Astroche Chelonoidis Chersina Cylindraspis Geochelone Gopherus Homopus Indotestudo Kinixys Malacochersus Manouria Psammobates Pyxis Stigmoche Testudo Trionychia Carettochelyidae Carettoche Trionychidae Cyclanorb Cyclanorbis Cycloderma Lissemys Trionych Amyda Apalone Chitra Dogania Nilssonia Palea Peloche Pelodiscus Rafetus Trionyx Pleurodira Chelidae Chel Acanthoche Chelus Mesoclemmys Phrynops Platemys Rhinemys Chelodin Chelodina Elseya Elusor Emydura Flaviemys Myuche Pseudemydura Rheodytes Hydromedus Hydromedusa Pelomedusidae Pelomedusa Pelusios Podocnemididae Erymnoche Peltocephalus Podocnemis
+			}
+			first_names_female = {
+			Cryptodira Chelydridae Chelydra Macrochelys Chelonioidea Cheloniidae Carettinae Caretta Lepidochelys Cheloniinae Chelonia Eretmochelys Natator Dermochelyidae Dermochelys Kinosternoidea Dermatemydidae Dermatemys Kinosternidae Kinosterninae Kinosternon Sternotherus Staurotypinae Claudius Staurotypus Testudinoidea Emydidae Deirochelyinae Chrysemys Deirochelys Graptemys Malaclemys Pseudemys Trachemys Emydinae Clemmys Emys Glyptemys Terrapene Geoemydidae Geoemydinae Batagur Cuora Cyclemys Geoclemys Geoemyda Hardella Heosemys Leucocephalon Malayemys Mauremys Melanochelys Morenia Notochelys Orlitia Pangshura Sacalia Siebenrockiella Vijayachelys Rhinoclemmydinae Rhinoclemmys Platysternidae Platysternon Testudinidae Aldabrachelys Astrochelys Chelonoidis Chersina Cylindraspis Geochelone Gopherus Homopus Indotestudo Kinixys Malacochersus Manouria Psammobates Pyxis Stigmochelys Testudo Trionychia Carettochelyidae Carettochelys Trionychidae Cyclanorbinae Cyclanorbis Cycloderma Lissemys Trionychinae Amyda Apalone Chitra Dogania Nilssonia Palea Pelochelys Pelodiscus Rafetus Trionyx Pleurodira Chelidae Chelinae Acanthochelys Chelus Mesoclemmys Phrynops Platemys Rhinemys Chelodininae Chelodina Elseya Elusor Emydura Flaviemys Myuchelys Pseudemydura Rheodytes Hydromedusinae Hydromedusa Pelomedusidae Pelomedusa Pelusios Podocnemididae Erymnochelys Peltocephalus Podocnemis
+			}
+			second_names = {
+			""
+			}
+			regnal_first_names_male = {
+			Cryptodira Chelydridae Chelydra Macroche Chelonioidea Cheloniidae Carett Caretta Lepidoche Cheloni Chelonia Eretmoche Natator Dermochelyidae Dermoche Kinosternoidea Dermatemydidae Dermatemys Kinosternidae Kinostern Kinosternon Sternotherus Staurotyp Claudius Staurotypus Testudinoidea Emydidae Deirochely Chrysemys Deiroche Graptemys Malaclemys Pseudemys Trachemys Emyd Clemmys Emys Glyptemys Terrapene Geoemydidae Geoemyd Batagur Cuora Cyclemys Geoclemys Geoemyda Hardella Heosemys Leucocephalon Malayemys Mauremys Melanoche Morenia Notoche Orlitia Pangshura Sacalia Siebenrockiella Vijayache Rhinoclemmyd Rhinoclemmys Platysternidae Platysternon Testudinidae Aldabrache Astroche Chelonoidis Chersina Cylindraspis Geochelone Gopherus Homopus Indotestudo Kinixys Malacochersus Manouria Psammobates Pyxis Stigmoche Testudo Trionychia Carettochelyidae Carettoche Trionychidae Cyclanorb Cyclanorbis Cycloderma Lissemys Trionych Amyda Apalone Chitra Dogania Nilssonia Palea Peloche Pelodiscus Rafetus Trionyx Pleurodira Chelidae Chel Acanthoche Chelus Mesoclemmys Phrynops Platemys Rhinemys Chelodin Chelodina Elseya Elusor Emydura Flaviemys Myuche Pseudemydura Rheodytes Hydromedus Hydromedusa Pelomedusidae Pelomedusa Pelusios Podocnemididae Erymnoche Peltocephalus Podocnemis
+			}
+			regnal_first_names_female = {
+			Cryptodira Chelydridae Chelydra Macrochelys Chelonioidea Cheloniidae Carettinae Caretta Lepidochelys Cheloniinae Chelonia Eretmochelys Natator Dermochelyidae Dermochelys Kinosternoidea Dermatemydidae Dermatemys Kinosternidae Kinosterninae Kinosternon Sternotherus Staurotypinae Claudius Staurotypus Testudinoidea Emydidae Deirochelyinae Chrysemys Deirochelys Graptemys Malaclemys Pseudemys Trachemys Emydinae Clemmys Emys Glyptemys Terrapene Geoemydidae Geoemydinae Batagur Cuora Cyclemys Geoclemys Geoemyda Hardella Heosemys Leucocephalon Malayemys Mauremys Melanochelys Morenia Notochelys Orlitia Pangshura Sacalia Siebenrockiella Vijayachelys Rhinoclemmydinae Rhinoclemmys Platysternidae Platysternon Testudinidae Aldabrachelys Astrochelys Chelonoidis Chersina Cylindraspis Geochelone Gopherus Homopus Indotestudo Kinixys Malacochersus Manouria Psammobates Pyxis Stigmochelys Testudo Trionychia Carettochelyidae Carettochelys Trionychidae Cyclanorbinae Cyclanorbis Cycloderma Lissemys Trionychinae Amyda Apalone Chitra Dogania Nilssonia Palea Pelochelys Pelodiscus Rafetus Trionyx Pleurodira Chelidae Chelinae Acanthochelys Chelus Mesoclemmys Phrynops Platemys Rhinemys Chelodininae Chelodina Elseya Elusor Emydura Flaviemys Myuchelys Pseudemydura Rheodytes Hydromedusinae Hydromedusa Pelomedusidae Pelomedusa Pelusios Podocnemididae Erymnochelys Peltocephalus Podocnemis
+			}
+			regnal_second_names = {
+			""
+			}
+		}
+	}
+}

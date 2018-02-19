@@ -1,0 +1,110 @@
+component_set = {
+	key = "ftl_components"
+	
+	required_component_set = yes
+	icon = "GFX_ship_part_hyperdrive"
+	icon_frame = 1	
+}
+
+component_set = {
+	key = "thruster_components"
+	
+	required_component_set = yes
+	icon = "GFX_ship_part_thruster_1"
+	icon_frame = 1	
+}
+
+#This set is still used for a lot of event ships etc
+#component_set = {
+#	key = "combat_computers"
+#	
+#	required_component_set = yes
+#	icon = "GFX_ship_part_computer"
+#	icon_frame = 1	
+#}
+component_set = {
+	key = "corvette_combat_computers"
+	
+	required_component_set = yes
+	icon = "GFX_ship_part_computer"
+	icon_frame = 1	
+}
+component_set = {
+	key = "destroyer_combat_computers"
+	
+	required_component_set = yes
+	icon = "GFX_ship_part_computer"
+	icon_frame = 1	
+}
+component_set = {
+	key = "cruiser_combat_computers"
+	
+	required_component_set = yes
+	icon = "GFX_ship_part_computer"
+	icon_frame = 1	
+}
+component_set = {
+	key = "battleship_combat_computers"
+	
+	required_component_set = yes
+	icon = "GFX_ship_part_computer"
+	icon_frame = 1	
+}
+
+component_set = {
+	key = "ship_sensor_components"
+	
+	required_component_set = yes
+	icon = "GFX_ship_part_sensor"
+	icon_frame = 1	
+}
+
+
+component_set = {
+	key = "border_extruders"
+	required_component_set = yes
+	icon = "GFX_ship_part_sensor"
+	icon_frame = 1	
+}
+
+component_set = {
+	key = "aura_components"
+	required_component_set = yes
+	icon = "GFX_ship_part_sensor"
+	icon_frame = 1	
+}
+
+component_set = {
+	key = "ship_aura_components"
+	required_component_set = yes
+	icon = "GFX_ship_part_sensor"
+	icon_frame = 1	
+}
+
+component_set = {
+	key = "station_small_aura_components"
+	required_component_set = yes
+	icon = "GFX_ship_part_sensor"
+	icon_frame = 1	
+}
+
+component_set = {
+	key = "station_medium_aura_components"
+	required_component_set = yes
+	icon = "GFX_ship_part_sensor"
+	icon_frame = 1	
+}
+
+component_set = {
+	key = "station_large_aura_components"
+	required_component_set = yes
+	icon = "GFX_ship_part_sensor"
+	icon_frame = 1	
+}
+
+component_set = {
+	key = "tactical_components"
+	required_component_set = yes
+	icon = "GFX_ship_part_tactical"
+	icon_frame = 1
+}

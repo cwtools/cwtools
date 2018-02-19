@@ -1,0 +1,22 @@
+# Terra Prime Patrol Frigate
+ship_design = {
+	name = "House Patrol Frigate"
+	ship_size = corvette
+	section = {
+		template = "corvette_stern_cannon"
+		slot = "stern"
+		component = { slot = "LARGE_GUN_01" template = "LARGE_KANG_DISRUPTOR_1" }
+		component = { slot = "LARGE_GUN_01" template = "LARGE_KANG_DISRUPTOR_1" }
+		component = { slot = "SMALL_GUN_1" template = "POINT_DEFENCE_PHOTON_TORPEDO_2" }
+	}
+	section = {
+		template = "corvette_mid_17"
+		slot = "mid"
+	}	
+	required_component="REQUIRED_WARP_1_PF"
+	required_component="REQUIRED_COMPUTER_1_PF"
+	required_component="REQUIRED_THRUSTERS_1A_PF"
+	required_component="Required_Combat_Sensor_brawler_1"
+	required_component="REQUIRED_DEFENSE_1_ARMOR_PF"
+	required_component="REQUIRED_HULL_1A_PF"
+}

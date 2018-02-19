@@ -1,0 +1,87 @@
+
+
+# ####################
+#  Critter Weapons - Mining Drones
+# ####################
+
+@critter_cost_value = 35
+
+
+weapon_component_template = {
+	key = "SMALL_MINING_LASER"
+	hidden = yes
+	size = small
+	entity = "small_mining_drone_weapon_entity"
+	type = instant
+	icon = "GFX_ship_part_mining_drone_laser_1"
+	icon_frame = 1
+	projectile_gfx = "gamma_laser_s"
+	tags = { weapon_type_energy }
+	ai_tags = { weapon_role_anti_armor }
+	
+	component_set = "MINING_DRONE_LASER_1"
+	#prerequisitess = { "tech_mining_drone_weapon_1" }
+	cost = @critter_cost_value
+}
+
+weapon_component_template = {
+	key = "MEDIUM_MINING_LASER"
+	hidden = yes
+	size = medium
+	entity = "medium_mining_drone_weapon_entity"
+	type = instant
+	icon = "GFX_ship_part_mining_drone_laser_1"
+	icon_frame = 1
+	projectile_gfx = "gamma_laser_m"
+	tags = { weapon_type_energy }
+	ai_tags = { weapon_role_anti_armor }
+	
+	component_set = "MINING_DRONE_LASER_1"
+	#prerequisitess = { "tech_mining_drone_weapon_1" }
+	cost = @critter_cost_value
+}
+
+### Drone home base fighter
+
+strike_craft_component_template = {
+	key = "DRONE_STRIKE_CRAFT"
+	size = LARGE
+	entity = "ancient_corvette_hull_entity"
+	cost = 0
+	power = 0
+	hidden = yes
+	
+	count = 8
+	regeneration_per_day = 0.13
+	launch_time = 1.5
+	
+	damage = { min = 1 max = 2 }
+	cooldown = 2.5
+	range = 10
+	accuracy = 0.70
+	tracking = 0.10
+			
+	health = 40
+	armor = 5
+	shield = 0
+	evasion = 0.30
+	
+	speed = 3.0
+	rotation_speed = 0.1
+	acceleration = 2.5
+	
+	
+	shield_damage = 1.0
+	shield_penetration = 0
+	armor_penetration = 0
+	
+	ship_behavior = "bombers_behavior"
+	
+	weapon_type = instant
+	projectile_gfx = "gamma_laser_s"
+	
+	component_set = "DRONE_STRIKE_CRAFT"
+	icon = "GFX_ship_part_strike_craft_scout_1"
+	icon_frame = 1
+	tags = { weapon_type_strike_craft }
+}

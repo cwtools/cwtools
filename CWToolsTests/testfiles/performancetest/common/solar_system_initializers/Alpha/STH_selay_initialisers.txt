@@ -1,0 +1,100 @@
+#Selay Homeworld
+selay_homeworld = {			
+	name = "Beta Renner Secunda"		
+	class = "sc_g"
+	flags = { selay_homeworld }
+	usage = custom_empire
+	max_instances = 1
+	planet = { name = "Beta Renner Secunda" class = star orbit_distance = 0 orbit_angle = 1 size = { min = 20 max = 30 } has_ring = no }		
+	change_orbit = { min = 20 max = 30 }
+	planet = {
+		count = 3
+		orbit_distance = { min = 20 max = 30 }
+		orbit_angle = { min = 90 max = 270 }
+		moon = { count = { min = 0 max = 1 } orbit_angle = { min = 90 max = 270 } orbit_distance = 8 }
+	}	
+	change_orbit = { min = 30 max = 40 }
+	planet = {		
+		name = "Beta Renner Secunda IV"	
+		class = "pc_m1_class"	
+		size = { min = 18 max = 20 }
+		starting_planet = yes
+		has_ring = no
+		tile_blockers = none
+		init_effect = {
+			prevent_anomaly = yes			
+			if = {
+				limit = { NOT = { any_country = { has_country_flag = selay_clutches } } }
+				create_species = { 
+					name = "Selay" 
+					class = SEL 
+					portrait = selay 
+					homeworld = THIS 
+					traits = { 
+					    trait="trait_reptilian"
+						trait="trait_resilient"
+						trait="trait_conformists"
+						trait="trait_sedentary"
+						ideal_planet_class = "pc_m1_class" 
+					} 
+				}
+				last_created_species = { save_global_event_target_as = selaySpecies }
+				create_country = {
+					name = "NAME_selay_clutches"
+					type = default
+					ignore_initial_colony_error = yes
+					civics = { civic = "civic_shadow_council" civic = "civic_police_state" }
+					authority = auth_democratic
+					name_list = "Selay"
+					ethos = { ethic = "ethic_xenophobe" ethic = "ethic_militarist" ethic = "ethic_egalitarian" }
+					species = event_target:selaySpecies
+					flag = {
+						icon = { category = "zoological" file = "flag_zoological_23.dds" }
+						background = { category = "backgrounds" file = "stripe.dds" }
+						colors = { "customcolor1420" "customcolor1556" "null" "null" }
+					}
+					ship_prefix=""
+					effect = {
+						set_graphical_culture = generic_02
+						set_country_flag = selay_clutches
+						set_country_flag = custom_start_screen
+						set_country_flag = generic_ent
+						set_country_flag = alpha_beta_empire
+						set_country_flag = init_spawned
+						set_country_flag = botf_minor
+						save_global_event_target_as = selay_clutches
+					}
+				}
+				create_colony = { owner = event_target:selay_clutches species = event_target:selaySpecies ethos = owner }
+			}
+			set_capital = yes
+			random_country = {
+				limit = { has_country_flag = selay_clutches }
+				save_global_event_target_as = selay_clutches
+				add_appropriate_start_techs = yes
+				species = { save_global_event_target_as = selaySpecies }
+				set_country_type = minorRace
+			}
+			set_owner = event_target:selay_clutches
+			generate_minor_empire_start_buildings = yes
+			generate_minor_empire_start_pops = yes
+			generate_major_empire_start_fleets = yes
+			set_name = "Beta Renner Secunda IV"	
+		}
+		moon = { count = 4 orbit_angle = { min = 90 max = 270 } orbit_distance = 8 }
+	}
+	change_orbit = { min = 20 max = 30 }
+	planet = {
+		name = "Beta Renner Secunda V"	
+		orbit_distance = { min = 20 max = 30 }
+		orbit_angle = { min = 90 max = 270 }
+		moon = { count = { min = 0 max = 1 } orbit_angle = { min = 90 max = 270 } orbit_distance = 8 }
+	}
+	change_orbit = { min = 20 max = 30 }
+	planet = {
+		name = "Beta Renner Secunda VI"
+		orbit_distance = { min = 20 max = 30 }
+		orbit_angle = { min = 90 max = 270 }
+		moon = { count = { min = 0 max = 1 } orbit_angle = { min = 90 max = 270 } orbit_distance = 8 }
+	}
+}

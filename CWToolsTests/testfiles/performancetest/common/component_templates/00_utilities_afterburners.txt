@@ -1,0 +1,79 @@
+# Icons set here are the ones show in the actual slot. The reason is so that we can support different icons for different sizes. 
+
+#############
+#	POWER	#
+#############
+@power_L1 = -5       
+@power_L2 = -10
+          
+#############
+#	COST	#
+#############
+@cost_L1 = 20
+@cost_L2 = 40
+
+#############
+#	AFTERBURNER	#
+#############
+@afterburner_L1 = 0.25
+@afterburner_L2 = 0.50
+
+#############
+# UTILITIES #
+#############
+
+# Afterburners
+utility_component_template = {
+	key = "AFTERBURNER_1"
+	size = aux
+	icon = "GFX_ship_part_afterburner_1"
+	icon_frame = 1
+	power = -10
+	cost = 4
+	modifier = {
+		ship_combat_speed_mult = 0.25
+	}
+	#prerequisites = { "tech_afterburners_1" }
+	component_set = "AFTERBURNER_1"
+	upgrades_to = "AFTERBURNER_2"
+	hidden = yes
+	
+	ai_weight = {
+		weight = 10
+		modifier = {
+			factor = 2.0
+			is_preferred_weapons = weapon_type_kinetic
+		}
+		modifier = {
+			factor = 0.5
+			is_preferred_weapons = weapon_type_explosive
+		}		
+	}
+}
+
+utility_component_template = {
+	key = "AFTERBURNER_2"
+	size = aux
+	icon = "GFX_ship_part_afterburner_2"
+	icon_frame = 1
+	power = -20
+	cost = 6
+	modifier = {
+		ship_combat_speed_mult = 0.50
+	}
+	#prerequisites = { "tech_afterburners_2" }
+	component_set = "AFTERBURNER_2"
+	hidden = yes
+	
+	ai_weight = {
+		weight = 15
+		modifier = {
+			factor = 2.0
+			is_preferred_weapons = weapon_type_kinetic
+		}
+		modifier = {
+			factor = 0.5
+			is_preferred_weapons = weapon_type_explosive
+		}	
+	}
+}

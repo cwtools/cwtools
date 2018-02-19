@@ -1,0 +1,119 @@
+@distance = 30
+@base_moon_distance = 10
+
+#TRogoran
+TRogoranHomeworld = {
+	name = "T'Rogoron"
+	class = "sc_g"
+	flags = { trogoron_homeworld }
+	init_effect = { log = "T'rogoron homeworld" }
+	usage = custom_empire
+	planet = { name = "T'Rogoron A" class = star orbit_distance = 0 orbit_angle = 1 size = { min = 20 max = 30 } has_ring = no }
+	change_orbit = 50
+	planet = {
+		count = { min = 1 max = 2 }
+		orbit_distance = 20
+		class = rl_unhabitable_planets
+		orbit_angle = { min = 90 max = 270 }
+		change_orbit = @base_moon_distance
+		moon = { count = { min = 0 max = 1 } class = rl_inner_moons orbit_angle = { min = 90 max = 270 } orbit_distance = 10 }
+	}
+	change_orbit = 30
+	planet = {
+		name = "T'Rogoron Prime"
+		home_planet = yes
+		class = pc_arctic
+		orbit_distance = 10
+		orbit_angle = { min = 90 max = 270 }
+		size = { min = 22 max = 25 }
+		starting_planet = yes
+		tile_blockers = none
+		modifiers = none
+		init_effect = { prevent_anomaly = yes }
+		init_effect = {
+			if = {
+				limit = { NOT = { any_country = { has_country_flag = trogoran_empire } } }
+				create_species = { 
+				    name = "T'Rogoran" 
+				    class = TRO 
+				    portrait = sth_humanoid_01 
+				    homeworld = THIS 
+				    traits = { 
+				        trait="trait_enduring"
+	                    trait="trait_conformists"
+	                    trait="trait_rigid"
+				        ideal_planet_class = "pc_arctic" 
+					} 
+				}
+				last_created_species = { save_global_event_target_as = trogoranSpecies }
+				create_country = {
+					name = "NAME_trogoran_empire"
+					type = default
+					ignore_initial_colony_error = yes
+					civics = { civic = "civic_slaver_guilds" civic = "civic_nationalistic_zeal" }
+					authority = auth_dictatorial
+					name_list = "Trogoran"
+					ethos = { ethic = "ethic_militarist" ethic = "ethic_xenophobe" ethic = "ethic_authoritarian" }
+					species = event_target:trogoranSpecies
+					flag = {
+						icon = { category = "blocky" file = "flag_blocky_19.dds" }
+						background = { category = "backgrounds" file = "circle.dds" }
+						colors = { "customcolor656" "black" "null" "null" }
+					}
+					ship_prefix = ""
+					effect = {
+						set_graphical_culture = generic_01
+						save_global_event_target_as = trogoran_empire
+						set_country_flag = trogoran_empire
+						set_country_flag = custom_start_screen
+						set_country_flag = generic_ent
+						set_country_flag = gamma_empire
+						set_country_flag = init_spawned
+						set_country_flag = sth_medium_galaxy
+					}
+				}
+				create_colony = { owner = event_target:trogoran_empire species = event_target:trogoranSpecies ethos = owner }
+			}
+			set_capital = yes
+			random_country = {
+				limit = { has_country_flag = trogoran_empire }
+				save_global_event_target_as = trogoran_empire
+				add_appropriate_start_techs = yes
+				species = { save_global_event_target_as = trogoranSpecies }
+            }
+			set_owner = event_target:trogoran_empire
+			generate_major_empire_start_buildings = yes
+			generate_major_empire_start_pops = yes	
+			generate_major_empire_start_fleets = yes
+			set_name = "T'Rogoran Prime"			
+		}
+		change_orbit = @base_moon_distance
+		moon = { count = { min = 0 max = 1 } class = rl_outer_moons orbit_angle = { min = 90 max = 270 } orbit_distance = 10 }
+	}
+	planet = {
+		count = { min = 0 max = 2 }
+		orbit_distance = 20
+		orbit_angle = { min = 90 max = 270 }
+		change_orbit = @base_moon_distance
+		moon = { count = { min = 0 max = 1 } class = rl_outer_moons orbit_angle = { min = 90 max = 270 } orbit_distance = 10 }
+	}
+	planet = {
+		count = { min = 1 max = 3 }
+		orbit_distance = 25
+		orbit_angle = { min = 90 max = 270 }
+		change_orbit = @base_moon_distance
+		moon = { count = { min = 0 max = 1 } class = rl_outer_moons orbit_angle = { min = 90 max = 270 } orbit_distance = 10 }
+	}
+	planet = {
+		count = { min = 1 max = 2 }
+		orbit_distance = 20
+		class = pc_gas_giant
+		orbit_angle = { min = 90 max = 270 }
+		change_orbit = @base_moon_distance
+		moon = { count = { min = 0 max = 3 } class = rl_outer_moons orbit_angle = { min = 90 max = 270 } orbit_distance = 10 }
+	}
+	change_orbit = { min = 40 max = 50}		
+	planet = { name = "T'Rogoron B" class = star flags = { secondaryStar } size = { min = 10 max = 20 } has_ring = no }
+	change_orbit = { min = 40 max = 50}	
+	planet = { name = "T'Rogoron C" class = star flags = { secondaryStar } size = { min = 10 max = 20 } has_ring = no }
+}

@@ -1,0 +1,23 @@
+# War Factory
+building_war_factory = {
+	is_listed = no
+	cost = { }
+	required_resources = { energy = 2 }
+	produced_resources = {
+		engineering_research = 8
+		physics_research = 8
+	}
+	upgrades = { }
+	ai_replace = no
+}
+
+building_altamid_mine = {
+	is_listed = no
+	cost = { }
+	required_resources = { energy = 2 }
+	produced_resources = {
+		minerals = 10
+	}
+	upgrades = { }
+	ai_replace = no
+}

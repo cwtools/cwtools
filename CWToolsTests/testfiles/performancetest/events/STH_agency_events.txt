@@ -1,0 +1,689 @@
+############################
+#
+# Agency Events
+#
+# Written by Walshicus
+#
+############################
+
+namespace = STH_agency
+
+country_event = {
+	id = STH_agency.10000
+	hide_window = yes
+	trigger = {}
+	is_triggered_only = yes
+	immediate = {
+		every_owned_leader = {
+			add_trait = leader_trait_doctor
+		}
+	}
+}
+
+country_event = {
+	id = STH_agency.10001
+	hide_window = yes
+	trigger = {}
+	is_triggered_only = yes
+	immediate = {
+		enable_faction_of_type = sth_agency_storage
+	}
+}
+
+
+#Vulcan founding events
+country_event = {
+	id = STH_agency.1
+	title = STH_agency.1.name
+	desc = STH_agency.1.desc
+	picture = sth_GFX_evt_IME1
+	trigger = {
+		has_country_flag = vulcan_high_command
+		NOT = { has_country_flag = recentIMECreateRequest }
+		NOT = { has_country_flag = IME_member }
+		any_owned_leader = { is_medical_leader = yes }
+		NOT = { has_global_flag = consideringIME }
+		NOT = { exists = event_target:interspecies_medical_exchange }
+		energy > 99
+	}
+	mean_time_to_happen = { months = 360 }
+	immediate = {
+		set_global_flag = consideringIME
+		random_owned_leader = {
+			limit = { is_medical_leader = yes leader_class = scientist }
+			save_global_event_target_as = foundedIME
+		}
+	}
+	option = {
+		name = STH_agency.1.a
+		add_energy = -100
+		add_modifier = { modifier = em_interspecies_medical_exchange days = -1 } 
+		hidden_effect = { country_event = { id = STH_agency.10 scopes = { from = event_target:foundedIME } } }
+	}
+	option = {
+		name = STH_agency.1.b
+		hidden_effect = { set_timed_country_flag = { flag = recentIMECreateRequest days = 720 }  }
+	}
+	after = { remove_global_flag = consideringIME }
+}
+
+#Other Alpha Quadrant founding events
+country_event = {
+	id = STH_agency.2
+	title = STH_agency.1.name
+	desc = STH_agency.1.desc
+	picture = sth_GFX_evt_IME1
+	trigger = {
+		years_passed > 20
+		is_normal_country = yes
+		is_assimilator = no
+		is_borg_empire = no
+		has_country_flag = alpha_beta_empire
+		NOT = { has_country_flag = IME_member }
+		OR = {
+			has_ethic = ethic_pacifist
+			has_ethic = ethic_fanatic_pacifist
+			has_ethic = ethic_xenophile
+			has_ethic = ethic_fanatic_xenophile
+		}
+		NOT = { has_country_flag = vulcan_high_command }
+		NOT = { has_country_flag = recentIMECreateRequest }
+		any_owned_leader = { is_medical_leader = yes }
+		NOT = { has_global_flag = consideringIME }
+		NOT = { exists = event_target:interspecies_medical_exchange }
+		energy > 99
+	}
+	mean_time_to_happen = { months = 360 }
+	immediate = {
+		set_global_flag = consideringIME
+		random_owned_leader = {
+			limit = { is_medical_leader = yes leader_class = scientist }
+			save_global_event_target_as = foundedIME
+		}
+	}
+	option = {
+		name = STH_agency.1.a
+		add_energy = -100
+		add_modifier = { modifier = em_interspecies_medical_exchange days = -1 } 
+		hidden_effect = { country_event = { id = STH_agency.10 scopes = { from = event_target:foundedIME } } }
+	}
+	option = {
+		name = STH_agency.1.b
+		hidden_effect = { set_timed_country_flag = { flag = recentIMECreateRequest days = 1440 }  }
+	}
+	after = { hidden_effect = { remove_global_flag = consideringIME } }
+}
+
+#Other founding events
+country_event = {
+	id = STH_agency.3
+	title = STH_agency.1.name
+	desc = STH_agency.1.desc
+	picture = sth_GFX_evt_IME1
+	trigger = {
+		years_passed > 50
+		is_normal_country = yes
+		is_assimilator = no
+		is_borg_empire = no
+		NOT = { has_country_flag = IME_member }
+		NOR = {
+			has_ethic = ethic_fanatic_militarist
+			has_ethic = ethic_xenophobe
+			has_ethic = ethic_fanatic_xenophobe
+		}
+		NOT = { has_country_flag = vulcan_high_command }
+		NOT = { has_country_flag = recentIMECreateRequest }
+		any_owned_leader = { is_medical_leader = yes }
+		NOT = { has_global_flag = consideringIME }
+		NOT = { exists = event_target:interspecies_medical_exchange }
+		energy > 99
+	}
+	mean_time_to_happen = { months = 360 }
+	immediate = {
+		set_global_flag = consideringIME
+		random_owned_leader = {
+			limit = { is_medical_leader = yes leader_class = scientist }
+			save_global_event_target_as = foundedIME
+		}
+	}
+	option = {
+		name = STH_agency.1.a
+		add_energy = -100
+		add_modifier = { modifier = em_interspecies_medical_exchange days = -1 } 
+		hidden_effect = { country_event = { id = STH_agency.10 scopes = { from = event_target:foundedIME } } }
+	}
+	option = {
+		name = STH_agency.1.b
+		hidden_effect = { set_timed_country_flag = { flag = recentIMECreateRequest days = 1440 }  }
+	}
+	after = { hidden_effect = { remove_global_flag = consideringIME } }
+}
+
+#IME Gone Cleanup 1
+country_event = {
+	id = STH_agency.6
+	hide_window = yes
+	trigger = { 
+		exists = event_target:interspecies_medical_exchange
+		is_same_value = event_target:interspecies_medical_exchange
+		NOT = {
+			any_country = { has_country_flag = IME_member }
+		}
+	}
+	mean_time_to_happen = { months = 3 }
+	immediate = {
+		set_country_flag = cleanupRemove
+		destroy_country = yes
+	}
+}
+
+#IME Gone Cleanup 2
+country_event = {
+	id = STH_agency.7
+	hide_window = yes
+	trigger = { 
+		NOT = { exists = event_target:interspecies_medical_exchange }
+		any_country = { has_country_flag = IME_member }
+	}
+	mean_time_to_happen = { months = 3 }
+	immediate = {
+		remove_country_flag = IME_member
+		remove_modifier = em_interspecies_medical_exchange
+	}
+}
+
+planet_event = {
+	id = test
+	title = test.name
+	desc = test.desc
+	picture = GFX_evt_mining_station #a name of a picture to display
+	location = from #A scope to the object that is relevant to the event that player can move to. For example, the planet where event is happening
+	show_sound = t #Name of the sound clip to be played when event is shown
+	diplomatic = yes #Makes event look like diplomatic communications. For example, first contact event or a conversation with the subterranean people
+	is_triggered_only = yes #The game will not consider this event for starting on its own. Event will need to be triggered by another event, or by some other effect. Most events will use this.
+	trigger = {
+		
+	}
+	immediate = {
+		
+	}
+	option = {
+		
+	}
+}
+#IME Invites
+country_event = {
+	id = STH_agency.5
+	title = STH_agency.5.name
+	desc = STH_agency.5.desc
+	picture = sth_GFX_evt_IME1
+	trigger = {
+		is_normal_country = yes
+		is_assimilator = no
+		is_borg_empire = no
+		NOR = { has_country_flag = IME_member has_country_flag = consideringIME has_country_flag = invitedIME has_country_flag = recentIMECreateRequest }
+		any_owned_leader = { is_medical_leader = yes leader_class = scientist }
+		exists = event_target:interspecies_medical_exchange
+		energy > 99
+		any_country = {
+			has_country_flag = IME_member
+			has_communications = root
+			NOT = { is_same_value = root }
+		}
+	}
+	mean_time_to_happen = { months = 1 }
+	immediate = {
+		hidden_effect = { set_timed_country_flag = { flag = recentIMECreateRequest days = 720 }  }
+		random_country = {
+			limit = { has_country_flag = IME_member has_communications = root }
+			save_event_target_as = IME_notifier
+		}
+		set_global_flag = consideringIME
+		set_global_flag = invitedIME
+		establish_communications_no_message = event_target:interspecies_medical_exchange
+	}
+	option = {
+		name = STH_agency.5.a
+		add_energy = -100
+		add_modifier = { modifier = em_interspecies_medical_exchange days = -1 } 
+		hidden_effect = {
+			every_country = {
+				limit = { has_country_flag = IME_member }
+				country_event = { id = STH_agency.8 scopes = { from = root } }
+			}
+			set_country_flag = IME_member
+			establish_communications_no_message = event_target:interspecies_medical_exchange
+			country_event = { id = STH_agency.50 days = 7 random = 3 scopes = { from = event_target:interspecies_medical_exchange } }
+		}
+	}
+	option = {
+		name = STH_agency.5.b
+		hidden_effect = { }
+	}
+	after = {
+		hidden_effect = { remove_global_flag = consideringIME }
+	}
+}
+
+#Joining Notification
+country_event = {
+	id = STH_agency.8
+	title = STH_agency.8.name
+	desc = STH_agency.8.desc
+	picture = sth_GFX_evt_IME1
+	trigger = { NOT = { has_country_flag = ignoreIME } }
+	is_triggered_only = yes
+	immediate = { }
+	option = {
+		name = "UNDERSTOOD"
+	}
+	option = {
+		name = STH_agency.8.b
+		hidden_effect = { set_timed_country_flag = { flag = ignoreIME days = 1800 } }
+	}
+}
+
+#Leaving Notification
+country_event = {
+	id = STH_agency.9
+	title = STH_agency.9.name
+	desc = STH_agency.9.desc
+	picture = sth_GFX_evt_IME1
+	trigger = { NOT = { has_country_flag = ignoreIME } }
+	is_triggered_only = yes
+	immediate = { }
+	option = {
+		name = "UNDERSTOOD"
+	}
+	option = {
+		name = STH_agency.9.b
+		hidden_effect = { set_timed_country_flag = { flag = ignoreIME days = 1800 } }
+	}
+}
+
+
+
+#Joining Event
+country_event = {
+	id = STH_agency.10
+	hide_window = yes
+	trigger = { }
+	is_triggered_only = yes
+	immediate = {
+		from = { set_secondment_flags = yes }
+		create_country = {
+			name = "NAME_InterspeciesMedicalExchange"
+			type = agency
+			authority = auth_agency
+			civics = root
+			species = root
+			auto_delete = no
+			flag = {
+				icon = { category = "trek" file = "interspecies_medical_exchange.dds" }
+				background = { category = "backgrounds" file = "00_solid.dds" }
+				colors = { "blue" "black" "null" "null" }
+			}
+			ethos = root
+			ignore_initial_colony_error = yes
+			effect = {
+				save_global_event_target_as = interspecies_medical_exchange
+				set_country_flag = interspecies_medical_exchange
+				establish_communications_no_message = root
+				assign_leader = from
+				enable_faction_of_type = sth_agency_storage
+			}
+		}
+		set_country_flag = IME_member
+		country_event = { id = STH_agency.50 days = 7 random = 3 scopes = { from = event_target:interspecies_medical_exchange } }
+	}
+}
+
+#Create Random Leaders Event
+country_event = {
+	id = STH_agency.20
+	hide_window = yes
+	trigger = {
+		exists = event_target:interspecies_medical_exchange
+		has_country_flag = IME_member
+		event_target:interspecies_medical_exchange = {
+			free_leader_slots > 1
+		}
+	}
+	mean_time_to_happen = { months = 12 }
+	immediate = {
+		create_leader = {
+			type = scientist
+			species = root
+			name = random
+			skill = random
+			traits = {
+				trait = random_trait
+				trait = leader_trait_doctor
+			}
+		}
+		last_created_leader = {
+			set_secondment_flags = yes
+			set_leader_flag = "IME_Loaned_From:@root"
+			set_leader_flag = IME_exchange
+			exile_leader_as = newLeader
+		}
+		event_target:interspecies_medical_exchange = {
+			create_fleet = { name = "Dummy" }
+			last_created_fleet = {
+				set_owner = event_target:interspecies_medical_exchange
+				create_ship_design = { design = "USS_Grissom" }
+				create_ship = { name = "Dummy" design = last_created_design }
+				set_leader = newLeader
+				leader = { unassign_leader = this }
+				delete_fleet = this
+			}
+		}
+	}
+}
+
+
+
+#IME Diplomacy
+country_event = {
+	id = STH_agency.50
+	title = STH_agency.50.name
+	desc = {
+		trigger = { has_country_flag = IME_member }
+		text = STH_agency.50.desc_01
+	}
+	desc = {
+		trigger = { NOT = { has_country_flag = IME_member } }
+		text = STH_agency.50.desc_02
+	}
+	diplomatic = yes
+	custom_gui = "enclave_curator_window"
+	force_open = yes
+	picture_event_data = {
+		portrait = from.leader
+		room = medical_room
+	}
+	trigger = { 
+		exists = event_target:interspecies_medical_exchange 
+		FROM = { is_same_value = event_target:interspecies_medical_exchange }
+		NOT = { has_country_flag = "talkingToIME" }
+	}
+	is_triggered_only = yes
+	immediate = { 
+		from = { enable_faction_of_type = sth_agency_storage }
+		leader = { save_event_target_as = IMEleader }
+		set_country_flag = "talkingToIME" 
+	}
+	option = {
+		name = STH_agency.50.q #IME?
+		response_text = STH_agency.50.q.response
+		is_dialog_only = yes
+	}
+	option = {
+		name = STH_agency.50.a #Join IME
+		response_text = STH_agency.50.a.response
+		trigger = { 
+			NOT = { has_country_flag = IME_member } 
+			energy > 99
+		}
+		ai_chance = { factor = 10 }
+		add_modifier = { modifier = em_interspecies_medical_exchange days = -1 } 
+		add_energy = -100
+		hidden_effect = { set_country_flag = IME_member }
+	}
+	option = {
+		name = STH_agency.50.b #Leave IME
+		trigger = { has_country_flag = IME_member }
+		ai_chance = { factor = 0 }
+		hidden_effect = { country_event = { id = STH_agency.80 scopes = { from = from } } }
+	}
+	option = {
+		name = STH_agency.50.c #Hire from IME
+		trigger = { 
+			has_country_flag = IME_member
+			event_target:interspecies_medical_exchange = { any_owned_leader = { has_leader_flag = IME_exchange NOT = { has_leader_flag = "IME_Loaned_From:@Root" } } }
+			influence > 99
+		}
+		ai_chance = { factor = 0 modifier = { factor = 5 event_target:interspecies_medical_exchange = { any_owned_leader = { has_leader_flag = IME_exchange } } } }
+		hidden_effect = { country_event = { id = STH_agency.60 scopes = { from = from } } }
+	}
+	option = {
+		name = STH_agency.50.d #Loan to IME
+		trigger = { 
+			has_country_flag = IME_member
+			any_owned_leader = { is_medical_leader = yes leader_class = scientist } 
+		}
+		ai_chance = { factor = 0 modifier = { factor = 5 any_owned_leader = { is_medical_leader = yes leader_class = scientist } } }
+		hidden_effect = { country_event = { id = STH_agency.70 scopes = { from = from } } }
+	}
+	option = {
+		name = STH_agency.50.z #Exit
+		default_hide_option = yes
+	}
+	after = { hidden_effect = { remove_country_flag = "talkingToIME" } }
+}
+
+#Leave IME
+country_event = {
+	id = STH_agency.80
+	title = STH_agency.80.name
+	desc = {
+		text = STH_agency.80.desc_01
+	}
+	diplomatic = yes
+	custom_gui = "enclave_curator_window"
+	force_open = yes
+	picture_event_data = {
+		portrait = from.leader
+		room = medical_room
+	}
+	is_triggered_only = yes
+	trigger = { exists = event_target:interspecies_medical_exchange }
+	immediate = {
+		set_country_flag = "talkingToIME"
+	}
+	option = {
+		name = STH_agency.80.a #Leave IME
+		ai_chance = { factor = 0 }
+		response_text = STH_agency.80.a.response
+		remove_modifier = em_interspecies_medical_exchange
+		hidden_effect = { 
+			remove_country_flag = IME_member
+			every_country = {
+				limit = { has_country_flag = IME_member }
+				country_event = { id = STH_agency.9 scopes = { from = root } }
+			}
+		}
+	}
+	option = {
+		name = STH_agency.80.z #Back
+		default_hide_option = yes
+		hidden_effect = { 
+			remove_country_flag = "talkingToIME"		
+			country_event = { id = STH_agency.50 scopes = { from = from } }
+		}
+	}
+	after = { remove_country_flag = "talkingToIME" }
+}
+
+
+#IME Diplomacy - Hire From
+country_event = {
+	id = STH_agency.60
+	title = STH_agency.60.name
+	desc = {
+		trigger = { exists = event_target:hireLeader1 exists = event_target:hireLeader2 }
+		text = STH_agency.60.desc_01
+	}
+	desc = {
+		trigger = { exists = event_target:hireLeader1 NOT = { exists = event_target:hireLeader2 } }
+		text = STH_agency.60.desc_02
+	}
+	desc = {
+		trigger = { NOT = { exists = event_target:hireLeader1 exists = event_target:hireLeader2 } }
+		text = STH_agency.60.desc_03
+	}
+	diplomatic = yes
+	custom_gui = "enclave_curator_window"
+	force_open = yes
+	picture_event_data = {
+		portrait = from.leader
+		room = medical_room
+	}
+	is_triggered_only = yes
+	trigger = { exists = event_target:interspecies_medical_exchange }
+	immediate = {
+		set_country_flag = "talkingToIME"
+		event_target:interspecies_medical_exchange = {
+			random_owned_leader = {
+				limit = { is_medical_leader = yes NOT = { has_leader_flag = "IME_Loaned_From:@Root" } }
+				save_event_target_as = hireLeader1
+			}
+			if = {
+				limit = { exists = event_target:hireLeader1 }
+				random_owned_leader = {
+					limit = { is_medical_leader = yes NOT = { has_leader_flag = "IME_Loaned_From:@Root" } NOR = { is_same_value = event_target:hireLeader1 } }
+					save_event_target_as = hireLeader2
+				}
+			}
+		}		
+	}
+	option = {
+		name = STH_agency.60.a #Leader 1
+		response_text = STH_agency.60.a.response
+		trigger = { exists = event_target:hireLeader1 influence > 99 }
+		ai_chance = { factor = 0 modifier = { factor = 10 exists = event_target:hireLeader1 } }
+		add_influence = -100
+		custom_tooltip = STH_agency.60.a.tooltip
+		hidden_effect = { 		
+			event_target:hireLeader1 = { exile_leader_as = hireLeader }
+			create_fleet = { name = "Dummy" }
+			last_created_fleet = {
+				set_owner = root
+				create_ship_design = { design = "USS_Grissom" }
+				create_ship = { name = "Dummy" design = last_created_design }
+				set_leader = hireLeader
+				leader = { unassign_leader = this }
+				delete_fleet = this
+			}
+		}
+	}
+	option = {
+		name = STH_agency.60.b #Leader 2
+		response_text = STH_agency.60.a.response
+		trigger = { exists = event_target:hireLeader2 influence > 99 }		
+		ai_chance = { factor = 0 }
+		add_influence = -100
+		custom_tooltip = STH_agency.60.b.tooltip
+		hidden_effect = { 		
+			event_target:hireLeader2 = { exile_leader_as = hireLeader }
+			create_fleet = { name = "Dummy" }
+			last_created_fleet = {
+				set_owner = root
+				create_ship_design = { design = "USS_Grissom" }
+				create_ship = { name = "Dummy" design = last_created_design }
+				set_leader = hireLeader
+				leader = { unassign_leader = this }
+				delete_fleet = this
+			}
+		}
+	}
+	option = {
+		name = STH_agency.60.z #Back
+		default_hide_option = yes
+		hidden_effect = {
+			remove_country_flag = "talkingToIME"		
+			country_event = { id = STH_agency.50 scopes = { from = from } }
+		}
+	}
+	after = { remove_country_flag = "talkingToIME" }
+}
+
+#IME Diplomacy - Loan To
+country_event = {
+	id = STH_agency.70
+	title = STH_agency.70.name
+	desc = {
+		text = STH_agency.70.desc_01
+	}
+	diplomatic = yes
+	custom_gui = "enclave_curator_window"
+	force_open = yes
+	picture_event_data = {
+		portrait = from.leader
+		room = medical_room
+	}
+	is_triggered_only = yes
+	trigger = { exists = event_target:interspecies_medical_exchange }
+	immediate = {
+		set_country_flag = "talkingToIME"
+		random_owned_leader = {
+			limit = { is_medical_leader = yes leader_class = scientist }
+			save_event_target_as = loanLeader1
+		}
+		if = {
+			limit = { exists = event_target:loanLeader1 }
+			random_owned_leader = {
+				limit = { is_medical_leader = yes leader_class = scientist NOR = { is_same_value = event_target:loanLeader1 } }
+				save_event_target_as = loanLeader2
+			}
+		}		
+	}
+	option = {
+		name = STH_agency.70.a #Leader 1
+		response_text = STH_agency.70.a.response
+		trigger = { exists = event_target:loanLeader1 }
+		ai_chance = { factor = 0 modifier = { factor = 10 exists = event_target:loanLeader1 } }
+		custom_tooltip = STH_agency.70.a.tooltip
+		event_target:loanLeader1 = { 
+			add_scaling_leader_influence = yes
+			set_secondment_flags = yes
+		}
+		hidden_effect = {
+			event_target:loanLeader1 = { 
+				set_leader_flag = "IME_Loaned_From:@Root" 
+				set_leader_flag = IME_exchange 
+				exile_leader_as = loanCandidate
+			}
+			event_target:interspecies_medical_exchange = {
+				leader = { save_event_target_as = originalLeader unassign_leader = this }
+				set_leader = loanCandidate
+				leader = { unassign_leader = this }
+				assign_leader = event_target:originalLeader
+			}
+		}
+	}
+	option = {
+		name = STH_agency.70.b #Leader 2
+		response_text = STH_agency.70.a.response
+		trigger = { exists = event_target:loanLeader2 }		
+		ai_chance = { factor = 0 }
+		custom_tooltip = STH_agency.70.b.tooltip
+		event_target:loanLeader2 = { 
+			add_scaling_leader_influence = yes
+			set_secondment_flags = yes
+		}
+		hidden_effect = {
+			event_target:loanLeader2 = {
+				set_leader_flag = "IME_Loaned_From:@Root" 
+				set_leader_flag = IME_exchange 
+				exile_leader_as = loanCandidate
+			}
+			event_target:interspecies_medical_exchange = {
+				leader = { save_event_target_as = originalLeader unassign_leader = this }
+				set_leader = loanCandidate
+				leader = { unassign_leader = this }
+				assign_leader = event_target:originalLeader
+			}
+		}
+	}
+	option = {
+		name = STH_agency.70.z #Back
+		default_hide_option = yes
+		hidden_effect = {
+			remove_country_flag = "talkingToIME"
+			country_event = { id = STH_agency.50 scopes = { from = from } }
+		}
+	}
+	after = { remove_country_flag = "talkingToIME" }
+}
+

@@ -1,0 +1,91 @@
+#Trill Homeworld
+trill_homeworld = {			
+	name = "Trill"		
+	class = "sc_g"
+	flags = { trill_homeworld }
+	init_effect = { log = "trill homeworld" }
+	usage = custom_empire
+	max_instances = 1
+	planet = { name = "Trill" class = star orbit_distance = 0 orbit_angle = 1 size = 25 has_ring = no }		
+	planet = {
+		count = { min = 1 max = 4 }
+		orbit_distance = { min = 20 max = 30 }
+		orbit_angle = { min = 90 max = 270 }
+		moon = { count = { min = 0 max = 1 } orbit_angle = { min = 90 max = 270 } orbit_distance = 5 }
+	}	
+	planet = {		
+		name = "Trill"	
+		class = "pc_continental"	
+		orbit_distance = 30	
+		size = { min = 18 max = 20 }
+		starting_planet = yes
+		has_ring = no
+		tile_blockers = none
+		init_effect = {
+			prevent_anomaly = yes			
+			if = {
+				limit = { NOT = { any_country = { has_country_flag = trill_republic } } }
+				create_species = {
+					name = "Trill"
+					class = TRI
+					portrait = trill
+					homeworld = THIS
+					traits = {
+						trait="trait_symbiont" 
+						trait="trait_slow_breeders" 
+						ideal_planet_class = "pc_continental" 
+					} 
+				}
+				last_created_species = { save_global_event_target_as = trillSpecies }
+				create_country = {
+					name = "NAME_trill_republic"
+					type = default
+					ignore_initial_colony_error = yes
+					civics = { civic = "civic_meritocracy" civic = "civic_free_haven" }
+					authority = auth_democratic
+					name_list = "Trill"
+					ethos = { ethic = "ethic_xenophile" ethic = "ethic_egalitarian" ethic = "ethic_pacifist" }
+					species = event_target:trillSpecies
+					flag = {
+						icon = { category = "trek" file = "trill.dds" }
+						background = { category = "backgrounds" file = "circle.dds" }
+						colors = { "blue" "customcolor1734" "null" "null" }
+					}
+					ship_prefix=""
+					effect = {
+						set_graphical_culture = generic_02
+						set_country_flag = trill_republic
+						set_country_flag = custom_start_screen
+						set_country_flag = generic_ent
+						set_country_flag = alpha_beta_empire
+						set_country_flag = init_spawned
+						set_country_flag = botf_minor
+						save_global_event_target_as = trill_republic
+					}
+				}
+				create_colony = { owner = event_target:trill_republic species = event_target:trillSpecies ethos = owner }
+			}
+			set_capital = yes
+			random_country = {
+				limit = { has_country_flag = trill_republic }
+				save_global_event_target_as = trill_republic
+				add_appropriate_start_techs = yes
+				species = { save_global_event_target_as = trillSpecies }
+				set_country_type = minorRace
+			}
+			set_owner = event_target:trill_republic
+			generate_minor_empire_start_buildings = yes
+			generate_minor_empire_start_pops = yes
+			generate_major_empire_start_fleets = yes
+			set_name = "Trill"
+		}
+	}
+	change_orbit = 80
+	planet = {
+		count = { min = 1 max = 4 }
+		orbit_distance = { min = 20 max = 30 }
+		orbit_angle = { min = 90 max = 270 }
+		moon = { count = { min = 0 max = 1 } orbit_angle = { min = 90 max = 270 } orbit_distance = 5 }
+	}
+	planet = { name = "Trill B" class = star orbit_distance = 100 orbit_angle = 1 size = 20 has_ring = no }	
+}

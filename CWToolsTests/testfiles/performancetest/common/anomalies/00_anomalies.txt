@@ -1,0 +1,555 @@
+########################
+### anomaly EVENTS ###
+########################
+# potential = ship scope
+
+# All discoveries assigned weight 1 unless otherwise stated
+
+# Coprolite Asteroid
+anomaly = {
+	event = anomaly.1
+	category = "origin_asteroid_category"
+	
+	weight = 1
+	
+	potential = {
+		owner = { is_borg_empire = no is_assimilator = no }
+	}
+}
+
+# Pirate Treasure
+anomaly = {
+	event = anomaly.5
+	category = "hatch_asteroid_category"
+	
+	potential = {
+		owner = { is_borg_empire = no is_assimilator = no }
+	}
+}
+
+# Asteroid Fauna
+anomaly = {
+	event = anomaly.10
+	category = "life_asteroid_category"
+	
+	potential = {
+		owner = { is_borg_empire = no is_assimilator = no }
+	}
+}
+
+# Asteroid Fossils
+anomaly = {
+	event = anomaly.15
+	category = "origin_asteroid_category"
+	
+	potential = {
+		owner = { is_borg_empire = no is_assimilator = no }
+	}
+}
+
+# Derelict Shipyard
+anomaly = {
+	event = anomaly.25
+	category = "hatch_asteroid_category"
+	
+	potential = {
+		owner = { is_borg_empire = no is_assimilator = no }
+	}
+}
+
+# Junkyard
+anomaly = {
+	event = anomaly.30
+	category = "debris_asteroid_category"
+	
+	potential = {
+		owner = { is_borg_empire = no is_assimilator = no }
+	}
+}
+
+# Crashed Scout Ship
+anomaly = {
+	event = anomaly.35
+	category = "crashed_ship_asteroid_category"
+	
+	potential = {
+		owner = { is_borg_empire = no is_assimilator = no }
+	}
+}
+
+# Automated Mining Base
+anomaly = {
+	event = anomaly.40
+	category = "station_asteroid_category"
+	
+	potential = {
+		owner = { is_borg_empire = no is_assimilator = no }
+	}
+}
+
+# Weapons Target Range
+anomaly = {
+	event = anomaly.50
+	category = "emissions_asteroid_category"
+	
+	potential = {
+		owner = { is_borg_empire = no is_assimilator = no }
+	}
+}
+
+# Asteroid Collision
+anomaly = {
+	event = anomaly.55
+	category = "collision_asteroid_category"
+	
+	potential = {
+		orbit = {
+			has_any_strategic_resource = no
+		}
+	}
+}
+
+# Exotic Radiation
+anomaly = {
+	event = anomaly.60
+	category = "emissions_asteroid_category"
+	
+	potential = {
+		owner = { is_borg_empire = no is_assimilator = no }
+	}
+}
+
+# Crashed Ore Freighter
+anomaly = {
+	event = anomaly.65
+	category = "crashed_ship_asteroid_category"
+	
+	potential = {
+		owner = { is_borg_empire = no is_assimilator = no }
+	}
+}
+
+# Atmospheric Ecosystem
+anomaly = {
+	event = anomaly.300
+	category = "life_gasgiant_category"
+	
+	potential = {
+		owner = { is_borg_empire = no is_assimilator = no }
+	}
+}
+
+# Abandoned Cargo Pod
+anomaly = {
+	event = anomaly.305
+	category = "cargo_gasgiant_category"
+	
+	potential = {
+		owner = { is_borg_empire = no is_assimilator = no }
+	}
+}
+
+# Social Experiment
+anomaly = {
+	event = anomaly.310
+	category = "aerostat_gasgiant_category"
+	
+	potential = {
+		owner = { is_borg_empire = no is_assimilator = no }
+	}
+}
+
+# Aerostat Colonies
+anomaly = {
+	event = anomaly.315
+	category = "aerostat_gasgiant_category"
+	
+	potential = {
+		owner = { is_borg_empire = no is_assimilator = no }
+	}
+}
+
+# Debris Field
+anomaly = {
+	event = anomaly.320
+	category = "debris_gasgiant_category"
+	
+	potential = {
+		owner = { is_borg_empire = no is_assimilator = no }
+	}
+}
+
+# Crushed Cruiser
+anomaly = {
+	event = anomaly.325
+	category = "object_gasgiant_category"
+	
+	potential = {
+		owner = { is_borg_empire = no is_assimilator = no }
+	}
+}
+
+# Extreme Storms
+anomaly = {
+	event = anomaly.330
+	category = "storms_gasgiant_category"
+	
+	potential = {
+		owner = { is_borg_empire = no is_assimilator = no }
+	}
+}
+
+# Energy Signature
+anomaly = {
+	event = anomaly.335
+	category = "object_gasgiant_category"
+	
+	potential = {
+		owner = { is_borg_empire = no is_assimilator = no }
+	}
+}
+
+# Precious Moon
+anomaly = {
+	event = anomaly.340
+	category = "moon_gasgiant_category"
+	
+	potential = {
+		orbit = {
+			has_any_strategic_resource = no
+		}
+	}
+}
+
+# Asteroid Collision
+anomaly = {
+	event = anomaly.600
+	category = "impact_uninhabitable_category"
+	
+	potential = {
+		owner = { is_borg_empire = no is_assimilator = no }
+	}
+}
+
+# Warp Impact
+anomaly = {
+	event = anomaly.605
+	category = "impact_uninhabitable_category"
+	
+	potential = {
+		owner = { is_borg_empire = no is_assimilator = no }
+	}
+}
+
+# Microsingularity
+anomaly = {
+	event = anomaly.610
+	category = "energy_uninhabitable_category"
+	
+	potential = {
+		owner = { is_borg_empire = no is_assimilator = no }
+	}
+}
+
+# Magnetic Reversal
+anomaly = {
+	event = anomaly.615
+	category = "energy_uninhabitable_category"
+	
+	potential = {
+		owner = { is_borg_empire = no is_assimilator = no }
+	}
+}
+
+# Mummified Pilot
+anomaly = {
+	event = anomaly.625
+	category = "signal_uninhabitable_category"
+	
+	potential = {
+		owner = { is_borg_empire = no is_assimilator = no }
+	}
+}
+
+# Ancient Life Pod
+anomaly = {
+	event = anomaly.630
+	category = "signal_uninhabitable_category"
+	
+	potential = {
+		owner = { is_borg_empire = no is_assimilator = no }
+	}
+}
+
+# Alien Writing
+anomaly = {
+	event = anomaly.635
+	category = "writing_uninhabitable_category"
+	
+	potential = {
+		owner = { is_borg_empire = no is_assimilator = no }
+	}
+}
+
+# Solar Sailer
+anomaly = {
+	event = anomaly.650
+	category = "solar_uninhabitable_category"
+	
+	potential = {
+		owner = { is_borg_empire = no is_assimilator = no }
+	}
+}
+
+# Glancing Hit
+anomaly = {
+	event = anomaly.655
+	category = "energy_uninhabitable_category"
+	
+	potential = {
+		owner = { is_borg_empire = no is_assimilator = no }
+	}
+}
+
+# Towed Asteroid
+anomaly = {
+	event = anomaly.660
+	category = "asteroid_uninhabitable_category"
+	
+	potential = {
+		owner = { is_borg_empire = no is_assimilator = no }
+	}
+}
+
+# Nuclear Devastation (Toxic)
+anomaly = {
+	event = anomaly.670
+	category = "inhabited_toxic_category"
+	
+	potential = {
+		orbit = {
+			is_planet_class = pc_toxic
+		}
+	}
+}
+
+## Nuclear Wasteland (Arctic/Tundra and Desert/Arid)
+#anomaly = {
+#	event = anomaly.675
+#	category = "HAB_PHY_1"
+#	
+#	potential = {
+#		orbit = {
+#			OR = {
+#				is_planet_class = pc_arctic
+#				is_planet_class = pc_tundra
+#				is_planet_class = pc_arid
+#				is_planet_class = pc_desert
+#			}
+#		}
+#	}
+#}
+#
+## Gamma-Ray Burst
+#anomaly = {
+#	event = anomaly.680
+#	category = "HAB_PHY_1"
+#	
+#	potential = {
+#		orbit = {
+#			owner = { is_borg_empire = no is_assimilator = no }
+#		}
+#	}
+#}
+
+# Runaway Greenhouse Effect
+anomaly = {
+	event = anomaly.685
+	category = "inhabited_toxic_category"
+	
+	potential = {
+		orbit = {
+			is_planet_class = pc_toxic
+		}
+	}
+}
+
+# Ammonia Biosphere
+anomaly = {
+	event = anomaly.690
+	category = "life_toxic_category"
+	
+	potential = {
+		orbit = {
+			is_planet_class = pc_toxic
+		}
+	}
+}
+
+# Silicon Life Forms
+anomaly = {
+	event = anomaly.695
+	category = "life_barren_category"
+	
+	potential = {
+		owner = { is_borg_empire = no is_assimilator = no }
+	}
+}
+
+# Wildcat Miners
+anomaly = {
+	event = anomaly.700
+	category = "station_uninhabitable_category"
+	
+	potential = {
+		owner = { is_borg_empire = no is_assimilator = no }
+	}
+}
+
+# Ancient Survey Marker
+anomaly = {
+	event = anomaly.705
+	category = "beacon_uninhabitable_category"
+	
+	potential = {
+		owner = { is_borg_empire = no is_assimilator = no }
+	}
+}
+
+# Ocean Beneath the Ice
+anomaly = {
+	event = anomaly.2510
+	category = "life_frozen_category"
+	
+	potential = {
+		owner = { is_borg_empire = no is_assimilator = no }
+	}
+}
+
+# Gigantic Skeleton
+anomaly = {
+	event = anomaly.2520
+	category = "mountain_uninhabitable_category"
+	
+	potential = {
+		owner = { is_borg_empire = no is_assimilator = no }
+	}
+}
+
+# Signs of Battle
+anomaly = {
+	event = anomaly.2530
+	category = "battle_uninhabitable_category"
+	
+	potential = {
+		owner = { is_borg_empire = no is_assimilator = no }
+	}
+}
+
+# Alien Mural
+anomaly = {
+	event = anomaly.2540
+	category = "object_uninhabitable_category"
+	
+	potential = {
+		orbit = {
+			OR = {
+				is_planet_class = pc_frozen
+				is_planet_class = pc_barren
+				is_planet_class = pc_barren_cold
+				is_planet_class = pc_molten
+				is_planet_class = pc_toxic
+			}
+		}
+	}
+}
+
+# Automated Shipyard
+anomaly = {
+	event = anomaly.2550
+	category = "shipyard_uninhabitable_category"
+	
+	potential = {
+		owner = { is_borg_empire = no is_assimilator = no }
+	}
+}
+
+# Gas Giant Ship
+anomaly = {
+	event = anomaly.2560
+	category = "ship_gasgiant_category"
+	
+	potential = {
+		owner = { is_borg_empire = no is_assimilator = no }
+	}
+}
+
+# Terminal Orbit
+anomaly = {
+	event = anomaly.2570
+	category = "terminal_gasgiant_category"
+	
+	potential = {
+		owner = { is_borg_empire = no is_assimilator = no }
+	}
+}
+
+# Gas Giant Civilization
+anomaly = {
+	event = anomaly.5000
+	category = "signal_gasgiant_category"
+	
+	potential = {
+		owner = { is_borg_empire = no is_assimilator = no }
+	}
+}
+
+## Upliftable Species ### TEMP ###
+#anomaly = {
+#	event = anomaly.6000
+#	category = "UPLIFTING"
+#	
+#	potential = {
+#		owner = { is_borg_empire = no is_assimilator = no }
+#	}
+#}
+
+## Primitive Industrial Civilization
+#anomaly = {
+#	event = primitive.1
+#	category = "HPL_INHABITED_CAT"
+#	
+#	potential = {
+#		owner = { is_borg_empire = no is_assimilator = no }
+#	}
+#}
+#
+## Primitive Medieval Civilization
+#anomaly = {
+#	event = primitive.2
+#	category = "HPL_INHABITED_CAT"
+#	
+#	potential = {
+#		owner = { is_borg_empire = no is_assimilator = no }
+#	}
+#}
+#
+## Primitive Stone Age Aliens
+#anomaly = {
+#	event = primitive.3
+#	category = "HPL_INHABITED_CAT"
+#	
+#	potential = {
+#		owner = { is_borg_empire = no is_assimilator = no }
+#	}
+#}
+
+# Nuclear Wasteland (Sol III)
+# anomaly = {
+	# event = galactic_features.104
+	# category = "sol_wasteland_category"
+	
+	# potential = {
+		# owner = { is_borg_empire = no is_assimilator = no }
+	# }
+# }

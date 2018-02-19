@@ -1,0 +1,96 @@
+﻿### Skrreean by EHKodiak
+Skrreean = {
+	randomized = no
+
+	ship_names = {
+		generic = { Bounty Harvest Taciturn Karanja Gympie Dromedary "Beast of Burden" Monowai Solstice Zenith Shroud Joy Maiden Amity "Humble Fortune" Charity Conundrum Dawn Solitude Legacy Mirage Riddle
+		}
+		corvette = {
+		}
+		saber = {
+		}
+		sovereign = {
+		}
+		steamrunner = {
+		}		
+		adv_cruiser = {
+		}
+		strike = {
+		}	
+		constructor = { }
+		colonizer = { }
+		science = { }
+		transport = { }
+		outpost_station = {
+			sequential_name = "Frontier Outpost"
+		}
+	}
+
+	fleet_names = {
+		sequential_name = "%O% Fleet"
+	}
+	
+	army_names = {
+		defense_army = {
+			sequential_name = "%O% Skrreean Defenders"
+		}
+		assault_army = {
+			sequential_name = "%O% Skrreean Assaulters"
+		}
+		slave_army = {
+			sequential_name = "%O% Indentured Defence Force"
+		}
+		clone_army = { 
+			sequential_name = "%O% Clone Defence Force"
+		}
+		robotic_army = {
+			sequential_name = "%O% Mechanised Defence Force"
+		}
+		android_army = {
+			sequential_name = "%O% Synthetic Defence Force"
+		}
+		psionic_army = { 
+			sequential_name = "%O% Psi Defence Force"
+		}
+		xenomorph_army = {
+			sequential_name = "%O% Bio-Warfare Defence Force"
+		}
+		gene_warrior_army = {
+			sequential_name = "%O% Bio-Engineered Defence Force"
+		}
+	}
+
+	planet_names = {
+		generic = {
+			names = { 
+			}
+		}
+	}
+
+
+	### CHARACTERS 
+
+	character_names = {
+		names1 = {
+			weight = 40
+			first_names_male = {
+			Tumak Cowl Gai Tum Tuumak Mak Gail Gawl Clumak Gaikmak Tyn Gaovayn Haowanak Gavrinsakl Tulsh Grinowl Arldiak Griva Cinsak Zimyn Gavayn Cowvak Tumain Ansarlsh Harimal Vyn Arluak Odinynak Grimpk Gaovak Maik Tull Gaynakl Gakman Tumanak Tuumaik Ganak Tynsh Gavans Gansak Tynshil
+			}
+			first_names_female = {
+			Haneek Aneek Vayna Anek Vanek Vayneek Nayaneek Vanayna Vynek Vaneek Anaynek Hayana Vynana Vanayka Kava Ana Deboek Hava Kit Kin Deek Kavat Anava Kiner Vanekat Avavat Vaynek Ranan Kittra Anatrit Rinava Anerana Kainek Kiinan Deeka Kineeka Ryn Hayneek Havboek Vaitt Aan Rattran Anaynn Vattr Dekava Derit Ananayn Aeriit Deera Drat Kayner Dran Dva Anavat Yner Deerin Anok Doek Deerit
+			}
+			second_names = {
+			""
+			}
+			regnal_first_names_male = {
+			Tumak Cowl Gai Tum Tuumak Mak Gail Gawl Clumak Gaikmak Tyn Gaovayn Haowanak Gavrinsakl Tulsh Grinowl Arldiak Griva Cinsak Zimyn Gavayn Cowvak Tumain Ansarlsh Harimal Vyn Arluak Odinynak Grimpk Gaovak Maik Tull Gaynakl Gakman Tumanak Tuumaik Ganak Tynsh Gavans Gansak Tynshil
+			}
+			regnal_first_names_female = {
+			Haneek Aneek Vayna Anek Vanek Vayneek Nayaneek Vanayna Vynek Vaneek Anaynek Hayana Vynana Vanayka Kava Ana Deboek Hava Kit Kin Deek Kavat Anava Kiner Vanekat Avavat Vaynek Ranan Kittra Anatrit Rinava Anerana Kainek Kiinan Deeka Kineeka Ryn Hayneek Havboek Vaitt Aan Rattran Anaynn Vattr Dekava Derit Ananayn Aeriit Deera Drat Kayner Dran Dva Anavat Yner Deerin Anok Doek Deerit
+			}
+			regnal_second_names = {
+			""
+			}
+		}
+	}
+}

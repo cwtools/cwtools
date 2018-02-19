@@ -1,0 +1,2128 @@
+#### STNH 1.8 compat ####
+
+
+# Possible Deposit Variables
+# modifier - weight, will replace the weight value
+# modifier - factor, will multiply the weight value
+# resources, resource and amount
+# station = station class in orbit to gather
+# if you mix resources that are not supposed to be collected by an orbital station remember to put is_orbital_slot = no
+
+#NULL DEPOSIT MUST EXIST
+d_null_deposit = {
+	is_null = yes
+	
+	drop_weight = {
+		weight = 50
+		modifier = {
+			weight = 0
+			planet = {
+				OR = {
+					is_planet_class = pc_black_hole
+					is_planet_class = pc_neutron_star
+					is_planet_class = pc_pulsar				
+				}
+			}
+		}
+		modifier = {
+			weight = 33
+			planet = {
+				is_planet_class = pc_gaia
+			}
+		}
+		modifier = {
+			weight = 100
+			planet = {
+				OR = {
+					is_planet_class = pc_barren
+					is_planet_class = pc_barren_cold
+					is_planet_class = pc_a_star
+					is_planet_class = pc_b_star
+					is_planet_class = pc_f_star
+					is_planet_class = pc_g_star
+					is_planet_class = pc_k_star
+					is_planet_class = pc_m_star
+					is_planet_class = pc_nuked
+				}
+			}
+		}
+	}
+}
+
+##################################
+############ MINERALS ############
+##################################
+
+d_mineral_deposit = {
+	resources = { minerals = 1 }
+	station = shipclass_mining_station
+	orbital_weight = {
+		weight = 10
+	}
+	
+	drop_weight = {
+		weight = 0
+		modifier = {
+			weight = 10
+			planet = {
+				is_planet_class = pc_nuked
+			}
+		}
+		modifier = {
+			weight = 15
+			planet = {
+				OR = {
+					is_planet_class = pc_gaia				
+					is_planet_class = pc_continental
+					is_planet_class = pc_arctic
+					is_planet_class = pc_arid
+					is_planet_class = pc_savannah
+					is_planet_class = pc_tropical
+					is_planet_class = pc_alpine
+					is_planet_class = pc_m1_class
+					is_planet_class = pc_desert
+					is_planet_class = pc_ocean
+					is_planet_class = pc_tundra
+					is_planet_class = pc_l2_class
+					is_planet_class = pc_frozen
+					is_planet_class = pc_g_class
+					is_planet_class = pc_class_q_variable
+					is_planet_class = pc_class_q_geo
+					is_planet_class = pc_r_class
+					is_planet_class = pc_f_class
+					is_planet_class = pc_k_class
+					is_planet_class = pc_y_class
+					is_planet_class = pc_x_class
+				}
+			}
+		}
+		modifier = {
+			factor = 1.5
+			planet = {
+				OR = {
+					is_planet_class = pc_tundra
+					is_planet_class = pc_arctic
+					is_planet_class = pc_alpine
+				}
+			}
+		}	
+	}
+}
+
+d_rich_mineral_deposit = {
+	resources = { minerals = 2 }
+	station = shipclass_mining_station
+	orbital_weight = {
+		weight = 20
+	}
+	
+	drop_weight = {
+		weight = 0
+		modifier = {
+			weight = 6
+			planet = {
+				OR = {
+					is_planet_class = pc_molten
+					is_planet_class = pc_toxic
+					is_planet_class = pc_nuked
+					is_planet_class = pc_frozen
+				}
+			}
+		}
+		modifier = {
+			weight = 10
+			planet = {
+				OR = {
+					is_planet_class = pc_gaia
+					is_planet_class = pc_continental
+					is_planet_class = pc_arctic
+					is_planet_class = pc_arid
+					is_planet_class = pc_savannah
+					is_planet_class = pc_tropical
+					is_planet_class = pc_alpine
+					is_planet_class = pc_m1_class
+					is_planet_class = pc_desert
+					is_planet_class = pc_ocean
+					is_planet_class = pc_tundra
+					is_planet_class = pc_l2_class
+					is_planet_class = pc_frozen
+					is_planet_class = pc_g_class
+					is_planet_class = pc_class_q_variable
+					is_planet_class = pc_class_q_geo
+					is_planet_class = pc_r_class
+					is_planet_class = pc_f_class
+					is_planet_class = pc_k_class
+					is_planet_class = pc_y_class
+					is_planet_class = pc_x_class
+				}
+			}
+		}
+		modifier = {
+			weight = 12
+			planet = {
+				OR = {
+					is_planet_class = pc_barren
+					is_planet_class = pc_barren_cold
+				}
+			}
+		}
+		modifier = {
+			weight = 22
+			planet = {
+				is_asteroid = yes
+			}
+		}
+		modifier = {
+			factor = 1.5
+			planet = {
+				OR = {
+					is_planet_class = pc_tundra
+					is_planet_class = pc_arctic
+					is_planet_class = pc_alpine
+				}
+			}
+		}	
+		modifier = {
+			factor = 1.5
+			planet = {
+				is_planet_class = pc_gaia
+			}
+		}		
+	}
+}
+
+d_vast_mineral_deposit = {
+	resources = { minerals = 3 }
+	station = shipclass_mining_station
+	orbital_weight = {
+		weight = 30
+	}
+	
+	drop_weight = {
+		weight = 0
+		modifier = {
+			weight = 2
+			planet = {
+				OR = {
+					is_planet_class = pc_gaia				
+					is_planet_class = pc_continental
+					is_planet_class = pc_arctic
+					is_planet_class = pc_arid
+					is_planet_class = pc_savannah
+					is_planet_class = pc_tropical
+					is_planet_class = pc_alpine
+					is_planet_class = pc_m1_class
+					is_planet_class = pc_desert
+					is_planet_class = pc_ocean
+					is_planet_class = pc_tundra
+					is_planet_class = pc_l2_class
+					is_planet_class = pc_frozen
+					is_planet_class = pc_g_class
+					is_planet_class = pc_class_q_variable
+					is_planet_class = pc_class_q_geo
+					is_planet_class = pc_r_class
+					is_planet_class = pc_f_class
+					is_planet_class = pc_k_class
+					is_planet_class = pc_y_class
+					is_planet_class = pc_x_class
+				}
+			}
+		}
+		modifier = {
+			weight = 3
+			planet = {
+				is_asteroid = yes
+			}
+		}
+		modifier = {
+			factor = 0.5
+			planet = {
+				is_asteroid = yes
+				is_in_cluster = resource_cluster_0
+			}
+		}
+		modifier = {
+			factor = 1.5
+			planet = {
+				OR = {
+					is_planet_class = pc_tundra
+					is_planet_class = pc_arctic
+					is_planet_class = pc_alpine
+				}
+			}
+		}
+		modifier = {
+			factor = 1.5
+			planet = {
+				is_planet_class = pc_gaia
+			}
+		}		
+	}
+}
+
+d_immense_mineral_deposit = {
+	resources = { minerals = 4 }
+	station = shipclass_mining_station
+	orbital_weight = {
+		weight = 50
+	}
+	
+	drop_weight = {
+		weight = 0
+		modifier = {
+			weight = 1
+			planet = {
+				OR = {
+					is_planet_class = pc_gaia				
+					is_planet_class = pc_continental
+					is_planet_class = pc_arctic
+					is_planet_class = pc_arid
+					is_planet_class = pc_savannah
+					is_planet_class = pc_tropical
+					is_planet_class = pc_alpine
+					is_planet_class = pc_m1_class
+					is_planet_class = pc_desert
+					is_planet_class = pc_ocean
+					is_planet_class = pc_tundra
+					is_planet_class = pc_l2_class
+					is_planet_class = pc_frozen
+					is_planet_class = pc_g_class
+					is_planet_class = pc_class_q_variable
+					is_planet_class = pc_class_q_geo
+					is_planet_class = pc_r_class
+					is_planet_class = pc_f_class
+					is_planet_class = pc_k_class
+					is_planet_class = pc_y_class
+					is_planet_class = pc_x_class
+				}
+			}
+		}
+		modifier = {
+			weight = 1.5
+			planet = {
+				is_asteroid = yes
+			}
+		}
+		modifier = {
+			factor = 0.5
+			planet = {
+				is_asteroid = yes
+				is_in_cluster = resource_cluster_0
+			}
+		}
+		modifier = {
+			factor = 1.5
+			planet = {
+				OR = {
+					is_planet_class = pc_tundra
+					is_planet_class = pc_arctic
+					is_planet_class = pc_alpine
+				}
+			}
+		}
+		modifier = {
+			factor = 1.5
+			planet = {
+				is_planet_class = pc_gaia
+			}
+		}		
+	}
+}
+
+##################################
+######### MIXED DEPOSITS #########
+##################################
+
+d_mineral_energy_deposit = {
+	resources = {
+		energy = 1
+		minerals = 1
+	}
+	station = shipclass_mining_station
+	orbital_weight = {
+		weight = 20
+	}
+	
+	drop_weight = {
+		weight = 0
+		modifier = {
+			weight = 5
+			planet = {
+				OR = {
+					is_planet_class = pc_gaia				
+					is_planet_class = pc_continental
+					is_planet_class = pc_arctic
+					is_planet_class = pc_arid
+					is_planet_class = pc_savannah
+					is_planet_class = pc_tropical
+					is_planet_class = pc_alpine
+					is_planet_class = pc_m1_class
+					is_planet_class = pc_desert
+					is_planet_class = pc_ocean
+					is_planet_class = pc_tundra
+					is_planet_class = pc_l2_class
+					is_planet_class = pc_frozen
+					is_planet_class = pc_g_class
+					is_planet_class = pc_class_q_variable
+					is_planet_class = pc_class_q_geo
+					is_planet_class = pc_r_class
+					is_planet_class = pc_f_class
+					is_planet_class = pc_k_class
+					is_planet_class = pc_y_class
+					is_planet_class = pc_x_class
+				}
+			}
+		}	
+		modifier = {
+			factor = 1.25
+			planet = {
+				OR = {
+					is_planet_class = pc_arid
+					is_planet_class = pc_desert
+					is_planet_class = pc_savannah
+				}
+			}
+		}
+	}
+}
+
+d_rich_mineral_energy_deposit = {
+	resources = {
+		energy = 2
+		minerals = 2
+	}
+	station = shipclass_mining_station
+	orbital_weight = {
+		weight = 60
+	}
+	
+	drop_weight = {
+		weight = 0
+		modifier = {
+			weight = 2
+			planet = {
+				OR = {
+					is_planet_class = pc_gaia				
+					is_planet_class = pc_continental
+					is_planet_class = pc_arctic
+					is_planet_class = pc_arid
+					is_planet_class = pc_savannah
+					is_planet_class = pc_tropical
+					is_planet_class = pc_alpine
+					is_planet_class = pc_m1_class
+					is_planet_class = pc_desert
+					is_planet_class = pc_ocean
+					is_planet_class = pc_tundra
+					is_planet_class = pc_l2_class
+					is_planet_class = pc_frozen
+					is_planet_class = pc_g_class
+					is_planet_class = pc_class_q_variable
+					is_planet_class = pc_class_q_geo
+					is_planet_class = pc_r_class
+					is_planet_class = pc_f_class
+					is_planet_class = pc_k_class
+					is_planet_class = pc_y_class
+					is_planet_class = pc_x_class
+				}
+			}
+		}
+		modifier = {
+			factor = 1.5
+			planet = {
+				is_planet_class = pc_gaia
+			}
+		}	
+		modifier = {
+			factor = 1.25
+			planet = {
+				OR = {
+					is_planet_class = pc_arid
+					is_planet_class = pc_desert
+					is_planet_class = pc_savannah
+				}
+			}
+		}		
+	}
+}
+
+d_mineral_food_deposit = {
+	resources = {
+		food = 1
+		minerals = 1
+	}
+	is_orbital_slot = no
+	
+	drop_weight = {
+		weight = 0
+		modifier = {
+			weight = 5
+			planet = {
+				OR = {
+					is_planet_class = pc_gaia				
+					is_planet_class = pc_continental
+					is_planet_class = pc_arctic
+					is_planet_class = pc_arid
+					is_planet_class = pc_savannah
+					is_planet_class = pc_tropical
+					is_planet_class = pc_alpine
+					is_planet_class = pc_m1_class
+					is_planet_class = pc_desert
+					is_planet_class = pc_ocean
+					is_planet_class = pc_tundra
+					is_planet_class = pc_l2_class
+					is_planet_class = pc_frozen
+					is_planet_class = pc_g_class
+					is_planet_class = pc_class_q_variable
+					is_planet_class = pc_class_q_geo
+					is_planet_class = pc_r_class
+					is_planet_class = pc_f_class
+					is_planet_class = pc_k_class
+					is_planet_class = pc_y_class
+					is_planet_class = pc_x_class
+				}
+			}
+		}
+		modifier = {
+			factor = 1.25
+			planet = {
+				OR = {
+					is_planet_class = pc_continental
+					is_planet_class = pc_tropical
+					is_planet_class = pc_ocean
+				}
+			}
+		}			
+	}
+}
+
+d_rich_food_mineral_deposit = {
+	resources = {
+		food = 2
+		minerals = 2
+	}
+	is_orbital_slot = no
+	
+	drop_weight = {
+		weight = 0
+		modifier = {
+			weight = 2
+			planet = {
+				OR = {
+					is_planet_class = pc_gaia				
+					is_planet_class = pc_continental
+					is_planet_class = pc_arctic
+					is_planet_class = pc_arid
+					is_planet_class = pc_savannah
+					is_planet_class = pc_tropical
+					is_planet_class = pc_alpine
+					is_planet_class = pc_m1_class
+					is_planet_class = pc_desert
+					is_planet_class = pc_ocean
+					is_planet_class = pc_tundra
+					is_planet_class = pc_l2_class
+					is_planet_class = pc_frozen
+					is_planet_class = pc_g_class
+					is_planet_class = pc_class_q_variable
+					is_planet_class = pc_class_q_geo
+					is_planet_class = pc_r_class
+					is_planet_class = pc_f_class
+					is_planet_class = pc_k_class
+					is_planet_class = pc_y_class
+					is_planet_class = pc_x_class
+				}
+			}
+		}
+		modifier = {
+			factor = 1.5
+			planet = {
+				is_planet_class = pc_gaia
+			}
+		}
+		modifier = {
+			factor = 1.25
+			planet = {
+				OR = {
+					is_planet_class = pc_continental
+					is_planet_class = pc_tropical
+					is_planet_class = pc_ocean
+				}
+			}
+		}			
+	}
+}
+
+##################################
+######### ENERGY CREDITS #########
+##################################
+
+d_energy_deposit = {
+	resources = { energy = 1 }
+	station = shipclass_mining_station
+	orbital_weight = {
+		weight = 10
+	}
+	
+	drop_weight = {
+		weight = 0
+		modifier = {
+			weight = 15
+			planet = {
+				OR = {
+					is_planet_class = pc_gaia				
+					is_planet_class = pc_continental
+					is_planet_class = pc_arctic
+					is_planet_class = pc_arid
+					is_planet_class = pc_savannah
+					is_planet_class = pc_tropical
+					is_planet_class = pc_alpine
+					is_planet_class = pc_m1_class
+					is_planet_class = pc_desert
+					is_planet_class = pc_ocean
+					is_planet_class = pc_tundra
+					is_planet_class = pc_l2_class
+					is_planet_class = pc_frozen
+					is_planet_class = pc_g_class
+					is_planet_class = pc_class_q_variable
+					is_planet_class = pc_class_q_geo
+					is_planet_class = pc_r_class
+					is_planet_class = pc_f_class
+					is_planet_class = pc_k_class
+					is_planet_class = pc_y_class
+					is_planet_class = pc_x_class
+				}
+			}
+		}
+		modifier = {
+			factor = 1.5
+			planet = {
+				OR = {
+					is_planet_class = pc_arid
+					is_planet_class = pc_desert
+					is_planet_class = pc_savannah
+				}
+			}
+		}			
+	}
+}
+
+d_rich_energy_deposit = {
+	resources = { energy = 2 }
+	station = shipclass_mining_station
+	orbital_weight = {
+		weight = 20
+	}
+	
+	drop_weight = {
+		weight = 0
+		modifier = {
+			weight = 3
+			planet = {
+				is_planet_class = pc_molten
+			}
+		}
+		modifier = {
+			weight = 10
+			planet = {
+				OR = {
+					is_planet_class = pc_gaia				
+					is_planet_class = pc_continental
+					is_planet_class = pc_arctic
+					is_planet_class = pc_arid
+					is_planet_class = pc_savannah
+					is_planet_class = pc_tropical
+					is_planet_class = pc_alpine
+					is_planet_class = pc_m1_class
+					is_planet_class = pc_desert
+					is_planet_class = pc_ocean
+					is_planet_class = pc_tundra
+					is_planet_class = pc_l2_class
+					is_planet_class = pc_frozen
+					is_planet_class = pc_g_class
+					is_planet_class = pc_class_q_variable
+					is_planet_class = pc_class_q_geo
+					is_planet_class = pc_r_class
+					is_planet_class = pc_f_class
+					is_planet_class = pc_k_class
+					is_planet_class = pc_y_class
+					is_planet_class = pc_x_class
+				}
+			}
+		}
+		modifier = {
+			weight = 12
+			planet = {
+				OR = {
+					is_planet_class = pc_a_star
+					is_planet_class = pc_b_star
+					is_planet_class = pc_f_star
+					is_planet_class = pc_g_star
+					is_planet_class = pc_k_star
+					is_planet_class = pc_m_star
+				}
+			}
+		}
+		modifier = {
+			weight = 25
+			planet = {
+				is_planet_class = pc_gas_giant
+			}
+		}
+		modifier = {
+			factor = 1.5
+			planet = {
+				OR = {
+					is_planet_class = pc_arid
+					is_planet_class = pc_desert
+					is_planet_class = pc_savannah
+				}
+			}
+		}	
+		modifier = {
+			factor = 1.5
+			planet = {
+				is_planet_class = pc_gaia
+			}
+		}		
+	}
+}
+
+d_vast_energy_deposit = {
+	resources = { energy = 3 }
+	station = shipclass_mining_station
+	orbital_weight = {
+		weight = 30
+	}
+	
+	drop_weight = {
+		weight = 0		
+		modifier = {
+			weight = 2
+			planet = {
+				OR = {
+					is_planet_class = pc_a_star
+					is_planet_class = pc_b_star
+					is_planet_class = pc_f_star
+					is_planet_class = pc_g_star
+					is_planet_class = pc_k_star
+					is_planet_class = pc_m_star
+				}
+			}
+		}
+		modifier = {
+			weight = 1
+			planet = {
+				OR = {
+					is_planet_class = pc_gaia				
+					is_planet_class = pc_continental
+					is_planet_class = pc_arctic
+					is_planet_class = pc_arid
+					is_planet_class = pc_savannah
+					is_planet_class = pc_tropical
+					is_planet_class = pc_alpine
+					is_planet_class = pc_m1_class
+					is_planet_class = pc_desert
+					is_planet_class = pc_ocean
+					is_planet_class = pc_tundra
+					is_planet_class = pc_l2_class
+					is_planet_class = pc_frozen
+					is_planet_class = pc_g_class
+					is_planet_class = pc_class_q_variable
+					is_planet_class = pc_class_q_geo
+					is_planet_class = pc_r_class
+					is_planet_class = pc_f_class
+					is_planet_class = pc_k_class
+					is_planet_class = pc_y_class
+					is_planet_class = pc_x_class
+				}
+			}
+		}		
+		modifier = {
+			weight = 8
+			planet = {
+				is_planet_class = pc_gas_giant
+			}
+		}	
+		modifier = {
+			factor = 1.5
+			planet = {
+				OR = {
+					is_planet_class = pc_arid
+					is_planet_class = pc_desert
+					is_planet_class = pc_savannah
+				}
+			}
+		}	
+		modifier = {
+			factor = 1.5
+			planet = {
+				is_planet_class = pc_gaia
+			}
+		}		
+	}
+}
+
+d_immense_energy_deposit = {
+	resources = { energy = 4 }
+	station = shipclass_mining_station
+	orbital_weight = {
+		weight = 50
+	}
+	
+	drop_weight = {
+		weight = 0		
+		modifier = {
+			weight = 1
+			planet = {
+				OR = {
+					is_planet_class = pc_a_star
+					is_planet_class = pc_b_star
+					is_planet_class = pc_f_star
+					is_planet_class = pc_g_star
+					is_planet_class = pc_k_star
+					is_planet_class = pc_m_star
+				}
+			}
+		}
+		modifier = {
+			weight = 0.5
+			planet = {
+				OR = {
+					is_planet_class = pc_gaia				
+					is_planet_class = pc_continental
+					is_planet_class = pc_arctic
+					is_planet_class = pc_arid
+					is_planet_class = pc_savannah
+					is_planet_class = pc_tropical
+					is_planet_class = pc_alpine
+					is_planet_class = pc_m1_class
+					is_planet_class = pc_desert
+					is_planet_class = pc_ocean
+					is_planet_class = pc_tundra
+					is_planet_class = pc_l2_class
+					is_planet_class = pc_frozen
+					is_planet_class = pc_g_class
+					is_planet_class = pc_class_q_variable
+					is_planet_class = pc_class_q_geo
+					is_planet_class = pc_r_class
+					is_planet_class = pc_f_class
+					is_planet_class = pc_k_class
+					is_planet_class = pc_y_class
+					is_planet_class = pc_x_class
+				}
+			}
+		}		
+		modifier = {
+			weight = 4
+			planet = {
+				is_planet_class = pc_gas_giant
+			}
+		}	
+		modifier = {
+			factor = 1.5
+			planet = {
+				OR = {
+					is_planet_class = pc_arid
+					is_planet_class = pc_desert
+					is_planet_class = pc_savannah
+				}
+			}
+		}	
+		modifier = {
+			factor = 1.5
+			planet = {
+				is_planet_class = pc_gaia
+			}
+		}		
+	}
+}
+
+##################################
+######### 		FOOD 	 #########
+##################################
+
+d_farmland_deposit = {
+	resources = { food = 1 }
+	is_orbital_slot = no
+	
+	drop_weight = {
+		weight = 0
+		modifier = {
+			weight = 15
+			planet = {
+				OR = {
+					is_planet_class = pc_gaia				
+					is_planet_class = pc_continental
+					is_planet_class = pc_arctic
+					is_planet_class = pc_arid
+					is_planet_class = pc_savannah
+					is_planet_class = pc_tropical
+					is_planet_class = pc_alpine
+					is_planet_class = pc_m1_class
+					is_planet_class = pc_desert
+					is_planet_class = pc_ocean
+					is_planet_class = pc_tundra
+					is_planet_class = pc_l2_class
+					is_planet_class = pc_frozen
+					is_planet_class = pc_g_class
+					is_planet_class = pc_class_q_variable
+					is_planet_class = pc_class_q_geo
+					is_planet_class = pc_r_class
+					is_planet_class = pc_f_class
+					is_planet_class = pc_k_class
+					is_planet_class = pc_y_class
+					is_planet_class = pc_x_class
+				}
+			}
+		}
+		modifier = {
+			factor = 1.5
+			planet = {
+				OR = {
+					is_planet_class = pc_continental
+					is_planet_class = pc_tropical
+					is_planet_class = pc_ocean
+				}
+			}
+		}			
+	}
+}
+
+d_rich_farmland_deposit = {
+	resources = { food = 2 }
+	is_orbital_slot = no
+	
+	drop_weight = {
+		weight = 0
+		modifier = {
+			weight = 10
+			planet = {
+				OR = {
+					is_planet_class = pc_gaia				
+					is_planet_class = pc_continental
+					is_planet_class = pc_arctic
+					is_planet_class = pc_arid
+					is_planet_class = pc_savannah
+					is_planet_class = pc_tropical
+					is_planet_class = pc_alpine
+					is_planet_class = pc_m1_class
+					is_planet_class = pc_desert
+					is_planet_class = pc_ocean
+					is_planet_class = pc_tundra
+					is_planet_class = pc_l2_class
+					is_planet_class = pc_frozen
+					is_planet_class = pc_g_class
+					is_planet_class = pc_class_q_variable
+					is_planet_class = pc_class_q_geo
+					is_planet_class = pc_r_class
+					is_planet_class = pc_f_class
+					is_planet_class = pc_k_class
+					is_planet_class = pc_y_class
+					is_planet_class = pc_x_class
+				}
+			}
+		}
+		modifier = {
+			factor = 1.5
+			planet = {
+				OR = {
+					is_planet_class = pc_continental
+					is_planet_class = pc_tropical
+					is_planet_class = pc_ocean
+				}
+			}
+		}
+		modifier = {
+			factor = 1.5
+			planet = {
+				is_planet_class = pc_gaia
+			}
+		}			
+	}
+}
+
+d_vast_farmland_deposit = {
+	resources = { food = 3 }
+	is_orbital_slot = no
+	
+	drop_weight = {
+		weight = 0
+		modifier = {
+			weight = 2
+			planet = {
+				OR = {
+					is_planet_class = pc_gaia				
+					is_planet_class = pc_continental
+					is_planet_class = pc_arctic
+					is_planet_class = pc_arid
+					is_planet_class = pc_savannah
+					is_planet_class = pc_tropical
+					is_planet_class = pc_alpine
+					is_planet_class = pc_m1_class
+					is_planet_class = pc_desert
+					is_planet_class = pc_ocean
+					is_planet_class = pc_tundra
+					is_planet_class = pc_l2_class
+					is_planet_class = pc_frozen
+					is_planet_class = pc_g_class
+					is_planet_class = pc_class_q_variable
+					is_planet_class = pc_class_q_geo
+					is_planet_class = pc_r_class
+					is_planet_class = pc_f_class
+					is_planet_class = pc_k_class
+					is_planet_class = pc_y_class
+					is_planet_class = pc_x_class
+				}
+			}
+		}
+		modifier = {
+			factor = 1.5
+			planet = {
+				OR = {
+					is_planet_class = pc_continental
+					is_planet_class = pc_tropical
+					is_planet_class = pc_ocean
+				}
+			}
+		}	
+		modifier = {
+			factor = 1.5
+			planet = {
+				is_planet_class = pc_gaia
+			}
+		}			
+	}
+}
+
+d_immense_farmland_deposit = {
+	resources = { food = 4 }
+	is_orbital_slot = no
+	
+	drop_weight = {
+		weight = 0
+		modifier = {
+			weight = 1
+			planet = {
+				OR = {
+					is_planet_class = pc_gaia				
+					is_planet_class = pc_continental
+					is_planet_class = pc_arctic
+					is_planet_class = pc_arid
+					is_planet_class = pc_savannah
+					is_planet_class = pc_tropical
+					is_planet_class = pc_alpine
+					is_planet_class = pc_m1_class
+					is_planet_class = pc_desert
+					is_planet_class = pc_ocean
+					is_planet_class = pc_tundra
+					is_planet_class = pc_l2_class
+					is_planet_class = pc_frozen
+					is_planet_class = pc_g_class
+					is_planet_class = pc_class_q_variable
+					is_planet_class = pc_class_q_geo
+					is_planet_class = pc_r_class
+					is_planet_class = pc_f_class
+					is_planet_class = pc_k_class
+					is_planet_class = pc_y_class
+					is_planet_class = pc_x_class
+				}
+			}
+		}
+		modifier = {
+			factor = 1.5
+			planet = {
+				OR = {
+					is_planet_class = pc_continental
+					is_planet_class = pc_tropical
+					is_planet_class = pc_ocean
+				}
+			}
+		}	
+		modifier = {
+			factor = 1.5
+			planet = {
+				is_planet_class = pc_gaia
+			}
+		}			
+	}
+}
+
+##################################
+######### 	SOCIETY 	 #########
+##################################
+
+d_society_deposit = {
+	resources = { society_research = 1 }
+	station = shipclass_research_station 
+	orbital_weight = {
+		weight = 10
+	}
+	
+	drop_weight = {
+		weight = 0
+		modifier = {
+			weight = 14
+			planet = {
+				is_planet_class = pc_nuked
+			}
+		}			
+		modifier = {
+			weight = 7
+			planet = {
+				OR = {
+					is_planet_class = pc_gaia				
+					is_planet_class = pc_continental
+					is_planet_class = pc_arctic
+					is_planet_class = pc_arid
+					is_planet_class = pc_savannah
+					is_planet_class = pc_tropical
+					is_planet_class = pc_alpine
+					is_planet_class = pc_m1_class
+					is_planet_class = pc_desert
+					is_planet_class = pc_ocean
+					is_planet_class = pc_tundra
+					is_planet_class = pc_l2_class
+					is_planet_class = pc_frozen
+					is_planet_class = pc_g_class
+					is_planet_class = pc_class_q_variable
+					is_planet_class = pc_class_q_geo
+					is_planet_class = pc_r_class
+					is_planet_class = pc_f_class
+					is_planet_class = pc_k_class
+					is_planet_class = pc_y_class
+					is_planet_class = pc_x_class
+				}
+			}
+		}
+		modifier = {
+			factor = 1.5
+			planet = {
+				OR = {
+					is_planet_class = pc_continental
+					is_planet_class = pc_tropical
+					is_planet_class = pc_ocean
+				}
+			}
+		}
+	}
+}
+
+d_rich_society_deposit = {
+	resources = { society_research = 2 }
+	station = shipclass_research_station 
+	orbital_weight = {
+		weight = 20
+	}
+	
+	drop_weight = {
+		weight = 0
+		modifier = {
+			weight = 5
+			planet = {
+				is_planet_class = pc_nuked
+			}
+		}			
+		modifier = {
+			weight = 3
+			planet = {
+				OR = {
+					is_planet_class = pc_gaia				
+					is_planet_class = pc_continental
+					is_planet_class = pc_arctic
+					is_planet_class = pc_arid
+					is_planet_class = pc_savannah
+					is_planet_class = pc_tropical
+					is_planet_class = pc_alpine
+					is_planet_class = pc_m1_class
+					is_planet_class = pc_desert
+					is_planet_class = pc_ocean
+					is_planet_class = pc_tundra
+					is_planet_class = pc_l2_class
+					is_planet_class = pc_frozen
+					is_planet_class = pc_g_class
+					is_planet_class = pc_class_q_variable
+					is_planet_class = pc_class_q_geo
+					is_planet_class = pc_r_class
+					is_planet_class = pc_f_class
+					is_planet_class = pc_k_class
+					is_planet_class = pc_y_class
+					is_planet_class = pc_x_class
+				}
+			}
+		}
+		modifier = {
+			factor = 1.5
+			planet = {
+				OR = {
+					is_planet_class = pc_continental
+					is_planet_class = pc_tropical
+					is_planet_class = pc_ocean
+				}
+			}
+		}
+		modifier = {
+			weight = 4
+			planet = {
+				is_planet_class = pc_toxic
+			}
+		}
+		modifier = {
+			factor = 1.5
+			planet = {
+				is_planet_class = pc_gaia
+			}
+		}			
+	}
+}
+
+d_vast_society_deposit = {
+	resources = { society_research = 3 }
+	station = shipclass_research_station 
+	orbital_weight = {
+		weight = 30
+	}
+	
+	drop_weight = {
+		weight = 0
+		modifier = {
+			weight = 1
+			planet = {
+				OR = {
+					is_planet_class = pc_toxic
+					is_planet_class = pc_gaia
+				}
+			}
+		}
+		modifier = {
+			weight = 1
+			planet = {
+				AND = {
+					OR = {
+						is_planet_class = pc_gaia				
+						is_planet_class = pc_continental
+						is_planet_class = pc_arctic
+						is_planet_class = pc_arid
+						is_planet_class = pc_savannah
+						is_planet_class = pc_tropical
+						is_planet_class = pc_alpine
+						is_planet_class = pc_m1_class
+						is_planet_class = pc_desert
+						is_planet_class = pc_ocean
+						is_planet_class = pc_tundra
+						is_planet_class = pc_l2_class
+						is_planet_class = pc_frozen
+						is_planet_class = pc_g_class
+						is_planet_class = pc_class_q_variable
+						is_planet_class = pc_class_q_geo
+						is_planet_class = pc_r_class
+						is_planet_class = pc_f_class
+						is_planet_class = pc_k_class
+						is_planet_class = pc_y_class
+						is_planet_class = pc_x_class
+					}
+					OR = {					
+						has_planet_modifier = "pm_titanic_life"
+						has_planet_modifier = "pm_dangerous_wildlife"
+						has_planet_modifier = "pm_natural_beauty"
+						has_planet_modifier = "pm_atmospheric_aphrodisiac"
+						has_planet_modifier = "pm_atmospheric_hallucinogen"
+						has_planet_modifier = "pm_lush"	
+					}
+				}
+			}
+		}
+		modifier = {
+			weight = 2
+			planet = {
+				is_planet_class = pc_nuked
+			}
+		}
+		modifier = {
+			factor = 3
+			planet = {
+				OR = {					
+					has_planet_modifier = "pm_titanic_life"
+					has_planet_modifier = "pm_dangerous_wildlife"
+					has_planet_modifier = "pm_natural_beauty"
+					has_planet_modifier = "pm_atmospheric_aphrodisiac"
+					has_planet_modifier = "pm_atmospheric_hallucinogen"
+					has_planet_modifier = "pm_lush"	
+				}
+			}
+		}
+		modifier = {
+			factor = 1.5
+			planet = {
+				is_planet_class = pc_gaia
+			}
+		}		
+	}
+}
+
+d_immense_society_deposit = {
+	resources = { society_research = 4 }
+	station = shipclass_research_station
+	orbital_weight = {
+		weight = 50
+	}
+	
+	drop_weight = {
+		weight = 0
+		modifier = {
+			weight = 1
+			planet = {
+				is_planet_class = pc_nuked
+			}
+		}			
+		modifier = {
+			weight = 2
+			planet = {
+				is_planet_class = pc_gaia
+			}
+		}
+		modifier = {
+			weight = 35
+			planet = {
+				AND = {
+					OR = {
+						is_planet_class = pc_gaia				
+						is_planet_class = pc_continental
+						is_planet_class = pc_arctic
+						is_planet_class = pc_arid
+						is_planet_class = pc_savannah
+						is_planet_class = pc_tropical
+						is_planet_class = pc_alpine
+						is_planet_class = pc_m1_class
+						is_planet_class = pc_desert
+						is_planet_class = pc_ocean
+						is_planet_class = pc_tundra
+						is_planet_class = pc_l2_class
+						is_planet_class = pc_frozen
+						is_planet_class = pc_g_class
+						is_planet_class = pc_class_q_variable
+						is_planet_class = pc_class_q_geo
+						is_planet_class = pc_r_class
+						is_planet_class = pc_f_class
+						is_planet_class = pc_k_class
+						is_planet_class = pc_y_class
+						is_planet_class = pc_x_class
+					}
+					OR = {					
+						has_planet_modifier = "pm_titanic_life"
+						has_planet_modifier = "pm_dangerous_wildlife"
+						has_planet_modifier = "pm_natural_beauty"
+						has_planet_modifier = "pm_atmospheric_aphrodisiac"
+						has_planet_modifier = "pm_atmospheric_hallucinogen"
+						has_planet_modifier = "pm_lush"	
+					}
+				}
+			}
+		}
+		modifier = {
+			factor = 0
+			planet = {
+				OR = {
+					has_deposit = "d_immense_mineral_deposit"
+					has_deposit = "d_immense_energy_deposit"
+					has_deposit = "d_immense_society_deposit"
+					has_deposit = "d_immense_physics_deposit"
+					has_deposit = "d_immense_engineering_deposit"
+					has_strategic_resource = yes
+				}
+			}		
+		}
+		modifier = {
+			factor = 1.5
+			planet = {
+				is_planet_class = pc_gaia
+			}
+		}		
+	}
+}
+
+##################################
+######### 	 PHYSICS 	 #########
+##################################
+
+d_physics_deposit = {
+	resources = { physics_research = 1 }
+	station = shipclass_research_station 
+	orbital_weight = {
+		weight = 10
+	}
+	
+	drop_weight = {
+		weight = 0
+		modifier = {
+			weight = 16
+			planet = {
+				is_planet_class = pc_nuked
+			}
+		}
+		modifier = {
+			weight = 12
+			planet = {
+				OR = {
+					is_planet_class = pc_gaia				
+					is_planet_class = pc_continental
+					is_planet_class = pc_arctic
+					is_planet_class = pc_arid
+					is_planet_class = pc_savannah
+					is_planet_class = pc_tropical
+					is_planet_class = pc_alpine
+					is_planet_class = pc_m1_class
+					is_planet_class = pc_desert
+					is_planet_class = pc_ocean
+					is_planet_class = pc_tundra
+					is_planet_class = pc_l2_class
+					is_planet_class = pc_frozen
+					is_planet_class = pc_g_class
+					is_planet_class = pc_class_q_variable
+					is_planet_class = pc_class_q_geo
+					is_planet_class = pc_r_class
+					is_planet_class = pc_f_class
+					is_planet_class = pc_k_class
+					is_planet_class = pc_y_class
+					is_planet_class = pc_x_class
+				}
+			}
+		}
+		modifier = {
+			factor = 1.5
+			planet = {
+				OR = {
+					is_planet_class = pc_arid
+					is_planet_class = pc_desert
+					is_planet_class = pc_savannah
+				}
+			}
+		}			
+	}
+}
+
+d_rich_physics_deposit = {
+	resources = { physics_research = 2 }
+	station = shipclass_research_station 
+	orbital_weight = {
+		weight = 20
+	}
+	
+	drop_weight = {
+		weight = 0
+		modifier = {
+			weight = 7
+			planet = {
+				is_planet_class = pc_nuked
+			}
+		}		
+		modifier = {
+			weight = 5
+			planet = {
+				OR = {
+					is_planet_class = pc_gaia				
+					is_planet_class = pc_continental
+					is_planet_class = pc_arctic
+					is_planet_class = pc_arid
+					is_planet_class = pc_savannah
+					is_planet_class = pc_tropical
+					is_planet_class = pc_alpine
+					is_planet_class = pc_m1_class
+					is_planet_class = pc_desert
+					is_planet_class = pc_ocean
+					is_planet_class = pc_tundra
+					is_planet_class = pc_l2_class
+					is_planet_class = pc_frozen
+					is_planet_class = pc_g_class
+					is_planet_class = pc_class_q_variable
+					is_planet_class = pc_class_q_geo
+					is_planet_class = pc_r_class
+					is_planet_class = pc_f_class
+					is_planet_class = pc_k_class
+					is_planet_class = pc_y_class
+					is_planet_class = pc_x_class
+				}
+			}
+		}
+		modifier = {
+			weight = 5
+			planet = {
+				OR = {
+					is_planet_class = pc_a_star
+					is_planet_class = pc_b_star
+					is_planet_class = pc_f_star
+					is_planet_class = pc_g_star
+					is_planet_class = pc_k_star
+					is_planet_class = pc_m_star
+				}
+			}
+		}
+		modifier = {
+			factor = 1.5
+			planet = {
+				OR = {
+					is_planet_class = pc_arid
+					is_planet_class = pc_desert
+					is_planet_class = pc_savannah
+				}
+			}
+		}
+		modifier = {
+			factor = 1.5
+			planet = {
+				is_planet_class = pc_gaia
+			}
+		}		
+	}
+}
+
+d_vast_physics_deposit = {
+	resources = { physics_research = 3 }
+	station = shipclass_research_station 
+	orbital_weight = {
+		weight = 30
+	}
+	
+	drop_weight = {
+		weight = 0	
+		modifier = {
+			weight = 1.5
+			planet = {
+				OR = {
+					is_planet_class = pc_a_star
+					is_planet_class = pc_b_star
+					is_planet_class = pc_f_star
+					is_planet_class = pc_g_star
+					is_planet_class = pc_k_star
+					is_planet_class = pc_m_star
+				}
+			}
+		}
+		modifier = {
+			weight = 4
+			planet = {
+				is_planet_class = pc_nuked
+			}
+		}
+		modifier = {
+			weight = 2
+			planet = {
+				AND = {
+					OR = {
+						is_planet_class = pc_gaia				
+						is_planet_class = pc_continental
+						is_planet_class = pc_arctic
+						is_planet_class = pc_arid
+						is_planet_class = pc_savannah
+						is_planet_class = pc_tropical
+						is_planet_class = pc_alpine
+						is_planet_class = pc_m1_class
+						is_planet_class = pc_desert
+						is_planet_class = pc_ocean
+						is_planet_class = pc_tundra
+						is_planet_class = pc_l2_class
+						is_planet_class = pc_frozen
+						is_planet_class = pc_g_class
+						is_planet_class = pc_class_q_variable
+						is_planet_class = pc_class_q_geo
+						is_planet_class = pc_r_class
+						is_planet_class = pc_f_class
+						is_planet_class = pc_k_class
+						is_planet_class = pc_y_class
+						is_planet_class = pc_x_class
+					}
+					OR = {
+						has_planet_modifier = "pm_chthonian_planet"
+						has_planet_modifier = "pm_wild_storms"
+					}
+				}
+			}
+		}
+		modifier = {
+			weight = 20
+			planet = {
+				OR = {
+					is_planet_class = pc_pulsar
+					is_planet_class = pc_neutron_star
+				}
+			}
+		}
+		modifier = {
+			factor = 1.5
+			planet = {
+				is_planet_class = pc_gaia
+			}
+		}		
+	}
+}
+
+d_immense_physics_deposit = {
+	resources = { physics_research = 4 }
+	station = shipclass_research_station
+	orbital_weight = {
+		weight = 50
+	}
+	
+	drop_weight = {
+		weight = 0
+		modifier = {
+			weight = 1.5
+			planet = {
+				is_planet_class = pc_nuked
+			}
+		}
+		modifier = {
+			weight = 25
+			planet = {
+				OR = {
+					is_planet_class = pc_black_hole
+					is_planet_class = pc_pulsar
+					is_planet_class = pc_neutron_star
+				}
+			}
+		}
+		modifier = {
+			weight = 40
+			planet = {
+				AND = {
+					OR = {
+						is_planet_class = pc_gaia				
+						is_planet_class = pc_continental
+						is_planet_class = pc_arctic
+						is_planet_class = pc_arid
+						is_planet_class = pc_savannah
+						is_planet_class = pc_tropical
+						is_planet_class = pc_alpine
+						is_planet_class = pc_m1_class
+						is_planet_class = pc_desert
+						is_planet_class = pc_ocean
+						is_planet_class = pc_tundra
+						is_planet_class = pc_l2_class
+						is_planet_class = pc_frozen
+						is_planet_class = pc_g_class
+						is_planet_class = pc_class_q_variable
+						is_planet_class = pc_class_q_geo
+						is_planet_class = pc_r_class
+						is_planet_class = pc_f_class
+						is_planet_class = pc_k_class
+						is_planet_class = pc_y_class
+						is_planet_class = pc_x_class
+					}
+					OR = {
+						has_planet_modifier = "pm_chthonian_planet"
+						has_planet_modifier = "pm_wild_storms"
+					}
+				}
+			}
+		}
+		modifier = {
+			factor = 0
+			planet = {
+				OR = {
+					has_deposit = "d_immense_mineral_deposit"
+					has_deposit = "d_immense_energy_deposit"
+					has_deposit = "d_immense_society_deposit"
+					has_deposit = "d_immense_physics_deposit"
+					has_deposit = "d_immense_engineering_deposit"
+					has_strategic_resource = yes
+				}
+			}		
+		}
+		modifier = {
+			factor = 1.5
+			planet = {
+				is_planet_class = pc_gaia
+			}
+		}		
+	}
+}
+
+
+##################################
+#########  ENGINEERING   #########
+##################################
+
+d_engineering_deposit = {
+	resources = { engineering_research = 1 }
+	station = shipclass_research_station 
+	orbital_weight = {
+		weight = 10
+	}
+	
+	drop_weight = {
+		weight = 0
+		modifier = {
+			weight = 14
+			planet = {
+				is_planet_class = pc_nuked
+			}
+		}		
+		modifier = {
+			weight = 6
+			planet = {
+				is_planet_class = pc_tropical
+			}
+		}
+		modifier = {
+			weight = 7
+			planet = {
+				OR = {
+					is_planet_class = pc_gaia				
+					is_planet_class = pc_continental
+					is_planet_class = pc_arctic
+					is_planet_class = pc_arid
+					is_planet_class = pc_savannah
+					is_planet_class = pc_tropical
+					is_planet_class = pc_alpine
+					is_planet_class = pc_m1_class
+					is_planet_class = pc_desert
+					is_planet_class = pc_ocean
+					is_planet_class = pc_tundra
+					is_planet_class = pc_l2_class
+					is_planet_class = pc_frozen
+					is_planet_class = pc_g_class
+					is_planet_class = pc_class_q_variable
+					is_planet_class = pc_class_q_geo
+					is_planet_class = pc_r_class
+					is_planet_class = pc_f_class
+					is_planet_class = pc_k_class
+					is_planet_class = pc_y_class
+					is_planet_class = pc_x_class
+				}
+			}
+		}
+		modifier = {
+			factor = 1.5
+			planet = {
+				OR = {
+					is_planet_class = pc_tundra
+					is_planet_class = pc_arctic
+					is_planet_class = pc_alpine
+				}
+			}
+		}			
+	}
+}
+
+d_rich_engineering_deposit = {
+	resources = { engineering_research = 2 }
+	station = shipclass_research_station 
+	orbital_weight = {
+		weight = 20
+	}
+	
+	drop_weight = {
+		weight = 0
+		modifier = {
+			weight = 3
+			planet = {
+				OR = {
+					is_planet_class = pc_gaia				
+					is_planet_class = pc_continental
+					is_planet_class = pc_arctic
+					is_planet_class = pc_arid
+					is_planet_class = pc_savannah
+					is_planet_class = pc_tropical
+					is_planet_class = pc_alpine
+					is_planet_class = pc_m1_class
+					is_planet_class = pc_desert
+					is_planet_class = pc_ocean
+					is_planet_class = pc_tundra
+					is_planet_class = pc_l2_class
+					is_planet_class = pc_frozen
+					is_planet_class = pc_g_class
+					is_planet_class = pc_class_q_variable
+					is_planet_class = pc_class_q_geo
+					is_planet_class = pc_r_class
+					is_planet_class = pc_f_class
+					is_planet_class = pc_k_class
+					is_planet_class = pc_y_class
+					is_planet_class = pc_nuked
+					is_planet_class = pc_x_class
+				}
+			}
+		}
+		modifier = {
+			weight = 4
+			planet = {
+				OR = {
+					is_planet_class = pc_frozen
+					is_planet_class = pc_gas_giant
+				}
+			}
+		}
+		modifier = {
+			factor = 1.5
+			planet = {
+				OR = {
+					is_planet_class = pc_tundra
+					is_planet_class = pc_arctic
+					is_planet_class = pc_alpine
+				}
+			}
+		}
+		modifier = {
+			factor = 1.5
+			planet = {
+				is_planet_class = pc_gaia
+			}
+		}		
+	}
+}
+
+d_vast_engineering_deposit = {
+	resources = { engineering_research = 3 }
+	station = shipclass_research_station 
+	orbital_weight = {
+		weight = 30
+	}
+	
+	drop_weight = {
+		weight = 0
+		modifier = {
+			weight = 1
+			planet = {
+				OR = {
+					is_planet_class = pc_frozen
+					is_planet_class = pc_gas_giant
+					is_planet_class = pc_nuked
+				}
+			}
+		}
+		modifier = {
+			weight = 10
+			planet = {
+				AND = {
+					is_planet_class = pc_molten
+					has_planet_modifier = "pm_chthonian_planet"
+				}
+			}
+		}
+		modifier = {
+			weight = 2
+			planet = {
+				AND = {
+					OR = {
+						is_planet_class = pc_gaia				
+						is_planet_class = pc_continental
+						is_planet_class = pc_arctic
+						is_planet_class = pc_arid
+						is_planet_class = pc_savannah
+						is_planet_class = pc_tropical
+						is_planet_class = pc_alpine
+						is_planet_class = pc_m1_class
+						is_planet_class = pc_desert
+						is_planet_class = pc_ocean
+						is_planet_class = pc_tundra
+						is_planet_class = pc_l2_class
+						is_planet_class = pc_frozen
+						is_planet_class = pc_g_class
+						is_planet_class = pc_class_q_variable
+						is_planet_class = pc_class_q_geo
+						is_planet_class = pc_r_class
+						is_planet_class = pc_f_class
+						is_planet_class = pc_k_class
+						is_planet_class = pc_y_class
+						is_planet_class = pc_x_class
+					}
+					has_planet_modifier = "pm_unstable_tectonics"
+				}
+			}
+		}
+		modifier = {
+			weight = 20
+			planet = {
+				OR = {
+					is_planet_class = pc_black_hole
+					is_planet_class = pc_neutron_star
+					is_planet_class = pc_pulsar
+				}
+			}
+		}
+		modifier = {
+			factor = 1.5
+			planet = {
+				is_planet_class = pc_gaia
+			}
+		}		
+	}
+}
+
+d_immense_engineering_deposit = {
+	resources = { engineering_research = 4 }
+	station = shipclass_research_station
+	orbital_weight = {
+		weight = 50
+	}
+	
+	drop_weight = {
+		weight = 0
+		modifier = {
+			weight = 1
+			planet = {
+				is_planet_class = pc_nuked
+			}
+		}
+		modifier = {
+			weight = 5
+			planet = {
+				AND = {
+					is_planet_class = pc_molten
+					has_planet_modifier = "pm_chthonian_planet"
+				}
+			}
+		}
+		modifier = {
+			weight = 20
+			planet = {
+				OR = {
+					is_planet_class = pc_black_hole
+					is_planet_class = pc_pulsar
+					is_planet_class = pc_neutron_star
+				}
+			}
+		}
+		modifier = {
+			weight = 35
+			planet = {
+				AND = {
+					OR = {
+						is_planet_class = pc_gaia				
+						is_planet_class = pc_continental
+						is_planet_class = pc_arctic
+						is_planet_class = pc_arid
+						is_planet_class = pc_savannah
+						is_planet_class = pc_tropical
+						is_planet_class = pc_alpine
+						is_planet_class = pc_m1_class
+						is_planet_class = pc_desert
+						is_planet_class = pc_ocean
+						is_planet_class = pc_tundra
+						is_planet_class = pc_l2_class
+						is_planet_class = pc_frozen
+						is_planet_class = pc_g_class
+						is_planet_class = pc_class_q_variable
+						is_planet_class = pc_class_q_geo
+						is_planet_class = pc_r_class
+						is_planet_class = pc_f_class
+						is_planet_class = pc_k_class
+						is_planet_class = pc_y_class
+						is_planet_class = pc_x_class
+					}
+					has_planet_modifier = "pm_unstable_tectonics"
+				}
+			}
+		}
+		modifier = {
+			factor = 0
+			planet = {
+				OR = {
+					has_deposit = "d_immense_mineral_deposit"
+					has_deposit = "d_immense_energy_deposit"
+					has_deposit = "d_immense_society_deposit"
+					has_deposit = "d_immense_physics_deposit"
+					has_deposit = "d_immense_engineering_deposit"
+					has_strategic_resource = yes
+				}
+			}
+		}
+		modifier = {
+			factor = 1.5
+			planet = {
+				is_planet_class = pc_gaia
+			}
+		}		
+	}
+}
+
+##################################
+###### EVENT & DISCOVERY   #######
+##################################
+
+d_enormous1_engineering_deposit = {
+	resources = { engineering_research = 6 }
+	station = shipclass_research_station
+	orbital_weight = { weight = 0 }
+	drop_weight = { weight = 0 }
+}
+
+d_enormous2_engineering_deposit = {
+	resources = { engineering_research = 8 }
+	station = shipclass_research_station
+	orbital_weight = { weight = 0 }
+	drop_weight = { weight = 0 }
+}
+
+d_enormous3_engineering_deposit = {
+	resources = { engineering_research = 10 }
+	station = shipclass_research_station
+	orbital_weight = { weight = 0 }
+	drop_weight = { weight = 0 }
+}
+
+d_enormous1_physics_deposit = {
+	resources = { physics_research = 6 }
+	station = shipclass_research_station
+	orbital_weight = { weight = 0 }
+	drop_weight = { weight = 0 }
+}
+
+d_enormous2_physics_deposit = {
+	resources = { physics_research = 8 }
+	station = shipclass_research_station
+	orbital_weight = { weight = 0 }
+	drop_weight = { weight = 0 }
+}
+
+d_enormous3_physics_deposit = {
+	resources = { physics_research = 10 }
+	station = shipclass_research_station
+	orbital_weight = { weight = 0 }
+	drop_weight = { weight = 0 }
+}
+
+d_enormous1_society_deposit = {
+	resources = { society_research = 6 }
+	station = shipclass_research_station
+	orbital_weight = { weight = 0 }
+	drop_weight = { weight = 0 }
+}
+
+d_enormous2_society_deposit = {
+	resources = { society_research = 8 }
+	station = shipclass_research_station
+	orbital_weight = { weight = 0 }
+	drop_weight = { weight = 0 }
+}
+
+d_enormous3_society_deposit = {
+	resources = { society_research = 10 }
+	station = shipclass_research_station
+	orbital_weight = { weight = 0 }
+	drop_weight = { weight = 0 }
+}
+
+d_enormous1_mineral_deposit = {
+	resources = { minerals = 6 }
+	station = shipclass_mining_station
+	orbital_weight = { weight = 0 }
+	drop_weight = { weight = 0 }
+}
+
+d_enormous2_mineral_deposit = {
+	resources = { minerals = 8 }
+	station = shipclass_mining_station
+	orbital_weight = { weight = 0 }
+	drop_weight = { weight = 0 }
+}
+
+d_enormous3_mineral_deposit = {
+	resources = { minerals = 10 }
+	station = shipclass_mining_station
+	orbital_weight = { weight = 0 }
+	drop_weight = { weight = 0 }
+}
+
+d_worm_deposit = {
+	resources = { society_research = 20 }
+	station = shipclass_research_station
+	orbital_weight = { weight = 0 }
+	drop_weight = { weight = 0 }
+}
+
+
+##################################
+########## TERRAFORMING ##########
+##################################
+
+d_terraforming_gas_deposit = {
+	resources = {
+		sr_biosculpting_18 = 1
+		energy = 3
+	}
+	is_orbital_slot = no
+	drop_weight = {
+		weight = 0
+		modifier = {
+			weight = 1.25
+			planet = {
+					is_planet_class = pc_ocean
+					is_planet_class = pc_tropical
+					is_planet_class = pc_m1_class
+					is_planet_class = pc_class_q_variable
+			}
+		}
+		modifier = {
+			factor = 2
+			planet = {
+				AND = {
+					is_planet_class = pc_gas_giant
+					is_inside_nebula = yes
+				}
+			}			
+		}
+		modifier = {
+			factor = 0
+			planet = {
+				OR = {
+					has_deposit = "d_immense_mineral_deposit"
+					has_deposit = "d_immense_energy_deposit"
+					has_deposit = "d_immense_society_deposit"
+					has_deposit = "d_immense_physics_deposit"
+					has_deposit = "d_immense_engineering_deposit"
+					has_strategic_resource = yes
+				}
+			}
+		}
+	}
+}
+
+d_terraforming_fluid_deposit = {
+	resources = {
+		sr_terraform_liquids = 1
+		energy = 3
+	}
+	station = shipclass_mining_station 
+	orbital_weight = {
+		weight = 55
+	}
+	
+	drop_weight = {
+		weight = 0
+		modifier = {
+			weight = 1
+			planet = {
+					is_planet_class = pc_arctic
+					is_planet_class = pc_frozen
+					is_planet_class = pc_class_q_geo
+			}
+		}
+		modifier = {
+			factor = 2
+			planet = {
+				AND = {
+					is_planet_class = pc_frozen
+					is_inside_nebula = yes
+				}
+			}			
+		}
+		modifier = {
+			factor = 0
+			planet = {
+				OR = {
+					has_deposit = "d_immense_mineral_deposit"
+					has_deposit = "d_immense_energy_deposit"
+					has_deposit = "d_immense_society_deposit"
+					has_deposit = "d_immense_physics_deposit"
+					has_deposit = "d_immense_engineering_deposit"
+					has_strategic_resource = yes
+				}
+			}
+		}
+	}
+
+}
+
+#######################################
+######### STRATEGIC RESOURCES #########
+#######################################
+##### in STH file ####
+

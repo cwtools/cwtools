@@ -1,0 +1,409 @@
+assimilate_planet = {
+	if = { limit = { is_planet_class = pc_a_star } set_planet_flag = was_pc_a_star }
+	if = { limit = { is_planet_class = pc_ai } set_planet_flag = was_pc_ai }
+	if = { limit = { is_planet_class = pc_alpine } set_planet_flag = was_pc_alpine }
+	if = { limit = { is_planet_class = pc_arctic } set_planet_flag = was_pc_arctic }
+	if = { limit = { is_planet_class = pc_arid } set_planet_flag = was_pc_arid }
+	if = { limit = { is_planet_class = pc_assimilated } set_planet_flag = was_pc_assimilated }
+	if = { limit = { is_planet_class = pc_asteroid } set_planet_flag = was_pc_asteroid }
+	if = { limit = { is_planet_class = pc_b_class } set_planet_flag = was_pc_b_class }
+	if = { limit = { is_planet_class = pc_b_star } set_planet_flag = was_pc_b_star }
+	if = { limit = { is_planet_class = pc_barren } set_planet_flag = was_pc_barren }
+	if = { limit = { is_planet_class = pc_barren_broken } set_planet_flag = was_pc_barren_broken }
+	if = { limit = { is_planet_class = pc_barren_cold } set_planet_flag = was_pc_barren_cold }
+	if = { limit = { is_planet_class = pc_black_hole } set_planet_flag = was_pc_black_hole }
+	if = { limit = { is_planet_class = pc_class_d_barren } set_planet_flag = was_pc_class_d_barren }
+	if = { limit = { is_planet_class = pc_class_e } set_planet_flag = was_pc_class_e }
+	if = { limit = { is_planet_class = pc_class_k_trans } set_planet_flag = was_pc_class_k_trans }
+	if = { limit = { is_planet_class = pc_class_n_titan } set_planet_flag = was_pc_class_n_titan }
+	if = { limit = { is_planet_class = pc_class_o_sulfar } set_planet_flag = was_pc_class_o_sulfar }
+	if = { limit = { is_planet_class = pc_class_q_geo } set_planet_flag = was_pc_class_q_geo }
+	if = { limit = { is_planet_class = pc_class_q_variable } set_planet_flag = was_pc_class_q_variable }
+	if = { limit = { is_planet_class = pc_continental } set_planet_flag = was_pc_continental }
+	if = { limit = { is_planet_class = pc_desert } set_planet_flag = was_pc_desert }
+	if = { limit = { is_planet_class = pc_f_class } set_planet_flag = was_pc_f_class }
+	if = { limit = { is_planet_class = pc_f_star } set_planet_flag = was_pc_f_star }
+	if = { limit = { is_planet_class = pc_frozen } set_planet_flag = was_pc_frozen }
+	if = { limit = { is_planet_class = pc_g_class } set_planet_flag = was_pc_g_class }
+	if = { limit = { is_planet_class = pc_g_star } set_planet_flag = was_pc_g_star }
+	if = { limit = { is_planet_class = pc_gaia } set_planet_flag = was_pc_gaia }
+	if = { limit = { is_planet_class = pc_gas_giant } set_planet_flag = was_pc_gas_giant }
+	if = { limit = { is_planet_class = pc_habitat } set_planet_flag = was_pc_habitat }
+	if = { limit = { is_planet_class = pc_i_class } set_planet_flag = was_pc_i_class }
+	if = { limit = { is_planet_class = pc_infested } set_planet_flag = was_pc_infested }
+	if = { limit = { is_planet_class = pc_k_class } set_planet_flag = was_pc_k_class }
+	if = { limit = { is_planet_class = pc_k_star } set_planet_flag = was_pc_k_star }
+	if = { limit = { is_planet_class = pc_l2_class } set_planet_flag = was_pc_l2_class }
+	if = { limit = { is_planet_class = pc_m_star } set_planet_flag = was_pc_m_star }
+	if = { limit = { is_planet_class = pc_m1_class } set_planet_flag = was_pc_m1_class }
+	if = { limit = { is_planet_class = pc_molten } set_planet_flag = was_pc_molten }
+	if = { limit = { is_planet_class = pc_neutron_star } set_planet_flag = was_pc_neutron_star }
+	if = { limit = { is_planet_class = pc_nuked } set_planet_flag = was_pc_nuked }
+	if = { limit = { is_planet_class = pc_ocean } set_planet_flag = was_pc_ocean }
+	if = { limit = { is_planet_class = pc_planet_remnant } set_planet_flag = was_pc_planet_remnant }
+	if = { limit = { is_planet_class = pc_portal } set_planet_flag = was_pc_portal }
+	if = { limit = { is_planet_class = pc_pulsar } set_planet_flag = was_pc_pulsar }
+	if = { limit = { is_planet_class = pc_r_class } set_planet_flag = was_pc_r_class }
+	if = { limit = { is_planet_class = pc_s_class } set_planet_flag = was_pc_s_class }
+	if = { limit = { is_planet_class = pc_savannah } set_planet_flag = was_pc_savannah }
+	if = { limit = { is_planet_class = pc_shielded } set_planet_flag = was_pc_shielded }
+	if = { limit = { is_planet_class = pc_shrouded } set_planet_flag = was_pc_shrouded }
+	if = { limit = { is_planet_class = pc_thegreatlink } set_planet_flag = was_pc_thegreatlink }
+	if = { limit = { is_planet_class = pc_toxic } set_planet_flag = was_pc_toxic }
+	if = { limit = { is_planet_class = pc_tropical } set_planet_flag = was_pc_tropical }
+	if = { limit = { is_planet_class = pc_tundra } set_planet_flag = was_pc_tundra }
+	if = { limit = { is_planet_class = pc_u_class } set_planet_flag = was_pc_u_class }
+	if = { limit = { is_planet_class = pc_x_class } set_planet_flag = was_pc_x_class }
+	if = { limit = { is_planet_class = pc_y_class } set_planet_flag = was_pc_y_class }
+	
+	if = { limit = { is_artificial_planet = no is_starship_planet = no } change_pc = pc_assimilated }
+	if = {
+		limit = { OR = { is_artificial_planet = yes is_starship_planet = yes } is_asteroid_habitat = no }
+		change_pc = pc_starbase_blank_brg
+		set_owner = controller
+		set_correct_spaceport_name_BRG = yes
+		if = {
+			limit = { has_spaceport = no }
+			create_spaceport = { owner = ROOT initial_module = "module_defense_antiproton_0_borg" }
+		}
+		assimilate_buildings = yes
+	}
+	if = { 
+		limit = { is_artificial_planet = yes is_asteroid_habitat = yes } 
+		set_owner = controller
+	}
+}
+
+de_assimilate_planet = {
+	if = { limit = { has_planet_flag = was_pc_a_star } change_pc = pc_a_star remove_planet_flag = was_pc_a_star }
+	if = { limit = { has_planet_flag = was_pc_ai } change_pc = pc_ai remove_planet_flag = was_pc_ai }
+	if = { limit = { has_planet_flag = was_pc_alpine } change_pc = pc_alpine remove_planet_flag = was_pc_alpine }
+	if = { limit = { has_planet_flag = was_pc_arctic } change_pc = pc_arctic remove_planet_flag = was_pc_arctic }
+	if = { limit = { has_planet_flag = was_pc_arid } change_pc = pc_arid remove_planet_flag = was_pc_arid }
+	if = { limit = { has_planet_flag = was_pc_assimilated } change_pc = pc_assimilated remove_planet_flag = was_pc_assimilated }
+	if = { limit = { has_planet_flag = was_pc_asteroid } change_pc = pc_asteroid remove_planet_flag = was_pc_asteroid }
+	if = { limit = { has_planet_flag = was_pc_b_class } change_pc = pc_b_class remove_planet_flag = was_pc_b_class }
+	if = { limit = { has_planet_flag = was_pc_b_star } change_pc = pc_b_star remove_planet_flag = was_pc_b_star }
+	if = { limit = { has_planet_flag = was_pc_barren } change_pc = pc_barren remove_planet_flag = was_pc_barren }
+	if = { limit = { has_planet_flag = was_pc_barren_broken } change_pc = pc_barren_broken remove_planet_flag = was_pc_barren_broken }
+	if = { limit = { has_planet_flag = was_pc_barren_cold } change_pc = pc_barren_cold remove_planet_flag = was_pc_barren_cold }
+	if = { limit = { has_planet_flag = was_pc_black_hole } change_pc = pc_black_hole remove_planet_flag = was_pc_black_hole }
+	if = { limit = { has_planet_flag = was_pc_class_d_barren } change_pc = pc_class_d_barren remove_planet_flag = was_pc_class_d_barren }
+	if = { limit = { has_planet_flag = was_pc_class_e } change_pc = pc_class_e remove_planet_flag = was_pc_class_e }
+	if = { limit = { has_planet_flag = was_pc_class_k_trans } change_pc = pc_class_k_trans remove_planet_flag = was_pc_class_k_trans }
+	if = { limit = { has_planet_flag = was_pc_class_n_titan } change_pc = pc_class_n_titan remove_planet_flag = was_pc_class_n_titan }
+	if = { limit = { has_planet_flag = was_pc_class_o_sulfar } change_pc = pc_class_o_sulfar remove_planet_flag = was_pc_class_o_sulfar }
+	if = { limit = { has_planet_flag = was_pc_class_q_geo } change_pc = pc_class_q_geo remove_planet_flag = was_pc_class_q_geo }
+	if = { limit = { has_planet_flag = was_pc_class_q_variable } change_pc = pc_class_q_variable remove_planet_flag = was_pc_class_q_variable }
+	if = { limit = { has_planet_flag = was_pc_continental } change_pc = pc_continental remove_planet_flag = was_pc_continental }
+	if = { limit = { has_planet_flag = was_pc_desert } change_pc = pc_desert remove_planet_flag = was_pc_desert }
+	if = { limit = { has_planet_flag = was_pc_f_class } change_pc = pc_f_class remove_planet_flag = was_pc_f_class }
+	if = { limit = { has_planet_flag = was_pc_f_star } change_pc = pc_f_star remove_planet_flag = was_pc_f_star }
+	if = { limit = { has_planet_flag = was_pc_frozen } change_pc = pc_frozen remove_planet_flag = was_pc_frozen }
+	if = { limit = { has_planet_flag = was_pc_g_class } change_pc = pc_g_class remove_planet_flag = was_pc_g_class }
+	if = { limit = { has_planet_flag = was_pc_g_star } change_pc = pc_g_star remove_planet_flag = was_pc_g_star }
+	if = { limit = { has_planet_flag = was_pc_gaia } change_pc = pc_gaia remove_planet_flag = was_pc_gaia }
+	if = { limit = { has_planet_flag = was_pc_gas_giant } change_pc = pc_gas_giant remove_planet_flag = was_pc_gas_giant }
+	if = { limit = { has_planet_flag = was_pc_habitat } change_pc = pc_habitat remove_planet_flag = was_pc_habitat }
+	if = { limit = { has_planet_flag = was_pc_i_class } change_pc = pc_i_class remove_planet_flag = was_pc_i_class }
+	if = { limit = { has_planet_flag = was_pc_infested } change_pc = pc_infested remove_planet_flag = was_pc_infested }
+	if = { limit = { has_planet_flag = was_pc_k_class } change_pc = pc_k_class remove_planet_flag = was_pc_k_class }
+	if = { limit = { has_planet_flag = was_pc_k_star } change_pc = pc_k_star remove_planet_flag = was_pc_k_star }
+	if = { limit = { has_planet_flag = was_pc_l2_class } change_pc = pc_l2_class remove_planet_flag = was_pc_l2_class }
+	if = { limit = { has_planet_flag = was_pc_m_star } change_pc = pc_m_star remove_planet_flag = was_pc_m_star }
+	if = { limit = { has_planet_flag = was_pc_m1_class } change_pc = pc_m1_class remove_planet_flag = was_pc_m1_class }
+	if = { limit = { has_planet_flag = was_pc_molten } change_pc = pc_molten remove_planet_flag = was_pc_molten }
+	if = { limit = { has_planet_flag = was_pc_neutron_star } change_pc = pc_neutron_star remove_planet_flag = was_pc_neutron_star }
+	if = { limit = { has_planet_flag = was_pc_nuked } change_pc = pc_nuked remove_planet_flag = was_pc_nuked }
+	if = { limit = { has_planet_flag = was_pc_ocean } change_pc = pc_ocean remove_planet_flag = was_pc_ocean }
+	if = { limit = { has_planet_flag = was_pc_planet_remnant } change_pc = pc_planet_remnant remove_planet_flag = was_pc_planet_remnant }
+	if = { limit = { has_planet_flag = was_pc_portal } change_pc = pc_portal remove_planet_flag = was_pc_portal }
+	if = { limit = { has_planet_flag = was_pc_pulsar } change_pc = pc_pulsar remove_planet_flag = was_pc_pulsar }
+	if = { limit = { has_planet_flag = was_pc_r_class } change_pc = pc_r_class remove_planet_flag = was_pc_r_class }
+	if = { limit = { has_planet_flag = was_pc_s_class } change_pc = pc_s_class remove_planet_flag = was_pc_s_class }
+	if = { limit = { has_planet_flag = was_pc_savannah } change_pc = pc_savannah remove_planet_flag = was_pc_savannah }
+	if = { limit = { has_planet_flag = was_pc_shielded } change_pc = pc_shielded remove_planet_flag = was_pc_shielded }
+	if = { limit = { has_planet_flag = was_pc_shrouded } change_pc = pc_shrouded remove_planet_flag = was_pc_shrouded }
+	if = { limit = { has_planet_flag = was_pc_thegreatlink } change_pc = pc_thegreatlink remove_planet_flag = was_pc_thegreatlink }
+	if = { limit = { has_planet_flag = was_pc_toxic } change_pc = pc_toxic remove_planet_flag = was_pc_toxic }
+	if = { limit = { has_planet_flag = was_pc_tropical } change_pc = pc_tropical remove_planet_flag = was_pc_tropical }
+	if = { limit = { has_planet_flag = was_pc_tundra } change_pc = pc_tundra remove_planet_flag = was_pc_tundra }
+	if = { limit = { has_planet_flag = was_pc_u_class } change_pc = pc_u_class remove_planet_flag = was_pc_u_class }
+	if = { limit = { has_planet_flag = was_pc_x_class } change_pc = pc_x_class remove_planet_flag = was_pc_x_class }
+	if = { limit = { has_planet_flag = was_pc_y_class } change_pc = pc_y_class remove_planet_flag = was_pc_y_class }
+}
+
+assimilate_pop = {
+	random_list = {
+		40 = {
+			modifier = { factor = 5.0 planet = { NOT = { any_pop = { has_trait = trait_pc_assimilated_preference } } } }
+			modifier = { factor = 2.0 event_target:assimilating_empire = { has_technology = tech_assimilation_1 NOT = { has_technology = tech_assimilation_2 } } }
+			modifier = { factor = 4.0 event_target:assimilating_empire = { has_technology = tech_assimilation_1 has_technology = tech_assimilation_2 } }
+			if = {
+				limit = { NOT = { has_trait = trait_pc_assimilated_preference } }
+				add_correct_assimilation_bonus = yes
+			}
+			modify_species = { species = this add_trait = trait_pc_assimilated_preference }
+			remove_assimilated_pop_modifiers = yes
+			save_event_target_as = assimilated_pop
+		}
+		60 = {
+			kill_pop = yes
+		}
+	}
+}
+
+de_assimilate_pop = {
+	modify_species = { species = this remove_trait = trait_pc_assimilated_preference }
+}
+
+
+remove_assimilated_pop_modifiers = {
+	remove_modifier = culture_shock_stone_age
+	remove_modifier = culture_shock_bronze_age
+	remove_modifier = culture_shock_iron_age
+	remove_modifier = culture_shock_late_medieval_age
+	remove_modifier = culture_shock_renaissance_age
+	remove_modifier = culture_shock_steam_age
+	remove_modifier = culture_shock_industrial_age
+	remove_modifier = culture_shock_machine_age
+	remove_modifier = culture_shock_atomic_age
+	remove_modifier = culture_shock_early_space_age
+}
+
+add_correct_assimilation_bonus = {
+	if = {
+		limit = { exists = event_target:assimilating_empire exists = event_target:assimilated_pop_species }
+		event_target:assimilating_empire = {
+			if = {
+				limit = { NOT = { has_country_flag = "assimilated_first@event_target:assimilated_pop_species" } }
+				country_event = { id = STH_borg.103 scopes = { from = event_target:assimilated_pop_species } days = 0 }
+			}
+			if = {
+				limit = { has_country_flag = "assimilated_first@event_target:assimilated_pop_species" NOT = { has_country_flag = "assimilated_low@event_target:assimilated_pop_species" } }
+				if = {
+					limit = { has_swapped_tradition = tr_adaptability_3 }
+					add_improved_assimilation_unity_bonus_2 = yes
+					else = {
+						add_assimilation_unity_bonus_2 = yes
+					}
+				}
+				if = {
+					limit = { has_swapped_tradition = tr_versatility_4 }
+					add_improved_assimilation_research_bonus_2 = yes
+					else = {
+						add_assimilation_research_bonus_2 = yes
+					}
+				}
+				random_list = {
+					10 = { set_country_flag = "assimilated_low@event_target:assimilated_pop_species" }
+					90 = {}
+				}
+			}
+			if = {
+				limit = { has_country_flag = "assimilated_low@event_target:assimilated_pop_species" NOT = { has_country_flag = "assimilated_mid@event_target:assimilated_pop_species" } }
+				if = {
+					limit = { has_swapped_tradition = tr_adaptability_3 }
+					add_improved_assimilation_unity_bonus_3 = yes
+					else = {
+						add_assimilation_unity_bonus_3 = yes
+					}
+				}
+				if = {
+					limit = { has_swapped_tradition = tr_versatility_4 }
+					add_improved_assimilation_research_bonus_3 = yes
+					else = {
+						add_assimilation_research_bonus_3 = yes
+					}
+				}
+				random_list = {
+					10 = { set_country_flag = "assimilated_mid@event_target:assimilated_pop_species" }
+					90 = {}
+				}
+			}
+			if = {
+				limit = { has_country_flag = "assimilated_mid@event_target:assimilated_pop_species" NOT = { has_country_flag = "assimilated_high@event_target:assimilated_pop_species" } }
+				if = {
+					limit = { has_swapped_tradition = tr_adaptability_3 }
+					add_improved_assimilation_unity_bonus_4 = yes
+					else = {
+						add_assimilation_unity_bonus_4 = yes
+					}
+				}
+				if = {
+					limit = { has_swapped_tradition = tr_versatility_4 }
+					add_improved_assimilation_research_bonus_4 = yes
+					else = {
+						add_assimilation_research_bonus_4 = yes
+					}
+				}
+				random_list = {
+					10 = { 
+						set_country_flag = "assimilated_high@event_target:assimilated_pop_species" 
+						country_event = { id = STH_borg.106 scopes = { from = event_target:assimilated_pop_species } days = 0 }
+					}
+					90 = {}
+				}
+			}
+			if = {
+				limit = { has_country_flag = "assimilated_high@event_target:assimilated_pop_species" }
+				if = {
+					limit = { has_swapped_tradition = tr_adaptability_3 }
+					add_improved_assimilation_unity_bonus_5 = yes
+					else = {
+						add_assimilation_unity_bonus_5 = yes
+					}
+				}
+				if = {
+					limit = { has_swapped_tradition = tr_versatility_4 }
+					add_improved_assimilation_research_bonus_5 = yes
+					else = {
+						add_assimilation_research_bonus_5 = yes
+					}
+				}
+			}
+			set_country_flag = "assimilated_first@event_target:assimilated_pop_species"
+		}
+	}
+}
+
+
+### Standard Assimilation Bonus
+add_assimilation_unity_bonus_1 = {
+	add_unity = 1000
+}
+
+add_assimilation_research_bonus_1 = {
+	add_society_research = 500
+	add_physics_research = 500
+	add_engineering_research = 500
+}
+
+add_assimilation_unity_bonus_2 = {
+	add_unity = 250
+}
+
+add_assimilation_research_bonus_2 = {
+	add_society_research = 50
+	add_physics_research = 50
+	add_engineering_research = 50
+}
+
+add_assimilation_unity_bonus_3 = {
+	add_unity = 100
+}
+
+add_assimilation_research_bonus_3 = {
+	add_society_research = 25
+	add_physics_research = 25
+	add_engineering_research = 25
+}
+
+add_assimilation_unity_bonus_4 = {
+	add_unity = 50
+}
+
+add_assimilation_research_bonus_4 = {
+	add_society_research = 10
+	add_physics_research = 10
+	add_engineering_research = 10
+}
+
+add_assimilation_unity_bonus_5 = {
+	add_unity = 25
+}
+
+add_assimilation_research_bonus_5 = {
+	add_society_research = 5
+	add_physics_research = 5
+	add_engineering_research = 5
+}
+
+
+### Improved Bonus via Traditions
+
+add_improved_assimilation_unity_bonus_1 = {
+	add_unity = 2000
+}
+
+add_improved_assimilation_research_bonus_1 = {
+	add_society_research = 1000
+	add_physics_research = 1000
+	add_engineering_research = 1000
+}
+
+add_improved_assimilation_unity_bonus_2 = {
+	add_unity = 500
+}
+
+add_improved_assimilation_research_bonus_2 = {
+	add_society_research = 100
+	add_physics_research = 100
+	add_engineering_research = 100
+}
+
+add_improved_assimilation_unity_bonus_3 = {
+	add_unity = 200
+}
+
+add_improved_assimilation_research_bonus_3 = {
+	add_society_research = 50
+	add_physics_research = 50
+	add_engineering_research = 50
+}
+
+add_improved_assimilation_unity_bonus_4 = {
+	add_unity = 100
+}
+
+add_improved_assimilation_research_bonus_4 = {
+	add_society_research = 20
+	add_physics_research = 20
+	add_engineering_research = 20
+}
+
+add_improved_assimilation_unity_bonus_5 = {
+	add_unity = 50
+}
+
+add_improved_assimilation_research_bonus_5 = {
+	add_society_research = 10
+	add_physics_research = 10
+	add_engineering_research = 10
+}
+
+
+assimilate_buildings = {
+	every_tile = {
+		limit = { has_building_construction = yes }
+		remove_building = yes
+	}
+	every_tile = {
+		limit = { OR = { has_building = building_agri_processing_complex } }
+		set_building = space_building_hydroponics_farm_1
+	}
+	every_tile = {
+		limit = { OR = { has_building = building_dark_matter_power_plant } }
+		set_building = space_building_power_plant_1
+	}
+	every_tile = {
+		limit = { OR = { has_building = building_ancient_factory } }
+		set_building = space_building_mining_network_1
+	}
+	every_tile = {
+		limit = { OR = { has_building = building_ancient_archives } has_resource = { type = physics_research amount > 0 } }
+		set_building = space_building_physics_lab_1
+	}
+	every_tile = {
+		limit = { OR = { has_building = building_ancient_archives } has_resource = { type = engineering_research amount > 0 } }
+		set_building = space_building_engineering_facility_1
+	}
+	every_tile = {
+		limit = { OR = { has_building = building_ancient_archives } has_resource = { type = society_research amount > 0 } }
+		set_building = space_building_bio_lab_1
+	}
+	every_tile = {
+		limit = { OR = { has_building = building_ancient_archives } }
+		remove_building = yes
+	}
+}

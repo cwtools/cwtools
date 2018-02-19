@@ -1,0 +1,421 @@
+#Sets starting resources for minor races
+set_starting_resources = {
+    add_minerals = 200
+    add_energy = 100
+	add_food = 100
+	add_influence = 100
+}
+
+#Sets starting resources for fallen empires
+set_fallen_starting_resources = {
+    add_minerals = 2000
+    add_energy = 1000
+	add_food = 1000
+	add_influence = 1000
+	add_unity = 1000
+}
+
+create_federation_mirror_universe_country = {	
+	if = {
+		limit = { NOT = { exists = event_target:humanSpecies } }
+		create_species = { 
+			name = "Human" 
+			class = FED 
+			portrait = human 
+			traits = { trait = "trait_charismatic" trait = "trait_natural_sociologists" ideal_planet_class = "pc_continental" } 
+		}
+		last_created_species = { save_global_event_target_as = humanSpecies }
+	}
+	create_country = {
+		name = "Terran Empire"
+		name_list = Human
+		authority = "auth_imperial"
+		ship_prefix = "ISS"
+		civics = { civic = "civic_slaver_guilds" civic = "civic_cutthroat_politics" }
+		species = event_target:humanSpecies
+		ethos = { ethic = ethic_fanatic_militarist ethic = ethic_authoritarian }
+		flag = { icon = { category = "trek" file = "Mirror1.dds" } background = { category = "backgrounds" file = "circle.dds" } colors = { "customcolor1891" "customcolor1452" "null" "null" } }
+		effect = {
+			save_global_event_target_as = mirror_universe_fed_vanguard
+			set_country_flag = mirror_universe_fed_vanguard
+			set_country_flag = terran_empire
+			set_graphical_culture = federation_MU_04 #REPLACE WITH ERA SPECIFIC
+			set_country_type = mirrorUniverseVanguard
+			add_minerals = 10000
+			add_energy = 10000
+			set_subject_of = { who = none }
+			copy_techs_from = { target = event_target:mirror_universe_fed_target except = { } } 
+			give_technology = { tech = "tech_phaser_cannon_1" message = no } 
+			give_technology = { tech = "tech_engineering_starship-class_717" message = no } 
+			give_technology = { tech = "tech_society_statecraft_931" message = no }
+			establish_communications_no_message = event_target:mirror_universe_fed_target
+			create_leader = { type = admiral species = owner_main_species name = random skill = random traits = { trait = leader_trait_unyielding } }
+			last_created_leader = {
+				save_global_event_target_as = mirror_universe_fed_leader				
+				if = { 
+					limit = { gender = male owner = { is_species_class = FED } }
+					random_list = {
+						10 = { set_name = "Benjamin Sisko" change_leader_portrait = mirrorBenSisko }
+						10 = { set_name = "Jean-Luc Picard" change_leader_portrait = mirrorJeanLucPicard }
+					}
+				}
+				if = { 
+					limit = { gender = male owner = { is_species_class = VUL } }
+					random_list = {
+						10 = { set_name = "Tuvok" change_leader_portrait = mirrorTuvok }
+					}
+				}
+				if = { 
+					limit = { gender = female owner = { is_species_class = FED } }
+					random_list = {
+						10 = { set_name = "Kathryn Janeway" change_leader_portrait = mirrorKathrynJaneway }
+						10 = { set_name = "Jennifer Sisko" change_leader_portrait = mirrorJenniferSisko }
+					}
+				}
+			}
+			add_modifier = { modifier = "em_mirror_universe_supply" }
+		}		
+	}
+}
+
+configure_mirror_universe_beachhead = {
+	every_tile = {
+		limit = { has_blocker = yes }
+		remove_blocker = yes
+	}
+	every_tile = {
+		limit = { has_blocker = no has_pop = no }
+		create_pop = { species = owner_main_species  }
+	}
+	every_tile = {
+		limit = { has_building = no has_resource = { type = food amount > 0 } }
+		set_building = "building_hydroponics_farm_3"
+	}
+	every_tile = {
+		limit = { has_building = no has_resource = { type = energy amount > 0 } }
+		set_building = "building_power_plant_4"
+	}
+	every_tile = {
+		limit = { has_building = no has_resource = { type = minerals amount > 0 } }
+		set_building = "building_mining_network_4"
+	}
+	every_tile = {
+		limit = { has_building = no has_resource = { type = society_research amount > 0 } }
+		set_building = "building_bio_lab_3"
+	}
+	every_tile = {
+		limit = { has_building = no has_resource = { type = engineering_research amount > 0 } }
+		set_building = "building_engineering_facility_3"
+	}
+	every_tile = {
+		limit = { has_building = no has_resource = { type = physics_research amount > 0 } }
+		set_building = "building_physics_lab_3"
+	}
+	every_tile = {
+		limit = { has_building = no }
+		random_list = {
+			10 = {
+				modifier = { factor = 0 planet = { has_building = "building_naval_HQ" } }
+				set_building = "building_naval_HQ"
+			}
+			10 = {
+				modifier = { factor = 0 planet = { has_building = "building_planetary_shield_2" } }
+				set_building = "building_planetary_shield_2"
+			}
+			10 = {
+				modifier = { factor = 0.5 planet = { has_building = "building_planetary_shield_3" } }
+				set_building = "building_planetary_shield_3"
+			}
+			2 = {
+				set_building = "building_power_plant_4"
+			}
+			2 = {
+				set_building = "building_mining_network_4"
+			}
+			2 = {
+				set_building = "building_hydroponics_farm_3"
+			}
+		}
+	}
+}
+
+create_federation_mirror_universe_country_2 = {	
+	if = {
+		limit = { NOT = { exists = event_target:mirror_universe_fed_vanguard_2 } }	
+		create_country = { 
+			name = "Terran Empire"
+			name_list = Human
+			authority = "auth_imperial"
+			ship_prefix = "ISS"
+			civics = { civic = "civic_slaver_guilds" civic = "civic_cutthroat_politics" }
+			species = event_target:humanSpecies
+			ethos = { ethic = ethic_fanatic_militarist ethic = ethic_authoritarian }
+			flag = { icon = { category = "trek" file = "Mirror1.dds" } background = { category = "backgrounds" file = "circle.dds" } colors = { "customcolor1891" "customcolor1452" "null" "null" } }
+			effect = {
+				save_global_event_target_as = mirror_universe_fed_vanguard_2
+				set_country_flag = mirror_universe_fed_vanguard_2
+				set_country_flag = terran_empire
+				set_graphical_culture = federation_MU_04 #REPLACE WITH ERA SPECIFIC
+				set_subject_of = { who = none }
+				set_country_type = mirrorUniverseVanguard
+				add_minerals = 10000
+				add_energy = 10000
+				give_technology = { tech = "tech_phaser_cannon_1" message = no } 
+				give_technology = { tech = "tech_engineering_starship-class_717" message = no } 
+				give_technology = { tech = "tech_society_statecraft_931" message = no }
+				copy_techs_from = { target = event_target:mirror_universe_fed_target except = { } } 
+				establish_communications_no_message = event_target:mirror_universe_fed_target
+				add_modifier = { modifier = "em_mirror_universe_supply" }
+			}
+		}
+	}
+}
+
+ensure_mirror_universe_exile_country_exists = {
+	if = {
+		limit = { any_country = { is_country_type = exile has_country_flag = mirrorUniverseExileCountry } }
+		random_country = { 
+			limit = { is_country_type = exile has_country_flag = mirrorUniverseExileCountry } 
+			save_event_target_as = mirrorUniverseExileCountry
+		}
+		else = {
+			create_country = { name = "Mirror Universe" species = random type = exile ethos = { } authority = random civics = random flag = random auto_delete = no }
+			last_created_country = { set_country_flag = mirrorUniverseExileCountry save_event_target_as = mirrorUniverseExileCountry }
+		}
+	}
+}
+
+become_hebitian_union = {
+	change_country_flag = {
+		icon = { category = "trek" file = "hebitian.dds" }
+		background = { category = "backgrounds" file = "circle.dds" }
+		colors = { "blue" "black" "null" "null" }
+	}	
+	remove_country_flag = cardassian_union
+	set_country_flag = hebitian_union
+	change_government = { 
+		authority = "auth_democratic"
+		civics = { civic = "civic_environmentalist" civic = "civic_agrarian_idyll" }
+	}
+	clear_ethos = yes
+	country_add_ethic = ethic_egalitarian
+	country_add_ethic = ethic_pacifist
+	country_add_ethic = ethic_spiritualist
+	owner_species = { rename_species = { name_list = hebitian_name } }
+	set_empire_name = "Hebitian Union"
+}
+
+become_hebitian_country = {	
+	remove_country_flag = cardassian_country
+	remove_country_flag = cardassian_union
+	set_country_flag = hebitian_country
+	change_government = { 
+		authority = "auth_democratic"
+		civics = { civic = "civic_environmentalist" civic = "civic_agrarian_idyll" }
+	}
+	clear_ethos = yes
+	country_add_ethic = ethic_egalitarian
+	country_add_ethic = ethic_pacifist
+	country_add_ethic = ethic_spiritualist
+	owner_species = { rename_species = { name_list = hebitian_name } }
+	random_list = {
+		1000 = {  
+			modifier = { factor = 0 any_country = { has_country_flag = hebitian_alliance } }
+			set_country_flag = "Hebitian Alliance"
+			set_empire_name = "Hebitian Alliance"
+		}
+		1000 = {  
+			modifier = { factor = 0 any_country = { has_country_flag = hebitian_confederation } }
+			set_country_flag = "Hebitian Confederation"
+			set_empire_name = "Hebitian Confederation"
+		}
+		1000 = {  
+			modifier = { factor = 0 any_country = { has_country_flag = hebitian_states } }
+			set_country_flag = "United Hebitian States"
+			set_empire_name = "United Hebitian States"
+		}
+		1000 = {  
+			modifier = { factor = 0 any_country = { has_country_flag = hebitian_serene_republic } }
+			set_country_flag = "Serene Hebitian Republic"
+			set_empire_name = "Serene Hebitian Republic"
+		}
+		1 = {}
+	}	
+}
+
+create_borg_rebel_country = {	
+	random_list = {
+		10 = {	
+			modifier = { factor = 0 exists = event_target:borg_cooperative }
+			create_rebels = { 
+				name = "Borg Cooperative" 
+				authority = auth_cybernetic_consciousness 
+				civics = { civic = civic_free_haven civic = civic_parliamentary_system } 
+				species = root 
+				ethos = { ethic = "ethic_egalitarian" ethic = "ethic_cybernetic_consciousness" ethic = "ethic_xenophile" }
+				flag = { 
+					icon = { category = "trek" file = "borg-cooperative.dds" }
+					background = { category = "backgrounds" file = "00_solid.dds" }
+					colors = { "customcolor1127" "customcolor1127" "null" "null" }
+				}
+			}
+			last_created_country = { 
+				create_leader = { type = ruler species = owner_main_species name = random skill = random traits = { trait = random_trait trait = random_trait } }
+				remove_country_flag = the_borg_collective
+				set_country_flag = borg_cooperative
+				save_global_event_target_as = borg_cooperative
+				set_graphical_culture = borg_blue_01
+			}
+		}
+		10 = {
+			modifier = { factor = 0 exists = event_target:unimatrix_zero }
+			create_rebels = { 
+				name = "Unimatrix Zero" 
+				authority = auth_cybernetic_consciousness 
+				civics = { civic = civic_agrarian_idyll civic = civic_beacon_of_liberty }
+				species = root 
+				ethos = { ethic = "ethic_egalitarian" ethic = "ethic_pacifist" ethic = "ethic_cybernetic_consciousness" }
+				flag = { 
+					icon = { category = "trek" file = "borg-cooperative.dds" }
+					background = { category = "backgrounds" file = "00_solid.dds" }
+					colors = { "customcolor709" "customcolor709" "null" "null" }
+				}
+			}
+			last_created_country = { 
+				create_leader = { type = ruler species = owner_main_species name = random skill = random traits = { trait = random_trait trait = random_trait } } 
+				remove_country_flag = the_borg_collective
+				set_country_flag = unimatrix_zero
+				save_global_event_target_as = unimatrix_zero
+				set_graphical_culture = borg_yellow_01
+			}
+		}
+	}
+	last_created_country = {
+		assign_leader = last_created_leader
+		create_leader = { type = scientist species = root name = random skill = random traits = { trait = random_trait trait = random_trait } }
+		create_leader = { type = scientist species = root name = random skill = random traits = { trait = random_trait trait = random_trait } }
+		create_leader = { type = scientist species = root name = random skill = random traits = { trait = random_trait trait = random_trait } }
+		create_leader = { type = admiral species = root name = random skill = random traits = { trait = random_trait trait = random_trait } }
+		create_leader = { type = general species = root name = random skill = random traits = { trait = random_trait trait = random_trait } }
+		create_leader = { type = governor species = root name = random skill = random traits = { trait = random_trait trait = random_trait } }
+		set_country_type = default
+		set_subject_of = { who = none }
+		declare_war = { who = root name = "Borg Civil War" }
+		add_war_demand = { type = "cede_planet" parameter:planet = root.capital_scope warscore_cost = 90 target = this enemy = root }
+		root = { add_war_demand = { type = "cede_planet" parameter:planet = last_created_country.capital_scope warscore_cost = 50 target = root enemy = last_created_country } }
+		add_modifier = { modifier = em_rebel_borg_supply days = 1080 }
+		add_modifier = { modifier = em_rebel_borg_naval_cap days = 900 }
+		every_owned_planet = {
+			create_correct_spaceport = yes
+		}
+		add_energy = 5000
+		add_minerals = 12000
+		add_influence = 250
+		add_unity = 500	
+	}
+}
+
+create_undine_country = {
+	create_species = { name = "Undine" class = UND portrait = undine traits = { ideal_planet_class = "pc_continental" } }
+	create_country = {
+		name = "Undine"
+		type = undine
+		auto_delete = no
+		species = last_created
+		flag = {
+			icon = { category = "trek" file = "8472.dds" }
+			background = { category = "backgrounds" file = "new_dawn.dds" }
+			colors = { "orange" "black" "null" "null" }
+		}
+		ethos = { ethic = "ethic_fanatic_xenophobe"	ethic = "ethic_militarist" }
+	}
+	last_created_country = { 
+		set_country_flag = undine 
+		save_event_target_as = undine
+		establish_communications_no_message = root
+		set_faction_hostility = { set_hostile = yes }
+	}
+	#Undine Spawn 1
+	random_planet = {
+		limit = { 
+			is_inside_border = root 
+			is_colony  = no
+		}
+		save_global_event_target_as = undineSpawn1
+		create_undine_fleet = yes
+	}
+	#Undine Spawn 2
+	random_planet = {
+		limit = { 
+			is_inside_border = root 
+			is_colony  = no
+		}
+		save_global_event_target_as = undineSpawn2
+		create_undine_fleet = yes
+	}
+	#Undine Spawn 3
+	random_planet = {
+		limit = { 
+			is_inside_border = root 
+			is_colony  = no
+		}
+		save_global_event_target_as = undineSpawn3
+		create_undine_fleet = yes
+	}
+}
+
+create_terra_prime_country = {
+	if = {
+		limit = { NOT = { exists = event_target:humanSpecies } }
+		random_country = {
+			limit = { is_species_class = FED }
+			species = { save_global_event_target_as = humanSpecies }
+		}
+	}
+	create_country = {
+		name = "Terra Prime"
+		authority = auth_oligarchic
+		civics = random #BANKS CHANGE
+		species = event_target:humanSpecies
+		ship_prefix = TSS
+		ethos = { ethic = "ethic_xenophobe" ethic = "ethic_militarist" ethic = "ethic_egalitarian" }
+		flag = { icon = { category = "trek" file = "UnitedEarth.dds" } background = { category = "backgrounds" file = "circle.dds" } colors = { "customcolor1702" "black" "null" "null" } }
+		name_list = Human
+		effect = {
+			save_global_event_target_as = terraPrime
+			add_energy = 1000
+			add_minerals = 1000
+			create_species = { name = "Human" class = TREKHEROES portrait = JohnPaxton traits = random }
+			create_leader = {
+				type = governor
+				species = last_created
+				name = "John Paxton"
+				skill = random
+				traits = { trait = random_trait trait = random_trait }
+				effect = { 
+					set_is_female = no 
+					save_global_event_target_as = johnPaxton
+				}
+			}
+			assign_leader = event_target:johnPaxton
+			create_leader = { type = scientist species = event_target:humanSpecies name = random skill = random traits = { trait = random_trait trait = random_trait } }
+			create_leader = { type = scientist species = event_target:humanSpecies name = random skill = random traits = { trait = random_trait trait = random_trait } }
+			create_leader = { type = scientist species = event_target:humanSpecies name = random skill = random traits = { trait = random_trait trait = random_trait } }
+			create_leader = { type = admiral species = event_target:humanSpecies name = random skill = random traits = { trait = random_trait trait = random_trait } }
+			create_leader = { type = general species = event_target:humanSpecies name = random skill = random traits = { trait = random_trait trait = random_trait } }
+			create_leader = { type = governor species = event_target:humanSpecies name = random skill = random traits = { trait = random_trait trait = random_trait } }
+			set_subject_of = { who = none }
+			give_technology = { tech = "tech_phaser_cannon_1" message = no }
+			give_technology = { tech = "tech_engineering_starship-class_717" message = no }
+			give_technology = { tech = "tech_society_statecraft_931" message = no }
+		}
+	}	
+}
+
+
+
+add_hundred_return_bonus = {
+	#IMPROVE THIS
+	add_unity = 500
+	add_society_research = 500
+}

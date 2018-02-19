@@ -1,0 +1,191 @@
+############################
+#
+# Andorian Flavour Events
+#
+# Written by Walshicus / Kodiak
+#
+############################
+
+namespace = STH_andorian_flavour
+
+@tier1materialreward = 6
+@tier1materialmin = 100
+@tier1materialmax = 500
+@tier2materialreward = 12
+@tier2materialmin = 150
+@tier2materialmax = 1000
+@tier3materialreward = 18
+@tier3materialmin = 250
+@tier3materialmax = 1500
+@tier4materialreward = 24
+@tier4materialmin = 350
+@tier4materialmax = 2000
+
+@tier1influencereward = 6
+@tier1influencemin = 40
+@tier1influencemax = 100
+@tier2influencereward = 12
+@tier2influencemin = 80
+@tier2influencemax = 175
+@tier3influencereward = 18
+@tier3influencemin = 125
+@tier3influencemax = 250
+@tier4influencereward = 24
+@tier4influencemin = 150
+@tier4influencemax = 300
+
+@tier1researchreward = 6
+@tier1researchmin = 60
+@tier1researchmax = 150
+@tier2researchreward = 12
+@tier2researchmin = 90
+@tier2researchmax = 250
+@tier3researchreward = 18
+@tier3researchmin = 120
+@tier3researchmax = 350
+@tier4researchreward = 24
+@tier4researchmin = 150
+@tier4researchmax = 500
+
+fleet_event = {
+	id = STH_andorian_flavour.1
+	title = STH_andorian_flavour.1.name
+	desc = STH_andorian_flavour.1.desc
+	picture = sth_GFX_evt_andorianKumari
+	location = ROOT
+	trigger = {
+		exists = leader
+		leader = { 
+			leader_class = admiral 
+			NOT = { has_trait = leader_trait_maimed }
+		}
+		is_in_combat = no
+		owner = {
+			is_species_class  = ADR
+			any_owned_fleet = {
+				exists = leader
+				leader = {
+					leader_class = admiral
+					NOT = { 
+						is_same_value = ROOT.leader 
+						has_trait = leader_trait_maimed
+					}
+				}
+			}
+		}
+	}
+	mean_time_to_happen = { months = 1800 }
+	immediate = { 
+		leader = { save_event_target_as = officerA }
+		owner = {
+			random_owned_fleet = {
+				limit = {
+					exists = leader
+					leader = {
+						leader_class = admiral
+						NOT = { is_same_value = event_target:officerA }
+					}
+				}
+				leader = { save_event_target_as = officerB }
+			}
+		}
+	}
+	option = {
+		name = STH_andorian_flavour.1.a
+		hidden_effect = {
+			random_list = {
+				25 = { fleet_event = { id = STH_andorian_flavour.2 days = 5 } } #OfficerB Killed
+				25 = { fleet_event = { id = STH_andorian_flavour.3 days = 5 } } #OfficerB Maimed
+				25 = { fleet_event = { id = STH_andorian_flavour.4 days = 5 } } #OfficerA Maimed
+				25 = { fleet_event = { id = STH_andorian_flavour.5 days = 5 } } #OfficerA Killed
+			}
+		}
+	}
+}
+
+#OfficerB Killed
+fleet_event = {
+	id = STH_andorian_flavour.2
+	title = STH_andorian_flavour.2.name
+	desc = STH_andorian_flavour.2.desc
+	picture = sth_GFX_evt_andorianUshaan
+	location = ROOT
+	is_triggered_only = yes
+	immediate = { }
+	option = {
+		name = STH_andorian_flavour.2.a
+		event_target:officerB = {
+			kill_leader = { 
+				type = admiral
+				show_notification = yes
+			}
+		}
+		event_target:officerA = {
+			add_trait = leader_trait_resilient
+			add_experience = 500
+		}
+	}
+}
+#OfficerB Maimed
+fleet_event = {
+	id = STH_andorian_flavour.3
+	title = STH_andorian_flavour.3.name
+	desc = STH_andorian_flavour.3.desc
+	picture = sth_GFX_evt_andorianUshaan
+	location = ROOT
+	is_triggered_only = yes
+	immediate = { }
+	option = {
+		name = STH_andorian_flavour.3.a
+		event_target:officerB = {
+			add_trait = leader_trait_maimed
+		}
+		event_target:officerA = {
+			add_trait = leader_trait_aggressive
+			add_experience = 250
+		}
+	}
+}
+#OfficerA Maimed
+fleet_event = {
+	id = STH_andorian_flavour.4
+	title = STH_andorian_flavour.4.name
+	desc = STH_andorian_flavour.4.desc
+	picture = sth_GFX_evt_andorianUshaan
+	location = ROOT
+	is_triggered_only = yes
+	immediate = { }
+	option = {
+		name = STH_andorian_flavour.4.a
+		event_target:officerA = {
+			add_trait = leader_trait_maimed
+		}
+		event_target:officerB = {
+			add_trait = leader_trait_aggressive
+			add_experience = 250
+		}
+	}
+}
+#OfficerA Killed
+fleet_event = {
+	id = STH_andorian_flavour.5
+	title = STH_andorian_flavour.5.name
+	desc = STH_andorian_flavour.5.desc
+	picture = sth_GFX_evt_andorianUshaan
+	location = ROOT
+	is_triggered_only = yes
+	immediate = { }
+	option = {
+		name = STH_andorian_flavour.5.a
+		event_target:officerA = {
+			kill_leader = { 
+				type = admiral
+				show_notification = yes
+			}
+		}
+		event_target:officerB = {
+			add_trait = leader_trait_resilient
+			add_experience = 500
+		}
+	}
+}

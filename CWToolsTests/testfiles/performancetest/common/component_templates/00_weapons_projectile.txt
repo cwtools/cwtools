@@ -1,0 +1,574 @@
+# Icons set here are the ones show in the actual slot. The reason is so that we can support different icons for different sizes. 
+
+#Updated Range on these
+
+# DEFAULT VALUES:
+# is_missile = no
+# is_beam = no
+# is_point_defence = no
+
+# ####################
+#  Mass Drivers
+# ####################
+
+# ## Mass Drivers
+weapon_component_template = {
+	type = instant
+	
+	key = "SMALL_MASS_DRIVER_1"
+	size = small
+	entity = "small_kinetic_gun_entity"
+	hidden = yes
+	
+	
+	icon = "GFX_ship_part_mass_driver_1"
+	icon_frame = 1
+	
+	#prerequisites = { "tech_mass_drivers_1" }
+	component_set = "MASS_DRIVER_1"
+	projectile_gfx = "mass_driver_s"
+	tags = { weapon_type_kinetic }
+	ai_tags = { weapon_role_anti_shield }
+	upgrades_to = "SMALL_MASS_DRIVER_2"
+}
+
+weapon_component_template = {
+	type = instant
+	
+	key = "MEDIUM_MASS_DRIVER_1"
+	size = medium
+	entity = "medium_kinetic_gun_entity"
+	hidden = yes
+		
+	icon = "GFX_ship_part_mass_driver_1"
+	icon_frame = 1
+	
+	#prerequisites = { "tech_mass_drivers_1"}
+	component_set = "MASS_DRIVER_1"
+	projectile_gfx = "mass_driver_m"
+	tags = { weapon_type_kinetic }
+	ai_tags = { weapon_role_anti_shield }
+	upgrades_to = "MEDIUM_MASS_DRIVER_2"
+}
+
+weapon_component_template = {
+	type = instant
+	
+	key = "LARGE_MASS_DRIVER_1"
+	size = large
+	entity = "large_kinetic_gun_entity"
+		
+	icon = "GFX_ship_part_mass_driver_1"
+	icon_frame = 1
+	hidden = yes
+	
+	#prerequisites = { "tech_mass_drivers_1" }
+	component_set = "MASS_DRIVER_1"
+	projectile_gfx = "mass_driver_l"
+	tags = { weapon_type_kinetic }
+	ai_tags = { weapon_role_anti_shield }
+	upgrades_to = "LARGE_MASS_DRIVER_2"
+}
+
+# ## Coilguns
+weapon_component_template = {
+	type = instant
+	
+	key = "SMALL_MASS_DRIVER_2"
+	size = small
+	entity = "small_kinetic_gun_entity"
+	hidden = yes
+		
+	icon = "GFX_ship_part_mass_driver_2"
+	icon_frame = 1
+	
+	#prerequisites = { "tech_mass_drivers_2" }
+	component_set = "MASS_DRIVER_2"
+	projectile_gfx = "coilgun_s"
+	tags = { weapon_type_kinetic }
+	ai_tags = { weapon_role_anti_shield }
+	upgrades_to = "SMALL_MASS_DRIVER_3"
+}
+
+weapon_component_template = {
+	type = instant
+	
+	key = "MEDIUM_MASS_DRIVER_2"
+	size = medium
+	entity = "medium_kinetic_gun_entity"
+	
+	icon = "GFX_ship_part_mass_driver_2"
+	icon_frame = 1
+	hidden = yes
+	
+	#prerequisites = { "tech_mass_drivers_2" }
+	component_set = "MASS_DRIVER_2"
+	projectile_gfx = "coilgun_m"
+	tags = { weapon_type_kinetic }
+	ai_tags = { weapon_role_anti_shield }
+	upgrades_to = "MEDIUM_MASS_DRIVER_3"
+}
+
+weapon_component_template = {
+	type = instant
+	
+	key = "LARGE_MASS_DRIVER_2"
+	size = large
+	entity = "large_kinetic_gun_entity"
+	
+	icon = "GFX_ship_part_mass_driver_2"
+	icon_frame = 1
+	hidden = yes
+	
+	#prerequisites = { "tech_mass_drivers_2" }
+	component_set = "MASS_DRIVER_2"
+	projectile_gfx = "coilgun_l"
+	tags = { weapon_type_kinetic }
+	ai_tags = { weapon_role_anti_shield }
+	upgrades_to = "LARGE_MASS_DRIVER_3"
+}
+
+# ## Railguns
+weapon_component_template = {
+	type = instant
+	
+	key = "SMALL_MASS_DRIVER_3"
+	size = small
+	entity = "small_kinetic_gun_entity"
+	
+	icon = "GFX_ship_part_mass_driver_3"
+	icon_frame = 1
+	hidden = yes
+	
+	#prerequisites = { "tech_mass_drivers_3" }
+	component_set = "MASS_DRIVER_3"
+	projectile_gfx = "railgun_s"
+	tags = { weapon_type_kinetic }
+	ai_tags = { weapon_role_anti_shield }
+	upgrades_to = "SMALL_MASS_DRIVER_4"
+}
+
+weapon_component_template = {
+	type = instant
+	
+	key = "MEDIUM_MASS_DRIVER_3"
+	size = medium
+	entity = "medium_kinetic_gun_entity"
+	
+	icon = "GFX_ship_part_mass_driver_3"
+	icon_frame = 1
+	hidden = yes
+	
+	#prerequisites = { "tech_mass_drivers_3" }
+	component_set = "MASS_DRIVER_3"
+	projectile_gfx = "railgun_m"
+	tags = { weapon_type_kinetic }
+	ai_tags = { weapon_role_anti_shield }
+	upgrades_to = "MEDIUM_MASS_DRIVER_4"
+}
+
+weapon_component_template = {
+	type = instant
+	
+	key = "LARGE_MASS_DRIVER_3"
+	size = large
+	entity = "large_kinetic_gun_entity"
+	
+	icon = "GFX_ship_part_mass_driver_3"
+	icon_frame = 1
+	hidden = yes
+	
+	#prerequisites = { "tech_mass_drivers_3" }
+	component_set = "MASS_DRIVER_3"
+	projectile_gfx = "railgun_l"
+	tags = { weapon_type_kinetic }
+	ai_tags = { weapon_role_anti_shield }
+	upgrades_to = "LARGE_MASS_DRIVER_4"
+}
+
+# ## Advanced Railguns
+weapon_component_template = {
+	type = instant
+	
+	key = "SMALL_MASS_DRIVER_4"
+	size = small
+	entity = "small_kinetic_gun_entity"
+	
+	icon = "GFX_ship_part_mass_driver_4"
+	icon_frame = 1
+	hidden = yes
+	
+	#prerequisites = { "tech_mass_drivers_4" }
+	component_set = "MASS_DRIVER_4"
+	projectile_gfx = "advanced_railgun_s"
+	tags = { weapon_type_kinetic }
+	ai_tags = { weapon_role_anti_shield }
+	upgrades_to = "SMALL_MASS_DRIVER_5"
+}
+
+weapon_component_template = {
+	type = instant
+	
+	key = "MEDIUM_MASS_DRIVER_4"
+	size = medium
+	entity = "medium_kinetic_gun_entity"
+	
+	icon = "GFX_ship_part_mass_driver_4"
+	icon_frame = 1
+	hidden = yes
+	
+	#prerequisites = { "tech_mass_drivers_4" }
+	component_set = "MASS_DRIVER_4"
+	projectile_gfx = "advanced_railgun_m"
+	tags = { weapon_type_kinetic }
+	ai_tags = { weapon_role_anti_shield }
+	upgrades_to = "MEDIUM_MASS_DRIVER_5"
+}
+
+weapon_component_template = {
+	type = instant
+	
+	key = "LARGE_MASS_DRIVER_4"
+	size = large
+	entity = "large_kinetic_gun_entity"
+	
+	icon = "GFX_ship_part_mass_driver_4"
+	icon_frame = 1
+	hidden = yes
+	
+	#prerequisites = { "tech_mass_drivers_4" }
+	component_set = "MASS_DRIVER_4"
+	projectile_gfx = "advanced_railgun_l"
+	tags = { weapon_type_kinetic }
+	ai_tags = { weapon_role_anti_shield }
+	upgrades_to = "LARGE_MASS_DRIVER_5"
+}
+
+# ## Gauss Cannons
+weapon_component_template = {
+	type = instant
+	
+	key = "SMALL_MASS_DRIVER_5"
+	size = small
+	entity = "small_kinetic_gun_entity"
+	
+	icon = "GFX_ship_part_mass_driver_5"
+	icon_frame = 1
+	hidden = yes
+	
+	#prerequisites = { "tech_mass_drivers_5" }
+	component_set = "MASS_DRIVER_5"
+	projectile_gfx = "gauss_cannon_s"
+	tags = { weapon_type_kinetic }
+	ai_tags = { weapon_role_anti_shield }
+}
+
+weapon_component_template = {
+	type = instant
+	
+	key = "MEDIUM_MASS_DRIVER_5"
+	size = medium
+	entity = "medium_kinetic_gun_entity"
+	
+	icon = "GFX_ship_part_mass_driver_5"
+	icon_frame = 1
+	hidden = yes
+	
+	#prerequisites = { "tech_mass_drivers_5" }
+	component_set = "MASS_DRIVER_5"
+	projectile_gfx = "gauss_cannon_m"
+	tags = { weapon_type_kinetic }
+	ai_tags = { weapon_role_anti_shield }
+}
+
+weapon_component_template = {
+	type = instant
+	
+	key = "LARGE_MASS_DRIVER_5"
+	size = large
+	entity = "large_kinetic_gun_entity"
+	
+	icon = "GFX_ship_part_mass_driver_5"
+	icon_frame = 1
+	hidden = yes
+	
+	#prerequisites = { "tech_mass_drivers_5" }
+	component_set = "MASS_DRIVER_5"
+	projectile_gfx = "gauss_cannon_l"
+	tags = { weapon_type_kinetic }
+	ai_tags = { weapon_role_anti_shield }
+}
+
+
+# ####################
+# Spaceport Mass Driver
+# ####################
+
+weapon_component_template = {
+	key = "SMALL_SPACEPORT_MASS_DRIVER"
+	size = small
+	entity = "small_kinetic_gun_entity"
+	
+	type = instant
+	icon = "GFX_ship_part_mass_driver_1"
+	icon_frame = 1
+	
+	projectile_gfx = "advanced_railgun_l"
+	hidden = yes
+	component_set = "SPACEPORT_MASS_DRIVER"
+	tags = { weapon_type_kinetic }
+}
+
+weapon_component_template = {
+	key = "MEDIUM_SPACEPORT_MASS_DRIVER"
+	size = medium
+	entity = "medium_kinetic_gun_entity"
+	
+	type = instant
+	icon = "GFX_ship_part_mass_driver_1"
+	icon_frame = 1
+	
+	projectile_gfx = "advanced_railgun_l"
+	hidden = yes
+	component_set = "SPACEPORT_MASS_DRIVER"
+	tags = { weapon_type_kinetic }
+}
+
+weapon_component_template = {
+	key = "LARGE_SPACEPORT_MASS_DRIVER"
+	size = large
+	entity = "large_kinetic_gun_entity"
+	
+	type = instant
+	icon = "GFX_ship_part_mass_driver_1"
+	icon_frame = 1
+	
+	projectile_gfx = "advanced_railgun_l"
+	hidden = yes
+	component_set = "SPACEPORT_MASS_DRIVER"
+	tags = { weapon_type_kinetic }
+}
+
+
+# ####################
+#  Kinetic Artillery
+# ####################
+
+# ## Kinetic Artillery 1
+weapon_component_template = {
+	type = instant
+	
+	key = "LARGE_KINETIC_ARTILLERY_1"
+	size = large
+	entity = "large_kinetic_gun_entity"
+	
+	icon = "GFX_ship_part_kinetic_artillery_1"
+	icon_frame = 1
+	hidden = yes
+	
+	#prerequisites = { "tech_kinetic_artillery_1" }
+	component_set = "KINETIC_ARTILLERY_1"
+	projectile_gfx = "kinetic_artillery"
+	tags = { weapon_type_kinetic }
+	ai_tags = { weapon_role_long_range }
+	ai_tag_weight = 0
+	upgrades_to = "LARGE_KINETIC_ARTILLERY_2"
+}
+
+# ## Kinetic Artillery 2
+weapon_component_template = {
+	type = instant
+	
+	key = "LARGE_KINETIC_ARTILLERY_2"
+	size = large
+	entity = "large_kinetic_gun_entity"
+	
+	icon = "GFX_ship_part_kinetic_artillery_2"
+	icon_frame = 1
+	hidden = yes
+	
+	#prerequisites = { "tech_kinetic_artillery_2" }
+	component_set = "KINETIC_ARTILLERY_2"
+	projectile_gfx = "adv_kinetic_artillery"
+	tags = { weapon_type_kinetic }
+	ai_tags = { weapon_role_long_range }
+	ai_tag_weight = 0
+}
+
+
+# ####################
+#  Autocannons
+# ####################
+
+# ## Autocannons 1
+weapon_component_template = {
+	type = instant
+	
+	key = "SMALL_AUTOCANNON_1"
+	size = small
+	entity = "small_kinetic_gun_entity"
+	
+	icon = "GFX_ship_part_autocannon_1"
+	icon_frame = 1
+	hidden = yes
+	
+	#prerequisites = { "tech_autocannons_1" }
+	component_set = "AUTOCANNON_1"
+	projectile_gfx = "auto_cannons_s"
+	tags = { weapon_type_kinetic }
+	ai_tags = { weapon_role_short_range }
+	upgrades_to = "SMALL_AUTOCANNON_2"
+}
+
+
+weapon_component_template = {
+	type = instant
+	
+	key = "MEDIUM_AUTOCANNON_1"
+	size = medium
+	entity = "medium_kinetic_gun_entity"
+	
+	icon = "GFX_ship_part_autocannon_1"
+	icon_frame = 1
+	hidden = yes
+	
+	#prerequisites = { "tech_autocannons_1"}
+	component_set = "AUTOCANNON_1"
+	projectile_gfx = "auto_cannons_m"
+	tags = { weapon_type_kinetic }
+	ai_tags = { weapon_role_short_range }
+	upgrades_to = "MEDIUM_AUTOCANNON_2"
+}
+
+
+weapon_component_template = {
+	type = instant
+	
+	key = "LARGE_AUTOCANNON_1"
+	size = large
+	entity = "large_kinetic_gun_entity"
+	
+	icon = "GFX_ship_part_autocannon_1"
+	icon_frame = 1
+	hidden = yes
+	
+	#prerequisites = { "tech_autocannons_1" }
+	component_set = "AUTOCANNON_1"
+	projectile_gfx = "auto_cannons_l"
+	tags = { weapon_type_kinetic }
+	ai_tags = { weapon_role_short_range }
+	upgrades_to = "LARGE_AUTOCANNON_2"
+}
+
+# ## Autocannons 2
+weapon_component_template = {
+	type = instant
+	
+	key = "SMALL_AUTOCANNON_2"
+	size = small
+	entity = "small_kinetic_gun_entity"
+	
+	icon = "GFX_ship_part_autocannon_2"
+	icon_frame = 1
+	hidden = yes
+	
+	#prerequisites = { "tech_autocannons_2" }
+	component_set = "AUTOCANNON_2"
+	projectile_gfx = "ripper_auto_cannons_s"
+	tags = { weapon_type_kinetic }
+	ai_tags = { weapon_role_short_range }
+	upgrades_to = "SMALL_AUTOCANNON_3"
+}
+
+weapon_component_template = {
+	type = instant
+	
+	key = "MEDIUM_AUTOCANNON_2"
+	size = medium
+	entity = "medium_kinetic_gun_entity"
+	
+	icon = "GFX_ship_part_autocannon_2"
+	icon_frame = 1
+	hidden = yes
+	
+	#prerequisites = { "tech_autocannons_2" }
+	component_set = "AUTOCANNON_2"
+	projectile_gfx = "ripper_auto_cannons_m"
+	tags = { weapon_type_kinetic }
+	ai_tags = { weapon_role_short_range }
+	upgrades_to = "MEDIUM_AUTOCANNON_3"
+}
+
+weapon_component_template = {
+	type = instant
+	
+	key = "LARGE_AUTOCANNON_2"
+	size = large
+	entity = "large_kinetic_gun_entity"
+	
+	icon = "GFX_ship_part_autocannon_2"
+	icon_frame = 1
+	hidden = yes
+	
+	#prerequisites = { "tech_autocannons_2" }
+	component_set = "AUTOCANNON_2"
+	projectile_gfx = "ripper_auto_cannons_l"
+	tags = { weapon_type_kinetic }
+	ai_tags = { weapon_role_short_range }
+	upgrades_to = "LARGE_AUTOCANNON_3"
+}
+
+# ## Autocannons 3
+weapon_component_template = {
+	type = instant
+	
+	key = "SMALL_AUTOCANNON_3"
+	size = small
+	entity = "small_kinetic_gun_entity"
+	
+	icon = "GFX_ship_part_autocannon_3"
+	icon_frame = 1
+	hidden = yes
+	
+	#prerequisites = { "tech_autocannons_3" }
+	component_set = "AUTOCANNON_3"
+	projectile_gfx = "stormfire_auto_cannons_s"
+	tags = { weapon_type_kinetic }
+	ai_tags = { weapon_role_short_range }
+}
+
+weapon_component_template = {
+	type = instant
+	
+	key = "MEDIUM_AUTOCANNON_3"
+	size = medium
+	entity = "medium_kinetic_gun_entity"
+	
+	icon = "GFX_ship_part_autocannon_3"
+	icon_frame = 1
+	hidden = yes
+	
+	#prerequisites = { "tech_autocannons_3" }
+	component_set = "AUTOCANNON_3"
+	projectile_gfx = "stormfire_auto_cannons_m"
+	tags = { weapon_type_kinetic }
+	ai_tags = { weapon_role_short_range }	
+}
+
+weapon_component_template = {
+	type = instant
+	
+	key = "LARGE_AUTOCANNON_3"
+	size = large
+	entity = "large_kinetic_gun_entity"
+	
+	icon = "GFX_ship_part_autocannon_3"
+	icon_frame = 1
+	hidden = yes
+	
+	#prerequisites = { "tech_autocannons_3" }
+	component_set = "AUTOCANNON_3"
+	projectile_gfx = "stormfire_auto_cannons_l"
+	tags = { weapon_type_kinetic }
+	ai_tags = { weapon_role_short_range }
+}

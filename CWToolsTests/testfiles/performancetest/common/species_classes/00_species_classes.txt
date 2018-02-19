@@ -1,0 +1,302 @@
+### STNH 1.8 Compatible ###
+
+
+# Number of entries controlls amount to choose from in designer  I.E.   "mol1" "mol2" "mol3" "mol4"
+# graphical_culture is connected to the looks used for ships and cities, see "common/graphical_culture/"
+# Portraits here are one you can choose from in the character creater. For prescripted races they are grabbed straight from the .gfx file. 
+# playable=(yes/no)/trigger, default is yes, if this species class can is playable
+# randomized=(yes/no)/trigger, default is yes, if this species class is randomized
+# custom_portraits
+#	randomized = trigger, default is no, to specify if portraits are randomized
+#	playable = trigger, default is yes, to specify if portraits are playable
+#	portraits, list portrait keys
+# species_trait_points: base number of species trait points available for this species class
+# species_max_traits: maximum number of traits that species of this class can have (doesn't count those with cost == 0)
+# possible: ethics/government requirements; see common/governments/readme_requirements.txt
+# gender: yes|no (default: yes). whether the species have a gender
+# portrait_modding: yes|no (default: no). whether the portrait can be modified with genemodding/robomodding
+
+
+HUM = {
+	archetype = BIOLOGICAL 
+	playable = { always = no }
+	randomized = no
+
+	portraits = {
+		"human"
+		"humanoid_02"
+		"humanoid_03"
+		"humanoid_04"
+		"humanoid_05"
+	}
+	
+	# These should not be used for randomly generated species
+	non_randomized_portraits = {
+		"human"
+	}
+	
+	graphical_culture = mammalian_01
+	move_pop_sound_effect = "moving_pop_confirmation"
+
+
+} 
+
+PRE_MAM = {
+	archetype = PRESAPIENT
+	playable = { always = no }
+	randomized = no
+
+	portraits = {
+		"pre_mam6"
+		"pre_mam13"
+	}
+
+	graphical_culture = mammalian_01
+	move_pop_sound_effect = "moving_pop_confirmation"
+	uplifted_into = "MAM"
+	uplifted_portraits = 
+	{
+		"mam6"
+		"mam13"	
+	}
+
+
+}
+
+PRE_REP = {
+	archetype = PRESAPIENT
+	playable = { always = no }
+	randomized = no
+
+	portraits = {
+		"pre_rep09"
+		"pre_rep12"
+	}
+
+	graphical_culture = reptilian_01
+	move_pop_sound_effect = "reptilian_pops_move"
+	uplifted_into = "REP"
+	uplifted_portraits = 
+	{
+		"rep9"
+		"rep12"	
+	}
+
+
+}
+
+PRE_AVI = {
+	archetype = PRESAPIENT
+	playable = { always = no }
+	randomized = no
+
+	portraits = {
+		"pre_avi1"
+		"pre_avi12"
+	}
+
+	graphical_culture = avian_01
+	move_pop_sound_effect = "avian_pops_move"
+	uplifted_into = "AVI"
+	uplifted_portraits = 
+	{
+		"avi1"
+		"avi12"	
+	}
+
+
+}
+
+PRE_ART = {
+	archetype = PRESAPIENT
+	playable = { always = no }
+	randomized = no
+
+	portraits = {
+		"pre_art1"
+		"pre_art11"
+		"pre_art12"
+		"pre_art13"
+		"pre_art14"
+		"pre_art15"
+	}
+
+	graphical_culture = arthropoid_01
+	move_pop_sound_effect = "arthopoid_pops_move"
+	uplifted_into = "ART"
+	uplifted_portraits = {
+		"art1"
+		"art11"
+		"art12"
+		"art13"
+		"art14"
+		"art15"
+	}
+
+
+}
+
+PRE_MOL = {
+	archetype = PRESAPIENT
+	playable = { always = no }
+	randomized = no
+
+	portraits = {
+		"pre_mol1"
+		"pre_mol3"
+	}
+
+	graphical_culture = molluscoid_01
+	move_pop_sound_effect = "molluscoid_pops_move"
+	uplifted_into = "MOL"
+	uplifted_portraits = {
+		"mol1"
+		"mol3"
+	}
+
+
+}
+
+AI = {
+	playable = { always = no }
+	randomized = no
+
+	gender = no
+
+	portraits = {
+		"hum_robot_red"
+	}
+	
+	graphical_culture = ai_01
+	move_pop_sound_effect = "moving_pop_confirmation"
+}
+
+
+PRE_FUN = {
+	archetype = PRESAPIENT
+	playable = { always = no }
+	randomized = no
+
+	gender = no
+
+	portraits = {
+		"pre_fun9"
+		"pre_fun13"
+	}
+
+	graphical_culture = fungoid_01
+	move_pop_sound_effect = "fungoid_pops_move"
+	uplifted_into = "FUN"
+	uplifted_portraits = {
+		"fun9"
+		"fun13"
+	}
+
+
+}
+
+SWARM = {
+	archetype = OTHER
+	playable = { always = no }
+	randomized = no
+
+	gender = no
+
+	portraits = {
+		"swarm"
+	}
+	
+	graphical_culture = swarm_01
+	move_pop_sound_effect = "moving_pop_confirmation"
+}
+
+EXD = {
+	archetype = OTHER
+	playable = { always = no }
+	randomized = no
+
+	gender = no
+
+	portraits = {
+		"exd1"
+		"exd2"		# No textures
+		"exd3"		# No textures
+	}
+
+	graphical_culture = extra_dimensional_01
+	move_pop_sound_effect = "moving_pop_confirmation"
+}
+
+ROBOT = {
+	archetype = ROBOT
+	playable = { always = no }
+	randomized = no
+	robotic = yes
+	gender = no
+	use_climate_preference = no
+	portrait_modding = yes
+	
+	leader_age_min = 2
+	leader_age_max = 10
+	
+	custom_portraits = {
+		randomized = { host_has_dlc = "Synthetic Dawn Story Pack" }
+		playable = { host_has_dlc = "Synthetic Dawn Story Pack" }
+		portraits = {
+			"sd_hum_robot"
+			"sd_mam_robot"
+			"sd_rep_robot"
+			"sd_avi_robot"
+			"sd_art_robot"
+			"sd_mol_robot"
+			"sd_fun_robot"
+			"sd_pla_robot"
+		}
+	}
+
+	custom_portraits = { # use custom_portraits instead of portraits so we can put them after the custom_portraits above
+		randomized = { always = yes }
+		playable = { always = yes }
+		portraits = {
+			"default_robot"
+		}
+	}
+	
+	graphical_culture = ai_01
+	move_pop_sound_effect = "robot_pops_move"
+
+	
+}
+
+MACHINE = {
+	archetype = MACHINE
+	playable = { always = no }
+	randomized = no
+	possible = { authority = { OR = { value = auth_machine_intelligence text = SPECIES_CLASS_MUST_USE_MACHINE_INTELLIGENCE } } }
+	possible_secondary = { always = no text = SECONDARY_SPECIES_CLASS_INVALID }
+
+	robotic = yes
+	gender = no
+	use_climate_preference = no
+	portrait_modding = yes
+	
+	leader_age_min = 2
+	leader_age_max = 10
+
+	portraits = {
+		"sd_hum_robot"
+		"sd_mam_robot"
+		"sd_rep_robot"
+		"sd_avi_robot"
+		"sd_art_robot"
+		"sd_mol_robot"
+		"sd_fun_robot"
+		"sd_pla_robot"
+		"default_robot"
+	}
+
+	graphical_culture = mammalian_01
+	move_pop_sound_effect = "robot_pops_move"
+
+	
+}

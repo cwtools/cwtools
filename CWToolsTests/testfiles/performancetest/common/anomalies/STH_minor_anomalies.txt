@@ -1,0 +1,15 @@
+########################
+# STH anomaly List
+########################
+# potential = ship scope
+
+# All discoveries assigned weight 1 unless otherwise stated
+#these are different anomalies that occur in each category.
+
+# Ancient Probe
+anomaly = {
+	event = STH_minor_anomaly.1
+	category = "STH_orbital_signal_source_1_category"
+	weight = 1
+	potential = { always = yes }
+}

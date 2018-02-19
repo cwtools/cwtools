@@ -1,0 +1,47 @@
+utility_component_template = {
+	key = "CURATOR_EXPLORER_LAB"
+	size = medium
+	icon = "GFX_ship_part_curator_lab"
+	icon_frame = 1
+	power = 0
+	cost = 0
+	science_lab_speed = 1
+	science_lab_level = 1
+	class_restriction = { shipclass_science_ship }
+	###prerequisites = { "tech_curator_lab" }
+	hidden = yes
+	ship_modifier = {
+		science_ship_survey_speed = 0.25
+	}
+
+	component_set = "science_labs"
+	
+	ai_weight = {
+		weight = 100
+	}
+}
+
+utility_component_template = {
+	key = "CURATOR_ARCHEOLOGY_LAB"
+	size = medium
+	icon = "GFX_ship_part_archeology_lab"
+	icon_frame = 1
+	power = 0
+	cost = 0
+	science_lab_speed = 1
+	science_lab_level = 1
+	class_restriction = { shipclass_science_ship }
+	###prerequisites = { "tech_archeology_lab" }
+	hidden = yes
+	ship_modifier = {
+		ship_anomaly_fail_risk = -0.05
+		ship_anomaly_generation_chance_mult = 0.05
+		ship_anomaly_research_speed_mult = 0.25
+	}
+
+	component_set = "science_labs"
+	
+	ai_weight = {
+		weight = 100
+	}
+}

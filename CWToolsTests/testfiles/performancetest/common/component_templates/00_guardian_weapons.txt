@@ -1,0 +1,440 @@
+# ####################
+#  Energy Lance
+# ####################
+
+# ## Stellarite Titan Laser
+weapon_component_template = {
+	key = "STELLARITE_BEAM"
+	size = extra_large
+	entity = "invisible_turret_entity"
+	type = instant
+	prio_projectile = yes
+	
+	hidden = yes
+	
+	icon = "GFX_ship_part_energy_lance_2"
+	icon_frame = 1
+	
+	firing_arc = 15.0
+	min_range = 30.0
+	static_rotation = yes
+	
+	target_weights = {
+		npc_warship_01 = 50000
+		space_dragon_baby = 50000
+		massive_ship_fallen_empire = 50000
+		large_ship_fallen_empire = 50000
+		battleship = 50000
+		cruiser = 1500
+		destroyer = 500
+		small_ship_fallen_empire = 500
+		corvette = 100
+	}
+	
+	tags = { weapon_type_energy }
+	projectile_gfx = "stellarite_titan_laser"
+}
+
+weapon_component_template = {
+	key = "STELLARITE_MISSILE"
+	size = large
+	entity = "invisible_turret_entity"
+	type = missile
+
+	hidden = yes
+	use_ship_kill_target = no
+	
+	icon = "GFX_ship_part_energy_torpedo_2"
+	icon_frame = 1
+	#color = { 0.1 1.0 0.1 1 }
+	
+	target_weights = {
+		npc_warship_01 = 2500
+		space_dragon_baby = 2500	
+		massive_ship_fallen_empire = 2500
+		large_ship_fallen_empire = 2500	
+		battleship = 2500
+		cruiser = 2500
+		destroyer = 500
+		small_ship_fallen_empire = 500
+		corvette = 100
+	}
+	
+	tags = { weapon_type_energy }
+	projectile_gfx = "stellarite_missile"
+}
+
+weapon_component_template = {
+	key = "STELLARITE_PLASMA"
+	size = large
+	entity = "invisible_turret_entity"
+	type = instant
+
+	hidden = yes
+	use_ship_kill_target = no
+	
+	icon = "GFX_ship_part_plasma_3"
+	icon_frame = 1
+	#color = { 0.1 1.0 0.1 1 }
+	
+	target_weights = {
+		cruiser = 2500
+		destroyer = 1500
+		small_ship_fallen_empire = 1500
+		battleship = 1000
+		npc_warship_01 = 1000
+		space_dragon_baby = 1000		
+		massive_ship_fallen_empire = 1000
+		large_ship_fallen_empire = 1000		
+		corvette = 500	
+	}
+	
+	tags = { weapon_type_energy }
+	projectile_gfx = "stellarite_plasma"
+}
+
+weapon_component_template = {
+	key = "STELLARITE_LASER"
+	size = point_defence
+	entity = "invisible_turret_entity"
+	type = point_defence
+
+	hidden = yes
+	
+	icon = "GFX_ship_part_laser_5"
+	icon_frame = 1
+	#color = { 0.1 1.0 0.1 1 }
+	
+	tags = { weapon_type_point_defense weapon_type_energy }
+	projectile_gfx = "stellarite_pd"
+}
+
+weapon_component_template = {
+	key = "TECHNO_WEAPON"
+	size = large
+	entity = "invisible_turret_entity"
+	type = instant
+	
+	use_ship_kill_target = no
+	
+	icon = "GFX_ship_part_energy_lance_2"
+	icon_frame = 1
+	#color = { 0.1 1.0 0.1 1 }
+	
+	hidden = yes
+	#component_set = "FALLEN_EMPIRE_SPACEPORT_LANCE"
+	projectile_gfx = "technosphere_weapon"
+	tags = { weapon_type_energy }
+	target_weights = {
+		npc_warship_01 = 50000
+		space_dragon_baby = 50000
+		massive_ship_fallen_empire = 50000
+		large_ship_fallen_empire = 50000
+		battleship = 50000
+		cruiser = 1500
+		destroyer = 500
+		corvette = 100
+	}
+}
+
+weapon_component_template = {
+	key = "TECHNO_PD"
+	size = point_defence
+	entity = "invisible_turret_entity"
+	type = point_defence
+
+	hidden = yes
+	
+	icon = "GFX_ship_part_laser_5"
+	icon_frame = 1
+	#color = { 0.1 1.0 0.1 1 }
+	
+	tags = { weapon_type_point_defense weapon_type_energy }
+	projectile_gfx = "gamma_laser_s"
+}
+
+weapon_component_template = {
+	key = "DRAGON_WEAPON"
+	size = large
+	entity = "invisible_turret_entity"
+	type = instant
+	prio_projectile = yes
+	
+	icon = "GFX_ship_part_energy_lance_2"
+	icon_frame = 1
+	#color = { 0.1 1.0 0.1 1 }
+	
+	firing_arc = 15.0
+	min_range = 30.0
+	static_rotation = yes
+	
+	hidden = yes
+	#component_set = "FALLEN_EMPIRE_SPACEPORT_LANCE"
+	projectile_gfx = "dragon_weapon"
+	tags = { weapon_type_energy }
+	target_weights = {
+		npc_warship_01 = 50000
+		space_dragon_baby = 50000
+		massive_ship_fallen_empire = 50000
+		large_ship_fallen_empire = 50000
+		battleship = 50000
+		cruiser = 1500
+		destroyer = 500
+		corvette = 100
+	}
+}
+
+weapon_component_template = {
+	key = "DRAGON_SECONDARY_WEAPON"
+	size = medium
+	entity = "invisible_turret_entity"
+	type = instant
+	
+	icon = "GFX_ship_part_energy_lance_2"
+	icon_frame = 1
+	#color = { 0.1 1.0 0.1 1 }
+	
+	hidden = yes
+	use_ship_kill_target = no
+	
+	projectile_gfx = "dragon_wing_weapon"
+	tags = { weapon_type_energy }
+	target_weights = {
+		cruiser = 2500
+		destroyer = 1500
+		small_ship_fallen_empire = 1500
+		battleship = 1000
+		npc_warship_01 = 1000
+		space_dragon_baby = 1000		
+		massive_ship_fallen_empire = 1000
+		large_ship_fallen_empire = 1000				
+		corvette = 500	
+	}
+}
+
+weapon_component_template = {
+	key = "DRAGON_TERTIARY_WEAPON"
+	size = point_defence
+	entity = "invisible_turret_entity"
+	type = point_defence
+	
+	icon = "GFX_ship_part_energy_lance_2"
+	icon_frame = 1
+	#color = { 0.1 1.0 0.1 1 }
+	
+	hidden = yes
+	projectile_gfx = "arc_emitter"
+	tags = { weapon_type_point_defense weapon_type_energy }
+}
+
+weapon_component_template = {
+	key = "DIMENSIONAL_HORROR_PRIMARY_WEAPON"
+	size = extra_large
+	entity = "invisible_turret_entity"
+	type = instant
+	prio_projectile = yes
+	
+	icon = "GFX_ship_part_energy_lance_2"
+	icon_frame = 1
+	#color = { 0.1 1.0 0.1 1 }
+
+	firing_arc = 15.0
+	min_range = 30.0
+	static_rotation = yes
+	
+	hidden = yes
+	#component_set = "FALLEN_EMPIRE_SPACEPORT_LANCE"
+	projectile_gfx = "dimensional_titan_laser"
+	tags = { weapon_type_energy }
+	
+	target_weights = {
+		npc_warship_01 = 50000
+		space_dragon_baby = 50000
+		massive_ship_fallen_empire = 50000
+		large_ship_fallen_empire = 50000
+		battleship = 50000
+		cruiser = 1500
+		destroyer = 500
+		small_ship_fallen_empire = 500
+		corvette = 100
+	}
+}
+
+weapon_component_template = {
+	key = "DIMENSIONAL_HORROR_LARGE_WEAPON"
+	size = large
+	entity = "invisible_turret_entity"
+	type = instant
+	icon = "GFX_ship_part_laser_1"
+	icon_frame = 1
+	projectile_gfx = "dimensional_horror_spike_weapon"
+	tags = { weapon_type_energy }
+	ai_tags = { weapon_role_anti_armor }
+	hidden = yes
+	use_ship_kill_target = no
+	
+	target_weights = {
+		cruiser = 5000
+		npc_warship_01 = 50000
+		space_dragon_baby = 50000
+		massive_ship_fallen_empire = 50000
+		large_ship_fallen_empire = 50000
+		battleship = 50000
+		destroyer = 1000
+		corvette = 500
+	}
+}
+
+weapon_component_template = {
+	key = "DIMENSIONAL_HORROR_MEDIUM_WEAPON"
+	size = large
+	entity = "invisible_turret_entity"
+	type = instant
+	icon = "GFX_ship_part_laser_1"
+	icon_frame = 1
+	projectile_gfx = "dimensional_horror_spike_weapon"
+	tags = { weapon_type_energy }
+	ai_tags = { weapon_role_anti_armor }
+	hidden = yes
+	use_ship_kill_target = no
+	
+	target_weights = {
+		cruiser = 50000
+		destroyer = 50000
+		small_ship_fallen_empire = 50000
+		battleship = 1000
+		npc_warship_01 = 1000
+		space_dragon_baby = 1000		
+		massive_ship_fallen_empire = 1000
+		large_ship_fallen_empire = 1000			
+		corvette = 5000
+	}
+}
+
+weapon_component_template = {
+	key = "DIMENSIONAL_HORROR_SMALL_WEAPON"
+	size = small
+	entity = "invisible_turret_entity"
+	type = instant
+	icon = "GFX_ship_part_laser_1"
+	icon_frame = 1
+	projectile_gfx = "dimensional_horror_spike_weapon"
+	tags = { weapon_type_energy }
+	ai_tags = { weapon_role_anti_armor }
+	hidden = yes
+	use_ship_kill_target = no
+	
+	target_weights = {
+		corvette = 50000
+		destroyer = 2500
+		small_ship_fallen_empire = 2500
+		cruiser = 1500
+		battleship = 500
+		npc_warship_01 = 500
+		space_dragon_baby = 500		
+		massive_ship_fallen_empire = 500
+		large_ship_fallen_empire = 500		
+	}
+}
+
+weapon_component_template = {
+	key = "DIMENSIONAL_HORROR_PD"
+	size = point_defence
+	entity = "invisible_turret_entity"
+	type = point_defence
+	
+	icon = "GFX_ship_part_energy_lance_2"
+	icon_frame = 1
+	#color = { 0.1 1.0 0.1 1 }
+	
+	hidden = yes
+	projectile_gfx = "dimensional_horror_spike_weapon"
+	tags = { weapon_type_point_defense weapon_type_energy }
+}
+
+### Hive asteroid fighter
+
+strike_craft_component_template = {
+	key = "HIVE_STRIKE_CRAFT"
+	size = LARGE
+	entity = "hive_asteroid_05_entity"
+	cost = 50
+	power = -50
+
+	count = 20
+	regeneration_per_day = 0
+	launch_time = 0.2
+	
+	damage = { min = 2 max = 4 }
+	cooldown = 4.0
+	range = 40
+	attack_range = 120
+	accuracy = 1.0
+	
+	health = 50
+	armor = 10
+	shield = 0
+	evasion = 0.40
+	
+	speed = 5.0
+	rotation_speed = 0.3
+	acceleration = 2.5
+	
+	shield_damage = 1.0
+	shield_penetration = 1
+	armor_penetration = 0.66
+	
+	ship_behavior = "bombers_behavior"
+	
+	weapon_type = instant
+	projectile_gfx = "small_space_amoeba_weapon"
+	
+	component_set = "SWARM_STRIKE_CRAFT_1"
+	icon = "GFX_ship_part_swarm_strike_craft_1"
+	icon_frame = 1
+	tags = { weapon_type_strike_craft }
+
+	hidden = yes
+}
+
+weapon_component_template = {
+	key = "WRAITH_RED_LASER"
+	size = large
+	entity = "large_laser_gun_entity"
+	type = instant
+	icon = "GFX_ship_part_laser_1"
+	icon_frame = 1
+	projectile_gfx = "infrared_laser_l"
+	tags = { weapon_type_energy }
+	ai_tags = { weapon_role_anti_armor }
+
+	hidden = yes
+}
+
+weapon_component_template = {
+	key = "WRAITH_BLUE_LASER"
+	size = large
+	entity = "large_laser_gun_entity"
+	type = instant
+	icon = "GFX_ship_part_laser_1"
+	icon_frame = 1
+	projectile_gfx = "blue_laser_l"
+	tags = { weapon_type_energy }
+	ai_tags = { weapon_role_anti_armor }
+
+	hidden = yes
+}
+
+weapon_component_template = {
+	key = "WRAITH_YELLOW_LASER"
+	size = large
+	entity = "large_laser_gun_entity"
+	type = instant
+	icon = "GFX_ship_part_laser_1"
+	icon_frame = 1
+	projectile_gfx = "gamma_laser_l"
+	tags = { weapon_type_energy }
+	ai_tags = { weapon_role_anti_armor }
+
+	hidden = yes
+}

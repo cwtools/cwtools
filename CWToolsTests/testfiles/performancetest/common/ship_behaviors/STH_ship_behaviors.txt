@@ -1,0 +1,153 @@
+#this file ( and all files in this folder ) is reloadable with console command "reload behavior"
+#filewatcher is enabled for all files in this folder
+
+ship_behavior = {
+	name = "charge_default"
+	preferred_attack_range = min
+	formation_distance = 30
+	return_to_formation_distance = 20
+	
+	collision_awareness = 0.5
+	collision_strafe = 0.1							#collision_strafe allows the ship to move in any direction while colliding with another
+	collision_radius = 1.0
+	attack_move_pattern = none
+	passive_move_pattern = charge
+	
+	desc = "charge_default_behavior_desc"
+	
+	targeting = {
+		component_target_weight_mult	= 1.0		#score += <weights based on target ship size from components> * <component_target_weight_mult>
+		keep_previous_target_bonus		= 100		#flat bonus for keeping previous target
+		damage_value					= 5			#score += estimated damage dealt ( including damage to shields ) * <damage_value>
+		low_health_bonus				= 500		#flat bonus if estimated damage will kill the target in a few shots
+		shield_focus_value				= 5			#score += estimated shield damage dealt * shield damage bonus * <shield_focus_value>
+		armor_focus_value				= 5			#score += enemy armor * shield penetration value * <armor_focus_value>
+		already_incoming_damage_penalty = 200		#score -= ( fleet total estimated damage to enemy / enemy max HP ) * <already_incoming_damage_penalty>.
+		distance_to_fleet_penalty		= 0		#score -= manhattan-distance between enemy and fleet * <distance_to_fleet_penalty>
+		size_difference_penalty			= 0			#score -= Abs( ship size - enemy ship size ) * <size_difference_penalty>. "Pick a fight with someone your own size!"
+		transport_target_penalty		= 50000		#if( target is transport ) score -= <transport_target_penalty>
+		civilian_target_penalty			= 100000	#if( target is civilian ) score -= <civilian_target_penalty>
+		#angle_to_target_penalty			= 1000	
+		} 
+}
+ship_behavior = {
+	name = "picket_mid_range_default"
+	preferred_attack_range = median		#max/min/median/12/412..	#this is the distance to target the ship wants to keep when attacking
+	
+	formation_distance = 10				#when orbing/following ship will try to keep this distance to assigned position	
+	return_to_formation_distance = 30	#when attacking the ship will switch to passive mode if distance to assigned position is greater that this
+
+	collision_awareness = 0.75			#how much we try to avoid other ships
+	collision_strafe = 0.5				#collision_strafe allows the ship to move in any direction while colliding with another
+	collision_radius = 1.0
+	attack_move_pattern = none			#stationary/charge/follow/stationary/none
+	passive_move_pattern = charge
+	
+	desc = "picket_mid_range_default_behavior_desc"
+	
+	targeting = {
+		component_target_weight_mult	= 1.0		#score += <weights based on target ship size from components> * <component_target_weight_mult>
+		keep_previous_target_bonus		= 500		#flat bonus for keeping previous target
+		damage_value					= 5			#score += estimated damage dealt ( including damage to shields ) * <damage_value>
+		low_health_bonus				= 5000		#flat bonus if estimated damage will kill the target in a few shots
+		shield_focus_value				= 5			#score += estimated shield damage dealt * shield damage bonus * <shield_focus_value>
+		armor_focus_value				= 5			#score += enemy armor * shield penetration value * <armor_focus_value>
+		already_incoming_damage_penalty = 0		#score -= ( fleet total estimated damage to enemy / enemy max HP ) * <already_incoming_damage_penalty>.
+		distance_to_fleet_penalty		= 30		#score -= manhattan-distance between enemy and fleet * <distance_to_fleet_penalty>
+		size_difference_penalty			= 1000		#score -= Abs( ship size - enemy ship size ) * <size_difference_penalty>. "Pick a fight with someone your own size!"
+		transport_target_penalty		= 50000		#if( target is transport ) score -= <transport_target_penalty>
+		civilian_target_penalty			= 100000	#if( target is civilian ) score -= <civilian_target_penalty>
+		#angle_to_target_penalty			= 1000	
+		}
+}
+
+
+ship_behavior = {
+	name = "brawler_mid_range_default"
+	preferred_attack_range = median
+	formation_distance = 10
+	return_to_formation_distance = 30
+	
+	collision_awareness = 0.5
+	collision_strafe = 0.1							#collision_strafe allows the ship to move in any direction while colliding with another
+	collision_radius = 1.0
+	attack_move_pattern = orbit
+	passive_move_pattern = charge
+	
+	desc = "brawler_mid_range_default_behavior_desc"
+	
+	targeting = {
+		component_target_weight_mult	= 1.0		#score += <weights based on target ship size from components> * <component_target_weight_mult>
+		keep_previous_target_bonus		= 50		#flat bonus for keeping previous target
+		damage_value					= 5			#score += estimated damage dealt ( including damage to shields ) * <damage_value>
+		low_health_bonus				= 0		#flat bonus if estimated damage will kill the target in a few shots
+		shield_focus_value				= 5			#score += estimated shield damage dealt * shield damage bonus * <shield_focus_value>
+		armor_focus_value				= 5			#score += enemy armor * shield penetration value * <armor_focus_value>
+		already_incoming_damage_penalty = 200		#score -= ( fleet total estimated damage to enemy / enemy max HP ) * <already_incoming_damage_penalty>.
+		distance_to_fleet_penalty		= 5		#score -= manhattan-distance between enemy and fleet * <distance_to_fleet_penalty>
+		size_difference_penalty			= 0			#score -= Abs( ship size - enemy ship size ) * <size_difference_penalty>. "Pick a fight with someone your own size!"
+		transport_target_penalty		= 50000		#if( target is transport ) score -= <transport_target_penalty>
+		civilian_target_penalty			= 100000	#if( target is civilian ) score -= <civilian_target_penalty>
+		#angle_to_target_penalty			= 1000	
+		}
+}
+
+ship_behavior = {
+	name = "skirmisher_mid_range_default"
+	preferred_attack_range = median
+	formation_distance = 10
+	return_to_formation_distance = 30
+	
+	collision_awareness = 0.5
+	collision_strafe = 0.1							#collision_strafe allows the ship to move in any direction while colliding with another
+	collision_radius = 1.0
+	attack_move_pattern = orbit
+	passive_move_pattern = charge
+	
+	desc = "skirmisher_mid_range_default_behavior_desc"
+	
+	targeting = {
+		component_target_weight_mult	= 1.0		#score += <weights based on target ship size from components> * <component_target_weight_mult>
+		keep_previous_target_bonus		= 1000		#flat bonus for keeping previous target
+		damage_value					= 5			#score += estimated damage dealt ( including damage to shields ) * <damage_value>
+		low_health_bonus				= 5000		#flat bonus if estimated damage will kill the target in a few shots
+		shield_focus_value				= 5			#score += estimated shield damage dealt * shield damage bonus * <shield_focus_value>
+		armor_focus_value				= 5			#score += enemy armor * shield penetration value * <armor_focus_value>
+		already_incoming_damage_penalty = 200		#score -= ( fleet total estimated damage to enemy / enemy max HP ) * <already_incoming_damage_penalty>.
+		distance_to_fleet_penalty		= 5		#score -= manhattan-distance between enemy and fleet * <distance_to_fleet_penalty>
+		size_difference_penalty			= 0			#score -= Abs( ship size - enemy ship size ) * <size_difference_penalty>. "Pick a fight with someone your own size!"
+		transport_target_penalty		= 50000		#if( target is transport ) score -= <transport_target_penalty>
+		civilian_target_penalty			= 100000	#if( target is civilian ) score -= <civilian_target_penalty>
+		#angle_to_target_penalty			= 1000	
+		}
+}
+
+
+ship_behavior = {
+	name = "long_range_sniper"
+	preferred_attack_range = max
+	formation_distance = 110
+	return_to_formation_distance = 60
+	collision_awareness = 0.2
+	collision_radius = 1.0							#collision_radius is a multiplier on the radius specified in the ship size
+	collision_strafe = 2.5							#collision_strafe allows the ship to move in any direction while colliding with another
+	attack_move_pattern = stay_at_range
+	passive_move_pattern = charge
+	
+	desc = "long_range_sniper_behavior_desc"
+	
+	targeting = {
+		component_target_weight_mult	= 2.0		#score += <weights based on target ship size from components> * <component_target_weight_mult>
+		keep_previous_target_bonus		= 1000		#flat bonus for keeping previous target
+		damage_value					= 2.5		#score += estimated damage dealt ( including damage to shields ) * <damage_value>
+		low_health_bonus				= 0			#flat bonus if estimated damage will kill the target in a few shots
+		shield_focus_value				= 5			#score += estimated shield damage dealt * shield damage bonus * <shield_focus_value>
+		armor_focus_value				= 5			#score += enemy armor * shield penetration value * <armor_focus_value>
+		already_incoming_damage_penalty = 150		#score -= ( fleet total estimated damage to enemy / enemy max HP ) * <already_incoming_damage_penalty>.
+		distance_to_fleet_penalty		= 0			#score -= manhattan-distance between enemy and fleet * <distance_to_fleet_penalty>
+		size_difference_penalty			= 50		#score -= Abs( ship size - enemy ship size ) * <size_difference_penalty>. "Pick a fight with someone your own size!"
+		transport_target_penalty		= 50000		#if( target is transport ) score -= <transport_target_penalty>
+		civilian_target_penalty			= 100000	#if( target is civilian ) score -= <civilian_target_penalty>
+		#angle_to_target_penalty			= 10000		#score -= <#angle_to_target_penalty> * ( angle to target / 180 )
+	}
+}

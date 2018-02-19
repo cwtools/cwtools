@@ -1,0 +1,191 @@
+triggered_wary_respect = {
+	trigger = {
+		AND = {
+			OR = {
+				has_country_flag = cardassian_union 
+				has_country_flag = breen_confederacy
+				has_country_flag = tholian_assembly
+			}
+			OR = {
+				FROM = { has_country_flag = cardassian_union  }
+				FROM = { has_country_flag = breen_confederacy  }
+				FROM = { has_country_flag = tholian_assembly  }
+			}
+		}
+	}
+	opinion = { base = 25 }
+}
+
+triggered_founder_infiltrator = {
+	trigger = {
+		any_owned_leader = {
+			has_leader_flag = "changeling_infiltrator" leader_class = ruler
+		}
+		from = {
+			is_changeling_empire = yes
+		}
+	}
+	opinion = { base = 50 }
+}
+
+triggered_hardcoded_enemies = {
+#ADD LOCALISATION
+	trigger = {
+		OR = {
+			AND = {
+				has_country_flag = pralor_auxiliary
+				FROM = { has_country_flag = cravic_imperative }
+			}
+			AND = {
+				has_country_flag = cravic_imperative
+				FROM = { has_country_flag = pralor_auxiliary }
+			}
+		}
+	}
+	opinion = { base = -1000 }
+}
+
+
+
+triggered_IME_members = {
+#ADD LOCALISATION
+	trigger = {
+		has_country_flag = IME_member
+		FROM = { has_country_flag = IME_member }
+	}
+	opinion = { base = 10 }
+}
+
+triggered_assimilators = {
+#ADD LOCALISATION
+	trigger = {
+		NOT = { has_valid_civic = civic_assimilators }
+		FROM = { has_valid_civic = civic_assimilators }
+	}
+	opinion = { base = -1000 }
+}
+
+triggered_federation_membership = {
+#ADD LOCALISATION
+	trigger = {
+		has_country_flag = united_federation_of_planets
+		FROM = { OR = { is_subject_type = member_world is_subject_type = member_world_human } }
+	}
+	opinion = { base = 50 }
+}
+
+#
+triggered_vulcan_earth_friendship = {
+#ADD LOCALISATION
+	trigger = {
+		OR = {
+			AND = { has_country_flag = united_earth FROM = { has_country_flag = vulcan_high_command } }
+			AND = { has_country_flag = vulcan_high_command FROM = { has_country_flag = united_earth } }
+		}
+	}
+	opinion = { base = 25 }
+}
+
+triggered_romulan_vulcan_animosity = {
+#ADD LOCALISATION
+	trigger = {
+		OR = {
+			AND = { has_country_flag = romulan_star_empire FROM = { has_country_flag = vulcan_high_command } }
+			AND = { has_country_flag = vulcan_high_command FROM = { has_country_flag = romulan_star_empire } }
+		}
+	}
+	opinion = { base = -25 }
+}
+
+triggered_klingon_animosity = {
+#ADD LOCALISATION
+	trigger = {
+		NOT = { has_country_flag = honourable_warriors } 
+		FROM = { is_species_class = KDF }
+	}
+	opinion = { base = -25 }
+}
+
+# Authoritians aren't loved
+triggered_opinion_authoritian = {
+	trigger = {
+		has_ethic = "ethic_authoritarian"
+		has_ethic = "ethic_fanatic_authoritarian"
+		FROM = {
+			OR = {
+				has_ethic = "ethic_authoritarian"
+				has_ethic = "ethic_fanatic_authoritarian"
+			}
+		}
+	}
+	opinion = { base = -5 }
+}
+
+# Militarists aren't loved
+triggered_opinion_military = {
+	trigger = {
+		has_ethic = "ethic_militarist"
+		has_ethic = "ethic_fanatic_militarist"
+		FROM = {
+			OR = {
+				has_ethic = "ethic_militarist"
+				has_ethic = "ethic_fanatic_militarist"
+			}
+		}
+	}
+	opinion = { base = -5 }
+}
+
+# Police state
+triggered_opinion_police_state = {
+	trigger = {
+		OR = {
+			has_ethic = "ethic_egalitarian"
+			has_ethic = "ethic_fanatic_egalitarian"
+			}
+		has_authority = auth_democratic	
+		FROM = { has_civic = civic_police_state }
+		}
+	opinion = { base = -20 }
+}
+
+# Slaver guild
+triggered_opinion_slaver_guilds = {
+	trigger = {
+		has_authority = auth_democratic	
+		FROM = { has_civic = civic_slaver_guilds }
+		}
+	opinion = { base = -30 }
+}
+
+# Imperial cult
+triggered_opinion_imperial_cult = {
+	trigger = {
+		OR = {
+			has_ethic = "ethic_egalitarian"
+			has_ethic = "ethic_fanatic_egalitarian"
+			}
+		has_authority = auth_democratic	
+		FROM = { has_civic = civic_imperial_cult }
+		}
+	opinion = { base = -10 }
+}
+
+
+# Cunning
+opinion_cunning_species = {
+	opinion = {
+		base = 0
+		modifier = {
+			add = -25
+			FROM = {
+				exists = ruler
+				ruler = {
+					species = {
+						has_trait = "trait_cunning"		
+					}
+				}			
+			}
+		}		
+	}
+}

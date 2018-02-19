@@ -1,0 +1,371 @@
+###The global flags used in these system initializers are used in the relevant map files to provide a global flag identifying which map has been selected. 
+# Signum_mm - Sets flag to identify the map. Only use in main (full galaxy) map. Do not delete.		
+signum_mm = {			
+	class = "rl_standard_stars"		
+	planet = { count = 1 class = star orbit_distance = 0 orbit_angle = 1 size = {min = 20 max = 40 } has_ring = no }		
+	change_orbit = { min = 100 max = 150}	
+	planet = {		
+		count = 1
+		orbit_distance = {min = 30 max = 40}	
+		class = random	
+		orbit_angle = { min = 90 max = 270 }	
+		size = { min = 20 max = 40 }	
+		init_effect = {
+			set_global_flag = sth_main_map
+		}
+		moon = {	
+			count = { min = 0 max = 4 }
+			class = random
+			orbit_distance = { min = 6 max = 12 }
+			size = { min = 8 max = 12 }
+		}	
+	}
+	planet = {		
+		count = { min = 0 max = 8}	
+		orbit_distance = {min = 30 max = 40}	
+		class = random	
+		orbit_angle = { min = 90 max = 270 }	
+		size = { min = 20 max = 40 }	
+		moon = { count = { min = 0 max = 4 } class = random orbit_distance = { min = 6 max = 12 } size = { min = 8 max = 12 } }	
+	}	
+}
+# Signum_om - Sets flag to identify the map. Only use in original map. Do not delete. (Not that the original map is obsolete, so this is no longer relevant)		
+	name = "Signum"		
+	class = "rl_standard_stars"		
+	planet = { count = 1 class = star orbit_distance = 0 orbit_angle = 1 size = {min = 20 max = 40 } has_ring = no }		
+	change_orbit = { min = 100 max = 150}	
+	planet = {		
+		count = 1
+		orbit_distance = {min = 30 max = 40}	
+		class = random	
+		orbit_angle = { min = 90 max = 270 }	
+		size = { min = 20 max = 40 }	
+		init_effect = {
+			set_global_flag = sth_original_map
+		}
+		moon = {	
+			count = { min = 0 max = 4 }
+			class = random
+			orbit_distance = { min = 6 max = 12 }
+			size = { min = 8 max = 12 }
+		}	
+	}
+	planet = {		
+		count = { min = 0 max = 8}	
+		orbit_distance = {min = 30 max = 40}	
+		class = random	
+		orbit_angle = { min = 90 max = 270 }	
+		size = { min = 20 max = 40 }	
+		moon = { count = { min = 0 max = 4 } class = random orbit_distance = { min = 6 max = 12 } size = { min = 8 max = 12 } }	
+	}		
+}
+# Signum_ab1 - Sets flag to identify the map. Only use in main alpha/beta map. Do not delete.		
+signum_ab1 = {			
+	class = "rl_standard_stars"		
+	planet = { count = 1 class = star orbit_distance = 0 orbit_angle = 1 size = {min = 20 max = 40 } has_ring = no }		
+	change_orbit = { min = 100 max = 150}	
+	planet = {		
+		count = 1
+		orbit_distance = {min = 30 max = 40}	
+		class = random	
+		orbit_angle = { min = 90 max = 270 }	
+		size = { min = 20 max = 40 }	
+		init_effect = {
+			set_global_flag = sth_alphabeta_map
+		}
+		moon = {	
+			count = { min = 0 max = 4 }
+			class = random
+			orbit_distance = { min = 6 max = 12 }
+			size = { min = 8 max = 12 }
+		}	
+	}
+	planet = {		
+		count = { min = 0 max = 8}	
+		orbit_distance = {min = 30 max = 40}	
+		class = random	
+		orbit_angle = { min = 90 max = 270 }	
+		size = { min = 20 max = 40 }	
+		moon = { count = { min = 0 max = 4 } class = random orbit_distance = { min = 6 max = 12 } size = { min = 8 max = 12 } }	
+	}		
+}
+# Signum_ab2 - Sets flag to identify the map. Only use in alpha/beta (600) map. Do not delete.		
+signum_ab2 = {			
+	class = "rl_standard_stars"		
+	planet = { count = 1 class = star orbit_distance = 0 orbit_angle = 1 size = {min = 20 max = 40 } has_ring = no }		
+	change_orbit = { min = 100 max = 150}	
+	planet = {		
+		count = 1
+		orbit_distance = {min = 30 max = 40}	
+		class = random	
+		orbit_angle = { min = 90 max = 270 }	
+		size = { min = 20 max = 40 }	
+		init_effect = {
+			set_global_flag = sth_alphabeta_600_map
+		}
+		moon = {	
+			count = { min = 0 max = 4 }
+			class = random
+			orbit_distance = { min = 6 max = 12 }
+			size = { min = 8 max = 12 }
+		}	
+	}
+	planet = {		
+		count = { min = 0 max = 8}	
+		orbit_distance = {min = 30 max = 40}	
+		class = random	
+		orbit_angle = { min = 90 max = 270 }	
+		size = { min = 20 max = 40 }	
+		moon = { count = { min = 0 max = 4 } class = random orbit_distance = { min = 6 max = 12 } size = { min = 8 max = 12 } }	
+	}		
+}
+# Signum_ab3 - Sets flag to identify the map. Only use in alpha/beta (450) map. Do not delete.		
+signum_ab3 = {			
+	class = "rl_standard_stars"		
+	planet = { count = 1 class = star orbit_distance = 0 orbit_angle = 1 size = {min = 20 max = 40 } has_ring = no }		
+	change_orbit = { min = 100 max = 150}	
+	planet = {		
+		count = 1
+		orbit_distance = {min = 30 max = 40}	
+		class = random	
+		orbit_angle = { min = 90 max = 270 }	
+		size = { min = 20 max = 40 }	
+		init_effect = {
+			set_global_flag = sth_alphabeta_450_map
+		}
+		moon = {	
+			count = { min = 0 max = 4 }
+			class = random
+			orbit_distance = { min = 6 max = 12 }
+			size = { min = 8 max = 12 }
+		}	
+	}
+	planet = {		
+		count = { min = 0 max = 8}	
+		orbit_distance = {min = 30 max = 40}	
+		class = random	
+		orbit_angle = { min = 90 max = 270 }	
+		size = { min = 20 max = 40 }	
+		moon = { count = { min = 0 max = 4 } class = random orbit_distance = { min = 6 max = 12 } size = { min = 8 max = 12 } }	
+	}		
+}
+# Signum_abm - Sets flag to identify the map. Only use in main alpha/beta mirror map. Do not delete.		
+signum_abm = {			
+	class = "rl_standard_stars"		
+	planet = { count = 1 class = star orbit_distance = 0 orbit_angle = 1 size = {min = 20 max = 40 } has_ring = no }		
+	change_orbit = { min = 100 max = 150}	
+	planet = {		
+		count = 1
+		orbit_distance = {min = 30 max = 40}	
+		class = random	
+		orbit_angle = { min = 90 max = 270 }	
+		size = { min = 20 max = 40 }	
+		init_effect = { set_global_flag = sth_alphabeta_mirror_map } ##MAP FLAG
+		moon = {	
+			count = { min = 0 max = 4 }
+			class = random
+			orbit_distance = { min = 6 max = 12 }
+			size = { min = 8 max = 12 }
+		}	
+	}
+	planet = {		
+		count = { min = 0 max = 8}	
+		orbit_distance = {min = 30 max = 40}	
+		class = random	
+		orbit_angle = { min = 90 max = 270 }	
+		size = { min = 20 max = 40 }	
+		moon = { count = { min = 0 max = 4 } class = random orbit_distance = { min = 6 max = 12 } size = { min = 8 max = 12 } }	
+	}		
+}
+# Signum_dm - Sets flag to identify the map. Only use in delta map. Do not delete.		
+signum_dm = {			
+	class = "rl_standard_stars"		
+	planet = { count = 1 class = star orbit_distance = 0 orbit_angle = 1 size = {min = 20 max = 40 } has_ring = no }		
+	change_orbit = { min = 100 max = 150}	
+	planet = {	
+		count = 1
+		orbit_distance = {min = 30 max = 40}	
+		class = random	
+		orbit_angle = { min = 90 max = 270 }	
+		size = { min = 20 max = 40 }	
+		init_effect = { set_global_flag = sth_delta_map } ##MAP FLAG
+		moon = { count = { min = 0 max = 4 } class = random orbit_distance = { min = 6 max = 12 } size = { min = 8 max = 12 } }	
+	}
+	planet = {		
+		count = { min = 0 max = 8}	
+		orbit_distance = {min = 30 max = 40}	
+		class = random	
+		orbit_angle = { min = 90 max = 270 }	
+		size = { min = 20 max = 40 }	
+		moon = { count = { min = 0 max = 4 } class = random orbit_distance = { min = 6 max = 12 } size = { min = 8 max = 12 } }	
+	}	
+}
+
+# Signum_gm - Sets flag to identify the map. Only use in gamma map. Do not delete.		
+signum_gm = {			
+	class = "rl_standard_stars"		
+	planet = { count = 1 class = star orbit_distance = 0 orbit_angle = 1 size = {min = 20 max = 40 } has_ring = no }		
+	change_orbit = { min = 100 max = 150}	
+	planet = {	
+		count = 1
+		orbit_distance = {min = 30 max = 40}	
+		class = random	
+		orbit_angle = { min = 90 max = 270 }	
+		size = { min = 20 max = 40 }	
+		init_effect = { set_global_flag = sth_gamma_map } ##MAP FLAG
+		moon = { count = { min = 0 max = 4 } class = random orbit_distance = { min = 6 max = 12 } size = { min = 8 max = 12 } }	
+	}
+	planet = {		
+		count = { min = 0 max = 8}	
+		orbit_distance = {min = 30 max = 40}	
+		class = random	
+		orbit_angle = { min = 90 max = 270 }	
+		size = { min = 20 max = 40 }	
+		moon = { count = { min = 0 max = 4 } class = random orbit_distance = { min = 6 max = 12 } size = { min = 8 max = 12 } }	
+	}	
+}
+
+# Signum_rm - Sets flag to identify the map. Only use in random map. Do not delete.		
+signum_rm = {			
+	class = "rl_standard_stars"		
+	planet = { count = 1 class = star orbit_distance = 0 orbit_angle = 1 size = {min = 20 max = 40 } has_ring = no }		
+	change_orbit = { min = 100 max = 150}	
+	planet = {	
+		count = 1
+		orbit_distance = {min = 30 max = 40}	
+		class = random	
+		orbit_angle = { min = 90 max = 270 }	
+		size = { min = 20 max = 40 }	
+		init_effect = { set_global_flag = sth_random_map } ##MAP FLAG
+		moon = { count = { min = 0 max = 4 } class = random orbit_distance = { min = 6 max = 12 } size = { min = 8 max = 12 } }	
+	}
+	planet = {		
+		count = { min = 0 max = 8}	
+		orbit_distance = {min = 30 max = 40}	
+		class = random	
+		orbit_angle = { min = 90 max = 270 }	
+		size = { min = 20 max = 40 }	
+		moon = { count = { min = 0 max = 4 } class = random orbit_distance = { min = 6 max = 12 } size = { min = 8 max = 12 } }	
+	}	
+}
+# Signum_mg - Sets flag to identify the map. Only use in mirror galaxy map. Do not delete.		
+signum_mg = {			
+	class = sc_g		
+	planet = { count = 1 class = star orbit_distance = 0 orbit_angle = 1 size = {min = 20 max = 40 } has_ring = no }		
+	change_orbit = { min = 100 max = 150}	
+	planet = {		
+		count = 1
+		orbit_distance = {min = 30 max = 40}	
+		class = random	
+		orbit_angle = { min = 90 max = 270 }	
+		size = { min = 20 max = 40 }	
+		init_effect = {
+			set_global_flag = sth_mirror_galaxy_map
+		}
+		moon = {	
+			count = { min = 0 max = 4 }
+			class = random
+			orbit_distance = { min = 6 max = 12 }
+			size = { min = 8 max = 12 }
+		}	
+	}
+	planet = {		
+		count = { min = 0 max = 8}	
+		orbit_distance = {min = 30 max = 40}	
+		class = random	
+		orbit_angle = { min = 90 max = 270 }	
+		size = { min = 20 max = 40 }	
+		moon = { count = { min = 0 max = 4 } class = random orbit_distance = { min = 6 max = 12 } size = { min = 8 max = 12 } }	
+	}	
+}
+# Signum_mabg - Sets flag to identify the map. Only use in alpha/beta mirror galaxy map. Do not delete.		
+signum_mabg = {			
+	class = sc_g		
+	planet = { count = 1 class = star orbit_distance = 0 orbit_angle = 1 size = {min = 20 max = 40 } has_ring = no }		
+	change_orbit = { min = 100 max = 150}	
+	planet = {		
+		count = 1
+		orbit_distance = {min = 30 max = 40}	
+		class = random	
+		orbit_angle = { min = 90 max = 270 }	
+		size = { min = 20 max = 40 }	
+		init_effect = {
+			set_global_flag = sth_alphabeta_mirror_map
+		}
+		moon = {	
+			count = { min = 0 max = 4 }
+			class = random
+			orbit_distance = { min = 6 max = 12 }
+			size = { min = 8 max = 12 }
+		}	
+	}
+	planet = {		
+		count = { min = 0 max = 8}	
+		orbit_distance = {min = 30 max = 40}	
+		class = random	
+		orbit_angle = { min = 90 max = 270 }	
+		size = { min = 20 max = 40 }	
+		moon = { count = { min = 0 max = 4 } class = random orbit_distance = { min = 6 max = 12 } size = { min = 8 max = 12 } }	
+	}	
+}
+# Signum_botf - Sets flag to identify the map. Only use in BotF map. Do not delete.		
+signum_botf = {			
+	class = sc_g		
+	planet = { count = 1 class = star orbit_distance = 0 orbit_angle = 1 size = {min = 20 max = 40 } has_ring = no }		
+	change_orbit = { min = 100 max = 150}	
+	planet = {		
+		count = 1
+		orbit_distance = {min = 30 max = 40}	
+		class = random	
+		orbit_angle = { min = 90 max = 270 }	
+		size = { min = 20 max = 40 }	
+		init_effect = {
+			set_global_flag = sth_botf_map
+		}
+		moon = {	
+			count = { min = 0 max = 4 }
+			class = random
+			orbit_distance = { min = 6 max = 12 }
+			size = { min = 8 max = 12 }
+		}	
+	}
+	planet = {		
+		count = { min = 0 max = 8}	
+		orbit_distance = {min = 30 max = 40}	
+		class = random	
+		orbit_angle = { min = 90 max = 270 }	
+		size = { min = 20 max = 40 }	
+		moon = { count = { min = 0 max = 4 } class = random orbit_distance = { min = 6 max = 12 } size = { min = 8 max = 12 } }	
+	}	
+}
+
+# Signum_medgm - Sets flag to identify the map. Only use in medium galaxy map (i.e., the full galaxy map with about 900 star systems. Do not delete.		
+signum_medgm = {			
+	class = "rl_standard_stars"		
+	planet = { count = 1 class = star orbit_distance = 0 orbit_angle = 1 size = {min = 20 max = 40 } has_ring = no }		
+	change_orbit = { min = 100 max = 150}	
+	planet = {		
+		count = 1
+		orbit_distance = {min = 30 max = 40}	
+		class = random	
+		orbit_angle = { min = 90 max = 270 }	
+		size = { min = 20 max = 40 }	
+		init_effect = {
+			set_global_flag = sth_medium_galaxy_map
+		}
+		moon = {	
+			count = { min = 0 max = 4 }
+			class = random
+			orbit_distance = { min = 6 max = 12 }
+			size = { min = 8 max = 12 }
+		}	
+	}
+	planet = {		
+		count = { min = 0 max = 8}	
+		orbit_distance = {min = 30 max = 40}	
+		class = random	
+		orbit_angle = { min = 90 max = 270 }	
+		size = { min = 20 max = 40 }	
+		moon = { count = { min = 0 max = 4 } class = random orbit_distance = { min = 6 max = 12 } size = { min = 8 max = 12 } }	
+	}	
+}

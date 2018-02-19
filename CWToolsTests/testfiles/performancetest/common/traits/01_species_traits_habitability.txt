@@ -1,0 +1,668 @@
+trait_pc_continental_preference = {
+      sorting_priority = 30
+      allowed_archetypes = { BIOLOGICAL PRESAPIENT  }
+      modifier = {
+         pc_continental_habitability = 0.8
+         pc_savannah_habitability = 0.6
+         pc_alpine_habitability = 0.6
+         pc_arctic_habitability = 0.4
+         pc_arid_habitability = 0.4
+         pc_m1_class_habitability = 0.4
+         pc_tropical_habitability = 0.2
+         pc_ocean_habitability = 0.2
+         pc_tundra_habitability = 0.2
+         pc_class_q_geo_habitability = 0.2
+      }
+      modification = no
+      ai_weight = { weight = 0 }
+   }
+   
+trait_pc_arctic_preference = {
+      sorting_priority = 30
+      allowed_archetypes = { BIOLOGICAL PRESAPIENT  }
+      modifier = {
+         pc_arctic_habitability = 0.8
+         pc_alpine_habitability = 0.6
+         pc_ocean_habitability = 0.6
+         pc_continental_habitability = 0.4
+         pc_arid_habitability = 0.4
+         pc_m1_class_habitability = 0.4
+         pc_savannah_habitability = 0.2
+         pc_tropical_habitability = 0.2
+         pc_frozen_habitability = 0.2
+         pc_class_q_geo_habitability = 0.2
+         pc_r_class_habitability = 0.2
+      }
+      modification = no
+      ai_weight = { weight = 0 }
+   }
+   
+trait_pc_arid_preference = {
+      sorting_priority = 30
+      allowed_archetypes = { BIOLOGICAL PRESAPIENT  }
+      modifier = {
+         pc_arid_habitability = 0.8
+         pc_savannah_habitability = 0.6
+         pc_tropical_habitability = 0.6
+         pc_continental_habitability = 0.4
+         pc_arctic_habitability = 0.4
+         pc_m1_class_habitability = 0.4
+         pc_alpine_habitability = 0.2
+         pc_ocean_habitability = 0.2
+         pc_desert_habitability = 0.2
+         pc_class_q_variable_habitability = 0.2
+      }
+      modification = no
+      ai_weight = { weight = 0 }
+   }
+   
+trait_pc_savannah_preference = {
+      sorting_priority = 30
+      allowed_archetypes = { BIOLOGICAL PRESAPIENT  }
+      modifier = {
+         pc_savannah_habitability = 0.8
+         pc_continental_habitability = 0.6
+         pc_arid_habitability = 0.6
+         pc_tropical_habitability = 0.4
+         pc_alpine_habitability = 0.4
+         pc_arctic_habitability = 0.2
+         pc_m1_class_habitability = 0.2
+         pc_ocean_habitability = 0.1
+         pc_desert_habitability = 0.1
+         pc_tundra_habitability = 0.1
+         pc_class_q_variable_habitability = 0.1
+         pc_class_q_geo_habitability = 0.1
+      }
+      modification = no
+      ai_weight = { weight = 0 }
+   }
+   
+trait_pc_tropical_preference = {
+      sorting_priority = 30
+      allowed_archetypes = { BIOLOGICAL PRESAPIENT JEMHADAR VORTA }
+      modifier = {
+         pc_tropical_habitability = 0.8
+         pc_arid_habitability = 0.6
+         pc_m1_class_habitability = 0.6
+         pc_savannah_habitability = 0.4
+         pc_ocean_habitability = 0.4
+         pc_class_q_variable_habitability = 0.4
+         pc_continental_habitability = 0.2
+         pc_arctic_habitability = 0.2
+         pc_alpine_habitability = 0.1
+         pc_desert_habitability = 0.1
+         pc_g_class_habitability = 0.1
+         pc_r_class_habitability = 0.1
+      }
+      modification = no
+      ai_weight = { weight = 0 }
+   }
+   
+trait_pc_alpine_preference = {
+      sorting_priority = 30
+      allowed_archetypes = { BIOLOGICAL PRESAPIENT  }
+      modifier = {
+         pc_alpine_habitability = 0.8
+         pc_continental_habitability = 0.6
+         pc_arctic_habitability = 0.6
+         pc_savannah_habitability = 0.4
+         pc_ocean_habitability = 0.4
+         pc_class_q_geo_habitability = 0.4
+         pc_arid_habitability = 0.2
+         pc_m1_class_habitability = 0.2
+         pc_tropical_habitability = 0.1
+         pc_tundra_habitability = 0.1
+         pc_frozen_habitability = 0.1
+         pc_r_class_habitability = 0.1
+      }
+      modification = no
+      ai_weight = { weight = 0 }
+   }
+   
+trait_pc_m1_class_preference = {
+      sorting_priority = 30
+      allowed_archetypes = { BIOLOGICAL PRESAPIENT  }
+      modifier = {
+         pc_m1_class_habitability = 0.8
+         pc_tropical_habitability = 0.6
+         pc_ocean_habitability = 0.6
+         pc_continental_habitability = 0.4
+         pc_arctic_habitability = 0.4
+         pc_arid_habitability = 0.4
+         pc_savannah_habitability = 0.2
+         pc_alpine_habitability = 0.2
+         pc_g_class_habitability = 0.2
+         pc_class_q_variable_habitability = 0.2
+         pc_r_class_habitability = 0.2
+      }
+      modification = no
+      ai_weight = { weight = 0 }
+   }
+   
+trait_pc_ocean_preference = {
+      sorting_priority = 30
+      allowed_archetypes = { BIOLOGICAL PRESAPIENT JEMHADAR VORTA }
+      modifier = {
+         pc_ocean_habitability = 0.8
+         pc_thegreatlink_habitability = 0.6
+         pc_arctic_habitability = 0.6
+         pc_m1_class_habitability = 0.6
+         pc_tropical_habitability = 0.4
+         pc_alpine_habitability = 0.4
+         pc_r_class_habitability = 0.4
+         pc_continental_habitability = 0.2
+         pc_arid_habitability = 0.2
+         pc_savannah_habitability = 0.1
+         pc_frozen_habitability = 0.1
+         pc_g_class_habitability = 0.1
+         pc_class_q_variable_habitability = 0.1
+         pc_class_q_geo_habitability = 0.1
+      }
+      modification = no
+      ai_weight = { weight = 0 }
+   }
+   
+### Uniquye Founders preference - The Great Link
+   trait_pc_thegreatlink_preference = {
+      icon = "gfx/interface/icons/traits/trait_pc_ocean_preference.dds"
+      sorting_priority = 30
+      allowed_archetypes = { BIOLOGICAL PRESAPIENT  }
+      modifier = {
+         pc_thegreatlink_habitability = 1
+      }
+      modification = no
+      ai_weight = { weight = 0 }
+   }
+   
+### Unique Sheliak preference
+   trait_pc_desert_preference = {
+      sorting_priority = 30
+      allowed_archetypes = { BIOLOGICAL PRESAPIENT  }
+      modifier = {
+         pc_desert_habitability = 0.9
+         pc_arid_habitability = 0.4
+         pc_savannah_habitability = 0.4
+         pc_tropical_habitability = 0.4
+         pc_class_q_variable_habitability = 0.4
+         pc_y_class_habitability = 0.4
+         pc_x_class_habitability = 0.4
+      }
+      modification = no
+      ai_weight = { weight = 0 }
+   }
+   
+### Unique Breen preference - Glacial Habitability
+   trait_pc_frozen_preference = {
+      sorting_priority = 30
+      allowed_archetypes = { BIOLOGICAL PRESAPIENT  }
+      modifier = {
+         pc_frozen_habitability = 0.9
+         pc_arctic_habitability = 0.4
+         pc_alpine_habitability = 0.4
+         pc_ocean_habitability = 0.4
+         pc_class_q_geo_habitability = 0.4
+         pc_r_class_habitability = 0.4
+         pc_nuked_habitability = 0.4
+      }
+      modification = no
+      ai_weight = { weight = 0 }
+   }
+   
+trait_pc_tundra_preference = {
+      sorting_priority = 30
+      allowed_archetypes = { BIOLOGICAL PRESAPIENT  }
+      modifier = {
+         pc_tundra_habitability = 0.8
+         pc_continental_habitability = 0.4
+         pc_k_class_habitability = 0.4
+         pc_savannah_habitability = 0.2
+         pc_alpine_habitability = 0.2
+         pc_class_q_geo_habitability = 0.2
+         pc_y_class_habitability = 0.2
+         pc_arctic_habitability = 0.1
+         pc_arid_habitability = 0.1
+         pc_m1_class_habitability = 0.1
+      }
+      modification = no
+      ai_weight = { weight = 0 }
+   }
+   
+trait_pc_g_class_preference = {
+      sorting_priority = 30
+      allowed_archetypes = { BIOLOGICAL PRESAPIENT  }
+      modifier = {
+         pc_g_class_habitability = 0.8
+         pc_m1_class_habitability = 0.4
+         pc_f_class_habitability = 0.4
+         pc_tropical_habitability = 0.2
+         pc_ocean_habitability = 0.2
+         pc_class_q_variable_habitability = 0.2
+         pc_r_class_habitability = 0.2
+         pc_continental_habitability = 0.1
+         pc_arctic_habitability = 0.1
+         pc_arid_habitability = 0.1
+      }
+      modification = no
+      ai_weight = { weight = 0 }
+   }
+   
+### Unique Tholian preference - Demon Habitability
+   trait_pc_y_class_preference = {
+      sorting_priority = 30
+      allowed_archetypes = { BIOLOGICAL PRESAPIENT  }
+      modifier = {
+         pc_y_class_habitability = 0.9
+         pc_savannah_habitability = 0.4
+         pc_desert_habitability = 0.4
+         pc_tundra_habitability = 0.4
+      }
+      modification = no
+      ai_weight = { weight = 0 }
+   }
+   
+### Disabled planet, kept for compatibility
+   trait_pc_l2_class_preference = {
+      sorting_priority = 30
+      allowed_archetypes = { BIOLOGICAL PRESAPIENT  }
+      modifier = {
+         pc_l2_class_habitability = 0.8
+      }
+      modification = no
+      ai_weight = { weight = 0 }
+   }
+   
+trait_pc_r_class_preference = {
+      sorting_priority = 30
+      allowed_archetypes = { BIOLOGICAL PRESAPIENT  }
+      modifier = {
+         pc_r_class_habitability = 0.8
+         pc_ocean_habitability = 0.4
+         pc_arctic_habitability = 0.2
+         pc_m1_class_habitability = 0.2
+         pc_tropical_habitability = 0.1
+         pc_alpine_habitability = 0.1
+         pc_frozen_habitability = 0.1
+         pc_g_class_habitability = 0.1
+         pc_class_q_variable_habitability = 0.1
+         pc_class_q_geo_habitability = 0.1
+      }
+      modification = no
+      ai_weight = { weight = 0 }
+   }
+   
+trait_pc_class_q_variable_preference = {
+      sorting_priority = 30
+      allowed_archetypes = { BIOLOGICAL PRESAPIENT  }
+      modifier = {
+         pc_class_q_variable_habitability = 0.8
+         pc_tropical_habitability = 0.4
+         pc_arid_habitability = 0.2
+         pc_m1_class_habitability = 0.2
+         pc_savannah_habitability = 0.1
+         pc_ocean_habitability = 0.1
+         pc_desert_habitability = 0.1
+         pc_g_class_habitability = 0.1
+         pc_r_class_habitability = 0.1
+      }
+      modification = no
+      ai_weight = { weight = 0 }
+   }
+   
+trait_pc_class_q_geo_preference = {
+      sorting_priority = 30
+      allowed_archetypes = { BIOLOGICAL PRESAPIENT  }
+      modifier = {
+         pc_class_q_geo_habitability = 0.8
+         pc_alpine_habitability = 0.4
+         pc_continental_habitability = 0.2
+         pc_arctic_habitability = 0.2
+         pc_savannah_habitability = 0.1
+         pc_ocean_habitability = 0.1
+         pc_tundra_habitability = 0.1
+         pc_frozen_habitability = 0.1
+         pc_r_class_habitability = 0.1
+      }
+      modification = no
+      ai_weight = { weight = 0 }
+   }
+   
+trait_pc_f_class_preference = {
+      sorting_priority = 30
+      allowed_archetypes = { BIOLOGICAL PRESAPIENT  }
+      modifier = {
+         pc_f_class_habitability = 0.8
+         pc_g_class_habitability = 0.4
+         pc_m1_class_habitability = 0.1
+      }
+      modification = no
+      ai_weight = { weight = 0 }
+   }
+   
+trait_pc_k_class_preference = {
+      sorting_priority = 30
+      allowed_archetypes = { BIOLOGICAL PRESAPIENT  }
+      modifier = {
+         pc_k_class_habitability = 0.8
+         pc_tundra_habitability = 0.4
+         pc_continental_habitability = 0.1
+      }
+      modification = no
+      ai_weight = { weight = 0 }
+   }
+   
+trait_pc_x_class_preference = {
+      icon = "gfx/interface/icons/traits/trait_pc_desert_preference.dds"
+      sorting_priority = 30
+      allowed_archetypes = { BIOLOGICAL PRESAPIENT  }
+      modifier = {
+         pc_x_class_habitability = 0.8
+         pc_desert_habitability = 0.4
+         pc_arid_habitability = 0.1
+      }
+      modification = no
+      ai_weight = { weight = 0 }
+   }
+   
+trait_pc_gaia_preference = {
+      sorting_priority = 30
+      allowed_archetypes = { BIOLOGICAL PRESAPIENT  }
+      modifier = {
+         pc_gaia_habitability = 1
+         pc_continental_habitability = 0.6
+         pc_arctic_habitability = 0.6
+         pc_arid_habitability = 0.6
+         pc_m1_class_habitability = 0.6
+         pc_savannah_habitability = 0.4
+         pc_tropical_habitability = 0.4
+         pc_alpine_habitability = 0.4
+         pc_ocean_habitability = 0.4
+         pc_desert_habitability = 0.1
+         pc_tundra_habitability = 0.1
+         pc_frozen_habitability = 0.1
+         pc_g_class_habitability = 0.1
+         pc_class_q_variable_habitability = 0.1
+         pc_class_q_geo_habitability = 0.1
+         pc_r_class_habitability = 0.1
+      }
+      modification = no
+      ai_weight = { weight = 0 }
+   }
+   
+trait_pc_nuked_preference = {
+      sorting_priority = 30
+      allowed_archetypes = { BIOLOGICAL PRESAPIENT  }
+      modifier = {
+         pc_nuked_habitability = 0.8
+         pc_frozen_habitability = 0.4
+         pc_arctic_habitability = 0.1
+      }
+      modification = no
+      ai_weight = { weight = 0 }
+   }
+   
+trait_pc_ringworld_habitable_preference = {
+      icon = "gfx/interface/icons/traits/trait_pc_ring_preference.dds"
+      sorting_priority = 30
+      allowed_archetypes = { BIOLOGICAL PRESAPIENT  }
+      modifier = {
+         pc_ringworld_habitable_habitability = 1
+      }
+      modification = no
+      randomized = no
+      ai_weight = { weight = 0 }
+   }
+   
+trait_pc_habitat_preference = {
+      icon = "gfx/interface/icons/traits/trait_pc_ring_preference.dds"
+      sorting_priority = 30
+      allowed_archetypes = { BIOLOGICAL PRESAPIENT  }
+      modifier = {
+         pc_habitat_habitability = 1
+      }
+      modification = no
+      randomized = no
+      ai_weight = { weight = 0 }
+   }
+   
+trait_pc_helix_preference = {
+      icon = "gfx/interface/icons/traits/trait_pc_ring_preference.dds"
+      sorting_priority = 30
+      allowed_archetypes = { BIOLOGICAL PRESAPIENT  }
+      modifier = {
+         pc_helix_habitability = 1
+      }
+      modification = no
+      randomized = no
+      ai_weight = { weight = 0 }
+   }
+   
+trait_pc_unimatrix_preference = {
+      icon = "gfx/interface/icons/traits/trait_pc_ring_preference.dds"
+      sorting_priority = 30
+      allowed_archetypes = { BIOLOGICAL PRESAPIENT  }
+      modifier = {
+         pc_unimatrix_habitability = 1
+      }
+      modification = no
+      randomized = no
+      ai_weight = { weight = 0 }
+   }
+   
+trait_pc_hunters_lodge_preference = {
+      icon = "gfx/interface/icons/traits/trait_pc_ring_preference.dds"
+      sorting_priority = 30
+      allowed_archetypes = { BIOLOGICAL PRESAPIENT  }
+      modifier = {
+         pc_hunters_lodge_habitability = 1
+      }
+      modification = no
+      randomized = no
+      ai_weight = { weight = 0 }
+   }
+   
+trait_pc_starbase_blank_preference = {
+      icon = "gfx/interface/icons/traits/trait_pc_ring_preference.dds"
+      sorting_priority = 30
+      allowed_archetypes = { BIOLOGICAL PRESAPIENT  }
+      modifier = {
+         pc_starbase_blank_habitability = 1
+      }
+      modification = no
+      randomized = no
+      ai_weight = { weight = 0 }
+   }
+   
+trait_pc_starbase_blank_fed_preference = {
+      icon = "gfx/interface/icons/traits/trait_pc_ring_preference.dds"
+      sorting_priority = 30
+      allowed_archetypes = { BIOLOGICAL PRESAPIENT  }
+      modifier = {
+         pc_starbase_blank_fed_habitability = 1
+      }
+      modification = no
+      randomized = no
+      ai_weight = { weight = 0 }
+   }
+   
+trait_pc_starbase_blank_car_preference = {
+      icon = "gfx/interface/icons/traits/trait_pc_ring_preference.dds"
+      sorting_priority = 30
+      allowed_archetypes = { BIOLOGICAL PRESAPIENT  }
+      modifier = {
+         pc_starbase_blank_car_habitability = 1
+      }
+      modification = no
+      randomized = no
+      ai_weight = { weight = 0 }
+   }
+   
+trait_pc_starbase_blank_brg_preference = {
+      icon = "gfx/interface/icons/traits/trait_pc_ring_preference.dds"
+      sorting_priority = 30
+      allowed_archetypes = { BIOLOGICAL PRESAPIENT  }
+      modifier = {
+         pc_starbase_blank_brg_habitability = 1
+      }
+      modification = no
+      randomized = no
+      ai_weight = { weight = 0 }
+   }
+   
+trait_pc_asteroid_prison_preference = {
+      icon = "gfx/interface/icons/traits/trait_pc_ring_preference.dds"
+      sorting_priority = 30
+      allowed_archetypes = { BIOLOGICAL PRESAPIENT  }
+      modifier = {
+         pc_asteroid_prison_habitability = 1
+      }
+      modification = no
+      randomized = no
+      ai_weight = { weight = 0 }
+   }
+   
+trait_pc_voth_city_ship_preference = {
+      icon = "gfx/interface/icons/traits/trait_pc_ring_preference.dds"
+      sorting_priority = 30
+      allowed_archetypes = { BIOLOGICAL PRESAPIENT  }
+      modifier = {
+         pc_voth_city_ship_habitability = 1
+		 pc_tropical_habitability = 0.8
+         pc_arid_habitability = 0.6
+         pc_m1_class_habitability = 0.6
+         pc_savannah_habitability = 0.4
+         pc_ocean_habitability = 0.4
+         pc_class_q_variable_habitability = 0.4
+         pc_continental_habitability = 0.2
+         pc_arctic_habitability = 0.2
+         pc_alpine_habitability = 0.1
+         pc_desert_habitability = 0.1
+         pc_g_class_habitability = 0.1
+         pc_r_class_habitability = 0.1
+      }
+      modification = no
+      randomized = no
+      ai_weight = { weight = 0 }
+   }
+   
+   
+### Borg Habitability for drones
+   trait_pc_assimilated_preference = {
+      sorting_priority = 30
+      allowed_archetypes = { BIOLOGICAL PRESAPIENT  }
+      modifier = {
+         pop_consumer_goods_mult = -1
+         pop_growth_req = 500 
+         pc_assimilated_habitability = 1
+         pc_continental_habitability = 0.5
+         pc_arctic_habitability = 0.5
+         pc_arid_habitability = 0.5
+         pc_savannah_habitability = 0.5
+         pc_tropical_habitability = 0.5
+         pc_alpine_habitability = 0.5
+         pc_m1_class_habitability = 0.5
+         pc_ocean_habitability = 0.5
+         pc_thegreatlink_habitability = 0.5
+         pc_desert_habitability = 0.5
+         pc_frozen_habitability = 0.5
+         pc_tundra_habitability = 0.5
+         pc_g_class_habitability = 0.5
+         pc_y_class_habitability = 0.5
+         pc_l2_class_habitability = 0.5
+         pc_r_class_habitability = 0.5
+         pc_class_q_variable_habitability = 0.5
+         pc_class_q_geo_habitability = 0.5
+         pc_f_class_habitability = 0.5
+         pc_k_class_habitability = 0.5
+         pc_x_class_habitability = 0.5
+         pc_gaia_habitability = 0.5
+         pc_nuked_habitability = 0.5
+         pc_ringworld_habitable_habitability = 0.5
+         pc_habitat_habitability = 0.5
+         pc_helix_habitability = 0.5
+         pc_unimatrix_habitability = 0.5
+         pc_hunters_lodge_habitability = 0.5
+         pc_starbase_blank_habitability = 0.5
+         pc_starbase_blank_fed_habitability = 0.5
+         pc_starbase_blank_car_habitability = 0.5
+         pc_starbase_blank_brg_habitability = 0.5
+         pc_asteroid_prison_habitability = 0.5
+         pc_voth_city_ship_habitability = 0.5
+      }
+      modification = no
+      randomized = no
+      forced_happiness = yes
+      ai_weight = { weight = 0 }
+   }
+   
+trait_pc_machine_preference = {
+      icon = "gfx/interface/icons/traits/trait_pc_ring_preference.dds"
+      sorting_priority = 30
+      allowed_archetypes = { BIOLOGICAL PRESAPIENT  }
+      modifier = {
+         pc_machine_habitability = 1
+         pc_continental_habitability = 0.5
+         pc_arctic_habitability = 0.5
+         pc_arid_habitability = 0.5
+         pc_savannah_habitability = 0.5
+         pc_tropical_habitability = 0.5
+         pc_alpine_habitability = 0.5
+         pc_m1_class_habitability = 0.5
+         pc_ocean_habitability = 0.5
+         pc_thegreatlink_habitability = 0.5
+         pc_desert_habitability = 0.5
+         pc_frozen_habitability = 0.5
+         pc_tundra_habitability = 0.5
+         pc_g_class_habitability = 0.5
+         pc_y_class_habitability = 0.5
+         pc_l2_class_habitability = 0.5
+         pc_r_class_habitability = 0.5
+         pc_class_q_variable_habitability = 0.5
+         pc_class_q_geo_habitability = 0.5
+         pc_f_class_habitability = 0.5
+         pc_k_class_habitability = 0.5
+         pc_x_class_habitability = 0.5
+         pc_gaia_habitability = 0.5
+         pc_nuked_habitability = 0.5
+         pc_ringworld_habitable_habitability = 0.5
+         pc_habitat_habitability = 0.5
+         pc_helix_habitability = 0.5
+         pc_unimatrix_habitability = 0.5
+         pc_hunters_lodge_habitability = 0.5
+         pc_starbase_blank_habitability = 0.5
+         pc_starbase_blank_fed_habitability = 0.5
+         pc_starbase_blank_car_habitability = 0.5
+         pc_starbase_blank_brg_habitability = 0.5
+         pc_asteroid_prison_habitability = 0.5
+         pc_voth_city_ship_habitability = 0.5
+      }
+      modification = no
+      randomized = no
+      forced_happiness = yes
+      ai_weight = { weight = 0 }
+   }
+
+### D'Arsay unique Habitability
+   # trait_pc_darsay_preference = {
+      # sorting_priority = 30
+      # allowed_archetypes = { BIOLOGICAL PRESAPIENT  }
+      # modifier = {
+		 # pc_gaia_habitability = 1
+         # pc_assimilated_habitability = 1
+		 # pc_machine_habitability = 1
+		 # pc_starbase_blank_brg_habitability = 1
+		 # pc_unimatrix_habitability = 1
+         # pc_alpine_habitability = 0.8
+		 # pc_arctic_habitability = 0.8
+         # pc_continental_habitability = 0.6
+         # pc_savannah_habitability = 0.4
+         # pc_ocean_habitability = 0.4
+         # pc_class_q_geo_habitability = 0.4
+         # pc_arid_habitability = 0.2
+         # pc_m1_class_habitability = 0.2
+         # pc_tropical_habitability = 0.2
+      # }
+      # modification = no
+      # randomized = no
+      # ai_weight = { weight = 0 }
+   # }
+   

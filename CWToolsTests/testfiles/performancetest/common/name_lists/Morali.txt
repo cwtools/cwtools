@@ -1,0 +1,97 @@
+﻿### Morali by EHKodiak similar to orion due inbreeding
+Morali = {
+	randomized = no
+
+	ship_names = {
+		generic = {
+		Segus Mullatobius Huetia Grannia Veterius Ambisamarus Arausus Visucellio Inthus Britasgus Tarausus Andrasta Agrus Aeris Arvernunnos Anetonus Andatus Brianus Rudianus Cernus Canextios Alisama Belata Mulus Alisagrus Andartios Sucius Vosegomo Condatus Latus Neris Abelatus Bello Arnemausio Sedatis Tarabus Arabus Contres Artiomarus Trios Abandrasta Belatobius Abandatis Abelatobius Condarta Huetericura Adsullos Grania Hueterius Ancaste Barintara Roborrum Belisagrona Nemetia Vheterius Ambis Artiomara Leucellio Belisagrus Aerius Andinus Mullatus Anextios Britanniae Vetericura Tridama Coventia Damos Abandraste Brianos Adsullo Arnemausus Roborvo Belatucarus Nemetiris Tridamona Camna Arnemetiris Bellio Leucellos Nemausio Leucetiris Aveteris Mullos Adsullatus Aventina Canetonus Tarannia Andatis Abellos Alisamarus Aufanis Damarus Anextiomara Vhetericura Huetios Latucadros Vinotonnus Alisagrona Aveterius
+		}
+		corvette = {
+		}
+		saber = {
+		}
+		sovereign = {
+		}
+		steamrunner = {
+		}		
+		adv_cruiser = {
+		}
+		strike = {
+		}	
+		constructor = { }
+		colonizer = { }
+		science = { }
+		transport = { }
+		outpost_station = {
+			sequential_name = "Frontier Outpost"
+		}
+	}
+
+	fleet_names = {
+		sequential_name = "%O% Fleet"
+	}
+	
+	army_names = {
+		defense_army = {
+			sequential_name = "%O% Peacekeepers"
+		}
+		assault_army = {
+			sequential_name = "%O% Expeditionary Force"
+		}
+		slave_army = {
+			sequential_name = "%O% Indentured Defence Force"
+		}
+		clone_army = { 
+			sequential_name = "%O% Clone Defence Force"
+		}
+		robotic_army = {
+			sequential_name = "%O% Mechanised Defence Force"
+		}
+		android_army = {
+			sequential_name = "%O% Synthetic Defence Force"
+		}
+		psionic_army = { 
+			sequential_name = "%O% Psi Defence Force"
+		}
+		xenomorph_army = {
+			sequential_name = "%O% Bio-Warfare Defence Force"
+		}
+		gene_warrior_army = {
+			sequential_name = "%O% Bio-Engineered Defence Force"
+		}
+	}
+
+	planet_names = {
+		generic = {
+			names = { 
+			}
+		}
+	}
+
+
+	### CHARACTERS 
+
+	character_names = {
+		names1 = {
+			weight = 40
+			first_names_male = {
+			Urnet Holencos Horrod Horrod-Sor Koi Herrod Nolur Tevor Nollin Hubin Ugochi Ulbrek Urnet Holencos Ubnel Borok-Sor Borok Ulthori Bolun Beldov Benoro Bilot Cholifir Emork Foktim Gomoshes Glochies Heilen Hjuloh Holcomb Sorris Isolio Dolun Ignotin Juruh Kerov Keros Lifoq Liktor Vaxildots Grogod Scanlun Mozinphor Nomob Ofish Otrom Prochem Simri Soholo Teish Thentok Thyloster Tumbel U'toliis Voltob Wol Yungots
+			}
+			first_names_female = {
+			Navalir Maras D'Nish D'Nivalir Devna Vila Gaila Naila D'Nala Leata Marta Treir Aaliia Gaeta Baeta Virilta Jaralis Shanna Zheeggu Shairur Maggoush Vashkinali Nigelli Gegavu Jigulalish Hadillu Shesso Taydali Dadder Geessu Taiddou Thevissalir Neessosho Thinnouhnu Jevvouvali Jannousali Thahnu Mede Hedes Naggolle Seedduhliss Nevuhno Lerouhali Lennesh Laydish Daili Dehnehnu Hehnovali Krilali Dilali Anetra Tilali Mala Maril Annil Guisepali Rosil Rosa Angeyali Giovilali Tereyali Lucyali Carmeyali Cateriyali Franceyali Antonieyali Carali Eleyali Conceyali Riyali Margheriyali Frilali Paali Vittoyali Ariilali Orieyali Nicoyali Calilali Stefilali Giseyali Caliudyali Lorenyali Gabrieyali Isabeyali Valeyali Lucreyali Diyali Benedeyali Pieyali Vexhali
+			}
+			second_names = {
+			""
+			}
+			regnal_first_names_male = {
+			Urnet Holencos Horrod Horrod-Sor Koi Herrod Nolur Tevor Nollin Hubin Ugochi Ulbrek Urnet Holencos Ubnel Borok-Sor Borok Ulthori Bolun Beldov Benoro Bilot Cholifir Emork Foktim Gomoshes Glochies Heilen Hjuloh Holcomb Sorris Isolio Dolun Ignotin Juruh Kerov Keros Lifoq Liktor Vaxildots Grogod Scanlun Mozinphor Nomob Ofish Otrom Prochem Simri Soholo Teish Thentok Thyloster Tumbel U'toliis Voltob Wol Yungots
+			}
+			regnal_first_names_female = {
+			Navalir Maras D'Nish D'Nivalir Devna Vila Gaila Naila D'Nala Leata Marta Treir Aaliia Gaeta Baeta Virilta Jaralis Shanna Zheeggu Shairur Maggoush Vashkinali Nigelli Gegavu Jigulalish Hadillu Shesso Taydali Dadder Geessu Taiddou Thevissalir Neessosho Thinnouhnu Jevvouvali Jannousali Thahnu Mede Hedes Naggolle Seedduhliss Nevuhno Lerouhali Lennesh Laydish Daili Dehnehnu Hehnovali Krilali Dilali Anetra Tilali Mala Maril Annil Guisepali Rosil Rosa Angeyali Giovilali Tereyali Lucyali Carmeyali Cateriyali Franceyali Antonieyali Carali Eleyali Conceyali Riyali Margheriyali Frilali Paali Vittoyali Ariilali Orieyali Nicoyali Calilali Stefilali Giseyali Caliudyali Lorenyali Gabrieyali Isabeyali Valeyali Lucreyali Diyali Benedeyali Pieyali Vexhali
+			}
+			regnal_second_names = {
+			""
+			}
+		}
+	}
+}

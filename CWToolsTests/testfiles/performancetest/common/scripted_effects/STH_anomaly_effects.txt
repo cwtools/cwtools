@@ -1,0 +1,39 @@
+set_the_hundred_anomaly = {
+	random_system = {
+		limit = { 
+			any_planet = { 
+				is_star = no 
+				is_asteroid = no 
+				is_artificial_planet = no 
+			} 
+			NAND = {
+				exists = space_owner
+				space_owner = { has_country_flag = the_dominion }
+			}
+		} #REPLACE WITH is_terrestrial_planet trigger
+		random_system_planet = {
+			limit = { is_star = no is_asteroid = no is_artificial_planet = no }
+			add_anomaly = STH_the_hundred_category
+		}
+	}
+}
+
+# set_the_ship_anomaly = {
+	# random_system = {
+		# limit = { 
+			# any_planet = { 
+				# is_star = no 
+				# is_asteroid = no 
+				# is_artificial_planet = no 
+			# } 
+			# NAND = {
+				# exists = space_owner
+				# space_owner = { has_country_flag = the_dominion }
+			# }
+		# } #REPLACE WITH is_terrestrial_planet trigger
+		# random_system_planet = {
+			# limit = { is_star = no is_asteroid = no is_artificial_planet = no }
+			# add_anomaly = STH_the_hundred_category
+		# }
+	# }
+# }

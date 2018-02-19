@@ -1,0 +1,98 @@
+﻿### Tamarian
+Tamarian = {
+	randomized = no
+
+	ship_names = {
+		generic = {
+			"Darmok on the ocean" "Harel, his bravery known" "Jalad on the ocean" "Jalad at Tanagra" "Sidalime, eyes starward" "Tirave, his prow unbroken" "Brelot seeking Vernak" "Gorell in stormy waters" "The beast at Tanagra" "Beast beneath Anzo" "Kadir beneath Mo Moteh" "Zima at Anzo" "The beast at Anzo" "Zima and Bakor" "Keyleth and Vaxildan" "Keyleth, at the Suntree" "When the walls fell" "Vexahlia at Saundor" "Pike, on the sea" "Grog, in the mountain" "Zahra, at the lair" "Kiteo, his eyes closed" "Kima, at the crypt" "Kiteo, his eyes open" "Temba, his arms wide" "Temba, at rest" "Mirab, sails unfurled" "Shaka, when the walls fell" "Sokath, his eyes uncovered" "Sokath, his eyes opened" "Kailash, when it rises" "River Temarc in winter" "Zinda, his face black" "Zinda, his eyes red" "Rai and Jiri at Lungha" "Rai of Lowani" "Lowani under two moons" "Jiri of Ubaya" "Ubaya of crossroads" "Lungha, her sky gray" "Uzani, with fists open" "Uzani, with fists closed" "Perci under two moons" "Chenza at court" "Chenza of silence" "Kira at Bashi" "Callimas at Bahar" "His song at Marquet" "His song at Syngorn" "Perci, his aura dark" "Walsh, his pen steady" "Harel, his screen glows" "Matix, his skill strong" "Janack, his voice clear" "Sirick, his voice clear" "Scanlan and Kaylee" "Mercer on one knee" "Grinsel, his craft" "Raishan, the betrayer" "Belrond, in darkness"  
+		}
+		corvette = {
+		}
+		saber = {
+		}
+		sovereign = {
+		}
+		steamrunner = {
+		}		
+		adv_cruiser = {
+		}
+		strike = {
+		}	
+		constructor = { Starbuilder "Builder of Stars" }
+		colonizer = { Starbringer "Bringer to Stars" }
+		science = { Starseeker "Seeker of Stars" }
+		transport = { Starbridge "Bridge between Stars" }
+		outpost_station = {
+			sequential_name = "Frontier Outpost"
+		}
+	}
+
+	fleet_names = {
+		sequential_name = "%O% Fleet"
+	}
+	
+	army_names = {
+		defense_army = {
+			sequential_name = "%O% Defenders of Tama"
+		}
+		assault_army = {
+			sequential_name = "%O% Defence Force"
+		}
+		slave_army = {
+			sequential_name = "%O% Indentured Defence Force"
+		}
+		clone_army = { 
+			sequential_name = "%O% Clone Defence Force"
+		}
+		robotic_army = {
+			sequential_name = "%O% Mechanical Defence Force"
+		}
+		android_army = {
+			sequential_name = "%O% Synthetic Defence Force"
+		}
+		psionic_army = { 
+			sequential_name = "%O% Psi Defence Force"
+		}
+		xenomorph_army = {
+			sequential_name = "%O% Bio-Warfare Defence Force"
+		}
+		gene_warrior_army = {
+			sequential_name = "%O% Bio-Engineered Defence Force"
+		}
+	}
+
+	planet_names = {
+		generic = {
+			names = {
+				Shantil El-Adril Tal'Dorei Kanda Malindi Razna Marquet Anzo "Mo Moteh"
+			}
+		}
+	}
+
+
+	### CHARACTERS
+
+	character_names = {
+		names1 = {
+			weight = 100
+			first_names_male = {		
+				Darmok Tirave Brelot Gorell Dathon Dethon Honethon Dermok Chenza Shaka Zinda Sokath Mirab Temba Termok Tethon Makor Kiazi Vaxildok Kodiok Harok Shaggok Walshok Janock Hadon Zimpok
+			}
+			first_names_female = {
+				Kailash Sidalime Lash Jalad Jalash Keyleth Vexahlia Kiteo Kadir Zima Kima Rai Jiri Lowani Lungha Ribha Femha Sternha Carpha Clavicha Humerha Allurash
+			}
+			second_names = {
+				" "
+			}
+			regnal_first_names_male = {
+				Darmok Dathon Dethon Larnok Honethon Dermok Chenza Shaka Zinda Sokath Mirab Temba Termok Tethon Makor Kiazi Vaxildok Kodiok Harok Shaggok Walshok Janock Hadon Zimpok
+			}
+			regnal_first_names_female = {
+				Kailash Lash Jalad Jalash Keyleth Vexahlia Kiteo Kadir Zima Kima Rai Jiri Lowani Lungha Ribha Femha Sternha Carpha Clavicha Humerha Allurash
+			}
+			regnal_second_names = {
+				" "
+			}
+		}
+	}
+}

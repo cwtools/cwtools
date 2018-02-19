@@ -1,0 +1,773 @@
+############################
+#
+# De Declaratem Events
+#
+# Written by Walshicus
+#
+############################
+
+namespace = STH_deDeclaratem_event
+
+
+
+### The Terratin Incident
+ship_event = {
+	id = STH_deDeclaratem_event.1
+	title = STH_deDeclaratem_eventName
+	desc = { 
+		trigger = { owner = { OR = { earth_empires = yes is_species_class = FED } } }
+		text = STH_deDeclaratem_event.1.desc_01
+	}
+	desc = { 
+		trigger = { 
+			NOT = { owner = { OR = { earth_empires = yes is_species_class = FED } } } 
+			any_country = { 
+				OR = { earth_empires = yes is_species_class = FED }
+				NOT = { is_same_value = root.owner }
+				has_communications = root.owner
+			}
+		}
+		text = STH_deDeclaratem_event.1.desc_02
+	}
+	desc = { 
+		trigger = { 
+			NOT = { owner = { OR = { earth_empires = yes is_species_class = FED } } } 
+			OR = {
+				any_country = { 
+					OR = { earth_empires = yes is_species_class = FED }
+					NOT = { is_same_value = root.owner }
+					NOT = { has_communications = root.owner }
+				}
+				NOT = { any_country = { OR = { earth_empires = yes is_species_class = FED } } }
+			}
+		}
+		text = STH_deDeclaratem_event.1.desc_03
+	}
+	picture = sth_GFX_evt_deDeclaratem1
+	location = FROM
+	is_triggered_only = yes
+	trigger = {
+		solar_system = {
+			any_planet = { is_planet_class = pc_black_hole }
+		}
+	}
+	immediate = {
+		solar_system = {
+			random_system_planet  = { 
+				limit = { is_planet_class = pc_black_hole }
+				set_planet_flag = deDeclaratemBlackHole
+				save_global_event_target_as = deDeclaratemBlackHole
+				create_ambient_object = { 
+					type = sth_xcv247 
+					location = root 
+					entity_offset = { min = 10 max = 20 }
+					entity_offset_height = { min = 10 max = 15 }
+				}
+				last_created_ambient_object = { set_ambient_object_flag = xcv247 }
+			}
+		}
+		random_country = { 
+			limit = {
+				OR = { earth_empires = yes is_species_class = FED }
+				NOT = { is_same_value = root.owner }
+			}
+			save_event_target_as = humanCountry
+		}
+	}
+	option = {
+		name = STH_deDeclaratem_event.1.a #Board Ship
+		hidden_effect = {
+			random_list = {
+				70 = { ship_event = { id = STH_deDeclaratem_event.2 days = 2 } } #Crew Dead
+				30 = { ship_event = { id = STH_deDeclaratem_event.3 days = 2 } } #Crew Alive
+			}
+		}
+	}
+	option = {
+		name = STH_deDeclaratem_event.1.b #Scan First
+		hidden_effect = {
+			random_list = {
+				30 = { ship_event = { id = STH_deDeclaratem_event.4 days = 5 } } #Crew Dead
+				50 = { ship_event = { id = STH_deDeclaratem_event.5 days = 5 } } #Crew Alive
+				20 = { ship_event = { id = STH_deDeclaratem_event.6 days = 5 } } #Ship Destroyed
+			}
+		}
+	}
+	option = {
+		name = STH_deDeclaratem_event.1.c #Contact UE/Feds
+		trigger = {
+			owner = { 
+				NOR = { earth_empires = yes is_species_class = FED } 
+				any_country = { 
+					OR = { earth_empires = yes is_species_class = FED }
+					NOT = { is_same_value = root.owner }
+					has_communications = root.owner
+				}
+			}			
+		}
+		hidden_effect = { ship_event = { id = STH_deDeclaratem_event.7 days = 2 } }
+	}
+	option = {
+		name = STH_deDeclaratem_event.1.d #Target Practice
+		trigger = { 
+			owner = { 
+				NOR = { earth_empires = yes is_species_class = FED } 
+				NOR = { pacifist_country_traditions = yes egalitarian_country_traditions = yes } 
+			}
+			
+		}
+		hidden_effect = { ship_event = { id = STH_deDeclaratem_event.8 days = 2 } }
+	}
+}
+
+#Board the Ship - Crew Dead
+ship_event = {
+	id = STH_deDeclaratem_event.2
+	title = STH_deDeclaratem_eventName
+	desc = { 
+		trigger = { owner = { OR = { earth_empires = yes is_species_class = FED } } }
+		text = STH_deDeclaratem_event.2.desc_01
+	}
+	desc = { 
+		trigger = { 
+			NOT = { owner = { OR = { earth_empires = yes is_species_class = FED } } } 
+			any_country = { 
+				OR = { earth_empires = yes is_species_class = FED }
+				NOT = { is_same_value = root.owner }
+				has_communications = root.owner
+			}
+		}
+		text = STH_deDeclaratem_event.2.desc_02
+	}
+	desc = { 
+		trigger = { 
+			NOT = { owner = { OR = { earth_empires = yes is_species_class = FED } } } 
+			OR = {
+				any_country = { 
+					OR = { earth_empires = yes is_species_class = FED }
+					NOT = { is_same_value = root.owner }
+					NOT = { has_communications = root.owner }
+				}
+				NOT = { any_country = { OR = { earth_empires = yes is_species_class = FED } } }
+			}
+		}
+		text = STH_deDeclaratem_event.2.desc_03
+	}
+	picture = sth_GFX_evt_deDeclaratem1
+	location = FROM
+	is_triggered_only = yes
+	option = {
+		name = STH_deDeclaratem_event.2.a
+		hidden_effect = {
+			solar_system = {
+				random_system_ambient_object = {
+					limit = { has_ambient_object_flag = xcv247 }
+					destroy_ambient_object = this
+				}
+			}
+			owner = {
+				create_fleet = {
+					name = "UESP Manhire"
+					effect = {
+						set_owner = root.owner
+						create_ship = { name = "UESP Manhire XCV-247" design = "Declaration" prefix = no }
+						set_location = root
+					}
+				}
+				add_physics_research = 500
+			}
+		}
+	}
+	after = {
+		hidden_effect = { owner = { country_event = { id = STH_deDeclaratem_event.9 days = 7 random = 3 } } }
+	}
+}
+
+#Crew alive!
+ship_event = {
+	id = STH_deDeclaratem_event.3
+	title = STH_deDeclaratem_eventName
+	desc = { 
+		trigger = { owner = { OR = { earth_empires = yes is_species_class = FED } } }
+		text = STH_deDeclaratem_event.3.desc_01
+	}
+	desc = { 
+		trigger = { 
+			NOT = { owner = { OR = { earth_empires = yes is_species_class = FED } } } 
+			any_country = { 
+				OR = { earth_empires = yes is_species_class = FED }
+				NOT = { is_same_value = root.owner }
+				has_communications = root.owner
+			}
+		}
+		text = STH_deDeclaratem_event.3.desc_02
+	}
+	desc = { 
+		trigger = { 
+			NOT = { owner = { OR = { earth_empires = yes is_species_class = FED } } } 
+			OR = {
+				any_country = { 
+					OR = { earth_empires = yes is_species_class = FED }
+					NOT = { is_same_value = root.owner }
+					NOT = { has_communications = root.owner }
+				}
+				NOT = { any_country = { OR = { earth_empires = yes is_species_class = FED } } }
+			}
+		}
+		text = STH_deDeclaratem_event.3.desc_03
+	}
+	picture = sth_GFX_evt_deDeclaratem1
+	location = FROM
+	is_triggered_only = yes
+	option = {
+		name = STH_deDeclaratem_event.3.a
+		hidden_effect = {
+			solar_system = {
+				random_system_ambient_object = {
+					limit = { has_ambient_object_flag = xcv247 }
+					destroy_ambient_object = this
+				}
+			}
+			owner = {
+				create_species = {
+					name = "Human"
+					class = FED
+					portrait = human
+					traits = random
+				}
+				create_leader = { 
+					species = last_created_species
+					type = scientist 
+					sub_type = survey 
+					name = random 
+					traits = { trait = leader_trait_spark_of_genius }
+					skill = 1000
+				}
+				last_created_leader = {
+					if = {
+						limit = { gender = female }
+						set_name = "Maryanne Webb"
+						else = { set_name = "Colin Webb" }
+					}
+				}
+				create_fleet = {
+					name = "UESP Manhire"
+					effect = {
+						set_owner = root.owner
+						create_ship = { name = "UESP Manhire XCV-247" design = "Declaration" prefix = no }
+						set_location = root
+					}
+				}
+				last_created_fleet = { assign_leader = last_created_leader set_fleet_flag = UESPManhire }
+				last_created_leader = { set_leader_flag = UESPManhireCaptain }
+				add_physics_research = 500
+			}
+		}
+	}
+	after = {
+		hidden_effect = { owner = { country_event = { id = STH_deDeclaratem_event.9 days = 7 random = 3 } } }
+		hidden_effect = { owner = { country_event = { id = STH_deDeclaratem_event.10 days = 7 random = 3 } } }
+	}
+}
+
+ship_event = {
+	id = STH_deDeclaratem_event.4
+	title = STH_deDeclaratem_eventName
+	desc = { 
+		trigger = { owner = { OR = { earth_empires = yes is_species_class = FED } } }
+		text = STH_deDeclaratem_event.4.desc_01
+	}
+	desc = { 
+		trigger = { 
+			NOT = { owner = { OR = { earth_empires = yes is_species_class = FED } } } 
+			any_country = { 
+				OR = { earth_empires = yes is_species_class = FED }
+				NOT = { is_same_value = root.owner }
+				has_communications = root.owner
+			}
+		}
+		text = STH_deDeclaratem_event.4.desc_02
+	}
+	desc = { 
+		trigger = { 
+			NOT = { owner = { OR = { earth_empires = yes is_species_class = FED } } } 
+			OR = {
+				any_country = { 
+					OR = { earth_empires = yes is_species_class = FED }
+					NOT = { is_same_value = root.owner }
+					NOT = { has_communications = root.owner }
+				}
+				NOT = { any_country = { OR = { earth_empires = yes is_species_class = FED } } }
+			}
+		}
+		text = STH_deDeclaratem_event.4.desc_03
+	}
+	picture = sth_GFX_evt_deDeclaratem1
+	location = FROM
+	is_triggered_only = yes
+	option = {
+		name = STH_deDeclaratem_event.4.a
+		hidden_effect = {
+			solar_system = {
+				random_system_ambient_object = {
+					limit = { has_ambient_object_flag = xcv247 }
+					destroy_ambient_object = this
+				}
+			}
+			owner = {
+				create_fleet = {
+					name = "UESP Manhire"
+					effect = {
+						set_owner = root.owner
+						create_ship = { name = "UESP Manhire XCV-247" design = "Declaration" prefix = no }
+						set_location = root
+					}
+				}
+				add_physics_research = 600
+			}
+		}
+	}
+	after = {
+		hidden_effect = { owner = { country_event = { id = STH_deDeclaratem_event.9 days = 7 random = 3 } } }
+	}
+}
+
+ship_event = {
+	id = STH_deDeclaratem_event.5
+	title = STH_deDeclaratem_eventName
+	desc = { 
+		trigger = { owner = { OR = { earth_empires = yes is_species_class = FED } } }
+		text = STH_deDeclaratem_event.5.desc_01
+	}
+	desc = { 
+		trigger = { 
+			NOT = { owner = { OR = { earth_empires = yes is_species_class = FED } } } 
+			any_country = { 
+				OR = { earth_empires = yes is_species_class = FED }
+				NOT = { is_same_value = root.owner }
+				has_communications = root.owner
+			}
+		}
+		text = STH_deDeclaratem_event.5.desc_02
+	}
+	desc = { 
+		trigger = { 
+			NOT = { owner = { OR = { earth_empires = yes is_species_class = FED } } } 
+			OR = {
+				any_country = { 
+					OR = { earth_empires = yes is_species_class = FED }
+					NOT = { is_same_value = root.owner }
+					NOT = { has_communications = root.owner }
+				}
+				NOT = { any_country = { OR = { earth_empires = yes is_species_class = FED } } }
+			}
+		}
+		text = STH_deDeclaratem_event.5.desc_03
+	}
+	picture = sth_GFX_evt_deDeclaratem1
+	location = FROM
+	is_triggered_only = yes
+	option = {
+		name = STH_deDeclaratem_event.5.a
+		hidden_effect = {
+			solar_system = {
+				random_system_ambient_object = {
+					limit = { has_ambient_object_flag = xcv247 }
+					destroy_ambient_object = this
+				}
+			}
+			owner = {
+				create_species = {
+					name = "Human"
+					class = FED
+					portrait = human
+					traits = random
+				}
+				create_leader = { 
+					species = last_created_species
+					type = scientist 
+					sub_type = survey 
+					name = random 
+					traits = { trait = leader_trait_spark_of_genius }
+					skill = 1000
+				}
+				last_created_leader = {
+					if = {
+						limit = { gender = female }
+						set_name = "Maryanne Webb"
+						else = { set_name = "Colin Webb" }
+					}
+				}
+				create_fleet = {
+					name = "UESP Manhire"
+					effect = {
+						set_owner = root.owner
+						create_ship = { name = "UESP Manhire XCV-247" design = "Declaration" prefix = no }
+						set_location = root
+					}
+				}
+				last_created_fleet = { assign_leader = last_created_leader set_fleet_flag = UESPManhire }
+				last_created_leader = { set_leader_flag = UESPManhireCaptain }
+				add_physics_research = 600
+			}
+		}
+	}
+	after = {
+		hidden_effect = { owner = { country_event = { id = STH_deDeclaratem_event.9 days = 7 random = 3 } } }
+		hidden_effect = { owner = { country_event = { id = STH_deDeclaratem_event.10 days = 7 random = 3 } } }
+	}
+}
+
+#Ship Destroyed
+ship_event = {
+	id = STH_deDeclaratem_event.6
+	title = STH_deDeclaratem_eventName
+	show_sound = event_super_explosion
+	desc = { 
+		trigger = { owner = { OR = { earth_empires = yes is_species_class = FED } } }
+		text = STH_deDeclaratem_event.6.desc_01
+	}
+	desc = { 
+		trigger = { 
+			NOT = { owner = { OR = { earth_empires = yes is_species_class = FED } } } 
+			any_country = { 
+				OR = { earth_empires = yes is_species_class = FED }
+				NOT = { is_same_value = root.owner }
+				has_communications = root.owner
+			}
+		}
+		text = STH_deDeclaratem_event.6.desc_02
+	}
+	desc = { 
+		trigger = { 
+			NOT = { owner = { OR = { earth_empires = yes is_species_class = FED } } } 
+			OR = {
+				any_country = { 
+					OR = { earth_empires = yes is_species_class = FED }
+					NOT = { is_same_value = root.owner }
+					NOT = { has_communications = root.owner }
+				}
+				NOT = { any_country = { OR = { earth_empires = yes is_species_class = FED } } }
+			}
+		}
+		text = STH_deDeclaratem_event.6.desc_03
+	}
+	picture = sth_GFX_evt_deDeclaratem1
+	location = FROM
+	is_triggered_only = yes
+	immediate = { leader = { save_event_target_as = shipLeader } }
+	option = {
+		name = STH_deDeclaratem_event.6.a
+		hidden_effect = {
+			solar_system = {
+				random_system_ambient_object = {
+					limit = { has_ambient_object_flag = xcv247 }
+					create_ambient_object = {
+						type = explosion_particle_object
+						location = this
+						duration = 10
+						use_3d_location = yes			
+						entity_offset = { min = 0 max = 0 }
+						entity_offset_angle = { min = 0 max = 0 }
+						entity_offset_height = { min = 0 max = 0 }			
+						entity_scale_to_size = yes
+						scale = 100
+					}
+					destroy_ambient_object = this
+				}
+			}
+			owner = { add_physics_research = 300 }
+		}
+	}
+}
+
+#UE/Feds told
+ship_event = {
+	id = STH_deDeclaratem_event.7
+	title = STH_deDeclSTH_deDeclaratem_eventName
+	desc = STH_deDeclaratem_event.7.desc
+	picture = sth_GFX_evt_deDeclaratem1
+	immediate = {
+		random_country = {
+			limit = { OR = { earth_empires = yes is_species_class = FED } NOT = { is_same_value = root.owner } has_communications = root.owner}
+			save_event_target_as = humanCountry
+		}
+		owner = { save_event_target_as = deDeclaratemFinder }
+		solar_system = {
+			random_system_ambient_object = {
+				limit = { has_ambient_object_flag = xcv247 }
+				save_event_target_as = xcv247
+			}
+		}
+	}
+	is_triggered_only = yes
+	option = {
+		name = STH_deDeclaratem_event.7.a
+		owner = {
+			add_influence = 100
+			event_target:humanCountry = { add_opinion_modifier = { who = root.owner modifier = opinion_medium_boost } }
+			hidden_effect = { event_target:humanCountry = { country_event = { id = STH_deDeclaratem_event.12 days = 1 } } }
+		}
+	}
+}
+
+#Target Practice
+ship_event = {
+	id = STH_deDeclaratem_event.8
+	title = STH_deDeclaratem_eventName
+	show_sound = event_super_explosion
+	desc = {
+		trigger = {
+			any_country = {
+				OR = { earth_empires = yes is_species_class = FED } 
+				NOT = { is_same_value = root.owner } 
+				has_communications = root.owner
+			}
+		}
+		text = STH_deDeclaratem_event.8.desc_01 #Know Feds
+	}
+	desc = {
+		trigger = {
+			OR = {
+				any_country = {
+					OR = { earth_empires = yes is_species_class = FED } 
+					NOT = { is_same_value = root.owner } 
+					NOT = { has_communications = root.owner }
+				}
+				any_country = {
+					NOR = { earth_empires = yes is_species_class = FED } 
+				}
+			}
+		}
+		text = STH_deDeclaratem_event.8.desc_02 #Don't know Feds
+	}
+	picture = sth_GFX_evt_deDeclaratem1
+	is_triggered_only = yes
+	immediate = {
+		random_country = {
+			limit = { OR = { earth_empires = yes is_species_class = FED } NOT = { is_same_value = root.owner } has_communications = root.owner }
+			save_event_target_as = humanCountry
+		}
+		solar_system = {
+			random_system_ambient_object = {
+				limit = { has_ambient_object_flag = xcv247 }
+				create_ambient_object = {
+					type = explosion_particle_object
+					location = this
+					duration = 10
+					use_3d_location = yes			
+					entity_offset = { min = 0 max = 0 }
+					entity_offset_angle = { min = 0 max = 0 }
+					entity_offset_height = { min = 0 max = 0 }			
+					entity_scale_to_size = yes
+					scale = 100
+				}
+				destroy_ambient_object = this
+			}
+		}
+	}
+	option = {
+		name = STH_deDeclaratem_event.8.a
+		leader = { add_skill = 1 }
+		owner = { add_engineering_research = 200 }
+		if = {
+			limit = { exists = event_target:humanCountry }
+			if = {
+				limit = { event_target:humanCountry = { has_communications = root.owner } }
+				event_target:humanCountry = { add_opinion_modifier = { who = root.owner modifier = opinion_insult } }
+			}
+		}
+	}
+}
+
+# Get to research XCV
+country_event = {
+	id = STH_deDeclaratem_event.9
+	title = STH_deDeclaratem_event.9.name
+	desc = STH_deDeclaratem_event.9.desc
+	picture = sth_GFX_evt_deDeclaratem1
+	location = FROM
+	is_triggered_only = yes
+	trigger = {
+		OR = { earth_empires = yes is_species_class = FED }
+	}
+	option = {
+		name = STH_deDeclaratem_event.9.a
+		add_research_option = tech_xcv330_1
+		add_tech_progress = {
+			tech = tech_xcv330_1
+			progress = 0.75
+		}
+	}
+	option = {
+		name = STH_deDeclaratem_event.9.b
+	}
+}
+# Captain thanks
+country_event = {
+	id = STH_deDeclaratem_event.10
+	title = STH_deDeclaratem_event.10.name
+	desc = {
+		trigger = { OR = { earth_empires = yes is_species_class = FED } }
+		text = STH_deDeclaratem_event.10.desc_01 #Are Fed
+	}
+	desc = {
+		trigger = { NOR = { earth_empires = yes is_species_class = FED } }
+		text = STH_deDeclaratem_event.10.desc_02 #Aren't Fed
+	}
+	diplomatic = yes
+	picture_event_data = {
+		portrait = event_target:UESPManhireCaptain
+		room = xcv330_room
+	}
+	location = FROM
+	is_triggered_only = yes
+	immediate = { 
+		random_owned_leader = {
+			limit = { has_leader_flag = UESPManhireCaptain }
+			save_event_target_as = UESPManhireCaptain
+		}
+		random_owned_fleet = {
+			limit = { has_fleet_flag = UESPManhire }
+			save_event_target_as = UESPManhire
+		}
+	}
+	option = {
+		name = STH_deDeclaratem_event.10.d #Detail?
+		is_dialog_only = yes
+		response_text = STH_deDeclaratem_event.10.d.response
+	}
+	option = {
+		name = STH_deDeclaratem_event.10.a #Stays
+		trigger = { OR = { earth_empires = yes is_species_class = FED } }
+	}
+	option = {
+		name = STH_deDeclaratem_event.10.b #Allowed to return
+		trigger = { NOR = { earth_empires = yes is_species_class = FED } }
+		add_influence = 50
+		hidden_effect = { event_target:UESPManhireCaptain = { kill_leader = { type = scientist show_notification = no } } }
+	}
+	option = {
+		name = STH_deDeclaratem_event.10.c #Not allowed to return
+		trigger = { 
+			NOR = { earth_empires = yes is_species_class = FED }
+			NOR = { pacifist_country_traditions = yes egalitarian_country_traditions = yes } 
+		}
+		event_target:UESPManhireCaptain = { kill_leader = { type = scientist show_notification = no } }
+		add_society_research = 100
+	}
+	
+	
+	
+}
+
+#UE/Feds told about XCV
+country_event = {
+	id = STH_deDeclaratem_event.12
+	title = STH_deDeclaratem_event.12.name
+	desc = STH_deDeclaratem_event.12.desc
+	picture = sth_GFX_evt_deDeclaratem1
+	location = FROM
+	is_triggered_only = yes
+	option = {
+		name = STH_deDeclaratem_event.12.a
+		enable_special_project = {
+			name = "DE_DECLARATEM_1_PROJECT"
+			location = event_target:xcv247
+		}
+	}
+}
+
+#Feds arrive
+ship_event = {
+	id = STH_deDeclaratem_event.11
+	title = STH_deDeclaratem_eventName
+	desc = STH_deDeclaratem_event.11.desc
+	picture = sth_GFX_evt_deDeclaratem1
+	location = FROM
+	is_triggered_only = yes
+	option = {
+		name = STH_deDeclaratem_event.1.a #Board Ship
+		hidden_effect = {
+			random_list = {
+				70 = { ship_event = { id = STH_deDeclaratem_event.2 days = 2 } } #Crew Dead
+				30 = { ship_event = { id = STH_deDeclaratem_event.3 days = 2 } } #Crew Alive
+			}
+		}
+	}
+	option = {
+		name = STH_deDeclaratem_event.1.b #Scan First
+		hidden_effect = {
+			random_list = {
+				30 = { ship_event = { id = STH_deDeclaratem_event.4 days = 5 } } #Crew Dead
+				50 = { ship_event = { id = STH_deDeclaratem_event.5 days = 5 } } #Crew Alive
+				20 = { ship_event = { id = STH_deDeclaratem_event.6 days = 5 } } #Ship Destroyed
+			}
+		}
+	}
+}
+
+ship_event = {
+	id = STH_deDeclaratem_event.100
+	title = STH_deDeclaratem_eventName
+	desc = STH_deDeclaratem_event.100.desc
+	show_sound = event_super_explosion
+	picture = sth_GFX_evt_deDeclaratem1
+	location = FROM
+	is_triggered_only = yes
+	option = {
+		name = STH_deDeclaratem_event.100.a
+		if = {
+			limit = { has_hp_percentage > 0.25 }
+			reduce_hp_percent = 0.25
+			else = {
+				if = {
+					limit = { has_hp_percentage > 0.1 }
+					reduce_hp_percent = 0.1
+				}
+			}
+		}
+	}
+}
+
+ship_event = {
+	id = STH_deDeclaratem_event.200
+	title = STH_deDeclaratem_eventName
+	desc = STH_deDeclaratem_event.200.desc
+	show_sound = event_super_explosion
+	picture = sth_GFX_evt_deDeclaratem1
+	location = FROM
+	is_triggered_only = yes
+	option = {
+		name = STH_deDeclaratem_event.200.a
+		fleet = { 
+			create_ambient_object = {
+				type = explosion_particle_object
+				location = this
+				duration = 10
+				use_3d_location = yes			
+				entity_offset = { min = 0 max = 0 }
+				entity_offset_angle = { min = 0 max = 0 }
+				entity_offset_height = { min = 0 max = 0 }			
+				entity_scale_to_size = yes
+				scale = 100
+			}
+			destroy_fleet = this 
+		}
+	}
+}
+
+# On tech gain
+country_event = {
+	id = STH_deDeclaratem_event.300
+	is_triggered_only = yes
+	hide_window = yes
+	trigger = {
+		last_increased_tech = tech_xcv330_1
+	}
+	immediate = {
+		give_technology = { tech = tech_physics_coleopteric_67 }
+		create_ship_design = { design = "Declaration" ftl = warp }
+		add_ship_design = last_created_design
+	}
+}

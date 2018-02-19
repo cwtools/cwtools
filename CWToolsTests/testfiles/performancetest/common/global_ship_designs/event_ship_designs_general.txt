@@ -1,0 +1,321 @@
+# Passenger Liner
+ship_design = {
+	name = "Splendor"
+	ship_size = passenger_liner
+	
+	section = {
+		template = "passenger_liner_section"
+		slot = "mid"
+		
+		component = {
+			slot = "LARGE_UTILITY_1"
+			template = "LARGE_ANTIMATTER_REACTOR"
+		}
+	}
+	required_component = "WARP_DRIVE_1"
+	required_component = "SHIP_THRUSTER_1"
+}
+
+# Primitive Space Station
+ship_design = {
+	name = "Space Station"
+	ship_size = primitive_space_station
+	
+	section = {
+		template = "primitive_space_station_section"
+		slot = "mid"
+		
+		component = {
+			slot = "SMALL_UTILITY_1"
+			template = "SMALL_FISSION_REACTOR"
+		}
+	}
+}
+
+# Generic Starbase
+ship_design = {
+	name = "Citadel"
+	ship_size = station_generic_01
+	section = {
+		template = "station_generic_01_key"
+		slot = "mid"
+		
+		component = {
+			slot = "SMALL_GUN_01"
+			template = "POINT_DEFENCE_1"
+		}
+		component = {
+			slot = "SMALL_GUN_02"
+			template = "SMALL_RED_LASER"
+		}
+		component = {
+			slot = "SMALL_GUN_03"
+			template = "SMALL_RED_LASER"
+		}
+		component = {
+			slot = "MEDIUM_GUN_01"
+			template = "MEDIUM_RED_LASER"
+		}
+		component = {
+			slot = "MEDIUM_GUN_02"
+			template = "MEDIUM_RED_LASER"
+		}
+		component = {
+			slot = "LARGE_GUN_01"
+			template = "LARGE_ENERGY_LANCE_1"
+		}
+	}
+}
+
+# Sensor Station
+ship_design = {
+	name = "Sentry"
+	ship_size = sensor_station_01
+	section = {
+		template = "sensor_station_key"
+		slot = "mid"
+		
+		component = {
+			slot = "SMALL_GUN_01"
+			template = "POINT_DEFENCE_1"
+		}
+		component = {
+			slot = "SMALL_GUN_02"
+			template = "SMALL_RED_LASER"
+		}
+		component = {
+			slot = "MEDIUM_UTILITY_1"
+			template = "MEDIUM_ANTIMATTER_REACTOR"
+		}
+		component = {
+			slot = "MEDIUM_UTILITY_2"
+			template = "MEDIUM_SHIELD_2"
+		}
+	}
+}
+
+
+# Generic Corvette
+ship_design = {
+	name = "Dagger"
+	ship_size = corvette
+	ship_size = corvette
+	section = {
+		template = "corvette_stern_cannon"
+		slot = "stern"
+		component = { slot = "LARGE_GUN_01" template = "LARGE_BASIC_DISRUPTOR_2" }
+		component = { slot = "LARGE_GUN_02" template = "LARGE_BASIC_DISRUPTOR_2" }
+		component = { slot = "LARGE_GUN_03" template = "LARGE_BASIC_DISRUPTOR_2" }
+		component = { slot = "LARGE_GUN_04" template = "LARGE_BASIC_DISRUPTOR_2" }
+		component = { slot = "SMALL_GUN_1" template = "POINT_DEFENCE_PHOTON_TORPEDO_1" }
+	}
+	section = {
+		template = "corvette_mid_17"
+		slot = "mid"
+		component = { slot = "SMALL_UTILITY_1" template = "UTILITY_SMALL_HARD_1" }
+		component = { slot = "LARGE_UTILITY_1" template = "UTILITY_LARGE_TRACKING_1" }
+	}	
+	required_component="REQUIRED_WARP_1_PF"
+	required_component="REQUIRED_COMPUTER_1_PF"
+	required_component="REQUIRED_THRUSTERS_1A_PF"
+	required_component="Required_Combat_Sensor_brawler_1"
+	required_component="REQUIRED_DEFENSE_1_ARMOR_PF"
+	required_component="REQUIRED_HULL_1A_PF"
+}
+
+# Generic Destroyer
+ship_design = {
+	name = "Ravager"
+	ship_size = destroyer
+	section = {
+		template = "DESTROYER_BOW_M1S2"
+		slot = "bow"
+		
+		component = {
+			slot = "MEDIUM_GUN_01"
+			template = "MEDIUM_RED_LASER"
+		}
+		component = {
+			slot = "SMALL_GUN_01"
+			template = "SMALL_RED_LASER"
+		}
+		component = {
+			slot = "SMALL_GUN_02"
+			template = "SMALL_RED_LASER"
+		}
+		component = {
+			slot = "MEDIUM_UTILITY_1"
+			template = "MEDIUM_FUSION_REACTOR"
+		}
+		component = {
+			slot = "MEDIUM_UTILITY_2"
+			template = "MEDIUM_FUSION_REACTOR"
+		}
+		component = {
+			slot = "MEDIUM_UTILITY_3"
+			template = "MEDIUM_FUSION_REACTOR"
+		}
+	}
+	section = {
+		template = "DESTROYER_STERN_S2"
+		slot = "stern"
+		
+		component = {
+			slot = "SMALL_GUN_01"
+			template = "SMALL_RED_LASER"
+		}
+		component = {
+			slot = "SMALL_GUN_02"
+			template = "SMALL_RED_LASER"
+		}
+		component = {
+			slot = "SMALL_UTILITY_1"
+			template = "SMALL_FUSION_REACTOR"
+		}
+		component = {
+			slot = "SMALL_UTILITY_2"
+			template = "SMALL_FUSION_REACTOR"
+		}
+		component = {
+			slot = "SMALL_UTILITY_3"
+			template = "SMALL_FUSION_REACTOR"
+		}
+		component = {
+			slot = "SMALL_UTILITY_4"
+			template = "SMALL_FUSION_REACTOR"
+		}
+	}
+	required_component="WARP_DRIVE_1"
+	required_component="SHIP_THRUSTER_1"
+	required_component="SHIP_SENSOR_1"
+}
+
+# Incoming Asteroid
+ship_design = {
+	name = "Asteroid"
+	ship_size = asteroid
+	use_design_name = yes
+}
+
+# Space Probe
+ship_design = {
+	name = "DS47"
+	ship_size = probe
+
+	section = {
+		template = "probe_section"
+		slot = "mid"
+		
+		component = {
+			slot = "MEDIUM_GUN_01"
+			template = "MEDIUM_PROBE_LIGHTNING"
+		}
+		component = {
+			slot = "MEDIUM_GUN_02"
+			template = "MEDIUM_PROBE_LIGHTNING"
+		}
+	}
+}
+
+
+# Cultist Ship I
+ship_design = {
+	name = "Divine Glory"
+	ship_size = abandoned_ship
+
+	section = {
+		template = "abandoned_ship_section"
+		slot = "mid"
+		
+		component = {
+			slot = "LARGE_GUN_01"
+			template = "LARGE_MISSILE_2"
+		}
+		component = {
+			slot = "LARGE_GUN_02"
+			template = "LARGE_MISSILE_2"
+		}
+		component = {
+			slot = "MEDIUM_GUN_01"
+			template = "MEDIUM_BLUE_LASER"
+		}
+		component = {
+			slot = "MEDIUM_GUN_02"
+			template = "MEDIUM_BLUE_LASER"
+		}
+		component = {
+			slot = "MEDIUM_GUN_03"
+			template = "MEDIUM_BLUE_LASER"
+		}		
+		component = {
+			slot = "MEDIUM_UTILITY_1"
+			template = "MEDIUM_FUSION_REACTOR"
+		}
+		component = {
+			slot = "MEDIUM_UTILITY_1"
+			template = "MEDIUM_FUSION_REACTOR"
+		}			
+		component = {
+			slot = "MEDIUM_UTILITY_2"
+			template = "MEDIUM_SHIELD_2"
+		}		
+		component = {
+			slot = "LARGE_UTILITY_1"
+			template = "LARGE_ARMOR_2"
+		}		
+	}
+	required_component="WARP_DRIVE_2"
+	required_component="SHIP_THRUSTER_2"
+	required_component="SHIP_SENSOR_2"
+}
+
+# Cultist Ship II
+ship_design = {
+	name = "Righteous"
+	ship_size = abandoned_ship
+
+	section = {
+		template = "abandoned_ship_section"
+		slot = "mid"
+		
+		component = {
+			slot = "LARGE_GUN_01"
+			template = "LARGE_MISSILE_1"
+		}
+		component = {
+			slot = "LARGE_GUN_02"
+			template = "LARGE_MISSILE_1"
+		}
+		component = {
+			slot = "MEDIUM_GUN_01"
+			template = "MEDIUM_RED_LASER"
+		}
+		component = {
+			slot = "MEDIUM_GUN_02"
+			template = "MEDIUM_RED_LASER"
+		}
+		component = {
+			slot = "MEDIUM_GUN_03"
+			template = "MEDIUM_RED_LASER"
+		}		
+		component = {
+			slot = "MEDIUM_UTILITY_1"
+			template = "MEDIUM_FISSION_REACTOR"
+		}
+		component = {
+			slot = "MEDIUM_UTILITY_1"
+			template = "MEDIUM_FISSION_REACTOR"
+		}			
+		component = {
+			slot = "MEDIUM_UTILITY_2"
+			template = "MEDIUM_SHIELD_1"
+		}			
+		component = {
+			slot = "LARGE_UTILITY_1"
+			template = "LARGE_ARMOR_1"
+		}			
+	}
+	required_component="WARP_DRIVE_1"
+	required_component="SHIP_THRUSTER_1"
+	required_component="SHIP_SENSOR_1"
+}

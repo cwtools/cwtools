@@ -1,0 +1,52 @@
+# variables:
+# parameters, data containing the specifics, eg which planet we're talking about
+# warscore_cost, scripted value, root is target country, amount of warscore required to push this demand
+# potential, trigger, root and from are main attackers and defenders, war is fromfrom, decides if this demand is listed
+# possible, trigger, root and from are main attackers and defenders, war is fromfrom, fromfromfrom is the target country, decides if this demand can go through
+# proposable, trigger, root and from are main attackers and defenders, war is fromfrom, fromfromfrom is the target country, decides if this demand is ok to propose
+# demandable, trigger, root and from are main attackers and defenders, war is fromfrom, fromfromfrom is the target country, decides if you can send a peace offer demanding ( not surrendering ) the demand.
+# effect, effect, root and main are main attacker and defender, war is fromfrom, fromfromfrom is the target country, effect which executes when the demand is accepted
+# execution_order, integer, defines in which order demands are executed, lower is higher priority, having the same execution order will make the first defined one higher prio
+# monthly_warscore, a descriptor on monthly wargoal score
+#	amount, scripted value, root and from are main attackers and defenders, war is fromfrom, fromfromfrom is the target country
+#   valid, trigger, root and from are main attackers and defenders, war is fromfrom, fromfromfrom is the target country
+
+# For War in Heaven
+# annexation = {
+	# execution_order = 1
+	
+	# parameters = {
+		# country = {
+			# type = country
+		# }
+	# }
+	
+	# warscore_cost = {
+		# base = 75
+	# }
+	
+	# potential = {
+		# always = no
+	# }
+	
+	# possible = {
+		# always = yes
+	# }
+	
+	# proposable = {
+		# always = yes
+	# }
+	
+	# effect = {	
+		# parameter:country = {
+			# every_owned_planet  = {
+				# set_owner = root
+			# }
+		# }
+	# }
+	
+	# ai_weight = {
+		# base = 1000
+	# }
+# }
+

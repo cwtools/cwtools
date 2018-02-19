@@ -1,0 +1,97 @@
+﻿### Banean by EHKodiak
+Banean = {
+	randomized = no
+
+	ship_names = {
+		generic = {
+			Swann Geyse Ren Hauron Finzh Suon Goll Scoter Terne Cormarent Pluver Wagtoil Sparra Kastreel Perrygren Poffin Ruck Ravin Renn Harwk Eygle
+		}
+		corvette = {
+		}
+		saber = {
+		}
+		sovereign = {
+		}
+		steamrunner = {
+		}		
+		adv_cruiser = {
+		}
+		strike = {
+		}	
+		constructor = { }
+		colonizer = { }
+		science = { }
+		transport = { }
+		outpost_station = {
+			sequential_name = "Frontier Outpost"
+		}
+	}
+
+	fleet_names = {
+		sequential_name = "%O% Fleet"
+	}
+	
+	army_names = {
+		defense_army = {
+			sequential_name = "%O% Aerial Guard"
+		}
+		assault_army = {
+			sequential_name = "%O% Aerial Assault Force"
+		}
+		slave_army = {
+			sequential_name = "%O% Indentured Defence Force"
+		}
+		clone_army = { 
+			sequential_name = "%O% Clone Attack Force"
+		}
+		robotic_army = {
+			sequential_name = "%O% Mechanical Attack Force"
+		}
+		android_army = {
+			sequential_name = "%O% Synthetic Assault Force"
+		}
+		psionic_army = { 
+			sequential_name = "%O% Psionic Force"
+		}
+		xenomorph_army = {
+			sequential_name = "%O% Bio-Warfare Assault Force"
+		}
+		gene_warrior_army = {
+			sequential_name = "%O% Bio-Engineered Attack Force"
+		}
+	}
+
+	planet_names = {
+		generic = {
+			names = {
+			}
+		}
+	}
+
+
+	### CHARACTERS
+
+	character_names = {
+		names1 = {
+			weight = 100
+			first_names_male = {		
+				Tolan Tolen Croden Hadran Valderel Retayarl Dekorel Falderel Falderan Fallan Fellan Mizan Vidron Calvarel Haderel Haderel Vittorel Nirelnyarl Hirelnyarl Namaha Grelnsen Matixan Onenon Zimpulsan Janacen Kolan Timthaten Kumben Fallerel Fallerel Vallerel Vallerel Viven Vittorn Daykoran Faldirel Falliden Mizad Vidrel Calviden Hadeden
+			}
+			first_names_female = {
+				Lidell Jizell Lidela Jizela Yarell Faliela Falell Valiela Valell Viviaela Vittoela Daykoriela Faldiela Faliela Mizaell Vidriela Calviriela Haderinela Alonzinela Alberinela Agnesell Andrinela Adrinela Badrinela Baldiela Fadiela Gausdiela Fausdiela Flavi Fordiela Fulva Fiola Niolan Miollan Molliela Polinarela Fidorela Elnodaela Elininela Evi Eldiela Dodaela Doreoninela Carininela Cicilorela Claidiela Calidiela Gdaela Kumdiela Ravninela Valderell Retayaela Dekorell Falderell Faldedaela Faldaela Feldaela Mizaela Vidron Calvarell Haderell Hadell Vittoela Nirell Nyaela Hirell Nyaela Namaelaa Grelln Madiela Xaela Oninon Zimpuela Jaelaacin Kodaela Kumdiela Falerell Nalerella Valerell Valerell Vivin Vittorn Daykodaela Faldielarell Falidell Mizaela Vidrell Calvidell Hadedell
+			}
+			second_names = {
+				Swann Geyse Ren Hauron Finzh Suon Goll Scoter Terne Cormarent Pluver Wagtoil Sparra Kastreel Perrygren Poffin Ruck Ravin Harwk Eygle
+			}
+			regnal_first_names_male = {
+				Tolan Tolen Croden Hadran Valderel Retayarl Dekorel Falderel Falderan Fallan Fellan Mizan Vidron Calvarel Haderel Haderel Vittorel Nirelnyarl Hirelnyarl Namaha Grelnsen Matixan Onenon Zimpulsan Janacen Kolan Timthaten Kumben Fallerel Fallerel Vallerel Vallerel Viven Vittorn Daykoran Faldirel Falliden Mizad Vidrel Calviden Hadeden
+			}
+			regnal_first_names_female = {
+				Lidell Jizell Lidela Jizela Yarell Faliela Falell Valiela Valell Viviaela Vittoela Daykoriela Faldiela Faliela Mizaell Vidriela Calviriela Haderinela Alonzinela Alberinela Agnesell Andrinela Adrinela Badrinela Baldiela Fadiela Gausdiela Fausdiela Flavi Fordiela Fulva Fiola Niolan Miollan Molliela Polinarela Fidorela Elnodaela Elininela Evill Eldiela Dodaela Doreoninela Carininela Cicilorela Claidiela Calidiela Gdaela Kumdiela Ravninela Valderell Retayaela Dekorell Falderell Faldedaela Faldaela Feldaela Mizaela Vidron Calvarell Haderell Hadell Vittoela Nirell Nyaela Hirell Nyaela Namaelaa Grelln Madiela Xaela Oninon Zimpuela Jaelaacin Kodaela Kumdiela Falerell Nalerella Valerell Valerell Vivin Vittorn Daykodaela Faldielarell Falidell Mizaela Vidrell Calvidell Hadedell
+			}
+			regnal_second_names = {
+				Swann Geyse Ren Hauron Finzh Suon Goll Scoter Terne Cormarent Pluver Wagtoil Sparra Kastreel Perrygren Poffin Ruck Ravin Harwk Eygle
+			}
+		}
+	}
+}

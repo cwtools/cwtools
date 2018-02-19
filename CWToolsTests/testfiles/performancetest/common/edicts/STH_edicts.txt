@@ -1,0 +1,276 @@
+##########################################################################
+# Empire edicts
+##########################################################################
+
+### Information Quarntine
+   country_edict = {
+      name = "information_quarantine_country_edict"
+      prerequisites = { "tech_society_engineered_368" }
+      modifier = {
+         pop_government_ethic_attraction = 0.25
+      }
+      influence_cost = 1
+      allow = {
+         NOT = {
+            has_country_edict = encourage_free_thought_country_edict
+         }
+      }
+      ai_weight = {
+         weight = 1
+            modifier = {
+               factor = 0
+               NOR = {
+                  has_ethic = ethic_authoritarian
+                  has_ethic = ethic_fanatic_authoritarian
+            }
+         }
+      }
+   }
+   
+### Encourage Free Thought
+   country_edict = {
+      name = "encourage_free_thought_country_edict"
+      prerequisites = { "tech_society_engineered_368" }
+      modifier = {
+         pop_ethics_shift_speed_mult = 0.5
+      }
+      influence_cost = 1
+      allow = {
+         NOT = {
+            has_country_edict = information_quarantine_country_edict
+         }
+      }
+      ai_weight = {
+         weight = 1
+            modifier = {
+               factor = 0
+               NOR = {
+                  has_ethic = ethic_egalitarian
+                  has_ethic = ethic_fanatic_egalitarian
+            }
+         }
+      }
+   }
+   
+### Interstellar Cultural Exchange
+   country_edict = {
+      name = "cultural_exchange_country_edict"
+      potential = { OR = { has_non_swapped_tradition = tr_diplomacy_dynamic_ecomorphism has_swapped_tradition = tr_greed_1  } }
+      modifier = {
+         pop_other_species_happiness = 0.05
+      }
+      influence_cost = 0.75
+      ai_weight = {
+         weight = 1
+      }
+   }
+   
+### STEM Subsidies
+   country_edict = {
+      name = "stem_subsidies_country_edict"
+      potential = { has_swapped_tradition = tr_diversity_4  }
+      modifier = {
+         all_technology_research_speed = 0.05
+         pop_government_ethic_attraction = -0.10
+      }
+      influence_cost = 0.75
+      ai_weight = {
+         weight = 1
+      }
+   }
+   
+### Share the Burden
+   country_edict = {
+      name = "share_burden_country_edict"
+      potential = { OR = { has_non_swapped_tradition = tr_domination_protection_racket has_swapped_tradition = tr_cunning_3  } }
+      modifier = {
+         slave_mineral_output = 0.15
+         slave_food_output = 0.15
+         planet_unrest_add = 10
+      }
+      influence_cost = 0.75
+      ai_weight = {
+         weight = 1
+      }
+   }
+   
+### Religious Unity
+   country_edict = {
+      name = "religious_unity_country_edict"
+      potential = { OR = { has_swapped_tradition = tr_doctrine_4 has_swapped_tradition = tr_prophecy_3  } }
+      modifier = {
+         country_resource_unity_mult = 0.1
+      }
+      influence_cost = 0.75
+      ai_weight = {
+         weight = 1
+      }
+   }
+   
+### The Grand Fleet
+   country_edict = {
+      name = "grand_fleet_country_edict"
+      potential = { OR = { has_non_swapped_tradition = tr_supremacy_right_of_conquest has_swapped_tradition = tr_victory_2  } }
+      modifier = {
+         navy_size_mult = 0.25
+      }
+      influence_cost = 2
+      ai_weight = {
+         weight = 1
+      }
+   }
+   
+### Physics Research Grants
+   country_edict = {
+      name = "physics_research_focus_country_edict"
+      prerequisites = { "tech_society_biology_1028" }
+      modifier = {
+         country_physics_tech_research_speed = 0.2
+      }
+      influence_cost = 1
+      allow = {
+         NOR = {
+            has_country_edict = engineering_research_focus_country_edict
+            has_country_edict = society_research_focus_country_edict
+         }
+      }
+      ai_weight = {
+         weight = 0
+      }
+   }
+   
+### Society Research Grants
+   country_edict = {
+      name = "society_research_focus_country_edict"
+      prerequisites = { "tech_society_biology_1028" }
+      modifier = {
+         country_society_tech_research_speed = 0.2
+      }
+      influence_cost = 1
+      allow = {
+         NOR = {
+            has_country_edict = engineering_research_focus_country_edict
+            has_country_edict = physics_research_focus_country_edict
+         }
+      }
+      ai_weight = {
+         weight = 0
+      }
+   }
+   
+### Engineering Research Grants
+   country_edict = {
+      name = "engineering_research_focus_country_edict"
+      prerequisites = { "tech_society_biology_1028" }
+      modifier = {
+         country_engineering_tech_research_speed = 0.2
+      }
+      influence_cost = 1
+      allow = {
+         NOR = {
+            has_country_edict = physics_research_focus_country_edict
+            has_country_edict = society_research_focus_country_edict
+         }
+      }
+      ai_weight = {
+         weight = 0
+      }
+   }
+   
+### Full War Footing
+   country_edict = {
+      name = "full_footing_country_edict"
+      prerequisites = { "tech_society_engineered_368" }
+      modifier = {
+         country_ship_upgrade_cost_mult = -0.15
+         army_upkeep_mult = -0.15
+         ship_reparation_speed_mult = 0.15
+      }
+      influence_cost = 1
+      ai_weight = {
+         weight = 1
+      }
+   }
+   
+### War Ministry
+   country_edict = {
+      name = "war_ministry_country_edict"
+      prerequisites = { "tech_society_statecraft_993" }
+      modifier = {
+         pop_consumer_goods_mult = -0.1
+      }
+      influence_cost = 1
+      ai_weight = {
+         weight = 1
+      }
+   }
+   
+### Diplomatic Corps
+   country_edict = {
+      name = "diplomatic_corp_country_edict"
+      prerequisites = { "tech_society_statecraft_993" }
+      modifier = {
+         country_trust_growth = 0.10
+         country_trade_attractiveness = 0.10
+         diplomacy_influence_cost = -0.10
+      }
+      influence_cost = 1
+      ai_weight = {
+         weight = 1
+      }
+   }
+   
+### Heavy Industry Subsidies
+   country_edict = {
+      name = "heavy_industry_country_edict"
+      prerequisites = { "tech_society_statecraft_915" }
+      modifier = {
+         tile_resource_minerals_mult = 0.1
+         tile_resource_energy_mult = 0.1
+         tile_resource_food_mult = -0.2
+      }
+      influence_cost = 1
+      allow = {
+         NOT = {
+            has_country_edict = eco_industry_country_edict
+         }
+      }
+      ai_weight = {
+         weight = 1
+      }
+   }
+   
+### Clean Energy Subsidies
+   country_edict = {
+      name = "eco_industry_country_edict"
+      prerequisites = { "tech_society_statecraft_915" }
+      modifier = {
+         tile_resource_minerals_mult = -0.1
+         tile_resource_energy_mult = -0.1
+         tile_resource_food_mult = 0.2
+      }
+      influence_cost = 1
+      allow = {
+         NOT = {
+            has_country_edict = heavy_industry_country_edict
+         }
+      }
+      ai_weight = {
+         weight = 1
+      }
+   }
+   
+### Propoganda Dispatches
+   country_edict = {
+      name = "propoganda_dispatch_country_edict"
+      prerequisites = { "tech_society_statecraft_915" }
+      modifier = {
+         planet_sensor_range_mult = 0.5
+         country_border_mult = 0.1
+      }
+      influence_cost = 1
+      ai_weight = {
+         weight = 1
+      }
+   }
+   

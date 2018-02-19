@@ -1,0 +1,41 @@
+leader_trait_defiant_captain = {
+	cost = 1
+	modification = no
+	icon = "gfx/interface/icons/traits/leader_traits/leader_trait_fist.dds"
+	modifier = {
+		ship_fire_rate_mult = 0.1
+		species_leader_exp_gain = 0.15
+	}
+	leader_trait = yes
+	leader_class = { admiral }
+	initial = no
+	randomized = no
+}
+
+leader_trait_terran_mirrorMirror_captain_1 = {
+	cost = 1
+	modification = no
+	icon = "gfx/interface/icons/traits/leader_traits/leader_trait_fist.dds"
+	modifier = {
+		ship_fire_rate_mult = 0.1
+		species_leader_exp_gain = 0.15
+	}
+	leader_trait = yes
+	leader_class = { admiral }
+	initial = no
+	randomized = no
+}
+
+leader_trait_terran_mirrorMirror_captain_2 = {
+	cost = 1
+	modification = no
+	icon = "gfx/interface/icons/traits/leader_traits/leader_trait_fist.dds"
+	modifier = {
+		ship_fire_rate_mult = 0.1
+		species_leader_exp_gain = 0.15
+	}
+	leader_trait = yes
+	leader_class = { admiral }
+	initial = no
+	randomized = no
+}

@@ -1,0 +1,162 @@
+# All leaders will have a common trait-point value set in defines, which they use to grab traits
+
+# leader_trait = yes - this tags the trait as a leader-trait and not a species-trait
+# initial = no - if set to no, this trait can not be granted to leaders when they are generated
+# leader_class = { admiral scientist }  -- OR  - if not set, it can be given to all leader-types except Rulers
+# requires_traits = { trait_psionic } -- AND - leader-trait can only be randomly given on generation if the leaders species has this trait
+# requires_governments = { despotic_hegemony ai_overlordship } -- OR - leader-trait can only be randomly given on generation if the Empire has this type of government form
+# prerequisites = { tech_psionic_theory } - AND - leader-trait can only be given if the technology specified has been researched by the Empire
+
+#################
+#  Ruler Traits #
+#################
+
+# Ruler-traits have the same parameters as leader-traits
+# leader_class has to be set to include "ruler" for a ruler to be valid for a trait
+# modifiers granted to rulers are applied to the entire Empire
+
+trait_ruler_probe_focus = {
+	cost = 1
+	modification = no
+	icon = "gfx/interface/icons/traits/leader_traits/trait_ruler_probe_focus.dds"
+	leader_potential_add = {
+		from = { has_authority = auth_cybernetic_consciousness }
+	}
+	modifier = {
+		shipsize_corvette_build_cost_mult = -0.2
+	}
+	leader_trait = yes
+	leader_class = { ruler }
+	prerequisites = { tech_spaceport_1 }
+	opposites = { "trait_ruler_sphere_focus" "trait_ruler_cube_focus" "trait_ruler_diamond_focus" }
+}
+
+trait_ruler_sphere_focus = {
+	cost = 1
+	modification = no
+	icon = "gfx/interface/icons/traits/leader_traits/trait_ruler_sphere_focus.dds"
+	leader_potential_add = {
+		from = { has_authority = auth_cybernetic_consciousness }
+	}
+	modifier = {
+		shipsize_borg_sphere_build_cost_mult = -0.2
+	}
+	leader_trait = yes
+	leader_class = { ruler }
+	prerequisites = { tech_engineering_industry_1251 }
+	opposites = { "trait_ruler_probe_focus" "trait_ruler_cube_focus" "trait_ruler_diamond_focus" }
+}
+
+trait_ruler_cube_focus = {
+	cost = 1
+	modification = no
+	icon = "gfx/interface/icons/traits/leader_traits/trait_ruler_cube_focus.dds"
+	leader_potential_add = {
+		from = { has_authority = auth_cybernetic_consciousness }
+	}
+	modifier = {
+		shipsize_borg_cube_build_cost_mult = -0.15
+		shipsize_borg_tactical_build_cost_mult = -0.15
+	}
+	leader_trait = yes
+	leader_class = { ruler }
+	prerequisites = { tech_engineering_industry_1253 }
+	opposites = { "trait_ruler_probe_focus" "trait_ruler_sphere_focus" "trait_ruler_diamond_focus" }
+}
+
+trait_ruler_diamond_focus = {
+	cost = 1
+	modification = no
+	icon = "gfx/interface/icons/traits/leader_traits/trait_ruler_diamond_focus.dds"
+	leader_potential_add = {
+		from = { has_authority = auth_cybernetic_consciousness }
+	}
+	modifier = {
+		shipsize_borg_diamond_build_cost_mult = -0.2
+	}
+	leader_trait = yes
+	leader_class = { ruler }
+	prerequisites = { tech_engineering_industry_1252 }
+	opposites = { "trait_ruler_probe_focus" "trait_ruler_sphere_focus" "trait_ruler_cube_focus" }
+}
+
+trait_ruler_offensive_bias = {
+	cost = 1
+	modification = no
+	icon = "gfx/interface/icons/traits/leader_traits/trait_ruler_offensive_bias.dds"
+	leader_potential_add = {
+		from = { has_authority = auth_cybernetic_consciousness }
+	}
+	modifier = {
+		planet_army_build_cost_mult = -0.1
+		ship_weapon_damage = 0.05
+		army_damage_mult = 0.05
+	}
+	leader_trait = yes
+	leader_class = { ruler }
+}
+
+trait_ruler_defensive_bias = {
+	cost = 1
+	modification = no
+	icon = "gfx/interface/icons/traits/leader_traits/trait_ruler_defensive_bias.dds"
+	leader_potential_add = {
+		from = { has_authority = auth_cybernetic_consciousness }
+	}
+	modifier = {
+		shipsize_military_station_small_build_cost_mult = -0.2
+		shipsize_military_station_small_upkeep_mult = -0.2
+		shipsize_military_station_medium_build_cost_mult = -0.2
+		shipsize_military_station_medium_upkeep_mult = -0.2
+		shipsize_military_station_large_build_cost_mult = -0.2
+		shipsize_military_station_large_upkeep_mult = -0.2
+	}
+	leader_trait = yes
+	leader_class = { ruler }
+}
+
+trait_ruler_logistics_supercluster = {
+	cost = 1
+	modification = no
+	icon = "gfx/interface/icons/traits/leader_traits/trait_ruler_logistics_supercluster.dds"
+	leader_potential_add = {
+		from = { has_authority = auth_cybernetic_consciousness }
+	}
+	modifier = {
+		ship_upkeep_mult = -0.1
+		army_upkeep_mult = -0.1
+	}
+	leader_trait = yes
+	leader_class = { ruler }
+}
+
+trait_ruler_resource_extraction_bias = {
+	cost = 1
+	modification = no
+	icon = "gfx/interface/icons/traits/leader_traits/trait_ruler_resource_extraction_bias.dds"
+	leader_potential_add = {
+		from = { has_authority = auth_cybernetic_consciousness }
+	}
+	modifier = {
+		tile_resource_minerals_mult = 0.1
+		country_resource_minerals_add = 5
+		tile_resource_energy_mult = 0.1
+		country_resource_energy_add = 5
+	}
+	leader_trait = yes
+	leader_class = { ruler }
+}
+
+trait_ruler_resource_nanite_bias = {
+	cost = 1
+	modification = no
+	icon = "gfx/interface/icons/traits/leader_traits/trait_ruler_resource_nanite_bias.dds"
+	leader_potential_add = {
+		from = { has_authority = auth_cybernetic_consciousness }
+	}
+	modifier = {
+		country_resource_influence_add = 2
+	}
+	leader_trait = yes
+	leader_class = { ruler }
+}

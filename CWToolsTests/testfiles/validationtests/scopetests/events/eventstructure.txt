@@ -59,6 +59,7 @@ country_event =
 {
     is_triggered_only = yes
     option = {
+        ## Option direct effect
 		add_monthly_resource_mult = {
 			resource = physics_research
 			value = 5
@@ -66,6 +67,8 @@ country_event =
 			max = 5
 		}
     }
+    ## Hidden flag
+    ## hidden and event_target
     desc = {
 		trigger = {
 			hidden:owner = {
@@ -79,6 +82,7 @@ country_event =
 		}
     }
     
+    ##Two descs
     desc = {
 		trigger = {
 			hidden:owner = {
@@ -91,4 +95,17 @@ country_event =
             }
 		}
 	}
+}
+
+## Check that undefined scripted are errors
+country_event = {
+    is_triggered_only = yes
+    trigger = {
+        #error
+        nonsense = yes
+    }
+    immediate = {
+        #error
+        nonsense = yes
+    }
 }

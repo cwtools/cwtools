@@ -1,0 +1,179 @@
+# see README.txt for example
+
+STH_prison_asteroid_0 = {
+	entity = ""
+	construction_entity = "hirogen_01_orbital_habitat_entity"
+	place_entity_on_planet_plane = yes
+	entity_offset = { x = -7 y = -7 }
+	build_time = 900
+	build_cost = {
+		minerals = 600
+		influence = 50
+	}
+	construction_blocks_others = no
+
+	potential = {
+		has_country_flag = the_dominion
+		has_swapped_tradition = tr_victory_1
+	}
+
+	possible = {
+		custom_tooltip_fail = {
+			text = "requires_inside_border"
+			is_inside_border = from
+		}
+		custom_tooltip_fail = {
+			text = "requires_non_dominion_pop"
+			from = { any_owned_pop_species = { NOR = { is_species_class = DOM is_species_class = VOR is_species_class = JEM } } }
+		}
+		
+		###ADD IN LIMITER
+		
+	}
+
+	placement_rules = {
+		planet_possible = {
+
+			NOT = { has_anomaly = yes }
+
+			custom_tooltip_fail = {
+				text = "requires_no_existing_megastructure"
+				can_build_megastructure_on_planet = yes
+			}
+			custom_tooltip_fail = {
+				text = "requires_no_orbital_station"
+				has_orbital_station = no
+			}
+			custom_tooltip_fail = {
+				text = "requires_survey_not_habitable"
+				is_surveyed = {			# prevent leaking habitability information
+					who = prev.from
+					status = yes
+				}
+				habitable_planet = no	# prevent the spaceport colliding with the habitat
+			}
+			custom_tooltip_fail = { # balance for habitats
+				text = "requires_asteroid"
+				is_asteroid = yes
+			}
+			has_owner = no
+		} # use these for all non-star megastructures
+	}
+	
+	ai_weight = {
+	
+	}
+	
+	on_build_start = {}
+	on_build_cancel = {}
+	
+	on_build_complete = {
+		from = { save_event_target_as = builderCountry }
+		# from = {
+			# random_owned_pop_species = {
+				# limit = { NOR = { is_species_class = DOM is_species_class = VOR is_species_class = JEM } }
+				# save_event_target_as = builderCountryPrisonSpecies
+				# log = "[builderCountryPrisonSpecies.GetName]"
+			# }
+		# }
+		set_star_flag = asteroid_prison_built
+		FromFrom.Planet = {
+			if = {
+				limit = { is_planet_class = pc_asteroid_prison }
+				if = {
+					limit = { NOT = { exists = event_target:jemHadarSpecies } }
+					create_species = {
+						name = "Jem'Hadar"
+						plural = "Jem'Hadar"
+						class = "JEM"
+						portrait = "jem'hadar"
+						name_list="JemHadar"
+						traits = { trait = "trait_clone" trait = "trait_bred_for_war" trait = "trait_ketracel_white_addiction" trait = "trait_pc_ocean_preference" trait = "trait_pop_jem'hadar_1" }
+					}
+					last_created_species = {
+						save_global_event_target_as = jemHadarSpecies
+						set_jem_hadar_characteristics = yes
+						set_citizenship_type = { country = event_target:the_dominion type = citizenship_full }
+						set_military_service_type = { country = event_target:the_dominion type = military_service_full }
+					}
+				}
+				clear_colony_hubs = yes
+				create_colony = { owner = event_target:builderCountry species = event_target:jemHadarSpecies ethos = owner }
+				random_pop = { change_species = event_target:jemHadarSpecies }
+				convert_colony_hubs_space = yes
+				else = {
+					change_pc = pc_asteroid_prison
+					set_planet_entity = {
+						entity = "orbital_habitat_entity"
+						graphical_culture = hirogen_01
+					}
+					surveyed = { set_surveyed = yes surveyor = FROM }
+					while = {
+						limit = { planet_size > 4  }
+						change_planet_size = -1
+					}
+					while = {
+						limit = { planet_size < 4  }
+						change_planet_size = 1
+					}
+					while = {
+						limit = { any_tile = { has_blocker = yes } }
+						random_tile = { limit = { has_blocker = yes } remove_blocker = yes }
+					}
+					while = {
+						count = 2
+						random_tile = {
+							limit = { 
+								has_blocker = no 
+								has_building = no 
+								NOR = { 
+									has_resource = { type = minerals amount > 1 } 
+									has_resource = { type = energy amount > 1 } 
+									has_resource = { type = food amount > 1 } 
+									has_resource = { type = physics_research amount > 1 }
+									has_resource = { type = society_research amount > 1 }
+									has_resource = { type = engineering_research amount > 1 }								
+								} 
+							}
+							random_list = {
+								25 = {}
+								10 = { add_deposit = d_rich_mineral_deposit }
+								5 = { add_deposit = d_vast_mineral_deposit }
+								10 = { add_deposit = d_rich_energy_deposit }
+								5 = { add_deposit = d_vast_energy_deposit }
+								5 = { add_deposit = d_vast_farmland_deposit }
+								5 = { add_deposit = d_rich_society_deposit }
+								5 = { add_deposit = d_vast_society_deposit }
+							}
+							set_blocker = "tb_asteroid_prison_expansion"
+						}
+					}
+					if = {
+						limit = { NOT = { exists = event_target:jemHadarSpecies } }
+						create_species = {
+							name = "Jem'Hadar"
+							plural = "Jem'Hadar"
+							class = "JEM"
+							portrait = "jem'hadar"
+							name_list="JemHadar"
+							traits = { trait = "trait_clone" trait = "trait_bred_for_war" trait = "trait_ketracel_white_addiction" trait = "trait_pc_ocean_preference" trait = "trait_pop_jem'hadar_1" }
+						}
+						last_created_species = {
+							save_global_event_target_as = jemHadarSpecies
+							set_jem_hadar_characteristics = yes
+							set_citizenship_type = { country = event_target:the_dominion type = citizenship_full }
+							set_military_service_type = { country = event_target:the_dominion type = military_service_full }
+						}
+					}
+					create_colony = { owner = event_target:builderCountry species = event_target:jemHadarSpecies ethos = owner }
+					random_pop = { change_species = event_target:jemHadarSpecies }
+					planet_event = { id = STH_dominion_flavour.201 days = 0 }
+					convert_colony_hubs_space = yes
+				}
+			}
+			
+		}
+		remove_megastructure = fromfrom
+	}
+	
+}

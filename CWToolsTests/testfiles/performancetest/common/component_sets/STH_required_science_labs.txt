@@ -1,0 +1,21 @@
+# Icons set here are the ones shown in component editor list.
+
+component_set = { key = "science_labs" required_component_set = yes icon = "GFX_ship_part_sensor" icon_frame = 1 }
+component_set = { key = "science_module" required_component_set = yes icon = "GFX_ship_part_sensor" icon_frame = 1 }
+
+component_set = { key = "REQUIRED_LABS_0" icon = "GFX_ship_part_REQUIRED_LABS_0" icon_frame = 1 }
+component_set = { key = "REQUIRED_LABS_1" icon = "GFX_ship_part_REQUIRED_LABS_1" icon_frame = 1 }
+component_set = { key = "REQUIRED_LABS_2" icon = "GFX_ship_part_REQUIRED_LABS_2" icon_frame = 1 }
+component_set = { key = "REQUIRED_LABS_3" icon = "GFX_ship_part_REQUIRED_LABS_3" icon_frame = 1 }
+
+component_set = { key = "REQUIRED_SCIENCE_MODULE_HULL_0" icon = "GFX_ship_part_Required_Science_Module_hull_0" icon_frame = 1 }
+component_set = { key = "REQUIRED_SCIENCE_MODULE_MEDICAL_0" icon = "GFX_ship_part_Required_Science_Module_medical_0" icon_frame = 1 }
+component_set = { key = "REQUIRED_SCIENCE_MODULE_RELIGIOUS_0" icon = "GFX_ship_part_Required_Science_Module_religious_0" icon_frame = 1 }
+component_set = { key = "REQUIRED_SCIENCE_MODULE_PRISON_0" icon = "GFX_ship_part_Required_Science_Module_prison_0" icon_frame = 1 }
+component_set = { key = "REQUIRED_SCIENCE_MODULE_GAMBLING_0" icon = "GFX_ship_part_Required_Science_Module_gambling_0" icon_frame = 1 }
+component_set = { key = "REQUIRED_SCIENCE_MODULE_DIPLOMATIC_0" icon = "GFX_ship_part_Required_Science_Module_diplomatic_0" icon_frame = 1 }
+component_set = { key = "REQUIRED_SCIENCE_MODULE_HUNTING_0" icon = "GFX_ship_part_Required_Science_Module_hunting_0" icon_frame = 1 }
+component_set = { key = "REQUIRED_SCIENCE_MODULE_SCHOOL_0" icon = "GFX_ship_part_Required_Science_Module_school_0" icon_frame = 1 }
+component_set = { key = "REQUIRED_SCIENCE_MODULE_PROSPECTOR_0" icon = "GFX_ship_part_Required_Science_Module_prospector_0" icon_frame = 1 }
+component_set = { key = "REQUIRED_SCIENCE_MODULE_XENOBIOLOGY_0" icon = "GFX_ship_part_Required_Science_Module_xenobiology_0" icon_frame = 1 }
+component_set = { key = "REQUIRED_SCIENCE_MODULE_ESCAPE_0" icon = "GFX_ship_part_Required_Science_Module_escape_0" icon_frame = 1 }

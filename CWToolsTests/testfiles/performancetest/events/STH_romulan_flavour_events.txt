@@ -1,0 +1,453 @@
+############################
+#
+# Romulan Flavour Events
+#
+# Written by Walshicus
+#
+############################
+
+namespace = STH_romulan_flavour
+
+# Ruler Assassination Attempt
+country_event = {
+	id = STH_romulan_flavour.1
+	title = STH_romulan_flavour.1.name
+	desc = STH_romulan_flavour.1.desc
+	picture = sth_GFX_evt_romulanCapital
+	trigger = {
+		has_country_flag = romulan_star_empire
+		exists = leader
+		leader = { 
+			has_level < 4 
+			NOT = {	has_leader_flag = leader_trait_reverred	}
+		}
+		used_naval_capacity_percent < 0.5
+	}
+	mean_time_to_happen = { months = 360 }
+	immediate = {
+		leader = { save_event_target_as = ruler }
+		create_leader = {
+			type = admiral
+			species = owner_species
+			name = random
+			skill = random
+			traits = { 
+				trait = random_trait
+				trait = random_trait
+			}
+		}
+		last_created_leader = {
+			save_event_target_as = plotLeader
+			set_leader_flag = plotLeader
+		}
+	}
+	option = {
+		name = STH_romulan_flavour.1.a
+		hidden_effect = {
+			random_list = {
+				25 = { country_event = { id = STH_romulan_flavour.2 days = 14 random = 14 } } #Win and gain positive trait
+				25 = { country_event = { id = STH_romulan_flavour.3 days = 14 random = 14 } } #Win and gain negative trait
+				25 = { country_event = { id = STH_romulan_flavour.4 days = 14 random = 14 } } #Lose and die - country destabilised
+				25 = { country_event = { id = STH_romulan_flavour.5 days = 14 random = 14 } } #Lose and die - country happy
+			}
+		}
+	}
+}
+
+country_event = {
+	id = STH_romulan_flavour.2
+	title = STH_romulan_flavour.2.name
+	desc = STH_romulan_flavour.2.desc
+	picture = sth_GFX_evt_romulanCapital
+	is_triggered_only = yes
+	immediate = {
+		leader = { save_event_target_as = ruler }
+		random_owned_leader = {
+			limit = { has_leader_flag = plotLeader }
+			save_event_target_as = plotLeader
+		}
+	}
+	option = {
+		name = STH_romulan_flavour.2.a
+		add_modifier = {
+			modifier = em_country_united
+			days = 3600
+		}
+		event_target:plotLeader = {
+			kill_leader = { 
+				type = admiral
+				show_notification = no 
+			}
+		}
+		leader = { add_trait = leader_trait_reverred }
+	}
+}
+country_event = {
+	id = STH_romulan_flavour.3
+	title = STH_romulan_flavour.3.name
+	desc = STH_romulan_flavour.3.desc
+	picture = sth_GFX_evt_romulanCapital
+	is_triggered_only = yes
+	immediate = {
+		leader = { save_event_target_as = ruler }
+		random_owned_leader = {
+			limit = { has_leader_flag = plotLeader }
+			save_event_target_as = plotLeader
+		}
+	}
+	option = {
+		name = STH_romulan_flavour.3.a
+		add_modifier = {
+			modifier = em_country_divided
+			days = 3600
+		}
+		event_target:plotLeader = {
+			kill_leader = { 
+				type = admiral
+				show_notification = no 
+			}
+		}
+		leader = { add_trait = leader_trait_revilled }
+	}
+}
+country_event = {
+	id = STH_romulan_flavour.4
+	title = STH_romulan_flavour.4.name
+	desc = STH_romulan_flavour.4.desc
+	picture = sth_GFX_evt_romulanCapital
+	is_triggered_only = yes
+	immediate = {
+		leader = { save_event_target_as = ruler }
+		random_owned_leader = {
+			limit = { has_leader_flag = plotLeader }
+			save_event_target_as = plotLeader
+		}
+	}
+	option = {
+		name = STH_romulan_flavour.4.a
+		add_modifier = {
+			modifier = em_country_divided
+			days = 3600
+		}
+		kill_leader = { 
+			type = ruler
+			show_notification = no 
+		}
+		assign_leader = event_target:plotLeader
+		event_target:plotLeader = { add_trait = leader_trait_revilled }
+	}
+}
+country_event = {
+	id = STH_romulan_flavour.5
+	title = STH_romulan_flavour.5.name
+	desc = STH_romulan_flavour.5.desc
+	picture = sth_GFX_evt_romulanCapital
+	is_triggered_only = yes
+	immediate = {
+		leader = { save_event_target_as = ruler }
+		random_owned_leader = {
+			limit = { has_leader_flag = plotLeader }
+			save_event_target_as = plotLeader
+		}
+	}
+	option = {
+		name = STH_romulan_flavour.5.a
+		add_modifier = {
+			modifier = em_country_united
+			days = 3600
+		}
+		kill_leader = { 
+			type = ruler
+			show_notification = no 
+		}
+		assign_leader = event_target:plotLeader
+		event_target:plotLeader = { add_trait = leader_trait_reverred }
+	}
+}
+
+# Cardassian Obsidian Order Inquisition 1 to 10
+fleet_event = {
+	id = STH_romulan_flavour.11
+	title = STH_romulan_flavour.11.name
+	desc = STH_romulan_flavour.11.desc
+	picture = sth_GFX_evt_romulanCruiser
+	location = ROOT
+	trigger = {
+		owner = { has_country_flag = romulan_star_empire }
+		exists = leader
+		leader = { 
+			has_level < 3
+			NOT = { has_leader_flag = talShiarOrderInvestigated }
+		}
+		is_in_combat = no
+	}
+	mean_time_to_happen = { months = 3600 }
+	immediate = { 
+		leader = { 
+			save_event_target_as = officer
+			set_leader_flag = talShiarOrderInvestigated 
+		}
+	}
+	option = {
+		name = STH_romulan_flavour.11.a
+		hidden_effect = {
+			random_list = {
+				80 = { fleet_event = { id = STH_romulan_flavour.12 days = 1 } } #Win and gain positive trait
+				20 = { fleet_event = { id = STH_romulan_flavour.13 days = 1 } } #Lose and gain negative trait
+			}
+		}
+	}
+}
+fleet_event = {
+	id = STH_romulan_flavour.12
+	title = STH_romulan_flavour.12.name
+	desc = STH_romulan_flavour.12.desc
+	picture = sth_GFX_evt_romulanCourt
+	location = ROOT
+	is_triggered_only = yes
+	immediate = { leader = { save_event_target_as = officer } }
+	option = {
+		name = STH_romulan_flavour.12.a
+		leader = { add_trait = leader_trait_resilient }	
+		owner = { add_influence = 25 }
+	}
+}
+fleet_event = {
+	id = STH_romulan_flavour.13
+	title = STH_romulan_flavour.13.name
+	desc = STH_romulan_flavour.13.desc
+	picture = sth_GFX_evt_romulanCourt
+	location = ROOT
+	is_triggered_only = yes
+	immediate = { leader = { save_event_target_as = officer } }
+	option = {
+		name = STH_romulan_flavour.13.a
+		leader = { add_trait = leader_trait_arrested_development }
+		owner = {
+			add_influence = -25
+		}
+	}
+}
+
+# Obsidian Order Inquisition TWO
+fleet_event = {
+	id = STH_romulan_flavour.14
+	title = STH_romulan_flavour.14.name
+	desc = STH_romulan_flavour.14.desc
+	picture = sth_GFX_evt_galorCruiser
+	location = ROOT
+	trigger = {
+		owner = { has_country_flag = romulan_star_empire }
+		exists = leader
+		leader = {
+			has_level < 3
+			NOT = {	has_leader_flag = talShiarInvestigated	}
+		}
+		is_in_combat = no
+	}
+	mean_time_to_happen = { months = 3600 }
+	immediate = { 
+		leader = {
+			save_event_target_as = officer
+			set_leader_flag = talShiarInvestigated
+		}
+	}
+	option = {
+		name = STH_romulan_flavour.14.a
+		hidden_effect = {
+			random_list = {
+				60 = { fleet_event = { id = STH_romulan_flavour.15 days = 1 } } #Win and gain positive trait
+				40 = { fleet_event = { id = STH_romulan_flavour.16 days = 1 } } #Lose and gain negative trait
+			}
+		}
+	}
+}
+fleet_event = {
+	id = STH_romulan_flavour.15
+	title = STH_romulan_flavour.15.name
+	desc = STH_romulan_flavour.15.desc
+	picture = sth_GFX_evt_fiveLights
+	location = ROOT
+	is_triggered_only = yes
+	immediate = { leader = { save_event_target_as = officer } }
+	option = {
+		name = STH_romulan_flavour.15.a
+		leader = { add_trait = leader_trait_resilient }	
+		owner = {
+			add_influence = 25
+		}
+	}
+}
+fleet_event = {
+	id = STH_romulan_flavour.16
+	title = STH_romulan_flavour.16.name
+	desc = STH_romulan_flavour.16.desc
+	picture = sth_GFX_evt_fiveLights
+	location = ROOT
+	is_triggered_only = yes
+	immediate = { leader = { save_event_target_as = officer } }
+	option = {
+		name = STH_romulan_flavour.16.a
+		leader = { add_trait = leader_trait_arrested_development }
+		owner = {
+			add_influence = -25
+		}
+	}
+}
+
+##Obsidian spy lockbox
+ship_event = {
+	id = STH_romulan_flavour.17
+	title = STH_romulan_flavour.17.name
+	desc = STH_romulan_flavour.17.desc
+	picture = sth_GFX_evt_romulanCruiser
+	location = ROOT
+	trigger = {
+		owner = { has_country_flag = romulan_star_empire }
+		exists = leader
+		leader = {
+			has_level > 3
+			NOT = { has_leader_flag = talShiarInvestigated }
+		}
+		is_in_combat = no
+	}
+	mean_time_to_happen = { months = 3600 }
+	immediate = {
+		leader = { 
+			save_event_target_as = officer
+			set_leader_flag = talShiarInvestigated 
+		}
+	}
+	option = {
+		name = STH_romulan_flavour.17.a
+		hidden_effect = {
+			random_list = {
+				50 = { ship_event = { id = STH_romulan_flavour.18 days = 1 } } #Win and gain positive trait
+				50 = { ship_event = { id = STH_romulan_flavour.19 days = 1 } } #Win and gain positive trait
+			}
+		}
+	}
+}
+ship_event = {
+	id = STH_romulan_flavour.18
+	title = STH_romulan_flavour.18.name
+	desc = STH_romulan_flavour.18.desc
+	picture = sth_GFX_evt_romulanCruiser
+	location = ROOT
+	is_triggered_only = yes
+	immediate = { leader = { save_event_target_as = officer } }
+	option = {
+		name = STH_romulan_flavour.18.a
+		leader = { add_trait = leader_trait_scout }	
+		owner = { add_influence = 25 }
+	}
+}
+ship_event = {
+	id = STH_romulan_flavour.19
+	title = STH_romulan_flavour.19.name
+	desc = STH_romulan_flavour.19.desc
+	picture = sth_GFX_evt_romulanCruiser
+	location = ROOT
+	is_triggered_only = yes
+	immediate = { leader = { save_event_target_as = officer } }
+	option = {
+		name = STH_romulan_flavour.19.a
+		leader = { add_trait = leader_trait_trickster }
+		owner = { add_influence = 25 }
+	}
+}
+
+#An Odd Report
+ship_event = {
+	id = STH_romulan_flavour.20
+	title = STH_romulan_flavour.20.name
+	desc = STH_romulan_flavour.20.desc
+	picture = sth_GFX_evt_romulanCruiser
+	location = ROOT
+	trigger = {
+		owner = { 
+			is_country_type = default
+			has_country_flag = romulan_star_empire
+		}
+		exists = leader
+		leader = { 
+			has_level < 3 
+			leader_class = admiral
+			NOT = { has_leader_flag = talShiarInvestigated }
+		}
+		is_in_combat = no
+	}
+	mean_time_to_happen = { months = 3600 }
+	immediate = { 
+		leader = { 
+			save_event_target_as = officer 
+			set_leader_flag = talShiarInvestigated
+		}			
+	}
+	option = {
+		name = STH_romulan_flavour.20.a
+		hidden_effect = {
+			random_list = {
+				10 = { ship_event = { id = STH_romulan_flavour.21 days = 1 } } #Critical success
+				40 = { ship_event = { id = STH_romulan_flavour.22 days = 1 } } #Success
+				40 = { ship_event = { id = STH_romulan_flavour.23 days = 1 } } #Failure
+				10 = { ship_event = { id = STH_romulan_flavour.24 days = 1 } } #Critical failure
+			}
+		}
+	}
+}
+ship_event = {
+	id = STH_romulan_flavour.21
+	title = STH_romulan_flavour.21.name
+	desc = STH_romulan_flavour.21.desc
+	picture = sth_GFX_evt_romulanCruiser
+	location = ROOT
+	is_triggered_only = yes
+	immediate = { leader = { save_event_target_as = officer } }
+	option = {
+		name = STH_romulan_flavour.21.a
+		leader = { add_trait = leader_trait_fleet_logistician }
+		owner = { add_influence = 25 }
+	}
+}
+ship_event = {
+	id = STH_romulan_flavour.22
+	title = STH_romulan_flavour.22.name
+	desc = STH_romulan_flavour.22.desc
+	picture = sth_GFX_evt_romulanCruiser
+	location = ROOT
+	is_triggered_only = yes
+	immediate = { leader = { save_event_target_as = officer } }
+	option = {
+		name = STH_romulan_flavour.22.a
+		owner = { add_influence = 10 }
+	}
+}
+ship_event = {
+	id = STH_romulan_flavour.23
+	title = STH_romulan_flavour.23.name
+	desc = STH_romulan_flavour.23.desc
+	picture = sth_GFX_evt_romulanCruiser
+	location = ROOT
+	is_triggered_only = yes
+	immediate = { leader = { save_event_target_as = officer } }
+	option = {
+		name = STH_romulan_flavour.23.a
+		leader = { add_trait = leader_trait_substance_abuser }
+		owner = { add_influence = -10 }
+	}
+}
+ship_event = {
+	id = STH_romulan_flavour.24
+	title = STH_romulan_flavour.24.name
+	desc = STH_romulan_flavour.24.desc
+	picture = sth_GFX_evt_romulanCruiser
+	location = ROOT
+	is_triggered_only = yes
+	immediate = { leader = { save_event_target_as = officer } }
+	option = {
+		name = STH_romulan_flavour.24.a
+		kill_leader = { type = admiral }
+		owner = { add_influence = -25 }
+	}
+}

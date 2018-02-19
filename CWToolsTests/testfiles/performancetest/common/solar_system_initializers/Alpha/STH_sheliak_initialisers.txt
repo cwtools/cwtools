@@ -1,0 +1,102 @@
+@distance = 30
+@base_moon_distance = 10
+
+#Sheliak
+sheliak_homeworld = {
+	name = "Sheliak"
+	class = sc_b
+	asteroids_distance = 88
+	flags = { sheliak_homeworld }
+	init_effect = { log = "sheliak homeworld" }
+	usage = custom_empire
+	max_instances = 1
+	planet = { name = "Sheliak" class = star orbit_distance = 0 orbit_angle = 1 size = { min = 30 max = 40 } has_ring = no }
+	change_orbit = { min = 20 max = 30}
+	planet = {
+		count = 2
+		orbit_distance = { min = 16 max = 22 }
+		size = { min = 8 max = 12 }
+		class = random_non_colonizable
+		orbit_angle = { min = 90 max = 270 }
+		change_orbit = @base_moon_distance
+		moon = { count = { min = 0 max = 1 } size = { min = 5 max = 8 } class = rl_unhabitable_planets orbit_angle = { min = 90 max = 270 } orbit_distance = 8 }
+	}
+	planet = {
+		name = "Shelia"
+		class = "pc_desert"
+		orbit_distance = 14.5
+		orbit_angle = 220
+		size = { min = 22 max = 25 }
+		starting_planet = yes
+		has_ring = no
+		tile_blockers = none
+		modifiers = none
+		init_effect = { prevent_anomaly = yes }
+		init_effect = {
+			if = {
+				limit = { NOT = { any_country = { has_country_flag = sheliak_corporate } } }
+				create_species = {
+				    name = "Sheliak"
+				    class = SHE
+				    portrait = sheliak
+				    homeworld = THIS
+				    traits = {
+				        trait="trait_silicon"
+	                    trait="trait_natural_engineers"
+	                    trait="trait_repugnant"
+	                    ideal_planet_class = "pc_desert"
+					} 
+	            }
+				last_created_species = { save_global_event_target_as = sheliakSpecies }
+				create_country = {
+					name = "NAME_sheliak_corporate"
+					type = default
+					ignore_initial_colony_error = yes
+					civics = { civic = "civic_attention_detail" civic = "civic_mining_guilds" }
+					authority = auth_oligarchic
+					name_list = "Sheliak"
+					ethos = { ethic = "ethic_authoritarian" ethic = "ethic_materialist" ethic = "ethic_xenophobe" }
+					species = event_target:sheliakSpecies
+					flag = {
+						icon = { category = "pointy" file = "flag_pointy_14.dds" }
+						background = { category = "backgrounds" file = "00_solid.dds" }
+						colors = { "grey" "black" "null" "null" }
+					}
+					ship_prefix = "SCV"
+					effect = {
+						set_graphical_culture = generic_02
+						set_country_flag = sheliak_corporate
+						set_country_flag = custom_start_screen
+						set_country_flag = generic_ent
+						set_country_flag = alpha_beta_empire
+						set_country_flag = sth_medium_galaxy
+						set_country_flag = init_spawned
+						set_country_flag = botf_minor
+						save_global_event_target_as = sheliak_corporate
+					}
+				}
+				create_colony = { owner = event_target:sheliak_corporate species = event_target:sheliakSpecies ethos = owner }
+			}
+			set_capital = yes
+			random_country = {
+				limit = { has_country_flag = sheliak_corporate }
+				save_global_event_target_as = sheliak_corporate
+				add_appropriate_start_techs = yes
+				species = { save_global_event_target_as = sheliakSpecies }
+            }
+			set_owner = event_target:sheliak_corporate
+			generate_major_empire_start_buildings = yes
+			generate_major_empire_start_pops = yes
+			generate_major_empire_start_fleets = yes
+			set_name = "Shelia"
+		}
+	}
+	planet = {
+		count = 3
+		orbit_distance = { min = 18 max = 25 }
+		class = random_non_colonizable
+		orbit_angle = { min = 90 max = 270 }
+		change_orbit = @base_moon_distance
+		moon = { count = { min = 0 max = 1 } class = random_non_colonizable orbit_angle = { min = 90 max = 270 } orbit_distance = 5 }
+	}
+}

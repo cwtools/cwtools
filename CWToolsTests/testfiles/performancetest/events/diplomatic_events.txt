@@ -1,0 +1,912 @@
+#################################
+#
+# Diplomatic Events
+# by Rufus Tronde
+# STNH - Capek 1.8.0 Compat
+#################################
+
+@tier1researchreward = 6
+@tier1researchmin = 60
+@tier1researchmax = 150
+@tier2researchreward = 12
+@tier2researchmin = 90
+@tier2researchmax = 250
+@tier3researchreward = 18
+@tier3researchmin = 120
+@tier3researchmax = 350
+@tier4researchreward = 24
+@tier4researchmin = 150
+@tier4researchmax = 500
+@tier1unityreward = 6
+@tier1unitymin = 100
+@tier1unitymax = 500
+@tier2unityreward = 12
+@tier2unitymin = 150
+@tier2unitymax = 1000
+@tier3unityreward = 18
+@tier3unitymin = 250
+@tier3unitymax = 1500
+@tier4unityreward = 24
+@tier4unitymin = 350
+@tier4unitymax = 2000
+@tier5unityreward = 48
+@tier5unitymin = 700
+@tier5unitymax = 4000
+
+namespace = diplomatic
+
+# Insult broadcasted
+country_event = {
+	id = diplomatic.1
+
+	hide_window = yes
+	
+	trigger = {
+		#
+		always = no
+		#
+		OR = {
+			has_ethic = ethic_xenophobe
+			has_ethic = ethic_fanatic_xenophobe
+		}
+		any_owned_fleet = {
+			exists = leader
+			leader = { leader_class = admiral }
+			exists = solar_system
+			solar_system = {
+				exists = space_owner
+				space_owner = {
+					has_communications = root
+					NOR = {
+						is_country = ROOT
+						is_at_war_with = ROOT
+						is_subject = yes
+					}
+				}
+			}
+		}
+	}
+	
+	#is_triggered_only = yes
+	mean_time_to_happen = { months = 6000 }
+	
+	immediate = {
+		random_owned_fleet = {
+			limit = {
+				exists = leader
+				solar_system = {
+					exists = space_owner
+					space_owner = {
+						has_communications = root
+						NOR = {
+							is_country = ROOT
+							is_at_war_with = ROOT
+						}
+					}
+				}
+			}
+			save_event_target_as = broadcasted_insult_fleet
+			leader = { save_event_target_as = broadcasted_insult_leader }
+			solar_system = {
+				space_owner = {
+					country_event = { id = diplomatic.2 }
+				}
+			}
+		}
+	}
+}
+
+# Insult received
+country_event = {
+	id = diplomatic.2
+	title = "diplomatic.2.name"
+	desc = "diplomatic.2.desc"
+	picture = GFX_evt_unknown_ships
+	show_sound = event_radio_chatter
+	location = event_target:broadcasted_insult_fleet
+
+	is_triggered_only = yes
+	
+	# Demand resignation
+	option = {
+		name = diplomatic.2.a
+		trigger = {
+			NOT = { has_ethic = ethic_fanatic_militarist }
+		}
+		FROM = { country_event = { id = diplomatic.3 } }
+	}
+
+	# Demand execution
+	option = {
+		name = diplomatic.2.b
+		trigger = {
+			NOT = { has_ethic = ethic_fanatic_pacifist }
+			OR = {
+				has_ethic = ethic_militarist
+				has_ethic = ethic_fanatic_militarist
+				has_ethic = ethic_xenophobe
+				has_ethic = ethic_fanatic_xenophobe
+			}
+		}
+		FROM = { country_event = { id = diplomatic.4 } }
+	}
+
+	# Demand nothing
+	option = {
+		name = diplomatic.2.c
+		add_influence = -50
+	}
+}
+
+# Resignation Demanded
+country_event = {
+	id = diplomatic.3
+	title = "diplomatic.3.name"
+	desc = "diplomatic.3.desc"
+	picture = GFX_evt_throne_room
+	show_sound = event_radio_chatter
+	location = event_target:broadcasted_insult_fleet
+
+	is_triggered_only = yes
+	
+	# Fire general
+	option = {
+		name = diplomatic.3.a
+		tooltip = {
+			event_target:broadcasted_insult_fleet = {
+				exile_leader_as = insulting_admiral
+			}
+		}
+		FROM = { country_event = { id = diplomatic.5 } }
+	}
+
+	# Refuse
+	option = {
+		name = diplomatic.3.b
+		FROM = {
+			add_opinion_modifier = {
+				who = ROOT
+				modifier = opinion_insult
+			}
+			country_event = { id = diplomatic.7 }
+		}
+	}
+}
+
+# Execution Demanded
+country_event = {
+	id = diplomatic.4
+	title = "diplomatic.3.name"
+	desc = "diplomatic.4.desc"
+	picture = GFX_evt_throne_room
+	show_sound = event_radio_chatter
+	location = event_target:broadcasted_insult_fleet
+
+	is_triggered_only = yes
+	
+	# Execute general
+	option = {
+		name = diplomatic.4.a
+		tooltip = {
+			event_target:broadcasted_insult_fleet = {
+				kill_leader = { show_notification = no }
+			}
+		}
+		FROM = { country_event = { id = diplomatic.6 } }
+	}
+
+	# Refuse
+	option = {
+		name = diplomatic.4.b
+		FROM = {
+			add_opinion_modifier = {
+				who = FROM
+				modifier = opinion_insult
+			}
+			country_event = { id = diplomatic.7 }
+		}
+	}
+}
+
+# Retirement Accepted
+country_event = {
+	id = diplomatic.5
+	title = "diplomatic.5.name"
+	desc = "diplomatic.5.desc"
+	picture = GFX_evt_throne_room
+	show_sound = event_conversation
+	location = FROM
+
+	is_triggered_only = yes
+	
+	option = {
+		name = diplomatic.5.a
+		add_influence = 25
+		event_target:broadcasted_insult_fleet = {
+			exile_leader_as = insulting_admiral
+		}
+	}
+}
+
+# Execution Accepted
+country_event = {
+	id = diplomatic.6
+	title = "diplomatic.6.name"
+	desc = "diplomatic.6.desc"
+	picture = GFX_evt_star_yellow
+	show_sound = event_airlock
+	location = FROM
+
+	is_triggered_only = yes
+	
+	option = {
+		name = diplomatic.6.a
+		add_influence = 25
+		event_target:broadcasted_insult_fleet = {
+			kill_leader = { show_notification = no }
+		}
+	}
+}
+
+# Punishment Refused
+country_event = {
+	id = diplomatic.7
+	title = "diplomatic.7.name"
+	desc = "diplomatic.7.desc"
+	picture = GFX_evt_throne_room
+	show_sound = event_alien_signal
+	location = FROM
+
+	is_triggered_only = yes
+	
+	option = {
+		name = diplomatic.7.a
+	}
+}
+
+# Science Ship in territory
+country_event = {
+	id = diplomatic.9
+
+	hide_window = yes
+	
+	trigger = {
+		#
+		always = no
+		#
+		any_owned_ship = {
+			is_ship_class = shipclass_science_ship
+			exists = solar_system
+			solar_system = {
+				exists = space_owner
+				space_owner = {
+					has_communications = root
+					NOR = {
+						is_country = ROOT
+						is_at_war_with = ROOT
+						is_subject = yes
+					}
+					OR = {
+						has_ethic = ethic_materialist
+						has_ethic = ethic_fanatic_materialist
+						AND = {
+							ROOT = {
+								NOT = { has_modifier = alien_genome_research }
+								has_technology = tech_society_genome_447
+							}
+							OR = {
+								has_ethic = ethic_xenophobe
+								has_ethic = ethic_fanatic_xenophobe
+							}
+						}
+						AND = {
+							#exists = leader
+							OR = {
+								has_ethic = ethic_spiritualist
+								has_ethic = ethic_fanatic_spiritualist
+							}
+							ROOT = {
+								NOR = {
+									has_ethic = ethic_spiritualist
+									has_ethic = ethic_fanatic_spiritualist
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+	
+	#is_triggered_only = yes
+	mean_time_to_happen = { months = 3000 }
+	
+	immediate = {
+		random_owned_ship = {
+			limit = {
+				is_ship_class = shipclass_science_ship
+				exists = solar_system
+				solar_system = {
+					exists = space_owner
+					space_owner = {
+						has_communications = root
+						NOR = {
+							is_country = ROOT
+							is_at_war_with = ROOT
+							is_subject = yes
+						}
+						OR = {
+							has_ethic = ethic_materialist
+							has_ethic = ethic_fanatic_materialist
+							AND = {
+								ROOT = {
+									NOT = { has_modifier = alien_genome_research }
+									has_technology = tech_society_genome_447
+								}
+								OR = {
+									has_ethic = ethic_xenophobe
+									has_ethic = ethic_fanatic_xenophobe
+								}
+							}
+							AND = {
+								#exists = leader
+								OR = {
+									has_ethic = ethic_spiritualist
+									has_ethic = ethic_fanatic_spiritualist
+								}
+								ROOT = {
+									NOR = {
+										has_ethic = ethic_spiritualist
+										has_ethic = ethic_fanatic_spiritualist
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+			save_event_target_as = encroaching_research_fleet
+			if = {
+				limit = { exists = leader }
+				leader = { save_event_target_as = encroaching_research_leader }
+			}
+			solar_system = {
+				space_owner = {
+					switch = {
+						trigger = has_ethic
+						ethic_materialist = { country_event = { id = diplomatic.10 } }
+						ethic_fanatic_materialist = { country_event = { id = diplomatic.10 } }
+						ethic_xenophobe = { country_event = { id = diplomatic.12 } }
+						ethic_fanatic_xenophobe = { country_event = { id = diplomatic.12 } }
+						ethic_spiritualist = { country_event = { id = diplomatic.15 } }
+						ethic_fanatic_spiritualist = { country_event = { id = diplomatic.15 } }
+					}
+				}
+			}
+		}
+	}
+}
+
+# Researchers Suspect Secrets Being Stolen
+country_event = {
+	id = diplomatic.10
+	title = "diplomatic.10.name"
+	desc = "diplomatic.10.desc"
+	picture = GFX_evt_big_landing_ship
+	show_sound = event_conversation
+	location = event_target:encroaching_research_fleet
+
+	is_triggered_only = yes
+	
+	option = {
+		name = diplomatic.10.a
+		set_closed_borders = {
+			who = FROMFROM
+			status = yes
+		}
+		add_opinion_modifier = {
+			who = FROMFROM
+			modifier = encroaching_scientists
+		}
+		FROMFROM = {
+			country_event = { id = diplomatic.11 days = 7 }
+		}
+	}
+
+	option = {
+		name = diplomatic.10.b
+		add_influence = -50
+	}
+}
+
+# Borders Closed to Avoid Stolen Secrets
+country_event = {
+	id = diplomatic.11
+	title = "diplomatic.11.name"
+	desc = "diplomatic.11.desc"
+	picture = GFX_evt_ship_in_orbit
+	location = event_target:encroaching_research_fleet
+
+	is_triggered_only = yes
+
+	diplomatic = yes
+
+	picture_event_data = {
+		portrait = FROM
+		planet_background = FROM
+		graphical_culture = FROM
+		city_level = FROM
+		room = FROM.ruler
+	}
+	
+	option = {
+		name = diplomatic.11.a
+	}
+}
+
+# People Suspect Genome Mapped
+country_event = {
+	id = diplomatic.12
+	title = "diplomatic.12.name"
+	desc = "diplomatic.12.desc"
+	picture = GFX_evt_genetic_modification
+	show_sound = event_conversation
+	location = event_target:encroaching_research_fleet
+
+	is_triggered_only = yes
+	
+	option = {
+		name = diplomatic.12.a
+		set_closed_borders = {
+			who = FROMFROM
+			status = yes
+		}
+		add_opinion_modifier = {
+			who = FROMFROM
+			modifier = encroaching_scientists
+		}
+		FROMFROM = {
+			country_event = { id = diplomatic.13 days = 7 }
+		}
+	}
+
+	option = {
+		name = diplomatic.12.b
+		add_influence = -50
+	}
+
+	option = {
+		name = diplomatic.12.c
+		trigger = {
+			has_technology = tech_society_genome_447
+			FROMFROM = { capital_scope = { solar_system = { has_access_fleet = ROOT } } }
+		}
+		enable_special_project = {
+			name = "retaliatory_genome_mapping"
+			location = FROMFROM.capital_scope
+			owner = root
+		}
+		add_influence = -20
+	}
+}
+
+# Borders Closed to Avoid Genome Mapping
+country_event = {
+	id = diplomatic.13
+	title = "diplomatic.13.name"
+	desc = "diplomatic.13.desc"
+	picture = GFX_evt_ship_in_orbit
+	location = event_target:encroaching_research_fleet
+
+	is_triggered_only = yes
+
+	diplomatic = yes
+
+	picture_event_data = {
+		portrait = FROM
+		planet_background = FROM
+		graphical_culture = FROM
+		city_level = FROM
+		room = FROM.ruler
+	}
+	
+	option = {
+		name = diplomatic.13.a
+	}
+}
+
+# "Enemy" Genome Mapped
+country_event = {
+	id = diplomatic.14
+	title = "diplomatic.14.name"
+	desc = "diplomatic.14.desc"
+	picture = GFX_evt_genetic_modification
+	show_sound = event_laboratory_sound
+	location = from
+
+	is_triggered_only = yes
+	
+	option = {
+		name = diplomatic.14.a
+		add_modifier = {
+			modifier = alien_genome_research
+			days = 18000
+		}
+	}
+}
+
+# Locals Suspect Heretic Scientist
+country_event = {
+	id = diplomatic.15
+	title = "diplomatic.15.name"
+	desc = "diplomatic.15.desc"
+	picture = GFX_evt_big_landing_ship
+	show_sound = event_conversation
+	location = event_target:encroaching_research_fleet
+
+	is_triggered_only = yes
+	
+	option = {
+		name = diplomatic.15.a
+		set_closed_borders = {
+			who = FROMFROM
+			status = yes
+		}
+		add_opinion_modifier = {
+			who = FROMFROM
+			modifier = encroaching_scientists
+		}
+		FROMFROM = {
+			country_event = { id = diplomatic.16 days = 7 }
+		}
+	}
+
+	option = {
+		name = diplomatic.15.b
+		custom_tooltip = diplomatic.15.b.tooltip
+		hidden_effect = {
+			random = {
+				chance = 50
+				FROMFROM = {
+					country_event = { id = diplomatic.17 days = 60 }
+				}
+			}
+		}
+	}
+}
+
+# Borders Closed to Avoid Heretical Research
+country_event = {
+	id = diplomatic.16
+	title = "diplomatic.16.name"
+	desc = "diplomatic.16.desc"
+	picture = GFX_evt_ship_in_orbit
+	location = event_target:encroaching_research_fleet
+
+	is_triggered_only = yes
+
+	diplomatic = yes
+
+	picture_event_data = {
+		portrait = FROM
+		planet_background = FROM
+		graphical_culture = FROM
+		city_level = FROM
+		room = FROM.ruler
+	}
+	
+	option = {
+		name = diplomatic.16.a
+	}
+}
+
+# Scientist Makes Heretical Discovery
+country_event = {
+	id = diplomatic.17
+	title = "diplomatic.17.name"
+	desc = "diplomatic.17.desc"
+	picture = GFX_evt_ship_in_orbit
+	show_sound = event_laboratory_sound
+	location = event_target:encroaching_research_fleet
+
+	is_triggered_only = yes
+	
+	option = {
+		name = diplomatic.17.a
+		event_target:encroaching_research_fleet = {
+			leader = {
+				exile_leader_as = heretical_scientist
+			}
+		}
+	}
+
+	option = {
+		name = diplomatic.17.b
+		FROM = {
+			add_opinion_modifier = {
+				who = ROOT
+				modifier = opinion_heretical_research
+			}
+			country_event = { id = diplomatic.18 }
+		}
+	}
+}
+
+# Heretical Research Published
+country_event = {
+	id = diplomatic.18
+	title = "diplomatic.18.name"
+	desc = "diplomatic.18.desc"
+	picture = GFX_evt_ship_in_orbit
+	show_sound = event_planetary_riot
+	location = event_target:encroaching_research_fleet
+
+	is_triggered_only = yes
+	immediate = {
+		add_modifier = {
+			modifier = unity_reduction_diplomatic_18
+			days = 1800
+		}
+	}
+	
+	option = {
+		name = diplomatic.18.a
+		tooltip = {
+			add_modifier = {
+			modifier = unity_reduction_diplomatic_18
+			days = 1800
+			}
+		}
+	}
+}
+
+# Exotic Woodwind
+country_event = {
+	id = diplomatic.19
+	title = "diplomatic.19.name"
+	desc = "diplomatic.19.desc"
+	picture = GFX_evt_outpost
+	show_sound = event_radio_chatter
+	location = music_listening_planet
+
+	trigger = {
+		#
+		always = no
+		#
+		any_neighbor_country = {
+			has_communications = root
+			NOR = {
+				is_at_war_with = ROOT
+				is_subject = yes
+			}
+			exists = capital_scope
+			capital_scope = { solar_system = { has_access_fleet = ROOT } }
+			ROOT = {
+				any_owned_planet = {
+					is_neighbor_of = PREVPREV
+					num_pops > 3
+					any_pop = { is_same_species = owner }
+				}
+			}
+		}
+		NOT = { has_authority = auth_machine_intelligence }
+	}
+
+	immediate = {
+		random_neighbor_country = {
+			limit = {
+				has_communications = root
+				NOT = {
+					is_at_war_with = ROOT
+					is_subject = yes
+				}
+				capital_scope = { solar_system = { has_access_fleet = ROOT } }
+				ROOT = {
+					any_owned_planet = {
+						is_neighbor_of = PREVPREV
+						num_pops > 3
+						any_pop = { is_same_species = owner }
+					}
+				}
+			}
+			save_event_target_as = music_origin_country
+			ROOT = {
+				random_owned_planet = {
+					limit = {
+						is_neighbor_of = PREVPREV
+						num_pops > 3
+						any_pop = { is_same_species = owner }
+					}
+					save_event_target_as = music_listening_planet
+				}
+			}
+		}
+	}
+	
+	#is_triggered_only = yes
+	mean_time_to_happen = { months = 4800 }
+	
+	option = {
+		name = diplomatic.19.a
+		event_target:music_listening_planet = {
+			random_owned_pop = {
+				limit = {
+					is_same_species = owner_main_species
+					NOT = { has_modifier = alien_music }
+				}
+				add_modifier = {
+					modifier = "alien_music"
+					days = 36000
+				}
+				if = {
+					limit = {
+						NOT = {
+							has_ethic = ethic_xenophile
+							pop_has_trait = trait_robotic_1
+							pop_has_trait = trait_robotic_2
+						}
+					}
+					pop_change_ethic = ethic_xenophile
+				}
+				if = { limit = { has_ethic = ethic_xenophobe } pop_remove_ethic = ethic_xenophobe }
+			}
+			random_owned_pop = {
+				limit = { NOT = { has_modifier = alien_music } }
+				add_modifier = {
+					modifier = "alien_music"
+					days = 36000
+				}
+				if = {
+					limit = {
+						NOT = {
+							has_ethic = ethic_xenophile
+							pop_has_trait = trait_robotic_1
+							pop_has_trait = trait_robotic_2
+						}
+					}
+					pop_change_ethic = ethic_xenophile
+				}
+				if = { limit = { has_ethic = ethic_xenophobe } pop_remove_ethic = ethic_xenophobe }
+			}
+			random_owned_pop = {
+				limit = { NOT = { has_modifier = alien_music } }
+				add_modifier = {
+					modifier = "alien_music"
+					days = 36000
+				}
+				if = {
+					limit = {
+						NOT = {
+							has_ethic = ethic_xenophile
+							pop_has_trait = trait_robotic_1
+							pop_has_trait = trait_robotic_2
+						}
+					}
+					pop_change_ethic = ethic_xenophile
+				}
+				if = { limit = { has_ethic = ethic_xenophobe } pop_remove_ethic = ethic_xenophobe }
+			}
+		}
+	}
+
+	option = {
+		name = diplomatic.19.b
+		enable_special_project = {
+			name = "woodwind_instrument_investigation"
+			location = event_target:music_origin_country.capital_scope
+			owner = root
+		}
+	}
+}
+
+# Exotic Woodwind followup: Instrumental Biology
+country_event = {
+	id = diplomatic.20
+	title = "diplomatic.20.name"
+	desc = "diplomatic.20.desc"
+	picture = GFX_evt_ship_in_orbit
+	location = from
+	show_sound = event_alien_nature
+
+	is_triggered_only = yes
+	
+	option = {
+		name = diplomatic.20.a
+		add_monthly_resource_mult = {
+			resource = society_research
+			value = @tier2researchreward
+			min = @tier2researchmin
+			max = @tier2researchmax
+		}
+	}
+}
+
+# Encroaching Colonies
+planet_event = {
+	id = diplomatic.21
+	title = "diplomatic.21.name"
+	desc = "diplomatic.21.desc"
+	picture = GFX_evt_colony_settlement
+	location = root
+
+	is_triggered_only = yes
+
+	trigger = {
+		NOT = { is_artificial_planet = yes }
+		solar_system = {
+			NOT = {	exists = space_owner } # colonizing outside borders
+			any_neighbor_system = {
+				exists = space_owner
+				space_owner = {
+					is_ai = yes
+					is_normal_country = yes
+					has_communications = root.owner
+					NOR = {
+						is_country = root.owner
+						is_at_war_with = root.owner
+						is_subject = yes
+						is_in_federation_with = root.owner
+						has_opinion_modifier = { who = root.owner modifier = encroaching_colony }
+						opinion = {
+							who = root.owner
+							value > -100
+						}
+					}
+				}
+			}
+		}
+	}
+
+	immediate = {
+		solar_system = {
+			random_neighbor_system = {
+				limit = {
+					exists = space_owner
+					space_owner = {
+						has_communications = root.owner
+						NOT = { is_country = ROOT.owner }
+						is_ai = yes
+						is_normal_country = yes	   
+						NOT = { is_in_federation_with = ROOT.owner }
+						NOT = {
+							has_opinion_modifier = { who = ROOT.owner modifier = encroaching_colony }
+						}
+						opinion = {
+							who = root.owner
+							value > -100
+						}
+					}
+				}
+				space_owner = { save_event_target_as = neighbor_contesting_colony }
+			}
+		}
+	}
+
+	diplomatic = yes
+
+	picture_event_data = {
+		portrait = event_target:neighbor_contesting_colony
+		planet_background = event_target:neighbor_contesting_colony
+		graphical_culture = event_target:neighbor_contesting_colony
+		city_level = event_target:neighbor_contesting_colony
+		room = event_target:neighbor_contesting_colony.ruler
+	}
+	
+	option = {
+		name = diplomatic.21.a
+		destroy_colony = { keep_buildings = no }
+		ai_chance = {
+			factor = 0
+		}
+	}
+
+	option = {
+		name = diplomatic.21.b
+		event_target:neighbor_contesting_colony = {
+			add_opinion_modifier = {
+				who = ROOT.owner
+				modifier = encroaching_colony
+			}
+		}
+	}
+}

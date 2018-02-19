@@ -1,0 +1,32 @@
+# doomsday
+ship_design = {
+	name = "NAME_unimatrix_defense_small"
+	ship_size = borg_unimatrix_defense_small
+	section = {
+		template = "borg_unimatrix_defense_small_stern_weapon_1"
+		slot = "stern"
+		component = { slot = "MEDIUM_GUN_01" template = "MEDIUM_BORG_ANTI_1" }
+		component = { slot = "MEDIUM_GUN_02" template = "MEDIUM_BORG_ANTI_1" }
+		component = { slot = "MEDIUM_GUN_03" template = "MEDIUM_BORG_ANTI_1" }
+		component = { slot = "MEDIUM_GUN_04" template = "MEDIUM_BORG_ANTI_1" }
+		component = { slot = "TORPEDO_01" template = "TORPEDO_BORG_TORPEDO_1" }
+		component = { slot = "TORPEDO_02" template = "TORPEDO_BORG_TORPEDO_1" }
+	}
+	section = {
+		template = "borg_unimatrix_defense_small_mid_main_2"
+		slot = "mid"
+		component = { slot = "SMALL_UTILITY_1" template = "UTILITY_SMALL_ARMOR_0" }
+		component = { slot = "SMALL_UTILITY_2" template = "UTILITY_SMALL_ARMOR_0" }
+		component = { slot = "SMALL_UTILITY_3" template = "UTILITY_SMALL_ARMOR_0" }
+		component = { slot = "SMALL_UTILITY_4" template = "UTILITY_SMALL_ARMOR_0" }
+		component = { slot = "SMALL_UTILITY_5" template = "UTILITY_SMALL_ARMOR_0" }
+		component = { slot = "SMALL_UTILITY_6" template = "UTILITY_SMALL_ARMOR_0" }
+		component = { slot = "SMALL_UTILITY_7" template = "UTILITY_SMALL_ARMOR_0" }
+		component = { slot = "SMALL_UTILITY_8" template = "UTILITY_SMALL_ARMOR_0" }
+		component = { slot = "AUX_UTILITY_1" template = "UTILITY_AUX_BORG_CREW_3" }
+		component = { slot = "AUX_UTILITY_2" template = "UTILITY_AUX_BORG_CREW_3" }		
+	}
+	required_component="REQUIRED_STATION_REACTOR_0"
+	required_component="REQUIRED_DEFENSE_0_BORG_DS"
+	required_component="REQUIRED_HULL_0_BORG_DS"
+}

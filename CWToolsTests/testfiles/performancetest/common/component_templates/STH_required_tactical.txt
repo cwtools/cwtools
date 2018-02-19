@@ -1,0 +1,304 @@
+# Emergency Backup Systems
+   utility_component_template = {
+      key = "REQUIRED_TACTICAL_BACKUP"
+      size = small
+      icon = "GFX_ship_part_Required_Tactical_Backup_"
+      icon_frame = 1
+      power = 0
+      cost = 5
+      
+      ship_modifier = {     }
+      modifier = { ship_hitpoints_mult = 0.01    }
+      ai_weight = { weight = 1 }
+      prerequisites = { "tech_emergency_backup" }
+      component_set = "required_tactical"
+   }
+   
+# Cloaking Generator
+   utility_component_template = {
+      key = "REQUIRED_TACTICAL_CLOAK"
+      size = small
+      icon = "GFX_ship_part_Required_Tactical_Cloak_0"
+      icon_frame = 1
+      power = -20
+      cost = 20
+      upgrades_to = "REQUIRED_TACTICAL_CLOAK_1"
+      ship_modifier = {     }
+      modifier = { ship_evasion_add = 10    }
+      ai_weight = { weight = 1600 }
+      prerequisites = { "tech_physics_early_96" }
+      component_set = "required_tactical"
+   }
+   
+# Cloaking Generator II
+   utility_component_template = {
+      key = "REQUIRED_TACTICAL_CLOAK_1"
+      size = small
+      icon = "GFX_ship_part_Required_Tactical_Cloak_1"
+      icon_frame = 1
+      power = -35
+      cost = 35
+      upgrades_to = "REQUIRED_TACTICAL_CLOAK_2"
+      ship_modifier = {     }
+      modifier = { ship_evasion_add = 15    }
+      ai_weight = { weight = 1700 }
+      prerequisites = { "tech_physics_nullifier_97" }
+      component_set = "required_tactical"
+   }
+   
+# Multiphase Cloaking Generator
+   utility_component_template = {
+      key = "REQUIRED_TACTICAL_CLOAK_2"
+      size = small
+      icon = "GFX_ship_part_Required_Tactical_Cloak_2"
+      icon_frame = 1
+      power = -45
+      cost = 45
+      upgrades_to = "REQUIRED_TACTICAL_CLOAK_3"
+      ship_modifier = {     }
+      modifier = { ship_evasion_add = 20    }
+      ai_weight = { weight = 1800 }
+      prerequisites = { "tech_physics_field_manipulation_182" }
+      component_set = "required_tactical"
+   }
+   
+# Spatial Displacement Cloaking Generator
+   utility_component_template = {
+      key = "REQUIRED_TACTICAL_CLOAK_3"
+      size = small
+      icon = "GFX_ship_part_Required_Tactical_Cloak_3"
+      icon_frame = 1
+      power = -75
+      cost = 75
+      upgrades_to = "REQUIRED_TACTICAL_CLOAK_4"
+      ship_modifier = {     }
+      modifier = { ship_evasion_add = 25    }
+      ai_weight = { weight = 1900 }
+      prerequisites = { "tech_physics_field_manipulation_183" }
+      component_set = "required_tactical"
+   }
+   
+# Temporal Energy Cloak
+   utility_component_template = {
+      key = "REQUIRED_TACTICAL_CLOAK_4"
+      size = small
+      icon = "GFX_ship_part_Required_Tactical_Cloak_4"
+      icon_frame = 1
+      power = -105
+      cost = 135
+      
+      ship_modifier = {     }
+      modifier = { ship_evasion_add = 30    }
+      ai_weight = { weight = 2000 }
+      prerequisites = { "tech_physics_field_manipulation_184" }
+      component_set = "required_tactical"
+   }
+   
+# Interphase Cloaking Generator
+   utility_component_template = {
+      key = "REQUIRED_TACTICAL_CLOAK_RED"
+      size = small
+      icon = "GFX_ship_part_Required_Tactical_Cloak_red"
+      icon_frame = 1
+      power = -90
+      cost = 115
+      
+      ship_modifier = {     }
+      modifier = { ship_evasion_add = 10    }
+      ai_weight = { weight = 100 }
+      prerequisites = { "tech_physics_interphase_98" }
+      component_set = "required_tactical"
+   }
+   
+# Science Console
+   utility_component_template = {
+      key = "REQUIRED_TACTICAL_SCIENCE"
+      size = small
+      icon = "GFX_ship_part_Required_Tactical_Science_"
+      icon_frame = 1
+      power = -15
+      cost = 15
+      
+      ship_modifier = { ship_tracking_add = 5    }
+      modifier = { ship_evasion_mult = 0.05 ship_combat_speed_mult = 0.05 ship_speed_mult = 0.05  }
+      ai_weight = { weight = 5 }
+      prerequisites = { "tech_society_space_393" }
+      component_set = "required_tactical"
+   }
+   
+# Dervish Device
+   utility_component_template = {
+      key = "REQUIRED_TACTICAL_DERVISH"
+      size = small
+      icon = "GFX_ship_part_Required_Tactical_Dervish_"
+      icon_frame = 1
+      power = -35
+      cost = 35
+      
+      ship_modifier = { ship_weapon_damage = 0.20    }
+      modifier = {     }
+      ai_weight = { weight = 2000 }
+      prerequisites = { "tech_physics_dervish_149" }
+      component_set = "required_tactical"
+   }
+   
+# Engineering Console
+   utility_component_template = {
+      key = "REQUIRED_TACTICAL_ENGINEERING"
+      size = small
+      icon = "GFX_ship_part_Required_Tactical_Engineering_"
+      icon_frame = 1
+      power = -15
+      cost = 15
+      
+      ship_modifier = {     }
+      modifier = { ship_armor_mult = 0.05 ship_hitpoints_mult = 0.05 ship_shield_hp_mult = 0.05  }
+      ai_weight = { weight = 5 }
+      prerequisites = { "tech_engineering_inertial_629" }
+      component_set = "required_tactical"
+   }
+   
+# Tactical Console
+   utility_component_template = {
+      key = "REQUIRED_TACTICAL_TACTICAL"
+      size = small
+      icon = "GFX_ship_part_Required_Tactical_Tactical_"
+      icon_frame = 1
+      power = -15
+      cost = 15
+      
+      ship_modifier = { ship_weapon_range_mult = 0.05 ship_fire_rate_mult = 0.05 ship_weapon_damage = 0.05  }
+      modifier = {     }
+      ai_weight = { weight = 5 }
+      prerequisites = { "tech_physics_gravity_82" }
+      component_set = "required_tactical"
+   }
+   
+# Precog Chamber
+   utility_component_template = {
+      key = "REQUIRED_TACTICAL_PRECOG"
+      size = small
+      icon = "GFX_ship_part_Required_Tactical_Precog_"
+      icon_frame = 1
+      power = -90
+      cost = 110
+      
+      ship_modifier = { ship_accuracy_add = 10    }
+      modifier = {     }
+      ai_weight = { weight = 110 }
+      prerequisites = { "tech_society_applied_462" }
+      component_set = "required_tactical"
+   }
+   
+# Exographic Targeting Sensor
+   utility_component_template = {
+      key = "REQUIRED_TACTICAL_EXOGRAPHIC"
+      size = small
+      icon = "GFX_ship_part_Required_Tactical_Exographic_"
+      icon_frame = 1
+      power = -45
+      cost = 45
+      
+      ship_modifier = { SHIP_SHIELD_PENETRATION_MULT = 0.1 SHIP_ARMOR_PENETRATION_MULT = 0.1   }
+      modifier = {     }
+      ai_weight = { weight = 600 }
+      prerequisites = { "tech_physics_particles_306" }
+      component_set = "required_tactical"
+   }
+   
+# Raiding Party
+   utility_component_template = {
+      key = "REQUIRED_TACTICAL_RAIDING"
+      size = small
+      icon = "GFX_ship_part_Required_Tactical_raiding_"
+      icon_frame = 1
+      power = -50
+      cost = 200
+      
+      ship_modifier = {     }
+      modifier = {     }
+      ai_weight = { weight = 2500 }
+      prerequisites = { "tech_society_statecraft_1180" }
+      component_set = "required_tactical"
+   }
+   
+# Slavery Party
+   utility_component_template = {
+      key = "REQUIRED_TACTICAL_SLAVERS"
+      size = small
+      icon = "GFX_ship_part_Required_Tactical_slavers_"
+      icon_frame = 1
+      power = -50
+      cost = 200
+      
+      ship_modifier = {     }
+      modifier = {     }
+      ai_weight = { weight = 2500 }
+      prerequisites = { "tech_society_statecraft_1181" }
+      component_set = "required_tactical"
+   }
+   
+# Marine Detatchment
+   utility_component_template = {
+      key = "REQUIRED_TACTICAL_MARINE"
+      size = small
+      icon = "GFX_ship_part_Required_Tactical_marine_"
+      icon_frame = 1
+      power = -50
+      cost = 200
+      
+      ship_modifier = {     }
+      modifier = {     }
+      ai_weight = { weight = 100 }
+      prerequisites = { "tech_society_centralized_403" }
+      component_set = "required_tactical"
+   }
+   
+# Humanitarian Aid
+   utility_component_template = {
+      key = "REQUIRED_TACTICAL_AID"
+      size = small
+      icon = "GFX_ship_part_Required_Tactical_aid_"
+      icon_frame = 1
+      power = -50
+      cost = 200
+      
+      ship_modifier = {     }
+      modifier = {     }
+      ai_weight = { weight = 1000 }
+      prerequisites = { "tech_society_new_worlds_1186" }
+      component_set = "required_tactical"
+   }
+   
+# Temporal Spitfire
+   utility_component_template = {
+      key = "REQUIRED_TACTICAL_SPITFIRE"
+      size = small
+      icon = "GFX_ship_part_Required_Tactical_Spitfire_"
+      icon_frame = 1
+      power = -90
+      cost = 115
+      
+      ship_modifier = { ship_fire_rate_mult = 0.15    }
+      modifier = {     }
+      ai_weight = { weight = 1000 }
+      prerequisites = { "tech_physics_temporal_64" }
+      component_set = "required_tactical"
+   }
+   
+# Temporal Rewinder
+   utility_component_template = {
+      key = "REQUIRED_TACTICAL_TEMPORAL"
+      size = small
+      icon = "GFX_ship_part_Required_Tactical_Temporal_"
+      icon_frame = 1
+      power = -95
+      cost = 125
+      
+      ship_modifier = {     }
+      modifier = { ship_combat_speed_mult = 0.5    }
+      ai_weight = { weight = 110 }
+      prerequisites = { "tech_physics_manheim_62" }
+      component_set = "required_tactical"
+   }
+   

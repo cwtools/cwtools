@@ -1,0 +1,36 @@
+on_game_start = {
+	events = {
+		STH_MirrorUniverse_event.1
+	}
+}
+
+on_pre_communications_established = {
+	events = {
+		STH_MirrorUniverse_event.2
+	}
+}
+
+on_ship_destroyed_perp = {
+	events = {
+		STH_MirrorUniverse_event.8
+		STH_MirrorUniverse_event.15 #Needed?
+		STH_MirrorUniverse_event.47
+	}
+}
+
+on_yearly_pulse = {
+	events = {
+		# Alliance conditions
+		STH_MirrorUniverse_event.50
+		# Terran Empire "Mirror, Mirror" Event Chain (conditions)
+		STH_MirrorUniverse_event.66
+		# Terran Empire subsequent civil wars conditions
+		STH_MirrorUniverse_event.85
+	}
+}
+
+on_war_won = {
+	events = {
+		#STH_MirrorUniverse_event.48
+	}
+}

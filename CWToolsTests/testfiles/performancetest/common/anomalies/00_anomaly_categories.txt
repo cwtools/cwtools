@@ -1,0 +1,1327 @@
+############################
+### DISCOVERY CATEGORIES ###
+############################
+# potential = planet scope
+# on_success = ship scope
+# on_fail = ship scope
+# on_critical_fail = ship scope
+# level = level of discovery that is checked against scientist level
+# risk = risk of researching the discovery (defaults to NDefines::NGameplay:anomaly_RISK_DEFAULT)
+
+# For on_success, on_fail, on_critical_fail
+# FROM = planet scope
+# ROOT = ship scope
+# Ex. on_fail, ship_event would have the planet in From.From
+
+# Crashed Ship (Asteroid)
+anomaly_category = {
+	key = "crashed_ship_asteroid_category"
+	desc = "crashed_ship_asteroid_category_desc"
+	picture = GFX_evt_mining_station
+	level = 2
+	#risk = 30
+	
+	spawn_chance = {		
+		modifier = {
+			add = 3
+			is_asteroid = yes
+			FROM = { owner = { is_borg_empire = no is_assimilator = no } }
+		}
+	}
+	
+	on_success = {
+	}
+
+	on_fail = {
+		ship_event = { id = anomaly_failure.1 }
+	}
+
+	on_critical_fail = {
+		random_list = {
+			16 = { ship_event = { id = anomaly_failure.400 } }
+			16 = { ship_event = { id = anomaly_failure.401 } }
+			16 = { ship_event = { id = anomaly_failure.402 } }
+			16 = { ship_event = { id = anomaly_failure.403 } }
+			16 = { ship_event = { id = anomaly_failure.404 } }
+			16 = { ship_event = { id = anomaly_failure.405 } }
+		}
+	}
+}
+
+# Unknown Origin (Asteroid)
+anomaly_category = {
+	key = "origin_asteroid_category"
+	desc = "origin_asteroid_category_desc"
+	picture = GFX_evt_mining_station
+	level = 1
+	#risk = 30
+	
+	spawn_chance = {		
+		modifier = {
+			add = 3
+			is_asteroid = yes
+			FROM = { owner = { is_borg_empire = no is_assimilator = no } }
+		}
+	}
+	
+	on_success = {
+	}
+
+	on_fail = {
+		ship_event = { id = anomaly_failure.2 }
+	}
+
+	on_critical_fail = {
+		random_list = {
+			16 = { ship_event = { id = anomaly_failure.400 } }
+			16 = { ship_event = { id = anomaly_failure.401 } }
+			16 = { ship_event = { id = anomaly_failure.402 } }
+			16 = { ship_event = { id = anomaly_failure.403 } }
+			16 = { ship_event = { id = anomaly_failure.404 } }
+			16 = { ship_event = { id = anomaly_failure.405 } }
+		}
+	}
+}
+
+# Covered in Debris (Asteroid)
+anomaly_category = {
+	key = "debris_asteroid_category"
+	desc = "debris_asteroid_category_desc"
+	picture = GFX_evt_mining_station
+	level = 2
+	#risk = 30
+	
+	spawn_chance = {		
+		modifier = {
+			add = 3
+			is_asteroid = yes
+			FROM = { owner = { is_borg_empire = no is_assimilator = no } }
+		}
+	}
+	
+	on_success = {
+	}
+
+	on_fail = {
+		ship_event = { id = anomaly_failure.3 }
+	}
+
+	on_critical_fail = {
+		random_list = {
+			16 = { ship_event = { id = anomaly_failure.400 } }
+			16 = { ship_event = { id = anomaly_failure.401 } }
+			16 = { ship_event = { id = anomaly_failure.402 } }
+			16 = { ship_event = { id = anomaly_failure.403 } }
+			16 = { ship_event = { id = anomaly_failure.404 } }
+			16 = { ship_event = { id = anomaly_failure.405 } }
+		}
+	}
+}
+
+# Energy Emissions (Asteroid)
+anomaly_category = {
+	key = "emissions_asteroid_category"
+	desc = "emissions_asteroid_category_desc"
+	picture = GFX_evt_mining_station
+	level = 1
+	#risk = 30
+	
+	spawn_chance = {		
+		modifier = {
+			add = 3
+			is_asteroid = yes
+			FROM = { owner = { is_borg_empire = no is_assimilator = no } }
+		}
+	}
+	
+	on_success = {
+	}
+
+	on_fail = {
+		ship_event = { id = anomaly_failure.4 }
+	}
+
+	on_critical_fail = {
+		random_list = {
+			16 = { ship_event = { id = anomaly_failure.400 } }
+			16 = { ship_event = { id = anomaly_failure.401 } }
+			16 = { ship_event = { id = anomaly_failure.402 } }
+			16 = { ship_event = { id = anomaly_failure.403 } }
+			16 = { ship_event = { id = anomaly_failure.404 } }
+			16 = { ship_event = { id = anomaly_failure.405 } }
+		}
+	}
+}
+
+# Docking Hatch (Asteroid)
+anomaly_category = {
+	key = "hatch_asteroid_category"
+	desc = "hatch_asteroid_category_desc"
+	picture = GFX_evt_mining_station
+	level = 2
+	#risk = 30
+	
+	spawn_chance = {		
+		modifier = {
+			add = 3
+			is_asteroid = yes
+			FROM = { owner = { is_borg_empire = no is_assimilator = no } }
+		}
+	}
+	
+	on_success = {
+	}
+
+	on_fail = {
+		ship_event = { id = anomaly_failure.5 }
+	}
+
+	on_critical_fail = {
+		random_list = {
+			16 = { ship_event = { id = anomaly_failure.400 } }
+			16 = { ship_event = { id = anomaly_failure.401 } }
+			16 = { ship_event = { id = anomaly_failure.402 } }
+			16 = { ship_event = { id = anomaly_failure.403 } }
+			16 = { ship_event = { id = anomaly_failure.404 } }
+			16 = { ship_event = { id = anomaly_failure.405 } }
+		}
+	}
+}
+
+# Asteroid Collision (Asteroid)
+anomaly_category = {
+	key = "collision_asteroid_category"
+	desc = "collision_asteroid_category_desc"
+	picture = GFX_evt_mining_station
+	level = 1
+	#risk = 30
+	
+	spawn_chance = {		
+		modifier = {
+			add = 3
+			is_asteroid = yes
+			has_any_strategic_resource = no
+			FROM = { owner = { is_borg_empire = no is_assimilator = no } }
+		}
+	}
+	
+	on_success = {
+	}
+
+	on_fail = {
+		ship_event = { id = anomaly_failure.6 }
+	}
+
+	on_critical_fail = {
+		random_list = {
+			16 = { ship_event = { id = anomaly_failure.400 } }
+			16 = { ship_event = { id = anomaly_failure.401 } }
+			16 = { ship_event = { id = anomaly_failure.402 } }
+			16 = { ship_event = { id = anomaly_failure.403 } }
+			16 = { ship_event = { id = anomaly_failure.404 } }
+			16 = { ship_event = { id = anomaly_failure.405 } }
+		}
+	}
+}
+
+# Abandoned Station (Asteroid)
+anomaly_category = {
+	key = "station_asteroid_category"
+	desc = "station_asteroid_category_desc"
+	picture = GFX_evt_mining_station
+	level = 2
+	#risk = 30
+	
+	spawn_chance = {		
+		modifier = {
+			add = 3
+			is_asteroid = yes
+			num_minerals > 0
+			FROM = { owner = { is_borg_empire = no is_assimilator = no } }
+		}
+	}
+	
+	on_success = {
+	}
+
+	on_fail = {
+		ship_event = { id = anomaly_failure.7 }
+	}
+
+	on_critical_fail = {
+		random_list = {
+			16 = { ship_event = { id = anomaly_failure.400 } }
+			16 = { ship_event = { id = anomaly_failure.401 } }
+			16 = { ship_event = { id = anomaly_failure.402 } }
+			16 = { ship_event = { id = anomaly_failure.403 } }
+			16 = { ship_event = { id = anomaly_failure.404 } }
+			16 = { ship_event = { id = anomaly_failure.405 } }
+		}
+	}
+}
+
+# Life Signs (Asteroid)
+anomaly_category = {
+	key = "life_asteroid_category"
+	desc = "life_asteroid_category_desc"
+	picture = GFX_evt_microscopic_life
+	level = 1
+	#risk = 30
+	
+	spawn_chance = {		
+		modifier = {
+			add = 3
+			is_asteroid = yes
+			FROM = { owner = { is_borg_empire = no is_assimilator = no } }
+		}
+	}
+	
+	on_success = {
+	}
+
+	on_fail = {
+		ship_event = { id = anomaly_failure.8 }
+	}
+
+	on_critical_fail = {
+		random_list = {
+			16 = { ship_event = { id = anomaly_failure.400 } }
+			16 = { ship_event = { id = anomaly_failure.401 } }
+			16 = { ship_event = { id = anomaly_failure.402 } }
+			16 = { ship_event = { id = anomaly_failure.403 } }
+			16 = { ship_event = { id = anomaly_failure.404 } }
+			16 = { ship_event = { id = anomaly_failure.405 } }
+		}
+	}
+}
+
+# Atmospheric Object (Gas Giant)
+anomaly_category = {
+	key = "object_gasgiant_category"
+	desc = "object_gasgiant_category_desc"
+	picture = GFX_evt_ship_in_orbit
+	level = 2
+	#risk = 30
+	
+	spawn_chance = {		
+		modifier = {
+			add = 3
+			is_planet_class = pc_gas_giant
+			FROM = { owner = { is_borg_empire = no is_assimilator = no } }
+		}
+	}
+	
+	on_success = {
+	}
+
+	on_fail = {
+		ship_event = { id = anomaly_failure.9 }
+	}
+
+	on_critical_fail = {
+		random_list = {
+			16 = { ship_event = { id = anomaly_failure.900 } }
+			16 = { ship_event = { id = anomaly_failure.901 } }
+			16 = { ship_event = { id = anomaly_failure.902 } }
+			16 = { ship_event = { id = anomaly_failure.903 } }
+		}
+	}
+}
+
+# Promising Moon (Gas Giant)
+anomaly_category = {
+	key = "moon_gasgiant_category"
+	desc = "moon_gasgiant_category_desc"
+	picture = GFX_evt_ship_in_orbit
+	level = 1
+	#risk = 30
+	
+	spawn_chance = {		
+		modifier = {
+			add = 3
+			is_planet_class = pc_gas_giant
+			has_any_strategic_resource = no
+			FROM = { owner = { is_borg_empire = no is_assimilator = no } }
+		}
+	}
+	
+	on_success = {
+	}
+
+	on_fail = {
+		ship_event = { id = anomaly_failure.10 }
+	}
+
+	on_critical_fail = {
+		random_list = {
+			16 = { ship_event = { id = anomaly_failure.900 } }
+			16 = { ship_event = { id = anomaly_failure.901 } }
+			16 = { ship_event = { id = anomaly_failure.902 } }
+			16 = { ship_event = { id = anomaly_failure.903 } }
+		}
+	}
+}
+
+# Life Signs (Gas Giant)
+anomaly_category = {
+	key = "life_gasgiant_category"
+	desc = "life_gasgiant_category_desc"
+	picture = GFX_evt_microscopic_life
+	level = 2
+	#risk = 30
+	
+	spawn_chance = {		
+		modifier = {
+			add = 3
+			is_planet_class = pc_gas_giant
+			FROM = { owner = { is_borg_empire = no is_assimilator = no } }
+		}
+	}
+	
+	on_success = {
+	}
+
+	on_fail = {
+		ship_event = { id = anomaly_failure.11 }
+	}
+
+	on_critical_fail = {
+		random_list = {
+			16 = { ship_event = { id = anomaly_failure.900 } }
+			16 = { ship_event = { id = anomaly_failure.901 } }
+			16 = { ship_event = { id = anomaly_failure.902 } }
+			16 = { ship_event = { id = anomaly_failure.903 } }
+		}
+	}
+}
+
+# Atmospheric Storms (Gas Giant)
+anomaly_category = {
+	key = "storms_gasgiant_category"
+	desc = "storms_gasgiant_category_desc"
+	picture = GFX_evt_ship_in_orbit
+	level = 1
+	#risk = 30
+	
+	spawn_chance = {		
+		modifier = {
+			add = 3
+			is_planet_class = pc_gas_giant
+			FROM = { owner = { is_borg_empire = no is_assimilator = no } }
+		}
+	}
+	
+	on_success = {
+	}
+
+	on_fail = {
+		ship_event = { id = anomaly_failure.12 }
+	}
+
+	on_critical_fail = {
+		random_list = {
+			16 = { ship_event = { id = anomaly_failure.900 } }
+			16 = { ship_event = { id = anomaly_failure.901 } }
+			16 = { ship_event = { id = anomaly_failure.902 } }
+			16 = { ship_event = { id = anomaly_failure.903 } }
+		}
+	}
+}
+
+# Aerostat Structures (Gas Giant)
+anomaly_category = {
+	key = "aerostat_gasgiant_category"
+	desc = "aerostat_gasgiant_category_desc"
+	picture = GFX_evt_ship_in_orbit
+	level = 1
+	#risk = 30
+	
+	spawn_chance = {		
+		modifier = {
+			add = 3
+			is_planet_class = pc_gas_giant
+			FROM = { owner = { is_borg_empire = no is_assimilator = no } }
+		}
+	}
+	
+	on_success = {
+	}
+
+	on_fail = {
+		ship_event = { id = anomaly_failure.13 }
+	}
+
+	on_critical_fail = {
+		random_list = {
+			16 = { ship_event = { id = anomaly_failure.900 } }
+			16 = { ship_event = { id = anomaly_failure.901 } }
+			16 = { ship_event = { id = anomaly_failure.902 } }
+			16 = { ship_event = { id = anomaly_failure.903 } }
+		}
+	}
+}
+
+# Cargo Pod (Gas Giant)
+anomaly_category = {
+	key = "cargo_gasgiant_category"
+	desc = "cargo_gasgiant_category_desc"
+	picture = GFX_evt_ship_in_orbit
+	level = 1
+	#risk = 30
+	
+	spawn_chance = {		
+		modifier = {
+			add = 3
+			is_planet_class = pc_gas_giant
+			FROM = { owner = { is_borg_empire = no is_assimilator = no } }
+		}
+	}
+	
+	on_success = {
+	}
+
+	on_fail = {
+		ship_event = { id = anomaly_failure.14 }
+	}
+
+	on_critical_fail = {
+		random_list = {
+			16 = { ship_event = { id = anomaly_failure.900 } }
+			16 = { ship_event = { id = anomaly_failure.901 } }
+			16 = { ship_event = { id = anomaly_failure.902 } }
+			16 = { ship_event = { id = anomaly_failure.903 } }
+		}
+	}
+}
+
+# Space Debris (Gas Giant)
+anomaly_category = {
+	key = "debris_gasgiant_category"
+	desc = "debris_gasgiant_category_desc"
+	picture = GFX_evt_ship_in_orbit
+	level = 1
+	#risk = 30
+	
+	spawn_chance = {		
+		modifier = {
+			add = 3
+			is_planet_class = pc_gas_giant
+			FROM = { owner = { is_borg_empire = no is_assimilator = no } }
+		}
+	}
+	
+	on_success = {
+	}
+
+	on_fail = {
+		ship_event = { id = anomaly_failure.15 }
+	}
+
+	on_critical_fail = {
+		random_list = {
+			16 = { ship_event = { id = anomaly_failure.900 } }
+			16 = { ship_event = { id = anomaly_failure.901 } }
+			16 = { ship_event = { id = anomaly_failure.902 } }
+			16 = { ship_event = { id = anomaly_failure.903 } }
+		}
+	}
+}
+
+# Massive Impact (Uninhabitable Planet)
+anomaly_category = {
+	key = "impact_uninhabitable_category"
+	desc = "impact_uninhabitable_category_desc"
+	picture = GFX_evt_nuclear_explosion
+	level = 1
+	#risk = 30
+	
+	spawn_chance = {		
+		modifier = {
+			add = 3
+			uninhabitable_regular_planet = yes
+			FROM = { owner = { is_borg_empire = no is_assimilator = no } }
+		}
+	}
+	
+	on_success = {
+	}
+
+	on_fail = {
+		ship_event = { id = anomaly_failure.16 }
+	}
+
+	on_critical_fail = {
+		random_list = {
+			16 = { ship_event = { id = anomaly_failure.1400 } }
+			16 = { ship_event = { id = anomaly_failure.1401 } }
+			16 = { ship_event = { id = anomaly_failure.1402 } }
+			16 = { ship_event = { id = anomaly_failure.1403 } }
+			16 = { ship_event = { id = anomaly_failure.1404 } }
+			16 = { ship_event = { id = anomaly_failure.1405 } }
+		}
+	}
+}
+
+# Unusual Energy Readings (Uninhabitable Planet)
+anomaly_category = {
+	key = "energy_uninhabitable_category"
+	desc = "energy_uninhabitable_category_desc"
+	picture = GFX_evt_ship_in_orbit
+	level = 1
+	#risk = 30
+	
+	spawn_chance = {		
+		modifier = {
+			add = 3
+			uninhabitable_regular_planet = yes
+			FROM = { owner = { is_borg_empire = no is_assimilator = no } }
+		}
+	}
+	
+	on_success = {
+	}
+
+	on_fail = {
+		ship_event = { id = anomaly_failure.17 }
+	}
+
+	on_critical_fail = {
+		random_list = {
+			16 = { ship_event = { id = anomaly_failure.1400 } }
+			16 = { ship_event = { id = anomaly_failure.1401 } }
+			16 = { ship_event = { id = anomaly_failure.1402 } }
+			16 = { ship_event = { id = anomaly_failure.1403 } }
+			16 = { ship_event = { id = anomaly_failure.1404 } }
+			16 = { ship_event = { id = anomaly_failure.1405 } }
+		}
+	}
+}
+
+# Weak Signal (Uninhabitable Planet)
+anomaly_category = {
+	key = "signal_uninhabitable_category"
+	desc = "signal_uninhabitable_category_desc"
+	picture = GFX_evt_ship_in_orbit
+	level = 1
+	#risk = 30
+	
+	spawn_chance = {		
+		modifier = {
+			add = 3
+			uninhabitable_regular_planet = yes
+			FROM = { owner = { is_borg_empire = no is_assimilator = no } }
+		}
+	}
+	
+	on_success = {
+	}
+
+	on_fail = {
+		ship_event = { id = anomaly_failure.18 }
+	}
+
+	on_critical_fail = {
+		random_list = {
+			16 = { ship_event = { id = anomaly_failure.1400 } }
+			16 = { ship_event = { id = anomaly_failure.1401 } }
+			16 = { ship_event = { id = anomaly_failure.1402 } }
+			16 = { ship_event = { id = anomaly_failure.1403 } }
+			16 = { ship_event = { id = anomaly_failure.1404 } }
+			16 = { ship_event = { id = anomaly_failure.1405 } }
+		}
+	}
+}
+
+# Asteroid in Orbit (Uninhabitable Planet)
+anomaly_category = {
+	key = "asteroid_uninhabitable_category"
+	desc = "asteroid_uninhabitable_category_desc"
+	picture = GFX_evt_asteroid_approaching_planet
+	level = 1
+	#risk = 30
+	
+	spawn_chance = {		
+		modifier = {
+			add = 3
+			uninhabitable_regular_planet = yes
+			FROM = { owner = { is_borg_empire = no is_assimilator = no } }
+		}
+	}
+	
+	on_success = {
+	}
+
+	on_fail = {
+		ship_event = { id = anomaly_failure.19 }
+	}
+
+	on_critical_fail = {
+		random_list = {
+			16 = { ship_event = { id = anomaly_failure.1400 } }
+			16 = { ship_event = { id = anomaly_failure.1401 } }
+			16 = { ship_event = { id = anomaly_failure.1402 } }
+			16 = { ship_event = { id = anomaly_failure.1403 } }
+			16 = { ship_event = { id = anomaly_failure.1404 } }
+			16 = { ship_event = { id = anomaly_failure.1405 } }
+		}
+	}
+}
+
+# Solar Sailer (Uninhabitable Planet)
+anomaly_category = {
+	key = "solar_uninhabitable_category"
+	desc = "solar_uninhabitable_category_desc"
+	picture = GFX_evt_ship_in_orbit
+	level = 1
+	#risk = 30
+	
+	spawn_chance = {		
+		modifier = {
+			add = 3
+			uninhabitable_regular_planet = yes
+			FROM = { owner = { is_borg_empire = no is_assimilator = no } }
+		}
+	}
+	
+	on_success = {
+	}
+
+	on_fail = {
+		ship_event = { id = anomaly_failure.20 }
+	}
+
+	on_critical_fail = {
+		random_list = {
+			16 = { ship_event = { id = anomaly_failure.1400 } }
+			16 = { ship_event = { id = anomaly_failure.1401 } }
+			16 = { ship_event = { id = anomaly_failure.1402 } }
+			16 = { ship_event = { id = anomaly_failure.1403 } }
+			16 = { ship_event = { id = anomaly_failure.1404 } }
+			16 = { ship_event = { id = anomaly_failure.1405 } }
+		}
+	}
+}
+
+# Life Signs (Toxic Planet)
+anomaly_category = {
+	key = "life_toxic_category"
+	desc = "life_toxic_category_desc"
+	picture = GFX_evt_microscopic_life
+	level = 1
+	#risk = 30
+	
+	spawn_chance = {		
+		modifier = {
+			add = 3
+			is_planet_class = pc_toxic
+			FROM = { owner = { is_borg_empire = no is_assimilator = no } }
+		}
+	}
+	
+	on_success = {
+	}
+
+	on_fail = {
+		ship_event = { id = anomaly_failure.21 }
+	}
+
+	on_critical_fail = {
+		random_list = {
+			16 = { ship_event = { id = anomaly_failure.1400 } }
+			16 = { ship_event = { id = anomaly_failure.1401 } }
+			16 = { ship_event = { id = anomaly_failure.1402 } }
+			16 = { ship_event = { id = anomaly_failure.1403 } }
+			16 = { ship_event = { id = anomaly_failure.1404 } }
+			16 = { ship_event = { id = anomaly_failure.1405 } }
+		}
+	}
+}
+
+# Life Signs (Frozen Planet)
+anomaly_category = {
+	key = "life_frozen_category"
+	desc = "life_frozen_category_desc"
+	picture = GFX_evt_microscopic_life
+	level = 1
+	#risk = 30
+	
+	spawn_chance = {		
+		modifier = {
+			add = 3
+			is_planet_class = pc_frozen
+			FROM = { owner = { is_borg_empire = no is_assimilator = no } }
+		}
+	}
+	
+	on_success = {
+	}
+
+	on_fail = {
+		ship_event = { id = anomaly_failure.21 }
+	}
+
+	on_critical_fail = {
+		random_list = {
+			16 = { ship_event = { id = anomaly_failure.1400 } }
+			16 = { ship_event = { id = anomaly_failure.1401 } }
+			16 = { ship_event = { id = anomaly_failure.1402 } }
+			16 = { ship_event = { id = anomaly_failure.1403 } }
+			16 = { ship_event = { id = anomaly_failure.1404 } }
+			16 = { ship_event = { id = anomaly_failure.1405 } }
+		}
+	}
+}
+
+# Life Signs (Barren Planet)
+anomaly_category = {
+	key = "life_barren_category"
+	desc = "life_barren_category_desc"
+	picture = GFX_evt_microscopic_life
+	level = 1
+	#risk = 30
+	
+	spawn_chance = {		
+		modifier = {
+			add = 3
+			OR = {
+				is_planet_class = pc_barren
+				is_planet_class = pc_barren_cold
+			}
+			has_any_strategic_resource = no
+			FROM = { owner = { is_borg_empire = no is_assimilator = no } }
+		}
+	}
+	
+	on_success = {
+	}
+
+	on_fail = {
+		ship_event = { id = anomaly_failure.21 }
+	}
+
+	on_critical_fail = {
+		random_list = {
+			16 = { ship_event = { id = anomaly_failure.1400 } }
+			16 = { ship_event = { id = anomaly_failure.1401 } }
+			16 = { ship_event = { id = anomaly_failure.1402 } }
+			16 = { ship_event = { id = anomaly_failure.1403 } }
+			16 = { ship_event = { id = anomaly_failure.1404 } }
+			16 = { ship_event = { id = anomaly_failure.1405 } }
+		}
+	}
+}
+
+# Space Station (Uninhabitable Planet)
+anomaly_category = {
+	key = "station_uninhabitable_category"
+	desc = "station_uninhabitable_category_desc"
+	picture = GFX_evt_space_station
+	level = 1
+	#risk = 30
+	
+	spawn_chance = {		
+		modifier = {
+			add = 3
+			uninhabitable_regular_planet = yes
+			num_minerals > 0
+			exists = space_owner
+			space_owner = { is_same_value = from.owner }
+			FROM = { owner = { is_borg_empire = no is_assimilator = no } }
+		}
+	}
+	
+	on_success = {
+	}
+
+	on_fail = {
+		ship_event = { id = anomaly_failure.22 }
+	}
+
+	on_critical_fail = {
+		random_list = {
+			16 = { ship_event = { id = anomaly_failure.1400 } }
+			16 = { ship_event = { id = anomaly_failure.1401 } }
+			16 = { ship_event = { id = anomaly_failure.1402 } }
+			16 = { ship_event = { id = anomaly_failure.1403 } }
+			16 = { ship_event = { id = anomaly_failure.1404 } }
+			16 = { ship_event = { id = anomaly_failure.1405 } }
+		}
+	}
+}
+
+# Signs of Battle (Uninhabitable Planet)
+anomaly_category = {
+	key = "battle_uninhabitable_category"
+	desc = "battle_uninhabitable_category_desc"
+	picture = GFX_evt_small_space_battle
+	level = 2
+	#risk = 30
+	
+	spawn_chance = {		
+		modifier = {
+			add = 3
+			uninhabitable_regular_planet = yes
+			FROM = { owner = { is_borg_empire = no is_assimilator = no } }
+		}
+		modifier = {
+			factor = 0
+			from.owner = { has_country_flag = spawned_battle_uninhabitable_category }
+		}
+	}
+	
+	on_spawn = {
+		from.owner = { set_country_flag = spawned_battle_uninhabitable_category }
+	}
+	
+	on_success = {
+	}
+
+	on_fail = {
+		ship_event = { id = anomaly_failure.23 }
+	}
+
+	on_critical_fail = {
+		random_list = {
+			16 = { ship_event = { id = anomaly_failure.1400 } }
+			16 = { ship_event = { id = anomaly_failure.1401 } }
+			16 = { ship_event = { id = anomaly_failure.1402 } }
+			16 = { ship_event = { id = anomaly_failure.1403 } }
+			16 = { ship_event = { id = anomaly_failure.1404 } }
+			16 = { ship_event = { id = anomaly_failure.1405 } }
+		}
+	}
+}
+
+# Automated Shipyard (Uninhabitable Planet)
+anomaly_category = {
+	key = "shipyard_uninhabitable_category"
+	desc = "shipyard_uninhabitable_category_desc"
+	picture = GFX_evt_space_station
+	level = 2
+	#risk = 30
+	
+	spawn_chance = {		
+		modifier = {
+			add = 1
+			uninhabitable_regular_planet = yes
+			from.owner = {
+				is_ai = no
+				NOT = {
+					has_country_flag = automated_shipyard_found
+				}
+			}
+			FROM = { owner = { is_borg_empire = no is_assimilator = no } }
+		}
+	}
+
+	on_spawn = {
+		from.owner = { set_country_flag = automated_shipyard_found }
+	}
+	
+	on_success = {
+	}
+
+	on_fail = {
+		ship_event = { id = anomaly_failure.24 }
+	}
+
+	on_critical_fail = {
+		random_list = {
+			16 = { ship_event = { id = anomaly_failure.1400 } }
+			16 = { ship_event = { id = anomaly_failure.1401 } }
+			16 = { ship_event = { id = anomaly_failure.1402 } }
+			16 = { ship_event = { id = anomaly_failure.1403 } }
+			16 = { ship_event = { id = anomaly_failure.1404 } }
+			16 = { ship_event = { id = anomaly_failure.1405 } }
+		}
+	}
+}
+
+# Formerly Inhabited (Toxic Planet)
+anomaly_category = {
+	key = "inhabited_toxic_category"
+	desc = "inhabited_toxic_category_desc"
+	picture = GFX_evt_dead_city
+	level = 1
+	#risk = 30
+	
+	spawn_chance = {		
+		modifier = {
+			add = 3
+			is_planet_class = pc_toxic
+			FROM = { owner = { is_borg_empire = no is_assimilator = no } }
+		}
+	}
+	
+	on_success = {
+	}
+
+	on_fail = {
+		ship_event = { id = anomaly_failure.25 }
+	}
+
+	on_critical_fail = {
+		random_list = {
+			16 = { ship_event = { id = anomaly_failure.1400 } }
+			16 = { ship_event = { id = anomaly_failure.1401 } }
+			16 = { ship_event = { id = anomaly_failure.1402 } }
+			16 = { ship_event = { id = anomaly_failure.1403 } }
+			16 = { ship_event = { id = anomaly_failure.1404 } }
+			16 = { ship_event = { id = anomaly_failure.1405 } }
+		}
+	}
+}
+
+# Surface Writing (Uninhabitable Planet)
+anomaly_category = {
+	key = "writing_uninhabitable_category"
+	desc = "writing_uninhabitable_category_desc"
+	picture = GFX_evt_ship_in_orbit
+	level = 1
+	#risk = 30
+	
+	spawn_chance = {		
+		modifier = {
+			add = 3
+			uninhabitable_regular_planet = yes
+			FROM = { owner = { is_borg_empire = no is_assimilator = no } }
+		}
+		modifier = {
+			factor = 0
+			from.owner = { has_country_flag = spawned_writing_uninhabitable_category }
+		}
+	}
+
+	on_spawn = {
+		from.owner = { set_country_flag = spawned_writing_uninhabitable_category }
+	}
+	
+	on_success = {
+	}
+
+	on_fail = {
+		ship_event = { id = anomaly_failure.26 }
+	}
+
+	on_critical_fail = {
+		random_list = {
+			16 = { ship_event = { id = anomaly_failure.1400 } }
+			16 = { ship_event = { id = anomaly_failure.1401 } }
+			16 = { ship_event = { id = anomaly_failure.1402 } }
+			16 = { ship_event = { id = anomaly_failure.1403 } }
+			16 = { ship_event = { id = anomaly_failure.1404 } }
+			16 = { ship_event = { id = anomaly_failure.1405 } }
+		}
+	}
+}
+
+# Surface Beacon (Uninhabitable Planet)
+anomaly_category = {
+	key = "beacon_uninhabitable_category"
+	desc = "beacon_uninhabitable_category_desc"
+	picture = GFX_evt_ship_in_orbit
+	level = 1
+	#risk = 30
+	
+	spawn_chance = {		
+		modifier = {
+			add = 3
+			uninhabitable_regular_planet = yes
+			has_any_strategic_resource = no
+			FROM = { owner = { is_borg_empire = no is_assimilator = no } }
+		}
+	}
+	
+	on_success = {
+	}
+
+	on_fail = {
+		ship_event = { id = anomaly_failure.27 }
+	}
+
+	on_critical_fail = {
+		random_list = {
+			16 = { ship_event = { id = anomaly_failure.1400 } }
+			16 = { ship_event = { id = anomaly_failure.1401 } }
+			16 = { ship_event = { id = anomaly_failure.1402 } }
+			16 = { ship_event = { id = anomaly_failure.1403 } }
+			16 = { ship_event = { id = anomaly_failure.1404 } }
+			16 = { ship_event = { id = anomaly_failure.1405 } }
+		}
+	}
+}
+
+# Strange Mountain Formation (Uninhabitable Planet)
+anomaly_category = {
+	key = "mountain_uninhabitable_category"
+	desc = "mountain_uninhabitable_category_desc"
+	picture = GFX_evt_ship_in_orbit
+	level = 2
+	#risk = 30
+	
+	spawn_chance = {		
+		modifier = {
+			add = 3
+			uninhabitable_regular_planet = yes
+			FROM = { owner = { is_borg_empire = no is_assimilator = no } }
+		}
+		modifier = {
+			factor = 0
+			from.owner = { has_country_flag = spawned_mountain_uninhabitable_category }
+		}
+	}
+
+	on_spawn = {
+		from.owner = { set_country_flag = spawned_mountain_uninhabitable_category }
+	}
+	
+	on_success = {
+	}
+
+	on_fail = {
+		ship_event = { id = anomaly_failure.28 }
+	}
+
+	on_critical_fail = {
+		random_list = {
+			16 = { ship_event = { id = anomaly_failure.1400 } }
+			16 = { ship_event = { id = anomaly_failure.1401 } }
+			16 = { ship_event = { id = anomaly_failure.1402 } }
+			16 = { ship_event = { id = anomaly_failure.1403 } }
+			16 = { ship_event = { id = anomaly_failure.1404 } }
+			16 = { ship_event = { id = anomaly_failure.1405 } }
+		}
+	}
+}
+
+# Unidentified Object (Uninhabitable Planet)
+anomaly_category = {
+	key = "object_uninhabitable_category"
+	desc = "object_uninhabitable_category_desc"
+	picture = GFX_evt_ship_in_orbit
+	level = 3
+	#risk = 30
+	
+	spawn_chance = {		
+		modifier = {
+			add = 3
+			uninhabitable_regular_planet = yes
+			FROM = { owner = { is_borg_empire = no is_assimilator = no } }
+		}
+		modifier = {
+			factor = 0
+			from.owner = { has_country_flag = spawned_object_uninhabitable_category }
+		}
+	}
+
+	on_spawn = {
+		from.owner = { set_country_flag = spawned_object_uninhabitable_category }
+	}
+	
+	on_success = {
+	}
+
+	on_fail = {
+		ship_event = { id = anomaly_failure.29 }
+	}
+
+	on_critical_fail = {
+		random_list = {
+			16 = { ship_event = { id = anomaly_failure.1400 } }
+			16 = { ship_event = { id = anomaly_failure.1401 } }
+			16 = { ship_event = { id = anomaly_failure.1402 } }
+			16 = { ship_event = { id = anomaly_failure.1403 } }
+			16 = { ship_event = { id = anomaly_failure.1404 } }
+			16 = { ship_event = { id = anomaly_failure.1405 } }
+		}
+	}
+}
+
+# Gas Giant Signal (Gas Giant)
+anomaly_category = {
+	key = "signal_gasgiant_category"
+	desc = "signal_gasgiant_category_desc"
+	picture = GFX_evt_ship_in_orbit
+	level = 3
+	#risk = 30
+	
+	spawn_chance = {		
+		modifier = {
+			add = 3
+			is_planet_class = pc_gas_giant
+			FROM = { owner = { is_borg_empire = no is_assimilator = no } }
+		}
+	}
+	
+	on_success = {
+	}
+
+	on_fail = {
+		ship_event = { id = anomaly_failure.30 }
+	}
+
+	on_critical_fail = {
+		random_list = {
+			16 = { ship_event = { id = anomaly_failure.900 } }
+			16 = { ship_event = { id = anomaly_failure.901 } }
+			16 = { ship_event = { id = anomaly_failure.902 } }
+			16 = { ship_event = { id = anomaly_failure.903 } }
+		}
+	}
+}
+
+# Gas Giant Ship (Gas Giant)
+anomaly_category = {
+	key = "ship_gasgiant_category"
+	desc = "ship_gasgiant_category_desc"
+	picture = GFX_evt_ship_in_orbit
+	level = 3
+	#risk = 30
+	
+	spawn_chance = {		
+		modifier = {
+			add = 3
+			is_planet_class = pc_gas_giant
+			FROM = { owner = { is_borg_empire = no is_assimilator = no } }
+		}
+	}
+	
+	on_success = {
+	}
+
+	on_fail = {
+		ship_event = { id = anomaly_failure.31 }
+	}
+
+	on_critical_fail = {
+		random_list = {
+			16 = { ship_event = { id = anomaly_failure.900 } }
+			16 = { ship_event = { id = anomaly_failure.901 } }
+			16 = { ship_event = { id = anomaly_failure.902 } }
+			16 = { ship_event = { id = anomaly_failure.903 } }
+		}
+	}
+}
+
+# Terminal Orbit (Gas Giant)
+anomaly_category = {
+	key = "terminal_gasgiant_category"
+	desc = "terminal_gasgiant_category_desc"
+	picture = GFX_evt_ship_in_orbit
+	level = 3
+	#risk = 30
+	
+	spawn_chance = {		
+		modifier = {
+			add = 3
+			is_planet_class = pc_gas_giant
+			FROM = { owner = { is_borg_empire = no is_assimilator = no } }
+			is_moon = no
+		}
+	}
+	
+	on_success = {
+	}
+
+	on_fail = {
+		ship_event = { id = anomaly_failure.32 }
+	}
+
+	on_critical_fail = {
+		random_list = {
+			16 = { ship_event = { id = anomaly_failure.900 } }
+			16 = { ship_event = { id = anomaly_failure.901 } }
+			16 = { ship_event = { id = anomaly_failure.902 } }
+			16 = { ship_event = { id = anomaly_failure.903 } }
+		}
+	}
+}
+
+# Sol Anomaly
+anomaly_category = {
+	key = "sol_wasteland_category"
+	desc = "sol_wasteland_category_desc"
+	picture = GFX_evt_city_ruins
+	level = 1
+	#risk = 0
+	
+	spawn_chance = {		
+		modifier = {
+			add = 0
+		}
+	}
+	
+	on_success = {
+	}
+
+	on_fail = {
+	}
+
+	on_critical_fail = {
+	}
+}
+
+# Terraforming Candidate
+anomaly_category = {
+	key = "terraforming_candidate_category"
+	desc = "terraforming_candidate_category_desc"
+	picture = GFX_evt_drilling_for_gas
+	level = 1
+	#risk = 0
+	
+	spawn_chance = {		
+		modifier = {
+			add = 2
+			NOT = { has_modifier = terraforming_candidate }
+			OR = {
+				is_planet_class = pc_barren
+				is_planet_class = pc_barren_cold
+			}	
+			FROM = { owner = { is_borg_empire = no is_assimilator = no } }
+		}
+	}
+	
+	on_success = {
+	}
+
+	on_fail = {
+	}
+
+	on_critical_fail = {
+	}
+}
+
+# Living Metal
+anomaly_category = {
+	key = "living_metal_category"
+	desc = "living_metal_category_desc"
+	picture = GFX_evt_cold_barren
+	level = 3
+	#risk = 0
+	
+	spawn_chance = {		
+		modifier = {
+			add = 1
+			AND = {
+				OR = {
+					is_planet_class = pc_barren
+					is_planet_class = pc_barren_cold
+					is_asteroid = yes
+				}
+				has_any_strategic_resource = no
+			}
+			FROM = { owner = { is_borg_empire = no is_assimilator = no } }
+		}
+	}
+	
+	on_success = {
+	}
+
+	on_fail = {
+		ship_event = { id = anomaly_failure.16 }
+	}
+
+	on_critical_fail = {
+		ship_event = { id = anomaly_failure.1400 }
+	}
+}

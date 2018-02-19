@@ -1,0 +1,9 @@
+
+
+# a new leader is generated for an empire, to be available for recruitment
+# scope: country, from: leader
+on_leader_spawned = {
+	events = {
+		STH_onaction.2000 # Machine Intelligence ruler gets trait
+	}
+}

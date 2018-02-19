@@ -1,0 +1,112 @@
+@distance = 30
+@base_moon_distance = 10
+
+
+#Skrreean
+skrreean_homeworld = {
+	name = "Meron"
+	class = "sc_k"
+	flags = { skrreean_homeworld }
+	init_effect = { log = "skrreean homeworld" }
+	usage = custom_empire
+	max_instances = 1
+	planet = { name = "Skrre" class = star orbit_distance = 0 orbit_angle = 1 size = { min = 10 max = 20 } has_ring = no }
+	planet = {
+		count = {min = 1 max = 3}
+		orbit_distance = { min = 23 max = 29 }
+		class = rl_unhabitable_planets
+		orbit_angle = { min = 90 max = 270 }
+		moon = { count = { min = 0 max = 2 } class = rl_inner_moons orbit_angle = { min = 90 max = 270 } orbit_distance = 10 }
+	}
+	planet = {
+		name = "Skry"
+		class = pc_ocean
+		orbit_distance = 14.5
+		orbit_angle = 220
+		size = { min = 22 max = 25 }
+		starting_planet = yes
+		has_ring = no
+		tile_blockers = none
+		modifiers = none
+		init_effect = { prevent_anomaly = yes }
+		init_effect = {
+			if = {
+				limit = { NOT = { any_country = { has_country_flag = skrreean_republic } } }
+				create_species = { 
+				    name = "Skrreean" 
+				    class = SKR 
+				    portrait = skrreean 
+				    homeworld = THIS
+					traits = { 
+						trait = "trait_agrarian"
+						trait = "trait_communal"
+						trait = "trait_sedentary"
+						ideal_planet_class = "pc_ocean" 
+				    } 
+				}
+				last_created_species = { save_global_event_target_as = skrreanSpecies }
+				create_country = {
+					name = "NAME_skrrean_republic"
+					type = default
+					ignore_initial_colony_error = yes
+					civics = { civic = "civic_agrarian_idyll" civic = "civic_matriarchy" }
+			    	authority = "auth_oligarchic"
+					name_list = "Skrreean"
+					ethos = { ethic="ethic_fanatic_pacifist" ethic="ethic_xenophobe" }
+					species = event_target:skrreanSpecies
+					flag = {
+						icon = { category = "pointy" file = "flag_pointy_14.dds" }
+						background = { category = "backgrounds" file = "00_solid.dds" }
+						colors = { "grey" "black" "null" "null" }
+					}
+					ship_prefix = "SKR"
+					effect = {
+						set_graphical_culture = generic_02
+						set_country_flag = skrrean_republic
+						set_country_flag = custom_start_screen
+						set_country_flag = generic_ent
+						set_country_flag = gamma_empire
+						set_country_flag = init_spawned
+						save_global_event_target_as = skrrean_republic
+					}
+				}
+				create_colony = { owner = event_target:skrrean_republic species = event_target:skrreanSpecies ethos = owner }
+			}
+			set_capital = yes
+			random_country = {
+				limit = { has_country_flag = skrrean_republic }
+				save_global_event_target_as = skrrean_republic
+				add_appropriate_start_techs = yes
+				species = { save_global_event_target_as = skrreanSpecies }
+			}
+			set_owner = event_target:skrrean_republic
+			generate_major_empire_start_buildings = yes
+			generate_major_empire_start_pops = yes	
+			generate_major_empire_start_fleets = yes
+		}
+	}
+	planet = {
+		count = { min = 0 max = 3 }
+		orbit_distance = { min = 14 max = 25 }
+		class = rl_unhabitable_planets
+		orbit_angle = { min = 90 max = 270 }
+		moon = {
+			count = { min = 0 max = 1 }
+			class = rl_outer_moons
+			orbit_angle = { min = 90 max = 270 }
+			orbit_distance = 10
+		}
+	}
+	planet = {
+		count = 1
+		orbit_distance = { min = 18 max = 25 }
+		class = rl_unhabitable_planets
+		orbit_angle = { min = 90 max = 270 }
+		moon = {
+			count = { min = 0 max = 1 }
+			class = rl_outer_moons
+			orbit_angle = { min = 90 max = 270 }
+			orbit_distance = 10
+		}
+	}
+}

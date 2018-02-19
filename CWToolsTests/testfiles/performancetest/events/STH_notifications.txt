@@ -1,0 +1,31 @@
+########################
+#
+# Generic Notifications
+#
+# Written by Walshicus
+#
+########################
+
+namespace = STH_notifications
+
+#Small Timeline Change
+country_event = {
+	id = STH_notifications.100
+	title = "STH_notifications.100.name"
+	desc = { text = "STH_notifications.100.desc" }
+	picture = sth_GFX_evt_praxis2
+	is_triggered_only = yes
+	immediate = { }
+	option = { name = STH_notifications.100.a }
+}
+
+#Large Timeline Change
+country_event = {
+	id = STH_notifications.101
+	title = "STH_notifications.101.name"
+	desc = { text = "STH_notifications.101.desc" }
+	picture = sth_GFX_evt_praxis2
+	is_triggered_only = yes
+	immediate = { }
+	option = { name = STH_notifications.101.a }
+}

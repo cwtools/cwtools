@@ -1,0 +1,257 @@
+#################################
+#
+# anomaly Events 
+# STNH - Banks 1.8.0 Compat
+#################################
+
+namespace = anomaly
+
+@tier1influencecontact = 7
+@tier1influencecontactxenophile = 8
+@tier1influencecontactmin = 20
+@tier1influencecontactmax = 80
+
+@tier2influencecontact = 10
+@tier2influencecontactxenophile = 12
+@tier2influencecontactmin = 40
+@tier2influencecontactmax = 100
+
+@tier1materialreward = 6
+@tier1materialmin = 100
+@tier1materialmax = 500
+@tier2materialreward = 12
+@tier2materialmin = 150
+@tier2materialmax = 1000
+@tier3materialreward = 18
+@tier3materialmin = 250
+@tier3materialmax = 1500
+@tier4materialreward = 24
+@tier4materialmin = 350
+@tier4materialmax = 2000
+@tier5materialreward = 48
+@tier5materialmin = 700
+@tier5materialmax = 4000
+
+@tier1influencereward = 6
+@tier1influencemin = 40
+@tier1influencemax = 100
+@tier2influencereward = 12
+@tier2influencemin = 80
+@tier2influencemax = 175
+@tier3influencereward = 18
+@tier3influencemin = 125
+@tier3influencemax = 250
+@tier4influencereward = 24
+@tier4influencemin = 150
+@tier4influencemax = 300
+@tier5influencereward = 36
+@tier5influencemin = 250
+@tier5influencemax = 500
+@tier6influencereward = 48
+@tier6influencemin = 300
+@tier6influencemax = 600
+
+@tier1researchreward = 6
+@tier1researchmin = 60
+@tier1researchmax = 150
+@tier2researchreward = 12
+@tier2researchmin = 90
+@tier2researchmax = 250
+@tier3researchreward = 18
+@tier3researchmin = 120
+@tier3researchmax = 350
+@tier4researchreward = 24
+@tier4researchmin = 150
+@tier4researchmax = 500
+@tier5researchreward = 48
+@tier5researchmin = 300
+@tier5researchmax = 1000
+
+# ROOT = ship scope
+# FROM = planet scope
+
+### rogue moon
+ship_event = {
+	id = anomaly.6000
+	title = anomaly.6000.name
+	desc = anomaly.6000.desc_STH
+	picture = GFX_evt_ship_in_orbit
+	show_sound = event_alien_nature
+	location = FROM
+	
+	is_triggered_only = yes
+
+	option = {
+		name = CURIOUS
+		owner = {
+			add_monthly_resource_mult = {
+				resource = physics_research
+				value = @tier2researchreward
+				min = @tier2researchmin
+				max = @tier2researchmax
+			}
+		}
+	}
+}
+
+### rogue moon base
+ship_event = {
+	id = anomaly.6001
+	title = anomaly.6000.name
+	desc = anomaly.6001.desc_STH
+	picture = GFX_evt_ship_in_orbit
+	show_sound = event_alien_nature
+	location = FROM
+	
+	is_triggered_only = yes
+
+	option = {
+		name = CURIOUS
+		owner = {
+			add_monthly_resource_mult = {
+				resource = engineering_research
+				value = @tier2researchreward
+				min = @tier2researchmin
+				max = @tier2researchmax
+			}
+		}
+	}
+}
+
+
+### Surveying a modifier planet, replacing 6005
+ship_event = {
+	id = anomaly.6660
+	title = anomaly.6005.name
+	desc = {
+		trigger = {
+			hidden:from = {
+				switch = {
+					trigger = has_modifier
+					hazardous_weather = { text = anomaly.6660.desc.weather }
+					weak_magnetic_field = { text = anomaly.6660.desc.magnetic }
+					strong_magnetic_field = { text = anomaly.6660.desc.magnetic }
+					unstable_tectonics = { text = anomaly.6660.desc.tectonic }
+					tidal_locked = { text = anomaly.6660.desc.tidal }
+					chthonian_planet = { text = anomaly.6660.desc.resources }
+					asteroid_impacts = { text = anomaly.6660.desc.impacts }
+					extensive_moon_system = { text = anomaly.6660.desc.resources }
+					carbon_world = { text = anomaly.6660.desc.resources }
+					wild_storms = { text = anomaly.6660.desc.weather }
+					low_gravity = { text = anomaly.6660.desc.gravity }
+					high_gravity = { text = anomaly.6660.desc.gravity }
+					#hollow_planet = { text = anomaly.6660.desc.hollow }
+					dangerous_wildlife = { text = anomaly.6660.desc.wildlife }
+					titanic_life = { text = anomaly.6660.desc.titan }
+					mineral_rich = { text = anomaly.6660.desc.resources }
+					ultra_rich = { text = anomaly.6660.desc.resources }
+					asteroid_belt = { text = anomaly.6660.desc.resources }
+					natural_beauty = { text = anomaly.6660.desc.beauty }
+					atmospheric_aphrodisiac = { text = anomaly.6660.desc.atmosphere }
+					atmospheric_hallucinogen = { text = anomaly.6660.desc.atmosphere }
+					lush_planet = { text = anomaly.6660.desc.lush }
+					bleak_planet = { text = anomaly.6660.desc.terrible }
+					irradiated_planet = { text = anomaly.6660.desc.terrible }
+					default = { text = anomaly.6660.desc.default }
+				}
+			}
+		}
+	}
+
+	picture = GFX_evt_ship_in_orbit
+	show_sound = event_mystic_reveal
+	location = FROM
+	
+	is_triggered_only = yes	
+	
+	trigger = {
+		owner = {
+			NOT = {
+				is_tutorial_level = 0
+				has_country_flag = discovered_modifier_planet
+				has_authority = auth_machine_intelligence
+			}
+		}
+		from = {
+			num_modifiers > 0
+		}
+	}
+
+	immediate = { 
+		owner = { set_country_flag = discovered_modifier_planet }
+	}
+
+	option = {
+		name = INTRIGUING
+		custom_tooltip = anomaly.6660.a.tooltip
+	}
+}
+
+#Machine Empire version
+ship_event = {
+	id = anomaly.6661
+	title = anomaly.6005.name
+
+	desc = {
+		trigger = {
+			hidden:from = {
+				switch = {
+					trigger = has_modifier
+					hazardous_weather = { text = anomaly.6660.desc.weather }
+					weak_magnetic_field = { text = anomaly.6660.desc.magnetic }
+					strong_magnetic_field = { text = anomaly.6660.des.magnetic }
+					unstable_tectonics = { text = anomaly.6660.desc.tectonic }
+					tidal_locked = { text = anomaly.6660.desc.tidal_mach }
+					chthonian_planet = { text = anomaly.6660.desc.resources }
+					asteroid_impacts = { text = anomaly.6660.desc.impacts }
+					extensive_moon_system = { text = anomaly.6660.descresources }
+					carbon_world = { text = anomaly.6660.desc.resources }
+					wild_storms = { text = anomaly.6660.desc.weather }
+					low_gravity = { text = anomaly.6660.desc.gravity_mach }
+					high_gravity = { text = anomaly.6660.desc.gravity }
+					#hollow_planet = { text = anomaly.6660.desc.hollow }
+					dangerous_wildlife = { text = anomaly.6660.desc.wildlife }
+					titanic_life = { text = anomaly.6660.desc.titan }
+					mineral_rich = { text = anomaly.6660.desc.resources }
+					ultra_rich = { text = anomaly.6660.desc.resources }
+					asteroid_belt = { text = anomaly.6660.desc.resources }
+					natural_beauty = { text = anomaly.6660.desc.beauty }
+					atmospheric_aphrodisiac = { text = anomaly.6660.desc.atmosphere }
+					atmospheric_hallucinogen = { text = anomaly.6660.desc.atmosphere_mach }
+					lush_planet = { text = anomaly.6660.desc.lush_mach }
+					bleak_planet = { text = anomaly.6660.desc.terrible_mach }
+					irradiated_planet = { text = anomaly.6660.desc.terrible_mach }
+					default = { text = anomaly.6660.desc.default }
+				}
+			}
+		}
+	}
+
+	picture = GFX_evt_ship_in_orbit
+	show_sound = event_mystic_reveal
+	location = FROM
+	
+	is_triggered_only = yes	
+	
+	trigger = {
+		owner = {
+			NOT = {
+				is_tutorial_level = 0
+				has_country_flag = discovered_modifier_planet
+			}
+			has_authority = auth_machine_intelligence
+		}
+		from = {
+			num_modifiers > 0
+		}
+	}
+
+	immediate = { 
+		owner = { set_country_flag = discovered_modifier_planet }
+	}
+
+	option = {
+		name = INTRIGUING
+		custom_tooltip = anomaly.6660.a.tooltip
+	}
+}

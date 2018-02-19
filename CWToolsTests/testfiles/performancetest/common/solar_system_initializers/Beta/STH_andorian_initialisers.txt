@@ -1,0 +1,136 @@
+@distance = 30
+@base_moon_distance = 10
+
+# Andorians		
+andorian_homeworld = {			
+	name = "Procyon"
+	class = "sc_f"
+	usage = custom_empire
+	flags = { andorian_homeworld }
+	init_effect = { log = "andorian homeworld" }
+	max_instances = 1
+	planet = { name = "Andoria" class = star orbit_distance = 0 orbit_angle = 1 size = 30 has_ring = no }
+	planet = { name = "Kastra" class = "pc_barren" orbit_distance = 50 orbit_angle = -170 size = 13 has_ring = no }
+	planet = { name = "Kuy'Thela" class = "pc_barren" orbit_distance = 30 orbit_angle = 30 size = 10 has_ring = no }
+	planet = { name = "Andron" class = "pc_toxic" orbit_distance = 20 orbit_angle = 110 size = 12 has_ring = no }
+	planet = { name = "Brok'va" class = "pc_barren_cold" orbit_distance = 20 orbit_angle = 100 size = 12 has_ring = no}
+	planet = {
+		name = "Kul'va"
+		class = "pc_gas_giant"
+		orbit_distance = 30
+		orbit_angle = -170
+		size = 35
+		has_ring = no
+		moon = { name = "Kul'va a" class = "pc_barren" size = 8 orbit_distance = 20 orbit_angle = 30 has_ring = no }
+	}
+	planet = { name = "Kazaan" class = "pc_barren_cold" orbit_distance = 30 orbit_angle = 120 size = 13 has_ring = no }
+	planet = {
+		name = "Onlith"
+		class = "pc_gas_giant"
+		orbit_distance = 30
+		orbit_angle = 90
+		size = 30
+		has_ring = yes
+		moon = {
+			name = "Andoria"
+			class = "pc_arctic"
+			orbit_distance = 25
+			orbit_angle = 160
+			size = { min = 22 max = 25 }
+			starting_planet = yes
+			has_ring = no
+			tile_blockers = none
+			modifiers = none
+			init_effect = { prevent_anomaly = yes }
+			init_effect = {
+				if = {
+					limit = { NOT = { any_country = { has_country_flag = andorian_empire } } }
+					create_species = {
+					    name = "Andorian"
+					    class = ADR
+					    portrait = andorian
+					    homeworld = THIS
+					    traits = {
+					        trait="trait_talented"
+                        	trait="trait_industrious"
+	                        trait="trait_slow_breeders"
+	                        trait="trait_solitary"
+					        ideal_planet_class = "pc_arctic"
+						}
+					}
+					last_created_species = { save_global_event_target_as = andorianSpecies }
+					create_country = {
+						name = "NAME_andorian_empire"
+						type = default
+						ignore_initial_colony_error = yes
+						civics = { civic = "civic_imperial_guard" civic = "civic_nationalistic_zeal" }
+						authority = auth_democratic
+						name_list = "Andorian"
+						ethos = { ethic = "ethic_militarist" ethic = "ethic_xenophile" ethic = "ethic_materialist" }
+						species = event_target:andorianSpecies
+						flag = {
+							icon = { category = "trek" file = "Andorian.dds" }
+							background = { category = "backgrounds" file = "00_solid.dds" }
+							colors = { "customcolor1481" "customcolor1181" "null" "null" }
+						}
+						ship_prefix = IGS
+						effect = {
+							set_graphical_culture = andorian_01
+							set_country_flag = andorian_empire
+							set_country_flag = custom_start_screen
+							set_country_flag = generic_ent
+							set_country_flag = alpha_beta_empire
+							set_country_flag = init_spawned
+							set_country_flag = federation_founder
+							set_country_flag = first_alien_life
+							set_country_flag = first_contact_event
+							set_country_flag = sth_medium_galaxy
+							set_country_flag = botf_minor
+							save_global_event_target_as = andorian_empire
+						}
+					}
+					create_colony = { owner = event_target:andorian_empire species = event_target:andorianSpecies ethos = owner }
+				}
+				set_capital = yes
+				random_country = {
+					limit = { has_country_flag = andorian_empire }
+					save_global_event_target_as = andorian_empire
+					add_appropriate_start_techs = yes
+					give_technology = { tech = "tech_society_ushaan_377" message = no }
+					species = { save_global_event_target_as = andorianSpecies }
+				}
+				set_owner = event_target:andorian_empire
+				create_species = {
+					name = Aenar
+					class = "AEN"
+					portrait = "aenar"
+					name_list = "Andorian"
+					homeworld = THIS
+					traits = {
+						trait = "trait_slow_breeders"
+						trait = "trait_nonadaptive"
+						trait = "trait_conformists"
+						trait = "trait_talented"
+						trait = "trait_quick_learners"
+						trait = "trait_telepathy"
+						ideal_planet_class = "pc_arctic"
+					}
+				}
+				last_created_species = { save_global_event_target_as = aenarSpecies set_species_identity = event_target:andorianSpecies }
+				event_target:andorian_empire = { event_target:aenarSpecies = { set_citizenship_type = { country = event_target:andorian_empire type = citizenship_full } } }
+				while = {
+					count = 2
+					random_tile = {
+						limit = { has_blocker = no has_grown_pop = no has_growing_pop = no }
+						create_pop = { species = event_target:aenarSpecies }
+					}
+				}
+				generate_major_empire_start_buildings = yes
+				generate_major_empire_start_pops = yes
+				generate_major_empire_start_fleets = yes
+				set_name = "Andoria"
+			}
+		}
+		moon = { name = "Onlith b" class = "pc_barren" size = 7 orbit_distance = 2.5 orbit_angle = 30 has_ring = no }
+	}
+}	

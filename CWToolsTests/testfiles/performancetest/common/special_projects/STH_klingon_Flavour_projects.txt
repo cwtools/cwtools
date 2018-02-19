@@ -1,0 +1,71 @@
+# Available requirements:
+#
+#	SKILLS
+#	skill = 2
+#
+#	LEADER
+#	leader = scientist
+#	leader = admiral
+#	leader = general
+#	leader = ruler
+#	leader = governor
+#	
+#	MILITARY SHIPS
+#	shipclass_military = 1
+#	
+#	CIVILIAN SHIPS
+#	shipclass_constructor = 2
+#	shipclass_science_ship = 1
+#	shipclass_colonizer = 2
+#	
+#	ARMIES
+#	shipclass_transport = 1
+#	assault_armies = 2
+#	defense_armies = 1
+#	
+#	STATIONS
+#	research_station = yes
+#	mining_station = yes
+#	observation_station = yes
+#
+#	SCOPES
+#	abort_trigger
+#	this = country (project owner)
+#	from = event scope (planet or ship, MIGHT NOT EXIST)
+#	fromfrom = project creation scope (usually equals location)
+#	
+#	on_success
+#	this = event scope (ship or planet)
+#	from = project creation scope (usually equals location)
+#	
+#	on_fail
+#	this = country (project owner)
+#	from = project creation scope (usually equals location)
+
+#Use Admiral
+
+special_project = {
+	key = "COMMISSION_KLINGON_OPERA_PROJECT"
+	# cost = 60
+	days_to_research = 180
+	timelimit = 720
+	tech_department = society_technology
+	picture = sth_GFX_evt_theSwordOfKahless9
+	icon = "gfx/interface/icons/situation_log/situation_log_quest.dds"
+	location = no	
+	event_scope = planet_event	
+	requirements = { }
+	on_success = {
+		owner = { 
+			random_list = {
+				5 = { country_event = { id = STH_klingon_flavour.9 } }
+				75 = { country_event = { id = STH_klingon_flavour.10 } }
+				20 = { country_event = { id = STH_klingon_flavour.11 } }
+			}
+		}
+	}
+	
+	on_fail = {
+		country_event = { id = STH_klingon_flavour.12 }
+	}
+}

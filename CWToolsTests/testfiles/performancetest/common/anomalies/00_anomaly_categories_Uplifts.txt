@@ -1,0 +1,270 @@
+#################
+# UPLIFT EVENTS #
+#################
+
+# Uplifting Snakeoids
+anomaly_category = {
+	key = "UPLIFT_SNAKEOID_CAT"
+	desc = "UPLIFT_SNAKEOID_CAT_DESC"
+	picture = GFX_evt_landing_ship
+	level = 1
+	#risk = 0
+	
+	spawn_chance = {
+		modifier = {
+			add = 5
+			is_planet_class = pc_desert
+			FROM = { owner = { NOT = { has_country_flag = upl_snakeoid } } }
+			FROM = { owner = { is_borg_empire = no is_assimilator = no } }
+		}
+	}
+
+	on_success = {
+		owner = { set_country_flag = upl_snakeoid }
+	}
+
+	on_fail = {}
+
+	on_critical_fail = {}
+
+}
+
+# Uplifting Generic Desert
+anomaly_category = {
+	key = "UPLIFT_DESERT_CAT"
+	desc = "UPLIFT_DESERT_CAT_DESC"
+	picture = GFX_evt_underground_civilization
+	level = 1
+	#risk = 0
+	
+	spawn_chance = {
+		modifier = {
+			add = 10
+			is_planet_class = pc_desert
+			FROM = { owner = { is_borg_empire = no is_assimilator = no } }
+		}
+	}
+
+	on_success = { }
+
+	on_fail = {}
+
+	on_critical_fail = {}
+
+}
+
+# Uplifting Generic Ocean
+anomaly_category = {
+	key = "UPLIFT_OCEAN_CAT"
+	desc = "UPLIFT_GENERIC_CAT_DESC"
+	picture = GFX_evt_ship_in_orbit
+	level = 1
+	#risk = 0
+	
+	spawn_chance = {
+		modifier = {
+			add = 10
+			is_planet_class = pc_ocean
+			FROM = { owner = { is_borg_empire = no is_assimilator = no } }
+		}
+	}
+
+	on_success = {
+#		FROM = { owner = { set_country_flag = upl_ongoing_generic } } 
+	}
+
+	on_fail = {}
+
+	on_critical_fail = {}
+
+}
+
+# Uplifting Generic Arid
+anomaly_category = {
+	key = "UPLIFT_ARID_CAT"
+	desc = "UPLIFT_GENERIC_CAT_DESC"
+	picture = GFX_evt_landing_ship
+	level = 1
+	#risk = 0
+	
+	spawn_chance = {
+		modifier = {
+			add = 10
+			is_planet_class = pc_arid
+			FROM = { owner = { is_borg_empire = no is_assimilator = no } }
+		}
+	}
+
+	on_success = {
+#		FROM = { owner = { set_country_flag = upl_ongoing_generic } } 
+	}
+
+	on_fail = {}
+
+	on_critical_fail = {}
+
+}
+
+# Uplifting Generic Continental
+anomaly_category = {
+	key = "UPLIFT_CONTINENTAL_CAT"
+	desc = "UPLIFT_CONTINENTAL_CAT_DESC"
+	picture = GFX_evt_big_landing_ship
+	level = 1
+	#risk = 0
+	
+	spawn_chance = {
+		modifier = {
+			add = 10
+			is_planet_class = pc_continental
+			FROM = { owner = { is_borg_empire = no is_assimilator = no } }
+		}
+	}
+
+	on_success = {
+#		FROM = { owner = { set_country_flag = upl_ongoing_generic } } 
+	}
+
+	on_fail = {}
+
+	on_critical_fail = {}
+
+}
+
+# Uplifting Generic Tropical
+anomaly_category = {
+	key = "UPLIFT_TROPICAL_CAT"
+	desc = "UPLIFT_TROPICAL_CAT_DESC"
+	picture = GFX_evt_alien_nature
+	level = 1
+	#risk = 0
+	
+	spawn_chance = {
+		modifier = {
+			add = 10
+			is_planet_class = pc_tropical
+			FROM = { owner = { is_borg_empire = no is_assimilator = no } }
+		}
+	}
+
+	on_success = {
+#		FROM = { owner = { set_country_flag = upl_ongoing_generic } } 
+	}
+
+	on_fail = {}
+
+	on_critical_fail = {}
+
+}
+
+# Uplifting Generic Tundra
+anomaly_category = {
+	key = "UPLIFT_TUNDRA_CAT"
+	desc = "UPLIFT_TUNDRA_CAT_DESC"
+	picture = GFX_evt_atmospheric_entry
+	level = 1
+	#risk = 0
+	
+	spawn_chance = {
+		modifier = {
+			add = 10
+			is_planet_class = pc_tundra
+			FROM = { owner = { is_borg_empire = no is_assimilator = no } }
+		}
+	}
+
+	on_success = {
+#		FROM = { owner = { set_country_flag = upl_ongoing_generic } } 
+	}
+
+	on_fail = {}
+
+	on_critical_fail = {}
+
+}
+
+# Uplifting Generic Arctic
+anomaly_category = {
+	key = "UPLIFT_ARCTIC_CAT"
+	desc = "UPLIFT_ARCTIC_CAT_DESC"
+	picture = GFX_evt_atmospheric_entry
+	level = 1
+	#risk = 0
+	
+	spawn_chance = {
+		modifier = {
+			add = 10
+			is_planet_class = pc_arctic
+			FROM = { owner = { is_borg_empire = no is_assimilator = no } }
+		}
+	}
+
+	on_success = {
+#		FROM = { owner = { set_country_flag = upl_ongoing_generic } } 
+	}
+
+	on_fail = {}
+
+	on_critical_fail = {}
+
+}
+
+# Uplifting Generic
+anomaly_category = {
+	key = "UPLIFT_GENERIC_CAT"
+	desc = "UPLIFT_GENERIC_CAT_DESC"
+	picture = GFX_evt_landing_ship
+	level = 1
+	#risk = 0
+	
+	spawn_chance = {
+		modifier = {
+			add = 6
+			habitable_planet = yes
+			#OR = {
+			#	is_planet_class = pc_desert
+			#	is_planet_class = pc_tropical
+			#	is_planet_class = pc_arid
+			#	is_planet_class = pc_continental
+			#	is_planet_class = pc_ocean
+			#	is_planet_class = pc_tundra
+			#	is_planet_class = pc_arctic
+			#}
+			FROM = { owner = { NOT = { has_country_flag = upl_ongoing_generic } } }
+			FROM = { owner = { is_borg_empire = no is_assimilator = no } }
+		}
+	}
+
+	on_success = {
+		owner = { set_country_flag = upl_ongoing_generic }
+	}
+
+	on_fail = {}
+
+	on_critical_fail = {}
+}
+
+## Uplifting Roachoid
+anomaly_category = {
+	key = "UPLIFT_ROACHOID_CAT"
+	desc = "UPLIFT_ROACHOID_CAT_DESC"
+	picture = GFX_evt_atmospheric_entry
+	level = 1
+	#risk = 0
+	
+	spawn_chance = {
+		modifier = {
+			add = 5
+			is_planet_class = pc_nuked
+			FROM = { owner = { is_borg_empire = no is_assimilator = no } }
+		}
+	}
+
+	on_success = {
+#		FROM = { owner = { set_country_flag = upl_ongoing_generic } } 
+	}
+
+	on_fail = {}
+
+	on_critical_fail = {}
+}

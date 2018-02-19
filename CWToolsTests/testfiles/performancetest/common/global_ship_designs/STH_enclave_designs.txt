@@ -1,0 +1,59 @@
+# Enclave Station Trader
+ship_design = {
+	name = "NAME_STH_Trader_Enclave_Station"
+	ship_size = orbital_station
+	section = {
+		template = "station_enclave_trader_sth_key"
+		slot = "mid"
+		component = { slot = "EXTRA_LARGE_01" template = "TITAN_LASER" }
+		component = { slot = "LARGE_GUN_01" template = "LARGE_GAMMA_LASER" }		
+		component = { slot = "LARGE_GUN_02" template = "LARGE_MISSILE_5" }		
+		component = { slot = "LARGE_GUN_03" template = "LARGE_PLASMA_3" }		
+		component = { slot = "LARGE_GUN_04" template = "LARGE_DISRUPTOR_3" }
+		component = { slot = "LARGE_GUN_05" template = "LARGE_KINETIC_ARTILLERY_2" }
+		component = { slot = "LARGE_GUN_06" template = "LARGE_KINETIC_ARTILLERY_2" }
+		component = { slot = "MEDIUM_GUN_01" template = "MEDIUM_DISRUPTOR_3" }
+		component = { slot = "MEDIUM_GUN_02" template = "MEDIUM_DISRUPTOR_3" }
+		component = { slot = "MEDIUM_GUN_03" template = "FLAK_BATTERY_2" }
+		component = { slot = "MEDIUM_GUN_04" template = "FLAK_BATTERY_2" }
+		component = { slot = "MEDIUM_GUN_05" template = "SWARMER_MISSILE_2" }
+		component = { slot = "MEDIUM_GUN_06" template = "SWARMER_MISSILE_2" }
+		component = { slot = "PD_01" template = "POINT_DEFENCE_3" }	
+		component = { slot = "PD_02" template = "POINT_DEFENCE_3" }
+		component = { slot = "PD_03" template = "POINT_DEFENCE_3" }
+		component = { slot = "PD_04" template = "POINT_DEFENCE_3" }
+		component = { slot = "TORPEDO_01" template = "TORPEDO_3" }	
+		component = { slot = "TORPEDO_02" template = "TORPEDO_3" }
+		component = { slot = "TORPEDO_03" template = "ENERGY_TORPEDO_2" }
+		component = { slot = "SMALL_GUN_01" template = "SMALL_AUTOCANNON_3" }
+		component = { slot = "SMALL_GUN_02" template = "SMALL_AUTOCANNON_3" }
+		component = { slot = "SMALL_GUN_03" template = "SMALL_AUTOCANNON_3" }
+		component = { slot = "SMALL_GUN_04" template = "SMALL_MISSILE_5" }
+		component = { slot = "SMALL_GUN_05" template = "SMALL_MISSILE_5" }
+		component = { slot = "SMALL_GUN_06" template = "SMALL_MISSILE_5" }		
+		component = { slot = "LARGE_UTILITY_1" template = "LARGE_ZERO_POINT_REACTOR" }
+		component = { slot = "LARGE_UTILITY_2" template = "LARGE_ZERO_POINT_REACTOR" }
+		component = { slot = "LARGE_UTILITY_3" template = "LARGE_ZERO_POINT_REACTOR" }
+		component = { slot = "LARGE_UTILITY_4" template = "LARGE_ZERO_POINT_REACTOR" }
+		component = { slot = "LARGE_UTILITY_5" template = "LARGE_ZERO_POINT_REACTOR" }
+		component = { slot = "LARGE_UTILITY_6" template = "LARGE_ZERO_POINT_REACTOR" }
+		component = { slot = "LARGE_UTILITY_7" template = "LARGE_ARMOR_5" }
+		component = { slot = "LARGE_UTILITY_8" template = "LARGE_ARMOR_5" }
+		component = { slot = "LARGE_UTILITY_9" template = "LARGE_ARMOR_5" }
+		component = { slot = "LARGE_UTILITY_10" template = "LARGE_ARMOR_5" }
+		component = { slot = "LARGE_UTILITY_11" template = "LARGE_ARMOR_5" }		
+		component = { slot = "LARGE_UTILITY_12" template = "LARGE_ARMOR_5" }
+		component = { slot = "LARGE_UTILITY_13" template = "LARGE_SHIELD_5" }
+		component = { slot = "LARGE_UTILITY_14" template = "LARGE_SHIELD_5" }
+		component = { slot = "LARGE_UTILITY_15" template = "LARGE_SHIELD_5" }
+		component = { slot = "LARGE_UTILITY_16" template = "LARGE_SHIELD_5" }
+		component = { slot = "LARGE_UTILITY_17" template = "LARGE_SHIELD_5" }
+		component = { slot = "LARGE_UTILITY_18" template = "LARGE_SHIELD_5" }
+		component = { slot = "LARGE_UTILITY_19" template = "LARGE_SHIELD_5" }
+		component = { slot = "LARGE_UTILITY_20" template = "LARGE_SHIELD_5" }
+		component = { slot = "AUX_UTILITY_1" template = "SHIELD_RECHARGER" }
+		component = { slot = "AUX_UTILITY_2" template = "SHIELD_RECHARGER" }
+		component = { slot = "AUX_UTILITY_3" template = "SHIELD_RECHARGER" }
+	}
+	required_component="SHIP_SENSOR_4"
+}

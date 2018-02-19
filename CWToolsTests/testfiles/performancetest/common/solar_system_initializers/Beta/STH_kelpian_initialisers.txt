@@ -1,0 +1,94 @@
+#Kelpien Homeworld
+kelpian_homeworld = {
+	name = "Kelai"
+	class = "sc_f"
+	flags = { kelpian_homeworld }
+	init_effect = { log = "kelpian homeworld" }
+	usage = custom_empire
+	max_instances = 1
+	planet = { name = "Kelai" class = star orbit_distance = 0 orbit_angle = 1 size = { min = 20 max = 30 } has_ring = no }		
+	planet = {
+		count = { min = 1 max = 4 }
+		orbit_distance = { min = 20 max = 30 }
+		orbit_angle = { min = 90 max = 270 }
+		moon = { count = { min = 0 max = 1 } orbit_angle = { min = 90 max = 270 } orbit_distance = 5 }
+	}	
+	planet = {		
+		name = "Kelpia"	
+		class = "pc_savannah"
+		orbit_distance = 30
+		size = { min = 18 max = 20 }
+		starting_planet = yes
+		has_ring = no
+		tile_blockers = none
+		init_effect = {
+			prevent_anomaly = yes			
+			if = {
+				limit = { NOT = { any_country = { has_country_flag = kelpian_duchies } } }
+				create_species = { 
+					name = "Kelpien" 
+					class = KEL
+					portrait = kelpian
+					homeworld = THIS 
+					traits = { 
+						trait="trait_agrarian"
+	                    trait="trait_heightened_senses"
+	                    trait="trait_communal"
+	                    trait="trait_reclusive"
+	                    trait="trait_coward"
+						ideal_planet_class = "pc_savannah"
+					}
+				}
+				last_created_species = { save_global_event_target_as = kelpianSpecies }
+				create_country = {
+					name = "NAME_Kelpian_Duchies"
+					type = default
+					ignore_initial_colony_error = yes
+					civics = { civic = "civic_the_herd" civic = "civic_agrarian_idyll" }
+					authority = auth_democratic
+					name_list = "Kelpien"
+					ethos = { ethic = "ethic_fanatic_pacifist" ethic = "ethic_egalitarian" }
+					species = event_target:kelpianSpecies
+					flag = {
+						icon = { category = "trek" file = "kelpian.dds" }
+						background ={ category="backgrounds" file="00_solid.dds" }
+						colors= { "customcolor1972" "black" "null" "null" }
+					}
+					ship_prefix = ""
+					effect = {
+						set_graphical_culture = generic_01
+						set_country_flag = kelpian_duchies
+						set_country_flag = custom_start_screen
+						set_country_flag = generic_ent
+						set_country_flag = alpha_beta_empire
+						set_country_flag = init_spawned
+						set_country_flag = botf_minor
+						save_global_event_target_as = kelpian_duchies
+					}
+				}
+				create_colony = { owner = event_target:kelpian_duchies species = event_target:kelpianSpecies ethos = owner }
+			}
+			set_capital = yes
+			random_country = {
+				limit = { has_country_flag = kelpian_duchies }
+				save_global_event_target_as = kelpian_duchies
+				add_appropriate_start_techs = yes
+                give_technology = { tech = "tech_tb_dangerous_wildlife" message = no }
+				species = { save_global_event_target_as = kelpianSpecies }
+				set_country_type = minorRace
+			}
+			set_owner = event_target:kelpian_duchies
+			generate_minor_empire_start_buildings_kelp = yes
+			generate_minor_empire_start_pops = yes
+			generate_major_empire_start_fleets = yes
+			set_name = "Kelpia"	
+		}
+	}
+	change_orbit = 80
+	planet = {
+		count = { min = 1 max = 4 }
+		orbit_distance = { min = 20 max = 30 }
+		orbit_angle = { min = 90 max = 270 }
+		moon = { count = { min = 0 max = 1 } orbit_angle = { min = 90 max = 270 } orbit_distance = 5 }
+	}
+}

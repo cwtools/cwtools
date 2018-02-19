@@ -1,0 +1,157 @@
+valid_federation_candidate = {
+	is_ai = yes
+	OR = {
+		AND = {
+			is_in_federation_with = Root
+			NOT = { is_country_type = ufp_member_world }
+			is_normal_country = yes
+		}
+		AND = {
+			is_subject = yes
+			exists = overlord
+			overlord = { is_same_value = Root }
+			NOT = { is_country_type = ufp_member_world }
+			is_normal_country = yes
+		}
+	}
+}
+
+valid_federation_formation = {
+	OR = { 
+		is_ai = no
+		NOT = {		
+			any_country = {
+				is_ai = no
+				OR = {
+					has_country_flag = "vulcan_high_command"
+					has_country_flag = "andorian_empire"
+					has_country_flag = "tellarian_technocracy"
+					OR = {
+						has_country_flag = united_earth
+						AND = {
+							has_country_flag = united_human_remnant
+							OR = { has_ethic = "ethic_xenophile" has_ethic = "ethic_fanatic_xenophile" }
+						}
+					}
+				}
+			}
+		}
+	}
+	count_country = {
+		count > 1
+		limit = {
+			is_in_federation_with = root
+			NOT = { is_same_value = root }
+			OR = {
+				has_country_flag = "vulcan_high_command"
+				has_country_flag = "andorian_empire"
+				has_country_flag = "tellarian_technocracy"
+				OR = {
+					has_country_flag = united_earth
+					AND = {
+						has_country_flag = united_human_remnant
+						OR = { has_ethic = "ethic_xenophile" has_ethic = "ethic_fanatic_xenophile" }
+					}
+				}
+			}
+		}
+	
+	}
+	NOT = { any_country = { has_country_flag = united_federation_of_planets } }
+	years_passed > 15
+	NOT = { has_country_flag = xindi_crisis }
+	NOT = { has_country_flag = demons_crisis }
+	NOT = { has_global_flag = federation_in_progress }
+}
+
+### Building triggers for unique embassies
+
+human_fed_members = {
+    any_subject = { 
+        AND = { 
+            is_country_type = ufp_member_world
+            has_country_flag = united_earth
+            is_ai = yes
+        }
+    }
+}
+
+klingon_fed_members = {
+    any_subject = { 
+        AND = { 
+            is_country_type = ufp_member_world
+            has_country_flag = klingon_empire
+            is_ai = yes
+        }
+    }
+}
+
+bajoran_fed_members = {
+    any_subject = { 
+        AND = { 
+            is_country_type = ufp_member_world
+            has_country_flag = bajoran_republic 
+            is_ai = yes
+        }
+    }
+}
+
+ferengi_fed_members = {
+    any_subject = { 
+        AND = { 
+            is_country_type = ufp_member_world
+            has_country_flag = ferengi_alliance
+            is_ai = yes
+        }
+    }
+}
+
+bolian_fed_members = {
+    any_subject = { 
+        AND = { 
+            is_country_type = ufp_member_world
+            has_country_flag = bolian_league 
+            is_ai = yes
+        }
+    }
+}
+
+andorian_fed_members = {
+    any_subject = { 
+        AND = { 
+            is_country_type = ufp_member_world
+            has_country_flag = andorian_empire
+            is_ai = yes
+        }
+    }
+}
+
+betazed_fed_members = {
+    any_subject = { 
+        AND = { 
+            is_country_type = ufp_member_world
+            has_country_flag = betazoid_houses
+            is_ai = yes
+        }
+    }
+}
+
+trill_fed_members = {
+    any_subject = { 
+        AND = { 
+            is_country_type = ufp_member_world
+            has_country_flag = trill_republic
+            is_ai = yes
+        }
+    }
+}
+
+vulcan_fed_members = {
+    any_subject = { 
+        AND = { 
+            is_country_type = ufp_member_world
+            has_country_flag = vulcan_high_command
+            is_ai = yes
+        }
+    }
+}

@@ -1,0 +1,185 @@
+﻿	NCamera = {	
+		SYSTEM_SPACE_SCALE_MULT 				= 8.5		### Needed to ensure clicking arrows to other systems works
+	}
+	NGraphics = {
+		PLANET_MAP_ICON_OFFSET					= 0.0		# based on planet size
+		MEGASTRUCTURE_MAP_ICON_OFFSET			= 0.06		# based on mega structure size
+
+		MISSILE_HEIGHT_OFFSET					= -5.0		# how high up missiles will fly
+		MISSILE_ROTATION_RATE					= 10.0		# how fast missiles will adjust their rotation. High values can cause visible snaps each micro update
+		MISSILE_RANDOM_OFFSET_MIN_RADIUS 		= 2.5		# random spread of missiles
+		MISSILE_RANDOM_OFFSET_MAX_RADIUS 		= 5.0
+		BALLISTIC_PROJECTILE_MISSED_LIFETIME 	= 5.0		# missed ballistic projectiles will live for (at least) this long before being removed
+		MISSED_BEAM_LENGTH 						= 1000.0	# how long missed beams will be
+		SHIP_RANDOM_HEIGHT_OFFSET 				= 40.0
+		RANDOM_HEIGHT_MIN						= -20.0
+		RANDOM_HEIGHT_MAX						= 20.0
+	}
+	NInterface = {	
+		BROWSER_BASE_URL						= "http://www.stellariswiki.com/StarTrek_NewHorizons" #STH
+		INGAME_HELP_URL							= "http://www.stellariswiki.com/StarTrek_NewHorizons"
+	}
+	NGameplay = {
+		START_YEAR 								= 2150		
+		SHIP_SUBLIGHT_SPEED_MULT				= 12		# General speed multiplier for ship movement within solar systems #sth
+		MISSILE_SUBLIGHT_SPEED_MULT 			= 10		# General speed multiplier for ship movement within solar systems
+		FTL_RANGE_WARP							= 40		# Base warp range ## STH
+		LEADER_POOL_SIZE						= 5			# Each leader pool will consist of this many leaders #sth
+		LEADER_POOL_LEAD_TIME					= 5			# Years leaders will remain in the leader pool until replaced
+		LEADER_SCIENTIST_ASSIST_RESEARCH_MULT	= 0.75		# Assist Research modifier-mult per skill level (this value times skill level equals modifier)
+		BORDER_BASE_RADIUS						= 14		# The base radius of the border		
+		BORDER_POPULATION_MODIFIER				= 0.1		# The border population modifier
+		BORDER_HABITAT_MODIFIER					= 0.75
+		WAR_SCORE_SHIP_KILL_MUL					= 0.35		# Multiplier of warscore gained
+		WAR_SCORE_SHIP_KILL_WINNER_MUL			= 0.75		# Multiplier of warscore loss for the sinking of ships for the winner 
+		WAR_SCORE_FLEET_COMBAT_WIN_BASE			= 0.2		# Base score for winning a fleet combat
+		WAR_SCORE_PLANET_BASE					= 7.5		# Relative warscore value of a planet # STH: Taking planets harder, but more rewarding (changed from 10)
+		WAR_SCORE_OCCUPATION_MUL				= 1.5		# 150% warscore gained from completely occupying the opponents # STH: From 1.5
+		WAR_SCORE_PLANET_MIN					= 5.0		# Warscore from 1 planet will never be less than this # STH: From 5
+		WAR_SCORE_WARGOAL_MULT					= 1.75		# Wargoal planets are worth this much more
+		DEBRIS_DAYS								= 1			# How many days the debris is visible for
+		#COLONY_SENSOR_RANGE						= 10.0		# Base Sensor range from system from having colony in it (does not stack)
+		MAX_FRICTION 							= 75		# Max friction (total)
+		FRICTION_FROM_BORDERING_SYSTEM 			= 2			# Friction for each bordering system
+		CUSTOM_EMPIRE_SPAWN_CHANCE 				= 1000		
+		DOCKED_FLEET_MAINTENANCE_REDUCTION		= 0.40		# Docked fleets will have a lowered maintenance	
+		SUBJECT_INTEGRATION_BASE_PROGRESS 		= 10 		# Cost per month for subject integration
+		SUBJECT_INTEGRATION_COST_PER_POP 		= 4 		# Integration cost per pop 
+		SUBJECT_INTEGRATION_COST_PER_PLANET		= 45 		# Integration cost per planet	
+		CORE_SECTOR_SYSTEM_CAP					= 4
+		PLANET_UNREST_ARMY						= -5		# Effect per army on planetary unrest
+		TECH_COST_MULT_NUM_POPS                 = 0.007 # Each non-free Pop adds +X% tech cost
+		FLEET_MAX_SHIPS							= 50
+		FTL_RANGE_JUMPDRIVE						= 40				# Jumpdrive range
+		STARTING_WEAPON_TECHS = {
+			"tech_andorian_phaser_1"
+			"tech_phaser_cannon_1"
+			"tech_cardassian_phaser_1"
+			"tech_phaser_1"
+			"tech_particle_phaser_1"
+			"tech_cutting_beam_1"
+			"tech_disruptor_klingon_cannon_1"
+			"tech_disruptor_cannon_1"
+			"tech_plasma_disruptor_beam_1"
+			"tech_plasma_cannon_1"
+			"tech_antiproton_cannon_1"
+			"tech_polaron_beam_1"
+			"tech_tetryon_cannon_1"
+			"tech_physics_particles_747" ### quantum resonance - Pralor and Cravik
+			"tech_physics_particles_755" ### Thermic Charge - Vidiian
+			"tech_physics_particles_763" ### Chroniton cannon - Krenim
+		}
+		STARTING_WEAPON_TECHS_ICONS = {
+			"GFX_weapon_type_andorian_phaser"
+			"GFX_weapon_type_phase_cannon"
+			"GFX_weapon_type_cardassian_phaser"
+			"GFX_weapon_type_phaser"
+			"GFX_weapon_type_particle_phaser"
+			"GFX_weapon_type_cutting_beam"
+			"GFX_weapon_type_disruptor_klingon_cannon"
+			"GFX_weapon_type_disruptor"
+			"GFX_weapon_type_plasma_disruptor"
+			"GFX_weapon_type_plasma"
+			"GFX_weapon_type_antiproton"
+			"GFX_weapon_type_polaron"
+			"GFX_weapon_type_tetryon"
+			"GFX_weapon_type_quantum"	
+			"GFX_weapon_type_thermic"	
+			"GFX_weapon_type_chroniton"	
+		}
+		STARTING_FTL_TYPES = {
+			"warp"
+		}
+	}
+	NShip = {
+		DESIGNER_WEAPON_STACKING_DIV						= 0.15			# The higher this is the more the ship designer will try to vary which weapon types are used on its sections
+		ENERGY_MAINTENANCE_MUL								= 0.003			# Ship Maintenance Multiplier Percentage of the cost of the ship
+		MINERAL_MAINTENANCE_MUL								= 0.002			# Ship Maintenance Multiplier Percentage of the cost of the ship
+		REPAIR_SHIELD_MUL					                = 2.0		    # Shields regen faster when ship is being repaired.
+		COST_SECTION_MUL									= 0.0
+		COST_SECTION_BASE									= 0.0
+		COST_SECTION_ADD_SMALL_WEAPON_SLOT					= 0.0
+		COST_SECTION_ADD_MEDIUM_WEAPON_SLOT					= 0.0
+		COST_SECTION_ADD_LARGE_WEAPON_SLOT					= 0.0
+		COST_SECTION_ADD_TORPEDO_WEAPON_SLOT 				= 0.0
+		COST_SECTION_ADD_EXTRA_LARGE_WEAPON_SLOT			= 0.0
+		COST_SECTION_ADD_AUX_WEAPON_SLOT					= 0.0
+		COST_SECTION_ADD_SMALL_UTIL_SLOT					= 0.0
+		COST_SECTION_ADD_MEDIUM_UTIL_SLOT					= 0.0
+		COST_SECTION_ADD_LARGE_UTIL_SLOT					= 0.0
+		COST_SECTION_ADD_AUX_UTIL_SLOT						= 0.0
+		FLEET_MOVE_MAX_DIST_SHIPS							= 50.0		# Max distance that ships are allowed to travel before last ship
+		FLEET_BASE_FORMATION_SCALE							= 4.25
+		FLEET_BASE_FORMATION_DIV							= 10
+		FLEET_FORMATION_WARP_MULT 							= 6.0
+		FLEET_SIZE_FORMATION_WARP_DIV						= 3
+		WARP_WINDUP 										= 3.0 		# Distance multiplier to warp windup in microupdates
+		WARP_WINDDOWN 										= 3.0 		# Distance multiplier to warp winddown in microupdates
+		WARP_WINDDOWN_OUTSIDE_BORDER						= 2.0		# How much more winddown time is there for systems which are 100% away from friendly territory
+		WARP_INTERSTELLAR_TRAVEL_SPEED 						= 0.08 		# In micro updates ( 10/day )
+		EXCESS_POWER_BONUS_THRESHOLD_MAX	                = 0.1 	    # 0.5 means 0-50% excess power linearly scales ship_excess_power modifier between 0-1.
+		EXCESS_POWER_BONUS_THRESHOLD_MIN	                = 0.1       # min value for excess power to be used.
+		MILITARY_POWER_SPACEPORT_BASE_MULT		= 0.75
+		MILITARY_POWER_SPACEPORT_LEVEL_MULT		= 0.0
+	}
+	NEconomy = {
+		COLONY_SHIP_MAINTENANCE 							= 4.0 		# Monthly colony ship maintenance
+		FLEET_UPGRADE_TIME_COST_MULT						= 0.25		# Upgrade fleet cost
+		FLEET_UPGRADE_MINERAL_COST_MULT						= 0.50		# mineral cost of ship upgrade is abs
+		OUTPOST_STATION_MINERAL_COST						= 150		# Mineral cost to build outpost					
+		OUTPOST_STATION_INFLUENCE_MAINTENANCE 				= 0.5		# Monthly outpost station Influence maintenance
+		EXPANSION_COST_DISTANCE_COST						= 3.0		# each 1 range equals X of this define as an influence cost to colonize
+		EXPANSION_COST_BASE									= 40.0		# the influence base cost of colonzation and frontier outposts by this value.
+	}
+	NPop = {
+	 	MIN_CROWDING_TO_MIGRATE 							= 0.85		# Unless planet is this % full, pops won't migrate
+	}
+	NAI = {	
+		THREAT_SIZE_FACTOR_MAX 								= 2.2 
+		SHARED_THREAT_MULT 									= 0.65		# How much does having a shared threat boost opinion?
+		THREAT_DECAY 										= -0.25		# Each month		THREAT_SIZE_FACTOR_MAX = 2.4
+		THREAT_POSITIVE_OPINION_FACTOR 						= 0.003		# How much does opinion of the victim affect threat?
+		THREAT_NEGATIVE_OPINION_FACTOR 						= 0.004
+		THREAT_OPINION_MAX 									= 1.35
+		FEDERATION_ACCEPTANCE_SHARED_THREAT 				= 0.17		# scales with actual threat
+		FEDERATION_ACCEPTANCE_DISTANCE_MULT 				= -0.5		# per 1 border distance
+		DEFENSIVE_PACT_ACCEPTANCE_DISTANCE_MULT 			= -0.5 		# per 1 border distance	
+		NON_AGGRESSION_PACT_ACCEPTANCE_DISTANCE_MULT		= -0.5		# per 1 border distance	
+		MIGRATION_PACT_ACCEPTANCE_DISTANCE_MULT 			= -0.25 	# per 1 border distance
+		VASSALIZATION_ACCEPTANCE_NUM_POPS 					= -0.35		# per pop
+		VASSALIZATION_ACCEPTANCE_POWER_DIFFERENCE_MULT 		= 10		# for each 1x over min
+		VASSALIZATION_ACCEPTANCE_DISTANCE_MULT 				= -0.75		# per 1 border distance
+		NAVY_BUDGET_FRACTION 								= 0.25 		# AI will spend this fraction of their income on ships
+		STATION_BUDGET_FRACTION 							= 0.20 		# AI will spend this fraction of their income on stations
+		BUILDING_BUDGET_FRACTION 							= 0.40 		# AI will spend this fraction of their income on buildings
+		MINERAL_MILITARY_STATION_BUDGET_FRACTION			= 0.05		# AI will spend this fraction of their stored minerals on military stations
+		MINERAL_NAVY_BUDGET_FRACTION						= 0.20		# AI will spend this fraction of their stored minerals on ships
+		MINERAL_STATION_BUDGET_FRACTION 					= 0.15		# AI will spend this fraction of their stored minerals on stations (used for spaceport instead when it needs a new spaceport)
+		MINERAL_BUILDING_BUDGET_FRACTION 					= 0.05		# AI will spend this fraction of their stored minerals on buildings (used for spaceport instead when it needs a new spaceport)
+		MINERAL_SPACEPORT_BUDGET_FRACTION					= 0.05		# AI will spend this fraction of their stored minerals on spaceport modules
+		MINERAL_COLONY_BUDGET_FRACTION 						= 0.15
+		MINERAL_ARMY_BUDGET_FRACTION 						= 0.05		# AI will spend this fraction on armies
+		MINERAL_TILE_BLOCKER_BUDGET_FRACTION				= 0.05		# AI will spend this fraction on tile blockers
+		
+		#ROBOT STUFF
+		MINERAL_ROBOT_BUDGET_FRACTION						= 0.30		# AI will spend this fraction of their stored minerals on robots
+		ENERGY_ROBOT_BUDGET_FRACTION						= 0.30
+		
+		
+		MINERAL_MEGASTRUCTURE_BUDGET_FRACTION				= 0.05	# AI will spend this fraction of their stored minerals on megastructures (taken from stations & buildings) 
+		MAX_MINERALS_STORED_NAVY 							= 1500		# Minerals AI will store for navy when it needs more
+		MIN_MINERALS_STORED_NAVY 							= 500		# Minerals AI will store for navy when it does not need more 				
+		AI_DESIRED_ARMY_MINERALS_AT_WAR						= 250		# AI wants at least this many minerals for armies while at war
+		# SECTOR_COLONY_BUDGET_FRACTION 						= 0.10		# Fraction of budget going to colonies
+		# SECTOR_STATION_BUDGET_FRACTION 						= 0.20		# Fraction of budget going to stations
+		# SECTOR_BUILDING_BUDGET_FRACTION 					= 0.50 		# Fraction of budget going to buildings
+		# SECTOR_TILE_BLOCKER_BUDGET_FRACTION 				= 0.05 		# Fraction of budget going to tile blockers
+		# SECTOR_SPACEPORT_BUDGET_FRACTION 					= 0.10 		# Fraction of budget going to spaceports
+		# SECTOR_ARMY_BUDGET_FRACTION 						= 0.05		# Fraction of budget going to armies
+		# SECTOR_ROBOT_BUDGET_FRACTION 						= 0.0		# AI will spend this fraction of their stored minerals on robots (transfered to buildings if they don't use robots)
+		# SECTOR_MINERALS_NEED_THRESHOLD 						= 5			# Minerals needed per month before starting to build other buildings
+		#OUTPOST_STATION_RESOURCES_BUILD 					= 9			# AI should build outpost station if system has more than this many resources
+		#OUTPOST_STATION_RESOURCES_NEIGHBORS_BUILD 			= 20 		#
+		OUTPOST_STATION_RANGE 								= 200		# 	
+		#OPTIMAL_OUTPOST_DISTANCE							= 3000		# Range from borders ED will build outpost (square distance)		
+	}		

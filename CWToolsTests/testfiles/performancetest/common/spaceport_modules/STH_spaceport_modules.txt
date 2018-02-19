@@ -1,0 +1,1170 @@
+
+
+
+### Border control
+   module_border_control = {
+      icon = "spaceport_module_border_control"
+      section = "SCIENCE_SPACEPORT_SECTION"
+      construction_days = 270
+      prerequisites = { "tech_society_statecraft_925" }
+      spaceport_level = 3
+      cost = { minerals = 300 influence = 25 }
+      required_resources = {
+         energy = 2
+      }
+      planet_modifier = {
+         planet_border_mult = 0.2
+         planet_migration_all_pull = 0.5
+      }
+      ai_weight = { 
+         modifier = {
+            factor = 0
+            from = { sector_controlled = yes }
+         }
+      }
+   }
+   
+### Synchronized Defenses
+   module_synchronized_defenses = {
+      icon = "spaceport_module_synchronized_defenses"
+      section = "SCIENCE_SPACEPORT_SECTION"
+      construction_days = 180
+      prerequisites = { "tech_physics_synchronized_14" }
+      spaceport_level = 4
+      cost = { minerals = 200 }
+      required_resources = {
+         energy = 2
+      }
+      station_modifier = {
+         ship_fire_rate_mult = 0.5
+      }
+   }
+   
+### Holodeck
+   module_holodeck = {
+      icon = "spaceport_module_holodeck"
+      section = "SCIENCE_SPACEPORT_SECTION"
+      construction_days = 360
+      prerequisites = { "tech_physics_holodeck_26" }
+      spaceport_level = 1
+      cost = { minerals = 500 influence = 100 }
+      required_resources = {
+         energy = 5
+      }
+      planet_modifier = {
+         pop_happiness = 0.05
+      }
+      ai_weight = { 
+         modifier = {
+            factor = 0
+            from = { sector_controlled = yes }
+         }
+      }
+   }
+   
+### Fleet Academy
+   module_fleet_academy = {
+      icon = "spaceport_module_fleet_academy"
+      section = "SCIENCE_SPACEPORT_SECTION"
+      construction_days = 270
+      prerequisites = { "tech_society_interstellar_400" }
+      spaceport_level = 1
+      cost = { minerals = 300 influence = 25 }
+      required_resources = {
+         energy = 2
+      }
+      ship_modifier = {
+         ship_fire_rate_mult = 0.10
+      }
+      ai_weight = { 
+         modifier = {
+            factor = 0
+            from = { sector_controlled = yes }
+         }
+      }
+   }
+   
+### Orbital Hydroponic Farm
+   module_orbital_hydroponics = {
+      icon = "spaceport_module_orbital_hydroponics"
+      section = "SCIENCE_SPACEPORT_SECTION"
+      construction_days = 210
+      prerequisites = { "tech_society_orbital_480" }
+      spaceport_level = 1
+      cost = { minerals = 150 }
+      required_resources = {
+         energy = 2
+      }
+      planet_modifier = {
+         planet_resource_food_add = 4
+      }
+   }
+   
+### Orbital Sensor Array
+   module_orbital_sensor = {
+      icon = "spaceport_module_orbital_sensor"
+      section = "SCIENCE_SPACEPORT_SECTION"
+      construction_days = 210
+      prerequisites = { "tech_physics_orbital_37" }
+      spaceport_level = 1
+      cost = { minerals = 150 }
+      required_resources = {
+         energy = 2
+      }
+      planet_modifier = {
+         planet_sensor_range_mult = 0.75
+      }
+      ai_weight = { 
+         modifier = {
+            factor = 0
+            from = { sector_controlled = yes }
+         }
+      }
+   }
+   
+### Starbase Crew Quarters
+   module_crew_quarters = {
+      icon = "spaceport_module_crew_quarters"
+      section = "SCIENCE_SPACEPORT_SECTION"
+      construction_days = 210
+      prerequisites = { "tech_society_self-sustaining_411" }
+      spaceport_level = 1
+      cost = { minerals = 150 }
+      required_resources = {
+         energy = 1
+      }
+      orbit_modifier = {
+         ship_upkeep_mult = -0.20
+      }
+      ai_weight = { 
+         modifier = {
+            factor = 0
+            from = { sector_controlled = yes }
+         }
+      }
+   }
+   
+### Engineering Bay
+   module_engineering_bay = {
+      icon = "spaceport_module_engineering_bay"
+      section = "SCIENCE_SPACEPORT_SECTION"
+      construction_days = 210
+      prerequisites = { "tech_society_self-sustaining_411" }
+      spaceport_level = 1
+      cost = { minerals = 150 }
+      required_resources = {
+         energy = 2
+      }
+      orbit_modifier = {
+         ship_reparation_speed_mult = 0.5
+      }
+      ai_weight = { 
+         modifier = {
+            factor = 0
+            from = { sector_controlled = yes }
+         }
+      }
+   }
+   
+### Space Resturant
+   module_space_resturant = {
+      icon = "spaceport_module_space_resturant"
+      section = "SCIENCE_SPACEPORT_SECTION"
+      construction_days = 270
+      prerequisites = { "tech_society_galactic_433" }
+      spaceport_level = 1
+      cost = { minerals = 300 influence = 25 }
+      required_resources = {
+         energy = 2
+      }
+      planet_modifier = {
+         planet_migration_xeno_pull = 0.5
+      }
+      ai_weight = { 
+         modifier = {
+            factor = 0
+            from = { sector_controlled = yes }
+         }
+      }
+   }
+   
+### Zero-G Research Center
+   module_orbital_research = {
+      icon = "spaceport_module_orbital_research"
+      section = "SCIENCE_SPACEPORT_SECTION"
+      construction_days = 270
+      prerequisites = { "tech_society_zero-g_449" }
+      spaceport_level = 1
+      cost = { minerals = 300 influence = 25 }
+      required_resources = {
+         energy = 2
+      }
+      planet_modifier = {
+         tile_resource_physics_research_mult = 0.05
+         tile_resource_society_research_mult = 0.05
+         tile_resource_engineering_research_mult = 0.05
+      }
+   }
+   
+### Luxury Hotel
+   module_hotel = {
+      icon = "spaceport_module_hotel"
+      section = "SCIENCE_SPACEPORT_SECTION"
+      construction_days = 360
+      prerequisites = { "tech_society_biology_1025" }
+      spaceport_level = 3
+      cost = { minerals = 400 influence = 25 }
+      produced_resources = { sr_prosperity_26 = 1 }
+      required_resources = {
+         energy = 2
+      }
+      ai_weight = { 
+         modifier = {
+            factor = 0
+            from = { sector_controlled = yes }
+         }
+      }
+   }
+   
+### Cultural Archives
+   module_cultural_centre = {
+      icon = "spaceport_module_cultural_centre"
+      section = "SCIENCE_SPACEPORT_SECTION"
+      construction_days = 360
+      prerequisites = { "tech_society_new_worlds_1171" }
+      spaceport_level = 3
+      cost = { minerals = 400 influence = 25 }
+      produced_resources = { unity = 3 }
+      required_resources = {
+         energy = 2
+      }
+      ai_weight = { 
+         modifier = {
+            factor = 0
+            from = { sector_controlled = yes }
+         }
+      }
+   }
+   
+### Zero-G Ore Processor
+   module_processor = {
+      icon = "spaceport_module_processor"
+      section = "SCIENCE_SPACEPORT_SECTION"
+      construction_days = 210
+      prerequisites = { "tech_engineering_materials_1433" }
+      spaceport_level = 1
+      cost = { minerals = 150 }
+      produced_resources = { minerals = 4 }
+      required_resources = {
+         energy = 2
+      }
+   }
+   
+### Mind Control Laser
+   module_orbital_laser = {
+      icon = "spaceport_module_orbital_laser"
+      section = "SCIENCE_SPACEPORT_SECTION"
+      construction_days = 360
+      prerequisites = { "tech_society_mass-scale_490" }
+      spaceport_level = 1
+      cost = { minerals = 400 influence = 25 }
+      required_resources = {
+         energy = 4
+      }
+      planet_modifier = {
+         pop_government_ethic_attraction = 0.5
+      }
+      ai_weight = { 
+         modifier = {
+            factor = 0
+            from = { sector_controlled = yes }
+         }
+      }
+   }
+   
+### Surveillance Pod
+   module_survey_pod = {
+      icon = "spaceport_module_survey_pod"
+      section = "SCIENCE_SPACEPORT_SECTION"
+      construction_days = 360
+      prerequisites = { "tech_society_statecraft_925" }
+      spaceport_level = 3
+      cost = { minerals = 400 influence = 25 }
+      required_resources = {
+         energy = 2
+      }
+      planet_modifier = {
+         planet_unrest_add = -25
+      }
+      ai_weight = { 
+         modifier = {
+            factor = 0
+            from = { sector_controlled = yes }
+         }
+      }
+   }
+   
+### Weather Control System
+   module_orbital_weather = {
+      icon = "spaceport_module_orbital_weather"
+      section = "SCIENCE_SPACEPORT_SECTION"
+      construction_days = 270
+      prerequisites = { "tech_society_weather_500" }
+      spaceport_level = 4
+      cost = { minerals = 300 influence = 25 }
+      required_resources = {
+         energy = 2
+      }
+      planet_modifier = {
+         pop_environment_tolerance = 0.05
+      }
+      ai_weight = { 
+         modifier = {
+            factor = 0
+            from = { sector_controlled = yes }
+         }
+      }
+   }
+   
+### Pioneering Terminal
+   module_pioneering_terminal = {
+      icon = "spaceport_module_pioneering_terminal"
+      section = "ASSEMBLYYARD_SPACEPORT_SECTION"
+      construction_days = 270
+      prerequisites = { "tech_society_new_worlds_1110" }
+      spaceport_level = 1
+      cost = { minerals = 300 influence = 25 }
+      modifier = {
+         shipsize_colonizer_build_cost_mult = -0.25
+         shipsize_colonizer_construction_speed_mult = 0.25
+      }
+      required_resources = {
+         energy = 2
+      }
+      ai_weight = { 
+         modifier = {
+            factor = 0
+            from = { sector_controlled = yes }
+         }
+      }
+   }
+   
+### Orbital Dockyard
+   module_shipyard_1 = {
+      icon = "spaceport_module_shipyard_1"
+      section = "ASSEMBLYYARD_SPACEPORT_SECTION"
+      construction_days = 180
+      prerequisites = { "tech_engineering_orbital_552" }
+      spaceport_level = 1
+      cost = { minerals = 200 }
+      modifier = {
+         shipsize_saber_construction_speed_mult = 0.33
+         shipsize_sovereign_construction_speed_mult = 0.33
+      }
+      required_resources = {
+         energy = 1
+      }
+      ai_weight = { 
+         modifier = {
+            factor = 0
+            from = { sector_controlled = yes }
+         }
+      }
+   }
+   
+### Regional Assembly Yard
+   module_shipyard_2 = {
+      icon = "spaceport_module_shipyard_2"
+      section = "ASSEMBLYYARD_SPACEPORT_SECTION"
+      construction_days = 210
+      prerequisites = { "tech_engineering_regional_553" }
+      spaceport_level = 3
+      cost = { minerals = 400 }
+      modifier = {
+         shipsize_steamrunner_construction_speed_mult = 0.33
+         shipsize_adv_cruiser_construction_speed_mult = 0.33
+      }
+      required_resources = {
+         energy = 2
+      }
+      ai_weight = { 
+         modifier = {
+            factor = 0
+            from = { sector_controlled = yes }
+         }
+      }
+   }
+   
+### Fleet Shipyard
+   module_shipyard_3 = {
+      icon = "spaceport_module_shipyard_3"
+      section = "ASSEMBLYYARD_SPACEPORT_SECTION"
+      construction_days = 240
+      prerequisites = { "tech_engineering_fleet_554" }
+      spaceport_level = 6
+      cost = { minerals = 600 }
+      modifier = {
+         shipsize_strike_construction_speed_mult = 0.33
+         shipsize_assault_cruiser_construction_speed_mult = 0.33
+      }
+      required_resources = {
+         energy = 3
+      }
+      ai_weight = { 
+         modifier = {
+            factor = 0
+            from = { sector_controlled = yes }
+         }
+      }
+   }
+   
+### Starbase Armor Plating
+   module_defense_armor = {
+      icon = "spaceport_module_defense_armor"
+      section = "SCIENCE_SPACEPORT_SECTION"
+      construction_days = 180
+      prerequisites = { "tech_engineering_spaceport_562" }
+      spaceport_level = 1
+      cost = { minerals = 200 }
+      station_modifier = {
+         ship_armor_add = 75
+      }
+   }
+   
+### Starbase Shields
+   module_defense_shields = {
+      icon = "spaceport_module_defense_shields"
+      section = "SCIENCE_SPACEPORT_SECTION"
+      construction_days = 180
+      prerequisites = { "tech_engineering_spaceport_564" }
+      spaceport_level = 1
+      cost = { minerals = 200 }
+      required_resources = {
+         energy = 2
+      }
+      station_modifier = {
+         ship_shield_hp_add = 25000
+         ship_shield_regen_add = 125
+         ship_shield_regen_add_perc = 0.1
+      }
+   }
+   
+### Central Structural Integrity Field
+   module_defense_hull = {
+      icon = "spaceport_module_defense_hull"
+      section = "SCIENCE_SPACEPORT_SECTION"
+      construction_days = 180
+      prerequisites = { "tech_engineering_central_565" }
+      spaceport_level = 4
+      cost = { minerals = 200 }
+      required_resources = {
+         energy = 2
+      }
+      station_modifier = {
+         ship_hitpoints_add = 35000
+      }
+   }
+   
+### Synthetic Dilithium Manufacturer
+   module_dilithium = {
+      icon = "spaceport_module_dilithium"
+      section = "SCIENCE_SPACEPORT_SECTION"
+      construction_days = 360
+      prerequisites = { "tech_engineering_materials_1432" }
+      spaceport_level = 1
+      cost = { minerals = 200 }
+      produced_resources = { sr_processed_25 = 1 }
+      required_resources = {
+         energy = 10
+      }
+      ai_weight = { 
+         modifier = {
+            factor = 0
+            from = { sector_controlled = yes }
+         }
+      }
+   }
+   
+### Dark Matter Lab
+   module_dark_matter = {
+      icon = "spaceport_module_dark_matter"
+      section = "SCIENCE_SPACEPORT_SECTION"
+      construction_days = 360
+      prerequisites = { "tech_engineering_exotic_591" }
+      spaceport_level = 1
+      cost = { minerals = 500 }
+      produced_resources = { physics_research = 20 }
+      required_resources = {
+         energy = 2
+         sr_dark_9 = 1
+      }
+      ai_weight = { 
+         modifier = {
+            factor = 0
+            from = { sector_controlled = yes }
+         }
+      }
+   }
+   
+### Neutroniom Forge
+   module_neutronoum_forge = {
+      icon = "spaceport_module_neutronoum_forge"
+      section = "SCIENCE_SPACEPORT_SECTION"
+      construction_days = 360
+      prerequisites = { "tech_engineering_exotic_591" }
+      spaceport_level = 1
+      cost = { minerals = 500 }
+      produced_resources = { minerals = 10 energy = 10 }
+      required_resources = {
+         sr_neutronium_8 = 1
+      }
+      ai_weight = { 
+         modifier = {
+            factor = 0
+            from = { sector_controlled = yes }
+         }
+      }
+   }
+   
+### Micro-Fusion Reactor
+   module_micro_fusion = {
+      icon = "spaceport_module_micro_fusion"
+      section = "SCIENCE_SPACEPORT_SECTION"
+      construction_days = 210
+      prerequisites = { "tech_physics_miniaturized_49" }
+      spaceport_level = 1
+      cost = { minerals = 150 }
+      produced_resources = { energy = 4 }
+   }
+   
+### Photon Torpedeo Pylon
+   module_defense_photon = {
+      icon = "spaceport_module_defense_photon"
+      section = "TORP_SPACEPORT_SECTION"
+      construction_days = 180
+      prerequisites = { "tech_engineering_photon_654" }
+      spaceport_level = 1
+      cost = { minerals = 200 }
+      component_set = "TORP_PHOTON_SPACEPORT_0"
+      required_resources = {
+         energy = 1
+      }
+      station_modifier = {
+         ship_weapon_damage = 0.10
+      }
+   }
+   
+### Plasma Torpedo Pylon
+   module_defense_plasma = {
+      icon = "spaceport_module_defense_plasma"
+      section = "TORP_SPACEPORT_SECTION"
+      construction_days = 180
+      prerequisites = { "tech_engineering_plasma_685" }
+      spaceport_level = 1
+      cost = { minerals = 200 }
+      component_set = "TORP_PLASMA_SPACEPORT_0"
+      required_resources = {
+         energy = 1
+      }
+      station_modifier = {
+         ship_weapon_damage = 0.10
+      }
+   }
+   
+### Quantum Torpedo Pylon
+   module_defense_quantum = {
+      icon = "spaceport_module_defense_quantum"
+      section = "TORP_SPACEPORT_SECTION"
+      construction_days = 180
+      prerequisites = { "tech_engineering_rocketry_1669" }
+      spaceport_level = 1
+      cost = { minerals = 200 }
+      component_set = "TORP_QUANTUM_SPACEPORT_0"
+      required_resources = {
+         energy = 1
+      }
+      station_modifier = {
+         ship_weapon_damage = 0.10
+      }
+   }
+   
+### Polaron Torpedo Pylon
+   module_defense_polaron = {
+      icon = "spaceport_module_defense_polaron"
+      section = "TORP_SPACEPORT_SECTION"
+      construction_days = 180
+      prerequisites = { "tech_engineering_rocketry_1670" }
+      spaceport_level = 1
+      cost = { minerals = 200 }
+      component_set = "TORP_POLARON_SPACEPORT_0"
+      required_resources = {
+         energy = 1
+      }
+      station_modifier = {
+         ship_weapon_damage = 0.10
+      }
+   }
+   
+### Chroniton Torpedo Pylon
+   module_defense_chroniton = {
+      icon = "spaceport_module_defense_chroniton"
+      section = "TORP_SPACEPORT_SECTION"
+      construction_days = 180
+      prerequisites = { "tech_engineering_rocketry_1658" }
+      spaceport_level = 1
+      cost = { minerals = 200 }
+      component_set = "TORP_CHRONITON_SPACEPORT_0"
+      required_resources = {
+         energy = 1
+      }
+      station_modifier = {
+         ship_weapon_damage = 0.10
+      }
+   }
+   
+### Hangar Bays - generic
+   module_hangar_bay = {
+      icon = "spaceport_module_hangar_bay"
+      section = "HANGAR_SPACEPORT_SECTION"
+      construction_days = 180
+      prerequisites = { "tech_engineering_industry_1257" }
+      spaceport_level = 1
+      cost = { minerals = 200 }
+      component_set = "HANGAR_STANDARD_1"
+      required_resources = {
+         energy = 1
+      }
+      station_modifier = {
+         ship_weapon_damage = 0.10
+      }
+   }
+   
+### Hangar Bays - FED
+   module_hangar_bay_fed = {
+      icon = "spaceport_module_hangar_bay"
+      section = "HANGAR_SPACEPORT_SECTION"
+      construction_days = 180
+      prerequisites = { "tech_engineering_industry_1302" }
+      spaceport_level = 1
+      cost = { minerals = 200 }
+      component_set = "HANGAR_FEDERATION_1"
+      required_resources = {
+         energy = 1
+      }
+      station_modifier = {
+         ship_weapon_damage = 0.10
+      }
+   }
+   
+### Hangar Bays - CAR
+   module_hangar_bay_car = {
+      icon = "spaceport_module_hangar_bay"
+      section = "HANGAR_SPACEPORT_SECTION"
+      construction_days = 180
+      prerequisites = { "tech_engineering_industry_1306" }
+      spaceport_level = 1
+      cost = { minerals = 200 }
+      component_set = "HANGAR_CARDASSIAN_1"
+      required_resources = {
+         energy = 1
+      }
+      station_modifier = {
+         ship_weapon_damage = 0.10
+      }
+   }
+   
+### Hangar Bays - DOM
+   module_hangar_bay_dom = {
+      icon = "spaceport_module_hangar_bay"
+      section = "HANGAR_SPACEPORT_SECTION"
+      construction_days = 180
+      prerequisites = { "tech_engineering_industry_1318" }
+      spaceport_level = 1
+      cost = { minerals = 200 }
+      component_set = "HANGAR_DOMINION_1"
+      required_resources = {
+         energy = 1
+      }
+      station_modifier = {
+         ship_weapon_damage = 0.10
+      }
+   }
+   
+### Hangar Bays - ROM
+   module_hangar_bay_rom = {
+      icon = "spaceport_module_hangar_bay"
+      section = "HANGAR_SPACEPORT_SECTION"
+      construction_days = 180
+      prerequisites = { "tech_engineering_industry_1314" }
+      spaceport_level = 1
+      cost = { minerals = 200 }
+      component_set = "HANGAR_ROMULAN_1"
+      required_resources = {
+         energy = 1
+      }
+      station_modifier = {
+         ship_weapon_damage = 0.10
+      }
+   }
+   
+### Hangar Bays - KDF
+   module_hangar_bay_kdf = {
+      icon = "spaceport_module_hangar_bay"
+      section = "HANGAR_SPACEPORT_SECTION"
+      construction_days = 180
+      prerequisites = { "tech_engineering_industry_1310" }
+      spaceport_level = 1
+      cost = { minerals = 200 }
+      component_set = "HANGAR_KLINGON_1"
+      required_resources = {
+         energy = 1
+      }
+      station_modifier = {
+         ship_weapon_damage = 0.10
+      }
+   }
+   
+### Stationary Pulse Cannon Bank - fed
+   module_defense_phaser_0_initial = {
+      icon = "spaceport_module_defense_phaser_0_initial"
+      section = "CORE_SPACEPORT_SECTION"
+      prerequisites = { "tech_phaser_cannon_1" }
+      initial = yes
+      initial_only = yes
+      replaceable = no
+      potential = { owner = { uses_phaser_weapons_fed = yes } }
+      component_set = "PULSE_PHASER_SPACEPORT_1"
+      ai_weight = { 
+         weight = 0
+      }
+   }
+   
+### Stationary Type-B Phaser Emitter - general phaser
+   module_defense_basic_phaser_0_initial = {
+      icon = "spaceport_module_defense_basic_phaser_0_initial"
+      section = "CORE_SPACEPORT_SECTION"
+      prerequisites = { "tech_phaser_1" }
+      initial = yes
+      initial_only = yes
+      replaceable = no
+      potential = { owner = { uses_phaser_weapons = yes } }
+      component_set = "PHASER_SPACEPORT_1"
+      ai_weight = { 
+         weight = 0
+      }
+   }
+   
+### Stationary Type-C Phaser Emitter - andorian
+   module_defense_phaser_0_andorian = {
+      icon = "spaceport_module_defense_phaser_0_andorian"
+      section = "CORE_SPACEPORT_SECTION"
+      prerequisites = { "tech_andorian_phaser_1" }
+      initial = yes
+      initial_only = yes
+      replaceable = no
+      potential = { owner = { uses_phaser_weapons_andorian = yes } }
+      component_set = "ANDORIAN_PHASER_SPACEPORT_1"
+      ai_weight = { 
+         weight = 0
+      }
+   }
+   
+### Stationary Type-D Particle Phaser Emitter - vulcan/tamarian
+   module_defense_phaser_0_particle = {
+      icon = "spaceport_module_defense_phaser_0_particle"
+      section = "CORE_SPACEPORT_SECTION"
+      prerequisites = { "tech_particle_phaser_1" }
+      initial = yes
+      initial_only = yes
+      replaceable = no
+      potential = { owner = { uses_phaser_weapons_particle = yes } }
+      component_set = "PARTICLE_PHASER_SPACEPORT_1"
+      ai_weight = { 
+         weight = 0
+      }
+   }
+   
+### Stationary Wave Disruptor Bank - cardassian
+   module_defense_phaser_0_cardassian = {
+      icon = "spaceport_module_defense_phaser_0_cardassian"
+      section = "CORE_SPACEPORT_SECTION"
+      prerequisites = { "tech_cardassian_phaser_1" }
+      initial = yes
+      initial_only = yes
+      replaceable = no
+      potential = { owner = { uses_phaser_weapons_cardassian = yes } }
+      component_set = "SPIRAL_PHASER_SPACEPORT_1"
+      ai_weight = { 
+         weight = 0
+      }
+   }
+   
+### Starbase Phaser Array
+   module_defense_phaser_1 = {
+      icon = "spaceport_module_defense_phaser_1"
+      section = "BEAM_SPACEPORT_SECTION"
+      construction_days = 180
+      prerequisites = { "tech_physics_starbase_178" }
+      spaceport_level = 1
+      cost = { minerals = 200 }
+      component_set = "PHASER_SPACEPORT_1"
+      required_resources = {
+         energy = 1
+      }
+      station_modifier = {
+         ship_weapon_damage = 0.10
+      }
+   }
+   
+### Phaser Starbase Cannon
+   module_defense_phaser_2 = {
+      icon = "spaceport_module_defense_phaser_2"
+      section = "CANNON_SPACEPORT_SECTION"
+      construction_days = 180
+      prerequisites = { "tech_physics_starbase_179" }
+      spaceport_level = 4
+      cost = { minerals = 200 }
+      component_set = "PHASER_SPACEPORT_2"
+      required_resources = {
+         energy = 1
+      }
+      station_modifier = {
+         ship_weapon_damage = 0.10
+      }
+   }
+   
+### Stationary Tetryonic K-Disruptor Bank - klingon
+   module_defense_disruptor_0_klingon = {
+      icon = "spaceport_module_defense_disruptor_0_klingon"
+      section = "CORE_SPACEPORT_SECTION"
+      prerequisites = { "tech_disruptor_klingon_cannon_1" }
+      initial = yes
+      initial_only = yes
+      replaceable = no
+      potential = { owner = { uses_disruptor_weapons_klingon = yes } }
+      component_set = "KANG_DISRUPTOR_SPACEPORT_1"
+      ai_weight = { 
+         weight = 0
+      }
+   }
+   
+### Stationary Plasma P-Disruptor Bank - romulan
+   module_defense_plasma_disruptor_0_initial = {
+      icon = "spaceport_module_defense_plasma_disruptor_0_initial"
+      section = "CORE_SPACEPORT_SECTION"
+      prerequisites = { "tech_plasma_disruptor_beam_1" }
+      initial = yes
+      initial_only = yes
+      replaceable = no
+      potential = { owner = { uses_plasma_disruptor_weapons = yes } }
+      component_set = "PLASMA_DISRUPTOR_SPACEPORT_1"
+      ai_weight = { 
+         weight = 0
+      }
+   }
+   
+### Stationary I-Disruptor Bank - general disruptor
+   module_defense_disruptor_0_initial = {
+      icon = "spaceport_module_defense_disruptor_0_initial"
+      section = "CORE_SPACEPORT_SECTION"
+      prerequisites = { "tech_disruptor_cannon_1" }
+      initial = yes
+      initial_only = yes
+      replaceable = no
+      potential = { owner = { uses_disruptor_weapons = yes } }
+      component_set = "DISRUPTOR_SPACEPORT_1"
+      ai_weight = { 
+         weight = 0
+      }
+   }
+   
+### Starbase Disruptor Array
+   module_defense_disruptor_1 = {
+      icon = "spaceport_module_defense_disruptor_1"
+      section = "BEAM_SPACEPORT_SECTION"
+      construction_days = 180
+      prerequisites = { "tech_physics_starbase_218" }
+      spaceport_level = 1
+      cost = { minerals = 200 }
+      component_set = "DISRUPTOR_SPACEPORT_1"
+      required_resources = {
+         energy = 1
+      }
+      station_modifier = {
+         ship_weapon_damage = 0.10
+      }
+   }
+   
+### Disruptor Starbase Cannon
+   module_defense_disruptor_2 = {
+      icon = "spaceport_module_defense_disruptor_2"
+      section = "CANNON_SPACEPORT_SECTION"
+      construction_days = 180
+      prerequisites = { "tech_physics_starbase_219" }
+      spaceport_level = 4
+      cost = { minerals = 200 }
+      component_set = "DISRUPTOR_SPACEPORT_2"
+      required_resources = {
+         energy = 1
+      }
+      station_modifier = {
+         ship_weapon_damage = 0.10
+      }
+   }
+   
+### Plasma Defense Module
+   module_defense_plasma_0_initial = {
+      icon = "spaceport_module_defense_plasma_0_initial"
+      section = "CORE_SPACEPORT_SECTION"
+      prerequisites = { "tech_plasma_cannon_1" }
+      initial = yes
+      initial_only = yes
+      replaceable = no
+      potential = { owner = { uses_plasma_weapons = yes } }
+      component_set = "PLASMA_SPACEPORT_1"
+      ai_weight = { 
+         weight = 0
+      }
+   }
+   
+### Starbase Plasma Array
+   module_defense_plasma_1 = {
+      icon = "spaceport_module_defense_plasma_1"
+      section = "BEAM_SPACEPORT_SECTION"
+      construction_days = 180
+      prerequisites = { "tech_physics_starbase_252" }
+      spaceport_level = 1
+      cost = { minerals = 200 }
+      component_set = "PLASMA_SPACEPORT_1"
+      required_resources = {
+         energy = 1
+      }
+      station_modifier = {
+         ship_weapon_damage = 0.10
+      }
+   }
+   
+### Plasma Starbase Cannon
+   module_defense_plasma_2 = {
+      icon = "spaceport_module_defense_plasma_2"
+      section = "CANNON_SPACEPORT_SECTION"
+      construction_days = 180
+      prerequisites = { "tech_physics_starbase_253" }
+      spaceport_level = 4
+      cost = { minerals = 200 }
+      component_set = "PLASMA_SPACEPORT_2"
+      required_resources = {
+         energy = 1
+      }
+      station_modifier = {
+         ship_weapon_damage = 0.10
+      }
+   }
+   
+### Antiproton Defense Module
+   module_defense_antiproton_0_initial = {
+      icon = "spaceport_module_defense_antiproton_0_initial"
+      section = "CORE_SPACEPORT_SECTION"
+      prerequisites = { "tech_antiproton_cannon_1" }
+      initial = yes
+      initial_only = yes
+      replaceable = no
+      potential = { owner = { uses_antiproton_weapons = yes } }
+      component_set = "ANTI_SPACEPORT_1"
+      ai_weight = { 
+         weight = 0
+      }
+   }
+   
+### Stationary Cutting Beam
+   module_defense_antiproton_0_borg = {
+      icon = "spaceport_module_defense_antiproton_0_borg"
+      section = "CORE_SPACEPORT_SECTION"
+      prerequisites = { "tech_cutting_beam_1" }
+      initial = yes
+      initial_only = yes
+      replaceable = no
+      potential = { owner = { uses_antiproton_weapons_borg = yes } }
+      component_set = "BORG_SPACEPORT_1"
+      ai_weight = { 
+         weight = 0
+      }
+   }
+   
+### Starbase Antiproton Array
+   module_defense_antiproton_1 = {
+      icon = "spaceport_module_defense_antiproton_1"
+      section = "BEAM_SPACEPORT_SECTION"
+      construction_days = 180
+      prerequisites = { "tech_physics_starbase_283" }
+      spaceport_level = 1
+      cost = { minerals = 200 }
+      component_set = "ANTI_SPACEPORT_1"
+      required_resources = {
+         energy = 1
+      }
+      station_modifier = {
+         ship_weapon_damage = 0.10
+      }
+   }
+   
+### Antiproton Starbase Cannon
+   module_defense_antiproton_2 = {
+      icon = "spaceport_module_defense_antiproton_2"
+      section = "CANNON_SPACEPORT_SECTION"
+      construction_days = 180
+      prerequisites = { "tech_physics_starbase_284" }
+      spaceport_level = 4
+      cost = { minerals = 200 }
+      component_set = "ANTI_SPACEPORT_2"
+      required_resources = {
+         energy = 1
+      }
+      station_modifier = {
+         ship_weapon_damage = 0.10
+      }
+   }
+   
+### Polaron Defense Module
+   module_defense_polaron_0_initial = {
+      icon = "spaceport_module_defense_polaron_0_initial"
+      section = "CORE_SPACEPORT_SECTION"
+      prerequisites = { "tech_polaron_beam_1" }
+      initial = yes
+      initial_only = yes
+      replaceable = no
+      potential = { owner = { uses_polaron_weapons = yes } }
+      component_set = "POLARON_SPACEPORT_1"
+      ai_weight = { 
+         weight = 0
+      }
+   }
+   
+### Starbase Polaron Array
+   module_defense_polaron_1 = {
+      icon = "spaceport_module_defense_polaron_1"
+      section = "BEAM_SPACEPORT_SECTION"
+      construction_days = 180
+      prerequisites = { "tech_physics_starbase_308" }
+      spaceport_level = 1
+      cost = { minerals = 200 }
+      component_set = "POLARON_SPACEPORT_1"
+      required_resources = {
+         energy = 1
+      }
+      station_modifier = {
+         ship_weapon_damage = 0.10
+      }
+   }
+   
+### Polaron Starbase Cannon
+   module_defense_polaron_2 = {
+      icon = "spaceport_module_defense_polaron_2"
+      section = "CANNON_SPACEPORT_SECTION"
+      construction_days = 180
+      prerequisites = { "tech_physics_starbase_309" }
+      spaceport_level = 4
+      cost = { minerals = 200 }
+      component_set = "POLARON_SPACEPORT_2"
+      required_resources = {
+         energy = 1
+      }
+      station_modifier = {
+         ship_weapon_damage = 0.10
+      }
+   }
+   
+### Tetryon Defense Module - standard
+   module_defense_tetryon_0_initial = {
+      icon = "spaceport_module_defense_tetryon_0_initial"
+      section = "CORE_SPACEPORT_SECTION"
+      prerequisites = { "tech_tetryon_cannon_1" }
+      initial = yes
+      initial_only = yes
+      replaceable = no
+      potential = { owner = { uses_tetryon_weapons = yes } }
+      component_set = "TETRYON_SPACEPORT_1"
+      ai_weight = { 
+         weight = 0
+      }
+   }
+   
+### Quantum Resonance Defense Module - pralor/cravik
+   module_defense_tetryon_0_quantum = {
+      icon = "spaceport_module_defense_tetryon_0_quantum"
+      section = "CORE_SPACEPORT_SECTION"
+      prerequisites = { "tech_physics_particles_747" }
+      initial = yes
+      initial_only = yes
+      replaceable = no
+      potential = { owner = { uses_quantum_resonance_weapons = yes } }
+      component_set = "TETRYON_QUANTUM_SPACEPORT_1"
+      ai_weight = { 
+         weight = 0
+      }
+   }
+   
+### Thermic Defense Module - vidiians
+   module_defense_tetryon_0_thermic = {
+      icon = "spaceport_module_defense_tetryon_0_thermic"
+      section = "CORE_SPACEPORT_SECTION"
+      prerequisites = { "tech_physics_particles_755" }
+      initial = yes
+      initial_only = yes
+      replaceable = no
+      potential = { owner = { uses_thermic_weapons  = yes } }
+      component_set = "TETRYON_HYPER_SPACEPORT_1"
+      ai_weight = { 
+         weight = 0
+      }
+   }
+   
+### Chroniton Defense Module - krenim
+   module_defense_tetryon_0_chroniton = {
+      icon = "spaceport_module_defense_tetryon_0_chroniton"
+      section = "CORE_SPACEPORT_SECTION"
+      prerequisites = { "tech_physics_particles_763" }
+      initial = yes
+      initial_only = yes
+      replaceable = no
+      potential = { owner = { uses_chroniton_weapons = yes } }
+      component_set = "TETRYON_CHRONITON_SPACEPORT_1"
+      ai_weight = { 
+         weight = 0
+      }
+   }
+   
+### Starbase Tetryon Array
+   module_defense_tetryon_1 = {
+      icon = "spaceport_module_defense_tetryon_1"
+      section = "BEAM_SPACEPORT_SECTION"
+      construction_days = 180
+      prerequisites = { "tech_physics_starbase_335" }
+      spaceport_level = 1
+      cost = { minerals = 200 }
+      component_set = "TETRYON_SPACEPORT_1"
+      required_resources = {
+         energy = 1
+      }
+      station_modifier = {
+         ship_weapon_damage = 0.10
+      }
+   }
+   
+### Tetryon Starbase Cannon
+   module_defense_tetryon_2 = {
+      icon = "spaceport_module_defense_tetryon_2"
+      section = "CANNON_SPACEPORT_SECTION"
+      construction_days = 180
+      prerequisites = { "tech_physics_starbase_336" }
+      spaceport_level = 4
+      cost = { minerals = 200 }
+      component_set = "TETRYON_SPACEPORT_2"
+      required_resources = {
+         energy = 1
+      }
+      station_modifier = {
+         ship_weapon_damage = 0.10
+      }
+   }
+   

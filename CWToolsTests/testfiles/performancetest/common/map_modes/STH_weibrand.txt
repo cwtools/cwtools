@@ -1,0 +1,140 @@
+#Scope layout:
+# this = the country who owns the borders we a re coloring
+# from = the country who we are coloring for, usually the player
+
+#example = {
+#	icon = "GFX_some_icon"		-- which icon to use in the main gui
+#	hardcoded_tooltip = opinion -- override tooltip generation with a hardcoded method. Currently supported: opinion
+#	can_change_point_of_view = yes	-- can the player click on other empires to see the map mode from their point of view?
+#	enable_terra_incognita = yes	-- should terra incognita be rendered when this map mode is active?
+#	
+#	color = {						-- the bread and butter of the map modes. A country will be colored with the first color block who's condition is met
+#		value = hsv { 1.0 0.0 0.0 1.0 }	-- you can also use hsv {...}
+#		custom_tooltip = "SOME_STRING"	-- Tooltip to be shown if this is the selected color. suports [This.GetName] etc
+#		condition = {
+#			...							-- simple AND trigger for evaluation. Will also generate a tooltip if neither hardcoded_tooltip or custom_tooltip is defined
+#		}
+#	}
+#}
+
+#FIX LATER
+# weibrand_logarithmic_map_mode = {
+	# icon = "GFX_map_mode_weibrand"
+	# enable_terra_incognita = yes
+	# can_change_point_of_view = no
+	# color = { 
+		# value = hsv { 0.167 0.55 1.0 1.0 } 
+		# condition = { OR = { is_country_type = primitive } } 
+		# custom_tooltip = "MAP_MODE_WEIBRAND_001" 
+	# }
+	# color = { 
+		# value = hsv { 1.0 0.55 1.0 1.0 } 
+		# condition = { OR = { check_variable = { which = techsResearched value > 1484 } is_country_type = fallen_empire is_country_type = awakened_empire } } 
+		# custom_tooltip = "MAP_MODE_WEIBRAND_100"
+	# }
+	# color = { value = hsv { 0.167 0.55 1.0 1.0 } condition = { NOT = { check_variable = { which = techsResearched value > 12 } } } custom_tooltip = "MAP_MODE_WEIBRAND_001" }
+	
+	# color = { value = hsv { 0.175 0.55 1.0 1.0 } condition = {  check_variable = { which = techsResearched value > 12 } check_variable = { which = techsResearched value < 26 } } custom_tooltip = "MAP_MODE_WEIBRAND_002" }
+	# color = { value = hsv { 0.184 0.55 1.0 1.0 } condition = {  check_variable = { which = techsResearched value > 25 } check_variable = { which = techsResearched value < 39 } } custom_tooltip = "MAP_MODE_WEIBRAND_003" }
+	# color = { value = hsv { 0.192 0.55 1.0 1.0 } condition = {  check_variable = { which = techsResearched value > 38 } check_variable = { which = techsResearched value < 52 } } custom_tooltip = "MAP_MODE_WEIBRAND_004" }
+	# color = { value = hsv { 0.2 0.55 1.0 1.0 } condition = {  check_variable = { which = techsResearched value > 51 } check_variable = { which = techsResearched value < 65 } } custom_tooltip = "MAP_MODE_WEIBRAND_005" }
+	# color = { value = hsv { 0.209 0.55 1.0 1.0 } condition = {  check_variable = { which = techsResearched value > 64 } check_variable = { which = techsResearched value < 78 } } custom_tooltip = "MAP_MODE_WEIBRAND_006" }
+	# color = { value = hsv { 0.217 0.55 1.0 1.0 } condition = {  check_variable = { which = techsResearched value > 77 } check_variable = { which = techsResearched value < 91 } } custom_tooltip = "MAP_MODE_WEIBRAND_007" }
+	# color = { value = hsv { 0.226 0.55 1.0 1.0 } condition = {  check_variable = { which = techsResearched value > 90 } check_variable = { which = techsResearched value < 104 } } custom_tooltip = "MAP_MODE_WEIBRAND_008" }
+	# color = { value = hsv { 0.234 0.55 1.0 1.0 } condition = {  check_variable = { which = techsResearched value > 103 } check_variable = { which = techsResearched value < 117 } } custom_tooltip = "MAP_MODE_WEIBRAND_009" }
+	# color = { value = hsv { 0.242 0.55 1.0 1.0 } condition = {  check_variable = { which = techsResearched value > 116 } check_variable = { which = techsResearched value < 130 } } custom_tooltip = "MAP_MODE_WEIBRAND_010" }
+	# color = { value = hsv { 0.251 0.55 1.0 1.0 } condition = {  check_variable = { which = techsResearched value > 129 } check_variable = { which = techsResearched value < 143 } } custom_tooltip = "MAP_MODE_WEIBRAND_011" }
+	# color = { value = hsv { 0.259 0.55 1.0 1.0 } condition = {  check_variable = { which = techsResearched value > 142 } check_variable = { which = techsResearched value < 156 } } custom_tooltip = "MAP_MODE_WEIBRAND_012" }
+	# color = { value = hsv { 0.268 0.55 1.0 1.0 } condition = {  check_variable = { which = techsResearched value > 155 } check_variable = { which = techsResearched value < 169 } } custom_tooltip = "MAP_MODE_WEIBRAND_013" }
+	# color = { value = hsv { 0.276 0.55 1.0 1.0 } condition = {  check_variable = { which = techsResearched value > 168 } check_variable = { which = techsResearched value < 182 } } custom_tooltip = "MAP_MODE_WEIBRAND_014" }
+	# color = { value = hsv { 0.285 0.55 1.0 1.0 } condition = {  check_variable = { which = techsResearched value > 181 } check_variable = { which = techsResearched value < 195 } } custom_tooltip = "MAP_MODE_WEIBRAND_015" }
+	# color = { value = hsv { 0.293 0.55 1.0 1.0 } condition = {  check_variable = { which = techsResearched value > 194 } check_variable = { which = techsResearched value < 208 } } custom_tooltip = "MAP_MODE_WEIBRAND_016" }
+	# color = { value = hsv { 0.301 0.55 1.0 1.0 } condition = {  check_variable = { which = techsResearched value > 207 } check_variable = { which = techsResearched value < 221 } } custom_tooltip = "MAP_MODE_WEIBRAND_017" }
+	# color = { value = hsv { 0.31 0.55 1.0 1.0 } condition = {  check_variable = { which = techsResearched value > 220 } check_variable = { which = techsResearched value < 234 } } custom_tooltip = "MAP_MODE_WEIBRAND_018" }
+	# color = { value = hsv { 0.318 0.55 1.0 1.0 } condition = {  check_variable = { which = techsResearched value > 233 } check_variable = { which = techsResearched value < 247 } } custom_tooltip = "MAP_MODE_WEIBRAND_019" }
+	# color = { value = hsv { 0.327 0.55 1.0 1.0 } condition = {  check_variable = { which = techsResearched value > 246 } check_variable = { which = techsResearched value < 260 } } custom_tooltip = "MAP_MODE_WEIBRAND_020" }
+	# color = { value = hsv { 0.335 0.55 1.0 1.0 } condition = {  check_variable = { which = techsResearched value > 259 } check_variable = { which = techsResearched value < 273 } } custom_tooltip = "MAP_MODE_WEIBRAND_021" }
+	# color = { value = hsv { 0.343 0.55 1.0 1.0 } condition = {  check_variable = { which = techsResearched value > 272 } check_variable = { which = techsResearched value < 286 } } custom_tooltip = "MAP_MODE_WEIBRAND_022" }
+	# color = { value = hsv { 0.352 0.55 1.0 1.0 } condition = {  check_variable = { which = techsResearched value > 285 } check_variable = { which = techsResearched value < 299 } } custom_tooltip = "MAP_MODE_WEIBRAND_023" }
+	# color = { value = hsv { 0.36 0.55 1.0 1.0 } condition = {  check_variable = { which = techsResearched value > 298 } check_variable = { which = techsResearched value < 312 } } custom_tooltip = "MAP_MODE_WEIBRAND_024" }
+	# color = { value = hsv { 0.369 0.55 1.0 1.0 } condition = {  check_variable = { which = techsResearched value > 311 } check_variable = { which = techsResearched value < 325 } } custom_tooltip = "MAP_MODE_WEIBRAND_025" }
+	# color = { value = hsv { 0.377 0.55 1.0 1.0 } condition = {  check_variable = { which = techsResearched value > 324 } check_variable = { which = techsResearched value < 338 } } custom_tooltip = "MAP_MODE_WEIBRAND_026" }
+	# color = { value = hsv { 0.386 0.55 1.0 1.0 } condition = {  check_variable = { which = techsResearched value > 337 } check_variable = { which = techsResearched value < 351 } } custom_tooltip = "MAP_MODE_WEIBRAND_027" }
+	# color = { value = hsv { 0.394 0.55 1.0 1.0 } condition = {  check_variable = { which = techsResearched value > 350 } check_variable = { which = techsResearched value < 364 } } custom_tooltip = "MAP_MODE_WEIBRAND_028" }
+	# color = { value = hsv { 0.402 0.55 1.0 1.0 } condition = {  check_variable = { which = techsResearched value > 363 } check_variable = { which = techsResearched value < 377 } } custom_tooltip = "MAP_MODE_WEIBRAND_029" }
+	# color = { value = hsv { 0.411 0.55 1.0 1.0 } condition = {  check_variable = { which = techsResearched value > 376 } check_variable = { which = techsResearched value < 390 } } custom_tooltip = "MAP_MODE_WEIBRAND_030" }
+	# color = { value = hsv { 0.419 0.55 1.0 1.0 } condition = {  check_variable = { which = techsResearched value > 389 } check_variable = { which = techsResearched value < 403 } } custom_tooltip = "MAP_MODE_WEIBRAND_031" }
+	# color = { value = hsv { 0.428 0.55 1.0 1.0 } condition = {  check_variable = { which = techsResearched value > 402 } check_variable = { which = techsResearched value < 416 } } custom_tooltip = "MAP_MODE_WEIBRAND_032" }
+	# color = { value = hsv { 0.436 0.55 1.0 1.0 } condition = {  check_variable = { which = techsResearched value > 415 } check_variable = { which = techsResearched value < 429 } } custom_tooltip = "MAP_MODE_WEIBRAND_033" }
+	# color = { value = hsv { 0.444 0.55 1.0 1.0 } condition = {  check_variable = { which = techsResearched value > 428 } check_variable = { which = techsResearched value < 442 } } custom_tooltip = "MAP_MODE_WEIBRAND_034" }
+	# color = { value = hsv { 0.453 0.55 1.0 1.0 } condition = {  check_variable = { which = techsResearched value > 441 } check_variable = { which = techsResearched value < 455 } } custom_tooltip = "MAP_MODE_WEIBRAND_035" }
+	# color = { value = hsv { 0.461 0.55 1.0 1.0 } condition = {  check_variable = { which = techsResearched value > 454 } check_variable = { which = techsResearched value < 468 } } custom_tooltip = "MAP_MODE_WEIBRAND_036" }
+	# color = { value = hsv { 0.47 0.55 1.0 1.0 } condition = {  check_variable = { which = techsResearched value > 467 } check_variable = { which = techsResearched value < 481 } } custom_tooltip = "MAP_MODE_WEIBRAND_037" }
+	# color = { value = hsv { 0.478 0.55 1.0 1.0 } condition = {  check_variable = { which = techsResearched value > 480 } check_variable = { which = techsResearched value < 494 } } custom_tooltip = "MAP_MODE_WEIBRAND_038" }
+	# color = { value = hsv { 0.487 0.55 1.0 1.0 } condition = {  check_variable = { which = techsResearched value > 493 } check_variable = { which = techsResearched value < 507 } } custom_tooltip = "MAP_MODE_WEIBRAND_039" }
+	# color = { value = hsv { 0.495 0.55 1.0 1.0 } condition = {  check_variable = { which = techsResearched value > 506 } check_variable = { which = techsResearched value < 520 } } custom_tooltip = "MAP_MODE_WEIBRAND_040" }
+	# color = { value = hsv { 0.503 0.55 1.0 1.0 } condition = {  check_variable = { which = techsResearched value > 519 } check_variable = { which = techsResearched value < 533 } } custom_tooltip = "MAP_MODE_WEIBRAND_041" }
+	# color = { value = hsv { 0.512 0.55 1.0 1.0 } condition = {  check_variable = { which = techsResearched value > 532 } check_variable = { which = techsResearched value < 546 } } custom_tooltip = "MAP_MODE_WEIBRAND_042" }
+	# color = { value = hsv { 0.52 0.55 1.0 1.0 } condition = {  check_variable = { which = techsResearched value > 545 } check_variable = { which = techsResearched value < 559 } } custom_tooltip = "MAP_MODE_WEIBRAND_043" }
+	# color = { value = hsv { 0.529 0.55 1.0 1.0 } condition = {  check_variable = { which = techsResearched value > 558 } check_variable = { which = techsResearched value < 572 } } custom_tooltip = "MAP_MODE_WEIBRAND_044" }
+	# color = { value = hsv { 0.537 0.55 1.0 1.0 } condition = {  check_variable = { which = techsResearched value > 571 } check_variable = { which = techsResearched value < 585 } } custom_tooltip = "MAP_MODE_WEIBRAND_045" }
+	# color = { value = hsv { 0.545 0.55 1.0 1.0 } condition = {  check_variable = { which = techsResearched value > 584 } check_variable = { which = techsResearched value < 598 } } custom_tooltip = "MAP_MODE_WEIBRAND_046" }
+	# color = { value = hsv { 0.554 0.55 1.0 1.0 } condition = {  check_variable = { which = techsResearched value > 597 } check_variable = { which = techsResearched value < 611 } } custom_tooltip = "MAP_MODE_WEIBRAND_047" }
+	# color = { value = hsv { 0.562 0.55 1.0 1.0 } condition = {  check_variable = { which = techsResearched value > 610 } check_variable = { which = techsResearched value < 624 } } custom_tooltip = "MAP_MODE_WEIBRAND_048" }
+	# color = { value = hsv { 0.571 0.55 1.0 1.0 } condition = {  check_variable = { which = techsResearched value > 623 } check_variable = { which = techsResearched value < 637 } } custom_tooltip = "MAP_MODE_WEIBRAND_049" }
+	# color = { value = hsv { 0.579 0.55 1.0 1.0 } condition = {  check_variable = { which = techsResearched value > 636 } check_variable = { which = techsResearched value < 650 } } custom_tooltip = "MAP_MODE_WEIBRAND_050" }
+	# color = { value = hsv { 0.588 0.55 1.0 1.0 } condition = {  check_variable = { which = techsResearched value > 649 } check_variable = { which = techsResearched value < 663 } } custom_tooltip = "MAP_MODE_WEIBRAND_051" }
+	# color = { value = hsv { 0.596 0.55 1.0 1.0 } condition = {  check_variable = { which = techsResearched value > 662 } check_variable = { which = techsResearched value < 676 } } custom_tooltip = "MAP_MODE_WEIBRAND_052" }
+	# color = { value = hsv { 0.604 0.55 1.0 1.0 } condition = {  check_variable = { which = techsResearched value > 675 } check_variable = { which = techsResearched value < 689 } } custom_tooltip = "MAP_MODE_WEIBRAND_053" }
+	# color = { value = hsv { 0.613 0.55 1.0 1.0 } condition = {  check_variable = { which = techsResearched value > 688 } check_variable = { which = techsResearched value < 702 } } custom_tooltip = "MAP_MODE_WEIBRAND_054" }
+	# color = { value = hsv { 0.621 0.55 1.0 1.0 } condition = {  check_variable = { which = techsResearched value > 701 } check_variable = { which = techsResearched value < 715 } } custom_tooltip = "MAP_MODE_WEIBRAND_055" }
+	# color = { value = hsv { 0.63 0.55 1.0 1.0 } condition = {  check_variable = { which = techsResearched value > 714 } check_variable = { which = techsResearched value < 728 } } custom_tooltip = "MAP_MODE_WEIBRAND_056" }
+	# color = { value = hsv { 0.638 0.55 1.0 1.0 } condition = {  check_variable = { which = techsResearched value > 727 } check_variable = { which = techsResearched value < 741 } } custom_tooltip = "MAP_MODE_WEIBRAND_057" }
+	# color = { value = hsv { 0.646 0.55 1.0 1.0 } condition = {  check_variable = { which = techsResearched value > 740 } check_variable = { which = techsResearched value < 754 } } custom_tooltip = "MAP_MODE_WEIBRAND_058" }
+	# color = { value = hsv { 0.655 0.55 1.0 1.0 } condition = {  check_variable = { which = techsResearched value > 753 } check_variable = { which = techsResearched value < 767 } } custom_tooltip = "MAP_MODE_WEIBRAND_059" }
+	# color = { value = hsv { 0.663 0.55 1.0 1.0 } condition = {  check_variable = { which = techsResearched value > 766 } check_variable = { which = techsResearched value < 780 } } custom_tooltip = "MAP_MODE_WEIBRAND_060" }
+	# color = { value = hsv { 0.672 0.55 1.0 1.0 } condition = {  check_variable = { which = techsResearched value > 779 } check_variable = { which = techsResearched value < 793 } } custom_tooltip = "MAP_MODE_WEIBRAND_061" }
+	# color = { value = hsv { 0.68 0.55 1.0 1.0 } condition = {  check_variable = { which = techsResearched value > 792 } check_variable = { which = techsResearched value < 806 } } custom_tooltip = "MAP_MODE_WEIBRAND_062" }
+	# color = { value = hsv { 0.689 0.55 1.0 1.0 } condition = {  check_variable = { which = techsResearched value > 805 } check_variable = { which = techsResearched value < 819 } } custom_tooltip = "MAP_MODE_WEIBRAND_063" }
+	# color = { value = hsv { 0.697 0.55 1.0 1.0 } condition = {  check_variable = { which = techsResearched value > 818 } check_variable = { which = techsResearched value < 832 } } custom_tooltip = "MAP_MODE_WEIBRAND_064" }
+	# color = { value = hsv { 0.705 0.55 1.0 1.0 } condition = {  check_variable = { which = techsResearched value > 831 } check_variable = { which = techsResearched value < 845 } } custom_tooltip = "MAP_MODE_WEIBRAND_065" }
+	# color = { value = hsv { 0.714 0.55 1.0 1.0 } condition = {  check_variable = { which = techsResearched value > 844 } check_variable = { which = techsResearched value < 858 } } custom_tooltip = "MAP_MODE_WEIBRAND_066" }
+	# color = { value = hsv { 0.722 0.55 1.0 1.0 } condition = {  check_variable = { which = techsResearched value > 857 } check_variable = { which = techsResearched value < 871 } } custom_tooltip = "MAP_MODE_WEIBRAND_067" }
+	# color = { value = hsv { 0.731 0.55 1.0 1.0 } condition = {  check_variable = { which = techsResearched value > 870 } check_variable = { which = techsResearched value < 884 } } custom_tooltip = "MAP_MODE_WEIBRAND_068" }
+	# color = { value = hsv { 0.739 0.55 1.0 1.0 } condition = {  check_variable = { which = techsResearched value > 883 } check_variable = { which = techsResearched value < 897 } } custom_tooltip = "MAP_MODE_WEIBRAND_069" }
+	# color = { value = hsv { 0.747 0.55 1.0 1.0 } condition = {  check_variable = { which = techsResearched value > 896 } check_variable = { which = techsResearched value < 910 } } custom_tooltip = "MAP_MODE_WEIBRAND_070" }
+	# color = { value = hsv { 0.756 0.55 1.0 1.0 } condition = {  check_variable = { which = techsResearched value > 909 } check_variable = { which = techsResearched value < 923 } } custom_tooltip = "MAP_MODE_WEIBRAND_071" }
+	# color = { value = hsv { 0.764 0.55 1.0 1.0 } condition = {  check_variable = { which = techsResearched value > 922 } check_variable = { which = techsResearched value < 936 } } custom_tooltip = "MAP_MODE_WEIBRAND_072" }
+	# color = { value = hsv { 0.773 0.55 1.0 1.0 } condition = {  check_variable = { which = techsResearched value > 935 } check_variable = { which = techsResearched value < 949 } } custom_tooltip = "MAP_MODE_WEIBRAND_073" }
+	# color = { value = hsv { 0.781 0.55 1.0 1.0 } condition = {  check_variable = { which = techsResearched value > 948 } check_variable = { which = techsResearched value < 962 } } custom_tooltip = "MAP_MODE_WEIBRAND_074" }
+	# color = { value = hsv { 0.79 0.55 1.0 1.0 } condition = {  check_variable = { which = techsResearched value > 961 } check_variable = { which = techsResearched value < 975 } } custom_tooltip = "MAP_MODE_WEIBRAND_075" }
+	# color = { value = hsv { 0.798 0.55 1.0 1.0 } condition = {  check_variable = { which = techsResearched value > 974 } check_variable = { which = techsResearched value < 988 } } custom_tooltip = "MAP_MODE_WEIBRAND_076" }
+	# color = { value = hsv { 0.806 0.55 1.0 1.0 } condition = {  check_variable = { which = techsResearched value > 987 } check_variable = { which = techsResearched value < 1001 } } custom_tooltip = "MAP_MODE_WEIBRAND_077" }
+	# color = { value = hsv { 0.815 0.55 1.0 1.0 } condition = {  check_variable = { which = techsResearched value > 1000 } check_variable = { which = techsResearched value < 1014 } } custom_tooltip = "MAP_MODE_WEIBRAND_078" }
+	# color = { value = hsv { 0.823 0.55 1.0 1.0 } condition = {  check_variable = { which = techsResearched value > 1013 } check_variable = { which = techsResearched value < 1027 } } custom_tooltip = "MAP_MODE_WEIBRAND_079" }
+	# color = { value = hsv { 0.832 0.55 1.0 1.0 } condition = {  check_variable = { which = techsResearched value > 1026 } check_variable = { which = techsResearched value < 1040 } } custom_tooltip = "MAP_MODE_WEIBRAND_080" }
+	# color = { value = hsv { 0.84 0.55 1.0 1.0 } condition = {  check_variable = { which = techsResearched value > 1039 } check_variable = { which = techsResearched value < 1053 } } custom_tooltip = "MAP_MODE_WEIBRAND_081" }
+	# color = { value = hsv { 0.848 0.55 1.0 1.0 } condition = {  check_variable = { which = techsResearched value > 1052 } check_variable = { which = techsResearched value < 1066 } } custom_tooltip = "MAP_MODE_WEIBRAND_082" }
+	# color = { value = hsv { 0.857 0.55 1.0 1.0 } condition = {  check_variable = { which = techsResearched value > 1065 } check_variable = { which = techsResearched value < 1079 } } custom_tooltip = "MAP_MODE_WEIBRAND_083" }
+	# color = { value = hsv { 0.865 0.55 1.0 1.0 } condition = {  check_variable = { which = techsResearched value > 1078 } check_variable = { which = techsResearched value < 1092 } } custom_tooltip = "MAP_MODE_WEIBRAND_084" }
+	# color = { value = hsv { 0.874 0.55 1.0 1.0 } condition = {  check_variable = { which = techsResearched value > 1091 } check_variable = { which = techsResearched value < 1105 } } custom_tooltip = "MAP_MODE_WEIBRAND_085" }
+	# color = { value = hsv { 0.882 0.55 1.0 1.0 } condition = {  check_variable = { which = techsResearched value > 1104 } check_variable = { which = techsResearched value < 1118 } } custom_tooltip = "MAP_MODE_WEIBRAND_086" }
+	# color = { value = hsv { 0.891 0.55 1.0 1.0 } condition = {  check_variable = { which = techsResearched value > 1117 } check_variable = { which = techsResearched value < 1131 } } custom_tooltip = "MAP_MODE_WEIBRAND_087" }
+	# color = { value = hsv { 0.899 0.55 1.0 1.0 } condition = {  check_variable = { which = techsResearched value > 1130 } check_variable = { which = techsResearched value < 1144 } } custom_tooltip = "MAP_MODE_WEIBRAND_088" }
+	# color = { value = hsv { 0.907 0.55 1.0 1.0 } condition = {  check_variable = { which = techsResearched value > 1143 } check_variable = { which = techsResearched value < 1157 } } custom_tooltip = "MAP_MODE_WEIBRAND_089" }
+	# color = { value = hsv { 0.916 0.55 1.0 1.0 } condition = {  check_variable = { which = techsResearched value > 1156 } check_variable = { which = techsResearched value < 1170 } } custom_tooltip = "MAP_MODE_WEIBRAND_090" }
+	# color = { value = hsv { 0.924 0.55 1.0 1.0 } condition = {  check_variable = { which = techsResearched value > 1169 } check_variable = { which = techsResearched value < 1183 } } custom_tooltip = "MAP_MODE_WEIBRAND_091" }
+	# color = { value = hsv { 0.933 0.55 1.0 1.0 } condition = {  check_variable = { which = techsResearched value > 1182 } check_variable = { which = techsResearched value < 1196 } } custom_tooltip = "MAP_MODE_WEIBRAND_092" }
+	# color = { value = hsv { 0.941 0.55 1.0 1.0 } condition = {  check_variable = { which = techsResearched value > 1195 } check_variable = { which = techsResearched value < 1209 } } custom_tooltip = "MAP_MODE_WEIBRAND_093" }
+	# color = { value = hsv { 0.949 0.55 1.0 1.0 } condition = {  check_variable = { which = techsResearched value > 1208 } check_variable = { which = techsResearched value < 1222 } } custom_tooltip = "MAP_MODE_WEIBRAND_094" }
+	# color = { value = hsv { 0.958 0.55 1.0 1.0 } condition = {  check_variable = { which = techsResearched value > 1221 } check_variable = { which = techsResearched value < 1235 } } custom_tooltip = "MAP_MODE_WEIBRAND_095" }
+	# color = { value = hsv { 0.966 0.55 1.0 1.0 } condition = {  check_variable = { which = techsResearched value > 1234 } check_variable = { which = techsResearched value < 1248 } } custom_tooltip = "MAP_MODE_WEIBRAND_096" }
+	# color = { value = hsv { 0.975 0.55 1.0 1.0 } condition = {  check_variable = { which = techsResearched value > 1247 } check_variable = { which = techsResearched value < 1261 } } custom_tooltip = "MAP_MODE_WEIBRAND_097" }
+	# color = { value = hsv { 0.983 0.55 1.0 1.0 } condition = {  check_variable = { which = techsResearched value > 1260 } check_variable = { which = techsResearched value < 1274 } } custom_tooltip = "MAP_MODE_WEIBRAND_098" }
+	# color = { value = hsv { 0.992 0.55 1.0 1.0 } condition = {  check_variable = { which = techsResearched value > 1273 } check_variable = { which = techsResearched value < 1287 } } custom_tooltip = "MAP_MODE_WEIBRAND_099" }
+
+
+	
+	
+	
+# }

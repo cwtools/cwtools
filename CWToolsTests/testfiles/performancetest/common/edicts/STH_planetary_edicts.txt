@@ -1,0 +1,412 @@
+##########################################################################
+# Planet edicts
+##########################################################################
+
+### Re-Education Campgain
+   planet_edict = {
+      name = "reeducation_campaign_edict"
+      influence_cost = 150
+      modifier = {
+         pop_government_ethic_attraction = 0.2
+      }
+      length = 3600
+      prerequisites = { "tech_society_statecraft_991" }
+      allow = { }
+      ai_weight = {
+         weight = 1
+         modifier = {
+            factor = 0
+            num_pops < 10
+         }
+      }
+   }
+   
+### First Contact Day
+   planet_edict = {
+      name = "local_festival_1_edict"
+      influence_cost = 125
+      modifier = {
+         pop_happiness = 0.10
+      }
+      length = 3600
+      potential = {
+         owner = {
+            is_species_class = FED
+         }
+      }
+      allow = { }
+      ai_weight = {
+         weight = 1
+      }
+   }
+   
+### Kot'baval Festival
+   planet_edict = {
+      name = "local_festival_2_edict"
+      influence_cost = 125
+      modifier = {
+         pop_happiness = 0.10
+      }
+      length = 3600
+      potential = {
+         owner = {
+            is_species_class = KDF
+         }
+      }
+      allow = { }
+      ai_weight = {
+         weight = 1
+      }
+   }
+   
+### Kal Rekk Observation
+   planet_edict = {
+      name = "local_festival_3_edict"
+      influence_cost = 125
+      modifier = {
+         pop_happiness = 0.10
+      }
+      length = 3600
+      potential = {
+         owner = {
+            is_species_class = VUL
+         }
+      }
+      allow = { }
+      ai_weight = {
+         weight = 1
+      }
+   }
+   
+### Peldor Gratitude Festival
+   planet_edict = {
+      name = "local_festival_4_edict"
+      influence_cost = 125
+      modifier = {
+         pop_happiness = 0.10
+      }
+      length = 3600
+      potential = {
+         owner = {
+            is_species_class = BAJ
+         }
+      }
+      allow = { }
+      ai_weight = {
+         weight = 1
+      }
+   }
+   
+### Prixin Celebration
+   planet_edict = {
+      name = "local_festival_5_edict"
+      influence_cost = 125
+      modifier = {
+         pop_happiness = 0.10
+      }
+      length = 3600
+      potential = {
+         owner = {
+            is_species_class = TAL
+         }
+      }
+      allow = { }
+      ai_weight = {
+         weight = 1
+      }
+   }
+   
+### Eitreih'hveinn Farmer Festival
+   planet_edict = {
+      name = "local_festival_6_edict"
+      influence_cost = 125
+      modifier = {
+         pop_happiness = 0.10
+      }
+      length = 3600
+      potential = {
+         owner = {
+            is_species_class = ROM
+         }
+      }
+      allow = { }
+      ai_weight = {
+         weight = 1
+      }
+   }
+   
+### Local Festival
+   planet_edict = {
+      name = "local_festival_edict"
+      influence_cost = 150
+      modifier = {
+         pop_happiness = 0.10
+      }
+      length = 3600
+      potential = {
+         owner = {
+            has_unique_festival = no
+         }
+      }
+      allow = { }
+      ai_weight = {
+         weight = 1
+      }
+   }
+   
+### Farming Subsidies
+   planet_edict = {
+      name = "farming_subsidies_edict"
+      influence_cost = 150
+      modifier = {
+         tile_resource_food_mult = 0.25
+      }
+      length = 3600
+      prerequisites = { "tech_society_planetary_367" }
+      allow = { }
+      ai_weight = {
+         weight = 1
+         modifier = {
+            factor = 0
+            num_pops < 10
+         }
+      }
+   }
+   
+### Land of Opportunity
+   planet_edict = {
+      name = "land_of_opportunity_edict"
+      influence_cost = 150
+      modifier = {
+         planet_migration_all_pull = 1
+      }
+      length = 3600
+      prerequisites = { "tech_society_statecraft_991" }
+      allow = { }
+      ai_weight = {
+         weight = 1
+         modifier = {
+            factor = 0
+            num_pops < 10
+         }
+      }
+   }
+   
+### Capacity Overload
+   planet_edict = {
+      name = "capacity_overload_edict"
+      influence_cost = 150
+      modifier = {
+         tile_resource_energy_mult = 0.15
+      }
+      length = 3600
+      prerequisites = { "tech_society_planetary_367" }
+      allow = { }
+      ai_weight = {
+         weight = 1
+         modifier = {
+            factor = 0
+            num_pops < 10
+         }
+      }
+   }
+   
+### Production Targets
+   planet_edict = {
+      name = "production_targets_edict"
+      influence_cost = 150
+      modifier = {
+         tile_resource_minerals_mult = 0.15
+      }
+      length = 3600
+      prerequisites = { "tech_society_planetary_367" }
+      allow = { }
+      ai_weight = {
+         weight = 1
+         modifier = {
+            factor = 0
+            num_pops < 10
+         }
+      }
+   }
+   
+### Infrastructure Projects
+   planet_edict = {
+      name = "infrastructure_projects_edict"
+      influence_cost = 150
+      modifier = {
+         planet_building_cost_mult = -0.25
+         planet_building_build_speed_mult = 0.33
+      }
+      length = 3600
+      prerequisites = { "tech_society_statecraft_991" }
+      allow = { }
+      ai_weight = {
+         weight = 1
+      modifier = {
+         factor = 0
+            NOT = {
+               any_tile = {
+                  has_blocker = no
+                  has_building = no
+               }
+            }
+         }
+      }
+   }
+   
+### Arms Race
+   planet_edict = {
+      name = "arms_race_edict"
+      influence_cost = 150
+      modifier = {
+         spaceport_module_cost_mult = -0.25
+         spaceport_ship_build_speed_mult = 0.33
+         planet_army_build_speed_mult = 0.33
+      }
+      length = 3600
+      potential = {
+         owner = {
+            OR = { has_non_swapped_tradition = tr_supremacy_right_of_conquest  has_swapped_tradition = tr_victory_2  }
+         }
+      }
+      allow = { }
+      ai_weight = {
+         weight = 1
+         modifier = {
+            factor = 0
+            has_spaceport = no
+         }
+      }
+   }
+   
+### Tourism Bureau
+   planet_edict = {
+      name = "legal_aliens_edict"
+      influence_cost = 150
+      modifier = {
+         planet_migration_xeno_pull = 1
+      }
+      length = 3600
+      potential = {
+         owner = {
+            OR = { has_non_swapped_tradition = tr_diplomacy_dynamic_ecomorphism  has_swapped_tradition = tr_greed_1  }
+         }
+      }
+      allow = { }
+      ai_weight = {
+         weight = 0
+      }
+   }
+   
+### Consencrated World
+   planet_edict = {
+      name = "consecrated_worlds_edict"
+      influence_cost = 300
+      modifier = {
+         pop_happiness = 0.05
+         pop_growth_speed = 0.10
+         tile_resource_unity_mult = 0.1
+      }
+      length = 3600
+      potential = {
+         owner = {
+            OR = {  has_swapped_tradition = tr_doctrine_4  has_swapped_tradition = tr_prophecy_3  }
+         }
+      }
+      allow = { }
+      ai_weight = {
+         weight = 1
+         modifier = {
+            factor = 0
+            num_pops < 10
+         }
+      }
+   }
+   
+### Spirit of Science
+   planet_edict = {
+      name = "spirit_science_edict"
+      influence_cost = 150
+      modifier = {
+         tile_resource_physics_research_mult = 0.20
+         tile_resource_society_research_mult = 0.20
+         tile_resource_engineering_research_mult = 0.20
+      }
+      length = 3600
+      potential = {
+         owner = {
+             has_swapped_tradition = tr_diversity_4 
+         }
+      }
+      allow = { }
+      ai_weight = {
+         weight = 1
+         modifier = {
+            factor = 0
+            num_pops < 10
+         }
+      }
+   }
+   
+### Extensive Sensor Searches
+   planet_edict = {
+      name = "sensor_search_edict"
+      influence_cost = 150
+      modifier = {
+         planet_sensor_range_mult = 1
+      }
+      length = 3600
+      allow = { }
+      ai_weight = {
+         weight = 1
+         modifier = {
+            factor = 0
+            num_pops < 10
+         }
+      }
+   }
+   
+### Art Exhibit
+   planet_edict = {
+      name = "art_exhibit_edict"
+      influence_cost = 150
+      modifier = {
+         tile_resource_unity_mult = 0.2
+      }
+      length = 3600
+      prerequisites = { "tech_society_statecraft_993" }
+      allow = { }
+      ai_weight = {
+         weight = 1
+         modifier = {
+            factor = 0
+            num_pops < 10
+         }
+      }
+   }
+   
+### Propaganda Broadcast
+   planet_edict = {
+      name = "crush_rebellion_edict"
+      influence_cost = 150
+      modifier = {
+         country_unrest_unhappy_slave_effect_mult = -0.25
+         planet_unrest_add = -10
+      }
+      length = 3600
+      potential = {
+         owner = {
+            OR = { has_non_swapped_tradition = tr_domination_protection_racket  has_swapped_tradition = tr_cunning_3  }
+         }
+      }
+      allow = { }
+      ai_weight = {
+         weight = 1
+         modifier = {
+            factor = 0
+            num_pops < 10
+         }
+      }
+   }
+   

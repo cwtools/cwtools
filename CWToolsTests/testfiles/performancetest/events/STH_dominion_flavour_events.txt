@@ -1,0 +1,3857 @@
+############################
+#
+# Dominion Flavour Events
+#
+# Written by Walshicus and Shaggo
+#
+############################
+
+namespace = STH_dominion_flavour
+
+event = {
+	id = STH_dominion_flavour.0
+	hide_window = yes
+	is_triggered_only = yes
+	trigger = { any_country = { is_species_class = DOM } }
+	immediate = {
+		random_country = {
+			limit = { is_species_class = DOM } #CHANGE TO CIVIC CHECK
+			country_event = { id = STH_dominion_flavour.100 days = 1 random = 359 }
+			every_owned_planet = {
+				limit = { is_planet_class = pc_asteroid_prison }
+				random_list = {
+					19 = {}
+					1 = { planet_event = { id = STH_dominion_flavour.200 days = 180 random = 60 } }
+				}
+			}
+		}
+	}
+}
+
+### Piracy Start
+country_event = {
+	id = STH_dominion_flavour.1
+	title = "STH_dominion_flavour.1.name"
+	picture = sth_GFX_evt_jemHadarFighter1
+	show_sound = event_space_battle
+	desc = { # Generic
+		text = STH_dominion_flavour.1.desc_01
+	}
+	trigger = {
+		NOT = { has_global_flag = rogue_jem_hadar_destroyed }
+		has_country_flag = the_dominion
+		NOT = { has_country_flag = spawned_rogue_jem_hadar }
+		exists = capital_scope
+		exists = event_target:jemHadarSpecies
+		capital_scope = {
+			solar_system = {
+				ROOT = {
+					any_controlled_planet = {
+						OR = { has_mining_station = yes has_research_station = yes }
+						solar_system = { NOT = { is_same_value = PREVPREVPREV } }
+					}
+				}
+			}
+		}
+	}
+	is_triggered_only = yes
+	immediate = {
+		set_country_flag = spawned_rogue_jem_hadar
+		set_country_flag = pirate_encountered
+		every_country = {
+			limit = { is_country_type = pirate has_country_flag = rogue_jem_hadar }
+			establish_communications_no_message = root
+		}
+		capital_scope = { save_event_target_as = capital }
+		capital_scope = { solar_system = { save_event_target_as = capital_system } }
+		save_event_target_as = pirate_target
+		# If Warp or Hyper Drive
+		random_system = {
+			limit = {
+				distance = { source = event_target:capital max_distance = 60 min_distance = 5 }
+				any_planet = { is_asteroid = yes }
+				NOT = { has_star_flag = hostile_system }
+				OR = { has_owner = no is_owned_by = ROOT }
+			}
+			random_system_planet = {
+				limit = { is_asteroid = yes }
+				save_event_target_as = pirate_home
+				create_country = {
+					name = "Rogue Jem'Hadar"
+					type = pirate
+					species = event_target:jemHadarSpecies
+					name_list = "JemHadar"
+					flag = {
+						icon = { category = "trek" file = "jemHadar.dds" }
+						background = { category = "backgrounds" file = "horizontal.dds" }
+						colors = { "customcolor1736" "customcolor1842" "null" "null" }
+					}
+				}
+				last_created_country = {
+					set_graphical_culture = dominion_01
+					set_relation_flag = { who = ROOT flag = rogue_jem_hadar_relation }
+					set_country_flag = rogue_jem_hadar
+					establish_communications_no_message = ROOT	
+					# copy_techs_from = { target = ROOT except = { } }
+					create_fleet = {
+						name = "NAME_Rogue_Jem_Hadar_Station"
+						effect = {
+							set_owner = PREV
+							create_ship = { name = random design = "NAME_Rogue_Jem_Hadar_Station" graphical_culture = "dominion_01" }
+							set_location = PREVPREV
+						}
+					}
+					create_leader = { type = admiral species = owner_main_species name = random skill = 500 }
+					create_fleet = {
+						name = "NAME_Rogue_Jem_Hadar_Fleet"
+						effect = {
+							set_owner = PREV
+							create_ship_design = { design = "NAME_Rogue_Jem_Hadar_Ship" ftl = ROOT }
+							while = {
+								count = 5
+								create_ship = { name = random design = last_created_design graphical_culture = "dominion_01" }
+							}
+							assign_leader = last_created_leader
+							set_location = PREVPREV
+							set_fleet_stance = aggressive
+							set_aggro_range_measure_from = self
+							set_aggro_range = 150	
+							queue_actions = {
+								repeat = {
+									find_random_system = {
+										trigger = {
+											id = "STH_dominion_flavour1.trigger.1"
+											NOT = { has_star_flag = hostile_system is_same_value = event_target:capital_system }
+											any_planet = {
+												OR = { has_mining_station = yes has_research_station = yes }
+												exists = controller
+												controller = { is_same_value = event_target:pirate_target }
+											}
+											distance = { source = PREV max_distance = 100 min_distance = 20 }
+										}
+										found_system = { move_to = THIS }	
+									}
+									find_closest_planet = {
+										trigger = {
+											id = "STH_dominion_flavour1.trigger.2"
+											OR = { has_mining_station = yes has_research_station = yes }
+										}
+										found_planet = { orbit_planet = THIS wait = { duration = 20 } }
+									}
+									find_random_system = {
+										trigger = {
+											id = "STH_dominion_flavour1.trigger.3"
+											any_planet = { is_planet = event_target:pirate_home }
+										}
+										found_system = { move_to = THIS }	
+									}
+									find_closest_planet = {
+										trigger = {
+											id = "STH_dominion_flavour1.trigger.4"
+											is_planet = event_target:pirate_home
+										}
+										found_planet = { orbit_planet = THIS wait = { duration = 200 random = 150 } }
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+	option = { name = STH_dominion_flavour.1.a }
+}
+
+
+
+# New Ships (HIDDEN)
+country_event = {
+	id = STH_dominion_flavour.2
+	hide_window = yes
+	
+	trigger = {
+		NOT = { has_global_flag = privateers_destroyed }
+		is_country_type = pirate
+		has_country_flag = rogue_jem_hadar
+		OR = { num_fleets < 2 num_ships < 3 }
+		any_owned_ship = { is_ship_size = pirate_station }
+		exists = event_target:jemHadarSpecies
+	}
+	mean_time_to_happen = { months = 100 }
+	immediate = {
+		random_country = {
+			limit = { reverse_has_relation_flag = { flag = rogue_jem_hadar_relation who = ROOT } }
+			save_event_target_as = pirate_target
+			capital_scope = { solar_system = { save_event_target_as = capital_system } }
+		}
+		create_leader = { type = admiral species = event_target:jemHadarSpecies name = random skill = 100 }
+		random_owned_ship = {
+			limit = { is_ship_size = pirate_station }
+			save_event_target_as = pirate_home
+			if = {
+				limit = { exists = event_target:pirate_target }
+				create_fleet = { name = "NAME_Rogue_Jem_Hadar_Fleet"
+					effect = {
+						set_owner = ROOT
+						create_ship_design = { design = "NAME_Rogue_Jem_Hadar_Ship" ftl = event_target:pirate_target }
+						while = {
+							count = 5
+							create_ship = { name = random design = last_created_design graphical_culture = "dominion_01" }
+						}
+						assign_leader = last_created_leader
+						set_location = event_target:pirate_home
+						set_fleet_stance = aggressive
+						set_aggro_range_measure_from = self
+						set_aggro_range = 150
+						queue_actions = {
+							repeat = {
+								find_random_system = {
+									trigger = {
+										id = "STH_dominion_flavour.2.trigger.1"
+										NOT = { has_star_flag = hostile_system is_same_value = event_target:capital_system }
+										any_planet = {
+											OR = { has_mining_station = yes has_research_station = yes }
+											exists = controller
+											controller = { is_same_value = event_target:pirate_target }
+										}
+										distance = { source = PREV max_distance = 100 min_distance = 20 }
+									}
+									found_system = { move_to = THIS }	
+								}
+								find_closest_planet = {
+									trigger = {
+										id = "STH_dominion_flavour.2.trigger.2"
+										OR = { has_mining_station = yes has_research_station = yes }
+									}
+									found_planet = {
+										orbit_planet = THIS
+										wait = { duration = 20 }
+									}
+								}
+								find_random_system = {
+									trigger = {
+										id = "STH_dominion_flavour.2.trigger.3"
+										any_planet = { is_planet = event_target:pirate_home }
+									}
+									found_system = { move_to = THIS }	
+								}
+								find_closest_planet = {
+									trigger = {
+										id = "STH_dominion_flavour.2.trigger.4"
+										is_planet = event_target:pirate_home
+									}
+									found_planet = {
+										orbit_planet = THIS
+										wait = { duration = 200 random = 150 }
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+# Destroyed Pirate Station
+country_event = {
+	id = STH_dominion_flavour.3
+	title = STH_dominion_flavour.3.name
+	picture = sth_GFX_evt_jemHadarFighter2
+	desc = STH_dominion_flavour.3.desc
+	show_sound = event_space_battle
+	is_triggered_only = yes
+	trigger = {
+		has_country_flag = the_dominion
+		from = {
+			is_country_type = pirate
+			has_communications = root
+			has_country_flag = rogue_jem_hadar
+		}
+		fromfromfrom = { is_ship_size = pirate_station }
+	}
+	immediate = {
+		# if = {
+			# limit = { has_country_flag = the_dominion }
+			# log = "is Dominion"
+			# else = { log = "isn't Dominion" }
+		# }
+		# if = {
+			# limit = { from = { is_country_type = pirate } }
+			# log = "destroyed Pirate"
+			# else = { log = "didn't destroy Pirate" }
+		# }
+		# if = {
+			# limit = { from = { has_communications = root } }
+			# log = "has comms with Root"
+			# else = { log = "no comms with Root" }
+		# }
+		# if = {
+			# limit = { fromfromfrom = { any_owned_ship = { is_ship_size = pirate_station } } } 
+			# log = "destroyed pirate"
+			# else = { log = "didn't destroy pirate" }
+		# }
+		
+		random_list = {
+			15 = { set_country_flag = big_loot }
+			35 = { set_country_flag = medium_loot }
+			50 = { set_country_flag = small_loot }
+		}
+	}
+	option = {
+		name = UNDERSTOOD
+		trigger = { has_country_flag = big_loot }
+		add_minerals = 300
+		add_energy = 150
+		add_unity = 150
+		hidden_effect = { remove_country_flag = big_loot }
+	}
+	option = {
+		name = UNDERSTOOD
+		trigger = { has_country_flag = medium_loot }
+		add_minerals = 180
+		add_energy = 100
+		add_unity = 100
+		hidden_effect = { remove_country_flag = medium_loot }
+	}
+	option = {
+		name = UNDERSTOOD
+		trigger = { has_country_flag = small_loot }
+		add_minerals = 80
+		add_energy = 50
+		add_unity = 50
+		hidden_effect = { remove_country_flag = small_loot }
+	}
+	option = {
+		name = UNDERSTOOD
+		trigger = {
+			NOR = {
+				has_country_flag = big_loot
+				has_country_flag = medium_loot
+				has_country_flag = small_loot
+			}
+		}
+		add_minerals = 200
+		add_energy = 200
+		add_unity = 200
+	}
+}
+###PIRACY END
+
+#Dominion Name Setting etc.
+country_event = {
+	id = STH_dominion_flavour.4
+	hide_window = yes
+	is_triggered_only = yes
+	trigger = { FROM = { species = { OR = { is_species_class = DOM is_species_class = JEM is_species_class = VOR } } } }
+	immediate = {
+		if = {
+			limit = { FROM = { species = { is_species_class = DOM } } exists = event_target:vortaSpecies }
+			random_list = {
+				75 = { FROM = { change_species = event_target:vortaSpecies remove_trait = leader_trait_shapeshifter } }
+				25 = { }
+			}
+		}
+		if = {
+			limit = {  FROM = { species = { is_species_class = DOM } } }
+			FROM = { set_name = "Founder" }
+		}
+		if = {
+			limit = { FROM = { species = { is_species_class = JEM } }  }
+			if = {
+				limit = { FROM = { OR = { leader_class = governor leader_class = scientist } } }
+				if = {
+					limit = { any_owned_pop_species = { is_species_class = VOR } exists = event_target:vortaSpecies }
+					FROM = { change_species = event_target:vortaSpecies }
+					else = {
+						if = {
+							limit = { exists = event_target:founderSpecies }
+							FROM = { change_species = event_target:founderSpecies set_name = "Founder" }
+						}
+					}
+				}
+				else = {
+					FROM = { set_jem_hadar_name = yes set_is_female = no set_age = 1 }
+				}
+			}
+			
+		}
+		if = {
+			limit = { FROM = { OR = { leader_class = admiral leader_class = general } species = { is_species_class = VOR } } }
+			if = {
+				limit = { any_owned_pop_species = { is_species_class = JEM } exists = event_target:jemHadarSpecies }
+				random_list = {
+					60 = {
+						FROM = { 
+							change_species = event_target:jemHadarSpecies
+							set_jem_hadar_name = yes 
+							set_is_female = no
+							set_age = 1
+						}
+					}
+					40 = { }
+				}
+			}
+		}
+	}
+}
+
+#Fix Silly No-Existing-Pop thing
+pop_event = {
+	id = STH_dominion_flavour.5
+	hide_window = yes
+	is_triggered_only = yes
+	trigger = {
+		planet = { 
+			count_pops = { 
+				limit = { 
+					is_same_species = root
+				} 
+				count < 2 
+			} 
+		}
+	}
+	immediate = { 
+		species = { save_event_target_as = popSpecies }
+		tile = {
+			kill_pop = yes
+			create_pop = { species = event_target:popSpecies }
+		}
+	}
+}
+
+# pop_event = {
+	# id = STH_dominion_flavour.6
+	# hide_window = yes
+	# is_triggered_only = yes
+	# trigger = {
+		# OR = { is_species_class = JEM is_species_class = VOR }
+	# }
+	# immediate = { 
+		# switch = {
+			# trigger = is_species_class
+			# JEM = { log = "Jem'Hadar Built by [Root.Owner" }
+			# VOR = { log = "Vorta Built by [Root.Owner]"  }
+		# }
+	# }
+# }
+
+#Vorta/Jem Hadar Recreation
+country_event = {
+	id = STH_dominion_flavour.100
+	title = STH_dominion_flavour.100.name
+	picture = sth_GFX_evt_empireDominion
+	desc = {
+		trigger = { NOR = { any_owned_pop_species = { is_species_class = VOR } } any_owned_pop_species = { is_species_class = JEM } }
+		text = STH_dominion_flavour.100.desc_01
+	}
+	desc = {
+		trigger = { NOR = { any_owned_pop_species = { is_species_class = JEM } } any_owned_pop_species = { is_species_class = VOR } }
+		text = STH_dominion_flavour.100.desc_02
+	}
+	desc = {
+		trigger = { NOR = { any_owned_pop_species = { is_species_class = JEM } } NOR = { any_owned_pop_species = { is_species_class = VOR } } }
+		text = STH_dominion_flavour.100.desc_03
+	}
+	is_triggered_only = yes
+	trigger = { 
+		is_species_class = DOM
+		OR = {
+			NOR = { 
+				any_owned_pop_species = { is_species_class = VOR } 
+				has_special_project = "RECREATE_VORTA_PROJECT_1" 
+			}
+			NOR = { 
+				any_owned_pop_species = { is_species_class = JEM }
+				has_special_project = "RECREATE_JEMHADAR_PROJECT_1"
+			}
+		}
+		any_owned_planet = { free_pop_tiles > 1 }
+		NOT = { has_country_flag = rejectRecreateProject }
+	}
+	immediate = {
+		random_owned_planet = { 
+			limit = { free_pop_tiles > 1 }
+			save_event_target_as = projectPlanet
+		}
+	}
+	option = {
+		name =  STH_dominion_flavour.100.a
+		trigger = { 
+			NOR = { 
+				any_owned_pop_species = { is_species_class = VOR } 
+				has_special_project = "RECREATE_VORTA_PROJECT_1" 
+			}
+		}
+		allow = { 
+			NOR = { 
+				any_owned_pop_species = { is_species_class = VOR } 
+				has_special_project = "RECREATE_VORTA_PROJECT_1" 
+			}
+		}
+		enable_special_project = { name = RECREATE_VORTA_PROJECT_1 owner = root location = event_target:projectPlanet }
+	}
+	option = {
+		name = STH_dominion_flavour.100.b
+		trigger = { 
+			NOR = { 
+				any_owned_pop_species = { is_species_class = JEM }
+				has_special_project = "RECREATE_JEMHADAR_PROJECT_1"
+			}
+		}
+		allow = {
+			NOR = { 
+				any_owned_pop_species = { is_species_class = JEM }
+				has_special_project = "RECREATE_JEMHADAR_PROJECT_1"
+			} 
+		}
+		enable_special_project = { name = RECREATE_JEMHADAR_PROJECT_1 owner = root location = event_target:projectPlanet }
+	}
+	option = {
+		name = STH_dominion_flavour.100.c
+		set_timed_country_flag = { flag = rejectRecreateProject days = 1800 }
+	}
+}
+
+
+#Prison Planet Events
+planet_event = {
+	id = STH_dominion_flavour.200
+	title = STH_dominion_flavour.200.name
+	picture = sth_GFX_evt_dominionPrison
+	desc = {
+		text = STH_dominion_flavour.200.desc_01
+	}
+	is_triggered_only = yes
+	trigger = { 
+		NOT = { has_planet_flag = recentPrisonerDeath }
+		exists = owner
+		owner = { is_species_class = DOM }
+		any_pop = { NOR = { is_species_class = DOM is_species_class = VOR is_species_class = JEM } }
+	}
+	immediate = {
+		random_pop = { 
+			limit = { NOR = { is_species_class = DOM is_species_class = VOR is_species_class = JEM } }
+			species = { save_event_target_as = prisonerSpecies }
+			save_event_target_as = prisonerPop
+		}
+		set_timed_planet_flag = { flag = recentPrisonerDeath years = 2 }
+		owner = {
+			random_owned_pop = { 
+				limit = {
+					is_same_species = event_target:prisonerSpecies
+					exists = planet
+					planet = { NOT = { is_same_value = root } }
+				}
+				save_event_target_as = newPrisonerPop
+			}
+		}
+	}
+	option = {
+		name =  STH_dominion_flavour.200.a
+		allow = { 
+			custom_tooltip = {
+				fail_text = STH_dominion_flavour.200.a.fail
+				exists = event_target:newPrisonerPop 
+			}
+			owner = { influence > 9 }
+		}
+		event_target:prisonerPop = { kill_pop = yes }
+		resettle_pop = { pop = event_target:newPrisonerPop planet = root }
+		owner = { 
+			add_monthly_resource_mult = { resource = society_research value = 3 } 
+			add_influence = -10
+		}
+	}
+	option = {
+		name =  STH_dominion_flavour.200.b
+		event_target:prisonerPop = { kill_pop = yes }
+		owner = { add_monthly_resource_mult = { resource = society_research value = 3 } }
+	}
+}
+#Prison First Founded
+planet_event = {
+	id = STH_dominion_flavour.201
+	title = STH_dominion_flavour.201.name
+	picture = sth_GFX_evt_dominionPrison
+	desc = {
+		text = STH_dominion_flavour.201.desc_01
+	}
+	is_triggered_only = yes
+	trigger = { }
+	immediate = { }
+	option = { name =  STH_dominion_flavour.201.a }
+}
+
+
+#Honoured Elder Bits
+country_event = {
+    id = STH_dominion_flavour.302
+    title = STH_dominion_flavour.302.name
+    desc = STH_dominion_flavour.302.desc
+    picture = sth_GFX_evt_empireDominion
+    trigger = { 
+		is_changeling_empire = yes
+		any_owned_pop_species = { is_species_class = JEM }
+	}
+	mean_time_to_happen = {
+		years = 25
+		modifier = { factor = 3.0 any_owned_leader = { leader_class = general } }
+	}
+	immediate = {
+		create_leader = {
+			type = general
+			species = event_target:jemHadarSpecies
+			traits = { trait = leader_trait_honoured_elder_army trait = leader_trait_attacker }
+			set_age = 20
+			skill = 1000
+		}
+		last_created_leader = { 
+			set_jem_hadar_name = yes
+			set_is_female = no
+			save_event_target_as = jemHadarElder
+		}
+	}
+    option = { name = STH_dominion_flavour.302.a }
+	option = { 
+		name = STH_dominion_flavour.302.b 
+		add_influence = 25
+		hidden_effect = { event_target:jemHadarElder = { kill_leader = { show_notification = no } } }
+	}
+}
+	
+country_event = {
+    id = STH_dominion_flavour.303
+    title = STH_dominion_flavour.303.name
+    desc = STH_dominion_flavour.303.desc
+    picture = sth_GFX_evt_empireDominion
+    location = ROOT
+    trigger = { 
+		is_changeling_empire = yes
+		any_owned_pop_species = { is_species_class = JEM }
+	}
+	mean_time_to_happen = {
+		years = 25
+		modifier = { factor = 3.0 any_owned_leader = { leader_class = admiral } }
+	}
+	immediate = {
+		create_leader = {
+			type = admiral
+			species = event_target:jemHadarSpecies
+			traits = { trait = leader_trait_honoured_elder_fleet trait = leader_trait_attacker }
+			set_age = 20
+			skill = 1000
+		}
+		last_created_leader = { 
+			set_jem_hadar_name = yes 
+			set_is_female = no
+			save_event_target_as = jemHadarElder
+		}
+	}
+    option = { name = STH_dominion_flavour.303.a }
+	option = { 
+		name = STH_dominion_flavour.303.b 
+		add_influence = 25
+		hidden_effect = { event_target:jemHadarElder = { kill_leader = { show_notification = no } } }
+	}
+}
+
+
+#Yearly Stuff
+event = {
+	id = STH_dominion_flavour.1000
+	hide_window = yes
+	is_triggered_only = yes
+	immediate = {
+		every_country = {
+			limit = { 
+				is_changeling_empire = yes
+				is_country_type = default
+				NOT = { has_country_flag = changeling_infiltration_effect }
+			}
+			country_event = { id = STH_dominion_flavour.1001 days = 60 }
+		}
+		every_country = {
+			limit = { any_owned_leader = { has_leader_flag = "changeling_infiltrator" } }
+			save_event_target_as = changelingInfiltratedCountry
+			every_owned_leader = {
+				limit = { has_leader_flag = "changeling_infiltrator" }
+				save_event_target_as = changelingInfiltrator
+				random_country = {
+					limit = { event_target:changelingInfiltrator = { has_leader_flag = "changeling_infiltrator_for:@Prev" } }
+					save_event_target_as = changelingInfiltratorCountry
+				}
+				change_variable = { which = years_infiltrating value = 1 }
+				if = {
+					limit = { leader_class = ruler exists = event_target:changelingInfiltratorCountry }
+					owner = { add_trust = { amount = 5 who = event_target:changelingInfiltratorCountry } }
+				}
+				if = {
+					limit = { leader_class = scientist exists = event_target:changelingInfiltratorCountry }
+					owner = { steal_research_to_changelingInfiltratorCountry = yes }
+				}
+				if = {
+					limit = { leader_class = governor exists = event_target:changelingInfiltratorCountry }
+					owner = {
+						every_owned_planet = {
+							limit = { 
+								exists = leader 
+								leader = { is_same_value = event_target:changelingInfiltrator }
+							}
+							random_list = {
+								5 = { planet_event = { id = STH_dominion_flavour.1090 days = 100 random = 20 } }
+								5 = { planet_event = { id = STH_dominion_flavour.1091 days = 80 random = 10 } }
+								80 = {}
+							}							
+						}
+					}
+				}
+				random_list = {
+					99 = { 
+						modifier = { factor = 1.5 exists = event_target:changelingInfiltratorCountry event_target:changelingInfiltratorCountry = { has_swapped_tradition = tr_victory_4 } }
+					}
+					1 = {
+						modifier = { factor = 5 owner = { has_policy_flag = changeling_detection_1 } }
+						modifier = { factor = 10 owner = { has_policy_flag = changeling_detection_2 } }
+						modifier = { factor = 20 owner = { has_policy_flag = changeling_detection_3 } }
+						event_target:changelingInfiltratorCountry = { country_event = { id = STH_dominion_flavour.1100 days = 240 random = 20 scopes = { from = event_target:changelingInfiltrator fromfrom = event_target:changelingInfiltratedCountry } } }
+					}
+					1 = {
+						modifier = { factor = 5 owner = { has_policy_flag = changeling_detection_1 } }
+						modifier = { factor = 10 owner = { has_policy_flag = changeling_detection_2 } }
+						modifier = { factor = 20 owner = { has_policy_flag = changeling_detection_3 } }
+						event_target:changelingInfiltratorCountry = { country_event = { id = STH_dominion_flavour.1101 days = 240 random = 20 scopes = { from = event_target:changelingInfiltrator fromfrom = event_target:changelingInfiltratedCountry } } }
+					}
+				}
+			}
+			
+		}
+	}
+}
+
+#Changeling Infiltration
+country_event = {
+	id = STH_dominion_flavour.1001
+	title = STH_dominion_flavour.1001.name
+	picture = sth_GFX_evt_empireDominion
+	desc = { text = STH_dominion_flavour.1001.desc_01 }
+	is_triggered_only = yes
+	trigger = { 
+		is_changeling_empire = yes
+		exists = event_target:founderSpecies
+	}
+	immediate = {
+		set_timed_country_flag = { flag = changeling_infiltration_effect days = 600 }	
+	}
+	option = {
+		name =  STH_dominion_flavour.1001.a #Send Changeling Spy
+		custom_tooltip = STH_dominion_flavour.1001.a.tooltip
+		allow = { any_country = { valid_espionage_target = yes } }
+		hidden_effect = { country_event = { id = STH_dominion_flavour.1010 } }
+	}
+	option = {
+		name =  STH_dominion_flavour.1001.b #Recall Changeling Spy
+		trigger = { any_country = { is_normal_country = yes any_owned_leader = { has_leader_flag = "changeling_infiltrator_for:@Root" } } }
+		allow = { any_country = { is_normal_country = yes any_owned_leader = { has_leader_flag = "changeling_infiltrator_for:@Root" } } }
+		hidden_effect = { country_event = { id = STH_dominion_flavour.1050 } }
+	}
+	option = {
+		name =  STH_dominion_flavour.1001.c #Contemplations
+		allow = { unity > 49 }
+		hidden_effect = { country_event = { id = STH_dominion_flavour.1060 } }
+	}
+	option = {
+		name =  STH_dominion_flavour.1001.d #Dominion Member States
+		trigger = { any_country = { OR = { is_subject_type = dominion_member is_subject_type = dominion_member_human } } }
+		allow = { any_country = { OR = { is_subject_type = dominion_member is_subject_type = dominion_member_human } } }
+		hidden_effect = { country_event = { id = STH_dominion_flavour.3000 } }
+	}	
+	option = { 
+		name = STH_dominion_flavour.1001.z
+	}
+}
+
+#Select Country to Infiltrate
+country_event = {
+	id = STH_dominion_flavour.1010
+	title = STH_dominion_flavour.1010.name
+	picture = sth_GFX_evt_empireDominion
+	desc = { text = STH_dominion_flavour.1010.desc_01 }
+	is_triggered_only = yes
+	trigger = { is_changeling_empire = yes }
+	immediate = {
+		random_country = {
+			limit = { has_country_flag = LastinfiltrationTarget }
+			save_event_target_as = LastinfiltrationTarget
+		}
+		random_country = {
+			limit = { valid_espionage_target = yes NOT = {is_country = event_target:LastinfiltrationTarget } }
+			save_event_target_as = infiltrationTarget1
+		}
+		random_country = {
+			limit = {
+				valid_espionage_target = yes
+				NOR = { 
+					is_country = event_target:LastinfiltrationTarget
+					is_country = event_target:infiltrationTarget1 
+				}
+			}
+			save_event_target_as = infiltrationTarget2
+		}
+		random_country = {
+			limit = {
+				valid_espionage_target = yes
+				NOR = { 
+					is_country = event_target:LastinfiltrationTarget
+					is_country = event_target:infiltrationTarget1
+					is_country = event_target:infiltrationTarget2
+				}
+			}
+			save_event_target_as = infiltrationTarget3
+		}
+		random_country = {
+			limit = {
+				valid_espionage_target = yes
+				NOR = { 
+					is_country = event_target:LastinfiltrationTarget
+					is_country = event_target:infiltrationTarget1
+					is_country = event_target:infiltrationTarget2
+					is_country = event_target:infiltrationTarget3
+				}
+			}
+			save_event_target_as = infiltrationTarget4
+		}
+	}
+	option = {
+		name = STH_dominion_flavour.1010.a
+		allow = { exists = event_target:LastinfiltrationTarget }
+		trigger = { exists = event_target:LastinfiltrationTarget }
+		hidden_effect = { 
+			every_country = { 	
+				limit = { has_country_flag = LastinfiltrationTarget } 
+				remove_country_flag = LastinfiltrationTarget 
+			}
+			event_target:LastinfiltrationTarget = { set_country_flag = LastinfiltrationTarget } 
+			country_event = { id = STH_dominion_flavour.1011 scopes = { from = event_target:LastinfiltrationTarget } } 
+		}
+	}
+	option = {
+		name = STH_dominion_flavour.1010.b
+		allow = { exists = event_target:infiltrationTarget1 }
+		trigger = { exists = event_target:infiltrationTarget1 }
+		hidden_effect = { 
+			every_country = { 	
+				limit = { has_country_flag = LastinfiltrationTarget } 
+				remove_country_flag = LastinfiltrationTarget 
+			}
+			event_target:infiltrationTarget1 = { set_country_flag = LastinfiltrationTarget } 
+			country_event = { id = STH_dominion_flavour.1011 scopes = { from = event_target:infiltrationTarget1 } } 
+		}
+	}
+	option = {
+		name = STH_dominion_flavour.1010.c
+		allow = { exists = event_target:infiltrationTarget2 }
+		trigger = { exists = event_target:infiltrationTarget2 }
+		hidden_effect = { 
+			every_country = { 	
+				limit = { has_country_flag = LastinfiltrationTarget } 
+				remove_country_flag = LastinfiltrationTarget 
+			}
+			event_target:infiltrationTarget2 = { set_country_flag = LastinfiltrationTarget } 
+			country_event = { id = STH_dominion_flavour.1011 scopes = { from = event_target:infiltrationTarget2 } } 
+		}
+	}
+	option = {
+		name = STH_dominion_flavour.1010.d
+		allow = { exists = event_target:infiltrationTarget3 }
+		trigger = { exists = event_target:infiltrationTarget3 }
+		hidden_effect = { 
+			every_country = { 	
+				limit = { has_country_flag = LastinfiltrationTarget } 
+				remove_country_flag = LastinfiltrationTarget 
+			}
+			event_target:infiltrationTarget3 = { set_country_flag = LastinfiltrationTarget } 
+			country_event = { id = STH_dominion_flavour.1011 scopes = { from = event_target:infiltrationTarget3 } } 
+		}
+	}
+	option = {
+		name = STH_dominion_flavour.1010.e
+		allow = { exists = event_target:infiltrationTarget4 }
+		trigger = { exists = event_target:infiltrationTarget4 }
+		hidden_effect = { 
+			every_country = { 	
+				limit = { has_country_flag = LastinfiltrationTarget } 
+				remove_country_flag = LastinfiltrationTarget 
+			}
+			event_target:infiltrationTarget4 = { set_country_flag = LastinfiltrationTarget } 
+			country_event = { id = STH_dominion_flavour.1011 scopes = { from = event_target:infiltrationTarget4 } } 
+		}
+	}
+	option = { 
+		name = STH_dominion_flavour.1010.y
+		hidden_effect = { country_event = { id = STH_dominion_flavour.1010 } }
+	}
+	option = { 
+		name = STH_dominion_flavour.1010.z
+		hidden_effect = { country_event = { id = STH_dominion_flavour.1001 } }
+	}
+}
+
+#Select Leader Type to Replace
+country_event = {
+	id = STH_dominion_flavour.1011
+	title = STH_dominion_flavour.1011.name
+	picture = sth_GFX_evt_empireDominion
+	desc = { text = STH_dominion_flavour.1011.desc_01 }
+	is_triggered_only = yes
+	trigger = { is_changeling_empire = yes }
+	immediate = { }
+	option = {
+		name = STH_dominion_flavour.1011.a #Admiral
+		allow = { 
+			custom_tooltip = {
+				fail_text = STH_dominion_flavour.1011.a.failtexta
+				exists = from
+				from = { any_owned_leader = { leader_class = admiral NOT = { has_leader_flag = "changeling_infiltrator" } } }
+			}
+			custom_tooltip = {
+				fail_text = STH_dominion_flavour.1011.a.failtextb
+				influence > 59
+			}
+		}
+		hidden_effect = { country_event = { id = STH_dominion_flavour.1012 scopes = { from = from } } }
+		add_influence = -60
+	}
+	option = {
+		name = STH_dominion_flavour.1011.b #General
+		allow = { 
+			custom_tooltip = {
+				fail_text = STH_dominion_flavour.1011.b.failtexta
+				exists = from
+				from = { any_owned_leader = { leader_class = general NOT = { has_leader_flag = "changeling_infiltrator" } } }
+			}
+			custom_tooltip = {
+				fail_text = STH_dominion_flavour.1011.b.failtextb
+				influence > 59
+			}
+		}
+		hidden_effect = { country_event = { id = STH_dominion_flavour.1013 scopes = { from = from } } }
+		add_influence = -60
+	}
+	option = {
+		name = STH_dominion_flavour.1011.c #Governor
+		allow = { 
+			custom_tooltip = {
+				fail_text = STH_dominion_flavour.1011.c.failtexta
+				exists = from
+				from = { any_owned_leader = { leader_class = governor NOT = { has_leader_flag = "changeling_infiltrator" } } }
+			}
+			custom_tooltip = {
+				fail_text = STH_dominion_flavour.1011.c.failtextb
+				influence > 79
+			}
+			custom_tooltip = {
+				fail_text = STH_dominion_flavour.1011.c.failtextc
+				has_swapped_tradition = tr_victory_3
+			}
+		}
+		hidden_effect = { country_event = { id = STH_dominion_flavour.1014 scopes = { from = from } } }
+		add_influence = -80
+	}
+	option = {
+		name = STH_dominion_flavour.1011.d #Scientist
+		allow = { 
+			custom_tooltip = {
+				fail_text = STH_dominion_flavour.1011.d.failtexta
+				exists = from
+				from = { any_owned_leader = { leader_class = scientist NOT = { has_leader_flag = "changeling_infiltrator" } } }
+			}
+			custom_tooltip = {
+				fail_text = STH_dominion_flavour.1011.d.failtextb		
+				influence > 79
+			}
+			custom_tooltip = {
+				fail_text = STH_dominion_flavour.1011.d.failtextc
+				has_swapped_tradition = tr_victory_3
+			}
+		}
+		hidden_effect = { country_event = { id = STH_dominion_flavour.1015 scopes = { from = from } } }
+		add_influence = -80
+	}
+	option = {
+		name = STH_dominion_flavour.1011.e #Ruler
+		allow = { 
+			custom_tooltip = {
+				fail_text = STH_dominion_flavour.1011.e.failtexta
+				exists = from
+				from = { any_owned_leader = { leader_class = ruler NOT = { has_leader_flag = "changeling_infiltrator" } } }
+			}
+			custom_tooltip = {
+				fail_text = STH_dominion_flavour.1011.e.failtextb		
+				influence > 119
+			}
+			custom_tooltip = {
+				fail_text = STH_dominion_flavour.1011.e.failtextc
+				has_swapped_tradition = tr_victory_4
+			}
+		}
+		hidden_effect = { country_event = { id = STH_dominion_flavour.1016 scopes = { from = from } } }
+		add_influence = -120
+	}
+	option = { 
+		name = STH_dominion_flavour.1011.z
+		hidden_effect = { country_event = { id = STH_dominion_flavour.1010 } }
+	}
+}
+
+#Acknowledge Plot - Admiral
+country_event = {
+	id = STH_dominion_flavour.1012
+	title = STH_dominion_flavour.1012.name
+	picture = sth_GFX_evt_empireDominion
+	desc = { text = STH_dominion_flavour.1012.desc_01 }
+	is_triggered_only = yes
+	trigger = { is_changeling_empire = yes }
+	option = { name = STH_dominion_flavour.1012.a }
+	after = { hidden_effect = { country_event = { id = STH_dominion_flavour.1017 scopes = { from = from } days = 70 random = 7 } } }
+}
+#Acknowledge Plot - General
+country_event = {
+	id = STH_dominion_flavour.1013
+	title = STH_dominion_flavour.1013.name
+	picture = sth_GFX_evt_empireDominion
+	desc = { text = STH_dominion_flavour.1013.desc_01 }
+	is_triggered_only = yes
+	trigger = { is_changeling_empire = yes }
+	option = { name = STH_dominion_flavour.1013.a }
+	after = { hidden_effect = { country_event = { id = STH_dominion_flavour.1018 scopes = { from = from } days = 70 random = 7 } } }
+}
+#Acknowledge Plot - Governor
+country_event = {
+	id = STH_dominion_flavour.1014
+	title = STH_dominion_flavour.1014.name
+	picture = sth_GFX_evt_empireDominion
+	desc = { text = STH_dominion_flavour.1014.desc_01 }
+	is_triggered_only = yes
+	trigger = { is_changeling_empire = yes }
+	option = { name = STH_dominion_flavour.1014.a }
+	after = { hidden_effect = { country_event = { id = STH_dominion_flavour.1019 scopes = { from = from } days = 70 random = 7 } } }
+}
+#Acknowledge Plot - Scientist
+country_event = {
+	id = STH_dominion_flavour.1015
+	title = STH_dominion_flavour.1015.name
+	picture = sth_GFX_evt_empireDominion
+	desc = { text = STH_dominion_flavour.1015.desc_01 }
+	is_triggered_only = yes
+	trigger = { is_changeling_empire = yes }
+	option = { name = STH_dominion_flavour.1015.a }
+	after = { hidden_effect = { country_event = { id = STH_dominion_flavour.1020 scopes = { from = from } days = 70 random = 7 } } }
+}
+#Acknowledge Plot - Ruler
+country_event = {
+	id = STH_dominion_flavour.1016
+	title = STH_dominion_flavour.1016.name
+	picture = sth_GFX_evt_empireDominion
+	desc = { text = STH_dominion_flavour.1016.desc_01 }
+	is_triggered_only = yes
+	trigger = { is_changeling_empire = yes }
+	option = { name = STH_dominion_flavour.1016.a }
+	after = { hidden_effect = { country_event = { id = STH_dominion_flavour.1021 scopes = { from = from } days = 84 random = 14 } } }
+}
+
+#Resolve - Admiral
+country_event = {
+	id = STH_dominion_flavour.1017
+	hide_window = yes
+	is_triggered_only = yes
+	trigger = { is_changeling_empire = yes }
+	immediate = {
+		random_list = {
+			20 = { 
+				modifier = { factor = 1.5 any_owned_planet = { is_planet_class = pc_asteroid_prison any_owned_pop = { is_same_species = root.from } } }
+				hidden_effect = { country_event = { id = STH_dominion_flavour.1022 scopes = { from = from } } } #Success - Admiral
+			}
+			10 = { 
+				hidden_effect = { country_event = { id = STH_dominion_flavour.1023 scopes = { from = from } } } #Failure - Admiral
+			}
+		}
+	}
+}
+#Resolve - General
+country_event = {
+	id = STH_dominion_flavour.1018
+	hide_window = yes
+	is_triggered_only = yes
+	trigger = { is_changeling_empire = yes }
+	immediate = {
+		random_list = {
+			20 = { 
+				modifier = { factor = 1.5 any_owned_planet = { is_planet_class = pc_asteroid_prison any_owned_pop = { is_same_species = root.from } } }
+				hidden_effect = { country_event = { id = STH_dominion_flavour.1024 scopes = { from = from } } } #Success - General
+			}
+			10 = { 
+				hidden_effect = { country_event = { id = STH_dominion_flavour.1025 scopes = { from = from } } } #Failure - General
+			}
+		}
+	}
+}
+#Resolve - Governor
+country_event = {
+	id = STH_dominion_flavour.1019
+	hide_window = yes
+	is_triggered_only = yes
+	trigger = { is_changeling_empire = yes }
+	immediate = {
+		random_list = {
+			15 = { 
+				modifier = { factor = 1.5 any_owned_planet = { is_planet_class = pc_asteroid_prison any_owned_pop = { is_same_species = root.from } } }
+				hidden_effect = { country_event = { id = STH_dominion_flavour.1026 scopes = { from = from } } } #Success - Governor
+			}
+			10 = { 
+				hidden_effect = { country_event = { id = STH_dominion_flavour.1027 scopes = { from = from } } } #Failure - Governor
+			}
+		}
+	}
+}
+#Resolve - Scientist
+country_event = {
+	id = STH_dominion_flavour.1020
+	hide_window = yes
+	is_triggered_only = yes
+	trigger = { is_changeling_empire = yes }
+	immediate = {
+		random_list = {
+			15 = { 
+				modifier = { factor = 1.5 any_owned_planet = { is_planet_class = pc_asteroid_prison any_owned_pop = { is_same_species = root.from } } }
+				hidden_effect = { country_event = { id = STH_dominion_flavour.1028 scopes = { from = from } } } #Success - Scientist
+			}
+			10 = { 
+				hidden_effect = { country_event = { id = STH_dominion_flavour.1029 scopes = { from = from } } } #Failure - Scientist
+			}
+		}
+	}
+}
+#Resolve - Ruler
+country_event = {
+	id = STH_dominion_flavour.1021
+	hide_window = yes
+	is_triggered_only = yes
+	trigger = { is_changeling_empire = yes }
+	immediate = {
+		random_list = {
+			10 = {
+				modifier = { factor = 1.5 any_owned_planet = { is_planet_class = pc_asteroid_prison any_owned_pop = { is_same_species = root.from } } }
+				hidden_effect = { country_event = { id = STH_dominion_flavour.1030 scopes = { from = from } } } #Success - Ruler
+			}
+			10 = { 
+				hidden_effect = { country_event = { id = STH_dominion_flavour.1031 scopes = { from = from } } } #Failure - Ruler
+			}
+		}
+	}
+}
+
+
+#Plot Success - Admiral
+country_event = {
+	id = STH_dominion_flavour.1022
+	title = STH_dominion_flavour.1022.name
+	picture = sth_GFX_evt_empireDominion
+	desc = { 
+		trigger = { exists = event_target:replacedLeader }
+		text = STH_dominion_flavour.1022.desc_01 
+	}
+	desc = { 
+		trigger = { NOT = { exists = event_target:replacedLeader } }
+		text = STH_dominion_flavour.1023.desc_01
+	}
+	is_triggered_only = yes
+	trigger = { is_changeling_empire = yes }
+	immediate = {
+		from = { random_owned_leader = { limit = { leader_class = admiral NOT = { has_leader_flag = changeling_infiltrator } } save_event_target_as = replacedLeader } }
+		if = {
+			limit = { exists = event_target:replacedLeader }
+			event_target:replacedLeader = {
+				species = { save_event_target_as = replacedSpecies }
+				change_species = event_target:founderSpecies
+				change_leader_portrait = event_target:replacedSpecies
+				set_leader_flag = "changeling_infiltrator_for:@Root"
+				set_leader_flag = "changeling_infiltrator"
+			}
+		}
+	}
+	option = { name = STH_dominion_flavour.1022.a }
+}
+#Plot Failure - Admiral
+country_event = {
+	id = STH_dominion_flavour.1023
+	title = STH_dominion_flavour.1023.name
+	picture = sth_GFX_evt_empireDominion
+	desc = { text = STH_dominion_flavour.1023.desc_01 }
+	is_triggered_only = yes
+	trigger = { is_changeling_empire = yes }
+	option = { name = STH_dominion_flavour.1023.a }
+}
+
+#Plot Success - General
+country_event = {
+	id = STH_dominion_flavour.1024
+	title = STH_dominion_flavour.1024.name
+	picture = sth_GFX_evt_empireDominion
+	desc = { 
+		trigger = { exists = event_target:replacedLeader }
+		text = STH_dominion_flavour.1024.desc_01 
+	}
+	desc = { 
+		trigger = { NOT = { exists = event_target:replacedLeader } }
+		text = STH_dominion_flavour.1025.desc_01
+	}
+	is_triggered_only = yes
+	trigger = { is_changeling_empire = yes }
+	immediate = {
+		from = { random_owned_leader = { limit = { leader_class = general NOT = { has_leader_flag = changeling_infiltrator } } save_event_target_as = replacedLeader } }
+		if = {
+			limit = { exists = event_target:replacedLeader }
+			event_target:replacedLeader = {
+				species = { save_event_target_as = replacedSpecies }
+				change_species = event_target:founderSpecies
+				change_leader_portrait = event_target:replacedSpecies
+				set_leader_flag = "changeling_infiltrator_for:@Root"
+				set_leader_flag = "changeling_infiltrator"
+			}
+		}
+	}
+	option = { name = STH_dominion_flavour.1024.a }
+}
+#Plot Failure - General
+country_event = {
+	id = STH_dominion_flavour.1025
+	title = STH_dominion_flavour.1025.name
+	picture = sth_GFX_evt_empireDominion
+	desc = { text = STH_dominion_flavour.1025.desc_01 }
+	is_triggered_only = yes
+	trigger = { is_changeling_empire = yes }
+	option = { name = STH_dominion_flavour.1025.a }
+}
+
+#Plot Success - Governor
+country_event = {
+	id = STH_dominion_flavour.1026
+	title = STH_dominion_flavour.1026.name
+	picture = sth_GFX_evt_empireDominion
+	desc = { 
+		trigger = { exists = event_target:replacedLeader }
+		text = STH_dominion_flavour.1026.desc_01 
+	}
+	desc = { 
+		trigger = { NOT = { exists = event_target:replacedLeader } }
+		text = STH_dominion_flavour.1027.desc_01
+	}
+	is_triggered_only = yes
+	trigger = { is_changeling_empire = yes }
+	immediate = {
+		from = { random_owned_leader = { limit = { leader_class = governor NOT = { has_leader_flag = changeling_infiltrator } } save_event_target_as = replacedLeader } }
+		if = {
+			limit = { exists = event_target:replacedLeader }
+			event_target:replacedLeader = {
+				species = { save_event_target_as = replacedSpecies }
+				change_species = event_target:founderSpecies
+				change_leader_portrait = event_target:replacedSpecies
+				set_leader_flag = "changeling_infiltrator_for:@Root"
+				set_leader_flag = "changeling_infiltrator"
+			}
+		}
+	}
+	option = { name = STH_dominion_flavour.1026.a }
+}
+#Plot Failure - Governor
+country_event = {
+	id = STH_dominion_flavour.1027
+	title = STH_dominion_flavour.1027.name
+	picture = sth_GFX_evt_empireDominion
+	desc = { text = STH_dominion_flavour.1027.desc_01 }
+	is_triggered_only = yes
+	trigger = { is_changeling_empire = yes }
+	option = { name = STH_dominion_flavour.1027.a }
+}
+
+#Plot Success - Scientist
+country_event = {
+	id = STH_dominion_flavour.1028
+	title = STH_dominion_flavour.1028.name
+	picture = sth_GFX_evt_empireDominion
+	desc = { 
+		trigger = { exists = event_target:replacedLeader }
+		text = STH_dominion_flavour.1028.desc_01 
+	}
+	desc = { 
+		trigger = { NOT = { exists = event_target:replacedLeader } }
+		text = STH_dominion_flavour.1029.desc_01
+	}
+	is_triggered_only = yes
+	trigger = { is_changeling_empire = yes }
+	immediate = {
+		from = { random_owned_leader = { limit = { leader_class = scientist NOT = { has_leader_flag = changeling_infiltrator } } save_event_target_as = replacedLeader } }
+		if = {
+			limit = { exists = event_target:replacedLeader }
+			event_target:replacedLeader = {
+				species = { save_event_target_as = replacedSpecies }
+				change_species = event_target:founderSpecies
+				change_leader_portrait = event_target:replacedSpecies
+				set_leader_flag = "changeling_infiltrator_for:@Root"
+				set_leader_flag = "changeling_infiltrator"
+			}
+		}
+	}
+	option = { name = STH_dominion_flavour.1028.a }
+}
+#Plot Failure - Scientist
+country_event = {
+	id = STH_dominion_flavour.1029
+	title = STH_dominion_flavour.1029.name
+	picture = sth_GFX_evt_empireDominion
+	desc = { text = STH_dominion_flavour.1029.desc_01 }
+	is_triggered_only = yes
+	trigger = { is_changeling_empire = yes }
+	option = { name = STH_dominion_flavour.1029.a }
+}
+
+#Plot Success - Ruler
+country_event = {
+	id = STH_dominion_flavour.1030
+	title = STH_dominion_flavour.1030.name
+	picture = sth_GFX_evt_empireDominion
+	desc = { 
+		trigger = { exists = event_target:replacedLeader }
+		text = STH_dominion_flavour.1030.desc_01 
+	}
+	desc = { 
+		trigger = { NOT = { exists = event_target:replacedLeader } }
+		text = STH_dominion_flavour.1031.desc_01
+	}
+	is_triggered_only = yes
+	trigger = { is_changeling_empire = yes }
+	immediate = {
+		from = { random_owned_leader = { limit = { leader_class = ruler } save_event_target_as = replacedLeader } }
+		if = {
+			limit = { exists = event_target:replacedLeader }
+			event_target:replacedLeader = {
+				species = { save_event_target_as = replacedSpecies }
+				change_species = event_target:founderSpecies
+				change_leader_portrait = event_target:replacedSpecies
+				set_leader_flag = "changeling_infiltrator_for:@Root"
+				set_leader_flag = "changeling_infiltrator"
+			}
+		}
+	}
+	option = { name = STH_dominion_flavour.1030.a }
+}
+#Plot Failure - Ruler
+country_event = {
+	id = STH_dominion_flavour.1031
+	title = STH_dominion_flavour.1031.name
+	picture = sth_GFX_evt_empireDominion
+	desc = { text = STH_dominion_flavour.1031.desc_01 }
+	is_triggered_only = yes
+	trigger = { is_changeling_empire = yes }
+	option = { name = STH_dominion_flavour.1031.a }
+}
+
+
+
+#Select Leader to Return
+country_event = {
+	id = STH_dominion_flavour.1050
+	title = STH_dominion_flavour.1050.name
+	picture = sth_GFX_evt_empireDominion
+	desc = { text = STH_dominion_flavour.1050.desc_01 }
+	is_triggered_only = yes
+	trigger = { is_changeling_empire = yes }
+	immediate = {
+		random_country = {
+			limit = { is_normal_country = yes any_owned_leader = { has_leader_flag = "changeling_infiltrator_for:@Root" } }
+			random_owned_leader = {
+				limit = { has_leader_flag = "changeling_infiltrator_for:@Root" }
+				save_event_target_as = exfiltrationTarget1
+			}
+		}
+		random_country = {
+			limit = { 
+				is_normal_country = yes 
+				any_owned_leader = { 
+					has_leader_flag = "changeling_infiltrator_for:@Root" 
+					NOT = { is_same_value = event_target:exfiltrationTarget1 }
+				} 
+			}
+			random_owned_leader = {
+				limit = { 
+					has_leader_flag = "changeling_infiltrator_for:@Root" 
+					NOT = { is_same_value = event_target:exfiltrationTarget1 }
+				}
+				save_event_target_as = exfiltrationTarget2
+			}
+		}
+		random_country = {
+			limit = { 
+				is_normal_country = yes 
+				any_owned_leader = { 
+					has_leader_flag = "changeling_infiltrator_for:@Root" 
+					NOT = { is_same_value = event_target:exfiltrationTarget1 }
+					NOT = { is_same_value = event_target:exfiltrationTarget2 }
+				} 
+			}
+			random_owned_leader = {
+				limit = { 
+					has_leader_flag = "changeling_infiltrator_for:@Root" 
+					NOT = { is_same_value = event_target:exfiltrationTarget1 }
+					NOT = { is_same_value = event_target:exfiltrationTarget2 }
+				}
+				save_event_target_as = exfiltrationTarget3
+			}
+		}
+		random_country = {
+			limit = { 
+				is_normal_country = yes 
+				any_owned_leader = { 
+					has_leader_flag = "changeling_infiltrator_for:@Root" 
+					NOT = { is_same_value = event_target:exfiltrationTarget1 }
+					NOT = { is_same_value = event_target:exfiltrationTarget2 }
+					NOT = { is_same_value = event_target:exfiltrationTarget3 }
+				} 
+			}
+			random_owned_leader = {
+				limit = { 
+					has_leader_flag = "changeling_infiltrator_for:@Root" 
+					NOT = { is_same_value = event_target:exfiltrationTarget1 }
+					NOT = { is_same_value = event_target:exfiltrationTarget2 }
+					NOT = { is_same_value = event_target:exfiltrationTarget3 }
+				}
+				save_event_target_as = exfiltrationTarget4
+			}
+		}
+	}
+	option = {
+		name = STH_dominion_flavour.1050.a
+		allow = { exists = event_target:exfiltrationTarget1 }
+		trigger = { exists = event_target:exfiltrationTarget1 }
+		hidden_effect = { 
+			country_event = { id = STH_dominion_flavour.1052 scopes = { from = event_target:exfiltrationTarget1 fromfrom = event_target:exfiltrationTarget1.owner } }
+			event_target:exfiltrationTarget1.owner = { country_event = { id = STH_dominion_flavour.1051 scopes = { from = event_target:exfiltrationTarget1 fromfrom = root } days = 7 } }
+		}
+	}
+	option = {
+		name = STH_dominion_flavour.1050.b
+		allow = { exists = event_target:exfiltrationTarget2 }
+		trigger = { exists = event_target:exfiltrationTarget2 }
+		hidden_effect = { 
+			country_event = { id = STH_dominion_flavour.1052 scopes = { from = event_target:exfiltrationTarget2 fromfrom = event_target:exfiltrationTarget2.owner } }
+			event_target:exfiltrationTarget2.owner = { country_event = { id = STH_dominion_flavour.1051 scopes = { from = event_target:exfiltrationTarget2 fromfrom = root } days = 7 } }
+		}
+	}
+	option = {
+		name = STH_dominion_flavour.1050.c
+		allow = { exists = event_target:exfiltrationTarget3 }
+		trigger = { exists = event_target:exfiltrationTarget3 }
+		hidden_effect = { 
+			country_event = { id = STH_dominion_flavour.1052 scopes = { from = event_target:exfiltrationTarget3 fromfrom = event_target:exfiltrationTarget3.owner } }
+			event_target:exfiltrationTarget3.owner = { country_event = { id = STH_dominion_flavour.1051 scopes = { from = event_target:exfiltrationTarget3 fromfrom = root } days = 7 } }
+		}
+	}
+	option = {
+		name = STH_dominion_flavour.1050.d
+		allow = { exists = event_target:exfiltrationTarget4 }
+		trigger = { exists = event_target:exfiltrationTarget4 }
+		hidden_effect = { 
+			country_event = { id = STH_dominion_flavour.1052 scopes = { from = event_target:exfiltrationTarget4 fromfrom = event_target:exfiltrationTarget4.owner } }
+			event_target:exfiltrationTarget4.owner = { country_event = { id = STH_dominion_flavour.1051 scopes = { from = event_target:exfiltrationTarget4 fromfrom = root } days = 7 } }
+		}
+	}
+	option = { 
+		name = STH_dominion_flavour.1050.y
+		hidden_effect = { country_event = { id = STH_dominion_flavour.1050 } }
+	}	
+	option = { 
+		name = STH_dominion_flavour.1050.z
+		hidden_effect = { country_event = { id = STH_dominion_flavour.1001 } }
+	}
+}
+
+#Leader Disappeared - Notification
+country_event = {
+	id = STH_dominion_flavour.1051
+	title = STH_dominion_flavour.1051.name
+	picture = sth_GFX_evt_spaceBackground
+	desc = { 
+		trigger = { from = { leader_class = admiral } }
+		text = STH_dominion_flavour.1051.desc_01 
+	}
+	desc = { 
+		trigger = { from = { leader_class = general } }
+		text = STH_dominion_flavour.1051.desc_02 
+	}
+	desc = { 
+		trigger = { from = { leader_class = governor } }
+		text = STH_dominion_flavour.1051.desc_03 
+	}
+	desc = { 
+		trigger = { from = { leader_class = scientist } }
+		text = STH_dominion_flavour.1051.desc_04 
+	}
+	desc = { 
+		trigger = { from = { leader_class = ruler } }
+		text = STH_dominion_flavour.1051.desc_05 
+	}
+	is_triggered_only = yes
+	trigger = { exists = from }
+	option = { 
+		name = STH_dominion_flavour.1051.a 
+		from = { kill_leader = { show_notification = no } }
+	}
+}
+
+#Get Exfiltration Bonus
+country_event = {
+	id = STH_dominion_flavour.1052
+	title = STH_dominion_flavour.1052.name
+	picture = sth_GFX_evt_empireDominion
+	desc = { text = STH_dominion_flavour.1052.desc_01 }
+	is_triggered_only = yes
+	trigger = { exists = from }
+	option = { 
+		name = STH_dominion_flavour.1052.a 
+		from = { root_get_exfiltration_bonus = yes }
+	}
+}
+
+#Contemplations Decider
+country_event = {
+	id = STH_dominion_flavour.1060
+	title = STH_dominion_flavour.1060.name
+	picture = sth_GFX_evt_empireDominion
+	desc = { text = STH_dominion_flavour.1060.desc_01 }
+	is_triggered_only = yes
+	option = { 
+		name = STH_dominion_flavour.1060.a 
+		allow = { unity > 49 }
+		add_unity = -50
+		hidden_effect = {
+			random_list = {
+				10 = { country_event = { id = STH_dominion_flavour.1061 days = 70 random = 14 } } #Grow Changeling Pop
+				10 = { country_event = { id = STH_dominion_flavour.1062 days = 70 random = 14 } } #Add More Unity
+				10 = { country_event = { id = STH_dominion_flavour.1063 days = 70 random = 14 } } #Add Productivity
+				10 = { country_event = { id = STH_dominion_flavour.1064 days = 70 random = 14 } } #Nothing
+			}
+		}
+	}
+	option = { 
+		name = STH_dominion_flavour.1060.z
+		hidden_effect = { country_event = { id = STH_dominion_flavour.1001 } }
+	}
+}
+#Contemplations - Bonus 1
+country_event = {
+	id = STH_dominion_flavour.1061
+	title = STH_dominion_flavour.1061.name
+	picture = sth_GFX_evt_empireDominion
+	desc = { text = STH_dominion_flavour.1061.desc_01 }
+	is_triggered_only = yes
+	option = { 
+		name = STH_dominion_flavour.1061.a 
+		every_owned_pop = {
+			limit = { is_species_class = DOM is_growing = yes }
+			add_modifier = { modifier = po_changeling_growth days = 360 }
+		}
+	}
+}
+#Contemplations - Bonus 2
+country_event = {
+	id = STH_dominion_flavour.1062
+	title = STH_dominion_flavour.1062.name
+	picture = sth_GFX_evt_empireDominion
+	desc = { text = STH_dominion_flavour.1062.desc_01 }
+	is_triggered_only = yes
+	option = { 
+		name = STH_dominion_flavour.1062.a
+		random_list = {
+			10 = { add_unity = 75 }
+			10 = { add_unity = 100 }
+			10 = { add_unity = 125 }
+		}
+	}
+}
+#Contemplations - Bonus 3
+country_event = {
+	id = STH_dominion_flavour.1063
+	title = STH_dominion_flavour.1063.name
+	picture = sth_GFX_evt_empireDominion
+	desc = { text = STH_dominion_flavour.1063.desc_01 }
+	is_triggered_only = yes
+	option = { 
+		name = STH_dominion_flavour.1063.a
+		add_modifier = { modifier = em_changeling_insight days = 360 }
+	}
+}
+#Contemplations - Bonus 4 - No Bonus
+country_event = {
+	id = STH_dominion_flavour.1064
+	title = STH_dominion_flavour.1064.name
+	picture = sth_GFX_evt_empireDominion
+	desc = { text = STH_dominion_flavour.1064.desc_01 }
+	is_triggered_only = yes
+	option = { 
+		name = STH_dominion_flavour.1064.a
+	}
+}
+
+#Fighting a Changeling Admiral
+country_event = {
+	id = STH_dominion_flavour.1070
+	hide_window = yes
+	is_triggered_only = yes
+	trigger = {
+		FROMFROM = {
+			exists = leader
+			leader = { 
+				has_leader_flag = "changeling_infiltrator_for:@FromFromFrom.Owner"
+			}
+		}
+	}
+	immediate = {		
+		fromfrom.owner = { save_event_target_as = friendlyCountry }
+		fromfrom = { save_event_target_as = friendlyFleet }
+		fromfromfrom.owner = { save_event_target_as = enemyCountry }
+		fromfromfrom = { save_event_target_as = enemyFleet }
+		random_list = {
+			40 = { 
+				country_event = { id = STH_dominion_flavour.1071 scopes = { from = event_target:enemyCountry fromfrom = event_target:friendlyFleet fromfromfrom = event_target:enemyFleet } } #Infiltrated Notification
+				FROM = { country_event = { id = STH_dominion_flavour.1072 scopes = { from = event_target:friendlyCountry fromfrom = event_target:friendlyFleet fromfromfrom = event_target:enemyFleet } } } #Infiltrator Notification
+			} #Abandon Fleet
+			30 = {
+				country_event = { id = STH_dominion_flavour.1073 scopes = { from = event_target:enemyCountry fromfrom = event_target:friendlyFleet fromfromfrom = event_target:enemyFleet } } #Infiltrated Notification
+				FROM = { country_event = { id = STH_dominion_flavour.1074 scopes = { from = event_target:friendlyCountry fromfrom = event_target:friendlyFleet fromfromfrom = event_target:enemyFleet } } } #Infiltrator Notification
+			} #Damage Ships
+			30 = {
+				FROM = { 
+					country_event = { 
+						id = STH_dominion_flavour.1075 
+						scopes = { 
+							from = event_target:friendlyCountry
+							fromfrom = event_target:friendlyFleet 
+							fromfromfrom = event_target:enemyFleet
+						}
+					} 
+				} #Infiltrator Notification
+			} #Apply Debuff
+		}
+	}
+}
+#Abandoned Fleet - Infiltrated Notification
+country_event = {
+	id = STH_dominion_flavour.1071
+	title = STH_dominion_flavour.1071.name
+	picture = {
+		picture = sth_GFX_evt_spaceBattle1
+	}
+	desc = { text = STH_dominion_flavour.1071.desc_01 }
+	is_triggered_only = yes
+	trigger = {
+		exists = FROMFROM
+		FROMFROM = { exists = leader }
+	}
+	option = { name = STH_dominion_flavour.1071.a }
+}
+#Abandoned Fleet - Infiltrator Notification
+country_event = {
+	id = STH_dominion_flavour.1072
+	title = STH_dominion_flavour.1072.name
+	picture = {
+		picture = sth_GFX_evt_spaceBattle1
+	}
+	desc = { text = STH_dominion_flavour.1072.desc_01 }
+	is_triggered_only = yes
+	trigger = {
+		exists = FROMFROM
+		FROMFROM = { exists = leader }
+	}
+	immediate = { 
+		FROMFROM = {
+			leader = { 
+				root_get_fleet_exfiltration_bonus = yes 
+				kill_leader = { show_notification = no }
+			}
+		}
+	}
+	option = { name = STH_dominion_flavour.1072.a }
+}
+
+#Damage Ships - Infiltrated Notification
+country_event = {
+	id = STH_dominion_flavour.1073
+	title = STH_dominion_flavour.1073.name
+	picture = {
+		picture = sth_GFX_evt_spaceBattle2
+	}
+	desc = { text = STH_dominion_flavour.1073.desc_01 }
+	is_triggered_only = yes
+	trigger = {
+		exists = FROMFROM
+		FROMFROM = { exists = leader }
+	}
+	option = { name = STH_dominion_flavour.1073.a }
+}
+#Damage Ships - Infiltrator Notification
+country_event = {
+	id = STH_dominion_flavour.1074
+	title = STH_dominion_flavour.1074.name
+	picture = {
+		picture = sth_GFX_evt_spaceBattle2
+	}
+	desc = { text = STH_dominion_flavour.1074.desc_01 }
+	is_triggered_only = yes
+	trigger = {
+		exists = FROMFROM
+		FROMFROM = { exists = leader }
+	}
+	immediate = { 
+		FROMFROM = { light_damage_fleet_ships = yes }
+	}
+	option = { name = STH_dominion_flavour.1074.a }
+}
+
+#Reduce Fleet Coordination - Infiltrator Notification
+country_event = {
+	id = STH_dominion_flavour.1075
+	title = STH_dominion_flavour.1075.name
+	picture = {
+		picture = sth_GFX_evt_spaceBattle3
+	}
+	desc = { text = STH_dominion_flavour.1075.desc_01 }
+	is_triggered_only = yes
+	trigger = {
+		exists = FROMFROM
+		FROMFROM = { exists = leader }
+	}
+	immediate = { 
+		FROMFROM = { add_modifier = { modifier = fl_changeling_fleet_discoordination days = 360 } }
+	}
+	option = { name = STH_dominion_flavour.1075.a }
+}
+
+
+# This = planet under bombardment
+# From = bombarding empire
+#Bombarding a Changeling General
+planet_event = {
+	id = STH_dominion_flavour.1080
+	hide_window = yes
+	is_triggered_only = yes
+	trigger = {
+		exists = owner
+		owner = {
+			any_owned_leader = {
+				leader_class = general
+				has_leader_flag = "changeling_infiltrator_for:@From"
+			}
+		}
+	}
+	immediate = {		
+		FROM = { save_event_target_as = attackingCountry }
+		owner = {
+			save_event_target_as = friendlyCountry
+			every_owned_leader = {
+				limit = { 
+					leader_class = general
+					has_leader_flag = "changeling_infiltrator_for:@From"
+				}
+				save_event_target_as = changelingInfiltrator
+			}
+		}
+		from = { save_event_target_as = enemyCountry }
+		random_list = {
+			5 = { 
+				owner = { country_event = { id = STH_dominion_flavour.1081 scopes = { from = event_target:enemyCountry fromfrom = root fromfromfrom = event_target:changelingInfiltrator } } } #Infiltrated Notification
+				FROM = { country_event = { id = STH_dominion_flavour.1082 scopes = { from = event_target:friendlyCountry fromfrom = root fromfromfrom = event_target:changelingInfiltrator } } } #Infiltrator Notification
+			} #Abandon Fleet
+			70 = {
+				FROM = { country_event = { id = STH_dominion_flavour.1085 scopes = { from = event_target:friendlyCountry fromfrom = root fromfromfrom = event_target:changelingInfiltrator } } } #Infiltrator Notification
+			} #Apply Debuff
+			25 = { } #Do Nothing
+		}
+	}
+}
+#Abandoned Army - Infiltrated Notification
+country_event = {
+	id = STH_dominion_flavour.1081
+	title = STH_dominion_flavour.1081.name
+	picture = { picture = sth_GFX_evt_groundBattle1 }
+	desc = { text = STH_dominion_flavour.1081.desc_01 }
+	is_triggered_only = yes
+	trigger = { 
+		exists = FROMFROM
+	}
+	option = { name = STH_dominion_flavour.1081.a }
+}
+#Abandoned Army - Infiltrator Notification
+country_event = {
+	id = STH_dominion_flavour.1082
+	title = STH_dominion_flavour.1082.name
+	picture = {
+		picture = sth_GFX_evt_groundBattle1
+	}
+	desc = { text = STH_dominion_flavour.1082.desc_01 }
+	is_triggered_only = yes
+	trigger = { 
+		exists = FROMFROM
+		exists = FROMFROMFROM 
+	}
+	immediate = { 
+		FROMFROMFROM = {
+			root_get_army_exfiltration_bonus = yes 
+			kill_leader = { show_notification = no }
+		}
+	}
+	option = { name = STH_dominion_flavour.1082.a }
+}
+
+#Reduce Army Coordination - Infiltrator Notification
+country_event = {
+	id = STH_dominion_flavour.1085
+	title = STH_dominion_flavour.1085.name
+	picture = {
+		picture = sth_GFX_evt_groundBattle1
+	}
+	desc = { text = STH_dominion_flavour.1085.desc_01 }
+	is_triggered_only = yes
+	trigger = {
+		exists = FROMFROM
+		exists = FROMFROMFROM
+		FROMFROM = { NOT = { has_modifier = ar_changeling_army_discoordination } }
+	}
+	immediate = { 
+		FROMFROM = { add_modifier = { modifier = ar_changeling_army_discoordination days = 360 } }
+	}
+	option = { name = STH_dominion_flavour.1085.a }
+}
+
+
+
+
+#Governor Unrest Events
+planet_event = {
+	id = STH_dominion_flavour.1090
+	title = unrest.101.name
+	desc = unrest.101.desc
+	picture = GFX_evt_burning_settlement
+	show_sound = event_air_raid_siren
+	location = root
+	is_triggered_only = yes
+	trigger = {
+		exists = owner
+		owner = { 
+			is_normal_country = yes
+			is_borg_empire = no			
+		}
+		controller = { is_same_value = root.owner }
+		has_ground_combat = no
+		NOT = {
+			has_planet_flag = recent_unrest_event
+			OR = {
+				has_modifier = riots_averted
+				has_modifier = spiritualist_unrest
+				has_modifier = authoritarian_unrest
+				has_modifier = materialist_unrest
+				has_modifier = xenophobe_unrest
+				has_modifier = xenophile_unrest
+				has_modifier = pacifist_unrest
+				has_modifier = militarist_unrest
+				has_modifier = authoritarian_unrest
+				has_modifier = egalitarian_unrest
+				has_modifier = major_terrorist_action
+				has_modifier = minor_terrorist_action
+			}
+		}
+	}
+	immediate = {
+		add_modifier = { modifier = minor_terrorist_action years = 20 }
+		set_timed_planet_flag = { flag = recent_unrest_event years = 2 }
+	}
+	option = {
+		name = UNFORTUNATE
+		tooltip = { add_modifier = { modifier = minor_terrorist_action years = 20 } }
+	}
+}
+planet_event = {
+	id = STH_dominion_flavour.1091
+	title = unrest.105.name
+	desc = unrest.105.desc
+	picture = GFX_evt_burning_settlement
+	show_sound = event_air_raid_siren
+	location = root
+	is_triggered_only = yes
+	trigger = {
+		exists = owner
+		owner = { 
+			is_normal_country = yes
+			is_borg_empire = no			
+		}
+		controller = { is_same_value = root.owner }
+		has_ground_combat = no
+		NOT = {
+			has_planet_flag = recent_unrest_event
+			OR = {
+				has_modifier = riots_averted
+				has_modifier = spiritualist_unrest
+				has_modifier = authoritarian_unrest
+				has_modifier = materialist_unrest
+				has_modifier = xenophobe_unrest
+				has_modifier = xenophile_unrest
+				has_modifier = pacifist_unrest
+				has_modifier = militarist_unrest
+				has_modifier = authoritarian_unrest
+				has_modifier = egalitarian_unrest
+				has_modifier = major_terrorist_action
+				has_modifier = minor_terrorist_action
+			}
+		}
+	}
+	immediate = {
+		add_modifier = { modifier = major_terrorist_action years = 10 }
+		set_timed_planet_flag = { flag = recent_unrest_event years = 2 }
+	}
+	option = {
+		name = UNFORTUNATE
+		tooltip = { add_modifier = { modifier = major_terrorist_action years = 10 } }
+	}
+}
+
+
+#Changeling Found but exfiltrated - changeling country
+country_event = {
+	id = STH_dominion_flavour.1100
+	title = STH_dominion_flavour.1100.name
+	desc = STH_dominion_flavour.1100.desc_01
+	picture = sth_GFX_evt_empireDominion
+	is_triggered_only = yes
+	immediate = {
+		from = { root_get_exfiltration_bonus = yes }
+		fromfrom = {
+			country_event = { id = STH_dominion_flavour.1102 days = 1 scopes = { from = root.from fromfrom = root } }
+		}
+	}
+	option = { 
+		name = STH_dominion_flavour.1100.a 
+		tooltip = { from = { root_get_exfiltration_bonus = yes } }
+	}
+}
+#Changeling Found and killed - changeling country
+country_event = {
+	id = STH_dominion_flavour.1101
+	title = STH_dominion_flavour.1101.name
+	desc = STH_dominion_flavour.1101.desc_01
+	picture = sth_GFX_evt_empireDominion
+	is_triggered_only = yes
+	immediate = {
+		fromfrom = {
+			country_event = { id = STH_dominion_flavour.1103 days = 1 scopes = { from = root.from fromfrom = root } }
+		}
+	}
+	option = { 
+		name = STH_dominion_flavour.1101.a 
+	}
+}
+
+#Changeling Found but exfiltrated - infiltrated country
+country_event = {
+	id = STH_dominion_flavour.1102
+	title = STH_dominion_flavour.1102.name
+	desc = {
+		trigger = { has_country_flag = changelingDetected }
+		text = STH_dominion_flavour.1102.desc_01
+	}
+	desc = {
+		trigger = { NOT = { has_country_flag = changelingDetected } }
+		text = STH_dominion_flavour.1102.desc_02
+	}
+	picture = sth_GFX_evt_changelingFound1
+	is_triggered_only = yes
+	immediate = {
+		from = { kill_leader = { show_notification = no } }
+	}
+	option = { 
+		name = STH_dominion_flavour.1102.a
+		add_opinion_modifier = { modifier = opinion_changeling_infiltration who = fromfrom }
+		hidden_effect = { set_country_flag = changelingDetected }
+	}
+}
+#Changeling Found and killed - infiltrated country
+country_event = {
+	id = STH_dominion_flavour.1103
+	title = STH_dominion_flavour.1103.name
+	desc = {
+		trigger = { has_country_flag = changelingDetected }
+		text = STH_dominion_flavour.1103.desc_01
+	}
+	desc = {
+		trigger = { NOT = { has_country_flag = changelingDetected } }
+		text = STH_dominion_flavour.1103.desc_02
+	}
+	picture = sth_GFX_evt_changelingFound2
+	is_triggered_only = yes
+	immediate = {
+		from = { kill_leader = { show_notification = no } }
+	}
+	option = { 
+		name = STH_dominion_flavour.1103.a
+		add_opinion_modifier = { modifier = opinion_changeling_infiltration who = fromfrom }
+		hidden_effect = { set_country_flag = changelingDetected }
+	}
+}
+
+
+
+# The Ship setup
+fleet_event = {
+	id = STH_dominion_flavour.2000
+	hide_window = yes
+	trigger = {
+		owner = { 
+			is_changeling_empire = yes 
+			any_neighbor_country = { 
+				is_normal_country = yes 
+				has_communications = root.owner
+				any_system = { 
+					has_owner = yes
+					owner = { is_same_value = prev }
+					any_planet = { is_colony = no is_inhabitable_planet = yes } 
+				}
+			}
+		}
+		any_owned_ship = { is_ship_class = shipclass_military }
+		NOT = { exists = solar_system }
+		years_passed > 20
+		exists = leader
+		leader = { species = { is_species_class = DOM } }
+	}
+	fire_only_once = yes
+	mean_time_to_happen = {	months = 2 }
+	immediate = {
+		leader = {
+			save_global_event_target_as = theShipLeader
+			exile_leader_as = theShipLeader
+		}
+		random_owned_ship = { 
+			limit = { is_ship_class = shipclass_military }
+			delete_ship = this
+		}
+		
+		owner = {
+			closest_system = {
+				min_steps = 1
+				limit = {
+					has_owner = yes
+					owner = { is_neighbor_of = root.owner }
+					any_planet = { is_colony = no is_inhabitable_planet = yes }
+				}
+				owner = { save_event_target_as = crashPlanetSystemOwner }
+				save_event_target_as = crashPlanetSystem
+				random_system_planet = {
+					limit = { is_colony = no is_inhabitable_planet = yes }
+					save_event_target_as = crashPlanet
+					add_anomaly = STH_the_ship_category
+				}
+			}
+			country_event = { id = STH_dominion_flavour.2001 scopes = { from = event_target:theShipLeader fromfrom = event_target:crashPlanetSystem fromfromfrom = event_target:crashPlanetSystemOwner } }
+			event_target:crashPlanetSystemOwner = { country_event = { id = STH_dominion_flavour.2002 days = 7 scopes = { from = root.owner fromfrom = event_target:crashPlanet fromfromfrom = event_target:crashPlanetSystem } } }
+		}
+	}
+}
+
+#Dominion Notification
+country_event = {
+	id = STH_dominion_flavour.2001
+	title = STH_dominion_flavour.2001.name
+	desc = { text = STH_dominion_flavour.2001.desc }
+	picture = sth_GFX_evt_jemHadarFighter2
+	is_triggered_only = yes
+	option = { name = STH_dominion_flavour.2001.a }
+}
+
+#Neighbour Notification
+country_event = {
+	id = STH_dominion_flavour.2002
+	title = STH_dominion_flavour.2002.name
+	desc = { text = STH_dominion_flavour.2002.desc }
+	picture = sth_GFX_evt_jemHadarFighter2
+	is_triggered_only = yes
+	option = { name = STH_dominion_flavour.2002.a }
+}
+
+#Anomaly Fail
+ship_event = {
+	id = STH_dominion_flavour.2010
+	title = STH_dominion_flavour.2010.name
+	desc = { 
+		trigger = { owner = { is_changeling_empire = yes } }
+		text = STH_dominion_flavour.2010.desc_01
+	}
+	desc = { 
+		trigger = { owner = { is_changeling_empire = no } }
+		text = STH_dominion_flavour.2010.desc_02
+	}
+	picture = sth_GFX_evt_theShip1
+	is_triggered_only = yes
+	trigger = { owner = { is_assimilator = no } }
+	immediate = {
+		if = { 
+			limit = { has_hp_percentage > 0.16 }	
+			random_list = { 
+				10 = { reduce_hp_percent = 5 }
+				10 = { reduce_hp_percent = 15 }
+			}
+		}
+	}
+	option = { 
+		name = STH_dominion_flavour.2010.a 
+		trigger = { owner = { is_changeling_empire = yes } }
+	}
+	option = { 
+		name = STH_dominion_flavour.2010.b
+		trigger = { owner = { is_changeling_empire = no } }
+	}
+}
+
+#Anomaly Success
+ship_event = {
+	id = STH_dominion_flavour.2020
+	title = STH_dominion_flavour.2020.name
+	desc = { 
+		trigger = { owner = { is_changeling_empire = yes } }
+		text = STH_dominion_flavour.2020.desc_01
+	}
+	desc = { 
+		trigger = { owner = { is_changeling_empire = no } exists = event_target:changelingEmpire event_target:changelingEmpire = { has_communications = root.owner } }
+		text = STH_dominion_flavour.2020.desc_02
+	}
+	desc = { 
+		trigger = { owner = { is_changeling_empire = no } NOT = { exists = event_target:changelingEmpire event_target:changelingEmpire = { has_communications = root.owner } } }
+		text = STH_dominion_flavour.2020.desc_03
+	}
+	picture = sth_GFX_evt_theShip1
+	is_triggered_only = yes
+	trigger = { owner = { is_assimilator = no } }
+	immediate = {
+		random_country = {
+			limit = { is_changeling_empire = yes has_communications = root.owner }
+			save_event_target_as = changelingEmpire
+		}
+	}
+	option = { 
+		name = STH_dominion_flavour.2020.a #Recovered Changeling
+		trigger = { owner = { is_changeling_empire = yes } }
+		allow = { owner = { is_changeling_empire = yes } }
+		owner = { add_influence = 100 }
+	}
+	option = { 
+		name = STH_dominion_flavour.2020.b #Begin Recovery
+		trigger = { owner = { is_changeling_empire = no } }
+		allow = { owner = { is_changeling_empire = no } }
+		fleet = { set_event_locked = yes }
+		hidden_effect = { ship_event = { id = STH_dominion_flavour.2021 scopes = { from = from } days = 60 random = 7 } }
+	}
+	option = { 
+		name = STH_dominion_flavour.2020.c #Signal Dominion
+		trigger = { 
+			owner = { is_changeling_empire = no } 
+			exists = event_target:changelingEmpire
+			event_target:changelingEmpire = { has_communications = root.owner }
+		}
+		allow = { 
+			owner = { is_changeling_empire = no } 
+			exists = event_target:changelingEmpire
+			event_target:changelingEmpire = { has_communications = root.owner }
+		}
+		event_target:changelingEmpire = {
+			country_event = { id = STH_dominion_flavour.2024 scopes = { from = from fromfrom = root } }
+			add_opinion_modifier = { modifier = opinion_returned_changeling who = root.owner }
+		}
+	}
+}
+
+#Ship Recovery
+ship_event = {
+	id = STH_dominion_flavour.2021
+	title = STH_dominion_flavour.2021.name
+	desc = { 
+		trigger = { exists = event_target:changelingEmpire event_target:changelingEmpire = { has_communications = root.owner } }
+		text = STH_dominion_flavour.2021.desc_01
+	}
+	desc = { 
+		trigger = { NOT = { exists = event_target:changelingEmpire event_target:changelingEmpire = { has_communications = root.owner } } }
+		text = STH_dominion_flavour.2021.desc_02
+	}
+	picture = sth_GFX_evt_theShip1
+	is_triggered_only = yes
+	immediate = {
+		random_country = {
+			limit = { is_changeling_empire = yes has_communications = root.owner }
+			save_event_target_as = changelingEmpire
+		}
+	}
+	option = { 
+		name = STH_dominion_flavour.2021.a #Hold Out
+		trigger = { exists = event_target:changelingEmpire }
+		allow = { exists = event_target:changelingEmpire }
+		random_list = {
+			75 = { hidden_effect = { ship_event = { id = STH_dominion_flavour.2022 scopes = { from = from fromfrom = event_target:changelingEmpire } days = 30 random = 7 } } } #Success
+			25 = { hidden_effect = { ship_event = { id = STH_dominion_flavour.2023 scopes = { from = from fromfrom = event_target:changelingEmpire } days = 30 random = 7 } } } #Failure
+		}
+		event_target:changelingEmpire = {
+			country_event = { id = STH_dominion_flavour.2025 scopes = { from = from fromfrom = root } }
+			add_opinion_modifier = { modifier = opinion_outraged who = root.owner }
+		}
+	}
+	option = { 
+		name = STH_dominion_flavour.2021.b #Cave in
+		trigger = { exists = event_target:changelingEmpire }
+		allow = { exists = event_target:changelingEmpire }
+		fleet = { set_event_locked = no }
+		event_target:changelingEmpire = {
+			country_event = { id = STH_dominion_flavour.2026 scopes = { from = from fromfrom = root } }
+		}
+	}
+	option = { 
+		name = STH_dominion_flavour.2021.c #Ship Recovered
+		trigger = { NOT = { exists = event_target:changelingEmpire } }
+		allow = { NOT = { exists = event_target:changelingEmpire } }
+		fleet = { set_event_locked = no }
+		create_fleet = {
+			name = "NAME_Recovered_Vessel"
+			effect = {
+				set_owner = Root.Owner
+				create_ship_design = { design = "NAME_Jem_Hadar_Ship" ftl = ROOT }
+				create_ship = { name = random design = last_created_design graphical_culture = "dominion_01" }
+				set_location = Root
+				set_fleet_stance = aggressive
+			}
+		}
+	}
+}
+
+#Recovery Success
+ship_event = {
+	id = STH_dominion_flavour.2022
+	title = STH_dominion_flavour.2022.name
+	desc = { text = STH_dominion_flavour.2022.desc }
+	picture = sth_GFX_evt_theShip1
+	is_triggered_only = yes
+	option = { 
+		name = STH_dominion_flavour.2022.a #Success
+		create_fleet = {
+			name = "NAME_Recovered_Vessel"
+			effect = {
+				set_owner = Root.Owner
+				create_ship_design = { design = "NAME_Jem_Hadar_Ship" ftl = ROOT }
+				create_ship = { name = random design = last_created_design graphical_culture = "dominion_01" }
+				set_location = Root
+				set_fleet_stance = aggressive
+			}
+		}
+	}
+	after = { fleet = { set_event_locked = no } }
+}
+
+#Recovery Failure
+ship_event = {
+	id = STH_dominion_flavour.2023
+	title = STH_dominion_flavour.2023.name
+	desc = { text = STH_dominion_flavour.2023.desc }
+	picture = sth_GFX_evt_theShip1
+	is_triggered_only = yes
+	immediate = {
+	}
+	option = { 
+		name = STH_dominion_flavour.2023.a #Failure
+		if = { 
+			limit = { has_hp_percentage > 0.16 }	
+			random_list = { 
+				10 = { reduce_hp_percent = 5 }
+				10 = { reduce_hp_percent = 15 }
+			}
+		}
+	}
+	after = { fleet = { set_event_locked = no } }
+}
+
+
+#Country gave changeling back
+country_event = {
+	id = STH_dominion_flavour.2024
+	title = STH_dominion_flavour.2024.name
+	desc = { text = STH_dominion_flavour.2024.desc }
+	picture = sth_GFX_evt_theShip1
+	is_triggered_only = yes
+	immediate = { }
+	option = { 
+		name = STH_dominion_flavour.2024.a #Perhaps some solids are trustworthy
+		add_influence = 100
+	}
+}
+
+#Country refused to give changeling back
+country_event = {
+	id = STH_dominion_flavour.2025
+	title = STH_dominion_flavour.2025.name
+	desc = { text = STH_dominion_flavour.2025.desc }
+	picture = sth_GFX_evt_theShip1
+	is_triggered_only = yes
+	immediate = { }
+	option = { 
+		name = STH_dominion_flavour.2025.a #They will pay
+	}
+}
+
+#Country gave changeling after threats
+country_event = {
+	id = STH_dominion_flavour.2026
+	title = STH_dominion_flavour.2026.name
+	desc = { text = STH_dominion_flavour.2026.desc }
+	picture = sth_GFX_evt_theShip1
+	is_triggered_only = yes
+	immediate = { }
+	option = { 
+		name = STH_dominion_flavour.2026.a #They are right to fear us
+		add_influence = 100
+	}
+}
+
+
+
+
+#Vorta Killed
+fleet_event = {
+	id = STH_dominion_flavour.2050
+	title = STH_dominion_flavour.2050.name
+	desc = { text = STH_dominion_flavour.2050.desc }
+	picture = sth_GFX_evt_jemHadarFighter1
+	mean_time_to_happen = { months = 600 }
+	trigger = {
+		exists = owner
+		owner = {
+			is_changeling_empire = yes
+			exists = capital_scope
+			any_owned_pop_species = { is_species_class = JEM }
+			any_owned_pop_species = { is_species_class = VOR }
+		}
+		exists = leader
+		leader = { 
+			species = { is_species_class = VOR } 
+			leader_class = admiral
+		}
+		exists = event_target:jemHadarSpecies
+		exists = event_target:vortaSpecies
+	}
+	option = { 
+		name = STH_dominion_flavour.2050.a #Get Jem'Hadar Leader
+		leader = { kill_leader = { show_notification = no } }
+		hidden_effect = { 
+			owner = { 
+				create_leader = { type = admiral species = event_target:jemHadarSpecies name = random skill = random } 
+				last_created_leader = { set_jem_hadar_name = yes set_is_female = no set_age = 4 save_event_target_as = tempLeader }
+			}
+			assign_leader = event_target:tempLeader 
+		}
+		custom_tooltip = "STH_dominion_flavour.2050.a.tooltip"
+	}
+	option = { 
+		name = STH_dominion_flavour.2050.b #Activate her/his clone
+		owner = { tooltip = { root.leader = { kill_leader = { show_notification = no } } } }
+		custom_tooltip = "STH_dominion_flavour.2050.b.tooltip"
+		leader = { add_skill = -200 }
+	}
+	option = { 
+		name = STH_dominion_flavour.2050.c #Discipline is mandatory!
+		leader = { kill_leader = { show_notification = no } }
+		owner = { add_unity = 50 }
+	}
+}
+
+
+#Select Member world
+country_event = {
+	id = STH_dominion_flavour.3000
+	title = STH_dominion_flavour.3000.name
+	picture = sth_GFX_evt_empireDominion
+	desc = { text = STH_dominion_flavour.3000.desc_01 }
+	is_triggered_only = yes
+	trigger = { is_changeling_empire = yes }
+	immediate = {
+		random_country = {
+			limit = { has_country_flag = LastDemandTarget }
+			save_event_target_as = LastDemandTarget
+		}
+		random_country = {
+			limit = { OR = { is_subject_type = dominion_member is_subject_type = dominion_member_human } NOR = { is_country = event_target:LastDemandTarget } }
+			save_event_target_as = dominionMember1
+		}
+		random_country = {
+			limit = {
+				OR = { is_subject_type = dominion_member is_subject_type = dominion_member_human }
+				NOR = { is_country = event_target:LastDemandTarget is_country = event_target:dominionMember1 }
+			}
+			save_event_target_as = dominionMember2
+		}
+		random_country = {
+			limit = {
+				OR = { is_subject_type = dominion_member is_subject_type = dominion_member_human }
+				NOR = { 
+					is_country = event_target:dominionMember1
+					is_country = event_target:dominionMember2
+					is_country = event_target:LastDemandTarget
+				}
+			}
+			save_event_target_as = dominionMember3
+		}
+		random_country = {
+			limit = {
+				OR = { is_subject_type = dominion_member is_subject_type = dominion_member_human }
+				NOR = { 
+					is_country = event_target:dominionMember1
+					is_country = event_target:dominionMember2
+					is_country = event_target:dominionMember3
+					is_country = event_target:LastDemandTarget
+				}
+			}
+			save_event_target_as = dominionMember4
+		}
+		random_country = {
+			limit = {
+				OR = { is_subject_type = dominion_member is_subject_type = dominion_member_human }
+				NOR = { 
+					is_country = event_target:dominionMember1
+					is_country = event_target:dominionMember2
+					is_country = event_target:dominionMember3
+					is_country = event_target:dominionMember4
+					is_country = event_target:LastDemandTarget
+				}
+			}
+			save_event_target_as = dominionMember5
+		}
+		random_country = {
+			limit = {
+				OR = { is_subject_type = dominion_member is_subject_type = dominion_member_human }
+				NOR = { 
+					is_country = event_target:dominionMember1
+					is_country = event_target:dominionMember2
+					is_country = event_target:dominionMember3
+					is_country = event_target:dominionMember4
+					is_country = event_target:dominionMember5
+					is_country = event_target:LastDemandTarget
+				}
+			}
+			save_event_target_as = dominionMember6
+		}
+	}
+	option = {
+		name = STH_dominion_flavour.3000.a
+		allow = { exists = event_target:LastDemandTarget }
+		trigger = { exists = event_target:LastDemandTarget }
+		hidden_effect = { 
+			every_country = { 	
+				limit = { has_country_flag = LastDemandTarget } 
+				remove_country_flag = LastDemandTarget 
+			}
+			event_target:LastDemandTarget = { set_country_flag = LastDemandTarget } 
+			country_event = { id = STH_dominion_flavour.3001 scopes = { from = event_target:LastDemandTarget } } 
+		}
+	}
+	option = {
+		name = STH_dominion_flavour.3000.b
+		allow = { exists = event_target:dominionMember1 }
+		trigger = { exists = event_target:dominionMember1 }
+		hidden_effect = { 
+			every_country = { 	
+				limit = { has_country_flag = LastDemandTarget } 
+				remove_country_flag = LastDemandTarget 
+			}
+			event_target:dominionMember1 = { set_country_flag = LastDemandTarget } 
+			country_event = { id = STH_dominion_flavour.3001 scopes = { from = event_target:dominionMember1 } } 
+		}
+	}
+	option = {
+		name = STH_dominion_flavour.3000.c
+		allow = { exists = event_target:dominionMember2 }
+		trigger = { exists = event_target:dominionMember2 }
+		hidden_effect = { 
+			every_country = { 	
+				limit = { has_country_flag = LastDemandTarget } 
+				remove_country_flag = LastDemandTarget 
+			}
+			event_target:dominionMember2 = { set_country_flag = LastDemandTarget } 
+			country_event = { id = STH_dominion_flavour.3001 scopes = { from = event_target:dominionMember2 } } 
+		}
+	}
+	option = {
+		name = STH_dominion_flavour.3000.d
+		allow = { exists = event_target:dominionMember3 }
+		trigger = { exists = event_target:dominionMember3 }
+		hidden_effect = { 
+			every_country = { 	
+				limit = { has_country_flag = LastDemandTarget } 
+				remove_country_flag = LastDemandTarget 
+			}
+			event_target:dominionMember3 = { set_country_flag = LastDemandTarget } 
+			country_event = { id = STH_dominion_flavour.3001 scopes = { from = event_target:dominionMember3 } } 
+		}
+	}
+	option = {
+		name = STH_dominion_flavour.3000.e
+		allow = { exists = event_target:dominionMember4 }
+		trigger = { exists = event_target:dominionMember4 }
+		hidden_effect = { 
+			every_country = { 	
+				limit = { has_country_flag = LastDemandTarget } 
+				remove_country_flag = LastDemandTarget 
+			}
+			event_target:dominionMember4 = { set_country_flag = LastDemandTarget } 
+			country_event = { id = STH_dominion_flavour.3001 scopes = { from = event_target:dominionMember4 } } 
+		}
+	}
+	option = {
+		name = STH_dominion_flavour.3000.f
+		allow = { exists = event_target:dominionMember5 }
+		trigger = { exists = event_target:dominionMember5 }
+		hidden_effect = { 
+			every_country = { 	
+				limit = { has_country_flag = LastDemandTarget } 
+				remove_country_flag = LastDemandTarget 
+			}
+			event_target:dominionMember5 = { set_country_flag = LastDemandTarget } 
+			country_event = { id = STH_dominion_flavour.3001 scopes = { from = event_target:dominionMember5 } } 
+		}
+	}
+	option = {
+		name = STH_dominion_flavour.3000.g
+		allow = { exists = event_target:dominionMember6 }
+		trigger = { exists = event_target:dominionMember6 }
+		hidden_effect = { 
+			every_country = { 	
+				limit = { has_country_flag = LastDemandTarget } 
+				remove_country_flag = LastDemandTarget 
+			}
+			event_target:dominionMember6 = { set_country_flag = LastDemandTarget } 
+			country_event = { id = STH_dominion_flavour.3001 scopes = { from = event_target:dominionMember6 } } 
+		}
+	}
+	option = { 
+		name = STH_dominion_flavour.3000.y 
+		hidden_effect = { country_event = { id = STH_dominion_flavour.3000 } } #new list
+	}
+	option = { 
+		name = STH_dominion_flavour.3000.z
+		hidden_effect = { country_event = { id = STH_dominion_flavour.1001 } } #back
+	}
+}
+
+#Select Demand
+country_event = {
+	id = STH_dominion_flavour.3001
+	title = STH_dominion_flavour.3001.name
+	picture = sth_GFX_evt_empireDominion
+	desc = { text = STH_dominion_flavour.3001.desc_01 }
+	is_triggered_only = yes
+	trigger = { is_changeling_empire = yes }
+	immediate = { }
+	option = {
+		name = STH_dominion_flavour.3001.a #Tribute
+		allow = { 			
+			influence > 24
+			exists = from
+			from = { 
+				energy > 100
+				minerals > 100
+				opinion = { who = root value > 25 }
+			}
+		}		
+		hidden_effect = { country_event = { id = STH_dominion_flavour.3010 scopes = { from = from } } }		
+	}
+	option = {
+		name = STH_dominion_flavour.3001.b #Fleet
+		allow = { 
+			influence > 75
+			has_swapped_tradition = tr_victory_4
+			exists = from
+			from = { 
+				opinion = { who = root value > 75 }
+				from.capital_scope = {
+					has_spaceport = yes
+				}
+			}
+		}
+		hidden_effect = { country_event = { id = STH_dominion_flavour.3020 scopes = { from = from } } }		
+	}
+	option = {
+		name = STH_dominion_flavour.3001.c #Planets
+		allow = { 
+			influence > 299
+			has_swapped_tradition = tr_victory_4
+			exists = from
+			from = { 
+				opinion = { who = root value > 150 }
+			}
+		}
+		hidden_effect = { country_event = { id = STH_dominion_flavour.3030 scopes = { from = from } } }
+	}
+	option = {
+		name = STH_dominion_flavour.3001.f # Destroy frontier outpost
+		trigger = { 
+			exists = from
+			from = {
+				is_ai = yes 
+				any_owned_fleet = {
+					is_ship_size = outpost_station
+				}	
+			}
+		}
+		hidden_effect = { country_event = { id = STH_dominion_flavour.3060 scopes = { from = from } } }
+	}
+	option = {
+		name = STH_dominion_flavour.3001.d # Propaganda
+		trigger = { 
+			exists = from
+			from = {
+				is_ai = yes 
+			}
+		}
+		hidden_effect = { country_event = { id = STH_dominion_flavour.3040 scopes = { from = from } } }
+	}
+	option = {
+		name = STH_dominion_flavour.3001.e # Leaders
+		hidden_effect = { country_event = { id = STH_dominion_flavour.3050 scopes = { from = from } } }
+	}
+	option = { 
+		name = STH_dominion_flavour.3001.z
+		hidden_effect = { country_event = { id = STH_dominion_flavour.3000 } } #back
+	}
+}
+
+
+#Select tribute Demand
+country_event = {
+	id = STH_dominion_flavour.3010
+	title = STH_dominion_flavour.3010.name
+	picture = sth_GFX_evt_empireDominion
+	desc = { text = STH_dominion_flavour.3010.desc_01 }
+	is_triggered_only = yes
+	trigger = { is_changeling_empire = yes }
+	immediate = { }
+	option = {
+		name = STH_dominion_flavour.3010.a # Low Tribute
+		custom_tooltip = STH_dominion_flavour.3010.a.tooltip
+		allow = { 			
+			influence > 25
+			exists = from
+			from = { 
+				energy > 100
+				minerals > 100
+				opinion = { who = root value > 25 }
+			}
+		}	
+		hidden_effect = {
+			add_influence = -25
+			add_energy = 100
+			add_minerals = 100
+			from = { 
+				add_energy = -100
+				add_minerals = -100
+				add_opinion_modifier = { who = root modifier = opinion_demanded_low_tribute }
+			}
+		}
+	}
+	option = {
+		name = STH_dominion_flavour.3010.b # Medium Tribute
+		custom_tooltip = STH_dominion_flavour.3010.b.tooltip
+		allow = { 			
+			influence > 49
+			exists = from
+			from = { 
+				energy > 250
+				minerals > 250
+				opinion = { who = root value > 50 }
+			}
+		}		
+		hidden_effect = {
+			add_influence = -50
+			add_energy = 250
+			add_minerals = 250
+			from = { 
+				add_energy = -250
+				add_minerals = -250
+				add_opinion_modifier = { who = root modifier = opinion_demanded_medium_tribute }
+			}
+		}
+	}
+	option = {
+		name = STH_dominion_flavour.3010.c # High Tribute
+		custom_tooltip = STH_dominion_flavour.3010.c.tooltip
+		allow = { 			
+			influence > 75
+			exists = from
+			from = { 
+				energy > 500
+				minerals > 500
+				opinion = { who = root value > 75 }
+			}
+		}		
+		hidden_effect = {
+			add_influence = -75
+			add_energy = 500
+			add_minerals = 500
+			from = { 
+				add_energy = -500
+				add_minerals = -500
+				add_opinion_modifier = { who = root modifier = opinion_demanded_high_tribute }
+			}
+		}
+	}
+	option = { 
+		name = STH_dominion_flavour.3010.z
+		hidden_effect = { country_event = { id = STH_dominion_flavour.3001 scopes = { from = from } } } #back
+	}
+}
+
+#Select Fleet Demand
+country_event = {
+	id = STH_dominion_flavour.3020
+	title = STH_dominion_flavour.3020.name
+	picture = sth_GFX_evt_empireDominion
+	desc = { text = STH_dominion_flavour.3020.desc_01 }
+	is_triggered_only = yes
+	trigger = { is_changeling_empire = yes }
+	immediate = { }
+	option = {
+		name = STH_dominion_flavour.3020.a # Small Fleet
+		custom_tooltip = STH_dominion_flavour.3020.a.tooltip
+		allow = {
+			custom_tooltip = { 
+				fail_text = STH_dominion_flavour.3020.a.failtooltip
+				influence > 100
+				minerals > 250
+				energy > 250
+				exists = from
+				from = { 
+					opinion = { who = root value > 75 }
+					NOT = { has_country_flag = demanded_small_fleet }
+				}
+			}
+		}
+		hidden_effect = {
+			add_influence = -100
+			add_energy = -250
+			add_minerals = -250
+			from = { 
+				add_opinion_modifier = { who = root modifier = opinion_demanded_small_fleet }
+				set_timed_country_flag = { flag = demanded_small_fleet days = 900 }
+			}
+			country_event = { id = STH_dominion_flavour.3021 days = 30 scopes = { from = from } }			
+		}
+	}
+	option = {
+		name = STH_dominion_flavour.3020.b # Medium Fleet
+		custom_tooltip = STH_dominion_flavour.3020.b.tooltip
+		allow = {
+			custom_tooltip = { 
+				fail_text = STH_dominion_flavour.3020.b.failtooltip
+				influence > 150
+				minerals > 500
+				energy > 500
+				has_technology = tech_engineering_destroyer_541
+				exists = from
+				from = { 
+					opinion = { who = root value > 100 }
+					has_technology = tech_engineering_destroyer_541
+					NOT = { has_country_flag = demanded_medium_fleet }
+				}
+			}
+		}
+		hidden_effect = {
+			add_influence = -150
+			add_energy = -500
+			add_minerals = -500
+			from = { 
+				add_opinion_modifier = { who = root modifier = opinion_demanded_medium_fleet }
+				set_timed_country_flag = { flag = demanded_medium_fleet days = 1500 }
+			}
+			country_event = { id = STH_dominion_flavour.3022 days = 90 scopes = { from = from } }
+		}		
+	}
+	option = {
+		name = STH_dominion_flavour.3020.c # Big Fleet
+		custom_tooltip = STH_dominion_flavour.3020.c.tooltip
+		allow = {
+			custom_tooltip = { 
+				fail_text = STH_dominion_flavour.3020.c.failtooltip
+				has_technology = tech_engineering_cruiser_542
+				influence > 250
+				minerals > 750
+				energy > 750
+				exists = from
+				from = { 
+					opinion = { who = root value > 150 }
+					has_technology = tech_engineering_cruiser_542
+					NOT = { has_country_flag = demanded_big_fleet }
+				}
+			}
+		}
+		hidden_effect = {
+			add_influence = -250
+			add_energy = -750
+			add_minerals = -750
+			from = { 
+				add_opinion_modifier = { who = root modifier = opinion_demanded_big_fleet }
+				set_timed_country_flag = { flag = demanded_big_fleet days = 2100 }
+			}
+			country_event = { id = STH_dominion_flavour.3023 days = 180 scopes = { from = from } }
+		}		
+	}
+	option = { 
+		name = STH_dominion_flavour.3020.z
+		hidden_effect = { country_event = { id = STH_dominion_flavour.3001 scopes = { from = from } } } #back
+	}
+}	
+
+
+#Small Fleet Spawn
+country_event = {
+	id = STH_dominion_flavour.3021
+	title = STH_dominion_flavour.3021.name
+	picture = sth_GFX_evt_jemHadarFighter3
+	desc = { text = STH_dominion_flavour.3021.desc_01 }
+	is_triggered_only = yes
+	trigger = { is_changeling_empire = yes }
+	location = from.capital_scope
+	immediate = { 
+		from = { 
+			from.capital_scope = { save_event_target_as = MemberCapital }
+			create_fleet = {
+				effect = {
+					set_owner = root
+					set_location = from.capital_scope
+					while = {
+						count = 3
+						create_ship = { name = random random_existing_design = corvette graphical_culture = root prefix = no }
+						last_created_ship = { 
+							if = {
+								limit = { owner = { OR = { has_country_flag = starfleet_tos has_country_flag = klingon_tos has_country_flag = romulan_tos has_country_flag = generic_tos has_country_flag = borg_tos } } }
+								add_modifier = { modifier = "erabuff_tos" days = -1 }
+							}
+							if = {
+								limit = { owner = { OR = { has_country_flag = starfleet_tmp has_country_flag = klingon_tmp has_country_flag = romulan_tmp has_country_flag = generic_tmp has_country_flag = borg_tmp } } }
+								add_modifier = { modifier = "erabuff_tmp" days = -1 }
+							}
+							if = {
+								limit = { owner = { OR = { has_country_flag = starfleet_tng has_country_flag = klingon_tng has_country_flag = romulan_tng has_country_flag = generic_tng has_country_flag = borg_tng } } }
+								add_modifier = { modifier = "erabuff_tng" days = -1 }
+							}
+							if = {
+								limit = { owner = { OR = { has_country_flag = starfleet_tng2 has_country_flag = klingon_tng2 has_country_flag = romulan_tng2 has_country_flag = generic_tng2 has_country_flag = borg_tng2 } } }
+								add_modifier = { modifier = "erabuff_tng2" days = -1 } 
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+	option = { 
+		name = STH_dominion_flavour.3021.a		
+	}
+}
+
+#Small Fleet Spawn
+country_event = {
+	id = STH_dominion_flavour.3022
+	title = STH_dominion_flavour.3022.name
+	picture = sth_GFX_evt_jemHadarFighter3
+	desc = { text = STH_dominion_flavour.3022.desc_01 }
+	is_triggered_only = yes
+	trigger = { is_changeling_empire = yes }
+	location = from.capital_scope
+	immediate = { 
+		from.capital_scope = { save_event_target_as = MemberCapital }
+		from = { 
+			create_fleet = {
+				effect = {
+					set_owner = root
+					set_location = from.capital_scope
+					while = {
+						count = 3
+						create_ship = { name = random random_existing_design = corvette graphical_culture = root prefix = no }
+						last_created_ship = { 
+							if = {
+								limit = { owner = { OR = { has_country_flag = starfleet_tos has_country_flag = klingon_tos has_country_flag = romulan_tos has_country_flag = generic_tos has_country_flag = borg_tos } } }
+								add_modifier = { modifier = "erabuff_tos" days = -1 }
+							}
+							if = {
+								limit = { owner = { OR = { has_country_flag = starfleet_tmp has_country_flag = klingon_tmp has_country_flag = romulan_tmp has_country_flag = generic_tmp has_country_flag = borg_tmp } } }
+								add_modifier = { modifier = "erabuff_tmp" days = -1 }
+							}
+							if = {
+								limit = { owner = { OR = { has_country_flag = starfleet_tng has_country_flag = klingon_tng has_country_flag = romulan_tng has_country_flag = generic_tng has_country_flag = borg_tng } } }
+								add_modifier = { modifier = "erabuff_tng" days = -1 }
+							}
+							if = {
+								limit = { owner = { OR = { has_country_flag = starfleet_tng2 has_country_flag = klingon_tng2 has_country_flag = romulan_tng2 has_country_flag = generic_tng2 has_country_flag = borg_tng2 } } }
+								add_modifier = { modifier = "erabuff_tng2" days = -1 } 
+							}
+						}
+					}
+					create_ship = { name = random random_existing_design = saber graphical_culture = root prefix = no }
+					last_created_ship = { 
+						if = {
+							limit = { owner = { OR = { has_country_flag = starfleet_tos has_country_flag = klingon_tos has_country_flag = romulan_tos has_country_flag = generic_tos has_country_flag = borg_tos } } }
+							add_modifier = { modifier = "erabuff_tos" days = -1 }
+						}
+						if = {
+							limit = { owner = { OR = { has_country_flag = starfleet_tmp has_country_flag = klingon_tmp has_country_flag = romulan_tmp has_country_flag = generic_tmp has_country_flag = borg_tmp } } }
+							add_modifier = { modifier = "erabuff_tmp" days = -1 }
+						}
+						if = {
+							limit = { owner = { OR = { has_country_flag = starfleet_tng has_country_flag = klingon_tng has_country_flag = romulan_tng has_country_flag = generic_tng has_country_flag = borg_tng } } }
+							add_modifier = { modifier = "erabuff_tng" days = -1 }
+						}
+						if = {
+							limit = { owner = { OR = { has_country_flag = starfleet_tng2 has_country_flag = klingon_tng2 has_country_flag = romulan_tng2 has_country_flag = generic_tng2 has_country_flag = borg_tng2 } } }
+							add_modifier = { modifier = "erabuff_tng2" days = -1 } 
+						}
+					}
+				}
+			}
+		}
+	}
+	option = { 
+		name = STH_dominion_flavour.3022.a		
+	}
+}	
+
+#Big Fleet Spawn
+country_event = {
+	id = STH_dominion_flavour.3023
+	title = STH_dominion_flavour.3023.name
+	picture = sth_GFX_evt_jemHadarFighter3
+	desc = { text = STH_dominion_flavour.3023.desc_01 }
+	is_triggered_only = yes
+	trigger = { is_changeling_empire = yes }
+	location = from.capital_scope
+	immediate = {
+		from.capital_scope = { save_event_target_as = MemberCapital }
+		from = {
+			create_fleet = {
+				effect = {
+					set_owner = root
+					set_location = from.capital_scope
+					while = {
+						count = 3
+						create_ship = { name = random random_existing_design = corvette graphical_culture = root prefix = no }
+						last_created_ship = { 
+							if = {
+								limit = { owner = { OR = { has_country_flag = starfleet_tos has_country_flag = klingon_tos has_country_flag = romulan_tos has_country_flag = generic_tos has_country_flag = borg_tos } } }
+								add_modifier = { modifier = "erabuff_tos" days = -1 }
+							}
+							if = {
+								limit = { owner = { OR = { has_country_flag = starfleet_tmp has_country_flag = klingon_tmp has_country_flag = romulan_tmp has_country_flag = generic_tmp has_country_flag = borg_tmp } } }
+								add_modifier = { modifier = "erabuff_tmp" days = -1 }
+							}
+							if = {
+								limit = { owner = { OR = { has_country_flag = starfleet_tng has_country_flag = klingon_tng has_country_flag = romulan_tng has_country_flag = generic_tng has_country_flag = borg_tng } } }
+								add_modifier = { modifier = "erabuff_tng" days = -1 }
+							}
+							if = {
+								limit = { owner = { OR = { has_country_flag = starfleet_tng2 has_country_flag = klingon_tng2 has_country_flag = romulan_tng2 has_country_flag = generic_tng2 has_country_flag = borg_tng2 } } }
+								add_modifier = { modifier = "erabuff_tng2" days = -1 } 
+							}
+						}
+					}
+					create_ship = { name = random random_existing_design = saber graphical_culture = root prefix = no }
+					last_created_ship = { 
+						if = {
+							limit = { owner = { OR = { has_country_flag = starfleet_tos has_country_flag = klingon_tos has_country_flag = romulan_tos has_country_flag = generic_tos has_country_flag = borg_tos } } }
+							add_modifier = { modifier = "erabuff_tos" days = -1 }
+						}
+						if = {
+							limit = { owner = { OR = { has_country_flag = starfleet_tmp has_country_flag = klingon_tmp has_country_flag = romulan_tmp has_country_flag = generic_tmp has_country_flag = borg_tmp } } }
+							add_modifier = { modifier = "erabuff_tmp" days = -1 }
+						}
+						if = {
+							limit = { owner = { OR = { has_country_flag = starfleet_tng has_country_flag = klingon_tng has_country_flag = romulan_tng has_country_flag = generic_tng has_country_flag = borg_tng } } }
+							add_modifier = { modifier = "erabuff_tng" days = -1 }
+						}
+						if = {
+							limit = { owner = { OR = { has_country_flag = starfleet_tng2 has_country_flag = klingon_tng2 has_country_flag = romulan_tng2 has_country_flag = generic_tng2 has_country_flag = borg_tng2 } } }
+							add_modifier = { modifier = "erabuff_tng2" days = -1 } 
+						}
+					}
+					create_ship = { name = random random_existing_design = sovereign graphical_culture = root prefix = no }
+					last_created_ship = { 
+						if = {
+							limit = { owner = { OR = { has_country_flag = starfleet_tos has_country_flag = klingon_tos has_country_flag = romulan_tos has_country_flag = generic_tos has_country_flag = borg_tos } } }
+							add_modifier = { modifier = "erabuff_tos" days = -1 }
+						}
+						if = {
+							limit = { owner = { OR = { has_country_flag = starfleet_tmp has_country_flag = klingon_tmp has_country_flag = romulan_tmp has_country_flag = generic_tmp has_country_flag = borg_tmp } } }
+							add_modifier = { modifier = "erabuff_tmp" days = -1 }
+						}
+						if = {
+							limit = { owner = { OR = { has_country_flag = starfleet_tng has_country_flag = klingon_tng has_country_flag = romulan_tng has_country_flag = generic_tng has_country_flag = borg_tng } } }
+							add_modifier = { modifier = "erabuff_tng" days = -1 }
+						}
+						if = {
+							limit = { owner = { OR = { has_country_flag = starfleet_tng2 has_country_flag = klingon_tng2 has_country_flag = romulan_tng2 has_country_flag = generic_tng2 has_country_flag = borg_tng2 } } }
+							add_modifier = { modifier = "erabuff_tng2" days = -1 } 
+						}
+					}
+				}
+			}
+		}
+	}
+	option = { 
+		name = STH_dominion_flavour.3023.a		
+	}
+}		
+
+#Select planet demand
+country_event = {
+	id = STH_dominion_flavour.3030
+	title = STH_dominion_flavour.3030.name
+	picture = sth_GFX_evt_empireDominion
+	desc = { text = STH_dominion_flavour.3030.desc_01 }
+	is_triggered_only = yes
+	trigger = { is_changeling_empire = yes }
+	immediate = {
+		from = {
+			random_owned_planet = {
+				limit = { is_capital = yes }
+				save_event_target_as = member_capital
+			}		
+			random_owned_planet = {
+				limit = { is_colony = yes NOR = { is_planet = event_target:member_capital } }
+				save_event_target_as = MemberPlanet1
+			}
+			random_owned_planet = {
+				limit = {
+					is_colony = yes
+					NOR = { 
+						is_planet = event_target:MemberPlanet1
+						is_planet = event_target:member_capital
+					}
+				}
+				save_event_target_as = MemberPlanet2
+			}
+			random_owned_planet = {
+				limit = {
+					is_colony = yes
+					NOR = { 
+						is_planet = event_target:member_capital
+						is_planet = event_target:MemberPlanet1
+						is_planet = event_target:MemberPlanet2
+					}
+				}
+				save_event_target_as = MemberPlanet3
+			}
+			random_owned_planet = {
+				limit = {
+					is_colony = yes
+					NOR = { 
+						is_planet = event_target:member_capital
+						is_planet = event_target:MemberPlanet1
+						is_planet = event_target:MemberPlanet2
+						is_planet = event_target:MemberPlanet3
+					}
+				}
+				save_event_target_as = MemberPlanet4
+			}
+			random_owned_planet = {
+				limit = {
+					is_colony = yes
+					NOR = { 
+						is_planet = event_target:member_capital
+						is_planet = event_target:MemberPlanet1
+						is_planet = event_target:MemberPlanet2
+						is_planet = event_target:MemberPlanet3
+						is_planet = event_target:MemberPlanet4
+					}
+				}
+				save_event_target_as = MemberPlanet5
+			}
+			random_owned_planet = {
+				limit = {
+					is_colony = yes
+					NOR = { 
+						is_planet = event_target:member_capital
+						is_planet = event_target:MemberPlanet1
+						is_planet = event_target:MemberPlanet2
+						is_planet = event_target:MemberPlanet3
+						is_planet = event_target:MemberPlanet4
+						is_planet = event_target:MemberPlanet5
+					}
+				}
+				save_event_target_as = MemberPlanet6
+			}
+		}	
+	}
+	option = {
+		name = STH_dominion_flavour.3030.a
+		custom_tooltip = STH_dominion_flavour.3030.a.tooltip
+		allow = { influence > 249 }
+		trigger = { exists = event_target:MemberPlanet1 }
+		event_target:MemberPlanet1 = { set_owner = root } 
+		add_influence = -250
+		from = { 
+			add_opinion_modifier = { who = root modifier = opinion_demanded_planet }
+		}
+	}
+	option = {
+		name = STH_dominion_flavour.3030.b
+		custom_tooltip = STH_dominion_flavour.3030.b.tooltip
+		allow = { influence > 249 }
+		trigger = { exists = event_target:MemberPlanet2 }
+		event_target:MemberPlanet2 = { set_owner = root }
+		add_influence = -250
+		from = { 
+			add_opinion_modifier = { who = root modifier = opinion_demanded_planet }
+		}
+	}
+	option = {
+		name = STH_dominion_flavour.3030.c
+		custom_tooltip = STH_dominion_flavour.3030.c.tooltip
+		allow = { influence > 249 }
+		trigger = { exists = event_target:MemberPlanet3 }
+		event_target:MemberPlanet3 = { set_owner = root }
+		add_influence = -250
+		from = { 
+			add_opinion_modifier = { who = root modifier = opinion_demanded_planet }
+		}
+	}
+	option = {
+		name = STH_dominion_flavour.3030.d
+		custom_tooltip = STH_dominion_flavour.3030.d.tooltip
+		allow = { influence > 249 }
+		trigger = { exists = event_target:MemberPlanet4 }
+		event_target:MemberPlanet4 = { set_owner = root }
+		add_influence = -250
+		from = { 
+			add_opinion_modifier = { who = root modifier = opinion_demanded_planet }
+		}
+	}
+	option = {
+		name = STH_dominion_flavour.3030.e
+		custom_tooltip = STH_dominion_flavour.3030.e.tooltip
+		allow = { influence > 249 }
+		trigger = { exists = event_target:MemberPlanet5 }
+		event_target:MemberPlanet5 = { set_owner = root }
+		add_influence = -250
+		from = { 
+			add_opinion_modifier = { who = root modifier = opinion_demanded_planet }
+		}
+	}
+	option = {
+		name = STH_dominion_flavour.3030.f
+		custom_tooltip = STH_dominion_flavour.3030.f.tooltip
+		allow = { influence > 249 }
+		trigger = { exists = event_target:MemberPlanet6 }
+		event_target:MemberPlanet6 = { set_owner = root }
+		add_influence = -250
+		from = { 
+			add_opinion_modifier = { who = root modifier = opinion_demanded_planet }
+		}
+	}
+	option = {
+		name = STH_dominion_flavour.3030.g
+		custom_tooltip = STH_dominion_flavour.3030.g.tooltip
+		allow = { influence > 349 }
+		trigger = { exists = event_target:member_capital }
+		event_target:member_capital = { set_owner = root }
+		from = { 
+			add_opinion_modifier = { who = root modifier = opinion_demanded_capital }
+		}
+		add_influence = -350
+	}
+	option = { 
+		name = STH_dominion_flavour.3030.y 
+		hidden_effect = { country_event = { id = STH_dominion_flavour.3030 scopes = { from = from } } } #new list
+	}
+	option = { 
+		name = STH_dominion_flavour.3030.z
+		hidden_effect = { country_event = { id = STH_dominion_flavour.3001 scopes = { from = from } } } #back
+	}
+}
+
+
+# Propaganda Campaigns
+country_event = {
+	id = STH_dominion_flavour.3040
+	title = STH_dominion_flavour.3040.name
+	picture = sth_GFX_evt_empireDominion
+	desc = { text = STH_dominion_flavour.3040.desc_01 }
+	is_triggered_only = yes
+	trigger = { is_changeling_empire = yes }
+	immediate = { }
+	option = {
+		name = STH_dominion_flavour.3040.a # Low Propaganda
+		custom_tooltip = STH_dominion_flavour.3040.a.tooltip
+		allow = { 			
+			energy > 300
+			minerals > 300
+			exists = from
+		}
+		hidden_effect = {
+			add_energy = -300
+			add_minerals = -300
+			from = { 
+				add_opinion_modifier = { who = root modifier = opinion_low_propaganda }
+			}
+		}
+	}
+	option = {
+		name = STH_dominion_flavour.3040.b # Medium Propaganda
+		custom_tooltip = STH_dominion_flavour.3040.b.tooltip
+		allow = { 			
+			energy > 650
+			minerals > 650
+			exists = from
+		}	
+		hidden_effect = {
+			add_energy = -650
+			add_minerals = -650
+			from = { add_opinion_modifier = { who = root modifier = opinion_medium_propaganda }
+			}
+		}
+	}
+	option = {
+		name = STH_dominion_flavour.3040.c # High Propaganda
+		custom_tooltip = STH_dominion_flavour.3040.c.tooltip
+		allow = { 			
+			energy > 1000
+			minerals > 1000
+			exists = from
+		}	
+		hidden_effect = {
+			add_energy = -1000
+			add_minerals = -1000
+			from = { add_opinion_modifier = { who = root modifier = opinion_high_propaganda }
+			}
+		}
+	}
+	option = {
+		name = STH_dominion_flavour.3040.d # Very High Propaganda
+		custom_tooltip = STH_dominion_flavour.3040.d.tooltip
+		allow = { 			
+			energy > 1500
+			minerals > 1500
+			exists = from
+		}	
+		hidden_effect = {
+			add_energy = -1500
+			add_minerals = -1500
+			from = { add_opinion_modifier = { who = root modifier = opinion_very_high_propaganda }
+			}
+		}
+	}	
+
+	option = { 
+		name = STH_dominion_flavour.3040.z
+		hidden_effect = { country_event = { id = STH_dominion_flavour.3001 scopes = { from = from } } } #back
+	}
+}		
+
+# Send Leader
+country_event = {
+	id = STH_dominion_flavour.3050
+	title = STH_dominion_flavour.3050.name
+	picture = sth_GFX_evt_empireDominion
+	desc = { text = STH_dominion_flavour.3050.desc_01 }
+	is_triggered_only = yes
+	trigger = { is_changeling_empire = yes }
+	immediate = {
+		random_owned_leader = { limit = { leader_class = admiral species = { is_species_class = JEM } } save_event_target_as = JemHadarAdmiral } 
+		random_owned_leader = { limit = { leader_class = general species = { is_species_class = JEM } } save_event_target_as = JemHadarGeneral }
+		random_owned_leader = { limit = { leader_class = governor species = { is_species_class = VOR } } save_event_target_as = VortaGovernor } 
+		random_owned_leader = { limit = { leader_class = scientist species = { is_species_class = VOR } } save_event_target_as = VortaScientist } 	
+	}
+	option = {
+		trigger = { exists = event_target:JemHadarAdmiral }
+		name = STH_dominion_flavour.3050.a #Admiral
+		custom_tooltip = STH_dominion_flavour.3050.a.tooltip
+		allow = { 
+			custom_tooltip = { 
+				text = STH_dominion_flavour.3050.a.tooltip
+				fail_text = STH_dominion_flavour.3050.a.failtooltip
+				exists = from
+				exists = event_target:JemHadarAdmiral
+				NOT = { from = { any_owned_leader = { has_leader_flag = "JemHadarAdmiral" } } } 
+			}
+		}
+		hidden_effect = { 
+            event_target:JemHadarAdmiral = { set_leader_flag = "JemHadarAdmiral" exile_leader_as = JemHadarAdmiral } 
+            from = {
+                random_owned_fleet = {
+                    limit = { is_ship_class = shipclass_military }
+                    leader = { unassign_leader = this }
+                    save_event_target_as = MemberStateFleet
+                }
+                event_target:MemberStateFleet = {
+                    set_leader = JemHadarAdmiral
+                }
+                if = {
+                	limit = { is_ai = yes }
+                	add_modifier = { modifier = em_jemhadar_admiral days = -1 }
+                	else = {  
+                		add_modifier = { modifier = em_jemhadar_admiral_human days = -1 } 
+                	}
+                }                      
+            }                
+		}
+	}
+	
+	option = {
+		name = STH_dominion_flavour.3050.a2 #Admiral
+		trigger = { NOR = { exists = event_target:JemHadarAdmiral from = { any_owned_leader = { has_leader_flag = "JemHadarAdmiral" } } } }
+		allow = { 
+			custom_tooltip = { 
+				text = STH_dominion_flavour.3050.a.tooltip
+				fail_text = STH_dominion_flavour.3050.a.failtooltip
+				exists = from
+				exists = event_target:JemHadarAdmiral
+				NOT = { from = { any_owned_leader = { has_leader_flag = "JemHadarAdmiral" } } } 
+			}
+		}
+	}
+	
+	option = {
+		name = STH_dominion_flavour.3050.b #General
+		trigger = { exists = event_target:JemHadarGeneral }
+		custom_tooltip = STH_dominion_flavour.3050.b.tooltip
+		allow = { 
+			custom_tooltip = { 
+				text = STH_dominion_flavour.3050.b.tooltip
+				fail_text = STH_dominion_flavour.3050.b.failtooltip
+				exists = from
+				exists = event_target:JemHadarGeneral
+				NOT = { from = { any_owned_leader = { has_leader_flag = "JemHadarGeneral" } } }
+			}
+		}
+		hidden_effect = { 
+			event_target:JemHadarGeneral = { set_leader_flag = "JemHadarGeneral" exile_leader_as = JemHadarGeneral } 
+			from = {
+		        create_fleet = {
+		            name = "NAME_Other_Science_Ship"
+		            effect = {
+		                set_owner = from
+		                create_ship_design = {
+		                    design = "NAME_Prototype"
+		                    ftl = from
+		                }
+		                create_ship = {
+		                    name = "NAME_From_Beyond"
+		                    design = last_created_design
+		                    graphical_culture = "extra_dimensional_01"
+		                    prefix = no
+		                    upgradable = no
+		                }
+		                set_location = from.capital_scope
+		                save_event_target_as = deleted_ship
+		            }
+		        }
+		        event_target:deleted_ship = {
+		            set_leader = JemHadarGeneral
+		            leader = { unassign_leader = this }
+		            delete_fleet = this
+		        }
+                if = {
+                	limit = { is_ai = yes }
+                	add_modifier = { modifier = em_jemhadar_general days = -1 }
+                	else = {  
+                		add_modifier = { modifier = em_jemhadar_general_human days = -1 } 
+                	}
+                }
+            }				
+		}
+	}
+	
+	option = {
+		name = STH_dominion_flavour.3050.b2 #General
+		trigger = { NOR = { exists = event_target:JemHadarGeneral from = { any_owned_leader = { has_leader_flag = "JemHadarGeneral" } } } }
+		allow = { 
+			custom_tooltip = { 
+				text = STH_dominion_flavour.3050.b.tooltip
+				fail_text = STH_dominion_flavour.3050.b.failtooltip
+				exists = from
+				exists = event_target:JemHadarGeneral
+				NOT = { from = { any_owned_leader = { has_leader_flag = "JemHadarGeneral" } } }
+			}
+		}
+	}
+	
+	option = {
+		name = STH_dominion_flavour.3050.c #Governor
+		trigger = { exists = event_target:VortaGovernor } 
+		custom_tooltip = STH_dominion_flavour.3050.c.tooltip
+		allow = { 
+			custom_tooltip = { 
+			text = STH_dominion_flavour.3050.c.tooltip
+			fail_text = STH_dominion_flavour.3050.c.failtooltip
+			exists = from
+			exists = event_target:VortaGovernor
+			NOT = { from = { any_owned_leader = { has_leader_flag = "VortaGovernor" } } }
+			}
+		}
+		hidden_effect = { 
+			event_target:VortaGovernor = { set_leader_flag = "VortaGovernor" exile_leader_as = VortaGovernor } 
+			from = {
+		        create_fleet = {
+		            name = "NAME_Other_Science_Ship"
+		            effect = {
+		                set_owner = from
+		                create_ship_design = {
+		                    design = "NAME_Prototype"
+		                    ftl = from
+		                }
+		                create_ship = {
+		                    name = "NAME_From_Beyond"
+		                    design = last_created_design
+		                    graphical_culture = "extra_dimensional_01"
+		                    prefix = no
+		                    upgradable = no
+		                }
+		                set_location = from.capital_scope
+		                save_event_target_as = deleted_ship
+		            }
+		        }
+		        event_target:deleted_ship = {
+		            set_leader = VortaGovernor
+		            leader = { unassign_leader = this }
+		            delete_fleet = this
+		        }
+                if = {
+                	limit = { is_ai = yes }
+                	add_modifier = { modifier = em_vorta_governor days = -1 }
+                	else = {  
+                		add_modifier = { modifier = em_vorta_governor_human days = -1 } 
+                	}
+                }		        
+			}				
+		}
+	}
+	
+	option = {
+		name = STH_dominion_flavour.3050.c2 #No Governor
+		trigger = { NOR = { exists = event_target:VortaGovernor from = { any_owned_leader = { has_leader_flag = "VortaGovernor" } } } }
+		allow = { 
+			custom_tooltip = { 
+			text = STH_dominion_flavour.3050.c.tooltip
+			fail_text = STH_dominion_flavour.3050.c.failtooltip
+			exists = from
+			exists = event_target:VortaGovernor
+			NOT = { from = { any_owned_leader = { has_leader_flag = "VortaGovernor" } } }
+			}
+		}
+	}
+	
+	option = {
+		name = STH_dominion_flavour.3050.d #Scientist
+		trigger = { exists = event_target:VortaScientist }
+		custom_tooltip = STH_dominion_flavour.3050.d.tooltip
+		allow = { 
+			custom_tooltip = { 
+			text = STH_dominion_flavour.3050.d.tooltip
+			fail_text = STH_dominion_flavour.3050.d.failtooltip
+			exists = from
+			exists = event_target:VortaScientist
+			NOT = { from = { any_owned_leader = { has_leader_flag = "VortaScientist" } } }
+			}
+		}
+		hidden_effect = { 
+			event_target:VortaScientist = { set_leader_flag = "VortaScientist" exile_leader_as = VortaScientist } 
+			from = {
+		        create_fleet = {
+		            name = "NAME_Other_Science_Ship"
+		            effect = {
+		                set_owner = from
+		                create_ship_design = {
+		                    design = "NAME_Prototype"
+		                    ftl = from
+		                }
+		                create_ship = {
+		                    name = "NAME_From_Beyond"
+		                    design = last_created_design
+		                    graphical_culture = "extra_dimensional_01"
+		                    prefix = no
+		                    upgradable = no
+		                }
+		                set_location = from.capital_scope
+		                save_event_target_as = deleted_ship
+		            }
+		        }
+		        event_target:deleted_ship = {
+		            set_leader = VortaScientist
+		            leader = { unassign_leader = this }
+		            delete_fleet = this
+		        }
+                if = {
+                	limit = { is_ai = yes }
+                	add_modifier = { modifier = em_vorta_scientist days = -1 }
+                	else = {  
+                		add_modifier = { modifier = em_vorta_scientist_human days = -1 } 
+                	}
+                }
+			}				
+		}
+	}
+
+	option = {
+		name = STH_dominion_flavour.3050.d2 #No Scientist
+		trigger = { NOR = { exists = event_target:VortaScientist from = { any_owned_leader = { has_leader_flag = "VortaScientist" } } } }
+		allow = { 
+			custom_tooltip = { 
+			text = STH_dominion_flavour.3050.d.tooltip
+			fail_text = STH_dominion_flavour.3050.d.failtooltip
+			exists = from
+			exists = event_target:VortaScientist
+			NOT = { from = { any_owned_leader = { has_leader_flag = "VortaScientist" } } }
+			}
+		}
+	}	
+
+	
+	option = { 
+		name = STH_dominion_flavour.3050.e
+		trigger = { 
+			exists = from
+			from = { any_owned_leader = { OR = { has_leader_flag = "JemHadarAdmiral" has_leader_flag = "JemHadarGeneral" has_leader_flag = "VortaGovernor" has_leader_flag = "VortaScientist" } } }
+		}
+		hidden_effect = { country_event = { id = STH_dominion_flavour.3051 scopes = { from = from } } } #Retrieve Leader
+	}
+	option = { 
+		name = STH_dominion_flavour.3050.y
+		hidden_effect = { country_event = { id = STH_dominion_flavour.3050 scopes = { from = from } } } #refresh
+	}
+	option = { 
+		name = STH_dominion_flavour.3050.z
+		hidden_effect = { country_event = { id = STH_dominion_flavour.3001 scopes = { from = from } } } #back
+	}
+}
+
+#Retrieve Leader
+country_event = {
+	id = STH_dominion_flavour.3051
+	title = STH_dominion_flavour.3051.name
+	picture = sth_GFX_evt_empireDominion
+	desc = { text = STH_dominion_flavour.3051.desc_01 }
+	is_triggered_only = yes
+	trigger = { is_changeling_empire = yes }
+	immediate = { 
+		from = {
+			random_owned_leader = { limit = { has_leader_flag = "JemHadarAdmiral" } save_event_target_as = JemHadarAdmiral } 
+			random_owned_leader = { limit = { has_leader_flag = "JemHadarGeneral" } save_event_target_as = JemHadarGeneral }
+			random_owned_leader = { limit = { has_leader_flag = "VortaGovernor" } save_event_target_as = VortaGovernor } 
+			random_owned_leader = { limit = { has_leader_flag = "VortaScientist" } save_event_target_as = VortaScientist } 	
+		}
+	}
+	option = {
+		name = STH_dominion_flavour.3051.a #Admiral
+		custom_tooltip = STH_dominion_flavour.3051.a.tooltip
+		trigger = { 
+			exists = from
+			from = { any_owned_leader = { has_leader_flag = "JemHadarAdmiral" } }
+		}
+		hidden_effect = {             
+            from = { remove_modifier = em_jemhadar_admiral remove_modifier = em_jemhadar_admiral_human event_target:JemHadarAdmiral = { exile_leader_as = JemHadarAdmiral } }  
+	        create_fleet = {
+	            name = "NAME_Other_Science_Ship"
+	            effect = {
+	                set_owner = root
+	                create_ship_design = {
+	                    design = "NAME_Prototype"
+	                    ftl = root
+	                }
+	                create_ship = {
+	                    name = "NAME_From_Beyond"
+	                    design = last_created_design
+	                    graphical_culture = "extra_dimensional_01"
+	                    prefix = no
+	                    upgradable = no
+	                }
+	                set_location = root.capital_scope
+	                save_event_target_as = deleted_ship
+	            }
+	        }
+	        event_target:deleted_ship = {
+	            set_leader = JemHadarAdmiral
+	            leader = { remove_leader_flag = "JemHadarAdmiral" unassign_leader = this }
+	            delete_fleet = this
+	        }                          
+        }
+        #add_influence = 50                
+	}
+	option = {
+		name = STH_dominion_flavour.3051.b #General
+		custom_tooltip = STH_dominion_flavour.3051.b.tooltip
+		trigger = { 
+			exists = from
+			from = { any_owned_leader = { has_leader_flag = "JemHadarGeneral" } }
+		}
+		hidden_effect = {             
+            from = { remove_modifier = em_jemhadar_general remove_modifier = em_jemhadar_general_human event_target:JemHadarGeneral = { exile_leader_as = JemHadarGeneral } } 
+	        create_fleet = {
+	            name = "NAME_Other_Science_Ship"
+	            effect = {
+	                set_owner = root
+	                create_ship_design = {
+	                    design = "NAME_Prototype"
+	                    ftl = root
+	                }
+	                create_ship = {
+	                    name = "NAME_From_Beyond"
+	                    design = last_created_design
+	                    graphical_culture = "extra_dimensional_01"
+	                    prefix = no
+	                    upgradable = no
+	                }
+	                set_location = root.capital_scope
+	                save_event_target_as = deleted_ship
+	            }
+	        }
+	        event_target:deleted_ship = {
+	            set_leader = JemHadarGeneral
+	            leader = { remove_leader_flag = "JemHadarGeneral" unassign_leader = this }
+	            delete_fleet = this
+	        }                          
+        }
+        #add_influence = 50
+	}
+	option = {
+		name = STH_dominion_flavour.3051.c #Governor
+		custom_tooltip = STH_dominion_flavour.3051.c.tooltip
+		trigger = { 
+			exists = from
+			from = { any_owned_leader = { has_leader_flag = "VortaGovernor" } }
+		}
+		hidden_effect = {             
+            from = { remove_modifier = em_vorta_governor remove_modifier = em_vorta_governor_human event_target:VortaGovernor = { exile_leader_as = VortaGovernor } }
+            create_fleet = {
+	            name = "NAME_Other_Science_Ship"
+	            effect = {
+	                set_owner = root
+	                create_ship_design = {
+	                    design = "NAME_Prototype"
+	                    ftl = root
+	                }
+	                create_ship = {
+	                    name = "NAME_From_Beyond"
+	                    design = last_created_design
+	                    graphical_culture = "extra_dimensional_01"
+	                    prefix = no
+	                    upgradable = no
+	                }
+	                set_location = root.capital_scope
+	                save_event_target_as = deleted_ship
+	            }
+	        }
+	        event_target:deleted_ship = {
+	            set_leader = VortaGovernor
+	            leader = { remove_leader_flag = "VortaGovernor" unassign_leader = this }
+	            delete_fleet = this
+	        }                          
+        }
+		#add_influence = 50
+	}
+	option = {
+		name = STH_dominion_flavour.3051.d #Scientist
+		custom_tooltip = STH_dominion_flavour.3051.d.tooltip
+		trigger = { 
+			exists = from
+			from = { any_owned_leader = { has_leader_flag = "VortaScientist" } }
+		}
+		hidden_effect = {             
+            from = { remove_modifier = em_vorta_scientist remove_modifier = em_vorta_scientist_human event_target:VortaScientist = { exile_leader_as = VortaScientist } }  
+	        create_fleet = {
+	            name = "NAME_Other_Science_Ship"
+	            effect = {
+	                set_owner = root
+	                create_ship_design = {
+	                    design = "NAME_Prototype"
+	                    ftl = root
+	                }
+	                create_ship = {
+	                    name = "NAME_From_Beyond"
+	                    design = last_created_design
+	                    graphical_culture = "extra_dimensional_01"
+	                    prefix = no
+	                    upgradable = no
+	                }
+	                set_location = root.capital_scope
+	                save_event_target_as = deleted_ship
+	            }
+	        }
+	        event_target:deleted_ship = {
+	            set_leader = VortaScientist
+	            leader = { remove_leader_flag = "VortaScientist" unassign_leader = this }
+	            delete_fleet = this
+	        }                          
+        }
+		#add_influence = 50
+	}
+	option = { 
+		name = STH_dominion_flavour.3051.z
+		hidden_effect = { country_event = { id = STH_dominion_flavour.3050 scopes = { from = from } } } #back
+	}
+}
+
+#On leader death, remove empire buffs
+
+country_event = {
+	id = STH_dominion_flavour.3052
+	hide_window = yes
+	is_triggered_only = yes
+	trigger = { 
+		from = { OR = { has_leader_flag = "JemHadarAdmiral" has_leader_flag = "JemHadarGeneral" has_leader_flag = "VortaGovernor" has_leader_flag = "VortaScientist" } }
+	}
+	immediate = { 
+		if = { 
+			limit = { from = { has_leader_flag = "JemHadarAdmiral" } }
+			this = { remove_modifier = em_jemhadar_admiral remove_modifier = em_jemhadar_admiral_human }
+		}
+		if = { 
+			limit = { from = { has_leader_flag = "JemHadarGeneral" } }
+			this = { remove_modifier = em_jemhadar_general remove_modifier = em_jemhadar_general_human }
+		}
+		if = { 
+			limit = { from = { has_leader_flag = "VortaGovernor" } }
+			this = { remove_modifier = em_vorta_governor remove_modifier = em_vorta_governor_human }
+		}
+		if = { 
+			limit = { from = { has_leader_flag = "VortaScientist" } }
+			this = { remove_modifier = em_vorta_scientist remove_modifier = em_vorta_scientist_human }
+		}
+	}	
+}
+
+
+
+# Destroy frontier outpost
+country_event = {
+	id = STH_dominion_flavour.3060
+	title = STH_dominion_flavour.3060.name
+	picture = sth_GFX_evt_empireDominion
+	desc = { text = STH_dominion_flavour.3060.desc_01 }
+	is_triggered_only = yes
+	trigger = { is_changeling_empire = yes }
+	immediate = {
+		from = {
+			random_owned_fleet = {
+				limit = { is_ship_size = outpost_station }
+				save_event_target_as = MemberOutpost1
+				solar_system = { save_event_target_as = MemberOutpostSystem1 }
+			}		
+			random_owned_fleet = {
+				limit = {
+					is_ship_size = outpost_station
+					NOR = { 
+						is_same_value = event_target:MemberOutpost1
+					}
+				}
+				save_event_target_as = MemberOutpost2
+				solar_system = { save_event_target_as = MemberOutpostSystem2 }
+			}
+			random_owned_fleet = {
+				limit = {
+					is_ship_size = outpost_station
+					NOR = { 
+						is_same_value = event_target:MemberOutpost1
+						is_same_value = event_target:MemberOutpost2
+					}
+				}
+				save_event_target_as = MemberOutpost3
+				solar_system = { save_event_target_as = MemberOutpostSystem3 }
+			}
+			random_owned_fleet = {
+				limit = {
+					is_ship_size = outpost_station
+					NOR = { 
+						is_same_value = event_target:MemberOutpost1
+						is_same_value = event_target:MemberOutpost2
+						is_same_value = event_target:MemberOutpost3
+					}
+				}
+				save_event_target_as = MemberOutpost4
+				solar_system = { save_event_target_as = MemberOutpostSystem4 }
+			}
+		}	
+	}
+	option = {
+		name = STH_dominion_flavour.3060.a
+		custom_tooltip = STH_dominion_flavour.3060.a.tooltip
+		#allow = { influence > 299 }
+		trigger = { exists = event_target:MemberOutpost1 }
+		event_target:MemberOutpost1 = { delete_fleet = this } 
+		hidden_effect = { 
+			add_influence = 25
+			add_unity = 25
+			from = { 
+				add_opinion_modifier = { who = root modifier = opinion_demanded_outpost_deconstruction }
+			}
+		}
+	}
+	option = {
+		name = STH_dominion_flavour.3060.b
+		custom_tooltip = STH_dominion_flavour.3060.b.tooltip
+		#allow = { influence > 299 }
+		trigger = { exists = event_target:MemberOutpost2 }
+		event_target:MemberOutpost2 = { delete_fleet = this } 
+		hidden_effect = { 
+			add_influence = 25
+			add_unity = 25
+			from = { 
+				add_opinion_modifier = { who = root modifier = opinion_demanded_outpost_deconstruction }
+			}
+		}
+	}
+	option = {
+		name = STH_dominion_flavour.3060.c
+		custom_tooltip = STH_dominion_flavour.3060.c.tooltip
+		#allow = { influence > 299 }
+		trigger = { exists = event_target:MemberOutpost3 }
+		event_target:MemberOutpost3 = { delete_fleet = this } 
+		hidden_effect = { 
+			add_influence = 25
+			add_unity = 25
+			from = { 
+				add_opinion_modifier = { who = root modifier = opinion_demanded_outpost_deconstruction }
+			}
+		}
+	}
+	option = {
+		name = STH_dominion_flavour.3060.d
+		custom_tooltip = STH_dominion_flavour.3060.d.tooltip
+		#allow = { influence > 299 }
+		trigger = { exists = event_target:MemberOutpost4 }
+		event_target:MemberOutpost4 = { delete_fleet = this } 
+		hidden_effect = { 
+			add_influence = 25
+			add_unity = 25
+			from = { 
+				add_opinion_modifier = { who = root modifier = opinion_demanded_outpost_deconstruction }
+			}
+		}
+	}
+	option = { 
+		name = STH_dominion_flavour.3060.y 
+		hidden_effect = { country_event = { id = STH_dominion_flavour.3060 scopes = { from = from } } } #new list
+	}
+	option = { 
+		name = STH_dominion_flavour.3060.z
+		hidden_effect = { country_event = { id = STH_dominion_flavour.3001 scopes = { from = from } } } #back
+	}
+}
+

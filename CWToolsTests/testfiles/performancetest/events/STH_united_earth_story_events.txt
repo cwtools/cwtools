@@ -1,0 +1,2236 @@
+########################
+#
+# United Earth Story Events
+#
+# Written by Walshicus
+#
+########################
+
+namespace = STH_united_earth_story
+
+# 1
+country_event = {
+	id = STH_united_earth_story.1
+	title = "STH_united_earth_story.1.name"
+	desc = "STH_united_earth_story.1.desc"
+	picture = sth_GFX_evt_terraPrime1
+	trigger = {
+		has_country_flag = united_earth
+		OR = {
+			enterprise_era = yes
+			franklin_era = yes
+		}
+		NOT = { has_country_flag = easy_mode }
+		NOT = { has_country_flag = demons_crisis_started }
+		NOT = { has_country_flag = united_federation_of_planets }
+		capital_scope = { any_pop = { NOT = { is_same_species = ROOT } } }
+	}
+	is_triggered_only = yes
+	immediate = {
+		set_country_flag = demons_crisis_started
+		capital_scope = {
+			random_owned_pop = {
+				limit = { NOT = { is_same_species = ROOT } }
+				save_event_target_as = alienPop
+			}
+		}
+		random_country = {
+			limit = { is_same_species = event_target:alienPop }
+			save_event_target_as = alienCountry
+		}
+	}
+	option = {
+		name = STH_united_earth_story.1.a
+		set_country_flag = demons_5
+		event_target:alienCountry = { add_opinion_modifier = { who = ROOT modifier = opinion_insult } }
+		custom_tooltip = "STH_united_earth_story.1.a.tooltip"
+		hidden_effect = {
+			every_owned_pop = {
+				limit = { is_same_species = event_target:alienPop }
+				add_modifier = { modifier = pop_discrimination days = 3600 }
+			}
+		}
+		hidden_effect = { country_event = { id = STH_united_earth_story.8 days = 480 random = 120  } }
+	}
+	option = {
+		name = STH_united_earth_story.1.b
+		set_country_flag = terra_prime_investigation
+		add_influence = -25
+		add_energy = -25
+		event_target:alienCountry = { add_opinion_modifier = { who = ROOT modifier = opinion_very_concerned } }
+		custom_tooltip = "STH_united_earth_story.1.b.tooltip"
+		hidden_effect = {
+			every_owned_pop = {
+				limit = { is_same_species = event_target:alienPop }
+				add_modifier = { modifier = pop_nervous days = 3650 }
+			}
+		}
+		hidden_effect = { country_event = { id = STH_united_earth_story.2 days = 360 random = 120 } }
+	}
+	option = {
+		name = STH_united_earth_story.1.c
+		set_country_flag = terra_prime_investigation
+		add_influence = -100
+		add_energy = -50
+		event_target:alienCountry = { add_opinion_modifier = { who = ROOT modifier = opinion_concerned } }
+		hidden_effect = { country_event = { id = STH_united_earth_story.2 days = 360 random = 120  } }
+	}
+}
+
+
+#Investigation leads to Luna
+country_event = {
+	id = STH_united_earth_story.2
+	title = "STH_united_earth_story.2.name"
+	desc = "STH_united_earth_story.2.desc"
+	picture = sth_GFX_evt_terraPrime2
+	is_triggered_only = yes
+	immediate = { 
+		random_planet = {
+			limit = { has_planet_flag = sol_luna }
+			save_event_target_as = luna
+		}
+	}
+	option = {
+		name = STH_united_earth_story.2.a
+		enable_special_project = {
+			name = "TERRA_PRIME_1_PROJECT"
+			location = event_target:luna
+		}
+	}
+}
+
+#Investigation succesful
+ship_event = {
+	id = STH_united_earth_story.3
+	title = "STH_united_earth_story.3.name"
+	desc = "STH_united_earth_story.3.desc"
+	picture = sth_GFX_evt_terraPrime3
+	is_triggered_only = yes
+	option = {
+		name = STH_united_earth_story.3.a
+		owner = { end_event_chain = "terra_prime_chain" }
+		hidden_effect = { owner = { country_event = { id = STH_united_earth_story.6 days = 56 random = 14 } } }
+	}
+}
+
+#Investigation failed
+country_event = {
+	id = STH_united_earth_story.4
+	title = "STH_united_earth_story.4.name"
+	desc = "STH_united_earth_story.4.desc"
+	picture = sth_GFX_evt_terraPrime3
+	is_triggered_only = yes
+	immediate = { set_country_flag = tough_terra_prime }
+	option = {
+		name = STH_united_earth_story.4.a
+		end_event_chain = "terra_prime_chain"
+		hidden_effect = { country_event = { id = STH_united_earth_story.6 days = 56 random = 14 } }
+	}
+}
+
+
+
+#Tough War
+country_event = {
+	id = STH_united_earth_story.6
+	title = "STH_united_earth_story.6.name"
+	desc = { 
+		trigger = { NOT = { has_country_flag = tough_terra_prime } }
+		text = "STH_united_earth_story.5.desc" 
+	}
+	desc = { 
+		trigger = { has_country_flag = tough_terra_prime }
+		text = "STH_united_earth_story.6.desc" 
+	}
+	picture = sth_GFX_evt_terraPrime5
+	trigger = {
+		any_owned_planet = { has_planet_flag = sol_mars }
+		NOT = { has_country_flag = united_federation_of_planets }
+	}
+	is_triggered_only = yes
+	immediate = {
+		remove_country_flag = demons_crisis
+		random_owned_planet = {
+			limit = { has_planet_flag = sol_mars }
+			save_event_target_as = mars
+		}
+		event_target:mars = {
+			create_terra_prime_country = yes
+			set_owner = event_target:terraPrime	
+			event_target:terraPrime = {
+				establish_communications_no_message = root
+				copy_techs_from = { target = root except = { } }
+				declare_war = { who = root name = "Paxton's War" }
+				add_war_demand = { type = "cede_planet" parameter:planet = root.capital_scope warscore_cost = 90 target = this enemy = root }
+				create_fleet_from_naval_cap = 0.15
+				last_created_fleet = { set_name = "Human Defence Fleet" set_location = event_target:terraPrime.capital_scope }
+			}	
+		}
+		add_war_demand = { type = "cede_planet" parameter:planet = event_target:terraPrime.capital_scope warscore_cost = 50 target = root enemy = event_target:terraPrime }
+	}
+	option = { name = STH_united_earth_story.6.a }
+	option = {
+		name = STH_united_earth_story.6.b
+		country_event = { id = STH_united_earth_story.1009 }
+	}
+}
+
+country_event = {
+	id = STH_united_earth_story.1009
+	title = "STH_united_earth_story.1009.name"
+	desc = { text = "STH_united_earth_story.1009.desc" }
+	picture = sth_GFX_evt_terraPrime5
+	trigger = {
+		exists = event_target:terraPrime
+	}
+	is_triggered_only = yes
+	option = { name = STH_united_earth_story.1009.a }
+	option = {
+		name = STH_united_earth_story.1009.b
+		event_target:terraPrime = { set_player = root }
+	}
+}
+
+
+#Pops becoming more angry
+country_event = {
+	id = STH_united_earth_story.7
+	title = "STH_united_earth_story.7.name"
+	desc = "STH_united_earth_story.7.desc"
+	picture = sth_GFX_evt_terraPrime7
+	trigger = {
+		#is_crises_allowed = yes
+		has_country_flag = united_earth
+		NOT = { has_country_flag = united_federation_of_planets }
+		NOT = { has_country_flag = demons_crisis_started }
+		has_country_flag = xindi_crisis_complete_win
+		OR = { enterprise_era = yes franklin_era = yes }
+		capital_scope = { any_pop = { NOT = { is_same_species = FROM } } }
+	}
+	mean_time_to_happen = {	months = 18 }
+	immediate = {
+		set_timed_country_flag = { flag = demons_crisis days = 10000 }
+		capital_scope = {
+			random_owned_pop = {
+				limit = { NOT = { is_same_species = FROM } }
+				save_event_target_as = alienPop
+			}
+		}
+		random_country = {
+			limit = { is_same_species = event_target:alienPop }
+			save_event_target_as = alienCountry
+		}
+	}
+	option = {
+		name = STH_united_earth_story.7.a
+		random_owned_pop = {
+			limit = { is_same_species = FROM }
+			#CHANGE TO EFFECT LATER
+			random_list = {
+				50 = { pop_change_ethic = "ethic_xenophobe" }
+				50 = { pop_change_ethic = "ethic_militarist" }
+			}
+		}
+		hidden_effect = { 
+			random_list = {
+				15 = { country_event = { id = STH_united_earth_story.7 days = 180 random = 90 } }
+				5 = { country_event = { id = STH_united_earth_story.1 days = 180 random = 90 } }
+			}
+		}		
+	}
+	option = {
+		trigger = { 
+			has_country_resource = { type = energy amount > 49 }
+			has_country_resource = { type = influence amount > 49 }
+		}
+		name = STH_united_earth_story.7.b
+		add_influence = -50
+		add_energy = -50
+		hidden_effect = { 
+			random_list = {
+				5 = { country_event = { id = STH_united_earth_story.7 days = 180 random = 90 } }
+				15 = { country_event = { id = STH_united_earth_story.1 days = 180 random = 90 } }
+			}
+		}
+	}
+}
+
+
+#Rumblings around the system
+country_event = {
+	id = STH_united_earth_story.8
+	title = "STH_united_earth_story.8.name"
+	desc = "STH_united_earth_story.8.desc"
+	picture = sth_GFX_evt_terraPrime8
+	is_triggered_only = yes
+	immediate = { set_country_flag = tough_terra_prime }
+	option = {
+		name = STH_united_earth_story.8.a
+		hidden_effect = { country_event = { id = STH_united_earth_story.6 days = 56 random = 14 } }
+	}
+}
+
+#Xindi Probe Event
+planet_event = {
+	id = STH_united_earth_story.9
+	title = "STH_united_earth_story.9.name"
+	desc = "STH_united_earth_story.9.desc"
+	picture = sth_GFX_evt_xindiProbe1
+	show_sound = event_air_raid_siren
+	location = ROOT
+	trigger = {
+		#is_crises_allowed = yes
+		has_owner = yes
+		has_planet_flag = sol_earth
+		owner = {
+			has_country_flag = united_earth
+			is_ai = no
+			NOT = { has_country_flag = easy_mode }
+			NOT = { has_country_flag = united_federation_of_planets }
+			NOT = { has_country_flag = xindi_crisis_started }
+			NOT = { has_country_flag = xindi_probe_target_country }
+		}
+		NOT = { any_country = { has_country_flag = xindi_council } }
+		num_pops > 0
+		years_passed > 5
+	}
+	# is_triggered_only = yes
+	mean_time_to_happen = { months = 60 }
+	immediate = {
+		save_event_target_as = xindi_probe_target_planet
+		owner = { 
+			set_country_flag = xindi_probe_target_country
+			save_event_target_as = xindi_probe_target_country
+			set_country_flag = xindi_crisis_started 
+			set_timed_country_flag = { flag = xindi_crisis days = 5000 }
+		}
+		create_country = {
+			name = "Xindi Probe"
+			type = faction
+			auto_delete = no
+			flag = {
+				icon = { category = "trek" file = "xindi.dds" }
+				background = { category = "backgrounds" file = "new_dawn.dds" }
+				colors = { "black" "black" "null" "null" }
+			}
+		}
+		last_created_country = {
+			establish_communications_no_message = root.owner
+			set_country_flag = xindi_probe_country
+			create_fleet = {
+				settings = { spawn_debris = no is_boss = yes }
+				name = "Unknown Probe"
+				effect = {
+					set_aggro_range = 0
+					set_fleet_stance = aggressive
+					set_aggro_range_measure_from = self
+					set_owner = PREV
+					set_fleet_flag = xindi_probe_fleet 
+					save_event_target_as = xindi_probe_fleet
+					create_ship = { name = "Unknown Probe" design = "Xindi Probe" }
+					set_location = { target = ROOT distance = 400 angle = random }
+					queue_actions = {
+						move_to = ROOT
+						effect = {
+							id = "STH_united_earth_story.9.effect.1"
+							ROOT = { 
+								planet_event = { id = STH_united_earth_story.12 }
+							}
+						}
+					}
+				}
+			}
+			set_relation_flag = {
+				who = root.owner
+				flag = xindi_probe_enemy
+			}
+		}
+	}
+	
+	option = {
+		name = STH_united_earth_story.9.a
+		begin_event_chain = {
+			event_chain = "xindi_event_chain"
+			target = root.owner
+		}
+	}
+}
+
+
+# Probe Destroyed (HIDDEN)
+country_event = {
+	id = STH_united_earth_story.10
+	hide_window = yes
+	is_triggered_only = yes
+	trigger = {
+		exists = from
+		from = { has_country_flag = xindi_probe_country }
+	}
+	immediate = {
+		if = {
+			limit = {
+				has_country_flag = xindi_probe_target_country
+				from = {
+					has_relation_flag = {
+						who = root
+						flag = xindi_probe_enemy
+					}
+				}
+			}
+			random_owned_planet = {
+				limit = { has_planet_flag = sol_earth }
+				planet_event = { id = STH_united_earth_story.11 }
+			}
+			else = {
+				random_country = {
+					limit = {
+						reverse_has_relation_flag = {
+							who = from
+							flag = xindi_probe_enemy
+						}
+						has_country_flag = xindi_probe_target_country
+					}
+					random_owned_planet = {
+						limit = { has_planet_flag = sol_earth }
+						planet_event = { id = STH_united_earth_story.11 }
+					}
+				}
+			}
+		}
+	}
+}
+
+# Probe Destroyed
+planet_event = {
+	id = STH_united_earth_story.11
+	title = "STH_united_earth_story.11.name"
+	desc = "STH_united_earth_story.11.desc"
+	picture = sth_GFX_evt_xindiProbe3
+	show_sound = event_ship_explosion
+	location = ROOT
+	is_triggered_only = yes
+	immediate = {
+		fromfrom = {
+			remove_relation_flag = { who = root.owner flag = xindi_probe_enemy }
+			destroy_country = yes
+		}
+		random_country = {
+			limit = { has_country_flag = xindi_probe_target_country }
+			save_event_target_as = xindi_probe_target_country
+		}
+	}
+	option = {
+		name = EXCELLENT
+		hidden_effect = { owner = { enable_special_project = { name = "XINDI_1_PROJECT" location = root owner = event_target:xindi_probe_target_country } } }
+	}
+}
+
+# Probe Attacks Planet
+planet_event = {
+	id = STH_united_earth_story.12
+	title = "STH_united_earth_story.12.name"
+	desc = { text = STH_united_earth_story.12.desc_01 }
+	desc = { text = STH_united_earth_story.12.desc_02 }
+	desc = { text = STH_united_earth_story.12.desc_03 }
+	desc = { text = STH_united_earth_story.12.desc_04 }
+	picture = sth_GFX_evt_xindiProbe2
+	show_sound = event_super_explosion
+	location = ROOT
+	is_triggered_only = yes
+	immediate = {
+		owner = { country_event = { id = STH_united_earth_story.13 days = 1 } }
+		random_tile = { limit = { has_blocker = no } set_blocker = "tb_crater" }
+		random_tile = { limit = { has_blocker = no } set_blocker = "tb_crater" }
+		owner = { 
+			save_event_target_as = xindi_probe_target_country 
+			set_timed_country_flag = { flag = xindi_attack_recent days = 1080 }
+		}
+		save_event_target_as = xindi_probe_target_planet
+		
+	}
+	
+	option = {
+		name = STH_united_earth_story.12.a
+		random_owned_pop = { kill_pop = yes }
+		hidden_effect = { enable_special_project = { name = "XINDI_1_PROJECT" location = root owner = event_target:xindi_probe_target_country } }
+	}
+}
+
+# Destroy Asteroid after fleet actions have completed and event fired
+country_event = {
+	id = STH_united_earth_story.13
+	hide_window = yes
+	is_triggered_only = yes
+	immediate = {
+		random_country = {
+			limit = { has_relation_flag = { who = root flag = xindi_probe_enemy } }
+			every_owned_ship = { fleet = { destroy_fleet = this } }
+			destroy_country = yes
+		}
+	}
+}
+
+#Wreckage Analysed
+ship_event = {
+	id = STH_united_earth_story.14
+	title = "STH_united_earth_story.14.name"
+	desc = { text = STH_united_earth_story.14.desc }
+	picture = sth_GFX_evt_xindiProbe3
+	location = ROOT
+	is_triggered_only = yes
+	immediate = {
+		random_country = {
+			limit = { has_country_flag = xindi_probe_target_country }
+			save_event_target_as = xindi_probe_target_country
+		}
+	}
+	option = {
+		name = STH_united_earth_story.14.a
+		hidden_effect = { enable_special_project = { name = "XINDI_2_PROJECT" location = event_target:xindi_probe_target_country.capital_scope owner =  event_target:xindi_probe_target_country } }
+	}
+}
+
+#Send leader to Delphic Expanse
+fleet_event = {
+	id = STH_united_earth_story.15
+	title = "STH_united_earth_story.15.name"
+	desc = { text = STH_united_earth_story.15.desc }
+	picture = sth_GFX_evt_expanseEnterprise1
+	location = ROOT
+	is_triggered_only = yes
+	immediate = {
+		# fleet = { 
+			leader = { 
+				set_leader_flag = xindi_probe_leader
+				save_global_event_target_as = xindi_probe_leader
+			}
+			exile_leader_as = xindi_probe_leader
+		# }
+		owner = { country_event = { id = STH_united_earth_story.16 days = 90 random = 10 } }
+	}
+	option = { name = STH_united_earth_story.15.a }
+}
+
+
+#First Delphic Expanse Trial - The Xindi
+country_event = {
+	id = STH_united_earth_story.16
+	title = "STH_united_earth_story.16.name"
+	desc = { text = STH_united_earth_story.16.desc }
+	picture = sth_GFX_evt_expanseKessick1
+	location = ROOT
+	is_triggered_only = yes
+	trigger = {	}
+	immediate = { 
+		end_event_chain = "xindi_event_chain"
+	}
+	option = {
+		name = STH_united_earth_story.16.b
+		hidden_effect = { country_event = { id = STH_united_earth_story.18 } }
+	}
+	option = {
+		name = STH_united_earth_story.16.a
+		trigger = {
+			has_country_resource = { type = energy amount > 24 }
+			has_country_resource = { type = minerals amount > 24 }
+		}
+		hidden_effect = { 
+			country_event = { id = STH_united_earth_story.17 } 
+			set_country_flag = delphicExpeditionStarted
+		}
+		add_energy = -25
+		add_minerals = -25
+	}
+	option = {
+		name = STH_united_earth_story.16.af
+		trigger = {
+			OR = {
+				NOT = { has_country_resource = { type = energy amount > 24 } }
+				NOT = { has_country_resource = { type = minerals amount > 24 } }
+			}
+		}
+		hidden_effect = { country_event = { id = STH_united_earth_story.16 } }
+	}
+	option = {
+		name = STH_united_earth_story.16.c
+		trigger = {
+			has_country_resource = { type = energy amount > 249 }
+			has_country_resource = { type = minerals amount > 249 }
+		}
+		hidden_effect = { 
+			country_event = { id = STH_united_earth_story.19 } 
+			set_country_flag = delphicExpeditionStarted
+		}
+		add_energy = -250
+		add_minerals = -250
+	}
+	option = {
+		name = STH_united_earth_story.16.cf
+		trigger = {
+			OR = {
+				NOT = { has_country_resource = { type = energy amount > 249 } }
+				NOT = { has_country_resource = { type = minerals amount > 249 } }
+			}
+		}
+		hidden_effect = { country_event = { id = STH_united_earth_story.16 } }
+	}
+}
+
+#Meet with Kessick
+country_event = {
+	id = STH_united_earth_story.17
+	title = "STH_united_earth_story.17.name"
+	desc = { text = STH_united_earth_story.17.desc }
+	picture = sth_GFX_evt_expanseKessick2
+	location = ROOT
+	is_triggered_only = yes
+	immediate = { 
+	}
+	option = {
+		name = STH_united_earth_story.17.a
+		hidden_effect = { country_event = { id = STH_united_earth_story.30 days = 20 random = 10 } }
+	}
+}
+
+#Exfiltrate Kessick
+country_event = {
+	id = STH_united_earth_story.18
+	title = "STH_united_earth_story.18.name"
+	desc = { text = STH_united_earth_story.18.desc }
+	picture = sth_GFX_evt_expanseKessick2
+	location = ROOT
+	is_triggered_only = yes
+	immediate = { 
+	}
+	option = {
+		name = STH_united_earth_story.18.a
+		hidden_effect = { country_event = { id = STH_united_earth_story.30 days = 20 random = 10 } }
+	}
+}
+
+#Buy Kessick's Contract
+country_event = {
+	id = STH_united_earth_story.19
+	title = "STH_united_earth_story.19.name"
+	desc = { text = STH_united_earth_story.19.desc }
+	picture = sth_GFX_evt_expanseKessick3
+	location = ROOT
+	is_triggered_only = yes
+	immediate = { 
+	}
+	option = {
+		name = STH_united_earth_story.19.a
+		hidden_effect = { country_event = { id = STH_united_earth_story.30 days = 20 random = 10 } }
+	}
+}
+
+#Finding Xindi Homeworld
+country_event = {
+	id = STH_united_earth_story.30
+	title = "STH_united_earth_story.30.name"
+	desc = { text = STH_united_earth_story.30.desc }
+	picture = sth_GFX_evt_expanseXindus1
+	location = ROOT
+	is_triggered_only = yes
+	immediate = { 
+
+	}
+	option = {
+		name = STH_united_earth_story.30.a
+		hidden_effect = { country_event = { id = STH_united_earth_story.31 days = 90 random = 10 } }
+	}
+}
+
+#Second Delphic Expanse Trial - Impulse
+country_event = {
+	id = STH_united_earth_story.31
+	title = "STH_united_earth_story.31.name"
+	desc = { text = STH_united_earth_story.31.desc }
+	picture = sth_GFX_evt_expanseSeleya1
+	location = ROOT
+	is_triggered_only = yes
+	immediate = { 
+	}
+	option = {
+		name = STH_united_earth_story.31.a
+		hidden_effect = { country_event = { id = STH_united_earth_story.32 } }
+	}
+	option = {
+		name = STH_united_earth_story.31.b
+		trigger = { has_country_resource = { type = energy amount > 149 } }
+		add_energy = -150
+		hidden_effect = {
+			random_list = {
+				50 = { country_event = { id = STH_united_earth_story.33 } }
+				50 = { country_event = { id = STH_united_earth_story.34 } }
+			}
+		}
+	}
+	option = {
+		name = STH_united_earth_story.31.bf
+		trigger = { NOT = { has_country_resource = { type = energy amount > 149 } } }
+		hidden_effect = { country_event = { id = STH_united_earth_story.31 } }
+	}
+}
+
+#Second Delphic Expanse Trial - MACO rescue
+country_event = {
+	id = STH_united_earth_story.32
+	title = "STH_united_earth_story.32.name"
+	desc = { text = STH_united_earth_story.32.desc }
+	picture = sth_GFX_evt_expanseSeleya3
+	location = ROOT
+	is_triggered_only = yes
+	immediate = { 
+		random_country = {
+			limit = { has_country_flag = vulcan_high_command }
+			add_opinion_modifier = { who = root modifier = opinion_concerned }
+		}
+
+	}
+	option = {
+		name = STH_united_earth_story.32.a
+		hidden_effect = { country_event = { id = STH_united_earth_story.35 days = 90 random = 20 } }
+	}
+}
+#Second Delphic Expanse Trial - Cure works
+country_event = {
+	id = STH_united_earth_story.33
+	title = "STH_united_earth_story.33.name"
+	desc = { text = STH_united_earth_story.33.desc }
+	picture = sth_GFX_evt_expanseSeleya2
+	location = ROOT
+	is_triggered_only = yes
+	immediate = { 
+		set_country_flag = expanseHelpedVulcansWin
+		random_country = {
+			limit = { has_country_flag = vulcan_high_command }
+			add_opinion_modifier = { who = root modifier = opinion_medium_boost }
+		}
+
+	}
+	option = {
+		name = STH_united_earth_story.33.a
+		hidden_effect = { country_event = { id = STH_united_earth_story.35 days = 90 random = 20 } }
+	}
+}
+#Second Delphic Expanse Trial - Cure fails
+country_event = {
+	id = STH_united_earth_story.34
+	title = "STH_united_earth_story.34.name"
+	desc = { text = STH_united_earth_story.34.desc }
+	picture = sth_GFX_evt_expanseSeleya2
+	location = ROOT
+	is_triggered_only = yes
+	immediate = { 
+		set_country_flag = expanseHelpedVulcansLose
+		random_country = {
+			limit = { has_country_flag = vulcan_high_command }
+			add_opinion_modifier = { who = root modifier = opinion_small_boost }
+		}
+
+	}
+	option = {
+		name = STH_united_earth_story.34.a
+		hidden_effect = { country_event = { id = STH_united_earth_story.35 days = 90 random = 20 } }
+	}
+}
+
+#Third Delphic Expanse Trial - Shipment
+country_event = {
+	id = STH_united_earth_story.35
+	title = "STH_united_earth_story.35.name"
+	desc = { text = STH_united_earth_story.35.desc }
+	picture = sth_GFX_evt_expanseArboreal1
+	location = ROOT
+	is_triggered_only = yes
+	immediate = { 
+
+	}
+	option = {
+		name = STH_united_earth_story.35.a
+		hidden_effect = { country_event = { id = STH_united_earth_story.36 } }
+	}
+	option = {
+		name = STH_united_earth_story.35.b
+		trigger = { has_country_resource = { type = minerals amount > 249 } }
+		hidden_effect = {
+			random_list = {
+				75 = { country_event = { id = STH_united_earth_story.37 } }
+				25 = { country_event = { id = STH_united_earth_story.38 } }
+			}
+		}
+		add_minerals = -250
+	}
+	option = {
+		name = STH_united_earth_story.35.bf
+		trigger = { NOT = { has_country_resource = { type = minerals amount > 249 } } }
+		hidden_effect = { country_event = { id = STH_united_earth_story.35 } }
+	}
+	option = {
+		name = STH_united_earth_story.35.c
+		hidden_effect = { country_event = { id = STH_united_earth_story.38 } }
+	}
+}
+
+#Third Delphic Expanse Trial - Talked to Gralik
+country_event = {
+	id = STH_united_earth_story.36
+	title = "STH_united_earth_story.36.name"
+	desc = { text = STH_united_earth_story.36.desc }
+	picture = sth_GFX_evt_expanseArboreal2
+	location = ROOT
+	is_triggered_only = yes
+	immediate = { 
+		set_country_flag = expanseGralikTalked 
+
+	}
+	option = {
+		name = STH_united_earth_story.36.a
+		hidden_effect = {
+			country_event = { id = STH_united_earth_story.39 days = 90 random = 20 }
+		}
+	}
+}
+#Third Delphic Expanse Trial - Destroyed Kemocite Saved Colony
+country_event = {
+	id = STH_united_earth_story.37
+	title = "STH_united_earth_story.37.name"
+	desc = { text = STH_united_earth_story.37.desc }
+	picture = sth_GFX_evt_expanseArboreal3
+	location = ROOT
+	is_triggered_only = yes
+	immediate = { 
+		set_country_flag = expanseGralikSurvived 
+
+	}
+	option = {
+		name = STH_united_earth_story.37.a
+		hidden_effect = {
+			country_event = { id = STH_united_earth_story.39 days = 90 random = 20 }
+		}
+	}
+}
+#Third Delphic Expanse Trial - Destroyed Kemocite and Colony
+country_event = {
+	id = STH_united_earth_story.38
+	title = "STH_united_earth_story.38.name"
+	desc = { text = STH_united_earth_story.38.desc }
+	picture = sth_GFX_evt_expanseArboreal4
+	location = ROOT
+	is_triggered_only = yes
+	immediate = { 
+		set_country_flag = expanseGralikKilled 
+	}
+	option = {
+		name = STH_united_earth_story.38.a
+		hidden_effect = {
+			country_event = { id = STH_united_earth_story.39 days = 90 random = 20 }
+		}
+	}
+}
+
+#Fourth Delphic Expanse Trial - Proving Ground
+country_event = {
+	id = STH_united_earth_story.39
+	title = "STH_united_earth_story.39.name"
+	desc = { text = STH_united_earth_story.39.desc }
+	picture = sth_GFX_evt_expanseKumari1
+	location = ROOT
+	is_triggered_only = yes
+	immediate = { }
+	option = {
+		name = STH_united_earth_story.39.a
+		country_event = { id = STH_united_earth_story.40 }
+	}
+	option = {
+		name = STH_united_earth_story.39.b
+		hidden_effect = {
+			random_list = {
+				75 = { country_event = { id = STH_united_earth_story.41 } }
+				25 = { country_event = { id = STH_united_earth_story.42 } }
+			}
+		}
+		add_energy = 100
+		add_minerals = 100
+	}
+}
+#Fourth Delphic Expanse Trial - Reject Andorian Help
+country_event = {
+	id = STH_united_earth_story.40
+	title = "STH_united_earth_story.40.name"
+	desc = { text = STH_united_earth_story.40.desc }
+	picture = sth_GFX_evt_expanseKumari2
+	location = ROOT
+	is_triggered_only = yes
+	immediate = { 
+		random_country = {
+			limit = { has_country_flag = andorian_empire }
+			add_opinion_modifier = { who = root modifier = opinion_very_concerned }
+		}
+
+	}
+	option = {
+		name = STH_united_earth_story.40.a
+		hidden_effect = { country_event = { id = STH_united_earth_story.43 days = 90 random = 20 } }
+	}
+}
+#Fourth Delphic Expanse Trial - Accept Andorian Help - Good Outcome
+country_event = {
+	id = STH_united_earth_story.41
+	title = "STH_united_earth_story.41.name"
+	desc = { text = STH_united_earth_story.41.desc }
+	picture = sth_GFX_evt_expanseKumari2
+	location = ROOT
+	is_triggered_only = yes
+	immediate = { 
+		random_country = {
+			limit = { has_country_flag = andorian_empire }
+			add_opinion_modifier = { who = root modifier = opinion_concerned }
+		}
+		set_country_flag = expanseShranHelped
+
+	}
+	option = {
+		name = STH_united_earth_story.41.a
+		hidden_effect = { country_event = { id = STH_united_earth_story.43 days = 90 random = 20 } }
+	}
+}
+#Fourth Delphic Expanse Trial - Accept Andorian Help - Bad Outcome
+country_event = {
+	id = STH_united_earth_story.42
+	title = "STH_united_earth_story.42.name"
+	desc = { text = STH_united_earth_story.42.desc }
+	picture = sth_GFX_evt_expanseKumari2
+	location = ROOT
+	is_triggered_only = yes
+	immediate = { 
+		random_country = {
+			limit = { has_country_flag = andorian_empire }
+			add_opinion_modifier = { who = root modifier = opinion_insult }
+		}
+
+	}
+	option = {
+		name = STH_united_earth_story.41.a
+		hidden_effect = { country_event = { id = STH_united_earth_story.43 days = 90 random = 20 } }
+	}
+}
+
+#Fifth Delphic Expanse Trial - Strategem
+country_event = {
+	id = STH_united_earth_story.43
+	title = "STH_united_earth_story.43.name"
+	desc = { text = STH_united_earth_story.43.desc }
+	picture = sth_GFX_evt_expanseDegra1
+	location = ROOT
+	is_triggered_only = yes
+	immediate = { 
+
+	}
+	option = {
+		name = STH_united_earth_story.43.a
+		hidden_effect = { country_event = { id = STH_united_earth_story.44 } }
+	}
+	option = {
+		name = STH_united_earth_story.43.b
+		trigger = { has_country_resource = { type = energy amount > 99 } }
+		hidden_effect = {
+			random_list = {
+				75 = { country_event = { id = STH_united_earth_story.45 } }
+				25 = { country_event = { id = STH_united_earth_story.46 } }
+			}
+		}
+		add_energy = -100
+	}
+	option = {
+		name = STH_united_earth_story.43.bf
+		trigger = { NOT = { has_country_resource = { type = energy amount > 99 } } }
+		hidden_effect = { country_event = { id = STH_united_earth_story.43 } }
+	}
+	option = {
+		name = STH_united_earth_story.43.c
+		hidden_effect = {
+			random_list = {
+				50 = { country_event = { id = STH_united_earth_story.47 } }
+				50 = { country_event = { id = STH_united_earth_story.48 } }
+			}
+		}
+	}
+}
+#Fifth Delphic Expanse Trial - Abandon Degra
+country_event = {
+	id = STH_united_earth_story.44
+	title = "STH_united_earth_story.44.name"
+	desc = { text = STH_united_earth_story.44.desc }
+	picture = sth_GFX_evt_expanseDegra1
+	location = ROOT
+	is_triggered_only = yes
+	immediate = { 
+		set_country_flag = expanseDegraAbandoned 
+
+	}
+	option = {
+		name = STH_united_earth_story.44.a
+		hidden_effect = { 
+			random_list = {
+				10 = { country_event = { id = STH_united_earth_story.50 days = 90 random = 20 }  }
+				10 = { country_event = { id = STH_united_earth_story.70 days = 45 random = 10 }  }
+			}
+		}
+	}
+}
+#Fifth Delphic Expanse Trial - Degra Ruse Works
+country_event = {
+	id = STH_united_earth_story.45
+	title = "STH_united_earth_story.45.name"
+	desc = { text = STH_united_earth_story.45.desc }
+	picture = sth_GFX_evt_expanseDegra2
+	location = ROOT
+	is_triggered_only = yes
+	immediate = { 
+		set_country_flag = expanseDegraPersuaded 
+
+	}
+	option = {
+		name = STH_united_earth_story.45.a
+		hidden_effect = { 
+			random_list = {
+				10 = { country_event = { id = STH_united_earth_story.49 days = 30 random = 5 }  }
+				10 = { country_event = { id = STH_united_earth_story.70 days = 30 random = 5 }  }
+			}
+		}
+	}
+}
+#Fifth Delphic Expanse Trial - Degra Ruse Fails
+country_event = {
+	id = STH_united_earth_story.46
+	title = "STH_united_earth_story.46.name"
+	desc = { text = STH_united_earth_story.46.desc }
+	picture = sth_GFX_evt_expanseDegra3
+	location = ROOT
+	is_triggered_only = yes
+	immediate = { 
+		set_country_flag = expanseDegraAbandoned 
+
+	}
+	option = {
+		name = STH_united_earth_story.46.a
+		hidden_effect = { 
+			random_list = {
+				10 = { country_event = { id = STH_united_earth_story.50 days = 90 random = 20 }  }
+				10 = { country_event = { id = STH_united_earth_story.70 days = 45 random = 10 }  }
+			}
+		}
+	}
+}
+#Fifth Delphic Expanse Trial - Degra Appeal Works
+country_event = {
+	id = STH_united_earth_story.47
+	title = "STH_united_earth_story.47.name"
+	desc = { text = STH_united_earth_story.47.desc }
+	picture = sth_GFX_evt_expanseDegra4
+	location = ROOT
+	is_triggered_only = yes
+	immediate = { 
+		set_country_flag = expanseDegraPersuaded 
+	}
+	option = {
+		name = STH_united_earth_story.47.a
+		hidden_effect = { 
+			random_list = {
+				10 = { country_event = { id = STH_united_earth_story.49 days = 30 random = 5 }  }
+				10 = { country_event = { id = STH_united_earth_story.70 days = 30 random = 5 }  }
+			}
+		}
+	}
+}
+#Fifth Delphic Expanse Trial - Degra Appeal Fails
+country_event = {
+	id = STH_united_earth_story.48
+	title = "STH_united_earth_story.48.name"
+	desc = { text = STH_united_earth_story.48.desc }
+	picture = sth_GFX_evt_expanseDegra4
+	location = ROOT
+	is_triggered_only = yes
+	immediate = { 
+		set_country_flag = expanseDegraAbandoned 
+	}
+	option = {
+		name = STH_united_earth_story.48.a
+		hidden_effect = { 
+			random_list = {
+				10 = { country_event = { id = STH_united_earth_story.50 days = 90 random = 20 }  }
+				10 = { country_event = { id = STH_united_earth_story.70 days = 45 random = 10 }  }
+			}
+		}
+	}
+}
+
+# Delphix Expanse Trial - Hatchery
+country_event = {
+	id = STH_united_earth_story.70
+	title = "STH_united_earth_story.70.name"
+	desc = { 
+		trigger = { has_country_flag = expanseDegraAbandoned }
+		text = STH_united_earth_story.70.desc_01
+	}
+	desc = { 
+		trigger = { has_country_flag = expanseDegraPersuaded }
+		text = STH_united_earth_story.70.desc_02
+	}
+	picture = sth_GFX_evt_expanseHatchery1
+	is_triggered_only = yes
+	option = {
+		name = STH_united_earth_story.70.a #Don't investigate
+		hidden_effect = { 
+			if = {
+				limit = { has_country_flag = expanseDegraPersuaded } 
+				country_event = { id = STH_united_earth_story.49 }
+				else = { country_event = { id = STH_united_earth_story.50 } }
+			}
+		}
+	}
+	option = {
+		name = STH_united_earth_story.70.b #Blow up the ship
+		hidden_effect = {
+			set_country_flag = expanseHatcheryDestroyed
+			country_event = { id = STH_united_earth_story.71 }
+		}
+	}
+	option = {
+		name = STH_united_earth_story.70.c
+		hidden_effect = { 
+			random_list = {
+				10 = { country_event = { id = STH_united_earth_story.72 } }
+				10 = { country_event = { id = STH_united_earth_story.73 } }
+			}
+		}
+	}
+}
+#Ship Blown Up
+country_event = {
+	id = STH_united_earth_story.71
+	title = "STH_united_earth_story.71.name"
+	desc = { 
+		trigger = { has_country_flag = expanseDegraAbandoned }
+		text = STH_united_earth_story.71.desc_01
+	}
+	desc = { 
+		trigger = { has_country_flag = expanseDegraPersuaded }
+		text = STH_united_earth_story.71.desc_02
+	}
+	picture = sth_GFX_evt_expanseHatchery4
+	is_triggered_only = yes
+	option = {
+		name = STH_united_earth_story.71.a #Don't investigate
+		hidden_effect = { 
+			if = {
+				limit = { has_country_flag = expanseDegraPersuaded } 
+				country_event = { id = STH_united_earth_story.49 days = 30 random = 5 }
+				else = { country_event = { id = STH_united_earth_story.50 days = 90 random = 15 } }
+			}
+		}
+	}
+}
+#Ship Investigated - Infants Dead
+country_event = {
+	id = STH_united_earth_story.72
+	title = "STH_united_earth_story.72.name"
+	desc = { 
+		trigger = { has_country_flag = expanseDegraAbandoned }
+		text = STH_united_earth_story.72.desc_01
+	}
+	desc = { 
+		trigger = { has_country_flag = expanseDegraPersuaded }
+		text = STH_united_earth_story.72.desc_02
+	}
+	picture = sth_GFX_evt_expanseHatchery2
+	is_triggered_only = yes
+	option = {
+		name = STH_united_earth_story.72.a #Go on way
+		hidden_effect = { 
+			if = {
+				limit = { has_country_flag = expanseDegraPersuaded } 
+				country_event = { id = STH_united_earth_story.49 days = 30 random = 5 }
+				else = { country_event = { id = STH_united_earth_story.50 days = 90 random = 15 } }
+			}
+		}
+	}
+}
+#Ship Investigated - Infants Alive
+country_event = {
+	id = STH_united_earth_story.73
+	title = "STH_united_earth_story.73.name"
+	desc = { text = STH_united_earth_story.73.desc }
+	picture = sth_GFX_evt_expanseHatchery3
+	is_triggered_only = yes
+	option = {
+		name = STH_united_earth_story.73.a #Destroy Ship
+		hidden_effect = { 
+			set_country_flag = expanseHatcheryDestroyed
+			country_event = { id = STH_united_earth_story.74 }
+		}
+	}
+	option = {
+		name = STH_united_earth_story.73.b #Research cure
+		trigger = { energy > 99 }
+		ai_chance = { factor = 0 modifier = { factor = 1 energy > 99 } }
+		add_energy = -100
+		hidden_effect = { country_event = { id = STH_united_earth_story.75 } }
+	}
+}
+#Ship Blown Up
+country_event = {
+	id = STH_united_earth_story.74
+	title = "STH_united_earth_story.74.name"
+	desc = { 
+		trigger = { has_country_flag = expanseDegraAbandoned }
+		text = STH_united_earth_story.74.desc_01
+	}
+	desc = { 
+		trigger = { has_country_flag = expanseDegraPersuaded }
+		text = STH_united_earth_story.74.desc_02
+	}
+	picture = sth_GFX_evt_expanseHatchery4
+	is_triggered_only = yes
+	option = {
+		name = STH_united_earth_story.74.a #Destroy Ship
+		hidden_effect = { 
+			if = {
+				limit = { has_country_flag = expanseDegraPersuaded } 
+				country_event = { id = STH_united_earth_story.49 days = 30 random = 5 }
+				else = { country_event = { id = STH_united_earth_story.50 days = 90 random = 15 } }
+			}
+		}
+	}
+}
+#Cure Researched
+country_event = {
+	id = STH_united_earth_story.75
+	title = "STH_united_earth_story.75.name"
+	desc = { text = STH_united_earth_story.75.desc }
+	picture = sth_GFX_evt_expanseHatchery2
+	is_triggered_only = yes
+	option = {
+		name = STH_united_earth_story.75.a #Leave to fend for themselves
+		hidden_effect = { 
+			if = {
+				limit = { has_country_flag = expanseDegraPersuaded } 
+				country_event = { id = STH_united_earth_story.49 days = 30 random = 5 }
+				else = { country_event = { id = STH_united_earth_story.50 days = 90 random = 15 } }
+			}
+		}
+	}
+	option = {
+		name = STH_united_earth_story.75.b #Leave to fend for themselves
+		hidden_effect = { 
+			set_country_flag = expanseHatcheryAdopted
+			if = {
+				limit = { has_country_flag = expanseDegraPersuaded } 
+				country_event = { id = STH_united_earth_story.49 days = 30 random = 5 }
+				else = { country_event = { id = STH_united_earth_story.50 days = 90 random = 15 } }
+			}
+		}
+	}
+	option = {
+		name = STH_united_earth_story.75.c #Leave to fend for themselves
+		hidden_effect = { 
+			set_country_flag = expanseHatcheryNotified
+			if = {
+				limit = { has_country_flag = expanseDegraPersuaded } 
+				country_event = { id = STH_united_earth_story.49 days = 30 random = 5 }
+				else = { country_event = { id = STH_united_earth_story.50 days = 90 random = 15 } }
+			}
+		}
+	}
+}
+
+#Insect Babies All Grown Up
+country_event = {
+	id = STH_united_earth_story.76
+	title = "STH_united_earth_story.76.name"
+	desc = { text = STH_united_earth_story.76.desc }
+	picture = sth_GFX_evt_federationEarth
+	is_triggered_only = yes
+	immediate = {
+		if = {
+			limit = { NOT = { exists = event_target:xindi_insectoid } }
+			create_species = {
+				name = "Xindi-Insectoid"
+				namelist = "ART1"
+				class = XININS
+				portrait = xindi_insectoid
+				homeworld = THIS
+				traits = { trait = trait_xindi trait = trait_fleeting trait = trait_rapid_breeders trait = trait_strong trait = trait_natural_engineers ideal_planet_class = "pc_arid" }
+			}
+			last_created_species = {
+				save_global_event_target_as = xindi_insectoid
+				if = { limit = { exists = event_target:xindi_mammalian } set_species_identity = event_target:xindi_mammalian }
+			}
+		}
+		random_owned_planet = {
+			limit = { 
+				free_pop_tiles > 0
+				habitability = { who = event_target:xindi_insectoid value > 0.3 }
+				is_capital = no
+			}
+			save_event_target_as = settlePlanet2
+		}
+		random_owned_planet = {
+			limit = { 
+				free_pop_tiles > 0 
+				habitability = { who = event_target:xindi_insectoid value > 0.3 }
+				is_capital = no
+				NOR = {
+					AND = { exists = event_target:settlePlanet2 is_same_value = event_target:settlePlanet2 }
+				}
+			}
+			save_event_target_as = settlePlanet3
+		}
+		random_owned_planet = {
+			limit = { 
+				free_pop_tiles > 0 
+				habitability = { who = event_target:xindi_insectoid value > 0.3 }
+				is_capital = no
+				NOR = {
+					AND = { exists = event_target:settlePlanet2 is_same_value = event_target:settlePlanet2 }
+					AND = { exists = event_target:settlePlanet3 is_same_value = event_target:settlePlanet3 }
+				}
+			}
+			save_event_target_as = settlePlanet4
+		}
+	}
+	option = {
+		name = STH_united_earth_story.76.a #Option 1 - Capital
+		capital_scope = {
+			if = {
+				limit = { free_pop_tiles > 0 }
+				random_tile = {
+					limit = { has_grown_pop = no has_growing_pop = no has_blocker = no }
+					create_pop = { species = event_target:xindi_insectoid }
+				}
+				else = {
+					random_tile = {
+						limit = { has_grown_pop = yes }
+						kill_pop = yes
+						create_pop = { species = event_target:xindi_insectoid }
+					}
+				}
+			}
+			
+		}
+	}
+	option = {
+		name = STH_united_earth_story.76.b #Option 2
+		trigger = { exists = event_target:settlePlanet2 }
+		event_target:settlePlanet2 = {
+			random_tile = {
+				limit = { has_grown_pop = no has_growing_pop = no has_blocker = no }
+				create_pop = { species = event_target:xindi_insectoid }
+			}
+		}
+	}
+	option = {
+		name = STH_united_earth_story.76.c #Option 3
+		trigger = { exists = event_target:settlePlanet3 }
+		event_target:settlePlanet3 = {
+			random_tile = {
+				limit = { has_grown_pop = no has_growing_pop = no has_blocker = no }
+				create_pop = { species = event_target:xindi_insectoid }
+			}
+		}
+	}
+	option = {
+		name = STH_united_earth_story.76.d #Option 4
+		trigger = { exists = event_target:settlePlanet4 }
+		event_target:settlePlanet4 = {
+			random_tile = {
+				limit = { has_grown_pop = no has_growing_pop = no has_blocker = no }
+				create_pop = { species = event_target:xindi_insectoid }
+			}
+		}
+	}
+	after = {
+		create_leader = {
+			type = admiral
+			species = event_target:xindi_insectoid
+			name = "Xixtchixi"
+			skill = 5
+			traits = { trait = leader_trait_gale_speed trait = leader_trait_aggressive }
+		}
+	}
+}
+
+#Xindi Council Met - Quick
+country_event = {
+	id = STH_united_earth_story.49
+	title = "STH_united_earth_story.49.name"
+	desc = { 
+		trigger = { has_country_flag = expanseGralikTalked has_country_flag = expanseDegraPersuaded }
+		text = STH_united_earth_story.49.desc_01
+	}
+	desc = { 
+		trigger = { has_country_flag = expanseGralikSurvived has_country_flag = expanseDegraPersuaded }
+		text = STH_united_earth_story.49.desc_01
+	}
+	desc = { 
+		trigger = { has_country_flag = expanseGralikKilled has_country_flag = expanseDegraPersuaded }
+		text = STH_united_earth_story.49.desc_03
+	}
+	desc = { 
+		trigger = { has_country_flag = expanseGralikTalked has_country_flag = expanseDegraAbandoned }
+		text = STH_united_earth_story.49.desc_04
+	}
+	desc = { 
+		trigger = { has_country_flag = expanseGralikSurvived has_country_flag = expanseDegraAbandoned }
+		text = STH_united_earth_story.49.desc_06
+	}
+	desc = { 
+		trigger = { has_country_flag = expanseGralikKilled has_country_flag = expanseDegraAbandoned }
+		text = STH_united_earth_story.49.desc_06
+	}
+	picture = sth_GFX_evt_expanseXindiShips1
+	location = ROOT
+	is_triggered_only = yes
+	immediate = { 
+
+	}
+	option = {
+		name = STH_united_earth_story.49.a
+		hidden_effect = { country_event = { id = STH_united_earth_story.51 } }
+	}
+}
+
+#Slow Azati Prime
+country_event = {
+	id = STH_united_earth_story.50
+	title = "STH_united_earth_story.50.name"
+	desc = { text = STH_united_earth_story.50.desc }
+	picture = sth_GFX_evt_expanseEnterprise1
+	location = ROOT
+	is_triggered_only = yes
+	immediate = { 
+		set_country_flag = expanseSlowAzatiDiscovery 
+
+	}
+	option = {
+		name = STH_united_earth_story.50.a
+		hidden_effect = { country_event = { id = STH_united_earth_story.49 } }
+	}
+}
+
+#Xindi Council Met 2
+country_event = {
+	id = STH_united_earth_story.51
+	title = "STH_united_earth_story.51.name"
+	desc = { 
+		trigger = { has_country_flag = expanseGralikTalked has_country_flag = expanseDegraPersuaded }
+		text = STH_united_earth_story.51.desc_01
+	}
+	desc = { 
+		trigger = { has_country_flag = expanseGralikSurvived has_country_flag = expanseDegraPersuaded }
+		text = STH_united_earth_story.51.desc_01
+	}
+	desc = { 
+		trigger = { has_country_flag = expanseGralikKilled has_country_flag = expanseDegraPersuaded }
+		text = STH_united_earth_story.51.desc_03
+	}
+	desc = { 
+		trigger = { has_country_flag = expanseGralikTalked has_country_flag = expanseDegraAbandoned }
+		text = STH_united_earth_story.51.desc_04
+	}
+	desc = { 
+		trigger = { has_country_flag = expanseGralikSurvived has_country_flag = expanseDegraAbandoned }
+		text = STH_united_earth_story.51.desc_06
+	}
+	desc = { 
+		trigger = { has_country_flag = expanseGralikKilled has_country_flag = expanseDegraAbandoned }
+		text = STH_united_earth_story.51.desc_06
+	}
+	picture = sth_GFX_evt_expanseCouncil1
+	location = ROOT
+	is_triggered_only = yes
+	immediate = { 
+
+	}
+	option = {
+		name = STH_united_earth_story.20.a
+		hidden_effect = { capital_scope = { planet_event = { id = STH_united_earth_story.20 } } }
+	}
+}
+
+
+#Xindi Weapon Event
+planet_event = {
+	id = STH_united_earth_story.20
+	title = "STH_united_earth_story.20.name"
+	desc = "STH_united_earth_story.20.desc"
+	picture = sth_GFX_evt_expanseXindiWeaponArrived1
+	show_sound = event_air_raid_siren
+	location = ROOT
+	trigger = {
+		has_owner = yes
+		has_planet_flag = sol_earth
+	}
+	is_triggered_only = yes
+	immediate = {
+		owner = { set_country_flag = xindi_weapon_target_country  }
+		if = {
+			limit = { exists = event_target:xindi_probe_leader }
+			planet_event = { id = STH_hero_ship.0 } # Spawn NX-01
+		}
+		
+		create_country = {
+			name = "Xindi Weapon"
+			type = faction
+			auto_delete = no
+			flag = {
+				icon = { category = "trek" file = "xindi.dds" }
+				background = { category = "backgrounds" file = "new_dawn.dds" }
+				colors = { "black" "black" "null" "null" }
+			}
+		}
+		last_created_country = {
+			set_graphical_culture = xindi_01
+			establish_communications_no_message = root.owner
+			set_country_flag = xindi_weapon_country
+			create_fleet = {
+				settings = { spawn_debris = no is_boss = yes }
+				name = "Xindi Weapon"
+				effect = {
+					set_aggro_range = 0
+					set_fleet_stance = aggressive
+					set_aggro_range_measure_from = self
+					set_owner = PREV
+					set_fleet_flag = xindi_weapon_fleet 
+					save_event_target_as = xindi_weapon_fleet
+					create_ship = { name = "Xindi Weapon" design = "Xindi Weapon" graphical_culture = "borg_01" }
+					create_ship = { name = "Xindi Reptilian Escort" design = "Xindi Reptilian Escort" graphical_culture = "xindi_01" }
+					set_location = { target = ROOT distance = 400 angle = random }
+					queue_actions = {
+						move_to = ROOT
+						effect = {
+							id = "STH_united_earth_story.20.effect.1"
+							ROOT = { planet_event = { id = STH_united_earth_story.55 } }
+						}
+					}
+				}
+			}
+			set_relation_flag = { who = root.owner flag = xindi_weapon_enemy }
+		}
+		if = {
+			limit = { owner = { OR = { has_country_flag = expanseHatcheryDestroyed has_country_flag = expanseHatcheryAdopted } } }
+			last_created_fleet = { create_ship = { name = "Xindi Insectoid Escort" design = "Xindi Insectoid Escort" graphical_culture = "xindi_01" } }
+		}
+		if = {
+			limit = { owner = { NOR = { has_country_flag = expanseHatcheryNotified } } }
+			last_created_fleet = { create_ship = { name = "Xindi Insectoid Escort" design = "Xindi Insectoid Escort" graphical_culture = "xindi_01" } }
+		}
+		if  = {
+			limit = { owner = { fleet_power > 500 } }
+			last_created_fleet = {
+				create_ship = { name = "Xindi Reptilian Escort" design = "Xindi Reptilian Escort" graphical_culture = "xindi_01" }
+				create_ship = { name = "Xindi Insectoid Escort" design = "Xindi Insectoid Escort" graphical_culture = "xindi_01" }
+			}
+		}
+		if  =  {
+			limit = { owner = { fleet_power > 750 } }
+			last_created_fleet = {
+				create_ship = { name = "Xindi Reptilian Escort" design = "Xindi Reptilian Escort" graphical_culture = "xindi_01" }
+				create_ship = { name = "Xindi Insectoid Escort" design = "Xindi Insectoid Escort" graphical_culture = "xindi_01" }
+			}
+		}
+		if  =  {
+			limit = { owner = { fleet_power > 1000 } }
+			last_created_fleet = {
+				create_ship = { name = "Xindi Insectoid Escort" design = "Xindi Insectoid Escort" graphical_culture = "xindi_01" }
+				create_ship = { name = "Xindi Reptilian Escort" design = "Xindi Reptilian Escort" graphical_culture = "xindi_01" }
+			}
+		}
+		every_country = {
+			limit = { 
+				has_communications = ROOT.owner
+				NOT = { is_same_value = ROOT.owner }
+			}
+			country_event = { id = STH_united_earth_story.60 days = 5 }
+		}
+	}
+	option = {
+		name = STH_united_earth_story.20.a
+		hidden_effect = {
+			owner = {
+				country_event = { id = STH_united_earth_story.52 days = 2 }
+				country_event = { id = STH_united_earth_story.53 days = 3 }
+				country_event = { id = STH_united_earth_story.54 days = 3 }
+			}
+		}
+	}
+}
+
+#Other countries find out
+country_event = {
+	id = STH_united_earth_story.60
+	title = "STH_united_earth_story.60.name"
+	desc = { text = STH_united_earth_story.60.desc }
+	picture = sth_GFX_evt_expanseXindiWeaponArrived1
+	is_triggered_only = yes
+	immediate = {
+		random_country = {
+			limit = { has_country_flag = united_earth }
+			save_event_target_as = unitedEarth
+		}
+	}
+	option = { name = STH_united_earth_story.60.a }
+	option = { name = STH_united_earth_story.60.b }
+}
+
+#Vulcan Help
+country_event = {
+	id = STH_united_earth_story.52
+	title = "STH_united_earth_story.52.name"
+	desc = { text = STH_united_earth_story.52.desc }
+	picture = sth_GFX_evt_expanseSeleya2
+	location = ROOT
+	trigger = {
+		has_country_flag = expanseHelpedVulcansWin
+	}
+	is_triggered_only = yes
+	option = {
+		name = STH_united_earth_story.52.a 
+		hidden_effect = {
+            capital_scope = { save_event_target_as = capital }
+			spawn_hero_ship_ENT_VUL = yes
+			last_created_fleet = {
+				set_location = { target = event_target:capital distance = 400 angle = random }
+			}
+		}
+	}
+}
+#Andorian Help
+country_event = {
+	id = STH_united_earth_story.53
+	title = "STH_united_earth_story.53.name"
+	desc = { text = STH_united_earth_story.53.desc }
+	picture = sth_GFX_evt_expanseKumari2
+	location = ROOT
+	trigger = {
+		has_country_flag = expanseShranHelped
+	}
+	is_triggered_only = yes
+	option = {
+		name = STH_united_earth_story.53.a 
+		hidden_effect = {
+			capital_scope = { save_event_target_as = capital }
+			spawn_hero_ship_ENT_ADR = yes
+			last_created_fleet = {
+				set_location = { target = event_target:capital distance = 400 angle = random }
+			}
+		}
+	}
+}
+
+#Xindi Help
+country_event = {
+	id = STH_united_earth_story.54
+	title = "STH_united_earth_story.54.name"
+	desc = { text = STH_united_earth_story.54.desc }
+	picture = sth_GFX_evt_expanseXindiShips1
+	location = ROOT
+	trigger = {
+		has_country_flag = expanseDegraPersuaded
+		has_country_flag = expanseGralikTalked
+	}
+	is_triggered_only = yes
+	immediate = { 
+		capital_scope = { save_event_target_as = capital }
+	}
+	option = { 
+		name = STH_united_earth_story.54.a 
+		hidden_effect = {
+			create_fleet = { 
+				name = "Xindi Primate Fleet" 
+				settings = { can_upgrade = no can_change_composition = no can_change_leader = no }
+			}
+			last_created_fleet = { 	
+				set_owner = root
+				create_ship = { name = "Xindi Primate Escort" design = "Xindi Primate Escort" graphical_culture = "generic_01" prefix = no }
+				last_created_ship = { set_ship_flag = "Xindi_Primate_Escort" }
+				set_location = event_target:capital 
+			}
+			create_fleet = { 
+				name = "Xindi Arboreal Fleet" 
+				settings = { can_upgrade = no can_change_composition = no can_change_leader = no }
+			}
+			last_created_fleet = {
+				set_owner = root
+				create_ship = { name = "Xindi Arboreal Escort" design = "Xindi Arboreal Escort" graphical_culture = "generic_01" prefix = no }
+				last_created_ship = { set_ship_flag = "Xindi_Arboreal_Escort" }
+				set_location = event_target:capital 
+			}
+		}
+	}
+}
+
+
+
+# Weapon Destroyed (HIDDEN)
+country_event = {
+	id = STH_united_earth_story.21
+	hide_window = yes
+	is_triggered_only = yes
+	trigger = {
+		exists = from
+		from = { has_country_flag = xindi_weapon_country }
+	}
+	immediate = {
+		if = {
+			limit = {
+				has_country_flag = xindi_weapon_target_country
+				from = {
+					has_relation_flag = {
+						who = root
+						flag = xindi_weapon_enemy
+					}
+				}
+			}
+			random_owned_planet = {
+				limit = { has_planet_flag = sol_earth }
+				planet_event = { id = STH_united_earth_story.22 }
+			}
+			else = {
+				random_country = {
+					limit = {
+						reverse_has_relation_flag = {
+							who = from
+							flag = xindi_weapon_enemy
+						}
+						has_country_flag = xindi_weapon_target_country
+					}
+					random_owned_planet = {
+						limit = { has_planet_flag = sol_earth }
+						planet_event = { id = STH_united_earth_story.22 }
+					}
+				}
+			}
+		}
+	}
+}
+
+# Weapon Destroyed
+planet_event = {
+	id = STH_united_earth_story.22
+	title = "STH_united_earth_story.22.name"
+	desc = "STH_united_earth_story.22.desc"
+	picture = sth_GFX_evt_expanseXindiWeaponFail1
+	show_sound = event_ship_explosion
+	location = ROOT
+	is_triggered_only = yes
+	immediate = {
+		fromfrom = {
+			remove_relation_flag = { who = root.owner flag = xindi_weapon_enemy }
+			destroy_country = yes
+		}
+		random_planet = {
+			limit = { has_planet_flag = kolea_vei }
+			spawn_system = {
+				min_distance = 5
+				max_distance = 10
+				initializer = "xindi_system_event_spawn"  
+			}
+		}
+		owner = { 
+			save_event_target_as = owner
+			set_country_flag = xindi_crisis_complete_win
+			remove_country_flag = xindi_crisis
+			
+			every_owned_ship = {
+                limit = { has_ship_flag = VSS_Seleya } 
+				save_event_target_as = seleya
+            }
+			if = {
+                limit = { exists = event_target:seleya }
+	            event_target:seleya = {
+                	ship_event = { id = STH_united_earth_story.102 }  
+	            }
+                else = {
+	                random_country = { 
+	                    limit = { has_country_flag = vulcan_high_command } 
+	                    country_event = { id = STH_united_earth_story.105 } 
+	                }
+                }
+            }
+
+            every_owned_ship = {
+                limit = { has_ship_flag = IGS_Kumari } 
+				save_event_target_as = kumari
+            }
+			if = {
+                limit = { exists = event_target:kumari }
+	            event_target:kumari = {
+	                ship_event = { id = STH_united_earth_story.100 } 
+	            }
+                else = {
+	                random_country = { 
+	                    limit = { has_country_flag = andorian_empire } 
+	                    country_event = { id = STH_united_earth_story.104 } 
+	                }
+                }
+            }
+
+			every_owned_ship = {
+				limit = { has_ship_flag = Xindi_Primate_Escort }
+                delete_ship = this
+			}
+			every_owned_ship = {
+				limit = { has_ship_flag = Xindi_Arboreal_Escort }
+                delete_ship = this
+			}
+		}
+	}
+	option = { 
+		name = STH_united_earth_story.22.a 
+		owner = { end_event_chain = "xindi_event_chain" }
+		random_country = {
+			limit = { has_country_flag = xindi_council }
+			establish_communications_no_message = event_target:owner
+		}
+		hidden_effect = {
+			if = {
+				limit = { owner = { has_country_flag = expanseHatcheryAdopted } }
+				owner = { country_event = { id = STH_united_earth_story.76 days = 360 random = 90 } }
+			}
+		}
+	}
+}
+
+
+# Weapon Attacks Planet
+planet_event = {
+	id = STH_united_earth_story.55
+	hide_window = yes
+	location = ROOT
+	is_triggered_only = yes
+	immediate = {
+		if = {
+			limit = {
+				has_orbital_station = no
+				solar_system = { 
+					any_ship_in_system = { 
+						fleet = { 
+							has_fleet_flag = xindi_weapon_fleet 
+							is_in_combat = no
+						} 
+						FROM = {
+							is_same_value = ROOT	
+						}
+					}
+				}
+			}
+			planet_event = { id = STH_united_earth_story.23 }
+			
+			else = {
+				if = {
+					limit = {
+						solar_system = {
+							any_ship_in_system = {
+								fleet = {
+									has_fleet_flag = xindi_weapon_fleet 
+								}
+							}
+						}
+					}
+					planet_event = { id = STH_united_earth_story.55 days = 28 }
+				}
+			}
+		}
+	}
+}
+
+#Empires React to Earth Destroyed
+country_event = {
+	id = STH_united_earth_story.56
+	title = "STH_united_earth_story.56.name"
+	desc = { text = STH_united_earth_story.56.desc }
+	picture = sth_GFX_evt_expanseXindiWeaponSuccess1
+	trigger = { 
+		any_country = { has_country_flag = united_human_remnant } 
+		NOT = { has_country_flag = united_human_remnant }
+	}
+	is_triggered_only = yes
+	immediate = { 
+		save_event_target_as = donatingCountry
+		random_country = { 
+			limit = { has_country_flag = united_human_remnant }
+			save_event_target_as = united_human_remnant
+		}
+		random_planet = {
+			limit = { has_planet_flag = sol_earth }
+			save_event_target_as = solEarth
+		}
+	}
+	option = { name = STH_united_earth_story.56.a }
+	option = { 
+		trigger = { 
+			has_country_resource = { type = energy amount > 49 } 
+			OR = {
+				is_ai = no
+				opinion = { who = event_target:united_human_remnant value > 100 }
+			}
+		}
+		event_target:united_human_remnant = { 
+			add_energy = 50 
+			country_event = { id = STH_united_earth_story.57 days = 2 }
+		}
+		add_energy = -50
+		name = STH_united_earth_story.56.b
+	}
+	option = { 
+		trigger = { 
+			has_country_resource = { type = minerals amount > 49 } 
+			OR = {
+				is_ai = no
+				opinion = { who = event_target:united_human_remnant value > 100 }
+			}
+		}
+		event_target:united_human_remnant = { 
+			add_minerals = 50
+			country_event = { id = STH_united_earth_story.58 days = 2 }
+		}
+		add_minerals = -50
+		name = STH_united_earth_story.56.c
+	}
+	option = {
+		trigger = { 
+			has_country_resource = { type = energy amount > 49 } 
+			has_country_resource = { type = minerals amount > 49 }
+			OR = {
+				is_ai = no
+				opinion = { who = event_target:united_human_remnant value > 150 }
+			}
+		}
+		event_target:united_human_remnant = { 
+			add_energy = 50
+			add_minerals = 50
+			country_event = { id = STH_united_earth_story.59 days = 2 }
+		}
+		add_energy = -50
+		add_minerals = -50
+		name = STH_united_earth_story.56.d
+	}
+}
+country_event = {
+	id = STH_united_earth_story.57
+	title = "STH_united_earth_story.57.name"
+	desc = { text = STH_united_earth_story.57.desc }
+	picture = sth_GFX_evt_expanseXindiWeaponSuccess1
+	trigger = { has_country_flag = united_human_remnant }
+	is_triggered_only = yes
+	immediate = { 
+		random_owned_pop = {
+			limit = { OR = { has_ethic = "ethic_militarist" has_ethic = "ethic_fanatic_militarist" } }
+			if = {
+				limit = { OR = { has_ethic = "ethic_militarist" has_ethic = "ethic_fanatic_militarist" } }
+				pop_change_ethic = "ethic_pacifist"
+			}
+		}
+	}
+	option = { name = STH_united_earth_story.57.a }
+	option = { 
+		trigger = { 
+			has_country_flag = deMilitaristDonation 
+			OR = { has_ethic = "ethic_xenophobe" has_ethic = "ethic_fanatic_xenophobe" }
+		}
+		name = STH_united_earth_story.57.b
+		shift_ethic = "ethic_xenophile"
+	}
+	after = {
+		set_timed_country_flag = { flag = deMilitaristDonation days = 1000 }
+	}
+}
+country_event = {
+	id = STH_united_earth_story.58
+	title = "STH_united_earth_story.58.name"
+	desc = { text = STH_united_earth_story.58.desc }
+	picture = sth_GFX_evt_expanseXindiWeaponSuccess1
+	trigger = { has_country_flag = united_human_remnant }
+	is_triggered_only = yes
+	immediate = { 
+		random_owned_pop = {
+			limit = { OR = { has_ethic = "ethic_xenophobe" has_ethic = "ethic_fanatic_xenophobe" } }
+			if = {
+				limit = { OR = { has_ethic = "ethic_xenophobe" has_ethic = "ethic_fanatic_xenophobe" } }
+				pop_change_ethic = "ethic_xenophile"
+			}
+		}
+	}
+	option = { name = STH_united_earth_story.58.a }
+	option = { 
+		trigger = { 
+			has_country_flag = deXenophobeDonation 
+			has_ethic = "ethic_fanatic_xenophobe"
+		}
+		name = STH_united_earth_story.58.b
+		country_remove_ethic = "ethic_fanatic_xenophobe"
+		country_add_ethic = "ethic_xenophobe"
+	}
+	after = {
+		set_timed_country_flag = { flag = deXenophobeDonation days = 1000 }
+	}
+}
+country_event = {
+	id = STH_united_earth_story.59
+	title = "STH_united_earth_story.59.name"
+	desc = { text = STH_united_earth_story.59.desc }
+	picture = sth_GFX_evt_expanseXindiWeaponSuccess1
+	trigger = { has_country_flag = united_human_remnant }
+	is_triggered_only = yes
+	immediate = { 
+		random_owned_pop = {
+			limit = { 
+				OR = { has_ethic = "ethic_militarist" has_ethic = "ethic_fanatic_militarist" }
+			}
+			if = {
+				limit = { has_ethic = "ethic_militarist" }
+				pop_change_ethic = "ethic_pacifist"
+			}
+			if = {
+				limit = { has_ethic = "ethic_fanatic_militarist" }
+				pop_change_ethic = "ethic_militarist"
+			}
+		}
+		random_owned_pop = {
+			limit = { 
+				OR = { has_ethic = "ethic_xenophobe" has_ethic = "ethic_fanatic_xenophobe" }
+			}
+			if = {
+				limit = { has_ethic = "ethic_xenophobe" }
+				pop_change_ethic = "ethic_xenophile"
+			}
+			if = {
+				limit = { has_ethic = "ethic_fanatic_xenophobe" }
+				pop_change_ethic = "ethic_xenophobe"
+			}
+		}
+	}
+	option = { name = STH_united_earth_story.59.a }
+	option = { 
+		trigger = { 
+			has_country_flag = deMilitaristDonation 
+			has_ethic = "ethic_militarist"
+		}
+		name = STH_united_earth_story.59.b
+		country_remove_ethic = "ethic_militarist"
+		country_add_ethic = "ethic_pacifist"
+	}
+	option = { 
+		trigger = { 
+			has_country_flag = deXenophobeDonation 
+			has_ethic = "ethic_fanatic_xenophobe"
+		}
+		name = STH_united_earth_story.59.c
+		country_remove_ethic = "ethic_fanatic_xenophobe"
+		country_add_ethic = "ethic_xenophobe"
+	}
+	after = {
+		set_timed_country_flag = { flag = deMilitaristDonation days = 1000 }
+		set_timed_country_flag = { flag = deXenophobeDonation days = 1000 }
+	}
+}
+
+# Weapon Attacks Planet
+planet_event = {
+	id = STH_united_earth_story.23
+	title = "STH_united_earth_story.23.name"
+	desc = { text = STH_united_earth_story.23.desc }
+	picture = sth_GFX_evt_expanseXindiWeaponSuccess1
+	show_sound = event_super_explosion
+	location = ROOT
+	is_triggered_only = yes
+	immediate = {
+		owner = { 
+			end_event_chain = "xindi_event_chain"
+			set_country_flag = xindi_crisis_complete_lose
+			remove_country_flag = xindi_crisis
+			save_event_target_as = owner
+			country_event = { id = STH_united_earth_story.24 days = 1 }
+			become_united_terran_remnant = yes
+            
+			every_owned_ship = {
+                limit = { has_ship_flag = VSS_Seleya } 
+				save_event_target_as = seleya
+            }
+			if = {
+                limit = { exists = event_target:seleya }
+	            event_target:seleya = {
+                	ship_event = { id = STH_united_earth_story.102 }  
+	            }
+                else = {
+	                random_country = { 
+	                    limit = { has_country_flag = vulcan_high_command } 
+	                    country_event = { id = STH_united_earth_story.105 } 
+	                }
+                }
+            }
+
+            every_owned_ship = {
+                limit = { has_ship_flag = IGS_Kumari }
+				save_event_target_as = kumari
+            }
+			if = {
+                limit = { exists = event_target:kumari }
+	            event_target:kumari = {
+	                ship_event = { id = STH_united_earth_story.100 } 
+	            }
+                else = {
+	                random_country = { 
+	                    limit = { has_country_flag = andorian_empire } 
+	                    country_event = { id = STH_united_earth_story.104 } 
+	                }
+                }
+            }
+
+			every_owned_ship = {
+				limit = { has_ship_flag = Xindi_Primate_Escort }
+                delete_ship = this
+			}
+			every_owned_ship = {
+				limit = { has_ship_flag = Xindi_Arboreal_Escort }
+                delete_ship = this
+			}
+		}
+		random_planet = {
+			limit = { has_planet_flag = kolea_vei }
+			spawn_system = {
+				min_distance = 5
+				max_distance = 10
+				initializer = "xindi_system_event_spawn"  
+			}
+		}
+		destroy_colony = { keep_buildings = no }
+		create_ambient_object = {
+			type = explosion_particle_object
+			location = this
+			duration = 10
+			use_3d_location = yes			
+			entity_offset = { min = 0 max = 0 }
+			entity_offset_angle = { min = 0 max = 0 }
+			entity_offset_height = { min = 0 max = 0 }			
+			entity_scale_to_size = yes
+			scale = 100
+		}
+		change_pc = pc_barren_broken
+		orbital_deposit_tile = { clear_deposits = yes }
+		# remove_planet = yes
+		every_country = {
+			limit = { has_communications = event_target:owner }
+			country_event = { id = STH_united_earth_story.56 days = 1 }
+		}
+		
+		
+	}
+	option = {
+		name = STH_united_earth_story.23.a
+		random_country = {
+			limit = { has_country_flag = xindi_council }
+			establish_communications_no_message = event_target:owner
+			hidden_effect = { change_dominant_species = { species =  "Xindi-Mammalian" } }
+			event_target:owner = { add_opinion_modifier = { who = prev modifier = opinion_genocide } }
+		}
+	}
+}
+
+# Destroy Weapon after fleet actions have completed and event fired
+country_event = {
+	id = STH_united_earth_story.24
+	hide_window = yes
+	is_triggered_only = yes
+	immediate = {
+		random_country = {
+			limit = { has_relation_flag = { who = root flag = xindi_weapon_enemy } }
+			every_owned_ship = { fleet = { destroy_fleet = this } }
+			destroy_country = yes
+		}
+	}
+}
+
+# Return Kumari to Andorians
+ship_event = {
+    id = STH_united_earth_story.100
+    title = "STH_united_earth_story.100.name"
+    desc = "STH_united_earth_story.100.desc"
+    picture = sth_GFX_evt_expanseKumari2
+    is_triggered_only = yes
+    immediate = {
+        random_country = {
+            limit = { has_country_flag = andorian_empire }
+            country_event = { id = STH_united_earth_story.101 }
+        }
+		delete_ship = this
+    }
+    option = { name = sth_understood }
+}
+country_event = {
+    id = STH_united_earth_story.101
+    title = "STH_united_earth_story.101.name"
+    desc = "STH_united_earth_story.101.desc"
+    picture = sth_GFX_evt_expanseKumari2
+    is_triggered_only = yes
+    immediate = {
+    	spawn_hero_ship_ENT_ADR = yes
+    }
+    option = { name = sth_understood }
+}
+# Kumari returns Home without Help
+country_event = {
+    id = STH_united_earth_story.104
+    title = "STH_united_earth_story.104.name"
+    desc = "STH_united_earth_story.104.desc"
+    picture = sth_GFX_evt_expanseKumari2
+    is_triggered_only = yes
+    immediate = {
+    	spawn_hero_ship_ENT_ADR = yes
+    }
+    option = { name = sth_understood }
+}
+
+# Return Seleya to Vulcans
+ship_event = {
+    id = STH_united_earth_story.102
+    title = "STH_united_earth_story.102.name"
+    desc = "STH_united_earth_story.102.desc"
+    picture = sth_GFX_evt_expanseSeleya2
+    is_triggered_only = yes
+    immediate = {
+        random_country = {
+            limit = { has_country_flag = vulcan_high_command }
+            country_event = { id = STH_united_earth_story.103 }
+        }
+		delete_ship = this
+    }
+    option = { name = sth_understood }
+}
+country_event = {
+    id = STH_united_earth_story.103
+    title = "STH_united_earth_story.103.name"
+    desc = "STH_united_earth_story.103.desc"
+    picture = sth_GFX_evt_expanseSeleya2
+    is_triggered_only = yes
+    immediate = {
+    	spawn_hero_ship_ENT_VUL = yes
+    }
+    option = { name = sth_understood }
+}
+# Seleya returns Home/Has been destroyed without Helping
+country_event = {
+    id = STH_united_earth_story.105
+    title = "STH_united_earth_story.105.name"
+    desc = "STH_united_earth_story.105.desc"
+    picture = sth_GFX_evt_expanseSeleya2
+    is_triggered_only = yes
+    immediate = {
+    	spawn_hero_ship_ENT_VUL = yes
+    }
+    option = { name = sth_understood }
+}

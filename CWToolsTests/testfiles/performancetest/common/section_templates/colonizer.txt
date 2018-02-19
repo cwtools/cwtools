@@ -1,0 +1,14 @@
+ship_section_template = {
+	key = "DEFAULT_COLONIZATION_SECTION"
+	ship_size = colonizer
+	fits_on_slot = mid
+	entity = "colony_ship_entity"
+	icon = "GFX_ship_part_core_mid"
+	
+	cost = 200
+	
+	small_utility_slots = 2
+	medium_utility_slots = 0
+	large_utility_slots = 0
+	aux_utility_slots = 1
+}

@@ -1,0 +1,104 @@
+@distance = 30
+@base_moon_distance = 10
+
+#Breen
+breen_homeworld = {
+	name = "Breen"
+	class = "sc_m"
+	asteroids_distance = 75
+	flags = { breen_homeworld }
+	init_effect = { log = "breen homeworld" }
+	usage = custom_empire
+	max_instances = 1
+	init_effect = { log = "breen homeworld" }
+	planet = { name = "Breen" class = "pc_k_star" orbit_distance = 0 orbit_angle = 1 size = 35 has_ring = no }
+	change_orbit = { min = 20 max = 30}
+	planet = {
+		count = 3
+		orbit_distance = { min = 16 max = 22 }
+		size = { min = 8 max = 12 }
+		class = random_non_colonizable
+		orbit_angle = { min = 90 max = 270 }
+		change_orbit = @base_moon_distance
+		moon = { count = { min = 0 max = 1 } size = { min = 5 max = 8 } class = rl_unhabitable_planets orbit_angle = { min = 90 max = 270 } orbit_distance = 8 }
+	}
+	planet = {
+		name = "Breen Prime"
+		class = pc_frozen
+		orbit_distance = 14.5
+		orbit_angle = 220
+		size = { min = 22 max = 25 }
+		starting_planet = yes
+		has_ring = no
+		tile_blockers = none
+		modifiers = none
+		init_effect = { prevent_anomaly = yes }
+		init_effect = {
+			if = {
+				limit = { NOT = { any_country = { has_country_flag = breen_confederacy } } }
+				create_species = { 
+				    name = "Breen" 
+				    class = BRE 
+				    portrait = breen 
+				    homeworld = THIS 
+				    traits = { 
+				        trait="trait_environment_suit_dependency"
+						trait="trait_conformists"
+						trait="trait_natural_physicists"
+						trait="trait_sedentary"
+				        ideal_planet_class = "pc_frozen" 
+				        }
+				    }
+				last_created_species = { save_global_event_target_as = breenSpecies }
+				create_country = {
+					name = "NAME_breen_confederacy"
+					type = default
+					ignore_initial_colony_error = yes
+					civics = { civic = "civic_efficient_bureaucracy" civic = "civic_slaver_guilds" }
+					authority = auth_imperial
+					name_list = "Breen"
+					ethos = { ethic = "ethic_militarist" ethic = "ethic_xenophobe" ethic = "ethic_authoritarian" }
+					species = event_target:breenSpecies
+					flag = {
+						icon = { category = "trek" file = "breen.dds" }
+						background = { category = "backgrounds" file = "00_solid.dds" }
+						colors = { "customcolor1824" "black" "null" "null" }
+					}
+					ship_prefix = "BCS"
+					effect = {
+						set_graphical_culture = breen_01
+						set_country_flag = breen_confederacy
+						set_country_flag = custom_start_screen
+						set_country_flag = generic_ent
+						set_country_flag = alpha_beta_empire
+						set_country_flag = init_spawned
+						set_country_flag = sth_medium_galaxy
+						set_country_flag = botf_minor
+						save_global_event_target_as = breen_confederacy
+					}
+				}
+				create_colony = { owner = event_target:breen_confederacy species = event_target:breenSpecies ethos = owner }
+			}
+			set_capital = yes
+			random_country = {
+				limit = { has_country_flag = breen_confederacy }
+				save_global_event_target_as = breen_confederacy 
+				species = { save_global_event_target_as = breenSpecies }
+				add_appropriate_start_techs = yes
+            }
+			set_owner = event_target:breen_confederacy
+			generate_major_empire_start_buildings = yes
+			generate_major_empire_start_pops = yes
+			generate_major_empire_start_fleets = yes
+			set_name = "Breen Prime"
+		}
+	}
+	planet = {
+		count = 3
+		orbit_distance = { min = 18 max = 25 }
+		class = random_non_colonizable
+		orbit_angle = { min = 90 max = 270 }
+		change_orbit = @base_moon_distance
+		moon = { count = { min = 0 max = 1 } class = random_non_colonizable orbit_angle = { min = 90 max = 270 } orbit_distance = 5 }
+	}
+}

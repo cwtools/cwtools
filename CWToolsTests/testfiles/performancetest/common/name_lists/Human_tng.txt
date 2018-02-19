@@ -1,0 +1,590 @@
+﻿### United Nations of Earth
+Human_tng = {
+	randomized = no
+
+	ship_names = {
+		generic = {
+			Challenger Columbus Curie Clarke Asimov Dawkins Magellan Liberty
+		}
+
+		corvette = {
+			Emmette Aardvark Accentor Adder Albatross Alligator Anaconda Antelope Armadillo Asp Badger Bass Beagle Bloodhound Buffalo Bulldog Buzzard Camel Cheetah
+			Cobra Coyote Dingo Dolphin Dragonfly Dromedary Eagle Elephant Falcon Ferret Firefly Fox Gazelle Glowworm "Grey Wolf" Greyhound Haddock Hawk
+			Jackal Jackdaw Jaguar Kangaroo Kestrel "King Cobra" "King Fish" Ladybird Leopard Lion Lizard Lynx Minx Mongoose Mosquito Narwhal Nighthawk Ocelot Orca 
+			Osprey Panther Peacock Pelican Penguin Petrel Platypus Polecat Porcupine Puma Python Rattlesnake Raven Salamander Sardine Scorpion Shark Shrike
+			Skylark Sparrow Spider Starfish Stingray Stork Sturgeon Swordfish Tapir Tiger "Tiger Shark" Vulture Walrus Wolverine Apache Aztec Cossack Dervish
+			Druid Highlander Janissary Matador Papillon Parthian Patrician Saracen Sphinx Sultan Tomahawk Viking Zulu Abhay Akshay Akula Soyuz Harrier "Tomoe Gozen"
+			Garuda Yangwei Datong Haifeng Hailong Yongcheng Yinghao Taiyang Chaoyang Qiuxing Guangxing Zhengsheng Taizhao Meihong Wulong Jiangkun Acorn
+			Musketeer Pharaoh Mongol Rickenbacker "John Paul Jones" Doblestnyi Steregushchiy Soobrazitelny "Rodger Young" "Crazy Horse" Richthofen Boyington
+			Fonck Mannock Bishop Kazakov Coppens Brumowski Baracca Hartmann Juutilainen Nishizawa Sakai Shestakov Kozhedub Cantacuzino "Van Lierde" Bong
+			Shaggo Grinsel Zoom Walsh Harel Osito Janack
+		}
+		
+		constructor = {
+			Pacific Atlantic Adriatic Amazon Danube India Africa Volga Colorado Ganges Jordan Mekong "Rio Grande" Rubicon Yangtze Mississippi Yukon Indus
+			Rhine Tigris Sahara Bengal Merrimack Potomac Susquehanna Orinoco Shenandoah
+		}
+		
+		colonizer = {
+			Mayflower Abundance Bountiful Felicity Hope Opportunity Serenity Unity Destiny Britannia Byzantium Caledonia "El Dorado" Knossos Memphis 
+			Olympus Persepolis "Sierra de la Plata" Sparta Valhalla "Crystal Palace" Alaska Angola Australia Brazil Canada Congo Guinea India Indonesia 
+			Jamaica Macau Mozambique Philippines Somalia "Sri Lanka" Taiwan
+		}
+		
+		science = {
+			Daedalus Intrepid Grissom Oberth Aldrin Armstrong Columbus Copernicus Cortez Drake Hubble Goddard Galileo Einstein Gagarin Tereshkova "Zheng He" "Leif Ericson" Magellan "James Cook"
+			"Marco Polo" Newton Tesla "Von Braun" "Walter Raleigh" Asimov Clark Sagan "Ibn Battuta" Kepler Ptolemy Pytheas Azophi Discovery Voyager Tradewind Scout 
+			Pioneer Explorer Sojourner "Santa Maria" Hawking Earhart Nobel Kelvin Fahrenheit Equinox Lagrange Tsiolkovsky
+		}
+		
+		saber = {
+			Reliant Miranda Saratoga Amsterdam Austin Athens Atlanta Baghdad Baltimore Bangkok Barcelona Beijing Belfast Berlin Bombay Boston Hyderabad Budapest "Buenos Aires" Cairo Calcutta
+			"Cape Town" Chicago Copenhagen Damascus "Dar es Salaam" Detroit Dubai Dublin Edinburgh Gibraltar Glasgow Guangzhou Hanoi Havana Helsinki "Hong Kong"
+			Houston Istanbul Jakarta Jerusalem Johannesburg Kiev London "Los Angeles" Madrid Manila Minsk Moscow Mumbai "New York" "New Orleans" Novgorod Osaka Oslo 
+			Paris Prague "Rio de Janeiro" Rome Rotterdam "San Francisco" "Sao Paulo" Sarajevo Seattle Seoul Sevastopol Shanghai Singapore "St. Louis" Stockholm Tokyo
+			Toronto Vancouver Vienna Vladivostok Warsaw Sydney Brisbane "Mexico City" München Nairobi Smolensk Casablanca Venice Mogadishu Montreal Birmingham
+			Liverpool Manchester Kabul Kyoto Volgograd "St. Petersburg" Frankfurt Belgrade Marseille Brussels Tripoli Tehran Quebec Florence Exeter Dallas Denver
+			Lagos Melbourne Calgary Ottawa Algiers Brazzaville Santiago Montevideo Bogota Chengdu Hangzhou Shaoxing Yokohama Pittsburgh Philadelphia Miami Lisbon
+			Hamburg Bremen Phoenix Indianapolis Minneapolis Milan Surabaya "Kuala Lumpur" "Abu Dhabi" Ankara Beirut Kathmandu Tapei Islamabad Karachi Zürich Delhi
+			Bangalore Düsseldorf "Tel Aviv" Lima Luxembourg Bucharest Geneva Gothenburg Lyon Bratislava Tunis Riyadh Riga Valencia Krakow Vilnius Tallinn Edmonton
+			Tijuana Trondheim
+		}
+		
+		sovereign = {
+			Bolivar Brusilov Churchill Clausewitz Garibaldi "Gustavus Adolphus" Hammurabi "Julius Caesar" Justinian Lincoln Patton Rommel "Sun Tzu" Liberator
+			Zhukov "Alexander Nevsky" Pyrrhus "Yi Sun-sin" Heihachiro "Khalid ibn al-Walid" Vasa Hindenburg "De Gaulle" Subutai Nagato Scharnhorst Clemenceau 
+			Richelieu "Jean Bart" Sparviero Affondatore Tromp "De Ruyter" Esperanza Pelayo Velasco Juneau Sherwood Alamo Bannockburn Borodino Breitenfeld Cannae 
+			"El Alamein" Gaugamela Kadesh Kursk Masada Normandy Salamis Sedan Tannenberg Ticonderoga Thermopylae Marengo Leipzig Shiloh Königgrätz Ypres 
+			Somme Suomussalmi Kharkov Guadalcanal "Leyte Gulf" "Dien Bien Phu" Thymbra Manassas Blenheim Unicorn Adelphi Angel Borealis Bounty Emancipator 
+			"Morning Star" "Shi Lang" Vikramaditya Viraat Vikrant Vishal Napoleon Kongo Oriskany "Bunker Hill" Farragut "Kitty Hawk" "Royal Oak" Thunderbolt 
+			"Royal Sovereign" Marathon "Frederick II" Nimitz Eisenhower Roland "Tran Hung Dao" Themistocles
+		}
+		
+		steamrunner = {
+			Ulysses Munro Xenophon Xerxes Nelson Hercules Icarus Atlas Apollo Bellerophon Excalibur Alexander Belisarius Hannibal Washington Saladin 
+			Bismarck Actium Agincourt Austerlitz Gettysburg Jutland Trafalgar Tsushima "Valley Forge" Verdun Waterloo Granicus Pharsalus Akira Charlemagne
+			"Black Prince" Hood Potemkin Musashi Warspite Victory Courage Dauntless Endeavor Excelsior Formidable Indefatigable Chivalrous Valiant Monitor 
+			Bulwark Defender Endurance Vigilant Resolute Fortitude Yamamoto Lexington Midway Saratoga Yorktown "Coral Sea" Hermes Wasp Hornet "Ark Royal" 
+			Essex Akagi Kaga Illustrious Intrepid Invincible Enterprise Constellation Constitution Ranger Andromeda Aquila Century Concord Defiant Galaxy 
+			Odyssey Orion Providence Reliant Pegasus
+		}
+		adv_cruiser = {
+			Galaxy Odyssey Yamato Gandhi Madison Agrippa Persia "San Fransisco"
+		}
+		strike = {
+			Defiant Venture "Sao Paulo" Ajax
+		}
+		outpost_station = {
+			sequential_name = "Frontier Outpost"
+		}
+		research_station = { 
+			#random_names = {}
+			sequential_name = "Cold Station"
+		}
+		transport = {
+			Cowpens "Belleau Wood" Bataan Monterey Veracruz Tarawa "Iwo Jima" Okinawa Inchon "Goose Green" Gallipoli Mukden Narvik Narva Poltava "Lake Peipus" Malta Antietam "Baton Rouge" Beauport Abukir Lund Issus Changping "Teutoburg Forest" "Watling Street" Yarmouk Salamanca Berezina Fredericksburg Chickamauga Caporetto "Khalkhin Gol" Gazala "Monte Cassino" Saipan Breslau 
+		}
+		military_station_small = { 
+			Mercury Venus Terra Mars Jupiter Saturn Uranus Neptune Luna Phobos Deimos Ceres Ganymede Callisto Io Europa Titan Rhea Iapetus Dione Tethys Enceladus Mimas Titania Oberon Umbriel Ariel Miranda Triton Pluto Charon 
+		}
+		military_station_medium = {
+			Mercury Venus Terra Mars Jupiter Saturn Uranus Neptune Luna Phobos Deimos Ceres Ganymede Callisto Io Europa Titan Rhea Iapetus Dione Tethys Enceladus Mimas Titania Oberon Umbriel Ariel Miranda Triton Pluto Charon 
+		}
+		
+		military_station_large = { 
+			Mercury Venus Terra Mars Jupiter Saturn Uranus Neptune Luna Phobos Deimos Ceres Ganymede Callisto Io Europa Titan Rhea Iapetus Dione Tethys Enceladus Mimas Titania Oberon Umbriel Ariel Miranda Triton Pluto Charon
+		}
+	}
+	
+	ship_class_names = {
+		corvette = { Challenger }
+		saber = { Reliant }
+		sovereign = { Lacota }
+		steamrunner = { Akira }
+		adv_cruiser = { Galaxy }
+		strike = { Defiant }
+		science = { Nova }
+	}
+
+	fleet_names = {
+		random_names = { }
+		sequential_name = "%O% Fleet"
+	}
+	
+	army_names = {
+	
+		defense_army = {
+			sequential_name = "%O% Planetary Guard"
+		}
+
+		assault_army = {
+			sequential_name = "%O% Expeditionary Force"
+		}
+		
+		slave_army = {
+			sequential_name = "%O% Indentured Rifles"
+		}
+		
+		clone_army = { 
+			sequential_name = "%O% Clone Army"
+		}
+		
+		robotic_army = {
+			sequential_name = "%O% Hunter-Killer Group"
+		}
+		
+		android_army = {
+			sequential_name = "%O% Synthetic Rangers"
+		}
+		
+		psionic_army = { 
+			sequential_name = "%O% Psi Commando"
+		}
+		
+		xenomorph_army = {
+			sequential_name = "%O% Bio-Warfare Division"
+		}
+		
+		gene_warrior_army = {
+			random_names = {
+				"SARC-A 'Gladiators'" "SARC-B 'Widowmakers'" "SARC-C 'Immortals'" "SARC-D 'Berserkers'" "SARC-E 'Assassins'"
+				"SARC-F 'Reapers'" "SARC-G 'Nighthawks'" "SARC-H 'Desperados'" "SARC-I 'Grey Knights'" "SARC-J 'Roughnecks'" 
+			}
+			sequential_name = "%O% Bio-Engineered Squadron"
+		}
+	}
+
+	planet_names = {
+
+		generic = {
+			names = {
+				"New Jerusalem" Anchor Dis Avalon Bounty Hope Olympia Serendipity Spring Thinis Salaam Xianyang Concord
+				Theia Tuscany "New Roanoke" Wenzhou "New Jamestown" "New Troy" Delgovicia "Wang Tong" Al-Jissa Al-Mada'in 
+				Al-Nuqayrah Al-Karak Al-Matabbah "Las Veredas" "San Lucas" "San Fernando" "San Cristóbal" "Nueva Sonora" 
+				"Puerto González" Nozomi Akatsuki "Nueva Cádiz" "La Isabela" "New Coventry" "St. Yegorov" "St. Pomeroy"
+				"Port Karakosov"
+			}
+		}
+		
+		pc_desert = {
+			names = {
+				"Nova Arabia" Sahara Gobi Kalahari Mojave Patagonia Syria Chihuahua Sand "Kara Kum" Colorado Sonora 
+				"Kyzyl Kum" Taklamakan Thar Gibson Namib Lut Kavir Dune Kali Muspelheim Vulcan Baal Carthage 
+				Ordos Khara Lop Maranjab Negev Sinai Atacama Simpson
+			}
+		}
+		
+		pc_arid = {
+			names = {
+				Lebanon Tyre Antioch Jaxartes Oxus Turan Accona Bardenas Larzac Oltenia Tabernas Atacama Tanami 
+				Rangipo "New Mars" Canaan
+			}
+		}
+		
+		pc_tropical = {
+			names = {
+				Amazonia Congo Ecuador Rain Storm Monsoon Bengal "New Africa" Kishkindha Zanzibar Kipling
+			}
+		}
+		
+		pc_continental = {
+			names = {
+				Albion Amor Dawn Horizon Asgard "Terra Nova" Kongzi Zoroaster "Tian Yi" 
+				"Wu Ding" Zheng "Gao Zu" Tokugawa Oda Toyotomi Rama Vishnu Soma Pangea
+			}
+		}
+		
+		pc_gaia = {
+			names = {
+				Eden Elysium Cornucopia Utopia Shambhala Xanadu Shangri-La
+			}
+		}
+		
+		pc_ocean = {
+			names = {
+				Atlantis Oceania Pacifica Atlantica Euxina Hyrcania Rubrica Erythraea Baltica R'lyeh Dagon Kraken Aegea 
+				Adriatica Tyrrhenia Mediterranea Mare "Port Rabcewicz" Ningbo
+			}
+		}
+		
+		pc_tundra = {
+			names = {
+				Iceland Canada Kola Scandza Utgard Rus Blizzard Taiyuan
+			}
+		}
+		
+		pc_arctic = {
+			names = {
+				Thule Arctica Greenland Alaska Baffin Siberia Niflheim Hyperborea
+			}
+		}
+	}
+
+
+	### CHARACTERS
+
+	character_names = {
+
+		names1 = {
+			weight = 40
+			first_names_male = {
+				John Brian Peter Adam James William Jacob Christopher Joshua Michael Ethan Joseph Matthew Anthony Daniel Ryan Samuel Kevin
+				David Logan Carter Benjamin Andrew Henry Nicholas Gavin Owen Jack Wyatt Wayne Walter Charles Louis Merritt Earl Alfred Vernon
+				Edward Donald George Paul Greg Thomas Robert Gene Glen Hugh Ronald Francis Stephen Jon Richard Mark Marcus Scott Duncan
+				Douglas Keith Howard Russell Clayton Lee Steve Tom Clay Oliver Kenneth Ralph Andy Tony Tyrone Lawrence Patrick Harry Alan
+				Eugene Frank Craig Jason Martin Jonathan Harrison Connor Sean Cooper Stanley Calhoun Neil Jeffrey Harold Raymond Fred
+				Marshall Silas Roy Jesse Ken Bruce Norris Horatio Clarence Lloyd Duane Mortimer Ben Ernest Warren Graham Marvin Orson Dennis
+				Jackson Dwight Harlan Arthur Percival Montgomery Clyde Rodney Gerald Franklin Jake Horace Irving Seth Randolph Floyd Carl 
+				Brent Cliff Malcolm Timothy Wallace Pierce Edmund Gary Tony Nathan Eric Albert Robin Geoffrey Larry Ian Leonard Gordon Derek
+				Maxwell Alec Bernard Stuart Rupert Dean Philip Ross Colin Darren Melvin Justin Zack Elliot Simon Morgan Clark Xavier Jared
+				Edgar Crispin Nelson Emmett Trevor Travis Lance Adrian Desmond Brendan Brett Ambrose Basil Kieran Conan Dermot Dudley Felix
+				Finn Oscar Sidney Aaron Vincent Angus Grant Luke Miles Morton Randall Reginald Herbert Wesley Nigel Alexander Dominic Bradley
+				Liam Dirk Vance Kyle Chester
+			}
+			first_names_female = {
+				Olivia Emily Sophie Jessica Alice Scarlett Emma Daisy Eve Phoebe Sienna Anna Mary Megan Elizabeth Amy Darcy Matilda Erin
+				Lucy Grace Evelyn Amber Harriet Caitlyn Jasmine Madison Kate Eleanor Alexandra Sarah Martha Bethany Rebecca Victoria
+				Gabriella Naomi Lauren Clara Laura Kayla Nicole Skye Eliza Patricia Linda Barbara Jennifer Maria Susan Margaret Dorothy
+				Lisa Nancy Helen Sandra Donna Carol Ruth Sharon Michelle Kimberly Deborah Amelia Charlotte Isabella Ruby Addison Alyssa
+				Abigail Julia Samantha Brooklyn Ashley Natalie Brianna Chloe Hailey Lillian Judith Alison Amanda Angela Audrey Beatrice
+				Brenda Bridget Caroline Cassandra Charity Cecilia Anne Clarissa Christabel Cheryl Cynthia Cadence Cordelia Daphne Deanna
+				Denise Dolores Doreen Drusilia Edith Edna Eleonor Eileen Edwina Ellen Estelle Ethel Felicity Fiona Genevieve Gertie Gwen
+				Gwendolyn Henrietta Imogen Iris Imelda Jacqueline Jane Jenna Joanna Josephine Julianne Kathleen Kierra Kaylee Leah Lois
+				Loretta Lorna Louisa Lynnette Lucinda Mabel Marcia Marilyn Marissa Marjorie Maud Melanie Myrna Mavis Nadine Paula Penelope
+				Philippa Priscilla Rhonda Rita Roberta Rosamund Rosemary Roxanne Sabrina Selma Selina Sibyl Suzanne Tara Tabitha Thelma
+				Teresa Tiffany Vanessa Vivian Melissa Wanda Wendy Winifred Victoria Yvette Vera Zelda Joan Pamela Sherry Adrienne Monica
+				Irene Heather Lindsay Gillian Kristen Odette Felicia Christina Candace Arlene Tisha Majel Fran Doris Julie Courtney Shelly
+				Frances Mandy Mindy Rachel Miranda Virginia Gina Karla Tricia Diane Phyllis Sally Elaine Kara Shannon Susie Elle Gail Ann
+				Kathryn Tina Carrie Miriam Vivica Tamara Judy Willow Hilary Claire Danielle Teri Jackie Kelly Bonnie Holly Janice Brittney
+				Bianca Stephanie Natasha Lydia Mona Meredith Lynda Erica Heidi Paige Carmen Hayden Mallory Mercedes Marion Winona Jill
+				Molly Constance Jenny Penny Meryl Jodie Veronica April Sigourney Jillian Honor
+			}
+			second_names = {
+				Picard Janeway Sisko Smith Jones Williams Taylor Brown Davies Evans Wilson Johnson Robinson Wright Thompson Evans Walker White Roberts Green Hall
+				Wood Jackson Clark Lewis Mason Mitchell Cox Campbell Stewart Quinn Murphy Hamilton Moore Murray McLaughlin Martin O'Neill
+				Anderson Scott MacDonald Reid Ross Watson Patterson Morrison Sanders Harris Hughes Driscoll Price Jenkins Morgan Moss
+				Sinclair Simpson Zimmerman Young York Youngfellow Winters Worley Woodard Whitley Wheeler Wentworth West Weaver Webb Welsh
+				Sparks Spencer Stafford Stanley Steel Sterling Stevens Stone Stewart Sullivan Swanson Sweeney Swift Sykes Terrell Thornton
+				Tipton Turner Tyler Underwood Vincent Voight Wade Washington Watts O'Connor O'Donnell O'Hara Owens Page Palmer Parker
+				Perry Parson Paxton Payne Perkins Peters Pershing Phillips Pitt Potter Reynolds Reaves Reese Richardson Rivers Robbins
+				Robertson Roswell Ryan Salinger Samuels Sandler Savage Saxton Schneider Scowley Sedgwick Shannon Flint Sibbett Silverman
+				Silverstone Smart Snow Kruger Landau Lawrence Lawson Lee Leonard Little Lowell Michaels McGillis McKinnon McSwain McCoy
+				McCarthy McCormick McCreary Marshall Lynch Miller Montgomery Morris Nash Newman Nichols North Masterson Mayfield McCall
+				Hansen Harrington Hart Hendricks Holmes Higgins Hoffman Hood Hutchinson Hyland Knight Kirk King Kenway Kennedy Kelly
+				Kane Nathanson Jennings Jacobs Jefferies Irwin Gilbert Glass Glover Goldberg Goldstein Goodman Goodwin Graham Grant Graves
+				Gray Greenberg Gorney Griffin Halley Hunter Holloway Hoover Hutchins Hill Hines Holden Harvey Handler Cohen Collins Conrad
+				Conroy Cook Conley Compton Cody Crouch Crosby Curtis Fields Farrell Felton Fisher Fleming Forrest Foster Fox Freeman
+				Futterman Gardner Garrett Gates Garfield Gabriel Daniels Darling Easterbrook Edwards Edelstein Elliott Emerson Ericson
+				Duncan Dickinson Alexander Allen Austin Bauer Bancroft Baker Bailey Banks Barks Bassett Brewster Brooks Breckenridge Booth
+				Bloom Sherman Sheridan Billingsley Billings Bergman Bates Becker Bell Bellflower Bains Bean Cartwright Carpenter Buckland
+				Burness Burnett Bush Butler French England Carroll Carter Cavanaugh Chaffin Chase Channing Chapman Arnold Fry Milton
+				Sharp Durston Howell Mead Poole Ashton Brockbank Cooper Cursham Dixon Baxter Drake Garland Wells Hargreaves Houghton
+				Haygarth Hurst Kingsford Lindsay Rawson Walden Walters Whitfield Bennett Cross Buxton Dyson McMillan Russell Scott Beauclerk
+				Ward Howard Lloyd Tanner Nicholas Matthews Ellis Whyting Whittaker Barton Hawkins Garrovick Spector Reeves Vernon McNiven
+				Rowley Sandford Fawcett Lockhart Lang Oliphant Wilkins Balfour Appleby Buchanan Yardley Shaw Stokes Allenby Cockburn Mundy
+				Franklin Armstrong Chamberlain Powell Abbott Blair "Van Hoof" "Van Rijn" Burnside Schofield Farnsworth Ford Warner Porter
+				Barksdale Polk Gibbons Archer Pickett Houston Whitfield Pearson Lucas Horner Bainbridge Rollins Casey Cochrane Merchant
+				Bowden Douglas Muldoon Wickham Milligan Bradley Findley Spooner Harper Shepard Kingston Knox Colbeck Shields Burns Gibson
+				Burton Crutchley Gilligan Bridges Richter Fowler Novak Longfield Seabrook Hazelton Kingsley Doggart Wilcox Hudson Hooks Hicks
+				Cameron Hammond Knotts Jefferson Coffey Adams Babcock Baldwin Bannister Purcell Baumgartner Birch Blackwood Blake Bolander
+				Bolton Brock Brannigan Burke Weyland Burrows Cairns Carlyle Carson Charlesworth Church Clancy Cullen Dufresne Bixby Featherstone
+				Ferguson Foley Funk Gorman Haddock Grisdale Grimes Hoffmeyer Holt Ingram Kaiser Kearns Keeler Kellerman Kinnear Kurtz Kyle
+				Laidlaw Lankshear Lessard Lowe MacKenzie MacNevin MacInnis Madigan Maloney Marsh McAllister McBain Myers Nicholson Olsen
+				O'Malley Peacock Peckham Murdoch Prefontaine Pratt Popovic Pritchard Quackenbush Penebscott Pfaffenbach Ramsey Quincey
+				Reilly Reinhart Renaud Rolston Shoebottom Skinner Sloan Snell Snider Sorensen Spiller Spurgeon Stanfield Stackhouse Stiles
+				Sutherland Sutton Taggart Townsend Traynor Stark Strudwick MacArthur Barnes Atkins Ballard Biggs Baird Fredericks Humphry
+				Colt Dillard Cunningham DeStefano Finks Fletcher Galloway Kirby Sutter Preston Tucker "Smith Jr." "Williams Jr." "Evans Jr."
+				"Walker Jr." "Taylor Jr." "Scott Jr." "Meriweather II" "Barksdale III" "Leadbetter IV" "Pemberton II" "Trapier III" Kowalski
+				Rabinowitz Feldman Katz Roykirk Decker
+			}
+			regnal_first_names_male = {
+				Alexander Vladimir Boris Tiberius Theobald Valerian Maximus Lucius
+			}
+			regnal_first_names_female = {
+				Theodora Fatima Miranda Cordelia Svetlana Anastasia Valentina Henrietta
+			}
+			regnal_second_names = {
+				Habsburg Romanov Windsor Mountbatten Salazar Nelson
+			}
+		}
+		
+		names2 = {
+			weight = 20
+			first_names_male = {
+				Ivan Nikolai Boris Vladimir Pyotr Alexei Dmitri Sergei Viktor Roman Igor Mikhail Vasily Pavel Fyodor Nikita Valery
+				Vladislav Leonid Maxim Yuri Oleg Andrei Konstantin Vyacheslav Aleksandr Stanislav Anatoli Miroslav Artyom Bogdan
+				Branislav Ilya Jaroslav Radomir Kirill Radoslav Lubomir Ratimir Yegor
+			}
+			first_names_female = {
+				Anna Yelena Olga Oksana Tatyana Svetlana Nadya Yekaterina Irina Galina Miroslava Anastasia Vera Polina Lyudmila Elena
+				Marina Darya Irma Ksenia Alexandra Nadesja Valentina Arina Alya Galenka Katya Ljuba Radmila Natacha Vlada Nadezhda
+				Tatiana Sonia Mira
+				
+			}
+			second_names = {
+				Grishina Fedorov Komarov Pushkov Petrenko Shatalov Ivanov Kamensky Vasiliev Ulanov Volkov Gryaznov Dudnik Yerzov Zhirov
+				Zhivenkov Kazakov Krutov Ivannikov Kolosov Kuzin Larionov Maksimushkin Markov Ostrovsky Polachev Rychenkov Romanov
+				Sayanovich Statnik Sorokin Turgenev Titov Tvardovsky Antonov Skobelev Lazarev Makarov Dragomirov Alexseyev
+			}
+			regnal_first_names_male = {
+				Alexander Vladimir Boris Tiberius Theobald Valerian Maximus Lucius
+			}
+			regnal_first_names_female = {
+				Theodora Fatima Miranda Cordelia Svetlana Anastasia Valentina Henrietta
+			}
+			regnal_second_names = {
+				Habsburg Romanov Windsor Mountbatten Salazar Nelson
+			}
+		}
+		
+		names3 = {
+			weight = 40
+			first_names_male = {
+				An Bao Bo Cai Cheng De Dong Feng Gang Guo Hu Hui Jian Jie Kang Li Liang Long Meng Ning Peng Qiang Shi Song Tao Tian Wei 
+				You Yong Yi Xiong Wu
+			}
+			first_names_female = {
+				Ai Bi Cui Chan Dai Dan Fang Hong Hua Huan Jiao Ju Juan Lan Lian Lin Mei Na Ni Qian Qiao Qing Shan Shu Ting Wen Xia Xian
+				Xiang Xiu Xue Yan Ying Yu Yuan Yun Zhen Zhi Zhu Zi
+			}
+			second_names = {
+				Liang Luo Kuang Lu Zheng Lin Xu Xie Wang Zhu Yang Mao Shen Hu Tan He Deng Wu Cheng Gao Wan Kong Pan Sima Zhuge Ouyang Situ
+				Huang Zhao Zhang
+			}
+			regnal_first_names_male = {
+				You Yong Yi Xiong Wu Feng Gang Guo Hu Hui
+			}
+			regnal_first_names_female = {
+				Ai Bi Lian Lin Mei Na Ni Xiu Xue Yan Ying Yu Yuan
+			}
+			regnal_second_names = {
+				Wang Zhu Yang
+			}
+		}
+		
+		names4 = {
+			weight = 15
+			first_names_male = {
+				Karl Wilhelm Otto Heinrich Friedrich Paul Hans Gustav Max Ernst Hermann Walter Werner Günther Wolfgang Helmuth Kurt Rolf
+				Peter Klaus Gerhard Heinz Horst Manfred Uwe Jürgen Dieter Andreas Thomas Stefan Lukas Felix Martin Fritz Johann Erich Arnold
+				Bruno Franz Rudolf Erhard Jörg Axel Emil Gerhardt Gottfried Holger Joachim Konrad Lothar Ludwig Matthias Moritz Reinhard
+				Sigismund Ulrich Udo
+			}
+			first_names_female = {
+				Anna Elsa Emma Helga Ursula Gisela Ingrid Ilse Jessika Sandra Stefanie Andrea Anja Katrin Birgit Martina Heike Sabine Erika
+				Edith Lena Lisa Katharina Claudia Silvia Tina Annike Renate Bettina Wibke Sara Lina Julia Marith Heidi Angelika Christel
+				Gretchen Hilde Hildegard Gertrude Wilhelmina Lisbeth Kerstin Johanna Anita
+			}
+			second_names = {
+				Müller Schmidt Schneider Fischer Weber Meyer Wagner Schulz Becker Hoffmann Bauer Brinkmann Brill Dietrich Erhard Grasser
+				"von Gebser" "von Fritsch" "von Wrangel" "von Halkett" "von Boyen" "von Falkenstein" Dreyer Wolf Klein Richter Schäfer
+				Neumann Braun Schwarz Krüger Stein Keller Schubert Baumann Ziegler Brandt Sauer Kreutz Bergmeister Andbert
+			}
+			regnal_first_names_male = {
+				Alexander Vladimir Boris Tiberius Theobald Valerian Maximus Lucius
+			}
+			regnal_first_names_female = {
+				Theodora Fatima Miranda Cordelia Svetlana Anastasia Valentina Henrietta
+			}
+			regnal_second_names = {
+				Habsburg Romanov Windsor Mountbatten Salazar Nelson
+			}
+		}
+		
+		names5 = {
+			weight = 15
+			first_names_male = {
+				Philippe Pierre Jean-Marie Marcel Francois Hubert Paul Antoine Michel Henri Marc Jean Maurice René Claude Yves Jacques
+				Simon Olivier Joseph Robert Georges André Raymond Gaston Charles Thierry Guy Patrice Mathieu Jean-Francois Lucien Jean-Paul
+				Daniel Thibault Luc Dominic Sébastien Hugo
+			}
+			first_names_female = {
+				Chloe Inés Manon Camille Clara Juliette Clémence Jeanne Charlotte Marie Nina Julia Elise Justine Yasmine Elina Andrea
+				Eleonore Clarisse Fanny Selma Leila Veronique Sophie Helena Daphne Suzanne Melanie Bernadette Maud Angeline Celine Jessica
+				Pauline Viviane Jeanette
+			}
+			second_names = {
+				Martin Bernard Dubois Durand Leroy Moreau Lambert Dupont Leclerc Laurent Renard Tremblay Gagnon Roy Bouchard Gauthier
+				Morin Lavoie Fortin Gagne Duval Hébert "Le Gall" "Le Roux" Deville Gerard Duchaine Jauvin Gilbert Bergeron Paquette
+				Pelletier Rémy Giroud Bosquet "de Castelnau" "de Montaignac" Lebouef Péllissier Deveraux
+			}
+			regnal_first_names_male = {
+				Alexander Vladimir Boris Tiberius Theobald Valerian Maximus Lucius
+			}
+			regnal_first_names_female = {
+				Theodora Fatima Miranda Cordelia Svetlana Anastasia Valentina Henrietta
+			}
+			regnal_second_names = {
+				Habsburg Romanov Windsor Mountbatten Salazar Nelson
+			}
+		}
+		
+		names6 = {
+			weight = 15
+			first_names_male = {
+				Hiroto Hikaru Takumi Tsubasa Ren Minato Shota Yuuto Sota Yuma Takeru Rikuto Tatsuki Ryuto Haru Yushin Kosei Yoshinobu
+				Jiro Hiroshi Yoshida Mitsue Keisuke Saburo Junichi Yoshi Koshiro Kentaro Koichiro
+			}
+			first_names_female = {
+				Haruna Sakura Misaki Aoi Mihane Miyu Rin Nanami Yui Hina Honoka Riko Yuna Koharu Hinata Mei Saki Ichika Hiyori Yusuki
+				Shiori Natsuki Ayane Kaho Hana Momoka Himari Yume Aomame Noriko Kazumi Kimiko
+			}
+			second_names = {
+				Sato Suzuki Takahashi Tanaka Watanabe Ito Nakamura Kobayashi Yamamoto Kato Yoshida Yamada Sasaki Yamaguchi Matsumoto
+				Inoue Kimura Shimizu Hayashi Saito Yamazaki Nakajima Mori Abe Ikeda Hashimoto Ishikawa Yamashita Ogawa Ishii Hasegawa
+				Goto Okada Fujita Sakamoto Murakami Nishimura Nakagawa Harada Okamoto Miura Takaya Amano Higuchi Ota
+			}
+			regnal_first_names_male = {
+				Teruhito Nekuhiko Mimatsuhiko Anaho Hironari Norinaga
+			}
+			regnal_first_names_female = {
+				Nukatabe Toyomike Takara Niinomi Hidaka Takama Okiko Toshiko
+			}
+			regnal_second_names = {
+				"no Mikoto" Sumeramikoto Otomo Suijin Mononobe Yamato
+			}
+		}
+		
+		names7 = {
+			weight = 15
+			first_names_male = {
+				Aarav Vivaan Aditya Arjun Reyansh Arnav Krishna Ishaan Shaurya Atharv Advik Pranav Advaith Dhruv Kabir Ritvik Aarush
+				Kayaan Darsh Veer Rahul Mahesh Shyam Raj Kumar Palash Rakesh Nishant Neeraj Prathamesh Shubham
+			}
+			first_names_female = {
+				Saanvi Aanya Aadhya Aaradhya Ananya Pari Anika Navya Diya Avani Myra Ira Aahana Anvi Prisha Riya Aarohi Anaya Akshara
+				Shanaya Kyra Siya Priyanka Divya Mahima Shivangi Juvina Anoushka Anushri Apoorva Sanjana
+			}
+			second_names = {
+				Kumar Moorthi Shastri Prasad Acharya Swamy Pillai Gowda Nayak Desmukh Bhat Bhandary Poojary Upadhyay Chowta Naik
+				Kulkarni Dodamani Patil Gupta Sharma Namboodiri Pannikar Potti Kutty Varma Sondharam Sooriyaprakash Chandran Vijay
+				Venktaesan Puttappa
+			}
+			regnal_first_names_male = {
+				Kayaan Darsh Veer Rahul Mahesh Shaurya Atharv Advik Pranav
+			}
+			regnal_first_names_female = {
+				Saanvi Aanya Aadhya Aaradhya Ananya Priyanka Divya Mahima Shivangi
+			}
+			regnal_second_names = {
+				Kumar Moorthi Shastri Prasad Acharya Patil Gupta Sharma Namboodiri Pannikar Potti Kutty Varma Sondharam
+			}
+		}
+		
+		names8 = {
+			weight = 25
+			first_names_male = {
+				Diego Luis Pedro Joaquin José Emilio Eduardo Alejandro Carlos Fernando Francisco Julio "José Antonio" "José Manuel" Juan
+				"José María" Ignacio Manuel Pablo Miguel Ramón Raimundo Santiago Ricardo Marcelo Javier Gaspar Alfonso Lorenzo Enrique
+				Ernesto Gerardo Guillermo Jesús Salvadore Sergio Roberto Esteban
+			}
+			first_names_female = {
+				Hortensia Isabel Valentina Alejandra Alicia Antonia Carla Carmen Catalina Dolores Estefania Eva Fernanda Florencia 
+				Gabriela Grizelda Maria Lorena Magdalena Mercedes Miriam Paulina Sofia Yolanda Camila Luciana Valeria Mariana Daniela
+				Martina Julieta Antonella Renata Agustina Constanza Fabiana
+			}
+			second_names = {
+				Garcia Martinez Rodriguez Fernandez Sanchez Lopez Martin Perez Gonzalez Alvarez Gomez Diaz Dominguez Hernandez
+				Ramirez Mendez Perez Vasquez Ruiz Aguera Alonso Batista Esguerra Flores "de la Guardia" "de la Cruz" "de la Vega"
+				"de Vargas" Ibanez Moralez Riveros Rosario Velazco Torres Quesada Saldana Salazar Ortega Ortiz Solano Romero
+			}
+			regnal_first_names_male = {
+				Santiago Ricardo Marcelo Javier Ernesto Gerardo Guillermo
+			}
+			regnal_first_names_female = {
+				Alicia Antonia Carla Carmen Catalina Dolores Martina Julieta Antonella Renata
+			}
+			regnal_second_names = {
+				Fernandez Sanchez Lopez Martin Perez Gonzalez Alvarez Gomez Diaz
+			}
+		}
+		
+		names9 = {
+			weight = 15
+			first_names_male = {
+				Abdullah Abbas Abed Ahmad Ahmed Ali Ammar Amir Hamza Hassan Hydar Ibrahim Jamal Kareem Khathem Khalil Khalid Malik Mahdi 
+				Hussein Mohamed Mohammad Mohammed Muhammad Muhammed Nasir Omar Rashad Rashid Samir Tariq Yahir Yasin Yusuf Barak
+			}
+			first_names_female = {
+				Alma Amani Amira Aisha Fatima Hala Hana Hasti Imani Jana Jaliyah Jazmin Jenna Kaliyah Layan Leen Leila Lydia Malak Maryam 
+				Maritza Mina Naima Noor Salma Samira Sanaa Yesenia Zahra Satayesh Zeinab Reihaneh Mobina Narges Ma'soumeh Sakineh Aya
+			}
+			second_names = {
+				Barakat Abbas "Abdel Nour" Abboud al-Ahdal al-Ajlani al-Bariqi al-Mubarak Adwam Akkad Alawi al-Asiri al-Atrash al-Dimashqi
+				Bakir Hussein al-Hazmi al-Bishi El-Baz Ibrahim Ishak Ismail El-Farouk Hassan El-Ghazali Bilal Nadir Juhani Jawahir Hamidi
+				al-Jazari al-Samarrai Salman Qasim Qudsi Qaderi al-Qadi Farrokhzad Madani Sassani Turani Khadem Ghorbani Jamshidi Rahimi
+			}
+			regnal_first_names_male = {
+				Abdullah Abbas Abed Khalil Khalid Malik Mahdi Nasir Omar Rashad Rashid Samir
+			}
+			regnal_first_names_female = {
+				Zeinab Reihaneh Mobina Narges Ma'soumeh Sakineh Aya Alma Amani Amira
+			}
+			regnal_second_names = {
+				arakat Abbas "Abdel Nour" Abboud al-Ahdal al-Jazari al-Samarrai Salman Qasim Qudsi Qaderi al-Qadi Farrokhzad Madani
+			}
+		}
+		
+		names10 = {
+			weight = 15
+			first_names_male = {
+				Faraji Imamu Jelani Jengo Jumaane Khamisi Kibwe Mosi Mwenye Sefu Simba Tendaji Zuberi Abasi Annan Azizi Badru Bakari Bwana
+				Chane Chuma Enzi Faraji Hanisi Idi Issa Jabari Akani Aluwanip Ayanda Bambanani Bheka Bhekithemba Bhekizizwe Butholezwe Dikotsi 
+				Dzingai Esaia Hangwani Humbe Kabelo Khathu Khumbu Kutlwano Kwanele Lentswe Lesebo Letswalo Lutendo Mahlubandile Makalo Mareka 
+				Masingita Moeketsi Molapo Mosemotsane Motlalentwa Mothusi Msizi Mzwamadoda Nthofeela Oagile Paseka Phahamo Poloko Qukeza Refilwe 
+				Sanele S'bu Sehlolo Sekgolokhane Sibusiso Sizwe Teboho Thabiso Themba Thuso Tsebo T'sehla Tshawe Unathi Wandile Mbutu Kofi
+			}
+			first_names_female = {
+				Asha Abla Adhra Adila Aeeshah Afiya Chausiku Eshe Furaha Imani Kamaria Marjani Mchumba Mwanajuma Nia Nuru Sanaa Sauda Subira 
+				Zuri Aizivaishe Anatswanashe Anodiwa Anokosha Awande Bokang Bongani Dikeledi Edzai Fikile Gugu Kagiso Keneuwe Koketso Langalibalele
+				Lerato Lindidwe Litsoanelo Lulama Majobo Maletsatsi Matshediso Mbali Mmaabo Mncedisi Mohau Moratuoa Muambiwa Nnyadzeni Nofoto
+				Nthati Ntsebo Ntswaki Phathu Reneilwe Rudzani Shandu Sinethemba Sizani Thanduxolo Tshanduko Tungu Zinhle
+			} 
+			second_names = {
+				Azikiwe Awolowo Balewa Akintola Nzeogwu Onwuatuegwu Okeke Okonkwo Babangida Buhari Dimka Ibori Jomo-Gbomo Iwu Bamgboshe Biobaku
+				Tinibu Akinjide Akiloye Adeyemi Sekibo Bankole Nnamani Okadigbo Ironsi Ojukwu Chukwumereije Iweala Okonjo Gbadamosi Olanrewaju
+				Madaki Oyinlola Onyejekwe Jakande Ngige Uba Ohakim Alakija Onobanjo Mbanefo Mbadinuju Ekwensi Gowon Saro-Wiwa Naidoo Swanepoel 
+				Msibi Ngobese Ngema Masuku Khonjwayo Khumalo Kwayi Mambi Mbanjwa Mkhwemte Mtakwenda Ngwanya Nkwali Thwane Skhosana Tshangisa 
+				Tshonyane Xhamela Xoko Zangwa Ndungwane Bhukhwana Dzana Gatyeni Gxarha Jwarha Khawuta
+			}
+			regnal_first_names_male = {
+				Faraji Imamu Jelani Jengo Jumaane Khamisi Kwanele Lentswe Lesebo Letswalo Lutendo Mahlubandile Makalo Mareka
+			}
+			regnal_first_names_female = {
+				Kagiso Keneuwe Koketso Langalibalele Ntsebo Ntswaki Phathu Reneilwe Rudzani Shandu
+			}
+			regnal_second_names = {
+				Azikiwe Awolowo Balewa Akintola Nzeogwu Onwuatuegwu
+			}
+		}
+		
+		names11 = {
+			weight = 15
+			first_names_male = {
+				Mario Luigi Giovanni Guiseppe Antonio Roberto Andrea Stefano Marco Franscesco Angelo Vincenzo Pietro Salvatore Carlo Franco
+				Domenico Bruno Paulo Michele Giorgio Sergio Luciano Alessandro Alfonso Benito Fabrizio Cesare Enrico Gustavo Silvio Umberto
+				Nicola Matteo Ignazio Camillo Daniele Cristian Alberto Guido Lorenzo Tommaso Fabio
+			}
+			first_names_female = {
+				Maria Anna Guiseppina Rosa Angela Giovanna Teresa Lucia Carmela Caterina Francesca Antonietta Carla Elena Concetta Rita
+				Margherita Franca Paola Vittoria Arianna Orietta Nicoletta Clara Stefania Gisella Claudia Lorenza Gabriella Isabella Valeria
+				Lucrezia Dina Benedetta Pietra
+			}
+			second_names = {
+				Rossi Russo Ferrari Bianchi Ricci Marino "De Luca" Costa Giordano Mancini Rizzo Lombardi Moretti Ravelli Conti Gallo Bello
+				Albricci Badoglio Cappello "Di Robilant" "Di Savoia" Garibaldi Saletta Pallavicino Pianelli Mambretti Marcuzzi Valeri Pezzaglia
+				Balletti Bianconelli Antonelli Corsini D'Alessandro D'Agostino "De Rosa" "De Sciglio" "Di Chiara" "Di Bartolomei" Delvecchio
+				"Del Grosso" D'Antoni Fazio "Di Bella" "Di Gennaro" Fabbrini Gambadori Galvani Marchetti Mazzitelli Olivieri Pacini Quadrini
+			}
+			regnal_first_names_male = {
+				Mario Luigi Giovanni Enrico Gustavo Silvio Umberto
+			}
+			regnal_first_names_female = {
+				Theodora Fatima Miranda Cordelia Svetlana Anastasia Valentina Henrietta
+			}
+			regnal_second_names = {
+				Ferrari Bianchi Ricci Marino "De Luca" Costa Giordano
+			}
+		}
+	}
+}

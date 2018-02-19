@@ -1,0 +1,144 @@
+@distance = 30
+@base_moon_distance = 10
+
+
+#Oschean Hunters
+oschean_homeworld = {
+	name = "Za'id"
+	class = "sc_k"
+	flags = { oschean_homeworld }
+	init_effect = { log = "oschean homeworld" }
+	usage = custom_empire
+	max_instances = 1
+	planet = { name = "Osch" class = star orbit_distance = 0 orbit_angle = 1 size = { min = 10 max = 20 } has_ring = no }
+	planet = {
+		count = {min = 1 max = 3}
+		orbit_distance = { min = 23 max = 29 }
+		class = rl_unhabitable_planets
+		orbit_angle = { min = 90 max = 270 }
+		moon = { count = { min = 0 max = 2 } class = rl_inner_moons orbit_angle = { min = 90 max = 270 } orbit_distance = 10 }
+	}
+	planet = {
+		name = "Ma'kor"
+		class = pc_ocean
+		orbit_distance = 14.5
+		orbit_angle = 220
+		size = { min = 22 max = 25 }
+		starting_planet = yes
+		has_ring = no
+		tile_blockers = none
+		modifiers = none
+		init_effect = { prevent_anomaly = yes }
+		init_effect = {
+			if = {
+				limit = { NOT = { any_country = { has_country_flag = oschean_hunters } } }
+				create_species = { 
+				    name = "Oschean" 
+				    class = OSC 
+				    portrait = oschean 
+				    homeworld = THIS 
+				    traits = { 
+				        trait="trait_skilled_hunters"
+	                    trait="trait_communal"	
+				        ideal_planet_class = "pc_ocean" 
+					} 
+				}
+				last_created_species = { save_global_event_target_as = oscheanSpecies }
+				create_country = {
+					name = "NAME_oschean_hunters"
+					type = default
+					ignore_initial_colony_error = yes
+					civics = { civic = "civic_warrior_culture" civic = "civic_syncretic_evolution" }
+				    authority = "auth_democratic"
+					name_list = "Oschean"
+					ethos = { 
+					    ethic="ethic_egalitarian"
+	                    ethic="ethic_militarist"
+	                    ethic="ethic_materialist"
+                     }
+					species = event_target:oscheanSpecies
+					flag = { 
+						icon = { category="trek" file="oschean.dds" }
+						background = { category = "backgrounds" file = "horizontal_stripe.dds" }
+						colors = { "customcolor1698" "customcolor1778" "null" "null" }
+					}
+					ship_prefix = "OHV"
+				}
+				last_created_country = {
+					set_graphical_culture = generic_04
+					set_country_flag = oschean_hunters
+					set_country_flag = custom_start_screen
+					set_country_flag = generic_ent
+					set_country_flag = gamma_empire
+					set_country_flag = init_spawned
+					set_country_flag = sth_medium_galaxy
+					save_global_event_target_as = oschean_hunters
+					give_technology = { tech = "tech_disruptor_cannon_1" message = no }
+					give_technology = { tech = "tech_engineering_bird-of-prey_716" message = no }
+					change_country_flag = { 
+						icon = { category="trek" file="oschean.dds" }
+						background = { category = "backgrounds" file = "horizontal_stripe.dds" }
+						colors = { "customcolor1698" "customcolor1778" "null" "null" }
+					}
+				}
+				create_colony = { owner = event_target:oschean_hunters species = event_target:oscheanSpecies ethos = owner }
+			}
+			set_capital = yes
+			random_country = {
+				limit = { has_country_flag = oschean_hunters }
+				save_global_event_target_as = oschean_hunters
+				add_appropriate_start_techs = yes
+				species = { save_global_event_target_as = oscheanSpecies }
+			}
+			create_species = {
+				name = "Tosk"
+				class = "TOS"
+				portrait = "tosk"
+				name_list = "MAM2"
+				homeworld = THIS
+				traits = { 
+					trait = "trait_syncretic_proles" 
+					trait = "trait_strong" 
+					ideal_planet_class = "pc_ocean"  
+				}
+			}
+			last_created_species = { save_global_event_target_as = toskSpecies }
+			while = {
+				count = 2
+				random_tile = {
+					limit = { has_blocker = no has_grown_pop = no has_growing_pop = no }
+					create_pop = { species = event_target:toskSpecies }
+				}
+			}
+			set_owner = event_target:oschean_hunters
+			generate_major_empire_start_buildings = yes
+			generate_major_empire_start_pops = yes
+			generate_major_empire_start_fleets = yes
+			set_name = "Ma'kor"
+		}
+	}
+	planet = {
+		count = { min = 0 max = 3 }
+		orbit_distance = { min = 14 max = 25 }
+		class = rl_unhabitable_planets
+		orbit_angle = { min = 90 max = 270 }
+		moon = {
+			count = { min = 0 max = 1 }
+			class = rl_outer_moons
+			orbit_angle = { min = 90 max = 270 }
+			orbit_distance = 10
+		}
+	}
+	planet = {
+		count = 1
+		orbit_distance = { min = 18 max = 25 }
+		class = rl_unhabitable_planets
+		orbit_angle = { min = 90 max = 270 }
+		moon = {
+			count = { min = 0 max = 1 }
+			class = rl_outer_moons
+			orbit_angle = { min = 90 max = 270 }
+			orbit_distance = 10
+		}
+	}
+}

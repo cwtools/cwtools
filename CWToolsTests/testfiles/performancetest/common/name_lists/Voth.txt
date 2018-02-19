@@ -1,0 +1,82 @@
+﻿### Voth
+Voth = {
+	randomized = no
+
+	ship_names = {
+		generic = {
+			Mtosaurus Galosaura Aetosaurus Eshansaurus Echnosaurus Argasaurus Wyleosaurus Galtisaurus Caphosaurus Callosaurus Astosaurus Didaisaurus Fengosaurus Pisaurus Saurus Parasaurus Ahshisaurus Leysaurus Stegisaurus Scosaurus Qianysaurus Diplosaurus Leamosaurus Raptosaurus Chunosaurus Likasaurus Tylosaurus Shunsaurus Gasaurus Panosaurus Ariusaurus Dasaurus Ligosaurus Lampasaurus Stesaurus Ahsaurostes Atrosaurus Malosaurus Sileosaurus Scopcsaurus Ornisaurus Ilisaurus Chisaurus Shanosaurus Neddosaurus Nigmosaurus Tecsaurus Thecosaurus Kosaurus Ngenusauru Notasaurus Hesaurus Kilesaurus Montosaurus Chaeosaurus Aliaosaurus Pinasauros Ourasaurus Andusaurus Masaurus Olosaurus Riosaurus Hulsaurus Pawsaurus Aerosauros Talsaurus Beisaurus Drosaurus Nasaurus Ubeosaurus Naalusaurus Jengosaurus Manosaurus Ariasaurus Blasaurus Arasaurus Aerosaurus Revusaurus Nyorosaurus Anosaurus Heisaurus Zhousaurus Medusaurus Huanosaurus Losaurus Anchasaurus Huasaurus Cryosaurus Lousaurus Laevisaurus Caulosaurus Lepsysaurus Danosaurus Mosaurus Fostosaurus Oloposaurus Lesosaurus Ticosaurus Haeosaurus Aleocratops Zapatops Vulceratops Paceratops Marmatops Elapatops Yavenatops Uniceratops Peltops Jaklapatops Venatops Khetops Aeocratops Catops Geratops Neovenatops Saiceratops Apatops Theratops Ratops Datops Dravenatops Micratops Batops Xiatops Lexoviatops Pivenatops Amaceratops Zanatops Tambatops Euceratops Daceratops Zatops Neumatops Megaltops Moceratops Velapatops Agnatops Atops Cratops Selognatops Uteratops Heratops Tanatops Euaceratops Magnatops Seceratops Jobatops Sinatops Arctops Anatops Umatops Parontops Saltops Terreratops Montops Genatops Toceratops Avidontops Rapteratops Tamberatops Tataenatops Aetops Dimontops Caenatops Tatops Pelognatops Ignatops Sigilmatops Notognatops Agaceratops Eocratops Patops Embatops Luanatops Asygnatops Dipatops Sefapatops Bonatops Plesiatops Roceratops Epaceratops Citipatops Miceratops Centops Ojoratops Natopsis Biceratops Nutheratops Maleoctops Kanatops Venagnatops Pteratops Giraptops Nectops Mantinatops Eloceratops Elmatops Toceraptops Natops Laparaptor Astroraptor Arkharaptor Garaptor Giraptor Hiraptor Paraptor Araptor Euroraptor Elociraptor Prociraptor Turaptor Graptor Diraptor Naraptor Proceraptor Batharaptor Asinraptor Saldoraptor Theraptor Natoraptor Lambiraptor Zaraptor Ojoraptor Taraptor Skoraptor Sauraptor Liraptor Biharaptor Saiceraptor Xuanraptor Iguanraptor Amaraptor Kunbaraptor Sauroraptor Raptoraptor Juraptor Baraptor Sibiraptor Doraptor Mojoraptor Ceraptor Chioraptor Wannaraptor Pararaptor Ororaptor Mymooraptor Koraptor Diceraptor Razaraptor Tuojiraptor Saraptor Coraptor Indhraptor Ratoraptor Miraptor Bisauraptor Lindhraptor Jainoraptor Gojiraptor Kulceraptor Lycoraptor Coloraptor Laeoraptor Echiraptor Riliraptor Chiraptor Chairaptor Ariraptor Euceraptor Gyptoraptor Loraptor Amparaptor Nyororaptor Quenraptor Icharaptor Eodroraptor Ganoraptor Astahraptor Chikuraptor Limnoraptor Baraptornis Toraptor Racoraptor Dinoraptor Atsinraptor Andoraptor Bagaraptor Toceraptor Kateoraptor Vahioraptor Chaeoraptor Teroraptor Gemiraptor Fulguraptor Leptoraptor Horaptor Kakuraptor Yibiraptor Atodactyl Gadactyl Nodactyl Datodactyl Bradactyl Huanodactyl Sonodactyl Pradactyl Ortadactyl Peltadactyl Chodactyl Saltadactyl Xuanodactyl Doradactyl Regadactyl Rachodactyl Inodactyl Elanodactyl Gyptodactyl Rhodactyl Shanodactyl Manodactyl Sanodactyl Ovoradactyl Anchodactyl Loradactyl Pachodactyl Avinodactyl
+
+
+		}
+		outpost_station = {
+			sequential_name = "Frontier Outpost"
+		}
+	}
+
+	fleet_names = {
+		sequential_name = "%O% Fleet"
+	}
+	
+	army_names = {
+		defense_army = {
+			sequential_name = "%O% Guard"
+		}
+		assault_army = {
+			sequential_name = "%O% Defence Force"
+		}
+		slave_army = {
+			sequential_name = "%O% Indentured Defence Force"
+		}
+		clone_army = { 
+			sequential_name = "%O% Clone Defence Force"
+		}
+		robotic_army = {
+			sequential_name = "%O% Mechanical Defence Force"
+		}
+		android_army = {
+			sequential_name = "%O% Synthetic Defence Force"
+		}
+		psionic_army = { 
+			sequential_name = "%O% Psi Defence Force"
+		}
+		xenomorph_army = {
+			sequential_name = "%O% Bio-Warfare Defence Force"
+		}
+		gene_warrior_army = {
+			sequential_name = "%O% Bio-Engineered Defence Force"
+		}
+	}
+
+	planet_names = {
+		generic = {
+			names = { }
+		}
+	}
+
+
+	### CHARACTERS
+
+	character_names = {
+		names1 = {
+			weight = 100
+			first_names_male = {		
+				Forra Florra Nelen Curalk Dran Rex Tova Dren Nalin Forin Halin Tolin Vran Lan Eran Nylan Dryn Ryx Cirilk
+			}
+			first_names_female = {
+				Forra Florra Nelen Curalk Dran Rex Tova Dren Nalin Forin Halin Tolin Vran Lan Eran Nylan Dryn Ryx Cirilk
+			}
+			second_names = {
+				Exil Eknar Foluma Axxara Veer Teer Toluma Axil Exal Uxil Ixul Okner Uknal Yknil Yxyl
+			}
+			regnal_first_names_male = {
+				Forra Florra Nelen Curalk Dran Rex Tova Dren Nalin Forin Halin Tolin Vran Lan Eran Nylan Dryn Ryx Cirilk
+			}
+			regnal_first_names_female = {
+				Forra Florra Nelen Curalk Dran Rex Tova Dren Nalin Forin Halin Tolin Vran Lan Eran Nylan Dryn Ryx Cirilk
+			}
+			regnal_second_names = {
+				Exil Eknar Foluma Axxara Veer Teer Toluma Axil Exal Uxil Ixul Okner Uknal Yknil Yxyl
+			}
+		}
+	}
+}

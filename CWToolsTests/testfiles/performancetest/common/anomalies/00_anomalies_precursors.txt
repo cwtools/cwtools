@@ -1,0 +1,679 @@
+########################
+### anomaly EVENTS ###
+########################
+# potential = ship scope
+
+# All discoveries assigned weight 1 unless otherwise stated
+
+### Vultaum Precursor Discoveries
+
+## Vultaum Introduction 1
+#anomaly = {
+#	event = precursor.1
+#	category = "vultaum_asteroid_category"
+#	
+#	weight = 500
+#	
+#	potential = {
+#		owner = { is_borg_empire = no is_assimilator = no }
+#	}
+#}
+
+# Vultaum Mining Base
+anomaly = {
+	event = precursor.5
+	category = "vultaum_1_cat"
+	
+	potential = {
+		owner = { is_borg_empire = no is_assimilator = no }
+	}
+}
+
+# Vultaum Observatory
+anomaly = {
+	event = precursor.10
+	category = "vultaum_2_cat"
+	
+	potential = {
+		owner = { is_borg_empire = no is_assimilator = no }
+	}
+}
+
+# Vultaum Colony 1
+anomaly = {
+	event = precursor.15
+	category = "vultaum_3_cat"
+	
+	potential = {
+		owner = { is_borg_empire = no is_assimilator = no }
+	}
+}
+
+# Vultaum Colony 2
+anomaly = {
+	event = precursor.20
+	category = "vultaum_4_cat"
+	
+	potential = {
+		owner = { is_borg_empire = no is_assimilator = no }
+	}
+}
+
+# Vultaum Colony 3
+anomaly = {
+	event = precursor.25
+	category = "vultaum_5_cat"
+	
+	potential = {
+		owner = { is_borg_empire = no is_assimilator = no }
+	}
+}
+
+# Vultaum Gas Giant Base
+anomaly = {
+	event = precursor.30
+	category = "vultaum_6_cat"
+	
+	potential = {
+		owner = { is_borg_empire = no is_assimilator = no }
+	}
+}
+
+# Vultaum Trade Post
+anomaly = {
+	event = precursor.35
+	category = "vultaum_7_cat"
+	
+	potential = {
+		owner = { is_borg_empire = no is_assimilator = no }
+	}
+}
+
+# Vultaum Satellite
+anomaly = {
+	event = precursor.40
+	category = "vultaum_8_cat"
+	
+	potential = {
+		owner = { is_borg_empire = no is_assimilator = no }
+	}
+}
+
+# Vultaum Splinter Colony
+anomaly = {
+	event = precursor.45
+	category = "vultaum_9_cat"
+
+	potential = {
+		owner = { is_borg_empire = no is_assimilator = no }
+	}
+}
+
+# Vultaum Virtual Reality Center
+anomaly = {
+	event = precursor.50
+	category = "vultaum_10_cat"
+	
+	potential = {
+		owner = { is_borg_empire = no is_assimilator = no }
+	}
+}
+
+# Vultaum Asteroid Mining Base
+anomaly = {
+	event = precursor.55
+	category = "vultaum_11_cat"
+	
+	potential = {
+		owner = { is_borg_empire = no is_assimilator = no }
+	}
+}
+
+### Yuht Precursor Discoveries
+
+## Yuht Introduction 1
+#anomaly = {
+#	event = precursor.500
+#	category = "yuht_asteroid_category"
+#	
+#	weight = 500
+#	
+#	potential = {
+#		owner = { is_borg_empire = no is_assimilator = no }
+#	}
+#}
+
+# Yuht Hatchery World
+anomaly = {
+	event = precursor.505
+	category = "yuht_1_cat"
+	
+	potential = {
+		owner = { is_borg_empire = no is_assimilator = no }
+	}
+}
+
+# Yuht Listening Post
+anomaly = {
+	event = precursor.510
+	category = "yuht_2_cat"
+	
+	potential = {
+		owner = { is_borg_empire = no is_assimilator = no }
+	}
+}
+
+# Yuht Colony 1
+anomaly = {
+	event = precursor.515
+	category = "yuht_3_cat"
+	
+	potential = {
+		owner = { is_borg_empire = no is_assimilator = no }
+	}
+}
+
+# Yuht Colony 2
+anomaly = {
+	event = precursor.520
+	category = "yuht_4_cat"
+	
+	potential = {
+		owner = { is_borg_empire = no is_assimilator = no }
+	}
+}
+
+# Yuht Colony 3
+anomaly = {
+	event = precursor.525
+	category = "yuht_5_cat"
+	
+	potential = {
+		owner = { is_borg_empire = no is_assimilator = no }
+	}
+}
+
+# Yuht Satellite
+anomaly = {
+	event = precursor.530
+	category = "yuht_6_cat"
+	
+	potential = {
+		owner = { is_borg_empire = no is_assimilator = no }
+	}
+}
+
+# Yuht Cruiser
+anomaly = {
+	event = precursor.535
+	category = "yuht_7_cat"
+	
+	potential = {
+		owner = { is_borg_empire = no is_assimilator = no }
+	}
+}
+
+# Yuht Colony Ship
+anomaly = {
+	event = precursor.540
+	category = "yuht_8_cat"
+	
+	potential = {
+		owner = { is_borg_empire = no is_assimilator = no }
+	}
+}
+
+# Yuht Asteroid Dwelling
+anomaly = {
+	event = precursor.545
+	category = "yuht_9_cat"
+
+	potential = {
+		owner = { is_borg_empire = no is_assimilator = no }
+	}
+}
+
+### First League Precursor Discoveries
+
+## First League Introduction 1
+#anomaly = {
+#	event = precursor.1000
+#	category = "league_asteroid_category"
+#	
+#	weight = 500
+#	
+#	potential = {
+#		owner = { is_borg_empire = no is_assimilator = no }
+#	}
+#}
+
+# League Naval Base
+anomaly = {
+	event = precursor.1005
+	category = "league_1_cat"
+	
+	potential = {
+		owner = { is_borg_empire = no is_assimilator = no }
+	}
+}
+
+# League Cruiser
+anomaly = {
+	event = precursor.1010
+	category = "league_2_cat"
+
+	potential = {
+		owner = { is_borg_empire = no is_assimilator = no }
+	}
+}
+
+# Khamdai Homeworld
+anomaly = {
+	event = precursor.1015
+	category = "league_3_cat"
+	
+	potential = {
+		owner = { is_borg_empire = no is_assimilator = no }
+	}
+}
+
+# Chassago Homeworld
+anomaly = {
+	event = precursor.1020
+	category = "league_4_cat"
+	
+	potential = {
+		owner = { is_borg_empire = no is_assimilator = no }
+	}
+}
+
+# Migir-Yan Homeworld
+anomaly = {
+	event = precursor.1025
+	category = "league_5_cat"
+	
+	potential = {
+		owner = { is_borg_empire = no is_assimilator = no }
+	}
+}
+
+# V'ropak Homeworld
+anomaly = {
+	event = precursor.1030
+	category = "league_6_cat"
+
+	potential = {
+		owner = { is_borg_empire = no is_assimilator = no }
+	}
+}
+
+# League Science Base
+anomaly = {
+	event = precursor.1035
+	category = "league_7_cat"
+
+	potential = {
+		owner = { is_borg_empire = no is_assimilator = no }
+	}
+}
+
+# Joint League Colony
+anomaly = {
+	event = precursor.1040
+	category = "league_8_cat"
+	
+	potential = {
+		owner = { is_borg_empire = no is_assimilator = no }
+	}
+}
+
+# League Trade Center
+anomaly = {
+	event = precursor.1045
+	category = "league_9_cat"
+
+	potential = {
+		owner = { is_borg_empire = no is_assimilator = no }
+	}
+}
+
+# Battle Wreckage
+anomaly = {
+	event = precursor.1050
+	category = "league_10_cat"
+
+	potential = {
+		owner = { is_borg_empire = no is_assimilator = no }
+	}
+}
+
+# Prison Complex
+anomaly = {
+	event = precursor.1055
+	category = "league_11_cat"
+
+	potential = {
+		owner = { is_borg_empire = no is_assimilator = no }
+	}
+}
+
+# Protected Primitive World
+anomaly = {
+	event = precursor.1060
+	category = "league_12_cat"
+
+	potential = {
+		owner = { is_borg_empire = no is_assimilator = no }
+	}
+}
+
+# Blockaded World
+anomaly = {
+	event = precursor.1065
+	category = "league_13_cat"
+
+	potential = {
+		owner = { is_borg_empire = no is_assimilator = no }
+	}
+}
+
+# Smuggler Asteroid
+anomaly = {
+	event = precursor.1070
+	category = "league_14_cat"
+
+	potential = {
+		owner = { is_borg_empire = no is_assimilator = no }
+	}
+}
+
+### Irassian Precursor Discoveries
+
+## Irassian Introduction 1
+#anomaly = {
+#	event = precursor.1500
+#	category = "irassian_asteroid_category"
+#	
+#	weight = 500
+#	
+#	potential = {
+#		owner = { is_borg_empire = no is_assimilator = no }
+#	}
+#}
+
+# Quarantined World
+anomaly = {
+	event = precursor.1505
+	category = "irassian_1_cat"
+	
+	potential = {
+		owner = { is_borg_empire = no is_assimilator = no }
+	}
+}
+
+# Purified World
+anomaly = {
+	event = precursor.1510
+	category = "irassian_2_cat"
+
+	potential = {
+		owner = { is_borg_empire = no is_assimilator = no }
+	}
+}
+
+# Scheming Client Race
+anomaly = {
+	event = precursor.1515
+	category = "irassian_3_cat"
+
+	potential = {
+		owner = { is_borg_empire = no is_assimilator = no }
+	}
+}
+
+# Destroyed Client Race
+anomaly = {
+	event = precursor.1520
+	category = "irassian_4_cat"
+
+	potential = {
+		owner = { is_borg_empire = no is_assimilator = no }
+	}
+}
+
+# Dead Colony
+anomaly = {
+	event = precursor.1525
+	category = "irassian_5_cat"
+
+	potential = {
+		owner = { is_borg_empire = no is_assimilator = no }
+	}
+}
+
+# Dead Mining Base
+anomaly = {
+	event = precursor.1530
+	category = "irassian_6_cat"
+
+	potential = {
+		owner = { is_borg_empire = no is_assimilator = no }
+	}
+}
+
+# Irassian Colony
+anomaly = {
+	event = precursor.1535
+	category = "irassian_7_cat"
+
+	potential = {
+		owner = { is_borg_empire = no is_assimilator = no }
+	}
+}
+
+# Derelict Ship
+anomaly = {
+	event = precursor.1540
+	category = "irassian_8_cat"
+
+	potential = {
+		owner = { is_borg_empire = no is_assimilator = no }
+	}
+}
+
+# Disease Control Base
+anomaly = {
+	event = precursor.1545
+	category = "irassian_9_cat"
+
+	potential = {
+		owner = { is_borg_empire = no is_assimilator = no }
+	}
+}
+
+# Asteroid Listening Post
+anomaly = {
+	event = precursor.1550
+	category = "irassian_10_cat"
+
+	potential = {
+		owner = { is_borg_empire = no is_assimilator = no }
+	}
+}
+
+# Gas Giant Science Station
+anomaly = {
+	event = precursor.1555
+	category = "irassian_11_cat"
+
+	potential = {
+		owner = { is_borg_empire = no is_assimilator = no }
+	}
+}
+
+### Cybrex Precursor Discoveries
+
+## Cybrex Introduction 1
+#anomaly = {
+#	event = precursor.2000
+#	category = "cybrex_asteroid_category"
+#	
+#	weight = 500
+#	
+#	potential = {
+#		owner = { is_borg_empire = no is_assimilator = no }
+#	}
+#}
+
+# Kuur Homeworld
+anomaly = {
+	event = precursor.2005
+	category = "cybrex_1_cat"
+	
+	potential = {
+		owner = { is_borg_empire = no is_assimilator = no }
+	}
+}
+
+# Indimak Homeworld
+anomaly = {
+	event = precursor.2010
+	category = "cybrex_2_cat"
+
+	potential = {
+		owner = { is_borg_empire = no is_assimilator = no }
+	}
+}
+
+# Broken Warform
+anomaly = {
+	event = precursor.2015
+	category = "cybrex_3_cat"
+
+	potential = {
+		owner = { is_borg_empire = no is_assimilator = no }
+	}
+}
+
+# Cybrex Invasion
+anomaly = {
+	event = precursor.2020
+	category = "cybrex_4_cat"
+
+	potential = {
+		owner = { is_borg_empire = no is_assimilator = no }
+	}
+}
+
+# Cybrex Ruins
+anomaly = {
+	event = precursor.2025
+	category = "cybrex_5_cat"
+
+	potential = {
+		owner = { is_borg_empire = no is_assimilator = no }
+	}
+}
+
+# Cybrex Listening Post
+anomaly = {
+	event = precursor.2030
+	category = "cybrex_6_cat"
+
+	potential = {
+		owner = { is_borg_empire = no is_assimilator = no }
+	}
+}
+
+# Cybrex Refinery
+anomaly = {
+	event = precursor.2035
+	category = "cybrex_7_cat"
+
+	potential = {
+		owner = { is_borg_empire = no is_assimilator = no }
+	}
+}
+
+# Battle Debris
+anomaly = {
+	event = precursor.2040
+	category = "cybrex_8_cat"
+
+	potential = {
+		owner = { is_borg_empire = no is_assimilator = no }
+	}
+}
+
+# Cybrex Base Remains
+anomaly = {
+	event = precursor.2045
+	category = "cybrex_9_cat"
+
+	potential = {
+		owner = { is_borg_empire = no is_assimilator = no }
+	}
+}
+
+# Organic Remains
+anomaly = {
+	event = precursor.2050
+	category = "cybrex_10_cat"
+
+	potential = {
+		owner = { is_borg_empire = no is_assimilator = no }
+	}
+}
+
+# Cybrex Research Station
+anomaly = {
+	event = precursor.2055
+	category = "cybrex_11_cat"
+
+	potential = {
+		owner = { is_borg_empire = no is_assimilator = no }
+	}
+}
+
+
+### EVENT SPAWNED DISCOVERIES
+
+# Vultaum Homeworld
+anomaly = {
+	event = precursor.101
+	category = "VULTAUMAR"
+	
+	potential = {
+		owner = { is_borg_empire = no is_assimilator = no }
+	}
+}
+
+# Yuht Homeworld
+anomaly = {
+	event = precursor.601
+	category = "YUHTAAN"
+	
+	potential = {
+		owner = { is_borg_empire = no is_assimilator = no }
+	}
+}
+
+# First League Homeworld
+anomaly = {
+	event = precursor.1101
+	category = "FEN_HABBANIS"
+	
+	potential = {
+		owner = { is_borg_empire = no is_assimilator = no }
+	}
+}
+
+# Irassian Homeworld
+anomaly = {
+	event = precursor.1601
+	category = "IRASSIA"
+	
+	potential = {
+		owner = { is_borg_empire = no is_assimilator = no }
+	}
+}

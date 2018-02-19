@@ -1,0 +1,666 @@
+### STNH 1.8 Compatible ###
+
+
+#	Example:
+# 
+#	example_trigger = {
+#		is_country_type = default
+#		free_leader_slots > 0
+#	}
+#
+#
+#	In a script file:
+#
+#	trigger = {
+#		example_trigger = yes
+#	}
+#
+
+print_scope_trigger = {
+	log = "------------------------------"
+	log = "- Printing the current scopes (effect) -"
+	log = "- This: [This.GetName]"
+	log = "- Root: [Root.GetName]"
+	log = "- Prev: [Prev.GetName]"
+	log = "- PrevPrev: [Prev.Prev.GetName]"
+	log = "- PrevPrevPrev: [Prev.Prev.Prev.GetName]"
+	log = "- PrevPrevPrevPrev: [Prev.Prev.Prev.Prev.GetName]"
+	log = "- From: [From.GetName]"
+	log = "- FromFrom: [From.From.GetName]"
+	log = "- FromFromFrom: [From.From.From.GetName]"
+	log = "- FromFromFromFrom: [From.From.From.From.GetName]"
+	log = "- This's Orbit: [This.Orbit.GetName]"
+	log = "- Root's Solar System / Star Name: [Root.Solar_System.GetName] / [Root.GetStarName]"
+	log = "- Root's Owner's Name: [Root.Owner.GetName]"
+	log = "- Root's Owner's Capital's Name: [Root.Owner.Capital.GetName]"
+	log = "------------------------------"
+}
+
+is_pirate_system = {
+	any_ship_in_system = {
+		is_ship_size = pirate_station
+	}
+}
+
+is_shackled_robot = { # The pop is a non-free robot
+	OR = {
+		has_trait = "trait_robotic_1"
+		has_trait = "trait_robotic_2"
+		AND = {
+			has_trait = "trait_robotic_3"
+			NAND = {
+				exists = owner
+				owner = { 
+					OR = {
+						has_policy_flag = ai_full_rights 
+						is_mechanical_empire = yes
+					}
+				}
+			}
+		}
+	}
+}
+
+is_non_sapient_robot = { # The pop is a non-sapient robot
+	OR = {
+		has_trait = "trait_robotic_1"
+		has_trait = "trait_robotic_2"
+		AND = {
+			has_trait = "trait_robotic_3"
+			exists = owner
+			owner = { has_policy_flag = ai_outlawed }
+		}
+	}
+}
+
+is_non_menial_laborer = {
+	OR = {
+		is_enslaved = no
+		NOT = { has_slavery_type = { country = from type = slavery_normal } }
+	}
+	is_non_sapient_robot = no
+	is_sapient = yes
+}
+
+is_robot_tile_or_planet = {
+	NOR = {
+		AND = {
+			exists = pop
+			pop = { is_non_sapient_robot = no }
+		}
+		AND = {
+			NOT = { exists = pop }
+			planet = {
+				any_owned_pop = {
+					is_non_sapient_robot = no
+				}
+			}				
+		}
+	}	
+}
+
+is_slave_tile_or_planet = {
+	NOR = {
+		AND = {
+			exists = pop
+			pop = { is_non_menial_laborer = yes }
+		}
+		AND = {
+			NOT = { exists = pop }
+			planet = {
+				any_owned_pop = {
+					is_non_menial_laborer = yes
+				}
+			}				
+		}
+	}	
+}
+
+wears_clothes = { # The species uses the portrait that wears clothes
+	OR = {
+		species_portrait = human
+		species_portrait = humanoid_02
+		species_portrait = humanoid_03
+		species_portrait = humanoid_04
+		species_portrait = humanoid_05
+		species_portrait = mam5
+		species_portrait = mam13
+		species_portrait = mam10
+		species_portrait = mam14
+		species_portrait = mam4
+		species_portrait = mam9
+		species_portrait = mam11
+		species_portrait = mam6
+		species_portrait = mam3
+		species_portrait = mam12
+		species_portrait = mam7
+		species_portrait = mam15
+		species_portrait = mam2
+		species_portrait = mam8
+		species_portrait = mam1
+		species_portrait = mam16
+		species_portrait = mam17
+		species_portrait = rep1
+		species_portrait = rep2
+		species_portrait = rep3
+		species_portrait = rep4
+		species_portrait = rep5
+		species_portrait = rep6
+		species_portrait = rep7
+		species_portrait = rep8
+		species_portrait = rep9
+		species_portrait = rep10
+		species_portrait = rep11
+		species_portrait = rep12
+		species_portrait = rep13
+		species_portrait = rep15
+		species_portrait = rep16
+		species_portrait = avi1
+		species_portrait = avi2
+		species_portrait = avi4
+		species_portrait = avi5
+		species_portrait = avi6
+		species_portrait = avi8
+		species_portrait = avi9
+		species_portrait = avi10
+		species_portrait = avi11
+		species_portrait = avi12
+		species_portrait = avi13
+		species_portrait = avi14
+		species_portrait = avi15
+		species_portrait = avi16
+		species_portrait = art7
+		species_portrait = art6
+		species_portrait = art8
+		species_portrait = art9
+		species_portrait = art10
+		species_portrait = mol1
+		species_portrait = mol2
+		species_portrait = mol3
+		species_portrait = mol4
+		species_portrait = mol5
+		species_portrait = mol11
+		species_portrait = mol12
+		species_portrait = mol13
+		species_portrait = mol14
+		species_portrait = mol15
+		species_portrait = fun6
+		species_portrait = fun7
+		species_portrait = fun8
+		species_portrait = fun9
+		species_portrait = fun10
+		species_portrait = pla6
+		species_portrait = pla7
+		species_portrait = pla8
+		species_portrait = pla9
+		species_portrait = pla10
+	}
+}
+
+is_awakened_fallen_empire_machine = {
+	is_country_type = awakened_fallen_empire
+	has_authority = auth_machine_intelligence
+}
+
+is_awakened_fallen_empire_materialist = {
+	is_country_type = awakened_fallen_empire
+	has_ethic = ethic_fanatic_materialist
+}
+
+is_awakened_fallen_empire_spiritualist = {
+	is_country_type = awakened_fallen_empire
+	has_ethic = ethic_fanatic_spiritualist
+}
+
+is_awakened_fallen_empire_xenophobe = {
+	is_country_type = awakened_fallen_empire
+	has_ethic = ethic_fanatic_xenophobe
+}
+
+is_awakened_fallen_empire_xenophile = {
+	is_country_type = awakened_fallen_empire
+	has_ethic = ethic_fanatic_xenophile
+}
+
+is_valid_fallen_empire_for_task = {
+	is_country_type = fallen_empire
+	is_at_war = no
+	fleet_power > 40000
+	OR = {
+		has_ethic = ethic_fanatic_spiritualist
+		has_ethic = ethic_fanatic_xenophile
+		has_ethic = ethic_fanatic_materialist
+		has_authority = auth_machine_intelligence
+	}
+}
+
+is_fe_cluster = {
+	OR = {
+		is_in_cluster = fe1_cluster
+		is_in_cluster = fe2_cluster
+		is_in_cluster = fe3_cluster
+		is_in_cluster = fe4_cluster
+		is_in_cluster = fe_mach_cluster
+	}
+}
+
+has_leviathans = {
+	#OR = {
+		host_has_dlc = "Leviathans Story Pack"
+		#local_has_dlc = "Leviathans Story Pack"
+	#}
+}
+
+uninhabitable_regular_planet = {
+	OR = {
+		is_planet_class = pc_molten
+		is_planet_class = pc_barren
+		is_planet_class = pc_barren_cold
+		is_planet_class = pc_toxic
+		is_planet_class = pc_frozen
+	}
+}
+
+colonizeable_planet = {
+	OR = {
+		is_planet_class = pc_nuked
+		habitable_structure = yes
+		habitable_planet = yes
+	}
+}
+
+habitable_planet = {
+	OR = {
+		is_planet_class = pc_desert
+		is_planet_class = pc_tropical
+		is_planet_class = pc_arid
+		is_planet_class = pc_continental
+		is_planet_class = pc_ocean
+		is_planet_class = pc_tundra
+		is_planet_class = pc_arctic
+		is_planet_class = pc_alpine
+		is_planet_class = pc_savannah
+		is_planet_class = pc_gaia
+	}
+}
+
+habitable_structure = {
+	OR = {
+		is_planet_class = pc_ringworld_habitable
+		is_planet_class = pc_habitat
+	}
+}
+
+is_guardian_country = {
+	OR = {
+		is_country_type = guardian
+		is_country_type = guardian_dragon
+		is_country_type = guardian_sphere
+		is_country_type = guardian_wraith
+		is_country_type = guardian_horror
+		is_country_type = guardian_fortress
+		is_country_type = guardian_hiver
+		is_country_type = guardian_stellarite
+		is_country_type = guardian_dreadnought
+	}
+}
+
+has_encountered_other_species = {
+	OR = {
+		has_civic = civic_syncretic_evolution
+		has_civic = civic_machine_servitor
+		num_communications > 0
+		any_owned_pop = {
+			NOR = {
+				has_trait = "trait_robotic_1"
+				has_trait = "trait_robotic_2"
+				has_trait = "trait_robotic_3"
+			}
+			NOT = { is_same_species = prev }
+		}
+	}	
+}
+
+has_citizenship_rights = {
+	OR = {	
+		has_citizenship_type = { type = citizenship_full }
+		has_citizenship_type = { type = citizenship_caste_system }
+		has_citizenship_type = { type = citizenship_full_machine }
+	}
+}
+
+allows_alien_leaders = {
+	any_owned_planet ={
+		any_owned_pop = {
+			NOT = { is_same_species = root }
+			has_citizenship_rights = yes
+		}
+	}
+}
+
+can_be_military_leader = {
+	is_enslaved = no
+	is_sapient = yes
+	OR = {
+		is_robot_pop = no
+		AND = {
+			has_trait = trait_robotic_3
+			owner = { has_policy_flag = ai_full_rights }
+		}
+		is_species_class = JEM
+		owner = { has_authority = auth_machine_intelligence }
+	}
+	OR = {
+		has_citizenship_type = { type = citizenship_full_machine }
+		has_military_service_type = { type = military_service_full }
+	}
+}
+
+can_be_soldier = {
+	is_sapient = yes
+	OR = {
+		has_military_service_type = { type = military_service_full }
+		has_military_service_type = { type = military_service_limited }
+		is_species_class = JEM
+	}
+}
+
+allows_slavery = {
+	OR = {
+		has_policy_flag = slavery_allowed
+		has_ethic = ethic_gestalt_consciousness
+	}	
+}
+
+allows_purge = {
+	OR = {
+		has_ethic = ethic_gestalt_consciousness
+		has_valid_civic = civic_fanatic_purifiers
+		has_policy_flag = purge_allowed
+		has_policy_flag = purge_displacement_only
+	}	
+}
+
+can_build_megastructure_on_planet = {
+	has_any_megastructure = no
+	NOR = {
+		has_planet_flag = megastructure
+		has_planet_flag = has_megastructure
+		solar_system = {
+			OR = {
+				has_star_flag = ring_world_built
+				has_star_flag = helix_built
+			}
+		}
+	}
+}
+
+has_generic_government = {
+	OR = {
+		has_government = gov_despotic_empire
+		has_government = gov_feudal_empire
+		has_government = gov_constitutional_dictatorship
+		has_government = gov_plutocratic_oligarchy
+		has_government = gov_representative_democracy
+	}
+}
+
+has_spiritualist_government = {
+	OR = {
+		has_government = gov_theocratic_monarchy
+		has_government = gov_theocratic_dictatorship
+		has_government = gov_theocratic_oligarchy
+		has_government = gov_theocratic_republic
+		has_government = gov_divine_empire
+		has_government = gov_holy_tribunal
+	}
+}
+
+has_militarist_government = {
+	OR = {
+		has_government = gov_star_empire
+		has_government = gov_military_dictatorship
+		has_government = gov_military_junta
+		has_government = gov_military_commissariat
+		has_government = gov_martial_empire
+		has_government = gov_martial_dictatorship
+		has_government = gov_war_council
+		has_government = gov_assembly_of_clans
+		has_government = gov_citizen_stratocracy
+		has_government = gov_citizen_republic
+	}
+}
+
+has_pacifist_government = {
+	OR = {
+		has_government = gov_irenic_monarchy
+		has_government = gov_irenic_dictatorship
+		has_government = gov_irenic_bureaucracy
+		has_government = gov_moral_democracy
+		has_government = gov_celestial_empire
+	}
+}
+
+has_materialist_government = {
+	OR = {
+		has_government = gov_despotic_hegemony
+		has_government = gov_totalitarian_regime
+		has_government = gov_executive_committee
+		has_government = gov_direct_democracy
+		has_government = gov_illuminated_autocracy
+		has_government = gov_technocratic_dictatorship
+		has_government = gov_science_directorate
+		has_government = gov_rational_consensus
+	}
+}
+
+has_primitive_government = {
+	OR = {
+		has_government = gov_feudal_realms
+		has_government = gov_fragmented_nation_states
+	}
+}
+
+#Works in species scope, with a country in from
+is_lonely_hive_mind_pop = {
+	has_trait = trait_hive_mind
+	NOT = { from = { has_authority = auth_hive_mind } }
+	from = { 
+		NOR = {
+			is_country_type = fallen_empire
+			is_country_type = awakened_fallen_empire
+		}
+	}
+}
+
+#Works in species scope, with a country in from
+is_disconnected_machine_pop = {
+	has_trait = trait_machine_unit
+	from = {
+		NOR = {
+			has_authority = auth_machine_intelligence
+			is_country_type = fallen_empire
+			is_country_type = awakened_fallen_empire
+		}
+	}
+}
+
+has_culture_shock = {
+	OR = {
+		has_modifier = culture_shock_stone_age
+		has_modifier = culture_shock_bronze_age 
+		has_modifier = culture_shock_iron_age 
+		has_modifier = culture_shock_late_medieval_age 
+		has_modifier = culture_shock_renaissance_age 
+		has_modifier = culture_shock_steam_age 
+		has_modifier = culture_shock_industrial_age 
+		has_modifier = culture_shock_machine_age 
+		has_modifier = culture_shock_atomic_age 
+		has_modifier = culture_shock_early_space_age 
+	}
+}
+
+# Checks if a planet is under any kind of orbital bombardment
+under_bombardment = {
+	orbital_bombardment = soft
+	orbital_bombardment = limited
+	orbital_bombardment = full
+	orbital_bombardment = armageddon
+}
+
+has_any_megastructure_in_empire = {
+	any_system_within_border = {
+		OR = {
+			has_megastructure = spy_orb_1
+			has_megastructure = spy_orb_2
+			has_megastructure = spy_orb_3
+			has_megastructure = spy_orb_4
+			has_megastructure = think_tank_1
+			has_megastructure = think_tank_2
+			has_megastructure = think_tank_3
+			has_megastructure = think_tank_4
+			has_megastructure = dyson_sphere_1
+			has_megastructure = dyson_sphere_2
+			has_megastructure = dyson_sphere_3
+			has_megastructure = dyson_sphere_4
+			has_megastructure = dyson_sphere_5	
+			has_megastructure = ring_world_2_intermediate
+			has_megastructure = dyson_sphere_ruined
+			has_megastructure = dyson_sphere_restored
+			has_megastructure = spy_orb_ruined
+			has_megastructure = spy_orb_restored
+			has_megastructure = think_tank_ruined
+			has_megastructure = think_tank_restored
+			has_megastructure = ring_world_ruined
+			has_megastructure = ring_world_restored						
+		}
+	}
+}
+
+has_any_tradition_unlocked = {
+	OR = {
+		has_tradition = tr_discovery_adopt
+		has_tradition = tr_diplomacy_adopt
+		has_tradition = tr_domination_adopt
+		has_tradition = tr_expansion_adopt
+		has_tradition = tr_harmony_adopt
+		has_tradition = tr_prosperity_adopt
+		has_tradition = tr_supremacy_adopt
+	}
+}
+
+is_fallen_machine_empire = {
+	OR = {
+		is_country_type = fallen_empire
+		is_country_type = awakened_fallen_empire
+	}
+	has_authority = auth_machine_intelligence
+}
+
+is_berserk_fallen_machine_empire = {
+	is_fallen_machine_empire = yes
+	has_valid_civic = civic_malfunctioning_custodian
+}
+
+has_crisis = {
+	OR = {
+		has_global_flag = crisis_stage_1
+		has_global_flag = crisis_stage_2
+		has_global_flag = crisis_stage_3
+		has_global_flag = crisis_stage_4
+	}
+}
+
+has_crisis_stage_1 ={
+	has_global_flag = crisis_stage_1
+}
+
+has_crisis_stage_2 ={
+	has_global_flag = crisis_stage_2
+}
+
+has_crisis_stage_3 ={
+	has_global_flag = crisis_stage_3
+}
+
+has_crisis_stage_4 ={
+	has_global_flag = crisis_stage_4
+}
+
+is_pre_sapient_livestock = {
+	is_sapient = no
+	has_citizenship_type = { type = citizenship_slavery }
+	has_slavery_type = { type = slavery_livestock  }
+}
+
+is_synthetic_empire = {
+	OR = {
+		has_country_flag = synthetic_empire
+		has_authority = auth_machine_intelligence
+	}
+}
+
+planet_can_be_liberated_from_owner = {
+	owner = {
+		NOR = {
+			is_country_type = awakened_fallen_empire
+			is_country_type = fallen_empire
+			has_authority = auth_hive_mind
+			has_authority = auth_machine_intelligence
+		}
+	}
+}
+
+pops_on_planet_can_form_government = {
+	any_pop = {
+		species = {
+			pops_have_happiness = yes
+		}
+	}
+}
+
+is_valid_refugee_pop = {
+	is_robot_pop = no
+	NOR = { 
+		has_trait = trait_hive_mind 
+		has_trait = trait_nerve_stapled
+		is_species_class = JEM
+		is_species_class = VOR
+		is_species_class = DOM
+	}		
+	owner = {
+		any_relation = {
+			is_country_type = default
+			NOT = { has_policy_flag = refugees_not_allowed } 
+			root = {
+				OR = { 
+					has_citizenship_type = { type = citizenship_full country = prev }
+					has_citizenship_type = { type = citizenship_caste_system country = prev }
+					AND = {
+						has_citizenship_type = { type = citizenship_limited country = prev }
+						has_citizenship_type = { type = citizenship_caste_system_limited country = prev }
+						prev = { has_policy_flag = refugees_allowed }
+					}	
+				}						
+			}
+			any_owned_planet = {
+				habitability = { who = root value > 0.2 }
+				any_tile = {
+					has_blocker = no
+					has_pop = no
+				}
+			}
+		}		
+	}
+}
+
+is_cyborg_empire = {
+	owner_species = { has_trait = trait_cybernetic }
+}
+
+is_mechanical_empire = {
+	OR = {	
+		owner_species = { has_trait = trait_mechanical }		
+		has_country_flag = synthetic_empire
+	}
+}

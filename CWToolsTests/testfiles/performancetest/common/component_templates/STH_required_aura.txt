@@ -1,0 +1,2291 @@
+### Grappler
+   utility_component_template = {
+      key = "REQUIRED_AURA_DESTROYER_TRACTOR_0"
+      size = small
+      icon = "GFX_ship_part_Required_Aura_Tractor_0"
+      icon_frame = 1
+      power = 0
+      cost = 10
+      component_set = "required_aura_Destroyer"
+      upgrades_to = "REQUIRED_AURA_DESTROYER_TRACTOR_1"
+      hostile_aura = {
+         name = aura_Tractor
+         radius = 10
+         apply_on = ships
+         stack_info = {
+            id = hostile_snare_aura
+            priority = 1
+         }
+         modifier = {
+            ship_combat_speed_mult = -0.1
+            ship_speed_mult = -0.1
+        }
+      }
+      prerequisites = {"tech_physics_particles_300" }
+      ai_weight = {
+         weight = 1
+      }
+   }
+   
+### Tractor Beam
+   utility_component_template = {
+      key = "REQUIRED_AURA_DESTROYER_TRACTOR_1"
+      size = small
+      icon = "GFX_ship_part_Required_Aura_Tractor_1"
+      icon_frame = 1
+      power = -30
+      cost = 40
+      component_set = "required_aura_Destroyer"
+      upgrades_to = "REQUIRED_AURA_DESTROYER_TRACTOR_2"
+      hostile_aura = {
+         name = aura_Tractor
+         radius = 20
+         apply_on = ships
+         stack_info = {
+            id = hostile_snare_aura
+            priority = 2
+         }
+         modifier = {
+            ship_combat_speed_mult = -0.2
+            ship_speed_mult = -0.2
+            ship_fire_rate_mult = -0.05
+        }
+      }
+      prerequisites = {"tech_physics_tractor_122" }
+      ai_weight = {
+         weight = 2
+      }
+   }
+   
+### Multiphase Tractor Beam
+   utility_component_template = {
+      key = "REQUIRED_AURA_DESTROYER_TRACTOR_2"
+      size = small
+      icon = "GFX_ship_part_Required_Aura_Tractor_2"
+      icon_frame = 1
+      power = -70
+      cost = 80
+      component_set = "required_aura_Destroyer"
+      upgrades_to = "REQUIRED_AURA_DESTROYER_TRACTOR_3"
+      hostile_aura = {
+         name = aura_Tractor
+         radius = 30
+         apply_on = ships
+         stack_info = {
+            id = hostile_snare_aura
+            priority = 3
+         }
+         modifier = {
+            ship_combat_speed_mult = -0.3
+            ship_speed_mult = -0.3
+            ship_fire_rate_mult = -0.1
+        }
+      }
+      prerequisites = {"tech_physics_field_manipulation_231" }
+      ai_weight = {
+         weight = 4
+      }
+   }
+   
+### Subspace Tractor Beam
+   utility_component_template = {
+      key = "REQUIRED_AURA_DESTROYER_TRACTOR_3"
+      size = small
+      icon = "GFX_ship_part_Required_Aura_Tractor_3"
+      icon_frame = 1
+      power = -130
+      cost = 140
+      component_set = "required_aura_Destroyer"
+      hostile_aura = {
+         name = aura_Tractor
+         radius = 40
+         apply_on = ships
+         stack_info = {
+            id = hostile_snare_aura
+            priority = 4
+         }
+         modifier = {
+            ship_combat_speed_mult = -0.4
+            ship_speed_mult = -0.4
+            ship_fire_rate_mult = -0.15
+        }
+      }
+      prerequisites = {"tech_physics_field_manipulation_235" }
+      ai_weight = {
+         weight = 8
+      }
+   }
+   
+### Warp Inhibitor
+   utility_component_template = {
+      key = "REQUIRED_AURA_DESTROYER_INHIBITOR_0"
+      size = small
+      icon = "GFX_ship_part_Required_Aura_Inhibitor_0"
+      icon_frame = 1
+      power = -80
+      cost = 90
+      component_set = "required_aura_Destroyer"
+      ftl_magnet = yes
+      upgrades_to = "REQUIRED_AURA_DESTROYER_INHIBITOR_1"
+      hostile_aura = {
+         name = aura_Inhibitor
+         radius = 80
+         apply_on = fleets
+         stack_info = {
+            id = hostile_snare_aura
+            priority = 110
+         }
+         modifier = {
+            ship_windup_mult = 3
+            fleet_emergency_ftl_min_days_mult = 0.25
+        }
+      }
+      prerequisites = {"tech_physics_field_manipulation_232" }
+      ai_weight = {
+         weight = 5
+      }
+   }
+   
+### Subsapce Weapon
+   utility_component_template = {
+      key = "REQUIRED_AURA_DESTROYER_INHIBITOR_1"
+      size = small
+      icon = "GFX_ship_part_Required_Aura_Inhibitor_1"
+      icon_frame = 1
+      power = -130
+      cost = 180
+      component_set = "required_aura_Destroyer"
+      ftl_magnet = yes
+      upgrades_to = "REQUIRED_AURA_DESTROYER_INHIBITOR_2"
+      hostile_aura = {
+         name = aura_Inhibitor
+         radius = 100
+         apply_on = fleets
+         stack_info = {
+            id = hostile_snare_aura
+            priority = 120
+         }
+         modifier = {
+            ship_windup_mult = 4
+            fleet_emergency_ftl_min_days_mult = 0.5
+        }
+      }
+      prerequisites = {"tech_physics_subspace_125" }
+      ai_weight = {
+         weight = 10
+      }
+   }
+   
+### Isolytic Subsapce Weapon
+   utility_component_template = {
+      key = "REQUIRED_AURA_DESTROYER_INHIBITOR_2"
+      size = small
+      icon = "GFX_ship_part_Required_Aura_Inhibitor_2"
+      icon_frame = 1
+      power = -150
+      cost = 210
+      component_set = "required_aura_Destroyer"
+      ftl_magnet = yes
+      upgrades_to = "REQUIRED_AURA_DESTROYER_INHIBITOR_3"
+      hostile_aura = {
+         name = aura_Inhibitor
+         radius = 120
+         apply_on = fleets
+         stack_info = {
+            id = hostile_snare_aura
+            priority = 130
+         }
+         modifier = {
+            ship_windup_mult = 5
+            fleet_emergency_ftl_min_days_mult = 0.75
+        }
+      }
+      prerequisites = {"tech_physics_field_manipulation_238" }
+      ai_weight = {
+         weight = 12
+      }
+   }
+   
+### Temporal Shockwave Snare
+   utility_component_template = {
+      key = "REQUIRED_AURA_DESTROYER_INHIBITOR_3"
+      size = small
+      icon = "GFX_ship_part_Required_Aura_Inhibitor_3"
+      icon_frame = 1
+      power = -160
+      cost = 220
+      component_set = "required_aura_Destroyer"
+      ftl_magnet = yes
+      hostile_aura = {
+         name = aura_Inhibitor
+         radius = 120
+         apply_on = fleets
+         stack_info = {
+            id = hostile_snare_aura
+            priority = 130
+         }
+         modifier = {
+            ship_windup_mult = 6
+            fleet_emergency_ftl_min_days_mult = 1
+        }
+      }
+      prerequisites = {"tech_physics_field_manipulation_131" }
+      ai_weight = {
+         weight = 14
+      }
+   }
+   
+### Tholian Web
+   utility_component_template = {
+      key = "REQUIRED_AURA_DESTROYER_WEB_0"
+      size = small
+      icon = "GFX_ship_part_Required_Aura_Web_0"
+      icon_frame = 1
+      power = -30
+      cost = 40
+      component_set = "required_aura_Destroyer"
+      upgrades_to = "REQUIRED_AURA_DESTROYER_WEB_1"
+      hostile_aura = {
+         name = aura_Web
+         radius = 50
+         apply_on = ships
+         stack_info = {
+            id = hostile_snare_aura
+            priority = 5
+         }
+         modifier = {
+            ship_combat_speed_mult = -0.4
+            ship_speed_mult = -0.4
+            ship_fire_rate_mult = -0.1
+            ship_windup_mult = 2
+        }
+      }
+      prerequisites = {"tech_physics_field_manipulation_239" }
+      ai_weight = {
+         weight = 1000
+      }
+   }
+   
+### Tholian Web Spinner
+   utility_component_template = {
+      key = "REQUIRED_AURA_DESTROYER_WEB_1"
+      size = small
+      icon = "GFX_ship_part_Required_Aura_Web_1"
+      icon_frame = 1
+      power = -60
+      cost = 80
+      component_set = "required_aura_Destroyer"
+      upgrades_to = "REQUIRED_AURA_DESTROYER_WEB_2"
+      hostile_aura = {
+         name = aura_Web
+         radius = 50
+         apply_on = ships
+         stack_info = {
+            id = hostile_snare_aura
+            priority = 6
+         }
+         modifier = {
+            ship_combat_speed_mult = -0.5
+            ship_speed_mult = -0.5
+            ship_fire_rate_mult = -0.15
+            ship_windup_mult = 2.5
+        }
+      }
+      prerequisites = {"tech_physics_field_manipulation_240" }
+      ai_weight = {
+         weight = 1100
+      }
+   }
+   
+### Tholian Web Spinner II
+   utility_component_template = {
+      key = "REQUIRED_AURA_DESTROYER_WEB_2"
+      size = small
+      icon = "GFX_ship_part_Required_Aura_Web_2"
+      icon_frame = 1
+      power = -110
+      cost = 130
+      component_set = "required_aura_Destroyer"
+      hostile_aura = {
+         name = aura_Web
+         radius = 50
+         apply_on = ships
+         stack_info = {
+            id = hostile_snare_aura
+            priority = 6
+         }
+         modifier = {
+            ship_combat_speed_mult = -0.6
+            ship_speed_mult = -0.6
+            ship_fire_rate_mult = -0.2
+            ship_windup_mult = 3
+        }
+      }
+      prerequisites = {"tech_physics_field_manipulation_241" }
+      ai_weight = {
+         weight = 1200
+      }
+   }
+   
+### Breen Energy Dissipator
+   utility_component_template = {
+      key = "REQUIRED_AURA_DESTROYER_BREEN_0"
+      size = small
+      icon = "GFX_ship_part_Required_Aura_Breen_0"
+      icon_frame = 1
+      power = -50
+      cost = 70
+      component_set = "required_aura_Destroyer"
+      upgrades_to = "REQUIRED_AURA_DESTROYER_BREEN_1"
+      hostile_aura = {
+         name = aura_Breen
+         radius = 30
+         apply_on = ships
+         stack_info = {
+            id = hostile_inhibitor_aura
+            priority = 4
+         }
+         modifier = {
+            ship_fire_rate_mult = -0.2
+        }
+      }
+      prerequisites = {"tech_physics_energy_134" }
+      ai_weight = {
+         weight = 1000
+      }
+   }
+   
+### Enhanced Energy Dissipator II
+   utility_component_template = {
+      key = "REQUIRED_AURA_DESTROYER_BREEN_1"
+      size = small
+      icon = "GFX_ship_part_Required_Aura_Breen_1"
+      icon_frame = 1
+      power = -80
+      cost = 90
+      component_set = "required_aura_Destroyer"
+      upgrades_to = "REQUIRED_AURA_DESTROYER_BREEN_2"
+      hostile_aura = {
+         name = aura_Breen
+         radius = 30
+         apply_on = ships
+         stack_info = {
+            id = hostile_inhibitor_aura
+            priority = 7
+         }
+         modifier = {
+            ship_fire_rate_mult = -0.25
+        }
+      }
+      prerequisites = {"tech_physics_particles_322" }
+      ai_weight = {
+         weight = 1100
+      }
+   }
+   
+### Enhanced Energy Dissipator III
+   utility_component_template = {
+      key = "REQUIRED_AURA_DESTROYER_BREEN_2"
+      size = small
+      icon = "GFX_ship_part_Required_Aura_Breen_2"
+      icon_frame = 1
+      power = -130
+      cost = 150
+      component_set = "required_aura_Destroyer"
+      hostile_aura = {
+         name = aura_Breen
+         radius = 30
+         apply_on = ships
+         stack_info = {
+            id = hostile_inhibitor_aura
+            priority = 7
+         }
+         modifier = {
+            ship_fire_rate_mult = -0.3
+        }
+      }
+      prerequisites = {"tech_physics_particles_323" }
+      ai_weight = {
+         weight = 1200
+      }
+   }
+   
+### Borg Tractor Beam
+   utility_component_template = {
+      key = "REQUIRED_AURA_DESTROYER_BORG_TRACTOR_0"
+      size = small
+      icon = "GFX_ship_part_Required_Aura_Borg_tractor_0"
+      icon_frame = 1
+      power = -60
+      cost = 100
+      component_set = "required_aura_Destroyer"
+      upgrades_to = "REQUIRED_AURA_DESTROYER_BORG_TRACTOR_1"
+      hostile_aura = {
+         name = aura_Borg_tractor
+         radius = 25
+         apply_on = ships
+         stack_info = {
+            id = hostile_snare_aura
+            priority = 7
+         }
+         modifier = {
+            ship_combat_speed_mult = -0.2
+            ship_speed_mult = -0.2
+        }
+         damage_per_day = {
+            accuracy = 0.8
+            damage = { min = 10 max = 20 }
+            shield_damage = 1.0
+            shield_penetration = 0.0
+            armor_penetration = 0.5
+         }
+      }
+      prerequisites = {"tech_physics_field_manipulation_219" }
+      ai_weight = {
+         weight = 1000
+      }
+   }
+   
+### Borg Cutting Beam
+   utility_component_template = {
+      key = "REQUIRED_AURA_DESTROYER_BORG_TRACTOR_1"
+      size = small
+      icon = "GFX_ship_part_Required_Aura_Borg_tractor_1"
+      icon_frame = 1
+      power = -110
+      cost = 170
+      component_set = "required_aura_Destroyer"
+      upgrades_to = "REQUIRED_AURA_DESTROYER_BORG_TRACTOR_2"
+      hostile_aura = {
+         name = aura_Borg_tractor
+         radius = 35
+         apply_on = ships
+         stack_info = {
+            id = hostile_snare_aura
+            priority = 8
+         }
+         modifier = {
+            ship_combat_speed_mult = -0.25
+            ship_speed_mult = -0.25
+        }
+         damage_per_day = {
+            accuracy = 0.8
+            damage = { min = 15 max = 30 }
+            shield_damage = 1.0
+            shield_penetration = 0.0
+            armor_penetration = 0.5
+         }
+      }
+      prerequisites = {"tech_physics_field_manipulation_223" }
+      ai_weight = {
+         weight = 1050
+      }
+   }
+   
+### Borg Coherent Cutting Beam
+   utility_component_template = {
+      key = "REQUIRED_AURA_DESTROYER_BORG_TRACTOR_2"
+      size = small
+      icon = "GFX_ship_part_Required_Aura_Borg_tractor_2"
+      icon_frame = 1
+      power = -170
+      cost = 250
+      component_set = "required_aura_Destroyer"
+      hostile_aura = {
+         name = aura_Borg_tractor
+         radius = 35
+         apply_on = ships
+         stack_info = {
+            id = hostile_snare_aura
+            priority = 8
+         }
+         modifier = {
+            ship_combat_speed_mult = -0.3
+            ship_speed_mult = -0.3
+        }
+         damage_per_day = {
+            accuracy = 0.8
+            damage = { min = 20 max = 40 }
+            shield_damage = 1.0
+            shield_penetration = 0.0
+            armor_penetration = 0.5
+         }
+      }
+      prerequisites = {"tech_physics_field_manipulation_227" }
+      ai_weight = {
+         weight = 1100
+      }
+   }
+   
+### Nanite Projector
+   utility_component_template = {
+      key = "REQUIRED_AURA_DESTROYER_BORG_REPAIR_0"
+      size = small
+      icon = "GFX_ship_part_Required_Aura_Borg_repair_0"
+      icon_frame = 1
+      power = -60
+      cost = 100
+      component_set = "required_aura_Destroyer"
+      upgrades_to = "REQUIRED_AURA_DESTROYER_BORG_REPAIR_1"
+      friendly_aura = {
+         name = aura_Borg_repair
+         radius = 80
+         apply_on = ships
+         stack_info = {
+            id = friendly_support_aura
+            priority = 7
+         }
+         modifier = {
+            ship_auto_repair_add = 0.03
+        }
+      }
+      prerequisites = {"tech_society_statecraft_983" }
+      ai_weight = {
+         weight = 7
+      }
+   }
+   
+### Nanite Projector II
+   utility_component_template = {
+      key = "REQUIRED_AURA_DESTROYER_BORG_REPAIR_1"
+      size = small
+      icon = "GFX_ship_part_Required_Aura_Borg_repair_1"
+      icon_frame = 1
+      power = -160
+      cost = 240
+      component_set = "required_aura_Destroyer"
+      friendly_aura = {
+         name = aura_Borg_repair
+         radius = 80
+         apply_on = ships
+         stack_info = {
+            id = friendly_support_aura
+            priority = 7
+         }
+         modifier = {
+            ship_auto_repair_add = 0.05
+        }
+      }
+      prerequisites = {"tech_society_statecraft_988" }
+      ai_weight = {
+         weight = 8
+      }
+   }
+   
+### Borg Adaptive Plexus
+   utility_component_template = {
+      key = "REQUIRED_AURA_DESTROYER_ADAPTIVE_0"
+      size = small
+      icon = "GFX_ship_part_Required_Aura_Adaptive_0"
+      icon_frame = 1
+      power = -90
+      cost = 140
+      component_set = "required_aura_Destroyer"
+      upgrades_to = "REQUIRED_AURA_DESTROYER_ADAPTIVE_1"
+      hostile_aura = {
+         name = aura_Adaptive
+         radius = 50
+         apply_on = ships
+         stack_info = {
+            id = friendly_support_aura
+            priority = 1
+         }
+         modifier = {
+            SHIP_ARMOR_PENETRATION_MULT = -0.3
+        }
+      }
+      prerequisites = {"tech_physics_field_manipulation_221" }
+      ai_weight = {
+         weight = 900
+      }
+   }
+   
+### Borg Multi-Adapative Plexus
+   utility_component_template = {
+      key = "REQUIRED_AURA_DESTROYER_ADAPTIVE_1"
+      size = small
+      icon = "GFX_ship_part_Required_Aura_Adaptive_1"
+      icon_frame = 1
+      power = -140
+      cost = 210
+      component_set = "required_aura_Destroyer"
+      hostile_aura = {
+         name = aura_Adaptive
+         radius = 50
+         apply_on = ships
+         stack_info = {
+            id = friendly_support_aura
+            priority = 2
+         }
+         modifier = {
+            SHIP_ARMOR_PENETRATION_MULT = -0.5
+        }
+      }
+      prerequisites = {"tech_physics_field_manipulation_225" }
+      ai_weight = {
+         weight = 950
+      }
+   }
+   
+### Mine Sweeper
+   utility_component_template = {
+      key = "REQUIRED_AURA_DESTROYER_SWEEPER"
+      size = small
+      icon = "GFX_ship_part_Required_Aura_Sweeper_"
+      icon_frame = 1
+      power = -60
+      cost = 80
+      component_set = "required_aura_Destroyer"
+      friendly_aura = {
+         name = aura_Sweeper
+         radius = 1
+         apply_on = ships
+         stack_info = {
+            id = hostile_minefield_aura
+            priority = 150
+         }
+      }
+      prerequisites = {"tech_engineering_rocketry_1612" }
+      ai_weight = {
+         weight = 1
+      }
+   }
+   
+### Interia Nullifier
+   utility_component_template = {
+      key = "REQUIRED_AURA_DESTROYER_DEFENSE"
+      size = small
+      icon = "GFX_ship_part_Required_Aura_Defense_"
+      icon_frame = 1
+      power = -100
+      cost = 130
+      component_set = "required_aura_Destroyer"
+      friendly_aura = {
+         name = aura_Defense
+         radius = 1
+         apply_on = ships
+         stack_info = {
+            id = hostile_snare_aura
+            priority = 150
+         }
+      }
+      prerequisites = {"tech_physics_field_manipulation_236" }
+      ai_weight = {
+         weight = 100
+      }
+   }
+   
+### Electronic Countermeasures
+   utility_component_template = {
+      key = "REQUIRED_AURA_CRUISER_JAMMER_0"
+      size = small
+      icon = "GFX_ship_part_Required_Aura_Jammer_0"
+      icon_frame = 1
+      power = 0
+      cost = 10
+      component_set = "required_aura_Cruiser"
+      upgrades_to = "REQUIRED_AURA_CRUISER_JAMMER_1"
+      hostile_aura = {
+         name = aura_Jammer
+         radius = 50
+         apply_on = ships
+         stack_info = {
+            id = hostile_inhibitor_aura
+            priority = 1
+         }
+         modifier = {
+            ship_accuracy_add = -4
+        }
+      }
+      prerequisites = {"tech_physics_particles_300" }
+      ai_weight = {
+         weight = 1
+      }
+   }
+   
+### Advanced Electronic Countermeasures
+   utility_component_template = {
+      key = "REQUIRED_AURA_CRUISER_JAMMER_1"
+      size = small
+      icon = "GFX_ship_part_Required_Aura_Jammer_1"
+      icon_frame = 1
+      power = -30
+      cost = 40
+      component_set = "required_aura_Cruiser"
+      upgrades_to = "REQUIRED_AURA_CRUISER_JAMMER_2"
+      hostile_aura = {
+         name = aura_Jammer
+         radius = 50
+         apply_on = ships
+         stack_info = {
+            id = hostile_inhibitor_aura
+            priority = 4
+         }
+         modifier = {
+            ship_accuracy_add = -8
+        }
+      }
+      prerequisites = {"tech_physics_signal_38" }
+      ai_weight = {
+         weight = 4
+      }
+   }
+   
+### Gravimetric Countermeasures
+   utility_component_template = {
+      key = "REQUIRED_AURA_CRUISER_JAMMER_2"
+      size = small
+      icon = "GFX_ship_part_Required_Aura_Jammer_2"
+      icon_frame = 1
+      power = -70
+      cost = 80
+      component_set = "required_aura_Cruiser"
+      upgrades_to = "REQUIRED_AURA_CRUISER_JAMMER_3"
+      hostile_aura = {
+         name = aura_Jammer
+         radius = 50
+         apply_on = ships
+         stack_info = {
+            id = hostile_inhibitor_aura
+            priority = 4
+         }
+         modifier = {
+            ship_accuracy_add = -12
+        }
+      }
+      prerequisites = {"tech_physics_computing_60" }
+      ai_weight = {
+         weight = 6
+      }
+   }
+   
+### Verteron Countermeasures
+   utility_component_template = {
+      key = "REQUIRED_AURA_CRUISER_JAMMER_3"
+      size = small
+      icon = "GFX_ship_part_Required_Aura_Jammer_3"
+      icon_frame = 1
+      power = -100
+      cost = 130
+      component_set = "required_aura_Cruiser"
+      hostile_aura = {
+         name = aura_Jammer
+         radius = 50
+         apply_on = ships
+         stack_info = {
+            id = hostile_inhibitor_aura
+            priority = 9
+         }
+         modifier = {
+            ship_accuracy_add = -16
+        }
+      }
+      prerequisites = {"tech_physics_computing_70" }
+      ai_weight = {
+         weight = 9
+      }
+   }
+   
+### Modulating Shield Frequencies
+   utility_component_template = {
+      key = "REQUIRED_AURA_CRUISER_FREQ"
+      size = small
+      icon = "GFX_ship_part_Required_Aura_Freq_"
+      icon_frame = 1
+      power = -90
+      cost = 100
+      component_set = "required_aura_Cruiser"
+      hostile_aura = {
+         name = aura_Freq
+         radius = 50
+         apply_on = ships
+         stack_info = {
+            id = hostile_inhibitor_aura
+            priority = 8
+         }
+         modifier = {
+            SHIP_SHIELD_PENETRATION_MULT = -0.2
+            SHIP_ARMOR_PENETRATION_MULT = -0.2
+        }
+      }
+      prerequisites = {"tech_physics_field_manipulation_192" }
+      ai_weight = {
+         weight = 8
+      }
+   }
+   
+### Aceton Assimilator
+   utility_component_template = {
+      key = "REQUIRED_AURA_CRUISER_ACETON_0"
+      size = small
+      icon = "GFX_ship_part_Required_Aura_Aceton_0"
+      icon_frame = 1
+      power = -50
+      cost = 60
+      component_set = "required_aura_Cruiser"
+      upgrades_to = "REQUIRED_AURA_CRUISER_ACETON_1"
+      hostile_aura = {
+         name = aura_Aceton
+         radius = 50
+         apply_on = ships
+         stack_info = {
+            id = hostile_inhibitor_aura
+            priority = 5
+         }
+         modifier = {
+            ship_shield_hp_mult = -0.2
+            ship_shield_regen_add_perc = -0.05
+        }
+      }
+      prerequisites = {"tech_physics_aceton_133" }
+      ai_weight = {
+         weight = 5
+      }
+   }
+   
+### Comatizer Mk. II Assimilator
+   utility_component_template = {
+      key = "REQUIRED_AURA_CRUISER_ACETON_1"
+      size = small
+      icon = "GFX_ship_part_Required_Aura_Aceton_1"
+      icon_frame = 1
+      power = -80
+      cost = 90
+      component_set = "required_aura_Cruiser"
+      hostile_aura = {
+         name = aura_Aceton
+         radius = 50
+         apply_on = ships
+         stack_info = {
+            id = hostile_inhibitor_aura
+            priority = 5
+         }
+         modifier = {
+            ship_shield_hp_mult = -0.3
+            ship_shield_regen_add_perc = -0.1
+        }
+      }
+      prerequisites = {"tech_physics_particles_308" }
+      ai_weight = {
+         weight = 8
+      }
+   }
+   
+### Tholian Web
+   utility_component_template = {
+      key = "REQUIRED_AURA_CRUISER_WEB_0"
+      size = small
+      icon = "GFX_ship_part_Required_Aura_Web_0"
+      icon_frame = 1
+      power = -30
+      cost = 40
+      component_set = "required_aura_Cruiser"
+      upgrades_to = "REQUIRED_AURA_CRUISER_WEB_1"
+      hostile_aura = {
+         name = aura_Web
+         radius = 50
+         apply_on = ships
+         stack_info = {
+            id = hostile_snare_aura
+            priority = 5
+         }
+         modifier = {
+            ship_combat_speed_mult = -0.4
+            ship_speed_mult = -0.4
+            ship_fire_rate_mult = -0.1
+            ship_windup_mult = 2
+        }
+      }
+      prerequisites = {"tech_physics_field_manipulation_239" }
+      ai_weight = {
+         weight = 1000
+      }
+   }
+   
+### Tholian Web Spinner
+   utility_component_template = {
+      key = "REQUIRED_AURA_CRUISER_WEB_1"
+      size = small
+      icon = "GFX_ship_part_Required_Aura_Web_1"
+      icon_frame = 1
+      power = -60
+      cost = 80
+      component_set = "required_aura_Cruiser"
+      upgrades_to = "REQUIRED_AURA_CRUISER_WEB_2"
+      hostile_aura = {
+         name = aura_Web
+         radius = 50
+         apply_on = ships
+         stack_info = {
+            id = hostile_snare_aura
+            priority = 6
+         }
+         modifier = {
+            ship_combat_speed_mult = -0.5
+            ship_speed_mult = -0.5
+            ship_fire_rate_mult = -0.15
+            ship_windup_mult = 2.5
+        }
+      }
+      prerequisites = {"tech_physics_field_manipulation_240" }
+      ai_weight = {
+         weight = 1100
+      }
+   }
+   
+### Tholian Web Spinner II
+   utility_component_template = {
+      key = "REQUIRED_AURA_CRUISER_WEB_2"
+      size = small
+      icon = "GFX_ship_part_Required_Aura_Web_2"
+      icon_frame = 1
+      power = -110
+      cost = 130
+      component_set = "required_aura_Cruiser"
+      hostile_aura = {
+         name = aura_Web
+         radius = 50
+         apply_on = ships
+         stack_info = {
+            id = hostile_snare_aura
+            priority = 6
+         }
+         modifier = {
+            ship_combat_speed_mult = -0.6
+            ship_speed_mult = -0.6
+            ship_fire_rate_mult = -0.2
+            ship_windup_mult = 3
+        }
+      }
+      prerequisites = {"tech_physics_field_manipulation_241" }
+      ai_weight = {
+         weight = 1200
+      }
+   }
+   
+### Breen Energy Dissipator
+   utility_component_template = {
+      key = "REQUIRED_AURA_CRUISER_BREEN_0"
+      size = small
+      icon = "GFX_ship_part_Required_Aura_Breen_0"
+      icon_frame = 1
+      power = -50
+      cost = 70
+      component_set = "required_aura_Cruiser"
+      upgrades_to = "REQUIRED_AURA_CRUISER_BREEN_1"
+      hostile_aura = {
+         name = aura_Breen
+         radius = 30
+         apply_on = ships
+         stack_info = {
+            id = hostile_inhibitor_aura
+            priority = 4
+         }
+         modifier = {
+            ship_fire_rate_mult = -0.2
+        }
+      }
+      prerequisites = {"tech_physics_energy_134" }
+      ai_weight = {
+         weight = 1000
+      }
+   }
+   
+### Enhanced Energy Dissipator II
+   utility_component_template = {
+      key = "REQUIRED_AURA_CRUISER_BREEN_1"
+      size = small
+      icon = "GFX_ship_part_Required_Aura_Breen_1"
+      icon_frame = 1
+      power = -80
+      cost = 90
+      component_set = "required_aura_Cruiser"
+      upgrades_to = "REQUIRED_AURA_CRUISER_BREEN_2"
+      hostile_aura = {
+         name = aura_Breen
+         radius = 30
+         apply_on = ships
+         stack_info = {
+            id = hostile_inhibitor_aura
+            priority = 7
+         }
+         modifier = {
+            ship_fire_rate_mult = -0.25
+        }
+      }
+      prerequisites = {"tech_physics_particles_322" }
+      ai_weight = {
+         weight = 1100
+      }
+   }
+   
+### Enhanced Energy Dissipator III
+   utility_component_template = {
+      key = "REQUIRED_AURA_CRUISER_BREEN_2"
+      size = small
+      icon = "GFX_ship_part_Required_Aura_Breen_2"
+      icon_frame = 1
+      power = -130
+      cost = 150
+      component_set = "required_aura_Cruiser"
+      hostile_aura = {
+         name = aura_Breen
+         radius = 30
+         apply_on = ships
+         stack_info = {
+            id = hostile_inhibitor_aura
+            priority = 7
+         }
+         modifier = {
+            ship_fire_rate_mult = -0.3
+        }
+      }
+      prerequisites = {"tech_physics_particles_323" }
+      ai_weight = {
+         weight = 1200
+      }
+   }
+   
+### Borg Tractor Beam
+   utility_component_template = {
+      key = "REQUIRED_AURA_CRUISER_BORG_TRACTOR_0"
+      size = small
+      icon = "GFX_ship_part_Required_Aura_Borg_tractor_0"
+      icon_frame = 1
+      power = -60
+      cost = 100
+      component_set = "required_aura_Cruiser"
+      upgrades_to = "REQUIRED_AURA_CRUISER_BORG_TRACTOR_1"
+      hostile_aura = {
+         name = aura_Borg_tractor
+         radius = 25
+         apply_on = ships
+         stack_info = {
+            id = hostile_snare_aura
+            priority = 7
+         }
+         modifier = {
+            ship_combat_speed_mult = -0.2
+            ship_speed_mult = -0.2
+        }
+         damage_per_day = {
+            accuracy = 0.8
+            damage = { min = 10 max = 20 }
+            shield_damage = 1.0
+            shield_penetration = 0.0
+            armor_penetration = 0.5
+         }
+      }
+      prerequisites = {"tech_physics_field_manipulation_219" }
+      ai_weight = {
+         weight = 1000
+      }
+   }
+   
+### Borg Cutting Beam
+   utility_component_template = {
+      key = "REQUIRED_AURA_CRUISER_BORG_TRACTOR_1"
+      size = small
+      icon = "GFX_ship_part_Required_Aura_Borg_tractor_1"
+      icon_frame = 1
+      power = -110
+      cost = 170
+      component_set = "required_aura_Cruiser"
+      upgrades_to = "REQUIRED_AURA_CRUISER_BORG_TRACTOR_2"
+      hostile_aura = {
+         name = aura_Borg_tractor
+         radius = 35
+         apply_on = ships
+         stack_info = {
+            id = hostile_snare_aura
+            priority = 8
+         }
+         modifier = {
+            ship_combat_speed_mult = -0.25
+            ship_speed_mult = -0.25
+        }
+         damage_per_day = {
+            accuracy = 0.8
+            damage = { min = 15 max = 30 }
+            shield_damage = 1.0
+            shield_penetration = 0.0
+            armor_penetration = 0.5
+         }
+      }
+      prerequisites = {"tech_physics_field_manipulation_223" }
+      ai_weight = {
+         weight = 1050
+      }
+   }
+   
+### Borg Coherent Cutting Beam
+   utility_component_template = {
+      key = "REQUIRED_AURA_CRUISER_BORG_TRACTOR_2"
+      size = small
+      icon = "GFX_ship_part_Required_Aura_Borg_tractor_2"
+      icon_frame = 1
+      power = -170
+      cost = 250
+      component_set = "required_aura_Cruiser"
+      hostile_aura = {
+         name = aura_Borg_tractor
+         radius = 35
+         apply_on = ships
+         stack_info = {
+            id = hostile_snare_aura
+            priority = 8
+         }
+         modifier = {
+            ship_combat_speed_mult = -0.3
+            ship_speed_mult = -0.3
+        }
+         damage_per_day = {
+            accuracy = 0.8
+            damage = { min = 20 max = 40 }
+            shield_damage = 1.0
+            shield_penetration = 0.0
+            armor_penetration = 0.5
+         }
+      }
+      prerequisites = {"tech_physics_field_manipulation_227" }
+      ai_weight = {
+         weight = 1100
+      }
+   }
+   
+### Nanite Projector
+   utility_component_template = {
+      key = "REQUIRED_AURA_CRUISER_BORG_REPAIR_0"
+      size = small
+      icon = "GFX_ship_part_Required_Aura_Borg_repair_0"
+      icon_frame = 1
+      power = -60
+      cost = 100
+      component_set = "required_aura_Cruiser"
+      upgrades_to = "REQUIRED_AURA_CRUISER_BORG_REPAIR_1"
+      friendly_aura = {
+         name = aura_Borg_repair
+         radius = 80
+         apply_on = ships
+         stack_info = {
+            id = friendly_support_aura
+            priority = 7
+         }
+         modifier = {
+            ship_auto_repair_add = 0.03
+        }
+      }
+      prerequisites = {"tech_society_statecraft_983" }
+      ai_weight = {
+         weight = 7
+      }
+   }
+   
+### Nanite Projector II
+   utility_component_template = {
+      key = "REQUIRED_AURA_CRUISER_BORG_REPAIR_1"
+      size = small
+      icon = "GFX_ship_part_Required_Aura_Borg_repair_1"
+      icon_frame = 1
+      power = -160
+      cost = 240
+      component_set = "required_aura_Cruiser"
+      friendly_aura = {
+         name = aura_Borg_repair
+         radius = 80
+         apply_on = ships
+         stack_info = {
+            id = friendly_support_aura
+            priority = 7
+         }
+         modifier = {
+            ship_auto_repair_add = 0.05
+        }
+      }
+      prerequisites = {"tech_society_statecraft_988" }
+      ai_weight = {
+         weight = 10
+      }
+   }
+   
+### Borg Adaptive Plexus
+   utility_component_template = {
+      key = "REQUIRED_AURA_CRUISER_ADAPTIVE_0"
+      size = small
+      icon = "GFX_ship_part_Required_Aura_Adaptive_0"
+      icon_frame = 1
+      power = -90
+      cost = 140
+      component_set = "required_aura_Cruiser"
+      upgrades_to = "REQUIRED_AURA_CRUISER_ADAPTIVE_1"
+      hostile_aura = {
+         name = aura_Adaptive
+         radius = 50
+         apply_on = ships
+         stack_info = {
+            id = friendly_support_aura
+            priority = 1
+         }
+         modifier = {
+            SHIP_ARMOR_PENETRATION_MULT = -0.3
+        }
+      }
+      prerequisites = {"tech_physics_field_manipulation_221" }
+      ai_weight = {
+         weight = 900
+      }
+   }
+   
+### Borg Multi-Adapative Plexus
+   utility_component_template = {
+      key = "REQUIRED_AURA_CRUISER_ADAPTIVE_1"
+      size = small
+      icon = "GFX_ship_part_Required_Aura_Adaptive_1"
+      icon_frame = 1
+      power = -140
+      cost = 210
+      component_set = "required_aura_Cruiser"
+      hostile_aura = {
+         name = aura_Adaptive
+         radius = 50
+         apply_on = ships
+         stack_info = {
+            id = friendly_support_aura
+            priority = 2
+         }
+         modifier = {
+            SHIP_ARMOR_PENETRATION_MULT = -0.5
+        }
+      }
+      prerequisites = {"tech_physics_field_manipulation_225" }
+      ai_weight = {
+         weight = 950
+      }
+   }
+   
+### Mine Sweeper
+   utility_component_template = {
+      key = "REQUIRED_AURA_CRUISER_SWEEPER"
+      size = small
+      icon = "GFX_ship_part_Required_Aura_Sweeper_"
+      icon_frame = 1
+      power = -60
+      cost = 80
+      component_set = "required_aura_Cruiser"
+      friendly_aura = {
+         name = aura_Sweeper
+         radius = 1
+         apply_on = ships
+         stack_info = {
+            id = hostile_minefield_aura
+            priority = 150
+         }
+      }
+      prerequisites = {"tech_engineering_rocketry_1612" }
+      ai_weight = {
+         weight = 1
+      }
+   }
+   
+### Anti-Viral Defenses
+   utility_component_template = {
+      key = "REQUIRED_AURA_CRUISER_DEFENSE"
+      size = small
+      icon = "GFX_ship_part_Required_Aura_Defense_"
+      icon_frame = 1
+      power = -80
+      cost = 110
+      component_set = "required_aura_Cruiser"
+      friendly_aura = {
+         name = aura_Defense
+         radius = 1
+         apply_on = ships
+         stack_info = {
+            id = hostile_inhibitor_aura
+            priority = 100
+         }
+      }
+      prerequisites = {"tech_physics_computing_68" }
+      ai_weight = {
+         weight = 100
+      }
+   }
+   
+### Battle Bridge
+   utility_component_template = {
+      key = "REQUIRED_AURA_BATTLESHIP_BRIDGE_0"
+      size = small
+      icon = "GFX_ship_part_Required_Aura_Bridge_0"
+      icon_frame = 1
+      power = 0
+      cost = 10
+      component_set = "required_aura_Battleship"
+      upgrades_to = "REQUIRED_AURA_BATTLESHIP_BRIDGE_1"
+      friendly_aura = {
+         name = aura_Bridge
+         radius = 40
+         apply_on = ships
+         stack_info = {
+            id = friendly_support_aura
+            priority = 1
+         }
+         modifier = {
+            ship_weapon_damage = 0.01
+            ship_fire_rate_mult = 0.01
+        }
+      }
+      prerequisites = {"tech_defense_army" }
+      ai_weight = {
+         weight = 1
+      }
+   }
+   
+### Fleet Battle Bridge
+   utility_component_template = {
+      key = "REQUIRED_AURA_BATTLESHIP_BRIDGE_1"
+      size = small
+      icon = "GFX_ship_part_Required_Aura_Bridge_1"
+      icon_frame = 1
+      power = -90
+      cost = 100
+      component_set = "required_aura_Battleship"
+      upgrades_to = "REQUIRED_AURA_BATTLESHIP_BRIDGE_2"
+      friendly_aura = {
+         name = aura_Bridge
+         radius = 60
+         apply_on = ships
+         stack_info = {
+            id = friendly_support_aura
+            priority = 5
+         }
+         modifier = {
+            ship_weapon_damage = 0.03
+            ship_fire_rate_mult = 0.03
+        }
+      }
+      prerequisites = {"tech_society_naval_406" }
+      ai_weight = {
+         weight = 5
+      }
+   }
+   
+### Holographic Battle Bridge
+   utility_component_template = {
+      key = "REQUIRED_AURA_BATTLESHIP_BRIDGE_2"
+      size = small
+      icon = "GFX_ship_part_Required_Aura_Bridge_2"
+      icon_frame = 1
+      power = -150
+      cost = 190
+      component_set = "required_aura_Battleship"
+      friendly_aura = {
+         name = aura_Bridge
+         radius = 80
+         apply_on = ships
+         stack_info = {
+            id = friendly_support_aura
+            priority = 10
+         }
+         modifier = {
+            ship_weapon_damage = 0.05
+            ship_fire_rate_mult = 0.05
+        }
+      }
+      prerequisites = {"tech_society_statecraft_965" }
+      ai_weight = {
+         weight = 10
+      }
+   }
+   
+### Holographic Ship Projector
+   utility_component_template = {
+      key = "REQUIRED_AURA_BATTLESHIP_HOLOGRAPHIC"
+      size = small
+      icon = "GFX_ship_part_Required_Aura_Holographic_"
+      icon_frame = 1
+      power = -160
+      cost = 200
+      component_set = "required_aura_Battleship"
+      friendly_aura = {
+         name = aura_Holographic
+         radius = 80
+         apply_on = ships
+         stack_info = {
+            id = friendly_support_aura
+            priority = 11
+         }
+         modifier = {
+            ship_evasion_mult = 0.1
+        }
+      }
+      prerequisites = {"tech_physics_holographic_27" }
+      ai_weight = {
+         weight = 11
+      }
+   }
+   
+### Extended Shield
+   utility_component_template = {
+      key = "REQUIRED_AURA_BATTLESHIP_SHIELD_0"
+      size = small
+      icon = "GFX_ship_part_Required_Aura_Shield_0"
+      icon_frame = 1
+      power = -60
+      cost = 70
+      component_set = "required_aura_Battleship"
+      upgrades_to = "REQUIRED_AURA_BATTLESHIP_SHIELD_1"
+      friendly_aura = {
+         name = aura_Shield
+         radius = 60
+         apply_on = ships
+         stack_info = {
+            id = friendly_support_aura
+            priority = 5
+         }
+         modifier = {
+            ship_shield_regen_add_perc = 0.15
+        }
+      }
+      prerequisites = {"tech_physics_extendable_87" }
+      ai_weight = {
+         weight = 5
+      }
+   }
+   
+### Rotating Extended Shields
+   utility_component_template = {
+      key = "REQUIRED_AURA_BATTLESHIP_SHIELD_1"
+      size = small
+      icon = "GFX_ship_part_Required_Aura_Shield_1"
+      icon_frame = 1
+      power = -110
+      cost = 120
+      component_set = "required_aura_Battleship"
+      friendly_aura = {
+         name = aura_Shield
+         radius = 80
+         apply_on = ships
+         stack_info = {
+            id = friendly_support_aura
+            priority = 8
+         }
+         modifier = {
+            ship_shield_regen_add_perc = 0.25
+        }
+      }
+      prerequisites = {"tech_physics_field_manipulation_194" }
+      ai_weight = {
+         weight = 8
+      }
+   }
+   
+### Mobile Repair Depot
+   utility_component_template = {
+      key = "REQUIRED_AURA_BATTLESHIP_REPAIR_0"
+      size = small
+      icon = "GFX_ship_part_Required_Aura_Repair_0"
+      icon_frame = 1
+      power = -70
+      cost = 80
+      component_set = "required_aura_Battleship"
+      upgrades_to = "REQUIRED_AURA_BATTLESHIP_REPAIR_1"
+      friendly_aura = {
+         name = aura_Repair
+         radius = 80
+         apply_on = ships
+         stack_info = {
+            id = friendly_support_aura
+            priority = 7
+         }
+         modifier = {
+            ship_auto_repair_add = 0.03
+        }
+      }
+      prerequisites = {"tech_society_mobile_409" }
+      ai_weight = {
+         weight = 7
+      }
+   }
+   
+### Nano-Repair Bots Injectors
+   utility_component_template = {
+      key = "REQUIRED_AURA_BATTLESHIP_REPAIR_1"
+      size = small
+      icon = "GFX_ship_part_Required_Aura_Repair_1"
+      icon_frame = 1
+      power = -140
+      cost = 180
+      component_set = "required_aura_Battleship"
+      friendly_aura = {
+         name = aura_Repair
+         radius = 80
+         apply_on = ships
+         stack_info = {
+            id = friendly_support_aura
+            priority = 7
+         }
+         modifier = {
+            ship_auto_repair_add = 0.04
+        }
+      }
+      prerequisites = {"tech_society_statecraft_964" }
+      ai_weight = {
+         weight = 10
+      }
+   }
+   
+### Tholian Web
+   utility_component_template = {
+      key = "REQUIRED_AURA_BATTLESHIP_WEB_0"
+      size = small
+      icon = "GFX_ship_part_Required_Aura_Web_0"
+      icon_frame = 1
+      power = -30
+      cost = 40
+      component_set = "required_aura_Battleship"
+      upgrades_to = "REQUIRED_AURA_BATTLESHIP_WEB_1"
+      hostile_aura = {
+         name = aura_Web
+         radius = 50
+         apply_on = ships
+         stack_info = {
+            id = hostile_snare_aura
+            priority = 5
+         }
+         modifier = {
+            ship_combat_speed_mult = -0.4
+            ship_speed_mult = -0.4
+            ship_fire_rate_mult = -0.1
+            ship_windup_mult = 2
+        }
+      }
+      prerequisites = {"tech_physics_field_manipulation_239" }
+      ai_weight = {
+         weight = 1000
+      }
+   }
+   
+### Tholian Web Spinner
+   utility_component_template = {
+      key = "REQUIRED_AURA_BATTLESHIP_WEB_1"
+      size = small
+      icon = "GFX_ship_part_Required_Aura_Web_1"
+      icon_frame = 1
+      power = -60
+      cost = 80
+      component_set = "required_aura_Battleship"
+      upgrades_to = "REQUIRED_AURA_BATTLESHIP_WEB_2"
+      hostile_aura = {
+         name = aura_Web
+         radius = 50
+         apply_on = ships
+         stack_info = {
+            id = hostile_snare_aura
+            priority = 6
+         }
+         modifier = {
+            ship_combat_speed_mult = -0.5
+            ship_speed_mult = -0.5
+            ship_fire_rate_mult = -0.15
+            ship_windup_mult = 2.5
+        }
+      }
+      prerequisites = {"tech_physics_field_manipulation_240" }
+      ai_weight = {
+         weight = 1100
+      }
+   }
+   
+### Tholian Web Spinner II
+   utility_component_template = {
+      key = "REQUIRED_AURA_BATTLESHIP_WEB_2"
+      size = small
+      icon = "GFX_ship_part_Required_Aura_Web_2"
+      icon_frame = 1
+      power = -110
+      cost = 130
+      component_set = "required_aura_Battleship"
+      hostile_aura = {
+         name = aura_Web
+         radius = 50
+         apply_on = ships
+         stack_info = {
+            id = hostile_snare_aura
+            priority = 6
+         }
+         modifier = {
+            ship_combat_speed_mult = -0.6
+            ship_speed_mult = -0.6
+            ship_fire_rate_mult = -0.2
+            ship_windup_mult = 3
+        }
+      }
+      prerequisites = {"tech_physics_field_manipulation_241" }
+      ai_weight = {
+         weight = 1200
+      }
+   }
+   
+### Breen Energy Dissipator
+   utility_component_template = {
+      key = "REQUIRED_AURA_BATTLESHIP_BREEN_0"
+      size = small
+      icon = "GFX_ship_part_Required_Aura_Breen_0"
+      icon_frame = 1
+      power = -50
+      cost = 70
+      component_set = "required_aura_Battleship"
+      upgrades_to = "REQUIRED_AURA_BATTLESHIP_BREEN_1"
+      hostile_aura = {
+         name = aura_Breen
+         radius = 30
+         apply_on = ships
+         stack_info = {
+            id = hostile_inhibitor_aura
+            priority = 4
+         }
+         modifier = {
+            ship_fire_rate_mult = -0.2
+        }
+      }
+      prerequisites = {"tech_physics_energy_134" }
+      ai_weight = {
+         weight = 1000
+      }
+   }
+   
+### Enhanced Energy Dissipator II
+   utility_component_template = {
+      key = "REQUIRED_AURA_BATTLESHIP_BREEN_1"
+      size = small
+      icon = "GFX_ship_part_Required_Aura_Breen_1"
+      icon_frame = 1
+      power = -80
+      cost = 90
+      component_set = "required_aura_Battleship"
+      upgrades_to = "REQUIRED_AURA_BATTLESHIP_BREEN_2"
+      hostile_aura = {
+         name = aura_Breen
+         radius = 30
+         apply_on = ships
+         stack_info = {
+            id = hostile_inhibitor_aura
+            priority = 7
+         }
+         modifier = {
+            ship_fire_rate_mult = -0.25
+        }
+      }
+      prerequisites = {"tech_physics_particles_322" }
+      ai_weight = {
+         weight = 1100
+      }
+   }
+   
+### Enhanced Energy Dissipator III
+   utility_component_template = {
+      key = "REQUIRED_AURA_BATTLESHIP_BREEN_2"
+      size = small
+      icon = "GFX_ship_part_Required_Aura_Breen_2"
+      icon_frame = 1
+      power = -130
+      cost = 150
+      component_set = "required_aura_Battleship"
+      hostile_aura = {
+         name = aura_Breen
+         radius = 30
+         apply_on = ships
+         stack_info = {
+            id = hostile_inhibitor_aura
+            priority = 7
+         }
+         modifier = {
+            ship_fire_rate_mult = -0.3
+        }
+      }
+      prerequisites = {"tech_physics_particles_323" }
+      ai_weight = {
+         weight = 1200
+      }
+   }
+   
+### Borg Tractor Beam
+   utility_component_template = {
+      key = "REQUIRED_AURA_BATTLESHIP_BORG_TRACTOR_0"
+      size = small
+      icon = "GFX_ship_part_Required_Aura_Borg_tractor_0"
+      icon_frame = 1
+      power = -60
+      cost = 100
+      component_set = "required_aura_Battleship"
+      upgrades_to = "REQUIRED_AURA_BATTLESHIP_BORG_TRACTOR_1"
+      hostile_aura = {
+         name = aura_Borg_tractor
+         radius = 25
+         apply_on = ships
+         stack_info = {
+            id = hostile_snare_aura
+            priority = 7
+         }
+         modifier = {
+            ship_combat_speed_mult = -0.2
+            ship_speed_mult = -0.2
+        }
+         damage_per_day = {
+            accuracy = 0.8
+            damage = { min = 10 max = 20 }
+            shield_damage = 1.0
+            shield_penetration = 0.0
+            armor_penetration = 0.5
+         }
+      }
+      prerequisites = {"tech_physics_field_manipulation_219" }
+      ai_weight = {
+         weight = 1000
+      }
+   }
+   
+### Borg Cutting Beam
+   utility_component_template = {
+      key = "REQUIRED_AURA_BATTLESHIP_BORG_TRACTOR_1"
+      size = small
+      icon = "GFX_ship_part_Required_Aura_Borg_tractor_1"
+      icon_frame = 1
+      power = -110
+      cost = 170
+      component_set = "required_aura_Battleship"
+      upgrades_to = "REQUIRED_AURA_BATTLESHIP_BORG_TRACTOR_2"
+      hostile_aura = {
+         name = aura_Borg_tractor
+         radius = 35
+         apply_on = ships
+         stack_info = {
+            id = hostile_snare_aura
+            priority = 8
+         }
+         modifier = {
+            ship_combat_speed_mult = -0.25
+            ship_speed_mult = -0.25
+        }
+         damage_per_day = {
+            accuracy = 0.8
+            damage = { min = 15 max = 30 }
+            shield_damage = 1.0
+            shield_penetration = 0.0
+            armor_penetration = 0.5
+         }
+      }
+      prerequisites = {"tech_physics_field_manipulation_223" }
+      ai_weight = {
+         weight = 1050
+      }
+   }
+   
+### Borg Coherent Cutting Beam
+   utility_component_template = {
+      key = "REQUIRED_AURA_BATTLESHIP_BORG_TRACTOR_2"
+      size = small
+      icon = "GFX_ship_part_Required_Aura_Borg_tractor_2"
+      icon_frame = 1
+      power = -170
+      cost = 250
+      component_set = "required_aura_Battleship"
+      hostile_aura = {
+         name = aura_Borg_tractor
+         radius = 35
+         apply_on = ships
+         stack_info = {
+            id = hostile_snare_aura
+            priority = 8
+         }
+         modifier = {
+            ship_combat_speed_mult = -0.3
+            ship_speed_mult = -0.3
+        }
+         damage_per_day = {
+            accuracy = 0.8
+            damage = { min = 20 max = 40 }
+            shield_damage = 1.0
+            shield_penetration = 0.0
+            armor_penetration = 0.5
+         }
+      }
+      prerequisites = {"tech_physics_field_manipulation_227" }
+      ai_weight = {
+         weight = 1100
+      }
+   }
+   
+### Nanite Projector
+   utility_component_template = {
+      key = "REQUIRED_AURA_BATTLESHIP_BORG_REPAIR_0"
+      size = small
+      icon = "GFX_ship_part_Required_Aura_Borg_repair_0"
+      icon_frame = 1
+      power = -60
+      cost = 100
+      component_set = "required_aura_Battleship"
+      upgrades_to = "REQUIRED_AURA_BATTLESHIP_BORG_REPAIR_1"
+      friendly_aura = {
+         name = aura_Borg_repair
+         radius = 80
+         apply_on = ships
+         stack_info = {
+            id = friendly_support_aura
+            priority = 7
+         }
+         modifier = {
+            ship_auto_repair_add = 0.03
+        }
+      }
+      prerequisites = {"tech_society_statecraft_983" }
+      ai_weight = {
+         weight = 7
+      }
+   }
+   
+### Nanite Projector II
+   utility_component_template = {
+      key = "REQUIRED_AURA_BATTLESHIP_BORG_REPAIR_1"
+      size = small
+      icon = "GFX_ship_part_Required_Aura_Borg_repair_1"
+      icon_frame = 1
+      power = -160
+      cost = 240
+      component_set = "required_aura_Battleship"
+      friendly_aura = {
+         name = aura_Borg_repair
+         radius = 80
+         apply_on = ships
+         stack_info = {
+            id = friendly_support_aura
+            priority = 7
+         }
+         modifier = {
+            ship_auto_repair_add = 0.05
+        }
+      }
+      prerequisites = {"tech_society_statecraft_988" }
+      ai_weight = {
+         weight = 10
+      }
+   }
+   
+### Borg Adaptive Plexus
+   utility_component_template = {
+      key = "REQUIRED_AURA_BATTLESHIP_ADAPTIVE_0"
+      size = small
+      icon = "GFX_ship_part_Required_Aura_Adaptive_0"
+      icon_frame = 1
+      power = -90
+      cost = 140
+      component_set = "required_aura_Battleship"
+      upgrades_to = "REQUIRED_AURA_BATTLESHIP_ADAPTIVE_1"
+      hostile_aura = {
+         name = aura_Adaptive
+         radius = 50
+         apply_on = ships
+         stack_info = {
+            id = friendly_support_aura
+            priority = 1
+         }
+         modifier = {
+            SHIP_ARMOR_PENETRATION_MULT = -0.3
+        }
+      }
+      prerequisites = {"tech_physics_field_manipulation_221" }
+      ai_weight = {
+         weight = 900
+      }
+   }
+   
+### Borg Multi-Adapative Plexus
+   utility_component_template = {
+      key = "REQUIRED_AURA_BATTLESHIP_ADAPTIVE_1"
+      size = small
+      icon = "GFX_ship_part_Required_Aura_Adaptive_1"
+      icon_frame = 1
+      power = -140
+      cost = 210
+      component_set = "required_aura_Battleship"
+      hostile_aura = {
+         name = aura_Adaptive
+         radius = 50
+         apply_on = ships
+         stack_info = {
+            id = friendly_support_aura
+            priority = 2
+         }
+         modifier = {
+            SHIP_ARMOR_PENETRATION_MULT = -0.5
+        }
+      }
+      prerequisites = {"tech_physics_field_manipulation_225" }
+      ai_weight = {
+         weight = 950
+      }
+   }
+   
+### Mine Sweeper
+   utility_component_template = {
+      key = "REQUIRED_AURA_BATTLESHIP_SWEEPER"
+      size = small
+      icon = "GFX_ship_part_Required_Aura_Sweeper_"
+      icon_frame = 1
+      power = -60
+      cost = 80
+      component_set = "required_aura_Battleship"
+      friendly_aura = {
+         name = aura_Sweeper
+         radius = 1
+         apply_on = ships
+         stack_info = {
+            id = hostile_minefield_aura
+            priority = 150
+         }
+      }
+      prerequisites = {"tech_engineering_rocketry_1612" }
+      ai_weight = {
+         weight = 1
+      }
+   }
+   
+### Exotic Matter Torpedo
+   utility_component_template = {
+      key = "REQUIRED_AURA_BATTLESHIP_DISRUPT"
+      size = small
+      icon = "GFX_ship_part_Required_Aura_Disrupt_"
+      icon_frame = 1
+      power = -40
+      cost = 50
+      component_set = "required_aura_Battleship"
+      hostile_aura = {
+         name = aura_Disrupt
+         radius = 50
+         apply_on = ships
+         stack_info = {
+            id = friendly_support_aura
+            priority = 100
+         }
+      }
+      prerequisites = {"tech_engineering_rocketry_1604" }
+      ai_weight = {
+         weight = 2
+      }
+   }
+   
+### Drydock Worker Bees
+   utility_component_template = {
+      key = "REQUIRED_AURA_DRYDOCK_REPAIR_0"
+      size = small
+      icon = "GFX_ship_part_Required_Aura_Repair_0"
+      icon_frame = 1
+      power = -105
+      cost = 140
+      component_set = "required_aura_Drydock"
+      upgrades_to = "REQUIRED_AURA_DRYDOCK_REPAIR_1"
+      friendly_aura = {
+         name = aura_Repair
+         radius = 150
+         apply_on = ships
+         stack_info = {
+            id = friendly_support_aura
+            priority = 3
+         }
+         modifier = {
+            ship_auto_repair_add = 0.1
+            ship_shield_regen_add_perc = 0.1
+        }
+      }
+      prerequisites = {"tech_engineering_deep_563" }
+      ai_weight = {
+         weight = 1
+      }
+   }
+   
+### Enhanced worker Bees
+   utility_component_template = {
+      key = "REQUIRED_AURA_DRYDOCK_REPAIR_1"
+      size = small
+      icon = "GFX_ship_part_Required_Aura_Repair_1"
+      icon_frame = 1
+      power = -315
+      cost = 350
+      component_set = "required_aura_Drydock"
+      upgrades_to = "REQUIRED_AURA_DRYDOCK_REPAIR_2"
+      friendly_aura = {
+         name = aura_Repair
+         radius = 150
+         apply_on = ships
+         stack_info = {
+            id = friendly_support_aura
+            priority = 6
+         }
+         modifier = {
+            ship_auto_repair_add = 0.15
+            ship_shield_regen_add_perc = 0.15
+        }
+      }
+      prerequisites = {"tech_engineering_industry_1279" }
+      ai_weight = {
+         weight = 2
+      }
+   }
+   
+### Nanite Worker Bees
+   utility_component_template = {
+      key = "REQUIRED_AURA_DRYDOCK_REPAIR_2"
+      size = small
+      icon = "GFX_ship_part_Required_Aura_Repair_2"
+      icon_frame = 1
+      power = -455
+      cost = 590
+      component_set = "required_aura_Drydock"
+      friendly_aura = {
+         name = aura_Repair
+         radius = 150
+         apply_on = ships
+         stack_info = {
+            id = friendly_support_aura
+            priority = 10
+         }
+         modifier = {
+            ship_auto_repair_add = 0.2
+            ship_shield_regen_add_perc = 0.2
+        }
+      }
+      prerequisites = {"tech_engineering_mass-scale_566" }
+      ai_weight = {
+         weight = 3
+      }
+   }
+   
+### Nuclear Mines
+   utility_component_template = {
+      key = "REQUIRED_AURA_MINEFIELD_EXPLODE_0"
+      size = small
+      icon = "GFX_ship_part_Required_Aura_Explode_0"
+      icon_frame = 1
+      power = -40
+      cost = 80
+      component_set = "required_aura_Minefield"
+      upgrades_to = "REQUIRED_AURA_MINEFIELD_EXPLODE_1"
+      hostile_aura = {
+         name = aura_Explode
+         radius = 110
+         apply_on = ships
+         stack_info = {
+            id = hostile_minefield_aura
+            priority = 100
+         }
+         graphics = {
+            area_effect = {
+               entity = "circle_area_entity"
+               dynamic_scale = yes
+            }
+         area_effect = {
+            entity = "mine_field_small_entity"
+            dynamic_scale = no
+         }
+         ship_effect = {
+            entity = "ship_aura_minefield_entity"
+            dynamic_scale = no
+         }
+      }
+         damage_per_day = {
+            accuracy = 0.5
+            damage = { min = 50 max = 100 }
+            shield_damage = 1.0
+            shield_penetration = 0.0
+            armor_penetration = 0.5
+         }
+      }
+      prerequisites = {"tech_engineering_nuclear_702" }
+      ai_weight = {
+         weight = 1
+      }
+   }
+   
+### Magnetic Mines
+   utility_component_template = {
+      key = "REQUIRED_AURA_MINEFIELD_EXPLODE_1"
+      size = small
+      icon = "GFX_ship_part_Required_Aura_Explode_1"
+      icon_frame = 1
+      power = -120
+      cost = 160
+      component_set = "required_aura_Minefield"
+      upgrades_to = "REQUIRED_AURA_MINEFIELD_EXPLODE_2"
+      hostile_aura = {
+         name = aura_Explode
+         radius = 110
+         apply_on = ships
+         stack_info = {
+            id = hostile_minefield_aura
+            priority = 110
+         }
+         graphics = {
+            area_effect = {
+               entity = "circle_area_entity"
+               dynamic_scale = yes
+            }
+         area_effect = {
+            entity = "mine_field_small_entity"
+            dynamic_scale = no
+         }
+         ship_effect = {
+            entity = "ship_aura_minefield_entity"
+            dynamic_scale = no
+         }
+      }
+         damage_per_day = {
+            accuracy = 0.7
+            damage = { min = 60 max = 120 }
+            shield_damage = 1.0
+            shield_penetration = 0.0
+            armor_penetration = 0.5
+         }
+      }
+      prerequisites = {"tech_engineering_magnetic_703" }
+      ai_weight = {
+         weight = 2
+      }
+   }
+   
+### Anti-Matter Mines
+   utility_component_template = {
+      key = "REQUIRED_AURA_MINEFIELD_EXPLODE_2"
+      size = small
+      icon = "GFX_ship_part_Required_Aura_Explode_2"
+      icon_frame = 1
+      power = -240
+      cost = 280
+      component_set = "required_aura_Minefield"
+      upgrades_to = "REQUIRED_AURA_MINEFIELD_EXPLODE_3"
+      hostile_aura = {
+         name = aura_Explode
+         radius = 110
+         apply_on = ships
+         stack_info = {
+            id = hostile_minefield_aura
+            priority = 120
+         }
+         graphics = {
+            area_effect = {
+               entity = "circle_area_entity"
+               dynamic_scale = yes
+            }
+         area_effect = {
+            entity = "mine_field_small_entity"
+            dynamic_scale = no
+         }
+         ship_effect = {
+            entity = "ship_aura_minefield_entity"
+            dynamic_scale = no
+         }
+      }
+         damage_per_day = {
+            accuracy = 0.7
+            damage = { min = 80 max = 160 }
+            shield_damage = 1.0
+            shield_penetration = 0.0
+            armor_penetration = 0.5
+         }
+      }
+      prerequisites = {"tech_engineering_anti-matter_704" }
+      ai_weight = {
+         weight = 3
+      }
+   }
+   
+### Tricobalt Mines
+   utility_component_template = {
+      key = "REQUIRED_AURA_MINEFIELD_EXPLODE_3"
+      size = small
+      icon = "GFX_ship_part_Required_Aura_Explode_3"
+      icon_frame = 1
+      power = -360
+      cost = 400
+      component_set = "required_aura_Minefield"
+      upgrades_to = "REQUIRED_AURA_MINEFIELD_EXPLODE_4"
+      hostile_aura = {
+         name = aura_Explode
+         radius = 110
+         apply_on = ships
+         stack_info = {
+            id = hostile_minefield_aura
+            priority = 130
+         }
+         graphics = {
+            area_effect = {
+               entity = "circle_area_entity"
+               dynamic_scale = yes
+            }
+         area_effect = {
+            entity = "mine_field_small_entity"
+            dynamic_scale = no
+         }
+         ship_effect = {
+            entity = "ship_aura_minefield_entity"
+            dynamic_scale = no
+         }
+      }
+         damage_per_day = {
+            accuracy = 0.7
+            damage = { min = 100 max = 200 }
+            shield_damage = 1.0
+            shield_penetration = 0.0
+            armor_penetration = 0.5
+         }
+      }
+      prerequisites = {"tech_engineering_tricolbat_705" }
+      ai_weight = {
+         weight = 4
+      }
+   }
+   
+### Self-Replicating Mines
+   utility_component_template = {
+      key = "REQUIRED_AURA_MINEFIELD_EXPLODE_4"
+      size = small
+      icon = "GFX_ship_part_Required_Aura_Explode_4"
+      icon_frame = 1
+      power = -480
+      cost = 520
+      component_set = "required_aura_Minefield"
+      hostile_aura = {
+         name = aura_Explode
+         radius = 110
+         apply_on = ships
+         stack_info = {
+            id = hostile_minefield_aura
+            priority = 140
+         }
+         graphics = {
+            area_effect = {
+               entity = "circle_area_entity"
+               dynamic_scale = yes
+            }
+         area_effect = {
+            entity = "mine_field_small_entity"
+            dynamic_scale = no
+         }
+         ship_effect = {
+            entity = "ship_aura_minefield_entity"
+            dynamic_scale = no
+         }
+      }
+         damage_per_day = {
+            accuracy = 0.8
+            damage = { min = 110 max = 220 }
+            shield_damage = 1.0
+            shield_penetration = 0.0
+            armor_penetration = 0.5
+         }
+      }
+      prerequisites = {"tech_engineering_self-replicating_706" }
+      ai_weight = {
+         weight = 5
+      }
+   }
+   

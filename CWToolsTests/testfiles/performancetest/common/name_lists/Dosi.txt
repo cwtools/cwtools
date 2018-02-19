@@ -1,0 +1,97 @@
+﻿### Dosi by EHKodiak
+Dosi = {
+	randomized = no
+
+	ship_names = {
+		generic = {
+		"Free Market" "Opportune Enterprise" Bazaar Medina Attainer Kingmaker Venture "Errant Venture" Freebooter Cutpurse Endowment "Leveraged Buyout" Margin Merchant Merger Constite Invigorator Innervater Acquisition Animater Tradesman Accrue Accumulate "Aggressive Adjustment" "Barter Bear" "Bear Market" "Bull Market" "Red Chip" "Broker's Bank" "Escrow Merchant" "Stock Delivery" "Fiscal Floater" "Capital Gain" "Bankrupt Bank"
+		}
+		corvette = {
+		}
+		saber = {
+		}
+		sovereign = {
+		}
+		steamrunner = {
+		}		
+		adv_cruiser = {
+		}
+		strike = {
+		}	
+		constructor = { }
+		colonizer = { }
+		science = { }
+		transport = { }
+		outpost_station = {
+			sequential_name = "Frontier Outpost"
+		}
+	}
+
+	fleet_names = {
+		sequential_name = "%O% Fleet"
+	}
+	
+	army_names = {
+		defense_army = {
+			sequential_name = "%O% Dosi Guards"
+		}
+		assault_army = {
+			sequential_name = "%O% Enforcer Corps"
+		}
+		slave_army = {
+			sequential_name = "%O% Indentured Defence Force"
+		}
+		clone_army = { 
+			sequential_name = "%O% Clone Defence Force"
+		}
+		robotic_army = {
+			sequential_name = "%O% Mechanical Defence Force"
+		}
+		android_army = {
+			sequential_name = "%O% Synthetic Defence Force"
+		}
+		psionic_army = { 
+			sequential_name = "%O% Psi Defence Force"
+		}
+		xenomorph_army = {
+			sequential_name = "%O% Bio-Warfare Defence Force"
+		}
+		gene_warrior_army = {
+			sequential_name = "%O% Bio-Engineered Defence Force"
+		}
+	}
+
+	planet_names = {
+		generic = {
+			names = { 
+			}
+		}
+	}
+
+
+	### CHARACTERS Dosi male names are hard with a soft ending usually a U whilst female have softer names with Zy being prominant. Male royalty have harder sounding suffix
+
+	character_names = {
+		names1 = {
+			weight = 40
+			first_names_male = {
+			Inglatu Alemantu Antartu Austu Belgutu Bratu Bulgatu Canatu Chiptu Dinamartu Escoctu Eslovaktu Esloventu Anatu Francit Galestu Greciatu Hungitu Inglatertu Irlantu Islanditu Luxburtu Marruecotu Nuetu  Najostu Polonitu Rumanitu Reitu Estadotu Sudicatu Suecitu Suitu Zelantu Unitu Unidotu Mantu Logati Kodi
+			}
+			first_names_female = {
+			Zyree Zybel Zybele Zybeles Zybell Zybee Zycada Zycaeda Zycaida Zycala Zycayda Zycelee Zycelia Zycelie Zycely Zyee Zylee Zylia Zylie Zylae Zydnee Zydra Zydrah Zyeara Zyearra Zyerria Zyel Zyelo Zyen Zyera Zyere Zyeria Zyerra Zyerrah Zyerre Zyerria Zygdem Zykada Zykaeda Zykaida Zykayda Zyle Zyli Zylia Zylina Zylka Zylla Zylle Zyllee Zylee Zyllee Zylly Zym Zymberlee Zymburley Zymone Zyn Zynamon Zynara Zynberlee Zynda Zyndal Zyndea Zyndee Zyndel Zyndell Zyndee Zynderel Zynderela Zynderele Zynderell Zynderee Zyndereeh Zynderee Zyndee Zyndi Zyndia Zyndie Zyndl Zyndra Zyndy Zyndyl Zynia Zynna Zynnabar Zynnamon Zynnamond Zynnia Zynnie Zynny Zynta Zyntah Zyntha Zynthea Zynthia Zynthie Zynthy Zynthya Zynthyia Zyntia Zyntra Zynxia Zynzia Zyona Zyonah Zyora Zyoria Zyorsdan Zyorstag Zyorstaidh Zyorstan Zyorstiadh Zypora Zypporah Zypria Zypriana Zypriano Zyprina Zyqala Zyqalla Zyra Zyrah Zyrce Zyrcea Zyrceah Zyrcee Zyrcee Zyre Zye Zyrcy Zyrenia Zyri Zyria Zyriaca Zyril Zyrila Zyrilia Zyrilla Zyrinea 
+			}
+			second_names = {
+			" "
+			}
+			regnal_first_names_male = {
+			Inglatam Alemantam Antartam Austam Belgutam Bratam Bulgatam Canatam Chiptam Dinamartam Escoctam Eslovaktam Esloventam Anatam Francit Galestam Greciatam Hungitam Inglatertam Irlantam Islanditam Luxburtam Marruecotam Nuetam  Najostam Polonitam Rumanitam Reitam Estadotam Sudicatam Suecitam Suitam Zelantam Unitam Unidotam Mantam Kodam
+			}
+			regnal_first_names_female = {
+			Zyree Zybel Zybele Zybeles Zybell Zybee Zycada Zycaeda Zycaida Zycala Zycayda Zycelee Zycelia Zycelie Zycely Zyee Zylee Zylia Zylie Zylae Zydnee Zydra Zydrah Zyeara Zyearra Zyerria Zyel Zyelo Zyen Zyera Zyere Zyeria Zyerra Zyerrah Zyerre Zyerria Zygdem Zykada Zykaeda Zykaida Zykayda Zyle Zyli Zylia Zylina Zylka Zylla Zylle Zyllee Zylee Zyllee Zylly Zym Zymberlee Zymburley Zymone Zyn Zynamon Zynara Zynberlee Zynda Zyndal Zyndea Zyndee Zyndel Zyndell Zyndee Zynderel Zynderela Zynderele Zynderell Zynderee Zyndereeh Zynderee Zyndee Zyndi Zyndia Zyndie Zyndl Zyndra Zyndy Zyndyl Zynia Zynna Zynnabar Zynnamon Zynnamond Zynnia Zynnie Zynny Zynta Zyntah Zyntha Zynthea Zynthia Zynthie Zynthy Zynthya Zynthyia Zyntia Zyntra Zynxia Zynzia Zyona Zyonah Zyora Zyoria Zyorsdan Zyorstag Zyorstaidh Zyorstan Zyorstiadh Zypora Zypporah Zypria Zypriana Zypriano Zyprina Zyqala Zyqalla Zyra Zyrah Zyrce Zyrcea Zyrceah Zyrcee Zyrcee Zyre Zye Zyrcy Zyrenia Zyri Zyria Zyriaca Zyril Zyrila Zyrilia Zyrilla Zyrinea 
+			}
+			regnal_second_names = {
+			" "
+			}
+		}
+	}
+}

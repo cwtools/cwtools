@@ -1,0 +1,98 @@
+﻿### Gorn
+Gorn = {
+	randomized = no
+
+	ship_names = {
+		generic = {
+			Vishap Naga Tuatara Draguas Zilant Varanus Balaur Cuelebre Kulshedra Coca Slibinas Drakon Evren Dreq Bolla "Vere Celen" Zburator Hydra Makar Neak Imoogi Bakunawa Vibria Wyvern Bisterne Azazek "Azhi Dahaka" Qinglong Fafnir Gorynych Guivres Jormungandr Kur Illuyankas Lagarfljotsormurinn Ladon Ikuchi Leviathan Lotan Sirrush Nidhogg Ouroboros Orochi Ryujin Sarkany Tarasque Thevetat Tiamat Abzu Thordak Umbrasyl Raishan Amaru Brimscythe Voragul Vritra Typhon Alduin
+		}
+		corvette = {
+		}
+		saber = {
+		}
+		sovereign = {
+		}
+		steamrunner = {
+		}		
+		adv_cruiser = {
+		}
+		strike = {
+		}	
+		constructor = { }
+		colonizer = { }
+		science = { }
+		transport = { }
+		outpost_station = {
+			sequential_name = "Frontier Outpost"
+		}
+	}
+
+	fleet_names = {
+		sequential_name = "%O% Fleet"
+	}
+	
+	army_names = {
+		defense_army = {
+			sequential_name = "%O% Gorn Guard"
+		}
+		assault_army = {
+			sequential_name = "%O% Raiders"
+		}
+		slave_army = {
+			sequential_name = "%O% Enslaved Troops"
+		}
+		clone_army = { 
+			sequential_name = "%O% Clone Defence Force"
+		}
+		robotic_army = {
+			sequential_name = "%O% Mechanical Defence Force"
+		}
+		android_army = {
+			sequential_name = "%O% Synthetic Defence Force"
+		}
+		psionic_army = { 
+			sequential_name = "%O% Psi Defence Force"
+		}
+		xenomorph_army = {
+			sequential_name = "%O% Bio-Warfare Defence Force"
+		}
+		gene_warrior_army = {
+			sequential_name = "%O% Bio-Engineered Defence Force"
+		}
+	}
+
+	planet_names = {
+		generic = {
+			names = {
+				Agornu Axelot Bygoth Cenotaph Garag Gihdahr Koreb Maltharin Ozannot Rogg S'snagor Seudath Talgat S'zakouk Sreemar Nazs Acukan Xeelath Zhodaar Kog Fezzan Teets Lozelak Frayah Sladous Azsamal S'ladous S'lazzan S'starr
+			}
+		}
+	}
+
+
+	### CHARACTERS
+
+	character_names = {
+		names1 = {
+			weight = 100
+			first_names_male = {		
+				S'sslaa Dasuzzan Zhoyah S'snerd K'an Xeetar Feerozs Graand Hedrees Sogirz Morsiget Hemal S'tathis Gadaar K'sallk Seezaar Xeelath Teelet Azakazs S'taalet Masandas S'sleerith Lerayith Hesakazs Ezayak Fidin Bazin Trakazs S'kaachat Xar S'loth
+			}
+			first_names_female = {
+				Dasuzzan Zhoyah S'snerd K'an Xeetar Feerozs Graand Hedrees Sogirz Morsiget Hemal S'tathis Gadaar K'sallk Seezaar Xeelath Teelet Azakazs S'taalet Masandas S'sleerith Lerayith Hesakazs Ezayak Fidin Bazin Trakazs S'kaachat Xar
+			}
+			second_names = {
+				""
+			}
+			regnal_first_names_male = {
+				S'sslaa Dasuzzan Zhoyah S'snerd K'an Xeetar Feerozs Graand Hedrees Sogirz Morsiget Hemal S'tathis Gadaar K'sallk Seezaar Xeelath Teelet Azakazs S'taalet Masandas S'sleerith Lerayith Hesakazs Ezayak Fidin Bazin Trakazs S'kaachat Xar S'loth
+			}
+			regnal_first_names_female = {
+				Dasuzzan Zhoyah S'snerd K'an Xeetar Feerozs Graand Hedrees Sogirz Morsiget Hemal S'tathis Gadaar K'sallk Seezaar Xeelath Teelet Azakazs S'taalet Masandas S'sleerith Lerayith Hesakazs Ezayak Fidin Bazin Trakazs S'kaachat Xar
+			}
+			regnal_second_names = {
+				""
+			}
+		}
+	}
+}

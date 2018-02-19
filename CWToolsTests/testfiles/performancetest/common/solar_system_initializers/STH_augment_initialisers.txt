@@ -1,0 +1,172 @@
+#Augments System Spawn
+augment_system_event_spawn = {
+	name = "Navam Suraj"
+	class = sc_g
+	
+	planet = {
+		name = "Navam Suraj"
+		class = star
+		size = 30
+		orbit_distance = 0
+		orbit_angle = 1
+		has_ring = no
+	}
+	change_orbit = { min = 30 max = 40}
+	planet = {
+		name = "Navam Suraj I"
+		class = "pc_b_class"
+		size = 8
+		orbit_angle = { min = 45 max = 270 }
+		has_ring = no
+	}
+	change_orbit = { min = 20 max = 30}
+	planet = {
+		name = "Navam Suraj II"
+		class = "pc_b_class"
+		size = 8
+		orbit_angle = { min = 45 max = 270 }
+		has_ring = no
+		init_effect = {
+			orbital_deposit_tile = {
+				clear_deposits = yes
+				add_deposit = d_sr_trellium_1_deposit
+			}
+		}
+	}
+	change_orbit = { min = 20 max = 30}
+	planet = {
+		name = "Navam Vishav"
+		class = "pc_arid"
+		size = 20
+		orbit_angle = { min = 45 max = 270 }
+		starting_planet = no
+		tile_blockers = none
+		has_ring = no
+		init_effect = {
+			prevent_anomaly = yes
+			create_species = {
+				name = "Human Augment"
+				class = FED
+				portrait = humanAugment
+				homeworld = THIS
+				traits = { trait = "trait_strong" trait = "trait_resilient" trait = "trait_intelligent" ideal_planet_class = "pc_continental" }
+			}
+			last_created_species = { save_event_target_as = humanAugment }
+			create_country = {
+				name = "Augment Khanate"
+				ship_prefix = "KV"
+				type = default
+				ignore_initial_colony_error = yes
+				civics = random #CHANGE
+				authority = auth_imperial #CHANGE
+				name_list = "Human"
+				ethos = { ethic = "ethic_xenophobe" ethic = "ethic_authoritarian" }
+				species = event_target:humanAugment
+				flag = {
+					icon = { category = "trek" file = "Khanate.dds" }
+					background = { category = "backgrounds" file = "flame_circle.dds" }
+					colors = { "red" "orange" "null" "null" }
+				}
+				effect = {
+					set_graphical_culture = generic_01
+					set_country_flag = augment_khanate
+					give_technology = { tech = "tech_phaser_cannon_1" }
+					give_technology = { tech = tech_engineering_starship-class_717 }
+				}
+			}
+			create_colony = {
+				owner = last_created_country
+				species = event_target:humanAugment
+				ethos = owner
+			}
+			random_tile = {
+				limit = {
+					has_blocker = no
+					has_grown_pop = no
+					has_growing_pop = no
+				}
+				create_pop = {
+					species = event_target:humanAugment
+					#ethos = owner
+				}
+			}
+			random_tile = {
+				limit = {
+					has_blocker = no
+					has_grown_pop = no
+					has_growing_pop = no
+				}
+				create_pop = {
+					species = event_target:humanAugment
+					#ethos = owner
+				}
+			}
+			random_tile = {
+				limit = {
+					has_blocker = no
+					has_grown_pop = no
+					has_growing_pop = no
+				}
+				create_pop = {
+					species = event_target:humanAugment
+					#ethos = owner
+				}
+			}
+			random_tile = {
+				limit = { 
+					has_blocker = no 
+					has_building = no 
+					has_grown_pop = yes
+				}
+				set_building = "building_hydroponics_farm_1"
+				add_deposit = d_farmland_deposit
+			}
+			random_tile = {
+				limit = { 
+					has_blocker = no 
+					has_building = no 
+					has_grown_pop = yes
+				}
+				set_building = "building_power_plant_1"
+				add_deposit = d_energy_deposit	
+			}
+			random_tile = {
+				limit = { 
+					has_blocker = no 
+					has_building = no 
+					has_grown_pop = yes
+				}
+				set_building = "building_mining_network_1"
+				add_deposit = d_mineral_deposit	
+			}
+			random_tile = {
+				limit = { has_blocker = no has_building = no }
+				set_blocker = "tb_failing_infrastructure"
+				add_deposit = d_engineering_deposit	
+			}
+			random_tile = {
+				limit = { has_blocker = no has_building = no }
+				set_blocker = "tb_failing_infrastructure"
+				add_deposit = d_society_deposit			
+			}
+			random_tile = {
+				limit = { has_blocker = no has_building = no }
+				set_blocker = "tb_failing_infrastructure"
+				add_deposit = d_physics_deposit				
+			}
+			random_tile = {
+				limit = { has_blocker = no has_building = no }
+				set_blocker = "tb_decrepit_dwellings"
+				add_deposit = d_rich_energy_deposit					
+			}
+			set_capital = yes
+			random_country = {
+				limit = { has_country_flag = augment_khanate }
+				save_global_event_target_as = augment_khanate
+				species = { save_global_event_target_as = humanAugment }
+				add_appropriate_start_techs = yes
+			}			
+			set_name = "Navam Vishav"
+		}		
+	}
+}

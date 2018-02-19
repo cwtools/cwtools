@@ -1,0 +1,678 @@
+#Dominion (Founders)
+@distance = 30
+@base_moon_distance = 10
+
+founders_homeworld = {
+	name = "Founder's Planet"
+	class = sc_g
+	asteroids_distance = 115
+	flags = { founders_homeworld }
+	init_effect = { log = "dominion homeworld" }
+	usage = custom_empire
+	max_instances = 1
+	planet = {
+		count = 1
+		home_planet = yes
+		class = pc_thegreatlink
+		name = "Founder's Planet"
+		orbit_distance = 1
+		orbit_angle = 1
+		size = 25
+		starting_planet = yes
+		tile_blockers = none
+		modifiers = none
+		init_effect = { prevent_anomaly = yes }
+		init_effect = {
+			if = {
+				limit = { NOT = { any_country = { has_country_flag = the_dominion } } }
+				create_species = { 
+				    name = "Founders"
+					namelist = Founder
+				    class = DOM 
+				    portrait = changeling 
+				    homeworld = THIS 
+				    traits = { 
+				        trait = "trait_conformists" 
+				        trait = "trait_shapeshifter" 
+				        trait = "trait_master_geneticist"
+				        trait = "trait_pc_thegreatlink_preference"
+				        ideal_planet_class = "pc_thegreatlink" 
+					} 
+				}
+				last_created_species = { save_global_event_target_as = founderSpecies }
+				create_country = {
+					name = "NAME_the_dominion"
+					type = default
+					ignore_initial_colony_error = yes
+					civics = { civic = "civic_river_1" civic = "civic_river_2" }
+					authority = auth_great_link
+					name_list = "Vorta"
+					ethos = { ethic = "ethic_authoritarian" ethic = "ethic_xenophobe" ethic = "ethic_great_link" }
+					species = event_target:founderSpecies
+					flag = {
+						icon = { category = "trek" file = "Dominion.dds" }
+						background = { category = "backgrounds" file = "00_solid.dds" }
+						colors = { "customcolor1793" "black" "null" "null" }
+					}
+					ship_prefix = ""
+					effect = {
+						set_graphical_culture = dominion_01
+						set_country_flag = the_dominion
+						set_country_flag = custom_start_screen
+						set_country_flag = generic_ent
+						set_country_flag = gamma_empire
+						set_country_flag = init_spawned
+						set_country_flag = sth_medium_galaxy
+						save_global_event_target_as = the_dominion
+					}
+				}
+				create_colony = { owner = event_target:the_dominion species = event_target:founderSpecies ethos = owner }
+			}
+			set_capital = yes
+			random_country = {
+				limit = { has_country_flag = the_dominion }
+				save_global_event_target_as = the_dominion
+				add_physics_research = 1000
+				add_society_research = 1000
+				add_appropriate_start_techs = yes
+				give_technology = { tech = "tech_jem_hadar_cloning" message = no }
+				give_technology = { tech = "tech_ketracel_white" message = no }
+				species = { save_global_event_target_as = founderSpecies }
+				change_government = {
+					authority = auth_great_link
+					civics = { civic = "civic_river_1" civic = "civic_river_2" }
+				}
+            }
+			set_owner = event_target:the_dominion
+			random_tile = {
+				limit = { has_blocker = no has_building = no num_adjacent_tiles > 3 }
+				set_building = "building_capital_1"
+				add_deposit = d_energy_deposit
+				random_neighboring_tile = {
+					limit = { has_blocker = no has_building = no }
+					set_building = "building_hydroponics_farm_1"
+					add_deposit = d_rich_farmland_deposit				
+				}
+				random_neighboring_tile = {
+					limit = { has_blocker = no has_building = no }
+					set_building = "building_hydroponics_farm_1"
+					add_deposit = d_rich_farmland_deposit
+				}
+				random_neighboring_tile = {
+					limit = { has_blocker = no has_building = no }
+					set_building = "building_ketracel_sodium"
+					add_deposit = d_sr_sodium_12_deposit
+				}
+				random_neighboring_tile = {
+					limit = { has_blocker = no has_building = no }
+					set_building = "building_engineering_facility_0"
+					add_deposit = d_engineering_deposit
+				}
+			}
+			random_tile = {
+				limit = { has_blocker = no has_building = no }
+					set_building = "building_engineering_facility_0"
+					add_deposit = d_engineering_deposit
+				}
+			random_tile = {
+				limit = { has_blocker = no has_building = no }
+				set_building = "building_bio_lab_0"
+				add_deposit = d_society_deposit
+			}
+			random_tile = {
+				limit = { has_blocker = no has_building = no }
+				set_building = "building_bio_lab_0"
+				add_deposit = d_society_deposit
+			}
+			random_tile = {
+				limit = { has_blocker = no has_building = no }
+				set_building = "building_ketracel_yridium"
+				add_deposit = d_sr_yridium_11_deposit
+			}
+			random_tile = {
+				limit = { has_blocker = no has_building = no }
+				set_building = "building_mining_network_1"
+				add_deposit = d_mineral_deposit
+
+			}
+			random_tile = {
+				limit = { has_blocker = no has_building = no }
+				set_building = "building_mining_network_1"
+				add_deposit = d_mineral_deposit
+			}
+			random_tile = {
+				limit = { has_blocker = no has_building = no }
+				set_building = "building_power_plant_1"
+				add_deposit = d_energy_deposit
+			}
+			random_tile = {
+				limit = { has_blocker = no has_building = no }
+				set_building = "building_power_plant_1"
+				add_deposit = d_rich_energy_deposit
+			}
+			random_tile = {
+				limit = { has_blocker = no has_building = no }
+				set_building = "building_power_plant_1"
+				add_deposit = d_energy_deposit
+			}
+			random_tile = {
+				limit = { has_blocker = no has_building = no }
+				set_building = "building_power_plant_1"
+				add_deposit = d_energy_deposit
+			}
+			random_tile = {
+				limit = { has_blocker = no has_building = no }
+				set_building = "building_ketracel_white_synthesis_facility_0"	
+			}
+			random_tile = {
+				limit = { has_blocker = no has_building = no }
+				set_building = "building_physics_lab_0"
+				add_deposit = d_physics_deposit
+			}
+			if = { limit = { NOT = { exists = event_target:vortaSpecies } } 
+				create_species = {
+					name = "Vorta"
+					plural = "Vorta"
+					class = "VOR"
+					portrait = "vorta"
+					name_list="Vorta"
+					traits = { trait = "trait_skilled_administrator" trait = "trait_telepathy" trait = "trait_clone" trait = "trait_pc_ocean_preference" }
+				}
+				last_created_species = { 
+					set_citizenship_type = { country = event_target:the_dominion type = citizenship_full }
+					set_military_service_type = { country = event_target:the_dominion type = military_service_full }
+					save_global_event_target_as = vortaSpecies 
+					set_vorta_characteristics = yes
+				}
+			}
+			random_tile = {
+				limit = { has_blocker = no has_grown_pop = no has_growing_pop = no }
+				create_pop = { species = event_target:vortaSpecies ethos = owner }
+			}
+			random_tile = {
+				limit = { has_blocker = no has_grown_pop = no has_growing_pop = no }
+				create_pop = { species = event_target:vortaSpecies ethos = owner }
+			}
+			random_tile = {
+				limit = { has_blocker = no has_grown_pop = no has_growing_pop = no }
+				create_pop = { species = event_target:founderSpecies ethos = owner }
+			}
+			random_tile = {
+				limit = { has_blocker = no has_grown_pop = no has_growing_pop = no }
+				create_pop = { species = event_target:founderSpecies ethos = owner }
+			}
+			random_tile = {
+				limit = { has_blocker = no has_grown_pop = no has_growing_pop = no }
+				create_pop = { species = event_target:founderSpecies ethos = owner }
+			}
+			random_tile = {
+				limit = { has_blocker = no has_grown_pop = no has_growing_pop = no }
+				create_pop = { species = event_target:founderSpecies ethos = owner }
+			}
+			random_tile = {
+				limit = { has_blocker = no has_grown_pop = no has_growing_pop = no }
+				create_pop = { species = event_target:founderSpecies ethos = owner }
+			}
+			random_tile = {
+				limit = { has_blocker = no has_grown_pop = no has_growing_pop = no }
+				create_pop = { species = event_target:founderSpecies ethos = owner }
+			}
+			generate_major_empire_start_pops = yes
+			generate_major_empire_start_fleets = yes
+			set_name = "Founder's Planet"
+		}
+	}
+}
+
+kurill_prime = {
+	name = "Kurill"
+	class = "sc_f"
+	usage = custom_empire
+	init_effect = { log = "vorta homeworld" }
+	planet = {
+		name = "Kurill A"
+		class = star
+		orbit_distance = 0
+		orbit_angle = 1
+		size = { min = 20 max = 30 }
+		has_ring = no
+	}
+	change_orbit = 50
+	planet = {
+		count = { min = 1 max = 3 }
+		class = random_asteroid
+		orbit_distance = 0
+		orbit_angle = { min = 40 max = 100 }
+	}
+	planet = {
+		count = { min = 0 max = 2 }
+		orbit_distance = 20
+		class = rl_unhabitable_planets
+		orbit_angle = { min = 90 max = 270 }
+		change_orbit = @base_moon_distance
+		moon = {
+			count = { min = 0 max = 1 }
+			class = "rl_inner_moons"
+			orbit_angle = { min = 90 max = 270 }
+			orbit_distance = 5
+		}
+	}
+	planet = {
+		name = "Kurill Prime"
+		count = 1
+		orbit_distance = 20
+		home_planet = yes
+		class = "pc_ocean"
+		orbit_angle = { min = 90 max = 270 }
+		size = { min = 22 max = 25 }
+		tile_blockers = none
+		modifiers = none
+		init_effect = {
+			prevent_anomaly = yes
+		}
+		init_effect = {
+			save_event_target_as = vortaHomeworld
+			random_country = {
+				limit = { has_country_flag = the_dominion }
+				save_global_event_target_as = the_dominion
+			}
+			if = { 
+				limit = { exists = event_target:the_dominion }
+				set_owner = event_target:the_dominion
+				if = {
+					limit = { NOT = { exists = event_target:vortaSpecies } }
+					create_species = {
+						name = "Vorta"
+						plural = "Vorta"
+						class = "VOR"
+						portrait = "vorta"
+						name_list="Vorta"
+						traits = { trait = "trait_skilled_administrator" trait = "trait_telepathy" trait = "trait_clone" trait = "trait_pc_ocean_preference" }
+					}
+					last_created_species = {
+						save_global_event_target_as = vortaSpecies
+						set_vorta_characteristics = yes
+						set_citizenship_type = { country = event_target:the_dominion type = citizenship_full }
+						set_military_service_type = { country = event_target:the_dominion type = military_service_full }
+					}
+				}
+				event_target:vortaSpecies = { set_species_homeworld = event_target:vortaHomeworld }
+				if = {
+					limit = { NOT = { exists = event_target:jemHadarSpecies } }
+					create_species = {
+						name = "Jem'Hadar"
+						plural = "Jem'Hadar"
+						class = "JEM"
+						portrait = "jem'hadar"
+						name_list="JemHadar"
+						traits = { trait = "trait_clone" trait = "trait_ketracel_white_addiction" trait = "trait_pop_jem'hadar_1" trait = "trait_pc_ocean_preference" }
+					}
+					last_created_species = {
+						save_global_event_target_as = jemHadarSpecies
+						set_jem_hadar_characteristics = yes
+						set_citizenship_type = { country = event_target:the_dominion type = citizenship_full }
+						set_military_service_type = { country = event_target:the_dominion type = military_service_full }
+					}
+				}
+				
+				random_tile = {
+					limit = { has_blocker = no has_building = no num_adjacent_tiles > 3 }
+					set_building = "building_capital_1"
+					add_deposit = d_farmland_deposit						
+					add_deposit = d_mineral_deposit
+					create_pop = { species = event_target:vortaSpecies ethos = owner }
+				}
+				random_tile = {
+					limit = { has_blocker = no has_building = no }
+					set_building = "building_power_plant_1"
+					add_deposit = d_energy_deposit
+					# build_pop = {
+						# name = pop_jem'hadar_1
+					# }
+					# pop = { species = { save_global_event_target_as = jemHadarSpecies } }
+					create_pop = { species = event_target:jemHadarSpecies ethos = owner }
+				}
+				random_tile = {
+					limit = { has_blocker = no has_building = no }
+					set_building = "building_power_plant_1"
+					add_deposit = d_energy_deposit
+					create_pop = { species = event_target:vortaSpecies ethos = owner }
+				}
+				random_tile = {
+					limit = { has_blocker = no has_building = no }
+					set_building = "building_mining_network_1"
+					add_deposit = d_mineral_deposit
+					# build_pop = {
+						# name = pop_jem'hadar_1
+					# }	
+					create_pop = { species = event_target:jemHadarSpecies ethos = owner }
+				}
+				random_tile = {
+					limit = { has_blocker = no has_building = no }
+					set_building = "building_hydroponics_farm_1"
+					add_deposit = d_vast_farmland_deposit
+					# build_pop = {
+						# name = pop_jem'hadar_1
+					# }	
+					create_pop = { species = event_target:jemHadarSpecies ethos = owner }
+				}
+				random_tile = {
+					limit = { has_blocker = no has_building = no }
+					set_building = "building_mining_network_1"
+					add_deposit = d_mineral_deposit
+					create_pop = { species = event_target:vortaSpecies ethos = owner }
+				}
+				random_tile = {
+					limit = { has_blocker = no has_building = no }
+					set_building = "building_mining_network_1"
+					add_deposit = d_mineral_deposit
+					create_pop = { species = event_target:vortaSpecies ethos = owner }
+				}
+				random_tile = {
+					limit = { has_blocker = no has_building = no }
+					set_building = "building_mining_network_1"
+					add_deposit = d_mineral_deposit
+					create_pop = { species = event_target:vortaSpecies ethos = owner }
+				}	
+				random_tile = {
+					limit = { has_blocker = no has_building = no }
+					set_building = "building_mining_network_1"
+					add_deposit = d_mineral_deposit
+					create_pop = { species = event_target:vortaSpecies ethos = owner }
+				}
+				random_tile = {
+					limit = { has_blocker = no has_building = no }
+					add_deposit = d_engineering_deposit
+					set_building = "building_engineering_facility_0"	
+					create_pop = { species = event_target:vortaSpecies ethos = owner }
+				}
+				random_tile = {
+					limit = { has_blocker = no has_building = no }
+					add_deposit = d_society_deposit
+					set_building = "building_bio_lab_0"	
+					create_pop = { species = event_target:vortaSpecies ethos = owner }
+				}
+				random_tile = {
+					limit = { has_blocker = no has_building = no }
+					add_deposit = d_physics_deposit	
+					set_building = "building_physics_lab_0"			
+					create_pop = { species = event_target:vortaSpecies ethos = owner }
+				}
+				random_tile = {
+					limit = { has_blocker = no has_building = no }
+					add_deposit = d_energy_deposit					
+				}
+				random_tile = {
+					limit = { has_blocker = no has_building = no }
+					add_deposit = d_energy_deposit				
+				}
+				random_tile = {
+					limit = { has_blocker = no has_building = no }
+					add_deposit = d_farmland_deposit									
+				}
+				random_tile = {
+					limit = { has_blocker = no has_building = no }
+					add_deposit = d_farmland_deposit									
+				}
+				random_tile = {
+					limit = { has_blocker = no has_building = no }
+					add_deposit = d_mineral_deposit				
+				}
+				random_tile = {
+					limit = { has_blocker = no has_building = no }
+					add_deposit = d_mineral_deposit				
+				}
+			}
+		}
+		change_orbit = @base_moon_distance
+		moon = {
+			count = { min = 0 max = 1 }
+			class = rl_outer_moons
+			orbit_angle = { min = 90 max = 270 }
+			orbit_distance = 5
+		}
+	}
+	planet = {
+		count = { min = 2 max = 4 }
+		orbit_distance = 20
+		class = rl_unhabitable_planets
+		orbit_angle = { min = 90 max = 270 }
+		change_orbit = @base_moon_distance
+		moon = {
+			count = { min = 0 max = 1 }
+			class = "rl_outer_moons"
+			orbit_angle = { min = 90 max = 270 }
+			orbit_distance = 5
+		}
+	}
+	planet = {
+		count = { min = 1 max = 2 }
+		orbit_distance = 20
+		class = pc_gas_giant
+		orbit_angle = { min = 90 max = 270 }
+		change_orbit = @base_moon_distance
+		moon = {
+			count = { min = 0 max = 3 }
+			class = "rl_outer_moons"
+			orbit_angle = { min = 90 max = 270 }
+			orbit_distance = 5
+		}
+	}
+	change_orbit = 50									
+	planet = {									
+		name = "Kurill B"								
+		count = 1								
+		class = pc_g_star								
+		orbit_angle = { min = 90 max = 270 }								
+		size = { min = 20 max = 30 }								
+		has_ring = no	
+		entity = "g_star_class_star_entity"		
+	}	
+}
+
+dominion_satellite = {
+	class = "rl_standard_stars"
+	asteroids_distance = 50
+	usage = custom_empire
+	init_effect = { log = "dominion satellite" }
+	planet = {
+		count = 1
+		class = star
+		orbit_distance = 0
+		orbit_angle = 1
+		size = { min = 20 max = 30 }
+		has_ring = no
+	}
+	change_orbit = 50
+	planet = {
+		count = { min = 1 max = 3 }
+		class = random_asteroid
+		orbit_distance = 0
+		orbit_angle = { min = 40 max = 100 }
+	}
+	planet = {
+		count = { min = 0 max = 2 }
+		orbit_distance = 20
+		class = "rl_unhabitable_planets"
+		orbit_angle = { min = 90 max = 270 }
+		change_orbit = @base_moon_distance
+		moon = {
+			count = { min = 0 max = 1 }
+			class = "rl_inner_moons"
+			orbit_angle = { min = 90 max = 270 }
+			orbit_distance = 5
+		}
+	}
+	planet = {
+		count = 1
+		orbit_distance = 20
+		home_planet = yes
+		class = "pc_ocean"
+		orbit_angle = { min = 90 max = 270 }
+		size = { min = 18 max = 22 }
+		tile_blockers = none
+		modifiers = none
+		init_effect = {
+			prevent_anomaly = yes
+		}
+		init_effect = {
+			random_country = { 
+				limit = { has_country_flag = the_dominion } 
+				save_global_event_target_as = the_dominion
+			}
+			if = {
+				limit = { exists = event_target:the_dominion }
+				set_owner = event_target:the_dominion
+				if = {
+					limit = { NOT = { exists = event_target:vortaSpecies } }
+					create_species = {
+						name = "Vorta"
+						namelist = Vorta
+						plural = "Vorta"
+						class = "VOR"
+						portrait = "vorta"
+						name_list="Vorta"
+						traits = { trait = "trait_skilled_administrator" trait = "trait_telepathy" trait = "trait_clone" trait = "trait_pc_ocean_preference" }
+					}
+					last_created_species = {
+						save_global_event_target_as = vortaSpecies
+						set_citizenship_type = { country = event_target:the_dominion type = citizenship_full }
+						set_military_service_type = { country = event_target:the_dominion type = military_service_full }
+						set_vorta_characteristics = yes
+					}
+				}
+				random_tile = {
+					limit = { has_blocker = no has_building = no num_adjacent_tiles > 3 }
+					set_building = "building_capital_1"
+					add_deposit = d_farmland_deposit						
+					add_deposit = d_mineral_deposit
+					create_pop = { species = event_target:vortaSpecies ethos = owner }			
+					random_neighboring_tile = {
+						limit = { has_blocker = no has_building = no }
+						set_building = "building_hydroponics_farm_1"
+						add_deposit = d_vast_farmland_deposit						
+						create_pop = { species = event_target:vortaSpecies ethos = owner }
+					}
+					random_neighboring_tile = {
+						limit = { has_blocker = no has_building = no }
+						set_building = "building_hydroponics_farm_1"
+						add_deposit = d_farmland_deposit						
+						create_pop = { species = event_target:vortaSpecies ethos = owner }										
+					}
+					random_neighboring_tile = {
+						limit = { has_blocker = no has_building = no }
+						set_building = "building_power_plant_1"
+						add_deposit = d_energy_deposit
+						create_pop = { species = event_target:vortaSpecies ethos = owner }										
+					}
+					random_neighboring_tile = {
+						limit = { has_blocker = no has_building = no }
+						set_building = "building_power_plant_1"
+						add_deposit = d_energy_deposit
+						create_pop = { species = event_target:vortaSpecies ethos = owner }										
+					}
+				}
+				random_tile = {
+					limit = { has_blocker = no has_building = no }
+					set_building = "building_power_plant_1"
+					add_deposit = d_energy_deposit
+					create_pop = { species = event_target:vortaSpecies ethos = owner }				
+				}
+				random_tile = {
+					limit = { has_blocker = no has_building = no }
+					set_building = "building_mining_network_1"
+					add_deposit = d_mineral_deposit
+					create_pop = { species = event_target:vortaSpecies ethos = owner }
+				}
+				random_tile = {
+					limit = { has_blocker = no has_building = no }
+					set_building = "building_mining_network_1"
+					add_deposit = d_mineral_deposit
+					create_pop = { species = event_target:vortaSpecies ethos = owner }
+				}
+				random_tile = {
+					limit = { has_blocker = no has_building = no }
+					set_building = "building_mining_network_1"
+					add_deposit = d_mineral_deposit
+					create_pop = { species = event_target:vortaSpecies ethos = owner }
+				}	
+				random_tile = {
+					limit = { has_blocker = no has_building = no }
+					set_blocker = "tb_active_volcano"
+					add_deposit = d_engineering_deposit
+				}
+				random_tile = {
+					limit = { has_blocker = no has_building = no }
+					set_blocker = "tb_toxic_kelp"
+					add_deposit = d_society_deposit
+				}
+				random_tile = {
+					limit = { has_blocker = no has_building = no }
+					set_blocker = "tb_active_volcano"
+					add_deposit = d_physics_deposit	
+				}
+				random_tile = {
+					limit = { has_blocker = no has_building = no }
+					set_blocker = "tb_toxic_kelp"
+					add_deposit = d_energy_deposit					
+				}
+				random_tile = {
+					limit = { has_blocker = no has_building = no }
+					add_deposit = d_energy_deposit				
+				}
+				random_tile = {
+					limit = { has_blocker = no has_building = no }
+					set_blocker = "tb_toxic_kelp"
+					add_deposit = d_farmland_deposit									
+				}
+				random_tile = {
+					limit = { has_blocker = no has_building = no }
+					add_deposit = d_farmland_deposit									
+				}
+				random_tile = {
+					limit = { has_blocker = no has_building = no }
+					set_blocker = "tb_toxic_kelp"
+					add_deposit = d_mineral_deposit				
+				}
+				random_tile = {
+					limit = { has_blocker = no has_building = no }
+					add_deposit = d_mineral_deposit				
+				}
+			}
+		}
+		change_orbit = @base_moon_distance
+		moon = {
+			count = { min = 0 max = 1 }
+			class = "rl_outer_moons"
+			orbit_angle = { min = 90 max = 270 }
+			orbit_distance = 5
+		}
+	}
+	planet = {
+		count = { min = 2 max = 4 }
+		orbit_distance = 20
+		class = "rl_unhabitable_planets"
+		orbit_angle = { min = 90 max = 270 }
+		change_orbit = @base_moon_distance
+		moon = {
+			count = { min = 0 max = 1 }
+			class = "rl_outer_moons"
+			orbit_angle = { min = 90 max = 270 }
+			orbit_distance = 5
+		}
+	}
+	planet = {
+		count = { min = 1 max = 2 }
+		orbit_distance = 20
+		class = pc_gas_giant
+		orbit_angle = { min = 90 max = 270 }
+		change_orbit = @base_moon_distance
+		moon = {
+			count = { min = 0 max = 3 }
+			class = "rl_outer_moons"
+			orbit_angle = { min = 90 max = 270 }
+			orbit_distance = 5
+		}
+	}
+
+}

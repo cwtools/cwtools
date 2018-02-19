@@ -1,0 +1,1691 @@
+add_appropriate_start_techs = {
+
+### Give Sections Tech
+
+	if = {
+		limit = { use_weapon_beam = yes }
+		give_technology = { tech = "tech_engineering_starship-class_717" message = no }
+	}
+	if = {
+		limit = { use_weapon_cannon = yes }
+		give_technology = { tech = "tech_engineering_bird-of-prey_716" message = no }
+	}
+	
+### Give colony ship tech
+
+	if = {
+		limit = { starts_with_colony_tech = yes }
+		give_technology = { tech = "tech_colonization_1" message = no }
+	}
+	
+
+### Give warp-engine tech
+
+    if = {
+		limit = { uses_singularity_cores = yes }
+		give_technology = { tech = "tech_physics_artificial_70" message = no }
+	}
+	
+	if = {
+		limit = { uses_ring_engine = yes }
+		give_technology = { tech = "tech_physics_coleopteric_67" message = no }
+	}
+	
+	if = {
+		limit = { uses_transwarp_engine = yes }
+		give_technology = { tech = "tech_transwarp_borg" message = no }
+	}
+	
+### Non-Borg unique technology dump
+
+	if = {
+		limit = { is_borg_empire = no }
+		give_technology = { tech = "tech_basic_science_lab_1" message = no }
+	}
+
+### Borg unique technology dump
+
+	if = {
+		limit = { is_borg_empire = yes }
+		give_technology = { tech = "tech_interlink_alcove" message = no }
+		give_technology = { tech = "tech_cortical_processing" message = no }
+		give_technology = { tech = "tech_borg_defense" message = no }
+		give_technology = { tech = "tech_borg_hull" message = no }
+		give_technology = { tech = "tech_borg_thruster" message = no }
+		give_technology = { tech = "tech_borg_queen_chamber" message = no }
+		give_technology = { tech = "tech_society_biology_1716" message = no }
+	}
+	
+	
+### Give Weapon Techs
+
+	if = {
+		limit = { uses_polaron_weapons = yes }
+		give_technology = { tech = "tech_polaron_beam_1" message = no }
+		give_technology = { tech = "tech_polaron_torp_start" message = no }
+		create_ship_design = { design = "Polaron Frigate" }
+		create_fleet = {
+			effect = {
+				set_owner = prev
+				set_location = prevprev
+				while = {
+					count = 3
+					create_ship = { name = random random_existing_design = corvette graphical_culture = prev prefix = yes }
+				}
+			}
+		}
+	}
+	if = {
+		limit = { uses_quantum_resonance_weapons = yes }
+		give_technology = { tech = "tech_physics_particles_747" message = no }
+		give_technology = { tech = "tech_engineering_rocketry_1681" message = no }
+		create_ship_design = { design = "Resonance Frigate" }
+		create_fleet = {
+			effect = {
+				set_owner = prev
+				set_location = prevprev
+				while = {
+					count = 3
+					create_ship = { name = random random_existing_design = corvette graphical_culture = prev prefix = yes }
+				}
+			}
+		}
+	}
+	if = {
+		limit = { uses_thermic_weapons = yes }
+		give_technology = { tech = "tech_physics_particles_755" message = no }
+		give_technology = { tech = "tech_early_photonic" message = no }
+		create_ship_design = { design = "Thermionic Frigate" }
+		create_fleet = {
+			effect = {
+				set_owner = prev
+				set_location = prevprev
+				while = {
+					count = 3
+					create_ship = { name = random random_existing_design = corvette graphical_culture = prev prefix = yes }
+				}
+			}
+		}
+	}
+	if = {
+		limit = { uses_chroniton_weapons = yes }
+		give_technology = { tech = "tech_physics_particles_763" message = no }
+		give_technology = { tech = "tech_engineering_rocketry_1673" message = no }
+		create_ship_design = { design = "Krenim Frigate" }
+		create_fleet = {
+			effect = {
+				set_owner = prev
+				set_location = prevprev
+				while = {
+					count = 3
+					create_ship = { name = random random_existing_design = corvette graphical_culture = prev prefix = yes }
+				}
+			}
+		}
+	}
+	if = {
+		limit = { uses_tetryon_weapons = yes }
+		give_technology = { tech = "tech_tetryon_cannon_1" message = no }
+		give_technology = { tech = "tech_early_photonic" message = no }
+		create_ship_design = { design = "Tetryon Frigate" }
+			create_fleet = {
+				effect = {
+					set_owner = prev
+					set_location = prevprev
+					while = {
+						count = 3
+						create_ship = { name = random random_existing_design = corvette graphical_culture = prev prefix = yes }
+					}
+				}
+		}
+	}
+	if = {
+		limit = { uses_antiproton_weapons = yes }
+		give_technology = { tech = "tech_antiproton_cannon_1" message = no }
+		give_technology = { tech = "tech_early_photonic" message = no }
+		create_ship_design = { design = "Antiproton Frigate" }
+		create_fleet = {
+			effect = {
+				set_owner = prev
+				set_location = prevprev
+				while = {
+					count = 3
+					create_ship = { name = random random_existing_design = corvette graphical_culture = prev prefix = yes }
+				}
+			}
+		}
+	}
+	if = {
+		limit = { uses_antiproton_weapons_borg = yes }
+		give_technology = { tech = "tech_cutting_beam_1" message = no }
+		give_technology = { tech = "tech_engineering_rocketry_746" message = no }
+		create_ship_design = { design = "Borg Frigate" }
+		create_fleet = {
+			effect = {
+				set_owner = prev
+				set_location = prevprev
+				while = {
+					count = 3
+					create_ship = { name = random random_existing_design = corvette graphical_culture = prev prefix = yes }
+				}
+			}
+		}
+	}
+	if = {
+		limit = { uses_plasma_weapons = yes }
+		give_technology = { tech = "tech_plasma_cannon_1" message = no }
+		give_technology = { tech = "tech_fusion_torpedo" message = no }
+		create_ship_design = { design = "Plasma Frigate" }
+		create_fleet = {
+			effect = {
+				set_owner = prev
+				set_location = prevprev
+				while = {
+					count = 3
+					create_ship = { name = random random_existing_design = corvette graphical_culture = prev prefix = yes }
+				}
+			}
+		}
+	}
+	if = {
+		limit = { uses_disruptor_weapons = yes }
+		give_technology = { tech = "tech_disruptor_cannon_1" message = no }
+		give_technology = { tech = "tech_early_photonic" message = no }
+		create_ship_design = { design = "Disruptor Frigate" }
+		create_fleet = {
+			effect = {
+				set_owner = prev
+				set_location = prevprev
+				while = {
+					count = 3
+					create_ship = { name = random random_existing_design = corvette graphical_culture = prev prefix = yes }
+				}
+			}
+		}
+	}
+	if = {
+		limit = { uses_disruptor_weapons_klingon = yes }
+		give_technology = { tech = "tech_disruptor_klingon_cannon_1" message = no }
+		give_technology = { tech = "tech_early_photonic" message = no }
+		create_ship_design = { design = "Klingon Frigate" }
+		create_fleet = {
+			effect = {
+				set_owner = prev
+				set_location = prevprev
+				while = {
+					count = 3
+					create_ship = { name = random random_existing_design = corvette graphical_culture = prev prefix = yes }
+				}
+			}
+		}
+	}
+	if = {
+		limit = { uses_plasma_disruptor_weapons = yes }
+		give_technology = { tech = "tech_plasma_disruptor_beam_1" message = no }
+		give_technology = { tech = "tech_fusion_torpedo" message = no }
+		create_ship_design = { design = "Romulan Frigate" }
+		create_fleet = {
+			effect = {
+				set_owner = prev
+				set_location = prevprev
+				while = {
+					count = 3
+					create_ship = { name = random random_existing_design = corvette graphical_culture = prev prefix = yes }
+				}
+			}
+		}
+	}
+	if = {
+		limit = { uses_phaser_weapons = yes }
+		give_technology = { tech = "tech_phaser_1" message = no }
+		give_technology = { tech = "tech_early_photonic" message = no }
+		create_ship_design = { design = "Phaser Frigate" }
+		create_fleet = {
+			effect = {
+				set_owner = prev
+				set_location = prevprev
+				while = {
+					count = 3
+					create_ship = { name = random random_existing_design = corvette graphical_culture = prev prefix = yes }
+				}
+			}
+		}
+	}
+	if = {
+		limit = { uses_phaser_weapons_fed = yes }
+		give_technology = { tech = "tech_phaser_cannon_1" message = no }
+		give_technology = { tech = "tech_nuclear_torpedo" message = no }
+		create_ship_design = { design = "Earth Frigate" }
+		create_fleet = {
+			effect = {
+				set_owner = prev
+				set_location = prevprev
+				while = {
+					count = 3
+					create_ship = { name = random random_existing_design = corvette graphical_culture = prev prefix = yes }
+				}
+			}
+		}
+	}
+	if = {
+		limit = { uses_phaser_weapons_cardassian = yes }
+		give_technology = { tech = "tech_cardassian_phaser_1" message = no }
+		give_technology = { tech = "tech_early_photonic" message = no }
+		create_ship_design = { design = "Cardassian Frigate" }
+		create_fleet = {
+			effect = {
+				set_owner = prev
+				set_location = prevprev
+				while = {
+					count = 3
+					create_ship = { name = random random_existing_design = corvette graphical_culture = prev prefix = yes }
+				}
+			}
+		}
+	}
+	if = {
+		limit = { uses_phaser_weapons_andorian = yes }
+		give_technology = { tech = "tech_andorian_phaser_1" message = no }
+		give_technology = { tech = "tech_early_photonic" message = no }
+		create_ship_design = { design = "Andorian Frigate" }
+		create_fleet = {
+			effect = {
+				set_owner = prev
+				set_location = prevprev
+				while = {
+					count = 3
+					create_ship = { name = random random_existing_design = corvette graphical_culture = prev prefix = yes }
+				}
+			}
+		}
+	}
+	if = {
+		limit = { uses_phaser_weapons_particle = yes }
+		give_technology = { tech = "tech_particle_phaser_1" message = no }
+		give_technology = { tech = "tech_early_photonic" message = no }
+		if = {
+			limit = { uses_ring_engine = yes }
+			create_ship_design = { design = "Vulcan Frigate" }
+			create_fleet = {
+				effect = {
+					set_owner = prev
+					set_location = prevprev
+					while = {
+						count = 3
+						create_ship = { name = random random_existing_design = corvette graphical_culture = prev prefix = yes }
+					}
+				}
+			}
+		}
+		if = {
+			limit = { uses_ring_engine = no }
+			create_ship_design = { design = "Tamarian Frigate" }
+			create_fleet = {
+				effect = {
+					set_owner = prev
+					set_location = prevprev
+					while = {
+						count = 3
+						create_ship = { name = random random_existing_design = corvette graphical_culture = prev prefix = yes }
+					}
+				}
+			}
+		}
+	}
+}
+
+###
+### Pop generation scripted effect
+###
+
+generate_fallen_empire_start_pops = {
+	if = {
+		limit = { owner = { has_country_flag = init_spawned } }
+		every_tile = {
+			limit = { AND = { has_building = yes has_blocker = no has_grown_pop = no has_growing_pop = no } }
+			create_pop = { species = owner_main_species }
+		}
+	}
+}
+
+generate_major_empire_start_pops = {
+	if = {
+		limit = { owner = { has_country_flag = init_spawned } }
+		every_tile = {
+			limit = { AND = { has_building = yes has_blocker = no has_grown_pop = no has_growing_pop = no } }
+			create_pop = { species = owner_main_species }
+		}
+		random_tile = { limit = { has_blocker = no has_grown_pop = no has_growing_pop = no } create_pop = { species = owner_main_species } }
+	}
+}
+
+generate_minor_empire_start_pops = {
+	if = {
+		limit = { owner = { has_country_flag = init_spawned } }
+		every_tile = {
+			limit = { AND = { has_building = yes has_blocker = no has_grown_pop = no has_growing_pop = no } }
+			create_pop = { species = owner_main_species }
+		}
+		random_tile = { limit = { has_blocker = no has_grown_pop = no has_growing_pop = no } create_pop = { species = owner_main_species } }
+	}
+}
+
+generate_satellite_start_pops = {
+	if = {
+		every_tile = {
+			limit = { AND = { has_building = yes has_blocker = no has_grown_pop = no has_growing_pop = no } }
+			create_pop = { species = owner_main_species }
+		}
+	}
+}
+			
+# Unique variant for Remus
+generate_minor_empire_start_pops_remus = {
+	if = {
+		every_tile = {
+			limit = { AND = { has_building = yes has_blocker = no has_grown_pop = no has_growing_pop = no } }
+			create_pop = { species = event_target:remanSpecies }
+		}
+		random_tile = { limit = { has_blocker = no has_grown_pop = no has_growing_pop = no } create_pop = { species = event_target:romulanSpecies } }
+		random_tile = { limit = { has_blocker = no has_grown_pop = no has_growing_pop = no } create_pop = { species = event_target:romulanSpecies } }
+	}
+}
+
+generate_borg_empire_start_pops = {
+	if = {
+		limit = { owner = { has_country_flag = init_spawned } }
+		every_tile = {
+			limit = { AND = { has_building = yes has_blocker = no has_grown_pop = no has_growing_pop = no } }
+			create_pop = { species = owner_main_species }
+		}
+	}
+}
+
+###
+### Building / Tile-blocker scripted effects
+###
+
+# For Major empires
+generate_major_empire_start_buildings = {
+	#clear existing buildings
+	every_tile = {
+		limit = { has_building = yes }
+		remove_building = yes
+	}
+	random_tile = {
+		limit = { has_blocker = no has_building = no num_adjacent_tiles > 3 }
+		set_building = "building_capital_1"
+		set_deposit = d_energy_deposit				
+		random_neighboring_tile = {
+			limit = { has_blocker = no has_building = no }
+			set_building = "building_hydroponics_farm_1"
+			set_deposit = d_rich_farmland_deposit						
+		}
+		random_neighboring_tile = {
+			limit = { has_blocker = no has_building = no }
+			set_building = "building_hydroponics_farm_1"
+			set_deposit = d_rich_farmland_deposit						
+		}
+		random_neighboring_tile = {
+			limit = { has_blocker = no has_building = no }
+			set_building = "building_power_plant_1"
+			set_deposit = d_rich_energy_deposit					
+		}
+		random_neighboring_tile = {
+			limit = { has_blocker = no has_building = no }
+			set_building = "building_mining_network_1"
+			set_deposit = d_rich_mineral_deposit
+		}				
+	}
+	random_tile = {
+		limit = { has_blocker = no has_building = no }
+		set_building = "building_mining_network_1"
+		set_deposit = d_mineral_deposit					
+	}
+	random_tile = {
+		limit = { has_blocker = no has_building = no }
+		set_building = "building_power_plant_1"
+		set_deposit = d_rich_energy_deposit			
+	}
+	random_tile = {
+		limit = { has_blocker = no has_building = no }
+		set_deposit = d_engineering_deposit
+		set_building = "building_engineering_facility_0"
+	}
+	random_tile = {
+		limit = { has_blocker = no has_building = no }
+		set_deposit = d_society_deposit
+		set_building = "building_bio_lab_0"
+	}
+	random_tile = {
+		limit = { has_blocker = no has_building = no }
+		set_deposit = d_physics_deposit
+		set_building = "building_physics_lab_0"
+	}
+	while = {
+		count = 3
+		random_tile = {
+			limit = { has_blocker = no has_building = no }
+			set_blocker = "tb_failing_infrastructure"
+			set_deposit = d_engineering_deposit
+		}
+	}
+	while = {
+		count = 3
+		random_tile = {
+			limit = { has_blocker = no has_building = no }
+			set_blocker = "tb_decrepit_dwellings"
+			set_deposit = d_rich_energy_deposit
+		}
+	}
+}
+
+# For minor empires
+generate_minor_empire_start_buildings = {
+	every_tile = {
+		limit = { has_building = yes }
+		remove_building = yes
+	}
+	random_tile = {
+		limit = { has_blocker = no has_building = no num_adjacent_tiles > 3 }
+		set_building = "building_capital_1"
+		set_deposit = d_energy_deposit				
+		random_neighboring_tile = {
+			limit = { has_blocker = no has_building = no }
+			set_building = "building_hydroponics_farm_1"
+			set_deposit = d_rich_farmland_deposit						
+		}
+		random_neighboring_tile = {
+			limit = { has_blocker = no has_building = no }
+			set_building = "building_hydroponics_farm_1"
+			set_deposit = d_rich_farmland_deposit						
+		}
+		random_neighboring_tile = {
+			limit = { has_blocker = no has_building = no }
+			set_building = "building_power_plant_1"
+			set_deposit = d_rich_energy_deposit					
+		}
+		random_neighboring_tile = {
+			limit = { has_blocker = no has_building = no }
+			set_building = "building_mining_network_1"
+			set_deposit = d_rich_mineral_deposit
+		}				
+	}
+	random_tile = {
+		limit = { has_blocker = no has_building = no }
+		set_building = "building_mining_network_1"
+		set_deposit = d_mineral_deposit					
+	}
+	random_tile = {
+		limit = { has_blocker = no has_building = no }
+		set_building = "building_power_plant_1"
+		set_deposit = d_rich_energy_deposit			
+	}
+	random_tile = {
+		limit = { has_blocker = no has_building = no }
+		random_list = {
+			33 = { 
+				set_deposit = d_engineering_deposit
+				set_building = "building_engineering_facility_0"
+			}
+			33 = { 
+				set_deposit = d_society_deposit
+				set_building = "building_bio_lab_0"
+			}
+			33 = { 
+				set_deposit = d_physics_deposit
+				set_building = "building_physics_lab_0"
+			}					
+		}					
+	}
+	while = {
+		count = 3
+		random_tile = {
+			limit = { has_blocker = no has_building = no }
+			set_blocker = "tb_failing_infrastructure"
+			set_deposit = d_engineering_deposit
+		}
+	}
+	while = {
+		count = 2
+		random_tile = {
+			limit = { has_blocker = no has_building = no }
+			set_blocker = "tb_decrepit_dwellings"
+			set_deposit = d_rich_energy_deposit
+		}
+	}
+}
+
+# For satellite colonies, appropiate blocker
+generate_suitable_blocker = {
+	random_list = {
+		5 = {
+			modifier = { factor = 20 Planet = { OR = { is_planet_class = pc_continental is_planet_class = pc_arctic is_planet_class = pc_alpine } } }
+			set_blocker = "tb_mountain_range"
+		}
+		5 = {
+			modifier = { factor = 20 planet = { is_planet_class = pc_y_class } }
+			set_blocker = "tb_active_volcano"
+		}
+		5 = {
+			modifier = { factor = 20 planet = { OR = { is_planet_class = pc_continental is_planet_class = pc_savannah } } }
+			modifier = { factor = 0 planet = { OR = { is_planet_class = pc_y_class } } }
+			set_blocker = "tb_dangerous_wildlife"
+		}
+		5 = {
+			modifier = { factor = 20 planet = { is_planet_class = pc_tropical } }
+			modifier = { factor = 0 planet = { OR = { is_planet_class = pc_y_class } } }
+			set_blocker = "tb_dense_jungle"
+		}
+		5 = {
+			modifier = { factor = 20 planet = { OR = { is_planet_class = pc_arid is_planet_class = pc_desert } } }
+			modifier = { factor = 0 planet = { OR = { is_planet_class = pc_y_class } } }
+			set_blocker = "tb_quicksand_basin"
+		}
+		5 = {
+			modifier = { factor = 20 planet = { OR = { is_planet_class = pc_tropical is_planet_class = pc_m1_class } } }
+			modifier = { factor = 0 planet = { OR = { is_planet_class = pc_y_class } } }
+			set_blocker = "tb_noxious_swamp"
+		}
+		5 = {
+			modifier = { factor = 20 planet = { is_planet_class = pc_arctic } }
+			modifier = { factor = 0 planet = { OR = { is_planet_class = pc_y_class is_planet_class = pc_arid is_planet_class = pc_desert } } }
+			set_blocker = "tb_massive_glacier"
+		}
+		5 = {
+			modifier = { factor = 20 planet = { OR = { is_planet_class = pc_m1_class is_planet_class = pc_ocean } } }
+			modifier = { factor = 0 planet = { OR = { is_planet_class = pc_y_class } } }
+			set_blocker = "tb_toxic_kelp"
+		}
+		5 = {
+			modifier = { factor = 20 planet = { OR = { is_planet_class = pc_savannah is_planet_class = pc_desert } } }
+			modifier = { factor = 0 planet = { OR = { is_planet_class = pc_y_class } } }
+			set_blocker = "tb_deep_sinkhole"
+		}
+	}
+}
+
+# For satellite colonies - only for major empires that have satellites
+generate_satellite_start_buildings = {
+	every_tile = {
+		limit = { has_building = yes }
+		remove_building = yes
+	}
+	random_tile = {
+		limit = { has_blocker = no has_building = no num_adjacent_tiles > 3 }
+		set_building = "building_colony_shelter"
+		set_deposit = d_energy_deposit
+		random_neighboring_tile = {
+			limit = { has_blocker = no has_building = no }
+			set_building = "building_basic_farm"
+			set_deposit = d_rich_farmland_deposit						
+		}
+		random_neighboring_tile = {
+			limit = { has_blocker = no has_building = no }
+			set_building = "building_basic_power_plant"
+			set_deposit = d_rich_energy_deposit					
+		}
+		random_neighboring_tile = {
+			limit = { has_blocker = no has_building = no }
+			set_building = "building_basic_mine"
+			set_deposit = d_rich_mineral_deposit
+		}				
+	}
+	random_tile = {
+		limit = { has_blocker = no has_building = no }
+		set_deposit = d_mineral_deposit					
+	}
+	random_tile = {
+		limit = { has_blocker = no has_building = no }
+		set_deposit = d_rich_energy_deposit			
+	}
+	random_tile = {
+		limit = { has_blocker = no has_building = no }
+		random_list = {
+			33 = { 
+				set_deposit = d_engineering_deposit
+			}
+			33 = { 
+				set_deposit = d_society_deposit
+			}
+			33 = { 
+				set_deposit = d_physics_deposit
+			}					
+		}					
+	}
+	while = { count = 4 random_tile = { limit = { has_blocker = no has_building = no } generate_suitable_blocker = yes } }
+	random_tile = { limit = { has_blocker = yes } add_deposit = d_engineering_deposit }
+	random_tile = { limit = { has_blocker = yes } add_deposit = d_society_deposit }
+	random_tile = { limit = { has_blocker = yes } add_deposit = d_physics_deposit }
+	random_tile = { limit = { has_blocker = yes } add_deposit = d_energy_deposit }
+}
+
+# Unique Kelpian minor
+generate_minor_empire_start_buildings_kelp = {
+	generate_minor_empire_start_buildings = yes
+	every_tile = {
+		limit = { has_blocker = yes }
+		set_blocker = "tb_dangerous_wildlife"
+	}
+}
+
+# Unique Voth tileblockers
+generate_cityship_blockers_voth = {
+	every_tile = {
+		limit = { has_blocker = yes }
+		set_blocker = "tb_dangerous_disrepair"
+	}
+}
+
+# Unique Hurq starting planet tile set
+generate_haven_blockers_hurq = {
+	every_tile = {
+		limit = { has_blocker = yes }
+		set_blocker = "tb_crater"
+	}
+	random_tile = { 
+		limit = { has_blocker = no has_building = no }
+		set_deposit = "d_sr_relics_24_deposit"
+		set_building = "building_museum_1"
+	}
+}
+
+# Unique Mars satellite variant
+generate_satellite_start_buildings_mars = {
+	random_tile = {
+		limit = { has_blocker = no has_building = no num_adjacent_tiles > 3 }
+		set_building = "building_colony_shelter"
+		set_deposit = d_energy_deposit
+		random_neighboring_tile = {
+			limit = { has_blocker = no has_building = no }
+			set_building = "building_basic_farm"
+			set_deposit = d_rich_farmland_deposit						
+		}
+		random_neighboring_tile = {
+			limit = { has_blocker = no has_building = no }
+			set_building = "building_basic_power_plant"
+			set_deposit = d_rich_energy_deposit					
+		}
+		random_neighboring_tile = {
+			limit = { has_blocker = no has_building = no }
+			set_building = "building_basic_mine"
+			set_deposit = d_rich_mineral_deposit
+		}				
+	}
+	random_tile = {
+		limit = { has_blocker = no has_building = no }
+		set_blocker = "tb_mountain_range"
+		add_deposit = d_engineering_deposit
+	}
+	random_tile = {
+		limit = { has_blocker = no has_building = no }
+		set_blocker = "tb_deep_sinkhole"
+		add_deposit = d_energy_deposit					
+	}
+	random_tile = {
+		limit = { has_blocker = no has_building = no }
+		set_blocker = "tb_mars_canyon"
+	}
+	random_tile = {
+		limit = { has_blocker = no has_building = no }
+		clear_deposits = yes
+		add_deposit = d_sr_mars_22_deposit
+	}
+}
+
+# Unique variant for Pralor/Cravik
+generate_major_empire_start_buildings_machine = {
+	random_tile = {
+		limit = { has_blocker = no has_building = no num_adjacent_tiles > 3 }
+		set_building = "building_machine_capital_1"
+		set_deposit = d_energy_deposit				
+		random_neighboring_tile = {
+			limit = { has_blocker = no has_building = no }
+			set_building = "building_mining_network_1"
+			set_deposit = d_mineral_deposit						
+		}
+		random_neighboring_tile = {
+			limit = { has_blocker = no has_building = no }
+			set_building = "building_power_plant_1"
+			set_deposit = d_energy_deposit						
+		}
+		random_neighboring_tile = {
+			limit = { has_blocker = no has_building = no }
+			set_building = "building_power_plant_1"
+			set_deposit = d_rich_energy_deposit					
+		}
+		random_neighboring_tile = {
+			limit = { has_blocker = no has_building = no }
+			set_building = "building_mining_network_1"
+			set_deposit = d_rich_mineral_deposit
+		}				
+	}
+	random_tile = {
+		limit = { has_blocker = no has_building = no }
+		set_building = "building_mining_network_1"
+		set_deposit = d_mineral_deposit					
+	}
+	random_tile = {
+		limit = { has_blocker = no has_building = no }
+		set_building = "building_power_plant_1"
+		set_deposit = d_rich_energy_deposit			
+	}	
+	while = {
+		count = 3
+		random_tile = {
+			limit = { has_blocker = no has_building = no }
+			set_blocker = "tb_former_battlefield"
+			set_deposit = d_engineering_deposit
+		}
+	}
+	while = {
+		count = 3
+		random_tile = {
+			limit = { has_blocker = no has_building = no }
+			set_blocker = "tb_exterminators_ruins"
+			set_deposit = d_society_deposit
+		}
+	}
+}
+
+# Unique variant for Hirogen
+generate_major_empire_start_buildings_hunters_lodge = {
+	every_tile = {
+		limit = { has_building = yes }
+		remove_building = yes
+	}
+	random_tile = {
+		limit = { has_blocker = no has_building = no num_adjacent_tiles > 3 }
+		set_building = "helix_ops_1"
+		add_deposit = d_rich_energy_deposit
+		random_neighboring_tile = {
+			limit = { has_blocker = no has_building = no }
+			set_building = "space_building_hydroponics_farm_1"
+			add_deposit = d_rich_farmland_deposit						
+		}
+		random_neighboring_tile = {
+			limit = { has_blocker = no has_building = no }
+			set_building = "space_building_mining_network_1"
+			add_deposit = d_vast_mineral_deposit						
+		}
+		while = {
+			count = 2
+			random_neighboring_tile = {
+				limit = { has_blocker = no has_building = no }
+				set_building = "space_building_power_plant_1"
+				add_deposit = d_rich_energy_deposit						
+			}
+		}		
+	}
+	random_tile = {
+		limit = { has_blocker = no has_building = no has_grown_pop = no has_growing_pop = no }
+		set_building = "space_building_hydroponics_farm_1"
+		add_deposit = d_vast_farmland_deposit
+	}
+	random_tile = {
+		limit = { has_blocker = no has_building = no has_grown_pop = no has_growing_pop = no }
+		set_building = "space_building_mining_network_1"
+		add_deposit = d_rich_mineral_deposit
+	}
+	random_tile = {
+		limit = { has_blocker = no has_building = no }
+		add_deposit = d_rich_engineering_deposit				
+	}
+	random_tile = {
+		limit = { has_blocker = no has_building = no }
+		add_deposit = d_rich_society_deposit				
+	}
+	random_tile = {
+		limit = { has_blocker = no has_building = no }
+		add_deposit = d_rich_physics_deposit				
+	}
+	random_tile = {
+		limit = { has_blocker = no has_building = no }
+		add_deposit = d_rich_mineral_deposit
+	}
+	while = {
+		count = 3
+		random_tile = {
+			limit = { has_blocker = no has_building = no }
+			set_blocker = "tb_hunters_lodge_expansion"
+		}
+	}
+	while = {
+		count = 3
+		random_tile = {
+			limit = { has_blocker = no has_building = no }
+			add_deposit = d_rich_energy_deposit
+		}
+	}
+	random_tile = {
+		limit = { has_blocker = no has_building = no }
+		add_deposit = d_rich_mineral_deposit
+		set_blocker = "tb_hunters_lodge_expansion"
+	}
+	random_tile = {
+		limit = { has_blocker = no has_building = no }
+		add_deposit = d_rich_farmland_deposit
+		set_blocker = "tb_hunters_lodge_expansion"
+	}
+	random_tile = {
+		limit = { has_blocker = no has_building = no }
+		add_deposit = d_vast_mineral_deposit
+		set_blocker = "tb_hunters_lodge_expansion"
+	}				
+}
+
+# Unique variant for Suliban
+generate_major_empire_start_buildings_helix = {
+	every_tile = {
+		limit = { has_building = yes }
+		remove_building = yes
+	}
+	random_tile = {
+		limit = { has_blocker = no has_building = no num_adjacent_tiles > 3 }
+		set_building = "helix_ops_1"
+		add_deposit = d_rich_energy_deposit				
+		random_neighboring_tile = {
+			limit = { has_blocker = no has_building = no }
+			set_building = "space_building_hydroponics_farm_1"
+			add_deposit = d_rich_farmland_deposit						
+		}
+		random_neighboring_tile = {
+			limit = { has_blocker = no has_building = no }
+			set_building = "space_building_power_plant_1"
+			add_deposit = d_rich_energy_deposit						
+		}
+		random_neighboring_tile = {
+			limit = { has_blocker = no has_building = no }
+			set_building = "space_building_power_plant_1"
+			add_deposit = d_vast_energy_deposit						
+		}
+		random_neighboring_tile = {
+			limit = { has_blocker = no has_building = no }
+			set_building = "space_building_mining_network_1"
+			add_deposit = d_rich_mineral_deposit						
+		}
+	}
+	random_tile = {
+		limit = { has_blocker = no has_building = no has_grown_pop = no has_growing_pop = no }
+		set_building = "space_building_hydroponics_farm_1"
+		add_deposit = d_rich_farmland_deposit
+	}
+	random_tile = {
+		limit = { has_blocker = no has_building = no has_grown_pop = no has_growing_pop = no }
+		set_building = "space_building_mining_network_1"
+		add_deposit = d_rich_mineral_deposit
+	}
+	random_tile = {
+		limit = { has_blocker = no has_building = no }
+		add_deposit = d_rich_engineering_deposit				
+	}
+	random_tile = {
+		limit = { has_blocker = no has_building = no }
+		add_deposit = d_rich_society_deposit				
+	}
+	random_tile = {
+		limit = { has_blocker = no has_building = no }
+		add_deposit = d_rich_physics_deposit				
+	}
+	while = {
+		count = 2
+		random_tile = {
+			limit = { has_blocker = no has_building = no }
+			add_deposit = d_vast_mineral_deposit
+		}
+	}	
+	random_tile = {
+		limit = { has_blocker = no has_building = no }
+		add_deposit = d_rich_mineral_deposit
+		set_blocker = "tb_helix_expansion"
+	}
+	while = {
+		count = 3
+		random_tile = {
+			limit = { has_blocker = no has_building = no }
+			set_blocker = "tb_helix_expansion"
+		}
+	}
+	random_tile = {
+		limit = { has_blocker = no has_building = no }
+		add_deposit = d_rich_farmland_deposit
+		set_blocker = "tb_helix_expansion"
+	}
+	random_tile = {
+		limit = { has_blocker = no has_building = no }
+		add_deposit = d_vast_energy_deposit
+		set_blocker = "tb_helix_expansion"
+	}
+}
+
+# Unique variant for Borg
+generate_major_empire_start_buildings_unicomplex = {
+	every_tile = {
+		limit = { has_building = yes }
+		remove_building = yes
+	}
+	random_tile = {
+		limit = { has_blocker = no has_building = no has_grown_pop = no num_adjacent_tiles > 3 }
+		set_building = "node_hub_1"
+		add_deposit = d_rich_energy_deposit
+		random_neighboring_tile = {
+			limit = { has_blocker = no has_building = no has_grown_pop = no }
+			set_building = "space_building_mining_network_1"
+			add_deposit = d_rich_mineral_deposit
+		}
+		random_neighboring_tile = {
+			limit = { has_blocker = no has_building = no has_grown_pop = no }
+			set_building = "space_building_hydroponics_farm_1"
+			add_deposit = d_rich_farmland_deposit
+		}
+		random_neighboring_tile = {
+			limit = { has_blocker = no has_building = no has_grown_pop = no }
+			set_building = "space_building_power_plant_1"
+			add_deposit = d_rich_energy_deposit
+		}
+		random_neighboring_tile = {
+			limit = { has_blocker = no has_building = no has_grown_pop = no }
+			set_building = "space_building_power_plant_1"
+			add_deposit = d_vast_energy_deposit
+		}
+	}
+	random_tile = {
+		limit = { has_blocker = no has_building = no has_grown_pop = no }
+		set_building = "space_building_physics_lab_1"
+		add_deposit = d_rich_physics_deposit
+	}
+	random_tile = {
+		limit = { has_blocker = no has_building = no has_grown_pop = no }
+		set_building = "space_building_mining_network_1"
+		add_deposit = d_vast_mineral_deposit
+	}
+	while = {
+		count = 5
+		random_tile = {
+			limit = { has_blocker = no has_building = no has_grown_pop = no }
+			set_building = "space_building_mining_network_1"
+			add_deposit = d_rich_mineral_deposit
+		}
+	}
+	random_tile = {
+		limit = { has_blocker = no has_building = no has_grown_pop = no }
+		set_building = "space_building_mining_network_1"
+		add_deposit = d_vast_mineral_deposit
+	}
+	random_tile = {
+		limit = { has_blocker = no has_building = no has_grown_pop = no }
+		set_building = "space_building_power_plant_1"
+		add_deposit = d_rich_energy_deposit
+	}
+	while = {
+		count = 4
+		random_tile = {
+			limit = { has_blocker = no has_building = no has_grown_pop = no }
+			set_building = "space_building_power_plant_1"
+			add_deposit = d_vast_energy_deposit
+		}
+	}
+	while = {
+		count = 2
+		random_tile = {
+			limit = { has_blocker = no has_building = no has_grown_pop = no }
+			set_building = "space_building_power_plant_1"
+			add_deposit = d_rich_energy_deposit
+		}
+	}
+	while = {
+		count = 2
+		random_tile = {
+			limit = { has_blocker = no has_building = no has_grown_pop = no }
+			set_building = "space_building_hydroponics_farm_1"
+			add_deposit = d_vast_farmland_deposit
+		}
+	}
+	while = {
+		count = 3
+		random_tile = {
+			limit = { has_blocker = no has_building = no has_grown_pop = no }
+			set_building = "space_building_hydroponics_farm_1"
+			add_deposit = d_rich_farmland_deposit
+		}
+	}
+}
+
+# Unique variant for Fallen empires
+generate_fallen_empire_start_buildings = {
+	every_tile = {
+		remove_building = yes
+		remove_blocker = yes
+	}
+	random_tile = {
+		limit = { has_grown_pop = yes num_adjacent_tiles > 3 }
+		set_building = "building_capital_3"
+		set_deposit = d_vast_energy_deposit				
+		random_neighboring_tile = { set_building = "building_agri_processing_complex" set_deposit = d_vast_farmland_deposit }
+		random_neighboring_tile = { set_building = "building_agri_processing_complex" set_deposit = d_vast_farmland_deposit }
+		random_neighboring_tile = { set_building = "building_dark_matter_power_plant" set_deposit = d_vast_energy_deposit }
+		random_neighboring_tile = { set_building = "building_ancient_factory" set_deposit = d_vast_mineral_deposit }				
+	}
+	while = {
+		limit = { any_tile = { has_building = no } }
+		random_tile = { 
+			limit = { has_building = no } 
+			clear_deposits = yes
+			add_random_fe_building = yes
+		}
+	}
+	while = {
+		limit = { any_tile = { has_grown_pop = no } }
+		create_pop = { species = owner_main_species }
+	}
+}
+
+###
+### Other Initilization scripted effects
+###
+
+add_random_fe_building = {
+	random_list = {
+		10 = { set_building = "building_agri_processing_complex" set_deposit = d_vast_farmland_deposit }
+		10 = { set_building = "building_dark_matter_power_plant" set_deposit = d_vast_energy_deposit }
+		10 = { set_building = "building_ancient_factory" set_deposit = d_vast_mineral_deposit }
+		10 = { set_building = "building_ancient_archives" }
+	}
+}
+
+add_appropriate_start_design = {
+	#owner scope
+	if = {
+		limit = { always = yes }
+		create_ship_design = { design = "Early generic cannon Patrol Frigate" }
+	}
+	
+	
+	add_ship_design = last_created_design
+}
+
+generate_major_empire_start_fleets = {
+	if = {
+		limit = { owner = { has_country_flag = init_spawned } }
+		create_correct_spaceport_planetscope = yes
+		owner = {
+			create_fleet = {
+				effect = {
+					set_owner = prev
+					set_location = prevprev
+					create_ship = { name = random random_existing_design = constructor graphical_culture = prev prefix = yes }
+				}
+			}
+			create_fleet = {
+				effect = {
+					set_owner = prev
+					set_location = prevprev
+					create_ship = { name = random random_existing_design = science graphical_culture = prev prefix = yes }
+					owner = { create_leader = { name = random type = scientist skill = random traits = { trait = random_trait trait = random_trait } } }
+					assign_leader = last_created_leader
+				}
+			}
+		}
+	}
+}
+
+generate_fallen_empire_start_fleets = {
+	create_correct_spaceport_planetscope = yes
+	owner = {
+		create_fleet = {
+			effect = {
+				set_owner = prev
+				set_location = prevprev
+				create_ship = { name = random random_existing_design = constructor graphical_culture = prev prefix = yes }
+				set_location = {
+					target = PREVPREV
+					distance = 35
+					angle = random 
+				}
+			}
+		}
+		create_fleet = {
+			effect = {
+				set_owner = prev
+				set_location = prevprev
+				create_ship = { name = random random_existing_design = science graphical_culture = prev prefix = yes }
+				set_location = {
+					target = PREVPREV
+					distance = 35
+					angle = random 
+				}
+				owner = { create_leader = { name = random type = scientist skill = random traits = { trait = random_trait trait = random_trait } } }
+				assign_leader = last_created_leader
+			}
+		}
+		create_ship_design = { design = "Fallen Sword" }
+		create_fleet = {
+			effect = {
+				set_owner = prev
+				set_location = prevprev
+				while = {
+					count = 15
+					create_ship = { name = random design = last_created_design upgradable = no }
+					set_location = {
+						target = PREVPREV
+						distance = 35
+						angle = random 
+					}
+				}
+			}
+		}
+		create_ship_design = { design = "Fallen Mercy" }
+		create_fleet = {
+			effect = {
+				set_owner = prev
+				set_location = prevprev
+				while = {
+					count = 10
+					create_ship = { name = random design = last_created_design upgradable = no }
+					set_location = {
+						target = PREVPREV
+						distance = 35
+						angle = random 
+					}
+				}
+			}
+		}
+		create_ship_design = { design = "Fallen Justice" }
+		create_fleet = {
+			effect = {
+				set_owner = prev
+				set_location = prevprev
+				while = {
+					count = 5
+					create_ship = { name = random design = last_created_design upgradable = no }
+					set_location = {
+						target = PREVPREV
+						distance = 35
+						angle = random 
+					}
+				}
+			}
+		}
+	}	
+}
+
+### Fallen empire unique technology dump
+	fallen_empire_techs = {
+		give_technology = { tech = tech_physics_administrative_3 message = no }
+		give_technology = { tech = tech_physics_duotronic_4 message = no }
+		give_technology = { tech = tech_physics_basic_5 message = no }
+		give_technology = { tech = tech_physics_isolinear_6 message = no }
+		give_technology = { tech = tech_physics_self_7 message = no }
+		give_technology = { tech = tech_physics_adaptive_10 message = no }
+		give_technology = { tech = tech_physics_multitronic_11 message = no }
+		give_technology = { tech = tech_improved_databank_uplinks message = no }
+		give_technology = { tech = tech_physics_computing_16 message = no }
+		give_technology = { tech = tech_physics_synchronized_14 message = no }
+		give_technology = { tech = tech_astrometrics_labs message = no }
+		give_technology = { tech = tech_physics_transporters_23 message = no }
+		give_technology = { tech = tech_physics_computing_29 message = no }
+		give_technology = { tech = tech_physics_advanced_19 message = no }
+		give_technology = { tech = tech_physics_computing_31 message = no }
+		give_technology = { tech = tech_physics_applied_20 message = no }
+		give_technology = { tech = tech_physics_computing_33 message = no }
+		give_technology = { tech = tech_physics_space-time_21 message = no }
+		give_technology = { tech = tech_physics_computing_36 message = no }
+		give_technology = { tech = tech_physics_unified_22 message = no }
+		give_technology = { tech = tech_physics_holodeck_26 message = no }
+		give_technology = { tech = tech_physics_computing_39 message = no }
+		give_technology = { tech = tech_scientific_method message = no }
+		give_technology = { tech = tech_society_protein_479 message = no }
+		give_technology = { tech = tech_optical_sensor message = no }
+		give_technology = { tech = tech_combat_sensors message = no }
+		give_technology = { tech = tech_physics_gravitic_31 message = no }
+		give_technology = { tech = tech_physics_nuclear_32 message = no }
+		give_technology = { tech = tech_physics_signal_38 message = no }
+		give_technology = { tech = tech_physics_stellar_35 message = no }
+		give_technology = { tech = tech_physics_computing_59 message = no }
+		give_technology = { tech = tech_physics_computing_60 message = no }
+		give_technology = { tech = tech_physics_tachyon_41 message = no }
+		give_technology = { tech = tech_physics_astrometrics_40 message = no }
+		give_technology = { tech = tech_physics_multiphasic_43 message = no }
+		give_technology = { tech = tech_fission_power message = no }
+		give_technology = { tech = tech_physics_inertial_54 message = no }
+		give_technology = { tech = tech_physics_industrial_108 message = no }
+		give_technology = { tech = tech_physics_field_110 message = no }
+		give_technology = { tech = tech_physics_global_111 message = no }
+		give_technology = { tech = tech_physics_carbon_56 message = no }
+		give_technology = { tech = tech_physics_quantum_114 message = no }
+		give_technology = { tech = tech_physics_z-particles_112 message = no }
+		give_technology = { tech = tech_physics_planetary_115 message = no }
+		give_technology = { tech = tech_physics_zero_58 message = no }
+		give_technology = { tech = tech_physics_pure_57 message = no }
+		give_technology = { tech = tech_physics_field_manipulation_113 message = no }
+		give_technology = { tech = tech_physics_synchronous_59 message = no }
+		give_technology = { tech = tech_physics_zero_119 message = no }
+		give_technology = { tech = tech_physics_miniaturized_49 message = no }
+		give_technology = { tech = tech_warp_engine message = no }
+		give_technology = { tech = tech_specialization_warp message = no }
+		give_technology = { tech = tech_physics_field_manipulation_141 message = no }
+		give_technology = { tech = tech_physics_field_manipulation_142 message = no }
+		give_technology = { tech = tech_physics_dicyclic_73 message = no }
+		give_technology = { tech = tech_physics_tricyclic_76 message = no }
+		give_technology = { tech = tech_physics_field_manipulation_146 message = no }
+		give_technology = { tech = tech_physics_navigational_66 message = no }
+		give_technology = { tech = tech_physics_field_manipulation_148 message = no }
+		give_technology = { tech = tech_physics_dilithium_74 message = no }
+		give_technology = { tech = tech_physics_field_manipulation_151 message = no }
+		give_technology = { tech = tech_physics_field_manipulation_152 message = no }
+		give_technology = { tech = tech_physics_bipolar_77 message = no }
+		give_technology = { tech = tech_physics_hyper-inection_80 message = no }
+		give_technology = { tech = tech_physics_field_manipulation_155 message = no }
+		give_technology = { tech = tech_physics_field_manipulation_157 message = no }
+		give_technology = { tech = tech_physics_defensive_83 message = no }
+		give_technology = { tech = tech_physics_multi-spatial_91 message = no }
+		give_technology = { tech = tech_physics_multi-adaptive_92 message = no }
+		give_technology = { tech = tech_physics_field_manipulation_192 message = no }
+		give_technology = { tech = tech_physics_refractive_93 message = no }
+		give_technology = { tech = tech_physics_field_manipulation_194 message = no }
+		give_technology = { tech = tech_physics_field_manipulation_196 message = no }
+		give_technology = { tech = tech_physics_field_manipulation_205 message = no }
+		give_technology = { tech = tech_physics_radial_103 message = no }
+		give_technology = { tech = tech_physics_interphased_105 message = no }
+		give_technology = { tech = tech_physics_field_manipulation_208 message = no }
+		give_technology = { tech = tech_physics_multi-spectrum_85 message = no }
+		give_technology = { tech = tech_physics_multiphasic_86 message = no }
+		give_technology = { tech = tech_physics_field_manipulation_212 message = no }
+		give_technology = { tech = tech_physics_immersion_104 message = no }
+		give_technology = { tech = tech_physics_field_manipulation_214 message = no }
+		give_technology = { tech = tech_physics_unimatrix_106 message = no }
+		give_technology = { tech = tech_physics_shield_88 message = no }
+		give_technology = { tech = tech_physics_shield_90 message = no }
+		give_technology = { tech = tech_physics_field_manipulation_218 message = no }
+		give_technology = { tech = tech_physics_gravity_121 message = no }
+		give_technology = { tech = tech_physics_field_manipulation_231 message = no }
+		give_technology = { tech = tech_physics_field_manipulation_232 message = no }
+		give_technology = { tech = tech_physics_advanced_124 message = no }
+		give_technology = { tech = tech_physics_field_manipulation_235 message = no }
+		give_technology = { tech = tech_physics_particles_300 message = no }
+		give_technology = { tech = tech_physics_particles_301 message = no }
+		give_technology = { tech = tech_physics_phase_131 message = no }
+		give_technology = { tech = tech_physics_particles_304 message = no }
+		give_technology = { tech = tech_physics_aceton_133 message = no }
+		give_technology = { tech = tech_physics_particles_306 message = no }
+		give_technology = { tech = tech_physics_particles_307 message = no }
+		give_technology = { tech = tech_physics_particles_308 message = no }
+		give_technology = { tech = tech_physics_particles_309 message = no }
+		give_technology = { tech = tech_physics_particles_311 message = no }
+		give_technology = { tech = tech_physics_holographic_141 message = no }
+		give_technology = { tech = tech_physics_particles_313 message = no }
+		give_technology = { tech = tech_physics_particles_322 message = no }
+		give_technology = { tech = tech_specialization_weapon message = no }
+		give_technology = { tech = tech_physics_particles_328 message = no }
+		give_technology = { tech = tech_physics_teratogenic_137 message = no }
+		give_technology = { tech = tech_physics_particles_334 message = no }
+		give_technology = { tech = tech_physics_phase_138 message = no }
+		give_technology = { tech = tech_physics_particles_340 message = no }
+		give_technology = { tech = tech_physics_central_147 message = no }
+		give_technology = { tech = tech_planetary_government message = no }
+		give_technology = { tech = tech_society_planetary_355 message = no }
+		give_technology = { tech = tech_society_galactic_356 message = no }
+		give_technology = { tech = tech_society_colonial_357 message = no }
+		give_technology = { tech = tech_society_galactic_358 message = no }
+		give_technology = { tech = tech_society_foundations_359 message = no }
+		give_technology = { tech = tech_society_statecraft_907 message = no }
+		give_technology = { tech = tech_society_planetary_367 message = no }
+		give_technology = { tech = tech_society_interstellar_363 message = no }
+		give_technology = { tech = tech_society_statecraft_911 message = no }
+		give_technology = { tech = tech_society_engineered_368 message = no }
+		give_technology = { tech = tech_society_adaptive_369 message = no }
+		give_technology = { tech = tech_society_statecraft_915 message = no }
+		give_technology = { tech = tech_society_statecraft_916 message = no }
+		give_technology = { tech = tech_society_imperial_370 message = no }
+		give_technology = { tech = tech_society_statecraft_918 message = no }
+		give_technology = { tech = tech_society_galactic_364 message = no }
+		give_technology = { tech = tech_society_statecraft_920 message = no }
+		give_technology = { tech = tech_society_statecraft_921 message = no }
+		give_technology = { tech = tech_defense_army message = no }
+		give_technology = { tech = tech_society_space_393 message = no }
+		give_technology = { tech = tech_interstellar_campaigns message = no }
+		give_technology = { tech = tech_society_naval_404 message = no }
+		give_technology = { tech = tech_society_distributed_405 message = no }
+		give_technology = { tech = tech_society_interstellar_410 message = no }
+		give_technology = { tech = tech_society_fluid_413 message = no }
+		give_technology = { tech = tech_society_interstellar_400 message = no }
+		give_technology = { tech = tech_society_self-sustaining_411 message = no }
+		give_technology = { tech = tech_society_long-term_401 message = no }
+		give_technology = { tech = tech_society_self-assembling_402 message = no }
+		give_technology = { tech = tech_society_mobile_409 message = no }
+		give_technology = { tech = tech_society_statecraft_961 message = no }
+		give_technology = { tech = tech_society_naval_406 message = no }
+		give_technology = { tech = tech_society_modular_407 message = no }
+		give_technology = { tech = tech_society_combined_397 message = no }
+		give_technology = { tech = tech_society_special_395 message = no }
+		give_technology = { tech = tech_society_centralized_403 message = no }
+		give_technology = { tech = tech_society_galactic_408 message = no }
+		give_technology = { tech = tech_society_statecraft_972 message = no }
+		give_technology = { tech = tech_society_statecraft_973 message = no }
+		give_technology = { tech = tech_society_advanced_412 message = no }
+		give_technology = { tech = tech_society_virtual_415 message = no }
+		give_technology = { tech = tech_society_open-standard_430 message = no }
+		give_technology = { tech = tech_society_biology_1005 message = no }
+		give_technology = { tech = tech_society_diplomatic_432 message = no }
+		give_technology = { tech = tech_society_galactic_388 message = no }
+		give_technology = { tech = tech_society_biology_1008 message = no }
+		give_technology = { tech = tech_society_code_431 message = no }
+		give_technology = { tech = tech_society_neural_488 message = no }
+		give_technology = { tech = tech_society_biology_1013 message = no }
+		give_technology = { tech = tech_society_secret_436 message = no }
+		give_technology = { tech = tech_society_counter-intelligence_438 message = no }
+		give_technology = { tech = tech_society_ministry_434 message = no }
+		give_technology = { tech = tech_society_interstellar_427 message = no }
+		give_technology = { tech = tech_society_biology_1025 message = no }
+		give_technology = { tech = tech_society_biology_1026 message = no }
+		give_technology = { tech = tech_society_biology_1028 message = no }
+		give_technology = { tech = tech_society_xenobiology_441 message = no }
+		give_technology = { tech = tech_society_secrets_442 message = no }
+		give_technology = { tech = tech_society_bioform_443 message = no }
+		give_technology = { tech = tech_society_psycho-history_444 message = no }
+		give_technology = { tech = tech_society_advanced_448 message = no }
+		give_technology = { tech = tech_society_science_455 message = no }
+		give_technology = { tech = tech_society_university_452 message = no }
+		give_technology = { tech = tech_society_predictive_454 message = no }
+		give_technology = { tech = tech_society_global_459 message = no }
+		give_technology = { tech = tech_society_galactic_456 message = no }
+		give_technology = { tech = tech_society_biology_1040 message = no }
+		give_technology = { tech = tech_society_holographic_461 message = no }
+		give_technology = { tech = tech_society_zero-g_449 message = no }
+		give_technology = { tech = tech_society_biology_1046 message = no }
+		give_technology = { tech = tech_society_biology_1047 message = no }
+		give_technology = { tech = tech_society_biology_1048 message = no }
+		give_technology = { tech = tech_society_genome_447 message = no }
+		give_technology = { tech = tech_society_biology_1070 message = no }
+		give_technology = { tech = tech_society_heuristic_450 message = no }
+		give_technology = { tech = tech_society_radical_453 message = no }
+		give_technology = { tech = tech_eco_simulation message = no }
+		give_technology = { tech = tech_society_orbital_480 message = no }
+		give_technology = { tech = tech_society_gene_481 message = no }
+		give_technology = { tech = tech_society_xenology_445 message = no }
+		give_technology = { tech = tech_society_advanced_486 message = no }
+		give_technology = { tech = tech_society_xenobotany_482 message = no }
+		give_technology = { tech = tech_society_biodiversity_483 message = no }
+		give_technology = { tech = tech_bureau_colonial message = no }
+		give_technology = { tech = tech_society_new_worlds_1102 message = no }
+		give_technology = { tech = tech_society_intergalactic_499 message = no }
+		give_technology = { tech = tech_society_new_worlds_1104 message = no }
+		give_technology = { tech = tech_society_new_worlds_1105 message = no }
+		give_technology = { tech = tech_terraforming_borg message = no }
+		give_technology = { tech = tech_specialization_frontier message = no }
+		give_technology = { tech = tech_society_advanced_498 message = no }
+		give_technology = { tech = tech_society_frontier_505 message = no }
+		give_technology = { tech = tech_society_new_worlds_1113 message = no }
+		give_technology = { tech = tech_society_new_worlds_1114 message = no }
+		give_technology = { tech = tech_society_assembly_502 message = no }
+		give_technology = { tech = tech_society_new_worlds_1117 message = no }
+		give_technology = { tech = tech_society_new_worlds_1118 message = no }
+		give_technology = { tech = tech_society_new_worlds_1119 message = no }
+		give_technology = { tech = tech_society_gravitational_501 message = no }
+		give_technology = { tech = tech_society_consensus-shaped_384 message = no }
+		give_technology = { tech = tech_terraforming_base_1 message = no }
+		give_technology = { tech = tech_society_new_worlds_1125 message = no }
+		give_technology = { tech = tech_terraforming_base_2 message = no }
+		give_technology = { tech = tech_society_hostile_511 message = no }
+		give_technology = { tech = tech_terraforming_base_3 message = no }
+		give_technology = { tech = tech_society_weather_500 message = no }
+		give_technology = { tech = tech_society_new_worlds_1144 message = no }
+		give_technology = { tech = tech_society_new_worlds_1145 message = no }
+		give_technology = { tech = tech_tb_dangerous_wildlife message = no }
+		give_technology = { tech = tech_tb_deep_sinkhole message = no }
+		give_technology = { tech = tech_tb_massive_glacier message = no }
+		give_technology = { tech = tech_tb_mountain_range message = no }
+		give_technology = { tech = tech_tb_noxious_swamp message = no }
+		give_technology = { tech = tech_tb_quicksand_basin message = no }
+		give_technology = { tech = tech_tb_toxic_kelp message = no }
+		give_technology = { tech = tech_tb_volcano message = no }
+		give_technology = { tech = tech_society_new_worlds_1162 message = no }
+		give_technology = { tech = tech_society_new_worlds_1163 message = no }
+		give_technology = { tech = tech_society_distributed_390 message = no }
+		give_technology = { tech = tech_society_new_worlds_1166 message = no }
+		give_technology = { tech = tech_society_cultural_391 message = no }
+		give_technology = { tech = tech_society_new_worlds_1170 message = no }
+		give_technology = { tech = tech_society_new_worlds_1171 message = no }
+		give_technology = { tech = tech_society_new_worlds_1172 message = no }
+		give_technology = { tech = tech_society_new_worlds_1173 message = no }
+		give_technology = { tech = tech_deassimilate_1 message = no }
+		give_technology = { tech = tech_deassimilate_2 message = no }
+		give_technology = { tech = tech_civilian_infrastructure message = no }
+		give_technology = { tech = tech_engineering_industry_1201 message = no }
+		give_technology = { tech = tech_engineering_large_533 message = no }
+		give_technology = { tech = tech_engineering_industry_1203 message = no }
+		give_technology = { tech = tech_engineering_deep_536 message = no }
+		give_technology = { tech = tech_engineering_industry_1205 message = no }
+		give_technology = { tech = tech_engineering_planetary_539 message = no }
+		give_technology = { tech = tech_engineering_industry_1207 message = no }
+		give_technology = { tech = tech_spaceport_2 message = no }
+		give_technology = { tech = tech_spaceport_3 message = no }
+		give_technology = { tech = tech_spaceport_4 message = no }
+		give_technology = { tech = tech_patrol_frigate message = no }
+		give_technology = { tech = tech_engineering_cruiser_542 message = no }
+		give_technology = { tech = tech_engineering_assault_546 message = no }
+		give_technology = { tech = tech_engineering_industry_1223 message = no }
+		give_technology = { tech = tech_engineering_industry_1224 message = no }
+		give_technology = { tech = tech_engineering_industry_1225 message = no }
+		give_technology = { tech = tech_engineering_industry_1226 message = no }
+		give_technology = { tech = tech_engineering_industry_1227 message = no }
+		give_technology = { tech = tech_engineering_industry_1232 message = no }
+		give_technology = { tech = tech_engineering_industry_1233 message = no }
+		give_technology = { tech = tech_engineering_multi-vector_551 message = no }
+		give_technology = { tech = tech_ship_program message = no }
+		give_technology = { tech = tech_engineering_advanced_547 message = no }
+		give_technology = { tech = tech_engineering_next-level_548 message = no }
+		give_technology = { tech = tech_engineering_next-level_718 message = no }
+		give_technology = { tech = tech_engineering_next-level_719 message = no }
+		give_technology = { tech = tech_engineering_advanced_721 message = no }
+		give_technology = { tech = tech_engineering_next-level_722 message = no }
+		give_technology = { tech = tech_engineering_next-level_723 message = no }
+		give_technology = { tech = tech_engineering_next-level_724 message = no }
+		give_technology = { tech = tech_engineering_next-level_725 message = no }
+		give_technology = { tech = tech_engineering_industry_1258 message = no }
+		give_technology = { tech = tech_engineering_industry_1259 message = no }
+		give_technology = { tech = tech_engineering_industry_1260 message = no }
+		give_technology = { tech = tech_space_construction message = no }
+		give_technology = { tech = tech_engineering_defense_556 message = no }
+		give_technology = { tech = tech_engineering_deep_563 message = no }
+		give_technology = { tech = tech_engineering_spaceport_564 message = no }
+		give_technology = { tech = tech_engineering_deep_558 message = no }
+		give_technology = { tech = tech_engineering_industry_1278 message = no }
+		give_technology = { tech = tech_engineering_industry_1279 message = no }
+		give_technology = { tech = tech_engineering_central_565 message = no }
+		give_technology = { tech = tech_engineering_regional_553 message = no }
+		give_technology = { tech = tech_engineering_fleet_554 message = no }
+		give_technology = { tech = tech_engineering_listening_555 message = no }
+		give_technology = { tech = tech_physics_orbital_37 message = no }
+		give_technology = { tech = tech_dilithium_distillation message = no }
+		give_technology = { tech = tech_refining_techniques message = no }
+		give_technology = { tech = tech_engineering_materials_1402 message = no }
+		give_technology = { tech = tech_engineering_materials_1403 message = no }
+		give_technology = { tech = tech_engineering_superfluid_575 message = no }
+		give_technology = { tech = tech_engineering_exotic_591 message = no }
+		give_technology = { tech = tech_engineering_mineral_582 message = no }
+		give_technology = { tech = tech_engineering_gouge_578 message = no }
+		give_technology = { tech = tech_engineering_power_594 message = no }
+		give_technology = { tech = tech_engineering_deep_586 message = no }
+		give_technology = { tech = tech_engineering_stratified_579 message = no }
+		give_technology = { tech = tech_engineering_zero_583 message = no }
+		give_technology = { tech = tech_engineering_advanced_587 message = no }
+		give_technology = { tech = tech_engineering_particle_580 message = no }
+		give_technology = { tech = tech_engineering_subspace-shifting_584 message = no }
+		give_technology = { tech = tech_engineering_materials_1420 message = no }
+		give_technology = { tech = tech_engineering_materials_1421 message = no }
+		give_technology = { tech = tech_engineering_mineral_588 message = no }
+		give_technology = { tech = tech_engineering_geothermal_590 message = no }
+		give_technology = { tech = tech_engineering_theta-matrix_596 message = no }
+		give_technology = { tech = tech_engineering_materials_1425 message = no }
+		give_technology = { tech = tech_engineering_advanced_589 message = no }
+		give_technology = { tech = tech_engineering_materials_1428 message = no }
+		give_technology = { tech = tech_engineering_materials_1429 message = no }
+		give_technology = { tech = tech_engineering_piezoelectric_597 message = no }
+		give_technology = { tech = tech_engineering_materials_1433 message = no }
+		give_technology = { tech = tech_engineering_materials_1440 message = no }
+		give_technology = { tech = tech_engineering_materials_1441 message = no }
+		give_technology = { tech = tech_engineering_materials_1442 message = no }
+		give_technology = { tech = tech_basic_industry message = no }
+		give_technology = { tech = tech_emergency_backup message = no }
+		give_technology = { tech = tech_engineering_improved_604 message = no }
+		give_technology = { tech = tech_engineering_materials_1448 message = no }
+		give_technology = { tech = tech_engineering_multi-layered_602 message = no }
+		give_technology = { tech = tech_engineering_materials_1451 message = no }
+		give_technology = { tech = tech_engineering_structural_605 message = no }
+		give_technology = { tech = tech_engineering_rotating_606 message = no }
+		give_technology = { tech = tech_titanium_hull message = no }
+		give_technology = { tech = tech_engineering_magnesite_611 message = no }
+		give_technology = { tech = tech_engineering_trititanium_613 message = no }
+		give_technology = { tech = tech_engineering_kelindide_615 message = no }
+		give_technology = { tech = tech_engineering_monotanium_617 message = no }
+		give_technology = { tech = tech_engineering_materials_1464 message = no }
+		give_technology = { tech = tech_engineering_low_619 message = no }
+		give_technology = { tech = tech_engineering_refractive_620 message = no }
+		give_technology = { tech = tech_engineering_masking_621 message = no }
+		give_technology = { tech = tech_engineering_materials_1468 message = no }
+		give_technology = { tech = tech_engineering_duranium_612 message = no }
+		give_technology = { tech = tech_engineering_materials_1470 message = no }
+		give_technology = { tech = tech_engineering_polyduranium_616 message = no }
+		give_technology = { tech = tech_engineering_materials_1473 message = no }
+		give_technology = { tech = tech_engineering_tetraburnium_618 message = no }
+		give_technology = { tech = tech_engineering_parametallic_622 message = no }
+		give_technology = { tech = tech_engineering_ablative_623 message = no }
+		give_technology = { tech = tech_engineering_reflective_624 message = no }
+		give_technology = { tech = tech_assault_armies message = no }
+		give_technology = { tech = tech_engineering_powered_626 message = no }
+		give_technology = { tech = tech_engineering_personal_627 message = no }
+		give_technology = { tech = tech_engineering_materials_1481 message = no }
+		give_technology = { tech = tech_thrusters_1 message = no }
+		give_technology = { tech = tech_engineering_materials_1491 message = no }
+		give_technology = { tech = tech_engineering_avidyne_633 message = no }
+		give_technology = { tech = tech_engineering_materials_1494 message = no }
+		give_technology = { tech = tech_engineering_materials_1495 message = no }
+		give_technology = { tech = tech_engineering_hyper-impulse_637 message = no }
+		give_technology = { tech = tech_engineering_driver_639 message = no }
+		give_technology = { tech = tech_engineering_ullage_640 message = no }
+		give_technology = { tech = tech_engineering_inertial_641 message = no }
+		give_technology = { tech = tech_engineering_materials_1500 message = no }
+		give_technology = { tech = tech_engineering_materials_1501 message = no }
+		give_technology = { tech = tech_engineering_low_634 message = no }
+		give_technology = { tech = tech_engineering_low_636 message = no }
+		give_technology = { tech = tech_engineering_materials_1505 message = no }
+		give_technology = { tech = tech_engineering_materials_1506 message = no }
+		give_technology = { tech = tech_engineering_independent_642 message = no }
+		give_technology = { tech = tech_engineering_ramscoop_643 message = no }
+		give_technology = { tech = tech_engineering_bussard_644 message = no }
+		give_technology = { tech = tech_engineering_materials_1510 message = no }
+		give_technology = { tech = tech_engineering_nuclear_702 message = no }
+		give_technology = { tech = tech_engineering_rocketry_1602 message = no }
+		give_technology = { tech = tech_engineering_magnetic_703 message = no }
+		give_technology = { tech = tech_engineering_rocketry_1604 message = no }
+		give_technology = { tech = tech_engineering_gravimetric_697 message = no }
+		give_technology = { tech = tech_engineering_anti-matter_704 message = no }
+		give_technology = { tech = tech_engineering_gravity-sheer_698 message = no }
+		give_technology = { tech = tech_engineering_tricolbat_705 message = no }
+		give_technology = { tech = tech_engineering_rocketry_1609 message = no }
+		give_technology = { tech = tech_engineering_self-replicating_706 message = no }
+		give_technology = { tech = tech_engineering_photon_653 message = no }
+		give_technology = { tech = tech_engineering_rocketry_1618 message = no }
+		give_technology = { tech = tech_engineering_rocketry_1619 message = no }
+		give_technology = { tech = tech_engineering_type-8_668 message = no }
+		give_technology = { tech = tech_specialization_torpedo message = no }
+		give_technology = { tech = tech_engineering_intersecting_676 message = no }
+		give_technology = { tech = tech_engineering_interlacing_677 message = no }
+		give_technology = { tech = tech_engineering_improved_678 message = no }
+		give_technology = { tech = tech_engineering_dynamic_679 message = no }
+		give_technology = { tech = tech_engineering_quasi-interacting_680 message = no }
+		give_technology = { tech = tech_engineering_photon_654 message = no }
+		give_technology = { tech = tech_engineering_global_650 message = no }
+		give_technology = { tech = tech_engineering_rocketry_1638 message = no }
+		give_technology = { tech = tech_engineering_rocketry_1639 message = no }
+		give_technology = { tech = tech_specialization_plasma_torp message = no }
+		give_technology = { tech = tech_engineering_rocketry_1645 message = no }
+		give_technology = { tech = tech_engineering_interphased_693 message = no }
+		give_technology = { tech = tech_engineering_rocketry_1647 message = no }
+		give_technology = { tech = tech_engineering_radon_690 message = no }
+		give_technology = { tech = tech_engineering_noble_688 message = no }
+		give_technology = { tech = tech_engineering_warp_694 message = no }
+		give_technology = { tech = tech_engineering_rocketry_1651 message = no }
+		give_technology = { tech = tech_engineering_plasma_685 message = no }
+		give_technology = { tech = tech_engineering_tricobalt_696 message = no }
+		give_technology = { tech = tech_engineering_rocketry_1657 message = no }
+		give_technology = { tech = tech_engineering_rocketry_1658 message = no }
+		give_technology = { tech = tech_specialization_polaron_torpedo message = no }
+		give_technology = { tech = tech_engineering_rocketry_1665 message = no }
+		give_technology = { tech = tech_engineering_rocketry_1667 message = no }
+		give_technology = { tech = tech_engineering_rocketry_1668 message = no }
+		give_technology = { tech = tech_engineering_rocketry_1669 message = no }
+		give_technology = { tech = tech_engineering_rocketry_1670 message = no }
+		give_technology = { tech = tech_engineering_rocketry_1671 message = no }
+		give_technology = { tech = tech_engineering_rocketry_1672 message = no }
+		give_technology = { tech = tech_engineering_rocketry_1682 message = no }
+		give_technology = { tech = tech_engineering_rocketry_1683 message = no }
+		give_technology = { tech = tech_engineering_rocketry_1684 message = no }
+		give_technology = { tech = tech_engineering_rocketry_1685 message = no }
+		give_technology = { tech = tech_engineering_rocketry_1686 message = no }
+		give_technology = { tech = tech_engineering_rocketry_1690 message = no }
+		give_technology = { tech = "tech_physics_administrative_3" message = no }
+		give_technology = { tech = "tech_physics_basic_5" message = no }
+		give_technology = { tech = "tech_physics_self_7" message = no }
+		give_technology = { tech = "tech_physics_computing_9" message = no }
+		give_technology = { tech = "tech_physics_positronic_13" message = no }
+		give_technology = { tech = "tech_physics_holographic_27" message = no }
+		give_technology = { tech = "tech_physics_multiphasic_43" message = no }
+		give_technology = { tech = "tech_physics_artificial_116" message = no }
+		give_technology = { tech = "tech_physics_synchronous_59" message = no }
+		give_technology = { tech = "tech_physics_thermionic_60" message = no }
+		give_technology = { tech = "tech_physics_tetryonic_61" message = no }
+		give_technology = { tech = "tech_physics_field_manipulation_183" message = no }
+		give_technology = { tech = "tech_physics_aldean_100" message = no }
+		give_technology = { tech = "tech_physics_field_manipulation_195" message = no }
+		give_technology = { tech = "tech_physics_paratrinic_95" message = no }
+		give_technology = { tech = "tech_physics_field_manipulation_211" message = no }
+		give_technology = { tech = "tech_physics_field_manipulation_218" message = no }
+		give_technology = { tech = "tech_physics_field_manipulation_235" message = no }
+		give_technology = { tech = "tech_physics_muon_139" message = no }
+		give_technology = { tech = "tech_physics_quantum_140" message = no }
+		give_technology = { tech = "tech_physics_medevlan_144" message = no }
+		give_technology = { tech = "tech_physics_isokinetic_146" message = no }
+		give_technology = { tech = "tech_physics_holographic_141" message = no }
+		give_technology = { tech = "tech_physics_particles_313" message = no }
+		give_technology = { tech = "tech_physics_particles_856" message = no }
+		give_technology = { tech = "tech_physics_graviton_326" message = no }
+		give_technology = { tech = "tech_physics_particles_862" message = no }
+		give_technology = { tech = "tech_physics_particles_867" message = no }
+		give_technology = { tech = "tech_physics_starbase_335" message = no }
+		give_technology = { tech = "tech_physics_starbase_336" message = no }
+		give_technology = { tech = "tech_physics_particles_882" message = no }
+		give_technology = { tech = "tech_physics_particles_883" message = no }
+		give_technology = { tech = "tech_society_statecraft_901" message = no }
+		give_technology = { tech = "tech_society_planetary_355" message = no }
+		give_technology = { tech = "tech_society_galactic_356" message = no }
+		give_technology = { tech = "tech_society_colonial_357" message = no }
+		give_technology = { tech = "tech_society_galactic_358" message = no }
+		give_technology = { tech = "tech_society_foundations_359" message = no }
+		give_technology = { tech = "tech_society_holographic_417" message = no }
+		give_technology = { tech = "tech_society_nano-vitality_484" message = no }
+		give_technology = { tech = "tech_engineering_large_533" message = no }
+		give_technology = { tech = "tech_engineering_deep_536" message = no }
+		give_technology = { tech = "tech_engineering_planetary_539" message = no }
+		give_technology = { tech = "tech_engineering_industry_1207" message = no }
+		give_technology = { tech = "tech_engineering_industry_1208" message = no }
+		give_technology = { tech = "tech_spaceport_2" message = no }
+		give_technology = { tech = "tech_spaceport_3" message = no }
+		give_technology = { tech = "tech_spaceport_4" message = no }
+		give_technology = { tech = "tech_spaceport_5" message = no }
+		give_technology = { tech = "tech_spaceport_6" message = no }
+		give_technology = { tech = "tech_engineering_industry_1260" message = no }
+		give_technology = { tech = "tech_engineering_deep_558" message = no }
+		give_technology = { tech = "tech_engineering_industry_1298" message = no }
+		give_technology = { tech = "tech_engineering_industry_1299" message = no }
+		give_technology = { tech = "tech_engineering_industry_1300" message = no }
+		give_technology = { tech = "tech_engineering_materials_1443" message = no }
+		give_technology = { tech = "tech_engineering_materials_1464" message = no }
+		give_technology = { tech = "tech_engineering_materials_1468" message = no }
+		give_technology = { tech = "tech_engineering_hyper-impulse_637" message = no }
+		give_technology = { tech = "tech_engineering_rocketry_1611" message = no }
+		give_technology = { tech = "tech_engineering_transphasic_701" message = no }
+		give_technology = { tech = "tech_engineering_rocketry_1672" message = no }
+	}
+}	

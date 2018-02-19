@@ -1,0 +1,29 @@
+# doomsday
+ship_design = {
+	name = "Doomsday Machine"
+	ship_size = doomsday
+	section = {
+		template = "doomsday_stern_starship_1"
+		slot = "stern"
+		component = { slot = "MEDIUM_GUN_01" template = "MEDIUM_DOOMSDAY_0" }
+		component = { slot = "MEDIUM_GUN_02" template = "MEDIUM_DOOMSDAY_0" }
+		component = { slot = "MEDIUM_GUN_03" template = "MEDIUM_DOOMSDAY_0" }
+	}
+	section = {
+		template = "doomsday_mid_secondary_9"
+		slot = "mid"
+		component = { slot = "SMALL_UTILITY_1" template = "UTILITY_SMALL_ARMOR_0" }
+		component = { slot = "SMALL_UTILITY_2" template = "UTILITY_SMALL_ARMOR_0" }
+		component = { slot = "AUX_UTILITY_1" template = "UTILITY_AUX_CREW_0" }
+		component = { slot = "LARGE_UTILITY_1" template = "UTILITY_LARGE_TRACKING_0" }
+		component = { slot = "LARGE_UTILITY_2" template = "UTILITY_LARGE_TRACKING_0" }
+		component = { slot = "MEDIUM_UTILITY_1" template = "UTILITY_MEDIUM_EPS_0" }
+		component = { slot = "MEDIUM_UTILITY_2" template = "UTILITY_MEDIUM_EPS_0" }
+	}
+	required_component="REQUIRED_WARP_5_COMBAT_BS"
+	required_component="REQUIRED_COMPUTER_4_BC"
+	required_component="REQUIRED_THRUSTERS_1A_BS"
+	required_component="Required_Combat_Sensor_brawler_1"
+	required_component="REQUIRED_DEFENSE_2_ARMOR_BS"
+	required_component="REQUIRED_HULL_5A_BS"
+}

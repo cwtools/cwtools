@@ -1,0 +1,41 @@
+# Icons set here are the ones shown in component editor list.
+
+component_set = { key = "required_ship_sensors" required_component_set = yes icon = "GFX_ship_part_Required_Sensors_Short_0" icon_frame = 1	}
+component_set = { key = "required_ship_sensors_HE" required_component_set = yes icon = "GFX_ship_part_Required_Sensors_Short_0" icon_frame = 1	}
+component_set = { key = "required_ship_sensors_BC" required_component_set = yes icon = "GFX_ship_part_Required_Sensors_Short_0" icon_frame = 1	}
+
+component_set = { key = "REQUIRED_COMBAT_SENSORS_0_SHORT_SKIRMISHER" icon = "GFX_ship_part_Required_Sensors_Short_0" icon_frame = 1 }
+component_set = { key = "REQUIRED_COMBAT_SENSORS_0_SHORT_BLITZER" icon = "GFX_ship_part_Required_Sensors_Short_0" icon_frame = 1 }
+component_set = { key = "REQUIRED_COMBAT_SENSORS_0_SHORT_SNIPER" icon = "GFX_ship_part_Required_Sensors_Short_0" icon_frame = 1 }
+
+component_set = { key = "REQUIRED_COMBAT_SENSORS_0_MID_SKIRMISHER" icon = "GFX_ship_part_Required_Sensors_Mid_0" icon_frame = 1 }
+component_set = { key = "REQUIRED_COMBAT_SENSORS_0_MID_BLITZER" icon = "GFX_ship_part_Required_Sensors_Mid_0" icon_frame = 1 }
+component_set = { key = "REQUIRED_COMBAT_SENSORS_0_MID_SNIPER" icon = "GFX_ship_part_Required_Sensors_Mid_0" icon_frame = 1 }
+
+component_set = { key = "REQUIRED_COMBAT_SENSORS_0_LONG_SKIRMISHER" icon = "GFX_ship_part_Required_Sensors_Long_0" icon_frame = 1 }
+component_set = { key = "REQUIRED_COMBAT_SENSORS_0_LONG_BLITZER" icon = "GFX_ship_part_Required_Sensors_Long_0" icon_frame = 1 }
+component_set = { key = "REQUIRED_COMBAT_SENSORS_0_LONG_SNIPER" icon = "GFX_ship_part_Required_Sensors_Long_0" icon_frame = 1 }
+
+component_set = { key = "REQUIRED_COMBAT_SENSORS_1_SHORT_SKIRMISHER" icon = "GFX_ship_part_Required_Sensors_Short_1" icon_frame = 1 }
+component_set = { key = "REQUIRED_COMBAT_SENSORS_1_SHORT_BLITZER" icon = "GFX_ship_part_Required_Sensors_Short_1" icon_frame = 1 }
+component_set = { key = "REQUIRED_COMBAT_SENSORS_1_SHORT_SNIPER" icon = "GFX_ship_part_Required_Sensors_Short_1" icon_frame = 1 }
+
+component_set = { key = "REQUIRED_COMBAT_SENSORS_1_MID_SKIRMISHER" icon = "GFX_ship_part_Required_Sensors_Mid_1" icon_frame = 1 }
+component_set = { key = "REQUIRED_COMBAT_SENSORS_1_MID_BLITZER" icon = "GFX_ship_part_Required_Sensors_Mid_1" icon_frame = 1 }
+component_set = { key = "REQUIRED_COMBAT_SENSORS_1_MID_SNIPER" icon = "GFX_ship_part_Required_Sensors_Mid_1" icon_frame = 1 }
+
+component_set = { key = "REQUIRED_COMBAT_SENSORS_1_LONG_SKIRMISHER" icon = "GFX_ship_part_Required_Sensors_Long_1" icon_frame = 1 }
+component_set = { key = "REQUIRED_COMBAT_SENSORS_1_LONG_BLITZER" icon = "GFX_ship_part_Required_Sensors_Long_1" icon_frame = 1 }
+component_set = { key = "REQUIRED_COMBAT_SENSORS_1_LONG_SNIPER" icon = "GFX_ship_part_Required_Sensors_Long_1" icon_frame = 1 }
+
+component_set = { key = "REQUIRED_COMBAT_SENSORS_2_SHORT_SKIRMISHER" icon = "GFX_ship_part_Required_Sensors_Short_2" icon_frame = 1 }
+component_set = { key = "REQUIRED_COMBAT_SENSORS_2_SHORT_BLITZER" icon = "GFX_ship_part_Required_Sensors_Short_2" icon_frame = 1 }
+component_set = { key = "REQUIRED_COMBAT_SENSORS_2_SHORT_SNIPER" icon = "GFX_ship_part_Required_Sensors_Short_2" icon_frame = 1 }
+
+component_set = { key = "REQUIRED_COMBAT_SENSORS_2_MID_SKIRMISHER" icon = "GFX_ship_part_Required_Sensors_Mid_2" icon_frame = 1 }
+component_set = { key = "REQUIRED_COMBAT_SENSORS_2_MID_BLITZER" icon = "GFX_ship_part_Required_Sensors_Mid_2" icon_frame = 1 }
+component_set = { key = "REQUIRED_COMBAT_SENSORS_2_MID_SNIPER" icon = "GFX_ship_part_Required_Sensors_Mid_2" icon_frame = 1 }
+
+component_set = { key = "REQUIRED_COMBAT_SENSORS_2_LONG_SKIRMISHER" icon = "GFX_ship_part_Required_Sensors_Long_2" icon_frame = 1 }
+component_set = { key = "REQUIRED_COMBAT_SENSORS_2_LONG_BLITZER" icon = "GFX_ship_part_Required_Sensors_Long_2" icon_frame = 1 }
+component_set = { key = "REQUIRED_COMBAT_SENSORS_2_LONG_SNIPER" icon = "GFX_ship_part_Required_Sensors_Long_2" icon_frame = 1 }

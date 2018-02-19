@@ -1,0 +1,396 @@
+############################
+#
+# Klingon Flavour Events
+#
+# Written by Walshicus
+#
+############################
+
+namespace = STH_klingon_flavour
+
+#KDF Flavour Events
+
+
+# Leader challenged
+fleet_event = {
+	id = STH_klingon_flavour.1
+	title = STH_klingon_flavour.1.name
+	desc = STH_klingon_flavour.1.desc
+	picture = sth_GFX_evt_klingonLeadership1
+	location = ROOT
+	trigger = {
+		owner = { 
+			is_country_type = default
+			is_species_class  = KDF
+		}
+		exists = leader
+		is_in_combat = no
+	}
+	mean_time_to_happen = { months = 720 }
+	immediate = {
+		leader = { save_event_target_as = officer }
+		if = {
+			limit = { leader = { leader_class = admiral } }
+			owner = { create_leader = { type = admiral species = owner_main_species name = random skill = 200 } }
+		}
+		if = {
+			limit = { leader = { leader_class = general } }
+			owner = { create_leader = { type = general species = owner_main_species name = random skill = 200 } }
+		}
+		if = {
+			limit = { leader = { leader_class = scientist } }
+			owner = { create_leader = { type = scientist species = owner_main_species name = random skill = 200 } }
+		}
+		last_created_leader = {
+			save_event_target_as = challengingOfficer 
+			exile_leader_as = challengingOfficer
+		}
+	}
+	option = {
+		name = STH_klingon_flavour.1.a
+		hidden_effect = {
+			random_list = {
+				20 = { #Win and gain positive trait
+					modifier = { factor = 1.25 leader = { has_level = 2 } }
+					modifier = { factor = 1.50 leader = { has_level = 3 } }
+					modifier = { factor = 1.75 leader = { has_level = 4 } }
+					modifier = { factor = 2.00 leader = { has_level = 5 } }
+					fleet_event = { id = STH_klingon_flavour.2 days = 1 }
+				} 
+				20 = { #Win and gain negative trait
+					modifier = { factor = 1.25 leader = { has_level = 2 } }
+					modifier = { factor = 1.50 leader = { has_level = 3 } }
+					modifier = { factor = 1.75 leader = { has_level = 4 } }
+					modifier = { factor = 2.00 leader = { has_level = 5 } }
+					fleet_event = { id = STH_klingon_flavour.3 days = 1 } 
+				} 
+				20 = { #Win
+					modifier = { factor = 1.25 leader = { has_level = 2 } }
+					modifier = { factor = 1.50 leader = { has_level = 3 } }
+					modifier = { factor = 1.75 leader = { has_level = 4 } }
+					modifier = { factor = 2.00 leader = { has_level = 5 } }
+					fleet_event = { id = STH_klingon_flavour.4 days = 1 } 
+				} 
+				40 = { #Lose and die
+					fleet_event = { id = STH_klingon_flavour.5 days = 1 }
+				} 
+			}
+		}
+	}
+}
+
+fleet_event = {
+	id = STH_klingon_flavour.2
+	title = STH_klingon_flavour.2.name
+	desc = STH_klingon_flavour.2.desc
+	picture = sth_GFX_evt_klingonLeadership2
+	location = ROOT
+	is_triggered_only = yes
+	immediate = { leader = { save_event_target_as = officer } }
+	after = {
+		hidden_effect = { 
+			if = {
+				limit = { event_target:challengingOfficer = { leader_class = admiral } }
+				event_target:challengingOfficer = { kill_leader = { type = scientist show_notification = no } }
+			}
+			if = {
+				limit = { event_target:challengingOfficer = { leader_class = general } }
+				event_target:challengingOfficer = { kill_leader = { type = scientist show_notification = no } }
+			}
+			if = {
+				limit = { event_target:challengingOfficer = { leader_class = scientist } }
+				event_target:challengingOfficer = { kill_leader = { type = scientist show_notification = no } }
+			}
+		}
+	}
+	option = {
+		name = STH_klingon_flavour.2.a
+		leader = { add_trait = leader_trait_resilient }	
+		owner = { add_influence = 25 }
+	}
+}
+fleet_event = {
+	id = STH_klingon_flavour.3
+	title = STH_klingon_flavour.3.name
+	desc = STH_klingon_flavour.3.desc
+	picture = sth_GFX_evt_klingonLeadership2
+	location = ROOT
+	is_triggered_only = yes
+	immediate = { leader = { save_event_target_as = officer } }
+	after = {
+		hidden_effect = { 
+			if = {
+				limit = { event_target:challengingOfficer = { leader_class = admiral } }
+				event_target:challengingOfficer = { kill_leader = { type = scientist show_notification = no } }
+			}
+			if = {
+				limit = { event_target:challengingOfficer = { leader_class = general } }
+				event_target:challengingOfficer = { kill_leader = { type = scientist show_notification = no } }
+			}
+			if = {
+				limit = { event_target:challengingOfficer = { leader_class = scientist } }
+				event_target:challengingOfficer = { kill_leader = { type = scientist show_notification = no } }
+			}
+		}
+	}
+	option = {
+		name = STH_klingon_flavour.3.a
+		leader = { add_trait = leader_trait_maimed }
+		owner = { add_influence = 25 }
+	}
+}
+fleet_event = {
+	id = STH_klingon_flavour.4
+	title = STH_klingon_flavour.4.name
+	desc = STH_klingon_flavour.4.desc
+	picture = sth_GFX_evt_klingonLeadership3
+	location = ROOT
+	is_triggered_only = yes
+	immediate = { leader = { save_event_target_as = officer } }
+	after = {
+		hidden_effect = {
+			if = {
+				limit = { event_target:challengingOfficer = { leader_class = admiral } }
+				event_target:challengingOfficer = { kill_leader = { type = scientist show_notification = no } }
+			}
+			if = {
+				limit = { event_target:challengingOfficer = { leader_class = general } }
+				event_target:challengingOfficer = { kill_leader = { type = scientist show_notification = no } }
+			}
+			if = {
+				limit = { event_target:challengingOfficer = { leader_class = scientist } }
+				event_target:challengingOfficer = { kill_leader = { type = scientist show_notification = no } }
+			}
+		}
+	}
+	option = {
+		name = STH_klingon_flavour.4.a
+		owner = { add_influence = -25 }
+	}
+}
+fleet_event = {
+	id = STH_klingon_flavour.5
+	title = STH_klingon_flavour.5.name
+	desc = STH_klingon_flavour.5.desc
+	picture = sth_GFX_evt_klingonLeadership2
+	location = ROOT
+	is_triggered_only = yes
+	option = {
+		name = STH_klingon_flavour.5.a
+		if = {
+			limit = { leader = { leader_class = admiral } }
+			kill_leader = { type = admiral show_notification = no }
+		}
+		if = {
+			limit = { leader = { leader_class = general } }
+			kill_leader = { type = general show_notification = no }
+		}
+		if = {
+			limit = { leader = { leader_class = scientist } }
+			kill_leader = { type = scientist show_notification = no }
+		}	
+		set_leader = challengingOfficer
+	}
+}
+
+#Praxis Explode Chain
+#1 Start Overmining
+country_event = { #Irradiated
+	id = STH_klingon_flavour.6
+	title = "STH_klingon_flavour.6.name"
+	desc = "STH_klingon_flavour.6.desc"
+	picture = sth_GFX_evt_praxis1
+	location = ROOT
+	trigger = {
+		is_species_class  = KDF
+		NOT = { has_country_flag = qonosSystemPraxisDestroyed }
+		NOT = { has_country_flag = qonosSystemPraxisMined }
+		any_planet_within_border = {
+			has_planet_flag = "qonosSystemPraxis"
+			has_mining_station  = yes
+		}
+	}
+	immediate = {
+		random_planet = {
+			limit = { has_planet_flag = "qonosSystemPraxis" }
+			save_event_target_as = qonosSystemPraxis
+		}
+	}
+	mean_time_to_happen = {	months = 600 }
+	option = {
+		name = STH_klingon_flavour.6.a #Intensify Mining
+		add_minerals = -500
+		event_target:qonosSystemPraxis = {
+			orbital_deposit_tile = {
+				add_deposit = d_immense_energy_deposit
+				add_deposit = d_vast_mineral_deposit
+			}
+		}
+		hidden_effect = {
+			set_country_flag = qonosSystemPraxisMined
+			random_list = {
+				50 = { country_event = { id = STH_klingon_flavour.7 days = 10000 random = 500 } } #Win and gain positive trait
+				50 = { country_event = { id = STH_klingon_flavour.6 days = 10000 random = 500 } } #Win and gain negative trait
+			}
+		}
+	}
+	option = {
+		name = STH_klingon_flavour.6.b #Leave Moon As-Is
+	}
+}
+
+country_event = { #Blown Up
+	id = STH_klingon_flavour.7
+	title = "STH_klingon_flavour.7.name"
+	desc = "STH_klingon_flavour.7.desc"
+	picture = sth_GFX_evt_praxis2
+	show_sound = event_ship_explosion
+	location = ROOT
+	is_triggered_only = yes
+	immediate = {
+		random_planet = {
+			limit = { has_planet_flag = "qonosSystemPraxis" }
+			save_event_target_as = qonosSystemPraxis
+		}
+		set_country_flag = qonosSystemPraxisDestroyed
+		event_target:qonosSystemPraxis = {
+			create_ambient_object = {
+				type = explosion_particle_object
+				location = this
+				duration = 10
+				use_3d_location = yes			
+				entity_offset = { min = 0 max = 0 }
+				entity_offset_angle = { min = 0 max = 0 }
+				entity_offset_height = { min = 0 max = 0 }			
+				entity_scale_to_size = yes
+				scale = 100
+			}
+			change_pc = pc_barren_broken
+			orbital_deposit_tile = { clear_deposits = yes }
+		}
+	}
+	option = {
+		name = STH_klingon_flavour.7.a #Disaster!
+		root.capital_scope = {
+			add_modifier = { modifier = pm_praxis_debris days = 36000 }
+		}
+	}
+}
+
+#Commission Klingon Opera (space)
+country_event = {
+	id = STH_klingon_flavour.8
+	title = "STH_klingon_flavour.8.name"
+	desc = "STH_klingon_flavour.8.desc"
+	picture = sth_GFX_evt_theSwordOfKahless2
+	location = ROOT
+	is_triggered_only = yes
+	trigger = {
+		klingon_empires = yes
+		FROMFROM = {
+			exists = leader
+			leader = { leader_class = admiral }
+		}
+		any_owned_leader = { NOT = { has_leader_flag = opera_worthy } }
+	}
+	immediate = {
+		FROMFROM = { leader = { save_event_target_as = officer } }
+	}
+	option = {
+		name = STH_klingon_flavour.8.a
+		trigger = { 
+			has_country_resource = { type = influence amount > 99 }
+			has_country_resource = { type = energy amount > 199 } 
+		}
+		add_energy = -200
+		add_influence = -100
+		enable_special_project = { name = "COMMISSION_KLINGON_OPERA_PROJECT" location = root.capital_scope owner = root }
+		event_target:officer = { set_leader_flag = opera_worthy }
+	}
+	option = {
+		name = STH_klingon_flavour.8.af
+		trigger = { 
+			NOT = { 
+				has_country_resource = { type = influence amount > 99 }
+				has_country_resource = { type = energy amount > 199 }
+			}
+		}
+	}
+	option = { name = STH_klingon_flavour.8.b }
+}
+
+country_event = {
+	id = STH_klingon_flavour.9
+	title = "STH_klingon_flavour.9.name"
+	desc = { text =  "STH_klingon_flavour.9.desc_01" }
+	picture = sth_GFX_evt_theSwordOfKahless9
+	location = ROOT
+	is_triggered_only = yes
+	show_sound = event_klingon_opera_1
+	immediate = {
+		capital_scope = { leader = { save_event_target_as = ruler } }
+		every_owned_leader = {
+			limit = { has_leader_flag = opera_worthy }
+			save_event_target_as = officer
+			remove_leader_flag = opera_worthy
+		}
+	}
+	option = {
+		name = STH_klingon_flavour.9.a
+		add_modifier = { modifier = em_great_opera days = 4800 }
+	}
+}
+
+country_event = {
+	id = STH_klingon_flavour.10
+	title = "STH_klingon_flavour.10.name"
+	desc = { text =  "STH_klingon_flavour.10.desc_01" }
+	picture = sth_GFX_evt_theSwordOfKahless9
+	location = ROOT
+	is_triggered_only = yes
+	show_sound = event_klingon_opera_1
+	immediate = {
+		capital_scope = { leader = { save_event_target_as = ruler } }
+		every_owned_leader = {
+			limit = { has_leader_flag = opera_worthy }
+			save_event_target_as = officer
+			remove_leader_flag = opera_worthy
+		}
+	}
+	option = {
+		name = STH_klingon_flavour.10.a
+		add_modifier = { modifier = em_good_opera days = 3600 }
+	}
+}
+
+country_event = {
+	id = STH_klingon_flavour.11
+	title = "STH_klingon_flavour.11.name"
+	desc = { text = "STH_klingon_flavour.11.desc_01" }
+	picture = sth_GFX_evt_theSwordOfKahless9
+	location = ROOT
+	is_triggered_only = yes
+	show_sound = event_klingon_opera_1
+	immediate = {
+		capital_scope = { leader = { save_event_target_as = ruler } }
+		every_owned_leader = {
+			limit = { has_leader_flag = opera_worthy }
+			save_event_target_as = officer
+			remove_leader_flag = opera_worthy
+		}
+	}
+	option = { name = STH_klingon_flavour.11.a }
+}
+
+country_event = {
+	id = STH_klingon_flavour.12
+	hide_window = yes
+	location = ROOT
+	is_triggered_only = yes
+	immediate = {
+		every_owned_leader = {
+			limit = { has_leader_flag = opera_worthy }
+			remove_leader_flag = opera_worthy
+		}
+	}
+}

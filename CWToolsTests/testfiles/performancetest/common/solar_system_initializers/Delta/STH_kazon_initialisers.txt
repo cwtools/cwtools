@@ -1,0 +1,128 @@
+#Kazon
+kazon_homeworld = {
+	name = "Kazon"
+	class = "sc_k"
+	asteroids_distance = 88
+	flags = { kazon_homeworld }
+	usage = custom_empire
+	max_instances = 1
+	planet = {
+		name = "Kazon"
+		class = "pc_k_star"
+		orbit_distance = 0
+		orbit_angle = 1
+		size = 30
+		has_ring = no
+	}
+	planet = {
+		count = 3
+		orbit_distance = { min = 16 max = 22 }
+		class = random_non_colonizable
+		orbit_angle = { min = 90 max = 270 }
+		change_orbit = @base_moon_distance
+		moon = {
+			count = { min = 0 max = 2 }
+			class = random_non_colonizable
+			orbit_angle = { min = 90 max = 270 }
+			orbit_distance = 5
+		}
+	}
+	planet = {
+		count = 5
+		orbit_distance = { min = 14 max = 25 }
+		class = random_non_colonizable
+		orbit_angle = { min = 90 max = 270 }
+		change_orbit = @base_moon_distance
+		moon = {
+			count = { min = 0 max = 1 }
+			class = random_non_colonizable
+			orbit_angle = { min = 90 max = 270 }
+			orbit_distance = 5
+		}
+	}
+	planet = {
+		name = "Kazon Prime"
+		class = pc_arid
+		orbit_distance = 14.5
+		orbit_angle = 220
+		size = { min = 22 max = 25 }
+		starting_planet = yes
+		has_ring = no
+		tile_blockers = none
+		modifiers = none
+		init_effect = { prevent_anomaly = yes }
+		init_effect = {
+			set_global_flag = kazon_homeworld_spawned
+			if = {
+				limit = { NOT = { any_country = { has_country_flag = kazon_sects } } }
+				create_species = {
+					name = "Kazon"
+					class = KAZ
+					portrait = kazon
+					homeworld = THIS
+					traits = {
+						trait = "trait_slow_learners"
+						trait="trait_nomadic"
+						trait="trait_adaptive"
+						ideal_planet_class = "pc_arid"
+					}
+				}
+				last_created_species = { save_global_event_target_as = kazonSpecies }
+				create_country = {
+					name = "NAME_kazon_sects"
+					ship_prefix = "KSV"
+					type = default
+					ignore_initial_colony_error = yes
+					civics = { civic = "civic_warrior_culture" civic = "civic_cutthroat_politics" }
+					authority = auth_dictatorial
+					name_list = "Kazon"
+					ethos = { ethic = "ethic_militarist" ethic = "ethic_fanatic_authoritarian" }
+					species = event_target:kazonSpecies
+					flag = {
+						icon = { category = "trek" file = "kazon.dds" }
+						background = { category = "backgrounds" file = "00_solid.dds" }
+						colors = { "customcolor1655" "customcolor2001" "null" "null" }
+					}
+					ship_prefix = "KSV"
+					effect = {
+						set_graphical_culture = kazon_01					
+						set_country_flag = kazon_sects
+						set_country_flag = custom_start_screen
+						set_country_flag = generic_ent
+						set_country_flag = delta_empire
+						set_country_flag = init_spawned
+						set_country_flag = sth_medium_galaxy
+						save_global_event_target_as = kazon_sects
+					}
+				}
+				create_colony = { owner = event_target:kazon_sects species = event_target:kazonSpecies ethos = owner }
+			}
+			set_capital = yes
+			random_country = {
+				limit = { has_country_flag = kazon_sects }
+				save_global_event_target_as = kazon_sects
+				add_appropriate_start_techs = yes
+				species = { save_global_event_target_as = kazonSpecies }
+			}
+			set_owner = event_target:kazon_sects
+			generate_major_empire_start_buildings = yes
+			generate_major_empire_start_pops = yes
+			generate_major_empire_start_fleets = yes
+			set_name = "Kazon Prime"
+		}
+	}
+	planet = {
+		count = 1
+		orbit_distance = { min = 18 max = 25 }
+		class = random_non_colonizable
+		orbit_angle = { min = 90 max = 270 }	
+		change_orbit = @base_moon_distance
+		moon = {
+			count = { min = 0 max = 1 }
+			class = random_non_colonizable
+			orbit_angle = { min = 90 max = 270 }
+			orbit_distance = 5
+		}
+	}
+
+}

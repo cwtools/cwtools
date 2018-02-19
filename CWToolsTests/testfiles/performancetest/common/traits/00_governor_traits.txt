@@ -1,0 +1,203 @@
+
+# All leaders will have a common trait-point value set in defines, which they use to grab traits
+
+# leader_trait = yes - this tags the trait as a leader-trait and not a species-trait
+# initial = no - if set to no, this trait can not be granted to leaders when they are generated
+# leader_class = { admiral scientist }  -- OR  - if not set, it can be given to all leader-types except Rulers
+# requires_traits = { trait_psionic } -- AND - leader-trait can only be randomly given on generation if the leaders species has this trait
+# requires_governments = { despotic_hegemony ai_overlordship } -- OR - leader-trait can only be randomly given on generation if the Empire has this type of government form
+# prerequisites = { tech_psionic_theory } - AND - leader-trait can only be given if the technology specified has been researched by the Empire
+
+###################
+# Governor Traits #
+###################
+
+leader_trait_iron_fist = {
+	cost = 1
+	modification = no
+	icon = "gfx/interface/icons/traits/leader_traits/leader_trait_iron_fist.dds"
+	leader_potential_add = {
+		from = { allows_slavery = yes }
+		from = { is_drone_authority = no }
+	}
+	modifier = {
+		slave_mineral_output = 0.1
+		slave_food_output = 0.1
+	}
+	leader_trait = yes
+	leader_class = { governor }
+}
+
+leader_trait_army_veteran = {
+	cost = 1
+	modification = no
+	icon = "gfx/interface/icons/traits/leader_traits/leader_trait_army_veteran.dds"
+	modifier = {
+		planet_army_build_speed_mult = 0.2
+		planet_army_build_cost_mult = -0.2
+		garrison_health = 0.5
+	}
+	leader_potential_add = {
+		from = { is_drone_authority = no }
+	}
+	leader_trait = yes
+	leader_class = { governor }
+	# prerequisites = { tech_centralized_command }
+	opposites = { "leader_trait_retired_fleet_officer" }
+}
+
+leader_trait_retired_fleet_officer = {
+	cost = 1
+	modification = no
+	icon = "gfx/interface/icons/traits/leader_traits/leader_trait_retired_fleet_officer.dds"
+	modifier = {
+		spaceport_ship_build_speed_mult = 0.20
+		spaceport_ship_build_cost_mult = -0.10
+		spaceport_module_cost_mult = -0.10
+	}
+	leader_potential_add = {
+		from = { is_drone_authority = no }
+	}
+	leader_trait = yes
+	leader_class = { governor }
+	# prerequisites = { tech_interstellar_fleet_traditions }
+	opposites = { "leader_trait_army_veteran" }
+}
+
+leader_trait_architectural_interest = {
+	cost = 1
+	modification = no
+	icon = "gfx/interface/icons/traits/leader_traits/leader_trait_architectural_interest.dds"
+	modifier = {
+		planet_building_cost_mult = -0.10
+		planet_building_build_speed_mult = 0.10
+	}
+	leader_potential_add = {
+		from = { is_drone_authority = no }
+	}
+	leader_trait = yes
+	leader_class = { governor }
+}
+
+leader_trait_agrarian_upbringing = {
+	cost = 1
+	modification = no
+	icon = "gfx/interface/icons/traits/leader_traits/leader_trait_agrarian_upbringing.dds"
+	modifier = {
+		tile_resource_food_mult = 0.10
+		hydroponics_farm_build_cost_mult = -0.20
+	}
+	leader_potential_add = {
+		from = { is_drone_authority = no }
+	}
+	leader_trait = yes
+	leader_class = { governor }
+}
+
+leader_trait_intellectual = {
+	cost = 1
+	modification = no
+	icon = "gfx/interface/icons/traits/leader_traits/leader_trait_intellectual.dds"
+	modifier = {
+		tile_resource_engineering_research_mult = 0.10
+		tile_resource_physics_research_mult = 0.10
+		tile_resource_society_research_mult = 0.10
+	}
+	leader_potential_add = {
+		from = { is_drone_authority = no }
+	}
+	leader_trait = yes
+	leader_class = { governor }
+}
+
+leader_trait_environmental_engineer = {
+	cost = 1
+	modification = no
+	icon = "gfx/interface/icons/traits/leader_traits/leader_trait_environmental_engineer.dds"
+	modifier = {
+		planet_clear_blocker_cost_mult = -0.25
+		planet_clear_blocker_time_mult = -0.25
+	}
+	leader_potential_add = {
+		from = { is_drone_authority = no }
+	}
+	leader_trait = yes
+	leader_class = { governor }
+}
+
+leader_trait_governor_cyborg = {
+	cost = 1
+	modification = no
+	icon = "gfx/interface/icons/traits/leader_traits/leader_trait_cyborg.dds"
+	self_modifier = {
+		leader_age = 40
+	}
+	modifier = {
+		tile_resource_energy_mult = 0.05
+		tile_resource_minerals_mult = 0.05
+	}
+	leader_potential_add = {
+		from = { is_drone_authority = no }
+	}
+	leader_trait = yes
+	leader_class = { governor }
+	initial = no
+	randomized = no
+}
+
+leader_trait_governor_synthetic = {
+	cost = 0
+	modification = no
+	icon = "gfx/interface/icons/traits/leader_traits/leader_trait_synthetic.dds"
+	modifier = {
+		planet_clear_blocker_cost_mult = -0.10
+		planet_clear_blocker_time_mult = -0.10
+		tile_resource_engineering_research_mult = 0.05
+		tile_resource_physics_research_mult = 0.05
+		tile_resource_society_research_mult = 0.05
+		planet_building_build_speed_mult = 0.25
+	}
+	leader_potential_add = {
+		from = { is_drone_authority = no }
+	}
+	leader_trait = yes
+	leader_class = { governor }
+	initial = no
+	randomized = no
+}
+
+leader_trait_governor_psionic = {
+	cost = 0
+	modification = no
+	icon = "gfx/interface/icons/traits/leader_traits/leader_trait_psionic_leader.dds"
+	modifier = {
+		planet_unrest_add = -15
+	}
+	leader_potential_add = {
+		from = { is_drone_authority = no }
+	}
+	leader_trait = yes
+	leader_class = { governor }
+	initial = no
+	randomized = no
+}
+
+leader_trait_governor_chosen = {
+	cost = 0
+	modification = no
+	icon = "gfx/interface/icons/traits/leader_traits/leader_trait_psionic_chosen_one.dds"
+	immortal_leaders = yes
+	leader_potential_add = {
+		always = no
+	}
+	modifier = {
+		planet_unrest_add = -30
+		tile_resource_energy_mult = 0.05
+		tile_resource_minerals_mult = 0.05
+		planet_building_build_speed_mult = 0.3
+	}
+	leader_trait = yes
+	leader_class = { governor }
+	initial = no
+	randomized = no
+}

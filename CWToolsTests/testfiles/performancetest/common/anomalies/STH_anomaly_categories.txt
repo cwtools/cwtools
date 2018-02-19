@@ -1,0 +1,324 @@
+############################
+# STH CATEGORIES 
+############################
+# potential = planet scope
+# on_success = ship scope
+# on_fail = ship scope
+# on_critical_fail = ship scope
+# level = level of discovery that is checked against scientist level
+# risk = risk of researching the discovery (defaults to NDefines::NGameplay:anomaly_RISK_DEFAULT)
+
+# For on_success, on_fail, on_critical_fail
+# FROM = planet scope
+# ROOT = ship scope
+# Ex. on_fail, ship_event would have the planet in From.From
+
+anomaly_category = {
+	key = STH_sleepingDogs_category
+	desc = STH_sleepingDogs_category_desc
+	picture = GFX_evt_ship_in_orbit
+	level = 3
+	spawn_chance = {
+		modifier = {
+			add = 10
+			is_gas_giant = yes
+			from = { owner = { NOT = {	has_country_flag = STH_sleepingDogs_flag } } }
+			from = { owner = { is_borg_empire = no } }
+		}
+	}
+	on_spawn = { from = { owner = { set_country_flag = STH_sleepingDogs_flag } } }
+	on_success = { }
+	on_fail = { ship_event = { id = STH_sleepingDogs_fail.1	} }
+	on_critical_fail = { ship_event = { id = STH_sleepingDogs_fail.2 } }
+}
+
+anomaly_category = {
+	key = STH_arsenalOfFreedom_category
+	desc = STH_arsenalOfFreedom_category_desc
+	picture = GFX_evt_ship_in_orbit
+	level = 2
+	spawn_chance = {
+		modifier = {
+			add = 10
+			is_planet_class = pc_tropical
+			from = { owner = { NOT = { has_country_flag = STH_arsenalOfFreedom_flag } } }
+			from = { owner = { is_borg_empire = no } }
+		}
+	}
+	on_spawn = { from = { owner = { set_country_flag = STH_arsenalOfFreedom_flag } } }
+	on_success = { }
+	on_fail = { ship_event = { id = STH_arsenalOfFreedom_fail.1	} }
+	on_critical_fail = { ship_event = { id = STH_arsenalOfFreedom_fail.2 } }
+}
+
+anomaly_category = {
+	key = STH_theTerratinIncident_category
+	desc = STH_theTerratinIncident_category_desc
+	picture = GFX_evt_ship_in_orbit
+	level = 2
+	#risk = 5
+	spawn_chance = {
+		modifier = {
+			add = 10
+			is_planet_class = pc_g_class
+			from = { owner = { NOT = { has_country_flag = STH_theTerratinIncident_flag } } }
+			from = { owner = { is_borg_empire = no } }
+		}
+	}
+	on_spawn = { from = { owner = { set_country_flag = STH_theTerratinIncident_flag } } }
+	on_success = { }
+	on_fail = { ship_event = { id = STH_theTerratinIncident_fail.1 } }
+	on_critical_fail = { ship_event = { id = STH_theTerratinIncident_fail.2 } }
+}
+
+
+anomaly_category = {
+	key = STH_theSilentEnemy_category
+	desc = STH_theSilentEnemy_category_desc
+	picture = GFX_evt_ship_in_orbit
+	level = 2
+	spawn_chance = {
+		modifier = {
+			add = 10
+			years_passed > 1
+			from = { owner = { NOT = { has_country_flag = STH_theSilentEnemy_flag } } }
+			from = { owner = { is_borg_empire = no } }
+		}
+	}
+	on_spawn = { from = { owner = { set_country_flag = STH_theSilentEnemy_flag } } }
+	on_success = { }
+	on_fail = { ship_event = { id = STH_theSilentEnemy_fail.1 } }
+	on_critical_fail = { ship_event = { id = STH_theSilentEnemy_fail.2 } }
+}
+
+anomaly_category = {
+	key = STH_strangeNewWorld_category
+	desc = STH_strangeNewWorld_category_desc
+	picture = GFX_evt_ship_in_orbit
+	level = 2
+	spawn_chance = {
+		modifier = {
+			add = 10
+			is_m_class = yes
+			from = { owner = { NOT = { has_country_flag = STH_strangeNewWorld_flag } } }
+			from = { owner = { is_borg_empire = no } }
+		}
+	}
+	on_spawn = { from = { owner = { set_country_flag = STH_strangeNewWorld_flag } } }
+	on_success = { }
+	on_fail = { ship_event = { id = STH_strangeNewWorld_event.17 } }
+	on_critical_fail = { ship_event = { id = STH_strangeNewWorld_event.18 } }
+}
+
+anomaly_category = {
+	key = STH_gamestersOfTriskelion_category
+	desc = STH_gamestersOfTriskelion_category_desc
+	picture = GFX_evt_ship_in_orbit
+	level = 4
+	spawn_chance = {
+		modifier = {
+			add = 10
+			is_m_class = yes
+			from = { owner = { NOT = { has_country_flag = STH_gamestersOfTriskelion_flag } } }
+			from = { owner = { is_borg_empire = no } }
+		}
+	}
+	on_spawn = { from = { owner = { set_country_flag = STH_gamestersOfTriskelion_flag } } }
+	on_success = { }
+	on_fail = { ship_event = { id = STH_gamestersOfTriskelion_event.2 } }
+	on_critical_fail = { ship_event = { id = STH_gamestersOfTriskelion_event.1 } }
+}
+
+anomaly_category = {
+  key = STH_mirrorMirror_category
+	desc = STH_mirrorMirror_category_desc
+	picture = GFX_evt_ship_in_orbit
+	level = 2
+	spawn_chance = {
+		modifier = { 
+			add = 10
+			is_asteroid = no
+			is_star = no
+			from = {
+				owner = {
+					NOR = { 
+						has_country_flag = STH_mirrorMirror_flag 
+						has_country_flag = terran_empire
+					}
+					has_transporters = yes
+				}
+			}
+			from = { owner = { is_borg_empire = no } }
+		}
+	}
+	on_spawn = { from = { owner = { set_country_flag = STH_mirrorMirror_flag } } }
+	on_success = { }
+	on_fail = { ship_event = { id = STH_mirrorMirror_event.9 } }
+	on_critical_fail = { ship_event = { id = STH_mirrorMirror_event.9 } }
+}
+
+anomaly_category = {
+    key = STH_theSkinOfEvil_category
+    desc = STH_theSkinOfEvil_category_desc
+    picture = sth_GFX_evt_theSkinOfEvil1
+    level = 1
+    spawn_chance = {
+        modifier = {
+            add = 10
+            is_m_class = yes
+            from = {
+                owner = {
+                    NOT = { has_country_flag = STH_theSkinOfEvil_flag }
+					is_ai = no
+                }
+            }
+			from = { owner = { is_borg_empire = no } }
+        }
+    }
+    on_spawn = { from = { owner = { set_country_flag = STH_theSkinOfEvil_flag } } }
+	on_success = { }
+	on_fail = { ship_event = { id = STH_theSkinOfEvil_fail.1 } }
+	on_critical_fail = { ship_event = { id = STH_theSkinOfEvil_fail.2 } }
+}
+
+anomaly_category = {
+	key = STH_space_seed_category
+	desc = STH_space_seed_category_desc
+	picture = sth_GFX_evt_space_seep
+	level = 1
+	spawn_chance = {
+		modifier = {
+            add = 5
+			is_star = no
+			from = { 
+				owner = {
+					OR = { 
+						earth_empires = yes
+						is_species_class = FED
+					}
+					has_country_flag = cold_storage_finished
+				} 
+			}
+			from = { owner = { is_borg_empire = no } }
+        }
+    }
+	on_success = { }
+	on_fail = { ship_event = { id = STH_space_seed_event_fail.1 } }
+	on_critical_fail = { ship_event = { id = STH_space_seed_event_fail.2 } }
+}
+
+anomaly_category = {
+	key = STH_terra_nova_category
+	desc = STH_terra_nova_category_desc
+	picture = sth_GFX_evt_terra_nova
+	level = 1
+    spawn_chance = {
+        modifier = {
+            add = 1
+            is_planet_class = pc_continental
+            has_modifier = surface_impact
+            from = { 
+                owner = { 
+                    earth_empires = yes
+                    NOT = { has_country_flag = STH_terra_nova_flag } 
+                    is_ai = no
+                } 
+            }
+			from = { owner = { is_borg_empire = no } }
+        }
+    }
+	on_spawn = { from = { owner = { set_country_flag = STH_terra_nova_flag } } }
+	on_success = {  }
+	on_fail = { ship_event = { id = STH_terra_nova_event_fail.1 } }
+	on_critical_fail = { ship_event = { id = STH_terra_nova_event_fail.2 } }
+}
+
+anomaly_category = {
+	key = STH_de_declaratem_category
+	desc = STH_de_declaratem_category_desc
+	picture = sth_GFX_evt_MirrorUniverse1
+	level = 1
+    spawn_chance = {
+        modifier = {
+            add = 10
+            is_planet_class = pc_black_hole
+            from = { 
+                owner = { 
+                    earth_empires = yes
+                    NOT = { has_global_flag = STH_de_declaratem_flag } 
+                } 
+            }
+        }
+		modifier = {
+            add = 10
+            is_planet_class = pc_black_hole
+            from = { 
+                years_passed > 25
+				owner = { NOT = { has_global_flag = STH_de_declaratem_flag } } 
+            }
+			from = { owner = { is_borg_empire = no } }
+        }
+    }
+	on_spawn = { from = { owner = { set_global_flag = STH_de_declaratem_flag } } }
+	on_success = {  }
+	on_fail = { ship_event = { id = STH_deDeclaratem_event.100 } }
+	on_critical_fail = { ship_event = { id = STH_deDeclaratem_event.200 } }
+}
+
+
+anomaly_category = {
+	key = STH_samaritan_snare_category
+	desc = STH_samaritan_snare_category_desc
+	picture = sth_GFX_evt_doomsday_1
+	level = 2
+	spawn_chance = {
+		modifier = {
+			add = 10
+			is_colonizable = no
+			from = { 
+				owner = { 
+					is_ai = no
+					NOT = { has_global_flag = STH_samaritan_snare_flag } 
+				} 
+            }
+			from = { owner = { is_borg_empire = no } }
+		}
+	}
+	on_spawn = { from = { owner = { set_global_flag = STH_samaritan_snare_flag } } }
+	on_success = { }
+	on_fail = { ship_event = { id = STH_samaritan_snare_event.100 } }
+	on_critical_fail = { ship_event = { id = STH_samaritan_snare_event.100 } }
+}
+
+anomaly_category = {
+	key = STH_the_hundred_category
+	desc = STH_the_hundred_category_desc
+	picture = sth_GFX_evt_the_hundred_1
+	level = 2
+	spawn_chance = {		
+		modifier = {
+			add = 0
+		}
+	}
+	on_spawn = { }
+	on_success = { }
+	on_fail = { ship_event = { id = STH_dominion_story.100 } }
+	on_critical_fail = { ship_event = { id = STH_dominion_story.100 } }
+}
+
+
+anomaly_category = {
+	key = STH_the_ship_category
+	desc = STH_the_ship_desc
+	picture = sth_GFX_evt_theShip1
+	level = 3
+	spawn_chance = {		
+		modifier = {
+			add = 0
+		}
+	}
+	on_spawn = { }
+	on_success = { }
+	on_fail = { ship_event = { id = STH_dominion_flavour.2010 } }
+	on_critical_fail = { ship_event = { id = STH_dominion_flavour.2010 } }
+}

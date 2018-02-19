@@ -1,0 +1,421 @@
+component_set = { key = "required_warp" required_component_set = yes icon = "GFX_ship_part_sensor" icon_frame = 1 }
+component_set = { key = "borg_required_warp" required_component_set = yes icon = "GFX_ship_part_sensor" icon_frame = 1 }
+   
+component_set = { key = "REQUIRED_WARP_PF" icon = "GFX_ship_part_Required_Warp_0_PF" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_DE" icon = "GFX_ship_part_Required_Warp_0_DE" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_CR" icon = "GFX_ship_part_Required_Warp_0_CR" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_BC" icon = "GFX_ship_part_Required_Warp_0_BC" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_BS" icon = "GFX_ship_part_Required_Warp_0_BS" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_HE" icon = "GFX_ship_part_Required_Warp_0_HE" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_AC" icon = "GFX_ship_part_Required_Warp_0_AC" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_SB" icon = "GFX_ship_part_Required_Warp_0_SB" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_SC" icon = "GFX_ship_part_Required_Warp_0_SC" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_CS" icon = "GFX_ship_part_Required_Warp_0_CS" icon_frame = 1 }
+   
+component_set = { key = "REQUIRED_WARP_1_PF" icon = "GFX_ship_part_Required_Warp_1_PF" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_1_DE" icon = "GFX_ship_part_Required_Warp_1_DE" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_1_CR" icon = "GFX_ship_part_Required_Warp_1_CR" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_1_BC" icon = "GFX_ship_part_Required_Warp_1_BC" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_1_BS" icon = "GFX_ship_part_Required_Warp_1_BS" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_1_HE" icon = "GFX_ship_part_Required_Warp_1_HE" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_1_AC" icon = "GFX_ship_part_Required_Warp_1_AC" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_1_SB" icon = "GFX_ship_part_Required_Warp_1_SB" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_1_SC" icon = "GFX_ship_part_Required_Warp_1_SC" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_1_CS" icon = "GFX_ship_part_Required_Warp_1_CS" icon_frame = 1 }
+   
+component_set = { key = "REQUIRED_WARP_2_PF" icon = "GFX_ship_part_Required_Warp_2_PF" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_2_DE" icon = "GFX_ship_part_Required_Warp_2_DE" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_2_CR" icon = "GFX_ship_part_Required_Warp_2_CR" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_2_BC" icon = "GFX_ship_part_Required_Warp_2_BC" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_2_BS" icon = "GFX_ship_part_Required_Warp_2_BS" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_2_HE" icon = "GFX_ship_part_Required_Warp_2_HE" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_2_AC" icon = "GFX_ship_part_Required_Warp_2_AC" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_2_SB" icon = "GFX_ship_part_Required_Warp_2_SB" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_2_SC" icon = "GFX_ship_part_Required_Warp_2_SC" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_2_CS" icon = "GFX_ship_part_Required_Warp_2_CS" icon_frame = 1 }
+   
+component_set = { key = "REQUIRED_WARP_3_EXPLORATION_PF" icon = "GFX_ship_part_Required_Warp_Exploration_3_PF" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_3_EXPLORATION_DE" icon = "GFX_ship_part_Required_Warp_Exploration_3_DE" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_3_EXPLORATION_CR" icon = "GFX_ship_part_Required_Warp_Exploration_3_CR" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_3_EXPLORATION_BC" icon = "GFX_ship_part_Required_Warp_Exploration_3_BC" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_3_EXPLORATION_BS" icon = "GFX_ship_part_Required_Warp_Exploration_3_BS" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_3_EXPLORATION_HE" icon = "GFX_ship_part_Required_Warp_Exploration_3_HE" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_3_EXPLORATION_AC" icon = "GFX_ship_part_Required_Warp_Exploration_3_AC" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_3_EXPLORATION_SB" icon = "GFX_ship_part_Required_Warp_Exploration_3_SB" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_3_EXPLORATION_SC" icon = "GFX_ship_part_Required_Warp_Exploration_3_SC" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_3_EXPLORATION_CS" icon = "GFX_ship_part_Required_Warp_Exploration_3_CS" icon_frame = 1 }
+   
+component_set = { key = "REQUIRED_WARP_4_EXPLORATION_PF" icon = "GFX_ship_part_Required_Warp_Exploration_4_PF" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_4_EXPLORATION_DE" icon = "GFX_ship_part_Required_Warp_Exploration_4_DE" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_4_EXPLORATION_CR" icon = "GFX_ship_part_Required_Warp_Exploration_4_CR" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_4_EXPLORATION_BC" icon = "GFX_ship_part_Required_Warp_Exploration_4_BC" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_4_EXPLORATION_BS" icon = "GFX_ship_part_Required_Warp_Exploration_4_BS" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_4_EXPLORATION_HE" icon = "GFX_ship_part_Required_Warp_Exploration_4_HE" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_4_EXPLORATION_AC" icon = "GFX_ship_part_Required_Warp_Exploration_4_AC" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_4_EXPLORATION_SB" icon = "GFX_ship_part_Required_Warp_Exploration_4_SB" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_4_EXPLORATION_SC" icon = "GFX_ship_part_Required_Warp_Exploration_4_SC" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_4_EXPLORATION_CS" icon = "GFX_ship_part_Required_Warp_Exploration_4_CS" icon_frame = 1 }
+   
+component_set = { key = "REQUIRED_WARP_5_EXPLORATION_PF" icon = "GFX_ship_part_Required_Warp_Exploration_5_PF" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_5_EXPLORATION_DE" icon = "GFX_ship_part_Required_Warp_Exploration_5_DE" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_5_EXPLORATION_CR" icon = "GFX_ship_part_Required_Warp_Exploration_5_CR" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_5_EXPLORATION_BC" icon = "GFX_ship_part_Required_Warp_Exploration_5_BC" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_5_EXPLORATION_BS" icon = "GFX_ship_part_Required_Warp_Exploration_5_BS" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_5_EXPLORATION_HE" icon = "GFX_ship_part_Required_Warp_Exploration_5_HE" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_5_EXPLORATION_AC" icon = "GFX_ship_part_Required_Warp_Exploration_5_AC" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_5_EXPLORATION_SB" icon = "GFX_ship_part_Required_Warp_Exploration_5_SB" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_5_EXPLORATION_SC" icon = "GFX_ship_part_Required_Warp_Exploration_5_SC" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_5_EXPLORATION_CS" icon = "GFX_ship_part_Required_Warp_Exploration_5_CS" icon_frame = 1 }
+   
+component_set = { key = "REQUIRED_WARP_6_EXPLORATION_PF" icon = "GFX_ship_part_Required_Warp_Exploration_6_PF" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_6_EXPLORATION_DE" icon = "GFX_ship_part_Required_Warp_Exploration_6_DE" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_6_EXPLORATION_CR" icon = "GFX_ship_part_Required_Warp_Exploration_6_CR" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_6_EXPLORATION_BC" icon = "GFX_ship_part_Required_Warp_Exploration_6_BC" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_6_EXPLORATION_BS" icon = "GFX_ship_part_Required_Warp_Exploration_6_BS" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_6_EXPLORATION_HE" icon = "GFX_ship_part_Required_Warp_Exploration_6_HE" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_6_EXPLORATION_AC" icon = "GFX_ship_part_Required_Warp_Exploration_6_AC" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_6_EXPLORATION_SB" icon = "GFX_ship_part_Required_Warp_Exploration_6_SB" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_6_EXPLORATION_SC" icon = "GFX_ship_part_Required_Warp_Exploration_6_SC" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_6_EXPLORATION_CS" icon = "GFX_ship_part_Required_Warp_Exploration_6_CS" icon_frame = 1 }
+   
+component_set = { key = "REQUIRED_WARP_7_EXPLORATION_PF" icon = "GFX_ship_part_Required_Warp_Exploration_7_PF" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_7_EXPLORATION_DE" icon = "GFX_ship_part_Required_Warp_Exploration_7_DE" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_7_EXPLORATION_CR" icon = "GFX_ship_part_Required_Warp_Exploration_7_CR" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_7_EXPLORATION_BC" icon = "GFX_ship_part_Required_Warp_Exploration_7_BC" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_7_EXPLORATION_BS" icon = "GFX_ship_part_Required_Warp_Exploration_7_BS" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_7_EXPLORATION_HE" icon = "GFX_ship_part_Required_Warp_Exploration_7_HE" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_7_EXPLORATION_AC" icon = "GFX_ship_part_Required_Warp_Exploration_7_AC" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_7_EXPLORATION_SB" icon = "GFX_ship_part_Required_Warp_Exploration_7_SB" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_7_EXPLORATION_SC" icon = "GFX_ship_part_Required_Warp_Exploration_7_SC" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_7_EXPLORATION_CS" icon = "GFX_ship_part_Required_Warp_Exploration_7_CS" icon_frame = 1 }
+   
+component_set = { key = "REQUIRED_WARP_8_EXPLORATION_PF" icon = "GFX_ship_part_Required_Warp_Exploration_8_PF" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_8_EXPLORATION_DE" icon = "GFX_ship_part_Required_Warp_Exploration_8_DE" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_8_EXPLORATION_CR" icon = "GFX_ship_part_Required_Warp_Exploration_8_CR" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_8_EXPLORATION_BC" icon = "GFX_ship_part_Required_Warp_Exploration_8_BC" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_8_EXPLORATION_BS" icon = "GFX_ship_part_Required_Warp_Exploration_8_BS" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_8_EXPLORATION_HE" icon = "GFX_ship_part_Required_Warp_Exploration_8_HE" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_8_EXPLORATION_AC" icon = "GFX_ship_part_Required_Warp_Exploration_8_AC" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_8_EXPLORATION_SB" icon = "GFX_ship_part_Required_Warp_Exploration_8_SB" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_8_EXPLORATION_SC" icon = "GFX_ship_part_Required_Warp_Exploration_8_SC" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_8_EXPLORATION_CS" icon = "GFX_ship_part_Required_Warp_Exploration_8_CS" icon_frame = 1 }
+   
+component_set = { key = "REQUIRED_WARP_TRANSWARP_PF" icon = "GFX_ship_part_Required_Warp_Transwarp__PF" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_TRANSWARP_DE" icon = "GFX_ship_part_Required_Warp_Transwarp__DE" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_TRANSWARP_CR" icon = "GFX_ship_part_Required_Warp_Transwarp__CR" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_TRANSWARP_BC" icon = "GFX_ship_part_Required_Warp_Transwarp__BC" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_TRANSWARP_BS" icon = "GFX_ship_part_Required_Warp_Transwarp__BS" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_TRANSWARP_HE" icon = "GFX_ship_part_Required_Warp_Transwarp__HE" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_TRANSWARP_AC" icon = "GFX_ship_part_Required_Warp_Transwarp__AC" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_TRANSWARP_SB" icon = "GFX_ship_part_Required_Warp_Transwarp__SB" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_TRANSWARP_SC" icon = "GFX_ship_part_Required_Warp_Transwarp__SC" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_TRANSWARP_CS" icon = "GFX_ship_part_Required_Warp_Transwarp__CS" icon_frame = 1 }
+   
+component_set = { key = "REQUIRED_WARP_3_COMBAT_PF" icon = "GFX_ship_part_Required_Warp_Combat_3_PF" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_3_COMBAT_DE" icon = "GFX_ship_part_Required_Warp_Combat_3_DE" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_3_COMBAT_CR" icon = "GFX_ship_part_Required_Warp_Combat_3_CR" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_3_COMBAT_BC" icon = "GFX_ship_part_Required_Warp_Combat_3_BC" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_3_COMBAT_BS" icon = "GFX_ship_part_Required_Warp_Combat_3_BS" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_3_COMBAT_HE" icon = "GFX_ship_part_Required_Warp_Combat_3_HE" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_3_COMBAT_AC" icon = "GFX_ship_part_Required_Warp_Combat_3_AC" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_3_COMBAT_SB" icon = "GFX_ship_part_Required_Warp_Combat_3_SB" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_3_COMBAT_SC" icon = "GFX_ship_part_Required_Warp_Combat_3_SC" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_3_COMBAT_CS" icon = "GFX_ship_part_Required_Warp_Combat_3_CS" icon_frame = 1 }
+   
+component_set = { key = "REQUIRED_WARP_4_COMBAT_PF" icon = "GFX_ship_part_Required_Warp_Combat_4_PF" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_4_COMBAT_DE" icon = "GFX_ship_part_Required_Warp_Combat_4_DE" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_4_COMBAT_CR" icon = "GFX_ship_part_Required_Warp_Combat_4_CR" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_4_COMBAT_BC" icon = "GFX_ship_part_Required_Warp_Combat_4_BC" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_4_COMBAT_BS" icon = "GFX_ship_part_Required_Warp_Combat_4_BS" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_4_COMBAT_HE" icon = "GFX_ship_part_Required_Warp_Combat_4_HE" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_4_COMBAT_AC" icon = "GFX_ship_part_Required_Warp_Combat_4_AC" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_4_COMBAT_SB" icon = "GFX_ship_part_Required_Warp_Combat_4_SB" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_4_COMBAT_SC" icon = "GFX_ship_part_Required_Warp_Combat_4_SC" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_4_COMBAT_CS" icon = "GFX_ship_part_Required_Warp_Combat_4_CS" icon_frame = 1 }
+   
+component_set = { key = "REQUIRED_WARP_5_COMBAT_PF" icon = "GFX_ship_part_Required_Warp_Combat_5_PF" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_5_COMBAT_DE" icon = "GFX_ship_part_Required_Warp_Combat_5_DE" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_5_COMBAT_CR" icon = "GFX_ship_part_Required_Warp_Combat_5_CR" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_5_COMBAT_BC" icon = "GFX_ship_part_Required_Warp_Combat_5_BC" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_5_COMBAT_BS" icon = "GFX_ship_part_Required_Warp_Combat_5_BS" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_5_COMBAT_HE" icon = "GFX_ship_part_Required_Warp_Combat_5_HE" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_5_COMBAT_AC" icon = "GFX_ship_part_Required_Warp_Combat_5_AC" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_5_COMBAT_SB" icon = "GFX_ship_part_Required_Warp_Combat_5_SB" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_5_COMBAT_SC" icon = "GFX_ship_part_Required_Warp_Combat_5_SC" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_5_COMBAT_CS" icon = "GFX_ship_part_Required_Warp_Combat_5_CS" icon_frame = 1 }
+   
+component_set = { key = "REQUIRED_WARP_6_COMBAT_PF" icon = "GFX_ship_part_Required_Warp_Combat_6_PF" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_6_COMBAT_DE" icon = "GFX_ship_part_Required_Warp_Combat_6_DE" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_6_COMBAT_CR" icon = "GFX_ship_part_Required_Warp_Combat_6_CR" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_6_COMBAT_BC" icon = "GFX_ship_part_Required_Warp_Combat_6_BC" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_6_COMBAT_BS" icon = "GFX_ship_part_Required_Warp_Combat_6_BS" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_6_COMBAT_HE" icon = "GFX_ship_part_Required_Warp_Combat_6_HE" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_6_COMBAT_AC" icon = "GFX_ship_part_Required_Warp_Combat_6_AC" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_6_COMBAT_SB" icon = "GFX_ship_part_Required_Warp_Combat_6_SB" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_6_COMBAT_SC" icon = "GFX_ship_part_Required_Warp_Combat_6_SC" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_6_COMBAT_CS" icon = "GFX_ship_part_Required_Warp_Combat_6_CS" icon_frame = 1 }
+   
+component_set = { key = "REQUIRED_WARP_7_COMBAT_PF" icon = "GFX_ship_part_Required_Warp_Combat_7_PF" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_7_COMBAT_DE" icon = "GFX_ship_part_Required_Warp_Combat_7_DE" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_7_COMBAT_CR" icon = "GFX_ship_part_Required_Warp_Combat_7_CR" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_7_COMBAT_BC" icon = "GFX_ship_part_Required_Warp_Combat_7_BC" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_7_COMBAT_BS" icon = "GFX_ship_part_Required_Warp_Combat_7_BS" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_7_COMBAT_HE" icon = "GFX_ship_part_Required_Warp_Combat_7_HE" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_7_COMBAT_AC" icon = "GFX_ship_part_Required_Warp_Combat_7_AC" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_7_COMBAT_SB" icon = "GFX_ship_part_Required_Warp_Combat_7_SB" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_7_COMBAT_SC" icon = "GFX_ship_part_Required_Warp_Combat_7_SC" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_7_COMBAT_CS" icon = "GFX_ship_part_Required_Warp_Combat_7_CS" icon_frame = 1 }
+   
+component_set = { key = "REQUIRED_WARP_8_COMBAT_PF" icon = "GFX_ship_part_Required_Warp_Combat_8_PF" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_8_COMBAT_DE" icon = "GFX_ship_part_Required_Warp_Combat_8_DE" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_8_COMBAT_CR" icon = "GFX_ship_part_Required_Warp_Combat_8_CR" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_8_COMBAT_BC" icon = "GFX_ship_part_Required_Warp_Combat_8_BC" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_8_COMBAT_BS" icon = "GFX_ship_part_Required_Warp_Combat_8_BS" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_8_COMBAT_HE" icon = "GFX_ship_part_Required_Warp_Combat_8_HE" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_8_COMBAT_AC" icon = "GFX_ship_part_Required_Warp_Combat_8_AC" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_8_COMBAT_SB" icon = "GFX_ship_part_Required_Warp_Combat_8_SB" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_8_COMBAT_SC" icon = "GFX_ship_part_Required_Warp_Combat_8_SC" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_8_COMBAT_CS" icon = "GFX_ship_part_Required_Warp_Combat_8_CS" icon_frame = 1 }
+   
+component_set = { key = "REQUIRED_WARP_BREACH_PF" icon = "GFX_ship_part_Required_Warp_Breach__PF" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_BREACH_DE" icon = "GFX_ship_part_Required_Warp_Breach__DE" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_BREACH_CR" icon = "GFX_ship_part_Required_Warp_Breach__CR" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_BREACH_BC" icon = "GFX_ship_part_Required_Warp_Breach__BC" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_BREACH_BS" icon = "GFX_ship_part_Required_Warp_Breach__BS" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_BREACH_HE" icon = "GFX_ship_part_Required_Warp_Breach__HE" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_BREACH_AC" icon = "GFX_ship_part_Required_Warp_Breach__AC" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_BREACH_SB" icon = "GFX_ship_part_Required_Warp_Breach__SB" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_BREACH_SC" icon = "GFX_ship_part_Required_Warp_Breach__SC" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_BREACH_CS" icon = "GFX_ship_part_Required_Warp_Breach__CS" icon_frame = 1 }
+   
+component_set = { key = "REQUIRED_WARP_1_RING_PF" icon = "GFX_ship_part_Required_Warp_Ring_1_PF" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_1_RING_DE" icon = "GFX_ship_part_Required_Warp_Ring_1_DE" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_1_RING_CR" icon = "GFX_ship_part_Required_Warp_Ring_1_CR" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_1_RING_BC" icon = "GFX_ship_part_Required_Warp_Ring_1_BC" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_1_RING_BS" icon = "GFX_ship_part_Required_Warp_Ring_1_BS" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_1_RING_HE" icon = "GFX_ship_part_Required_Warp_Ring_1_HE" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_1_RING_AC" icon = "GFX_ship_part_Required_Warp_Ring_1_AC" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_1_RING_SB" icon = "GFX_ship_part_Required_Warp_Ring_1_SB" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_1_RING_SC" icon = "GFX_ship_part_Required_Warp_Ring_1_SC" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_1_RING_CS" icon = "GFX_ship_part_Required_Warp_Ring_1_CS" icon_frame = 1 }
+   
+component_set = { key = "REQUIRED_WARP_2_RING_PF" icon = "GFX_ship_part_Required_Warp_Ring_2_PF" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_2_RING_DE" icon = "GFX_ship_part_Required_Warp_Ring_2_DE" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_2_RING_CR" icon = "GFX_ship_part_Required_Warp_Ring_2_CR" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_2_RING_BC" icon = "GFX_ship_part_Required_Warp_Ring_2_BC" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_2_RING_BS" icon = "GFX_ship_part_Required_Warp_Ring_2_BS" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_2_RING_HE" icon = "GFX_ship_part_Required_Warp_Ring_2_HE" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_2_RING_AC" icon = "GFX_ship_part_Required_Warp_Ring_2_AC" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_2_RING_SB" icon = "GFX_ship_part_Required_Warp_Ring_2_SB" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_2_RING_SC" icon = "GFX_ship_part_Required_Warp_Ring_2_SC" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_2_RING_CS" icon = "GFX_ship_part_Required_Warp_Ring_2_CS" icon_frame = 1 }
+   
+component_set = { key = "REQUIRED_WARP_3_RING_PF" icon = "GFX_ship_part_Required_Warp_Ring_3_PF" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_3_RING_DE" icon = "GFX_ship_part_Required_Warp_Ring_3_DE" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_3_RING_CR" icon = "GFX_ship_part_Required_Warp_Ring_3_CR" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_3_RING_BC" icon = "GFX_ship_part_Required_Warp_Ring_3_BC" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_3_RING_BS" icon = "GFX_ship_part_Required_Warp_Ring_3_BS" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_3_RING_HE" icon = "GFX_ship_part_Required_Warp_Ring_3_HE" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_3_RING_AC" icon = "GFX_ship_part_Required_Warp_Ring_3_AC" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_3_RING_SB" icon = "GFX_ship_part_Required_Warp_Ring_3_SB" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_3_RING_SC" icon = "GFX_ship_part_Required_Warp_Ring_3_SC" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_3_RING_CS" icon = "GFX_ship_part_Required_Warp_Ring_3_CS" icon_frame = 1 }
+   
+component_set = { key = "REQUIRED_WARP_4_RING_PF" icon = "GFX_ship_part_Required_Warp_Ring_4_PF" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_4_RING_DE" icon = "GFX_ship_part_Required_Warp_Ring_4_DE" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_4_RING_CR" icon = "GFX_ship_part_Required_Warp_Ring_4_CR" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_4_RING_BC" icon = "GFX_ship_part_Required_Warp_Ring_4_BC" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_4_RING_BS" icon = "GFX_ship_part_Required_Warp_Ring_4_BS" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_4_RING_HE" icon = "GFX_ship_part_Required_Warp_Ring_4_HE" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_4_RING_AC" icon = "GFX_ship_part_Required_Warp_Ring_4_AC" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_4_RING_SB" icon = "GFX_ship_part_Required_Warp_Ring_4_SB" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_4_RING_SC" icon = "GFX_ship_part_Required_Warp_Ring_4_SC" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_4_RING_CS" icon = "GFX_ship_part_Required_Warp_Ring_4_CS" icon_frame = 1 }
+   
+component_set = { key = "REQUIRED_WARP_5_RING_PF" icon = "GFX_ship_part_Required_Warp_Ring_5_PF" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_5_RING_DE" icon = "GFX_ship_part_Required_Warp_Ring_5_DE" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_5_RING_CR" icon = "GFX_ship_part_Required_Warp_Ring_5_CR" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_5_RING_BC" icon = "GFX_ship_part_Required_Warp_Ring_5_BC" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_5_RING_BS" icon = "GFX_ship_part_Required_Warp_Ring_5_BS" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_5_RING_HE" icon = "GFX_ship_part_Required_Warp_Ring_5_HE" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_5_RING_AC" icon = "GFX_ship_part_Required_Warp_Ring_5_AC" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_5_RING_SB" icon = "GFX_ship_part_Required_Warp_Ring_5_SB" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_5_RING_SC" icon = "GFX_ship_part_Required_Warp_Ring_5_SC" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_5_RING_CS" icon = "GFX_ship_part_Required_Warp_Ring_5_CS" icon_frame = 1 }
+   
+component_set = { key = "REQUIRED_WARP_6_RING_PF" icon = "GFX_ship_part_Required_Warp_Ring_6_PF" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_6_RING_DE" icon = "GFX_ship_part_Required_Warp_Ring_6_DE" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_6_RING_CR" icon = "GFX_ship_part_Required_Warp_Ring_6_CR" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_6_RING_BC" icon = "GFX_ship_part_Required_Warp_Ring_6_BC" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_6_RING_BS" icon = "GFX_ship_part_Required_Warp_Ring_6_BS" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_6_RING_HE" icon = "GFX_ship_part_Required_Warp_Ring_6_HE" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_6_RING_AC" icon = "GFX_ship_part_Required_Warp_Ring_6_AC" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_6_RING_SB" icon = "GFX_ship_part_Required_Warp_Ring_6_SB" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_6_RING_SC" icon = "GFX_ship_part_Required_Warp_Ring_6_SC" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_6_RING_CS" icon = "GFX_ship_part_Required_Warp_Ring_6_CS" icon_frame = 1 }
+   
+component_set = { key = "REQUIRED_WARP_7_RING_PF" icon = "GFX_ship_part_Required_Warp_Ring_7_PF" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_7_RING_DE" icon = "GFX_ship_part_Required_Warp_Ring_7_DE" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_7_RING_CR" icon = "GFX_ship_part_Required_Warp_Ring_7_CR" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_7_RING_BC" icon = "GFX_ship_part_Required_Warp_Ring_7_BC" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_7_RING_BS" icon = "GFX_ship_part_Required_Warp_Ring_7_BS" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_7_RING_HE" icon = "GFX_ship_part_Required_Warp_Ring_7_HE" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_7_RING_AC" icon = "GFX_ship_part_Required_Warp_Ring_7_AC" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_7_RING_SB" icon = "GFX_ship_part_Required_Warp_Ring_7_SB" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_7_RING_SC" icon = "GFX_ship_part_Required_Warp_Ring_7_SC" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_7_RING_CS" icon = "GFX_ship_part_Required_Warp_Ring_7_CS" icon_frame = 1 }
+   
+component_set = { key = "REQUIRED_WARP_1_SINGULARITY_PF" icon = "GFX_ship_part_Required_Warp_Singularity_1_PF" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_1_SINGULARITY_DE" icon = "GFX_ship_part_Required_Warp_Singularity_1_DE" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_1_SINGULARITY_CR" icon = "GFX_ship_part_Required_Warp_Singularity_1_CR" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_1_SINGULARITY_BC" icon = "GFX_ship_part_Required_Warp_Singularity_1_BC" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_1_SINGULARITY_BS" icon = "GFX_ship_part_Required_Warp_Singularity_1_BS" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_1_SINGULARITY_HE" icon = "GFX_ship_part_Required_Warp_Singularity_1_HE" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_1_SINGULARITY_AC" icon = "GFX_ship_part_Required_Warp_Singularity_1_AC" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_1_SINGULARITY_SB" icon = "GFX_ship_part_Required_Warp_Singularity_1_SB" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_1_SINGULARITY_SC" icon = "GFX_ship_part_Required_Warp_Singularity_1_SC" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_1_SINGULARITY_CS" icon = "GFX_ship_part_Required_Warp_Singularity_1_CS" icon_frame = 1 }
+   
+component_set = { key = "REQUIRED_WARP_2_SINGULARITY_PF" icon = "GFX_ship_part_Required_Warp_Singularity_2_PF" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_2_SINGULARITY_DE" icon = "GFX_ship_part_Required_Warp_Singularity_2_DE" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_2_SINGULARITY_CR" icon = "GFX_ship_part_Required_Warp_Singularity_2_CR" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_2_SINGULARITY_BC" icon = "GFX_ship_part_Required_Warp_Singularity_2_BC" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_2_SINGULARITY_BS" icon = "GFX_ship_part_Required_Warp_Singularity_2_BS" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_2_SINGULARITY_HE" icon = "GFX_ship_part_Required_Warp_Singularity_2_HE" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_2_SINGULARITY_AC" icon = "GFX_ship_part_Required_Warp_Singularity_2_AC" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_2_SINGULARITY_SB" icon = "GFX_ship_part_Required_Warp_Singularity_2_SB" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_2_SINGULARITY_SC" icon = "GFX_ship_part_Required_Warp_Singularity_2_SC" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_2_SINGULARITY_CS" icon = "GFX_ship_part_Required_Warp_Singularity_2_CS" icon_frame = 1 }
+   
+component_set = { key = "REQUIRED_WARP_3_SINGULARITY_PF" icon = "GFX_ship_part_Required_Warp_Singularity_3_PF" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_3_SINGULARITY_DE" icon = "GFX_ship_part_Required_Warp_Singularity_3_DE" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_3_SINGULARITY_CR" icon = "GFX_ship_part_Required_Warp_Singularity_3_CR" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_3_SINGULARITY_BC" icon = "GFX_ship_part_Required_Warp_Singularity_3_BC" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_3_SINGULARITY_BS" icon = "GFX_ship_part_Required_Warp_Singularity_3_BS" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_3_SINGULARITY_HE" icon = "GFX_ship_part_Required_Warp_Singularity_3_HE" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_3_SINGULARITY_AC" icon = "GFX_ship_part_Required_Warp_Singularity_3_AC" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_3_SINGULARITY_SB" icon = "GFX_ship_part_Required_Warp_Singularity_3_SB" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_3_SINGULARITY_SC" icon = "GFX_ship_part_Required_Warp_Singularity_3_SC" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_3_SINGULARITY_CS" icon = "GFX_ship_part_Required_Warp_Singularity_3_CS" icon_frame = 1 }
+   
+component_set = { key = "REQUIRED_WARP_4_SINGULARITY_PF" icon = "GFX_ship_part_Required_Warp_Singularity_4_PF" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_4_SINGULARITY_DE" icon = "GFX_ship_part_Required_Warp_Singularity_4_DE" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_4_SINGULARITY_CR" icon = "GFX_ship_part_Required_Warp_Singularity_4_CR" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_4_SINGULARITY_BC" icon = "GFX_ship_part_Required_Warp_Singularity_4_BC" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_4_SINGULARITY_BS" icon = "GFX_ship_part_Required_Warp_Singularity_4_BS" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_4_SINGULARITY_HE" icon = "GFX_ship_part_Required_Warp_Singularity_4_HE" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_4_SINGULARITY_AC" icon = "GFX_ship_part_Required_Warp_Singularity_4_AC" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_4_SINGULARITY_SB" icon = "GFX_ship_part_Required_Warp_Singularity_4_SB" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_4_SINGULARITY_SC" icon = "GFX_ship_part_Required_Warp_Singularity_4_SC" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_4_SINGULARITY_CS" icon = "GFX_ship_part_Required_Warp_Singularity_4_CS" icon_frame = 1 }
+   
+component_set = { key = "REQUIRED_WARP_5_SINGULARITY_PF" icon = "GFX_ship_part_Required_Warp_Singularity_5_PF" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_5_SINGULARITY_DE" icon = "GFX_ship_part_Required_Warp_Singularity_5_DE" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_5_SINGULARITY_CR" icon = "GFX_ship_part_Required_Warp_Singularity_5_CR" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_5_SINGULARITY_BC" icon = "GFX_ship_part_Required_Warp_Singularity_5_BC" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_5_SINGULARITY_BS" icon = "GFX_ship_part_Required_Warp_Singularity_5_BS" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_5_SINGULARITY_HE" icon = "GFX_ship_part_Required_Warp_Singularity_5_HE" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_5_SINGULARITY_AC" icon = "GFX_ship_part_Required_Warp_Singularity_5_AC" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_5_SINGULARITY_SB" icon = "GFX_ship_part_Required_Warp_Singularity_5_SB" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_5_SINGULARITY_SC" icon = "GFX_ship_part_Required_Warp_Singularity_5_SC" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_5_SINGULARITY_CS" icon = "GFX_ship_part_Required_Warp_Singularity_5_CS" icon_frame = 1 }
+   
+component_set = { key = "REQUIRED_WARP_6_SINGULARITY_PF" icon = "GFX_ship_part_Required_Warp_Singularity_6_PF" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_6_SINGULARITY_DE" icon = "GFX_ship_part_Required_Warp_Singularity_6_DE" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_6_SINGULARITY_CR" icon = "GFX_ship_part_Required_Warp_Singularity_6_CR" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_6_SINGULARITY_BC" icon = "GFX_ship_part_Required_Warp_Singularity_6_BC" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_6_SINGULARITY_BS" icon = "GFX_ship_part_Required_Warp_Singularity_6_BS" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_6_SINGULARITY_HE" icon = "GFX_ship_part_Required_Warp_Singularity_6_HE" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_6_SINGULARITY_AC" icon = "GFX_ship_part_Required_Warp_Singularity_6_AC" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_6_SINGULARITY_SB" icon = "GFX_ship_part_Required_Warp_Singularity_6_SB" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_6_SINGULARITY_SC" icon = "GFX_ship_part_Required_Warp_Singularity_6_SC" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_6_SINGULARITY_CS" icon = "GFX_ship_part_Required_Warp_Singularity_6_CS" icon_frame = 1 }
+   
+component_set = { key = "REQUIRED_WARP_7_SINGULARITY_PF" icon = "GFX_ship_part_Required_Warp_Singularity_7_PF" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_7_SINGULARITY_DE" icon = "GFX_ship_part_Required_Warp_Singularity_7_DE" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_7_SINGULARITY_CR" icon = "GFX_ship_part_Required_Warp_Singularity_7_CR" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_7_SINGULARITY_BC" icon = "GFX_ship_part_Required_Warp_Singularity_7_BC" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_7_SINGULARITY_BS" icon = "GFX_ship_part_Required_Warp_Singularity_7_BS" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_7_SINGULARITY_HE" icon = "GFX_ship_part_Required_Warp_Singularity_7_HE" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_7_SINGULARITY_AC" icon = "GFX_ship_part_Required_Warp_Singularity_7_AC" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_7_SINGULARITY_SB" icon = "GFX_ship_part_Required_Warp_Singularity_7_SB" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_7_SINGULARITY_SC" icon = "GFX_ship_part_Required_Warp_Singularity_7_SC" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_7_SINGULARITY_CS" icon = "GFX_ship_part_Required_Warp_Singularity_7_CS" icon_frame = 1 }
+   
+component_set = { key = "REQUIRED_WARP_1_BORG_PF" icon = "GFX_ship_part_Required_Warp_Borg_1_PF" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_1_BORG_DE" icon = "GFX_ship_part_Required_Warp_Borg_1_DE" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_1_BORG_CR" icon = "GFX_ship_part_Required_Warp_Borg_1_CR" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_1_BORG_BC" icon = "GFX_ship_part_Required_Warp_Borg_1_BC" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_1_BORG_BS" icon = "GFX_ship_part_Required_Warp_Borg_1_BS" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_1_BORG_HE" icon = "GFX_ship_part_Required_Warp_Borg_1_HE" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_1_BORG_AC" icon = "GFX_ship_part_Required_Warp_Borg_1_AC" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_1_BORG_SB" icon = "GFX_ship_part_Required_Warp_Borg_1_SB" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_1_BORG_SC" icon = "GFX_ship_part_Required_Warp_Borg_1_SC" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_1_BORG_CS" icon = "GFX_ship_part_Required_Warp_Borg_1_CS" icon_frame = 1 }
+   
+component_set = { key = "REQUIRED_WARP_2_BORG_PF" icon = "GFX_ship_part_Required_Warp_Borg_2_PF" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_2_BORG_DE" icon = "GFX_ship_part_Required_Warp_Borg_2_DE" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_2_BORG_CR" icon = "GFX_ship_part_Required_Warp_Borg_2_CR" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_2_BORG_BC" icon = "GFX_ship_part_Required_Warp_Borg_2_BC" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_2_BORG_BS" icon = "GFX_ship_part_Required_Warp_Borg_2_BS" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_2_BORG_HE" icon = "GFX_ship_part_Required_Warp_Borg_2_HE" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_2_BORG_AC" icon = "GFX_ship_part_Required_Warp_Borg_2_AC" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_2_BORG_SB" icon = "GFX_ship_part_Required_Warp_Borg_2_SB" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_2_BORG_SC" icon = "GFX_ship_part_Required_Warp_Borg_2_SC" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_2_BORG_CS" icon = "GFX_ship_part_Required_Warp_Borg_2_CS" icon_frame = 1 }
+   
+component_set = { key = "REQUIRED_WARP_3_BORG_PF" icon = "GFX_ship_part_Required_Warp_Borg_3_PF" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_3_BORG_DE" icon = "GFX_ship_part_Required_Warp_Borg_3_DE" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_3_BORG_CR" icon = "GFX_ship_part_Required_Warp_Borg_3_CR" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_3_BORG_BC" icon = "GFX_ship_part_Required_Warp_Borg_3_BC" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_3_BORG_BS" icon = "GFX_ship_part_Required_Warp_Borg_3_BS" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_3_BORG_HE" icon = "GFX_ship_part_Required_Warp_Borg_3_HE" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_3_BORG_AC" icon = "GFX_ship_part_Required_Warp_Borg_3_AC" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_3_BORG_SB" icon = "GFX_ship_part_Required_Warp_Borg_3_SB" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_3_BORG_SC" icon = "GFX_ship_part_Required_Warp_Borg_3_SC" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_3_BORG_CS" icon = "GFX_ship_part_Required_Warp_Borg_3_CS" icon_frame = 1 }
+   
+component_set = { key = "REQUIRED_WARP_4_BORG_PF" icon = "GFX_ship_part_Required_Warp_Borg_4_PF" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_4_BORG_DE" icon = "GFX_ship_part_Required_Warp_Borg_4_DE" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_4_BORG_CR" icon = "GFX_ship_part_Required_Warp_Borg_4_CR" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_4_BORG_BC" icon = "GFX_ship_part_Required_Warp_Borg_4_BC" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_4_BORG_BS" icon = "GFX_ship_part_Required_Warp_Borg_4_BS" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_4_BORG_HE" icon = "GFX_ship_part_Required_Warp_Borg_4_HE" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_4_BORG_AC" icon = "GFX_ship_part_Required_Warp_Borg_4_AC" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_4_BORG_SB" icon = "GFX_ship_part_Required_Warp_Borg_4_SB" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_4_BORG_SC" icon = "GFX_ship_part_Required_Warp_Borg_4_SC" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_4_BORG_CS" icon = "GFX_ship_part_Required_Warp_Borg_4_CS" icon_frame = 1 }
+   
+component_set = { key = "REQUIRED_WARP_5_BORG_PF" icon = "GFX_ship_part_Required_Warp_Borg_5_PF" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_5_BORG_DE" icon = "GFX_ship_part_Required_Warp_Borg_5_DE" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_5_BORG_CR" icon = "GFX_ship_part_Required_Warp_Borg_5_CR" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_5_BORG_BC" icon = "GFX_ship_part_Required_Warp_Borg_5_BC" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_5_BORG_BS" icon = "GFX_ship_part_Required_Warp_Borg_5_BS" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_5_BORG_HE" icon = "GFX_ship_part_Required_Warp_Borg_5_HE" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_5_BORG_AC" icon = "GFX_ship_part_Required_Warp_Borg_5_AC" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_5_BORG_SB" icon = "GFX_ship_part_Required_Warp_Borg_5_SB" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_5_BORG_SC" icon = "GFX_ship_part_Required_Warp_Borg_5_SC" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_5_BORG_CS" icon = "GFX_ship_part_Required_Warp_Borg_5_CS" icon_frame = 1 }
+   
+component_set = { key = "REQUIRED_WARP_6_BORG_PF" icon = "GFX_ship_part_Required_Warp_Borg_6_PF" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_6_BORG_DE" icon = "GFX_ship_part_Required_Warp_Borg_6_DE" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_6_BORG_CR" icon = "GFX_ship_part_Required_Warp_Borg_6_CR" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_6_BORG_BC" icon = "GFX_ship_part_Required_Warp_Borg_6_BC" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_6_BORG_BS" icon = "GFX_ship_part_Required_Warp_Borg_6_BS" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_6_BORG_HE" icon = "GFX_ship_part_Required_Warp_Borg_6_HE" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_6_BORG_AC" icon = "GFX_ship_part_Required_Warp_Borg_6_AC" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_6_BORG_SB" icon = "GFX_ship_part_Required_Warp_Borg_6_SB" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_6_BORG_SC" icon = "GFX_ship_part_Required_Warp_Borg_6_SC" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_6_BORG_CS" icon = "GFX_ship_part_Required_Warp_Borg_6_CS" icon_frame = 1 }
+   
+component_set = { key = "REQUIRED_WARP_7_BORG_PF" icon = "GFX_ship_part_Required_Warp_Borg_7_PF" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_7_BORG_DE" icon = "GFX_ship_part_Required_Warp_Borg_7_DE" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_7_BORG_CR" icon = "GFX_ship_part_Required_Warp_Borg_7_CR" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_7_BORG_BC" icon = "GFX_ship_part_Required_Warp_Borg_7_BC" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_7_BORG_BS" icon = "GFX_ship_part_Required_Warp_Borg_7_BS" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_7_BORG_HE" icon = "GFX_ship_part_Required_Warp_Borg_7_HE" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_7_BORG_AC" icon = "GFX_ship_part_Required_Warp_Borg_7_AC" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_7_BORG_SB" icon = "GFX_ship_part_Required_Warp_Borg_7_SB" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_7_BORG_SC" icon = "GFX_ship_part_Required_Warp_Borg_7_SC" icon_frame = 1 }
+   component_set = { key = "REQUIRED_WARP_7_BORG_CS" icon = "GFX_ship_part_Required_Warp_Borg_7_CS" icon_frame = 1 }
+   

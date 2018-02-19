@@ -1,0 +1,106 @@
+@distance = 30
+@base_moon_distance = 10
+
+#Tellar
+tellarian_homeworld = {
+	name = "61 Cygni"
+	class = "sc_k"
+	flags = { tellarian_homeworld }
+	init_effect = { log = "tellarian homeworld" }
+	usage = custom_empire
+	max_instances = 1
+	planet = { name = "Tellar" class = star orbit_distance = 0 orbit_angle = 1 size = 30 has_ring = no }
+	planet = {
+		count = 3
+		orbit_distance = { min = 16 max = 22 }
+		orbit_angle = { min = 90 max = 270 }
+		moon = { count = { min = 0 max = 2 } class = random_non_colonizable orbit_angle = { min = 90 max = 270 } orbit_distance = 5 }
+	}
+	planet = {
+		name = "Tellar Prime"
+		class = pc_savannah
+		orbit_distance = 25
+		orbit_angle = 220
+		size = { min = 22 max = 25 }
+		starting_planet = yes
+		has_ring = no
+		tile_blockers = none
+		modifiers = none
+		init_effect = { prevent_anomaly = yes }
+		init_effect = {
+			if = {
+				limit = { NOT = { any_country = { has_country_flag = tellarian_technocracy } } }
+				create_species = {
+				    name = "Tellarite"
+				    class = TEL
+				    portrait = tellarite
+				    homeworld = THIS
+				    traits = {
+				        trait="trait_charismatic"
+	                    trait="trait_communal"
+	                    trait="trait_natural_engineers"
+	                    trait="trait_slow_breeders"
+				        ideal_planet_class = "pc_savannah"
+					} 
+				}
+				last_created_species = { save_global_event_target_as = tellariteSpecies }
+				create_country = {
+					name = "NAME_tellarian_technocracy"
+					type = default
+					ignore_initial_colony_error = yes
+					civics = { civic = "civic_stubborn_pride" civic = "civic_technocracy" }
+					authority = auth_democratic
+					name_list = "Tellarite"
+					ethos = { ethic = "ethic_xenophile" ethic = "ethic_fanatic_materialist" }
+					species = event_target:tellariteSpecies
+					flag = {
+						icon = { category = "trek" file = "tellarite.dds" }
+						background = { category = "backgrounds" file = "00_solid.dds" }
+						colors = { "customcolor1275" "black" "null" "null" }
+					}
+					ship_prefix = "TV"
+					effect = {
+						set_graphical_culture = tellarite_01
+						set_country_flag = tellarian_technocracy
+						set_country_flag = custom_start_screen
+						set_country_flag = federation_founder
+						set_country_flag = generic_ent
+						set_country_flag = alpha_beta_empire
+						set_country_flag = init_spawned
+						set_country_flag = first_alien_life
+						set_country_flag = first_contact_event
+						set_country_flag = sth_medium_galaxy
+						set_country_flag = botf_minor
+						save_global_event_target_as = tellarian_technocracy
+					}
+				}
+				create_colony = { owner = event_target:tellarian_technocracy species = event_target:tellariteSpecies ethos = owner }
+			}
+			set_capital = yes
+			random_country = {
+				limit = { has_country_flag = tellarian_technocracy }
+				save_global_event_target_as = tellarian_technocracy
+				add_appropriate_start_techs = yes
+				give_technology = {	tech = "tech_society_ritualized_381" message = no }
+				species = { save_global_event_target_as = tellariteSpecies }
+            }
+			set_owner = event_target:tellarian_technocracy
+			generate_major_empire_start_buildings = yes
+			generate_major_empire_start_pops = yes
+			generate_major_empire_start_fleets = yes
+			set_name = "Tellar Prime"
+		}
+		moon = { name = "Kera" class = "pc_barren" size = { min = 5 max = 8 } orbit_angle = { min = 90 max = 270 } orbit_distance = 7 }
+		moon = { name = "Phinda" class = "pc_barren" size = { min = 5 max = 8 } orbit_angle = { min = 90 max = 270 } orbit_distance = 7 }
+	}
+	planet = {
+		count = 3
+		orbit_distance = { min = 18 max = 25 }
+		orbit_angle = { min = 90 max = 270 }
+		moon = { count = { min = 0 max = 1 } class = random_non_colonizable orbit_angle = { min = 90 max = 270 } orbit_distance = 5 }
+	}
+	change_orbit = { min = 20 max = 30 }
+	planet = { name = "Tellamarkus" class = "pc_frozen" orbit_distance = { min = 18 max = 25 } orbit_angle = { min = 90 max = 270 } }
+	change_orbit = { min = 20 max = 30 }
+	planet = { name = "61 Cygni B" class = star flags = { secondaryStar } orbit_distance = 0 orbit_angle = { min = 90 max = 270 } size = { min = 10 max = 20 } has_ring = no }
+}

@@ -82,19 +82,23 @@ module STLValidation =
         |Some _ -> OK //Do better
         |None -> if key.StartsWith("@") then OK else Invalid [inv S.Error root (sprintf "unknown effect %s used." key)]
     
-    let valTriggerLeaf (triggers : (Effect * bool) list) (scopes : ScopeContext) (leaf : Leaf) =
-        match triggers |> List.tryFind (fun (e, _) -> e.Name.ToLower() = leaf.Key.ToLower()) with
-        |Some (_, true) -> OK
-        |Some (t, false) -> Invalid [inv S.Error leaf (sprintf "%s trigger used in incorrect scope. In %A but expected %s" leaf.Key (scopes.CurrentScope) (t.Scopes |> List.map (fun f -> f.ToString()) |> String.concat ", "))]
+    let valTriggerLeaf (triggers : Effect list) (scopes : ScopeContext) (leaf : Leaf) =
+        match triggers |> List.tryFind (fun e -> e.Name.ToLower() = leaf.Key.ToLower()) with
+        |Some e ->
+            if e.Scopes |> List.contains(scopes.CurrentScope)
+            then OK
+            else Invalid [inv S.Error leaf (sprintf "%s trigger used in incorrect scope. In %A but expected %s" leaf.Key (scopes.CurrentScope) (e.Scopes |> List.map (fun f -> f.ToString()) |> String.concat ", "))]
         |None -> handleUnknownTrigger leaf leaf.Key
 
-    let valEffectLeaf (effects : (Effect * bool) list) (scopes : ScopeContext) (leaf : Leaf) =
-        match effects |> List.tryFind (fun (e, _) -> e.Name = leaf.Key) with
-            |Some(_, true) -> OK
-            |Some (t, false) -> Invalid [inv S.Error leaf (sprintf "%s effect used in incorrect scope. In %A but expected %s" leaf.Key (scopes.CurrentScope) (t.Scopes |> List.map (fun f -> f.ToString()) |> String.concat ", "))]
+    let valEffectLeaf (effects : Effect list) (scopes : ScopeContext) (leaf : Leaf) =
+        match effects |> List.tryFind (fun e -> e.Name.ToLower() = leaf.Key.ToLower()) with
+            |Some e ->
+                if e.Scopes |> List.contains(scopes.CurrentScope)
+                then OK
+                else Invalid [inv S.Error leaf (sprintf "%s effect used in incorrect scope. In %A but expected %s" leaf.Key (scopes.CurrentScope) (e.Scopes |> List.map (fun f -> f.ToString()) |> String.concat ", "))]
             |None -> handleUnknownEffect leaf leaf.Key
 
-    let rec valEventTrigger (root : Node) (triggers : (Effect * bool) list) (effects : (Effect * bool) list) (scopes : ScopeContext) (effect : Both) =
+    let rec valEventTrigger (root : Node) (triggers : Effect list) (effects : Effect list) (scopes : ScopeContext) (effect : Both) =
         match effect with
         |LeafI leaf -> valTriggerLeaf triggers scopes leaf
         |NodeI node ->
@@ -112,13 +116,17 @@ module STLValidation =
                 |NewScope s -> valNodeTriggers root triggers effects s node
                 |WrongScope ss -> Invalid [inv S.Error node (sprintf "%s scope command used in incorrect scope. In %A but expected %s" x scopes.CurrentScope (ss |> List.map (fun s -> s.ToString()) |> String.concat ", "))]
                 |NotFound ->
-                    match triggers |> List.tryFind (fun (e, _) -> e.Name.ToLower() = x.ToLower() ) with
-                    |Some (_, true) -> OK
-                    |Some (t, false) -> Invalid [inv S.Error node (sprintf "%s trigger used in incorrect scope. In %A but expected %s" x scopes.CurrentScope (t.Scopes |> List.map (fun f -> f.ToString()) |> String.concat ", "))]
+                    match triggers |> List.tryFind (fun e -> e.Name.ToLower() = x.ToLower() ) with
+                    |Some e ->
+                        if e.Scopes |> List.contains(scopes.CurrentScope)
+                        then OK
+                        else Invalid [inv S.Error node (sprintf "%s trigger used in incorrect scope. In %A but expected %s" x scopes.CurrentScope (e.Scopes |> List.map (fun f -> f.ToString()) |> String.concat ", "))]
+                    // |Some (_, true) -> OK
+                    // |Some (t, false) -> Invalid [inv S.Error node (sprintf "%s trigger used in incorrect scope. In %A but expected %s" x scopes.CurrentScope (t.Scopes |> List.map (fun f -> f.ToString()) |> String.concat ", "))]
                     |None -> handleUnknownTrigger node x
         |_ -> OK
 
-    and valEventEffect (root : Node) (triggers : (Effect * bool) list) (effects : (Effect * bool) list) (scopes : ScopeContext) (effect : Both) =
+    and valEventEffect (root : Node) (triggers : Effect list) (effects : Effect list) (scopes : ScopeContext) (effect : Both) =
         match effect with
         |LeafI leaf -> valEffectLeaf effects scopes leaf
         |NodeI node ->
@@ -136,23 +144,27 @@ module STLValidation =
                 |NewScope s -> valNodeEffects node triggers effects s node
                 |WrongScope ss -> Invalid [inv S.Error node (sprintf "%s scope command used in incorrect scope. In %A but expected %s" x scopes.CurrentScope (ss |> List.map (fun s -> s.ToString()) |> String.concat ", "))]
                 |NotFound ->
-                    match effects |> List.tryFind (fun (e, _) -> e.Name.ToLower() = x.ToLower()) with
-                    |Some(_, true) -> OK
-                    |Some (t, false) -> Invalid [inv S.Error node (sprintf "%s effect used in incorrect scope. In %A but expected %s" x scopes.CurrentScope (t.Scopes  |> List.map (fun f -> f.ToString()) |> String.concat ", "))]
+                    match effects |> List.tryFind (fun e -> e.Name.ToLower() = x.ToLower()) with
+                    |Some e -> 
+                        if e.Scopes |> List.contains(scopes.CurrentScope)
+                        then OK
+                        else Invalid [inv S.Error node (sprintf "%s effect used in incorrect scope. In %A but expected %s" x scopes.CurrentScope (e.Scopes  |> List.map (fun f -> f.ToString()) |> String.concat ", "))]
+                    // |Some(_, true) -> OK
+                    // |Some (t, false) -> Invalid [inv S.Error node (sprintf "%s effect used in incorrect scope. In %A but expected %s" x scopes.CurrentScope (t.Scopes  |> List.map (fun f -> f.ToString()) |> String.concat ", "))]
                     |None -> handleUnknownEffect node x
         |_ -> OK
     
-    and valNodeTriggers (root : Node) (triggers : (Effect * bool) list) (effects : (Effect * bool) list) (scopes : ScopeContext) (node : Node) =
-        let scopedTriggers = triggers |> List.map (fun (e, _) -> e, scopes.CurrentScope = Scope.Any || e.Scopes |> List.exists (fun s -> s = scopes.CurrentScope))
-        let scopedEffects = effects |> List.map (fun (e, _) -> e,  scopes.CurrentScope = Scope.Any || e.Scopes |> List.exists (fun s -> s = scopes.CurrentScope)) 
-        List.map (valEventTrigger root scopedTriggers scopedEffects scopes) node.All |> List.fold (<&&>) OK
+    and valNodeTriggers (root : Node) (triggers : Effect list) (effects : Effect list) (scopes : ScopeContext) (node : Node) =
+        // let scopedTriggers = triggers |> List.map (fun (e, _) -> e, scopes.CurrentScope = Scope.Any || e.Scopes |> List.exists (fun s -> s = scopes.CurrentScope))
+        // let scopedEffects = effects |> List.map (fun (e, _) -> e,  scopes.CurrentScope = Scope.Any || e.Scopes |> List.exists (fun s -> s = scopes.CurrentScope)) 
+        List.map (valEventTrigger root triggers effects scopes) node.All |> List.fold (<&&>) OK
 
-    and valNodeEffects (root : Node) (triggers : (Effect * bool) list) (effects : (Effect * bool) list) (scopes : ScopeContext) (node : Node) =
-        let scopedTriggers = triggers |> List.map (fun (e, _) -> e, scopes.CurrentScope = Scope.Any || e.Scopes |> List.exists (fun s -> s = scopes.CurrentScope)) 
-        let scopedEffects = effects |> List.map (fun (e, _) -> e, scopes.CurrentScope = Scope.Any || e.Scopes |> List.exists (fun s -> s = scopes.CurrentScope)) 
-        List.map (valEventEffect root scopedTriggers scopedEffects scopes) node.All |> List.fold (<&&>) OK
+    and valNodeEffects (root : Node) (triggers : Effect list) (effects : Effect list) (scopes : ScopeContext) (node : Node) =
+        //let scopedTriggers = triggers |> List.map (fun (e, _) -> e, scopes.CurrentScope = Scope.Any || e.Scopes |> List.exists (fun s -> s = scopes.CurrentScope)) 
+        //let scopedEffects = effects |> List.map (fun (e, _) -> e, scopes.CurrentScope = Scope.Any || e.Scopes |> List.exists (fun s -> s = scopes.CurrentScope)) 
+        List.map (valEventEffect root triggers effects scopes) node.All |> List.fold (<&&>) OK
 
-    let valOption (root : Node) (triggers : (Effect * bool) list) (effects : (Effect * bool) list) (scopes : ScopeContext) (node : Node) =
+    let valOption (root : Node) (triggers : Effect list) (effects : Effect list) (scopes : ScopeContext) (node : Node) =
         let optionTriggers = ["trigger"; "allow"]
         let optionEffects = ["tooltip"; "hidden_effect"]
         let optionExcludes = ["name"; "custom_tooltip"; "response_text"; "is_dialog_only"; "sound"; "ai_chance"; "custom_gui"; "default_hide_option"]
@@ -178,36 +190,36 @@ module STLValidation =
     let valEventTriggers  (triggers : (Effect) list) (effects : (Effect) list) (event : Event) =
         let eventScope = { Root = eventScope event; From = []; Scopes = [eventScope event]}
         //let eventScope = Seq.append [eventScope event] (Seq.initInfinite (fun _ -> Scope.Any))
-        let scopedTriggers = triggers |> List.map (fun e -> e, e.Scopes |> List.exists (fun s -> s = eventScope.CurrentScope)) 
-        let scopedEffects = effects |> List.map (fun e -> e, e.Scopes |> List.exists (fun s -> s = eventScope.CurrentScope)) 
+        // let scopedTriggers = triggers |> List.map (fun e -> e, e.Scopes |> List.exists (fun s -> s = eventScope.CurrentScope)) 
+        // let scopedEffects = effects |> List.map (fun e -> e, e.Scopes |> List.exists (fun s -> s = eventScope.CurrentScope)) 
         match event.Child "trigger" with
         |Some n -> 
-            let v = List.map (valEventTrigger event scopedTriggers scopedEffects eventScope) n.All
+            let v = List.map (valEventTrigger event triggers effects eventScope) n.All
             v |> List.fold (<&&>) OK
         |None -> OK
     let valEventEffects (triggers : (Effect) list) (effects : (Effect) list) (event : Event) =
         let eventScope = { Root = eventScope event; From = []; Scopes = [eventScope event]}
-        let scopedTriggers = triggers |> List.map (fun e -> e, e.Scopes |> List.exists (fun s -> s = eventScope.CurrentScope)) 
-        let scopedEffects = effects |> List.map (fun e -> e, e.Scopes |> List.exists (fun s -> s = eventScope.CurrentScope)) 
+        // let scopedTriggers = triggers |> List.map (fun e -> e, e.Scopes |> List.exists (fun s -> s = eventScope.CurrentScope)) 
+        // let scopedEffects = effects |> List.map (fun e -> e, e.Scopes |> List.exists (fun s -> s = eventScope.CurrentScope)) 
         let desc = 
             event.Childs "desc" 
             <&!&> (fun n ->
                     match n.Child "trigger" with
-                    |Some t -> valNodeTriggers event scopedTriggers scopedEffects eventScope t
+                    |Some t -> valNodeTriggers event triggers effects eventScope t
                     |None -> OK)
         let imm = 
             match event.Child "immediate" with
             |Some n -> 
-                let v = List.map (valEventEffect event scopedTriggers scopedEffects eventScope) n.All
+                let v = List.map (valEventEffect event triggers effects eventScope) n.All
                 v |> List.fold (<&&>) OK
             |None -> OK
         let aft = 
             match event.Child "after" with
             |Some n -> 
-                let v = List.map (valEventEffect event scopedTriggers scopedEffects eventScope) n.All
+                let v = List.map (valEventEffect event triggers effects eventScope) n.All
                 v |> List.fold (<&&>) OK
             |None -> OK
-        let opts = event.Childs "option" |> List.map (fun o -> (valOption o scopedTriggers scopedEffects eventScope o))
+        let opts = event.Childs "option" |> List.map (fun o -> (valOption o triggers effects eventScope o))
         let opts2 = opts |> List.fold (<&&>) OK
         desc <&&> imm <&&> aft <&&> opts2
 

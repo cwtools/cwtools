@@ -1,0 +1,22 @@
+defined_text = {
+	name = GetBorgSpeciesNumber
+	text = { trigger = { is_species_class = FED } localization_key = "5618" }
+	text = { trigger = { is_species_class = TAL } localization_key = "218" }
+	text = { trigger = { is_species_class = FER } localization_key = "180" }
+	text = { trigger = { is_species_class = KAZ } localization_key = "329" }
+	text = { trigger = { is_species_class = NRC } localization_key = "689" }
+	text = { trigger = { is_species_class = BRU } localization_key = "2461" }
+	text = { trigger = { is_species_class = VUL } localization_key = "3259" }
+	text = { trigger = { is_species_class = UND } localization_key = "8472" }
+	text = { trigger = { is_species_class = BRG } localization_key = "0" }
+	
+	text = { trigger = { is_species_class = HIR } localization_key = "478" }
+	text = { trigger = { is_species_class = BET } localization_key = "1599" }
+	text = { trigger = { is_species_class = CAR } localization_key = "2000" }
+	text = { trigger = { is_species_class = ROM } localization_key = "3783" }
+	text = { trigger = { is_species_class = KDF } localization_key = "5008" }
+	#text = { trigger = { is_species_class = PAK } localization_key = "95012" }
+	text = {
+		localization_key = "10348"
+	}
+}

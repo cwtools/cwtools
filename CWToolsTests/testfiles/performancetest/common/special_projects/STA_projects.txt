@@ -1,0 +1,49 @@
+######################
+# More Events Mod
+# Special Projects
+######################
+
+#Second Chance Special Project
+special_project = {
+	key = "SECOND_CHANCE_PROJECT"
+	cost = 0
+	days_to_research = 30
+	tech_department = society_technology
+	picture = GFX_evt_society_research
+	
+	event_scope = ship_event
+	
+	requirements = {
+		shipclass_science_ship = 1
+		leader = scientist
+		skill > 2
+	}
+	
+	on_success = {
+		#ship_event = { id = STA_SecondChance_event.1 }
+	}
+	
+	on_fail = { }
+}
+
+special_project = {
+	key = "SILENCE_PROJECT"
+	cost = 0
+	days_to_research = 90
+	tech_department = physics_technology
+	icon = "gfx/interface/icons/situation_log/situation_log_planet.dds"
+	picture = sth_GFX_evt_blackHole
+	
+	event_scope = ship_event
+	
+	requirements = {
+		shipclass_science_ship = 1
+		leader = scientist
+	}
+	
+	on_success = {
+		ship_event = { id = STA_silence_event.100 }
+	}
+	
+	on_fail = { }
+}

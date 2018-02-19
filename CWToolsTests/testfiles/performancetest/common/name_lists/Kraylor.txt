@@ -1,0 +1,97 @@
+﻿### Kraylor by EHKodiak uninspired ship names as per nightingale episode. 
+Kraylor = {
+	randomized = no
+
+	ship_names = {
+		generic = {
+"Design 1" "Design 27" "Design 53" "Design 79" "Design 105" "Design 131" "Design 157" "Design 183" "Design 209" "Design 235" "Design 261" "Design 287" "Design 313" "Design 339" "Design 365" "Design 391" "Design 417" "Design 443" "Design 469" "Design 495" "Design 521" "Design 547" "Design 573" "Design 599" "Design 625" "Design 651" "Design 677" "Design 703" "Design 729" "Design 755" "Design 781" "Design 807" "Design 833" "Design 859" "Design 885" "Design 911" "Design 937" "Design 963" "Design 989" "Variant 42" "Variant 83" "Variant 124" "Variant 165" "Variant 206" "Variant 247" "Variant 288" "Variant 329" "Variant 370" "Variant 411" "Variant 452" "Variant 493" "Variant 534" "Variant 575" "Variant 616" "Variant 657" "Variant 698" "Variant 739" "Variant 780" "Variant 821" "Variant 862" "Variant 903" "Variant 944" "Variant 985"
+		}
+		corvette = {
+		}
+		saber = {
+		}
+		sovereign = {
+		}
+		steamrunner = {
+		}		
+		adv_cruiser = {
+		}
+		strike = {
+		}	
+		constructor = { }
+		colonizer = { }
+		science = { }
+		transport = { }
+		outpost_station = {
+			sequential_name = "Frontier Outpost"
+		}
+	}
+
+	fleet_names = {
+		sequential_name = "%O% Fleet"
+	}
+	
+	army_names = {
+		defense_army = {
+			sequential_name = "%O% Militia"
+		}
+		assault_army = {
+			sequential_name = "%O% Assault Contingent"
+		}
+		slave_army = {
+			sequential_name = "%O% Indentured Defence Force"
+		}
+		clone_army = { 
+			sequential_name = "%O% Clone Defence Force"
+		}
+		robotic_army = {
+			sequential_name = "%O% Mechanised Defence Force"
+		}
+		android_army = {
+			sequential_name = "%O% Synthetic Defence Force"
+		}
+		psionic_army = { 
+			sequential_name = "%O% Psi Defence Force"
+		}
+		xenomorph_army = {
+			sequential_name = "%O% Bio-Warfare Defence Force"
+		}
+		gene_warrior_army = {
+			sequential_name = "%O% Bio-Engineered Defence Force"
+		}
+	}
+
+	planet_names = {
+		generic = {
+			names = { 
+			}
+		}
+	}
+
+
+	### CHARACTERS 
+
+	character_names = {
+		names1 = {
+			weight = 40
+			first_names_male = {
+			Geral Terek Brell Loken Petek Larak Rurigen Merrken Depnell Colyus Marell Luigell Giovanell Guisepnell Antunken Robertken Andrek Stefgell Marcoken Franscell Angelell Vincell Pietrok Salvatken Carlken Francken Domellan Brunan Paulan Michele Giorgell Sergell Lucan Alessan Alfan Bellitken Fabrizken Cesken ellrkeno Gustaken Silviken Umtoken Nicogell Mattell Ignazigell Camirrken Danirken Cristirken Alberken Guidken Lorellzan Tommak Fabikan Grogikan Vaxildan Percigel Scangel 
+			}
+			first_names_female = {
+			Krayla Dayla Anetra Tayla Mayla Maralya Annayla Guisepa Rosay Rosa Angeyla Giovayla Tereyla Lucyla Carmeyla Cateriyla Franceyla Antonieyla Carayla Eleyla Conceyla Riyla Margheriyla Frayla Pala Vittoyla Ariayla Orieyla Nicoleyla Clayla Stefayla Giseyla Claudyla Lorenyla Gabrieyla Isabeyla Valeyla Lucreyla Diyla Benedeyla Pieyla Vexhaleya Pikeyla  
+			}
+			second_names = {
+			""
+			}
+			regnal_first_names_male = {
+			Geral Terek Brell Loken Petek Larak Rurigen Merrken Depnell Colyus Marell Luigell Giovanell Guisepnell Antunken Robertken Andrek Stefgell Marcoken Franscell Angelell Vincell Pietrok Salvatken Carlken Francken Domellan Brunan Paulan Michele Giorgell Sergell Lucan Alessan Alfan Bellitken Fabrizken Cesken ellrkeno Gustaken Silviken Umtoken Nicogell Mattell Ignazigell Camirrken Danirken Cristirken Alberken Guidken Lorellzan Tommak Fabikan Grogikan Vaxildan Percigel Scangel
+			}
+			regnal_first_names_female = {
+			Krayla Dayla Anetra Tayla Mayla Maralya Annayla Guisepa Rosay Rosa Angeyla Giovayla Tereyla Lucyla Carmeyla Cateriyla Franceyla Antonieyla Carayla Eleyla Conceyla Riyla Margheriyla Frayla Pala Vittoyla Ariayla Orieyla Nicoleyla Clayla Stefayla Giseyla Claudyla Lorenyla Gabrieyla Isabeyla Valeyla Lucreyla Diyla Benedeyla Pieyla Vexhaleya Pikeyla
+			}
+			regnal_second_names = {
+			""
+			}
+		}
+	}
+}

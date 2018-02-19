@@ -1,0 +1,289 @@
+#Dyson Sphere Site 
+dyson_sphere_0 = {
+	entity = "construction_platform_entity"
+	construction_entity = "construction_platform_entity"
+	portrait = "GFX_megastructure_construction_background"
+	place_entity_on_planet_plane = no
+	entity_offset = { x = -7 y = -7 }
+	build_time = 1800
+	build_cost = {
+		minerals = 10000
+		influence = 300
+	}
+
+	maintenance = {
+		energy = 5
+	}
+
+	potential = {
+		has_ascension_perk = ap_galactic_wonders
+	}
+	
+	possible = {
+		custom_tooltip = {
+			fail_text = "requires_inside_border"
+			is_inside_border = from
+		}
+		custom_tooltip = {
+			fail_text = "requires_surveyed_system"
+			NOT = {
+				any_planet = {
+					is_surveyed = {
+						who = prev.from
+						status = no
+					}
+				}
+			}
+		}
+		custom_tooltip = {
+			fail_text = "requires_no_habitable_planets"
+			NOT = {
+				any_planet = {
+					AND = {
+						OR = {
+							habitable_planet = yes
+							habitable_structure = yes
+						}
+						NOT = { has_planet_flag = habitat }
+					}
+				}
+			}
+		}
+		custom_tooltip = {
+			fail_text = "requires_no_black_hole_neutron_star_pulsar"
+			NOT = {
+				is_star_class = sc_black_hole
+				is_star_class = sc_neutron_star
+				is_star_class = sc_pulsar
+			}
+		}
+		custom_tooltip = {
+			fail_text = "requires_no_existing_megastructure"
+			NOT = { has_any_megastructure = yes }
+		}
+	}
+	
+	placement_rules = {
+		planet_possible = {
+			custom_tooltip = {
+				fail_text = "must_build_around_star"
+				is_star = yes
+			}
+			custom_tooltip = {
+				fail_text = "requires_no_anomaly"
+				NOT = { has_anomaly = yes }
+			}
+			custom_tooltip = {
+				fail_text = "requires_no_orbital_station"
+				has_orbital_station = no
+			}
+		}
+	}
+	
+	ai_weight = {
+		factor = 15
+		
+		modifier = {
+			factor = 0.1
+			has_any_megastructure_in_empire = yes
+		}
+		
+		modifier = {
+			factor = 0.1
+			any_system_within_border = {
+				OR = {
+					has_megastructure = dyson_sphere_1
+					has_megastructure = dyson_sphere_2
+					has_megastructure = dyson_sphere_3
+					has_megastructure = dyson_sphere_4
+					has_megastructure = dyson_sphere_5	
+				}
+			}
+		}
+	}
+	
+	on_build_start = {}
+	on_build_cancel = {}
+	on_build_complete = {
+		set_star_flag = dyson_sphere_built
+	}
+}
+
+#Dyson Sphere Frame
+dyson_sphere_1 = {
+	entity = "dyson_sphere_phase_01_entity"
+	construction_entity = "dyson_sphere_frame_entity"
+	portrait = "GFX_megastructure_construction_background"
+	upgrade_from = {
+		dyson_sphere_0
+	}
+	build_time = 3600
+	build_cost = {
+		minerals = 40000
+	}
+
+	possible = {
+		from = { has_ascension_perk = ap_galactic_wonders }
+	}
+}
+
+#Partial Dyson Sphere
+dyson_sphere_2 = {
+	entity = "dyson_sphere_phase_02_entity"
+	construction_entity = "dyson_sphere_part_1_entity"
+	portrait = "GFX_megastructure_construction_background"
+	upgrade_from = {
+		dyson_sphere_1
+	}
+	build_time = 3600
+	build_cost = {
+		minerals = 40000
+	}
+	monthly_production = {
+		energy = 100
+	}
+
+	possible = {
+		from = { has_ascension_perk = ap_galactic_wonders }
+	}
+}
+
+#Partial Dyson Sphere
+dyson_sphere_3 = {
+	entity = "dyson_sphere_phase_03_entity"
+	construction_entity = "dyson_sphere_part_2_entity"
+	portrait = "GFX_megastructure_construction_background"
+	upgrade_from = {
+		dyson_sphere_2
+	}
+	build_time = 3600
+	build_cost = {
+		minerals = 40000
+	}
+	monthly_production = {
+		energy = 200
+	}
+
+	possible = {
+		from = { has_ascension_perk = ap_galactic_wonders }
+	}
+}
+
+#Partial Dyson Sphere
+dyson_sphere_4 = {
+	entity = "dyson_sphere_phase_04_entity"
+	construction_entity = "dyson_sphere_part_3_entity"
+	portrait = "GFX_megastructure_construction_background"
+	upgrade_from = {
+		dyson_sphere_3
+	}
+	build_time = 3600
+	build_cost = {
+		minerals = 40000
+	}
+	monthly_production = {
+		energy = 300
+	}
+
+	possible = {
+		from = { has_ascension_perk = ap_galactic_wonders }
+	}
+}
+
+#Dyson Sphere
+dyson_sphere_5 = {
+	entity = "dyson_sphere_phase_05_entity"
+	construction_entity = "dyson_sphere_part_4_entity"
+	portrait = "GFX_megastructure_dyson_sphere_background"
+	upgrade_from = {
+		dyson_sphere_4
+	}
+	build_time = 3600
+	build_cost = {
+		minerals = 40000
+	}
+	monthly_production = {
+		energy = 400
+	}
+
+	possible = {
+		from = { has_ascension_perk = ap_galactic_wonders }
+	}
+
+	on_build_complete = {
+		every_system_planet = {
+			limit = {
+				OR = {
+					is_planet_class = pc_molten
+					is_planet_class = pc_toxic
+				}
+			}
+			change_pc = pc_frozen
+		}
+		every_system_planet = {
+			limit = {
+				is_planet_class = pc_barren
+			}
+			change_pc = pc_barren_cold
+		}		
+	}
+}
+
+# Ruined Dyson Sphere
+dyson_sphere_ruined = {
+	entity = "dyson_sphere_destroyed_entity"
+	portrait = "GFX_megastructure_construction_background"
+
+	potential = {
+		always = no
+	}
+}
+
+# Restored Dyson Sphere
+dyson_sphere_restored = {
+	entity = "dyson_sphere_phase_05_entity"
+	construction_entity = "dyson_sphere_part_4_ent ity"
+	portrait = "GFX_megastructure_dyson_sphere_background"
+	upgrade_from = {
+		dyson_sphere_ruined
+	}
+	build_time = 3600
+	build_cost = {
+		minerals = 40000
+	}
+	monthly_production = {
+		energy = 400
+	}
+
+	possible = {
+		always = no
+	}
+
+	on_build_start = {
+		fromfrom = {
+			set_graphical_culture = root.from
+		}
+	}
+
+	on_build_complete = {
+		every_system_planet = {
+			limit = {
+				OR = {
+					is_planet_class = pc_molten
+					is_planet_class = pc_toxic
+				}
+			}
+			change_pc = pc_frozen
+		}
+		every_system_planet = {
+			limit = {
+				is_planet_class = pc_barren
+			}
+			change_pc = pc_barren_cold
+		}
+		every_system_ambient_object = { destroy_ambient_object = this }
+		from = {
+			country_event = { id = utopia.2011 }
+		}
+	}
+}

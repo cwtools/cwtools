@@ -1,0 +1,344 @@
+############################
+#
+# Undine Invasion Crisis Events
+#
+# Written by Walshicus
+#
+############################
+
+namespace = STH_undine_crisis
+
+#Fluidic Space Discovered
+country_event = {
+	id = STH_undine_crisis.1
+	title = STH_undine_crisis.1.name
+	desc = STH_undine_crisis.1.desc
+	picture = sth_GFX_evt_undineBorg1
+	fire_only_once = yes
+	trigger = {
+		has_country_flag = the_borg_collective
+		NOT = { has_country_flag = fluidic_space_discovered }
+		fleet_power > 50000
+	}
+	mean_time_to_happen = { months = 120 }
+	immediate = { set_country_flag = fluidic_space_discovered }
+	option = {
+		name = STH_undine_crisis.1.a
+		ai_chance = { factor = 20 }
+	}
+	option = {
+		ai_chance = { factor = 100 }
+		name = STH_undine_crisis.1.b
+		every_country = {
+			limit = { 
+				has_communications = root 
+				NOT = { is_country = root }
+			}
+			country_event = { id = STH_undine_crisis.2 days = 28 random = 7 }
+		}
+		country_event = { id = STH_undine_crisis.3 days = 360 random = 180 }
+	}
+}
+
+#Borg Neighbour Alert 1
+country_event = {
+	id = STH_undine_crisis.2
+	title = STH_undine_crisis.2.name
+	desc = STH_undine_crisis.2.desc
+	picture = sth_GFX_evt_undineBorg1
+	fire_only_once = yes
+	is_triggered_only = yes
+	immediate = { }
+	option = { name = STH_undine_crisis.2.a }
+}
+
+#Fluidic Space Experiments
+country_event = {
+	id = STH_undine_crisis.3
+	title = STH_undine_crisis.3.name
+	desc = STH_undine_crisis.3.desc
+	picture = sth_GFX_evt_undineBorg1
+	trigger = { has_country_flag = the_borg_collective }
+	is_triggered_only = yes
+	immediate = { }
+	option = {
+		name = STH_undine_crisis.3.a
+		trigger = { energy > 999 }
+		ai_chance = { factor = 100 }
+		every_country = {
+			limit = { 
+				has_communications = root 
+				NOT = { is_country = root }
+			}
+			country_event = { id = STH_undine_crisis.4 days = 28 random = 7 }
+		}
+		country_event = { id = STH_undine_crisis.5 days = 360 random = 180 }
+	}
+	option = {
+		name = STH_undine_crisis.3.af
+		trigger = { energy < 1000 }
+		hidden_effect = { country_event = { id = STH_undine_crisis.3 days = 720 random = 28 } }
+	}
+	option = {
+		name = STH_undine_crisis.3.b
+		trigger = { energy > 999 }
+		hidden_effect = { country_event = { id = STH_undine_crisis.3 days = 720 random = 28 } }
+	}
+	option = {
+		name = STH_undine_crisis.3.c
+		ai_chance = { factor = 0 }
+	}
+}
+
+#Borg Neighbour Alert 2
+country_event = {
+	id = STH_undine_crisis.4
+	title = STH_undine_crisis.4.name
+	desc = STH_undine_crisis.4.desc
+	picture = sth_GFX_evt_undineBorg1
+	fire_only_once = yes
+	is_triggered_only = yes
+	immediate = { }
+	option = { name = STH_undine_crisis.4.a }
+}
+
+#Fluidic Space Stuff
+country_event = {
+	id = STH_undine_crisis.5
+	title = STH_undine_crisis.5.name
+	desc = {
+		trigger = { NOT = { has_country_flag = exploredFluidicSpace } }
+		text = STH_undine_crisis.5.desc_01
+	}
+	desc = {
+		trigger = { has_country_flag = exploredFluidicSpace }
+		text = STH_undine_crisis.5.desc_02
+	}
+	picture = sth_GFX_evt_undineBorg1
+	trigger = { 
+		is_borg_empire = yes
+		NOT = { any_country = { has_country_flag = undine } }
+	}
+	is_triggered_only = yes
+	immediate = { }
+	option = {
+		name = STH_undine_crisis.5.a
+		trigger = { energy > 999 }
+		ai_chance = { factor = 100 }
+		add_energy = -1000
+		hidden_effect = {
+			set_country_flag = exploredFluidicSpace
+			random_list = {
+				80 = {  
+					add_physics_research = 500
+					add_society_research = 500
+					add_unity = 200
+					country_event = { id = STH_undine_crisis.5 days = 720 random = 90 }
+				}
+				20 = {
+					add_physics_research = 250
+					add_society_research = 250
+					add_unity = 100
+					create_undine_country = yes
+					country_event = { id = STH_undine_crisis.7 days = 1 }
+					every_country = {
+						limit = { has_communications = root NOT = { is_country = root }	}
+						country_event = { id = STH_undine_crisis.6 days = 28 random = 7 }
+					}
+				}
+			}
+		}
+	}
+	option = {
+		name = STH_undine_crisis.5.b
+		trigger = { energy > 4999 }
+		add_energy = -5000
+		hidden_effect = {
+			set_country_flag = exploredFluidicSpace
+			random_list = {
+				60 = {  
+					add_physics_research = 1000
+					add_society_research = 1000
+					add_unity = 400
+					country_event = { id = STH_undine_crisis.5 days = 720 random = 90 }
+				}
+				40 = {
+					add_physics_research = 500
+					add_society_research = 500
+					add_unity = 200
+					create_undine_country = yes		
+					country_event = { id = STH_undine_crisis.7 days = 1 }
+					every_country = {
+						limit = { has_communications = root NOT = { is_country = root }	}
+						country_event = { id = STH_undine_crisis.6 days = 28 random = 7 }
+					}
+				}
+			}
+		}
+	}
+	option = {
+		name = STH_undine_crisis.5.c
+		hidden_effect = {
+			country_event = { id = STH_undine_crisis.5 days = 720 random = 90 }
+		}
+	}
+	option = {
+		name = STH_undine_crisis.5.d
+		ai_chance = { factor = 0 }
+	}
+}
+
+#Borg Neighbour Alert 3
+country_event = {
+	id = STH_undine_crisis.6
+	title = STH_undine_crisis.6.name
+	desc = STH_undine_crisis.6.desc
+	picture = sth_GFX_evt_undineBorg1
+	fire_only_once = yes
+	is_triggered_only = yes
+	immediate = { }
+	option = { name = STH_undine_crisis.6.a }
+}
+
+#Borg Self Alert
+country_event = {
+	id = STH_undine_crisis.7
+	title = STH_undine_crisis.7.name
+	desc = STH_undine_crisis.7.desc
+	picture = sth_GFX_evt_undineBorg1
+	fire_only_once = yes
+	is_triggered_only = yes
+	immediate = { }
+	option = { name = BORG_DISASTER }
+}
+
+
+country_event = {
+	id = STH_undine_crisis.100
+	title = STH_undine_crisis.100.name
+	desc = { text = STH_undine_crisis.100.desc }
+	diplomatic = yes
+	picture_event_data = { portrait = FROM room = undine_room }
+	is_triggered_only = yes
+	trigger = { FROM = { is_country_type = undine } }
+	immediate = { }
+	option = {
+		name = STH_undine_crisis.100.a #Borg Only
+		trigger = { is_borg_empire = yes }
+		response_text = STH_undine_crisis.100.a.response
+		is_dialog_only = yes
+	}
+	option = {
+		name = STH_undine_crisis.100.b #Non-Borg
+		trigger = { is_borg_empire = no }
+		response_text = STH_undine_crisis.100.b.response
+		is_dialog_only = yes
+	}
+	option = {
+		name = STH_undine_crisis.100.c
+		trigger = { is_borg_empire = yes }
+	}
+	option = {
+		name = STH_undine_crisis.100.d
+		trigger = { is_borg_empire = no }
+	}
+}
+
+#Initial Undine
+country_event = {
+	id = STH_undine_crisis.101
+	title = "TRANSMISSION"
+	desc = { text = STH_undine_crisis.100.desc }
+	diplomatic = yes
+	picture_event_data = { portrait = FROM room = undine_room }
+	is_triggered_only = yes
+	immediate = {
+		random_country = {
+			limit = { is_country_type = undine }
+			save_event_target_as = undine
+		}
+	}
+	option = {
+		name = STH_undine_crisis.100.a #Borg Only
+		trigger = { is_borg_empire = yes }
+		response_text = STH_undine_crisis.100.a.response
+		is_dialog_only = yes
+	}
+	option = {
+		name = STH_undine_crisis.100.b #Non-Borg
+		trigger = { is_borg_empire = no }
+		response_text = STH_undine_crisis.100.b.response
+		is_dialog_only = yes
+	}
+	option = {
+		name = STH_undine_crisis.100.c
+		trigger = { is_borg_empire = yes }
+	}
+	option = {
+		name = STH_undine_crisis.100.d
+		trigger = { is_borg_empire = no }
+	}
+}
+
+
+fleet_event = {
+	id = STH_undine_crisis.200
+	hide_window = yes
+	trigger = { 
+		owner = { is_country_type = undine }
+		OR = {
+			AND = { 
+				exists = orbit
+				orbit = { exists = owner }
+				NOT = { owner = { is_hostile = root.orbit.owner } }
+			}
+			AND = {
+				NOT = { is_in_combat = yes }
+			}
+		}
+		
+	}
+	mean_time_to_happen = { months = 6 }
+	immediate = {
+		queue_actions = {
+			find_closest_system = {
+				trigger = {
+					id = "STH_undine_crisis.200.trigger.1"
+					any_planet = { 
+						exists = owner
+						owner = { is_hostile = root.owner } 
+					}
+					distance = { source = FROMFROM max_distance = 200 min_distance = 0 }
+				}
+				found_system = { move_to = THIS }
+			}
+			find_closest_planet = {
+				trigger = {
+					id = "STH_undine_crisis.200.trigger.2"
+					exists = owner
+					owner = { is_hostile = root.owner }
+				}
+				found_planet = { orbit_planet = THIS }
+			}
+		}
+	}
+}
+
+#Enhanced Bombard
+planet_event = {
+	id = STH_undine_crisis.300
+	hide_window = yes
+	trigger = { FROM = { is_country_type = undine } }
+	is_triggered_only = yes
+	immediate = {
+		random_list = {
+			50 = { random_pop = { kill_pop = yes } }
+			50 = {
+				random_tile = {
+					remove_building = yes
+					set_blocker = "tb_bombarded_land"
+				}
+			}
+		}
+	}
+}

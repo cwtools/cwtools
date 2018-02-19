@@ -1,0 +1,22 @@
+# First Contact
+special_project = {
+	key = "INVESTIGATE_ENCLAVE"
+	picture = GFX_evt_star_chart
+	icon = "gfx/interface/icons/situation_log/situation_log_radar.dds"
+	cost = 60
+	tech_department = society_technology
+	days_to_research = 0
+	location = no
+	timelimit = -1
+	AI_wait_days = { weight = 80 }
+	event_scope = planet_event
+	requirements = { }
+	abort_trigger = {
+		OR = {
+			NOT = { exists = FROMFROM }
+			has_communications = FROMFROM
+		}
+	}
+	on_success = { owner = { country_event = { id = STH_enclave_events.99 } } }
+	on_fail = { }
+}

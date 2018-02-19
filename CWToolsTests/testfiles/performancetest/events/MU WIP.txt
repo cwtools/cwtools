@@ -1,0 +1,1484 @@
+#################################
+#
+# Federation Story / Crisis Events
+# by Walshicus
+#
+#################################
+
+
+namespace = STH_federation_story
+
+#Mirror Universe
+country_event = {
+	id = STH_federation_story.4000
+	title = "STH_federation_story.4000.name"
+	desc = "STH_federation_story.4000.desc"
+	picture = sth_GFX_evt_MirrorUniverse1
+	# location = event_target:mirror_universe_fed_portal_system_1
+	trigger = {
+		is_country_type = default
+		OR = { 
+			next_generation_era = yes
+			first_contact_era = yes
+			all_good_things_era = yes
+		}
+		#is_crises_allowed = yes
+		check_variable = { which = "first_contact_era_crisis" value < 2 }
+		NOR = { 
+			has_country_flag = mirror_universe_fed_crisis 
+			has_country_flag = first_contact_era_crisis_ongoing
+		}
+		OR = { 
+			AND = { 
+				has_country_flag = united_federation_of_planets
+				NOT = {
+					any_country = {  
+						has_country_flag = united_earth
+						NOT = { is_same_value = root }
+					}
+				}
+			}
+			has_country_flag = united_earth
+		}
+	}
+	mean_time_to_happen = { months = 240 }
+	immediate = {
+		begin_event_chain = {
+			event_chain = mirror_invasion_fed_chain
+			target = THIS
+		}
+		set_country_flag = mirror_universe_fed_crisis
+		set_country_flag = mirror_universe_fed_target
+		set_timed_country_flag = { flag = first_contact_era_crisis_ongoing days = 2400 }
+		random_list = {
+			75 = { change_variable = { which = "first_contact_era_crisis" value = 2 } }
+			25 = { change_variable = { which = "first_contact_era_crisis" value = 1 } }
+		}
+		random_system_within_border  = {
+			# spawn_system = { min_distance = 75 max_distance = 150 initializer = "mirror_universe_fed_portal_system_1" }
+			spawn_system = { min_distance = 20 max_distance = 50 initializer = "mirror_universe_fed_portal_system_1" } #FIX ON RELEASE
+		}
+		random_system = {
+			limit = { has_star_flag = mirror_universe_fed_portal_system_1 }
+			save_global_event_target_as = mirror_universe_fed_portal_system_1
+		}
+		save_global_event_target_as = mirror_universe_fed_target
+		create_point_of_interest = {
+			id = mirror_universe_fed_spawn_1
+			name = mirror_universe_fed_spawn_1_title
+			desc = mirror_universe_fed_spawn_1_desc
+			event_chain = mirror_invasion_fed_chain
+			location = event_target:mirror_universe_fed_portal_system_1
+		}
+	}
+	option = { name = STH_federation_story.4000.a }
+	# option = { name = STH_federation_story.4000.b }
+	after = { 
+		hidden_effect = { 
+			country_event = { id = STH_federation_story.4002 days = 360 random = 90 }
+			country_event = { id = STH_federation_story.4020 days = 720 random = 90 }
+			every_country = {
+				limit = { 
+					any_owned_planet = { distance = { source = event_target:mirror_universe_fed_portal_system_1 max_distance = 150 } }
+					NOT = { is_same_value = Root }
+				}
+				country_event = { id = STH_federation_story.4001 days = 28 random = 7 } 
+			}
+		} 
+	}
+}
+#Neighbour Notification
+country_event = {
+	id = STH_federation_story.4001
+	title = "STH_federation_story.4001.name"
+	desc = "STH_federation_story.4001.desc"
+	picture = sth_GFX_evt_MirrorUniverse1
+	location = event_target:mirror_universe_fed_portal_system_1
+	is_triggered_only = yes
+	trigger = { is_country_type = default }
+	option = { name = STH_federation_story.4001.a }
+	option = { name = STH_federation_story.4001.b }
+}
+#Second Warning
+country_event = {
+	id = STH_federation_story.4002
+	title = "STH_federation_story.4002.name"
+	desc = "STH_federation_story.4002.desc"
+	picture = sth_GFX_evt_MirrorUniverse2
+	is_triggered_only = yes
+	trigger = { 
+		is_country_type = default 
+		NOT = { has_country_flag = mirror_universe_crisis_fed_first_portal_seen }
+		NOT = { has_country_flag = mirror_universe_crisis_fed_escapee_met }
+	}
+	immediate = {
+		ensure_mirror_universe_exile_country_exists = yes
+		create_leader = { type = admiral species = root skill = random name = random }
+		last_created_leader = { 
+			save_global_event_target_as = mirror_universe_fed_escapee
+			exile_leader_as = mirror_universe_fed_escapee 
+		}
+		event_target:mirrorUniverseExileCountry = { set_leader = mirror_universe_fed_escapee }
+	}
+	option = { 
+		name = STH_federation_story.4002.a 
+		hidden_effect = { country_event = { id = STH_federation_story.4003 } }
+	}
+	option = { name = STH_federation_story.4002.b }
+}
+
+#Escapee Dialogue
+country_event = {
+	id = STH_federation_story.4003
+	title = STH_federation_story.4003.name
+	desc = { text = STH_federation_story.4003.desc }
+	diplomatic = yes
+	picture_event_data = {
+		portrait = event_target:mirror_universe_fed_escapee
+		planet_background = event_target:mirror_universe_fed_escapee
+		graphical_culture = event_target:mirror_universe_fed_escapee
+		city_level = event_target:mirror_universe_fed_escapee
+		room = event_target:mirror_universe_fed_escapee
+	}
+	is_triggered_only = yes
+	trigger = { }
+	immediate = { 
+		leader = { save_event_target_as = fed_leader }
+		
+		set_country_flag = mirror_universe_crisis_fed_escapee_met
+	}
+	option = {
+		name = STH_federation_story.4003.a
+		response_text = STH_federation_story.4003.a.response
+		is_dialog_only = yes
+	}
+	option = {
+		name = STH_federation_story.4003.b
+		response_text = STH_federation_story.4003.b.response
+		is_dialog_only = yes
+	}
+	option = {
+		name = STH_federation_story.4003.c
+		response_text = STH_federation_story.4003.c.response
+	}
+	option = {
+		name = STH_federation_story.4003.d
+		response_text = STH_federation_story.4003.d.response
+	}
+}
+
+#Enter First MU Portal System
+fleet_event = {
+	id = STH_federation_story.4010
+	title = "STH_federation_story.4010.name"
+	location = event_target:mirror_universe_fed_portal_system_1
+	desc = { 
+		trigger = { Owner = { has_country_flag = mirror_universe_crisis_fed_escapee_met } }
+		text = "STH_federation_story.4010.desc_01" 
+	}
+	desc = { 
+		trigger = { Owner = { NOT = { has_country_flag = mirror_universe_crisis_fed_escapee_met } } }
+		text = "STH_federation_story.4010.desc_02" 
+	}
+	picture = sth_GFX_evt_MirrorUniverse1
+	is_triggered_only = yes
+	trigger = { 
+		FROM = { has_star_flag = mirror_universe_fed_portal_system_1 }
+		exists = owner
+		owner = { 
+			has_country_flag = mirror_universe_fed_crisis
+			NOR = { has_country_flag = mirror_universe_fed_crisis_resolved_won has_country_flag = mirror_universe_fed_crisis_resolved_lost }
+			OR = { has_country_flag = united_federation_of_planets has_country_flag = united_earth } 
+			NOT = { has_country_flag = mirror_universe_crisis_fed_first_portal_seen }
+			NOT = { has_country_flag = mirror_universe_crisis_fed_full_invasion }
+		}
+	}
+	immediate = {
+		owner = { set_country_flag = mirror_universe_crisis_fed_first_portal_seen }
+		FROM = { random_planet = { save_global_event_target_as = mirror_universe_fed_portal_system_1_spawnloc } }
+		FROM = {
+			spawn_planet = {
+				class = "pc_starbase_blank_fed"
+				size = 3
+				init_effect = {
+					set_planet_flag = mirror_universe_fed_temp_planet
+					create_colony = { owner = ROOT.OWNER species = ROOT.OWNER }
+					create_federation_mirror_universe_country = yes
+					set_owner = event_target:mirror_universe_fed_vanguard
+					set_name = "Outpost Alpha"
+					create_spaceport = { owner = event_target:mirror_universe_fed_vanguard initial_module = "module_defense_phaser_0_initial" }
+					last_created_fleet = { set_fleet_flag = starbase_megastructure }
+					save_event_target_as = mirror_universe_fed_temp_planet
+				}
+			}
+		}
+		event_target:mirror_universe_fed_vanguard = {
+			random_owned_fleet = { save_event_target_as = dummyCapital }
+			add_modifier = { modifier = "em_mirror_universe_supply" }
+			set_country_type = default			
+			create_fleet_from_naval_cap = 1.0
+			set_country_type = mirrorUniverseVanguard
+			last_created_fleet = { 
+				set_owner = event_target:mirror_universe_fed_vanguard
+				assign_leader = event_target:mirror_universe_fed_leader
+				set_location = event_target:mirror_universe_fed_temp_planet 
+				set_fleet_flag = mirror_universe_fed_fleet_vanguard_1
+				set_fleet_stance = passive
+				set_aggro_range_measure_from = event_target:mirror_universe_fed_temp_planet 
+				set_aggro_range = 200
+			}
+		}
+		# event_target:mirror_universe_fed_temp_planet = { remove_planet = yes }
+	}
+	option = { name = STH_federation_story.4010.a }
+	option = { name = STH_federation_story.4010.b }
+	after = {
+		hidden_effect = { 
+			owner = { 
+				if = {  
+					limit = { NOT = { has_country_flag = mirror_universe_fed_leader_met } }
+					country_event = { id = STH_federation_story.4011 days = 2 } 
+				}
+				remove_point_of_interest = mirror_universe_fed_spawn_1
+			} 
+		}
+	}
+}
+
+#MU Leader Dialogue
+country_event = {
+	id = STH_federation_story.4011
+	title = STH_federation_story.4011.name
+	desc = { text = STH_federation_story.4011.desc }
+	location = event_target:mirror_universe_fed_portal_system_1
+	diplomatic = yes
+	picture_event_data = {
+		portrait = event_target:mirror_universe_fed_leader
+		planet_background = event_target:mirror_universe_fed_leader
+		graphical_culture = event_target:mirror_universe_fed_leader
+		city_level = event_target:mirror_universe_fed_leader
+		room = event_target:mirror_universe_fed_leader
+	}
+	is_triggered_only = yes
+	trigger = { }
+	immediate = { 
+		leader = { save_event_target_as = fed_leader }
+		set_country_flag = mirror_universe_fed_leader_met 
+	}
+	option = {
+		name = STH_federation_story.4011.a
+		response_text = STH_federation_story.4011.a.response
+		is_dialog_only = yes
+	}
+	option = {
+		name = STH_federation_story.4011.b
+		response_text = STH_federation_story.4011.b.response
+		is_dialog_only = yes
+	}
+	option = {
+		name = STH_federation_story.4011.c
+		response_text = STH_federation_story.4011.c.response
+		hidden_effect = {
+			event_target:mirror_universe_fed_vanguard = {
+				set_faction_hostility = { set_hostile = no }
+			}
+			set_country_flag = mirror_universe_fed_appeased_vanguard
+		}
+	}
+	option = {
+		name = STH_federation_story.4011.d
+		response_text = STH_federation_story.4011.d.response
+	}
+}
+
+#Killed all MU ships frame
+country_event = {
+	id = STH_federation_story.4015
+	hide_window = yes
+	is_triggered_only = yes
+	trigger = {
+		exists = FROM
+		FROM = {
+			has_country_flag = mirror_universe_fed_vanguard
+			NOT = {
+				any_owned_fleet  = {
+					NOT = {
+						is_same_value = FROMFROMFROM
+					}
+				}
+			}
+		}
+	}
+	immediate = { 
+		set_country_flag = mirror_universe_fed_vanguard_destroyed 
+		FROM = { 
+			every_owned_planet = {  
+				limit = { is_starbase_planet = yes }
+				remove_planet = yes
+			}
+			destroy_country = yes 
+		}
+	}
+	after = {
+		#trigger second attempt
+		hidden_effect = { 
+			event_target:mirror_universe_fed_target = {
+				country_event = { id = STH_federation_story.4016 } 
+				country_event = { id = STH_federation_story.4030 days = 3600 random = 720 } 
+			}	
+		}
+	}
+}
+#Killed all MU ships
+country_event = {
+	id = STH_federation_story.4016
+	title = STH_federation_story.4016.name
+	desc = { 
+		# trigger = { has_country_flag = mirror_universe_fed_leader_met }
+		text = STH_federation_story.4016.desc
+	}
+	is_triggered_only = yes
+	picture = sth_GFX_evt_MirrorUniverse3
+	immediate = {
+		end_event_chain = mirror_invasion_fed_chain
+	}
+	option = {
+		name = STH_federation_story.4016.a
+	}
+	option = {
+		name = STH_federation_story.4016.b
+	}
+	after = { }
+}
+
+
+#Mirror Universe Brings System Into Prime
+country_event = {
+	id = STH_federation_story.4020
+	title = STH_federation_story.4020.name
+	location = event_target:mirror_universe_fed_portal_system_1
+	desc = { 
+		trigger = { 
+			has_country_flag = mirror_universe_fed_leader_met  
+			any_country = { has_country_flag = mirror_universe_fed_vanguard is_hostile = root }
+		}
+		text = STH_federation_story.4020.desc_01 
+	}
+	desc = { 
+		trigger = { 
+			has_country_flag = mirror_universe_fed_leader_met  
+			any_country = { has_country_flag = mirror_universe_fed_vanguard NOT = { is_hostile = root } }
+		}
+		text = STH_federation_story.4020.desc_04 
+	}
+	desc = { 
+		trigger = { has_country_flag = mirror_universe_crisis_fed_escapee_met NOT = { has_country_flag = mirror_universe_fed_leader_met } }
+		text = STH_federation_story.4020.desc_02
+	}
+	desc = { 
+		trigger = { NOR = { has_country_flag = mirror_universe_fed_leader_met has_country_flag = mirror_universe_crisis_fed_escapee_met } }
+		text = STH_federation_story.4020.desc_03
+	}
+	picture = sth_GFX_evt_MirrorUniverse1
+	is_triggered_only = yes
+	trigger = { 
+		OR = {
+			any_country = { has_country_flag = mirror_universe_fed_vanguard }
+			NOT = { has_country_flag = mirror_universe_crisis_fed_first_portal_seen } #Either MU country exists or system not entered
+		}
+		NOR = { 
+			has_country_flag = mirror_universe_fed_crisis_resolved_won 
+			has_country_flag = mirror_universe_fed_crisis_resolved_lost 
+			has_country_flag = mirror_universe_crisis_fed_full_invasion 
+		}
+	}
+	immediate = {
+		remove_point_of_interest = mirror_universe_fed_spawn_1
+		if = {
+			limit = { NOR = { exists = event_target:mirror_universe_fed_vanguard exists = event_target:mirror_universe_fed_invasion } }
+			random_system = {
+				limit = { has_star_flag = mirror_universe_fed_portal_system_1 }
+				save_global_event_target_as = mirror_universe_fed_portal_system_1
+				spawn_planet = {
+					class = "pc_starbase_blank_fed"
+					size = 3
+					init_effect = {
+						set_planet_flag = mirror_universe_fed_temp_planet
+						create_colony = { owner = event_target:mirror_universe_fed_target species = event_target:mirror_universe_fed_target }
+						create_federation_mirror_universe_country = yes
+						set_owner = event_target:mirror_universe_fed_vanguard
+						create_spaceport = { owner = event_target:mirror_universe_fed_vanguard initial_module = "module_defense_phaser_0_initial" }
+						last_created_fleet = { set_fleet_flag = starbase_megastructure }
+						save_event_target_as = mirror_universe_fed_temp_planet
+						set_name = "Outpost Alpha"
+					}
+				}
+				event_target:mirror_universe_fed_vanguard = {
+					random_owned_fleet = { save_event_target_as = dummyCapital }
+					add_modifier = { modifier = "em_mirror_universe_supply" }
+					set_country_type = default			
+					create_fleet_from_naval_cap = 1.0
+					set_country_type = mirrorUniverseVanguard
+					last_created_fleet = {
+						set_owner = event_target:mirror_universe_fed_vanguard
+						set_location = event_target:mirror_universe_fed_temp_planet 
+						set_fleet_flag = mirror_universe_fed_fleet_vanguard_1
+					}
+				}
+				
+			}
+			# event_target:mirror_universe_fed_temp_planet = { remove_planet = yes }
+		}
+		
+		set_country_flag = mirror_universe_crisis_fed_full_invasion
+		random_system = {
+			limit = { has_star_flag = mirror_universe_fed_portal_system_1 }
+			save_global_event_target_as = mirror_universe_fed_portal_system_1
+		}
+		event_target:mirror_universe_fed_portal_system_1 = {
+			spawn_planet = {
+				class = "pc_continental"
+				size = 20
+				orbit_distance = 50
+				orbit_angle_offset = 30
+				init_effect = {
+					set_name = "Beach Head Alpha"
+					set_planet_flag = mirror_universe_fed_beach_head
+					save_global_event_target_as = mirror_universe_fed_beach_head
+				}
+			}
+			create_ambient_object = {
+				type = explosion_particle_object
+				location = event_target:mirror_universe_fed_portal_system_1
+				duration = 20
+				use_3d_location = yes			
+				entity_offset = { min = 0 max = 0 }
+				entity_offset_angle = { min = 0 max = 0 }
+				entity_offset_height = { min = 0 max = 0 }			
+				entity_scale_to_size = yes
+				scale = 100
+			}
+		}
+		event_target:mirror_universe_fed_beach_head = {
+			create_colony = { 
+				owner = event_target:mirror_universe_fed_vanguard 
+				species = event_target:mirror_universe_fed_vanguard
+			}
+			configure_mirror_universe_beachhead = yes
+			create_spaceport = { owner = event_target:mirror_universe_fed_vanguard initial_module = "module_defense_phaser_0_initial" }
+			set_name = "Beach Head Alpha"
+		}
+		event_target:mirror_universe_fed_vanguard = {
+			set_country_type = default
+			set_country_flag = mirror_universe_fed_invasion
+			remove_country_flag = mirror_universe_fed_vanguard
+			save_global_event_target_as = mirror_universe_fed_invasion
+			clear_global_event_target = mirror_universe_fed_vanguard
+		}
+	}
+	option = {
+		name = STH_federation_story.4020.a
+	}
+	after = {
+		country_event = { id = STH_federation_story.4021 days = 2 }
+	}
+}
+
+#War Declaration
+country_event = {
+	id = STH_federation_story.4021
+	title = STH_federation_story.4021.name
+	desc = { 
+		trigger = { NOT = { has_country_flag = mirror_universe_fed_leader_met } }
+		text = STH_federation_story.4021.desc_01 
+	}
+	desc = { 
+		trigger = { has_country_flag = mirror_universe_fed_leader_met }
+		text = STH_federation_story.4021.desc_02
+	}
+	diplomatic = yes
+	is_triggered_only = yes
+	picture_event_data = {
+		portrait = event_target:mirror_universe_fed_leader
+		planet_background = event_target:mirror_universe_fed_leader
+		graphical_culture = event_target:mirror_universe_fed_leader
+		city_level = event_target:mirror_universe_fed_leader
+		room = event_target:mirror_universe_fed_leader
+	}
+	immediate = {
+		leader = { save_event_target_as = fed_leader }
+		if = { 
+			limit = { not = { exists = event_target:mirror_universe_fed_leader } }
+			event_target:mirror_universe_fed_invasion = { 
+				leader = { save_global_event_target_as = mirror_universe_fed_leader }
+			}
+		}
+		event_target:mirror_universe_fed_invasion = {
+			declare_war = { who = root name = "Mirror Universe Invasion" }
+		}
+		every_owned_planet = {
+			save_event_target_as = target_planet
+			event_target:mirror_universe_fed_invasion = {
+				add_war_demand = { 
+					type = "cede_planet" 
+					parameter:planet = event_target:target_planet 
+					warscore_cost = 10 
+					target = event_target:mirror_universe_fed_invasion 
+					enemy = root 
+				}
+			}
+		}
+	}
+	option = {
+		name = STH_federation_story.4021.a #Question 1
+		response_text = STH_federation_story.4021.a.response
+		is_dialog_only = yes
+	}
+	option = {
+		name = STH_federation_story.4021.b #Question 2
+		response_text = STH_federation_story.4021.b.response
+		is_dialog_only = yes
+	}
+	option = {
+		name = STH_federation_story.4021.c #Fight
+		response_text = STH_federation_story.4021.c.response
+	}
+	# option = {
+		# name = STH_federation_story.4021.d #Surrender
+		
+	# }
+	after = {
+		hidden_effect = {
+			every_country = {
+				limit = { 
+					has_communications = root
+					is_normal_country = yes
+					NOT = { is_borg_empire = yes is_assimilator = yes }
+					NOR = { 
+						exists = overlord
+						is_same_value = root 
+						is_same_value = event_target:mirror_universe_fed_invasion
+					}
+				}
+				country_event = { id = STH_federation_story.4022 days = 7 random = 3 }
+			}
+		}
+	}
+}
+
+
+#Invite to war
+country_event = {
+	id = STH_federation_story.4022
+	title = STH_federation_story.4022.name
+	desc = { text = STH_federation_story.4022.desc }
+	diplomatic = yes
+	is_triggered_only = yes
+	trigger = { 
+		is_normal_country = yes
+		exists = ruler
+		can_declare_war = event_target:mirror_universe_fed_invasion
+		NOT = { has_country_flag = mirror_universe_fed_war_invite } 
+	}
+	picture_event_data = {
+		portrait = event_target:mirror_universe_fed_leader
+		planet_background = event_target:mirror_universe_fed_leader
+		graphical_culture = event_target:mirror_universe_fed_leader
+		city_level = event_target:mirror_universe_fed_leader
+		room = event_target:mirror_universe_fed_leader
+	}
+	immediate = {
+		set_country_flag = mirror_universe_fed_war_invite #Make Timed?
+		if = { 
+			limit = { not = { exists = event_target:mirror_universe_fed_leader } }
+			event_target:mirror_universe_fed_invasion = { leader = { save_global_event_target_as = mirror_universe_fed_leader } }
+		}
+	
+	
+	}
+	option = {
+		name = STH_federation_story.4022.a #Question 1
+		response_text = STH_federation_story.4022.a.response
+		is_dialog_only = yes
+	}
+	option = {
+		name = STH_federation_story.4022.b #Question 2
+		response_text = STH_federation_story.4022.b.response
+		is_dialog_only = yes
+	}
+	option = {
+		name = STH_federation_story.4022.c #Accept
+		ai_chance = { 
+			factor = 0 
+			modifier = { 
+				factor = 10 
+				has_communications = event_target:mirror_universe_fed_target
+				NOT = { opinion = { who = event_target:mirror_universe_fed_target value > -100 } }
+			}
+		}
+		response_text = STH_federation_story.4022.c.response
+		join_war = event_target:mirror_universe_fed_invasion
+		save_event_target_as = mirror_universe_fed_war_joiner_hostile
+		event_target:mirror_universe_fed_target = {
+			country_event = { id = STH_federation_story.4023 }
+		}
+	}
+	option = {
+		name = STH_federation_story.4022.d #Reject
+		ai_chance = { factor = 10 }
+		response_text = STH_federation_story.4022.d.response
+		save_event_target_as = mirror_universe_fed_war_joiner_neutral
+		event_target:mirror_universe_fed_target = {
+			country_event = { id = STH_federation_story.4025 }
+		}
+	}
+	option = {
+		name = STH_federation_story.4022.e #Join War Against MU
+		ai_chance = {
+			modifier = { 
+				factor = 10 
+				has_communications = event_target:mirror_universe_fed_target
+				NOT = { opinion = { who = event_target:mirror_universe_fed_target value > 100 } }
+			}
+		}
+		response_text = STH_federation_story.4022.e.response
+		join_war = event_target:mirror_universe_fed_target
+		save_event_target_as = mirror_universe_fed_war_joiner_friendly
+		event_target:mirror_universe_fed_target = {
+			country_event = { id = STH_federation_story.4024 }
+		}
+	}
+	after = {
+		
+	}
+}
+
+#Country joins war on MU side
+country_event = {
+	id = STH_federation_story.4023
+	title = STH_federation_story.4023.name
+	desc = { text = STH_federation_story.4023.desc }
+	picture = sth_GFX_evt_MirrorUniverse4
+	is_triggered_only = yes
+	trigger = { }
+	option = { name = STH_federation_story.4023.a }
+}
+
+#Country joins war against MU
+country_event = {
+	id = STH_federation_story.4024
+	title = STH_federation_story.4024.name
+	desc = { text = STH_federation_story.4024.desc }
+	picture = sth_GFX_evt_MirrorUniverse4
+	is_triggered_only = yes
+	trigger = { }
+	option = { name = STH_federation_story.4024.a }
+}
+#Country is neutral - maybe remove?
+country_event = {
+	id = STH_federation_story.4025
+	title = STH_federation_story.4025.name
+	desc = { text = STH_federation_story.4025.desc }
+	picture = sth_GFX_evt_MirrorUniverse4
+	is_triggered_only = yes
+	trigger = { }
+	option = { name = STH_federation_story.4025.a }
+}
+
+
+#Mirror Universe Second Attempt
+country_event = {
+	id = STH_federation_story.4030
+	title = "STH_federation_story.4030.name"
+	desc = "STH_federation_story.4030.desc"
+	picture = sth_GFX_evt_MirrorUniverse1
+	trigger = {
+		is_country_type = default
+	}
+	is_triggered_only = yes
+	immediate = {
+		begin_event_chain = {
+			event_chain = mirror_invasion_fed_chain
+			target = THIS
+		}
+		save_global_event_target_as = mirror_universe_fed_target
+		random_system_within_border  = {
+			spawn_system = { min_distance = 20 max_distance = 50 initializer = "mirror_universe_fed_portal_system_2a" }
+		}
+		random_system = {
+			limit = { has_star_flag = mirror_universe_fed_portal_system_2a }
+			save_global_event_target_as = mirror_universe_fed_portal_system_2a
+		}
+		random_system_within_border  = {
+			spawn_system = { min_distance = 20 max_distance = 50 initializer = "mirror_universe_fed_portal_system_2b" }
+		}
+		random_system = {
+			limit = { has_star_flag = mirror_universe_fed_portal_system_2b }
+			save_global_event_target_as = mirror_universe_fed_portal_system_2b
+		}
+		
+	}
+	option = { name = STH_federation_story.4030.a }
+	after = { 
+		hidden_effect = { 
+			country_event = { id = STH_federation_story.4040 days = 720 random = 90 }
+			country_event = { id = STH_federation_story.4041 days = 720 random = 90 }
+			every_country = {
+				limit = { 
+					OR = {
+						any_owned_planet = { distance = { source = event_target:mirror_universe_fed_portal_system_2a max_distance = 150 } }
+						any_owned_planet = { distance = { source = event_target:mirror_universe_fed_portal_system_2b max_distance = 150 } }
+					}
+					NOT = { is_same_value = Root }
+				}
+				country_event = { id = STH_federation_story.4031 days = 28 random = 7 } 
+			}
+			create_point_of_interest = {
+				id = mirror_universe_fed_spawn_2a
+				name = mirror_universe_fed_spawn_2a_title
+				desc = mirror_universe_fed_spawn_2a_desc
+				event_chain = mirror_invasion_fed_chain
+				location = event_target:mirror_universe_fed_portal_system_2a
+			}
+			create_point_of_interest = {
+				id = mirror_universe_fed_spawn_2b
+				name = mirror_universe_fed_spawn_2b_title
+				desc = mirror_universe_fed_spawn_2b_desc
+				event_chain = mirror_invasion_fed_chain
+				location = event_target:mirror_universe_fed_portal_system_2b
+			}
+		} 
+	}
+}
+#Neighbour Notification
+country_event = {
+	id = STH_federation_story.4031
+	title = "STH_federation_story.4031.name"
+	desc = "STH_federation_story.4031.desc"
+	picture = sth_GFX_evt_MirrorUniverse1
+	is_triggered_only = yes
+	trigger = { is_country_type = default }
+	option = { name = STH_federation_story.4031.a }
+	option = { name = STH_federation_story.4031.b }
+}
+
+#Enter Second MU Portal Systems
+fleet_event = {
+	id = STH_federation_story.4032
+	title = "STH_federation_story.4032.name"
+	desc = { 
+		trigger = { Owner = { OR = { has_country_flag = mirror_universe_crisis_fed_second_a_portal_seen has_country_flag = mirror_universe_crisis_fed_second_b_portal_seen } } }
+		text = "STH_federation_story.4032.desc_01" 
+	}
+	desc = { 
+		trigger = { Owner = { NOR = { has_country_flag = mirror_universe_crisis_fed_second_a_portal_seen has_country_flag = mirror_universe_crisis_fed_second_b_portal_seen } } }
+		text = "STH_federation_story.4032.desc_02" 
+	}
+	picture = sth_GFX_evt_MirrorUniverse1
+	is_triggered_only = yes
+	trigger = { 
+		exists = owner
+		owner = { 
+			has_country_flag = mirror_universe_fed_crisis 
+			OR = { has_country_flag = united_federation_of_planets has_country_flag = united_earth } 
+			NOT = { has_country_flag = mirror_universe_crisis_fed_full_invasion }
+		}
+		OR = {
+			AND = {
+				FROM = { has_star_flag = mirror_universe_fed_portal_system_2a }
+				owner = { NOT = { has_country_flag = mirror_universe_crisis_fed_second_a_portal_seen } }
+			}
+			AND = {
+				FROM = { has_star_flag = mirror_universe_fed_portal_system_2b }
+				owner = { NOT = { has_country_flag = mirror_universe_crisis_fed_second_b_portal_seen } }
+			}
+		}
+	}
+	immediate = {
+		if = {
+			limit = { FROM = { has_star_flag = mirror_universe_fed_portal_system_2a } }
+			FROM = { random_planet = { save_global_event_target_as = mirror_universe_fed_portal_system_2a_spawnloc } }
+			owner = {
+				remove_point_of_interest = mirror_universe_fed_spawn_2a 
+				set_country_flag = mirror_universe_crisis_fed_second_a_portal_seen
+			}
+		}
+		if = {
+			limit = { FROM = { has_star_flag = mirror_universe_fed_portal_system_2b } }
+			FROM = { random_planet = { save_global_event_target_as = mirror_universe_fed_portal_system_2b_spawnloc } }
+			owner = { 
+				remove_point_of_interest = mirror_universe_fed_spawn_2b 
+				set_country_flag = mirror_universe_crisis_fed_second_b_portal_seen
+			}
+		}
+		
+		FROM = {
+			spawn_planet = {
+				class = "pc_starbase_blank_fed"
+				size = 3
+				init_effect = {
+					set_planet_flag = mirror_universe_fed_temp_planet
+					create_colony = { owner = ROOT.OWNER species = ROOT.OWNER }
+					create_federation_mirror_universe_country_2 = yes
+					set_owner = event_target:mirror_universe_fed_vanguard_2
+					create_spaceport = { owner = event_target:mirror_universe_fed_vanguard_2 initial_module = "module_defense_phaser_0_initial" }
+					last_created_fleet = { set_fleet_flag = starbase_megastructure }
+					save_event_target_as = mirror_universe_fed_temp_planet
+					set_name = "Outpost Beta"
+				}
+			}
+		}
+		event_target:mirror_universe_fed_vanguard_2 = {
+			create_leader = { type = ruler species = owner_main_species name = random skill = random traits = { trait = leader_trait_unyielding trait = random_trait } }
+			last_created_leader = {
+				save_global_event_target_as = mirror_universe_fed_leader_2
+				if = {
+					limit = { gender = female owner = { is_species_class = FED } } 
+					random_list = {
+						10 = { modifier = { factor = 0 event_target:mirror_universe_fed_vanguard_2 = { has_country_flag = hasKassidyYates } } set_name = "Kassidy Yates" change_leader_portrait = mirrorKassidyYates event_target:mirror_universe_fed_vanguard_2 = { set_country_flag = hasKassidyYates } }
+						10 = { modifier = { factor = 0 event_target:mirror_universe_fed_vanguard_2 = { has_country_flag = hasAnnikaHansen } } set_name = "Annika Hansen" change_leader_portrait = mirrorAnnikaHansen event_target:mirror_universe_fed_vanguard_2 = { set_country_flag = hasAnnikaHansen } }
+						10 = { modifier = { factor = 0 event_target:mirror_universe_fed_vanguard_2 = { has_country_flag = hasBeverleyCrusher } } set_name = "Beverly Crusher" change_leader_portrait = mirrorBeverleyCrusher event_target:mirror_universe_fed_vanguard_2 = { set_country_flag = hasBeverleyCrusher } }
+					}
+				}
+				if = {
+					limit = { gender = male owner = { is_species_class = FED } } 
+					random_list = {
+						10 = { modifier = { factor = 0 event_target:mirror_universe_fed_vanguard_2 = { has_country_flag = hasWilliamRiker } } set_name = "William Riker" change_leader_portrait = mirrorWillRiker event_target:mirror_universe_fed_vanguard_2 = { set_country_flag = hasWilliamRiker } }
+						10 = { modifier = { factor = 0 event_target:mirror_universe_fed_vanguard_2 = { has_country_flag = hasMilesOBrien } } set_name = "Miles O'Brien" change_leader_portrait = mirrorMilesObrien event_target:mirror_universe_fed_vanguard_2 = { set_country_flag = hasMilesOBrien } }
+						10 = { modifier = { factor = 0 event_target:mirror_universe_fed_vanguard_2 = { has_country_flag = hasWesleyCrusher } } set_name = "Wesley Crusher" change_leader_portrait = mirrorWesleyCrusher event_target:mirror_universe_fed_vanguard_2 = { set_country_flag = hasWesleyCrusher } }
+					}
+				}
+			}
+			random_owned_fleet = { save_event_target_as = dummyCapital }
+			add_modifier = { modifier = "em_mirror_universe_supply" }
+			set_country_type = default			
+			create_fleet_from_naval_cap = 1.0
+			set_country_type = mirrorUniverseVanguard
+			last_created_fleet = {
+				set_owner = event_target:mirror_universe_fed_vanguard_2
+				assign_leader = event_target:mirror_universe_fed_leader_2 
+				set_location = event_target:mirror_universe_fed_temp_planet 
+				set_fleet_stance = passive
+				set_aggro_range_measure_from = event_target:mirror_universe_fed_temp_planet 
+				set_aggro_range = 200
+				if = { 
+					limit = { FROM = { has_star_flag = mirror_universe_fed_portal_system_2a } }
+					set_fleet_flag = mirror_universe_fed_fleet_vanguard_2a
+				}
+				if = { 
+					limit = { FROM = { has_star_flag = mirror_universe_fed_portal_system_2b } }
+					set_fleet_flag = mirror_universe_fed_fleet_vanguard_2b
+				}
+			}
+		}
+		# event_target:mirror_universe_fed_temp_planet = { remove_planet = yes }
+	}
+	option = { name = STH_federation_story.4032.a }
+	option = { name = STH_federation_story.4032.b }
+	after = {
+		hidden_effect = { 
+			if = {
+				limit = { Owner = { NOR = { has_country_flag = mirror_universe_crisis_fed_second_a_portal_seen has_country_flag = mirror_universe_crisis_fed_second_b_portal_seen } } }
+				owner = { country_event = { id = STH_federation_story.4033 days = 2 } } 
+			}
+			
+		}
+	}
+}
+
+#MU Leader Dialogue
+country_event = {
+	id = STH_federation_story.4033
+	title = STH_federation_story.4033.name
+	desc = { text = STH_federation_story.4033.desc }
+	diplomatic = yes
+	picture_event_data = {
+		portrait = event_target:mirror_universe_fed_leader_2
+		planet_background = event_target:mirror_universe_fed_leader_2
+		graphical_culture = event_target:mirror_universe_fed_leader_2
+		city_level = event_target:mirror_universe_fed_leader_2
+		room = event_target:mirror_universe_fed_leader_2
+	}
+	is_triggered_only = yes
+	trigger = { NOT = { has_country_flag = mirror_universe_fed_leader_met_2 } }
+	immediate = { 
+		leader = { save_event_target_as = fed_leader }
+		set_country_flag = mirror_universe_fed_leader_met_2
+	}
+	option = {
+		name = STH_federation_story.4033.a
+		response_text = STH_federation_story.4033.a.response
+		is_dialog_only = yes
+	}
+	option = {
+		name = STH_federation_story.4033.b
+		response_text = STH_federation_story.4033.b.response
+		is_dialog_only = yes
+	}
+	option = {
+		name = STH_federation_story.4033.c
+		response_text = STH_federation_story.4033.c.response
+	}
+}
+
+#Killed all MU ships frame
+country_event = {
+	id = STH_federation_story.4034
+	hide_window = yes
+	is_triggered_only = yes
+	trigger = {
+		exists = FROM
+		FROM = {
+			has_country_flag = mirror_universe_fed_vanguard_2
+			NOT = { any_owned_fleet  = { NOT = { is_same_value = FROMFROMFROM } } }
+		}
+	}
+	immediate = { 
+		set_country_flag = mirror_universe_fed_vanguard_2_destroyed 
+		FROM = { 
+			every_owned_planet = {  
+				limit = { is_starbase_planet = yes }
+				remove_planet = yes
+			}
+			destroy_country = yes 
+		}
+	}
+	after = {
+		#trigger second attempt
+		hidden_effect = { 
+			country_event = { id = STH_federation_story.4035 }
+			country_event = { id = STH_federation_story.4099 } # Cleanup
+		}
+	}
+}
+
+#Killed all MU ships
+country_event = {
+	id = STH_federation_story.4035
+	title = STH_federation_story.4035.name
+	desc = { 
+		# trigger = { has_country_flag = mirror_universe_fed_leader_met }
+		text = STH_federation_story.4035.desc
+	}
+	is_triggered_only = yes
+	picture = sth_GFX_evt_MirrorUniverse3
+	immediate = {
+		end_event_chain = mirror_invasion_fed_chain
+	}
+	option = {
+		name = STH_federation_story.4035.a
+	}
+	option = {
+		name = STH_federation_story.4035.b
+	}
+}
+
+
+#Mirror Universe Brings System Into Prime
+country_event = {
+	id = STH_federation_story.4040
+	title = STH_federation_story.4040.name
+	desc = {
+		trigger = { has_country_flag = mirror_universe_fed_portal_system_2b_spawned }
+		text = STH_federation_story.4040.desc_01 
+	}
+	desc = { 
+		trigger = { NOT = { has_country_flag = mirror_universe_fed_portal_system_2b_spawned } }
+		text = STH_federation_story.4040.desc_02
+	}
+	picture = sth_GFX_evt_MirrorUniverse1
+	is_triggered_only = yes
+	trigger = { 
+		OR = {
+			any_country = { OR = { has_country_flag = mirror_universe_fed_vanguard_2 has_country_flag = mirror_universe_fed_invasion } }
+			NOT = { has_country_flag = mirror_universe_fed_portal_system_2a_spawned } #Either MU country exists or system not entered
+		}
+	}
+	immediate = {
+		remove_point_of_interest = mirror_universe_fed_spawn_2a
+		remove_point_of_interest = mirror_universe_fed_spawn_2b
+		if = {
+			limit = { exists = event_target:mirror_universe_fed_invasion }
+			event_target:mirror_universe_fed_invasion = { save_event_target_as = mirror_universe_fed_country }
+			else = {
+				if = {
+					limit = { exists = event_target:mirror_universe_fed_vanguard_2 }
+					event_target:mirror_universe_fed_vanguard_2 = { save_event_target_as = mirror_universe_fed_country }
+				}
+			}
+		}
+		
+		if = {
+			limit = { NOT = { exists = event_target:mirror_universe_fed_country } }
+			random_system = {
+				limit = { has_star_flag = mirror_universe_fed_portal_system_2a }
+				save_global_event_target_as = mirror_universe_fed_portal_system_2a
+				spawn_planet = {
+					class = "pc_starbase_blank_fed"
+					size = 3
+					init_effect = {
+						set_planet_flag = mirror_universe_fed_temp_planet
+						create_colony = { owner = event_target:mirror_universe_fed_target species = event_target:mirror_universe_fed_target }
+						create_federation_mirror_universe_country = yes
+						set_owner = event_target:mirror_universe_fed_country
+						set_name = "Outpost Beta"
+						create_spaceport = { owner = event_target:mirror_universe_fed_country initial_module = "module_defense_phaser_0_initial" }
+						last_created_fleet = { set_fleet_flag = starbase_megastructure }
+						save_event_target_as = mirror_universe_fed_temp_planet
+					}
+				}
+				event_target:mirror_universe_fed_country = {
+					random_owned_fleet = { save_event_target_as = dummyCapital }
+					add_modifier = { modifier = "em_mirror_universe_supply" }
+					set_country_type = default			
+					create_fleet_from_naval_cap = 1.0
+					set_country_type = mirrorUniverseVanguard
+					last_created_fleet = {
+						set_owner = this
+						set_location = event_target:mirror_universe_fed_temp_planet 
+						set_fleet_flag = mirror_universe_fed_fleet_vanguard_2a
+					}
+				}
+			}
+			event_target:mirror_universe_fed_temp_planet = { remove_planet = yes }
+		}
+		
+		set_country_flag = mirror_universe_crisis_fed_full_invasion
+		random_system = {
+			limit = { has_star_flag = mirror_universe_fed_portal_system_2a }
+			save_global_event_target_as = mirror_universe_fed_portal_system_2a
+		}
+		event_target:mirror_universe_fed_portal_system_2a = {
+			spawn_planet = {
+				class = "pc_continental"
+				size = 20
+				orbit_distance = 50
+				orbit_angle_offset = 30
+				init_effect = {
+					set_name = "Beach Head Beta"
+					set_planet_flag = mirror_universe_fed_beach_head_beta
+					save_global_event_target_as = mirror_universe_fed_beach_head_beta
+				}
+			}
+			create_ambient_object = {
+				type = explosion_particle_object
+				location = event_target:mirror_universe_fed_portal_system_2a
+				duration = 20
+				use_3d_location = yes			
+				entity_offset = { min = 0 max = 0 }
+				entity_offset_angle = { min = 0 max = 0 }
+				entity_offset_height = { min = 0 max = 0 }			
+				entity_scale_to_size = yes
+				scale = 100
+			}
+		}
+		event_target:mirror_universe_fed_beach_head_beta = {
+			create_colony = { 
+				owner = event_target:mirror_universe_fed_country
+				species = event_target:mirror_universe_fed_country
+			}
+			configure_mirror_universe_beachhead = yes
+			create_spaceport = { owner = event_target:mirror_universe_fed_country initial_module = "module_defense_phaser_0_initial" }
+			set_name = "Beach Head Beta"
+		}
+		event_target:mirror_universe_fed_vanguard = {
+			set_country_type = default
+			set_country_flag = mirror_universe_fed_invasion
+			add_modifier = { modifier = "em_mirror_universe_supply" }
+			remove_country_flag = mirror_universe_fed_vanguard_2
+			save_global_event_target_as = mirror_universe_fed_invasion
+			clear_global_event_target = mirror_universe_fed_vanguard_2
+		}
+	}
+	option = {
+		name = STH_federation_story.4040.a
+		trigger = { has_country_flag = mirror_universe_fed_invasion }
+	}
+	option = {
+		name = STH_federation_story.4040.b
+		trigger = { NOT = { has_country_flag = mirror_universe_fed_invasion } }
+		hidden_effect = { country_event = { id = STH_federation_story.4042 days = 2 } }
+	}
+}
+
+#Mirror Universe Brings System Into Prime - Second Beta
+country_event = {
+	id = STH_federation_story.4041
+	title = STH_federation_story.4041.name
+	desc = { 
+		trigger = { has_country_flag = mirror_universe_fed_portal_system_2a_spawned }
+		text = STH_federation_story.4041.desc_01 
+	}
+	desc = { 
+		trigger = { NOT = { has_country_flag = mirror_universe_fed_portal_system_2a_spawned } }
+		text = STH_federation_story.4041.desc_02
+	}
+	picture = sth_GFX_evt_MirrorUniverse1
+	is_triggered_only = yes
+	trigger = { 
+		OR = {
+			any_country = { OR = { has_country_flag = mirror_universe_fed_vanguard_2 has_country_flag = mirror_universe_fed_invasion } }
+			NOT = { has_country_flag = mirror_universe_fed_portal_system_2b_spawned } #Either MU country exists or system not entered
+		}
+	}
+	immediate = {
+		if = {
+			limit = { exists = event_target:mirror_universe_fed_invasion }
+			event_target:mirror_universe_fed_invasion = { save_event_target_as = mirror_universe_fed_country }
+			else = {
+				if = {
+					limit = { exists = event_target:mirror_universe_fed_vanguard_2 }
+					event_target:mirror_universe_fed_vanguard_2 = { save_event_target_as = mirror_universe_fed_country }
+				}
+			}
+		}
+		
+		if = {
+			limit = { NOT = { exists = event_target:mirror_universe_fed_country } }
+			random_system = {
+				limit = { has_star_flag = mirror_universe_fed_portal_system_2b }
+				save_global_event_target_as = mirror_universe_fed_portal_system_2b
+				spawn_planet = {
+					class = "pc_starbase_blank_fed"
+					size = 3
+					init_effect = {
+						set_planet_flag = mirror_universe_fed_temp_planet
+						create_colony = { owner = event_target:mirror_universe_fed_target species = event_target:mirror_universe_fed_target }
+						create_federation_mirror_universe_country = yes
+						set_owner = event_target:mirror_universe_fed_country
+						set_name = "Outpost Gamma"
+						create_spaceport = { owner = event_target:mirror_universe_fed_country initial_module = "module_defense_phaser_0_initial" }
+						last_created_fleet = { set_fleet_flag = starbase_megastructure }
+						save_event_target_as = mirror_universe_fed_temp_planet
+					}
+				}
+				event_target:mirror_universe_fed_country = {
+					random_owned_fleet = { save_event_target_as = dummyCapital }
+					add_modifier = { modifier = "em_mirror_universe_supply" }
+					set_country_type = default			
+					create_fleet_from_naval_cap = 1.0
+					set_country_type = mirrorUniverseVanguard
+					last_created_fleet = {
+						set_owner = this
+						set_location = event_target:mirror_universe_fed_temp_planet 
+						set_fleet_flag = mirror_universe_fed_fleet_vanguard_2b
+					}
+				}
+			}
+			# event_target:mirror_universe_fed_temp_planet = { remove_planet = yes }
+		}
+		
+		set_country_flag = mirror_universe_crisis_fed_full_invasion
+		random_system = {
+			limit = { has_star_flag = mirror_universe_fed_portal_system_2b }
+			save_global_event_target_as = mirror_universe_fed_portal_system_2b
+		}
+		event_target:mirror_universe_fed_portal_system_2b = {
+			spawn_planet = {
+				class = "pc_continental"
+				size = 20
+				orbit_distance = 50
+				orbit_angle_offset = 30
+				init_effect = {
+					set_name = "Beach Head Gamma"
+					set_planet_flag = mirror_universe_fed_beach_head_gamma
+					save_global_event_target_as = mirror_universe_fed_beach_head_gamma
+				}
+			}
+			create_ambient_object = {
+				type = explosion_particle_object
+				location = event_target:mirror_universe_fed_portal_system_2b
+				duration = 20
+				use_3d_location = yes			
+				entity_offset = { min = 0 max = 0 }
+				entity_offset_angle = { min = 0 max = 0 }
+				entity_offset_height = { min = 0 max = 0 }			
+				entity_scale_to_size = yes
+				scale = 100
+			}
+		}
+		event_target:mirror_universe_fed_beach_head_gamma = {
+			create_colony = { 
+				owner = event_target:mirror_universe_fed_country
+				species = event_target:mirror_universe_fed_country
+			}
+			configure_mirror_universe_beachhead = yes
+			create_spaceport = { owner = event_target:mirror_universe_fed_country initial_module = "module_defense_phaser_0_initial" }
+			set_name = "Beach Head Gamma"
+		}
+		event_target:mirror_universe_fed_vanguard = {
+			set_country_type = default
+			set_country_flag = mirror_universe_fed_invasion
+			add_modifier = { modifier = "em_mirror_universe_supply" }
+			remove_country_flag = mirror_universe_fed_vanguard_2
+			save_global_event_target_as = mirror_universe_fed_invasion
+			clear_global_event_target = mirror_universe_fed_vanguard_2
+		}
+	}
+	option = {
+		name = STH_federation_story.4041.a
+		trigger = { has_country_flag = mirror_universe_fed_invasion }
+	}
+	option = {
+		name = STH_federation_story.4041.b
+		trigger = { NOT = { has_country_flag = mirror_universe_fed_invasion } }
+		hidden_effect = { country_event = { id = STH_federation_story.4042 days = 2 } }
+	}
+}
+
+#War Declaration
+country_event = {
+	id = STH_federation_story.4042
+	title = STH_federation_story.4042.name
+	desc = { 
+		text = STH_federation_story.4042.desc
+	}
+	diplomatic = yes
+	is_triggered_only = yes
+	picture_event_data = {
+		portrait = event_target:mirror_universe_fed_leader
+		planet_background = event_target:mirror_universe_fed_leader
+		graphical_culture = event_target:mirror_universe_fed_leader
+		city_level = event_target:mirror_universe_fed_leader
+		room = event_target:mirror_universe_fed_leader
+	}
+	immediate = {
+		end_event_chain = mirror_invasion_fed_chain
+		leader = { save_event_target_as = fed_leader }
+		if = { 
+			limit = { not = { exists = event_target:mirror_universe_fed_leader } }
+			event_target:mirror_universe_fed_invasion = { 
+				leader = { save_global_event_target_as = mirror_universe_fed_leader }
+			}
+		}
+		event_target:mirror_universe_fed_invasion = {
+			declare_war = { who = root name = "Mirror Universe Invasion" }
+		}
+		every_owned_planet = {
+			save_event_target_as = target_planet
+			event_target:mirror_universe_fed_invasion = {
+				add_war_demand = { 
+					type = "cede_planet" 
+					parameter:planet = event_target:target_planet 
+					warscore_cost = 10 
+					target = event_target:mirror_universe_fed_invasion 
+					enemy = root 
+				}
+			}
+		}
+	}
+	# option = {
+		# name = STH_federation_story.4042.a #Question 1
+		# response_text = STH_federation_story.4042.a.response
+		# is_dialog_only = yes
+	# }
+	# option = {
+		# name = STH_federation_story.4042.b #Question 2
+		# response_text = STH_federation_story.4042.b.response
+		# is_dialog_only = yes
+	# }
+	option = {
+		name = STH_federation_story.4042.c #Fight
+		response_text = STH_federation_story.4042.c.response
+	}
+	# option = {
+		# name = STH_federation_story.4021.d #Surrender
+		
+	# }
+	after = {
+		hidden_effect = {
+			every_country = {
+				limit = { 
+					has_communications = root
+					is_normal_country = yes
+					NOT = { is_borg_empire = yes is_assimilator = yes }
+					NOR = { 
+						exists = overlord
+						is_same_value = root 
+						is_same_value = event_target:mirror_universe_fed_invasion
+					}
+				}
+				country_event = { id = STH_federation_story.4022 days = 7 random = 3 }
+			}
+		}
+	}
+}
+
+
+#MU Loses
+country_event = {
+	id = STH_federation_story.4090
+	title = STH_federation_story.4090.name
+	desc = { text = STH_federation_story.4090.desc }
+	picture = sth_GFX_evt_MirrorUniverse3
+	is_triggered_only = yes
+	trigger = { 
+		has_country_flag = mirror_universe_fed_target
+		From = { has_country_flag = mirror_universe_fed_invasion }
+	}
+	option = { 
+		name = STH_federation_story.4090.a
+		hidden_effect = { 
+			FROM = { 
+				every_owned_planet = {  
+					limit = { is_starbase_planet = yes }
+					remove_planet = yes
+				}
+				destroy_country = yes 
+			}
+		}
+	}
+	after = {
+		hidden_effect = {
+			country_event = { id = STH_federation_story.4099 } # Cleanup
+		}
+	}
+}
+
+#MU Wins
+country_event = {
+	id = STH_federation_story.4091
+	hide_window = yes
+	is_triggered_only = yes
+	trigger = { 
+		has_country_flag = mirror_universe_fed_invasion
+		From = { has_country_flag = mirror_universe_fed_target }
+	}
+	immediate = {
+		From = { country_event = { id = STH_federation_story.4092 } }
+	}
+}
+#War lost
+country_event = {
+	id = STH_federation_story.4092
+	title = STH_federation_story.4092.name
+	desc = { text = STH_federation_story.4092.desc }
+	picture = sth_GFX_evt_MirrorUniverse4
+	is_triggered_only = yes
+	trigger = { }
+	immediate = { }
+	option = { 
+		name = STH_federation_story.4092.a
+		#full surrender
+		hidden_effect = { country_event = { id = STH_federation_story.4093 } }
+	}
+	option = { 
+		name = STH_federation_story.4092.b
+		#Normal Surrender
+	}
+	after = { hidden_effect = { country_event = { id = STH_federation_story.4098 } } }
+}
+#Confirm full surrender?!
+country_event = {
+	id = STH_federation_story.4093
+	title = STH_federation_story.4093.name
+	desc = { text = STH_federation_story.4093.desc }
+	picture = sth_GFX_evt_MirrorUniverse4
+	is_triggered_only = yes
+	trigger = { }
+	immediate = { 
+		random_country = {
+			limit = { has_country_flag = mirror_universe_fed_invasion }
+			save_event_target_as = terran_empire
+		}
+	}
+	option = { 
+		name = STH_federation_story.4093.a
+		#full surrender
+		hidden_effect = { 
+			event_target:mirror_universe_invasion = {
+				leader = { exile_leader_as = mirror_universe_leader }
+				every_owned_fleet = { set_owner = root }
+				every_owned_planet = { set_owner = root }
+			}
+			every_owned_leader = {
+				random_list = {
+					70 = { kill_leader = { show_notification = yes } }
+					10 = { add_trait = leader_trait_substance_abuser }
+					10 = { add_trait = leader_trait_arrested_development}
+					10 = {}
+				}
+			}
+			set_leader = mirror_universe_leader
+			become_terran_empire = yes
+		}
+	}
+	option = { 
+		name = STH_federation_story.4093.b
+		#Normal Surrender
+	}
+}
+
+#MU Cleanup
+country_event = {
+	id = STH_federation_story.4098
+	hide_window = yes
+	is_triggered_only = yes
+	trigger = { }
+	immediate = {
+		set_country_flag = mirror_universe_fed_crisis_resolved_lost
+		
+		remove_point_of_interest = mirror_universe_fed_spawn_1
+		remove_point_of_interest = mirror_universe_fed_spawn_2a
+		remove_point_of_interest = mirror_universe_fed_spawn_2b
+		every_country = {
+			remove_country_flag = mirror_universe_fed_target
+			remove_country_flag = mirror_universe_crisis_fed_first_portal_seen
+			remove_country_flag = mirror_universe_crisis_fed_escapee_met
+			remove_country_flag = mirror_universe_crisis_fed_full_invasion
+			remove_country_flag = mirror_universe_fed_appeased_vanguard
+			remove_country_flag = mirror_universe_fed_vanguard_destroyed 
+			remove_country_flag = mirror_universe_fed_leader_met
+			remove_country_flag = mirror_universe_fed_war_invite
+			remove_country_flag = mirror_universe_fed_leader_met_2
+			remove_country_flag = mirror_universe_crisis_fed_second_a_portal_seen
+			remove_country_flag = mirror_universe_crisis_fed_second_b_portal_seen
+			remove_country_flag = mirror_universe_fed_vanguard_2_destroyed 
+			remove_country_flag = mirror_universe_fed_portal_system_2a_spawned
+			remove_country_flag = mirror_universe_fed_portal_system_2b_spawned
+		}
+		every_planet = {
+			solar_system = {
+				remove_star_flag = mirror_universe_fed_portal_system_1
+				remove_star_flag = mirror_universe_fed_portal_system_2a
+				remove_star_flag = mirror_universe_fed_portal_system_2b
+			}
+		}
+	}
+}
+#MU Cleanup
+country_event = {
+	id = STH_federation_story.4099
+	hide_window = yes
+	is_triggered_only = yes
+	trigger = { }
+	immediate = {
+		set_country_flag = mirror_universe_fed_crisis_resolved_won
+		remove_point_of_interest = mirror_universe_fed_spawn_1
+		remove_point_of_interest = mirror_universe_fed_spawn_2a
+		remove_point_of_interest = mirror_universe_fed_spawn_2b
+		every_country = {	
+			remove_country_flag = mirror_universe_fed_target
+			remove_country_flag = mirror_universe_crisis_fed_first_portal_seen
+			remove_country_flag = mirror_universe_crisis_fed_escapee_met
+			remove_country_flag = mirror_universe_crisis_fed_full_invasion
+			remove_country_flag = mirror_universe_fed_appeased_vanguard
+			remove_country_flag = mirror_universe_fed_vanguard_destroyed 
+			remove_country_flag = mirror_universe_fed_leader_met
+			remove_country_flag = mirror_universe_fed_war_invite
+			remove_country_flag = mirror_universe_fed_leader_met_2
+			remove_country_flag = mirror_universe_crisis_fed_second_a_portal_seen
+			remove_country_flag = mirror_universe_crisis_fed_second_b_portal_seen
+			remove_country_flag = mirror_universe_fed_vanguard_2_destroyed 
+			remove_country_flag = mirror_universe_fed_portal_system_2a_spawned
+			remove_country_flag = mirror_universe_fed_portal_system_2b_spawned
+		}
+		every_planet = {
+			solar_system = {
+				remove_star_flag = mirror_universe_fed_portal_system_1
+				remove_star_flag = mirror_universe_fed_portal_system_2a
+				remove_star_flag = mirror_universe_fed_portal_system_2b
+			}
+		}
+	}
+}

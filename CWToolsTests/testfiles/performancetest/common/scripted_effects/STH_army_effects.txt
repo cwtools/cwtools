@@ -1,0 +1,25 @@
+light_damage_armies = {
+	###NOTHING WORKS :(
+	# random_planet_army = {
+		# limit = { has_hp_percentage > 0.5 NOT = { has_ship_flag = changelingDamage } }
+		# reduce_hp_percent = 25
+		# set_ship_flag = changelingDamage
+	# }
+	# random_owned_ship = {
+		# limit = { has_hp_percentage > 0.5 NOT = { has_ship_flag = changelingDamage } }
+		# reduce_hp_percent = 25
+		# set_ship_flag = changelingDamage
+	# }
+	# random_owned_ship = {
+		# limit = { has_hp_percentage > 0.5 NOT = { has_ship_flag = changelingDamage } }
+		# reduce_hp_percent = 25
+		# set_ship_flag = changelingDamage
+	# }
+	# while = {
+		# count = 3
+		# random_owned_ship = {
+			# limit = { has_ship_flag = changelingDamage }
+			# remove_ship_flag = changelingDamage
+		# }
+	# }
+}

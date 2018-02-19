@@ -1,0 +1,309 @@
+##############################
+# Cardassian Factions
+##############################
+
+sth_cardassian_oralian = {
+	election_header = "GFX_faction_header_yellow"
+	guiding_ethic = ethic_spiritualist
+	
+	unique = yes
+	support_multiplier = 1
+	
+	is_potential = {
+		years_passed > 10
+		OR = { is_species_class = CAR }
+		NOR = { has_ethic = ethic_gestalt_consciousness is_borg_empire = yes }
+	}
+	
+	parameters = {
+		empire = {
+			type = country
+			valid_objects = {
+				is_same_value = root
+			}
+		}
+	}
+	
+	can_join_faction = {
+		is_enslaved = no
+		is_shackled_robot = no
+		is_being_purged = no
+		has_culture_shock = no
+		NOT = { has_trait = trait_nerve_stapled }
+		OR = {
+			has_ethic = ethic_egalitarian
+			has_ethic = ethic_fanatic_egalitarian
+			has_ethic = ethic_spiritualist
+			has_ethic = ethic_fanatic_spiritualist
+		}
+		is_robot_pop = no
+	}
+	
+	attraction = {
+		base = 150
+		
+		modifier = {
+			factor = 1.25
+			exists = from
+			from = {
+				exists = leader
+				leader = { leader_class = ruler }
+			}
+		}
+		
+		modifier = {
+			factor = 0.75
+			exists = from
+			from = {
+				NOT = { exists = leader }
+			}
+		}
+		
+		# Should really check for citizenship instead
+		modifier = {
+			factor = 0.25
+			NOT = { is_same_species = owner_species }
+		}
+	}
+	
+	leader = {
+		base = 100
+		modifier = {
+			factor = 0
+			leader_class = ruler
+			owner = { has_authority = auth_imperial }
+		}
+	}
+
+	demand = {
+		title = "PROGRESSIVE_NO_AUTO"
+		unfulfilled_title = "PROGRESSIVE_AUTO"
+		desc = "PROGRESSIVE_DEMOCRATIC_GOVERNMENT_DESC"
+
+		fulfilled_effect = 5
+		unfulfilled_effect = -15
+
+		potential = {
+			exists = owner
+		}
+
+		trigger = {
+			owner = {
+				NOR = {
+					has_authority = auth_imperial
+					has_authority = auth_dictatorial
+				}
+			}
+		}
+	}
+
+	demand = {
+		title = "PROGRESSIVE_FREE_MOVEMENT"
+		unfulfilled_title = "PROGRESSIVE_NO_FREE_MOVEMENT"
+		desc = "PROGRESSIVE_FREE_MOVEMENT_DESC"
+
+		fulfilled_effect = 3
+		unfulfilled_effect = -10
+
+		potential = {
+			exists = owner
+		}
+
+		trigger = {
+			owner = {
+				NOR = {
+					has_policy_flag = resettlement_allowed
+					NOT = { has_policy_flag = core_worlds_all }
+					any_owned_pop = {
+						has_migration_control = yes
+						is_sapient = yes
+						NOT = { is_non_sapient_robot = yes }
+					}
+				}
+			}
+		}
+	}
+
+	demand = {
+		title = "PROGRESSIVE_REPRODUCTIVE_FREEDOM"
+		unfulfilled_title = "PROGRESSIVE_NO_REPRODUCTIVE_FREEDOM"
+		desc = "PROGRESSIVE_REPRODUCTIVE_FREEDOM_DESC"
+
+		fulfilled_effect = 2
+		unfulfilled_effect = -10
+
+		potential = {
+			exists = owner
+		}
+
+		trigger = {
+			NOT = {
+				any_owned_pop = {
+					has_population_control = yes
+				}
+			}
+		}
+	}
+
+	demand = {
+		title = "PROGRESSIVE_SLAVERY_BANNED"
+		unfulfilled_title = "PROGRESSIVE_SLAVERY_ALLOWED"
+		desc = "PROGRESSIVE_SLAVERY_BANNED_DESC"
+
+		unfulfilled_effect = -15
+
+		potential = {
+			exists = owner
+		}
+
+		trigger = {
+			owner = {
+				allows_slavery = no
+			}
+		}
+	}
+
+	demand = {
+		title = "TRADITIONALIST_SPIRITUALIST_POPS"
+		unfulfilled_title = "TRADITIONALIST_FEW_SPIRITUALIST_POPS"
+		desc = "TRADITIONALIST_SPIRITUALIST_POPS_DESC"
+		fulfilled_effect = 5
+		potential = { exists = owner }
+		trigger = {
+			owner = {
+				pop_percentage = {
+					percentage > 0.24
+					limit = { pop_has_ethic = ethic_spiritualist }
+				}
+			}
+		}
+	}
+	
+	on_create = { pop_faction_event = { id = STH_faction_events.1 } }
+	
+	on_destroy = {
+		if = {
+			limit = { has_modifier = promoted_sth_cardassian_oralian }
+			remove_modifier = promoted_sth_cardassian_oralian
+		}
+		if = {
+			limit = { has_modifier = suppressed_sth_cardassian_oralian }
+			remove_modifier = suppressed_sth_cardassian_oralian
+		}
+	}
+	
+	actions = {
+		embrace_faction = {
+			title = "EMBRACE_FACTION"
+			description = "EMBRACE_FACTION_DESC"
+			cost = { influence = 500 }
+			potential = {
+				exists = owner
+			}
+			valid = {
+				custom_tooltip = {
+					fail_text = EMBRACE_FACTION_COOLDOWN
+					parameter:empire = { NOT = { has_country_flag = embraced_faction } }
+				}
+				support > 0.25
+				parameter:empire = {
+					NOT = { has_country_flag = hebitian_union }
+				}
+			}
+			effect = {
+				add_modifier = { modifier = embraced_faction days = 3600 }
+				parameter:empire = {
+					shift_ethic = ethic_egalitarian
+					shift_ethic = ethic_spiritualist
+					hidden_effect = { set_timed_country_flag = { flag = embraced_faction days = 7200 } }
+					hidden_effect = {
+						every_pop_faction = {
+							limit = { NOT = { is_same_value = root } }
+							add_modifier = { modifier = embraced_another_faction days = 3600 }
+						}
+						if = {
+							limit = { NOR = { has_country_flag = hebitian_country has_country_flag = hebitian_union } }
+							country_event = { id = STH_cardassian_story.1000 }
+						}
+					}
+				}
+			}
+			ai_weight = { base = 0 }
+		}
+		
+		promote_faction = {
+			title = "PROMOTE_FACTION"
+			description = "PROMOTE_FACTION_DESC"
+			potential = {
+				exists = owner
+				parameter:empire = { 
+					NOR = { 
+						has_modifier = suppressed_sth_cardassian_oralian
+						has_modifier = promoted_sth_cardassian_oralian 
+					}				
+				}
+			}
+			effect = {
+				parameter:empire = { add_modifier = { modifier = promoted_sth_cardassian_oralian days = -1 } }
+			}
+			ai_weight = { base = 0 }
+		}
+		
+		cancel_promote_faction = {
+			title = "CANCEL_PROMOTE_FACTION"
+			description = "CANCEL_PROMOTE_FACTION_DESC"
+			potential = {
+				exists = owner
+				parameter:empire = {  has_modifier = promoted_sth_cardassian_oralian }
+			}
+			effect = {
+				parameter:empire = { remove_modifier = promoted_sth_cardassian_oralian }
+			}
+			ai_weight = { base = 0 }
+		}		
+		
+		suppress_faction = {
+			title = "SUPPRESS_FACTION"
+			description = "SUPPRESS_FACTION_DESC"
+			potential = {
+				exists = owner
+				parameter:empire = { 
+					NOR = { 
+						has_modifier = suppressed_sth_cardassian_oralian
+						has_modifier = promoted_sth_cardassian_oralian 
+					}
+				}
+			}
+			effect = {
+				add_modifier = { modifier = suppressed_faction days = -1 }
+				parameter:empire = {
+					add_modifier = { modifier = suppressed_sth_cardassian_oralian days = -1 }
+				}
+			}
+			ai_weight = { 
+				factor = 0 
+				modifier = {
+					factor = 1.00
+					parameter:empire = {
+						has_country_flag = cardassian_union
+						has_ethic = ethic_fanatic_authoritarian
+					}
+				}
+			}
+		}
+		
+		cancel_suppress_faction = {
+			title = "CANCEL_SUPPRESS_FACTION"
+			description = "CANCEL_SUPPRESS_FACTION_DESC"
+			potential = {
+				exists = owner
+				parameter:empire = { has_modifier = suppressed_sth_cardassian_oralian }
+			}
+			effect = {
+				remove_modifier = suppressed_faction
+				parameter:empire = { remove_modifier = suppressed_sth_cardassian_oralian }
+			}
+			ai_weight = { base = 0 }
+		}	
+	}
+}

@@ -1,0 +1,435 @@
+# Sentinel Base
+ship_design = {
+	name = "Vigil"
+	ship_size = station_generic_01
+	section = {
+		template = "station_generic_01_key"
+		slot = "mid"
+		
+		component = {
+			slot = "SMALL_GUN_01"
+			template = "POINT_DEFENCE_3"
+		}
+		component = {
+			slot = "SMALL_GUN_02"
+			template = "POINT_DEFENCE_3"
+		}
+		component = {
+			slot = "SMALL_GUN_03"
+			template = "SMALL_GAMMA_LASER"
+		}
+		component = {
+			slot = "SMALL_GUN_04"
+			template = "SMALL_GAMMA_LASER"
+		}
+		component = {
+			slot = "MEDIUM_GUN_01"
+			template = "MEDIUM_PLASMA_3"
+		}
+		component = {
+			slot = "MEDIUM_GUN_02"
+			template = "MEDIUM_PLASMA_3"
+		}
+		component = {
+			slot = "LARGE_GUN_01"
+			template = "LARGE_ENERGY_LANCE_2"
+		}
+		component = {
+			slot = "LARGE_GUN_02"
+			template = "LARGE_ENERGY_LANCE_2"
+		}
+		component = {
+			slot = "STRIKE_CRAFT_01"
+			template = "LARGE_FIGHTERS_HANGAR_3"
+		}
+		component = {
+			slot = "STRIKE_CRAFT_02"
+			template = "LARGE_BOMBERS_HANGAR_3"
+		}
+		component = {
+			slot = "LARGE_UTILITY_1"
+			template = "LARGE_SHIELD_5"
+		}
+		component = {
+			slot = "LARGE_UTILITY_2"
+			template = "LARGE_SHIELD_5"
+		}
+		component = {
+			slot = "LARGE_UTILITY_3"
+			template = "LARGE_ARMOR_5"
+		}
+		component = {
+			slot = "LARGE_UTILITY_4"
+			template = "LARGE_ARMOR_5"
+		}
+		component = {
+			slot = "LARGE_UTILITY_5"
+			template = "LARGE_ZERO_POINT_REACTOR"
+		}
+		component = {
+			slot = "MEDIUM_UTILITY_1"
+			template = "MEDIUM_ZERO_POINT_REACTOR"
+		}
+		component = {
+			slot = "MEDIUM_UTILITY_2"
+			template = "MEDIUM_ZERO_POINT_REACTOR"
+		}
+		component = {
+			slot = "MEDIUM_UTILITY_3"
+			template = "MEDIUM_ZERO_POINT_REACTOR"
+		}
+		component = {
+			slot = "MEDIUM_UTILITY_4"
+			template = "MEDIUM_ZERO_POINT_REACTOR"
+		}
+		component = {
+			slot = "MEDIUM_UTILITY_5"
+			template = "MEDIUM_ZERO_POINT_REACTOR"
+		}
+		component = {
+			slot = "MEDIUM_UTILITY_6"
+			template = "MEDIUM_ZERO_POINT_REACTOR"
+		}
+		component = {
+			slot = "AUX_UTILITY_1"
+			template = "SHIELD_RECHARGER"
+		}
+	}
+	required_component = "SHIP_SENSOR_4"
+}
+
+# Sentinel Refugee Base
+ship_design = {
+	name = "PR-417"
+	ship_size = pirate_station
+
+	section = {
+		template = "PIRATE_STATION_SECTION"
+		slot = "west"
+		
+		component = {
+			slot = "SMALL_GUN_01"
+			template = "SMALL_MASS_DRIVER_1"
+		}
+		component = {
+			slot = "PD_01"
+			template = "POINT_DEFENCE_1"
+		}
+		component = {
+			slot = "MEDIUM_GUN_01"
+			template = "MEDIUM_MISSILE_1"
+		}
+		component = {
+			slot = "LARGE_UTILITY_1"
+			template = "LARGE_FISSION_REACTOR"
+		}
+		component = {
+			slot = "LARGE_UTILITY_2"
+			template = "LARGE_FISSION_REACTOR"
+		}
+		component = {
+			slot = "LARGE_UTILITY_3"
+			template = "LARGE_ARMOR_1"
+		}
+	}
+	required_component = "SHIP_SENSOR_1"
+}
+
+# Sentinel Battleship
+ship_design = {
+	name = "Spearhead"
+	ship_size = battleship
+	
+	section = {
+		template = "BATTLESHIP_BOW_L1M1S2"
+		slot = "bow"
+		
+		component = {
+			slot = "LARGE_GUN_01"
+			template = "LARGE_KINETIC_ARTILLERY_2"
+		}
+		component = {
+			slot = "MEDIUM_GUN_01"
+			template = "SMALL_PLASMA_3"
+		}
+		component = {
+			slot = "SMALL_GUN_01"
+			template = "POINT_DEFENCE_3"
+		}
+		component = {
+			slot = "SMALL_GUN_02"
+			template = "POINT_DEFENCE_3"
+		}
+		component = {
+			slot = "LARGE_UTILITY_1"
+			template = "LARGE_ZERO_POINT_REACTOR"
+		}
+		component = {
+			slot = "LARGE_UTILITY_2"
+			template = "LARGE_ZERO_POINT_REACTOR"
+		}
+	}
+	section = {
+		template = "BATTLESHIP_MID_L2M2"
+		slot = "mid"
+		
+		component = {
+			slot = "LARGE_GUN_01"
+			template = "LARGE_PLASMA_3"
+		}
+		component = {
+			slot = "LARGE_GUN_02"
+			template = "LARGE_PLASMA_3"
+		}
+		component = {
+			slot = "MEDIUM_GUN_01"
+			template = "MEDIUM_PLASMA_3"
+		}
+		component = {
+			slot = "MEDIUM_GUN_02"
+			template = "MEDIUM_PLASMA_3"
+		}
+		component = {
+			slot = "LARGE_UTILITY_1"
+			template = "LARGE_ZERO_POINT_REACTOR"
+		}
+		component = {
+			slot = "LARGE_UTILITY_2"
+			template = "LARGE_ZERO_POINT_REACTOR"
+		}
+		component = {
+			slot = "LARGE_UTILITY_3"
+			template = "LARGE_ZERO_POINT_REACTOR"
+		}
+		component = {
+			slot = "LARGE_UTILITY_4"
+			template = "LARGE_ZERO_POINT_REACTOR"
+		}
+		component = {
+			slot = "LARGE_UTILITY_5"
+			template = "LARGE_ARMOR_5"
+		}
+		component = {
+			slot = "LARGE_UTILITY_6"
+			template = "LARGE_SHIELD_5"
+		}
+	}
+	section = {
+		template = "BATTLESHIP_STERN_M2"
+		slot = "stern"
+		
+		component = {
+			slot = "MEDIUM_GUN_01"
+			template = "MEDIUM_PLASMA_3"
+		}
+		component = {
+			slot = "MEDIUM_GUN_02"
+			template = "MEDIUM_PLASMA_3"
+		}
+		component = {
+			slot = "LARGE_UTILITY_1"
+			template = "LARGE_ARMOR_5"
+		}
+		component = {
+			slot = "LARGE_UTILITY_2"
+			template = "LARGE_ARMOR_5"
+		}
+	}
+	required_component = "WARP_DRIVE_3"
+	required_component = "COMBAT_COMPUTER_AGGRESSIVE_ADVANCED"
+	required_component = "SHIP_THRUSTER_4"
+	required_component = "SHIP_SENSOR_4"
+}
+
+# Sentinel Cruiser
+ship_design = {
+	name = "Death's Head"
+	ship_size = cruiser
+	
+	section = {
+		template = "CRUISER_BOW_M2"
+		slot = "bow"
+		
+		component = {
+			slot = "MEDIUM_GUN_01"
+			template = "MEDIUM_PLASMA_3"
+		}
+		component = {
+			slot = "MEDIUM_GUN_02"
+			template = "MEDIUM_PLASMA_3"
+		}
+		component = {
+			slot = "MEDIUM_UTILITY_1"
+			template = "MEDIUM_SHIELD_5"
+		}
+		component = {
+			slot = "MEDIUM_UTILITY_2"
+			template = "MEDIUM_ARMOR_5"
+		}
+		component = {
+			slot = "MEDIUM_UTILITY_3"
+			template = "MEDIUM_SHIELD_5"
+		}
+	}
+	section = {
+		template = "CRUISER_MID_M3"
+		slot = "mid"
+		
+		component = {
+			slot = "MEDIUM_GUN_01"
+			template = "MEDIUM_PLASMA_3"
+		}
+		component = {
+			slot = "MEDIUM_GUN_02"
+			template = "MEDIUM_PLASMA_3"
+		}
+		component = {
+			slot = "MEDIUM_GUN_03"
+			template = "MEDIUM_PLASMA_3"
+		}
+		component = {
+			slot = "LARGE_UTILITY_1"
+			template = "LARGE_ZERO_POINT_REACTOR"
+		}
+		component = {
+			slot = "LARGE_UTILITY_2"
+			template = "LARGE_ZERO_POINT_REACTOR"
+		}
+		component = {
+			slot = "LARGE_UTILITY_3"
+			template = "LARGE_ZERO_POINT_REACTOR"
+		}
+	}
+	section = {
+		template = "CRUISER_STERN_S2"
+		slot = "stern"
+		
+		component = {
+			slot = "SMALL_GUN_01"
+			template = "POINT_DEFENCE_3"
+		}
+		component = {
+			slot = "SMALL_GUN_02"
+			template = "POINT_DEFENCE_3"
+		}
+		component = {
+			slot = "MEDIUM_UTILITY_1"
+			template = "MEDIUM_ZERO_POINT_REACTOR"
+		}
+		component = {
+			slot = "MEDIUM_UTILITY_2"
+			template = "MEDIUM_ZERO_POINT_REACTOR"
+		}
+	}
+	required_component = "WARP_DRIVE_3"
+	required_component = "COMBAT_COMPUTER_AGGRESSIVE_ADVANCED"
+	required_component = "SHIP_THRUSTER_4"
+	required_component = "SHIP_SENSOR_4"
+}
+
+# Sentinel Destroyer
+ship_design = {
+	name = "Bug Crusher"
+	ship_size = destroyer
+	
+	section = {
+		template = "DESTROYER_BOW_M1S2"
+		slot = "bow"
+		
+		component = {
+			slot = "MEDIUM_GUN_01"
+			template = "MEDIUM_PLASMA_3"
+		}
+		component = {
+			slot = "SMALL_GUN_01"
+			template = "SMALL_PLASMA_3"
+		}
+		component = {
+			slot = "SMALL_GUN_02"
+			template = "SMALL_PLASMA_3"
+		}
+		component = {
+			slot = "MEDIUM_UTILITY_1"
+			template = "MEDIUM_ZERO_POINT_REACTOR"
+		}
+		component = {
+			slot = "MEDIUM_UTILITY_2"
+			template = "MEDIUM_ZERO_POINT_REACTOR"
+		}
+		component = {
+			slot = "MEDIUM_UTILITY_3"
+			template = "MEDIUM_SHIELD_5"
+		}
+	}
+	section = {
+		template = "DESTROYER_STERN_S2"
+		slot = "stern"
+		
+		component = {
+			slot = "SMALL_GUN_01"
+			template = "POINT_DEFENCE_3"
+		}
+		component = {
+			slot = "SMALL_GUN_02"
+			template = "POINT_DEFENCE_3"
+		}
+		component = {
+			slot = "SMALL_UTILITY_1"
+			template = "SMALL_ZERO_POINT_REACTOR"
+		}
+		component = {
+			slot = "SMALL_UTILITY_2"
+			template = "SMALL_ZERO_POINT_REACTOR"
+		}
+		component = {
+			slot = "SMALL_UTILITY_3"
+			template = "SMALL_ARMOR_5"
+		}
+		component = {
+			slot = "SMALL_UTILITY_4"
+			template = "SMALL_ARMOR_5"
+		}
+	}
+	required_component = "WARP_DRIVE_3"
+	required_component = "COMBAT_COMPUTER_AGGRESSIVE_ADVANCED"
+	required_component = "SHIP_THRUSTER_4"
+	required_component = "SHIP_SENSOR_4"
+}
+
+# Sentinel Corvette
+ship_design = {
+	name = "Blade"
+	ship_size = corvette
+	section = {
+		template = "corvette_stern_cannon"
+		slot = "stern"
+		component = { slot = "LARGE_GUN_01" template = "LARGE_BASIC_DISRUPTOR_2" }
+		component = { slot = "LARGE_GUN_02" template = "LARGE_BASIC_DISRUPTOR_2" }
+		component = { slot = "LARGE_GUN_03" template = "LARGE_BASIC_DISRUPTOR_2" }
+		component = { slot = "LARGE_GUN_04" template = "LARGE_BASIC_DISRUPTOR_2" }
+		component = { slot = "SMALL_GUN_1" template = "POINT_DEFENCE_PHOTON_TORPEDO_2" }
+	}
+	section = {
+		template = "corvette_mid_17"
+		slot = "mid"
+		component = { slot = "SMALL_UTILITY_1" template = "UTILITY_SMALL_HARD_1" }
+		component = { slot = "LARGE_UTILITY_1" template = "UTILITY_LARGE_TRACKING_1" }
+	}	
+	required_component="REQUIRED_WARP_1_PF"
+	required_component="REQUIRED_COMPUTER_1_PF"
+	required_component="REQUIRED_THRUSTERS_1A_PF"
+	required_component="Required_Combat_Sensor_brawler_1"
+	required_component="REQUIRED_DEFENSE_1_ARMOR_PF"
+	required_component="REQUIRED_HULL_1A_PF"
+}
+
+
+# Sentinels Large Military Station
+ship_design = {
+	name = "Sentinel-1"
+	ship_size = military_station_large
+	section = {
+		template = "military_station_large_mid_1"
+		slot = "east"
+	}
+}

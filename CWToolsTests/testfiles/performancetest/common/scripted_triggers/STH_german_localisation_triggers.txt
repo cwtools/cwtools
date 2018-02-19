@@ -1,0 +1,72 @@
+DE_loc_der_empires = {
+    OR = {
+     	has_country_flag = benzarian_commonwealth
+		has_country_flag = vulcan_high_command
+		has_country_flag = kazon_sects
+		has_country_flag = xindi_council
+		has_country_flag = argrathian_commonwealth
+	}
+}
+
+DE_loc_die_empires = {
+    OR = {
+        has_country_flag = cardassian_union
+ 		has_country_flag = tellarian_technocracy
+ 		has_country_flag = breen_confederacy
+ 		has_country_flag = ferengi_alliance
+ 		has_country_flag = husnock_ascendency
+		has_country_flag = suliban_cabal
+		has_country_flag = tholian_assembly
+		has_country_flag = vidiian_sodality
+		has_country_flag = bajoran_republic
+		has_country_flag = betazoid_houses
+		has_country_flag = bolian_league
+		has_country_flag = bynar_domains
+		has_country_flag = caitian_union
+		has_country_flag = cheronite_nation
+		has_country_flag = denobulan_unity
+		has_country_flag = dosi_confederacy
+		has_country_flag = fen_domar_states
+		has_country_flag = flaxian_hegemony
+		has_country_flag = garidian_republic
+		has_country_flag = gorn_empire
+		has_country_flag = hirogen_hunters
+		has_country_flag = hurq_stagnancy
+		has_country_flag = karemman_foundation
+		has_country_flag = kobali_republic
+		has_country_flag = kraylor_republic
+		has_country_flag = lyridian_diaspora
+		has_country_flag = morali_states
+		has_country_flag = nausicaan_tribes
+		has_country_flag = norcadian_harmony
+		has_country_flag = nyberrite_alliance
+		has_country_flag = orion_free_states
+		has_country_flag = sheliak_corporate
+		has_country_flag = talaxian_empire
+		has_country_flag = trill_republic
+		has_country_flag = vaadwaur_supremacy
+		has_country_flag = voth_theocracy
+		has_country_flag = wadi_emirates
+		has_country_flag = yaderan_republic
+		has_country_flag = zahl_technocracy
+		has_country_flag = zakdorn_alliance
+		has_country_flag = united_earth
+    }
+}
+
+DE_loc_das_empires = {
+    OR = {
+		has_country_flag = klingon_empire
+		has_country_flag = romulan_star_empire
+		has_country_flag = borg_collective
+		has_country_flag = andorian_empire
+		has_country_flag = antican_packs
+		has_country_flag = brunali_empire
+		has_country_flag = devorian_solidarity
+		has_country_flag = krenim_imperium
+ 		has_country_flag = rakharian_free_states
+		has_country_flag = rigellian_consortium
+		has_country_flag = selay_clutches
+		has_country_flag = trogoran_empire
+	}
+}

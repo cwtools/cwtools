@@ -1,0 +1,1441 @@
+############################
+### DISCOVERY CATEGORIES ###
+############################
+
+########################
+### changed tech id ###
+########################
+
+
+# default = planet scope
+# potential = planet scope
+# spawn_chance = planet scope (from = the ship)
+# on_spawn = planet scope (ibid)
+# on_success = ship scope
+# on_fail = ship scope
+# on_critical_fail = ship scope
+# level = level of anomaly that is checked against scientist level
+# #risk = risk of researching the anomaly (defaults to NDefines::NGameplay:anomaly_RISK_DEFAULT)
+
+### ASTEROID DISCOVERY CATEGORIES
+
+# Wavelengths detected (thinking asteroid, cell cells, gravity crush)
+anomaly_category = {
+	key = "AST_WAVELENGTHS_1_CAT"
+	desc = "AST_WAVELENGTHS_1_DESC"
+	picture = GFX_evt_mining_station
+	level = 1
+	#risk = 30
+
+	spawn_chance = {
+		modifier = {
+			add = 3
+			is_asteroid = yes
+			FROM = { owner = { is_borg_empire = no is_assimilator = no } }
+		}
+	}
+
+	on_success = {
+	}
+
+	on_fail = {
+		ship_event = { id = anomaly_failure.2500 }
+	}
+
+	on_critical_fail = {
+		ship_event = { id = anomaly_failure.2600 }
+	}
+}
+
+# Debris field, aliens finding Plaque and Record, humans finding Plaque
+anomaly_category = {
+	key = "AST_DEBRIS_FIELD_1_CAT"
+	desc = "AST_DEBRIS_FIELD_1_DESC"
+	picture = GFX_evt_mining_station
+	level = 2
+	#risk = 40
+
+	spawn_chance = {
+		modifier = {
+			add = 3
+			is_asteroid = yes
+			OR = {
+				any_system = {
+					OR = {
+						# Commonwealth of Man NPC system
+						has_star_flag = com_sol
+						# Tomb World
+						has_star_flag = nuked_sol
+					}
+				}
+				any_country = {
+					OR = {
+						has_country_flag = human_1
+						# Early Space Age Humans
+						has_country_flag = humans_early_space_age
+					}
+				}
+			}
+			FROM = {
+				owner = {
+					NOR = {
+						has_country_flag = found_voyager
+						has_country_flag = found_pioneer
+					}
+				}
+			}
+			FROM = { owner = { is_borg_empire = no is_assimilator = no } }
+		}
+	}
+
+	on_spawn = {
+		from = {
+			owner = {
+				#set_country_flag = found_voyager
+			}
+		}
+	}
+
+	on_success = {
+	}
+
+	on_fail = {
+		ship_event = { id = anomaly_failure.2501 }
+	}
+
+	on_critical_fail = {
+		ship_event = { id = anomaly_failure.2601 }
+	}
+}
+
+# Lush habitable planet: triffids & human Record
+anomaly_category = {
+	key = "HBL_LUSH_PLANET_1_CAT"
+	desc = "HBL_LUSH_PLANET_1_DESC"
+	picture = GFX_evt_medieval_alien_civilization
+	level = 2
+	#risk = 10
+
+	spawn_chance = {
+		modifier = {
+			add = 3
+			OR = {
+				is_planet_class = pc_continental
+				is_planet_class = pc_tropical
+			}
+			OR = {
+				any_system = {
+					OR = {
+						# Commonwealth of Man NPC system
+						has_star_flag = com_sol
+						# Tomb World
+						has_star_flag = nuked_sol
+					}
+				}
+				any_country = {
+					OR = {
+						has_country_flag = human_1
+						# Early Space Age Humans
+						has_country_flag = humans_early_space_age
+					}
+				}
+			}
+			FROM = {
+				owner = {
+					NOT = {
+						has_country_flag = found_voyager
+						has_country_flag = found_pioneer
+					}
+				}
+			}
+			FROM = { owner = { is_borg_empire = no is_assimilator = no } }
+		}
+	}
+
+	on_success = {
+	}
+
+	on_fail = {
+		ship_event = { id = anomaly_failure.2502}
+	}
+
+	on_critical_fail = {
+		ship_event = { id = anomaly_failure.2602 }
+	}
+}
+
+# Monolith museum
+anomaly_category = {
+	key = "UHB_ANCIENT_RUINS_1_CAT"
+	desc = "UHB_ANCIENT_RUINS_1_DESC"
+	picture = GFX_evt_ancient_alien_temple
+	level = 3
+	#risk = 10
+
+	spawn_chance = {
+		modifier = {
+			add = 3
+			is_star = no
+			is_asteroid = no
+			is_ringworld = no
+			NOT = {
+				is_planet_class = pc_desert
+				is_planet_class = pc_tropical
+				is_planet_class = pc_arid
+				is_planet_class = pc_continental
+				is_planet_class = pc_ocean
+				is_planet_class = pc_tundra
+				is_planet_class = pc_arctic
+				is_planet_class = pc_gas_giant
+			}
+			FROM = { owner = { NOT = { has_country_flag = UHB_ANCIENT_RUINS_1_FLAG } } }
+			FROM = { owner = { is_borg_empire = no is_assimilator = no } }
+		}
+	}
+
+	on_spawn = {
+		from = {
+			owner = {
+				set_country_flag = UHB_ANCIENT_RUINS_1_FLAG
+			}
+		}
+	}
+
+	on_success = {
+	}
+
+	on_fail = {
+		ship_event = { id = anomaly_failure.2503 }
+	}
+
+	on_critical_fail = {
+		ship_event = { id = anomaly_failure.2603 }
+	}
+}
+
+# Derelict star chart
+anomaly_category = {
+	key = "UHB_MOLTEN_CHART_CAT"
+	desc = "UHB_MOLTEN_CHART_DESC"
+	picture = GFX_evt_underground_civilization
+	level = 2
+	#risk = 50
+
+	spawn_chance = {
+		modifier = {
+			add = 3
+			is_planet_class = pc_molten
+			FROM = { owner = { is_borg_empire = no is_assimilator = no } }
+		}
+	}
+
+	on_success = {
+	}
+
+	on_fail = {
+		ship_event = { id = anomaly_failure.2504 }
+	}
+
+	on_critical_fail = {
+		ship_event = { id = anomaly_failure.2604 }
+	}
+}
+
+# Abandoned playground
+anomaly_category = {
+	key = "GEN_PLAYGROUND_CAT"
+	desc = "GEN_PLAYGROUND_DESC"
+	picture = GFX_evt_alien_city
+	level = 2
+	#risk = 10
+
+	spawn_chance = {
+		modifier = {
+			add = 3
+			is_asteroid = no
+			is_star = no
+			is_ringworld = no
+			NOT = { is_planet_class = pc_gas_giant }
+			FROM = { owner = { NOT = { has_country_flag = GEN_PLAYGROUND_FLAG } } }
+			FROM = { owner = { is_borg_empire = no is_assimilator = no } }
+		}
+	}
+
+	on_spawn = {
+		from = { owner = { set_country_flag = GEN_PLAYGROUND_FLAG } }
+	}
+
+	on_success = {
+	}
+
+	on_fail = {
+		ship_event = { id = anomaly_failure.2535 }
+	}
+
+	on_critical_fail = {
+		ship_event = { id = anomaly_failure.2635 }
+	}
+}
+
+# Familiar shrine
+anomaly_category = {
+	key = "AST_SHRINE_1_CAT"
+	desc = "AST_SHRINE_1_DESC"
+	picture = GFX_evt_mining_station
+	level = 2
+	#risk = 10
+
+	spawn_chance = {
+		modifier = {
+			add = 3
+			is_asteroid = yes
+			FROM = {
+				owner = {
+					is_ai = no
+					NOR = {
+						species_portrait = human
+						has_country_flag = AST_SHRINE_1_FLAG
+						capital_scope.solar_system = {
+							has_star_flag = sol
+						}
+					}
+				}
+			}
+			FROM = { owner = { is_borg_empire = no is_assimilator = no } }
+		}
+	}
+
+	on_spawn = {
+		from = { owner = { set_country_flag = AST_SHRINE_1_FLAG } }
+	}
+
+	on_success = {
+	}
+
+	on_fail = {
+		ship_event = { id = anomaly_failure.2540 }
+	}
+
+	on_critical_fail = {
+		ship_event = { id = anomaly_failure.2640 }
+	}
+}
+
+# What Music They Make
+anomaly_category = {
+	key = "HBL_MUSIC_1_CAT"
+	desc = "HBL_MUSIC_1_DESC"
+	picture = GFX_evt_alien_nature
+	level = 3
+	#risk = 40
+
+	spawn_chance = {
+		modifier = {
+			add = 3
+			OR = {
+				is_planet_class = pc_desert
+				is_planet_class = pc_tropical
+				is_planet_class = pc_arid
+				is_planet_class = pc_continental
+				is_planet_class = pc_ocean
+				is_planet_class = pc_tundra
+				is_planet_class = pc_arctic
+			}
+			FROM = { owner = { is_borg_empire = no is_assimilator = no } }
+		}
+	}
+
+	on_success = {
+	}
+
+	on_fail = {
+		ship_event = { id = anomaly_failure.2545 }
+	}
+
+	on_critical_fail = {
+		ship_event = { id = anomaly_failure.2645 }
+	}
+}
+
+# Below Zro
+anomaly_category = {
+	key = "GAS_ZRO_ICE_CAT"
+	desc = "GAS_ZRO_ICE_DESC"
+	picture = GFX_evt_gas_giant
+	level = 3
+	#risk = 45
+
+	spawn_chance = {
+		modifier = {
+			add = 3
+			is_planet_class = pc_gas_giant
+			FROM = {
+				owner = {
+					has_technology = tech_physics_advanced_124 # Zro Mining
+					NOT = { has_country_flag = GAS_ZRO_ICE_FLAG }
+				}
+			}
+			FROM = { owner = { is_borg_empire = no is_assimilator = no } }
+		}
+	}
+
+	on_spawn = {
+		from = { owner = { set_country_flag = GAS_ZRO_ICE_FLAG } }
+	}
+
+	on_success = {
+	}
+
+	on_fail = {
+		ship_event = { id = anomaly_failure.2550 }
+	}
+
+	on_critical_fail = {
+		ship_event = { id = anomaly_failure.2650 }
+	}
+}
+
+# Illicit Matter
+anomaly_category = {
+	key = "AST_ILLICIT_DARK_CAT"
+	desc = "AST_ILLICIT_DARK_DESC"
+	picture = GFX_evt_asteroid_approaching_planet
+	level = 4
+	#risk = 25
+
+	spawn_chance = {
+		modifier = {
+			add = 3
+			is_asteroid = yes
+			FROM = {
+				owner = {
+					has_technology = tech_engineering_geothermal_590
+				}
+			}
+			FROM = { owner = { is_borg_empire = no is_assimilator = no } }
+		}
+	}
+
+	on_success = {
+	}
+
+	on_fail = {
+		ship_event = { id = anomaly_failure.2555 }
+	}
+
+	on_critical_fail = {
+		ship_event = { id = anomaly_failure.2655 }
+	}
+}
+
+# Purple Rain
+anomaly_category = {
+	key = "TOX_PURPLE_RAIN_CAT"
+	desc = "TOX_PURPLE_RAIN_DESC"
+	picture = GFX_evt_big_landing_ship
+	level = 4
+	#risk = 60
+
+	spawn_chance = {
+		modifier = {
+			add = 3
+			is_planet_class = pc_toxic
+			FROM = { owner = { NOT = { has_country_flag = TOX_PURPLE_RAIN_FLAG } } }
+			FROM = { owner = { is_borg_empire = no is_assimilator = no } }
+		}
+	}
+
+	on_spawn = {
+		from = {
+			owner = {
+				set_country_flag = TOX_PURPLE_RAIN_FLAG
+			}
+		}
+	}
+
+	on_success = {
+	}
+
+	on_fail = {
+		ship_event = { id = anomaly_failure.2560 }
+	}
+
+	on_critical_fail = {
+		ship_event = { id = anomaly_failure.2660 }
+	}
+}
+
+# Ecdysis Project
+anomaly_category = {
+	key = "FROZ_BASE_CAT"
+	desc = "FROZ_BASE_DESC"
+	picture = GFX_evt_outpost
+	level = 1
+	#risk = 50
+	
+	spawn_chance = {
+		modifier = {
+			add = 3
+			is_planet_class = pc_frozen
+			FROM = { owner = { NOT = { has_country_flag = FROZ_BASE_FLAG } } }
+			FROM = { owner = { is_borg_empire = no is_assimilator = no } }
+		}
+	}
+	
+	on_success = {
+	}
+	
+	on_fail = {
+		ship_event = { id = anomaly_failure.2560 }
+	}
+	
+	on_critical_fail = {
+		ship_event = { id = anomaly_failure.2665 }
+	}
+}
+
+# Nimkip
+anomaly_category = {
+	key = "TROP_PETS_CAT"
+	desc = "TROP_PETS_DESC"
+	picture = GFX_evt_alien_nature
+	level = 2
+	#risk = 20
+
+	spawn_chance = {
+		modifier = {
+			add = 3
+			is_planet_class = pc_tropical
+			FROM = { owner = { is_borg_empire = no is_assimilator = no } }
+		}
+	}
+
+	on_success = {
+	}
+
+	on_fail = {
+		ship_event = { id = anomaly_failure.2560 }
+	}
+
+	on_critical_fail = {
+		ship_event = { id = anomaly_failure.2665 }
+	}
+}
+
+# Limbo
+# anomaly_category = {
+	# key = "BARR_BASE_CAT"
+	# desc = "BARR_BASE_DESC"
+	# picture = GFX_evt_archaeological_dig
+	# level = 3
+	# risk = 30
+
+	# spawn_chance = {
+		# modifier = {
+			# add = 3
+			# is_planet_class = pc_barren
+			# FROM = { owner = { NOT = { has_country_flag = BARR_BASE_FLAG } } }
+		# }
+	# }
+
+	# on_spawn = {
+		# from = {
+			# owner = {
+				# set_country_flag = BARR_BASE_FLAG
+			# }
+		# }
+	# }
+
+	# on_success = {
+	# }
+
+	# on_fail = {
+		# ship_event = { id = anomaly_failure.2560 }
+	# }
+
+	# on_critical_fail = {
+		# ship_event = { id = anomaly_failure.2665 }
+	# }
+# }
+
+# Projecting Moon
+anomaly_category = {
+	key = "PROJ_MOON_CAT"
+	desc = "PROJ_MOON_DESC"
+	picture = GFX_evt_asteroid_approaching_planet
+	level = 2
+	#risk = 30
+
+	spawn_chance = {
+		modifier = {
+			add = 3
+			NOT = {
+				is_star = no
+				is_planet_class = pc_gas_giant
+			}
+			OR = {
+				is_planet_class = pc_toxic
+				is_planet_class = pc_barren
+				is_planet_class = pc_frozen
+				is_planet_class = pc_molten
+			}
+			has_moon = yes
+			num_moons < 2
+			any_moon = {
+				is_planet_class = pc_toxic
+				is_planet_class = pc_barren
+				is_planet_class = pc_frozen
+				is_planet_class = pc_molten
+			}
+			FROM = { owner = { is_borg_empire = no is_assimilator = no } }
+		}
+	}
+
+	on_spawn = {
+		from = { owner = { set_country_flag = PROJ_MOON_FLAG } }
+	}
+
+	on_success = {
+	}
+
+	on_fail = {
+		ship_event = { id = anomaly_failure.2560 }
+	}
+
+	on_critical_fail = {
+		ship_event = { id = anomaly_failure.2665 }
+	}
+}
+
+# Misty Shores
+anomaly_category = {
+	key = "SEA_CAT"
+	desc = "SEA_DESC"
+	picture = GFX_evt_ship_in_orbit
+	level = 1
+	#risk = 25
+
+	spawn_chance = {
+		modifier = {
+			add = 3
+			is_planet_class = pc_ocean
+			FROM = { owner = { NOT = { has_country_flag = SEA_FLAG } } }
+			FROM = { owner = { is_borg_empire = no is_assimilator = no } }
+		}
+	}
+
+	on_spawn = {
+		from = { owner = { set_country_flag = SEA_FLAG } }
+	}
+
+	on_fail = {
+		ship_event = { id = anomaly_failure.2560 }
+	}
+
+	on_critical_fail = {
+		ship_event = { id = anomaly_failure.2665 }
+	}
+}
+
+# Geothermal
+anomaly_category = {
+	key = "MOLTEN_BASE_CAT"
+	desc = "MOLTEN_BASE_DESC"
+	picture = GFX_evt_dead_city
+	level = 1
+	#risk = 30
+
+	spawn_chance = {
+		modifier = {
+			add = 3
+			is_planet_class = pc_molten
+			from = { owner = { NOT = { has_country_flag = TIMED_GEOTHERMAL } } }
+			FROM = { owner = { is_borg_empire = no is_assimilator = no } }
+		}
+	}
+
+	on_spawn = {
+		from = { owner = { set_timed_country_flag = { flag = TIMED_GEOTHERMAL days = 1800 } } }
+	}
+
+	on_success = {
+	}
+
+	on_fail = {
+		ship_event = { id = anomaly_failure.2560 }
+	}
+
+	on_critical_fail = {
+		ship_event = { id = anomaly_failure.2665 }
+	}
+}
+
+# Completely Leveled
+anomaly_category = {
+	key = "LEVELED_CAT"
+	desc = "LEVELED_DESC"
+	picture = GFX_evt_ship_in_orbit
+	level = 1
+	#risk = 60
+
+	spawn_chance = {
+		modifier = {
+			add = 3
+			OR = {
+				is_planet_class = pc_tundra
+				is_planet_class = pc_tropical
+				is_planet_class = pc_arctic
+				is_planet_class = pc_continental
+				is_planet_class = pc_arid
+				is_planet_class = pc_ocean
+			}
+			from = { owner = { NOT = { has_country_flag = TIMED_LEVELED } } }
+			FROM = { owner = { is_borg_empire = no is_assimilator = no } }
+		}
+	}
+
+
+
+	on_spawn = {
+		from = { owner = { set_timed_country_flag = { flag = TIMED_LEVELED days = 3600 } } }
+	}
+
+	on_success = {
+	}
+
+	on_fail = {
+		ship_event = { id = anomaly_failure.2560 }
+	}
+
+	on_critical_fail = {
+		ship_event = { id = anomaly_failure.2665 }
+	}
+}
+
+# Dimensional Drift
+anomaly_category = {
+	key = "DIMENSIONAL_POCKET_CAT"
+	desc = "DIMENSIONAL_POCKET_DESC"
+	picture = GFX_evt_mining_station
+	level = 3
+	#risk = 30
+
+	spawn_chance = {
+		modifier = {
+			add = 3
+			is_asteroid = yes
+			FROM = { owner = { is_borg_empire = no is_assimilator = no } }
+		}
+	}
+
+	on_success = {
+	}
+
+	on_fail = {
+		ship_event = { id = anomaly_failure.2500 }
+	}
+
+	on_critical_fail = {
+		ship_event = { id = anomaly_failure.2601 }
+	}
+}
+
+# Cornucopia
+anomaly_category = {
+	key = "HAB_CORN_CAT"
+	desc = "HAB_CORN_DESC"
+	picture = GFX_evt_ship_in_orbit
+	level = 2
+	#risk = 20
+
+	spawn_chance = {
+		modifier = {
+			add = 3
+			OR = {
+				is_planet_class = pc_tropical
+				is_planet_class = pc_continental
+				is_planet_class = pc_ocean
+			}
+			FROM = { owner = { is_borg_empire = no is_assimilator = no } }
+		}
+	}
+
+	on_success = {
+	}
+
+	on_fail = {
+		ship_event = { id = anomaly_failure.2560 }
+	}
+
+	on_critical_fail = {
+		ship_event = { id = anomaly_failure.2665 }
+	}
+}
+
+# Raw Materials
+anomaly_category = {
+	key = "HAB_MAT_CAT"
+	desc = "HAB_MAT_DESC"
+	picture = GFX_evt_ship_in_orbit
+	level = 2
+	#risk = 20
+
+	spawn_chance = {
+		modifier = {
+			add = 3
+			OR = {
+				is_planet_class = pc_tropical
+				is_planet_class = pc_continental
+				is_planet_class = pc_arid
+			}
+			FROM = { owner = { is_borg_empire = no is_assimilator = no } }
+		}
+	}
+
+	on_success = {
+	}
+
+	on_fail = {
+		ship_event = { id = anomaly_failure.2560 }
+	}
+
+	on_critical_fail = {
+		ship_event = { id = anomaly_failure.2665 }
+	}
+}
+
+# Shadow Play
+anomaly_category = {
+	key = "ATM_ANOMALY_CAT"
+	desc = "ATM_ANOMALY_DESC"
+	picture = GFX_evt_ship_in_orbit
+	level = 2
+	#risk = 20
+
+	spawn_chance = {
+		modifier = {
+			add = 3
+			is_asteroid = no
+			is_star = no
+			is_ringworld = no
+			NOT = {
+				is_planet_class = pc_gas_giant
+				is_planet_class = pc_desert
+				is_planet_class = pc_tropical
+				is_planet_class = pc_arid
+				is_planet_class = pc_continental
+				is_planet_class = pc_ocean
+				is_planet_class = pc_tundra
+				is_planet_class = pc_arctic
+			}
+			FROM = { owner = { is_borg_empire = no is_assimilator = no } }
+		}
+	}
+
+	on_success = {
+	}
+
+	on_fail = {
+		ship_event = { id = anomaly_failure.2560 }
+	}
+
+	on_critical_fail = {
+		ship_event = { id = anomaly_failure.2665 }
+	}
+}
+
+# Grimacing
+anomaly_category = {
+	key = "FRBR_GRIMACING_CAT"
+	desc = "FRBR_GRIMACING_DESC"
+	picture = GFX_evt_warm_barren
+	level = 3
+	#risk = 30
+
+	spawn_chance = {
+		modifier = {
+			add = 3
+			is_planet_class = pc_barren
+			planet_size < 26
+			FROM = { owner = { is_borg_empire = no is_assimilator = no } }
+		}
+	}
+
+	on_success = {
+	}
+
+	on_fail = {
+		ship_event = { id = anomaly_failure.2560 }
+	}
+
+	on_critical_fail = {
+		ship_event = { id = anomaly_failure.2665 }
+	}
+}
+
+# Ice Lit
+anomaly_category = {
+	key = "FROZ_ILLUMINATED_CAT"
+	desc = "FROZ_ILLUMINATED_DESC"
+	picture = GFX_evt_frozen
+	level = 2
+	#risk = 35
+
+	spawn_chance = {
+		modifier = {
+			add = 3
+			is_planet_class = pc_frozen
+			from = {
+				owner = {
+					has_technology = tech_lasers_1
+					NOT = {
+						has_technology = tech_lasers_3
+						has_technology = tech_lasers_4
+						has_technology = tech_lasers_5
+					}
+				}
+			}
+			FROM = { owner = { is_borg_empire = no is_assimilator = no } }
+		}
+	}
+
+	on_success = {
+	}
+
+	on_fail = {
+		ship_event = { id = anomaly_failure.2560 }
+	}
+
+	on_critical_fail = {
+		ship_event = { id = anomaly_failure.2665 }
+	}
+}
+
+# Deceptive Giant
+anomaly_category = {
+	key = "GAS_CLOUDY_CAT"
+	desc = "GAS_CLOUDY_DESC"
+	picture = GFX_evt_gas_giant
+	level = 1
+	#risk = 30
+
+	spawn_chance = {
+		modifier = {
+			add = 3
+			is_planet_class = pc_gas_giant
+			FROM = { owner = { is_borg_empire = no is_assimilator = no } }
+		}
+	}
+
+	on_success = {
+	}
+
+	on_fail = {
+		ship_event = { id = anomaly_failure.2560 }
+	}
+
+	on_critical_fail = {
+		ship_event = { id = anomaly_failure.2665 }
+	}
+}
+
+# Eden Overrun
+anomaly_category = {
+	key = "GAIA_MOVE_CAT"
+	desc = "GAIA_MOVE_DESC"
+	picture = GFX_evt_alien_nature
+	level = 2
+	#risk = 15
+
+	spawn_chance = {
+		modifier = {
+			add = 3
+			is_planet_class = pc_gaia
+			FROM = { owner = { is_borg_empire = no is_assimilator = no } }
+		}
+	}
+
+	on_success = {
+	}
+
+	on_fail = {
+		ship_event = { id = anomaly_failure.2560 }
+	}
+
+	on_critical_fail = {
+		ship_event = { id = anomaly_failure.2665 }
+	}
+}
+
+# Olfactory
+anomaly_category = {
+	key = "FROZ_BOX_CAT"
+	desc = "FROZ_BOX_DESC"
+	picture = GFX_evt_frozen
+	level = 1
+	#risk = 30
+
+	spawn_chance = {
+		modifier = {
+			add = 3
+			is_planet_class = pc_frozen
+			FROM = { owner = { is_borg_empire = no is_assimilator = no } }
+		}
+	}
+
+	on_success = {
+	}
+
+	on_fail = {
+		ship_event = { id = anomaly_failure.2560 }
+	}
+
+	on_critical_fail = {
+		ship_event = { id = anomaly_failure.2665 }
+	}
+}
+
+# Ultimate Weapon
+anomaly_category = {
+	key = "CONT_SIGNS_CAT"
+	desc = "CONT_SIGNS_DESC"
+	picture = GFX_evt_alien_city
+	level = 2
+	#risk = 40
+
+	spawn_chance = {
+		modifier = {
+			add = 3
+			OR = {
+				is_planet_class = pc_continental
+				is_planet_class = pc_tropical
+				is_planet_class = pc_tundra
+			}
+			FROM = { owner = { is_borg_empire = no is_assimilator = no } }
+		}
+	}
+
+	on_success = {
+	}
+
+	on_fail = {
+		ship_event = { id = anomaly_failure.2560 }
+	}
+
+	on_critical_fail = {
+		ship_event = { id = anomaly_failure.2665 }
+	}
+}
+
+# Mineral Factorial
+anomaly_category = {
+	key = "FROZ_BASE2_CAT"
+	desc = "FROZ_BASE2_DESC"
+	picture = GFX_evt_arctic
+	level = 2
+	#risk = 30
+
+	spawn_chance = {
+		modifier = {
+			add = 3
+			is_planet_class = pc_arctic
+			FROM = { owner = { is_borg_empire = no is_assimilator = no } }
+		}
+	}
+
+	on_success = {
+	}
+
+	on_fail = {
+		ship_event = { id = anomaly_failure.2560 }
+	}
+
+	on_critical_fail = {
+		ship_event = { id = anomaly_failure.2665 }
+	}
+}
+
+# Asteroid Crater
+anomaly_category = {
+	key = "AST_CRATER_CAT"
+	desc = "AST_CRATER_DESC"
+	picture = GFX_evt_asteroid_approaching_planet
+	level = 1
+	#risk = 30
+
+	spawn_chance = {
+		modifier = {
+			add = 3
+			is_asteroid = yes
+			FROM = { owner = { is_borg_empire = no is_assimilator = no } }
+		}
+	}
+
+	on_success = {
+	}
+
+	on_fail = {
+		ship_event = { id = anomaly_failure.2560 }
+	}
+
+	on_critical_fail = {
+		ship_event = { id = anomaly_failure.2665 }
+	}
+}
+
+# Failed Colony
+anomaly_category = {
+	key = "BAR_COLONY_CAT"
+	desc = "BAR_COLONY_DESC"
+	picture = GFX_evt_warm_barren
+	level = 3
+	#risk = 30
+
+	spawn_chance = {
+		modifier = {
+			add = 3
+			is_planet_class = pc_barren
+			FROM = { owner = { is_borg_empire = no is_assimilator = no } }
+		}
+	}
+
+	on_success = {
+	}
+
+	on_fail = {
+		ship_event = { id = anomaly_failure.2560 }
+	}
+
+	on_critical_fail = {
+		ship_event = { id = anomaly_failure.2665 }
+	}
+}
+
+# Toxic Materials
+anomaly_category = {
+	key = "TOX_MAT_CAT"
+	desc = "TOX_MAT_DESC"
+	picture = GFX_evt_toxic
+	level = 1
+	#risk = 35
+
+	spawn_chance = {
+		modifier = {
+			add = 3
+			is_planet_class = pc_toxic
+			FROM = { owner = { is_borg_empire = no is_assimilator = no } }
+		}
+	}
+
+	on_success = {
+	}
+
+	on_fail = {
+		ship_event = { id = anomaly_failure.2560 }
+	}
+
+	on_critical_fail = {
+		ship_event = { id = anomaly_failure.2665 }
+	}
+}
+
+# Mineral Cluster
+anomaly_category = {
+	key = "AST_CLUSTER_CAT"
+	desc = "AST_CLUSTER_DESC"
+	picture = GFX_evt_mining_station
+	level = 2
+	#risk = 20
+
+	spawn_chance = {
+		modifier = {
+			add = 3
+			is_asteroid = yes
+			FROM = { owner = { is_borg_empire = no is_assimilator = no } }
+		}
+	}
+
+	on_success = {
+
+	}
+
+	on_fail = {
+		ship_event = { id = anomaly_failure.2560 }
+	}
+
+	on_critical_fail = {
+		ship_event = { id = anomaly_failure.2665 }
+	}
+}
+
+# Checkered Gaea
+anomaly_category = {
+	key = "GAEA_CHECKERED_CAT"
+	desc = "GAEA_CHECKERED_DESC"
+	picture = GFX_evt_ship_in_orbit
+	level = 2
+	#risk = 20
+
+	spawn_chance = {
+		modifier = {
+			add = 3
+			is_planet_class = pc_gaia
+			FROM = { owner = { is_borg_empire = no is_assimilator = no } }
+		}
+	}
+
+	on_success = {
+	}
+
+	on_fail = {
+		ship_event = { id = anomaly_failure.2560 }
+	}
+
+	on_critical_fail = {
+		ship_event = { id = anomaly_failure.2665 }
+	}
+}
+
+# Parked Ship
+anomaly_category = {
+	key = "GEN_ABANDONED_SHIP_CAT"
+	desc = "GEN_ABANDONED_SHIP_DESC"
+	picture = GFX_evt_landing_ship
+	level = 4
+	#risk = 25
+
+	spawn_chance = {
+		modifier = {
+			add = 3
+			OR = {
+				is_planet_class = pc_continental
+				is_planet_class = pc_arid
+			}
+			FROM = { owner = { is_borg_empire = no is_assimilator = no } }
+		}
+	}
+
+	on_success = {
+	}
+
+	on_fail = {
+		ship_event = { id = anomaly_failure.2560 }
+	}
+
+	on_critical_fail = {
+		ship_event = { id = anomaly_failure.2665 }
+	}
+}
+
+# Taking Stock
+anomaly_category = {
+	key = "GEN_DESERT_CAT"
+	desc = "GEN_DESERT_DESC"
+	picture = GFX_evt_landing_ship
+	level = 2
+	#risk = 30
+
+	spawn_chance = {
+		modifier = {
+			add = 3
+			is_planet_class = pc_desert
+			FROM = { owner = { is_borg_empire = no is_assimilator = no } }
+		}
+	}
+
+	on_success = {
+	}
+
+	on_fail = {
+		ship_event = { id = anomaly_failure.2560 }
+	}
+
+	on_critical_fail = {
+		ship_event = { id = anomaly_failure.2665 }
+	}
+}
+
+# Grinding Lattice
+anomaly_category = {
+	key = "TOX_STRUCTURES_CAT"
+	desc = "TOX_STRUCTURES_DESC"
+	picture = GFX_evt_toxic
+	level = 4
+	#risk = 15
+
+	spawn_chance = {
+		modifier = {
+			add = 3
+			is_planet_class = pc_toxic
+			FROM = { owner = { is_borg_empire = no is_assimilator = no } }
+		}
+	}
+
+	on_success = {
+	}
+
+	on_fail = {
+		ship_event = { id = anomaly_failure.2560 }
+	}
+
+	on_critical_fail = {
+		ship_event = { id = anomaly_failure.2665 }
+	}
+}
+
+# Wooden Hegemony
+anomaly_category = {
+	key = "TROP_WOODS_CAT"
+	desc = "TROP_WOODS_DESC"
+	picture = GFX_evt_tropical
+	level = 2
+	#risk = 40
+
+	spawn_chance = {
+		modifier = {
+			add = 3
+			is_planet_class = pc_tropical
+			FROM = { owner = { is_borg_empire = no is_assimilator = no } }
+		}
+	}
+	
+	on_fail = {
+		ship_event = { id = anomaly_failure.2560 }
+	}
+
+	on_critical_fail = {
+		ship_event = { id = anomaly_failure.2665 }
+	}
+}
+
+# Black Hole Readings
+anomaly_category = {
+	key = "HOLE_RADIATION_CAT"
+	desc = "HOLE_RADIATION_DESC"
+	picture = GFX_evt_black_hole
+	level = 3
+	#risk = 30
+
+	spawn_chance = {
+		modifier = {
+			add = 3
+			is_star_class = sc_black_hole
+			FROM = { owner = { is_borg_empire = no is_assimilator = no } }
+		}
+	}
+
+	on_fail = {
+		ship_event = { id = anomaly_failure.2560 }
+	}
+
+	on_critical_fail = {
+		ship_event = { id = anomaly_failure.2665 }
+	}
+}
+
+# The Ransomeers
+anomaly_category = {
+	key = "UHB_BUOY_CAT"
+	desc = "UHB_BUOY_DESC"
+	picture = GFX_evt_satellite_in_orbit
+	level = 2
+	#risk = 40
+
+	spawn_chance = {
+		modifier = {
+			add = 3
+			is_planet_class = pc_toxic
+			is_planet_class = pc_barren_cold
+			is_planet_class = pc_barren
+			is_planet_class = pc_frozen
+			is_planet_class = pc_nuked
+			from = {
+				owner = {
+					has_country_flag = birth_of_piracy
+					NOT = { has_country_flag = ransomeer_event }
+				}
+			}
+			FROM = { owner = { is_borg_empire = no is_assimilator = no } }
+		}
+	}
+
+	on_spawn = {
+		from = {
+			owner = {
+				set_country_flag = ransomeer_event
+			}
+		}
+	}
+
+	on_fail = {
+		ship_event = { id = anomaly_failure.2560 }
+	}
+
+	on_critical_fail = {
+		ship_event = { id = anomaly_failure.2665 }
+	}
+}
+
+# Ancient Battlefield
+anomaly_category = {
+	key = "GAIA_RECORD_CAT"
+	desc = "GAIA_RECORD_DESC"
+	picture = GFX_evt_alien_ruins
+	level = 4
+	#risk = 40
+
+	spawn_chance = {
+		modifier = {
+			add = 3
+			is_planet_class = pc_gaia
+			is_planet_class = pc_continental
+			from = {
+				owner = {
+					NOT = { has_country_flag = ancient_alliance_event }
+				}
+			}
+			FROM = { owner = { is_borg_empire = no is_assimilator = no } }
+		}
+	}
+
+	on_spawn = {
+		from = {
+			owner = {
+				set_country_flag = ancient_alliance_event
+			}
+		}
+	}
+
+	on_fail = {
+		ship_event = { id = anomaly_failure.2560 }
+	}
+
+	on_critical_fail = {
+		ship_event = { id = anomaly_failure.2665 }
+	}
+}
+
+# Abandoned Mining Drone processing station
+anomaly_category = {
+	key = "CRYSTAL_MANUFACTORY_CAT"
+	desc = "CRYSTAL_MANUFACTORY_DESC"
+	picture = GFX_evt_mining_station
+	level = 2
+	#risk = 30
+
+	spawn_chance = {
+		modifier = {
+			add = 0
+			FROM = { owner = { is_borg_empire = no is_assimilator = no } }
+		}
+	}
+
+	on_spawn = {
+	}
+
+	on_fail = {
+		ship_event = { id = anomaly_failure.2670 }
+	}
+
+	on_critical_fail = {}
+}

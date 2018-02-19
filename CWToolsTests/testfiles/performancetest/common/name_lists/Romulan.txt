@@ -1,0 +1,111 @@
+﻿### Romulan Star Empire
+Romulan = {
+	randomized = no
+
+	ship_names = {
+		generic = {
+			"Shagus" "Grinselius" "Swiselas" "Walshicus" "Matixas" "Aj'rmr" "Belak" "D'ridthau" "Decius" "Dividices" "Devoras" "Harelax" "Genorex" "Haakona" "Khazara" "Koderex" "Makar" "Narada" "Precetor" "Scimitar" "T'Met" "T'Tpalok" "Talvath" "Terix" "Tomal" "Valdore" "T'liss" "T'varo" "Dhelan" "Dhael" "Mogai" "D'deridex" "D'ridthau" "Ar'Kif" "Ha'feh" "Ha'apax" "Daeinos" "Ha'nom" "Faeht" "Shamshir" "Tulwar" "Khaiell" "Kara" "Jaeih" "D'Khellra" "Jhu'aek" "Deihu" "Okhala" "Malem" "Vastam" "Morrigu" "Khopesh" "Falchion" "D'renet" "D'retex" "D'ridren" "R'derex" "R'tan" "D'dredar"
+		}
+		corvette = {
+		}
+		saber = {
+		}
+		sovereign = {
+		}
+		steamrunner = {
+		}		
+		adv_cruiser = {
+		}
+		strike = {
+		}		
+		constructor = { 
+		"Architecti Auxilia" "Architeci Cordia" "Architeci Castell" "Architeci Caglia" "Architeci Colonia" "Architeci Soluni" "Architeci Calcari" "Architeci D'Khell" "Architeci D'ridensca" "Architeci D'retell" "Architeci Sciacaenina" "Architeci Durocoria" "Architeci Decium" "Architeci Montinum" "Architeci Daedar" "Architeci Vennata" "Architeci Cefala" "Architeci Walshicum" "Architeci Tusculamium" "Architeci Coridreda" "Architeci Chieria" "Architeci Ardotagenoa" "Architeci Navennatan" "Architeci Belas" "Architeci Jaeihu" "Architeci Talvatriano" "Architeci Entium" "Architeci Anaventum" "Architeci Dhelandate" "Architeci Precetorton" "Architeci Concorium" "Architeci Durocordia" "Architeci Segontinum" "Architeci Conda" "Architeci D'derex" "Architeci Forum" "Architeci Ventempedar" "Architeci Durovillae" "Architeci Camerix" "Architeci Dubraevagna" "Architeci Letorton" "Architeci Gabiae" "Architeci Banna" "Architeci Durolica" "Architeci Bevath" "Architeci Evidices" "Architeci Stabii" "Architeci Durovia" "Architeci Daeihu" "Architeci Swisell" "Architeci Tusca" "Architeci Verulan" "Architeci Brutum" "Architeci Naconcangis" "Architeci Khaiellae" "Architeci Vindolaneum" "Architeci Soluna" "Architeci Curinium" "Architeci Londinis" "Architeci Mediolanda" "Architeci Misenoa" "Architeci Misentum" "Architeci Mamucius" "Architeci Apiolandate" "Architeci Teria" "Architeci Ricum" "Architeci Tusfelia" "Architeci Varomago" "Architeci Walshir" "Architeci Horton" "Architeci Torres" "Architeci Evidex" "Architeci Bevagnia" "Architeci Coridren" "Architeci Etrurin" "Architeci Verulaneum" "Architeci Calcaricina" "Architeci Olitum" "Architeci Gerex" "Architeci Colonda" "Architeci Coloniacate" "Architeci Dhellra" "Architeci Vinos" "Architeci Regula" "Architeci Salius" "Architeci D'Khelas" "Architeci Sciacae" "Architeci Durolicana" "Architeci Hercell" "Architeci Condinis" "Architeci Olica" "Architeci Potentium" "Architeci Letor" "Architeci Valdorex" "Architeci Loniacae" "Architeci Casti" "Architeci Dividex" "Architeci Petelseprio" "Architeci Durocorium" "Architeci Koderix" "Architeci Regillusca" 
+		}
+		colonizer = { 
+		"Coloni Auxilia" "Coloni Cordia" "Coloni Castell" "Coloni Caglia" "Coloni Colonia" "Coloni Soluni" "Coloni Calcari" "Coloni D'Khell" "Coloni D'ridensca" "Coloni D'retell" "Coloni Sciacaenina" "Coloni Durocoria" "Coloni Decium" "Coloni Montinum" "Coloni Daedar" "Coloni Vennata" "Coloni Cefala" "Coloni Walshicum" "Coloni Tusculamium" "Coloni Coridreda" "Coloni Chieria" "Coloni Ardotagenoa" "Coloni Navennatan" "Coloni Belas" "Coloni Jaeihu" "Coloni Talvatriano" "Coloni Entium" "Coloni Anaventum" "Coloni Dhelandate" "Coloni Precetorton" "Coloni Concorium" "Coloni Durocordia" "Coloni Segontinum" "Coloni Conda" "Coloni D'derex" "Coloni Forum" "Coloni Ventempedar" "Coloni Durovillae" "Coloni Camerix" "Coloni Dubraevagna" "Coloni Letorton" "Coloni Gabiae" "Coloni Banna" "Coloni Durolica" "Coloni Bevath" "Coloni Evidices" "Coloni Stabii" "Coloni Durovia" "Coloni Daeihu" "Coloni Swisell" "Coloni Tusca" "Coloni Verulan" "Coloni Brutum" "Coloni Naconcangis" "Coloni Khaiellae" "Coloni Vindolaneum" "Coloni Soluna" "Coloni Curinium" "Coloni Londinis" "Coloni Mediolanda" "Coloni Misenoa" "Coloni Misentum" "Coloni Mamucius" "Coloni Apiolandate" "Coloni Teria" "Coloni Ricum" "Coloni Tusfelia" "Coloni Varomago" "Coloni Walshir" "Coloni Horton" "Coloni Torres" "Coloni Evidex" "Coloni Bevagnia" "Coloni Coridren" "Coloni Etrurin" "Coloni Verulaneum" "Coloni Calcaricina" "Coloni Olitum" "Coloni Gerex" "Coloni Colonda" "Coloni Coloniacate" "Coloni Dhellra" "Coloni Vinos" "Coloni Regula" "Coloni Salius" "Coloni D'Khelas" "Coloni Sciacae" "Coloni Durolicana" "Coloni Hercell" "Coloni Condinis" "Coloni Olica" "Coloni Potentium" "Coloni Letor" "Coloni Valdorex" "Coloni Loniacae" "Coloni Casti" "Coloni Dividex" "Coloni Petelseprio" "Coloni Durocorium" "Coloni Koderix" "Coloni Regillusca" 
+		}
+		science = { 
+		"Explorates Cordia" "Explorates Castell" "Explorates Caglia" "Explorates Colonia" "Explorates Soluni" "Explorates Calcari" "Explorates D'Khell" "Explorates D'ridensca" "Explorates D'retell" "Explorates Sciacaenina" "Explorates Durocoria" "Explorates Decium" "Explorates Montinum" "Explorates Daedar" "Explorates Vennata" "Explorates Cefala" "Explorates Walshicum" "Explorates Tusculamium" "Explorates Coridreda" "Explorates Chieria" "Explorates Ardotagenoa" "Explorates Navennatan" "Explorates Belas" "Explorates Jaeihu" "Explorates Talvatriano" "Explorates Entium" "Explorates Anaventum" "Explorates Dhelandate" "Explorates Precetorton" "Explorates Concorium" "Explorates Durocordia" "Explorates Segontinum" "Explorates Conda" "Explorates D'derex" "Explorates Forum" "Explorates Ventempedar" "Explorates Durovillae" "Explorates Camerix" "Explorates Dubraevagna" "Explorates Letorton" "Explorates Gabiae" "Explorates Banna" "Explorates Durolica" "Explorates Bevath" "Explorates Evidices" "Explorates Stabii" "Explorates Durovia" "Explorates Daeihu" "Explorates Swisell" "Explorates Tusca" "Explorates Verulan" "Explorates Brutum" "Explorates Naconcangis" "Explorates Khaiellae" "Explorates Vindolaneum" "Explorates Soluna" "Explorates Curinium" "Explorates Londinis" "Explorates Mediolanda" "Explorates Misenoa" "Explorates Misentum" "Explorates Mamucius" "Explorates Apiolandate" "Explorates Teria" "Explorates Ricum" "Explorates Tusfelia" "Explorates Varomago" "Explorates Walshir" "Explorates Horton" "Explorates Torres" "Explorates Evidex" "Explorates Bevagnia" "Explorates Coridren" "Explorates Etrurin" "Explorates Verulaneum" "Explorates Calcaricina" "Explorates Olitum" "Explorates Gerex" "Explorates Colonda" "Explorates Coloniacate" "Explorates Dhellra" "Explorates Vinos" "Explorates Regula" "Explorates Salius" "Explorates D'Khelas" "Explorates Sciacae" "Explorates Durolicana" "Explorates Hercell" "Explorates Condinis" "Explorates Olica" "Explorates Potentium" "Explorates Letor" "Explorates Valdorex" "Explorates Loniacae" "Explorates Casti" "Explorates Dividex" "Explorates Petelseprio" "Explorates Durocorium" "Explorates Koderix" "Explorates Regillusca"
+		}
+		transport = { "Legionary Transport" }
+		outpost_station = {
+			sequential_name = "Frontier Outpost"
+		}
+	}
+	ship_class_names = {
+		corvette = { T'Liss }
+		saber = { Kara }
+		sovereign = { Malem }
+		steamrunner = { D'retex }
+		adv_cruiser = { D'Deridex }
+		strike = { Mogai }
+	}
+
+	fleet_names = {
+		sequential_name = "%O% Fleet"
+	}
+	
+	army_names = {
+		defense_army = {
+			sequential_name = "%O% Guard"
+		}
+		assault_army = {
+			sequential_name = "%O% Legion"
+		}
+		slave_army = {
+			sequential_name = "%O% Indentured Legion"
+		}
+		clone_army = { 
+			sequential_name = "%O% Clone Legion"
+		}
+		robotic_army = {
+			sequential_name = "%O% Mechanical Legion"
+		}
+		android_army = {
+			sequential_name = "%O% Synthetic Legion"
+		}
+		psionic_army = { 
+			sequential_name = "%O% Psi Legion"
+		}
+		xenomorph_army = {
+			sequential_name = "%O% Bio-Warfare Legion"
+		}
+		gene_warrior_army = {
+			sequential_name = "%O% Bio-Engineered Legion"
+		}
+	}
+
+	planet_names = {
+		generic = {
+			names = {
+			}
+		}
+	}
+
+
+	### CHARACTERS
+
+	character_names = {
+		names1 = {
+			weight = 100
+			first_names_male = {		
+				Aehkhifv Aerv Aev Argelian Chavek Deletham Delon Dhiemm D'Nal Ejiul Fveirrolh Galan Giellun Hanaj Hatham H'daen Hexce Hirl Havraha Hexce Hvaid Kalabam Kaol Khaiel Khiy Khoal Lai Lhaerrh Lhaes Llhran Maec Maiell Maiek Mandukar Miral Nnerhin Nniol Nuhir Nveid Rh'vaurek R'Imus Saren S'harien S'auen S'Talon S'Task S'Tcaevra S'Ten S'Tev Stelam S'Tokkr Taev Takaram T'maekh Vaebn Terrh Vrih Yhea
+			}
+			first_names_female = {
+				Ael Aidoann Ariennye Arrenhe Arrhae D'Elon Dhael Dhivael D'Ral Ecural Ekkhae Eviess Hannam Hloal Jaeih Ihho Isha Jaeih Jhu Latta Llaiir LLuni Mhai Mnheia N'alae Nalah Nn'khiy Nuhir Rhhaein Rhian Rhiana Ro'Wena Saeihr S'anra Shiarrael Sienae Sindari Ssaedhe S'Tarleya Teelis Thue T'Manda T'Rehu Verelan
+			}
+			second_names = {
+				Aenikh Aelhih Aieme Aimne Annhwi Barel Dharvanek Cretak D'Amarok D'mora D'varo Dar Deletham Dorek`a Donatra Ehhelih Gaius Galathon Hdaen Hiren Hheinia Hrienth Hwaehrai Hwaerianh Hwersuil Illialhlae Ieithoedd Jhaelaa Jomar Jo'rek Kassus Kayton Keirianh Keras Khellian Khev Khnialmnae Kota Koval Lareth Letant Lhaihtrha Lhoell Liorae-sihaer Llhweiir Llweii Louris Lovok Maec Maelrok Marrus Mas Mendak Merek Mirok Movar Nanclus Neral N'Vek Othan Pardek Parthok Qellar R'Mor Raaik Raedheol Rahaen'fvil Ralaa Rehu Riuurren Rllaillieu Ruwon Rylov Sahen Sarine Sela Sirol Solos Solius Sullan Suran Tal'Aura Tela Terik Terrh'vnau Tomalak Tovan Valdran Velal Vreenak Xereth
+			}
+			regnal_first_names_male = {
+				Aehkhifv Aerv Aev Argelian Chavek Deletham Delon Dhiemm D'Nal Ejiul Fveirrolh Galan Giellun Hanaj Hatham H'daen Hexce HHirl Havraha Hexce Hvaid Kalabam Kaol Khaiel Khiy Khoal Lai Lhaerrh Lhaes Llhran Maec Maiell Maiek Mandukar Miral Nnerhin Nniol Nuhir Nveid Rh'vaurek R'Imus Saren S'harien S'auen S'Talon S'Task S'Tcaevra S'Ten S'Tev Stelam S'Tokkr Taev Takaram T'maekh Vaebn Terrh Vrih Yhea
+			}
+			regnal_first_names_female = {
+				Ael Aidoann Ariennye Arrenhe Arrhae D'Elon Dhael Dhivael D'Ral Ecural Ekkhae Eviess Hannam Hloal Jaeih Ihho Isha Jaeih Jhu Latta Llaiir LLuni Mhai Mnheia N'alae Nalah Nn'khiy Nuhir Rhhaein Rhian Rhiana Ro'Wena Saeihr S'anra Shiarrael Sienae Sindari Ssaedhe S'Tarleya Teelis Thue T'Manda T'Rehu Verelan
+			}
+			regnal_second_names = {
+				Aenikh Aelhih Aieme Aimne Annhwi Barel Dharvanek Cretak D'Amarok D'mora D'varo Dar Deletham Dorek`a Donatra Ehhelih Gaius Galathon Hdaen Hiren Hheinia Hrienth Hwaehrai Hwaerianh Hwersuil Illialhlae Ieithoedd Jhaelaa Jomar Jo'rek Kassus Kayton Keirianh Keras Khellian Khev Khnialmnae Kota Koval Lareth Letant Lhaihtrha Lhoell Liorae-sihaer Llhweiir Llweii Louris Lovok Maec Maelrok Marrus Mas Mendak Merek Mirok Movar Nanclus Neral N'Vek Othan Pardek Parthok Qellar R'Mor Raaik Raedheol Rahaen'fvil Ralaa Rehu Riuurren Rllaillieu Ruwon Rylov Sahen Sarine Sela Sirol Solos Solius Sullan Suran Tal'Aura Tela Terik Terrh'vnau Tomalak Tovan Valdran Velal Vreenak Xereth
+			}
+		}
+	}
+}

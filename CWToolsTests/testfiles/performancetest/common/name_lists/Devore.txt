@@ -1,0 +1,97 @@
+﻿### Devore by EHKodiak
+Devore = {
+	randomized = no
+
+	ship_names = {
+		generic = {
+		Manticle Shorale Manthem Fetter Shackal Fastnor Restrictor Carcerator Restrainer Confinor Constrainor Hoblor Holdor Chainment Hindrance Trammel Trapor Brackle Ligator Litigat Judical
+		}
+		corvette = {
+		}
+		saber = {
+		}
+		sovereign = {
+		}
+		steamrunner = {
+		}		
+		adv_cruiser = {
+		}
+		strike = {
+		}	
+		constructor = { }
+		colonizer = { }
+		science = { }
+		transport = { }
+		outpost_station = {
+			sequential_name = "Frontier Outpost"
+		}
+	}
+
+	fleet_names = {
+		sequential_name = "%O% Fleet"
+	}
+	
+	army_names = {
+		defense_army = {
+			sequential_name = "%O% Guard"
+		}
+		assault_army = {
+			sequential_name = "%O% Defence Force"
+		}
+		slave_army = {
+			sequential_name = "%O% Indentured Defence Force"
+		}
+		clone_army = { 
+			sequential_name = "%O% Clone Defence Force"
+		}
+		robotic_army = {
+			sequential_name = "%O% Mechanical Defence Force"
+		}
+		android_army = {
+			sequential_name = "%O% Synthetic Defence Force"
+		}
+		psionic_army = { 
+			sequential_name = "%O% Psi Defence Force"
+		}
+		xenomorph_army = {
+			sequential_name = "%O% Bio-Warfare Defence Force"
+		}
+		gene_warrior_army = {
+			sequential_name = "%O% Bio-Engineered Defence Force"
+		}
+	}
+
+	planet_names = {
+		generic = {
+			names = { 
+			}
+		}
+	}
+
+
+	### CHARACTERS Devore names are seemingly stolen from Star Wars because Voyager writers suck
+
+	character_names = {
+		names1 = {
+			weight = 40
+			first_names_male = {
+			Kashyk Prax Nabo Mustafa Hoath Dagoba Endo Tatoon Kamin Jakko Dantoon Eadu Geonos Beespin Malastar Hutt Ondero Korrib Mandalor Rodia Rylot Scarif Trandosh Umbar Yavi
+			}
+			first_names_female = {
+			Corusca Anoa Cantoni Akiv Aldera Chandria Corell Dathom Feliucia Florru Kesse Lotha Korriba Moraba Yavi Umba Trando Scari Rylo Rodi Manda Mandalo Horri Korri Ornde
+			}
+			second_names = {
+			" "
+			}
+			regnal_first_names_male = {
+			Kashyk Prax Nabo Mustafa Hoath Dagoba Endo Tatoon Kamin Jakko Dantoon Eadu Geonos Beespin Malastar Hutt Ondero Korrib Mandalor Rodia Rylot Scarif Trandosh Umbar Yavi
+			}
+			regnal_first_names_female = {
+			Corusca Anoa Cantoni Akiv Aldera Chandria Corell Dathom Feliucia Florru Kesse Lotha Korriba Moraba Yavi Umba Trando Scari Rylo Rodi Manda Mandalo Horri Korri Ornde
+			}
+			regnal_second_names = {
+			" "
+			}
+		}
+	}
+}

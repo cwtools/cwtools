@@ -1,0 +1,3739 @@
+# Micro-Fusion Thrusters (Patrol Frigate)
+utility_component_template = {
+  key = "REQUIRED_THRUSTERS_0_PF"
+  size = small
+  icon = "GFX_ship_part_Required_Thruster_0"
+  icon_frame = 1
+  power = -5
+  cost = 5
+  size_restriction = { corvette }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_THRUSTERS_1A_PF"
+  ship_modifier = {     }
+  modifier = {     }
+  ai_weight = { weight = 1 }
+  prerequisites = { "tech_thrusters_1" }
+  component_set = "required_thrusters"
+}
+# Micro-Fusion Thrusters (Destroyer)
+utility_component_template = {
+  key = "REQUIRED_THRUSTERS_0_DE"
+  size = small
+  icon = "GFX_ship_part_Required_Thruster_0"
+  icon_frame = 1
+  power = -10
+  cost = 5
+  size_restriction = { saber }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_THRUSTERS_1A_DE"
+  ship_modifier = {     }
+  modifier = {     }
+  ai_weight = { weight = 1 }
+  prerequisites = { "tech_thrusters_1" }
+  component_set = "required_thrusters"
+}
+# Micro-Fusion Thrusters (Cruiser/Sphere)
+utility_component_template = {
+  key = "REQUIRED_THRUSTERS_0_CR"
+  size = small
+  icon = "GFX_ship_part_Required_Thruster_0"
+  icon_frame = 1
+  power = -20
+  cost = 20
+  size_restriction = { sovereign borg_sphere }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_THRUSTERS_1A_CR"
+  ship_modifier = {     }
+  modifier = {     }
+  ai_weight = { weight = 1 }
+  prerequisites = { "tech_thrusters_1" }
+  component_set = "required_thrusters"
+}
+# Micro-Fusion Thrusters (Battlecruiser/Diamond)
+utility_component_template = {
+  key = "REQUIRED_THRUSTERS_0_BC"
+  size = small
+  icon = "GFX_ship_part_Required_Thruster_0"
+  icon_frame = 1
+  power = -10
+  cost = 10
+  size_restriction = { steamrunner borg_diamond }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_THRUSTERS_1A_BC"
+  ship_modifier = {     }
+  modifier = {     }
+  ai_weight = { weight = 1 }
+  prerequisites = { "tech_thrusters_1" }
+  component_set = "required_thrusters"
+}
+# Micro-Fusion Thrusters (Battleship)
+utility_component_template = {
+  key = "REQUIRED_THRUSTERS_0_BS"
+  size = small
+  icon = "GFX_ship_part_Required_Thruster_0"
+  icon_frame = 1
+  power = -25
+  cost = 25
+  size_restriction = { adv_cruiser }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_THRUSTERS_1A_BS"
+  ship_modifier = {     }
+  modifier = {     }
+  ai_weight = { weight = 1 }
+  prerequisites = { "tech_thrusters_1" }
+  component_set = "required_thrusters"
+}
+# Micro-Fusion Thrusters (Heavy Escort)
+utility_component_template = {
+  key = "REQUIRED_THRUSTERS_0_HE"
+  size = small
+  icon = "GFX_ship_part_Required_Thruster_0"
+  icon_frame = 1
+  power = -15
+  cost = 10
+  size_restriction = { strike }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_THRUSTERS_1A_HE"
+  ship_modifier = {     }
+  modifier = {     }
+  ai_weight = { weight = 1 }
+  prerequisites = { "tech_thrusters_1" }
+  component_set = "required_thrusters"
+}
+# Micro-Fusion Thrusters (Assault Cruiser)
+utility_component_template = {
+  key = "REQUIRED_THRUSTERS_0_AC"
+  size = small
+  icon = "GFX_ship_part_Required_Thruster_0"
+  icon_frame = 1
+  power = -25
+  cost = 25
+  size_restriction = { assault_cruiser }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_THRUSTERS_1A_AC"
+  ship_modifier = {     }
+  modifier = {     }
+  ai_weight = { weight = 1 }
+  prerequisites = { "tech_thrusters_1" }
+  component_set = "required_thrusters"
+}
+# Micro-Fusion Thrusters (Dreadnought)
+utility_component_template = {
+  key = "REQUIRED_THRUSTERS_0_SB"
+  size = small
+  icon = "GFX_ship_part_Required_Thruster_0"
+  icon_frame = 1
+  power = -45
+  cost = 45
+  size_restriction = { super_battleship borg_cube borg_tactical }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_THRUSTERS_1A_SB"
+  ship_modifier = {     }
+  modifier = {     }
+  ai_weight = { weight = 1 }
+  prerequisites = { "tech_thrusters_1" }
+  component_set = "required_thrusters"
+}
+# Micro-Fusion Thrusters (Man-O-War)
+utility_component_template = {
+  key = "REQUIRED_THRUSTERS_0_SC"
+  size = small
+  icon = "GFX_ship_part_Required_Thruster_0"
+  icon_frame = 1
+  power = -70
+  cost = 70
+  size_restriction = { super_cube }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_THRUSTERS_1A_SC"
+  ship_modifier = {     }
+  modifier = {     }
+  ai_weight = { weight = 1 }
+  prerequisites = { "tech_thrusters_1" }
+  component_set = "required_thrusters"
+}
+# Micro-Fusion Thrusters (Civilian Ships)
+utility_component_template = {
+  key = "REQUIRED_THRUSTERS_0_CS"
+  size = small
+  icon = "GFX_ship_part_Required_Thruster_0"
+  icon_frame = 1
+  power = -5
+  cost = 5
+  class_restriction = { shipclass_constructor shipclass_colonizer shipclass_science_ship shipclass_transport }
+  upgrades_to = "REQUIRED_THRUSTERS_1A_CS"
+  ship_modifier = {     }
+  modifier = {     }
+  ai_weight = { weight = 1 }
+  prerequisites = { "tech_thrusters_1" }
+  component_set = "required_thrusters"
+}
+
+# Solar Sails (Patrol Frigate)
+utility_component_template = {
+  key = "REQUIRED_THRUSTERS_0SAIL_PF"
+  size = small
+  icon = "GFX_ship_part_Required_Thruster_Sail_0"
+  icon_frame = 1
+  power = 0
+  cost = 5
+  size_restriction = { corvette }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_THRUSTERS_1A_PF"
+  ship_modifier = {     }
+  modifier = { ship_combat_speed_mult = -0.4 ship_speed_mult = -0.4   }
+  ai_weight = { weight = 20 }
+  prerequisites = { "tech_society_words_379" }
+  component_set = "required_thrusters"
+}
+# Solar Sails (Destroyer)
+utility_component_template = {
+  key = "REQUIRED_THRUSTERS_0SAIL_DE"
+  size = small
+  icon = "GFX_ship_part_Required_Thruster_Sail_0"
+  icon_frame = 1
+  power = 0
+  cost = 5
+  size_restriction = { saber }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_THRUSTERS_1A_DE"
+  ship_modifier = {     }
+  modifier = { ship_combat_speed_mult = -0.4 ship_speed_mult = -0.4   }
+  ai_weight = { weight = 20 }
+  prerequisites = { "tech_society_words_379" }
+  component_set = "required_thrusters"
+}
+# Solar Sails (Cruiser/Sphere)
+utility_component_template = {
+  key = "REQUIRED_THRUSTERS_0SAIL_CR"
+  size = small
+  icon = "GFX_ship_part_Required_Thruster_Sail_0"
+  icon_frame = 1
+  power = 0
+  cost = 5
+  size_restriction = { sovereign borg_sphere }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_THRUSTERS_1A_CR"
+  ship_modifier = {     }
+  modifier = { ship_combat_speed_mult = -0.4 ship_speed_mult = -0.4   }
+  ai_weight = { weight = 20 }
+  prerequisites = { "tech_society_words_379" }
+  component_set = "required_thrusters"
+}
+# Solar Sails (Battlecruiser/Diamond)
+utility_component_template = {
+  key = "REQUIRED_THRUSTERS_0SAIL_BC"
+  size = small
+  icon = "GFX_ship_part_Required_Thruster_Sail_0"
+  icon_frame = 1
+  power = 0
+  cost = 5
+  size_restriction = { steamrunner borg_diamond }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_THRUSTERS_1A_BC"
+  ship_modifier = {     }
+  modifier = { ship_combat_speed_mult = -0.4 ship_speed_mult = -0.4   }
+  ai_weight = { weight = 20 }
+  prerequisites = { "tech_society_words_379" }
+  component_set = "required_thrusters"
+}
+# Solar Sails (Battleship)
+utility_component_template = {
+  key = "REQUIRED_THRUSTERS_0SAIL_BS"
+  size = small
+  icon = "GFX_ship_part_Required_Thruster_Sail_0"
+  icon_frame = 1
+  power = 0
+  cost = 5
+  size_restriction = { adv_cruiser }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_THRUSTERS_1A_BS"
+  ship_modifier = {     }
+  modifier = { ship_combat_speed_mult = -0.4 ship_speed_mult = -0.4   }
+  ai_weight = { weight = 20 }
+  prerequisites = { "tech_society_words_379" }
+  component_set = "required_thrusters"
+}
+# Solar Sails (Heavy Escort)
+utility_component_template = {
+  key = "REQUIRED_THRUSTERS_0SAIL_HE"
+  size = small
+  icon = "GFX_ship_part_Required_Thruster_Sail_0"
+  icon_frame = 1
+  power = 0
+  cost = 5
+  size_restriction = { strike }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_THRUSTERS_1A_HE"
+  ship_modifier = {     }
+  modifier = { ship_combat_speed_mult = -0.4 ship_speed_mult = -0.4   }
+  ai_weight = { weight = 20 }
+  prerequisites = { "tech_society_words_379" }
+  component_set = "required_thrusters"
+}
+# Solar Sails (Assault Cruiser)
+utility_component_template = {
+  key = "REQUIRED_THRUSTERS_0SAIL_AC"
+  size = small
+  icon = "GFX_ship_part_Required_Thruster_Sail_0"
+  icon_frame = 1
+  power = 0
+  cost = 5
+  size_restriction = { assault_cruiser }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_THRUSTERS_1A_AC"
+  ship_modifier = {     }
+  modifier = { ship_combat_speed_mult = -0.4 ship_speed_mult = -0.4   }
+  ai_weight = { weight = 20 }
+  prerequisites = { "tech_society_words_379" }
+  component_set = "required_thrusters"
+}
+# Solar Sails (Dreadnought)
+utility_component_template = {
+  key = "REQUIRED_THRUSTERS_0SAIL_SB"
+  size = small
+  icon = "GFX_ship_part_Required_Thruster_Sail_0"
+  icon_frame = 1
+  power = 0
+  cost = 10
+  size_restriction = { super_battleship borg_cube borg_tactical }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_THRUSTERS_1A_SB"
+  ship_modifier = {     }
+  modifier = { ship_combat_speed_mult = -0.4 ship_speed_mult = -0.4   }
+  ai_weight = { weight = 20 }
+  prerequisites = { "tech_society_words_379" }
+  component_set = "required_thrusters"
+}
+# Solar Sails (Man-O-War)
+utility_component_template = {
+  key = "REQUIRED_THRUSTERS_0SAIL_SC"
+  size = small
+  icon = "GFX_ship_part_Required_Thruster_Sail_0"
+  icon_frame = 1
+  power = 0
+  cost = 15
+  size_restriction = { super_cube }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_THRUSTERS_1A_SC"
+  ship_modifier = {     }
+  modifier = { ship_combat_speed_mult = -0.4 ship_speed_mult = -0.4   }
+  ai_weight = { weight = 20 }
+  prerequisites = { "tech_society_words_379" }
+  component_set = "required_thrusters"
+}
+# Solar Sails (Civilian Ships)
+utility_component_template = {
+  key = "REQUIRED_THRUSTERS_0SAIL_CS"
+  size = small
+  icon = "GFX_ship_part_Required_Thruster_Sail_0"
+  icon_frame = 1
+  power = 0
+  cost = 5
+  class_restriction = { shipclass_constructor shipclass_colonizer shipclass_science_ship shipclass_transport }
+  upgrades_to = "REQUIRED_THRUSTERS_1A_CS"
+  ship_modifier = {     }
+  modifier = { ship_combat_speed_mult = -0.4 ship_speed_mult = -0.4   }
+  ai_weight = { weight = 20 }
+  prerequisites = { "tech_society_words_379" }
+  component_set = "required_thrusters"
+}
+
+# Sub-impulse Thrusters (Patrol Frigate)
+utility_component_template = {
+  key = "REQUIRED_THRUSTERS_1A_PF"
+  size = small
+  icon = "GFX_ship_part_Required_Thruster_A_1"
+  icon_frame = 1
+  power = -10
+  cost = 10
+  size_restriction = { corvette }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_THRUSTERS_2A_PF"
+  ship_modifier = {     }
+  modifier = { ship_combat_speed_mult = 0.4 ship_speed_mult = 0.4 ship_evasion_add = 1  }
+  ai_weight = { weight = 50 }
+  prerequisites = { "tech_engineering_impulse_631" }
+  component_set = "required_thrusters"
+}
+# Sub-impulse Thrusters (Destroyer)
+utility_component_template = {
+  key = "REQUIRED_THRUSTERS_1A_DE"
+  size = small
+  icon = "GFX_ship_part_Required_Thruster_A_1"
+  icon_frame = 1
+  power = -25
+  cost = 10
+  size_restriction = { saber }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_THRUSTERS_2A_DE"
+  ship_modifier = {     }
+  modifier = { ship_combat_speed_mult = 0.4 ship_speed_mult = 0.4 ship_evasion_add = 1  }
+  ai_weight = { weight = 50 }
+  prerequisites = { "tech_engineering_impulse_631" }
+  component_set = "required_thrusters"
+}
+# Sub-impulse Thrusters (Cruiser/Sphere)
+utility_component_template = {
+  key = "REQUIRED_THRUSTERS_1A_CR"
+  size = small
+  icon = "GFX_ship_part_Required_Thruster_A_1"
+  icon_frame = 1
+  power = -50
+  cost = 20
+  size_restriction = { sovereign borg_sphere }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_THRUSTERS_2A_CR"
+  ship_modifier = {     }
+  modifier = { ship_combat_speed_mult = 0.4 ship_speed_mult = 0.4 ship_evasion_add = 1  }
+  ai_weight = { weight = 50 }
+  prerequisites = { "tech_engineering_impulse_631" }
+  component_set = "required_thrusters"
+}
+# Sub-impulse Thrusters (Battlecruiser/Diamond)
+utility_component_template = {
+  key = "REQUIRED_THRUSTERS_1A_BC"
+  size = small
+  icon = "GFX_ship_part_Required_Thruster_A_1"
+  icon_frame = 1
+  power = -35
+  cost = 10
+  size_restriction = { steamrunner borg_diamond }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_THRUSTERS_2A_BC"
+  ship_modifier = {     }
+  modifier = { ship_combat_speed_mult = 0.4 ship_speed_mult = 0.4 ship_evasion_add = 1  }
+  ai_weight = { weight = 50 }
+  prerequisites = { "tech_engineering_impulse_631" }
+  component_set = "required_thrusters"
+}
+# Sub-impulse Thrusters (Battleship)
+utility_component_template = {
+  key = "REQUIRED_THRUSTERS_1A_BS"
+  size = small
+  icon = "GFX_ship_part_Required_Thruster_A_1"
+  icon_frame = 1
+  power = -70
+  cost = 30
+  size_restriction = { adv_cruiser }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_THRUSTERS_2A_BS"
+  ship_modifier = {     }
+  modifier = { ship_combat_speed_mult = 0.4 ship_speed_mult = 0.4 ship_evasion_add = 1  }
+  ai_weight = { weight = 50 }
+  prerequisites = { "tech_engineering_impulse_631" }
+  component_set = "required_thrusters"
+}
+# Sub-impulse Thrusters (Heavy Escort)
+utility_component_template = {
+  key = "REQUIRED_THRUSTERS_1A_HE"
+  size = small
+  icon = "GFX_ship_part_Required_Thruster_A_1"
+  icon_frame = 1
+  power = -40
+  cost = 15
+  size_restriction = { strike }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_THRUSTERS_2A_HE"
+  ship_modifier = {     }
+  modifier = { ship_combat_speed_mult = 0.4 ship_speed_mult = 0.4 ship_evasion_add = 1  }
+  ai_weight = { weight = 50 }
+  prerequisites = { "tech_engineering_impulse_631" }
+  component_set = "required_thrusters"
+}
+# Sub-impulse Thrusters (Assault Cruiser)
+utility_component_template = {
+  key = "REQUIRED_THRUSTERS_1A_AC"
+  size = small
+  icon = "GFX_ship_part_Required_Thruster_A_1"
+  icon_frame = 1
+  power = -65
+  cost = 25
+  size_restriction = { assault_cruiser }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_THRUSTERS_2A_AC"
+  ship_modifier = {     }
+  modifier = { ship_combat_speed_mult = 0.4 ship_speed_mult = 0.4 ship_evasion_add = 1  }
+  ai_weight = { weight = 50 }
+  prerequisites = { "tech_engineering_impulse_631" }
+  component_set = "required_thrusters"
+}
+# Sub-impulse Thrusters (Dreadnought)
+utility_component_template = {
+  key = "REQUIRED_THRUSTERS_1A_SB"
+  size = small
+  icon = "GFX_ship_part_Required_Thruster_A_1"
+  icon_frame = 1
+  power = -125
+  cost = 50
+  size_restriction = { super_battleship borg_cube borg_tactical }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_THRUSTERS_2A_SB"
+  ship_modifier = {     }
+  modifier = { ship_combat_speed_mult = 0.4 ship_speed_mult = 0.4 ship_evasion_add = 1  }
+  ai_weight = { weight = 50 }
+  prerequisites = { "tech_engineering_impulse_631" }
+  component_set = "required_thrusters"
+}
+# Sub-impulse Thrusters (Man-O-War)
+utility_component_template = {
+  key = "REQUIRED_THRUSTERS_1A_SC"
+  size = small
+  icon = "GFX_ship_part_Required_Thruster_A_1"
+  icon_frame = 1
+  power = -185
+  cost = 75
+  size_restriction = { super_cube }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_THRUSTERS_2A_SC"
+  ship_modifier = {     }
+  modifier = { ship_combat_speed_mult = 0.4 ship_speed_mult = 0.4 ship_evasion_add = 1  }
+  ai_weight = { weight = 50 }
+  prerequisites = { "tech_engineering_impulse_631" }
+  component_set = "required_thrusters"
+}
+# Sub-impulse Thrusters (Civilian Ships)
+utility_component_template = {
+  key = "REQUIRED_THRUSTERS_1A_CS"
+  size = small
+  icon = "GFX_ship_part_Required_Thruster_A_1"
+  icon_frame = 1
+  power = -5
+  cost = 10
+  class_restriction = { shipclass_constructor shipclass_colonizer shipclass_science_ship shipclass_transport }
+  upgrades_to = "REQUIRED_THRUSTERS_2A_CS"
+  ship_modifier = {     }
+  modifier = { ship_combat_speed_mult = 0.4 ship_speed_mult = 0.4 ship_evasion_add = 1  }
+  ai_weight = { weight = 50 }
+  prerequisites = { "tech_engineering_impulse_631" }
+  component_set = "required_thrusters"
+}
+
+# Impulse Thruster (Patrol Frigate)
+utility_component_template = {
+  key = "REQUIRED_THRUSTERS_2A_PF"
+  size = small
+  icon = "GFX_ship_part_Required_Thruster_A_2"
+  icon_frame = 1
+  power = -15
+  cost = 15
+  size_restriction = { corvette }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_THRUSTERS_3A_PF"
+  ship_modifier = {     }
+  modifier = { ship_combat_speed_mult = 0.5 ship_speed_mult = 0.5 ship_evasion_add = 2  }
+  ai_weight = { weight = 100 }
+  prerequisites = { "tech_engineering_materials_1491" }
+  component_set = "required_thrusters"
+}
+# Impulse Thruster (Destroyer)
+utility_component_template = {
+  key = "REQUIRED_THRUSTERS_2A_DE"
+  size = small
+  icon = "GFX_ship_part_Required_Thruster_A_2"
+  icon_frame = 1
+  power = -40
+  cost = 15
+  size_restriction = { saber }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_THRUSTERS_3A_DE"
+  ship_modifier = {     }
+  modifier = { ship_combat_speed_mult = 0.5 ship_speed_mult = 0.5 ship_evasion_add = 2  }
+  ai_weight = { weight = 100 }
+  prerequisites = { "tech_engineering_materials_1491" }
+  component_set = "required_thrusters"
+}
+# Impulse Thruster (Cruiser/Sphere)
+utility_component_template = {
+  key = "REQUIRED_THRUSTERS_2A_CR"
+  size = small
+  icon = "GFX_ship_part_Required_Thruster_A_2"
+  icon_frame = 1
+  power = -85
+  cost = 35
+  size_restriction = { sovereign borg_sphere }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_THRUSTERS_3A_CR"
+  ship_modifier = {     }
+  modifier = { ship_combat_speed_mult = 0.5 ship_speed_mult = 0.5 ship_evasion_add = 2  }
+  ai_weight = { weight = 100 }
+  prerequisites = { "tech_engineering_materials_1491" }
+  component_set = "required_thrusters"
+}
+# Impulse Thruster (Battlecruiser/Diamond)
+utility_component_template = {
+  key = "REQUIRED_THRUSTERS_2A_BC"
+  size = small
+  icon = "GFX_ship_part_Required_Thruster_A_2"
+  icon_frame = 1
+  power = -55
+  cost = 15
+  size_restriction = { steamrunner borg_diamond }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_THRUSTERS_3A_BC"
+  ship_modifier = {     }
+  modifier = { ship_combat_speed_mult = 0.5 ship_speed_mult = 0.5 ship_evasion_add = 2  }
+  ai_weight = { weight = 100 }
+  prerequisites = { "tech_engineering_materials_1491" }
+  component_set = "required_thrusters"
+}
+# Impulse Thruster (Battleship)
+utility_component_template = {
+  key = "REQUIRED_THRUSTERS_2A_BS"
+  size = small
+  icon = "GFX_ship_part_Required_Thruster_A_2"
+  icon_frame = 1
+  power = -115
+  cost = 45
+  size_restriction = { adv_cruiser }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_THRUSTERS_3A_BS"
+  ship_modifier = {     }
+  modifier = { ship_combat_speed_mult = 0.5 ship_speed_mult = 0.5 ship_evasion_add = 2  }
+  ai_weight = { weight = 100 }
+  prerequisites = { "tech_engineering_materials_1491" }
+  component_set = "required_thrusters"
+}
+# Impulse Thruster (Heavy Escort)
+utility_component_template = {
+  key = "REQUIRED_THRUSTERS_2A_HE"
+  size = small
+  icon = "GFX_ship_part_Required_Thruster_A_2"
+  icon_frame = 1
+  power = -65
+  cost = 20
+  size_restriction = { strike }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_THRUSTERS_3A_HE"
+  ship_modifier = {     }
+  modifier = { ship_combat_speed_mult = 0.5 ship_speed_mult = 0.5 ship_evasion_add = 2  }
+  ai_weight = { weight = 100 }
+  prerequisites = { "tech_engineering_materials_1491" }
+  component_set = "required_thrusters"
+}
+# Impulse Thruster (Assault Cruiser)
+utility_component_template = {
+  key = "REQUIRED_THRUSTERS_2A_AC"
+  size = small
+  icon = "GFX_ship_part_Required_Thruster_A_2"
+  icon_frame = 1
+  power = -110
+  cost = 45
+  size_restriction = { assault_cruiser }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_THRUSTERS_3A_AC"
+  ship_modifier = {     }
+  modifier = { ship_combat_speed_mult = 0.5 ship_speed_mult = 0.5 ship_evasion_add = 2  }
+  ai_weight = { weight = 100 }
+  prerequisites = { "tech_engineering_materials_1491" }
+  component_set = "required_thrusters"
+}
+# Impulse Thruster (Dreadnought)
+utility_component_template = {
+  key = "REQUIRED_THRUSTERS_2A_SB"
+  size = small
+  icon = "GFX_ship_part_Required_Thruster_A_2"
+  icon_frame = 1
+  power = -205
+  cost = 80
+  size_restriction = { super_battleship borg_cube borg_tactical }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_THRUSTERS_3A_SB"
+  ship_modifier = {     }
+  modifier = { ship_combat_speed_mult = 0.5 ship_speed_mult = 0.5 ship_evasion_add = 2  }
+  ai_weight = { weight = 100 }
+  prerequisites = { "tech_engineering_materials_1491" }
+  component_set = "required_thrusters"
+}
+# Impulse Thruster (Man-O-War)
+utility_component_template = {
+  key = "REQUIRED_THRUSTERS_2A_SC"
+  size = small
+  icon = "GFX_ship_part_Required_Thruster_A_2"
+  icon_frame = 1
+  power = -305
+  cost = 120
+  size_restriction = { super_cube }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_THRUSTERS_3A_SC"
+  ship_modifier = {     }
+  modifier = { ship_combat_speed_mult = 0.5 ship_speed_mult = 0.5 ship_evasion_add = 2  }
+  ai_weight = { weight = 100 }
+  prerequisites = { "tech_engineering_materials_1491" }
+  component_set = "required_thrusters"
+}
+# Impulse Thruster (Civilian Ships)
+utility_component_template = {
+  key = "REQUIRED_THRUSTERS_2A_CS"
+  size = small
+  icon = "GFX_ship_part_Required_Thruster_A_2"
+  icon_frame = 1
+  power = -10
+  cost = 15
+  class_restriction = { shipclass_constructor shipclass_colonizer shipclass_science_ship shipclass_transport }
+  upgrades_to = "REQUIRED_THRUSTERS_3A_CS"
+  ship_modifier = {     }
+  modifier = { ship_combat_speed_mult = 0.5 ship_speed_mult = 0.5 ship_evasion_add = 2  }
+  ai_weight = { weight = 100 }
+  prerequisites = { "tech_engineering_materials_1491" }
+  component_set = "required_thrusters"
+}
+
+# Avidyne Impulse Thruster (Patrol Frigate)
+utility_component_template = {
+  key = "REQUIRED_THRUSTERS_3A_PF"
+  size = small
+  icon = "GFX_ship_part_Required_Thruster_A_3"
+  icon_frame = 1
+  power = -25
+  cost = 20
+  size_restriction = { corvette }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_THRUSTERS_4A_PF"
+  ship_modifier = {     }
+  modifier = { ship_combat_speed_mult = 0.6 ship_speed_mult = 0.6 ship_evasion_add = 6  }
+  ai_weight = { weight = 150 }
+  prerequisites = { "tech_engineering_avidyne_633" }
+  component_set = "required_thrusters"
+}
+# Avidyne Impulse Thruster (Destroyer)
+utility_component_template = {
+  key = "REQUIRED_THRUSTERS_3A_DE"
+  size = small
+  icon = "GFX_ship_part_Required_Thruster_A_3"
+  icon_frame = 1
+  power = -60
+  cost = 20
+  size_restriction = { saber }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_THRUSTERS_4A_DE"
+  ship_modifier = {     }
+  modifier = { ship_combat_speed_mult = 0.6 ship_speed_mult = 0.6 ship_evasion_add = 6  }
+  ai_weight = { weight = 150 }
+  prerequisites = { "tech_engineering_avidyne_633" }
+  component_set = "required_thrusters"
+}
+# Avidyne Impulse Thruster (Cruiser/Sphere)
+utility_component_template = {
+  key = "REQUIRED_THRUSTERS_3A_CR"
+  size = small
+  icon = "GFX_ship_part_Required_Thruster_A_3"
+  icon_frame = 1
+  power = -125
+  cost = 50
+  size_restriction = { sovereign borg_sphere }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_THRUSTERS_4A_CR"
+  ship_modifier = {     }
+  modifier = { ship_combat_speed_mult = 0.6 ship_speed_mult = 0.6 ship_evasion_add = 6  }
+  ai_weight = { weight = 150 }
+  prerequisites = { "tech_engineering_avidyne_633" }
+  component_set = "required_thrusters"
+}
+# Avidyne Impulse Thruster (Battlecruiser/Diamond)
+utility_component_template = {
+  key = "REQUIRED_THRUSTERS_3A_BC"
+  size = small
+  icon = "GFX_ship_part_Required_Thruster_A_3"
+  icon_frame = 1
+  power = -80
+  cost = 25
+  size_restriction = { steamrunner borg_diamond }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_THRUSTERS_4A_BC"
+  ship_modifier = {     }
+  modifier = { ship_combat_speed_mult = 0.6 ship_speed_mult = 0.6 ship_evasion_add = 6  }
+  ai_weight = { weight = 150 }
+  prerequisites = { "tech_engineering_avidyne_633" }
+  component_set = "required_thrusters"
+}
+# Avidyne Impulse Thruster (Battleship)
+utility_component_template = {
+  key = "REQUIRED_THRUSTERS_3A_BS"
+  size = small
+  icon = "GFX_ship_part_Required_Thruster_A_3"
+  icon_frame = 1
+  power = -165
+  cost = 65
+  size_restriction = { adv_cruiser }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_THRUSTERS_4A_BS"
+  ship_modifier = {     }
+  modifier = { ship_combat_speed_mult = 0.6 ship_speed_mult = 0.6 ship_evasion_add = 6  }
+  ai_weight = { weight = 150 }
+  prerequisites = { "tech_engineering_avidyne_633" }
+  component_set = "required_thrusters"
+}
+# Avidyne Impulse Thruster (Heavy Escort)
+utility_component_template = {
+  key = "REQUIRED_THRUSTERS_3A_HE"
+  size = small
+  icon = "GFX_ship_part_Required_Thruster_A_3"
+  icon_frame = 1
+  power = -95
+  cost = 30
+  size_restriction = { strike }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_THRUSTERS_4A_HE"
+  ship_modifier = {     }
+  modifier = { ship_combat_speed_mult = 0.6 ship_speed_mult = 0.6 ship_evasion_add = 6  }
+  ai_weight = { weight = 150 }
+  prerequisites = { "tech_engineering_avidyne_633" }
+  component_set = "required_thrusters"
+}
+# Avidyne Impulse Thruster (Assault Cruiser)
+utility_component_template = {
+  key = "REQUIRED_THRUSTERS_3A_AC"
+  size = small
+  icon = "GFX_ship_part_Required_Thruster_A_3"
+  icon_frame = 1
+  power = -155
+  cost = 60
+  size_restriction = { assault_cruiser }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_THRUSTERS_4A_AC"
+  ship_modifier = {     }
+  modifier = { ship_combat_speed_mult = 0.6 ship_speed_mult = 0.6 ship_evasion_add = 6  }
+  ai_weight = { weight = 150 }
+  prerequisites = { "tech_engineering_avidyne_633" }
+  component_set = "required_thrusters"
+}
+# Avidyne Impulse Thruster (Dreadnought)
+utility_component_template = {
+  key = "REQUIRED_THRUSTERS_3A_SB"
+  size = small
+  icon = "GFX_ship_part_Required_Thruster_A_3"
+  icon_frame = 1
+  power = -295
+  cost = 115
+  size_restriction = { super_battleship borg_cube borg_tactical }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_THRUSTERS_4A_SB"
+  ship_modifier = {     }
+  modifier = { ship_combat_speed_mult = 0.6 ship_speed_mult = 0.6 ship_evasion_add = 6  }
+  ai_weight = { weight = 150 }
+  prerequisites = { "tech_engineering_avidyne_633" }
+  component_set = "required_thrusters"
+}
+# Avidyne Impulse Thruster (Man-O-War)
+utility_component_template = {
+  key = "REQUIRED_THRUSTERS_3A_SC"
+  size = small
+  icon = "GFX_ship_part_Required_Thruster_A_3"
+  icon_frame = 1
+  power = -440
+  cost = 175
+  size_restriction = { super_cube }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_THRUSTERS_4A_SC"
+  ship_modifier = {     }
+  modifier = { ship_combat_speed_mult = 0.6 ship_speed_mult = 0.6 ship_evasion_add = 6  }
+  ai_weight = { weight = 150 }
+  prerequisites = { "tech_engineering_avidyne_633" }
+  component_set = "required_thrusters"
+}
+# Avidyne Impulse Thruster (Civilian Ships)
+utility_component_template = {
+  key = "REQUIRED_THRUSTERS_3A_CS"
+  size = small
+  icon = "GFX_ship_part_Required_Thruster_A_3"
+  icon_frame = 1
+  power = -15
+  cost = 20
+  class_restriction = { shipclass_constructor shipclass_colonizer shipclass_science_ship shipclass_transport }
+  upgrades_to = "REQUIRED_THRUSTERS_4A_CS"
+  ship_modifier = {     }
+  modifier = { ship_combat_speed_mult = 0.6 ship_speed_mult = 0.6 ship_evasion_add = 6  }
+  ai_weight = { weight = 150 }
+  prerequisites = { "tech_engineering_avidyne_633" }
+  component_set = "required_thrusters"
+}
+
+# Impulse Manifold (Patrol Frigate)
+utility_component_template = {
+  key = "REQUIRED_THRUSTERS_4A_PF"
+  size = small
+  icon = "GFX_ship_part_Required_Thruster_A_4"
+  icon_frame = 1
+  power = -30
+  cost = 25
+  size_restriction = { corvette }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_THRUSTERS_5A_PF"
+  ship_modifier = {     }
+  modifier = { ship_combat_speed_mult = 0.7 ship_speed_mult = 0.7 ship_evasion_add = 10  }
+  ai_weight = { weight = 200 }
+  prerequisites = { "tech_engineering_improved_635" }
+  component_set = "required_thrusters"
+}
+# Impulse Manifold (Destroyer)
+utility_component_template = {
+  key = "REQUIRED_THRUSTERS_4A_DE"
+  size = small
+  icon = "GFX_ship_part_Required_Thruster_A_4"
+  icon_frame = 1
+  power = -80
+  cost = 25
+  size_restriction = { saber }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_THRUSTERS_5A_DE"
+  ship_modifier = {     }
+  modifier = { ship_combat_speed_mult = 0.7 ship_speed_mult = 0.7 ship_evasion_add = 10  }
+  ai_weight = { weight = 200 }
+  prerequisites = { "tech_engineering_improved_635" }
+  component_set = "required_thrusters"
+}
+# Impulse Manifold (Cruiser/Sphere)
+utility_component_template = {
+  key = "REQUIRED_THRUSTERS_4A_CR"
+  size = small
+  icon = "GFX_ship_part_Required_Thruster_A_4"
+  icon_frame = 1
+  power = -165
+  cost = 65
+  size_restriction = { sovereign borg_sphere }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_THRUSTERS_5A_CR"
+  ship_modifier = {     }
+  modifier = { ship_combat_speed_mult = 0.7 ship_speed_mult = 0.7 ship_evasion_add = 10  }
+  ai_weight = { weight = 200 }
+  prerequisites = { "tech_engineering_improved_635" }
+  component_set = "required_thrusters"
+}
+# Impulse Manifold (Battlecruiser/Diamond)
+utility_component_template = {
+  key = "REQUIRED_THRUSTERS_4A_BC"
+  size = small
+  icon = "GFX_ship_part_Required_Thruster_A_4"
+  icon_frame = 1
+  power = -105
+  cost = 35
+  size_restriction = { steamrunner borg_diamond }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_THRUSTERS_5A_BC"
+  ship_modifier = {     }
+  modifier = { ship_combat_speed_mult = 0.7 ship_speed_mult = 0.7 ship_evasion_add = 10  }
+  ai_weight = { weight = 200 }
+  prerequisites = { "tech_engineering_improved_635" }
+  component_set = "required_thrusters"
+}
+# Impulse Manifold (Battleship)
+utility_component_template = {
+  key = "REQUIRED_THRUSTERS_4A_BS"
+  size = small
+  icon = "GFX_ship_part_Required_Thruster_A_4"
+  icon_frame = 1
+  power = -225
+  cost = 90
+  size_restriction = { adv_cruiser }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_THRUSTERS_5A_BS"
+  ship_modifier = {     }
+  modifier = { ship_combat_speed_mult = 0.7 ship_speed_mult = 0.7 ship_evasion_add = 10  }
+  ai_weight = { weight = 200 }
+  prerequisites = { "tech_engineering_improved_635" }
+  component_set = "required_thrusters"
+}
+# Impulse Manifold (Heavy Escort)
+utility_component_template = {
+  key = "REQUIRED_THRUSTERS_4A_HE"
+  size = small
+  icon = "GFX_ship_part_Required_Thruster_A_4"
+  icon_frame = 1
+  power = -125
+  cost = 40
+  size_restriction = { strike }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_THRUSTERS_5A_HE"
+  ship_modifier = {     }
+  modifier = { ship_combat_speed_mult = 0.7 ship_speed_mult = 0.7 ship_evasion_add = 10  }
+  ai_weight = { weight = 200 }
+  prerequisites = { "tech_engineering_improved_635" }
+  component_set = "required_thrusters"
+}
+# Impulse Manifold (Assault Cruiser)
+utility_component_template = {
+  key = "REQUIRED_THRUSTERS_4A_AC"
+  size = small
+  icon = "GFX_ship_part_Required_Thruster_A_4"
+  icon_frame = 1
+  power = -210
+  cost = 85
+  size_restriction = { assault_cruiser }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_THRUSTERS_5A_AC"
+  ship_modifier = {     }
+  modifier = { ship_combat_speed_mult = 0.7 ship_speed_mult = 0.7 ship_evasion_add = 10  }
+  ai_weight = { weight = 200 }
+  prerequisites = { "tech_engineering_improved_635" }
+  component_set = "required_thrusters"
+}
+# Impulse Manifold (Dreadnought)
+utility_component_template = {
+  key = "REQUIRED_THRUSTERS_4A_SB"
+  size = small
+  icon = "GFX_ship_part_Required_Thruster_A_4"
+  icon_frame = 1
+  power = -395
+  cost = 160
+  size_restriction = { super_battleship borg_cube borg_tactical }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_THRUSTERS_5A_SB"
+  ship_modifier = {     }
+  modifier = { ship_combat_speed_mult = 0.7 ship_speed_mult = 0.7 ship_evasion_add = 10  }
+  ai_weight = { weight = 200 }
+  prerequisites = { "tech_engineering_improved_635" }
+  component_set = "required_thrusters"
+}
+# Impulse Manifold (Man-O-War)
+utility_component_template = {
+  key = "REQUIRED_THRUSTERS_4A_SC"
+  size = small
+  icon = "GFX_ship_part_Required_Thruster_A_4"
+  icon_frame = 1
+  power = -595
+  cost = 240
+  size_restriction = { super_cube }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_THRUSTERS_5A_SC"
+  ship_modifier = {     }
+  modifier = { ship_combat_speed_mult = 0.7 ship_speed_mult = 0.7 ship_evasion_add = 10  }
+  ai_weight = { weight = 200 }
+  prerequisites = { "tech_engineering_improved_635" }
+  component_set = "required_thrusters"
+}
+# Impulse Manifold (Civilian Ships)
+utility_component_template = {
+  key = "REQUIRED_THRUSTERS_4A_CS"
+  size = small
+  icon = "GFX_ship_part_Required_Thruster_A_4"
+  icon_frame = 1
+  power = -20
+  cost = 25
+  class_restriction = { shipclass_constructor shipclass_colonizer shipclass_science_ship shipclass_transport }
+  upgrades_to = "REQUIRED_THRUSTERS_5A_CS"
+  ship_modifier = {     }
+  modifier = { ship_combat_speed_mult = 0.7 ship_speed_mult = 0.7 ship_evasion_add = 10  }
+  ai_weight = { weight = 200 }
+  prerequisites = { "tech_engineering_improved_635" }
+  component_set = "required_thrusters"
+}
+
+# Impulse Manifold Mk. VI (Patrol Frigate)
+utility_component_template = {
+  key = "REQUIRED_THRUSTERS_5A_PF"
+  size = small
+  icon = "GFX_ship_part_Required_Thruster_A_5"
+  icon_frame = 1
+  power = -40
+  cost = 30
+  size_restriction = { corvette }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_THRUSTERS_6A_PF"
+  ship_modifier = {     }
+  modifier = { ship_combat_speed_mult = 0.8 ship_speed_mult = 0.8 ship_evasion_add = 14  }
+  ai_weight = { weight = 250 }
+  prerequisites = { "tech_engineering_materials_1494" }
+  component_set = "required_thrusters"
+}
+# Impulse Manifold Mk. VI (Destroyer)
+utility_component_template = {
+  key = "REQUIRED_THRUSTERS_5A_DE"
+  size = small
+  icon = "GFX_ship_part_Required_Thruster_A_5"
+  icon_frame = 1
+  power = -100
+  cost = 30
+  size_restriction = { saber }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_THRUSTERS_6A_DE"
+  ship_modifier = {     }
+  modifier = { ship_combat_speed_mult = 0.8 ship_speed_mult = 0.8 ship_evasion_add = 14  }
+  ai_weight = { weight = 250 }
+  prerequisites = { "tech_engineering_materials_1494" }
+  component_set = "required_thrusters"
+}
+# Impulse Manifold Mk. VI (Cruiser/Sphere)
+utility_component_template = {
+  key = "REQUIRED_THRUSTERS_5A_CR"
+  size = small
+  icon = "GFX_ship_part_Required_Thruster_A_5"
+  icon_frame = 1
+  power = -215
+  cost = 85
+  size_restriction = { sovereign borg_sphere }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_THRUSTERS_6A_CR"
+  ship_modifier = {     }
+  modifier = { ship_combat_speed_mult = 0.8 ship_speed_mult = 0.8 ship_evasion_add = 14  }
+  ai_weight = { weight = 250 }
+  prerequisites = { "tech_engineering_materials_1494" }
+  component_set = "required_thrusters"
+}
+# Impulse Manifold Mk. VI (Battlecruiser/Diamond)
+utility_component_template = {
+  key = "REQUIRED_THRUSTERS_5A_BC"
+  size = small
+  icon = "GFX_ship_part_Required_Thruster_A_5"
+  icon_frame = 1
+  power = -135
+  cost = 45
+  size_restriction = { steamrunner borg_diamond }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_THRUSTERS_6A_BC"
+  ship_modifier = {     }
+  modifier = { ship_combat_speed_mult = 0.8 ship_speed_mult = 0.8 ship_evasion_add = 14  }
+  ai_weight = { weight = 250 }
+  prerequisites = { "tech_engineering_materials_1494" }
+  component_set = "required_thrusters"
+}
+# Impulse Manifold Mk. VI (Battleship)
+utility_component_template = {
+  key = "REQUIRED_THRUSTERS_5A_BS"
+  size = small
+  icon = "GFX_ship_part_Required_Thruster_A_5"
+  icon_frame = 1
+  power = -285
+  cost = 115
+  size_restriction = { adv_cruiser }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_THRUSTERS_6A_BS"
+  ship_modifier = {     }
+  modifier = { ship_combat_speed_mult = 0.8 ship_speed_mult = 0.8 ship_evasion_add = 14  }
+  ai_weight = { weight = 250 }
+  prerequisites = { "tech_engineering_materials_1494" }
+  component_set = "required_thrusters"
+}
+# Impulse Manifold Mk. VI (Heavy Escort)
+utility_component_template = {
+  key = "REQUIRED_THRUSTERS_5A_HE"
+  size = small
+  icon = "GFX_ship_part_Required_Thruster_A_5"
+  icon_frame = 1
+  power = -165
+  cost = 50
+  size_restriction = { strike }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_THRUSTERS_6A_HE"
+  ship_modifier = {     }
+  modifier = { ship_combat_speed_mult = 0.8 ship_speed_mult = 0.8 ship_evasion_add = 14  }
+  ai_weight = { weight = 250 }
+  prerequisites = { "tech_engineering_materials_1494" }
+  component_set = "required_thrusters"
+}
+# Impulse Manifold Mk. VI (Assault Cruiser)
+utility_component_template = {
+  key = "REQUIRED_THRUSTERS_5A_AC"
+  size = small
+  icon = "GFX_ship_part_Required_Thruster_A_5"
+  icon_frame = 1
+  power = -270
+  cost = 110
+  size_restriction = { assault_cruiser }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_THRUSTERS_6A_AC"
+  ship_modifier = {     }
+  modifier = { ship_combat_speed_mult = 0.8 ship_speed_mult = 0.8 ship_evasion_add = 14  }
+  ai_weight = { weight = 250 }
+  prerequisites = { "tech_engineering_materials_1494" }
+  component_set = "required_thrusters"
+}
+# Impulse Manifold Mk. VI (Dreadnought)
+utility_component_template = {
+  key = "REQUIRED_THRUSTERS_5A_SB"
+  size = small
+  icon = "GFX_ship_part_Required_Thruster_A_5"
+  icon_frame = 1
+  power = -505
+  cost = 205
+  size_restriction = { super_battleship borg_cube borg_tactical }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_THRUSTERS_6A_SB"
+  ship_modifier = {     }
+  modifier = { ship_combat_speed_mult = 0.8 ship_speed_mult = 0.8 ship_evasion_add = 14  }
+  ai_weight = { weight = 250 }
+  prerequisites = { "tech_engineering_materials_1494" }
+  component_set = "required_thrusters"
+}
+# Impulse Manifold Mk. VI (Man-O-War)
+utility_component_template = {
+  key = "REQUIRED_THRUSTERS_5A_SC"
+  size = small
+  icon = "GFX_ship_part_Required_Thruster_A_5"
+  icon_frame = 1
+  power = -765
+  cost = 305
+  size_restriction = { super_cube }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_THRUSTERS_6A_SC"
+  ship_modifier = {     }
+  modifier = { ship_combat_speed_mult = 0.8 ship_speed_mult = 0.8 ship_evasion_add = 14  }
+  ai_weight = { weight = 250 }
+  prerequisites = { "tech_engineering_materials_1494" }
+  component_set = "required_thrusters"
+}
+# Impulse Manifold Mk. VI (Civilian Ships)
+utility_component_template = {
+  key = "REQUIRED_THRUSTERS_5A_CS"
+  size = small
+  icon = "GFX_ship_part_Required_Thruster_A_5"
+  icon_frame = 1
+  power = -30
+  cost = 30
+  class_restriction = { shipclass_constructor shipclass_colonizer shipclass_science_ship shipclass_transport }
+  upgrades_to = "REQUIRED_THRUSTERS_6A_CS"
+  ship_modifier = {     }
+  modifier = { ship_combat_speed_mult = 0.8 ship_speed_mult = 0.8 ship_evasion_add = 14  }
+  ai_weight = { weight = 250 }
+  prerequisites = { "tech_engineering_materials_1494" }
+  component_set = "required_thrusters"
+}
+
+# Compound Impulse Manifold Mk. VII (Patrol Frigate)
+utility_component_template = {
+  key = "REQUIRED_THRUSTERS_6A_PF"
+  size = small
+  icon = "GFX_ship_part_Required_Thruster_A_6"
+  icon_frame = 1
+  power = -50
+  cost = 35
+  size_restriction = { corvette }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_THRUSTERS_7A_PF"
+  ship_modifier = {     }
+  modifier = { ship_combat_speed_mult = 0.9 ship_speed_mult = 0.9 ship_evasion_add = 18  }
+  ai_weight = { weight = 300 }
+  prerequisites = { "tech_engineering_materials_1495" }
+  component_set = "required_thrusters"
+}
+# Compound Impulse Manifold Mk. VII (Destroyer)
+utility_component_template = {
+  key = "REQUIRED_THRUSTERS_6A_DE"
+  size = small
+  icon = "GFX_ship_part_Required_Thruster_A_6"
+  icon_frame = 1
+  power = -125
+  cost = 40
+  size_restriction = { saber }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_THRUSTERS_7A_DE"
+  ship_modifier = {     }
+  modifier = { ship_combat_speed_mult = 0.9 ship_speed_mult = 0.9 ship_evasion_add = 18  }
+  ai_weight = { weight = 300 }
+  prerequisites = { "tech_engineering_materials_1495" }
+  component_set = "required_thrusters"
+}
+# Compound Impulse Manifold Mk. VII (Cruiser/Sphere)
+utility_component_template = {
+  key = "REQUIRED_THRUSTERS_6A_CR"
+  size = small
+  icon = "GFX_ship_part_Required_Thruster_A_6"
+  icon_frame = 1
+  power = -265
+  cost = 105
+  size_restriction = { sovereign borg_sphere }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_THRUSTERS_7A_CR"
+  ship_modifier = {     }
+  modifier = { ship_combat_speed_mult = 0.9 ship_speed_mult = 0.9 ship_evasion_add = 18  }
+  ai_weight = { weight = 300 }
+  prerequisites = { "tech_engineering_materials_1495" }
+  component_set = "required_thrusters"
+}
+# Compound Impulse Manifold Mk. VII (Battlecruiser/Diamond)
+utility_component_template = {
+  key = "REQUIRED_THRUSTERS_6A_BC"
+  size = small
+  icon = "GFX_ship_part_Required_Thruster_A_6"
+  icon_frame = 1
+  power = -170
+  cost = 55
+  size_restriction = { steamrunner borg_diamond }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_THRUSTERS_7A_BC"
+  ship_modifier = {     }
+  modifier = { ship_combat_speed_mult = 0.9 ship_speed_mult = 0.9 ship_evasion_add = 18  }
+  ai_weight = { weight = 300 }
+  prerequisites = { "tech_engineering_materials_1495" }
+  component_set = "required_thrusters"
+}
+# Compound Impulse Manifold Mk. VII (Battleship)
+utility_component_template = {
+  key = "REQUIRED_THRUSTERS_6A_BS"
+  size = small
+  icon = "GFX_ship_part_Required_Thruster_A_6"
+  icon_frame = 1
+  power = -355
+  cost = 145
+  size_restriction = { adv_cruiser }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_THRUSTERS_7A_BS"
+  ship_modifier = {     }
+  modifier = { ship_combat_speed_mult = 0.9 ship_speed_mult = 0.9 ship_evasion_add = 18  }
+  ai_weight = { weight = 300 }
+  prerequisites = { "tech_engineering_materials_1495" }
+  component_set = "required_thrusters"
+}
+# Compound Impulse Manifold Mk. VII (Heavy Escort)
+utility_component_template = {
+  key = "REQUIRED_THRUSTERS_6A_HE"
+  size = small
+  icon = "GFX_ship_part_Required_Thruster_A_6"
+  icon_frame = 1
+  power = -205
+  cost = 65
+  size_restriction = { strike }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_THRUSTERS_7A_HE"
+  ship_modifier = {     }
+  modifier = { ship_combat_speed_mult = 0.9 ship_speed_mult = 0.9 ship_evasion_add = 18  }
+  ai_weight = { weight = 300 }
+  prerequisites = { "tech_engineering_materials_1495" }
+  component_set = "required_thrusters"
+}
+# Compound Impulse Manifold Mk. VII (Assault Cruiser)
+utility_component_template = {
+  key = "REQUIRED_THRUSTERS_6A_AC"
+  size = small
+  icon = "GFX_ship_part_Required_Thruster_A_6"
+  icon_frame = 1
+  power = -335
+  cost = 135
+  size_restriction = { assault_cruiser }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_THRUSTERS_7A_AC"
+  ship_modifier = {     }
+  modifier = { ship_combat_speed_mult = 0.9 ship_speed_mult = 0.9 ship_evasion_add = 18  }
+  ai_weight = { weight = 300 }
+  prerequisites = { "tech_engineering_materials_1495" }
+  component_set = "required_thrusters"
+}
+# Compound Impulse Manifold Mk. VII (Dreadnought)
+utility_component_template = {
+  key = "REQUIRED_THRUSTERS_6A_SB"
+  size = small
+  icon = "GFX_ship_part_Required_Thruster_A_6"
+  icon_frame = 1
+  power = -630
+  cost = 250
+  size_restriction = { super_battleship borg_cube borg_tactical }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_THRUSTERS_7A_SB"
+  ship_modifier = {     }
+  modifier = { ship_combat_speed_mult = 0.9 ship_speed_mult = 0.9 ship_evasion_add = 18  }
+  ai_weight = { weight = 300 }
+  prerequisites = { "tech_engineering_materials_1495" }
+  component_set = "required_thrusters"
+}
+# Compound Impulse Manifold Mk. VII (Man-O-War)
+utility_component_template = {
+  key = "REQUIRED_THRUSTERS_6A_SC"
+  size = small
+  icon = "GFX_ship_part_Required_Thruster_A_6"
+  icon_frame = 1
+  power = -950
+  cost = 380
+  size_restriction = { super_cube }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_THRUSTERS_7A_SC"
+  ship_modifier = {     }
+  modifier = { ship_combat_speed_mult = 0.9 ship_speed_mult = 0.9 ship_evasion_add = 18  }
+  ai_weight = { weight = 300 }
+  prerequisites = { "tech_engineering_materials_1495" }
+  component_set = "required_thrusters"
+}
+# Compound Impulse Manifold Mk. VII (Civilian Ships)
+utility_component_template = {
+  key = "REQUIRED_THRUSTERS_6A_CS"
+  size = small
+  icon = "GFX_ship_part_Required_Thruster_A_6"
+  icon_frame = 1
+  power = -35
+  cost = 35
+  class_restriction = { shipclass_constructor shipclass_colonizer shipclass_science_ship shipclass_transport }
+  upgrades_to = "REQUIRED_THRUSTERS_7A_CS"
+  ship_modifier = {     }
+  modifier = { ship_combat_speed_mult = 0.9 ship_speed_mult = 0.9 ship_evasion_add = 18  }
+  ai_weight = { weight = 300 }
+  prerequisites = { "tech_engineering_materials_1495" }
+  component_set = "required_thrusters"
+}
+
+# Hyper-Impulse Engine (Patrol Frigate)
+utility_component_template = {
+  key = "REQUIRED_THRUSTERS_7A_PF"
+  size = small
+  icon = "GFX_ship_part_Required_Thruster_A_7"
+  icon_frame = 1
+  power = -60
+  cost = 40
+  size_restriction = { corvette }
+  class_restriction = { shipclass_military }
+  
+  ship_modifier = {     }
+  modifier = { ship_combat_speed_mult = 1 ship_speed_mult = 1 ship_evasion_add = 22  }
+  ai_weight = { weight = 350 }
+  prerequisites = { "tech_engineering_hyper-impulse_637" }
+  component_set = "required_thrusters"
+}
+# Hyper-Impulse Engine (Destroyer)
+utility_component_template = {
+  key = "REQUIRED_THRUSTERS_7A_DE"
+  size = small
+  icon = "GFX_ship_part_Required_Thruster_A_7"
+  icon_frame = 1
+  power = -155
+  cost = 50
+  size_restriction = { saber }
+  class_restriction = { shipclass_military }
+  
+  ship_modifier = {     }
+  modifier = { ship_combat_speed_mult = 1 ship_speed_mult = 1 ship_evasion_add = 22  }
+  ai_weight = { weight = 350 }
+  prerequisites = { "tech_engineering_hyper-impulse_637" }
+  component_set = "required_thrusters"
+}
+# Hyper-Impulse Engine (Cruiser/Sphere)
+utility_component_template = {
+  key = "REQUIRED_THRUSTERS_7A_CR"
+  size = small
+  icon = "GFX_ship_part_Required_Thruster_A_7"
+  icon_frame = 1
+  power = -325
+  cost = 130
+  size_restriction = { sovereign borg_sphere }
+  class_restriction = { shipclass_military }
+  
+  ship_modifier = {     }
+  modifier = { ship_combat_speed_mult = 1 ship_speed_mult = 1 ship_evasion_add = 22  }
+  ai_weight = { weight = 350 }
+  prerequisites = { "tech_engineering_hyper-impulse_637" }
+  component_set = "required_thrusters"
+}
+# Hyper-Impulse Engine (Battlecruiser/Diamond)
+utility_component_template = {
+  key = "REQUIRED_THRUSTERS_7A_BC"
+  size = small
+  icon = "GFX_ship_part_Required_Thruster_A_7"
+  icon_frame = 1
+  power = -205
+  cost = 65
+  size_restriction = { steamrunner borg_diamond }
+  class_restriction = { shipclass_military }
+  
+  ship_modifier = {     }
+  modifier = { ship_combat_speed_mult = 1 ship_speed_mult = 1 ship_evasion_add = 22  }
+  ai_weight = { weight = 350 }
+  prerequisites = { "tech_engineering_hyper-impulse_637" }
+  component_set = "required_thrusters"
+}
+# Hyper-Impulse Engine (Battleship)
+utility_component_template = {
+  key = "REQUIRED_THRUSTERS_7A_BS"
+  size = small
+  icon = "GFX_ship_part_Required_Thruster_A_7"
+  icon_frame = 1
+  power = -435
+  cost = 175
+  size_restriction = { adv_cruiser }
+  class_restriction = { shipclass_military }
+  
+  ship_modifier = {     }
+  modifier = { ship_combat_speed_mult = 1 ship_speed_mult = 1 ship_evasion_add = 22  }
+  ai_weight = { weight = 350 }
+  prerequisites = { "tech_engineering_hyper-impulse_637" }
+  component_set = "required_thrusters"
+}
+# Hyper-Impulse Engine (Heavy Escort)
+utility_component_template = {
+  key = "REQUIRED_THRUSTERS_7A_HE"
+  size = small
+  icon = "GFX_ship_part_Required_Thruster_A_7"
+  icon_frame = 1
+  power = -245
+  cost = 80
+  size_restriction = { strike }
+  class_restriction = { shipclass_military }
+  
+  ship_modifier = {     }
+  modifier = { ship_combat_speed_mult = 1 ship_speed_mult = 1 ship_evasion_add = 22  }
+  ai_weight = { weight = 350 }
+  prerequisites = { "tech_engineering_hyper-impulse_637" }
+  component_set = "required_thrusters"
+}
+# Hyper-Impulse Engine (Assault Cruiser)
+utility_component_template = {
+  key = "REQUIRED_THRUSTERS_7A_AC"
+  size = small
+  icon = "GFX_ship_part_Required_Thruster_A_7"
+  icon_frame = 1
+  power = -410
+  cost = 165
+  size_restriction = { assault_cruiser }
+  class_restriction = { shipclass_military }
+  
+  ship_modifier = {     }
+  modifier = { ship_combat_speed_mult = 1 ship_speed_mult = 1 ship_evasion_add = 22  }
+  ai_weight = { weight = 350 }
+  prerequisites = { "tech_engineering_hyper-impulse_637" }
+  component_set = "required_thrusters"
+}
+# Hyper-Impulse Engine (Dreadnought)
+utility_component_template = {
+  key = "REQUIRED_THRUSTERS_7A_SB"
+  size = small
+  icon = "GFX_ship_part_Required_Thruster_A_7"
+  icon_frame = 1
+  power = -765
+  cost = 305
+  size_restriction = { super_battleship borg_cube borg_tactical }
+  class_restriction = { shipclass_military }
+  
+  ship_modifier = {     }
+  modifier = { ship_combat_speed_mult = 1 ship_speed_mult = 1 ship_evasion_add = 22  }
+  ai_weight = { weight = 350 }
+  prerequisites = { "tech_engineering_hyper-impulse_637" }
+  component_set = "required_thrusters"
+}
+# Hyper-Impulse Engine (Man-O-War)
+utility_component_template = {
+  key = "REQUIRED_THRUSTERS_7A_SC"
+  size = small
+  icon = "GFX_ship_part_Required_Thruster_A_7"
+  icon_frame = 1
+  power = -1155
+  cost = 460
+  size_restriction = { super_cube }
+  class_restriction = { shipclass_military }
+  
+  ship_modifier = {     }
+  modifier = { ship_combat_speed_mult = 1 ship_speed_mult = 1 ship_evasion_add = 22  }
+  ai_weight = { weight = 350 }
+  prerequisites = { "tech_engineering_hyper-impulse_637" }
+  component_set = "required_thrusters"
+}
+# Hyper-Impulse Engine (Civilian Ships)
+utility_component_template = {
+  key = "REQUIRED_THRUSTERS_7A_CS"
+  size = small
+  icon = "GFX_ship_part_Required_Thruster_A_7"
+  icon_frame = 1
+  power = -45
+  cost = 40
+  class_restriction = { shipclass_constructor shipclass_colonizer shipclass_science_ship shipclass_transport }
+  
+  ship_modifier = {     }
+  modifier = { ship_combat_speed_mult = 1 ship_speed_mult = 1 ship_evasion_add = 22  }
+  ai_weight = { weight = 350 }
+  prerequisites = { "tech_engineering_hyper-impulse_637" }
+  component_set = "required_thrusters"
+}
+
+# Stealth Thruster (Patrol Frigate)
+utility_component_template = {
+  key = "REQUIRED_THRUSTERS_1B_PF"
+  size = small
+  icon = "GFX_ship_part_Required_Thruster_B_1"
+  icon_frame = 1
+  power = -5
+  cost = 10
+  size_restriction = { corvette }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_THRUSTERS_2B_PF"
+  ship_modifier = {     }
+  modifier = { ship_combat_speed_mult = -0.2 ship_speed_mult = -0.2 ship_evasion_add = 10  }
+  ai_weight = { weight = 50 }
+  prerequisites = { "tech_engineering_low_632" }
+  component_set = "required_thrusters"
+}
+# Stealth Thruster (Destroyer)
+utility_component_template = {
+  key = "REQUIRED_THRUSTERS_1B_DE"
+  size = small
+  icon = "GFX_ship_part_Required_Thruster_B_1"
+  icon_frame = 1
+  power = -15
+  cost = 25
+  size_restriction = { saber }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_THRUSTERS_2B_DE"
+  ship_modifier = {     }
+  modifier = { ship_combat_speed_mult = -0.2 ship_speed_mult = -0.2 ship_evasion_add = 10  }
+  ai_weight = { weight = 50 }
+  prerequisites = { "tech_engineering_low_632" }
+  component_set = "required_thrusters"
+}
+# Stealth Thruster (Cruiser/Sphere)
+utility_component_template = {
+  key = "REQUIRED_THRUSTERS_1B_CR"
+  size = small
+  icon = "GFX_ship_part_Required_Thruster_B_1"
+  icon_frame = 1
+  power = -30
+  cost = 65
+  size_restriction = { sovereign borg_sphere }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_THRUSTERS_2B_CR"
+  ship_modifier = {     }
+  modifier = { ship_combat_speed_mult = -0.2 ship_speed_mult = -0.2 ship_evasion_add = 10  }
+  ai_weight = { weight = 50 }
+  prerequisites = { "tech_engineering_low_632" }
+  component_set = "required_thrusters"
+}
+# Stealth Thruster (Battlecruiser/Diamond)
+utility_component_template = {
+  key = "REQUIRED_THRUSTERS_1B_BC"
+  size = small
+  icon = "GFX_ship_part_Required_Thruster_B_1"
+  icon_frame = 1
+  power = -20
+  cost = 30
+  size_restriction = { steamrunner borg_diamond }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_THRUSTERS_2B_BC"
+  ship_modifier = {     }
+  modifier = { ship_combat_speed_mult = -0.2 ship_speed_mult = -0.2 ship_evasion_add = 10  }
+  ai_weight = { weight = 50 }
+  prerequisites = { "tech_engineering_low_632" }
+  component_set = "required_thrusters"
+}
+# Stealth Thruster (Battleship)
+utility_component_template = {
+  key = "REQUIRED_THRUSTERS_1B_BS"
+  size = small
+  icon = "GFX_ship_part_Required_Thruster_B_1"
+  icon_frame = 1
+  power = -40
+  cost = 85
+  size_restriction = { adv_cruiser }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_THRUSTERS_2B_BS"
+  ship_modifier = {     }
+  modifier = { ship_combat_speed_mult = -0.2 ship_speed_mult = -0.2 ship_evasion_add = 10  }
+  ai_weight = { weight = 50 }
+  prerequisites = { "tech_engineering_low_632" }
+  component_set = "required_thrusters"
+}
+# Stealth Thruster (Heavy Escort)
+utility_component_template = {
+  key = "REQUIRED_THRUSTERS_1B_HE"
+  size = small
+  icon = "GFX_ship_part_Required_Thruster_B_1"
+  icon_frame = 1
+  power = -25
+  cost = 40
+  size_restriction = { strike }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_THRUSTERS_2B_HE"
+  ship_modifier = {     }
+  modifier = { ship_combat_speed_mult = -0.2 ship_speed_mult = -0.2 ship_evasion_add = 10  }
+  ai_weight = { weight = 50 }
+  prerequisites = { "tech_engineering_low_632" }
+  component_set = "required_thrusters"
+}
+# Stealth Thruster (Assault Cruiser)
+utility_component_template = {
+  key = "REQUIRED_THRUSTERS_1B_AC"
+  size = small
+  icon = "GFX_ship_part_Required_Thruster_B_1"
+  icon_frame = 1
+  power = -40
+  cost = 80
+  size_restriction = { assault_cruiser }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_THRUSTERS_2B_AC"
+  ship_modifier = {     }
+  modifier = { ship_combat_speed_mult = -0.2 ship_speed_mult = -0.2 ship_evasion_add = 10  }
+  ai_weight = { weight = 50 }
+  prerequisites = { "tech_engineering_low_632" }
+  component_set = "required_thrusters"
+}
+# Stealth Thruster (Dreadnought)
+utility_component_template = {
+  key = "REQUIRED_THRUSTERS_1B_SB"
+  size = small
+  icon = "GFX_ship_part_Required_Thruster_B_1"
+  icon_frame = 1
+  power = -75
+  cost = 150
+  size_restriction = { super_battleship borg_cube borg_tactical }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_THRUSTERS_2B_SB"
+  ship_modifier = {     }
+  modifier = { ship_combat_speed_mult = -0.2 ship_speed_mult = -0.2 ship_evasion_add = 10  }
+  ai_weight = { weight = 50 }
+  prerequisites = { "tech_engineering_low_632" }
+  component_set = "required_thrusters"
+}
+# Stealth Thruster (Man-O-War)
+utility_component_template = {
+  key = "REQUIRED_THRUSTERS_1B_SC"
+  size = small
+  icon = "GFX_ship_part_Required_Thruster_B_1"
+  icon_frame = 1
+  power = -110
+  cost = 225
+  size_restriction = { super_cube }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_THRUSTERS_2B_SC"
+  ship_modifier = {     }
+  modifier = { ship_combat_speed_mult = -0.2 ship_speed_mult = -0.2 ship_evasion_add = 10  }
+  ai_weight = { weight = 50 }
+  prerequisites = { "tech_engineering_low_632" }
+  component_set = "required_thrusters"
+}
+# Stealth Thruster (Civilian Ships)
+utility_component_template = {
+  key = "REQUIRED_THRUSTERS_1B_CS"
+  size = small
+  icon = "GFX_ship_part_Required_Thruster_B_1"
+  icon_frame = 1
+  power = -5
+  cost = 10
+  class_restriction = { shipclass_constructor shipclass_colonizer shipclass_science_ship shipclass_transport }
+  upgrades_to = "REQUIRED_THRUSTERS_2B_CS"
+  ship_modifier = {     }
+  modifier = { ship_combat_speed_mult = -0.2 ship_speed_mult = -0.2 ship_evasion_add = 10  }
+  ai_weight = { weight = 50 }
+  prerequisites = { "tech_engineering_low_632" }
+  component_set = "required_thrusters"
+}
+
+# Paralithium Mk. III Stealth Thruster (Patrol Frigate)
+utility_component_template = {
+  key = "REQUIRED_THRUSTERS_2B_PF"
+  size = small
+  icon = "GFX_ship_part_Required_Thruster_B_2"
+  icon_frame = 1
+  power = -10
+  cost = 15
+  size_restriction = { corvette }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_THRUSTERS_3B_PF"
+  ship_modifier = {     }
+  modifier = { ship_combat_speed_mult = -0.1 ship_speed_mult = -0.1 ship_evasion_add = 14  }
+  ai_weight = { weight = 100 }
+  prerequisites = { "tech_engineering_materials_1501" }
+  component_set = "required_thrusters"
+}
+# Paralithium Mk. III Stealth Thruster (Destroyer)
+utility_component_template = {
+  key = "REQUIRED_THRUSTERS_2B_DE"
+  size = small
+  icon = "GFX_ship_part_Required_Thruster_B_2"
+  icon_frame = 1
+  power = -25
+  cost = 40
+  size_restriction = { saber }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_THRUSTERS_3B_DE"
+  ship_modifier = {     }
+  modifier = { ship_combat_speed_mult = -0.1 ship_speed_mult = -0.1 ship_evasion_add = 14  }
+  ai_weight = { weight = 100 }
+  prerequisites = { "tech_engineering_materials_1501" }
+  component_set = "required_thrusters"
+}
+# Paralithium Mk. III Stealth Thruster (Cruiser/Sphere)
+utility_component_template = {
+  key = "REQUIRED_THRUSTERS_2B_CR"
+  size = small
+  icon = "GFX_ship_part_Required_Thruster_B_2"
+  icon_frame = 1
+  power = -50
+  cost = 105
+  size_restriction = { sovereign borg_sphere }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_THRUSTERS_3B_CR"
+  ship_modifier = {     }
+  modifier = { ship_combat_speed_mult = -0.1 ship_speed_mult = -0.1 ship_evasion_add = 14  }
+  ai_weight = { weight = 100 }
+  prerequisites = { "tech_engineering_materials_1501" }
+  component_set = "required_thrusters"
+}
+# Paralithium Mk. III Stealth Thruster (Battlecruiser/Diamond)
+utility_component_template = {
+  key = "REQUIRED_THRUSTERS_2B_BC"
+  size = small
+  icon = "GFX_ship_part_Required_Thruster_B_2"
+  icon_frame = 1
+  power = -30
+  cost = 50
+  size_restriction = { steamrunner borg_diamond }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_THRUSTERS_3B_BC"
+  ship_modifier = {     }
+  modifier = { ship_combat_speed_mult = -0.1 ship_speed_mult = -0.1 ship_evasion_add = 14  }
+  ai_weight = { weight = 100 }
+  prerequisites = { "tech_engineering_materials_1501" }
+  component_set = "required_thrusters"
+}
+# Paralithium Mk. III Stealth Thruster (Battleship)
+utility_component_template = {
+  key = "REQUIRED_THRUSTERS_2B_BS"
+  size = small
+  icon = "GFX_ship_part_Required_Thruster_B_2"
+  icon_frame = 1
+  power = -70
+  cost = 140
+  size_restriction = { adv_cruiser }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_THRUSTERS_3B_BS"
+  ship_modifier = {     }
+  modifier = { ship_combat_speed_mult = -0.1 ship_speed_mult = -0.1 ship_evasion_add = 14  }
+  ai_weight = { weight = 100 }
+  prerequisites = { "tech_engineering_materials_1501" }
+  component_set = "required_thrusters"
+}
+# Paralithium Mk. III Stealth Thruster (Heavy Escort)
+utility_component_template = {
+  key = "REQUIRED_THRUSTERS_2B_HE"
+  size = small
+  icon = "GFX_ship_part_Required_Thruster_B_2"
+  icon_frame = 1
+  power = -40
+  cost = 65
+  size_restriction = { strike }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_THRUSTERS_3B_HE"
+  ship_modifier = {     }
+  modifier = { ship_combat_speed_mult = -0.1 ship_speed_mult = -0.1 ship_evasion_add = 14  }
+  ai_weight = { weight = 100 }
+  prerequisites = { "tech_engineering_materials_1501" }
+  component_set = "required_thrusters"
+}
+# Paralithium Mk. III Stealth Thruster (Assault Cruiser)
+utility_component_template = {
+  key = "REQUIRED_THRUSTERS_2B_AC"
+  size = small
+  icon = "GFX_ship_part_Required_Thruster_B_2"
+  icon_frame = 1
+  power = -65
+  cost = 130
+  size_restriction = { assault_cruiser }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_THRUSTERS_3B_AC"
+  ship_modifier = {     }
+  modifier = { ship_combat_speed_mult = -0.1 ship_speed_mult = -0.1 ship_evasion_add = 14  }
+  ai_weight = { weight = 100 }
+  prerequisites = { "tech_engineering_materials_1501" }
+  component_set = "required_thrusters"
+}
+# Paralithium Mk. III Stealth Thruster (Dreadnought)
+utility_component_template = {
+  key = "REQUIRED_THRUSTERS_2B_SB"
+  size = small
+  icon = "GFX_ship_part_Required_Thruster_B_2"
+  icon_frame = 1
+  power = -120
+  cost = 245
+  size_restriction = { super_battleship borg_cube borg_tactical }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_THRUSTERS_3B_SB"
+  ship_modifier = {     }
+  modifier = { ship_combat_speed_mult = -0.1 ship_speed_mult = -0.1 ship_evasion_add = 14  }
+  ai_weight = { weight = 100 }
+  prerequisites = { "tech_engineering_materials_1501" }
+  component_set = "required_thrusters"
+}
+# Paralithium Mk. III Stealth Thruster (Man-O-War)
+utility_component_template = {
+  key = "REQUIRED_THRUSTERS_2B_SC"
+  size = small
+  icon = "GFX_ship_part_Required_Thruster_B_2"
+  icon_frame = 1
+  power = -185
+  cost = 365
+  size_restriction = { super_cube }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_THRUSTERS_3B_SC"
+  ship_modifier = {     }
+  modifier = { ship_combat_speed_mult = -0.1 ship_speed_mult = -0.1 ship_evasion_add = 14  }
+  ai_weight = { weight = 100 }
+  prerequisites = { "tech_engineering_materials_1501" }
+  component_set = "required_thrusters"
+}
+# Paralithium Mk. III Stealth Thruster (Civilian Ships)
+utility_component_template = {
+  key = "REQUIRED_THRUSTERS_2B_CS"
+  size = small
+  icon = "GFX_ship_part_Required_Thruster_B_2"
+  icon_frame = 1
+  power = -10
+  cost = 15
+  class_restriction = { shipclass_constructor shipclass_colonizer shipclass_science_ship shipclass_transport }
+  upgrades_to = "REQUIRED_THRUSTERS_3B_CS"
+  ship_modifier = {     }
+  modifier = { ship_combat_speed_mult = -0.1 ship_speed_mult = -0.1 ship_evasion_add = 14  }
+  ai_weight = { weight = 100 }
+  prerequisites = { "tech_engineering_materials_1501" }
+  component_set = "required_thrusters"
+}
+
+# RCS Mk. IV Stealth Thruster (Patrol Frigate)
+utility_component_template = {
+  key = "REQUIRED_THRUSTERS_3B_PF"
+  size = small
+  icon = "GFX_ship_part_Required_Thruster_B_3"
+  icon_frame = 1
+  power = -15
+  cost = 20
+  size_restriction = { corvette }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_THRUSTERS_4B_PF"
+  ship_modifier = {     }
+  modifier = { ship_combat_speed_mult = 0 ship_speed_mult = 0 ship_evasion_add = 18  }
+  ai_weight = { weight = 150 }
+  prerequisites = { "tech_engineering_low_634" }
+  component_set = "required_thrusters"
+}
+# RCS Mk. IV Stealth Thruster (Destroyer)
+utility_component_template = {
+  key = "REQUIRED_THRUSTERS_3B_DE"
+  size = small
+  icon = "GFX_ship_part_Required_Thruster_B_3"
+  icon_frame = 1
+  power = -35
+  cost = 55
+  size_restriction = { saber }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_THRUSTERS_4B_DE"
+  ship_modifier = {     }
+  modifier = { ship_combat_speed_mult = 0 ship_speed_mult = 0 ship_evasion_add = 18  }
+  ai_weight = { weight = 150 }
+  prerequisites = { "tech_engineering_low_634" }
+  component_set = "required_thrusters"
+}
+# RCS Mk. IV Stealth Thruster (Cruiser/Sphere)
+utility_component_template = {
+  key = "REQUIRED_THRUSTERS_3B_CR"
+  size = small
+  icon = "GFX_ship_part_Required_Thruster_B_3"
+  icon_frame = 1
+  power = -75
+  cost = 150
+  size_restriction = { sovereign borg_sphere }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_THRUSTERS_4B_CR"
+  ship_modifier = {     }
+  modifier = { ship_combat_speed_mult = 0 ship_speed_mult = 0 ship_evasion_add = 18  }
+  ai_weight = { weight = 150 }
+  prerequisites = { "tech_engineering_low_634" }
+  component_set = "required_thrusters"
+}
+# RCS Mk. IV Stealth Thruster (Battlecruiser/Diamond)
+utility_component_template = {
+  key = "REQUIRED_THRUSTERS_3B_BC"
+  size = small
+  icon = "GFX_ship_part_Required_Thruster_B_3"
+  icon_frame = 1
+  power = -45
+  cost = 75
+  size_restriction = { steamrunner borg_diamond }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_THRUSTERS_4B_BC"
+  ship_modifier = {     }
+  modifier = { ship_combat_speed_mult = 0 ship_speed_mult = 0 ship_evasion_add = 18  }
+  ai_weight = { weight = 150 }
+  prerequisites = { "tech_engineering_low_634" }
+  component_set = "required_thrusters"
+}
+# RCS Mk. IV Stealth Thruster (Battleship)
+utility_component_template = {
+  key = "REQUIRED_THRUSTERS_3B_BS"
+  size = small
+  icon = "GFX_ship_part_Required_Thruster_B_3"
+  icon_frame = 1
+  power = -100
+  cost = 200
+  size_restriction = { adv_cruiser }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_THRUSTERS_4B_BS"
+  ship_modifier = {     }
+  modifier = { ship_combat_speed_mult = 0 ship_speed_mult = 0 ship_evasion_add = 18  }
+  ai_weight = { weight = 150 }
+  prerequisites = { "tech_engineering_low_634" }
+  component_set = "required_thrusters"
+}
+# RCS Mk. IV Stealth Thruster (Heavy Escort)
+utility_component_template = {
+  key = "REQUIRED_THRUSTERS_3B_HE"
+  size = small
+  icon = "GFX_ship_part_Required_Thruster_B_3"
+  icon_frame = 1
+  power = -55
+  cost = 90
+  size_restriction = { strike }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_THRUSTERS_4B_HE"
+  ship_modifier = {     }
+  modifier = { ship_combat_speed_mult = 0 ship_speed_mult = 0 ship_evasion_add = 18  }
+  ai_weight = { weight = 150 }
+  prerequisites = { "tech_engineering_low_634" }
+  component_set = "required_thrusters"
+}
+# RCS Mk. IV Stealth Thruster (Assault Cruiser)
+utility_component_template = {
+  key = "REQUIRED_THRUSTERS_3B_AC"
+  size = small
+  icon = "GFX_ship_part_Required_Thruster_B_3"
+  icon_frame = 1
+  power = -95
+  cost = 185
+  size_restriction = { assault_cruiser }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_THRUSTERS_4B_AC"
+  ship_modifier = {     }
+  modifier = { ship_combat_speed_mult = 0 ship_speed_mult = 0 ship_evasion_add = 18  }
+  ai_weight = { weight = 150 }
+  prerequisites = { "tech_engineering_low_634" }
+  component_set = "required_thrusters"
+}
+# RCS Mk. IV Stealth Thruster (Dreadnought)
+utility_component_template = {
+  key = "REQUIRED_THRUSTERS_3B_SB"
+  size = small
+  icon = "GFX_ship_part_Required_Thruster_B_3"
+  icon_frame = 1
+  power = -175
+  cost = 350
+  size_restriction = { super_battleship borg_cube borg_tactical }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_THRUSTERS_4B_SB"
+  ship_modifier = {     }
+  modifier = { ship_combat_speed_mult = 0 ship_speed_mult = 0 ship_evasion_add = 18  }
+  ai_weight = { weight = 150 }
+  prerequisites = { "tech_engineering_low_634" }
+  component_set = "required_thrusters"
+}
+# RCS Mk. IV Stealth Thruster (Man-O-War)
+utility_component_template = {
+  key = "REQUIRED_THRUSTERS_3B_SC"
+  size = small
+  icon = "GFX_ship_part_Required_Thruster_B_3"
+  icon_frame = 1
+  power = -265
+  cost = 530
+  size_restriction = { super_cube }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_THRUSTERS_4B_SC"
+  ship_modifier = {     }
+  modifier = { ship_combat_speed_mult = 0 ship_speed_mult = 0 ship_evasion_add = 18  }
+  ai_weight = { weight = 150 }
+  prerequisites = { "tech_engineering_low_634" }
+  component_set = "required_thrusters"
+}
+# RCS Mk. IV Stealth Thruster (Civilian Ships)
+utility_component_template = {
+  key = "REQUIRED_THRUSTERS_3B_CS"
+  size = small
+  icon = "GFX_ship_part_Required_Thruster_B_3"
+  icon_frame = 1
+  power = -15
+  cost = 20
+  class_restriction = { shipclass_constructor shipclass_colonizer shipclass_science_ship shipclass_transport }
+  upgrades_to = "REQUIRED_THRUSTERS_4B_CS"
+  ship_modifier = {     }
+  modifier = { ship_combat_speed_mult = 0 ship_speed_mult = 0 ship_evasion_add = 18  }
+  ai_weight = { weight = 150 }
+  prerequisites = { "tech_engineering_low_634" }
+  component_set = "required_thrusters"
+}
+
+# Cooled Mk. V Stealth Thruster (Patrol Frigate)
+utility_component_template = {
+  key = "REQUIRED_THRUSTERS_4B_PF"
+  size = small
+  icon = "GFX_ship_part_Required_Thruster_B_4"
+  icon_frame = 1
+  power = -20
+  cost = 25
+  size_restriction = { corvette }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_THRUSTERS_5B_PF"
+  ship_modifier = {     }
+  modifier = { ship_combat_speed_mult = 0.1 ship_speed_mult = 0.1 ship_evasion_add = 22  }
+  ai_weight = { weight = 200 }
+  prerequisites = { "tech_engineering_low_636" }
+  component_set = "required_thrusters"
+}
+# Cooled Mk. V Stealth Thruster (Destroyer)
+utility_component_template = {
+  key = "REQUIRED_THRUSTERS_4B_DE"
+  size = small
+  icon = "GFX_ship_part_Required_Thruster_B_4"
+  icon_frame = 1
+  power = -45
+  cost = 75
+  size_restriction = { saber }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_THRUSTERS_5B_DE"
+  ship_modifier = {     }
+  modifier = { ship_combat_speed_mult = 0.1 ship_speed_mult = 0.1 ship_evasion_add = 22  }
+  ai_weight = { weight = 200 }
+  prerequisites = { "tech_engineering_low_636" }
+  component_set = "required_thrusters"
+}
+# Cooled Mk. V Stealth Thruster (Cruiser/Sphere)
+utility_component_template = {
+  key = "REQUIRED_THRUSTERS_4B_CR"
+  size = small
+  icon = "GFX_ship_part_Required_Thruster_B_4"
+  icon_frame = 1
+  power = -100
+  cost = 200
+  size_restriction = { sovereign borg_sphere }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_THRUSTERS_5B_CR"
+  ship_modifier = {     }
+  modifier = { ship_combat_speed_mult = 0.1 ship_speed_mult = 0.1 ship_evasion_add = 22  }
+  ai_weight = { weight = 200 }
+  prerequisites = { "tech_engineering_low_636" }
+  component_set = "required_thrusters"
+}
+# Cooled Mk. V Stealth Thruster (Battlecruiser/Diamond)
+utility_component_template = {
+  key = "REQUIRED_THRUSTERS_4B_BC"
+  size = small
+  icon = "GFX_ship_part_Required_Thruster_B_4"
+  icon_frame = 1
+  power = -65
+  cost = 100
+  size_restriction = { steamrunner borg_diamond }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_THRUSTERS_5B_BC"
+  ship_modifier = {     }
+  modifier = { ship_combat_speed_mult = 0.1 ship_speed_mult = 0.1 ship_evasion_add = 22  }
+  ai_weight = { weight = 200 }
+  prerequisites = { "tech_engineering_low_636" }
+  component_set = "required_thrusters"
+}
+# Cooled Mk. V Stealth Thruster (Battleship)
+utility_component_template = {
+  key = "REQUIRED_THRUSTERS_4B_BS"
+  size = small
+  icon = "GFX_ship_part_Required_Thruster_B_4"
+  icon_frame = 1
+  power = -135
+  cost = 270
+  size_restriction = { adv_cruiser }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_THRUSTERS_5B_BS"
+  ship_modifier = {     }
+  modifier = { ship_combat_speed_mult = 0.1 ship_speed_mult = 0.1 ship_evasion_add = 22  }
+  ai_weight = { weight = 200 }
+  prerequisites = { "tech_engineering_low_636" }
+  component_set = "required_thrusters"
+}
+# Cooled Mk. V Stealth Thruster (Heavy Escort)
+utility_component_template = {
+  key = "REQUIRED_THRUSTERS_4B_HE"
+  size = small
+  icon = "GFX_ship_part_Required_Thruster_B_4"
+  icon_frame = 1
+  power = -75
+  cost = 120
+  size_restriction = { strike }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_THRUSTERS_5B_HE"
+  ship_modifier = {     }
+  modifier = { ship_combat_speed_mult = 0.1 ship_speed_mult = 0.1 ship_evasion_add = 22  }
+  ai_weight = { weight = 200 }
+  prerequisites = { "tech_engineering_low_636" }
+  component_set = "required_thrusters"
+}
+# Cooled Mk. V Stealth Thruster (Assault Cruiser)
+utility_component_template = {
+  key = "REQUIRED_THRUSTERS_4B_AC"
+  size = small
+  icon = "GFX_ship_part_Required_Thruster_B_4"
+  icon_frame = 1
+  power = -125
+  cost = 250
+  size_restriction = { assault_cruiser }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_THRUSTERS_5B_AC"
+  ship_modifier = {     }
+  modifier = { ship_combat_speed_mult = 0.1 ship_speed_mult = 0.1 ship_evasion_add = 22  }
+  ai_weight = { weight = 200 }
+  prerequisites = { "tech_engineering_low_636" }
+  component_set = "required_thrusters"
+}
+# Cooled Mk. V Stealth Thruster (Dreadnought)
+utility_component_template = {
+  key = "REQUIRED_THRUSTERS_4B_SB"
+  size = small
+  icon = "GFX_ship_part_Required_Thruster_B_4"
+  icon_frame = 1
+  power = -235
+  cost = 475
+  size_restriction = { super_battleship borg_cube borg_tactical }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_THRUSTERS_5B_SB"
+  ship_modifier = {     }
+  modifier = { ship_combat_speed_mult = 0.1 ship_speed_mult = 0.1 ship_evasion_add = 22  }
+  ai_weight = { weight = 200 }
+  prerequisites = { "tech_engineering_low_636" }
+  component_set = "required_thrusters"
+}
+# Cooled Mk. V Stealth Thruster (Man-O-War)
+utility_component_template = {
+  key = "REQUIRED_THRUSTERS_4B_SC"
+  size = small
+  icon = "GFX_ship_part_Required_Thruster_B_4"
+  icon_frame = 1
+  power = -355
+  cost = 715
+  size_restriction = { super_cube }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_THRUSTERS_5B_SC"
+  ship_modifier = {     }
+  modifier = { ship_combat_speed_mult = 0.1 ship_speed_mult = 0.1 ship_evasion_add = 22  }
+  ai_weight = { weight = 200 }
+  prerequisites = { "tech_engineering_low_636" }
+  component_set = "required_thrusters"
+}
+# Cooled Mk. V Stealth Thruster (Civilian Ships)
+utility_component_template = {
+  key = "REQUIRED_THRUSTERS_4B_CS"
+  size = small
+  icon = "GFX_ship_part_Required_Thruster_B_4"
+  icon_frame = 1
+  power = -20
+  cost = 25
+  class_restriction = { shipclass_constructor shipclass_colonizer shipclass_science_ship shipclass_transport }
+  upgrades_to = "REQUIRED_THRUSTERS_5B_CS"
+  ship_modifier = {     }
+  modifier = { ship_combat_speed_mult = 0.1 ship_speed_mult = 0.1 ship_evasion_add = 22  }
+  ai_weight = { weight = 200 }
+  prerequisites = { "tech_engineering_low_636" }
+  component_set = "required_thrusters"
+}
+
+# Masked Mk. VI Stealth Thruster (Patrol Frigate)
+utility_component_template = {
+  key = "REQUIRED_THRUSTERS_5B_PF"
+  size = small
+  icon = "GFX_ship_part_Required_Thruster_B_5"
+  icon_frame = 1
+  power = -25
+  cost = 35
+  size_restriction = { corvette }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_THRUSTERS_6B_PF"
+  ship_modifier = {     }
+  modifier = { ship_combat_speed_mult = 0.2 ship_speed_mult = 0.2 ship_evasion_add = 26  }
+  ai_weight = { weight = 250 }
+  prerequisites = { "tech_engineering_masked_638" }
+  component_set = "required_thrusters"
+}
+# Masked Mk. VI Stealth Thruster (Destroyer)
+utility_component_template = {
+  key = "REQUIRED_THRUSTERS_5B_DE"
+  size = small
+  icon = "GFX_ship_part_Required_Thruster_B_5"
+  icon_frame = 1
+  power = -60
+  cost = 95
+  size_restriction = { saber }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_THRUSTERS_6B_DE"
+  ship_modifier = {     }
+  modifier = { ship_combat_speed_mult = 0.2 ship_speed_mult = 0.2 ship_evasion_add = 26  }
+  ai_weight = { weight = 250 }
+  prerequisites = { "tech_engineering_masked_638" }
+  component_set = "required_thrusters"
+}
+# Masked Mk. VI Stealth Thruster (Cruiser/Sphere)
+utility_component_template = {
+  key = "REQUIRED_THRUSTERS_5B_CR"
+  size = small
+  icon = "GFX_ship_part_Required_Thruster_B_5"
+  icon_frame = 1
+  power = -130
+  cost = 255
+  size_restriction = { sovereign borg_sphere }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_THRUSTERS_6B_CR"
+  ship_modifier = {     }
+  modifier = { ship_combat_speed_mult = 0.2 ship_speed_mult = 0.2 ship_evasion_add = 26  }
+  ai_weight = { weight = 250 }
+  prerequisites = { "tech_engineering_masked_638" }
+  component_set = "required_thrusters"
+}
+# Masked Mk. VI Stealth Thruster (Battlecruiser/Diamond)
+utility_component_template = {
+  key = "REQUIRED_THRUSTERS_5B_BC"
+  size = small
+  icon = "GFX_ship_part_Required_Thruster_B_5"
+  icon_frame = 1
+  power = -80
+  cost = 130
+  size_restriction = { steamrunner borg_diamond }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_THRUSTERS_6B_BC"
+  ship_modifier = {     }
+  modifier = { ship_combat_speed_mult = 0.2 ship_speed_mult = 0.2 ship_evasion_add = 26  }
+  ai_weight = { weight = 250 }
+  prerequisites = { "tech_engineering_masked_638" }
+  component_set = "required_thrusters"
+}
+# Masked Mk. VI Stealth Thruster (Battleship)
+utility_component_template = {
+  key = "REQUIRED_THRUSTERS_5B_BS"
+  size = small
+  icon = "GFX_ship_part_Required_Thruster_B_5"
+  icon_frame = 1
+  power = -170
+  cost = 345
+  size_restriction = { adv_cruiser }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_THRUSTERS_6B_BS"
+  ship_modifier = {     }
+  modifier = { ship_combat_speed_mult = 0.2 ship_speed_mult = 0.2 ship_evasion_add = 26  }
+  ai_weight = { weight = 250 }
+  prerequisites = { "tech_engineering_masked_638" }
+  component_set = "required_thrusters"
+}
+# Masked Mk. VI Stealth Thruster (Heavy Escort)
+utility_component_template = {
+  key = "REQUIRED_THRUSTERS_5B_HE"
+  size = small
+  icon = "GFX_ship_part_Required_Thruster_B_5"
+  icon_frame = 1
+  power = -100
+  cost = 155
+  size_restriction = { strike }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_THRUSTERS_6B_HE"
+  ship_modifier = {     }
+  modifier = { ship_combat_speed_mult = 0.2 ship_speed_mult = 0.2 ship_evasion_add = 26  }
+  ai_weight = { weight = 250 }
+  prerequisites = { "tech_engineering_masked_638" }
+  component_set = "required_thrusters"
+}
+# Masked Mk. VI Stealth Thruster (Assault Cruiser)
+utility_component_template = {
+  key = "REQUIRED_THRUSTERS_5B_AC"
+  size = small
+  icon = "GFX_ship_part_Required_Thruster_B_5"
+  icon_frame = 1
+  power = -160
+  cost = 325
+  size_restriction = { assault_cruiser }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_THRUSTERS_6B_AC"
+  ship_modifier = {     }
+  modifier = { ship_combat_speed_mult = 0.2 ship_speed_mult = 0.2 ship_evasion_add = 26  }
+  ai_weight = { weight = 250 }
+  prerequisites = { "tech_engineering_masked_638" }
+  component_set = "required_thrusters"
+}
+# Masked Mk. VI Stealth Thruster (Dreadnought)
+utility_component_template = {
+  key = "REQUIRED_THRUSTERS_5B_SB"
+  size = small
+  icon = "GFX_ship_part_Required_Thruster_B_5"
+  icon_frame = 1
+  power = -305
+  cost = 610
+  size_restriction = { super_battleship borg_cube borg_tactical }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_THRUSTERS_6B_SB"
+  ship_modifier = {     }
+  modifier = { ship_combat_speed_mult = 0.2 ship_speed_mult = 0.2 ship_evasion_add = 26  }
+  ai_weight = { weight = 250 }
+  prerequisites = { "tech_engineering_masked_638" }
+  component_set = "required_thrusters"
+}
+# Masked Mk. VI Stealth Thruster (Man-O-War)
+utility_component_template = {
+  key = "REQUIRED_THRUSTERS_5B_SC"
+  size = small
+  icon = "GFX_ship_part_Required_Thruster_B_5"
+  icon_frame = 1
+  power = -460
+  cost = 920
+  size_restriction = { super_cube }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_THRUSTERS_6B_SC"
+  ship_modifier = {     }
+  modifier = { ship_combat_speed_mult = 0.2 ship_speed_mult = 0.2 ship_evasion_add = 26  }
+  ai_weight = { weight = 250 }
+  prerequisites = { "tech_engineering_masked_638" }
+  component_set = "required_thrusters"
+}
+# Masked Mk. VI Stealth Thruster (Civilian Ships)
+utility_component_template = {
+  key = "REQUIRED_THRUSTERS_5B_CS"
+  size = small
+  icon = "GFX_ship_part_Required_Thruster_B_5"
+  icon_frame = 1
+  power = -25
+  cost = 30
+  class_restriction = { shipclass_constructor shipclass_colonizer shipclass_science_ship shipclass_transport }
+  upgrades_to = "REQUIRED_THRUSTERS_6B_CS"
+  ship_modifier = {     }
+  modifier = { ship_combat_speed_mult = 0.2 ship_speed_mult = 0.2 ship_evasion_add = 26  }
+  ai_weight = { weight = 250 }
+  prerequisites = { "tech_engineering_masked_638" }
+  component_set = "required_thrusters"
+}
+
+# Paragravitic Mk. VII Stealth Thruster (Patrol Frigate)
+utility_component_template = {
+  key = "REQUIRED_THRUSTERS_6B_PF"
+  size = small
+  icon = "GFX_ship_part_Required_Thruster_B_6"
+  icon_frame = 1
+  power = -30
+  cost = 40
+  size_restriction = { corvette }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_THRUSTERS_7B_PF"
+  ship_modifier = {     }
+  modifier = { ship_combat_speed_mult = 0.3 ship_speed_mult = 0.3 ship_evasion_add = 30  }
+  ai_weight = { weight = 300 }
+  prerequisites = { "tech_engineering_materials_1505" }
+  component_set = "required_thrusters"
+}
+# Paragravitic Mk. VII Stealth Thruster (Destroyer)
+utility_component_template = {
+  key = "REQUIRED_THRUSTERS_6B_DE"
+  size = small
+  icon = "GFX_ship_part_Required_Thruster_B_6"
+  icon_frame = 1
+  power = -75
+  cost = 120
+  size_restriction = { saber }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_THRUSTERS_7B_DE"
+  ship_modifier = {     }
+  modifier = { ship_combat_speed_mult = 0.3 ship_speed_mult = 0.3 ship_evasion_add = 30  }
+  ai_weight = { weight = 300 }
+  prerequisites = { "tech_engineering_materials_1505" }
+  component_set = "required_thrusters"
+}
+# Paragravitic Mk. VII Stealth Thruster (Cruiser/Sphere)
+utility_component_template = {
+  key = "REQUIRED_THRUSTERS_6B_CR"
+  size = small
+  icon = "GFX_ship_part_Required_Thruster_B_6"
+  icon_frame = 1
+  power = -160
+  cost = 320
+  size_restriction = { sovereign borg_sphere }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_THRUSTERS_7B_CR"
+  ship_modifier = {     }
+  modifier = { ship_combat_speed_mult = 0.3 ship_speed_mult = 0.3 ship_evasion_add = 30  }
+  ai_weight = { weight = 300 }
+  prerequisites = { "tech_engineering_materials_1505" }
+  component_set = "required_thrusters"
+}
+# Paragravitic Mk. VII Stealth Thruster (Battlecruiser/Diamond)
+utility_component_template = {
+  key = "REQUIRED_THRUSTERS_6B_BC"
+  size = small
+  icon = "GFX_ship_part_Required_Thruster_B_6"
+  icon_frame = 1
+  power = -100
+  cost = 160
+  size_restriction = { steamrunner borg_diamond }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_THRUSTERS_7B_BC"
+  ship_modifier = {     }
+  modifier = { ship_combat_speed_mult = 0.3 ship_speed_mult = 0.3 ship_evasion_add = 30  }
+  ai_weight = { weight = 300 }
+  prerequisites = { "tech_engineering_materials_1505" }
+  component_set = "required_thrusters"
+}
+# Paragravitic Mk. VII Stealth Thruster (Battleship)
+utility_component_template = {
+  key = "REQUIRED_THRUSTERS_6B_BS"
+  size = small
+  icon = "GFX_ship_part_Required_Thruster_B_6"
+  icon_frame = 1
+  power = -215
+  cost = 430
+  size_restriction = { adv_cruiser }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_THRUSTERS_7B_BS"
+  ship_modifier = {     }
+  modifier = { ship_combat_speed_mult = 0.3 ship_speed_mult = 0.3 ship_evasion_add = 30  }
+  ai_weight = { weight = 300 }
+  prerequisites = { "tech_engineering_materials_1505" }
+  component_set = "required_thrusters"
+}
+# Paragravitic Mk. VII Stealth Thruster (Heavy Escort)
+utility_component_template = {
+  key = "REQUIRED_THRUSTERS_6B_HE"
+  size = small
+  icon = "GFX_ship_part_Required_Thruster_B_6"
+  icon_frame = 1
+  power = -120
+  cost = 195
+  size_restriction = { strike }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_THRUSTERS_7B_HE"
+  ship_modifier = {     }
+  modifier = { ship_combat_speed_mult = 0.3 ship_speed_mult = 0.3 ship_evasion_add = 30  }
+  ai_weight = { weight = 300 }
+  prerequisites = { "tech_engineering_materials_1505" }
+  component_set = "required_thrusters"
+}
+# Paragravitic Mk. VII Stealth Thruster (Assault Cruiser)
+utility_component_template = {
+  key = "REQUIRED_THRUSTERS_6B_AC"
+  size = small
+  icon = "GFX_ship_part_Required_Thruster_B_6"
+  icon_frame = 1
+  power = -200
+  cost = 405
+  size_restriction = { assault_cruiser }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_THRUSTERS_7B_AC"
+  ship_modifier = {     }
+  modifier = { ship_combat_speed_mult = 0.3 ship_speed_mult = 0.3 ship_evasion_add = 30  }
+  ai_weight = { weight = 300 }
+  prerequisites = { "tech_engineering_materials_1505" }
+  component_set = "required_thrusters"
+}
+# Paragravitic Mk. VII Stealth Thruster (Dreadnought)
+utility_component_template = {
+  key = "REQUIRED_THRUSTERS_6B_SB"
+  size = small
+  icon = "GFX_ship_part_Required_Thruster_B_6"
+  icon_frame = 1
+  power = -380
+  cost = 755
+  size_restriction = { super_battleship borg_cube borg_tactical }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_THRUSTERS_7B_SB"
+  ship_modifier = {     }
+  modifier = { ship_combat_speed_mult = 0.3 ship_speed_mult = 0.3 ship_evasion_add = 30  }
+  ai_weight = { weight = 300 }
+  prerequisites = { "tech_engineering_materials_1505" }
+  component_set = "required_thrusters"
+}
+# Paragravitic Mk. VII Stealth Thruster (Man-O-War)
+utility_component_template = {
+  key = "REQUIRED_THRUSTERS_6B_SC"
+  size = small
+  icon = "GFX_ship_part_Required_Thruster_B_6"
+  icon_frame = 1
+  power = -570
+  cost = 1140
+  size_restriction = { super_cube }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_THRUSTERS_7B_SC"
+  ship_modifier = {     }
+  modifier = { ship_combat_speed_mult = 0.3 ship_speed_mult = 0.3 ship_evasion_add = 30  }
+  ai_weight = { weight = 300 }
+  prerequisites = { "tech_engineering_materials_1505" }
+  component_set = "required_thrusters"
+}
+# Paragravitic Mk. VII Stealth Thruster (Civilian Ships)
+utility_component_template = {
+  key = "REQUIRED_THRUSTERS_6B_CS"
+  size = small
+  icon = "GFX_ship_part_Required_Thruster_B_6"
+  icon_frame = 1
+  power = -30
+  cost = 35
+  class_restriction = { shipclass_constructor shipclass_colonizer shipclass_science_ship shipclass_transport }
+  upgrades_to = "REQUIRED_THRUSTERS_7B_CS"
+  ship_modifier = {     }
+  modifier = { ship_combat_speed_mult = 0.3 ship_speed_mult = 0.3 ship_evasion_add = 30  }
+  ai_weight = { weight = 300 }
+  prerequisites = { "tech_engineering_materials_1505" }
+  component_set = "required_thrusters"
+}
+
+# Subspace-Shifted Mk. VIII Stealth Thruster (Patrol Frigate)
+utility_component_template = {
+  key = "REQUIRED_THRUSTERS_7B_PF"
+  size = small
+  icon = "GFX_ship_part_Required_Thruster_B_7"
+  icon_frame = 1
+  power = -35
+  cost = 50
+  size_restriction = { corvette }
+  class_restriction = { shipclass_military }
+  
+  ship_modifier = {     }
+  modifier = { ship_combat_speed_mult = 0.4 ship_speed_mult = 0.4 ship_evasion_add = 34  }
+  ai_weight = { weight = 350 }
+  prerequisites = { "tech_engineering_materials_1506" }
+  component_set = "required_thrusters"
+}
+# Subspace-Shifted Mk. VIII Stealth Thruster (Destroyer)
+utility_component_template = {
+  key = "REQUIRED_THRUSTERS_7B_DE"
+  size = small
+  icon = "GFX_ship_part_Required_Thruster_B_7"
+  icon_frame = 1
+  power = -90
+  cost = 145
+  size_restriction = { saber }
+  class_restriction = { shipclass_military }
+  
+  ship_modifier = {     }
+  modifier = { ship_combat_speed_mult = 0.4 ship_speed_mult = 0.4 ship_evasion_add = 34  }
+  ai_weight = { weight = 350 }
+  prerequisites = { "tech_engineering_materials_1506" }
+  component_set = "required_thrusters"
+}
+# Subspace-Shifted Mk. VIII Stealth Thruster (Cruiser/Sphere)
+utility_component_template = {
+  key = "REQUIRED_THRUSTERS_7B_CR"
+  size = small
+  icon = "GFX_ship_part_Required_Thruster_B_7"
+  icon_frame = 1
+  power = -195
+  cost = 390
+  size_restriction = { sovereign borg_sphere }
+  class_restriction = { shipclass_military }
+  
+  ship_modifier = {     }
+  modifier = { ship_combat_speed_mult = 0.4 ship_speed_mult = 0.4 ship_evasion_add = 34  }
+  ai_weight = { weight = 350 }
+  prerequisites = { "tech_engineering_materials_1506" }
+  component_set = "required_thrusters"
+}
+# Subspace-Shifted Mk. VIII Stealth Thruster (Battlecruiser/Diamond)
+utility_component_template = {
+  key = "REQUIRED_THRUSTERS_7B_BC"
+  size = small
+  icon = "GFX_ship_part_Required_Thruster_B_7"
+  icon_frame = 1
+  power = -120
+  cost = 195
+  size_restriction = { steamrunner borg_diamond }
+  class_restriction = { shipclass_military }
+  
+  ship_modifier = {     }
+  modifier = { ship_combat_speed_mult = 0.4 ship_speed_mult = 0.4 ship_evasion_add = 34  }
+  ai_weight = { weight = 350 }
+  prerequisites = { "tech_engineering_materials_1506" }
+  component_set = "required_thrusters"
+}
+# Subspace-Shifted Mk. VIII Stealth Thruster (Battleship)
+utility_component_template = {
+  key = "REQUIRED_THRUSTERS_7B_BS"
+  size = small
+  icon = "GFX_ship_part_Required_Thruster_B_7"
+  icon_frame = 1
+  power = -260
+  cost = 520
+  size_restriction = { adv_cruiser }
+  class_restriction = { shipclass_military }
+  
+  ship_modifier = {     }
+  modifier = { ship_combat_speed_mult = 0.4 ship_speed_mult = 0.4 ship_evasion_add = 34  }
+  ai_weight = { weight = 350 }
+  prerequisites = { "tech_engineering_materials_1506" }
+  component_set = "required_thrusters"
+}
+# Subspace-Shifted Mk. VIII Stealth Thruster (Heavy Escort)
+utility_component_template = {
+  key = "REQUIRED_THRUSTERS_7B_HE"
+  size = small
+  icon = "GFX_ship_part_Required_Thruster_B_7"
+  icon_frame = 1
+  power = -150
+  cost = 235
+  size_restriction = { strike }
+  class_restriction = { shipclass_military }
+  
+  ship_modifier = {     }
+  modifier = { ship_combat_speed_mult = 0.4 ship_speed_mult = 0.4 ship_evasion_add = 34  }
+  ai_weight = { weight = 350 }
+  prerequisites = { "tech_engineering_materials_1506" }
+  component_set = "required_thrusters"
+}
+# Subspace-Shifted Mk. VIII Stealth Thruster (Assault Cruiser)
+utility_component_template = {
+  key = "REQUIRED_THRUSTERS_7B_AC"
+  size = small
+  icon = "GFX_ship_part_Required_Thruster_B_7"
+  icon_frame = 1
+  power = -245
+  cost = 490
+  size_restriction = { assault_cruiser }
+  class_restriction = { shipclass_military }
+  
+  ship_modifier = {     }
+  modifier = { ship_combat_speed_mult = 0.4 ship_speed_mult = 0.4 ship_evasion_add = 34  }
+  ai_weight = { weight = 350 }
+  prerequisites = { "tech_engineering_materials_1506" }
+  component_set = "required_thrusters"
+}
+# Subspace-Shifted Mk. VIII Stealth Thruster (Dreadnought)
+utility_component_template = {
+  key = "REQUIRED_THRUSTERS_7B_SB"
+  size = small
+  icon = "GFX_ship_part_Required_Thruster_B_7"
+  icon_frame = 1
+  power = -460
+  cost = 920
+  size_restriction = { super_battleship borg_cube borg_tactical }
+  class_restriction = { shipclass_military }
+  
+  ship_modifier = {     }
+  modifier = { ship_combat_speed_mult = 0.4 ship_speed_mult = 0.4 ship_evasion_add = 34  }
+  ai_weight = { weight = 350 }
+  prerequisites = { "tech_engineering_materials_1506" }
+  component_set = "required_thrusters"
+}
+# Subspace-Shifted Mk. VIII Stealth Thruster (Man-O-War)
+utility_component_template = {
+  key = "REQUIRED_THRUSTERS_7B_SC"
+  size = small
+  icon = "GFX_ship_part_Required_Thruster_B_7"
+  icon_frame = 1
+  power = -695
+  cost = 1385
+  size_restriction = { super_cube }
+  class_restriction = { shipclass_military }
+  
+  ship_modifier = {     }
+  modifier = { ship_combat_speed_mult = 0.4 ship_speed_mult = 0.4 ship_evasion_add = 34  }
+  ai_weight = { weight = 350 }
+  prerequisites = { "tech_engineering_materials_1506" }
+  component_set = "required_thrusters"
+}
+# Subspace-Shifted Mk. VIII Stealth Thruster (Civilian Ships)
+utility_component_template = {
+  key = "REQUIRED_THRUSTERS_7B_CS"
+  size = small
+  icon = "GFX_ship_part_Required_Thruster_B_7"
+  icon_frame = 1
+  power = -35
+  cost = 40
+  class_restriction = { shipclass_constructor shipclass_colonizer shipclass_science_ship shipclass_transport }
+  
+  ship_modifier = {     }
+  modifier = { ship_combat_speed_mult = 0.4 ship_speed_mult = 0.4 ship_evasion_add = 34  }
+  ai_weight = { weight = 350 }
+  prerequisites = { "tech_engineering_materials_1506" }
+  component_set = "required_thrusters"
+}
+
+# Omni-Directional Impulse (Patrol Frigate)
+utility_component_template = {
+  key = "REQUIRED_THRUSTERS_0_BORG_PF"
+  size = small
+  icon = "GFX_ship_part_Required_Thruster_Borg_0"
+  icon_frame = 1
+  power = -5
+  cost = 5
+  size_restriction = { corvette }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_THRUSTERS_1_BORG_PF"
+  ship_modifier = {     }
+  modifier = {     }
+  ai_weight = { weight = 400 }
+  prerequisites = { "tech_borg_thruster" }
+  component_set = "required_thrusters"
+}
+# Omni-Directional Impulse (Destroyer)
+utility_component_template = {
+  key = "REQUIRED_THRUSTERS_0_BORG_DE"
+  size = small
+  icon = "GFX_ship_part_Required_Thruster_Borg_0"
+  icon_frame = 1
+  power = -20
+  cost = 15
+  size_restriction = { saber }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_THRUSTERS_1_BORG_DE"
+  ship_modifier = {     }
+  modifier = {     }
+  ai_weight = { weight = 400 }
+  prerequisites = { "tech_borg_thruster" }
+  component_set = "borg_required_thrusters"
+}
+# Omni-Directional Impulse (Cruiser/Sphere)
+utility_component_template = {
+  key = "REQUIRED_THRUSTERS_0_BORG_CR"
+  size = small
+  icon = "GFX_ship_part_Required_Thruster_Borg_0"
+  icon_frame = 1
+  power = -40
+  cost = 40
+  size_restriction = { sovereign borg_sphere }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_THRUSTERS_1_BORG_CR"
+  ship_modifier = {     }
+  modifier = {     }
+  ai_weight = { weight = 400 }
+  prerequisites = { "tech_borg_thruster" }
+  component_set = "borg_required_thrusters"
+}
+# Omni-Directional Impulse (Battlecruiser/Diamond)
+utility_component_template = {
+  key = "REQUIRED_THRUSTERS_0_BORG_BC"
+  size = small
+  icon = "GFX_ship_part_Required_Thruster_Borg_0"
+  icon_frame = 1
+  power = -25
+  cost = 20
+  size_restriction = { steamrunner borg_diamond }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_THRUSTERS_1_BORG_BC"
+  ship_modifier = {     }
+  modifier = {     }
+  ai_weight = { weight = 400 }
+  prerequisites = { "tech_borg_thruster" }
+  component_set = "borg_required_thrusters"
+}
+# Omni-Directional Impulse (Battleship)
+utility_component_template = {
+  key = "REQUIRED_THRUSTERS_0_BORG_BS"
+  size = small
+  icon = "GFX_ship_part_Required_Thruster_Borg_0"
+  icon_frame = 1
+  power = -50
+  cost = 50
+  size_restriction = { adv_cruiser }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_THRUSTERS_1_BORG_BS"
+  ship_modifier = {     }
+  modifier = {     }
+  ai_weight = { weight = 400 }
+  prerequisites = { "tech_borg_thruster" }
+  component_set = "borg_required_thrusters"
+}
+# Omni-Directional Impulse (Heavy Escort)
+utility_component_template = {
+  key = "REQUIRED_THRUSTERS_0_BORG_HE"
+  size = small
+  icon = "GFX_ship_part_Required_Thruster_Borg_0"
+  icon_frame = 1
+  power = -30
+  cost = 25
+  size_restriction = { strike }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_THRUSTERS_1_BORG_HE"
+  ship_modifier = {     }
+  modifier = {     }
+  ai_weight = { weight = 400 }
+  prerequisites = { "tech_borg_thruster" }
+  component_set = "borg_required_thrusters"
+}
+# Omni-Directional Impulse (Assault Cruiser)
+utility_component_template = {
+  key = "REQUIRED_THRUSTERS_0_BORG_AC"
+  size = small
+  icon = "GFX_ship_part_Required_Thruster_Borg_0"
+  icon_frame = 1
+  power = -50
+  cost = 50
+  size_restriction = { assault_cruiser }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_THRUSTERS_1_BORG_AC"
+  ship_modifier = {     }
+  modifier = {     }
+  ai_weight = { weight = 400 }
+  prerequisites = { "tech_borg_thruster" }
+  component_set = "borg_required_thrusters"
+}
+# Omni-Directional Impulse (Dreadnought)
+utility_component_template = {
+  key = "REQUIRED_THRUSTERS_0_BORG_SB"
+  size = small
+  icon = "GFX_ship_part_Required_Thruster_Borg_0"
+  icon_frame = 1
+  power = -90
+  cost = 90
+  size_restriction = { super_battleship borg_cube borg_tactical }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_THRUSTERS_1_BORG_SB"
+  ship_modifier = {     }
+  modifier = {     }
+  ai_weight = { weight = 400 }
+  prerequisites = { "tech_borg_thruster" }
+  component_set = "borg_required_thrusters"
+}
+# Omni-Directional Impulse (Man-O-War)
+utility_component_template = {
+  key = "REQUIRED_THRUSTERS_0_BORG_SC"
+  size = small
+  icon = "GFX_ship_part_Required_Thruster_Borg_0"
+  icon_frame = 1
+  power = -135
+  cost = 135
+  size_restriction = { super_cube }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_THRUSTERS_1_BORG_SC"
+  ship_modifier = {     }
+  modifier = {     }
+  ai_weight = { weight = 400 }
+  prerequisites = { "tech_borg_thruster" }
+  component_set = "borg_required_thrusters"
+}
+# Omni-Directional Impulse (Civilian Ships)
+utility_component_template = {
+  key = "REQUIRED_THRUSTERS_0_BORG_CS"
+  size = small
+  icon = "GFX_ship_part_Required_Thruster_Borg_0"
+  icon_frame = 1
+  power = -5
+  cost = 5
+  class_restriction = { shipclass_constructor shipclass_colonizer shipclass_science_ship shipclass_transport }
+  upgrades_to = "REQUIRED_THRUSTERS_1_BORG_CS"
+  ship_modifier = {     }
+  modifier = {     }
+  ai_weight = { weight = 400 }
+  prerequisites = { "tech_borg_thruster" }
+  component_set = "required_thrusters"
+}
+
+# Omni-Directional Impulse Array (Patrol Frigate)
+utility_component_template = {
+  key = "REQUIRED_THRUSTERS_1_BORG_PF"
+  size = small
+  icon = "GFX_ship_part_Required_Thruster_Borg_1"
+  icon_frame = 1
+  power = -20
+  cost = 15
+  size_restriction = { corvette }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_THRUSTERS_2_BORG_PF"
+  ship_modifier = {     }
+  modifier = { ship_combat_speed_mult = 0.1 ship_speed_mult = 0.1 ship_evasion_add = 2  }
+  ai_weight = { weight = 500 }
+  prerequisites = { "tech_engineering_materials_1523" }
+  component_set = "required_thrusters"
+}
+# Omni-Directional Impulse Array (Destroyer)
+utility_component_template = {
+  key = "REQUIRED_THRUSTERS_1_BORG_DE"
+  size = small
+  icon = "GFX_ship_part_Required_Thruster_Borg_1"
+  icon_frame = 1
+  power = -45
+  cost = 35
+  size_restriction = { saber }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_THRUSTERS_2_BORG_DE"
+  ship_modifier = {     }
+  modifier = { ship_combat_speed_mult = 0.1 ship_speed_mult = 0.1 ship_evasion_add = 2  }
+  ai_weight = { weight = 500 }
+  prerequisites = { "tech_engineering_materials_1523" }
+  component_set = "borg_required_thrusters"
+}
+# Omni-Directional Impulse Array (Cruiser/Sphere)
+utility_component_template = {
+  key = "REQUIRED_THRUSTERS_1_BORG_CR"
+  size = small
+  icon = "GFX_ship_part_Required_Thruster_Borg_1"
+  icon_frame = 1
+  power = -100
+  cost = 100
+  size_restriction = { sovereign borg_sphere }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_THRUSTERS_2_BORG_CR"
+  ship_modifier = {     }
+  modifier = { ship_combat_speed_mult = 0.1 ship_speed_mult = 0.1 ship_evasion_add = 2  }
+  ai_weight = { weight = 500 }
+  prerequisites = { "tech_engineering_materials_1523" }
+  component_set = "borg_required_thrusters"
+}
+# Omni-Directional Impulse Array (Battlecruiser/Diamond)
+utility_component_template = {
+  key = "REQUIRED_THRUSTERS_1_BORG_BC"
+  size = small
+  icon = "GFX_ship_part_Required_Thruster_Borg_1"
+  icon_frame = 1
+  power = -60
+  cost = 50
+  size_restriction = { steamrunner borg_diamond }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_THRUSTERS_2_BORG_BC"
+  ship_modifier = {     }
+  modifier = { ship_combat_speed_mult = 0.1 ship_speed_mult = 0.1 ship_evasion_add = 2  }
+  ai_weight = { weight = 500 }
+  prerequisites = { "tech_engineering_materials_1523" }
+  component_set = "borg_required_thrusters"
+}
+# Omni-Directional Impulse Array (Battleship)
+utility_component_template = {
+  key = "REQUIRED_THRUSTERS_1_BORG_BS"
+  size = small
+  icon = "GFX_ship_part_Required_Thruster_Borg_1"
+  icon_frame = 1
+  power = -135
+  cost = 135
+  size_restriction = { adv_cruiser }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_THRUSTERS_2_BORG_BS"
+  ship_modifier = {     }
+  modifier = { ship_combat_speed_mult = 0.1 ship_speed_mult = 0.1 ship_evasion_add = 2  }
+  ai_weight = { weight = 500 }
+  prerequisites = { "tech_engineering_materials_1523" }
+  component_set = "borg_required_thrusters"
+}
+# Omni-Directional Impulse Array (Heavy Escort)
+utility_component_template = {
+  key = "REQUIRED_THRUSTERS_1_BORG_HE"
+  size = small
+  icon = "GFX_ship_part_Required_Thruster_Borg_1"
+  icon_frame = 1
+  power = -75
+  cost = 60
+  size_restriction = { strike }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_THRUSTERS_2_BORG_HE"
+  ship_modifier = {     }
+  modifier = { ship_combat_speed_mult = 0.1 ship_speed_mult = 0.1 ship_evasion_add = 2  }
+  ai_weight = { weight = 500 }
+  prerequisites = { "tech_engineering_materials_1523" }
+  component_set = "borg_required_thrusters"
+}
+# Omni-Directional Impulse Array (Assault Cruiser)
+utility_component_template = {
+  key = "REQUIRED_THRUSTERS_1_BORG_AC"
+  size = small
+  icon = "GFX_ship_part_Required_Thruster_Borg_1"
+  icon_frame = 1
+  power = -125
+  cost = 125
+  size_restriction = { assault_cruiser }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_THRUSTERS_2_BORG_AC"
+  ship_modifier = {     }
+  modifier = { ship_combat_speed_mult = 0.1 ship_speed_mult = 0.1 ship_evasion_add = 2  }
+  ai_weight = { weight = 500 }
+  prerequisites = { "tech_engineering_materials_1523" }
+  component_set = "borg_required_thrusters"
+}
+# Omni-Directional Impulse Array (Dreadnought)
+utility_component_template = {
+  key = "REQUIRED_THRUSTERS_1_BORG_SB"
+  size = small
+  icon = "GFX_ship_part_Required_Thruster_Borg_1"
+  icon_frame = 1
+  power = -235
+  cost = 235
+  size_restriction = { super_battleship borg_cube borg_tactical }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_THRUSTERS_2_BORG_SB"
+  ship_modifier = {     }
+  modifier = { ship_combat_speed_mult = 0.1 ship_speed_mult = 0.1 ship_evasion_add = 2  }
+  ai_weight = { weight = 500 }
+  prerequisites = { "tech_engineering_materials_1523" }
+  component_set = "borg_required_thrusters"
+}
+# Omni-Directional Impulse Array (Man-O-War)
+utility_component_template = {
+  key = "REQUIRED_THRUSTERS_1_BORG_SC"
+  size = small
+  icon = "GFX_ship_part_Required_Thruster_Borg_1"
+  icon_frame = 1
+  power = -355
+  cost = 355
+  size_restriction = { super_cube }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_THRUSTERS_2_BORG_SC"
+  ship_modifier = {     }
+  modifier = { ship_combat_speed_mult = 0.1 ship_speed_mult = 0.1 ship_evasion_add = 2  }
+  ai_weight = { weight = 500 }
+  prerequisites = { "tech_engineering_materials_1523" }
+  component_set = "borg_required_thrusters"
+}
+# Omni-Directional Impulse Array (Civilian Ships)
+utility_component_template = {
+  key = "REQUIRED_THRUSTERS_1_BORG_CS"
+  size = small
+  icon = "GFX_ship_part_Required_Thruster_Borg_1"
+  icon_frame = 1
+  power = -15
+  cost = 10
+  class_restriction = { shipclass_constructor shipclass_colonizer shipclass_science_ship shipclass_transport }
+  upgrades_to = "REQUIRED_THRUSTERS_2_BORG_CS"
+  ship_modifier = {     }
+  modifier = { ship_combat_speed_mult = 0.1 ship_speed_mult = 0.1 ship_evasion_add = 2  }
+  ai_weight = { weight = 500 }
+  prerequisites = { "tech_engineering_materials_1523" }
+  component_set = "required_thrusters"
+}
+
+# Omni-Directional Impulse Array II (Patrol Frigate)
+utility_component_template = {
+  key = "REQUIRED_THRUSTERS_2_BORG_PF"
+  size = small
+  icon = "GFX_ship_part_Required_Thruster_Borg_2"
+  icon_frame = 1
+  power = -30
+  cost = 20
+  size_restriction = { corvette }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_THRUSTERS_3_BORG_PF"
+  ship_modifier = {     }
+  modifier = { ship_combat_speed_mult = 0.2 ship_speed_mult = 0.2 ship_evasion_add = 4  }
+  ai_weight = { weight = 600 }
+  prerequisites = { "tech_engineering_materials_1524" }
+  component_set = "required_thrusters"
+}
+# Omni-Directional Impulse Array II (Destroyer)
+utility_component_template = {
+  key = "REQUIRED_THRUSTERS_2_BORG_DE"
+  size = small
+  icon = "GFX_ship_part_Required_Thruster_Borg_2"
+  icon_frame = 1
+  power = -75
+  cost = 60
+  size_restriction = { saber }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_THRUSTERS_3_BORG_DE"
+  ship_modifier = {     }
+  modifier = { ship_combat_speed_mult = 0.2 ship_speed_mult = 0.2 ship_evasion_add = 4  }
+  ai_weight = { weight = 600 }
+  prerequisites = { "tech_engineering_materials_1524" }
+  component_set = "borg_required_thrusters"
+}
+# Omni-Directional Impulse Array II (Cruiser/Sphere)
+utility_component_template = {
+  key = "REQUIRED_THRUSTERS_2_BORG_CR"
+  size = small
+  icon = "GFX_ship_part_Required_Thruster_Borg_2"
+  icon_frame = 1
+  power = -160
+  cost = 160
+  size_restriction = { sovereign borg_sphere }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_THRUSTERS_3_BORG_CR"
+  ship_modifier = {     }
+  modifier = { ship_combat_speed_mult = 0.2 ship_speed_mult = 0.2 ship_evasion_add = 4  }
+  ai_weight = { weight = 600 }
+  prerequisites = { "tech_engineering_materials_1524" }
+  component_set = "borg_required_thrusters"
+}
+# Omni-Directional Impulse Array II (Battlecruiser/Diamond)
+utility_component_template = {
+  key = "REQUIRED_THRUSTERS_2_BORG_BC"
+  size = small
+  icon = "GFX_ship_part_Required_Thruster_Borg_2"
+  icon_frame = 1
+  power = -100
+  cost = 80
+  size_restriction = { steamrunner borg_diamond }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_THRUSTERS_3_BORG_BC"
+  ship_modifier = {     }
+  modifier = { ship_combat_speed_mult = 0.2 ship_speed_mult = 0.2 ship_evasion_add = 4  }
+  ai_weight = { weight = 600 }
+  prerequisites = { "tech_engineering_materials_1524" }
+  component_set = "borg_required_thrusters"
+}
+# Omni-Directional Impulse Array II (Battleship)
+utility_component_template = {
+  key = "REQUIRED_THRUSTERS_2_BORG_BS"
+  size = small
+  icon = "GFX_ship_part_Required_Thruster_Borg_2"
+  icon_frame = 1
+  power = -215
+  cost = 215
+  size_restriction = { adv_cruiser }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_THRUSTERS_3_BORG_BS"
+  ship_modifier = {     }
+  modifier = { ship_combat_speed_mult = 0.2 ship_speed_mult = 0.2 ship_evasion_add = 4  }
+  ai_weight = { weight = 600 }
+  prerequisites = { "tech_engineering_materials_1524" }
+  component_set = "borg_required_thrusters"
+}
+# Omni-Directional Impulse Array II (Heavy Escort)
+utility_component_template = {
+  key = "REQUIRED_THRUSTERS_2_BORG_HE"
+  size = small
+  icon = "GFX_ship_part_Required_Thruster_Borg_2"
+  icon_frame = 1
+  power = -120
+  cost = 95
+  size_restriction = { strike }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_THRUSTERS_3_BORG_HE"
+  ship_modifier = {     }
+  modifier = { ship_combat_speed_mult = 0.2 ship_speed_mult = 0.2 ship_evasion_add = 4  }
+  ai_weight = { weight = 600 }
+  prerequisites = { "tech_engineering_materials_1524" }
+  component_set = "borg_required_thrusters"
+}
+# Omni-Directional Impulse Array II (Assault Cruiser)
+utility_component_template = {
+  key = "REQUIRED_THRUSTERS_2_BORG_AC"
+  size = small
+  icon = "GFX_ship_part_Required_Thruster_Borg_2"
+  icon_frame = 1
+  power = -200
+  cost = 200
+  size_restriction = { assault_cruiser }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_THRUSTERS_3_BORG_AC"
+  ship_modifier = {     }
+  modifier = { ship_combat_speed_mult = 0.2 ship_speed_mult = 0.2 ship_evasion_add = 4  }
+  ai_weight = { weight = 600 }
+  prerequisites = { "tech_engineering_materials_1524" }
+  component_set = "borg_required_thrusters"
+}
+# Omni-Directional Impulse Array II (Dreadnought)
+utility_component_template = {
+  key = "REQUIRED_THRUSTERS_2_BORG_SB"
+  size = small
+  icon = "GFX_ship_part_Required_Thruster_Borg_2"
+  icon_frame = 1
+  power = -380
+  cost = 380
+  size_restriction = { super_battleship borg_cube borg_tactical }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_THRUSTERS_3_BORG_SB"
+  ship_modifier = {     }
+  modifier = { ship_combat_speed_mult = 0.2 ship_speed_mult = 0.2 ship_evasion_add = 4  }
+  ai_weight = { weight = 600 }
+  prerequisites = { "tech_engineering_materials_1524" }
+  component_set = "borg_required_thrusters"
+}
+# Omni-Directional Impulse Array II (Man-O-War)
+utility_component_template = {
+  key = "REQUIRED_THRUSTERS_2_BORG_SC"
+  size = small
+  icon = "GFX_ship_part_Required_Thruster_Borg_2"
+  icon_frame = 1
+  power = -570
+  cost = 570
+  size_restriction = { super_cube }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_THRUSTERS_3_BORG_SC"
+  ship_modifier = {     }
+  modifier = { ship_combat_speed_mult = 0.2 ship_speed_mult = 0.2 ship_evasion_add = 4  }
+  ai_weight = { weight = 600 }
+  prerequisites = { "tech_engineering_materials_1524" }
+  component_set = "borg_required_thrusters"
+}
+# Omni-Directional Impulse Array II (Civilian Ships)
+utility_component_template = {
+  key = "REQUIRED_THRUSTERS_2_BORG_CS"
+  size = small
+  icon = "GFX_ship_part_Required_Thruster_Borg_2"
+  icon_frame = 1
+  power = -20
+  cost = 15
+  class_restriction = { shipclass_constructor shipclass_colonizer shipclass_science_ship shipclass_transport }
+  upgrades_to = "REQUIRED_THRUSTERS_3_BORG_CS"
+  ship_modifier = {     }
+  modifier = { ship_combat_speed_mult = 0.2 ship_speed_mult = 0.2 ship_evasion_add = 4  }
+  ai_weight = { weight = 600 }
+  prerequisites = { "tech_engineering_materials_1524" }
+  component_set = "required_thrusters"
+}
+
+# Omni-Directional Impulse Array III (Patrol Frigate)
+utility_component_template = {
+  key = "REQUIRED_THRUSTERS_3_BORG_PF"
+  size = small
+  icon = "GFX_ship_part_Required_Thruster_Borg_3"
+  icon_frame = 1
+  power = -45
+  cost = 30
+  size_restriction = { corvette }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_THRUSTERS_4_BORG_PF"
+  ship_modifier = {     }
+  modifier = { ship_combat_speed_mult = 0.4 ship_speed_mult = 0.4 ship_evasion_add = 6  }
+  ai_weight = { weight = 700 }
+  prerequisites = { "tech_engineering_materials_1525" }
+  component_set = "required_thrusters"
+}
+# Omni-Directional Impulse Array III (Destroyer)
+utility_component_template = {
+  key = "REQUIRED_THRUSTERS_3_BORG_DE"
+  size = small
+  icon = "GFX_ship_part_Required_Thruster_Borg_3"
+  icon_frame = 1
+  power = -110
+  cost = 90
+  size_restriction = { saber }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_THRUSTERS_4_BORG_DE"
+  ship_modifier = {     }
+  modifier = { ship_combat_speed_mult = 0.4 ship_speed_mult = 0.4 ship_evasion_add = 6  }
+  ai_weight = { weight = 700 }
+  prerequisites = { "tech_engineering_materials_1525" }
+  component_set = "borg_required_thrusters"
+}
+# Omni-Directional Impulse Array III (Cruiser/Sphere)
+utility_component_template = {
+  key = "REQUIRED_THRUSTERS_3_BORG_CR"
+  size = small
+  icon = "GFX_ship_part_Required_Thruster_Borg_3"
+  icon_frame = 1
+  power = -235
+  cost = 235
+  size_restriction = { sovereign borg_sphere }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_THRUSTERS_4_BORG_CR"
+  ship_modifier = {     }
+  modifier = { ship_combat_speed_mult = 0.4 ship_speed_mult = 0.4 ship_evasion_add = 6  }
+  ai_weight = { weight = 700 }
+  prerequisites = { "tech_engineering_materials_1525" }
+  component_set = "borg_required_thrusters"
+}
+# Omni-Directional Impulse Array III (Battlecruiser/Diamond)
+utility_component_template = {
+  key = "REQUIRED_THRUSTERS_3_BORG_BC"
+  size = small
+  icon = "GFX_ship_part_Required_Thruster_Borg_3"
+  icon_frame = 1
+  power = -150
+  cost = 120
+  size_restriction = { steamrunner borg_diamond }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_THRUSTERS_4_BORG_BC"
+  ship_modifier = {     }
+  modifier = { ship_combat_speed_mult = 0.4 ship_speed_mult = 0.4 ship_evasion_add = 6  }
+  ai_weight = { weight = 700 }
+  prerequisites = { "tech_engineering_materials_1525" }
+  component_set = "borg_required_thrusters"
+}
+# Omni-Directional Impulse Array III (Battleship)
+utility_component_template = {
+  key = "REQUIRED_THRUSTERS_3_BORG_BS"
+  size = small
+  icon = "GFX_ship_part_Required_Thruster_Borg_3"
+  icon_frame = 1
+  power = -315
+  cost = 315
+  size_restriction = { adv_cruiser }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_THRUSTERS_4_BORG_BS"
+  ship_modifier = {     }
+  modifier = { ship_combat_speed_mult = 0.4 ship_speed_mult = 0.4 ship_evasion_add = 6  }
+  ai_weight = { weight = 700 }
+  prerequisites = { "tech_engineering_materials_1525" }
+  component_set = "borg_required_thrusters"
+}
+# Omni-Directional Impulse Array III (Heavy Escort)
+utility_component_template = {
+  key = "REQUIRED_THRUSTERS_3_BORG_HE"
+  size = small
+  icon = "GFX_ship_part_Required_Thruster_Borg_3"
+  icon_frame = 1
+  power = -180
+  cost = 145
+  size_restriction = { strike }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_THRUSTERS_4_BORG_HE"
+  ship_modifier = {     }
+  modifier = { ship_combat_speed_mult = 0.4 ship_speed_mult = 0.4 ship_evasion_add = 6  }
+  ai_weight = { weight = 700 }
+  prerequisites = { "tech_engineering_materials_1525" }
+  component_set = "borg_required_thrusters"
+}
+# Omni-Directional Impulse Array III (Assault Cruiser)
+utility_component_template = {
+  key = "REQUIRED_THRUSTERS_3_BORG_AC"
+  size = small
+  icon = "GFX_ship_part_Required_Thruster_Borg_3"
+  icon_frame = 1
+  power = -300
+  cost = 300
+  size_restriction = { assault_cruiser }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_THRUSTERS_4_BORG_AC"
+  ship_modifier = {     }
+  modifier = { ship_combat_speed_mult = 0.4 ship_speed_mult = 0.4 ship_evasion_add = 6  }
+  ai_weight = { weight = 700 }
+  prerequisites = { "tech_engineering_materials_1525" }
+  component_set = "borg_required_thrusters"
+}
+# Omni-Directional Impulse Array III (Dreadnought)
+utility_component_template = {
+  key = "REQUIRED_THRUSTERS_3_BORG_SB"
+  size = small
+  icon = "GFX_ship_part_Required_Thruster_Borg_3"
+  icon_frame = 1
+  power = -560
+  cost = 560
+  size_restriction = { super_battleship borg_cube borg_tactical }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_THRUSTERS_4_BORG_SB"
+  ship_modifier = {     }
+  modifier = { ship_combat_speed_mult = 0.4 ship_speed_mult = 0.4 ship_evasion_add = 6  }
+  ai_weight = { weight = 700 }
+  prerequisites = { "tech_engineering_materials_1525" }
+  component_set = "borg_required_thrusters"
+}
+# Omni-Directional Impulse Array III (Man-O-War)
+utility_component_template = {
+  key = "REQUIRED_THRUSTERS_3_BORG_SC"
+  size = small
+  icon = "GFX_ship_part_Required_Thruster_Borg_3"
+  icon_frame = 1
+  power = -845
+  cost = 845
+  size_restriction = { super_cube }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_THRUSTERS_4_BORG_SC"
+  ship_modifier = {     }
+  modifier = { ship_combat_speed_mult = 0.4 ship_speed_mult = 0.4 ship_evasion_add = 6  }
+  ai_weight = { weight = 700 }
+  prerequisites = { "tech_engineering_materials_1525" }
+  component_set = "borg_required_thrusters"
+}
+# Omni-Directional Impulse Array III (Civilian Ships)
+utility_component_template = {
+  key = "REQUIRED_THRUSTERS_3_BORG_CS"
+  size = small
+  icon = "GFX_ship_part_Required_Thruster_Borg_3"
+  icon_frame = 1
+  power = -30
+  cost = 20
+  class_restriction = { shipclass_constructor shipclass_colonizer shipclass_science_ship shipclass_transport }
+  upgrades_to = "REQUIRED_THRUSTERS_4_BORG_CS"
+  ship_modifier = {     }
+  modifier = { ship_combat_speed_mult = 0.4 ship_speed_mult = 0.4 ship_evasion_add = 6  }
+  ai_weight = { weight = 700 }
+  prerequisites = { "tech_engineering_materials_1525" }
+  component_set = "required_thrusters"
+}
+
+# Omni-Directional Impulse Array IV (Patrol Frigate)
+utility_component_template = {
+  key = "REQUIRED_THRUSTERS_4_BORG_PF"
+  size = small
+  icon = "GFX_ship_part_Required_Thruster_Borg_4"
+  icon_frame = 1
+  power = -60
+  cost = 40
+  size_restriction = { corvette }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_THRUSTERS_5_BORG_PF"
+  ship_modifier = {     }
+  modifier = { ship_combat_speed_mult = 0.5 ship_speed_mult = 0.5 ship_evasion_add = 8  }
+  ai_weight = { weight = 800 }
+  prerequisites = { "tech_engineering_materials_1526" }
+  component_set = "required_thrusters"
+}
+# Omni-Directional Impulse Array IV (Destroyer)
+utility_component_template = {
+  key = "REQUIRED_THRUSTERS_4_BORG_DE"
+  size = small
+  icon = "GFX_ship_part_Required_Thruster_Borg_4"
+  icon_frame = 1
+  power = -155
+  cost = 120
+  size_restriction = { saber }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_THRUSTERS_5_BORG_DE"
+  ship_modifier = {     }
+  modifier = { ship_combat_speed_mult = 0.5 ship_speed_mult = 0.5 ship_evasion_add = 8  }
+  ai_weight = { weight = 800 }
+  prerequisites = { "tech_engineering_materials_1526" }
+  component_set = "borg_required_thrusters"
+}
+# Omni-Directional Impulse Array IV (Cruiser/Sphere)
+utility_component_template = {
+  key = "REQUIRED_THRUSTERS_4_BORG_CR"
+  size = small
+  icon = "GFX_ship_part_Required_Thruster_Borg_4"
+  icon_frame = 1
+  power = -325
+  cost = 325
+  size_restriction = { sovereign borg_sphere }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_THRUSTERS_5_BORG_CR"
+  ship_modifier = {     }
+  modifier = { ship_combat_speed_mult = 0.5 ship_speed_mult = 0.5 ship_evasion_add = 8  }
+  ai_weight = { weight = 800 }
+  prerequisites = { "tech_engineering_materials_1526" }
+  component_set = "borg_required_thrusters"
+}
+# Omni-Directional Impulse Array IV (Battlecruiser/Diamond)
+utility_component_template = {
+  key = "REQUIRED_THRUSTERS_4_BORG_BC"
+  size = small
+  icon = "GFX_ship_part_Required_Thruster_Borg_4"
+  icon_frame = 1
+  power = -205
+  cost = 165
+  size_restriction = { steamrunner borg_diamond }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_THRUSTERS_5_BORG_BC"
+  ship_modifier = {     }
+  modifier = { ship_combat_speed_mult = 0.5 ship_speed_mult = 0.5 ship_evasion_add = 8  }
+  ai_weight = { weight = 800 }
+  prerequisites = { "tech_engineering_materials_1526" }
+  component_set = "borg_required_thrusters"
+}
+# Omni-Directional Impulse Array IV (Battleship)
+utility_component_template = {
+  key = "REQUIRED_THRUSTERS_4_BORG_BS"
+  size = small
+  icon = "GFX_ship_part_Required_Thruster_Borg_4"
+  icon_frame = 1
+  power = -435
+  cost = 435
+  size_restriction = { adv_cruiser }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_THRUSTERS_5_BORG_BS"
+  ship_modifier = {     }
+  modifier = { ship_combat_speed_mult = 0.5 ship_speed_mult = 0.5 ship_evasion_add = 8  }
+  ai_weight = { weight = 800 }
+  prerequisites = { "tech_engineering_materials_1526" }
+  component_set = "borg_required_thrusters"
+}
+# Omni-Directional Impulse Array IV (Heavy Escort)
+utility_component_template = {
+  key = "REQUIRED_THRUSTERS_4_BORG_HE"
+  size = small
+  icon = "GFX_ship_part_Required_Thruster_Borg_4"
+  icon_frame = 1
+  power = -245
+  cost = 195
+  size_restriction = { strike }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_THRUSTERS_5_BORG_HE"
+  ship_modifier = {     }
+  modifier = { ship_combat_speed_mult = 0.5 ship_speed_mult = 0.5 ship_evasion_add = 8  }
+  ai_weight = { weight = 800 }
+  prerequisites = { "tech_engineering_materials_1526" }
+  component_set = "borg_required_thrusters"
+}
+# Omni-Directional Impulse Array IV (Assault Cruiser)
+utility_component_template = {
+  key = "REQUIRED_THRUSTERS_4_BORG_AC"
+  size = small
+  icon = "GFX_ship_part_Required_Thruster_Borg_4"
+  icon_frame = 1
+  power = -410
+  cost = 410
+  size_restriction = { assault_cruiser }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_THRUSTERS_5_BORG_AC"
+  ship_modifier = {     }
+  modifier = { ship_combat_speed_mult = 0.5 ship_speed_mult = 0.5 ship_evasion_add = 8  }
+  ai_weight = { weight = 800 }
+  prerequisites = { "tech_engineering_materials_1526" }
+  component_set = "borg_required_thrusters"
+}
+# Omni-Directional Impulse Array IV (Dreadnought)
+utility_component_template = {
+  key = "REQUIRED_THRUSTERS_4_BORG_SB"
+  size = small
+  icon = "GFX_ship_part_Required_Thruster_Borg_4"
+  icon_frame = 1
+  power = -765
+  cost = 765
+  size_restriction = { super_battleship borg_cube borg_tactical }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_THRUSTERS_5_BORG_SB"
+  ship_modifier = {     }
+  modifier = { ship_combat_speed_mult = 0.5 ship_speed_mult = 0.5 ship_evasion_add = 8  }
+  ai_weight = { weight = 800 }
+  prerequisites = { "tech_engineering_materials_1526" }
+  component_set = "borg_required_thrusters"
+}
+# Omni-Directional Impulse Array IV (Man-O-War)
+utility_component_template = {
+  key = "REQUIRED_THRUSTERS_4_BORG_SC"
+  size = small
+  icon = "GFX_ship_part_Required_Thruster_Borg_4"
+  icon_frame = 1
+  power = -1155
+  cost = 1155
+  size_restriction = { super_cube }
+  class_restriction = { shipclass_military }
+  upgrades_to = "REQUIRED_THRUSTERS_5_BORG_SC"
+  ship_modifier = {     }
+  modifier = { ship_combat_speed_mult = 0.5 ship_speed_mult = 0.5 ship_evasion_add = 8  }
+  ai_weight = { weight = 800 }
+  prerequisites = { "tech_engineering_materials_1526" }
+  component_set = "borg_required_thrusters"
+}
+# Omni-Directional Impulse Array IV (Civilian Ships)
+utility_component_template = {
+  key = "REQUIRED_THRUSTERS_4_BORG_CS"
+  size = small
+  icon = "GFX_ship_part_Required_Thruster_Borg_4"
+  icon_frame = 1
+  power = -45
+  cost = 25
+  class_restriction = { shipclass_constructor shipclass_colonizer shipclass_science_ship shipclass_transport }
+  upgrades_to = "REQUIRED_THRUSTERS_5_BORG_CS"
+  ship_modifier = {     }
+  modifier = { ship_combat_speed_mult = 0.5 ship_speed_mult = 0.5 ship_evasion_add = 8  }
+  ai_weight = { weight = 800 }
+  prerequisites = { "tech_engineering_materials_1526" }
+  component_set = "required_thrusters"
+}
+
+# Omni-Directional Paragravitic Impulse Array (Patrol Frigate)
+utility_component_template = {
+  key = "REQUIRED_THRUSTERS_5_BORG_PF"
+  size = small
+  icon = "GFX_ship_part_Required_Thruster_Borg_5"
+  icon_frame = 1
+  power = -80
+  cost = 55
+  size_restriction = { corvette }
+  class_restriction = { shipclass_military }
+  
+  ship_modifier = {     }
+  modifier = { ship_combat_speed_mult = 0.7 ship_speed_mult = 0.7 ship_evasion_add = 14  }
+  ai_weight = { weight = 900 }
+  prerequisites = { "tech_engineering_materials_1527" }
+  component_set = "required_thrusters"
+}
+# Omni-Directional Paragravitic Impulse Array (Destroyer)
+utility_component_template = {
+  key = "REQUIRED_THRUSTERS_5_BORG_DE"
+  size = small
+  icon = "GFX_ship_part_Required_Thruster_Borg_5"
+  icon_frame = 1
+  power = -200
+  cost = 160
+  size_restriction = { saber }
+  class_restriction = { shipclass_military }
+  
+  ship_modifier = {     }
+  modifier = { ship_combat_speed_mult = 0.7 ship_speed_mult = 0.7 ship_evasion_add = 14  }
+  ai_weight = { weight = 900 }
+  prerequisites = { "tech_engineering_materials_1527" }
+  component_set = "borg_required_thrusters"
+}
+# Omni-Directional Paragravitic Impulse Array (Cruiser/Sphere)
+utility_component_template = {
+  key = "REQUIRED_THRUSTERS_5_BORG_CR"
+  size = small
+  icon = "GFX_ship_part_Required_Thruster_Borg_5"
+  icon_frame = 1
+  power = -420
+  cost = 420
+  size_restriction = { sovereign borg_sphere }
+  class_restriction = { shipclass_military }
+  
+  ship_modifier = {     }
+  modifier = { ship_combat_speed_mult = 0.7 ship_speed_mult = 0.7 ship_evasion_add = 14  }
+  ai_weight = { weight = 900 }
+  prerequisites = { "tech_engineering_materials_1527" }
+  component_set = "borg_required_thrusters"
+}
+# Omni-Directional Paragravitic Impulse Array (Battlecruiser/Diamond)
+utility_component_template = {
+  key = "REQUIRED_THRUSTERS_5_BORG_BC"
+  size = small
+  icon = "GFX_ship_part_Required_Thruster_Borg_5"
+  icon_frame = 1
+  power = -265
+  cost = 215
+  size_restriction = { steamrunner borg_diamond }
+  class_restriction = { shipclass_military }
+  
+  ship_modifier = {     }
+  modifier = { ship_combat_speed_mult = 0.7 ship_speed_mult = 0.7 ship_evasion_add = 14  }
+  ai_weight = { weight = 900 }
+  prerequisites = { "tech_engineering_materials_1527" }
+  component_set = "borg_required_thrusters"
+}
+# Omni-Directional Paragravitic Impulse Array (Battleship)
+utility_component_template = {
+  key = "REQUIRED_THRUSTERS_5_BORG_BS"
+  size = small
+  icon = "GFX_ship_part_Required_Thruster_Borg_5"
+  icon_frame = 1
+  power = -565
+  cost = 565
+  size_restriction = { adv_cruiser }
+  class_restriction = { shipclass_military }
+  
+  ship_modifier = {     }
+  modifier = { ship_combat_speed_mult = 0.7 ship_speed_mult = 0.7 ship_evasion_add = 14  }
+  ai_weight = { weight = 900 }
+  prerequisites = { "tech_engineering_materials_1527" }
+  component_set = "borg_required_thrusters"
+}
+# Omni-Directional Paragravitic Impulse Array (Heavy Escort)
+utility_component_template = {
+  key = "REQUIRED_THRUSTERS_5_BORG_HE"
+  size = small
+  icon = "GFX_ship_part_Required_Thruster_Borg_5"
+  icon_frame = 1
+  power = -320
+  cost = 260
+  size_restriction = { strike }
+  class_restriction = { shipclass_military }
+  
+  ship_modifier = {     }
+  modifier = { ship_combat_speed_mult = 0.7 ship_speed_mult = 0.7 ship_evasion_add = 14  }
+  ai_weight = { weight = 900 }
+  prerequisites = { "tech_engineering_materials_1527" }
+  component_set = "borg_required_thrusters"
+}
+# Omni-Directional Paragravitic Impulse Array (Assault Cruiser)
+utility_component_template = {
+  key = "REQUIRED_THRUSTERS_5_BORG_AC"
+  size = small
+  icon = "GFX_ship_part_Required_Thruster_Borg_5"
+  icon_frame = 1
+  power = -535
+  cost = 535
+  size_restriction = { assault_cruiser }
+  class_restriction = { shipclass_military }
+  
+  ship_modifier = {     }
+  modifier = { ship_combat_speed_mult = 0.7 ship_speed_mult = 0.7 ship_evasion_add = 14  }
+  ai_weight = { weight = 900 }
+  prerequisites = { "tech_engineering_materials_1527" }
+  component_set = "borg_required_thrusters"
+}
+# Omni-Directional Paragravitic Impulse Array (Dreadnought)
+utility_component_template = {
+  key = "REQUIRED_THRUSTERS_5_BORG_SB"
+  size = small
+  icon = "GFX_ship_part_Required_Thruster_Borg_5"
+  icon_frame = 1
+  power = -1000
+  cost = 1000
+  size_restriction = { super_battleship borg_cube borg_tactical }
+  class_restriction = { shipclass_military }
+  
+  ship_modifier = {     }
+  modifier = { ship_combat_speed_mult = 0.7 ship_speed_mult = 0.7 ship_evasion_add = 14  }
+  ai_weight = { weight = 900 }
+  prerequisites = { "tech_engineering_materials_1527" }
+  component_set = "borg_required_thrusters"
+}
+# Omni-Directional Paragravitic Impulse Array (Man-O-War)
+utility_component_template = {
+  key = "REQUIRED_THRUSTERS_5_BORG_SC"
+  size = small
+  icon = "GFX_ship_part_Required_Thruster_Borg_5"
+  icon_frame = 1
+  power = -1510
+  cost = 1510
+  size_restriction = { super_cube }
+  class_restriction = { shipclass_military }
+  
+  ship_modifier = {     }
+  modifier = { ship_combat_speed_mult = 0.7 ship_speed_mult = 0.7 ship_evasion_add = 14  }
+  ai_weight = { weight = 900 }
+  prerequisites = { "tech_engineering_materials_1527" }
+  component_set = "borg_required_thrusters"
+}
+# Omni-Directional Paragravitic Impulse Array (Civilian Ships)
+utility_component_template = {
+  key = "REQUIRED_THRUSTERS_5_BORG_CS"
+  size = small
+  icon = "GFX_ship_part_Required_Thruster_Borg_5"
+  icon_frame = 1
+  power = -55
+  cost = 30
+  class_restriction = { shipclass_constructor shipclass_colonizer shipclass_science_ship shipclass_transport }
+  
+  ship_modifier = {     }
+  modifier = { ship_combat_speed_mult = 0.7 ship_speed_mult = 0.7 ship_evasion_add = 14  }
+  ai_weight = { weight = 900 }
+  prerequisites = { "tech_engineering_materials_1527" }
+  component_set = "required_thrusters"
+}

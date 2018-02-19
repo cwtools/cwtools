@@ -1,0 +1,428 @@
+@distance = 30
+@base_moon_distance = 10
+
+# The Borg
+borg_initializer = {
+	name = "Unimatrix One"
+	class = "sc_m"
+	flags = { borg_homeworld unicomplex_2 }
+	init_effect = { log = "borg homeworld" }
+	usage = custom_empire
+	planet = {
+		class = "pc_unimatrix"
+		name = "NAME_Unicomplex_Section_Alpha"
+		size = 25
+		home_planet = yes
+		starting_planet = yes
+		orbit_angle = 0
+		orbit_distance = 0
+		has_ring = no
+		tile_blockers = none
+		modifiers = none
+		init_effect = {
+			save_event_target_as = unicomplexSpawn
+			solar_system = { save_event_target_as = solar_system }
+			set_planet_flag = "unicomplexGreen"
+			add_modifier = { modifier = pm_unimatrix_main }
+			create_ambient_object = {
+                type = "borg_unimatrix_structure_01_object"
+                location = planet
+                entity_offset = { min = 0 max = 0 }
+                entity_offset_height = { min = -20 max = -20 }
+				entity_face_object = star
+            }
+			last_created_ambient_object = { 
+				set_ambient_object_flag = "unicomplexAmbientFor:@event_target:unicomplexSpawn" 
+				set_ambient_object_flag = "unicomplexGreen" 
+			}
+			prevent_anomaly = yes
+			save_global_event_target_as = unimatrixOnePrimary
+			if = {
+				limit = { NOT = { any_country = { has_country_flag = the_borg_collective } } }
+				create_species = {
+					name = "Borg"
+					class = BRG
+					portrait = borg
+					name_list = "Borg"
+					traits = {
+						trait = "trait_quick_learners"
+						trait = "trait_strong"
+						trait = "trait_pc_alpine_preference"
+						ideal_planet_class = "pc_assimilated"
+					}
+				} 
+				last_created_species = { save_global_event_target_as = borgSpecies }			
+				create_country = {
+					name = "NAME_borg_collective"
+					name_list = "Borg"
+					type = default
+					ignore_initial_colony_error = yes
+					civics = { civic = "civic_assimilators" civic = "civic_functional_architecture" }
+					authority = auth_cybernetic_consciousness
+					ethos = { ethic = "ethic_cybernetic_consciousness" ethic = "ethic_fanatic_militarist" }
+					species = event_target:borgSpecies
+					flag = {
+						icon = { category = "trek" file = "Borg.dds" }
+						background = { category = "backgrounds" file = "00_solid.dds" }
+						colors = { "green" "black" "null" "null" }
+					}
+					effect = {
+						set_graphical_culture = borg_01
+						set_country_flag = the_borg_collective
+						set_country_flag = delta_empire
+						set_country_flag = borg_ent
+						set_country_flag = init_spawned
+						set_country_flag = sth_medium_galaxy
+						save_global_event_target_as = borgCollective
+					}
+				}
+			}
+			random_country = {
+				limit = { has_country_flag = the_borg_collective }
+				save_global_event_target_as = borgCollective
+				add_appropriate_start_techs = yes
+				if = {
+					limit = { NOT = { has_trait = "trait_pc_alpine_preference" } }
+					modify_species = { species = this add_trait = "trait_pc_alpine_preference" }
+				}
+				species = { 
+					save_global_event_target_as = borgSpecies					
+				}
+				change_government = {
+					authority = auth_cybernetic_consciousness
+					civics = { civic = "civic_assimilators" civic = "civic_functional_architecture" }
+				}
+				set_variable = { which = "unicomplex_count" value = 1 }
+			}
+			event_target:borgCollective = {
+				add_minerals = 1000
+				add_energy = 1500
+				add_influence = 300
+				add_engineering_research = 1000
+				add_physics_research = 1000
+				add_society_research = 1000
+				save_event_target_as = owner
+			}
+			set_unicomplex_number_flag = yes
+			set_unicomplex_system_number_flag = yes
+			set_unicomplex_name = yes
+			change_pc = pc_unimatrix
+			set_planet_entity = { entity = "orbital_habitat_entity" graphical_culture = borg_01 }
+			set_planet_flag = megastructure
+			set_planet_flag = habitat
+			surveyed = { set_surveyed = yes surveyor = event_target:borgCollective }
+			while = {
+				limit = { any_tile = { has_blocker = yes } }
+				random_tile = { limit = { has_blocker = yes } remove_blocker = yes }
+			}
+			solar_system = {
+				spawn_megastructure = {
+					name = "NAME_Unicomplex_Expansion"
+					type = "STH_unimatrix_unfinished"
+					orbit_angle = 180
+					orbit_distance = 100
+					owner = event_target:borgCollective
+					graphical_culture = event_target:borgCollective
+					location = planet
+				}
+				set_star_flag = unicomplex_2
+			}
+			set_capital = yes
+			set_owner = event_target:borgCollective
+			generate_major_empire_start_buildings_unicomplex = yes
+			generate_borg_empire_start_pops = yes
+			random_list = {
+				10 = {
+					create_fleet = {
+						name = "Unimatrix Defense Perimeter"
+						effect = {
+							set_owner = event_target:borgCollective
+							create_ship = { name = random design = "NAME_unimatrix_defense_small" }
+							set_location = { target = prev distance = 35 angle = random }    
+						}
+					}
+				}    
+				10 = {
+					create_fleet = {
+						name = "Unimatrix Defense Perimeter"
+						effect = {
+							set_owner = event_target:borgCollective
+							create_ship = { name = random design = "NAME_unimatrix_defense_small" }
+							set_location = { target = prev distance = 30 angle = random }						
+						}
+					}
+				}    
+				10 = {
+					create_fleet = {
+						name = "Unimatrix Defense Perimeter"
+						effect = {
+							set_owner = event_target:borgCollective
+							create_ship = { name = random design = "NAME_unimatrix_defense_small" }
+							set_location = { target = prev distance = 25 angle = random }    
+						}
+					}
+				}    
+				10 = {
+					create_fleet = {
+						name = "Unimatrix Defense Perimeter"
+						effect = {
+							set_owner = event_target:borgCollective
+							create_ship = { name = random design = "NAME_unimatrix_defense_small" }
+							set_location = { target = prev distance = 20 angle = random } 
+						}
+					}
+				}     
+				10 = {
+					create_fleet = {
+						name = "Unimatrix Defense Perimeter"
+						effect = {
+							set_owner = event_target:borgCollective
+							create_ship = { name = random design = "NAME_unimatrix_defense_small" }
+							set_location = { target = prev distance = 15 angle = random }
+						}
+					}
+				}    
+				10 = {
+					create_fleet = {
+						name = "Unimatrix Defense Perimeter"
+						effect = {
+							set_owner = event_target:borgCollective
+							create_ship = { name = random design = "NAME_unimatrix_defense_small" }
+							set_location = { target = prev distance = 10 angle = random }
+						}
+					}
+				}    
+				10 = {
+					create_fleet = {
+						name = "Unimatrix Defense Perimeter"
+						effect = {
+							set_owner = event_target:borgCollective
+							create_ship = { name = random design = "NAME_unimatrix_defense_small" }
+							set_location = { target = prev distance = 5 angle = random }    
+						}
+					}
+				}
+			}
+			last_created_fleet = { set_fleet_flag = "unicomplex_defence_for:@event_target:unicomplexSpawn" }	    
+		}
+	}
+	planet = {
+		class = "pc_unimatrix"
+		name = "NAME_Unicomplex_Section_Beta"
+		size = 25
+		orbit_angle = 90
+		orbit_distance = 100
+		has_ring = no
+		tile_blockers = none
+		modifiers = none
+		init_effect = {
+			save_event_target_as = unicomplexSpawn
+			solar_system = { 
+				save_event_target_as = solar_system 
+				set_unicomplex_number_flag = yes
+			}
+			set_unicomplex_number_flag = yes
+			set_planet_flag = "unicomplexGreen"
+			set_unicomplex_system_number_flag = yes
+			set_unicomplex_name = yes
+			prevent_anomaly = yes
+			set_planet_entity = { entity = "orbital_habitat_entity" graphical_culture = borg_01 }
+			if = {
+            	limit = { NOT = { exists = event_target:borgCollective } }
+				random_country = {
+					limit = { has_country_flag = the_borg_collective }
+					save_global_event_target_as = borgCollective
+				}
+            }
+            create_ambient_object = {
+                type = "borg_unimatrix_structure_01_object"
+                location = planet
+                entity_offset = { min = 0 max = 0 }
+                entity_offset_height = { min = -20 max = -20 }
+				entity_face_object = star
+            }
+			last_created_ambient_object = { 
+				set_ambient_object_flag = "unicomplexAmbientFor:@event_target:unicomplexSpawn" 
+				set_ambient_object_flag = "unicomplexGreen" 
+			}
+			set_planet_flag = megastructure
+			set_planet_flag = habitat
+			surveyed = { set_surveyed = yes surveyor = event_target:borgCollective }
+            while = {
+                limit = { any_tile = { has_blocker = yes } }
+                random_tile = { limit = { has_blocker = yes } remove_blocker = yes }
+            }
+
+			set_owner = event_target:borgCollective
+			create_colony = { owner = event_target:borgCollective species = event_target:borgSpecies }
+			random_tile = {
+				limit = { has_building = yes has_grown_pop = yes }
+				remove_building = yes
+				kill_pop = yes
+			}
+
+            random_tile = {
+				limit = { has_blocker = no has_building = no has_grown_pop = no num_adjacent_tiles > 3 }
+				set_building = "helix_ops_1"
+				add_deposit = d_farmland_deposit
+				add_deposit = d_mineral_deposit
+				create_pop = { species = event_target:borgSpecies }
+				random_neighboring_tile = {
+					limit = { has_blocker = no has_building = no has_grown_pop = no }
+					set_building = "space_building_mining_network_1"
+					add_deposit = d_vast_mineral_deposit
+					create_pop = { species = event_target:borgSpecies }					
+				}
+				random_neighboring_tile = {
+					limit = { has_blocker = no has_building = no has_grown_pop = no }
+					set_building = "space_building_hydroponics_farm_1"
+					add_deposit = d_rich_farmland_deposit
+					create_pop = { species = event_target:borgSpecies }						
+				}
+				random_neighboring_tile = {
+					limit = { has_blocker = no has_building = no has_grown_pop = no }
+					set_building = "space_building_power_plant_1"
+					add_deposit = d_rich_energy_deposit
+					create_pop = { species = event_target:borgSpecies }							
+				}
+				random_neighboring_tile = {
+					limit = { has_blocker = no has_building = no has_grown_pop = no }
+					set_building = "space_building_power_plant_1"
+					add_deposit = d_vast_energy_deposit
+					create_pop = { species = event_target:borgSpecies }						
+				}										
+			}
+			unicomplex_tileblockers = yes
+
+			random_tile = {
+				limit = { has_blocker = no has_building = no has_grown_pop = no }
+				set_building = "space_building_physics_lab_1"
+				add_deposit = d_rich_physics_deposit
+				create_pop = { species = event_target:borgSpecies }
+			}
+			random_tile = {
+				limit = { has_blocker = no has_building = no has_grown_pop = no }
+				set_building = "space_building_bio_lab_1"
+				add_deposit = d_rich_society_deposit
+				create_pop = { species = event_target:borgSpecies }
+			}
+			random_tile = {
+				limit = { has_blocker = no has_building = no has_grown_pop = no }
+				set_building = "space_building_engineering_facility_1"
+				add_deposit = d_rich_engineering_deposit
+				create_pop = { species = event_target:borgSpecies }
+			}
+			random_tile = {
+				limit = { has_blocker = no has_building = no has_grown_pop = no }
+				set_building = "space_building_hydroponics_farm_1"
+				add_deposit = d_rich_farmland_deposit
+				create_pop = { species = event_target:borgSpecies }
+			}
+			random_tile = {
+				limit = { has_blocker = no has_building = no has_grown_pop = no }
+				set_building = "space_building_hydroponics_farm_1"
+				add_deposit = d_rich_farmland_deposit
+				create_pop = { species = event_target:borgSpecies }
+			}
+			random_tile = {
+				limit = { has_blocker = no has_building = no has_grown_pop = no }
+				set_building = "space_building_maturation_0"
+				add_deposit = d_rich_farmland_deposit
+				create_pop = { species = event_target:borgSpecies }
+			}
+            while = {
+                count = 4
+                unicomplex_resource = yes
+            }
+			random_list = {
+				10 = {
+					create_fleet = {
+						name = "Unimatrix Defense Perimeter"
+						effect = {
+							set_owner = event_target:borgCollective
+							create_ship = { name = random design = "NAME_unimatrix_defense_small" }
+							set_location = { target = prev distance = 35 angle = random }    
+						}
+					}
+				}    
+				10 = {
+					create_fleet = {
+						name = "Unimatrix Defense Perimeter"
+						effect = {
+							set_owner = event_target:borgCollective
+							create_ship = { name = random design = "NAME_unimatrix_defense_small" }
+							set_location = { target = prev distance = 30 angle = random }						
+						}
+					}
+				}    
+				10 = {
+					create_fleet = {
+						name = "Unimatrix Defense Perimeter"
+						effect = {
+							set_owner = event_target:borgCollective
+							create_ship = { name = random design = "NAME_unimatrix_defense_small" }
+							set_location = { target = prev distance = 25 angle = random }    
+						}
+					}
+				}    
+				10 = {
+					create_fleet = {
+						name = "Unimatrix Defense Perimeter"
+						effect = {
+							set_owner = event_target:borgCollective
+							create_ship = { name = random design = "NAME_unimatrix_defense_small" }
+							set_location = { target = prev distance = 20 angle = random } 
+						}
+					}
+				}     
+				10 = {
+					create_fleet = {
+						name = "Unimatrix Defense Perimeter"
+						effect = {
+							set_owner = event_target:borgCollective
+							create_ship = { name = random design = "NAME_unimatrix_defense_small" }
+							set_location = { target = prev distance = 15 angle = random }
+						}
+					}
+				}    
+				10 = {
+					create_fleet = {
+						name = "Unimatrix Defense Perimeter"
+						effect = {
+							set_owner = event_target:borgCollective
+							create_ship = { name = random design = "NAME_unimatrix_defense_small" }
+							set_location = { target = prev distance = 10 angle = random }
+						}
+					}
+				}    
+				10 = {
+					create_fleet = {
+						name = "Unimatrix Defense Perimeter"
+						effect = {
+							set_owner = event_target:borgCollective
+							create_ship = { name = random design = "NAME_unimatrix_defense_small" }
+							set_location = { target = prev distance = 5 angle = random }    
+						}
+					}
+				}
+			}
+			last_created_fleet = { set_fleet_flag = "unicomplex_defence_for:@event_target:unicomplexSpawn" }
+			if = {	
+				limit = { event_target:borgCollective = { is_ai = no } }
+				solar_system = {
+					set_star_flag = unicomplex_2
+					spawn_megastructure = {
+						name = "NAME_Unicomplex_2"
+						type = "STH_unimatrix_unfinished"
+						
+						orbit_angle = -180
+						orbit_distance = 100
+						owner = event_target:borgCollective
+						graphical_culture = "borg_01"
+						location = event_target:unimatrixOnePrimary
+					}
+				}
+			}	
+		}
+    }
+}

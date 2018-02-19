@@ -1,0 +1,205 @@
+### Cybernetic Imperative - for Borg Collective
+ethic_cybernetic_consciousness = {
+	cost = 1
+	category = "hive"
+	category_value = 0
+	use_for_pops = no
+	
+	country_modifier = {
+    	pop_government_ethic_attraction = 0.25
+	}
+	
+	tags = {
+	}
+	country_attraction = {
+		value = 2
+		modifier = {
+			factor = 0
+			NOR = { has_trait = trait_synaptic_processors }
+		}
+	}
+	pop_attraction = {
+		value = 1
+		modifier = {
+			factor = 0
+			NOR = { has_trait = trait_synaptic_processors }
+		}
+	}
+	random_weight = {
+		value = 0
+		modifier = {
+			factor = 0
+			OR = { has_global_flag = game_started }
+		}
+	}
+}
+
+### Cybernetic Consensus - for Borg Cooperative / Unimatrix Zero / Bynar etc.
+ethic_cybernetic_consensus = {
+	cost = 1
+	category = "hive"
+	category_value = 1
+	use_for_pops = no
+	
+	country_modifier = {
+    	pop_government_ethic_attraction = 0.25
+	}
+	
+	tags = {
+	}
+	country_attraction = {
+		value = 2
+		modifier = {
+			factor = 0
+			NOR = { has_trait = trait_synaptic_processors }
+		}
+	}
+	pop_attraction = {
+		value = 1
+		modifier = {
+			factor = 0
+			NOR = { has_trait = trait_synaptic_processors }
+		}
+	}
+	random_weight = {
+		value = 0
+		modifier = {
+			factor = 0
+			OR = { has_global_flag = game_started }
+		}
+	}
+}
+
+ethic_great_link = {
+	cost = 1
+	category = "hive"
+	category_value = 0
+	use_for_pops = no
+	
+	country_modifier = {
+    	pop_government_ethic_attraction = 0.25
+	}
+	
+	country_attraction = {
+		value = 2
+		modifier = {
+			factor = 0
+			NOR = { has_trait = trait_shapeshifter }
+		}
+	}
+	pop_attraction = {
+		value = 1
+		modifier = {
+			factor = 0
+			NOR = { has_trait = trait_shapeshifter }
+		}
+	}
+	random_weight = {
+		value = 0
+		modifier = {
+			factor = 0
+			OR = { has_global_flag = game_started }
+		}
+	}
+}
+
+
+#Beta Branch Version
+#ethic_cybernetic_consciousness = {
+#	cost = 3
+#	category = "col"
+#	category_value = 0
+#	use_for_pops = no
+#	
+#	country_modifier = {
+#		# country_resource_influence_add = 1
+#		# country_resource_unity_mult = 0.20
+#		# pop_environment_tolerance = 0.10
+#		# pop_growth_speed = 0.25
+#	}
+#	
+#	tags = {
+#		# ETHIC_HIVE_MIND_NO_TUTORIAL
+#		# ETHIC_HIVE_MIND_AUTHORITY
+#		ETHIC_ALLOW_FULL_BOMBARDMENT
+#		# ETHIC_HIVE_MIND_IMMORTAL_RULER
+#		# ETHIC_HIVE_MIND_NO_FACTIONS
+#		# ETHIC_HIVE_MIND_DOMESTIC_POP_SURVIVAL
+#		# ETHIC_HIVE_MIND_FOREIGN_POP_SURVIVAL
+#		# ETHIC_DISALLOW_AI
+#		# ETHIC_HIVE_MIND_ASCENSION_RESTRICTIONS
+#		# ETHIC_HIVE_MIND_GENEMODDING
+#	}
+#	country_attraction = {
+#		value = 1
+#		modifier = {
+#			factor = 0
+#			NOR = {
+#				has_country_flag = the_borg_collective
+#			}
+#		}
+#	}
+#	pop_attraction = {
+#		value = 1		
+#		modifier = {
+#			factor = 0
+#			from = {
+#				exists = owner
+#				owner = { has_country_flag = the_borg_collective }
+#			}
+#		}	
+#	}
+#	random_weight = {
+#		value = 75
+#		modifier = {
+#			factor = 0
+#			OR = { has_global_flag = game_started }
+#		}
+#	}
+#}
+#
+
+
+
+ethic_genocidal = {
+	cost = 1
+	category = "xen"
+	category_value = 0
+	use_for_pops = no
+	
+		
+	random_weight = {
+		value = 0
+	}
+	
+	country_attraction = {
+		value = 1
+		modifier = {
+			factor = 0
+			NOR = {
+				has_country_flag = the_borg_collective
+			}
+		}
+	}
+	pop_attraction = {
+		value = 1		
+		modifier = {
+			factor = 0
+			from = {
+				exists = owner
+				owner = { has_country_flag = the_borg_collective }
+			}
+		}	
+	}
+}
+
+ethic_fanatic_genocidal = {
+	cost = 2
+	category = "xen"
+	category_value = 1
+	use_for_pops = no
+	
+	random_weight = {
+		value = 0
+	}
+}

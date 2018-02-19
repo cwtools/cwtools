@@ -1,0 +1,620 @@
+#########################################
+#										#
+#			Terra Nova Colony			#
+#		Event Written by: Janack		#
+#										#
+#########################################
+
+@tier1influencecontact = 7
+@tier1influencecontactxenophile = 8
+@tier1influencecontactmin = 20
+@tier1influencecontactmax = 80
+@tier2influencecontact = 10
+@tier2influencecontactxenophile = 12
+@tier2influencecontactmin = 40
+@tier2influencecontactmax = 100
+
+@tier1materialreward = 6
+@tier1materialmin = 100
+@tier1materialmax = 500
+@tier2materialreward = 12
+@tier2materialmin = 150
+@tier2materialmax = 1000
+@tier3materialreward = 18
+@tier3materialmin = 250
+@tier3materialmax = 1500
+@tier4materialreward = 24
+@tier4materialmin = 350
+@tier4materialmax = 2000
+@tier5materialreward = 48
+@tier5materialmin = 700
+@tier5materialmax = 4000
+
+@tier1influencereward = 6
+@tier1influencemin = 40
+@tier1influencemax = 100
+@tier2influencereward = 12
+@tier2influencemin = 80
+@tier2influencemax = 175
+@tier3influencereward = 18
+@tier3influencemin = 125
+@tier3influencemax = 250
+@tier4influencereward = 24
+@tier4influencemin = 150
+@tier4influencemax = 300
+@tier5influencereward = 36
+@tier5influencemin = 250
+@tier5influencemax = 500
+@tier6influencereward = 48
+@tier6influencemin = 300
+@tier6influencemax = 600
+
+@tier1researchreward = 6
+@tier1researchmin = 60
+@tier1researchmax = 150
+@tier2researchreward = 12
+@tier2researchmin = 90
+@tier2researchmax = 250
+@tier3researchreward = 18
+@tier3researchmin = 120
+@tier3researchmax = 350
+@tier4researchreward = 24
+@tier4researchmin = 150
+@tier4researchmax = 500
+@tier5researchreward = 48
+@tier5researchmin = 300
+@tier5researchmax = 1000
+
+namespace = STH_terra_nova_event
+
+# Terra Nova
+ship_event = {
+	id = STH_terra_nova_event.1
+	title = "STH_terra_nova_event.1.name"
+	desc = "STH_terra_nova_event.1.desc"
+	picture = sth_GFX_evt_terra_nova_1
+	show_sound = event_ship_thrusters
+	location = from
+	is_triggered_only = yes
+	immediate = {
+		from = {
+			set_planet_flag = STH_terra_flag
+			random_tile = {
+				limit = { has_blocker = no has_building = no num_adjacent_tiles > 3 }
+				set_building = "building_colony_shelter"
+				set_ruined = yes
+				add_deposit = d_energy_deposit
+				random_neighboring_tile = {
+					limit = { has_building = no }
+					remove_blocker = yes
+					set_building = "building_basic_farm"
+					set_ruined = yes
+					add_deposit = d_farmland_deposit
+				}
+			}
+		}
+	}
+	option = {
+		name = STH_terra_nova_event.1.a # Leave orbit
+		hidden_effect = {
+			ship_event = { id = STH_terra_nova_event.2 days = 2 } 
+		}
+	}
+	option = {
+		name = STH_terra_nova_event.1.b # Send an away team
+		hidden_effect = {
+			ship_event = { id = STH_terra_nova_event.3 days = 15 }  # Crew attacked
+		}
+	}
+}
+
+ship_event = {
+	id = STH_terra_nova_event.2 # Leave orbit
+	title = STH_terra_nova_event.2.name
+	desc = STH_terra_nova_event.2.desc
+	picture = sth_GFX_evt_terra_nova_1
+	location = Root
+	is_triggered_only = yes
+	option = {
+		name = STH_terra_nova_event.2.a
+		hidden_effect = {
+			random_list = {
+				70 = { ship_event = { id = STH_terra_nova_event.201 days = 1 } } # Primatives die out
+				30 = { ship_event = { id = STH_terra_nova_event.202 days = 60 random = 30 } } # Primatives left behind
+			}
+		}
+	}
+}
+
+ship_event = {
+	id = STH_terra_nova_event.201 # Primatives Die
+	title = STH_terra_nova_event.201.name
+	desc = STH_terra_nova_event.201.desc
+	picture = sth_GFX_evt_terra_nova_1
+	location = Root
+	is_triggered_only = yes
+	option = {
+		name = STH_terra_nova_event.201.a
+		leader = { add_experience = 250 }
+		owner = { add_influence = -50 }
+	}
+}
+
+ship_event = {
+	id = STH_terra_nova_event.202 # Primatives alive
+	title = STH_terra_nova_event.202.name
+	desc = STH_terra_nova_event.202.desc
+	picture = sth_GFX_evt_terra_nova_1
+	location = Root
+	is_triggered_only = yes
+	immediate = { 
+		random_planet = {
+			limit = { has_planet_flag = STH_terra_flag }
+			save_event_target_as = terraNova
+			create_species = {
+				name = Novan
+				class = FED
+				portrait = human
+				traits = {
+					trait = "trait_quick_learners"
+					trait = "trait_charismatic"
+					ideal_planet_class = "pc_continental"
+				}
+				homeworld = event_target:terraNova
+			}
+			create_country = {
+				name = Nova
+				authority = random
+				civics = { civic = civic_secret_of_fire civic = civic_the_wheel }
+				species = last_created_species
+				ethos = { ethic = "ethic_xenophobe" ethic = "ethic_individualist" ethic = "ethic_militarist" }
+				flag = random
+				type = primitive
+			}
+			last_created_country = { set_graphical_culture = preindustrial_01 set_country_flag = bronze_age set_primitive_age = bronze_age }
+			create_colony = { owner = last_created_country species = Novan }
+			best_tile_for_pop = { create_pop = { species = Novan } }
+			random_tile = {
+				limit = { has_blocker = no has_building = no has_grown_pop = yes }
+				set_building = "building_primitive_farm"
+				add_deposit = d_farmland_deposit
+			}
+			create_army = { name = "Primitive Army" owner = last_created species = last_created type = "primitive_army" }
+		}
+	}
+	option = {
+		name = STH_terra_nova_event.202.a
+		leader = { add_experience = 50 }
+	}
+}
+
+ship_event = {
+	id = STH_terra_nova_event.3
+	title = STH_terra_nova_event.3.name
+	desc = {
+		trigger = { owner = { has_transporters = no } }
+		text = STH_terra_nova_event.3.desc_01
+	}
+	desc = {
+		trigger = { owner = { has_transporters = yes } }
+		text = STH_terra_nova_event.3.desc_02
+	}
+	picture = sth_GFX_evt_terra_nova_2
+	location = Root
+	is_triggered_only = yes
+	immediate = {  }
+	option = {
+		name = STH_terra_nova_event.3.a
+		hidden_effect = {
+			random_list = {
+				60 = { ship_event = { id = STH_terra_nova_event.4 days = 30 } } # Attacked
+				25 = { ship_event = { id = STH_terra_nova_event.5 days = 30 } } # Crew Killed
+				15 = { ship_event = { id = STH_terra_nova_event.6 days = 30 } } # Roanoke
+			}
+		}
+	}
+}
+
+ship_event = {
+	id = STH_terra_nova_event.4
+	title = STH_terra_nova_event.4.name
+	desc = STH_terra_nova_event.4.desc
+	picture = sth_GFX_evt_terra_nova_2
+	location = Root
+	is_triggered_only = yes
+	immediate = { leader = { save_event_target_as = leader } }
+	option = {
+		name = STH_terra_nova_event.4.a # Regroup on ship
+		hidden_effect = {
+			ship_event = { id = STH_terra_nova_event.401 days = 15 }
+		}
+	}
+}
+
+ship_event = {
+	id = STH_terra_nova_event.5
+	title = STH_terra_nova_event.5.name
+	desc = STH_terra_nova_event.5.desc
+	picture = sth_GFX_evt_terra_nova_2
+	location = Root
+	is_triggered_only = yes
+	option = {
+		name = STH_terra_nova_event.5.a #Hunt the 'aliens'
+		trigger = { owner = { OR = { has_ethic = ethic_xenophobe has_ethic = ethic_fanatic_xenophobe } } }
+		hidden_effect = {
+			ship_event = { id = STH_terra_nova_event.501 days = 25 }
+		}
+	}
+	option = {
+		name = STH_terra_nova_event.5.b # Try to negotiate
+		hidden_effect = {
+			ship_event = { id = STH_terra_nova_event.502 days = 25 }
+		}
+	}
+	option = {
+		name = STH_terra_nova_event.5.c # Leave the Planet
+		hidden_effect = {
+			random_list = {
+				50 = { ship_event = { id = STH_terra_nova_event.5031 days = 25 } } # Novan's survive
+				50 = { ship_event = { id = STH_terra_nova_event.5032 days = 25 } } # Novan's die out
+			}
+		}
+	}
+}
+
+ship_event = {
+	id = STH_terra_nova_event.6
+	title = STH_terra_nova_event.6.name
+	desc = STH_terra_nova_event.6.desc
+	picture = sth_GFX_evt_terra_nova_2
+	location = Root
+	is_triggered_only = yes
+	option = {
+		name = STH_terra_nova_event.6.a # Roanoke
+		leader = { add_experience = 250 }
+		owner = { add_influence = 15 }
+	}
+}
+
+ship_event = {
+	id = STH_terra_nova_event.401
+	title = STH_terra_nova_event.401.name
+	desc = {
+		trigger = { owner = { has_transporters = no } }
+		text = STH_terra_nova_event.401.desc_01
+	}
+	desc = {
+		trigger = { owner = { has_transporters = yes } }
+		text = STH_terra_nova_event.401.desc_02
+	}
+	picture = sth_GFX_evt_terra_nova_2
+	location = Root
+	is_triggered_only = yes
+	immediate = { leader = { save_event_target_as = leader } }
+	option = {
+		name = STH_terra_nova_event.401.a # Negotiate Peace
+		hidden_effect = { ship_event = { id = STH_terra_nova_event.4001 days = 35 } }
+	}
+	option = {
+		name = STH_terra_nova_event.401.b # Assault and Rescue
+		hidden_effect = { ship_event = { id = STH_terra_nova_event.4002 days = 35 } }
+	}
+}
+
+ship_event = {
+	id = STH_terra_nova_event.4001 # Novans join UE
+	title = STH_terra_nova_event.4001.name
+	desc = STH_terra_nova_event.4001.desc
+	picture = sth_GFX_evt_terra_nova_2
+	location = Root
+	is_triggered_only = yes
+	immediate = {
+		owner = { save_event_target_as = shipOwner }
+		random_planet = {
+			limit = { has_planet_flag = STH_terra_flag }
+			save_event_target_as = terraNova
+			create_species = {
+				name = Novan
+				class = FED
+				portrait = human
+				homeworld = event_target:terraNova
+				traits = { 
+					trait = "trait_quick_learners"
+					trait = "trait_charismatic"
+					ideal_planet_class = "pc_continental"
+				}	
+			}
+			create_colony = { 
+				owner = event_target:shipOwner
+				species = Novan
+			}
+			every_tile = { limit = { has_building = "building_colony_shelter" } remove_building = yes }
+			every_tile = { limit = { has_building = "building_basic_farm" } remove_building = yes }
+			random_tile = {
+				limit = { has_blocker = no has_building = no num_adjacent_tiles > 3 }
+				set_building = "building_colony_shelter"
+				add_deposit = d_energy_deposit
+				random_neighboring_tile = {
+					limit = { has_building = no }
+					remove_blocker = yes
+					set_building = "building_basic_farm"
+					add_deposit = d_farmland_deposit
+				}
+			}
+			best_tile_for_pop = { create_pop = { species = event_target:humanSpecies } }
+			last_created_species = { save_global_event_target_as = novanSpecies set_species_identity = event_target:humanSpecies }
+			event_target:united_earth = { event_target:novanSpecies = { set_citizenship_type = { country = event_target:united_earth type = citizenship_full } } }
+			set_name = "Terra Nova"
+		}
+	}
+	option = {
+		name = STH_terra_nova_event.4001.a
+		owner = {
+			leader = { add_experience = 500 }
+			add_monthly_resource_mult = { resource = influence value = @tier3influencereward min = @tier3influencemin max = @tier3influencemax }
+		}
+	}
+}
+
+ship_event = {
+	id = STH_terra_nova_event.4002 # Novans die
+	title = STH_terra_nova_event.4002.name
+	desc = {
+		trigger = { owner = { has_transporters = no } }
+		text = STH_terra_nova_event.4002.desc_01
+	}
+	desc = {
+		trigger = { owner = { has_transporters = yes } }
+		text = STH_terra_nova_event.4002.desc_02
+	}
+	picture = sth_GFX_evt_terra_nova_2
+
+	location = Root
+	is_triggered_only = yes
+	option = {
+		name = STH_terra_nova_event.4002.a
+		leader = { add_experience = 250 }
+		owner = { add_influence = -25 }
+	}
+}
+
+ship_event = {
+	id = STH_terra_nova_event.501 # Hunt and kill Novans
+	title = STH_terra_nova_event.501.name
+	desc = STH_terra_nova_event.501.desc
+	picture = sth_GFX_evt_terra_nova_3
+	location = Root
+	is_triggered_only = yes
+	option = {
+		name = STH_terra_nova_event.501.a
+		leader = { add_experience = 250 }
+		owner = { add_influence = -50 }
+	}
+}
+
+ship_event = {
+	id = STH_terra_nova_event.502 # Negotiate with Novans
+	title = STH_terra_nova_event.502.name
+	desc = STH_terra_nova_event.502.desc
+	picture = sth_GFX_evt_terra_nova_3
+	location = Root
+	is_triggered_only = yes
+	option = {
+		name = STH_terra_nova_event.502.a
+		hidden_effect = {
+			random_list = {
+				50 = { ship_event = { id = STH_terra_nova_event.5021 days = 30 } } # Negotiaions Succeed
+				25 = { ship_event = { id = STH_terra_nova_event.5022 days = 30 } } # Negotiaions Fail alive Novans
+				25 = { ship_event = { id = STH_terra_nova_event.5023 days = 30 } } # Negotiaions Fail dead Novans
+			}
+		}
+	}
+}
+
+ship_event = {
+	id = STH_terra_nova_event.5021 # Novans join UE
+	title = STH_terra_nova_event.5021.name
+	desc = STH_terra_nova_event.5021.desc
+	picture = sth_GFX_evt_terra_nova_3
+	location = Root
+	is_triggered_only = yes
+	immediate = {
+		owner = { save_event_target_as = shipOwner }
+		random_planet = {
+			limit = { has_planet_flag = STH_terra_flag }
+			save_event_target_as = terraNova
+			create_species = {
+				name = Novan
+				class = FED
+				portrait = human
+				homeworld = event_target:terraNova
+				traits = { 
+					trait = "trait_quick_learners"
+					trait = "trait_charismatic"
+					ideal_planet_class = "pc_continental"
+				}	
+			}
+			create_colony = { 
+				owner = event_target:shipOwner
+				species = Novan
+			}
+			every_tile = { limit = { has_building = "building_colony_shelter" } remove_building = yes }
+			every_tile = { limit = { has_building = "building_basic_farm" } remove_building = yes }
+			random_tile = {
+				limit = { has_blocker = no has_building = no num_adjacent_tiles > 3 }
+				set_building = "building_colony_shelter"
+				add_deposit = d_energy_deposit
+				random_neighboring_tile = {
+					limit = { has_building = no }
+					remove_blocker = yes
+					set_building = "building_basic_farm"
+					add_deposit = d_farmland_deposit
+				}
+			}
+			last_created_species = { save_global_event_target_as = novanSpecies set_species_identity = event_target:humanSpecies }
+			event_target:united_earth = { event_target:novanSpecies = { set_citizenship_type = { country = event_target:united_earth type = citizenship_full } } }
+			set_name = "Terra Nova"
+		}
+	}
+	option = {
+		name = STH_terra_nova_event.5021.a # Negotiaions Succeed
+		leader = { add_experience = 350 }
+		owner = { add_monthly_resource_mult = { resource = influence value = @tier2influencereward min = @tier2influencemin max = @tier2influencemax } }
+	}
+}
+
+ship_event = {
+	id = STH_terra_nova_event.5022 # Novans Survive
+	title = STH_terra_nova_event.5022.name
+	desc = STH_terra_nova_event.5022.desc
+	picture = sth_GFX_evt_terra_nova_3
+	location = Root
+	is_triggered_only = yes
+	immediate = { 
+		random_planet = {
+			limit = { has_planet_flag = STH_terra_flag }
+			create_species = {
+				name = Novan
+				class = FED
+				portrait = human
+				traits = {
+					trait = "trait_quick_learners"
+					trait = "trait_charismatic"
+					ideal_planet_class = "pc_continental"
+				}
+				homeworld = from
+			}
+			create_country = {
+				name = Nova
+				authority = random
+				civics = { civic = civic_secret_of_fire civic = civic_the_wheel }
+				species = last_created
+				ethos = { ethic = "ethic_xenophobe" ethic = "ethic_individualist" ethic = "ethic_militarist" }
+				flag = random
+				type = primitive
+			}
+			last_created_country = { set_graphical_culture = preindustrial_01 set_country_flag = bronze_age set_primitive_age = bronze_age }
+			last_created_species = { save_global_event_target_as = novanSpecies set_species_identity = event_target:humanSpecies }
+			event_target:united_earth = { event_target:novanSpecies = { set_citizenship_type = { country = event_target:united_earth type = citizenship_full } } }
+			create_colony = { owner = last_created_country species = last_created ethos = owner }
+			best_tile_for_pop = { create_pop = { species = last_created ethos = owner } }
+			random_tile = {
+				limit = { has_blocker = no has_building = no has_grown_pop = yes }
+				set_building = "building_primitive_farm"
+				add_deposit = d_farmland_deposit
+			}
+			create_army = { name = "Primitive Army" owner = last_created species = last_created type = "primitive_army" }
+		}
+	}
+	option = {
+		name = STH_terra_nova_event.5022.a # Negotiaions Fail
+		leader = { add_experience = 250 }
+		owner = { add_influence = -25 }
+	}
+}
+
+ship_event = {
+	id = STH_terra_nova_event.5023 # Novans Die out
+	title = STH_terra_nova_event.5023.name
+	desc = STH_terra_nova_event.5023.desc
+	picture = sth_GFX_evt_terra_nova_3
+	location = Root
+	is_triggered_only = yes
+	option = {
+		name = STH_terra_nova_event.5023.a # Negotiaions Fail
+		leader = { add_experience = 250 }
+		owner = { add_influence = -25 }
+	}
+}
+
+ship_event = {
+	id = STH_terra_nova_event.5031 # Novans Survive
+	title = STH_terra_nova_event.5031.name
+	desc = STH_terra_nova_event.5031.desc
+	picture = sth_GFX_evt_terra_nova_3
+	location = Root
+	is_triggered_only = yes
+	immediate = { 
+		random_planet = {
+			limit = { has_planet_flag = STH_terra_flag }
+			create_species = {
+				name = Novan
+				class = FED
+				portrait = human
+				traits = { 
+					trait = "trait_quick_learners" 
+					trait = "trait_charismatic"
+					ideal_planet_class = "pc_continental"
+				}
+				homeworld = from
+			}
+			create_country = {
+				name = Nova
+				authority = random
+				civics = { civic = civic_secret_of_fire civic = civic_the_wheel }
+				species = last_created
+				ethos = { ethic = "ethic_xenophobe" ethic = "ethic_individualist" ethic = "ethic_militarist" }
+				flag = random
+				type = primitive
+			}
+			last_created_country = { set_graphical_culture = preindustrial_01 set_country_flag = bronze_age set_primitive_age = bronze_age }
+			last_created_species = { save_global_event_target_as = novanSpecies set_species_identity = event_target:humanSpecies }
+			event_target:united_earth = { event_target:novanSpecies = { set_citizenship_type = { country = event_target:united_earth type = citizenship_full } } }
+			create_colony = { owner = last_created_country species = last_created ethos = owner }
+			best_tile_for_pop = { create_pop = { species = last_created ethos = owner } }
+			random_tile = {
+				limit = { has_blocker = no has_building = no has_grown_pop = yes }
+				set_building = "building_primitive_farm"
+				add_deposit = d_farmland_deposit
+			}
+			create_army = { name = "Primitive Army" owner = last_created species = last_created type = "primitive_army" }
+		}
+	}
+	option = {
+		name = STH_terra_nova_event.5031.a
+		leader = { add_experience = 150 }
+		owner = { add_influence = -25 }
+	}
+}
+
+ship_event = {
+	id = STH_terra_nova_event.5032 # Novans die out
+	title = STH_terra_nova_event.5032.name
+	desc = STH_terra_nova_event.5032.desc
+	picture = sth_GFX_evt_terra_nova_3
+	location = Root
+	is_triggered_only = yes
+	option = {
+		name = STH_terra_nova_event.5032.a
+		leader = { add_experience = 250 }
+		owner = { add_influence = -25 }
+	}
+}
+
+namespace = STH_terra_nova_event_fail
+ship_event = {
+	id = STH_terra_nova_event_fail.1
+	title = STH_terra_nova_event_fail.1.name
+	desc = STH_terra_nova_event_fail.1.desc
+	picture = sth_GFX_evt_terra_nova_1
+	location = Root
+	is_triggered_only = yes
+	option = {
+		name = STH_terra_nova_event_fail.1.a
+		leader = { add_experience = 25 }
+		owner = { add_influence = -25 }
+	}
+}
+ship_event = {
+	id = STH_terra_nova_event_fail.2
+	title = STH_terra_nova_event_fail.2.name
+	desc = STH_terra_nova_event_fail.2.desc
+	picture = sth_GFX_evt_terra_nova_1
+	location = Root
+	is_triggered_only = yes
+	option = {
+		name = STH_terra_nova_event_fail.2.a
+		leader = { add_experience = 25 }
+		owner = { add_influence = -50 }
+	}
+}

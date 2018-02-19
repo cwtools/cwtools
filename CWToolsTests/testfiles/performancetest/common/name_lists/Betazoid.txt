@@ -1,0 +1,97 @@
+﻿### Betazoid by EHKodiak
+Betazoid = {
+	randomized = no
+
+	ship_names = {
+		generic = {
+		Harmony Exposure Compassion Affection Fervor Sympathy Sentiment Commotion Passion Empathy Love Heat Fascination Dedication Infatuation Ardor Motivation Commitment Obsession Empathy Rapport Solidarity Affection Sincerity Pathos Remorse Admiration
+		}
+		corvette = {
+		}
+		saber = {
+		}
+		sovereign = {
+		}
+		steamrunner = {
+		}		
+		adv_cruiser = {
+		}
+		strike = {
+		}	
+		constructor = { }
+		colonizer = { }
+		science = { }
+		transport = { }
+		outpost_station = {
+			sequential_name = "Frontier Outpost"
+		}
+	}
+
+	fleet_names = {
+		sequential_name = "%O% Fleet"
+	}
+	
+	army_names = {
+		defense_army = {
+			sequential_name = "%O% Guard"
+		}
+		assault_army = {
+			sequential_name = "%O% Betazoid Corps"
+		}
+		slave_army = {
+			sequential_name = "%O% Indentured Defence Force"
+		}
+		clone_army = { 
+			sequential_name = "%O% Clone Defence Force"
+		}
+		robotic_army = {
+			sequential_name = "%O% Mechanical Defence Force"
+		}
+		android_army = {
+			sequential_name = "%O% Synthetic Defence Force"
+		}
+		psionic_army = { 
+			sequential_name = "%O% Telepath Defence Force"
+		}
+		xenomorph_army = {
+			sequential_name = "%O% Bio-Warfare Defence Force"
+		}
+		gene_warrior_army = {
+			sequential_name = "%O% Bio-Engineered Defence Force"
+		}
+	}
+
+	planet_names = {
+		generic = {
+			names = { 
+			}
+		}
+	}
+
+
+	### CHARACTERS
+
+	character_names = {
+		names1 = {
+			weight = 40
+			first_names_male = {
+			Sabin Andrus Jurot Reittan Devinoni Lon Stadi Amanin Tam Rennan Kenth Bael Cort Sark Kojo Sonek Dal Eusho Meron Gart Hent Barin Basild 
+			}
+			first_names_female = {
+			Juliet Deanna Lorella Ilirra Elleth Damira Drennela Yulana Jirelle Molaranna Nerissa Rhonu Mira Anissina Gwendal Malla Rina Kestra Lwaxana Sorana
+			}
+			second_names = {
+			Obertag Fort Genestra Grax Genstra Pran Povron Troi Deo Duren Corbin Byxthar Kav Kif Kitain Konya Lasren Minnar Mryax Nomine Oxila Berel Astrun Tevren Tancreda Xerix Stadi Rozhenko
+			}
+			regnal_first_names_male = {
+			Sabin Andrus Jurot Reittan Devinoni Lon Stadi Amanin Tam Rennan Kenth Bael Cort Sark Kojo Sonek Dal Eusho Meron Gart Hent Barin Basild
+			}
+			regnal_first_names_female = {
+			Juliet Deanna Lorella Ilirra Elleth Damira Drennela Yulana Jirelle Molaranna Nerissa Rhonu Mira Anissina Gwendal Malla Rina Kestra Lwaxana Sorana
+			}
+			regnal_second_names = {
+			Obertag Fort Genestra Grax Genstra Pran Povron Troi Deo Duren Corbin Byxthar Kav Kif Kitain Konya Lasren Minnar Mryax Nomine Oxila Berel Astrun Tevren Tancreda Xerix Stadi Rozhenko
+			}
+		}
+	}
+}

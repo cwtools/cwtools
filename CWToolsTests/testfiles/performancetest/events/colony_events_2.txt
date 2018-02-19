@@ -1,0 +1,1232 @@
+##############################
+# Colony Events
+# by Maximilian Olbers
+# STNH - Capek 1.8.0 Compat
+##############################
+
+namespace = colony
+
+@tier1influencecontact = 7
+@tier1influencecontactxenophile = 8
+@tier1influencecontactmin = 20
+@tier1influencecontactmax = 80
+
+@tier2influencecontact = 10
+@tier2influencecontactxenophile = 12
+@tier2influencecontactmin = 40
+@tier2influencecontactmax = 100
+
+@tier1materialreward = 6
+@tier1materialmin = 100
+@tier1materialmax = 500
+@tier2materialreward = 12
+@tier2materialmin = 150
+@tier2materialmax = 1000
+@tier3materialreward = 18
+@tier3materialmin = 250
+@tier3materialmax = 1500
+@tier4materialreward = 24
+@tier4materialmin = 350
+@tier4materialmax = 2000
+@tier5materialreward = 48
+@tier5materialmin = 700
+@tier5materialmax = 4000
+
+@tier1influencereward = 6
+@tier1influencemin = 40
+@tier1influencemax = 100
+@tier2influencereward = 12
+@tier2influencemin = 80
+@tier2influencemax = 175
+@tier3influencereward = 18
+@tier3influencemin = 125
+@tier3influencemax = 250
+@tier4influencereward = 24
+@tier4influencemin = 150
+@tier4influencemax = 300
+@tier5influencereward = 36
+@tier5influencemin = 250
+@tier5influencemax = 500
+@tier6influencereward = 48
+@tier6influencemin = 300
+@tier6influencemax = 600
+
+@tier1unityreward = 6
+@tier1unitymin = 100
+@tier1unitymax = 500
+@tier2unityreward = 12
+@tier2unitymin = 150
+@tier2unitymax = 1000
+@tier3unityreward = 18
+@tier3unitymin = 250
+@tier3unitymax = 1500
+@tier4unityreward = 24
+@tier4unitymin = 350
+@tier4unitymax = 2000
+@tier5unityreward = 48
+@tier5unitymin = 700
+@tier5unitymax = 4000
+
+@tier1researchreward = 6
+@tier1researchmin = 60
+@tier1researchmax = 150
+@tier2researchreward = 12
+@tier2researchmin = 90
+@tier2researchmax = 250
+@tier3researchreward = 18
+@tier3researchmin = 120
+@tier3researchmax = 350
+@tier4researchreward = 24
+@tier4researchmin = 150
+@tier4researchmax = 500
+@tier5researchreward = 48
+@tier5researchmin = 300
+@tier5researchmax = 1000
+
+##############################################################################
+# HELPFUL DRONES CHAIN
+##############################################################################
+
+# First event, spawns a special project to awaken/catch the attention of the drones.
+# Checks for uninhabitable moon (where the drones will be in the fiction) before firing
+planet_event = {
+	id = colony.1500
+	title = "colony.1500.name"
+	desc = "colony.1500.desc"
+	picture = GFX_evt_asteroid_approaching_planet
+	location = ROOT
+	
+	trigger = {
+		has_owner = yes
+		original_owner = yes
+		is_homeworld = no
+		owner = {
+			is_ai = no
+			NOT = { has_country_flag = FLDrone_country }
+		}
+		is_capital = no
+		has_ground_combat = no
+		is_occupied_flag = no
+		num_pops > 0
+		NOR = {
+			is_planet_class = pc_habitat
+			has_planet_flag = colony_event
+			has_planet_flag = FLDrone_event
+		}
+		has_moon = yes
+		any_moon = {
+			habitable_planet = no
+		}
+	}
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		set_planet_flag = FLDrone_event
+		set_planet_flag = colony_event
+		owner = { set_country_flag = FLDrone_country }
+	}
+	
+	option = {
+		name = colony.1500.a
+		enable_special_project = {
+			name = "HELPFUL_DRONES_1_PROJECT"
+			location = this
+			owner = root
+		}
+	}
+}
+
+# Second event, followup to special project. Reveals the drones' existence to the player
+planet_event = {
+	id = colony.1501
+	title = "colony.1501.name"
+	desc = "colony.1501.desc"
+	picture = GFX_evt_asteroid_approaching_planet
+	location = ROOT
+	
+	is_triggered_only = yes
+
+	trigger = {
+		exists = owner
+		owner = { has_country_flag = FLDrone_country }
+	}
+
+	option = {
+		name = colony.1501.a
+		hidden_effect = {
+			if = {
+				limit = { any_tile = { has_blocker = yes } }
+				planet_event = { id = colony.1502 days = 360 random = 60 }
+				else = {
+					planet_event = { id = colony.1503 days = 360 random = 60 }
+				}
+			}
+		}
+	}
+}
+
+# Third event, drones awaken and remove a random Blocker from the planet's surface
+planet_event = {
+	id = colony.1502
+	title = "colony.1502.name"
+	desc = "colony.1502.desc"
+	picture = GFX_evt_atmospheric_entry
+	location = ROOT
+	
+	is_triggered_only = yes
+
+	trigger = { owner = { has_country_flag = FLDrone_country } }
+
+	option = {
+		name = colony.1502.a
+		custom_tooltip = colony.1502.a.tooltip
+		random_tile = {
+			limit = {
+				has_blocker = yes
+			}
+			remove_blocker = yes
+		}
+		planet_event = { id = colony.1503 days = 360 }
+	}
+}
+# Fourth event, drones build an old space elevator on the player's planet
+# Gives a negative modifier to production for two years and tier2 Engineering mult
+planet_event = {
+	id = colony.1503
+	title = "colony.1503.name"
+	desc = "colony.1503.desc"
+	picture = GFX_evt_big_landing_ship
+	location = ROOT
+
+	is_triggered_only = yes
+
+	trigger = { owner = { has_country_flag = FLDrone_country } }
+
+	option = {
+		name = colony.1503.a
+		owner = {
+			add_monthly_resource_mult = {
+				resource = engineering_research
+				value = @tier2researchreward
+				min = @tier2researchmin
+				max = @tier2researchmax
+			}
+		}
+		add_modifier = {
+			modifier = "drone_space_elevator"
+			days = 3600
+		}
+		hidden_effect = { planet_event = { id = colony.1504 days = 360 } }
+	}
+}
+
+# Fifth event, adds 2 minerals to the colony's moon (mineral cache of unknown origin)
+planet_event = {
+	id = colony.1504
+	title = "colony.1504.name"
+	desc = "colony.1504.desc"
+	picture = GFX_evt_asteroid_approaching_planet
+	location = ROOT
+
+	is_triggered_only = yes
+
+	trigger = { owner = { has_country_flag = FLDrone_country } }
+
+	option = {
+		name = colony.1504.a
+		random_moon = {
+			limit = {
+				habitable_planet = no
+			}
+			random_tile = {
+				limit = { has_blocker = no has_deposit = no }
+				add_deposit = d_vast_mineral_deposit
+				add_deposit = d_vast_mineral_deposit
+			}
+			add_modifier = {
+				modifier = "drone_mineral_gift"
+				days = -1
+			}
+		}
+		hidden_effect = { planet_event = { id = colony.1505 days = 360 } }
+	}
+}
+
+# Sixth event, adds 3 life data to the colony's moon (ancient satellite transmissions)
+planet_event = {
+	id = colony.1505
+	title = "colony.1505.name"
+	desc = "colony.1505.desc"
+	picture = GFX_evt_asteroid_approaching_planet
+	location = ROOT
+
+	is_triggered_only = yes
+	
+	trigger = { owner = { has_country_flag = FLDrone_country } }
+	
+	option = {
+		name = FASCINATING
+		random_moon = {
+			limit = {
+				habitable_planet = no
+			}
+			orbital_deposit_tile = {
+				add_deposit = d_vast_society_deposit
+			}
+			add_modifier = {
+				modifier = "drone_fl_satellite"
+				days = -1
+			}
+		}
+		hidden_effect = { planet_event = { id = colony.1506 days = 360 } }
+	}
+}
+
+# Seventh event, some drones destroy themselves
+planet_event = {
+	id = colony.1506
+	title = "colony.1506.name"
+	desc = "colony.1506.desc"
+	picture = GFX_evt_asteroid_approaching_planet
+	location = ROOT
+
+	is_triggered_only = yes
+	
+	trigger = { owner = { has_country_flag = FLDrone_country } }
+	
+	auto_opens = yes
+
+	option = {
+		name = colony.1506.a
+		hidden_effect = { planet_event = { id = colony.1507 days = 360 } }
+	}
+}
+
+# Eighth event, building up the next event
+planet_event = {
+	id = colony.1507
+	title = "colony.1507.name"
+	desc = "colony.1507.desc"
+	picture = GFX_evt_asteroid_approaching_planet
+	location = ROOT
+
+	is_triggered_only = yes
+	
+	trigger = { owner = { has_country_flag = FLDrone_country } }
+
+	option = {
+		name = colony.1507.a
+		planet_event = { id = colony.1508 days = 360 }
+	}
+}
+
+# Ninth event, foreign tech is discovered inside the destroyed drones
+planet_event = {
+	id = colony.1508
+	title = "colony.1508.name"
+	desc = "colony.1508.desc"
+	picture = GFX_evt_asteroid_approaching_planet
+	location = ROOT
+
+	is_triggered_only = yes
+	
+	trigger = { owner = { has_country_flag = FLDrone_country } }
+	
+	option = {
+		name = colony.1508.a
+		planet_event = { id = colony.1509 days = 360 }
+	}
+}
+
+# Tenth event, foreign tech identified as comms devices. Enables special project.
+planet_event = {
+	id = colony.1509
+	title = "colony.1509.name"
+	desc = "colony.1509.desc"
+	picture = GFX_evt_asteroid_approaching_planet
+	location = ROOT
+
+	is_triggered_only = yes
+	
+	trigger = { owner = { has_country_flag = FLDrone_country } }
+	
+	option = {
+		name = MARVELOUS
+		planet_event = { id = colony.1510 days = 360 }
+	}
+}
+
+# Eleventh event, followup to special project. A dastardly plot is uncovered, and the player has to choose how to proceed.
+planet_event = {
+	id = colony.1510
+	title = "colony.1510.name"
+	desc = "colony.1510.desc"
+	picture = GFX_evt_asteroid_approaching_planet
+	location = ROOT
+
+	is_triggered_only = yes
+	
+	trigger = { owner = { has_country_flag = FLDrone_country } }
+	
+	option = {
+		name = colony.1510.a
+		owner = {
+			add_monthly_resource_mult = {
+				resource = influence
+				value = @tier2influencereward
+				min = @tier2influencemin
+				max = @tier2influencemax
+			}
+		}
+		planet_event = { id = colony.1514 days = 730 }
+	}
+
+	option = {
+		name = colony.1510.b
+		planet_event = { id = colony.1511 days = 7 }
+	}
+
+	option = {
+		name = colony.1510.c
+		owner = {
+			add_monthly_resource_mult = {
+				resource = engineering_research
+				value = @tier3researchreward
+				min = @tier3researchmin
+				max = @tier3researchmax
+			}
+		}
+		planet_event = { id = colony.1513 days = 730 }
+	}
+}
+
+# Branch B (not very intuitive), drones are sent to sabotage the incoming pirate fleet.
+planet_event = {
+	id = colony.1511
+	title = "colony.1511.name"
+	desc = "colony.1511.desc"
+	picture = GFX_evt_asteroid_approaching_planet
+	location = ROOT
+
+	is_triggered_only = yes
+	
+	trigger = { owner = { has_country_flag = FLDrone_country } }
+
+	option = {
+		name = colony.1511.a
+		planet_event = { id = colony.1512 days = 700 }
+	}
+}
+
+# Branch B-1, Pirate fleet spawns with reduced strength.
+planet_event = {
+	id = colony.1512
+	title = "colony.1512.name"
+	desc = "colony.1512.desc"
+	picture = GFX_evt_federation_fleet
+	location = ROOT
+
+	is_triggered_only = yes
+	
+	trigger = { owner = { has_country_flag = FLDrone_country } }
+	
+	option = {
+		name = BATTLESTATIONS
+		remove_global_flag = FLDrone_doing_global
+		set_global_flag = FLDrone_done_global
+		hidden_effect = {
+			create_country = {
+				name = "NAME_Wounded_Pirates"
+				type = faction
+				auto_delete = yes
+			}
+			last_created_country = {
+				create_fleet = {
+					name = "NAME_Wounded_Pirates"
+					effect = {
+						set_owner = PREV
+						create_ship = {
+							name = "NAME_Scorched_Ravager"
+							design = "NAME_Dagger"
+						}
+						create_ship = {
+							name = "NAME_Damaged_Pillager"
+							design = "NAME_Dagger"
+						}
+						set_location = ROOT
+					}
+				}
+				set_faction_hostility = { set_hostile = yes }
+				establish_communications_no_message = root.owner
+			}
+		}
+	}
+}
+
+# Branch C, pirate fleet spawns with slightly greater strength
+planet_event = {
+	id = colony.1513
+	title = "colony.1513.name"
+	desc = "colony.1513.desc"
+	picture = GFX_evt_federation_fleet
+	location = ROOT
+
+	is_triggered_only = yes
+	
+	trigger = { owner = { has_country_flag = FLDrone_country } }
+
+	option = {
+		name = colony.1513.a
+		remove_global_flag = FLDrone_doing_global
+		set_global_flag = FLDrone_done_global
+		hidden_effect = {
+			create_country = {
+				name = "NAME_Wounded_Pirates"
+				type = faction
+				auto_delete = yes
+			}
+			last_created_country = {
+				create_fleet = {
+					name = "NAME_Numerous_Pirates"
+					effect = {
+						set_owner = PREV
+						create_ship = {
+							name = "NAME_First_Ravager"
+							design = "NAME_Dagger"
+						}
+						create_ship = {
+							name = "NAME_First_Pillager"
+							design = "NAME_Dagger"
+						}
+						create_ship = {
+							name = "NAME_Second_Ravager"
+							design = "NAME_Dagger"
+						}
+						create_ship = {
+							name = "NAME_Second_Pillager"
+							design = "NAME_Dagger"
+						}
+						create_ship = {
+							name = "NAME_Third_Ravager"
+							design = "NAME_Dagger"
+						}
+						create_ship = {
+							name = "NAME_Third_Pillager"
+							design = "NAME_Dagger"
+						}
+						set_location = ROOT
+					}
+				}
+				set_faction_hostility = { set_hostile = yes }
+				establish_communications_no_message = root.owner
+			}
+		}
+	}
+}
+
+# Branch A, pirate fleet arrives unmodified.
+planet_event = {
+	id = colony.1514
+	title = "colony.1514.name"
+	desc = "colony.1514.desc"
+	picture = GFX_evt_federation_fleet
+	location = ROOT
+
+	is_triggered_only = yes
+	
+	trigger = { owner = { has_country_flag = FLDrone_country } }
+
+	option = {
+		name = colony.1514.a
+		remove_global_flag = FLDrone_doing_global
+		set_global_flag = FLDrone_done_global
+		hidden_effect = {
+			create_country = {
+				name = "NAME_Cunning_Pirates"
+				type = faction
+				auto_delete = yes
+			}
+			last_created_country = {
+				create_fleet = {
+					name = "NAME_Wounded_Pirates"
+					effect = {
+						set_owner = PREV
+						create_ship = {
+							name = "NAME_Ravager"
+							design = "NAME_Dagger"
+						}
+						create_ship = {
+							name = "NAME_Pillager"
+							design = "NAME_Dagger"
+						}
+						create_ship = {
+							name = "NAME_Swashbuckler"
+							design = "NAME_Dagger"
+						}
+						set_location = ROOT
+					}
+				}
+			}
+		}
+	}
+}
+
+##############################################################################
+# POLLEN APHRODISIAC CHAIN
+##############################################################################
+
+# First event, spawns a non-mandatory special project the player can research
+planet_event = {
+	id = colony.1520
+	title = "colony.1520.name"
+	desc = "colony.1520.desc"
+	picture = GFX_evt_big_landing_ship
+	location = ROOT
+
+	trigger = {
+		has_owner = yes
+		original_owner = yes
+		is_homeworld = no
+		owner = {
+			is_ai = no
+			is_borg_empire = no 
+			NOT = { has_country_flag = pheromone_country }
+			NOT = { has_ethic = ethic_gestalt_consciousness }
+		}
+		NOR = {
+			has_global_flag = pheromonefrenzy_global
+			has_global_flag = pheromonefrenzy_done_global
+			has_planet_flag = colony_event
+			has_planet_flag = pheromone_planet
+			is_planet_class = pc_ringworld_habitable
+			is_planet_class = pc_habitat
+			is_planet_class = pc_arid
+			is_planet_class = pc_desert
+			is_planet_class = pc_savannah
+		}
+		is_artificial_planet = no
+		has_ground_combat = no
+		is_occupied_flag = no
+		num_pops > 0
+		is_capital = no
+	}
+
+	is_triggered_only = yes
+
+	immediate = {
+		set_global_flag = pheromonefrenzy_global
+		set_planet_flag = colony_event
+		set_planet_flag = pheromone_planet
+		owner = { set_country_flag = pheromone_country }
+	}
+
+	option = {
+		name = CURIOUS
+		enable_special_project = {
+			name = "POLLEN_1_PROJECT"
+			location = root
+			owner = root
+		}
+		hidden_effect = { planet_event = { id = colony.1521 days = 360 } }
+	}
+}
+
+# Second event, offers the player the choice to nip the event chain in the bud (if they can afford it). If they do not, the first planet modifier is applied.
+planet_event = {
+	id = colony.1521
+	title = "colony.1521.name"
+	desc = "colony.1521.desc"
+	picture = GFX_evt_medieval_alien_civilization
+	location = ROOT
+
+	is_triggered_only = yes
+
+	trigger = {
+		owner = {
+			is_ai = no
+			has_country_flag = pheromone_country
+		}
+		has_planet_flag = pheromone_planet
+		has_planet_flag = colony_event
+		has_ground_combat = no
+		num_pops > 0
+		is_capital = no
+	}
+
+	option = {
+		name = REMARKABLE
+		add_modifier = {
+			modifier = "pheromoned_1"
+			days = -1
+		}
+		hidden_effect = { planet_event = { id = colony.1522 days = 400 } }
+	}
+
+	option = {
+		name = colony.1521.b
+		allow = {
+			owner = {
+				energy > 399
+			}
+		}
+		owner = {
+			add_energy = -400
+		}
+	}
+
+	option = {
+		name = colony.1521.c
+		trigger = {
+			owner = {
+				energy < 400
+			}
+		}
+		add_modifier = {
+			modifier = "pheromoned_1"
+			days = -1
+		}
+		hidden_effect = { planet_event = { id = colony.1522 days = 500 } }
+	}
+}
+
+# Third event, worker productivity declines. Enables an optional special project that can partially mitigate this.
+planet_event = {
+	id = colony.1522
+	title = "colony.1522.name"
+	desc = "colony.1522.desc"
+	picture = GFX_evt_medieval_alien_civilization
+	location = ROOT
+
+	is_triggered_only = yes
+
+	trigger = {
+		owner = {
+			is_ai = no
+			has_country_flag = pheromone_country
+		}
+		has_planet_flag = pheromone_planet
+		has_planet_flag = colony_event
+		has_ground_combat = no
+		num_pops > 0
+		is_capital = no
+	}
+
+	option = {
+		name = colony.1522.a
+		add_modifier = {
+			modifier = "pheromoned_2"
+			days = -1
+		}
+		enable_special_project = {
+			name = "POLLEN_2_PROJECT"
+			location = ROOT
+			owner = root
+		}
+		hidden_effect = { planet_event = { id = colony.1524 days = 300 } }
+
+	}
+}
+
+# Event 3-A, followup to optional special project spawned by event 3. Applies a positive modifier and gives 600 Society Research, event chain continues.
+planet_event = {
+	id = colony.1523
+	title = "colony.1523.name"
+	desc = "colony.1523.desc"
+	picture = GFX_evt_medieval_alien_civilization
+	location = ROOT
+
+	is_triggered_only = yes
+
+	trigger = {
+		owner = {
+			is_ai = no
+			has_country_flag = pheromone_country
+		}
+		has_planet_flag = pheromone_planet
+		has_planet_flag = colony_event
+		has_ground_combat = no
+		num_pops > 0
+		is_capital = no
+	}
+
+	option = {
+		name = colony.1523.a
+		owner = {
+			add_monthly_resource_mult = {
+				resource = society_research
+				value = @tier1researchreward
+				min = @tier1researchmin
+				max = @tier1researchmax
+			}
+		}
+		add_modifier = {
+			modifier = "depheromoned_1"
+			days = -1
+		}
+	}
+}
+
+# Fourth event, colony's pops become much less inclined to migrate
+planet_event = {
+	id = colony.1524
+	title = "colony.1524.name"
+	desc = "colony.1524.desc"
+	picture = GFX_evt_medieval_alien_civilization
+	location = ROOT
+
+	is_triggered_only = yes
+
+	trigger = {
+		owner = {
+			is_ai = no
+			has_country_flag = pheromone_country
+		}
+		has_planet_flag = pheromone_planet
+		has_planet_flag = colony_event
+		has_ground_combat = no
+		num_pops > 0
+		is_capital = no
+	}
+
+	option = {
+		name = INTRIGUING
+		add_modifier = {
+			modifier = "pheromoned_3"
+			days = -1
+		}
+		hidden_effect = { planet_event = { id = colony.1525 days = 100 } }
+	}
+}
+
+# Fifth event, chain branches. Player can either accept another negative modifier for the sake of stability, or avoid it for now with repercussions down the road.
+planet_event = {
+	id = colony.1525
+	title = "colony.1525.name"
+	desc = "colony.1525.desc"
+	picture = GFX_evt_medieval_alien_civilization
+	location = ROOT
+
+	is_triggered_only = yes
+
+	trigger = {
+		has_owner = yes
+		original_owner = yes
+		is_homeworld = no
+		owner = { is_ai = no }
+		has_planet_flag = pheromone_planet
+		has_global_flag = pheromonefrenzy_global
+		has_planet_flag = colony_event
+		has_ground_combat = no
+		num_pops > 0
+		is_capital = no
+	}
+
+	auto_opens = yes
+
+	option = {
+		name = colony.1525.a
+		hidden_effect = { planet_event = { id = colony.1529 days = 200 } }
+	}
+
+	option = {
+		name = colony.1525.b
+		add_modifier = {
+			modifier = "pheromoned_4"
+			days = -1
+		}
+		hidden_effect = { planet_event = { id = colony.1526 days = 200 } }
+	}
+}
+
+# Branch A-1, the player's country has to depose the local government and run the colony from the capital.
+planet_event = {
+	id = colony.1526
+	title = "colony.1526.name"
+	desc = "colony.1526.desc"
+	picture = GFX_evt_medieval_alien_civilization
+	location = ROOT
+
+	is_triggered_only = yes
+
+	trigger = {
+		has_owner = yes
+		original_owner = yes
+		is_homeworld = no
+		owner = { is_ai = no }
+		has_planet_flag = pheromone_planet
+		has_global_flag = pheromonefrenzy_global
+		has_planet_flag = colony_event
+		has_ground_combat = no
+		num_pops > 0
+		is_capital = no
+	}
+
+	auto_opens = yes
+
+	option = {
+		name = colony.1526.a
+		hidden_effect = { planet_event = { id = colony.1527 days = 300 } }
+	}
+}
+
+# Branch A-2, the new government starts taking steps to break the native flower's narcotic hold over the population
+planet_event = {
+	id = colony.1527
+	title = "colony.1527.name"
+	desc = "colony.1527.desc"
+	picture = GFX_evt_medieval_alien_civilization
+	location = ROOT
+
+	is_triggered_only = yes
+
+	trigger = {
+		has_owner = yes
+		original_owner = yes
+		is_homeworld = no
+		owner = { is_ai = no }
+		has_planet_flag = pheromone_planet
+		has_global_flag = pheromonefrenzy_global
+		has_planet_flag = colony_event
+		has_ground_combat = no
+		num_pops > 0
+		is_capital = no
+	}
+
+	auto_opens = yes
+
+	option = {
+		name = INTRIGUING
+		hidden_effect = { planet_event = { id = colony.1528 days = 360 } }
+	}
+}
+
+# Branch A-3, the new government comes into contact with a still-loyal military force stationed on the planet, and stage a colony-wide purge of the pollen-bearing flower. All modifiers associated with the plant's proliferation are removed and the event chain ends.
+planet_event = {
+	id = colony.1528
+	title = "colony.1528.name"
+	desc = "colony.1528.desc"
+	picture = GFX_evt_medieval_alien_civilization
+	location = ROOT
+
+	is_triggered_only = yes
+
+	trigger = {
+		has_owner = yes
+		original_owner = yes
+		is_homeworld = no
+		owner = { is_ai = no }
+		has_planet_flag = pheromone_planet
+		has_global_flag = pheromonefrenzy_global
+		has_planet_flag = colony_event
+		has_ground_combat = no
+		num_pops > 0
+		is_capital = no
+	}
+
+	auto_opens = yes
+
+	immediate = {
+		remove_global_flag = pheromonefrenzy_global
+		remove_planet_flag = colony_event
+		remove_planet_flag = pheromone_planet
+		set_global_flag = pheromonefrenzy_done_global
+	}
+
+	option = {
+		name = colony.1528.a
+		hidden_effect = {
+			if = {
+				limit = { has_modifier = pheromoned_1 }
+			remove_modifier = pheromoned_1
+			}
+
+			if = {
+				limit = { has_modifier = pheromoned_2 }
+			remove_modifier = pheromoned_2
+			}
+
+			if = {
+				limit = { has_modifier = pheromoned_3 }
+			remove_modifier = pheromoned_3
+			}
+
+			if = {
+				limit = { has_modifier = pheromoned_4 }
+			remove_modifier = pheromoned_4
+			}
+
+			if = {
+				limit = { has_modifier = depheromoned_1 }
+			remove_modifier = depheromoned_1
+			}
+		}
+		custom_tooltip = colony.1528.a.tooltip
+	}
+}
+
+# Branch B-1, due to the player's hands-off approach to the colony's affairs, a flower-cult has arisen on the planet. Tension increases.
+planet_event = {
+	id = colony.1529
+	title = "colony.1529.name"
+	desc = "colony.1529.desc"
+	picture = GFX_evt_medieval_alien_civilization
+	location = ROOT
+
+	is_triggered_only = yes
+
+	trigger = {
+		has_owner = yes
+		original_owner = yes
+		is_homeworld = no
+		owner = { is_ai = no }
+		has_planet_flag = pheromone_planet
+		has_global_flag = pheromonefrenzy_global
+		has_planet_flag = colony_event
+		has_ground_combat = no
+		num_pops > 0
+		is_capital = no
+	}
+
+	option = {
+		name = WORRYING
+		hidden_effect = { planet_event = { id = colony.1530 days = 60 } }
+	}
+}
+
+# Branch B-2, something bad is about to happen. A special project is enabled, allowing the player to potentially stave off disaster.
+planet_event = {
+	id = colony.1530
+	title = "colony.1530.name"
+	desc = "colony.1530.desc"
+	picture = GFX_evt_medieval_alien_civilization
+	location = ROOT
+
+	is_triggered_only = yes
+
+	trigger = {
+		has_owner = yes
+		original_owner = yes
+		is_homeworld = no
+		owner = { is_ai = no }
+		has_planet_flag = pheromone_planet
+		has_global_flag = pheromonefrenzy_global
+		has_planet_flag = colony_event
+		num_pops > 0
+	}
+
+	option = {
+		name = colony.1530.a
+		enable_special_project = {
+			name = "POLLEN_3_PROJECT"
+			location = this
+			owner = root
+		}
+	}
+}
+
+# Branch B-2-1, successfully researched the special project! The planet is purged of the plant and everything returns to normal. Event chain ends.
+planet_event = {
+	id = colony.1531
+	title = "colony.1531.name"
+	desc = "colony.1531.desc"
+	picture = GFX_evt_big_landing_ship
+	location = ROOT
+
+	is_triggered_only = yes
+
+	trigger = {
+		has_owner = yes
+		original_owner = yes
+		is_homeworld = no
+		owner = { is_ai = no }
+		has_planet_flag = pheromone_planet
+		has_global_flag = pheromonefrenzy_global
+		has_planet_flag = colony_event
+		has_ground_combat = no
+		num_pops > 0
+		is_capital = no
+	}
+
+	immediate = {
+		if = {
+			limit = { has_modifier = pheromoned_1 }
+			remove_modifier = pheromoned_1
+		}
+		if = {
+			limit = { has_modifier = pheromoned_2 }
+			remove_modifier = pheromoned_2
+		}
+		if = {
+			limit = { has_modifier = pheromoned_3 }
+			remove_modifier = pheromoned_3
+		}
+		if = {
+			limit = { has_modifier = pheromoned_4 }
+			remove_modifier = pheromoned_4
+		}
+		if = {
+			limit = { has_modifier = depheromoned_1 }
+			remove_modifier = depheromoned_1
+		}
+		set_planet_flag = pheromonefrenzy_reviving
+	}
+
+	option = {
+		name = colony.1531.a
+		custom_tooltip = colony.1531.a.tooltip
+
+		owner = {
+			add_monthly_resource_mult = {
+				resource = unity
+				value = @tier2unityreward
+				min = @tier2unitymin
+				max = @tier2unitymax
+			}
+		}
+	}
+}
+
+# Branch B-2-2, failed to research the special project! The planet is purged of the flower, and indeed all life. The player's colony is destroyed, the planet becomes Toxic for two years, and the player's country gains a negative happiness modifier for ten years.
+planet_event = {
+	id = colony.1532
+	title = "colony.1532.name"
+	desc = "colony.1532.desc"
+	picture = GFX_evt_satellite_in_orbit
+	location = ROOT
+
+	is_triggered_only = yes
+
+	trigger = {
+		has_owner = yes
+		original_owner = yes
+		is_homeworld = no
+		owner = { is_ai = no }
+		has_planet_flag = pheromone_planet
+		has_global_flag = pheromonefrenzy_global
+		has_planet_flag = colony_event
+		has_ground_combat = no
+		num_pops > 0
+		is_capital = no
+	}
+
+	auto_opens = yes
+
+	immediate = {
+		if = {
+			limit = { has_modifier = pheromoned_1 }
+			remove_modifier = pheromoned_1
+		}
+		if = {
+			limit = { has_modifier = pheromoned_2 }
+			remove_modifier = pheromoned_2
+		}
+		if = {
+			limit = { has_modifier = pheromoned_3 }
+			remove_modifier = pheromoned_3
+		}
+		if = {
+			limit = { has_modifier = pheromoned_4 }
+			remove_modifier = pheromoned_4
+		}
+		if = {
+			limit = { has_modifier = depheromoned_1 }
+			remove_modifier = depheromoned_1
+		}
+		set_planet_flag = pheromonefrenzy_reviving
+
+		owner = {
+			add_modifier = {
+				modifier = "pheromoned_grief"
+				days = 3600
+			}
+		}
+	}
+
+	option = {
+		name = colony.1532.a
+		hidden_effect = {
+			owner = {
+				country_event = { id = colony.1533 days = 730 }
+			}
+			change_pc = pc_toxic
+			destroy_colony = { keep_buildings = no }
+		}
+
+		tooltip = {
+			owner = {
+				add_modifier = {
+					modifier = "pheromoned_grief"
+					days = 3600
+				}
+			}
+		}
+	}
+}
+
+# Branch B-2-3, the planet is no longer toxic and can be re-colonized. Event chain ends.
+country_event = {
+	id = colony.1533
+	title = "colony.1533.name"
+	desc = "colony.1533.desc"
+	picture = GFX_evt_landing_ship
+	location = from
+
+	is_triggered_only = yes
+
+	trigger = {
+		has_global_flag = pheromonefrenzy_global
+		from = {
+			has_owner = no
+			is_planet_class = pc_toxic
+		}
+	}
+
+	immediate = {
+		from = {
+			remove_planet_flag = pheromonefrenzy_reviving
+			remove_planet_flag = colony_event
+			remove_planet_flag = pheromone_planet
+			change_pc = pc_desert
+		}
+		set_global_flag = pheromonefrenzy_done_global
+	}
+
+	option = {
+		name = colony.1533.a
+		custom_tooltip = pheromonefrenzy.revived.tooltip
+	}
+}
+
+# Event 1-A, followup event to optional research project. Player gains 600 Society Research.
+planet_event = {
+	id = colony.1534
+	title = "colony.1534.name"
+	desc = "colony.1534.desc"
+	picture = GFX_evt_alien_ruins
+	location = ROOT
+
+	is_triggered_only = yes
+
+	trigger = {
+		has_owner = yes
+		original_owner = yes
+		is_homeworld = no
+		owner = { is_ai = no }
+		has_global_flag = pheromonefrenzy_global
+		has_planet_flag = pheromone_planet
+		has_planet_flag = colony_event
+	}
+
+	option = {
+		name = OK
+		owner = {
+			add_monthly_resource_mult = {
+				resource = society_research
+				value = @tier1researchreward
+				min = @tier1researchmin
+				max = @tier1researchmax
+			}
+		}
+	}
+}

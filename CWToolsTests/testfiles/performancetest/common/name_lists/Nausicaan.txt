@@ -1,0 +1,98 @@
+﻿### Nausicaan
+Nausicaan = {
+	randomized = no
+	
+	ship_names = {
+		generic = {
+			Stinger Pincer Claw Nipper Mandible Cutter Grasper Grappler Wrestle Boxer Fang Claw Bite Talon Guramba NiGuramba Ravager Scourge Kolasi Reclaimer Raider Invader
+		}
+		corvette = {
+		}
+		saber = {
+		}
+		sovereign = {
+		}
+		steamrunner = {
+		}		
+		adv_cruiser = {
+		}
+		strike = {
+		}	
+		constructor = { }
+		colonizer = { }
+		science = { }
+		transport = { }
+		outpost_station = {
+			sequential_name = "Frontier Outpost"
+		}
+	}
+
+	fleet_names = {
+		sequential_name = "%O% Raider Fleet"
+	}
+	
+	army_names = {
+		defense_army = {
+			sequential_name = "%O% Guard"
+		}
+		assault_army = {
+			sequential_name = "%O% Raiders"
+		}
+		slave_army = {
+			sequential_name = "%O% Indentured Defence Force"
+		}
+		clone_army = { 
+			sequential_name = "%O% Clone Defence Force"
+		}
+		robotic_army = {
+			sequential_name = "%O% Mechanical Defence Force"
+		}
+		android_army = {
+			sequential_name = "%O% Synthetic Defence Force"
+		}
+		psionic_army = { 
+			sequential_name = "%O% Psi Defence Force"
+		}
+		xenomorph_army = {
+			sequential_name = "%O% Bio-Warfare Defence Force"
+		}
+		gene_warrior_army = {
+			sequential_name = "%O% Bio-Engineered Defence Force"
+		}
+	}
+
+	planet_names = {
+		generic = {
+			names = {
+				Beskaa Scheraa Phaeacaa Alcinaa Aretaa Agallaa Artemaa Odyssaa Telemachaa Aristaa Perseptaa Ptholiportaa Nietzaa  
+			}
+		}
+	}
+
+
+	### CHARACTERS
+
+	character_names = {
+		names1 = {
+			weight = 100
+			first_names_male = {		
+				Navin Gramash Targak Dgidum Vageet Thimmkic Livom Shesheerdz Peth Cherrg Uut Notz Steg Veechuz Teiltham Uuthox Dgeezutz Vaggrec Steeth Ratz Oc Hechk Pith Teeyeg Jopuup Ghichuu Rebzum Duurgichk Stechk Mochk Xin Stam Hon Riluujz Xetaz Xorr Tleirr Traen Reerr Hetkz Ghukaechk Shilthu Telthoth Jopujz Dargujz Irtuchk Kleirr Xoz Gourrg Lhuush Bouth
+			}
+			first_names_female = {
+				Navin Gramash Targak Dgidum Vageet Thimmkic Livom Shesheerdz Peth Cherrg Uut Notz Steg Veechuz Teiltham Uuthox Dgeezutz Vaggrec Steeth Ratz Oc Hechk Pith Teeyeg Jopuup Ghichuu Rebzum Duurgichk Stechk Mochk Xin Stam Hon Riluujz Xetaz Xorr Tleirr Traen Reerr Hetkz Ghukaechk Shilthu Telthoth Jopujz Dargujz Irtuchk Kleirr Xoz Gourrg Lhuush Bouth
+			}
+			second_names = {
+				" "
+			}
+			regnal_first_names_male = {
+				Navin Gramash Targak Dgidum Vageet Thimmkic Livom Shesheerdz Peth Cherrg Uut Notz Steg Veechuz Teiltham Uuthox Dgeezutz Vaggrec Steeth Ratz Oc Hechk Pith Teeyeg Jopuup Ghichuu Rebzum Duurgichk Stechk Mochk Xin Stam Hon Riluujz Xetaz Xorr Tleirr Traen Reerr Hetkz Ghukaechk Shilthu Telthoth Jopujz Dargujz Irtuchk Kleirr Xoz Gourrg Lhuush Bouth 
+			}
+			regnal_first_names_female = {
+				Navin Gramash Targak Dgidum Vageet Thimmkic Livom Shesheerdz Peth Cherrg Uut Notz Steg Veechuz Teiltham Uuthox Dgeezutz Vaggrec Steeth Ratz Oc Hechk Pith Teeyeg Jopuup Ghichuu Rebzum Duurgichk Stechk Mochk Xin Stam Hon Riluujz Xetaz Xorr Tleirr Traen Reerr Hetkz Ghukaechk Shilthu Telthoth Jopujz Dargujz Irtuchk Kleirr Xoz Gourrg Lhuush Bouth
+			}
+			regnal_second_names = {
+				" "
+			}
+		}
+	}
+}

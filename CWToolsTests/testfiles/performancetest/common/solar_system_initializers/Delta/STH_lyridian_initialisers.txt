@@ -1,0 +1,122 @@
+@distance = 30
+@base_moon_distance = 10
+
+#Lyridian
+LyridianHomeworld = {
+	name = "Lyridia"
+	class = "rl_standard_stars"
+	asteroids_distance = 115
+	flags = { lyridian_homeworld }
+	init_effect = { log = "lyridian homeworld" }
+	usage = custom_empire
+	init_effect = { log = "lyridian homeworld" }
+	planet = { name = "Lyridia" class = star orbit_distance = 0 orbit_angle = 1 size = { min = 20 max = 30 } has_ring = no }
+	change_orbit = 50
+	planet = {
+		count = { min = 1 max = 2 }
+		orbit_distance = 20
+		class = random_non_colonizable
+		orbit_angle = { min = 90 max = 270 }
+		change_orbit = @base_moon_distance
+		moon = { count = { min = 0 max = 1 } class = random_non_colonizable orbit_angle = { min = 90 max = 270 } orbit_distance = 5 }
+	}
+	change_orbit = 30
+	planet = {
+		name = "Lyridia Prime"
+		home_planet = yes
+		class = pc_alpine
+		orbit_distance = 10
+		orbit_angle = { min = 90 max = 270 }
+		size = { min = 22 max = 25 }
+		starting_planet = yes
+		tile_blockers = none
+		modifiers = none
+		init_effect = { prevent_anomaly = yes }
+		init_effect = {
+			if = {
+				limit = { NOT = { any_country = { has_country_flag = lyridian_diaspora } } }
+				create_species = {
+					name = "Lyridian"
+					class = LYR
+					portrait = lyridian
+					homeworld = THIS
+					traits = {
+						trait = "trait_industrious"
+						trait = "trait_intelligent"
+						trait = "trait_fleeting"
+						trait = "trait_deviants"
+						ideal_planet_class = "pc_alpine"
+					}
+				}
+				last_created_species = { save_global_event_target_as = lyridianSpecies }
+				create_country = {
+					name = "NAME_lyridian_diaspora"
+					type = default
+					ignore_initial_colony_error = yes
+					civics = { civic = "civic_warrior_culture" civic = "civic_technocracy" }
+					authority = auth_dictatorial
+					name_list = "Lyridian"
+					ethos = { ethic = "ethic_militarist" ethic = "ethic_authoritarian" ethic = "ethic_materialist" }
+					species = event_target:lyridianSpecies
+					flag = {
+						icon = { category = "pointy" file = "flag_pointy_23.dds" }
+						background = { category = "backgrounds" file = "stripes.dds" }
+						colors = { "customcolor2050" "customcolor2001" "null" "null" }
+					}
+					ship_prefix = ""
+					effect = {
+						set_graphical_culture = generic_03
+						set_country_flag = lyridian_diaspora
+						set_country_flag = custom_start_screen
+						set_country_flag = generic_ent
+						set_country_flag = delta_empire
+						set_country_flag = init_spawned
+						save_global_event_target_as = lyridian_diaspora
+					}
+				}
+				create_colony = { owner = event_target:lyridian_diaspora species = event_target:lyridianSpecies ethos = owner }
+			}
+			set_capital = yes
+			random_country = {
+				limit = { has_country_flag = lyridian_diaspora }
+				save_global_event_target_as = lyridian_diaspora
+				add_appropriate_start_techs = yes
+				species = { save_global_event_target_as = lyridianSpecies }
+            }
+			set_owner = event_target:lyridian_diaspora
+			generate_major_empire_start_buildings = yes
+			generate_major_empire_start_pops = yes
+			generate_major_empire_start_fleets = yes
+			set_name = "Lyridia Prime" 
+		}
+		change_orbit = @base_moon_distance
+		moon = { count = { min = 0 max = 1 } class = random_non_colonizable orbit_angle = { min = 90 max = 270 } orbit_distance = 5 }
+	}
+	planet = {
+		count = { min = 0 max = 2 }
+		orbit_distance = 20
+		class = random_non_colonizable
+		orbit_angle = { min = 90 max = 270 }
+		change_orbit = @base_moon_distance
+		moon = { count = { min = 0 max = 1 } class = random_non_colonizable orbit_angle = { min = 90 max = 270 } orbit_distance = 5 }
+	}
+	change_orbit = 25
+	planet = { count = { min = 2 max = 3 } class = random_asteroid orbit_distance = 0 orbit_angle = { min = 40 max = 110 } }
+	planet = {
+		count = { min = 1 max = 3 }
+		orbit_distance = 25
+		class = random_non_colonizable
+		orbit_angle = { min = 90 max = 270 }
+		change_orbit = @base_moon_distance
+		moon = { count = { min = 0 max = 1 } class = random_non_colonizable orbit_angle = { min = 90 max = 270 } orbit_distance = 5 }
+	}
+	planet = {
+		count = { min = 1 max = 2 }
+		orbit_distance = 20
+		class = pc_gas_giant
+		orbit_angle = { min = 90 max = 270 }
+		change_orbit = @base_moon_distance
+		moon = { count = { min = 0 max = 3 } class = random_non_colonizable orbit_angle = { min = 90 max = 270 } orbit_distance = 5 }
+	}
+	planet = { count = { min = 0 max = 2 } orbit_distance = 20 class = random_non_colonizable orbit_angle = { min = 90 max = 270 } }
+}

@@ -1,0 +1,617 @@
+# All global modifiers are here.  They are applied from certain game-features.
+#
+#icon_frame = 1 # green frame
+#icon_frame = 2 # yellow frame
+#icon_frame = 3 # red frame
+# Effects are fully scriptable here.
+
+# The names can NOT be removed or changed since the code references them
+
+
+##########################################################################
+# Star Trek Horizons Modifiers
+##########################################################################
+
+# may be some day we will have better modifier api
+
+sth_dilithium_1 = {
+	navy_size_add = 10
+}
+sth_dilithium_2 = {
+	navy_size_add = 20
+}
+sth_dilithium_3 = {
+	navy_size_add = 30
+}
+sth_dilithium_4 = {
+	navy_size_add = 40
+}
+sth_dilithium_5 = {
+	navy_size_add = 50
+}
+sth_dilithium_6 = {
+	navy_size_add = 60
+}
+sth_dilithium_7 = {
+	navy_size_add = 70
+}
+sth_dilithium_8 = {
+	navy_size_add = 80
+}
+sth_dilithium_9 = {
+	navy_size_add = 90
+}
+sth_dilithium_10 = {
+	navy_size_add = 100
+}
+sth_dilithium_11 = {
+	navy_size_add = 110
+}
+sth_dilithium_12 = {
+	navy_size_add = 120
+}
+sth_dilithium_13 = {
+	navy_size_add = 130
+}
+sth_dilithium_14 = {
+	navy_size_add = 140
+}
+sth_dilithium_15 = {
+	navy_size_add = 150
+}
+sth_dilithium_16 = {
+	navy_size_add = 160
+}
+sth_dilithium_17 = {
+	navy_size_add = 170
+}
+sth_dilithium_18 = {
+	navy_size_add = 180
+}
+sth_dilithium_19 = {
+	navy_size_add = 190
+}
+sth_dilithium_20 = {
+	navy_size_add = 200
+}
+sth_dilithium_21 = {
+	navy_size_add = 210
+}
+sth_dilithium_22 = {
+	navy_size_add = 220
+}
+sth_dilithium_23 = {
+	navy_size_add = 230
+}
+sth_dilithium_24 = {
+	navy_size_add = 240
+}
+sth_dilithium_25 = {
+	navy_size_add = 250
+}
+sth_dilithium_26 = {
+	navy_size_add = 260
+}
+sth_dilithium_27 = {
+	navy_size_add = 270
+}
+sth_dilithium_28 = {
+	navy_size_add = 280
+}
+sth_dilithium_29 = {
+	navy_size_add = 290
+}
+sth_dilithium_30 = {
+	navy_size_add = 300
+}
+sth_dilithium_31 = {
+	navy_size_add = 310
+}
+sth_dilithium_32 = {
+	navy_size_add = 320
+}
+sth_dilithium_33 = {
+	navy_size_add = 330
+}
+sth_dilithium_34 = {
+	navy_size_add = 340
+}
+sth_dilithium_35 = {
+	navy_size_add = 350
+}
+sth_dilithium_36 = {
+	navy_size_add = 360
+}
+sth_dilithium_37 = {
+	navy_size_add = 370
+}
+sth_dilithium_38 = {
+	navy_size_add = 380
+}
+sth_dilithium_39 = {
+	navy_size_add = 390
+}
+sth_dilithium_40 = {
+	navy_size_add = 400
+}
+sth_dilithium_41 = {
+	navy_size_add = 410
+}
+sth_dilithium_42 = {
+	navy_size_add = 420
+}
+sth_dilithium_43 = {
+	navy_size_add = 430
+}
+sth_dilithium_44 = {
+	navy_size_add = 440
+}
+sth_dilithium_45 = {
+	navy_size_add = 450
+}
+sth_dilithium_46 = {
+	navy_size_add = 460
+}
+sth_dilithium_47 = {
+	navy_size_add = 470
+}
+sth_dilithium_48 = {
+	navy_size_add = 480
+}
+sth_dilithium_49 = {
+	navy_size_add = 490
+}
+sth_dilithium_50 = {
+	navy_size_add = 500
+}
+sth_dilithium_51 = {
+	navy_size_add = 510
+}
+sth_dilithium_52 = {
+	navy_size_add = 520
+}
+sth_dilithium_53 = {
+	navy_size_add = 530
+}
+sth_dilithium_54 = {
+	navy_size_add = 540
+}
+sth_dilithium_55 = {
+	navy_size_add = 550
+}
+sth_dilithium_56 = {
+	navy_size_add = 560
+}
+sth_dilithium_57 = {
+	navy_size_add = 570
+}
+sth_dilithium_58 = {
+	navy_size_add = 580
+}
+sth_dilithium_59 = {
+	navy_size_add = 590
+}
+sth_dilithium_60 = {
+	navy_size_add = 600
+}
+sth_dilithium_61 = {
+	navy_size_add = 610
+}
+sth_dilithium_62 = {
+	navy_size_add = 620
+}
+sth_dilithium_63 = {
+	navy_size_add = 630
+}
+sth_dilithium_64 = {
+	navy_size_add = 640
+}
+sth_dilithium_65 = {
+	navy_size_add = 650
+}
+sth_dilithium_66 = {
+	navy_size_add = 660
+}
+sth_dilithium_67 = {
+	navy_size_add = 670
+}
+sth_dilithium_68 = {
+	navy_size_add = 680
+}
+sth_dilithium_69 = {
+	navy_size_add = 690
+}
+sth_dilithium_70 = {
+	navy_size_add = 700
+}
+sth_dilithium_71 = {
+	navy_size_add = 710
+}
+sth_dilithium_72 = {
+	navy_size_add = 720
+}
+sth_dilithium_73 = {
+	navy_size_add = 730
+}
+sth_dilithium_74 = {
+	navy_size_add = 740
+}
+sth_dilithium_75 = {
+	navy_size_add = 750
+}
+sth_dilithium_76 = {
+	navy_size_add = 760
+}
+sth_dilithium_77 = {
+	navy_size_add = 770
+}
+sth_dilithium_78 = {
+	navy_size_add = 780
+}
+sth_dilithium_79 = {
+	navy_size_add = 790
+}
+sth_dilithium_80 = {
+	navy_size_add = 800
+}
+sth_dilithium_81 = {
+	navy_size_add = 810
+}
+sth_dilithium_82 = {
+	navy_size_add = 820
+}
+sth_dilithium_83 = {
+	navy_size_add = 830
+}
+sth_dilithium_84 = {
+	navy_size_add = 840
+}
+sth_dilithium_85 = {
+	navy_size_add = 850
+}
+sth_dilithium_86 = {
+	navy_size_add = 860
+}
+sth_dilithium_87 = {
+	navy_size_add = 870
+}
+sth_dilithium_88 = {
+	navy_size_add = 880
+}
+sth_dilithium_89 = {
+	navy_size_add = 890
+}
+sth_dilithium_90 = {
+	navy_size_add = 900
+}
+sth_dilithium_91 = {
+	navy_size_add = 910
+}
+sth_dilithium_92 = {
+	navy_size_add = 920
+}
+sth_dilithium_93 = {
+	navy_size_add = 930
+}
+sth_dilithium_94 = {
+	navy_size_add = 940
+}
+sth_dilithium_95 = {
+	navy_size_add = 950
+}
+sth_dilithium_96 = {
+	navy_size_add = 960
+}
+sth_dilithium_97 = {
+	navy_size_add = 970
+}
+sth_dilithium_98 = {
+	navy_size_add = 980
+}
+sth_dilithium_99 = {
+	navy_size_add = 990
+}
+sth_dilithium_100 = {
+	navy_size_add = 1000
+}
+sth_dilithium_101 = {
+	navy_size_add = 1010
+}
+sth_dilithium_102 = {
+	navy_size_add = 1020
+}
+sth_dilithium_103 = {
+	navy_size_add = 1030
+}
+sth_dilithium_104 = {
+	navy_size_add = 1040
+}
+sth_dilithium_105 = {
+	navy_size_add = 1050
+}
+sth_dilithium_106 = {
+	navy_size_add = 1060
+}
+sth_dilithium_107 = {
+	navy_size_add = 1070
+}
+sth_dilithium_108 = {
+	navy_size_add = 1080
+}
+sth_dilithium_109 = {
+	navy_size_add = 1090
+}
+sth_dilithium_110 = {
+	navy_size_add = 1100
+}
+sth_dilithium_111 = {
+	navy_size_add = 1110
+}
+sth_dilithium_112 = {
+	navy_size_add = 1120
+}
+sth_dilithium_113 = {
+	navy_size_add = 1130
+}
+sth_dilithium_114 = {
+	navy_size_add = 1140
+}
+sth_dilithium_115 = {
+	navy_size_add = 1150
+}
+sth_dilithium_116 = {
+	navy_size_add = 1160
+}
+sth_dilithium_117 = {
+	navy_size_add = 1170
+}
+sth_dilithium_118 = {
+	navy_size_add = 1180
+}
+sth_dilithium_119 = {
+	navy_size_add = 1190
+}
+sth_dilithium_120 = {
+	navy_size_add = 1200
+}
+sth_dilithium_121 = {
+	navy_size_add = 1210
+}
+sth_dilithium_122 = {
+	navy_size_add = 1220
+}
+sth_dilithium_123 = {
+	navy_size_add = 1230
+}
+sth_dilithium_124 = {
+	navy_size_add = 1240
+}
+sth_dilithium_125 = {
+	navy_size_add = 1250
+}
+sth_dilithium_126 = {
+	navy_size_add = 1260
+}
+sth_dilithium_127 = {
+	navy_size_add = 1270
+}
+sth_dilithium_128 = {
+	navy_size_add = 1280
+}
+sth_dilithium_129 = {
+	navy_size_add = 1290
+}
+sth_dilithium_130 = {
+	navy_size_add = 1300
+}
+sth_dilithium_131 = {
+	navy_size_add = 1310
+}
+sth_dilithium_132 = {
+	navy_size_add = 1320
+}
+sth_dilithium_133 = {
+	navy_size_add = 1330
+}
+sth_dilithium_134 = {
+	navy_size_add = 1340
+}
+sth_dilithium_135 = {
+	navy_size_add = 1350
+}
+sth_dilithium_136 = {
+	navy_size_add = 1360
+}
+sth_dilithium_137 = {
+	navy_size_add = 1370
+}
+sth_dilithium_138 = {
+	navy_size_add = 1380
+}
+sth_dilithium_139 = {
+	navy_size_add = 1390
+}
+sth_dilithium_140 = {
+	navy_size_add = 1400
+}
+sth_dilithium_141 = {
+	navy_size_add = 1410
+}
+sth_dilithium_142 = {
+	navy_size_add = 1420
+}
+sth_dilithium_143 = {
+	navy_size_add = 1430
+}
+sth_dilithium_144 = {
+	navy_size_add = 1440
+}
+sth_dilithium_145 = {
+	navy_size_add = 1450
+}
+sth_dilithium_146 = {
+	navy_size_add = 1460
+}
+sth_dilithium_147 = {
+	navy_size_add = 1470
+}
+sth_dilithium_148 = {
+	navy_size_add = 1480
+}
+sth_dilithium_149 = {
+	navy_size_add = 1490
+}
+sth_dilithium_150 = {
+	navy_size_add = 1500
+}
+sth_dilithium_151 = {
+	navy_size_add = 1510
+}
+sth_dilithium_152 = {
+	navy_size_add = 1520
+}
+sth_dilithium_153 = {
+	navy_size_add = 1530
+}
+sth_dilithium_154 = {
+	navy_size_add = 1540
+}
+sth_dilithium_155 = {
+	navy_size_add = 1550
+}
+sth_dilithium_156 = {
+	navy_size_add = 1560
+}
+sth_dilithium_157 = {
+	navy_size_add = 1570
+}
+sth_dilithium_158 = {
+	navy_size_add = 1580
+}
+sth_dilithium_159 = {
+	navy_size_add = 1590
+}
+sth_dilithium_160 = {
+	navy_size_add = 1600
+}
+sth_dilithium_161 = {
+	navy_size_add = 1610
+}
+sth_dilithium_162 = {
+	navy_size_add = 1620
+}
+sth_dilithium_163 = {
+	navy_size_add = 1630
+}
+sth_dilithium_164 = {
+	navy_size_add = 1640
+}
+sth_dilithium_165 = {
+	navy_size_add = 1650
+}
+sth_dilithium_166 = {
+	navy_size_add = 1660
+}
+sth_dilithium_167 = {
+	navy_size_add = 1670
+}
+sth_dilithium_168 = {
+	navy_size_add = 1680
+}
+sth_dilithium_169 = {
+	navy_size_add = 1690
+}
+sth_dilithium_170 = {
+	navy_size_add = 1700
+}
+sth_dilithium_171 = {
+	navy_size_add = 1710
+}
+sth_dilithium_172 = {
+	navy_size_add = 1720
+}
+sth_dilithium_173 = {
+	navy_size_add = 1730
+}
+sth_dilithium_174 = {
+	navy_size_add = 1740
+}
+sth_dilithium_175 = {
+	navy_size_add = 1750
+}
+sth_dilithium_176 = {
+	navy_size_add = 1760
+}
+sth_dilithium_177 = {
+	navy_size_add = 1770
+}
+sth_dilithium_178 = {
+	navy_size_add = 1780
+}
+sth_dilithium_179 = {
+	navy_size_add = 1790
+}
+sth_dilithium_180 = {
+	navy_size_add = 1800
+}
+sth_dilithium_181 = {
+	navy_size_add = 1810
+}
+sth_dilithium_182 = {
+	navy_size_add = 1820
+}
+sth_dilithium_183 = {
+	navy_size_add = 1830
+}
+sth_dilithium_184 = {
+	navy_size_add = 1840
+}
+sth_dilithium_185 = {
+	navy_size_add = 1850
+}
+sth_dilithium_186 = {
+	navy_size_add = 1860
+}
+sth_dilithium_187 = {
+	navy_size_add = 1870
+}
+sth_dilithium_188 = {
+	navy_size_add = 1880
+}
+sth_dilithium_189 = {
+	navy_size_add = 1890
+}
+sth_dilithium_190 = {
+	navy_size_add = 1900
+}
+sth_dilithium_191 = {
+	navy_size_add = 1910
+}
+sth_dilithium_192 = {
+	navy_size_add = 1920
+}
+sth_dilithium_193 = {
+	navy_size_add = 1930
+}
+sth_dilithium_194 = {
+	navy_size_add = 1940
+}
+sth_dilithium_195 = {
+	navy_size_add = 1950
+}
+sth_dilithium_196 = {
+	navy_size_add = 1960
+}
+sth_dilithium_197 = {
+	navy_size_add = 1970
+}
+sth_dilithium_198 = {
+	navy_size_add = 1980
+}
+sth_dilithium_199 = {
+	navy_size_add = 1990
+}
+sth_dilithium_200 = {
+	navy_size_add = 2000
+}
+

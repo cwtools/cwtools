@@ -1,0 +1,152 @@
+# see README.txt for example
+
+STH_helix_0 = {
+	entity = ""
+	construction_entity = "orbital_habitat_entity"
+	place_entity_on_planet_plane = yes
+	entity_offset = { x = -7 y = -7 }
+	build_time = 900
+	build_cost = {
+		minerals = 750
+		influence = 50
+	}
+	construction_blocks_others = no
+
+	potential = {
+		has_country_flag = suliban_cabal
+	}
+
+	possible = {
+		custom_tooltip_fail = {
+			text = "requires_inside_border"
+			is_inside_border = from
+		}
+	}
+
+	placement_rules = {
+		planet_possible = {
+
+			NOT = { has_anomaly = yes }
+
+			custom_tooltip_fail = {
+				text = "requires_no_existing_megastructure"
+				can_build_megastructure_on_planet = yes
+			}
+			custom_tooltip_fail = {
+				text = "requires_no_orbital_station"
+				has_orbital_station = no
+			}
+			custom_tooltip_fail = {
+				text = "requires_survey_not_habitable"
+				is_surveyed = {			# prevent leaking habitability information
+					who = prev.from
+					status = yes
+				}
+				habitable_planet = no	# prevent the spaceport colliding with the habitat
+			}
+			custom_tooltip_fail = { # balance for habitats
+				text = "requires_major_planetary_body"
+				is_gas_giant = yes	
+			}
+		} # use these for all non-star megastructures
+	}
+	
+	ai_weight = {
+		modifier = {
+			weight = 0
+			NOT = {
+				has_ethic = ethic_militarist
+			}
+		}
+	}
+	
+	on_build_start = {}
+	on_build_cancel = {}
+	
+	on_build_complete = {
+	set_star_flag = helix_built
+		spawn_planet = {
+			class = "pc_helix"
+			location = fromfrom.planet
+			orbit_location = yes
+			orbit_angle_offset = 45
+			orbit_distance_offset = 9.899
+			size = 20
+			has_ring = no
+			
+			init_effect = {
+				every_country = {
+					limit = { has_country_flag = suliban_cabal }
+					save_event_target_as = suliban_cabal
+				}				
+				set_name = "[FROM.from.planet.GetName] Helix"
+				set_planet_entity = {
+					entity = "orbital_habitat_entity"
+					graphical_culture = suliban_01
+				}
+				surveyed = {
+					set_surveyed = yes
+					surveyor = FROM
+				}
+				while = {
+					limit = {
+						any_tile = { has_blocker = yes }
+					}
+					random_tile = {
+						limit = { has_blocker = yes }
+						remove_blocker = yes
+					}
+				}
+				while = {
+					count = 14
+					random_tile = {
+						limit = { 
+							has_blocker = no 
+							has_building = no 
+							NOR = { 
+								has_resource = { type = minerals amount > 1 } 
+								has_resource = { type = energy amount > 1 } 
+								has_resource = { type = food amount > 1 } 
+								has_resource = { type = physics_research amount > 1 }
+								has_resource = { type = society_research amount > 1 }
+								has_resource = { type = engineering_research amount > 1 }								
+							} 
+						}
+						random_list = {
+							25 = {}
+							10 = { add_deposit = d_rich_mineral_deposit }
+							5 = { add_deposit = d_vast_mineral_deposit }
+							10 = { add_deposit = d_rich_energy_deposit }
+							5 = { add_deposit = d_vast_energy_deposit }
+							10 = { add_deposit = d_rich_farmland_deposit }
+							5 = { add_deposit = d_vast_farmland_deposit }
+							5 = { add_deposit = d_rich_physics_deposit }
+							5 = { add_deposit = d_vast_physics_deposit }
+							5 = { add_deposit = d_rich_society_deposit }
+							5 = { add_deposit = d_vast_society_deposit }
+							5 = { add_deposit = d_rich_engineering_deposit }
+							5 = { add_deposit = d_vast_engineering_deposit }
+						}
+						set_blocker = "tb_helix_expansion"
+					}
+				}
+				create_colony = {
+					owner = from
+					species = from
+				}
+				random_tile = {
+					limit = { has_building = yes }
+					set_building = "helix_ops_0"
+				}
+				copy_orbital_tile = fromfrom.planet
+				set_planet_flag = megastructure
+				set_planet_flag = habitat
+			}
+		}
+		fromfrom.planet = {
+			set_planet_flag = has_megastructure
+		}
+		remove_megastructure = fromfrom
+	}
+	
+}

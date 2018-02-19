@@ -1,0 +1,143 @@
+special_project = {
+	key = "HUMAN_AUGMENTS_PROJECT_1"
+	#event_chain = "whale_probe_chain"
+	cost = 0
+	days_to_research = 30
+	tech_department = physics_technology
+	picture = sth_GFX_evt_Augments2
+	timelimit = 360
+	event_scope = ship_event
+	requirements = {
+		shipclass_military = 1
+		leader = admiral
+	}
+	on_success = { 
+		owner = { country_event = { id = STH_federation_story.4 } }
+	}
+	on_fail = {	
+		country_event = { id = STH_federation_story.3 }
+	}
+}
+special_project = {
+	key = "HUMAN_AUGMENTS_PROJECT_2"
+	#event_chain = "whale_probe_chain"
+	cost = 0
+	days_to_research = 30
+	tech_department = physics_technology
+	picture = sth_GFX_evt_Augments2
+	timelimit = 360
+	event_scope = ship_event
+	requirements = {
+		shipclass_military = 1
+		leader = admiral
+	}
+	on_success = { 
+		owner = { country_event = { id = STH_federation_story.10 } }
+	}
+	on_fail = {	
+		country_event = { id = STH_federation_story.9 }
+	}
+}
+special_project = {
+	key = "HUMAN_AUGMENTS_PROJECT_3"
+	#event_chain = "whale_probe_chain"
+	cost = 0
+	days_to_research = 30
+	tech_department = engineering_technology
+	picture = sth_GFX_evt_Augments2
+	timelimit = 360
+	event_scope = ship_event
+	requirements = {
+		shipclass_science_ship = 1
+		leader = scientist
+	}
+	on_success = { 
+		owner = { country_event = { id = STH_federation_story.15 } }
+	}
+	on_fail = { }
+}
+
+
+
+
+special_project = {
+	key = "WHALE_PROBE_1_PROJECT"
+	#event_chain = "whale_probe_chain"
+	cost = 0
+	days_to_research = 30
+	tech_department = physics_technology
+	picture = sth_GFX_evt_whaleprobe1
+	timelimit = -1
+	event_scope = ship_event
+	requirements = {
+		shipclass_science_ship = 1
+		leader = scientist
+	}
+	on_success = { 
+		fleet = { 
+			fleet_event = { id = STH_federation_story.2220 } 
+			set_event_locked = yes
+		}
+	}
+	on_fail = {	}
+	abort_trigger = {
+		OR = { 
+			NOT = { any_country = { has_country_flag = whale_probe_country } }
+			AND = {
+				exists = event_target:whale_probe_fleet
+				event_target:whale_probe_fleet = { owner = { has_country_flag = whale_probe_resolved } }
+			}
+		}
+	}
+}
+
+
+
+special_project = {
+	key = "FED_MEDIATE_DISPUTE_PROJECT_1A"
+	cost = 0
+	days_to_research = 180
+	tech_department = society_technology
+	picture = sth_GFX_evt_federationCouncil
+	timelimit = 720
+	event_scope = ship_event
+	requirements = {
+		shipclass_science_ship = 1
+		leader = scientist
+		# has_component = REQUIRED_SCIENCE_MODULE_DIPLOMATIC_0
+	}
+	on_success = { 
+		owner = { country_event = { id = theFederation.129 scopes = { from = event_target:fedCouncilMediateA fromfrom = event_target:fedCouncilMediateB fromfromfrom = root.from } } }
+		clear_global_event_target = fedCouncilMediateA
+		clear_global_event_target = fedCouncilMediateB
+	}
+	on_fail = { 
+		country_event = { id = theFederation.130 scopes = { from = event_target:fedCouncilMediateA fromfrom = event_target:fedCouncilMediateB fromfromfrom = root.from } }
+		clear_global_event_target = fedCouncilMediateA
+		clear_global_event_target = fedCouncilMediateB
+	}
+}
+special_project = {
+	key = "FED_MEDIATE_DISPUTE_PROJECT_1B"
+	cost = 0
+	days_to_research = 180
+	tech_department = society_technology
+	picture = sth_GFX_evt_federationCouncil
+	timelimit = 720
+	event_scope = ship_event
+	requirements = {
+		shipclass_science_ship = 1
+		leader = scientist
+		# has_component = REQUIRED_SCIENCE_MODULE_DIPLOMATIC_0
+	}
+	on_success = { 
+		owner = { country_event = { id = theFederation.129 scopes = { from = event_target:fedCouncilMediateA fromfrom = event_target:fedCouncilMediateB fromfromfrom = root.from } } }
+		clear_global_event_target = fedCouncilMediateA
+		clear_global_event_target = fedCouncilMediateB
+	}
+	on_fail = { 
+		country_event = { id = theFederation.130 scopes = { from = event_target:fedCouncilMediateA fromfrom = event_target:fedCouncilMediateB fromfromfrom = root.from } }
+		clear_global_event_target = fedCouncilMediateA
+		clear_global_event_target = fedCouncilMediateB
+	}
+}

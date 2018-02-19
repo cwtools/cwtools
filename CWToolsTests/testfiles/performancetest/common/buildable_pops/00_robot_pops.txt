@@ -1,0 +1,242 @@
+#my_buildable_pop = {
+#	TODO lots of stuff missing
+#
+#	species = { ... }				# species template
+#	portrait = {					# change portrait to the first whose trigger matches. leave unchanged from species template if none matches
+#		portrait_key = { trigger }	# scope: country, from: upgraded from species (optional)
+#	}
+#}
+
+# buildable_robot_pop_1 = {
+		
+	# prerequisites = {
+		# "tech_robotic_workers"
+	# }
+	# cost = {
+		# minerals = 100
+	# }
+	
+	# potential_build = {
+		# NOT = {
+			# has_technology = "tech_droid_workers"
+			# has_technology = "tech_synthetic_workers"
+			# has_country_flag = synthetic_age
+		# }
+	# }
+	
+	# allow = {
+		# NOR = { 
+			# has_policy_flag = robots_outlawed 
+			# has_authority = auth_hive_mind
+		# }
+	# }
+	
+	# species = {
+		# name = "ROBOT_POP_SPECIES_1"
+		# name_list = "AI"
+		# class = "ROBOT"
+		# portrait = "default_robot"
+		# traits = {
+			# trait = "trait_mechanical"
+			# trait = "trait_robotic_1"
+		# }
+		# new_pop_resource_requirement = {
+			# type = robot_food 
+			# value = 30.0
+		# }
+		# pops_auto_growth = 1.0
+		# pops_auto_upgrade_to = buildable_robot_pop_2
+
+		# pops_can_be_colonizers = no
+		# pops_can_migrate = no
+		# pops_can_reproduce = no
+		# pops_can_join_factions = no
+		# pop_maintenance = 1
+		# pops_can_be_slaves = no
+		# can_generate_leaders = no
+		# pops_have_happiness = no
+		# consumer_goods = no
+		# pop_ethics = no
+	# }
+	# portrait = {
+		# sd_hum_robot = { use_robot_portrait_sd_hum_robot = yes }
+		# sd_mam_robot = { use_robot_portrait_sd_mam_robot = yes }
+		# sd_rep_robot = { use_robot_portrait_sd_rep_robot = yes }
+		# sd_avi_robot = { use_robot_portrait_sd_avi_robot = yes }
+		# sd_art_robot = { use_robot_portrait_sd_art_robot = yes }
+		# sd_mol_robot = { use_robot_portrait_sd_mol_robot = yes }
+		# sd_fun_robot = { use_robot_portrait_sd_fun_robot = yes }
+		# sd_pla_robot = { use_robot_portrait_sd_pla_robot = yes }
+		# sd_worker_robot = { use_robot_portrait_sd_worker_robot = yes }
+	# }
+# }
+
+# buildable_robot_pop_2 = {
+		
+	# prerequisites = {
+		# "tech_droid_workers"
+	# }
+	# cost = {
+		# minerals = 100
+	# }
+	
+	# potential_build = {
+		# NOT = {
+			# has_technology = "tech_synthetic_workers"
+			# has_country_flag = synthetic_age
+		# }
+	# }
+	
+	# allow = {
+		# NOR = { 
+			# has_policy_flag = robots_outlawed 
+			# has_authority = auth_hive_mind
+		# }
+	# }
+	
+	# species = {
+		# name = "ROBOT_POP_SPECIES_2"
+		# name_list = "AI"
+		# class = "ROBOT"
+		# portrait = "default_robot"
+		# traits = {
+			# trait = "trait_mechanical"
+			# trait = "trait_robotic_2"
+		# }
+		
+		# new_pop_resource_requirement = {
+			# type = robot_food 
+			# value = 30.0			
+		# }
+		# pops_auto_growth = 1.0
+		# pops_auto_upgrade_to = buildable_robot_pop_3
+		
+		# pops_can_be_colonizers = yes
+		# pops_can_migrate = no
+		# pops_can_reproduce = no
+		# pops_can_join_factions = no
+		# pop_maintenance = 1
+		# can_generate_leaders = no
+		# pops_can_be_slaves = no
+		# pops_have_happiness = no
+		# consumer_goods = no
+		# pop_ethics = no
+	# }
+	# portrait = {
+		# sd_hum_robot = { use_robot_portrait_sd_hum_robot = yes }
+		# sd_mam_robot = { use_robot_portrait_sd_mam_robot = yes }
+		# sd_rep_robot = { use_robot_portrait_sd_rep_robot = yes }
+		# sd_avi_robot = { use_robot_portrait_sd_avi_robot = yes }
+		# sd_art_robot = { use_robot_portrait_sd_art_robot = yes }
+		# sd_mol_robot = { use_robot_portrait_sd_mol_robot = yes }
+		# sd_fun_robot = { use_robot_portrait_sd_fun_robot = yes }
+		# sd_pla_robot = { use_robot_portrait_sd_pla_robot = yes }
+		# sd_worker_robot = { use_robot_portrait_sd_worker_robot = yes }
+	# }
+# }
+
+# buildable_robot_pop_3 = {
+		
+	# prerequisites = {
+		# "tech_synthetic_workers"
+	# }
+	# cost = {
+		# minerals = 100
+	# }
+	
+	# allow = {
+		# NOR = { 
+			# has_policy_flag = robots_outlawed 
+			# has_authority = auth_hive_mind
+		# }
+	# }
+	
+	# species = {
+		# name = "ROBOT_POP_SPECIES_3"
+		# name_list = "AI"
+		# class = "ROBOT"
+		# portrait = "default_robot"
+		# traits = {
+			# trait = "trait_mechanical"
+			# trait = "trait_robotic_3"
+		# }
+		
+		# new_pop_resource_requirement = {
+			# type = robot_food
+			# value = 30.0
+		# }
+		# pops_auto_growth = 1.0
+		
+		# pops_can_be_colonizers = yes
+		# pops_can_migrate = yes
+		# pops_can_reproduce = no
+		# pops_can_join_factions = yes
+		# pop_maintenance = 1
+		# can_generate_leaders = yes
+		# pops_can_be_slaves = yes
+		# pops_have_happiness = yes
+		# pop_ethics = random	#can also be pop_ethics = { some_ethic some_other_ethic etc }
+	# }
+	# portrait = {
+		# sd_hum_robot = { use_robot_portrait_sd_hum_robot = yes }
+		# sd_mam_robot = { use_robot_portrait_sd_mam_robot = yes }
+		# sd_rep_robot = { use_robot_portrait_sd_rep_robot = yes }
+		# sd_avi_robot = { use_robot_portrait_sd_avi_robot = yes }
+		# sd_art_robot = { use_robot_portrait_sd_art_robot = yes }
+		# sd_mol_robot = { use_robot_portrait_sd_mol_robot = yes }
+		# sd_fun_robot = { use_robot_portrait_sd_fun_robot = yes }
+		# sd_pla_robot = { use_robot_portrait_sd_pla_robot = yes }
+		# sd_worker_robot = { use_robot_portrait_sd_worker_robot = yes }
+	# }
+# }
+
+# buildable_robot_pop_4 = {
+	# cost = {
+		# minerals = 100
+	# }
+	
+	# potential_build = {
+		# OR = {
+			# has_country_flag = synthetic_age
+			# has_authority = auth_machine_intelligence
+		# }
+	# }
+
+	# species = founder_species
+# }
+
+# buildable_modded_robot_pop = {
+	# cost = {
+		# minerals = 100
+	# }
+
+	# prerequisites = { "tech_robomodding" }
+	
+	# allow = {
+		# NOR = { 
+			# has_policy_flag = robots_outlawed 
+			# has_authority = auth_hive_mind
+		# }
+	# }
+
+	# species_class = ROBOT
+# }
+
+
+buildable_machine_pop_pralor = {
+	cost = { minerals = 100 }
+	potential_build = {
+		has_authority = auth_machine_intelligence
+		is_species_class = PRA 
+	}
+	species_class = PRA
+}
+
+buildable_machine_pop_cravic = {
+	cost = { minerals = 100 }
+	potential_build = {
+		has_authority = auth_machine_intelligence
+		is_species_class = CRA
+	}
+	species_class = CRA
+}

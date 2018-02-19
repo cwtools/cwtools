@@ -1,0 +1,14 @@
+buildable_vorta = {
+	cost = { minerals = 100 }
+	prerequisites = { "tech_jem_hadar_cloning" }
+	potential_build = { always = yes }
+	species_class = VOR
+}
+
+buildable_jem_hadar = {
+	cost = { minerals = 100 }
+	potential_build = { always = yes }
+	prerequisites = { "tech_jem_hadar_cloning" }
+	allow = { OR = { has_country_strategic_resource = { type = sr_ketracel_13 amount > 1 } has_country_strategic_resource = { type = sr_ketracel_13 amount = 1 } } }
+	species_class = JEM
+}

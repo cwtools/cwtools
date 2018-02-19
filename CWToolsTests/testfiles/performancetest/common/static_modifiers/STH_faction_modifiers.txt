@@ -1,0 +1,18 @@
+#icon_frame = 1 # green frame
+#icon_frame = 2 # yellow frame
+#icon_frame = 3 # red frame
+
+##########################################################################
+# Faction Modifiers
+##########################################################################
+promoted_sth_cardassian_oralian = {
+	pop_ethic_egalitarian_attraction_mult = 0.20
+	pop_ethic_spiritualist_attraction_mult = 0.30
+	country_resource_influence_add = -1
+}
+
+suppressed_sth_cardassian_oralian = {
+	pop_ethic_egalitarian_attraction_mult = -0.20
+	pop_ethic_spiritualist_attraction_mult = -0.30
+	country_resource_influence_add = -1
+}

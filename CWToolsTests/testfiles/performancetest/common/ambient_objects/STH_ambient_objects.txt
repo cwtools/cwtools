@@ -1,0 +1,73 @@
+
+
+# gas cloud object
+ambient_object = {
+	name = "sth_object"
+	entity = "sth_dust_entity"
+	selectable = no
+	show_name = no
+}
+
+# XCV 247
+ambient_object = {
+	name = "sth_xcv247"
+	description = "sth_xcv247_desc"
+	entity = "xcv330_entity"
+	selectable = yes
+	show_name = yes
+}
+
+ambient_object = {
+	name = "borg_unimatrix_structure_01_object"
+	entity = "unimatrix_ambience_entity"
+	selectable = no
+	show_name = no
+}
+#blue
+ambient_object = {
+	name = "borg_unimatrix_structure_blue_01_object"
+	entity = "unimatrix_ambience_blue_entity"
+	selectable = no
+	show_name = no
+}
+
+#red
+ambient_object = {
+	name = "borg_unimatrix_structure_red_01_object"
+	entity = "unimatrix_ambience_red_entity"
+	selectable = no
+	show_name = no
+}
+
+#yellow
+ambient_object = {
+	name = "borg_unimatrix_structure_yellow_01_object"
+	entity = "unimatrix_ambience_yellow_entity"
+	selectable = no
+	show_name = no
+}
+
+
+#orange
+ambient_object = {
+	name = "borg_unimatrix_structure_orange_01_object"
+	entity = "unimatrix_ambience_orange_entity"
+	selectable = no
+	show_name = no
+}
+
+#purple
+ambient_object = {
+	name = "borg_unimatrix_structure_purple_01_object"
+	entity = "unimatrix_ambience_purple_entity"
+	selectable = no
+	show_name = no
+}
+
+#firstfed_cube
+ambient_object = {
+	name = "firstfed_cube"
+	entity = "fesarian_01_fallen_ambiente_cube_entity"
+	selectable = no
+	show_name = no
+}

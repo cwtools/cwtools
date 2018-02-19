@@ -1,0 +1,97 @@
+﻿### Fen Domar by EHKodiak
+Fendomar = {
+	randomized = no
+
+	ship_names = {
+		generic = {
+		"Blaze of Domar" "Brilliance of Domar" "Dazzling of Domar" "Flashing of Domar" "Glistening of Domar" "Glittering of Domar" "Golden of Domar" "Intensity of Domar" "Luminous Domar" "Radiance of Domar" "Radiant Domar" "Shimmering of Domar" "Shine of Domar" "Silver of Domar" "Sparkling of Domar" "Vivid Domar" "Blaze of Domar" "Glow of Domar" "Light of Domar" "Argent of Domar" "Aurora of Domar" "Beam of Domar" "Domar's Flame" "Burnished of Domar" "Coruscate of Domar" "Glaring of Domar" "Gleaming of Domar" "Gloss of Domar" "Illuminated of Domar" "Luminated of Domar" "Incandescent of Domar" "Lambent of Domar" "Light of Domar" "Lighted of Domar" "Lustrous Domar" "Phosphorescent Domar" "Resplendent Domar" "Scintillating Domar"
+		}
+		corvette = {
+		}
+		saber = {
+		}
+		sovereign = {
+		}
+		steamrunner = {
+		}		
+		adv_cruiser = {
+		}
+		strike = {
+		}	
+		constructor = { }
+		colonizer = { }
+		science = { }
+		transport = { }
+		outpost_station = {
+			sequential_name = "Outpost of Domar"
+		}
+	}
+
+	fleet_names = {
+		sequential_name = "%O% Fleet"
+	}
+	
+	army_names = {
+		defense_army = {
+			sequential_name = "%O% Domar Sentinels"
+		}
+		assault_army = {
+			sequential_name = "%O% Knights of Domar"
+		}
+		slave_army = {
+			sequential_name = "%O% Indentured Defence Force"
+		}
+		clone_army = { 
+			sequential_name = "%O% Clone Defence Force"
+		}
+		robotic_army = {
+			sequential_name = "%O% Mechanised Defence Force"
+		}
+		android_army = {
+			sequential_name = "%O% Synthetic Defence Force"
+		}
+		psionic_army = { 
+			sequential_name = "%O% Psi Defence Force"
+		}
+		xenomorph_army = {
+			sequential_name = "%O% Bio-Warfare Defence Force"
+		}
+		gene_warrior_army = {
+			sequential_name = "%O% Bio-Engineered Defence Force"
+		}
+	}
+
+	planet_names = {
+		generic = {
+			names = { 
+			}
+		}
+	}
+
+
+	### CHARACTERS 
+
+	character_names = {
+		names1 = {
+			weight = 40
+			first_names_male = {
+			Ael Ronarg Agerli Dausfer Rung Fharris "Ag Fen" Rfen Domauss Foci Isca Fever Doci Fenver Fes Ager Ronar Agern Afaodan Domerlin Ociver Fekalla Dohanng Dofen Doma Dous Isallis Iscfen Agerver Domdohaver Dover Feusover Doma Ronar Agerae Fciver Ddan Ffen Domsver Dokallarrig AFen Didsa Ronaromar Agefen Iscaisver Iskaver Ronarth Fenhanng Fenthanng Ageiver Agocimartn Domver Ronardhanng Ronart Dver Dver Ftegaka IscaFen Domaka Fenng Domaciver Agerver Ronar Agllisver Domafhanng Irafen Iscaegver Felsodanng Doussc Dthannng Doricisan Agethanng Darrer Catega Iscateg Iscng Isca Iharve Iscthanng Fafar Fehanng Disodan Iscatever Agmarafa Domocivfen Indohanng Odan
+			}
+			first_names_female = {
+			Iscatedomg Domver Allien Nner Aodan "Ager Fen" Feharriver Iscn Aghanng Agerhver Iscat Ronaran Iscciver Fver Dommartfen Fefen Ifarseker Dnnen Iscategatn Ronarthfen Dsallisver Domaver Iscatsver Issver Ronaraver Imaisver Dohanng Ronara Iglsodan Aguskver Fngaraver Sodan Agerhdan Iscmen Afever Domng Dar Iscatver Domathanng Domg Ageraellan Agerhard Domsorodan Dllisver Domerfan DoFen Fnne Iici Illis Agfarsek Iscver Domn Dfen Di Iscategan Dous Fethanng Ronar Ronar Idlis Domlanga Domae Categ Dois Cidsa Ronartha Domaver Doer Ronar Agever Isca Ismafahanng Ronar Acathanng Agehanng Isca Ager Feen Domahanng Dtegalng Dollis Ronar Isca Agel Doma Fus Igael Alus Isgen Ager Oricthaangg Ager Ronar Domahanng Isca Domadri Ronarre Fenmerla Dociver Agerhadrn Feodan
+			}
+			second_names = {
+			Aver Tetegg Orig Hadrn Sodan "har Fen" "hart Do" "Fen Dver" "har Ver" "afa Va" Tega Sasodan Ver Fen Kver Rafen Vessar
+			}
+			regnal_first_names_male = {
+			Ael Ronarg Agerli Dausfer Rung Fharris "Ag Fen" Rfen Domauss Foci Isca Fever Doci Fenver Fes Ager Ronar Agern Afaodan Domerlin Ociver Fekalla Dohanng Dofen Doma Dous Isallis Iscfen Agerver Domdohaver Dover Feusover Doma Ronar Agerae Fciver Ddan Ffen Domsver Dokallarrig AFen Didsa Ronaromar Agefen Iscaisver Iskaver Ronarth Fenhanng Fenthanng Ageiver Agocimartn Domver Ronardhanng Ronart Dver Dver Ftegaka IscaFen Domaka Fenng Domaciver Agerver Ronar Agllisver Domafhanng Irafen Iscaegver Felsodanng Doussc Dthannng Doricisan Agethanng Darrer Catega Iscateg Iscng Isca Iharve Iscthanng Fafar Fehanng Disodan Iscatever Agmarafa Domocivfen Indohanng Odan
+			}
+			regnal_first_names_female = {
+			Iscatedomg Domver Allien Nner Aodan "Ager Fen" Feharriver Iscn Aghanng Agerhver Iscat Ronaran Iscciver Fver Dommartfen Fefen Ifarseker Dnnen Iscategatn Ronarthfen Dsallisver Domaver Iscatsver Issver Ronaraver Imaisver Dohanng Ronara Iglsodan Aguskver Fngaraver Sodan Agerhdan Iscmen Afever Domng Dar Iscatver Domathanng Domg Ageraellan Agerhard Domsorodan Dllisver Domerfan DoFen Fnne Iici Illis Agfarsek Iscver Domn Dfen Di Iscategan Dous Fethanng Ronar Ronar Idlis Domlanga Domae Categ Dois Cidsa Ronartha Domaver Doer Ronar Agever Isca Ismafahanng Ronar Acathanng Agehanng Isca Ager Feen Domahanng Dtegalng Dollis Ronar Isca Agel Doma Fus Igael Alus Isgen Ager Oricthaangg Ager Ronar Domahanng Isca Domadri Ronarre Fenmerla Dociver Agerhadrn Feodan
+			}
+			regnal_second_names = {
+			Aver Tetegg Orig Hadrn Sodan "har Fen" "hart Do" "Fen Dver" "har Ver" "afa Va" Tega Sasodan Ver Fen Kver Rafen Vessar
+			}
+		}
+	}
+}

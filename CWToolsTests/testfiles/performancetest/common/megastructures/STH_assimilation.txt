@@ -1,0 +1,103 @@
+# see README.txt for example
+
+# STH_assimilation_0 = {
+	# entity = "construction_platform_entity"
+	# construction_entity = "construction_platform_entity"
+	# portrait = "GFX_megastructure_construction_background"
+	# place_entity_on_planet_plane = no
+	# entity_offset = { x = -7 y = -7 }
+	# build_time = 30
+	# build_cost = {
+		# minerals = 25
+		# influence = 25
+	# }
+
+	# maintenance = {
+		# energy = 5
+	# }
+
+	# potential = {
+		# has_ascension_perk = ap_the_circle_of_life
+		# can_assimilate = yes # USE THIS
+		# is_species_class = BRG
+	# }
+	
+	# possible = {
+		# custom_tooltip = {
+			# fail_text = "requires_inside_border"
+			# is_inside_border = from
+		# }
+		# custom_tooltip = {
+			# fail_text = "requires_surveyed_system"
+			# NOT = {
+				# any_planet = {
+					# is_surveyed = {
+						# who = prev.from
+						# status = no
+					# }
+				# }
+			# }
+		# }
+		# custom_tooltip = {
+			# fail_text = "requires_no_habitable_planets"
+			# NOT = {
+				# any_planet = {
+					# OR = {
+						# habitable_planet = yes
+						# habitable_structure = yes
+					# }
+				# }
+			# }
+		# }
+		# custom_tooltip = {
+			# fail_text = "requires_no_black_hole"
+			# NOT = { is_star_class = sc_black_hole }
+		# }
+	# }
+	
+	# placement_rules = {
+		# planet_possible = {
+			# custom_tooltip = {
+				# fail_text = "must_be_populated"
+				# is_colony = yes
+			# }
+		# }
+	# }
+	
+	# ai_weight = {
+		# factor = 10		
+		# modifier = {
+			# factor = 0.5
+			# has_any_megastructure_in_empire = yes
+								
+	
+		# }
+	# }
+	
+	# on_build_start = {}
+	# on_build_cancel = {}
+	# on_build_complete = {
+		# from = {
+			# save_event_target_as = assimilatingCountry
+		# }
+		# fromfrom.planet = {
+			# set_planet_flag = "assimilated_planet"
+			# set_planet_flag = "assimilated_by:@event_target:assimilatingCountry"
+			# set_planet_flag = "assimilated_from:@Owner"
+			# assimilate_planet = yes
+			# set_controller = event_target:assimilatingCountry
+			# remove_megastructure = fromfrom
+			# random_pop  = {
+				# limit = { NOT = { has_trait = trait_pc_assimilated_preference } }
+				# assimilate_pop = yes
+			# }
+			# random_pop  = {
+				# limit = { NOT = { has_trait = trait_pc_assimilated_preference } }
+				# assimilate_pop = yes
+			# }
+			# planet_event = { id = STH_onaction.1000 days = 28 random = 7 }
+		# }
+		
+		
+	# }
+# }

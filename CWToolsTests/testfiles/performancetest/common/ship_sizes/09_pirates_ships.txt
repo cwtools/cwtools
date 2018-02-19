@@ -1,0 +1,145 @@
+#reloadable with 'reload stats'
+# This file is where you start when you want to configure something new, then go to sections
+
+@civilian_ships_combat_speed = 0.5
+@corvette_combat_speed = 1.5 	# assault ships
+@corvette_combat_rotation = 0.08
+@corvette_collision_radius = 2.0
+
+@destroyer_combat_speed = 1.0	 # picket ships, should stay with the battleships
+@destroyer_combat_rotation = 0.05
+@destroyer_collision_radius = 2.5
+
+@cruiser_combat_speed = 1.25	 # assault ships
+@cruiser_combat_rotation = 0.025
+@cruiser_collision_radius = 3
+
+@battleship_combat_speed = 0.75	
+@battleship_combat_rotation = 0.02
+@battleship_collision_radius = 3
+
+@titan_combat_speed = 0.75
+@titan_combat_rotation = 0.02
+@titan_collision_radius = 15
+
+@build_block_radius_none = 0
+@build_block_radius_tiny = 10
+@build_block_radius_small = 70
+@build_block_radius_medium = 90
+@build_block_radius_large = 110
+
+
+##########
+# PIRATE #
+##########
+
+pirate_corvette = {
+	graphical_culture = { "pirate_01" }
+
+	max_speed = 5.25
+	acceleration = 0.35
+	rotation_speed = 0.1
+	combat_max_speed = @corvette_combat_speed
+	combat_rotation_speed = @corvette_combat_rotation
+	collision_radius = @corvette_collision_radius
+	modifier = {
+		ship_armor_add = 5
+		ship_evasion_add = 40
+	}
+	max_hitpoints = 500
+	size_multiplier = 1
+	fleet_slot_size = 1
+	section_slots = { "mid" = { locator = "part1" } }
+	num_target_locators = 0
+	is_space_station = no
+	icon_frame = 2
+	
+	class = shipclass_military
+	is_designable = no
+
+	required_component_set = "ftl_components"
+	required_component_set = "combat_computers"
+	required_component_set = "thruster_components"
+}
+
+pirate_destroyer = {
+	graphical_culture = { "pirate_01" }
+
+	max_speed = 4.5
+	acceleration = 0.3
+	rotation_speed = 0.2
+	combat_max_speed = @destroyer_combat_speed
+	combat_rotation_speed = @destroyer_combat_rotation
+	collision_radius = @destroyer_collision_radius
+	modifier = {
+		ship_evasion_add = 10
+		ship_armor_add = 25
+	}
+	max_hitpoints = 1400
+	size_multiplier = 2
+	fleet_slot_size = 2
+	section_slots = { "mid" = { locator = "part1" } }
+	num_target_locators = 0
+	icon_frame = 3
+	is_space_station = no
+	
+	class = shipclass_military
+	is_designable = no
+	
+	required_component_set = "ftl_components"
+	required_component_set = "combat_computers"
+	required_component_set = "thruster_components"
+}
+
+pirate_cruiser = {
+	graphical_culture = { "pirate_01" }
+
+	max_speed = 3.0
+	acceleration = 0.2
+	rotation_speed = 0.2
+	combat_max_speed = @destroyer_combat_speed
+	combat_rotation_speed = @destroyer_combat_rotation
+	collision_radius = @destroyer_collision_radius
+	modifier = {
+		ship_evasion_add = 5
+		ship_armor_add = 55
+	}
+	max_hitpoints = 5000
+	size_multiplier = 3
+	fleet_slot_size = 4
+	section_slots = { "mid" = { locator = "part1" } }
+	num_target_locators = 0
+	icon_frame = 3
+	is_space_station = no
+	
+	class = shipclass_military
+	is_designable = no
+	
+	required_component_set = "ftl_components"
+	required_component_set = "combat_computers"
+	required_component_set = "thruster_components"
+}
+
+pirate_station = {
+	graphical_culture = { "pirate_01" "borg_01" "dominion_01" }
+	max_speed = 0.0
+	acceleration = 0.0
+	rotation_speed = 0.0
+	modifier = {
+		ship_evasion_mult = -1
+		ship_armor_add = 50
+		ship_weapon_range_mult = 0.20
+	}
+	max_hitpoints = 7500
+	size_multiplier = 4
+	fleet_slot_size = 4
+	section_slots = { 
+		"west" = { locator = "part1" }
+	}
+	num_target_locators = 0
+	is_space_station = yes
+	build_block_radius = @build_block_radius_tiny
+	
+	class = shipclass_military_station
+	is_designable = no
+}

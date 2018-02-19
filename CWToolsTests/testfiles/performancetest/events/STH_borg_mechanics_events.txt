@@ -1,0 +1,1672 @@
+namespace = STH_borg
+
+country_event = {
+	id = STH_borg.1
+	is_triggered_only = yes
+	hide_window = yes
+	trigger = {
+		is_ai = no
+		is_normal_country = yes
+		FROM = { is_assimilator = yes }
+	}
+	immediate = {
+		establish_communications = FROM
+		FROM = { establish_communications = root }
+		country_event = { 
+			id = STH_borg.3 
+			days = 0
+			scopes = { from = from }
+		}
+	}
+}
+
+# country_event = {
+	# id = STH_borg.2
+
+	# is_triggered_only = yes
+	# hide_window = yes
+	# trigger = {
+		# is_country_type = default
+		# THIS = { has_country_flag = the_borg_collective }
+	# }
+	# immediate = {
+		# establish_communications = FROM
+		# FROM = { establish_communications = THIS }
+		# every_country = {
+			# limit = { has_country_flag = the_borg_collective }
+			# save_event_target_as = borg_collective
+		# }
+		# event_target:borg_collective = { root = { country_event = { id = STH_borg.3 days = 1 } } }
+	# }
+# }
+
+country_event = {
+	id = STH_borg.3
+	title = "STH_borg.3.name"
+	desc = "STH_borg.3.desc"
+	is_triggered_only = yes
+	diplomatic = yes
+	show_sound = borg_male_greetings_02
+	picture_event_data = {
+		portrait = event_target:borgLeader
+		room = "ethic_genocidal_room"
+	}
+	immediate = {
+		from = {
+			if = {
+				limit = { exists = leader } 
+				leader = { save_event_target_as = borgLeader }
+				else = { save_event_target_as = borgLeader }
+			}
+		}
+	}
+	option = {
+		name = STH_borg.3.a
+		response_text = STH_borg.3.a.response
+	}	
+}
+
+#New Assimilate Gatekeeper
+event = {
+	id = STH_borg.50
+	is_triggered_only = yes
+	hide_window = yes
+	trigger = { 
+		any_country = {
+			is_assimilator = yes
+			OR = {
+				any_owned_pop_species = { NOT = { has_trait = trait_pc_assimilated_preference } }
+				any_controlled_planet = { 
+					is_colony = yes 
+					NOT = { is_controlled_by = owner }
+				}
+			}
+		}
+	}
+	immediate = {
+		every_country = {
+			limit = { is_assimilator = yes any_owned_pop_species = { NOT = { has_trait = trait_pc_assimilated_preference } } }
+			country_event = { id = STH_borg.51 } #Pop Assimilate
+		}
+		every_country = {
+			limit = { 
+				is_assimilator = yes 
+				any_controlled_planet = { 
+					is_colony = yes 
+					NOT = { is_controlled_by = owner }
+				} 
+			}
+			country_event = { id = STH_borg.61 } #Planet Assimilate
+		}
+	}	
+}
+
+#Assimilate Pop
+country_event = {
+	id = STH_borg.51
+	is_triggered_only = yes
+	hide_window = yes
+	trigger = { is_assimilator = yes }
+	immediate = {
+		random_owned_pop = {
+			limit = { NOT = { has_trait = trait_pc_assimilated_preference } }
+			save_event_target_as = assimilated_pop
+			species = { save_event_target_as = assimilated_pop_species }
+			root = { save_event_target_as = assimilating_empire }
+			assimilate_pop = yes
+		}
+	}
+}
+
+#Assimilate Planet
+country_event = {
+	id = STH_borg.61
+	is_triggered_only = yes
+	hide_window = yes
+	trigger = { is_assimilator = yes }
+	immediate = {
+		add_threat = { who = Root amount = 15 } # scales to pops
+		random_controlled_planet = {
+			limit = { is_assimilated_planet = no is_artificial_planet = no is_colony = yes }
+			set_planet_flag = "original_owner:@owner"
+			every_tile = {
+				limit = { has_growing_pop = yes }
+				kill_pop = yes
+			}
+			assimilate_planet = yes
+			set_planet_max_health = 2000
+			set_planet_health = 2000
+			set_owner = controller
+			save_event_target_as = assimilatedPlanet
+		}
+		random_controlled_planet = {
+			limit = { is_assimilated_planet = no OR = { is_artificial_planet = yes is_starship_planet = yes } is_colony = yes }
+			every_tile = {
+				limit = { has_growing_pop = yes }
+				kill_pop = yes
+			}
+			assimilate_planet = yes
+		}
+		random_controlled_planet = {
+			limit = { is_planet_class = pc_assimilated is_colony = yes NOT = { is_controlled_by = owner } }
+			set_owner = controller
+		}
+		# every_owned_fleet = {
+			# limit = { owner = { is_ai = yes } is_ship_class = shipclass_transport }
+			# fleet_event = { id = STH_borg.105 days = 0 scopes = { from = event_target:assimilatedPlanet fromfrom = event_target:assimilatedPlanet } }
+		# }
+	}	
+}
+
+
+
+#Assimilate Gatekeeper
+# country_event = {
+	# id = STH_borg.100
+	# is_triggered_only = yes
+	# hide_window = yes
+	# trigger = { is_assimilator = yes }
+	# immediate = {
+		# country_event = {
+			# id = STH_borg.101
+			# days = 30
+			# scopes = {
+				# from = from
+				# fromfrom = fromfrom
+			# }
+		# }
+	# }	
+# }
+
+#Assimilate Planet Actual
+# country_event = {
+	# id = STH_borg.101
+	# is_triggered_only = yes
+	# hide_window = yes
+	# trigger = { is_assimilator = yes }
+	# immediate = {
+		# FROMFROM = { set_controller = root }	
+		# add_threat = {
+			# who = Root
+			# amount = 15 # scales to pops
+		# }
+		# FROMFROM = {
+			# if = {
+				# FROM = {
+					# every_owned_pop = {
+						# limit = { planet = { is_planet = FROMFROM } }
+						# pop_event = { 
+							# id = STH_borg.102 
+							# scopes = { from = root }
+							# days = 15 random = 90
+						# }
+					# }
+				# }
+				# set_planet_flag = "original_owner:@owner"
+				# assimilate_planet = yes
+				# set_planet_max_health = 2000
+				# set_planet_health = 2000
+				# set_owner = controller
+			# }
+		# }
+		# every_owned_fleet = {
+			# limit = {
+				# owner = { is_ai = yes }
+				#solar_system = { is_same_value = FROMFROM.solar_system }
+				# is_ship_class = shipclass_transport
+			# }
+			# fleet_event = { id = STH_borg.105 days = 0 scopes = { from = from fromfrom = fromfrom } }
+		# }
+	# }	
+# }
+
+# fleet_event = {
+	# id = STH_borg.105
+	# hide_window = yes
+	# is_triggered_only = yes
+	# trigger = {
+		#exists = orbit
+		#orbit = { is_same_value = FROMFROM }
+		# is_ship_class = shipclass_transport
+	# }
+	# immediate = {
+		# clear_orders = yes
+		# fleet_event = { id = STH_borg.105 days = 5 scopes = { from = from fromfrom = fromfrom } }
+	# }
+# }
+
+
+
+#De-Assimilate Planet
+country_event = {
+	id = STH_borg.300
+	hide_window = yes
+	is_triggered_only = yes
+	trigger = { 
+		is_assimilator = no
+		FROMFROM = { 
+			owner = { is_assimilator = yes }
+		}
+	}
+	
+	immediate = {
+		FROMFROM = {
+			save_event_target_as = planet
+		}
+		if = {
+			limit = { 
+				FROMFROM = { NOT = { has_planet_flag = "original_owner:@root" } }
+				any_country = { FROMFROM = { has_planet_flag = "original_owner:@prev" } } 
+			}
+			random_country = {
+				limit = { FROMFROM = { has_planet_flag = "original_owner:@prev" } }
+				save_event_target_as = originalOwner
+			}
+			country_event = {
+				id = STH_borg.301
+				scopes = { 
+					from = event_target:originalOwner 
+					fromfrom = event_target:planet
+				}
+				days = 0
+			}
+			else = {
+				country_event = { 
+					id = STH_borg.302 
+					scopes = { 
+						from = root
+						fromfrom = event_target:planet 
+					}
+				} 
+			}
+		}
+	}
+}
+
+country_event = {
+	id = STH_borg.301
+	title = "STH_borg.301.name"
+	desc = "STH_borg.301.desc"
+	picture = sth_GFX_evt_borgPlanet1
+	show_sound = event_radio_chatter
+	is_triggered_only = yes
+	immediate = {
+		establish_communications = FROM
+		FROMFROM = {
+			surveyed = { set_surveyed = yes surveyor = FROM }
+		}
+	}
+	after = {
+		hidden_effect = {
+			FROMFROM = { 
+				every_tile = {
+	                limit = { has_growing_pop = yes }
+	                kill_pop = yes
+	            }
+	        }
+	    } 
+	}
+	option = {
+		name = "STH_borg.301.a"
+		FROMFROM = { 
+			set_owner = ROOT
+		}
+	}
+	option = {
+		name = "STH_borg.301.b"
+		FROM = {
+			FROMFROM = { 
+				set_owner = prev
+				set_controller = prev
+			}
+			add_opinion_modifier = { modifier = opinion_returned_planet who = ROOT }
+			country_event = { id = STH_borg.303 scopes = { from = root fromfrom = fromfrom } }
+		}
+	}
+}
+
+country_event = {
+	id = STH_borg.302
+	title = "STH_borg.302.name"
+	desc = "STH_borg.302.desc"
+	picture = sth_GFX_evt_borgPlanet1
+	show_sound = event_radio_chatter
+	is_triggered_only = yes
+	option = {
+		name = "STH_borg.301.a"
+		fromfrom = { set_owner = root }
+	}
+}
+
+country_event = {
+	id = STH_borg.303
+	title = "STH_borg.303.name"
+	desc = "STH_borg.303.desc"
+	picture = sth_GFX_evt_borgPlanet1
+	show_sound = event_radio_chatter
+	is_triggered_only = yes
+	option = { name = "STH_borg.303.a" }
+}
+
+
+#Borg Assimilation Event
+pop_event = {
+	id = STH_borg.102
+	hide_window = yes
+	
+	is_triggered_only = yes
+	immediate = {
+		save_event_target_as = assimilated_pop
+		species = { save_event_target_as = assimilated_pop_species }
+		from = { save_event_target_as = assimilating_empire }
+		assimilate_pop = yes
+	}
+}
+
+#Big Species Boost
+country_event = {
+	id = STH_borg.103
+	title = "STH_borg.103.name"
+	desc = "STH_borg.103.desc"
+	picture = sth_GFX_evt_borgAssimilation1	
+	is_triggered_only = yes
+	immediate = { }
+	option = {
+		name = STH_borg.103.a
+		if = {
+			limit = { has_swapped_tradition = tr_adaptability_3 }
+			add_improved_assimilation_unity_bonus_1 = yes
+			else = {
+				add_assimilation_unity_bonus_1 = yes
+			}
+		}
+		if = {
+			limit = { has_swapped_tradition = tr_versatility_4 }
+			add_improved_assimilation_research_bonus_1 = yes
+			else = {
+				add_assimilation_research_bonus_1 = yes
+			}
+		}
+	}
+}
+
+#Add other alerts here?
+
+#End of Species Boost
+country_event = {
+	id = STH_borg.106
+	title = "STH_borg.106.name"
+	desc = "STH_borg.106.desc"
+	picture = sth_GFX_evt_borgAssimilation1	
+	is_triggered_only = yes
+	immediate = { }
+	option = { name = BORG_UNDERSTOOD }
+}
+
+planet_event = {
+	id = STH_borg.150
+	hide_window = yes
+	mean_time_to_happen = { days = 45 }
+	trigger = {
+		has_owner = yes
+		owner = { is_borg_empire = no }
+		num_pops > 0
+		any_pop = { has_trait = trait_pc_assimilated_preference }
+	}
+	immediate = {
+		if = {
+			limit = { owner = { has_policy_flag = drone_deactivation } }
+			random_pop = {
+				limit = { has_trait = trait_pc_assimilated_preference }
+				kill_pop = yes
+			}
+			random_pop = {
+				limit = { has_trait = trait_pc_assimilated_preference }
+				kill_pop = yes
+			}
+			if = {
+				limit = { any_country = { is_borg_empire = yes } }
+				random_country = { limit = { is_borg_empire = yes } save_event_target_as = borg }			
+				random_pop = {
+					limit = { has_trait = trait_pc_assimilated_preference }
+					random_list = {
+						90 = {}
+						10 = {
+							root = { create_army = { name = "Drone" owner = event_target:borg species = prev type = assault_army } }
+							kill_pop = yes
+						}
+					}
+				}
+			}
+		}
+		if = {
+			limit = { owner = { has_policy_flag = drone_de_assimilation_1 } }
+			random_pop = {
+				limit = { has_trait = trait_pc_assimilated_preference }
+				kill_pop = yes
+			}
+			random_pop = {
+				limit = { has_trait = trait_pc_assimilated_preference }
+				de_assimilate_pop = yes
+			}
+			if = {
+				limit = { any_country = { is_borg_empire = yes } }
+				random_country = { limit = { is_borg_empire = yes } save_event_target_as = borg }			
+				random_pop = {
+					limit = { has_trait = trait_pc_assimilated_preference }
+					random_list = {
+						80 = {}
+						20 = {
+							root = { create_army = { name = "Drone" owner = event_target:borg species = prev type = assault_army } }
+							kill_pop = yes
+						}
+					}
+				}
+			}
+		}
+		if = {
+			limit = { owner = { has_policy_flag = drone_de_assimilation_2 } }
+			random_pop = {
+				limit = { has_trait = trait_pc_assimilated_preference }
+				de_assimilate_pop = yes
+			}
+			random_pop = {
+				limit = { has_trait = trait_pc_assimilated_preference }
+				de_assimilate_pop = yes
+			}
+			if = {
+				limit = { any_country = { is_borg_empire = yes } }
+				random_country = { limit = { is_borg_empire = yes } save_event_target_as = borg }			
+				random_pop = {
+					limit = { has_trait = trait_pc_assimilated_preference }
+					random_list = {
+						70 = {}
+						30 = {
+							root = { create_army = { name = "Drone" owner = event_target:borg species = prev type = assault_army } }
+							kill_pop = yes
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+#Unimatrix Spawn Gating
+event = {
+	id = STH_borg.1000
+	is_triggered_only = yes
+	hide_window = yes
+	trigger = {
+		any_country = { 
+			is_ai = yes 
+			is_borg_empire = yes 
+		}
+	}
+	immediate = {
+		every_country = {
+			limit = { is_ai = yes is_borg_empire = yes }
+			country_event = { id = STH_borg.1010 days = 1 }
+		}
+	}
+}
+
+
+#Unimatrix Spawning
+country_event = {
+	id = STH_borg.1010
+	is_triggered_only = yes
+	hide_window = yes
+	trigger = { 
+		is_ai = yes 
+		is_borg_empire = yes 
+	}
+	immediate = {
+		save_event_target_as = borg
+		species = { save_global_event_target_as = borgSpecies }
+		capital_scope = { save_event_target_as = unimatrix_main }
+		capital_scope = {
+			solar_system = {
+				set_star_flag = unicomplex_4
+				spawn_megastructure = {
+					name = "NAME_Unicomplex_Expansion"
+					type = "STH_unimatrix_unfinished"
+					orbit_angle = 0
+					orbit_distance = 100
+					owner = event_target:borg
+					graphical_culture = event_target:borg
+					location = planet
+				}
+				spawn_megastructure = {
+					name = "NAME_Unicomplex_Expansion"
+					type = "STH_unimatrix_unfinished"
+					orbit_angle = 270
+					orbit_distance = 100
+					owner = event_target:borg
+					graphical_culture = event_target:borg
+					location = planet
+				}
+			}
+		}
+		every_owned_megastructure = {
+			save_event_target_as = megastructure
+			event_target:borg = { 
+				country_event = {
+					id = STH_borg.1001
+					days = 0
+					scopes = {
+						from = event_target:borg
+						fromfrom = event_target:megastructure
+					}
+				} 
+			}
+		}
+	}
+}
+
+
+#Unimatrix Spawning
+country_event = {
+	id = STH_borg.1001
+	is_triggered_only = yes
+	hide_window = yes
+	immediate = {
+		every_country = {
+			limit = { is_ai = yes is_borg_empire = yes }
+			save_event_target_as = borgCollective
+			species = { save_global_event_target_as = borgSpecies }
+		}	
+		save_event_target_as = owner
+		fromfrom = {
+			solar_system = {
+				save_event_target_as = solar_system
+				spawn_planet = {
+					class = "pc_unimatrix"
+					location = fromfrom
+					size = 25
+					init_effect = {
+						save_event_target_as = unicomplexSpawn
+						solar_system = { 
+							save_event_target_as = solar_system 
+							set_unicomplex_number_flag = yes
+						}
+						set_unicomplex_number_flag = yes
+						set_unicomplex_system_number_flag = yes
+						set_unicomplex_name = yes
+						change_pc = pc_unimatrix
+						set_planet_entity = {
+							entity = "orbital_habitat_entity"
+							graphical_culture = borg_01
+						}
+						surveyed = {
+							set_surveyed = yes
+							surveyor = root
+						}
+						set_all_comms_surveyed = yes
+						while = {
+							limit = { any_tile = { has_blocker = yes } }
+							random_tile = { limit = { has_blocker = yes } remove_blocker = yes }
+						}
+						create_colony = { owner = event_target:borgCollective species = event_target:borgSpecies }
+						random_tile = {
+							limit = { has_building = yes has_grown_pop = yes }
+							remove_building = yes
+							kill_pop = yes
+						}
+
+			            random_tile = {
+							limit = { has_blocker = no has_building = no has_grown_pop = no num_adjacent_tiles > 3 }
+							set_building = "helix_ops_1"
+							add_deposit = d_farmland_deposit
+							add_deposit = d_mineral_deposit
+							create_pop = { species = event_target:borgSpecies }
+							random_neighboring_tile = {
+								limit = { has_blocker = no has_building = no has_grown_pop = no }
+								set_building = "space_building_mining_network_1"
+								add_deposit = d_vast_mineral_deposit
+								create_pop = { species = event_target:borgSpecies }					
+							}
+							random_neighboring_tile = {
+								limit = { has_blocker = no has_building = no has_grown_pop = no }
+								set_building = "space_building_hydroponics_farm_1"
+								add_deposit = d_rich_farmland_deposit
+								create_pop = { species = event_target:borgSpecies }						
+							}
+							random_neighboring_tile = {
+								limit = { has_blocker = no has_building = no has_grown_pop = no }
+								set_building = "space_building_power_plant_1"
+								add_deposit = d_rich_energy_deposit
+								create_pop = { species = event_target:borgSpecies }							
+							}
+							random_neighboring_tile = {
+								limit = { has_blocker = no has_building = no has_grown_pop = no }
+								set_building = "space_building_power_plant_1"
+								add_deposit = d_vast_energy_deposit
+								create_pop = { species = event_target:borgSpecies }						
+							}										
+						}
+						unicomplex_tileblockers = yes
+
+						random_tile = {
+							limit = { has_blocker = no has_building = no has_grown_pop = no }
+							set_building = "space_building_physics_lab_1"
+							add_deposit = d_rich_physics_deposit
+							create_pop = { species = event_target:borgSpecies }
+						}
+						random_tile = {
+							limit = { has_blocker = no has_building = no has_grown_pop = no }
+							set_building = "space_building_engineering_facility_1"
+							add_deposit = d_rich_engineering_deposit
+							create_pop = { species = event_target:borgSpecies }
+						}
+						random_tile = {
+							limit = { has_blocker = no has_building = no has_grown_pop = no }
+							set_building = "space_building_hydroponics_farm_1"
+							add_deposit = d_rich_farmland_deposit
+							create_pop = { species = event_target:borgSpecies }
+						}
+						random_tile = {
+							limit = { has_blocker = no has_building = no has_grown_pop = no }
+							set_building = "space_building_hydroponics_farm_1"
+							add_deposit = d_rich_farmland_deposit
+							create_pop = { species = event_target:borgSpecies }
+						}
+						random_tile = {
+							limit = { has_blocker = no has_building = no has_grown_pop = no }
+							set_building = "space_building_mining_network_1"
+							add_deposit = d_vast_mineral_deposit
+							create_pop = { species = event_target:borgSpecies }
+						}
+						random_tile = {
+							limit = { has_blocker = no has_building = no has_grown_pop = no }
+							set_building = "space_building_maturation_0"
+							add_deposit = d_vast_energy_deposit
+							create_pop = { species = event_target:borgSpecies }
+						}
+			            while = {
+			                count = 5
+			                unicomplex_resource = yes
+			            }
+						trigger_megastructure_icon = yes
+						set_planet_flag = megastructure
+						set_planet_flag = habitat
+						unicomplex_defense_perimeter = yes
+						save_event_target_as = megastructure
+						create_ambient_object = {
+							type = "borg_unimatrix_structure_01_object"
+							location = fromfrom
+							entity_offset = { min = 0 max = 0 }
+							entity_offset_height = { min = -20 max = -20 }
+							entity_face_object = star
+						}
+						last_created_ambient_object = {
+							set_ambient_object_flag = "unicomplexAmbientFor:@event_target:unicomplexSpawn"
+							set_ambient_object_flag = "unicomplexGreen"
+						}
+					}
+				}
+			}
+			remove_megastructure = this
+		}
+	}
+}
+
+#Re-spawn missing unicomplex defences
+planet_event = {
+	id = STH_borg.1002
+	hide_window = yes
+	mean_time_to_happen = { days = 360 }
+	trigger = {
+		is_planet_class = pc_unimatrix
+		has_owner = yes
+		owner = { is_borg_empire = yes }
+		NOT = {
+			solar_system = { 
+				any_ship_in_system = { 
+					fleet = { 
+						owner = { 
+							is_at_war_with = root.owner 
+						} 
+					} 
+				}
+			}
+		}
+		NOT = {
+			solar_system = { 
+				any_ship_in_system = { 
+					fleet = { 
+						owner = { 
+							is_hostile = root.owner
+						} 
+					} 
+				}
+			}
+		}
+	}
+	immediate = {
+		if = {
+			limit = { NOT = { owner = { any_owned_fleet = { has_fleet_flag = "unicomplex_defence_for:@root" } } } }
+			random_list = {
+				10 = { 
+					create_fleet = {
+						name = "Unimatrix Defense Perimeter"
+						effect = {
+							set_owner = root.owner
+							create_ship = { name = random design = "unimatrix_defense_small" }
+							set_location = { target = root distance = 35 angle = random }    
+						}
+					}
+				}    
+				10 = {
+					create_fleet = {
+						name = "Unimatrix Defense Perimeter"
+						effect = {
+							set_owner = root.owner
+							create_ship = { name = random design = "unimatrix_defense_small" }
+							set_location = { target = root distance = 30 angle = random }    
+						}
+					}
+				}    
+				10 = {
+					create_fleet = {
+						name = "Unimatrix Defense Perimeter"
+						effect = {
+							set_owner = root.owner
+							create_ship = { name = random design = "unimatrix_defense_small" }
+							set_location = { target = root distance = 25 angle = random }    
+						}
+					}
+				}    
+				10 = {
+					create_fleet = {
+						name = "Unimatrix Defense Perimeter"
+						effect = {
+							set_owner = root.owner
+							create_ship = { name = random design = "unimatrix_defense_small" }
+							set_location = { target = root distance = 20 angle = random }    
+						}
+					}
+				}     
+				10 = {
+					create_fleet = {
+						name = "Unimatrix Defense Perimeter"
+						effect = {
+							set_owner = root.owner
+							create_ship = { name = random design = "unimatrix_defense_small" }
+							set_location = { target = root distance = 15 angle = random }    
+						}
+					}
+				}    
+				10 = {
+					create_fleet = {
+						name = "Unimatrix Defense Perimeter"
+						effect = {
+							set_owner = root.owner
+							create_ship = { name = random design = "unimatrix_defense_small" }
+							set_location = { target = root distance = 10 angle = random }    
+						}
+					}
+				}    
+				10 = {
+					create_fleet = {
+						name = "Unimatrix Defense Perimeter"
+						effect = {
+							set_owner = root.owner
+							create_ship = { name = random design = "unimatrix_defense_small" }
+							set_location = { target = root distance = 5 angle = random }    
+						}
+					}
+				}
+			}
+			last_created_fleet = { set_fleet_flag = "unicomplex_defence_for:@root" }
+		}
+	}
+}
+
+#Kill non-borg Unimatrixes
+planet_event = {
+	id = STH_borg.1003
+	hide_window = yes
+	mean_time_to_happen = { days = 30 }
+	trigger = {
+		is_planet_class = pc_unimatrix
+		has_owner = yes
+		controller = { 
+			is_borg_empire = no
+			#can_have_unicomplexes = no
+		}
+		NOT = {
+			solar_system = { 
+				any_ship_in_system = { 
+					fleet = { 
+						owner = { 
+							is_at_war_with = root.controller 
+						} 
+					} 
+				}
+			}
+		}
+	}
+	immediate = {
+		controller = {
+			country_event = {
+				id = STH_borg.1004
+				days = 0
+				scopes = { from = root }
+			}
+		}
+	}
+}
+
+#Kill non-borg Unimatrixes
+country_event = {
+	id = STH_borg.1004
+	title = "STH_borg.1004.name"
+	desc = "STH_borg.1004.desc"
+	picture = sth_GFX_evt_borgUnicomplex1
+	is_triggered_only = yes
+	trigger = {}
+	option = {
+		name = "STH_borg.1004.a"
+		add_minerals = 2000
+		add_energy = 2000
+	}
+	option = {
+		name = "STH_borg.1004.b"
+		add_engineering_research = 1000
+		add_physics_research = 500
+	}
+	after = {
+		from = {
+			destroy_colony = { keep_buildings = no }
+			solar_system = {
+				every_system_ambient_object = { 
+					limit = { has_ambient_object_flag = "unicomplexAmbientFor:@from" } 
+					destroy_ambient_object = this
+				}
+			}
+			remove_planet = yes
+		}
+	}
+}
+
+#Kill non-borg Unimatrix Expansions
+country_event = {
+	id = STH_borg.1011
+	hide_window = yes
+	# mean_time_to_happen = { days = 30 }
+	trigger = {
+		is_borg_empire = no
+		any_owned_megastructure = {
+			OR = {
+				is_megastructure_type = STH_unicomplex
+				is_megastructure_type = STH_unimatrix_unfinished
+				is_megastructure_type = STH_unimatrix_finished
+			}
+		}
+	}
+	immediate = {
+		every_owned_megastructure = {
+			limit = {
+				OR = {
+					is_megastructure_type = STH_unicomplex
+					is_megastructure_type = STH_unimatrix_unfinished
+					is_megastructure_type = STH_unimatrix_finished
+				}
+			}
+			remove_megastructure = this
+		}
+	}
+}
+
+
+
+#Add Unimatrix Expansions
+country_event = {
+	id = STH_borg.1005
+	hide_window = yes
+	mean_time_to_happen = { months = 2 }
+	trigger = {
+		is_borg_empire = yes
+		any_owned_planet = { 
+			is_planet_class = pc_unimatrix 
+			solar_system = {
+				OR = {
+					NOT = { any_planet = { has_planet_flag = "unicomplex_part_1" } }
+					NOT = { any_planet = { has_planet_flag = "unicomplex_part_2" } }
+					NOT = { any_planet = { has_planet_flag = "unicomplex_part_3" } }
+					NOT = { any_planet = { has_planet_flag = "unicomplex_part_4" } }
+					NOT = { any_planet = { has_planet_flag = "unicomplex_part_5" } }
+				}
+				NOT = {
+					any_system_megastructure = {
+						is_megastructure_type = STH_unimatrix_unfinished
+					}
+				}
+				NOT = {
+					any_ship_in_system = { 
+						fleet = { 
+							owner = { 
+								is_at_war_with = root 
+							} 
+						} 
+					}
+				}
+				NOT = {
+					any_ship_in_system = { 
+						fleet = { 
+							owner = { 
+								is_hostile = root
+							} 
+						} 
+					}
+				}
+			}
+		}
+	}
+	immediate = {
+		random_system = {
+			limit = {
+				any_planet = { is_planet_class = pc_unimatrix }
+				OR = {
+					NOT = { any_planet = { has_planet_flag = "unicomplex_part_1" } }
+					NOT = { any_planet = { has_planet_flag = "unicomplex_part_2" } }
+					NOT = { any_planet = { has_planet_flag = "unicomplex_part_3" } }
+					NOT = { any_planet = { has_planet_flag = "unicomplex_part_4" } }
+					NOT = { any_planet = { has_planet_flag = "unicomplex_part_5" } }
+				}
+				NOT = {
+					any_system_megastructure = {
+						is_megastructure_type = STH_unimatrix_unfinished
+					}
+				}
+			}
+			if = {
+				limit = { NOT = { any_planet = { has_planet_flag = unicomplex_part_1 } } }
+				spawn_megastructure = { name = "NAME_Unicomplex_Expansion" type = "STH_unimatrix_unfinished" orbit_angle = 0 orbit_distance = 0 owner = from graphical_culture = fromfrom location = planet }
+				else = {
+					if = {
+						limit = { NOT = { any_planet = { has_planet_flag = unicomplex_part_2 } } }
+						spawn_megastructure = { name = "NAME_Unicomplex_Expansion" type = "STH_unimatrix_unfinished" orbit_angle = 90 orbit_distance = 100 owner = from graphical_culture = fromfrom location = planet }
+						else = {
+							if = {
+								limit = { NOT = { any_planet = { has_planet_flag = unicomplex_part_3 } } }
+								spawn_megastructure = { name = "NAME_Unicomplex_Expansion" type = "STH_unimatrix_unfinished" orbit_angle = 180 orbit_distance = 100 owner = from graphical_culture = fromfrom location = planet }
+								else = {
+									if = {
+										limit = { NOT = { any_planet = { has_planet_flag = unicomplex_part_4 } } }
+										spawn_megastructure = { name = "NAME_Unicomplex_Expansion" type = "STH_unimatrix_unfinished" orbit_angle = 270 orbit_distance = 100 owner = from graphical_culture = fromfrom location = planet }
+										else = {
+											if = {
+												limit = { NOT = { any_planet = { has_planet_flag = unicomplex_part_5 } } }
+												spawn_megastructure = { name = "NAME_Unicomplex_Expansion" type = "STH_unimatrix_unfinished" orbit_angle = 0 orbit_distance = 100 owner = from graphical_culture = fromfrom location = planet }
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+#Borg Destroyed
+country_event = {
+	id = STH_borg.1006
+	hide_window = yes
+	is_triggered_only = yes
+	trigger = {
+		is_assimilator = yes
+		is_borg_empire = yes
+		exists = FROM
+		FROM = { is_normal_country = yes }
+	}
+	immediate = { 
+		FROM = { country_event = { id = STH_borg.1007 } }
+	}
+}
+
+#Borg Destroyed
+country_event = {
+	id = STH_borg.1007
+	title = "STH_borg.1007.name"
+	desc = "STH_borg.1007.desc"
+	picture = sth_GFX_evt_borgUnicomplex1
+	is_triggered_only = yes
+	trigger = { }
+	immediate = { }
+	option = {
+		name = "STH_borg.1007.a"
+		random_list = {
+			25 = { give_technology = { tech = tech_physics_field_manipulation_177 } }
+			25 = { give_technology = { tech = tech_engineering_materials_1522 } }
+			25 = { give_technology = { tech = tech_physics_field_manipulation_227 } }
+			25 = { give_technology = { tech = tech_physics_particles_711 } }
+		}
+	}
+}
+
+
+#Unicomplex Colour Change
+planet_event = {
+	id = STH_borg.1008
+	hide_window = yes
+	# mean_time_to_happen = { months = 2 }
+	trigger = { 
+		is_planet_class = pc_unimatrix
+		has_owner = yes
+		OR = {
+			AND = {
+				owner = { has_country_flag = borg_cooperative }
+				NOT = { has_planet_flag = unicomplexBlue }
+			}
+			AND = {
+				owner = { has_country_flag = unimatrix_zero }
+				NOT = { has_planet_flag = unicomplexYellow }
+			}
+			AND = {
+				owner = { has_country_flag = mirror_borg }
+				NOT = { has_planet_flag = unicomplexOrange }
+			}
+			AND = {
+				owner = { NOR = { has_country_flag = borg_cooperative has_country_flag = unimatrix_zero has_country_flag = mirror_borg } }
+				NOT = { has_planet_flag = unicomplexGreen }
+			}
+		}
+	}
+	immediate = { 
+		owner = {
+			every_owned_megastructure = { set_graphical_culture = prev }
+			if = {
+				limit = { has_country_flag = borg_cooperative }
+				root.solar_system = {
+					every_system_ambient_object = {
+						limit = { has_ambient_object_flag = "unicomplexAmbientFor:@root" NOT = { has_ambient_object_flag = "unicomplexBlue" } }
+						create_ambient_object = {
+							type = "borg_unimatrix_structure_blue_01_object"
+							location = this
+							entity_offset = { min = 0 max = 0 }
+							entity_offset_height = { min = -20 max = -20 }
+							entity_face_object = star
+						}
+						destroy_ambient_object = this
+						solar_system = { last_created_ambient_object = { set_ambient_object_flag = "unicomplexAmbientFor:@root" set_ambient_object_flag = "unicomplexBlue" } }
+						root = { set_planet_flag = unicomplexBlue remove_planet_flag = unicomplexYellow remove_planet_flag = unicomplexOrange remove_planet_flag = unicomplexGreen }
+					}
+				}
+			}
+			if = {
+				limit = { has_country_flag = unimatrix_zero }
+				root.solar_system = {
+					every_system_ambient_object = {
+						limit = { has_ambient_object_flag = "unicomplexAmbientFor:@root" NOT = { has_ambient_object_flag = "unicomplexYellow" } }
+						create_ambient_object = {
+							type = "borg_unimatrix_structure_yellow_01_object"
+							location = this
+							entity_offset = { min = 0 max = 0 }
+							entity_offset_height = { min = -20 max = -20 }
+							entity_face_object = star
+						}
+						destroy_ambient_object = this
+						solar_system = { last_created_ambient_object = { set_ambient_object_flag = "unicomplexAmbientFor:@root" set_ambient_object_flag = "unicomplexYellow" } }
+						root = { remove_planet_flag = unicomplexBlue set_planet_flag = unicomplexYellow remove_planet_flag = unicomplexOrange remove_planet_flag = unicomplexGreen }
+					}
+				}
+			}
+			if = {
+				limit = { has_country_flag = mirror_borg }
+				root.solar_system = {
+					every_system_ambient_object = {
+						limit = { has_ambient_object_flag = "unicomplexAmbientFor:@root" NOT = { has_ambient_object_flag = "unicomplexOrange" } }
+						create_ambient_object = {
+							type = "borg_unimatrix_structure_orange_01_object"
+							location = this
+							entity_offset = { min = 0 max = 0 }
+							entity_offset_height = { min = -20 max = -20 }
+							entity_face_object = star
+						}
+						destroy_ambient_object = this
+						solar_system = { last_created_ambient_object = { set_ambient_object_flag = "unicomplexAmbientFor:@root" set_ambient_object_flag = "unicomplexOrange" } }
+						root = { remove_planet_flag = unicomplexBlue remove_planet_flag = unicomplexYellow remove_planet_flag = unicomplexOrange set_planet_flag = unicomplexOrange }
+					}
+				}
+			}
+			if = {
+				limit = { NOR = { has_country_flag = borg_cooperative has_country_flag = unimatrix_zero has_country_flag = mirror_borg } }
+				root.solar_system = {
+					every_system_ambient_object = {
+						limit = { has_ambient_object_flag = "unicomplexAmbientFor:@root" NOT = { has_ambient_object_flag = "unicomplexGreen" } }
+						create_ambient_object = {
+							type = "borg_unimatrix_structure_01_object"
+							location = this
+							entity_offset = { min = 0 max = 0 }
+							entity_offset_height = { min = -20 max = -20 }
+							entity_face_object = star
+						}
+						destroy_ambient_object = this
+						solar_system = { last_created_ambient_object = { set_ambient_object_flag = "unicomplexAmbientFor:@root" set_ambient_object_flag = "unicomplexGreen" } }
+						root = { remove_planet_flag = unicomplexBlue remove_planet_flag = unicomplexYellow remove_planet_flag = unicomplexOrange set_planet_flag = unicomplexGreen }
+					}
+				}
+			}
+		}
+	}
+}
+
+
+#Borg Destroyed
+country_event = {
+	id = STH_borg.1009
+	title = "Change Country Flag"
+	desc = "Do it"
+	picture = sth_GFX_evt_borgUnicomplex1
+	is_triggered_only = yes
+	trigger = { }
+	immediate = { }
+	option = {
+		name = "Borg Collective"
+		set_country_flag = "the_borg_collective"
+		remove_country_flag = "borg_cooperative"
+		remove_country_flag = "unimatrix_zero"
+		remove_country_flag = "mirror_borg"
+		set_graphical_culture = borg_01
+	}
+	option = {
+		name = "Borg Cooperative"
+		remove_country_flag = "the_borg_collective"
+		set_country_flag = "borg_cooperative"
+		remove_country_flag = "unimatrix_zero"
+		remove_country_flag = "mirror_borg"
+		set_graphical_culture = borg_blue_01
+	}
+	option = {
+		name = "Unimatrix Zero"
+		remove_country_flag = "the_borg_collective"
+		remove_country_flag = "borg_cooperative"
+		set_country_flag = "unimatrix_zero"
+		remove_country_flag = "mirror_borg"
+		set_graphical_culture = borg_yellow_01
+	}
+	option = {
+		name = "Mirror Borg"
+		remove_country_flag = "the_borg_collective"
+		remove_country_flag = "borg_cooperative"
+		remove_country_flag = "unimatrix_zero"
+		set_country_flag = "mirror_borg"
+		set_graphical_culture = borg_orange_01
+	}
+}
+
+event = {
+	id = STH_borg.1020
+	hide_window = yes
+	is_triggered_only = yes
+	trigger = {}
+	immediate = { 
+		every_country = {
+			limit = { is_borg_empire = yes }
+			save_event_target_as = country
+			random_system = {
+				limit = { 
+					has_star_flag = "unicomplex_1:@event_target:country"
+					NOT = { any_planet = { is_planet_class = "pc_unimatrix" has_owner = yes is_owned_by = event_target:country } }
+				}
+				remove_star_flag = "unicomplex_1:@event_target:country"
+			}
+			random_system = {
+				limit = { 
+					has_star_flag = "unicomplex_2:@event_target:country"
+					NOT = { any_planet = { is_planet_class = "pc_unimatrix" has_owner = yes is_owned_by = event_target:country } }
+				}
+				remove_star_flag = "unicomplex_2:@event_target:country"
+			}
+			random_system = {
+				limit = { 
+					has_star_flag = "unicomplex_3:@event_target:country"
+					NOT = { any_planet = { is_planet_class = "pc_unimatrix" has_owner = yes is_owned_by = event_target:country } }
+				}
+				remove_star_flag = "unicomplex_3:@event_target:country"
+			}
+			random_system = {
+				limit = { 
+					has_star_flag = "unicomplex_4:@event_target:country"
+					NOT = { any_planet = { is_planet_class = "pc_unimatrix" has_owner = yes is_owned_by = event_target:country } }
+				}
+				remove_star_flag = "unicomplex_4:@event_target:country"
+			}
+			random_system = {
+				limit = { 
+					has_star_flag = "unicomplex_5:@event_target:country"
+					NOT = { any_planet = { is_planet_class = "pc_unimatrix" has_owner = yes is_owned_by = event_target:country } }
+				}
+				remove_star_flag = "unicomplex_5:@event_target:country"
+			}
+		}
+	}
+}
+
+#Colony Scoop
+country_event = {
+	id = STH_borg.1050
+	title = "STH_borg.1050.name"
+	desc = "STH_borg.1050.desc"
+	picture = sth_GFX_evt_borgPlanet1
+	is_triggered_only = yes
+	trigger = { exists = from }
+	immediate = { 
+		from = {
+			every_tile = {
+				limit = { has_pop = yes }
+				pop = { 
+					save_event_target_as = scoopPop 
+				}
+				if = {
+					limit = { root = {  any_owned_planet = { NOT = { is_same_value = from } free_pop_tiles > 0 } } }
+					root = {
+						random_owned_planet = {
+							limit = { 
+								NOT = { is_same_value = from } 
+								free_pop_tiles > 0 
+							}
+							event_target:scoopPop = { pop_event = { id = STH_borg.102 scopes = { from = root } days = 0 } }
+							resettle_pop = { pop = event_target:scoopPop planet = this }
+						}
+					#change_variable = { which = "relocated_pops" value = 1 }		
+					}
+					else = {
+						event_target:scoopPop = { kill_pop = yes }
+					}
+				}
+			}
+			every_tile = {
+				limit = { has_building = yes }
+				remove_building = yes
+				#CHANGE TO APPROPRIATE
+				root = { 
+					if = { 
+						limit = { has_swapped_tradition = tradition_productivity_3 }
+						change_variable = { which = "scooped_buildings" value = 2 }
+						else = { 
+							change_variable = { which = "scooped_buildings" value = 1 }
+						}	
+					}
+				}
+				random_list = {
+					75 = { set_blocker = tb_crater }
+					25 = {}
+				}
+			}
+			every_tile = {
+                limit = { has_growing_pop = yes }
+                kill_pop = yes
+            }
+			if = {
+				limit = { OR = { is_starbase_planet = yes is_planet_class = pc_helix is_planet_class = pc_starbase_blank_brg } }
+				remove_planet = yes
+			}
+			if = {
+				limit = { is_asteroid_habitat = yes }
+				change_pc = pc_asteroid
+				while = {
+					limit = { planet_size > 1  }
+					change_planet_size = -1
+				}
+			}
+		}
+	}
+	after = {
+		hidden_effect = {
+			from = { 
+				every_tile = {
+	                limit = { OR = { has_pop = yes has_growing_pop = yes } }
+	                kill_pop = yes
+	            }
+	        }
+	    } 
+	}          
+	option = {
+		name = "STH_borg.1050.a"
+		if = {
+			limit = { check_variable = { which = "scooped_buildings"  value = 1 } }
+			add_colony_scoop_bonus_1 = yes
+		}
+		if = {
+			limit = { check_variable = { which = "scooped_buildings"  value = 2 } }
+			add_colony_scoop_bonus_2 = yes
+		}
+		if = {
+			limit = { check_variable = { which = "scooped_buildings"  value = 3 } }
+			add_colony_scoop_bonus_3 = yes
+		}
+		if = {
+			limit = { check_variable = { which = "scooped_buildings"  value = 4 } }
+			add_colony_scoop_bonus_4 = yes
+		}
+		if = {
+			limit = { check_variable = { which = "scooped_buildings"  value = 5 } }
+			add_colony_scoop_bonus_5 = yes
+		}
+		if = {
+			limit = { check_variable = { which = "scooped_buildings"  value = 6 } }
+			add_colony_scoop_bonus_6 = yes
+		}
+		if = {
+			limit = { check_variable = { which = "scooped_buildings"  value = 7 } }
+			add_colony_scoop_bonus_7 = yes
+		}
+		if = {
+			limit = { check_variable = { which = "scooped_buildings"  value = 8 } }
+			add_colony_scoop_bonus_8 = yes
+		}
+		if = {
+			limit = { check_variable = { which = "scooped_buildings"  value = 9 } }
+			add_colony_scoop_bonus_9 = yes
+		}
+		if = {
+			limit = { check_variable = { which = "scooped_buildings"  value = 10 } }
+			add_colony_scoop_bonus_10 = yes
+		}
+		if = {
+			limit = { check_variable = { which = "scooped_buildings"  value = 11 } }
+			add_colony_scoop_bonus_11 = yes
+		}
+		if = {
+			limit = { check_variable = { which = "scooped_buildings"  value = 12 } }
+			add_colony_scoop_bonus_12 = yes
+		}
+		if = {
+			limit = { check_variable = { which = "scooped_buildings"  value = 13 } }
+			add_colony_scoop_bonus_13 = yes
+		}
+		if = {
+			limit = { check_variable = { which = "scooped_buildings"  value = 14 } }
+			add_colony_scoop_bonus_14 = yes
+		}
+		if = {
+			limit = { check_variable = { which = "scooped_buildings"  value = 15 } }
+			add_colony_scoop_bonus_15 = yes
+		}
+		if = {
+			limit = { check_variable = { which = "scooped_buildings"  value = 16 } }
+			add_colony_scoop_bonus_16 = yes
+		}
+		if = {
+			limit = { check_variable = { which = "scooped_buildings"  value = 17 } }
+			add_colony_scoop_bonus_17 = yes
+		}
+		if = {
+			limit = { check_variable = { which = "scooped_buildings"  value = 18 } }
+			add_colony_scoop_bonus_18 = yes
+		}
+		if = {
+			limit = { check_variable = { which = "scooped_buildings"  value = 19 } }
+			add_colony_scoop_bonus_19 = yes
+		}
+		if = {
+			limit = { check_variable = { which = "scooped_buildings"  value = 20 } }
+			add_colony_scoop_bonus_20 = yes
+		}
+		if = {
+			limit = { check_variable = { which = "scooped_buildings"  value = 21 } }
+			add_colony_scoop_bonus_21 = yes
+		}		
+		if = {
+			limit = { check_variable = { which = "scooped_buildings"  value = 22 } }
+			add_colony_scoop_bonus_22 = yes
+		}		
+		if = {
+			limit = { check_variable = { which = "scooped_buildings"  value = 23 } }
+			add_colony_scoop_bonus_23 = yes
+		}		
+		if = {
+			limit = { check_variable = { which = "scooped_buildings"  value = 24 } }
+			add_colony_scoop_bonus_24 = yes
+		}		
+		if = {
+			limit = { check_variable = { which = "scooped_buildings"  value = 25 } }
+			add_colony_scoop_bonus_25 = yes
+		}
+		if = {
+			limit = { check_variable = { which = "scooped_buildings"  value = 26 } }
+			add_colony_scoop_bonus_26 = yes
+		}
+		if = {
+			limit = { check_variable = { which = "scooped_buildings"  value = 27 } }
+			add_colony_scoop_bonus_27 = yes
+		}
+		if = {
+			limit = { check_variable = { which = "scooped_buildings"  value = 28 } }
+			add_colony_scoop_bonus_28 = yes
+		}
+		if = {
+			limit = { check_variable = { which = "scooped_buildings"  value = 29 } }
+			add_colony_scoop_bonus_29 = yes
+		}
+		if = {
+			limit = { check_variable = { which = "scooped_buildings"  value = 30 } }
+			add_colony_scoop_bonus_30 = yes
+		}
+		if = {
+			limit = { check_variable = { which = "scooped_buildings"  value = 31 } }
+			add_colony_scoop_bonus_31 = yes
+		}
+		if = {
+			limit = { check_variable = { which = "scooped_buildings"  value = 32 } }
+			add_colony_scoop_bonus_32 = yes
+		}
+		if = {
+			limit = { check_variable = { which = "scooped_buildings"  value = 33 } }
+			add_colony_scoop_bonus_33 = yes
+		}
+		if = {
+			limit = { check_variable = { which = "scooped_buildings"  value = 34 } }
+			add_colony_scoop_bonus_34 = yes
+		}
+		if = {
+			limit = { check_variable = { which = "scooped_buildings"  value = 35 } }
+			add_colony_scoop_bonus_35 = yes
+		}
+		if = {
+			limit = { check_variable = { which = "scooped_buildings"  value = 36 } }
+			add_colony_scoop_bonus_36 = yes
+		}
+		if = {
+			limit = { check_variable = { which = "scooped_buildings"  value = 37 } }
+			add_colony_scoop_bonus_37 = yes
+		}
+		if = {
+			limit = { check_variable = { which = "scooped_buildings"  value = 38 } }
+			add_colony_scoop_bonus_38 = yes
+		}
+		if = {
+			limit = { check_variable = { which = "scooped_buildings"  value = 39 } }
+			add_colony_scoop_bonus_39 = yes
+		}
+		if = {
+			limit = { check_variable = { which = "scooped_buildings"  value = 40 } }
+			add_colony_scoop_bonus_40 = yes
+		}
+		if = {
+			limit = { check_variable = { which = "scooped_buildings"  value = 41 } }
+			add_colony_scoop_bonus_41 = yes
+		}
+		if = {
+			limit = { check_variable = { which = "scooped_buildings"  value = 42 } }
+			add_colony_scoop_bonus_42 = yes
+		}
+		if = {
+			limit = { check_variable = { which = "scooped_buildings"  value = 43 } }
+			add_colony_scoop_bonus_43 = yes
+		}
+		if = {
+			limit = { check_variable = { which = "scooped_buildings"  value = 44 } }
+			add_colony_scoop_bonus_44 = yes
+		}
+		if = {
+			limit = { check_variable = { which = "scooped_buildings"  value = 45 } }
+			add_colony_scoop_bonus_45 = yes
+		}
+		if = {
+			limit = { check_variable = { which = "scooped_buildings"  value = 46 } }
+			add_colony_scoop_bonus_46 = yes
+		}		
+		if = {
+			limit = { check_variable = { which = "scooped_buildings"  value = 47 } }
+			add_colony_scoop_bonus_47 = yes
+		}		
+		if = {
+			limit = { check_variable = { which = "scooped_buildings"  value = 48 } }
+			add_colony_scoop_bonus_48 = yes
+		}		
+		if = {
+			limit = { check_variable = { which = "scooped_buildings"  value = 49 } }
+			add_colony_scoop_bonus_49 = yes
+		}		
+		if = {
+			limit = { check_variable = { which = "scooped_buildings"  value = 50 } }
+			add_colony_scoop_bonus_50 = yes
+		}
+		hidden_effect = {
+			set_variable = { which = "scooped_buildings" value = 0 }
+		}																												
+	}
+}
+
+country_event = {
+	id = STH_borg.1051
+	title = "STH_borg.1051.name"
+	desc = {
+		trigger = { NOT = { has_established_contact = FROMFROM } }
+		text = "STH_borg.1051.desc_01"
+	}
+	desc = {
+		trigger = { has_established_contact = FROMFROM }
+		text = "STH_borg.1051.desc_02"
+	}
+	picture = sth_GFX_evt_borgPlanet1
+	show_sound = event_radio_chatter
+	is_triggered_only = yes
+	trigger = {
+		exists = FROM
+		exists = FROMFROM
+		FROM = { space_owner = { is_same_value = root } }
+	}
+	immediate = {
+		add_threat = { who = FROMFROM amount = 5 }
+	}
+	option = {
+		name = "STH_borg.1051.a"
+		trigger = { has_established_contact = FROMFROM }
+		if = {
+			limit = { NOT = { is_at_war_with = FROMFROM } }
+			add_influence = -50
+			add_unity = -50
+		}
+	}
+	option = {
+		name = "STH_borg.1051.b"
+		trigger = { has_established_contact = FROMFROM  }
+		if = {
+			limit = { can_declare_war = FROMFROM }
+			declare_war = { who = FROMFROM name = "[Root.GetName] War of Self Defence" }
+		}
+	}
+	option = {
+		name = "STH_borg.1051.c"
+		trigger = { NOT = { has_established_contact = FROMFROM } }
+	}
+}
+
+country_event = {
+	id = STH_borg.1052
+	title = "STH_borg.1052.name"
+	desc = {
+		trigger = { NOT = { has_established_contact = FROMFROM } }
+		text = "STH_borg.1052.desc_01"
+	}
+	desc = {
+		trigger = { has_established_contact = FROMFROM }
+		text = "STH_borg.1052.desc_02"
+	}
+	picture = sth_GFX_evt_borgPlanet1
+	show_sound = event_radio_chatter
+	is_triggered_only = yes
+	trigger = {
+		exists = FROM
+		exists = FROMFROM
+		FROM = { space_owner = { is_same_value = root } }
+	}
+	immediate = {
+		add_threat = { who = FROMFROM amount = 5 }
+	}
+	option = {
+		name = "STH_borg.1052.a"
+		trigger = { has_established_contact = FROMFROM }
+		if = {
+			limit = { NOT = { is_at_war_with = FROMFROM } }
+			add_influence = -50
+			add_unity = -50
+		}
+	}
+	option = {
+		name = "STH_borg.1052.b"
+		trigger = { has_established_contact = FROMFROM }
+		if = {
+			limit = { can_declare_war = FROMFROM }
+			declare_war = { who = FROMFROM name = "[Root.GetName] War of Revenge" }
+		}
+	}
+	option = {
+		name = "STH_borg.1052.c"
+		trigger = { NOT = { has_established_contact = FROMFROM } }
+	}
+}
+
+country_event = {
+	id = STH_borg.2000
+	hide_window = yes
+	is_triggered_only = yes
+	trigger = { 
+		is_assimilator = yes
+		is_borg_empire = yes
+		exists = FROM
+		FROM = { leader_class = ruler }
+	}
+	immediate = {
+		kill_leader = { 
+			type = ruler
+			show_notification = no 
+		}
+		create_leader = {
+			name = NAME_ruler_name_Borg
+			species = root
+			type = ruler
+			skill = random
+			traits = { trait = random_trait trait = random_trait }
+		}
+		if = {
+			limit = { sth_mirror_maps = no }
+			last_created_leader = { set_is_female = yes }
+			else = {
+				last_created_leader = { set_is_female = no }
+			}
+		}
+		assign_leader = last_created_leader
+	}
+}
+
+planet_event = {
+	id = STH_borg.5000
+	hide_window = yes
+	trigger = { 
+		is_planet_class = pc_assimilated
+		has_owner = no
+	}
+	mean_time_to_happen = { months = 30 }
+	immediate = {
+	de_assimilate_planet = yes
+	}
+}

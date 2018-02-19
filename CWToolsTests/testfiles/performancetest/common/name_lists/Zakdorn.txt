@@ -1,0 +1,65 @@
+﻿### Zakdorn
+Zakdorn = {
+	randomized = no
+	ship_names = {
+		generic = {
+			Glir All Glt Lall Drguts Tenxing Backsze Trze Basebze Skiboby Hik Ninjuu Punchby Shon Balaall Polelay Carches Des Cyclog Archm Gigray Autnet Trwing Spsu Juurfu Snook Papeze Aeving Croeing Rallyle Volley Floker Elle Raccing Mass Basebg Ling Hilf Snorze Grquets Blackti Judze Baset Letchwg Ringets Coze Polosse Cycxing Mope Skyd Crwing Flyfi Capeze Vaquets Bushing Icezg Dirtjum Netelze Kennis Disc Skball Tobket Backlin Barby Paraze Rod Skiards Speedp Waaeqze Badmg Fluttze Icesves Png Unis Snorkey Goss Shket Wak Shou Botzy Cuttir Blbting Flyize Ropxing Wakg Udo Vagling Cyching Coing Rafg Steey Floop Medll Sanshoy Biving Sofkey Bulng Brodeo Castize Baskze Kicgolf Kun Sccer Tkendo Shoze Aring Shootfi Pun Aikour Canog Eiards Arfiing Skydze Hoov Supfooy Saxelay Shase Harne Bapeze Longbal Bang Slm Kixing Bandng Mounkey Ultimay River Jmball Eball Hareu Moxing Flooze Greigh Bulxing Toss Scootm Kneebon Flutze Sailinl Kicze Throwbg Lop Basejy Toor Goalon Saihing Himbing Medlng Scootg Eighnet Barbg Polmate Skaves Bullrir Matchze Oxing Trampy Gymnass Cut Kneeze Minlay Formuge Bandze Unsg Tendo Ketxing Teu Dirze Kitball Bacing Gymnze Hory Superoy Kitel Tracs Catnet Racdog Poloze Bage Juge Roppdr Lacr Dodway Call Kicing Rivern Discgol Ropeju Barding Cyclo Streets Abse Beach Carxing Voss Rmult Caze Bandyze Rackze Skitoft Tramll Homball Ulf Volo Surpou Kending Tking Rinze Bandoy Hmofng Hilball Anglt Juze Slhting Soze Cardsg Para Seaka Fall Racque Kstroke Hdy Sailf Parasdo Trackck Banxing Bbicket Wrze Walkido Glpeze Letts Waol Wboy Hangze Kendol Geoze Hillczs Snown Ulplay Ringeze Slambal Stee Parkze Foxhg Wirmoto Sumt Axfing Icepool Steepg Sapezr Cyclf Lanze Climb Ropecs Waterpo Matbals Bodybon Ropmoto Rodnis Lacrze Cat Juggng Geoto Miniay Gymnnis Batons Eis Wry Loy Kitefng Handh Badting Tepins Dee Glmul Swordf Beaglze Rishing Figolf Watics Ton Cuttnet Lepool Cycze
+		}
+		outpost_station = {
+			sequential_name = "Frontier Outpost"
+		}
+	}
+	fleet_names = {
+		sequential_name = "%O% Fleet"
+	}
+	army_names = {
+		defense_army = {
+			sequential_name = "%O% Zakdorn Guard"
+		}
+		assault_army = {
+			sequential_name = "%O% Liberation Force"
+		}
+		slave_army = {
+			sequential_name = "%O% Indentured Defence Force"
+		}
+		clone_army = { 
+			sequential_name = "%O% Clone Defence Force"
+		}
+		robotic_army = {
+			sequential_name = "%O% Mechanical Defence Force"
+		}
+		android_army = {
+			sequential_name = "%O% Synthetic Defence Force"
+		}
+		psionic_army = { 
+			sequential_name = "%O% Psi Defence Force"
+		}
+		xenomorph_army = {
+			sequential_name = "%O% Bio-Warfare Defence Force"
+		}
+		gene_warrior_army = {
+			sequential_name = "%O% Bio-Engineered Defence Force"
+		}
+	}
+	planet_names = {
+		generic = {
+			names = { }
+		}
+	}
+
+	### CHARACTERS
+	character_names = {
+		names1 = {
+			weight = 100
+			first_names_male = {
+				Klim Sakud Jir Gruhn Sirna Koll Girkud Sim Jirna Kol Jir Jirud Sir Sima Grn Girud Klirud Jirn Kll Girnar Grnakel Sirnarnakel Marnarkud Sima Kolirna Sirnakud Girnakel Girkell Sarna Grna Sirnar Siruhnarkel Jirkud Jiruhn Gim Grud Jimarn Sirud Sirnakud Sirn Jim Kollir Simarn Sirkel Sakellir Jiruhna Kolir Gima Jirkuhna Kllllim Klll Sirkelll Jirnar Jirkell Girn Jirn Koliruhna Sakuhna Girkel Klir Sar Girkuhn Sirnakel Mar Siruhnarna Kllirna Kolim Sakel Kolirud Sirud Markuhna Jirnar Simar Kolll Jimakuhna Jirnakel Jirkuhn Sirn Girnakelima Marna Grnakell Sim Grkelirnakel Sarn Girnakuhna Jima Kolirn Sirkud Jirkel Jiruhnaruhn Jim Sirnakuhna Giruhna Kllir Saruhn Sarnarkuhn Grkud Jirnarkud Sirnakellirn Siruhna Klirna Grkelll Siruhna Sakuhnarna Klima Jirnarna
+			}
+			first_names_female = {
+				Myk Girudy Kalyk Aly Mykae Talyk Tae Sirnok Tolyk Allly Ally Sirudy Allyk Mykaly Tok Taly Kallyk Girnok Toly Alllyk Tykae Kaly Tokaly Alllly Tollyk Kae Tallyk Tolly Tykaly Alykae Tollly Tallly Kallly
+			}
+			second_names = {
+				Dokachin Armnoj Roplik Bunkrep Helkara Kolrami Azernal Arn Bunopl Azel Bun Bunkachi Hermnkrara Kok Koj Hereplinkrn Kop Aral Doj Hereli Helkamik Kol Azep Aramik Azelrel Azelk Bunamn Heplrachi Ara Hep Rol Heplrep Dolrn Roj Bunokra Azerali Arera Bunali Rolrep Hereplrep Heplk Roli Helrel Armik Bunka Azernali Bunolrep Dolik Arelkrmnok Arereli Bunarnkalra Dok Bunk Dopl Roka Bunoplkachi Helk Rokrnoli Azermna Azepl Kolra Bunkramnk Arminoj Rolkachi Bunal Dokamnka Arepl Heli Ararnok Bunoj Azermnachik Koka Helkachink Rop Hel Arnoj Koplrmi Dop Herep Dolka Azera Rokra Aralrmi Rolrnolk Bunkrarel Rolrnka Kolikrelk Roplra Rokarn Buna Azereli Bunkarn Bunkachin Ropli Helina Arnk Armi Rokachikamn Heplra Doli Helrnol Helrmi Dokrmn Herminalrn Rolramikrnop Azerep Helin
+			}
+		}
+	}
+}

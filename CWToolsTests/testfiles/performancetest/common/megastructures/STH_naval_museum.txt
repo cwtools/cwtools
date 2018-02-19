@@ -1,0 +1,117 @@
+STH_starfleet_naval_museum_0 = {
+	entity = "fed_ent_naval_museum_entity"
+	construction_entity = "fed_ent_naval_museum_entity"
+	portrait = "GFX_megastructure_construction_background"
+	place_entity_on_planet_plane = no
+	place_entity_on_planet_plane = no
+	entity_offset = { x = 0 y = -5 }
+	build_time = 720
+	build_cost = {
+		minerals = 2000
+		influence = 250
+	}
+	potential = {		
+		 OR = {
+		 	has_country_flag = starfleet_tos
+		 	has_country_flag = starfleet_tmp
+		 	has_country_flag = starfleet_tng
+		 }
+	}
+	possible = {
+		custom_tooltip = {
+			fail_text = "requires_inside_border"
+			is_inside_border = from
+		}
+		NOT = { any_megastructure = { is_megastructure_type = STH_starfleet_naval_museum_0 } }
+		NOT = { any_country = { has_country_flag = starfleet_naval_museum_country } }
+	}
+	placement_rules = {
+		planet_possible = {
+			custom_tooltip = {
+				fail_text = "requires_no_existing_megastructure"
+				has_any_megastructure = no
+				NOR = {
+					has_planet_flag = megastructure
+					has_planet_flag = has_megastructure
+				}
+			}
+			custom_tooltip = {
+				fail_text = "requires_survey_not_habitable"
+				is_surveyed = {			# prevent leaking habitability information
+					who = prev.from
+					status = yes
+				}
+				habitable_planet = no	# prevent the spaceport colliding with the habitat
+				habitable_structure = no
+			}
+			custom_tooltip = {
+				fail_text = "requires_not_star"
+				is_star = no
+			}
+			custom_tooltip = {
+				fail_text = "requires_no_anomaly"
+				NOT = { has_anomaly = yes }
+			}
+		} # use these for all non-star megastructures
+	}
+	ai_weight = { factor = 10 }
+	on_build_start = {}
+	on_build_cancel = {}
+	on_build_complete = {
+		from = { save_event_target_as = builderCountry }
+		set_star_flag = STH_starfleet_naval_museum_built
+		fromfrom.planet = { set_planet_flag = has_megastructure save_event_target_as = naval_museum_planet }
+		# fromfrom = { save_event_target_as = CustomCapital }
+		create_country = {
+			name = "Starfleet Historical Society"
+			type = naval_museum
+			authority = event_target:builderCountry
+			civics = event_target:builderCountry
+			species = event_target:builderCountry
+			flag = {
+				icon = { category = "trek" file = "starfleet_naval_museum.dds" }
+				background = { category = "backgrounds" file = "00_solid.dds" }
+				colors = { "blue" "black" "null" "null" }
+			}
+			ethos = event_target:builderCountry
+			ignore_initial_colony_error = yes
+			effect = {
+				save_global_event_target_as = starfleet_naval_museum_country
+				set_country_flag = starfleet_naval_museum_country
+				#set_graphical_culture = federation_02
+				set_subject_of = { who = event_target:builderCountry subject_type = agency }
+			}
+		}
+		event_target:starfleet_naval_museum_country = {
+			create_fleet = {
+				name = "Starfleet Naval Museum"
+				settings = { spawn_debris = no }
+				effect = {
+					set_owner = event_target:starfleet_naval_museum_country
+					create_ship = {
+						name = random
+						design = "Starfleet Naval Museum"
+						# graphical_culture = no
+					}
+					set_location = {
+						target = event_target:naval_museum_planet
+						distance = 0
+					}
+					save_global_event_target_as = starfleet_naval_museum
+					set_fleet_flag = starfleet_naval_museum
+					event_target:starfleet_naval_museum_country = {
+						set_custom_capital_location = event_target:starfleet_naval_museum
+					}
+				}
+			}
+			create_leader = {
+				type = ruler
+				species = prev
+				name = random
+				skill = 2000
+			}
+			establish_communications_no_message = event_target:builderCountry
+			remove_megastructure = fromfrom
+		}
+	}
+}

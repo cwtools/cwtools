@@ -1,0 +1,90 @@
+@distance = 30
+@base_moon_distance = 10
+
+# Yaderan Homeworld
+yaderan_homeworld = {
+	name = "Yadera"
+	class = sc_g
+	flags = { yaderan_homeworld }
+	init_effect = { log = "yaderan homeworld" }
+	usage = custom_empire
+	max_instances = 1
+	planet = { name = "Yadera" class = star size = { min = 20 max = 30 } orbit_distance = 0 orbit_angle = 1 has_ring = no }
+	planet = {
+		count = { min = 4 max = 8 }
+		orbit_distance = { min = 25 max = 45 }
+		class = rl_unhabitable_planets
+		orbit_angle = { min = 90 max = 270 }
+		change_orbit = @base_moon_distance
+		moon = { count = { min = 0 max = 2 } class = rl_inner_moons orbit_angle = { min = 90 max = 270 } orbit_distance = 8 }
+	}
+	change_orbit = { min = 20 max = 30 }
+	planet = {
+		name = "Yadera Prime"
+		class = "pc_alpine"
+		size = { min = 18 max = 20 }
+		starting_planet = yes
+		tile_blockers = none
+		modifiers = none
+		has_ring = no
+		init_effect = {
+			prevent_anomaly = yes			
+			if = {
+				limit = { NOT = { any_country = { has_country_flag = yaderan_republic } } }
+				create_species = { 
+				    name = "Yaderan"
+				    class = YAD 
+				    portrait = yaderan 
+				    homeworld = THIS 
+				    traits = { 
+				        trait="trait_intelligent"
+                    	trait="trait_communal"
+                    	trait="trait_sedentary"
+				        ideal_planet_class = "pc_alpine" 
+					} 
+				}
+				last_created_species = { save_global_event_target_as = yaderanSpecies }
+				create_country = {
+					name = "NAME_yaderan_republic"
+					type = default
+					ignore_initial_colony_error = yes
+					civics = { civic = "civic_virtuoso" civic = "civic_inwards_perfection" }
+					authority = auth_democratic
+					name_list = "Yaderan"
+					ethos = { ethic = "ethic_xenophobe" ethic = "ethic_egalitarian" ethic = "ethic_pacifist" }
+					species = event_target:yaderanSpecies
+					flag = {
+						icon={ category="trek" file="yaderan.dds" }
+						background={ category="backgrounds" file="00_solid.dds" }
+						colors={ "customcolor537" "blue" "null" "null" }
+					}
+					ship_prefix = ""
+					effect = {
+						set_graphical_culture = generic_01
+						set_country_flag = yaderan_republic
+						set_country_flag = custom_start_screen
+						set_country_flag = generic_ent
+						set_country_flag = gamma_empire
+						set_country_flag = init_spawned
+						save_global_event_target_as = yaderan_republic
+					}
+				}
+				create_colony = { owner = event_target:yaderan_republic species = event_target:yaderanSpecies ethos = owner }
+			}
+			set_capital = yes
+			random_country = {
+				limit = { has_country_flag = yaderan_republic }
+				save_global_event_target_as = yaderan_republic
+				add_appropriate_start_techs = yes
+                give_technology = { tech = "tech_physics_holodeck_26" message = no }
+				species = { save_global_event_target_as = yaderanSpecies }
+				set_country_type = minorRace
+			}
+			set_owner = event_target:yaderan_republic
+			generate_minor_empire_start_buildings = yes
+			generate_minor_empire_start_pops = yes
+			generate_major_empire_start_fleets = yes
+			set_name = "Yadera Prime" }
+		}		
+	}
+}

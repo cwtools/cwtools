@@ -1,0 +1,98 @@
+﻿### Denobulan by EHKodiak
+Denobulan = {
+	randomized = no
+
+	ship_names = {
+		generic = {
+			Barzai Atal Sansu Kadath Ulthar Lerion Thurai Hatheg Spalga Boyya Daman Sande Nasai Gwal Nisai Shalman Ghar Quezi Ghani Surgat "Tor Kade" Breghal Kamar Tole Bulochi Astor Harchu Malik Bien Bisil Chutran Dogoro Niaslo Phuldo Arondu Chungo Dassu Foljo Nala Bruk Biensla Varcha Chitral Suntree
+		}
+		corvette = {
+		}
+		saber = {
+		}
+		sovereign = {
+		}
+		steamrunner = {
+		}		
+		adv_cruiser = {
+		}
+		strike = {
+		}	
+		constructor = { }
+		colonizer = { }
+		science = { }
+		transport = { }
+		outpost_station = {
+			sequential_name = "Frontier Outpost"
+		}
+	}
+
+	fleet_names = {
+		sequential_name = "%O% Fleet"
+	}
+	
+	army_names = {
+		defense_army = {
+			sequential_name = "%O% Guard"
+		}
+		assault_army = {
+			sequential_name = "%O% Assault Force"
+		}
+		slave_army = {
+			sequential_name = "%O% Indentured Defence Force"
+		}
+		clone_army = { 
+			sequential_name = "%O% Clone Defence Force"
+		}
+		robotic_army = {
+			sequential_name = "%O% Mechanical Defence Force"
+		}
+		android_army = {
+			sequential_name = "%O% Synthetic Defence Force"
+		}
+		psionic_army = { 
+			sequential_name = "%O% Psionic Force"
+		}
+		xenomorph_army = {
+			sequential_name = "%O% Bio-Warfare Assault Force"
+		}
+		gene_warrior_army = {
+			sequential_name = "%O% Bio-Engineered Defence Force"
+		}
+	}
+
+	planet_names = {
+		generic = {
+			names = {
+				Denobula
+			}
+		}
+	}
+
+
+	### CHARACTERS
+
+	character_names = {
+		names1 = {
+			weight = 100
+			first_names_male = {		
+				Parnikee Phlox Masc Threx Struhlem Vindeilin Tropp Vleb Phloben Stresc Bek Sonden Zela Mebingin Vlon Throrneilikee Groznin Stretlun Phlesc Vlottis Grom Grog Sorn Belakee Cren Threpp Throk Phlon Vlotlax Thran Phlan Bogga Groznik Klaban Mettus Yolen Vaxildan Scanlan  
+			}
+			first_names_female = {
+				Terim Telles Crenfel Ghrex Grazna Yelauna Ephrix Grellasa Trephta Eklara Yeenfera Telbem Aza Stephax Birlura Trisim Grevex Velesa Fesel Talphil Gesela Thabena Treesel Thophres Arlil Forlisa Indaura Kessil Trevix Vesna Percalia Vexahlia Keyleth Vaxleth
+			}
+			second_names = {
+				" "
+			}
+			regnal_first_names_male = {
+				Parnikee Phlox Masc Threx Struhlem Vindeilin Tropp Vleb Phloben Stresc Bek Sonden Zela Mebingin Vlon Throrneilikee Groznin Stretlun Phlesc Vlottis Grom Grog Sorn Belakee Cren Threpp Throk Phlon Vlotlax Thran Phlan Bogga Groznik Klaban Mettus Yolen Vaxildan Scanlan 
+			}
+			regnal_first_names_female = {
+				Terim Telles Crenfel Ghrex Grazna Yelauna Ephrix Grellasa Trephta Eklara Yeenfera Telbem Aza Stephax Birlura Trisim Grevex Velesa Fesel Talphil Gesela Thabena Treesel Thophres Arlil Forlisa Indaura Kessil Trevix Vesna Percalia Vexahlia Keyleth
+			}
+			regnal_second_names = {
+				" "
+			}
+		}
+	}
+}

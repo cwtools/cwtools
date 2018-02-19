@@ -1,0 +1,24 @@
+# Patrol Frigate
+ship_design = {
+	name = "Altamid Swarm"
+	use_design_name = yes
+	ship_size = swarmship
+	section = {
+		template = "swarmship_stern_starship_1"
+		slot = "stern"
+		component = { slot = "SMALL_GUN_01" template = "MEDIUM_ASSAULT_PHASER_2" }
+		component = { slot = "SMALL_GUN_02" template = "MEDIUM_ASSAULT_PHASER_2" }
+	}
+	section = {
+		template = "swarmship_mid_secondary_1"
+		slot = "mid"
+		component = { slot = "SMALL_UTILITY_1" template = "UTILITY_SMALL_ARMOR_0" }
+		component = { slot = "LARGE_UTILITY_1" template = "UTILITY_LARGE_TRACKING_0" }
+	}	
+	required_component="REQUIRED_WARP_1_PF"
+	required_component="REQUIRED_COMPUTER_1_PF"
+	required_component="REQUIRED_THRUSTERS_1A_PF"
+	required_component="Required_Combat_Sensor_charge_1"
+	required_component="REQUIRED_DEFENSE_1_ARMOR_PF"
+	required_component="REQUIRED_HULL_1A_PF"
+}

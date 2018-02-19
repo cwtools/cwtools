@@ -1,0 +1,23 @@
+opinion_alien_rebels = {
+	opinion = { 
+		base = -500 
+	}
+}
+
+opinion_terran_oppressors = {
+	opinion = { 
+		base = -500 
+	}
+}
+
+opinion_terran_to_neighbours = {
+	opinion = { 
+		base = -250 
+	}
+}
+
+opinion_terran_from_neighbours = {
+	opinion = { 
+		base = -250 
+	}
+}

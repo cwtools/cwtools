@@ -1,0 +1,137 @@
+#Viaian
+vidiian_homeworld = {
+	name = "Via"
+	class = "sc_g"
+	flags = { Viaian_homeworld }
+	init_effect = { log = "vidiian homeworld" }
+	usage = custom_empire
+	max_instances = 1
+	planet = { name = "Via A" class = star orbit_distance = 0 orbit_angle = 1 size = 30 has_ring = no }
+	planet = {
+		count = 3
+		orbit_distance = { min = 35 max = 35 }
+		orbit_angle = { min = 90 max = 270 }
+		moon = { count = { min = 0 max = 2 } class = random_non_colonizable orbit_distance = 5 }
+	}
+	planet = {
+		name = "Vidiia"
+		class = pc_arctic
+		orbit_distance = 14.5
+		orbit_angle = 220
+		size = { min = 22 max = 25 }
+		starting_planet = yes
+		has_ring = no
+		tile_blockers = none
+		modifiers = none
+		init_effect = { prevent_anomaly = yes }
+		init_effect = {			
+			set_global_flag = vidiian_homeworld_spawned
+			if = {
+				limit = { NOT = { any_country = { has_country_flag = vidiian_sodality } } }
+				create_species = { 
+				    name = "Vidiian" 
+				    class = VID
+				    portrait = vidiian
+				    homeworld = THIS
+				    traits = { 
+                        trait="trait_intelligent"
+	                    trait="trait_industrious"
+	                    trait="trait_repugnant"
+	                    trait="trait_the_phage"
+	                    trait="trait_master_geneticist"
+                        ideal_planet_class = "pc_arctic" 
+                    } 
+                }
+				last_created_species = { save_global_event_target_as = vidiianSpecies }
+				create_country = {
+					name = "NAME_vidiian_sodality"
+					type = default
+					ignore_initial_colony_error = yes
+					civics = { civic = "civic_technocracy" civic = "civic_unrelenting_struggle" }
+					authority = auth_oligarchic
+					name_list = "Vidiian"
+					ethos = { ethic = "ethic_militarist" ethic = "ethic_materialist" ethic = "ethic_xenophobe"}
+					species = event_target:vidiianSpecies
+					flag = {
+						icon = { category = "trek" file = "vidiian.dds" }
+						background = { category = "backgrounds" file = "horizontal.dds" }
+						colors = { "customcolor650" "customcolor406" "null" "null" }
+					}
+					ship_prefix = "VSV"
+					effect = {
+						set_graphical_culture = vidiian_01
+						set_country_flag = vidiian_sodality
+						set_country_flag = custom_start_screen
+						set_country_flag = generic_ent
+						set_country_flag = delta_empire
+						set_country_flag = init_spawned
+						set_country_flag = sth_medium_galaxy
+						save_global_event_target_as = vidiian_sodality
+					}
+				}
+				create_colony = { owner = event_target:vidiian_sodality species = event_target:vidiianSpecies ethos = owner }
+			}
+			set_capital = yes
+			random_country = {
+				limit = { has_country_flag = vidiian_sodality }
+				save_global_event_target_as = vidiian_sodality
+				add_appropriate_start_techs = yes
+				species = { save_global_event_target_as = vidiianSpecies }
+			}
+			set_owner = event_target:vidiian_sodality
+			generate_major_empire_start_buildings = yes
+			generate_major_empire_start_pops = yes
+			generate_major_empire_start_fleets = yes
+			set_name = "Vidiia"
+		}
+		
+		moon = {
+			name = "Pel Alae"
+			class = "pc_ocean"
+			size = { min = 6 max = 8 }
+			orbit_distance = 7
+		}
+	}
+	planet = {
+		count = { min = 0 max = 2 }
+		orbit_distance = { min = 14 max = 25 }
+		class = random_non_colonizable
+		orbit_angle = { min = 90 max = 270 }
+		moon = {
+			count = { min = 0 max = 1 }
+			class = random_non_colonizable
+			orbit_distance = 5
+		}
+	}
+	planet = {
+		count = 1
+		orbit_distance = { min = 18 max = 25 }
+		class = random_non_colonizable
+		orbit_angle = { min = 90 max = 270 }
+		moon = {
+			count = { min = 0 max = 1 }
+			class = random_non_colonizable
+			orbit_angle = { min = 90 max = 270 }
+			orbit_distance = 5
+		}
+	}
+	change_orbit = { min = 20 max = 30 }
+	planet = {
+		name = "Elko"
+		class = star
+		flags = { secondaryStar }
+		orbit_angle = 190
+		size = { min = 10 max = 15 }
+		has_ring = no
+	}
+	change_orbit = 20
+		planet = {
+		name = "Via B"
+		class = star
+		flags = { secondaryStar }
+		orbit_angle = 180
+		size = { min = 10 max = 15 }
+		has_ring = no
+	}
+
+}
