@@ -52,5 +52,9 @@ fleet_event =
                 }
             }
         }
+
+        fromfrom = {
+            add_opinion_modifier = {who = root modifier = opinion_graverobber_1}
+        }
     }
 }

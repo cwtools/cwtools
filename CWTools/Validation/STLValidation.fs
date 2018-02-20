@@ -24,8 +24,8 @@ module STLValidation =
         member this.Merge(y : EntitySet) = EntitySet(this.Raw @ y.Raw)
 
     type StructureValidator = EntitySet -> EntitySet -> ValidationResult
-    let shipName (ship : Ship) = if ship.Name = "" then Invalid [(inv S.Error ship "must have name")] else OK
-    let shipSize (ship : Ship) = if ship.ShipSize = "" then Invalid [(inv S.Error ship "must have size")] else OK
+    let shipName (ship : Ship) = if ship.Name = "" then Invalid [(inv (ErrorCodes.CustomError "must have name") ship)] else OK
+    let shipSize (ship : Ship) = if ship.ShipSize = "" then Invalid [(inv (ErrorCodes.CustomError "must have size") ship)] else OK
 
     let validateShip : Validator<Ship>  = shipName <&> shipSize
 
@@ -43,7 +43,7 @@ module STLValidation =
                         match values with
                         | [] -> children
                         | x -> 
-                            x |> List.map ((fun f -> f, f.Value.ToString()) >> (fun (l, v) -> if variables |> List.contains v then OK else Invalid [inv S.Error l (v + " is not defined")]))
+                            x |> List.map ((fun f -> f, f.Value.ToString()) >> (fun (l, v) -> if variables |> List.contains v then OK else Invalid [inv (ErrorCodes.UndefinedVariable v) l]))
                               |> List.fold (<&&>) OK)
         let fCombine = (<&&>)
         node |> (foldNode2 fNode fCombine OK)
@@ -75,27 +75,27 @@ module STLValidation =
     let inline handleUnknownTrigger (root : ^a) (key : string) =
         match STLProcess.ignoreKeys |> List.tryFind (fun k -> k.ToLower() = key.ToLower()) with
         |Some _ -> OK //Do better
-        |None -> if key.StartsWith("@") then OK else Invalid [inv S.Error root (sprintf "unknown trigger %s used." key)]
+        |None -> if key.StartsWith("@") then OK else Invalid [inv (ErrorCodes.UndefinedTrigger key) root]
     
     let inline handleUnknownEffect root (key : string) =
         match STLProcess.ignoreKeys |> List.tryFind (fun k -> k.ToLower() = key.ToLower()) with
         |Some _ -> OK //Do better
-        |None -> if key.StartsWith("@") then OK else Invalid [inv S.Error root (sprintf "unknown effect %s used." key)]
+        |None -> if key.StartsWith("@") then OK else Invalid [inv (ErrorCodes.UndefinedEffect key) root]
     
     let valTriggerLeaf (triggers : Effect list) (scopes : ScopeContext) (leaf : Leaf) =
         match triggers |> List.tryFind (fun e -> e.Name.ToLower() = leaf.Key.ToLower()) with
         |Some e ->
-            if e.Scopes |> List.contains(scopes.CurrentScope)
+            if e.Scopes |> List.contains(scopes.CurrentScope) || scopes.CurrentScope = Scope.Any
             then OK
-            else Invalid [inv S.Error leaf (sprintf "%s trigger used in incorrect scope. In %A but expected %s" leaf.Key (scopes.CurrentScope) (e.Scopes |> List.map (fun f -> f.ToString()) |> String.concat ", "))]
+            else Invalid [inv (ErrorCodes.IncorrectTriggerScope leaf.Key (scopes.CurrentScope.ToString()) (e.Scopes |> List.map (fun f -> f.ToString()) |> String.concat ", ")) leaf]
         |None -> handleUnknownTrigger leaf leaf.Key
 
     let valEffectLeaf (effects : Effect list) (scopes : ScopeContext) (leaf : Leaf) =
         match effects |> List.tryFind (fun e -> e.Name.ToLower() = leaf.Key.ToLower()) with
             |Some e ->
-                if e.Scopes |> List.contains(scopes.CurrentScope)
+                if e.Scopes |> List.contains(scopes.CurrentScope) || scopes.CurrentScope = Scope.Any
                 then OK
-                else Invalid [inv S.Error leaf (sprintf "%s effect used in incorrect scope. In %A but expected %s" leaf.Key (scopes.CurrentScope) (e.Scopes |> List.map (fun f -> f.ToString()) |> String.concat ", "))]
+                else Invalid [inv (ErrorCodes.IncorrectEffectScope leaf.Key (scopes.CurrentScope.ToString()) (e.Scopes |> List.map (fun f -> f.ToString()) |> String.concat ", ")) leaf]
             |None -> handleUnknownEffect leaf leaf.Key
 
     let rec valEventTrigger (root : Node) (triggers : Effect list) (effects : Effect list) (scopes : ScopeContext) (effect : Both) =
@@ -114,13 +114,13 @@ module STLValidation =
             |x ->
                 match changeScope effects triggers x scopes with
                 |NewScope s -> valNodeTriggers root triggers effects s node
-                |WrongScope ss -> Invalid [inv S.Error node (sprintf "%s scope command used in incorrect scope. In %A but expected %s" x scopes.CurrentScope (ss |> List.map (fun s -> s.ToString()) |> String.concat ", "))]
+                |WrongScope ss -> Invalid [inv (ErrorCodes.IncorrectScopeScope x (scopes.CurrentScope.ToString()) (ss |> List.map (fun s -> s.ToString()) |> String.concat ", ")) node]
                 |NotFound ->
                     match triggers |> List.tryFind (fun e -> e.Name.ToLower() = x.ToLower() ) with
                     |Some e ->
-                        if e.Scopes |> List.contains(scopes.CurrentScope)
+                        if e.Scopes |> List.contains(scopes.CurrentScope) || scopes.CurrentScope = Scope.Any
                         then OK
-                        else Invalid [inv S.Error node (sprintf "%s trigger used in incorrect scope. In %A but expected %s" x scopes.CurrentScope (e.Scopes |> List.map (fun f -> f.ToString()) |> String.concat ", "))]
+                        else Invalid [inv (ErrorCodes.IncorrectTriggerScope x (scopes.CurrentScope.ToString()) (e.Scopes |> List.map (fun f -> f.ToString()) |> String.concat ", ")) node]
                     // |Some (_, true) -> OK
                     // |Some (t, false) -> Invalid [inv S.Error node (sprintf "%s trigger used in incorrect scope. In %A but expected %s" x scopes.CurrentScope (t.Scopes |> List.map (fun f -> f.ToString()) |> String.concat ", "))]
                     |None -> handleUnknownTrigger node x
@@ -142,13 +142,13 @@ module STLValidation =
             |x ->
                 match changeScope effects triggers x scopes with
                 |NewScope s -> valNodeEffects node triggers effects s node
-                |WrongScope ss -> Invalid [inv S.Error node (sprintf "%s scope command used in incorrect scope. In %A but expected %s" x scopes.CurrentScope (ss |> List.map (fun s -> s.ToString()) |> String.concat ", "))]
+                |WrongScope ss -> Invalid [inv (ErrorCodes.IncorrectScopeScope x (scopes.CurrentScope.ToString()) (ss |> List.map (fun s -> s.ToString()) |> String.concat ", ")) node]
                 |NotFound ->
                     match effects |> List.tryFind (fun e -> e.Name.ToLower() = x.ToLower()) with
                     |Some e -> 
-                        if e.Scopes |> List.contains(scopes.CurrentScope)
+                        if e.Scopes |> List.contains(scopes.CurrentScope) || scopes.CurrentScope = Scope.Any
                         then OK
-                        else Invalid [inv S.Error node (sprintf "%s effect used in incorrect scope. In %A but expected %s" x scopes.CurrentScope (e.Scopes  |> List.map (fun f -> f.ToString()) |> String.concat ", "))]
+                        else Invalid [inv (ErrorCodes.IncorrectEffectScope x (scopes.CurrentScope.ToString()) (e.Scopes  |> List.map (fun f -> f.ToString()) |> String.concat ", ")) node]
                     // |Some(_, true) -> OK
                     // |Some (t, false) -> Invalid [inv S.Error node (sprintf "%s effect used in incorrect scope. In %A but expected %s" x scopes.CurrentScope (t.Scopes  |> List.map (fun f -> f.ToString()) |> String.concat ", "))]
                     |None -> handleUnknownEffect node x
@@ -239,7 +239,7 @@ module STLValidation =
                 | _ -> false
             | None -> false
         match isMTTH || isTrig || isOnce || isAlwaysNo with
-        | false -> Invalid [inv S.Information event "This event might affect performance as it runs on every tick, consider adding 'is_triggered_only', 'fire_only_once' or 'mean_time_to_happen'"]
+        | false -> Invalid [inv ErrorCodes.EventEveryTick event]
         | true -> OK
 
     let valResearchLeader (area : string) (cat : string option) (node : Node) =
@@ -248,8 +248,8 @@ module STLValidation =
                             match x.Key with
                             | "research_leader" ->
                                 match x.TagText "area" with
-                                | "" -> Invalid [inv S.Error x "This research_leader is missing required \"area\""]
-                                | area2 when area <> area2 -> Invalid [inv S.Information x (sprintf "This research_leader is uses area %s but the technology uses area %s" area2 area)]
+                                | "" -> Invalid [inv ErrorCodes.ResearchLeaderArea x]
+                                | area2 when area <> area2 -> Invalid [inv (ErrorCodes.ResearchLeaderTech area area2) x]
                                 | _ -> OK
                                 /// These aren't really required
                                 // <&&>
@@ -272,7 +272,7 @@ module STLValidation =
                     let cat = node.Child "category" |> Option.bind (fun c -> c.All |> List.tryPick (function |LeafValueI lv -> Some (lv.Value.ToString()) |_ -> None))
                     let catres = 
                         match cat with
-                        | None -> Invalid [inv S.Error node "No category found for this technology"]
+                        | None -> Invalid [inv ErrorCodes.TechCatMissing node]
                         | Some _ -> OK
                     catres <&&> valResearchLeader area cat node
             techs |> List.map inner |> List.fold (<&&>) OK
@@ -287,7 +287,7 @@ module STLValidation =
                             let results =
                                 match x.Key with
                                 | "effectButtonType" -> 
-                                    x.Leafs "effect" <&!&> (fun e -> if List.contains (e.Value.ToRawString()) effects then OK else Invalid [inv S.Error e (sprintf "Button effect %s not found" (e.Value.ToString()))])
+                                    x.Leafs "effect" <&!&> (fun e -> if List.contains (e.Value.ToRawString()) effects then OK else Invalid [inv (ErrorCodes.ButtonEffectMissing (e.Value.ToString())) e])
                                 | _ -> OK
                             results <&&> children
                                 )
@@ -307,7 +307,7 @@ module STLValidation =
                                 match x.Leafs "spriteType" with
                                 | [] -> OK
                                 | xs -> 
-                                    xs <&!&> (fun e -> if List.contains (e.Value.ToRawString()) sprites then OK else Invalid [inv S.Error e (sprintf "Sprite type %s not found" (e.Value.ToString()))])
+                                    xs <&!&> (fun e -> if List.contains (e.Value.ToRawString()) sprites then OK else Invalid [inv (ErrorCodes.SpriteMissing (e.Value.ToString())) e])
                             results <&&> children
                                 )
             let fCombine = (<&&>)

@@ -21,13 +21,13 @@ module STLLocalisationValidation =
         match key = "" || key.Contains(" "), Set.contains key keys with
         | true, _ -> OK
         | _, true -> OK
-        | _, false -> Invalid [inv S.Warning leaf (sprintf "Localisation key %s is not defined for %O" key lang)]
+        | _, false -> Invalid [inv (ErrorCodes.MissingLocalisation key (lang :> obj)) leaf]
 
     let checkLocName (leaf : Leaf) (keys : Set<string>) (lang : Lang) key  =
         match key = "" || key.Contains(" "), Set.contains key keys with
         | true, _ -> OK
         | _, true -> OK
-        | _, false -> Invalid [inv S.Warning leaf (sprintf "Localisation key %s is not defined for %O" key lang)]
+        | _, false -> Invalid [inv (ErrorCodes.MissingLocalisation key (lang :> obj)) leaf]
 
     let checkLocKeys (keys : (Lang * Set<string>) list) (leaf : Leaf) =
         let key = leaf.Value |> (function |QString s -> s |s -> s.ToString())
@@ -64,7 +64,7 @@ module STLLocalisationValidation =
             match key = "" || key.Contains(" "), Set.contains key keys with
             | true, _ -> OK
             | _, true -> OK
-            | _, false -> Invalid [inv S.Warning node (sprintf "Localisation key %s is not defined for %O" key lang)]
+            | _, false -> Invalid [inv (ErrorCodes.MissingLocalisation key (lang :> obj)) node]
     
     let checkLocNodeS (keys : (Lang * Set<string>) list) key (node : Node) =
          keys |> List.fold (fun state (l, keys)  -> state <&&> checkLocNode keys l key node) OK

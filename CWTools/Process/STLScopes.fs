@@ -503,9 +503,9 @@ module STLScopes =
                     let possibleScopes = e.Scopes
                     let exact = possibleScopes |> List.contains context.CurrentScope
                     match context.CurrentScope, possibleScopes, exact with
+                    | Scope.Any, _, _ -> {context with Scopes = e.InnerScope::context.Scopes}, NewScope {context with Scopes = e.InnerScope::context.Scopes}
                     | _, [], _ -> context, NotFound
                     | _, _, true -> {context with Scopes = e.InnerScope::context.Scopes}, NewScope {context with Scopes = e.InnerScope::context.Scopes}
-                    | Scope.Any, _, _ -> {context with Scopes = e.InnerScope::context.Scopes}, NewScope {context with Scopes = e.InnerScope::context.Scopes}
                     | _, ss, false -> context, WrongScope ss
         let inner2 = fun a b -> inner a b |> (fun (c, d) -> c, Some d)
         keys |> Array.fold (fun (c, r) k -> match r with |None -> inner2 c k |Some (NewScope x) -> inner2 x k |Some x -> c, Some x) (source, None) |> snd |> Option.defaultValue (NotFound)
