@@ -24,6 +24,7 @@ module STLValidation =
         member this.Merge(y : EntitySet) = EntitySet(this.Raw @ y.Raw)
 
     type StructureValidator = EntitySet -> EntitySet -> ValidationResult
+    type FileValidator = IResourceAPI -> EntitySet -> ValidationResult
     let shipName (ship : Ship) = if ship.Name = "" then Invalid [(inv (ErrorCodes.CustomError "must have name") ship)] else OK
     let shipSize (ship : Ship) = if ship.ShipSize = "" then Invalid [(inv (ErrorCodes.CustomError "must have size") ship)] else OK
 
@@ -300,18 +301,34 @@ module STLValidation =
             let sprites = os.GlobMatchChildren("**/interface/*.gfx") @ os.GlobMatchChildren("**/interface/*/*.gfx")
                             |> List.filter (fun e -> e.Key = "spriteTypes")
                             |> List.collect (fun e -> e.Children)
-                            |> List.collect (fun s -> s.TagsText "name")
+            let spriteNames = sprites |> List.collect (fun s -> s.TagsText "name")
             let gui = es.GlobMatchChildren("**/interface/*.gui") @ es.GlobMatchChildren("**/interface/*/*.gui")
             let fNode = (fun (x : Node) children ->
                             let results =
                                 match x.Leafs "spriteType" with
                                 | [] -> OK
                                 | xs -> 
-                                    xs <&!&> (fun e -> if List.contains (e.Value.ToRawString()) sprites then OK else Invalid [inv (ErrorCodes.SpriteMissing (e.Value.ToString())) e])
+                                    xs <&!&> (fun e -> if List.contains (e.Value.ToRawString()) spriteNames then OK else Invalid [inv (ErrorCodes.SpriteMissing (e.Value.ToString())) e])
                             results <&&> children
                                 )
             let fCombine = (<&&>)
             gui <&!&> (foldNode2 fNode fCombine OK)
+    
+    let valSpriteFiles : FileValidator =
+        fun rm es ->
+            let sprites = es.GlobMatchChildren("**/interface/*.gfx") @ es.GlobMatchChildren("**/interface/*/*.gfx")
+                            |> List.filter (fun e -> e.Key = "spriteTypes")
+                            |> List.collect (fun e -> e.Children)
+            let filenames = rm.GetResources() |> List.choose (function |FileResource (f, _) -> Some f |EntityResource (f, _) -> Some f)
+            let inner = 
+                fun (x : Node) ->
+                    x.Leafs "textureFile" @ x.Leafs "texturefile" @ x.Leafs "effectFile"
+                    <&!&> (fun l ->
+                        let filename = l.Value.ToRawString().Replace("/","\\").Replace(".lua",".shader")
+                        match filenames |> List.exists (fun f -> f.EndsWith(filename)) with
+                        | true -> OK
+                        | false -> Invalid [inv (ErrorCodes.MissingFile (l.Value.ToRawString())) l])
+            sprites <&!&> inner
 
 
 

@@ -69,9 +69,9 @@ let tests =
                 let testLocKeys = entities |> List.map (fun e -> e.filepath, getLocTestInfo e.entity)
                 let nodeComments = entities |> List.collect (fun e -> getNodeComments e.entity) |> List.map fst
                 
-                eprintfn "%A" testLocKeys
+                //eprintfn "%A" testLocKeys
                 // eprintfn "%A" entities
-                eprintfn "%A" errors
+                //eprintfn "%A" errors
                 // eprintfn "%A" stl.LocalisationErrors
                 let inner (file, ((req : FParsec.Position list), (noreq : FParsec.Position list), (nodekeys : FParsec.Position list)) )=
                     let extra = noreq |> List.filter (fun r -> errors |> List.contains r)
@@ -105,6 +105,7 @@ let tests2 =
         let stl = STLGame("./testfiles/validationtests/interfacetests", FilesScope.All, "", [], [], [], [STL STLLang.English], false)
         let errors = stl.ValidationErrors |> List.map (fun (c, s, n, l, f) -> Position.UnConv n)
         let testVals = stl.AllEntities |> List.map (fun (e) -> e.filepath, getNodeComments e.entity |> List.map fst)
+        eprintfn "%A" (stl.AllFiles())
         //let nodeComments = entities |> List.collect (fun (f, s) -> getNodeComments s) |> List.map fst
         let inner (file, ((nodekeys : FParsec.Position list)) )=
             let expected = nodekeys

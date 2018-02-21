@@ -100,6 +100,7 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
                     "map/setup_scenarios";
                     "prescripted_countries";
                     "interface";
+                    "gfx";
                     ]
 
 
@@ -194,8 +195,19 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
                         |> List.map ((fun folder -> scope, Path.GetFullPath(Path.Combine(path, folder)))
                         >> (fun (scope, folder) -> scope, folder, (if Directory.Exists folder then getAllFoldersUnion [folder] |> Seq.collect Directory.EnumerateFiles else Seq.empty )|> List.ofSeq))
                         |> List.collect (fun (scope, _, files) -> files |> List.map (fun f -> scope, Path.GetFullPath(f)))
-                        |> List.filter (fun (_, file) -> List.contains (Path.GetExtension(file)) [".txt"; ".gui"; ".gfx"])
-            let allFiles = List.map getAllFiles allFolders |> List.collect id |> List.map (fun( s, f) -> s, f, File.ReadAllText f)
+            let fileToResourceInput (scope, filepath) =
+                match Path.GetExtension(filepath) with
+                |".txt"
+                |".gui"
+                |".gfx" ->
+                    Some (EntityResourceInput { scope = scope; filepath = filepath; filetext = File.ReadAllText filepath; validate = true})
+                |".dds"
+                |".tga"
+                |".shader"
+                |".lua" ->
+                    Some (FileResourceInput { scope = scope; filepath = filepath })
+                |_ -> None
+            let allFiles = List.map getAllFiles allFolders |> List.collect id |> List.choose fileToResourceInput
             allFiles
 
         let updateScriptedTriggers () = 
@@ -268,6 +280,7 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
 
         let parseErrors() = 
             resources.GetResources()
+                |> List.choose (function |EntityResource (_, e) -> Some e |_ -> None)
                 |> List.choose (fun r -> r.result |> function |(Fail (result)) when r.validate -> Some (r.filepath, result.error, result.position)  |_ -> None)
 
 
@@ -294,7 +307,10 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
             let res = validators |> List.map (fun v -> v oldEntities newEntities) |> List.fold (<&&>) OK
                        |> (function |Invalid es -> es |_ -> [])
 
-            (validateShips (flattened)) @ (validateEvents (flattened)) @ res
+            let fileValidators = [valSpriteFiles]
+            let fres = fileValidators <&!&> (fun v -> v resources newEntities) |> (function |Invalid es -> es |_ -> [])
+
+            (validateShips (flattened)) @ (validateEvents (flattened)) @ res @ fres
         
         let localisationCheck (entities : Entity list) =
             eprintfn "Localisation check %i files" (entities.Length)
@@ -315,15 +331,19 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
         let updateFile filepath =
             eprintfn "%s" filepath
             let file = File.ReadAllText filepath
-            let newEntities = resources.UpdateFile {scope = ""; filepath = filepath; filetext = file; validate = true}
+            let newEntities = resources.UpdateFile (EntityResourceInput {scope = ""; filepath = filepath; filetext = file; validate = true})
             validateAll newEntities @ localisationCheck newEntities
 
         do 
             eprintfn "Parsing %i files" allFilesByPath.Length
-            let files = allFilesByPath |> List.map (fun (s, f, ft) -> {scope = s; filepath = f; filetext = ft; validate = true})
-            let filteredfiles = if validateVanilla then files else files |> List.map (fun f -> if f.scope = "vanilla" then {f with validate = false} else f)
+            // let efiles = allFilesByPath |> List.filter (fun (_, f, _) -> not(f.EndsWith(".dds"))) 
+            //             |> List.map (fun (s, f, ft) -> EntityResourceInput {scope = s; filepath = f; filetext = ft; validate = true})
+            // let otherfiles = allFilesByPath |> List.filter (fun (_, f, _) -> f.EndsWith(".dds"))
+            //                     |> List.map (fun (s, f, _) -> FileResourceInput {scope = s; filepath = f;})
+            let files = allFilesByPath
+            let filteredfiles = if validateVanilla then files else files |> List.choose (function |FileResourceInput f -> Some (FileResourceInput f) |EntityResourceInput f -> if f.scope = "vanilla" then Some (EntityResourceInput {f with validate = false}) else Some (EntityResourceInput f))
             resources.UpdateFiles(filteredfiles) |> ignore
-            let embedded = embeddedFiles |> List.map (fun (f, ft) -> {scope = "embedded"; filepath = f; filetext = ft; validate = false})
+            let embedded = embeddedFiles |> List.map (fun (f, ft) -> EntityResourceInput {scope = "embedded"; filepath = f; filetext = ft; validate = false})
            
             match gameDirectory with
             |None -> resources.UpdateFiles(embedded) |> ignore
@@ -340,7 +360,13 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
         member __.LocalisationErrors= (localisationCheck (resources.ValidatableEntities()))
         //member __.ValidationWarnings = warningsAll
         member __.Folders = allFolders
-        member __.AllFiles = resources.GetResources() |> List.map (fun r -> r.result |> function |(Fail (result)) -> (r.filepath, false, result.parseTime) |Pass(result) -> (r.filepath, true, result.parseTime))
+        member __.AllFiles() = 
+            resources.GetResources()
+            // |> List.map 
+            //     (function 
+            //         |EntityResource (f, r) ->  r.result |> function |(Fail (result)) -> (r.filepath, false, result.parseTime) |Pass(result) -> (r.filepath, true, result.parseTime)
+            //         |FileResource (f, r) ->  (r.filepath, false, 0L))
+            //|> List.map (fun r -> r.result |> function |(Fail (result)) -> (r.filepath, false, result.parseTime) |Pass(result) -> (r.filepath, true, result.parseTime))
         member __.ScripteTriggers = scriptedTriggers
         member __.ScriptedEffects = scriptedEffects
         member __.UpdateFile file = updateFile file

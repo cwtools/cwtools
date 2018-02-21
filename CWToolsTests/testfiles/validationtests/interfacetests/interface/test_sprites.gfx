@@ -1,12 +1,19 @@
 spriteTypes = {
 	spriteType = {
 		name = "test_sprite_1"
-		textureFile = "gfx/interface/icons/faction_icons/faction_icons_regionalist.dds"
+		textureFile = "gfx/test.dds"
+		## Correct file name for shader
+		effectFile = "gfx/FX/buttonstate_onlydisable.shader"
+		## Vanilla error using "lua"
+		effectFile = "gfx/FX/buttonstate_onlydisable.lua"
 		noOfFrames = 1
 	}
 
 	spriteType = {
 		name = test_sprite_2
-		texturefile = "gfx/interface/icons/custom/icon_sector_logo.dds"
+		#error
+		textureFile = "gfx/Test.dds"
+		#error
+		effectFile = "gfx/FX/Buttonstate_onlydisable.shader"
     }
 }
