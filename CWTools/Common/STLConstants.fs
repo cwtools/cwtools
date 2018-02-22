@@ -24,6 +24,7 @@ module STLConstants =
         |Any
         |Design
         |Starbase
+        |Star
         |InvalidScope
 
     let allScopes = [
@@ -45,6 +46,7 @@ module STLConstants =
             Design;
             Starbase;
             Megastructure;
+            Star;
             ]
     let parseScope =
         (fun (x : string) -> 

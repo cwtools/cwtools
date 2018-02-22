@@ -183,6 +183,11 @@ module CKParser =
         let hash = (fun (file, name) -> file.GetHashCode(), name)
         (memoize hash inner) (fileString, fileName)
 
+    let getSuccess (result) = 
+        match result with
+        |Success(s, _, _) -> s
+        |_ -> EventFile []
+
     let api =
         {
             parseFile = parseEventFile
