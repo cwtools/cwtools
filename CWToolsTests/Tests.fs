@@ -10,6 +10,7 @@ open CWTools.Process.ProcessCore
 open System.IO
 open System.Reflection
 open CWTools.Parser.DocsParser
+open System
 
 
 let getAllTestLocs node =
@@ -150,9 +151,13 @@ let fixEmbeddedFileName (s : string) =
 [<Tests>]
 let embeddedTests =
     testList "embedded" [
+        let filelist = Assembly.GetEntryAssembly().GetManifestResourceStream("CWToolsTests.testfiles.embeddedtest.embedded.vanilla_files_test.csv") 
+                                |> (fun f -> (new StreamReader(f)).ReadToEnd().Split(Environment.NewLine))
+                                |> Array.toList |> List.map (fun f -> f, "")
+        eprintfn "%A" filelist               
         let embeddedFileNames = Assembly.GetEntryAssembly().GetManifestResourceNames() |> Array.filter (fun f -> f.Contains("common") || f.Contains("localisation") || f.Contains("interface"))
         let embeddedFiles = embeddedFileNames |> List.ofArray |> List.map (fun f -> fixEmbeddedFileName f, (new StreamReader(Assembly.GetEntryAssembly().GetManifestResourceStream(f))).ReadToEnd())
-        let stlE = STLGame("./testfiles/embeddedtest/test", FilesScope.All, "", [], [], embeddedFiles, [STL STLLang.English], false)
+        let stlE = STLGame("./testfiles/embeddedtest/test", FilesScope.All, "", [], [], embeddedFiles @ filelist, [STL STLLang.English], false)
         let stlNE = STLGame("./testfiles/embeddedtest/test", FilesScope.All, "", [], [], [], [STL STLLang.English], false)
         let eerrors = stlE.ValidationErrors |> List.map (fun (c, s, n, l, f) -> Position.UnConv n)
         let neerrors = stlNE.ValidationErrors |> List.map (fun (c, s, n, l, f) -> Position.UnConv n)

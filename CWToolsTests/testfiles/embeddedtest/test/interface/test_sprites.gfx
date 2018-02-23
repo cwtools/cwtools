@@ -1,0 +1,14 @@
+spriteTypes = {
+	spriteType = {
+		name = "test_sprite_1"
+		#error
+		textureFile = "gfx/interface/test.dds"
+		## Correct file name for shader
+		#error
+		effectFile = "gfx/FX/buttonstate_onlydisable.shader"
+		## Vanilla error using "lua"
+		#error
+		effectFile = "gfx/FX/buttonstate_onlydisable.lua"
+		noOfFrames = 1
+	}
+}

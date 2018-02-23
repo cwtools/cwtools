@@ -30,7 +30,6 @@ module CWToolsCLI =
         | Localisation = 5
     type ListSort =
         | Path = 1
-        | Time = 2
     type ListArgs =
         | [<MainCommand; ExactlyOnce; Last>] ListType of ListTypes
         | Sort of ListSort option
@@ -105,8 +104,10 @@ module CWToolsCLI =
         | ListTypes.Files -> 
             match sortOrder with
             | None
-            | Some ListSort.Path -> printfn "%A" gameObj.allFileList
-            | Some ListSort.Time -> printfn "%A" (gameObj.allFileList |> List.sortByDescending (fun {time = t} -> t))
+            | Some ListSort.Path -> 
+                let files = gameObj.allFileList |> List.map (sprintf "%O")
+                File.WriteAllLines("files.csv", files)
+                //gameObj.allFileList |> List.iter (fun f -> printfn "%O" f)
             | _ -> failwith "Unexpected sort order"
         | ListTypes.Triggers ->
             // let triggers = DocsParser.parseDocs "C:\Users\Jennifer\Documents\Thomas\CK2Events\CK2EventsTests\game_triggers (1).txt"

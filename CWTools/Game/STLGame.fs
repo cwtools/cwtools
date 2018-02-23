@@ -343,7 +343,7 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
             let files = allFilesByPath
             let filteredfiles = if validateVanilla then files else files |> List.choose (function |FileResourceInput f -> Some (FileResourceInput f) |EntityResourceInput f -> if f.scope = "vanilla" then Some (EntityResourceInput {f with validate = false}) else Some (EntityResourceInput f))
             resources.UpdateFiles(filteredfiles) |> ignore
-            let embedded = embeddedFiles |> List.map (fun (f, ft) -> EntityResourceInput {scope = "embedded"; filepath = f; filetext = ft; validate = false})
+            let embedded = embeddedFiles |> List.map (fun (f, ft) -> if ft = "" then FileResourceInput { scope = "embedded"; filepath = f } else EntityResourceInput {scope = "embedded"; filepath = f; filetext = ft; validate = false})
            
             match gameDirectory with
             |None -> resources.UpdateFiles(embedded) |> ignore
