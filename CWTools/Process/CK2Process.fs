@@ -18,13 +18,13 @@ module CK2Process =
 
     type EventRoot(key, pos) =
         inherit Node("events", Position.Empty)
-        member __.Events : Event list = base.All |> List.choose (function |NodeI n -> Some n |_ -> None) |> List.choose (function | :? Event as e -> Some e |_ -> None)
+        member __.Events : Event list = base.All |> List.choose (function |NodeC n -> Some n |_ -> None) |> List.choose (function | :? Event as e -> Some e |_ -> None)
         member this.Namespace = this.Tag "namespace" |> (function |Some (String s) -> s | _ -> "")
 
     type ArtifactFile(key, pos) =
         inherit Node("artifacts", Position.Empty)
         member this.Slots = this.Child "slots" |> (function |Some c -> c.ToRaw | _ -> [])
-        member __.Weapons = base.All |> List.choose (function |NodeI n when n.Key <> "slots" -> Some n |_ -> None)
+        member __.Weapons = base.All |> List.choose (function |NodeC n when n.Key <> "slots" -> Some n |_ -> None)
 
     let maps =
         [
@@ -84,13 +84,13 @@ module CK2Process =
         let fNode = (fun (x:Node) _ -> 
                         match x with
                         | :? Event as e when e.Tag "desc" |> Option.isSome 
-                            -> e.SetTag "desc" (LeafI (Leaf (KeyValueItem(Key("desc"), Value.String (getDesc e.Desc)))))
+                            -> e.SetTag "desc" (LeafC (Leaf (KeyValueItem(Key("desc"), Value.String (getDesc e.Desc)))))
                         | :? Event as e when e.Child "desc" |> Option.isSome
                             -> e.Child "desc" |> 
                                 function 
-                                |Some n -> n.SetTag "text" (LeafI (Leaf (KeyValueItem(Key("text"), Value.String (getDesc (n.TagText "text"))))))
+                                |Some n -> n.SetTag "text" (LeafC (Leaf (KeyValueItem(Key("text"), Value.String (getDesc (n.TagText "text"))))))
                                 |None -> ()
-                        | :? Option as o -> o.SetTag "name" (LeafI (Leaf (KeyValueItem(Key("name"), Value.String (getDesc o.Name)))))
+                        | :? Option as o -> o.SetTag "name" (LeafC (Leaf (KeyValueItem(Key("name"), Value.String (getDesc o.Name)))))
                         | _ -> ()
                         )
         let fCombine = (fun _ _ -> ())
@@ -138,11 +138,11 @@ module CK2Process =
         root.Events |> List.map (fun e -> (e.ID, getOptions localisation e))
 
     let getEventComments (root : EventRoot) =
-        let findComment t s (a : Both) =
+        let findComment t s (a : Child) =
             match (s, a) with
             | ((b, c), _) when b -> (b, c)
-            | ((_, _), CommentI nc) -> (false, nc)
-            | ((_, c), NodeI (:? Event as n)) when n.ID = t -> (true, c)
+            | ((_, _), CommentC nc) -> (false, nc)
+            | ((_, c), NodeC (:? Event as n)) when n.ID = t -> (true, c)
             | ((_, _), _) -> (false, "")
         root.Events |> List.map (fun e -> e.ID, root.All |> List.fold (findComment e.ID) (false, "") |> snd)
 

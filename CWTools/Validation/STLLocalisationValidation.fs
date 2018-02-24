@@ -43,7 +43,7 @@ module STLLocalisationValidation =
     let valEventNameLocs (keys : (Lang * Set<string>) list) (node : Node) =
         let names = keys |> List.choose (fun (l, ks) -> if l = STL STLLang.Default then Some ks else None) |> List.tryHead |> Option.defaultValue Set.empty
         let fNode = (fun (x : Node) children ->
-                        match x.Key.ToLower(), x.Leafs "name" with
+                        match x.Key.ToLower(), x.Leafs "name" |> List.ofSeq with
                         | "create_point_of_interest", _
                         | "enable_special_project", _
                         | "create_species", _
@@ -104,8 +104,9 @@ module STLLocalisationValidation =
             let es = es.GlobMatchChildren("**/events/*.txt")
             let inner =
                 fun (event : Node) ->
-                    let titles = event.Leafs "title" |> List.map (checkLocKeys keys) |> List.fold (<&&>) OK
-                    let options = event.Childs "option" |> List.collect (fun o -> o.Leafs "name" |> List.map (checkLocKeys keys))
+                    let titles = event.Leafs "title" |> List.ofSeq |> List.map (checkLocKeys keys) |> List.fold (<&&>) OK
+                    let options = event.Childs "option" |> List.ofSeq
+                                                        |> List.collect (fun o -> o.Leafs "name" |> List.ofSeq |> List.map (checkLocKeys keys))
                                                         |> List.fold (<&&>) OK                
                     let usedKeys = event.Children |> List.fold (fun s c -> s <&&> (getLocKeys keys ["desc"; "text"; "custom_tooltip"; "fail_text"; "response_text"] c)) OK
                     let nameres = valEventNameLocs keys event
@@ -118,8 +119,8 @@ module STLLocalisationValidation =
             entities |> List.map
                 (fun (node : Node) ->
                 let keyres = checkKeyAndDesc keys node
-                let innerKeys = node.Childs "prereqfor_desc" |> List.fold (fun s c -> s <&&> (getLocKeys keys ["desc"; "title"] c)) OK
-                let flags = node.Child "feature_flags" |> Option.map (fun c -> c.All |> List.choose (function |LeafValueI lv -> Some lv.Value |_ -> None )) |> Option.defaultValue []
+                let innerKeys = node.Childs "prereqfor_desc" |> List.ofSeq |> List.fold (fun s c -> s <&&> (getLocKeys keys ["desc"; "title"] c)) OK
+                let flags = node.Child "feature_flags" |> Option.map (fun c -> c.All |> List.choose (function |LeafValueC lv -> Some lv.Value |_ -> None )) |> Option.defaultValue []
                 let flags2 = flags |> List.map (fun f -> "feature_" + f.ToString())
                 let flagres = flags2 |> List.fold (fun s c -> s <&&> (keys |> List.fold (fun state (l, keys)  -> state <&&> checkLocNode keys l c node) OK)) OK
                 let flagdesc = flags2 |> List.map (fun f -> f + "_desc")
@@ -157,9 +158,9 @@ module STLLocalisationValidation =
                     let keyres = 
                         match node.TagText "hidden" with
                         | "yes" -> OK
-                        | _ -> node.Leafs "key" |> List.fold (fun s l -> s <&&> (checkLocKeys keys l)) OK
-                    let auras = node.Childs "friendly_aura" @ node.Childs "hostile_aura"
-                    let aurares = auras |> List.fold (fun s c -> s <&&> (getLocKeys keys ["name"] c)) OK
+                        | _ -> node.Leafs "key" |> List.ofSeq |> List.fold (fun s l -> s <&&> (checkLocKeys keys l)) OK
+                    let auras = Seq.append (node.Childs "friendly_aura") (node.Childs "hostile_aura")
+                    let aurares = auras |> List.ofSeq |> List.fold (fun s c -> s <&&> (getLocKeys keys ["name"] c)) OK
                     keyres <&&> aurares
             entities |> List.map inner |> List.fold (<&&>) OK
 
@@ -209,7 +210,7 @@ module STLLocalisationValidation =
         let key = cat.Key
         let start = cat.TagText "adoption_bonus"
         let finish = cat.TagText "finish_bonus"
-        let vals = cat.Child "traditions" |> Option.map (fun c -> c.All |> List.choose (function |LeafValueI lv -> Some lv.Value |_ -> None )) |> Option.defaultValue []
+        let vals = cat.Child "traditions" |> Option.map (fun c -> c.All |> List.choose (function |LeafValueC lv -> Some lv.Value |_ -> None )) |> Option.defaultValue []
         let traditions = vals |> List.map (function |QString s -> s |x -> x.ToString())
         let keyres = keys |> List.fold (fun state (l, keys)  -> state <&&> checkLocNode keys l key cat) OK
         (start, finish, traditions)
@@ -277,8 +278,8 @@ module STLLocalisationValidation =
     let valFactionDemands : LocalisationValidator =
         fun _ keys es ->
             let factions = es.GlobMatchChildren("**/common/pop_faction_types/*.txt")
-            let demands = factions |> List.collect (fun f -> f.Childs "demand")
-            let actions = factions |> List.collect (fun f -> f.Childs "actions")
+            let demands = factions |> Seq.collect (fun f -> f.Childs "demand")
+            let actions = factions |> Seq.collect (fun f -> f.Childs "actions")
             let inner = fun c -> (getLocKeys keys ["title"; "desc"; "unfulfilled_title"] c)
             let finner = checkLocNodeKeyAdvs keys "pft_" [""; "_desc"]
             demands <&!&> inner
@@ -373,11 +374,11 @@ module STLLocalisationValidation =
     let valPolicies : LocalisationValidator =
         fun _ keys es ->
             let policies = es.GlobMatchChildren("**/common/policies/*.txt")
-            let options = policies |> List.collect (fun p -> p.Childs "option")
+            let options = policies |> Seq.collect (fun p -> p.Childs "option")
             let inner = checkLocNodeKeyAdvs keys "policy_" [""; "_desc"]
             let oinner =
                 fun (node : Node) ->
-                    let vals = node.Child "policy_flags" |> Option.map (fun c -> c.All |> List.choose (function |LeafValueI lv -> Some lv.Value |_ -> None )) |> Option.defaultValue []
+                    let vals = node.Child "policy_flags" |> Option.map (fun c -> c.All |> List.choose (function |LeafValueC lv -> Some lv.Value |_ -> None )) |> Option.defaultValue []
                     let vals2 = vals |> List.map (fun v -> v.ToString() + "_name")
                     vals2 |> List.fold (fun s c -> s <&&> (keys |> List.fold (fun state (l, keys)  -> state <&&> checkLocNode keys l c node) OK)) OK
                     <&&>

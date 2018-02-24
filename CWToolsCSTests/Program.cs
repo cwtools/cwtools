@@ -7,6 +7,8 @@ using System.Linq;
 using CWTools.Process;
 using Microsoft.FSharp.Core;
 using System.IO;
+using CWTools.CSharp;
+//using CWTools.CSharp.Extensions;
 
 namespace CWToolsCSTests
 {
@@ -19,7 +21,8 @@ namespace CWToolsCSTests
 
             //Parse event file
             var parsed = CWTools.Parser.CKParser.parseEventFile("./testevent.txt");
-            var eventFile = CWTools.Parser.CKParser.getSuccess(parsed);
+            
+            var eventFile = parsed.GetResult();
 
             //"Process" result into nicer format
             var processed = CK2Process.processEventFile(eventFile);
@@ -28,7 +31,10 @@ namespace CWToolsCSTests
             var myEvent = processed.Events.FirstOrDefault(x => x.ID == "test.1");
             
             //Add is_triggered_only = true
-            myEvent.All = ListModule.OfSeq(myEvent.All.Append(Both.NewLeafI(new Leaf(KeyValueItem.NewKeyValueItem(Key.NewKey("is_triggered_only"), Value.NewBool(true)), Position.Empty))));
+            var leaf = new Leaf("is_triggered_only", Value.NewBool(true));
+
+            myEvent.AllChildren.Add(Leaf.Create("is_triggered_only", Value.NewBool(true))));
+            //myEvent.All = ListModule.OfSeq(myEvent.All.Append(Both.NewLeafI(Leaf.(Key.NewKey("is_triggered_only"), Value.NewBool(true)))));
 
             //Output
             var output = processed.ToRaw;

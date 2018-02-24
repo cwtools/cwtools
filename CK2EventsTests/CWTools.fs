@@ -64,7 +64,7 @@ let processTests =
         //     List.iter (fun d -> printfn "%A" d |> ignore) duplicates
 
         testCase "STLGame ship validation" <| fun () ->
-            let game = STLGame("CK2EventsTests/stellaris")
+            let game = STLGame("CK2EventsTests/stellaris", FilesScope.All, "", [], [], [], [], false)
             let errors = game.ValidationErrors
             Expect.hasCountOf errors 2u (fun _ -> true) "Not enough errors"
             //errors |> List.iter (fun (s, e) -> printfn "%A" (s.ToRaw |> CKPrinter.api.prettyPrintStatements, e, s.Position) |> ignore)
@@ -84,13 +84,13 @@ let docsTests =
     testList "docs tests" [
         testCase "effects parse" <| fun () ->
             let path = "CK2EventsTests/game_effects (1).txt"
-            let parsed = parseDocs path
+            let parsed = DocsParser.parseDocsFile path
             match parsed with
             |Failure(msg,_,_) -> Expect.isTrue false msg
             |_ -> ()
         testCase "triggers parse" <| fun () ->
             let path = "CK2EventsTests/game_triggers (1).txt"
-            let parsed = parseDocs path
+            let parsed = DocsParser.parseDocsFile path
             match parsed with
             |Failure(msg,_,_) -> Expect.isTrue false msg
             |_ -> ()

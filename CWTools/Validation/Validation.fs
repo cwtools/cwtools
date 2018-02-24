@@ -67,6 +67,6 @@ module ValidationCore =
         | Invalid e1, Invalid e2 -> Invalid (e1 @ e2)
         | Invalid e, OK | OK, Invalid e -> Invalid e
 
-    let (<&!&>) es f = es |> List.fold (fun s c -> s <&&> (f c)) OK
+    let (<&!&>) es f = es |> Seq.fold (fun s c -> s <&&> (f c)) OK
 
     

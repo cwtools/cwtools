@@ -15,6 +15,7 @@ type CK2Settings () =
     member val eu4Directory : string = "" with get, set
     member this.EU4Directory = GameDirectory(this.eu4Directory)
     member val stlDirectory : string = "" with get, set
+    member val stlLanguage : STLLang = STLLang.English with get, set
     member this.STLDirectory = GameDirectory(this.stlDirectory)
     member this.Directory x = 
         match x with
@@ -31,6 +32,7 @@ type UserSettings (settings:CK2Settings) =
     member this.hoi4Directory = settings.hoi4Directory
     member this.eu4Directory = settings.eu4Directory
     member this.stlDirectory = settings.stlDirectory
+    member this.stlLanguage = settings.stlLanguage
     member this.bundleEdges = settings.bundleEdges
 
 type CK2SettingsJson =

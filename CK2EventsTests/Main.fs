@@ -94,7 +94,7 @@ let parserTests =
 let localisationTests =
     testList "localisation tests" [
         testCase "localisation folder" <| fun () ->
-            let parsed = CK2LocalisationService({folder = "CK2EventsUI/localization"; language = CK2Lang.English})
+            let parsed = CK2LocalisationService({folder = "CK2EventsUI/localization"; language = Lang.CK2 CK2Lang.English})
             ()
     ]
 
@@ -109,7 +109,7 @@ let test file =
         Expect.equal v rawAgain "Not equal"
         let eventComment = CK2Process.getEventComments processed
         let immediates = CK2Process.getAllImmediates processed
-        let localisation = CK2LocalisationService({folder="CK2EventsUI/localization"; language= CK2Lang.English}).Api 
+        let localisation = CK2LocalisationService({folder="CK2EventsUI/localization"; language= Lang.CK2 CK2Lang.English}).Api 
         let options = CK2Process.getEventsOptions localisation processed
         let pretties = processed.Events |> List.map (fun e -> (e.ID, CKPrinter.api.prettyPrintStatements e.ToRaw))
         let ck3 = CK2Process.addLocalisedDescAll processed localisation
@@ -125,7 +125,7 @@ let test2 file =
         Expect.equal v rawAgain "Not equal"
         let eventComment = CK2Process.getEventComments processed
         let immediates = CK2Process.getAllImmediates processed
-        let localisation = CK2LocalisationService({folder="CK2EventsUI/localization"; language= CK2Lang.English}).Api
+        let localisation = CK2LocalisationService({folder="CK2EventsUI/localization"; language= Lang.CK2 CK2Lang.English}).Api
         let options = CK2Process.getEventsOptions localisation processed
         let pretties = processed.Events |> List.map (fun e -> (e.ID, CKPrinter.api.prettyPrintStatements e.ToRaw))
         let ck3 = CK2Process.addLocalisedDescAll processed localisation
@@ -167,7 +167,7 @@ let processingTests =
 
         testCase "addLocalisation" <| fun () ->
             let parsed = parser.parseString "character_event = { desc = LOCTEST }" "test"
-            let service = CK2LocalisationService({folder="CK2EventsTests/localisation test files"; language= CK2Lang.English}).Api
+            let service = CK2LocalisationService({folder="CK2EventsTests/localisation test files"; language= Lang.CK2 CK2Lang.English}).Api
             match parsed with
             |Success(v, _, _) ->
                 let processed = CK2Process.processEventFile v

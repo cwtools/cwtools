@@ -22,13 +22,13 @@ let getAllTestLocs node =
     node |> (foldNode2 fNode fCombine ([],[]))
 
 let getNodeComments (node : Node) =
-    let findComments t s (a : Both) =
+    let findComments t s (a : Child) =
             match (s, a) with
             | ((b, c), _) when b -> (b, c)
-            | ((_, c), CommentI nc) when nc.StartsWith("#") -> (false, c)
-            | ((_, c), CommentI nc) -> (false, nc::c)
-            | ((_, c), NodeI n) when n.Key = t -> (true, c)
-            | ((_, c), LeafI v) when v.Key = t -> (true, c)
+            | ((_, c), CommentC nc) when nc.StartsWith("#") -> (false, c)
+            | ((_, c), CommentC nc) -> (false, nc::c)
+            | ((_, c), NodeC n) when n.Key = t -> (true, c)
+            | ((_, c), LeafC v) when v.Key = t -> (true, c)
             | ((_, _), _) -> (false, [])
     let fNode = (fun (node:Node) (children) ->
             let one = node.Values |> List.map (fun e -> let (Position p) = e.Position in p, node.All |> List.rev |> List.fold (findComments e.Key) (false, []) |> snd)

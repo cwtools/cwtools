@@ -31,6 +31,11 @@ type SettingsViewModel (settings) =
         enums |> Seq.map (fun e -> SelectListItem(Value = (int e).ToString(), Text = e.ToString()))
               |> (fun l -> SelectList(l, "Value", "Text"))
 
+    member val stlLanguages =
+        let enums : STLLang seq = unbox (Enum.GetValues(typeof<STLLang>))
+        enums |> Seq.map (fun e -> SelectListItem(Value = (int e).ToString(), Text = e.ToString()))
+              |> (fun l -> SelectList(l, "Value", "Text"))
+
 type IndexViewModel (settings, files, filenamespaces, appSettings : AppSettings) =
     inherit BaseViewModel (settings)
     member val files : List<String> = files
@@ -75,9 +80,9 @@ type ValidationViewModelFileRow =
     }
 type ValidationViewModel (settings, appSettings : AppSettings) =
     inherit BaseViewModel(settings)
-    let game = STLGame(settings.STLDirectory.gameDirectory)
+    let game = STLGame(settings.STLDirectory.gameDirectory, FilesScope.All, "", [], [], [], [], true)
     let validationErrors = game.ValidationErrors
     member val folders = game.Folders
-    member val parserErrorList = game.ParserErrors |> List.map (fun (f, e) -> {file = f; error = e})
-    member val validationErrorList = validationErrors |> List.map (fun (s,e) -> {category = s.GetType().Name ; error = e; position = s.Position.ToString()})
-    member val allFileList = game.AllFiles |> List.map (fun (f, p) -> {file = f; pass = p})
+    member val parserErrorList = game.ParserErrors |> List.map (fun (f, e, _) -> {file = f; error = e})
+    member val validationErrorList = validationErrors |> List.map (fun (s, _, p, _, e) -> {category = s ; error = e; position = p.ToString()})
+    member val allFileList = game.AllFiles() |> List.choose (function |EntityResource (s,e) -> Some (s,e) |_ -> None) |> List.map (fun (f, p) -> {file = f; pass = p.result |> function |Pass _ -> true |_ -> false})

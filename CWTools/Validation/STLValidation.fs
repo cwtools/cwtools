@@ -99,10 +99,10 @@ module STLValidation =
                 else Invalid [inv (ErrorCodes.IncorrectEffectScope leaf.Key (scopes.CurrentScope.ToString()) (e.Scopes |> List.map (fun f -> f.ToString()) |> String.concat ", ")) leaf]
             |None -> handleUnknownEffect leaf leaf.Key
 
-    let rec valEventTrigger (root : Node) (triggers : Effect list) (effects : Effect list) (scopes : ScopeContext) (effect : Both) =
+    let rec valEventTrigger (root : Node) (triggers : Effect list) (effects : Effect list) (scopes : ScopeContext) (effect : Child) =
         match effect with
-        |LeafI leaf -> valTriggerLeaf triggers scopes leaf
-        |NodeI node ->
+        |LeafC leaf -> valTriggerLeaf triggers scopes leaf
+        |NodeC node ->
             match node.Key with
             |x when STLProcess.toTriggerKeys @ STLProcess.toTriggerBlockKeys |> List.contains (x.ToLower()) ->
                 valNodeTriggers root triggers effects scopes node
@@ -127,10 +127,10 @@ module STLValidation =
                     |None -> handleUnknownTrigger node x
         |_ -> OK
 
-    and valEventEffect (root : Node) (triggers : Effect list) (effects : Effect list) (scopes : ScopeContext) (effect : Both) =
+    and valEventEffect (root : Node) (triggers : Effect list) (effects : Effect list) (scopes : ScopeContext) (effect : Child) =
         match effect with
-        |LeafI leaf -> valEffectLeaf effects scopes leaf
-        |NodeI node ->
+        |LeafC leaf -> valEffectLeaf effects scopes leaf
+        |NodeC node ->
             match node.Key with
             |x when STLProcess.toTriggerKeys @ STLProcess.toTriggerBlockKeys |> List.contains x ->
                 valNodeTriggers root triggers effects scopes node
@@ -171,17 +171,17 @@ module STLValidation =
         let optionExcludes = ["name"; "custom_tooltip"; "response_text"; "is_dialog_only"; "sound"; "ai_chance"; "custom_gui"; "default_hide_option"]
         let filterFunction =
             function
-            | NodeI n -> optionExcludes |> List.contains (n.Key.ToLower())
-            | LeafI l -> optionExcludes |> List.contains (l.Key.ToLower())
+            | NodeC n -> optionExcludes |> List.contains (n.Key.ToLower())
+            | LeafC l -> optionExcludes |> List.contains (l.Key.ToLower())
             | _ -> false
         let leaves = node.Values |> List.filter (fun l -> not (optionExcludes |> List.contains (l.Key.ToLower())))
         let children = node.Children |> List.filter (fun c -> not (optionExcludes |> List.contains (c.Key.ToLower())))
         let lres = leaves <&!&> (valEffectLeaf effects scopes)
         let tres = children |> List.filter (fun c -> optionTriggers |> List.contains (c.Key.ToLower()))
-                    <&!&> (NodeI >> valEventTrigger root triggers effects scopes)
+                    <&!&> (NodeC >> valEventTrigger root triggers effects scopes)
         let effectPos = children |> List.filter (fun c -> not (optionTriggers |> List.contains (c.Key.ToLower())))
         let eres = effectPos |> List.filter (fun c -> not (optionEffects |> List.contains (c.Key.ToLower())))
-                    <&!&> (NodeI >> valEventEffect root triggers effects scopes)
+                    <&!&> (NodeC >> valEventEffect root triggers effects scopes)
         let esres = effectPos |> List.filter (fun c -> optionEffects |> List.contains (c.Key.ToLower()))
                     <&!&> (valNodeEffects root triggers effects scopes)
         lres <&&> tres <&&> eres <&&> esres
@@ -220,7 +220,7 @@ module STLValidation =
                 let v = List.map (valEventEffect event triggers effects eventScope) n.All
                 v |> List.fold (<&&>) OK
             |None -> OK
-        let opts = event.Childs "option" |> List.map (fun o -> (valOption o triggers effects eventScope o))
+        let opts = event.Childs "option" |> List.ofSeq |> List.map (fun o -> (valOption o triggers effects eventScope o))
         let opts2 = opts |> List.fold (<&&>) OK
         desc <&&> imm <&&> aft <&&> opts2
 
@@ -270,7 +270,7 @@ module STLValidation =
             let inner =
                 fun (node : Node) ->
                     let area = node.TagText "area"
-                    let cat = node.Child "category" |> Option.bind (fun c -> c.All |> List.tryPick (function |LeafValueI lv -> Some (lv.Value.ToString()) |_ -> None))
+                    let cat = node.Child "category" |> Option.bind (fun c -> c.All |> List.tryPick (function |LeafValueC lv -> Some (lv.Value.ToString()) |_ -> None))
                     let catres = 
                         match cat with
                         | None -> Invalid [inv ErrorCodes.TechCatMissing node]
@@ -301,11 +301,11 @@ module STLValidation =
             let sprites = os.GlobMatchChildren("**/interface/*.gfx") @ os.GlobMatchChildren("**/interface/*/*.gfx")
                             |> List.filter (fun e -> e.Key = "spriteTypes")
                             |> List.collect (fun e -> e.Children)
-            let spriteNames = sprites |> List.collect (fun s -> s.TagsText "name")
+            let spriteNames = sprites |> Seq.collect (fun s -> s.TagsText "name") |> List.ofSeq
             let gui = es.GlobMatchChildren("**/interface/*.gui") @ es.GlobMatchChildren("**/interface/*/*.gui")
             let fNode = (fun (x : Node) children ->
                             let results =
-                                match x.Leafs "spriteType" with
+                                match x.Leafs "spriteType" |> List.ofSeq with
                                 | [] -> OK
                                 | xs -> 
                                     xs <&!&> (fun e -> if List.contains (e.Value.ToRawString()) spriteNames then OK else Invalid [inv (ErrorCodes.SpriteMissing (e.Value.ToString())) e])
@@ -322,7 +322,7 @@ module STLValidation =
             let filenames = rm.GetResources() |> List.choose (function |FileResource (f, _) -> Some f |EntityResource (f, _) -> Some f)
             let inner = 
                 fun (x : Node) ->
-                    x.Leafs "textureFile" @ x.Leafs "texturefile" @ x.Leafs "effectFile"
+                   Seq.append (x.Leafs "textureFile") (Seq.append (x.Leafs "texturefile") (x.Leafs "effectFile"))
                     <&!&> (fun l ->
                         let filename = l.Value.ToRawString().Replace("/","\\").Replace(".lua",".shader")
                         match filenames |> List.exists (fun f -> f.EndsWith(filename)) with

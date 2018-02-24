@@ -42,6 +42,10 @@
         <a class="btn btn-default col-md-1" asp-area="" asp-controller="Home" asp-action="SetFolder" asp-route-game="stl">Set game folder</a>
     </div>
     <div class="form-group">
+        <label asp-for="settings.stlLanguage" class="control-label col-md-3">STL localisation language</label>
+        <select asp-for="settings.stlLanguage" asp-items="Model.stlLanguages" class="form-control col-md-8"></select>
+    </div>
+    <div class="form-group">
         <label asp-for="settings.bundleEdges" class="control-label col-md-3">Bundle edges</label>
         <input asp-for="settings.bundleEdges" class="form-control col-md-8"/>
     </div>
