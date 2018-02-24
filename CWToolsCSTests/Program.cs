@@ -8,7 +8,6 @@ using CWTools.Process;
 using Microsoft.FSharp.Core;
 using System.IO;
 using CWTools.CSharp;
-//using CWTools.CSharp.Extensions;
 
 namespace CWToolsCSTests
 {
@@ -32,9 +31,9 @@ namespace CWToolsCSTests
             
             //Add is_triggered_only = true
             var leaf = new Leaf("is_triggered_only", Value.NewBool(true));
-
-            myEvent.AllChildren.Add(Leaf.Create("is_triggered_only", Value.NewBool(true))));
-            //myEvent.All = ListModule.OfSeq(myEvent.All.Append(Both.NewLeafI(Leaf.(Key.NewKey("is_triggered_only"), Value.NewBool(true)))));
+            myEvent.AllChildren.Add(Child.NewLeafC(leaf));
+            // or
+            // myEvent.AllChildren.Add(Leaf.Create("is_triggered_only", Value.NewBool(true)));
 
             //Output
             var output = processed.ToRaw;
@@ -43,10 +42,6 @@ namespace CWToolsCSTests
                 .PrintFormatLine(
                     new PrintfFormat<FSharpFunc<FSharpList<Statement>, Unit>, TextWriter, Unit, Unit, FSharpList<Statement>>("%A"))
                 .Invoke(output);
-
-
-            //Microsoft.FSharp.Core.PrintfModule.PrintFormatLine(new PrintfFormat<T, System.IO.TextWriter, Unit, Unit>())
-            //Console.WriteLine(processed.ToString());
         }
     }
 }

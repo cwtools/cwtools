@@ -5,24 +5,11 @@
     <TargetFramework>netcoreapp2.0</TargetFramework>
     <DependsOnNETStandard>true</DependsOnNETStandard>
   </PropertyGroup>
-    <ItemGroup>
-    <!-- <ProjectReference Include="..\CWTools\CWTools.fsproj">
-      <Name>CWTools.fsproj</Name>
-    </ProjectReference> -->
-        <!-- <ProjectReference Include="..\CWTools.CSharp\CWTools.CSharp.fsproj">
-      <Name>CWTools.fsproj</Name>
-    </ProjectReference> -->
-  </ItemGroup>
   <ItemGroup>
     <PackageReference Include="System.Text.Encoding.CodePages" Version="4.4.0" />
     <PackageReference Include="FParsec" Version="1.0.3" />
     <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.0" />
-    <Reference Include="CWTools">
-      <HintPath>..\CWTools\bin\Debug\netstandard2.0\CWTools.dll</HintPath>
-    </Reference>  
-      <Reference Include="CWTools.CSharp">
-      <HintPath>..\CWTools.CSharp\bin\Debug\netstandard2.0\CWTools.CSharp.dll</HintPath>
-    </Reference>
+    <PackageReference Include="cwtools" Version="0.1.1"/>
   </ItemGroup>
   
 </Project>

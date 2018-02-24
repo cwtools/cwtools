@@ -1,0 +1,5 @@
+type project
+version 0.1.1
+authors Thomas Boby
+description
+  A library for parsing, editing, and validating Paradox Interactive script files.
