@@ -8,6 +8,7 @@
     <Compile Include="Common/STLConstants.fs" />
     <Compile Include="Parser/CKParser.fs" />
     <Compile Include="Parser/DocsParser.fs" />
+    <Compile Include="Parser/SetupLogParser.fs" />
     <Compile Include="Localisation/LocalisationDomain.fs" />
     <Compile Include="Localisation/YAMLLocalisationParser.fs" />
     <Compile Include="Localisation/CK2Localisation.fs" />

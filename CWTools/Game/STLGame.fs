@@ -27,7 +27,7 @@ type FilesScope =
 
 //type GameFile = GameFile of result : FileResult
 
-type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, triggers : DocEffect list, effects : DocEffect list, embeddedFiles : (string * string) list, langs : Lang list, validateVanilla : bool ) =
+type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, triggers : DocEffect list, effects : DocEffect list, modifiers : Modifier list, embeddedFiles : (string * string) list, langs : Lang list, validateVanilla : bool ) =
         let scriptFolders = [
                     "common/agendas";
                     "common/ambient_objects";
@@ -72,6 +72,7 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
                     "common/random_names";
                     "common/scripted_effects";
                     "common/scripted_triggers";
+                    "common/scripted_variables";
                     "common/section_templates";
                     "common/sector_types";
                     "common/ship_behaviors";
@@ -119,6 +120,7 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
 
         let mutable scriptedTriggers : Effect list = []
         let mutable scriptedEffects : Effect list = []
+        let mutable staticModifiers : Modifier list = []
         let mutable localisationAPIs : ILocalisationAPI list = []
 
         let rec getAllFolders dirs =
@@ -204,7 +206,8 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
                 |".dds"
                 |".tga"
                 |".shader"
-                |".lua" ->
+                |".lua"
+                |".png" ->
                     Some (FileResourceInput { scope = scope; filepath = filepath })
                 |_ -> None
             let allFiles = List.map getAllFiles allFolders |> List.collect id |> List.choose fileToResourceInput
@@ -246,6 +249,15 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
                 ((before |> Set.ofList) = (final |> Set.ofList)) || i > 10
             while (not (ff())) do ()
             scriptedEffects <- final
+
+        let updateStaticodifiers () =
+            let rawModifiers =
+                resources.AllEntities()
+                |> List.choose (function |f when f.filepath.Contains("static_modifiers") -> Some (f.entity) |_ -> None)
+                |> List.collect (fun n -> n.Children)
+                |> List.rev
+            let newModifiers = rawModifiers |> List.fold (fun es e -> (STLProcess.getStaticModifierCategory es e)::es) modifiers
+            staticModifiers <- newModifiers
         
         let updateLocalisation() = 
             localisationAPIs <-
@@ -292,7 +304,7 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
             let events = entities |> List.choose (function | :? Event as e -> Some e |_ -> None)
             let scriptedTriggers = scriptedTriggers
             let scriptedEffects = scriptedEffects
-            events |> List.map (fun e -> (valEventVals e) <&&> (valEventTriggers (vanillaTriggers @ scriptedTriggers) (vanillaEffects @ scriptedEffects) e) <&&> (valEventEffects (vanillaTriggers @ scriptedTriggers) (vanillaEffects @ scriptedEffects) e))
+            events |> List.map (fun e -> (valEventVals e) <&&> (valEventTriggers (vanillaTriggers @ scriptedTriggers) (vanillaEffects @ scriptedEffects) e) <&&> (valEventEffects (vanillaTriggers @ scriptedTriggers) (vanillaEffects @ scriptedEffects) staticModifiers e))
                    |> List.choose (function |Invalid es -> Some es |_ -> None)
                    |> List.collect id
         let snood = snd
@@ -351,6 +363,7 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
 
             updateScriptedTriggers()
             updateScriptedEffects()
+            updateStaticodifiers()
             updateLocalisation()
 
         //member __.Results = parseResults

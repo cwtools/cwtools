@@ -135,3 +135,56 @@ module STLConstants =
         member val InnerScope : Scope = inner
         new(de : DocEffect, inner : Scope) =
             ScopedEffect(de.Name, de.Scopes, inner, de.Type, de.Desc, de.Usage)
+
+    type ModifierCategory =
+        |Pop
+        |Science
+        |Country
+        |Army
+        |Leader
+        |Planet
+        |PopFaction
+        |ShipSize
+        |Ship
+        |Tile
+        |Megastructure
+        |PlanetClass
+        |Starbase
+        |Any
+    type RawStaticModifier = 
+        {
+            num : int
+            tag : string
+            name : string
+        }
+    type RawModifier = 
+        {
+            tag : string
+            category : int
+        }
+
+    type Modifier = 
+        {
+            tag : string
+            categories : ModifierCategory list
+            /// Is this a core modifier or a static modifier?
+            core : bool
+        }
+    let createModifier (raw : RawModifier) =
+        let category = 
+            match raw.category with
+            | 2 -> ModifierCategory.Pop
+            | 64 -> ModifierCategory.Science
+            | 256 -> ModifierCategory.Country
+            | 512 -> ModifierCategory.Army
+            | 1024 -> ModifierCategory.Leader
+            | 2048 -> ModifierCategory.Planet
+            | 8192 -> ModifierCategory.PopFaction
+            | 16496 -> ModifierCategory.ShipSize
+            | 16508 -> ModifierCategory.Ship
+            | 32768 -> ModifierCategory.Tile
+            | 65536 -> ModifierCategory.Megastructure
+            | 131072 -> ModifierCategory.PlanetClass
+            | 262144 -> ModifierCategory.Starbase
+            |_ -> ModifierCategory.Any
+        { tag = raw.tag; categories = [category]; core = true}

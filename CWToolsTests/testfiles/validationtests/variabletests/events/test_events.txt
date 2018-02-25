@@ -1,0 +1,8 @@
+@local_var = 10
+
+namespace = @local_var
+namespace = @test_var
+event = {
+    #error
+    thing = @test_not_defined
+}

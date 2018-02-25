@@ -15,7 +15,7 @@ open CWTools.Localisation
 open CWTools.Localisation.CK2Localisation
 open CWTools.Process.CK2Process
 
-let winFolder = "C:\\Program Files (x86)\\Steam\\steamapps\\common\\"
+let winFolder = "F:\\Games\\Steam\\steamapps\\common\\"
 let linuxFolder = "/home/thomas/.steam/steam/steamapps/common/"
 let steamFolder = winFolder
 let printer = CKPrinter.api
@@ -145,8 +145,8 @@ let processingTests =
             | _ -> ()
 
         testList "process all" [
-            let folders = ["CK2EventsTests/events"; 
-                            "CK2EventsTests/event test files";
+            let folders = ["events"; 
+                            "event test files";
                             steamFolder + "Stellaris/events";
                             //steamFolder + "Europa Universalis IV/events";
                             steamFolder + "Hearts of Iron IV/events";
