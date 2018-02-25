@@ -1,0 +1,3 @@
+test_modifier = {
+    	max_rivalries = 10
+}

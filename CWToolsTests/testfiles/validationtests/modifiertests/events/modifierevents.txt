@@ -1,0 +1,49 @@
+namespace = test
+
+## Check undefined modifiers throw errors
+country_event = {
+    is_triggered_only = yes
+    trigger = {
+        #error
+        has_modifier = test_not_defined
+    }
+    immediate = {
+        #error
+        add_modifier = {
+            modifier = test_not_defined
+        }
+        #error
+        remove_modifier = test_not_defined
+    }
+}
+
+## Check modifier scope errors
+ship_event = {
+    is_triggered_only = yes
+    trigger = {
+        #error
+        has_modifier = test_modifier 
+    }
+    immediate = {
+        #error
+        add_modifier = {
+            modifier = test_modifier 
+        }
+        #error
+        remove_modifier = test_modifier
+    }
+}
+
+## Control
+country_event = {
+    is_triggered_only = yes
+    trigger = {
+        has_modifier = test_modifier 
+    }
+    immediate = {
+        add_modifier = {
+            modifier = test_modifier 
+        }
+        remove_modifier = test_modifier
+    }
+}

@@ -104,7 +104,8 @@ let tests =
 let testFolder folder testsname =
     testList testsname [
         let triggers, effects = parseDocsFile "./testfiles/validationtests/trigger_docs_0.2.txt" |> (function |Success(p, _, _) -> DocsParser.processDocs p)
-        let stl = STLGame(folder, FilesScope.All, "", triggers, effects, [], [], [STL STLLang.English], false)
+        let modifiers = SetupLogParser.parseLogsFile "./testfiles/validationtests/setup.log" |> (function |Success(p, _, _) -> SetupLogParser.processLogs p)
+        let stl = STLGame(folder, FilesScope.All, "", triggers, effects, modifiers, [], [STL STLLang.English], false)
         let errors = stl.ValidationErrors |> List.map (fun (c, s, n, l, f) -> Position.UnConv n) //>> (fun p -> FParsec.Position(p.StreamName, p.Index, p.Line, 1L)))
         let testVals = stl.AllEntities |> List.map (fun (e) -> e.filepath, getNodeComments e.entity |> List.map fst)
         printfn "%A" (errors |> List.map (fun f -> f.StreamName))
@@ -127,6 +128,7 @@ let folderTests =
         testFolder "./testfiles/validationtests/interfacetests" "interface"
         testFolder "./testfiles/validationtests/scopetests" "scopes"
         testFolder "./testfiles/validationtests/variabletests" "variables"
+        testFolder "./testfiles/validationtests/modifiertests" "modifiers"
     ]
 // [<Tests>]
 // let tests2 = 

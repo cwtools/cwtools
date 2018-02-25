@@ -304,7 +304,7 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
             let events = entities |> List.choose (function | :? Event as e -> Some e |_ -> None)
             let scriptedTriggers = scriptedTriggers
             let scriptedEffects = scriptedEffects
-            events |> List.map (fun e -> (valEventVals e) <&&> (valEventTriggers (vanillaTriggers @ scriptedTriggers) (vanillaEffects @ scriptedEffects) e) <&&> (valEventEffects (vanillaTriggers @ scriptedTriggers) (vanillaEffects @ scriptedEffects) staticModifiers e))
+            events |> List.map (fun e -> (valEventVals e) <&&> (valEventTriggers (vanillaTriggers @ scriptedTriggers) (vanillaEffects @ scriptedEffects) staticModifiers e) <&&> (valEventEffects (vanillaTriggers @ scriptedTriggers) (vanillaEffects @ scriptedEffects) staticModifiers e))
                    |> List.choose (function |Invalid es -> Some es |_ -> None)
                    |> List.collect id
         let snood = snd
