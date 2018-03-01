@@ -117,10 +117,10 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
         let resources = ResourceManager().Api
 
         let validatableFiles() = resources.ValidatableFiles
-
-        let mutable scriptedTriggers : Effect list = []
-        let mutable scriptedEffects : Effect list = []
-        let mutable staticModifiers : Modifier list = []
+        let lookup = Lookup()
+        // let mutable scriptedTriggers : Effect list = []
+        // let mutable scriptedEffects : Effect list = []
+        // let mutable staticModifiers : Modifier list = []
         let mutable localisationAPIs : ILocalisationAPI list = []
 
         let rec getAllFolders dirs =
@@ -229,7 +229,7 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
                 first <- false
                 ((before |> Set.ofList) = (final |> Set.ofList)) || i > 10
             while (not (ff())) do ()
-            scriptedTriggers <- final
+            lookup.scriptedTriggers <- final
 
 
         let updateScriptedEffects () =
@@ -244,11 +244,11 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
             let ff() = 
                 i <- i + 1
                 let before = final
-                final <- rawEffects |>  List.fold (fun es e -> (STLProcess.getScriptedTriggerScope first EffectType.Effect es scriptedTriggers e) :> Effect::es) final
+                final <- rawEffects |>  List.fold (fun es e -> (STLProcess.getScriptedTriggerScope first EffectType.Effect es lookup.scriptedTriggers e) :> Effect::es) final
                 first <- false
                 ((before |> Set.ofList) = (final |> Set.ofList)) || i > 10
             while (not (ff())) do ()
-            scriptedEffects <- final
+            lookup.scriptedEffects <- final
 
         let updateStaticodifiers () =
             let rawModifiers =
@@ -257,7 +257,7 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
                 |> List.collect (fun n -> n.Children)
                 |> List.rev
             let newModifiers = rawModifiers |> List.fold (fun es e -> (STLProcess.getStaticModifierCategory es e)::es) modifiers
-            staticModifiers <- newModifiers
+            lookup.staticModifiers <- newModifiers
         
         let updateLocalisation() = 
             localisationAPIs <-
@@ -302,9 +302,9 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
             
         let validateEvents (entities : Node list) =
             let events = entities |> List.choose (function | :? Event as e -> Some e |_ -> None)
-            let scriptedTriggers = scriptedTriggers
-            let scriptedEffects = scriptedEffects
-            events |> List.map (fun e -> (valEventVals e) <&&> (valEventTriggers (vanillaTriggers @ scriptedTriggers) (vanillaEffects @ scriptedEffects) staticModifiers e) <&&> (valEventEffects (vanillaTriggers @ scriptedTriggers) (vanillaEffects @ scriptedEffects) staticModifiers e))
+            let scriptedTriggers = lookup.scriptedTriggers
+            let scriptedEffects = lookup.scriptedEffects
+            events |> List.map (fun e -> (valEventVals e) <&&> (valEventTriggers (vanillaTriggers @ scriptedTriggers) (vanillaEffects @ scriptedEffects) lookup.staticModifiers e) <&&> (valEventEffects (vanillaTriggers @ scriptedTriggers) (vanillaEffects @ scriptedEffects) lookup.staticModifiers e))
                    |> List.choose (function |Invalid es -> Some es |_ -> None)
                    |> List.collect id
         let snood = snd
@@ -380,9 +380,11 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
             //         |EntityResource (f, r) ->  r.result |> function |(Fail (result)) -> (r.filepath, false, result.parseTime) |Pass(result) -> (r.filepath, true, result.parseTime)
             //         |FileResource (f, r) ->  (r.filepath, false, 0L))
             //|> List.map (fun r -> r.result |> function |(Fail (result)) -> (r.filepath, false, result.parseTime) |Pass(result) -> (r.filepath, true, result.parseTime))
-        member __.ScripteTriggers = scriptedTriggers
-        member __.ScriptedEffects = scriptedEffects
+        member __.ScripteTriggers = lookup.scriptedTriggers
+        member __.ScriptedEffects = lookup.scriptedEffects
         member __.UpdateFile file = updateFile file
         member __.AllEntities = resources.AllEntities()
+        member __.References = References(resources, lookup)
+       
 
         //member __.ScriptedTriggers = parseResults |> List.choose (function |Pass(f, p, t) when f.Contains("scripted_triggers") -> Some p |_ -> None) |> List.map (fun t -> )
