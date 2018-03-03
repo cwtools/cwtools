@@ -9,5 +9,6 @@ open CWTools.Common.STLConstants
 
 type Lookup() =
     member val scriptedTriggers : Effect list = [] with get, set
+    
     member val scriptedEffects : Effect list = [] with get, set
     member val staticModifiers : Modifier list = [] with get, set

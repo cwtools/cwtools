@@ -1,0 +1,4 @@
+test = {
+    pop_happiness = 10
+    pop_consumer_goods_mult = 20
+}

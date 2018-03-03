@@ -225,14 +225,15 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
             let ff() = 
                 i <- i + 1
                 let before = final
-                final <- rawTriggers |> List.fold (fun ts t -> (STLProcess.getScriptedTriggerScope first EffectType.Trigger ts ts t) :> Effect::ts) final
+                final <- rawTriggers |> List.map (fun t -> (STLProcess.getScriptedTriggerScope first EffectType.Trigger final final t) :> Effect)
                 first <- false
                 ((before |> Set.ofList) = (final |> Set.ofList)) || i > 10
             while (not (ff())) do ()
-            lookup.scriptedTriggers <- final
+            lookup.scriptedTriggers <- final @ vanillaTriggers
 
 
         let updateScriptedEffects () =
+            eprintfn "%A" (resources.AllEntities() |> List.filter (fun f -> f.filepath.Contains("factions_effects")) |> List.collect (fun f -> f.entity.Children) |> List.map (fun f -> f.Key))
             let rawEffects = 
                 resources.AllEntities()
                 |> List.choose (function |f when f.filepath.Contains("scripted_effects") -> Some (f.entity) |_ -> None)
@@ -244,11 +245,11 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
             let ff() = 
                 i <- i + 1
                 let before = final
-                final <- rawEffects |>  List.fold (fun es e -> (STLProcess.getScriptedTriggerScope first EffectType.Effect es lookup.scriptedTriggers e) :> Effect::es) final
+                final <- rawEffects |>  List.map (fun e -> (STLProcess.getScriptedTriggerScope first EffectType.Effect final lookup.scriptedTriggers e) :> Effect)
                 first <- false
                 ((before |> Set.ofList) = (final |> Set.ofList)) || i > 10
             while (not (ff())) do ()
-            lookup.scriptedEffects <- final
+            lookup.scriptedEffects <- final @ vanillaEffects
 
         let updateStaticodifiers () =
             let rawModifiers =
@@ -256,7 +257,7 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
                 |> List.choose (function |f when f.filepath.Contains("static_modifiers") -> Some (f.entity) |_ -> None)
                 |> List.collect (fun n -> n.Children)
                 |> List.rev
-            let newModifiers = rawModifiers |> List.fold (fun es e -> (STLProcess.getStaticModifierCategory es e)::es) modifiers
+            let newModifiers = rawModifiers |> List.map (fun e -> STLProcess.getStaticModifierCategory modifiers e)
             lookup.staticModifiers <- newModifiers
         
         let updateLocalisation() = 
@@ -382,6 +383,7 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
             //|> List.map (fun r -> r.result |> function |(Fail (result)) -> (r.filepath, false, result.parseTime) |Pass(result) -> (r.filepath, true, result.parseTime))
         member __.ScripteTriggers = lookup.scriptedTriggers
         member __.ScriptedEffects = lookup.scriptedEffects
+        member __.StaticModifiers = lookup.staticModifiers
         member __.UpdateFile file = updateFile file
         member __.AllEntities = resources.AllEntities()
         member __.References = References(resources, lookup)

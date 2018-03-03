@@ -100,6 +100,7 @@ module STLConstants =
                     let r1 = x.Name.CompareTo(y.Name)
                     if r1 = 0 then 0 else List.compareWith compare x.Scopes y.Scopes
                 | _ -> invalidArg "yobj" ("cannot compare values of different types" + yobj.GetType().ToString())
+        override x.ToString() = sprintf "%s: %A" x.Name x.Scopes
     
 
     type ScriptedEffect(name, scopes, effectType) =

@@ -11,6 +11,7 @@ open System.IO
 open System.Reflection
 open CWTools.Parser.DocsParser
 open CWTools.Parser.SetupLogParser
+open CWTools.Common.STLConstants
 open System
 
 
@@ -129,6 +130,18 @@ let folderTests =
         testFolder "./testfiles/validationtests/scopetests" "scopes"
         testFolder "./testfiles/validationtests/variabletests" "variables"
         testFolder "./testfiles/validationtests/modifiertests" "modifiers"
+    ]
+
+[<Tests>]
+let specialtests =
+    testList "log" [
+        testCase "modifiers" <| fun () ->
+            let modfile = SetupLogParser.parseLogsFile "./testfiles/scriptedorstatictest/setup.log"
+            (modfile |> (function |Failure(e, _,_) -> eprintfn "%s" e |_ -> ()))
+            let modifiers = (modfile |> (function |Success(p, _, _) -> SetupLogParser.processLogs p))
+            let stl = STLGame("./testfiles/scriptedorstatictest/", FilesScope.All, "", [], [], modifiers, [], [STL STLLang.English], false)
+            let exp = [{tag = "test"; categories = [ModifierCategory.Pop]; core = false}]
+            Expect.equal stl.StaticModifiers exp ""
     ]
 // [<Tests>]
 // let tests2 = 

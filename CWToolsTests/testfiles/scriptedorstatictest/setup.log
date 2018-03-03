@@ -1,0 +1,9 @@
+[16:22:45][game_application.cpp:1274]: Initializing Database: CStaticModifierDatabase
+[16:22:45][modifier.cpp:948]: Static Modifier #91 tag = subterranean_ocean name = Subterranean Ocean
+[16:22:58][buildable_pop.cpp:253]: Missing buildable-pop Localization Key: buildable_robot_pop_3_awoken_build_cost_mult
+[16:22:58][buildable_pop.cpp:253]: Missing buildable-pop Localization Key: buildable_robot_pop_3_awoken_construction_speed_mult
+[16:23:00][modifier.cpp:366]: Printing Modifier Definitions
+[16:23:00][modifier.cpp:370]: [0] Tag: pop_happiness, Categories: 2
+[16:23:00][modifier.cpp:370]: [1] Tag: pop_consumer_goods_mult, Categories: 2
+[16:23:00][modifier.cpp:370]: [2] Tag: pop_consumer_goods_add, Categories: 2
+[16:23:00][modifier.cpp:370]: [3] Tag: biological_pop_happiness, Categories: 2
