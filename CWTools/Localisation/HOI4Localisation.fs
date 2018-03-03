@@ -9,31 +9,44 @@ module HOI4Localisation =
 
     type HOI4LocalisationService(localisationSettings : LocalisationSettings) =
         let localisationFolder : string = localisationSettings.folder
-        let language : CK2Lang =  
-            match localisationSettings.language with
-                | CK2 l -> l
-                | _ -> failwith "Wrong language for localisation"
-        let languageKey =
-            match language with
-            |CK2Lang.English -> "l_english"
-            |CK2Lang.French -> "l_french"
-            |CK2Lang.Spanish -> "l_spanish"
-            |CK2Lang.German -> "l_german"
-            |_ -> failwith "Unknown language enum value"
+        // let language : CK2Lang =  
+        //     match localisationSettings.language with
+        //         | CK2 l -> l
+        //         | _ -> failwith "Wrong language for localisation"
+        // let languageKey =
+        //     match language with
+        //     |CK2Lang.English -> "l_english"
+        //     |CK2Lang.French -> "l_french"
+        //     |CK2Lang.Spanish -> "l_spanish"
+        //     |CK2Lang.German -> "l_german"
+        //     |_ -> failwith "Unknown language enum value"
+        
+        let keyToLanguage =
+            function
+            |"l_english" -> Some CK2Lang.English
+            |"l_french" -> Some CK2Lang.French
+            |"l_spanish" -> Some CK2Lang.Spanish
+            |"l_german" -> Some CK2Lang.German
+            |_ -> None
         let mutable results : IDictionary<string, (bool * int * string)> = upcast new Dictionary<string, (bool * int * string)>()
-        let mutable records : Entry list = []
+        let mutable records : (Entry * Lang) list = []
         let addFile f = 
             match parseLocFile f with
-            | Success({key = key; entries = entries}, _, _) when key = languageKey -> records <- entries@records; (true, entries.Length, "")
-            | Success(v, _, _) -> (true, v.entries.Length, "")
+            | Success({key = key; entries = entries}, _, _) ->
+                match keyToLanguage key with
+                |Some l ->
+                    let es = entries |> List.map (fun e -> e, CK2 l)
+                    records <- es@records; (true, es.Length, "")
+                |None -> (true, entries.Length, "")
             | Failure(msg, _, _) -> (false, 0, msg)
         let addFiles (x : string list) = List.map (fun f -> (f, addFile f)) x
+        let recordsLang (lang : Lang) = records |> List.choose (function |(r, l) when l = lang -> Some r |_ -> None)
 
-        let values = records |> List.map (fun r -> (r.key, r.desc)) |> dict
+        let values l = recordsLang l |> List.map (fun r -> (r.key, r.desc)) |> dict
 
-        let getDesc x = records |> List.tryPick (fun r -> if r.key = x then Some r.desc else None) |> Option.defaultValue x
+        let getDesc l x = recordsLang l |> List.tryPick (fun r -> if r.key = x then Some r.desc else None) |> Option.defaultValue x
 
-        let getKeys = records |> List.map (fun r -> r.key)
+        let getKeys l = recordsLang l |> List.map (fun r -> r.key)
 
         do
             match Directory.Exists(localisationFolder) with
@@ -43,11 +56,11 @@ module HOI4Localisation =
             | false -> ()
 
         //new (settings : CK2Settings) = HOI4LocalisationService(settings.HOI4Directory.localisationDirectory, settings.ck2Language)
-        member __.Api = {
+        member __.Api lang= {
             new ILocalisationAPI with
                 member __.Results = results
-                member __.Values = values
-                member __.GetKeys = getKeys
-                member __.GetDesc x = getDesc x
-                member __.GetLang = CK2 language
+                member __.Values = values lang
+                member __.GetKeys = getKeys lang
+                member __.GetDesc x = getDesc lang x
+                member __.GetLang = lang
             }

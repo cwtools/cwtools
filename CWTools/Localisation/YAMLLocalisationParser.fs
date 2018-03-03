@@ -1,4 +1,5 @@
 namespace CWTools.Localisation
+open CWTools.Common
 
 module YAMLLocalisationParser =
     open FParsec

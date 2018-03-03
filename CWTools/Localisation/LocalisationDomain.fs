@@ -18,5 +18,4 @@ type ILocalisationAPI =
 type LocalisationSettings = 
     {
         folder : string
-        language : Lang
     }

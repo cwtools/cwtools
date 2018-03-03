@@ -12,10 +12,10 @@ module CK2Localisation =
 
     type CK2LocalisationService(localisationSettings : LocalisationSettings) =
         let localisationFolder : string = localisationSettings.folder
-        let language : CK2Lang = 
-            match localisationSettings.language with
-            | CK2 l -> l
-            | _ -> failwith "Wrong language for localisation"
+        // let language : CK2Lang = 
+        //     match localisationSettings.language with
+        //     | CK2 l -> l
+        //     | _ -> failwith "Wrong language for localisation"
         let mutable csv : Runtime.CsvFile<LocalisationEntry.Row> = upcast LocalisationEntry.Parse "#CODE;ENGLISH;FRENCH;GERMAN;;SPANISH;;;;;;;;;x\nPROV1013;Lori;;Lori;;;;;;;;;;;x"
         let mutable csvFallback : Runtime.CsvFile<LocalisationEntryFallback.Row> = upcast LocalisationEntryFallback.Parse "#CODE;ENGLISH;FRENCH;GERMAN;;SPANISH;;;;;;;;;x\nPROV1013;Lori;;Lori;;;;;;;;;;;x"
         let addFile (x : string) =
@@ -48,7 +48,7 @@ module CK2Localisation =
         let mutable results : IDictionary<string, (bool * int * string)> = upcast new Dictionary<string, (bool * int * string)>()
         let addFiles (x : string list) = List.map (fun f -> (f, addFile f)) x
 
-        let getForLang (x : LocalisationEntry.Row) =
+        let getForLang language (x : LocalisationEntry.Row) =
             match language with
             |CK2Lang.English -> x.ENGLISH
             |CK2Lang.French -> x.FRENCH
@@ -56,7 +56,7 @@ module CK2Localisation =
             |CK2Lang.Spanish -> x.SPANISH
             |_ -> x.ENGLISH
                 
-        let getForLangFallback (x : LocalisationEntryFallback.Row) =
+        let getForLangFallback language (x : LocalisationEntryFallback.Row) =
             match language with
             |CK2Lang.English -> x.ENGLISH
             |CK2Lang.French -> x.FRENCH
@@ -66,17 +66,17 @@ module CK2Localisation =
 
         let getKeys = csv.Rows |> Seq.map (fun f -> f.``#CODE``) |> List.ofSeq
 
-        let values = 
-            let one = csv.Rows |> Seq.map(fun f -> (f.``#CODE``, getForLang f))
-            let two = csvFallback.Rows |> Seq.map(fun f -> (f.``#CODE``, getForLangFallback f))
+        let values lang = 
+            let one = csv.Rows |> Seq.map(fun f -> (f.``#CODE``, getForLang lang f))
+            let two = csvFallback.Rows |> Seq.map(fun f -> (f.``#CODE``, getForLangFallback lang f))
             Seq.concat [one; two] |> dict
 
-        let getDesc x =
+        let getDesc lang x =
             let one = csv.Rows |> Seq.tryFind (fun f -> f.``#CODE`` = x) 
             let two = csvFallback.Rows |> Seq.tryFind (fun f -> f.``#CODE`` = x)
             match (one, two) with
-            | (Some x, _) -> getForLang x
-            | (None, Some x) -> getForLangFallback x
+            | (Some x, _) -> getForLang lang x
+            | (None, Some x) -> getForLangFallback lang x
             | _ -> x
         
         do
@@ -91,11 +91,11 @@ module CK2Localisation =
   
         member val Results = results with get, set
 
-        member __.Api = {
+        member __.Api lang = {
             new ILocalisationAPI with
                 member __.Results = results
-                member __.Values = values
+                member __.Values = values lang
                 member __.GetKeys = getKeys
-                member __.GetDesc x = getDesc x
-                member __.GetLang = CK2 language
+                member __.GetDesc x = getDesc lang x
+                member __.GetLang = CK2 lang
             }

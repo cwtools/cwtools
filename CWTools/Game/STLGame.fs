@@ -233,7 +233,6 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
 
 
         let updateScriptedEffects () =
-            eprintfn "%A" (resources.AllEntities() |> List.filter (fun f -> f.filepath.Contains("factions_effects")) |> List.collect (fun f -> f.entity.Children) |> List.map (fun f -> f.Key))
             let rawEffects = 
                 resources.AllEntities()
                 |> List.choose (function |f when f.filepath.Contains("scripted_effects") -> Some (f.entity) |_ -> None)
@@ -262,14 +261,16 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
         
         let updateLocalisation() = 
             localisationAPIs <-
-                let allLocs = locFolders |> List.collect (fun (l, _) -> (STL STLLang.Default :: langs)|> List.map (fun lang -> STLLocalisationService({ folder = l; language = lang}).Api))
+                let locs = locFolders |> List.map (fun (folder, _) -> STLLocalisationService({ folder = folder}))
+                let allLocs = locs |> List.collect (fun l -> (STL STLLang.Default :: langs)|> List.map (fun lang -> l.Api(lang)))
                 match gameDirectory with
                 |Some _ -> allLocs
                 |None ->  
                     allLocs @ (getEmbeddedFiles 
                     |> List.filter (fun (_, fn, _ )-> fn.Contains("localisation"))
                     |> List.map (fun (_, fn, f) -> (fn, f))
-                    |> (fun files -> (STL STLLang.Default :: langs) |> List.map (fun lang -> STLLocalisationService(files, lang).Api)))
+                    |> (fun files -> STLLocalisationService(files))
+                    |> (fun l -> (STL STLLang.Default :: langs) |> List.map (fun lang -> l.Api(lang))))
             //TODO: Add loc from embedded
                 
                     
