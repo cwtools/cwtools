@@ -122,6 +122,7 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
         // let mutable scriptedEffects : Effect list = []
         // let mutable staticModifiers : Modifier list = []
         let mutable localisationAPIs : ILocalisationAPI list = []
+        let mutable localisationErrors : (string * Severity * CWTools.Parser.Position * int * string * string option) list option = None
 
         let rec getAllFolders dirs =
             if Seq.isEmpty dirs then Seq.empty else
@@ -372,7 +373,13 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
         member __.Duplicates = validateDuplicates
         member __.ParserErrors = parseErrors()
         member __.ValidationErrors = (validateAll (resources.ValidatableEntities()))
-        member __.LocalisationErrors= (localisationCheck (resources.ValidatableEntities()))
+        member __.LocalisationErrors= 
+            match localisationErrors with
+            |Some les -> les
+            |None -> 
+                let les = (localisationCheck (resources.ValidatableEntities()))
+                localisationErrors <- Some les
+                les
         //member __.ValidationWarnings = warningsAll
         member __.Folders = allFolders
         member __.AllFiles() = 

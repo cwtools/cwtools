@@ -48,11 +48,15 @@ module ValidationCore =
         static member CustomError = fun error -> { ID = "CW999"; Severity = Severity.Error; Message = error}
     type ValidationResult = 
         | OK
-        | Invalid of (string * Severity * CWTools.Parser.Position * int * string) list
-    let inline inv (code : ErrorCode) (l : ^a) =
+        | Invalid of (string * Severity * CWTools.Parser.Position * int * string * option<string>) list
+
+    let inline invData (code : ErrorCode) (l : ^a) (data : option<string>) =
         let pos = (^a : (member Position : CWTools.Parser.Position) l)
         let key = (^a : (member Key : string) l)
-        code.ID, code.Severity, pos, key.Length, code.Message
+        code.ID, code.Severity, pos, key.Length, code.Message, data
+
+    let inline inv (code : ErrorCode) (l : ^a) =
+        invData code l None
         
     // let inline inv (sev : Severity) (l : ^a) (s : string) = 
     //     let pos = (^a : (member Position : CWTools.Parser.Position) l)
