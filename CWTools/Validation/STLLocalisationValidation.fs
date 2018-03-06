@@ -18,13 +18,13 @@ module STLLocalisationValidation =
 
     let checkLocKey (leaf : Leaf) (keys : Set<string>) (lang : Lang) key =
         if lang = STL STLLang.Default then OK else
-        match key = "" || key.Contains(" "), Set.contains key keys with
+        match key = "" || key.Contains(" ") || (key.StartsWith("[") && key.EndsWith("]")), Set.contains key keys with
         | true, _ -> OK
         | _, true -> OK
         | _, false -> Invalid [invData (ErrorCodes.MissingLocalisation key (lang :> obj)) leaf (Some key)]
 
     let checkLocName (leaf : Leaf) (keys : Set<string>) (lang : Lang) key  =
-        match key = "" || key.Contains(" "), Set.contains key keys with
+        match key = "" || key.Contains(" ") || (key.StartsWith("[") && key.EndsWith("]")), Set.contains key keys with
         | true, _ -> OK
         | _, true -> OK
         | _, false -> Invalid [invData (ErrorCodes.MissingLocalisation key (lang :> obj)) leaf (Some key)]
@@ -61,7 +61,7 @@ module STLLocalisationValidation =
 
     let checkLocNode (keys : Set<string>) (lang : Lang) key (node : Node) =
         if lang = STL STLLang.Default then OK else
-            match key = "" || key.Contains(" "), Set.contains key keys with
+            match key = "" || key.Contains(" ") || (key.StartsWith("[") && key.EndsWith("]")), Set.contains key keys with
             | true, _ -> OK
             | _, true -> OK
             | _, false -> Invalid [invData (ErrorCodes.MissingLocalisation key (lang :> obj)) node (Some key)]

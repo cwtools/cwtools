@@ -19,6 +19,13 @@ tech_engineering_industry_1201 = {
           title = "test_required"
           desc = "test_required"
        }
+       a = {
+           desc = "[something]"
+       }
+       b ={
+           #error a
+           desc = "[test"
+       }
     }
     weight = 100
     
