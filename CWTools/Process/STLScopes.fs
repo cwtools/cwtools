@@ -90,6 +90,7 @@ module STLScopes =
 // this
 // event_target:
 // parameter:
+    let defaultDesc = "Scope (/context) switch"
     let scopedEffects = [
         ScopedEffect("space_owner", [Scope.GalacticObject; Scope.Planet], Scope.Country, EffectType.Both, "", ""); //Planet from MoreEventsMod
         ScopedEffect("overlord", [Scope.Country], Scope.Country, EffectType.Both, "", "");

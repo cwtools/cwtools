@@ -133,6 +133,8 @@ module STLValidation =
     
     let valTriggerLeaf (triggers : Effect list) (modifiers : Modifier list) (scopes : ScopeContext) (leaf : Leaf) =
         match triggers |> List.tryFind (fun e -> e.Name.ToLower() = leaf.Key.ToLower()) with
+        //match triggers |> List.tryPick (function | :? ScopedEffect as e when e.Name.ToLower() = leaf.Key.ToLower() -> None |e when e.Name.ToLower() = leaf.Key.ToLower() -> Some e |_ -> None) with
+        |Some (:? ScopedEffect as e) -> Invalid [inv (ErrorCodes.IncorrectScopeAsLeaf (e.Name) (leaf.Value.ToRawString())) leaf]
         |Some e ->
             if e.Scopes |> List.contains(scopes.CurrentScope) || scopes.CurrentScope = Scope.Any
             then valTriggerLeafUsage modifiers scopes leaf
@@ -141,6 +143,8 @@ module STLValidation =
 
     let valEffectLeaf (effects : Effect list) (modifiers : Modifier list) (scopes : ScopeContext) (leaf : Leaf) =
         match effects |> List.tryFind (fun e -> e.Name.ToLower() = leaf.Key.ToLower()) with
+        //match effects |> List.tryPick (function | :? ScopedEffect as e when e.Name.ToLower() = leaf.Key.ToLower() -> None |e when e.Name.ToLower() = leaf.Key.ToLower() -> Some e |_ -> None) with
+            |Some (:? ScopedEffect as e) -> Invalid [inv (ErrorCodes.IncorrectScopeAsLeaf (e.Name) (leaf.Value.ToRawString())) leaf]
             |Some e ->
                 if e.Scopes |> List.contains(scopes.CurrentScope) || scopes.CurrentScope = Scope.Any
                 then valEffectLeafUsage modifiers scopes leaf
