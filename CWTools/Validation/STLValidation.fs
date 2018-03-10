@@ -156,7 +156,7 @@ module STLValidation =
         |LeafC leaf -> valTriggerLeaf triggers modifiers scopes leaf
         |NodeC node ->
             match node.Key with
-            |x when STLProcess.toTriggerKeys @ STLProcess.toTriggerBlockKeys |> List.contains (x.ToLower()) ->
+            |x when STLProcess.toTriggerBlockKeys |> List.contains (x.ToLower()) ->
                 valNodeTriggers root triggers effects modifiers scopes node
             // |x when STLProcess.isTargetKey x ->  
             //     valNodeTriggers root triggers effects Scope.Any node
@@ -184,7 +184,7 @@ module STLValidation =
         |LeafC leaf -> valEffectLeaf effects modifiers scopes leaf
         |NodeC node ->
             match node.Key with
-            |x when STLProcess.toTriggerKeys @ STLProcess.toTriggerBlockKeys |> List.contains x ->
+            |x when STLProcess.toTriggerBlockKeys |> List.contains x ->
                 valNodeTriggers root triggers effects modifiers scopes node
             // |x when STLProcess.isTargetKey x ->
             //     OK //Handle later

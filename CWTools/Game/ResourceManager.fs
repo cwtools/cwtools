@@ -95,7 +95,7 @@ type ResourceManager () =
     let parseFiles (files : ResourceInput list) = 
         let mapf =
             function
-            |EntityResourceInput e -> e |> ((fun f -> f.scope, f.filepath, f.validate, (fun (t, t2) -> duration (fun () -> CKParser.parseString t t2)) (f.filepath, f.filetext)) >> matchResult)
+            |EntityResourceInput e -> e |> ((fun f -> f.scope, f.filepath, f.validate, (fun (t, t2) -> duration (fun () -> CKParser.parseString t2 t)) (f.filepath, f.filetext)) >> matchResult)
             |FileResourceInput f -> FileResource (f.filepath, { scope = f.scope; filepath = f.filepath })
         files |> PSeq.map mapf |> PSeq.toList
             // files |> PSeq.map ((fun f -> f.scope, f.filepath, f.validate, (fun (t, t2) -> duration (fun () -> CKParser.parseString t t2)) (f.filepath, f.filetext)) >> matchResult)

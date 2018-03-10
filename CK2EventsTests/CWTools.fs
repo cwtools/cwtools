@@ -64,7 +64,7 @@ let processTests =
         //     List.iter (fun d -> printfn "%A" d |> ignore) duplicates
 
         testCase "STLGame ship validation" <| fun () ->
-            let game = STLGame("CK2EventsTests/stellaris", FilesScope.All, "", [], [], [], [], false)
+            let game = STLGame("CK2EventsTests/stellaris", FilesScope.All, "", [], [], [], [], [], false)
             let errors = game.ValidationErrors
             Expect.hasCountOf errors 2u (fun _ -> true) "Not enough errors"
             //errors |> List.iter (fun (s, e) -> printfn "%A" (s.ToRaw |> CKPrinter.api.prettyPrintStatements, e, s.Position) |> ignore)

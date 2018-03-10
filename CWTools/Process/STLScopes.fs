@@ -92,48 +92,48 @@ module STLScopes =
 // parameter:
     let defaultDesc = "Scope (/context) switch"
     let scopedEffects = [
-        ScopedEffect("space_owner", [Scope.GalacticObject; Scope.Planet], Scope.Country, EffectType.Both, "", ""); //Planet from MoreEventsMod
-        ScopedEffect("overlord", [Scope.Country], Scope.Country, EffectType.Both, "", "");
-        ScopedEffect("defender", [Scope.War], Scope.Country, EffectType.Both, "", "");
-        ScopedEffect("attacker", [Scope.War], Scope.Country, EffectType.Both, "", "");
-        ScopedEffect("owner", [Scope.Ship; Scope.Pop; Scope.Fleet; Scope.Planet; Scope.PopFaction; Scope.Sector; Scope.Leader; Scope.Country; Scope.Starbase], Scope.Country, EffectType.Both, "", ""); //Fleet, Planet, PopFaction, Sector, Leader, Country from vanilla use
+        ScopedEffect("space_owner", [Scope.GalacticObject; Scope.Planet], Scope.Country, EffectType.Both, defaultDesc, ""); //Planet from MoreEventsMod
+        ScopedEffect("overlord", [Scope.Country], Scope.Country, EffectType.Both, defaultDesc, "");
+        ScopedEffect("defender", [Scope.War], Scope.Country, EffectType.Both, defaultDesc, "");
+        ScopedEffect("attacker", [Scope.War], Scope.Country, EffectType.Both, defaultDesc, "");
+        ScopedEffect("owner", [Scope.Ship; Scope.Pop; Scope.Fleet; Scope.Planet; Scope.PopFaction; Scope.Sector; Scope.Leader; Scope.Country; Scope.Starbase], Scope.Country, EffectType.Both, "", ""); //Fleet, Planet, PopFaction, Sector, Leader, Country from defaultDescnilla use
         ScopedEffect("controller", [Scope.Planet], Scope.Country, EffectType.Both, "", ""); //Planet from vanilla use
-        ScopedEffect("planet_owner", [Scope.Planet], Scope.Country, EffectType.Both, "", "");
-        ScopedEffect("last_created_country", allScopes, Scope.Country, EffectType.Both, "", "");
-        ScopedEffect("last_refugee_country", [], Scope.Country, EffectType.Both, "", "");
-        ScopedEffect("leader", [Scope.Ship; Scope.Planet; Scope.Country; Scope.PopFaction; Scope.Fleet], Scope.Leader, EffectType.Both, "", ""); //PopFaction, Fleet from vanilla use
-        ScopedEffect("last_created_leader", allScopes, Scope.Leader, EffectType.Both, "", "");
-        ScopedEffect("ruler", [Scope.Country], Scope.Leader, EffectType.Both, "", "");
-        ScopedEffect("heir", [], Scope.Leader, EffectType.Both, "", "");
+        ScopedEffect("planet_owner", [Scope.Planet], Scope.Country, EffectType.Both, defaultDesc, "");
+        ScopedEffect("last_created_country", allScopes, Scope.Country, EffectType.Both, defaultDesc, "");
+        ScopedEffect("last_refugee_country", [], Scope.Country, EffectType.Both, defaultDesc, "");
+        ScopedEffect("leader", [Scope.Ship; Scope.Planet; Scope.Country; Scope.PopFaction; Scope.Fleet], Scope.Leader, EffectType.Both, "", ""); //PopFaction, Fleet from vannilla use
+        ScopedEffect("last_created_leader", allScopes, Scope.Leader, EffectType.Both, defaultDesc, "");
+        ScopedEffect("ruler", [Scope.Country], Scope.Leader, EffectType.Both, defaultDesc, "");
+        ScopedEffect("heir", [], Scope.Leader, EffectType.Both, defaultDesc, "");
         ScopedEffect("solar_system", [Scope.Ship; Scope.Planet; Scope.Country; Scope.Fleet; Scope.AmbientObject], Scope.GalacticObject, EffectType.Both, "", ""); //Fleet, Ambient object from vanilla use
-        ScopedEffect("last_created_system", allScopes, Scope.GalacticObject, EffectType.Both, "", "");
-        ScopedEffect("planet", [Scope.Pop; Scope.Tile; Scope.Planet], Scope.Planet, EffectType.Both, "", "");
-        ScopedEffect("capital_scope", [Scope.Country], Scope.Planet, EffectType.Both, "", "");
-        ScopedEffect("orbit", [Scope.Fleet; Scope.Ship], Scope.Planet, EffectType.Both, "", "");
-        ScopedEffect("home_planet", [Scope.Country; Scope.Species; Scope.Planet], Scope.Planet, EffectType.Both, "", "");
-        ScopedEffect("star", [Scope.Planet; Scope.Ship; Scope.Fleet; Scope.AmbientObject; Scope.Megastructure; Scope.GalacticObject; Scope.Starbase], Scope.Planet, EffectType.Both, "", "");
-        ScopedEffect("last_created_ship", allScopes, Scope.Ship, EffectType.Both, "", "");
-        ScopedEffect("spaceport", [Scope.Planet], Scope.Fleet, EffectType.Both, "", "");
-        ScopedEffect("mining_station", [Scope.Planet], Scope.Fleet, EffectType.Both, "", "");
-        ScopedEffect("research_station", [Scope.Planet], Scope.Fleet, EffectType.Both, "", "");
-        ScopedEffect("last_created_fleet", allScopes, Scope.Fleet, EffectType.Both, "", "");
-        ScopedEffect("fleet", [Scope.Ship; Scope.Starbase], Scope.Fleet, EffectType.Both, "", "");
-        ScopedEffect("pop", [Scope.Tile], Scope.Pop, EffectType.Both, "", "");
-        ScopedEffect("last_created_pop", allScopes, Scope.Pop, EffectType.Both, "", "");
-        ScopedEffect("last_created_ambient_object", allScopes, Scope.AmbientObject, EffectType.Both, "", "");
-        ScopedEffect("last_created_army", allScopes, Scope.Army, EffectType.Both, "", "");
-        ScopedEffect("tile", [Scope.Pop], Scope.Tile, EffectType.Both, "", "");
-        ScopedEffect("orbital_deposit_tile", [Scope.Planet], Scope.Tile, EffectType.Both, "", "");
-        ScopedEffect("best_tile_for_pop", [Scope.Planet], Scope.Tile, EffectType.Both, "", "");
-        ScopedEffect("owner_species", [Scope.Country], Scope.Species, EffectType.Both, "", "");
-        ScopedEffect("last_created_species", allScopes, Scope.Species, EffectType.Both, "", "");
-        ScopedEffect("species", [Scope.Country; Scope.Ship; Scope.Leader; Scope.Pop], Scope.Species, EffectType.Both, "", "");
-        ScopedEffect("pop_faction", [Scope.Pop], Scope.PopFaction, EffectType.Both, "", "");
-        ScopedEffect("last_created_pop_faction", allScopes, Scope.PopFaction, EffectType.Both, "", "");
-        ScopedEffect("core_sector", [], Scope.Sector, EffectType.Both, "", "");
-        ScopedEffect("sector", [Scope.Planet], Scope.Sector, EffectType.Both, "", "");
-        ScopedEffect("alliance", [], Scope.Alliance, EffectType.Both, "", "");
-        ScopedEffect("starbase", [Scope.GalacticObject; Scope.Planet], Scope.Starbase, EffectType.Both, "", "");
+        ScopedEffect("last_created_system", allScopes, Scope.GalacticObject, EffectType.Both, defaultDesc, "");
+        ScopedEffect("planet", [Scope.Pop; Scope.Tile; Scope.Planet], Scope.Planet, EffectType.Both, defaultDesc, "");
+        ScopedEffect("capital_scope", [Scope.Country], Scope.Planet, EffectType.Both, defaultDesc, "");
+        ScopedEffect("orbit", [Scope.Fleet; Scope.Ship], Scope.Planet, EffectType.Both, defaultDesc, "");
+        ScopedEffect("home_planet", [Scope.Country; Scope.Species; Scope.Planet], Scope.Planet, EffectType.Both, defaultDesc, "");
+        ScopedEffect("star", [Scope.Planet; Scope.Ship; Scope.Fleet; Scope.AmbientObject; Scope.Megastructure; Scope.GalacticObject; Scope.Starbase], Scope.Planet, EffectType.Both, defaultDesc, "");
+        ScopedEffect("last_created_ship", allScopes, Scope.Ship, EffectType.Both, defaultDesc, "");
+        ScopedEffect("spaceport", [Scope.Planet], Scope.Fleet, EffectType.Both, defaultDesc, "");
+        ScopedEffect("mining_station", [Scope.Planet], Scope.Fleet, EffectType.Both, defaultDesc, "");
+        ScopedEffect("research_station", [Scope.Planet], Scope.Fleet, EffectType.Both, defaultDesc, "");
+        ScopedEffect("last_created_fleet", allScopes, Scope.Fleet, EffectType.Both, defaultDesc, "");
+        ScopedEffect("fleet", [Scope.Ship; Scope.Starbase], Scope.Fleet, EffectType.Both, defaultDesc, "");
+        ScopedEffect("pop", [Scope.Tile], Scope.Pop, EffectType.Both, defaultDesc, "");
+        ScopedEffect("last_created_pop", allScopes, Scope.Pop, EffectType.Both, defaultDesc, "");
+        ScopedEffect("last_created_ambient_object", allScopes, Scope.AmbientObject, EffectType.Both, defaultDesc, "");
+        ScopedEffect("last_created_army", allScopes, Scope.Army, EffectType.Both, defaultDesc, "");
+        ScopedEffect("tile", [Scope.Pop], Scope.Tile, EffectType.Both, defaultDesc, "");
+        ScopedEffect("orbital_deposit_tile", [Scope.Planet], Scope.Tile, EffectType.Both, defaultDesc, "");
+        ScopedEffect("best_tile_for_pop", [Scope.Planet], Scope.Tile, EffectType.Both, defaultDesc, "");
+        ScopedEffect("owner_species", [Scope.Country], Scope.Species, EffectType.Both, defaultDesc, "");
+        ScopedEffect("last_created_species", allScopes, Scope.Species, EffectType.Both, defaultDesc, "");
+        ScopedEffect("species", [Scope.Country; Scope.Ship; Scope.Leader; Scope.Pop], Scope.Species, EffectType.Both, defaultDesc, "");
+        ScopedEffect("pop_faction", [Scope.Pop], Scope.PopFaction, EffectType.Both, defaultDesc, "");
+        ScopedEffect("last_created_pop_faction", allScopes, Scope.PopFaction, EffectType.Both, defaultDesc, "");
+        ScopedEffect("core_sector", [], Scope.Sector, EffectType.Both, defaultDesc, "");
+        ScopedEffect("sector", [Scope.Planet], Scope.Sector, EffectType.Both, defaultDesc, "");
+        ScopedEffect("alliance", [], Scope.Alliance, EffectType.Both, defaultDesc, "");
+        ScopedEffect("starbase", [Scope.GalacticObject; Scope.Planet], Scope.Starbase, EffectType.Both, defaultDesc, "");
     ]
     let relativeScopes =
         ["root", Scope.Any, Scope.Any;
@@ -487,6 +487,10 @@ module STLScopes =
         "PREVPREV", prev >> prev;
         "PREVPREVPREV", prev >> prev >> prev;
         "PREVPREVPREVPREV", prev >> prev >> prev >> prev
+        "AND", id;
+        "OR", id;
+        "NOR", id;
+        "NOT", id;
     ]
     let changeScope (effects : Effect list) (triggers : Effect list) (key : string) (source : ScopeContext) = 
         let key = if key.StartsWith("hidden:") then key.Substring(7) else key

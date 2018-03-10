@@ -33,16 +33,22 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
                     "common/ambient_objects";
                     "common/anomalies";
                     "common/armies";
-                    "common/army_attachments";
+                    "common/army_attachments"; //Removed in 2.0?
+                    "common/ascension_perks";
                     "common/attitudes";
+                    "common/bombardment_stances";
                     "common/buildable_pops";
+                    "common/building_tags";
                     "common/buildings";
                     "common/button_effects";
+                    "common/bypass";
+                    "common/casus_belli";
                     "common/colors";
-                    "common/component_flags";
+                    "common/component_flags"; //Removed in 2.0?
                     "common/component_sets";
                     "common/component_tags";
                     "common/component_templates";
+                    "common/country_customization";
                     "common/country_types";
                     //"common/defines";
                     "common/deposits";
@@ -58,8 +64,10 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
                     "common/governments/civics";
                     "common/graphical_culture";
                     "common/mandates";
+                    "common/map_modes";
                     "common/megastructures";
                     "common/name_lists";
+                    "common/notification_modifiers";
                     "common/observation_station_missions";
                     "common/on_actions";
                     "common/opinion_modifiers";
@@ -71,6 +79,7 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
                     "common/precursor_civilizations";
                     "common/random_names";
                     "common/scripted_effects";
+                    "common/scripted_loc";
                     "common/scripted_triggers";
                     "common/scripted_variables";
                     "common/section_templates";
@@ -78,24 +87,32 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
                     "common/ship_behaviors";
                     "common/ship_sizes";
                     "common/solar_system_initializers";
-                    "common/spaceport_modules";
                     "common/special_projects";
+                    "common/species_archetypes";
                     "common/species_classes";
-                    "common/species_rights";
                     "common/species_names";
+                    "common/species_rights";
+                    "common/star_classes";
+                    "common/starbase_building";
+                    "common/starbase_levels";
+                    "common/starbase_modules";
+                    "common/starbase_types";
+                    "common/spaceport_modules"; //Removed in 2.0
                     "common/start_screen_messages";
                     "common/static_modifiers";
                     "common/strategic_resources";
                     "common/subjects";
+                    "common/system_types";
                     "common/technology";
                     "common/terraform";
                     "common/tile_blockers";
-                    "common/traditions";
                     "common/tradition_categories";
+                    "common/traditions";
                     "common/traits";
-                    "common/triggered_modifiers";
-                    "common/war_demand_counters";
-                    "common/war_demand_types";
+                    "common/triggered_modifiers"; //Removed in 2.0
+                    "common/war_demand_counters"; //Removed in 2.0
+                    "common/war_demand_types"; //Removed in 2.0
+                    "common/war_goals";
                     "events";
                     "map/galaxy";
                     "map/setup_scenarios";

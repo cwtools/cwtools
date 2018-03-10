@@ -90,12 +90,52 @@ type PrinterAPI =
 
 module CKParser =
 
+    let (<!>) (p: Parser<_,_>) label : Parser<_,_> =
+        fun stream ->
+            printfn "%A: Entering %s" stream.Position label
+            let reply = p stream
+            printfn "%A: Leaving %s (%A)" stream.Position label reply.Status
+            reply
+
+    let betweenL (popen: Parser<_,_>) (pclose: Parser<_,_>) (p: Parser<_,_>) label =
+        let expectedLabel = expected label
+        let notClosedError (pos: FParsec.Position) =
+         messageError (sprintf "The %s opened at %s was not closed."
+                               label (pos.ToString()))
+        fun (stream: CharStream<_>) ->
+        // The following code might look a bit complicated, but that's mainly
+        // because we manually apply three parsers in sequence and have to merge
+        // the errors when they refer to the same parser state.
+        let state0 = stream.State
+        let reply1 = popen stream
+        if reply1.Status = Ok then
+          let stateTag1 = stream.StateTag
+          let reply2 = p stream
+          let error2 = if stateTag1 <> stream.StateTag then reply2.Error
+                       else mergeErrors reply1.Error reply2.Error
+          if reply2.Status = Ok then
+            let stateTag2 = stream.StateTag
+            let reply3 = pclose stream
+            let error3 = if stateTag2 <> stream.StateTag then reply3.Error
+                         else mergeErrors error2 reply3.Error
+            if reply3.Status = Ok then
+              Reply(Ok, reply2.Result, error3)
+            else
+              Reply(reply3.Status,
+                    mergeErrors error3 (notClosedError (state0.GetPosition(stream))))
+          else
+            Reply(reply2.Status, reply2.Error)
+        else
+          let error = if state0.Tag <> stream.StateTag then reply1.Error
+                      else expectedLabel
+          Reply(reply1.Status, error)
+
     // Sets of chars
     // =======
     let whitespaceTextChars = " \t\r\n"
     let norseChars =['ö';'ð';'æ';'ó';'ä';'Þ';'Å';'Ö']
     let idchar = letter <|> digit <|> anyOf ['_'; ':'; '@'; '.'; '\"'; '-'; ''']
-    let valuechar = letter <|> digit <|> anyOf (['_'; '.'; '-'; ':'; '\''; '['; ']'; '@';'''; '+'; '`'; '%'] @ ['š'; 'Š'; '’'])
+    let valuechar = letter <|> digit <|> anyOf (['_'; '.'; '-'; ':'; '\''; '['; ']'; '@';'''; '+'; '`'; '%'; '/'] @ ['š'; 'Š'; '’'])
 
 
     // Utility parsers
@@ -105,7 +145,7 @@ module CKParser =
     let strSkip s = skipString s .>> ws <?> ("skip string " + s)
     let ch c = pchar c .>> ws <?> ("char " + string c)
     let chSkip c = skipChar c .>> ws <?> ("skip char " + string c)
-    let clause inner = between (chSkip '{' <?> "opening brace") (chSkip '}' <?> "closing brace") inner
+    let clause inner = betweenL (chSkip '{' <?> "opening brace") (chSkip '}' <?> "closing brace") inner "clause"
     let quotedCharSnippet = many1Satisfy (fun c -> c <> '\\' && c <> '"')
     let escapedChar = pstring "\\\"" |>> string
 
@@ -128,7 +168,8 @@ module CKParser =
     let valueI = pint64 .>> notFollowedBy (valuechar) .>> ws |>> int |>> Int
     let valueF = pfloat .>> notFollowedBy (valuechar) .>> ws |>> float |>> Float     
 
-    let hsv = strSkip "hsv" >>. clause (pipe3 valueF valueF valueF (fun a b c -> Clause [Statement.Value a;Statement.Value b; Statement.Value c]))          
+    let hsv = strSkip "hsv" >>. clause (pipe3 valueF valueF valueF (fun a b c -> Clause [Statement.Value a;Statement.Value b; Statement.Value c])) 
+    let rgb = strSkip "rgb" >>. clause (pipe3 valueI valueI valueI (fun a b c -> Clause [Statement.Value a;Statement.Value b; Statement.Value c])) 
 
     // Complex types
     // =======
@@ -142,12 +183,15 @@ module CKParser =
     
     let valueClause = clause (many statement) |>> Clause <?> "statement clause"
 
-    do valueimpl := valueQ <|> (attempt valueBlock) <|> valueClause <|> (attempt valueB) <|> (attempt valueI) <|> (attempt valueF) <|> (attempt hsv) <|> valueS  <?> "value"
+    do valueimpl := valueQ <|> (attempt valueBlock) <|> valueClause <|> (attempt valueB) <|> (attempt valueI) <|> (attempt valueF) <|> (attempt hsv) <|> (attempt rgb) <|> valueS  <?> "value"
     
     do keyvalueimpl := pipe3 (getPosition) ((keyQ <|> key) .>> operator) (value) (fun pos id value -> KeyValue(PosKeyValue(Position pos, KeyValueItem(id, value))))
     let alle = ws >>. many statement .>> eof |>> (fun f -> (EventFile f : EventFile))
     //let all = ws >>. attempt (many statement) <|> (many1 ((value |>> Value) <|> (comment |>> Comment))) .>> eof
-    let all = ws >>. many statement .>> eof
+    let valuelist = many1 (attempt (value |>> Value) <|> (comment |>> Comment)) .>> eof
+    let statementlist = (many statement) .>> eof
+    let all = ws >>. ((attempt valuelist) <|> statementlist)
+    //let all = ws >>. (attempt( (many1 (attempt (value |>> Value) <|> (comment |>> Comment))) <!> "valuelist") <|> ((many statement) <!> "statementlist")) .>> eof
     let parseEventFile filepath = runParserOnFile alle () filepath (System.Text.Encoding.GetEncoding(1252))
 
     let internal applyParser (parser: Parser<'Result,'UserState>) (stream: CharStream<'UserState>) =
@@ -177,7 +221,7 @@ module CKParser =
     let parseString fileString filename =
         let inner = (fun (file, name) -> runParserOnString all () name file)
         let hash = (fun (file, name) -> file.GetHashCode(), name)
-        (memoize hash inner) (filename, fileString)
+        (memoize hash inner) (fileString, filename)
     let parseEventString fileString fileName =
         let inner = (fun (file, name) -> runParserOnString alle () name file)
         let hash = (fun (file, name) -> file.GetHashCode(), name)
@@ -193,7 +237,7 @@ module CKParser =
             parseFile = parseEventFile
             parseString = parseEventString
         }
-
+   
 module CKPrinter =
     let tabs n = String.replicate n "\t"
 

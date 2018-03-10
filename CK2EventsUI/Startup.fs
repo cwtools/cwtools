@@ -37,10 +37,10 @@ type Startup private () =
             let appsettings = provider.GetService<AppSettings>()
             let settings = provider.GetService<CK2Settings>()
             match appsettings.currentGame with
-            |Game.CK2 -> CK2LocalisationService({ folder = settings.CK2Directory.localisationDirectory; language = Lang.CK2 settings.ck2Language}).Api
-            |Game.EU4 -> EU4LocalisationService({ folder = settings.EU4Directory.localisationDirectory; language = Lang.CK2 settings.ck2Language}).Api
-            |Game.HOI4 -> HOI4LocalisationService({ folder = settings.HOI4Directory.localisationDirectory; language = Lang.CK2 settings.ck2Language}).Api
-            |Game.STL -> STLLocalisationService({ folder = settings.STLDirectory.localisationDirectory; language = Lang.STL settings.stlLanguage}).Api
+            |Game.CK2 -> CK2LocalisationService({ folder = settings.CK2Directory.localisationDirectory}).Api (settings.ck2Language)
+            |Game.EU4 -> EU4LocalisationService({ folder = settings.EU4Directory.localisationDirectory}).Api (Lang.CK2 settings.ck2Language)
+            |Game.HOI4 -> HOI4LocalisationService({ folder = settings.HOI4Directory.localisationDirectory}).Api (Lang.CK2 settings.ck2Language)
+            |Game.STL -> STLLocalisationService({ folder = settings.STLDirectory.localisationDirectory}).Api (Lang.STL settings.stlLanguage)
             | x -> failwith ("Unknown game enum value " + x.ToString())
             ) |> ignore
 

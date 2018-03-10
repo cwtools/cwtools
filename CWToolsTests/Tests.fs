@@ -66,12 +66,14 @@ let parseEntities validfiles =
 let tests =
     testList "localisation" [
         testList "no loc" [
-                let stl = STLGame("./testfiles/localisationtests/gamefiles", FilesScope.All, "", [], [], [], [], [STL STLLang.English], false)
+                let stl = STLGame("./testfiles/localisationtests/gamefiles", FilesScope.All, "", [], [], [], [], [STL STLLang.English], true)
+                let parseErrors = stl.ParserErrors
                 let errors = stl.LocalisationErrors |> List.map (fun (c, s, n, l, f, k) -> Position.UnConv n)
                 let entities = stl.AllEntities
                 let testLocKeys = entities |> List.map (fun e -> e.filepath, getLocTestInfo e.entity)
                 let nodeComments = entities |> List.collect (fun e -> getNodeComments e.entity) |> List.map fst
-                
+                yield testCase ("parse") <| fun () -> Expect.isEmpty parseErrors (parseErrors |> List.tryHead |> Option.map (sprintf "%A") |> Option.defaultValue "")
+                yield testCase ("parse2") <| fun () -> Expect.isEmpty stl.ParserErrors (stl.ParserErrors |> List.tryHead |> Option.map (sprintf "%A") |> Option.defaultValue "")
                 //eprintfn "%A" testLocKeys
                 // eprintfn "%A" entities
                 //eprintfn "%A" errors
@@ -91,6 +93,9 @@ let tests =
                 
                 let locfiles = "localisation/l_english.yml", File.ReadAllText("./testfiles/localisationtests/localisation/l_english.yml")
                 let stl = STLGame("./testfiles/localisationtests/gamefiles", FilesScope.All, "", [], [], [], [locfiles], [STL STLLang.English], false)
+                let parseErrors = stl.ParserErrors
+                yield testCase ("parse") <| fun () -> Expect.isEmpty parseErrors (parseErrors |> List.tryHead |> Option.map (sprintf "%A") |> Option.defaultValue "")
+
                 let errors = stl.LocalisationErrors |> List.map (fun (c, s, n, l, f, k) -> Position.UnConv n)
                 let testLocKeys = stl.AllEntities |> List.map (fun e -> e.filepath, getLocTestInfo e.entity)
                 let inner (file, ((req : FParsec.Position list), (noreq : FParsec.Position list), (nodekeys : FParsec.Position list) ))=
