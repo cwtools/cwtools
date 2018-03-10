@@ -5,6 +5,7 @@ open FParsec
 open System.IO
 open CWTools.Parser
 open CWTools.Process.STLProcess
+open CWTools.Process.STLScopes
 
 type References(resourceManager : IResourceAPI, lookup : Lookup) =
     let entities() = resourceManager.AllEntities() |> List.map (fun e -> e.entity)
@@ -20,3 +21,4 @@ type References(resourceManager : IResourceAPI, lookup : Lookup) =
     member __.ModifierNames = modifiers()
     member __.TriggerNames = triggers()
     member __.EffectNames = effects()
+    member __.ScopeNames = oneToOneScopes |> List.map (fun (n, _) -> n)
