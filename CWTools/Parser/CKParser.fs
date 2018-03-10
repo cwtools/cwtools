@@ -168,8 +168,12 @@ module CKParser =
     let valueI = pint64 .>> notFollowedBy (valuechar) .>> ws |>> int |>> Int
     let valueF = pfloat .>> notFollowedBy (valuechar) .>> ws |>> float |>> Float     
 
-    let hsv = strSkip "hsv" >>. clause (pipe3 valueF valueF valueF (fun a b c -> Clause [Statement.Value a;Statement.Value b; Statement.Value c])) 
-    let rgb = strSkip "rgb" >>. clause (pipe3 valueI valueI valueI (fun a b c -> Clause [Statement.Value a;Statement.Value b; Statement.Value c])) 
+    let hsv3 = clause (pipe3 valueF valueF valueF (fun a b c -> Clause [Statement.Value a;Statement.Value b; Statement.Value c]))
+    let hsv4 = clause (pipe4 valueF valueF valueF valueF (fun a b c d -> Clause [Statement.Value a;Statement.Value b; Statement.Value c; Statement.Value d]))
+    let hsv = strSkip "hsv" >>. ((attempt hsv4) <|> hsv3)
+    let rgb3 = clause (pipe3 valueI valueI valueI (fun a b c -> Clause [Statement.Value a;Statement.Value b; Statement.Value c])) 
+    let rgb4 = clause (pipe4 valueI valueI valueI valueI (fun a b c d -> Clause [Statement.Value a;Statement.Value b; Statement.Value c; Statement.Value d])) 
+    let rgb = strSkip "rgb" >>. ((attempt rgb4) <|> rgb3)
 
     // Complex types
     // =======
