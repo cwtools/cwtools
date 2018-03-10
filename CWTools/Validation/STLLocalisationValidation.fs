@@ -105,12 +105,13 @@ module STLLocalisationValidation =
             let inner =
                 fun (event : Node) ->
                     let titles = event.Leafs "title" |> List.ofSeq |> List.map (checkLocKeys keys) |> List.fold (<&&>) OK
+                    let desc = event.Leafs "desc" |> List.ofSeq |> List.map (checkLocKeys keys) |> List.fold (<&&>) OK
                     let options = event.Childs "option" |> List.ofSeq
                                                         |> List.collect (fun o -> o.Leafs "name" |> List.ofSeq |> List.map (checkLocKeys keys))
                                                         |> List.fold (<&&>) OK                
                     let usedKeys = event.Children |> List.fold (fun s c -> s <&&> (getLocKeys keys ["desc"; "text"; "custom_tooltip"; "fail_text"; "response_text"] c)) OK
                     let nameres = valEventNameLocs keys event
-                    titles <&&> options <&&> usedKeys <&&> nameres
+                    titles <&&> desc <&&> options <&&> usedKeys <&&> nameres
             es <&!&> inner
         
     let valTechLocs : LocalisationValidator =

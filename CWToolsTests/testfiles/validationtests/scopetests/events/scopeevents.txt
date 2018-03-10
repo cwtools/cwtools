@@ -58,3 +58,51 @@ fleet_event =
         }
     }
 }
+
+fleet_event =
+{
+    is_triggered_only = yes
+    immediate = {
+        OWNER = {
+            any_owned_planet = {
+                
+            }
+        }
+    }
+}
+
+## Prevprev followed by prev behaviour
+country_event = {
+    id = ccrebel_sow_unrest.21
+    hide_window = yes
+    is_triggered_only = yes
+    
+    immediate = {
+        every_country = {
+            limit = {
+                reverse_has_relation_flag = {
+                    who = root
+                    flag = ccrebel_sowing_unrest_by
+                }
+                root = {
+                    NOT = {
+                        any_owned_planet = {
+                            has_planet_flag = ccrebel_planet_being_stirred_up_longer@prevprev
+                            prevprev = {
+                                any_owned_planet = {
+                                    prevprev = { has_planet_flag = ccrebel_planet_being_stirred_up_longer_planet@prev }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            root = {
+                remove_relation_flag = {
+                    who = prev
+                    flag = ccrebel_sowing_unrest_by
+                }
+            }
+        }
+    }
+}

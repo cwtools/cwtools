@@ -1,0 +1,7 @@
+planet_event = {
+    is_triggered_only = yes
+    desc = {
+        text = "test_required"
+    }
+    desc = "test_required"
+}

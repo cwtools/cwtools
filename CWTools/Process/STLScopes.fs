@@ -514,8 +514,8 @@ module STLScopes =
                     | _, _, true -> {context with Scopes = e.InnerScope::context.Scopes}, NewScope {context with Scopes = e.InnerScope::context.Scopes}
                     | _, ss, false -> context, WrongScope ss
         let inner2 = fun a b -> inner a b |> (fun (c, d) -> c, Some d)
-        keys |> Array.fold (fun (c, r) k -> match r with |None -> inner2 c k |Some (NewScope x) -> inner2 x k |Some x -> c, Some x) (source, None) |> snd |> Option.defaultValue (NotFound)
-
+        let res = keys |> Array.fold (fun (c, r) k -> match r with |None -> inner2 c k |Some (NewScope x) -> inner2 x k |Some x -> c, Some x) (source, None) |> snd |> Option.defaultValue (NotFound)
+        res |> function |NewScope x -> NewScope { source with Scopes = x.CurrentScope::source.Scopes } |x -> x
 
     // let changeScope (scope : string) source = scopes 
     //                                             |> List.tryFind (fun (n, s, _) -> n.ToLower() = scope.ToLower() && s = source)
