@@ -127,6 +127,7 @@ module STLProcess =
             fst3 >> ((=) "ship_event"), processNode<Event>, id;
             fst3 >> ((=) "pop_faction_event"), processNode<Event>, id;
             fst3 >> ((=) "pop_event"), processNode<Event>, id;
+            fst3 >> ((=) "event"), processNode<Event>, id;
             (fun (_, p, c) -> (globCheckPosition("**/common/button_effects/*.txt") p) && not c.complete), processNode<Button_Effect>, (fun c -> { c with complete = true});
        ]
     let shipProcess = BaseProcess(shipMap)

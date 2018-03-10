@@ -364,6 +364,11 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
             eprintfn "%s" filepath
             let file = File.ReadAllText filepath
             let newEntities = resources.UpdateFile (EntityResourceInput {scope = ""; filepath = filepath; filetext = file; validate = true})
+            match filepath with
+            |x when x.Contains("scripted_triggers") -> updateScriptedTriggers()
+            |x when x.Contains("scripted_effects") -> updateScriptedEffects()
+            |x when x.Contains("static_modifiers") -> updateStaticodifiers()
+            |_ -> ()
             validateAll newEntities @ localisationCheck newEntities
 
         do 

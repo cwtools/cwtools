@@ -3,6 +3,7 @@
 namespace = @local_var
 namespace = @test_var
 event = {
+    is_triggered_only = yes
     #error
     thing = @test_not_defined
 }
