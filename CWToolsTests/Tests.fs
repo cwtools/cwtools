@@ -29,14 +29,14 @@ let getNodeComments (node : Node) =
             | ((b, c), _) when b -> (b, c)
             | ((_, c), CommentC nc) when nc.StartsWith("#") -> (false, c)
             | ((_, c), CommentC nc) -> (false, nc::c)
-            | ((_, c), NodeC n) when n.Key = t -> (true, c)
-            | ((_, c), LeafC v) when v.Key = t -> (true, c)
+            | ((_, c), NodeC n) when n.Position = t -> (true, c)
+            | ((_, c), LeafC v) when v.Position = t -> (true, c)
             | ((_, _), _) -> (false, [])
     let fNode = (fun (node:Node) (children) ->
-            let one = node.Values |> List.map (fun e -> let (Position p) = e.Position in p, node.All |> List.rev |> List.fold (findComments e.Key) (false, []) |> snd)
+            let one = node.Values |> List.map (fun e -> let (Position p) = e.Position in p, node.All |> List.rev |> List.fold (findComments e.Position) (false, []) |> snd)
             //eprintfn "%s %A" node.Key (node.All |> List.rev)
             //eprintfn "%A" one
-            let two = node.Children |> List.map (fun e -> let (Position p) = e.Position in p, node.All |> List.rev |> List.fold (findComments e.Key) (false, []) |> snd)
+            let two = node.Children |> List.map (fun e -> let (Position p) = e.Position in p, node.All |> List.rev |> List.fold (findComments e.Position) (false, []) |> snd)
             let new2 = one @ two |> List.filter (fun (p, c) -> not (List.isEmpty c))
             new2 @ children
                 )

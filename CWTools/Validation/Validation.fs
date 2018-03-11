@@ -45,6 +45,7 @@ module ValidationCore =
             fun (modifier : string) (actual : string) (expected : string) ->
             { ID = "CW115"; Severity = Severity.Warning; Message = sprintf "%s static modifier possibly used in incorrect scope. In %s but expected %s. Please feedback verified usage" modifier actual expected}
         static member IncorrectScopeAsLeaf = fun (scope : string) (leaf : string) -> { ID = "CW116"; Severity = Severity.Error; Message = sprintf "%s scope command used incorrectly, did you mean _%s = { %s }" scope scope leaf }
+        static member UndefinedScriptVariable = fun (variable : string) -> { ID = "CW117"; Severity = Severity.Error; Message = sprintf "%s variable is never defined" variable}
         static member CustomError = fun error -> { ID = "CW999"; Severity = Severity.Error; Message = error}
     type ValidationResult = 
         | OK

@@ -382,5 +382,97 @@ module STLValidation =
                         | false -> Invalid [inv (ErrorCodes.MissingFile (l.Value.ToRawString())) l])
             sprites <&!&> inner
 
+    let filterOptionToEffects (o : STLProcess.Option) =
+        let optionTriggers = ["trigger"; "allow"]
+        //let optionEffects = ["tooltip"; "hidden_effect"]
+        let optionExcludes = ["name"; "custom_tooltip"; "response_text"; "is_dialog_only"; "sound"; "ai_chance"; "custom_gui"; "default_hide_option"] @ optionTriggers
+        o.All <- o.All |> List.filter (function |LeafC l -> (not (List.contains l.Key optionExcludes)) | _ -> true)
+        o.All <- o.All |> List.filter (function |NodeC l -> (not (List.contains l.Key optionExcludes)) | _ -> true)
+        o :> Node
+
+    let findAllSetVariables (node : Node) =
+        let fNode = (fun (x : Node) children ->
+                    match x.Children |> List.filter (fun n -> List.contains (n.Key) ["set_variable"; "change_variable"; "subtract_variable"; "multiply_variable"; "divide_variable"]) with
+                    | [] -> []
+                    | x -> 
+                        x |> List.map (fun v -> v.TagText "which")
+                    @ children )
+        let fCombine = (@)
+        foldNode2 fNode fCombine [] node
+
+    let  validateUsedVariables (variables : string list) (node : Node) =
+        let fNode = (fun (x : Node) children ->
+                    match x.Childs "check_variable" |> List.ofSeq with
+                    | [] -> children
+                    | t -> 
+                        t <&!&> (fun node -> node |> (fun n -> n.Leafs "which" |> List.ofSeq) <&!&> (fun n -> if List.contains (n.Value.ToRawString()) variables then OK else Invalid [inv (ErrorCodes.UndefinedScriptVariable (n.Value.ToRawString())) node] ))
+                        <&&> children
+                    )
+        let fCombine = (<&&>)
+        foldNode2 fNode fCombine OK node
+
+    let getDefinedScriptVariables (es : EntitySet) =
+        let fNode = (fun (x : Node) children ->
+                    match x with
+                    | (:? EffectBlock as x) -> x::children
+                    | _ -> children)
+        let ftNode = (fun (x : Node) children ->
+                    match x with
+                    | (:? TriggerBlock as x) -> x::children
+                    | _ -> children)
+        let foNode = (fun (x : Node) children ->
+                    match x with
+                    | (:? Option as x) -> x::children
+                    | _ -> children)
+        let fCombine = (@)
+        let opts = es.All |> List.collect (foldNode2 foNode fCombine []) |> List.map filterOptionToEffects
+        let effects = es.All |> List.collect (foldNode2 fNode fCombine []) |> List.map (fun f -> f :> Node)
+        effects @ opts |> List.collect findAllSetVariables  
+
+    let valVariables : StructureValidator =
+        fun os es ->
+            let fNode = (fun (x : Node) children ->
+                        match x with
+                        | (:? EffectBlock as x) -> x::children
+                        | _ -> children)
+            let ftNode = (fun (x : Node) children ->
+                        match x with
+                        | (:? TriggerBlock as x) -> x::children
+                        | _ -> children)
+            let foNode = (fun (x : Node) children ->
+                        match x with
+                        | (:? Option as x) -> x::children
+                        | _ -> children)
+            let fCombine = (@)
+            let opts = es.All |> List.collect (foldNode2 foNode fCombine []) |> List.map filterOptionToEffects
+            let effects = es.All |> List.collect (foldNode2 fNode fCombine []) |> List.map (fun f -> f :> Node)
+            let triggers = es.All |> List.collect (foldNode2 ftNode fCombine []) |> List.map (fun f -> f :> Node)
+            let defVars = effects |> List.collect findAllSetVariables
+            triggers <&!&> (validateUsedVariables defVars)
+
+
+    let valTest : StructureValidator = 
+        fun os es ->
+            let fNode = (fun (x : Node) children ->
+                        match x with
+                        | (:? EffectBlock as x) -> x::children
+                        | _ -> children)
+            let ftNode = (fun (x : Node) children ->
+                        match x with
+                        | (:? TriggerBlock as x) -> x::children
+                        | _ -> children)
+            let foNode = (fun (x : Node) children ->
+                        match x with
+                        | (:? Option as x) -> x::children
+                        | _ -> children)
+            let fCombine = (@)
+            let opts = es.All |> List.collect (foldNode2 foNode fCombine []) |> List.map filterOptionToEffects
+            let effects = es.All |> List.collect (foldNode2 fNode fCombine []) |> List.map (fun f -> f :> Node)
+            let triggers = es.All |> List.collect (foldNode2 ftNode fCombine []) |> List.map (fun f -> f :> Node)
+            OK
+            // opts @ effects <&!&> (fun x -> Invalid [inv (ErrorCodes.CustomError "effect") x])
+            // <&&> (triggers <&!&> (fun x -> Invalid [inv (ErrorCodes.CustomError "trigger") x]))
+            
+
 
 

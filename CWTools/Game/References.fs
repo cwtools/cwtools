@@ -22,3 +22,4 @@ type References(resourceManager : IResourceAPI, lookup : Lookup) =
     member __.TriggerNames = triggers()
     member __.EffectNames = effects()
     member __.ScopeNames = oneToOneScopes |> List.map (fun (n, _) -> n)
+    member __.ScriptVariableNames = lookup.definedScriptVariables |> List.distinct

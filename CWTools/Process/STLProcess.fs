@@ -109,6 +109,9 @@ module STLProcess =
         member this.Desc = this.TagText "desc"
         member this.Hidden = this.Tag "hide_window" |> (function | Some (Bool b) -> b | _ -> false)
    
+    type EffectBlock(key, pos) = inherit Node(key, pos)
+    type TriggerBlock(key, pos) = inherit Node(key, pos)
+    type Option(key, pos) = inherit Node(key, pos)
     let globCheckPosition (pattern : string) =
         let glob = Glob.Parse(pattern)
         (fun (p : Position) ->
@@ -118,17 +121,27 @@ module STLProcess =
     
     let shipMap =
         [
-            fst3 >> ((=) "ship_design"), processNode<Ship>, id;
-            fst3 >> ((=) "section"), processNode<ShipSection>, id;
-            fst3 >> ((=) "component"), processNode<ShipComponent>, id;
-            fst3 >> ((=) "planet_event"), processNode<Event>, id;
-            fst3 >> ((=) "country_event"), processNode<Event>, id;
-            fst3 >> ((=) "fleet_event"), processNode<Event>, id;
-            fst3 >> ((=) "ship_event"), processNode<Event>, id;
-            fst3 >> ((=) "pop_faction_event"), processNode<Event>, id;
-            fst3 >> ((=) "pop_event"), processNode<Event>, id;
-            fst3 >> ((=) "event"), processNode<Event>, id;
-            (fun (_, p, c) -> (globCheckPosition("**/common/button_effects/*.txt") p) && not c.complete), processNode<Button_Effect>, (fun c -> { c with complete = true});
+            fst3 >> ((=) "ship_design"), processNode<Ship>, "ship", id;
+            fst3 >> ((=) "section"), processNode<ShipSection>, "shipsection", id;
+            fst3 >> ((=) "component"), processNode<ShipComponent>, "shipcomponent", id;
+            fst3 >> ((=) "planet_event"), processNode<Event>, "event", id;
+            fst3 >> ((=) "country_event"), processNode<Event>, "event", id;
+            fst3 >> ((=) "fleet_event"), processNode<Event>, "event", id;
+            fst3 >> ((=) "ship_event"), processNode<Event>, "event", id;
+            fst3 >> ((=) "pop_faction_event"), processNode<Event>, "event", id;
+            fst3 >> ((=) "pop_event"), processNode<Event>, "event", id;
+            fst3 >> ((=) "event"), processNode<Event>, "event", id;
+            (function |("trigger", _, {parents = "event"::_}) -> true |_ -> false), processNode<TriggerBlock>, "triggerblock", id;
+            (function |("immediate", _, { parents = "event"::_ }) -> true |_ -> false), processNode<EffectBlock>, "effectblock", id;
+            (function |("option", _, {parents = "event"::_}) -> true |_ -> false), processNode<Option>, "option", id;
+            //(function |("hidden_effect", _, {parents = "option"::_}) -> true |_ -> false), processNode<EffectBlock>, "effectblock", id;
+            //(function |("tooltip", _, {parents = "option"::_}) -> true |_ -> false), processNode<EffectBlock>, "effectblock", id;
+            (function |("desc", _, {parents = "event"::_}) -> true |_ -> false), processNode<Node>, "eventdesc", id;
+            (function |("trigger", _, {parents = "eventdesc"::"event"::_}) -> true |_ -> false), processNode<TriggerBlock>, "triggerblock", id;
+            (function |("after", _, {parents = "event"::_}) -> true |_ -> false), processNode<EffectBlock>, "effectblock", id;
+            (function |("limit", _, {parents = "effectblock"::_}) -> true |_ -> false), processNode<TriggerBlock>, "triggerblock", id;
+            (function |("limit", _, {parents = "option"::_}) -> true |_ -> false), processNode<TriggerBlock>, "triggerblock", id;
+            (fun (_, p, c) -> (globCheckPosition("**/common/button_effects/*.txt") p) && not c.complete), processNode<Button_Effect>, "buttoneffect",  (fun c -> { c with complete = true});
        ]
     let shipProcess = BaseProcess(shipMap)
 

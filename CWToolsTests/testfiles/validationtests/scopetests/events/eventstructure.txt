@@ -151,34 +151,34 @@ planet_event = {
 
 ##Check each of the types of events works, all throw warning about being every tick
 
-###error
-##event = {
-##id = test
-##}
-##
-##
-##
-###error
-##fleet_event = {
-##id = test
-##}
-##
-###error
-##planet_event = {
-##id = test
-##}
-##
-###error
-##pop_event = {
-##id = test
-##}
-##
-###error
-##pop_faction_event = {
-##id = test
-##}
-##
-###error
-##country_event = {
-##    id = test
-##}
+#error
+event = {
+id = test
+}
+
+
+
+#error
+fleet_event = {
+id = test
+}
+
+#error
+planet_event = {
+id = test
+}
+
+#error
+pop_event = {
+id = test
+}
+
+#error
+pop_faction_event = {
+id = test
+}
+
+#error
+country_event = {
+    id = test
+}

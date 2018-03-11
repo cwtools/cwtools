@@ -10,6 +10,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Tests.fs" />
+    <Compile Include="ProcessTests.fs"/>
     <Compile Include="Main.fs" />
     <None Include="App.config" />
   </ItemGroup>

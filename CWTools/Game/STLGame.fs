@@ -277,6 +277,7 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
             let newModifiers = rawModifiers |> List.map (fun e -> STLProcess.getStaticModifierCategory modifiers e)
             lookup.staticModifiers <- newModifiers
         
+        
         let updateLocalisation() = 
             localisationAPIs <-
                 let locs = locFolders |> List.map (fun (folder, _) -> STLLocalisationService({ folder = folder}))
@@ -290,6 +291,9 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
                     |> (fun files -> STLLocalisationService(files))
                     |> (fun l -> (STL STLLang.Default :: langs) |> List.map (fun lang -> l.Api(lang))))
             //TODO: Add loc from embedded
+
+        let updateDefinedVariables() =
+            lookup.definedScriptVariables <- EntitySet (resources.AllEntities()) |> getDefinedScriptVariables
                 
                     
         let findDuplicates (sl : Statement list) =
@@ -333,7 +337,7 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
             let allEntitiesByFile = entities |> List.map (fun f -> f.entity)
             let flattened = allEntitiesByFile |> List.map (fun n -> n.Children) |> List.collect id
 
-            let validators = [validateVariables; valTechnology; valButtonEffects; valSprites]
+            let validators = [validateVariables; valTechnology; valButtonEffects; valSprites; valVariables]
             let oldEntities = EntitySet (resources.AllEntities())
             let newEntities = EntitySet entities
             let res = validators |> List.map (fun v -> v oldEntities newEntities) |> List.fold (<&&>) OK
@@ -369,6 +373,7 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
             |x when x.Contains("scripted_effects") -> updateScriptedEffects()
             |x when x.Contains("static_modifiers") -> updateStaticodifiers()
             |_ -> ()
+            updateDefinedVariables()
             validateAll newEntities @ localisationCheck newEntities
 
         do 
@@ -390,6 +395,7 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
             updateScriptedEffects()
             updateStaticodifiers()
             updateLocalisation()
+            updateDefinedVariables()
 
         //member __.Results = parseResults
         member __.Duplicates = validateDuplicates

@@ -96,7 +96,7 @@ module STLScopes =
         ScopedEffect("overlord", [Scope.Country], Scope.Country, EffectType.Both, defaultDesc, "");
         ScopedEffect("defender", [Scope.War], Scope.Country, EffectType.Both, defaultDesc, "");
         ScopedEffect("attacker", [Scope.War], Scope.Country, EffectType.Both, defaultDesc, "");
-        ScopedEffect("owner", [Scope.Ship; Scope.Pop; Scope.Fleet; Scope.Planet; Scope.PopFaction; Scope.Sector; Scope.Leader; Scope.Country; Scope.Starbase], Scope.Country, EffectType.Both, "", ""); //Fleet, Planet, PopFaction, Sector, Leader, Country from defaultDescnilla use
+        ScopedEffect("owner", [Scope.Ship; Scope.Pop; Scope.Fleet; Scope.Planet; Scope.PopFaction; Scope.Sector; Scope.Leader; Scope.Country; Scope.Starbase], Scope.Country, EffectType.Both, "", ""); //Fleet, Planet, PopFaction, Sector, Leader, Country from vanilla use
         ScopedEffect("controller", [Scope.Planet], Scope.Country, EffectType.Both, "", ""); //Planet from vanilla use
         ScopedEffect("planet_owner", [Scope.Planet], Scope.Country, EffectType.Both, defaultDesc, "");
         ScopedEffect("last_created_country", allScopes, Scope.Country, EffectType.Both, defaultDesc, "");
