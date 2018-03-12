@@ -326,8 +326,6 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
             
         let validateEvents (entities : Node list) =
             let events = entities |> List.choose (function | :? Event as e -> Some e |_ -> None)
-            let scriptedTriggers = lookup.scriptedTriggers
-            let scriptedEffects = lookup.scriptedEffects
             events |> List.map (fun e -> (valEventVals e) )
                    |> List.choose (function |Invalid es -> Some es |_ -> None)
                    |> List.collect id

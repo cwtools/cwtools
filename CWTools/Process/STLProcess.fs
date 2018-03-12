@@ -128,6 +128,9 @@ module STLProcess =
         |"pop_faction" -> processNode<'T> (fun n -> n.Scope <- Scope.PopFaction; n)
         |"pop" -> processNode<'T> (fun n -> n.Scope <- Scope.Pop; n)
         |_ -> processNode<'T> (fun n -> n.Scope <- Scope.Any; n)
+
+    let specificScopeProcessNode<'T when 'T :> Node> (scope : Scope) (lookup : LookupContext) =
+        processNode<'T> (fun n -> n.Scope <- scope; n)
     
     // let triggerProcessNode (lookup : LookupContext) =
     //     let postinit = 
@@ -159,19 +162,34 @@ module STLProcess =
             fst3 >> ((=) "pop_faction_event"), processNodeSimple<Event>, "event", (fun c -> {c with scope = "pop_faction"});
             fst3 >> ((=) "pop_event"), processNodeSimple<Event>, "event", (fun c -> {c with scope = "pop"});
             fst3 >> ((=) "event"), processNodeSimple<Event>, "event", id;
+            //Events
             (function |("trigger", _, {parents = "event"::_}) -> true |_ -> false), scopedProcessNode<TriggerBlock>, "triggerblock", id;
             (function |("immediate", _, { parents = "event"::_ }) -> true |_ -> false), scopedProcessNode<EffectBlock>, "effectblock", id;
             (function |("option", _, {parents = "event"::_}) -> true |_ -> false), scopedProcessNode<Option>, "option", id;
             (function |("tooltip", _, {parents = "option"::_}) -> true |_ -> false), scopedProcessNode<EffectBlock>, "effectblock", id;
             (function |("allow", _, {parents = "option"::_}) -> true |_ -> false), scopedProcessNode<TriggerBlock>, "triggerblock", id;
             (function |("trigger", _, {parents = "option"::_}) -> true |_ -> false), scopedProcessNode<TriggerBlock>, "triggerblock", id;
-            //(function |("hidden_effect", _, {parents = "option"::_}) -> true |_ -> false), processNodeSimple<EffectBlock>, "effectblock", id;
-            //(function |("tooltip", _, {parents = "option"::_}) -> true |_ -> false), processNodeSimple<EffectBlock>, "effectblock", id;
             (function |("desc", _, {parents = "event"::_}) -> true |_ -> false), scopedProcessNode<Node>, "eventdesc", id;
             (function |("trigger", _, {parents = "eventdesc"::"event"::_}) -> true |_ -> false), scopedProcessNode<TriggerBlock>, "triggerblock", id;
             (function |("after", _, {parents = "event"::_}) -> true |_ -> false), scopedProcessNode<EffectBlock>, "effectblock", id;
             (function |("limit", _, {parents = "effectblock"::_}) -> true |_ -> false), triggerInEffectProcessNode, "triggerblock", id;
             (function |("limit", _, {parents = "option"::_}) -> true |_ -> false), processNodeSimple<TriggerBlock>, "triggerblock", id;
+            //Buildings
+            (fun (_, p, c) -> (globCheckPosition("**/common/buildings/*.txt") p) && not c.complete), processNodeSimple<Button_Effect>, "building",  (fun c -> { c with complete = true});
+            (function |("potential", _, {parents = "building"::_}) -> true |_ -> false), specificScopeProcessNode<TriggerBlock> Scope.Tile, "triggerblock", id;
+            (function |("allow", _, {parents = "building"::_}) -> true |_ -> false), specificScopeProcessNode<TriggerBlock> Scope.Tile, "triggerblock", id;
+            (function |("ai_allow", _, {parents = "building"::_}) -> true |_ -> false), specificScopeProcessNode<TriggerBlock> Scope.Tile, "triggerblock", id;
+            (function |("destroy_if", _, {parents = "building"::_}) -> true |_ -> false), specificScopeProcessNode<TriggerBlock> Scope.Tile, "triggerblock", id;
+            (function |("active", _, {parents = "building"::_}) -> true |_ -> false), specificScopeProcessNode<TriggerBlock> Scope.Tile, "triggerblock", id;
+            (function |("planet_modifier_with_pop_trigger", _, {parents = "building"::_}) -> true |_ -> false), processNodeSimple<Node>, "planetmodpop", id;
+            //Armies
+            (fun (_, p, c) -> (globCheckPosition("**/common/armies/*.txt") p) && not c.complete), processNodeSimple<Button_Effect>, "army",  (fun c -> { c with complete = true});
+            (function |("potential", _, {parents = "army"::_}) -> true |_ -> false), specificScopeProcessNode<TriggerBlock> Scope.Planet, "triggerblock", id;
+            (function |("allow", _, {parents = "army"::_}) -> true |_ -> false), specificScopeProcessNode<TriggerBlock> Scope.Planet, "triggerblock", id;
+            (function |("show_tech_unlock_if", _, {parents = "army"::_}) -> true |_ -> false), specificScopeProcessNode<TriggerBlock> Scope.Country, "triggerblock", id;
+            (function |("on_queued", _, {parents = "army"::_}) -> true |_ -> false), specificScopeProcessNode<EffectBlock> Scope.Country, "effectblock", id;
+            (function |("on_unqueued", _, {parents = "army"::_}) -> true |_ -> false), specificScopeProcessNode<EffectBlock> Scope.Country, "effectblock", id;
+            //Button effects
             (fun (_, p, c) -> (globCheckPosition("**/common/button_effects/*.txt") p) && not c.complete), processNodeSimple<Button_Effect>, "buttoneffect",  (fun c -> { c with complete = true});
        ]
     let shipProcess = BaseProcess(shipMap)

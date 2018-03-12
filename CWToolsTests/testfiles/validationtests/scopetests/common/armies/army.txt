@@ -1,0 +1,41 @@
+### Test army triggers/effects
+   army_jemhadar = {
+      damage = 1.9
+      health = 2.4
+      morale = 2.4
+      morale_damage = 1
+      collateral_damage = 0.75
+      war_exhaustion = 4
+      time = 250
+      maintenance = 4
+      cost = { minerals = 400 }
+      icon_frame = 8
+      prerequisites = { "tech_jem_hadar_cloning" }
+      allow = {
+         custom_tooltip = {
+            text = army_jemhadar_limit_tooltip
+            owner = { 
+                NOT = { check_variable = { which = "army_jemhadar_count" value = 3 } } 
+                }
+         }
+                 #error
+                has_fleet_stance = yes
+
+      }
+      on_queued = { 
+          owner = { change_variable = { which = "army_jemhadar_count" value = 1 } } 
+          #error
+         set_fleet_stance = yes
+          }
+      on_unqueued = { 
+          owner = { change_variable = { which = "army_jemhadar_count" value = -1 } } 
+          #error
+         set_Fleet_stance = yes
+    }
+      potential = {
+         from = { is_species_class = JEM }
+         owner = { NOT = { check_variable = { which = "army_jemhadar_count" value = 3 } } }
+         #error
+         has_fleet_stance = yes
+      }
+   }
