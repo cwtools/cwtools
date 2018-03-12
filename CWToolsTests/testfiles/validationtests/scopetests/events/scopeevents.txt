@@ -37,6 +37,30 @@ fleet_event =
             PREV = {
                 set_fleet_stance = aggressive
             }
+            PREV = {
+                NOT = {
+                    set_fleet_stance = aggressive
+                }
+            }
+            PREV ={
+                NOT = {
+                    NOT = {
+                        set_fleet_stance = aggressive
+                    }
+                }
+            }
+            NOT = {
+                PREV ={
+                    set_fleet_stance = aggressive
+                }
+            }
+            PREV ={
+                PREV = {
+                    PREV = {
+                        set_fleet_stance = aggressive
+                    }
+                }
+            }
             OWNER ={
                 #error
                 set_fleet_stance = aggressive

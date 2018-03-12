@@ -9,7 +9,6 @@ open CWTools.Common.STLConstants
 open DotNet.Globbing
 
 module STLProcess =
-    let toTriggerKeys = ["OR"; "AND"; "NOR"; "NAND"; "NOT";]
     let toTriggerBlockKeys = ["limit"; "trigger"; "allow"]
     let _targetKeys = ["THIS"; "ROOT"; "PREV"; "FROM"; "OWNER"; "CONTROLLER"; "CAPITAL"; "SOLAR_SYSTEM"; "LEADER"; "RANDOM"; "FROMFROM"; "FROMFROMFROM"; "FROMFROMFROMFROM"; "PREVPREV"; "PREVPREVPREV"; "PREVPREVPREVPREV";
                         "CAPITAL_SCOPE"]//Added used in STH]

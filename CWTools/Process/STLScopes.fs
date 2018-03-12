@@ -1,5 +1,6 @@
 namespace CWTools.Process
 
+open NodaTime.TimeZones
 module STLScopes =
     open CWTools.Common.STLConstants
     
@@ -474,11 +475,11 @@ module STLScopes =
         | NotFound
 
     let oneToOneScopes = 
-        let from = fun s -> {s with Scopes = Scope.Any::s.Scopes}
-        let prev = fun s -> {s with Scopes = s.PopScope}
+        let from = fun (s, change) -> {s with Scopes = Scope.Any::s.Scopes}, true
+        let prev = fun (s, change) -> {s with Scopes = s.PopScope}, true
         [
         "THIS", id;
-        "ROOT", fun s -> {s with Scopes = s.Root::s.Scopes};
+        "ROOT", fun (s, change) -> {s with Scopes = s.Root::s.Scopes}, true;
         "FROM", from; //TODO Make it actually use FROM
         "FROMFROM", from >> from;
         "FROMFROMFROM", from >> from >> from;
@@ -497,28 +498,34 @@ module STLScopes =
     let changeScope (effects : Effect list) (triggers : Effect list) (key : string) (source : ScopeContext) = 
         let key = if key.StartsWith("hidden:") then key.Substring(7) else key
         let keys = key.Split('.')
-        let inner (context : ScopeContext) (nextKey : string) =
+        let inner ((context : ScopeContext), (changed : bool)) (nextKey : string) =
             let onetoone = oneToOneScopes |> List.tryFind (fun (k, f) -> k.ToLower() = nextKey.ToLower())
             match onetoone with
-            | Some (_, f) -> f context, NewScope (f context)
+            | Some (_, f) -> f (context, false), NewScope (f (context, false) |> fst)
             | None ->
                 let effect = (effects @ triggers) 
                             |> List.choose (function | :? ScopedEffect as e -> Some e |_ -> None)
                             |> List.tryFind (fun e -> e.Name.ToLower() = nextKey.ToLower())
                 match effect with
-                | None -> context, NotFound
+                | None -> (context, false), NotFound
                 | Some e -> 
                     let possibleScopes = e.Scopes
                     let exact = possibleScopes |> List.contains context.CurrentScope
                     match context.CurrentScope, possibleScopes, exact with
-                    | Scope.Any, _, _ -> {context with Scopes = e.InnerScope::context.Scopes}, NewScope {context with Scopes = e.InnerScope::context.Scopes}
-                    | _, [], _ -> context, NotFound
-                    | _, _, true -> {context with Scopes = e.InnerScope::context.Scopes}, NewScope {context with Scopes = e.InnerScope::context.Scopes}
-                    | _, ss, false -> context, WrongScope ss
+                    | Scope.Any, _, _ -> ({context with Scopes = e.InnerScope::context.Scopes}, true), NewScope {context with Scopes = e.InnerScope::context.Scopes}
+                    | _, [], _ -> (context, false), NotFound
+                    | _, _, true -> ({context with Scopes = e.InnerScope::context.Scopes}, true), NewScope {context with Scopes = e.InnerScope::context.Scopes}
+                    | _, ss, false -> (context, false), WrongScope ss
         let inner2 = fun a b -> inner a b |> (fun (c, d) -> c, Some d)
-        let res = keys |> Array.fold (fun (c, r) k -> match r with |None -> inner2 c k |Some (NewScope x) -> inner2 x k |Some x -> c, Some x) (source, None) |> snd |> Option.defaultValue (NotFound)
-        let x = res |> function |NewScope x -> NewScope { source with Scopes = x.CurrentScope::source.Scopes } |x -> x
-        x
+        let res = keys |> Array.fold (fun ((c,b), r) k -> match r with |None -> inner2 (c, b) k |Some (NewScope x) -> inner2 (x, b) k |Some x -> (c,b), Some x) ((source, false), None)// |> snd |> Option.defaultValue (NotFound)
+        let res2 =
+            match res with
+            |(_, _), None -> NotFound
+            |(_, true), Some r -> r |> function |NewScope x -> NewScope { source with Scopes = x.CurrentScope::source.Scopes } |x -> x
+            |(_, false), Some r -> r
+        // let x = res |> function |NewScope x -> NewScope { source with Scopes = x.CurrentScope::source.Scopes } |x -> x
+        // x
+        res2
 
     // let changeScope (scope : string) source = scopes 
     //                                             |> List.tryFind (fun (n, s, _) -> n.ToLower() = scope.ToLower() && s = source)
