@@ -1,0 +1,57 @@
+##Test triggers
+ethic_gestalt_consciousness = {
+	playable = {
+        has_country_flag = yes
+        #error
+        has_fleet_flag = yes
+	}
+
+	cost = 3
+	category = "hive"
+	category_value = 0
+	use_for_pops = no
+	
+	country_modifier = {
+		country_war_exhaustion_mult = -0.2
+		country_resource_influence_add = 1
+		country_core_sector_system_cap = 2
+	}
+	
+	tags = {
+		ETHIC_GESTALT_CONSCIOUSNESS_NO_TUTORIAL
+		ETHIC_GESTALT_CONSCIOUSNESS_AUTHORITY
+		ETHIC_GESTALT_CONSCIOUSNESS_IMMORTAL_RULER
+		ETHIC_GESTALT_CONSCIOUSNESS_NO_FACTIONS
+		ETHIC_GESTALT_CONSCIOUSNESS_DOMESTIC_POP_SURVIVAL
+		ETHIC_ALLOW_NO_RETREAT	
+	}
+
+    pop_attraction_tag = {
+        desc = POP_ATTRACTION_MATERIALIST_RESEARCH_POS
+		trigger = {
+            has_country_flag = yes
+            #error
+            has_fleet_flag = yes
+		}
+    }
+	
+	random_weight = {
+		value = 100
+		modifier = {
+			factor = 0
+			OR = {
+				NOR = {
+					host_has_dlc = "Utopia"
+					host_has_dlc = "Synthetic Dawn Story Pack"
+				}
+				has_global_flag = game_started # additional traits (trait_hive_mind, trait_machine_unit) are only assigned and verified for empire designs, no effect after game start
+			}
+		}
+		modifier = {
+			factor = 2
+			host_has_dlc = "Synthetic Dawn Story Pack"
+			host_has_dlc = "Utopia"
+			NOT = { has_global_flag = game_started }
+		}
+	}
+}

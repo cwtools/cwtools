@@ -1,0 +1,53 @@
+##Test effects and triggers
+gateway = {
+	name = GATEWAY_GALACTIC
+	is_pathfind = yes
+	uses_action = no
+	always_active = no
+	windup_time = 0
+	winddown_time = 0
+	ftl_multiplier = 0			
+	icon_frame = 25
+	remember_instances = no 	
+	galactic_map_tooltip_header=GATEWAY_GALACTIC
+	galactic_map_tooltip_desc=GATEWAY_GALACTIC_DESC
+	connection_type = any_other
+	animation_time = 1
+	ftl_ship_effect = "gateway_ftl_ship_effect_entity"
+	ftl_bypass_effect = "gateway_ftl_bypass_effect_entity"
+	prerequisites = {
+		tech_gateway_activation
+	}
+	on_pre_explore = {
+		activate_gateway = fromfrom
+		if = {
+			limit = { num_active_gateways = 1 }
+			random_megastructure = {
+				limit = { is_megastructure_type = gateway_ruined }
+				upgrade_megastructure_to = gateway_restored
+				finish_upgrade = yes
+			}
+		}
+        set_fleet_flag = yes
+        #error
+        set_country_flag = yes
+	}
+	country_can_use = {
+		custom_tooltip = {
+			fail_text = GATEWAY_COUNTRY_CANNOT_USE
+			OR = {
+				NOT = { exists = from }
+				from = {
+					NOR = {
+						has_closed_borders = root
+						is_hostile = root
+					}
+				}
+			}
+		}
+        #error
+        has_fleet_order = yes
+        has_country_flag = yes
+	}
+	on_action = "on_entering_gateway"
+}

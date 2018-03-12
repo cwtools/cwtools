@@ -1,0 +1,26 @@
+## Test triggers and effects
+passive_observation = {
+	icon = "GFX_fleet_task_passive_observation"
+	small_icon = 1
+
+	gain = {
+		society_research = 8
+	}
+	
+	ai_weight = {
+		weight = 1
+	}
+
+    valid = {
+        #error
+        has_fleet_flag = yes
+        has_country_flag = yes
+    }
+
+    potential = {
+        #error
+        has_fleet_flag = yes
+        has_country_flag = yes
+
+    }
+}

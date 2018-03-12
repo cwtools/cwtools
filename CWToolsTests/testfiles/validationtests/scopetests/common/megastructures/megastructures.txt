@@ -1,0 +1,71 @@
+##Test triggers and effects
+ring_world_1 = {
+	entity = "construction_platform_entity"
+	construction_entity = "construction_platform_entity"
+	portrait = "GFX_megastructure_construction_background"
+	place_entity_on_planet_plane = no
+	entity_offset = { x = -7 y = -7 }
+	build_time = 1800
+	build_cost = {
+		minerals = 10000
+		influence = 300
+	}
+
+	maintenance = {
+		energy = 5
+	}
+
+	potential = {
+        #error
+        has_fleet_flag = yes
+        has_country_flag = yes
+	}
+	
+	possible = {
+        has_star_flag = yes
+        #error
+        has_country_flag = yes
+	}
+	
+	placement_rules = {
+		planet_possible = {
+            has_planet_flag = yes
+            #error
+            has_fleet_flag = yes
+		}
+	}
+	
+	ai_weight = {
+		factor = 10		
+		
+		modifier = {
+			factor = 0.1
+			starbase = { NOT = { has_starbase_size >= starbase_starfortress } }
+		}	
+
+		modifier = {
+			factor = 0.1
+			any_neighbor_system = { 
+				NOT = { 
+					owner = { is_same_value = from } 
+				}
+			}
+		}		
+	}
+	
+	on_build_start = { 
+        #error
+        set_fleet_flag = yes
+        set_star_flag = yes
+    }
+	on_build_cancel = {
+        #error
+        set_fleet_flag = yes
+        set_star_flag = yes
+    }
+	on_build_complete = {
+        #error
+        set_fleet_flag = yes
+        set_star_flag = yes
+	}
+}

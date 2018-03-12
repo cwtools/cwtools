@@ -1,0 +1,35 @@
+##Test trigger
+indiscriminate = {
+	trigger = {
+		#error
+		has_claim = yes
+		has_fleet_order = yes
+	}
+	
+	icon_frame = 2
+	default = no
+	
+	stop_when_armies_dead = no
+	abduct_pops = no
+
+	planet_damage = 1.0
+	army_damage = 1.5	
+	
+	kill_pop_chance = 0.33
+	min_pops_to_kill_pop = 4
+	add_blocker_chance = 0.2
+	max_blockers = 5
+	
+	## root = fleet
+	## from = planet
+	ai_weight = {
+		weight = 5
+		modifier = {
+			factor = 0
+			exists = from
+			from = { 
+				owner = { is_same_value = root.owner }
+			}
+		}
+	}
+}

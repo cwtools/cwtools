@@ -1,0 +1,72 @@
+##test effects and triggers
+planet_edict ={
+    name = "patrol_drones"
+	cost = { influence = 1 }
+	length = 1
+
+	modifier = {
+		planet_unrest_mult = -0.50
+	}
+	
+	potential = {
+        has_planet_flag = yes
+        #error
+        has_fleet_flag = yes
+	}
+
+    allow = {
+        has_planet_flag = yes
+        #error
+        has_fleet_flag = yes
+    }
+
+    effect = {
+        set_planet_flag = yes
+        #error
+        set_fleet_flag = yes
+    }
+	
+	ai_weight = {
+		weight = 1000
+		modifier = {
+			unrest < 50
+			factor = 0
+		}
+	}
+}
+
+country_edict ={
+    name = "patrol_drones"
+	cost = { influence = 1 }
+	length = 1
+
+	modifier = {
+		planet_unrest_mult = -0.50
+	}
+	
+	potential = {
+        #error
+        has_planet_flag = yes
+        has_country_flag = yes
+	}
+
+    allow = {
+        #error
+        has_planet_flag = yes
+        has_country_flag = yes
+    }
+
+    effect = {
+        #error
+        set_planet_flag = yes
+        set_country_flag = yes
+    }
+	
+	ai_weight = {
+		weight = 1000
+		modifier = {
+			unrest < 50
+			factor = 0
+		}
+	}
+}

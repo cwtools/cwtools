@@ -1,0 +1,20 @@
+##Test triggers
+cb_despoliation = {
+	show_in_diplomacy = yes
+	show_notification = yes
+	potential = {
+        #error
+        has_fleet_flag = yes
+        has_country_flag = yes
+	}
+	is_valid = {
+        #error
+        has_fleet_flag = yes
+        has_country_flag = yes
+	}
+    destroy_if = {
+        #error
+        has_fleet_flag = yes
+        has_country_flag = yes
+    }
+}

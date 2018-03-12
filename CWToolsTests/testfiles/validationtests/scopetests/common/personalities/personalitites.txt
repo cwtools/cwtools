@@ -1,0 +1,80 @@
+##Test triggers and effects
+spiritual_seekers = {
+	aggressiveness = 0.25
+	trade_willingness = 0.9
+	bravery = 0.75
+	combat_bravery = 1.0
+
+	military_spending = 0.8
+	colony_spending = 1.0
+
+	federation_acceptance = 10
+	nap_acceptance = 20
+	defensive_pact_acceptance = 10
+	migration_pact_acceptance = 20
+
+	advanced_start_chance = 10
+
+	weapon_preferences = weapon_type_energy
+	armor_ratio = 0.4
+	shields_ratio = 0.4
+	hull_ratio = 0.2
+
+	threat_modifier = 1.1
+	threat_others_modifier = 1.0
+	friction_modifier = 0.25
+	claims_modifier = 1.0
+
+	behaviour = {
+		conqueror = no
+		subjugator = no
+		liberator = yes
+		opportunist = no
+		slaver = no
+		caste_system = no
+		uplifter = yes
+		purger = no
+		displacer = no
+		infiltrator = yes
+		dominator = no
+		robot_exploiter = yes
+		robot_liberator = no
+		propagator = no
+		multispecies = yes
+		crisis_fighter = yes
+	}
+
+	allow = {
+		#error
+        has_fleet_flag = yes
+        has_country_flag = yes
+	}
+
+	weight_modifier = {
+		weight = 10
+		modifier = {
+			factor = 2
+			has_ethic = "ethic_fanatic_pacifist"
+		}
+		modifier = {
+			factor = 2
+			has_ethic = "ethic_fanatic_xenophile"
+		}
+		modifier = {
+			factor = 1
+			has_trait = "trait_adaptive"
+		}
+		modifier = {
+			factor = -1
+			has_trait = "trait_nonadaptive"
+		}
+		modifier = {
+			factor = 2
+			has_trait = "trait_extremely_adaptive"
+		}
+		modifier = {
+			factor = 1
+			has_election_type = democratic
+		}
+	}
+}

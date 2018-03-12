@@ -1,0 +1,40 @@
+##Test triggers and effects
+action_demand_tributary = {
+	requires_actor_peace = yes
+	requires_recipient_peace = yes
+	diplo_view_acceptance_icon = yes
+	should_notify_all_communications = yes
+	requires_recipient_independence = no
+	AI_acceptance_base_value = -50
+
+	possible = {
+        #error
+		has_fleet_flag = yes
+        has_country_flag = yes
+	}
+
+	proposable = {
+        #error
+		has_fleet_flag = yes
+        has_country_flag = yes
+	}
+
+    potential = {
+        #error
+		has_fleet_flag = yes
+        has_country_flag = yes
+    }
+
+	on_decline = {
+        #error
+		set_fleet_flag = yes
+        set_country_flag = yes
+	}
+
+    on_accept = {
+        #error
+		set_fleet_flag = yes
+        set_country_flag = yes
+
+    }
+}

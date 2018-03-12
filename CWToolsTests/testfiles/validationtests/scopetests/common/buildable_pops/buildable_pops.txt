@@ -1,0 +1,61 @@
+##Test triggers
+buildable_robot_pop_3_awoken = {
+		
+	prerequisites = {
+		"tech_synthetic_workers"
+	}
+	
+	show_tech_unlock_if = { 
+        #error
+        has_fleet_order = yes
+        has_country_flag = yes
+	}
+	
+	cost = {
+		minerals = 100
+	}
+
+	potential_build = {
+        #error
+        has_fleet_order = yes
+        has_country_flag = yes
+	}
+
+    allow ={
+        #error
+        has_fleet_order = yes
+        has_country_flag = yes
+    }
+	
+	species = {
+		name = "ROBOT_POP_SPECIES_3_AWOKEN"
+		name_list = "AI"
+		class = "ROBOT"
+		portrait = "default_robot"
+		traits = {
+			trait = "trait_mechanical"
+			trait = "trait_robotic_3"
+			trait = "trait_robot_awoken"
+		}
+		
+		new_pop_resource_requirement = {
+			type = robot_food
+			value = 30.0
+		}
+		pops_auto_growth = 1.0
+		
+		pops_can_be_colonizers = yes
+		pops_can_migrate = yes
+		pops_can_reproduce = no
+		pops_can_join_factions = yes
+		pop_maintenance = 1
+		can_generate_leaders = yes
+		pops_can_be_slaves = yes
+		pops_have_happiness = yes
+		pop_ethics = { ethic_fanatic_materialist ethic_xenophile }
+	}
+	portrait = {
+		sd_hum_robot = { NOT = { host_has_dlc = "Synthetic Dawn Story Pack" } }
+		sd_fun_robot = { host_has_dlc = "Synthetic Dawn Story Pack" }
+	}
+}

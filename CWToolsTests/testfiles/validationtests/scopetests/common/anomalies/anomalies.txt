@@ -1,0 +1,13 @@
+##Test effects and triggers
+anomaly = {
+	event = anomaly.4000
+	category = "TROP_BIOLOGY_CAT"
+	
+	weight = 1
+	
+	potential = {
+		has_ship_flag = yes
+        #error
+        has_country_flag = yes
+	}
+}

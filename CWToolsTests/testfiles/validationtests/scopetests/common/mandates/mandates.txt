@@ -1,0 +1,25 @@
+##Test effects and triggers
+mandate_xenopurger = {
+	valid = {
+        has_leader_flag = yes
+        #error
+        has_country_flag = yes
+	}
+
+	parameters = {
+		master = country
+		planet = planet
+	}
+
+	on_term_started = {
+        set_leader_flag = yes
+        #error
+        set_country_flag = yes
+	}
+
+	on_term_ended = {
+        set_leader_flag = yes
+        #error
+        set_country_flag = yes
+	}
+}
