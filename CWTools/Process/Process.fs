@@ -90,22 +90,22 @@ module ProcessCore =
         node
     
     let processNodeSimple<'T when 'T :> Node> _ = processNode<'T> id
-    type LookupContext = { complete : bool; parents : string list; scope : string }
+    type LookupContext = { complete : bool; parents : string list; scope : string; previous : string }
     type NodeTypeMap = ((string * Position * LookupContext) -> bool) * (LookupContext -> ((Node -> Statement -> unit) -> string -> Position -> Statement list -> Node)) * string * (LookupContext -> LookupContext)
     
     let fst3 (x, _, _) = x
     let snd3 (_, x, _) = x
     let tri3 (_, _, x) = x
 
-    let updateContext f n context =
-        f { context with parents = n::context.parents }
+    let updateContext f n key context =
+        f { context with parents = n::context.parents; previous = key }
 
     type BaseProcess (maps : NodeTypeMap list ) =
         let rec lookup =
             (fun (key : string) (pos : Position) (context : LookupContext) ->
                 match maps |> List.tryFind (fun (a, _, _, _) -> a (key, pos, context)) with
-                |Some (_,t, n, c) -> t context (processNodeInner (updateContext c n context)) key pos
-                |None -> processNode<Node> id (processNodeInner context) key pos
+                |Some (_,t, n, c) -> t context (processNodeInner (updateContext c n key context)) key pos
+                |None -> processNode<Node> id (processNodeInner {context with previous = key}) key pos
                 ) >> (fun f a b c -> NodeC (f a b c))
         and processNodeInner (c : LookupContext) (node : Node) statement =
             match statement with
@@ -113,7 +113,7 @@ module ProcessCore =
             | KeyValue(PosKeyValue(pos, kv)) -> node.All <- LeafC(Leaf(kv, pos))::node.All
             | Comment(c) -> node.All <- CommentC c::node.All
             | Value(v) -> node.All <- LeafValueC(LeafValue(v))::node.All
-        member __.ProcessNode<'T when 'T :> Node >() = processNode<'T> id (processNodeInner { complete = false; parents = []; scope = ""})
+        member __.ProcessNode<'T when 'T :> Node >() = processNode<'T> id (processNodeInner { complete = false; parents = []; scope = ""; previous = ""})
 
     let baseMap = []
     let processNodeBasic = BaseProcess(baseMap).ProcessNode()

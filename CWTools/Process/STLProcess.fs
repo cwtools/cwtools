@@ -166,9 +166,9 @@ module STLProcess =
             (function |("trigger", _, {parents = "event"::_}) -> true |_ -> false), scopedProcessNode<TriggerBlock>, "triggerblock", id;
             (function |("immediate", _, { parents = "event"::_ }) -> true |_ -> false), scopedProcessNode<EffectBlock>, "effectblock", id;
             (function |("option", _, {parents = "event"::_}) -> true |_ -> false), scopedProcessNode<Option>, "option", id;
-            (function |("tooltip", _, {parents = "option"::_}) -> true |_ -> false), scopedProcessNode<EffectBlock>, "effectblock", id;
-            (function |("allow", _, {parents = "option"::_}) -> true |_ -> false), scopedProcessNode<TriggerBlock>, "triggerblock", id;
-            (function |("trigger", _, {parents = "option"::_}) -> true |_ -> false), scopedProcessNode<TriggerBlock>, "triggerblock", id;
+            (function |("tooltip", _, {parents = "option"::_; previous = "option"}) -> true |_ -> false), scopedProcessNode<EffectBlock>, "effectblock", id;
+            (function |("allow", _, {parents = "option"::_; previous = "option"}) -> true |_ -> false), scopedProcessNode<TriggerBlock>, "triggerblock", id;
+            (function |("trigger", _, {parents = "option"::_; previous = "option"}) -> true |_ -> false), scopedProcessNode<TriggerBlock>, "triggerblock", id;
             (function |("desc", _, {parents = "event"::_}) -> true |_ -> false), scopedProcessNode<Node>, "eventdesc", id;
             (function |("trigger", _, {parents = "eventdesc"::"event"::_}) -> true |_ -> false), scopedProcessNode<TriggerBlock>, "triggerblock", id;
             (function |("after", _, {parents = "event"::_}) -> true |_ -> false), scopedProcessNode<EffectBlock>, "effectblock", id;

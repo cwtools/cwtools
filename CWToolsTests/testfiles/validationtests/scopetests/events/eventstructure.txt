@@ -182,3 +182,23 @@ id = test
 country_event = {
     id = test
 }
+
+##Check trigger inside fleet order
+fleet_event ={
+    is_triggered_only = yes
+    option = {
+        custom_tooltip = {
+            queue_actions = {
+                find_closest_planet = {
+                    trigger = {
+                        id = guardian.1062.trigger.1
+                        is_planet_class = pc_black_hole
+                        solar_system = {
+                            has_star_flag = guardians_technosphere_system
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
