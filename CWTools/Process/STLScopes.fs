@@ -491,6 +491,8 @@ module STLScopes =
         "OR", id;
         "NOR", id;
         "NOT", id;
+        "hidden_effect", id;
+        "hidden_trigger", id;
     ]
     let changeScope (effects : Effect list) (triggers : Effect list) (key : string) (source : ScopeContext) = 
         let key = if key.StartsWith("hidden:") then key.Substring(7) else key
@@ -515,7 +517,8 @@ module STLScopes =
                     | _, ss, false -> context, WrongScope ss
         let inner2 = fun a b -> inner a b |> (fun (c, d) -> c, Some d)
         let res = keys |> Array.fold (fun (c, r) k -> match r with |None -> inner2 c k |Some (NewScope x) -> inner2 x k |Some x -> c, Some x) (source, None) |> snd |> Option.defaultValue (NotFound)
-        res |> function |NewScope x -> NewScope { source with Scopes = x.CurrentScope::source.Scopes } |x -> x
+        let x = res |> function |NewScope x -> NewScope { source with Scopes = x.CurrentScope::source.Scopes } |x -> x
+        x
 
     // let changeScope (scope : string) source = scopes 
     //                                             |> List.tryFind (fun (n, s, _) -> n.ToLower() = scope.ToLower() && s = source)

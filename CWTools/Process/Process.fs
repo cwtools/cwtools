@@ -3,6 +3,7 @@ namespace CWTools.Process
 open CWTools.Parser
 open Newtonsoft.Json
 open System
+open CWTools.Common.STLConstants
 
 module List =
   let replace f sub xs = 
@@ -44,6 +45,7 @@ and Node (key : string, pos : Position) =
     member val Key = key
     member val Position = pos
     member val AllChildren : ResizeArray<Child> = new ResizeArray<Child>() with get, set
+    member val Scope : Scope = Scope.Any with get, set
     member this.All with get () = this.AllChildren |> List.ofSeq
     member this.All with set(value : Child list) = this.AllChildren <- (value |> ResizeArray<Child>)
     member this.Nodes = this.All |> Seq.choose (function |NodeC n -> Some n |_ -> None)
@@ -76,18 +78,20 @@ and Node (key : string, pos : Position) =
 
 module ProcessCore =
 
-    let processNode< 'T when 'T :> Node > inner (key : string) (pos : Position) (sl : Statement list) : Node =
+    let processNode< 'T when 'T :> Node > (postinit : 'T -> 'T) inner (key : string) (pos : Position) (sl : Statement list) : Node =
         // let node = match key with
         //             |"" -> Activator.CreateInstance(typeof<'T>) :?> Node
         //             |x -> Activator.CreateInstance(typeof<'T>, x) :?> Node
         //let paramList : obj[] = [|key; pos|]
         //let bindingFlags = BindingFlags.CreateInstance ||| BindingFlags.Public ||| BindingFlags.Instance ||| BindingFlags.OptionalParamBinding
         //let node = Activator.CreateInstance(typeof<'T>, bindingFlags ,null, paramList, null) :?> Node
-        let node = Activator.CreateInstance(typeof<'T>, key, pos) :?> Node
+        let node =  Activator.CreateInstance(typeof<'T>, key, pos) :?> 'T |> postinit :> Node//  |> postinit// :?> Node |> postinit
         sl |> List.iter (fun e -> inner node e) |> ignore
         node
-    type LookupContext = { complete : bool; parents : string list }
-    type NodeTypeMap = ((string * Position * LookupContext) -> bool) * ((Node -> Statement -> unit) -> string -> Position -> Statement list -> Node) * string * (LookupContext -> LookupContext)
+    
+    let processNodeSimple<'T when 'T :> Node> _ = processNode<'T> id
+    type LookupContext = { complete : bool; parents : string list; scope : string }
+    type NodeTypeMap = ((string * Position * LookupContext) -> bool) * (LookupContext -> ((Node -> Statement -> unit) -> string -> Position -> Statement list -> Node)) * string * (LookupContext -> LookupContext)
     
     let fst3 (x, _, _) = x
     let snd3 (_, x, _) = x
@@ -100,8 +104,8 @@ module ProcessCore =
         let rec lookup =
             (fun (key : string) (pos : Position) (context : LookupContext) ->
                 match maps |> List.tryFind (fun (a, _, _, _) -> a (key, pos, context)) with
-                |Some (_,t, n, c) -> t (processNodeInner (updateContext c n context)) key pos
-                |None -> processNode<Node> (processNodeInner context) key pos
+                |Some (_,t, n, c) -> t context (processNodeInner (updateContext c n context)) key pos
+                |None -> processNode<Node> id (processNodeInner context) key pos
                 ) >> (fun f a b c -> NodeC (f a b c))
         and processNodeInner (c : LookupContext) (node : Node) statement =
             match statement with
@@ -109,7 +113,7 @@ module ProcessCore =
             | KeyValue(PosKeyValue(pos, kv)) -> node.All <- LeafC(Leaf(kv, pos))::node.All
             | Comment(c) -> node.All <- CommentC c::node.All
             | Value(v) -> node.All <- LeafValueC(LeafValue(v))::node.All
-        member __.ProcessNode<'T when 'T :> Node >() = processNode<'T> (processNodeInner { complete = false; parents = []})
+        member __.ProcessNode<'T when 'T :> Node >() = processNode<'T> id (processNodeInner { complete = false; parents = []; scope = ""})
 
     let baseMap = []
     let processNodeBasic = BaseProcess(baseMap).ProcessNode()

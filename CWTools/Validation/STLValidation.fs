@@ -9,6 +9,7 @@ open CWTools.Common
 open CWTools.Common.STLConstants
 open DotNet.Globbing
 open CWTools.Games
+open Newtonsoft.Json.Linq
 
 
 module STLValidation =
@@ -250,6 +251,71 @@ module STLValidation =
             let v = List.map (valEventTrigger event triggers effects modifiers eventScope) n.All
             v |> List.fold (<&&>) OK
         |None -> OK
+    /// Flawed, caqn't deal with DU        
+    let rec copy source target =
+        let properties (x:obj) = x.GetType().GetProperties()
+        query {
+            for s in properties source do
+            join t in properties target on (s.Name = t.Name)
+            where t.CanWrite
+            select s }
+        |> Seq.iter (fun s ->
+            let value = s.GetValue(source,null)
+            if value.GetType().FullName.StartsWith("System.") 
+            then s.SetValue(target, value, null)            
+            else copy value (s.GetValue(target,null))
+        )
+
+    let filterOptionToEffects (o : STLProcess.Option) =
+        let optionTriggers = ["trigger"; "allow"]
+        let optionEffects = ["tooltip";]
+        let optionExcludes = ["name"; "custom_tooltip"; "response_text"; "is_dialog_only"; "sound"; "ai_chance"; "custom_gui"; "default_hide_option"] @ optionTriggers @ optionEffects
+        let newO = Option(o.Key, o.Position)
+        copy o newO
+        newO.All <- newO.All |> List.filter (function |LeafC l -> (not (List.contains l.Key optionExcludes)) | _ -> true)
+        newO.All <- newO.All |> List.filter (function |NodeC l -> (not (List.contains l.Key optionExcludes)) | _ -> true)
+        newO.Scope <- o.Scope
+        newO :> Node
+
+    let valEffectsNew (triggers : (Effect) list) (effects : (Effect) list) (modifiers : Modifier list) (effectBlock : Node) =
+        let scope = { Root = effectBlock.Scope; From = []; Scopes = [effectBlock.Scope]}
+        effectBlock.All <&!&> valEventEffect effectBlock triggers effects modifiers scope
+
+    let valAllEffects (triggers : (Effect) list) (effects : (Effect) list) (modifiers : Modifier list) (es : EntitySet) =
+        let fNode = (fun (x : Node) children ->
+            match x with
+            | (:? EffectBlock as x) -> valEffectsNew triggers effects modifiers x
+            | _ -> OK
+            <&&> children)
+        let foNode = (fun (x : Node) children ->
+            match x with
+            | (:? Option as x) -> x |> filterOptionToEffects |> (fun o -> valEffectsNew triggers effects modifiers o)
+            | _ -> OK
+            <&&> children)
+
+        let fCombine = (<&&>)
+        // let opts = es.All |> List.collect (foldNode2 foNode (@) []) |> List.map filterOptionToEffects
+        // es.All @ opts <&!&> foldNode2 fNode fCombine OK 
+        (es.All <&!&> foldNode2 foNode fCombine OK)
+        <&&>
+        (es.All <&!&> foldNode2 fNode fCombine OK)
+
+    let valTriggersNew (triggers : (Effect) list) (effects : (Effect) list) (modifiers : Modifier list) (effectBlock : Node) =
+        let scope = { Root = effectBlock.Scope; From = []; Scopes = [effectBlock.Scope]}
+        effectBlock.All <&!&> valEventTrigger effectBlock triggers effects modifiers scope
+
+
+    let valAllTriggers (triggers : (Effect) list) (effects : (Effect) list) (modifiers : Modifier list) (es : EntitySet) =
+        let fNode = (fun (x : Node) children ->
+            match x with
+            | (:? TriggerBlock as x) when not x.InEffectBlock -> valTriggersNew triggers effects modifiers x
+            | _ -> OK
+            <&&> children)
+        let fCombine = (<&&>)
+        es.All <&!&> foldNode2 fNode fCombine OK 
+
+
+
     let valEventEffects (triggers : (Effect) list) (effects : (Effect) list) (modifiers : Modifier list) (event : Event) =
         let eventScope = { Root = eventScope event; From = []; Scopes = [eventScope event]}
         // let scopedTriggers = triggers |> List.map (fun e -> e, e.Scopes |> List.exists (fun s -> s = eventScope.CurrentScope)) 
@@ -382,13 +448,7 @@ module STLValidation =
                         | false -> Invalid [inv (ErrorCodes.MissingFile (l.Value.ToRawString())) l])
             sprites <&!&> inner
 
-    let filterOptionToEffects (o : STLProcess.Option) =
-        let optionTriggers = ["trigger"; "allow"]
-        //let optionEffects = ["tooltip"; "hidden_effect"]
-        let optionExcludes = ["name"; "custom_tooltip"; "response_text"; "is_dialog_only"; "sound"; "ai_chance"; "custom_gui"; "default_hide_option"] @ optionTriggers
-        o.All <- o.All |> List.filter (function |LeafC l -> (not (List.contains l.Key optionExcludes)) | _ -> true)
-        o.All <- o.All |> List.filter (function |NodeC l -> (not (List.contains l.Key optionExcludes)) | _ -> true)
-        o :> Node
+
 
     let findAllSetVariables (node : Node) =
         let fNode = (fun (x : Node) children ->
@@ -447,7 +507,7 @@ module STLValidation =
             let opts = es.All |> List.collect (foldNode2 foNode fCombine []) |> List.map filterOptionToEffects
             let effects = es.All |> List.collect (foldNode2 fNode fCombine []) |> List.map (fun f -> f :> Node)
             let triggers = es.All |> List.collect (foldNode2 ftNode fCombine []) |> List.map (fun f -> f :> Node)
-            let defVars = effects |> List.collect findAllSetVariables
+            let defVars = effects @ opts |> List.collect findAllSetVariables
             triggers <&!&> (validateUsedVariables defVars)
 
 

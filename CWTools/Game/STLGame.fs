@@ -328,7 +328,7 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
             let events = entities |> List.choose (function | :? Event as e -> Some e |_ -> None)
             let scriptedTriggers = lookup.scriptedTriggers
             let scriptedEffects = lookup.scriptedEffects
-            events |> List.map (fun e -> (valEventVals e) <&&> (valEventTriggers (vanillaTriggers @ scriptedTriggers) (vanillaEffects @ scriptedEffects) lookup.staticModifiers e) <&&> (valEventEffects (vanillaTriggers @ scriptedTriggers) (vanillaEffects @ scriptedEffects) lookup.staticModifiers e))
+            events |> List.map (fun e -> (valEventVals e) )
                    |> List.choose (function |Invalid es -> Some es |_ -> None)
                    |> List.collect id
         let snood = snd
@@ -346,7 +346,10 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
             let fileValidators = [valSpriteFiles]
             let fres = fileValidators <&!&> (fun v -> v resources newEntities) |> (function |Invalid es -> es |_ -> [])
 
-            (validateShips (flattened)) @ (validateEvents (flattened)) @ res @ fres
+            let eres = valAllEffects (lookup.scriptedTriggers) (lookup.scriptedEffects) (lookup.staticModifiers) newEntities  |> (function |Invalid es -> es |_ -> [])
+            let tres = valAllTriggers (lookup.scriptedTriggers) (lookup.scriptedEffects) (lookup.staticModifiers) newEntities  |> (function |Invalid es -> es |_ -> [])
+            //(validateShips (flattened)) @ (validateEvents (flattened)) @ res @ fres @ eres
+            (validateShips (flattened)) @ (validateEvents (flattened)) @ res @ fres @ eres @ tres
         
         let localisationCheck (entities : Entity list) =
             eprintfn "Localisation check %i files" (entities.Length)

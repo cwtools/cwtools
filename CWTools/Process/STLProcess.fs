@@ -14,7 +14,7 @@ module STLProcess =
     let _targetKeys = ["THIS"; "ROOT"; "PREV"; "FROM"; "OWNER"; "CONTROLLER"; "CAPITAL"; "SOLAR_SYSTEM"; "LEADER"; "RANDOM"; "FROMFROM"; "FROMFROMFROM"; "FROMFROMFROMFROM"; "PREVPREV"; "PREVPREVPREV"; "PREVPREVPREVPREV";
                         "CAPITAL_SCOPE"]//Added used in STH]
     let targetKeys = _targetKeys |> List.sortByDescending (fun k -> k.Length)
-    let toEffectBlockKeys = ["hidden_effect"; "if"; "else"; "tooltip"]
+    let toEffectBlockKeys = ["if"; "else"; "tooltip"]
     let ignoreKeys = ["count"; "min_steps"; "max_steps"]
 
 
@@ -110,7 +110,9 @@ module STLProcess =
         member this.Hidden = this.Tag "hide_window" |> (function | Some (Bool b) -> b | _ -> false)
    
     type EffectBlock(key, pos) = inherit Node(key, pos)
-    type TriggerBlock(key, pos) = inherit Node(key, pos)
+    type TriggerBlock(key, pos) = 
+        inherit Node(key, pos)
+        member val InEffectBlock : bool = false with get, set
     type Option(key, pos) = inherit Node(key, pos)
     let globCheckPosition (pattern : string) =
         let glob = Glob.Parse(pattern)
@@ -118,30 +120,60 @@ module STLProcess =
             let p2 = Position.UnConv(p)
             glob.IsMatch(p2.StreamName))
 
+    let scopedProcessNode<'T when 'T :> Node> (lookup : LookupContext) =
+        match lookup.scope with
+        |"planet" -> processNode<'T> (fun n -> n.Scope <- Scope.Planet; n)
+        |"country" -> processNode<'T> (fun n -> n.Scope <- Scope.Country; n)
+        |"fleet" -> processNode<'T> (fun n -> n.Scope <- Scope.Fleet; n)
+        |"ship" -> processNode<'T> (fun n -> n.Scope <- Scope.Ship; n)
+        |"pop_faction" -> processNode<'T> (fun n -> n.Scope <- Scope.PopFaction; n)
+        |"pop" -> processNode<'T> (fun n -> n.Scope <- Scope.Pop; n)
+        |_ -> processNode<'T> (fun n -> n.Scope <- Scope.Any; n)
+    
+    // let triggerProcessNode (lookup : LookupContext) =
+    //     let postinit = 
+    //         match lookup.scope with
+    //             |"planet" ->  (fun (n : TriggerBlock) -> n.Scope <- Scope.Planet; n)
+    //             |"country" ->  (fun n -> n.Scope <- Scope.Country; n)
+    //             |"fleet" ->  (fun n -> n.Scope <- Scope.Fleet; n)
+    //             |"ship" ->  (fun n -> n.Scope <- Scope.Ship; n)
+    //             |"pop_faction" ->  (fun n -> n.Scope <- Scope.PopFaction; n)
+    //             |"pop" ->  (fun n -> n.Scope <- Scope.Pop; n)
+    //             |_ ->  (fun n -> n.Scope <- Scope.Any; n)
+    //     match lookup.parents with
+    //     | "effectblock"::_ -> processNode<TriggerBlock> (postinit >> (fun n -> n.InEffectBlock <- true; n))
+    //     | _ -> processNode<TriggerBlock> postinit
+
+    let triggerInEffectProcessNode (lookup : LookupContext) =
+        processNode<TriggerBlock> (fun n -> n.InEffectBlock <- true; n)
+
     
     let shipMap =
         [
-            fst3 >> ((=) "ship_design"), processNode<Ship>, "ship", id;
-            fst3 >> ((=) "section"), processNode<ShipSection>, "shipsection", id;
-            fst3 >> ((=) "component"), processNode<ShipComponent>, "shipcomponent", id;
-            fst3 >> ((=) "planet_event"), processNode<Event>, "event", id;
-            fst3 >> ((=) "country_event"), processNode<Event>, "event", id;
-            fst3 >> ((=) "fleet_event"), processNode<Event>, "event", id;
-            fst3 >> ((=) "ship_event"), processNode<Event>, "event", id;
-            fst3 >> ((=) "pop_faction_event"), processNode<Event>, "event", id;
-            fst3 >> ((=) "pop_event"), processNode<Event>, "event", id;
-            fst3 >> ((=) "event"), processNode<Event>, "event", id;
-            (function |("trigger", _, {parents = "event"::_}) -> true |_ -> false), processNode<TriggerBlock>, "triggerblock", id;
-            (function |("immediate", _, { parents = "event"::_ }) -> true |_ -> false), processNode<EffectBlock>, "effectblock", id;
-            (function |("option", _, {parents = "event"::_}) -> true |_ -> false), processNode<Option>, "option", id;
-            //(function |("hidden_effect", _, {parents = "option"::_}) -> true |_ -> false), processNode<EffectBlock>, "effectblock", id;
-            //(function |("tooltip", _, {parents = "option"::_}) -> true |_ -> false), processNode<EffectBlock>, "effectblock", id;
-            (function |("desc", _, {parents = "event"::_}) -> true |_ -> false), processNode<Node>, "eventdesc", id;
-            (function |("trigger", _, {parents = "eventdesc"::"event"::_}) -> true |_ -> false), processNode<TriggerBlock>, "triggerblock", id;
-            (function |("after", _, {parents = "event"::_}) -> true |_ -> false), processNode<EffectBlock>, "effectblock", id;
-            (function |("limit", _, {parents = "effectblock"::_}) -> true |_ -> false), processNode<TriggerBlock>, "triggerblock", id;
-            (function |("limit", _, {parents = "option"::_}) -> true |_ -> false), processNode<TriggerBlock>, "triggerblock", id;
-            (fun (_, p, c) -> (globCheckPosition("**/common/button_effects/*.txt") p) && not c.complete), processNode<Button_Effect>, "buttoneffect",  (fun c -> { c with complete = true});
+            fst3 >> ((=) "ship_design"), processNodeSimple<Ship>, "ship", id;
+            fst3 >> ((=) "section"), processNodeSimple<ShipSection>, "shipsection", id;
+            fst3 >> ((=) "component"), processNodeSimple<ShipComponent>, "shipcomponent", id;
+            fst3 >> ((=) "planet_event"), processNodeSimple<Event>, "event", (fun c -> {c with scope = "planet"});
+            fst3 >> ((=) "country_event"), processNodeSimple<Event>, "event", (fun c -> {c with scope = "country"});
+            fst3 >> ((=) "fleet_event"), processNodeSimple<Event>, "event", (fun c -> {c with scope = "fleet"});
+            fst3 >> ((=) "ship_event"), processNodeSimple<Event>, "event", (fun c -> {c with scope = "ship"});
+            fst3 >> ((=) "pop_faction_event"), processNodeSimple<Event>, "event", (fun c -> {c with scope = "pop_faction"});
+            fst3 >> ((=) "pop_event"), processNodeSimple<Event>, "event", (fun c -> {c with scope = "pop"});
+            fst3 >> ((=) "event"), processNodeSimple<Event>, "event", id;
+            (function |("trigger", _, {parents = "event"::_}) -> true |_ -> false), scopedProcessNode<TriggerBlock>, "triggerblock", id;
+            (function |("immediate", _, { parents = "event"::_ }) -> true |_ -> false), scopedProcessNode<EffectBlock>, "effectblock", id;
+            (function |("option", _, {parents = "event"::_}) -> true |_ -> false), scopedProcessNode<Option>, "option", id;
+            (function |("tooltip", _, {parents = "option"::_}) -> true |_ -> false), scopedProcessNode<EffectBlock>, "effectblock", id;
+            (function |("allow", _, {parents = "option"::_}) -> true |_ -> false), scopedProcessNode<TriggerBlock>, "triggerblock", id;
+            (function |("trigger", _, {parents = "option"::_}) -> true |_ -> false), scopedProcessNode<TriggerBlock>, "triggerblock", id;
+            //(function |("hidden_effect", _, {parents = "option"::_}) -> true |_ -> false), processNodeSimple<EffectBlock>, "effectblock", id;
+            //(function |("tooltip", _, {parents = "option"::_}) -> true |_ -> false), processNodeSimple<EffectBlock>, "effectblock", id;
+            (function |("desc", _, {parents = "event"::_}) -> true |_ -> false), scopedProcessNode<Node>, "eventdesc", id;
+            (function |("trigger", _, {parents = "eventdesc"::"event"::_}) -> true |_ -> false), scopedProcessNode<TriggerBlock>, "triggerblock", id;
+            (function |("after", _, {parents = "event"::_}) -> true |_ -> false), scopedProcessNode<EffectBlock>, "effectblock", id;
+            (function |("limit", _, {parents = "effectblock"::_}) -> true |_ -> false), triggerInEffectProcessNode, "triggerblock", id;
+            (function |("limit", _, {parents = "option"::_}) -> true |_ -> false), processNodeSimple<TriggerBlock>, "triggerblock", id;
+            (fun (_, p, c) -> (globCheckPosition("**/common/button_effects/*.txt") p) && not c.complete), processNodeSimple<Button_Effect>, "buttoneffect",  (fun c -> { c with complete = true});
        ]
     let shipProcess = BaseProcess(shipMap)
 
