@@ -1,0 +1,28 @@
+
+## Test triggers and effects
+satrapy = {
+	can_expand = yes
+	can_be_integrated = no
+	joins_overlord_wars = no
+	calls_overlord_to_war = no
+	can_do_diplomacy = yes
+	
+	diplo_threat = 0.75
+	
+	subject_tax_rate = {
+		minerals = 0.2
+		energy = 0.1
+	}
+	
+	potential = {
+        has_country_flag = yes
+        #error
+        has_fleet_flag = yes
+	}
+	
+	effect = {
+        set_country_flag = yes
+        #error
+        set_fleet_flag = yes
+	}
+}

@@ -1,0 +1,23 @@
+##Test trigger
+tradition_domination = {
+	adoption_bonus = "tr_domination_adopt"
+	finish_bonus = "tr_domination_finish"
+	traditions = {
+		"tr_domination_colonial_viceroys"
+		"tr_domination_protection_racket"
+		"tr_domination_star_lords"
+		"tr_domination_fleet_levies"
+		"tr_domination_vassal_acculturation"
+	}
+	tradition_swap = {
+		name = tradition_domination_machine
+		trigger = {
+            has_country_flag = yes
+            #error
+            has_fleet_flag = yes
+		}
+		weight = {
+			factor = 1
+		}		
+	}
+}

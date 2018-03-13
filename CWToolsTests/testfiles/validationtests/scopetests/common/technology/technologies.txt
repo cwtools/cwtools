@@ -1,0 +1,50 @@
+##Test triggers
+tech_pk_godray = {
+	area = engineering
+	cost = 10
+	tier = 5
+	is_rare = yes
+	category = { psionics }
+	prerequisites = { "tech_colossus" }
+	ai_update_type = military
+	weight = 10
+	
+	potential = {
+        has_country_flag = yes
+        #error
+        has_fleet_flag = yes
+	}
+	
+	weight_modifier = {
+		factor = 0.50
+		modifier = {
+			factor = 0.20
+			NOR = {
+				research_leader = {
+					area = engineering
+					has_trait = "leader_trait_maniacal"
+				}
+				research_leader = {
+					area = engineering
+					has_trait = "leader_trait_curator"
+				}
+				research_leader = {
+					area = engineering
+					has_trait = "leader_trait_expertise_psionics"
+				}
+			}			
+		}
+	}
+	
+	ai_weight = {
+		factor = 0.25
+		modifier = {
+			factor = 1.25
+			has_ethic = ethic_spiritualist
+		}
+		modifier = {
+			factor = 1.5
+			has_ethic = ethic_fanatic_spiritualist
+		}
+	}
+}

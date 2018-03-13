@@ -1,0 +1,25 @@
+##Test triggers
+living_standard_deassimilation = {
+	token = living_standard_deassimilation
+	name = living_standard_deassimilation
+
+	pop_modifier = {
+		pop_consumer_goods_add = 2.0
+	}
+
+	potential = {
+        has_species_flag = yes
+        #error
+        has_country_flag = yes
+    }
+
+	allow = {
+        has_species_flag = yes
+        #error
+        has_country_flag = yes
+	}
+
+	ai_will_do = {
+		factor = 100
+	}
+}

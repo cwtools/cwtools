@@ -1,0 +1,49 @@
+##Test triggers
+@colossus_collision_radius = 4
+@colossus_formation_priority = 4
+
+@speed_very_slow = 80
+@speed_slow = 100
+@speed_default = 120
+@speed_fast = 140
+@speed_very_fast = 160
+
+colossus = {
+	formation_priority = @colossus_formation_priority
+	max_speed = @speed_very_slow
+	acceleration = 0.2
+	rotation_speed = 0.15
+	collision_radius = @colossus_collision_radius
+	max_hitpoints = 30000
+	modifier = {
+		ship_evasion_add = 2
+	}
+	size_multiplier = 32
+	fleet_slot_size = 32
+	section_slots = { "ship" = { locator = "frame_ship" } }
+	num_target_locators = 4
+	is_space_station = no
+	icon_frame = 7
+	base_buildtime = 3600
+	can_have_federation_design = no
+	enable_default_design = yes
+	
+	prerequisites = { "tech_colossus" }
+	
+	class = shipclass_military_special
+	construction_type = starbase_shipyard
+	required_component_set = "power_core"
+	required_component_set = "ftl_components"
+	required_component_set = "thruster_components"
+	required_component_set = "combat_computers"
+
+	possible_starbase = {
+        has_starbase_module = yes
+        #error
+        has_country_flag = yes
+	}
+	
+	empire_limit = {
+		base = 1
+	}
+}

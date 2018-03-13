@@ -1,0 +1,26 @@
+##Test trigger
+terraform_link = {
+	from = "pc_nuked"
+	to = "pc_continental"
+	
+	energy = 10000
+	duration = 7200
+	
+	condition = {
+        has_country_flag = yes
+        #error
+        has_fleet_flag = yes
+	}
+	
+	ai_weight = {
+		weight = 2
+		modifier = {
+			factor = 0
+			OR = {
+				is_mechanical_empire = yes
+				is_cyborg_empire = yes
+				has_authority = auth_machine_intelligence
+			}
+		}
+	}
+}

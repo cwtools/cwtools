@@ -1,0 +1,30 @@
+##Test triggers
+tr_diplomacy_entente_coordination = {
+	possible = {
+		has_tradition = tr_diplomacy_the_federation
+	}
+
+	modifier = {
+		federation_naval_cap_contribution_mult = 1.00
+	}
+	
+	tradition_swap = {
+		name = tr_adaptability_survival_fittest
+		inherit_effects = no
+		inherit_icon = no
+		inherit_name = no
+		trigger = {
+            has_country_flag = yes
+            #error
+            has_fleet_flag = yes
+		}
+		modifier = {
+			BIOLOGICAL_species_trait_points_add = 1
+
+			modify_species_cost_mult = -0.15
+		}
+		weight = {
+			factor = 1
+		}
+	}
+}

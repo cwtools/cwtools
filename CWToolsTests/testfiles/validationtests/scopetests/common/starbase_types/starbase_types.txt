@@ -1,0 +1,47 @@
+##Test trigger
+stb_trading_hub_gestalt = {
+	potential = {
+        has_starbase_module = yes
+        #error
+        has_country_flag = yes
+	}
+
+	weight_modifier = {
+		base = 100	
+		modifier = {
+			add = 100
+			count_starbase_modules = {
+				type = trading_hub
+				count > 1
+			}
+		}		
+		modifier = {
+			add = 100
+			count_starbase_modules = {
+				type = trading_hub
+				count > 2
+			}
+		}
+		modifier = {
+			add = 100
+			count_starbase_modules = {
+				type = trading_hub
+				count > 3
+			}
+		}
+		modifier = {
+			add = 100
+			count_starbase_modules = {
+				type = trading_hub
+				count > 4
+			}
+		}
+		modifier = {
+			add = 100
+			count_starbase_modules = {
+				type = trading_hub
+				count > 5
+			}
+		}
+	}
+}

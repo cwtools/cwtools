@@ -1,0 +1,11 @@
+## Test triggers
+part = {
+	location = 0
+	localization = "START_SCREEN_PART_ONE_CONTINENTAL"
+	
+	trigger = {
+        has_country_flag = yes
+        #error
+        has_star_flag = yes
+	}		
+}

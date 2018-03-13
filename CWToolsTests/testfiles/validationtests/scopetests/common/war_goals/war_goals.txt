@@ -1,0 +1,40 @@
+##Test triggers and effects
+wg_independence = {
+	casus_belli = cb_subject
+	
+	hide_if_no_cb = yes
+	set_defender_wargoal = wg_assert_overlordship
+	
+	potential = {
+        has_country_flag = yes
+        #error
+        has_fleet_flag = yes
+	}
+	possible = {
+        has_country_flag = yes
+        #error
+        has_fleet_flag = yes
+	}
+	
+	on_status_quo = {	
+        set_country_flag = yes
+        #error
+        set_fleet_flag = yes
+	}
+	
+	on_accept = {
+        set_country_flag = yes
+        #error
+        set_fleet_flag = yes
+	}
+	
+	on_wargoal_set = {
+	    set_country_flag = yes
+        #error
+        set_fleet_flag = yes		
+	}
+	
+	ai_weight = {
+		weight = 100
+	}
+}

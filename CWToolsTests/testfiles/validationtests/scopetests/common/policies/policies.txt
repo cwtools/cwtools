@@ -1,0 +1,41 @@
+##Test triggers and effects
+first_contact_protocol = {
+
+	potential = {
+		has_country_flag = yes
+        #error
+        has_fleet_flag = yes
+	}
+
+    allow = {
+		has_country_flag = yes
+        #error
+        has_fleet_flag = yes
+    }
+	
+	option = {
+		name = "first_contact_attack_not_allowed"
+		
+		policy_flags = {
+			first_contact_attack_not_allowed
+		}
+		
+		on_enabled = {
+            set_country_flag = yes
+            #error
+            set_fleet_flag = yes
+		}
+
+        on_disabled = {
+            set_country_flag = yes
+            #error
+            set_fleet_flag = yes
+ 
+        }
+		
+		valid = {
+            has_country_flag = yes
+            #error
+            has_fleet_flag = yes
+		}
+	}

@@ -1,0 +1,12 @@
+## Test trigger
+sys_colonized = {
+	potential = {
+        has_star_flag = yes
+        #error
+        has_country_flag = yes
+	}
+
+	weight_modifier = {
+		base = 200
+	}
+}

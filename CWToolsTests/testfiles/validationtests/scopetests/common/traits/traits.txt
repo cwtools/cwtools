@@ -1,0 +1,42 @@
+##Test trigger
+trait_ruler_military_pioneer = {
+	cost = 1
+	modification = no
+	icon = "gfx/interface/icons/traits/leader_traits/trait_ruler_military_pioneer.dds"
+	leader_potential_add = {
+        has_leader_flag = yes
+        #error
+        has_fleet_flag = yes
+	}
+	modifier = {
+		country_ship_upgrade_cost_mult = -0.1
+		starbase_shipyard_build_cost_mult = -0.1
+	}
+	leader_trait = yes
+	leader_class = { ruler }
+	prerequisites = { tech_refit_standards }
+}
+
+trait_presapient_irradiated = {
+	cost = 1
+	initial = no
+	sapient = no
+	modification = yes
+	species_potential_add = { always = no }
+	icon = "gfx/interface/icons/traits/trait_primitive.dds"
+	allowed_archetypes = { BIOLOGICAL PRESAPIENT }
+	modifier = {
+		pc_nuked_habitability = 1
+		leader_age = 30
+	}
+    species_potential_add = { 
+        has_species_flag = yes
+        #error
+        has_country_flag = yes 
+        }
+    species_potential_remove = { 
+        has_species_flag = yes
+        #error
+        has_country_flag = yes 
+        }
+}

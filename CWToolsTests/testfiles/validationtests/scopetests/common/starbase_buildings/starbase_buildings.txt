@@ -1,0 +1,32 @@
+##Test triggers
+resource_silo = {
+	icon = "GFX_spaceport_module_resource_silo"
+	construction_days = 180
+	
+    potential = {
+        has_starbase_flag = yes
+        #error
+        has_country_flag = yes
+    }
+
+    possible = {
+        has_starbase_flag = yes
+        #error
+        has_country_flag = yes
+    }
+    
+    cost = {
+		minerals = 100
+	}
+	
+	country_modifier = {
+		max_minerals = 2500
+		max_energy = 2500
+	}
+
+	ai_build_at_chokepoint = no
+	ai_build_outside_chokepoint = yes
+	ai_weight = {
+		weight = 50
+	}
+}

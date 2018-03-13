@@ -1,0 +1,31 @@
+##Test effects and triggers
+basic_init_02 = {
+	class = "rl_standard_stars"
+	asteroids_distance = 95
+	
+	usage = misc_system_init
+	usage_odds = 20
+	
+	planet = {
+		count = 1
+		class = star
+		orbit_distance = 0
+		orbit_angle = 1
+		size = { min = 20 max = 30 }
+		has_ring = no
+        init_effect = {
+            #error
+            set_fleet_flag = yes
+            set_planet_flag = yes
+        }
+	}
+	neighbor_system = {
+		distance = { min = 10 max = 100 }
+		initializer = "example_neighbor"
+        trigger = {
+            #error
+            has_fleet_flag = yes
+        has_star_flag = yes
+        }
+	}
+}
