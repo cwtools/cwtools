@@ -26,11 +26,17 @@ module CK2Process =
         member this.Slots = this.Child "slots" |> (function |Some c -> c.ToRaw | _ -> [])
         member __.Weapons = base.All |> List.choose (function |NodeC n when n.Key <> "slots" -> Some n |_ -> None)
 
+    // let maps =
+    //     [
+    //         fst3 >> ((=) "option"), processNodeSimple<Option>, "option", id;
+    //         (fun (s, _, _) -> s.EndsWith("event")), processNodeSimple<Event>, "event", id;
+    //     ]
+
     let maps =
-        [
-            fst3 >> ((=) "option"), processNodeSimple<Option>, "option", id;
-            (fun (s, _, _) -> s.EndsWith("event")), processNodeSimple<Event>, "event", id;
-        ]
+        function
+        |("option", _, _) -> processNodeSimple<Option>, "option", id;
+        |(s, _, _) when s.EndsWith("event") -> processNodeSimple<Event>, "event", id;
+        |_ -> processNodeSimple<Node>, "", id;
 
     let ck2Process = BaseProcess(maps)
     let processCK2Node = ck2Process.ProcessNode<Node>()

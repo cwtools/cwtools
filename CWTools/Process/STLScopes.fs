@@ -136,20 +136,6 @@ module STLScopes =
         ScopedEffect("alliance", [], Scope.Alliance, EffectType.Both, defaultDesc, "");
         ScopedEffect("starbase", [Scope.GalacticObject; Scope.Planet], Scope.Starbase, EffectType.Both, defaultDesc, "");
     ]
-    let relativeScopes =
-        ["root", Scope.Any, Scope.Any;
-        "from", Scope.Any, Scope.Any;
-        "prev", Scope.Any, Scope.Any;
-        "prevprev", Scope.Any, Scope.Any;
-        "prevprevprev", Scope.Any, Scope.Any;
-        "prevprevprevprev", Scope.Any, Scope.Any;
-        "fromfrom", Scope.Any, Scope.Any;
-        "fromfromfrom", Scope.Any, Scope.Any;
-        "fromfromfromfrom", Scope.Any, Scope.Any;
-        "this", Scope.Any, Scope.Any;
-        "event_target:", Scope.Any, Scope.Any;
-        "parameter:", Scope.Any, Scope.Any]
-
 // any/every/random_ship
 // any/every/random_pop
 // any/every/random_owned_ship
@@ -325,15 +311,6 @@ module STLScopes =
                 match scopeLists |> List.tryPick (function | (n, t) when n = de.Name -> Some t |_ -> None) with
                 | Some t -> ScopedEffect(de, t) :> DocEffect
                 | None -> de) 
-
-    let anyScopes = [
-        "last_created_ambient_object", allScopes, Scope.AmbientObject
-        ;"last_created_country", allScopes, Scope.Country
-        ;"last_created_fleet", allScopes, Scope.Fleet
-        ;"last_created_leader", allScopes, Scope.Leader
-        ;"last_created_pop", allScopes, Scope.Pop
-        ;"last_created_species", allScopes, Scope.Species
-    ]
 
     let scopes =
         ["every_country", Scope.Any, Scope.Country

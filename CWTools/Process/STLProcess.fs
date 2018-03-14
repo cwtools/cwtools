@@ -149,7 +149,213 @@ module STLProcess =
     let triggerInEffectProcessNode (lookup : LookupContext) =
         processNode<TriggerBlock> (fun n -> n.InEffectBlock <- true; n)
 
-    
+    let stellarisFunction =
+        function
+        |("ship_design", _, _) -> processNodeSimple<Ship>, "ship", id
+        |("section", _, _) -> processNodeSimple<ShipSection>, "shipsection", id;
+        |("component", _, _) -> processNodeSimple<ShipComponent>, "shipcomponent", id;
+        |("planet_event", _, _) -> processNodeSimple<Event>, "event", (fun c -> {c with scope = "planet"});
+        |("country_event", _, _) -> processNodeSimple<Event>, "event", (fun c -> {c with scope = "country"});
+        |("fleet_event", _, _) -> processNodeSimple<Event>, "event", (fun c -> {c with scope = "fleet"});
+        |("ship_event", _, _) -> processNodeSimple<Event>, "event", (fun c -> {c with scope = "ship"});
+        |("pop_faction_event", _, _) -> processNodeSimple<Event>, "event", (fun c -> {c with scope = "pop_faction"});
+        |("pop_event", _, _) -> processNodeSimple<Event>, "event", (fun c -> {c with scope = "pop"});
+        |("event", _, _) -> processNodeSimple<Event>, "event", id;
+        //Events
+        |("trigger", _, {parents = "event"::_}) ->  scopedProcessNode<TriggerBlock>, "triggerblock", id;
+        |("immediate", _, { parents = "event"::_ }) ->  scopedProcessNode<EffectBlock>, "effectblock", id;
+        |("option", _, {parents = "event"::_}) ->  scopedProcessNode<Option>, "option", id;
+        |("tooltip", _, {parents = "option"::_; previous = "option"}) ->  scopedProcessNode<EffectBlock>, "effectblock", id;
+        |("allow", _, {parents = "option"::_; previous = "option"}) ->  scopedProcessNode<TriggerBlock>, "triggerblock", id;
+        |("trigger", _, {parents = "option"::_; previous = "option"}) ->  scopedProcessNode<TriggerBlock>, "triggerblock", id;
+        |("desc", _, {parents = "event"::_}) ->  scopedProcessNode<Node>, "eventdesc", id;
+        |("trigger", _, {parents = "eventdesc"::"event"::_}) ->  scopedProcessNode<TriggerBlock>, "triggerblock", id;
+        |("after", _, {parents = "event"::_}) ->  scopedProcessNode<EffectBlock>, "effectblock", id;
+        |("limit", _, {parents = "effectblock"::_}) ->  triggerInEffectProcessNode, "triggerblock", id;
+        |("limit", _, {parents = "option"::_}) ->  processNodeSimple<TriggerBlock>, "triggerblock", id;
+        //Buildings
+        |(_, p, c) when globCheckPosition("**/common/buildings/*.txt") p && not c.complete ->  processNodeSimple<Node>, "building",  (fun c -> { c with complete = true});
+        |("potential", _, {parents = "building"::_}) ->  specificScopeProcessNode<TriggerBlock> Scope.Tile, "triggerblock", id;
+        |("allow", _, {parents = "building"::_}) ->  specificScopeProcessNode<TriggerBlock> Scope.Tile, "triggerblock", id;
+        |("ai_allow", _, {parents = "building"::_}) ->  specificScopeProcessNode<TriggerBlock> Scope.Tile, "triggerblock", id;
+        |("destroy_if", _, {parents = "building"::_}) ->  specificScopeProcessNode<TriggerBlock> Scope.Tile, "triggerblock", id;
+        |("active", _, {parents = "building"::_}) ->  specificScopeProcessNode<TriggerBlock> Scope.Tile, "triggerblock", id;
+        |("planet_modifier_with_pop_trigger", _, {parents = "building"::_}) ->  processNodeSimple<Node>, "planetmodpop", id;
+        //Armies
+        |(_, p, c) when globCheckPosition("**/common/armies/*.txt") p && not c.complete ->  processNodeSimple<Node>, "army",  (fun c -> { c with complete = true});
+        |("potential", _, {parents = "army"::_}) ->  specificScopeProcessNode<TriggerBlock> Scope.Planet, "triggerblock", id;
+        |("allow", _, {parents = "army"::_}) ->  specificScopeProcessNode<TriggerBlock> Scope.Planet, "triggerblock", id;
+        |("show_tech_unlock_if", _, {parents = "army"::_}) ->  specificScopeProcessNode<TriggerBlock> Scope.Country, "triggerblock", id;
+        |("on_queued", _, {parents = "army"::_}) ->  specificScopeProcessNode<EffectBlock> Scope.Country, "effectblock", id;
+        |("on_unqueued", _, {parents = "army"::_}) ->  specificScopeProcessNode<EffectBlock> Scope.Country, "effectblock", id;
+        //Anomalies
+        |(n, p, c) when n = "anomaly" && (globCheckPosition("**/common/anomalies/*.txt") p && not c.complete) ->  processNodeSimple<Node>, "anomaly",  (fun c -> { c with complete = true});
+        |("potential", _, {parents = "anomaly"::_}) ->  specificScopeProcessNode<TriggerBlock> Scope.Ship, "triggerblock", id;
+        |(n, p, c) when n = "anomaly_category" && (globCheckPosition("**/common/anomalies/*.txt") p && not c.complete) -> processNodeSimple<Node>, "anomalycat",  (fun c -> { c with complete = true});
+        |("potential", _, {parents = "anomalycat"::_}) ->  specificScopeProcessNode<TriggerBlock> Scope.Planet, "triggerblock", id;
+        |("on_spawn", _, {parents = "anomalycat"::_}) ->  specificScopeProcessNode<EffectBlock> Scope.Planet, "effectblock", id;
+        |("on_success", _, {parents = "anomalycat"::_}) ->  specificScopeProcessNode<EffectBlock> Scope.Ship, "effectblock", id;
+        |("on_fail", _, {parents = "anomalycat"::_}) ->  specificScopeProcessNode<EffectBlock> Scope.Ship, "effectblock", id;
+        |("on_critical_fail", _, {parents = "anomalycat"::_}) ->  specificScopeProcessNode<EffectBlock> Scope.Ship, "effectblock", id;
+        //Ascension perks
+        |(_, p, c) when globCheckPosition("**/common/ascension_perks/*.txt") p && not c.complete ->  processNodeSimple<Node>, "ascension",  (fun c -> { c with complete = true});
+        |("potential", _, {parents = "ascension"::_}) ->  specificScopeProcessNode<TriggerBlock> Scope.Country, "triggerblock", id;
+        |("possible", _, {parents = "ascension"::_}) ->  specificScopeProcessNode<TriggerBlock> Scope.Country, "triggerblock", id;
+        |("on_enabled", _, {parents = "ascension"::_}) ->  specificScopeProcessNode<EffectBlock> Scope.Country, "effectblock", id;
+        //Bombardment stances
+        |(_, p, c) when globCheckPosition("**/common/bombardment_stances/*.txt") p && not c.complete ->  processNodeSimple<Node>, "bombard",  (fun c -> { c with complete = true});
+        |("trigger", _, {parents = "bombard"::_;}) ->  specificScopeProcessNode<TriggerBlock> Scope.Fleet, "triggerblock", id;
+        //Buildable pops
+        |(_, p, c) when globCheckPosition("**/common/buildable_pops/*.txt") p && not c.complete ->  processNodeSimple<Node>, "buildpops",  (fun c -> { c with complete = true});
+        |("potential_build", _, {parents = "buildpops"::_;}) ->  specificScopeProcessNode<TriggerBlock> Scope.Country, "triggerblock", id;
+        |("allow", _, {parents = "buildpops"::_;}) ->  specificScopeProcessNode<TriggerBlock> Scope.Country, "triggerblock", id;
+        |("show_tech_unlock_if", _, {parents = "buildpops"::_;}) ->  specificScopeProcessNode<TriggerBlock> Scope.Country, "triggerblock", id;
+        //Button effects #todo effects
+        |(_, p, c) when globCheckPosition("**/common/button_effects/*.txt") p && not c.complete ->  processNodeSimple<Button_Effect>, "buttoneffect",  (fun c -> { c with complete = true});
+        //Bypass
+        |(_, p, c) when globCheckPosition("**/common/bypass/*.txt") p && not c.complete ->  processNodeSimple<Node>, "bypass",  (fun c -> { c with complete = true});
+        |("on_pre_explore", _, {parents = "bypass"::_;}) ->  specificScopeProcessNode<EffectBlock> Scope.Fleet, "effectblock", id;
+        |("country_can_use", _, {parents = "bypass"::_;}) ->  specificScopeProcessNode<TriggerBlock> Scope.Country, "triggerblock", id;
+        //Casus belli
+        |(_, p, c) when globCheckPosition("**/common/casus_belli/*.txt") p && not c.complete ->  processNodeSimple<Node>, "casusbelli",  (fun c -> { c with complete = true});
+        |("potential", _, {parents = "casusbelli"::_;}) ->  specificScopeProcessNode<TriggerBlock> Scope.Country, "triggerblock", id;
+        |("is_valid", _, {parents = "casusbelli"::_;}) ->  specificScopeProcessNode<TriggerBlock> Scope.Country, "triggerblock", id;
+        |("destroy_if", _, {parents = "casusbelli"::_;}) ->  specificScopeProcessNode<TriggerBlock> Scope.Country, "triggerblock", id;
+        //Diplomatic actions            
+        |(_, p, c) when globCheckPosition("**/common/diplomatic_actions/*.txt") p && not c.complete ->  processNodeSimple<Node>, "diploact",  (fun c -> { c with complete = true});
+        |("potential", _, {parents = "diploact"::_;}) ->  specificScopeProcessNode<TriggerBlock> Scope.Country, "triggerblock", id;
+        |("possible", _, {parents = "diploact"::_;}) ->  specificScopeProcessNode<TriggerBlock> Scope.Country, "triggerblock", id;
+        |("proposable", _, {parents = "diploact"::_;}) ->  specificScopeProcessNode<TriggerBlock> Scope.Country, "triggerblock", id;
+        |("on_accept", _, {parents = "diploact"::_;}) ->  specificScopeProcessNode<EffectBlock> Scope.Country, "effectblock", id;
+        |("on_decline", _, {parents = "diploact"::_;}) ->  specificScopeProcessNode<EffectBlock> Scope.Country, "effectblock", id;
+        //Edicts
+        |(n, p, c) when n = "country_edict" && (globCheckPosition("**/common/edicts/*.txt") p && not c.complete) -> processNodeSimple<Node>, "edict",  (fun c -> { c with complete = true; scope = "country"});
+        |(n, p, c) when n = "planet_edict" && (globCheckPosition("**/common/edicts/*.txt") p && not c.complete) -> processNodeSimple<Node>, "edict",  (fun c -> { c with complete = true; scope = "planet"});
+        |("potential", _, {parents = "edict"::_;}) ->  scopedProcessNode<TriggerBlock>, "triggerblock", id;
+        |("allow", _, {parents = "edict"::_;}) ->  scopedProcessNode<TriggerBlock>, "triggerblock", id;
+        |("effect", _, {parents = "edict"::_;}) ->  scopedProcessNode<EffectBlock>, "effectblock", id;
+        //Ethics
+        |(_, p, c) when globCheckPosition("**/common/ethics/*.txt") p && not c.complete ->  processNodeSimple<Node>, "ethic",  (fun c -> { c with complete = true;});
+        |("playable", _, {parents = "ethic"::_;}) ->  specificScopeProcessNode<TriggerBlock> Scope.Country, "triggerblock", id;
+        |("pop_attraction_tag", _, {parents = "ethic"::_;}) ->  processNodeSimple<Node>, "popattractiontag", id;
+        |("trigger", _, {parents = "popattractiontag"::"ethic"::_;}) ->  specificScopeProcessNode<TriggerBlock> Scope.Country, "triggerblock", id;
+        //Mandates
+        |(_, p, c) when globCheckPosition("**/common/mandates/*.txt") p && not c.complete ->  processNodeSimple<Node>, "mandate",  (fun c -> { c with complete = true;});
+        |("valid", _, {parents = "mandate"::_;}) ->  specificScopeProcessNode<TriggerBlock> Scope.Leader, "triggerblock", id;
+        |("on_term_started", _, {parents = "mandate"::_;}) ->  specificScopeProcessNode<EffectBlock> Scope.Leader, "effectblock", id;
+        |("on_term_ended", _, {parents = "mandate"::_;}) ->  specificScopeProcessNode<EffectBlock> Scope.Leader, "effectblock", id;
+        //Megastrucutres
+        |(_, p, c) when globCheckPosition("**/common/megastructures/*.txt") p && not c.complete ->  processNodeSimple<Node>, "megastructure",  (fun c -> { c with complete = true;});
+        |("potential", _, {parents = "megastructure"::_;}) ->  specificScopeProcessNode<TriggerBlock> Scope.Country, "triggerblock", id;
+        |("possible", _, {parents = "megastructure"::_;}) ->  specificScopeProcessNode<TriggerBlock> Scope.GalacticObject, "triggerblock", id;
+        |("placement_rules", _, {parents = "megastructure"::_;}) ->  processNodeSimple<Node>, "megastructureplacement", id;
+        |("planet_possible", _, {parents = "megastructureplacement"::"megastructure"::_;}) ->  specificScopeProcessNode<TriggerBlock> Scope.Planet, "triggerblock", id;
+        |("on_build_start", _, {parents = "megastructure"::_;}) ->  specificScopeProcessNode<EffectBlock> Scope.GalacticObject, "effectblock", id;
+        |("on_build_cancel", _, {parents = "megastructure"::_;}) ->  specificScopeProcessNode<EffectBlock> Scope.GalacticObject, "effectblock", id;
+        |("on_build_complete", _, {parents = "megastructure"::_;}) ->  specificScopeProcessNode<EffectBlock> Scope.GalacticObject, "effectblock", id;
+        //Observation station missions
+        |(_, p, c) when globCheckPosition("**/common/observation_station_missions/*.txt") p && not c.complete ->  processNodeSimple<Node>, "obsstation",  (fun c -> { c with complete = true;});
+        |("potential", _, {parents = "obsstation"::_;}) ->  specificScopeProcessNode<TriggerBlock> Scope.Country, "triggerblock", id;
+        |("valid", _, {parents = "obsstation"::_;}) ->  specificScopeProcessNode<TriggerBlock> Scope.Country, "triggerblock", id;
+        //Personalities
+        |(_, p, c) when globCheckPosition("**/common/personalities/*.txt") p && not c.complete ->  processNodeSimple<Node>, "personality",  (fun c -> { c with complete = true;});
+        |("allow", _, {parents = "personality"::_;}) ->  specificScopeProcessNode<TriggerBlock> Scope.Country, "triggerblock", id;
+        //Policies
+        |(_, p, c) when globCheckPosition("**/common/policies/*.txt") p && not c.complete ->  processNodeSimple<Node>, "policy",  (fun c -> { c with complete = true;});
+        |("potential", _, {parents = "policy"::_;}) ->  specificScopeProcessNode<TriggerBlock> Scope.Country, "triggerblock", id;
+        |("allow", _, {parents = "policy"::_;}) ->  specificScopeProcessNode<TriggerBlock> Scope.Country, "triggerblock", id;
+        |("option", _, {parents = "policy"::_;}) ->  processNodeSimple<Node>, "policyoption", id;
+        |("valid", _, {parents = "policyoption"::"policy"::_;}) ->  specificScopeProcessNode<TriggerBlock> Scope.Country, "policyoption", id;
+        |("on_enabled", _, {parents = "policyoption"::"policy"::_;}) ->  specificScopeProcessNode<EffectBlock> Scope.Country, "effectblock", id;
+        |("on_disabled", _, {parents = "policyoption"::"policy"::_;}) ->  specificScopeProcessNode<EffectBlock> Scope.Country, "effectblock", id;
+        //Pop faction types
+        |(_, p, c) when globCheckPosition("**/common/pop_faction_types/*.txt") p && not c.complete ->  processNodeSimple<Node>, "popfaction",  (fun c -> { c with complete = true;});
+        |("is_potential", _, {parents = "popfaction"::_;}) ->  specificScopeProcessNode<TriggerBlock> Scope.Country, "triggerblock", id;
+        |("can_join_faction", _, {parents = "popfaction"::_;}) ->  specificScopeProcessNode<TriggerBlock> Scope.Pop, "triggerblock", id;
+        |("demand", _, {parents = "popfaction"::_;}) ->  processNodeSimple<Node>, "popfactiondemand", id;
+        |("potential", _, {parents = "popfactiondemand"::"popfaction"::_;}) ->  specificScopeProcessNode<TriggerBlock> Scope.PopFaction, "triggerblock", id;
+        |("trigger", _, {parents = "popfactiondemand"::"popfaction"::_;}) ->  specificScopeProcessNode<TriggerBlock> Scope.PopFaction, "triggerblock", id;
+        |("on_create", _, {parents = "popfaction"::_;}) ->  specificScopeProcessNode<EffectBlock> Scope.PopFaction, "effectblock", id;
+        |("on_destroy", _, {parents = "popfaction"::_;}) ->  specificScopeProcessNode<EffectBlock> Scope.Country, "effectblock", id;
+        |("actions", _, {parents = "popfaction"::_;}) ->  processNodeSimple<Node>, "popfactionaction", id;
+        |("embrace_faction", _, {parents = "popfactionaction"::"popfaction"::_;}) ->  processNodeSimple<Node>, "popfactionaction2", id;
+        |("promote_faction", _, {parents = "popfactionaction"::"popfaction"::_;}) ->  processNodeSimple<Node>, "popfactionaction2", id;
+        |("cancel_promote_faction", _, {parents = "popfactionaction"::"popfaction"::_;}) ->  processNodeSimple<Node>, "popfactionaction2", id;
+        |("suppress_faction", _, {parents = "popfactionaction"::"popfaction"::_;}) ->  processNodeSimple<Node>, "popfactionaction2", id;
+        |("cancel_suppress_faction", _, {parents = "popfactionaction"::"popfaction"::_;}) ->  processNodeSimple<Node>, "popfactionaction2", id;
+        |("potential", _, {parents = "popfactionaction2"::"popfactionaction"::"popfaction"::_;}) ->  specificScopeProcessNode<TriggerBlock> Scope.PopFaction, "triggerblock", id;
+        |("effect", _, {parents = "popfactionaction2"::"popfactionaction"::"popfaction"::_;}) ->  specificScopeProcessNode<EffectBlock> Scope.PopFaction, "effectblock", id;
+        |("valid", _, {parents = "popfactionaction2"::"popfactionaction"::"popfaction"::_;}) ->  specificScopeProcessNode<TriggerBlock> Scope.PopFaction, "triggerblock", id;
+        //Ship_sizes
+        |(_, p, c) when globCheckPosition("**/common/ship_sizes/*.txt") p && not c.complete ->  processNodeSimple<Node>, "shipsize",  (fun c -> { c with complete = true;});
+        |("possible_starbase", _, {parents = "shipsize"::_;}) ->  specificScopeProcessNode<TriggerBlock> Scope.Starbase, "triggerblock", id;
+        //Solar system
+        |(_, p, c) when globCheckPosition("**/common/solar_system_initializers/*.txt") p && not c.complete ->  processNodeSimple<Node>, "solarsystem",  (fun c -> { c with complete = true;});
+        |("planet", _, {parents = "solarsystem"::_;}) ->  processNodeSimple<Node>, "solarplanet", id;
+        |("init_effect", _, {parents = "solarplanet"::"solarsystem"::_;}) ->  specificScopeProcessNode<EffectBlock> Scope.Planet, "effectblock", id;
+        |("neighbor_system", _, {parents = "solarsystem"::_;}) ->  processNodeSimple<Node>, "solarneighbor", id;
+        |("trigger", _, {parents = "solarneighbor"::"solarsystem"::_;}) ->  specificScopeProcessNode<TriggerBlock> Scope.GalacticObject, "triggerblock", id;
+        //Special projects
+        |(_, p, c) when globCheckPosition("**/common/special_projects/*.txt") p && not c.complete ->  processNodeSimple<Node>, "specialproject",  (fun c -> { c with complete = true;});
+        |("on_success", _, {parents = "specialproject"::_;}) ->  specificScopeProcessNode<EffectBlock> Scope.Any, "effectblock", id;
+        ///////TODO special project
+        //////
+        //Species classes
+        |(_, p, c) when globCheckPosition("**/common/species_classes/*.txt") p && not c.complete ->  processNodeSimple<Node>, "specialclass",  (fun c -> { c with complete = true;});
+        //////TODO species classes
+        //Species rights
+        |(_, p, c) when globCheckPosition("**/common/species_rights/*.txt") p && not c.complete ->  processNodeSimple<Node>, "speciesrights",  (fun c -> { c with complete = true;});
+        |("potential", _, {parents = "speciesrights"::_;}) ->  specificScopeProcessNode<TriggerBlock> Scope.Species, "triggerblock", id;
+        |("allow", _, {parents = "speciesrights"::_;}) ->  specificScopeProcessNode<TriggerBlock> Scope.Species, "triggerblock", id;
+        //Starbase buildings
+        |(_, p, c) when globCheckPosition("**/common/starbase_buildings/*.txt") p && not c.complete ->  processNodeSimple<Node>, "starbasebuilding",  (fun c -> { c with complete = true;});
+        |("potential", _, {parents = "starbasebuilding"::_;}) ->  specificScopeProcessNode<TriggerBlock> Scope.Starbase, "triggerblock", id;
+        |("possible", _, {parents = "starbasebuilding"::_;}) ->  specificScopeProcessNode<TriggerBlock> Scope.Starbase, "triggerblock", id;
+        //Starbase modules
+        |(_, p, c) when globCheckPosition("**/common/starbase_modules/*.txt") p && not c.complete ->  processNodeSimple<Node>, "starbasemodule",  (fun c -> { c with complete = true;});
+        |("potential", _, {parents = "starbasemodule"::_;}) ->  specificScopeProcessNode<TriggerBlock> Scope.Starbase, "triggerblock", id;
+        |("possible", _, {parents = "starbasemodule"::_;}) ->  specificScopeProcessNode<TriggerBlock> Scope.Starbase, "triggerblock", id;
+        //Starbase type
+        |(_, p, c) when globCheckPosition("**/common/starbase_types/*.txt") p && not c.complete ->  processNodeSimple<Node>, "starbasetype",  (fun c -> { c with complete = true;});
+        |("potential", _, {parents = "starbasetype"::_;}) ->  specificScopeProcessNode<TriggerBlock> Scope.Starbase, "triggerblock", id;
+        //Start screen messages
+        |(_, p, c) when globCheckPosition("**/common/start_screen_messages/*.txt") p && not c.complete ->  processNodeSimple<Node>, "startscreen",  (fun c -> { c with complete = true;});
+        |("trigger", _, {parents = "startscreen"::_;}) ->  specificScopeProcessNode<TriggerBlock> Scope.Country, "triggerblock", id;
+        //Subjects
+        |(_, p, c) when globCheckPosition("**/common/subjects/*.txt") p && not c.complete ->  processNodeSimple<Node>, "subject",  (fun c -> { c with complete = true;});
+        |("potential", _, {parents = "subject"::_;}) ->  specificScopeProcessNode<TriggerBlock> Scope.Country, "triggerblock", id;
+        |("effect", _, {parents = "subject"::_;}) ->  specificScopeProcessNode<EffectBlock> Scope.Country, "effectblock", id;
+        //System types
+        |(_, p, c) when globCheckPosition("**/common/system_types/*.txt") p && not c.complete ->  processNodeSimple<Node>, "systemtype",  (fun c -> { c with complete = true;});
+        |("potential", _, {parents = "systemtype"::_;}) ->  specificScopeProcessNode<TriggerBlock> Scope.GalacticObject, "triggerblock", id;
+        //Technologies
+        |(_, p, c) when globCheckPosition("**/common/technology/*.txt") p && not c.complete ->  processNodeSimple<Node>, "technology",  (fun c -> { c with complete = true;});
+        |("potential", _, {parents = "technology"::_;}) ->  specificScopeProcessNode<TriggerBlock> Scope.Country, "triggerblock", id;
+        //Terraform
+        |(_, p, c) when globCheckPosition("**/common/terraform/*.txt") p && not c.complete ->  processNodeSimple<Node>, "terraform",  (fun c -> { c with complete = true;});
+        |("condition", _, {parents = "terraform"::_;}) ->  specificScopeProcessNode<TriggerBlock> Scope.Country, "triggerblock", id;
+        //Tradition category
+        |(_, p, c) when globCheckPosition("**/common/tradition_categories/*.txt") p && not c.complete ->  processNodeSimple<Node>, "tradcat",  (fun c -> { c with complete = true;});
+        |("tradition_swap", _, {parents = "tradcat"::_;}) ->  processNodeSimple<Node>, "tradcatswap", id;
+        |("trigger", _, {parents = "tradcatswap"::"tradcat"::_;}) ->  specificScopeProcessNode<TriggerBlock> Scope.Country, "triggerblock", id;
+        //Tradition
+        |(_, p, c) when globCheckPosition("**/common/traditions/*.txt") p && not c.complete ->  processNodeSimple<Node>, "trad",  (fun c -> { c with complete = true;});
+        |("tradition_swap", _, {parents = "trad"::_;}) ->  processNodeSimple<Node>, "tradswap", id;
+        |("trigger", _, {parents = "tradswap"::"trad"::_;}) ->  specificScopeProcessNode<TriggerBlock> Scope.Country, "triggerblock", id;
+        //Traits
+        |(_, p, c) when globCheckPosition("**/common/traits/*.txt") p && not c.complete ->  processNodeSimple<Node>, "trait",  (fun c -> { c with complete = true;});
+        |("leader_potential_add", _, {parents = "trait"::_;}) ->  specificScopeProcessNode<TriggerBlock> Scope.Leader, "triggerblock", id;
+        |("species_potential_add", _, {parents = "trait"::_;}) ->  specificScopeProcessNode<TriggerBlock> Scope.Species, "triggerblock", id;
+        |("species_potential_remove", _, {parents = "trait"::_;}) ->  specificScopeProcessNode<TriggerBlock> Scope.Species, "triggerblock", id;
+        //War goals
+        |(_, p, c) when globCheckPosition("**/common/war_goals/*.txt") p && not c.complete ->  processNodeSimple<Node>, "wargoal",  (fun c -> { c with complete = true;});
+        |("potential", _, {parents = "wargoal"::_;}) ->  specificScopeProcessNode<TriggerBlock> Scope.Country, "triggerblock", id;
+        |("possible", _, {parents = "wargoal"::_;}) ->  specificScopeProcessNode<TriggerBlock> Scope.Country, "triggerblock", id;
+        |("on_status_quo", _, {parents = "wargoal"::_;}) ->  specificScopeProcessNode<EffectBlock> Scope.Country, "effectblock", id;
+        |("on_accept", _, {parents = "wargoal"::_;}) ->  specificScopeProcessNode<EffectBlock> Scope.Country, "effectblock", id;
+        |("on_wargoal_set", _, {parents = "wargoal"::_;}) ->  specificScopeProcessNode<EffectBlock> Scope.Country, "effectblock", id;
+        |_ -> processNodeSimple<Node>, "", id;
+            
     let shipMap =
         [
             fst3 >> ((=) "ship_design"), processNodeSimple<Ship>, "ship", id;
@@ -358,7 +564,7 @@ module STLProcess =
             
        ]
 
-    let shipProcess = BaseProcess(shipMap)
+    let shipProcess = BaseProcess(stellarisFunction)
 
     let staticModifierCategory (modifiers : (string * ModifierCategory list) list) (node : Node) =
         node.Values |> List.filter (fun v -> v.Key <> "icon" && v.Key <> "icon_frame")
