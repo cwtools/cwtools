@@ -176,7 +176,7 @@ module CKParser =
             match (a, b, c, d) with 
             | (a, b, c, (Some d)) -> Clause [Statement.Value a;Statement.Value b; Statement.Value c; Statement.Value d]
             | (a, b, c, None) -> Clause [Statement.Value a;Statement.Value b; Statement.Value c;]))
-    let hsv = strSkip "hsv" >>. hsv
+    let hsv = strSkip "hsv" >>. hsvI
     let rgbI = clause (pipe4 valueI valueI valueI (opt valueI) 
             (fun a b c d -> 
             match (a, b, c, d) with 
