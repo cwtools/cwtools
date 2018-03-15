@@ -1,5 +1,6 @@
 namespace CWTools.Validation
 open CWTools.Process
+open FSharp.Collections.ParallelSeq
 
 module ValidationCore =
     
@@ -77,6 +78,7 @@ module ValidationCore =
         | Invalid e1, Invalid e2 -> Invalid (e1 @ e2)
         | Invalid e, OK | OK, Invalid e -> Invalid e
 
-    let (<&!&>) es f = es |> Seq.fold (fun s c -> s <&&> (f c)) OK
+    let (<&!&>) es f = es |> PSeq.map f |> PSeq.fold (<&&>) OK 
+    // |> PSeq.map (fun s c -> s <&&> (f c)) |> PSeq.fold (<&&>) OK
 
     

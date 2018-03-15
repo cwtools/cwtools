@@ -57,15 +57,16 @@ module STLValidation =
             let globalVars = os.GlobMatch("**/common/scripted_variables/*.txt") @ es.GlobMatch("**/common/scripted_variables/*.txt")
                             |> List.map getDefinedVariables
                             |> List.collect id
-            let x =  
-                es.All  
-                |> List.map
+            es.All <&!&>
+            // let x =  
+            //     es.All  
+            //     |> List.map
                     (fun node -> 
                         let defined = getDefinedVariables node
                         let errors = checkUsedVariables node (defined @ globalVars)
                         errors
                     )
-            x |> List.fold (<&&>) OK
+            //x |> List.fold (<&&>) OK
 
     let categoryScopeList = [
         ModifierCategory.Army, [Scope.Army; Scope.Country]
@@ -394,7 +395,8 @@ module STLValidation =
                         | None -> Invalid [inv ErrorCodes.TechCatMissing node]
                         | Some _ -> OK
                     catres <&&> valResearchLeader area cat node
-            techs |> List.map inner |> List.fold (<&&>) OK
+            techs <&!&> inner
+            //techs |> List.map inner |> List.fold (<&&>) OK
 
     let valButtonEffects : StructureValidator =
         fun os es ->

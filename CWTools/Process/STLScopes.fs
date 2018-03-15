@@ -3,7 +3,7 @@ namespace CWTools.Process
 open NodaTime.TimeZones
 module STLScopes =
     open CWTools.Common.STLConstants
-    
+    open CWTools.Utilities.Utils
 
 
 
@@ -476,13 +476,13 @@ module STLScopes =
         let key = if key.StartsWith("hidden:") then key.Substring(7) else key
         let keys = key.Split('.')
         let inner ((context : ScopeContext), (changed : bool)) (nextKey : string) =
-            let onetoone = oneToOneScopes |> List.tryFind (fun (k, f) -> k.ToLower() = nextKey.ToLower())
+            let onetoone = oneToOneScopes |> List.tryFind (fun (k, _) -> k == nextKey)// (fun (k, f) -> k.ToLower() = nextKey.ToLower())
             match onetoone with
             | Some (_, f) -> f (context, false), NewScope (f (context, false) |> fst)
             | None ->
                 let effect = (effects @ triggers) 
                             |> List.choose (function | :? ScopedEffect as e -> Some e |_ -> None)
-                            |> List.tryFind (fun e -> e.Name.ToLower() = nextKey.ToLower())
+                            |> List.tryFind (fun e -> e.Name == nextKey)
                 match effect with
                 | None -> (context, false), NotFound
                 | Some e -> 

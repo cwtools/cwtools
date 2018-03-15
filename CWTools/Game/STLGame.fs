@@ -280,7 +280,7 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
         
         let updateLocalisation() = 
             localisationAPIs <-
-                let locs = locFolders |> List.map (fun (folder, _) -> STLLocalisationService({ folder = folder}))
+                let locs = locFolders |> PSeq.ofList |> PSeq.map (fun (folder, _) -> STLLocalisationService({ folder = folder})) |> PSeq.toList
                 let allLocs = locs |> List.collect (fun l -> (STL STLLang.Default :: langs)|> List.map (fun lang -> l.Api(lang)))
                 match gameDirectory with
                 |Some _ -> allLocs
@@ -338,12 +338,13 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
             let validators = [validateVariables; valTechnology; valButtonEffects; valSprites; valVariables]
             let oldEntities = EntitySet (resources.AllEntities())
             let newEntities = EntitySet entities
-            let res = validators |> List.map (fun v -> v oldEntities newEntities) |> List.fold (<&&>) OK
-                       |> (function |Invalid es -> es |_ -> [])
-
+            eprintfn "Validating misc"
+            //let res = validators |> List.map (fun v -> v oldEntities newEntities) |> List.fold (<&&>) OK
+            let res = validators <&!&> (fun v -> v oldEntities newEntities) |> (function |Invalid es -> es |_ -> [])
+            eprintfn "Validating files"
             let fileValidators = [valSpriteFiles]
             let fres = fileValidators <&!&> (fun v -> v resources newEntities) |> (function |Invalid es -> es |_ -> [])
-
+            eprintfn "Validating effects/triggers"
             let eres = valAllEffects (lookup.scriptedTriggers) (lookup.scriptedEffects) (lookup.staticModifiers) newEntities  |> (function |Invalid es -> es |_ -> [])
             let tres = valAllTriggers (lookup.scriptedTriggers) (lookup.scriptedEffects) (lookup.staticModifiers) newEntities  |> (function |Invalid es -> es |_ -> [])
             //(validateShips (flattened)) @ (validateEvents (flattened)) @ res @ fres @ eres
