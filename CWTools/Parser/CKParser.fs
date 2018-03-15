@@ -151,10 +151,7 @@ module CKParser =
 
     // Base types
     // =======
-    //let operator = (skipAnyOf "=<>") >>. optional (chSkip '=') <?> "operator"
-    //let operator = (chSkip '=' <|> chSkip '>' <|> chSkip '<') >>. optional (chSkip '=') <?> "operator"
     let operator = choice [chSkip '='; chSkip '>'; chSkip '<'] >>. optional (chSkip '=') <?> "operator"
-    //let operator = (attempt (strSkip ">=")) <|> (attempt (strSkip "<=")) <|> (attempt (strSkip "==")) <|> chSkip '=' <|> chSkip '<' <|> chSkip '>' <?> "operator"
 
     let comment = skipChar '#' >>. manyCharsTill anyChar ((newline |>> ignore) <|> eof) .>> ws |>> string <?> "comment"
 
@@ -179,7 +176,7 @@ module CKParser =
             match (a, b, c, d) with 
             | (a, b, c, (Some d)) -> Clause [Statement.Value a;Statement.Value b; Statement.Value c; Statement.Value d]
             | (a, b, c, None) -> Clause [Statement.Value a;Statement.Value b; Statement.Value c;]))
-    let hsv = strSkip "hsv" >>. hsvI//((attempt hsv4) <|> hsv3)
+    let hsv = strSkip "hsv" >>. hsv
     let rgbI = clause (pipe4 valueI valueI valueI (opt valueI) 
             (fun a b c d -> 
             match (a, b, c, d) with 
@@ -189,7 +186,7 @@ module CKParser =
 
     let rgb3 = clause (pipe3 valueI valueI valueI (fun a b c -> Clause [Statement.Value a;Statement.Value b; Statement.Value c])) 
     let rgb4 = clause (pipe4 valueI valueI valueI valueI (fun a b c d -> Clause [Statement.Value a;Statement.Value b; Statement.Value c; Statement.Value d])) 
-    let rgb = strSkip "rgb" >>. rgbI//((attempt rgb4) <|> rgb3)
+    let rgb = strSkip "rgb" >>. rgbI
 
     // Complex types
     // =======
@@ -207,11 +204,9 @@ module CKParser =
     
     do keyvalueimpl := pipe3 (getPosition) ((keyQ <|> key) .>> operator) (value) (fun pos id value -> KeyValue(PosKeyValue(Position pos, KeyValueItem(id, value))))
     let alle = ws >>. many statement .>> eof |>> (fun f -> (EventFile f : EventFile))
-    //let all = ws >>. attempt (many statement) <|> (many1 ((value |>> Value) <|> (comment |>> Comment))) .>> eof
     let valuelist = many1 ((comment |>> Comment) <|> (value |>> Value)) .>> eof
     let statementlist = (many statement) .>> eof
     let all = ws >>. ((attempt valuelist) <|> statementlist)
-    //let all = ws >>. (attempt( (many1 (attempt (value |>> Value) <|> (comment |>> Comment))) <!> "valuelist") <|> ((many statement) <!> "statementlist")) .>> eof
     let parseEventFile filepath = runParserOnFile alle () filepath (System.Text.Encoding.GetEncoding(1252))
 
     let internal applyParser (parser: Parser<'Result,'UserState>) (stream: CharStream<'UserState>) =
