@@ -134,13 +134,13 @@ module CKParser =
     // =======
     let whitespaceTextChars = " \t\r\n"
     let norseChars =['ö';'ð';'æ';'ó';'ä';'Þ';'Å';'Ö']
-    let idchar = letter <|> digit <|> anyOf ['_'; ':'; '@'; '.'; '\"'; '-'; ''']
-    let valuechar = letter <|> digit <|> anyOf (['_'; '.'; '-'; ':'; '\''; '['; ']'; '@';'''; '+'; '`'; '%'; '/'] @ ['š'; 'Š'; '’'])
+    let idchar = choice [letter; digit; anyOf ['_'; ':'; '@'; '.'; '\"'; '-'; ''']]
+    let valuechar = choice [letter; digit; anyOf (['_'; '.'; '-'; ':'; '\''; '['; ']'; '@';'''; '+'; '`'; '%'; '/'] @ ['š'; 'Š'; '’'])]
 
 
     // Utility parsers
     // =======
-    let ws = (skipMany spaces1 |>> ignore) <?> "whitespace"
+    let ws = (skipMany spaces1) <?> "whitespace"
     let str s = pstring s .>> ws <?> ("string " + s)
     let strSkip s = skipString s .>> ws <?> ("skip string " + s)
     let ch c = pchar c .>> ws <?> ("char " + string c)
@@ -151,7 +151,10 @@ module CKParser =
 
     // Base types
     // =======
-    let operator = (attempt (strSkip ">=")) <|> (attempt (strSkip "<=")) <|> (attempt (strSkip "==")) <|> chSkip '=' <|> chSkip '<' <|> chSkip '>' <?> "operator"
+    //let operator = (skipAnyOf "=<>") >>. optional (chSkip '=') <?> "operator"
+    //let operator = (chSkip '=' <|> chSkip '>' <|> chSkip '<') >>. optional (chSkip '=') <?> "operator"
+    let operator = choice [chSkip '='; chSkip '>'; chSkip '<'] >>. optional (chSkip '=') <?> "operator"
+    //let operator = (attempt (strSkip ">=")) <|> (attempt (strSkip "<=")) <|> (attempt (strSkip "==")) <|> chSkip '=' <|> chSkip '<' <|> chSkip '>' <?> "operator"
 
     let comment = skipChar '#' >>. manyCharsTill anyChar ((newline |>> ignore) <|> eof) .>> ws |>> string <?> "comment"
 
@@ -170,10 +173,23 @@ module CKParser =
 
     let hsv3 = clause (pipe3 valueF valueF valueF (fun a b c -> Clause [Statement.Value a;Statement.Value b; Statement.Value c]))
     let hsv4 = clause (pipe4 valueF valueF valueF valueF (fun a b c d -> Clause [Statement.Value a;Statement.Value b; Statement.Value c; Statement.Value d]))
-    let hsv = strSkip "hsv" >>. ((attempt hsv4) <|> hsv3)
+    let hsvI = 
+        clause (pipe4 valueF valueF valueF (opt valueF) 
+            (fun a b c d -> 
+            match (a, b, c, d) with 
+            | (a, b, c, (Some d)) -> Clause [Statement.Value a;Statement.Value b; Statement.Value c; Statement.Value d]
+            | (a, b, c, None) -> Clause [Statement.Value a;Statement.Value b; Statement.Value c;]))
+    let hsv = strSkip "hsv" >>. hsvI//((attempt hsv4) <|> hsv3)
+    let rgbI = clause (pipe4 valueI valueI valueI (opt valueI) 
+            (fun a b c d -> 
+            match (a, b, c, d) with 
+            | (a, b, c, (Some d)) -> Clause [Statement.Value a;Statement.Value b; Statement.Value c; Statement.Value d]
+            | (a, b, c, None) -> Clause [Statement.Value a;Statement.Value b; Statement.Value c;]))
+
+
     let rgb3 = clause (pipe3 valueI valueI valueI (fun a b c -> Clause [Statement.Value a;Statement.Value b; Statement.Value c])) 
     let rgb4 = clause (pipe4 valueI valueI valueI valueI (fun a b c d -> Clause [Statement.Value a;Statement.Value b; Statement.Value c; Statement.Value d])) 
-    let rgb = strSkip "rgb" >>. ((attempt rgb4) <|> rgb3)
+    let rgb = strSkip "rgb" >>. rgbI//((attempt rgb4) <|> rgb3)
 
     // Complex types
     // =======
@@ -187,12 +203,12 @@ module CKParser =
     
     let valueClause = clause (many statement) |>> Clause <?> "statement clause"
 
-    do valueimpl := valueQ <|> (attempt valueBlock) <|> valueClause <|> (attempt valueB) <|> (attempt valueI) <|> (attempt valueF) <|> (attempt hsv) <|> (attempt rgb) <|> valueS  <?> "value"
+    do valueimpl := choiceL [valueQ; (attempt valueBlock); valueClause; (attempt valueB); (attempt valueI); (attempt valueF); (attempt hsv); (attempt rgb); valueS] "value"
     
     do keyvalueimpl := pipe3 (getPosition) ((keyQ <|> key) .>> operator) (value) (fun pos id value -> KeyValue(PosKeyValue(Position pos, KeyValueItem(id, value))))
     let alle = ws >>. many statement .>> eof |>> (fun f -> (EventFile f : EventFile))
     //let all = ws >>. attempt (many statement) <|> (many1 ((value |>> Value) <|> (comment |>> Comment))) .>> eof
-    let valuelist = many1 (attempt (value |>> Value) <|> (comment |>> Comment)) .>> eof
+    let valuelist = many1 ((comment |>> Comment) <|> (value |>> Value)) .>> eof
     let statementlist = (many statement) .>> eof
     let all = ws >>. ((attempt valuelist) <|> statementlist)
     //let all = ws >>. (attempt( (many1 (attempt (value |>> Value) <|> (comment |>> Comment))) <!> "valuelist") <|> ((many statement) <!> "statementlist")) .>> eof

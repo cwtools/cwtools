@@ -91,31 +91,32 @@ type ResourceManager () =
         | Success(parsed, _, _) -> EntityResource (file, { scope = scope; filepath = file; validate = validate; result = Pass({statements = parsed; parseTime = time}) })
         | Failure(msg, pe, _) -> EntityResource (file, { scope = scope; filepath = file; validate = validate; result = Fail({error = msg; position = pe.Position; parseTime = time})})
 
+    let parseFile (file : ResourceInput) = 
+         match file with
+                    |EntityResourceInput e -> e |> ((fun f -> f.scope, f.filepath, f.validate, (fun (t, t2) -> duration (fun () -> CKParser.parseString t2 t)) (f.filepath, f.filetext)) >> matchResult)
+                    |FileResourceInput f -> FileResource (f.filepath, { scope = f.scope; filepath = f.filepath })
+        
 
-    let parseFiles (files : ResourceInput list) = 
-        let mapf =
-            function
-            |EntityResourceInput e -> e |> ((fun f -> f.scope, f.filepath, f.validate, (fun (t, t2) -> duration (fun () -> CKParser.parseString t2 t)) (f.filepath, f.filetext)) >> matchResult)
-            |FileResourceInput f -> FileResource (f.filepath, { scope = f.scope; filepath = f.filepath })
-        files |> PSeq.map mapf |> PSeq.toList
-            // files |> PSeq.map ((fun f -> f.scope, f.filepath, f.validate, (fun (t, t2) -> duration (fun () -> CKParser.parseString t t2)) (f.filepath, f.filetext)) >> matchResult)
-            //          |> PSeq.toList
+    let parseEntity (file : Resource) =
+        file,
+                match file with
+                |EntityResource (_, {result = Pass(s); filepath = f; validate = v}) ->
+                    Some { filepath = f; entity = (STLProcess.shipProcess.ProcessNode<Node>() "root" (Position.File(f)) s.statements); validate = v}
+                |_ -> None        
 
-    let parseEntities (validfiles : EntityResource list) =
-        validfiles |> List.filter (fun v -> v.result |> function |Pass(_) -> true |_ -> false)
-                   |> List.map ((fun f -> (f.filepath, f.validate, let (Pass s) = f.result in s.statements))
-                        >> (fun (f, v, parsed) -> { filepath = f; entity = (STLProcess.shipProcess.ProcessNode<Node>() "root" (Position.File(f)) parsed); validate = v}))
+    let saveResults (resource, entity) =
+        seq {
+            fileMap <- 
+                match resource with
+                |EntityResource (f, _) -> fileMap.Add(f, resource) 
+                |FileResource (f, _) -> fileMap.Add(f, resource)
+            match entity with
+            |Some e -> entitiesMap <- entitiesMap.Add(e.filepath, e); yield e
+            |None -> ()
+        }
 
     let updateFiles files =
-        let fileres = files |> parseFiles
-        fileMap <- fileres |> List.fold (fun x s -> (match s with |EntityResource (f, _) -> x.Add(f, s) |FileResource (f, _) -> x.Add(f, s))) fileMap
-        let newEntities = fileres |> List.choose (function |EntityResource (_, r) -> Some r |_ -> None) |> parseEntities
-        entitiesMap <- newEntities |> List.fold (fun x s -> x.Add(s.filepath, s)) entitiesMap
-        newEntities
-
-    // let nootparty noots =
-    //     validnoots |> cutenoot (bundle)
-    //     forbiddennoots = poopnoot (thomas)
+        files |> PSeq.ofList |> PSeq.map (parseFile >> parseEntity) |> Seq.collect saveResults |> Seq.toList
 
     let getResources() = fileMap |> Map.toList |> List.map snd
     let validatableFiles() = fileMap |> Map.toList |> List.map snd |> List.choose (function |EntityResource (_, e) -> Some e |_ -> None) |> List.filter (fun f -> f.validate)

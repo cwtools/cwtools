@@ -98,7 +98,9 @@ module ProcessCore =
     let tri3 (_, _, x) = x
 
     let updateContext f n key context =
-        f { context with parents = n::context.parents; previous = key }
+        match n with
+        |"" -> f { context with previous = key }
+        |_ -> f { context with parents = n::context.parents; previous = key }
 
     type BaseProcess (maps : NodeTypeMap ) =
         let rec lookup =
