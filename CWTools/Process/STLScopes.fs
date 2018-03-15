@@ -476,7 +476,7 @@ module STLScopes =
         let key = if key.StartsWith("hidden:") then key.Substring(7) else key
         let keys = key.Split('.')
         let inner ((context : ScopeContext), (changed : bool)) (nextKey : string) =
-            let onetoone = oneToOneScopes |> List.tryFind (fun (k, _) -> k == nextKey)// (fun (k, f) -> k.ToLower() = nextKey.ToLower())
+            let onetoone = oneToOneScopes |> List.tryFind (fun (k, _) -> k == nextKey)
             match onetoone with
             | Some (_, f) -> f (context, false), NewScope (f (context, false) |> fst)
             | None ->
@@ -504,10 +504,7 @@ module STLScopes =
         // x
         res2
 
-    // let changeScope (scope : string) source = scopes 
-    //                                             |> List.tryFind (fun (n, s, _) -> n.ToLower() = scope.ToLower() && s = source)
-    //                                             |> Option.bind (fun (_, _, d) -> Some d)
     let sourceScope (scope : string) = scopes
-                                    |> List.choose (function | (n, s, _) when n.ToLower() = scope.ToLower() -> Some s |_ -> None)
+                                    |> List.choose (function | (n, s, _) when n == scope -> Some s |_ -> None)
                                     |> (function |x when List.contains Scope.Any x -> Some allScopes |[] -> None |x -> Some x)
 

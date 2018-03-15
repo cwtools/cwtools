@@ -7,6 +7,8 @@ open CWTools.Process
 open CWTools.Process.STLScopes
 open CWTools.Common.STLConstants
 open DotNet.Globbing
+open System
+open CWTools.Utilities.Utils
 
 module STLProcess =
     let toTriggerBlockKeys = ["limit"; "trigger"; "allow"]
@@ -21,7 +23,7 @@ module STLProcess =
         function
         |"" -> true
         |x ->
-            match targetKeys |> List.tryFind (fun f -> x.ToLower().StartsWith(f.ToLower()))  with
+            match targetKeys |> List.tryFind (fun f -> x.StartsWith(f, StringComparison.OrdinalIgnoreCase))  with
             |Some s -> if s.Length = x.Length then true else isTargetKey (x.Substring(s.Length + 1))
             |None -> false
 
@@ -34,13 +36,13 @@ module STLProcess =
                             function
                             | x when x.Key = root -> 
                                 allScopes
-                            | x when (x.Key.ToLower().StartsWith("event_target:")) ->
+                            | x when (x.Key.StartsWith("event_target:", StringComparison.OrdinalIgnoreCase)) ->
                                 allScopes
-                            | x when targetKeys |> List.exists (fun y -> y.ToLower() = x.Key.ToLower()) ->
+                            | x when targetKeys |> List.exists (fun y -> y == x.Key) ->
                                 allScopes
-                            | x when anyBlockKeys |> List.exists (fun y -> y.ToLower() = x.Key.ToLower()) ->
+                            | x when anyBlockKeys |> List.exists (fun y -> y == x.Key) ->
                                 scriptedTriggerScope strict effects triggers root x
-                            | x when triggerBlockKeys |> List.exists (fun y -> y.ToLower() = x.Key.ToLower()) -> 
+                            | x when triggerBlockKeys |> List.exists (fun y -> y == x.Key) -> 
                                 scriptedTriggerScope strict triggers triggers root x
                             | x ->
                                 match STLScopes.sourceScope x.Key with

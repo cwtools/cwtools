@@ -10,6 +10,7 @@ open CWTools.Common.STLConstants
 open DotNet.Globbing
 open CWTools.Games
 open Newtonsoft.Json.Linq
+open CWTools.Utilities.Utils
 
 
 module STLValidation =
@@ -124,18 +125,17 @@ module STLValidation =
         |_ -> Scope.Army
 
     let inline handleUnknownTrigger (root : ^a) (key : string) =
-        match STLProcess.ignoreKeys |> List.tryFind (fun k -> k.ToLower() = key.ToLower()) with
+        match STLProcess.ignoreKeys |> List.tryFind (fun k -> k == key) with
         |Some _ -> OK //Do better
         |None -> if key.StartsWith("@") then OK else Invalid [inv (ErrorCodes.UndefinedTrigger key) root]
     
     let inline handleUnknownEffect root (key : string) =
-        match STLProcess.ignoreKeys |> List.tryFind (fun k -> k.ToLower() = key.ToLower()) with
+        match STLProcess.ignoreKeys |> List.tryFind (fun k -> k == key) with
         |Some _ -> OK //Do better
         |None -> if key.StartsWith("@") then OK else Invalid [inv (ErrorCodes.UndefinedEffect key) root]
     
     let valTriggerLeaf (triggers : Effect list) (modifiers : Modifier list) (scopes : ScopeContext) (leaf : Leaf) =
-        match triggers |> List.tryFind (fun e -> e.Name.ToLower() = leaf.Key.ToLower()) with
-        //match triggers |> List.tryPick (function | :? ScopedEffect as e when e.Name.ToLower() = leaf.Key.ToLower() -> None |e when e.Name.ToLower() = leaf.Key.ToLower() -> Some e |_ -> None) with
+        match triggers |> List.tryFind (fun e -> e.Name == leaf.Key) with
         |Some (:? ScopedEffect as e) -> Invalid [inv (ErrorCodes.IncorrectScopeAsLeaf (e.Name) (leaf.Value.ToRawString())) leaf]
         |Some e ->
             if e.Scopes |> List.contains(scopes.CurrentScope) || scopes.CurrentScope = Scope.Any
@@ -144,8 +144,7 @@ module STLValidation =
         |None -> handleUnknownTrigger leaf leaf.Key
 
     let valEffectLeaf (effects : Effect list) (modifiers : Modifier list) (scopes : ScopeContext) (leaf : Leaf) =
-        match effects |> List.tryFind (fun e -> e.Name.ToLower() = leaf.Key.ToLower()) with
-        //match effects |> List.tryPick (function | :? ScopedEffect as e when e.Name.ToLower() = leaf.Key.ToLower() -> None |e when e.Name.ToLower() = leaf.Key.ToLower() -> Some e |_ -> None) with
+        match effects |> List.tryFind (fun e -> e.Name == leaf.Key) with
             |Some (:? ScopedEffect as e) -> Invalid [inv (ErrorCodes.IncorrectScopeAsLeaf (e.Name) (leaf.Value.ToRawString())) leaf]
             |Some e ->
                 if e.Scopes |> List.contains(scopes.CurrentScope) || scopes.CurrentScope = Scope.Any
@@ -158,7 +157,7 @@ module STLValidation =
         |LeafC leaf -> valTriggerLeaf triggers modifiers scopes leaf
         |NodeC node ->
             match node.Key with
-            |x when STLProcess.toTriggerBlockKeys |> List.contains (x.ToLower()) ->
+            |x when STLProcess.toTriggerBlockKeys |> List.exists (fun t -> t == x) ->
                 valNodeTriggers root triggers effects modifiers scopes node
             // |x when STLProcess.isTargetKey x ->  
             //     valNodeTriggers root triggers effects Scope.Any node
@@ -171,7 +170,7 @@ module STLValidation =
                 |NewScope s -> valNodeTriggers root triggers effects modifiers s node
                 |WrongScope ss -> Invalid [inv (ErrorCodes.IncorrectScopeScope x (scopes.CurrentScope.ToString()) (ss |> List.map (fun s -> s.ToString()) |> String.concat ", ")) node]
                 |NotFound ->
-                    match triggers |> List.tryFind (fun e -> e.Name.ToLower() = x.ToLower() ) with
+                    match triggers |> List.tryFind (fun e -> e.Name == x ) with
                     |Some e ->
                         if e.Scopes |> List.contains(scopes.CurrentScope) || scopes.CurrentScope = Scope.Any
                         then OK
@@ -199,7 +198,7 @@ module STLValidation =
                 |NewScope s -> valNodeEffects node triggers effects modifiers s node
                 |WrongScope ss -> Invalid [inv (ErrorCodes.IncorrectScopeScope x (scopes.CurrentScope.ToString()) (ss |> List.map (fun s -> s.ToString()) |> String.concat ", ")) node]
                 |NotFound ->
-                    match effects |> List.tryFind (fun e -> e.Name.ToLower() = x.ToLower()) with
+                    match effects |> List.tryFind (fun e -> e.Name == x) with
                     |Some e -> 
                         if e.Scopes |> List.contains(scopes.CurrentScope) || scopes.CurrentScope = Scope.Any
                         then valEffectNodeUsage modifiers scopes node
@@ -225,18 +224,18 @@ module STLValidation =
         let optionExcludes = ["name"; "custom_tooltip"; "response_text"; "is_dialog_only"; "sound"; "ai_chance"; "custom_gui"; "default_hide_option"]
         let filterFunction =
             function
-            | NodeC n -> optionExcludes |> List.contains (n.Key.ToLower())
-            | LeafC l -> optionExcludes |> List.contains (l.Key.ToLower())
+            | NodeC n -> optionExcludes |> List.exists (fun f -> n.Key == f)
+            | LeafC l -> optionExcludes |> List.exists (fun f -> l.Key == f)
             | _ -> false
-        let leaves = node.Values |> List.filter (fun l -> not (optionExcludes |> List.contains (l.Key.ToLower())))
-        let children = node.Children |> List.filter (fun c -> not (optionExcludes |> List.contains (c.Key.ToLower())))
+        let leaves = node.Values |> List.filter (fun l -> not (optionExcludes |> List.exists (fun f -> l.Key == f)))
+        let children = node.Children |> List.filter (fun c -> not (optionExcludes |> List.exists (fun f -> c.Key == f)))
         let lres = leaves <&!&> (valEffectLeaf effects modifiers scopes)
-        let tres = children |> List.filter (fun c -> optionTriggers |> List.contains (c.Key.ToLower()))
+        let tres = children |> List.filter (fun c -> optionTriggers |> List.exists (fun f -> c.Key == f))
                     <&!&> (NodeC >> valEventTrigger root triggers effects modifiers scopes)
-        let effectPos = children |> List.filter (fun c -> not (optionTriggers |> List.contains (c.Key.ToLower())))
-        let eres = effectPos |> List.filter (fun c -> not (optionEffects |> List.contains (c.Key.ToLower())))
+        let effectPos = children |> List.filter (fun c -> not (optionTriggers |> List.exists (fun f -> c.Key == f)))
+        let eres = effectPos |> List.filter (fun c -> not (optionEffects |> List.exists (fun f -> c.Key == f)))
                     <&!&> (NodeC >> valEventEffect root triggers effects modifiers scopes)
-        let esres = effectPos |> List.filter (fun c -> optionEffects |> List.contains (c.Key.ToLower()))
+        let esres = effectPos |> List.filter (fun c -> optionEffects |> List.exists (fun f -> c.Key == f))
                     <&!&> (valNodeEffects root triggers effects modifiers scopes)
         lres <&&> tres <&&> eres <&&> esres
         //children |> List.map (valEventEffect node triggers effects scopes) |> List.fold (<&&>) OK
@@ -453,8 +452,9 @@ module STLValidation =
 
 
     let findAllSetVariables (node : Node) =
+        let keys = ["set_variable"; "change_variable"; "subtract_variable"; "multiply_variable"; "divide_variable"]
         let fNode = (fun (x : Node) children ->
-                    match x.Children |> List.filter (fun n -> List.contains (n.Key) ["set_variable"; "change_variable"; "subtract_variable"; "multiply_variable"; "divide_variable"]) with
+                    match x.Children |> List.filter (fun n -> List.contains (n.Key) keys) with
                     | [] -> []
                     | x -> 
                         x |> List.map (fun v -> v.TagText "which")
@@ -506,8 +506,8 @@ module STLValidation =
                         | (:? Option as x) -> x::children
                         | _ -> children)
             let fCombine = (@)
-            let opts = es.All |> List.collect (foldNode2 foNode fCombine []) |> List.map filterOptionToEffects
-            let effects = es.All |> List.collect (foldNode2 fNode fCombine []) |> List.map (fun f -> f :> Node)
+            let opts = os.All @ es.All |> List.collect (foldNode2 foNode fCombine []) |> List.map filterOptionToEffects
+            let effects = os.All @ es.All |> List.collect (foldNode2 fNode fCombine []) |> List.map (fun f -> f :> Node)
             let triggers = es.All |> List.collect (foldNode2 ftNode fCombine []) |> List.map (fun f -> f :> Node)
             let defVars = effects @ opts |> List.collect findAllSetVariables
             triggers <&!&> (validateUsedVariables defVars)
