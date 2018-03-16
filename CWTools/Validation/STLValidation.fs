@@ -92,7 +92,7 @@ module STLValidation =
         |Some (c, ss), s -> if List.contains s ss then OK else Invalid [inv (ErrorCodes.IncorrectStaticModifierScope modifier (s.ToString()) (ss |> List.map (fun f -> f.ToString()) |> String.concat ", ")) node]
         
 
-    let inline valModifier (modifiers : Modifier list) (scopes : ScopeContext) (modifier : string) (node) =
+    let inline valStaticModifier (modifiers : Modifier list) (scopes : ScopeContext) (modifier : string) (node) =
         let exists = modifiers |> List.tryFind (fun m -> m.tag = modifier && not m.core )
         match exists with
         |None -> Invalid [inv (ErrorCodes.UndefinedStaticModifier modifier) node]
@@ -101,17 +101,17 @@ module STLValidation =
 
     let valTriggerLeafUsage (modifiers : Modifier list) (scopes : ScopeContext) (leaf : Leaf) =
         match leaf.Key with
-        | "has_modifier" -> valModifier modifiers scopes (leaf.Value.ToRawString()) leaf
+        | "has_modifier" -> valStaticModifier modifiers scopes (leaf.Value.ToRawString()) leaf
         | _ -> OK
 
     let valEffectLeafUsage (modifiers : Modifier list) (scopes : ScopeContext) (leaf : Leaf) =
         match leaf.Key with
-        | "remove_modifier" -> valModifier modifiers scopes (leaf.Value.ToRawString()) leaf
+        | "remove_modifier" -> valStaticModifier modifiers scopes (leaf.Value.ToRawString()) leaf
         | _ -> OK
 
     let valEffectNodeUsage (modifiers : Modifier list) (scopes : ScopeContext) (node : Node) =
         match node.Key with
-        | "add_modifier" -> valModifier modifiers scopes (node.TagText "modifier") node
+        | "add_modifier" -> valStaticModifier modifiers scopes (node.TagText "modifier") node
         | _ -> OK
 
     let eventScope (event : Event) =
@@ -535,6 +535,28 @@ module STLValidation =
             // opts @ effects <&!&> (fun x -> Invalid [inv (ErrorCodes.CustomError "effect") x])
             // <&&> (triggers <&!&> (fun x -> Invalid [inv (ErrorCodes.CustomError "trigger") x]))
             
+    let inline checkModifierInScope (modifier : string) (scope : Scope) (node : ^a) (cat : ModifierCategory) =
+        match List.tryFind (fun (c, _) -> c = cat) categoryScopeList, scope with
+        |None, _ -> OK
+        |Some _, s when s = Scope.Any -> OK
+        |Some (c, ss), s -> if List.contains s ss then OK else Invalid [inv (ErrorCodes.IncorrectModifierScope modifier (s.ToString()) (ss |> List.map (fun f -> f.ToString()) |> String.concat ", ")) node]
+
+    let valModifier (modifiers : Modifier list) (scope : Scope) (leaf : Leaf) =
+        match modifiers |> List.tryFind (fun m -> m.tag == leaf.Key) with
+        |None -> Invalid [inv (ErrorCodes.UndefinedModifier (leaf.Key)) leaf]
+        |Some m -> m.categories <&!&> checkModifierInScope (leaf.Key) (scope) leaf
+            // match m.categories |> List.contains (modifierCategory) with
+            // |true -> OK
+            // |false -> Invalid [inv (ErrorCodes.IncorrectModifierScope (leaf.Key) (modifierCategory.ToString()) (m.categories.ToString())) leaf]
 
 
-
+    let valModifiers (modifiers : Modifier list) (node : ModifierBlock) =
+        node.Values <&!&> valModifier modifiers node.Scope
+    let valAllModifiers (modifiers : (Modifier) list) (es : EntitySet) =
+        let fNode = (fun (x : Node) children ->
+            match x with
+            | (:? ModifierBlock as x) -> valModifiers modifiers x
+            | _ -> OK
+            <&&> children)
+        let fCombine = (<&&>)
+        es.All <&!&> foldNode2 fNode fCombine OK 

@@ -115,7 +115,7 @@ module STLProcess =
         inherit Node(key, pos)
         member val InEffectBlock : bool = false with get, set
     type Option(key, pos) = inherit Node(key, pos)
-
+    type ModifierBlock(key, pos) = inherit Node(key, pos)
     let memoize keyFunction memFunction =
         let dict = new System.Collections.Generic.Dictionary<_,_>()
         fun n ->
@@ -145,6 +145,9 @@ module STLProcess =
 
     let specificScopeProcessNode<'T when 'T :> Node> (scope : Scope) (lookup : LookupContext) =
         processNode<'T> (fun n -> n.Scope <- scope; n)
+
+    // let modifierScopeProcessNode (modifier : ModifierCategory) (lookup : LookupContext) =
+    //     processNode<ModifierBlock> (fun n -> n.ModifierCategory <- modifier; n)
     
     // let triggerProcessNode (lookup : LookupContext) =
     //     let postinit = 
@@ -195,6 +198,10 @@ module STLProcess =
         |("destroy_if", _, {parents = "building"::_}) ->  specificScopeProcessNode<TriggerBlock> Scope.Tile, "triggerblock", id;
         |("active", _, {parents = "building"::_}) ->  specificScopeProcessNode<TriggerBlock> Scope.Tile, "triggerblock", id;
         |("planet_modifier_with_pop_trigger", _, {parents = "building"::_}) ->  processNodeSimple<Node>, "planetmodpop", id;
+        |("planet_modifier", _, {parents = "building"::_}) ->  specificScopeProcessNode<ModifierBlock> Scope.Planet, "modifierblock", id;
+        |("army_modifier", _, {parents = "building"::_}) ->  specificScopeProcessNode<ModifierBlock> Scope.Army, "modifierblock", id;
+        |("country_modifier", _, {parents = "building"::_}) ->  specificScopeProcessNode<ModifierBlock> Scope.Country, "modifierblock", id;
+        
         //Armies
         |(_, p, c) when not c.complete && globCheckPosition("**/common/armies/*.txt") p ->  processNodeSimple<Node>, "army",  (fun c -> { c with complete = true});
         |("potential", _, {parents = "army"::_}) ->  specificScopeProcessNode<TriggerBlock> Scope.Planet, "triggerblock", id;

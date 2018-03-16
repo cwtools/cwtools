@@ -347,8 +347,9 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
             eprintfn "Validating effects/triggers"
             let eres = valAllEffects (lookup.scriptedTriggers) (lookup.scriptedEffects) (lookup.staticModifiers) newEntities  |> (function |Invalid es -> es |_ -> [])
             let tres = valAllTriggers (lookup.scriptedTriggers) (lookup.scriptedEffects) (lookup.staticModifiers) newEntities  |> (function |Invalid es -> es |_ -> [])
+            let mres = valAllModifiers (modifiers) newEntities  |> (function |Invalid es -> es |_ -> [])
             //(validateShips (flattened)) @ (validateEvents (flattened)) @ res @ fres @ eres
-            (validateShips (flattened)) @ (validateEvents (flattened)) @ res @ fres @ eres @ tres
+            (validateShips (flattened)) @ (validateEvents (flattened)) @ res @ fres @ eres @ tres @ mres
         
         let localisationCheck (entities : Entity list) =
             eprintfn "Localisation check %i files" (entities.Length)

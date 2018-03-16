@@ -91,5 +91,96 @@ building_physics_lab_0 = {
     ai_weight = {
         weight = 10
     }
+
+    country_modifier = {
+		tile_resource_energy_mult = 0.10
+        #error
+        fake_modifiers = 10
+	}
+
 }
    
+##Check modifiers in buildings
+building_xeno_zoo = {
+	base_buildtime = 240
+	
+	cost = {
+		minerals = 150
+	}
+	
+	show_tech_unlock_if = { NOT = { has_authority = auth_machine_intelligence } }
+
+	potential = {
+		NOT = { 
+			owner = { has_authority = auth_machine_intelligence }
+		}
+		planet = {
+			NOT = { is_planet_class = pc_habitat }
+		}
+	}
+
+	destroy_if = {
+		exists = owner
+		owner = { has_authority = auth_machine_intelligence }
+	}	
+	
+	required_resources = {
+		energy = 1
+	}
+	
+	produced_resources = {
+		unity = 4
+		society_research = 4
+	}
+	
+	planet_modifier = {
+		pop_citizen_happiness = 0.05
+		planet_migration_all_pull = 0.25
+        #error
+        starbase_upgrade_cost_mult = 0.5
+	}
+
+    country_modifier = {
+        starbase_upgrade_cost_mult = 0.5
+		pop_citizen_happiness = 0.05
+		planet_migration_all_pull = 0.25
+    }
+
+    army_modifier = {
+        #error
+        starbase_upgrade_cost_mult = 0.5
+        army_health = 10
+    }
+	
+	allow = {
+		AND = {
+			custom_tooltip = {
+				fail_text = "requires_building_capital_1"
+				planet = {
+					OR = {
+						has_building = "building_capital_1"
+						has_building = "building_capital_2"
+						has_building = "building_capital_3"
+					}
+				}
+			}
+			custom_tooltip = {
+				fail_text = "requires_alien_pets"
+				tile = {
+					has_resource = {
+						type = sr_alien_pets
+						amount > 0
+					}
+				}
+			}
+		}
+	}
+	
+	prerequisites = {
+		"tech_alien_life_studies"
+	}
+
+	ai_weight = {
+		factor = 10
+	}
+}
