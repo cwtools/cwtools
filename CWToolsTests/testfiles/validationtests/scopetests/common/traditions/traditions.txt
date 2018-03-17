@@ -6,6 +6,8 @@ tr_diplomacy_entente_coordination = {
 
 	modifier = {
 		federation_naval_cap_contribution_mult = 1.00
+		#error
+		invalid = yes
 	}
 	
 	tradition_swap = {
@@ -22,6 +24,8 @@ tr_diplomacy_entente_coordination = {
 			BIOLOGICAL_species_trait_points_add = 1
 
 			modify_species_cost_mult = -0.15
+			#error
+			invalid = yes
 		}
 		weight = {
 			factor = 1

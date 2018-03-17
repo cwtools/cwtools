@@ -1,0 +1,19 @@
+##Test modifiers
+civic_corvee_system = {
+	potential = { ethics = { NOT = { value = ethic_gestalt_consciousness } } }
+	possible = {
+		ethics = {
+			NOR = {
+				text = civic_tooltip_not_egalitarian
+				value = ethic_egalitarian
+				value = ethic_fanatic_egalitarian
+			}
+		}
+	}
+	random_weight = { base = 5 }
+	modifier = {
+		pop_resettlement_cost_mult = -0.5
+        #error
+        invalid_mod = 5
+	}
+}

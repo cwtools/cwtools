@@ -8,6 +8,11 @@ tech_pk_godray = {
 	prerequisites = { "tech_colossus" }
 	ai_update_type = military
 	weight = 10
+
+	modifier = {
+		shipsize_corvette_build_speed_mult = 0.25
+		shipsize_corvette_build_cost_mult = -0.05
+	}
 	
 	potential = {
         has_country_flag = yes

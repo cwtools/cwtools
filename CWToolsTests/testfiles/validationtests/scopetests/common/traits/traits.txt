@@ -28,6 +28,8 @@ trait_presapient_irradiated = {
 	modifier = {
 		pc_nuked_habitability = 1
 		leader_age = 30
+		#error
+		invalid = yes
 	}
     species_potential_add = { 
         has_species_flag = yes

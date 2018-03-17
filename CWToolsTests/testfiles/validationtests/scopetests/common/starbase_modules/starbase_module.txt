@@ -22,7 +22,23 @@ missile_battery = {
 	station_modifier = {
 		ship_hull_mult = 0.10
 		ship_armor_mult = 0.10
+		#error
+		country_naval_cap_add = 5
 	}
+
+	country_modifier = {
+         country_naval_cap_add = 5
+		 #error
+		 invalid_mod = yes
+	}
+
+	triggered_country_modifier = {
+         potential = { has_starbase_building = naval_logistics_office }
+         country_naval_cap_add = 3
+		 #error
+		 invalid_mod = 10
+	}
+
 	
 	upkeep_resources = {
 		energy = 1

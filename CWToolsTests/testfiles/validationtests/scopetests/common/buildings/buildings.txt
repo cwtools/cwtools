@@ -81,12 +81,29 @@ building_physics_lab_0 = {
 
     planet_modifier_with_pop_trigger = {
         key = building_neuro_electric_amplifier
-        potential = { has_trait = trait_cybernetic }
+        potential = { 
+            has_trait = trait_cybernetic
+            #error
+            has_planet_flag = yes
+        }
         modifier = {
             tile_resource_minerals_mult = 0.15
             tile_resource_energy_mult = 0.15
         }
 	}
+
+    triggered_planet_modifier = {
+        key = building_neuro_electric_amplifier
+        potential = { 
+            has_planet_flag = trait_cybernetic
+            #error
+            has_starbase_flag = yes
+        }
+        modifier = {
+            tile_resource_minerals_mult = 0.15
+            tile_resource_energy_mult = 0.15
+        }
+    }
 
     ai_weight = {
         weight = 10
@@ -183,4 +200,36 @@ building_xeno_zoo = {
 	ai_weight = {
 		factor = 10
 	}
+
+    planet_modifier_with_pop_trigger = {
+		key = building_neuro_electric_amplifier
+		potential = { 
+            has_trait = trait_cybernetic
+            #error
+            has_planet_flag = yes
+        }
+		modifier = {
+			tile_resource_minerals_mult = 0.15
+			tile_resource_energy_mult = 0.15
+            #error 
+            starbase_upgrade_cost_mult = 0.5
+		}
+	}
+
+    triggered_planet_modifier = {
+        key = building_neuro_electric_amplifier
+        potential = { 
+            has_planet_flag = trait_cybernetic
+            #error
+            has_starbase_flag = yes
+        }
+        modifier = {
+            tile_resource_minerals_mult = 0.15
+			tile_resource_energy_mult = 0.15
+            #error 
+            starbase_upgrade_cost_mult = 0.5
+        }
+    }
+
+    
 }

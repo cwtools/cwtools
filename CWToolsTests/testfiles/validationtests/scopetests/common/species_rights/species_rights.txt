@@ -1,25 +1,51 @@
 ##Test triggers
 living_standard_deassimilation = {
-	token = living_standard_deassimilation
-	name = living_standard_deassimilation
-
-	pop_modifier = {
-		pop_consumer_goods_add = 2.0
-	}
-
-	potential = {
-        has_species_flag = yes
-        #error
-        has_country_flag = yes
+    token = living_standard_deassimilation
+    name = living_standard_deassimilation
+    
+    pop_modifier = {
+    	pop_consumer_goods_add = 2.0
+	#error
+	max_energy = 500
     }
 
-	allow = {
-        has_species_flag = yes
-        #error
-        has_country_flag = yes
-	}
+    modifier = {
+	##Todo
+	army_damage_mult = 0.2
+	max_energy = 500
+    }
+    
+    potential = {
+	has_species_flag = yes
+	#error
+	has_country_flag = yes
+    }
+    
+    allow = {
+	has_species_flag = yes
+	#error
+	has_country_flag = yes
+    }
+    
 
-	ai_will_do = {
-		factor = 100
+    ai_will_do = {
+		factor = 3
+		modifier = {
+			factor = 0
+			from = {
+				has_valid_ai_personality = yes
+				has_ai_personality_behaviour = multispecies
+			}
+		}
+		modifier = {
+			factor = 0
+			from = {
+				has_valid_ai_personality = no
+				OR = {
+					has_ethic = ethic_xenophile
+					has_ethic = ethic_fanatic_xenophile
+				}
+			}
+		}		
 	}
 }

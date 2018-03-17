@@ -18,10 +18,18 @@ resource_silo = {
     cost = {
 		minerals = 100
 	}
+
+	station_modifier = {
+		ship_hull_mult = 0.10
+		#error
+		max_minerals = 100
+	}
 	
 	country_modifier = {
 		max_minerals = 2500
 		max_energy = 2500
+		#error
+		invalid_modifier = yes
 	}
 
 	ai_build_at_chokepoint = no

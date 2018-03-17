@@ -1,0 +1,85 @@
+##Test modifiers in component_templates
+utility_component_template = {
+	key = "SENSOR_4"
+	size = medium
+	icon = "GFX_ship_part_sensor_4"
+	icon_frame = 1
+	power = 5
+	cost = 5
+	sensor_range = 5
+	
+	ship_modifier = {
+		ship_tracking_add = 10
+        #error
+        leader_age = 30
+	}
+
+    modifier = {
+		ship_tracking_add = 10
+        #error
+        leader_age = 30
+	}
+	
+	prerequisites = { "tech_sensors_4" }
+	component_set = "sensor_components"
+	
+	ai_weight = {
+		weight = 1000
+	}	
+
+    hostile_aura = {
+		name = "aura_shield_dampener"
+		radius = 5
+		apply_on = ships
+		
+		stack_info = {	
+			id = hostile_shield_dampener
+			priority = 1
+		}
+		
+		modifier = {
+            ship_tracking_add = 10
+            #error
+            leader_age = 30
+		}
+		
+		graphics = {
+			area_effect = {
+				entity = "circle_area_entity"
+				dynamic_scale = yes
+			}
+			ship_effect = {
+				entity = "ship_aura_negative_entity"
+				dynamic_scale = no
+			}
+		}
+	}
+
+    friendly_aura = {
+		name = "aura_shield_dampener"
+		radius = 5
+		apply_on = ships
+		
+		stack_info = {			
+			id = hostile_shield_dampener
+			priority = 1
+		}
+		
+		modifier = {
+            ship_tracking_add = 10
+            #error
+            leader_age = 30
+		}
+		
+		graphics = {
+			area_effect = {
+				entity = "circle_area_entity"
+				dynamic_scale = yes
+			}
+			ship_effect = {
+				entity = "ship_aura_negative_entity"
+				dynamic_scale = no
+			}
+		}
+	}
+}

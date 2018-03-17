@@ -1,4 +1,4 @@
-##Test triggers
+##Test triggers and modifiers
 ethic_gestalt_consciousness = {
 	playable = {
         has_country_flag = yes
@@ -12,9 +12,10 @@ ethic_gestalt_consciousness = {
 	use_for_pops = no
 	
 	country_modifier = {
-		country_war_exhaustion_mult = -0.2
 		country_resource_influence_add = 1
 		country_core_sector_system_cap = 2
+		#error
+		invalid_modifier = 10
 	}
 	
 	tags = {

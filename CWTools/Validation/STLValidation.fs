@@ -79,8 +79,8 @@ module STLValidation =
         ModifierCategory.Pop, [Scope.Pop; Scope.Planet; Scope.Country]
         ModifierCategory.PopFaction, [Scope.PopFaction; Scope.Country]
         ModifierCategory.Science, [Scope.Ship; Scope.Country]
-        ModifierCategory.Ship, [Scope.Ship; Scope.Country]
-        ModifierCategory.ShipSize, [Scope.Ship; Scope.Country]
+        ModifierCategory.Ship, [Scope.Ship; Scope.Starbase; Scope.Country]
+        ModifierCategory.ShipSize, [Scope.Ship; Scope.Starbase; Scope.Country]
         ModifierCategory.Starbase, [Scope.Starbase; Scope.Country]
         ModifierCategory.Tile, [Scope.Tile; Scope.Pop; Scope.Planet; Scope.Country]
     ]
@@ -551,7 +551,9 @@ module STLValidation =
 
 
     let valModifiers (modifiers : Modifier list) (node : ModifierBlock) =
-        node.Values <&!&> valModifier modifiers node.Scope
+        let filteredModifierKeys = ["description"; "key"]
+        let filtered = node.Values |> List.filter (fun f -> not (filteredModifierKeys |> List.exists (fun k -> k == f.Key)))
+        filtered <&!&> valModifier modifiers node.Scope
     let valAllModifiers (modifiers : (Modifier) list) (es : EntitySet) =
         let fNode = (fun (x : Node) children ->
             match x with

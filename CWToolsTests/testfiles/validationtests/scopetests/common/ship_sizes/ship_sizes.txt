@@ -17,6 +17,8 @@ colossus = {
 	max_hitpoints = 30000
 	modifier = {
 		ship_evasion_add = 2
+		#error
+		max_energy = 2500
 	}
 	size_multiplier = 32
 	fleet_slot_size = 32

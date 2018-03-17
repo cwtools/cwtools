@@ -38,4 +38,20 @@ first_contact_protocol = {
             #error
             has_fleet_flag = yes
 		}
+
+        modifier = {
+            pop_resettlement_cost_mult = -0.5
+            #error
+            invalid_mod = 5
+        }
+		AI_weight = {
+			modifier = {
+				factor = 3
+				has_valid_ai_personality = yes
+				OR = {
+					has_ai_personality_behaviour = infiltrator
+					has_ai_personality_behaviour = dominator
+				}
+			}
+        }
 	}

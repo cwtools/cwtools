@@ -1,0 +1,16 @@
+##Test modifiers 
+sr_living_metal = {
+	AI_category = strategic_resource
+	prerequisites = { "tech_mine_living_metal" }
+	tradable = yes
+	is_rare = yes
+	is_global = yes
+	
+	modifier = {
+		mod_megastructure_build_cost_mult = -0.2
+		ship_hull_regen_add_perc = 0.5
+		ship_armor_regen_add_perc = 0.5
+        #error
+        invalid_modifier = yes
+	}
+}

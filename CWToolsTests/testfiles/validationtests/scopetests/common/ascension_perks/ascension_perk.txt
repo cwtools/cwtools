@@ -23,4 +23,12 @@ ap_machine_worlds = {
 	ai_weight = {
 		factor = 10
 	}
+
+	modifier = {
+		leader_skill_levels = 2
+		country_leader_cap = 2
+		#error
+		invalid_modifier = 1
+	}
+
 }

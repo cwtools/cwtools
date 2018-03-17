@@ -197,11 +197,22 @@ module STLProcess =
         |("ai_allow", _, {parents = "building"::_}) ->  specificScopeProcessNode<TriggerBlock> Scope.Tile, "triggerblock", id;
         |("destroy_if", _, {parents = "building"::_}) ->  specificScopeProcessNode<TriggerBlock> Scope.Tile, "triggerblock", id;
         |("active", _, {parents = "building"::_}) ->  specificScopeProcessNode<TriggerBlock> Scope.Tile, "triggerblock", id;
+        
         |("planet_modifier_with_pop_trigger", _, {parents = "building"::_}) ->  processNodeSimple<Node>, "planetmodpop", id;
+        |("potential", _, {parents = "planetmodpop"::"building"::_}) ->  specificScopeProcessNode<TriggerBlock> Scope.Pop, "triggerblock", id;
+        |("modifier", _, {parents = "planetmodpop"::"building"::_}) ->  specificScopeProcessNode<ModifierBlock> Scope.Planet, "triggerblock", id;
+        
+        |("triggered_planet_modifier", _, {parents = "building"::_}) ->  processNodeSimple<Node>, "triggeredplanetmod", id;
+        |("potential", _, {parents = "triggeredplanetmod"::"building"::_}) ->  specificScopeProcessNode<TriggerBlock> Scope.Planet, "triggerblock", id;
+        |("modifier", _, {parents = "triggeredplanetmod"::"building"::_}) ->  specificScopeProcessNode<ModifierBlock> Scope.Planet, "triggerblock", id;
+
         |("planet_modifier", _, {parents = "building"::_}) ->  specificScopeProcessNode<ModifierBlock> Scope.Planet, "modifierblock", id;
         |("army_modifier", _, {parents = "building"::_}) ->  specificScopeProcessNode<ModifierBlock> Scope.Army, "modifierblock", id;
         |("country_modifier", _, {parents = "building"::_}) ->  specificScopeProcessNode<ModifierBlock> Scope.Country, "modifierblock", id;
-        
+        //Agendas
+        |(_, p, c) when not c.complete && globCheckPosition("**/common/agendas/*.txt") p ->  processNodeSimple<Node>, "agenda",  (fun c -> { c with complete = true});
+        |("weight_modifier", _, {parents = "agenda"::_}) ->  processNodeSimple<Node>, "weightmodifier", id;
+        |("modifier", _, {parents = "agenda"::_}) ->  specificScopeProcessNode<ModifierBlock> Scope.Country, "modifierblock", id;
         //Armies
         |(_, p, c) when not c.complete && globCheckPosition("**/common/armies/*.txt") p ->  processNodeSimple<Node>, "army",  (fun c -> { c with complete = true});
         |("potential", _, {parents = "army"::_}) ->  specificScopeProcessNode<TriggerBlock> Scope.Planet, "triggerblock", id;
@@ -223,6 +234,8 @@ module STLProcess =
         |("potential", _, {parents = "ascension"::_}) ->  specificScopeProcessNode<TriggerBlock> Scope.Country, "triggerblock", id;
         |("possible", _, {parents = "ascension"::_}) ->  specificScopeProcessNode<TriggerBlock> Scope.Country, "triggerblock", id;
         |("on_enabled", _, {parents = "ascension"::_}) ->  specificScopeProcessNode<EffectBlock> Scope.Country, "effectblock", id;
+        |("ai_weight", _, {parents = "ascension"::_}) ->  processNodeSimple<Node>, "ai_weight", id;
+        |("modifier", _, {parents = "ascension"::_}) ->  specificScopeProcessNode<ModifierBlock> Scope.Country, "modifierblock", id;
         //Bombardment stances
         |(_, p, c) when not c.complete && globCheckPosition("**/common/bombardment_stances/*.txt") p ->  processNodeSimple<Node>, "bombard",  (fun c -> { c with complete = true});
         |("trigger", _, {parents = "bombard"::_;}) ->  specificScopeProcessNode<TriggerBlock> Scope.Fleet, "triggerblock", id;
@@ -242,6 +255,14 @@ module STLProcess =
         |("potential", _, {parents = "casusbelli"::_;}) ->  specificScopeProcessNode<TriggerBlock> Scope.Country, "triggerblock", id;
         |("is_valid", _, {parents = "casusbelli"::_;}) ->  specificScopeProcessNode<TriggerBlock> Scope.Country, "triggerblock", id;
         |("destroy_if", _, {parents = "casusbelli"::_;}) ->  specificScopeProcessNode<TriggerBlock> Scope.Country, "triggerblock", id;
+        //Component templates
+        |(_, p, c) when not c.complete && globCheckPosition("**/common/component_templates/*.txt") p ->  processNodeSimple<Node>, "componenttemplate",  (fun c -> { c with complete = true});
+        |("ai_weight", _, {parents = "componenttemplate"::_}) ->  processNodeSimple<Node>, "ai_weight", id;
+        |("friendly_aura", _, {parents = "componenttemplate"::_;}) ->  processNodeSimple<Node>, "componentaura", id;
+        |("hostile_aura", _, {parents = "componenttemplate"::_;}) ->  processNodeSimple<Node>, "componentaura", id;
+        |("modifier", _, {parents = "componentaura"::"componenttemplate"::_}) ->  specificScopeProcessNode<ModifierBlock> Scope.Ship, "modifierblock", id;
+        |("ship_modifier", _, {parents = "componenttemplate"::_}) ->  specificScopeProcessNode<ModifierBlock> Scope.Ship, "modifierblock", id;
+        |("modifier", _, {parents = "componenttemplate"::_}) ->  specificScopeProcessNode<ModifierBlock> Scope.Ship, "modifierblock", id;
         //Diplomatic actions            
         |(_, p, c) when not c.complete && globCheckPosition("**/common/diplomatic_actions/*.txt") p ->  processNodeSimple<Node>, "diploact",  (fun c -> { c with complete = true});
         |("potential", _, {parents = "diploact"::_;}) ->  specificScopeProcessNode<TriggerBlock> Scope.Country, "triggerblock", id;
@@ -255,11 +276,20 @@ module STLProcess =
         |("potential", _, {parents = "edict"::_;}) ->  scopedProcessNode<TriggerBlock>, "triggerblock", id;
         |("allow", _, {parents = "edict"::_;}) ->  scopedProcessNode<TriggerBlock>, "triggerblock", id;
         |("effect", _, {parents = "edict"::_;}) ->  scopedProcessNode<EffectBlock>, "effectblock", id;
+        |("modifier", _, {parents = "edict"::_; previous = "edict"}) ->  scopedProcessNode<ModifierBlock>, "modifierblock", id;
         //Ethics
         |(_, p, c) when not c.complete && globCheckPosition("**/common/ethics/*.txt") p ->  processNodeSimple<Node>, "ethic",  (fun c -> { c with complete = true;});
         |("playable", _, {parents = "ethic"::_;}) ->  specificScopeProcessNode<TriggerBlock> Scope.Country, "triggerblock", id;
         |("pop_attraction_tag", _, {parents = "ethic"::_;}) ->  processNodeSimple<Node>, "popattractiontag", id;
         |("trigger", _, {parents = "popattractiontag"::"ethic"::_;}) ->  specificScopeProcessNode<TriggerBlock> Scope.Country, "triggerblock", id;
+        |("country_modifier", _, {parents = "ethic"::_;}) ->  specificScopeProcessNode<ModifierBlock> Scope.Country, "modifierblock", id;
+        //Government, authoritity
+        |(_, p, c) when not c.complete && globCheckPosition("**/common/governments/authorities/*.txt") p ->  processNodeSimple<Node>, "authority",  (fun c -> { c with complete = true;});
+        |("country_modifier", _, {parents = "authority"::_;}) ->  specificScopeProcessNode<ModifierBlock> Scope.Country, "modifierblock", id;
+        //Government, civics
+        |(_, p, c) when not c.complete && globCheckPosition("**/common/governments/civics/*.txt") p ->  processNodeSimple<Node>, "civic",  (fun c -> { c with complete = true;});
+        |("random_weight", _, {parents = "civic"::_;}) ->  processNodeSimple<Node>, "randomweight", id;
+        |("modifier", _, {parents = "civic"::_;}) ->  specificScopeProcessNode<ModifierBlock> Scope.Country, "modifierblock", id;
         //Mandates
         |(_, p, c) when not c.complete && globCheckPosition("**/common/mandates/*.txt") p ->  processNodeSimple<Node>, "mandate",  (fun c -> { c with complete = true;});
         |("valid", _, {parents = "mandate"::_;}) ->  specificScopeProcessNode<TriggerBlock> Scope.Leader, "triggerblock", id;
@@ -289,6 +319,8 @@ module STLProcess =
         |("valid", _, {parents = "policyoption"::"policy"::_;}) ->  specificScopeProcessNode<TriggerBlock> Scope.Country, "policyoption", id;
         |("on_enabled", _, {parents = "policyoption"::"policy"::_;}) ->  specificScopeProcessNode<EffectBlock> Scope.Country, "effectblock", id;
         |("on_disabled", _, {parents = "policyoption"::"policy"::_;}) ->  specificScopeProcessNode<EffectBlock> Scope.Country, "effectblock", id;
+        |("ai_weight", _, {parents = "policyoption"::"policy"::_;}) ->  processNodeSimple<Node>, "aiweight", id;
+        |("modifier", _, {parents = "policyoption"::"policy"::_; previous = "option"}) ->  specificScopeProcessNode<ModifierBlock> Scope.Country, "modifierblock", id;
         //Pop faction types
         |(_, p, c) when not c.complete && globCheckPosition("**/common/pop_faction_types/*.txt") p ->  processNodeSimple<Node>, "popfaction",  (fun c -> { c with complete = true;});
         |("is_potential", _, {parents = "popfaction"::_;}) ->  specificScopeProcessNode<TriggerBlock> Scope.Country, "triggerblock", id;
@@ -310,6 +342,9 @@ module STLProcess =
         //Ship_sizes
         |(_, p, c) when not c.complete && globCheckPosition("**/common/ship_sizes/*.txt") p ->  processNodeSimple<Node>, "shipsize",  (fun c -> { c with complete = true;});
         |("possible_starbase", _, {parents = "shipsize"::_;}) ->  specificScopeProcessNode<TriggerBlock> Scope.Starbase, "triggerblock", id;
+        ////TODO: improve, Starbase so that both ship and starbase modifiers work
+        |("modifier", _, {parents = "shipsize"::_;}) ->  specificScopeProcessNode<ModifierBlock> Scope.Starbase, "modifierblock", id;
+
         //Solar system
         |(_, p, c) when not c.complete && globCheckPosition("**/common/solar_system_initializers/*.txt") p ->  processNodeSimple<Node>, "solarsystem",  (fun c -> { c with complete = true;});
         |("planet", _, {parents = "solarsystem"::_;}) ->  processNodeSimple<Node>, "solarplanet", id;
@@ -328,20 +363,33 @@ module STLProcess =
         |(_, p, c) when not c.complete && globCheckPosition("**/common/species_rights/*.txt") p ->  processNodeSimple<Node>, "speciesrights",  (fun c -> { c with complete = true;});
         |("potential", _, {parents = "speciesrights"::_;}) ->  specificScopeProcessNode<TriggerBlock> Scope.Species, "triggerblock", id;
         |("allow", _, {parents = "speciesrights"::_;}) ->  specificScopeProcessNode<TriggerBlock> Scope.Species, "triggerblock", id;
+        |("pop_modifier", _, {parents = "speciesrights"::_;}) ->  specificScopeProcessNode<ModifierBlock> Scope.Country, "modifierblock", id;
+        ////TODO work out scope
+        |("ai_will_do"), _, {parents = "speciesrights"::_;} -> processNodeSimple<Node>, "dk", id;
+        |("modifier", _, {parents = "speciesrights"::_;}) ->  specificScopeProcessNode<ModifierBlock> Scope.Any, "modifierblock", id;
         //Starbase buildings
         |(_, p, c) when not c.complete && globCheckPosition("**/common/starbase_buildings/*.txt") p ->  processNodeSimple<Node>, "starbasebuilding",  (fun c -> { c with complete = true;});
         |("potential", _, {parents = "starbasebuilding"::_;}) ->  specificScopeProcessNode<TriggerBlock> Scope.Starbase, "triggerblock", id;
         |("possible", _, {parents = "starbasebuilding"::_;}) ->  specificScopeProcessNode<TriggerBlock> Scope.Starbase, "triggerblock", id;
+        |("orbit_modifier", _, {parents = "starbasebuilding"::_;}) ->  specificScopeProcessNode<ModifierBlock> Scope.Ship, "modifierblock", id;
+        |("country_modifier", _, {parents = "starbasebuilding"::_;}) ->  specificScopeProcessNode<ModifierBlock> Scope.Country, "modifierblock", id;
+        |("station_modifier", _, {parents = "starbasebuilding"::_;}) ->  specificScopeProcessNode<ModifierBlock> Scope.Starbase, "modifierblock", id;
         //Starbase modules
         |(_, p, c) when not c.complete && globCheckPosition("**/common/starbase_modules/*.txt") p ->  processNodeSimple<Node>, "starbasemodule",  (fun c -> { c with complete = true;});
         |("potential", _, {parents = "starbasemodule"::_;}) ->  specificScopeProcessNode<TriggerBlock> Scope.Starbase, "triggerblock", id;
         |("possible", _, {parents = "starbasemodule"::_;}) ->  specificScopeProcessNode<TriggerBlock> Scope.Starbase, "triggerblock", id;
+        |("country_modifier", _, {parents = "starbasemodule"::_;}) ->  specificScopeProcessNode<ModifierBlock> Scope.Country, "modifierblock", id;
+        |("station_modifier", _, {parents = "starbasemodule"::_;}) ->  specificScopeProcessNode<ModifierBlock> Scope.Starbase, "modifierblock", id;
+        |("triggered_country_modifier", _, {parents = "starbasemodule"::_;}) ->  specificScopeProcessNode<ModifierBlock> Scope.Country, "modifierblock", id;
         //Starbase type
         |(_, p, c) when not c.complete && globCheckPosition("**/common/starbase_types/*.txt") p ->  processNodeSimple<Node>, "starbasetype",  (fun c -> { c with complete = true;});
         |("potential", _, {parents = "starbasetype"::_;}) ->  specificScopeProcessNode<TriggerBlock> Scope.Starbase, "triggerblock", id;
         //Start screen messages
         |(_, p, c) when not c.complete && globCheckPosition("**/common/start_screen_messages/*.txt") p ->  processNodeSimple<Node>, "startscreen",  (fun c -> { c with complete = true;});
         |("trigger", _, {parents = "startscreen"::_;}) ->  specificScopeProcessNode<TriggerBlock> Scope.Country, "triggerblock", id;
+        //Strategic resources
+        |(_, p, c) when not c.complete && globCheckPosition("**/common/strategic_resources/*.txt") p ->  processNodeSimple<Node>, "stratres",  (fun c -> { c with complete = true;});
+        |("modifier", _, {parents = "stratres"::_;}) ->  specificScopeProcessNode<ModifierBlock> Scope.Country, "modifierblock", id;
         //Subjects
         |(_, p, c) when not c.complete && globCheckPosition("**/common/subjects/*.txt") p ->  processNodeSimple<Node>, "subject",  (fun c -> { c with complete = true;});
         |("potential", _, {parents = "subject"::_;}) ->  specificScopeProcessNode<TriggerBlock> Scope.Country, "triggerblock", id;
@@ -352,22 +400,29 @@ module STLProcess =
         //Technologies
         |(_, p, c) when not c.complete && globCheckPosition("**/common/technology/*.txt") p ->  processNodeSimple<Node>, "technology",  (fun c -> { c with complete = true;});
         |("potential", _, {parents = "technology"::_;}) ->  specificScopeProcessNode<TriggerBlock> Scope.Country, "triggerblock", id;
+        |("modifier", _, {parents = "technology"::_; previous="technology"}) ->  specificScopeProcessNode<ModifierBlock> Scope.Country, "modifierblock", id;
         //Terraform
         |(_, p, c) when not c.complete && globCheckPosition("**/common/terraform/*.txt") p ->  processNodeSimple<Node>, "terraform",  (fun c -> { c with complete = true;});
         |("condition", _, {parents = "terraform"::_;}) ->  specificScopeProcessNode<TriggerBlock> Scope.Country, "triggerblock", id;
         //Tradition category
         |(_, p, c) when not c.complete && globCheckPosition("**/common/tradition_categories/*.txt") p ->  processNodeSimple<Node>, "tradcat",  (fun c -> { c with complete = true;});
         |("tradition_swap", _, {parents = "tradcat"::_;}) ->  processNodeSimple<Node>, "tradcatswap", id;
+        |("modifier", _, {parents = "tradcat"::_;}) ->  specificScopeProcessNode<ModifierBlock> Scope.Country, "modifierblock", id;
         |("trigger", _, {parents = "tradcatswap"::"tradcat"::_;}) ->  specificScopeProcessNode<TriggerBlock> Scope.Country, "triggerblock", id;
+        |("modifier", _, {parents = "tradcatswap"::"tradcat"::_; previous= "tradition_swap"}) ->  specificScopeProcessNode<ModifierBlock> Scope.Country, "modifierblock", id;
         //Tradition
         |(_, p, c) when not c.complete && globCheckPosition("**/common/traditions/*.txt") p ->  processNodeSimple<Node>, "trad",  (fun c -> { c with complete = true;});
         |("tradition_swap", _, {parents = "trad"::_;}) ->  processNodeSimple<Node>, "tradswap", id;
+        |("ai_weight", _, {parents = "trad"::_;}) ->  processNodeSimple<Node>, "aiweight", id;
+        |("modifier", _, {parents = "trad"::_;}) ->  specificScopeProcessNode<ModifierBlock> Scope.Country, "modifierblock", id;
         |("trigger", _, {parents = "tradswap"::"trad"::_;}) ->  specificScopeProcessNode<TriggerBlock> Scope.Country, "triggerblock", id;
+        |("modifier", _, {parents = "tradswap"::"trad"::_; previous = "tradition_swap"}) ->  specificScopeProcessNode<ModifierBlock> Scope.Country, "modifierblock", id;
         //Traits
         |(_, p, c) when not c.complete && globCheckPosition("**/common/traits/*.txt") p ->  processNodeSimple<Node>, "trait",  (fun c -> { c with complete = true;});
         |("leader_potential_add", _, {parents = "trait"::_;}) ->  specificScopeProcessNode<TriggerBlock> Scope.Leader, "triggerblock", id;
         |("species_potential_add", _, {parents = "trait"::_;}) ->  specificScopeProcessNode<TriggerBlock> Scope.Species, "triggerblock", id;
         |("species_potential_remove", _, {parents = "trait"::_;}) ->  specificScopeProcessNode<TriggerBlock> Scope.Species, "triggerblock", id;
+        |("modifier", _, {parents = "trait"::_;}) ->  specificScopeProcessNode<ModifierBlock> Scope.Country, "modifierblock", id;
         //War goals
         |(_, p, c) when not c.complete && globCheckPosition("**/common/war_goals/*.txt") p ->  processNodeSimple<Node>, "wargoal",  (fun c -> { c with complete = true;});
         |("potential", _, {parents = "wargoal"::_;}) ->  specificScopeProcessNode<TriggerBlock> Scope.Country, "triggerblock", id;

@@ -42,6 +42,7 @@ country_edict ={
 
 	modifier = {
 		planet_unrest_mult = -0.50
+        description = no_error
 	}
 	
 	potential = {

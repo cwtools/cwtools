@@ -1,5 +1,12 @@
 ##Test trigger
 tradition_domination = {
+	modifier = {
+		ascension_perks_add = 1
+		country_trust_cap_add = 50
+		#error
+		invalid = yes
+	}
+
 	adoption_bonus = "tr_domination_adopt"
 	finish_bonus = "tr_domination_finish"
 	traditions = {
@@ -19,5 +26,11 @@ tradition_domination = {
 		weight = {
 			factor = 1
 		}		
+		modifier = {
+			ascension_perks_add = 1
+			country_trust_cap_add = 50
+			#error
+			invalid = yes
+		}
 	}
 }
