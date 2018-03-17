@@ -1,0 +1,18 @@
+##Check invalid effect throws error
+country_event = {
+    is_triggered_only = yes
+    trigger = {
+        #error
+        nonsense = yes
+    }
+    immediate = {
+        #error
+        nonsense = yes
+        random_owned_ship = {
+            #error
+            random_ship = {
+                
+            }
+        }
+    }
+}

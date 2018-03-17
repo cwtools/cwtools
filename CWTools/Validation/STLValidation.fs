@@ -79,7 +79,7 @@ module STLValidation =
         ModifierCategory.Pop, [Scope.Pop; Scope.Planet; Scope.Country]
         ModifierCategory.PopFaction, [Scope.PopFaction; Scope.Country]
         ModifierCategory.Science, [Scope.Ship; Scope.Country]
-        ModifierCategory.Ship, [Scope.Ship; Scope.Starbase; Scope.Country]
+        ModifierCategory.Ship, [Scope.Ship; Scope.Starbase; Scope.Fleet; Scope.Country]
         ModifierCategory.ShipSize, [Scope.Ship; Scope.Starbase; Scope.Country]
         ModifierCategory.Starbase, [Scope.Starbase; Scope.Country]
         ModifierCategory.Tile, [Scope.Tile; Scope.Pop; Scope.Planet; Scope.Country]
