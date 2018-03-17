@@ -12,4 +12,5 @@ type Lookup() =
     
     member val scriptedEffects : Effect list = [] with get, set
     member val staticModifiers : Modifier list = [] with get, set
+    member val coreModifiers : Modifier list = [] with get, set
     member val definedScriptVariables : string list = [] with get, set

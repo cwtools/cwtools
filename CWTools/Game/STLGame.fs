@@ -295,7 +295,9 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
         let updateDefinedVariables() =
             lookup.definedScriptVariables <- EntitySet (resources.AllEntities()) |> getDefinedScriptVariables
                 
-                    
+        let updateModifiers() =
+            lookup.coreModifiers <- addGeneratedModifiers modifiers (EntitySet (resources.AllEntities()))
+
         let findDuplicates (sl : Statement list) =
             let node = ProcessCore.processNodeBasic "root" Position.Empty sl
             node.Children |> List.groupBy (fun c -> c.Key)
@@ -347,7 +349,7 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
             eprintfn "Validating effects/triggers"
             let eres = valAllEffects (lookup.scriptedTriggers) (lookup.scriptedEffects) (lookup.staticModifiers) newEntities  |> (function |Invalid es -> es |_ -> [])
             let tres = valAllTriggers (lookup.scriptedTriggers) (lookup.scriptedEffects) (lookup.staticModifiers) newEntities  |> (function |Invalid es -> es |_ -> [])
-            let mres = valAllModifiers (modifiers) newEntities  |> (function |Invalid es -> es |_ -> [])
+            let mres = valAllModifiers (lookup.coreModifiers) newEntities  |> (function |Invalid es -> es |_ -> [])
             //(validateShips (flattened)) @ (validateEvents (flattened)) @ res @ fres @ eres
             (validateShips (flattened)) @ (validateEvents (flattened)) @ res @ fres @ eres @ tres @ mres
         
@@ -399,6 +401,7 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
             updateStaticodifiers()
             updateLocalisation()
             updateDefinedVariables()
+            updateModifiers()
 
         //member __.Results = parseResults
         member __.Duplicates = validateDuplicates

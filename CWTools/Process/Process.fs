@@ -53,6 +53,7 @@ and Node (key : string, pos : Position) =
     member this.Leaves = this.All |> Seq.choose (function |LeafC l -> Some l |_ -> None)
     member this.Values = this.Leaves |> List.ofSeq
     member this.Comments = this.All |> Seq.choose (function |CommentC c -> Some c |_ -> None)
+    member this.LeafValues = this.All |> Seq.choose(function |LeafValueC lv -> Some lv |_ -> None)
     member this.Has x = this.All |> (Seq.exists (bothFind x))
     member this.Tag x = this.Values |> Seq.tryPick (function |l when l.Key = x -> Some l.Value |_ -> None)
     member this.Leafs x = this.Values |> Seq.choose (function |l when l.Key = x -> Some l |_ -> None)

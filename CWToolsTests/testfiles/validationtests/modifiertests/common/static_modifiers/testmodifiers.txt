@@ -1,3 +1,9 @@
 test_modifier = {
     	max_rivalries = 10
 }
+
+test_ship_generated = {
+	shipsize_xindi_weapon_hull_add = 10
+	##TODO error
+	shipsize_fake_hull_add = 10
+}

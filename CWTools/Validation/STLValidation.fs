@@ -562,3 +562,61 @@ module STLValidation =
             <&&> children)
         let fCombine = (<&&>)
         es.All <&!&> foldNode2 fNode fCombine OK 
+
+    let addGeneratedModifiers (modifiers : Modifier list) (es : EntitySet) =
+        let ships = es.GlobMatchChildren("**/common/ship_sizes/*.txt")
+        let shipKeys = ships |> List.map (fun f -> f.Key)
+        let shipModifierCreate =
+            (fun k -> 
+            [
+                {tag = "shipsize_"+k+"_build_speed_mult"; categories = [ModifierCategory.Starbase]; core = true }
+                {tag = "shipsize_"+k+"_build_cost_mult"; categories = [ModifierCategory.Starbase]; core = true }
+                {tag = "shipsize_"+k+"_upkeep_mult"; categories = [ModifierCategory.Ship]; core = true }
+                {tag = "shipsize_"+k+"_hull_mult"; categories = [ModifierCategory.Ship]; core = true }
+                {tag = "shipsize_"+k+"_hull_add"; categories = [ModifierCategory.Ship]; core = true }
+            ])
+        let shipModifiers = shipKeys |> List.collect shipModifierCreate
+
+        let stratres = es.GlobMatchChildren("**/common/strategic_resources/*.txt")
+        let srKeys = stratres |> List.map (fun f -> f.Key)
+        let srModifierCreate = 
+            (fun k ->
+            [
+                {tag = "static_resource_"+k+"_add"; categories = [ModifierCategory.Country]; core = true }
+                {tag = "static_planet_resource_"+k+"_add"; categories = [ModifierCategory.Planet]; core = true }
+                {tag = "tile_resource_"+k+"_mult"; categories = [ModifierCategory.Tile]; core = true }
+                {tag = "country_resource_"+k+"_mult"; categories = [ModifierCategory.Country]; core = true }
+                {tag = "country_federation_member_resource_"+k+"_mult"; categories = [ModifierCategory.Country]; core = true }
+                {tag = "country_federation_member_resource_"+k+"_max_mult"; categories = [ModifierCategory.Country]; core = true }
+                {tag = "country_subjects_resource_"+k+"_mult"; categories = [ModifierCategory.Country]; core = true }
+                {tag = "country_subjects_resource_"+k+"_max_mult"; categories = [ModifierCategory.Country]; core = true }
+                {tag = "country_strategic_resources_resource_"+k+"_mult"; categories = [ModifierCategory.Country]; core = true }
+                {tag = "country_strategic_resources_resource_"+k+"_max_mult"; categories = [ModifierCategory.Country]; core = true }
+                {tag = "country_planet_classes_resource_"+k+"_mult"; categories = [ModifierCategory.Country]; core = true }
+                {tag = "country_planet_classes_resource_"+k+"_max_mult"; categories = [ModifierCategory.Country]; core = true }
+                {tag = "tile_building_resource_"+k+"_add"; categories = [ModifierCategory.Tile]; core = true }
+                {tag = "tile_resource_"+k+"_add"; categories = [ModifierCategory.Tile]; core = true }
+                {tag = "planet_resource_"+k+"_add"; categories = [ModifierCategory.Planet]; core = true }
+                {tag = "country_resource_"+k+"_add"; categories = [ModifierCategory.Country]; core = true }
+                {tag = "max_"+k; categories = [ModifierCategory.Country]; core = true }
+            ])
+        let srModifiers = srKeys |> List.collect srModifierCreate
+        let planetclasses = es.GlobMatchChildren("**/common/planet_classes/*.txt")
+        let pcKeys = planetclasses |> List.map (fun f -> f.Key)
+        let pcModifiers = pcKeys |> List.map (fun k -> {tag = k+"_habitability"; categories = [ModifierCategory.PlanetClass]; core = true})
+        let buildingTags = es.GlobMatch("**/common/building_tags/*.txt") |> List.collect (fun f -> f.LeafValues |> List.ofSeq)
+        let buildingTagModifierCreate =
+            (fun k -> 
+            [
+                {tag = k+"_construction_speed_mult"; categories = [ModifierCategory.Planet]; core = true }
+                {tag = k+"_build_cost_mult"; categories = [ModifierCategory.Planet]; core = true }
+            ])
+        let buildingModifiers = buildingTags |> List.map (fun l -> l.Value.ToRawString())
+                                             |> List.collect buildingTagModifierCreate
+        let countryTypeKeys = es.GlobMatchChildren("**/common/country_types/*.txt") |> List.map (fun f -> f.Key)
+        let countryTypeModifiers = countryTypeKeys |> List.map (fun k -> {tag = "damage_vs_country_type_"+k+"_mult"; categories = [ModifierCategory.Ship]; core = true})
+        let speciesKeys = es.GlobMatchChildren("**/common/species_archetypes/*.txt")
+                            |> List.filter (fun s -> not (s.Has "inherit_traits_from"))
+                            |> List.map (fun s -> s.Key)
+        let speciesModifiers = speciesKeys |> List.map (fun k -> {tag = k+"_species_trait_points_add"; categories = [ModifierCategory.Country]; core = true})                    
+        shipModifiers @ srModifiers @ pcModifiers @ buildingModifiers @ countryTypeModifiers @ speciesModifiers @ modifiers

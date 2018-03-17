@@ -1,0 +1,23 @@
+country_edict = {
+	name = "drone_bounty"
+	modifier = {
+        shipsize_xindi_weapon_hull_add = 10
+        #error
+        shipsize_fake_hull_add = 10
+	}
+	
+	cost = { influence = 5 }
+
+	length = 36000
+
+	potential = {
+		has_country_flag = drone_bounty_edict_available
+	}
+
+	allow = {
+	}
+
+	ai_weight = {
+		weight = 0
+	}	
+}

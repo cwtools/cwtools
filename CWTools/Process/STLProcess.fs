@@ -276,7 +276,8 @@ module STLProcess =
         |("potential", _, {parents = "edict"::_;}) ->  scopedProcessNode<TriggerBlock>, "triggerblock", id;
         |("allow", _, {parents = "edict"::_;}) ->  scopedProcessNode<TriggerBlock>, "triggerblock", id;
         |("effect", _, {parents = "edict"::_;}) ->  scopedProcessNode<EffectBlock>, "effectblock", id;
-        |("modifier", _, {parents = "edict"::_; previous = "edict"}) ->  scopedProcessNode<ModifierBlock>, "modifierblock", id;
+        |("modifier", _, {parents = "edict"::_; previous = "country_edict"}) ->  scopedProcessNode<ModifierBlock>, "modifierblock", id;
+        |("modifier", _, {parents = "edict"::_; previous = "planet_edict"}) ->  scopedProcessNode<ModifierBlock>, "modifierblock", id;
         //Ethics
         |(_, p, c) when not c.complete && globCheckPosition("**/common/ethics/*.txt") p ->  processNodeSimple<Node>, "ethic",  (fun c -> { c with complete = true;});
         |("playable", _, {parents = "ethic"::_;}) ->  specificScopeProcessNode<TriggerBlock> Scope.Country, "triggerblock", id;

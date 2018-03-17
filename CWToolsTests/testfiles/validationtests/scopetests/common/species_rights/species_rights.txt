@@ -5,7 +5,7 @@ living_standard_deassimilation = {
     
     pop_modifier = {
     	pop_consumer_goods_add = 2.0
-	#error
+	##error, temp removed until work out scope
 	max_energy = 500
     }
 

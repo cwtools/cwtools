@@ -1,0 +1,30 @@
+##Test generation of modifiers
+xindi_weapon ={
+      max_speed = 30
+      acceleration = 10
+      rotation_speed = 1
+      max_hitpoints = 5000
+      size_multiplier = 0
+      fleet_slot_size = 8
+      modifier = {
+         ship_armor_add = 500
+         ship_evasion_mult = -0.8
+      }
+      icon_frame = 5
+      base_buildtime = 0
+      is_designable = no
+      is_space_object = yes
+      has_mineral_upkeep = yes
+      class = shipclass_military
+   
+      required_component_set = "required_sensor"
+      required_component_set = "required_warp"
+      required_component_set = "required_computer"
+      required_component_set = "required_defense"
+      required_component_set = "required_thruster"
+      required_component_set = "required_hull"
+      required_component_set = "required_tactical"
+      required_component_set = "required_aura_battleship"
+      section_slots = { "stern" = { locator = "part1" } "mid" = { locator = "part1" } }
+      num_target_locators = 2
+   }
