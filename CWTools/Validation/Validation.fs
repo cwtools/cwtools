@@ -48,10 +48,11 @@ module ValidationCore =
         static member IncorrectScopeAsLeaf = fun (scope : string) (leaf : string) -> { ID = "CW116"; Severity = Severity.Error; Message = sprintf "%s scope command used incorrectly, did you mean _%s = { %s }" scope scope leaf }
         static member UndefinedScriptVariable = fun (variable : string) -> { ID = "CW117"; Severity = Severity.Error; Message = sprintf "%s variable is never defined" variable}
         static member UndefinedModifier = fun (modifier : string) -> { ID = "CW118"; Severity = Severity.Error; Message = sprintf "unknown modifier %s used. Experimental, please report errors" modifier }
-
         static member IncorrectModifierScope =
             fun (modifier : string) (actual : string) (expected : string) ->
             { ID = "CW119"; Severity = Severity.Error; Message = sprintf "%s modifier used in incorrect scope. In %s but expected %s. Experimental, please report errors" modifier actual expected}
+        static member UnsavedEventTarget = fun (event : string) (targets : string) -> { ID = "CW220"; Severity = Severity.Error; Message = sprintf "%s or an event it calls require the event target(s) %s but they are not set by this event or by all possible events leading here" event targets}
+        static member MaybeUnsavedEventTarget = fun (event : string) (targets : string) -> { ID = "CW221"; Severity = Severity.Warning; Message = sprintf "%s or an event it calls require the event target(s) %s but they may not always be set by this event or by all possible events leading here" event targets}
 
         static member CustomError = fun error -> { ID = "CW999"; Severity = Severity.Error; Message = error}
     type ValidationResult = 

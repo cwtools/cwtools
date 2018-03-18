@@ -1,6 +1,7 @@
 namespace CWTools.Common
 
 open System
+open System.ComponentModel.Design
 module STLConstants =
     /// Blackninja9939: Country, leader, galatic object, planet, ship, fleet, pop, ambient object, army, tile, species, pop faction, sector and alliance
     /// Blackninja9939: War and Megastructure are scopes too
@@ -103,8 +104,9 @@ module STLConstants =
         override x.ToString() = sprintf "%s: %A" x.Name x.Scopes
     
 
-    type ScriptedEffect(name, scopes, effectType) =
+    type ScriptedEffect(name, scopes, effectType, comments) =
         inherit Effect(name, scopes, effectType)
+        member val Comments : string = comments
         override x.Equals(y) = 
             match y with
             | :? ScriptedEffect as y -> x.Name = y.Name && x.Scopes = y.Scopes && x.Type = y.Type

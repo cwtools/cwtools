@@ -1,0 +1,27 @@
+namespace = dayshine
+
+country_event = {
+    id = dayshine.1
+    is_triggered_only = yes
+    immediate = {
+        save_event_target_as = day_test
+        capital_scope = {
+            enable_special_project = {
+                name = "DAYSHINE_PROJECT"
+                location = THIS
+                owner = ROOT
+            }  
+        }
+
+    }
+}
+
+country_event = {
+    id = dayshine.2
+    is_triggered_only = yes
+    immediate = {
+        event_target:day_test = {
+            log = "(DAY): [This.GetName]"
+        }
+    }
+}

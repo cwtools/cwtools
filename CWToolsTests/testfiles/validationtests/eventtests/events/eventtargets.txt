@@ -1,0 +1,65 @@
+namespace = test
+
+#error
+country_event = {
+    is_triggered_only = yes
+    id = event.1
+    immediate = {
+        save_event_target_as = one
+        country_event = { id = event.2 }
+    }
+}
+
+#error
+country_event = {
+    is_triggered_only = yes
+    id = event.2
+    immediate ={
+        save_event_target_as = two
+        country_event = { id = event.3 }
+        country_event = { id = event.4 }
+    }
+
+}
+
+#error
+country_event = {
+    is_triggered_only = yes
+    id = event.3
+    immediate ={
+        save_event_target_as = three
+        event_target:three = {
+
+        }
+        event_target:four = {
+
+        }
+        country_event = { id = event.5 }
+    }
+
+}
+
+country_event = {
+    is_triggered_only = yes
+    id = event.4
+    immediate ={
+        save_event_target_as = four
+        event_target:four = {
+
+        }
+        event_target:two = {
+
+        }
+    }
+
+}
+
+country_event = {
+    is_triggered_only = yes
+    id = event.5
+    immediate = {
+        save_event_target_as = five
+        save_event_target_as = four
+        ##country_event = { id = event.1 }
+    }
+}

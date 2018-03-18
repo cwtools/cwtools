@@ -16,6 +16,8 @@ open CWTools.Process.STLScopes
 open DotNet.Globbing
 open System.Collections.Specialized
 open CWTools.Validation.STLLocalisationValidation
+open CWTools.Validation.STLEventValidation
+open CWTools.Process.ProcessCore
 
 
 
@@ -27,7 +29,7 @@ type FilesScope =
 
 //type GameFile = GameFile of result : FileResult
 
-type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, triggers : DocEffect list, effects : DocEffect list, modifiers : Modifier list, embeddedFiles : (string * string) list, langs : Lang list, validateVanilla : bool ) =
+type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, triggers : DocEffect list, effects : DocEffect list, modifiers : Modifier list, embeddedFiles : (string * string) list, langs : Lang list, validateVanilla : bool, experimental : bool ) =
         let scriptFolders = [
                     "common/agendas";
                     "common/ambient_objects";
@@ -231,11 +233,37 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
             let allFiles = List.map getAllFiles allFolders |> List.collect id |> List.choose fileToResourceInput
             allFiles
 
+        let getChildrenWithComments (root : Node) =
+            let findComment t s (a : Child) =
+                match (s, a) with
+                | ((b, c), _) when b -> (b, c)
+                | ((_, c), CommentC nc) -> (false, nc::c)
+                | ((_, c), NodeC n) when n.Key = t -> (true, c)
+                | ((_, _), _) -> (false, [])
+            root.Children |> List.map (fun e -> e, root.All |> List.rev |> List.fold (findComment e.Key) (false, []) |> snd)
+
+        // let getChildrenWithComments (node : Node) =
+        //     let findComments t s (a : Child) =
+        //             match (s, a) with
+        //             | ((b, c), _) when b -> (b, c)
+        //             | ((_, c), CommentC nc) -> (false, nc::c)
+        //             | ((_, c), NodeC n) when n.Position = t -> (true, c)
+        //             | ((_, c), LeafC v) when v.Position = t -> (true, c)
+        //             | ((_, _), _) -> (false, [])
+        //     let fNode = (fun (node:Node) (children) ->
+        //             let one = node.Values |> List.map (fun e -> node.All |> List.rev |> List.fold (findComments e.Position) (false, []) |> snd) |> List.collect id
+        //             let two = node.Children |> List.map (fun e ->  node.All |> List.rev |> List.fold (findComments e.Position) (false, []) |> snd) |> List.collect id
+        //             let new2 = one @ two
+        //             new2 @ children
+        //                 )
+        //     let fCombine = (@)
+        //     node |> fun c -> c, (foldNode2 fNode fCombine [] c)
+
         let updateScriptedTriggers () = 
             let rawTriggers = 
                 resources.AllEntities()
                 |> List.choose (function |f when f.filepath.Contains("scripted_triggers") -> Some (f.entity) |_ -> None)
-                |> List.collect (fun n -> n.Children)
+                |> List.collect getChildrenWithComments
                 |> List.rev
             let mutable final = vanillaTriggers
             let mutable i = 0
@@ -254,7 +282,8 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
             let rawEffects = 
                 resources.AllEntities()
                 |> List.choose (function |f when f.filepath.Contains("scripted_effects") -> Some (f.entity) |_ -> None)
-                |> List.collect (fun n -> n.Children)
+                |> List.collect getChildrenWithComments
+                //|> List.collect (fun n -> n.Children)
                 |> List.rev
             let mutable final = vanillaEffects
             let mutable i = 0
@@ -338,6 +367,7 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
             let flattened = allEntitiesByFile |> List.map (fun n -> n.Children) |> List.collect id
 
             let validators = [validateVariables; valTechnology; valButtonEffects; valSprites; valVariables]
+            let validators = if experimental then [getEventChains] @ validators else validators
             let oldEntities = EntitySet (resources.AllEntities())
             let newEntities = EntitySet entities
             eprintfn "Validating misc"
@@ -350,6 +380,7 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
             let eres = valAllEffects (lookup.scriptedTriggers) (lookup.scriptedEffects) (lookup.staticModifiers) newEntities  |> (function |Invalid es -> es |_ -> [])
             let tres = valAllTriggers (lookup.scriptedTriggers) (lookup.scriptedEffects) (lookup.staticModifiers) newEntities  |> (function |Invalid es -> es |_ -> [])
             let mres = valAllModifiers (lookup.coreModifiers) newEntities  |> (function |Invalid es -> es |_ -> [])
+            //let etres = getEventChains newEntities |> (function |Invalid es -> es |_ -> [])
             //(validateShips (flattened)) @ (validateEvents (flattened)) @ res @ fres @ eres
             (validateShips (flattened)) @ (validateEvents (flattened)) @ res @ fres @ eres @ tres @ mres
         

@@ -26,6 +26,7 @@
     <Compile Include="Validation/Validation.fs" />
     <Compile Include="Validation/STLValidation.fs" />
     <Compile Include="Validation/STLLocalisationValidation.fs" />
+    <Compile Include="Validation/STLEvents.fs" />
     <Compile Include="Game/STLGame.fs" />
     <Compile Include="CSharp/Extensions.fs" />
   </ItemGroup>
