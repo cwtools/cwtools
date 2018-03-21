@@ -104,9 +104,12 @@ module STLConstants =
         override x.ToString() = sprintf "%s: %A" x.Name x.Scopes
     
 
-    type ScriptedEffect(name, scopes, effectType, comments) =
+    type ScriptedEffect(name, scopes, effectType, comments, globals, settargets, usedtargets) =
         inherit Effect(name, scopes, effectType)
         member val Comments : string = comments
+        member val GlobalEventTargets : string list = globals
+        member val SavedEventTargets : string list = settargets
+        member val UsedEventTargets : string list = usedtargets
         override x.Equals(y) = 
             match y with
             | :? ScriptedEffect as y -> x.Name = y.Name && x.Scopes = y.Scopes && x.Type = y.Type

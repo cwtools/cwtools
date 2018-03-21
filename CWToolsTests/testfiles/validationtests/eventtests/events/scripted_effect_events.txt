@@ -1,0 +1,40 @@
+namespace  = test
+
+##Test that targets set and used in effects propagate
+country_event = {
+    id = testse.1
+    is_triggered_only = yes
+    immediate = {
+        set_target = yes
+        country_event = { id = testse.3 }
+    }
+}
+
+#error
+country_event = {
+    id = testse.2
+    is_triggered_only = yes
+    immediate = {
+        country_event = { id = testse.3 }
+    }
+}
+
+#error
+country_event = {
+    id = testse.3
+    is_triggered_only = yes
+    immediate = {
+        use_target = yes
+    }
+}
+
+##Test that targets globally set in effects propagate
+country_event = {
+    id = testse.4
+    is_triggered_only = yes
+    immediate = {
+        event_target:test_global_target = {
+            
+        }
+    }
+}

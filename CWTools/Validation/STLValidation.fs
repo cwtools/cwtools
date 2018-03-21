@@ -22,6 +22,14 @@ module STLValidation =
         member this.GlobMatchChildren(pattern : string) =
             this.GlobMatch(pattern) |> List.map (fun e -> e.Children) |> List.collect id
         member __.All = entities |> List.map (fun es -> es.entity)
+        member this.AllEffects= 
+            let fNode = (fun (x : Node) children ->
+                            match x with
+                            | :? EffectBlock as e -> [e]
+                            |_ -> children
+                                )
+            let fCombine = (@)
+            this.All |> List.collect (foldNode2 fNode fCombine [])
         member __.Raw = entities
         member this.Merge(y : EntitySet) = EntitySet(this.Raw @ y.Raw)
 

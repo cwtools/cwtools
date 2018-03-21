@@ -117,7 +117,7 @@ module STLEventValidation =
         let fCombine = (@)
         event |> (foldNode2 fNode fCombine []) |> Set.ofList
 
-    let findAllSavedGlobalEventTargets (event : Event) =
+    let findAllSavedGlobalEventTargets (event : Node) =
         let fNode = (fun (x : Node) children ->
                         let inner (leaf : Leaf) = if leaf.Key == "save_global_event_target_as" then Some (leaf.Value.ToRawString()) else None
                         (x.Values |> List.choose inner) @ children
@@ -125,20 +125,35 @@ module STLEventValidation =
         let fCombine = (@)
         event |> (foldNode2 fNode fCombine []) |> Set.ofList
 
-    let checkEventChain (projects : Node list) (globals : Set<string>) (events : Event list) =
+    let addScriptedEffectTargets (effects : ScriptedEffect list) ((e, s, u, r, x) : Event * Set<string> * Set<string> * string list * Set<string>) = 
+        let fNode = (fun (x : Node) (s, u) ->
+                        let inner (leaf : Leaf) = effects |> List.tryFind (fun e -> leaf.Key == e.Name) |> Option.map (fun e -> e.SavedEventTargets, e.UsedEventTargets)
+                        x.Values |> List.choose inner |> List.fold (fun (s, u) (s2, u2) -> s@s2, u@u2) (s, u))
+        let fCombine = (fun (s, u) (s2, u2) -> s@s2, u@u2)
+        let s2, u2 = foldNode2 fNode fCombine (s |> Set.toList, u |> Set.toList) e
+        (e, s2 |> Set.ofList, u2 |> Set.ofList, r, x)
+
+    let checkEventChain (effects : ScriptedEffect list) (projects : Node list) (globals : Set<string>) (events : Event list) =
         let mutable current = events |> List.map (fun e -> (e, findAllSavedEventTargets e, findAllUsedEventTargets e, findAllReferencedEvents projects e, findAllExistsEventTargets e))
                                         //|> (fun f -> eprintfn "%A" f; f)
+                                        |> List.map (addScriptedEffectTargets effects)
                                         |> List.map (fun (e, s, u, r, x) -> e, s, Set.difference u s, r, x)
         let getRequiredTargets (ids : string list) =
             let ret = ids |> List.collect (fun x -> current |> List.pick (fun (e2,_ , u2, _, _) -> if e2.ID = x then Some (Set.toList u2) else None)) |> Set.ofList
            // eprintfn "%A" ret
             ret
+        let getExistsTargets (ids : string list) = 
+            let ret = ids |> List.map (fun x -> current |> List.pick (fun (e2,_ , _, _, x2) -> if e2.ID = x then Some (Set.toList x2) else None)) 
+                            |> (fun f -> if List.isEmpty f then Set.empty else f |> List.map Set.ofList |> List.reduce (fun s n -> Set.intersect s (n))) 
+            // eprintfn "%A" ret
+            ret
+
         let update (e, s, u, r, x) =
             e,
             s,
             Set.difference (Set.union u (getRequiredTargets r)) s,
             r,
-            x
+            Set.union x (getExistsTargets r)
         let mutable i = 0
 
         let step (es) = 
@@ -156,11 +171,11 @@ module STLEventValidation =
         //     |[] -> Set.empty
         //     | xs -> xs |> List.map inner |> List.reduce (Set.intersect)
         let getSourceSetTargets (id : string) =
-            let inner = (fun (x : string) -> current |> List.choose (fun (_, s2, _, r2, _) -> if List.contains x r2 then Some (s2) else None))
+            let inner = (fun (x : string) -> current |> List.choose (fun (e2, s2, _, r2, _) -> if List.contains x r2 && e2.ID <> x then Some (s2) else None))
             inner id
 
         let getSourceExistsTargets (id : string) =
-            let inner = (fun (x : string) -> current |> List.choose (fun (_, _, _, r2, x2) -> if List.contains x r2 then Some (x2) else None))
+            let inner = (fun (x : string) -> current |> List.choose (fun (e2, _, _, r2, x2) -> if List.contains x r2 && e2.ID <> x then Some (x2) else None))
             inner id
 
         let down ((e : Event), s, u, r, x) =
@@ -197,20 +212,24 @@ module STLEventValidation =
 
             
 
-    let getEventChains : StructureValidator =
-        fun os es ->
-            let events = es.GlobMatchChildren("**/events/*.txt") |> List.choose (function | :? Event as e -> Some e |_ -> None)
-            let projects = os.GlobMatchChildren("**/common/special_projects/*.txt") @ es.GlobMatchChildren("**/common/special_projects/*.txt")
-            let globals = events |> List.map findAllSavedGlobalEventTargets |> List.fold (Set.union) (Set.empty)
-            let chains = events |> List.collect (fun (event) -> findAllReferencedEvents projects event |> List.map (fun f -> event.ID, f))
-                        //|> (fun f -> eprintfn "%A" f; f)
-                        |> List.collect(fun (s, t) -> [s,t; t,s])
-                        //|> (fun f -> eprintfn "%A" f; f)
-                        |> (fun es -> (graph2AdjacencyGraph (events |> List.map (fun f -> f.ID), es)))
-                        |> connectedComponents
-                        //|> (fun f -> eprintfn "%A" f; f)
-                        |> List.map (fun set -> set |> List.map (fun (event, targets) -> events |> List.find (fun e -> e.ID = event)))
-            chains <&!&> checkEventChain projects globals
+    let getEventChains (reffects : Effect list) (os : EntitySet) (es : EntitySet) =
+        let seffects = reffects |> List.choose (function | :? ScriptedEffect as e -> Some e |_ -> None)
+        let allevents = os.GlobMatchChildren("**/events/*.txt") |> List.choose (function | :? Event as e -> Some e |_ -> None)
+        let events = es.GlobMatchChildren("**/events/*.txt") |> List.choose (function | :? Event as e -> Some e |_ -> None)
+        let projects = os.GlobMatchChildren("**/common/special_projects/*.txt") @ es.GlobMatchChildren("**/common/special_projects/*.txt")
+        let effects = os.AllEffects @ es.AllEffects
+        let globalScriptedEffects = seffects |> List.collect (fun se -> se.GlobalEventTargets) |> Set.ofList
+        let globals = Set.union globalScriptedEffects (effects |> List.map findAllSavedGlobalEventTargets |> List.fold (Set.union) (Set.empty))
+        //eprintfn "%s" (globals |> Set.toList |> String.concat ", ")
+        let chains = events |> List.collect (fun (event) -> findAllReferencedEvents projects event |> List.map (fun f -> event.ID, f))
+                    //|> (fun f -> eprintfn "%A" f; f)
+                    |> List.collect(fun (s, t) -> [s,t; t,s])
+                    //|> (fun f -> eprintfn "%A" f; f)
+                    |> (fun es -> (graph2AdjacencyGraph (events |> List.map (fun f -> f.ID), es)))
+                    |> connectedComponents
+                    //|> (fun f -> eprintfn "%A" f; f)
+                    |> List.map (fun set -> set |> List.map (fun (event, targets) -> events |> List.find (fun e -> e.ID = event)))
+        chains <&!&> checkEventChain seffects projects globals
         
         
 

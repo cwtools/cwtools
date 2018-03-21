@@ -367,7 +367,6 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
             let flattened = allEntitiesByFile |> List.map (fun n -> n.Children) |> List.collect id
 
             let validators = [validateVariables; valTechnology; valButtonEffects; valSprites; valVariables]
-            let validators = if experimental then [getEventChains] @ validators else validators
             let oldEntities = EntitySet (resources.AllEntities())
             let newEntities = EntitySet entities
             eprintfn "Validating misc"
@@ -380,9 +379,10 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
             let eres = valAllEffects (lookup.scriptedTriggers) (lookup.scriptedEffects) (lookup.staticModifiers) newEntities  |> (function |Invalid es -> es |_ -> [])
             let tres = valAllTriggers (lookup.scriptedTriggers) (lookup.scriptedEffects) (lookup.staticModifiers) newEntities  |> (function |Invalid es -> es |_ -> [])
             let mres = valAllModifiers (lookup.coreModifiers) newEntities  |> (function |Invalid es -> es |_ -> [])
+            let evres =( if experimental then getEventChains (lookup.scriptedEffects) oldEntities newEntities else OK) |> (function |Invalid es -> es |_ -> [])
             //let etres = getEventChains newEntities |> (function |Invalid es -> es |_ -> [])
             //(validateShips (flattened)) @ (validateEvents (flattened)) @ res @ fres @ eres
-            (validateShips (flattened)) @ (validateEvents (flattened)) @ res @ fres @ eres @ tres @ mres
+            (validateShips (flattened)) @ (validateEvents (flattened)) @ res @ fres @ eres @ tres @ mres @ evres
         
         let localisationCheck (entities : Entity list) =
             eprintfn "Localisation check %i files" (entities.Length)

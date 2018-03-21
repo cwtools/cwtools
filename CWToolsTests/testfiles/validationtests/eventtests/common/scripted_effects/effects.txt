@@ -1,0 +1,17 @@
+set_global_test = {
+    save_global_event_target_as = test_global_target
+}
+
+set_target = {
+    save_event_target_as = test_target
+}
+
+set_recursive_target = {
+    set_target = yes
+}
+
+use_target = {
+    event_target:test_target = {
+
+    }
+}

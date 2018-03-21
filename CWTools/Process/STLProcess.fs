@@ -79,13 +79,53 @@ module STLProcess =
         // let limitScopes = nodeLimit |> List.map (scriptedTriggerScope triggers triggers)
         //nodeScopes @ valueScopes @ nodeScopeChanges @ limitScopes
         //        |> List.fold (fun a b -> Set.intersect (Set.ofList a) (Set.ofList b) |> Set.toList) allScopes
+    let findAllUsedEventTargets (event : Node) =
+        let fNode = (fun (x : Node) children ->
+                        let targetFromString (k : string) = k.Substring(13).Split('.').[0]
+                        let inner (leaf : Leaf) = if leaf.Value.ToRawString().StartsWith("event_target:") then Some (leaf.Value.ToRawString() |> targetFromString) else None
+                        match x.Key with
+                        |k when k.StartsWith("event_target:") -> 
+                           targetFromString k :: ((x.Values |> List.choose inner) @ children)     
+                        |_ ->                      
+                            ((x.Values |> List.choose inner) @ children)    
+                        
+                        )
+        let fCombine = (@)
+        event |> (foldNode2 fNode fCombine []) |> Set.ofList
+
+    let findAllSavedEventTargets (event : Node) =
+        let fNode = (fun (x : Node) children ->
+                        let inner (leaf : Leaf) = if leaf.Key == "save_event_target_as" then Some (leaf.Value.ToRawString()) else None
+                        (x.Values |> List.choose inner) @ children
+                        )
+        let fCombine = (@)
+        event |> (foldNode2 fNode fCombine []) |> Set.ofList
+
+    let findAllExistsEventTargets (event : Node) =
+        let fNode = (fun (x : Node) children ->
+                        let inner (leaf : Leaf) = if leaf.Key == "exists" && leaf.Value.ToRawString().StartsWith("event_target:") then Some (leaf.Value.ToRawString().Substring(13).Split('.').[0]) else None
+                        (x.Values |> List.choose inner) @ children
+                        )
+        let fCombine = (@)
+        event |> (foldNode2 fNode fCombine []) |> Set.ofList
+
+    let findAllSavedGlobalEventTargets (event : Node) =
+        let fNode = (fun (x : Node) children ->
+                        let inner (leaf : Leaf) = if leaf.Key == "save_global_event_target_as" then Some (leaf.Value.ToRawString()) else None
+                        (x.Values |> List.choose inner) @ children
+                        )
+        let fCombine = (@)
+        event |> (foldNode2 fNode fCombine []) |> Set.ofList
 
     let getScriptedTriggerScope (firstRun: bool) (effectType : EffectType) (effects : Effect list) (triggers : Effect list) ((node, comments) : Node * string list) =
         let effects2 = effects |> List.map (fun t -> t.Name, t.Scopes)
         let triggers2 = triggers |> List.map (fun t -> t.Name, t.Scopes)
         let scopes = scriptedTriggerScope firstRun effects2 triggers2 node.Key node
         let commentString = comments |> List.truncate 5 |> String.concat("\n")
-        ScriptedEffect(node.Key, scopes, effectType, commentString)
+        let globals = findAllSavedGlobalEventTargets node
+        let savetargets = findAllSavedEventTargets node
+        let usedtargets = findAllUsedEventTargets node
+        ScriptedEffect(node.Key, scopes, effectType, commentString, globals |> Set.toList, savetargets |> Set.toList, usedtargets |> Set.toList)
 
     type Ship (key, pos) =
         inherit Node(key, pos)
@@ -348,7 +388,7 @@ module STLProcess =
         |("modifier", _, {parents = "shipsize"::_;}) ->  specificScopeProcessNode<ModifierBlock> Scope.Starbase, "modifierblock", id;
 
         //Solar system
-        |(_, p, c) when not c.complete && globCheckPosition("**/common/solar_system_initializers/*.txt") p ->  processNodeSimple<Node>, "solarsystem",  (fun c -> { c with complete = true;});
+        |(_, p, c) when not c.complete && globCheckPosition("**/common/solar_system_initializers/**/*.txt") p ->  processNodeSimple<Node>, "solarsystem",  (fun c -> { c with complete = true;});
         |("planet", _, {parents = "solarsystem"::_;}) ->  processNodeSimple<Node>, "solarplanet", id;
         |("init_effect", _, {parents = "solarplanet"::"solarsystem"::_;}) ->  specificScopeProcessNode<EffectBlock> Scope.Planet, "effectblock", id;
         |("neighbor_system", _, {parents = "solarsystem"::_;}) ->  processNodeSimple<Node>, "solarneighbor", id;
