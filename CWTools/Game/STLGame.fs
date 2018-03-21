@@ -79,7 +79,7 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
                     "common/policies";
                     "common/pop_faction_types";
                     "common/precursor_civilizations";
-                    "common/random_names";
+                    //"common/random_names";
                     "common/scripted_effects";
                     "common/scripted_loc";
                     "common/scripted_triggers";

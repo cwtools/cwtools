@@ -135,7 +135,7 @@ module CKParser =
     let whitespaceTextChars = " \t\r\n"
     let norseChars =['ö';'ð';'æ';'ó';'ä';'Þ';'Å';'Ö']
     let idchar = choice [letter; digit; anyOf ['_'; ':'; '@'; '.'; '\"'; '-'; ''']]
-    let valuechar = choice [letter; digit; anyOf (['_'; '.'; '-'; ':'; '\''; '['; ']'; '@';'''; '+'; '`'; '%'; '/'] @ ['š'; 'Š'; '’'])]
+    let valuechar = choice [letter; digit; anyOf (['_'; '.'; '-'; ':'; '\''; '['; ']'; '@';'''; '+'; '`'; '%'; '/'; '!'] @ ['š'; 'Š'; '’'])]
 
 
     // Utility parsers
