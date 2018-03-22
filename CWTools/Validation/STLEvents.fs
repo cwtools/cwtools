@@ -138,23 +138,27 @@ module STLEventValidation =
                                         |> List.map (fun (e, s, u, r, x) -> eprintfn "%s %A %A %A %A" e.ID s u r x; (e, s, u, r, x))
                                         //|> (fun f -> eprintfn "%A" f; f)
                                         |> List.map (addScriptedEffectTargets effects)
-                                        |> List.map (fun (e, s, u, r, x) -> e, s, Set.difference u s, r, Set.remove e.ID x)
+                                        |> List.map (fun (e, s, u, r, x) -> e, s, s, Set.difference u s, r, x, x)
         let getRequiredTargets (ids : string list) =
-            let ret = ids |> List.collect (fun x -> current |> List.pick (fun (e2,_ , u2, _, _) -> if e2.ID = x then Some (Set.toList u2) else None)) |> Set.ofList
+            let ret = ids |> List.collect (fun x -> current |> List.pick (fun (e2,_ ,_ , u2, _, _, _) -> if e2.ID = x then Some (Set.toList u2) else None)) |> Set.ofList
            // eprintfn "%A" ret
             ret
-        let getExistsTargets (ids : string list) = 
-            let ret = ids |> List.map (fun x -> current |> List.pick (fun (e2,_ , _, _, x2) -> if e2.ID = x then Some (Set.toList x2) else None)) 
-                            |> (fun f -> if List.isEmpty f then Set.empty else f |> List.map Set.ofList |> List.reduce (fun s n -> Set.intersect s (n))) 
+
+        let getExistsTargets (currentx) (ids : string list) = 
+            let inter = ids |> List.map (fun x -> current |> List.pick (fun (e2,_, _, u2, _, _ ,x2) -> if e2.ID = x then Some (u2, x2) else None)) 
+            let all = inter |> List.fold (fun xs (u, x) -> Set.union(Set.union u x) xs) currentx
+            let ret = inter |> List.fold (fun xs (u, x) -> xs |> Set.toList |> List.fold (fun nxs nx -> if Set.contains nx u && not(Set.contains nx x) then nxs else nx::nxs) [] |> Set.ofList) all
             // eprintfn "%A" ret
             ret
 
-        let update (e, s, u, r, x) =
+        let update (e, os, s, u, r, ox, x) =
             e,
+            os,
             s,
             Set.difference (Set.union u (getRequiredTargets r)) s,
             r,
-            Set.union x (getExistsTargets r)
+            ox,
+            Set.union x (getExistsTargets (x) r)
         let mutable i = 0
 
         let step (es) = 
@@ -172,18 +176,40 @@ module STLEventValidation =
         //     |[] -> Set.empty
         //     | xs -> xs |> List.map inner |> List.reduce (Set.intersect)
         let getSourceSetTargets (id : string) =
-            let inner = (fun (x : string) -> current |> List.choose (fun (e2, s2, _, r2, _) ->  if List.contains x r2 && e2.ID <> x then eprintfn "asd %A %A %A" x e2.ID s2; Some (s2) else None))
+            let inner = (fun (x : string) -> current |> List.choose (fun (e2, _, s2, _, r2,_, _) ->  if List.contains x r2 && e2.ID <> x then eprintfn "asd %A %A %A" x e2.ID s2; Some (s2) else None))
             inner id
 
         let getSourceExistsTargets (id : string) =
-            let inner = (fun (x : string) -> current |> List.choose (fun (e2, _, _, r2, x2) -> if List.contains x r2 && e2.ID <> x then Some (x2) else None))
+            let inner = (fun (x : string) -> current |> List.choose (fun (e2, _, _, _, r2,_, x2) -> if List.contains x r2 && e2.ID <> x then Some (x2) else None))
             inner id
 
-        let down ((e : Event), s, u, r, x) =
+        let downOptimistic ((e : Event), os, s, u, r, ox, x) =
             e,
-            Set.union s (getSourceSetTargets e.ID |> (fun f -> if List.isEmpty f then Set.empty else List.reduce (Set.intersect) f)),
+            os,
+            Set.union os (getSourceSetTargets e.ID |> (fun f -> if List.isEmpty f then Set.empty else List.reduce (Set.union) f)),
             u,
             r,
+            ox,
+            //x
+            Set.union x (getSourceExistsTargets e.ID |> (fun f -> if List.isEmpty f then Set.empty else List.reduce (Set.union) f))
+        let mutable i = 0
+
+        let step (es) = 
+            //eprintfn "%A" current
+            i <- i + 1
+            let before = current
+            current <- es |> List.map downOptimistic
+            current = before || i > 100
+        while (not(step current)) do ()
+
+        let downPessimistic ((e : Event), os, s, u, r, ox, x) =
+            e,
+            os,
+            Set.union os (getSourceSetTargets e.ID |> (fun f -> if List.isEmpty f then Set.empty else List.reduce (Set.intersect) f)),
+            u,
+            r,
+            ox,
+            //x
             Set.union x (getSourceExistsTargets e.ID |> (fun f -> if List.isEmpty f then Set.empty else List.reduce (Set.intersect) f))
         let mutable i = 0
 
@@ -191,21 +217,21 @@ module STLEventValidation =
             //eprintfn "%A" current
             i <- i + 1
             let before = current
-            current <- es |> List.map down
+            current <- es |> List.map downPessimistic
             current = before || i > 100
         while (not(step current)) do ()
         //current |> List.iter (fun (e, s, u, r) -> eprintfn "event %s has %A and needs %A" (e.ID) s u)
        // current |> List.iter (fun (e, s, u, r) -> eprintfn "event %s is missing %A" (e.ID) (Set.difference u s))
-        current |> List.iter (fun (e, s, u, r, x) -> eprintfn "%s %A %A %A %A" e.ID s u r x;)
+        current |> List.iter (fun (e, os, s, u, r, ox, x) -> eprintfn "%s %A %A %A %A" e.ID s u r x;)
 
-        let missing = current |> List.filter (fun (e, s, u, r, x) -> not(Set.difference (Set.difference u (Set.union s x)) globals |> Set.isEmpty))
-        let maybeMissing = current |> List.filter (fun (e, s, u, r, x) -> 
+        let missing = current |> List.filter (fun (e, os, s, u, r, ox, x) -> not(Set.difference (Set.difference u (Set.union s x)) globals |> Set.isEmpty))
+        let maybeMissing = current |> List.filter (fun (e,os, s, u, r, ox, x) -> 
                                                     not(Set.difference (Set.difference u s) globals |> Set.isEmpty)
                                                     && (Set.difference (Set.difference u (Set.union s x)) globals |> Set.isEmpty))
-        let createError (e : Event, s, u, _, x) = 
+        let createError (e : Event, os, s, u, _, _, x) = 
              let needed = Set.difference (Set.difference u (Set.union s x)) globals |> Set.toList |> String.concat ", "
              Invalid [inv (ErrorCodes.UnsavedEventTarget (e.ID) needed) e]
-        let createWarning (e : Event, s, u, _, _) = 
+        let createWarning (e : Event, os, s, u, _, _, _) = 
              let needed = Set.difference (Set.difference u s) globals |> Set.toList |> String.concat ", "
              Invalid [inv (ErrorCodes.MaybeUnsavedEventTarget (e.ID) needed) e]
         missing <&!&> createError
