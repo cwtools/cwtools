@@ -87,7 +87,7 @@ module STLEventValidation =
         //eprintfn "%s proj targets %A" (event.ID) projectTargets
         directCalls @ projectTargets
     
-    let findAllUsedEventTargets (event : Event) =
+    let findAllUsedEventTargets (event : Node) =
         let fNode = (fun (x : Node) children ->
                         let targetFromString (k : string) = k.Substring(13).Split('.').[0]
                         let inner (leaf : Leaf) = if leaf.Value.ToRawString().StartsWith("event_target:") then Some (leaf.Value.ToRawString() |> targetFromString) else None
@@ -101,7 +101,7 @@ module STLEventValidation =
         let fCombine = (@)
         event |> (foldNode2 fNode fCombine []) |> Set.ofList
 
-    let findAllSavedEventTargets (event : Event) =
+    let findAllSavedEventTargets (event : Node) =
         let fNode = (fun (x : Node) children ->
                         let inner (leaf : Leaf) = if leaf.Key == "save_event_target_as" then Some (leaf.Value.ToRawString()) else None
                         (x.Values |> List.choose inner) @ children
@@ -133,11 +133,27 @@ module STLEventValidation =
         let s2, u2 = foldNode2 fNode fCombine (s |> Set.toList, u |> Set.toList) e
         (e, s2 |> Set.ofList, u2 |> Set.ofList, r, x)
 
-    let checkEventChain (effects : ScriptedEffect list) (projects : Node list) (globals : Set<string>) (events : Event list) =
+    let addSystemInitializer (sinits : Node list) ((e, s, u, r, x) : Event * Set<string> * Set<string> * string list * Set<string>) =
+        let fNode = (fun (x : Node) (s, u) ->
+                        match x.Key with
+                        |"spawn_system" -> 
+                            let initializer = x.TagText "initializer"
+                            match sinits |> List.tryFind (fun f -> f.Key == initializer) with
+                            |None -> s, u
+                            |Some sys -> (findAllSavedEventTargets sys |> Set.toList) @ s, (findAllUsedEventTargets sys |> Set.toList) @ u
+                        |_ -> s, u
+                        )
+        let fCombine = (fun (s, u) (s2, u2) -> s@s2, u@u2)               
+        let s2, u2 = foldNode2 fNode fCombine (s |> Set.toList, u |> Set.toList) e
+        (e, s2 |> Set.ofList, u2 |> Set.ofList, r, x)
+
+    let checkEventChain (effects : ScriptedEffect list) (sinits : Node list) (projects : Node list) (globals : Set<string>) (events : Event list) =
         let mutable current = events |> List.map (fun e -> (e, findAllSavedEventTargets e, findAllUsedEventTargets e, findAllReferencedEvents projects e, findAllExistsEventTargets e))
-                                        |> List.map (fun (e, s, u, r, x) -> eprintfn "%s %A %A %A %A" e.ID s u r x; (e, s, u, r, x))
+                                        //|> List.map (fun (e, s, u, r, x) -> eprintfn "%s %A %A %A %A" e.ID s u r x; (e, s, u, r, x))
                                         //|> (fun f -> eprintfn "%A" f; f)
                                         |> List.map (addScriptedEffectTargets effects)
+                                        |> List.map (addSystemInitializer sinits)
+                                        //|> List.map (fun (e, s, u, r, x) -> eprintfn "%s %A %A %A %A" e.ID s u r x; (e, s, u, r, x))
                                         |> List.map (fun (e, s, u, r, x) -> e, s, s, Set.difference u s, r, x, x)
         let getRequiredTargets (ids : string list) =
             let ret = ids |> List.collect (fun x -> current |> List.pick (fun (e2,_ ,_ , u2, _, _, _) -> if e2.ID = x then Some (Set.toList u2) else None)) |> Set.ofList
@@ -155,7 +171,7 @@ module STLEventValidation =
             e,
             os,
             s,
-            Set.difference (Set.union u (getRequiredTargets r)) s,
+            Set.difference (Set.union u (getRequiredTargets r)) os,
             r,
             ox,
             Set.union x (getExistsTargets (x) r)
@@ -176,7 +192,7 @@ module STLEventValidation =
         //     |[] -> Set.empty
         //     | xs -> xs |> List.map inner |> List.reduce (Set.intersect)
         let getSourceSetTargets (id : string) =
-            let inner = (fun (x : string) -> current |> List.choose (fun (e2, _, s2, _, r2,_, _) ->  if List.contains x r2 && e2.ID <> x then eprintfn "asd %A %A %A" x e2.ID s2; Some (s2) else None))
+            let inner = (fun (x : string) -> current |> List.choose (fun (e2, _, s2, _, r2,_, _) ->  if List.contains x r2 && e2.ID <> x then Some (s2) else None))
             inner id
 
         let getSourceExistsTargets (id : string) =
@@ -222,7 +238,7 @@ module STLEventValidation =
         while (not(step current)) do ()
         //current |> List.iter (fun (e, s, u, r) -> eprintfn "event %s has %A and needs %A" (e.ID) s u)
        // current |> List.iter (fun (e, s, u, r) -> eprintfn "event %s is missing %A" (e.ID) (Set.difference u s))
-        current |> List.iter (fun (e, os, s, u, r, ox, x) -> eprintfn "%s %A %A %A %A" e.ID s u r x;)
+       // current |> List.iter (fun (e, os, s, u, r, ox, x) -> eprintfn "%s %A %A %A %A" e.ID s u r x;)
 
         let missing = current |> List.filter (fun (e, os, s, u, r, ox, x) -> not(Set.difference (Set.difference u (Set.union s x)) globals |> Set.isEmpty))
         let maybeMissing = current |> List.filter (fun (e,os, s, u, r, ox, x) -> 
@@ -249,6 +265,7 @@ module STLEventValidation =
         let effects = os.AllEffects @ es.AllEffects
         let globalScriptedEffects = seffects |> List.collect (fun se -> se.GlobalEventTargets) |> Set.ofList
         let globals = Set.union globalScriptedEffects (effects |> List.map findAllSavedGlobalEventTargets |> List.fold (Set.union) (Set.empty))
+        let sinits = os.GlobMatchChildren("**\\common\\solar_system_initializers\\**\\*.txt") @ es.GlobMatchChildren("**\\common\\solar_system_initializers\\**\\*.txt")
         //eprintfn "%s" (globals |> Set.toList |> String.concat ", ")
         let chains = events |> List.collect (fun (event) -> findAllReferencedEvents projects event |> List.map (fun f -> event.ID, f))
                     //|> (fun f -> eprintfn "%A" f; f)
@@ -258,7 +275,7 @@ module STLEventValidation =
                     |> connectedComponents
                     //|> (fun f -> eprintfn "%A" f; f)
                     |> List.map (fun set -> set |> List.map (fun (event, targets) -> events |> List.find (fun e -> e.ID = event)))
-        chains <&!&> checkEventChain seffects projects globals
+        chains <&!&> checkEventChain seffects sinits projects globals
         
         
 

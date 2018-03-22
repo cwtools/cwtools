@@ -18,6 +18,18 @@ basic_init_02 = {
             set_fleet_flag = yes
             set_planet_flag = yes
         }
+		init_effect = {
+            #error
+            set_fleet_flag = yes
+            set_planet_flag = yes
+        }
+		moon ={
+			init_effect = {
+            #error
+            set_fleet_flag = yes
+            set_planet_flag = yes
+        }
+		}
 	}
 	neighbor_system = {
 		distance = { min = 10 max = 100 }

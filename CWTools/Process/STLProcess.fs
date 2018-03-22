@@ -123,6 +123,7 @@ module STLProcess =
         let scopes = scriptedTriggerScope firstRun effects2 triggers2 node.Key node
         let commentString = comments |> List.truncate 5 |> String.concat("\n")
         let globals = findAllSavedGlobalEventTargets node
+        globals |> Set.toList |> List.iter (fun g -> eprintf "%s" g )
         let savetargets = findAllSavedEventTargets node
         let usedtargets = findAllUsedEventTargets node
         ScriptedEffect(node.Key, scopes, effectType, commentString, globals |> Set.toList, savetargets |> Set.toList, usedtargets |> Set.toList)
@@ -388,9 +389,13 @@ module STLProcess =
         |("modifier", _, {parents = "shipsize"::_;}) ->  specificScopeProcessNode<ModifierBlock> Scope.Starbase, "modifierblock", id;
 
         //Solar system
-        |(_, p, c) when not c.complete && globCheckPosition("**/common/solar_system_initializers/**/*.txt") p ->  processNodeSimple<Node>, "solarsystem",  (fun c -> { c with complete = true;});
+        |(_, p, c) when not c.complete && globCheckPosition("**\\common\\solar_system_initializers\\**\\*.txt") p ->  processNodeSimple<Node>, "solarsystem",  (fun c -> { c with complete = true;});
+        |(_, p, c) when not c.complete && globCheckPosition("**/common/solar_system_initializers/*.txt") p ->  processNodeSimple<Node>, "solarsystem",  (fun c -> { c with complete = true;});
+        |("init_effect", _, {parents = "solarsystem"::_;}) ->  specificScopeProcessNode<EffectBlock> Scope.GalacticObject, "effectblock", id;
         |("planet", _, {parents = "solarsystem"::_;}) ->  processNodeSimple<Node>, "solarplanet", id;
         |("init_effect", _, {parents = "solarplanet"::"solarsystem"::_;}) ->  specificScopeProcessNode<EffectBlock> Scope.Planet, "effectblock", id;
+        |("moon", _, {parents = "solarplanet"::"solarsystem"::_;}) ->  processNodeSimple<Node>, "solarmoon", id;
+        |("init_effect", _, {parents = "solarmoon"::"solarplanet"::"solarsystem"::_;}) ->  specificScopeProcessNode<EffectBlock> Scope.Planet, "effectblock", id;
         |("neighbor_system", _, {parents = "solarsystem"::_;}) ->  processNodeSimple<Node>, "solarneighbor", id;
         |("trigger", _, {parents = "solarneighbor"::"solarsystem"::_;}) ->  specificScopeProcessNode<TriggerBlock> Scope.GalacticObject, "triggerblock", id;
         //Special projects

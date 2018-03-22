@@ -114,8 +114,8 @@ let testFolder folder testsname =
         let stl = STLGame(folder, FilesScope.All, "", triggers, effects, modifiers, [], [STL STLLang.English], false, true)
         let errors = stl.ValidationErrors |> List.map (fun (c, s, n, l, f, k) -> f, Position.UnConv n) //>> (fun p -> FParsec.Position(p.StreamName, p.Index, p.Line, 1L)))
         let testVals = stl.AllEntities |> List.map (fun (e) -> e.filepath, getNodeComments e.entity |> List.map fst)
-        printfn "%A" (errors |> List.map (fun (c, f) -> f.StreamName))
-        printfn "%A" (testVals)
+        //printfn "%A" (errors |> List.map (fun (c, f) -> f.StreamName))
+        //printfn "%A" (testVals)
 
         // eprintfn "%A" (stl.AllFiles())
         //let nodeComments = entities |> List.collect (fun (f, s) -> getNodeComments s) |> List.map fst
@@ -125,7 +125,7 @@ let testFolder folder testsname =
             let fileErrorPositions = fileErrors |> List.map snd
             let missing = remove_all expected fileErrorPositions
             let extras = remove_all fileErrorPositions expected
-            eprintfn "%A" fileErrors
+            //eprintfn "%A" fileErrors
             Expect.isEmpty (extras) (sprintf "Following lines are not expected to have an error %A, all %A" extras expected )
             Expect.isEmpty (missing) (sprintf "Following lines are expected to have an error %A" missing)
         yield! testVals |> List.map (fun (f, t) -> testCase (f.ToString()) <| fun () -> inner (f, t))
