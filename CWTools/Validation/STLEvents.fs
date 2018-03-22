@@ -135,9 +135,10 @@ module STLEventValidation =
 
     let checkEventChain (effects : ScriptedEffect list) (projects : Node list) (globals : Set<string>) (events : Event list) =
         let mutable current = events |> List.map (fun e -> (e, findAllSavedEventTargets e, findAllUsedEventTargets e, findAllReferencedEvents projects e, findAllExistsEventTargets e))
+                                        |> List.map (fun (e, s, u, r, x) -> eprintfn "%s %A %A %A %A" e.ID s u r x; (e, s, u, r, x))
                                         //|> (fun f -> eprintfn "%A" f; f)
                                         |> List.map (addScriptedEffectTargets effects)
-                                        |> List.map (fun (e, s, u, r, x) -> e, s, Set.difference u s, r, x)
+                                        |> List.map (fun (e, s, u, r, x) -> e, s, Set.difference u s, r, Set.remove e.ID x)
         let getRequiredTargets (ids : string list) =
             let ret = ids |> List.collect (fun x -> current |> List.pick (fun (e2,_ , u2, _, _) -> if e2.ID = x then Some (Set.toList u2) else None)) |> Set.ofList
            // eprintfn "%A" ret
@@ -161,7 +162,7 @@ module STLEventValidation =
             i <- i + 1
             let before = current
             current <- es |> List.map update
-            current = before || i > 10
+            current = before || i > 100
         while (not(step current)) do ()
         //current |> List.iter (fun (e, s, u, r) -> eprintfn "event %s has %A and needs %A" (e.ID) s u)
 
@@ -171,7 +172,7 @@ module STLEventValidation =
         //     |[] -> Set.empty
         //     | xs -> xs |> List.map inner |> List.reduce (Set.intersect)
         let getSourceSetTargets (id : string) =
-            let inner = (fun (x : string) -> current |> List.choose (fun (e2, s2, _, r2, _) -> if List.contains x r2 && e2.ID <> x then Some (s2) else None))
+            let inner = (fun (x : string) -> current |> List.choose (fun (e2, s2, _, r2, _) ->  if List.contains x r2 && e2.ID <> x then eprintfn "asd %A %A %A" x e2.ID s2; Some (s2) else None))
             inner id
 
         let getSourceExistsTargets (id : string) =
@@ -191,19 +192,21 @@ module STLEventValidation =
             i <- i + 1
             let before = current
             current <- es |> List.map down
-            current = before || i > 10
+            current = before || i > 100
         while (not(step current)) do ()
         //current |> List.iter (fun (e, s, u, r) -> eprintfn "event %s has %A and needs %A" (e.ID) s u)
        // current |> List.iter (fun (e, s, u, r) -> eprintfn "event %s is missing %A" (e.ID) (Set.difference u s))
+        current |> List.iter (fun (e, s, u, r, x) -> eprintfn "%s %A %A %A %A" e.ID s u r x;)
+
         let missing = current |> List.filter (fun (e, s, u, r, x) -> not(Set.difference (Set.difference u (Set.union s x)) globals |> Set.isEmpty))
         let maybeMissing = current |> List.filter (fun (e, s, u, r, x) -> 
                                                     not(Set.difference (Set.difference u s) globals |> Set.isEmpty)
                                                     && (Set.difference (Set.difference u (Set.union s x)) globals |> Set.isEmpty))
-        let createError (e : Event, s, u, _, _) = 
-             let needed = Set.difference u s |> Set.toList |> String.concat ", "
+        let createError (e : Event, s, u, _, x) = 
+             let needed = Set.difference (Set.difference u (Set.union s x)) globals |> Set.toList |> String.concat ", "
              Invalid [inv (ErrorCodes.UnsavedEventTarget (e.ID) needed) e]
         let createWarning (e : Event, s, u, _, _) = 
-             let needed = Set.difference u s |> Set.toList |> String.concat ", "
+             let needed = Set.difference (Set.difference u s) globals |> Set.toList |> String.concat ", "
              Invalid [inv (ErrorCodes.MaybeUnsavedEventTarget (e.ID) needed) e]
         missing <&!&> createError
         <&&>

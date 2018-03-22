@@ -1,0 +1,104 @@
+small_timeline_change = {
+    hidden_effect = {
+    	every_country = {
+    		limit = { is_country_type = default }
+    		random_list = {
+    			10 = { add_minerals = 100 }
+    			10 = { add_minerals = -100 }
+    			10 = { add_energy = 100 }
+    			10 = { add_energy = -100 }
+    			20 = { }
+    		}
+    		random_list = {
+    			92 = { }
+    			1 = { create_leader = { type = scientist species = owner_main_species name = random skill = 1 } }
+    			1 = { create_leader = { type = admiral species = owner_main_species name = random skill = 1 } }
+    			1 = { create_leader = { type = governor species = owner_main_species name = random skill = 1 } }
+    			1 = { create_leader = { type = general species = owner_main_species name = random skill = 1 } }
+    			1 = { create_leader = { type = scientist species = owner_main_species name = random skill = 3 } }
+    			1 = { create_leader = { type = admiral species = owner_main_species name = random skill = 3 } }
+    			1 = { create_leader = { type = governor species = owner_main_species name = random skill = 3 } }
+    			1 = { create_leader = { type = general species = owner_main_species name = random skill = 3 } }
+    		}
+    		if = {
+    			limit = { is_ai = no }
+    			country_event = { id = STH_notifications.100 days = 7 random = 3 }
+    		}
+    	}
+	}
+}
+
+large_timeline_change = {
+	hidden_effect = {
+    	every_country = {
+    		limit = { is_country_type = default }
+    		save_event_target_as = timelineCountry
+    		species = { save_event_target_as = timelineCountrySpecies }
+    		random_list = {
+    			10 = { add_minerals = 100 }
+    			10 = { add_minerals = -100 }
+    			10 = { add_energy = 100 }
+    			10 = { add_energy = -100 }
+    			20 = { }
+    		}
+    		random_list = {
+    			10 = { add_minerals = 100 }
+    			10 = { add_minerals = -100 }
+    			10 = { add_energy = 100 }
+    			10 = { add_energy = -100 }
+    			20 = { }
+    		}
+    		random_list = {
+    			92 = { }
+    			1 = { create_leader = { type = scientist species = owner_main_species name = random skill = 1 } }
+    			1 = { create_leader = { type = admiral species = owner_main_species name = random skill = 1 } }
+    			1 = { create_leader = { type = governor species = owner_main_species name = random skill = 1 } }
+    			1 = { create_leader = { type = general species = owner_main_species name = random skill = 1 } }
+    			1 = { create_leader = { type = scientist species = owner_main_species name = random skill = 3 } }
+    			1 = { create_leader = { type = admiral species = owner_main_species name = random skill = 3 } }
+    			1 = { create_leader = { type = governor species = owner_main_species name = random skill = 3 } }
+    			1 = { create_leader = { type = general species = owner_main_species name = random skill = 3 } }
+    		}
+    		random_list = {
+    			92 = { }
+    			1 = { create_leader = { type = scientist species = owner_main_species name = random skill = 1 } }
+    			1 = { create_leader = { type = admiral species = owner_main_species name = random skill = 1 } }
+    			1 = { create_leader = { type = governor species = owner_main_species name = random skill = 1 } }
+    			1 = { create_leader = { type = general species = owner_main_species name = random skill = 1 } }
+    			1 = { create_leader = { type = scientist species = owner_main_species name = random skill = 3 } }
+    			1 = { create_leader = { type = admiral species = owner_main_species name = random skill = 3 } }
+    			1 = { create_leader = { type = governor species = owner_main_species name = random skill = 3 } }
+    			1 = { create_leader = { type = general species = owner_main_species name = random skill = 3 } }
+    		}
+    		random_list = {
+    			90 = { }
+    			10 = { 
+    				random_neighbor_country = {
+    					limit = { 
+    						is_country_type = default
+    						num_owned_planets > 1
+    					}
+    					random_owned_planet = { 
+    						limit = { 
+    							is_capital = no 
+    							is_homeworld = no 
+    							NOT = { has_planet_flag = "timeChanged" }
+    						}
+    						set_timed_planet_flag = { flag = "timeChanged" days = 1800 }
+    						set_controller = event_target:timelineCountry
+    						set_owner = event_target:timelineCountry
+    						every_tile = {
+    							limit = { exists = pop }
+    							pop = { change_species = event_target:timelineCountrySpecies }
+    						}
+    					}
+    				}
+    			}
+    		}
+    		if = {
+    			limit = { is_ai = no }
+    			country_event = { id = STH_notifications.101 days = 7 random = 3 }
+    		}
+    	}
+    }
+}
