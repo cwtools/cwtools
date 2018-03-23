@@ -157,8 +157,7 @@ module STLEventValidation =
                                         |> List.map (fun (e, s, u, r, x) -> e, s, s, Set.difference u s, r, x, x)
         let getRequiredTargets (ids : string list) =
             if List.isEmpty ids then Set.empty else
-                eprintfn "%A" ids
-                let ret = ids |> List.choose (fun x -> current |> List.tryPick (fun (e2,_ ,_ , u2, _, _, _) -> if e2.ID = x then Some (Set.toList u2) else eprintfn "%A" x; None)) |> List.collect id |> Set.ofList
+                let ret = ids |> List.choose (fun x -> current |> List.tryPick (fun (e2,_ ,_ , u2, _, _, _) -> if e2.ID = x then Some (Set.toList u2) else  None)) |> List.collect id |> Set.ofList
                // eprintfn "%A" ret
                 ret
 
@@ -282,4 +281,20 @@ module STLEventValidation =
         chains <&!&> checkEventChain seffects sinits projects globals
         
         
+    let valEventCalls : StructureValidator =
+        fun os es ->
+            let events = (os.GlobMatchChildren("**/events/*.txt") |> List.choose (function | :? Event as e -> Some e |_ -> None))
+                         @ (es.GlobMatchChildren("**/events/*.txt") |> List.choose (function | :? Event as e -> Some e |_ -> None))
+            let eventIds = events |> List.map (fun e -> e.ID)
+            let effects = es.AllEffects
+            let eventEffectKeys = ["ship_event"; "pop_event"; "fleet_event"; "pop_faction_event"; "country_event"; "planet_event"]
+            let fNode = (fun (x : Node) children ->
+                        match x.Key with
+                        |k when eventEffectKeys |> List.exists (fun f -> f == k) ->
+                            x.Leafs "id" <&!&> (fun l -> if eventIds |> List.contains (l.Value.ToRawString()) then OK else Invalid [inv (ErrorCodes.UndefinedEvent (l.Value.ToRawString())) l])
+                        |_ -> OK
+                        <&&> children)
+            let fCombine = (<&&>)
+            effects <&!&> (foldNode2 fNode fCombine OK)
+
 
