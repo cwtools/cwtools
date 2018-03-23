@@ -156,12 +156,14 @@ module STLEventValidation =
                                         //|> List.map (fun (e, s, u, r, x) -> eprintfn "%s %A %A %A %A" e.ID s u r x; (e, s, u, r, x))
                                         |> List.map (fun (e, s, u, r, x) -> e, s, s, Set.difference u s, r, x, x)
         let getRequiredTargets (ids : string list) =
-            let ret = ids |> List.collect (fun x -> current |> List.pick (fun (e2,_ ,_ , u2, _, _, _) -> if e2.ID = x then Some (Set.toList u2) else None)) |> Set.ofList
-           // eprintfn "%A" ret
-            ret
+            if List.isEmpty ids then Set.empty else
+                eprintfn "%A" ids
+                let ret = ids |> List.choose (fun x -> current |> List.tryPick (fun (e2,_ ,_ , u2, _, _, _) -> if e2.ID = x then Some (Set.toList u2) else eprintfn "%A" x; None)) |> List.collect id |> Set.ofList
+               // eprintfn "%A" ret
+                ret
 
         let getExistsTargets (currentx) (ids : string list) = 
-            let inter = ids |> List.map (fun x -> current |> List.pick (fun (e2,_, _, u2, _, _ ,x2) -> if e2.ID = x then Some (u2, x2) else None)) 
+            let inter = ids |> List.choose (fun x -> current |> List.tryPick (fun (e2,_, _, u2, _, _ ,x2) -> if e2.ID = x then Some (u2, x2) else None)) 
             let all = inter |> List.fold (fun xs (u, x) -> Set.union(Set.union u x) xs) currentx
             let ret = inter |> List.fold (fun xs (u, x) -> xs |> Set.toList |> List.fold (fun nxs nx -> if Set.contains nx u && not(Set.contains nx x) then nxs else nx::nxs) [] |> Set.ofList) all
             // eprintfn "%A" ret
@@ -267,7 +269,9 @@ module STLEventValidation =
         let globals = Set.union globalScriptedEffects (effects |> List.map findAllSavedGlobalEventTargets |> List.fold (Set.union) (Set.empty))
         let sinits = os.GlobMatchChildren("**\\common\\solar_system_initializers\\**\\*.txt") @ es.GlobMatchChildren("**\\common\\solar_system_initializers\\**\\*.txt")
         //eprintfn "%s" (globals |> Set.toList |> String.concat ", ")
+        let eids = events |> List.map (fun e -> e.ID) |> Set.ofList
         let chains = events |> List.collect (fun (event) -> findAllReferencedEvents projects event |> List.map (fun f -> event.ID, f))
+                    |> List.filter (fun (_, f) -> Set.contains f eids)
                     //|> (fun f -> eprintfn "%A" f; f)
                     |> List.collect(fun (s, t) -> [s,t; t,s])
                     //|> (fun f -> eprintfn "%A" f; f)
