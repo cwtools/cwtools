@@ -153,7 +153,7 @@ module CK2Process =
         root.Events |> List.map (fun e -> e.ID, root.All |> List.fold (findComment e.ID) (false, "") |> snd)
 
     let getImmediate (event : Event)=
-        event.Children |> List.filter (fun c -> c.Key = "immediate")
+        event.Children |> List.filter (fun c -> c.Key = "immediate" || c.Key = "after")
                        |> List.map getIDs
     
     let getAllImmediates (root : EventRoot) =

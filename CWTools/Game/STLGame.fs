@@ -366,7 +366,7 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
             let allEntitiesByFile = entities |> List.map (fun f -> f.entity)
             let flattened = allEntitiesByFile |> List.map (fun n -> n.Children) |> List.collect id
 
-            let validators = [validateVariables; valTechnology; valButtonEffects; valSprites; valVariables]
+            let validators = [validateVariables; valTechnology; valButtonEffects; valSprites; valVariables; valEventCalls]
             let oldEntities = EntitySet (resources.AllEntities())
             let newEntities = EntitySet entities
             eprintfn "Validating misc"

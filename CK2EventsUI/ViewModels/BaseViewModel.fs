@@ -80,7 +80,7 @@ type ValidationViewModelFileRow =
     }
 type ValidationViewModel (settings, appSettings : AppSettings) =
     inherit BaseViewModel(settings)
-    let game = STLGame(settings.STLDirectory.gameDirectory, FilesScope.All, "", [], [], [], [], [], true)
+    let game = STLGame(settings.STLDirectory.gameDirectory, FilesScope.All, "", [], [], [], [], [], true, false)
     let validationErrors = game.ValidationErrors
     member val folders = game.Folders
     member val parserErrorList = game.ParserErrors |> List.map (fun (f, e, _) -> {file = f; error = e})
