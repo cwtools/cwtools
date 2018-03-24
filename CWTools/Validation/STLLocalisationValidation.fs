@@ -422,3 +422,8 @@ module STLLocalisationValidation =
                     (checkLocNodeTag keys "description" node)
                     else OK
             ams <&!&> inner
+
+    let valDeposits : LocalisationValidator =
+        fun _ keys es ->
+            let res = es.GlobMatchChildren("**/common/deposits/*.txt") |> List.filter (fun c -> c.Tag "is_null" |> (function |Some (Bool b) when b -> false |_ -> true))
+            res <&!&> (checkLocNodeKeyAdvs keys "" [""])

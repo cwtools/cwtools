@@ -1,0 +1,73 @@
+#key
+d_mineral_deposit = {
+	resources = { minerals = 1 }
+	station = shipclass_mining_station
+	orbital_weight = {
+		weight = 0
+	}
+	
+	drop_weight = {
+		weight = 0
+		modifier = {
+			weight = 15
+			planet = {
+				OR = {
+					is_planet_class = pc_gaia
+					is_planet_class = pc_continental
+					is_planet_class = pc_ringworld_habitable
+					is_planet_class = pc_machine
+					is_planet_class = pc_tropical
+					is_planet_class = pc_ocean
+					is_planet_class = pc_arid
+					is_planet_class = pc_desert
+					is_planet_class = pc_tundra
+					is_planet_class = pc_arctic
+					is_planet_class = pc_alpine
+					is_planet_class = pc_savannah
+					is_planet_class = pc_nuked
+				}
+			}
+		}
+		modifier = {
+			factor = 1.5
+			planet = {
+				OR = {
+					is_planet_class = pc_tundra
+					is_planet_class = pc_arctic
+					is_planet_class = pc_alpine
+				}
+			}
+		}	
+	}
+}
+
+##Null does not need loc
+d_null_deposit = {
+	is_null = yes
+	
+	drop_weight = {
+		weight = 50
+		modifier = {
+			weight = 0
+			planet = {
+				is_star = yes
+			}
+		}
+			weight = 33
+		modifier = {
+			planet = {
+				is_planet_class = pc_gaia
+			}
+		}		
+		modifier = {
+			weight = 100
+			planet = {
+				OR = {
+					is_planet_class = pc_barren
+					is_planet_class = pc_barren_cold
+					is_planet_class = pc_nuked
+				}
+			}
+		}
+	}
+}

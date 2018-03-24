@@ -392,7 +392,7 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
                                  valArmyAttachmentLocs; valDiploPhrases; valShipLoc; valFactionDemands; valSpeciesRightsLocs;
                                  valMapsLocs; valMegastructureLocs; valModifiers; valModules; valTraits; valGoverments; valPersonalities;
                                  valEthics; valPlanetClasses; valEdicts; valPolicies; valSectionTemplates; valSpeciesNames; valStratRes;
-                                 valAmbient]
+                                 valAmbient; valDeposits]
             let oldEntities = EntitySet (resources.AllEntities())
             let newEntities = EntitySet entities
 
