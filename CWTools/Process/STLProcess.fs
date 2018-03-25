@@ -27,7 +27,7 @@ module STLProcess =
             |Some s -> if s.Length = x.Length then true else isTargetKey (x.Substring(s.Length + 1))
             |None -> false
 
-    let rec scriptedTriggerScope (strict : bool) (effects : (string * Scope list) list) (triggers : (string * Scope list) list) (root : string) (node : Node) =
+    let rec scriptedTriggerScope (strict : bool) (effects : (Effect list)) (triggers : (Effect list)) (root : string) (node : Node) =
         let targetKeys = ["THIS"; "ROOT"; "PREV"; "FROM"; "OWNER"; "CONTROLLER"; "CAPITAL"; "SOLAR_SYSTEM"; "LEADER"; "RANDOM"; "FROMFROM"; "FROMFROMFROM"; "FROMFROMFROMFROM"; "PREVPREV"; "PREVPREVPREV"; "PREVPREVPREVPREV"]
         let anyBlockKeys = ["OR"; "AND"; "NOR"; "NAND"; "NOT"; "if"; "else"; "hidden_effect"]
         let triggerBlockKeys = ["limit"] //@ targetKeys
@@ -38,16 +38,16 @@ module STLProcess =
                                 allScopes
                             | x when (x.Key.StartsWith("event_target:", StringComparison.OrdinalIgnoreCase)) ->
                                 allScopes
-                            | x when targetKeys |> List.exists (fun y -> y == x.Key) ->
-                                allScopes
+                            // | x when targetKeys |> List.exists (fun y -> y == x.Key) ->
+                            //     allScopes
                             | x when anyBlockKeys |> List.exists (fun y -> y == x.Key) ->
                                 scriptedTriggerScope strict effects triggers root x
                             | x when triggerBlockKeys |> List.exists (fun y -> y == x.Key) -> 
                                 scriptedTriggerScope strict triggers triggers root x
-                            | x ->
-                                match STLScopes.sourceScope x.Key with
-                                | Some v -> v
-                                | None -> effects |> List.filter (fun (n, _) -> n = x.Key) |> List.map (fun (_, ss) -> ss) |> List.collect id
+                            | x -> STLScopes.sourceScope effects x.Key
+                                // match STLScopes.sourceScope x.Key with
+                                // | Some v -> v
+                                // | None -> effects |> List.filter (fun (n, _) -> n = x.Key) |> List.map (fun (_, ss) -> ss) |> List.collect id
                         )
         let valueScopes = node.Values 
                         //|> List.filter (fun v -> v.Key.StartsWith("@"))
@@ -55,7 +55,7 @@ module STLProcess =
                             function
                             | x when x.Key.StartsWith("@") -> allScopes
                             | x when x.Key = root -> allScopes
-                            | x -> effects |> List.tryFind (fun (n, _) -> n = x.Key) |> (function |Some (_,s) -> s |None -> [])
+                            | x -> effects |> List.tryFind (fun e -> e.Name = x.Key) |> (function |Some e -> e.Scopes |None -> [])
                            )
         let combinedScopes = nodeScopes @ valueScopes |> List.map (function | [] -> (if strict then [] else allScopes) |x -> x)
         combinedScopes |> List.fold (fun a b -> Set.intersect (Set.ofList a) (Set.ofList b) |> Set.toList) allScopes
@@ -118,9 +118,7 @@ module STLProcess =
         event |> (foldNode2 fNode fCombine []) |> Set.ofList
 
     let getScriptedTriggerScope (firstRun: bool) (effectType : EffectType) (effects : Effect list) (triggers : Effect list) ((node, comments) : Node * string list) =
-        let effects2 = effects |> List.map (fun t -> t.Name, t.Scopes)
-        let triggers2 = triggers |> List.map (fun t -> t.Name, t.Scopes)
-        let scopes = scriptedTriggerScope firstRun effects2 triggers2 node.Key node
+        let scopes = scriptedTriggerScope firstRun effects triggers node.Key node
         let commentString = comments |> List.truncate 5 |> String.concat("\n")
         let globals = findAllSavedGlobalEventTargets node
         globals |> Set.toList |> List.iter (fun g -> eprintf "%s" g )

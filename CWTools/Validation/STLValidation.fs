@@ -171,10 +171,14 @@ module STLValidation =
             match node.Key with
             |x when STLProcess.toTriggerBlockKeys |> List.exists (fun t -> t == x) ->
                 valNodeTriggers root triggers effects modifiers scopes node
+            |x when ["else"] |> List.contains x ->
+                valNodeTriggers node triggers effects modifiers scopes node
+
             // |x when STLProcess.isTargetKey x ->  
             //     valNodeTriggers root triggers effects Scope.Any node
-            |x when x.Contains("event_target:") ->
-                OK //Handle later
+            // |x when x.Contains("event_target:") ->
+
+            //     OK //Handle later
             |x when x.Contains("parameter:") ->
                 OK //Handle later
             |x ->
@@ -199,10 +203,12 @@ module STLValidation =
             match node.Key with
             |x when STLProcess.toTriggerBlockKeys |> List.contains x ->
                 valNodeTriggers root triggers effects modifiers scopes node
+            |x when ["else"] |> List.contains x ->
+                valNodeEffects node triggers effects modifiers scopes node
             // |x when STLProcess.isTargetKey x ->
             //     OK //Handle later
-            |x when x.Contains("event_target:") ->
-                OK //Handle later
+            // |x when x.Contains("event_target:") ->
+            //     OK //Handle later
             |x when x.Contains("parameter:") ->
                 OK //Handle later
             |x ->
@@ -304,6 +310,13 @@ module STLValidation =
             | (:? Option as x) -> x |> filterOptionToEffects |> (fun o -> valEffectsNew triggers effects modifiers o)
             | _ -> OK
             <&&> children)
+        let fseNode = (fun (x : Node) ->
+            
+            let scope = { Root = Scope.Any; From = []; Scopes = [Scope.Any]}
+            x.Children <&!&> (fun f -> valEventEffect x triggers effects modifiers scope (NodeC f)))
+        let fstNode = (fun (x : Node)  ->
+            let scope = { Root = Scope.Any; From = []; Scopes = [Scope.Any]}
+            x.Children <&!&> (fun f -> valEventTrigger x triggers effects modifiers scope (NodeC f)))
 
         let fCombine = (<&&>)
         // let opts = es.All |> List.collect (foldNode2 foNode (@) []) |> List.map filterOptionToEffects
@@ -311,6 +324,11 @@ module STLValidation =
         (es.All <&!&> foldNode2 foNode fCombine OK)
         <&&>
         (es.All <&!&> foldNode2 fNode fCombine OK)
+        <&&>
+        (es.AllOfTypeChildren EntityType.ScriptedEffects <&!&> fseNode)
+        <&&>
+        (es.AllOfTypeChildren EntityType.ScriptedTriggers <&!&> fstNode)
+
 
     let valTriggersNew (triggers : (Effect) list) (effects : (Effect) list) (modifiers : Modifier list) (effectBlock : Node) =
         let scope = { Root = effectBlock.Scope; From = []; Scopes = [effectBlock.Scope]}

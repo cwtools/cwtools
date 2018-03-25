@@ -1,0 +1,28 @@
+saveGCulture = {
+	if = { limit = { graphical_culture = klingon_01 } set_country_flag = temp_klingon_01 }
+	if = { limit = { graphical_culture = klingon_02 } set_country_flag = temp_klingon_02 }
+	if = { limit = { graphical_culture = klingon_03 } set_country_flag = temp_klingon_03 }
+	if = { limit = { graphical_culture = klingon_04 } set_country_flag = temp_klingon_04 }
+	if = { limit = { graphical_culture = romulan_01 } set_country_flag = temp_romulan_01 }
+	if = { limit = { graphical_culture = romulan_02 } set_country_flag = temp_romulan_02 }
+	if = { limit = { graphical_culture = romulan_03 } set_country_flag = temp_romulan_03 }
+	if = { limit = { graphical_culture = romulan_04 } set_country_flag = temp_romulan_04 }
+	if = { limit = { graphical_culture = federation_01 } set_country_flag = temp_federation_01 }
+	if = { limit = { graphical_culture = federation_02 } set_country_flag = temp_federation_02 }
+	if = { limit = { graphical_culture = federation_03 } set_country_flag = temp_federation_03 }
+	if = { limit = { graphical_culture = federation_04 } set_country_flag = temp_federation_04 }
+	if = { limit = { graphical_culture = andorian_01 } set_country_flag = temp_andorian_01 }
+	if = { limit = { graphical_culture = breen_01 } set_country_flag = temp_breen_01 }
+	if = { limit = { graphical_culture = borg_01 } set_country_flag = temp_borg_01 }
+	if = { limit = { graphical_culture = cardassian_01 } set_country_flag = temp_cardassian_01 }
+	if = { limit = { graphical_culture = dominion_01 } set_country_flag = temp_dominion_01 }
+	if = { limit = { graphical_culture = ferengi_01 } set_country_flag = temp_ferengi_01 }
+	if = { limit = { graphical_culture = kazon_01 } set_country_flag = temp_kazon_01 }
+	if = { limit = { graphical_culture = tellarite_01 } set_country_flag = temp_tellarite_01 }
+	if = { limit = { graphical_culture = tholian_01 } set_country_flag = temp_tholian_01 }
+	if = { limit = { graphical_culture = xindi_01 } set_country_flag = temp_xindi_01 }
+	if = { limit = { graphical_culture = vulcan_01 } set_country_flag = temp_vulcan_01 }
+	if = { limit = { graphical_culture = undine_01 } set_country_flag = temp_undine_01 }
+	if = { limit = { graphical_culture = generic_01 } set_country_flag = temp_generic_01 }
+	if = { limit = { graphical_culture = generic_02 } set_country_flag = temp_generic_02 }
+}

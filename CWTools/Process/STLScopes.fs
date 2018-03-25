@@ -101,8 +101,7 @@ module STLScopes =
         ScopedEffect("controller", [Scope.Planet], Scope.Country, EffectType.Both, "", ""); //Planet from vanilla use
         ScopedEffect("planet_owner", [Scope.Planet], Scope.Country, EffectType.Both, defaultDesc, "");
         ScopedEffect("last_created_country", allScopes, Scope.Country, EffectType.Both, defaultDesc, "");
-        ScopedEffect("last_refugee_country", [], Scope.Country, EffectType.Both, defaultDesc, "");
-        ScopedEffect("leader", [Scope.Ship; Scope.Planet; Scope.Country; Scope.PopFaction; Scope.Fleet], Scope.Leader, EffectType.Both, "", ""); //PopFaction, Fleet from vannilla use
+        ScopedEffect("leader", [Scope.Ship; Scope.Planet; Scope.Country; Scope.PopFaction; Scope.Fleet; Scope.Sector], Scope.Leader, EffectType.Both, "", ""); //PopFaction, Fleet from vannilla use, Sector from Iyur
         ScopedEffect("last_created_leader", allScopes, Scope.Leader, EffectType.Both, defaultDesc, "");
         ScopedEffect("ruler", [Scope.Country], Scope.Leader, EffectType.Both, defaultDesc, "");
         ScopedEffect("heir", [], Scope.Leader, EffectType.Both, defaultDesc, "");
@@ -135,6 +134,7 @@ module STLScopes =
         ScopedEffect("sector", [Scope.Planet], Scope.Sector, EffectType.Both, defaultDesc, "");
         ScopedEffect("alliance", [], Scope.Alliance, EffectType.Both, defaultDesc, "");
         ScopedEffect("starbase", [Scope.GalacticObject; Scope.Planet], Scope.Starbase, EffectType.Both, defaultDesc, "");
+        ScopedEffect("last_refugee_country", allScopes, Scope.Country, EffectType.Both, defaultDesc, "");
     ]
 // any/every/random_ship
 // any/every/random_pop
@@ -163,7 +163,7 @@ module STLScopes =
 // any/every/random_pop_faction
 // any/every/random_playable_country
 // any/every/random_subject
-    let scopeLists =[ 
+    let effectInnerScopes =[ 
         //These are from blackninja9939
         "any_ship",  Scope.Ship;
         "every_ship",  Scope.Ship;
@@ -306,11 +306,22 @@ module STLScopes =
         "last_created_species", Scope.Species
 
         ]
+    let effectInnerScopeFunctions = [
+        "if", id;
+        "while", id;
+    ]
+
     let addInnerScope (des : DocEffect list) =
-        des |> List.map (fun de ->
-                match scopeLists |> List.tryPick (function | (n, t) when n = de.Name -> Some t |_ -> None) with
-                | Some t -> ScopedEffect(de, t) :> DocEffect
+        let withSimple =
+             des |> List.map (fun de ->
+                match effectInnerScopes |> List.tryPick (function | (n, t) when n = de.Name -> Some (fun _ -> t) |_ -> None) with
+                | Some t -> ScopedEffect(de, t, true) :> DocEffect
                 | None -> de) 
+        withSimple |> List.map (fun de ->
+                match effectInnerScopeFunctions |> List.tryPick (function | (n, t) when n = de.Name -> Some t |_ -> None) with
+                | Some t -> ScopedEffect(de, t, false) :> DocEffect
+                | None -> de)
+        
 
     let scopes =
         ["every_country", Scope.Any, Scope.Country
@@ -474,37 +485,55 @@ module STLScopes =
     ]
     let changeScope (effects : Effect list) (triggers : Effect list) (key : string) (source : ScopeContext) = 
         let key = if key.StartsWith("hidden:") then key.Substring(7) else key
-        let keys = key.Split('.')
-        let inner ((context : ScopeContext), (changed : bool)) (nextKey : string) =
+        if key.StartsWith("event_target:") then NewScope { source with Scopes = Scope.Any::source.Scopes }
+        else
+            let keys = key.Split('.')
+            let inner ((context : ScopeContext), (changed : bool)) (nextKey : string) =
+                let onetoone = oneToOneScopes |> List.tryFind (fun (k, _) -> k == nextKey)
+                match onetoone with
+                | Some (_, f) -> f (context, false), NewScope (f (context, false) |> fst)
+                | None ->
+                    let effect = (effects @ triggers) 
+                                |> List.choose (function | :? ScopedEffect as e -> Some e |_ -> None)
+                                |> List.tryFind (fun e -> e.Name == nextKey)
+                    match effect with
+                    | None -> (context, false), NotFound
+                    | Some e -> 
+                        let possibleScopes = e.Scopes
+                        let exact = possibleScopes |> List.contains context.CurrentScope
+                        match context.CurrentScope, possibleScopes, exact, e.IsScopeChange with
+                        | Scope.Any, _, _, true -> ({context with Scopes = e.InnerScope context.CurrentScope::context.Scopes}, true), NewScope {context with Scopes = e.InnerScope context.CurrentScope::context.Scopes}
+                        | Scope.Any, _, _, false -> (context, false), NewScope context
+                        | _, [], _, _ -> (context, false), NotFound
+                        | _, _, true, true -> ({context with Scopes = e.InnerScope context.CurrentScope::context.Scopes}, true), NewScope {context with Scopes = e.InnerScope context.CurrentScope::context.Scopes}
+                        | _, _, true, false -> (context, false), NewScope context
+                        | _, ss, false, _ -> (context, false), WrongScope ss
+            let inner2 = fun a b -> inner a b |> (fun (c, d) -> c, Some d)
+            let res = keys |> Array.fold (fun ((c,b), r) k -> match r with |None -> inner2 (c, b) k |Some (NewScope x) -> inner2 (x, b) k |Some x -> (c,b), Some x) ((source, false), None)// |> snd |> Option.defaultValue (NotFound)
+            let res2 =
+                match res with
+                |(_, _), None -> NotFound
+                |(_, true), Some r -> r |> function |NewScope x -> NewScope { source with Scopes = x.CurrentScope::source.Scopes } |x -> x
+                |(_, false), Some r -> r
+            // let x = res |> function |NewScope x -> NewScope { source with Scopes = x.CurrentScope::source.Scopes } |x -> x
+            // x
+            res2
+
+    // let sourceScope (scope : string) = scopes
+    //                                 |> List.choose (function | (n, s, _) when n == scope -> Some s |_ -> None)
+    //                                 |> (function |x when List.contains Scope.Any x -> Some allScopes |[] -> None |x -> Some x)
+    let sourceScope (effects : Effect list) (key : string) = 
+        let key = if key.StartsWith("hidden:") then key.Substring(7) else key
+        let keys = key.Split('.') |> List.ofArray
+        let inner (nextKey : string) =
             let onetoone = oneToOneScopes |> List.tryFind (fun (k, _) -> k == nextKey)
             match onetoone with
-            | Some (_, f) -> f (context, false), NewScope (f (context, false) |> fst)
-            | None ->
-                let effect = (effects @ triggers) 
+            | Some (_) -> None
+            | None -> 
+                let effect = (effects) 
                             |> List.choose (function | :? ScopedEffect as e -> Some e |_ -> None)
                             |> List.tryFind (fun e -> e.Name == nextKey)
                 match effect with
-                | None -> (context, false), NotFound
-                | Some e -> 
-                    let possibleScopes = e.Scopes
-                    let exact = possibleScopes |> List.contains context.CurrentScope
-                    match context.CurrentScope, possibleScopes, exact with
-                    | Scope.Any, _, _ -> ({context with Scopes = e.InnerScope::context.Scopes}, true), NewScope {context with Scopes = e.InnerScope::context.Scopes}
-                    | _, [], _ -> (context, false), NotFound
-                    | _, _, true -> ({context with Scopes = e.InnerScope::context.Scopes}, true), NewScope {context with Scopes = e.InnerScope::context.Scopes}
-                    | _, ss, false -> (context, false), WrongScope ss
-        let inner2 = fun a b -> inner a b |> (fun (c, d) -> c, Some d)
-        let res = keys |> Array.fold (fun ((c,b), r) k -> match r with |None -> inner2 (c, b) k |Some (NewScope x) -> inner2 (x, b) k |Some x -> (c,b), Some x) ((source, false), None)// |> snd |> Option.defaultValue (NotFound)
-        let res2 =
-            match res with
-            |(_, _), None -> NotFound
-            |(_, true), Some r -> r |> function |NewScope x -> NewScope { source with Scopes = x.CurrentScope::source.Scopes } |x -> x
-            |(_, false), Some r -> r
-        // let x = res |> function |NewScope x -> NewScope { source with Scopes = x.CurrentScope::source.Scopes } |x -> x
-        // x
-        res2
-
-    let sourceScope (scope : string) = scopes
-                                    |> List.choose (function | (n, s, _) when n == scope -> Some s |_ -> None)
-                                    |> (function |x when List.contains Scope.Any x -> Some allScopes |[] -> None |x -> Some x)
-
+                |None -> None
+                |Some e -> Some e.Scopes
+        keys |> List.fold (fun acc k -> match acc with |Some e -> Some e |None -> inner k) None |> Option.defaultValue allScopes

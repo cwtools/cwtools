@@ -1,0 +1,68 @@
+namespace = test
+
+##Test if effect validation
+country_event = {
+    is_triggered_only = yes
+    immediate = {
+        set_country_flag = test
+        if = {
+            limit = {
+                has_country_flag = test
+                #error
+                has_ship_flag = test
+            }
+            set_country_flag = test
+            #error
+            set_ship_flag = test
+            else = {
+                set_country_flag = test
+                #error
+                set_ship_flag = test
+            }
+        }
+    }
+}
+
+##Test while
+country_event = {
+    is_triggered_only = yes
+    immediate = {
+        set_country_flag = test
+        while = {
+            limit = {
+                has_country_flag = test
+                #error
+                has_ship_flag = test
+            }
+            set_country_flag = test
+            #error
+            set_ship_flag = test
+        }
+    }
+}
+
+##Test random
+country_event = {
+    is_triggered_only = yes
+    immediate = {
+        set_country_flag = test
+        random_neighbor_country = {
+            set_country_flag = test
+            #error
+            set_ship_flag = test
+        }
+    }
+}
+
+##Test eventtarget
+country_event = {
+    is_triggered_only = yes
+    immediate = {
+        save_event_target_as = test
+        event_target:test = {
+            set_country_flag = test
+            #error
+            not_real = yes
+        }
+    }
+}

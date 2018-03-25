@@ -77,6 +77,7 @@ planet_event = {
 
 country_event = 
 {
+    id = test
     is_triggered_only = yes
     option = {
         ## Option direct effect
@@ -114,7 +115,11 @@ country_event =
                 has_authority = yes
             }
 		}
-	}
+    }
+    
+    immediate = {
+        save_global_event_target_as = owner
+    }
 }
 
 ## Check that undefined scripted are errors

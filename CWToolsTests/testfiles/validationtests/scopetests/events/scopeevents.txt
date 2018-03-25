@@ -95,6 +95,34 @@ fleet_event =
     }
 }
 
+##Check if doesn't count as a scope change
+fleet_event =
+{
+    is_triggered_only = yes
+
+    immediate = {
+        set_fleet_stance = aggressive
+        OWNER = {
+            #error
+            set_fleet_stance = aggressive
+            PREV = {
+                set_fleet_stance = aggressive
+            }
+            if = {
+                limit = { }
+                PREV = {
+                    NOT = {
+                        set_fleet_stance = aggressive
+                    }
+                }
+            }
+        }
+
+        fromfrom = {
+            add_opinion_modifier = {who = root modifier = opinion_graverobber_1}
+        }
+    }
+}
 ## Prevprev followed by prev behaviour
 country_event = {
     id = ccrebel_sow_unrest.21

@@ -136,12 +136,16 @@ module STLConstants =
         new(rawEffect : RawEffect, effectType) =
             let scopes = rawEffect.scopes |> List.collect parseScopes
             DocEffect(rawEffect.name, scopes, effectType, rawEffect.desc, rawEffect.usage)
-    type ScopedEffect(name, scopes, inner, effectType, desc, usage) =
+    type ScopedEffect(name, scopes, inner, effectType, desc, usage, isScopeChange) =
         inherit DocEffect(name, scopes, effectType, desc, usage)
-        member val InnerScope : Scope = inner
+        member val InnerScope : Scope -> Scope = inner
+        member val IsScopeChange : bool = isScopeChange
+        new(de : DocEffect, inner : Scope -> Scope, isScopeChange) =
+            ScopedEffect(de.Name, de.Scopes, inner, de.Type, de.Desc, de.Usage, isScopeChange)
         new(de : DocEffect, inner : Scope) =
-            ScopedEffect(de.Name, de.Scopes, inner, de.Type, de.Desc, de.Usage)
-
+            ScopedEffect(de.Name, de.Scopes, (fun _ -> inner), de.Type, de.Desc, de.Usage, true)
+        new(name, scopes, inner, effectType, desc, usage) =
+            ScopedEffect(name, scopes, (fun _ -> inner), effectType, desc, usage, true)
     type ModifierCategory =
         |Pop
         |Science
