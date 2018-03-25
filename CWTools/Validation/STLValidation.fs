@@ -21,6 +21,10 @@ module STLValidation =
             entities |> List.choose (fun es -> if glob.IsMatch(es.filepath) then Some es.entity else None)
         member this.GlobMatchChildren(pattern : string) =
             this.GlobMatch(pattern) |> List.map (fun e -> e.Children) |> List.collect id
+        member __.AllOfType (entityType : EntityType) =
+            entities |> List.choose(fun es -> if es.entityType = entityType then Some es.entity else None)
+        member this.AllOfTypeChildren (entityType : EntityType) =
+            this.AllOfType(entityType) |> List.map (fun e -> e.Children) |> List.collect id
         member __.All = entities |> List.map (fun es -> es.entity)
         member this.AllEffects= 
             let fNode = (fun (x : Node) children ->

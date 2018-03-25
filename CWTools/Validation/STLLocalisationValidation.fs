@@ -168,7 +168,7 @@ module STLLocalisationValidation =
 
     let valBuildingLocs : LocalisationValidator =
         fun _ keys es ->
-            let entities = es.GlobMatchChildren("**/common/buildings/*.txt")
+            let entities = es.AllOfTypeChildren EntityType.Buildings
             let inner =
                 fun node ->
                     let keyres = checkKeyAndDesc keys node

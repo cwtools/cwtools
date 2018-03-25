@@ -90,7 +90,7 @@ module ProcessCore =
         sl |> List.iter (fun e -> inner node e) |> ignore
         node
     
-    type LookupContext = { complete : bool; parents : string list; scope : string; previous : string }
+    type LookupContext = { complete : bool; parents : string list; scope : string; previous : string; entityType : EntityType }
     let processNodeSimple<'T when 'T :> Node> _ = processNode<'T> id
     type NodeTypeMap = ((string * Position * LookupContext)) -> (LookupContext -> ((Node -> Statement -> unit) -> string -> Position -> Statement list -> Node)) * string * (LookupContext -> LookupContext)
     
@@ -118,7 +118,8 @@ module ProcessCore =
             | KeyValue(PosKeyValue(pos, kv)) -> node.All <- LeafC(Leaf(kv, pos))::node.All
             | Comment(c) -> node.All <- CommentC c::node.All
             | Value(v) -> node.All <- LeafValueC(LeafValue(v))::node.All
-        member __.ProcessNode<'T when 'T :> Node >() = processNode<'T> id (processNodeInner { complete = false; parents = []; scope = ""; previous = ""})
+        member __.ProcessNode<'T when 'T :> Node >() = processNode<'T> id (processNodeInner { complete = false; parents = []; scope = ""; previous = ""; entityType = EntityType.Other})
+        member __.ProcessNode<'T when 'T :> Node >(entityType : EntityType) = processNode<'T> id (processNodeInner { complete = false; parents = []; scope = ""; previous = ""; entityType = entityType})
 
     let baseMap = fun _ -> processNodeSimple<Node>, "", id;
     let processNodeBasic = BaseProcess(baseMap).ProcessNode()

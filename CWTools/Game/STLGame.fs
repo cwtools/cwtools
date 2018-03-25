@@ -402,6 +402,7 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
 
         let updateFile filepath =
             eprintfn "%s" filepath
+            let filepath = Path.GetFullPath(filepath)
             let file = File.ReadAllText filepath
             let newEntities = resources.UpdateFile (EntityResourceInput {scope = ""; filepath = filepath; filetext = file; validate = true})
             match filepath with
