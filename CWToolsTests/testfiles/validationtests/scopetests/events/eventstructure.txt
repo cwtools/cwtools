@@ -73,6 +73,15 @@ planet_event = {
         add_anomaly = yes
     }
 
+    option = {
+		exclusive_trigger = {
+            #error
+            has_fleet_order = yes
+            has_building_construction = yes
+		}
+	}
+
+
 }
 
 country_event = 

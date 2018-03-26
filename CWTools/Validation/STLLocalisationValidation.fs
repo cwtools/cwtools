@@ -113,6 +113,20 @@ module STLLocalisationValidation =
                     let nameres = valEventNameLocs keys event
                     titles <&&> desc <&&> options <&&> usedKeys <&&> nameres
             es <&!&> inner
+
+    let valEffectLocs : LocalisationValidator =
+        fun _ keys es ->
+            let fNode = (fun (x : Node) children ->
+                getLocKeys keys ["custom_tooltip"] x <&&> children)
+            let fCombine = (<&&>)
+            es.AllEffects <&!&> (foldNode2 fNode fCombine OK)
+
+    let valTriggerLocs : LocalisationValidator =
+        fun _ keys es ->
+            let fNode = (fun (x : Node) children ->
+                getLocKeys keys ["custom_tooltip"] x <&&> children)
+            let fCombine = (<&&>)
+            es.AllTriggers <&!&> (foldNode2 fNode fCombine OK)
         
     let valTechLocs : LocalisationValidator =
         fun _ keys es ->
@@ -247,6 +261,16 @@ module STLLocalisationValidation =
             let armies = es.GlobMatchChildren("**/common/army_attachments/*.txt")
             let inner = checkLocNodeKeyAdvs keys "army_attachment_" [""; "_desc"]
             armies <&!&> inner
+
+    let valWarGoals : LocalisationValidator =
+        fun _ keys es ->
+            let wargoals = es.AllOfTypeChildren EntityType.WarGoals
+            wargoals <&!&> checkKeyAndDesc keys
+
+    // let valBuildingTags : LocalisationValidator =
+    //     fun _ keys es ->
+    //         let buildtags = es.AllOfType EntityType.BuildingTags
+    //         buildtags <&!&> (fun bt -> bt.LeafValues <&!&> checkLocNodeKeyAdvs keys "" ["_build_cost_mult"; "_construction_speed_mult"])
 
     let valDiploPhrases : LocalisationValidator =
         fun _ keys es ->

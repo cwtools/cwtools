@@ -34,6 +34,15 @@ module STLValidation =
                                 )
             let fCombine = (@)
             this.All |> List.collect (foldNode2 fNode fCombine [])
+        member this.AllTriggers= 
+            let fNode = (fun (x : Node) children ->
+                            match x with
+                            | :? TriggerBlock as e -> [e]
+                            |_ -> children
+                                )
+            let fCombine = (@)
+            this.All |> List.collect (foldNode2 fNode fCombine [])
+
         member __.Raw = entities
         member this.Merge(y : EntitySet) = EntitySet(this.Raw @ y.Raw)
 
@@ -292,7 +301,7 @@ module STLValidation =
         )
 
     let filterOptionToEffects (o : STLProcess.Option) =
-        let optionTriggers = ["trigger"; "allow"]
+        let optionTriggers = ["trigger"; "allow"; "exclusive_trigger"]
         let optionEffects = ["tooltip";]
         let optionExcludes = ["name"; "custom_tooltip"; "response_text"; "is_dialog_only"; "sound"; "ai_chance"; "custom_gui"; "default_hide_option"] @ optionTriggers @ optionEffects
         let newO = Option(o.Key, o.Position)

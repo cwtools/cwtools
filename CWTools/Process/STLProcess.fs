@@ -209,6 +209,7 @@ module STLProcess =
         |("tooltip", _, {parents = "option"::_; previous = "option"}) ->  scopedProcessNode<EffectBlock>, "effectblock", id;
         |("allow", _, {parents = "option"::_; previous = "option"}) ->  scopedProcessNode<TriggerBlock>, "triggerblock", id;
         |("trigger", _, {parents = "option"::_; previous = "option"}) ->  scopedProcessNode<TriggerBlock>, "triggerblock", id;
+        |("exclusive_trigger", _, {parents = "option"::_; previous = "option"}) ->  scopedProcessNode<TriggerBlock>, "triggerblock", id;
         |("desc", _, {parents = "event"::_}) ->  scopedProcessNode<Node>, "eventdesc", id;
         |("trigger", _, {parents = "eventdesc"::"event"::_}) ->  scopedProcessNode<TriggerBlock>, "triggerblock", id;
         |("after", _, {parents = "event"::_}) ->  scopedProcessNode<EffectBlock>, "effectblock", id;
