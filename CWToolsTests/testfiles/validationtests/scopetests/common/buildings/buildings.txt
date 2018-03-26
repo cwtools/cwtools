@@ -69,7 +69,7 @@ building_physics_lab_0 = {
     }
 
     active = {
-        has_prev_building = building_capital_3
+        has_trait = building_capital_3
         #error
         is_homeworld = yes
         planet = {

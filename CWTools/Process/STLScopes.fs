@@ -233,11 +233,7 @@ module STLScopes =
         "any_tile",  Scope.Tile;
         "every_tile",  Scope.Tile;
         "random_tile",  Scope.Tile;
-                
-        "any_neighbor_system",  Scope.GalacticObject;
-        "every_neighbor_system",  Scope.GalacticObject;
-        "random_neighbor_system",  Scope.GalacticObject;
-                
+                                
         "any_moon",  Scope.Planet;
         "every_moon",  Scope.Planet;
         "random_moon",  Scope.Planet;
@@ -308,146 +304,24 @@ module STLScopes =
 
         ]
     let effectInnerScopeFunctions = [
-        "if", id;
-        "while", id;
+        "if", id, []
+        "while", id, []
+        "any_neighbor_system", (fun _ -> Scope.GalacticObject), ["ignore_hyperlanes"];
+        "every_neighbor_system", (fun _ -> Scope.GalacticObject), ["ignore_hyperlanes"];
+        "random_neighbor_system", (fun _ -> Scope.GalacticObject), ["ignore_hyperlanes"];
     ]
 
     let addInnerScope (des : DocEffect list) =
         let withSimple =
              des |> List.map (fun de ->
                 match effectInnerScopes |> List.tryPick (function | (n, t) when n = de.Name -> Some (fun _ -> t) |_ -> None) with
-                | Some t -> ScopedEffect(de, t, true) :> DocEffect
+                | Some t -> ScopedEffect(de, t, true, []) :> DocEffect
                 | None -> de) 
         withSimple |> List.map (fun de ->
-                match effectInnerScopeFunctions |> List.tryPick (function | (n, t) when n = de.Name -> Some t |_ -> None) with
-                | Some t -> ScopedEffect(de, t, false) :> DocEffect
+                match effectInnerScopeFunctions |> List.tryPick (function | (n, t, s) when n = de.Name -> Some (t, s) |_ -> None) with
+                | Some (t, s) -> ScopedEffect(de, t, false, s) :> DocEffect
                 | None -> de)
         
-
-    let scopes =
-        ["every_country", Scope.Any, Scope.Country
-        ;"every_pop", Scope.Any, Scope.Pop
-        ;"every_planet", Scope.Any, Scope.Planet
-        ;"last_created_ambient_object", Scope.Any, Scope.AmbientObject
-        ;"last_created_country", Scope.Any, Scope.Country
-        ;"last_created_fleet", Scope.Any, Scope.Fleet
-        ;"last_created_leader", Scope.Any, Scope.Leader
-        ;"last_created_pop", Scope.Any, Scope.Pop
-        ;"last_created_species", Scope.Any, Scope.Species
-        ;"random_army", Scope.Any, Scope.Army
-        ;"random_country", Scope.Any, Scope.Country
-        ;"random_planet", Scope.Any, Scope.Planet
-        ;"random_rim_system", Scope.Any, Scope.GalacticObject
-        ;"random_system", Scope.Any, Scope.GalacticObject
-        ;"any_country", Scope.Any, Scope.Country
-        ;"any_system", Scope.Any, Scope.GalacticObject
-        ;"every_owned_fleet", Scope.Country, Scope.Fleet
-        ;"every_owned_planet", Scope.Country, Scope.Planet
-        ;"every_owned_leader", Scope.Country, Scope.Leader
-        ;"every_owned_pop", Scope.Country, Scope.Pop
-        ;"every_owned_ship", Scope.Country, Scope.Ship
-        ;"every_planet_within_border", Scope.Country, Scope.Planet
-        ;"every_pop_faction", Scope.Country, Scope.PopFaction
-        ;"owner_species", Scope.Country, Scope.Species
-        ;"random_neighbor_country", Scope.Country, Scope.Country
-        ;"random_owned_fleet", Scope.Country, Scope.Fleet
-        ;"random_owned_leader", Scope.Country, Scope.Leader
-        ;"random_owned_planet", Scope.Country, Scope.Planet
-        ;"random_owned_pop", Scope.Country, Scope.Pop
-        ;"random_owned_ship", Scope.Country, Scope.Ship
-        ;"random_fleet_in_system", Scope.Country, Scope.Fleet
-        ;"random_pop_faction", Scope.Country, Scope.PopFaction
-        ;"random_sector", Scope.Country, Scope.Sector
-        ;"random_system_within_border", Scope.Country, Scope.GalacticObject
-        ;"any_controlled_planet", Scope.Country, Scope.Planet
-        ;"any_neighbor_country", Scope.Country, Scope.Country
-        ;"any_owned_fleet", Scope.Country, Scope.Fleet
-        ;"any_owned_leader", Scope.Country, Scope.Leader
-        ;"any_owned_planet", Scope.Country, Scope.Planet
-        ;"any_owned_pop", Scope.Country, Scope.Pop
-        ;"any_owned_ship", Scope.Country, Scope.Ship
-        ;"any_planet_within_border", Scope.Country, Scope.Planet
-        ;"any_sector", Scope.Country, Scope.Sector
-        ;"any_system_within_border", Scope.Country, Scope.GalacticObject
-        //;"any_war", Scope.Country, Scope.War //?CK2
-        ;"capital_scope", Scope.Country, Scope.Planet
-        ;"overlord", Scope.Country, Scope.Country //?
-        ;"home_planet", Scope.Species, Scope.Planet //More
-        ;"solar_system", Scope.Planet, Scope.GalacticObject //More
-        ;"any_ship", Scope.Fleet, Scope.Ship
-        ;"orbit", Scope.Fleet, Scope.Planet
-        ;"orbit", Scope.Ship, Scope.Planet
-        ;"best_tile_for_pop", Scope.Planet, Scope.Tile
-        ;"every_spaceport", Scope.Planet, Scope.Ship //?
-        ;"every_planet_army", Scope.Planet, Scope.Army
-        ;"every_tile", Scope.Planet, Scope.Tile
-        ;"random_moon", Scope.Planet, Scope.Planet //?
-        ;"random_pop", Scope.Planet, Scope.Pop
-        ;"random_tile", Scope.Planet, Scope.Tile
-        ;"any_moon", Scope.Planet, Scope.Planet //?
-        ;"any_pop", Scope.Planet, Scope.Pop
-        ;"any_tile", Scope.Planet, Scope.Tile
-        ;"orbital_deposit_tile", Scope.Planet, Scope.Tile
-        ;"observation_outpost_owner", Scope.Planet, Scope.Country
-        ;"observation_outpost", Scope.Planet, Scope.Fleet //?
-        ;"closest_system", Scope.Fleet, Scope.GalacticObject
-        ;"pop_faction", Scope.Pop, Scope.PopFaction
-        ;"planet", Scope.Pop, Scope.Planet
-        ;"fleet", Scope.Ship, Scope.Fleet
-        ;"owner", Scope.Pop, Scope.Country
-        ;"owner", Scope.Ship, Scope.Country
-        ;"owner", Scope.Planet, Scope.Country //?
-        ;"leader", Scope.Country, Scope.Leader
-        ;"every_fleet_in_system", Scope.GalacticObject, Scope.Fleet
-        ;"every_system_ambient_object", Scope.GalacticObject, Scope.AmbientObject
-        ;"every_system_planet", Scope.GalacticObject, Scope.Planet
-        ;"random_system_ambient_object", Scope.GalacticObject, Scope.AmbientObject
-        ;"random_system_planet", Scope.GalacticObject, Scope.Planet
-        ;"any_bordering_country", Scope.GalacticObject, Scope.Country
-        ;"any_neighbor_system", Scope.GalacticObject, Scope.GalacticObject
-        ;"any_planet", Scope.GalacticObject, Scope.Planet
-        ;"any_ship_in_system", Scope.GalacticObject, Scope.Ship
-        ;"space_owner", Scope.GalacticObject, Scope.Country
-        ;"every_neighboring_tile", Scope.Tile, Scope.Tile
-        ;"random_neighboring_tile", Scope.Tile, Scope.Tile
-        ;"any_neighboring_tile", Scope.Tile, Scope.Tile
-        //;"any_attacker", Scope.War, Scope.Country
-        //;"any_defender", Scope.War, Scope.Country
-        ;"pop", Scope.Tile, Scope.Pop //? Added manually
-        ;"tile", Scope.Pop, Scope.Tile //? Added manually
-        ;"species", Scope.Leader, Scope.Species //? Added manually
-        ;"species", Scope.Ship, Scope.Species //? Added manually
-        ;"owner", Scope.Fleet, Scope.Country //?Added manually
-        ;"owner", Scope.Country, Scope.Country //?Added manually
-        ;"any_owned_ship", Scope.Fleet, Scope.Ship //?Added manually
-        ;"solar_system", Scope.Fleet, Scope.GalacticObject //?Added manually
-        ;"random_owned_pop", Scope.Planet, Scope.Pop //?Added manually
-        ;"any_owned_pop", Scope.Planet, Scope.Pop //?Added manually
-        ;"every_owned_pop", Scope.Planet, Scope.Pop//?added manually
-        ;"leader", Scope.Fleet, Scope.Leader //?Added manually
-        ;"planet", Scope.Planet, Scope.Planet //?orbit?
-        ;"species", Scope.Planet, Scope.Species //?Added manually
-        ;"solar_system", Scope.Ship, Scope.GalacticObject //?Added manually
-        ;"leader", Scope.Ship, Scope.Leader //?Added manually
-        ;"closest_system", Scope.GalacticObject, Scope.GalacticObject //?Added manually
-        ;"home_planet", Scope.Country, Scope.Planet//?Added manually
-        ;"closest_system", Scope.Ship, Scope.GalacticObject//?Added manually
-        ;"solar_system", Scope.AmbientObject, Scope.GalacticObject//?Added manually
-        ;"species", Scope.Pop, Scope.Species //?Added manually
-        ;"leader", Scope.Planet, Scope.Leader //?Added manually
-        ;"closest_system", Scope.Planet, Scope.GalacticObject //?Added manually
-        ;"closest_system", Scope.Country, Scope.GalacticObject //?Added manually
-        ;"species", Scope.Country, Scope.Species //?Added manuallu
-        ;"last_created_ship", Scope.Any, Scope.Ship //?Added manually
-        ;"random_owned_ship", Scope.Fleet, Scope.Ship //?Added manually
-        ;"ruler", Scope.Country, Scope.Leader//?Added manually
-        ;"sector", Scope.Planet, Scope.Sector//??Added manullay?
-        ;"root", Scope.Any, Scope.Any//??Added manullay?
-        ;"random_owned_pop", Scope.PopFaction, Scope.Pop//?added manually
-
-        ]
-
- 
 
     type ScopeContext =
         {
@@ -459,7 +333,7 @@ module STLScopes =
         member this.PopScope = match this.Scopes with |[] -> [] |_::xs -> xs
 
     type ScopeResult =
-        | NewScope of newScope : ScopeContext
+        | NewScope of newScope : ScopeContext * ignoreKeys : string list
         | WrongScope of expected : Scope list
         | NotFound
 
@@ -486,13 +360,13 @@ module STLScopes =
     ]
     let changeScope (effects : Effect list) (triggers : Effect list) (key : string) (source : ScopeContext) = 
         let key = if key.StartsWith("hidden:") then key.Substring(7) else key
-        if key.StartsWith("event_target:") then NewScope { source with Scopes = Scope.Any::source.Scopes }
+        if key.StartsWith("event_target:") then NewScope ({ source with Scopes = Scope.Any::source.Scopes }, [])
         else
             let keys = key.Split('.')
             let inner ((context : ScopeContext), (changed : bool)) (nextKey : string) =
                 let onetoone = oneToOneScopes |> List.tryFind (fun (k, _) -> k == nextKey)
                 match onetoone with
-                | Some (_, f) -> f (context, false), NewScope (f (context, false) |> fst)
+                | Some (_, f) -> f (context, false), NewScope (f (context, false) |> fst, [])
                 | None ->
                     let effect = (effects @ triggers) 
                                 |> List.choose (function | :? ScopedEffect as e -> Some e |_ -> None)
@@ -503,18 +377,18 @@ module STLScopes =
                         let possibleScopes = e.Scopes
                         let exact = possibleScopes |> List.contains context.CurrentScope
                         match context.CurrentScope, possibleScopes, exact, e.IsScopeChange with
-                        | Scope.Any, _, _, true -> ({context with Scopes = e.InnerScope context.CurrentScope::context.Scopes}, true), NewScope {context with Scopes = e.InnerScope context.CurrentScope::context.Scopes}
-                        | Scope.Any, _, _, false -> (context, false), NewScope context
+                        | Scope.Any, _, _, true -> ({context with Scopes = e.InnerScope context.CurrentScope::context.Scopes}, true), NewScope ({context with Scopes = e.InnerScope context.CurrentScope::context.Scopes}, e.IgnoreChildren)
+                        | Scope.Any, _, _, false -> (context, false), NewScope (context, e.IgnoreChildren)
                         | _, [], _, _ -> (context, false), NotFound
-                        | _, _, true, true -> ({context with Scopes = e.InnerScope context.CurrentScope::context.Scopes}, true), NewScope {context with Scopes = e.InnerScope context.CurrentScope::context.Scopes}
-                        | _, _, true, false -> (context, false), NewScope context
+                        | _, _, true, true -> ({context with Scopes = e.InnerScope context.CurrentScope::context.Scopes}, true), NewScope ({context with Scopes = e.InnerScope context.CurrentScope::context.Scopes}, e.IgnoreChildren)
+                        | _, _, true, false -> (context, false), NewScope (context, e.IgnoreChildren)
                         | _, ss, false, _ -> (context, false), WrongScope ss
             let inner2 = fun a b -> inner a b |> (fun (c, d) -> c, Some d)
-            let res = keys |> Array.fold (fun ((c,b), r) k -> match r with |None -> inner2 (c, b) k |Some (NewScope x) -> inner2 (x, b) k |Some x -> (c,b), Some x) ((source, false), None)// |> snd |> Option.defaultValue (NotFound)
+            let res = keys |> Array.fold (fun ((c,b), r) k -> match r with |None -> inner2 (c, b) k |Some (NewScope (x, i)) -> inner2 (x, b) k |Some x -> (c,b), Some x) ((source, false), None)// |> snd |> Option.defaultValue (NotFound)
             let res2 =
                 match res with
                 |(_, _), None -> NotFound
-                |(_, true), Some r -> r |> function |NewScope x -> NewScope { source with Scopes = x.CurrentScope::source.Scopes } |x -> x
+                |(_, true), Some r -> r |> function |NewScope (x, i) -> NewScope ({ source with Scopes = x.CurrentScope::source.Scopes }, i) |x -> x
                 |(_, false), Some r -> r
             // let x = res |> function |NewScope x -> NewScope { source with Scopes = x.CurrentScope::source.Scopes } |x -> x
             // x

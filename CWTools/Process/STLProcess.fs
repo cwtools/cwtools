@@ -220,7 +220,7 @@ module STLProcess =
         |("allow", _, {parents = "building"::_}) ->  specificScopeProcessNode<TriggerBlock> Scope.Tile, "triggerblock", id;
         |("ai_allow", _, {parents = "building"::_}) ->  specificScopeProcessNode<TriggerBlock> Scope.Tile, "triggerblock", id;
         |("destroy_if", _, {parents = "building"::_}) ->  specificScopeProcessNode<TriggerBlock> Scope.Tile, "triggerblock", id;
-        |("active", _, {parents = "building"::_}) ->  specificScopeProcessNode<TriggerBlock> Scope.Tile, "triggerblock", id;
+        |("active", _, {parents = "building"::_}) ->  specificScopeProcessNode<TriggerBlock> Scope.Pop, "triggerblock", id;
         
         |("planet_modifier_with_pop_trigger", _, {parents = "building"::_}) ->  processNodeSimple<Node>, "planetmodpop", id;
         |("potential", _, {parents = "planetmodpop"::"building"::_}) ->  specificScopeProcessNode<TriggerBlock> Scope.Pop, "triggerblock", id;

@@ -170,9 +170,9 @@ module STLValidation =
         |NodeC node ->
             match node.Key with
             |x when STLProcess.toTriggerBlockKeys |> List.exists (fun t -> t == x) ->
-                valNodeTriggers root triggers effects modifiers scopes node
-            |x when ["else"] |> List.contains x ->
-                valNodeTriggers node triggers effects modifiers scopes node
+                valNodeTriggers root triggers effects modifiers scopes [] node
+            |x when ["else"] |> List.exists (fun t -> t == x) ->
+                valNodeTriggers node triggers effects modifiers scopes [] node
 
             // |x when STLProcess.isTargetKey x ->  
             //     valNodeTriggers root triggers effects Scope.Any node
@@ -183,7 +183,7 @@ module STLValidation =
                 OK //Handle later
             |x ->
                 match changeScope effects triggers x scopes with
-                |NewScope s -> valNodeTriggers root triggers effects modifiers s node
+                |NewScope (s, ignores) -> valNodeTriggers root triggers effects modifiers s ignores node
                 |WrongScope ss -> Invalid [inv (ErrorCodes.IncorrectScopeScope x (scopes.CurrentScope.ToString()) (ss |> List.map (fun s -> s.ToString()) |> String.concat ", ")) node]
                 |NotFound ->
                     match triggers |> List.tryFind (fun e -> e.Name == x ) with
@@ -201,10 +201,10 @@ module STLValidation =
         |LeafC leaf -> valEffectLeaf effects modifiers scopes leaf
         |NodeC node ->
             match node.Key with
-            |x when STLProcess.toTriggerBlockKeys |> List.contains x ->
-                valNodeTriggers root triggers effects modifiers scopes node
-            |x when ["else"] |> List.contains x ->
-                valNodeEffects node triggers effects modifiers scopes node
+            |x when STLProcess.toTriggerBlockKeys |> List.exists (fun t -> t == x) ->
+                valNodeTriggers root triggers effects modifiers scopes [] node
+            |x when ["else"] |> List.exists (fun t -> t == x) ->
+                valNodeEffects node triggers effects modifiers scopes [] node
             // |x when STLProcess.isTargetKey x ->
             //     OK //Handle later
             // |x when x.Contains("event_target:") ->
@@ -213,7 +213,7 @@ module STLValidation =
                 OK //Handle later
             |x ->
                 match changeScope effects triggers x scopes with
-                |NewScope s -> valNodeEffects node triggers effects modifiers s node
+                |NewScope (s, ignores) -> valNodeEffects node triggers effects modifiers s ignores node
                 |WrongScope ss -> Invalid [inv (ErrorCodes.IncorrectScopeScope x (scopes.CurrentScope.ToString()) (ss |> List.map (fun s -> s.ToString()) |> String.concat ", ")) node]
                 |NotFound ->
                     match effects |> List.tryFind (fun e -> e.Name == x) with
@@ -226,15 +226,22 @@ module STLValidation =
                     |None -> handleUnknownEffect node x
         |_ -> OK
     
-    and valNodeTriggers (root : Node) (triggers : Effect list) (effects : Effect list) (modifiers : Modifier list) (scopes : ScopeContext) (node : Node) =
+    and valNodeTriggers (root : Node) (triggers : Effect list) (effects : Effect list) (modifiers : Modifier list) (scopes : ScopeContext) (ignores : string list) (node : Node) =
         // let scopedTriggers = triggers |> List.map (fun (e, _) -> e, scopes.CurrentScope = Scope.Any || e.Scopes |> List.exists (fun s -> s = scopes.CurrentScope))
         // let scopedEffects = effects |> List.map (fun (e, _) -> e,  scopes.CurrentScope = Scope.Any || e.Scopes |> List.exists (fun s -> s = scopes.CurrentScope)) 
-        List.map (valEventTrigger root triggers effects modifiers scopes) node.All |> List.fold (<&&>) OK
+        let filteredAll = 
+            node.All
+            |> List.filter (function |NodeC c -> not (List.exists (fun i -> i == c.Key) ignores) |LeafC c -> not (List.exists (fun i -> i == c.Key) ignores) |_ -> false)
+        List.map (valEventTrigger root triggers effects modifiers scopes) filteredAll |> List.fold (<&&>) OK
 
-    and valNodeEffects (root : Node) (triggers : Effect list) (effects : Effect list) (modifiers : Modifier list) (scopes : ScopeContext) (node : Node) =
+    and valNodeEffects (root : Node) (triggers : Effect list) (effects : Effect list) (modifiers : Modifier list) (scopes : ScopeContext) (ignores : string list) (node : Node) =
         //let scopedTriggers = triggers |> List.map (fun (e, _) -> e, scopes.CurrentScope = Scope.Any || e.Scopes |> List.exists (fun s -> s = scopes.CurrentScope)) 
         //let scopedEffects = effects |> List.map (fun (e, _) -> e, scopes.CurrentScope = Scope.Any || e.Scopes |> List.exists (fun s -> s = scopes.CurrentScope)) 
-        List.map (valEventEffect root triggers effects modifiers scopes) node.All |> List.fold (<&&>) OK
+        let filteredAll = 
+            node.All
+            |> List.filter (function |NodeC c -> not (List.exists (fun i -> i == c.Key) ignores) |LeafC c -> not (List.exists (fun i -> i == c.Key) ignores) |_ -> false)
+        List.map (valEventEffect root triggers effects modifiers scopes) filteredAll |> List.fold (<&&>) OK
+            
 
     let valOption (root : Node) (triggers : Effect list) (effects : Effect list) (modifiers : Modifier list) (scopes : ScopeContext) (node : Node) =
         let optionTriggers = ["trigger"; "allow"]
@@ -254,7 +261,7 @@ module STLValidation =
         let eres = effectPos |> List.filter (fun c -> not (optionEffects |> List.exists (fun f -> c.Key == f)))
                     <&!&> (NodeC >> valEventEffect root triggers effects modifiers scopes)
         let esres = effectPos |> List.filter (fun c -> optionEffects |> List.exists (fun f -> c.Key == f))
-                    <&!&> (valNodeEffects root triggers effects modifiers scopes)
+                    <&!&> (valNodeEffects root triggers effects modifiers scopes [])
         lres <&&> tres <&&> eres <&&> esres
         //children |> List.map (valEventEffect node triggers effects scopes) |> List.fold (<&&>) OK
         
@@ -354,7 +361,7 @@ module STLValidation =
             event.Childs "desc" 
             <&!&> (fun n ->
                     match n.Child "trigger" with
-                    |Some t -> valNodeTriggers event triggers effects modifiers eventScope t
+                    |Some t -> valNodeTriggers event triggers effects modifiers eventScope [] t
                     |None -> OK)
         let imm = 
             match event.Child "immediate" with

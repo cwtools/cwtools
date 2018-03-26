@@ -66,3 +66,22 @@ country_event = {
         }
     }
 }
+
+##Test internal effect ignores
+planet_event = {
+    is_triggered_only = yes
+    immediate = {
+        solar_system ={
+            every_neighbor_system = {
+                ignore_hyperlanes = yes
+                every_system_planet = {
+                    set_planet_flag = yes
+                    #error
+                    set_star_flag = yes
+                    #error
+                    not_real = yes
+                }
+            }
+        }
+    }
+}
