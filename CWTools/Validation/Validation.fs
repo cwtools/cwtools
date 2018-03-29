@@ -1,6 +1,7 @@
 namespace CWTools.Validation
 open CWTools.Process
 open FSharp.Collections.ParallelSeq
+open CWTools.Parser
 
 module ValidationCore =
     
@@ -66,6 +67,11 @@ module ValidationCore =
 
     let inline inv (code : ErrorCode) (l : ^a) =
         invData code l None
+
+    let invLeafValue (code : ErrorCode) (lv : LeafValue) (data : option<string>) =
+        let pos = lv.Position
+        let value = lv.Value.ToString()
+        code.ID, code.Severity, pos, value.Length, code.Message, data
         
     // let inline inv (sev : Severity) (l : ^a) (s : string) = 
     //     let pos = (^a : (member Position : CWTools.Parser.Position) l)

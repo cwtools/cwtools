@@ -32,8 +32,9 @@ type Leaf(keyvalueitem : KeyValueItem, ?pos : Position) =
     member this.ToRaw = KeyValueItem(Key(this.Key), this.Value)
     new(key : string, value : Value) = Leaf(KeyValueItem(Key(key), value))
     static member Create key value = LeafC(Leaf(KeyValueItem(Key(key), value)))
-and LeafValue(value : Value) =
+and LeafValue(value : Value, ?pos : Position) =
     member val Value = value with get, set
+    member val Position = defaultArg pos Position.Empty
     [<JsonIgnore>]
     member this.ToRaw = Value(this.Value)
     static member Create value = LeafValue value

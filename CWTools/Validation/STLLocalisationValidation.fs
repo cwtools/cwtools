@@ -57,7 +57,13 @@ module STLLocalisationValidation =
                          )
         let fCombine = (<&&>)
         node |> (foldNode2 fNode fCombine OK)
-    
+
+    let checkLocLeafValue (keys : Set<string>) (lang : Lang) key (lv : LeafValue) =
+        if lang = STL STLLang.Default then OK else
+            match key = "" || key.Contains(" ") || (key.StartsWith("[") && key.EndsWith("]")), Set.contains key keys with
+            | true, _ -> OK
+            | _, true -> OK
+            | _, false -> Invalid [invLeafValue (ErrorCodes.MissingLocalisation key (lang :> obj)) lv (Some key)]
 
     let checkLocNode (keys : Set<string>) (lang : Lang) key (node : Node) =
         if lang = STL STLLang.Default then OK else
@@ -65,6 +71,9 @@ module STLLocalisationValidation =
             | true, _ -> OK
             | _, true -> OK
             | _, false -> Invalid [invData (ErrorCodes.MissingLocalisation key (lang :> obj)) node (Some key)]
+    
+    let checkLocLeafValueS (keys : (Lang * Set<string>) list) key (lv : LeafValue) =
+         keys |> List.fold (fun state (l, keys)  -> state <&&> checkLocLeafValue keys l key lv) OK
     
     let checkLocNodeS (keys : (Lang * Set<string>) list) key (node : Node) =
          keys |> List.fold (fun state (l, keys)  -> state <&&> checkLocNode keys l key node) OK
@@ -76,10 +85,16 @@ module STLLocalisationValidation =
         let descres = keys |> List.fold (fun state (l, keys)  -> state <&&> checkLocNode keys l desc node) OK
         keyres <&&> descres
 
+    let checkLocLeafValueKeyAdv keys prefix suffix (lv : LeafValue) = 
+        let key = prefix + lv.Value.ToString() + suffix
+        (keys |> List.fold (fun state (l, keys)  -> state <&&> checkLocLeafValue keys l key lv) OK)
+
     let checkLocNodeKeyAdv keys prefix suffix (node : Node) = 
         let key = prefix + node.Key + suffix
         (keys |> List.fold (fun state (l, keys)  -> state <&&> checkLocNode keys l key node) OK)
     
+    let checkLocLeafValueKeyAdvs keys prefix suffixes lv = suffixes |> List.fold (fun s c -> s <&&> (checkLocLeafValueKeyAdv keys prefix c lv)) OK
+
     let checkLocNodeKeyAdvs keys prefix suffixes node = suffixes |> List.fold (fun s c -> s <&&> (checkLocNodeKeyAdv keys prefix c node)) OK
 
     let checkLocNodeTagAdv keys prefix suffix tag (node : Node) =
@@ -267,10 +282,10 @@ module STLLocalisationValidation =
             let wargoals = es.AllOfTypeChildren EntityType.WarGoals
             wargoals <&!&> checkKeyAndDesc keys
 
-    // let valBuildingTags : LocalisationValidator =
-    //     fun _ keys es ->
-    //         let buildtags = es.AllOfType EntityType.BuildingTags
-    //         buildtags <&!&> (fun bt -> bt.LeafValues <&!&> checkLocNodeKeyAdvs keys "" ["_build_cost_mult"; "_construction_speed_mult"])
+    let valBuildingTags : LocalisationValidator =
+        fun _ keys es ->
+            let buildtags = es.AllOfType EntityType.BuildingTags
+            buildtags <&!&> (fun bt -> bt.LeafValues <&!&> checkLocLeafValueKeyAdvs keys "" ["_build_cost_mult"; "_construction_speed_mult"])
 
     let valDiploPhrases : LocalisationValidator =
         fun _ keys es ->
