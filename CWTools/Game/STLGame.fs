@@ -378,11 +378,12 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
             eprintfn "Validating effects/triggers"
             let eres = valAllEffects (lookup.scriptedTriggers) (lookup.scriptedEffects) (lookup.staticModifiers) newEntities  |> (function |Invalid es -> es |_ -> [])
             let tres = valAllTriggers (lookup.scriptedTriggers) (lookup.scriptedEffects) (lookup.staticModifiers) newEntities  |> (function |Invalid es -> es |_ -> [])
+            let wres = validateModifierBlocks (lookup.scriptedTriggers) (lookup.scriptedEffects) (lookup.staticModifiers) newEntities |> (function |Invalid es -> es |_ -> [])
             let mres = valAllModifiers (lookup.coreModifiers) newEntities  |> (function |Invalid es -> es |_ -> [])
             let evres =( if experimental then getEventChains (lookup.scriptedEffects) oldEntities newEntities else OK) |> (function |Invalid es -> es |_ -> [])
             //let etres = getEventChains newEntities |> (function |Invalid es -> es |_ -> [])
             //(validateShips (flattened)) @ (validateEvents (flattened)) @ res @ fres @ eres
-            (validateShips (flattened)) @ (validateEvents (flattened)) @ res @ fres @ eres @ tres @ mres @ evres
+            (validateShips (flattened)) @ (validateEvents (flattened)) @ res @ fres @ eres @ tres @ mres @ evres @ wres
         
         let localisationCheck (entities : Entity list) =
             eprintfn "Localisation check %i files" (entities.Length)

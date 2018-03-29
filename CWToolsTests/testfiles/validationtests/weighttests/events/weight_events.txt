@@ -1,0 +1,35 @@
+namespace = test
+
+## Test basic ai_chance weight modifiers
+country_event = {
+    is_triggered_only = yes
+    option = {
+        ai_chance = {
+            factor = 50
+            modifier = {
+                factor = 10
+                has_country_flag = test
+                #error
+                has_planet_flag = test
+            }
+        }
+    }
+}
+
+## Test basic ai_chance weight modifiers
+country_event = {
+    is_triggered_only = yes
+    option = {
+        ai_chance = {
+            factor = 50
+            modifier = {
+                #error
+                asdd = no
+                #error
+                asd = yes
+                factor = 10
+            }
+        }
+    }
+
+}

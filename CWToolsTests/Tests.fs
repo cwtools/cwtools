@@ -45,13 +45,16 @@ let getNodeComments (node : Node) =
     let fCombine = (@)
     node |> (foldNode2 fNode fCombine [])
 
-let rec remove_first lst item =
+let rec remove_first f lst item =
     match lst with
-    | h::t when item = h -> t
-    | h::t -> h::remove_first t item
+    | h::t when f item = f h -> t
+    | h::t -> h::remove_first f t item
     | _ -> []
+let remove_all_by x y f =
+    y |> List.fold (remove_first f) x
 let remove_all x y =
-    y |> List.fold remove_first x
+    remove_all_by x y (id)
+    //y |> List.fold remove_first x
 
 
 
@@ -141,6 +144,7 @@ let folderTests =
         testFolder "./testfiles/validationtests/variabletests" "variables"
         testFolder "./testfiles/validationtests/modifiertests" "modifiers"
         testFolder "./testfiles/validationtests/eventtests" "events"
+        testFolder "./testfiles/validationtests/weighttests" "weights"
     ]
 
 [<Tests>]

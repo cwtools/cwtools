@@ -666,3 +666,25 @@ module STLValidation =
                             |> List.map (fun s -> s.Key)
         let speciesModifiers = speciesKeys |> List.map (fun k -> {tag = k+"_species_trait_points_add"; categories = [ModifierCategory.Country]; core = true})                    
         shipModifiers @ srModifiers @ pcModifiers @ buildingModifiers @ countryTypeModifiers @ speciesModifiers @ modifiers
+
+
+
+    let filterWeightBlockToTriggers (wmb : STLProcess.WeightModifierBlock) =
+        let excludes = ["factor"]
+        let newWmb = WeightModifierBlock(wmb.Key, wmb.Position)
+        copy wmb newWmb
+        newWmb.All <- newWmb.All |> List.filter (function |LeafC l -> (not (List.contains l.Key excludes)) | _ -> true)
+        newWmb.All <- newWmb.All |> List.filter (function |NodeC l -> (not (List.contains l.Key excludes)) | _ -> true)
+        newWmb.Scope <- wmb.Scope
+        // eprintfn "%A" (wmb.Values |> List.map (fun  c -> c.Key))
+        // eprintfn "%A" (newWmb.Values |> List.map (fun  c -> c.Key))
+        newWmb :> Node
+
+    let validateModifierBlocks (triggers : (Effect) list) (effects : (Effect) list) (modifiers : Modifier list) (es : EntitySet) =
+        let foNode = (fun (x : Node) children ->
+            match x with
+            | (:? WeightModifierBlock as x) -> x |> filterWeightBlockToTriggers |> (fun o -> valTriggersNew triggers effects modifiers o)
+            | _ -> OK
+            <&&> children)
+        let fCombine = (<&&>)
+        es.All <&!&> foldNode2 foNode fCombine OK

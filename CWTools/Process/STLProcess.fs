@@ -156,6 +156,8 @@ module STLProcess =
         member val InEffectBlock : bool = false with get, set
     type Option(key, pos) = inherit Node(key, pos)
     type ModifierBlock(key, pos) = inherit Node(key, pos)
+    type WeightBlock(key, pos) = inherit Node(key, pos)
+    type WeightModifierBlock(key, pos) = inherit Node(key, pos)
 
     let scopedProcessNode<'T when 'T :> Node> (lookup : LookupContext) =
         match lookup.scope with
@@ -215,6 +217,9 @@ module STLProcess =
         |("after", _, {parents = "event"::_}) ->  scopedProcessNode<EffectBlock>, "effectblock", id;
         |("limit", _, {parents = "effectblock"::_}) ->  triggerInEffectProcessNode, "triggerblock", id;
         |("limit", _, {parents = "option"::_}) ->  processNodeSimple<TriggerBlock>, "triggerblock", id;
+        |("ai_chance", _, {parents = "option"::_}) ->  processNodeSimple<WeightBlock>, "weightblock", id;
+        |("modifier", _, {parents = "weightblock"::"option"::_}) ->  scopedProcessNode<WeightModifierBlock>, "weightmodifierblock", id;
+
         //Buildings
         |(_, p, {complete = false; entityType = EntityType.Buildings}) ->  processNodeSimple<Node>, "building",  (fun c -> { c with complete = true});
         |("potential", _, {parents = "building"::_}) ->  specificScopeProcessNode<TriggerBlock> Scope.Tile, "triggerblock", id;
