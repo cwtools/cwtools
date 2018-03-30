@@ -1,22 +1,24 @@
-##Test trigger
+##Test weights
 terraform_link = {
 	from = "pc_nuked"
-	to = "pc_continental"
+	to = "pc_desert"
 	
 	energy = 10000
 	duration = 7200
 	
 	condition = {
-        has_country_flag = yes
-        #error
-        has_fleet_flag = yes
+		has_technology = "tech_climate_restoration"
 	}
 	
 	ai_weight = {
 		weight = 2
 		modifier = {
-			factor = 0
+            factor = 0
+            has_country_flag = yes
+            #error
+            has_planet_flag = yes
 			OR = {
+				
 				has_authority = auth_machine_intelligence
 			}
 		}

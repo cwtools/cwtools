@@ -1,0 +1,35 @@
+##Test weights
+tb_mountain_range = {	
+	time = 200
+	cost = {
+		energy = 400
+	}
+
+	spawn_chance = {
+		modifier = {
+            add = 10
+            is_orbital_tile = yes
+            #error
+            has_planet_flag = yes
+			planet = {
+				is_colonizable = yes
+				NOT = { is_planet_class = pc_alpine }
+			}
+		}
+		modifier = {
+			add = 20
+			planet = {
+				is_colonizable = yes
+				is_planet_class = pc_alpine
+			}
+		}
+		modifier = {
+			factor = 0.25
+			planet = {
+				planet_size < 15
+			}
+		}
+	}
+	
+	prerequisites = { "tech_tb_mountain_range" }
+}

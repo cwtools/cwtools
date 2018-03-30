@@ -167,6 +167,7 @@ module STLProcess =
         |"ship" -> processNode<'T> (fun n -> n.Scope <- Scope.Ship; n)
         |"pop_faction" -> processNode<'T> (fun n -> n.Scope <- Scope.PopFaction; n)
         |"pop" -> processNode<'T> (fun n -> n.Scope <- Scope.Pop; n)
+        |"leader" -> processNode<'T> (fun n -> n.Scope <- Scope.Leader; n)
         |_ -> processNode<'T> (fun n -> n.Scope <- Scope.Any; n)
 
     let specificScopeProcessNode<'T when 'T :> Node> (scope : Scope) (lookup : LookupContext) =
@@ -382,6 +383,10 @@ module STLProcess =
         |("allow", _, {parents = "personality"::_;}) ->  specificScopeProcessNode<TriggerBlock> Scope.Country, "triggerblock", id;
         |("weight_modifier", _, {parents = "personality"::_;}) ->  processNodeSimple<WeightBlock>, "weightblock", id;
         |("modifier", _, {parents = "weightblock"::"personality"::_;}) ->  specificScopeProcessNode<WeightModifierBlock> Scope.Country, "weightmodifierblock", id;
+        //Planet modifiers
+        |(_, _, {complete = false; entityType = EntityType.PlanetModifiers})  ->  processNodeSimple<Node>, "planetmod",  (fun c -> { c with complete = true;});
+        |("spawn_chance", _, {parents = "planetmod"::_;}) ->  processNodeSimple<WeightBlock>, "weightblock", id;
+        |("modifier", _, {parents = "weightblock"::"planetmod"::_;}) ->  specificScopeProcessNode<WeightModifierBlock> Scope.Planet, "weightmodifierblock", id;
         //Policies
         |(_, _, {complete = false; entityType = EntityType.Policies})  ->  processNodeSimple<Node>, "policy",  (fun c -> { c with complete = true;});
         |("potential", _, {parents = "policy"::_;}) ->  specificScopeProcessNode<TriggerBlock> Scope.Country, "triggerblock", id;
@@ -390,8 +395,9 @@ module STLProcess =
         |("valid", _, {parents = "policyoption"::"policy"::_;}) ->  specificScopeProcessNode<TriggerBlock> Scope.Country, "policyoption", id;
         |("on_enabled", _, {parents = "policyoption"::"policy"::_;}) ->  specificScopeProcessNode<EffectBlock> Scope.Country, "effectblock", id;
         |("on_disabled", _, {parents = "policyoption"::"policy"::_;}) ->  specificScopeProcessNode<EffectBlock> Scope.Country, "effectblock", id;
-        |("ai_weight", _, {parents = "policyoption"::"policy"::_;}) ->  processNodeSimple<Node>, "aiweight", id;
+        |("AI_weight", _, {parents = "policyoption"::"policy"::_;}) ->  processNodeSimple<WeightBlock>, "weightblock", id;
         |("modifier", _, {parents = "policyoption"::"policy"::_; previous = "option"}) ->  specificScopeProcessNode<ModifierBlock> Scope.Country, "modifierblock", id;
+        |("modifier", _, {parents = "weightblock"::"policyoption"::"policy"::_;}) ->  specificScopeProcessNode<WeightModifierBlock> Scope.Country, "weightmodifierblock", id;
         //Pop faction types
         |(_, _, {complete = false; entityType = EntityType.PopFactionTypes})  ->  processNodeSimple<Node>, "popfaction",  (fun c -> { c with complete = true;});
         |("is_potential", _, {parents = "popfaction"::_;}) ->  specificScopeProcessNode<TriggerBlock> Scope.Country, "triggerblock", id;
@@ -410,6 +416,16 @@ module STLProcess =
         |("potential", _, {parents = "popfactionaction2"::"popfactionaction"::"popfaction"::_;}) ->  specificScopeProcessNode<TriggerBlock> Scope.PopFaction, "triggerblock", id;
         |("effect", _, {parents = "popfactionaction2"::"popfactionaction"::"popfaction"::_;}) ->  specificScopeProcessNode<EffectBlock> Scope.PopFaction, "effectblock", id;
         |("valid", _, {parents = "popfactionaction2"::"popfactionaction"::"popfaction"::_;}) ->  specificScopeProcessNode<TriggerBlock> Scope.PopFaction, "triggerblock", id;
+        |("ai_weight", _, {parents = "popfactionaction2"::"popfactionaction"::"popfaction"::_;}) ->  processNodeSimple<WeightBlock>, "weightblock", id;
+        |("modifier", _, {parents = "weightblock"::"popfactionaction2"::"popfactionaction"::"popfaction"::_;}) ->  specificScopeProcessNode<WeightModifierBlock> Scope.PopFaction, "weightmodifierblock", id;
+        |("attraction", _, {parents = "popfaction"::_;}) ->  processNodeSimple<WeightBlock>, "weightblock",  (fun c -> { c with complete = true; scope = "pop"});
+        |("leader", _, {parents = "popfaction"::_;}) ->  processNodeSimple<WeightBlock>, "weightblock",  (fun c -> { c with complete = true; scope = "leader"});
+        |("modifier", _, {parents = "weightblock"::"popfaction"::_;}) ->  scopedProcessNode<WeightModifierBlock>, "weightmodifierblock", id;
+        //Section templates
+        |(_, _, {complete = false; entityType = EntityType.SectionTemplates})  ->  processNodeSimple<Node>, "sectiontemplate",  (fun c -> { c with complete = true;});
+        |("ai_weight", _, {parents = "sectiontemplate"::_;}) ->  processNodeSimple<WeightBlock>, "weightblock", id;
+        |("modifier", _, {parents = "weightblock"::"sectiontemplate"::_;}) ->  specificScopeProcessNode<WeightModifierBlock> Scope.Country, "weightmodifierblock", id;
+        ////TODO: Sector types
         //Ship_sizes
         |(_, _, {complete = false; entityType = EntityType.ShipSizes})  ->  processNodeSimple<Node>, "shipsize",  (fun c -> { c with complete = true;});
         |("possible_starbase", _, {parents = "shipsize"::_;}) ->  specificScopeProcessNode<TriggerBlock> Scope.Starbase, "triggerblock", id;
@@ -441,7 +457,8 @@ module STLProcess =
         |("allow", _, {parents = "speciesrights"::_;}) ->  specificScopeProcessNode<TriggerBlock> Scope.Species, "triggerblock", id;
         |("pop_modifier", _, {parents = "speciesrights"::_;}) ->  specificScopeProcessNode<ModifierBlock> Scope.Country, "modifierblock", id;
         ////TODO work out scope
-        |("ai_will_do"), _, {parents = "speciesrights"::_;} -> processNodeSimple<Node>, "dk", id;
+        |("ai_will_do"), _, {parents = "speciesrights"::_;} -> processNodeSimple<WeightBlock>, "weightblock", id;
+        |("modifier"), _, {parents = "weightblock"::"speciesrights"::_;} -> specificScopeProcessNode<WeightModifierBlock> Scope.Species, "weightmodifierblock", id;
         |("modifier", _, {parents = "speciesrights"::_;}) ->  specificScopeProcessNode<ModifierBlock> Scope.Any, "modifierblock", id;
         //Starbase buildings
         |(_, _, {complete = false; entityType = EntityType.StarbaseBuilding})  ->  processNodeSimple<Node>, "starbasebuilding",  (fun c -> { c with complete = true;});
@@ -450,6 +467,8 @@ module STLProcess =
         |("orbit_modifier", _, {parents = "starbasebuilding"::_;}) ->  specificScopeProcessNode<ModifierBlock> Scope.Ship, "modifierblock", id;
         |("country_modifier", _, {parents = "starbasebuilding"::_;}) ->  specificScopeProcessNode<ModifierBlock> Scope.Country, "modifierblock", id;
         |("station_modifier", _, {parents = "starbasebuilding"::_;}) ->  specificScopeProcessNode<ModifierBlock> Scope.Starbase, "modifierblock", id;
+        |("ai_weight"), _, {parents = "starbasebuilding"::_;} -> processNodeSimple<WeightBlock>, "weightblock", id;
+        |("modifier"), _, {parents = "weightblock"::"starbasebuilding"::_;} -> specificScopeProcessNode<WeightModifierBlock> Scope.Starbase, "weightmodifierblock", id;
         //Starbase modules
         |(_, _, {complete = false; entityType = EntityType.StarbaseModules})  ->  processNodeSimple<Node>, "starbasemodule",  (fun c -> { c with complete = true;});
         |("potential", _, {parents = "starbasemodule"::_;}) ->  specificScopeProcessNode<TriggerBlock> Scope.Starbase, "triggerblock", id;
@@ -457,9 +476,14 @@ module STLProcess =
         |("country_modifier", _, {parents = "starbasemodule"::_;}) ->  specificScopeProcessNode<ModifierBlock> Scope.Country, "modifierblock", id;
         |("station_modifier", _, {parents = "starbasemodule"::_;}) ->  specificScopeProcessNode<ModifierBlock> Scope.Starbase, "modifierblock", id;
         |("triggered_country_modifier", _, {parents = "starbasemodule"::_;}) ->  specificScopeProcessNode<ModifierBlock> Scope.Country, "modifierblock", id;
+        |("ai_weight"), _, {parents = "starbasemodule"::_;} -> processNodeSimple<WeightBlock>, "weightblock", id;
+        |("modifier"), _, {parents = "weightblock"::"starbasemodule"::_;} -> specificScopeProcessNode<WeightModifierBlock> Scope.Starbase, "weightmodifierblock", id;
         //Starbase type
         |(_, _, {complete = false; entityType = EntityType.StarbaseTypes})  ->  processNodeSimple<Node>, "starbasetype",  (fun c -> { c with complete = true;});
         |("potential", _, {parents = "starbasetype"::_;}) ->  specificScopeProcessNode<TriggerBlock> Scope.Starbase, "triggerblock", id;
+        |("weight_modifier"), _, {parents = "starbasetype"::_;} -> processNodeSimple<WeightBlock>, "weightblock", id;
+        |("ratio"), _, {parents = "starbasetype"::_;} -> processNodeSimple<WeightBlock>, "weightblock", id;
+        |("modifier"), _, {parents = "weightblock"::"starbasetype"::_;} -> specificScopeProcessNode<WeightModifierBlock> Scope.Starbase, "weightmodifierblock", id;
         //Start screen messages
         |(_, _, {complete = false; entityType = EntityType.StartScreenMessages})  ->  processNodeSimple<Node>, "startscreen",  (fun c -> { c with complete = true;});
         |("trigger", _, {parents = "startscreen"::_;}) ->  specificScopeProcessNode<TriggerBlock> Scope.Country, "triggerblock", id;
@@ -477,9 +501,19 @@ module STLProcess =
         |(_, _, {complete = false; entityType = EntityType.Technology})  ->  processNodeSimple<Node>, "technology",  (fun c -> { c with complete = true;});
         |("potential", _, {parents = "technology"::_;}) ->  specificScopeProcessNode<TriggerBlock> Scope.Country, "triggerblock", id;
         |("modifier", _, {parents = "technology"::_; previous="technology"}) ->  specificScopeProcessNode<ModifierBlock> Scope.Country, "modifierblock", id;
+        |("weight_modifier"), _, {parents = "technology"::_;} -> processNodeSimple<WeightBlock>, "weightblock", id;
+        |("ai_weight"), _, {parents = "technology"::_;} -> processNodeSimple<WeightBlock>, "weightblock", id;
+        |("modifier"), _, {parents = "weightblock"::"technology"::_;} -> specificScopeProcessNode<WeightModifierBlock> Scope.Country, "weightmodifierblock", id;
         //Terraform
         |(_, _, {complete = false; entityType = EntityType.Terraform})  ->  processNodeSimple<Node>, "terraform",  (fun c -> { c with complete = true;});
         |("condition", _, {parents = "terraform"::_;}) ->  specificScopeProcessNode<TriggerBlock> Scope.Country, "triggerblock", id;
+        |("ai_weight"), _, {parents = "terraform"::_;} -> processNodeSimple<WeightBlock>, "weightblock", id;
+        |("modifier"), _, {parents = "weightblock"::"terraform"::_;} -> specificScopeProcessNode<WeightModifierBlock> Scope.Country, "weightmodifierblock", id;
+        //Tile blockers
+        |(_, _, {complete = false; entityType = EntityType.TileBlockers})  ->  processNodeSimple<Node>, "tileblocker",  (fun c -> { c with complete = true;});
+        |("spawn_chance"), _, {parents = "tileblocker"::_;} -> processNodeSimple<WeightBlock>, "weightblock", id;
+        |("modifier"), _, {parents = "weightblock"::"tileblocker"::_;} -> specificScopeProcessNode<WeightModifierBlock> Scope.Tile, "weightmodifierblock", id;
+
         //Tradition category
         |(_, _, {complete = false; entityType = EntityType.TraditionCategories})  ->  processNodeSimple<Node>, "tradcat",  (fun c -> { c with complete = true;});
         |("tradition_swap", _, {parents = "tradcat"::_;}) ->  processNodeSimple<Node>, "tradcatswap", id;
@@ -489,11 +523,13 @@ module STLProcess =
         //Tradition
         |(_, _, {complete = false; entityType = EntityType.Traditions})  ->  processNodeSimple<Node>, "trad",  (fun c -> { c with complete = true;});
         |("tradition_swap", _, {parents = "trad"::_;}) ->  processNodeSimple<Node>, "tradswap", id;
-        |("ai_weight", _, {parents = "trad"::_;}) ->  processNodeSimple<Node>, "aiweight", id;
         |("modifier", _, {parents = "trad"::_;}) ->  specificScopeProcessNode<ModifierBlock> Scope.Country, "modifierblock", id;
         |("trigger", _, {parents = "tradswap"::"trad"::_;}) ->  specificScopeProcessNode<TriggerBlock> Scope.Country, "triggerblock", id;
         |("modifier", _, {parents = "tradswap"::"trad"::_; previous = "tradition_swap"}) ->  specificScopeProcessNode<ModifierBlock> Scope.Country, "modifierblock", id;
+        |("ai_weight"), _, {parents = "trad"::_;} -> processNodeSimple<WeightBlock>, "weightblock", id;
+        |("modifier"), _, {parents = "weightblock"::"trad"::_;} -> specificScopeProcessNode<WeightModifierBlock> Scope.Country, "weightmodifierblock", id;
         //Traits
+        ////TODO: traits ai_weight
         |(_, _, {complete = false; entityType = EntityType.Traits})  ->  processNodeSimple<Node>, "trait",  (fun c -> { c with complete = true;});
         |("leader_potential_add", _, {parents = "trait"::_;}) ->  specificScopeProcessNode<TriggerBlock> Scope.Leader, "triggerblock", id;
         |("species_potential_add", _, {parents = "trait"::_;}) ->  specificScopeProcessNode<TriggerBlock> Scope.Species, "triggerblock", id;
@@ -506,6 +542,8 @@ module STLProcess =
         |("on_status_quo", _, {parents = "wargoal"::_;}) ->  specificScopeProcessNode<EffectBlock> Scope.Country, "effectblock", id;
         |("on_accept", _, {parents = "wargoal"::_;}) ->  specificScopeProcessNode<EffectBlock> Scope.Country, "effectblock", id;
         |("on_wargoal_set", _, {parents = "wargoal"::_;}) ->  specificScopeProcessNode<EffectBlock> Scope.Country, "effectblock", id;
+        |("ai_weight"), _, {parents = "wargoal"::_;} -> processNodeSimple<WeightBlock>, "weightblock", id;
+        |("modifier"), _, {parents = "weightblock"::"wargoal"::_;} -> specificScopeProcessNode<WeightModifierBlock> Scope.Country, "weightmodifierblock", id;
         |_ -> processNodeSimple<Node>, "", (fun c -> {c with complete = true;});
             
     let shipProcess = BaseProcess(stellarisFunction)

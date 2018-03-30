@@ -1,0 +1,113 @@
+##Test weights
+stb_shipyard = {
+	potential = {
+		has_starbase_size >= starbase_starport
+		count_starbase_modules = {
+			type = shipyard
+			count > 0
+		}
+	}
+
+	weight_modifier = {
+		base = 100	
+		modifier = {
+            add = 100
+            has_starbase_module = yes
+            #error
+            has_country_flag = yes
+			count_starbase_modules = {
+				type = shipyard
+				count > 1
+			}
+		}		
+		modifier = {
+			add = 100
+			count_starbase_modules = {
+				type = shipyard
+				count > 2
+			}
+		}
+		modifier = {
+			add = 100
+			count_starbase_modules = {
+				type = shipyard
+				count > 3
+			}
+		}
+		modifier = {
+			add = 100
+			count_starbase_modules = {
+				type = shipyard
+				count > 4
+			}
+		}	
+		modifier = {
+			add = 100
+			count_starbase_modules = {
+				type = shipyard
+				count > 5
+			}
+		}
+	}
+
+	ai_design = {
+		min = {
+			base = 1
+		}
+		
+		ratio = {
+			base = 0.25
+			modifier = {
+                add = 0.10
+                has_starbase_building = yes
+                #error
+                has_country_flag = yes
+				owner = {
+					has_ethic = ethic_militarist
+				}
+			}
+			modifier = {
+				add = 0.05
+				owner = {
+					has_ethic = ethic_fanatic_militarist
+				}
+			}
+		}
+
+		buildings = {
+			crew_quarters = {
+				base = 1.00
+			}
+			
+			fleet_academy = {
+				base = 0.25
+			}
+
+			naval_logistics_office = {
+				base = 0.05
+			}
+
+			titan_yards = {
+				base = 0.01
+			}
+
+			colossus_yards = {
+				base = 0.01
+			}
+		}
+		
+		modules = {
+			shipyard = {
+				base = 1.00
+			}
+
+			anchorage = {
+				base = 0.50
+			}
+
+			hangar_bay = {
+				base = 0.45
+			}
+		}
+	}
+}

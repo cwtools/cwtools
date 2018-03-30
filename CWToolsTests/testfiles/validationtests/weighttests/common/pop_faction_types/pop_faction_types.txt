@@ -1,0 +1,135 @@
+##Test weights
+imperialist = {
+	election_header = "GFX_faction_header_yellow"
+	guiding_ethic = ethic_militarist
+	
+	unique = yes
+	support_multiplier = 1
+	
+	is_potential = {
+		has_country_flag = yes
+        #error
+        has_fleet_flag = yes
+	}
+	
+	parameters = {
+		empire = {
+			type = country
+			valid_objects = {
+				is_same_value = root
+			}
+		}
+	}
+	
+	can_join_faction = {
+        #error
+        has_country_flag = yes
+        has_pop_faction_flag = yes
+	}
+	
+	attraction = {
+		base = 100
+		
+		modifier = {
+			factor = 1.25
+			has_pop_flag = yes
+			#error
+			has_country_flag = yes
+			exists = from
+			from = {
+				exists = leader
+				leader = { leader_class = ruler }
+			}
+		}
+	}
+	
+	leader = {
+		base = 100
+		
+		modifier = {
+			factor = 0.0
+			has_leader_flag = yes
+			#error
+			has_planet_flag = yes
+			is_event_leader = yes
+		}
+	}
+
+	demand = {
+		title = "IMPERIALIST_PHILOSOPHY"
+		unfulfilled_title = "IMPERIALIST_NO_PHILOSOPHY"
+		desc = "IMPERIALIST_PHILOSOPHY_DESC"
+
+		fulfilled_effect = 5
+		unfulfilled_effect = -10
+
+		potential = {
+            has_pop_faction_flag = yes
+            #error
+            has_fleet_flag = yes
+		}
+
+		trigger = {
+            has_pop_faction_flag = yes
+            #error
+            has_fleet_flag = yes
+		}
+	}
+
+    on_create = {
+        #error
+        set_fleet_flag = yes
+        set_pop_faction_flag = yes
+    }
+
+    on_destroy = {
+        #error
+        set_fleet_flag = yes
+        set_country_flag = yes
+    }
+
+    actions = {
+        embrace_faction = {
+            title = "EMBRACE_FACTION"
+			description = "EMBRACE_FACTION_DESC"
+			
+			cost = {
+				influence = 500
+			}
+			
+			potential = {
+                has_pop_faction_flag = yes
+                #error
+                has_fleet_flag = yes
+			}
+			
+			valid = {
+                has_pop_faction_flag = yes
+                #error
+                has_fleet_flag = yes
+			}
+
+			effect = {
+                #error
+                set_fleet_flag = yes
+                set_pop_faction_flag = yes
+			}
+			
+			ai_weight = {
+				base = 1
+				modifier = {
+					factor = 0
+					has_pop_faction_flag = yes
+					#error
+					has_planet_flag = yes
+					support < 0.50
+					owner = {
+						has_ethic = ethic_militarist
+					}
+				}			
+			}
+
+        }
+    }
+
+}

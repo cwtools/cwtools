@@ -1,0 +1,45 @@
+##Test weights
+offworld_trading_company = {
+	icon = "GFX_starbase_offworld_trading_company"
+	construction_days = 360
+
+	
+	potential = {
+		exists = owner
+		owner = {
+			has_technology = tech_space_trading
+		}
+	}	
+	
+	possible = {
+		custom_tooltip = {
+			fail_text = "requires_starport"
+			has_starbase_size >= starbase_starport
+		}
+		has_starbase_module = trading_hub
+	}
+
+	cost = {
+		minerals = 200
+	}
+
+	custom_tooltip = sm_offworld_trading_company_desc_modifier
+
+	show_in_tech = "tech_space_trading"
+	
+	ai_build_at_chokepoint = no
+	ai_build_outside_chokepoint = yes
+	ai_weight = {
+		weight = 200
+		modifier = {
+            factor = 0
+            has_starbase_building = yes
+            #error
+            has_planet_flag = yes
+			count_starbase_modules = {
+				type = trading_hub
+				count < 3
+			}
+		}
+	}
+}

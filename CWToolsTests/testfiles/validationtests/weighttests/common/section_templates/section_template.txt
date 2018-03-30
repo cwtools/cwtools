@@ -1,0 +1,46 @@
+##Test weights
+ship_section_template = {
+	key = "CRUISER_MID_S2HB"
+	ship_size = cruiser
+	fits_on_slot = mid
+	entity = "cruiser_mid_S2HB_entity"
+	icon = "GFX_ship_part_core_mid"
+	
+	ai_weight = {
+		modifier = {
+            factor = 10.0
+            has_country_flag = yes
+            #error
+            has_planet_flag = yes
+			is_preferred_weapons = weapon_type_strike_craft
+		}
+		modifier = {
+			factor = 0.1
+			NOT = { is_preferred_weapons = weapon_type_strike_craft }
+		}		
+	}
+
+	component_slot = {
+		name = "PD_01"
+		slot_size = point_defence
+		slot_type = weapon
+		locatorname = "small_gun_01"
+	}
+	component_slot = {
+		name = "PD_02"
+		slot_size = point_defence
+		slot_type = weapon
+		locatorname = "small_gun_02"
+	}
+	component_slot = {
+		name = "STRIKE_CRAFT_01"
+		slot_size = large
+		slot_type = strike_craft
+		rotation = 90
+		locatorname = "strike_craft_locator_01"
+	}
+	
+	medium_utility_slots = 4
+	
+	cost = 100
+}

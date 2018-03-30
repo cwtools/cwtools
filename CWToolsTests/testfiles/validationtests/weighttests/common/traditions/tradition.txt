@@ -1,0 +1,52 @@
+##Test weights
+tr_discovery_adopt = {
+	modifier = {
+		ship_anomaly_fail_risk = -0.10
+		ship_anomaly_generation_chance_mult = 0.15
+	}
+
+	tradition_swap = {
+		name = tr_discovery_adopt_machine
+		inherit_effects = yes
+		inherit_name = no
+		trigger = {
+			has_authority = auth_machine_intelligence
+		}
+
+		weight = {
+			factor = 1
+		}
+	}
+
+	tradition_swap = {
+		name = tr_discovery_adopt_hive
+		inherit_effects = yes
+		inherit_name = no
+		trigger = {
+			has_authority = auth_hive_mind
+		}
+
+		weight = {
+			factor = 1
+		}
+	}
+	
+	ai_weight = {
+		factor = 10
+		modifier = {
+            factor = 5
+            has_country_flag = yes
+            #error
+            has_planet_flag = yes
+			years_passed < 10
+		}
+		modifier = {
+			factor = 2
+			has_ethic = ethic_materialist
+		}
+		modifier = {
+			factor = 3
+			has_ethic = ethic_fanatic_materialist
+		}			
+	}
+}

@@ -1,0 +1,23 @@
+##Test weights
+pm_null = {
+	is_null = yes
+	
+	spawn_chance = {
+		value = 275
+		modifier = {
+            factor = 3
+            has_planet_flag = yes
+            #error
+            has_country_flag = yes
+			num_modifiers > 2
+		}		
+		modifier = {
+			factor = 3
+			num_modifiers > 1
+		}
+		modifier = {
+			factor = 3
+			num_modifiers > 0
+		}
+	}
+}

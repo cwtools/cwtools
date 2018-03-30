@@ -1,0 +1,42 @@
+##Test weights
+wg_subjugation = {
+	casus_belli = cb_subjugation
+	
+	hide_if_no_cb = no
+	
+	surrender_acceptance = -100
+
+	potential = {
+		NOT = { has_valid_civic = civic_inwards_perfection }
+	}
+	possible = {
+		always = yes
+	}
+	on_accept = {
+		hidden_effect = {
+			from = {
+				add_threat = {
+					who = root
+					amount = 0.5
+				}				
+			}	
+		}		
+		from = {
+			set_subject_of = {
+				who = root
+				subject_type = vassal
+			}		
+		}	
+	}
+	
+	ai_weight = {
+		weight = 10
+		modifier = {
+            factor = 0
+            has_country_flag = yes
+            #error
+            has_planet_flag = yes
+			has_ai_personality_behaviour = wants_tribute
+		}
+	}
+}

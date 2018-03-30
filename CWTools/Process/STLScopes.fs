@@ -105,7 +105,7 @@ module STLScopes =
         ScopedEffect("last_created_leader", allScopes, Scope.Leader, EffectType.Both, defaultDesc, "");
         ScopedEffect("ruler", [Scope.Country], Scope.Leader, EffectType.Both, defaultDesc, "");
         ScopedEffect("heir", [], Scope.Leader, EffectType.Both, defaultDesc, "");
-        ScopedEffect("solar_system", [Scope.Ship; Scope.Planet; Scope.Country; Scope.Fleet; Scope.AmbientObject], Scope.GalacticObject, EffectType.Both, "", ""); //Fleet, Ambient object from vanilla use
+        ScopedEffect("solar_system", [Scope.Ship; Scope.Planet; Scope.Country; Scope.Fleet; Scope.AmbientObject; Scope.Tile], Scope.GalacticObject, EffectType.Both, "", ""); //Fleet, Ambient object, Tile from vanilla use
         ScopedEffect("last_created_system", allScopes, Scope.GalacticObject, EffectType.Both, defaultDesc, "");
         ScopedEffect("planet", [Scope.Pop; Scope.Tile; Scope.Planet], Scope.Planet, EffectType.Both, defaultDesc, "");
         ScopedEffect("capital_scope", [Scope.Country], Scope.Planet, EffectType.Both, defaultDesc, "");
@@ -128,7 +128,7 @@ module STLScopes =
         ScopedEffect("owner_species", [Scope.Country], Scope.Species, EffectType.Both, defaultDesc, "");
         ScopedEffect("last_created_species", allScopes, Scope.Species, EffectType.Both, defaultDesc, "");
         ScopedEffect("species", [Scope.Country; Scope.Ship; Scope.Leader; Scope.Pop], Scope.Species, EffectType.Both, defaultDesc, "");
-        ScopedEffect("pop_faction", [Scope.Pop], Scope.PopFaction, EffectType.Both, defaultDesc, "");
+        ScopedEffect("pop_faction", [Scope.Pop; Scope.Leader], Scope.PopFaction, EffectType.Both, defaultDesc, ""); //Leader from vanilla
         ScopedEffect("last_created_pop_faction", allScopes, Scope.PopFaction, EffectType.Both, defaultDesc, "");
         ScopedEffect("core_sector", [], Scope.Sector, EffectType.Both, defaultDesc, "");
         ScopedEffect("sector", [Scope.Planet], Scope.Sector, EffectType.Both, defaultDesc, "");

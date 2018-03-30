@@ -1,0 +1,80 @@
+##Test weights
+leader_enhancement = {
+
+	potential = {
+		has_technology = tech_selected_lineages
+	}
+	
+	option = {
+		name = "leader_enhancement_natural_selection"
+		
+		policy_flags = {
+			leader_enhancement_natural_selection
+		}
+		
+		on_enabled = {
+		}
+		
+		modifier = {}
+		
+	}
+	
+	option = {
+		name = "leader_enhancement_selected_lineages"
+		
+		policy_flags = {
+			leader_enhancement_selected_lineages
+		}
+		modifier = {
+			leader_skill_levels = 1
+			leader_age = 10
+			leader_cost = 0.5
+		}
+		
+		valid = {
+			NOT = { has_ethic = "ethic_fanatic_egalitarian" }
+		}
+		
+		AI_weight = {
+			factor = 2
+			modifier = {
+                has_country_flag = yes
+                #error
+                has_planet_flag = yes
+				factor = 0
+				OR = {
+					has_ethic = "ethic_egalitarian"
+					has_ethic = "ethic_fanatic_egalitarian"
+				}				
+			}
+		}
+		
+		prerequisites = { tech_selected_lineages }
+	}
+	
+	option = {
+		name = "leader_enhancement_capacity_boosters"
+		
+		policy_flags = {
+			leader_enhancement_capacity_boosters
+		}
+		modifier = {
+			leader_skill_levels = 2
+			leader_age = 20
+			leader_cost = 1
+		}
+		
+		valid = {
+			NOR = {
+				has_ethic = "ethic_egalitarian"
+				has_ethic = "ethic_fanatic_egalitarian"
+			}
+		}
+		
+		prerequisites = { tech_capacity_boosters }
+		
+		AI_weight = {
+			factor = 3
+		}
+	}
+}

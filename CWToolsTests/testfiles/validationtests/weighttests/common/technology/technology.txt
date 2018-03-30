@@ -1,0 +1,40 @@
+##Test weights
+tech_corvette_build_speed = {
+	cost = 5
+	area = engineering
+	tier = 1
+	category = { voidcraft }
+	prerequisites = { "tech_corvettes" }
+	weight = 5
+	
+	modifier = {
+		shipsize_corvette_build_speed_mult = 0.25
+		shipsize_corvette_build_cost_mult = -0.05
+	}
+	
+	weight_modifier = {
+		modifier = {
+            factor = 1.25
+            has_country_flag = yes
+            #error
+            has_planet_flag = yes
+			research_leader = {
+				area = engineering
+				has_trait = "leader_trait_expertise_voidcraft"
+			}
+		}
+	}
+	
+	ai_weight = {
+		modifier = {
+            factor = 1.25
+            has_country_flag = yes
+            #error
+            has_planet_flag = yes
+			research_leader = {
+				area = engineering
+				has_trait = "leader_trait_expertise_voidcraft"
+			}
+		}
+	}
+}

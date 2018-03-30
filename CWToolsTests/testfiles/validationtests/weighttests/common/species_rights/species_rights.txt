@@ -1,0 +1,30 @@
+##Test weights
+citizenship_purge_machine = {
+	token = citizenship_purge_machine
+	
+	potential = {
+		exists = from
+		from = { has_authority = auth_machine_intelligence }
+		NOR = {
+			has_trait = trait_machine_unit
+			has_trait = trait_mechanical
+		}
+	}
+
+	allow = {
+		hidden_trigger = { exists = from }
+		custom_tooltip = {
+			fail_text = same_species_disallowed
+			NOT = { is_same_species = from }
+		}
+	}
+	ai_will_do = {
+        factor = 0
+        modifier ={
+            factor = 5
+            has_species_flag = yes
+            #error
+            has_planet_flag = yes
+        }
+	}
+}
