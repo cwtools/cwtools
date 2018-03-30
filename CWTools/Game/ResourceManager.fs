@@ -66,22 +66,22 @@ type Entity =
         entityType : EntityType
     }
 
-type UpdateFile = ResourceInput -> Entity list
-type UpdateFiles = ResourceInput list -> Entity list
+type UpdateFile<'T> = ResourceInput -> (Entity * Lazy<'T>) list
+type UpdateFiles<'T> = ResourceInput list -> (Entity * Lazy<'T>) list
 type GetResources = unit -> Resource list
 type ValidatableFiles = unit -> EntityResource list
-type AllEntities = unit -> Entity list
-type ValidatableEntities = unit -> Entity list
+type AllEntities<'T> = unit -> (Entity * Lazy<'T>) list
+type ValidatableEntities<'T> = unit -> (Entity * Lazy<'T>) list
 
-type IResourceAPI =
-    abstract UpdateFile : UpdateFile
-    abstract UpdateFiles : UpdateFiles
+type IResourceAPI<'T> =
+    abstract UpdateFile : UpdateFile<'T>
+    abstract UpdateFiles : UpdateFiles<'T>
     abstract GetResources : GetResources
     abstract ValidatableFiles : ValidatableFiles
-    abstract AllEntities : AllEntities
-    abstract ValidatableEntities : ValidatableEntities
+    abstract AllEntities : AllEntities<'T>
+    abstract ValidatableEntities : ValidatableEntities<'T>
 
-type ResourceManager () =
+type ResourceManager<'T> (computedDataFunction : (Entity -> 'T)) =
     let memoize keyFunction memFunction =
         let dict = new System.Collections.Generic.Dictionary<_,_>()
         fun n ->
@@ -192,7 +192,7 @@ type ResourceManager () =
         |_ -> EntityType.Other
 
     let mutable fileMap : Map<string, Resource> = Map.empty
-    let mutable entitiesMap : Map<string, Entity> = Map.empty
+    let mutable entitiesMap : Map<string, Entity * Lazy<'T>> = Map.empty
     let duration f = 
         let timer = System.Diagnostics.Stopwatch()
         timer.Start()
@@ -225,7 +225,9 @@ type ResourceManager () =
                 |EntityResource (f, _) -> fileMap.Add(f, resource) 
                 |FileResource (f, _) -> fileMap.Add(f, resource)
             match entity with
-            |Some e -> entitiesMap <- entitiesMap.Add(e.filepath, e); yield e
+            |Some e -> 
+                let item = e, lazy (computedDataFunction e)
+                entitiesMap <- entitiesMap.Add(e.filepath, item); yield item
             |None -> ()
         }
 
@@ -235,10 +237,10 @@ type ResourceManager () =
     let getResources() = fileMap |> Map.toList |> List.map snd
     let validatableFiles() = fileMap |> Map.toList |> List.map snd |> List.choose (function |EntityResource (_, e) -> Some e |_ -> None) |> List.filter (fun f -> f.validate)
     let allEntities() = entitiesMap |> Map.toList |> List.map snd
-    let validatableEntities() = entitiesMap |> Map.toList |> List.map snd |> List.filter (fun e -> e.validate)
+    let validatableEntities() = entitiesMap |> Map.toList |> List.map snd |> List.filter (fun (e, _) -> e.validate)
         
     member __.Api = {
-        new IResourceAPI with
+        new IResourceAPI<'T> with
             member __.UpdateFiles = updateFiles
             member __.UpdateFile = (fun f -> updateFiles([f]))
             member __.GetResources = getResources

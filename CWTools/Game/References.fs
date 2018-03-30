@@ -7,8 +7,8 @@ open CWTools.Parser
 open CWTools.Process.STLProcess
 open CWTools.Process.STLScopes
 
-type References(resourceManager : IResourceAPI, lookup : Lookup) =
-    let entities() = resourceManager.AllEntities() |> List.map (fun e -> e.entity)
+type References<'T>(resourceManager : IResourceAPI<'T>, lookup : Lookup) =
+    let entities() = resourceManager.AllEntities() |> List.map (fun (e, _) -> e.entity)
     let events() = 
         entities()
         |> List.collect(fun e -> e.Children)

@@ -258,7 +258,7 @@ module STLEventValidation =
 
             
 
-    let getEventChains (reffects : Effect list) (os : EntitySet) (es : EntitySet) =
+    let getEventChains (reffects : Effect list) (os : STLEntitySet) (es : STLEntitySet) =
         let seffects = reffects |> List.choose (function | :? ScriptedEffect as e -> Some e |_ -> None)
         let allevents = os.GlobMatchChildren("**/events/*.txt") |> List.choose (function | :? Event as e -> Some e |_ -> None)
         let events = es.GlobMatchChildren("**/events/*.txt") |> List.choose (function | :? Event as e -> Some e |_ -> None)
@@ -283,9 +283,8 @@ module STLEventValidation =
         
     let valEventCalls : StructureValidator =
         fun os es ->
-            let events = (os.GlobMatchChildren("**/events/*.txt") |> List.choose (function | :? Event as e -> Some e |_ -> None))
-                         @ (es.GlobMatchChildren("**/events/*.txt") |> List.choose (function | :? Event as e -> Some e |_ -> None))
-            let eventIds = events |> List.map (fun e -> e.ID)
+            let events = (os.AllOfType EntityType.Events @ es.AllOfType EntityType.Events)
+            let eventIds = events |> List.collect (fun (e, d) -> d.Force().eventids)
             let effects = es.AllEffects
             let eventEffectKeys = ["ship_event"; "pop_event"; "fleet_event"; "pop_faction_event"; "country_event"; "planet_event"]
             let fNode = (fun (x : Node) children ->
@@ -296,5 +295,7 @@ module STLEventValidation =
                         <&&> children)
             let fCombine = (<&&>)
             effects <&!&> (foldNode2 fNode fCombine OK)
+
+
 
 

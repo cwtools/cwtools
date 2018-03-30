@@ -133,7 +133,7 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
             let vt = triggers |> addInnerScope |> List.map (fun e -> e :> Effect)
             se @ vt
 
-        let resources = ResourceManager().Api
+        let resources = ResourceManager(computeSTLData).Api
 
         let validatableFiles() = resources.ValidatableFiles
         let lookup = Lookup()
@@ -262,7 +262,7 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
         let updateScriptedTriggers () = 
             let rawTriggers = 
                 resources.AllEntities()
-                |> List.choose (function |f when f.filepath.Contains("scripted_triggers") -> Some (f.entity) |_ -> None)
+                |> List.choose (function |(f, _) when f.filepath.Contains("scripted_triggers") -> Some (f.entity) |_ -> None)
                 |> List.collect getChildrenWithComments
                 |> List.rev
             let mutable final = vanillaTriggers
@@ -281,7 +281,7 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
         let updateScriptedEffects () =
             let rawEffects = 
                 resources.AllEntities()
-                |> List.choose (function |f when f.filepath.Contains("scripted_effects") -> Some (f.entity) |_ -> None)
+                |> List.choose (function |(f, _) when f.filepath.Contains("scripted_effects") -> Some (f.entity) |_ -> None)
                 |> List.collect getChildrenWithComments
                 //|> List.collect (fun n -> n.Children)
                 |> List.rev
@@ -300,7 +300,7 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
         let updateStaticodifiers () =
             let rawModifiers =
                 resources.AllEntities()
-                |> List.choose (function |f when f.filepath.Contains("static_modifiers") -> Some (f.entity) |_ -> None)
+                |> List.choose (function |(f, _) when f.filepath.Contains("static_modifiers") -> Some (f.entity) |_ -> None)
                 |> List.collect (fun n -> n.Children)
                 |> List.rev
             let newModifiers = rawModifiers |> List.map (fun e -> STLProcess.getStaticModifierCategory modifiers e)
@@ -322,7 +322,7 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
             //TODO: Add loc from embedded
 
         let updateDefinedVariables() =
-            lookup.definedScriptVariables <- EntitySet (resources.AllEntities()) |> getDefinedScriptVariables
+            lookup.definedScriptVariables <- (resources.AllEntities()) |> List.collect (fun (_, d) -> d.Force().setvariables)
                 
         let updateModifiers() =
             lookup.coreModifiers <- addGeneratedModifiers modifiers (EntitySet (resources.AllEntities()))
@@ -361,17 +361,26 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
                    |> List.choose (function |Invalid es -> Some es |_ -> None)
                    |> List.collect id
         let snood = snd
-        let validateAll (entities : Entity list)  = 
+        let validateAll (entities : (Entity * Lazy<STLComputedData>) list)  = 
+            let duration f s = 
+                let timer = new System.Diagnostics.Stopwatch()
+                timer.Start()
+                let returnValue = f()
+                eprintfn "Elapsed Time: %i %s" timer.ElapsedMilliseconds s
+                returnValue
             eprintfn "Validating %i files" (entities.Length)
-            let allEntitiesByFile = entities |> List.map (fun f -> f.entity)
+            let allEntitiesByFile = entities |> List.map (fun (f, _) -> f.entity)
             let flattened = allEntitiesByFile |> List.map (fun n -> n.Children) |> List.collect id
 
-            let validators = [validateVariables; valTechnology; valButtonEffects; valSprites; valVariables; valEventCalls]
+            let validators = [validateVariables, "var"; valTechnology, "tech"; valButtonEffects, "but"; valSprites, "sprite"; valVariables, "var2"; valEventCalls, "event"]
             let oldEntities = EntitySet (resources.AllEntities())
             let newEntities = EntitySet entities
+            let runValidators f (validators : (StructureValidator * string) list) =
+                validators <&!&> (fun (v, s) -> duration (fun _ -> f v) s) |> (function |Invalid es -> es |_ -> [])
             eprintfn "Validating misc"
             //let res = validators |> List.map (fun v -> v oldEntities newEntities) |> List.fold (<&&>) OK
-            let res = validators <&!&> (fun v -> v oldEntities newEntities) |> (function |Invalid es -> es |_ -> [])
+            let res = runValidators (fun f -> f oldEntities newEntities) validators
+            //let res = validators <&!&> (fun v -> v oldEntities newEntities) |> (function |Invalid es -> es |_ -> [])
             eprintfn "Validating files"
             let fileValidators = [valSpriteFiles]
             let fres = fileValidators <&!&> (fun v -> v resources newEntities) |> (function |Invalid es -> es |_ -> [])
@@ -385,7 +394,7 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
             //(validateShips (flattened)) @ (validateEvents (flattened)) @ res @ fres @ eres
             (validateShips (flattened)) @ (validateEvents (flattened)) @ res @ fres @ eres @ tres @ mres @ evres @ wres
         
-        let localisationCheck (entities : Entity list) =
+        let localisationCheck (entities : (Entity * Lazy<STLComputedData>) list) =
             eprintfn "Localisation check %i files" (entities.Length)
             let keys = localisationAPIs |> List.groupBy (fun l -> l.GetLang) |> List.map (fun (k, g) -> k, g |>List.collect (fun ls -> ls.GetKeys) |> Set.ofList )
             
@@ -461,7 +470,7 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
         member __.StaticModifiers = lookup.staticModifiers
         member __.UpdateFile file = updateFile file
         member __.AllEntities = resources.AllEntities()
-        member __.References = References(resources, lookup)
+        member __.References = References<STLComputedData>(resources, lookup)
        
 
         //member __.ScriptedTriggers = parseResults |> List.choose (function |Pass(f, p, t) when f.Contains("scripted_triggers") -> Some p |_ -> None) |> List.map (fun t -> )

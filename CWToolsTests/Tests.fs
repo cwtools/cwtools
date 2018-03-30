@@ -75,8 +75,8 @@ let tests =
                 let parseErrors = stl.ParserErrors
                 let errors = stl.LocalisationErrors |> List.map (fun (c, s, n, l, f, k) -> Position.UnConv n)
                 let entities = stl.AllEntities
-                let testLocKeys = entities |> List.map (fun e -> e.filepath, getLocTestInfo e.entity)
-                let nodeComments = entities |> List.collect (fun e -> getNodeComments e.entity) |> List.map fst
+                let testLocKeys = entities |> List.map (fun (e, _) -> e.filepath, getLocTestInfo e.entity)
+                let nodeComments = entities |> List.collect (fun (e, _) -> getNodeComments e.entity) |> List.map fst
                 yield testCase ("parse") <| fun () -> Expect.isEmpty parseErrors (parseErrors |> List.tryHead |> Option.map (sprintf "%A") |> Option.defaultValue "")
                 yield testCase ("parse2") <| fun () -> Expect.isEmpty stl.ParserErrors (stl.ParserErrors |> List.tryHead |> Option.map (sprintf "%A") |> Option.defaultValue "")
                 //eprintfn "%A" testLocKeys
@@ -102,7 +102,7 @@ let tests =
                 yield testCase ("parse") <| fun () -> Expect.isEmpty parseErrors (parseErrors |> List.tryHead |> Option.map (sprintf "%A") |> Option.defaultValue "")
 
                 let errors = stl.LocalisationErrors |> List.map (fun (c, s, n, l, f, k) -> Position.UnConv n)
-                let testLocKeys = stl.AllEntities |> List.map (fun e -> e.filepath, getLocTestInfo e.entity)
+                let testLocKeys = stl.AllEntities |> List.map (fun (e, _) -> e.filepath, getLocTestInfo e.entity)
                 let inner (file, ((req : FParsec.Position list), (noreq : FParsec.Position list), (nodekeys : FParsec.Position list) ))=
                     let missing = req |> List.filter (fun r -> not (errors |> List.contains r))
                     let extra = noreq |> List.filter (fun r -> errors |> List.contains r)
@@ -118,7 +118,7 @@ let testFolder folder testsname =
         let modifiers = SetupLogParser.parseLogsFile "./testfiles/validationtests/setup.log" |> (function |Success(p, _, _) -> SetupLogParser.processLogs p)
         let stl = STLGame(folder, FilesScope.All, "", triggers, effects, modifiers, [], [STL STLLang.English], false, true)
         let errors = stl.ValidationErrors |> List.map (fun (c, s, n, l, f, k) -> f, Position.UnConv n) //>> (fun p -> FParsec.Position(p.StreamName, p.Index, p.Line, 1L)))
-        let testVals = stl.AllEntities |> List.map (fun (e) -> e.filepath, getNodeComments e.entity |> List.map fst)
+        let testVals = stl.AllEntities |> List.map (fun (e, _) -> e.filepath, getNodeComments e.entity |> List.map fst)
         //printfn "%A" (errors |> List.map (fun (c, f) -> f.StreamName))
         //printfn "%A" (testVals)
 
@@ -219,8 +219,8 @@ let embeddedTests =
         let stlNE = STLGame("./testfiles/embeddedtest/test", FilesScope.All, "", [], [], [], [], [STL STLLang.English], false, true)
         let eerrors = stlE.ValidationErrors |> List.map (fun (c, s, n, l, f, k) -> Position.UnConv n)
         let neerrors = stlNE.ValidationErrors |> List.map (fun (c, s, n, l, f, k) -> Position.UnConv n)
-        let etestVals = stlE.AllEntities |> List.map (fun (e) -> e.filepath, getNodeComments e.entity |> List.map fst)
-        let netestVals = stlNE.AllEntities |> List.map (fun (e) -> e.filepath, getNodeComments e.entity |> List.map fst)
+        let etestVals = stlE.AllEntities |> List.map (fun (e, _) -> e.filepath, getNodeComments e.entity |> List.map fst)
+        let netestVals = stlNE.AllEntities |> List.map (fun (e, _) -> e.filepath, getNodeComments e.entity |> List.map fst)
         let einner (file, ((nodekeys : FParsec.Position list)) )=
             let fileErrors = eerrors |> List.filter (fun f -> f.StreamName = file )
             Expect.isEmpty (fileErrors) (sprintf "Following lines are not expected to have an error %A" fileErrors )

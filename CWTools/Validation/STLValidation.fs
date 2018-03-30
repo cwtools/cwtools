@@ -15,17 +15,18 @@ open CWTools.Utilities.Utils
 
 module STLValidation =
     type S = Severity
-    type EntitySet(entities : Entity list) =
+    type EntitySet<'T>(entities : (Entity * Lazy<'T>) list) =
         member __.GlobMatch(pattern : string) =
             let glob = Glob.Parse(pattern)
-            entities |> List.choose (fun es -> if glob.IsMatch(es.filepath) then Some es.entity else None)
+            entities |> List.choose (fun (es, _) -> if glob.IsMatch(es.filepath) then Some es.entity else None)
         member this.GlobMatchChildren(pattern : string) =
             this.GlobMatch(pattern) |> List.map (fun e -> e.Children) |> List.collect id
         member __.AllOfType (entityType : EntityType) =
-            entities |> List.choose(fun es -> if es.entityType = entityType then Some es.entity else None)
+            entities |> List.choose(fun (es, d) -> if es.entityType = entityType then Some (es.entity, d)  else None)
         member this.AllOfTypeChildren (entityType : EntityType) =
-            this.AllOfType(entityType) |> List.map (fun e -> e.Children) |> List.collect id
-        member __.All = entities |> List.map (fun es -> es.entity)
+            this.AllOfType(entityType) |> List.map (fun (e, d) -> e.Children) |> List.collect id
+        member __.All = entities |> List.map (fun (es, _) -> es.entity)
+        member __.AllWithData = entities |> List.map (fun (es, d) -> es.entity, d)
         member this.AllEffects= 
             let fNode = (fun (x : Node) children ->
                             match x with
@@ -44,10 +45,15 @@ module STLValidation =
             this.All |> List.collect (foldNode2 fNode fCombine [])
 
         member __.Raw = entities
-        member this.Merge(y : EntitySet) = EntitySet(this.Raw @ y.Raw)
+        member this.Merge(y : EntitySet<'T>) = EntitySet(this.Raw @ y.Raw)
 
-    type StructureValidator = EntitySet -> EntitySet -> ValidationResult
-    type FileValidator = IResourceAPI -> EntitySet -> ValidationResult
+    type STLComputedData = {
+        eventids : string list
+        setvariables : string list
+    }
+    type STLEntitySet = EntitySet<STLComputedData>
+    type StructureValidator = EntitySet<STLComputedData> -> EntitySet<STLComputedData> -> ValidationResult
+    type FileValidator = IResourceAPI<STLComputedData> -> EntitySet<STLComputedData> -> ValidationResult
     let shipName (ship : Ship) = if ship.Name = "" then Invalid [(inv (ErrorCodes.CustomError "must have name") ship)] else OK
     let shipSize (ship : Ship) = if ship.ShipSize = "" then Invalid [(inv (ErrorCodes.CustomError "must have size") ship)] else OK
 
@@ -315,7 +321,7 @@ module STLValidation =
         let scope = { Root = effectBlock.Scope; From = []; Scopes = [effectBlock.Scope]}
         effectBlock.All <&!&> valEventEffect effectBlock triggers effects modifiers scope
 
-    let valAllEffects (triggers : (Effect) list) (effects : (Effect) list) (modifiers : Modifier list) (es : EntitySet) =
+    let valAllEffects (triggers : (Effect) list) (effects : (Effect) list) (modifiers : Modifier list) (es : STLEntitySet) =
         let fNode = (fun (x : Node) children ->
             match x with
             | (:? EffectBlock as x) -> valEffectsNew triggers effects modifiers x
@@ -351,7 +357,7 @@ module STLValidation =
         effectBlock.All <&!&> valEventTrigger effectBlock triggers effects modifiers scope
 
 
-    let valAllTriggers (triggers : (Effect) list) (effects : (Effect) list) (modifiers : Modifier list) (es : EntitySet) =
+    let valAllTriggers (triggers : (Effect) list) (effects : (Effect) list) (modifiers : Modifier list) (es : STLEntitySet) =
         let fNode = (fun (x : Node) children ->
             match x with
             | (:? TriggerBlock as x) when not x.InEffectBlock -> valTriggersNew triggers effects modifiers x
@@ -519,7 +525,7 @@ module STLValidation =
         let fCombine = (<&&>)
         foldNode2 fNode fCombine OK node
 
-    let getDefinedScriptVariables (es : EntitySet) =
+    let getDefinedScriptVariables (es : STLEntitySet) =
         let fNode = (fun (x : Node) children ->
                     match x with
                     | (:? EffectBlock as x) -> x::children
@@ -537,25 +543,30 @@ module STLValidation =
         let effects = es.All |> List.collect (foldNode2 fNode fCombine []) |> List.map (fun f -> f :> Node)
         effects @ opts |> List.collect findAllSetVariables  
 
+    let getEntitySetVariables (e : Entity) =
+        let fNode = (fun (x : Node) children ->
+                    match x with
+                    | (:? EffectBlock as x) -> x::children
+                    | _ -> children)
+        let foNode = (fun (x : Node) children ->
+                    match x with
+                    | (:? Option as x) -> x::children
+                    | _ -> children)
+        let fCombine = (@)
+        let opts = e.entity |> (foldNode2 foNode fCombine []) |> List.map filterOptionToEffects
+        let effects = e.entity |> (foldNode2 fNode fCombine []) |> List.map (fun f -> f :> Node)
+        effects @ opts |> List.collect findAllSetVariables
+
     let valVariables : StructureValidator =
         fun os es ->
-            let fNode = (fun (x : Node) children ->
-                        match x with
-                        | (:? EffectBlock as x) -> x::children
-                        | _ -> children)
             let ftNode = (fun (x : Node) children ->
-                        match x with
-                        | (:? TriggerBlock as x) -> x::children
-                        | _ -> children)
-            let foNode = (fun (x : Node) children ->
-                        match x with
-                        | (:? Option as x) -> x::children
-                        | _ -> children)
+                match x with
+                | (:? TriggerBlock as x) -> x::children
+                | _ -> children)
             let fCombine = (@)
-            let opts = os.All @ es.All |> List.collect (foldNode2 foNode fCombine []) |> List.map filterOptionToEffects
-            let effects = os.All @ es.All |> List.collect (foldNode2 fNode fCombine []) |> List.map (fun f -> f :> Node)
             let triggers = es.All |> List.collect (foldNode2 ftNode fCombine []) |> List.map (fun f -> f :> Node)
-            let defVars = effects @ opts |> List.collect findAllSetVariables
+            let defVars = (os.AllWithData @ es.AllWithData) |> List.collect (fun (_, d) -> d.Force().setvariables)
+            //let defVars = effects @ opts |> List.collect findAllSetVariables
             triggers <&!&> (validateUsedVariables defVars)
 
 
@@ -600,7 +611,7 @@ module STLValidation =
         let filteredModifierKeys = ["description"; "key"]
         let filtered = node.Values |> List.filter (fun f -> not (filteredModifierKeys |> List.exists (fun k -> k == f.Key)))
         filtered <&!&> valModifier modifiers node.Scope
-    let valAllModifiers (modifiers : (Modifier) list) (es : EntitySet) =
+    let valAllModifiers (modifiers : (Modifier) list) (es : STLEntitySet) =
         let fNode = (fun (x : Node) children ->
             match x with
             | (:? ModifierBlock as x) -> valModifiers modifiers x
@@ -609,7 +620,7 @@ module STLValidation =
         let fCombine = (<&&>)
         es.All <&!&> foldNode2 fNode fCombine OK 
 
-    let addGeneratedModifiers (modifiers : Modifier list) (es : EntitySet) =
+    let addGeneratedModifiers (modifiers : Modifier list) (es : STLEntitySet) =
         let ships = es.GlobMatchChildren("**/common/ship_sizes/*.txt")
         let shipKeys = ships |> List.map (fun f -> f.Key)
         let shipModifierCreate =
@@ -680,7 +691,7 @@ module STLValidation =
         // eprintfn "%A" (newWmb.Values |> List.map (fun  c -> c.Key))
         newWmb :> Node
 
-    let validateModifierBlocks (triggers : (Effect) list) (effects : (Effect) list) (modifiers : Modifier list) (es : EntitySet) =
+    let validateModifierBlocks (triggers : (Effect) list) (effects : (Effect) list) (modifiers : Modifier list) (es : STLEntitySet) =
         let foNode = (fun (x : Node) children ->
             match x with
             | (:? WeightModifierBlock as x) -> x |> filterWeightBlockToTriggers |> (fun o -> valTriggersNew triggers effects modifiers o)
@@ -688,3 +699,12 @@ module STLValidation =
             <&&> children)
         let fCombine = (<&&>)
         es.All <&!&> foldNode2 foNode fCombine OK
+
+
+    let computeSTLData (e : Entity) =
+        eprintfn "%A" (e.filepath)
+        let eventIds = if e.entityType = EntityType.Events then e.entity.Children |> List.choose (function | :? Event as e -> Some e.ID |_ -> None) else []
+        {
+            eventids = eventIds
+            setvariables = getEntitySetVariables e
+        }

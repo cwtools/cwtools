@@ -14,7 +14,7 @@ open System.Threading
 
 module STLLocalisationValidation =
     type S = Severity
-    type LocalisationValidator = EntitySet -> (Lang * Set<string>) list -> EntitySet -> ValidationResult
+    type LocalisationValidator = STLEntitySet -> (Lang * Set<string>) list -> STLEntitySet -> ValidationResult
 
     let checkLocKey (leaf : Leaf) (keys : Set<string>) (lang : Lang) key =
         if lang = STL STLLang.Default then OK else
@@ -246,8 +246,8 @@ module STLLocalisationValidation =
         (start, finish, traditions)
 
     let valTraditionLocCats : LocalisationValidator = 
-        fun entitySet keys nes -> 
-            let cats = entitySet.GlobMatch("**/tradition_categories/*.txt") |> List.collect (fun e -> e.Children)
+        fun STLEntitySet keys nes -> 
+            let cats = STLEntitySet.GlobMatch("**/tradition_categories/*.txt") |> List.collect (fun e -> e.Children)
             let newcats = nes.GlobMatch("**/tradition_categories/*.txt") |> List.collect (fun e -> e.Children)
             let starts, finishes, trads = cats |> List.map (processTradCat keys) |> List.fold (fun ( ss, fs, ts) (s, f, t) -> s::ss,  f::fs, ts @ t) ([], [], [])
             let traditions = nes.GlobMatch("**/traditions/*.txt")  |> List.collect (fun e -> e.Children)
@@ -284,7 +284,7 @@ module STLLocalisationValidation =
 
     let valBuildingTags : LocalisationValidator =
         fun _ keys es ->
-            let buildtags = es.AllOfType EntityType.BuildingTags
+            let buildtags = es.AllOfType EntityType.BuildingTags |> List.map fst
             buildtags <&!&> (fun bt -> bt.LeafValues <&!&> checkLocLeafValueKeyAdvs keys "" ["_build_cost_mult"; "_construction_speed_mult"])
 
     let valDiploPhrases : LocalisationValidator =
