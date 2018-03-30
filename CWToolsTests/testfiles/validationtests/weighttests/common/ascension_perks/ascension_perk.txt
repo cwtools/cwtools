@@ -1,0 +1,40 @@
+##Test weights
+ap_machine_worlds = {
+	on_enabled = {
+		custom_tooltip = "allow_machine_worlds"
+		custom_tooltip = "describe_machine_worlds"
+        #error
+        set_fleet_stance = yes
+        add_energy = 500
+	}
+
+	potential = {
+		has_authority = auth_machine_intelligence
+        #error
+        has_fleet_stance = yes
+	}
+	
+	possible = {
+		has_authority = auth_machine_intelligence
+        #error
+        has_fleet_stance = yes
+	}
+	
+	ai_weight = {
+		factor = 10
+		modifier = {
+			factor = 5
+			has_country_flag = yes
+			#error
+			has_planet_flag = yes
+		}
+	}
+
+	modifier = {
+		leader_skill_levels = 2
+		country_leader_cap = 2
+		#error
+		invalid_modifier = 1
+	}
+
+}

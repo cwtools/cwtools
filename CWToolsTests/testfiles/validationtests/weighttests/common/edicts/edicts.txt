@@ -1,4 +1,4 @@
-##test effects and triggers
+##test weghts
 planet_edict ={
     name = "patrol_drones"
 	cost = { influence = 1 }
@@ -30,7 +30,9 @@ planet_edict ={
 		weight = 1000
 		modifier = {
 			unrest < 50
-			factor = 0
+            factor = 0
+            #error
+            has_country_flag = yes
 		}
 	}
 }
@@ -68,7 +70,10 @@ country_edict ={
 	ai_weight = {
 		weight = 1000
 		modifier = {
-			factor = 0
+            factor = 0
+            has_country_flag = yes
+            #error
+            has_planet_flag = yes
 		}
 	}
 }

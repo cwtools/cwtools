@@ -1,0 +1,131 @@
+##Test weights
+fallen_empire = {
+	scaled_difficulty_bonuses = 0.5
+	counts_for_victory = yes
+	sub_title = "COUNTRY_FALLEN_EMPIRE"
+	sub_title_desc = "COUNTRY_FALLEN_EMPIRE_DESC"
+	
+	share_survey_data = no
+	relations = yes
+	fallen_empire = yes
+	needs_survey = no
+	diplomatic_wars = yes
+	ship_disengagement = yes
+	army_disengagement = yes
+	uses_special_buildables = yes
+	
+	faction = {
+		needs_border_access = no
+	}
+		
+	ai = {
+		enabled = yes
+		declare_war = yes
+		min_navy_for_wars = 0.0
+		min_assault_armies_for_wars = 6
+		colonizer = no
+		internal_policies = no
+		modification = no
+		construction = no
+		starbase_upgrade = no
+		limited_construction = yes
+		tech = no
+		modules = {
+			military_minister_module
+			foreign_minister_module
+			interior_minister_module
+		}
+		
+		army_data = {
+			gene_warrior_army = {
+				fraction = {
+					factor = 75
+					modifier = {
+						factor = 0
+                        NOT = { has_ethic = ethic_fanatic_xenophile }
+                        #error
+                        has_planet_flag = yes
+					}
+				}
+			}
+			
+			psionic_army = {
+				fraction = {
+					factor = 75
+					modifier = {
+						factor = 0
+						NOT = { has_ethic = ethic_fanatic_spiritualist }
+					}
+				}
+			}
+
+			xenomorph_army = {
+				fraction = {
+					factor = 75
+					modifier = {
+						factor = 0
+						NOT = { has_ethic = ethic_fanatic_xenophobe }
+					}
+				}
+			}
+
+			android_army = {
+				fraction = {
+					factor = 75
+					modifier = {
+						factor = 0
+						NOT = { has_ethic = ethic_fanatic_materialist }
+					}
+				}
+			}
+			
+			machine_assault_2 = {
+				fraction = {
+					factor = 50
+					modifier = {
+						factor = 0
+						NOT = { has_authority = auth_machine_intelligence }
+					}
+				}
+			}			
+
+			machine_assault_3 = {
+				fraction = {
+					factor = 25
+					modifier = {
+						factor = 0
+						NOT = { has_authority = auth_machine_intelligence }
+					}
+				}
+			}				
+		}
+	}
+	modules = {
+		all_technology_module = {}
+		standard_event_module = {}
+		standard_leader_module = {}
+		standard_economy_module = {}
+		standard_species_rights_module = {}
+		exclusive_diplomacy_module = {
+			can_receive = {
+				action_declare_war
+				action_offer_peace
+				action_make_rival
+				action_end_rivalry
+				action_offer_trade_deal
+				action_cancel_trade_deal
+				action_insult
+			}
+			can_send = {
+				action_declare_war
+				action_make_rival
+				action_end_rivalry
+				action_offer_peace
+				action_offer_trade_deal
+				action_cancel_trade_deal
+				action_open_borders
+				action_close_borders
+			}
+		}	
+	}
+}

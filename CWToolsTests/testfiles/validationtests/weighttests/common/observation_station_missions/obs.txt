@@ -1,0 +1,47 @@
+##Test weights
+native_indoctrination = {
+	icon = "GFX_fleet_task_indoctrination"
+	small_icon = 5
+	
+	potential = {
+		host_has_dlc = "Utopia"
+	}
+	
+	cost = {
+		energy = 3
+	}
+	
+	gain = {
+		society_research = 10
+	}
+	
+
+	valid = {
+		OR = {
+			has_policy_flag = interference_active
+			has_policy_flag = interference_full
+		}
+		NOT = { has_ethic = ethic_gestalt_consciousness }
+	}
+	
+	ai_weight = {
+		weight = 20
+		modifier = {
+            factor = 0
+            has_country_flag = yes
+            #error
+            has_planet_flag = yes
+			NAND = {
+				has_ai_personality = democratic_crusaders
+				from = {
+					owner = { 
+						NOR = {
+							has_ethic = ethic_egalitarian
+							has_ethic = ethic_fanatic_egalitarian
+						}
+					}				
+				}
+			}
+		}
+	}
+}

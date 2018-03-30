@@ -1,0 +1,24 @@
+##Test weights
+d_marauder_deposit_2 = {
+	resources = {
+		energy = 6
+	}
+	station = shipclass_mining_station
+	orbital_weight = {
+         weight = 0 
+         modifier = {
+             is_orbital_tile = yes
+             #error
+             has_country_flag = yes
+         }
+        }
+	drop_weight = { 
+        weight = 0 
+        modifier = {
+             is_orbital_tile = yes
+             #error
+             has_country_flag = yes
+        }
+
+    }
+}

@@ -670,7 +670,7 @@ module STLValidation =
 
 
     let filterWeightBlockToTriggers (wmb : STLProcess.WeightModifierBlock) =
-        let excludes = ["factor"]
+        let excludes = ["factor"; "add"; "weight"]
         let newWmb = WeightModifierBlock(wmb.Key, wmb.Position)
         copy wmb newWmb
         newWmb.All <- newWmb.All |> List.filter (function |LeafC l -> (not (List.contains l.Key excludes)) | _ -> true)

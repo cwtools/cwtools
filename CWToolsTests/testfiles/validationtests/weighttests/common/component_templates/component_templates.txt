@@ -1,0 +1,49 @@
+##Test ai_weight
+utility_component_template = {
+	key = "SHIP_AURA_TARGETING_GRID"
+	size = medium
+	icon = "GFX_ship_part_aura_nanobot"
+	icon_frame = 1
+	power = 0
+	cost = 0
+	
+	size_restriction = { titan }
+	component_set = "ship_aura_components"
+	
+	friendly_aura = {
+		name = "aura_targeting_grid"
+		radius = 5
+		apply_on = ships
+		
+		stack_info = {
+			id = friendly_targeting_grid
+			priority = 20
+		}
+		
+		modifier = {
+			ship_tracking_add = 10
+		}
+		
+		graphics = {
+			area_effect = {
+				entity = "circle_area_entity"
+				dynamic_scale = yes
+			}
+			ship_effect = {
+				entity = "ship_aura_positive_entity"
+				dynamic_scale = no
+			}
+		}
+	}
+	
+	ai_weight = {
+		weight = 10
+		modifier = {
+			factor = 2.0
+			is_ai = yes
+			is_preferred_weapons = weapon_type_kinetic
+			#error
+			has_planet_flag = yes
+		}
+	}
+}

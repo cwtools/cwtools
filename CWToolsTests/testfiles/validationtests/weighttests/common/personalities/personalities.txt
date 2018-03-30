@@ -1,0 +1,78 @@
+##Test weights
+slaving_despots = {
+	aggressiveness = 1.5
+	trade_willingness = 0.8
+	bravery = 0.5
+	combat_bravery = 1.0
+
+	military_spending = 1.1
+	colony_spending = 0.9
+
+	federation_acceptance = -10
+	nap_acceptance = -20
+	defensive_pact_acceptance = 0
+	migration_pact_acceptance = -100
+
+	advanced_start_chance = 50
+
+	weapon_preferences = weapon_type_explosive
+	armor_ratio = 0.3
+	shields_ratio = 0.4
+	hull_ratio = 0.3
+
+	threat_modifier = 1.0
+	threat_others_modifier = 0.5
+	friction_modifier = 1.0
+	claims_modifier = 2.0
+
+	behaviour = {
+		conqueror = yes
+		subjugator = yes
+		liberator = no
+		opportunist = yes
+		slaver = yes
+		caste_system = yes
+		uplifter = no
+		purger = no
+		displacer = no
+		dominator = yes
+		infiltrator = no
+		robot_exploiter = no
+		robot_liberator = no
+		propagator = no
+		multispecies = no
+		crisis_fighter = yes
+		decadent = yes
+	}
+
+
+	allow = {
+		is_country_type = default
+		OR = {
+			has_ethic = "ethic_authoritarian"
+			has_ethic = "ethic_fanatic_authoritarian"
+		}
+		NOR = {
+			has_ethic = "ethic_pacifist"
+			has_ethic = "ethic_fanatic_pacifist"
+			has_ethic = "ethic_xenophile"
+			has_ethic = "ethic_fanatic_xenophile"			
+		}	
+	}
+
+	weight_modifier = {
+		weight = 1
+		modifier = {
+            has_country_flag = yes
+            #error
+            has_planet_flag = yes
+			factor = 100
+			OR = {
+				has_valid_civic = "civic_slaver_guilds"
+				has_trait = "trait_decadent"
+				has_ethic = "ethic_xenophobe"
+				has_ethic = "ethic_fanatic_xenophobe"			
+			}			
+		}
+	}
+}

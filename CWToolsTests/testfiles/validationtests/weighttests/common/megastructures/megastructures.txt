@@ -1,0 +1,81 @@
+##Test weights
+gateway_0 = {
+	entity = "construction_platform_entity"
+	construction_entity = "construction_platform_entity"
+	portrait = "GFX_megastructure_construction_background"
+	place_entity_on_planet_plane = no
+	build_outside_gravity_well = yes 
+	show_galactic_map_icon = no
+	build_time = 1080
+	build_cost = {
+		minerals = 10000
+		influence = 100
+	}
+	construction_blocks_others = no
+
+	potential = {
+		has_technology = tech_gateway_construction
+	}
+
+	possible = {
+		custom_tooltip = {
+			fail_text = "requires_inside_border"
+			is_inside_border = from
+		}
+		custom_tooltip = {
+			fail_text = "requires_surveyed_system"
+			NOT = {
+				any_planet = {
+					is_surveyed = {
+						who = prev.from
+						status = no
+					}
+				}
+			}
+		}
+		custom_tooltip = {
+			fail_text = "requires_no_existing_gateway"
+			NOR = {
+				has_megastructure = gateway_0
+				has_megastructure = gateway_ruined
+				has_megastructure = gateway_restored
+				has_megastructure = gateway_final
+			}
+		}
+		custom_tooltip = {
+			fail_text = "requires_technology_gateway_construction"
+			from = { has_technology = tech_gateway_construction }
+		}
+	}
+
+	placement_rules = {
+	}
+	
+	ai_weight = {
+		factor = 5
+		
+		modifier = {
+            factor = 0
+            has_star_flag = yes
+            #error
+            has_ship_flag = yes
+			starbase = { NOT = { has_starbase_size >= starbase_starfortress } }
+		}	
+
+		modifier = {
+			factor = 0
+			any_neighbor_system = { 
+				OR = {
+					has_megastructure = gateway_0
+					has_megastructure = gateway_ruined
+					has_megastructure = gateway_restored
+					has_megastructure = gateway_final
+				}
+			}
+		}		
+	}
+	
+	on_build_start = {}
+	on_build_cancel = {}	
+	on_build_complete = {}
+}

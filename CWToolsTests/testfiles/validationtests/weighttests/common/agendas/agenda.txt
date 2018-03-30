@@ -1,0 +1,34 @@
+##Test agenda weight_modifiers
+agenda_defensive_focus = {
+	weight_modifier = {
+		weight = 100
+		modifier = {
+			factor = 1.5
+				from = {
+					has_ethic = ethic_militarist
+				}
+			}
+		modifier = {
+			factor = 2
+				from = {
+					has_ethic = ethic_fanatic_militarist
+				}
+			}
+		modifier = {
+			factor = 1.5
+			leader_class = admiral
+			#error
+			has_planet_flag = yes
+		}
+		modifier = {
+			factor = 2
+			leader_class = general
+		}
+	}
+	
+	modifier = {
+		shipclass_military_station_build_cost_mult = -0.15
+		shipclass_military_station_damage_mult = 0.25
+		shipclass_military_station_hull_mult = 0.25
+	}
+}
