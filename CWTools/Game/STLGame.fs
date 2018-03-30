@@ -353,7 +353,8 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
 
         let validateTechnology (entities : (string * Node) list) =
             let tech = entities |> List.filter (fun (f, _) -> f.Contains("common/technology/")) 
-            tech |> List.iter (fun (f, t) -> eprintfn "%s" f)
+            tech
+            // tech |> List.iter (fun (f, t) -> eprintfn "%s" f)
             
         let validateEvents (entities : Node list) =
             let events = entities |> List.choose (function | :? Event as e -> Some e |_ -> None)
@@ -366,7 +367,7 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
                 let timer = new System.Diagnostics.Stopwatch()
                 timer.Start()
                 let returnValue = f()
-                eprintfn "Elapsed Time: %i %s" timer.ElapsedMilliseconds s
+                //eprintfn "Elapsed Time: %i %s" timer.ElapsedMilliseconds s
                 returnValue
             eprintfn "Validating %i files" (entities.Length)
             let allEntitiesByFile = entities |> List.map (fun (f, _) -> f.entity)

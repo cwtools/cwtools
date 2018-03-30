@@ -49,24 +49,24 @@ and Node (key : string, pos : Position) =
     member val Scope : Scope = Scope.Any with get, set
     member this.All with get () = this.AllChildren |> List.ofSeq
     member this.All with set(value : Child list) = this.AllChildren <- (value |> ResizeArray<Child>)
-    member this.Nodes = this.All |> Seq.choose (function |NodeC n -> Some n |_ -> None)
+    member this.Nodes = this.AllChildren |> Seq.choose (function |NodeC n -> Some n |_ -> None)
     member this.Children = this.Nodes |> List.ofSeq
-    member this.Leaves = this.All |> Seq.choose (function |LeafC l -> Some l |_ -> None)
+    member this.Leaves = this.AllChildren |> Seq.choose (function |LeafC l -> Some l |_ -> None)
     member this.Values = this.Leaves |> List.ofSeq
-    member this.Comments = this.All |> Seq.choose (function |CommentC c -> Some c |_ -> None)
-    member this.LeafValues = this.All |> Seq.choose(function |LeafValueC lv -> Some lv |_ -> None)
-    member this.Has x = this.All |> (Seq.exists (bothFind x))
-    member this.Tag x = this.Values |> Seq.tryPick (function |l when l.Key = x -> Some l.Value |_ -> None)
-    member this.Leafs x = this.Values |> Seq.choose (function |l when l.Key = x -> Some l |_ -> None)
-    member this.Tags x = this.Values |> Seq.choose (function |l when l.Key = x -> Some l.Value |_ -> None)
+    member this.Comments = this.AllChildren |> Seq.choose (function |CommentC c -> Some c |_ -> None)
+    member this.LeafValues = this.AllChildren |> Seq.choose(function |LeafValueC lv -> Some lv |_ -> None)
+    member this.Has x = this.AllChildren |> (Seq.exists (bothFind x))
+    member this.Tag x = this.Leaves |> Seq.tryPick (function |l when l.Key = x -> Some l.Value |_ -> None)
+    member this.Leafs x = this.Leaves |> Seq.choose (function |l when l.Key = x -> Some l |_ -> None)
+    member this.Tags x = this.Leaves |> Seq.choose (function |l when l.Key = x -> Some l.Value |_ -> None)
     member this.TagText x = this.Tag x |> function |Some (QString s) -> s |Some s -> s.ToString() |None -> ""
     member this.TagsText x = this.Tags x |> Seq.map (function |(QString s) -> s |s -> s.ToString())
-    member this.SetTag x v = this.All <- this.All |> List.ofSeq |>  List.replaceOrAdd (bothFind x) (fun _ -> v) v
-    member this.Child x = this.Children |> Seq.tryPick (function |c when c.Key = x -> Some c |_ -> None)
-    member this.Childs x = this.Children |> Seq.choose (function |c when c.Key = x -> Some c |_ -> None)
+    member this.SetTag x v = this.All <- this.AllChildren |> List.ofSeq |>  List.replaceOrAdd (bothFind x) (fun _ -> v) v
+    member this.Child x = this.Nodes |> Seq.tryPick (function |c when c.Key = x -> Some c |_ -> None)
+    member this.Childs x = this.Nodes |> Seq.choose (function |c when c.Key = x -> Some c |_ -> None)
 
     [<JsonIgnore>]
-    member this.ToRaw : Statement list = this.All |> List.ofSeq |> List.rev |>
+    member this.ToRaw : Statement list = this.All |> List.rev |>
                                          List.map (function 
                                            |NodeC n -> KeyValue(PosKeyValue(n.Position, KeyValueItem(Key n.Key, Clause n.ToRaw)))
                                            |LeafValueC lv -> lv.ToRaw
@@ -140,7 +140,20 @@ module ProcessCore =
                         cont(fCombine resNode accTail) ))
             | [] -> cont acc
         loop [node] id
-    
+
+    let foldNode3 fNode acc (node : Node) =
+        let rec loop nodes cont =
+            seq {
+            match nodes with
+            | (x : Node)::tail ->
+                yield! loop x.Children (fun accChildren ->
+                    let resNode = fNode x accChildren
+                    loop tail (fun accTail ->
+                        cont(seq {yield resNode; yield! accTail})))
+                        // cont(fCombine resNode accTail) ))
+            | [] -> yield! cont acc
+            }
+        loop [node] id    
     let rec cata fNode (node:Node) :'r =
         let recurse = cata fNode
         fNode node (node.Children |> Seq.map recurse)

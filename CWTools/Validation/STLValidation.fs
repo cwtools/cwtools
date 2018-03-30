@@ -702,7 +702,6 @@ module STLValidation =
 
 
     let computeSTLData (e : Entity) =
-        eprintfn "%A" (e.filepath)
         let eventIds = if e.entityType = EntityType.Events then e.entity.Children |> List.choose (function | :? Event as e -> Some e.ID |_ -> None) else []
         {
             eventids = eventIds

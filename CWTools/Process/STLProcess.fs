@@ -121,7 +121,6 @@ module STLProcess =
         let scopes = scriptedTriggerScope firstRun effects triggers node.Key node
         let commentString = comments |> List.truncate 5 |> String.concat("\n")
         let globals = findAllSavedGlobalEventTargets node
-        globals |> Set.toList |> List.iter (fun g -> eprintf "%s" g )
         let savetargets = findAllSavedEventTargets node
         let usedtargets = findAllUsedEventTargets node
         ScriptedEffect(node.Key, scopes, effectType, commentString, globals |> Set.toList, savetargets |> Set.toList, usedtargets |> Set.toList)
