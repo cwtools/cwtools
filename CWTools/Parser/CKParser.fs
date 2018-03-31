@@ -200,7 +200,37 @@ module CKParser =
     
     let valueClause = clause (many statement) |>> Clause <?> "statement clause"
 
-    do valueimpl := choiceL [valueQ; (attempt valueBlock); valueClause; (attempt valueB); (attempt valueI); (attempt valueF); (attempt hsv); (attempt rgb); valueS] "value"
+    let valueCustom : Parser<Value, unit> =
+        fun (stream: CharStream<_>) ->
+            match stream.Peek() with
+            | '{' -> 
+                let vc = (attempt valueClause stream)
+                if vc.Status = Ok then vc else
+                    let vb = (attempt valueBlock stream)
+                    if vb.Status <> Ok then vc else vb
+                // let vb = (attempt valueBlock stream)
+                // if vb.Status = Ok then vb else valueClause stream
+            | '"' -> valueQ stream
+            | x when isDigit x -> 
+                let i = (attempt valueI stream)
+                if i.Status = Ok then i else
+                    let f = (attempt valueF stream)
+                    if f.Status = Ok then f else
+                    valueS stream
+            | _ -> 
+                match stream.PeekString 3, stream.PeekString 2 with
+                | "rgb", _ -> rgb stream
+                | "hsv", _ -> hsv stream
+                | "yes", _ -> (attempt valueB <|> valueS) stream
+                | _, "no" -> (attempt valueB <|> valueS) stream
+                | _ -> valueS stream
+                //| _ -> choice [(attempt valueB); valueS] stream
+                //choiceL [(attempt valueB); (attempt hsv); (attempt rgb); valueS] "value" stream
+
+    
+
+    do valueimpl := valueCustom
+        //choiceL [valueQ; (attempt valueB); (attempt valueI); (attempt valueF); (attempt hsv); (attempt rgb); (attempt valueS); (attempt valueBlock); valueClause;] "value"
     
     do keyvalueimpl := pipe3 (getPosition) ((keyQ <|> key) .>> operator) (value) (fun pos id value -> KeyValue(PosKeyValue(Position pos, KeyValueItem(id, value))))
     let alle = ws >>. many statement .>> eof |>> (fun f -> (EventFile f : EventFile))

@@ -141,19 +141,43 @@ module ProcessCore =
             | [] -> cont acc
         loop [node] id
 
-    let foldNode3 fNode acc (node : Node) =
+    let foldNode3 fNode (node : Node) =
         let rec loop nodes cont =
-            seq {
+            //Rewrite to use a parralel seq for each child
             match nodes with
             | (x : Node)::tail ->
-                yield! loop x.Children (fun accChildren ->
-                    let resNode = fNode x accChildren
+                let y = loop x.Children (fun a ->
+                    let resNode = fNode x
                     loop tail (fun accTail ->
-                        cont(seq {yield resNode; yield! accTail})))
+                        cont(seq {yield! resNode; yield! accTail})))
+                y
                         // cont(fCombine resNode accTail) ))
-            | [] -> yield! cont acc
+            | [] -> 
+                let x = cont Seq.empty
+                x
+            
+        loop [node] id |> List.ofSeq
+
+    let foldNode4 fNode (node : Node) =
+        let rec loop (nodes : seq<Node>) =
+            seq { 
+                yield! nodes |> Seq.collect fNode
+                let x = nodes |> Seq.collect (fun n -> n.Nodes)
+                yield! loop x
             }
-        loop [node] id    
+        loop (seq { yield node}) |> List.ofSeq
+
+
+    let foldNode5 fNode (node:Node) =
+        let rec loop nodes cont =
+            match nodes with
+            | (x : Node)::tail ->
+                loop x.Children (fun a ->
+                    let resNode = fNode x
+                    loop tail (fun accTail ->
+                        cont(seq {yield! a; yield! resNode; yield! accTail}) ))
+            | [] -> cont Seq.empty
+        loop [node] id
     let rec cata fNode (node:Node) :'r =
         let recurse = cata fNode
         fNode node (node.Children |> Seq.map recurse)

@@ -16,11 +16,17 @@ open System.IO
 open System.Reflection
 open CWTools.Parser.DocsParser
 
-let perf() = 
+let perf(b) = 
+    let timer = new System.Diagnostics.Stopwatch()
+    timer.Start()
     let triggers, effects = parseDocsFile "./testfiles/validationtests/trigger_docs_0.2.txt" |> (function |Success(p, _, _) -> DocsParser.processDocs p)
     let stl = STLGame("./testfiles/performancetest/", FilesScope.All, "", triggers, effects, [], [], [STL STLLang.English], false, true)
-    let errors = stl.ValidationErrors |> List.map (fun (c, s, n, l, f, k) -> Position.UnConv n)
-    let testVals = stl.AllEntities |> List.map (fun (e, _) -> e.filepath, Tests.getNodeComments e.entity |> List.map fst)
+    if b then
+        let errors = stl.ValidationErrors |> List.map (fun (c, s, n, l, f, k) -> Position.UnConv n)
+        let testVals = stl.AllEntities
+        ()
+    else ()
+    eprintfn "Elapsed Time: %i" timer.ElapsedMilliseconds
     ()
 
 let test() =
@@ -31,7 +37,9 @@ let test() =
 let main argv =
     Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
     if Array.tryHead argv = Some "p"
-    then perf(); 0
+    then perf(true); 0
+    elif Array.tryHead argv = Some "o"
+    then perf(false); 0
     elif Array.tryHead argv = Some "t"
     then test(); 0
     else Tests.runTestsInAssembly defaultConfig argv
