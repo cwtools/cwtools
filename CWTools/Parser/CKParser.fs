@@ -134,13 +134,13 @@ module CKParser =
     // =======
     let whitespaceTextChars = " \t\r\n"
     let norseChars =['ö';'ð';'æ';'ó';'ä';'Þ';'Å';'Ö']
-    let idchar = choice [letter; digit; anyOf ['_'; ':'; '@'; '.'; '\"'; '-'; ''']]
-    let valuechar = choice [letter; digit; anyOf (['_'; '.'; '-'; ':'; '\''; '['; ']'; '@';'''; '+'; '`'; '%'; '/'; '!'] @ ['š'; 'Š'; '’'])]
+    let idchar = choiceL [letter; digit; anyOf ['_'; ':'; '@'; '.'; '\"'; '-'; ''']] "id character"
+    let valuechar = choiceL [letter; digit; anyOf (['_'; '.'; '-'; ':'; '\''; '['; ']'; '@';'''; '+'; '`'; '%'; '/'; '!'] @ ['š'; 'Š'; '’'])] "value character"
 
 
     // Utility parsers
     // =======
-    let ws = (skipMany spaces1) <?> "whitespace"
+    let ws = (optional spaces1) <?> "whitespace"
     let str s = pstring s .>> ws <?> ("string " + s)
     let strSkip s = skipString s .>> ws <?> ("skip string " + s)
     let ch c = pchar c .>> ws <?> ("char " + string c)
@@ -164,6 +164,8 @@ module CKParser =
 
     let valueB = ( (skipString "yes") .>> notFollowedBy (valuechar) .>> ws  |>> (fun _ -> Bool(true))) <|>
                     ((skipString "no") .>> notFollowedBy (valuechar) .>> ws  |>> (fun _ -> Bool(false)))
+    let valueBYes = skipString "yes" .>> notFollowedBy (valuechar) .>> ws |>> (fun _ -> Bool(true))
+    let valueBNo = skipString "no" .>> notFollowedBy (valuechar) .>> ws |>> (fun _ -> Bool(false))
 
     let valueI = pint64 .>> notFollowedBy (valuechar) .>> ws |>> int |>> Int
     let valueF = pfloat .>> notFollowedBy (valuechar) .>> ws |>> float |>> Float     
@@ -201,28 +203,34 @@ module CKParser =
     let valueClause = clause (many statement) |>> Clause <?> "statement clause"
 
     let valueCustom : Parser<Value, unit> =
+        let vcP = attempt valueClause
+        let vbP = attempt valueBlock
+        let iP = attempt valueI
+        let fP = attempt valueF
+        let byP = attempt valueBYes <|> valueS
+        let bnP = attempt valueBNo <|> valueS
         fun (stream: CharStream<_>) ->
             match stream.Peek() with
             | '{' -> 
-                let vc = (attempt valueClause stream)
+                let vc = (vcP stream)
                 if vc.Status = Ok then vc else
-                    let vb = (attempt valueBlock stream)
+                    let vb = (vbP stream)
                     if vb.Status <> Ok then vc else vb
                 // let vb = (attempt valueBlock stream)
                 // if vb.Status = Ok then vb else valueClause stream
             | '"' -> valueQ stream
             | x when isDigit x -> 
-                let i = (attempt valueI stream)
+                let i = (iP stream)
                 if i.Status = Ok then i else
-                    let f = (attempt valueF stream)
+                    let f = (fP stream)
                     if f.Status = Ok then f else
                     valueS stream
             | _ -> 
                 match stream.PeekString 3, stream.PeekString 2 with
                 | "rgb", _ -> rgb stream
                 | "hsv", _ -> hsv stream
-                | "yes", _ -> (attempt valueB <|> valueS) stream
-                | _, "no" -> (attempt valueB <|> valueS) stream
+                | "yes", _ -> byP stream
+                | _, "no" -> bnP stream
                 | _ -> valueS stream
                 //| _ -> choice [(attempt valueB); valueS] stream
                 //choiceL [(attempt valueB); (attempt hsv); (attempt rgb); valueS] "value" stream
@@ -263,10 +271,10 @@ module CKParser =
                 let temp = memFunction(n)
                 dict.Add(keyFunction(n), temp)
                 temp
-    let parseString fileString filename =
-        let inner = (fun (file, name) -> runParserOnString all () name file)
-        let hash = (fun (file, name) -> file.GetHashCode(), name)
-        (memoize hash inner) (fileString, filename)
+    let parseString fileString filename = runParserOnString all () filename fileString
+        // let inner = (fun (file, name) -> runParserOnString all () name file)
+        // let hash = (fun (file, name) -> file.GetHashCode(), name)
+        // (memoize hash inner) (fileString, filename)
     let parseEventString fileString fileName =
         let inner = (fun (file, name) -> runParserOnString alle () name file)
         let hash = (fun (file, name) -> file.GetHashCode(), name)
