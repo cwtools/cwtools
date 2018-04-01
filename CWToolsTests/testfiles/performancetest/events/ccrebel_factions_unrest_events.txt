@@ -1,0 +1,58 @@
+namespace = unrest
+
+# This = country, planet owner
+# From = country, attack leader
+# FromFrom = planet
+
+# Revolt Suppressed #
+country_event = {
+	id = unrest.4235
+	title = unrest.4235.name
+	desc = {
+		trigger = { NOT = { has_ethic = ethic_gestalt_consciousness } }
+		text = unrest.4235.desc
+	}
+	desc = {
+		trigger = { has_ethic = ethic_gestalt_consciousness }
+		text = unrest.4235.desc.gesta
+	}
+	picture = {
+		picture = GFX_evt_alien_propaganda
+		trigger = { NOT = { has_ethic = ethic_gestalt_consciousness } }
+	}
+	picture = {
+		picture = GFX_evt_satellite_in_orbit
+		trigger = { has_ethic = ethic_gestalt_consciousness }
+	}
+	show_sound = event_celebration
+	location = FromFrom
+
+	trigger = {
+		is_country_type = default
+		FromFrom = {
+			has_planet_flag = revolt_in_progress
+			controller = { is_same_value = root }
+			NOR = {
+				has_planet_flag = cc_faction_revolt_planet
+				has_planet_flag = cc_faction_revolt_capital
+			}
+		}
+	}
+
+	is_triggered_only = yes
+
+	immediate = {
+		FromFrom = { remove_planet_flag = revolt_in_progress }
+	}
+
+	option = {
+		name = unrest.4235.a
+		FromFrom = {
+			add_modifier = {
+				modifier = revolt_suppressed_2
+				days = 3600
+			}
+		}
+		custom_tooltip = unrest.161.a.tooltip
+	}
+}

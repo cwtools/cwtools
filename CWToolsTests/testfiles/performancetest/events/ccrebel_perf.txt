@@ -1,0 +1,437 @@
+
+namespace = ccrebel_perf
+
+#monthly
+event = {
+	id = ccrebel_perf.1
+	is_triggered_only = yes
+	hide_window = yes
+	
+	immediate = {
+		every_country = {
+			every_owned_planet = {
+				limit = {
+					count_pops = {
+						limit = { has_ethic = ethic_spiritualist }
+						count > 2
+					}
+				}
+				set_timed_planet_flag = {
+					flag = ccrebel_perf_spiritualists_1
+					days = 31
+				}
+				if = {
+					limit = {
+						count_pops = {
+							limit = { has_ethic = ethic_spiritualist }
+							count > 5
+						}
+					}
+					set_timed_planet_flag = {
+						flag = ccrebel_perf_spiritualists_2
+						days = 31
+					}
+					if = {
+						limit = {
+							owner = {
+								OR = {
+									has_ethic = ethic_materialist
+									has_ethic = ethic_fanatic_materialist
+								}
+							}
+						}
+						set_timed_planet_flag = {
+							flag = cc_opposite_ethic_to_ruler
+							days = 31
+						}
+					}
+				}
+			}
+			every_owned_planet = {
+				limit = {
+					pop_percentage = {
+						limit = { has_ethic = ethic_spiritualist }
+						percentage > 0.49
+					}
+				}
+				set_timed_planet_flag = {
+					flag = ccrebel_perf_spiritualists_3
+					days = 31
+				}
+			}
+			
+			every_owned_planet = {
+				limit = {
+					count_pops = {
+						limit = { has_ethic = ethic_authoritarian }
+						count > 2
+					}
+				}
+				set_timed_planet_flag = {
+					flag = ccrebel_perf_authoritarians_1
+					days = 31
+				}
+				if = {
+					limit = {
+						count_pops = {
+							limit = { has_ethic = ethic_authoritarian }
+							count > 5
+						}
+					}
+					set_timed_planet_flag = {
+						flag = ccrebel_perf_authoritarians_2
+						days = 31
+					}
+					if = {
+						limit = {
+							owner = {
+								OR = {
+									has_ethic = ethic_egalitarian
+									has_ethic = ethic_fanatic_egalitarian
+								}
+							}
+						}
+						set_timed_planet_flag = {
+							flag = cc_opposite_ethic_to_ruler
+							days = 31
+						}
+					}
+				}
+			}
+			every_owned_planet = {
+				limit = {
+					pop_percentage = {
+						limit = { has_ethic = ethic_authoritarian }
+						percentage > 0.49
+					}
+				}
+				set_timed_planet_flag = {
+					flag = ccrebel_perf_authoritarians_3
+					days = 31
+				}
+			}
+			
+			every_owned_planet = {
+				limit = {
+					count_pops = {
+						limit = { has_ethic = ethic_xenophile }
+						count > 2
+					}
+				}
+				set_timed_planet_flag = {
+					flag = ccrebel_perf_xenophiles_1
+					days = 31
+				}
+				if = {
+					limit = {
+						count_pops = {
+							limit = { has_ethic = ethic_xenophile }
+							count > 5
+						}
+					}
+					set_timed_planet_flag = {
+						flag = ccrebel_perf_xenophiles_2
+						days = 31
+					}
+					if = {
+						limit = {
+							owner = {
+								OR = {
+									has_ethic = ethic_xenophobe
+									has_ethic = ethic_fanatic_xenophobe
+								}
+							}
+						}
+						set_timed_planet_flag = {
+							flag = cc_opposite_ethic_to_ruler
+							days = 31
+						}
+					}
+				}
+			}
+			every_owned_planet = {
+				limit = {
+					pop_percentage = {
+						limit = { has_ethic = ethic_xenophile }
+						percentage > 0.49
+					}
+				}
+				set_timed_planet_flag = {
+					flag = ccrebel_perf_xenophiles_3
+					days = 31
+				}
+			}
+			
+			every_owned_planet = {
+				limit = {
+					count_pops = {
+						limit = { has_ethic = ethic_materialist }
+						count > 2
+					}
+				}
+				set_timed_planet_flag = {
+					flag = ccrebel_perf_materialists_1
+					days = 31
+				}
+				if = {
+					limit = {
+						count_pops = {
+							limit = { has_ethic = ethic_materialist }
+							count > 5
+						}
+					}
+					set_timed_planet_flag = {
+						flag = ccrebel_perf_materialists_2
+						days = 31
+					}
+					if = {
+						limit = {
+							owner = {
+								OR = {
+									has_ethic = ethic_spiritualist
+									has_ethic = ethic_fanatic_spiritualist
+								}
+							}
+						}
+						set_timed_planet_flag = {
+							flag = cc_opposite_ethic_to_ruler
+							days = 31
+						}
+					}
+				}
+			}
+			every_owned_planet = {
+				limit = {
+					pop_percentage = {
+						limit = { has_ethic = ethic_materialist }
+						percentage > 0.49
+					}
+				}
+				set_timed_planet_flag = {
+					flag = ccrebel_perf_materialists_3
+					days = 31
+				}
+			}
+			
+			every_owned_planet = {
+				limit = {
+					count_pops = {
+						limit = { has_ethic = ethic_xenophobe }
+						count > 2
+					}
+				}
+				set_timed_planet_flag = {
+					flag = ccrebel_perf_xenophobes_1
+					days = 31
+				}
+				if = {
+					limit = {
+						count_pops = {
+							limit = { has_ethic = ethic_xenophobe }
+							count > 5
+						}
+					}
+					set_timed_planet_flag = {
+						flag = ccrebel_perf_xenophobes_2
+						days = 31
+					}
+					if = {
+						limit = {
+							owner = {
+								OR = {
+									has_ethic = ethic_xenophile
+									has_ethic = ethic_fanatic_xenophile
+								}
+							}
+						}
+						set_timed_planet_flag = {
+							flag = cc_opposite_ethic_to_ruler
+							days = 31
+						}
+					}
+				}
+			}
+			every_owned_planet = {
+				limit = {
+					pop_percentage = {
+						limit = { has_ethic = ethic_xenophobe }
+						percentage > 0.49
+					}
+				}
+				set_timed_planet_flag = {
+					flag = ccrebel_perf_xenophobes_3
+					days = 31
+				}
+			}
+			
+			every_owned_planet = {
+				limit = {
+					count_pops = {
+						limit = { has_ethic = ethic_egalitarian }
+						count > 2
+					}
+				}
+				set_timed_planet_flag = {
+					flag = ccrebel_perf_egalitarians_1
+					days = 31
+				}
+				if = {
+					limit = {
+						count_pops = {
+							limit = { has_ethic = ethic_egalitarian }
+							count > 5
+						}
+					}
+					set_timed_planet_flag = {
+						flag = ccrebel_perf_egalitarians_2
+						days = 31
+					}
+					if = {
+						limit = {
+							owner = {
+								OR = {
+									has_ethic = ethic_authoritarian
+									has_ethic = ethic_fanatic_authoritarian
+								}
+							}
+						}
+						set_timed_planet_flag = {
+							flag = cc_opposite_ethic_to_ruler
+							days = 31
+						}
+					}
+				}
+			}
+			every_owned_planet = {
+				limit = {
+					pop_percentage = {
+						limit = { has_ethic = ethic_egalitarian }
+						percentage > 0.49
+					}
+				}
+				set_timed_planet_flag = {
+					flag = ccrebel_perf_egalitarians_3
+					days = 31
+				}
+			}
+			
+			every_owned_planet = {
+				limit = {
+					count_pops = {
+						limit = { has_ethic = ethic_pacifist }
+						count > 2
+					}
+				}
+				set_timed_planet_flag = {
+					flag = ccrebel_perf_pacifists_1
+					days = 31
+				}
+				if = {
+					limit = {
+						count_pops = {
+							limit = { has_ethic = ethic_pacifist }
+							count > 5
+						}
+					}
+					set_timed_planet_flag = {
+						flag = ccrebel_perf_pacifists_2
+						days = 31
+					}
+					if = {
+						limit = {
+							owner = {
+								OR = {
+									has_ethic = ethic_militarist
+									has_ethic = ethic_fanatic_militarist
+								}
+							}
+						}
+						set_timed_planet_flag = {
+							flag = cc_opposite_ethic_to_ruler
+							days = 31
+						}
+					}
+				}
+			}
+			every_owned_planet = {
+				limit = {
+					pop_percentage = {
+						limit = { has_ethic = ethic_pacifist }
+						percentage > 0.49
+					}
+				}
+				set_timed_planet_flag = {
+					flag = ccrebel_perf_pacifists_3
+					days = 31
+				}
+			}
+			
+			every_owned_planet = {
+				limit = {
+					count_pops = {
+						limit = { has_ethic = ethic_militarist }
+						count > 2
+					}
+				}
+				set_timed_planet_flag = {
+					flag = ccrebel_perf_militarists_1
+					days = 31
+				}
+				if = {
+					limit = {
+						count_pops = {
+							limit = { has_ethic = ethic_militarist }
+							count > 5
+						}
+					}
+					set_timed_planet_flag = {
+						flag = ccrebel_perf_militarists_2
+						days = 31
+					}
+					if = {
+						limit = {
+							owner = {
+								OR = {
+									has_ethic = ethic_pacifist
+									has_ethic = ethic_fanatic_pacifist
+								}
+							}
+						}
+						set_timed_planet_flag = {
+							flag = cc_opposite_ethic_to_ruler
+							days = 31
+						}
+					}
+				}
+			}
+			every_owned_planet = {
+				limit = {
+					pop_percentage = {
+						limit = { has_ethic = ethic_militarist }
+						percentage > 0.49
+					}
+				}
+				set_timed_planet_flag = {
+					flag = ccrebel_perf_militarists_3
+					days = 31
+				}
+			}
+			
+			if = {
+				limit = { allows_slavery = yes }
+				every_owned_planet = {
+					limit = {
+						pop_percentage = {
+							percentage > 0.66
+							limit = { is_enslaved = yes }
+						}
+					}
+					set_timed_planet_flag = {
+						flag = ccrebel_perf_slaves_maj
+						days = 31
+					}
+				}
+			}
+		}
+	}
+}

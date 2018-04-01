@@ -35,16 +35,16 @@ module STLProcess =
                         |> List.map (
                             function
                             | x when x.Key = root -> 
-                                allScopes
+                                allScopesSet
                             | x when (x.Key.StartsWith("event_target:", StringComparison.OrdinalIgnoreCase)) ->
-                                allScopes
+                                allScopesSet
                             // | x when targetKeys |> List.exists (fun y -> y == x.Key) ->
                             //     allScopes
                             | x when anyBlockKeys |> List.exists (fun y -> y == x.Key) ->
                                 scriptedTriggerScope strict effects triggers root x
                             | x when triggerBlockKeys |> List.exists (fun y -> y == x.Key) -> 
                                 scriptedTriggerScope strict triggers triggers root x
-                            | x -> STLScopes.sourceScope effects x.Key
+                            | x -> STLScopes.sourceScope effects x.Key |> Set.ofList
                                 // match STLScopes.sourceScope x.Key with
                                 // | Some v -> v
                                 // | None -> effects |> List.filter (fun (n, _) -> n = x.Key) |> List.map (fun (_, ss) -> ss) |> List.collect id
@@ -53,38 +53,20 @@ module STLProcess =
                         //|> List.filter (fun v -> v.Key.StartsWith("@"))
                         |> List.map (
                             function
-                            | x when x.Key.StartsWith("@") -> allScopes
-                            | x when x.Key = root -> allScopes
-                            | x -> effects |> List.tryFind (fun e -> e.Name = x.Key) |> (function |Some e -> e.Scopes |None -> [])
+                            | x when x.Key.StartsWith("@", StringComparison.OrdinalIgnoreCase) -> allScopesSet
+                            | x when x.Key = root -> allScopesSet
+                            | x -> effects |> List.tryFind (fun e -> e.Name = x.Key) |> (function |Some e -> e.ScopesSet |None -> Set.empty)
                            )
-        let combinedScopes = nodeScopes @ valueScopes |> List.map (function | [] -> (if strict then [] else allScopes) |x -> x)
-        combinedScopes |> List.fold (fun a b -> Set.intersect (Set.ofList a) (Set.ofList b) |> Set.toList) allScopes
-        // let valueTriggers = node.Values |> List.choose (fun v -> if List.contains v.Key anyBlockKeys then None else Some v.Key)
-        // //valueTriggers |> List.iter (fun f -> printfn "%A" f)
-        // let nodeScopeChanges = node.Children |> List.choose (fun v -> sourceScope v.Key) //|> List.map (fun x -> [x])
-        // let nodeSameScope = node.Children |> List.choose (fun v -> match sourceScope v.Key with |Some s -> None |None -> Some v)
-        // let nodeTriggers = nodeSameScope |> List.choose (fun v -> if List.contains v.Key anyBlockKeys then None else Some v.Key)
-        // let nodeLimit = nodeSameScope |> List.choose (fun v -> if List.contains v.Key triggerBlockKeys then Some v else None)
-        // let valueScopes = (valueTriggers @ nodeTriggers)
-        //                 |> List.map (fun v -> 
-        //                     effects 
-        //                     |> List.filter (fun (n, ss) -> n = v)
-        //                     |> List.map (fun (n, ss) -> ss)
-        //                     |> List.collect id)
-        // let nodeRecTriggers = nodeSameScope |> List.choose (fun v -> if List.contains v.Key anyBlockKeys && not (List.contains v.Key triggerBlockKeys) then Some v else None)
+        let combinedScopes = nodeScopes @ valueScopes |> List.map (function | x when Set.isEmpty x -> (if strict then Set.empty else allScopesSet) |x -> x)
+        combinedScopes |> List.fold Set.intersect allScopesSet
+        //combinedScopes |> List.fold (fun a b -> Set.intersect (Set.ofList a) (Set.ofList b) |> Set.toList) allScopes
         
-        // let nodeScopes =
-        //     nodeRecTriggers
-        //     |> List.map (scriptedTriggerScope effects triggers)
-        // let limitScopes = nodeLimit |> List.map (scriptedTriggerScope triggers triggers)
-        //nodeScopes @ valueScopes @ nodeScopeChanges @ limitScopes
-        //        |> List.fold (fun a b -> Set.intersect (Set.ofList a) (Set.ofList b) |> Set.toList) allScopes
     let findAllUsedEventTargets (event : Node) =
         let fNode = (fun (x : Node) children ->
                         let targetFromString (k : string) = k.Substring(13).Split('.').[0]
-                        let inner (leaf : Leaf) = if leaf.Value.ToRawString().StartsWith("event_target:") then Some (leaf.Value.ToRawString() |> targetFromString) else None
+                        let inner (leaf : Leaf) = if leaf.Value.ToRawString().StartsWith("event_target:", StringComparison.OrdinalIgnoreCase) then Some (leaf.Value.ToRawString() |> targetFromString) else None
                         match x.Key with
-                        |k when k.StartsWith("event_target:") -> 
+                        |k when k.StartsWith("event_target:", StringComparison.OrdinalIgnoreCase) -> 
                            targetFromString k :: ((x.Values |> List.choose inner) @ children)     
                         |_ ->                      
                             ((x.Values |> List.choose inner) @ children)    
@@ -103,7 +85,7 @@ module STLProcess =
 
     let findAllExistsEventTargets (event : Node) =
         let fNode = (fun (x : Node) children ->
-                        let inner (leaf : Leaf) = if leaf.Key == "exists" && leaf.Value.ToRawString().StartsWith("event_target:") then Some (leaf.Value.ToRawString().Substring(13).Split('.').[0]) else None
+                        let inner (leaf : Leaf) = if leaf.Key == "exists" && leaf.Value.ToRawString().StartsWith("event_target:", StringComparison.OrdinalIgnoreCase) then Some (leaf.Value.ToRawString().Substring(13).Split('.').[0]) else None
                         (x.Values |> List.choose inner) @ children
                         )
         let fCombine = (@)
@@ -123,7 +105,7 @@ module STLProcess =
         let globals = findAllSavedGlobalEventTargets node
         let savetargets = findAllSavedEventTargets node
         let usedtargets = findAllUsedEventTargets node
-        ScriptedEffect(node.Key, scopes, effectType, commentString, globals |> Set.toList, savetargets |> Set.toList, usedtargets |> Set.toList)
+        ScriptedEffect(node.Key, scopes |> Set.toList, effectType, commentString, globals |> Set.toList, savetargets |> Set.toList, usedtargets |> Set.toList)
 
     type Ship (key, pos) =
         inherit Node(key, pos)

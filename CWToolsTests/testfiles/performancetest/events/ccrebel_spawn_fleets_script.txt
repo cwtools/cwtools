@@ -1,0 +1,241 @@
+namespace = rebellionscript
+
+
+# Initial rebels manage to take control of the planet, happens after the new owner is set, after the war is created.
+# This = Rebel Country
+# From = Planet
+# FromFrom = War
+
+country_event = {
+	id = rebellionscript.1
+	hide_window = yes
+	is_triggered_only = yes
+	
+	trigger = { from = { NOT = { has_planet_flag = cc_revolution } } }
+	
+	immediate = {
+			
+		save_event_target_as = cc_rebels
+		random_owned_pop = {
+			save_event_target_as = cc_rebels_pop
+		}
+		
+		#Unity
+		add_100_unity_per_year_passed = yes
+		
+		
+		
+		#Booster Modifier
+		add_modifier = {
+			modifier = "revolutionary_mobilisation"
+			days = 5400
+		}
+		country_event = { id = rebellionscript.1999 days = 5401 }
+			
+			
+		#Spawn the fleet
+		if = {
+			limit = { from = { num_pops < 12 } }
+			create_fleet_from_naval_cap = 0.375
+			last_created_fleet = {
+				set_location = from
+			}
+			else = {
+				if = {
+					limit = { from = { num_pops < 19 } }
+					create_fleet_from_naval_cap = 0.625
+					last_created_fleet = {
+						set_location = from
+					}
+					else = {
+						create_fleet_from_naval_cap = 0.75
+						last_created_fleet = {
+							set_location = from
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+country_event = {
+	id = rebellionscript.1999
+	hide_window = yes
+	is_triggered_only = yes 
+
+	trigger = { is_subject = no }
+
+	immediate = {
+		add_modifier = {
+			modifier = "revolutionary_mobilisation_0_5"
+			days = 3600
+		}
+	}
+}
+
+
+
+
+#Give country that rebels join some ships
+
+# Triggers country_event for the defender upon defeat
+# This = country, planet owner
+# From = country, attack leader
+# FromFrom = planet
+# Revolt Lost #
+country_event = {
+	id = rebellionscript.29
+	hide_window = yes
+
+	is_triggered_only = yes
+
+	trigger = {
+		From = { is_country_type = rebel }
+	}
+
+	immediate = {
+		
+		From = { #this one is needed to stop the annoying 'country destroyed' notifications
+			set_timed_country_flag = {
+				flag = cc_temporary_rebellion_marker@fromfrom
+				days = 13
+			}
+			save_event_target_as = ccrebel_lost_a_planet
+		}
+		
+		FromFrom = {
+
+			set_timed_planet_flag = {
+				flag = cc_recent_rebellion
+				days = 13
+			}
+			planet_event = { id = rebellionscript.30 days = 12 }
+		}	
+	}
+}
+
+planet_event = {
+	id = rebellionscript.30
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		exists = owner
+		has_planet_flag = cc_recent_rebellion
+		NOT = { owner = { has_country_flag = cc_temporary_rebellion_marker@root } }
+		owner = { has_country_flag = cc_rebellion }
+	}
+
+	immediate = {
+		
+		save_event_target_as = fatherland_cc_planet
+		
+		owner = {
+			save_event_target_as = fatherland_cc
+				
+			if = {
+				limit = { num_owned_planets < 4 }
+			
+				if = {
+					limit = { root = { num_pops < 13 NOT = { num_pops < 7 } } }
+					
+					create_fleet_from_naval_cap = 0.12
+					last_created_fleet = {
+						set_location = root
+					}
+					
+					else = {
+						if = {
+							limit = { root = { num_pops < 19 NOT = { num_pops < 7 } } }
+							
+							create_fleet_from_naval_cap = 0.24
+							last_created_fleet = {
+								set_location = root
+							}
+					
+							else = {
+								if = {
+									limit = { NOT = { num_pops < 7 } }
+									create_fleet_from_naval_cap = 0.36
+									last_created_fleet = {
+										set_location = root
+									}
+								}
+							}
+						}
+					}
+				}
+							
+				else = {
+					if = {
+						limit = {
+							num_owned_planets < 6
+						}
+						if = {
+							limit = { root = { num_pops < 13 NOT = { num_pops < 7 } } }
+							
+							create_fleet_from_naval_cap = 0.0675
+							last_created_fleet = {
+								set_location = root
+							}
+							
+							else = {
+								if = {
+									limit = { root = { num_pops < 19 NOT = { num_pops < 7 } } }
+									
+									create_fleet_from_naval_cap = 0.135
+									last_created_fleet = {
+										set_location = root
+									}
+							
+									else = {
+										if = {
+											limit = { NOT = { num_pops < 7 } }
+											create_fleet_from_naval_cap = 0.21
+											last_created_fleet = {
+												set_location = root
+											}
+										}
+									}
+								}
+							}
+						}
+						else = {
+							if = {
+								limit = { root = { num_pops < 13 NOT = { num_pops < 7 } } }
+								
+								create_fleet_from_naval_cap = 0.03
+								last_created_fleet = {
+									set_location = root
+								}
+								
+								else = {
+									if = {
+										limit = { root = { num_pops < 19 NOT = { num_pops < 7 } } }
+										
+										create_fleet_from_naval_cap = 0.06
+										last_created_fleet = {
+											set_location = root
+										}
+								
+										else = {
+											if = {
+												limit = { NOT = { num_pops < 7 } }
+												create_fleet_from_naval_cap = 0.09
+												last_created_fleet = {
+													set_location = root
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}

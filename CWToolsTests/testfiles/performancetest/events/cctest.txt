@@ -1,0 +1,36 @@
+
+namespace = cctest
+
+
+country_event = {
+	id = cctest.1
+	hide_window = yes
+	is_triggered_only = yes
+	
+	immediate = {
+	}
+}
+
+
+country_event = {
+	id = cctest.3
+	hide_window = yes
+	is_triggered_only = yes
+	
+	immediate = {
+		random_system_within_border = {
+			random_fleet_in_system = {
+				limit = {
+					any_owned_ship = {
+						is_ship_class = shipclass_starbase
+					}
+				}
+				add_modifier = {
+					modifier = dpe_starbase_talented_admiral
+					days = 10800
+				}
+			}
+		}
+	}
+}
+

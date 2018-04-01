@@ -1,0 +1,929 @@
+
+namespace = cc_events_blackmail
+
+#Blackmail Crisis
+country_event = {
+	id = cc_events_blackmail.20
+	title = cc_events_blackmail.20.name
+	desc = cc_events_blackmail.20.desc
+	
+	picture = GFX_evt_metropolis
+	
+	mean_time_to_happen = {
+		years = 100
+	}
+	
+	trigger = {
+		years_passed > 60
+		num_owned_planets > 7
+		NOT = { has_country_flag = cc_has_had_blackmail }
+		NOT = { has_ethic = ethic_gestalt_consciousness }
+		NOR = {
+			has_country_flag = cc_eventperf_has_overwhelming_rival
+			has_country_flag = cc_eventperf_has_superior_rival
+		}
+	}	
+	
+	immediate = {
+		set_timed_country_flag = {
+			flag = cc_has_had_blackmail
+			years = 60
+		}
+	}
+	
+	option = {
+		name = cc_events_blackmail.20.A
+		
+		add_modifier = {
+			modifier = cc_paid_blackmail
+			days = 360
+		}
+		ai_chance = {
+			factor = 2
+			
+			modifier = {
+				factor = 0.75
+				is_at_war = yes
+			}
+			modifier = {
+				factor = 0
+				is_at_war = yes
+				any_country = {
+					is_at_war_with = root
+					OR = {
+						relative_power = {
+							who = root
+							category = fleet
+							value = superior
+						}
+						relative_power = {
+							who = root
+							category = fleet
+							value = overwhelming
+						}
+					}
+				}
+			}
+		}
+	}
+	option = {
+		name = cc_events_blackmail.20.B
+		custom_tooltip = CCUNPREDICTABLE.tooltip
+		
+		hidden_effect = {
+			random_list = {
+				2 = { country_event = { id = cc_events_blackmail.201 days = 15 } }
+				
+				1 = {
+					country_event = { id = cc_events_blackmail.202 days = 15 }
+					modifier = {
+						factor = 0
+						OR = {
+							has_ethic = ethic_egalitarian
+							has_ethic = ethic_fanatic_egalitarian
+						}
+					}
+					modifier = {
+						factor = 0.5
+						OR = {
+							has_ethic = ethic_xenophile
+							has_ethic = ethic_pacifist
+							has_ethic = ethic_fanatic_xenophile
+							has_ethic = ethic_fanatic_pacifist
+						}
+						NOR = {
+							has_ethic = ethic_authoritarian
+							has_ethic = ethic_fanatic_authoritarian
+						}
+					}
+					modifier = {
+						factor = 1.5
+						has_ethic = ethic_authoritarian
+					}
+					modifier = {
+						factor = 2
+						has_ethic = ethic_fanatic_authoritarian
+					}
+				}
+
+				1 = {
+					country_event = { id = cc_events_blackmail.203 days = 15 }
+					modifier = {
+						factor = 0
+						OR = {
+							has_ethic = ethic_materialist
+							has_ethic = ethic_fanatic_materialist
+						}
+					}
+					modifier = {
+						factor = 0
+						NOT = { has_faction = traditionalist }
+					}
+					modifier = {
+						factor = 0.5
+						NOR = {
+							has_ethic = ethic_spiritualist
+							has_ethic = ethic_fanatic_spiritualist
+						}
+					}
+					modifier = {
+						factor = 1.5
+						has_ethic = ethic_spiritualist
+					}
+					modifier = {
+						factor = 2
+						has_ethic = ethic_fanatic_spiritualist
+					}
+				}
+
+				2 = {
+					country_event = { id = cc_events_blackmail.204 days = 15 }
+					modifier = {
+						factor = 0
+						OR = {
+							NOR = {
+								has_ethic = ethic_militarist
+								has_ethic = ethic_fanatic_militarist
+								has_ethic = ethic_xenophobe
+								has_ethic = ethic_fanatic_xenophobe
+							}
+							OR = {
+								has_ethic = ethic_pacifist
+								has_ethic = ethic_fanatic_pacifist
+							}
+						}
+					}
+					modifier = {
+						factor = 1.5
+						has_ethic = ethic_fanatic_militarist
+					}
+					modifier = {
+						factor = 1.5
+						has_ethic = ethic_fanatic_xenophobe
+						NOR = {
+							has_ethic = ethic_pacifist
+							has_ethic = ethic_fanatic_pacifist
+						}
+					}
+					modifier = { #wouldn't make sense
+						factor = 0
+						has_valid_civic = civic_fanatic_purifiers
+					}
+				}
+
+				1 = {
+					country_event = { id = cc_events_blackmail.205 days = 15 }
+					modifier = {
+						factor = 0
+						NOT = { has_authority = auth_democratic }
+					}
+					modifier = {
+						factor = 0.25
+						NOT = { has_faction = progressive }
+					}
+					modifier = {
+						factor = 1.5
+						has_ethic = ethic_egalitarian
+					}
+					modifier = {
+						factor = 2
+						has_ethic = ethic_fanatic_egalitarian
+					}
+				}
+
+				1 = {
+					country_event = { id = cc_events_blackmail.206 days = 15 }
+					modifier = {
+						factor = 0
+						NOT = { has_faction = technologist }
+					}
+					modifier = {
+						factor = 0
+						OR = {
+							has_ethic = ethic_spiritualist
+							has_ethic = ethic_fanatic_spiritualist
+						}
+					}
+					modifier = {
+						factor = 0.5
+						NOR = {
+							has_ethic = ethic_materialist
+							has_ethic = ethic_fanatic_materialist
+						}
+					}
+					modifier = {
+						factor = 1.5
+						has_ethic = ethic_materialist
+					}
+					modifier = {
+						factor = 2
+						has_ethic = ethic_fanatic_materialist
+					}
+				}
+
+				1 = {
+					country_event = { id = cc_events_blackmail.207 days = 15 }
+					modifier = {
+						factor = 0
+						NOT = { has_faction = xenoist }
+					}
+					modifier = {
+						factor = 0
+						OR = {
+							has_ethic = ethic_xenophobe
+							has_ethic = ethic_fanatic_xenophobe
+						}
+					}
+					modifier = {
+						factor = 0
+						pop_percentage = {
+							percentage < 0.15
+							limit = {
+								NOR = {
+									is_same_species = root
+									is_subspecies = root
+								}
+							}
+						}
+					}
+					modifier = {
+						factor = 2
+						pop_percentage = {
+							percentage > 0.4
+							limit = {
+								NOR = {
+									is_same_species = root
+									is_subspecies = root
+								}
+							}
+						}
+					}
+					modifier = {
+						factor = 0.5
+						NOR = {
+							has_ethic = ethic_xenophile
+							has_ethic = ethic_fanatic_xenophile
+						}
+					}
+					modifier = {
+						factor = 1.25
+						has_ethic = ethic_xenophile
+					}
+					modifier = {
+						factor = 1.5
+						has_ethic = ethic_fanatic_xenophile
+					}
+				}
+
+				1 = {
+					country_event = { id = cc_events_blackmail.208 days = 30 }
+					modifier = {
+						factor = 0.5
+						NOT = {
+							any_owned_planet = { unrest > 0 }
+						}
+					}
+					modifier = {
+						factor = 2
+						any_owned_planet = {
+							unrest > 40
+							unrest < 40
+						}
+					}
+					modifier = {
+						factor = 1.25
+						has_ethic = ethic_xenophobe
+					}
+					modifier = {
+						factor = 1.5
+						has_ethic = ethic_fanatic_xenophobe
+					}
+					modifier = {
+						factor = 1.5
+						has_ethic = ethic_authoritarian
+					}
+					modifier = {
+						factor = 2
+						has_ethic = ethic_fanatic_authoritarian
+					}
+				}
+
+				1 = {
+					country_event = { id = cc_events_blackmail.209 days = 15 }
+					modifier = {
+						factor = 0
+						OR = {
+							has_ethic = ethic_pacifist
+							has_ethic = ethic_fanatic_pacifist
+							has_ethic = ethic_xenophile
+							has_ethic = ethic_fanatic_xenophile
+						}
+						NOR = {
+							has_ethic = ethic_xenophobe
+							has_ethic = ethic_fanatic_xenophobe
+						}
+					}
+					modifier = {
+						factor = 2
+						is_at_war = yes
+					}
+					modifier = {
+						factor = 1.5
+						has_ethic = ethic_militarist
+					}
+					modifier = {
+						factor = 2
+						has_ethic = ethic_fanatic_militarist
+					}
+				}
+			}
+		}
+		
+		
+		ai_chance = {
+			factor = 1
+			modifier = {
+				factor = 2.5
+				is_at_war = yes
+			}
+			modifier = {
+				factor = 2.5
+				any_neighbor_country = {
+					is_rival = prev
+					relative_power = {
+						who = root
+						category = fleet
+						value = overwhelming
+					}
+				}
+			}
+		}
+	}
+}
+
+#Generic Corruption Scandal
+country_event = {
+	id = cc_events_blackmail.201
+	title = cc_events_blackmail.201.name
+	desc = cc_events_blackmail.201.desc
+	picture = GFX_evt_news_room
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		random_owned_leader = {
+			limit = { NOT = { leader_class = ruler } }
+			save_event_target_as = cc_first_corrupt
+		}
+		random_owned_leader = {
+			limit = {
+				NOR = {
+					leader_class = ruler
+					is_same_value = event_target:cc_first_corrupt
+				}
+			}
+			save_event_target_as = cc_second_corrupt
+		}
+		random_owned_leader = {
+			limit = {
+				NOR = {
+					leader_class = ruler
+					is_same_value = event_target:cc_first_corrupt
+					is_same_value = event_target:cc_second_corrupt
+				}
+			}
+			save_event_target_as = cc_third_corrupt
+		}
+		if = {
+			limit = {
+				any_owned_leader = {
+					NOR = {
+						leader_class = ruler
+						is_same_value = event_target:cc_first_corrupt
+						is_same_value = event_target:cc_second_corrupt
+						is_same_value = event_target:cc_third_corrupt
+					}
+				}
+			}
+			random_owned_leader = {
+				limit = {
+					NOR = {
+						leader_class = ruler
+						is_same_value = event_target:cc_first_corrupt
+						is_same_value = event_target:cc_second_corrupt
+						is_same_value = event_target:cc_third_corrupt
+					}
+				}
+				save_event_target_as = cc_fourth_corrupt
+			}
+		}
+	}
+			
+	
+	option = {
+		name = cc_events_blackmail.201.A
+		
+		custom_tooltip = cc_events_blackmail.201.A.tooltip
+		
+		hidden_effect = {
+			event_target:cc_first_corrupt = { kill_leader = { show_notification = no } }
+			event_target:cc_second_corrupt = { kill_leader = { show_notification = no } }
+			event_target:cc_third_corrupt = { kill_leader = { show_notification = no } }
+		}
+		if = {
+			limit = { exists = event_target:cc_fourth_corrupt }
+			custom_tooltip = cc_events_blackmail.201.A.tooltip2
+			hidden_effect = { event_target:cc_fourth_corrupt = { kill_leader = { show_notification = no } } }
+		}
+		
+		ai_chance = {
+			factor = 2.5
+			modifier = {
+				factor = 0.5
+				influence < 200
+			}
+			modifier = {
+				factor = 0.8
+				if = {
+					limit = { exists = event_target:cc_first_corrupt }
+					event_target:cc_first_corrupt = { has_skill > 4 }
+				}
+			}
+			modifier = {
+				factor = 0.8
+				if = {
+					limit = { exists = event_target:cc_second_corrupt }
+					event_target:cc_second_corrupt = { has_skill > 4 }
+				}
+			}
+			modifier = {
+				factor = 0.8
+				if = {
+					limit = { exists = event_target:cc_third_corrupt }
+					event_target:cc_third_corrupt = { has_skill > 4 }
+				}
+			}
+			modifier = {
+				factor = 0.8
+				if = {
+					limit = { exists = event_target:cc_fourth_corrupt }
+					event_target:cc_fourth_corrupt = { has_skill > 4 }
+				}
+			}
+		}
+	}
+	option = {
+		name = cc_events_blackmail.201.B
+		
+		add_modifier = {
+			modifier = cc_outrage_at_corruption
+			years = 10
+		}
+		
+		ai_chance = {
+			modifier = {
+				factor = 2
+				NOT = { any_owned_planet = { unrest > 0 } }
+			}
+			modifier = {
+				factor = 0.5
+				influence > 300
+			}
+			modifier = {
+				factor = 0.5
+				AND = {
+					if = {
+						limit = { exists = event_target:cc_first_corrupt }
+						event_target:cc_first_corrupt = { has_skill < 4 }
+					}
+					if = {
+						limit = { exists = event_target:cc_second_corrupt }
+						event_target:cc_second_corrupt = { has_skill < 4 }
+					}
+					if = {
+						limit = { exists = event_target:cc_third_corrupt }
+						event_target:cc_third_corrupt = { has_skill < 4 }
+					}
+					if = {
+						limit = { exists = event_target:cc_fourth_corrupt }
+						event_target:cc_fourth_corrupt = { has_skill < 4 }
+					}
+				}
+			}
+			modifier = {
+				factor = 1.2
+				if = {
+					limit = { exists = event_target:cc_first_corrupt }
+					event_target:cc_first_corrupt = { has_skill > 5 }
+				}
+			}
+			modifier = {
+				factor = 1.2
+				if = {
+					limit = { exists = event_target:cc_second_corrupt }
+					event_target:cc_second_corrupt = { has_skill > 5 }
+				}
+			}
+			modifier = {
+				factor = 1.2
+				if = {
+					limit = { exists = event_target:cc_third_corrupt }
+					event_target:cc_third_corrupt = { has_skill > 5 }
+				}
+			}
+			modifier = {
+				factor = 1.2
+				if = {
+					limit = { exists = event_target:cc_fourth_corrupt }
+					event_target:cc_fourth_corrupt = { has_skill > 5 }
+				}
+			}
+		}
+	}
+}
+
+
+#Police Violence Data
+country_event = {
+	id = cc_events_blackmail.202
+	title = cc_events_blackmail.202.name
+	desc = cc_events_blackmail.202.desc
+	picture = GFX_evt_news_room
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = cc_events_blackmail.202.option
+		
+		add_modifier = {
+			modifier = cc_outrage_at_police_violence
+			years = 10
+		}
+		
+		if = {
+			limit = { has_faction = progressive }
+			random_pop_faction = {
+				limit = { is_pop_faction_type = progressive }
+				add_modifier = {
+					modifier = cc_outrage_at_police_violence_faction
+					years = 10
+				}
+			}
+		}
+	}
+}
+
+
+#Priesthood Corruption Scandal
+country_event = {
+	id = cc_events_blackmail.203
+	title = cc_events_blackmail.203.name
+	desc = cc_events_blackmail.203.desc
+	picture = GFX_evt_news_room
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = UNFORTUNATE
+		
+		add_modifier = {
+			modifier = cc_outrage_at_priesthood_corruption
+			years = 10
+		}
+	}
+}
+
+
+#Galactic Domination Plans
+country_event = {
+	id = cc_events_blackmail.204
+	title = cc_events_blackmail.204.name
+	desc = cc_events_blackmail.204.desc
+	picture = GFX_evt_news_room
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = UNFORTUNATE
+		
+		every_relation = {
+			limit = {
+				is_country_type = default
+				has_communications = root
+				NOR = {
+					has_valid_civic = civic_fanatic_purifiers
+					has_valid_civic = civic_machine_terminator
+					has_valid_civic = civic_hive_devouring_swarm
+				}
+			}
+			add_opinion_modifier = {
+				who = root
+				modifier = cc_opinion_outrage_at_plans_to_conquer
+			}
+		}
+	}
+}
+
+#Electoral Manipulation
+country_event = {
+	id = cc_events_blackmail.205
+	title = cc_events_blackmail.205.name
+	desc = cc_events_blackmail.205.desc
+	picture = GFX_evt_news_room
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = UNFORTUNATE
+		
+		add_modifier = {
+			modifier = cc_outrage_at_electoral_manipulation
+			years = 10
+		}
+		random_pop_faction = {
+			limit = { is_pop_faction_type = progressive }
+			add_modifier = {
+				modifier = cc_outrage_at_electoral_manipulation_faction
+				years = 10
+			}
+		}
+	}
+}
+
+#Scientist Plagiarism
+country_event = {
+	id = cc_events_blackmail.206
+	title = cc_events_blackmail.206.name
+	desc = cc_events_blackmail.206.desc
+	picture = GFX_evt_news_room
+	
+	is_triggered_only = yes
+	
+	immediate = {
+	
+	
+		if = {
+			limit = {
+				any_owned_leader = {
+					leader_class = scientist
+					is_researching_area = physics
+				}
+			}
+			random_owned_leader = {
+				limit = {
+					leader_class = scientist
+					is_researching_area = physics
+				}
+				save_event_target_as = cc_first_scientist
+			}
+		}
+		if = {
+			limit = {
+				any_owned_leader = {
+					leader_class = scientist
+					is_researching_area = society
+				}
+			}
+			random_owned_leader = {
+				limit = {
+					leader_class = scientist
+					is_researching_area = society
+				}
+				save_event_target_as = cc_second_scientist
+			}
+		}
+		if = {
+			limit = {
+				any_owned_leader = {
+					leader_class = scientist
+					is_researching_area = engineering
+				}
+			}
+			random_owned_leader = {
+				limit = {
+					leader_class = scientist
+					is_researching_area = engineering
+				}
+				save_event_target_as = cc_third_scientist
+			}
+		}
+	}
+			
+	
+	option = {
+		name = cc_events_blackmail.206.A
+		
+		add_modifier = {
+			modifier = cc_loss_of_faith_in_ingenuity
+			years = 10
+		}
+		add_modifier = {
+			modifier = cc_other_states_watching_scientists
+			years = 10
+		}
+		
+		every_relation = {
+			limit = {
+				is_country_type = default
+				has_communications = root
+				NOR = {
+					has_valid_civic = civic_fanatic_purifiers
+					has_valid_civic = civic_machine_terminator
+					has_valid_civic = civic_hive_devouring_swarm
+				}
+			}
+			add_opinion_modifier = {
+				who = root
+				modifier = cc_opinion_stole_our_technology
+			}
+		}		
+		
+		ai_chance = {
+			modifier = {
+				factor = 0.5
+				influence > 300
+			}
+			modifier = {
+				factor = 2
+				OR = {
+					has_ethic = ethic_militarist
+					has_ethic = ethic_fanatic_militarist
+					has_ethic = ethic_xenophobe
+					has_ethic = ethic_fanatic_xenophobe
+				}
+			}
+			modifier = {
+				factor = 0.5
+				AND = {
+					if = {
+						limit = { exists = event_target:cc_first_scientist }
+						event_target:cc_first_scientist = { has_skill < 4 }
+					}
+					if = {
+						limit = { exists = event_target:cc_second_scientist }
+						event_target:cc_second_scientist = { has_skill < 4 }
+					}
+					if = {
+						limit = { exists = event_target:cc_third_scientist }
+						event_target:cc_third_scientist = { has_skill < 4 }
+					}
+				}
+			}
+		}
+	}
+	option = {
+		name = cc_events_blackmail.206.B
+		
+		add_modifier = {
+			modifier = cc_loss_of_faith_in_ingenuity
+			years = 10
+		}
+		
+		if = {
+			limit = { exists = event_target:cc_first_scientist }
+			event_target:cc_first_scientist = { exile_leader_as = cc_first_scientist }
+		}
+		if = {
+			limit = { exists = event_target:cc_second_scientist }
+			event_target:cc_second_scientist = { exile_leader_as = cc_second_scientist }
+		}
+		if = {
+			limit = { exists = event_target:cc_third_scientist }
+			event_target:cc_third_scientist = { exile_leader_as = cc_third_scientist }
+		}
+		
+		ai_chance = {
+			modifier = {
+				factor = 2
+				influence < 200
+			}
+			modifier = {
+				factor = 2
+				OR = {
+					has_ethic = ethic_pacifist
+					has_ethic = ethic_fanatic_pacifist
+					has_ethic = ethic_xenophile
+					has_ethic = ethic_fanatic_xenophile
+				}
+			}
+			modifier = {
+				factor = 0.75
+				exists = event_target:cc_first_scientist
+				event_target:cc_first_scientist = { has_skill > 4 }
+			}
+			modifier = {
+				factor = 0.75
+				exists = event_target:cc_second_scientist
+				event_target:cc_second_scientist = { has_skill > 4 }
+			}
+			modifier = {
+				factor = 0.75
+				exists = event_target:cc_third_scientist
+				event_target:cc_third_scientist = { has_skill > 4 }
+			}
+		}
+	}
+}
+
+#Data on Interspecies Discrimination Revealed!
+country_event = {
+	id = cc_events_blackmail.207
+	title = cc_events_blackmail.207.name
+	desc = cc_events_blackmail.207.desc
+	picture = GFX_evt_news_room
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = UNFORTUNATE
+		
+		custom_tooltip = cc_events_blackmail.207.tooltip
+		
+		hidden_effect = {
+			every_owned_pop = {
+				limit = {
+					species = { pops_have_happiness = yes }
+					nor = {
+						is_same_species = root
+						is_subspecies = root
+					}
+				}
+				add_modifier = {
+					modifier = cc_outrage_at_discrimination
+					years = 10
+				}
+			}
+		}
+	}
+}
+
+#Prison Security Breach
+country_event = {
+	id = cc_events_blackmail.208
+	title = cc_events_blackmail.208.name
+	desc = cc_events_blackmail.208.desc
+	picture = GFX_evt_news_room
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = cc_events_blackmail.208.option
+		
+		add_modifier = {
+			modifier = cc_prison_security_breach
+			years = 10
+		}
+	}
+}
+
+#Ship Designs Leaked
+country_event = {
+	id = cc_events_blackmail.209
+	title = cc_events_blackmail.209.name
+	desc = cc_events_blackmail.209.desc
+	picture = GFX_evt_fleet_evil
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		every_country = {
+			limit = {
+				is_rival = root
+				is_ai = no
+			}
+			country_event = { id = cc_events_blackmail.210 days = 5 }
+		}
+	}
+	
+	option = {
+		name = UNFORTUNATE
+		
+		add_modifier = {
+			modifier = cc_ship_designs_compromised
+			years = 15
+		}
+	}
+}
+
+#notify rivals
+country_event = {
+	id = cc_events_blackmail.210
+	title = cc_events_blackmail.210.name
+	desc = cc_events_blackmail.210.desc
+	picture = GFX_evt_fleet_evil
+	
+	is_triggered_only = yes
+
+	option = {
+		name = CCEXCELLENT
+		
+		tooltip = {
+			from = {
+				add_modifier = {
+					modifier = cc_ship_designs_compromised
+					years = 15
+				}
+			}
+		}
+	}
+}

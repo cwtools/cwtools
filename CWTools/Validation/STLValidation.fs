@@ -11,6 +11,7 @@ open DotNet.Globbing
 open CWTools.Games
 open Newtonsoft.Json.Linq
 open CWTools.Utilities.Utils
+open System
 
 
 module STLValidation =
@@ -28,23 +29,19 @@ module STLValidation =
         member __.All = entities |> List.map (fun (es, _) -> es.entity)
         member __.AllWithData = entities |> List.map (fun (es, d) -> es.entity, d)
         member this.AllEffects= 
-            let fNode = (fun (x : Node) ->
-                            seq {
+            let fNode = (fun (x : Node) acc ->
                             match x with
-                            | :? EffectBlock as e -> yield e
-                            |_ -> ()
-                            }
+                            | :? EffectBlock as e -> e::acc
+                            |_ -> acc
                                 )
-            this.All |> Seq.collect (foldNode5 fNode) |> List.ofSeq
+            this.All |> List.collect (foldNode7 fNode)
         member this.AllTriggers= 
-            let fNode = (fun (x : Node) ->
-                            seq {
+            let fNode = (fun (x : Node) acc ->
                             match x with
-                            | :? TriggerBlock as e -> yield e
-                            |_ -> ()
-                            }
+                            | :? TriggerBlock as e -> e::acc
+                            |_ -> acc
                                 )
-            this.All |> Seq.collect (foldNode5 fNode) |> List.ofSeq
+            this.All |> List.collect (foldNode7 fNode)
 
 
         member __.Raw = entities
@@ -64,14 +61,14 @@ module STLValidation =
 
 
     let getDefinedVariables (node : Node) =
-        let fNode = (fun (x:Node) ->
-                        seq { yield! x.Values |> List.choose (function  kv when kv.Key.StartsWith("@") -> Some kv.Key |_ -> None) }
+        let fNode = (fun (x:Node) acc -> 
+                        x.Values |> List.fold (fun a n -> if n.Key.StartsWith("@", StringComparison.OrdinalIgnoreCase) then n.Key::a else a) acc
                         )
-        node |> (foldNode5 fNode) |> List.ofSeq
+        node |> (foldNode7 fNode) |> List.ofSeq
 
     let checkUsedVariables (node : Node) (variables : string list) =
         let fNode = (fun (x:Node) children ->
-                        let values = x.Values |> List.choose (fun v -> match v.Value with |String s when s.StartsWith("@") -> Some v |_ -> None)
+                        let values = x.Values |> List.choose (fun v -> match v.Value with |String s when s.StartsWith("@", StringComparison.OrdinalIgnoreCase) -> Some v |_ -> None)
                         match values with
                         | [] -> children
                         | x -> 
@@ -156,12 +153,12 @@ module STLValidation =
     let inline handleUnknownTrigger (root : ^a) (key : string) =
         match STLProcess.ignoreKeys |> List.tryFind (fun k -> k == key) with
         |Some _ -> OK //Do better
-        |None -> if key.StartsWith("@") then OK else Invalid [inv (ErrorCodes.UndefinedTrigger key) root]
+        |None -> if key.StartsWith("@", StringComparison.OrdinalIgnoreCase) then OK else Invalid [inv (ErrorCodes.UndefinedTrigger key) root]
     
     let inline handleUnknownEffect root (key : string) =
         match STLProcess.ignoreKeys |> List.tryFind (fun k -> k == key) with
         |Some _ -> OK //Do better
-        |None -> if key.StartsWith("@") then OK else Invalid [inv (ErrorCodes.UndefinedEffect key) root]
+        |None -> if key.StartsWith("@", StringComparison.OrdinalIgnoreCase) then OK else Invalid [inv (ErrorCodes.UndefinedEffect key) root]
     
     let valTriggerLeaf (triggers : Effect list) (modifiers : Modifier list) (scopes : ScopeContext) (leaf : Leaf) =
         match triggers |> List.tryFind (fun e -> e.Name == leaf.Key) with
@@ -345,13 +342,14 @@ module STLValidation =
         let fCombine = (<&&>)
         // let opts = es.All |> List.collect (foldNode2 foNode (@) []) |> List.map filterOptionToEffects
         // es.All @ opts <&!&> foldNode2 fNode fCombine OK 
-        (es.All <&!&> foldNode2 foNode fCombine OK)
-        <&&>
-        (es.All <&!&> foldNode2 fNode fCombine OK)
-        <&&>
-        (es.AllOfTypeChildren EntityType.ScriptedEffects <&!&> fseNode)
-        <&&>
-        (es.AllOfTypeChildren EntityType.ScriptedTriggers <&!&> fstNode)
+        let a = (es.All <&!&> foldNode2 foNode fCombine OK)
+        //<&&>
+        let b = (es.All <&!&> foldNode2 fNode fCombine OK)
+        //<&&>
+        let c =(es.AllOfTypeChildren EntityType.ScriptedEffects <&!&> fseNode)
+        //<&&>
+        let d = (es.AllOfTypeChildren EntityType.ScriptedTriggers <&!&> fstNode)
+        a <&&> b <&&> c <&&> d
 
 
     let valTriggersNew (triggers : (Effect) list) (effects : (Effect) list) (modifiers : Modifier list) (effectBlock : Node) =
@@ -507,14 +505,10 @@ module STLValidation =
 
     let findAllSetVariables (node : Node) =
         let keys = ["set_variable"; "change_variable"; "subtract_variable"; "multiply_variable"; "divide_variable"]
-        let fNode = (fun (x : Node) ->
-                    seq {
-                    match x.Children |> List.filter (fun n -> List.contains (n.Key) keys) with
-                    | [] -> ()
-                    | x -> yield! x |> List.map (fun v -> v.TagText "which")
-                    }
+        let fNode = (fun (x : Node) acc ->
+                    x.Children |> List.fold (fun a n -> if List.contains (n.Key) keys then n.TagText "which" :: a else a) acc
                      )
-        foldNode5 fNode node |> List.ofSeq
+        foldNode7 fNode node |> List.ofSeq
 
     let  validateUsedVariables (variables : string list) (node : Node) =
         let fNode = (fun (x : Node) children ->
@@ -528,54 +522,48 @@ module STLValidation =
         foldNode2 fNode fCombine OK node
 
     let getDefinedScriptVariables (es : STLEntitySet) =
-        let fNode = (fun (x : Node) ->
-                    seq {
+        let fNode = (fun (x : Node) acc ->
                     match x with
-                    | (:? EffectBlock as x) -> yield x
-                    | _ -> ()
-                    })
-        let ftNode = (fun (x : Node) ->
-                    seq {
+                    | (:? EffectBlock as x) -> x::acc
+                    | _ -> acc
+                    )
+        let ftNode = (fun (x : Node) acc ->
                     match x with
-                    | (:? TriggerBlock as x) -> yield x
-                    | _ -> ()
-                    })
-        let foNode = (fun (x : Node)  ->
-                    seq {
+                    | (:? TriggerBlock as x) -> x::acc
+                    | _ -> acc
+                    )
+        let foNode = (fun (x : Node) acc ->
                     match x with
-                    | (:? Option as x) -> yield x
-                    | _ -> ()
-                    })
-        let opts = es.All |> Seq.collect (foldNode5 foNode) |> Seq.map filterOptionToEffects |> List.ofSeq
-        let effects = es.All |> Seq.collect (foldNode5 fNode) |> Seq.map (fun f -> f :> Node) |> List.ofSeq
+                    | (:? Option as x) -> x::acc
+                    | _ -> acc
+                    )
+        let opts = es.All |> List.collect (foldNode7 foNode) |> List.map filterOptionToEffects
+        let effects = es.All |> List.collect (foldNode7 fNode) |> List.map (fun f -> f :> Node)
         effects @ opts |> List.collect findAllSetVariables  
 
     let getEntitySetVariables (e : Entity) =
-        let fNode = (fun (x : Node) ->
-                    seq {
+        let fNode = (fun (x : Node) acc ->
                     match x with
-                    | (:? EffectBlock as x) -> yield x
-                    | _ -> ()
-                    })
-        let foNode = (fun (x : Node)  ->
-                    seq {
+                    | (:? EffectBlock as x) -> x::acc
+                    | _ -> acc
+                    )
+        let foNode = (fun (x : Node) acc ->
                     match x with
-                    | (:? Option as x) -> yield x
-                    | _ -> ()
-                    })
-        let opts = e.entity |> (foldNode5 foNode) |> List.ofSeq |> List.map filterOptionToEffects
-        let effects = e.entity |> (foldNode5 fNode) |> List.ofSeq |> List.map (fun f -> f :> Node)
+                    | (:? Option as x) -> x::acc
+                    | _ -> acc
+                    )
+        let opts = e.entity |> (foldNode7 foNode) |> List.map filterOptionToEffects
+        let effects = e.entity |> (foldNode7 fNode) |> List.map (fun f -> f :> Node)
         effects @ opts |> List.collect findAllSetVariables
 
     let valVariables : StructureValidator =
         fun os es ->
-            let ftNode = (fun (x : Node) ->
-                    seq {
+            let ftNode = (fun (x : Node) acc ->
                     match x with
-                    | (:? TriggerBlock as x) -> yield x
-                    | _ -> ()
-                    })
-            let triggers = es.All |> Seq.collect (foldNode5 ftNode) |> List.ofSeq |> List.map (fun f -> f :> Node)
+                    | (:? TriggerBlock as x) -> x::acc
+                    | _ -> acc
+                    )
+            let triggers = es.All |> List.collect (foldNode7 ftNode) |> List.map (fun f -> f :> Node)
             let defVars = (os.AllWithData @ es.AllWithData) |> List.collect (fun (_, d) -> d.Force().setvariables)
             //let defVars = effects @ opts |> List.collect findAllSetVariables
             triggers <&!&> (validateUsedVariables defVars)
@@ -583,27 +571,24 @@ module STLValidation =
 
     let valTest : StructureValidator = 
         fun os es ->
-            let fNode = (fun (x : Node) ->
-                        seq {
+            let fNode = (fun (x : Node) acc ->
                         match x with
-                        | (:? EffectBlock as x) -> yield x
-                        | _ -> ()
-                        })
-            let ftNode = (fun (x : Node) ->
-                        seq {
+                        | (:? EffectBlock as x) -> x::acc
+                        | _ -> acc
+                        )
+            let ftNode = (fun (x : Node) acc ->
                         match x with
-                        | (:? TriggerBlock as x) -> yield x
-                        | _ -> ()
-                        })
-            let foNode = (fun (x : Node)  ->
-                        seq {
+                        | (:? TriggerBlock as x) -> x::acc
+                        | _ -> acc
+                        )
+            let foNode = (fun (x : Node) acc ->
                         match x with
-                        | (:? Option as x) -> yield x
-                        | _ -> ()
-                        })
-            let opts = es.All |> Seq.collect (foldNode5 foNode) |> List.ofSeq |> List.map filterOptionToEffects
-            let effects = es.All |> Seq.collect (foldNode5 fNode) |> List.ofSeq |> List.map (fun f -> f :> Node)
-            let triggers = es.All |> Seq.collect (foldNode5 ftNode) |> List.ofSeq |> List.map (fun f -> f :> Node)
+                        | (:? Option as x) -> x::acc
+                        | _ -> acc
+                        )
+            let opts = es.All |> List.collect (foldNode7 foNode) |> List.map filterOptionToEffects
+            let effects = es.All |> List.collect (foldNode7 fNode) |> List.map (fun f -> f :> Node)
+            let triggers = es.All |> List.collect (foldNode7 ftNode) |> List.map (fun f -> f :> Node)
             OK
             // opts @ effects <&!&> (fun x -> Invalid [inv (ErrorCodes.CustomError "effect") x])
             // <&&> (triggers <&!&> (fun x -> Invalid [inv (ErrorCodes.CustomError "trigger") x]))

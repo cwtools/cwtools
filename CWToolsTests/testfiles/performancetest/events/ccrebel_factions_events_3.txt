@@ -1,0 +1,6364 @@
+
+#The tricky bit is that you have to turn the faction into planets. But it's doable. And also the lack of commands
+#regarding factions, so I can't directly check faction happiness.
+#Trigger: Faction is large and unhappy. This would be tested via:
+#pop_percentage = { percentage > 0.15 limit = { happiness < 40 member_of_faction = faction_X } }. So it would be 
+#testing the symptom rather than the actual faction, which is not ideal but is the best I can do. Aside from that, 
+#the empire has 5 planets, and at least one planet (not 'recently conquered') has more of their ethic than yours and
+#30% is theirs (will be the first stronghold). There would be a relatively long mtth. 
+
+#First event will be sort of 'warning signs' i.e. rumours of sedition but can't be proven, faction leader denies 
+#anything. But planets with 4+ pops of the ethic get 'seditious talk' modifier, +20% ethics attraction.
+
+#Second will be where planets with 30% or more of that ethic (and less of yours, also no revolt modifiers) become 
+#'[ethic] strongholds'. They then get a whole lot more ethics attraction (+100?) (also possibly income fall as 
+#withholding taxes). Planets fairly nearby will get modifiers attracting them to that ethic, but less. Planets with 
+#3+ pops now get '[ethic] sympathies' and +50% or something attraction.
+
+#This situation carries on for at least two years, and in this period any planet that goes above or below the 
+#previously set-out thresholds gains or loses the modifiers. At this stage, one can avert the crisis by either 
+#making the faction happy in some way (I could test whether the pops are happy as in the condition I said earlier) 
+#or by successfully making them no longer have strongholds.
+
+#After the two years, you will be told that a revolt is imminent if they are still upset and have enough strongholds 
+#(this could be scaled by empire size, though it can only be done up to three planets). You will be given a direct 
+#choice to shift ethics or risk the consequences. After that, at some point in the next year there will be a revolt 
+#in all the 'ethic strongholds'. (Code will be based on the AI revolt, but without the need for a fight to the death).
+
+#An addition would be the 'sympathies' planets: You'd be prompted to decide whether to exterminate, oppress or 
+#tolerate them. Ethics determine whether you can do each of those. The trade-off is that if you tolerate and they 
+#reach 'stronghold' level they can try to defect, whereas if you oppress they will get a modifier cutting attraction 
+#to that ethic, but also lose happiness and have a chance to try and defect before you have managed to fully oppress 
+#them. Exterminate is only possible for purifiers, then you just kill the pops in question. Though actually purifiers 
+#should be allowed to do that way before. There should be some sort of costs to killing a large fragment of your 
+#population, though.
+#(Try purge = yes)
+
+namespace = ccfaction
+
+#test events
+#country_event = {
+#	id = ccfaction.111
+#	hide_window = yes
+#	is_triggered_only = yes
+#	
+#	immediate = {
+#		every_pop_faction = {
+#			add_modifier = {
+#				modifier = cc_faction_test_modifier
+#				days = -1
+#			}
+#		}
+#		every_owned_planet = { set_planet_flag = recent_unrest_event }
+#		country_event = { id = ccfaction.1 days = 15 }
+#	}
+#}
+#country_event = {
+#	id = ccfaction.112
+#	hide_window = yes
+#	is_triggered_only = yes
+#	
+#	immediate = {
+#		every_pop_faction = {
+#			add_modifier = {
+#				modifier = cc_faction_test_modifier_1
+#				days = -1
+#			}
+#		}
+#	}
+#}
+#planet_event = {
+#	id = ccfaction.113
+#	title = OK
+#	desc = OK
+#	is_triggered_only = yes
+#	
+#	picture = GFX_evt_arguing_senate
+#	
+#	option = {
+#		name = OK
+#		add_modifier = {
+#			modifier = cc_planet_test1
+#			days = -1
+#		}
+#	}
+#	option = {
+#		name = OK
+#		add_modifier = {
+#			modifier = cc_planet_test2
+#			days = -1
+#		}
+#	}
+#}
+
+#performance booster event
+country_event = {
+	id = ccfaction.100
+	hide_window = yes
+	
+	trigger = {
+		years_passed > 30
+		has_country_flag = cc_potential_faction_revolt
+	}
+	
+	mean_time_to_happen = {
+#		months = 1
+		months = 120
+		
+		modifier = {
+			factor = 2
+			num_owned_planets < 10
+		}
+		
+		modifier = {
+			factor = 0.8
+			num_owned_planets > 25
+		}
+		
+		modifier = {
+			factor = 0.67
+			has_country_flag = cc_large_faction_revolt
+		}
+		modifier = {
+			factor = 0.67
+			has_country_flag = cc_angry_faction_revolt
+		}
+	}
+	immediate = { country_event = { id = ccfaction.1 } }
+}
+
+country_event = {
+	id = ccfaction.1
+	title = ccfaction.1.name
+	picture = GFX_evt_smugglers_in_bar
+	
+	desc = ccfaction.1.desc
+	
+	
+	trigger = {
+		NOT = { has_global_flag = irm_main_on } #disables for Imperial Routine mod as that messes with factions
+		NOT = { has_country_flag = cc_recent_factional_revolt }
+		is_country_type = default
+		num_owned_planets > 5
+		years_passed > 30
+		
+		NOT = { has_ethic = ethic_gestalt_consciousness }
+		
+		has_a_factional_revolt_active = no
+
+		count_pop_factions = {
+			limit = {
+				is_a_vanilla_faction = yes
+				support > 0.15
+				pop_percentage = {
+					percentage > 0.74
+					limit = { happiness < 0.4 }
+				}
+			}
+			count > 0
+		}
+	}
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		set_timed_country_flag = {
+			flag = cc_recent_factional_revolt
+			years = 40
+		}
+
+		random_list = { #so it only does one at a time
+			1 = {
+				modifier = {
+					factor = 0
+					NOT = {
+						AND = {
+							has_faction = imperialist
+							count_pop_factions = {
+								limit = {
+									is_pop_faction_type = imperialist
+									support > 0.15
+									pop_percentage = {
+										percentage > 0.74
+										limit = { happiness < 0.4 }
+									}
+								}
+								count = 1
+							}
+						}
+					}
+				}
+				modifier = {
+					factor = 2
+					AND = {
+						has_faction = imperialist
+						count_pop_factions = {
+							limit = {
+								is_pop_faction_type = imperialist
+								support > 0.15
+								pop_percentage = {
+									percentage > 0.6
+									limit = { happiness < 0.3 }
+								}
+							}
+							count = 1
+						}
+					}
+				}
+				modifier = {
+					factor = 0.5
+					OR = {
+						has_ethic = ethic_militarist
+						has_ethic = ethic_fanatic_militarist
+					}
+				}
+				modifier = {
+					factor = 1.5
+					OR = {
+						has_ethic = ethic_pacifist
+						has_ethic = ethic_fanatic_pacifist
+					}
+				}
+				
+				set_timed_country_flag = {
+					flag = cc_imperialist_revolt_active
+					days = 5400		#15 years
+				}
+				set_timed_country_flag = {
+					flag = cc_imperialist_seditions_active
+					days = 1800		#5 years
+				}
+				
+				#set event targets
+				
+				random_pop_faction = {
+					limit = { is_pop_faction_type = imperialist }
+					save_event_target_as = cc_rebellious_faction
+				}
+				
+				random_owned_leader = {
+					limit = { leader_of_faction = imperialist }
+					save_event_target_as = cc_rebellious_faction_leader
+				}
+			}
+
+			1 = {
+				modifier = {
+					factor = 0
+					NOT = {
+						AND = {
+							has_faction = isolationist
+							count_pop_factions = {
+								limit = {
+									is_pop_faction_type = isolationist
+									support > 0.15
+									pop_percentage = {
+										percentage > 0.74
+										limit = { happiness < 0.4 }
+									}
+								}
+								count = 1
+							}
+						}
+					}
+				}
+				modifier = {
+					factor = 2
+					AND = {
+						has_faction = isolationist
+						count_pop_factions = {
+							limit = {
+								is_pop_faction_type = isolationist
+								support > 0.15
+								pop_percentage = {
+									percentage > 0.6
+									limit = { happiness < 0.3 }
+								}
+							}
+							count = 1
+						}
+					}
+				}
+				modifier = {
+					factor = 0.5
+					OR = {
+						has_ethic = ethic_xenophobe
+						has_ethic = ethic_fanatic_xenophobe
+					}
+				}
+				modifier = {
+					factor = 1.5
+					OR = {
+						has_ethic = ethic_xenophile
+						has_ethic = ethic_fanatic_xenophile
+					}
+				}
+				
+				set_timed_country_flag = {
+					flag = cc_isolationist_revolt_active
+					days = 5400		#15 years
+				}
+				set_timed_country_flag = {
+					flag = cc_isolationist_seditions_active
+					days = 1800		#5 years
+				}
+				
+				#set event targets
+				
+				random_pop_faction = {
+					limit = { is_pop_faction_type = isolationist }
+					save_event_target_as = cc_rebellious_faction
+				}
+				
+				random_owned_leader = {
+					limit = { leader_of_faction = isolationist }
+					save_event_target_as = cc_rebellious_faction_leader
+				}
+			}
+
+			1 = {
+				modifier = {
+					factor = 0
+					NOT = {
+						AND = {
+							has_faction = progressive
+							count_pop_factions = {
+								limit = {
+									is_pop_faction_type = progressive
+									support > 0.15
+									pop_percentage = {
+										percentage > 0.74
+										limit = { happiness < 0.4 }
+									}
+								}
+								count = 1
+							}
+						}
+					}
+				}
+				modifier = {
+					factor = 2
+					AND = {
+						has_faction = progressive
+						count_pop_factions = {
+							limit = {
+								is_pop_faction_type = progressive
+								support > 0.15
+								pop_percentage = {
+									percentage > 0.6
+									limit = { happiness < 0.3 }
+								}
+							}
+							count = 1
+						}
+					}
+				}
+				modifier = {
+					factor = 0.5
+					OR = {
+						has_ethic = ethic_egalitarian
+						has_ethic = ethic_fanatic_egalitarian
+					}
+				}
+				modifier = {
+					factor = 1.5
+					OR = {
+						has_ethic = ethic_authoritarian
+						has_ethic = ethic_fanatic_authoritarian
+					}
+				}
+				
+				set_timed_country_flag = {
+					flag = cc_progressive_revolt_active
+					days = 5400		#15 years
+				}
+				set_timed_country_flag = {
+					flag = cc_progressive_seditions_active
+					days = 1800		#5 years
+				}
+				
+				#set event targets
+				
+				random_pop_faction = {
+					limit = { is_pop_faction_type = progressive }
+					save_event_target_as = cc_rebellious_faction
+				}
+				
+				random_owned_leader = {
+					limit = { leader_of_faction = progressive }
+					save_event_target_as = cc_rebellious_faction_leader
+				}
+			}
+			
+			1 = {
+				modifier = {
+					factor = 0
+					NOT = {
+						AND = {
+							has_faction = prosperity
+							count_pop_factions = {
+								limit = {
+									is_pop_faction_type = prosperity
+									support > 0.15
+									pop_percentage = {
+										percentage > 0.74
+										limit = { happiness < 0.4 }
+									}
+								}
+								count = 1
+							}
+						}
+					}
+				}
+				modifier = {
+					factor = 2
+					AND = {
+						has_faction = prosperity
+						count_pop_factions = {
+							limit = {
+								is_pop_faction_type = prosperity
+								support > 0.15
+								pop_percentage = {
+									percentage > 0.6
+									limit = { happiness < 0.3 }
+								}
+							}
+							count = 1
+						}
+					}
+				}
+				modifier = {
+					factor = 0.5
+					OR = {
+						has_ethic = ethic_pacifist
+						has_ethic = ethic_fanatic_pacifist
+					}
+				}
+				modifier = {
+					factor = 1.5
+					OR = {
+						has_ethic = ethic_militarist
+						has_ethic = ethic_fanatic_militarist
+					}
+				}
+			
+				set_timed_country_flag = {
+					flag = cc_prosperity_revolt_active
+					days = 5400		#15 years
+				}
+				set_timed_country_flag = {
+					flag = cc_prosperity_seditions_active
+					days = 1800		#5 years
+				}
+				
+				#set event targets
+				
+				random_pop_faction = {
+					limit = { is_pop_faction_type = prosperity }
+					save_event_target_as = cc_rebellious_faction
+				}
+				
+				random_owned_leader = {
+					limit = { leader_of_faction = prosperity }
+					save_event_target_as = cc_rebellious_faction_leader
+				}
+			}
+			
+			1 = {
+				modifier = {
+					factor = 0
+					NOT = {
+						AND = {
+							has_faction = supremacist
+							count_pop_factions = {
+								limit = {
+									is_pop_faction_type = supremacist
+									support > 0.15
+									pop_percentage = {
+										percentage > 0.74
+										limit = { happiness < 0.4 }
+									}
+								}
+								count = 1
+							}
+						}
+					}
+				}
+				modifier = {
+					factor = 2
+					AND = {
+						has_faction = supremacist
+						count_pop_factions = {
+							limit = {
+								is_pop_faction_type = supremacist
+								support > 0.15
+								pop_percentage = {
+									percentage > 0.6
+									limit = { happiness < 0.3 }
+								}
+							}
+							count = 1
+						}
+					}
+				}
+				modifier = {
+					factor = 0.5
+					OR = {
+						has_ethic = ethic_xenophobe
+						has_ethic = ethic_fanatic_xenophobe
+					}
+				}
+				modifier = {
+					factor = 1.5
+					OR = {
+						has_ethic = ethic_xenophile
+						has_ethic = ethic_fanatic_xenophile
+					}
+				}
+			
+				set_timed_country_flag = {
+					flag = cc_supremacist_revolt_active
+					days = 5400		#15 years
+				}
+				set_timed_country_flag = {
+					flag = cc_supremacist_seditions_active
+					days = 1800		#5 years
+				}
+				
+				#set event targets
+				
+				random_pop_faction = {
+					limit = { is_pop_faction_type = supremacist }
+					save_event_target_as = cc_rebellious_faction
+				}
+				
+				random_owned_leader = {
+					limit = { leader_of_faction = supremacist }
+					save_event_target_as = cc_rebellious_faction_leader
+				}
+			}
+			
+			1 = {
+				modifier = {
+					factor = 0
+					NOT = {
+						AND = {
+							has_faction = technologist
+							count_pop_factions = {
+								limit = {
+									is_pop_faction_type = technologist
+									support > 0.15
+									pop_percentage = {
+										percentage > 0.74
+										limit = { happiness < 0.4 }
+									}
+								}
+								count = 1
+							}
+						}
+					}
+				}
+				modifier = {
+					factor = 2
+					AND = {
+						has_faction = technologist
+						count_pop_factions = {
+							limit = {
+								is_pop_faction_type = technologist
+								support > 0.15
+								pop_percentage = {
+									percentage > 0.6
+									limit = { happiness < 0.3 }
+								}
+							}
+							count = 1
+						}
+					}
+				}
+				modifier = {
+					factor = 0.5
+					OR = {
+						has_ethic = ethic_materialist
+						has_ethic = ethic_fanatic_materialist
+					}
+				}
+				modifier = {
+					factor = 1.5
+					OR = {
+						has_ethic = ethic_spiritualist
+						has_ethic = ethic_fanatic_spiritualist
+					}
+				}
+			
+				set_timed_country_flag = {
+					flag = cc_technologist_revolt_active
+					days = 5400		#15 years
+				}
+				set_timed_country_flag = {
+					flag = cc_technologist_seditions_active
+					days = 1800		#5 years
+				}
+				
+				#set event targets
+				
+				random_pop_faction = {
+					limit = { is_pop_faction_type = technologist }
+					save_event_target_as = cc_rebellious_faction
+				}
+				
+				random_owned_leader = {
+					limit = { leader_of_faction = technologist }
+					save_event_target_as = cc_rebellious_faction_leader
+				}
+			}
+			
+			1 = {
+				modifier = {
+					factor = 0
+					NOT = {
+						AND = {
+							has_faction = totalitarian
+							count_pop_factions = {
+								limit = {
+									is_pop_faction_type = totalitarian
+									support > 0.15
+									pop_percentage = {
+										percentage > 0.74
+										limit = { happiness < 0.4 }
+									}
+								}
+								count = 1
+							}
+						}
+					}
+				}
+				modifier = {
+					factor = 2
+					AND = {
+						has_faction = totalitarian
+						count_pop_factions = {
+							limit = {
+								is_pop_faction_type = totalitarian
+								support > 0.15
+								pop_percentage = {
+									percentage > 0.6
+									limit = { happiness < 0.3 }
+								}
+							}
+							count = 1
+						}
+					}
+				}
+				modifier = {
+					factor = 0.5
+					OR = {
+						has_ethic = ethic_authoritarian
+						has_ethic = ethic_fanatic_authoritarian
+					}
+				}
+				modifier = {
+					factor = 1.5
+					OR = {
+						has_ethic = ethic_egalitarian
+						has_ethic = ethic_fanatic_egalitarian
+					}
+				}
+				
+				set_timed_country_flag = {
+					flag = cc_totalitarian_revolt_active
+					days = 5400		#15 years
+				}
+				set_timed_country_flag = {
+					flag = cc_totalitarian_seditions_active
+					days = 1800		#5 years
+				}
+				
+				#set event targets
+				
+				random_pop_faction = {
+					limit = { is_pop_faction_type = totalitarian }
+					save_event_target_as = cc_rebellious_faction
+				}
+				
+				random_owned_leader = {
+					limit = { leader_of_faction = totalitarian }
+					save_event_target_as = cc_rebellious_faction_leader
+				}
+			}
+			
+			1 = {
+				modifier = {
+					factor = 0
+					NOT = {
+						AND = {
+							has_faction = traditionalist
+							count_pop_factions = {
+								limit = {
+									is_pop_faction_type = traditionalist
+									support > 0.15
+									pop_percentage = {
+										percentage > 0.74
+										limit = { happiness < 0.4 }
+									}
+								}
+								count = 1
+							}
+						}
+					}
+				}
+				modifier = {
+					factor = 2
+					AND = {
+						has_faction = traditionalist
+						count_pop_factions = {
+							limit = {
+								is_pop_faction_type = traditionalist
+								support > 0.15
+								pop_percentage = {
+									percentage > 0.6
+									limit = { happiness < 0.3 }
+								}
+							}
+							count = 1
+						}
+					}
+				}
+				modifier = {
+					factor = 0.5
+					OR = {
+						has_ethic = ethic_spiritualist
+						has_ethic = ethic_fanatic_spiritualist
+					}
+				}
+				modifier = {
+					factor = 1.5
+					OR = {
+						has_ethic = ethic_materialist
+						has_ethic = ethic_fanatic_materialist
+					}
+				}
+				
+				set_timed_country_flag = {
+					flag = cc_traditionalist_revolt_active
+					days = 5400		#15 years
+				}
+				set_timed_country_flag = {
+					flag = cc_traditionalist_seditions_active
+					days = 1800		#5 years
+				}
+				
+				#set event targets
+				
+				random_pop_faction = {
+					limit = { is_pop_faction_type = traditionalist }
+					save_event_target_as = cc_rebellious_faction
+				}
+				
+				random_owned_leader = {
+					limit = { leader_of_faction = traditionalist }
+					save_event_target_as = cc_rebellious_faction_leader
+				}
+			}
+			
+			1 = {
+				modifier = {
+					factor = 0
+					NOT = {
+						AND = {
+							has_faction = xenoist
+							count_pop_factions = {
+								limit = {
+									is_pop_faction_type = xenoist
+									support > 0.15
+									pop_percentage = {
+										percentage > 0.74
+										limit = { happiness < 0.4 }
+									}
+								}
+								count = 1
+							}
+						}
+					}
+				}
+				modifier = {
+					factor = 2
+					AND = {
+						has_faction = xenoist
+						count_pop_factions = {
+							limit = {
+								is_pop_faction_type = xenoist
+								support > 0.15
+								pop_percentage = {
+									percentage > 0.6
+									limit = { happiness < 0.3 }
+								}
+							}
+							count = 1
+						}
+					}
+				}
+				modifier = {
+					factor = 0.5
+					OR = {
+						has_ethic = ethic_xenophile
+						has_ethic = ethic_fanatic_xenophile
+					}
+				}
+				modifier = {
+					factor = 1.5
+					OR = {
+						has_ethic = ethic_xenophobe
+						has_ethic = ethic_fanatic_xenophobe
+					}
+				}
+
+				set_timed_country_flag = {
+					flag = cc_xenoist_revolt_active
+					days = 5400		#15 years
+				}
+				set_timed_country_flag = {
+					flag = cc_xenoist_seditions_active
+					days = 1800		#5 years
+				}
+				
+				#set event targets
+				
+				random_pop_faction = {
+					limit = { is_pop_faction_type = xenoist }
+					save_event_target_as = cc_rebellious_faction
+				}
+				
+				random_owned_leader = {
+					limit = { leader_of_faction = xenoist }
+					save_event_target_as = cc_rebellious_faction_leader
+				}
+			}
+		}
+	}
+	option = {
+		name = CCWORRYING
+		
+		add_modifier = {
+			modifier = cc_country_factional_unrest
+			days = -1
+		}
+		every_owned_planet = {
+			limit = {
+				OR = {
+					count_pops = {
+						limit = { has_same_ethic_as_faction = yes }
+						count > 3
+					}
+					pop_percentage = {
+						percentage > 0.24
+						limit = { has_same_ethic_as_faction = yes }
+					}
+				}
+			}
+			add_appropriate_seditious_talk = yes
+		}
+		hidden_effect = {
+#			country_event = { id = ccfaction.2 days = 60 }
+#			country_event = { id = ccfaction.21 days = 61 }
+			country_event = { id = ccfaction.2 days = 1800 }
+			country_event = { id = ccfaction.21 days = 1801 }
+		}
+	}
+}
+
+
+#second event
+
+country_event = {
+	id = ccfaction.2
+	title = ccfaction.2.name
+	picture = GFX_evt_alien_propaganda
+	
+	desc = ccfaction.2.desc
+	
+	is_triggered_only = yes
+	
+	trigger = {
+	
+		exists = event_target:cc_rebellious_faction
+		count_pop_factions = {
+			limit = {
+				is_same_value = event_target:cc_rebellious_faction
+				support > 0.15
+				pop_percentage = {
+					percentage > 0.74
+					limit = { happiness < 0.4 }
+				}
+			}
+			count = 1
+		}
+		
+		any_owned_planet = {
+#			valid_factional_revolt_target = yes
+#			OR = {
+				count_pops = {
+					limit = { has_same_faction_as_faction = yes }
+					count > 4
+				}
+#				AND = {
+#					count_pops = {
+#						limit = { has_same_faction_as_faction = yes }
+#						count > 1
+#					}
+#					num_pops < 4
+#				}
+#				AND = {
+#					count_pops = {
+#						limit = { has_same_faction_as_faction = yes }
+#						count > 2
+#					}
+#					num_pops < 6
+#				}
+#			}
+		}
+	}
+	
+	immediate = {
+		set_timed_country_flag = {
+			flag = cc_continue_factional_revolt
+			days = 2
+		}
+	}
+	option = {
+		name = CCWORRYING
+		
+		hidden_effect = {
+#			country_event = { id = ccfaction.3 days = 45 } #faction allies with them
+#			country_event = { id = ccfaction.4 days = 90 } #stage 3
+#			country_event = { id = ccfaction.41 days = 91 } #stage 3 fails
+			country_event = { id = ccfaction.3 days = 540 } #faction allies with them
+			country_event = { id = ccfaction.4 days = 1080 } #stage 3
+			country_event = { id = ccfaction.41 days = 1081 } #stage 3 fails
+			
+			if = {
+				limit = {
+					event_target:cc_rebellious_faction = { is_pop_faction_type = xenoist }
+				}
+				set_timed_country_flag = {
+					flag = cc_xenoist_stage2_active
+					days = 1080
+				}
+			}
+			if = {
+				limit = {
+					event_target:cc_rebellious_faction = { is_pop_faction_type = supremacist }
+				}
+				set_timed_country_flag = {
+					flag = cc_supremacist_stage2_active
+					days = 1080
+				}
+			}
+			if = {
+				limit = {
+					event_target:cc_rebellious_faction = { is_pop_faction_type = isolationist }
+				}
+				set_timed_country_flag = {
+					flag = cc_isolationist_stage2_active
+					days = 1080
+				}
+			}
+			if = {
+				limit = {
+					event_target:cc_rebellious_faction = { is_pop_faction_type = progressive }
+				}
+				set_timed_country_flag = {
+					flag = cc_progressive_stage2_active
+					days = 1080
+				}
+			}
+			if = {
+				limit = {
+					event_target:cc_rebellious_faction = { is_pop_faction_type = totalitarian }
+				}
+				set_timed_country_flag = {
+					flag = cc_totalitarian_stage2_active
+					days = 1080
+				}
+			}
+			if = {
+				limit = {
+					event_target:cc_rebellious_faction = { is_pop_faction_type = imperialist }
+				}
+				set_timed_country_flag = {
+					flag = cc_imperialist_stage2_active
+					days = 1080
+				}
+			}
+			if = {
+				limit = {
+					event_target:cc_rebellious_faction = { is_pop_faction_type = prosperity }
+				}
+				set_timed_country_flag = {
+					flag = cc_prosperity_stage2_active
+					days = 1080
+				}
+			}
+			if = {
+				limit = {
+					event_target:cc_rebellious_faction = { is_pop_faction_type = traditionalist }
+				}
+				set_timed_country_flag = {
+					flag = cc_traditionalist_stage2_active
+					days = 1080
+				}
+			}
+			if = {
+				limit = {
+					event_target:cc_rebellious_faction = { is_pop_faction_type = technologist }
+				}
+				set_timed_country_flag = {
+					flag = cc_technologist_stage2_active
+					days = 1080
+				}
+			}
+			
+			every_owned_planet = {
+				limit = { has_seditious_talk = yes }
+				remove_all_seditious_talk = yes
+			}
+		}
+		
+		every_owned_planet = {
+			limit = {
+				count_pops = {
+					limit = { has_same_faction_as_faction = yes }
+					count > 4
+				}
+			}
+			add_appropriate_faction_stronghold = yes
+		}
+		every_owned_planet = {
+			limit = {
+				count_pops = {
+					limit = { has_same_ethic_as_faction = yes }
+					count > 2
+				}
+				NOT = {
+					count_pops = {
+						limit = { has_same_faction_as_faction = yes }
+						count > 4
+					}
+				}
+			}
+			add_appropriate_faction_sympathies = yes
+		}
+		every_owned_planet = {
+			limit = {				
+				NOT = {
+					count_pops = {
+						limit = { has_same_ethic_as_faction = yes }
+						count > 2
+					}
+				}
+				
+				owner = {
+					any_owned_planet = {
+						count_pops = {
+							limit = { has_same_faction_as_faction = yes }
+							count > 4
+						}
+						distance = {
+							source = prevprev
+							min_distance = 0
+							max_distance = 65
+						}
+					}
+				}
+			}
+			add_appropriate_faction_sedition = yes
+		}
+	}
+}
+
+#factional revolt peters out after stage 1
+country_event = {
+	id = ccfaction.21
+	title = ccfaction.21.name
+	desc = {
+		trigger = { event_target:cc_rebellious_faction = { NOT = { has_modifier = embraced_faction } } }
+		text = ccfaction.21.desc.fail
+	}
+	desc = {
+		trigger = { event_target:cc_rebellious_faction = { has_modifier = embraced_faction } }
+		text = ccfaction.21.desc.succeed
+	}
+	picture = GFX_evt_arguing_senate
+	
+	is_triggered_only = yes
+	
+	trigger = { NOT = { has_country_flag = cc_continue_factional_revolt } }
+	
+	option = {
+		name = CCGOOD
+		
+		remove_modifier = cc_country_factional_unrest
+		
+		custom_tooltip = cc_faction_revolt_modifiers_removed
+		hidden_effect = {
+			remove_all_faction_revolt_flags = yes
+			every_owned_planet = {
+				remove_all_seditious_talk = yes
+			}
+		}
+	}
+}
+
+
+#Event 2.5: Another faction joins the revolt
+country_event = {
+	id = ccfaction.3
+	title = ccfaction.3.name
+	desc = ccfaction.3.desc
+	
+	picture = GFX_evt_alien_propaganda
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		count_pop_factions = {
+			limit = {
+				is_a_vanilla_faction = yes
+				NOT = { is_same_value = event_target:cc_rebellious_faction }
+				if = {
+					limit = {
+						event_target:cc_rebellious_faction = { is_pop_faction_type = xenoist }
+					}
+					NOR = {
+						is_pop_faction_type = supremacist
+						is_pop_faction_type = isolationist
+					}
+				}
+				if = {
+					limit = {
+						event_target:cc_rebellious_faction = {
+							OR = {
+								is_pop_faction_type = supremacist
+								is_pop_faction_type = isolationist
+							}
+						}
+					}
+					NOT = { is_pop_faction_type = xenoist }
+				}
+				if = {
+					limit = {
+						event_target:cc_rebellious_faction = { is_pop_faction_type = progressive }
+					}
+					NOT = { is_pop_faction_type = totalitarian }
+				}
+				if = {
+					limit = {
+						event_target:cc_rebellious_faction = { is_pop_faction_type = technologist }
+					}
+					NOT = { is_pop_faction_type = traditionalist }
+				}
+				if = {
+					limit = {
+						event_target:cc_rebellious_faction = { is_pop_faction_type = traditionalist }
+					}
+					NOT = { is_pop_faction_type = technologist }
+				}
+				if = {
+					limit = {
+						event_target:cc_rebellious_faction = { is_pop_faction_type = prosperity }
+					}
+					NOT = { is_pop_faction_type = imperialist }
+				}
+				if = {
+					limit = {
+						event_target:cc_rebellious_faction = { is_pop_faction_type = imperialist }
+					}
+					NOT = { is_pop_faction_type = prosperity }
+				}
+				pop_percentage = {
+					percentage > 0.74
+					limit = { happiness < 0.4 }
+				}
+			}
+			count > 0
+		}
+	}
+	
+	immediate = {
+		random_list = {
+			1 = {
+				modifier = {
+					factor = 0
+					OR = {
+						event_target:cc_rebellious_faction = {
+							OR = {
+								is_pop_faction_type = xenoist
+								is_pop_faction_type = supremacist
+								is_pop_faction_type = isolationist
+							}
+						}
+						NOT = { has_faction = xenoist }
+						NOT = {
+							count_pop_factions = {
+								limit = {
+									is_pop_faction_type = xenoist
+									pop_percentage = {
+										percentage > 0.74
+										limit = { happiness < 0.4 }
+									}
+								}
+								count = 1
+							}
+						}
+					}
+				}
+				modifier = {
+					factor = 0.5
+					count_pop_factions = {
+						limit = {
+							is_pop_faction_type = xenoist
+							support < 0.15
+						}
+						count = 1
+					}
+				}
+				modifier = {
+					factor = 0.5
+					count_pop_factions = {
+						limit = {
+							is_pop_faction_type = xenoist
+							support < 0.1
+						}
+						count = 1
+					}
+				}
+				
+				random_pop_faction = {
+					limit = { is_pop_faction_type = xenoist }
+					save_event_target_as = cc_new_reb_faction
+				}
+				
+				set_timed_country_flag = {
+					flag = cc_xenoist_secondary_revolt_active
+					days = 1080
+				}
+				
+				set_timed_country_flag = {
+					flag = cc_xenoist_stage2_active
+					days = 540
+				}
+			}
+
+			1 = {
+				modifier = {
+					factor = 0
+					OR = {
+						event_target:cc_rebellious_faction = {
+							OR = {
+								is_pop_faction_type = xenoist
+								is_pop_faction_type = supremacist
+							}
+						}
+						NOT = { has_faction = supremacist }
+						NOT = {
+							count_pop_factions = {
+								limit = {
+									is_pop_faction_type = supremacist
+									pop_percentage = {
+										percentage > 0.74
+										limit = { happiness < 0.4 }
+									}
+								}
+								count = 1
+							}
+						}
+					}
+				}
+				modifier = {
+					factor = 0.5
+					count_pop_factions = {
+						limit = {
+							is_pop_faction_type = supremacist
+							support < 0.15
+						}
+						count = 1
+					}
+				}
+				modifier = {
+					factor = 0.5
+					count_pop_factions = {
+						limit = {
+							is_pop_faction_type = supremacist
+							support < 0.1
+						}
+						count = 1
+					}
+				}
+				
+				random_pop_faction = {
+					limit = { is_pop_faction_type = supremacist }
+					save_event_target_as = cc_new_reb_faction
+				}
+				
+				set_timed_country_flag = {
+					flag = cc_supremacist_secondary_revolt_active
+					days = 1080
+				}
+				
+				set_timed_country_flag = {
+					flag = cc_supremacist_stage2_active
+					days = 540
+				}
+			}
+			1 = {
+				modifier = {
+					factor = 0
+					OR = {
+						event_target:cc_rebellious_faction = {
+							OR = {
+								is_pop_faction_type = xenoist
+								is_pop_faction_type = isolationist
+							}
+						}
+						NOT = { has_faction = isolationist }
+						NOT = {
+							count_pop_factions = {
+								limit = {
+									is_pop_faction_type = isolationist
+									pop_percentage = {
+										percentage > 0.74
+										limit = { happiness < 0.4 }
+									}
+								}
+								count = 1
+							}
+						}
+					}
+				}
+				modifier = {
+					factor = 0.5
+					count_pop_factions = {
+						limit = {
+							is_pop_faction_type = isolationist
+							support < 0.15
+						}
+						count = 1
+					}
+				}
+				modifier = {
+					factor = 0.5
+					count_pop_factions = {
+						limit = {
+							is_pop_faction_type = isolationist
+							support < 0.1
+						}
+						count = 1
+					}
+				}
+				
+				random_pop_faction = {
+					limit = { is_pop_faction_type = isolationist }
+					save_event_target_as = cc_new_reb_faction
+				}
+				
+				set_timed_country_flag = {
+					flag = cc_isolationist_secondary_revolt_active
+					days = 1080
+				}
+				
+				set_timed_country_flag = {
+					flag = cc_isolationist_stage2_active
+					days = 540
+				}
+			}
+			1 = {
+				modifier = {
+					factor = 0
+					OR = {
+						event_target:cc_rebellious_faction = {
+							OR = {
+								is_pop_faction_type = technologist
+								is_pop_faction_type = traditionalist
+							}
+						}
+						NOT = { has_faction = traditionalist }
+						NOT = {
+							count_pop_factions = {
+								limit = {
+									is_pop_faction_type = traditionalist
+									pop_percentage = {
+										percentage > 0.74
+										limit = { happiness < 0.4 }
+									}
+								}
+								count = 1
+							}
+						}
+					}
+				}
+				modifier = {
+					factor = 0.5
+					count_pop_factions = {
+						limit = {
+							is_pop_faction_type = traditionalist
+							support < 0.15
+						}
+						count = 1
+					}
+				}
+				modifier = {
+					factor = 0.5
+					count_pop_factions = {
+						limit = {
+							is_pop_faction_type = traditionalist
+							support < 0.1
+						}
+						count = 1
+					}
+				}
+				
+				random_pop_faction = {
+					limit = { is_pop_faction_type = traditionalist }
+					save_event_target_as = cc_new_reb_faction
+				}
+				
+				set_timed_country_flag = {
+					flag = cc_traditionalist_secondary_revolt_active
+					days = 1080
+				}
+				
+				set_timed_country_flag = {
+					flag = cc_traditionalist_stage2_active
+					days = 540
+				}
+			}
+			1 = {
+				modifier = {
+					factor = 0
+					OR = {
+						event_target:cc_rebellious_faction = {
+							OR = {
+								is_pop_faction_type = technologist
+								is_pop_faction_type = traditionalist
+							}
+						}
+						NOT = { has_faction = technologist }
+						NOT = {
+							count_pop_factions = {
+								limit = {
+									is_pop_faction_type = technologist
+									pop_percentage = {
+										percentage > 0.74
+										limit = { happiness < 0.4 }
+									}
+								}
+								count = 1
+							}
+						}
+					}
+				}
+				modifier = {
+					factor = 0.5
+					count_pop_factions = {
+						limit = {
+							is_pop_faction_type = technologist
+							support < 0.15
+						}
+						count = 1
+					}
+				}
+				modifier = {
+					factor = 0.5
+					count_pop_factions = {
+						limit = {
+							is_pop_faction_type = technologist
+							support < 0.1
+						}
+						count = 1
+					}
+				}
+				
+				random_pop_faction = {
+					limit = { is_pop_faction_type = technologist }
+					save_event_target_as = cc_new_reb_faction
+				}
+				
+				set_timed_country_flag = {
+					flag = cc_technologist_secondary_revolt_active
+					days = 1080
+				}
+				
+				set_timed_country_flag = {
+					flag = cc_technologist_stage2_active
+					days = 540
+				}
+			}
+			1 = {
+				modifier = {
+					factor = 0
+					OR = {
+						event_target:cc_rebellious_faction = {
+							OR = {
+								is_pop_faction_type = totalitarian
+								is_pop_faction_type = progressive
+							}
+						}
+						NOT = { has_faction = totalitarian }
+						NOT = {
+							count_pop_factions = {
+								limit = {
+									is_pop_faction_type = totalitarian
+									pop_percentage = {
+										percentage > 0.74
+										limit = { happiness < 0.4 }
+									}
+								}
+								count = 1
+							}
+						}
+					}
+				}
+				modifier = {
+					factor = 0.5
+					count_pop_factions = {
+						limit = {
+							is_pop_faction_type = totalitarian
+							support < 0.15
+						}
+						count = 1
+					}
+				}
+				modifier = {
+					factor = 0.5
+					count_pop_factions = {
+						limit = {
+							is_pop_faction_type = totalitarian
+							support < 0.1
+						}
+						count = 1
+					}
+				}
+				
+				random_pop_faction = {
+					limit = { is_pop_faction_type = totalitarian }
+					save_event_target_as = cc_new_reb_faction
+				}
+				
+				set_timed_country_flag = {
+					flag = cc_totalitarian_secondary_revolt_active
+					days = 1080
+				}
+				
+				set_timed_country_flag = {
+					flag = cc_totalitarian_stage2_active
+					days = 540
+				}
+			}
+			1 = {
+				modifier = {
+					factor = 0
+					OR = {
+						event_target:cc_rebellious_faction = {
+							OR = {
+								is_pop_faction_type = progressive
+								is_pop_faction_type = totalitarian
+							}
+						}
+						NOT = { has_faction = progressive }
+						NOT = {
+							count_pop_factions = {
+								limit = {
+									is_pop_faction_type = progressive
+									pop_percentage = {
+										percentage > 0.74
+										limit = { happiness < 0.4 }
+									}
+								}
+								count = 1
+							}
+						}
+					}
+				}
+				modifier = {
+					factor = 0.5
+					count_pop_factions = {
+						limit = {
+							is_pop_faction_type = progressive
+							support < 0.15
+						}
+						count = 1
+					}
+				}
+				modifier = {
+					factor = 0.5
+					count_pop_factions = {
+						limit = {
+							is_pop_faction_type = progressive
+							support < 0.1
+						}
+						count = 1
+					}
+				}
+				
+				random_pop_faction = {
+					limit = { is_pop_faction_type = progressive }
+					save_event_target_as = cc_new_reb_faction
+				}
+				
+				set_timed_country_flag = {
+					flag = cc_progressive_secondary_revolt_active
+					days = 1080
+				}
+				
+				set_timed_country_flag = {
+					flag = cc_progressive_stage2_active
+					days = 540
+				}
+			}
+			1 = {
+				modifier = {
+					factor = 0
+					OR = {
+						event_target:cc_rebellious_faction = {
+							OR = {
+								is_pop_faction_type = imperialist
+								is_pop_faction_type = prosperity
+							}
+						}
+						NOT = { has_faction = imperialist }
+						NOT = {
+							count_pop_factions = {
+								limit = {
+									is_pop_faction_type = imperialist
+									pop_percentage = {
+										percentage > 0.74
+										limit = { happiness < 0.4 }
+									}
+								}
+								count = 1
+							}
+						}
+					}
+				}
+				modifier = {
+					factor = 0.5
+					count_pop_factions = {
+						limit = {
+							is_pop_faction_type = imperialist
+							support < 0.15
+						}
+						count = 1
+					}
+				}
+				modifier = {
+					factor = 0.5
+					count_pop_factions = {
+						limit = {
+							is_pop_faction_type = imperialist
+							support < 0.1
+						}
+						count = 1
+					}
+				}
+				
+				random_pop_faction = {
+					limit = { is_pop_faction_type = imperialist }
+					save_event_target_as = cc_new_reb_faction
+				}
+				
+				set_timed_country_flag = {
+					flag = cc_imperialist_secondary_revolt_active
+					days = 1080
+				}
+				
+				set_timed_country_flag = {
+					flag = cc_imperialist_stage2_active
+					days = 540
+				}
+			}
+			1 = {
+				modifier = {
+					factor = 0
+					OR = {
+						event_target:cc_rebellious_faction = {
+							OR = {
+								is_pop_faction_type = imperialist
+								is_pop_faction_type = prosperity
+							}
+						}
+						NOT = { has_faction = prosperity }
+						NOT = {
+							count_pop_factions = {
+								limit = {
+									is_pop_faction_type = prosperity
+									pop_percentage = {
+										percentage > 0.74
+										limit = { happiness < 0.4 }
+									}
+								}
+								count = 1
+							}
+						}
+					}
+				}
+				modifier = {
+					factor = 0.5
+					count_pop_factions = {
+						limit = {
+							is_pop_faction_type = prosperity
+							support < 0.15
+						}
+						count = 1
+					}
+				}
+				modifier = {
+					factor = 0.5
+					count_pop_factions = {
+						limit = {
+							is_pop_faction_type = prosperity
+							support < 0.1
+						}
+						count = 1
+					}
+				}
+				
+				random_pop_faction = {
+					limit = { is_pop_faction_type = prosperity }
+					save_event_target_as = cc_new_reb_faction
+				}
+				
+				set_timed_country_flag = {
+					flag = cc_prosperity_secondary_revolt_active
+					days = 1080
+				}
+				
+				set_timed_country_flag = {
+					flag = cc_prosperity_stage2_active
+					days = 540
+				}
+			}
+		}
+	}
+							
+					
+	option = {
+		name = CCWORRYING
+
+		every_owned_planet = {
+			limit = {
+				count_pops = {
+					limit = { has_same_faction_as_2nd_faction = yes }
+					count > 4
+				}
+			}
+			add_appropriate_2nd_faction_stronghold = yes
+		}
+		every_owned_planet = {
+			limit = {
+				count_pops = {
+					limit = { has_same_ethic_as_2nd_faction = yes }
+					count > 2
+				}
+				NOT = {
+					count_pops = {
+						limit = { has_same_faction_as_2nd_faction = yes }
+						count > 4
+					}
+				}
+			}
+			add_appropriate_2nd_faction_sympathies = yes
+		}
+		every_owned_planet = {
+			limit = {				
+				NOT = {
+					count_pops = {
+						limit = { has_same_ethic_as_2nd_faction = yes }
+						count > 2
+					}
+				}
+				owner = {
+					any_owned_planet = {
+						count_pops = {
+							limit = { has_same_faction_as_2nd_faction = yes }
+							count > 4
+						}
+						distance = {
+							source = prevprev
+							min_distance = 0
+							max_distance = 65
+						}
+					}
+				}
+			}
+			add_appropriate_2nd_faction_sedition = yes
+		}
+	}
+}
+
+
+#stage 3
+
+country_event = {
+	id = ccfaction.4
+	title = ccfaction.4.name
+	desc = {
+		trigger = { has_secondary_factional_revolt_active = yes }
+		text = ccfaction.4.dual.desc
+	}
+	desc = {
+		trigger = { has_secondary_factional_revolt_active = no }
+		text = ccfaction.4.single.desc
+	}
+	picture = GFX_evt_alien_propaganda
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		if = {
+			limit = { num_owned_planets < 7 }
+			any_owned_planet = { is_faction_stronghold = yes }
+			
+			else = {
+				if = {
+					limit = { num_owned_planets < 11 }
+					any_owned_planet = {
+						is_faction_stronghold = yes
+						root = {
+							any_owned_planet = {
+								NOT = { is_same_value = prevprev }
+								is_faction_stronghold = yes
+							}
+						}
+					}
+					
+					else = {
+						if = {
+							limit = { num_owned_planets < 20 }
+							any_owned_planet = {
+								is_faction_stronghold = yes
+								root = {
+									any_owned_planet = {
+										NOT = { is_same_value = prevprev }
+										is_faction_stronghold = yes
+										root = {
+											any_owned_planet = {
+												NOR = {
+													is_same_value = prevprev
+													is_same_value = prevprevprevprev
+												}
+												is_faction_stronghold = yes
+											}
+										}
+									}
+								}
+							}
+							else = {
+								OR = {
+									any_owned_planet = {
+										has_planet_flag = ccrebel_red
+										is_faction_stronghold = yes
+										root = {
+											any_owned_planet = {
+												NOT = { is_same_value = prevprev }
+												is_faction_stronghold = yes
+												root = {
+													any_owned_planet = {
+														NOR = {
+															is_same_value = prevprev
+															is_same_value = prevprevprevprev
+														}
+														is_faction_stronghold = yes
+														root = {
+															any_owned_planet = {
+																NOT = { has_planet_flag = ccrebel_red }
+																NOR = {
+																	is_same_value = prevprev
+																	is_same_value = prevprevprevprev
+																}
+																is_faction_stronghold = yes
+															}
+														}
+													}
+												}
+											}
+										}
+									}
+									any_owned_planet = {
+										has_planet_flag = ccrebel_green
+										is_faction_stronghold = yes
+										root = {
+											any_owned_planet = {
+												NOT = { is_same_value = prevprev }
+												is_faction_stronghold = yes
+												root = {
+													any_owned_planet = {
+														NOR = {
+															is_same_value = prevprev
+															is_same_value = prevprevprevprev
+														}
+														is_faction_stronghold = yes
+														root = {
+															any_owned_planet = {
+																NOT = { has_planet_flag = ccrebel_green }
+																NOR = {
+																	is_same_value = prevprev
+																	is_same_value = prevprevprevprev
+																}
+																is_faction_stronghold = yes
+															}
+														}
+													}
+												}
+											}
+										}
+									}
+									any_owned_planet = {
+										has_planet_flag = ccrebel_blue
+										is_faction_stronghold = yes
+										root = {
+											any_owned_planet = {
+												NOT = { is_same_value = prevprev }
+												is_faction_stronghold = yes
+												root = {
+													any_owned_planet = {
+														NOR = {
+															is_same_value = prevprev
+															is_same_value = prevprevprevprev
+														}
+														is_faction_stronghold = yes
+														root = {
+															any_owned_planet = {
+																NOT = { has_planet_flag = ccrebel_blue }
+																NOR = {
+																	is_same_value = prevprev
+																	is_same_value = prevprevprevprev
+																}
+																is_faction_stronghold = yes
+															}
+														}
+													}
+												}
+											}
+										}
+									}
+									any_owned_planet = {
+										has_planet_flag = ccrebel_yellow
+										is_faction_stronghold = yes
+										root = {
+											any_owned_planet = {
+												NOT = { is_same_value = prevprev }
+												is_faction_stronghold = yes
+												root = {
+													any_owned_planet = {
+														NOR = {
+															is_same_value = prevprev
+															is_same_value = prevprevprevprev
+														}
+														is_faction_stronghold = yes
+														root = {
+															any_owned_planet = {
+																NOT = { has_planet_flag = ccrebel_yellow }
+																NOR = {
+																	is_same_value = prevprev
+																	is_same_value = prevprevprevprev
+																}
+																is_faction_stronghold = yes
+															}
+														}
+													}
+												}
+											}
+										}
+									}
+									any_owned_planet = {
+										has_planet_flag = ccrebel_white
+										is_faction_stronghold = yes
+										root = {
+											any_owned_planet = {
+												NOT = { is_same_value = prevprev }
+												is_faction_stronghold = yes
+												root = {
+													any_owned_planet = {
+														NOR = {
+															is_same_value = prevprev
+															is_same_value = prevprevprevprev
+														}
+														is_faction_stronghold = yes
+														root = {
+															any_owned_planet = {
+																NOT = { has_planet_flag = ccrebel_white }
+																NOR = {
+																	is_same_value = prevprev
+																	is_same_value = prevprevprevprev
+																}
+																is_faction_stronghold = yes
+															}
+														}
+													}
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+	
+	immediate = {
+
+		#set event targets for the second faction (for desc)
+		if = {
+			limit = { has_secondary_factional_revolt_active = yes }
+			save_faction_revolt_2nd_event_target = yes
+		}
+		
+		set_timed_country_flag = {
+			flag = cc_continue_factional_revolt
+			days = 3
+		}
+		
+		if = {
+			limit = {
+				OR = {
+					has_country_flag = cc_imperialist_revolt_active
+					has_country_flag = cc_imperialist_secondary_revolt_active
+				}
+			}
+			set_timed_country_flag = {
+				flag = cc_imperialist_stage3_active
+				days = 2520
+			}
+		}
+		if = {
+			limit = {
+				OR = {
+					has_country_flag = cc_prosperity_revolt_active
+					has_country_flag = cc_prosperity_secondary_revolt_active
+				}
+			}
+			set_timed_country_flag = {
+				flag = cc_prosperity_stage3_active
+				days = 2520
+			}
+		}
+		if = {
+			limit = {
+				OR = {
+					has_country_flag = cc_totalitarian_revolt_active
+					has_country_flag = cc_totalitarian_secondary_revolt_active
+				}
+			}
+			set_timed_country_flag = {
+				flag = cc_totalitarian_stage3_active
+				days = 2520
+			}
+		}
+		if = {
+			limit = {
+				OR = {
+					has_country_flag = cc_progressive_revolt_active
+					has_country_flag = cc_progressive_secondary_revolt_active
+				}
+			}
+			set_timed_country_flag = {
+				flag = cc_progressive_stage3_active
+				days = 2520
+			}
+		}
+		if = {
+			limit = {
+				OR = {
+					has_country_flag = cc_technologist_revolt_active
+					has_country_flag = cc_technologist_secondary_revolt_active
+				}
+			}
+			set_timed_country_flag = {
+				flag = cc_technologist_stage3_active
+				days = 2520
+			}
+		}
+		if = {
+			limit = {
+				OR = {
+					has_country_flag = cc_traditionalist_revolt_active
+					has_country_flag = cc_traditionalist_secondary_revolt_active
+				}
+			}
+			set_timed_country_flag = {
+				flag = cc_traditionalist_stage3_active
+				days = 2520
+			}
+		}
+		if = {
+			limit = {
+				OR = {
+					has_country_flag = cc_xenoist_revolt_active
+					has_country_flag = cc_xenoist_secondary_revolt_active
+				}
+			}
+			set_timed_country_flag = {
+				flag = cc_xenoist_stage3_active
+				days = 2520
+			}
+		}
+		if = {
+			limit = {
+				OR = {
+					has_country_flag = cc_supremacist_revolt_active
+					has_country_flag = cc_supremacist_secondary_revolt_active
+				}
+			}
+			set_timed_country_flag = {
+				flag = cc_supremacist_stage3_active
+				days = 2520
+			}
+		}
+		if = {
+			limit = {
+				OR = {
+					has_country_flag = cc_isolationist_revolt_active
+					has_country_flag = cc_isolationist_secondary_revolt_active
+				}
+			}
+			set_timed_country_flag = {
+				flag = cc_isolationist_stage3_active
+				days = 2520
+			}
+		}
+
+#		country_event = { id = ccfaction.42 days = 180 }
+#		country_event = { id = ccfaction.900 days = 360 }
+		country_event = { id = ccfaction.42 days = 541 }
+		country_event = { id = ccfaction.900 days = 2521 }
+		country_event = { id = ccfaction.101 days = 31 }
+	}
+	option = {
+		name = CCWORRYING
+		
+		every_owned_planet = {
+			limit = { is_faction_stronghold = yes }
+			add_modifier = {
+				modifier = cc_faction_acute_unrest
+				days = 540
+			}
+			hidden_effect = {
+				set_timed_planet_flag = {
+					flag = recent_unrest_event
+					days = 540
+				}
+			}
+		}
+	}
+}
+
+#stage 2 fails
+country_event = {
+	id = ccfaction.41
+	title = ccfaction.41.name
+	desc = {
+		trigger = {
+			has_secondary_factional_revolt_active = yes
+			event_target:cc_rebellious_faction = { has_modifier = embraced_faction }
+		}
+		text = ccfaction.41.dual.succeed.desc
+	}
+	desc = {
+		trigger = {
+			has_secondary_factional_revolt_active = no
+			event_target:cc_rebellious_faction = { has_modifier = embraced_faction }
+		}
+		text = ccfaction.41.single.succeed.desc
+	}
+	desc = {
+		trigger = {
+			has_secondary_factional_revolt_active = yes
+			event_target:cc_rebellious_faction = { NOT = { has_modifier = embraced_faction } }
+		}
+		text = ccfaction.41.dual.fail.desc
+	}
+	desc = {
+		trigger = {
+			has_secondary_factional_revolt_active = no
+			event_target:cc_rebellious_faction = { NOT = { has_modifier = embraced_faction } }
+		}
+		text = ccfaction.41.single.fail.desc
+	}
+	picture = GFX_evt_arguing_senate
+
+	is_triggered_only = yes
+	
+	trigger = { NOT = { has_country_flag = cc_continue_factional_revolt } }
+	
+	immediate = {
+		if = {
+			limit = { has_secondary_factional_revolt_active = yes }
+			save_faction_revolt_2nd_event_target = yes
+		}
+		
+		remove_all_faction_revolt_flags = yes
+	}
+	option = {
+		name = CCGOOD2
+		
+		remove_modifier = cc_country_factional_unrest
+		
+		custom_tooltip = cc_faction_revolt_modifiers_removed
+		hidden_effect = {
+			every_owned_planet = {
+				remove_all_faction_strongholds = yes
+				remove_all_faction_sympathies = yes
+				remove_all_faction_seditions = yes
+			}
+			every_owned_planet = {
+				limit = { has_modifier = cc_faction_acute_unrest }
+				remove_modifier = cc_faction_acute_unrest
+			}
+		}
+	}
+}
+
+
+#stage 3 fails (same as previous event, but different descs and trigger
+country_event = {
+	id = ccfaction.42
+	title = ccfaction.42.name
+	desc = {
+		trigger = {
+			has_secondary_factional_revolt_active = yes
+			event_target:cc_rebellious_faction = { has_modifier = embraced_faction }
+		}
+		text = ccfaction.42.dual.succeed.desc
+	}
+	desc = {
+		trigger = {
+			has_secondary_factional_revolt_active = no
+			event_target:cc_rebellious_faction = { has_modifier = embraced_faction }
+		}
+		text = ccfaction.42.single.succeed.desc
+	}
+	desc = {
+		trigger = {
+			has_secondary_factional_revolt_active = yes
+			event_target:cc_rebellious_faction = { NOT = { has_modifier = embraced_faction } }
+		}
+		text = ccfaction.42.dual.fail.desc
+	}
+	desc = {
+		trigger = {
+			has_secondary_factional_revolt_active = no
+			event_target:cc_rebellious_faction = { NOT = { has_modifier = embraced_faction } }
+		}
+		text = ccfaction.42.single.fail.desc
+	}
+	picture = GFX_evt_arguing_senate
+
+	is_triggered_only = yes
+	
+	trigger = {
+		NOR = {
+			has_country_flag = cc_factional_revolt_succeeded
+			has_country_flag = cc_factional_revolt_attempt
+		}
+	}
+	
+	immediate = {		
+		set_timed_country_flag = {
+			flag = cc_revolt_ended_early
+			days = 2000
+		}
+		
+		if = {
+			limit = { has_secondary_factional_revolt_active = yes }
+			save_faction_revolt_2nd_event_target = yes
+		}
+		
+		remove_all_faction_revolt_flags = yes
+	}
+	option = {
+		name = CCGOOD2
+		
+		remove_modifier = cc_country_factional_unrest
+		
+		custom_tooltip = cc_faction_revolt_modifiers_removed
+		hidden_effect = {
+			every_owned_planet = {
+				remove_all_faction_strongholds = yes
+				remove_all_faction_sympathies = yes
+				remove_all_faction_seditions = yes
+			}
+			every_owned_planet = {
+				limit = { has_modifier = cc_faction_acute_unrest }
+				remove_modifier = cc_faction_acute_unrest
+			}
+		}
+	}
+}
+
+
+#Factional Revolt Begins (needs a planet willing to revolt)
+#Performance event
+country_event = {
+	id = ccfaction.101
+	hide_window = yes
+	
+	trigger = {
+		has_country_flag = cc_factional_revolt_can_attempt
+	}
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		random_list = {
+			25 = {
+				country_event = { id = ccfaction.6 }
+				modifier = {
+					factor = 1.5
+					has_country_flag = cc_factional_revolt_attempt_will_succeed
+				}
+				modifier = {
+					factor = 1.5
+					has_country_flag = cc_factional_revolt_attempt_2planets
+				}
+				modifier = {
+					factor = 2
+					has_country_flag = cc_factional_revolt_attempt_5planets
+				}
+			}
+			962 = { country_event = { id = ccfaction.101 days = 10 } }
+		}
+	}
+}
+
+
+#Actual event
+country_event = {
+	id = ccfaction.6
+	title = ccfaction.6.name
+	desc = {
+		text = ccfaction.6.desc.succeed.single
+		trigger = {
+			has_country_flag = cc_factional_revolt_succeeded
+#			NOT = { exists = event_target:cc_rebellious_faction_leader }
+			NOT = { exists = event_target:cc_new_reb_faction }
+		}
+	}
+#	desc = {
+#		text = ccfaction.6.desc.succeed.leader.single
+#		trigger = {
+#			has_country_flag = cc_factional_revolt_succeeded
+#			exists = event_target:cc_rebellious_faction_leader
+#			NOT = { exists = event_target:cc_new_reb_faction }
+#		}
+#	}
+	desc = {
+		text = ccfaction.6.desc.attempt.single
+		trigger = {
+			has_country_flag = cc_factional_revolt_attempt
+			NOT = { exists = event_target:cc_new_reb_faction }
+		}
+	}
+	desc = {
+		text = ccfaction.6.desc.succeed.dual
+		trigger = {
+			has_country_flag = cc_factional_revolt_succeeded
+#			NOT = { exists = event_target:cc_rebellious_faction_leader }
+			exists = event_target:cc_new_reb_faction
+		}
+	}
+#	desc = {
+#		text = ccfaction.6.desc.succeed.leader.dual
+#		trigger = {
+#			has_country_flag = cc_factional_revolt_succeeded
+#			exists = event_target:cc_rebellious_faction_leader
+#			exists = event_target:cc_new_reb_faction
+#		}
+#	}
+	desc = {
+		text = ccfaction.6.desc.attempt.dual
+		trigger = {
+			has_country_flag = cc_factional_revolt_attempt
+			exists = event_target:cc_new_reb_faction
+		}
+	}
+	
+	picture = {
+		picture = GFX_evt_arguing_senate
+		trigger = { has_country_flag = cc_factional_revolt_succeeded }
+	}
+	
+	picture = {
+		picture = GFX_evt_ground_combat
+		trigger = { has_country_flag = cc_factional_revolt_attempt }
+	}
+	
+	location = event_target:cc_rebel_faction_capital
+	
+	is_triggered_only = yes
+
+	trigger = {
+		has_factional_revolt_stage3 = yes
+		NOR = {
+			has_country_flag = cc_factional_revolt_attempt
+			has_country_flag = cc_factional_revolt_succeeded
+		}
+		num_owned_planets > 1
+		any_owned_planet = {
+			is_faction_stronghold = yes
+			unrest > 80
+			has_ground_combat = no
+			has_orbital_bombardment = no
+			exists = controller
+			controller = { is_same_value = root }
+			has_modifier = cc_faction_acute_unrest
+		}
+	}
+	
+	immediate = {
+		save_faction_revolt_event_target = yes
+		save_faction_revolt_2nd_event_target = yes
+		
+		if = {
+			limit = {
+				any_owned_planet = {
+					is_faction_stronghold = yes
+					unrest > 99
+					has_ground_combat = no
+					has_orbital_bombardment = no
+					exists = controller
+					controller = { is_same_value = root }
+					has_modifier = cc_faction_acute_unrest
+				}
+			}
+			
+			set_timed_country_flag = {
+				flag = cc_factional_revolt_succeeded
+				years = 10
+			}
+			
+
+			random_owned_planet = {
+				limit = {
+					is_faction_stronghold = yes
+					unrest > 99
+					has_ground_combat = no
+					has_orbital_bombardment = no
+					exists = controller
+					controller = { is_same_value = root }
+					has_modifier = cc_faction_acute_unrest
+				}
+				save_event_target_as = cc_rebel_faction_capital
+				
+				if = {
+					limit = { NOT = { any_owned_pop = { is_same_species = root } } }
+					random_pop = { change_species = root }
+				}
+			}	
+				
+			
+			#create country, swap owner, get other planets to swap.
+			create_country = {
+				name = random
+				type = default
+				species = root
+				ignore_initial_colony_error = yes
+				day_zero_contact = no
+				flag = random
+				effect = {
+
+					save_event_target_as = cc_breakaway_country
+
+					event_target:cc_rebel_faction_capital = {
+						if = {
+							limit = { has_modifier = cc_faction_acute_unrest }
+							remove_modifier = cc_faction_acute_unrest
+						}
+						remove_all_faction_strongholds = yes
+						remove_all_faction_sympathies = yes
+						remove_all_faction_seditions = yes
+						
+						set_owner = prev
+						
+						solar_system = {
+							starbase = {
+								set_owner = event_target:cc_breakaway_country
+							}
+							add_claims = {
+								who = root
+								num_of_claims = 1
+								show_notification = no
+							}
+							every_fleet_in_system = {
+								limit = {
+									exists = owner
+									owner = { is_same_value = root }
+									any_owned_ship = { is_ship_class = shipclass_military_station }
+								}
+								set_owner = event_target:cc_breakaway_country
+							}
+							
+							#Give them two nearby systems (without planets)
+							closest_system = {
+								min_steps = 1
+								max_steps = 1
+								limit = {
+									is_within_borders_of = root
+									starbase = { has_starbase_size = starbase_outpost }
+									NOT = { any_planet = { is_colony = yes } }
+								}
+								starbase = { set_owner = event_target:cc_breakaway_country }
+								
+								add_claims = {
+									who = root
+									num_of_claims = 1
+									show_notification = no
+								}
+							}
+							closest_system = {
+								min_steps = 1
+								max_steps = 1
+								limit = {
+									is_within_borders_of = root
+									starbase = { has_starbase_size = starbase_outpost }
+									NOT = { any_planet = { is_colony = yes } }
+								}
+								starbase = { set_owner = event_target:cc_breakaway_country }
+								
+								add_claims = {
+									who = root
+									num_of_claims = 1
+									show_notification = no
+								}
+							}
+						}
+
+	
+						#adding the chance to subsidise the rebels if you have Potent Rebellions
+						root = { save_event_target_as = old_owner }
+						
+						if = {
+							limit = {
+								any_country = {
+									NOT = { is_country_type = fallen_empire }
+									NOR = {
+										has_valid_civic = civic_fanatic_purifiers
+										has_valid_civic = civic_hive_devouring_swarm
+										has_valid_civic = civic_machine_terminator
+										has_valid_civic = civic_barbaric_despoilers
+									}
+									any_owned_planet = {
+										distance = {
+											source = prevprev
+											max_distance = 150
+										}
+									}
+								}
+							}
+						}
+						random_country = {
+							limit = {
+								NOT = { is_country_type = fallen_empire }
+								NOR = {
+									has_valid_civic = civic_fanatic_purifiers
+									has_valid_civic = civic_hive_devouring_swarm
+									has_valid_civic = civic_machine_terminator
+									has_valid_civic = civic_barbaric_despoilers
+								}
+								any_owned_planet = {
+									distance = {
+										source = prevprev
+										max_distance = 150
+									}
+								}
+								
+								opinion = {
+									who = event_target:old_owner
+									value < -50
+								}
+								OR = {
+									is_hostile_to = event_target:old_owner
+									is_angry_to = event_target:old_owner
+									is_rival = event_target:old_owner
+									is_disloyal_to = event_target:old_owner
+									is_domineering_to = event_target:old_owner
+								}
+								AND = {
+									OR = {
+										has_country_resource = {
+											type = minerals
+											amount > 2000
+										}
+										has_monthly_income = {
+											resource = minerals
+											value > 100
+										}
+									}
+									OR = {
+										has_monthly_income = {
+											resource = energy
+											value > 100
+										}
+										energy > 2000
+									}
+								}
+							}
+							prevprev = {
+								set_timed_relation_flag = {
+									flag = ccrebel_may_support_rebels
+									who = prev
+									days = 15
+								}
+							}
+							country_event = { id = ccrebel_sow_unrest.4 days = 14 }
+						}
+					}
+				
+					remove_all_ethics = yes
+					#primary ethic
+					root = {
+						switch = {
+							trigger = has_country_flag
+							cc_imperialist_revolt_active = { prev = { country_add_ethic = ethic_fanatic_militarist } }
+							cc_prosperity_revolt_active = { prev = { country_add_ethic = ethic_fanatic_pacifist } }
+							cc_totalitarian_revolt_active = { prev = { country_add_ethic = ethic_fanatic_authoritarian } }
+							cc_progressive_revolt_active = { prev = { country_add_ethic = ethic_fanatic_egalitarian } }
+							cc_technologist_revolt_active = { prev = { country_add_ethic = ethic_fanatic_materialist } }
+							cc_traditionalist_revolt_active = { prev = { country_add_ethic = ethic_fanatic_spiritualist } }
+							cc_xenoist_revolt_active = { prev = { country_add_ethic = ethic_fanatic_xenophile } }
+							cc_supremacist_revolt_active = { prev = { country_add_ethic = ethic_fanatic_xenophobe } }
+							cc_isolationist_revolt_active = { prev = { country_add_ethic = ethic_fanatic_xenophobe } }
+							default = { }
+						}
+					
+						#secondary ethic
+						switch = {
+							trigger = has_country_flag
+							cc_imperialist_secondary_revolt_active = { prev = { country_add_ethic = ethic_militarist } }
+							cc_prosperity_secondary_revolt_active = { prev = { country_add_ethic = ethic_pacifist } }
+							cc_totalitarian_secondary_revolt_active = { prev = { country_add_ethic = ethic_authoritarian } }
+							cc_progressive_secondary_revolt_active = { prev = { country_add_ethic = ethic_egalitarian } }
+							cc_technologist_secondary_revolt_active = { prev = { country_add_ethic = ethic_materialist } }
+							cc_traditionalist_secondary_revolt_active = { prev = { country_add_ethic = ethic_spiritualist } }
+							cc_xenoist_secondary_revolt_active = { prev = { country_add_ethic = ethic_xenophile } }
+							cc_supremacist_secondary_revolt_active = {
+								prev = {
+									if = {
+										limit = { NOT = { has_ethic = ethic_fanatic_xenophobe } }
+										country_add_ethic = ethic_xenophobe
+									}
+								}
+							}
+							cc_isolationist_secondary_revolt_active = {
+								prev = {
+									if = {
+										limit = { NOT = { has_ethic = ethic_fanatic_xenophobe } }
+										country_add_ethic = ethic_xenophobe
+									}
+								}
+							}
+							default = { }
+						}
+					}
+					
+					if = {
+						limit = { num_ethics = 1 }
+						random_list = {
+							1 = {
+								country_add_ethic = ethic_authoritarian
+								
+								modifier = {
+									factor = 0
+									OR = {
+										has_ethic = ethic_fanatic_authoritarian
+										has_ethic = ethic_fanatic_egalitarian
+										root = {
+											OR = {
+												has_ethic = ethic_fanatic_authoritarian
+												has_ethic = ethic_authoritarian
+											}
+										}
+									}
+								}
+							}
+							1 = {
+								country_add_ethic = ethic_egalitarian
+								
+								modifier = {
+									factor = 0
+									OR = {
+										has_ethic = ethic_fanatic_authoritarian
+										has_ethic = ethic_fanatic_egalitarian
+										root = {
+											OR = {
+												has_ethic = ethic_fanatic_egalitarian
+												has_ethic = ethic_egalitarian
+											}
+										}
+									}
+								}
+							}
+							1 = {
+								country_add_ethic = ethic_xenophile
+								
+								modifier = {
+									factor = 0
+									OR = {
+										has_ethic = ethic_fanatic_xenophile
+										has_ethic = ethic_fanatic_xenophobe
+										root = {
+											OR = {
+												has_ethic = ethic_fanatic_xenophile
+												has_ethic = ethic_xenophile
+											}
+										}
+									}
+								}
+							}
+							1 = {
+								country_add_ethic = ethic_xenophobe
+								
+								modifier = {
+									factor = 0
+									OR = {
+										has_ethic = ethic_fanatic_xenophile
+										has_ethic = ethic_fanatic_xenophobe
+										root = {
+											OR = {
+												has_ethic = ethic_fanatic_xenophobe
+												has_ethic = ethic_xenophobe
+											}
+										}
+									}
+								}
+							}
+							1 = {
+								country_add_ethic = ethic_spiritualist
+								
+								modifier = {
+									factor = 0
+									OR = {
+										has_ethic = ethic_fanatic_spiritualist
+										has_ethic = ethic_fanatic_materialist
+										root = {
+											OR = {
+												has_ethic = ethic_fanatic_spiritualist
+												has_ethic = ethic_spiritualist
+											}
+										}
+									}
+								}
+							}
+							1 = {
+								country_add_ethic = ethic_materialist
+								
+								modifier = {
+									factor = 0
+									OR = {
+										has_ethic = ethic_fanatic_spiritualist
+										has_ethic = ethic_fanatic_materialist
+										root = {
+											OR = {
+												has_ethic = ethic_fanatic_materialist
+												has_ethic = ethic_materialist
+											}
+										}
+									}
+								}
+							}
+							1 = {
+								country_add_ethic = ethic_militarist
+								
+								modifier = {
+									factor = 0
+									OR = {
+										has_ethic = ethic_fanatic_pacifist
+										has_ethic = ethic_fanatic_militarist
+										root = {
+											OR = {
+												has_ethic = ethic_fanatic_militarist
+												has_ethic = ethic_militarist
+											}
+										}
+									}
+								}
+							}
+							1 = {
+								country_add_ethic = ethic_pacifist
+								
+								modifier = {
+									factor = 0
+									OR = {
+										has_ethic = ethic_fanatic_pacifist
+										has_ethic = ethic_fanatic_militarist
+										root = {
+											OR = {
+												has_ethic = ethic_fanatic_pacifist
+												has_ethic = ethic_pacifist
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+					
+					change_government = {
+						authority = random
+						civics = random
+					}
+					
+					set_name = random
+						
+				
+							
+					set_timed_relation_flag = {
+						who = root
+						flag = cc_breakaway_country
+						years = 10
+					}
+					
+					root = {
+						if = {
+							limit = {
+								OR = {
+									AND = {
+										exists = event_target:cc_rebellious_faction_leader
+										event_target:cc_rebellious_faction_leader = { NOT = { leader_class = ruler } }
+									}
+									AND = {
+										exists = event_target:cc_new_reb_faction_leader
+										event_target:cc_new_reb_faction_leader = { NOT = { leader_class = ruler } }
+									}
+								}
+							}
+							country_event = { id = ccfaction.601 }
+						}
+					}
+					if = {
+						limit = { 
+							exists = event_target:cc_rebellious_faction_leader
+							root.ruler = { NOT = { is_same_value = event_target:cc_rebellious_faction_leader } }
+						}
+						event_target:cc_rebellious_faction_leader = {
+							if = {
+								limit = {
+									OR = {
+										leader_class = general
+										leader_class = admiral
+										leader_class = scientist
+									}
+								}
+								exile_leader_as = cc_rebellious_faction_leader
+								
+								else = {
+									root = {
+										create_fleet = {
+											name = "NAME_Other_Science_Ship"
+											effect = {
+												set_owner = root
+												create_ship_design = {
+													design = "NAME_Prototype"
+												}
+												create_ship = {
+													name = "NAME_From_Beyond"
+													design = last_created_design
+													graphical_culture = "extra_dimensional_01"
+													prefix = no
+													upgradable = no
+												}
+												set_location = root.capital_scope
+												save_event_target_as = deleted_ship
+											}
+										}
+										event_target:deleted_ship = {
+											set_leader = event_target:cc_rebellious_faction_leader
+											leader = { exile_leader_as = cc_rebellious_faction_leader }
+											delete_fleet = this
+										}
+									}
+								}
+							}
+						}
+						prev = { set_leader = cc_rebellious_faction_leader }
+						
+						
+						else = {
+							create_leader = {
+								type = ruler
+								species = owner_main_species
+								name = random
+								skill = 2
+								traits = {}
+							}
+							assign_leader = last_created_leader
+							ruler = {
+								add_random_leader_trait = yes
+							}
+						}
+					}
+					
+					if = {
+						limit = {
+							exists = event_target:cc_new_reb_faction_leader
+							root.ruler = { NOT = { is_same_value = event_target:cc_new_reb_faction_leader } }
+						}
+						event_target:cc_new_reb_faction_leader = {
+							if = {
+								limit = {
+									OR = {
+										leader_class = general
+										leader_class = admiral
+										leader_class = scientist
+									}
+								}
+								exile_leader_as = cc_new_reb_faction_leader
+								
+								else = {
+									root = {
+										create_fleet = {
+											name = "NAME_Other_Science_Ship"
+											effect = {
+												set_owner = root
+												create_ship_design = {
+													design = "NAME_Prototype"
+												}
+												create_ship = {
+													name = "NAME_From_Beyond"
+													design = last_created_design
+													graphical_culture = "extra_dimensional_01"
+													prefix = no
+													upgradable = no
+												}
+												set_location = root.capital_scope
+												save_event_target_as = deleted_ship
+											}
+										}
+										event_target:deleted_ship = {
+											set_leader = event_target:cc_new_reb_faction_leader
+											leader = { exile_leader_as = cc_new_reb_faction_leader }
+											delete_fleet = this
+										}
+									}
+								}
+							}
+						}
+						prev = {
+							create_fleet = {
+								name = "NAME_Other_Science_Ship"
+								effect = {
+									set_owner = event_target:cc_breakaway_country
+									create_ship_design = {
+										design = "NAME_Prototype"
+									}
+									create_ship = {
+										name = "NAME_From_Beyond"
+										design = last_created_design
+										graphical_culture = "extra_dimensional_01"
+										prefix = no
+										upgradable = no
+									}
+									set_location = root.capital_scope
+									save_event_target_as = deleted_ship
+								}
+							}
+							event_target:deleted_ship = {
+								set_leader = event_target:cc_new_reb_faction_leader
+								leader = { unassign_leader = this }
+								delete_fleet = this
+							}
+						}
+					}
+				}
+			}
+			
+			event_target:cc_breakaway_country = {
+				add_minerals = 200 # Should be atleast the required amount for a spaceport
+				add_energy = 200
+				add_influence = 250
+				
+				copy_techs_from = {
+					target = root
+					except = { }
+				}
+
+				# survey host's surveyed planets
+				every_planet = {
+					limit = {
+						is_surveyed = {
+							who = root
+							status = yes
+						}
+					}
+					surveyed = {
+						set_surveyed = yes
+						surveyor = prev
+					}
+				}
+				
+				establish_communications_no_message = root
+				root = {
+					every_relation = {
+						establish_communications_no_message = prevprev
+					}
+					
+					every_system_within_border = {
+						limit = { NOT = { prevprev = { has_claim = prev } } }
+						add_claims = {
+							who = prevprev
+							num_of_claims = 1
+							show_notification = no
+						}
+					}
+				}
+				
+				declare_war = {
+					target = root
+					attacker_war_goal = wg_dpe_faction_revolt
+				}
+
+				country_event = { id = ccfaction.602 days = 2 }
+			}
+
+			
+			every_owned_planet = { #swap the firm planets
+				limit = {
+					NOT = { is_same_value = event_target:cc_rebel_faction_capital }
+					is_faction_stronghold = yes
+					unrest > 80
+				}
+				planet_event = { id = ccfaction.61 days = 20 random = 15 }
+			}
+			
+			every_owned_planet = { #revolts in the others
+				limit = {
+					NOT = { is_same_value = event_target:cc_rebel_faction_capital }
+					is_faction_stronghold = yes
+					NOT = { unrest > 80 }
+				}
+				planet_event = { id = ccfaction.62 days = 20 random = 15 }
+			}
+			
+			country_event = { id = ccfaction.7 days = 45 }
+			
+			
+			else = {
+				set_country_flag = cc_factional_revolt_attempt
+					
+				random_owned_planet = {
+					limit = {
+						is_faction_stronghold = yes
+						unrest > 80
+						has_ground_combat = no
+						has_orbital_bombardment = no
+						exists = controller
+						controller = { is_same_value = root }
+						has_modifier = cc_faction_acute_unrest
+					}
+				
+				
+					set_planet_flag = revolt_in_progress
+					
+					if = {
+						limit = { NOT = { any_owned_pop = { is_same_species = root } } }
+						random_pop = { change_species = root }
+					}
+					
+					#create rebels
+					
+					create_rebels = {
+						species = root.species
+						ethos = random
+						authority = random
+						name = random
+						flag = random
+					
+						effect = {
+							remove_all_ethics = yes
+						
+							set_country_flag = cc_faction_rebels
+							establish_communications_no_message = root
+							root = {
+								every_relation = {
+									establish_communications_no_message = prevprev
+								}
+							}
+							
+							
+							#primary ethic
+							root = {
+								switch = {
+									trigger = has_country_flag
+									cc_imperialist_revolt_active = { prev = { country_add_ethic = ethic_fanatic_militarist } }
+									cc_prosperity_revolt_active = { prev = { country_add_ethic = ethic_fanatic_pacifist } }
+									cc_totalitarian_revolt_active = { prev = { country_add_ethic = ethic_fanatic_authoritarian } }
+									cc_progressive_revolt_active = { prev = { country_add_ethic = ethic_fanatic_egalitarian } }
+									cc_technologist_revolt_active = { prev = { country_add_ethic = ethic_fanatic_materialist } }
+									cc_traditionalist_revolt_active = { prev = { country_add_ethic = ethic_fanatic_spiritualist } }
+									cc_xenoist_revolt_active = { prev = { country_add_ethic = ethic_fanatic_xenophile } }
+									cc_supremacist_revolt_active = { prev = { country_add_ethic = ethic_fanatic_xenophobe } }
+									cc_isolationist_revolt_active = { prev = { country_add_ethic = ethic_fanatic_xenophobe } }
+									default = { }
+								}
+							
+								#secondary ethic
+								switch = {
+									trigger = has_country_flag
+									cc_imperialist_secondary_revolt_active = { prev = { country_add_ethic = ethic_militarist } }
+									cc_prosperity_secondary_revolt_active = { prev = { country_add_ethic = ethic_pacifist } }
+									cc_totalitarian_secondary_revolt_active = { prev = { country_add_ethic = ethic_authoritarian } }
+									cc_progressive_secondary_revolt_active = { prev = { country_add_ethic = ethic_egalitarian } }
+									cc_technologist_secondary_revolt_active = { prev = { country_add_ethic = ethic_materialist } }
+									cc_traditionalist_secondary_revolt_active = { prev = { country_add_ethic = ethic_spiritualist } }
+									cc_xenoist_secondary_revolt_active = { prev = { country_add_ethic = ethic_xenophile } }
+									cc_supremacist_secondary_revolt_active = {
+										prev = {
+											if = {
+												limit = { NOT = { has_ethic = ethic_fanatic_xenophobe } }
+												country_add_ethic = ethic_xenophobe
+											}
+										}
+									}
+									cc_isolationist_secondary_revolt_active = {
+										prev = {
+											if = {
+												limit = { NOT = { has_ethic = ethic_fanatic_xenophobe } }
+												country_add_ethic = ethic_xenophobe
+											}
+										}
+									}
+									default = { }
+								}
+							}
+							
+							if = {
+								limit = { num_ethics = 1 }
+								random_list = {
+									1 = {
+										country_add_ethic = ethic_authoritarian
+										
+										modifier = {
+											factor = 0
+											OR = {
+												has_ethic = ethic_fanatic_authoritarian
+												has_ethic = ethic_fanatic_egalitarian
+												root = {
+													OR = {
+														has_ethic = ethic_fanatic_authoritarian
+														has_ethic = ethic_authoritarian
+													}
+												}
+											}
+										}
+									}
+									1 = {
+										country_add_ethic = ethic_egalitarian
+										
+										modifier = {
+											factor = 0
+											OR = {
+												has_ethic = ethic_fanatic_authoritarian
+												has_ethic = ethic_fanatic_egalitarian
+												root = {
+													OR = {
+														has_ethic = ethic_fanatic_egalitarian
+														has_ethic = ethic_egalitarian
+													}
+												}
+											}
+										}
+									}
+									1 = {
+										country_add_ethic = ethic_xenophile
+										
+										modifier = {
+											factor = 0
+											OR = {
+												has_ethic = ethic_fanatic_xenophile
+												has_ethic = ethic_fanatic_xenophobe
+												root = {
+													OR = {
+														has_ethic = ethic_fanatic_xenophile
+														has_ethic = ethic_xenophile
+													}
+												}
+											}
+										}
+									}
+									1 = {
+										country_add_ethic = ethic_xenophobe
+										
+										modifier = {
+											factor = 0
+											OR = {
+												has_ethic = ethic_fanatic_xenophile
+												has_ethic = ethic_fanatic_xenophobe
+												root = {
+													OR = {
+														has_ethic = ethic_fanatic_xenophobe
+														has_ethic = ethic_xenophobe
+													}
+												}
+											}
+										}
+									}
+									1 = {
+										country_add_ethic = ethic_spiritualist
+										
+										modifier = {
+											factor = 0
+											OR = {
+												has_ethic = ethic_fanatic_spiritualist
+												has_ethic = ethic_fanatic_materialist
+												root = {
+													OR = {
+														has_ethic = ethic_fanatic_spiritualist
+														has_ethic = ethic_spiritualist
+													}
+												}
+											}
+										}
+									}
+									1 = {
+										country_add_ethic = ethic_materialist
+										
+										modifier = {
+											factor = 0
+											OR = {
+												has_ethic = ethic_fanatic_spiritualist
+												has_ethic = ethic_fanatic_materialist
+												root = {
+													OR = {
+														has_ethic = ethic_fanatic_materialist
+														has_ethic = ethic_materialist
+													}
+												}
+											}
+										}
+									}
+									1 = {
+										country_add_ethic = ethic_militarist
+										
+										modifier = {
+											factor = 0
+											OR = {
+												has_ethic = ethic_fanatic_pacifist
+												has_ethic = ethic_fanatic_militarist
+												root = {
+													OR = {
+														has_ethic = ethic_fanatic_militarist
+														has_ethic = ethic_militarist
+													}
+												}
+											}
+										}
+									}
+									1 = {
+										country_add_ethic = ethic_pacifist
+										
+										modifier = {
+											factor = 0
+											OR = {
+												has_ethic = ethic_fanatic_pacifist
+												has_ethic = ethic_fanatic_militarist
+												root = {
+													OR = {
+														has_ethic = ethic_fanatic_pacifist
+														has_ethic = ethic_pacifist
+													}
+												}
+											}
+										}
+									}
+								}
+							}
+							
+							change_government = {
+								authority = random
+								civics = random
+							}
+							
+							set_name = random
+								
+						
+							save_event_target_as = cc_breakaway_country
+									
+							set_timed_relation_flag = {
+								who = root
+								flag = cc_breakaway_country
+								years = 10
+							}
+							
+							root = {
+								if = {
+									limit = {
+										OR = {
+											AND = {
+												exists = event_target:cc_rebellious_faction_leader
+												event_target:cc_rebellious_faction_leader = { NOT = { leader_class = ruler } }
+											}
+											AND = {
+												exists = event_target:cc_new_reb_faction_leader
+												event_target:cc_new_reb_faction_leader = { NOT = { leader_class = ruler } }
+											}
+										}
+									}
+									country_event = { id = ccfaction.601 }
+								}
+							}
+							if = {
+								limit = {
+									exists = event_target:cc_rebellious_faction_leader
+									root.ruler = { NOT = { is_same_value = event_target:cc_rebellious_faction_leader } }
+								}
+								event_target:cc_rebellious_faction_leader = {
+									if = {
+										limit = {
+											OR = {
+												leader_class = general
+												leader_class = admiral
+												leader_class = scientist
+											}
+										}
+										exile_leader_as = cc_rebellious_faction_leader
+										
+										else = {
+											root = {
+												create_fleet = {
+													name = "NAME_Other_Science_Ship"
+													effect = {
+														set_owner = root
+														create_ship_design = {
+															design = "NAME_Prototype"
+														}
+														create_ship = {
+															name = "NAME_From_Beyond"
+															design = last_created_design
+															graphical_culture = "extra_dimensional_01"
+															prefix = no
+															upgradable = no
+														}
+														set_location = root.capital_scope
+														save_event_target_as = deleted_ship
+													}
+												}
+												event_target:deleted_ship = {
+													set_leader = event_target:cc_rebellious_faction_leader
+													leader = { exile_leader_as = cc_rebellious_faction_leader }
+													delete_fleet = this
+												}
+											}
+										}
+									}
+								}
+								prev = { set_leader = cc_rebellious_faction_leader }
+								
+								
+								else = {
+									create_leader = {
+										type = ruler
+										species = owner_main_species
+										name = random
+										skill = 2
+										traits = {}
+									}
+									assign_leader = last_created_leader
+									ruler = {
+										add_random_leader_trait = yes
+									}
+								}
+							}
+							
+							if = {
+								limit = {
+									exists = event_target:cc_new_reb_faction_leader
+									root.ruler = { NOT = { is_same_value = event_target:cc_new_reb_faction_leader } }
+								}
+								event_target:cc_new_reb_faction_leader = {
+									if = {
+										limit = {
+											OR = {
+												leader_class = general
+												leader_class = admiral
+												leader_class = scientist
+											}
+										}
+										exile_leader_as = cc_new_reb_faction_leader
+										
+										else = {
+											root = {
+												create_fleet = {
+													name = "NAME_Other_Science_Ship"
+													effect = {
+														set_owner = root
+														create_ship_design = {
+															design = "NAME_Prototype"
+														}
+														create_ship = {
+															name = "NAME_From_Beyond"
+															design = last_created_design
+															graphical_culture = "extra_dimensional_01"
+															prefix = no
+															upgradable = no
+														}
+														set_location = root.capital_scope
+														save_event_target_as = deleted_ship
+													}
+												}
+												event_target:deleted_ship = {
+													set_leader = event_target:cc_new_reb_faction_leader
+													leader = { exile_leader_as = cc_new_reb_faction_leader }
+													delete_fleet = this
+												}
+											}
+										}
+									}
+								}
+								prev = {
+									create_fleet = {
+										name = "NAME_Other_Science_Ship"
+										effect = {
+											set_owner = event_target:cc_breakaway_country
+											create_ship_design = {
+												design = "NAME_Prototype"
+											}
+											create_ship = {
+												name = "NAME_From_Beyond"
+												design = last_created_design
+												graphical_culture = "extra_dimensional_01"
+												prefix = no
+												upgradable = no
+											}
+											set_location = root.capital_scope
+											save_event_target_as = deleted_ship
+										}
+									}
+									event_target:deleted_ship = {
+										set_leader = event_target:cc_new_reb_faction_leader
+										leader = { unassign_leader = this }
+										delete_fleet = this
+									}
+								}
+							}
+						}
+					}
+				
+				
+					every_owned_pop = {
+						limit = {
+							OR = {
+								if = {
+									limit = {
+										root = {
+											OR = {
+												has_country_flag = cc_imperialist_revolt_active
+												has_country_flag = cc_imperialist_secondary_revolt_active
+											}
+										}
+									}
+									has_ethic = ethic_militarist
+									is_enslaved = no
+									is_being_purged = no
+									has_culture_shock = no
+									#member_of_faction = imperialist
+								}
+								if = {
+									limit = {
+										root = {
+											OR = {
+												has_country_flag = cc_prosperity_revolt_active
+												has_country_flag = cc_prosperity_secondary_revolt_active
+											}
+										}
+									}
+									has_ethic = ethic_pacifist
+									is_enslaved = no
+									is_being_purged = no
+									has_culture_shock = no
+									#member_of_faction = prosperity
+								}
+								if = {
+									limit = {
+										root = {
+											OR = {
+												has_country_flag = cc_totalitarian_revolt_active
+												has_country_flag = cc_totalitarian_secondary_revolt_active
+											}
+										}
+									}
+									has_ethic = ethic_authoritarian
+									is_enslaved = no
+									is_being_purged = no
+									has_culture_shock = no
+									#member_of_faction = totalitarian
+								}
+								if = {
+									limit = {
+										root = {
+											OR = {
+												has_country_flag = cc_progressive_revolt_active
+												has_country_flag = cc_progressive_secondary_revolt_active
+											}
+										}
+									}
+									has_ethic = ethic_egalitarian
+									is_enslaved = no
+									is_being_purged = no
+									has_culture_shock = no
+									#member_of_faction = progressive
+								}
+								if = {
+									limit = {
+										root = {
+											OR = {
+												has_country_flag = cc_technologist_revolt_active
+												has_country_flag = cc_technologist_secondary_revolt_active
+											}
+										}
+									}
+									has_ethic = ethic_materialist
+									is_enslaved = no
+									is_being_purged = no
+									has_culture_shock = no
+									#member_of_faction = technologist
+								}
+								if = {
+									limit = {
+										root = {
+											OR = {
+												has_country_flag = cc_traditionalist_revolt_active
+												has_country_flag = cc_traditionalist_secondary_revolt_active
+											}
+										}
+									}
+									has_ethic = ethic_spiritualist
+									is_enslaved = no
+									is_being_purged = no
+									has_culture_shock = no
+									#member_of_faction = traditionalist
+								}
+								if = {
+									limit = {
+										root = {
+											OR = {
+												has_country_flag = cc_xenoist_revolt_active
+												has_country_flag = cc_xenoist_secondary_revolt_active
+											}
+										}
+									}
+									has_ethic = ethic_xenophile
+									is_enslaved = no
+									is_being_purged = no
+									has_culture_shock = no
+									#member_of_faction = xenoist
+								}
+								if = {
+									limit = {
+										root = {
+											OR = {
+												has_country_flag = cc_supremacist_revolt_active
+												has_country_flag = cc_supremacist_secondary_revolt_active
+											}
+										}
+									}
+									has_ethic = ethic_xenophobe
+									is_enslaved = no
+									is_being_purged = no
+									has_culture_shock = no
+									
+									owner = {
+										NOR = {
+											has_ethic = ethic_pacifist
+											has_ethic = ethic_fanatic_pacifist
+										}
+									}
+									is_same_species = owner_species
+									#member_of_faction = supremacist
+								}
+								if = {
+									limit = {
+										root = {
+											OR = {
+												has_country_flag = cc_isolationist_revolt_active
+												has_country_flag = cc_isolationist_secondary_revolt_active
+											}
+										}
+									}
+									has_ethic = ethic_xenophobe
+									is_enslaved = no
+									is_being_purged = no
+									has_culture_shock = no
+									
+									OR = {
+										NOT = { is_same_species = owner_species }
+										owner = {
+											OR = {
+												has_ethic = ethic_pacifist
+												has_ethic = ethic_fanatic_pacifist
+											}
+										}
+									}
+									#member_of_faction = isolationist
+								}
+							}
+						}
+						planet = {
+							while = {
+								count = 3
+								create_army = {
+									owner = event_target:cc_breakaway_country
+									species = root.species
+									type = "assault_army"
+								}
+							}
+						}
+					}
+					
+					set_timed_planet_flag = {
+						flag = recent_unrest_event
+						days = 720
+					}
+					set_timed_planet_flag = {
+						flag = cc_faction_revolt_capital
+						days = 720
+					}
+				}
+			}
+		}
+	}
+	
+	option = {
+		name = UNFORTUNATE
+	}
+}
+
+#A leader defects
+country_event = {
+	id = ccfaction.601
+	title = ccfaction.601.name
+	desc = {
+		trigger = {
+			AND = {
+				exists = event_target:cc_rebellious_faction_leader
+				ruler = { NOT = { is_same_value = event_target:cc_rebellious_faction_leader } }
+				exists = event_target:cc_new_reb_faction_leader
+				ruler = { NOT = { is_same_value = event_target:cc_new_reb_faction_leader } }
+			}
+		}
+		text = ccfaction.601.desc.both
+	}
+	desc = {
+		trigger = {
+			AND = {
+				exists = event_target:cc_rebellious_faction_leader
+				ruler = { NOT = { is_same_value = event_target:cc_rebellious_faction_leader } }
+				OR = {
+					NOT = { exists = event_target:cc_new_reb_faction_leader }
+					AND = {
+						exists = event_target:cc_new_reb_faction_leader
+						ruler = { is_same_value = event_target:cc_new_reb_faction_leader }
+					}
+				}
+			}
+		}
+		text = ccfaction.601.desc.only1
+	}
+	desc = {
+		trigger = {
+			AND = {
+				OR = {
+					NOT = { exists = event_target:cc_rebellious_faction_leader }
+					AND = {
+						exists = event_target:cc_rebellious_faction_leader
+						ruler = { is_same_value = event_target:cc_rebellious_faction_leader }
+					}
+				}
+				exists = event_target:cc_new_reb_faction_leader
+				ruler = { NOT = { is_same_value = event_target:cc_new_reb_faction_leader } }
+			}
+		}
+		text = ccfaction.601.desc.only2
+	}
+	
+	picture = GFX_evt_hangar_bay
+	
+	is_triggered_only = yes
+	
+	option = { name = UNFORTUNATE }
+}
+
+
+
+country_event = {
+	id = ccfaction.602
+	hide_window = yes
+	is_triggered_only = yes
+
+	immediate = {
+		if = {
+			limit = { has_global_flag = potent_rebellions_expanded_active }
+			country_event = { id = rebellionscript.1 scopes = { from = capital_scope } }
+			create_fleet_from_naval_cap = 0.5
+			
+			else = { create_fleet_from_naval_cap = 1.5 }
+		}
+		
+
+		if = {
+			limit = { exists = event_target:cc_new_reb_faction_leader }
+			if = {
+				limit = { event_target:cc_new_reb_faction_leader = { leader_class = admiral } }
+				from = {
+					set_timed_country_flag = {
+						flag = cc_admiral_defects2
+						days = 5
+					}
+				}
+				event_target:cc_new_reb_faction_leader = { exile_leader_as = cc_new_reb_faction_leader }
+				last_created_fleet = { set_leader = cc_new_reb_faction_leader }
+			}
+			if = {
+				limit = { event_target:cc_new_reb_faction_leader = { leader_class = scientist } }
+				from = {
+					set_timed_country_flag = {
+						flag = cc_scientist_defects2
+						days = 5
+					}
+				}
+				event_target:cc_new_reb_faction_leader = { exile_leader_as = cc_new_reb_faction_leader }
+				
+				#Apparently, can't bring back
+			}
+			if = {
+				limit = { event_target:cc_new_reb_faction_leader = { leader_class = governor } }
+#				from = { #apparently, can't exile
+#					set_timed_country_flag = {
+#						flag = cc_governor_defects2
+#						days = 5
+#					}
+#				}
+			}
+			if = {
+				limit = { event_target:cc_new_reb_faction_leader = { leader_class = general } }
+				from = {
+					set_timed_country_flag = {
+						flag = cc_general_defects2
+						days = 5
+					}
+				}
+				event_target:cc_new_reb_faction_leader = { exile_leader_as = cc_new_reb_faction_leader }
+				#apparently, can't bring back
+			}
+		} 
+		
+	}
+}
+
+#swap owners on high unrest planets
+planet_event = {
+	id = ccfaction.61
+	title = ccfaction.61.name
+	desc = ccfaction.61.desc
+	
+	location = root
+	
+	#maybe I will make a better picture sometime
+	picture = GFX_evt_arguing_senate
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		exists = controller
+		controller = { is_same_value = root.owner }
+		is_faction_stronghold = yes
+		has_ground_combat = no
+		has_orbital_bombardment = no
+	}
+	
+	immediate = {
+		owner = { save_event_target_as = dpe_former_owner }
+		solar_system = {
+			starbase = {
+				set_owner = event_target:cc_breakaway_country
+			}
+			add_claims = {
+				who = event_target:dpe_former_owner
+				num_of_claims = 1
+				show_notification = no
+			}
+			every_fleet_in_system = {
+				limit = {
+					exists = owner
+					owner = { is_same_value = event_target:dpe_former_owner }
+					any_owned_ship = { is_ship_class = shipclass_military_station }
+				}
+				set_owner = event_target:cc_breakaway_country
+			}
+		}
+	
+	
+		#Give them a nearby system (without planets)
+		solar_system = {
+			closest_system = {
+				min_steps = 1
+				max_steps = 1
+				limit = {
+					is_within_borders_of = event_target:dpe_former_owner
+					starbase = { has_starbase_size = starbase_outpost }
+					NOT = { any_planet = { is_colony = yes } }
+				}
+				starbase = { set_owner = event_target:cc_breakaway_country }
+				
+				add_claims = {
+					who = event_target:dpe_former_owner
+					num_of_claims = 1
+					show_notification = no
+				}
+			}
+		}
+
+
+		set_owner = event_target:cc_breakaway_country
+
+
+		if = {
+			limit = { has_modifier = cc_faction_acute_unrest }
+			remove_modifier = cc_faction_acute_unrest
+		}
+		remove_all_faction_strongholds = yes
+		if = {
+			limit = { has_faction_sympathies = yes }
+			remove_all_faction_sympathies = yes
+		}
+		if = {
+			limit = { has_faction_sedition = yes }
+			remove_all_faction_seditions = yes
+		}
+
+		owner = {
+			if = {
+				limit = { num_owned_planets < 4 }
+					
+				if = {
+					limit = { root = { num_pops < 13 NOT = { num_pops < 7 } } }
+					
+					create_fleet_from_naval_cap = 0.12
+					last_created_fleet = {
+						set_location = root
+					}
+								
+					else = {
+						if = {
+							limit = { root = { num_pops < 19 NOT = { num_pops < 7 } } }
+							
+							create_fleet_from_naval_cap = 0.24
+							last_created_fleet = {
+								set_location = root
+							}
+					
+							else = {
+								if = {
+									limit = { NOT = { num_pops < 7 } }
+									create_fleet_from_naval_cap = 0.36
+									last_created_fleet = {
+										set_location = root
+									}
+								}
+							}
+						}
+					}
+				}
+									
+				else = {
+					if = {
+						limit = {
+							num_owned_planets < 6
+						}
+						if = {
+							limit = { root = { num_pops < 13 NOT = { num_pops < 7 } } }
+							
+							create_fleet_from_naval_cap = 0.0675
+							last_created_fleet = {
+								set_location = root
+							}
+							
+							else = {
+								if = {
+									limit = { root = { num_pops < 19 NOT = { num_pops < 7 } } }
+									
+									create_fleet_from_naval_cap = 0.135
+									last_created_fleet = {
+										set_location = root
+									}
+							
+									else = {
+										if = {
+											limit = { NOT = { num_pops < 7 } }
+											create_fleet_from_naval_cap = 0.21
+											last_created_fleet = {
+												set_location = root
+											}
+										}
+									}
+								}
+							}
+						}
+						else = {
+							if = {
+								limit = { root = { num_pops < 13 NOT = { num_pops < 7 } } }
+								
+								create_fleet_from_naval_cap = 0.03
+								last_created_fleet = {
+									set_location = root
+								}
+								
+								else = {
+									if = {
+										limit = { root = { num_pops < 19 NOT = { num_pops < 7 } } }
+										
+										create_fleet_from_naval_cap = 0.06
+										last_created_fleet = {
+											set_location = root
+										}
+								
+										else = {
+											if = {
+												limit = { NOT = { num_pops < 7 } }
+												create_fleet_from_naval_cap = 0.09
+												last_created_fleet = {
+													set_location = root
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+	option = { name = UNFORTUNATE }
+}
+
+
+
+#organised rebellion on low-unrest planets
+planet_event = {
+	id = ccfaction.62
+	title = ccfaction.62.name
+	desc = ccfaction.62.desc
+	
+	picture = GFX_evt_ground_combat
+	
+	location = root
+	
+	trigger = {
+		exists = controller
+		controller = { is_same_value = root.owner }
+		is_faction_stronghold = yes
+		has_ground_combat = no
+		has_orbital_bombardment = no
+	}
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		set_timed_planet_flag = {
+			flag = cc_revolution
+			days = 60
+		}
+
+		set_planet_flag = revolt_in_progress
+		
+		#create rebels
+		
+		create_rebels = {
+			ethos = event_target:cc_breakaway_country
+			authority = random
+			#civics = event_target:cc_breakaway_country
+			civics = random
+			species = event_target:cc_breakaway_country
+			flag = random
+			effect = {
+				set_country_flag = cc_faction_rebels_second_wave
+				save_event_target_as = cc_faction_rebels
+				establish_communications_no_message = root.owner
+				establish_communications_no_message = event_target:cc_breakaway_country
+				root = {
+					owner = {
+						every_relation = {
+							establish_communications_no_message = prevprevprev
+						}
+					}
+				}
+			}
+		}
+	
+	
+		every_owned_pop = {
+			limit = {
+				OR = {
+					if = {
+						limit = {
+							root.owner = {
+								OR = {
+									has_country_flag = cc_imperialist_revolt_active
+									has_country_flag = cc_imperialist_secondary_revolt_active
+								}
+							}
+						}
+						has_ethic = ethic_militarist
+						#member_of_faction = imperialist
+					}
+					if = {
+						limit = {
+							root.owner = {
+								OR = {
+									has_country_flag = cc_prosperity_revolt_active
+									has_country_flag = cc_prosperity_secondary_revolt_active
+								}
+							}
+						}
+						has_ethic = ethic_pacifist
+						#member_of_faction = prosperity
+					}
+					if = {
+						limit = {
+							root.owner = {
+								OR = {
+									has_country_flag = cc_totalitarian_revolt_active
+									has_country_flag = cc_totalitarian_secondary_revolt_active
+								}
+							}
+						}
+						has_ethic = ethic_authoritarian
+						#member_of_faction = totalitarian
+					}
+					if = {
+						limit = {
+							root.owner = {
+								OR = {
+									has_country_flag = cc_progressive_revolt_active
+									has_country_flag = cc_progressive_secondary_revolt_active
+								}
+							}
+						}
+						has_ethic = ethic_egalitarian
+						#member_of_faction = progressive
+					}
+					if = {
+						limit = {
+							root.owner = {
+								OR = {
+									has_country_flag = cc_technologist_revolt_active
+									has_country_flag = cc_technologist_secondary_revolt_active
+								}
+							}
+						}
+						has_ethic = ethic_materialist
+						#member_of_faction = technologist
+					}
+					if = {
+						limit = {
+							root.owner = {
+								OR = {
+									has_country_flag = cc_traditionalist_revolt_active
+									has_country_flag = cc_traditionalist_secondary_revolt_active
+								}
+							}
+						}
+						has_ethic = ethic_spiritualist
+						#member_of_faction = traditionalist
+					}
+					if = {
+						limit = {
+							root.owner = {
+								OR = {
+									has_country_flag = cc_xenoist_revolt_active
+									has_country_flag = cc_xenoist_secondary_revolt_active
+								}
+							}
+						}
+						has_ethic = ethic_xenophile
+						#member_of_faction = xenoist
+					}
+					if = {
+						limit = {
+							root.owner = {
+								OR = {
+									has_country_flag = cc_supremacist_revolt_active
+									has_country_flag = cc_supremacist_secondary_revolt_active
+								}
+							}
+						}
+						has_ethic = ethic_xenophobe
+						#member_of_faction = supremacist
+					}
+					if = {
+						limit = {
+							root.owner = {
+								OR = {
+									has_country_flag = cc_isolationist_revolt_active
+									has_country_flag = cc_isolationist_secondary_revolt_active
+								}
+							}
+						}
+						has_ethic = ethic_xenophobe
+						#member_of_faction = isolationist
+					}
+				}
+			}
+			planet = {
+				while = {
+					count = 3
+					create_army = {
+						owner = event_target:cc_faction_rebels
+						species = event_target:cc_breakaway_country
+						type = "assault_army"
+					}
+				}
+			}
+		}
+		
+		set_timed_planet_flag = {
+			flag = recent_unrest_event
+			days = 720
+		}
+		set_timed_planet_flag = {
+			flag = cc_faction_revolt_planet
+			days = 720
+		}
+	}
+	option = { name = UNFORTUNATE }
+}
+
+
+
+#Rebellion of first wave succeeds
+
+# Initial rebels manage to take control of the planet, happens before the new owner is set, after the war is created.
+# This = Rebel Country
+# From = Planet
+# FromFrom = War
+country_event = {
+	id = ccfaction.63
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = { has_country_flag = cc_faction_rebels }
+
+	immediate = {
+		save_event_target_as = cc_breakaway_country
+		set_timed_country_flag = { #this is to stop the PRE war dec
+			flag = ccrebel_dont_declare_war
+			days = 5
+		}
+
+		From = { 
+			remove_planet_flag = revolt_in_progress 
+			remove_planet_flag = cc_faction_revolt_capital
+			save_event_target_as = cc_rebel_faction_capital
+			
+			solar_system = {
+				starbase = {
+					set_owner = root
+				}
+				add_claims = {
+					who = from.owner
+					num_of_claims = 1
+					show_notification = no
+				}
+			}
+		}
+		from.owner = {
+			set_timed_relation_flag = {
+				flag = ccrebel_declare_war_on
+				who = root
+				days = 5
+			}
+			remove_country_flag = cc_factional_revolt_attempt
+			set_timed_country_flag = {
+				flag = cc_factional_revolt_succeeded
+				years = 10
+			}
+			
+			
+			every_owned_planet = { #swap the firm planets
+				limit = {
+					NOT = { is_same_value = from }
+					is_faction_stronghold = yes
+					unrest > 80
+				}
+				planet_event = { id = ccfaction.61 days = 20 random = 15 }
+			}
+			
+			every_owned_planet = { #revolts in the others
+				limit = {
+					NOT = { is_same_value = event_target:cc_rebel_faction_capital }
+					is_faction_stronghold = yes
+					NOT = { unrest > 80 }
+				}
+				planet_event = { id = ccfaction.62 days = 20 random = 15 }
+			}
+			
+			
+			save_event_target_as = rebelled_against
+			country_event = { id = ccfaction.64 days = 3 }
+			country_event = { id = ccfaction.7 days = 45 }
+		}
+		from = { 
+			if = {
+				limit = { has_modifier = cc_faction_acute_unrest }
+				remove_modifier = cc_faction_acute_unrest
+			}
+			remove_all_faction_strongholds = yes
+			if = {
+				limit = { has_faction_sympathies = yes }
+				remove_all_faction_sympathies = yes
+			}
+			if = {
+				limit = { has_faction_sedition = yes }
+				remove_all_faction_seditions = yes
+			}
+		}
+		if = {
+			limit = { NOT = { has_global_flag = potent_rebellions_expanded_active } }
+			create_fleet_from_naval_cap = 1.25
+
+			from.owner = { save_event_target_as = cc_old_owner }
+
+			from = { planet_event = { id = ccfaction.661 days = 1 } }
+			from = { planet_event = { id = ccfaction.661 days = 2 } }
+		}
+	}
+}
+
+
+# Initial rebels manage to take control of the planet, happens after the new owner is set, after the war is created.
+# This = Rebel Country
+# From = Planet
+# FromFrom = War
+country_event = {
+	id = ccfaction.631
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = { has_country_flag = cc_faction_rebels }
+
+	immediate = {
+		random_country = {
+			limit = {
+				has_relation_flag = {
+					who = ROOT
+					flag = ccrebel_declare_war_on
+				}
+			}
+			every_system_within_border = {
+				limit = { NOT = { root = { has_claim = prev } } }
+				add_claims = {
+					who = root
+					num_of_claims = 1
+					show_notification = no
+				}
+			}
+			root = {
+				declare_war = {
+					target = prev
+					attacker_war_goal = wg_dpe_faction_revolt
+				}
+			}
+		}
+	}
+}
+
+
+
+#Notify root.owner
+
+country_event = { # rebels have broken free notification
+	id = ccfaction.64
+	title = ccfaction.64.name
+	desc = ccfaction.64.desc
+	picture = GFX_evt_arguing_senate
+	
+	show_sound = event_factions
+	location = fromfrom
+
+	is_triggered_only = yes
+	
+	immediate = {
+		save_faction_revolt_event_target = yes
+	}
+
+	option = {
+		name = UNFORTUNATE
+	}
+}
+
+
+#Rebellion of second wave succeeds
+
+# Initial rebels manage to take control of the planet, happens before the new owner is set, after the war is created.
+# This = Rebel Country
+# From = Planet
+# FromFrom = War
+country_event = {
+	id = ccfaction.66
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = { has_country_flag = cc_faction_rebels_second_wave }
+	
+	immediate = {
+		set_timed_country_flag = { #this is to stop the PRE war dec
+			flag = ccrebel_dont_declare_war
+			days = 5
+		}
+		create_leader = {
+			type = ruler
+			species = owner_main_species
+			name = random
+			skill = 2
+			traits = {}
+		}
+		assign_leader = last_created_leader
+		ruler = {
+			add_random_leader_trait = yes
+		}
+		
+		from.owner = {
+			if = {
+				limit = {
+					any_country = {
+						NOT = { is_same_value = root } #just in case
+						has_relation_flag = {
+							who = prev
+							flag = cc_breakaway_country
+						}
+					}
+				}
+				random_country = {
+					limit = {
+						NOT = { is_same_value = root } #just in case
+						has_relation_flag = {
+							who = prev
+							flag = cc_breakaway_country
+						}
+					}
+					save_event_target_as = cc_breakaway_country
+				}
+			}
+		}
+		From = { 
+			remove_planet_flag = revolt_in_progress 
+			remove_planet_flag = cc_faction_revolt_planet
+			save_event_target_as = cc_rebel_faction_capital
+
+			solar_system = {
+				starbase = {
+					set_owner = root
+				}
+				add_claims = {
+					who = from.owner
+					num_of_claims = 1
+					show_notification = no
+				}
+			}
+		}
+		from.owner = {
+			save_event_target_as = rebelled_against
+			country_event = { id = ccfaction.67 days = 5 }
+		}
+		from = { 
+			if = {
+				limit = { has_modifier = cc_faction_acute_unrest }
+				remove_modifier = cc_faction_acute_unrest
+			}
+			remove_all_faction_strongholds = yes
+			if = {
+				limit = { has_faction_sympathies = yes }
+				remove_all_faction_sympathies = yes
+			}
+			if = {
+				limit = { has_faction_sedition = yes }
+				remove_all_faction_seditions = yes
+			}
+		}
+		if = {
+			limit = { exists = event_target:cc_breakaway_country }
+			event_target:cc_breakaway_country = {
+				country_event = { id = ccfaction.69 days = 5 }
+			}
+		}
+		if = {
+			limit = { NOT = { has_global_flag = potent_rebellions_expanded_active } }
+
+			from.owner = { save_event_target_as = cc_old_owner }
+			
+			from = { planet_event = { id = ccfaction.661 } }
+		}
+	}
+}
+
+planet_event = {
+	id = ccfaction.661
+	is_triggered_only = yes
+	hide_window = yes
+	
+	trigger = { exists = event_target:cc_old_owner }
+	
+	immediate = {
+		solar_system = {
+			closest_system = {
+				min_steps = 1
+				max_steps = 1
+				limit = {
+					is_within_borders_of = event_target:cc_old_owner
+					starbase = { has_starbase_size = starbase_outpost }
+					NOT = { any_planet = { is_colony = yes } }
+				}
+				starbase = { set_owner = root.owner }
+				
+				add_claims = {
+					who = event_target:cc_old_owner
+					num_of_claims = 1
+					show_notification = no
+				}
+			}
+		}
+	}
+}
+
+
+#Notify root.owner
+
+country_event = { # rebels have broken free notification
+	id = ccfaction.67
+	title = ccfaction.67.name
+	desc = ccfaction.67.desc
+	picture = GFX_evt_arguing_senate
+	
+	show_sound = event_factions
+	location = fromfrom
+
+	is_triggered_only = yes
+
+	option = {
+		name = UNFORTUNATE
+	}
+}
+
+
+#Rebellion of either wave fails
+
+# This = country, planet owner
+# From = country, attack leader
+# FromFrom = planet
+
+# Revolt Suppressed #
+country_event = {
+	id = ccfaction.68
+	title = ccfaction.68.name
+	desc = {
+		trigger = { fromfrom = { has_planet_flag = cc_faction_revolt_capital } }
+		text = ccfaction.68.desc.first
+	}
+	desc = {
+		trigger = { fromfrom = { has_planet_flag = cc_faction_revolt_planet } }
+		text = ccfaction.68.desc.second
+	}
+	
+	picture = GFX_evt_alien_propaganda
+	
+	show_sound = event_celebration
+	location = FromFrom
+
+	trigger = {
+		is_country_type = default
+		FromFrom = {
+			has_planet_flag = revolt_in_progress
+			exists = controller
+			controller = { is_same_value = root }
+			OR = {
+				has_planet_flag = cc_faction_revolt_planet
+				has_planet_flag = cc_faction_revolt_capital
+			}
+		}
+	}
+
+	is_triggered_only = yes
+
+	immediate = {
+		if = {
+			limit = { fromfrom = { has_planet_flag = cc_faction_revolt_planet } }
+			random_country = {
+				limit = {
+					NOT = { is_same_value = from } #just in case
+					has_relation_flag = {
+						who = root
+						flag = cc_breakaway_country
+					}
+				}
+				save_event_target_as = cc_breakaway_country
+			}
+		}
+		
+		save_faction_revolt_event_target = yes
+		
+		FromFrom = {
+			remove_planet_flag = revolt_in_progress
+			if = {
+				limit = { has_planet_flag = cc_faction_revolt_planet }
+				remove_planet_flag = cc_faction_revolt_planet
+			}
+			if = {
+				limit = { has_planet_flag = cc_faction_revolt_capital }
+				remove_planet_flag = cc_faction_revolt_capital
+			}
+		}
+		
+		if = {
+			limit = { has_country_flag = cc_factional_revolt_attempt }
+			remove_country_flag = cc_factional_revolt_attempt
+			
+			if = {
+				limit = { has_factional_revolt_stage3 = no }
+				country_event = { id = ccfaction.42 }
+			}
+		}
+	}
+
+	option = { #Vanilla name and tooltips are fine
+		name = unrest.4235.a
+		FromFrom = { 
+			add_modifier = {
+				modifier = cc_failed_factional_revolt
+				days = 3600
+			}
+			if = {
+				limit = { has_modifier = cc_faction_acute_unrest }
+				remove_modifier = cc_faction_acute_unrest
+			}
+		}
+		custom_tooltip = unrest.161.a.tooltip
+	}
+}
+
+
+#Planet Transferred (use for sympathisers too) (made a separate event for the sake of spaceport modules)
+
+country_event = {
+	id = ccfaction.69
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		exists = root
+		exists = from
+		NOT = { root = { is_same_value = from } }
+	}
+	
+	immediate = {
+		from = {
+			every_owned_starbase = {
+				set_owner = root
+			}
+			every_owned_planet = {
+				set_owner = root
+				hidden_effect = {
+					if = {
+						limit = { has_modifier = capital }
+						remove_modifier = capital
+					}
+					planet_event = { id = ccfaction.691 days = 2 }
+				}
+			}
+			set_country_flag = silence_destroy_event
+			destroy_country = yes
+		}
+	}
+}
+
+
+
+planet_event = {
+	id = ccfaction.691
+	hide_window = yes
+	is_triggered_only = yes
+	
+	trigger = {
+		NOT = {
+			AND = {
+				has_global_flag = potent_rebellions_expanded_active
+				owner = { has_country_flag = cc_rebellion }
+			}
+		}
+	}
+	
+	immediate = {
+		owner = {
+			if = {
+				limit = { num_owned_planets < 4 }
+			
+				if = {
+					limit = { root = { num_pops < 13 NOT = { num_pops < 7 } } }
+					
+					create_fleet_from_naval_cap = 0.12
+					last_created_fleet = {
+						set_location = root
+					}
+					
+					else = {
+						if = {
+							limit = { root = { num_pops < 19 NOT = { num_pops < 7 } } }
+							
+							create_fleet_from_naval_cap = 0.24
+							last_created_fleet = {
+								set_location = root
+							}
+					
+							else = {
+								if = {
+									limit = { NOT = { num_pops < 7 } }
+									create_fleet_from_naval_cap = 0.36
+									last_created_fleet = {
+										set_location = root
+									}
+								}
+							}
+						}
+					}
+				}
+			
+				else = {
+					if = {
+						limit = {
+							num_owned_planets < 6
+						}
+						if = {
+							limit = { root = { num_pops < 13 NOT = { num_pops < 7 } } }
+							
+							create_fleet_from_naval_cap = 0.0675
+							last_created_fleet = {
+								set_location = root
+							}
+							
+							else = {
+								if = {
+									limit = { root = { num_pops < 19 NOT = { num_pops < 7 } } }
+									
+									create_fleet_from_naval_cap = 0.135
+									last_created_fleet = {
+										set_location = root
+									}
+							
+									else = {
+										if = {
+											limit = { NOT = { num_pops < 7 } }
+											create_fleet_from_naval_cap = 0.21
+											last_created_fleet = {
+												set_location = root
+											}
+										}
+									}
+								}
+							}
+						}
+						else = {
+							if = {
+								limit = { root = { num_pops < 13 NOT = { num_pops < 7 } } }
+								
+								create_fleet_from_naval_cap = 0.03
+								last_created_fleet = {
+									set_location = root
+								}
+									
+								else = {
+									if = {
+										limit = { root = { num_pops < 19 NOT = { num_pops < 7 } } }
+										
+										create_fleet_from_naval_cap = 0.06
+										last_created_fleet = {
+											set_location = root
+										}
+							
+										else = {
+											if = {
+												limit = { NOT = { num_pops < 7 } }
+												create_fleet_from_naval_cap = 0.09
+												last_created_fleet = {
+													set_location = root
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}
+				
+
+
+
+#Dealing with the 'sympathies planets'
+country_event = {
+	id = ccfaction.7
+	title = ccfaction.7.name
+	desc = ccfaction.7.desc
+	
+	picture = GFX_evt_arguing_senate
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		any_owned_planet = {
+			has_faction_sympathies = yes
+			is_faction_stronghold = no
+		}
+	}
+	
+	immediate = {
+		every_owned_planet = {
+			limit = {
+				has_faction_sympathies = yes
+				is_faction_stronghold = no
+			}
+			
+			add_modifier = {
+				modifier = cc_breakaway_sympathy
+				days = -1
+			}
+			set_timed_planet_flag = {
+				flag = recent_unrest_event
+				years = 7
+			}
+			planet_event = { id = ccfaction.71 days = 30 }
+		}
+		random_owned_planet = {
+			limit = {
+				has_faction_sympathies = yes
+				is_faction_stronghold = no
+			}
+			save_event_target_as = random_sympathies_planet
+		}
+	}
+	option = {
+		name = CCKILLALL
+		custom_tooltip = ccfaction.7.A.tooltip
+		
+		every_owned_planet = {
+			limit = {
+				has_faction_sympathies = yes
+				is_faction_stronghold = no
+			}
+			remove_modifier = cc_breakaway_sympathy
+			#the faction sympathy modifier will go automatically
+				
+
+			hidden_effect = {
+				if = {
+					limit = {
+						root = {
+							OR = {
+								has_country_flag = cc_imperialist_revolt_active
+								has_country_flag = cc_imperialist_secondary_revolt_active
+							}
+						}
+					}
+					every_owned_pop = {
+						limit = { has_ethic = ethic_militarist }
+						
+						every_country = {
+							limit = {
+								has_communications = root
+								NOT = { is_country = root }
+								NOT = { has_ai_personality_behaviour = purger }
+								NOT = {
+									OR = {
+										has_ethic = ethic_fanatic_authoritarian
+										AND = {
+											has_ethic = ethic_authoritarian
+											OR = {
+												has_ethic = ethic_fanatic_xenophobe
+												has_ethic = ethic_fanatic_militarist
+												AND = {
+													has_ethic = ethic_xenophobe
+													has_ethic = ethic_militarist
+												}
+											}
+										}
+									}
+								}
+								OR = {
+									is_country_type = default
+									has_ai_personality = awakened_fallen_empire_xenophile				
+								}	
+							}
+							add_opinion_modifier = { who = root modifier = opinion_genocidal }
+						}
+						
+						kill_pop = yes
+					}
+				}
+				if = {
+					limit = {
+						root = {
+							OR = {
+								has_country_flag = cc_prosperity_revolt_active
+								has_country_flag = cc_prosperity_secondary_revolt_active
+							}
+						}
+					}
+					every_owned_pop = {
+						limit = { has_ethic = ethic_pacifist }
+						
+						every_country = {
+							limit = {
+								has_communications = root
+								NOT = { is_country = root }
+								NOT = { has_ai_personality_behaviour = purger }
+								NOT = {
+									OR = {
+										has_ethic = ethic_fanatic_authoritarian
+										AND = {
+											has_ethic = ethic_authoritarian
+											OR = {
+												has_ethic = ethic_fanatic_xenophobe
+												has_ethic = ethic_fanatic_militarist
+												AND = {
+													has_ethic = ethic_xenophobe
+													has_ethic = ethic_militarist
+												}
+											}
+										}
+									}
+								}
+								OR = {
+									is_country_type = default
+									has_ai_personality = awakened_fallen_empire_xenophile				
+								}	
+							}
+							add_opinion_modifier = { who = root modifier = opinion_genocidal }
+						}
+						
+						kill_pop = yes
+					}
+				}
+				if = {
+					limit = {
+						root = {
+							OR = {
+								has_country_flag = cc_totalitarian_revolt_active
+								has_country_flag = cc_totalitarian_secondary_revolt_active
+							}
+						}
+					}
+					every_owned_pop = {
+						limit = { has_ethic = ethic_authoritarian }
+						
+						every_country = {
+							limit = {
+								has_communications = root
+								NOT = { is_country = root }
+								NOT = { has_ai_personality_behaviour = purger }
+								NOT = {
+									OR = {
+										has_ethic = ethic_fanatic_authoritarian
+										AND = {
+											has_ethic = ethic_authoritarian
+											OR = {
+												has_ethic = ethic_fanatic_xenophobe
+												has_ethic = ethic_fanatic_militarist
+												AND = {
+													has_ethic = ethic_xenophobe
+													has_ethic = ethic_militarist
+												}
+											}
+										}
+									}
+								}
+								OR = {
+									is_country_type = default
+									has_ai_personality = awakened_fallen_empire_xenophile				
+								}	
+							}
+							add_opinion_modifier = { who = root modifier = opinion_genocidal }
+						}
+						
+						kill_pop = yes
+					}
+				}
+				if = {
+					limit = {
+						root = {
+							OR = {
+								has_country_flag = cc_progressive_revolt_active
+								has_country_flag = cc_progressive_secondary_revolt_active
+							}
+						}
+					}
+					every_owned_pop = {
+						limit = { has_ethic = ethic_egalitarian }
+						
+						every_country = {
+							limit = {
+								has_communications = root
+								NOT = { is_country = root }
+								NOT = { has_ai_personality_behaviour = purger }
+								NOT = {
+									OR = {
+										has_ethic = ethic_fanatic_authoritarian
+										AND = {
+											has_ethic = ethic_authoritarian
+											OR = {
+												has_ethic = ethic_fanatic_xenophobe
+												has_ethic = ethic_fanatic_militarist
+												AND = {
+													has_ethic = ethic_xenophobe
+													has_ethic = ethic_militarist
+												}
+											}
+										}
+									}
+								}
+								OR = {
+									is_country_type = default
+									has_ai_personality = awakened_fallen_empire_xenophile				
+								}	
+							}
+							add_opinion_modifier = { who = root modifier = opinion_genocidal }
+						}
+						
+						kill_pop = yes
+					}
+				}
+				if = {
+					limit = {
+						root = {
+							OR = {
+								has_country_flag = cc_technologist_revolt_active
+								has_country_flag = cc_technologist_secondary_revolt_active
+							}
+						}
+					}
+					every_owned_pop = {
+						limit = { has_ethic = ethic_materialist }
+						
+						every_country = {
+							limit = {
+								has_communications = root
+								NOT = { is_country = root }
+								NOT = { has_ai_personality_behaviour = purger }
+								NOT = {
+									OR = {
+										has_ethic = ethic_fanatic_authoritarian
+										AND = {
+											has_ethic = ethic_authoritarian
+											OR = {
+												has_ethic = ethic_fanatic_xenophobe
+												has_ethic = ethic_fanatic_militarist
+												AND = {
+													has_ethic = ethic_xenophobe
+													has_ethic = ethic_militarist
+												}
+											}
+										}
+									}
+								}
+								OR = {
+									is_country_type = default
+									has_ai_personality = awakened_fallen_empire_xenophile				
+								}	
+							}
+							add_opinion_modifier = { who = root modifier = opinion_genocidal }
+						}
+						
+						kill_pop = yes
+					}
+				}
+				if = {
+					limit = {
+						root = {
+							OR = {
+								has_country_flag = cc_traditionalist_revolt_active
+								has_country_flag = cc_traditionalist_secondary_revolt_active
+							}
+						}
+					}
+					every_owned_pop = {
+						limit = { has_ethic = ethic_spiritualist }
+						
+						every_country = {
+							limit = {
+								has_communications = root
+								NOT = { is_country = root }
+								NOT = { has_ai_personality_behaviour = purger }
+								NOT = {
+									OR = {
+										has_ethic = ethic_fanatic_authoritarian
+										AND = {
+											has_ethic = ethic_authoritarian
+											OR = {
+												has_ethic = ethic_fanatic_xenophobe
+												has_ethic = ethic_fanatic_militarist
+												AND = {
+													has_ethic = ethic_xenophobe
+													has_ethic = ethic_militarist
+												}
+											}
+										}
+									}
+								}
+								OR = {
+									is_country_type = default
+									has_ai_personality = awakened_fallen_empire_xenophile				
+								}	
+							}
+							add_opinion_modifier = { who = root modifier = opinion_genocidal }
+						}
+						
+						kill_pop = yes
+					}
+				}
+				if = {
+					limit = {
+						root = {
+							OR = {
+								has_country_flag = cc_xenoist_revolt_active
+								has_country_flag = cc_xenoist_secondary_revolt_active
+							}
+						}
+					}
+					every_owned_pop = {
+						limit = { has_ethic = ethic_xenophile }
+						
+						every_country = {
+							limit = {
+								has_communications = root
+								NOT = { is_country = root }
+								NOT = { has_ai_personality_behaviour = purger }
+								NOT = {
+									OR = {
+										has_ethic = ethic_fanatic_authoritarian
+										AND = {
+											has_ethic = ethic_authoritarian
+											OR = {
+												has_ethic = ethic_fanatic_xenophobe
+												has_ethic = ethic_fanatic_militarist
+												AND = {
+													has_ethic = ethic_xenophobe
+													has_ethic = ethic_militarist
+												}
+											}
+										}
+									}
+								}
+								OR = {
+									is_country_type = default
+									has_ai_personality = awakened_fallen_empire_xenophile				
+								}	
+							}
+							add_opinion_modifier = { who = root modifier = opinion_genocidal }
+						}
+						
+						kill_pop = yes
+					}
+				}
+				if = {
+					limit = {
+						root = {
+							OR = {
+								has_country_flag = cc_supremacist_revolt_active
+								has_country_flag = cc_isolationist_revolt_active
+								has_country_flag = cc_supremacist_secondary_revolt_active
+								has_country_flag = cc_isolationist_secondary_revolt_active
+							}
+						}
+					}
+					every_owned_pop = {
+						limit = { has_ethic = ethic_xenophobe }
+						
+						every_country = {
+							limit = {
+								has_communications = root
+								NOT = { is_country = root }
+								NOT = { has_ai_personality_behaviour = purger }
+								NOT = {
+									OR = {
+										has_ethic = ethic_fanatic_authoritarian
+										AND = {
+											has_ethic = ethic_authoritarian
+											OR = {
+												has_ethic = ethic_fanatic_xenophobe
+												has_ethic = ethic_fanatic_militarist
+												AND = {
+													has_ethic = ethic_xenophobe
+													has_ethic = ethic_militarist
+												}
+											}
+										}
+									}
+								}
+								OR = {
+									is_country_type = default
+									has_ai_personality = awakened_fallen_empire_xenophile				
+								}	
+							}
+							add_opinion_modifier = { who = root modifier = opinion_genocidal }
+						}
+						
+						kill_pop = yes
+					}
+				}
+			}
+		}
+		
+		add_modifier = {
+			modifier = cc_empire_terror
+			years = 10
+		}
+		
+		if = {
+			limit = {
+				NOR = {
+					has_country_flag = cc_progressive_revolt_active
+					has_country_flag = cc_progressive_secondary_revolt_active
+				}
+				has_faction = progressive
+			}
+			random_pop_faction = {
+				limit = { is_pop_faction_type = progressive }
+				add_modifier = {
+					modifier = cc_empire_terror_faction
+					years = 10
+				}
+			}
+		}
+		
+		ai_chance = {
+			factor = 5
+			modifier = {
+				factor = 5
+				OR = {
+					has_ethic = ethic_fanatic_authoritarian
+					has_valid_civic = civic_fanatic_purifiers
+				}
+			}
+			modifier = {
+				factor = 0.35
+				any_relation = {
+					has_communications = root
+					NOT = { is_country = root }
+					NOT = { has_ai_personality_behaviour = purger }
+					NOT = {
+						OR = {
+							has_ethic = ethic_fanatic_authoritarian
+							AND = {
+								has_ethic = ethic_authoritarian
+								OR = {
+									has_ethic = ethic_fanatic_xenophobe
+									has_ethic = ethic_fanatic_militarist
+									AND = {
+										has_ethic = ethic_xenophobe
+										has_ethic = ethic_militarist
+									}
+								}
+							}
+						}
+					}
+					OR = {
+						is_country_type = default
+						has_ai_personality = awakened_fallen_empire_xenophile				
+					}
+					OR = {
+						has_defensive_pact = root
+						is_in_federation_with = root
+					}
+				}
+			}
+		}
+		trigger = {
+			OR = {
+				has_valid_civic = civic_fanatic_purifiers
+				has_ethic = ethic_fanatic_authoritarian
+				AND = {
+					has_ethic = ethic_authoritarian
+					OR = {
+						has_ethic = ethic_fanatic_xenophobe
+						has_ethic = ethic_fanatic_militarist
+						AND = {
+							has_ethic = ethic_xenophobe
+							has_ethic = ethic_militarist
+						}
+					}
+				}
+			}
+		}
+	}
+	option = {
+		name = CCOPPRESS
+		
+		every_owned_planet = {
+			limit = {
+				has_faction_sympathies = yes
+				is_faction_stronghold = no
+			}
+			add_modifier = {
+				modifier = cc_planet_oppression
+				years = 10
+			}
+			hidden_effect = {
+				if = {
+					limit = {
+						root = {
+							OR = {
+								has_country_flag = cc_imperialist_revolt_active
+								has_country_flag = cc_imperialist_secondary_revolt_active
+							}
+						}
+					}
+					every_owned_pop = {
+						limit = { has_ethic = ethic_militarist }
+						add_modifier = {
+							modifier = cc_oppression
+							years = 10
+						}
+					}
+				}
+				if = {
+					limit = {
+						root = {
+							OR = {
+								has_country_flag = cc_prosperity_revolt_active
+								has_country_flag = cc_prosperity_secondary_revolt_active
+							}
+						}
+					}
+					every_owned_pop = {
+						limit = { has_ethic = ethic_pacifist }
+						add_modifier = {
+							modifier = cc_oppression
+							years = 10
+						}
+					}
+				}
+				if = {
+					limit = {
+						root = {
+							OR = {
+								has_country_flag = cc_totalitarian_revolt_active
+								has_country_flag = cc_totalitarian_secondary_revolt_active
+							}
+						}
+					}
+					every_owned_pop = {
+						limit = { has_ethic = ethic_authoritarian }
+						add_modifier = {
+							modifier = cc_oppression
+							years = 10
+						}
+					}
+				}
+				if = {
+					limit = {
+						root = {
+							OR = {
+								has_country_flag = cc_progressive_revolt_active
+								has_country_flag = cc_progressive_secondary_revolt_active
+							}
+						}
+					}
+					every_owned_pop = {
+						limit = { has_ethic = ethic_egalitarian }
+						add_modifier = {
+							modifier = cc_oppression
+							years = 10
+						}
+					}
+				}
+				if = {
+					limit = {
+						root = {
+							OR = {
+								has_country_flag = cc_technologist_revolt_active
+								has_country_flag = cc_technologist_secondary_revolt_active
+							}
+						}
+					}
+					every_owned_pop = {
+						limit = { has_ethic = ethic_materialist }
+						add_modifier = {
+							modifier = cc_oppression
+							years = 10
+						}
+					}
+				}
+				if = {
+					limit = {
+						root = {
+							OR = {
+								has_country_flag = cc_traditionalist_revolt_active
+								has_country_flag = cc_traditionalist_secondary_revolt_active
+							}
+						}
+					}
+					every_owned_pop = {
+						limit = { has_ethic = ethic_spiritualist }
+						add_modifier = {
+							modifier = cc_oppression
+							years = 10
+						}
+					}
+				}
+				if = {
+					limit = {
+						root = {
+							OR = {
+								has_country_flag = cc_xenoist_revolt_active
+								has_country_flag = cc_xenoist_secondary_revolt_active
+							}
+						}
+					}
+					every_owned_pop = {
+						limit = { has_ethic = ethic_xenophile }
+						add_modifier = {
+							modifier = cc_oppression
+							years = 10
+						}
+					}
+				}
+				if = {
+					limit = {
+						root = {
+							OR = {
+								has_country_flag = cc_supremacist_revolt_active
+								has_country_flag = cc_isolationist_revolt_active
+								has_country_flag = cc_supremacist_secondary_revolt_active
+								has_country_flag = cc_isolationist_secondary_revolt_active
+							}
+						}
+					}
+					every_owned_pop = {
+						limit = { has_ethic = ethic_xenophobe }
+						add_modifier = {
+							modifier = cc_oppression
+							years = 10
+						}
+					}
+				}
+			}
+		}
+		custom_tooltip = ccfaction.7.B.tooltip
+		
+		if = {
+			limit = {
+				NOR = {
+					has_country_flag = cc_progressive_revolt_active
+					has_country_flag = cc_progressive_secondary_revolt_active
+				}
+				has_faction = progressive
+			}
+			random_pop_faction = {
+				limit = { is_pop_faction_type = progressive }
+				add_modifier = {
+					modifier = cc_oppress_faction
+					years = 10
+				}
+			}
+		}
+		
+		trigger = {
+			NOR = {
+				has_ethic = ethic_egalitarian
+				has_ethic = ethic_fanatic_egalitarian
+			}
+		}
+		
+		ai_chance = {
+			factor = 5
+			modifier = {
+				factor = 1.5
+				OR = {
+					has_ethic = ethic_authoritarian
+					has_ethic = ethic_fanatic_authoritarian
+				}
+			}
+		}
+	}
+	option = { #subsidise
+		name = ccfaction.7.C
+		custom_tooltip = ccfaction.7.C.tooltip
+		
+		every_owned_planet = {
+			limit = {
+				has_faction_sympathies = yes
+				is_faction_stronghold = no
+			}
+			add_modifier = {
+				modifier = cc_bribed_planet
+				years = 10
+			}
+		}
+		
+		ai_chance = {
+			factor = 5
+			modifier = {
+				factor = 0.75
+				has_monthly_income = { resource = minerals value < 50 }
+			}
+			modifier = {
+				factor = 0.5
+				has_monthly_income = { resource = energy value < 5 }
+			}
+			modifier = {
+				factor = 0.5
+				is_at_war = yes
+				has_monthly_income = { resource = energy value < -50 }
+			}
+			
+			modifier = {
+				factor = 0.35
+				OR = {
+					has_valid_civic = civic_fanatic_purifiers
+					has_ethic = ethic_fanatic_authoritarian
+					AND = {
+						has_ethic = ethic_authoritarian
+						OR = {
+							has_ethic = ethic_fanatic_xenophobe
+							has_ethic = ethic_fanatic_militarist
+							AND = {
+								has_ethic = ethic_xenophobe
+								has_ethic = ethic_militarist
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+	option = {
+		name = ccfaction.7.D
+		
+		ai_chance = { factor = 1.5 }
+	}
+}
+
+
+#Gatekeeper for sympathy revolts (better practice than an MTTH)
+planet_event = {
+	id = ccfaction.71
+	hide_window = yes
+	is_triggered_only = yes
+	
+	trigger = {
+		has_modifier = cc_breakaway_sympathy
+		NOT = { has_planet_flag = cc_has_tried_sympathy_revolt }
+		owner = {
+			has_modifier = cc_country_factional_unrest
+			any_country = {
+				has_relation_flag = {
+					who = prev
+					flag = cc_breakaway_country
+				}
+			}
+		}
+	}
+	
+	immediate = {
+		random_list = {
+			12 = {
+				planet_event = { id = ccfaction.72 }
+				modifier = {
+					factor = 0
+					NOT = {
+						AND = {
+							exists = controller
+							controller = { is_same_value = root.owner }
+							has_ground_combat = no
+							has_orbital_bombardment = no
+							unrest > 80
+						}
+					}
+				}
+				modifier = {
+					factor = 1.5
+					unrest > 99
+				}
+			}
+			988 = { planet_event = { id = ccfaction.71 days = 30 } }
+		}
+	}
+}
+		
+	
+planet_event = {
+	id = ccfaction.72
+	title = ccfaction.62.name
+	desc = ccfaction.62.desc
+	
+	picture = GFX_evt_ground_combat
+	
+	location = root
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		exists = controller
+		controller = { is_same_value = root.owner }
+		has_modifier = cc_breakaway_sympathy
+		has_ground_combat = no
+		has_orbital_bombardment = no
+		unrest > 80
+		
+		owner = {
+			any_country = {
+				has_relation_flag = {
+					who = prev
+					flag = cc_breakaway_country
+				}
+			}
+		}
+	}
+	
+	immediate = {
+		set_timed_planet_flag = {
+			flag = cc_revolution
+			days = 60
+		}
+		set_timed_planet_flag = {
+			flag = cc_has_tried_sympathy_revolt
+			days = 2400
+		}
+
+		random_country = {
+			limit = {
+				has_relation_flag = {
+					who = root.owner
+					flag = cc_breakaway_country
+				}
+			}
+			save_event_target_as = cc_breakaway_country
+		}
+		
+		set_planet_flag = revolt_in_progress
+		
+		#create rebels
+		
+		create_rebels = {
+			ethos = event_target:cc_breakaway_country
+			authority = random
+			#civics = event_target:cc_breakaway_country
+			civics = random
+			species = event_target:cc_breakaway_country
+			flag = random
+			effect = {
+				set_country_flag = cc_faction_rebels_second_wave
+				save_event_target_as = cc_faction_rebels
+				establish_communications_no_message = root.owner
+				establish_communications_no_message = event_target:cc_breakaway_country
+				root = {
+					owner = {
+						every_relation = {
+							establish_communications_no_message = prevprevprev
+						}
+					}
+				}
+			}
+		}
+	
+	
+		every_owned_pop = {
+			limit = {
+				OR = {
+					if = {
+						limit = {
+							root.owner = {
+								OR = {
+									has_country_flag = cc_imperialist_revolt_active
+									has_country_flag = cc_imperialist_secondary_revolt_active
+								}
+							}
+						}
+						has_ethic = ethic_militarist
+						is_enslaved = no
+						is_being_purged = no
+						has_culture_shock = no
+						#member_of_faction = imperialist
+					}
+					if = {
+						limit = {
+							root.owner = {
+								OR = {
+									has_country_flag = cc_prosperity_revolt_active
+									has_country_flag = cc_prosperity_secondary_revolt_active
+								}
+							}
+						}
+						has_ethic = ethic_pacifist
+						is_enslaved = no
+						is_being_purged = no
+						has_culture_shock = no
+						#member_of_faction = prosperity
+					}
+					if = {
+						limit = {
+							root.owner = {
+								OR = {
+									has_country_flag = cc_totalitarian_revolt_active
+									has_country_flag = cc_totalitarian_secondary_revolt_active
+								}
+							}
+						}
+						has_ethic = ethic_authoritarian
+						is_enslaved = no
+						is_being_purged = no
+						has_culture_shock = no
+						#member_of_faction = totalitarian
+					}
+					if = {
+						limit = {
+							root.owner = {
+								OR = {
+									has_country_flag = cc_progressive_revolt_active
+									has_country_flag = cc_progressive_secondary_revolt_active
+								}
+							}
+						}
+						has_ethic = ethic_egalitarian
+						is_enslaved = no
+						is_being_purged = no
+						has_culture_shock = no
+						#member_of_faction = progressive
+					}
+					if = {
+						limit = {
+							root.owner = {
+								OR = {
+									has_country_flag = cc_technologist_revolt_active
+									has_country_flag = cc_technologist_secondary_revolt_active
+								}
+							}
+						}
+						has_ethic = ethic_materialist
+						is_enslaved = no
+						is_being_purged = no
+						has_culture_shock = no
+						#member_of_faction = technologist
+					}
+					if = {
+						limit = {
+							root.owner = {
+								OR = {
+									has_country_flag = cc_traditionalist_revolt_active
+									has_country_flag = cc_traditionalist_secondary_revolt_active
+								}
+							}
+						}
+						has_ethic = ethic_spiritualist
+						is_enslaved = no
+						is_being_purged = no
+						has_culture_shock = no
+						#member_of_faction = traditionalist
+					}
+					if = {
+						limit = {
+							root.owner = {
+								OR = {
+									has_country_flag = cc_xenoist_revolt_active
+									has_country_flag = cc_xenoist_secondary_revolt_active
+								}
+							}
+						}
+						has_ethic = ethic_xenophile
+						is_enslaved = no
+						is_being_purged = no
+						has_culture_shock = no
+						#member_of_faction = xenoist
+					}
+					if = {
+						limit = {
+							root.owner = {
+								OR = {
+									has_country_flag = cc_supremacist_revolt_active
+									has_country_flag = cc_supremacist_secondary_revolt_active
+								}
+							}
+						}
+						has_ethic = ethic_xenophobe
+						is_enslaved = no
+						is_being_purged = no
+						has_culture_shock = no
+						
+						owner = {
+							NOR = {
+								has_ethic = ethic_pacifist
+								has_ethic = ethic_fanatic_pacifist
+							}
+						}
+						is_same_species = owner_species
+						#member_of_faction = supremacist
+					}
+					if = {
+						limit = {
+							root.owner = {
+								OR = {
+									has_country_flag = cc_isolationist_revolt_active
+									has_country_flag = cc_isolationist_secondary_revolt_active
+								}
+							}
+						}
+						has_ethic = ethic_xenophobe
+						is_enslaved = no
+						is_being_purged = no
+						has_culture_shock = no
+						
+						OR = {
+							NOT = { is_same_species = owner_species }
+							owner = {
+								OR = {
+									has_ethic = ethic_pacifist
+									has_ethic = ethic_fanatic_pacifist
+								}
+							}
+						}
+						#member_of_faction = isolationist
+					}
+				}
+			}
+			planet = {
+				while = {
+					count = 3
+					create_army = {
+						owner = event_target:cc_faction_rebels
+						species = event_target:cc_breakaway_country
+						type = "assault_army"
+					}
+				}
+			}
+		}
+		
+		set_timed_planet_flag = {
+			flag = recent_unrest_event
+			days = 720
+		}
+		set_timed_planet_flag = {
+			flag = cc_faction_revolt_planet
+			days = 720
+		}
+	}
+	option = { name = UNFORTUNATE }
+}
+
+
+
+#end of factional unrest (expires 15 years after started)
+country_event = {
+	id = ccfaction.900
+	title = ccfaction.900.name
+	desc = {
+		trigger = { exists = event_target:cc_breakaway_country }
+		text = ccfaction.900.exists.desc
+	}
+	desc = {
+		trigger = { NOT = { exists = event_target:cc_breakaway_country } }
+		text = ccfaction.900.doesnotexist.desc
+	}
+	
+	picture = GFX_evt_arguing_senate
+
+	is_triggered_only = yes
+	
+	trigger = { NOT = { has_country_flag = cc_revolt_ended_early } }
+	
+	immediate = {
+		remove_all_faction_revolt_flags = yes
+		
+		if = {
+			limit = {
+				any_country = {
+					has_relation_flag = {
+						who = root
+						flag = cc_breakaway_country
+					}
+				}
+			}
+			random_country = {
+				limit = {
+					has_relation_flag = {
+						who = root
+						flag = cc_breakaway_country
+					}
+				}
+				save_event_target_as = cc_breakaway_country
+			}
+		}
+	}
+	
+	option = {
+		name = CCGOOD
+		
+		remove_modifier = cc_country_factional_unrest
+		
+		custom_tooltip = cc_faction_revolt_modifiers_removed
+		hidden_effect = {
+			every_owned_planet = {
+				remove_all_faction_strongholds = yes
+				remove_all_faction_sympathies = yes
+				remove_all_faction_seditions = yes
+			}
+			every_owned_planet = {
+				limit = { has_modifier = cc_faction_acute_unrest }
+				remove_modifier = cc_faction_acute_unrest
+			}
+			every_owned_planet = {
+				limit = { has_modifier = cc_breakaway_sympathy }
+				remove_modifier = cc_breakaway_sympathy
+			}
+		}
+	}
+}
+
+	
+
+#monthly, all-purpose cleanup event
+event = {
+	id = ccfaction.999
+	hide_window = yes
+	is_triggered_only = yes
+	
+	immediate = {
+	
+		#Remove all the basic stuff if planet is conquered
+		every_country = {
+			limit = {
+				has_a_factional_revolt_active = no
+			}
+			every_owned_planet = {
+				remove_all_faction_strongholds = yes
+				remove_all_faction_sympathies = yes
+				remove_all_faction_seditions = yes
+				
+				if = {
+					limit = { has_modifier = cc_faction_acute_unrest }
+					remove_modifier = cc_faction_acute_unrest
+				}
+			}
+		}
+		
+		
+		#increase chance of faction re-evaluation
+		every_country = {
+			limit = { has_modifier = cc_country_factional_unrest }
+			every_owned_planet = {
+				limit = { 
+					OR = {
+						has_seditious_talk = yes
+						is_faction_stronghold = yes
+						has_faction_sympathies = yes
+						has_faction_sedition = yes
+					}
+				}
+				
+				every_owned_pop = {
+					pop_event = { id = ccfaction.9991 }
+				}
+			}
+		}
+		
+		
+		every_country = {
+			limit = { has_a_factional_revolt_active = yes }
+		
+			if = {
+				limit = { has_factional_revolt_stage1 = yes }
+				every_owned_planet = {
+					limit = {
+						has_seditious_talk = yes
+						NOR = {
+							count_pops = {
+								limit = { has_same_ethic_as_faction = yes }
+								count > 3
+							}
+							pop_percentage = {
+								percentage > 0.24
+								limit = { has_same_ethic_as_faction = yes }
+							}
+						}
+					}
+					remove_appropriate_seditious_talk = yes
+				}
+				every_owned_planet = {
+					limit = {
+						has_seditious_talk = no
+						OR = {
+							count_pops = {
+								limit = { has_same_ethic_as_faction = yes }
+								count > 3
+							}
+							pop_percentage = {
+								percentage > 0.24
+								limit = { has_same_ethic_as_faction = yes }
+							}
+						}
+					}
+					add_appropriate_seditious_talk = yes
+				}
+			}
+			if = {
+				limit = {
+					OR = {
+						has_factional_revolt_stage2 = yes
+						has_factional_revolt_stage3 = yes
+					}
+				}
+				
+				every_owned_planet = {
+					limit = {
+						has_1st_faction_stronghold = yes
+						NOT = {
+							count_pops = {
+								limit = { has_same_faction_as_faction = yes }
+								count > 4
+							}
+						}
+					}
+					remove_appropriate_faction_stronghold = yes
+					if = {
+						limit = { has_modifier = cc_faction_acute_unrest }
+						remove_modifier = cc_faction_acute_unrest
+					}
+					if = {
+						limit = { owner = { is_ai = no } }
+						owner = { save_faction_revolt_event_target = yes }
+						planet_event = { id = ccfaction.9993 }
+					}
+					
+					owner = {
+						every_owned_planet = {
+							limit = {
+								has_1st_faction_sedition = yes
+								NOT = {
+									owner = {
+										any_owned_planet = {
+											has_1st_faction_stronghold = yes
+											distance = {
+												source = prevprev
+												min_distance = 0
+												max_distance = 65
+											}
+										}
+									}
+								}
+							}
+							remove_appropriate_faction_sedition = yes
+						}
+					}
+				}
+				every_owned_planet = {
+					limit = {
+						has_1st_faction_sympathies = yes
+						NOT = {
+							count_pops = {
+								limit = { has_same_ethic_as_faction = yes }
+								count > 2
+							}
+						}
+					}
+					remove_appropriate_faction_sympathies = yes
+				}
+				
+				every_owned_planet = {
+					limit = {
+						has_1st_faction_stronghold = no
+						NOT = { has_modifier = cc_breakaway_sympathy }
+						count_pops = {
+							limit = { has_same_faction_as_faction = yes }
+							count > 4
+						}
+					}
+					if = {
+						limit = { owner = { is_ai = no } }
+						owner = { save_faction_revolt_event_target = yes }
+						planet_event = { id = ccfaction.9994 }
+					}
+					add_appropriate_faction_stronghold = yes
+					set_timed_planet_flag = {
+						flag = ccfaction_nohide
+						days = 3
+					}
+					if = {
+						limit = { has_1st_faction_sympathies = yes }
+						remove_appropriate_faction_sympathies = yes
+					}
+					if = {
+						limit = { has_1st_faction_sedition = yes }
+						remove_appropriate_faction_sedition = yes
+					}
+					if = {
+						limit = {
+							owner = { has_factional_revolt_stage3 = yes }
+							NOT = { has_modifier = cc_faction_acute_unrest }
+						}
+						add_modifier = {
+							modifier = cc_faction_acute_unrest
+							days = 540
+						}
+						set_timed_planet_flag = {
+							flag = recent_unrest_event
+							days = 540
+						}
+					}
+					owner = {
+						every_owned_planet = {
+							limit = {
+								has_1st_faction_sedition = no
+								has_1st_faction_sympathies = no
+								has_1st_faction_stronghold = no
+								owner = {
+									any_owned_planet = {
+										has_1st_faction_stronghold = yes
+										distance = {
+											source = prevprev
+											min_distance = 0
+											max_distance = 65
+										}
+									}
+								}
+							}
+							add_appropriate_faction_sedition = yes
+						}
+					}
+				}
+				every_owned_planet = {
+					limit = {
+						has_1st_faction_sympathies = no
+						count_pops = {
+							limit = { has_same_ethic_as_faction = yes }
+							count > 2
+						}
+						NOT = {
+							count_pops = {
+								limit = { has_same_faction_as_faction = yes }
+								count > 4
+							}
+						}
+					}
+					add_appropriate_faction_sympathies = yes
+					
+					if = {
+						limit = { has_1st_faction_sedition = yes }
+						remove_appropriate_faction_sedition = yes
+					}
+				}
+				
+				if = {
+					limit = { has_secondary_factional_revolt_active = yes }
+					
+					every_owned_planet = {
+						limit = {
+							has_2nd_faction_stronghold = yes
+							NOT = {
+								count_pops = {
+									limit = { has_same_faction_as_2nd_faction = yes }
+									count > 4
+								}
+							}
+						}
+						remove_appropriate_2nd_faction_stronghold = yes
+						if = {
+							limit = { has_modifier = cc_faction_acute_unrest }
+							remove_modifier = cc_faction_acute_unrest
+						}
+						if = {
+							limit = { owner = { is_ai = no } }
+							owner = { save_faction_revolt_2nd_event_target = yes }
+							planet_event = { id = ccfaction.99931 }
+						}
+						
+						owner = {
+							every_owned_planet = {
+								limit = {
+									has_2nd_faction_sedition = yes
+									NOT = {
+										owner = {
+											any_owned_planet = {
+												has_2nd_faction_stronghold = yes
+												distance = {
+													source = prevprev
+													min_distance = 0
+													max_distance = 65
+												}
+											}
+										}
+									}
+								}
+								remove_appropriate_2nd_faction_sedition = yes
+							}
+						}
+					}
+					every_owned_planet = {
+						limit = {
+							has_2nd_faction_sympathies = yes
+							NOT = {
+								count_pops = {
+									limit = { has_same_ethic_as_2nd_faction = yes }
+									count > 2
+								}
+							}
+						}
+						remove_appropriate_2nd_faction_sympathies = yes
+					}
+					
+					every_owned_planet = {
+						limit = {
+							has_2nd_faction_stronghold = no
+							NOT = { has_modifier = cc_breakaway_sympathy }
+							count_pops = {
+								limit = { has_same_faction_as_2nd_faction = yes }
+								count > 4
+							}
+						}
+						if = {
+							limit = { owner = { is_ai = no } }
+							owner = { save_faction_revolt_2nd_event_target = yes }
+							planet_event = { id = ccfaction.99941 }
+						}
+						add_appropriate_2nd_faction_stronghold = yes
+						if = {
+							limit = { has_2nd_faction_sympathies = yes }
+							remove_appropriate_2nd_faction_sympathies = yes
+						}
+						if = {
+							limit = { has_2nd_faction_sedition = yes }
+							remove_appropriate_2nd_faction_sedition = yes
+						}
+						if = {
+							limit = {
+								owner = { has_factional_revolt_stage3 = yes }
+								NOT = { has_modifier = cc_faction_acute_unrest }
+							}
+							add_modifier = {
+								modifier = cc_faction_acute_unrest
+								days = 540
+							}
+							set_timed_planet_flag = {
+								flag = recent_unrest_event
+								days = 540
+							}
+						}
+						owner = {
+							every_owned_planet = {
+								limit = {
+									has_2nd_faction_sedition = no
+									has_2nd_faction_sympathies = no
+									has_2nd_faction_stronghold = no
+									owner = {
+										any_owned_planet = {
+											has_2nd_faction_stronghold = yes
+											distance = {
+												source = prevprev
+												min_distance = 0
+												max_distance = 65
+											}
+										}
+									}
+								}
+								add_appropriate_2nd_faction_sedition = yes
+							}
+						}
+					}
+					every_owned_planet = {
+						limit = {
+							has_2nd_faction_stronghold = no
+							has_2nd_faction_sympathies = no
+							count_pops = {
+								limit = { has_same_ethic_as_2nd_faction = yes }
+								count > 2
+							}
+							NOT = {
+								count_pops = {
+									limit = { has_same_faction_as_2nd_faction = yes }
+									count > 4
+								}
+							}
+						}
+						add_appropriate_2nd_faction_sympathies = yes
+						
+						if = {
+							limit = { has_2nd_faction_sedition = yes }
+							remove_appropriate_2nd_faction_sedition = yes
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+pop_event = {
+	id = ccfaction.9991
+	hide_window = yes
+	is_triggered_only = yes
+	
+	immediate = {
+		random = {
+			chance = 5
+			force_faction_evaluation = yes
+		}
+	}
+}
+
+#other one not quite all-purpose. This one on_bi_yearly_pulse
+#event = {
+#	id = ccfaction.9992
+#	hide_window = yes
+#	is_triggered_only = yes
+#	
+#	immediate = {
+#	}
+#}
+
+#Notification to make it more transparent to the player
+planet_event = {
+	id = ccfaction.9993
+	title = ccfaction.9993.name
+	desc = ccfaction.9993.desc
+	picture = GFX_evt_alien_propaganda
+	
+	location = root
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = CCGOOD
+
+		tooltip = {
+			remove_appropriate_faction_stronghold = yes
+			if = {
+				limit = { has_modifier = cc_faction_acute_unrest }
+				remove_modifier = cc_faction_acute_unrest
+			}
+			
+			if = {
+				limit = {
+					count_pops = {
+						limit = { has_same_ethic_as_faction = yes }
+						count > 2
+					}
+					NOT = {
+						count_pops = {
+							limit = { has_same_faction_as_faction = yes }
+							count > 4
+						}
+					}
+				}
+				add_appropriate_faction_sympathies = yes
+			}
+		}
+	}
+}
+
+planet_event = {
+	id = ccfaction.99931
+	title = ccfaction.9993.name
+	desc = ccfaction.99931.desc
+	picture = GFX_evt_alien_propaganda
+	
+	location = root
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = CCGOOD
+
+		tooltip = {
+			remove_appropriate_2nd_faction_stronghold = yes
+			if = {
+				limit = { has_modifier = cc_faction_acute_unrest }
+				remove_modifier = cc_faction_acute_unrest
+			}
+			
+			if = {
+				limit = {
+					count_pops = {
+						limit = { has_same_ethic_as_2nd_faction = yes }
+						count > 2
+					}
+					NOT = {
+						count_pops = {
+							limit = { has_same_faction_as_2nd_faction = yes }
+							count > 4
+						}
+					}
+				}
+				add_appropriate_2nd_faction_sympathies = yes
+			}
+		}
+	}
+}
+
+planet_event = {
+	id = ccfaction.9994
+	title = ccfaction.9994.name
+	desc = ccfaction.9994.desc
+	picture = GFX_evt_alien_propaganda
+	
+	location = root
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = UNFORTUNATE
+		
+		tooltip = {
+			add_appropriate_faction_stronghold = yes
+			if = {
+				limit = {
+					NOT = { has_modifier = cc_faction_acute_unrest }
+					owner = { has_factional_revolt_stage3 = yes }
+				}
+				add_modifier = {
+					modifier = cc_faction_acute_unrest
+					days = 540
+				}
+			}
+		}
+	}
+}
+
+planet_event = {
+	id = ccfaction.99941
+	title = ccfaction.9994.name
+	desc = ccfaction.99941.desc
+	picture = GFX_evt_alien_propaganda
+	
+	location = root
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = UNFORTUNATE
+		
+		tooltip = {
+			add_appropriate_2nd_faction_stronghold = yes
+			if = {
+				limit = {
+					NOT = { has_modifier = cc_faction_acute_unrest }
+					owner = { has_factional_revolt_stage3 = yes }
+				}
+				add_modifier = {
+					modifier = cc_faction_acute_unrest
+					days = 540
+				}
+			}
+		}
+	}
+}

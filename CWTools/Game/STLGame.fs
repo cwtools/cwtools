@@ -273,7 +273,8 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
                 let before = final
                 final <- rawTriggers |> List.map (fun t -> (STLProcess.getScriptedTriggerScope first EffectType.Trigger final final t) :> Effect)
                 first <- false
-                ((before |> Set.ofList) = (final |> Set.ofList)) || i > 10
+                before = final || i > 10
+                //((before |> Set.ofList) = (final |> Set.ofList)) || i > 10
             while (not (ff())) do ()
             lookup.scriptedTriggers <- final @ vanillaTriggers
 
@@ -293,7 +294,8 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
                 let before = final
                 final <- rawEffects |>  List.map (fun e -> (STLProcess.getScriptedTriggerScope first EffectType.Effect final lookup.scriptedTriggers e) :> Effect)
                 first <- false
-                ((before |> Set.ofList) = (final |> Set.ofList)) || i > 10
+                before = final || i > 10
+                //((before |> Set.ofList) = (final |> Set.ofList)) || i > 10
             while (not (ff())) do ()
             lookup.scriptedEffects <- final @ vanillaEffects
 
@@ -367,7 +369,7 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
                 let timer = new System.Diagnostics.Stopwatch()
                 timer.Start()
                 let returnValue = f()
-                //eprintfn "Elapsed Time: %i %s" timer.ElapsedMilliseconds s
+                eprintfn "Elapsed Time: %i %s" timer.ElapsedMilliseconds s
                 returnValue
             eprintfn "Validating %i files" (entities.Length)
             let allEntitiesByFile = entities |> List.map (fun (f, _) -> f.entity)
@@ -386,11 +388,11 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
             let fileValidators = [valSpriteFiles]
             let fres = fileValidators <&!&> (fun v -> v resources newEntities) |> (function |Invalid es -> es |_ -> [])
             eprintfn "Validating effects/triggers"
-            let eres = valAllEffects (lookup.scriptedTriggers) (lookup.scriptedEffects) (lookup.staticModifiers) newEntities  |> (function |Invalid es -> es |_ -> [])
-            let tres = valAllTriggers (lookup.scriptedTriggers) (lookup.scriptedEffects) (lookup.staticModifiers) newEntities  |> (function |Invalid es -> es |_ -> [])
-            let wres = validateModifierBlocks (lookup.scriptedTriggers) (lookup.scriptedEffects) (lookup.staticModifiers) newEntities |> (function |Invalid es -> es |_ -> [])
-            let mres = valAllModifiers (lookup.coreModifiers) newEntities  |> (function |Invalid es -> es |_ -> [])
-            let evres =( if experimental then getEventChains (lookup.scriptedEffects) oldEntities newEntities else OK) |> (function |Invalid es -> es |_ -> [])
+            let eres = duration (fun _ -> valAllEffects (lookup.scriptedTriggers) (lookup.scriptedEffects) (lookup.staticModifiers) newEntities  |> (function |Invalid es -> es |_ -> [])) "effects"
+            let tres = duration (fun _ ->  valAllTriggers (lookup.scriptedTriggers) (lookup.scriptedEffects) (lookup.staticModifiers) newEntities  |> (function |Invalid es -> es |_ -> [])) "triggers"
+            let wres = duration (fun _ ->  validateModifierBlocks (lookup.scriptedTriggers) (lookup.scriptedEffects) (lookup.staticModifiers) newEntities |> (function |Invalid es -> es |_ -> [])) "weights"
+            let mres = duration (fun _ ->  valAllModifiers (lookup.coreModifiers) newEntities  |> (function |Invalid es -> es |_ -> [])) "modifiers"
+            let evres = duration (fun _ ->  ( if experimental then getEventChains (lookup.scriptedEffects) oldEntities newEntities else OK) |> (function |Invalid es -> es |_ -> [])) "events"
             //let etres = getEventChains newEntities |> (function |Invalid es -> es |_ -> [])
             //(validateShips (flattened)) @ (validateEvents (flattened)) @ res @ fres @ eres
             (validateShips (flattened)) @ (validateEvents (flattened)) @ res @ fres @ eres @ tres @ mres @ evres @ wres

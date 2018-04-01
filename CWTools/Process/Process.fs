@@ -178,6 +178,27 @@ module ProcessCore =
                         cont(seq {yield! a; yield! resNode; yield! accTail}) ))
             | [] -> cont Seq.empty
         loop [node] id
+    
+    let foldNode6 fNode (node:Node) =
+        let rec loop nodes cont =
+            match nodes with
+            | (x : Node)::tail ->
+                loop x.Children (fun accChildren ->
+                    let resNode = fNode x
+                    loop tail (fun accTail ->
+                        cont(resNode::accTail) ))
+            | [] -> cont []
+        loop [node] id //|> List.collect
+
+    let foldNode7 fNode (node : Node) =
+        let rec loop acc nodes  =
+            match nodes with
+            | (x : Node) ->
+                let resNode = fNode x acc
+                x.Children |> List.fold loop resNode
+            //| [] -> acc
+        loop [] node
+
     let rec cata fNode (node:Node) :'r =
         let recurse = cata fNode
         fNode node (node.Children |> Seq.map recurse)

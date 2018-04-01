@@ -20,7 +20,7 @@ let perf(b) =
     let timer = new System.Diagnostics.Stopwatch()
     timer.Start()
     let triggers, effects = parseDocsFile "./testfiles/validationtests/trigger_docs_0.2.txt" |> (function |Success(p, _, _) -> DocsParser.processDocs p)
-    let stl = STLGame("./testfiles/performancetest/", FilesScope.All, "", triggers, effects, [], [], [STL STLLang.English], false, true)
+    let stl = STLGame("./testfiles/performancetest/", FilesScope.All, "", triggers, effects, [], [], [STL STLLang.English], false, false)
     if b then
         let errors = stl.ValidationErrors |> List.map (fun (c, s, n, l, f, k) -> Position.UnConv n)
         let testVals = stl.AllEntities

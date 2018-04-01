@@ -1,0 +1,10 @@
+
+namespace = ccrebel_sow_unrest
+
+#this is here for people without Potent Rebellions
+
+country_event = {
+	id = ccrebel_sow_unrest.4
+	hide_window = yes
+	is_triggered_only = yes
+}

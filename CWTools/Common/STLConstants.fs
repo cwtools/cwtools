@@ -49,6 +49,7 @@ module STLConstants =
             Megastructure;
             Star;
             ]
+    let allScopesSet = allScopes |> Set.ofList
     let parseScope =
         (fun (x : string) -> 
         x.ToLower() 
@@ -89,6 +90,7 @@ module STLConstants =
     type Effect internal (name, scopes, effectType) =
         member val Name : string = name
         member val Scopes : Scope list = scopes
+        member this.ScopesSet = this.Scopes |> Set.ofList
         member val Type : EffectType = effectType
         override x.Equals(y) = 
             match y with

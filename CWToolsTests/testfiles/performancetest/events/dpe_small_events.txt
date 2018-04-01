@@ -1,0 +1,1278 @@
+
+namespace = dpe_smallpos_events
+
+planet_event = {
+	id = dpe_smallpos_events.1
+	hide_window = yes
+
+	trigger = { has_planet_flag = dpe_potential_unity_planet }
+
+	mean_time_to_happen = { years = 50 }
+
+	immediate = {
+		planet_event = { id = dpe_smallpos_events.2 }
+	}
+}
+
+planet_event = {
+	id = dpe_smallpos_events.2
+	title = dpe_smallpos_events.2.name
+	desc = dpe_smallpos_events.2.desc
+	picture = GFX_evt_unity_symbol
+
+	is_triggered_only = yes
+
+	trigger = {
+		exists = owner
+		owner = {
+			is_country_type = default
+			NOR = {
+				has_ethic = ethic_gestalt_consciousness
+				has_country_flag = dpe_recent_unity_planet
+			}
+		}
+		NOT = { has_planet_flag = dpe_unity_planet }
+		unrest < 1
+		count_pops = {
+			limit = { species = { pops_have_happiness = yes } }
+			count > 7
+		}
+		pop_percentage = {
+			limit = { happiness > 0.55 }
+			percentage > 0.75
+		}
+	}
+
+	immediate = {
+		set_timed_planet_flag = {
+			flag = dpe_unity_planet
+			years = 40
+		}
+		owner = {
+			set_timed_country_flag = {
+				flag = dpe_recent_unity_planet
+				years = 10
+			}
+		}
+	}
+
+	option = {
+		name = CCEXCELLENT
+		add_modifier = {
+			modifier = dpe_unity_planet
+			days = 3600
+		}
+	}
+}
+
+
+#Leader Debates
+country_event = {
+	id = dpe_smallpos_events.3
+	hide_window = yes
+	
+	trigger = { has_country_flag = dpe_can_have_ruler_debate }
+	
+	mean_time_to_happen = { years = 20 }
+	
+	immediate = {
+		if = {
+			limit = {
+				OR = {
+					has_authority = auth_democratic
+					has_authority = auth_oligarchic
+				}
+				NOT = { has_country_flag = dpe_recent_ruler_debate }
+				exists = ruler
+				count_pop_factions = {
+					limit = {
+						pop_percentage = {
+							limit = { happiness < 0.4 }
+							percentage > 0.75
+						}
+						exists = leader
+					}
+					count > 0
+				}
+			}
+		
+			if = {
+				limit = {
+					count_pop_factions = {
+						limit = {
+							support > 0.15
+							pop_percentage = {
+								limit = { happiness < 0.4 }
+								percentage > 0.75
+							}
+							exists = leader
+						}
+						count > 0
+					}
+				}
+				random_pop_faction = {
+					limit = {
+						support > 0.15
+						pop_percentage = {
+							limit = { happiness < 0.4 }
+							percentage > 0.75
+						}
+						exists = leader
+					}
+					save_event_target_as = dpe_dissident_faction
+					leader = { save_event_target_as = dpe_dissident_faction_leader }
+				}
+				else = {
+					if = {
+						limit = {
+							count_pop_factions = {
+								limit = {
+									support > 0.10
+									pop_percentage = {
+										limit = { happiness < 0.4 }
+										percentage > 0.75
+									}
+									exists = leader
+								}
+								count > 0
+							}
+						}
+						random_pop_faction = {
+							limit = {
+								support > 0.10
+								pop_percentage = {
+									limit = { happiness < 0.4 }
+									percentage > 0.75
+								}
+								exists = leader
+							}
+							save_event_target_as = dpe_dissident_faction
+							leader = { save_event_target_as = dpe_dissident_faction_leader }
+						}
+						else = {
+							if = {
+								limit = {
+									count_pop_factions = {
+										limit = {
+											support > 0.05
+											pop_percentage = {
+												limit = { happiness < 0.4 }
+												percentage > 0.75
+											}
+											exists = leader
+										}
+										count > 0
+									}
+								}
+								random_pop_faction = {
+									limit = {
+										support > 0.05
+										pop_percentage = {
+											limit = { happiness < 0.4 }
+											percentage > 0.75
+										}
+										exists = leader
+									}
+									save_event_target_as = dpe_dissident_faction
+									leader = { save_event_target_as = dpe_dissident_faction_leader }
+								}
+								else = {
+									random_pop_faction = {
+										limit = {
+											pop_percentage = {
+												limit = { happiness < 0.4 }
+												percentage > 0.75
+											}
+											exists = leader
+										}
+										save_event_target_as = dpe_dissident_faction
+										leader = { save_event_target_as = dpe_dissident_faction_leader }
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		
+			if = {
+				limit = {
+					ruler = { NOT = { leader_of_faction = event_target:dpe_dissident_faction } }
+				}
+				set_timed_country_flag = {
+					flag = dpe_recent_ruler_debate
+					days = 7200
+				}
+				random_list = {
+					2 = { country_event = { id = dpe_smallpos_events.4 } }
+					1 = { country_event = { id = dpe_smallpos_events.5 } }
+				}
+			}
+		}
+	}
+}
+
+
+country_event = {
+	id = dpe_smallpos_events.4
+	title = dpe_smallpos_events.4.name
+	desc = dpe_smallpos_events.4.desc
+	picture = GFX_evt_arguing_senate
+
+	is_triggered_only = yes
+
+
+	option = {
+		name = dpe_smallpos_events.4.option
+
+		
+#		add_monthly_resource_mult = {
+#			resource = unity
+#			value = 3
+#			min = 30
+#			max = 10000
+#		}
+
+		add_modifier = {
+			modifier = dpe_persuasive_leader
+			days = 1080
+		}
+	}
+}
+
+country_event = {
+	id = dpe_smallpos_events.5
+	title = dpe_smallpos_events.5.name
+	desc = dpe_smallpos_events.5.desc
+	picture = GFX_evt_arguing_senate
+
+	is_triggered_only = yes
+
+
+	option = {
+		name = WORRYING
+
+		add_modifier = {
+			modifier = dpe_unpersuasive_leader
+			days = 1080
+		}
+	}
+}
+
+
+
+
+#Talent Uncovered
+country_event = {
+	id = dpe_smallpos_events.10
+	hide_window = yes
+
+	trigger = {
+		is_country_type = default
+		free_leader_slots > 0
+		NOT = { has_ethic = ethic_gestalt_consciousness }
+		NOT = { has_country_flag = dpe_recent_talent_leader }
+
+		any_owned_planet = {
+			NOT = { has_planet_flag = dpe_recent_talent_planet }
+			controller = { is_same_value = root }
+			any_owned_pop = {
+				species = { pops_have_happiness = yes }
+				has_citizenship_rights = yes
+				is_enslaved = no
+			}
+		}
+	}
+
+	mean_time_to_happen = { years = 20 }
+
+	immediate = {
+		random_list = {
+			20 = {
+				modifier = {
+					factor = 1.5
+					num_owned_planets < 6
+				}
+				modifier = {
+					factor = 1.5
+					num_owned_planets < 4
+				}
+				modifier = {
+					factor = 0.75
+					num_owned_planets > 11
+				}
+				modifier = {
+					factor = 0.75
+					num_owned_planets > 24
+				}
+				#Egalitarians are more open to talent
+				modifier = {
+					factor = 0.9
+					has_ethic = ethic_egalitarian
+				}
+				modifier = {
+					factor = 0.75
+					has_ethic = ethic_fanatic_egalitarian
+				}
+				modifier = {
+					factor = 1.1
+					has_ethic = ethic_authoritarian
+				}
+				modifier = {
+					factor = 1.25
+					has_ethic = ethic_fanatic_authoritarian
+				}
+			}
+			5 = { #Scientist
+				country_event = { id = dpe_smallpos_events.11 }
+				modifier = {
+					factor = 1.5
+					has_ethic = ethic_materialist
+				}
+				modifier = {
+					factor = 2
+					has_ethic = ethic_fanatic_materialist
+				}
+				modifier = {
+					factor = 2
+					any_owned_planet = {
+						NOT = { has_planet_flag = dpe_recent_talent_planet }
+						controller = { is_same_value = root }
+						any_owned_pop = {
+							OR = {
+								has_citizenship_type = {
+									type = citizenship_full
+									country = root
+								}
+								AND = {
+									has_citizenship_type = {
+										type = citizenship_caste_system
+										country = root
+									}
+									is_enslaved = no
+								}
+							}
+						}
+						has_modifier = cc_university
+					}
+				}
+			}
+			5 = { #General
+				country_event = { id = dpe_smallpos_events.12 }
+				modifier = {
+					factor = 1.25
+					has_ethic = ethic_militarist
+				}
+				modifier = {
+					factor = 1.5
+					has_ethic = ethic_fanatic_militarist
+				}
+				modifier = {
+					factor = 2
+					any_owned_planet = {
+						NOT = { has_planet_flag = dpe_recent_talent_planet }
+						controller = { is_same_value = root }
+						any_owned_pop = {
+							OR = {
+								has_citizenship_type = {
+									type = citizenship_full
+									country = root
+								}
+								AND = {
+									has_citizenship_type = {
+										type = citizenship_caste_system
+										country = root
+									}
+									is_enslaved = no
+								}
+							}
+						}
+						has_modifier = cc_milacademy
+					}
+				}
+			}
+			5 = { #Governor
+				country_event = { id = dpe_smallpos_events.13 }
+				modifier = {
+					factor = 2
+					any_owned_planet = {
+						NOT = { has_planet_flag = dpe_recent_talent_planet }
+						controller = { is_same_value = root }
+						any_owned_pop = {
+							OR = {
+								has_citizenship_type = {
+									type = citizenship_full
+									country = root
+								}
+								AND = {
+									has_citizenship_type = {
+										type = citizenship_caste_system
+										country = root
+									}
+									is_enslaved = no
+								}
+							}
+						}
+						OR = {
+							has_modifier = cc_colony_monarchy
+							has_modifier = cc_colony_direct_democracy
+						}
+					}
+				}
+			}
+			5 = { #Admiral
+				country_event = { id = dpe_smallpos_events.14 }
+				
+				modifier = {
+					factor = 1.25
+					has_ethic = ethic_militarist
+				}
+				modifier = {
+					factor = 1.5
+					has_ethic = ethic_fanatic_militarist
+				}
+				modifier = {
+					factor = 1.5
+					any_system_within_border = {
+						starbase = {
+							has_starbase_size >= starbase_starport
+							OR = {
+								has_starbase_building = fleet_academy
+								has_starbase_building = command_center
+							}
+						}
+						
+						NOT = { has_star_flag = dpe_recent_talent_starbase }
+					}
+				}
+				modifier = {
+					factor = 2
+					any_system_within_border = {
+						starbase = {
+							has_starbase_size >= starbase_starport
+						}
+						
+						NOT = { has_star_flag = dpe_recent_talent_starbase }
+						root = {
+							any_neighbor_country = {
+								OR = {
+									is_at_war_with = prev
+									is_hostile_to = prev
+									is_rival = prev
+								}
+								any_owned_planet = {
+									distance = {
+										source = prevprevprev
+										max_distance = 40
+									} 
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+
+country_event = {
+	id = dpe_smallpos_events.11
+	title = dpe_smallpos_events.11.name
+	desc = dpe_smallpos_events.11.desc
+	picture = {
+		picture = GFX_evt_society_research
+		trigger = { has_country_flag = dpe_temp_soc_research }
+	}
+	picture = {
+		picture = GFX_evt_physics_research
+		trigger = { has_country_flag = dpe_temp_phy_research }
+	}
+
+	location = event_target:dpe_talent_planet
+
+	is_triggered_only = yes
+
+	immediate = {
+		set_timed_country_flag = {
+			flag = dpe_recent_talent_leader
+			years = 20
+		}
+		if = {
+			limit = {
+				any_owned_planet = {
+					NOT = { has_planet_flag = dpe_recent_talent_planet }
+					controller = { is_same_value = root }
+					any_owned_pop = {
+						OR = {
+							has_citizenship_type = {
+								type = citizenship_full
+								country = root
+							}
+							AND = {
+								has_citizenship_type = {
+									type = citizenship_caste_system
+									country = root
+								}
+								is_enslaved = no
+							}
+						}
+					}
+					has_modifier = cc_university
+				}
+			}
+			random_owned_planet = {
+				limit = {				
+					NOT = { has_planet_flag = dpe_recent_talent_planet }
+					controller = { is_same_value = root }
+					any_owned_pop = {
+						OR = {
+							has_citizenship_type = {
+								type = citizenship_full
+								country = root
+							}
+							AND = {
+								has_citizenship_type = {
+									type = citizenship_caste_system
+									country = root
+								}
+								is_enslaved = no
+							}
+						}
+					}
+					has_modifier = cc_university
+				}
+				save_event_target_as = dpe_talent_planet
+				set_timed_planet_flag = {
+					flag = dpe_recent_talent_planet
+					years = 50
+				}
+			}
+			else = {
+				random_owned_planet = {
+					limit = {				
+						NOT = { has_planet_flag = dpe_recent_talent_planet }
+						controller = { is_same_value = root }
+						any_owned_pop = {
+							OR = {
+								has_citizenship_type = {
+									type = citizenship_full
+									country = root
+								}
+								AND = {
+									has_citizenship_type = {
+										type = citizenship_caste_system
+										country = root
+									}
+									is_enslaved = no
+								}
+							}
+						}
+					}
+					save_event_target_as = dpe_talent_planet
+					set_timed_planet_flag = {
+						flag = dpe_recent_talent_planet
+						years = 50
+					}
+				}
+			}
+		}
+		if = {
+			limit = {
+				event_target:dpe_talent_planet = {
+					any_owned_pop = {
+						is_same_species = root
+						is_enslaved = no
+					}
+				}
+			}
+			create_leader = {
+				type = scientist
+				species = root
+				name = random
+				skill = 2
+				traits = {
+					trait = leader_trait_dpe_talented
+				}
+			}
+			else = {
+				event_target:dpe_talent_planet = {
+					random_owned_pop = {
+						limit = {
+							species = { pops_have_happiness = yes }
+							OR = {
+								has_citizenship_type = {
+									type = citizenship_full
+									country = root
+								}
+								AND = {
+									has_citizenship_type = {
+										type = citizenship_caste_system
+										country = root
+									}
+									is_enslaved = no
+								}
+							}
+						}
+						save_event_target_as = dpe_talent_leader_pop
+					}
+				}
+				create_leader = {
+					type = scientist
+					species = event_target:dpe_talent_leader_pop.species
+					name = random
+					skill = 2
+					traits = {
+						trait = leader_trait_dpe_talented
+					}
+				}
+			}
+		}
+		last_created_leader = {
+			save_event_target_as = dpe_talent_leader
+			if = {
+				limit = {
+					dpe_talent_scientist_has_speciality = no
+				}
+				dpe_talent_scientist_give_speciality = yes
+			}
+		}
+	}
+
+	option = {
+		name = dpe_smallpos_events.11.A
+
+		allow = {
+			energy > 150
+		}
+		
+		add_energy = -150
+
+		custom_tooltip = dpe_smallpos_events.11.A.tooltip
+
+
+		ai_chance = {
+			factor = 1
+		}
+	}
+	option = {
+		name = dpe_smallpos_events.11.B
+
+		hidden_effect = { event_target:dpe_talent_leader = { kill_leader = { show_notification = no } } }
+
+		event_target:dpe_talent_planet = {
+			if = {
+				limit = {
+					event_target:dpe_talent_leader = {
+						OR = {
+							has_trait = leader_trait_expertise_materials
+							has_trait = leader_trait_expertise_propulsion
+							has_trait = leader_trait_expertise_voidcraft
+							has_trait = leader_trait_expertise_industry
+						}
+					}
+				}
+				add_modifier = {
+					modifier = dpe_planet_talented_engineer
+					days = 10800
+				}
+			}
+			if = {
+				limit = {
+					event_target:dpe_talent_leader = {
+						OR = {
+							has_trait = leader_trait_expertise_field_manipulation
+							has_trait = leader_trait_expertise_particles
+						}
+					}
+				}
+				add_modifier = {
+					modifier = dpe_planet_talented_physicist
+					days = 10800
+				}
+			}
+			if = {
+				limit = {
+					event_target:dpe_talent_leader = {
+						has_trait = leader_trait_expertise_computing
+					}
+				}
+				add_modifier = {
+					modifier = dpe_planet_talented_compscientist
+					days = 10800
+				}
+			}
+			if = {
+				limit = {
+					event_target:dpe_talent_leader = {
+						OR = {
+							has_trait = leader_trait_expertise_new_worlds
+							has_trait = leader_trait_expertise_statecraft
+							has_trait = leader_trait_expertise_military_theory
+						}
+					}
+				}
+				add_modifier = {
+					modifier = dpe_planet_talented_socscientist
+					days = 10800
+				}
+			}
+			if = {
+				limit = {
+					event_target:dpe_talent_leader = {
+						has_trait = leader_trait_expertise_biology
+					}
+				}
+				add_modifier = {
+					modifier = dpe_planet_talented_biologist
+					days = 10800
+				}
+			}
+		}
+
+		ai_chance = {
+			factor = 1.5
+		}
+	}
+}
+
+
+
+country_event = {
+	id = dpe_smallpos_events.12
+	title = dpe_smallpos_events.12.name
+	desc = dpe_smallpos_events.12.desc
+	picture = GFX_evt_cc_military_ceremony
+
+	location = event_target:dpe_talent_planet
+
+	is_triggered_only = yes
+
+	immediate = {
+		set_timed_country_flag = {
+			flag = dpe_recent_talent_leader
+			years = 20
+		}
+		if = {
+			limit = {
+				any_owned_planet = {
+					NOT = { has_planet_flag = dpe_recent_talent_planet }
+					controller = { is_same_value = root }
+					any_owned_pop = {
+						OR = {
+							has_citizenship_type = {
+								type = citizenship_full
+								country = root
+							}
+							AND = {
+								has_citizenship_type = {
+									type = citizenship_caste_system
+									country = root
+								}
+								is_enslaved = no
+							}
+						}
+					}
+					has_modifier = cc_milacademy
+				}
+			}
+			random_owned_planet = {
+				limit = {				
+					NOT = { has_planet_flag = dpe_recent_talent_planet }
+					controller = { is_same_value = root }
+					any_owned_pop = {
+						OR = {
+							has_citizenship_type = {
+								type = citizenship_full
+								country = root
+							}
+							AND = {
+								has_citizenship_type = {
+									type = citizenship_caste_system
+									country = root
+								}
+								is_enslaved = no
+							}
+						}
+					}
+					has_modifier = cc_milacademy
+				}
+				save_event_target_as = dpe_talent_planet
+				set_timed_planet_flag = {
+					flag = dpe_recent_talent_planet
+					years = 50
+				}
+			}
+			else = {
+				random_owned_planet = {
+					limit = {				
+						NOT = { has_planet_flag = dpe_recent_talent_planet }
+						controller = { is_same_value = root }
+						any_owned_pop = {
+							OR = {
+								has_citizenship_type = {
+									type = citizenship_full
+									country = root
+								}
+								AND = {
+									has_citizenship_type = {
+										type = citizenship_caste_system
+										country = root
+									}
+									is_enslaved = no
+								}
+							}
+						}
+					}
+					save_event_target_as = dpe_talent_planet
+					set_timed_planet_flag = {
+						flag = dpe_recent_talent_planet
+						years = 50
+					}
+				}
+			}
+		}
+		if = {
+			limit = {
+				event_target:dpe_talent_planet = {
+					any_owned_pop = {
+						is_same_species = root
+						is_enslaved = no
+					}
+				}
+			}
+			create_leader = {
+				type = general
+				species = root
+				name = random
+				skill = 2
+				traits = {
+					trait = leader_trait_dpe_talented
+					trait = leader_trait_charismatic
+				}
+			}
+			else = {
+				event_target:dpe_talent_planet = {
+					random_owned_pop = {
+						limit = {
+							species = { pops_have_happiness = yes }
+							OR = {
+								has_citizenship_type = {
+									type = citizenship_full
+									country = root
+								}
+								AND = {
+									has_citizenship_type = {
+										type = citizenship_caste_system
+										country = root
+									}
+									is_enslaved = no
+								}
+							}
+						}
+						save_event_target_as = dpe_talent_leader_pop
+					}
+				}
+				create_leader = {
+					type = general
+					species = event_target:dpe_talent_leader_pop.species
+					name = random
+					skill = 2
+					traits = {
+						trait = leader_trait_dpe_talented
+						trait = leader_trait_charismatic
+					}
+				}
+			}
+		}
+		last_created_leader = { save_event_target_as = dpe_talent_leader }
+	}
+
+	option = {
+		name = dpe_smallpos_events.12.A
+
+		allow = {
+			energy > 150
+		}
+		
+		add_energy = -150
+
+		custom_tooltip = dpe_smallpos_events.12.A.tooltip
+
+
+		ai_chance = {
+			factor = 1
+		}
+	}
+	option = {
+		name = dpe_smallpos_events.12.B
+
+		hidden_effect = { event_target:dpe_talent_leader = { kill_leader = { show_notification = no } } }
+
+		event_target:dpe_talent_planet = {
+			add_modifier = {
+				modifier = dpe_planet_talented_general
+				days = 10800
+			}
+		}
+	}
+}
+
+
+country_event = {
+	id = dpe_smallpos_events.13
+	title = dpe_smallpos_events.13.name
+	desc = dpe_smallpos_events.13.desc
+	picture = GFX_evt_cc_throne_room
+
+	location = event_target:dpe_talent_planet
+
+	is_triggered_only = yes
+
+	immediate = {
+		set_timed_country_flag = {
+			flag = dpe_recent_talent_leader
+			years = 20
+		}
+		if = {
+			limit = {
+				any_owned_planet = {
+					NOT = { has_planet_flag = dpe_recent_talent_planet }
+					controller = { is_same_value = root }
+					any_owned_pop = {
+						OR = {
+							has_citizenship_type = {
+								type = citizenship_full
+								country = root
+							}
+							AND = {
+								has_citizenship_type = {
+									type = citizenship_caste_system
+									country = root
+								}
+								is_enslaved = no
+							}
+						}
+					}
+					OR = {
+						has_modifier = cc_colony_monarchy
+						has_modifier = cc_colony_direct_democracy
+					}
+				}
+			}
+			random_owned_planet = {
+				limit = {				
+					NOT = { has_planet_flag = dpe_recent_talent_planet }
+					controller = { is_same_value = root }
+					any_owned_pop = {
+						OR = {
+							has_citizenship_type = {
+								type = citizenship_full
+								country = root
+							}
+							AND = {
+								has_citizenship_type = {
+									type = citizenship_caste_system
+									country = root
+								}
+								is_enslaved = no
+							}
+						}
+					}
+					OR = {
+						has_modifier = cc_colony_monarchy
+						has_modifier = cc_colony_direct_democracy
+					}
+				}
+				save_event_target_as = dpe_talent_planet
+				set_timed_planet_flag = {
+					flag = dpe_recent_talent_planet
+					years = 50
+				}
+			}
+			else = {
+				random_owned_planet = {
+					limit = {				
+						NOT = { has_planet_flag = dpe_recent_talent_planet }
+						controller = { is_same_value = root }
+						any_owned_pop = {
+							OR = {
+								has_citizenship_type = {
+									type = citizenship_full
+									country = root
+								}
+								AND = {
+									has_citizenship_type = {
+										type = citizenship_caste_system
+										country = root
+									}
+									is_enslaved = no
+								}
+							}
+						}
+					}
+					save_event_target_as = dpe_talent_planet
+					set_timed_planet_flag = {
+						flag = dpe_recent_talent_planet
+						years = 50
+					}
+				}
+			}
+		}
+		if = {
+			limit = {
+				event_target:dpe_talent_planet = {
+					any_owned_pop = {
+						is_same_species = root
+						is_enslaved = no
+					}
+				}
+			}
+			create_leader = {
+				type = governor
+				species = root
+				name = random
+				skill = 2
+				traits = {
+					trait = leader_trait_dpe_talented
+					trait = leader_trait_intellectual
+				}
+			}
+			else = {
+				event_target:dpe_talent_planet = {
+					random_owned_pop = {
+						limit = {
+							species = { pops_have_happiness = yes }
+							OR = {
+								has_citizenship_type = {
+									type = citizenship_full
+									country = root
+								}
+								AND = {
+									has_citizenship_type = {
+										type = citizenship_caste_system
+										country = root
+									}
+									is_enslaved = no
+								}
+							}
+						}
+						save_event_target_as = dpe_talent_leader_pop
+					}
+				}
+				create_leader = {
+					type = governor
+					species = event_target:dpe_talent_leader_pop.species
+					name = random
+					skill = 2
+					traits = {
+						trait = leader_trait_dpe_talented
+						trait = leader_trait_intellectual
+					}
+				}
+			}
+		}
+		last_created_leader = { save_event_target_as = dpe_talent_leader }
+	}
+
+	option = {
+		name = dpe_smallpos_events.13.A
+
+		allow = {
+			energy > 150
+		}
+		
+		add_energy = -150
+
+		custom_tooltip = dpe_smallpos_events.13.A.tooltip
+
+
+		ai_chance = {
+			factor = 1
+		}
+	}
+	option = {
+		name = dpe_smallpos_events.13.B
+
+		hidden_effect = { event_target:dpe_talent_leader = { kill_leader = { show_notification = no } } }
+
+		event_target:dpe_talent_planet = {
+			add_modifier = {
+				modifier = dpe_planet_talented_governor
+				days = 10800
+			}
+		}
+	}
+}
+
+
+country_event = {
+	id = dpe_smallpos_events.14
+	title = dpe_smallpos_events.14.name
+	desc = dpe_smallpos_events.14.desc
+	picture = GFX_evt_cc_military_ceremony
+
+	location = event_target:dpe_talent_starport_system
+
+	is_triggered_only = yes
+
+	immediate = {
+		set_timed_country_flag = {
+			flag = dpe_recent_talent_leader
+			years = 20
+		}
+		if = {
+			limit = {
+				any_system_within_border = {
+					starbase = {
+						has_starbase_size >= starbase_starport
+					}
+					
+					NOT = { has_star_flag = dpe_recent_talent_starbase }
+					root = {
+						any_neighbor_country = {
+							OR = {
+								is_at_war_with = prev
+								is_hostile_to = prev
+								is_rival = prev
+							}
+							any_owned_planet = {
+								distance = {
+									source = prevprevprev
+									max_distance = 40
+								} 
+							}
+						}
+					}
+				}
+			}
+			random_system_within_border = {
+				limit = {
+					starbase = {
+						has_starbase_size >= starbase_starport
+					}
+					NOT = { has_star_flag = dpe_recent_talent_starbase }
+					root = {
+						any_neighbor_country = {
+							OR = {
+								is_at_war_with = prev
+								is_hostile_to = prev
+								is_rival = prev
+							}
+							any_owned_planet = {
+								distance = {
+									source = prevprevprev
+									max_distance = 40
+								} 
+							}
+						}
+					}
+				}
+				save_event_target_as = dpe_talent_starport_system
+				set_timed_star_flag = {
+					flag = dpe_recent_talent_starbase
+					years = 50
+				}
+			}
+			else = {
+				if = {
+					limit = {
+						any_system_within_border = {
+							starbase = {
+								has_starbase_size >= starbase_starport
+								OR = {
+									has_starbase_building = fleet_academy
+									has_starbase_building = command_center
+								}
+							}
+							NOT = { has_star_flag = dpe_recent_talent_starbase }
+						}
+					}
+					random_system_within_border = {
+						limit = {
+							starbase = {
+								has_starbase_size >= starbase_starport
+								OR = {
+									has_starbase_building = fleet_academy
+									has_starbase_building = command_center
+								}
+							}
+							
+							NOT = { has_star_flag = dpe_recent_talent_starbase }
+						}
+						save_event_target_as = dpe_talent_starport_system
+						set_timed_star_flag = {
+							flag = dpe_recent_talent_starbase
+							years = 50
+						}
+					}
+					else = {
+						random_system_within_border = {
+							limit = {
+								starbase = {
+									has_starbase_size >= starbase_starport
+								}
+								NOT = { has_star_flag = dpe_recent_talent_starbase }
+							}
+							save_event_target_as = dpe_talent_starport_system
+							set_timed_star_flag = {
+								flag = dpe_recent_talent_starbase
+								years = 50
+							}
+						}
+					}
+				}
+			}
+		}
+		create_leader = {
+			type = admiral
+			species = event_target:dpe_talent_leader_pop.species
+			name = random
+			skill = 2
+			traits = {
+				trait = leader_trait_dpe_talented
+				trait = leader_trait_aggressive
+			}
+		}
+		last_created_leader = { save_event_target_as = dpe_talent_leader }
+	}
+
+	option = {
+		name = dpe_smallpos_events.14.A
+
+		allow = {
+			energy > 150
+		}
+		
+		add_energy = -150
+
+		custom_tooltip = dpe_smallpos_events.14.A.tooltip
+
+
+		ai_chance = {
+			factor = 1
+		}
+	}
+	option = {
+		name = dpe_smallpos_events.14.B
+
+		hidden_effect = { event_target:dpe_talent_leader = { kill_leader = { show_notification = no } } }
+
+		random_system_within_border = {
+			limit = {
+				is_same_value = event_target:dpe_talent_starport_system
+			}
+			random_fleet_in_system = {
+				limit = {
+					any_owned_ship = {
+						is_ship_class = shipclass_starbase
+					}
+				}
+				add_modifier = {
+					modifier = dpe_starbase_talented_admiral
+					days = 10800
+				}
+			}
+		}
+	}
+}

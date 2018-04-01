@@ -1,0 +1,2140 @@
+namespace = rebellionscript
+
+
+#Fix to the no ethics problem.
+
+# Initial rebels manage to take control of the planet, happens after the new owner is set, after the war is created.
+# This = Rebel Country
+# From = Planet
+# FromFrom = War
+
+country_event = {
+	id = rebellionscript.35
+	hide_window = yes
+	is_triggered_only = yes
+	
+	trigger = {
+		num_ethics = 0
+	}
+	
+	immediate = {
+		if = {
+			limit = {
+				from = {
+					pop_percentage = {
+						percentage > 0.5
+						limit = { has_ethic = ethic_authoritarian }
+					}
+				}
+			}
+			country_add_ethic = ethic_fanatic_authoritarian
+		}
+		if = {
+			limit = {
+				from = {
+					pop_percentage = {
+						percentage > 0.5
+						limit = { has_ethic = ethic_egalitarian }
+					}
+				}
+			}
+			country_add_ethic = ethic_fanatic_egalitarian
+		}
+		if = {
+			limit = {
+				from = {
+					pop_percentage = {
+						percentage > 0.5
+						limit = { has_ethic = ethic_pacifist }
+					}
+				}
+			}
+			country_add_ethic = ethic_fanatic_pacifist
+		}
+		if = {
+			limit = {
+				from = {
+					pop_percentage = {
+						percentage > 0.5
+						limit = { has_ethic = ethic_militarist }
+					}
+				}
+			}
+			country_add_ethic = ethic_fanatic_militarist
+		}
+		if = {
+			limit = {
+				from = {
+					pop_percentage = {
+						percentage > 0.5
+						limit = { has_ethic = ethic_xenophile }
+					}
+				}
+			}
+			country_add_ethic = ethic_fanatic_xenophile
+		}
+		if = {
+			limit = {
+				from = {
+					pop_percentage = {
+						percentage > 0.5
+						limit = { has_ethic = ethic_xenophobe }
+					}
+				}
+			}
+			country_add_ethic = ethic_fanatic_xenophobe
+		}
+		if = {
+			limit = {
+				from = {
+					pop_percentage = {
+						percentage > 0.5
+						limit = { has_ethic = ethic_spiritualist }
+					}
+				}
+			}
+			country_add_ethic = ethic_fanatic_spiritualist
+		}
+		if = {
+			limit = {
+				from = {
+					pop_percentage = {
+						percentage > 0.5
+						limit = { has_ethic = ethic_materialist }
+					}
+				}
+			}
+			country_add_ethic = ethic_fanatic_materialist
+		}
+		if = {
+			limit = {
+				from = {
+					pop_percentage = {
+						percentage > 0.25
+						limit = { has_ethic = ethic_authoritarian }
+					}
+					NOT = {
+						pop_percentage = {
+							percentage > 0.5
+							limit = { has_ethic = ethic_authoritarian }
+						}
+					}
+				}
+				NOR = { 
+					has_ethic = ethic_fanatic_egalitarian
+					has_ethic = ethic_egalitarian
+				}
+			}
+			country_add_ethic = ethic_authoritarian
+		}
+		if = {
+			limit = {
+				from = {
+					pop_percentage = {
+						percentage > 0.25
+						limit = { has_ethic = ethic_egalitarian }
+					}
+					NOT = {
+						pop_percentage = {
+							percentage > 0.5
+							limit = { has_ethic = ethic_egalitarian }
+						}
+					}
+				}
+				NOR = { 
+					has_ethic = ethic_fanatic_authoritarian
+					has_ethic = ethic_authoritarian
+				}
+			}
+			country_add_ethic = ethic_egalitarian
+		}
+		if = {
+			limit = {
+				from = {
+					pop_percentage = {
+						percentage > 0.25
+						limit = { has_ethic = ethic_pacifist }
+					}
+					NOT = {
+						pop_percentage = {
+							percentage > 0.5
+							limit = { has_ethic = ethic_pacifist }
+						}
+					}
+				}
+				NOR = { 
+					has_ethic = ethic_fanatic_militarist
+					has_ethic = ethic_militarist
+				}
+			}
+			country_add_ethic = ethic_pacifist
+		}
+		if = {
+			limit = {
+				from = {
+					pop_percentage = {
+						percentage > 0.25
+						limit = { has_ethic = ethic_militarist }
+					}
+					NOT = {
+						pop_percentage = {
+							percentage > 0.5
+							limit = { has_ethic = ethic_militarist }
+						}
+					}
+				}
+				NOR = { 
+					has_ethic = ethic_fanatic_pacifist
+					has_ethic = ethic_pacifist
+				}
+			}
+			country_add_ethic = ethic_militarist
+		}
+		if = {
+			limit = {
+				from = {
+					pop_percentage = {
+						percentage > 0.25
+						limit = { has_ethic = ethic_xenophile }
+					}
+					NOT = {
+						pop_percentage = {
+							percentage > 0.5
+							limit = { has_ethic = ethic_xenophile }
+						}
+					}
+				}
+				NOR = { 
+					has_ethic = ethic_fanatic_xenophobe
+					has_ethic = ethic_xenophobe
+				}
+			}
+			country_add_ethic = ethic_xenophile
+		}
+		if = {
+			limit = {
+				from = {
+					pop_percentage = {
+						percentage > 0.25
+						limit = { has_ethic = ethic_xenophobe }
+					}
+					NOT = {
+						pop_percentage = {
+							percentage > 0.5
+							limit = { has_ethic = ethic_xenophobe }
+						}
+					}
+				}
+				NOR = { 
+					has_ethic = ethic_fanatic_xenophile
+					has_ethic = ethic_xenophile
+				}
+			}
+			country_add_ethic = ethic_xenophobe
+		}
+		if = {
+			limit = {
+				from = {
+					pop_percentage = {
+						percentage > 0.25
+						limit = { has_ethic = ethic_spiritualist }
+					}
+					NOT = {
+						pop_percentage = {
+							percentage > 0.5
+							limit = { has_ethic = ethic_spiritualist }
+						}
+					}
+				}
+				NOR = { 
+					has_ethic = ethic_fanatic_materialist
+					has_ethic = ethic_materialist
+				}
+			}
+			country_add_ethic = ethic_spiritualist
+		}
+		if = {
+			limit = {
+				from = {
+					pop_percentage = {
+						percentage > 0.25
+						limit = { has_ethic = ethic_materialist }
+					}
+					NOT = {
+						pop_percentage = {
+							percentage > 0.5
+							limit = { has_ethic = ethic_materialist }
+						}
+					}
+				}
+				NOR = { 
+					has_ethic = ethic_fanatic_spiritualist
+					has_ethic = ethic_spiritualist
+				}
+			}
+			country_add_ethic = ethic_materialist
+		}
+		country_event = { id = rebellionscript.36 }
+		country_event = { id = rebellionscript.364 days = 2 }
+	}
+}
+
+
+country_event = {
+	id = rebellionscript.36
+	hide_window = yes
+	is_triggered_only = yes
+	
+	immediate = {
+		
+		if = {
+			limit = {
+				num_ethics = 2
+			}
+			if = {
+				limit = {
+					has_ethic = ethic_authoritarian
+					has_ethic = ethic_pacifist
+				}
+				random_list = {
+					50 = {
+						modifier = {
+							factor = 2
+							pop_percentage = {
+								percentage > 0.35
+								limit = { has_ethic = ethic_authoritarian }
+							}
+						}
+						country_remove_ethic = ethic_authoritarian
+						country_add_ethic = ethic_fanatic_authoritarian
+					}
+					50 = {
+						modifier = {
+							factor = 2
+							pop_percentage = {
+								percentage > 0.35
+								limit = { has_ethic = ethic_pacifist }
+							}
+						}
+						country_remove_ethic = ethic_pacifist
+						country_add_ethic = ethic_fanatic_pacifist
+					}
+				}
+			}
+			if = {
+				limit = {
+					has_ethic = ethic_authoritarian
+					has_ethic = ethic_militarist
+				}
+				random_list = {
+					50 = {
+						modifier = {
+							factor = 2
+							pop_percentage = {
+								percentage > 0.35
+								limit = { has_ethic = ethic_authoritarian }
+							}
+						}
+						country_remove_ethic = ethic_authoritarian
+						country_add_ethic = ethic_fanatic_authoritarian
+					}
+					50 = {
+						modifier = {
+							factor = 2
+							pop_percentage = {
+								percentage > 0.35
+								limit = { has_ethic = ethic_militarist }
+							}
+						}
+						country_remove_ethic = ethic_militarist
+						country_add_ethic = ethic_fanatic_militarist
+					}
+				}
+			}
+			if = {
+				limit = {
+					has_ethic = ethic_authoritarian
+					has_ethic = ethic_spiritualist
+				}
+				random_list = {
+					50 = {
+						modifier = {
+							factor = 2
+							pop_percentage = {
+								percentage > 0.35
+								limit = { has_ethic = ethic_authoritarian }
+							}
+						}
+						country_remove_ethic = ethic_authoritarian
+						country_add_ethic = ethic_fanatic_authoritarian
+					}
+					50 = {
+						modifier = {
+							factor = 2
+							pop_percentage = {
+								percentage > 0.35
+								limit = { has_ethic = ethic_spiritualist }
+							}
+						}
+						country_remove_ethic = ethic_spiritualist
+						country_add_ethic = ethic_fanatic_spiritualist
+					}
+				}
+			}
+			if = {
+				limit = {
+					has_ethic = ethic_authoritarian
+					has_ethic = ethic_materialist
+				}
+				random_list = {
+					50 = {
+						modifier = {
+							factor = 2
+							pop_percentage = {
+								percentage > 0.35
+								limit = { has_ethic = ethic_authoritarian }
+							}
+						}
+						country_remove_ethic = ethic_authoritarian
+						country_add_ethic = ethic_fanatic_authoritarian
+					}
+					50 = {
+						modifier = {
+							factor = 2
+							pop_percentage = {
+								percentage > 0.35
+								limit = { has_ethic = ethic_materialist }
+							}
+						}
+						country_remove_ethic = ethic_materialist
+						country_add_ethic = ethic_fanatic_materialist
+					}
+				}
+			}
+			if = {
+				limit = {
+					has_ethic = ethic_authoritarian
+					has_ethic = ethic_xenophobe
+				}
+				random_list = {
+					50 = {
+						modifier = {
+							factor = 2
+							pop_percentage = {
+								percentage > 0.35
+								limit = { has_ethic = ethic_authoritarian }
+							}
+						}
+						country_remove_ethic = ethic_authoritarian
+						country_add_ethic = ethic_fanatic_authoritarian
+					}
+					50 = {
+						modifier = {
+							factor = 2
+							pop_percentage = {
+								percentage > 0.35
+								limit = { has_ethic = ethic_xenophobe }
+							}
+						}
+						country_remove_ethic = ethic_xenophobe
+						country_add_ethic = ethic_fanatic_xenophobe
+					}
+				}
+			}
+			if = {
+				limit = {
+					has_ethic = ethic_authoritarian
+					has_ethic = ethic_xenophile
+				}
+				random_list = {
+					50 = {
+						modifier = {
+							factor = 2
+							pop_percentage = {
+								percentage > 0.35
+								limit = { has_ethic = ethic_authoritarian }
+							}
+						}
+						country_remove_ethic = ethic_authoritarian
+						country_add_ethic = ethic_fanatic_authoritarian
+					}
+					50 = {
+						modifier = {
+							factor = 2
+							pop_percentage = {
+								percentage > 0.35
+								limit = { has_ethic = ethic_xenophile }
+							}
+						}
+						country_remove_ethic = ethic_xenophile
+						country_add_ethic = ethic_fanatic_xenophile
+					}
+				}
+			}
+			
+			if = {
+				limit = {
+					has_ethic = ethic_egalitarian
+					has_ethic = ethic_pacifist
+				}
+				random_list = {
+					50 = {
+						modifier = {
+							factor = 2
+							pop_percentage = {
+								percentage > 0.35
+								limit = { has_ethic = ethic_egalitarian }
+							}
+						}
+						country_remove_ethic = ethic_egalitarian
+						country_add_ethic = ethic_fanatic_egalitarian
+					}
+					50 = {
+						modifier = {
+							factor = 2
+							pop_percentage = {
+								percentage > 0.35
+								limit = { has_ethic = ethic_pacifist }
+							}
+						}
+						country_remove_ethic = ethic_pacifist
+						country_add_ethic = ethic_fanatic_pacifist
+					}
+				}
+			}
+			if = {
+				limit = {
+					has_ethic = ethic_egalitarian
+					has_ethic = ethic_militarist
+				}
+				random_list = {
+					50 = {
+						modifier = {
+							factor = 2
+							pop_percentage = {
+								percentage > 0.35
+								limit = { has_ethic = ethic_egalitarian }
+							}
+						}
+						country_remove_ethic = ethic_egalitarian
+						country_add_ethic = ethic_fanatic_egalitarian
+					}
+					50 = {
+						modifier = {
+							factor = 2
+							pop_percentage = {
+								percentage > 0.35
+								limit = { has_ethic = ethic_militarist }
+							}
+						}
+						country_remove_ethic = ethic_militarist
+						country_add_ethic = ethic_fanatic_militarist
+					}
+				}
+			}
+			if = {
+				limit = {
+					has_ethic = ethic_egalitarian
+					has_ethic = ethic_spiritualist
+				}
+				random_list = {
+					50 = {
+						modifier = {
+							factor = 2
+							pop_percentage = {
+								percentage > 0.35
+								limit = { has_ethic = ethic_egalitarian }
+							}
+						}
+						country_remove_ethic = ethic_egalitarian
+						country_add_ethic = ethic_fanatic_egalitarian
+					}
+					50 = {
+						modifier = {
+							factor = 2
+							pop_percentage = {
+								percentage > 0.35
+								limit = { has_ethic = ethic_spiritualist }
+							}
+						}
+						country_remove_ethic = ethic_spiritualist
+						country_add_ethic = ethic_fanatic_spiritualist
+					}
+				}
+			}
+			if = {
+				limit = {
+					has_ethic = ethic_egalitarian
+					has_ethic = ethic_materialist
+				}
+				random_list = {
+					50 = {
+						modifier = {
+							factor = 2
+							pop_percentage = {
+								percentage > 0.35
+								limit = { has_ethic = ethic_egalitarian }
+							}
+						}
+						country_remove_ethic = ethic_egalitarian
+						country_add_ethic = ethic_fanatic_egalitarian
+					}
+					50 = {
+						modifier = {
+							factor = 2
+							pop_percentage = {
+								percentage > 0.35
+								limit = { has_ethic = ethic_materialist }
+							}
+						}
+						country_remove_ethic = ethic_materialist
+						country_add_ethic = ethic_fanatic_materialist
+					}
+				}
+			}
+			if = {
+				limit = {
+					has_ethic = ethic_egalitarian
+					has_ethic = ethic_xenophobe
+				}
+				random_list = {
+					50 = {
+						modifier = {
+							factor = 2
+							pop_percentage = {
+								percentage > 0.35
+								limit = { has_ethic = ethic_egalitarian }
+							}
+						}
+						country_remove_ethic = ethic_egalitarian
+						country_add_ethic = ethic_fanatic_egalitarian
+					}
+					50 = {
+						modifier = {
+							factor = 2
+							pop_percentage = {
+								percentage > 0.35
+								limit = { has_ethic = ethic_xenophobe }
+							}
+						}
+						country_remove_ethic = ethic_xenophobe
+						country_add_ethic = ethic_fanatic_xenophobe
+					}
+				}
+			}
+			if = {
+				limit = {
+					has_ethic = ethic_egalitarian
+					has_ethic = ethic_xenophile
+				}
+				random_list = {
+					50 = {
+						modifier = {
+							factor = 2
+							pop_percentage = {
+								percentage > 0.35
+								limit = { has_ethic = ethic_egalitarian }
+							}
+						}
+						country_remove_ethic = ethic_egalitarian
+						country_add_ethic = ethic_fanatic_egalitarian
+					}
+					50 = {
+						modifier = {
+							factor = 2
+							pop_percentage = {
+								percentage > 0.35
+								limit = { has_ethic = ethic_xenophile }
+							}
+						}
+						country_remove_ethic = ethic_xenophile
+						country_add_ethic = ethic_fanatic_xenophile
+					}
+				}
+			}
+			
+			
+			if = {
+				limit = {
+					has_ethic = ethic_pacifist
+					has_ethic = ethic_spiritualist
+				}
+				random_list = {
+					50 = {
+						modifier = {
+							factor = 2
+							pop_percentage = {
+								percentage > 0.35
+								limit = { has_ethic = ethic_pacifist }
+							}
+						}
+						country_remove_ethic = ethic_pacifist
+						country_add_ethic = ethic_fanatic_pacifist
+					}
+					50 = {
+						modifier = {
+							factor = 2
+							pop_percentage = {
+								percentage > 0.35
+								limit = { has_ethic = ethic_spiritualist }
+							}
+						}
+						country_remove_ethic = ethic_spiritualist
+						country_add_ethic = ethic_fanatic_spiritualist
+					}
+				}
+			}
+			if = {
+				limit = {
+					has_ethic = ethic_pacifist
+					has_ethic = ethic_materialist
+				}
+				random_list = {
+					50 = {
+						modifier = {
+							factor = 2
+							pop_percentage = {
+								percentage > 0.35
+								limit = { has_ethic = ethic_pacifist }
+							}
+						}
+						country_remove_ethic = ethic_pacifist
+						country_add_ethic = ethic_fanatic_pacifist
+					}
+					50 = {
+						modifier = {
+							factor = 2
+							pop_percentage = {
+								percentage > 0.35
+								limit = { has_ethic = ethic_materialist }
+							}
+						}
+						country_remove_ethic = ethic_materialist
+						country_add_ethic = ethic_fanatic_materialist
+					}
+				}
+			}
+			if = {
+				limit = {
+					has_ethic = ethic_pacifist
+					has_ethic = ethic_xenophobe
+				}
+				random_list = {
+					50 = {
+						modifier = {
+							factor = 2
+							pop_percentage = {
+								percentage > 0.35
+								limit = { has_ethic = ethic_pacifist }
+							}
+						}
+						country_remove_ethic = ethic_pacifist
+						country_add_ethic = ethic_fanatic_pacifist
+					}
+					50 = {
+						modifier = {
+							factor = 2
+							pop_percentage = {
+								percentage > 0.35
+								limit = { has_ethic = ethic_xenophobe }
+							}
+						}
+						country_remove_ethic = ethic_xenophobe
+						country_add_ethic = ethic_fanatic_xenophobe
+					}
+				}
+			}
+			if = {
+				limit = {
+					has_ethic = ethic_pacifist
+					has_ethic = ethic_xenophile
+				}
+				random_list = {
+					50 = {
+						modifier = {
+							factor = 2
+							pop_percentage = {
+								percentage > 0.35
+								limit = { has_ethic = ethic_pacifist }
+							}
+						}
+						country_remove_ethic = ethic_pacifist
+						country_add_ethic = ethic_fanatic_pacifist
+					}
+					50 = {
+						modifier = {
+							factor = 2
+							pop_percentage = {
+								percentage > 0.35
+								limit = { has_ethic = ethic_xenophile }
+							}
+						}
+						country_remove_ethic = ethic_xenophile
+						country_add_ethic = ethic_fanatic_xenophile
+					}
+				}
+			}
+			
+			if = {
+				limit = {
+					has_ethic = ethic_militarist
+					has_ethic = ethic_spiritualist
+				}
+				random_list = {
+					50 = {
+						modifier = {
+							factor = 2
+							pop_percentage = {
+								percentage > 0.35
+								limit = { has_ethic = ethic_militarist }
+							}
+						}
+						country_remove_ethic = ethic_militarist
+						country_add_ethic = ethic_fanatic_militarist
+					}
+					50 = {
+						modifier = {
+							factor = 2
+							pop_percentage = {
+								percentage > 0.35
+								limit = { has_ethic = ethic_spiritualist }
+							}
+						}
+						country_remove_ethic = ethic_spiritualist
+						country_add_ethic = ethic_fanatic_spiritualist
+					}
+				}
+			}
+			if = {
+				limit = {
+					has_ethic = ethic_militarist
+					has_ethic = ethic_materialist
+				}
+				random_list = {
+					50 = {
+						modifier = {
+							factor = 2
+							pop_percentage = {
+								percentage > 0.35
+								limit = { has_ethic = ethic_militarist }
+							}
+						}
+						country_remove_ethic = ethic_militarist
+						country_add_ethic = ethic_fanatic_militarist
+					}
+					50 = {
+						modifier = {
+							factor = 2
+							pop_percentage = {
+								percentage > 0.35
+								limit = { has_ethic = ethic_materialist }
+							}
+						}
+						country_remove_ethic = ethic_materialist
+						country_add_ethic = ethic_fanatic_materialist
+					}
+				}
+			}
+			if = {
+				limit = {
+					has_ethic = ethic_militarist
+					has_ethic = ethic_xenophobe
+				}
+				random_list = {
+					50 = {
+						modifier = {
+							factor = 2
+							pop_percentage = {
+								percentage > 0.35
+								limit = { has_ethic = ethic_militarist }
+							}
+						}
+						country_remove_ethic = ethic_militarist
+						country_add_ethic = ethic_fanatic_militarist
+					}
+					50 = {
+						modifier = {
+							factor = 2
+							pop_percentage = {
+								percentage > 0.35
+								limit = { has_ethic = ethic_xenophobe }
+							}
+						}
+						country_remove_ethic = ethic_xenophobe
+						country_add_ethic = ethic_fanatic_xenophobe
+					}
+				}
+			}
+			if = {
+				limit = {
+					has_ethic = ethic_militarist
+					has_ethic = ethic_xenophile
+				}
+				random_list = {
+					50 = {
+						modifier = {
+							factor = 2
+							pop_percentage = {
+								percentage > 0.35
+								limit = { has_ethic = ethic_militarist }
+							}
+						}
+						country_remove_ethic = ethic_militarist
+						country_add_ethic = ethic_fanatic_militarist
+					}
+					50 = {
+						modifier = {
+							factor = 2
+							pop_percentage = {
+								percentage > 0.35
+								limit = { has_ethic = ethic_xenophile }
+							}
+						}
+						country_remove_ethic = ethic_xenophile
+						country_add_ethic = ethic_fanatic_xenophile
+					}
+				}
+			}
+			
+			if = {
+				limit = {
+					has_ethic = ethic_spiritualist
+					has_ethic = ethic_xenophobe
+				}
+				random_list = {
+					50 = {
+						modifier = {
+							factor = 2
+							pop_percentage = {
+								percentage > 0.35
+								limit = { has_ethic = ethic_spiritualist }
+							}
+						}
+						country_remove_ethic = ethic_spiritualist
+						country_add_ethic = ethic_fanatic_spiritualist
+					}
+					50 = {
+						modifier = {
+							factor = 2
+							pop_percentage = {
+								percentage > 0.35
+								limit = { has_ethic = ethic_xenophobe }
+							}
+						}
+						country_remove_ethic = ethic_xenophobe
+						country_add_ethic = ethic_fanatic_xenophobe
+					}
+				}
+			}
+			if = {
+				limit = {
+					has_ethic = ethic_spiritualist
+					has_ethic = ethic_xenophile
+				}
+				random_list = {
+					50 = {
+						modifier = {
+							factor = 2
+							pop_percentage = {
+								percentage > 0.35
+								limit = { has_ethic = ethic_spiritualist }
+							}
+						}
+						country_remove_ethic = ethic_spiritualist
+						country_add_ethic = ethic_fanatic_spiritualist
+					}
+					50 = {
+						modifier = {
+							factor = 2
+							pop_percentage = {
+								percentage > 0.35
+								limit = { has_ethic = ethic_xenophile }
+							}
+						}
+						country_remove_ethic = ethic_xenophile
+						country_add_ethic = ethic_fanatic_xenophile
+					}
+				}
+			}
+		
+			if = {
+				limit = {
+					has_ethic = ethic_materialist
+					has_ethic = ethic_xenophobe
+				}
+				random_list = {
+					50 = {
+						modifier = {
+							factor = 2
+							pop_percentage = {
+								percentage > 0.35
+								limit = { has_ethic = ethic_materialist }
+							}
+						}
+						country_remove_ethic = ethic_materialist
+						country_add_ethic = ethic_fanatic_materialist
+					}
+					50 = {
+						modifier = {
+							factor = 2
+							pop_percentage = {
+								percentage > 0.35
+								limit = { has_ethic = ethic_xenophobe }
+							}
+						}
+						country_remove_ethic = ethic_xenophobe
+						country_add_ethic = ethic_fanatic_xenophobe
+					}
+				}
+			}
+			if = {
+				limit = {
+					has_ethic = ethic_materialist
+					has_ethic = ethic_xenophile
+				}
+				random_list = {
+					50 = {
+						modifier = {
+							factor = 2
+							pop_percentage = {
+								percentage > 0.35
+								limit = { has_ethic = ethic_materialist }
+							}
+						}
+						country_remove_ethic = ethic_materialist
+						country_add_ethic = ethic_fanatic_materialist
+					}
+					50 = {
+						modifier = {
+							factor = 2
+							pop_percentage = {
+								percentage > 0.35
+								limit = { has_ethic = ethic_xenophile }
+							}
+						}
+						country_remove_ethic = ethic_xenophile
+						country_add_ethic = ethic_fanatic_xenophile
+					}
+				}
+			}
+		}
+		
+			
+			
+		if = {
+			limit = {
+				num_ethics = 1
+			}
+			if = {
+				limit = {
+					has_ethic = ethic_authoritarian
+				}
+				country_remove_ethic = ethic_authoritarian
+				country_add_ethic = ethic_fanatic_authoritarian
+			}
+			if = {
+				limit = {
+					has_ethic = ethic_egalitarian
+				}
+				country_remove_ethic = ethic_egalitarian
+				country_add_ethic = ethic_fanatic_egalitarian
+			}
+			if = {
+				limit = {
+					has_ethic = ethic_pacifist
+				}
+				country_remove_ethic = ethic_pacifist
+				country_add_ethic = ethic_fanatic_pacifist
+			}
+			if = {
+				limit = {
+					has_ethic = ethic_spiritualist
+				}
+				country_remove_ethic = ethic_spiritualist
+				country_add_ethic = ethic_fanatic_spiritualist
+			}
+			if = {
+				limit = {
+					has_ethic = ethic_spiritualist
+				}
+				country_remove_ethic = ethic_spiritualist
+				country_add_ethic = ethic_fanatic_spiritualist
+			}
+			if = {
+				limit = {
+					has_ethic = ethic_materialist
+				}
+				country_remove_ethic = ethic_materialist
+				country_add_ethic = ethic_fanatic_materialist
+			}
+			if = {
+				limit = {
+					has_ethic = ethic_xenophile
+				}
+				country_remove_ethic = ethic_xenophile
+				country_add_ethic = ethic_fanatic_xenophile
+			}
+			if = {
+				limit = {
+					has_ethic = ethic_xenophobe
+				}
+				country_remove_ethic = ethic_xenophobe
+				country_add_ethic = ethic_fanatic_xenophobe
+			}
+		}
+		
+		
+		
+		if = {
+			limit = {
+				num_ethics = 0
+			}
+		
+			if = {
+				limit = {
+						pop_percentage = {
+							percentage > 0.15
+							limit = { has_ethic = ethic_authoritarian }
+						}
+					NOT = { has_ethic = ethic_egalitarian }
+				}
+				country_add_ethic = ethic_authoritarian
+			}
+			if = {
+				limit = {
+						pop_percentage = {
+							percentage > 0.15
+							limit = { has_ethic = ethic_egalitarian }
+						}
+					NOT = { has_ethic = ethic_authoritarian }
+				}
+				country_add_ethic = ethic_egalitarian
+			}
+			if = {
+				limit = {
+						pop_percentage = {
+							percentage > 0.15
+							limit = { has_ethic = ethic_pacifist }
+						}
+					NOT = { has_ethic = ethic_militarist }
+				}
+				country_add_ethic = ethic_pacifist
+			}
+			if = {
+				limit = {
+						pop_percentage = {
+							percentage > 0.15
+							limit = { has_ethic = ethic_militarist }
+						}
+					NOT = { has_ethic = ethic_pacifist }
+				}
+				country_add_ethic = ethic_militarist
+			}
+			if = {
+				limit = {
+						pop_percentage = {
+							percentage > 0.15
+							limit = { has_ethic = ethic_xenophile }
+						}
+					NOT = { has_ethic = ethic_xenophobe }
+				}
+				country_add_ethic = ethic_xenophile
+			}
+			if = {
+				limit = {
+						pop_percentage = {
+							percentage > 0.15
+							limit = { has_ethic = ethic_xenophobe }
+						}
+					NOT = { has_ethic = ethic_xenophile }
+				}
+				country_add_ethic = ethic_xenophobe
+			}
+			if = {
+				limit = {
+						pop_percentage = {
+							percentage > 0.15
+							limit = { has_ethic = ethic_spiritualist }
+						}
+					NOT = { has_ethic = ethic_materialist }
+				}
+				country_add_ethic = ethic_spiritualist
+			}
+			if = {
+				limit = {
+						pop_percentage = {
+							percentage > 0.15
+							limit = { has_ethic = ethic_materialist }
+						}
+					NOT = { has_ethic = ethic_spiritualist }
+				}
+				country_add_ethic = ethic_materialist
+			}
+		}
+		country_event = { id = rebellionscript.361 }
+		country_event = { id = rebellionscript.363 days = 1 }
+	}
+}
+
+country_event = {
+	id = rebellionscript.361
+	hide_window = yes
+	is_triggered_only = yes
+	
+	
+	immediate = {
+			
+		if = {
+			limit = {
+				num_ethics = 2
+				NOR = {
+					has_ethic = ethic_fanatic_authoritarian
+					has_ethic = ethic_fanatic_egalitarian
+					has_ethic = ethic_fanatic_materialist
+					has_ethic = ethic_fanatic_spiritualist
+					has_ethic = ethic_fanatic_militarist
+					has_ethic = ethic_fanatic_pacifist
+					has_ethic = ethic_fanatic_xenophile
+					has_ethic = ethic_fanatic_xenophobe
+				}
+			}
+			if = {
+				limit = {
+					OR = {
+						pop_percentage = {
+							percentage > 0.15
+							limit = { has_ethic = ethic_egalitarian }
+						}
+						pop_percentage = {
+							percentage > 0.15
+							limit = { has_ethic = ethic_authoritarian }
+						}
+						pop_percentage = {
+							percentage > 0.15
+							limit = { has_ethic = ethic_pacifist }
+						}
+						pop_percentage = {
+							percentage > 0.15
+							limit = { has_ethic = ethic_xenophile }
+						}
+						pop_percentage = {
+							percentage > 0.15
+							limit = { has_ethic = ethic_xenophobe }
+						}
+						pop_percentage = {
+							percentage > 0.15
+							limit = { has_ethic = ethic_militarist }
+						}
+						pop_percentage = {
+							percentage > 0.15
+							limit = { has_ethic = ethic_materialist }
+						}
+						pop_percentage = {
+							percentage > 0.15
+							limit = { has_ethic = ethic_spiritualist }
+						}
+					}
+				}
+				
+				random_list = {
+					12 = {
+						modifier = {
+							factor = 0
+							OR = {
+								NOR = {
+									has_ethic = ethic_authoritarian
+									has_ethic = ethic_fanatic_authoritarian
+									has_ethic = ethic_egalitarian
+									has_ethic = ethic_fanatic_egalitarian
+								}
+								NOT = {
+										pop_percentage = {
+											percentage > 0.15
+											limit = { has_ethic = ethic_egalitarian }
+										}
+								}
+							}
+						}
+						country_add_ethic = ethic_egalitarian
+					}
+					12 = {
+						modifier = {
+							factor = 0
+							OR = {
+								NOR = {
+									has_ethic = ethic_pacifist
+									has_ethic = ethic_fanatic_pacifist
+									has_ethic = ethic_militarist
+									has_ethic = ethic_fanatic_militarist
+								}
+								NOT = {
+										pop_percentage = {
+											percentage > 0.15
+											limit = { has_ethic = ethic_pacifist }
+										}
+								}
+							}
+						}
+						country_add_ethic = ethic_pacifist
+					}
+					12 = {
+						modifier = {
+							factor = 0
+							OR = {
+								NOR = {
+									has_ethic = ethic_xenophile
+									has_ethic = ethic_fanatic_xenophile
+									has_ethic = ethic_xenophobe
+									has_ethic = ethic_fanatic_xenophobe
+								}
+								NOT = {
+										pop_percentage = {
+											percentage > 0.15
+											limit = { has_ethic = ethic_xenophile }
+										}
+								}
+							}
+						}
+						country_add_ethic = ethic_xenophile
+					}
+					12 = {
+						modifier = {
+							factor = 0
+							OR = {
+								NOR = {
+									has_ethic = ethic_authoritarian
+									has_ethic = ethic_fanatic_authoritarian
+									has_ethic = ethic_egalitarian
+									has_ethic = ethic_fanatic_egalitarian
+								}
+								NOT = {
+										pop_percentage = {
+											percentage > 0.15
+											limit = { has_ethic = ethic_authoritarian }
+										}
+								}
+							}
+						}
+						country_add_ethic = ethic_authoritarian
+					}
+					12 = {
+						modifier = {
+							factor = 0
+							OR = {
+								NOR = {
+									has_ethic = ethic_xenophile
+									has_ethic = ethic_fanatic_xenophile
+									has_ethic = ethic_xenophobe
+									has_ethic = ethic_fanatic_xenophobe
+								}
+								NOT = {
+										pop_percentage = {
+											percentage > 0.15
+											limit = { has_ethic = ethic_xenophobe }
+										}
+								}
+							}
+						}
+						country_add_ethic = ethic_xenophobe
+					}
+					12 = {
+						modifier = {
+							factor = 0
+							OR = {
+								NOR = {
+									has_ethic = ethic_pacifist
+									has_ethic = ethic_fanatic_pacifist
+									has_ethic = ethic_militarist
+									has_ethic = ethic_fanatic_militarist
+								}
+								NOT = {
+										pop_percentage = {
+											percentage > 0.15
+											limit = { has_ethic = ethic_militarist }
+										}
+								}
+							}
+						}
+						country_add_ethic = ethic_militarist
+					}
+					12 = {
+						modifier = {
+							factor = 0
+							OR = {
+								NOR = {
+									has_ethic = ethic_materialist
+									has_ethic = ethic_fanatic_materialist
+									has_ethic = ethic_spiritualist
+									has_ethic = ethic_fanatic_spiritualist
+								}
+								NOT = {
+										pop_percentage = {
+											percentage > 0.15
+											limit = { has_ethic = ethic_materialist }
+										}
+								}
+							}
+						}
+						country_add_ethic = ethic_materialist
+					}
+					12 = {
+						modifier = {
+							factor = 0
+							OR = {
+								NOR = {
+									has_ethic = ethic_materialist
+									has_ethic = ethic_fanatic_materialist
+									has_ethic = ethic_spiritualist
+									has_ethic = ethic_fanatic_spiritualist
+								}
+								NOT = {
+										pop_percentage = {
+											percentage > 0.15
+											limit = { has_ethic = ethic_spiritualist }
+										}
+								}
+							}
+						}
+						country_add_ethic = ethic_spiritualist
+					}
+				}
+				else = {
+					random_list = {
+						12 = {
+							modifier = {
+								factor = 0
+								OR = {
+									has_ethic = ethic_authoritarian
+									has_ethic = ethic_fanatic_authoritarian
+									has_ethic = ethic_egalitarian
+									has_ethic = ethic_fanatic_egalitarian
+								}
+							}
+							modifier = {
+								factor = 2
+								count_owned_pops = {
+									limit = { has_ethic = ethic_authoritarian }
+									count > 2
+								}
+							}
+							country_add_ethic = ethic_authoritarian
+						}
+			
+						12 = {
+							modifier = {
+								factor = 0
+								OR = {
+									has_ethic = ethic_authoritarian
+									has_ethic = ethic_fanatic_authoritarian
+									has_ethic = ethic_egalitarian
+									has_ethic = ethic_fanatic_egalitarian
+								}
+							}
+							modifier = {
+								factor = 2
+								count_owned_pops = {
+									limit = { has_ethic = ethic_egalitarian }
+									count > 2
+								}
+							}
+							country_add_ethic = ethic_egalitarian
+						}
+						
+						12 = {
+							modifier = {
+								factor = 0
+								OR = {
+									has_ethic = ethic_xenophile
+									has_ethic = ethic_fanatic_xenophile
+									has_ethic = ethic_xenophobe
+									has_ethic = ethic_fanatic_xenophobe
+								}
+							}
+							modifier = {
+								factor = 2
+								count_owned_pops = {
+									limit = { has_ethic = ethic_xenophile }
+									count > 2
+								}
+							}
+							country_add_ethic = ethic_xenophile
+						}
+						
+						12 = {
+							modifier = {
+								factor = 0
+								OR = {
+									has_ethic = ethic_xenophile
+									has_ethic = ethic_fanatic_xenophile
+									has_ethic = ethic_xenophobe
+									has_ethic = ethic_fanatic_xenophobe
+								}
+							}
+							modifier = {
+								factor = 2
+								count_owned_pops = {
+									limit = { has_ethic = ethic_xenophobe }
+									count > 2
+								}
+							}
+							country_add_ethic = ethic_xenophobe
+						}
+						
+						12 = {
+							modifier = {
+								factor = 0
+								OR = {
+									has_ethic = ethic_militarist
+									has_ethic = ethic_fanatic_militarist
+									has_ethic = ethic_pacifist
+									has_ethic = ethic_fanatic_pacifist
+								}
+							}
+							modifier = {
+								factor = 2
+								count_owned_pops = {
+									limit = { has_ethic = ethic_militarist }
+									count > 2
+								}
+							}
+							country_add_ethic = ethic_militarist
+						}
+						
+						12 = {
+							modifier = {
+								factor = 0
+								OR = {
+									has_ethic = ethic_militarist
+									has_ethic = ethic_fanatic_militarist
+									has_ethic = ethic_pacifist
+									has_ethic = ethic_fanatic_pacifist
+								}
+							}
+							modifier = {
+								factor = 2
+								count_owned_pops = {
+									limit = { has_ethic = ethic_pacifist }
+									count > 2
+								}
+							}
+							country_add_ethic = ethic_pacifist
+						}
+						
+						12 = {
+							modifier = {
+								factor = 0
+								OR = {
+									has_ethic = ethic_spiritualist
+									has_ethic = ethic_fanatic_spiritualist
+									has_ethic = ethic_materialist
+									has_ethic = ethic_fanatic_materialist
+								}
+							}
+							modifier = {
+								factor = 2
+								count_owned_pops = {
+									limit = { has_ethic = ethic_spiritualist }
+									count > 2
+								}
+							}
+							country_add_ethic = ethic_spiritualist
+						}
+						
+						12 = {
+							modifier = {
+								factor = 0
+								OR = {
+									has_ethic = ethic_spiritualist
+									has_ethic = ethic_fanatic_spiritualist
+									has_ethic = ethic_materialist
+									has_ethic = ethic_fanatic_materialist
+								}
+							}
+							modifier = {
+								factor = 2
+								count_owned_pops = {
+									limit = { has_ethic = ethic_materialist }
+									count > 2
+								}
+							}
+							country_add_ethic = ethic_materialist
+						}
+					}
+				}
+			}
+		}
+	
+		
+		if = {
+			limit = { num_ethics > 3 }
+			
+		
+			if = {
+				limit = {
+					has_ethic = ethic_authoritarian
+				}
+				country_remove_ethic = ethic_authoritarian
+			}
+			if = {
+				limit = {
+					has_ethic = ethic_egalitarian
+				}
+				country_remove_ethic = ethic_egalitarian
+			}
+			if = {
+				limit = {
+					has_ethic = ethic_pacifist
+				}
+				country_remove_ethic = ethic_pacifist
+			}
+			if = {
+				limit = {
+					has_ethic = ethic_militarist
+				}
+				country_remove_ethic = ethic_militarist
+			}
+			if = {
+				limit = {
+					has_ethic = ethic_spiritualist
+				}
+				country_remove_ethic = ethic_spiritualist
+			}
+			if = {
+				limit = {
+					has_ethic = ethic_materialist
+				}
+				country_remove_ethic = ethic_materialist
+			}
+			if = {
+				limit = {
+					has_ethic = ethic_xenophile
+				}
+				country_remove_ethic = ethic_xenophile
+			}
+			if = {
+				limit = {
+					has_ethic = ethic_xenophobe
+				}
+				country_remove_ethic = ethic_xenophobe
+			}
+			
+			country_event = { id = rebellionscript.362 }
+		}
+		country_event = { id = rebellionscript.363 days = 1 }
+		
+		if = {
+			limit = {
+				OR = {
+					AND = {
+						num_ethics = 2
+						OR = {
+							has_ethic = ethic_fanatic_authoritarian
+							has_ethic = ethic_fanatic_egalitarian
+							has_ethic = ethic_fanatic_materialist
+							has_ethic = ethic_fanatic_spiritualist
+							has_ethic = ethic_fanatic_militarist
+							has_ethic = ethic_fanatic_pacifist
+							has_ethic = ethic_fanatic_xenophile
+							has_ethic = ethic_fanatic_xenophobe
+						}
+						OR = {
+							has_ethic = ethic_authoritarian
+							has_ethic = ethic_egalitarian
+							has_ethic = ethic_materialist
+							has_ethic = ethic_spiritualist
+							has_ethic = ethic_militarist
+							has_ethic = ethic_pacifist
+							has_ethic = ethic_xenophile
+							has_ethic = ethic_xenophobe
+						}
+					}
+					AND = {
+						num_ethics = 3
+						NOR = {
+							has_ethic = ethic_fanatic_authoritarian
+							has_ethic = ethic_fanatic_egalitarian
+							has_ethic = ethic_fanatic_materialist
+							has_ethic = ethic_fanatic_spiritualist
+							has_ethic = ethic_fanatic_militarist
+							has_ethic = ethic_fanatic_pacifist
+							has_ethic = ethic_fanatic_xenophile
+							has_ethic = ethic_fanatic_xenophobe
+						}
+					}
+				}
+			}
+			country_event = { id = rebellionscript.364 }
+		}
+	}
+}
+
+
+country_event = {
+	id = rebellionscript.362
+	hide_window = yes
+	is_triggered_only = yes
+	
+	trigger = {
+		num_ethics = 0
+	}
+	
+	immediate = {
+		if = {
+			limit = {
+					pop_percentage = {
+						percentage > 0.20
+						limit = { has_ethic = ethic_authoritarian }
+					}
+				NOT = { has_ethic = ethic_egalitarian }
+			}
+			country_add_ethic = ethic_authoritarian
+		}
+		if = {
+			limit = {
+					pop_percentage = {
+						percentage > 0.20
+						limit = { has_ethic = ethic_egalitarian }
+					}
+				NOT = { has_ethic = ethic_authoritarian }
+			}
+			country_add_ethic = ethic_egalitarian
+		}
+		if = {
+			limit = {
+					pop_percentage = {
+						percentage > 0.20
+						limit = { has_ethic = ethic_pacifist }
+					}
+				NOT = { has_ethic = ethic_militarist }
+			}
+			country_add_ethic = ethic_pacifist
+		}
+		if = {
+			limit = {
+					pop_percentage = {
+						percentage > 0.20
+						limit = { has_ethic = ethic_militarist }
+					}
+				NOT = { has_ethic = ethic_pacifist }
+			}
+			country_add_ethic = ethic_militarist
+		}
+		if = {
+			limit = {
+					pop_percentage = {
+						percentage > 0.20
+						limit = { has_ethic = ethic_xenophile }
+					}
+				NOT = { has_ethic = ethic_xenophobe }
+			}
+			country_add_ethic = ethic_xenophile
+		}
+		if = {
+			limit = {
+					pop_percentage = {
+						percentage > 0.20
+						limit = { has_ethic = ethic_xenophobe }
+					}
+				NOT = { has_ethic = ethic_xenophile }
+			}
+			country_add_ethic = ethic_xenophobe
+		}
+		if = {
+			limit = {
+					pop_percentage = {
+						percentage > 0.20
+						limit = { has_ethic = ethic_spiritualist }
+					}
+				NOT = { has_ethic = ethic_materialist }
+			}
+			country_add_ethic = ethic_spiritualist
+		}
+		if = {
+			limit = {
+					pop_percentage = {
+						percentage > 0.20
+						limit = { has_ethic = ethic_materialist }
+					}
+				NOT = { has_ethic = ethic_spiritualist }
+			}
+			country_add_ethic = ethic_materialist
+		}
+		country_event = { id = rebellionscript.363 }
+		
+		if = {
+			limit = {
+				OR = {
+					AND = {
+						num_ethics = 2
+						OR = {
+							has_ethic = ethic_fanatic_authoritarian
+							has_ethic = ethic_fanatic_egalitarian
+							has_ethic = ethic_fanatic_materialist
+							has_ethic = ethic_fanatic_spiritualist
+							has_ethic = ethic_fanatic_militarist
+							has_ethic = ethic_fanatic_pacifist
+							has_ethic = ethic_fanatic_xenophile
+							has_ethic = ethic_fanatic_xenophobe
+						}
+						OR = {
+							has_ethic = ethic_authoritarian
+							has_ethic = ethic_egalitarian
+							has_ethic = ethic_materialist
+							has_ethic = ethic_spiritualist
+							has_ethic = ethic_militarist
+							has_ethic = ethic_pacifist
+							has_ethic = ethic_xenophile
+							has_ethic = ethic_xenophobe
+						}
+					}
+					AND = {
+						num_ethics = 3
+						NOR = {
+							has_ethic = ethic_fanatic_authoritarian
+							has_ethic = ethic_fanatic_egalitarian
+							has_ethic = ethic_fanatic_materialist
+							has_ethic = ethic_fanatic_spiritualist
+							has_ethic = ethic_fanatic_militarist
+							has_ethic = ethic_fanatic_pacifist
+							has_ethic = ethic_fanatic_xenophile
+							has_ethic = ethic_fanatic_xenophobe
+						}
+					}
+				}
+			}
+			country_event = { id = rebellionscript.364 }
+		}
+	}
+}
+
+country_event = {
+	id = rebellionscript.363
+	hide_window = yes
+	is_triggered_only = yes
+	
+	trigger = { 
+		NOR = {
+			AND = {
+				num_ethics = 2
+				OR = {
+					has_ethic = ethic_fanatic_authoritarian
+					has_ethic = ethic_fanatic_egalitarian
+					has_ethic = ethic_fanatic_materialist
+					has_ethic = ethic_fanatic_spiritualist
+					has_ethic = ethic_fanatic_militarist
+					has_ethic = ethic_fanatic_pacifist
+					has_ethic = ethic_fanatic_xenophile
+					has_ethic = ethic_fanatic_xenophobe
+				}
+				OR = {
+					has_ethic = ethic_authoritarian
+					has_ethic = ethic_egalitarian
+					has_ethic = ethic_materialist
+					has_ethic = ethic_spiritualist
+					has_ethic = ethic_militarist
+					has_ethic = ethic_pacifist
+					has_ethic = ethic_xenophile
+					has_ethic = ethic_xenophobe
+				}
+			}
+			AND = {
+				num_ethics = 3
+				NOR = {
+					has_ethic = ethic_fanatic_authoritarian
+					has_ethic = ethic_fanatic_egalitarian
+					has_ethic = ethic_fanatic_materialist
+					has_ethic = ethic_fanatic_spiritualist
+					has_ethic = ethic_fanatic_militarist
+					has_ethic = ethic_fanatic_pacifist
+					has_ethic = ethic_fanatic_xenophile
+					has_ethic = ethic_fanatic_xenophobe
+				}
+			}
+		}
+	}
+	
+	immediate = {
+		
+		if = {
+			limit = { num_ethics > 3 }
+			if = {
+				limit = {
+					has_ethic = ethic_authoritarian
+				}
+				country_remove_ethic = ethic_authoritarian
+			}
+			if = {
+				limit = {
+					has_ethic = ethic_egalitarian
+				}
+				country_remove_ethic = ethic_egalitarian
+			}
+			if = {
+				limit = {
+					has_ethic = ethic_pacifist
+				}
+				country_remove_ethic = ethic_pacifist
+			}
+			if = {
+				limit = {
+					has_ethic = ethic_militarist
+				}
+				country_remove_ethic = ethic_militarist
+			}
+			if = {
+				limit = {
+					has_ethic = ethic_spiritualist
+				}
+				country_remove_ethic = ethic_spiritualist
+			}
+			if = {
+				limit = {
+					has_ethic = ethic_materialist
+				}
+				country_remove_ethic = ethic_materialist
+			}
+			if = {
+				limit = {
+					has_ethic = ethic_xenophile
+				}
+				country_remove_ethic = ethic_xenophile
+			}
+			if = {
+				limit = {
+					has_ethic = ethic_xenophobe
+				}
+				country_remove_ethic = ethic_xenophobe
+			}
+		}
+		
+		random_list = {
+			12 = {
+				modifier = {
+					factor = 0
+					OR = {
+						has_ethic = ethic_authoritarian
+						has_ethic = ethic_fanatic_authoritarian
+						has_ethic = ethic_egalitarian
+						has_ethic = ethic_fanatic_egalitarian
+					}
+				}
+				modifier = {
+					factor = 2
+					count_owned_pops = {
+						limit = { has_ethic = ethic_authoritarian }
+						count > 2
+					}
+				}
+				country_add_ethic = ethic_authoritarian
+			}
+
+			12 = {
+				modifier = {
+					factor = 0
+					OR = {
+						has_ethic = ethic_authoritarian
+						has_ethic = ethic_fanatic_authoritarian
+						has_ethic = ethic_egalitarian
+						has_ethic = ethic_fanatic_egalitarian
+					}
+				}
+				modifier = {
+					factor = 2
+					count_owned_pops = {
+						limit = { has_ethic = ethic_egalitarian }
+						count > 2
+					}
+				}
+				country_add_ethic = ethic_egalitarian
+			}
+			
+			12 = {
+				modifier = {
+					factor = 0
+					OR = {
+						has_ethic = ethic_xenophile
+						has_ethic = ethic_fanatic_xenophile
+						has_ethic = ethic_xenophobe
+						has_ethic = ethic_fanatic_xenophobe
+					}
+				}
+				modifier = {
+					factor = 2
+					count_owned_pops = {
+						limit = { has_ethic = ethic_xenophile }
+						count > 2
+					}
+				}
+				country_add_ethic = ethic_xenophile
+			}
+			
+			12 = {
+				modifier = {
+					factor = 0
+					OR = {
+						has_ethic = ethic_xenophile
+						has_ethic = ethic_fanatic_xenophile
+						has_ethic = ethic_xenophobe
+						has_ethic = ethic_fanatic_xenophobe
+					}
+				}
+				modifier = {
+					factor = 2
+					count_owned_pops = {
+						limit = { has_ethic = ethic_xenophobe }
+						count > 2
+					}
+				}
+				country_add_ethic = ethic_xenophobe
+			}
+			
+			12 = {
+				modifier = {
+					factor = 0
+					OR = {
+						has_ethic = ethic_militarist
+						has_ethic = ethic_fanatic_militarist
+						has_ethic = ethic_pacifist
+						has_ethic = ethic_fanatic_pacifist
+					}
+				}
+				modifier = {
+					factor = 2
+					count_owned_pops = {
+						limit = { has_ethic = ethic_militarist }
+						count > 2
+					}
+				}
+				country_add_ethic = ethic_militarist
+			}
+			
+			12 = {
+				modifier = {
+					factor = 0
+					OR = {
+						has_ethic = ethic_militarist
+						has_ethic = ethic_fanatic_militarist
+						has_ethic = ethic_pacifist
+						has_ethic = ethic_fanatic_pacifist
+					}
+				}
+				modifier = {
+					factor = 2
+					count_owned_pops = {
+						limit = { has_ethic = ethic_pacifist }
+						count > 2
+					}
+				}
+				country_add_ethic = ethic_pacifist
+			}
+			
+			12 = {
+				modifier = {
+					factor = 0
+					OR = {
+						has_ethic = ethic_spiritualist
+						has_ethic = ethic_fanatic_spiritualist
+						has_ethic = ethic_materialist
+						has_ethic = ethic_fanatic_materialist
+					}
+				}
+				modifier = {
+					factor = 2
+					count_owned_pops = {
+						limit = { has_ethic = ethic_spiritualist }
+						count > 2
+					}
+				}
+				country_add_ethic = ethic_spiritualist
+			}
+			
+			12 = {
+				modifier = {
+					factor = 0
+					OR = {
+						has_ethic = ethic_spiritualist
+						has_ethic = ethic_fanatic_spiritualist
+						has_ethic = ethic_materialist
+						has_ethic = ethic_fanatic_materialist
+					}
+				}
+				modifier = {
+					factor = 2
+					count_owned_pops = {
+						limit = { has_ethic = ethic_materialist }
+						count > 2
+					}
+				}
+				country_add_ethic = ethic_materialist
+			}
+		}
+		
+		country_event = { id = rebellionscript.363 }
+		
+		if = {
+			limit = {
+				OR = {
+					AND = {
+						num_ethics = 2
+						OR = {
+							has_ethic = ethic_fanatic_authoritarian
+							has_ethic = ethic_fanatic_egalitarian
+							has_ethic = ethic_fanatic_materialist
+							has_ethic = ethic_fanatic_spiritualist
+							has_ethic = ethic_fanatic_militarist
+							has_ethic = ethic_fanatic_pacifist
+							has_ethic = ethic_fanatic_xenophile
+							has_ethic = ethic_fanatic_xenophobe
+						}
+						OR = {
+							has_ethic = ethic_authoritarian
+							has_ethic = ethic_egalitarian
+							has_ethic = ethic_materialist
+							has_ethic = ethic_spiritualist
+							has_ethic = ethic_militarist
+							has_ethic = ethic_pacifist
+							has_ethic = ethic_xenophile
+							has_ethic = ethic_xenophobe
+						}
+					}
+					AND = {
+						num_ethics = 3
+						NOR = {
+							has_ethic = ethic_fanatic_authoritarian
+							has_ethic = ethic_fanatic_egalitarian
+							has_ethic = ethic_fanatic_materialist
+							has_ethic = ethic_fanatic_spiritualist
+							has_ethic = ethic_fanatic_militarist
+							has_ethic = ethic_fanatic_pacifist
+							has_ethic = ethic_fanatic_xenophile
+							has_ethic = ethic_fanatic_xenophobe
+						}
+					}
+				}
+			}
+			country_event = { id = rebellionscript.364 }
+		}
+	}
+}
+
+
+country_event = {
+	id = rebellionscript.364
+	hide_window = yes
+	is_triggered_only = yes
+	
+	trigger = { NOT = { has_country_flag = cc_rebel_ethic_sorted } }
+	
+	immediate = {
+		set_timed_country_flag = {
+			flag = cc_rebel_ethic_sorted
+			days = 15
+		}
+		change_government = {
+			authority = random
+			civics = random
+		}
+		set_name = random
+	}
+}
+

@@ -12,6 +12,7 @@ open CWTools.Games
 open Newtonsoft.Json.Linq
 open CWTools.Utilities.Utils
 open STLValidation
+open System
 
 module STLEventValidation =
     type 'a Node = 'a * 'a list
@@ -90,9 +91,9 @@ module STLEventValidation =
     let findAllUsedEventTargets (event : Node) =
         let fNode = (fun (x : Node) children ->
                         let targetFromString (k : string) = k.Substring(13).Split('.').[0]
-                        let inner (leaf : Leaf) = if leaf.Value.ToRawString().StartsWith("event_target:") then Some (leaf.Value.ToRawString() |> targetFromString) else None
+                        let inner (leaf : Leaf) = if leaf.Value.ToRawString().StartsWith("event_target:", StringComparison.OrdinalIgnoreCase) then Some (leaf.Value.ToRawString() |> targetFromString) else None
                         match x.Key with
-                        |k when k.StartsWith("event_target:") -> 
+                        |k when k.StartsWith("event_target:", StringComparison.OrdinalIgnoreCase) -> 
                            targetFromString k :: ((x.Values |> List.choose inner) @ children)     
                         |_ ->                      
                             ((x.Values |> List.choose inner) @ children)    

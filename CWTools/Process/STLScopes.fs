@@ -1,6 +1,7 @@
 namespace CWTools.Process
 
 open NodaTime.TimeZones
+open System
 module STLScopes =
     open CWTools.Common.STLConstants
     open CWTools.Utilities.Utils
@@ -359,8 +360,8 @@ module STLScopes =
         "hidden_trigger", id;
     ]
     let changeScope (effects : Effect list) (triggers : Effect list) (key : string) (source : ScopeContext) = 
-        let key = if key.StartsWith("hidden:") then key.Substring(7) else key
-        if key.StartsWith("event_target:") then NewScope ({ source with Scopes = Scope.Any::source.Scopes }, [])
+        let key = if key.StartsWith("hidden:", StringComparison.OrdinalIgnoreCase) then key.Substring(7) else key
+        if key.StartsWith("event_target:", StringComparison.OrdinalIgnoreCase) then NewScope ({ source with Scopes = Scope.Any::source.Scopes }, [])
         else
             let keys = key.Split('.')
             let inner ((context : ScopeContext), (changed : bool)) (nextKey : string) =
@@ -398,7 +399,7 @@ module STLScopes =
     //                                 |> List.choose (function | (n, s, _) when n == scope -> Some s |_ -> None)
     //                                 |> (function |x when List.contains Scope.Any x -> Some allScopes |[] -> None |x -> Some x)
     let sourceScope (effects : Effect list) (key : string) = 
-        let key = if key.StartsWith("hidden:") then key.Substring(7) else key
+        let key = if key.StartsWith("hidden:", StringComparison.OrdinalIgnoreCase) then key.Substring(7) else key
         let keys = key.Split('.') |> List.ofArray
         let inner (nextKey : string) =
             let onetoone = oneToOneScopes |> List.tryFind (fun (k, _) -> k == nextKey)
