@@ -215,7 +215,7 @@ module CKParser =
                 let vc = (vcP stream)
                 if vc.Status = Ok then vc else
                     let vb = (vbP stream)
-                    if vb.Status <> Ok then vc else vb
+                    if vb.Status <> Ok then valueClause stream else vb
                 // let vb = (attempt valueBlock stream)
                 // if vb.Status = Ok then vb else valueClause stream
             | '"' -> valueQ stream
