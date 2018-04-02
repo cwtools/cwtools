@@ -12,6 +12,8 @@ open CWTools.Games
 open Newtonsoft.Json.Linq
 open CWTools.Utilities.Utils
 open System
+open Microsoft.FSharp.Collections.Tagged
+open System.Collections
 
 
 module STLValidation =
@@ -160,7 +162,7 @@ module STLValidation =
         |Some _ -> OK //Do better
         |None -> if key.StartsWith("@", StringComparison.OrdinalIgnoreCase) then OK else Invalid [inv (ErrorCodes.UndefinedEffect key) root]
     
-    let valTriggerLeaf (triggers : Map<string, Effect>) (modifiers : Modifier list) (scopes : ScopeContext) (leaf : Leaf) =
+    let valTriggerLeaf (triggers : EffectMap) (modifiers : Modifier list) (scopes : ScopeContext) (leaf : Leaf) =
         match triggers.TryFind leaf.Key with
         |Some (:? ScopedEffect as e) -> Invalid [inv (ErrorCodes.IncorrectScopeAsLeaf (e.Name) (leaf.Value.ToRawString())) leaf]
         |Some e ->
@@ -169,7 +171,7 @@ module STLValidation =
             else Invalid [inv (ErrorCodes.IncorrectTriggerScope leaf.Key (scopes.CurrentScope.ToString()) (e.Scopes |> List.map (fun f -> f.ToString()) |> String.concat ", ")) leaf]
         |None -> handleUnknownTrigger leaf leaf.Key
 
-    let valEffectLeaf (effects : Map<string, Effect>) (modifiers : Modifier list) (scopes : ScopeContext) (leaf : Leaf) =
+    let valEffectLeaf (effects : EffectMap) (modifiers : Modifier list) (scopes : ScopeContext) (leaf : Leaf) =
         match effects.TryFind leaf.Key with
             |Some (:? ScopedEffect as e) -> Invalid [inv (ErrorCodes.IncorrectScopeAsLeaf (e.Name) (leaf.Value.ToRawString())) leaf]
             |Some e ->
@@ -178,7 +180,7 @@ module STLValidation =
                 else Invalid [inv (ErrorCodes.IncorrectEffectScope leaf.Key (scopes.CurrentScope.ToString()) (e.Scopes |> List.map (fun f -> f.ToString()) |> String.concat ", ")) leaf]
             |None -> handleUnknownEffect leaf leaf.Key
 
-    let rec valEventTrigger (root : Node) (triggers : Map<string, Effect>) (effects : Map<string, Effect>) (modifiers : Modifier list) (scopes : ScopeContext) (effect : Child) =
+    let rec valEventTrigger (root : Node) (triggers : EffectMap) (effects : EffectMap) (modifiers : Modifier list) (scopes : ScopeContext) (effect : Child) =
         match effect with
         |LeafC leaf -> valTriggerLeaf triggers modifiers scopes leaf
         |NodeC node ->
@@ -210,7 +212,7 @@ module STLValidation =
                     |None -> handleUnknownTrigger node x
         |_ -> OK
 
-    and valEventEffect (root : Node) (triggers : Map<string, Effect>) (effects : Map<string, Effect>) (modifiers : Modifier list) (scopes : ScopeContext) (effect : Child) =
+    and valEventEffect (root : Node) (triggers : EffectMap) (effects : EffectMap) (modifiers : Modifier list) (scopes : ScopeContext) (effect : Child) =
         match effect with
         |LeafC leaf -> valEffectLeaf effects modifiers scopes leaf
         |NodeC node ->
@@ -240,7 +242,7 @@ module STLValidation =
                     |None -> handleUnknownEffect node x
         |_ -> OK
     
-    and valNodeTriggers (root : Node) (triggers : Map<string, Effect>) (effects : Map<string, Effect>) (modifiers : Modifier list) (scopes : ScopeContext) (ignores : string list) (node : Node) =
+    and valNodeTriggers (root : Node) (triggers : EffectMap) (effects : EffectMap) (modifiers : Modifier list) (scopes : ScopeContext) (ignores : string list) (node : Node) =
         // let scopedTriggers = triggers |> List.map (fun (e, _) -> e, scopes.CurrentScope = Scope.Any || e.Scopes |> List.exists (fun s -> s = scopes.CurrentScope))
         // let scopedEffects = effects |> List.map (fun (e, _) -> e,  scopes.CurrentScope = Scope.Any || e.Scopes |> List.exists (fun s -> s = scopes.CurrentScope)) 
         let filteredAll = 
@@ -248,7 +250,7 @@ module STLValidation =
             |> List.filter (function |NodeC c -> not (List.exists (fun i -> i == c.Key) ignores) |LeafC c -> not (List.exists (fun i -> i == c.Key) ignores) |_ -> false)
         List.map (valEventTrigger root triggers effects modifiers scopes) filteredAll |> List.fold (<&&>) OK
 
-    and valNodeEffects (root : Node) (triggers : Map<string, Effect>) (effects : Map<string, Effect>) (modifiers : Modifier list) (scopes : ScopeContext) (ignores : string list) (node : Node) =
+    and valNodeEffects (root : Node) (triggers : EffectMap) (effects : EffectMap) (modifiers : Modifier list) (scopes : ScopeContext) (ignores : string list) (node : Node) =
         //let scopedTriggers = triggers |> List.map (fun (e, _) -> e, scopes.CurrentScope = Scope.Any || e.Scopes |> List.exists (fun s -> s = scopes.CurrentScope)) 
         //let scopedEffects = effects |> List.map (fun (e, _) -> e, scopes.CurrentScope = Scope.Any || e.Scopes |> List.exists (fun s -> s = scopes.CurrentScope)) 
         let filteredAll = 
@@ -257,7 +259,7 @@ module STLValidation =
         List.map (valEventEffect root triggers effects modifiers scopes) filteredAll |> List.fold (<&&>) OK
             
 
-    let valOption (root : Node) (triggers : Map<string, Effect>) (effects : Map<string, Effect>) (modifiers : Modifier list) (scopes : ScopeContext) (node : Node) =
+    let valOption (root : Node) (triggers : EffectMap) (effects : EffectMap) (modifiers : Modifier list) (scopes : ScopeContext) (node : Node) =
         let optionTriggers = ["trigger"; "allow"]
         let optionEffects = ["tooltip"; "hidden_effect"]
         let optionExcludes = ["name"; "custom_tooltip"; "response_text"; "is_dialog_only"; "sound"; "ai_chance"; "custom_gui"; "default_hide_option"]
@@ -316,13 +318,13 @@ module STLValidation =
         newO.Scope <- o.Scope
         newO :> Node
 
-    let valEffectsNew (triggers : Map<string, Effect>) (effects : Map<string, Effect>) (modifiers : Modifier list) (effectBlock : Node) =
+    let valEffectsNew (triggers : EffectMap) (effects : EffectMap) (modifiers : Modifier list) (effectBlock : Node) =
         let scope = { Root = effectBlock.Scope; From = []; Scopes = [effectBlock.Scope]}
         effectBlock.All <&!&> valEventEffect effectBlock triggers effects modifiers scope
 
     let valAllEffects (triggers : (Effect) list) (effects : (Effect) list) (modifiers : Modifier list) (es : STLEntitySet) =
-        let effectMap = effects |> List.map (fun e -> e.Name, e) |> Map
-        let triggerMap = triggers |> List.map (fun t -> t.Name, t) |> Map
+        let effectMap = effects |> List.map (fun e -> e.Name, e) |> (fun l -> EffectMap.FromList(STLStringComparer(), l))
+        let triggerMap = triggers |> List.map (fun t -> t.Name, t) |> (fun l -> EffectMap.FromList(STLStringComparer(), l))
         let fNode = (fun (x : Node) children ->
             match x with
             | (:? EffectBlock as x) -> valEffectsNew triggerMap effectMap modifiers x
@@ -349,14 +351,14 @@ module STLValidation =
         b <&&> c <&&> d
 
 
-    let valTriggersNew (triggers : Map<string, Effect>) (effects : Map<string, Effect>) (modifiers : Modifier list) (effectBlock : Node) =
+    let valTriggersNew (triggers : EffectMap) (effects : EffectMap) (modifiers : Modifier list) (effectBlock : Node) =
         let scope = { Root = effectBlock.Scope; From = []; Scopes = [effectBlock.Scope]}
         effectBlock.All <&!&> valEventTrigger effectBlock triggers effects modifiers scope
 
 
     let valAllTriggers (triggers : (Effect) list) (effects : (Effect) list) (modifiers : Modifier list) (es : STLEntitySet) =
-        let effectMap = effects |> List.map (fun e -> e.Name, e) |> Map
-        let triggerMap = triggers |> List.map (fun t -> t.Name, t) |> Map
+        let effectMap = effects |> List.map (fun e -> e.Name, e) |> (fun l -> EffectMap.FromList(STLStringComparer(), l))
+        let triggerMap = triggers |> List.map (fun t -> t.Name, t) |> (fun l -> EffectMap.FromList(STLStringComparer(), l))
         let fNode = (fun (x : Node) children ->
             match x with
             | (:? TriggerBlock as x) when not x.InEffectBlock -> valTriggersNew triggerMap effectMap modifiers x
@@ -692,8 +694,8 @@ module STLValidation =
         newWmb :> Node
 
     let validateModifierBlocks (triggers : (Effect) list) (effects : (Effect) list) (modifiers : Modifier list) (es : STLEntitySet) =
-        let effectMap = effects |> List.map (fun e -> e.Name, e) |> Map
-        let triggerMap = triggers |> List.map (fun t -> t.Name, t) |> Map
+        let effectMap = effects |> List.map (fun e -> e.Name, e) |> (fun l -> EffectMap.FromList(STLStringComparer(), l))
+        let triggerMap = triggers |> List.map (fun t -> t.Name, t) |> (fun l -> EffectMap.FromList(STLStringComparer(), l))
         let foNode = (fun (x : Node) children ->
             match x with
             | (:? WeightModifierBlock as x) -> x |> filterWeightBlockToTriggers |> (fun o -> valTriggersNew triggerMap effectMap modifiers o)

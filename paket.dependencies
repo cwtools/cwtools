@@ -24,3 +24,4 @@ nuget Argu
 nuget FSharp.Collections.ParallelSeq
 nuget FSharpPlus
 nuget DotNet.Glob
+nuget FSharpx.Collections

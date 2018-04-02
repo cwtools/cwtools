@@ -1,7 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>netcoreapp2.0</TargetFramework>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\CWTools\CWTools.fsproj">
@@ -12,7 +14,7 @@
     <Compile Include="Validator.fs" />
     <Compile Include="CWToolsCLI.fs" />
     <None Include="App.config" />
-    <EmbeddedResource Include="../CWTools/files/**"/>
+    <EmbeddedResource Include="../CWTools/files/**" />
   </ItemGroup>
   <Import Project="fsc.props" />
   <Import Project="..\.paket\Paket.Restore.targets" />

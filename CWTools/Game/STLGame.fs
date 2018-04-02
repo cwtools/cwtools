@@ -369,7 +369,7 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
                 let timer = new System.Diagnostics.Stopwatch()
                 timer.Start()
                 let returnValue = f()
-                eprintfn "Elapsed Time: %i %s" timer.ElapsedMilliseconds s
+                //eprintfn "Elapsed Time: %i %s" timer.ElapsedMilliseconds s
                 returnValue
             eprintfn "Validating %i files" (entities.Length)
             let allEntitiesByFile = entities |> List.map (fun (f, _) -> f.entity)

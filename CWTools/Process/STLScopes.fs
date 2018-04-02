@@ -5,6 +5,7 @@ open System
 module STLScopes =
     open CWTools.Common.STLConstants
     open CWTools.Utilities.Utils
+    open Microsoft.FSharp.Collections.Tagged
 
 
 
@@ -359,7 +360,9 @@ module STLScopes =
         "hidden_effect", id;
         "hidden_trigger", id;
     ]
-    let changeScope (effects : Map<string, Effect>) (triggers : Map<string, Effect>) (key : string) (source : ScopeContext) = 
+    type EffectMap = Map<string, Effect, STLStringComparer>
+
+    let changeScope (effects : EffectMap) (triggers : EffectMap) (key : string) (source : ScopeContext) = 
         let key = if key.StartsWith("hidden:", StringComparison.OrdinalIgnoreCase) then key.Substring(7) else key
         if key.StartsWith("event_target:", StringComparison.OrdinalIgnoreCase) then NewScope ({ source with Scopes = Scope.Any::source.Scopes }, [])
         else
