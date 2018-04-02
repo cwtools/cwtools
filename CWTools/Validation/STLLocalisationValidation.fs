@@ -360,7 +360,11 @@ module STLLocalisationValidation =
             let mods = es.GlobMatchChildren("**/common/spaceport_modules/*.txt")
             let inner = checkLocNodeKeyAdvs keys "sm_" [""]
             mods <&!&> inner
-
+    let valOpinionModifiers : LocalisationValidator = 
+        fun _ keys es ->
+            let opinionMods = es.AllOfTypeChildren EntityType.OpinionModifiers
+            let inner = checkLocNodeKeyAdvs keys "" ["";]
+            opinionMods <&!&> inner
     let valTraits : LocalisationValidator =
         fun _ keys es ->
             let traits = es.GlobMatchChildren("**/common/traits/*.txt")
