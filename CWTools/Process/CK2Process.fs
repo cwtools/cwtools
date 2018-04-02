@@ -1,5 +1,5 @@
 namespace CWTools.Process
-open CWTools.Parser
+open CWTools.Parser.Types
 open CWTools.Localisation
 open CWTools.Process.ProcessCore
 open CWTools.Process

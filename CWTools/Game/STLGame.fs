@@ -18,6 +18,7 @@ open System.Collections.Specialized
 open CWTools.Validation.STLLocalisationValidation
 open CWTools.Validation.STLEventValidation
 open CWTools.Process.ProcessCore
+open CWTools.Parser.Types
 
 
 
@@ -141,7 +142,7 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
         // let mutable scriptedEffects : Effect list = []
         // let mutable staticModifiers : Modifier list = []
         let mutable localisationAPIs : ILocalisationAPI list = []
-        let mutable localisationErrors : (string * Severity * CWTools.Parser.Position * int * string * string option) list option = None
+        let mutable localisationErrors : (string * Severity * CWTools.Parser.Types.Position * int * string * string option) list option = None
 
         let rec getAllFolders dirs =
             if Seq.isEmpty dirs then Seq.empty else
@@ -369,7 +370,7 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
                 let timer = new System.Diagnostics.Stopwatch()
                 timer.Start()
                 let returnValue = f()
-                //eprintfn "Elapsed Time: %i %s" timer.ElapsedMilliseconds s
+                eprintfn "Elapsed Time: %i %s" timer.ElapsedMilliseconds s
                 returnValue
             eprintfn "Validating %i files" (entities.Length)
             let allEntitiesByFile = entities |> List.map (fun (f, _) -> f.entity)

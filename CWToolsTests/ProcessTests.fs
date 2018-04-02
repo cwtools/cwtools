@@ -6,6 +6,7 @@ open FParsec
 open CWTools.Common
 open CWTools.Process
 open CWTools.Parser
+open CWTools.Parser.Types
 open CWTools.Process.ProcessCore
 open System.IO
 open System.Reflection

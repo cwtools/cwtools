@@ -3,7 +3,7 @@ open CWTools.Validation.ValidationCore
 open CWTools.Process.STLProcess
 open CWTools.Process
 open CWTools.Process.ProcessCore
-open CWTools.Parser
+open CWTools.Parser.Types
 open CWTools.Process.STLScopes
 open CWTools.Common
 open CWTools.Common.STLConstants

@@ -4,6 +4,7 @@ open CWTools.Parser
 open Newtonsoft.Json
 open System
 open CWTools.Common.STLConstants
+open CWTools.Parser.Types
 
 module List =
   let replace f sub xs = 
@@ -21,7 +22,6 @@ module List =
     match result with
     | Some ls -> ls
     | None -> add::xs
-
  
 type Leaf(keyvalueitem : KeyValueItem, ?pos : Position) =
     let (KeyValueItem (Key(key), value)) = keyvalueitem
@@ -42,13 +42,19 @@ and LeafValue(value : Value, ?pos : Position) =
 and Child = |NodeC of Node | LeafC of Leaf |CommentC of string |LeafValueC of LeafValue
 and Node (key : string, pos : Position) =
     let bothFind x = function |NodeC n when n.Key = x -> true |LeafC l when l.Key = x -> true |_ -> false
+    let mutable all : Child array = Array.empty
+    let mutable _leaves : Lazy<Leaf array> = lazy ( Array.empty )
+    let reset() =
+        _leaves <- lazy (all |> Array.choose (function |LeafC l -> Some l |_ -> None))
+    let leaves() = _leaves.Force()
     new(key : string) = Node(key, Position.Empty)
     member val Key = key
     member val Position = pos
-    member val AllChildren : ResizeArray<Child> = new ResizeArray<Child>() with get, set
     member val Scope : Scope = Scope.Any with get, set
-    member this.All with get () = this.AllChildren |> List.ofSeq
-    member this.All with set(value : Child list) = this.AllChildren <- (value |> ResizeArray<Child>)
+    member __.AllChildren with get () = all |> ResizeArray<Child>
+    member __.AllChildren with set(value : ResizeArray<Child>) = all <- (value |> Seq.toArray); reset()
+    member this.All with get () = all |> List.ofSeq
+    member this.All with set(value : Child list) = all <- (value |> List.toArray); reset()
     member this.Nodes = this.AllChildren |> Seq.choose (function |NodeC n -> Some n |_ -> None)
     member this.Children = this.Nodes |> List.ofSeq
     member this.Leaves = this.AllChildren |> Seq.choose (function |LeafC l -> Some l |_ -> None)
@@ -56,9 +62,9 @@ and Node (key : string, pos : Position) =
     member this.Comments = this.AllChildren |> Seq.choose (function |CommentC c -> Some c |_ -> None)
     member this.LeafValues = this.AllChildren |> Seq.choose(function |LeafValueC lv -> Some lv |_ -> None)
     member this.Has x = this.AllChildren |> (Seq.exists (bothFind x))
-    member this.Tag x = this.Leaves |> Seq.tryPick (function |l when l.Key = x -> Some l.Value |_ -> None)
-    member this.Leafs x = this.Leaves |> Seq.choose (function |l when l.Key = x -> Some l |_ -> None)
-    member this.Tags x = this.Leaves |> Seq.choose (function |l when l.Key = x -> Some l.Value |_ -> None)
+    member __.Tag x = leaves() |> Array.tryPick (function |l when l.Key = x -> Some l.Value |_ -> None)
+    member __.Leafs x = leaves() |> Array.choose (function |l when l.Key = x -> Some l |_ -> None) |> Array.toSeq
+    member __.Tags x = leaves() |> Array.choose (function |l when l.Key = x -> Some l.Value |_ -> None) |> Array.toSeq
     member this.TagText x = this.Tag x |> function |Some (QString s) -> s |Some s -> s.ToString() |None -> ""
     member this.TagsText x = this.Tags x |> Seq.map (function |(QString s) -> s |s -> s.ToString())
     member this.SetTag x v = this.All <- this.AllChildren |> List.ofSeq |>  List.replaceOrAdd (bothFind x) (fun _ -> v) v

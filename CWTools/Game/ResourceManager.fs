@@ -6,6 +6,7 @@ open System.IO
 open CWTools.Parser
 open DotNet.Globbing
 open CWTools.Common.STLConstants
+open CWTools.Parser.Types
 
 
 
