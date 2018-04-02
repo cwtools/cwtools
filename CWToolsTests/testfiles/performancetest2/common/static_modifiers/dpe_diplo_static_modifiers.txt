@@ -1,0 +1,102 @@
+
+#Dunno how full this will get (surely more opinion modifiers than static ones on diplo), but started a new file for the hell of it
+
+
+dpe_ruler_looks_weak = { #mild version of "humiliated"
+	country_resource_influence_mult = -0.25
+	pop_citizen_happiness = -0.05
+}
+
+dpe_ruler_looks_weak_faction = {
+	faction_happiness = -0.15
+}
+dpe_ruler_looks_weak_and_breaks_promises_faction = {
+	faction_happiness = -0.25
+}
+
+dpe_indemnity_paid = {
+	planet_resource_minerals_add = -100
+	
+	icon_frame = 3
+	icon = "gfx/interface/icons/planet_modifiers/pm_gold_pile.dds"
+}
+
+dpe_indemnity_receive = {
+	planet_resource_minerals_add = 100
+	
+	icon_frame = 1
+	icon = "gfx/interface/icons/planet_modifiers/pm_gold_pile.dds"
+}
+
+dpe_militarist_unrest = {
+	pop_ethic_militarist_attraction_mult = 0.8
+	planet_unrest_add = 30
+	
+	icon_frame = 3
+	icon = "gfx/interface/icons/planet_modifiers/pm_militarist.dds"
+}
+
+dpe_missionary_faction = { faction_happiness = 0.05 }
+dpe_missionary_faction_rejected = { faction_happiness = -0.05 }
+dpe_missionary_faction_rejected1 = { faction_happiness = -0.10 }
+
+dpe_missionary_country = { pop_ethic_spiritualist_attraction_mult = 0.33 }
+dpe_missionary_country_rejected = { pop_ethic_spiritualist_attraction_mult = -0.25 }
+
+#dpe_hosting_spiritualist_mission = { pop_ethic_spiritualist_attraction_mult = 0.67 }
+dpe_hosting_spiritualist_mission_planet = {
+	pop_ethic_spiritualist_attraction_mult = 1
+	planet_resource_unity_add = 3
+	
+	icon_frame = 2
+	icon = "gfx/interface/icons/planet_modifiers/pm_good_spiritualist.dds"
+}
+
+dpe_missionary_planet = {
+	pop_ethic_spiritualist_attraction_mult = 0.8
+	planet_resource_unity_add = 2
+	
+	icon_frame = 2
+	icon = "gfx/interface/icons/planet_modifiers/pm_good_spiritualist.dds"
+}
+
+dpe_rejected_xenophile_mission_faction = { faction_happiness = -0.1 }
+
+dpe_killed_missionaries_faction = { faction_happiness = -0.2 }
+dpe_killed_missionaries_faction1 = { faction_happiness = 0.1 }
+dpe_not_killed_missionaries_faction = { faction_happiness = -0.1 }
+
+dpe_spirmission_minor_mission = { pop_ethic_spiritualist_attraction_mult = 0.4 }
+dpe_spirmission_major_mission = { pop_ethic_spiritualist_attraction_mult = 0.8 }
+
+dpe_hosting_spirmission_planet_turbulence = {
+	pop_ethic_xenophobe_attraction_mult = 2
+	planet_unrest_add = 25
+
+	icon_frame = 3
+	icon = "gfx/interface/icons/planet_modifiers/pm_unrest.dds"
+}
+dpe_spirmission_killed_faction = { faction_happiness = -0.2 }
+dpe_spirmission_killed_xenophobia = {
+	pop_ethic_xenophobe_attraction_mult = 1.5
+	planet_unrest_mult = 0.5
+}
+
+dpe_spirmission_killed_faction1 = { faction_happiness = -0.1 }
+
+dpe_spirmission_planet_xenos_unwelcome = {
+	pop_ethic_xenophobe_attraction_mult = 2
+	planet_migration_xeno_pull = -0.5
+
+	icon_frame = 3
+	icon = "gfx/interface/icons/planet_modifiers/pm_hate_speech.dds"
+}
+
+dpe_spirmission_succeeded_country = { 
+	country_resource_unity_mult = 0.3
+	pop_ethic_spiritualist_attraction_mult = 0.5
+}
+
+dpe_spirmission_succeeded_faction = { faction_happiness = 0.15 }
+
+dpe_spirmission_sent_home_faction = { faction_happiness = -0.1 }

@@ -1,0 +1,84 @@
+﻿l_english:
+
+dpe_scandal.1.name:0 "国家资金被给予不应得的人"
+dpe_scandal.1.desc:0 "[root.GetName]上下对一则新近曝出的新闻议论纷纷： [root.GetRulerTitle] [root.GetRulerName]重新分配了部分国家资金，用以帮助陷入困境的贫民。许多公民对纳税人的血汗钱被拿去供养福利懒汉深恶痛绝，这在[root.GetSpeciesAdj]文化中被视作大恶。然而，另一些（曾经处于边缘的）声音则对[root.GetRulerTitle]的慷慨大加赞赏。他们一直以来为在[root.GetName]建立基本的社会福利制度而奔走努力，并认为此次事件是达成他们理想的绝佳机会,只要[root.GetRulerTitle]勇于迎难而上。"
+dpe_scandal.1.A:0 "断然否认这些指控"
+dpe_scandal.1.B:0 "一个更富有同情心的国家将是一件好事"
+dpe_scandal.1.C:0 "黯然辞职"
+dpe_scandal.1.C.tooltip:0 "$CCREMOVERULER.tooltip$"
+
+dpe_charity_unpopular_ruler:0 "不受欢迎的统治者"
+dpe_charity_unpopular_ruler_desc:0 "统治者身陷丑闻，被指控违背国家精神。尽管极力否认这些指控，但许多人对其否认表示怀疑，并不再信任统治者。"
+
+dpe_charity_faction_undeserving:0 "国家资金被给予不应得的人"
+
+
+#This one is adapted from the blackmail -> corruption scandal. Difference is the lack of blackmail and only 2 people caught
+
+dpe_scandal.2.name:0 "腐败丑闻!"
+dpe_scandal.2.desc:0 "两名重量级[root.GetSpeciesAdj]官员涉嫌贪腐的报告已经被公之于众。看来他们长期以来从自己部门的政府预算中切出了很大一块，塞进自己的腰包，随后再转移至小行星离岸避税天堂中，金额达数百万之巨。此事立刻激起了广泛愤怒，一些麻烦人物们迅速跳了出来，指责任命这些的官员的上层也是同谋。\n\n你将如何处理这种情况?"
+dpe_scandal.2.A:0 "他们必须下台，接受审判"
+dpe_scandal.2.A.tooltip:0 "[cc_first_corrupt.GetName]和[cc_second_corrupt.GetName]将从游戏中移除"
+dpe_scandal.2.B:0 "他们的工作意义非凡，保留他们的职务"
+
+#weakened it by 25%
+cc_outrage_at_corruption_1:0 "$cc_outrage_at_corruption$"
+cc_outrage_at_corruption_1_desc:0 "$cc_outrage_at_corruption_desc$"
+
+
+dpe_scandal.3.name:0 "[root.GetRulerTitle] [root.GetRulerName]没有信仰！"
+dpe_scandal.3.desc:0 "对宗教与精神世界的信仰一直以来都是[root.GetSpeciesAdj]社会的基石。正因如此，当[root.GetRulerTitle] [root.GetRulerName]最近被曝出并不认同这种信仰之后，整个社会都无比震惊。事件源于一段录像，[root.leader.GetSheHe] [root.leader.GetWasWere]在其中对[root.GetSpeciesAdj]宗教的核心教义大加嘲讽，并吹嘘操纵那些“相信魔法的傻瓜”是多么容易。宗教领袖们迅速发表声明抨击[root.GetRulerName]，要求剥夺[root.leader.GetSheHe]领导[root.GetName]的资格。许多公民对此都高呼赞同。然而[root.GetRulerTitle]的支持者们紧密团结在[root.leader.GetHimHer]周围，指出[root.leader.GetSheHe]是[root.GetName]有史以来最杰出的领袖之一，在银河政治舞台上也备受同侪尊重。\n\n应该如何处理眼下局势？"
+dpe_scandal.3.A:0 "宗教是给傻瓜准备的迷药。我们必须放弃迷信。"
+dpe_scandal.3.A.tooltip:0 "唯心主义者会极为不满。"
+dpe_scandal.3.B:0 "也许我们可以达成和解"
+dpe_scandal.3.B.tooltip:0 "如果宗教领袖不再反对[root.GetRulerTitle] [root.GetRulerName]，[root.leader.GetHimHer]也将对宗教问题保持沉默。"
+dpe_scandal.3.C:0 "[root.GetRulerTitle] [root.GetRulerName]必须下台。"
+dpe_scandal.3.C.tooltip:0 "$CCREMOVERULER.tooltip$"
+
+dpe_unbelief_faction:0 "统治者没有信仰"
+dpe_unbelief_empire:0 "不受欢迎的统治者"
+dpe_unbelief_empire_desc:0 "宗教与唯心主义乃是社会基柱，统治者却并无信仰。尽管他们设法保住了自己的地位，但民众大范围的不信任感已无可挽回。"
+
+dpe_scandal.4.name:0 "[root.GetRulerTitle] [root.GetRulerName]被逐出教会!"
+dpe_scandal.4.desc:0 "致[root.GetRulerName](你的头衔已不被承认)，\n\n我们特此声明，你已被[root.GetSpeciesAdj]所有教会开除教籍。此外，经全体投票通过，枢机会正式判决你已经被罚永堕地狱。愿先祖之灵怜悯于你。\n\n宗教事务枢机议会"
+
+dpe_damned_to_hell_faction:0 "统治者被罚永堕地狱"
+dpe_damned_to_hell_empire:0 "统治者被罚永堕地狱"
+dpe_damned_to_hell_empire_desc:0 "统治者悍然坚称自己是无神论者，国内主流宗教权威已将他逐出教会。"
+
+
+dpe_scandal.10.name:0 "可怕的真相"
+dpe_scandal.10.desc:0 "“尊敬的[root.GetRulerTitle]，能麻烦您看一眼这个吗?”\n\n [root.GetRulerTitle] [root.GetRulerName]仔细阅读着文件，[root.leader.GetHisHer]双眼因恐惧而睁大。“证据早就被销毁了，我办的万无一失。”[root.leader.GetSheHe]低语道。\n\n黑影般的访客发出冷笑，“然而，它就在你眼前。”\n\n---\n\n通过一次精心谋划的间谍行动，[root.GetRulerTitle]的对手已经拿到了证据，足以证明[root.leader.GetHisHer]的官方自传乃是精心编造的产物：[root.leader.GetSheHeCap]实际上是一名逃奴，以冷酷而精细的手段掩盖了自己的过去，最终依靠一系列谋杀与欺诈爬上权力顶峰。不幸的是，眼前重浮水面的证据准确无误，难以辩驳。如果这批材料被公之于众，[root.GetRulerTitle] [root.GetRulerName]的统治极有可能敲响丧钟，因为[root.GetSpeciesAdj]的精英阶层不可能俯首听命于一个逃亡奴隶。"
+dpe_scandal.10.A:0 "逮捕阴谋者并封锁证据。"
+dpe_scandal.10.A.tooltip:0 "证据很可能还是会被泄露"
+dpe_scandal.10.B:0 "你想要什么？"
+
+dpe_scandal.11.name:0 "阴谋被压制"
+dpe_scandal.11.desc:0 "看来此次阴谋远不如它第一眼看上去那么精密。通过迅疾而无情的行动，证据已经被封锁。"
+
+leader_trait_dpe_ruthless:0 "冷酷"
+leader_trait_dpe_ruthless_desc:0 "这位领袖杀伐决断从不迟疑"
+
+dpe_scandal.12.name:0 "压制阴谋失败"
+dpe_scandal.12.desc:0 "“蠢货！你难道真的以为我是单独行动吗？” \n\n尽管间谍被逮捕，但短短几分钟之后便传来警告，证据的副本已被送到[root.GetName]所有大型分发节点——以及[root.GetName]几个主要敌人手中。没过多久，[root.GetRulerTitle]私邸的大门就被撞开。涌进来的人群中包括了[root.GetName]中每一个权力团体派出的代表。[root.GetRulerName]望向自己以前的支持者，目光中带着恳求，但他们的眼神冷硬无情。\n\n“结束了”，副总理[random_guy.GetName]开口说道，手中的武器直指[root.GetRulerTitle] [root.GetRulerName]。“投降，或者死。”"
+dpe_scandal.12.A:0 "投降"
+dpe_scandal.12.A.tooltip:0 "[root.GetRulerName]被贬为奴隶卖出"
+dpe_scandal.12.B:0 "抵抗到底"
+dpe_scandal.12.B.tooltip:0 "死亡胜过蒙受羞辱"
+
+dpe_scandal.14.name:0 "阴谋者的价码"
+dpe_scandal.14.desc.generic:0 "一大笔钱可以让我们保持安静。"
+#cc_paid_blackmail modifier
+dpe_scandal.14.desc.egal:0 "下台，举行选举。我们会放过你的"
+dpe_scandal.14.desc.spir:0 "展现你对神的虔信，我们就保持沉默"
+dpe_scandal.14.desc.mil:0 "如果政府对敌人采取敌对立场，我们就保持沉默"
+dpe_scandal.14.desc.pac:0 "停止一切军国主义叫嚣，否则我们就泄露证据"
+dpe_scandal.14.desc.mat:0 "开放国内市场，我们就原谅你那小小的瑕疵"
+dpe_scandal.14.desc.phobe:0 "[root.GetSpeciesAdj]的星球上没有外星异族的位置。解决他们"
+dpe_scandal.14.desc.phile:0 "终结排外思潮就能使我们保持安静"
+
+dpe_scandal.14.A:0 "很好。你的条件被接受了"
+dpe_scandal.14.B:0 "绝无可能！逮捕阴谋者并封锁证据"
+dpe_scandal.14.B.tooltip: "$dpe_scandal.10.A.tooltip$"
+
+

@@ -1,0 +1,121 @@
+##########################################################################
+# Empire Policies
+#
+# #####
+#
+# AI:
+# Base AI-weight is 100, if unchanged
+# AI will grab whatever policy-option has the highest weight
+#
+# #####
+#
+##########################################################################
+
+cc_interspecies_marriage = {
+	potential = {
+		has_country_flag = cc_has_had_interspecies_marriage
+	}
+	
+	option = {
+		name = "allow_im"
+	
+		policy_flags = {
+			allows_im
+		}
+		
+		AI_weight = {
+			modifier = {
+				factor = 2
+				has_ethic = ethic_egalitarian
+			}
+			modifier = {
+				factor = 5
+				has_ethic = ethic_fanatic_egalitarian
+			}
+			modifier = {
+				factor = 10
+				has_ethic = ethic_xenophile
+			}
+			modifier = {
+				factor = 100
+				has_ethic = ethic_fanatic_xenophile
+			}
+			modifier = {
+				factor = 1.15
+				pop_percentage = {
+					percentage > 0.05
+					limit = {
+						has_pop_flag = cc_literally_xenophile_manifested
+						OR = {
+							has_citizenship_type = { country = root type = citizenship_full }
+							has_citizenship_type = { country = root type = citizenship_limited }
+							has_citizenship_type = { country = root type = citizenship_caste_system }
+							has_citizenship_type = { country = root type = citizenship_caste_system_limited }
+						}
+					}
+				}
+			}
+			modifier = {
+				factor = 1.5
+				pop_percentage = {
+					percentage > 0.1
+					limit = {
+						has_pop_flag = cc_literally_xenophile_manifested
+						OR = {
+							has_citizenship_type = { country = root type = citizenship_full }
+							has_citizenship_type = { country = root type = citizenship_limited }
+							has_citizenship_type = { country = root type = citizenship_caste_system }
+							has_citizenship_type = { country = root type = citizenship_caste_system_limited }
+						}
+					}
+				}
+			}
+		}
+	}
+	
+	option = {
+		name = "do_not_allow_im"
+		
+		policy_flags = {
+			does_not_allow_im
+		}
+		
+		AI_weight = {
+			modifier = {
+				factor = 1.2
+				NOR = {
+					has_ethic = ethic_xenophile
+					has_ethic = ethic_fanatic_xenophile
+					has_ethic = ethic_xenophobe
+					has_ethic = ethic_fanatic_xenophobe
+				}
+			}
+		}
+	}
+	
+	option = {
+		name = "ban_im_completely"
+		
+		policy_flags = {
+			bans_im_completely
+		}
+		
+		AI_weight = {
+			modifier = {
+				factor = 0.5
+				NOR = {
+					has_ethic = ethic_xenophobe
+					has_ethic = ethic_fanatic_xenophobe
+				}
+			}
+			modifier = {
+				factor = 20
+				has_ethic = ethic_xenophobe
+			}
+			modifier = {
+				factor = 100
+				has_ethic = ethic_fanatic_xenophobe
+			}
+		}
+	}
+}

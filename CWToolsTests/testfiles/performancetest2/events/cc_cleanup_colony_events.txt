@@ -1,0 +1,3190 @@
+
+namespace = cc_cleanup_events
+
+#Fired whenever a new owner is set for a planet,
+#be it after a war or through a trade
+#From = Country scope (new owner)
+#This = Planet scope
+planet_event = {
+	id = cc_cleanup_events.1
+	hide_window = yes
+	is_triggered_only = yes
+	
+	trigger = {
+		exists = owner
+		NOT = { has_planet_flag = cc_just_conquered }
+	}
+	
+#	trigger = {  
+#		OR = {
+#			has_political_colony_modifier = yes
+#			has_seditious_talk = yes
+#			is_faction_stronghold = yes
+#			has_faction_sympathies = yes
+#			has_faction_sedition = yes
+#		}
+#	}
+	
+	immediate = {
+		if = {
+			limit = {
+				has_planet_flag = cc_conquered_purge
+				NOT = { any_owned_pop = { is_being_purged = yes } }
+			}
+			remove_planet_flag = cc_conquered_purge
+		}
+			
+			
+			
+		set_timed_planet_flag = { #this is because someone said the same event happened 3 times and I can only see why it would happen twice...
+			flag = cc_just_conquered
+			days = 3
+		}
+		
+		#remove the ones not relevant to the new empire
+		remove_new_owner_irrelevant_political_colony_modifiers = yes
+		remove_all_faction_strongholds = yes
+		remove_all_faction_sympathies = yes
+		remove_all_faction_seditions = yes
+		remove_all_seditious_talk = yes
+		
+		if = {
+			limit = {
+				from = {
+					OR = {
+						has_civic = civic_machine_servitor
+						has_civic = civic_machine_assimilator
+					}
+				}
+			}
+			set_timed_planet_flag = {
+				flag = cc_conquered_purge
+				years = 25
+			}
+			planet_event = { id = cc_cleanup_events.9992 days = 2400 random = 720 }
+		}
+		
+		if = {
+			limit = {
+				has_modifier = cc_founder_spiritualist
+				NOR = {
+					has_modifier = cc_building_mausoleum
+					has_modifier = cc_founders_memory_disrespected_1_spiritualist
+					has_modifier = cc_founders_memory_disrespected_2_spiritualist
+				}
+			}
+			planet_event = { id = cc_cleanup_events.2 days = 15 random = 10 }
+		}	
+		if = {
+			limit = {
+				has_modifier = cc_famous_guru
+				NOR = {
+					has_modifier = cc_building_mausoleum
+					has_modifier = cc_founders_memory_disrespected_1_spiritualist
+					has_modifier = cc_founders_memory_disrespected_2_spiritualist
+				}
+			}
+			planet_event = { id = cc_cleanup_events.2 days = 15 random = 10 }
+		}
+		if = {
+			limit = {
+				has_modifier = cc_building_mausoleum
+			}
+			planet_event = { id = cc_cleanup_events.3 days = 5 }
+			planet_event = { id = cc_cleanup_events.999 days = 3 }
+		}
+		if = {
+			limit = {
+				has_modifier = cc_minor_mausoleum
+			}
+			planet_event = { id = cc_cleanup_events.4 days = 15 random = 10 }
+		}
+		if = {
+			limit = {
+				OR = {
+					has_modifier = cc_founders_memory_disrespected_1_spiritualist
+					has_modifier = cc_founders_memory_disrespected_2_spiritualist
+				}
+			}
+			planet_event = { id = cc_cleanup_events.5 days = 15 random = 10 }
+		}
+		if = {
+			limit = {
+				OR = {
+					has_modifier = cc_underground_spiritualist_movement_1
+					has_modifier = cc_underground_spiritualist_movement_2
+				}
+			}
+			planet_event = { id = cc_cleanup_events.6 days = 15 random = 10 }
+		}
+		if = {
+			limit = { has_modifier = cc_spiritualist_protectorate }
+			planet_event = { id = cc_cleanup_events.7 days = 15 random = 10 }
+		}
+		if = {
+			limit = { has_modifier = cc_colony_direct_democracy }
+			planet_event = { id = cc_cleanup_events.8 days = 15 random = 10 }
+		}
+		if = {
+			limit = {
+				OR = {
+					has_modifier = cc_underground_egalitarian_movement_1
+					has_modifier = cc_underground_egalitarian_movement_2
+				}
+			}
+			planet_event = { id = cc_cleanup_events.9 days = 15 random = 10 }
+		}
+		if = {
+			limit = { has_modifier = cc_colony_democracy_unhappy }
+			planet_event = { id = cc_cleanup_events.10 days = 15 random = 10 }
+		}
+		
+		
+		if = {
+			limit = { has_modifier = cc_building_university }
+			planet_event = { id = cc_cleanup_events.11 days = 5 }
+			planet_event = { id = cc_cleanup_events.999 days = 3 }
+		}
+		if = {
+			limit = { has_modifier = cc_university }
+			planet_event = { id = cc_cleanup_events.12 days = 15 random = 10 }
+		}
+		if = {
+			limit = {
+				has_modifier = cc_founder_materialist
+				NOR = {
+					has_modifier = cc_building_university
+					has_modifier = cc_founders_memory_disrespected_1_materialist
+				}
+			}
+			planet_event = { id = cc_cleanup_events.13 days = 15 random = 10 }
+		}
+		if = {
+			limit = { 
+				OR = {
+					has_modifier = cc_underground_materialist_movement_1
+					has_modifier = cc_underground_materialist_movement_2
+				}
+			}
+			planet_event = { id = cc_cleanup_events.14 days = 15 random = 10 }
+		}
+		if = {
+			limit = { has_modifier = cc_founders_memory_disrespected_1_materialist }
+			planet_event = { id = cc_cleanup_events.15 days = 15 random = 10 }
+		}
+		
+		
+
+		if = {
+			limit = { has_modifier = cc_colony_monarchy }
+			planet_event = { id = cc_cleanup_events.16 days = 15 random = 10 }
+		}
+		if = {
+			limit = {
+				OR = {
+					has_modifier = cc_underground_authoritarian_movement_1
+					has_modifier = cc_underground_authoritarian_movement_2
+				}
+			}
+			planet_event = { id = cc_cleanup_events.17 days = 15 random = 10 }
+		}
+		
+		if = {
+			limit = { has_modifier = cc_colony_monarchy_unhappy }
+			planet_event = { id = cc_cleanup_events.18 days = 15 random = 10 }
+		}
+		
+		
+
+		if = {
+			limit = { has_modifier = cc_milacademy }
+			planet_event = { id = cc_cleanup_events.19 days = 15 random = 10 }
+		}
+		if = {
+			limit = {
+				has_modifier = cc_founder_militarist
+				NOR = {
+					has_modifier = cc_building_milacademy
+					has_modifier = cc_founders_memory_disrespected_1_militarist
+				}
+			}
+			planet_event = { id = cc_cleanup_events.20 days = 15 random = 10 }
+		}
+		if = {
+			limit = { 
+				OR = {
+					has_modifier = cc_underground_militarist_movement_1
+					has_modifier = cc_underground_militarist_movement_2
+				}
+			}
+			planet_event = { id = cc_cleanup_events.21 days = 15 random = 10 }
+		}
+		if = {
+			limit = { has_modifier = cc_founders_memory_disrespected_1_militarist }
+			planet_event = { id = cc_cleanup_events.22 days = 15 random = 10 }
+		}
+		if = {
+			limit = { has_modifier = cc_building_milacademy }
+			planet_event = { id = cc_cleanup_events.24 days = 5 }
+			planet_event = { id = cc_cleanup_events.999 days = 3 }
+		}
+		
+
+		if = {
+			limit = {
+				has_modifier = cc_founder_pacifist
+				NOR = {
+					has_modifier = cc_building_pacmonument
+					has_modifier = cc_founders_memory_disrespected_1_pacifist
+					has_modifier = cc_founders_memory_disrespected_2_pacifist
+				}
+			}
+			planet_event = { id = cc_cleanup_events.25 days = 15 random = 10 }
+		}	
+		if = {
+			limit = {
+				has_modifier = cc_building_pacmonument
+			}
+			planet_event = { id = cc_cleanup_events.26 days = 5 }
+			planet_event = { id = cc_cleanup_events.999 days = 3 }
+		}
+		if = {
+			limit = {
+				OR = {
+					has_modifier = cc_minor_pacmonument
+					has_modifier = cc_pacifist_centre
+				}
+			}
+			planet_event = { id = cc_cleanup_events.27 days = 15 random = 10 }
+		}
+		if = {
+			limit = {
+				OR = {
+					has_modifier = cc_founders_memory_disrespected_1_pacifist
+					has_modifier = cc_founders_memory_disrespected_2_pacifist
+				}
+			}
+			planet_event = { id = cc_cleanup_events.28 days = 15 random = 10 }
+		}
+		if = {
+			limit = {
+				OR = {
+					has_modifier = cc_underground_pacifist_movement_1
+					has_modifier = cc_underground_pacifist_movement_2
+				}
+			}
+			planet_event = { id = cc_cleanup_events.30 days = 15 random = 10 }
+		}
+		if = {
+			limit = { has_modifier = cc_pacifist_protectorate }
+			planet_event = { id = cc_cleanup_events.31 days = 15 random = 10 }
+		}
+
+		
+		
+		#Xenophobes (I treat them a bit differently...)
+		
+		if = {
+			limit = {
+				has_modifier = cc_founder_xenophobe
+				NOT = { has_modifier = cc_building_xenophobe_institute }
+				NOT = {
+					owner = {
+						root = {
+							OR = {
+								any_owned_pop = {
+									has_pop_flag = cc_xenophobe_species
+									is_same_species = prevprev
+								}
+								AND = {
+									NOT = {
+										any_owned_pop = { has_pop_flag = cc_xenophobe_species }
+										pop_percentage = {
+											limit = { is_same_species = prev }
+											percentage > 0.45
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+			planet_event = { id = cc_cleanup_events.32 days = 15 random = 10 }
+		}
+		if = {
+			limit = {
+				has_modifier = cc_building_xenophobe_institute
+				NOT = {
+					owner = {
+						root = {
+							OR = {
+								any_owned_pop = {
+									has_pop_flag = cc_xenophobe_species
+									is_same_species = prevprev
+								}
+								AND = {
+									NOT = {
+										any_owned_pop = { has_pop_flag = cc_xenophobe_species }
+										pop_percentage = {
+											limit = { is_same_species = prev }
+											percentage > 0.45
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+			planet_event = { id = cc_cleanup_events.33 days = 5 }
+			planet_event = { id = cc_cleanup_events.999 days = 3 }
+		}
+		
+		if = {
+			limit = {
+				OR = {
+					has_modifier = cc_xenophobe_institute
+					has_modifier = cc_minor_xenophobe_institute
+				}
+				NOT = {
+					owner = {
+						root = {
+							OR = {
+								any_owned_pop = {
+									has_pop_flag = cc_xenophobe_species
+									is_same_species = prevprev
+								}
+								AND = {
+									NOT = {
+										any_owned_pop = { has_pop_flag = cc_xenophobe_species }
+										pop_percentage = {
+											limit = { is_same_species = prev }
+											percentage > 0.45
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+			planet_event = { id = cc_cleanup_events.34 days = 15 random = 10 }			
+		}
+		
+		if = {
+			limit = {
+				OR = {
+					has_modifier = cc_underground_xenophobe_movement_1
+					has_modifier = cc_underground_xenophobe_movement_2
+				}
+				NOT = {
+					owner = {
+						root = {
+							OR = {
+								any_owned_pop = {
+									has_pop_flag = cc_xenophobe_species
+									is_same_species = prevprev
+								}
+								AND = {
+									NOT = {
+										any_owned_pop = { has_pop_flag = cc_xenophobe_species }
+										pop_percentage = {
+											limit = { is_same_species = prev }
+											percentage > 0.45
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+			planet_event = { id = cc_cleanup_events.35 days = 15 random = 10 }			
+		}
+		
+		
+		#Xenophiles
+		if = {
+			limit = {
+				has_modifier = cc_founder_xenophile
+				NOR = {
+					has_modifier = cc_building_xenophile_institute
+					has_modifier = cc_founders_memory_disrespected_1_xenophile
+					has_modifier = cc_founders_memory_disrespected_2_xenophile
+				}
+			}
+			planet_event = { id = cc_cleanup_events.36 days = 15 random = 10 }
+		}
+		if = {
+			limit = {
+				has_modifier = cc_building_xenophile_institute
+			}
+			planet_event = { id = cc_cleanup_events.37 days = 5 }
+			planet_event = { id = cc_cleanup_events.999 days = 3 }
+		}
+		if = {
+			limit = {
+				has_modifier = cc_xenophile_institute
+			}
+			planet_event = { id = cc_cleanup_events.38 days = 15 random = 10 }
+		}
+		if = {
+			limit = {
+				OR = {
+					has_modifier = cc_founders_memory_disrespected_1_xenophile
+					has_modifier = cc_founders_memory_disrespected_2_xenophile
+				}
+			}
+			planet_event = { id = cc_cleanup_events.39 days = 15 random = 10 }
+		}
+		if = {
+			limit = {
+				OR = {
+					has_modifier = cc_underground_xenophile_movement_1
+					has_modifier = cc_underground_xenophile_movement_2
+				}
+			}
+			planet_event = { id = cc_cleanup_events.40 days = 15 random = 10 }
+		}
+	}
+}
+
+
+planet_event = {
+	id = cc_cleanup_events.2
+	title = cc_cleanup_events.2.name
+	desc = cc_cleanup_events.2.desc
+	
+	is_triggered_only = yes
+	
+	picture = GFX_evt_cc_priesthood
+	
+	location = root
+	
+	trigger = {
+		NOT = { has_planet_flag = cc_conquered_purge }
+		OR = {
+			has_modifier = cc_famous_guru
+			has_modifier = cc_founder_spiritualist
+		}
+	}
+	
+	option = {
+		name = CCYES
+		
+		
+		ai_chance = {
+			modifier = {
+				factor = 0
+				owner = {
+					OR = {
+						has_ethic = ethic_materialist
+						has_ethic = ethic_fanatic_materialist
+					}
+				}
+			}
+			modifier = {
+				factor = 0
+				NOT = { any_owned_pop = { has_citizenship_rights = yes } }
+			}
+		}
+	}
+	option = {
+		name = CCNO
+		
+		if = {
+			limit = { has_modifier = cc_founder_spiritualist }
+			remove_modifier = cc_founder_spiritualist
+		}
+		if = {
+			limit = { has_modifier = cc_famous_guru }
+			remove_modifier = cc_famous_guru
+		}
+		
+		add_modifier = {
+			modifier = cc_spiritualists_offended
+			years = 20
+		}
+		
+		ai_chance = {
+			factor = 0.5
+			modifier = {
+				factor = 0
+				owner = {
+					OR = {
+						has_ethic = ethic_spiritualist
+						has_ethic = ethic_fanatic_spiritualist
+					}
+				}
+				any_owned_pop = { has_citizenship_rights = yes }
+			}
+		}
+	}
+}
+
+planet_event = {
+	id = cc_cleanup_events.3
+	title = cc_cleanup_events.3.name
+	desc = cc_cleanup_events.3.desc
+	
+	is_triggered_only = yes
+	
+	picture = GFX_evt_cc_mausoleum
+	
+	location = root
+	
+	trigger = {
+		NOT = { has_planet_flag = cc_conquered_purge }
+		has_modifier = cc_building_mausoleum
+	}
+	
+	option = {
+		name = CCYES
+		custom_tooltip = cc_cleanup_events.3.tooltip
+		
+		ai_chance = {
+			modifier = {
+				factor = 0
+				owner = {
+					OR = {
+						has_ethic = ethic_materialist
+						has_ethic = ethic_fanatic_materialist
+					}
+				}
+			}
+			modifier = {
+				factor = 0
+				NOT = { any_owned_pop = { has_citizenship_rights = yes } }
+			}
+		}
+	}
+	option = {
+		name = CCNO
+		
+		remove_modifier = cc_building_mausoleum
+		if = {
+			limit = { has_modifier = cc_founder_spiritualist }
+			remove_modifier = cc_founder_spiritualist
+		}
+		if = {
+			limit = { has_modifier = cc_famous_guru }
+			remove_modifier = cc_famous_guru
+		}
+		
+		set_timed_planet_flag = {
+			flag = cc_mausoleum_cancelled
+			years = 5
+		}
+		
+		add_modifier = {
+			modifier = cc_spiritualists_offended
+			years = 20
+		}
+		
+		ai_chance = {
+			factor = 0.5
+			modifier = {
+				factor = 0
+				owner = {
+					OR = {
+						has_ethic = ethic_spiritualist
+						has_ethic = ethic_fanatic_spiritualist
+					}
+				}
+				any_owned_pop = { has_citizenship_rights = yes }
+			}
+		}
+	}
+}
+
+
+planet_event = {
+	id = cc_cleanup_events.4
+	title = cc_cleanup_events.4.name
+	desc = cc_cleanup_events.4.desc
+	
+	is_triggered_only = yes
+	
+	picture = GFX_evt_cc_mausoleum
+	
+	location = root
+	
+	trigger = {
+		NOT = { has_planet_flag = cc_conquered_purge }
+		has_modifier = cc_minor_mausoleum
+	}
+	
+	option = {
+		name = CCYES
+		
+		
+		ai_chance = {
+			modifier = {
+				factor = 0
+				owner = {
+					OR = {
+						has_ethic = ethic_materialist
+						has_ethic = ethic_fanatic_materialist
+					}
+				}
+			}
+			modifier = {
+				factor = 0
+				NOT = { any_owned_pop = { has_citizenship_rights = yes } }
+			}
+		}
+	}
+	option = {
+		name = CCNO
+		
+		remove_modifier = cc_minor_mausoleum
+		
+		add_modifier = {
+			modifier = cc_spiritualists_offended
+			years = 20
+		}
+		
+		ai_chance = {
+			factor = 1
+			modifier = {
+				factor = 0
+				NOR = {
+					owner = {
+						has_ethic = ethic_materialist
+						has_ethic = ethic_fanatic_materialist
+					}
+					NOT = { any_owned_pop = { has_citizenship_rights = yes } }
+				}
+			}
+		}
+	}
+}
+
+planet_event = {
+	id = cc_cleanup_events.5
+	title = cc_cleanup_events.5.name
+	desc = cc_cleanup_events.5.desc
+	
+	is_triggered_only = yes
+	location = root
+	
+	picture = GFX_evt_cc_priesthood
+	
+	trigger = {
+		NOT = { has_planet_flag = cc_conquered_purge }
+		OR = {
+			has_modifier = cc_founders_memory_disrespected_1_spiritualist
+			has_modifier = cc_founders_memory_disrespected_2_spiritualist
+		}
+	}
+	
+	option = {
+		name = CCYES
+		
+		add_modifier = {
+			modifier = cc_building_mausoleum
+			days = 1800
+		}
+		if = {
+			limit = { has_modifier = cc_founders_memory_disrespected_1_spiritualist }
+			remove_modifier = cc_founders_memory_disrespected_1_spiritualist
+		}
+		if = {
+			limit = { has_modifier = cc_founders_memory_disrespected_2_spiritualist }
+			remove_modifier = cc_founders_memory_disrespected_2_spiritualist
+		}
+		custom_tooltip = cc_minor_mausoleum_will_be_built
+		hidden_effect = { planet_event = { id = cc_cleanup_events.51 days = 1800 } }
+		
+		ai_chance = {
+			modifier = {
+				factor = 0
+				owner = {
+					OR = {
+						has_ethic = ethic_materialist
+						has_ethic = ethic_fanatic_materialist
+					}
+				}
+			}
+			modifier = {
+				factor = 0
+				NOT = { any_owned_pop = { has_citizenship_rights = yes } }
+			}
+		}
+	}
+	option = {
+		name = CCNO
+		
+		ai_chance = {
+			factor = 0.5
+			modifier = {
+				factor = 0
+				owner = {
+					OR = {
+						has_ethic = ethic_spiritualist
+						has_ethic = ethic_fanatic_spiritualist
+					}
+				}
+				any_owned_pop = { has_citizenship_rights = yes }
+			}
+		}
+	}
+}
+
+planet_event = {
+	id = cc_cleanup_events.51
+	title = cc_cleanup_events.51.name
+	desc = cc_cleanup_events.51.desc
+	
+	is_triggered_only = yes
+	location = root
+	
+	trigger = { NOT = { has_planet_flag = cc_mausoleum_cancelled } }
+	
+	picture = GFX_evt_cc_mausoleum
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = CCGOODGOOD
+		
+		add_modifier = {
+			modifier = cc_minor_mausoleum
+			days = -1
+		}
+		hidden_effect = {
+			if = {
+				limit = { has_modifier = cc_founder_spiritualist }
+				remove_modifier = cc_founder_spiritualist
+			}
+			if = {
+				limit = { has_modifier = cc_famous_guru }
+				remove_modifier = cc_famous_guru
+			}
+		}
+	}
+}
+
+planet_event = {
+	id = cc_cleanup_events.6
+	title = cc_cleanup_events.6.name
+	desc = cc_cleanup_events.6.desc
+	
+	is_triggered_only = yes
+	location = root
+	
+	picture = GFX_evt_ground_combat
+	
+	trigger = {
+		NOT = { has_planet_flag = cc_conquered_purge }
+		OR = {
+			has_modifier = cc_underground_spiritualist_movement_1
+			has_modifier = cc_underground_spiritualist_movement_2
+		}
+	}
+	
+	option = {
+		name = CCYES
+		
+		if = {
+			limit = { has_modifier = cc_underground_spiritualist_movement_1 }
+			remove_modifier = cc_underground_spiritualist_movement_1
+		}
+		if = {
+			limit = { has_modifier = cc_underground_spiritualist_movement_2 }
+			remove_modifier = cc_underground_spiritualist_movement_2
+		}
+		add_modifier = {
+			modifier = cc_spiritualist_protectorate
+			days = -1
+		}
+		ai_chance = {
+			modifier = {
+				factor = 0
+				owner = {
+					OR = {
+						has_ethic = ethic_materialist
+						has_ethic = ethic_fanatic_materialist
+					}
+				}
+			}
+			modifier = {
+				factor = 0
+				NOT = { any_owned_pop = { has_citizenship_rights = yes } }
+			}
+		}
+	}
+	option = {
+		name = CCNO
+		ai_chance = { factor = 0.5 }
+	}
+}
+
+planet_event = {
+	id = cc_cleanup_events.7
+	title = cc_cleanup_events.7.name
+	desc = cc_cleanup_events.7.desc
+	
+	is_triggered_only = yes
+	location = root
+	
+	picture = GFX_evt_cc_priesthood
+	
+	trigger = {
+		NOT = { has_planet_flag = cc_conquered_purge }
+		has_modifier = cc_spiritualist_protectorate
+	}
+	
+	option = {
+		name = CCYES
+		
+		
+		ai_chance = {
+			modifier = {
+				factor = 0
+				owner = {
+					OR = {
+						has_ethic = ethic_materialist
+						has_ethic = ethic_fanatic_materialist
+					}
+				}
+			}
+			modifier = {
+				factor = 0
+				NOT = { any_owned_pop = { has_citizenship_rights = yes } }
+			}
+		}
+	}
+	option = {
+		name = CCNO
+		
+		remove_modifier = cc_spiritualist_protectorate
+		
+		add_modifier = {
+			modifier = cc_spiritualists_offended
+			years = 20
+		}
+		
+		ai_chance = {
+			factor = 0.5
+			modifier = {
+				factor = 0
+				owner = {
+					OR = {
+						has_ethic = ethic_spiritualist
+						has_ethic = ethic_fanatic_spiritualist
+					}
+				}
+				any_owned_pop = { has_citizenship_rights = yes }
+			}
+		}
+	}
+}
+
+planet_event = {
+	id = cc_cleanup_events.8
+	title = cc_cleanup_events.8.name
+	desc = cc_cleanup_events.8.desc
+	
+	is_triggered_only = yes
+	location = root
+	
+	picture = GFX_evt_galactic_senate
+	
+	trigger = {
+		NOT = { has_planet_flag = cc_conquered_purge }
+		has_modifier = cc_colony_direct_democracy
+	}
+	
+	option = {
+		name = CCYES
+		
+		
+		ai_chance = {
+			modifier = {
+				factor = 0
+				owner = {
+					OR = {
+						has_ethic = ethic_authoritarian
+						has_ethic = ethic_fanatic_authoritarian
+					}
+				}
+			}
+			modifier = {
+				factor = 0
+				NOT = { any_owned_pop = { has_citizenship_rights = yes } }
+			}
+		}
+	}
+	option = {
+		name = CCNO
+		
+		remove_modifier = cc_colony_direct_democracy
+		
+		add_modifier = {
+			modifier = cc_colony_democracy_unhappy
+			days = 5400
+		}
+		
+		hidden_effect = {
+			owner = { save_event_target_as = cc_owner }
+			random = {
+				chance = 67
+				planet_event = { id = cc_colony_events.923 days = 5401 }
+			}
+		}
+		
+		ai_chance = {
+			factor = 0.33
+			modifier = {
+				factor = 0
+				owner = {
+					OR = {
+						has_ethic = ethic_egalitarian
+						has_ethic = ethic_fanatic_egalitarian
+					}
+				}
+				any_owned_pop = { has_citizenship_rights = yes }
+			}
+		}
+	}
+}
+	
+planet_event = {
+	id = cc_cleanup_events.9
+	title = cc_cleanup_events.9.name
+	desc = cc_cleanup_events.9.desc
+	
+	is_triggered_only = yes
+	location = root
+	
+	picture = GFX_evt_ground_combat
+	
+	trigger = {
+		NOT = { has_planet_flag = cc_conquered_purge }
+		OR = {
+			has_modifier = cc_underground_egalitarian_movement_1
+			has_modifier = cc_underground_egalitarian_movement_2
+		}
+	}
+	
+	option = {
+		name = CCYES
+		
+		if = {
+			limit = { has_modifier = cc_underground_egalitarian_movement_1 }
+			remove_modifier = cc_underground_egalitarian_movement_1
+		}
+		if = {
+			limit = { has_modifier = cc_underground_egalitarian_movement_2 }
+			remove_modifier = cc_underground_egalitarian_movement_2
+		}
+		add_modifier = {
+			modifier = cc_colony_direct_democracy
+			days = -1
+		}
+		ai_chance = {
+			modifier = {
+				factor = 5
+				owner = {
+					OR = {
+						has_ethic = ethic_egalitarian
+						has_ethic = ethic_fanatic_egalitarian
+					}
+				}
+			}
+			modifier = {
+				factor = 5
+				owner = { has_authority = auth_democratic }
+			}
+			modifier = {
+				factor = 0
+				owner = {
+					OR = {
+						has_ethic = ethic_authoritarian
+						has_ethic = ethic_fanatic_authoritarian
+					}
+				}
+			}
+			modifier = {
+				factor = 0
+				NOT = { any_owned_pop = { has_citizenship_rights = yes } }
+			}
+		}
+	}
+	option = { name = CCNO }
+}
+
+
+
+planet_event = {
+	id = cc_cleanup_events.10
+	title = cc_cleanup_events.10.name
+	desc = cc_cleanup_events.10.desc
+	
+	is_triggered_only = yes
+	location = root
+	
+	picture = GFX_evt_galactic_senate
+	
+	trigger = {
+		NOT = { has_planet_flag = cc_conquered_purge }
+		has_modifier = cc_colony_democracy_unhappy
+	}
+	
+	option = {
+		name = CCYES
+		
+		add_modifier = {
+			modifier = cc_colony_direct_democracy
+			days = -1
+		}
+		remove_modifier = cc_colony_democracy_unhappy
+		
+		ai_chance = {
+			modifier = {
+				factor = 0
+				owner = {
+					OR = {
+						has_authority = auth_imperial
+						has_authority = auth_dictatorial
+					}
+				}
+			}
+			modifier = {
+				factor = 0
+				NOT = { any_owned_pop = { has_citizenship_rights = yes } }
+			}
+		}
+	}
+	option = {
+		name = CCNO
+		
+		ai_chance = {
+			factor = 0.5
+			modifier = {
+				factor = 0
+				owner = { has_authority = auth_democratic }
+				any_owned_pop = { has_citizenship_rights = yes }
+			}
+		}
+	}
+}
+
+
+planet_event = {
+	id = cc_cleanup_events.11
+	title = cc_cleanup_events.11.name
+	desc = cc_cleanup_events.11.desc
+	
+	is_triggered_only = yes
+	location = root
+	
+	picture = GFX_evt_cc_university
+	
+	trigger = {
+		NOT = { has_planet_flag = cc_conquered_purge }
+		has_modifier = cc_building_university
+	}
+	
+	option = {
+		name = CCYES
+		custom_tooltip = cc_cleanup_events.11.tooltip
+		
+		ai_chance = {
+			modifier = {
+				factor = 0
+				owner = {
+					OR = {
+						has_ethic = ethic_spiritualist
+						has_ethic = ethic_fanatic_spiritualist
+					}
+				}
+			}
+			modifier = {
+				factor = 0
+				NOT = { any_owned_pop = { has_citizenship_rights = yes } }
+			}
+		}
+	}
+	option = {
+		name = CCNO
+		
+		remove_modifier = cc_building_university
+		
+		if = {
+			limit = { has_modifier = cc_founder_materialist }
+			remove_modifier = cc_founder_materialist
+		}
+		
+		set_timed_planet_flag = {
+			flag = cc_university_cancelled
+			years = 5
+		}
+		
+		add_modifier = {
+			modifier = cc_materialists_offended
+			years = 20
+		}
+		
+		ai_chance = {
+			factor = 0.5
+			modifier = {
+				factor = 0
+				owner = {
+					OR = {
+						has_ethic = ethic_materialist
+						has_ethic = ethic_fanatic_materialist
+					}
+				}
+				any_owned_pop = { has_citizenship_rights = yes }
+			}
+		}
+	}
+}
+
+planet_event = {
+	id = cc_cleanup_events.12
+	title = cc_cleanup_events.12.name
+	desc = cc_cleanup_events.12.desc
+	
+	is_triggered_only = yes
+	location = root
+	
+	picture = GFX_evt_cc_university
+	
+	trigger = {
+		NOT = { has_planet_flag = cc_conquered_purge }
+		has_modifier = cc_university
+	}
+	
+	option = {
+		name = CCYES
+		
+		
+		ai_chance = {
+			modifier = {
+				factor = 0
+				owner = {
+					OR = {
+						has_ethic = ethic_spiritualist
+						has_ethic = ethic_fanatic_spiritualist
+					}
+				}
+			}
+			modifier = {
+				factor = 0
+				NOT = { any_owned_pop = { has_citizenship_rights = yes } }
+			}
+		}
+	}
+	option = {
+		name = CCNO
+		
+		remove_modifier = cc_university
+		
+		add_modifier = {
+			modifier = cc_materialists_offended
+			years = 20
+		}
+		
+		ai_chance = {
+			factor = 1
+			modifier = {
+				factor = 0
+				NOR = {
+					owner = {
+						has_ethic = ethic_spiritualist
+						has_ethic = ethic_fanatic_spiritualist
+					}
+					NOT = { any_owned_pop = { has_citizenship_rights = yes } }
+				}
+			}
+		}
+	}
+}
+
+planet_event = {
+	id = cc_cleanup_events.13
+	title = cc_cleanup_events.13.name
+	desc = cc_cleanup_events.13.desc
+	
+	is_triggered_only = yes
+	location = root
+	
+	picture = GFX_evt_cc_physics_research
+	
+	trigger = {
+		NOT = { has_planet_flag = cc_conquered_purge }
+		has_modifier = cc_founder_materialist
+	}
+	
+	option = {
+		name = CCYES
+		
+		
+		ai_chance = {
+			modifier = {
+				factor = 0
+				owner = {
+					OR = {
+						has_ethic = ethic_spiritualist
+						has_ethic = ethic_fanatic_spiritualist
+					}
+				}
+			}
+			modifier = {
+				factor = 0
+				NOT = { any_owned_pop = { has_citizenship_rights = yes } }
+			}
+		}
+	}
+	option = {
+		name = CCNO
+		
+		remove_modifier = cc_founder_materialist
+		
+		add_modifier = {
+			modifier = cc_materialists_offended
+			years = 20
+		}
+		
+		ai_chance = {
+			factor = 0.5
+			modifier = {
+				factor = 0
+				owner = {
+					OR = {
+						has_ethic = ethic_materialist
+						has_ethic = ethic_fanatic_materialist
+					}
+				}
+				any_owned_pop = { has_citizenship_rights = yes }
+			}
+		}
+	}
+}
+
+planet_event = {
+	id = cc_cleanup_events.14
+	title = cc_cleanup_events.14.name
+	desc = cc_cleanup_events.14.desc
+	
+	is_triggered_only = yes
+	location = root
+	
+	picture = GFX_evt_ground_combat
+	
+	trigger = {
+		NOT = { has_planet_flag = cc_conquered_purge }
+		OR = {
+			has_modifier = cc_underground_materialist_movement_1
+			has_modifier = cc_underground_materialist_movement_2
+		}
+	}
+	
+	option = {
+		name = CCYES
+		
+		if = {
+			limit = { has_modifier = cc_underground_materialist_movement_1 }
+			remove_modifier = cc_underground_materialist_movement_1
+		}
+		if = {
+			limit = { has_modifier = cc_underground_materialist_movement_2 }
+			remove_modifier = cc_underground_materialist_movement_2
+		}
+		custom_tooltip = cc_university_will_be_built
+		hidden_effect = { planet_event = { id = cc_cleanup_events.151 days = 1800 } }
+		
+		ai_chance = {
+			modifier = {
+				factor = 0
+				owner = {
+					OR = {
+						has_ethic = ethic_spiritualist
+						has_ethic = ethic_fanatic_spiritualist
+					}
+				}
+			}
+			modifier = {
+				factor = 0
+				NOT = { any_owned_pop = { has_citizenship_rights = yes } }
+			}
+		}
+	}
+	option = {
+		name = CCNO
+		ai_chance = {
+			factor = 0.5
+			modifier = {
+				factor = 0
+				owner = {
+					OR = {
+						has_ethic = ethic_materialist
+						has_ethic = ethic_fanatic_materialist
+					}
+				}
+				any_owned_pop = { has_citizenship_rights = yes }
+			}
+		}
+	}
+}
+
+
+planet_event = {
+	id = cc_cleanup_events.15
+	title = cc_cleanup_events.15.name
+	desc = cc_cleanup_events.15.desc
+	
+	is_triggered_only = yes
+	location = root
+	
+	picture = GFX_evt_cc_university
+	
+	trigger = {
+		NOT = { has_planet_flag = cc_conquered_purge }
+		has_modifier = cc_founders_memory_disrespected_1_materialist
+	}
+	
+	option = {
+		name = CCYES
+		
+		add_modifier = {
+			modifier = cc_building_university
+			days = 1800
+		}
+		remove_modifier = cc_founders_memory_disrespected_1_materialist
+
+		custom_tooltip = cc_university_will_be_built
+		hidden_effect = { planet_event = { id = cc_cleanup_events.151 days = 1800 } }
+		
+		ai_chance = {
+			modifier = {
+				factor = 0
+				owner = {
+					OR = {
+						has_ethic = ethic_spiritualist
+						has_ethic = ethic_fanatic_spiritualist
+					}
+				}
+			}
+			modifier = {
+				factor = 0
+				NOT = { any_owned_pop = { has_citizenship_rights = yes } }
+			}
+		}
+	}
+	option = {
+		name = CCNO
+		
+		ai_chance = {
+			factor = 0.5
+			modifier = {
+				factor = 0
+				owner = {
+					OR = {
+						has_ethic = ethic_materialist
+						has_ethic = ethic_fanatic_materialist
+					}
+				}
+				any_owned_pop = { has_citizenship_rights = yes }
+			}
+		}
+	}
+}
+
+planet_event = {
+	id = cc_cleanup_events.151
+	title = cc_cleanup_events.151.name
+	desc = cc_cleanup_events.151.desc
+	
+	is_triggered_only = yes
+	location = root
+	
+	trigger = { NOT = { has_planet_flag = cc_university_cancelled } }
+	
+	picture = GFX_evt_cc_university
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = CCGOODGOOD
+		
+		add_modifier = {
+			modifier = cc_university
+			days = -1
+		}
+		hidden_effect = {
+			if = {
+				limit = { has_modifier = cc_founder_materialist }
+				remove_modifier = cc_founder_materialist
+			}
+		}
+		owner = {
+			if = {
+				limit = { has_faction = technologist }
+				random_pop_faction = {
+					limit = { is_pop_faction_type = technologist }
+					add_modifier = {
+						modifier = cc_university_built_faction
+						years = 10
+					}
+				}
+			}
+		}
+	}
+}
+
+
+planet_event = {
+	id = cc_cleanup_events.16
+	title = cc_cleanup_events.16.name
+	desc = cc_cleanup_events.16.desc
+	
+	is_triggered_only = yes
+	location = root
+	
+	picture = GFX_evt_cc_throne_room
+	
+	trigger = {
+		NOT = { has_planet_flag = cc_conquered_purge }
+		has_modifier = cc_colony_monarchy
+	}
+	
+	option = {
+		name = CCYES
+		
+		
+		ai_chance = {
+			modifier = {
+				factor = 0
+				owner = {
+					OR = {
+						has_ethic = ethic_egalitarian
+						has_ethic = ethic_fanatic_egalitarian
+					}
+				}
+			}
+			modifier = {
+				factor = 0
+				NOT = { any_owned_pop = { has_citizenship_rights = yes } }
+			}
+		}
+	}
+	option = {
+		name = CCNO
+		
+		remove_modifier = cc_colony_monarchy
+		
+		add_modifier = {
+			modifier = cc_colony_monarchy_unhappy
+			days = 5400
+		}
+		
+		hidden_effect = {
+			owner = { save_event_target_as = cc_owner }
+			random = {
+				chance = 67
+				planet_event = { id = cc_colony_events.923 days = 5401 }
+			}
+		}
+		
+		ai_chance = {
+			factor = 0.33
+			modifier = {
+				factor = 0
+				owner = {
+					OR = {
+						has_ethic = ethic_authoritarian
+						has_ethic = ethic_fanatic_authoritarian
+					}
+				}
+				any_owned_pop = { has_citizenship_rights = yes }
+			}
+		}
+	}
+}
+	
+planet_event = {
+	id = cc_cleanup_events.17
+	title = cc_cleanup_events.17.name
+	desc = cc_cleanup_events.17.desc
+	
+	is_triggered_only = yes
+	location = root
+	
+	picture = GFX_evt_ground_combat
+	
+	trigger = {
+		NOT = { has_planet_flag = cc_conquered_purge }
+		OR = {
+			has_modifier = cc_underground_authoritarian_movement_1
+			has_modifier = cc_underground_authoritarian_movement_2
+		}
+	}
+	
+	option = {
+		name = CCYES
+		
+		if = {
+			limit = { has_modifier = cc_underground_authoritarian_movement_1 }
+			remove_modifier = cc_underground_authoritarian_movement_1
+		}
+		if = {
+			limit = { has_modifier = cc_underground_authoritarian_movement_2 }
+			remove_modifier = cc_underground_authoritarian_movement_2
+		}
+		add_modifier = {
+			modifier = cc_colony_monarchy
+			days = -1
+		}
+		ai_chance = {
+			modifier = {
+				factor = 5
+				owner = {
+					OR = {
+						has_ethic = ethic_authoritarian
+						has_ethic = ethic_fanatic_authoritarian
+					}
+				}
+			}
+			modifier = {
+				factor = 5
+				owner = { has_authority = auth_imperial }
+			}
+			modifier = {
+				factor = 0
+				owner = {
+					OR = {
+						has_ethic = ethic_egalitarian
+						has_ethic = ethic_fanatic_egalitarian
+					}
+				}
+			}
+			modifier = {
+				factor = 0
+				NOT = { any_owned_pop = { has_citizenship_rights = yes } }
+			}
+		}
+	}
+	option = { name = CCNO }
+}
+
+
+
+planet_event = {
+	id = cc_cleanup_events.18
+	title = cc_cleanup_events.18.name
+	desc = cc_cleanup_events.18.desc
+	
+	is_triggered_only = yes
+	location = root
+	
+	picture = GFX_evt_cc_throne_room
+	
+	trigger = {
+		NOT = { has_planet_flag = cc_conquered_purge }
+		has_modifier = cc_colony_monarchy_unhappy
+	}
+	
+	option = {
+		name = CCYES
+		
+		add_modifier = {
+			modifier = cc_colony_monarchy
+			days = -1
+		}
+		remove_modifier = cc_colony_monarchy_unhappy
+		
+		ai_chance = {
+			modifier = {
+				factor = 0
+				owner = { has_authority = auth_democratic }
+			}
+			modifier = {
+				factor = 0
+				NOT = { any_owned_pop = { has_citizenship_rights = yes } }
+			}
+		}
+	}
+	option = {
+		name = CCNO
+		
+		ai_chance = {
+			factor = 0.5
+			modifier = {
+				factor = 0
+				owner = { has_authority = auth_imperial }
+				any_owned_pop = { has_citizenship_rights = yes }
+			}
+		}
+	}
+}
+
+
+###Militarists
+
+planet_event = {
+	id = cc_cleanup_events.19
+	title = cc_cleanup_events.19.name
+	desc = cc_cleanup_events.19.desc
+	
+	is_triggered_only = yes
+	location = root
+	
+	picture = GFX_evt_cc_military_ceremony
+	
+	trigger = {
+		NOT = { has_planet_flag = cc_conquered_purge }
+		has_modifier = cc_milacademy
+	}
+	
+	option = {
+		name = CCYES
+		
+		
+		ai_chance = {
+			modifier = {
+				factor = 0
+				owner = {
+					OR = {
+						has_ethic = ethic_pacifist
+						has_ethic = ethic_fanatic_pacifist
+					}
+				}
+			}
+			modifier = {
+				factor = 0
+				NOT = { any_owned_pop = { has_citizenship_rights = yes } }
+			}
+		}
+	}
+	option = {
+		name = CCNO
+		
+		remove_modifier = cc_milacademy
+		
+		add_modifier = {
+			modifier = cc_militarists_offended
+			years = 20
+		}
+		
+		ai_chance = {
+			factor = 1
+			modifier = {
+				factor = 0
+				NOR = {
+					owner = {
+						has_ethic = ethic_militarist
+						has_ethic = ethic_fanatic_militarist
+					}
+					NOT = { any_owned_pop = { has_citizenship_rights = yes } }
+				}
+			}
+		}
+	}
+}
+
+planet_event = {
+	id = cc_cleanup_events.20
+	title = cc_cleanup_events.20.name
+	desc = cc_cleanup_events.20.desc
+	
+	is_triggered_only = yes
+	location = root
+	
+	picture = GFX_evt_cc_military_ceremony
+	
+	trigger = {
+		NOT = { has_planet_flag = cc_conquered_purge }
+		has_modifier = cc_founder_militarist
+	}
+	
+	option = {
+		name = CCYES
+		
+		
+		ai_chance = {
+			modifier = {
+				factor = 0
+				owner = {
+					OR = {
+						has_ethic = ethic_pacifist
+						has_ethic = ethic_fanatic_pacifist
+					}
+				}
+			}
+			modifier = {
+				factor = 0
+				NOT = { any_owned_pop = { has_citizenship_rights = yes } }
+			}
+		}
+	}
+	option = {
+		name = CCNO
+		
+		remove_modifier = cc_founder_militarist
+		
+		add_modifier = {
+			modifier = cc_militarists_offended
+			years = 20
+		}
+		
+		ai_chance = {
+			factor = 0.5
+			modifier = {
+				factor = 0
+				owner = {
+					OR = {
+						has_ethic = ethic_militarist
+						has_ethic = ethic_fanatic_militarist
+					}
+				}
+				any_owned_pop = { has_citizenship_rights = yes }
+			}
+		}
+	}
+}
+
+planet_event = {
+	id = cc_cleanup_events.21
+	title = cc_cleanup_events.21.name
+	desc = cc_cleanup_events.21.desc
+	
+	is_triggered_only = yes
+	location = root
+	
+	picture = GFX_evt_ground_combat
+	
+	trigger = {
+		NOT = { has_planet_flag = cc_conquered_purge }
+		OR = {
+			has_modifier = cc_underground_militarist_movement_1
+			has_modifier = cc_underground_militarist_movement_2
+		}
+	}
+	
+	option = {
+		name = CCYES
+		
+		if = {
+			limit = { has_modifier = cc_underground_militarist_movement_1 }
+			remove_modifier = cc_underground_militarist_movement_1
+		}
+		if = {
+			limit = { has_modifier = cc_underground_militarist_movement_2 }
+			remove_modifier = cc_underground_militarist_movement_2
+		}
+		custom_tooltip = cc_milacademy_will_be_built
+		hidden_effect = { planet_event = { id = cc_cleanup_events.23 days = 1800 } }
+		
+		ai_chance = {
+			modifier = {
+				factor = 0
+				owner = {
+					OR = {
+						has_ethic = ethic_pacifist
+						has_ethic = ethic_fanatic_pacifist
+					}
+				}
+			}
+			modifier = {
+				factor = 0
+				NOT = { any_owned_pop = { has_citizenship_rights = yes } }
+			}
+		}
+	}
+	option = {
+		name = CCNO
+		ai_chance = {
+			factor = 0.5
+			modifier = {
+				factor = 0
+				owner = {
+					OR = {
+						has_ethic = ethic_militarist
+						has_ethic = ethic_fanatic_militarist
+					}
+				}
+				any_owned_pop = { has_citizenship_rights = yes }
+			}
+		}
+	}
+}
+
+
+planet_event = {
+	id = cc_cleanup_events.22
+	title = cc_cleanup_events.22.name
+	desc = cc_cleanup_events.22.desc
+	
+	is_triggered_only = yes
+	location = root
+	
+	picture = GFX_evt_cc_military_ceremony
+	
+	trigger = {
+		NOT = { has_planet_flag = cc_conquered_purge }
+		has_modifier = cc_founders_memory_disrespected_1_militarist
+	}
+	
+	option = {
+		name = CCYES
+		
+		add_modifier = {
+			modifier = cc_building_milacademy
+			days = 1800
+		}
+		remove_modifier = cc_founders_memory_disrespected_1_militarist
+
+		custom_tooltip = cc_milacademy_will_be_built
+		hidden_effect = { planet_event = { id = cc_cleanup_events.23 days = 1800 } }
+		
+		ai_chance = {
+			modifier = {
+				factor = 0
+				owner = {
+					OR = {
+						has_ethic = ethic_pacifist
+						has_ethic = ethic_fanatic_pacifist
+					}
+				}
+			}
+			modifier = {
+				factor = 0
+				NOT = { any_owned_pop = { has_citizenship_rights = yes } }
+			}
+		}
+	}
+	option = {
+		name = CCNO
+		
+		ai_chance = {
+			factor = 0.5
+			modifier = {
+				factor = 0
+				owner = {
+					OR = {
+						has_ethic = ethic_militarist
+						has_ethic = ethic_fanatic_militarist
+					}
+				}
+				any_owned_pop = { has_citizenship_rights = yes }
+			}
+		}
+	}
+}
+
+planet_event = {
+	id = cc_cleanup_events.23
+	title = cc_cleanup_events.23.name
+	desc = cc_cleanup_events.23.desc
+	
+	is_triggered_only = yes
+	location = root
+	
+	trigger = { NOT = { has_planet_flag = cc_milacademy_cancelled } }
+	
+	picture = GFX_evt_cc_military_ceremony
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = CCGOODGOOD
+		
+		add_modifier = {
+			modifier = cc_milacademy
+			days = -1
+		}
+		hidden_effect = {
+			if = {
+				limit = { has_modifier = cc_founder_militarist }
+				remove_modifier = cc_founder_militarist
+			}
+		}
+		owner = {
+			if = {
+				limit = { has_faction = imperialist }
+				random_pop_faction = {
+					limit = { is_pop_faction_type = imperialist }
+					add_modifier = {
+						modifier = cc_milacademy_built_faction
+						years = 10
+					}
+				}
+			}
+		}
+	}
+}
+
+
+planet_event = {
+	id = cc_cleanup_events.24
+	title = cc_cleanup_events.24.name
+	desc = cc_cleanup_events.24.desc
+	
+	is_triggered_only = yes
+	location = root
+	
+	picture = GFX_evt_cc_military_ceremony
+	
+	trigger = {
+		NOT = { has_planet_flag = cc_conquered_purge }
+		has_modifier = cc_building_milacademy
+	}
+	
+	option = {
+		name = CCYES
+		custom_tooltip = cc_cleanup_events.24.tooltip
+		
+		ai_chance = {
+			modifier = {
+				factor = 0
+				owner = {
+					OR = {
+						has_ethic = ethic_pacifist
+						has_ethic = ethic_fanatic_pacifist
+					}
+				}
+			}
+			modifier = {
+				factor = 0
+				NOT = { any_owned_pop = { has_citizenship_rights = yes } }
+			}
+		}
+	}
+	option = {
+		name = CCNO
+		
+		remove_modifier = cc_building_milacademy
+
+		if = {
+			limit = { has_modifier = cc_founder_militarist }
+			remove_modifier = cc_founder_militarist
+		}
+		
+		set_timed_planet_flag = {
+			flag = cc_milacademy_cancelled
+			years = 5
+		}
+		
+		add_modifier = {
+			modifier = cc_militarists_offended
+			years = 20
+		}
+		
+		ai_chance = {
+			factor = 0.5
+			modifier = {
+				factor = 0
+				owner = {
+					OR = {
+						has_ethic = ethic_militarist
+						has_ethic = ethic_fanatic_militarist
+					}
+				}
+				any_owned_pop = { has_citizenship_rights = yes }
+			}
+		}
+	}
+}
+
+####Pacifists:
+
+planet_event = {
+	id = cc_cleanup_events.25
+	title = cc_cleanup_events.25.name
+	desc = cc_cleanup_events.25.desc
+	
+	is_triggered_only = yes
+	
+	picture = GFX_evt_cc_peace_march
+	
+	location = root
+	
+	trigger = {
+		NOT = { has_planet_flag = cc_conquered_purge }
+		has_modifier = cc_founder_pacifist
+	}
+	
+	option = {
+		name = CCYES
+		
+		
+		ai_chance = {
+			modifier = {
+				factor = 0
+				owner = {
+					OR = {
+						has_ethic = ethic_militarist
+						has_ethic = ethic_fanatic_militarist
+					}
+				}
+			}
+			modifier = {
+				factor = 0
+				NOT = { any_owned_pop = { has_citizenship_rights = yes } }
+			}
+		}
+	}
+	option = {
+		name = CCNO
+		
+		remove_modifier = cc_founder_pacifist
+		
+		add_modifier = {
+			modifier = cc_pacifists_offended
+			years = 20
+		}
+		
+		ai_chance = {
+			factor = 0.5
+			modifier = {
+				factor = 0
+				owner = {
+					OR = {
+						has_ethic = ethic_pacifist
+						has_ethic = ethic_fanatic_pacifist
+					}
+				}
+				any_owned_pop = { has_citizenship_rights = yes }
+			}
+		}
+	}
+}
+
+planet_event = {
+	id = cc_cleanup_events.26
+	title = cc_cleanup_events.26.name
+	desc = cc_cleanup_events.26.desc
+	
+	is_triggered_only = yes
+	
+	picture = GFX_evt_cc_mausoleum
+	
+	location = root
+	
+	trigger = {
+		NOT = { has_planet_flag = cc_conquered_purge }
+		has_modifier = cc_building_pacmonument
+	}
+	
+	option = {
+		name = CCYES
+		custom_tooltip = cc_cleanup_events.26.tooltip
+		
+		ai_chance = {
+			modifier = {
+				factor = 0
+				owner = {
+					OR = {
+						has_ethic = ethic_militarist
+						has_ethic = ethic_fanatic_militarist
+					}
+				}
+			}
+			modifier = {
+				factor = 0
+				NOT = { any_owned_pop = { has_citizenship_rights = yes } }
+			}
+		}
+	}
+	option = {
+		name = CCNO
+		
+		remove_modifier = cc_building_pacmonument
+		
+		if = {
+			limit = { has_modifier = cc_founder_pacifist }
+			remove_modifier = cc_founder_pacifist
+		}
+		
+		set_timed_planet_flag = {
+			flag = cc_pacmonument_cancelled
+			years = 5
+		}
+		
+		add_modifier = {
+			modifier = cc_pacifists_offended
+			years = 20
+		}
+		
+		ai_chance = {
+			factor = 0.5
+			modifier = {
+				factor = 0
+				owner = {
+					OR = {
+						has_ethic = ethic_pacifist
+						has_ethic = ethic_fanatic_pacifist
+					}
+				}
+				any_owned_pop = { has_citizenship_rights = yes }
+			}
+		}
+	}
+}
+
+
+planet_event = {
+	id = cc_cleanup_events.27
+	title = cc_cleanup_events.27.name
+	desc = cc_cleanup_events.27.desc
+	
+	is_triggered_only = yes
+	
+	picture = GFX_evt_cc_mausoleum
+	
+	location = root
+	
+	trigger = {
+		NOT = { has_planet_flag = cc_conquered_purge }
+		OR = {
+			has_modifier = cc_minor_pacmonument
+			has_modifier = cc_pacifist_centre
+		}
+	}
+	
+	option = {
+		name = CCYES
+		
+		
+		ai_chance = {
+			modifier = {
+				factor = 0
+				owner = {
+					OR = {
+						has_ethic = ethic_militarist
+						has_ethic = ethic_fanatic_militarist
+					}
+				}
+			}
+			modifier = {
+				factor = 0
+				NOT = { any_owned_pop = { has_citizenship_rights = yes } }
+			}
+		}
+	}
+	option = {
+		name = CCNO
+		
+		if = {
+			limit = { has_modifier = cc_minor_pacmonument }
+			remove_modifier = cc_minor_pacmonument
+		}
+		if = {
+			limit = { has_modifier = cc_pacifist_centre }
+			remove_modifier = cc_pacifist_centre
+		}
+		
+		add_modifier = {
+			modifier = cc_pacifists_offended
+			years = 20
+		}
+		
+		ai_chance = {
+			factor = 1
+			modifier = {
+				factor = 0
+				NOR = {
+					owner = {
+						has_ethic = ethic_militarist
+						has_ethic = ethic_fanatic_militarist
+					}
+					NOT = { any_owned_pop = { has_citizenship_rights = yes } }
+				}
+			}
+		}
+	}
+}
+
+planet_event = {
+	id = cc_cleanup_events.28
+	title = cc_cleanup_events.28.name
+	desc = cc_cleanup_events.28.desc
+	
+	is_triggered_only = yes
+	location = root
+	
+	picture = GFX_evt_cc_peace_march
+	
+	trigger = {
+		NOT = { has_planet_flag = cc_conquered_purge }
+		OR = {
+			has_modifier = cc_founders_memory_disrespected_1_pacifist
+			has_modifier = cc_founders_memory_disrespected_2_pacifist
+		}
+	}
+	
+	option = {
+		name = CCYES
+		
+		add_modifier = {
+			modifier = cc_building_pacmonument
+			days = 1800
+		}
+		if = {
+			limit = { has_modifier = cc_founders_memory_disrespected_1_pacifist }
+			remove_modifier = cc_founders_memory_disrespected_1_pacifist
+		}
+		if = {
+			limit = { has_modifier = cc_founders_memory_disrespected_2_pacifist }
+			remove_modifier = cc_founders_memory_disrespected_2_pacifist
+		}
+		custom_tooltip = cc_minor_pacmonument_will_be_built
+		hidden_effect = { planet_event = { id = cc_cleanup_events.29 days = 1800 } }
+		
+		ai_chance = {
+			modifier = {
+				factor = 0
+				owner = {
+					OR = {
+						has_ethic = ethic_militarist
+						has_ethic = ethic_fanatic_militarist
+					}
+				}
+			}
+			modifier = {
+				factor = 0
+				NOT = { any_owned_pop = { has_citizenship_rights = yes } }
+			}
+		}
+	}
+	option = {
+		name = CCNO
+		
+		ai_chance = {
+			factor = 0.5
+			modifier = {
+				factor = 0
+				owner = {
+					OR = {
+						has_ethic = ethic_pacifist
+						has_ethic = ethic_fanatic_pacifist
+					}
+				}
+				any_owned_pop = { has_citizenship_rights = yes }
+			}
+		}
+	}
+}
+
+planet_event = {
+	id = cc_cleanup_events.29
+	title = cc_cleanup_events.29.name
+	desc = cc_cleanup_events.29.desc
+	
+	is_triggered_only = yes
+	location = root
+	
+	trigger = { NOT = { has_planet_flag = cc_pacmonument_cancelled } }
+	
+	picture = GFX_evt_cc_mausoleum
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = CCGOODGOOD
+		
+		add_modifier = {
+			modifier = cc_minor_pacmonument
+			days = -1
+		}
+	}
+}
+
+planet_event = {
+	id = cc_cleanup_events.30
+	title = cc_cleanup_events.30.name
+	desc = cc_cleanup_events.30.desc
+	
+	is_triggered_only = yes
+	location = root
+	
+	picture = GFX_evt_ground_combat
+	
+	trigger = {
+		NOT = { has_planet_flag = cc_conquered_purge }
+		OR = {
+			has_modifier = cc_underground_pacifist_movement_1
+			has_modifier = cc_underground_pacifist_movement_2
+		}
+	}
+	
+	option = {
+		name = CCYES
+		
+		if = {
+			limit = { has_modifier = cc_underground_pacifist_movement_1 }
+			remove_modifier = cc_underground_pacifist_movement_1
+		}
+		if = {
+			limit = { has_modifier = cc_underground_pacifist_movement_2 }
+			remove_modifier = cc_underground_pacifist_movement_2
+		}
+		add_modifier = {
+			modifier = cc_pacifist_protectorate
+			days = -1
+		}
+		ai_chance = {
+			modifier = {
+				factor = 0
+				owner = {
+					OR = {
+						has_ethic = ethic_militarist
+						has_ethic = ethic_fanatic_militarist
+					}
+				}
+			}
+			modifier = {
+				factor = 0
+				NOT = { any_owned_pop = { has_citizenship_rights = yes } }
+			}
+		}
+	}
+	option = {
+		name = CCNO
+		ai_chance = { factor = 0.5 }
+	}
+}
+
+planet_event = {
+	id = cc_cleanup_events.31
+	title = cc_cleanup_events.31.name
+	desc = cc_cleanup_events.31.desc
+	
+	is_triggered_only = yes
+	location = root
+	
+	picture = GFX_evt_cc_peace_march
+	
+	trigger = {
+		NOT = { has_planet_flag = cc_conquered_purge }
+		has_modifier = cc_pacifist_protectorate
+	}
+	
+	option = {
+		name = CCYES
+		
+		
+		ai_chance = {
+			modifier = {
+				factor = 0
+				owner = {
+					OR = {
+						has_ethic = ethic_militarist
+						has_ethic = ethic_fanatic_militarist
+					}
+				}
+			}
+			modifier = {
+				factor = 0
+				NOT = { any_owned_pop = { has_citizenship_rights = yes } }
+			}
+		}
+	}
+	option = {
+		name = CCNO
+		
+		remove_modifier = cc_pacifist_protectorate
+		
+		add_modifier = {
+			modifier = cc_pacifists_offended
+			years = 20
+		}
+		
+		ai_chance = {
+			factor = 0.5
+			modifier = {
+				factor = 0
+				owner = {
+					OR = {
+						has_ethic = ethic_pacifist
+						has_ethic = ethic_fanatic_pacifist
+					}
+				}
+				any_owned_pop = { has_citizenship_rights = yes }
+			}
+		}
+	}
+}
+
+
+
+#Xenophobes (a bit different)
+
+planet_event = {
+	id = cc_cleanup_events.32
+	title = cc_cleanup_events.32.name
+	desc = cc_cleanup_events.32.desc
+	
+	is_triggered_only = yes
+	location = root
+	
+	picture = GFX_evt_alien_segregation
+	
+	trigger = {
+		NOT = { has_planet_flag = cc_conquered_purge }
+		has_modifier = cc_founder_xenophobe
+	}
+	
+	option = {
+		name = cc_cleanup_events.32.option
+		
+		remove_modifier = cc_founder_xenophobe
+		
+		add_modifier = {
+			modifier = cc_xenophobes_offended
+			years = 20
+		}
+	}
+}
+
+planet_event = {
+	id = cc_cleanup_events.33
+	title = cc_cleanup_events.33.name
+	desc = cc_cleanup_events.33.desc
+	
+	is_triggered_only = yes
+	location = root
+	
+	picture = GFX_evt_alien_segregation
+	
+	trigger = {
+		NOT = { has_planet_flag = cc_conquered_purge }
+		has_modifier = cc_building_xenophobe_institute
+	}
+	
+	immediate = {
+		set_timed_planet_flag = {
+			flag = cc_xenophobe_institute_cancelled
+			years = 10
+		}
+	}
+	
+	option = {
+		name = OK
+		
+		remove_modifier = cc_building_xenophobe_institute
+		
+		hidden_effect = {
+			if = {
+				limit = { has_modifier = cc_founder_xenophobe }
+				remove_modifier = cc_founder_xenophobe
+			}
+		}
+		
+		add_modifier = {
+			modifier = cc_xenophobes_offended
+			years = 20
+		}
+	}
+}
+
+planet_event = {
+	id = cc_cleanup_events.34
+	title = cc_cleanup_events.34.name
+	desc = cc_cleanup_events.34.desc
+	
+	is_triggered_only = yes
+	location = root
+	
+	picture = GFX_evt_alien_segregation
+	
+	trigger = {
+		NOT = { has_planet_flag = cc_conquered_purge }
+		OR = {
+			has_modifier = cc_xenophobe_institute
+			has_modifier = cc_minor_xenophobe_institute
+		}
+	}
+	
+	option = {
+		name = cc_cleanup_events.34.B
+		
+		if = {
+			limit = { has_modifier = cc_xenophobe_institute }
+			remove_modifier = cc_xenophobe_institute
+		}
+		if = {
+			limit = { has_modifier = cc_minor_xenophobe_institute }
+			remove_modifier = cc_minor_xenophobe_institute
+		}
+		
+		add_modifier = {
+			modifier = cc_xenophobes_offended
+			years = 20
+		}
+	}
+	option = {
+		name = cc_cleanup_events.34.A
+		
+		ai_chance = {
+			factor = 0.5
+			modifier = {
+				factor = 0
+				owner = {
+					NOR = {
+						has_ethic = ethic_xenophobe
+						has_ethic = ethic_fanatic_xenophobe
+					}
+				}
+			}			
+		}
+	}
+}
+
+planet_event = {
+	id = cc_cleanup_events.35
+	title = cc_cleanup_events.35.name
+	desc = cc_cleanup_events.35.desc
+	
+	is_triggered_only = yes
+	location = root
+	
+	picture = GFX_evt_alien_segregation
+	
+	trigger = {
+		NOT = { has_planet_flag = cc_conquered_purge }
+		OR = {
+			has_modifier = cc_underground_xenophobe_movement_1
+			has_modifier = cc_underground_xenophobe_movement_2
+		}
+	}
+	
+	option = {
+		name = UNFORTUNATE
+		
+		add_modifier = {
+			modifier = cc_xenophobes_offended
+			years = 20
+		}
+	}
+}
+
+
+
+
+
+
+
+
+planet_event = {
+	id = cc_cleanup_events.36
+	title = cc_cleanup_events.36.name
+	desc = cc_cleanup_events.36.desc
+	
+	is_triggered_only = yes
+	
+	picture = GFX_evt_cc_alien_union
+	
+	location = root
+	
+	trigger = {
+		NOT = { has_planet_flag = cc_conquered_purge }
+		has_modifier = cc_founder_xenophile
+	}
+	
+	option = {
+		name = CCYES
+		
+		
+		ai_chance = {
+			modifier = {
+				factor = 0
+				owner = {
+					OR = {
+						has_ethic = ethic_xenophobe
+						has_ethic = ethic_fanatic_xenophobe
+					}
+				}
+			}
+			modifier = {
+				factor = 0
+				NOT = { any_owned_pop = { has_citizenship_rights = yes } }
+			}
+		}
+	}
+	option = {
+		name = CCNO
+		
+		remove_modifier = cc_founder_xenophile
+		
+		add_modifier = {
+			modifier = cc_xenophiles_offended
+			years = 20
+		}
+		
+		ai_chance = {
+			factor = 0.5
+			modifier = {
+				factor = 0
+				owner = {
+					OR = {
+						has_ethic = ethic_xenophile
+						has_ethic = ethic_fanatic_xenophile
+					}
+				}
+				any_owned_pop = { has_citizenship_rights = yes }
+			}
+		}
+	}
+}
+
+
+planet_event = {
+	id = cc_cleanup_events.37
+	title = cc_cleanup_events.37.name
+	desc = cc_cleanup_events.37.desc
+	
+	is_triggered_only = yes
+	
+	picture = GFX_evt_cc_alien_union
+	
+	location = root
+	
+	trigger = {
+		NOT = { has_planet_flag = cc_conquered_purge }
+		has_modifier = cc_building_xenophile_institute
+	}
+	
+	option = {
+		name = CCYES
+		custom_tooltip = cc_cleanup_events.3.tooltip
+		
+		ai_chance = {
+			modifier = {
+				factor = 0
+				owner = {
+					OR = {
+						has_ethic = ethic_xenophobe
+						has_ethic = ethic_fanatic_xenophobe
+					}
+				}
+			}
+			modifier = {
+				factor = 0
+				NOT = { any_owned_pop = { has_citizenship_rights = yes } }
+			}
+		}
+	}
+	option = {
+		name = CCNO
+		
+		remove_modifier = cc_building_xenophile_institute
+		if = {
+			limit = { has_modifier = cc_founder_xenophile }
+			remove_modifier = cc_founder_xenophile
+		}
+		
+		set_timed_planet_flag = {
+			flag = cc_xenophile_institute_cancelled
+			years = 5
+		}
+		
+		add_modifier = {
+			modifier = cc_xenophiles_offended
+			years = 20
+		}
+		
+		ai_chance = {
+			factor = 0.5
+			modifier = {
+				factor = 0
+				owner = {
+					OR = {
+						has_ethic = ethic_xenophile
+						has_ethic = ethic_fanatic_xenophile
+					}
+				}
+				any_owned_pop = { has_citizenship_rights = yes }
+			}
+		}
+	}
+}
+
+planet_event = {
+	id = cc_cleanup_events.38
+	title = cc_cleanup_events.38.name
+	desc = cc_cleanup_events.38.desc
+	
+	is_triggered_only = yes
+	
+	picture = GFX_evt_cc_alien_union
+	
+	location = root
+	
+	trigger = {
+		NOT = { has_planet_flag = cc_conquered_purge }
+		has_modifier = cc_xenophile_institute
+	}
+	
+	option = {
+		name = CCYES
+		
+		
+		ai_chance = {
+			modifier = {
+				factor = 0
+				owner = {
+					OR = {
+						has_ethic = ethic_xenophobe
+						has_ethic = ethic_fanatic_xenophobe
+					}
+				}
+			}
+			modifier = {
+				factor = 0
+				NOT = { any_owned_pop = { has_citizenship_rights = yes } }
+			}
+		}
+	}
+	option = {
+		name = CCNO
+		
+		remove_modifier = cc_xenophile_institute
+		
+		add_modifier = {
+			modifier = cc_xenophiles_offended
+			years = 20
+		}
+		
+		ai_chance = {
+			factor = 1
+			modifier = {
+				factor = 0
+				NOR = {
+					owner = {
+						has_ethic = ethic_xenophobe
+						has_ethic = ethic_fanatic_xenophobe
+					}
+					NOT = { any_owned_pop = { has_citizenship_rights = yes } }
+				}
+			}
+		}
+	}
+}
+
+planet_event = {
+	id = cc_cleanup_events.39
+	title = cc_cleanup_events.39.name
+	desc = cc_cleanup_events.39.desc
+	
+	is_triggered_only = yes
+	location = root
+	
+	picture = GFX_evt_cc_alien_union
+	
+	trigger = {
+		NOT = { has_planet_flag = cc_conquered_purge }
+		OR = {
+			has_modifier = cc_founders_memory_disrespected_1_xenophile
+			has_modifier = cc_founders_memory_disrespected_2_xenophile
+		}
+	}
+	
+	option = {
+		name = CCYES
+		
+		add_modifier = {
+			modifier = cc_building_xenophile_institute
+			days = 1800
+		}
+		if = {
+			limit = { has_modifier = cc_founders_memory_disrespected_1_xenophile }
+			remove_modifier = cc_founders_memory_disrespected_1_xenophile
+		}
+		if = {
+			limit = { has_modifier = cc_founders_memory_disrespected_2_xenophile }
+			remove_modifier = cc_founders_memory_disrespected_2_xenophile
+		}
+		custom_tooltip = cc_xenophile_institute_will_be_built
+		hidden_effect = { planet_event = { id = cc_cleanup_events.41 days = 1800 } }
+		
+		ai_chance = {
+			modifier = {
+				factor = 0
+				owner = {
+					OR = {
+						has_ethic = ethic_xenophobe
+						has_ethic = ethic_fanatic_xenophobe
+					}
+				}
+			}
+			modifier = {
+				factor = 0
+				NOT = { any_owned_pop = { has_citizenship_rights = yes } }
+			}
+		}
+	}
+	option = {
+		name = CCNO
+		
+		ai_chance = {
+			factor = 0.5
+			modifier = {
+				factor = 0
+				owner = {
+					OR = {
+						has_ethic = ethic_xenophile
+						has_ethic = ethic_fanatic_xenophile
+					}
+				}
+				any_owned_pop = { has_citizenship_rights = yes }
+			}
+		}
+	}
+}
+
+planet_event = {
+	id = cc_cleanup_events.40
+	title = cc_cleanup_events.40.name
+	desc = cc_cleanup_events.40.desc
+	
+	is_triggered_only = yes
+	location = root
+	
+	picture = GFX_evt_ground_combat
+	
+	trigger = {
+		NOT = { has_planet_flag = cc_conquered_purge }
+		OR = {
+			has_modifier = cc_underground_xenophile_movement_1
+			has_modifier = cc_underground_xenophile_movement_2
+		}
+	}
+	
+	option = {
+		name = CCYES
+		
+		if = {
+			limit = { has_modifier = cc_underground_xenophile_movement_1 }
+			remove_modifier = cc_underground_xenophile_movement_1
+		}
+		if = {
+			limit = { has_modifier = cc_underground_xenophile_movement_2 }
+			remove_modifier = cc_underground_xenophile_movement_2
+		}
+
+		add_modifier = {
+			modifier = cc_building_xenophile_institute
+			days = 1800
+		}
+		custom_tooltip = cc_xenophile_institute_will_be_built
+
+		hidden_effect = { planet_event = { id = cc_cleanup_events.41 days = 1800 } }
+
+		ai_chance = {
+			modifier = {
+				factor = 0
+				owner = {
+					OR = {
+						has_ethic = ethic_xenophobe
+						has_ethic = ethic_fanatic_xenophobe
+					}
+				}
+			}
+			modifier = {
+				factor = 0
+				NOT = { any_owned_pop = { has_citizenship_rights = yes } }
+			}
+		}
+	}
+	option = {
+		name = CCNO
+		ai_chance = { factor = 0.5 }
+	}
+}
+
+planet_event = {
+	id = cc_cleanup_events.41
+	title = cc_cleanup_events.41.name
+	desc = cc_cleanup_events.41.desc
+	
+	is_triggered_only = yes
+	location = root
+	
+	trigger = { NOT = { has_planet_flag = cc_xenophile_institute_cancelled } }
+	
+	picture = GFX_evt_cc_alien_union
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = CCGOODGOOD
+		
+		add_modifier = {
+			modifier = cc_xenophile_institute
+			days = -1
+		}
+		hidden_effect = {
+			if = {
+				limit = { has_modifier = cc_founder_xenophile }
+				remove_modifier = cc_founder_xenophile
+			}
+		}
+	}
+}
+
+
+
+
+
+
+
+
+
+planet_event = {
+	id = cc_cleanup_events.999
+	hide_window = yes
+	is_triggered_only = yes
+	
+	trigger = {
+		has_planet_flag = cc_conquered_purge
+		OR = {
+			has_modifier = cc_building_mausoleum
+			has_modifier = cc_building_university
+			has_modifier = cc_building_milacademy
+			has_modifier = cc_building_pacmonument
+			has_modifier = cc_building_xenophobe_institute
+			has_modifier = cc_building_xenophile_institute
+		}
+	}
+	
+	immediate = {
+		if = {
+			limit = { has_modifier = cc_building_mausoleum }
+			set_timed_planet_flag = {
+				flag = cc_mausoleum_cancelled
+				years = 5
+			}
+			remove_modifier = cc_building_mausoleum
+		}
+		if = {
+			limit = { has_modifier = cc_building_university }
+			set_timed_planet_flag = {
+				flag = cc_university_cancelled
+				years = 5
+			}
+			remove_modifier = cc_building_university
+		}
+		if = {
+			limit = { has_modifier = cc_building_milacademy }
+			set_timed_planet_flag = {
+				flag = cc_milacademy_cancelled
+				years = 5
+			}
+			remove_modifier = cc_building_milacademy
+		}
+		if = {
+			limit = { has_modifier = cc_building_pacmonument }
+			set_timed_planet_flag = {
+				flag = cc_pacmonument_cancelled
+				years = 5
+			}
+			remove_modifier = cc_building_pacmonument
+		}
+		if = {
+			limit = { has_modifier = cc_building_xenophobe_institute }
+			set_timed_planet_flag = {
+				flag = cc_xenophobe_institute_cancelled
+				years = 5
+			}
+			remove_modifier = cc_building_xenophobe_institute
+		}
+		if = {
+			limit = { has_modifier = cc_building_xenophile_institute }
+			set_timed_planet_flag = {
+				flag = cc_xenophile_institute_cancelled
+				years = 5
+			}
+			remove_modifier = cc_building_xenophile_institute
+		}
+	}
+}
+
+
+#I could put some flavour text in here, but can't be bothered right now
+planet_event = {
+	id = cc_cleanup_events.9992
+	is_triggered_only = yes
+	hide_window = yes
+	
+	trigger = { owner = { has_civic = civic_machine_servitor } }
+
+	immediate = {
+#		remove_rebel_irrelevant_political_colony_modifiers = yes
+		remove_all_political_colony_modifiers = yes
+	}
+}
+
+
+# Initial rebels manage to take control of the planet, happens before the new owner is set, after the war is created.
+# This = Rebel Country
+# From = Planet
+# FromFrom = War
+country_event = {
+	id = cc_cleanup_events.9996
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+#	trigger = {
+#		from = { 
+#			OR = {
+#				has_political_colony_modifier = yes
+#				has_seditious_talk = yes
+#				is_faction_stronghold = yes
+#				has_faction_sympathies = yes
+#				has_faction_sedition = yes
+#			}
+#		}
+#	}
+	
+	immediate = {
+		from = {
+			remove_rebel_irrelevant_political_colony_modifiers = yes
+			
+			remove_all_faction_strongholds = yes
+			remove_all_faction_sympathies = yes
+			remove_all_faction_seditions = yes
+			remove_all_seditious_talk = yes
+		}
+	}
+}
+
+
+# This = Pop scope
+# From = Planet
+pop_event = {
+	id = cc_cleanup_events.9997
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		has_modifier = pop_recently_conquered
+		from = {
+			has_political_colony_modifier = yes
+			NOT = { has_planet_flag = cc_conquered_purge }
+		}
+	}
+	
+	immediate = {
+		from = {
+			set_timed_planet_flag = {
+				flag = cc_conquered_purge
+				years = 25
+			}
+			planet_event = { id = cc_cleanup_events.9992 days = 2400 random = 720 }
+		}
+	}
+}
+
+# Colony Bombarded
+planet_event = {
+	id = cc_cleanup_events.9998
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	trigger = {
+#		OR = {
+#			has_political_colony_modifier = yes
+#			has_seditious_talk = yes
+#			is_faction_stronghold = yes
+#			has_faction_sympathies = yes
+#			has_faction_sedition = yes
+#		}
+		
+		FROM = {
+			OR = {
+				is_country_type = extradimensional 
+				is_country_type = extradimensional_2
+				is_country_type = extradimensional_3
+			}
+		}
+	}
+	
+	immediate = {
+		remove_all_political_colony_modifiers = yes
+		
+		remove_all_faction_strongholds = yes
+		remove_all_faction_sympathies = yes
+		remove_all_faction_seditions = yes
+		remove_all_seditious_talk = yes
+		
+		#Added for Spiritualist Mission
+		if = {
+			limit = {
+				has_modifier = dpe_hosting_spiritualist_mission_planet
+			}
+			planet_event = { id = dpe_spiritualist_mission.963 }
+		}
+	}
+}
+
+
+# Purge Complete
+planet_event = {
+	id = cc_cleanup_events.9999
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	trigger = {
+#		OR = { #apparently, checking too many modifiers breaks it
+#			has_political_colony_modifier = yes
+#			has_seditious_talk = yes
+#			is_faction_stronghold = yes
+#			has_faction_sympathies = yes
+#			has_faction_sedition = yes
+#		}
+		
+		OR = {
+			AND = {
+				has_planet_flag = cc_conquered_purge
+				count_pops = {
+					limit = { is_being_purged = yes }
+					count = 1 # Since the crisis ones go with the last pop being alive, I presume there is a reason
+				}
+			}
+			AND = {
+				num_pops = 1 # Last Pop is still alive when this event is fired
+				controller = { is_country_type = "ai_empire" }
+			}
+			AND = {
+				num_pops = 1 # Last Pop is still alive when this event is fired
+				controller = { is_country_type = "swarm" }
+			}
+		}
+	}
+	
+	immediate = {
+		remove_all_political_colony_modifiers = yes
+		
+		remove_all_faction_strongholds = yes
+		remove_all_faction_sympathies = yes
+		remove_all_faction_seditions = yes
+		remove_all_seditious_talk = yes
+		
+		#Added for Spiritualist Mission
+		if = {
+			limit = {
+				controller = { is_country_type = "ai_empire" }
+				has_modifier = dpe_hosting_spiritualist_mission_planet
+			}
+			planet_event = { id = dpe_spiritualist_mission.961 }
+		}
+
+		if = {
+			limit = {
+				controller = { is_country_type = "swarm" }
+				has_modifier = dpe_hosting_spiritualist_mission_planet
+			}
+			planet_event = { id = dpe_spiritualist_mission.962 }
+		}
+	}
+}

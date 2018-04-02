@@ -1,0 +1,975 @@
+﻿l_german:
+
+
+#Militarist:
+ cc_colony_events.2.name:0 "Pensionierter Admiral auf [root.GetName] anerkannt"
+ cc_colony_events.2.desc.pos:0 "Eine junge Kolonie bietet oft denjenigen, die den Ehrgeiz haben, es zu ergreifen, eine Chance aufzusteigen.\n\nAuf [root.GetName] hat sich dies als richtig erwiesen. Ein pensionierter hochdekorierter Marineoffizier namens [cc_colony_leader.GetName] hat die neuen Kolonisten mit [cc_colony_leader.GetHisHer]en Führungsfähigkeiten so inspiriert, dass sie begonnen haben, [cc_colony_leader.GetHisHer] Urteilsvermögen hoch zu schätzen. Glücklicherweise scheint [cc_colony_leader.GetSheHe] nicht geneigt zu sein, [cc_colony_leader.GetHisHer]e Popularität auszunützen, um sich gegen die Regierung der [root.owner.GetName] zu stellen. Unsere lokalen Beamten haben uns sogar beantragt, dass es am besten wäre, [cc_colony_leader.GetIhmIhrDE] eine offizielle Rolle als 'Legate von [root.GetName]' zu geben, um sicherzustellen, dass der Planet gut regiert wird."
+ cc_colony_events.2.desc.neut:0 "Eine junge Kolonie bietet oft eine Chance aufzusteigen, besonders für diejenigen, die diese Chance nicht auf Welten hätten, auf denen die staatlichen Autoritäten besser etabliert sind.\n\nAuf [root.GetName] hat sich dies als richtig erwiesen. Ein pensionierter hochdekorierter Marineoffizier namens [cc_colony_leader.GetName] hat die neuen Kolonisten mit [cc_colony_leader.GetHisHer]en Führungsfähigkeiten so inspiriert, dass sie begonnen haben, [cc_colony_leader.GetHisHer] Urteilsvermögen hoch zu schätzen. [cc_colony_leader.GetSheHeCap] hat bisher nicht [cc_colony_leader.GetHisHer]e neu-erworbene Autorität benutzt, um sich gegen die [root.owner.GetName] zu stellen, und kooperiert stattdessen mit der lokalen Regierung. Trotzdem haben sich Petitionen verbreitet, die fordern, dass [cc_colony_leader.GetHisHer]e Anstellung als 'Legat von [root.GetName]' offiziell gemacht wird. Dies würde allerdings von unseren normalen Methoden abweichen.\n\nWie sollen wir auf die Petition reagieren?"
+ cc_colony_events.2.desc.neg:0 "Eine junge Kolonie bietet oft eine Chance aufzusteigen, besonders für diejenigen, die diese Chance nicht auf Welten hätten, auf denen die staatlichen Autoritäten besser etabliert sind.\n\nAuf [root.GetName] hat sich dies als richtig erwiesen. Ein pensionierter hochdekorierter Marineoffizier namens [cc_colony_leader.GetName] hat die neuen Kolonisten mit [cc_colony_leader.GetHisHer]en Führungsfähigkeiten so inspiriert, dass sie begonnen haben, [cc_colony_leader.GetHisHer] Urteilsvermögen hoch zu schätzen. [cc_colony_leader.GetName], [cc_colony_leader.GetDerDieDE] von unseren lokalen Behörden als "störend" beschrieben wird, hat [cc_colony_leader.GetHisHer]e neu gefundene Autorität begrüßt und eine Petition gefördert, die fordert, dass [cc_colony_leader.GetHisHer]e Anstellung als 'Legat von [root.GetName]' offiziell gemacht wird. Leider hat diese Petition erhebliche Unterstützung erhalten, obwohl sie den Grundsätzen der [root.GetName] widerspricht.\n\nWie sollen wir auf die Petition reagieren?" 
+
+ cc_colony_events.2.A1:0 "Ernenne [cc_colony_leader.GetIhnSieDE] als Legat der Kolonie." 
+ cc_colony_events.2.A2:0 "Gib [cc_colony_leader.GetIhmIhrDE] eine Rolle als Berater[cc_colony_leader.GetXInDE]."
+ cc_colony_events.2.B:0 "Was glaubt [cc_colony_leader.GetSheHe], wer [cc_colony_leader.GetSheHe] ist? Rufe [cc_colony_leader.GetIhnSieDE] zurück."
+ cc_colony_events.2.C:0 "Gib der Petition statt."
+ cc_colony_events.2.D:0 "Was glaubt [cc_colony_leader.GetSheHe], wer [cc_colony_leader.GetSheHe] ist? Verhaftet [cc_colony_leader.GetIhnSieDE]!"
+ cc_colony_events.2.D.tooltip:0 "$CC_COLONY_UNPREDICTABLE$"
+
+
+ cc_colony_events.21.name:0 "Kleine Proteste auf [root.GetName]"
+ cc_colony_events.21.desc:0 "Nach der Verhaftung von [cc_colony_leader.GetName] gab es auf [root.GetName] kleine Proteste, sie haben sich aber nicht verbreitet, und die Mehrheit der Bevölkerung akzeptiert die Anklagen, die wir [cc_colony_leader.GetIhmIhrDE] vorgeworfen haben. Es scheint, als wäre [cc_colony_leader.GetHisHer]e Tapferkeit doch nicht so verehrt wie wir dachten!"
+
+
+ cc_colony_events.22.name:0 "Große Proteste auf [root.GetName]"
+ cc_colony_events.22.desc:0 "Die Verhaftung von [cc_colony_leader.GetName] hat große Proteste auf [Root.GetName] ausgelöst. Es wird verlangt, dass [cc_colony_leader.GetSheHe] freigesetzt wird. Teilweise ist sogar Gewalt ausgebrochen, und unsere lokalen Beamten haben Schwierigkeiten, die Bevölkerung unter Kontrolle zu behalten. Sie haben uns nach Beratung gefragt, wie sie die Situation bewältigen sollen."
+ cc_colony_events.22.A:0 "Bringt [cc_colony_leader.GetIhnSieDE] nach [root.owner.capital.GetName]."
+ cc_colony_events.22.A.tooltip:0 "[cc_colony_leader.GetSheHeCap] wird nie wieder nach [Root.GetName] zurückkehren.\nDies könnte dauerhafte Konsequenzen für die Einstellung der Bevölkerung gegenüber der [Root.Owner.GetName] haben."
+ cc_colony_events.22.B:0 "Befreit [cc_colony_leader.GetIhnSieDE] und lass [cc_colony_leader.GetIhnSieDE] Legat sein." 
+
+
+ cc_colony_events.221.name:0 "Nachhaltiges Misstrauen auf [Root.GetName]"
+ cc_colony_events.221.desc:0 "Einige Jahre sind vergangen, und Proteste gegen die Verhaftung von [cc_colony_leader.GetName] haben nachgelassen. Dennoch bleiben die Erinnerungen an [cc_colony_leader.GetIhnSieDE], und an wie [cc_colony_leader.GetSheHe] von [Root.GetName] weggerissen wurde. Sie bilden jetzt Teil der Volkskunde [root.GetName]s und verursachen viel Verbitterung. Es ist unwahrscheinlich, dass die Bevölkerung jemals ihrem Vaterland wirklich vertrauen wird."
+
+ cc_colony_events.23.name:0 "Demonstranten befreien [cc_colony_leader.GetName]"
+ cc_colony_events.23.desc:0 "Die Verhaftung von [cc_colony_leader.GetName] hat massive Proteste auf [Root.GetName] ausgelöst, und unsere planetaren Führungskräfte konnten nicht verhindern, dass die Situation außer Kontrolle geriet. In dem Chaos hat eine Gruppe von Demonstranten es geschafft, die Sicherheitssysteme des planetaren Gefängnisses durchzudringen und [cc_colony_leader.GetIhnSieDE] zu befreien. Unsere Beamten habe uns nach Beratung gefragt, wie sie die Situation bewältigen sollen."
+ cc_colony_events.23.A:0 "Gebt nach! Wir wollen keinen Bürgerkrieg starten."
+ cc_colony_events.23.B:0 "Verhaftet [cc_colony_leader.GetIhnSieDE] nochmals und nimm [cc_colony_leader.GetIhnSieDE] nach [Root.Owner.Capital.GetName]!"
+ cc_colony_events.23.C:0 "Verfolgt diesen Meuterer und [cc_colony_leader.GetHisHer]e Anhänger! Wir werden keinen Aufruhr dulden!"
+
+
+ cc_colony_events.231.name:0 "Verhaftung von [cc_colony_leader.GetName] erfolgreich"
+ cc_colony_events.231.desc:0 "Wir haben [cc_colony_leader.GetName] erfolgreich festgenommen. [cc_colony_leader.GetSheHeCap] steht jetzt unter Hausarrest auf [Root.Owner.Capital.GetName]. Jedoch gibt es immer noch weitverbreitete Proteste auf [Root.GetName], und es ist unklar, ob die Bevölkerung uns jemals wirklich vertrauen wird."
+ cc_colony_events.231.option:0 "$CC_GOODIGUESS$"
+
+ cc_colony_events.232.name:0 "Verhaftung von [cc_colony_leader.GetName] scheitert"
+ cc_colony_events.232.desc:0 "Unsere Versuche, [cc_colony_leader.GetName] festzunehmen, sind gescheitert. [cc_colony_leader.GetSheHeCap] hat [cc_colony_leader.GetHisHer]e treuesten Anhänger zusammengebracht und eine Untergrundbewegung gegründet, durch die [cc_colony_leader.GetSheHe] anscheinend [root.GetName] von xenoistischen Einflüssen verteidigen will. Wir können davon ausgehen, dass [cc_colony_leader.GetSheHe] unsere Behörden noch langfristig Probleme bereiten wird."
+
+ cc_colony_events.233.name:0 "Maßregelung auf [Root.GetName] erfolgreich"
+ cc_colony_events.233.desc:0 "Wir haben [cc_colony_leader.GetName] und [cc_colony_leader.GetHisHer]e Anhänger erfolgreich aufgespürt und hingerichtet. Sie werden unsere Kolonie nicht mehr mit ihrer Aufrührerei plagen. Dennoch wird es Zeit brauchen, bis wir das Vertrauen der Bevölkerung gewinnen."
+
+ cc_colony_events.234.name:0 "Maßregelung auf [Root.GetName] scheitert"
+ cc_colony_events.234.desc:0 "Unsere Versuche, [cc_colony_leader.GetName] aufzuspüren und hinzurichten, sind gescheitert. [cc_colony_leader.GetSheHeCap] hat [cc_colony_leader.GetHisHer]e treuesten Anhänger zusammengebracht und eine Untergrundbewegung gegründet, durch die [cc_colony_leader.GetSheHe] anscheinend die Unabhängigkeit [root.GetName]s von der [Root.Owner.GetName] gewinnen will. Wir können langfristigen Tumult erwarten."
+
+ cc_colony_events.235.name:0 "Verhaftung von [cc_colony_leader.GetName] scheitert auf katastrophale Weise"
+ cc_colony_events.235.desc:0 "Unsere Versuche, [cc_colony_leader.GetName] festzunehmen, sind gescheitert. [cc_colony_leader.GetSheHeCap] kam entweder im Kreuzfeuer ums Leben, oder [cc_colony_leader.GetSheHe] hat sich das eigene Leben genommen. Leider ist [cc_colony_leader.GetSheHe] hierdurch zu ein[cc_colony_leader.GetEmErDE] Märtyrer[cc_colony_leader.GetXInDE] geworden, und [cc_colony_leader.GetHisHer]e Volkstümlichkeit hat sich nach [cc_colony_leader.GetHisHer]em Tod zu neue Höhen aufgeschwungen. [cc_colony_leader.GetHisHerCap]e treuesten Anhänger haben eine Untergrundbewegung gegründet, durch die sie die Unabhängigkeit [root.GetName]s von der [Root.Owner.GetName] gewinnen wollen. Wir können langfristigen Tumult erwarten."
+ 
+ cc_colony_events.25.name:0 "Tod ein[cc_colony_leader.GetEsErDE] großen [cc_colony_leader.Species.GetName]en"
+ cc_colony_events.25.desc:0 "[cc_colony_leader.GetName], der 'Legat' von [root.GetName], ist heute nach einer kurzen Krankheit gestorben. Die Bevölkerung [root.GetName]s ist in Trauer. [cc_colony_leader.GetHisHerCap] letzter Wunsch war es, eine große Militärakademie auf [root.GetName] zu bauen, so dass die nächste Generation von Offizieren, für wem [cc_colony_leader.GetSheHe] den Weg bereitet hat, ihr Potenzial erreichen kann. Unsere Behörden auf [root.GetName] haben einen Plan vorgeschlagen, durch den dieser Wunsch verwirklicht werden könnte.\n\nSollen wir in die Akademie investieren?"
+ cc_colony_events.25.A: "Allerdings!"
+ cc_colony_events.25.B: "Es ist zu teuer."
+ cc_colony_events.25.B.tooltip:0 "[cc_colony_leader.GetName]s Einfluss auf [root.GetName] wird nach 30 Jahren nachlassen."
+ cc_colony_events.251.name:0 "Militärakademie auf [root.GetName] eröffnet"
+ cc_colony_events.251.desc:0 "Die Militärakademie zu [cc_colony_leader.GetName]s Ehre ist fertiggestellt worden. Im Innenhof wurde eine Statue des verstorbenen Offiziers enthüllt. Seine Eröffnung wurde von den Bürgern der Kolonie mit Freude aufgenommen. Sie sind der Meinung waren, dass [root.GetName] jetzt als wichtiges Zentrum der militärischen Lehre innerhalb der [root.owner.GetName] gilt. Darüber hinaus sind landesweit Mitglieder und Befürworter der Marine erfreut über diesen Beweis der Hingabe [root.owner.leader.GetDesDerDE] [root.owner.GetRulerTitle]s an die Menschen, die bereit sind, für dieser großartigen Nation ihr Leben aufzuopfern."
+
+ cc_milacademy_will_be_built:0 "\nDie Bauzeit der Militärakademie beträgt 5 Jahre. Es fügt den Modifikator §Y$cc_milacademy$§! hinzu:\n$MOD_PLANET_ORBITAL_BOMBARDMENT_DAMAGE$: §G-20%§!\n$MOD_PLANET_ARMY_BUILD_SPEED_MULT$: §G+50%§!\n$MOD_PLANET_ARMY_BUILD_COST_MULT$: §G-15%§!\n$MOD_POP_CITIZEN_HAPPINESS$: §G+10%§!\n$pop_ethic_militarist_attraction_mult$: §Y+150%§!"
+
+ cc_founder_militarist:0 "Planetares Legat"
+ cc_founder_militarist_desc:0 "Diese Kolonie ist von einem pensionierten Marineoffizier, der sich den Titel 'Legat' genommen hat, geleitet."
+
+ cc_militarist_influence:0 "Militaristischer Einfluss"
+ cc_militarist_influence_desc:0 "Ein pensionierter Marineoffizier berät die planetaren Behörden."
+
+ cc_minor_protests_militarist:0 "Kleine Proteste"
+ cc_minor_protests_militarist_desc:0 "Nach der Festnahme eines angesehenen pensionierten Marineoffiziers gibt es auf diesem Planeten kleine Proteste."
+ cc_major_protests_militarist:0 "Große Proteste"
+ cc_major_protests_militarist_desc:0 "Nach der Festnahme eines angesehenen pensionierten Marineoffiziers gibt es auf diesem Planeten große Proteste."
+
+ cc_underground_militarist_movement_1:0 "Militaristische Untergrundbewegung"
+ cc_underground_militarist_movement_1_desc:0 "Eine Untergrundbewegung, die von einem pensionierten Marineoffizier geführt wird, ist auf diesem Planeten aktiv. Es versucht Ideen und Bräuche, die gegen die Idealen unseres Staates sind, zu verbreiten."
+ cc_underground_militarist_movement_2:0 "Militaristische Widerstandsbewegung"
+ cc_underground_militarist_movement_2_desc:0 "Eine Untergrundbewegung, die von einem pensionierten Marineoffizier geführt wird, ist auf diesem Planeten aktiv. Ihr endgültiges Ziel ist es, Unabhängigkeit von unserem Staat zu gewinnen."
+
+ cc_militarists_offended:0 "Beleidigte Militaristen"
+ cc_militarists_offended_desc:0 "Die militaristische Bevölkerung dieses Planeten fühlt sich von dem neuen Regime entfremdet."
+
+ cc_milacademy_built_faction:0 "Militärakademie gegründet"
+
+ cc_building_milacademy:0 "Errichtet eine Militärakademie"
+ cc_building_milacademy_desc:0 "Eine Militärakademie wird auf diesem Planeten errichtet."
+
+ cc_milacademy:0 "Militärakademie"
+ cc_milacademy_desc:0 "Die Militärakademie auf diesem Planeten ist ein wichtiges Zentrum der militärischen Lehre. Ehrgeizige Offiziere reisen viele Lichtjahre, um es zu besuchen und von den besten militärischen Denkern zu lernen."
+
+ cc_founders_memory_disrespected_1_militarist:0 "Einheimischer Marineoffizier verachtet"
+ cc_founders_memory_disrespected_1_militarist_desc:0 "Die Bevölkerung ist entgeistert von der Art und Weise, auf der der Staat einen einheimischen Marineoffizier behandelt hat."
+
+ cc_mourning_martyr:0 "Betrauert Tod des Märtyrers"
+
+
+
+#Pacifists
+
+ cc_colony_events.3.name:0 "Pazifistisch[cc_colony_leader.GetErEDE] Aktivist[cc_colony_leader.GetXInDE] auf [root.GetName] anerkannt"
+ cc_colony_events.3.desc.pos:0 "Eine junge Kolonie bietet oft denjenigen, die den Ehrgeiz haben, es zu ergreifen, eine Chance aufzusteigen.\n\nAuf [root.GetName] hat sich dies als richtig erwiesen. Ein[cc_colony_leader.GetXEDE] pensioniert[cc_colony_leader.GetErEDE] Diplomat[cc_colony_leader.GetXInDE] namens [cc_colony_leader.GetName] hat vor Kurzem eine Medienkampagne gegen Krieg in der neuen Kolonie begonnen. [cc_colony_leader.GetSheHeCap] warnt vor den Gefahren eines Konflikts und lobt die Philosophie, die die [root.owner.GetName] befolgt. [cc_colony_leader.GetSheHeCap] hat eine kleine Gruppe von Anhänger an sich gesammelt, die sich jetzt die "Ghandeier" nennen. Diese neue Bewegung scheint bei der einheimischen Bevölkerung beliebt zu sein, und viele kommunale Führer haben sich gegen ebenfalls Krieg und Gewalt ausgesprochen. Die Bevölkerung - die die Unterstützung unserer planetaren Behörden in diesem Bestreben gewonnen hat - hat [cc_colony_leader.GetName] als ihren kolonialen Leiter anerkannt, um die [root.owner.GetName] bei der Gewährleistung einer friedlicheren Galaxie zu unterstützen."
+ cc_colony_events.3.desc.neut:0 "Eine junge Kolonie bietet oft eine Chance aufzusteigen, besonders für diejenigen, die diese Chance nicht auf Welten hätten, auf denen die staatlichen Autoritäten besser etabliert sind.\n\nAuf [root.GetName] hat sich dies als richtig erwiesen. Ein[cc_colony_leader.GetXEDE] pensioniert[cc_colony_leader.GetErEDE] Diplomat[cc_colony_leader.GetXInDE] namens [cc_colony_leader.GetName] hat vor Kurzem eine Medienkampagne gegen Krieg in der neuen Kolonie begonnen. [cc_colony_leader.GetSheHeCap] warnt vor den Gefahren eines Konflikts, und hat eine kleine Gruppe von Anhänger an sich gesammelt, die sich jetzt die "Ghandeier" nennen. Diese neue Bewegung scheint bei der einheimischen Bevölkerung beliebt zu sein, und viele kommunale Führer haben sich gegen ebenfalls Krieg und Gewalt ausgesprochen. Die Bevölkerung hat [cc_colony_leader.GetName] als ihren kolonialen Leiter anerkannt, um ihre außenpolitische Ansichten vor der Staatsregierung zu repräsentieren.\n\nWie sollen wir mit der Situation umgehen?"
+ cc_colony_events.3.desc.neg:0 "Eine junge Kolonie bietet oft eine Chance aufzusteigen, besonders für diejenigen, die diese Chance nicht auf Welten hätten, auf denen die staatlichen Autoritäten besser etabliert sind.\n\nAuf [root.GetName] hat sich dies als richtig erwiesen. Ein[cc_colony_leader.GetXEDE] pensioniert[cc_colony_leader.GetErEDE] Diplomat[cc_colony_leader.GetXInDE] namens [cc_colony_leader.GetName] hat vor Kurzem eine Medienkampagne gegen Krieg in der neuen Kolonie begonnen. [cc_colony_leader.GetSheHeCap] warnt vor den Gefahren eines Konflikts, und hat eine kleine Gruppe von Anhänger an sich gesammelt, die sich jetzt die "Ghandeier" nennen. Diese neue Bewegung scheint bei der einheimischen Bevölkerung beliebt zu sein, und viele kommunale Führer haben sich gegen ebenfalls Krieg und Gewalt ausgesprochen. Die Bevölkerung hat [cc_colony_leader.GetName] als ihren kolonialen Leiter anerkannt, um ihre außenpolitische Ansichten vor der Staatsregierung zu repräsentieren. Unsere Behörden auf dem Planeten sind entgeistert im Angesicht dieser Geschehnisse, und die Bevölkerung ist zunehmend aufgewühlt von ihrer Anwesenheit.\n\nWie sollen wir mit der Situation umgehen?"
+
+ cc_colony_events.3.B:0 "Toleriert [cc_colony_leader.GetIhnSieDE]."
+ cc_colony_events.3.C:0 "[cc_colony_leader.GetSheHeCap] ist ein Störenfried. Verhaftet [cc_colony_leader.GetIhnSieDE]!"
+ cc_colony_events.3.C.tooltip:0 "$CC_COLONY_UNPREDICTABLE$"
+
+
+ cc_colony_events.31.name:0 "$cc_colony_events.21.name$"
+ cc_colony_events.31.desc:0 "Nach der Verhaftung von [cc_colony_leader.GetName] gab es auf [root.GetName] kleine Proteste, sie haben sich aber nicht verbreitet, und die Mehrheit der Bevölkerung akzeptiert die Anklagen, die wir [cc_colony_leader.GetIhmIhrDE] vorgeworfen haben. Es scheint, als wären [cc_colony_leader.GetHisHer]e Lehren doch nicht so verehrt wie wir dachten!"
+
+ cc_colony_events.32.name:0 "$cc_colony_events.22.name$"
+ cc_colony_events.32.desc:0 "Die Verhaftung von [cc_colony_leader.GetName] hat große Proteste auf [Root.GetName] ausgelöst. Es wird verlangt, dass [cc_colony_leader.GetSheHe] freigesetzt wird. Obwohl die meisten Demonstranten nicht gewalttätig geworden sind - sie protestieren für den Pazifismus - haben sie jedoch verschiedene Formen des gewaltfreien Protests angewandt, die für unsere Behörden höchst störend sind. Unsere lokalen Beamten haben uns nach Beratung gefragt, wie sie die Situation bewältigen sollen."
+
+ cc_colony_events.32.A:0 "$cc_colony_events.22.A$"
+ cc_colony_events.32.A.tooltip:0 "$cc_colony_events.22.A.tooltip$"
+ cc_colony_events.32.B:0 "Befreit [cc_colony_leader.GetIhnSieDE]."
+
+
+ cc_colony_events.321.name:0 "$cc_colony_events.221.name$"
+ cc_colony_events.321.desc:0 "$cc_colony_events.221.desc$"
+
+ cc_colony_events.33.name:0 "$cc_colony_events.23.name$"
+ cc_colony_events.33.desc:0 "$cc_colony_events.23.desc$"
+ cc_colony_events.33.A:0 "$cc_colony_events.63.A$"
+ cc_colony_events.33.B:0 "$cc_colony_events.63.B$"
+ cc_colony_events.33.C:0 "Verfolgt diese 'Ghandiier' mit unserer vollen Macht."
+
+ cc_colony_events.331.name:0 "$cc_colony_events.231.name$"
+ cc_colony_events.331.desc:0 "Wir haben [cc_colony_leader.GetName] erfolgreich festgenommen. [cc_colony_leader.GetSheHeCap] steht jetzt unter Hausarrest auf [Root.Owner.Capital.GetName]. Jedoch gibt es immer noch weitverbreitete Proteste und gewaltfreie Störungsaktionen auf [Root.GetName], und es ist unklar, ob die Bevölkerung uns jemals wirklich vertrauen wird."
+ cc_colony_events.331.option:0 "$CC_GOODIGUESS$"
+
+ cc_colony_events.332.name:0 "$cc_colony_events.232.name$"
+ cc_colony_events.332.desc:0 "Unsere Versuche, [cc_colony_leader.GetName] festzunehmen, sind gescheitert. [cc_colony_leader.GetSheHeCap] hat [cc_colony_leader.GetHisHer]e treuesten Anhänger zusammengebracht und eine Untergrundbewegung gegründet, durch der [cc_colony_leader.GetSheHe] anscheinend [cc_colony_leader.GetHisHer]e Lehren (die mittlerweile durchaus anti-Establishment geworden sind) auf dem Planeten verbreiten will. Wir können davon ausgehen, dass [cc_colony_leader.GetSheHe] unsere Behörden noch langfristig Probleme bereiten wird."
+ cc_colony_events.333.name:0 "$cc_colony_events.233.name$"
+ cc_colony_events.333.desc:0 "$cc_colony_events.233.desc$"
+
+ cc_colony_events.334.name:0 "$cc_colony_events.234.name$"
+ cc_colony_events.334.desc:0 "Unsere Versuche, [cc_colony_leader.GetName] aufzuspüren und hinzurichten, sind gescheitert. [cc_colony_leader.GetSheHeCap] hat [cc_colony_leader.GetHisHer]e treuesten Anhänger zusammengebracht und eine Untergrundbewegung gegründet, durch der [cc_colony_leader.GetSheHe] anscheinend Frieden durch Unabhängigkeit von der [Root.Owner.GetName] gewinnen will. Leider haben einige verbitterte Führer [cc_colony_leader.GetHisHer]er Bewegung angefangen, die Anwendung von Gewalt zur Befreiung [Root.GetName]s von dem "größeren Übel" der [root.owner.GetName] zu befürworten. Wir können langfristigen Tumult erwarten."
+
+ cc_colony_events.34.name:0 "[cc_colony_leader.GetName]s Ruhm steigt"
+ cc_colony_events.34.desc:0 "Während den letzten 15 Jahren ist [cc_colony_leader.GetName] eine führende Figur auf [Root.GetName] gewesen. [cc_colony_leader.GetSheHeCap] ist bei den Einwohnern sehr beliebt, so sehr, dass er auch jenseits [root.GetName]s viele Bewunderer gesammelt hat. [cc_colony_leader.GetSheHeCap] wird inzwischen von allen friedliebenden Personen in diesem Teil der [root.owner.GetName] als Inspiration angesehen. Deshalb plant [cc_colony_leader.GetSheHe] eine Weltentour, um [cc_colony_leader.GetSheHe] [cc_colony_leader.GetHisHer]e Bewunderer zu besuchen!"
+
+ cc_colony_events.341.name:0 "[cc_colony_leader.GetName]s Weltentour vorbei"
+ cc_colony_events.341.desc:0 "[cc_colony_leader.GetName] hat die Welten in [cc_colony_leader.GetHisHer]em Sektor des [root.owner.GetName]s besucht. [cc_colony_leader.GetHisHerCap]e Anhänger waren überglücklich, die Chance zu haben, vom großartigen [cc_colony_leader.Species.GetName] Denker zu sehen und zu hören, und sind inspiriert von [cc_colony_leader.GetHisHer]em Beispiel. [cc_colony_leader.GetHisHerCap] Ruhm hat somit neue Höhen erreicht."
+
+ cc_colony_events.342.name:0 "[cc_colony_leader.GetName]s Weltentour endet auf tragischer Weise"
+ cc_colony_events.342.desc:0 "[cc_colony_leader.GetName] traf sich mit Unterstützern auf [random_visit_planet.GetName], als ein halb-verrückter fanatischer Imperialist [cc_colony_leader.GetIhnSieDE] erschoss, bevor [cc_colony_leader.GetHisHer]e Wachen reagieren konnte. Leider riss die Menge den Mörder auseinander, bevor man ihr festnehmen und befragen konnte. Dies hat es uns erschwert, Verschwörungstheorien überzeugend zu verneinen. Gerüchten zufolge hat jemand wichtig - vielleicht sogar jemand, der hoch in der [root.owner.GetSpeciesAdj]en Regierung ist - die Ermordung geplant. Es wird auch behauptet, dass die Sicherheit, die die [root.owner.GetSpeciesAdj]e Behörden auf [random_visit_planet.GetName] [cc_colony_leader.GetName] gegeben haben, nicht ausreichend war, und somit die Tragödie zu geschehen erlaubte. Die pazifistische Gemeinschaft in der [root.owner.GetName] ist entgeistert und verärgert. Die Leitung der [pazifist_faction.GetName] hat sich während des Chaos mit Regierungsbeamten getroffen und ihre Unzufriedenheit deutlich gemacht, aber auch vorgeschlagen, dass die Schmerzen der Pazifisten besänftigt werden könnten, wenn [cc_colony_leader.GetName] ein Staatsbegräbnis erhalten würde. Ebenfalls wollen sie, dass ein großes Denkmal zu [cc_colony_leader.GetHisHer]er Ehre auf [root.GetName] errichtet wird." 
+
+ cc_colony_events.342.A:0 "Macht es. [cc_colony_leader.GetSheHeCap] hat es verdient."
+ cc_pacmonument_will_be_built:0 "\nDie Bauzeit des Denkmals beträgt 5 Jahre. Es fügt den Modifikator §Y$cc_pacifist_centre$§! hinzu:\n$planet_resource_unity_add$: §G+5§!\n$MOD_POP_HAPPINESS$: §G+10%§!\n$pop_ethic_pacifist_attraction_mult$: §Y+250%§!"	
+ cc_colony_events.342.B:0 "$cc_colony_events.25.B$"
+
+ cc_colony_events.343.name:0 "Pazifistisches Versammlungszentrum auf [root.GetName] eröffnet"
+ cc_colony_events.343.desc:0 "Das Denkmal zu [cc_colony_leader.GetName]s Ehre ist fertiggestellt worden. Seine Eröffnung wurde von den Bürgern der Kolonie mit Freude aufgenommen, und viele [cc_colony_leader.GetHisHer]er Anhänger sind von anderen Welten zur Feier des Tages gekommen. Wir vermuten, dass dies zu einem symbolischen Versammlungszentrum für Pazifisten in- und sogar außerhalb der [root.owner.GetName] entwickeln wird."
+
+ cc_colony_events.35.name:0 "$cc_colony_events.25.name$"
+ cc_colony_events.35.desc:0 "[cc_colony_leader.GetName], der 'Legat' von [root.GetName], ist heute nach einer kurzen Krankheit gestorben. Die Bevölkerung [root.GetName]s ist in Trauer, und verlangt, dass wir ein Denkmal zu [cc_colony_leader.GetHisHer]er Ehre errichten, sodass sie einen Ort haben werden, wo sie sich an [cc_colony_leader.GetHisHer]e Lehren und Leben erinnern können."
+ cc_colony_events.35.A:0 "Errichtet ein Denkmal."
+ cc_colony_events.35.B:0 "Es ist zu teuer."
+ cc_colony_events.35.C:0 "[cc_colony_leader.GetSheHeCap] war bloß ein Störenfried. Dass man [cc_colony_leader.GetIhnSieDE] schnell vergisst!"
+
+ cc_colony_events.35.C.tooltip:0 "[cc_colony_leader.GetName]s Einfluss auf [root.GetName] wird nach 30 Jahren nachlassen."
+
+ cc_minor_pacmonument_will_be_built:0 "\nDie Bauzeit des Denkmals beträgt 5 Jahre. Es fügt den Modifikator §Y$cc_minor_pacmonument$§! hinzu:\n$planet_resource_unity_add$: §G+2§!\n$MOD_POP_HAPPINESS$: §G+5%§!\n$pop_ethic_pacifist_attraction_mult$: §Y+150%§!"
+ cc_colony_events.351.desc:0 "Das Denkmal zu [cc_colony_leader.GetName]s Ehre ist fertiggestellt worden. Die Bevölkerung [root.GetName]s hat jetzt einen Ort, wo sie sich an [cc_colony_leader.GetHisHer]e Lehren und Leben erinnern können."
+
+ cc_pacifists_offended:0 "Beleidigte Pazifisten"
+ cc_pacifists_offended_desc:0 "Die pazifistische Bevölkerung dieses Planeten fühlt sich von dem neuen Regime entfremdet."
+
+ cc_pacifist_protectorate:0 "Pazifistisches Protektorat"
+ cc_pacifist_protectorate_desc:0 "Die Herrscher dieses Planeten haben Frieden mit den regimekritischen Pazifisten geschlossen, indem sie den Planeten zu einem pazifistischen Protektorat gemacht haben."
+
+ cc_founder_pacifist:0 "Angesehener pazifistischer Aktivist"
+ cc_founder_pacifist_desc:0 "Die Gründerfigur dieses Planeten ist ein pazifistischer Aktivist, bekannt als der 'Ghandi'. Sie sind von der Bevölkerung hoch angesehen, und ihre Lehren sind von vielen befolgt."
+
+ cc_minor_protests_pacifist:0 "$cc_minor_protests_militarist$"
+ cc_minor_protests_pacifist_desc:0 "Nach der Festnahme eines angesehenen Aktivisten gibt es auf diesem Planeten kleine Proteste."
+
+ cc_major_protests_pacifist:0 "$cc_major_protests_militarist$"
+ cc_major_protests_pacifist_desc:0 "Nach der Festnahme eines angesehenen Aktivisten gibt es auf diesem Planeten große Proteste."
+
+ cc_pacifist_leader_visit:0 "Besuch des 'Ghandiis'"
+ cc_pacifist_leader_visit_desc:0 "Dieser Planet wurde von dem 'Ghandii', einen berühmten pazifistischen Aktivisten, besucht."
+
+ cc_mourning_pacifist:0 "Trauer überm Tod des 'Ghandiis'"
+ cc_mourning_and_angry_pacifist:0 "Wut über Reaktion zum Tod des 'Ghandiis'"
+
+ cc_building_pacmonument:0 "Errichtet ein Denkmal"
+ cc_building_pacmonument_desc:0 "Ein Denkmal zur Ehre eines angesehenen pazifistischen Aktivisten wird auf diesem Planeten errichtet."
+
+ cc_minor_pacmonument:0 "Denkmal eines pazifistischen Aktivisten"
+ cc_minor_pacmonument_desc:0 "Die Erinnerung an einem pazifistischen Aktivisten, der einer der ersten Kolonisten dieses Planeten war, ist noch geschätzt, und viele feiern jedes Jahr sein Namenstag."
+
+ cc_pacifist_centre:0 "Pazifistisches Versammlungszentrum"
+ cc_pacifist_centre_desc:0 "Das Denkmal zur Ehre eines angesehenen pazifistischen Aktivisten auf diesem Planeten ist ein Versammlungszentrum für Pazifisten, die viele Lichtjahre reisen um es zu besuchen."
+
+ cc_founders_memory_disrespected_1_pacifist:0 "Einheimischer pazifistischer Aktivist verachtet"
+ cc_founders_memory_disrespected_1_pacifist_desc:0 "Die Bevölkerung ist entgeistert von der Art und Weise, auf der der Staat einen einheimischen pazifistischen Aktivisten behandelt hat."
+
+ cc_founders_memory_disrespected_2_pacifist:0 "$cc_founders_memory_disrespected_1_pacifist$"
+ cc_founders_memory_disrespected_2_pacifist_desc:0 "$cc_founders_memory_disrespected_1_pacifist_desc$"
+
+ cc_underground_pacifist_movement_1:0 "Pazifistische Untergrundbewegung"
+ cc_underground_pacifist_movement_1_desc:0 "Eine Untergrundbewegung, die von einem regimekritischen pazifistischen Aktivisten geführt wird, ist auf diesem Planeten aktiv. Es versucht Ideen und Bräuche, die gegen die Idealen unseres Staates sind, zu verbreiten."
+
+ cc_underground_pacifist_movement_2:0 "Pazifistische Widerstandsbewegung"
+ cc_underground_pacifist_movement_2_desc:0 "Eine Untergrundbewegung, die von einem regimekritischen pazifistischen Aktivisten geführt wird, ist auf diesem Planeten aktiv. Ihr endgültiges Ziel ist es, Frieden durch Unabhängigkeit von dem Staat zu gewinnen. Leider haben einige verbitterte Führer der Bewegung angefangen, die Anwendung von Gewalt zur Befreiung des Planeten von der "größeren Übel" unseres Staates zu befürworten."
+
+#Xenophile
+
+ cc_colony_events.4.name:0 "Xenophilisch[cc_colony_leader.GetErEDE] Aktivist[cc_colony_leader.GetXInDE] auf [root.GetName] anerkannt"
+ cc_colony_events.4.desc.pos:0 "Jetzt da die [root.owner.GetSpeciesNamePlural] in die Sterne hinausgehen, fragen sich viele, was wir machen sollen, wenn wir andere intelligente Lebewesen treffen.\n\nAuf [root.GetName] ist dieses Thema besonders aktuell geworden. Dies liegt vor allem an einer gewissen gutherzigen Person namens[cc_colony_leader.GetName], [cc_colony_leader.GetDerDieDE] die Erschaffung von Systemen fordert, die die faire und gleiche Behandlung aller Xenos zu gewährleisten. Diese Ideologie wird unter den neuen Kolonisten sehr populär, die sich in die Idee verliebt haben, dass [root.GetName] zu einer multikulturellen 'Xenooase' wird. Sie haben begonnen, [cc_colony_leader.GetIhnSieDE] [cc_colony_leader.GetDenDieDE] "Mediator[cc_colony_leader.GetXInDE]" zu nennen und [cc_colony_leader.GetHisHer]en Rat zu folgen, sogar vor dem der höheren [root.owner.GetSpeciesAdj]en-Behörden. Zum Glück hat [cc_colony_leader.GetSheHe] sich bemüht, die lokalen Behörden zu konsultieren, bevor [cc_colony_leader.GetSheHe] wichtige Entscheidungen trifft. Ihrerseits befürworten unsere Beamten [cc_colony_leader.GetHisHer]e Lehren und Initiativen, und empfehlen, [cc_colony_leader.GetIhnSieDE] in die lokale Befehlsstruktur zu integrieren."
+ cc_colony_events.4.desc.neut:0 "Jetzt da die [root.owner.GetSpeciesNamePlural] in die Sterne hinausgehen, fragen sich viele, was wir machen sollen, wenn wir andere intelligente Lebewesen treffen.\n\nAuf [root.GetName] ist dieses Thema besonders aktuell geworden. Dies liegt vor allem an einer gewissen gutherzigen Person namens[cc_colony_leader.GetName], [cc_colony_leader.GetDerDieDE] die Erschaffung von Systemen fordert, die die faire und gleiche Behandlung aller Xenos zu gewährleisten. Diese Ideologie wird unter den neuen Kolonisten sehr populär, die sich in die Idee verliebt haben, dass [root.GetName] zu einer multikulturellen 'Xenooase' wird. Sie haben begonnen, [cc_colony_leader.GetIhnSieDE] [cc_colony_leader.GetDenDieDE] "Mediator[cc_colony_leader.GetXInDE]" zu nennen und [cc_colony_leader.GetHisHer]en Rat zu folgen, sogar vor dem der höheren [root.owner.GetSpeciesAdj]en-Behörden. [cc_colony_leader.GetSheHeCap] hat bisher nicht [cc_colony_leader.GetHisHer]e neu-erworbene Autorität benutzt, um sich gegen die [root.owner.GetName] zu stellen, und kooperiert stattdessen mit der lokalen Regierung. Jedoch scheinen [cc_colony_leader.GetHisHer]e grundsätzliche Ideale von den der [root.owner.GetName] abzuweichen.\n\nWie sollen wir mit der Situation umgehen?"
+ cc_colony_events.4.desc.neg:0 "Jetzt da die [root.owner.GetSpeciesNamePlural] in die Sterne hinausgehen, fragen sich viele, was wir machen sollen, wenn wir andere intelligente Lebewesen treffen.\n\nAuf [root.GetName] ist dieses Thema besonders aktuell geworden. Dies liegt vor allem an einem gewissen Störenfried namens[cc_colony_leader.GetName], [cc_colony_leader.GetDerDieDE] die Erschaffung von Systemen fordert, die die faire und gleiche Behandlung aller Xenos zu gewährleisten. Diese Ideologie wird unter den neuen Kolonisten sehr populär, die sich in die Idee verliebt haben, dass [root.GetName] zu einer multikulturellen 'Xenooase' wird. Sie haben begonnen, [cc_colony_leader.GetIhnSieDE] [cc_colony_leader.GetDenDieDE] "Mediator[cc_colony_leader.GetXInDE]" zu nennen und [cc_colony_leader.GetHisHer]en Rat zu folgen, sogar vor dem der höheren [root.owner.GetSpeciesAdj]en-Behörden. [cc_colony_leader.GetName], [cc_colony_leader.GetDerDieDE] von unseren lokalen Behörden als "störend" beschrieben wird, hat [cc_colony_leader.GetHisHer]e neu gefundene Autorität begrüßt und angefangen, für eine Position einzutreten, die weit von der Leitkultur der [root.owner.GetName] abweicht.\n\nWie sollen wir mit der Situation umgehen?"
+
+ cc_colony_events.4.B:0 "$cc_colony_events.3.B$"
+ cc_colony_events.4.C:0 "$cc_colony_events.3.C$"
+ cc_colony_events.4.C.tooltip:0 "$CC_COLONY_UNPREDICTABLE$"
+
+
+ cc_colony_events.41.name:0 "$cc_colony_events.21.name$"
+ cc_colony_events.41.desc:0 "$cc_colony_events.61.desc$"
+
+
+ cc_colony_events.42.name:0 "$cc_colony_events.22.name$"
+ cc_colony_events.42.desc:0 "$cc_colony_events.22.desc$"
+ cc_colony_events.42.A:0 "$cc_colony_events.22.A.desc$"
+ cc_colony_events.42.A.tooltip:0 "$cc_colony_events.22.A.tooltip$"
+ cc_colony_events.42.B:0 "Befreit [cc_colony_leader.GetIhnSieDE]." 
+
+
+ cc_colony_events.421.name:0 "$cc_colony_events.221.name$"
+ cc_colony_events.421.desc:0 "$cc_colony_events.221.desc$"
+
+ cc_colony_events.43.name:0 "$cc_colony_events.23.name$"
+ cc_colony_events.43.desc:0 "$cc_colony_events.23.desc$"
+ cc_colony_events.43.A:0 "$cc_colony_events.23.A$"
+ cc_colony_events.43.B:0 "$cc_colony_events.23.B$"
+ cc_colony_events.43.C:0 "Verfolgt diesen Störenfried und [cc_colony_leader.GetHisHer]e Anhänger."
+ cc_colony_events.431.name:0 "$cc_colony_events.231.name$"
+ cc_colony_events.431.desc:0 "$cc_colony_events.231.desc$"
+ cc_colony_events.431.option:0 "$CC_GOODIGUESS$"
+
+ cc_colony_events.432.name:0 "$cc_colony_events.232.name$"
+ cc_colony_events.432.desc:0 "Unsere Versuche, [cc_colony_leader.GetName] festzunehmen, sind gescheitert. [cc_colony_leader.GetSheHeCap] hat [cc_colony_leader.GetHisHer]e treuesten Anhänger zusammengebracht und eine Untergrundbewegung gegründet, durch der [cc_colony_leader.GetSheHe] anscheinend die xenoistischen Gemeinden [root.GetName]s von Diskrimination verteidigen will. Wir können davon ausgehen, dass [cc_colony_leader.GetSheHe] unsere Behörden noch langfristig Probleme bereiten wird."
+ cc_colony_events.433.name:0 "$cc_colony_events.233.name$"
+ cc_colony_events.433.desc:0 "$cc_colony_events.533.desc$"
+
+ cc_colony_events.434.name:0 "$cc_colony_events.234.name$"
+ cc_colony_events.434.desc:0 "$cc_colony_events.234.desc$"
+
+
+ cc_colony_events.45.name:0 "$cc_colony_events.55.name$"
+ cc_colony_events.45.desc:0 "[cc_colony_leader.GetName], [cc_colony_leader.GetDerDieDE] "Mediator[cc_colony_leader.GetXInDE]" [root.GetName]s, [cc_colony_leader.GetDerDieDE] schon einige Zeit an einem schlechten Gesundheitszustand litt, ist heute Morgen gestorben. Einer [cc_colony_leader.GetHisHer]er letzten Projekte war es, eine "Kulturelle Expo" zu erschaffen, die dafür sorgen soll, dass [cc_colony_leader.GetHisHer] Bestreben nach friedlichen und gerechten Beziehungen zwischen Spezies nach [cc_colony_leader.GetHisHer]em Tod nicht vergessen werden. Jedoch ist [cc_colony_leader.GetSheHe] gestorben, bevor dieses Projekt verwirklicht werden konnte. Die Bevölkerung [root.GetName]s ist in Trauer, und verlangt, dass wir [cc_colony_leader.GetName]s letzten Wunsch respektieren und die "Kulturelle Expo" staatliche Unterstützung geben."
+
+
+ cc_colony_events.45.A: "Etabliere eine Kulturelle Expo"
+ cc_colony_events.45.B: "$cc_colony_events.25.B$"
+ cc_colony_events.45.C:0 "$cc_colony_events.65.C$"
+ cc_colony_events.45.C.tooltip:0 "$cc_colony_events.55.C.tooltip$"
+
+ cc_colony_events.451.name:0 "Kulturelle Expo auf [root.GetName] eingeweiht"
+ cc_colony_events.451.desc:0 "Die "Kulturelle Expo" zu [cc_colony_leader.GetName]s Ehre ist eingeweiht worden. Ihre Eröffnung wurde von den Bürgern der Kolonie sowie von allen Xenos in der [root.owner.GetName] mit Freude aufgenommen. [cc_colony_leader.GetName]s Geist lebt in es weiter, und wird so lange in Erinnerung bleiben, wie die Expo gefeiert ist."
+
+ cc_xenophile_institute_will_be_built:0 "\nDie Vorbereitungszeit der Kulturellen Expo beträgt 5 Jahre. Es fügt den Modifikator §Y$cc_xenophile_institute$§! hinzu:\n$MOD_POP_HAPPINESS$: §G+5%§!\n$MOD_PLANET_MIGRATION_XENO_PULL$: §G+100%§!\n$tile_resource_unity_mult$: §G+25%§!\n$pop_ethic_xenophile_attraction_mult$: §Y+150%§!"
+
+
+ cc_founder_xenophile:0 "Xenophilischer Mediator"
+ cc_founder_xenophile_desc:0 "Diese Kolonie ist unter dem Einfluss einer charismatischen Person, deren Lebenszweck es ist, die faire und gleiche Behandlung aller Xenos zu gewährleisten."
+
+ cc_minor_protests_xenophile:0 "Kleine Proteste"
+ cc_minor_protests_xenophile_desc:0 "Nach der Festnahme eines angesehenen Xenoisten gibt es auf diesem Planeten kleine Proteste."
+ cc_major_protests_xenophile:0 "Große Proteste"
+ cc_major_protests_xenophile_desc:0 "Nach der Festnahme eines angesehenen Xenoisten gibt es auf diesem Planeten große Proteste."
+
+ cc_underground_xenophile_movement_1:0 "Xenophilische Untergrundbewegung"
+ cc_underground_xenophile_movement_1_desc:0 "Eine Untergrundbewegung, die von einem charismatischen Xenoisten geführt wird, ist auf diesem Planeten aktiv. Es versucht, die Xeno-Gemeinden des Planeten von Diskrimination zu verteidigen."
+ cc_underground_xenophile_movement_2:0 "Xenophilische Widerstandsbewegung"
+ cc_underground_xenophile_movement_2_desc:0 "Eine Untergrundbewegung, die von einem charismatischen Xenoisten geführt wird, ist auf diesem Planeten aktiv. Ihr endgültiges Ziel ist es, Frieden durch Unabhängigkeit von dem Staat zu gewinnen."
+
+ cc_xenophiles_offended:0 "Beleidigte Xenoisten"
+ cc_xenophiles_offended_desc:0 "Die xenophilische Bevölkerung dieses Planeten fühlt sich von dem neuen Regime entfremdet."
+
+ cc_building_xenophile_institute:0 "Vorbereitet eine Kulturelle Expo"
+ cc_building_xenophile_institute_desc:0 "Eine Kulturelle Expo, die dafür sorgen soll, dass das Bestreben des "Mediatoren" nach friedlichen und gerechten Beziehungen zwischen Spezies nach seinem Tod erhalten bleibt, wird vorbereitet."
+
+ cc_xenophile_institute:0 "Kulturelle Expo"
+ cc_xenophile_institute_desc:0 "Dieser Planet veranstaltet eine Kulturelle Expo zur Ehre eines angesehenen Bürgers, der bessere Interspeziesverhältnisse förderte. Sein Geist lebt in es weiter, und wird so lange in Erinnerung bleiben, wie die Expo gefeiert ist."
+
+
+
+ cc_founders_memory_disrespected_1_xenophile:0 "Gründerfigur verachtet"
+ cc_founders_memory_disrespected_1_xenophile_desc:0 "Die Bevölkerung ist entgeistert von der Art und Weise, auf der der Staat ihren "Mediatoren" (ein angesehener Bürger, der gute Verhältnisse zwischen allen Spezies förderte) behandelt hat."
+
+ cc_founders_memory_disrespected_2_xenophile:0 "$cc_founders_memory_disrespected_1_xenophile$"
+ cc_founders_memory_disrespected_2_xenophile_desc:0 "$cc_founders_memory_disrespected_1_xenophile_desc$"
+
+
+#Xenophobe
+
+ cc_colony_events.5.name:0 "Nationalistisch[cc_colony_leader.GetErEDE] Agitator[cc_colony_leader.GetXInDE] auf [root.GetName]"
+ cc_colony_events.5.desc.pos:0 "Jetzt da die [root.owner.GetSpeciesNamePlural] in die Sterne hinausgehen, fragen sich viele, was wir machen sollen, wenn wir andere intelligente Lebewesen treffen.\n\nAuf [root.GetName] ist dieses Thema besonders aktuell geworden. Dies liegt vor allem an ein[cc_colony_leader.GetEmErDE] charismatischen Redner[cc_colony_leader.GetXInDE] namens [cc_colony_leader.GetName], [cc_colony_leader.GetDessenDerenDE] Reden gegen alle Xenos den neuen Kolonisten so verzaubert haben, dass sie begonnen haben, [cc_colony_leader.GetIhnSieDE] den "Hegemonen" zu nennen und [cc_colony_leader.GetHisHer]en Rat zu folgen, sogar vor dem der höheren [root.owner.GetSpeciesAdj]en-Behörden. Zum Glück hat [cc_colony_leader.GetSheHe] sich bemüht, die lokalen Behörden zu konsultieren, bevor [cc_colony_leader.GetSheHe] wichtige Entscheidungen trifft. Ihrerseits befürworten unsere Beamten [cc_colony_leader.GetHisHer]e Lehren und Initiativen, und empfehlen, [cc_colony_leader.GetIhnSieDE] in die lokale Befehlsstruktur zu integrieren."
+ cc_colony_events.5.desc.neut:0 "Jetzt da die [root.owner.GetSpeciesNamePlural] in die Sterne hinausgehen, fragen sich viele, was wir machen sollen, wenn wir andere intelligente Lebewesen treffen.\n\nAuf [root.GetName] ist dieses Thema besonders aktuell geworden. Dies liegt vor allem an ein[cc_colony_leader.GetEmErDE] charismatischen Redner[cc_colony_leader.GetXInDE] namens [cc_colony_leader.GetName], [cc_colony_leader.GetDessenDerenDE] Reden gegen alle Xenos den neuen Kolonisten so verzaubert haben, dass sie begonnen haben, [cc_colony_leader.GetIhnSieDE] den "Hegemonen" zu nennen und [cc_colony_leader.GetHisHer]en Rat zu folgen, sogar vor dem der höheren [root.owner.GetSpeciesAdj]en-Behörden. [cc_colony_leader.GetSheHeCap] hat bisher nicht [cc_colony_leader.GetHisHer]e neu-erworbene Autorität benutzt, um sich gegen die [root.owner.GetName] zu stellen, und kooperiert stattdessen mit der lokalen Regierung. Jedoch scheinen [cc_colony_leader.GetHisHer]e grundsätzliche Ideale von den der [root.owner.GetName] abzuweichen.\n\nWie sollen wir mit der Situation umgehen?"
+ cc_colony_events.5.desc.neg:0 "Jetzt da die [root.owner.GetSpeciesNamePlural] in die Sterne hinausgehen, fragen sich viele, was wir machen sollen, wenn wir andere intelligente Lebewesen treffen.\n\nAuf [root.GetName] ist dieses Thema besonders aktuell geworden. Dies liegt vor allem an ein[cc_colony_leader.GetEmErDE] charismatischen Redner[cc_colony_leader.GetXInDE] namens [cc_colony_leader.GetName], [cc_colony_leader.GetDessenDerenDE] Reden gegen alle Xenos den neuen Kolonisten so verzaubert haben, dass sie begonnen haben, [cc_colony_leader.GetIhnSieDE] den "Hegemonen" zu nennen und [cc_colony_leader.GetHisHer]en Rat zu folgen, sogar vor dem der höheren [root.owner.GetSpeciesAdj]en-Behörden. [cc_colony_leader.GetName] hat [cc_colony_leader.GetHisHer]e neu gefundene Autorität genutzt, um für eine Position einzutreten, die weit von der Leitkultur der [root.owner.GetName] abweicht. Laut unseren lokalen Behörden ist er "eine Bedrohung für Anstand und unseren galaktischen zwischenstaatlichen Verhältnissen".\n\nWie sollen wir mit der Situation umgehen?"
+
+
+ cc_colony_events.5.B:0 "$cc_colony_events.3.B$"
+ cc_colony_events.5.C:0 "$cc_colony_events.3.C$"
+ cc_colony_events.5.C.tooltip:0 "$CC_COLONY_UNPREDICTABLE$"
+
+
+ cc_colony_events.51.name:0 "$cc_colony_events.21.name$"
+ cc_colony_events.51.desc:0 "Nach der Verhaftung von [cc_colony_leader.GetName] gab es auf [root.GetName] kleine Proteste, sie haben sich aber nicht verbreitet, und die Mehrheit der Bevölkerung akzeptiert die Anklagen, die wir [cc_colony_leader.GetIhmIhrDE] vorgeworfen haben. Es scheint, als wäre [cc_colony_leader.GetHisHer]e Volksverhetzerei doch nicht so verehrt wie wir dachten!"
+
+ cc_colony_events.52.name:0 "$cc_colony_events.22.name$"
+ cc_colony_events.52.desc:0 "$cc_colony_events.22.desc$"
+ cc_colony_events.52.A:0 "$cc_colony_events.22.A.desc$"
+ cc_colony_events.52.A.tooltip:0 "$cc_colony_events.22.A.tooltip$"
+ cc_colony_events.52.B:0 "Befreit [cc_colony_leader.GetIhnSieDE] und lass [cc_colony_leader.GetIhnSieDE] 'Hegemon' sein." 
+
+
+ cc_colony_events.521.name:0 "$cc_colony_events.221.name$"
+ cc_colony_events.521.desc:0 "$cc_colony_events.221.desc$"
+
+ cc_colony_events.53.name:0 "$cc_colony_events.23.name$"
+ cc_colony_events.53.desc:0 "$cc_colony_events.23.desc$"
+ cc_colony_events.53.A:0 "$cc_colony_events.23.A$"
+ cc_colony_events.53.B:0 "$cc_colony_events.23.B$"
+ cc_colony_events.53.C:0 "Verfolgt diesen Volksverhetzer und [cc_colony_leader.GetHisHer]e Anhänger. Wir werden keinen Aufruhr dulden."
+
+ cc_colony_events.531.name:0 "$cc_colony_events.231.name$"
+ cc_colony_events.531.desc:0 "$cc_colony_events.231.desc$"
+ cc_colony_events.531.option:0 "$CC_GOODIGUESS$"
+
+ cc_colony_events.532.name:0 "$cc_colony_events.232.name$"
+ cc_colony_events.532.desc:0 "Unsere Versuche, [cc_colony_leader.GetName] festzunehmen, sind gescheitert. [cc_colony_leader.GetSheHeCap] hat [cc_colony_leader.GetHisHer]e treuesten Anhänger zusammengebracht und eine Untergrundbewegung gegründet, durch der [cc_colony_leader.GetSheHe] anscheinend [root.GetName] von xenoistischen Einflüssen verteidigen will. Wir können davon ausgehen, dass [cc_colony_leader.GetSheHe] unsere Behörden noch langfristig Probleme bereiten wird."
+
+ cc_colony_events.533.name:0 "$cc_colony_events.233.name$"
+ cc_colony_events.533.desc:0 "$cc_colony_events.233.desc$"
+
+ cc_colony_events.534.name:0 "$cc_colony_events.234.name$"
+ cc_colony_events.534.desc:0 "$cc_colony_events.234.desc$"
+
+ cc_colony_events.54.name:0 "[cc_colony_leader.GetName]s Ruhm steigt"
+ cc_colony_events.54.desc.pos:0 "Während den letzten 15 Jahren ist [cc_colony_leader.GetName] eine führende Figur auf [Root.GetName] gewesen. [cc_colony_leader.GetSheHeCap] ist bei den [root.owner.GetSpeciesAdj]en Einwohnern sehr beliebt, und hat die nationale Sache neue Energie gebracht. [cc_colony_leader.GetSheHeCap] ist jetzt eine wohlbekannte aber kontroverse Figur, [cc_colony_leader.GetDerDieDE] gewiss auch viele Feinde hat: Gerüchte zufolge soll wenigstens einen Fremdstaat vorhaben, [cc_colony_leader.GetIhnSieDE] zu töten. Um dies zu schaffen werden sie jedoch an [cc_colony_leader.GetHisHer]er vielen Anhänger, die sich inzwischen auf vielen Welten in diesem Teil der [root.owner.GetName] zu finden sind, vorbeikommen müssen!"
+#Excellent!
+#Non-xenophobe variant:
+ cc_colony_events.540.name:0 "Xenophobische Belästigung" 
+ cc_colony_events.540.desc:0 "Unser Bündnispartner, die [from.owner.GetName], hat seit Jahrzehnten ein[cc_colony_leader.GetEnEDE] freimütig[cc_colony_leader.GetEnEDE] und charismatisch[cc_colony_leader.GetEnEDE] Fremdenhasser[cc_colony_leader.GetXInDE] geduldet. [cc_colony_leader.GetSheHeCap] ist auf [from.GetName] und anderen [from.owner.GetSpeciesAdj]en Planeten durch aufrührerische Reden, in der [cc_colony_leader.GetSheHe] Xenos verspottete und fremde Staaten - insbesondere die [root.GetName] - als "Volksfeinde" bezeichnete. [cc_colony_leader.GetSheHeCap] hat in letzter Zeit einige besonders hostile Reden gehalten, in dem [cc_colony_leader.GetSheHe] unser Volk, unsere Traditionen und unsere Regierung aufs Schärfste verurteilte, und forderte öffentlich nicht nur ein Ende zur Bündnis zwischen uns und der [from.owner.GetName], sondern auch, dass die [from.owner.GetName] eine hostile Stellung gegenüber uns aufnehmen soll. Es wird berichtet, dass unsere Diplomaten und Händler von [cc_colony_leader.GetName]s Anhänger belästigt werden. Wir müssen etwas tun!"
+ cc_colony_events.540.A:0 "Kontaktiere unser Bündnispartner, wir können sie helfen, das Problem zu... eliminieren."
+ cc_colony_events.540.B:0 "Es ist nicht das Risiko wert."
+
+ cc_colony_events.54.desc.neg:0 "Während den letzten 15 Jahren ist [cc_colony_leader.GetName] eine führende Figur auf [Root.GetName] gewesen. [cc_colony_leader.GetSheHeCap] ist sehr beliebt unter der [root.owner.GetSpeciesAdj]en Bevölkerung. Jedoch ist [cc_colony_leader.GetSheHe] eine sehr kontroverse Figur, beispielsweise bei den Xenorechtsorganisationen. In letzter Zeit ist [cc_colony_leader.GetHisHer] anti-Xeno Hetzerei für unserem Bündnispartner, die [ally.GetName], zu viel geworden. Ihr Botschafter hat [root.owner.GetRulerTitle] [root.owner.GetRulerName] unter vier Augen mitgeteilt, dass [ally.leader.GetDerDieDE] [ally.GetSpeciesAdj]e [ally.GetRulerTitle] bereit war, uns zu helfen, dies[cc_colony_leader.GetEnEDE] Volksverhetzer[cc_colony_leader.GetXInDE] zu "eliminieren"... aber auch, dass falls wir diesen Angebot ablehnen, [ally.leader.GetSheHe] weitere Ehrenkränkungen gegen der [ally.GetName] nicht mehr dulden wird.\n\nWas sollen wir machen?"
+ cc_colony_events.54.A:0 "[cc_colony_leader.GetName] ist ein[cc_colony_leader.GetXEDE] treu[cc_colony_leader.GetErEDE] [root.owner.GetSpeciesAdj][cc_colony_leader.GetErEDE] Bürger[cc_colony_leader.GetXInDE]."
+ cc_colony_events.54.B:0 "Sehr gut. Lass uns [cc_colony_leader.GetIhnSieDE] eliminieren."
+cc_colony_events.54.C:0 "We must respect our laws, no matter our opinion of [cc_colony_leader.GetHimHer]."
+cc_colony_events.54.C.tooltip:0 "No action will be taken against [cc_colony_leader.GetName]."
+
+ cc_colony_events.541.name:0 "Ermordung erfolgreich"
+ cc_colony_events.541.desc:0 "Die Ermordung [cc_colony_leader.GetName]s ist erfolgreich ausgegangen. Dennoch, obwohl eure Geheimagenten darauf bestehen, dass die Operation problemlos erfolgte, und dass keine belastenden Hinweise hinterlassen wurden, haben [cc_colony_leader.GetName]s anscheinend geraten, dass [ally.GetName] hinter der Ermordung steht. Proteste auf vielen Welten fordern, dass sämtliche Beziehungen zur [ally.GetName] beendet werden und eine xenophobischere Außenpolitik aufgenommen wird."
+ cc_colony_events.541.A:0 "Auf keinen Fall."
+ cc_colony_events.541.B:0 "Wir haben sie sowieso nie gemocht."
+
+
+ cc_colony_events.542.name:0 "Die [from.owner.GetName] zeigt sich hostil gegen uns"
+ cc_colony_events.542.desc:0 "Ihr bringt uns in eine schwierige Lage, [root.GetSpeciesNamePlural]: Wir müssen uns zwischen unseren Freunden und unseren Bürgern entscheiden. Nach sorgfältiger Überlegung haben wir uns darauf geeinigt, dass der Hauptzweck der Regierung der [from.GetName] darin besteht, dem Wohl der Bürger zu dienen. Aus diesem Grund bedauern wir, euch darüber zu informieren, dass wir keine Schritte zur erzwungenen Beseitigung von [cc_colony_leader.GetName] unterstützen oder dulden werden."
+
+ cc_colony_events.542.option:0 "Wir werden unsere Meinung von ihnen neu bewerten müssen."
+
+cc_colony_events.5421.name:0 "The [from.owner.GetName] refuses to take action"
+cc_colony_events.5421.desc:0 "You put us in a difficult position, [root.GetSpeciesNamePlural]: We must choose between our friends and our citizens. After careful consideration, we have decided that we cannot contemplate taking actions against our citizens that are illegal according to our laws, no matter how much we might abhor their views. For that reason, we regret to inform you that we will neither support nor tolerate any moves to forcibly eliminate [cc_colony_leader.GetName]. We apologise for this."
+cc_colony_events.5421.option:0 "We may have to reassess our opinion of them."
+
+ cc_colony_events.543.name:0 "Unterstützung zur Eliminierung [cc_colony_leader.GetName]s"
+ cc_colony_events.543.desc:0 "Wir werden gerne mit euch zusammenarbeiten, um den Unruhestifter, "Hegemon" [cc_colony_leader.GetName], zu eliminieren! Wir haben unseren Geheimdienst angewiesen, mit eurem zusammenzuarbeiten, um einen Plan zu entwickeln, sodass die Drohung, die [cc_colony_leader.GetName] uns darstellt, sehr bald neutralisiert werden kann."
+
+ cc_colony_events.544.name:0 "[cc_colony_leader.GetName] erfolgreich eliminiert"
+ cc_colony_events.544.desc:0 "[cc_colony_leader.GetName] ist eliminiert worden. Keine belastenden Hinweise zu unserer Beteiligung wurden zurückgelassen. Dennoch geben [cc_colony_leader.GetName]s Anhänger uns die Schuld - wenn man Xenoverschwörungen in allem sieht, wird man vermutlich irgendwann doch Recht haben. Ungeachtet dessen hat [from.owner.leader.GetDerDieDE] [from.owner.GetSpeciesAdj]e [from.owner.GetRulerTitle] uns versichert, dass der fortwährenden Freundschaft zwischen der [from.owner.GetName] und der [root.GetName] nichts im Weg stehen wird."
+
+ cc_colony_events.545.name:0 "Die [from.owner.GetName] hat uns betrogen!"
+ cc_colony_events.545.desc:0 "[cc_colony_leader.GetName] ist eliminiert worden. Keine belastenden Hinweise zu unserer Beteiligung wurden zurückgelassen. Dennoch geben [cc_colony_leader.GetName]s Anhänger uns die Schuld - wenn man Xenoverschwörungen in allem sieht, wird man vermutlich irgendwann doch Recht haben. Ohnehin, obwohl [from.owner.leader.GetDerDieDE] [from.owner.GetSpeciesAdj]e [from.owner.GetRulerTitle] uns versichert hatte, dass [from.owner.leader.GetSheHe] das Komplott unterstützte, hat [from.owner.leader.GetSheHe] seitdem dies abgeleugnet, die Schuld stattdessen auf uns geschoben, und unser Staat in der beleidigendsten Weise öffentlich abgewertet. Als unser Botschafter nach einer Erklärung fragte, wurde ihm mitgeteilt, dass er zehn Tage hatte, um den Planeten zu verlassen..."
+ cc_colony_events.545.option:0 "$cc_colony_events.542.option$"
+
+ cc_colony_events.546.name:0 "Ermordung scheitert!" 
+ cc_colony_events.546.desc:0 "Unsere Geheimagenten konnten [cc_colony_leader.GetName] nicht töten und wurden bei dem Versuch gefangen genommen. Wir waren nicht in der Lage, sie wiederzuerlangen, ohne unser Beteiligung zu kompromittieren, deswegen mussten wir sie ihrem Schicksal überlassen. Unglücklicherweise scheint es, dass sie geknackt haben, und nicht nur offenbart haben, dass wir versuchten, [cc_colony_leader.GetIhnSieDE] zu töten, sondern auch, dass wir dies im Namen von [ally.GetName] taten. Dies hat Tumult in der ganzen Nation verursacht. [cc_colony_leader.GetName]s Anhänger sind empört, und haben begonnen, offenen Widerstand gegen die Zentralregierung zu fordern - Aufrufe, die einigermaßen Unterstützung in der allgemeinen Bevölkerung erhalten, da viele angewidert sind, dass die Regierung mit einer fremden Macht gegen einer seiner eigenen Bürger komplottieren würde. Daher sind Proteste, die den Rücktritt der Regierung fordern, weit verbreitet.\n\nDer Botschafter der [all.GetName] hat sich für das Scheitern der Mission entschuldigt und alle mögliche Unterstützung, die [ally.GetName] geben kann, angeboten, obwohl er auch zugab, dass jegliche weitere Beteiligung der [ally.GetSpeciesNamePlural] im gegenwärtigen Klima negative Reaktionen hervorrufen könnte - er selbst musste in das Regierungsgebäude flüchten, nachdem sein Leben mehrmals bedroht wurde.\n\nDerweil hat [cc_colony_leader.GetName], [cc_colony_leader.GetDessenDerenDE] Ruhm neue Höhen erreicht hat, [cc_colony_leader.GetHisHer]e Anhänger auf Planeten in [cc_colony_leader.GetHisHer]em Teil der [root.owner.GetName] besucht und sie aufgefordert, [cc_colony_leader.GetIhnSieDE], ein[cc_colony_leader.GetXEDE] "wahr[cc_colony_leader.GetErEDE] [root.owner.GetSpeciesName][cc_colony_leader.GetErEDE]", gegen die "Verräter" in der Regierung zu unterstützen.\n\nWie werden wir in diesen unruhigen Zeiten Ordnung halten?"
+
+ cc_colony_events.546.A:0 "Wir werden die Krise überstehen müssen."
+ cc_colony_events.546.B:0 "Versucht eine Wiedergutmachung: Verurteile den Ermordungsversuch und die [ally.GetSpeciesNamePlural]."
+ cc_colony_events.546.C:0 "Entschuldigt euch und trete zurück."
+
+ cc_colony_events.547.name:0 "Ermordungsversuch scheitert"
+ cc_colony_events.547.desc:0 "Unser Bündnispartner und dessen unfähigen Meuchler haben es nicht nur nicht geschafft, den "Hegemonen" [cc_colony_leader.GetName] zu töten, sie wurden auch gefangengenommen und haben seitdem unsere Beteiligung preisgegeben. Dies hat Tumult innerhalb der [from.owner.GetName] verursacht und unsere Beziehung mit ihnen etwas angespannt - bis jetzt haben ihre Führungskräfte uns jedoch versichert, dass sich ihre Einstellung gegenüber uns nicht verändert hat."
+ cc_colony_events.548.name:0 "Verrat!"
+ cc_colony_events.548.desc:0 "Unser Bündnispartner und dessen unfähigen Meuchler haben es nicht nur nicht geschafft, den "Hegemonen" [cc_colony_leader.GetName] zu töten, sie wurden auch gefangengenommen und haben seitdem unsere Beteiligung preisgegeben. Dies hat Tumult innerhalb der [from.owner.GetName] verursacht. Die [from.owner.GetSpeciesAdj]e Regierung probiert, die Schuld auf uns zu verschieben, und hat die [root.GetName] mit Rhetorik, was die [cc_colony_leader.GetName]s ähnelt, verurteilt. Als unser Botschafter nach einer Erklärung fragte, wurde ihm mitgeteilt, dass er zehn Tage hatte, um den Planeten zu verlassen. Anscheinend haben sich unsere Beziehungen mit ihnen deutlich verschlechtert!"
+ cc_colony_events.548.option:0 "$cc_colony_events.542.option$"
+
+
+ cc_colony_events.55.name:0 "Tod ein[cc_colony_leader.GetEsErDE] großen [cc_colony_leader.Species.GetName]en"
+ cc_colony_events.55.desc:0 "[cc_colony_leader.GetName], der 'Hegemon' von [root.GetName], [cc_colony_leader.GetDerDieDE] schon einige Zeit an einem schlechten Gesundheitszustand litt, ist heute Morgen gestorben. Die Bevölkerung [root.GetName]s ist in Trauer, und verlangt, dass dass wir ein Institut [cc_colony_leader.GetHisHer]er Ehre errichten, sodass sie einen Ort haben werden, wo se [cc_colony_leader.GetHisHer]e Leistungen - und wichtiger noch, die Pracht des [cc_colony_leader.Species.GetAdj]en Volkes - feiern können."
+ cc_colony_events.55.A: "$cc_colony_events.25.A$"
+ cc_colony_events.55.B: "$cc_colony_events.25.B$"
+ cc_colony_events.55.C:0 "$cc_colony_events.65.C$"
+ cc_colony_events.55.C.tooltip:0 "$cc_colony_events.25.B.tooltip$"
+
+ cc_colony_events.551.name:0 "Reinheitsinstitut auf [root.GetName] eröffnet"
+ cc_colony_events.551.desc.A:0 "Das Institut zu [cc_colony_leader.GetName]s Ehre ist fertiggestellt worden. Seine Eröffnung wurde von den Bürgern der Kolonie mit Freude aufgenommen, und viele [cc_colony_leader.GetHisHer]er Anhänger sind von anderen Welten zur Feier des Tages gekommen. Wir vermuten, dass dies zu einem wichtigen Zentrum der [cc_colony_leader.Species.GetAdj]en Nationalisten entwickelnt wird."
+ cc_colony_events.551.desc.B:0 "Das Institut zu [cc_colony_leader.GetName]s Ehre ist fertiggestellt worden. Die Bevölkerung [root.GetName]s hat jetzt einen Ort, wo sie sich an [cc_colony_leader.GetHisHer]e Lehren und Leben erinnern können."
+
+ cc_xenophobe_hero_1:0 "$cc_xenophobe_hero$"
+ cc_xenophobe_hero_1_desc:0 "Viele auf diesem Planeten sehen den 'Hegemonen' eines naheliegenden Planeten als ihr Held, und würden ihm gern im Kampf gegen den Xenos sowie auch deren Sympathisanten in der Regierung folgen."
+ 
+ cc_widespread_xenophobic_unrest:0 "Weitverbreitete xenophobische Unruhe"
+ cc_widespread_xenophobic_unrest_desc:0 "Die verärgerte Rassistenfraktion, die beweisen kann, dass der Staat versucht hat, auf den Wunsch eines fremden Staates einer ihrer Anführer zu ermorden, wird von vielen unterstützt."
+ cc_xenophobe_assassinated_attempt:0 "Ermordungsversuch"
+ cc_ally_xenophobic_rhetoric:0 "Xenophobische Reden"
+
+ cc_xenophobe_martyr:0 "Gedächtnis an einem Märtyrer"
+ cc_xenophobe_martyr_desc:0 "Der ehemalige "Hegemon" dieses Planeten ist als Märtyrer des nationalen Kampfs angesehen, da er durch einer xenoistischen Verschwörung ums Leben kam."
+
+ cc_mourning_xenophobe:0 "Trauert einen Nationalhelden"
+ cc_mourning_and_angry_xenophobe:0 "Wut über Reaktion zum Tod eines Nationalhelden"
+
+ cc_xenophobe_hero:0 "Nationalheld"
+ cc_xenophobe_hero_desc:0 "Viele auf diesem Planeten sehen den 'Hegemonen' eines naheliegenden Planeten als ihr Held, und würden ihm gern im Kampf gegen den Xenos folgen."
+ cc_xenophobe_assassinated:0 "Held gemeuchelt"
+ cc_betrayed_us_ally:0 "Verrat"
+ cc_ignored_ally:0 "Ignorierte unser Bedenken"
+
+ cc_xenophobe_institute_will_be_built:0 "\nDie Bauzeit des Reinheitsinstituts beträgt 5 Jahre. Es fügt den Modifikator §Y$cc_xenophobe_institute$§! hinzu:\n$tile_resource_unity_mult$: §G+25%§!\n$MOD_PLANET_MIGRATION_SAME_PULL$: §G+50%§!\n$MOD_PLANET_MIGRATION_XENO_PULL$: §R-100%§!\n$MOD_POP_CITIZEN_HAPPINESS$: §G+10%§!\n$pop_ethic_xenophobe_attraction_mult$: §Y+250%§!"
+
+ cc_minor_xenophobe_institute_will_be_built:0 "\nDie Bauzeit des Hegemoneninstituts beträgt 5 Jahre. Es fügt den Modifikator §Y$cc_minor_xenophobe_institute$§! hinzu:\n$MOD_PLANET_MIGRATION_SAME_PULL$: §G+50%§!\n$MOD_PLANET_MIGRATION_XENO_PULL$: §R-100%§!\n$MOD_POP_CITIZEN_HAPPINESS$: §G+5%§!\n$pop_ethic_xenophobe_attraction_mult$: §Y+150%§!"
+
+
+ cc_founder_xenophobe:0 "Planetarer Hegemon"
+ cc_founder_xenophobe_desc:0 "Diese Kolonie wird von einer charismatischen Person regiert, deren Lebenszweck es ist, den Planeten von xenoistischen Einflüssen zu beschützen."
+
+
+ cc_minor_protests_xenophobe:0 "Kleine Proteste"
+ cc_minor_protests_xenophobe_desc:0 "Nach der Festnahme des "Hegemons" gibt es auf diesem Planeten kleine Proteste."
+ cc_major_protests_xenophobe:0 "Große Proteste"
+ cc_major_protests_xenophobe_desc:0 "Nach der Festnahme des "Hegemons" gibt es auf diesem Planeten große Proteste."
+
+ cc_underground_xenophobe_movement_1:0 "Xenophobische Untergrundbewegung"
+ cc_underground_xenophobe_movement_1_desc:0 "Eine Untergrundbewegung, die von einem charismatischen Regimekritiker geführt wird, ist auf diesem Planeten aktiv. Es versucht, den Planeten von xenoistischen Einflüssen zu beschützen Ideen und Bräuche, die gegen die Idealen unseres Staates sind, zu verbreiten."
+ cc_underground_xenophobe_movement_2:0 "Xenophobische Widerstandsbewegung"
+ cc_underground_xenophobe_movement_2_desc:0 "Eine Untergrundbewegung, die von einem charismatischen Regimekritiker geführt wird, ist auf diesem Planeten aktiv. Ihr endgültiges Ziel ist es, Frieden durch Unabhängigkeit von dem Staat zu gewinnen."
+
+ cc_xenophobes_offended:0 "Beleidigte Xenophoben"
+ cc_xenophobes_offended_desc:0 "Die xenophobische Bevölkerung dieses Planeten weigert sich die neue Regime als legitim anzuerkennen."
+
+ cc_xenophobe_institute_built_faction:0 "Reinheitsinstitut errichtet"
+
+ cc_building_xenophobe_institute:0 "Errichtet ein Institut"
+ cc_building_xenophobe_institute_desc:0 "Ein Institut zur Ehre des "Hegemons" wird auf diesem Planeten errichtet."
+
+ cc_xenophobe_institute:0 "Reinheitsinstitut"
+ cc_xenophobe_institute_desc:0 "Das Reinheitsinstitut ist ein wichtiges Zentrum für Nationalisten, die viele Lichtjahre reisen, um es zu besuchen."
+
+ cc_minor_xenophobe_institute:0 "Hegemoneninstitut"
+ cc_minor_xenophobe_institute_desc:0 "Das Gedächtnis an einem der frühen Kolonisten dieses Planeten wird noch von vielen an einem Institut zu seiner Ehre gefeiert."
+
+
+ cc_founders_memory_disrespected_1_xenophobe:0 "Einheimischer "Hegemon" verachtet"
+ cc_founders_memory_disrespected_1_xenophobe_desc:0 "Die Bevölkerung ist entgeistert von der Art und Weise, auf der der Staat einen ihrer hoch geschätzten Bürger behandelt hat."
+
+ cc_founders_memory_disrespected_2_xenophobe:0 "$cc_founders_memory_disrespected_1_xenophobe$"
+ cc_founders_memory_disrespected_2_xenophobe_desc:0 "$cc_founders_memory_disrespected_1_xenophobe_desc$"
+
+ cc_hostile_towards_xenos:0 "Hostil gegenüber Xenos"
+
+#Spiritualists
+
+ cc_colony_events.6.name:0 "Spiritualistischer Guru auf [root.GetName] anerkannt"
+ cc_colony_events.6.desc.pos:0 "Eine junge Kolonie bietet oft denjenigen, die den Ehrgeiz haben, es zu ergreifen, eine Chance aufzusteigen.\n\nAuf [root.GetName] hat sich dies als richtig erwiesen. Die Lehren eines spiritualistischen Gurus namens [cc_colony_leader.GetName] sind unter den neuen Kolonisten beliebt geworden. Sie haben begonnen, [cc_colony_leader.GetIhmIhrDE] "Ältest[cc_colony_leader.GetErEDE]" zu nennen, und folgen [cc_colony_leader.GetHisHer]en Rat, sogar vor der der [root.owner.GetSpeciesAdj]en Behörden. Glücklicherweise scheint [cc_colony_leader.GetSheHe] nicht geneigt zu sein, [cc_colony_leader.GetHisHer]e Popularität auszunützen, um sich gegen die Regierung der [root.owner.GetName] zu stellen. [cc_colony_leader.GetSheHeCap] konsultiert unsere Beamten bei allen wichtigen Entscheidungen, und sie loben [cc_colony_leader.GetHisHer]e Lehren und Initiativen. Sie haben uns sogar beantragt, dass es am besten wäre, [cc_colony_leader.GetIhmIhrDE] eine offizielle Rolle in der Regierung [root.GetName]s."
+ cc_colony_events.6.desc.neut:0 "Eine junge Kolonie bietet oft eine Chance aufzusteigen, besonders für diejenigen, die diese Chance nicht auf Welten hätten, auf denen die staatlichen Autoritäten besser etabliert sind.\n\nAuf [root.GetName] hat sich dies als richtig erwiesen. Die Lehren eines spiritualistischen Gurus namens [cc_colony_leader.GetName] sind unter den neuen Kolonisten beliebt geworden. Sie haben begonnen, [cc_colony_leader.GetIhmIhrDE] "Ältest[cc_colony_leader.GetErEDE]" zu nennen, und folgen [cc_colony_leader.GetHisHer]en Rat, sogar vor der der [root.owner.GetSpeciesAdj]en Behörden. [cc_colony_leader.GetSheHeCap] hat bisher nicht [cc_colony_leader.GetHisHer]e neu-erworbene Autorität benutzt, um sich gegen die [root.owner.GetName] zu stellen, und kooperiert stattdessen mit der lokalen Regierung. Jedoch scheinen [cc_colony_leader.GetHisHer]e grundsätzliche Ideale von den der [root.owner.GetName] abzuweichen.\n\nWie sollen wir mit der Situation umgehen?"
+ cc_colony_events.6.desc.neg:0 "Eine junge Kolonie bietet oft eine Chance aufzusteigen, besonders für diejenigen, die diese Chance nicht auf Welten hätten, auf denen die staatlichen Autoritäten besser etabliert sind.\n\nAuf [root.GetName] hat sich dies als richtig erwiesen. Die Lehren eines spiritualistischen Gurus namens [cc_colony_leader.GetName] sind unter den neuen Kolonisten beliebt geworden. Sie haben begonnen, [cc_colony_leader.GetIhmIhrDE] "Ältest[cc_colony_leader.GetErEDE]" zu nennen, und folgen [cc_colony_leader.GetHisHer]en Rat, sogar vor der der [root.owner.GetSpeciesAdj]en Behörden. [cc_colony_leader.GetName], [cc_colony_leader.GetDerDieDE] von unseren lokalen Behörden als "störend" beschrieben wird, hat [cc_colony_leader.GetHisHer]e neu gefundene Autorität begrüßt und angefangen, für eine Position einzutreten, die weit von der Leitkultur der [root.owner.GetName] abweicht.\n\nWie sollen wir mit der Situation umgehen?"
+ cc_colony_events.6.B:0 "$cc_colony_events.3.B$"
+ cc_colony_events.6.C:0 "$cc_colony_events.3.C$"
+ cc_colony_events.6.C.tooltip:0 "$CC_COLONY_UNPREDICTABLE$"
+
+
+ cc_colony_events.61.name:0 "$cc_colony_events.21.name$"
+ cc_colony_events.61.desc:0 "Nach der Verhaftung von [cc_colony_leader.GetName] gab es auf [root.GetName] kleine Proteste, sie haben sich aber nicht verbreitet, und die Mehrheit der Bevölkerung akzeptiert die Anklagen, die wir [cc_colony_leader.GetIhmIhrDE] vorgeworfen haben. Es scheint, als wären [cc_colony_leader.GetHisHer]e Lehren doch nicht so geschätzt wie wir dachten!"
+
+ cc_colony_events.62.name:0 "$cc_colony_events.22.name$"
+ cc_colony_events.62.desc:0 "$cc_colony_events.22.desc$"
+ cc_colony_events.62.A:0 "$cc_colony_events.22.A$"
+ cc_colony_events.62.A.tooltip:0 "$cc_colony_events.22.A.tooltip$"
+ cc_colony_events.62.B:0 "Befreit [cc_colony_leader.GetIhnSieDE]."
+
+ cc_colony_events.621.name:0 "$cc_colony_events.221.name$"
+ cc_colony_events.621.desc:0 "$cc_colony_events.221.desc$"
+
+ cc_colony_events.63.name:0 "$cc_colony_events.23.name$"
+ cc_colony_events.63.desc:0 "$cc_colony_events.23.desc$"
+ cc_colony_events.63.A:0 "Wir werden dies dulden müssen. Die Situation muss deeskaliert werden."
+ cc_colony_events.63.B:0 "Verhafte [cc_colony_leader.GetIhnSieDE] nochmals und nimm [cc_colony_leader.GetIhnSieDE] nach [Root.Owner.Capital.GetName]."
+ cc_colony_events.63.C:0 "Verfolgt die Spiritualisten mit unserer vollen Macht."
+
+ cc_colony_events.631.name:0 "$cc_colony_events.231.name$"
+ cc_colony_events.631.desc:0 "$cc_colony_events.231.desc$"
+ cc_colony_events.631.option:0 "$CC_GOODIGUESS$"
+
+ cc_colony_events.632.name:0 "$cc_colony_events.232.name$"
+ cc_colony_events.632.desc:0 "$cc_colony_events.332.desc$"
+
+ cc_colony_events.633.name:0 "$cc_colony_events.233.name$"
+ cc_colony_events.633.desc:0 "$cc_colony_events.233.desc$"
+
+ cc_colony_events.634.name:0 "$cc_colony_events.234.name$"
+ cc_colony_events.634.desc:0 "$cc_colony_events.234.desc$"
+
+
+ cc_colony_events.64.name:0 "$cc_colony_events.34.name$"
+ cc_colony_events.64.desc:0 "Während den letzten 15 Jahren ist [cc_colony_leader.GetName] eine führende Figur auf [Root.GetName] gewesen. [cc_colony_leader.GetSheHeCap] ist bei den Einwohnern sehr beliebt, so sehr, dass er auch jenseits [root.GetName]s viele Bewunderer gesammelt hat. [cc_colony_leader.GetSheHeCap] wird inzwischen von allen spiritualistischen Personen in diesem Teil der [root.owner.GetName] als Inspiration angesehen. Deshalb plant [cc_colony_leader.GetSheHe] eine Weltentour, um [cc_colony_leader.GetSheHe] [cc_colony_leader.GetHisHer]e Bewunderer zu besuchen!"
+ cc_colony_events.641.name:0 "$cc_colony_events.341.name$"
+ cc_colony_events.641.desc:0 "$cc_colony_events.341.desc$"
+
+
+ cc_colony_events.642.name:0 "$cc_colony_events.342.name$"
+ cc_colony_events.642.desc:0 "[cc_colony_leader.GetName] traf sich mit Unterstützern auf [random_visit_planet.GetName], als ein halb-verrückter fanatischer anti-Spiritualist [cc_colony_leader.GetIhnSieDE] erschoss, bevor [cc_colony_leader.GetHisHer]e Wachen reagieren konnte. Leider riss die Menge den Mörder auseinander, bevor man ihr festnehmen und befragen konnte. Dies hat es uns erschwert, Verschwörungstheorien überzeugend zu verneinen. Gerüchten zufolge hat jemand wichtig - vielleicht sogar jemand, der hoch in der [root.owner.GetSpeciesAdj]en Regierung ist - die Ermordung geplant. Es wird auch behauptet, dass die Sicherheit, die die [root.owner.GetSpeciesAdj]e Behörden auf [random_visit_planet.GetName] [cc_colony_leader.GetName] gegeben haben, nicht ausreichend war, und somit die Tragödie zu geschehen erlaubte. Die spiritualistische Gemeinschaft in der [root.owner.GetName] ist entgeistert und verärgert. Die Leitung der [spiritualist_faction.GetName] hat sich während des Chaos mit Regierungsbeamten getroffen und ihre Unzufriedenheit deutlich gemacht, aber auch vorgeschlagen, dass die Schmerzen der Spiritualisten besänftigt werden könnten, wenn [cc_colony_leader.GetName] ein Staatsbegräbnis erhalten würde. Ebenfalls wollen sie, dass ein großes Mausoleum zu [cc_colony_leader.GetHisHer]er Ehre auf [root.GetName] errichtet wird."
+
+ cc_colony_events.642.A:0 "$cc_colony_events.342.A$"
+ cc_mausoleum_will_be_built:0 "\nDie Bauzeit des Mausoleums beträgt 5 Jahre. Es fügt den Modifikator §Y$cc_religious_centre$§! hinzu:\n$tile_resource_unity_mult$: §G+50%§!\n$planet_resource_unity_add$: §G+2§!\n$MOD_POP_HAPPINESS$: §G+10%§!\n$MOD_PLANET_MIGRATION_ALL_PULL$: §G+50%§!\n$pop_ethic_spiritualist_attraction_mult$: §Y+250%§!"
+ cc_colony_events.642.B:0 "$cc_colony_events.25.B$"
+
+ cc_colony_events.643.name:0 "Mausoleum auf [root.GetName] eröffnet"
+ cc_colony_events.643.desc:0 "Das Mausoleum zu [cc_colony_leader.GetName]s Ehre ist fertiggestellt worden. Seine Eröffnung wurde von den Bürgern der Kolonie mit Freude aufgenommen, und viele [cc_colony_leader.GetHisHer]er Anhänger sind von anderen Welten zur Feier des Tages gekommen. Wir vermuten, dass dies zu einer wichtigen Pilgerfahrtsdestination für Spiritualisten in- und sogar außerhalb der [root.owner.GetName] entwickeln wird."
+
+ cc_colony_events.65.name:0 "$cc_colony_events.25.name$"
+ cc_colony_events.65.desc:0 "[cc_colony_leader.GetName], der berühmte Guru [root.GetName]s, der schon einige Zeit an einem schlechten Gesundheitszustand litt, ist heute Morgen gestorben. Die Bevölkerung [root.GetName]s ist in Trauer, und verlangt, dass wir einen Schrein zu [cc_colony_leader.GetHisHer]er Ehre errichten, sodass sie einen Ort haben werden, wo sie sich an [cc_colony_leader.GetHisHer]e Lehren und Leben erinnern können."
+ cc_colony_events.65.A:0 "Errichtet ein Mausoleum. [cc_colony_leader.GetSheHeCap] hat es verdient."
+ cc_colony_events.65.B:0 "$cc_colony_events.35.B$"
+ cc_colony_events.65.C:0 "$cc_colony_events.35.C$"
+
+ cc_colony_events.65.C.tooltip:0 "$cc_colony_events.35.C.tooltip$"
+
+ cc_minor_mausoleum_will_be_built:0 "\nDie Bauzeit des Mausoleums beträgt 5 Jahre. Es fügt den Modifikator §Y$cc_minor_mausoleum$§! hinzu:\n$tile_resource_unity_mult$: §G+25%§!\n$planet_resource_unity_add$: §G+1§!\n$MOD_POP_HAPPINESS$: §G+5%§!\n$pop_ethic_spiritualist_attraction_mult$: §Y+150%§!"
+ cc_colony_events.651.desc:0 "Das Mausoleum zu [cc_colony_leader.GetName]s Ehre ist fertiggestellt worden. Die Bevölkerung [root.GetName]s hat jetzt einen Ort, wo sie sich an [cc_colony_leader.GetHisHer]e Lehren und Leben erinnern können."
+ 
+#General random spiritualist guru
+
+ cc_colony_events.100.name:0 "Berühmter Guru auf [root.GetName]"
+ cc_colony_events.100.desc.pos:0 "Ein spiritualistischer Guru namens [cc_colony_leader.GetName] ist auf [root.GetName] sehr einflussreich geworden. [cc_colony_leader.GetHisHerCap]e Lehren sind von der Mehrheit der spiritualistischen Bevölkerung befolgt, und [cc_colony_leader.GetHisHer] Urteilsvermögen ist hoch geschätzt. [cc_colony_leader.GetSheHeCap] hat die spiritualistische Bewegung auf [root.GetName] neu belebt, und hat sogar eine große Anhängerschaft auf benachbarten Planeten an sich gesammelt. Jetzt hat [cc_colony_leader.GetSheHe] vor, eine Weltentour zu unternehmen, um [cc_colony_leader.GetHisHer]e Bewunderer zu besuchen. Obwohl Einige sich sorgen machen, dass [cc_colony_leader.GetHisHer] Einfluss den [root.owner.leader.GetDesDerDE] [root.owner.GetRulerTitle]s übertrifft, hat [cc_colony_leader.GetSheHe] zum Glück klargemacht, dass [cc_colony_leader.GetSheHe] [root.owner.leader.GetDenDieDE] [root.owner.GetRulerTitle] mit vollem Herzen unterstützt und sich [root.owner.leader.GetHisHer]er Autorität unterwirft."
+
+ cc_colony_events.100.desc.neut:0 "Ein spiritualistischer Guru namens [cc_colony_leader.GetName] ist auf [root.GetName] sehr einflussreich geworden. [cc_colony_leader.GetHisHerCap]e Lehren sind von der Mehrheit der spiritualistischen Bevölkerung befolgt, und [cc_colony_leader.GetHisHer] Urteilsvermögen ist hoch geschätzt. [cc_colony_leader.GetSheHeCap] hat die spiritualistische Bewegung auf [root.GetName] neu belebt, und hat sogar eine große Anhängerschaft auf benachbarten Planeten an sich gesammelt. Jetzt hat [cc_colony_leader.GetSheHe] vor, eine Weltentour zu unternehmen, um [cc_colony_leader.GetHisHer]e Bewunderer zu besuchen. Obwohl Einige sich sorgen machen, dass [cc_colony_leader.GetHisHer] Einfluss den [root.owner.leader.GetDesDerDE] [root.owner.GetRulerTitle]s übertrifft, hat [cc_colony_leader.GetSheHe] zum Glück klargemacht, dass [cc_colony_leader.GetSheHe] [root.owner.leader.GetDenDieDE] [root.owner.GetRulerTitle] mit vollem Herzen unterstützt und sich [root.owner.leader.GetHisHer]er Autorität unterwirft.\n\nJedoch weicht die Philosophie, die [cc_colony_leader.GetName] verbreitet, von der der [root.owner.GetName] ab. Wie sollen wir mit der Situation umgehen?"
+
+ cc_colony_events.100.desc.neg:0 "Ein spiritualistischer Guru namens [cc_colony_leader.GetName] ist auf [root.GetName] sehr einflussreich geworden. [cc_colony_leader.GetHisHerCap]e Lehren sind von der Mehrheit der spiritualistischen Bevölkerung befolgt, und [cc_colony_leader.GetHisHer] Urteilsvermögen ist hoch geschätzt. [cc_colony_leader.GetSheHeCap] hat die spiritualistische Bewegung auf [root.GetName] neu belebt, und hat sogar eine große Anhängerschaft auf benachbarten Planeten an sich gesammelt. Jetzt hat [cc_colony_leader.GetSheHe] vor, eine Weltentour zu unternehmen, um [cc_colony_leader.GetHisHer]e Bewunderer zu besuchen. Viele in der [root.owner.GetSpeciesAdj]en Regierung sind wegen [cc_colony_leader.GetHisHer]em Aufstieg besorgt, da sein Einfluss beinahe den [root.owner.leader.GetDesDerDE] [root.owner.GetRulerTitle]s übertrifft. [cc_colony_leader.GetName] hat bis jetzt nichts getan, was als rebelliös gelten könnte, jedoch ist [cc_colony_leader.GetHisHer]e Philosophie im direkten Konflikt mit die der [root.owner.GetName].\n\nWie sollen wir mit der Situation umgehen?"
+
+ cc_colony_events.100.tooltip:0 "Planeten innerhalb eines Radius von 75 Spieleinheiten bekommen den Modifikator $cc_spiritualist_leader_visit$:\n$pop_ethic_spiritualist_attraction_mult$: §Y+20%§!\n$MOD_POP_HAPPINESS$: §G+10%§!"
+
+ cc_colony_events.102.B:0 "Befreit [cc_colony_leader.GetIhnSieDE]. Untersage jedoch die Weltentour."
+ cc_colony_events.103.A.tooltip:0 "Die Weltentour wird jedoch nicht stattfinden."
+
+
+ cc_spiritualists_offended:0 "Beleidigte Spiritualisten"
+ cc_spiritualists_offended_desc:0 "Die spiritualistische Bevölkerung dieses Planeten fühlt sich von dem neuen Regime entfremdet."
+
+ cc_spiritualist_protectorate:0 "Spiritualistisches Protektorat"
+ cc_spiritualist_protectorate_desc:0 "Die Herrscher dieses Planeten haben Frieden mit den regimekritischen Spiritualisten geschlossen, indem sie den Planeten zu einem spiritualistischen Protektorat gemacht haben."
+
+ cc_founder_spiritualist:0 "Angesehener spiritualistischer Guru"
+ cc_founder_spiritualist_desc:0 "Die Gründerfigur dieses Planeten ist ein spiritualistischer Guru. Sie sind von der Bevölkerung hoch angesehen, und ihre Lehren sind von vielen befolgt."
+
+ cc_famous_guru:0 "Angesehener spiritualistischer Guru"
+ cc_famous_guru_desc:0 "Ein berühmter spiritualistischer Guru ist auf diesem Planeten aktiv. Sie sind von der Bevölkerung hoch angesehen, und ihre Lehren sind von vielen befolgt."
+
+ cc_minor_protests_spiritualist:0 "$cc_minor_protests_militarist$"
+ cc_minor_protests_spiritualist_desc:0 "Nach der Festnahme eines angesehenen Gurus gibt es auf diesem Planeten kleine Proteste."
+
+ cc_major_protests_spiritualist:0 "$cc_major_protests_militarist$"
+ cc_major_protests_spiritualist_desc:0 "Nach der Festnahme eines angesehenen Gurus gibt es auf diesem Planeten große Proteste."
+
+ cc_spiritualist_leader_visit:0 "Besuch eines berühmten Gurus"
+ cc_spiritualist_leader_visit_desc:0 "Dieser Planet wurde von einem berühmten spiritualistischen Guru besucht."
+
+ cc_mourning_spiritualist:0 "Trauer überm Tod eines berühmten Gurus"
+ cc_mourning_and_angry_spiritualist:0 "Wut über Reaktion zum Tod eines berühmten Gurus"
+
+ cc_building_mausoleum:0 "Errichtet ein Mausoleum"
+ cc_building_mausoleum_desc:0 "Ein Mausoleum zur Ehre eines angesehenen spiritualistischen Gurus wird auf diesem Planeten errichtet."
+
+ cc_minor_mausoleum:0 "Mausoleum eines Gurus"
+ cc_minor_mausoleum_desc:0 "Auf diesem Planeten befindet sich ein Mausoleum zur Ehre und Gedächtnis eines berühmten einheimischen Gurus."
+
+ cc_religious_centre:0 "Pilgerfahrtsdestination"
+ cc_religious_centre_desc:0 "Das Mausoleum zur Ehre und Gedächtnis eines berühmten einheimischen Gurus ist eine Pilgerfahrtsdestination, welche Spiritualisten viele Lichtjahre reisen um zu besuchen."
+
+ cc_founders_memory_disrespected_1_spiritualist:0 "Einheimischer spiritualistischer Guru verachtet"
+ cc_founders_memory_disrespected_1_spiritualist_desc:0 "Die Bevölkerung ist entgeistert von der Art und Weise, auf der der Staat einen einheimischen spiritualistischen Guru behandelt hat."
+
+ cc_founders_memory_disrespected_2_spiritualist:0 "$cc_founders_memory_disrespected_1_spiritualist$"
+ cc_founders_memory_disrespected_2_spiritualist_desc:0 "$cc_founders_memory_disrespected_1_spiritualist_desc$"
+
+ cc_underground_spiritualist_movement_1:0 "Spiritualistische Untergrundbewegung"
+ cc_underground_spiritualist_movement_1_desc:0 "Eine Untergrundbewegung, die von einem regimekritischen spiritualistischen Guru geführt wird, ist auf diesem Planeten aktiv. Es versucht Ideen und Bräuche, die gegen die Idealen unseres Staates sind, zu verbreiten."
+
+ cc_underground_spiritualist_movement_2:0 "Spiritualistische Widerstandsbewegung"
+ cc_underground_spiritualist_movement_2_desc:0 "Eine Untergrundbewegung, die von einem regimekritischen spiritualistischen Guru geführt wird, ist auf diesem Planeten aktiv. Ihr endgültiges Ziel ist es, Frieden durch Unabhängigkeit von dem Staat zu gewinnen."
+
+ cc_arrested_guru:0 "Berühmter Guru verhaftet"
+
+
+
+#Materialist
+
+ cc_colony_events.7.name:0 "Prominent[cc_colony_leader.GetErEDE] Intellektuelle auf [root.GetName]"
+ cc_colony_events.7.desc.pos:0 "Eine junge Kolonie bietet oft denjenigen, die den Ehrgeiz haben, es zu ergreifen, eine Chance aufzusteigen.\n\nAuf [root.GetName] hat sich dies als richtig erwiesen. [cc_colony_leader.GetName], ein[cc_colony_leader.GetXEDE] ehemalig[cc_colony_leader.GetErEDE] Professor[cc_colony_leader.GetXInDE], [cc_colony_leader.GetDerDieDE] für [cc_colony_leader.GetHisHer] innovatives Denken bekannt ist, ist unter den neuen Kolonisten beliebt geworden. Sie fragen [cc_colony_leader.GetIhnSieDE] nach Rat bei allen wichtigen Angelegenheiten, und nachdem [cc_colony_leader.GetSheHe] geniale Lösungen für einige drängende Probleme fand, mit denen die Kolonisten konfrontiert waren, hat [cc_colony_leader.GetSheHe] die Leitung des täglichen Betriebs der Kolonie übernommen. [cc_colony_leader.GetSheHeCap] hat sich nun zum Erfolg der Kolonie gewidmet, und ist der festen Überzeugung, dass [root.GetName] in dieser Galaxie niemals wichtig sein wird, es sei denn durch das Wissen seiner Bürger."
+ cc_colony_events.7.desc.neut:0 "Eine junge Kolonie bietet oft eine Chance aufzusteigen, besonders für diejenigen, die diese Chance nicht auf Welten hätten, auf denen die staatlichen Autoritäten besser etabliert sind.\n\nAuf [root.GetName] hat sich dies als richtig erwiesen. [cc_colony_leader.GetName], ein[cc_colony_leader.GetXEDE] ehemalig[cc_colony_leader.GetErEDE] Professor[cc_colony_leader.GetXInDE], [cc_colony_leader.GetDerDieDE] für [cc_colony_leader.GetHisHer] innovatives Denken bekannt ist, ist unter den neuen Kolonisten beliebt geworden. Sie fragen [cc_colony_leader.GetIhnSieDE] nach Rat bei allen wichtigen Angelegenheiten, und nachdem [cc_colony_leader.GetSheHe] geniale Lösungen für einige drängende Probleme fand, mit denen die Kolonisten konfrontiert waren, hat [cc_colony_leader.GetSheHe] die Leitung des täglichen Betriebs der Kolonie übernommen. [cc_colony_leader.GetSheHeCap] hat sich nun zum Erfolg der Kolonie gewidmet, und ist der festen Überzeugung, dass [root.GetName] in dieser Galaxie niemals wichtig sein wird, es sei denn durch das Wissen seiner Bürger.\n\nObwohl [cc_colony_leader.GetName] eindeutig kapabel ist, sind unsere Behörden etwas besorgt, da [cc_colony_leader.GetHisHer]e Philosophie von den Idealen der [root.owner.GetName] abweichen.\n\nWie sollen wir mit der Situation umgehen?"
+ cc_colony_events.7.desc.neg:0 "Eine junge Kolonie bietet oft eine Chance aufzusteigen, besonders für diejenigen, die diese Chance nicht auf Welten hätten, auf denen die staatlichen Autoritäten besser etabliert sind.\n\nAuf [root.GetName] hat sich dies als richtig erwiesen. [cc_colony_leader.GetName], ein[cc_colony_leader.GetXEDE] ehemalig[cc_colony_leader.GetErEDE] Professor[cc_colony_leader.GetXInDE], [cc_colony_leader.GetDerDieDE] für [cc_colony_leader.GetHisHer] innovatives Denken bekannt ist, ist unter den neuen Kolonisten beliebt geworden. Sie fragen [cc_colony_leader.GetIhnSieDE] nach Rat bei allen wichtigen Angelegenheiten, und nachdem [cc_colony_leader.GetSheHe] geniale Lösungen für einige drängende Probleme fand, mit denen die Kolonisten konfrontiert waren, hat [cc_colony_leader.GetSheHe] die Leitung des täglichen Betriebs der Kolonie übernommen.\n\nUnsere Behörden sind wegen [cc_colony_leader.GetHisHer]es steigenden Ansehen besorgt, da die Gefahr droht, dass [cc_colony_leader.GetSheHe] die Bürger [root.GetName]s irreleiten könnte mit seiner Ansicht, dass sie nur durch Ausbildung und Wissen (statt durch Spiritualismus) je etwas erwähnenswert schaffen werden. Die Regierung der [root.owner.GetName] halt jedoch die Spiritualismus als einziges angemessenes Streben aller guten [root.owner.GetSpeciesNamePlural].\n\nWie sollen wir mit der Situation umgehen?"
+
+ cc_colony_events.7.B:0 "$cc_colony_events.3.B$"
+ cc_colony_events.7.C:0 "Verhaftet [cc_colony_leader.GetIhnSieDE]!"
+ cc_colony_events.7.C.tooltip:0 "$CC_COLONY_UNPREDICTABLE$"
+
+#(65%)
+ cc_colony_events.71.name:0 "$cc_colony_events.21.name$"
+ cc_colony_events.71.desc:0 "Nach der Verhaftung von [cc_colony_leader.GetName] gab es auf [root.GetName] kleine Proteste, sie haben sich aber nicht verbreitet, und die Mehrheit der Bevölkerung akzeptiert die Anklagen, die wir [cc_colony_leader.GetIhmIhrDE] vorgeworfen haben. Es scheint, als wären [cc_colony_leader.GetHisHer]e Lehren doch nicht so verehrt wie wir dachten!"
+
+#(20%)
+ cc_colony_events.72.name:0 "$cc_colony_events.22.name$"
+ cc_colony_events.72.desc:0 "$cc_colony_events.22.desc$"
+ cc_colony_events.72.A:0 "$cc_colony_events.22.A$"
+ cc_colony_events.72.A.tooltip:0 "$cc_colony_events.22.A.tooltip$"
+ cc_colony_events.72.B:0 "Befreit [cc_colony_leader.GetIhnSieDE]."
+
+ cc_colony_events.721.name:0 "Nachhaltiges Misstrauen auf [Root.GetName]"
+ cc_colony_events.721.desc:0 "$cc_colony_events.221.desc$"
+
+#(15%)
+ cc_colony_events.73.name:0 "$cc_colony_events.23.name$"
+ cc_colony_events.73.desc:0 "$cc_colony_events.23.desc$"
+ cc_colony_events.73.A:0 "$cc_colony_events.63.A$"
+ cc_colony_events.73.B:0 "$cc_colony_events.63.B$"
+ cc_colony_events.73.C:0 "Verfolgt die Materialisten mit unserer vollen Macht."
+
+ cc_colony_events.731.name:0 "$cc_colony_events.231.name$"
+ cc_colony_events.731.desc:0 "$cc_colony_events.231.desc$"
+ cc_colony_events.731.option:0 "$CC_GOODIGUESS$"
+
+ cc_colony_events.732.name:0 "$cc_colony_events.232.name$"
+ cc_colony_events.732.desc:0 "$cc_colony_events.332.desc$"
+
+ cc_colony_events.733.name:0 "$cc_colony_events.233.name$"
+ cc_colony_events.733.desc:0 "$cc_colony_events.233.desc$"
+
+ cc_colony_events.734.name:0 "$cc_colony_events.234.name$"
+ cc_colony_events.734.desc:0 "$cc_colony_events.234.desc$"
+
+
+ cc_colony_events.75.name:0 "$cc_colony_events.25.name$"
+ cc_colony_events.75.desc:0 "[cc_colony_leader.GetName], [cc_colony_leader.GetDerDieDE] von vielen als Gründerfigur [root.GetName]s angesehen wird, ist heute nach einer kurzen Krankheit gestorben. Die Bevölkerung [root.GetName]s ist in Trauer. [cc_colony_leader.GetHisHerCap] letzter Wunsch war es, eine große Universität auf [root.GetName] zu errichten, sodass die nächste Generation von Denkern, für wem [cc_colony_leader.GetSheHe] den Weg bereitet hat, ihr Potenzial erreichen kann. Unsere Behörden auf [root.GetName] haben einen Plan vorgeschlagen, durch den dieser Wunsch verwirklicht werden könnte.\n\nSollen wir in die Universität investieren?"
+ cc_colony_events.75.A: "Allerdings!"
+ cc_colony_events.75.B: "$cc_colony_events.25.B$"
+
+ cc_colony_events.75.B.tooltip:0 "$cc_colony_events.35.C.tooltip$"
+
+ cc_colony_events.751.name:0 "Universität auf [root.GetName] eröffnet"
+ cc_colony_events.751.desc:0 "Die Universität zu [cc_colony_leader.GetName]s Ehre ist fertiggestellt worden. Ihre Eröffnung wurde von den Bürgern der Kolonie mit Freude aufgenommen. Sie sind der Meinung waren, dass [root.GetName] jetzt als wichtiges Zentrum der Lehre innerhalb der [root.owner.GetName] gilt. Darüber hinaus sind landesweit Materialisten erfreut über diesen Beweis der Hingabe [root.owner.leader.GetDesDerDE] [root.owner.GetRulerTitle]s an dem technologischen Fortschritt."
+
+ cc_university_will_be_built:0 "\nDie Bauzeit der Universität beträgt 5 Jahre. Es fügt den Modifikator §Y$cc_university$§! hinzu: §G+33%§!\n$tile_resource_society_research_mult$: §G+33%§!\n$tile_resource_engineering_research_mult$: §G+33%§!\n$MOD_PLANET_MIGRATION_ALL_PULL$: §G+25%§!\n$pop_ethic_materialist_attraction_mult$: §Y+150%§!"
+
+
+ cc_founder_materialist:0 "Angesehener Intellektueller"
+ cc_founder_materialist_desc:0 "Die Gründerfigur dieses Planeten ist ein ehemaliger Professor, der von der Bevölkerung hoch angesehen wird, und dessen Lehren von vielen befolgt werden."
+ cc_minor_protests_materialist:0 "$cc_minor_protests_militarist$"
+ cc_minor_protests_materialist_desc:0 "Nach der Festnahme eines angesehenen Intellektuellen gibt es auf diesem Planeten kleine Proteste."
+ cc_major_protests_materialist:0 "$cc_major_protests_militarist$"
+ cc_major_protests_materialist_desc:0 "Nach der Festnahme eines angesehenen Intellektuellen gibt es auf diesem Planeten große Proteste."
+ cc_underground_materialist_movement_1:0 "Intellektuelle Untergrundbewegung"
+ cc_underground_materialist_movement_1_desc:0 "Eine Untergrundbewegung, die von einem regimekritischen Intellektuellen geführt wird, ist auf diesem Planeten aktiv. Es versucht Ideen und Bräuche, die gegen die Idealen unseres Staates sind, zu verbreiten."
+ cc_underground_materialist_movement_2:0 "Intellektuelle Widerstandsbewegung"
+ cc_underground_materialist_movement_2_desc:0 "Eine Untergrundbewegung, die von einem regimekritischen Intellektuellen geführt wird, ist auf diesem Planeten aktiv. Ihr endgültiges Ziel ist es, Frieden durch Unabhängigkeit von dem Staat zu gewinnen."
+ cc_building_university:0 "Errichtet eine Universität"
+ cc_building_university_desc:0 "Eine wichtige Universität wird auf diesem Planeten errichtet."
+ cc_university:0 "Bildungszentrum"
+ cc_university_desc:0 "Die Universität auf diesem Planeten ist ein wichtiges Bildungszentrum. Studenten und Intellektuellen reisen viele Lichtjahre, um dort ein Studium zu betreiben."
+ cc_university_built_faction:0 "Universität errichtet"
+ cc_founders_memory_disrespected_1_materialist:0 "Einheimischer Intellektueller verachtet"
+ cc_founders_memory_disrespected_1_materialist_desc:0 "Die Bevölkerung ist entgeistert von der Art und Weise, auf der der Staat einen einheimischen Intellektuellen behandelt hat."
+
+ cc_materialists_offended:0 "Beleidigte Materialisten"
+ cc_materialists_offended_desc:0 "Die materialistische Bevölkerung dieses Planeten fühlt sich von dem neuen Regime entfremdet."
+
+
+#Authoritarian (monarchy): 
+ cc_colony_events.8.name:0 "Planetare Monarchie auf [root.GetName]"
+ cc_colony_events.8.desc.pos1:0 "Eine junge Kolonie bietet oft denjenigen, die den Ehrgeiz haben, es zu ergreifen, eine Chance aufzusteigen.\n\nAuf [root.GetName] hat sich dies als richtig erwiesen. Ein[cc_colony_leader.GetXEDE] talentiert[cc_colony_leader.GetErEDE] [cc_colony_leader.Species.GetName] namens [cc_colony_leader.GetName] hat die neuen Kolonisten mit [cc_colony_leader.GetHisHer]en Führungsfähigkeiten so inspiriert, dass sie begonnen haben, [cc_colony_leader.GetIhmIhrDE] königliche Ehren zu geben. Glücklicherweise scheint [cc_colony_leader.GetSheHe] nicht geneigt zu sein, [cc_colony_leader.GetHisHer]e Popularität auszunützen, um sich gegen die Regierung der [root.owner.GetName] zu stellen. Unsere lokalen Beamten haben uns sogar beantragt, dass es am besten wäre, [cc_colony_leader.GetIhmIhrDE] eine offizielle Rolle als 'Prinz von [root.GetName]' zu geben, um sicherzustellen, dass der Planet gut regiert wird."
+ cc_colony_events.8.desc.pos2:0 "Eine junge Kolonie bietet oft denjenigen, die den Ehrgeiz haben, es zu ergreifen, eine Chance aufzusteigen.\n\nAuf [root.GetName] hat sich dies als richtig erwiesen. Ein[cc_colony_leader.GetXEDE] talentiert[cc_colony_leader.GetErEDE] [cc_colony_leader.Species.GetName] namens [cc_colony_leader.GetName] hat die neuen Kolonisten mit [cc_colony_leader.GetHisHer]en Führungsfähigkeiten so inspiriert, dass sie begonnen haben, [cc_colony_leader.GetIhmIhrDE] königliche Ehren zu geben. Glücklicherweise scheint [cc_colony_leader.GetSheHe] nicht geneigt zu sein, [cc_colony_leader.GetHisHer]e Popularität auszunützen, um sich gegen die Regierung der [root.owner.GetName] zu stellen. Unsere lokalen Beamten haben uns sogar beantragt, dass es am besten wäre, [cc_colony_leader.GetIhmIhrDE] eine offizielle Rolle als 'Prinzessin von [root.GetName]' zu geben, um sicherzustellen, dass der Planet gut regiert wird."
+ cc_colony_events.8.desc.neut1:0 "Eine junge Kolonie bietet oft eine Chance aufzusteigen, besonders für diejenigen, die diese Chance nicht auf Welten hätten, auf denen die staatlichen Autoritäten besser etabliert sind.\n\nAuf [root.GetName] hat sich dies als richtig erwiesen. Ein[cc_colony_leader.GetXEDE] talentiert[cc_colony_leader.GetErEDE] [cc_colony_leader.Species.GetName] namens [cc_colony_leader.GetName] hat die neuen Kolonisten mit [cc_colony_leader.GetHisHer]en Führungsfähigkeiten so inspiriert, dass sie begonnen haben, [cc_colony_leader.GetIhmIhrDE] königliche Ehren zu geben. [cc_colony_leader.GetSheHeCap] hat bisher nicht [cc_colony_leader.GetHisHer]e neu-erworbene Autorität benutzt, um sich gegen die [root.owner.GetName] zu stellen, und kooperiert stattdessen mit der lokalen Regierung. Trotzdem haben sich Petitionen verbreitet, die fordern, dass [cc_colony_leader.GetHisHer]e Anstellung als 'Prinz von [root.GetName]' offiziell gemacht wird. Dies würde allerdings von unseren normalen Methoden abweichen.\n\nWie sollen wir auf die Petition reagieren?"
+ cc_colony_events.8.desc.neut2:0 "Eine junge Kolonie bietet oft eine Chance aufzusteigen, besonders für diejenigen, die diese Chance nicht auf Welten hätten, auf denen die staatlichen Autoritäten besser etabliert sind.\n\nAuf [root.GetName] hat sich dies als richtig erwiesen. Ein[cc_colony_leader.GetXEDE] talentiert[cc_colony_leader.GetErEDE] [cc_colony_leader.Species.GetName] namens [cc_colony_leader.GetName] hat die neuen Kolonisten mit [cc_colony_leader.GetHisHer]en Führungsfähigkeiten so inspiriert, dass sie begonnen haben, [cc_colony_leader.GetIhmIhrDE] königliche Ehren zu geben. [cc_colony_leader.GetSheHeCap] hat bisher nicht [cc_colony_leader.GetHisHer]e neu-erworbene Autorität benutzt, um sich gegen die [root.owner.GetName] zu stellen, und kooperiert stattdessen mit der lokalen Regierung. Trotzdem haben sich Petitionen verbreitet, die fordern, dass [cc_colony_leader.GetHisHer]e Anstellung als 'Prinzessin von [root.GetName]' offiziell gemacht wird. Dies würde allerdings von unseren normalen Methoden abweichen.\n\nWie sollen wir auf die Petition reagieren?"
+ cc_colony_events.8.desc.neg1:0 "Eine junge Kolonie bietet oft eine Chance aufzusteigen, besonders für diejenigen, die diese Chance nicht auf Welten hätten, auf denen die staatlichen Autoritäten besser etabliert sind.\n\nAuf [root.GetName] hat sich dies als richtig erwiesen. Ein[cc_colony_leader.GetXEDE] talentiert[cc_colony_leader.GetErEDE] [cc_colony_leader.Species.GetName] namens [cc_colony_leader.GetName] hat die neuen Kolonisten mit [cc_colony_leader.GetHisHer]en Führungsfähigkeiten so inspiriert, dass sie begonnen haben, [cc_colony_leader.GetIhmIhrDE] königliche Ehren zu geben. [cc_colony_leader.GetName], [cc_colony_leader.GetDerDieDE] von unseren lokalen Behörden als "störend" beschrieben wird, hat [cc_colony_leader.GetHisHer]e neu gefundene Autorität begrüßt und eine Petition gefördert, die fordert, dass [cc_colony_leader.GetHisHer]e Anstellung als 'Prinz von [root.GetName]' offiziell gemacht wird. Leider hat diese Petition erhebliche Unterstützung erhalten, obwohl sie den Grundsätzen der [root.GetName] widerspricht.\n\nWie sollen wir auf die Petition reagieren?"
+ cc_colony_events.8.desc.neg2:0 "Eine junge Kolonie bietet oft eine Chance aufzusteigen, besonders für diejenigen, die diese Chance nicht auf Welten hätten, auf denen die staatlichen Autoritäten besser etabliert sind.\n\nAuf [root.GetName] hat sich dies als richtig erwiesen. Ein[cc_colony_leader.GetXEDE] talentiert[cc_colony_leader.GetErEDE] [cc_colony_leader.Species.GetName] namens [cc_colony_leader.GetName] hat die neuen Kolonisten mit [cc_colony_leader.GetHisHer]en Führungsfähigkeiten so inspiriert, dass sie begonnen haben, [cc_colony_leader.GetIhmIhrDE] königliche Ehren zu geben. [cc_colony_leader.GetName], [cc_colony_leader.GetDerDieDE] von unseren lokalen Behörden als "störend" beschrieben wird, hat [cc_colony_leader.GetHisHer]e neu gefundene Autorität begrüßt und eine Petition gefördert, die fordert, dass [cc_colony_leader.GetHisHer]e Anstellung als 'Prinzessin von [root.GetName]' offiziell gemacht wird. Leider hat diese Petition erhebliche Unterstützung erhalten, obwohl sie den Grundsätzen der [root.GetName] widerspricht.\n\nWie sollen wir auf die Petition reagieren?"
+
+ cc_colony_events.8.A1:0 "Gegrüßt sei der neue Prinz [Root.GetName]s!" 
+ cc_colony_events.8.A2:0 "Gegrüßt sei die neue Prinzessin [Root.GetName]s!"
+ cc_colony_events.8.B:0 "[root.owner.leader.GetDerDieDECap] [root.owner.GetRulerTitle] wird keine Usurpationen tolerieren."
+ cc_colony_events.8.C:0 "Gib der Petition statt."
+ cc_colony_events.8.D:0 "$cc_colony_events.3.C$"
+ cc_colony_events.8.D.tooltip:0 "$CC_COLONY_UNPREDICTABLE$"
+
+ cc_colony_events.81.name:0 "$cc_colony_events.21.name$"
+ cc_colony_events.81.desc:0 "Nach der Verhaftung von [cc_colony_leader.GetName] gab es auf [root.GetName] kleine Proteste, sie haben sich aber nicht verbreitet, und die Mehrheit der Bevölkerung akzeptiert die Anklagen, die wir [cc_colony_leader.GetIhmIhrDE] vorgeworfen haben. Es scheint, als wäre [cc_colony_leader.GetSheHe] doch nicht so verehrt wie wir dachten!"
+
+ cc_colony_events.82.name:0 "$cc_colony_events.22.name$"
+ cc_colony_events.82.desc:0 "$cc_colony_events.22.desc$"
+ cc_colony_events.82.A:0 "$cc_colony_events.22.A$"
+ cc_colony_events.82.A.tooltip:0 "$cc_colony_events.22.A.tooltip$"
+ cc_colony_events.82.B1:0 "Befreit [cc_colony_leader.GetIhnSieDE] und lass [cc_colony_leader.GetIhnSieDE] Prinz sein." 
+ cc_colony_events.82.B2:0 "Befreit [cc_colony_leader.GetIhnSieDE] und lass [cc_colony_leader.GetIhnSieDE] Prinzessin sein." 
+ cc_colony_events.821.name:0 "$cc_colony_events.221.name$"
+ cc_colony_events.821.desc:0 "$cc_colony_events.221.desc$"
+
+ cc_colony_events.83.name:0 "$cc_colony_events.23.name$"
+ cc_colony_events.83.desc:0 "$cc_colony_events.23.desc$"
+ cc_colony_events.83.A:0 "$cc_colony_events.63.A$"
+ cc_colony_events.83.B:0 "$cc_colony_events.63.B$"
+ cc_colony_events.83.C:0 "Verfolgt diese Monarchisten mit unserer vollen Macht."
+
+ cc_colony_events.831.name:0 "$cc_colony_events.231.name$"
+ cc_colony_events.831.desc:0 "$cc_colony_events.231.desc$"
+ cc_colony_events.831.option:0 "$CC_GOODIGUESS$"
+
+ cc_colony_events.832.name:0 "$cc_colony_events.232.name$"
+ cc_colony_events.832.desc:0 "$cc_colony_events.332.desc$"
+
+ cc_colony_events.833.name:0 "$cc_colony_events.233.name$"
+ cc_colony_events.833.desc:0 "$cc_colony_events.233.desc$"
+
+ cc_colony_events.834.name:0 "$cc_colony_events.234.name$"
+ cc_colony_events.834.desc:0 "$cc_colony_events.234.desc$"
+
+
+
+ cc_colony_events.85.name:0 "$cc_colony_events.25.name$"
+ cc_colony_events.85.desc1:0 "[cc_colony_leader.GetName], Prinz von [root.GetName], ist heute nach einer kurzen Krankheit gestorben. [cc_colony_leader.GetSheHeCap] war als gerechter und weiser Leiter des Planeten gut angesehen, und hat die Bevölkerung durch guten und schlechten Zeiten geschickt geführt. Deshalb ist die Bevölkerung [root.GetName]s in Trauer. [cc_colony_leader.GetHisHerCap] Son, der von der Mehrheit der Bevölkerung [root.GetName]s befürwortet wird, verlangt, dass der Titel des Prinzen vererblich gemacht wird, sodass er wie sein Vater vor ihm regieren kann.\n\nSollen wir diesen Wunsch zustimmen?"
+ cc_colony_events.85.desc2:0 "[cc_colony_leader.GetName], Prinzessin von [root.GetName], ist heute nach einer kurzen Krankheit gestorben. [cc_colony_leader.GetSheHeCap] war als gerechte und weise Leiterin des Planeten gut angesehen, und hat die Bevölkerung durch guten und schlechten Zeiten geschickt geführt. Deshalb ist die Bevölkerung [root.GetName]s in Trauer. [cc_colony_leader.GetHisHerCap]e Tochter, die von der Mehrheit der Bevölkerung [root.GetName]s befürwortet wird, verlangt, dass der Titel der Prinzessin vererblich gemacht wird, sodass sie wie ihre Mutter vor ihr regieren kann.\n\nSollen wir diesen Wunsch zustimmen?"
+ cc_colony_events.85.A: "Allerdings!"
+ cc_colony_events.85.A.tooltip:0 "Der Modifikator $cc_colony_monarchy$ wird für unbefristete Zeit verbleiben."
+ cc_colony_events.85.B: "Bringt [root.GetName] wieder unter unserer direkten Kontrolle."
+ cc_colony_events.85.B.tooltip:0 "Die Bevölkerung könnte dauerhaft verärgert sein."
+
+ cc_colony_events.851.name:0 "Monarchistische Untergrundbewegung auf [cc_colony_leader.GetName]"
+ cc_colony_events.851.desc1:0 "Nach unsere Entscheidung, gegen den Willen der Bevölkerung [root.GetName]s die einheimische Monarchie aufzulösen, waren viele verständlicherweise bestürzt. Jetzt hat der Son des alten Prinzes seine treuesten Anhänger zusammengebracht und eine Untergrundbewegung gegründet, mit der er versuchen will, sein Fürstentum zurückzuerobern. Wir können davon ausgehen, dass [cc_colony_leader.GetSheHe] unsere Behörden noch langfristig Probleme bereiten wird."
+ cc_colony_events.851.desc2:0 "Nach unsere Entscheidung, gegen den Willen der Bevölkerung [root.GetName]s die einheimische Monarchie aufzulösen, waren viele verständlicherweise bestürzt. Jetzt hat die Tochter der alten Prinzessin ihre treuesten Anhänger zusammengebracht und eine Untergrundbewegung gegründet, mit der sie versuchen will, ihr Fürstentum zurückzuerobern. Wir können davon ausgehen, dass [cc_colony_leader.GetSheHe] unsere Behörden noch langfristig Probleme bereiten wird."
+
+
+ cc_colony_monarchy:0 "Fürstentum"
+ cc_colony_monarchy_desc:0 "Diese Kolonie ist von einer einheimischen Monarchie regiert."
+ cc_colony_monarchy_unhappy:0 "Fürstentum aufgelöst"
+ cc_colony_monarchy_unhappy_desc:0 "Diese Kolonie ist entgeistert, weil der Staat die einheimische Monarchie aufgelöst hat."
+
+ cc_minor_protests_authoritarian:0 "$cc_minor_protests_militarist$"
+ cc_minor_protests_authoritarian_desc:0 "Nach der Auflösung der einheimischen Monarchie gibt es auf diesem Planeten kleine Proteste."
+ cc_major_protests_authoritarian:0 "$cc_major_protests_militarist$"
+ cc_major_protests_authoritarian_desc:0 "Nach der Auflösung der einheimischen Monarchie gibt es auf diesem Planeten große Proteste."
+ cc_underground_authoritarian_movement_1:0 "Monarchistische Untergrundbewegung"
+ cc_underground_authoritarian_movement_1_desc:0 "Eine Untergrundbewegung, die die einheimische Monarchie wieder in Macht zu bringen will, ist auf diesem Planeten aktiv. Es versucht, Ideen und Bräuche, die gegen die Idealen unseres Staates sind, zu verbreiten."
+ cc_underground_authoritarian_movement_2:0 "Monarchistische Widerstandsbewegung"
+ cc_underground_authoritarian_movement_2_desc:0 "Eine Untergrundbewegung, die die einheimische Monarchie wieder in Macht zu bringen will, ist auf diesem Planeten aktiv. Ihr endgültiges Ziel ist es, Frieden durch Unabhängigkeit von dem Staat zu gewinnen."
+
+ 
+#Egalitarian
+ cc_colony_events.9.name:0 "Direkte Demokratie auf [root.GetName]"
+ cc_colony_events.9.desc.pos:0 "Die Bürger auf [root.GetName] haben auf eigener Initiative ein System der direkten Demokratie erstellt, mit das sie den Alltagsbetrieb der Kolonie erledigen. In ihr System werden die meisten politische Fragen von der ganzen Bevölkerung abgestimmt (heutzutage ist dies dank Technologie sehr einfach erledigt). Nur Aufgaben, die Koordination fordern, werden von Beamten, die durch das Los gewählt werden, erledigt.\n\nHiermit werden sie sicherlich besseren Zusammenhalt in ihrer neuen Gemeinde erzeugen, und auch die richtigen Entscheidungen für die Bürger treffen."
+ cc_colony_events.9.desc.neut:0 "Die Bürger auf [root.GetName] haben auf eigener Initiative ein System der direkten Demokratie erstellt, mit das sie den Alltagsbetrieb der Kolonie erledigen. In ihr System werden die meisten politische Fragen von der ganzen Bevölkerung abgestimmt (heutzutage ist dies dank Technologie sehr einfach erledigt). Nur Aufgaben, die Koordination fordern, werden von Beamten, die durch das Los gewählt werden, erledigt.\n\nSie behaupten, dass dies sie erlauben wird, besseren Zusammenhalt in ihrer neuen Gemeinde zu erzeugen, und auch die richtigen Entscheidungen für die Bürger zu treffen. Jedoch missbilligen viele in der [root.owner.GetSpeciesAdj]en Regierung das Experiment, da sie der Meinung sind, dass es ein un-[root.owner.GetSpeciesAdj]es Wesen hat.\n\nSollen wir das Experiment erlauben?"
+ cc_colony_events.9.desc.neg:0 "Die Bürger auf [root.GetName] haben auf eigener Initiative ein System der direkten Demokratie erstellt, mit das sie den Alltagsbetrieb der Kolonie erledigen. In ihr System werden die meisten politische Fragen von der ganzen Bevölkerung abgestimmt (heutzutage ist dies dank Technologie sehr einfach erledigt). Nur Aufgaben, die Koordination fordern, werden von Beamten, die durch das Los gewählt werden, erledigt.\n\nSie behaupten, dass dies sie erlauben wird, besseren Zusammenhalt in ihrer neuen Gemeinde zu erzeugen, und auch die richtigen Entscheidungen für die Bürger zu treffen. Jedoch sind viele in der [root.owner.GetSpeciesAdj]en Regierung der Meinung, dass dies ein gefährliches Experiment ist, welches im direkten Gegensatz zu den Werten der [root.owner.GetName] ist, und ihr Zusammenklang bedroht.\n\nSollen wir das Experiment erlauben?"
+ cc_colony_events.9.B:0 "Es darf weitergehen."
+ cc_colony_events.9.C:0 "Verbietet es."
+ cc_colony_events.9.C.tooltip:0 "Die Reaktion der Bevölkerung zu dieser Handlungsoption ist nicht vorhersehbar."
+
+ cc_colony_events.91.name:0 "$cc_colony_events.21.name$"
+ cc_colony_events.91.desc:0 "Nachdem wir ihren direkte Demokratie aufgelöst haben, gab es auf [root.GetName] kleine Proteste, sie haben sich aber nicht verbreitet, und die Mehrheit der Bevölkerung akzeptiert die höhere Autorität der [root.owner.GetName]. Es scheint, als wäre ihre "Demokratie" doch nicht so geschätzt wie wir dachten!"
+
+ cc_colony_events.92.name:0 "$cc_colony_events.22.name$"
+ cc_colony_events.92.desc:0 "Die Auflösung der direkten Demokratie auf [root.GetName] hat große Proteste verursacht, und viele fordern, dass es rückgängig gemacht wird. Teilweise ist sogar Gewalt ausgebrochen, und unsere lokalen Beamten haben Schwierigkeiten, die Bevölkerung unter Kontrolle zu behalten. Sie haben uns nach Beratung gefragt, wie sie die Situation bewältigen sollen."
+ cc_colony_events.92.A:0 "Die Proteste niederdrücken!"
+ cc_colony_events.92.B:0 "Die Proteste werden vorübergehen." 
+ cc_colony_events.92.C:0 "Direkte Demokratie auf [root.GetName] doch zulassen."
+
+ cc_colony_events.921.name:0 "$cc_colony_events.233.name$"
+ cc_colony_events.921.desc:0 "Wir haben die pro-demokratische Proteste auf [root.GetName] erfolgreich niedergedrückt. Deren Anführer wurden aufgespürt und hingerichtet. Sie werden unsere Kolonie nicht mehr mit ihrer Aufrührerei plagen. Dennoch wird es Zeit brauchen, bis wir das Vertrauen der Bevölkerung gewinnen."
+
+ cc_colony_events.922.name:0 "$cc_colony_events.234.name$"
+ cc_colony_events.922.desc:0 "Unsere Versuche, die pro-demokratische Proteste auf [root.GetName] niederzudrücken, sind gescheitert. Die Anführer der Proteste wurden von unserem Plan vorhergewarnt, und verstecken sich mit viele ihrer treuesten Anhänger vor unseren Behörden. Sie haben eine Untergrundbewegung gegründet, durch die sie anscheinend die Unabhängigkeit [root.GetName]s von der [Root.Owner.GetName] gewinnen will. Wir können langfristigen Tumult erwarten."
+ 
+ cc_colony_events.923.name:0 "$cc_colony_events.221.name$"
+ cc_colony_events.923.desc:0 "Einige Jahre sind vergangen, und Proteste gegen die Auflösung der direkten Demokratie auf [root.GetName] haben nachgelassen. Dennoch bleibt das Gedächtnis an der demokratischen Selbstverwaltung, das zunehmend als eine goldene Zeit der Unschuld betrachtet wird. Deren Auflösung verursacht somit viel Verbitterung. Es ist unwahrscheinlich, dass die Bevölkerung jemals ihrem Vaterland wirklich vertrauen wird."
+ 
+ cc_colony_events.924.name:0 "Untergrundbewegung auf [Root.GetName]"
+ cc_colony_events.924.desc:0 "Die vorausgesehene Ende der Proteste auf [root.GetName] hat sich nie ereignet. Sie haben so lange Probleme bereitet, bis unsere Behörden gezwungen wurden, die Demonstranten durch Gewalt auseinanderzutreiben. Seitdem ist die pro-Demokratie Bewegung im Untergrund getaucht. Es versucht dennoch, uns zu zwingen, die direkte Demokratie wiedereinzuführen. Wir können langfristigen Tumult erwarten."
+
+
+ cc_colony_direct_democracy:0 "Direkte Demokratie"
+ cc_colony_direct_democracy_desc:0 "Diese Kolonie ist von einer planetweiten direkten Demokratie regiert."
+ cc_colony_democracy_unhappy:0 "Direkte Demokratie aufgelöst"
+ cc_colony_democracy_unhappy_desc:0 "Diese Kolonie ist entsetzt, dass ihr System der direkten Demokratie von der jetzigen Regime aufgelöst wurde."
+
+ cc_minor_protests_egalitarian:0 "$cc_minor_protests_militarist$"
+ cc_minor_protests_egalitarian_desc:0 "Nach der Auflösung der planetaren direkten Demokratie gibt es auf diesem Planeten kleine Proteste."
+ cc_major_protests_egalitarian:0 "$cc_major_protests_militarist$"
+ cc_major_protests_egalitarian_desc:0 "Nach der Auflösung der planetaren direkten Demokratie gibt es auf diesem Planeten große Proteste."
+ cc_underground_egalitarian_movement_1:0 "Pro-Demokratische Untergrundbewegung"
+ cc_underground_egalitarian_movement_1_desc:0 "Eine Untergrundbewegung, die ein System der direkten Demokratie etablieren will, ist auf diesem Planeten aktiv. Es versucht, Ideen und Bräuche, die gegen die Idealen unseres Staates sind, zu verbreiten."
+ cc_underground_egalitarian_movement_2:0 "Pro-Demokratische Widerstandsbewegung"
+ cc_underground_egalitarian_movement_2_desc:0 "Eine Untergrundbewegung, die ein System der direkten Demokratie etablieren will, ist auf diesem Planeten aktiv. Ihr endgültiges Ziel ist es, Frieden durch Unabhängigkeit von dem Staat zu gewinnen."
+
+
+#Generic
+
+ CC_COLONY_UNPREDICTABLE:0 "[cc_colony_leader.GetName] wird von dem Planeten entfernt. Die Konsequenzen dieser Handlungsoption sind nicht vorhersehbar."
+
+ CC_GOODIGUESS:0 "Gut... ich glaube, zumindest."
+
+#Cleanup
+
+ cc_cleanup_events.2.name:0 "Angesehener Guru auf [root.GetName]"
+ cc_cleanup_events.2.desc:0 "Auf [root.GetName] steht ein angesehener Guru im Zentrum des Netzwerks von Spiritualisten, die auf dem Planeten einflussreich ist. Sollten sie erlaubt sein, in ihrer Position zu bleiben?"
+
+ cc_cleanup_events.3.name:0 "Mausoleum zur Ehre eines Gurus auf [root.GetName]"
+ cc_cleanup_events.3.desc:0 "Die alten Herrscher von [root.GetName] waren dabei, ein Mausoleum zur Ehre eines angesehenen Gurus auf [root.GetName] zu errichten. Falls es fertiggestellt wird, wird es zur Mittelpunkt des Netzwerks von Spiritualisten werden, das auf dem Planeten einflussreich ist. Sollten wir das Mausoleum weiterbauen?"
+ cc_cleanup_events.3.tooltip:0 "Nach der Fertigstellung wird das Mausoleum die Einigkeitsleistung, Zufriedenheit und spiritualistische Regierungsgesinnung des Planeten erhöhen."
+
+ cc_cleanup_events.4.name:0 "Mausoleum zur Ehre eines Gurus auf [root.GetName]"
+ cc_cleanup_events.4.desc:0 "Die alten Herrscher von [root.GetName] hatten ein Mausoleum zur Ehre eines angesehenen Gurus auf [root.GetName] errichtet. Es steht im Zentrum des Netzwerks von Spiritualisten, die auf dem Planeten einflussreich ist. Sollten wir es von Vernichtung verschonen?"
+
+ cc_cleanup_events.5.name:0 "Das Gedächtnis an einem Guru auf [root.GetName]"
+ cc_cleanup_events.5.desc:0 "Die alten Herrscher von [root.GetName] hatten die spiritualistische Bevölkerung verärgert, indem sie sich verweigert haben, ein Mausoleum zur Ehre eines angesehenen Gurus, der auf dem Planeten zuhause war, zu errichten. Sollten wir eins errichten?"
+
+ cc_cleanup_events.51.name:0 "Mausoleum auf [root.GetName] fertiggestellt"
+ cc_cleanup_events.51.desc:0 "Das Mausoleum zur Ehre des berühmten Gurus von [root.GetName] ist fertiggestellt worden. Die Bevölkerung [root.GetName]s hat jetzt einen Ort, wo sie sich an seine Lehren und Leben erinnern können."
+
+ cc_cleanup_events.6.name:0 "Spiritualistische Untergrundbewegung auf [root.GetName]"
+ cc_cleanup_events.6.desc:0 "Eine spiritualistische Untergrundbewegung hat die alten Herrscher von [Root.GetName] Probleme bereitet. Ihre Vorsitzenden haben mit uns getroffen, und sich bereit erklärt, die Waffen niederzulegen, unter der Bedingung, dass wir die Spiritualisten auf dem Planeten bestimmte Sonderrechte geben.\n\nSollen ihnen diese Rechte geben?"
+
+ cc_cleanup_events.7.name:0 "[root.GetName] is ein Spiritualistisches Protektorat"
+ cc_cleanup_events.7.desc:0 "Die spiritualistische Bevölkerung auf [root.GetName] wurde von der alten Regime einige Sonderrechte gegeben. Sollten wir diese bestätigen?"
+
+ cc_cleanup_events.8.name:0 "Direkte Demokratie auf [root.GetName]"
+ cc_cleanup_events.8.desc:0 "[root.GetName] ist derzeitig von einer planetaren direkten Demokratie regiert. Sollen wir sie erlauben, dieses System der Selbstverwaltung fortzuführen?"
+
+ cc_cleanup_events.9.name:0 "Pro-Demokratische Untergrundbewegung auf [root.GetName]"
+ cc_cleanup_events.9.desc:0 "Eine pro-demokratische Untergrundbewegung hat die alten Herrscher von [Root.GetName] Probleme bereitet. Ihre Vorsitzenden haben mit uns getroffen, und sich bereit erklärt, die Waffen niederzulegen, unter der Bedingung, dass wir ihre planetare direkte Demokratie zurückerstatten.\n\nSollen wir dies tun?"
+
+ cc_cleanup_events.10.name:0 "Direkte Demokratie auf [root.GetName] zurückerstatten?"
+ cc_cleanup_events.10.desc:0 "Die alten Herrscher von [root.GetName] hatten die progressive Bevölkerung verärgert, indem sie die planetare direkte Demokratie auflösten. Sollten wir es zurückerstatten?"
+
+
+ cc_cleanup_events.11.name:0 "Universität auf [root.GetName]"
+ cc_cleanup_events.11.desc:0 ""Die alten Herrscher von [root.GetName] waren dabei, eine große Universität auf [root.GetName] zu errichten. Falls es fertiggestellt wird, wird es zur Mittelpunkt des Netzwerks von Intellektuellen, das auf dem Planeten einflussreich ist, werden. Sollten wir die Universität weiterbauen?"
+ cc_cleanup_events.11.tooltip:0 "\nNach der Fertigstellung wird die Universität den Modifikator §Y$cc_university$§! hinzufügen:\n$tile_resource_physics_research_mult$: §G+33%§!\n$tile_resource_society_research_mult$: §G+33%§!\n$tile_resource_engineering_research_mult$: §G+33%§!\n$MOD_PLANET_MIGRATION_ALL_PULL$: §G+25%§!\n$pop_ethic_materialist_attraction_mult$: §Y+150%§!"
+
+ cc_cleanup_events.12.name:0 "Universität auf [root.GetName]"
+ cc_cleanup_events.12.desc:0 "Die alten Herrscher von [root.GetName] hatten eine große Universität auf [root.GetName] errichtet. Es steht im Zentrum des Netzwerks von Intellektuellen, das auf dem Planeten einflussreich ist. Sollten wir es von Vernichtung verschonen?"
+
+ cc_cleanup_events.13.name:0 "Angesehener Intellektuelle auf [root.GetName]"
+ cc_cleanup_events.13.desc:0 "Auf [root.GetName] steht ein angesehener Intellektuelle im Zentrum des Netzwerks von Materialisten, die auf dem Planeten einflussreich ist. Sollten sie erlaubt sein, in ihrer Position zu bleiben?"
+
+ cc_cleanup_events.14.name:0 "Intellektuelle Untergrundbewegung auf [root.GetName]"
+ cc_cleanup_events.14.desc:0 "Eine Untergrundbewegung von Intellektuellen hat die alten Herrscher von [Root.GetName] Probleme bereitet. Ihre Vorsitzenden haben mit uns getroffen, und sich bereit erklärt, die Waffen niederzulegen, unter der Bedingung, dass eine große Universität auf dem Planeten errichtet wird.\n\nSollen wir diese Universität errichten?"
+
+ cc_cleanup_events.15.name:0 "Das Gedächtnis an einem berühmten Intellektuellen auf [root.GetName]"
+ cc_cleanup_events.15.desc:0 "Die alten Herrscher von [root.GetName] hatten die materialistische Bevölkerung verärgert, indem sie sich verweigert haben, eine Universität zur Ehre eines angesehenen Intellektuellen, der auf dem Planeten zuhause war, zu errichten. Sollten wir eine errichten?"
+
+ cc_cleanup_events.151.name:0 "Universität auf [root.GetName] eröffnet"
+ cc_cleanup_events.151.desc:0 "Die Universität auf [root.GetName] ist fertiggestellt worden. Ihre Eröffnung wurde von den Bürgern der Kolonie mit Freude aufgenommen. Sie sind der Meinung waren, dass [root.GetName] jetzt als wichtiges Zentrum der Lehre innerhalb der [root.owner.GetName] gilt. Darüber hinaus sind landesweit Materialisten erfreut über diesen Beweis der Hingabe [root.owner.leader.GetDesDerDE] [root.owner.GetRulerTitle]s an dem technologischen Fortschritt."
+
+
+ cc_cleanup_events.16.name:0 "Fürstentum auf [root.GetName]"
+ cc_cleanup_events.16.desc:0 "[root.GetName] ist derzeitig von einer einheimischen Monarchie regiert. Sollen wir sie erlauben, dieses System der Selbstverwaltung fortzuführen?"
+
+ cc_cleanup_events.17.name:0 "Monarchistische Untergrundbewegung auf [root.GetName]"
+ cc_cleanup_events.17.desc:0 "Eine pro-demokratische Untergrundbewegung hat die alten Herrscher von [Root.GetName] Probleme bereitet. Ihre Vorsitzenden haben mit uns getroffen, und sich bereit erklärt, die Waffen niederzulegen, unter der Bedingung, dass wir ihre einheimische Monarchie zurückerstatten und ihr Anführer als 'Prinz von [root.GetName] anerkennen.\n\nSollen wir sie diesen Wunsch erstatten?"
+
+ cc_cleanup_events.18.name:0 "Einheimische Monarchie auf [root.GetName] zurückerstatten?"
+ cc_cleanup_events.18.desc:0 "Die alten Herrscher von [root.GetName] hatten die progressive Bevölkerung verärgert, indem sie die einheimische Monarchie, die die Kolonie als autonomes Fürstentum regierte, auflösten. Sollten wir es zurückerstatten?"
+
+ cc_cleanup_events.9.name:0 "Pro-Demokratische Untergrundbewegung auf [root.GetName]"
+ cc_cleanup_events.9.desc:0 "Eine pro-demokratische Untergrundbewegung hat die alten Herrscher von [Root.GetName] Probleme bereitet. Ihre Vorsitzenden haben mit uns getroffen, und sich bereit erklärt, die Waffen niederzulegen, unter der Bedingung, dass wir ihre planetare direkte Demokratie zurückerstatten.\n\nSollen wir dies tun?"
+
+
+
+ cc_cleanup_events.19.name:0 "Militärakademie auf [root.GetName]"
+ cc_cleanup_events.19.desc:0 "Die alten Herrscher von [root.GetName] hatten eine große Militärakademie auf [root.GetName] errichtet. Es steht im Zentrum des Netzwerks von Militaristen, die auf dem Planeten einflussreich ist. Sollten wir es von Vernichtung verschonen?"
+
+ cc_cleanup_events.20.name:0 "Der Legat von [root.GetName]"
+ cc_cleanup_events.20.desc:0 "Ein pensionierter hochdekorierter Marineoffizier, der 'Legat von [root.GetName]', ist von der Bevölkerung gut angesehen. Sie sind das Zentrum des Netzwerks von Militaristen, die auf dem Planeten einflussreich ist. Sollten sie erlaubt sein, in ihrer Position zu bleiben?"
+
+ cc_cleanup_events.21.name:0 "Militaristische Untergrundbewegung auf [root.GetName]"
+ cc_cleanup_events.21.desc:0 "Eine militaristische Untergrundbewegung hat die alten Herrscher von [Root.GetName] Probleme bereitet. Ihre Vorsitzenden haben mit uns getroffen, und sich bereit erklärt, die Waffen niederzulegen, unter der Bedingung, dass eine große Militärakademie auf dem Planeten errichtet wird.\n\nSollen wir diese Militärakademie errichten?"
+
+ cc_cleanup_events.22.name:0 "Das Gedächtnis an einem berühmten Marineoffizier auf [root.GetName]"
+ cc_cleanup_events.22.desc:0 "Die alten Herrscher von [root.GetName] hatten die militaristische Bevölkerung verärgert, indem sie sich verweigert haben, eine Militärakademie zur Ehre eines angesehenen Marineoffiziers, der auf dem Planeten zuhause war, zu errichten. Sollten wir eine errichten?"
+
+ cc_cleanup_events.23.name:0 "Militärakademie auf [root.GetName] eröffnet" 
+ cc_cleanup_events.23.desc:0 "Die Militärakademie auf [root.GetName] ist fertiggestellt worden. Im Innenhof wurde eine Statue des verstorbenen Offiziers enthüllt. Seine Eröffnung wurde von den Bürgern der Kolonie mit Freude aufgenommen. Sie sind der Meinung waren, dass [root.GetName] jetzt als wichtiges Zentrum der militärischen Lehre innerhalb der [root.owner.GetName] gilt. Darüber hinaus sind landesweit Mitglieder und Befürworter der Marine erfreut über diesen Beweis der Hingabe [root.owner.leader.GetDesDerDE] [root.owner.GetRulerTitle]s an die Menschen, die bereit sind, für dieser großartigen Nation ihr Leben aufzuopfern."
+
+ cc_cleanup_events.24.name:0 "Militärakademie auf [root.GetName]"
+ cc_cleanup_events.24.desc:0 "Die alten Herrscher von [root.GetName] waren dabei, eine große Militärakademie auf [root.GetName] zu errichten. Falls es fertiggestellt wird, wird es zur Mittelpunkt des Netzwerks von Militaristen werden, das auf dem Planeten einflussreich ist. Sollten wir die Akademie weiterbauen?"
+ cc_cleanup_events.24.tooltip:0 "\nNach der Fertigstellung wird die Militärakademie den Modifikator §Y$cc_milacademy$§! hinzufügen:\n$MOD_PLANET_ORBITAL_BOMBARDMENT_DAMAGE$: §G-20%§!\n$MOD_PLANET_ARMY_BUILD_SPEED_MULT$: §G+50%§!\n$MOD_PLANET_ARMY_BUILD_COST_MULT$: §G-15%§!\n$MOD_POP_CITIZEN_HAPPINESS$: §G+10%§!\n$pop_ethic_militarist_attraction_mult$: §Y+150%§!"
+
+
+
+ cc_cleanup_events.25.name:0 "Angesehener Pazifistischer Aktivist auf [root.GetName]"
+ cc_cleanup_events.25.desc:0 "Auf [root.GetName] steht ein angesehener pazifistischer Aktivist im Zentrum des Netzwerks von Pazifisten, die auf dem Planeten einflussreich ist. Sollten sie erlaubt sein, in ihrer Position zu bleiben?"
+
+ cc_cleanup_events.26.name:0 "Monument zur Ehre eines berühmten Aktivisten auf [root.GetName]"
+ cc_cleanup_events.26.desc:0 "Die alten Herrscher von [root.GetName] waren dabei, ein Monument zur Ehre eines angesehenen pazifistischen Aktivisten auf [root.GetName] zu errichten. Falls es fertiggestellt wird, wird es zur Mittelpunkt des Netzwerks von Pazifisten werden, das auf dem Planeten einflussreich ist. Sollten wir das Monument weiterbauen?"
+ cc_cleanup_events.26.tooltip:0 "Nach der Fertigstellung wird das Mausoleum die Einigkeitsleistung, Zufriedenheit und pazifistische Regierungsgesinnung des Planeten erhöhen."
+
+ cc_cleanup_events.27.name:0 "Monument zur Ehre eines berühmten Aktivisten auf [root.GetName]"
+ cc_cleanup_events.27.desc:0 "Die alten Herrscher von [root.GetName] hatten ein Monument zur Ehre eines angesehenen pazifistischen Aktivisten auf [root.GetName] errichtet. Es steht im Zentrum des Netzwerks von Pazifisten, die auf dem Planeten einflussreich ist. Sollten wir es von Vernichtung verschonen?"
+
+ cc_cleanup_events.28.name:0 "Das Gedächtnis an einem berühmten Aktivisten auf [root.GetName]"
+ cc_cleanup_events.28.desc:0 "Die alten Herrscher von [root.GetName] hatten die pazifistische Bevölkerung verärgert, indem sie sich verweigert haben, ein Monument zur Ehre eines angesehenen Aktivisten, der auf dem Planeten zuhause war, zu errichten. Sollten wir eins errichten?"
+ 
+ cc_cleanup_events.29.name:0 "Monument auf [root.GetName] fertiggestellt"
+ cc_cleanup_events.29.desc:0 "Das Monument zur Ehre des berühmten Aktivisten von [root.GetName] ist fertiggestellt worden. Die Bevölkerung [root.GetName]s hat jetzt einen Ort, wo sie sich an seine Lehren und Leben erinnern können."
+
+ cc_cleanup_events.30.name:0 "Pazifistische Untergrundbewegung auf [root.GetName]"
+ cc_cleanup_events.30.desc:0 "Eine pazifistische Untergrundbewegung hat die alten Herrscher von [Root.GetName] Probleme bereitet. Ihre Vorsitzenden haben mit uns getroffen, und sich bereit erklärt, die Waffen niederzulegen, unter der Bedingung, dass wir die Pazifisten auf dem Planeten bestimmte Sonderrechte geben.\n\nSollen ihnen diese Rechte geben?"
+
+ cc_cleanup_events.31.name:0 "[root.GetName] is ein Pazifistisches Protektorat"
+ cc_cleanup_events.31.desc:0 "Die pazifistische Bevölkerung auf [root.GetName] wurde von der alten Regime einige Sonderrechte gegeben. Sollten wir diese bestätigen?"
+
+
+
+ cc_cleanup_events.32.name:0 "Angesehener xenophobischer Politiker auf [root.GetName] begeht Selbstmord"
+ cc_cleanup_events.32.desc:0 "Ein angesehener xenophobischer Politiker war auf [root.GetName] vor dessen Eroberung aktiv. Sie waren als 'Hegemon' des Planeten bekannt, und behaupteten, dass sie es von xenoistische Einflüsse beschützen würden. Jetzt, mit ihrem Traum in Trümmern, haben sie Selbstmord begangen, statt weitere Beschämungen zu erleben müssen."
+ cc_cleanup_events.32.option:0 "Und tschüss!"
+
+ cc_cleanup_events.33.name:0 "Reinheitsinstitut auf [root.GetName]"
+ cc_cleanup_events.33.desc:0 "Die alten Herrscher von [root.GetName] waren dabei, ein Institut zur Ehre eines angesehenen einheimischen Politikers, der für seine durchaus xenophobischen Ansichten und Reden bekannt war, auf [root.GetName] zu errichten. Falls es fertiggestellt wird, würde es zur Mittelpunkt eines Netzwerks von Nationalisten auf dem Planeten werden. Es ist ironisch, dass sie solch ein Monument bauen würden, genau im Moment ihres Untergangs. Unsere neuen Behörden haben die Konstruktion des Instituts abgebrochen."
+
+ cc_cleanup_events.34.name:0 "Hegemoneninstitut auf [root.GetName]"
+ cc_cleanup_events.34.desc:0 "Die alten Herrscher von [root.GetName] hatten ein Institut zur Ehre eines angesehenen Politikers auf [root.GetName] errichtet. Obwohl die Ansichten des Politikers durchaus xenophobisch waren, haben Stellvertreter der eroberten Bevölkerung uns angefleht, das Gebäude nicht zu zerstören, da es von ihnen sehr geschätzt wird. Sollten wir es von Vernichtung verschonen?"
+ cc_cleanup_events.34.A:0 "Lass sie ihre Helden behalten."
+
+
+ cc_cleanup_events.35.name:0 "Xenophobische Untergrundbewegung auf [root.GetName]"
+ cc_cleanup_events.35.desc:0 "Eine xenophobische Untergrundbewegung hat die alten Herrscher von [Root.GetName] Probleme bereitet. Jetzt da wir den Planeten erobert haben, fühlen sie sich bestätigt in ihren früheren Aktionen, und haben vor, ihre Bemühungen zu verstärken, den Planeten von xenoistische Einflüsse zu beschützen."
+
+
+ cc_cleanup_events.36.name:0 "Angesehener xenoistischer Aktivist auf [root.GetName]"
+ cc_cleanup_events.36.desc:0 "Auf [root.GetName] steht ein angesehener Aktivist im Zentrum des Netzwerks von Pazifisten, die auf dem Planeten für Frieden und Wohlwollen zwischen Spezies sorgt. Sollten sie erlaubt sein, in ihrer Position zu bleiben?"
+
+ cc_cleanup_events.37.name:0 "Kulturelle Expo auf [root.GetName]"
+ cc_cleanup_events.37.desc:0 "Die alten Herrscher von [root.GetName] waren dabei, eine kulturelle Expo zur Ehre eines angesehenen Aktivisten auf [root.GetName] zu erstellen. Falls fertiggestellt, wird es dem Planeten den Ruf geben, ein freier Hafen für alle Spezies zu sein. Sollen wir es weiterhin unterstützen?"
+ cc_cleanup_events.37.tooltip:0 "Nach der Fertigstellung wird die kulturelle Expo den Modifikator §Y$cc_xenophile_institute$§! hinzufügen:\n$MOD_POP_HAPPINESS$: §G+5%§!\n$MOD_PLANET_MIGRATION_XENO_PULL$: §G+100%§!\n$tile_resource_unity_mult$: §G+25%§!\n$pop_ethic_xenophile_attraction_mult$: §Y+150%§!"
+
+ cc_cleanup_events.38.name:0 "Kulturelle Expo auf [root.GetName]"
+ cc_cleanup_events.38.desc:0 "Die alten Herrscher von [root.GetName] hatten eine kulturelle Expo zur Ehre eines angesehenen Aktivisten auf [root.GetName] unterstützt. Es stellt sicher, dass das Gedächtnis an ihm erhalten bleibt, und gibt dem Planeten den Ruf, ein freier Hafen für alle Spezies zu sein. Soll es weiter existieren dürfen?"
+ 
+ cc_cleanup_events.39.name:0 "Das Gedächtnis an einem berühmten Aktivisten auf [root.GetName]"
+ cc_cleanup_events.39.desc:0 "Die alten Herrscher von [root.GetName] hatten die xenoistische Bevölkerung verärgert, indem sie sich verweigert haben, eine kulturelle Expo zur Ehre eines angesehenen Aktivisten, der auf dem Planeten zuhause war, zu etablieren. Sollten wir eins etablieren?"
+
+ cc_cleanup_events.40.name:0 "Xenoistische Untergrundbewegung auf [root.GetName]"
+ cc_cleanup_events.40.desc:0 "Eine xenoistische Untergrundbewegung hat die alten Herrscher von [Root.GetName] Probleme bereitet. Ihre Vorsitzenden haben mit uns getroffen, und sich bereit erklärt, die Waffen niederzulegen, unter der Bedingung, dass wir eine kulturelle Expo auf dem Planeten unterstützen, durch die sie sicherstellen wollen, dass Frieden und Wohlwollen zwischen Spezies dauerhaft erhalten bleibt.\n\nSollen ihnen diese Rechte geben?"
+
+ cc_cleanup_events.41.name:0 "Kulturelle Expo auf [root.GetName] eingeweiht"
+ cc_cleanup_events.41.desc:0 "Die "Kulturelle Expo" zur Ehre des berühmten Aktivisten von [root.GetName] ist eingeweiht worden. Ihre Eröffnung wurde von den Bürgern der Kolonie sowie von allen Xenos in der [root.owner.GetName] mit Freude aufgenommen. Die Bevölkerung [root.GetName]s hat jetzt einen Ort, wo sie sich an seine Lehren und Leben erinnern können, und sind sich sicher, dass Frieden und Wohlwollen zwischen Spezies dauerhaft erhalten bleiben wird."
+
+
+#General Modifiers
+ cc_colony_distrusts:0 "Misstrauen gegenüber dem Staat"
+ cc_colony_distrusts_desc:0 "Große Teile der Bevölkerung dieser Kolonie misstrauen den Staat als Folge früheren Ereignissen in der Geschichte der Kolonie."
+
+ cc_lingering_oppression:0 "Verweilende Auswirkung der Maßregelung"
+ cc_oppression:0 "Maßregelung"
+
+ cc_planet_oppression:0 "Maßregelung"
+ cc_planet_oppression_desc:0 "Die Regierung führt eine oppressive Maßregelung gegen Regimekritiker auf diesem Planeten."

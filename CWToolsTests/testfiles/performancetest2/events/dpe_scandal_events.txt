@@ -1,0 +1,1099 @@
+namespace = dpe_scandal
+
+#triggered in performance events
+country_event = {
+	id = dpe_scandal.1
+	title = dpe_scandal.1.name
+	desc = dpe_scandal.1.desc
+	
+	picture = GFX_evt_news_room
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		is_country_type = default
+		OR = {
+			AND = {
+				has_ethic = ethic_fanatic_materialist
+				NOT = { has_ethic = ethic_egalitarian }
+			}
+			AND = {
+				has_ethic = ethic_materialist
+				has_ethic = ethic_fanatic_authoritarian
+			}
+		}
+		NOT = { has_country_flag = dpe_satisfied_egalitarians }
+		exists = ruler
+		ruler = { NOT = { leader_of_faction = totalitarian } }
+	}
+	
+	immediate = {
+		set_timed_country_flag = {
+			flag = dpe_recent_charity_scandal
+			years = 50
+		}
+	}
+	
+	option = {
+		name = dpe_scandal.1.A
+		
+		add_modifier = {
+			modifier = dpe_charity_unpopular_ruler
+			days = 3600
+		}
+		
+		random_pop_faction = {
+			limit = { is_pop_faction_type = technologist }
+			add_modifier = {
+				modifier = dpe_charity_faction_undeserving
+				days = 3600
+			}
+		}
+		
+		ai_chance = {
+			factor = 1.5
+			modifier = {
+				factor = 0.25
+				count_pop_factions = {
+					limit = {
+						is_pop_faction_type = technologist
+						support > 0.3
+					}
+				}
+			}
+		}
+	}
+
+	option = {
+		name = dpe_scandal.1.B
+		shift_ethic = ethic_egalitarian
+		
+		random_pop_faction = {
+			limit = { is_pop_faction_type = technologist }
+			add_modifier = {
+				modifier = dpe_charity_faction_undeserving
+				days = 3600
+			}
+		}
+		
+		
+		random_pop_faction = {
+			limit = { is_pop_faction_type = progressive }
+			add_modifier = { modifier = embraced_faction days = 3600 }
+			hidden_effect = { 
+				add_modifier = { modifier = embraced_faction_timer days = 3600 }
+				owner = {
+					every_pop_faction = {
+						limit = {
+							NOR = {
+								is_same_value = prevprev
+								is_pop_faction_type = technologist
+							}
+						}
+						add_modifier = { modifier = embraced_another_faction days = 3600 }
+					}
+				}
+			}
+		}
+		
+		ai_chance = {
+			modifier = {
+				factor = 0
+				has_ethic = ethic_fanatic_authoritarian
+			}
+			modifier = {
+				factor = 0.5
+				has_ethic = ethic_authoritarian
+			}
+			modifier = {
+				factor = 2
+				count_pop_factions = {
+					limit = {
+						is_pop_faction_type = progressive
+						support > 0.15
+					}
+				}
+			}
+		}
+		
+		trigger = { has_faction = progressive }
+	}
+
+	option = {
+		name = dpe_scandal.1.C
+		custom_tooltip = dpe_scandal.1.C.tooltip
+		hidden_effect = {
+			kill_leader = { type = ruler show_notification = no }
+		}
+		
+		ai_chance = {
+			factor = 2
+			modifier = {
+				factor = 5
+				count_pop_factions = {
+					limit = {
+						is_pop_faction_type = technologist
+						support > 0.3
+					}
+				}
+			}
+		}
+	}
+}
+
+
+
+#Corruption Scandal (adapted from cc_events_blackmail.201)
+country_event = {
+	id = dpe_scandal.2
+	title = dpe_scandal.2.name
+	desc = dpe_scandal.2.desc
+	picture = GFX_evt_news_room
+	
+	trigger = {
+		has_country_flag = dpe_can_have_corruption_scandal
+		NOT = { has_country_flag = dpe_recent_corruption_scandal }
+		is_at_war = no
+	}
+		
+		
+	mean_time_to_happen = {
+		years = 90
+		
+		modifier = {
+			factor = 0.8
+			OR = {
+				has_ethic = ethic_materialist
+				has_ethic = ethic_fanatic_materialist
+			}
+		}
+		modifier = {
+			factor = 0.8
+			has_country_flag = dpe_corruption_scandal_more_likely
+		}
+		modifier = {
+			factor = 0.8
+			has_country_flag = dpe_corruption_scandal_likely
+		}
+		modifier = {
+			factor = 0.65
+			has_country_flag = dpe_corruption_scandal_very_likely
+		}
+	}
+	
+	immediate = {
+		set_timed_country_flag = {
+			flag = dpe_recent_corruption_scandal
+			years = 50
+		}
+		random_owned_leader = {
+			limit = { NOT = { leader_class = ruler } }
+			save_event_target_as = cc_first_corrupt
+		}
+		random_owned_leader = {
+			limit = {
+				NOR = {
+					leader_class = ruler
+					is_same_value = event_target:cc_first_corrupt
+				}
+			}
+			save_event_target_as = cc_second_corrupt
+		}
+	}
+			
+	
+	option = {
+		name = dpe_scandal.2.A
+		
+		custom_tooltip = dpe_scandal.2.A.tooltip
+		
+		hidden_effect = {
+			event_target:cc_first_corrupt = { kill_leader = { show_notification = no } }
+			event_target:cc_second_corrupt = { kill_leader = { show_notification = no } }
+		}
+		
+		ai_chance = {
+			factor = 2
+			modifier = {
+				factor = 0.5
+				influence < 200
+			}
+			modifier = {
+				factor = 0.8
+				if = {
+					limit = { exists = event_target:cc_first_corrupt }
+					event_target:cc_first_corrupt = { has_skill > 4 }
+				}
+			}
+			modifier = {
+				factor = 0.8
+				if = {
+					limit = { exists = event_target:cc_second_corrupt }
+					event_target:cc_second_corrupt = { has_skill > 4 }
+				}
+			}
+		}
+	}
+	option = {
+		name = dpe_scandal.2.B
+		
+		add_modifier = {
+			modifier = cc_outrage_at_corruption
+			years = 10
+		}
+		
+		ai_chance = {
+			modifier = {
+				factor = 2
+				NOT = { any_owned_planet = { unrest > 0 } }
+			}
+			modifier = {
+				factor = 0.5
+				influence > 200
+			}
+			modifier = {
+				factor = 0.5
+				AND = {
+					if = {
+						limit = { exists = event_target:cc_first_corrupt }
+						event_target:cc_first_corrupt = { has_skill < 4 }
+					}
+					if = {
+						limit = { exists = event_target:cc_second_corrupt }
+						event_target:cc_second_corrupt = { has_skill < 4 }
+					}
+				}
+			}
+			modifier = {
+				factor = 1.2
+				if = {
+					limit = { exists = event_target:cc_first_corrupt }
+					event_target:cc_first_corrupt = { has_skill > 5 }
+				}
+			}
+			modifier = {
+				factor = 1.2
+				if = {
+					limit = { exists = event_target:cc_second_corrupt }
+					event_target:cc_second_corrupt = { has_skill > 5 }
+				}
+			}
+		}
+	}
+}
+
+
+
+#Ruler does not Believe
+country_event = {
+	id = dpe_scandal.3
+	title = dpe_scandal.3.name
+	desc = dpe_scandal.3.desc
+	picture = GFX_evt_cc_priesthood
+	
+	trigger = {
+		has_country_flag = dpe_can_have_corruption_scandal
+
+		OR = {
+			has_ethic = ethic_spiritualist
+			has_ethic = ethic_fanatic_spiritualist
+		}
+		NOT = { has_country_flag = dpe_recent_disbelief_scandal }
+
+		NOT = { has_modifier = cc_ruler_cult }
+		
+		exists = ruler
+		ruler = { NOT = { leader_of_faction = traditionalist } }
+	}
+		
+		
+	mean_time_to_happen = {
+		years = 115
+		
+		modifier = {
+			factor = 0.75
+			has_faction = technologist
+		}
+		modifier = {
+			factor = 0.75
+			has_faction = technologist
+			ruler = { leader_of_faction = technologist }
+		}
+		
+		modifier = {
+			factor = 0.75
+			has_country_flag = dpe_disbelief_scandal_more_likely
+		}
+	}
+	
+	immediate = {
+		set_timed_country_flag = {
+			flag = dpe_recent_disbelief_scandal
+			years = 50
+		}
+	}
+			
+	
+	option = {
+		name = dpe_scandal.3.A
+		
+		trigger = { has_faction = technologist }
+		
+		shift_ethic = ethic_materialist
+
+		random_pop_faction = {
+			limit = { is_pop_faction_type = technologist }
+			add_modifier = { modifier = embraced_faction days = 3600 }
+			hidden_effect = { 
+				add_modifier = { modifier = embraced_faction_timer days = 3600 }
+				owner = {
+					every_pop_faction = {
+						limit = {
+							NOR = { is_same_value = prevprev }
+							is_pop_faction_type = traditionalist
+						}
+						add_modifier = { modifier = embraced_another_faction days = 3600 }
+					}
+				}
+			}
+		}
+
+		custom_tooltip = dpe_scandal.3.A.tooltip
+		
+		hidden_effect = {
+			country_event = { id = dpe_scandal.4 days = 15 }
+		}
+		
+		ai_chance = {
+			modifier = {
+				factor = 0
+				OR = {
+					count_pop_factions = {
+						limit = {
+							is_pop_faction_type = traditionalist
+							support > 0.5
+						}
+						count = 1
+					}
+					NOT = { has_country_flag = dpe_disbelief_scandal_more_likely }
+				}
+			}
+			modifier = {
+				factor = 2
+				has_country_flag = cc_many_materialists
+			}
+		}
+	}
+	option = {
+		name = dpe_scandal.3.B
+		custom_tooltip = dpe_scandal.3.B.tooltip
+		
+		add_modifier = {
+			modifier = dpe_unbelief_empire
+			days = 3600
+		}
+		
+		random_pop_faction = {
+			limit = { is_pop_faction_type = traditionalist }
+			add_modifier = { modifier = dpe_unbelief_faction days = 3600 }
+		}
+		
+		ai_chance = {
+			factor = 2
+			modifier = {
+				factor = 0.5
+				OR = {
+					count_pop_factions = {
+						limit = {
+							is_pop_faction_type = traditionalist
+							support > 0.5
+						}
+						count = 1
+					}
+					NOT = { has_country_flag = dpe_disbelief_scandal_more_likely }
+				}
+			}
+			modifier = {
+				factor = 0.5
+				ruler = { has_skill < 4 }
+			}
+			modifier = {
+				factor = 2
+				ruler = { has_skill > 4 }
+			}
+			modifier = {
+				factor = 2
+				ruler = { has_skill > 6 }
+			}
+		}
+	}
+	option = {
+		name = dpe_scandal.3.C
+		custom_tooltip = dpe_scandal.3.C.tooltip
+		hidden_effect = {
+			kill_leader = { type = ruler show_notification = no }
+		}
+		
+		ai_chance = {
+			factor = 2
+			modifier = {
+				factor = 5
+				count_pop_factions = {
+					limit = {
+						is_pop_faction_type = traditionalist
+						support > 0.5
+					}
+					count = 1
+				}
+			}
+			modifier = {
+				factor = 2
+				ruler = { has_skill < 4 }
+			}
+			modifier = {
+				factor = 0.5
+				ruler = { has_skill > 4 }
+			}
+			modifier = {
+				factor = 0.5
+				ruler = { has_skill > 6 }
+			}
+		}
+	}
+}
+
+#Ruler does not Believe
+country_event = {
+	id = dpe_scandal.4
+	title = dpe_scandal.4.name
+	desc = dpe_scandal.4.desc
+	picture = GFX_evt_cc_priesthood
+	
+	is_triggered_only = yes
+	
+	trigger = { has_faction = traditionalist }
+	
+	option = {
+		name = UNFORTUNATE
+		
+		add_modifier = {
+			modifier = dpe_damned_to_hell_empire
+			days = 3600
+		}
+		
+		random_pop_faction = {
+			limit = { is_pop_faction_type = traditionalist }
+			add_modifier = { modifier = dpe_damned_to_hell_faction days = 3600 }
+		}
+	}
+}
+
+
+#triggered in performance
+#Ruler is an ex-slave
+country_event = {
+	id = dpe_scandal.10
+	title = dpe_scandal.10.name
+	desc = dpe_scandal.10.desc
+	
+	diplomatic = yes
+	
+	picture_event_data = {
+		portrait = root
+		room = root.ruler
+	}
+	
+	is_triggered_only = yes
+
+	trigger = {
+		is_country_type = default
+		allows_slavery = yes
+		
+		NOT = { has_country_flag = dpe_recent_escaped_slave_ruler }
+		
+		NOT = { has_authority = auth_imperial }
+		exists = ruler
+		
+		any_owned_pop = {
+			is_same_species = root.ruler
+			is_enslaved = yes
+		}
+	}
+	
+	immediate = {
+		set_timed_country_flag = {
+			flag = dpe_recent_escaped_slave_ruler
+			years = 120
+		}
+		
+		random_list = {
+			1 = {
+				set_timed_country_flag = {
+					flag = dpe_escaped_slave_ruler_generic
+					days = 30
+				}
+			}
+			2 = {
+				set_timed_country_flag = {
+					flag = dpe_escaped_slave_ruler_egal
+					days = 30
+				}
+				modifier = {
+					factor = 0
+					OR = {
+						has_ethic = ethic_egalitarian
+						has_ethic = ethic_fanatic_egalitarian
+						NOT = { has_faction = progressive }
+						has_authority = auth_democratic
+					}
+				}
+				modifier = {
+					factor = 2
+					count_pop_factions = {
+						limit = {
+							is_pop_faction_type = progressive
+							support > 0.15
+						}
+					}
+				}
+			}
+			1 = {
+				set_timed_country_flag = {
+					flag = dpe_escaped_slave_ruler_spir
+					days = 30
+				}
+				modifier = {
+					factor = 0
+					OR = {
+						has_ethic = ethic_spiritualist
+						has_ethic = ethic_fanatic_spiritualist
+						NOT = { has_faction = traditionalist }
+					}
+				}
+				modifier = {
+					factor = 2
+					count_pop_factions = {
+						limit = {
+							is_pop_faction_type = traditionalist
+							support > 0.15
+						}
+					}
+				}
+			}
+			1 = {
+				set_timed_country_flag = {
+					flag = dpe_escaped_slave_ruler_mil
+					days = 30
+				}
+				modifier = {
+					factor = 0
+					OR = {
+						has_ethic = ethic_militarist
+						has_ethic = ethic_fanatic_militarist
+						NOT = { has_faction = imperialist }
+					}
+				}
+				modifier = {
+					factor = 2
+					count_pop_factions = {
+						limit = {
+							is_pop_faction_type = imperialist
+							support > 0.15
+						}
+					}
+				}
+			}
+			1 = {
+				set_timed_country_flag = {
+					flag = dpe_escaped_slave_ruler_pac
+					days = 30
+				}
+				modifier = {
+					factor = 0
+					OR = {
+						has_ethic = ethic_pacifist
+						has_ethic = ethic_fanatic_pacifist
+						NOT = { has_faction = prosperity }
+					}
+				}
+				modifier = {
+					factor = 2
+					count_pop_factions = {
+						limit = {
+							is_pop_faction_type = prosperity
+							support > 0.15
+						}
+					}
+				}
+			}
+			1 = {
+				set_timed_country_flag = {
+					flag = dpe_escaped_slave_ruler_mat
+					days = 30
+				}
+				modifier = {
+					factor = 0
+					OR = {
+						has_ethic = ethic_materialist
+						has_ethic = ethic_fanatic_materialist
+						NOT = { has_faction = technologist }
+					}
+				}
+				modifier = {
+					factor = 2
+					count_pop_factions = {
+						limit = {
+							is_pop_faction_type = technologist
+							support > 0.15
+						}
+					}
+				}
+			}
+			1 = {
+				set_timed_country_flag = {
+					flag = dpe_escaped_slave_ruler_phobe
+					days = 30
+				}
+				modifier = {
+					factor = 0
+					OR = {
+						has_ethic = ethic_xenophobe
+						has_ethic = ethic_fanatic_xenophobe
+						NOT = {
+							has_faction = supremacist
+						}
+					}
+				}
+				modifier = {
+					factor = 2
+					count_pop_factions = {
+						limit = {
+							is_pop_faction_type = supremacist
+							support > 0.15
+						}
+					}
+				}
+			}
+			1 = {
+				set_timed_country_flag = {
+					flag = dpe_escaped_slave_ruler_phile
+					days = 30
+				}
+				modifier = {
+					factor = 0
+					OR = {
+						has_ethic = ethic_xenophile
+						has_ethic = ethic_fanatic_xenophile
+						NOT = { has_faction = xenoist }
+					}
+				}
+				modifier = {
+					factor = 2
+					count_pop_factions = {
+						limit = {
+							is_pop_faction_type = xenoist
+							support > 0.15
+						}
+					}
+				}
+			}
+		}
+	}
+	
+	option = {
+		name = dpe_scandal.10.A
+		custom_tooltip = dpe_scandal.10.A.tooltip
+		
+		hidden_effect = {
+			random_list = {
+				1 = { country_event = { id = dpe_scandal.11 days = 5 } }
+				3 = { country_event = { id = dpe_scandal.12 days = 1 } }
+			}
+		}
+	}
+	option = {
+		name = dpe_scandal.10.B
+		
+		hidden_effect = {
+			country_event = { id = dpe_scandal.14 }
+		}
+	}
+}
+
+country_event = {
+	id = dpe_scandal.11
+	title = dpe_scandal.11.name
+	desc = dpe_scandal.11.desc
+	
+	picture = GFX_evt_smugglers_in_bar
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = CCEXCELLENT
+		
+		if = {
+			limit = {
+				exists = ruler
+				ruler = { NOT = { has_ruler_trait = leader_trait_dpe_ruthless } }
+			}
+			ruler = { add_trait = leader_trait_dpe_ruthless }
+		}
+	}
+}
+
+country_event = {
+	id = dpe_scandal.12
+	title = dpe_scandal.12.name
+	desc = dpe_scandal.12.desc
+	
+	picture = GFX_evt_throne_room
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		random_owned_leader = {
+			limit = { NOT = { leader_class = ruler } }
+			save_event_target_as = random_guy
+		}
+	}
+	
+	option = {
+		name = dpe_scandal.12.A
+		
+		custom_tooltip = dpe_scandal.12.A.tooltip
+		
+		hidden_effect = {
+			kill_leader = { type = ruler show_notification = no }
+		}
+	}
+	option = {
+		name = dpe_scandal.12.B
+		
+		custom_tooltip = dpe_scandal.12.B.tooltip
+		
+		hidden_effect = {
+			kill_leader = { type = ruler show_notification = no }
+		}
+	}
+}
+
+
+country_event = {
+	id = dpe_scandal.14
+	title = dpe_scandal.14.name
+	desc = {
+		trigger = {
+			switch = {
+				trigger = has_country_flag
+				dpe_escaped_slave_ruler_generic = { text = dpe_scandal.14.desc.generic }
+				dpe_escaped_slave_ruler_phile = { text = dpe_scandal.14.desc.phile }
+				dpe_escaped_slave_ruler_phobe = { text = dpe_scandal.14.desc.phobe }
+				dpe_escaped_slave_ruler_mat = { text = dpe_scandal.14.desc.mat }
+				dpe_escaped_slave_ruler_pac = { text = dpe_scandal.14.desc.pac }
+				dpe_escaped_slave_ruler_egal = { text = dpe_scandal.14.desc.egal }
+				dpe_escaped_slave_ruler_spir = { text = dpe_scandal.14.desc.spir }
+				dpe_escaped_slave_ruler_mil = { text = dpe_scandal.14.desc.mil }
+				default = { text = dpe_scandal.14.desc.generic }
+			}
+		}
+	}
+	
+	diplomatic = yes
+	
+	picture_event_data = {
+		portrait = root
+		room = root.ruler
+	}
+	
+	is_triggered_only = yes
+
+	option = {
+		name = dpe_scandal.14.A
+		
+		if = {
+			limit = { has_country_flag = dpe_escaped_slave_ruler_generic }
+
+			add_modifier = {
+				modifier = cc_paid_blackmail
+				days = 360
+			}
+		}
+		
+		if = {
+			limit = { has_country_flag = dpe_escaped_slave_ruler_egal }
+			custom_tooltip = CCREMOVERULER.tooltip
+			hidden_effect = {
+				kill_leader = { type = ruler show_notification = no }
+			}
+			shift_ethic = ethic_egalitarian
+#			change_government = { authority = auth_democratic }
+			
+			random_pop_faction = {
+				limit = { is_pop_faction_type = progressive }
+				add_modifier = { modifier = embraced_faction days = 3600 }
+				hidden_effect = { 
+					add_modifier = { modifier = embraced_faction_timer days = 3600 }
+					owner = {
+						every_pop_faction = {
+							limit = {
+								NOT = { is_same_value = prevprev }
+							}
+							add_modifier = { modifier = embraced_another_faction days = 3600 }
+						}
+					}
+				}
+			}
+		}
+		if = {
+			limit = { has_country_flag = dpe_escaped_slave_ruler_phile }
+			
+			shift_ethic = ethic_xenophile
+			random_pop_faction = {
+				limit = { is_pop_faction_type = xenoist }
+				add_modifier = { modifier = embraced_faction days = 3600 }
+				hidden_effect = { 
+					add_modifier = { modifier = embraced_faction_timer days = 3600 }
+					owner = {
+						every_pop_faction = {
+							limit = {
+								NOT = { is_same_value = prevprev }
+							}
+							add_modifier = { modifier = embraced_another_faction days = 3600 }
+						}
+					}
+				}
+			}
+		}
+		if = {
+			limit = { has_country_flag = dpe_escaped_slave_ruler_phobe }
+			
+			shift_ethic = ethic_xenophobe
+			random_pop_faction = {
+				limit = { is_pop_faction_type = supremacist }
+				add_modifier = { modifier = embraced_faction days = 3600 }
+				hidden_effect = { 
+					add_modifier = { modifier = embraced_faction_timer days = 3600 }
+					owner = {
+						every_pop_faction = {
+							limit = {
+								NOT = { is_same_value = prevprev }
+							}
+							add_modifier = { modifier = embraced_another_faction days = 3600 }
+						}
+					}
+				}
+			}
+		}
+		if = {
+			limit = { has_country_flag = dpe_escaped_slave_ruler_mat }
+			
+			shift_ethic = ethic_materialist
+			random_pop_faction = {
+				limit = { is_pop_faction_type = technologist }
+				add_modifier = { modifier = embraced_faction days = 3600 }
+				hidden_effect = { 
+					add_modifier = { modifier = embraced_faction_timer days = 3600 }
+					owner = {
+						every_pop_faction = {
+							limit = {
+								NOT = { is_same_value = prevprev }
+							}
+							add_modifier = { modifier = embraced_another_faction days = 3600 }
+						}
+					}
+				}
+			}
+		}
+		if = {
+			limit = { has_country_flag = dpe_escaped_slave_ruler_pac }
+			
+			shift_ethic = ethic_pacifist
+			random_pop_faction = {
+				limit = { is_pop_faction_type = progressive }
+				add_modifier = { modifier = embraced_faction days = 3600 }
+				hidden_effect = { 
+					add_modifier = { modifier = embraced_faction_timer days = 3600 }
+					owner = {
+						every_pop_faction = {
+							limit = {
+								NOT = { is_same_value = prevprev }
+							}
+							add_modifier = { modifier = embraced_another_faction days = 3600 }
+						}
+					}
+				}
+			}
+		}
+		if = {
+			limit = { has_country_flag = dpe_escaped_slave_ruler_spir }
+			
+			shift_ethic = ethic_spiritualist
+			random_pop_faction = {
+				limit = { is_pop_faction_type = traditionalist }
+				add_modifier = { modifier = embraced_faction days = 3600 }
+				hidden_effect = { 
+					add_modifier = { modifier = embraced_faction_timer days = 3600 }
+					owner = {
+						every_pop_faction = {
+							limit = {
+								NOT = { is_same_value = prevprev }
+							}
+							add_modifier = { modifier = embraced_another_faction days = 3600 }
+						}
+					}
+				}
+			}
+		}
+		if = {
+			limit = { has_country_flag = dpe_escaped_slave_ruler_mil }
+			
+			shift_ethic = ethic_militarist
+			random_pop_faction = {
+				limit = { is_pop_faction_type = imperialist }
+				add_modifier = { modifier = embraced_faction days = 3600 }
+				hidden_effect = { 
+					add_modifier = { modifier = embraced_faction_timer days = 3600 }
+					owner = {
+						every_pop_faction = {
+							limit = {
+								NOT = { is_same_value = prevprev }
+							}
+							add_modifier = { modifier = embraced_another_faction days = 3600 }
+						}
+					}
+				}
+			}
+		}
+	}
+	option = {
+		name = dpe_scandal.14.B
+		custom_tooltip = dpe_scandal.14.B.tooltip
+		
+		hidden_effect = {
+			random_list = {
+				1 = { country_event = { id = dpe_scandal.11 days = 5 } }
+				3 = { country_event = { id = dpe_scandal.12 days = 1 } }
+			}
+		}
+	}
+}
+
+
+
+#remove modifiers if ruler changes
+country_event = {
+	id = dpe_scandal.99
+	hide_window = yes
+	is_triggered_only = yes
+	
+	trigger = {
+		NOR = {
+			has_authority = auth_imperial
+			has_authority = auth_dictatorial
+		}
+	}			
+	
+	immediate = {
+		if = {
+			limit = { has_modifier = dpe_charity_unpopular_ruler }
+			remove_modifier = dpe_charity_unpopular_ruler
+		}
+		
+		if = {
+			limit = {
+				count_pop_factions = {
+					limit = {
+						is_pop_faction_type = technologist
+						has_modifier = dpe_charity_faction_undeserving
+					}
+					count = 1
+				}
+			}
+			random_pop_faction = {
+				limit = { is_pop_faction_type = technologist }
+				remove_modifier = dpe_charity_faction_undeserving
+			}
+		}
+		
+		if = {
+			limit = { has_modifier = cc_ruler_humiliated }
+			remove_modifier = cc_ruler_humiliated
+		}
+		
+		if = {
+			limit = {
+				count_pop_factions = {
+					limit = {
+						is_pop_faction_type = xenoist
+						has_modifier = cc_xenophobic_offence_1
+					}
+					count = 1
+				}
+			}
+			random_pop_faction = {
+				limit = { is_pop_faction_type = xenoist }
+				remove_modifier = cc_xenophobic_offence_1
+			}
+		}
+		
+		if = {
+			limit = {
+				count_pop_factions = {
+					limit = {
+						is_pop_faction_type = xenoist
+						has_modifier = cc_xenophobic_offence_2
+					}
+					count = 1
+				}
+			}
+			random_pop_faction = {
+				limit = { is_pop_faction_type = xenoist }
+				remove_modifier = cc_xenophobic_offence_2
+			}
+		}
+		
+		
+		if = {
+			limit = { has_modifier = dpe_unbelief_empire }
+			remove_modifier = dpe_unbelief_empire
+		}
+		
+		if = {
+			limit = {
+				count_pop_factions = {
+					limit = {
+						is_pop_faction_type = traditionalist
+						has_modifier = dpe_unbelief_faction
+					}
+					count = 1
+				}
+			}
+			random_pop_faction = {
+				limit = { is_pop_faction_type = traditionalist }
+				remove_modifier = dpe_unbelief_faction
+			}
+		}
+		
+		if = {
+			limit = { has_modifier = dpe_damned_to_hell_empire }
+			remove_modifier = dpe_damned_to_hell_empire
+		}
+		
+		if = {
+			limit = {
+				count_pop_factions = {
+					limit = {
+						is_pop_faction_type = traditionalist
+						has_modifier = dpe_damned_to_hell_faction
+					}
+					count = 1
+				}
+			}
+			random_pop_faction = {
+				limit = { is_pop_faction_type = traditionalist }
+				remove_modifier = dpe_damned_to_hell_faction
+			}
+		}
+	}
+}

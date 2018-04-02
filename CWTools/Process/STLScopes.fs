@@ -359,7 +359,7 @@ module STLScopes =
         "hidden_effect", id;
         "hidden_trigger", id;
     ]
-    let changeScope (effects : Effect list) (triggers : Effect list) (key : string) (source : ScopeContext) = 
+    let changeScope (effects : Map<string, Effect>) (triggers : Map<string, Effect>) (key : string) (source : ScopeContext) = 
         let key = if key.StartsWith("hidden:", StringComparison.OrdinalIgnoreCase) then key.Substring(7) else key
         if key.StartsWith("event_target:", StringComparison.OrdinalIgnoreCase) then NewScope ({ source with Scopes = Scope.Any::source.Scopes }, [])
         else
@@ -369,10 +369,12 @@ module STLScopes =
                 match onetoone with
                 | Some (_, f) -> f (context, false), NewScope (f (context, false) |> fst, [])
                 | None ->
-                    let effect = (effects @ triggers) 
-                                |> List.choose (function | :? ScopedEffect as e -> Some e |_ -> None)
-                                |> List.tryFind (fun e -> e.Name == nextKey)
-                    match effect with
+                    let effectMatch = effects.TryFind nextKey |> Option.bind (function | :? ScopedEffect as e -> Some e |_ -> None)
+                    let triggerMatch = triggers.TryFind nextKey |> Option.bind (function | :? ScopedEffect as e -> Some e |_ -> None)
+                    // let effect = (effects @ triggers) 
+                    //             |> List.choose (function | :? ScopedEffect as e -> Some e |_ -> None)
+                    //             |> List.tryFind (fun e -> e.Name == nextKey)
+                    match Option.orElse effectMatch triggerMatch with
                     | None -> (context, false), NotFound
                     | Some e -> 
                         let possibleScopes = e.Scopes

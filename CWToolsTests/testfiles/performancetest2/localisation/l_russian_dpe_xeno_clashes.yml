@@ -1,0 +1,161 @@
+﻿l_russian:
+
+
+cc_xeno_clashes.2.name:0 "Ненавистная речь в [root.GetName]"
+cc_xeno_clashes.2.desc:0 "Ряд инцидентов вызвал рост напряженности между [species1.GetNamePlural] и [species2.GetNamePlural] в [root.GetName]. Общественная дискуссия моментально привела к обострению ксенофобии, и лидеры с обеих сторон начали заявлять, что [root.GetName] принадлежит им по праву. По рукам стали ходить документы, в которых один вид описывает другой в уничижительных терминах. А затем даже появились зловещие слухи среди [species2.GetNamePlural] о том, как можно решить "проблему [species1.GetAdj]"."
+cc_xeno_clashes.2.desc.phile:0 "В причудливом повороте событий резко обострились дебаты о том, кто же предпочтительнее и лучше - [species1.GetNamePlural] или [species2.GetNamePlural]. Общественная дискуссия моментально привела к обострению ксенофобии, и лидеры с обеих сторон начали заявлять, что [root.GetName] принадлежит им по праву. По рукам стали ходить документы, в которых один вид описывает другой в уничижительных терминах. А затем даже появились зловещие слухи среди [species2.GetNamePlural] о том, как можно решить "проблему [species1.GetAdj]"."
+cc_xeno_clashes.2.phile.own:0 "[species1.GetNamePlural] должны показывать лучший пример!"
+cc_xeno_clashes.2.phobe.own:0 "Эта инопланетная мразь не ровня [species1.GetNamePlural]."
+cc_xeno_clashes.2.own:0 "Мы должны сохранить мир."
+cc_xeno_clashes.2.no_own:0 "$cc_xeno_clashes.2.own$"
+cc_xeno_clashes.2.phobe.no_own:0 "Дайте этим инопланетным мразями разорвать друг друга на части."
+
+cc_planet_hate_speech:0 "Ненавистная речь"
+cc_planet_hate_speech_desc:0 "Порочные дискуссии способствую напряжению между разными видами на этой планете."
+
+cc_xeno_clashes.3.name:0 "Взрыв межвидовой напряженности в [root.GetName]"
+cc_xeno_clashes.3.desc.A:0 "Межвидовая напряженность [root.GetName] достигла точки кипения после массовых протестов среди населения [species2.GetAdj], вызванных арестом известного [species2.GetName], обвиняемого в коррупции. [species2.GetNamePlural] считают это последней каплей в череде репрессий властей [species1.GetAdj] против них . Это заставило недовольных выйти на улицы и выразить протест нынешнему положению дел. Со своей стороны, на улицы вышли такие же массовые контр-протесты лояльных государству [species1.GetNameAdj]. События быстро вышли из-под контроля, поскольку полиция не сумела удержать одну группу подальше от другой, что привело к массовой резне и кровопролитию. Была высла армия для восстановления порядка, но ситуация всё равно остаётся очень напряженной.\n\nЧто должно сделать в данной ситуации?"
+cc_xeno_clashes.3.desc.B:0 "Межвидовая напряженность [root.GetName] достигла точки кипения после массовых протестов среди населения [species2.GetAdj], вызванных арестом известного [species2.GetName], обвиняемого в произнесении ненавистной речи к [species1.GetNamePlural], чтобы они убирались к себе домой. [species2.GetNamePlural] возмущены подобным ходом и посчитали это последней каплей в череде репрессий властей [species1.GetAdj] против них. Это заставило выйти недовольных на улицы и выразить протест нынешнему положению дел. Со своей стороны, на улицы вышли такие же массовые контр-протесты лояльных государству [species1.GetNameAdj]. События быстро вышли из-под контроля, поскольку полиция не сумела удержать одну группу подальше от другой, что привело к массовой резне и кровопролитию. Была высла армия для восстановления порядка, но ситуация всё равно остаётся очень напряженной.\n\nЧто должно сделать в данной ситуации?"
+cc_xeno_clashes.3.A:0 "Для [species2.GetNamePlural] нет места в [root.owner.GetName]."
+cc_xeno_clashes.3.A.tooltip:0 "Население [root.owner.GetName] - [species2.GetAdj] - будет оскорблено." 
+cc_xeno_clashes.3.B:0 "Подобные инциденты неизбежны, но прискорбны."
+cc_xeno_clashes.3.B.tooltip:0 "Есть шанс, что волнения могут усилиться и распространиться."
+cc_xeno_clashes.3.C:0 "Мы должны найти способ, чтобы все расы ладили друг с другом."
+cc_xeno_clashes.3.C.tooltip:0 "Кампания по примирению - подкреплённая внушительными финансовыми инвистициями - облегчит напряжённость на планете."
+
+cc_xeno_clashes.31.name:0 "Основание фронта независимости [species2.GetAdj]"
+cc_xeno_clashes.31.desc:0 "К проклятому [root.GetRulerTitle] [root.GetRulerName],\n\nМы должны поблагодарить вас за разъяснение того, что сообщество [species2.GetAdj] давно подозревало: Нам давно не рады в [root.GetName]. Вы будете определенно рады услышать, что мы планируем отделиться от вашей империи, как можно скорее. Тирания [species1.GetAdj] не может - не будет - продолжаться вечно!\n\nС уважением,\n[annoyed_xeno.GetName],\nЛидер Фронта Независимости [species2.GetAdj]."
+cc_xeno_clashes.31.tooltip:0 "Все [species2.GetAdj] £pops получат модификатор §R$cc_feels_unwelcome$§!, дающий -20% СЧАСТЬЯ.\nВероятно дальнейшее межвидовое волнение."
+
+cc_planet_interspecies_tensions:0 "Межвидовое напряжение"
+cc_planet_interspecies_tensions_desc:0 "На этой планете растёт напряжение между разными видами."
+cc_empire_interspecies_tensions:0 "Распространение межвидового напряжения"
+cc_empire_interspecies_tensions_desc:0 "В империи растёт напряжение между разными видами."
+cc_feels_unwelcome:0 "Нежелателен"
+cc_xenos_disparaged:0 "Чужаки нежелательны"
+cc_xenos_disparaged_sup:0 "$cc_xenos_disparaged$"
+cc_xenos_encouraged:0 "Поощрение мирного сосуществования"
+
+cc_xeno_reconciliation:0 "Примирение с чужаками"
+cc_xeno_reconciliation_desc:0 "После периода чередующихся неприятностей, правительство разработало программу обеспечения примирения и мирного сосуществования между разными видами."
+cc_investment_package:0 "Инвестиционный пакет"
+cc_investment_package_desc:0 "Центральное правительство "инвестирует" в обеспечение спокойствия этой планеты."
+
+cc_xeno_clashes.32.name:0 "Ополчение [species2.GetAdj] наносит удар!"
+cc_xeno_clashes.32.desc:0 "Фронт независимости [species2.GetAdj] совершил атаку на [root.GetName]. Ополченцы [species2.GetName] застали в расплох сообщество [species1.GetAdj] и без предупреждения успели убить большое количество [species1.GetNamePlural]."
+cc_xeno_clashes.32.option:0 "Мы должны действовать, чтобы не допустить дальнейшей бойни."
+
+cc_xeno_clashes.33.name:0 "Фронт независимости [species2.GetAdj] наносит Удар!"
+cc_xeno_clashes.33.desc:0 "Оперативники фронта независимости [species2.GetAdj] совершили разрушительную атаку на [species1.GetNamePlural] на [root.GetName]. Мощная ядерная бомба взорвалась прямо посреди густонаселенного района [species1.GetNamePlural], вызвав несметное количество жертв. Выжившие [species1.GetNamePlural] срочно обратились за помощью, чтобы противостоять дальнейшим террористическим атакам."
+cc_xeno_clashes.33.option:0 "$cc_xeno_clashes.32.option$"
+
+
+cc_xeno_clashes.34.name:0 "Фронт независимости [species2.GetAdj] наносит удар!"
+cc_xeno_clashes.34.desc:0 "Фронт независимости [species2.GetAdj] запустил разрушительную кибер-атаку, направленную на власти [root.GetName]. Они причинили катастрофический ущерб и похитили засекреченные данные. Пока наше правительство ещё только приходит в себя, они уже собираются заменить его альтернативной администрацией [species2.GetAdj]."
+cc_xeno_clashes.34.option:0 "Мы должны действовать, чтобы восстановить порядок."
+
+cc_xeno_clashes.35.name:0 "Ополчение [species2.GetAdj] наносит удар!"
+cc_xeno_clashes.35.desc:0 "Фронт независимости [species2.GetAdj] совершил атаку на [root.GetName]. Ополченцы [species2.GetName] застали в расплох нескольких местных чиновников, убив некоторых из них и парализовав управление планетой. В результате этого удара, [species2.GetNamePlural] попытаются заменить нынешнее правительство своей альтернативной администрацией."
+cc_xeno_clashes.35.option:0 "$cc_xeno_clashes.34.option$"
+
+cc_xeno_clashes.36.name:0 "Фронт независимости [species2.GetAdj] наносит Удар!"
+cc_xeno_clashes.36.desc:0 "Оперативники фронта независимости [species2.GetAdj] совершили атаку на [root.GetName]. Похоже, что небольшая группа смертников смогла пронести высокомощную бомбу в правительственные здания, а затем взорвать её. Наше правительство искалечено потерей почти всего персонала и инфраструктуры, и пытается сдержать ситуацию под контролем."
+cc_xeno_clashes.36.option:0 "$cc_xeno_clashes.34.option$"
+
+cc_disrupted_government:0 "Нарушена работа правительства"
+cc_disrupted_government_desc:0 "Мятежники нарушили работу планетарной администрации и пытаются основать своё параллельное правительство."
+
+cc_xeno_clashes.37.name:0 "Резня на [root.GetName]"
+cc_xeno_clashes.37.desc:0 "Если мы немедленно не вмешаемся, то обострившаяся ситуация на [root.GetName] неизбежно приведёт к геноциду и резне. Ополчение [species1.GetNamePlural] и [species2.GetNamePlural] были сформированы в глубоком секрете, а затем началась серия атак. [species2.GetNamePlural] получили преимущество в ранних столкновениях и успели захватить и разрушить один из крупнейших городов [species1.GetAdj], что привело к несметному количеству жертв."
+
+cc_xeno_clashes.371.name:0 "Резня на [root.GetName]"
+cc_xeno_clashes.371.desc:0 "Лидер ополчения [species1.GetAdj] попросил у правительства поддержки (и без последствий для него в будущем) в уничтожении своих солдат. Он пообещал, что сможет обезопасить и очистить планету от [species2.GetNamePlural]. Как нам ответить?"
+cc_xeno_clashes.371.A:0 "Делайте это, если необходимо"
+cc_xeno_clashes.371.B:0 "Введите военное положение, чтобы предотвратить дальнейшую резню."
+
+cc_allowed_genocide_of_us:0 "Разрешить геноцид собственной расы"
+
+cc_xeno_clashes.372.name:0 "$cc_xeno_clashes.31.name$"
+cc_xeno_clashes.372.desc:0 "К проклятому [root.GetRulerTitle] [root.GetRulerName],\n\nВо вселенной нет таких слов, чтобы выразить всю глубину вашего предательства. Знайте, что вы сами сделали себя нашим врагом. Ваша тирания не может - не будет - продолжаться вечно!\n\nС уважением,\n[annoyed_xeno.GetName],\nЛидер Фронта Независимости [species2.GetAdj]."
+cc_xeno_clashes.372.tooltip:0 "Все [species2.GetAdj] £pops получат модификатор §R$cc_pop_fears_genocide$§!, дающий -50% СЧАСТЬЯ.\nВероятно дальнейшее межвидовое волнение."
+
+cc_pop_fears_genocide:0 "Страх геноцида"
+cc_xenos_spared_from_massacre:0 "Спасённые чужаки"
+cc_xenos_massacred:0 "Перебитые чужаки"
+
+cc_martial_law:0 "Введено военное положение"
+cc_martial_law_desc:0 "Центральное правительство ввело военное положение, чтобы сохранить мир на этой планете."
+
+
+cc_xeno_clashes.382.name:0 "Межвидовые волнения распространились в [root.GetName]"
+cc_xeno_clashes.382.desc:0 "Население [species1.GetAdj] и [species2.GetAdj] на [root.GetName] жадно следили за новостями с [from.GetName], и тамошняя общественная дискуссия начала отражаться и на [from.GetName]. Несмотря на то, что разные инциденты пока не получили широкого распространения, напряженность всё же высокая."
+
+cc_xeno_clashes.383.name:0 "Межвидовое напряжение укоренилось на [root.GetName]"
+cc_xeno_clashes.383.desc:0 "Напряжение между [species2.GetNamePlural] и [species1.GetNamePlural] распространилось, и теперь доминирует во всех дискуссиях, где две расы входят в контакт. Если ничего не предпринять, обязательно дойдет до насилия - и очень скоро!"
+
+cc_xeno_clashes.383.A:0 "Ввести военное положение."
+cc_xeno_clashes.383.B:0 "Нам будет лучше без [species2.GetNamePlural]."
+cc_xeno_clashes.383.B.tooltip:0 "Напряжение между двумя видами скорее всего приведёт к взрыву."
+
+
+cc_xeno_clashes.4.name:0 "Межвидовая напряженность достигла точки еипения в [root.GetName]"
+cc_xeno_clashes.4.desc:0 "Межвидовая напряженность между [species1.GetNamePlural] и [species2.GetNamePlural] на [root.GetName] достигла точки кипения после того, как лоялист [species2.GetAdj] убил видного [species1.GetName]. Это вызвало массовые насильственные протесты среди населения [species1.GetAdj], которые начали нападать на [species2.GetNamePlural] на улицах. [species2.GetNamePlural] быстро организовали свой контр-протест, и из-за того, что полиция не смогла удержать события под контролем, а противостоящие стороны порознь друг от друга, случилась настоящая резня. Была развернута армия для восстановления порядка на улицах. Делегаты от обеих сторон предложили свои решения планетарному губернатору, который, в свою очередь, обратился к исполнительной власти за помощью в решение сложившейся ситуации.\n\nКаким должен быть ответ официального правительства?"
+cc_xeno_clashes.4.A:0 "Поддержите [species1.GetNamePlural]."
+cc_xeno_clashes.4.B:0 "Поддержите [species2.GetNamePlural]."
+cc_xeno_clashes.4.C:0 "Введите военное положение до тех, пока они на научатся жить вместе."
+cc_xeno_clashes.4.D:0 "Отправить команду для переговоров."
+cc_xeno_clashes.4.E:0 "Ни один из них не достоин места в [root.owner.GetName]."
+
+cc_xeno_clashes.4.A.tooltip:0 "Сообщество [species2.GetAdj] в [root.owner.GetName] будет оскорблено, но [species1.GetSpeciesNamePlural] почувствуют себя оправданными." 
+cc_xeno_clashes.4.B.tooltip:0 "Сообщество [species1.GetAdj] в [root.owner.GetName] будет оскорблено, но [species2.GetSpeciesNamePlural] почувствуют себя оправданными."
+cc_xeno_clashes.4.D.tooltip:0 "Может быть, разногласия можно разрешить с помощью дипломатии."
+cc_xeno_clashes.4.E.tooltip:0 "Сообщество [species1.GetAdj] и [species2.GetAdj] в [root.owner.GetName] будет оскорблено."
+#E:
+cc_xeno_clashes.41.name:0 "Фомирование фронта независимости [species1.GetAdj]-[species2.GetAdj]"
+cc_xeno_clashes.41.desc:0 "К проклятому [root.GetRulerTitle] [root.GetRulerName],\n\nДо этих самых пор, мы, нижеподписавшиеся, находились в разногласиях. Однако ваш ответ привёл нас к осознанию того, что у нас есть общий враг - [root.GetSpeciesNamePlural]. Мы разрешили наши проблемы и примирились с различиями, и теперь готовы действовать вместе для создания гармоничного государства вне состава [root.GetName].\n\nС уважением,\n[annoyed_xeno.GetName] и [annoyed_xeno2.GetName]\nЛидеры фронта независимости [species1.GetAdj]-[species2.GetAdj]."
+cc_xeno_clashes.41.tooltip:0 "Все граждане £pops [species1.GetAdj] и [species2.GetAdj] получат модификатор §R$cc_feels_unwelcome$§!, дающий -20% СЧАСТЬЯ.\nВероятно, возможны дальнейшие межвидовые смятения."
+
+
+cc_xeno_clashes.42.name:0 "Ополчение [species1.GetAdj]-[species2.GetAdj] наносит удар!"
+cc_xeno_clashes.42.desc:0 "Фронт независимости [species1.GetAdj]-[species2.GetAdj] атаковал [root.GetName]. Ополчение [species1.GetNamePlural] и [species2.GetName] обрушились на население [root.owner.GetSpeciesAdj] без какого-либо предупреждения и успели убить многих [root.owner.GetSpeciesNamePlural]."
+cc_xeno_clashes.42.option:0 "Мы должны действовать, чтобы предотвратить дальнейшую резню."
+
+cc_xeno_clashes.43.name:0 "Фронт независимости [species1.GetAdj]-[species2.GetAdj] наносит удар!"
+cc_xeno_clashes.43.desc:0 "Оперативники фронта независимости [species1.GetAdj]-[species2.GetAdj] совершили нападение на [root.owner.GetSpeciesNamePlural] на [root.GetName] с помощью ращрушительной атаки: Мощная ядерная бомба взорвалась посреди густонаселенного района [root.owner.GetSpeciesNamePlural], вызвав бесчисленное количество жертв. Выжившие [root.owner.GetSpeciesNamePlural] срочно обращаются к нам за помощью, чтобы предотвратить дальнейшие террористические атаки."
+cc_xeno_clashes.43.option:0 "$cc_xeno_clashes.42.option$"
+
+
+cc_xeno_clashes.44.name:0 "Фронт независимости [species1.GetAdj]-[species2.GetAdj] наносит удар!"
+cc_xeno_clashes.44.desc:0 "Фронт еезависимости [species1.GetAdj]-[species2.GetAdj] запустили разрушительно кибер-атаку на наши власти на [root.GetName]. Они причинили катастрофический ущерб и похитили засекреченные данные. Пока наше правительство ещё только приходит в себя, они уже собираются заменить его альтернативной администрацией [species1.GetAdj]-[species2.GetAdj]."
+cc_xeno_clashes.44.option:0 "Мы должны действовать, чтобы восстановить порядок."
+
+cc_xeno_clashes.45.name:0 "Ополчение [species1.GetAdj]-[species2.GetAdj] наносит удар!"
+cc_xeno_clashes.45.desc:0 "Фронт независимости [species1.GetAdj]-[species2.GetAdj] совершил нападение на [root.GetName]. Ополченцы [species2.GetName] обрушились на наших местных чиновников, некоторых убив, а другим не позволив эффективно управлять планетой. После этого удара, [species1.GetNamePlural] и [species2.GetNamePlural] пытаются заменить местное правительство своей альтернативой."
+cc_xeno_clashes.45.option:0 "$cc_xeno_clashes.44.option$"
+
+cc_xeno_clashes.46.name:0 "Фронт независимости [species1.GetAdj]-[species2.GetAdj] наносит удар!"
+cc_xeno_clashes.46.desc:0 "Оперативники фронта независимости [species1.GetAdj]-[species2.GetAdj] совершили нападение на [root.GetName]. Похоже, что небольшая группа смертников смогла пронести высокомощную бомбу в правительственные здания, а затем взорвать её. Наше правительство искалечено потерей почти всего персонала и инфраструктуры, и пытается сдержать ситуацию под контролем."
+cc_xeno_clashes.46.option:0 "$cc_xeno_clashes.44.option$"
+
+cc_xeno_clashes.5.name:0 "Срыв переговоров на [root.GetName]"
+cc_xeno_clashes.5.desc:0 "Переговоры по разрешению разногласий между [species1.GetNamePlural] и [species2.GetNamePlural] сорвались на [root.GetName]. Не будет быстрого прекращения напряжённости."
+cc_xeno_clashes.5.A:0 "Тогда мы должны обеспечить мир."
+cc_xeno_clashes.5.B:0 "Ах, хорошо."
+
+cc_xeno_clashes.51.name:0 "Решение разногласий на [root.GetName]?"
+cc_xeno_clashes.51.desc:0 "Переговоры по разрешению разногласий между [species1.GetNamePlural] и [species2.GetNamePlural] позволили этим двум видам найти общую почву. В самом деле, они теперь согласны с тем, что они могут восстановить мир, если будет оказана поддержка правительства [species1.GetAdj]. Подозрительно, но похоже, что эта поддержка будет включать в себя большой "пакет разработки", по-видимому, для обеспечение того, что планета будет достаточно успешной и процветающей, чтобы никакой напряженности не возникало."
+cc_xeno_clashes.51.A:0 "Они получат нашу поддержку"
+cc_xeno_clashes.51.B:0 "Наглость!"
+cc_xeno_clashes.51.B.tooltip:0 "Мир на [root.GetName] может снова сорваться."
+
+cc_xeno_clashes.52.name:0 "Мир срывается в [root.GetName]"
+cc_xeno_clashes.52.desc:0 "Нелёгкое прекращение огня в [root.GetName]."
+cc_xeno_clashes.52.A:0 "Тогда мы должны обеспечить мир."
+cc_xeno_clashes.52.B:0 "Ах, хорошо."
+
+cc_xeno_clashes.53.name:0 "Поддержания мира в [root.GetName]"
+cc_xeno_clashes.53.desc:0 "Несмотря на наш отказ растранжиривания государственных фондов, [species1.GetNamePlural] и [species2.GetNamePlural] не выполнили своих угроз по возобновлению насилия, и непростой мир между этими видами удержался на [root.GetName]."
+
+cc_ruled_against_our_pops:0 "Правило против наших граждан"
+cc_ruled_against_us_pops:0 "Правило против нас"
+cc_ruled_in_our_favour_pops:0 "Правило в нашу пользу"

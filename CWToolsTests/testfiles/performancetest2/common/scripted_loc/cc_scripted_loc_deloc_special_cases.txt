@@ -1,0 +1,32 @@
+############################################
+###   SCRIPTED LOCALIZATION FOR GERMAN   ###
+###     Scripted by Caligula Caesar      ###
+############################################
+
+#These are tailor-made for unusual cases
+
+##To apply, use [event_target.GetXIn] or [scope.Leader.GetXInDE]
+
+defined_text = {
+	name = GetXEReverse
+	text = {
+		trigger = { cc_loc_leader_masc = yes }
+		localization_key = DELOC_e
+	}
+	text = {
+		trigger = { cc_loc_leader_fem = yes }
+		localization_key = DELOC_X
+	}
+}
+
+defined_text = {
+	name = GetEmErReverse
+	text = {
+		trigger = { cc_loc_leader_masc = yes }
+		localization_key = DELOC_er
+	}
+	text = {
+		trigger = { cc_loc_leader_fem = yes }
+		localization_key = DELOC_em
+	}
+}

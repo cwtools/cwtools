@@ -1,0 +1,51 @@
+#added this as a buff to Authoritarians, as this and PRE make it very difficult for them
+
+namespace = cc_thought_police
+
+
+# Pop is purged or escapes as a political refugee
+pop_event = {
+	id = cc_thought_police.1
+	title = OK
+	desc = OK
+	
+	hide_window = yes
+	is_triggered_only = yes
+
+	immediate = {
+		if = {
+			limit = { is_valid_TP_refugee_pop = yes }
+			random_list = {
+				6 = {
+					TP_refugee_pop_effect = yes
+					modifier = {
+						factor = 1.2
+						happiness < 0.2
+					}
+				}
+				4 = { kill_pop = yes }
+			}
+			else = { kill_pop = yes }
+		}
+	}
+}
+
+
+
+
+# Refugees Arrive (new species)
+pop_event = {
+	id = cc_thought_police.2
+	title = cc_thought_police.2.name	
+	picture = GFX_evt_unknown_ships
+	location = root
+	
+	desc = { text = cc_thought_police.2.desc }
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = cc_thought_police.2.a
+	}
+}
+

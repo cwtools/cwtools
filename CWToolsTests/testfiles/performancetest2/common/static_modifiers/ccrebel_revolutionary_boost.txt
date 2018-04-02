@@ -1,0 +1,80 @@
+
+##########################################################################
+# Rebellion Aid Script
+##########################################################################
+
+revolutionary_mobilisation = {
+	pop_government_ethic_attraction = 1
+	planet_unrest_mult = -0.25
+	pop_happiness_mult = 0.1
+	starbase_shipyard_build_cost_mult = -0.1
+	planet_army_build_cost_mult = -0.25
+	starbase_shipyard_build_speed_mult = 0.50
+	planet_army_build_speed_mult = 0.50
+	country_resource_food_mult = 0.5
+	country_resource_energy_mult = 0.25
+	country_resource_minerals_mult = 0.25
+	ship_upkeep_mult = -0.25
+	army_upkeep_mult = -0.25
+}
+
+revolutionary_mobilisation_0_5 = {
+	country_resource_food_mult = 0.25
+	country_resource_energy_mult = 0.1
+	country_resource_minerals_mult = 0.1
+	ship_upkeep_mult = -0.1
+	army_upkeep_mult = -0.1
+}
+
+
+#these are all unused
+revolutionary_boost_05 = {
+	ship_upkeep_mult = -0.25
+	army_upkeep_mult = -0.25
+}
+
+revolutionary_boost_1 = {
+	ship_upkeep_mult = -0.25
+	army_upkeep_mult = -0.25
+}
+
+revolutionary_boost_2 = {
+	country_resource_energy_mult = 0.1
+	country_resource_minerals_mult = 0.1
+
+	ship_upkeep_mult = -0.25
+	army_upkeep_mult = -0.25
+}
+
+revolutionary_boost_3 = {
+	country_resource_energy_mult = 0.15
+	country_resource_minerals_mult = 0.15
+
+	ship_upkeep_mult = -0.25
+	army_upkeep_mult = -0.25
+}
+
+revolutionary_boost_4 = {
+	country_resource_energy_mult = 0.22
+	country_resource_minerals_mult = 0.22
+#	country_resource_unity_mult = 1
+
+	ship_upkeep_mult = -0.25
+	army_upkeep_mult = -0.25
+}
+
+revolutionary_boost_5 = {
+	country_resource_energy_mult = 0.3
+	country_resource_minerals_mult = 0.3
+
+	ship_upkeep_mult = -0.25
+	army_upkeep_mult = -0.25
+}
+
+revolutionary_boost_6 = {
+	country_resource_energy_mult = 0.4
+	country_resource_minerals_mult = 0.4
+
+	ship_upkeep_mult = -0.25
+	army_upkeep_mult = -0.25
+}

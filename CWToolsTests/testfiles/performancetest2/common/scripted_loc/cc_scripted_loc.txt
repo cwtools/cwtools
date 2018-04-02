@@ -1,0 +1,288 @@
+############################################
+###   SCRIPTED LOCALIZATION FOR FRENCH   ###
+###     Scripted by Caligula Caesar      ###
+############################################
+
+
+##To apply, use [root.GetFactionTypeAdj]
+
+#Ex.: "The [xenophilic/supremacist/whatever] faction"
+defined_text = {
+	name = GetFactionTypeAdj
+	text = {
+		trigger = {
+			exists = root
+			owner = {
+				count_pop_factions = {
+					limit = { is_same_value = root }
+					count = 1	
+				}
+			}
+			root = { is_pop_faction_type = xenoist }
+		}
+		localization_key = ccloc_xenophilic
+	}
+	text = {
+		trigger = {
+			exists = root
+			owner = {
+				count_pop_factions = {
+					limit = { is_same_value = root }
+					count = 1	
+				}
+			}
+			root = { is_pop_faction_type = supremacist }
+		}
+		localization_key = ccloc_supremacist
+	}
+	text = {
+		trigger = {
+			exists = root
+			owner = {
+				count_pop_factions = {
+					limit = { is_same_value = root }
+					count = 1	
+				}
+			}
+			root = { is_pop_faction_type = isolationist }
+		}
+		localization_key = ccloc_isolationist
+	}
+	text = {
+		trigger = {
+			exists = root
+			owner = {
+				count_pop_factions = {
+					limit = { is_same_value = root }
+					count = 1	
+				}
+			}
+			root = { is_pop_faction_type = progressive }
+		}
+		localization_key = ccloc_progressive
+	}
+	text = {
+		trigger = {
+			exists = root
+			owner = {
+				count_pop_factions = {
+					limit = { is_same_value = root }
+					count = 1	
+				}
+			}
+			root = { is_pop_faction_type = totalitarian }
+		}
+		localization_key = ccloc_totalitarian
+	}
+	text = {
+		trigger = {
+			exists = root
+			owner = {
+				count_pop_factions = {
+					limit = { is_same_value = root }
+					count = 1	
+				}
+			}
+			root = { is_pop_faction_type = imperialist }
+		}
+		localization_key = ccloc_imperialist
+	}
+	text = {
+		trigger = {
+			exists = root
+			owner = {
+				count_pop_factions = {
+					limit = { is_same_value = root }
+					count = 1	
+				}
+			}
+			root = { is_pop_faction_type = prosperity }
+		}
+		localization_key = ccloc_pacifistic
+	}
+	text = {
+		trigger = {
+			exists = root
+			owner = {
+				count_pop_factions = {
+					limit = { is_same_value = root }
+					count = 1	
+				}
+			}
+			root = { is_pop_faction_type = traditionalist }
+		}
+		localization_key = ccloc_traditionalist
+	}
+	text = {
+		trigger = {
+			exists = root
+			owner = {
+				count_pop_factions = {
+					limit = { is_same_value = root }
+					count = 1	
+				}
+			}
+			root = { is_pop_faction_type = technologist }
+		}
+		localization_key = ccloc_materialistic
+	}
+}
+
+
+
+
+#"Parliament / the Council Buildings / your Palace"
+defined_text = {
+	name = GetGovtBuilding
+	text = {
+		trigger = { has_authority = auth_democratic }
+		localization_key = ccloc_democracy_building
+	}
+	text = {
+		trigger = { has_authority = auth_oligarchic }
+		localization_key = ccloc_oligarchy_building
+	}
+	text = {
+		trigger = {
+			NOR = {
+				has_authority = auth_democratic
+				has_authority = auth_oligarchic
+			}
+		}
+		localization_key = ccloc_others_building
+	}
+}
+
+
+
+
+#"the [Particles] Professor"
+defined_text = {
+	name = GetDPETalentField
+	
+	text = {
+		trigger = { dpe_talent_scientist_materials = yes }
+		localization_key = materials
+	}
+	text = {
+		trigger = { dpe_talent_scientist_propulsion = yes }
+		localization_key = propulsion
+	}
+	text = {
+		trigger = { dpe_talent_scientist_voidcraft = yes }
+		localization_key = voidcraft
+	}
+#	text = {
+#		trigger = { dpe_talent_scientist_robotics = yes }
+#		localization_key = robotics
+#	}
+	text = {
+		trigger = { dpe_talent_scientist_industry = yes }
+		localization_key = industry
+	}
+	text = {
+		trigger = { dpe_talent_scientist_field_manipulation = yes }
+		localization_key = field_manipulation
+	}
+	text = {
+		trigger = { dpe_talent_scientist_particles = yes }
+		localization_key = particles
+	}
+	text = {
+		trigger = { dpe_talent_scientist_computing = yes }
+		localization_key = computing
+	}
+#	text = {
+#		trigger = { dpe_talent_scientist_metaphysics = yes }
+#		localization_key = metaphysics
+#	}
+	text = {
+		trigger = { dpe_talent_scientist_statecraft = yes }
+		localization_key = statecraft
+	}
+	text = {
+		trigger = { dpe_talent_scientist_biology = yes }
+		localization_key = biology
+	}
+	text = {
+		trigger = { dpe_talent_scientist_military_theory = yes }
+		localization_key = military_theory
+	}
+	text = {
+		trigger = { dpe_talent_scientist_new_worlds = yes }
+		localization_key = new_worlds
+	}
+	text = {
+		trigger = { dpe_talent_scientist_psionics = yes }
+		localization_key = psionics
+	}
+}
+
+
+#Used for the 'local talent discovered' events
+defined_text = {
+	name = GetDPETalentFlavour
+
+	text = {
+		trigger = { dpe_talent_flavour_scientist_university = yes }
+		localization_key = dpe_talent_flavour_scientist_university
+	}
+	text = {
+		trigger = { dpe_talent_flavour_scientist_default = yes }
+		localization_key = dpe_talent_flavour_scientist_default
+	}
+	text = {
+		trigger = { dpe_talent_flavour_general_academy = yes }
+		localization_key = dpe_talent_flavour_general_academy
+	}
+	text = {
+		trigger = { dpe_talent_flavour_general_default = yes }
+		localization_key = dpe_talent_flavour_general_default
+	}
+	text = {
+		trigger = { dpe_talent_flavour_governor_royal = yes }
+		localization_key = dpe_talent_flavour_governor_royal
+	}
+	text = {
+		trigger = { dpe_talent_flavour_governor_democracy = yes }
+		localization_key = dpe_talent_flavour_governor_democracy
+	}
+	text = {
+		trigger = { dpe_talent_flavour_governor_default = yes }
+		localization_key = dpe_talent_flavour_governor_default
+	}
+}
+
+#Used for the 'local talent discovered' events
+defined_text = {
+	name = GetDPETalentFlavour1
+
+	text = {
+		trigger = { dpe_talent_flavour_scientist_university = yes }
+		localization_key = dpe_talent_flavour_scientist_university1
+	}
+	text = {
+		trigger = { dpe_talent_flavour_scientist_default = yes }
+		localization_key = dpe_talent_flavour_blank
+	}
+	text = {
+		trigger = { dpe_talent_flavour_general_academy = yes }
+		localization_key = dpe_talent_flavour_general_academy1
+	}
+	text = {
+		trigger = { dpe_talent_flavour_general_default = yes }
+		localization_key = dpe_talent_flavour_blank
+	}
+	text = {
+		trigger = { dpe_talent_flavour_governor_royal = yes }
+		localization_key = dpe_talent_flavour_governor_royal1
+	}
+	text = {
+		trigger = { dpe_talent_flavour_governor_democracy = yes }
+		localization_key = dpe_talent_flavour_governor_democracy1
+	}
+	text = {
+		trigger = { dpe_talent_flavour_governor_default = yes }
+		localization_key = dpe_talent_flavour_blank
+	}
+}

@@ -1,0 +1,256 @@
+
+# Blackmail Crisis
+cc_opinion_outrage_at_plans_to_conquer = {
+	opinion = {
+		base = -125
+		modifier = {
+			add = -50
+			OR = {
+				is_rival = from
+				is_hostile_to = from
+			}
+		}
+		modifier = {
+			add = 75
+			OR = {
+				has_defensive_pact = from
+				is_in_federation_with = from
+			}
+		}
+		modifier = {
+			add = 50
+			has_non_aggression_pact = from
+		}
+	}
+	decay = {
+		base = 5
+	}
+}
+
+cc_opinion_stole_our_technology = {
+	opinion = {
+		base = -50
+	}
+	decay = {
+		base = 5
+	}
+}
+
+cc_allowed_genocide_of_us = {
+	opinion = {
+		base = -100
+	}
+	decay = {
+		base = 2
+	}
+}
+
+cc_betrayed_us_ally = {
+	opinion = {
+		base = -100
+	}
+	
+	accumulative = yes
+	
+	min = -1000
+	
+	decay = {
+		base = 4
+	}
+}
+
+cc_ignored_ally = {
+	opinion = {
+		base = -25
+	}
+	
+	accumulative = yes
+	
+	min = -500
+	
+	decay = {
+		base = 4
+	}
+}
+
+dpe_eased_tensions = {
+	opinion = {
+		base = 50
+	}
+	
+	accumulative = yes
+	
+	max = 150
+	
+	decay = {
+		base = 4
+	}
+}
+
+cc_ally_xenophobic_rhetoric = {
+	opinion = {
+		base = -30
+	}
+	
+	accumulative = yes
+	
+	min = -300
+	
+	decay = {
+		base = 3
+	}
+}
+
+
+
+dpe_spiritualist_mission_insult = {
+	opinion = {
+		base = -50
+	}
+	
+	accumulative = no
+	
+	decay = {
+		base = 5
+	}
+}
+
+dpe_spiritualist_mission_ignored = {
+	opinion = {
+		base = -30
+	}
+	
+	accumulative = no
+	
+	decay = {
+		base = 3
+	}
+}
+
+dpe_spiritualist_mission_hive_listened = {
+	opinion = {
+		base = 30
+	}
+	
+	accumulative = no
+	
+	decay = {
+		base = 2
+	}
+}
+
+dpe_spiritualist_mission_hive_listened1 = {
+	opinion = {
+		base = 30
+	}
+	
+	accumulative = no
+	
+	decay = {
+		base = 2
+	}
+}
+
+dpe_spiritualist_mission_accepted_mission = {
+	opinion = {
+		base = 30
+	}
+	
+	accumulative = no
+	
+	decay = {
+		base = 2
+	}
+}
+
+
+dpe_dishonourable_in_war = {
+	opinion = {
+		base = -30
+	}
+	
+	accumulative = yes
+	
+	min = -100
+	
+	decay = {
+		base = 3
+	}
+}
+
+dpe_honourable_in_war = {
+	opinion = {
+		base = 30
+	}
+	
+	accumulative = yes
+	
+	max = 50
+	
+	decay = {
+		base = 3
+	}
+}
+
+dpe_spirmission_deceived = {
+	opinion = {
+		base = -30
+	}
+	
+	accumulative = no
+	
+	decay = {
+		base = 2
+	}
+}
+
+dpe_spirmission_accused_us = {
+	opinion = {
+		base = -30
+	}
+	
+	accumulative = no
+	
+	decay = {
+		base = 3
+	}
+}
+
+dpe_spirmission_sent_mission_home = {
+	opinion = {
+		base = -20
+	}
+	
+	accumulative = yes
+	
+	min = -50
+	
+	decay = {
+		base = 3
+	}
+}
+
+dpe_spirmission_succeeded = {
+	opinion = {
+		base = 20
+	}
+	unique = yes
+}
+
+dpe_xenophile_mission_opinion = {
+	opinion = {
+		base = 20
+	}
+	decay = {
+		base = 1
+	}
+}
+
+dpe_rejected_xenophile_mission_opinion = {
+	opinion = {
+		base = -20
+	}
+	decay = {
+		base = 1
+	}
+}

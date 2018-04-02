@@ -1,0 +1,19 @@
+
+ccethics_planet_test1 = {
+	pop_government_ethic_attraction = 1
+}
+ccethics_planet_test2 = {
+	pop_government_ethic_attraction = -0.25
+}
+ccethics_pop_test1 = {
+	pop_ethic_egalitarian_attraction_mult = -0.75
+}
+ccethics_pop_test2 = {
+	pop_ethic_egalitarian_attraction_mult = 10
+}
+ccethics_country_test1 = {
+	pop_ethic_egalitarian_attraction_mult = 0.5
+}
+ccethics_country_test2 = {
+	pop_ethic_egalitarian_attraction_mult = 10
+}

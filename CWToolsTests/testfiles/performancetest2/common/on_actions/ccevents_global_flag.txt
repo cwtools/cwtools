@@ -1,0 +1,12 @@
+
+on_monthly_pulse = {
+	events = {
+		ccflags.999
+	}
+}
+
+on_game_start = {
+    events = {
+		ccflags.999
+    }
+}

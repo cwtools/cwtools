@@ -1,0 +1,181 @@
+
+# Faction Revolt War Names
+
+war_name_parts_list = {
+	key = "ccrebel_faction_war_1"
+	parts = {
+		"Civil War" = 3
+		"War of Brothers" = 1
+	}
+}
+
+war_name_parts_list = {
+	key = "ccrebel_faction_war_2"
+	parts = {
+		"Revolt" = 1
+		"Uprising" = 1
+		"Rebellion" = 1
+	}
+}
+
+
+war_name_format = {
+	random_weight = {
+		factor = 0
+		modifier = {
+			add = 500
+			using_war_goal = {
+				type = wg_dpe_faction_revolt
+				owner = attacker
+			}
+		}
+	}
+	format = "[This.MainDefender.GetAdj] <ccrebel_faction_war_1>"
+}
+
+war_name_format = {
+	random_weight = {
+		factor = 0
+		modifier = {
+			add = 500
+			using_war_goal = {
+				type = wg_dpe_faction_revolt
+				owner = attacker
+			}
+			attacker = {
+				has_ethic = ethic_fanatic_spiritualist
+			}
+		}
+	}
+	format = "The Spiritualist <ccrebel_faction_war_2>"
+}
+war_name_format = {
+	random_weight = {
+		factor = 0
+		modifier = {
+			add = 500
+			using_war_goal = {
+				type = wg_dpe_faction_revolt
+				owner = attacker
+			}
+			attacker = {
+				has_ethic = ethic_fanatic_materialist
+			}
+		}
+	}
+	format = "The Materialist <ccrebel_faction_war_2>"
+}
+war_name_format = {
+	random_weight = {
+		factor = 0
+		modifier = {
+			add = 500
+			using_war_goal = {
+				type = wg_dpe_faction_revolt
+				owner = attacker
+			}
+			attacker = {
+				has_ethic = ethic_fanatic_pacifist
+			}
+		}
+	}
+	format = "The Pacifist <ccrebel_faction_war_2>"
+}
+war_name_format = {
+	random_weight = {
+		factor = 0
+		modifier = {
+			add = 500
+			using_war_goal = {
+				type = wg_dpe_faction_revolt
+				owner = attacker
+			}
+			attacker = {
+				has_ethic = ethic_fanatic_militarist
+			}
+		}
+	}
+	format = "The Imperialist <ccrebel_faction_war_2>"
+}
+war_name_format = {
+	random_weight = {
+		factor = 0
+		modifier = {
+			add = 500
+			using_war_goal = {
+				type = wg_dpe_faction_revolt
+				owner = attacker
+			}
+			attacker = {
+				has_ethic = ethic_fanatic_xenophobe
+			}
+		}
+	}
+	format = "The Supremacist <ccrebel_faction_war_2>"
+}
+war_name_format = {
+	random_weight = {
+		factor = 0
+		modifier = {
+			add = 500
+			using_war_goal = {
+				type = wg_dpe_faction_revolt
+				owner = attacker
+			}
+			attacker = {
+				has_ethic = ethic_fanatic_xenophile
+			}
+		}
+	}
+	format = "The Xenoist <ccrebel_faction_war_2>"
+}
+war_name_format = {
+	random_weight = {
+		factor = 0
+		modifier = {
+			add = 500
+			using_war_goal = {
+				type = wg_dpe_faction_revolt
+				owner = attacker
+			}
+			attacker = {
+				has_ethic = ethic_fanatic_egalitarian
+			}
+		}
+	}
+	format = "The Pro-Democratic <ccrebel_faction_war_2>"
+}
+war_name_format = {
+	random_weight = {
+		factor = 0
+		modifier = {
+			add = 500
+			using_war_goal = {
+				type = wg_dpe_faction_revolt
+				owner = attacker
+			}
+			attacker = {
+				has_ethic = ethic_fanatic_authoritarian
+				NOT = { has_authority = auth_imperial }
+			}
+		}
+	}
+	format = "The Authoritarian <ccrebel_faction_war_2>"
+}
+war_name_format = {
+	random_weight = {
+		factor = 0
+		modifier = {
+			add = 500
+			using_war_goal = {
+				type = wg_dpe_faction_revolt
+				owner = attacker
+			}
+			attacker = {
+				has_ethic = ethic_fanatic_authoritarian
+				has_authority = auth_imperial
+			}
+		}
+	}
+	format = "The Monarchist <ccrebel_faction_war_2>"
+}

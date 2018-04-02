@@ -1,0 +1,34 @@
+
+# A war is beginning, executed for every country in the war.
+# Root = Country
+# From = War
+on_war_beginning = {
+	events = {
+		dpe_spiritualist_mission.98
+	}
+}
+
+#This = destroyed country
+#From = optional, destroyer (country)
+on_country_destroyed = {
+	events = {
+		dpe_spiritualist_mission.99
+	}
+}
+
+#Fired whenever a new owner is set for a planet,
+#be it after a war or through a trade
+#From = Country scope (new owner)
+#This = Planet scope
+on_planet_transfer = {
+	events = {
+		dpe_spiritualist_mission.97
+	}
+}
+
+#no scope
+#on_yearly_pulse = {
+#	events = {
+#		dpe_xenophile_mission.1
+#	}
+#}

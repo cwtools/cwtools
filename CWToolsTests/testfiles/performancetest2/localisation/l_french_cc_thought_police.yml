@@ -1,0 +1,12 @@
+﻿l_french:
+
+edict_cc_thought_police:0 "Police Morale"
+edict_cc_thought_police_desc:0 "Utilisez la technologie pour surveiller l'opinion publique et si nécessaire, réprimer les éléments disruptifs.\n\nPops avec moins de 40% de bonheur qui ne partagent pas l'éthique dirigeante vont graduellement être purgées ou forcée de partir. Cela ne comptera pas comme purge au niveau des bonus et des pénalités, mais cela dégradera l'opinion des empires égalitaristes envers nous."
+
+	
+cc_thought_police.2.name:0 "Des réfugiés politiques arrivent de [RefugeeEscapedFrom.GetName]"
+cc_thought_police.2.desc:0 "Une flotte meurtrie de petits vaisseaux civils transportant des §Y[Root.GetSpeciesNamePlural]§! fuyant les §Y[RefugeeEscapedFrom.GetName]§! est arrivée dans notre espace. Après avoir distribué de la nourriture et soigné leurs blessés, les réfugiés ont été autorisés à s'installer sur §H[Root.Planet.GetName]§!.\n\nCes réfugiés dépenaillés et effrayés étaient des dissidents politiques du [RefugeeEscapedFrom.GetName], où ils étaient pourchassés par la police morale [RefugeeEscapedFrom.GetSpeciesAdj]. Ils se sont rendu compte que les autorités [RefugeeEscapedFrom.GetSpeciesAdj] en avaient après eux et qu'ils devaient partir immédiatement ou ils auraient "disparu". Ils s'en sont sorti uniquement grâce à un système de trains clandestins organisés dans la hâte ainsi que quelques navires marchands compatissants."
+cc_thought_police.2.a:0 "Ils sont les bienvenus."
+
+
+triggered_opinion_cc_thought_police:0 "Activez la Police Morale"

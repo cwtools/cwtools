@@ -1,0 +1,13 @@
+﻿l_german:
+
+edict_cc_thought_police:0 "Gedankenpolizei"
+edict_cc_thought_police_desc:0 "Nutzen Sie moderne Technologie um die Gedanken der Bevölkerung zu überwachen und falls nötig disruptive Elemente zu unterdrücken.\n\n£pops Bewohner, die unsere Regierungsethiken nicht teilen und weniger als 40% Zufriedenheit haben, werden schrittweise eleminiert oder abgeschoben. Dies zählt nicht als "Säuberung" für die Berechnung von positiven oder negativen Modifikatoren, aber es wird egalitäre Imperien verärgern."
+
+
+	
+cc_thought_police.2.name:0 "Politische Flüchtlinge aus der [RefugeeEscapedFrom.GetName] erreichen uns."
+cc_thought_police.2.desc:0 "Eine übel zugerichtete Flotte kleiner ziviler Schiffe, die §Y[Root.GetSpeciesNamePlural]§! transportieren und sich auf der Flucht von §Y[RefugeeEscapedFrom.GetName]§! befinden, haben unser Territorium erreicht. Nachdem wir sie mit Nahrungsmitteln ausgestattet und medizinisch grundversorgt hatten, wurde ihnen gestattet, sich auf §H[Root.Planet.GetName]§! niederzulassen.\n\nDiese abgerissenen und verängstigten Flüchtlinge sind politische Dissidenten, die [RefugeeEscapedFrom.GetName] entfliehen mussten nachdem sie von der Gedankenpolizei der [RefugeeEscapedFrom.GetSpeciesNamePlural] verfolgt wurden, und sie erkennen mussten, dass die Regierung sie "verschwinden" lassen würde sofern sie nicht sofort entkämen. Diese konnte nur in einer rasch organisierten Nacht-und-Nebel Aktion und mit der Hilfe einiger mitfühlender Frachterkapitäne bewerkstelligt werden."
+cc_thought_police.2.a:0 "Wir heißen sie willkommen."
+
+
+triggered_opinion_cc_thought_police:0 "Aktive Gedankenpolizei"

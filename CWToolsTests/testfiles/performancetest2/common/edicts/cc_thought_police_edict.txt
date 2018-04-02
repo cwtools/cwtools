@@ -1,0 +1,78 @@
+##########################################################################
+# Empire edicts
+##########################################################################
+
+@Edict1Cost = 100
+@Edict2Cost = 200
+@Edict3Cost = 300
+
+@EdictDuration = 4800
+
+
+country_edict = {
+	name = "cc_thought_police"
+	
+	length = @EdictDuration
+	cost = { influence = @Edict3Cost }
+	
+	modifier = {
+		pop_government_ethic_attraction = 0.2
+	}
+	potential = {
+		OR = {
+			has_valid_civic = civic_fanatic_purifiers
+			has_ethic = ethic_fanatic_authoritarian
+			AND = {
+				has_ethic = ethic_authoritarian
+				OR = {
+					has_ethic = ethic_fanatic_xenophobe
+					has_ethic = ethic_fanatic_militarist
+					AND = {
+						has_ethic = ethic_xenophobe
+						has_ethic = ethic_militarist
+					}
+				}
+			}
+		}
+	}
+	
+	ai_weight = {
+		weight = 0.75	
+		modifier = {
+			factor = 1.5
+			has_ethic = ethic_fanatic_authoritarian
+		}
+		modifier = {
+			factor = 2
+			has_policy_flag = slavery_allowed
+			any_owned_pop = { is_enslaved = yes }
+		}	
+		modifier = {
+			factor = 2
+			any_owned_planet = { unrest > 50 }
+		}	
+		modifier = {
+			factor = 0.5
+			NOT = { any_owned_planet = { unrest > 30 } }
+		}	
+		modifier = {
+			factor = 0
+			NOT = { any_owned_planet = { unrest > 0 } }
+		}	
+		modifier = {
+			factor = 0.5
+			NOT = { has_faction = progressive }
+		}
+		modifier = {
+			factor = 0.75
+			any_relation = {
+				has_defensive_pact = root
+				OR = {
+					has_ethic = ethic_egalitarian
+					has_ethic = ethic_fanatic_egalitarian
+				}
+			}
+		}
+	}	
+}
+

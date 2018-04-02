@@ -1,0 +1,336 @@
+
+cc_country_factional_unrest = {
+	pop_government_ethic_attraction = -0.25
+	country_resettlement_cost_mult = 0.25
+}
+
+
+cc_seditious_talk_militarist = {
+	pop_ethic_militarist_attraction_mult = 1
+
+	icon = "gfx/interface/icons/planet_modifiers/pm_sedition.dds"
+	icon_frame = 3
+}
+
+cc_seditious_talk_pacifist = {
+	pop_ethic_pacifist_attraction_mult = 1
+
+	icon = "gfx/interface/icons/planet_modifiers/pm_sedition.dds"
+	icon_frame = 3
+}
+
+cc_seditious_talk_xenophobe = {
+	pop_ethic_xenophobe_attraction_mult = 1
+
+	icon = "gfx/interface/icons/planet_modifiers/pm_sedition.dds"
+	icon_frame = 3
+}
+
+cc_seditious_talk_xenophile = {
+	pop_ethic_xenophile_attraction_mult = 1
+
+	icon = "gfx/interface/icons/planet_modifiers/pm_sedition.dds"
+	icon_frame = 3
+}
+
+cc_seditious_talk_egalitarian = {
+	pop_ethic_egalitarian_attraction_mult = 1
+
+	icon = "gfx/interface/icons/planet_modifiers/pm_sedition.dds"
+	icon_frame = 3
+}
+
+cc_seditious_talk_authoritarian = {
+	pop_ethic_authoritarian_attraction_mult = 1
+
+	icon = "gfx/interface/icons/planet_modifiers/pm_sedition.dds"
+	icon_frame = 3
+}
+
+cc_seditious_talk_spiritualist = {
+	pop_ethic_spiritualist_attraction_mult = 1
+
+	icon = "gfx/interface/icons/planet_modifiers/pm_sedition.dds"
+	icon_frame = 3
+}
+
+cc_seditious_talk_materialist = {
+	pop_ethic_materialist_attraction_mult = 1
+
+	icon = "gfx/interface/icons/planet_modifiers/pm_sedition.dds"
+	icon_frame = 3
+}
+
+
+
+cc_faction_stronghold_xenoist = {
+	pop_ethic_xenophile_attraction_mult = 2
+	tile_resource_energy_mult = -0.25
+	tile_resource_minerals_mult = -0.25
+
+	icon = "gfx/interface/icons/planet_modifiers/pm_xenophile.dds"
+	icon_frame = 2
+}
+
+cc_faction_stronghold_supremacist = {
+	pop_ethic_xenophobe_attraction_mult = 2
+	tile_resource_energy_mult = -0.25
+	tile_resource_minerals_mult = -0.25
+
+	icon = "gfx/interface/icons/planet_modifiers/pm_xenophobe.dds"
+	icon_frame = 2
+}
+
+cc_faction_stronghold_isolationist = {
+	pop_ethic_xenophobe_attraction_mult = 2
+	tile_resource_energy_mult = -0.25
+	tile_resource_minerals_mult = -0.25
+
+	icon = "gfx/interface/icons/planet_modifiers/pm_xenophobe.dds"
+	icon_frame = 2
+}
+
+cc_faction_stronghold_totalitarian = {
+	pop_ethic_authoritarian_attraction_mult = 2
+	tile_resource_energy_mult = -0.25
+	tile_resource_minerals_mult = -0.25
+
+	icon = "gfx/interface/icons/planet_modifiers/pm_authoritarian.dds"
+	icon_frame = 2
+}
+
+cc_faction_stronghold_progressive = {
+	pop_ethic_egalitarian_attraction_mult = 2
+	tile_resource_energy_mult = -0.25
+	tile_resource_minerals_mult = -0.25
+
+	icon = "gfx/interface/icons/planet_modifiers/pm_egalitarian.dds"
+	icon_frame = 2
+}
+
+cc_faction_stronghold_technologist = {
+	pop_ethic_materialist_attraction_mult = 2
+	tile_resource_energy_mult = -0.25
+	tile_resource_minerals_mult = -0.25
+
+	icon = "gfx/interface/icons/planet_modifiers/pm_materialist.dds"
+	icon_frame = 2
+}
+
+cc_faction_stronghold_traditionalist = {
+	pop_ethic_spiritualist_attraction_mult = 2
+	tile_resource_energy_mult = -0.25
+	tile_resource_minerals_mult = -0.25
+
+	icon = "gfx/interface/icons/planet_modifiers/pm_spiritualist.dds"
+	icon_frame = 2
+}
+
+cc_faction_stronghold_imperialist = {
+	pop_ethic_militarist_attraction_mult = 2
+	tile_resource_energy_mult = -0.25
+	tile_resource_minerals_mult = -0.25
+
+	icon = "gfx/interface/icons/planet_modifiers/pm_militarist.dds"
+	icon_frame = 2
+}
+
+cc_faction_stronghold_prosperity = {
+	pop_ethic_pacifist_attraction_mult = 2
+	tile_resource_energy_mult = -0.25
+	tile_resource_minerals_mult = -0.25
+
+	icon = "gfx/interface/icons/planet_modifiers/pm_pacifist.dds"
+	icon_frame = 2
+}
+
+
+
+cc_faction_sympathies_xenoist = {
+	pop_ethic_xenophile_attraction_mult = 1.25
+
+	icon = "gfx/interface/icons/planet_modifiers/pm_sedition.dds"
+	icon_frame = 3
+}
+
+cc_faction_sympathies_supremacist = {
+	pop_ethic_xenophobe_attraction_mult = 1.25
+
+	icon = "gfx/interface/icons/planet_modifiers/pm_sedition.dds"
+	icon_frame = 3
+}
+
+cc_faction_sympathies_isolationist = {
+	pop_ethic_xenophobe_attraction_mult = 1.25
+
+	icon = "gfx/interface/icons/planet_modifiers/pm_sedition.dds"
+	icon_frame = 3
+}
+
+cc_faction_sympathies_totalitarian = {
+	pop_ethic_authoritarian_attraction_mult = 1.25
+
+	icon = "gfx/interface/icons/planet_modifiers/pm_sedition.dds"
+	icon_frame = 3
+}
+
+cc_faction_sympathies_progressive = {
+	pop_ethic_egalitarian_attraction_mult = 1.25
+
+	icon = "gfx/interface/icons/planet_modifiers/pm_sedition.dds"
+	icon_frame = 3
+}
+
+cc_faction_sympathies_technologist = {
+	pop_ethic_materialist_attraction_mult = 1.25
+
+	icon = "gfx/interface/icons/planet_modifiers/pm_sedition.dds"
+	icon_frame = 3
+}
+
+cc_faction_sympathies_traditionalist = {
+	pop_ethic_spiritualist_attraction_mult = 1.25
+
+	icon = "gfx/interface/icons/planet_modifiers/pm_sedition.dds"
+	icon_frame = 3
+}
+
+cc_faction_sympathies_imperialist = {
+	pop_ethic_militarist_attraction_mult = 1.25
+
+	icon = "gfx/interface/icons/planet_modifiers/pm_sedition.dds"
+	icon_frame = 3
+}
+
+cc_faction_sympathies_prosperity = {
+	pop_ethic_pacifist_attraction_mult = 1.25
+
+	icon = "gfx/interface/icons/planet_modifiers/pm_sedition.dds"
+	icon_frame = 3
+}
+
+
+
+cc_faction_sedition_xenoist = {
+	pop_ethic_xenophile_attraction_mult = 0.8
+
+	icon = "gfx/interface/icons/planet_modifiers/pm_sow_unrest.dds"
+	icon_frame = 3
+}
+
+cc_faction_sedition_supremacist = {
+	pop_ethic_xenophobe_attraction_mult = 0.8
+
+	icon = "gfx/interface/icons/planet_modifiers/pm_sow_unrest.dds"
+	icon_frame = 3
+}
+
+cc_faction_sedition_isolationist = {
+	pop_ethic_xenophobe_attraction_mult = 0.8
+
+	icon = "gfx/interface/icons/planet_modifiers/pm_sow_unrest.dds"
+	icon_frame = 3
+}
+
+cc_faction_sedition_totalitarian = {
+	pop_ethic_authoritarian_attraction_mult = 0.8
+
+	icon = "gfx/interface/icons/planet_modifiers/pm_sow_unrest.dds"
+	icon_frame = 3
+}
+
+cc_faction_sedition_progressive = {
+	pop_ethic_egalitarian_attraction_mult = 0.8
+
+	icon = "gfx/interface/icons/planet_modifiers/pm_sow_unrest.dds"
+	icon_frame = 3
+}
+
+cc_faction_sedition_technologist = {
+	pop_ethic_materialist_attraction_mult = 0.8
+
+	icon = "gfx/interface/icons/planet_modifiers/pm_sow_unrest.dds"
+	icon_frame = 3
+}
+
+cc_faction_sedition_traditionalist = {
+	pop_ethic_spiritualist_attraction_mult = 0.8
+
+	icon = "gfx/interface/icons/planet_modifiers/pm_sow_unrest.dds"
+	icon_frame = 3
+}
+
+cc_faction_sedition_imperialist = {
+	pop_ethic_militarist_attraction_mult = 0.8
+
+	icon = "gfx/interface/icons/planet_modifiers/pm_sow_unrest.dds"
+	icon_frame = 3
+}
+
+cc_faction_sedition_prosperity = {
+	pop_ethic_pacifist_attraction_mult = 0.8
+
+	icon = "gfx/interface/icons/planet_modifiers/pm_sow_unrest.dds"
+	icon_frame = 3
+}
+
+cc_faction_acute_unrest = {
+	planet_unrest_mult = 1
+	
+	icon = "gfx/interface/icons/planet_modifiers/pm_unrest.dds"
+	icon_frame = 3
+}
+
+cc_failed_factional_revolt = {
+	pop_government_ethic_attraction = 1
+	planet_unrest_add = -25
+	icon_frame = 3
+	icon = "gfx/interface/icons/planet_modifiers/pm_unrest.dds"
+}
+
+cc_breakaway_sympathy = {
+	planet_unrest_mult = 0.8
+	pop_government_ethic_attraction = -0.5
+	
+	icon = "gfx/interface/icons/planet_modifiers/pm_guy_fawkes.dds"
+	icon_frame = 3
+}
+
+cc_empire_terror = {
+	pop_ethic_authoritarian_attraction_mult = 0.8
+	country_trust_growth = -0.5
+}
+
+cc_empire_terror_faction = {
+	faction_happiness = -0.5
+}
+
+cc_oppress_faction = {
+	faction_happiness = -0.2
+}
+
+cc_bribed_planet = {
+	tile_resource_energy_mult = -0.65
+	tile_resource_minerals_mult = -0.65
+	pop_happiness = 0.15
+	pop_government_ethic_attraction = 1
+	
+	icon = "gfx/interface/icons/planet_modifiers/pm_gold_pile.dds"
+	icon_frame = 1
+}
+
+#cc_faction_test_modifier = {
+#	faction_happiness = -1
+#}
+
+#cc_faction_test_modifier_1 = {
+#	faction_happiness = 0.7
+#}
+
+#cc_planet_test1 = {
+#	planet_unrest_add = 15
+#}
+
+#cc_planet_test2 = {
+#	planet_unrest_add = -15
+#}

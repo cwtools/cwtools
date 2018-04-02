@@ -1,0 +1,11 @@
+
+spriteTypes = {
+	spriteType = {
+		name = "GFX_wg_ccrebel_independence"
+		texturefile = "gfx/interface/icons/diplomacy/diplomacy_integrating.dds"
+	}
+	spriteType = {
+		name = "GFX_wg_dpe_faction_revolt"
+		texturefile = "gfx/interface/icons/diplomacy/diplomacy_force_ideology.dds"
+	}
+}

@@ -1,0 +1,237 @@
+namespace = leader
+
+#I overwrite this event because we came up with a way to make it better (also we want it more common as a result)
+
+
+namespace = leader
+
+# New Admiral
+
+# This = owner of fleet 1 (combatant)
+# From = owner of fleet 2 (destroyed)
+# FromFrom = fleet 1
+# FromFromFrom = fleet 2
+country_event = {
+	id = leader.1
+    hide_window = yes
+	is_triggered_only = yes
+	
+	trigger = {
+		is_country_type = default
+		free_leader_slots > 0
+	}
+
+	immediate = {
+		FROMFROM = {
+			solar_system = { save_event_target_as = system }
+		}
+
+		if = {
+			limit = { fromfrom = { any_ship = { is_ship_size = battleship } } }
+			
+			random_owned_ship = { 
+				limit = {
+					fleet = { is_same_value = FROMFROM }
+					is_ship_size = battleship
+					has_hp > 0
+				}
+				save_event_target_as = ship
+			}
+			else = {
+				if = {
+					limit = { fromfrom = { any_ship = { is_ship_size = cruiser } } }
+					random_owned_ship = { 
+						limit = {
+							fleet = { is_same_value = FROMFROM }
+							is_ship_size = cruiser
+							has_hp > 0
+						}
+						save_event_target_as = ship
+					}
+					else = {
+						random_owned_ship = { 
+							limit = {
+								fleet = { is_same_value = FROMFROM }
+								has_hp > 0
+							}
+							save_event_target_as = ship
+						}
+					}
+				}
+			}
+		}
+		if = {
+			limit = {
+				NOT = { exists = event_target:ship }
+			}
+			random_owned_ship = { 
+				limit = {
+					fleet = { is_same_value = FROMFROM }
+					has_hp > 0
+				}
+				save_event_target_as = ship
+			}
+		}
+
+		random_list = {
+			25 = {
+				create_leader = {
+					type = admiral
+					species = owner_main_species
+					name = random
+					skill = 2
+					traits = {
+						trait = leader_trait_gale_speed
+						trait = leader_trait_aggressive
+					}
+				}
+				last_created_leader = { save_event_target_as = officer }
+			}
+			25 = {
+				create_leader = {
+					type = admiral
+					species = owner_main_species
+					name = random
+					skill = 2
+					traits = {
+						trait = leader_trait_aggressive
+						trait = leader_trait_dpe_talented
+					}
+				}
+				last_created_leader = { save_event_target_as = officer }
+			}
+			25 = {
+				create_leader = {
+					type = admiral
+					species = owner_main_species
+					name = random
+					skill = 2
+					traits = {
+						trait = leader_trait_fleet_logistician
+						trait = leader_trait_cautious
+					}
+				}
+				last_created_leader = { save_event_target_as = officer }
+			}
+			25 = {
+				create_leader = {
+					type = admiral
+					species = owner_main_species
+					name = random
+					skill = 2
+					traits = {
+						trait = leader_trait_scout
+						trait = leader_trait_trickster
+					}
+				}
+				last_created_leader = { save_event_target_as = officer }
+			}
+		}
+
+        if = {
+            limit = { has_ethic = ethic_gestalt_consciousness }
+
+            random_list = {
+                1 = {
+                    country_event = { id = leader.91 }
+                    modifier = {
+                        factor = 3
+                        NOT = { exists = fromfrom.leader }
+                    }
+                }
+                7 = { }
+            }
+            else = {
+                if = {
+                    limit = { NOT = { exists = fromfrom.leader } }
+                    country_event = { id = leader.92 }
+
+                    else = {
+                        random = {
+							chance = 33
+							
+							fromfrom.leader = { save_event_target_as = dpe_admiral }
+                            country_event = { id = leader.92 }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+
+country_event = {
+	id = leader.91
+	title = "leader.1.name"
+	desc = {
+		trigger = { has_authority = auth_hive_mind }
+		text = "leader.1.desc.hive"
+	}
+	desc = {
+		trigger = { has_authority = auth_machine_intelligence }
+		text = "leader.1.desc.machine"
+	}
+	picture = GFX_evt_federation_fleet
+	location = event_target:system
+	
+	is_triggered_only = yes
+
+	option = {
+		name = GOOD
+		custom_tooltip = new_admiral
+	}
+}
+
+
+
+country_event = {
+	id = leader.92
+	title = leader.1.name
+	desc = {
+		trigger = { exists = event_target:dpe_admiral }
+		text = dpe_leader.1.desc
+	}
+	desc = {
+		trigger = { NOT = { exists = event_target:dpe_admiral } }
+		text = dpe_leader.2.desc
+	}
+	picture = GFX_evt_federation_fleet
+	location = event_target:system
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = dpe_leader.1.A
+		custom_tooltip = dpe_leader.1.A.tooltip
+
+		ai_chance = {
+			factor = 1
+			modifier = {
+				factor = 0
+				any_owned_leader = {
+					leader_class = admiral
+					root = {
+						any_owned_leader = {
+							leader_class = admiral
+							NOT = { is_same_value = prevprev }
+						}
+					}
+				}
+			}
+		}
+	}
+	option = {
+		name = dpe_leader.1.B
+		
+		event_target:ship = {
+			add_modifier = {
+				modifier = dpe_talented_captain
+				days = 10800
+			}
+		}
+		ai_chance = {
+			factor = 1
+		}
+	}
+}

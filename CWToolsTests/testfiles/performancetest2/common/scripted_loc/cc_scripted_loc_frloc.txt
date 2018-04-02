@@ -1,0 +1,254 @@
+############################################
+###   SCRIPTED LOCALIZATION FOR FRENCH   ###
+###     Scripted by Caligula Caesar      ###
+############################################
+
+##To apply, use [event_target.GetLeLaLead] or [scope.Leader.GetLeLaLead]
+
+#Ex.: "He is [the] scientist => "Il est [le] scientiste / elle est [la] scientiste" (lower case / minuscule)
+defined_text = {
+	name = GetLeLaLead
+	text = {
+		trigger = { cc_loc_leader_masc = yes }
+		localization_key = FRLOC_le
+	}
+	text = {
+		trigger = { cc_loc_leader_fem = yes }
+		localization_key = FRLOC_la
+	}
+}
+
+#Ex.: "[The] scientist is a man/woman." => "[Le] scientiste est un home. / [La] scientiste est une femme." (upper case / majuscule)
+defined_text = {
+	name = GetLeLaLeadCap
+	text = {
+		trigger = { cc_loc_leader_masc = yes }
+		localization_key = FRLOC_Le
+	}
+	text = {
+		trigger = { cc_loc_leader_fem = yes }
+		localization_key = FRLOC_La
+	}
+}
+
+
+#Ex.: "We are the servants [of the] senator." => "Nous sommes les serviteurs [du] sénateur / [de la] sénatrice" (lower case / minuscule)
+defined_text = {
+	name = GetDuDelaLead
+	text = {
+		trigger = { cc_loc_leader_masc = yes }
+		localization_key = FRLOC_du
+	}
+	text = {
+		trigger = { cc_loc_leader_fem = yes }
+		localization_key = FRLOC_dela
+	}
+}
+
+#Ex.: "[From] the senator" => "[Du] sénateur / [De la] sénatrice" (upper case / majuscule)
+defined_text = {
+	name = GetDuDelaLeadCap
+	text = {
+		trigger = { cc_loc_leader_masc = yes }
+		localization_key = FRLOC_Du
+	}
+	text = {
+		trigger = { cc_loc_leader_fem = yes }
+		localization_key = FRLOC_Dela
+	}
+}
+
+
+
+
+#Ex.: "We'll report that [to] the senator." => "Nous le rapporterons [au] sénateur / [à la] sénatrice." (lower case / minuscule)
+defined_text = {
+	name = GetAuAlaLead
+	text = {
+		trigger = { cc_loc_leader_masc = yes }
+		localization_key = FRLOC_au
+	}
+	text = {
+		trigger = { cc_loc_leader_fem = yes }
+		localization_key = FRLOC_ala
+	}
+}
+#Ex.: "[To] the senator." => "[Au] sénateur / [À la] sénatrice." (upper case / majuscule)
+defined_text = {
+	name = GetAuAlaLeadCap
+	text = {
+		trigger = { cc_loc_leader_masc = yes }
+		localization_key = FRLOC_Au
+	}
+	text = {
+		trigger = { cc_loc_leader_fem = yes }
+		localization_key = FRLOC_Ala
+	}
+}
+
+
+#Ex.: "Our beloved teacher" => "Notre enseignant(e) aimé(e)"
+defined_text = {
+	name = GetXELead
+	text = {
+		trigger = { cc_loc_leader_masc = yes }
+		localization_key = FRLOC_XX
+	}
+	text = {
+		trigger = { cc_loc_leader_fem = yes }
+		localization_key = FRLOC_e
+	}
+}
+
+
+
+#Ex.: "Someone XIV is our [current] teacher." => "Machin XIV est notre actu[el] enseignant. / Machine XIV est notre actu[elle] enseignante." (lower case / minuscule)
+defined_text = {
+	name = GetElElleLead
+	text = {
+		trigger = { cc_loc_leader_masc = yes }
+		localization_key = FRLOC_el
+	}
+	text = {
+		trigger = { cc_loc_leader_fem = yes }
+		localization_key = FRLOC_elle
+	}
+}
+
+
+
+#Ex.: "[Esteemed] teacher..." => "Très ch[er] enseignant... / Très ch[ère] enseignante..." (lower case / minuscule)
+defined_text = {
+	name = GetErEreLead
+	text = {
+		trigger = { cc_loc_leader_masc = yes }
+		localization_key = FRLOC_er
+	}
+	text = {
+		trigger = { cc_loc_leader_fem = yes }
+		localization_key = FRLOC_ere
+	}
+}
+
+
+
+#Ex.: "May the teacher stay a [master/mistress] of his/her students." => "Puisse l'enseignant rester le maître[x] de ses étudiants. / Puisse l'enseignante rester la maître[sse] de ses étudiants."
+defined_text = {
+	name = GetXSseLead
+	text = {
+		trigger = { cc_loc_leader_masc = yes }
+		localization_key = FRLOC_XX
+	}
+	text = {
+		trigger = { cc_loc_leader_fem = yes }
+		localization_key = FRLOC_sse
+	}
+}
+
+
+#Ex.: "The actor." => "L'act[eur]. / L'act[rice]."
+defined_text = {
+	name = GetEurRiceLead
+	text = {
+		trigger = { cc_loc_leader_masc = yes }
+		localization_key = FRLOC_eur
+	}
+	text = {
+		trigger = { cc_loc_leader_fem = yes }
+		localization_key = FRLOC_rice
+	}
+}
+
+
+#Ex.: "[de] lui / [d']elle"
+defined_text = {
+	name = GetDeDLead
+	text = {
+		trigger = { cc_loc_leader_masc = yes }
+		localization_key = FRLOC_de
+	}
+	text = {
+		trigger = { cc_loc_leader_fem = yes }
+		localization_key = FRLOC_d
+	}
+}
+
+
+#Ex.: "[de lui] / [d'elle]"
+defined_text = {
+	name = GetDeluiDelleLead
+	text = {
+		trigger = { cc_loc_leader_masc = yes }
+		localization_key = FRLOC_delui
+	}
+	text = {
+		trigger = { cc_loc_leader_fem = yes }
+		localization_key = FRLOC_delle
+	}
+}
+
+
+#Ex.: "vendeu[r] / vendeu[se]"
+defined_text = {
+	name = GetRSeLead
+	text = {
+		trigger = { cc_loc_leader_masc = yes }
+		localization_key = FRLOC_r
+	}
+	text = {
+		trigger = { cc_loc_leader_fem = yes }
+		localization_key = FRLOC_se
+	}
+}
+
+#Ex.: "cet / cet[te]"
+defined_text = {
+	name = GetXTeLead
+	text = {
+		trigger = { cc_loc_leader_masc = yes }
+		localization_key = FRLOC_XX
+	}
+	text = {
+		trigger = { cc_loc_leader_fem = yes }
+		localization_key = FRLOC_te
+	}
+}
+
+#Ex.: "ce / ce[tte]"
+defined_text = {
+	name = GetXTteLead
+	text = {
+		trigger = { cc_loc_leader_masc = yes }
+		localization_key = FRLOC_XX
+	}
+	text = {
+		trigger = { cc_loc_leader_fem = yes }
+		localization_key = FRLOC_tte
+	}
+}
+
+#Ex.: "citoyen / citoyen[ne]"
+defined_text = {
+	name = GetXNeLead
+	text = {
+		trigger = { cc_loc_leader_masc = yes }
+		localization_key = FRLOC_XX
+	}
+	text = {
+		trigger = { cc_loc_leader_fem = yes }
+		localization_key = FRLOC_ne
+	}
+}
+
+#Ex.: "intellectuel / intellectuel[le]"
+defined_text = {
+	name = GetXLeLead
+	text = {
+		trigger = { cc_loc_leader_masc = yes }
+		localization_key = FRLOC_XX
+	}
+	text = {
+		trigger = { cc_loc_leader_fem = yes }
+		localization_key = FRLOC_le
+	}
+}

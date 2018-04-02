@@ -1,0 +1,2913 @@
+
+namespace = cc_xeno_clashes
+
+
+planet_event = {
+	id = cc_xeno_clashes.1
+	hide_window = yes
+	
+	trigger = {
+		exists = owner
+		has_owner = yes
+		has_planet_flag = cc_eventperf_xeno_clashes_planet
+		NOR = {
+			has_planet_flag = cc_xeno_clashes
+			has_planet_flag = pop_modification
+			owner = {
+				OR = {
+					has_country_flag = cc_recent_xeno_empire_clashes
+					has_country_flag = cc_recent_first_xeno_clashes
+					has_ethic = ethic_gestalt_consciousness
+				}
+			}
+		}
+	}
+	
+	mean_time_to_happen = {
+		years = 80
+		
+		modifier = {
+			factor = 2
+			unrest < 1
+		}
+		modifier = {
+			factor = 2
+			NOT = { has_planet_flag = cc_eventperf_xeno_clashes_own_species_planet }
+			unrest < 1
+		}
+		modifier = {
+			factor = 0.67
+			unrest > 30
+		}
+		modifier = {
+			factor = 0.8
+			has_planet_flag = ccrebel_perf_xenophobes_1
+		}
+		modifier = {
+			factor = 0.8
+			has_planet_flag = ccrebel_perf_xenophobes_2
+		}
+		modifier = {
+			factor = 0.8
+			has_planet_flag = ccrebel_perf_xenophobes_3
+		}
+		modifier = {
+			factor = 1.33
+			has_planet_flag = ccrebel_perf_xenophiles_1
+		}
+		modifier = {
+			factor = 2
+			OR = {
+				has_planet_flag = ccrebel_perf_xenophiles_2
+				has_planet_flag = ccrebel_perf_xenophiles_3
+			}
+		}
+		modifier = {
+			factor = 1.5
+			owner = { NOT = { has_faction = supremacist } }
+		}
+		modifier = {
+			factor = 0.75
+			has_planet_flag = cc_eventperf_xeno_clashes_planet_likely
+		}
+		modifier = {
+			factor = 1.25
+			NOT = { has_planet_flag = cc_eventperf_xeno_clashes_own_species_planet }
+		}
+	}
+	
+	immediate = {
+		owner = {
+			save_event_target_as = cc_owner
+			set_timed_country_flag = {
+				flag = cc_recent_first_xeno_clashes
+				years = 5
+			}
+		}
+		if = {
+			limit = { has_planet_flag = cc_eventperf_xeno_clashes_own_species_planet }
+			owner.species = { save_event_target_as = species1 }
+			else = {
+				random_owned_pop = {
+					limit = {
+						species = { pops_have_happiness = yes }
+						is_robot_pop = no
+						is_enslaved = no
+						is_being_purged = no
+						
+						planet = {
+							count_pops = {
+								limit = { is_same_species = prev }
+								count > 1
+							}
+						}
+					}
+					species = {
+						save_event_target_as = species1
+					}
+				}
+			}
+		}
+		random_owned_pop = {
+			limit = {
+				species = { NOT = { is_same_value = event_target:species1 } }
+				species = { pops_have_happiness = yes }
+				is_robot_pop = no
+				is_enslaved = no
+				is_being_purged = no
+				planet = {
+					count_pops = {
+						limit = { is_same_species = prev }
+						count > 1
+					}
+				}
+			}
+			species = {
+				save_event_target_as = species2
+			}
+		}
+			
+			
+		if = {
+			limit = {
+				has_planet_flag = cc_eventperf_xeno_clashes_own_species_planet
+				unrest < 30
+			}
+			planet_event = { id = cc_xeno_clashes.2 }
+		}
+		if = {
+			limit = {
+				has_planet_flag = cc_eventperf_xeno_clashes_own_species_planet
+				NOT = { unrest < 30 }
+			}
+			planet_event = { id = cc_xeno_clashes.3 }
+		}
+		if = {
+			limit = {
+				NOT = { has_planet_flag = cc_eventperf_xeno_clashes_own_species_planet }
+			}
+			planet_event = { id = cc_xeno_clashes.2 }
+		}
+	}
+}
+
+planet_event = {
+	id = cc_xeno_clashes.2
+	title = cc_xeno_clashes.2.name
+	desc = {
+		trigger = {
+			OR = {
+				has_planet_flag = cc_eventperf_xeno_clashes_own_species_planet
+				owner = {
+					NOR = {
+						has_ethic = ethic_xenophile
+						has_ethic = ethic_fanatic_xenophile
+					}
+				}
+			}
+		}
+		text = cc_xeno_clashes.2.desc
+	}
+	desc = {
+		trigger = {
+			NOT = { has_planet_flag = cc_eventperf_xeno_clashes_own_species_planet }
+			owner = {
+				OR = {
+					has_ethic = ethic_xenophile
+					has_ethic = ethic_fanatic_xenophile
+				}
+			}
+		}
+		text = cc_xeno_clashes.2.desc.phile
+	}
+	picture = GFX_evt_alien_segregation
+	location = root
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		if = {
+			limit = { has_planet_flag = cc_eventperf_xeno_clashes_own_species_planet }
+			planet_event = { id = cc_xeno_clashes.3 days = 480 }
+			
+			else = { planet_event = { id = cc_xeno_clashes.4 days = 480 } }
+		}
+		set_timed_planet_flag = {
+			flag = cc_xeno_clashes
+			years = 30
+		}
+	}
+	
+	option = {
+		name = cc_xeno_clashes.2.phile.own
+		
+		add_modifier = {
+			modifier = cc_planet_hate_speech
+			days = 1800
+		}
+		
+		trigger = {
+			has_planet_flag = cc_eventperf_xeno_clashes_own_species_planet
+			owner = {
+				OR = {
+					has_ethic = ethic_xenophile
+					has_ethic = ethic_fanatic_xenophile
+				}
+			}
+		}
+	}
+	
+	option = {
+		name = cc_xeno_clashes.2.phobe.own
+		
+		add_modifier = {
+			modifier = cc_planet_hate_speech
+			days = 1800
+		}
+		
+		trigger = {
+			has_planet_flag = cc_eventperf_xeno_clashes_own_species_planet
+			owner = {
+					OR = {
+					has_ethic = ethic_xenophobe
+					has_ethic = ethic_fanatic_xenophobe
+				}
+			}
+		}
+	}
+	
+	option = {
+		name = cc_xeno_clashes.2.own
+		
+		add_modifier = {
+			modifier = cc_planet_hate_speech
+			days = 1800
+		}
+		
+		trigger = {
+			has_planet_flag = cc_eventperf_xeno_clashes_own_species_planet
+			owner = {
+				NOR = {
+					has_ethic = ethic_xenophobe
+					has_ethic = ethic_fanatic_xenophobe
+					has_ethic = ethic_xenophile
+					has_ethic = ethic_fanatic_xenophile
+				}
+			}
+		}
+	}
+	
+	option = {
+		name = cc_xeno_clashes.2.no_own
+		
+		add_modifier = {
+			modifier = cc_planet_hate_speech
+			days = 1800
+		}
+		
+		trigger = {
+			NOT = { has_planet_flag = cc_eventperf_xeno_clashes_own_species_planet }
+			owner = {
+				NOR = {
+					has_ethic = ethic_xenophobe
+					has_ethic = ethic_fanatic_xenophobe
+				}
+			}
+		}
+	}
+	
+	option = {
+		name = cc_xeno_clashes.2.phobe.no_own
+		
+		add_modifier = {
+			modifier = cc_planet_hate_speech
+			days = 1800
+		}
+		
+		trigger = {
+			NOT = { has_planet_flag = cc_eventperf_xeno_clashes_own_species_planet }
+			owner = {
+				OR = {
+					has_ethic = ethic_xenophobe
+					has_ethic = ethic_fanatic_xenophobe
+				}
+			}
+		}
+	}
+}
+
+
+planet_event = {
+	id = cc_xeno_clashes.3
+	
+	title = cc_xeno_clashes.3.name
+	desc = {
+		trigger = { NOT = { has_modifier = cc_planet_hate_speech } }
+		text = cc_xeno_clashes.3.desc.A
+	}
+	desc = {
+		trigger = { has_modifier = cc_planet_hate_speech }
+		text = cc_xeno_clashes.3.desc.B
+	}
+	picture = GFX_evt_alien_segregation
+	location = root
+	
+	is_triggered_only = yes
+
+	trigger = {
+		unrest > 0
+		owner = { is_same_value = event_target:cc_owner }
+		any_owned_pop = { species = { is_same_value = event_target:species1 } }
+		any_owned_pop = { species = { is_same_value = event_target:species2 } }
+	}
+	
+	immediate = {
+		set_timed_planet_flag = {
+			flag = cc_xeno_clashes
+			years = 30
+		}
+	}
+	
+	option = {
+		name = cc_xeno_clashes.3.A
+		custom_tooltip = cc_xeno_clashes.3.A.tooltip
+		
+		trigger = {
+			owner = {
+				NOR = {
+					has_ethic = ethic_xenophile
+					has_ethic = ethic_fanatic_xenophile
+				}
+			}
+		}
+		
+		ai_chance = {
+			factor = 1
+			modifier = {
+				factor = 5
+				owner = { has_ethic = ethic_xenophobe }
+			}
+			modifier = {
+				factor = 5
+				owner = { has_ethic = ethic_xenophobe }
+			}
+			modifier = {
+				factor = 0
+				owner = { 
+					OR = {
+						has_ethic = ethic_xenophile
+						has_ethic = ethic_fanatic_xenophile
+						
+						any_owned_pop = {
+							NOT = { is_same_species = prev }
+							has_citizenship_rights = no
+						}
+					}
+				}
+			}
+		}
+		
+		hidden_effect = {
+			if = {
+				limit = { has_modifier = cc_planet_hate_speech }
+				remove_modifier = cc_planet_hate_speech
+			}
+		}
+		
+		owner = {
+			if = {
+				limit = {
+					NOR = {
+						has_ethic = ethic_xenophobe
+						has_ethic = ethic_fanatic_xenophobe
+					}
+				}
+				shift_ethic = ethic_xenophobe
+					
+				if = {
+					limit = { has_faction = supremacist }
+					random_pop_faction = {
+						limit = { is_pop_faction_type = supremacist }
+						add_modifier = { modifier = embraced_faction days = 3600 }
+						hidden_effect = { 
+							add_modifier = { modifier = embraced_faction_timer days = 3600 }
+							owner = {
+								every_pop_faction = {
+									limit = {
+										NOR = {
+											is_same_value = prevprev
+											is_pop_faction_type = isolationist
+											is_pop_faction_type = xenoist
+										}
+									}
+									add_modifier = { modifier = embraced_another_faction days = 3600 }
+								}
+							}
+						}
+					}
+					else = {
+						random_pop_faction = {
+							limit = { is_pop_faction_type = isolationist }
+							add_modifier = { modifier = embraced_faction days = 3600 }
+							hidden_effect = { 
+								add_modifier = { modifier = embraced_faction_timer days = 3600 }
+								owner = {
+									every_pop_faction = {
+										limit = {
+											NOR = {
+												is_same_value = prevprev
+												is_pop_faction_type = xenoist
+											}
+										}
+										add_modifier = { modifier = embraced_another_faction days = 3600 }
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	
+		add_modifier = {
+			modifier = cc_planet_interspecies_tensions
+			days = 3600
+		}
+		
+		owner = {
+			if = {
+				limit = { has_faction = xenoist }
+				random_pop_faction = {
+					limit = { is_pop_faction_type = xenoist }
+					add_modifier = {
+						modifier = cc_xenos_disparaged
+						days = 3600
+					}
+				}
+			}
+		}
+		
+		hidden_effect = {
+			if = {
+				limit = {
+					owner = {
+						any_owned_planet = {
+							NOT = { is_same_value = root }
+							any_owned_pop = { species = { is_same_value = event_target:species2 } }
+						}
+					}
+				}
+				owner = { country_event = { id = cc_xeno_clashes.31 days = 15 random = 5 } }
+				
+				else = {
+					every_owned_pop = {
+						limit = { species = { is_same_value = event_target:species2 } }
+						add_modifier = {
+							modifier = cc_feels_unwelcome
+							days = 3600
+						}
+					}
+				}
+			}
+			planet_event = { id = cc_xeno_clashes.37 days = 180 }
+		}
+	}
+	option = {
+		name = cc_xeno_clashes.3.B
+		custom_tooltip = cc_xeno_clashes.3.B.tooltip
+		
+		trigger = {
+			owner = { NOT = { has_ethic = ethic_fanatic_xenophobe } }
+		}
+		
+		ai_chance = {
+			factor = 1
+		}
+		
+		hidden_effect = {
+			if = {
+				limit = { has_modifier = cc_planet_hate_speech }
+				remove_modifier = cc_planet_hate_speech
+			}
+		}
+	
+		add_modifier = {
+			modifier = cc_planet_interspecies_tensions
+			days = 3600
+		}
+		
+		hidden_effect = {
+			random_list = {
+				1 = {
+					planet_event = { id = cc_xeno_clashes.37 days = 180 }
+					modifier = {
+						factor = 1.5
+						unrest > 0
+					}
+					modifier = {
+						factor = 2
+						unrest > 30
+					}
+					modifier = {
+						factor = 4
+						unrest > 50
+					}
+					modifier = {
+						factor = 10
+						unrest > 80
+					}
+				}
+				4 = { }
+			}
+			owner = {
+				every_owned_planet = {
+					limit = {
+						NOT = { is_same_value = root }
+						any_owned_pop = { species = { is_same_value = event_target:species1 } }
+						any_owned_pop = { species = { is_same_value = event_target:species2 } }
+					}
+					planet_event = { id = cc_xeno_clashes.38 days = 15 }
+				}
+			}
+		}
+	}
+	option = {
+		name = cc_xeno_clashes.3.C
+		custom_tooltip = cc_xeno_clashes.3.C.tooltip
+		
+		trigger = {
+			owner = {
+				NOR = {
+					has_ethic = ethic_xenophobe
+					has_ethic = ethic_fanatic_xenophobe
+				}
+			}
+		}
+		
+		ai_chance = {
+			factor = 1
+			modifier = {
+				factor = 5
+				owner = { has_ethic = ethic_xenophile }
+			}
+			modifier = {
+				factor = 10
+				owner = { has_ethic = ethic_fanatic_xenophile }
+			}
+		}
+		
+		owner = {
+			add_modifier = {
+				modifier = cc_xeno_reconciliation
+				days = 3600
+			}
+		}
+		hidden_effect = {
+			if = {
+				limit = { has_modifier = cc_planet_hate_speech }
+				remove_modifier = cc_planet_hate_speech
+			}
+		}
+#		add_modifier = {
+#			modifier = cc_planet_interspecies_tensions
+#			days = 3600
+#		}
+		add_modifier = {
+			modifier = cc_investment_package
+			days = 3600
+		}
+		
+		owner = {
+			if = {
+				limit = { has_faction = supremacist }
+				random_pop_faction = {
+					limit = { is_pop_faction_type = supremacist }
+					add_modifier = {
+						modifier = cc_xenos_encouraged
+						days = 3600
+					}
+				}
+			}
+		}
+	}
+}
+
+
+country_event = {
+	id = cc_xeno_clashes.31
+	title = cc_xeno_clashes.31.name
+	desc = cc_xeno_clashes.31.desc
+	picture = GFX_evt_alien_segregation
+	
+	location = from	
+	is_triggered_only = yes
+
+	immediate = {
+		create_leader = {
+			type = general
+			species = event_target:species2
+			name = random
+			skill = 0
+		}
+		last_created_leader = {
+			save_event_target_as = annoyed_xeno
+			exile_leader_as = cc_annoyed_xeno
+		}
+		set_timed_country_flag = {
+			flag = cc_xeno_clashes_militia_formed
+			days = 1800
+		}
+	}
+	
+	option = {
+		name = UNFORTUNATE
+		
+		if = {
+			limit = {
+				any_owned_planet = {
+					any_owned_pop = { species = { is_same_value = event_target:species1 } }
+					any_owned_pop = { species = { is_same_value = event_target:species2 } }
+					owner = {
+						any_owned_planet = {
+							NOT = { is_same_value = prevprev }
+							any_owned_pop = { species = { is_same_value = event_target:species1 } }
+							any_owned_pop = { species = { is_same_value = event_target:species2 } }
+							owner = {
+								any_owned_planet = {
+									NOR = {
+										is_same_value = prevprev
+										is_same_value = prevprevprevprev
+									}
+									any_owned_pop = { species = { is_same_value = event_target:species1 } }
+									any_owned_pop = { species = { is_same_value = event_target:species2 } }
+								}
+							}
+						}
+					}
+				}
+			}					
+			add_modifier = {
+				modifier = cc_empire_interspecies_tensions
+				days = 3600
+			}
+			hidden_effect = {
+				set_timed_country_flag = {
+					flag = cc_recent_xeno_empire_clashes
+					years = 50
+				}
+			}
+		}
+
+		every_owned_planet = {
+			limit = {
+				NOT = { has_modifier = cc_planet_interspecies_tensions }
+				any_owned_pop = { species = { is_same_value = event_target:species1 } }
+				any_owned_pop = { species = { is_same_value = event_target:species2 } }
+			}
+			add_modifier = {
+				modifier = cc_planet_interspecies_tensions
+				days = 3600
+			}
+		}
+		
+		custom_tooltip = cc_xeno_clashes.31.tooltip
+		hidden_effect = {
+			every_owned_pop = {
+				limit = { species = { is_same_value = event_target:species2 } }
+				add_modifier = {
+					modifier = cc_feels_unwelcome
+					days = 3600
+				}
+			}
+			every_owned_planet = {
+				limit = { any_owned_pop = { species = { is_same_value = event_target:species2 } } }
+				planet_event = { id = cc_xeno_clashes.315 days = 30 }
+			}
+		}
+	}
+}
+
+planet_event = {
+	id = cc_xeno_clashes.315
+	hide_window = yes
+	is_triggered_only = yes
+	
+	trigger = {
+		has_modifier = cc_planet_interspecies_tensions
+#		any_owned_pop = { species = { is_same_value = event_target:species1 } }
+		any_owned_pop = { species = { is_same_value = event_target:species2 } }
+		NOT = { has_planet_flag = cc_interspecies_incident }
+		owner = { is_same_value = event_target:cc_owner }
+	}
+	
+	immediate = {
+		if = {
+			limit = {
+				any_owned_pop = { species = { is_same_value = event_target:species1 } }
+			}
+			if = {
+				limit = {
+					OR = {
+						has_building = building_colony_shelter
+						has_building = building_capital_1
+					}
+				}
+				random_list = {
+					1 = {
+						planet_event = { id = cc_xeno_clashes.32 }
+						modifier = {
+							factor = 1.5
+							unrest > 0
+						}
+						modifier = {
+							factor = 1.5
+							unrest > 30
+						}
+						modifier = {
+							factor = 1.5
+							unrest > 50
+						}
+						modifier = {
+							factor = 1.5
+							unrest > 80
+						}
+					}
+					149 = { }
+				}
+			}
+			if = {
+				limit = {
+					OR = {
+						has_building = building_capital_2
+						has_building = building_capital_3
+						has_building = building_hab_capital
+					}
+					NOR = {
+						has_building = building_colony_shelter
+						has_building = building_capital_1
+						has_building = building_capital_2
+						has_building = building_capital_3
+						has_building = building_hab_capital
+					}
+				}
+				random_list = {
+					1 = {
+						planet_event = { id = cc_xeno_clashes.33 }
+						modifier = {
+							factor = 1.5
+							unrest > 0
+						}
+						modifier = {
+							factor = 1.5
+							unrest > 30
+						}
+						modifier = {
+							factor = 1.5
+							unrest > 50
+						}
+						modifier = {
+							factor = 1.5
+							unrest > 80
+						}
+					}
+					1 = {
+						planet_event = { id = cc_xeno_clashes.34 }
+						modifier = {
+							factor = 1.5
+							unrest > 0
+						}
+						modifier = {
+							factor = 1.5
+							unrest > 30
+						}
+						modifier = {
+							factor = 1.5
+							unrest > 50
+						}
+						modifier = {
+							factor = 1.5
+							unrest > 80
+						}
+					}
+					297 = { }
+				}
+			}
+			else = {
+				if = {
+					limit = {
+						OR = {
+							has_building = building_colony_shelter
+							has_building = building_capital_1
+						}
+					}
+					random_list = {
+						1 = {
+							planet_event = { id = cc_xeno_clashes.35 }
+							modifier = {
+								factor = 1.5
+								unrest > 0
+							}
+							modifier = {
+								factor = 1.5
+								unrest > 30
+							}
+							modifier = {
+								factor = 1.5
+								unrest > 50
+							}
+							modifier = {
+								factor = 1.5
+								unrest > 80
+							}
+						}
+						149 = { }
+					}
+				}
+				if = {
+					limit = {
+						OR = {
+							has_building = building_capital_2
+							has_building = building_capital_3
+							has_building = building_hab_capital
+						}
+						NOR = {
+							has_building = building_colony_shelter
+							has_building = building_capital_1
+							has_building = building_capital_2
+							has_building = building_capital_3
+							has_building = building_hab_capital
+						}
+					}
+					random_list = {
+						1 = {
+							planet_event = { id = cc_xeno_clashes.36 }
+							modifier = {
+								factor = 1.5
+								unrest > 0
+							}
+							modifier = {
+								factor = 1.5
+								unrest > 30
+							}
+							modifier = {
+								factor = 1.5
+								unrest > 50
+							}
+							modifier = {
+								factor = 1.5
+								unrest > 80
+							}
+							modifier = {
+								factor = 0
+								NOR = {
+									has_building = building_colony_shelter
+									has_building = building_capital_1
+									has_building = building_capital_2
+									has_building = building_capital_3
+									has_building = building_hab_capital
+								}
+							}
+						}
+						1 = {
+							planet_event = { id = cc_xeno_clashes.34 }
+							modifier = {
+								factor = 1.5
+								unrest > 0
+							}
+							modifier = {
+								factor = 1.5
+								unrest > 30
+							}
+							modifier = {
+								factor = 1.5
+								unrest > 50
+							}
+							modifier = {
+								factor = 1.5
+								unrest > 80
+							}
+						}
+						297 = { }
+					}
+				}
+			}
+		}
+		planet_event = { id = cc_xeno_clashes.315 days = 30 }
+	}
+}
+
+
+planet_event = {
+	id = cc_xeno_clashes.32
+	title = cc_xeno_clashes.32.name
+	desc = cc_xeno_clashes.32.desc
+	picture = GFX_evt_burning_settlement
+	
+	location = root
+	is_triggered_only = yes
+	
+	immediate = {
+		set_timed_planet_flag = {
+			flag = cc_interspecies_incident
+			years = 10
+		}
+	}
+	
+	option = {
+		name = cc_xeno_clashes.32.option
+		random_owned_pop = {
+			limit = { species = { is_same_value = event_target:species1 } }
+			kill_pop = yes
+		}
+	}
+}
+
+planet_event = {
+	id = cc_xeno_clashes.33
+	title = cc_xeno_clashes.33.name
+	desc = cc_xeno_clashes.33.desc
+	picture = GFX_evt_nuclear_explosion
+	
+	location = root
+	is_triggered_only = yes
+	
+	immediate = {
+		set_timed_planet_flag = {
+			flag = cc_interspecies_incident
+			years = 10
+		}
+	}
+	
+	option = {
+		name = cc_xeno_clashes.33.option
+		random_owned_pop = {
+			limit = { species = { is_same_value = event_target:species1 } }
+			kill_pop = yes
+			tile = {
+				if = {
+					limit = {
+						has_building = yes
+						is_ruined = no
+					}
+					set_ruined = yes
+				}
+			}
+		}
+	}
+}
+
+planet_event = {
+	id = cc_xeno_clashes.34
+	title = cc_xeno_clashes.34.name
+	desc = cc_xeno_clashes.34.desc
+	picture = GFX_evt_glitchy_matrix
+	
+	location = root
+	is_triggered_only = yes
+	
+	immediate = {
+		set_timed_planet_flag = {
+			flag = cc_interspecies_incident
+			years = 10
+		}
+	}
+	
+	option = {
+		name = cc_xeno_clashes.34.option
+		
+		add_modifier = {
+			modifier = cc_disrupted_government
+			days = 1800
+		}
+	}
+}
+
+planet_event = {
+	id = cc_xeno_clashes.35
+	title = cc_xeno_clashes.35.name
+	desc = cc_xeno_clashes.35.desc
+	picture = GFX_evt_burning_settlement
+	
+	location = root
+	is_triggered_only = yes
+	
+	immediate = {
+		set_timed_planet_flag = {
+			flag = cc_interspecies_incident
+			years = 10
+		}
+	}
+	
+	option = {
+		name = cc_xeno_clashes.35.option
+		
+		add_modifier = {
+			modifier = cc_disrupted_government
+			days = 1800
+		}
+	}
+}
+
+planet_event = {
+	id = cc_xeno_clashes.36
+	title = cc_xeno_clashes.36.name
+	desc = cc_xeno_clashes.36.desc
+	picture = GFX_evt_nuclear_explosion
+	
+	location = root
+	is_triggered_only = yes
+	
+	immediate = {
+		set_timed_planet_flag = {
+			flag = cc_interspecies_incident
+			years = 10
+		}
+	}
+	
+	option = {
+		name = cc_xeno_clashes.36.option
+		
+		random_tile = {
+			limit = {
+				OR = {
+					has_building = building_colony_shelter
+					has_building = building_capital_1
+					has_building = building_capital_2
+					has_building = building_capital_3
+					has_building = building_hab_capital
+				}
+			}
+			set_ruined = yes
+		}
+		
+		add_modifier = {
+			modifier = cc_disrupted_government
+			days = 1800
+		}
+	}
+}
+
+
+planet_event = {
+	id = cc_xeno_clashes.37
+	title = cc_xeno_clashes.37.name
+	desc = cc_xeno_clashes.37.desc
+	picture = GFX_evt_city_ruins
+	
+	location = root
+	is_triggered_only = yes
+	
+	trigger = {
+		owner = { species = { is_same_value = event_target:species1 } }
+		NOT = { owner = { has_country_flag = cc_interspecies_genocide } }
+		NOT = { has_planet_flag = cc_interspecies_incident }
+		any_owned_pop = {
+			species = { is_same_value = event_target:species1 }
+			planet = {
+				any_owned_pop = {
+					NOT = { is_same_value = prevprev }
+					species = { is_same_value = event_target:species1 }
+				}
+			}
+		}
+		any_owned_pop = {
+			species = { is_same_value = event_target:species2 }
+			planet = {
+				any_owned_pop = {
+					NOT = { is_same_value = prevprev }
+					species = { is_same_value = event_target:species2 }
+				}
+			}
+		}
+	}
+	
+	immediate = {
+		set_timed_planet_flag = {
+			flag = cc_interspecies_incident
+			years = 10
+		}
+		owner = {
+			set_timed_country_flag = {
+				flag = cc_interspecies_genocide
+				years = 10
+			}
+		}
+	}
+	
+	option = {
+		name = UNFORTUNATE
+		
+		random_owned_pop = {
+			limit = { species = { is_same_value = event_target:species1 } }
+			kill_pop = yes
+		}
+		hidden_effect = { planet_event = { id = cc_xeno_clashes.371 days = 15 } }
+	}
+}
+
+planet_event = {
+	id = cc_xeno_clashes.371
+	title = cc_xeno_clashes.371.name
+	desc = cc_xeno_clashes.371.desc
+	picture = GFX_evt_city_ruins
+	
+	location = root
+	is_triggered_only = yes
+	
+	option = {
+		name = cc_xeno_clashes.371.A
+		
+		every_owned_pop = {
+			limit = { species = { is_same_value = event_target:species2 } }
+			kill_pop = yes
+			
+			hidden_effect = {
+				every_country = {
+					limit = {
+						NOT = { species = { is_same_value = event_target:species2 } }
+						has_communications = root.owner
+						NOT = { is_country = root.owner }
+						NOT = { has_ai_personality_behaviour = purger }
+						NOT = {
+							OR = {
+								has_ethic = ethic_fanatic_authoritarian
+								AND = {
+									has_ethic = ethic_authoritarian
+									OR = {
+										has_ethic = ethic_fanatic_xenophobe
+										has_ethic = ethic_fanatic_militarist
+										AND = {
+											has_ethic = ethic_xenophobe
+											has_ethic = ethic_militarist
+										}
+									}
+								}
+							}
+						}
+						OR = {
+							is_country_type = default
+							has_ai_personality = awakened_fallen_empire_xenophile				
+						}	
+					}
+					add_opinion_modifier = { who = root.owner modifier = opinion_genocidal }
+				}
+			}
+		}
+		
+		owner = {
+			if = {
+				limit = { has_faction = xenoist }
+				random_pop_faction = {
+					limit = { is_pop_faction_type = xenoist }
+					add_modifier = {
+						modifier = cc_xenos_massacred
+						days = 3600
+					}
+				}
+			}
+		}
+		
+		if = {
+			limit = {
+				any_country = { species = { is_same_value = event_target:species2 } }
+			}
+			every_country = {
+				limit = {
+					NOT = { is_same_value = root.owner } #should be impossible, but just making sure
+					species = { is_same_value = event_target:species2 }
+				}
+				add_opinion_modifier = {
+					modifier = cc_allowed_genocide_of_us
+					who = root.owner
+				}
+			}
+		}
+		custom_tooltip = CCKILLALL.tooltip
+		
+		hidden_effect = {
+			owner = {
+				if = {
+					limit = {
+						NOT = { has_country_flag = cc_xeno_clashes_militia_formed }
+						any_owned_planet = {
+							NOT = { is_same_value = root }
+							any_owned_pop = { species = { is_same_value = event_target:species2 } }
+						}
+					}
+					country_event = { id = cc_xeno_clashes.372 days = 15 random = 5 }
+				}
+			}
+		}
+		ai_chance = {
+			modifier = {
+				factor = 5
+				owner = { has_ethic = ethic_xenophobe }
+			}
+			modifier = {
+				factor = 10
+				owner = { has_ethic = ethic_fanatic_xenophobe }
+			}
+			modifier = {
+				factor = 0
+				NOT = { owner = { has_faction = supremacist } }
+			}
+			modifier = {
+				factor = 0
+				owner = {
+					NOR = {
+						has_ethic = ethic_xenophile
+						has_ethic = ethic_fanatic_xenophile
+					}
+				}
+			}
+		}
+	}
+	option = {
+		name = cc_xeno_clashes.371.B
+		
+		add_modifier = {
+			modifier = cc_martial_law
+			days = 3600
+		}
+		
+		owner = {
+			if = {
+				limit = { has_faction = supremacist }
+				random_pop_faction = {
+					limit = { is_pop_faction_type = supremacist }
+					add_modifier = {
+						modifier = cc_xenos_spared_from_massacre
+						days = 3600
+					}
+				}
+			}
+		}
+		ai_chance = {
+			modifier = {
+				factor = 5
+				owner = {
+					NOR = {
+						has_ethic = ethic_xenophobe
+						has_ethic = ethic_fanatic_xenophobe
+					}
+				}
+			}
+			modifier = {
+				factor = 0.5
+				NOT = { owner = { has_faction = xenoist } }
+			}
+			modifier = {
+				factor = 2
+				owner = {
+					count_pop_factions = {
+						limit = {
+							is_pop_faction_type = supremacist
+							support > 0.2
+						}
+						count = 1
+					}
+				}
+			}
+		}
+	}
+}
+
+
+country_event = {
+	id = cc_xeno_clashes.372
+	title = cc_xeno_clashes.372.name
+	desc = cc_xeno_clashes.372.desc
+	picture = GFX_evt_alien_segregation
+	
+	location = from	
+	is_triggered_only = yes
+
+	immediate = {
+		create_leader = {
+			type = general
+			species = event_target:species2
+			name = random
+			skill = 0
+		}
+		last_created_leader = {
+			save_event_target_as = annoyed_xeno
+			exile_leader_as = cc_annoyed_xeno
+		}
+		set_timed_country_flag = {
+			flag = cc_xeno_clashes_militia_formed
+			days = 1800
+		}
+	}
+	
+	option = {
+		name = UNFORTUNATE
+		
+		if = {
+			limit = {
+				NOT = { has_modifier = cc_empire_interspecies_tensions }
+				
+				any_owned_planet = {
+					any_owned_pop = { species = { is_same_value = event_target:species1 } }
+					any_owned_pop = { species = { is_same_value = event_target:species2 } }
+					owner = {
+						any_owned_planet = {
+							NOT = { is_same_value = prevprev }
+							any_owned_pop = { species = { is_same_value = event_target:species1 } }
+							any_owned_pop = { species = { is_same_value = event_target:species2 } }
+							owner = {
+								any_owned_planet = {
+									NOR = {
+										is_same_value = prevprev
+										is_same_value = prevprevprevprev
+									}
+									any_owned_pop = { species = { is_same_value = event_target:species1 } }
+									any_owned_pop = { species = { is_same_value = event_target:species2 } }
+								}
+							}
+						}
+					}
+				}
+			}					
+			add_modifier = {
+				modifier = cc_empire_interspecies_tensions
+				days = 3600
+			}
+			hidden_effect = {
+				set_timed_country_flag = {
+					flag = cc_recent_xeno_empire_clashes
+					years = 50
+				}
+			}
+		}
+
+		every_owned_planet = {
+			limit = {
+				NOT = { has_modifier = cc_planet_interspecies_tensions }
+				any_owned_pop = { species = { is_same_value = event_target:species1 } }
+				any_owned_pop = { species = { is_same_value = event_target:species2 } }
+			}
+			add_modifier = {
+				modifier = cc_planet_interspecies_tensions
+				days = 3600
+			}
+		}
+		
+		custom_tooltip = cc_xeno_clashes.372.tooltip
+		hidden_effect = {
+			every_owned_pop = {
+				limit = { species = { is_same_value = event_target:species2 } }
+				add_modifier = {
+					modifier = cc_pop_fears_genocide
+					days = 3600
+				}
+			}
+			every_owned_planet = {
+				limit = { any_owned_pop = { species = { is_same_value = event_target:species2 } } }
+				planet_event = { id = cc_xeno_clashes.373 days = 30 }
+			}
+		}
+	}
+}
+
+planet_event = {
+	id = cc_xeno_clashes.373
+	hide_window = yes
+	is_triggered_only = yes
+	
+	trigger = {
+		has_modifier = cc_planet_interspecies_tensions
+#		any_owned_pop = { species = { is_same_value = event_target:species1 } }
+		any_owned_pop = { species = { is_same_value = event_target:species2 } }
+		NOT = { has_planet_flag = cc_interspecies_incident }
+		owner = { is_same_value = event_target:cc_owner }
+	}
+	
+	immediate = {
+		if = {
+			limit = {
+				any_owned_pop = { species = { is_same_value = event_target:species1 } }
+			}
+			if = {
+				limit = {
+					OR = {
+						has_building = building_colony_shelter
+						has_building = building_capital_1
+					}
+				}
+				random_list = {
+					1 = {
+						planet_event = { id = cc_xeno_clashes.32 }
+						modifier = {
+							factor = 1.5
+							unrest > 0
+						}
+						modifier = {
+							factor = 1.5
+							unrest > 30
+						}
+						modifier = {
+							factor = 1.5
+							unrest > 50
+						}
+						modifier = {
+							factor = 1.5
+							unrest > 80
+						}
+					}
+					99 = { }
+				}
+			}
+			if = {
+				limit = {
+					OR = {
+						has_building = building_capital_2
+						has_building = building_capital_3
+						has_building = building_hab_capital
+					}
+					NOR = {
+						has_building = building_colony_shelter
+						has_building = building_capital_1
+						has_building = building_capital_2
+						has_building = building_capital_3
+						has_building = building_hab_capital
+					}
+				}
+				random_list = {
+					1 = {
+						planet_event = { id = cc_xeno_clashes.33 }
+						modifier = {
+							factor = 1.5
+							unrest > 0
+						}
+						modifier = {
+							factor = 1.5
+							unrest > 30
+						}
+						modifier = {
+							factor = 1.5
+							unrest > 50
+						}
+						modifier = {
+							factor = 1.5
+							unrest > 80
+						}
+					}
+					1 = {
+						planet_event = { id = cc_xeno_clashes.34 }
+						modifier = {
+							factor = 1.5
+							unrest > 0
+						}
+						modifier = {
+							factor = 1.5
+							unrest > 30
+						}
+						modifier = {
+							factor = 1.5
+							unrest > 50
+						}
+						modifier = {
+							factor = 1.5
+							unrest > 80
+						}
+					}
+					198 = { }
+				}
+			}
+			else = {
+				if = {
+					limit = {
+						OR = {
+							has_building = building_colony_shelter
+							has_building = building_capital_1
+						}
+					}
+					random_list = {
+						1 = {
+							planet_event = { id = cc_xeno_clashes.35 }
+							modifier = {
+								factor = 1.5
+								unrest > 0
+							}
+							modifier = {
+								factor = 1.5
+								unrest > 30
+							}
+							modifier = {
+								factor = 1.5
+								unrest > 50
+							}
+							modifier = {
+								factor = 1.5
+								unrest > 80
+							}
+						}
+						99 = { }
+					}
+				}
+				if = {
+					limit = {
+						OR = {
+							has_building = building_capital_2
+							has_building = building_capital_3
+							has_building = building_hab_capital
+						}
+						NOR = {
+							has_building = building_colony_shelter
+							has_building = building_capital_1
+							has_building = building_capital_2
+							has_building = building_capital_3
+							has_building = building_hab_capital
+						}
+					}
+					random_list = {
+						1 = {
+							planet_event = { id = cc_xeno_clashes.36 }
+							modifier = {
+								factor = 1.5
+								unrest > 0
+							}
+							modifier = {
+								factor = 1.5
+								unrest > 30
+							}
+							modifier = {
+								factor = 1.5
+								unrest > 50
+							}
+							modifier = {
+								factor = 1.5
+								unrest > 80
+							}
+							modifier = {
+								factor = 0
+								NOR = {
+									has_building = building_colony_shelter
+									has_building = building_capital_1
+									has_building = building_capital_2
+									has_building = building_capital_3
+									has_building = building_hab_capital
+								}
+							}
+						}
+						1 = {
+							planet_event = { id = cc_xeno_clashes.34 }
+							modifier = {
+								factor = 1.5
+								unrest > 0
+							}
+							modifier = {
+								factor = 1.5
+								unrest > 30
+							}
+							modifier = {
+								factor = 1.5
+								unrest > 50
+							}
+							modifier = {
+								factor = 1.5
+								unrest > 80
+							}
+						}
+						198 = { }
+					}
+				}
+			}
+		}
+		planet_event = { id = cc_xeno_clashes.373 days = 30 }
+	}
+}
+
+
+planet_event = {
+	id = cc_xeno_clashes.38
+	hide_window = yes
+	is_triggered_only = yes
+	
+	trigger = {
+		any_owned_pop = { species = { is_same_value = event_target:species1 } }
+		any_owned_pop = { species = { is_same_value = event_target:species2 } }
+		owner = { is_same_value = event_target:cc_owner }
+		
+		NOR = {
+			has_modifier = cc_planet_interspecies_tensions
+			owner = { has_modifier = cc_empire_interspecies_tensions }
+		}
+	}
+	
+	immediate = {
+	
+		random = {
+			chance = 6
+			planet_event = { id = cc_xeno_clashes.381 days = 15 random = 10 }
+		}
+	
+		if = {
+			limit = { owner = { NOT = { has_country_flag = cc_enough_xenohostile_12 } } }
+			planet_event = { id = cc_xeno_clashes.38 days = 30 }
+		}
+		
+		owner = {
+			if = {
+				limit = { 
+					has_country_flag = cc_enough_xenohostile_11
+					NOT = { has_country_flag = cc_enough_xenohostile_12 }
+				}
+				set_timed_country_flag = {
+					flag = cc_enough_xenohostile_12
+					years = 3
+				}
+			}
+			if = {
+				limit = { 
+					has_country_flag = cc_enough_xenohostile_10
+					NOT = { has_country_flag = cc_enough_xenohostile_11 }
+				}
+				set_timed_country_flag = {
+					flag = cc_enough_xenohostile_11
+					years = 3
+				}
+			}
+			if = {
+				limit = { 
+					has_country_flag = cc_enough_xenohostile_9
+					NOT = { has_country_flag = cc_enough_xenohostile_10 }
+				}
+				set_timed_country_flag = {
+					flag = cc_enough_xenohostile_10
+					years = 3
+				}
+			}
+			if = {
+				limit = { 
+					has_country_flag = cc_enough_xenohostile_8
+					NOT = { has_country_flag = cc_enough_xenohostile_9 }
+				}
+				set_timed_country_flag = {
+					flag = cc_enough_xenohostile_9
+					years = 3
+				}
+			}
+			if = {
+				limit = { 
+					has_country_flag = cc_enough_xenohostile_7
+					NOT = { has_country_flag = cc_enough_xenohostile_8 }
+				}
+				set_timed_country_flag = {
+					flag = cc_enough_xenohostile_8
+					years = 3
+				}
+			}
+			if = {
+				limit = { 
+					has_country_flag = cc_enough_xenohostile_6
+					NOT = { has_country_flag = cc_enough_xenohostile_7 }
+				}
+				set_timed_country_flag = {
+					flag = cc_enough_xenohostile_7
+					years = 3
+				}
+			}
+			if = {
+				limit = { 
+					has_country_flag = cc_enough_xenohostile_5
+					NOT = { has_country_flag = cc_enough_xenohostile_6 }
+				}
+				set_timed_country_flag = {
+					flag = cc_enough_xenohostile_6
+					years = 3
+				}
+			}
+			if = {
+				limit = { 
+					has_country_flag = cc_enough_xenohostile_4
+					NOT = { has_country_flag = cc_enough_xenohostile_5 }
+				}
+				set_timed_country_flag = {
+					flag = cc_enough_xenohostile_5
+					years = 3
+				}
+			}
+			if = {
+				limit = { 
+					has_country_flag = cc_enough_xenohostile_3
+					NOT = { has_country_flag = cc_enough_xenohostile_4 }
+				}
+				set_timed_country_flag = {
+					flag = cc_enough_xenohostile_4
+					years = 3
+				}
+			}
+			if = {
+				limit = { 
+					has_country_flag = cc_enough_xenohostile_2
+					NOT = { has_country_flag = cc_enough_xenohostile_3 }
+				}
+				set_timed_country_flag = {
+					flag = cc_enough_xenohostile_3
+					years = 3
+				}
+			}
+			if = {
+				limit = { 
+					has_country_flag = cc_enough_xenohostile_1
+					NOT = { has_country_flag = cc_enough_xenohostile_2 }
+				}
+				set_timed_country_flag = {
+					flag = cc_enough_xenohostile_2
+					years = 3
+				}
+			}
+			if = {
+				limit = { 
+					NOT = { has_country_flag = cc_enough_xenohostile_1 }
+				}
+				set_timed_country_flag = {
+					flag = cc_enough_xenohostile_1
+					years = 3
+				}
+			}
+		}
+	}
+}
+
+#gatekeeper for second or third planet
+planet_event = {
+	id = cc_xeno_clashes.381
+	hide_window = yes
+	is_triggered_only = yes
+	
+	trigger = {
+		any_owned_pop = { species = { is_same_value = event_target:species1 } }
+		any_owned_pop = { species = { is_same_value = event_target:species2 } }
+		owner = { is_same_value = event_target:cc_owner }
+		
+		NOR = {
+			has_modifier = cc_planet_interspecies_tensions
+			owner = { has_modifier = cc_empire_interspecies_tensions }
+		}
+	}
+	
+	immediate = {
+		if = {
+			limit = {
+				owner = { NOT = { any_owned_planet = { has_planet_flag = cc_second_xenoclash_planet } } }
+			}
+			planet_event = { id = cc_xeno_clashes.382 }
+
+			else = {
+				owner = {
+					if = {
+						limit = { NOT = { has_modifier = cc_empire_interspecies_tensions } }
+						country_event = { id = cc_xeno_clashes.383 }
+					}
+				}
+			}
+		}
+	}
+}
+	
+planet_event = {
+	id = cc_xeno_clashes.382
+	title = cc_xeno_clashes.382.name
+	desc = cc_xeno_clashes.382.desc
+	picture = GFX_evt_alien_segregation
+	
+	location = root
+	is_triggered_only = yes
+	
+	immediate = {
+		set_timed_planet_flag = {
+			flag = cc_second_xenoclash_planet
+			days = 3600
+		}
+	}
+	
+	option = {
+		name = UNFORTUNATE
+		add_modifier = {
+			modifier = cc_planet_interspecies_tensions
+			days = 3600
+		}
+	}
+}
+
+country_event = {
+	id = cc_xeno_clashes.383
+	title = cc_xeno_clashes.383.name
+	desc = cc_xeno_clashes.383.desc
+	picture = GFX_evt_burning_settlement
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = cc_xeno_clashes.383.A
+		add_modifier = {
+			modifier = cc_empire_interspecies_tensions
+			days = 3600
+		}
+		hidden_effect = {
+			set_timed_country_flag = {
+				flag = cc_recent_xeno_empire_clashes
+				years = 50
+			}
+		}
+		every_owned_planet = {
+			limit = {
+				NOT = { has_modifier = cc_planet_interspecies_tensions }
+				any_owned_pop = { species = { is_same_value = event_target:species1 } }
+				any_owned_pop = { species = { is_same_value = event_target:species2 } }
+			}
+			add_modifier = {
+				modifier = cc_planet_interspecies_tensions
+				days = 3600
+			}
+			add_modifier = {
+				modifier = cc_martial_law
+				days = 3600
+			}
+		}
+		ai_chance = {
+			modifier = {
+				factor = 5
+				owner = {
+					NOR = {
+						has_ethic = ethic_xenophobe
+						has_ethic = ethic_fanatic_xenophobe
+					}
+				}
+			}
+			modifier = {
+				factor = 0.5
+				NOT = { has_faction = xenoist }
+			}
+			modifier = {
+				factor = 2
+				count_pop_factions = {
+					limit = {
+						is_pop_faction_type = supremacist
+						support > 0.2
+					}
+					count = 1
+				}
+			}
+		}
+	}
+	option = {
+		name = cc_xeno_clashes.383.B
+		add_modifier = {
+			modifier = cc_empire_interspecies_tensions
+			days = 3600
+		}
+		hidden_effect = {
+			set_timed_country_flag = {
+				flag = cc_recent_xeno_empire_clashes
+				years = 50
+			}
+		}
+		
+		every_owned_planet = {
+			limit = {
+				NOT = { has_modifier = cc_planet_interspecies_tensions }
+				any_owned_pop = { species = { is_same_value = event_target:species1 } }
+				any_owned_pop = { species = { is_same_value = event_target:species2 } }
+			}
+			add_modifier = {
+				modifier = cc_planet_interspecies_tensions
+				days = 3600
+			}
+			hidden_effect = { planet_event = { id = cc_xeno_clashes.384 days = 180 random = 90 } }
+		}
+		
+		owner = {
+			if = {
+				limit = { has_faction = supremacist }
+				random_pop_faction = {
+					limit = {
+						is_pop_faction_type = supremacist
+					}
+					add_modifier = {
+						modifier = cc_xenos_disparaged_sup
+						days = 3600
+					}
+				}
+			}
+			if = {
+				limit = {
+					count_pop_factions = {
+						limit = {
+							is_pop_faction_type = xenoist
+							NOT = { has_modifier = cc_xenos_disparaged }
+						}
+						count = 1
+					}
+				}
+				random_pop_faction = {
+					limit = {
+						is_pop_faction_type = xenoist
+						NOT = { has_modifier = cc_xenos_disparaged }
+					}
+					add_modifier = {
+						modifier = cc_xenos_disparaged
+						days = 3600
+					}
+				}
+			}
+		}
+		ai_chance = {
+			modifier = {
+				factor = 5
+				owner = { has_ethic = ethic_xenophobe }
+			}
+			modifier = {
+				factor = 10
+				owner = { has_ethic = ethic_fanatic_xenophobe }
+			}
+			modifier = {
+				factor = 0
+				NOT = { owner = { has_faction = supremacist } }
+			}
+			modifier = {
+				factor = 0
+				owner = {
+					NOR = {
+						has_ethic = ethic_xenophile
+						has_ethic = ethic_fanatic_xenophile
+					}
+				}
+			}
+		}
+	}
+}
+
+planet_event = {
+	id = cc_xeno_clashes.384
+	hide_window = yes
+	is_triggered_only = yes
+	
+	immediate = {
+		random = {
+			chance = 33
+			planet_event = { id = cc_xeno_clashes.37 }
+		}
+	}
+}
+
+
+
+###############Two species that aren't your own
+
+
+planet_event = {
+	id = cc_xeno_clashes.4
+	title = cc_xeno_clashes.4.name
+	desc = cc_xeno_clashes.4.desc
+	
+	picture = GFX_evt_alien_segregation
+	location = root
+	
+	is_triggered_only = yes
+
+	trigger = {
+		unrest > 0
+		owner = { is_same_value = event_target:cc_owner }
+		any_owned_pop = { species = { is_same_value = event_target:species1 } }
+		any_owned_pop = { species = { is_same_value = event_target:species2 } }
+	}
+	
+	immediate = {
+		set_timed_planet_flag = {
+			flag = cc_xeno_clashes
+			years = 30
+		}
+	}
+	
+	option = {
+		name = cc_xeno_clashes.4.A
+		custom_tooltip = cc_xeno_clashes.4.A.tooltip
+		
+		trigger = {
+			owner = {
+				NOT = { has_ethic = ethic_fanatic_xenophobe }
+			}
+		}
+		
+		ai_chance = {
+			factor = 1
+			modifier = {
+				factor = 2
+				owner = {
+					pop_percentage = {
+						percentage > 0.2
+						limit = { species = { is_same_value = event_target:species1 } }
+					}
+					pop_percentage = {
+						percentage < 0.1
+						limit = { species = { is_same_value = event_target:species2 } }
+					}
+				}
+			}
+		}
+		
+		hidden_effect = {
+			owner = {
+				every_owned_pop = {
+					limit = { species = { is_same_value = event_target:species1 } }
+					add_modifier = {
+						modifier = cc_ruled_in_our_favour_pops
+						days = 3600
+					}
+				}
+				every_owned_pop = {
+					limit = { species = { is_same_value = event_target:species2 } }
+					add_modifier = {
+						modifier = cc_ruled_against_us_pops
+						days = 3600
+					}
+				}
+			}
+		
+			if = {
+				limit = { has_modifier = cc_planet_hate_speech }
+				remove_modifier = cc_planet_hate_speech
+			}
+		}
+	
+		add_modifier = {
+			modifier = cc_planet_interspecies_tensions
+			days = 3600
+		}
+	}
+	option = {
+		name = cc_xeno_clashes.4.B
+		custom_tooltip = cc_xeno_clashes.4.B.tooltip
+		
+		trigger = {
+			owner = {
+				NOT = { has_ethic = ethic_fanatic_xenophobe }
+			}
+		}
+		
+		ai_chance = {
+			factor = 1
+			modifier = {
+				factor = 2
+				owner = {
+					pop_percentage = {
+						percentage > 0.2
+						limit = { species = { is_same_value = event_target:species2 } }
+					}
+					pop_percentage = {
+						percentage < 0.1
+						limit = { species = { is_same_value = event_target:species1 } }
+					}
+				}
+			}
+		}
+		
+		hidden_effect = {
+			owner = {
+				every_owned_pop = {
+					limit = { species = { is_same_value = event_target:species2 } }
+					add_modifier = {
+						modifier = cc_ruled_in_our_favour_pops
+						days = 3600
+					}
+				}
+				every_owned_pop = {
+					limit = { species = { is_same_value = event_target:species1 } }
+					add_modifier = {
+						modifier = cc_ruled_against_us_pops
+						days = 3600
+					}
+				}
+			}
+		
+			if = {
+				limit = { has_modifier = cc_planet_hate_speech }
+				remove_modifier = cc_planet_hate_speech
+			}
+		}
+	
+		add_modifier = {
+			modifier = cc_planet_interspecies_tensions
+			days = 3600
+		}
+	}
+	
+	option = {
+		name = cc_xeno_clashes.4.C
+		
+		trigger = {
+			owner = {
+				NOT = { has_ethic = ethic_fanatic_egalitarian }
+			}
+		}
+		
+		ai_chance = {
+			factor = 1
+			modifier = {
+				factor = 3
+				owner = { has_ethic = ethic_authoritarian }
+			}
+			modifier = {
+				factor = 6
+				owner = { has_ethic = ethic_fanatic_authoritarian }
+			}
+		}
+		
+		add_modifier = {
+			modifier = cc_planet_interspecies_tensions
+			days = 3600
+		}
+		add_modifier = {
+			modifier = cc_martial_law
+			days = 3600
+		}
+	}
+
+	option = {
+		name = cc_xeno_clashes.4.D
+		custom_tooltip = cc_xeno_clashes.4.D.tooltip
+		
+		trigger = {
+			owner = {
+				NOT = { has_ethic = ethic_fanatic_xenophobe }
+			}
+		}
+		
+		ai_chance = {
+			factor = 1
+			modifier = {
+				factor = 5
+				owner = { has_ethic = ethic_xenophile }
+			}
+			modifier = {
+				factor = 5
+				owner = { has_ethic = ethic_fanatic_egalitarian }
+			}
+			modifier = {
+				factor = 10
+				owner = { has_ethic = ethic_fanatic_authoritarian }
+			}
+		}
+		
+		add_modifier = {
+			modifier = cc_planet_interspecies_tensions
+			days = 3600
+		}
+		hidden_effect = {
+			random_list = {
+				1 = { planet_event = { id = cc_xeno_clashes.5 days = 90 } }
+				1 = { planet_event = { id = cc_xeno_clashes.51 days = 90 } }
+			}
+		}
+	}
+
+	option = {
+		name = cc_xeno_clashes.4.E
+		custom_tooltip = cc_xeno_clashes.4.E.tooltip
+		
+		trigger = {
+			owner = {
+				NOR = {
+					has_ethic = ethic_xenophile
+					has_ethic = ethic_fanatic_xenophile
+				}
+			}
+		}
+		
+		ai_chance = {
+			factor = 1
+			modifier = {
+				factor = 5
+				owner = { has_ethic = ethic_xenophobe }
+			}
+			modifier = {
+				factor = 5
+				owner = { has_ethic = ethic_xenophobe }
+			}
+			modifier = {
+				factor = 0
+				owner = { 
+					OR = {
+						has_ethic = ethic_xenophile
+						has_ethic = ethic_fanatic_xenophile
+						
+						any_owned_pop = {
+							NOT = { is_same_species = prev }
+							has_citizenship_rights = no
+						}
+					}
+				}
+			}
+		}
+		
+		hidden_effect = {
+			if = {
+				limit = { has_modifier = cc_planet_hate_speech }
+				remove_modifier = cc_planet_hate_speech
+			}
+		}
+		
+		owner = {
+			if = {
+				limit = {
+					NOR = {
+						has_ethic = ethic_xenophobe
+						has_ethic = ethic_fanatic_xenophobe
+					}
+				}
+				shift_ethic = ethic_xenophobe
+					
+				if = {
+					limit = { has_faction = supremacist }
+					random_pop_faction = {
+						limit = { is_pop_faction_type = supremacist }
+						add_modifier = { modifier = embraced_faction days = 3600 }
+						hidden_effect = { 
+							add_modifier = { modifier = embraced_faction_timer days = 3600 }
+							owner = {
+								every_pop_faction = {
+									limit = {
+										NOR = {
+											is_same_value = prevprev
+											is_pop_faction_type = isolationist
+											is_pop_faction_type = xenoist
+										}
+									}
+									add_modifier = { modifier = embraced_another_faction days = 3600 }
+								}
+							}
+						}
+					}
+					else = {
+						random_pop_faction = {
+							limit = { is_pop_faction_type = isolationist }
+							add_modifier = { modifier = embraced_faction days = 3600 }
+							hidden_effect = { 
+								add_modifier = { modifier = embraced_faction_timer days = 3600 }
+								owner = {
+									every_pop_faction = {
+										limit = {
+											NOR = {
+												is_same_value = prevprev
+												is_pop_faction_type = xenoist
+											}
+										}
+										add_modifier = { modifier = embraced_another_faction days = 3600 }
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	
+		add_modifier = {
+			modifier = cc_planet_interspecies_tensions
+			days = 3600
+		}
+		
+		owner = {
+			if = {
+				limit = { has_faction = xenoist }
+				random_pop_faction = {
+					limit = { is_pop_faction_type = xenoist }
+					add_modifier = {
+						modifier = cc_xenos_disparaged
+						days = 3600
+					}
+				}
+			}
+		}
+		
+		hidden_effect = {
+			if = {
+				limit = {
+					owner = {
+						any_owned_planet = {
+							NOT = { is_same_value = root }
+							OR = {
+								any_owned_pop = { species = { is_same_value = event_target:species1 } }
+								any_owned_pop = { species = { is_same_value = event_target:species2 } }
+							}
+						}
+					}
+				}
+				owner = { country_event = { id = cc_xeno_clashes.41 days = 15 random = 5 } }
+				
+				else = {
+					every_owned_pop = {
+						limit = {
+							OR = {
+								species = { is_same_value = event_target:species1 }
+								species = { is_same_value = event_target:species2 }
+							}
+						}
+						add_modifier = {
+							modifier = cc_feels_unwelcome
+							days = 3600
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+
+
+
+
+
+country_event = {
+	id = cc_xeno_clashes.41
+	title = cc_xeno_clashes.41.name
+	desc = cc_xeno_clashes.41.desc
+	picture = GFX_evt_alien_segregation
+	
+	location = from	
+	is_triggered_only = yes
+
+	immediate = {
+		create_leader = {
+			type = general
+			species = event_target:species1
+			name = random
+			skill = 0
+		}
+		last_created_leader = {
+			save_event_target_as = annoyed_xeno
+			exile_leader_as = cc_annoyed_xeno
+		}
+		create_leader = {
+			type = general
+			species = event_target:species2
+			name = random
+			skill = 0
+		}
+		last_created_leader = {
+			save_event_target_as = annoyed_xeno2
+			exile_leader_as = cc_annoyed_xeno2
+		}
+		set_timed_country_flag = {
+			flag = cc_xeno_clashes_militia_formed
+			days = 1800
+		}
+	}
+	
+	option = {
+		name = UNFORTUNATE
+		
+		from = { remove_modifier = cc_planet_interspecies_tensions }
+		if = {
+			limit = {
+				any_owned_planet = {
+					any_owned_pop = { is_same_species = root.owner }
+					OR = {
+						any_owned_pop = { species = { is_same_value = event_target:species1 } }
+						any_owned_pop = { species = { is_same_value = event_target:species2 } }
+					}
+					owner = {
+						any_owned_planet = {
+							NOT = { is_same_value = prevprev }
+							any_owned_pop = { is_same_species = root.owner }
+							OR = {
+								any_owned_pop = { species = { is_same_value = event_target:species1 } }
+								any_owned_pop = { species = { is_same_value = event_target:species2 } }
+							}
+							owner = {
+								any_owned_planet = {
+									NOR = {
+										is_same_value = prevprev
+										is_same_value = prevprevprevprev
+									}
+									any_owned_pop = { is_same_species = root.owner }
+									OR = {
+										any_owned_pop = { species = { is_same_value = event_target:species1 } }
+										any_owned_pop = { species = { is_same_value = event_target:species2 } }
+									}
+								}
+							}
+						}
+					}
+				}
+			}					
+			add_modifier = {
+				modifier = cc_empire_interspecies_tensions
+				days = 3600
+			}
+			hidden_effect = {
+				set_timed_country_flag = {
+					flag = cc_recent_xeno_empire_clashes
+					years = 50
+				}
+			}
+		}
+
+		every_owned_planet = {
+			limit = {
+				NOT = { has_modifier = cc_planet_interspecies_tensions }
+				any_owned_pop = { is_same_species = root.owner }
+				OR = {
+					any_owned_pop = { species = { is_same_value = event_target:species1 } }
+					any_owned_pop = { species = { is_same_value = event_target:species2 } }
+				}
+			}
+			add_modifier = {
+				modifier = cc_planet_interspecies_tensions
+				days = 3600
+			}
+		}
+		
+		custom_tooltip = cc_xeno_clashes.41.tooltip
+		hidden_effect = {
+			every_owned_pop = {
+				limit = {
+					species = {
+						OR = {
+							is_same_value = event_target:species1
+							is_same_value = event_target:species2
+						}
+					}
+				}
+				add_modifier = {
+					modifier = cc_feels_unwelcome
+					days = 3600
+				}
+			}
+			every_owned_planet = {
+				limit = {
+					any_owned_pop = {
+						OR = {
+							species = { is_same_value = event_target:species1 }
+							species = { is_same_value = event_target:species2 }
+						}
+					}
+				}
+				planet_event = { id = cc_xeno_clashes.415 days = 30 }
+			}
+		}
+	}
+}
+
+planet_event = {
+	id = cc_xeno_clashes.415
+	hide_window = yes
+	is_triggered_only = yes
+	
+	trigger = {
+		has_modifier = cc_planet_interspecies_tensions
+		any_owned_pop = { is_same_species = root.owner }
+		OR = {
+			any_owned_pop = { species = { is_same_value = event_target:species1 } }
+			any_owned_pop = { species = { is_same_value = event_target:species2 } }
+		}
+		NOT = { has_planet_flag = cc_interspecies_incident }
+		owner = { is_same_value = event_target:cc_owner }
+	}
+	
+	immediate = {
+		if = {
+			limit = {
+				any_owned_pop = { species = { is_same_value = event_target:species1 } }
+			}
+			if = {
+				limit = {
+					OR = {
+						has_building = building_colony_shelter
+						has_building = building_capital_1
+					}
+				}
+				random_list = {
+					1 = {
+						planet_event = { id = cc_xeno_clashes.42 }
+						modifier = {
+							factor = 1.5
+							unrest > 0
+						}
+						modifier = {
+							factor = 1.5
+							unrest > 30
+						}
+						modifier = {
+							factor = 1.5
+							unrest > 50
+						}
+						modifier = {
+							factor = 1.5
+							unrest > 80
+						}
+					}
+					149 = { }
+				}
+			}
+			if = {
+				limit = {
+					OR = {
+						has_building = building_capital_2
+						has_building = building_capital_3
+						has_building = building_hab_capital
+					}
+					NOR = {
+						has_building = building_colony_shelter
+						has_building = building_capital_1
+						has_building = building_capital_2
+						has_building = building_capital_3
+						has_building = building_hab_capital
+					}
+				}
+				random_list = {
+					1 = {
+						planet_event = { id = cc_xeno_clashes.43 }
+						modifier = {
+							factor = 1.5
+							unrest > 0
+						}
+						modifier = {
+							factor = 1.5
+							unrest > 30
+						}
+						modifier = {
+							factor = 1.5
+							unrest > 50
+						}
+						modifier = {
+							factor = 1.5
+							unrest > 80
+						}
+					}
+					1 = {
+						planet_event = { id = cc_xeno_clashes.44 }
+						modifier = {
+							factor = 1.5
+							unrest > 0
+						}
+						modifier = {
+							factor = 1.5
+							unrest > 30
+						}
+						modifier = {
+							factor = 1.5
+							unrest > 50
+						}
+						modifier = {
+							factor = 1.5
+							unrest > 80
+						}
+					}
+					297 = { }
+				}
+			}
+			else = {
+				if = {
+					limit = {
+						OR = {
+							has_building = building_colony_shelter
+							has_building = building_capital_1
+						}
+					}
+					random_list = {
+						1 = {
+							planet_event = { id = cc_xeno_clashes.45 }
+							modifier = {
+								factor = 1.5
+								unrest > 0
+							}
+							modifier = {
+								factor = 1.5
+								unrest > 30
+							}
+							modifier = {
+								factor = 1.5
+								unrest > 50
+							}
+							modifier = {
+								factor = 1.5
+								unrest > 80
+							}
+						}
+						149 = { }
+					}
+				}
+				if = {
+					limit = {
+						OR = {
+							has_building = building_capital_2
+							has_building = building_capital_3
+							has_building = building_hab_capital
+						}
+						NOR = {
+							has_building = building_colony_shelter
+							has_building = building_capital_1
+							has_building = building_capital_2
+							has_building = building_capital_3
+							has_building = building_hab_capital
+						}
+					}
+					random_list = {
+						1 = {
+							planet_event = { id = cc_xeno_clashes.46 }
+							modifier = {
+								factor = 1.5
+								unrest > 0
+							}
+							modifier = {
+								factor = 1.5
+								unrest > 30
+							}
+							modifier = {
+								factor = 1.5
+								unrest > 50
+							}
+							modifier = {
+								factor = 1.5
+								unrest > 80
+							}
+							modifier = {
+								factor = 0
+								NOR = {
+									has_building = building_colony_shelter
+									has_building = building_capital_1
+									has_building = building_capital_2
+									has_building = building_capital_3
+									has_building = building_hab_capital
+								}
+							}
+						}
+						1 = {
+							planet_event = { id = cc_xeno_clashes.44 }
+							modifier = {
+								factor = 1.5
+								unrest > 0
+							}
+							modifier = {
+								factor = 1.5
+								unrest > 30
+							}
+							modifier = {
+								factor = 1.5
+								unrest > 50
+							}
+							modifier = {
+								factor = 1.5
+								unrest > 80
+							}
+						}
+						297 = { }
+					}
+				}
+			}
+		}
+		planet_event = { id = cc_xeno_clashes.415 days = 30 }
+	}
+}
+
+
+planet_event = {
+	id = cc_xeno_clashes.42
+	title = cc_xeno_clashes.42.name
+	desc = cc_xeno_clashes.42.desc
+	picture = GFX_evt_burning_settlement
+	
+	location = root
+	is_triggered_only = yes
+	
+	immediate = {
+		set_timed_planet_flag = {
+			flag = cc_interspecies_incident
+			years = 10
+		}
+	}
+	
+	option = {
+		name = cc_xeno_clashes.42.option
+		random_owned_pop = {
+			limit = { is_same_species = root.owner }
+			kill_pop = yes
+		}
+	}
+}
+
+planet_event = {
+	id = cc_xeno_clashes.43
+	title = cc_xeno_clashes.43.name
+	desc = cc_xeno_clashes.43.desc
+	picture = GFX_evt_nuclear_explosion
+	
+	location = root
+	is_triggered_only = yes
+	
+	immediate = {
+		set_timed_planet_flag = {
+			flag = cc_interspecies_incident
+			years = 10
+		}
+	}
+	
+	option = {
+		name = cc_xeno_clashes.43.option
+		random_owned_pop = {
+			limit = { is_same_species = root.owner }
+			kill_pop = yes
+			tile = {
+				if = {
+					limit = {
+						has_building = yes
+						is_ruined = no
+					}
+					set_ruined = yes
+				}
+			}
+		}
+	}
+}
+
+planet_event = {
+	id = cc_xeno_clashes.44
+	title = cc_xeno_clashes.44.name
+	desc = cc_xeno_clashes.44.desc
+	picture = GFX_evt_glitchy_matrix
+	
+	location = root
+	is_triggered_only = yes
+	
+	immediate = {
+		set_timed_planet_flag = {
+			flag = cc_interspecies_incident
+			years = 10
+		}
+	}
+	
+	option = {
+		name = cc_xeno_clashes.44.option
+		
+		add_modifier = {
+			modifier = cc_disrupted_government
+			days = 1800
+		}
+	}
+}
+
+planet_event = {
+	id = cc_xeno_clashes.45
+	title = cc_xeno_clashes.45.name
+	desc = cc_xeno_clashes.45.desc
+	picture = GFX_evt_burning_settlement
+	
+	location = root
+	is_triggered_only = yes
+	
+	immediate = {
+		set_timed_planet_flag = {
+			flag = cc_interspecies_incident
+			years = 10
+		}
+	}
+	
+	option = {
+		name = cc_xeno_clashes.45.option
+		
+		add_modifier = {
+			modifier = cc_disrupted_government
+			days = 1800
+		}
+	}
+}
+
+planet_event = {
+	id = cc_xeno_clashes.46
+	title = cc_xeno_clashes.46.name
+	desc = cc_xeno_clashes.46.desc
+	picture = GFX_evt_nuclear_explosion
+	
+	location = root
+	is_triggered_only = yes
+	
+	immediate = {
+		set_timed_planet_flag = {
+			flag = cc_interspecies_incident
+			years = 10
+		}
+	}
+	
+	option = {
+		name = cc_xeno_clashes.46.option
+		
+		random_tile = {
+			limit = {
+				OR = {
+					has_building = building_colony_shelter
+					has_building = building_capital_1
+					has_building = building_capital_2
+					has_building = building_capital_3
+					has_building = building_hab_capital
+				}
+			}
+			set_ruined = yes
+		}
+		
+		add_modifier = {
+			modifier = cc_disrupted_government
+			days = 1800
+		}
+	}
+}
+
+
+
+
+planet_event = {
+	id = cc_xeno_clashes.5
+	title = cc_xeno_clashes.5.name
+	desc = cc_xeno_clashes.5.desc
+	picture = GFX_evt_burning_settlement
+	
+	location = root
+	is_triggered_only = yes
+	
+	option = {
+		name = cc_xeno_clashes.5.A
+		
+		add_modifier = {
+			modifier = cc_martial_law
+			days = 3510
+		}
+	}
+	option = {
+		name = cc_xeno_clashes.5.B
+	}
+}
+
+planet_event = {
+	id = cc_xeno_clashes.51
+	title = cc_xeno_clashes.51.name
+	desc = cc_xeno_clashes.51.desc
+	picture = GFX_evt_cc_throne_room
+	
+	location = root
+	is_triggered_only = yes
+	
+	option = {
+		name = cc_xeno_clashes.51.A
+		
+		add_modifier = {
+			modifier = cc_investment_package
+			days = 3600
+		}
+		remove_modifier = cc_planet_interspecies_tensions
+	}
+	option = {
+		name = cc_xeno_clashes.51.B
+		custom_tooltip = cc_xeno_clashes.51.B.tooltip
+		
+		hidden_effect = {
+			random_list = {
+				1 = { planet_event = { id = cc_xeno_clashes.52 days = 90 } }
+				1 = { planet_event = { id = cc_xeno_clashes.53 days = 90 } }
+			}
+		}
+	}
+}
+
+planet_event = {
+	id = cc_xeno_clashes.52
+	title = cc_xeno_clashes.52.name
+	desc = cc_xeno_clashes.52.desc
+	picture = GFX_evt_burning_settlement
+	
+	location = root
+	is_triggered_only = yes
+	
+	option = {
+		name = cc_xeno_clashes.52.A
+		
+		add_modifier = {
+			modifier = cc_martial_law
+			days = 3510
+		}
+	}
+	option = {
+		name = cc_xeno_clashes.52.B
+	}
+}
+
+planet_event = {
+	id = cc_xeno_clashes.53
+	title = cc_xeno_clashes.53.name
+	desc = cc_xeno_clashes.53.desc
+	picture = GFX_evt_arguing_senate
+	
+	location = root
+	is_triggered_only = yes
+	
+	option = {
+		name = CCEXCELLENT
+		
+		remove_modifier = cc_planet_interspecies_tensions
+	}
+}
+
+

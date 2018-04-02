@@ -1,0 +1,49 @@
+
+leader_trait_dpe_ruthless = {
+	cost = 1
+	modification = no
+	icon = "gfx/interface/icons/traits/leader_traits/leader_trait_fist.dds"
+	leader_potential_add = {
+		NOT = { from = { has_ethic = "ethic_gestalt_consciousness" } }
+	}
+	modifier = {
+		planet_unrest_add = -15
+	}
+	leader_trait = yes
+	leader_class = { ruler }
+}
+
+
+
+
+leader_trait_dpe_talented = {
+	cost = 1
+	modification = no
+	icon = "gfx/interface/icons/traits/leader_traits/leader_trait_medal.dds"
+	self_modifier = {
+		species_leader_exp_gain = 0.25
+#		leader_skill_levels = 2
+	}
+	leader_potential_add = {
+		NOT = { leader_class = ruler}
+		NOT = { from = { has_ethic = "ethic_gestalt_consciousness" } }
+		
+	}
+	leader_class = { admiral scientist general governor }
+	opposites = { "leader_trait_stubborn" "leader_trait_adaptable" "leader_trait_arrested_development" }
+	leader_trait = yes
+	
+	initial = no
+	randomized = no
+
+	ai_categories = {
+		engineering
+		physics
+		society
+		survey
+	}
+	
+	ai_weight = {
+		weight = 50
+	}
+}

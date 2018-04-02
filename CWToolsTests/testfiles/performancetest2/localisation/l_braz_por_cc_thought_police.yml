@@ -1,0 +1,12 @@
+﻿l_braz_por:
+
+edict_cc_thought_police:0 "Polícia de Inteligencia"
+edict_cc_thought_police_desc:0 "Use tecnologia de ponta para policiar os pensamentos da população e, se necessário, suprimir elementos dissidentes.\n\n£pops  Pops com menos de 40% de felicidade que não compartilham da ética governante serão gradualmente purgados ou extraditados. Isso não vai contar como purgar para fins de bônus e penalidades, mas vai irritar impérios igualitários."
+
+	
+cc_thought_police.2.name:0 "Refugiados políticos chegaram de [RefugeeEscapedFrom.GetName]"
+cc_thought_police.2.desc:0 "Uma frota danificada de pequenos navios civis que transportam §Y[Root.GetSpeciesNamePlural]§! fugindo de §Y[RefugeeEscapedFrom.GetName]§! chegaram em nosso espaço. Depois de provê-los com comida e prestar assistência médica aos feridos, os refugiados foram autorizados a se instalar em §H[Root.Planet.GetName]§!.\n\nEstes refugiados esfarrapados e assustados são dissidentes políticos de [RefugeeEscapedFrom.GetName], onde foram perseguidos pela polícia do pensamento [RefugeeEscapedFrom.GetSpeciesName]. Eles perceberam que as autoridades [RefugeeEscapedFrom.GetSpeciesName] estavam atrás deles e que por isso eles tinham que fugir o mais rápido possível ou eles teriam "desaparecido". Eles só conseguiram escapar graças aos esforços de uma rede de transportes interna organizada a toda pressa e a alguns capitães comerciantes simpatizantes."
+cc_thought_police.2.a:0 "Eles são Bem-vindos aqui."
+
+
+triggered_opinion_cc_thought_police:0 "Ative a Polícia de Inteligencia"

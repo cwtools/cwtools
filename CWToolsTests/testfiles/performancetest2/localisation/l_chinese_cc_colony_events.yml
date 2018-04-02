@@ -1,0 +1,977 @@
+﻿l_chinese:
+
+
+#Militarist:
+cc_colony_events.2.name:0 "退休的舰队司令在[root.GetName]上声望日隆"
+cc_colony_events.2.desc.pos:0 "一个新生的殖民地对于雄心勃勃的人来说总是意味着一次进取的机会。\n\n在[root.GetName]上,情况正是如此。一位名叫[cc_colony_leader.GetName]的功勋退休舰队军官以其卓越的领导力激励了新殖民地上的居民，他们越发信赖[cc_colony_leader.GetHisHer]的判断。幸运的是，[cc_colony_leader.GetSheHe]似乎并不准备用[cc_colony_leader.GetHisHer]影响力来挑战[root.owner.GetName]政府。事实上，当地官员已向中央政府请愿，希望给予[cc_colony_leader.GetName]"[root.GetName]使节"的官方身份，以确保殖民地被妥善治理。" 
+cc_colony_events.2.desc.neut:0 "一个新生的殖民地对于雄心勃勃的人来说总是意味着一次进取的机会。\n\n在[root.GetName]上,情况正是如此。一位名叫[cc_colony_leader.GetName]的功勋退休舰队军官以其卓越的领导力激励了新殖民地上的居民，他们越发信赖[cc_colony_leader.GetHisHer]的判断。[cc_colony_leader.GetSheHeCap]目前还没有将自己新近建立的权威用以反对[root.owner.GetName]——事实上，[cc_colony_leader.GetSheHe]与我们的当地官员合作良好——但是将[cc_colony_leader.GetHisHer]"[root.GetName]使节"的称号予以官方认可的请愿 (这并不符合我们的通常做法)获得了广泛支持。\n\n我们应该如何回应这一请愿?"
+cc_colony_events.2.desc.neg:0 "一个新生的殖民地对于雄心勃勃的人来说总是意味着一次进取的机会。\n\n在[root.GetName]上,情况正是如此。一位名叫[cc_colony_leader.GetName]的功勋退休舰队军官以其卓越的领导力激励了新殖民地上的居民，他们越发信赖[cc_colony_leader.GetHisHer]的判断。[cc_colony_leader.GetName]十分享受自己新近获得的权威，被我们的地方官员称作"麻烦人物"。[cc_colony_leader.GetSheHe]支持了一项将其"[root.GetName]使节" 的称号予以官方认可的请愿。不幸的是，尽管与[root.GetName]的治理原则背道而驰，此事获得了广泛支持。\n\n我们应该如何回应这一请愿?" 
+
+cc_colony_events.2.A1:0 "将[cc_colony_leader.GetHimHer]任命为殖民地使节。" 
+cc_colony_events.2.A2:0 "给[cc_colony_leader.GetHimHer]一个顾问职位。"
+cc_colony_events.2.B:0 "召回[cc_colony_leader.GetHimHer],[cc_colony_leader.GetSheHe]显然已经忘记了自己的位置。"
+
+cc_colony_events.2.C:0 "批准请愿。"
+cc_colony_events.2.D:0 "[cc_colony_leader.GetSheHeCap]显然已经忘记了自己的位置。逮捕[cc_colony_leader.GetHimHer]!"
+cc_colony_events.2.D.tooltip:0 "$CC_COLONY_UNPREDICTABLE$"
+
+
+cc_colony_events.21.name:0 "[root.GetName]上的小规模抗议"
+cc_colony_events.21.desc:0 "由于[cc_colony_leader.GetName]被捕，[Root.GetName]上近来产生了小规模抗议活动,但并没有传播开来。大部分人认可了我们对[cc_colony_leader.GetHimHer]的指控。看来[cc_colony_leader.GetHisHer]英勇并不像我们想象的那样广受推崇!"
+
+
+cc_colony_events.22.name:0 "[root.GetName]上的大规模抗议"
+cc_colony_events.22.desc:0 "[cc_colony_leader.GetName]在[Root.GetName]被捕激起了广泛抗议，释放[cc_colony_leader.GetName]的呼声日渐高涨。示威活动开始逐渐掺入了暴力成分，我们的当地官员对控制民众感到力不从心。他们向执政官请求指导处理这一事件。"
+cc_colony_events.22.A:0 "把[cc_colony_leader.GetHimHer]带到[Root.Owner.Capital.GetName]。[cc_colony_leader.GetSheHeCap]将再也不会回到[Root.GetName]。"
+cc_colony_events.22.A.tooltip:0 "这将可能会使民众对[Root.Owner.GetName]的态度产生长久的影响。"
+cc_colony_events.22.B:0 "释放[cc_colony_leader.GetHimHer]承认[cc_colony_leader.GetHimHer]使节身份。" 
+
+
+cc_colony_events.221.name:0 "信任危机在[Root.GetName]上持续"
+cc_colony_events.221.desc:0 "数年之后,针对[cc_colony_leader.GetName]被捕的抗议已经消散。然而[cc_colony_leader.GetHisHer]的记忆——以及对[cc_colony_leader.GetSheHe]是如何被与[root.GetName]粗暴分离的记忆已经深深刻入了[root.GetName]的民众心中，仍然隐隐作痛。这里的殖民者不太可能再次毫无保留地信任母星系了。"
+
+cc_colony_events.23.name:0 "抗议者解救[cc_colony_leader.GetName]"
+cc_colony_events.23.desc:0 "[cc_colony_leader.GetName]被捕在[Root.GetName]激起了全面抗议。当地官员未能控制事态，在一片混乱中，一群抗议者冲破了行星监狱，释放了[cc_colony_leader. GetName]。我们的代表向执政官请求指导处理这一事件。"
+cc_colony_events.23.A:0 "顺从他们的要求。我们无法承受一场叛乱。"
+cc_colony_events.23.B:0 "再次逮捕[cc_colony_leader.GetHimHer]，把[cc_colony_leader.GetHimHer]押送到[Root.Owner.Capital.GetName]。"
+cc_colony_events.23.C:0 "把这个叛乱分子和[cc_colony_leader.GetHisHer]追随者解决掉。我们绝不容忍暴动!"
+
+cc_colony_events.231.name:0 "成功逮捕[cc_colony_leader.GetName]"
+cc_colony_events.231.desc:0 "[cc_colony_leader.GetName]已被成功逮捕。[cc_colony_leader.GetSheHeCap]被安置在了[Root.Owner.Capital.GetName]，处于我们的掌控之下。然而[Root.GetName]仍在举行大规模抗议。难以判断那里的人们是否还会再次信任我们。"
+cc_colony_events.231.option:0 "$CC_GOODIGUESS$"
+
+cc_colony_events.232.name:0 "未能逮捕[cc_colony_leader.GetName]"
+cc_colony_events.232.desc:0 "逮捕[cc_colony_leader.GetName]的行动失败了。[cc_colony_leader.GetSheHeCap]已经聚集了自己最亲信的追随者，开展了旨在保护[root.GetName]免受外部干扰的地下运动。未来一段时间[cc_colony_leader.GetHimHer]恐怕会让我们头痛不已。"
+
+cc_colony_events.233.name:0 "[Root.GetName]上的镇压活动取得成功。"
+cc_colony_events.233.desc:0 "追踪并猎杀[cc_colony_leader.GetName]及其追随者的行动圆满完成。他们的流毒被从我们的殖民地清除。然而，重新赢得当地民众的支持与信任将是一个漫长的过程。"
+
+cc_colony_events.234.name:0 "[Root.GetName]上的镇压行动失败。"
+cc_colony_events.234.desc:0 "追踪并猎杀[cc_colony_leader.GetName]及其追随者的行动失败了。[cc_colony_leader.GetSheHeCap]已经聚集了自己最信任的追随者，开展了旨在谋求独立的地下抵抗活动。未来一段时间恐怕会麻烦不断。"
+cc_colony_events.235.name:0 "在[Root.GetName]上对[cc_colony_leader.GetName]的逮捕遭遇灾难性失败。"
+cc_colony_events.235.desc:0 "对[cc_colony_leader.GetName]的逮捕失败了。无法确定是[cc_colony_leader.GetSheHeCap]在交火中身亡，还是死于自己之手。不幸的是，[cc_colony_leader.GetSheHe]因此被视为烈士，[cc_colony_leader.GetHisHer]声望在死后达到顶峰。[cc_colony_leader.GetHisHerCap]最信任的追随者已经聚集起来，开展了旨在谋求独立的地下抵抗活动。未来一段时间恐怕会麻烦不断。"
+
+cc_colony_events.25.name:0 "一位[cc_colony_leader.Species.GetName]伟人的离世"
+cc_colony_events.25.desc:0 "[cc_colony_leader.GetName],[root.GetName]使节,在短暂的与疾病抗争后，于今日逝世。[root.GetName]人民因此陷入悲伤。[cc_colony_leader.GetHisHerCap]生前最后的愿望是在[root.GetName]上建立一座伟大的军事学院，以期自己辛勤耕耘的下一代军官们能够完全释放自己的潜能。[root.GetName]上的地方官员已经向我们呈交了实现这一愿望的计划。\n\n我们应该为这所学院投资吗?"
+cc_colony_events.25.A: "当然!"
+cc_colony_events.25.B: "花费太高了。"
+cc_colony_events.25.B.tooltip:0 "[cc_colony_leader.GetName]的影响会在30年内消退。"
+cc_colony_events.251.name:0 "[root.GetName]上的军事学院正式成立"
+cc_colony_events.251.desc:0 "为纪念[cc_colony_leader.GetName]而建的军事学院已经完工了，已故领袖的巨大雕像矗立其中。殖民地民众为此而欢呼雀跃，他们相信[root.GetName]已经作为[root.owner.GetName]的重要军事中心而声名远播。不仅如此，[root.owner.GetName]境内各地的服役人员和他们的支持者们也感到欢欣鼓舞，将之视为[root.owner.GerRulerTitle]向所有为国效力的将士们进行的致意。"
+
+cc_milacademy_will_be_built:0 "\n军事学院将会在5年后完工。这将会添加以下调整值：§Y$cc_milacademy$§!, 效果：\n$MOD_PLANET_ORBITAL_BOMBARDMENT_DAMAGE$: §G-20%§!\n$MOD_PLANET_ARMY_BUILD_SPEED_MULT$: §G+50%§!\n$MOD_PLANET_ARMY_BUILD_COST_MULT$: §G-15%§!\n$MOD_POP_CITIZEN_HAPPINESS$: §G+10%§!\n$pop_ethic_militarist_attraction_mult$: §Y+150%§!"
+
+cc_founder_militarist:0 "行星使节"
+cc_founder_militarist_desc:0 "这块殖民地由一名退役舰队军官治理，他拥有'使节'的称号。"
+
+cc_militarist_influence:0 "军国主义者影响"
+cc_militarist_influence_desc:0 "一名退役舰队军官为这块殖民地的政府提供咨询。"
+
+cc_minor_protests_militarist:0 "小规模抗议"
+cc_minor_protests_militarist_desc:0 "这颗星球正在经历因一名广受敬重的退役舰队军官被捕而引起的小规模抗议。"
+cc_major_protests_militarist:0 "大规模抗议"
+cc_major_protests_militarist_desc:0 "这颗星球正在经历因一名广受敬重的退役舰队军官被捕而引起的大规模抗议。"
+
+cc_underground_militarist_movement_1:0 "地下军国主义运动"
+cc_underground_militarist_movement_1_desc:0 "在这颗星球上，一场以一名叛逆的前舰队军官为核心的地下运动十分活跃，意图传播、践行有违于我们帝国理念的思想。"
+cc_underground_militarist_movement_2:0 "地下军国主义运动"
+cc_underground_militarist_movement_2_desc:0 "在这颗星球上，一场以一名叛逆的前舰队军官为核心的地下运动十分活跃，其终极目标是从我们的帝国中彻底独立。"
+
+cc_militarists_offended:0 "被冒犯的军国主义者们"
+cc_militarists_offended_desc:0 "这颗星球上的军国主义民众因新政权的态度而深受冒犯。"
+
+cc_milacademy_built_faction:0 "军事学院建成"
+
+cc_building_milacademy:0 "建设一所军事学院"
+cc_building_milacademy_desc:0 "这颗星球上正在建设一所军事学院。"
+
+cc_milacademy:0 "军事学院"
+cc_milacademy_desc:0 "这颗星球上的军事学院是军事学习的重要中心。雄心勃勃的军官们跨越许多光年来到这里，向最优秀的军事头脑学习。"
+
+cc_founders_memory_disrespected_1_militarist:0 "本地舰队军官不受尊重"
+cc_founders_memory_disrespected_1_militarist_desc:0 "殖民地民众对母星系对待一名退役舰队军官的态度深感失望，他使这颗星球成为大家的家园。"
+
+cc_mourning_martyr:0 "缅怀烈士"
+
+
+
+#Pacifists
+
+cc_colony_events.3.name:0 "和平主义活动家在[root.GetName]上声望日隆"
+cc_colony_events.3.desc.pos:0 "一个新生的殖民地对于雄心勃勃的人来说总是意味着一次进取的机会。\n\n在[root.GetName]上,情况正是如此。一位名叫[cc_colony_leader.GetName]的退休外交官最近在新殖民地上开展了一场媒体宣传活动，宣扬[root.owner.GetName]所推行的政治哲学，警告民众冲突的危险。一小群支持者迅速自发组织起来，他们称自己为"新甘地主义者"。这项新运动似乎在当地民众中广受欢迎，许多地方领袖也共同发声，反对战争与暴力。民众们——带着我们当地官员的支持——提议将[cc_colony_leader.GetName]确立为殖民地领袖，以支持[root.owner.GetName]确保银河和平的努力。"
+cc_colony_events.3.desc.neut:0 "一个新生的殖民地总是意味着一次进取的机会,尤其是对那些难以在政治结构更为稳固的旧世界中取得显赫地位的人来说。\n\n在[root.GetName]上，情况正是如此。一位名叫[cc_colony_leader.GetName]的退休外交官最近在新殖民地上开展了一场媒体宣传活动，警告民众冲突的危险。一小群支持者迅速自发组织起来，他们称自己为"新甘地主义者"。这项新运动似乎在当地民众中广受欢迎，许多地方领袖也共同发声，反对战争与暴力。民众们提议将[cc_colony_leader.GetName]确立为殖民地领袖，以确保帝国理解他们对于外交政策的立场。 \n\n您希望如何处理这一情况?"
+cc_colony_events.3.desc.neg:0 "一个新生的殖民地总是意味着一次进取的机会,尤其是对那些难以在政治结构更为稳固的旧世界中取得显赫地位的人来说。\n\n在[root.GetName]上，情况正是如此。一位名叫[cc_colony_leader.GetName]的退休外交官最近在新殖民地上开展了一场媒体宣传活动，警告民众冲突的危险。一小群支持者迅速自发组织起来，他们称自己为"新甘地主义者"。这项新运动似乎在当地民众中广受欢迎，许多地方领袖也共同发声，反对战争与暴力。民众们提议将[cc_colony_leader.GetName]确立为殖民地领袖，以确保帝国理解他们对于外交政策的立场。目前该星球上的政府官员对事态发展表示失望。在一些地区，当地民众对我们代理人的存在越发焦虑不满。\n\n您希望如何处理这一情况?"
+
+cc_colony_events.3.B:0 "容忍[cc_colony_leader.GetHimHer]."
+cc_colony_events.3.C:0 "[cc_colony_leader.GetSheHeCap]是个麻烦家伙。逮捕[cc_colony_leader.GetHimHer]!"
+cc_colony_events.3.C.tooltip:0 "$CC_COLONY_UNPREDICTABLE$"
+
+
+cc_colony_events.31.name:0 "$cc_colony_events.21.name$"
+cc_colony_events.31.desc:0 "由于[cc_colony_leader.GetName]被捕，[Root.GetName]上近来产生了小规模抗议活动，但并没有传播开来。大部分人认可了我们对[cc_colony_leader.GetHimHer]的指控。看来[cc_colony_leader.GetHisHer]的教导并没有像我们想象的那样广受推崇!"
+
+
+cc_colony_events.32.name:0 "$cc_colony_events.22.name$"
+cc_colony_events.32.desc:0 "[cc_colony_leader.GetName]在[Root.GetName]被捕激起了广泛抗议，释放[cc_colony_leader.GetName]的呼声日渐高涨。尽管大部分抗议者-都持有和平主义观点-还没有诉诸暴力，他们已经采取了多种不同形式的非暴力抗议活动，对我们的日常管理造成了严重干扰。我们的地方官员已向执政官寻求如何处理这一情况的指导。"
+cc_colony_events.32.A:0 "$cc_colony_events.22.A$"
+cc_colony_events.32.A.tooltip:0 "$cc_colony_events.22.A.tooltip$"
+cc_colony_events.32.B:0 "释放[cc_colony_leader.GetHimHer]."
+
+
+cc_colony_events.321.name:0 "$cc_colony_events.221.name$"
+cc_colony_events.321.desc:0 "$cc_colony_events.221.desc$"
+
+cc_colony_events.33.name:0 "$cc_colony_events.23.name$"
+cc_colony_events.33.desc:0 "$cc_colony_events.23.desc$"
+cc_colony_events.33.A:0 "$cc_colony_events.63.A$"
+cc_colony_events.33.B:0 "$cc_colony_events.63.B$"
+cc_colony_events.33.C:0 "全力镇压新甘地主义者。"
+
+cc_colony_events.331.name:0 "$cc_colony_events.231.name$"
+cc_colony_events.331.desc:0 "[cc_colony_leader.GetName]已被成功逮捕。[cc_colony_leader.GetSheHeCap]被安置在了[Root.Owner.Capital.GetName]，处于我们的掌控之下。 然而[Root.GetName]仍在举行大规模抗议及非暴力抵抗活动。 难以判断那里的人们是否还会再次信任我们。"
+cc_colony_events.331.option:0 "$CC_GOODIGUESS$"
+
+cc_colony_events.332.name:0 "$cc_colony_events.232.name$"
+cc_colony_events.332.desc:0 "逮捕[cc_colony_leader.GetName]的行动失败了。[cc_colony_leader.GetSheHeCap]已经聚集了自己最亲信的追随者，开展了旨在传播其教导（现在已带上了浓重的反建制色彩）的地下运动。未来一段时间[cc_colony_leader.GetHimHer]恐怕会让我们头痛不已。"
+
+cc_colony_events.333.name:0 "$cc_colony_events.233.name$"
+cc_colony_events.333.desc:0 "$cc_colony_events.233.desc$"
+
+cc_colony_events.334.name:0 "$cc_colony_events.234.name$"
+cc_colony_events.334.desc:0 "追踪并猎杀[cc_colony_leader.GetName]的行动失败了。[cc_colony_leader.GetSheHeCap]已经聚集了自己最信任的追随者，开展了旨在谋求从[Root.Owner.GetName]独立以追求和平的地下抵抗运动。不幸的是，出于对事态发展的愤懑，该运动的部分分支开始鼓吹不惜动用暴力手段以从[root.owner.GetName]这一"更大的邪恶"中获得自由。未来一段时间恐怕会麻烦不断。"
+
+
+cc_colony_events.34.name:0 "[cc_colony_leader.GetName]声名远播"
+cc_colony_events.34.desc:0 "在过去的15年间，[cc_colony_leader.GetName]已经成为了[Root.GetName]上的领袖人物。[cc_colony_leader.GetSheHe]在民众间深受爱戴，其声望广为传播。[cc_colony_leader.GetSheHe]被[root.owner.GetName]这一地区的所有心向和平的民众视为导师。 事实上,[cc_colony_leader.GetSheHe]正在准备一次星际旅程来拜访自己所有的追随者!"
+
+cc_colony_events.341.name:0 "[cc_colony_leader.GetName]的星际旅程圆满结束"
+cc_colony_events.341.desc:0 "[cc_colony_leader.GetName]已经完成了对自己所在星区的跨星球访问。[cc_colony_leader.GetHisHerCap]追随者们为亲身看到、聆听[cc_colony_leader.Species.GetName]伟大思想家的机会而激动不已,并深受其光辉事迹的激励。[cc_colony_leader.GetName]的声望达到新高度。"
+
+
+cc_colony_events.342.name:0 "[cc_colony_leader.GetName]的星际旅程以悲剧告终"
+cc_colony_events.342.desc:0 "当[cc_colony_leader.GetName]在[random_visit_planet.GetName]上会见支持者时，一名狂热的帝国主义者在安保人员作出反应之前将[cc_colony_leader.GetHimHer]射杀。不幸的是，狂怒的人群当场将凶手杀死，我们无法对其展开审讯。阴谋论大行其道，声称一些人 - 甚至包括[root.owner.GetSpeciesAdj]政府的高层——是此次暗杀的幕后黑手。还有一些声音认为[random_visit_planet.GetName]上的[root.owner.GetSpeciesAdj]官员没有给[cc_colony_leader.GetName]提供足够的安保措施，间接导致了悲剧的发生。此事导致[root.owner.GetName]上的和平主义团体激愤难平。和平主义派系领导人[pacifist_faction.GetName]在一片混乱中与政府官员进行了会面，表达了他们的震怒，但同时也提议为了平息和平主义者们的怒火，应该为[cc_colony_leader.GetName]举行国葬，并在[root.GetName]上为他建立一座纪念碑。"
+cc_colony_events.342.A:0 "照做。[cc_colony_leader.GetSheHeCap]配得上这样的荣誉"
+cc_pacmonument_will_be_built:0 "\n纪念碑会在5年后完成。 将会添加如下调整值：T §Y$cc_pacifist_centre$§!，效果：\n$planet_resource_unity_add$: §G+5§!\n$MOD_POP_HAPPINESS$: §G+10%§!\n$pop_ethic_pacifist_attraction_mult$: §Y+250%§!"	
+cc_colony_events.342.B:0 "$cc_colony_events.25.B$"
+
+cc_colony_events.343.name:0 "[root.GetName]上的纪念碑揭幕"
+cc_colony_events.343.desc:0 "为纪念[cc_colony_leader.GetName]而建的纪念碑已经完工。其揭幕仪式吸引了大批观众，[cc_colony_leader.GetHisHer]追随者们从各个星球赶来躬逢盛事。 我们相信它会成为[root.owner.GetName]及其他星球上和平主义者的公众地标。"
+
+cc_colony_events.35.name:0 "$cc_colony_events.25.name$"
+cc_colony_events.35.desc:0 "[cc_colony_leader.GetName]于今天早晨离世。[cc_colony_leader.GetSheHe]已经与糟糕的健康状况斗争了很久，一次高烧最终夺去了其生命。[root.GetName]上的民众陷入悲伤，并要求我们为[cc_colony_leader.GetHisHer]设立一座纪念碑，以缅怀[cc_colony_leader.GetSheHe]的一生及其教导。"
+cc_colony_events.35.A:0 "为这位模范公民建立一座纪念碑。"
+cc_colony_events.35.B:0 "花费太高了。"
+cc_colony_events.35.C:0 "[cc_colony_leader.GetSheHeCap]只是个麻烦人物。希望[cc_colony_leader.GetHisHer]的影响尽快消散。"
+
+cc_colony_events.35.C.tooltip:0 "[root.GetName]将会在30年内摆脱[cc_colony_leader.GetName]的影响。"
+
+cc_minor_pacmonument_will_be_built:0 "\n纪念碑会在5年后完成。 将会添加如下调整值： §Y$cc_minor_pacmonument$§!，效果:\n$planet_resource_unity_add$: §G+2§!\n$MOD_POP_HAPPINESS$: §G+5%§!\n$pop_ethic_pacifist_attraction_mult$: §Y+150%§!"
+cc_colony_events.351.desc:0 "为悼念[cc_colony_leader.GetName]而建的纪念碑已经完工。[root.GetName]上的民众现在有了缅怀其教导与成就的地方。"
+
+
+cc_pacifists_offended:0 "被冒犯的和平主义者们"
+cc_pacifists_offended_desc:0 "这颗星球上的和平主义民众因新政权的态度而深受冒犯。"
+
+cc_pacifist_protectorate:0 "和平主义受保护国"
+cc_pacifist_protectorate_desc:0 "这颗星球的拥有者与持异见的和平主义者达成妥协，宣布这颗星球成为一个和平主义受保护国。"
+
+cc_founder_pacifist:0 "声名显赫的和平主义活动家"
+cc_founder_pacifist_desc:0 "这颗星球的奠基者是一位被成为'新甘地'的和平主义活动家。他在当地居民中备受尊敬，其教导被广泛遵从。"
+
+cc_minor_protests_pacifist:0 "$cc_minor_protests_militarist$"
+cc_minor_protests_pacifist_desc:0 "这颗星球正在经历因一名广受敬重的和平主义活动家被捕而引起的小规模抗议。"
+
+cc_major_protests_pacifist:0 "$cc_major_protests_militarist$"
+cc_major_protests_pacifist_desc:0 "这颗星球正在经历因一名广受敬重的和平主义活动家被捕而引起的大规模抗议。"
+
+cc_pacifist_leader_visit:0 " '新甘地'的访问"
+cc_pacifist_leader_visit_desc:0 "这颗星球被一名被称为'新甘地'的著名和平主义活动家拜访过。"
+
+cc_mourning_pacifist:0 " '新甘地'之死引起悲伤"
+cc_mourning_and_angry_pacifist:0 "对 '新甘地'之死的回应引起愤怒"
+
+cc_building_pacmonument:0 "正在建造纪念碑"
+cc_building_pacmonument_desc:0 "为纪念一位著名的和平主义活动家，这颗星球上正在建造一座纪念碑。"
+
+cc_minor_pacmonument:0 "和平主义活动家的纪念碑"
+cc_minor_pacmonument_desc:0 "这个星球上的一位早期和平主义活动家仍被广泛怀念，许多人都会参加每年的官方纪念日活动。"
+
+cc_pacifist_centre:0 "Congregational Pacifist Site"
+cc_pacifist_centre_desc:0 "这颗星球上为缅怀一位著名和平主义活动家而建立的纪念碑成为了一个公众地标，吸引着其追随者跨越许多光年前来参观。"
+
+cc_founders_memory_disrespected_1_pacifist:0 "本土和平主义活动家受到羞辱"
+cc_founders_memory_disrespected_1_pacifist_desc:0 "这颗星球上的民众因母星系对待一位著名本土和平主义活动家的方式而深感不满。"
+
+cc_founders_memory_disrespected_2_pacifist:0 "本土和平主义活动家受到羞辱"
+cc_founders_memory_disrespected_2_pacifist_desc:0 "这颗星球上的民众因母星系对待一位著名本土和平主义活动家的方式而深感不满。"
+
+cc_underground_pacifist_movement_1:0 "地下和平主义运动"
+cc_underground_pacifist_movement_1_desc:0 "在这颗星球上，一场以一名持异见的和平主义活动家为核心的地下运动十分活跃，意图传播有违于我们帝国理念的思想。"
+
+cc_underground_pacifist_movement_2:0 "地下和平主义抵抗运动"
+cc_underground_pacifist_movement_2_desc:0 "在这颗星球上，一场以一名持异见的和平主义活动家为核心的地下运动十分活跃， 其终极目标在于从我们的帝国中独立，以追求和平。 不幸的是，出于对事态发展的愤懑，该运动的部分分支开始鼓吹不惜动用暴力手段以从母星系这一"更大的邪恶"中获得自由。"
+
+
+#Xenophile
+
+cc_colony_events.4.name:0 "[root.GetName]上的亲外主义活动家"
+cc_colony_events.4.desc.pos:0 "随着我们的步伐迈向群星，许多人开始思考，当我们发现其他生命时该如何面对？ \n\n在[root.GetName]上，这个话题在公众讨论中尤其热门。这在很大程度上要归功于一位名叫[cc_colony_leader.GetName]的博爱人士,他呼吁建立一个确保所有外星人得到平等、公正对待的系统。这种理念在新殖民者中正变得广受欢迎，大家都沉醉于使[root.GetName]成为一个多元文化天堂的愿景。他们开始称[cc_colony_leader.GetHimHer]为"协调者" 并遵从[cc_colony_leader.GetHisHer]建议，甚至比对[root.owner.GetSpeciesAdj]高层更为尊重。幸运的是,[cc_colony_leader.GetSheHe]十分注重使自己的活动不被视为企图颠覆当地政府，总是在作重要决定前寻求地方官员的意见。作为回报，他们对[cc_colony_leader.GetHisHer]教导及倡议赞赏有加，并建议将[cc_colony_leader.GetHimHer]纳入当地决策层。" 
+cc_colony_events.4.desc.neut:0 "随着我们的步伐迈向群星，许多人开始思考，当我们发现其他生命时该如何面对？ \n\n在[root.GetName]上，这个话题在公众讨论中尤其热门。这在很大程度上要归功于一位名叫[cc_colony_leader.GetName]的博爱人士,他呼吁建立一个确保所有外星人得到平等、公正对待的系统。这种理念在新殖民者中正变得广受欢迎，大家都沉醉于使[root.GetName]成为一个多元文化天堂的愿景。他们开始称[cc_colony_leader.GetHimHer]为"协调者" 并遵从[cc_colony_leader.GetHisHer]建议，甚至比对[root.owner.GetSpeciesAdj]高层更为尊重。[cc_colony_leader.GetSheHeCap]目前还没有将自己新近建立的权威用以反对[root.owner.GetName]——事实上，[cc_colony_leader.GetSheHe]与我们的当地官员合作良好-但[cc_colony_leader.GetHisHer]的理念确实与[root.owner.GetName]领导阶层通常所倡导的颇有不同。\n\n我们应如何对待[cc_colony_leader.GetHimHer]?"
+cc_colony_events.4.desc.neg:0 "随着我们的步伐迈向群星，许多人开始思考，当我们发现其他生命时该如何面对？ \n\n在[root.GetName]上，这个话题在公众讨论中尤其热门。这在很大程度上是由一位名叫[cc_colony_leader.GetName]的麻烦人物引起的,他呼吁建立一个确保所有外星人得到平等、公正对待的系统。这种理念在新殖民者中正变得广受欢迎，大家都沉醉于使[root.GetName]成为一个多元文化天堂的愿景。他们开始称[cc_colony_leader.GetHimHer]为"协调者" 并遵从[cc_colony_leader.GetHisHer]建议，甚至比对[root.owner.GetSpeciesAdj]高层更为尊重。[cc_colony_leader.GetSheHe]将自己新获的权威用于宣扬其与[root.owner.GetName]主流相去甚远的理念，被我们的当地官员称为"公害"。\n\n我们应对[cc_colony_leader.GetHimHer]采取何种措施?" 
+
+cc_colony_events.4.B:0 "$cc_colony_events.3.B$"
+cc_colony_events.4.C:0 "$cc_colony_events.3.C$"
+cc_colony_events.4.C.tooltip:0 "$cc_colony_events.remove_leader.tooltip$"
+
+
+cc_colony_events.41.name:0 "$cc_colony_events.21.name$"
+cc_colony_events.41.desc:0 "$cc_colony_events.61.desc$"
+
+
+cc_colony_events.42.name:0 "$cc_colony_events.22.name$"
+cc_colony_events.42.desc:0 "$cc_colony_events.22.desc$"
+cc_colony_events.42.A:0 "$cc_colony_events.22.A.desc$"
+cc_colony_events.42.A.tooltip:0 "$cc_colony_events.22.A.tooltip$"
+cc_colony_events.42.B:0 "释放[cc_colony_leader.GetHimHer]." 
+
+
+cc_colony_events.421.name:0 "$cc_colony_events.221.name$"
+cc_colony_events.421.desc:0 "$cc_colony_events.221.desc$"
+
+cc_colony_events.43.name:0 "$cc_colony_events.23.name$"
+cc_colony_events.43.desc:0 "$cc_colony_events.23.desc$"
+cc_colony_events.43.A:0 "$cc_colony_events.23.A$"
+cc_colony_events.43.B:0 "$cc_colony_events.23.B$"
+cc_colony_events.43.C:0 "解决掉这个煽动者和[cc_colony_leader.GetHisHer]追随者。"
+
+cc_colony_events.431.name:0 "$cc_colony_events.231.name$"
+cc_colony_events.431.desc:0 "$cc_colony_events.231.desc$"
+cc_colony_events.431.option:0 "$CC_GOODIGUESS$"
+
+cc_colony_events.432.name:0 "$cc_colony_events.232.name$"
+cc_colony_events.432.desc:0 "逮捕[cc_colony_leader.GetName]的行动失败了。[cc_colony_leader.GetSheHeCap]已经聚集了自己最亲信的追随者，并展开了地下活动。显然[cc_colony_leader.GetSheHe]希望借此保护[root.GetName]上的外星社群免受搜捕与歧视。未来一段时间[cc_colony_leader.GetHimHer]恐怕会让我们头痛不已。"
+
+cc_colony_events.433.name:0 "$cc_colony_events.233.name$"
+cc_colony_events.433.desc:0 "$cc_colony_events.533.desc$"
+
+cc_colony_events.434.name:0 "$cc_colony_events.234.name$"
+cc_colony_events.434.desc:0 "$cc_colony_events.234.desc$"
+
+
+cc_colony_events.45.name:0 "$cc_colony_events.55.name$"
+cc_colony_events.45.desc:0 "[cc_colony_leader.GetName]于今天早晨离世。[cc_colony_leader.GetSheHe]已经与糟糕的健康状况斗争了很久，一次高烧最终夺去了其的生命。[cc_colony_leader.GetHisHer]临终前仍在努力的一个项目是设立一项年度文化交流活动，以确保自己为建立不同物种间和平、公正的关系所做的努力不被遗忘。然而[cc_colony_leader.GetSheHe]未能实现这一设想便溘然长逝。[root.GetName]上悲伤的民众们要求政府给予支持，以实现[cc_colony_leader.GetName]的遗愿。"
+cc_colony_events.45.A: "主办文化交流活动"
+cc_colony_events.45.B: "$cc_colony_events.25.B$"
+cc_colony_events.45.C:0 "$cc_colony_events.65.C$"
+cc_colony_events.45.C.tooltip:0 "$cc_colony_events.55.C.tooltip$"
+
+cc_colony_events.451.name:0 "[root.GetName]上的文化交流活动开幕"
+cc_colony_events.451.desc:0 "纪念[cc_colony_leader.GetName]的文化交流活动准备就绪。开幕式广受星球上的民众及[root.owner.GetName]境内各地外星人的欢迎。 伟人的精神借此长存，活动不休，记忆不灭。"
+
+
+cc_xenophile_institute_will_be_built:0 "\nw文化交流活动需要5年时间筹备。将会添加以下调整值：§Y$cc_xenophile_institute$§!，效果：\n$MOD_POP_HAPPINESS$: §G+5%§!\n$MOD_PLANET_MIGRATION_XENO_PULL$: §G+100%§!\n$tile_resource_unity_mult$: §G+25%§!\n$pop_ethic_xenophile_attraction_mult$: §Y+150%§!"
+
+
+cc_founder_xenophile:0 "亲外协调者"
+cc_founder_xenophile_desc:0 "这个殖民地受到一位充满个人魅力的伟人影响，其使命是确保所有外星人得到公正、平等的对待。"
+
+cc_minor_protests_xenophile:0 "小规模抗议活动"
+cc_minor_protests_xenophile_desc:0 "这颗星球正在经历因一名当地领袖被捕而引起的小规模抗议。"
+cc_major_protests_xenophile:0 "大规模抗议"
+cc_major_protests_xenophile_desc:0 "这颗星球正在经历因一名当地领袖被捕而引起的大规模抗议。"
+
+cc_underground_xenophile_movement_1:0 "地下亲外主义运动"
+cc_underground_xenophile_movement_1_desc:0 "以一名个人魅力超群的异见者为核心，这颗星球上正活跃着一场地下运动。活动旨在保护这里的外星社群不受搜捕与歧视。"
+cc_underground_xenophile_movement_2:0 "地下亲外主义运动"
+cc_underground_xenophile_movement_2_desc:0 "以一名个人魅力超群的异见者为核心，这颗星球上正活跃着一场地下运动。其终极目标在于从我们的帝国中彻底独立。"
+
+cc_xenophiles_offended:0 "被冒犯的亲外主义者们"
+cc_xenophiles_offended_desc:0 "这颗星球上的亲外主义民众因新政权的态度而深受冒犯。"
+
+cc_building_xenophile_institute:0 "正在筹备文化交流活动"
+cc_building_xenophile_institute_desc:0 "一场文化交流活动正在筹备，以纪念这颗星球上已逝"协调者"的伟大精神遗产。"
+
+cc_xenophile_institute:0 "文化交流活动"
+cc_xenophile_institute_desc:0 "为纪念一位终身致力于提升跨物种关系的杰出公民，这颗星球定期举办一项文化交流活动。伟人的精神与教导借此长存，只要活动还在举办，便不会被遗忘。"
+
+cc_founders_memory_disrespected_1_xenophile:0 "本地杰出公民不受尊重"
+cc_founders_memory_disrespected_1_xenophile_desc:0 "民众因母星系轻慢对待这颗星球上的"协调者"而深感失望，他因努力建立所有物种间的良好关系而广受尊敬。"
+
+cc_founders_memory_disrespected_2_xenophile:0 "$cc_founders_memory_disrespected_1_xenophile$"
+cc_founders_memory_disrespected_2_xenophile_desc:0 "$cc_founders_memory_disrespected_1_xenophile_desc$"
+
+
+#Xenophobe
+
+cc_colony_events.5.name:0 "Nationalist Agitator on[root.GetName]"
+cc_colony_events.5.desc.pos:0 "随着我们的步伐迈向群星，许多人开始思考，当我们发现其他生命时该如何面对？ \n\n在[root.GetName]上，这个话题在公众讨论中尤其热门。 这在很大程度上要归功于一位名叫[cc_colony_leader.GetName]的演讲家,[cc_colony_leader.GetSheHe]反对所有外星人的激情演说征服了此地的新殖民者们，他们 开始称[cc_colony_leader.GetHimHer]为 "霸权家"，并遵从[cc_colony_leader.GetHisHer]建议，甚至比对[root.owner.GetSpeciesAdj]高层更为尊重。幸运的是,[cc_colony_leader.GetSheHe]十分注重使自己的活动不被视为企图颠覆当地政府，总是在作重要决定前寻求地方官员的意见。作为回报，他们对[cc_colony_leader.GetHisHer]教导及倡议赞赏有加，并建议将[cc_colony_leader.GetHimHer]纳入当地决策层。" 
+cc_colony_events.5.desc.neut:0 "随着我们的步伐迈向群星，许多人开始思考，当我们发现其他生命时该如何面对？ \n\n在[root.GetName]上，这个话题在公众讨论中尤其热门。 这在很大程度上是由一位名叫[cc_colony_leader.GetName]的演讲家引起,[cc_colony_leader.GetSheHe]反对所有外星人的激情演说征服了此地的新殖民者们，他们 开始称[cc_colony_leader.GetHimHer]为 "霸权家"，并遵从[cc_colony_leader.GetHisHer]建议，甚至比对[root.owner.GetSpeciesAdj]高层更为尊重。[cc_colony_leader.GetName]目前还没有将自己新近建立的权威用以反对[root.owner.GetName]——事实上，[cc_colony_leader.GetSheHe]与我们的当地官员合作良好-但[cc_colony_leader.GetHisHer]的理念确实与[root.owner.GetName]领导阶层通常所倡导的颇有不同。\n\n我们应如何对待[cc_colony_leader.GetHimHer]?"
+cc_colony_events.5.desc.neg:0 "随着我们的步伐迈向群星，许多人开始思考，当我们发现其他生命时该如何面对？ \n\n在[root.GetName]上，这个话题在公众讨论中尤其热门。 这在很大程度上是由一位名叫[cc_colony_leader.GetName]的演讲家引起,[cc_colony_leader.GetSheHe]反对所有外星人的激情演说征服了此地的新殖民者们，他们 开始称[cc_colony_leader.GetHimHer]为 "霸权家"，并遵从[cc_colony_leader.GetHisHer]建议，甚至比对[root.owner.GetSpeciesAdj]高层更为尊重。[cc_colony_leader.GetName]将自己新获的权威用于宣扬其与[root.owner.GetName]主流相去甚远的理念，被我们的当地官员称为"一个对我们礼仪与星际外交关系的威胁" \n\n我们应对[cc_colony_leader.GetHimHer]采取何种措施?" 
+
+cc_colony_events.5.B:0 "$cc_colony_events.3.B$"
+cc_colony_events.5.C:0 "$cc_colony_events.3.C$"
+cc_colony_events.5.C.tooltip:0 "$CC_COLONY_UNPREDICTABLE$"
+
+
+cc_colony_events.51.name:0 "$cc_colony_events.21.name$"
+cc_colony_events.51.desc:0 "由于[cc_colony_leader.GetName]被捕，[Root.GetName]上近来产生了小规模抗议活动，但并没有传播开来。大部分人认可了我们对[cc_colony_leader.GetHimHer]的指控。看来[cc_colony_leader.GetHisHer]的演讲与煽动并没有像我们想象的那样广受推崇！"
+
+
+cc_colony_events.52.name:0 "$cc_colony_events.22.name$"
+cc_colony_events.52.desc:0 "$cc_colony_events.22.desc$"
+cc_colony_events.52.A:0 "$cc_colony_events.22.A.desc$"
+cc_colony_events.52.A.tooltip:0 "$cc_colony_events.22.A.tooltip$"
+cc_colony_events.52.B:0 "释放[cc_colony_leader.GetHimHer]，承认[cc_colony_leader.GetHimHer]霸权家的称号。" 
+
+
+cc_colony_events.521.name:0 "$cc_colony_events.221.name$"
+cc_colony_events.521.desc:0 "$cc_colony_events.221.desc$"
+
+cc_colony_events.53.name:0 "$cc_colony_events.23.name$"
+cc_colony_events.53.desc:0 "$cc_colony_events.23.desc$"
+cc_colony_events.53.A:0 "$cc_colony_events.23.A$"
+cc_colony_events.53.B:0 "$cc_colony_events.23.B$"
+cc_colony_events.53.C:0 "把这个叛乱分子和[cc_colony_leader.GetHisHer]追随者解决掉。我们绝不容忍动乱。"
+
+cc_colony_events.531.name:0 "$cc_colony_events.231.name$"
+cc_colony_events.531.desc:0 "$cc_colony_events.231.desc$"
+cc_colony_events.531.option:0 "$CC_GOODIGUESS$"
+
+cc_colony_events.532.name:0 "$cc_colony_events.232.name$"
+cc_colony_events.532.desc:0 "逮捕[cc_colony_leader.GetName]的行动失败了。[cc_colony_leader.GetSheHeCap]已经聚集了自己最亲信的追随者，开展了旨在保护[root.GetName]免受外星种族干扰的地下运动。未来一段时间[cc_colony_leader.GetHimHer]恐怕会让我们头痛不已。"
+
+cc_colony_events.533.name:0 "$cc_colony_events.233.name$"
+cc_colony_events.533.desc:0 "$cc_colony_events.233.desc$"
+
+cc_colony_events.534.name:0 "$cc_colony_events.234.name$"
+cc_colony_events.534.desc:0 "$cc_colony_events.234.desc$"
+
+cc_colony_events.54.name:0 "[cc_colony_leader.GetName]声名广为传播"
+cc_colony_events.54.desc.pos:0 "在过去的15年间，[cc_colony_leader.GetName]已经成为了[Root.GetName]上的领袖人物。[cc_colony_leader.GetSheHeCap]激励着[root.owner.GetSpeciesAdj]民众，使众人以前所未见的团结为其使命而努力。[cc_colony_leader.GetHisHerCap]声望广为传播，以至于传言说至少有一个外国政权正在密谋将其刺杀。不过要将此付诸实施，他们必须越过众多[cc_colony_leader.GetName]忠诚追随者的保护，他们现在遍布于[root.owner.GetName]这一地区的许多星球。"
+#Excellent!
+#Non-xenophobe variant:
+cc_colony_events.540.name:0 "外星刺头" 
+cc_colony_events.540.desc:0 "我们的盟友[from.owner.GetName]几十年来一直容忍着一位口无遮拦、善蛊人心的排外主义活动家。此人名叫[cc_colony_leader.GetName]，凭借公然嘲笑外星人的恶毒演讲为自己在[from.GetName]和其他[from.owner.GetSpeciesAdj]星球挣得大名。[cc_colony_leader.GetSheHeCap]敌视外星政权，更是将[root.GetName]称为"人民的公敌"。[cc_colony_leader.GetSheHeCap]最近发表了一系列尤为激烈的言论， 大肆咒骂我们的人民、传统与政府,不仅公然呼吁断绝与我们的盟友关系，更鼓吹[from.owner.GetName]应对我们采取敌对态度。我们收到不止一起报告，称我方外交官和商人被[cc_colony_leader.GetName]的排外主义追随者骚扰、袭击。必须要对此采取措施！" 
+cc_colony_events.540.A:0 "联系我们的盟友，我们可以帮助他们解决这个……问题。"
+cc_colony_events.540.B:0 "不值得为此冒险。"
+
+cc_colony_events.54.desc.neg:0 "在过去的15年间，[cc_colony_leader.GetName]已经成为了[Root.GetName]上的领袖人物。[cc_colony_leader.GetSheHeCap]为[root.owner.GetSpeciesAdj]民众注入了活力，却在各外星人权益团体中备受争议。最近[cc_colony_leader.GetHisHer]排外主义言论已经超出了我们的盟友[ally.GetName]可以容忍的底线。他们的大使私下里向[root.owner.GetRulerTitle][root.owner.GetRulerName]表示愿意代表[ally.GetSpeciesAdj][ally.GetRulerTitle]帮我们除去这个煽动家……同时也明确表态，如果我们拒绝，今后对[ally.GetName]的任何侮辱都不会再被容忍。\n\n我们该怎么做?"
+cc_colony_events.54.A:0 "[cc_colony_leader.GetName]是一位忠诚的[root.owner.GetSpeciesAdj]公民。"
+cc_colony_events.54.B:0 "很好。让我们解决[cc_colony_leader.GetHimHer]。"
+cc_colony_events.54.C:0 "We must respect our laws, no matter our opinion of [cc_colony_leader.GetHimHer]."
+cc_colony_events.54.C.tooltip:0 "No action will be taken against [cc_colony_leader.GetName]."
+
+cc_colony_events.541.name:0 "暗杀成功"
+cc_colony_events.541.desc:0 "对[cc_colony_leader.GetName]的暗杀成功了。然而，尽管你的特工坚称行动干净利落，没有留下任何罪证，[cc_colony_leader.GetName]的支持者们似乎还是猜到了[ally.GetName]是此次事件的幕后黑手。好几个星球上爆发了抗议，要求政府切断与[ally.GetName]的一切往来，并采取更为排外的外交政策。"
+cc_colony_events.541.A:0 "绝不！"
+cc_colony_events.541.B:0 "反正我们从来都不喜欢那群外星怪物。"
+
+cc_colony_events.542.name:0 "[from.owner.GetName]采取敌视态度"
+cc_colony_events.542.desc:0 "你们把我们置于了一个艰难的境地，[root.GetSpeciesNamePlural]:我们不得不在宝贵的盟友与自己的公民之间选择其一。深思熟虑之后，我们达成了统一意见：[from.GetName]政府的首要职责是为自己的人民服务。因此，我们遗憾地通知您，我们绝不会支持、容忍任何针对[cc_colony_leader.GetName]的暴力行动。"
+cc_colony_events.542.option:0 "我们必须重新评估对他们的看法了。"
+
+cc_colony_events.5421.name:0 "[from.owner.GetName]拒绝采取行动"
+cc_colony_events.5421.desc:0 "你们把我们置于了一个艰难的境地，[root.GetSpeciesNamePlural]:我们不得不在宝贵盟友与治下公民之间选择其一。深思熟虑之后，我们达成了统一意见：我们不能对自己的公民采取任何非法行动。因此，我们遗憾地通知您，我们绝不会支持、容忍任何针对[cc_colony_leader.GetName]的暴力行动。我们对此深表歉意。"
+cc_colony_events.5421.option:0 "或许我们应该重新评估对他们的看法了。"
+
+cc_colony_events.543.name:0 "支持除去[cc_colony_leader.GetName]"
+cc_colony_events.543.desc:0 "我们很高兴与你们合作，除去那个麻烦制造者，所谓的"霸权家"[cc_colony_leader.GetName]! 我们已经指示情报机构与你们一起制定计划以推进此事。很快，[cc_colony_leader.GetSheHe]带来的威胁就会消散。"
+
+
+cc_colony_events.544.name:0 "成功解决[cc_colony_leader.GetName]"
+cc_colony_events.544.desc:0 "除去[cc_colony_leader.GetName]的计划基本取得成功——事情已经了结，没有留下任何能够牵连到我们的罪证。尽管如此，[cc_colony_leader.GetName]的支持者们似乎还是将我们视为幕后黑手——自然，如果一个人以外星阴谋论的视角看待一切事物，他总会蒙中那么一两次。不管怎么说，[from.owner.GetName]政府积极为我们掩护，并保证没有任何事物能够损害他们与[root.GetName]长久以来的友谊。"
+
+cc_colony_events.545.name:0 "[from.owner.GetName]背叛了我们!"
+cc_colony_events.545.desc:0 "[cc_colony_leader.GetName]已被成功消灭——事情了结，没有留下任何能够牵连到我们的罪证。尽管如此，[cc_colony_leader.GetName]的支持者们似乎还是将我们视为幕后黑手——自然，如果一个人以外星阴谋论的视角看待一切事物，他总会蒙中那么一两次。然而，尽管[from.owner.GetSpeciesAdj][from.owner.GetRulerTitle]先前向我们保证支持此次计划，事发之后[from.owner.leader.GetSheHe]却背信弃义，将责任全部推到[root.GetName]头上,以最恶毒的侮辱诋毁我们的帝国。当我们的大使要求解释时，他却被命令10日之内离开当地星球……"
+cc_colony_events.545.option:0 "$cc_colony_events.542.option$"
+
+cc_colony_events.546.name:0 "暗杀失败!" 
+cc_colony_events.546.desc:0 "我们的情报官员搞砸了刺杀[cc_colony_leader.GetName]的计划,并在行动中被捕。为了不暴露政府在此事中的牵连，我们无法将他们救回，因此他们的命运只能全靠自己了。不幸的是，他们似乎已经招供，不仅承认我们企图暗杀[cc_colony_leader.GetHimHer],更揭露了我们是应[ally.GetName]要求而行事。此事在全国范围内激起轩然大波。[cc_colony_leader.GetName]的支持者们怒气冲天，已经开始公然号召抵制中央政府——其呼声在普通民众间也获得了相当程度的支持，许多人都对政府选择与外星政权共谋杀害一位自己的公民而义愤填膺。为此，要求政府下台的抗议四处扩散。\n\n[ally.GetName]的大使已为计划的失败道歉，并愿意提供任何[ally.GetName]力所能及的帮助，不过他认为更多的[ally.GetSpeciesAdj]参与在目前的政治风向中可能会产生反效果-在受到刺杀威胁后，他目前在政府大楼中避难。\n\n另一方面，眼下[cc_colony_leader.GetName]的声望如日中天，现在正在拜访自己母星附近各个星球上的支持者,呼吁大家支持[cc_colony_leader.GetHimHer],一个"真正的[root.owner.GetSpeciesName]",以对抗政府中的"叛徒"。\n\n我们在目前的动乱局势中应该如何行事？" 
+cc_colony_events.546.A:0 "我们会渡过难关"
+cc_colony_events.546.B:0 "尝试达成和解：谴责暗杀行动及[ally.GetSpeciesNamePlural]"
+cc_colony_events.546.C:0 "道歉并辞职下台"
+
+cc_colony_events.547.name:0 "暗杀计划失败"
+cc_colony_events.547.desc:0 "我们的盟友和他们无能的特工不仅没能杀掉"霸权家"[cc_colony_leader.GetName],反而在行动中被捕。特工随后供出了我们对此事的参与，在[from.owner.GetName]内部引起了轩然大波,导致双方外交关系空前紧张——不过到目前为止，他们的领导人向我们保证，他们对我们的态度没有改变。"
+cc_colony_events.548.name:0 "背叛!"
+cc_colony_events.548.desc:0 "我们的盟友和他们无能的特工不仅没能杀掉"霸权家"[cc_colony_leader.GetName],反而在行动中被捕。特工随后供出了我们对此事的参与，在[from.owner.GetName]内部引起了轩然大波。被民众的动乱所裹挟，[from.owner.GetSpeciesAdj]政府试图将事件归咎于我们，严厉谴责了[root.GetName]，口径与[cc_colony_leader.GetName]如出一辙。当我们的大使要求解释时，他被告知限10日之内离开当地星球。看来我们与[from.owner.GetName]的关系已经急剧恶化！"
+cc_colony_events.548.option:0 "$cc_colony_events.542.option$"
+
+cc_colony_events.55.name:0 "伟人离世"
+cc_colony_events.55.desc:0 "[cc_colony_leader.GetName],[root.GetName]中的"霸权家",于今天早晨离世。[cc_colony_leader.GetSheHe]已经与糟糕的健康状况斗争了很久，一次高烧最终夺去了其生命。[root.GetName]民众陷入悲伤，并要求我们以[cc_colony_leader.GetHisHer]的名义建立一所特殊的学院——不仅为纪念[cc_colony_leader.GetHisHer]的成就，更为展现[cc_colony_leader.Species.GetAdj]族民的荣光。"
+cc_colony_events.55.A: "$cc_colony_events.25.A$"
+cc_colony_events.55.B: "$cc_colony_events.25.B$"
+cc_colony_events.55.C:0 "$cc_colony_events.65.C$"
+cc_colony_events.55.C.tooltip:0 "[cc_colony_leader.GetName]的影响将会在30年消退"
+
+cc_colony_events.551.name:0 "正统学院在[root.GetName]上成立"
+cc_colony_events.551.desc.A:0 "为纪念[cc_colony_leader.GetName]而建的学院已经完工。其揭幕仪式吸引了众多参与者，[cc_colony_leader.GetHisHer]的支持者从各个星球赶来共襄盛事。我们相信这里将会成为[cc_colony_leader.Species.GetAdj]民族主义者们的重要思想中心。"
+cc_colony_events.551.desc.B:0 "为纪念[cc_colony_leader.GetName]而建的学院已经完工。[root.GetName]上的民众现在有了缅怀其教导与成就的地方。"
+
+cc_xenophobe_hero_1:0 "$cc_xenophobe_hero$"
+cc_xenophobe_hero_1_desc:0 "这颗星球上的许多人将附近一颗星球上的'霸权家'视为英雄，会毫不犹豫地追随他，与外星人或政府中的亲外主义者展开战斗。"
+cc_widespread_xenophobic_unrest:0 "排外动乱四处扩散"
+cc_widespread_xenophobic_unrest_desc:0 "对排外主义派系的支持广为传播，他们握有证据表明帝国政府曾与外星政权合谋，企图刺杀他们的一位领袖。"
+cc_xenophobe_assassinated_attempt:0 "刺杀霸权家计划"
+cc_ally_xenophobic_rhetoric:0 "排外主义言论"
+
+cc_xenophobe_martyr:0 "怀念烈士"
+cc_xenophobe_martyr_desc:0 "这颗星球上曾经的霸权家被外星阴谋刺杀，现在人们将他视作为其理念献身的烈士。"
+
+cc_mourning_xenophobe:0 "悼念英雄"
+cc_mourning_and_angry_xenophobe:0 "因为英雄之死而激起的怒火"
+
+cc_xenophobe_hero:0 "排外主义英雄 "
+cc_xenophobe_hero_desc:0 "这颗星球上的许多人将附近一颗星球上的'霸权家'视为英雄，会毫不犹豫地追随他与外星人展开战斗。"
+cc_xenophobe_assassinated:0 "英雄死于暗杀"
+cc_betrayed_us_ally:0 "背叛了我们"
+cc_ignored_ally:0 "无视了我们的担忧"
+
+cc_xenophobe_institute_will_be_built:0 "\n正统学院会在5年后完工。将添加以下调整值：§Y$cc_xenophobe_institute$§!，效果:\n$tile_resource_unity_mult$: §G+25%§!\n$MOD_PLANET_MIGRATION_SAME_PULL$: §G+50%§!\n$MOD_PLANET_MIGRATION_XENO_PULL$: §R-100%§!\n$MOD_POP_CITIZEN_HAPPINESS$: §G+10%§!\n$pop_ethic_xenophobe_attraction_mult$: §Y+250%§!"
+
+cc_minor_xenophobe_institute_will_be_built:0 "\n霸权家的学院会在5年后完工。将添加以下调整值：§Y$cc_minor_xenophobe_institute$§!，效果:\n$MOD_PLANET_MIGRATION_SAME_PULL$: §G+50%§!\n$MOD_PLANET_MIGRATION_XENO_PULL$: §R-100%§!\n$MOD_POP_CITIZEN_HAPPINESS$: §G+5%§!\n$pop_ethic_xenophobe_attraction_mult$: §Y+150%§!"
+
+
+cc_founder_xenophobe:0 "星球霸权家"
+cc_founder_xenophobe_desc:0 "这块殖民地由一位充满个人魅力的领袖统治，其个人使命在于保护这颗星球免受外星人影响。"
+
+cc_minor_protests_xenophobe:0 "小规模抗议"
+cc_minor_protests_xenophobe_desc:0 "这颗星球正在经历因一名当地领袖被捕而引起的小规模抗议。"
+cc_major_protests_xenophobe:0 "大规模抗议"
+cc_major_protests_xenophobe_desc:0 "这颗星球正在经历因一名当地领袖被捕而引起的大规模抗议。"
+
+cc_underground_xenophobe_movement_1:0 "地下排外主义运动"
+cc_underground_xenophobe_movement_1_desc:0 "以一名个人魅力超群的异见者为核心，这颗星球上正活跃着一场地下运动。他们旨在保护这里免受外星人影响。"
+cc_underground_xenophobe_movement_2:0 "Underground Xenophobe Movement"
+cc_underground_xenophobe_movement_2_desc:0 "以一名个人魅力超群的异见者为核心，这颗星球上正活跃着一场地下运动。其终极目标在于从我们的帝国中彻底独立。"
+
+cc_xenophobes_offended:0 "被冒犯的排外主义者们"
+cc_xenophobes_offended_desc:0 "这颗星球上的排外主义民众因新政权的存在而深受冒犯。"
+
+cc_xenophobe_institute_built_faction:0 "正统学院竣工"
+
+cc_building_xenophobe_institute:0 "正在建设一座学院"
+cc_building_xenophobe_institute_desc:0 "为纪念这颗星球的'霸权家'而建的学院正在施工中。"
+
+cc_xenophobe_institute:0 "正统学院"
+cc_xenophobe_institute_desc:0 "这颗星球上的正统学院是民族主义的一处思想中心，其追随者们跨越许多光年前来参观。"
+
+cc_minor_xenophobe_institute:0 "霸权家的学院"
+cc_minor_xenophobe_institute_desc:0 "这个星球上的一位早期排外主义活动家仍被广泛怀念，许多人都会参加每年的官方纪念日活动。"
+
+
+cc_founders_memory_disrespected_1_xenophobe:0 "本地霸权家不受尊重"
+cc_founders_memory_disrespected_1_xenophobe_desc:0 "这颗星球上的民众因母星系对待当地最受敬重的公民之一的方式而深感不满。"
+
+cc_founders_memory_disrespected_2_xenophobe:0 "$cc_founders_memory_disrespected_1_xenophobe$"
+cc_founders_memory_disrespected_2_xenophobe_desc:0 "$cc_founders_memory_disrespected_1_xenophobe_desc$"
+
+cc_hostile_towards_xenos:0 "敌视外星人"
+
+#Spiritualists
+
+cc_colony_events.6.name:0 "唯心主义长老在[root.GetName]上声望日隆"
+cc_colony_events.6.desc.pos:0 "一个新生的殖民地对于雄心勃勃的人来说总是意味着一次进取的机会。\n\n在[root.GetName]上，情况正是如此。一位名叫[cc_colony_leader.GetName]的精神领袖声望日渐高涨，人们将[cc_colony_leader.GetHimHer]称为"长老" ，对[cc_colony_leader.GetHisHer]的教导甚至比对[root.owner.GetSpeciesAdj]高层的法令更为看重。幸运的是,[cc_colony_leader.GetSheHe]十分注重使自己的活动不被视为企图颠覆当地政府，总是在作重要决定前寻求地方官员的意见。作为回报，他们对[cc_colony_leader.GetHisHer]教导及倡议赞赏有加，并建议将[cc_colony_leader.GetHimHer]纳入当地核心决策层。"
+cc_colony_events.6.desc.neut:0 "一个新生的殖民地对于雄心勃勃的人来说总是意味着一次进取的机会。\n\n在[root.GetName]上，情况正是如此。一位名叫[cc_colony_leader.GetName]的精神领袖声望日渐高涨，人们将[cc_colony_leader.GetHimHer]称为"长老" ，对[cc_colony_leader.GetHisHer]的教导甚至比对[root.owner.GetSpeciesAdj]高层的法令更为看重。到目前为止，[cc_colony_leader.GetSheHe]还没有将其权威用于反对[root.owner.GetName]——的确,[cc_colony_leader.GetSheHe]一直与我们的当地政府合作良好– 但[cc_colony_leader.GetHisHer]的理念确实与[root.owner.GetName]领导人颇有不同。\n\n我们应对[cc_colony_leader.GetHimHer]采取何种措施?"
+cc_colony_events.6.desc.neg:0 "一个新生的殖民地对于雄心勃勃的人来说总是意味着一次进取的机会。\n\n在[root.GetName]上，情况正是如此。一位名叫[cc_colony_leader.GetName]的精神领袖声望日渐高涨，人们将[cc_colony_leader.GetHimHer]称为"长老" ，对[cc_colony_leader.GetHisHer]的教导甚至比对[root.owner.GetSpeciesAdj]高层的法令更为看重。[cc_colony_leader.GetSheHe]将自己新获的权威用于实践其与[root.owner.GetName]主流相去甚远的理念，被我们的当地官员称为"麻烦人物"。\n\n我们应对[cc_colony_leader.GetHimHer]采取何种措施?"
+
+cc_colony_events.6.B:0 "$cc_colony_events.3.B$"
+cc_colony_events.6.C:0 "$cc_colony_events.3.C$"
+cc_colony_events.6.C.tooltip:0 "$CC_COLONY_UNPREDICTABLE$"
+
+
+cc_colony_events.61.name:0 "$cc_colony_events.21.name$"
+cc_colony_events.61.desc:0 "由于[cc_colony_leader.GetName]被捕，[Root.GetName]上近来产生了小规模抗议活动，但并没有传播开来。大部分人认可了我们对[cc_colony_leader.GetHimHer]的指控。看来[cc_colony_leader.GetHisHer]的教导并没有像我们想象的那样广受推崇。"
+
+
+cc_colony_events.62.name:0 "$cc_colony_events.22.name$"
+cc_colony_events.62.desc:0 "$cc_colony_events.22.desc$"
+cc_colony_events.62.A:0 "$cc_colony_events.22.A$"
+cc_colony_events.62.A.tooltip:0 "$cc_colony_events.22.A.tooltip$"
+cc_colony_events.62.B:0 "释放[cc_colony_leader.GetHimHer]."
+
+cc_colony_events.621.name:0 "$cc_colony_events.221.name$"
+cc_colony_events.621.desc:0 "$cc_colony_events.221.desc$"
+
+cc_colony_events.63.name:0 "$cc_colony_events.23.name$"
+cc_colony_events.63.desc:0 "$cc_colony_events.23.desc$"
+cc_colony_events.63.A:0 "我们必须必须对此采取容忍的态度。现在得给局势降温。"
+cc_colony_events.63.B:0 "把[cc_colony_leader.GetHimHer]再次逮捕，押送到[Root.Owner.Capital.GetName]。"
+cc_colony_events.63.C:0 "全力镇压唯心主义者。"
+
+cc_colony_events.631.name:0 "$cc_colony_events.231.name$"
+cc_colony_events.631.desc:0 "$cc_colony_events.231.desc$"
+cc_colony_events.631.option:0 "$CC_GOODIGUESS$"
+
+cc_colony_events.632.name:0 "$cc_colony_events.232.name$"
+cc_colony_events.632.desc:0 "$cc_colony_events.332.desc$"
+
+cc_colony_events.633.name:0 "$cc_colony_events.233.name$"
+cc_colony_events.633.desc:0 "$cc_colony_events.233.desc$"
+
+cc_colony_events.634.name:0 "$cc_colony_events.234.name$"
+cc_colony_events.634.desc:0 "$cc_colony_events.234.desc$"
+
+
+cc_colony_events.64.name:0 "[cc_colony_leader.GetName]的声望广为传播。"
+cc_colony_events.64.desc:0 "在过去15年间,[cc_colony_leader.GetName]成为了[Root.GetName]上的领袖人物。[cc_colony_leader.GetSheHe]在居民间备受尊崇,[cc_colony_leader.GetHisHer]声望广为传播。[cc_colony_leader.GetSheHe]现在被[root.owner.GetName]这一地区的所有灵修民众视为导师。事实上,[cc_colony_leader.GetSheHe]正在准备一次星际旅程来拜访自己所有的追随者!"
+
+cc_colony_events.641.name:0 "$cc_colony_events.341.name$"
+cc_colony_events.641.desc:0 "$cc_colony_events.341.desc$"
+
+
+cc_colony_events.642.name:0 "[cc_colony_leader.GetName]的星际旅行以悲剧收场"
+cc_colony_events.642.desc:0 "当[cc_colony_leader.GetName]在[random_visit_planet.GetName]上会见支持者时，一名狂热的反唯心主义者在保镖作出反应前将[cc_colony_leader.GetHimHer]射杀。不幸的是，狂怒的现场群众在我们有机会前审讯凶手前就将他撕碎。阴谋论大行其道，声称有人——甚至可能是[root.owner.GetSpeciesAdj]政府中的高层——暗中策划了刺杀。也有声音指责[random_visit_planet.GetName]上的当地政府没有给[cc_colony_leader.GetName]配备足够的安保力量，间接导致了悲剧的发生。此事导致[root.owner.GetName]上的唯心主义团体奋起抗议。唯心主义派系领导[spiritualist_faction.GetName]在动乱中与政府官员会面，明确表达了他们的愤怒，但同时也表示，为平息唯心主义者们的伤痛，应该为[cc_colony_leader.GetName]举行国葬，并在[root.GetName]上为[cc_colony_leader.GetHimHer]建起一座陵墓。"
+cc_colony_events.642.A:0 "批准。[cc_colony_leader.GetSheHeCap]值得如此纪念"
+cc_mausoleum_will_be_built:0 "\n陵墓会在5年后完成。将添加如下调整值： §Y$cc_religious_centre$§!，效果:\n$tile_resource_unity_mult$: §G+50%§!\n$planet_resource_unity_add$: §G+2§!\n$MOD_POP_HAPPINESS$: §G+10%§!\n$MOD_PLANET_MIGRATION_ALL_PULL$: §G+50%§!\n$pop_ethic_spiritualist_attraction_mult$: §Y+250%§!"
+cc_colony_events.642.B:0 "$cc_colony_events.25.B$"
+
+cc_colony_events.643.name:0 "[root.GetName]上的陵墓揭幕"
+cc_colony_events.643.desc:0 "为纪念[cc_colony_leader.GetName]而建的陵墓已经完工。其揭幕仪式吸引了大批观众，[cc_colony_leader.GetHisHer]追随者们从各个星球赶来见证这一时刻。我们相信它会成为[root.owner.GetName]及其他星球上唯心主义者的朝圣之所。"
+
+cc_colony_events.65.name:0 "$cc_colony_events.25.name$"
+cc_colony_events.65.desc:0 "[root.GetName]上的著名"长老"[cc_colony_leader.GetName]于今天早晨离世。[cc_colony_leader.GetSheHe]已经与糟糕的健康状况斗争了很久，一次高烧最终夺去了其生命。[root.GetName]上的民众陷入悲伤，并要求我们为[cc_colony_leader.GetHisHer]设立一座神龛，以缅怀[cc_colony_leader.GetSheHe]的一生及其教导。"
+cc_colony_events.65.A:0 "建立一座宏伟神龛。[cc_colony_leader.GetSheHeCap]配得上如此纪念"
+cc_colony_events.65.B:0 "花费太高了"
+cc_colony_events.65.C:0 "[cc_colony_leader.GetSheHeCap]只是个麻烦制造者。希望[cc_colony_leader.GetHisHer]被很快遗忘。"
+
+cc_colony_events.65.C.tooltip:0 "[root.GetName]将会在30年内摆脱[cc_colony_leader.GetName]的影响。"
+
+cc_minor_mausoleum_will_be_built:0 "\n陵墓会在5年后完成。将添加如下调整值： §Y$cc_minor_mausoleum$§!，效果:\n$tile_resource_unity_mult$: §G+25%§!\n$planet_resource_unity_add$: §G+1§!\n$MOD_POP_HAPPINESS$: §G+5%§!\n$pop_ethic_spiritualist_attraction_mult$: §Y+150%§!"
+cc_colony_events.651.desc:0 "[cc_colony_leader.GetName]的陵墓已经完工。[root.GetName]上的民众现在有了缅怀其教导与成就的地方。"
+
+#General random spiritualist guru
+
+cc_colony_events.100.name:0 "[root.GetName]上的著名长老"
+cc_colony_events.100.desc.pos:0 "一位名叫[cc_colony_leader.GetName]的唯心主义长老在[root.GetName]上地位日渐崇高。[cc_colony_leader.GetHisHerCap]的教导被大部分唯心主义民众所遵从，[cc_colony_leader.GetHisHer]的建议被视为宝贵财富。[cc_colony_leader.GetSheHeCap]已成功为[root.GetName]上的唯心主义派系重新注入了活力，甚至在附近星球上也信众遍布——[cc_colony_leader.GetSheHe]目前正在准备进行一场星际旅行，去拜访自己的追随者们。尽管有人担忧[cc_colony_leader.GetName]的光芒已经遮蔽了[root.owner.GetRulerTitle]，幸运的是，[cc_colony_leader.GetSheHe]已明确表示全面支持[root.owner.GetRulerTitle]，愿意服从其权威。"
+
+cc_colony_events.100.desc.neut:0 "一位名叫[cc_colony_leader.GetName]的唯心主义长老在[root.GetName]上地位日渐崇高。[cc_colony_leader.GetHisHerCap]的教导被大部分唯心主义民众所遵从，[cc_colony_leader.GetHisHer]的建议被视为宝贵财富。[cc_colony_leader.GetSheHeCap]已成功为[root.GetName]上的唯心主义派系重新注入了活力，甚至在附近星球上也信众遍布——[cc_colony_leader.GetSheHe]目前正在准备进行一场星际旅行，去拜访自己的追随者们。尽管有人担忧[cc_colony_leader.GetName]的光芒已经遮蔽了[root.owner.GetRulerTitle]，幸运的是，[cc_colony_leader.GetSheHe]已明确表示全面支持[root.owner.GetRulerTitle]，愿意服从其权威。\n\n然而[cc_colony_leader.GetName]所传授的哲学显著偏离了[root.owner.GetName]主流。我们应该采取行动吗?"
+
+cc_colony_events.100.desc.neg:0 "一位名叫[cc_colony_leader.GetName]的唯心主义长老在[root.GetName]上地位日渐崇高。[cc_colony_leader.GetHisHerCap]的教导被大部分唯心主义民众所遵从，[cc_colony_leader.GetHisHer]的建议被视为宝贵财富。[cc_colony_leader.GetSheHeCap]已成功为[root.GetName]上的唯心主义派系重新注入了活力，甚至在附近星球上也信众遍布——[cc_colony_leader.GetSheHe]目前正在准备进行一场星际旅行，去拜访自己的追随者们。[root.owner.GetSpeciesName]政府中的许多人对其影响力的增长感到担忧，认为这将会威胁[root.owner.GetRulerTitle]的权威。[cc_colony_leader.GetName]还没有作出任何带有反叛意味的举动，但[cc_colony_leader.GetHisHer]哲学与[root.owner.GetName]主流水火不容。\n\n我们应该如何应对？"
+
+cc_colony_events.100.tooltip:0 " 75单位距离内的星球将会得到以下调整值： $cc_spiritualist_leader_visit$，给予 §Y+20%§! $pop_ethic_spiritualist_attraction_mult$ 和 §G+10%§! $MOD_POP_HAPPINESS$."
+
+cc_colony_events.102.B:0 "释放[cc_colony_leader.GetHimHer]。但禁止[cc_colony_leader.GetHimHer]原定的星际旅程。"
+cc_colony_events.103.A.tooltip:0 "然而原定的星际旅程将无法成行。"
+
+
+cc_spiritualists_offended:0 "被冒犯的唯心主义者们"
+cc_spiritualists_offended_desc:0 "这颗星球上的唯心主义民众因新政权的态度而深受冒犯。"
+
+cc_spiritualist_protectorate:0 "唯心主义保护领"
+cc_spiritualist_protectorate_desc:0 "这颗星球的统治者们与持异见的唯心主义者们达成和解，宣布此地为一处唯心主义保护领。"
+
+cc_founder_spiritualist:0 "声望卓著的唯心主义长老"
+cc_founder_spiritualist_desc:0 "这颗星球的奠基者是一位唯心主义长老。他在当地居民中备受尊敬，其教导被广泛遵从。"
+
+cc_famous_guru:0 "声望卓著的唯心主义长老"
+cc_famous_guru_desc:0 "一位著名的唯心主义长老活跃在这颗星球上。他在当地居民中备受尊敬，其教导被广泛遵从。"
+
+cc_minor_protests_spiritualist:0 "$cc_minor_protests_militarist$"
+cc_minor_protests_spiritualist_desc:0 "这颗星球正在经历因一名广受敬重的长老被捕而引起的小规模抗议。"
+
+cc_major_protests_spiritualist:0 "$cc_major_protests_militarist$"
+cc_major_protests_spiritualist_desc:0 "这颗星球正在经历因一名广受敬重的长老被捕而引起的大规模抗议。"
+
+cc_spiritualist_leader_visit:0 "长老的访问"
+cc_spiritualist_leader_visit_desc:0 "这颗星球被一位著名的唯心主义长老拜访过"
+
+cc_mourning_spiritualist:0 "长老之死引起哀伤"
+cc_mourning_and_angry_spiritualist:0 "对长老之死的回应引起愤怒"
+
+cc_building_mausoleum:0 "正在建设陵墓"
+cc_building_mausoleum_desc:0 "为纪念一位影响深远的唯心主义长老，这颗星球上正在建设一座陵墓。"
+
+cc_minor_mausoleum:0 "长老的陵墓"
+cc_minor_mausoleum_desc:0 "这颗星球上有一座为纪念当地一位唯心主义长老而建的陵墓。"
+
+cc_religious_centre:0 "朝圣中心"
+cc_religious_centre_desc:0 "这颗星球上为纪念一位影响深远的唯心主义长老而建的陵墓是一处朝圣之所，其追随者跨越许多光年前来朝觐。"
+
+cc_founders_memory_disrespected_1_spiritualist:0 "本地长老不受尊重"
+cc_founders_memory_disrespected_1_spiritualist_desc:0 "这颗星球上的民众因母星系对待当地一位著名长老的方式而深感不满。"
+
+cc_founders_memory_disrespected_2_spiritualist:0 "本地长老不受尊重"
+cc_founders_memory_disrespected_2_spiritualist_desc:0 "这颗星球上的民众因母星系对待当地一位著名长老的方式而深感不满。"
+
+cc_underground_spiritualist_movement_1:0 "地下唯心主义运动"
+cc_underground_spiritualist_movement_1_desc:0 "以一名异见长老的教导为核心，一场地下运动在这颗星球上十分活跃。其宗旨在于传播相悖于我们帝国理念的思想。"
+
+cc_underground_spiritualist_movement_2:0 "地下唯心主义抵抗运动"
+cc_underground_spiritualist_movement_2_desc:0 "以一名异见长老的教导为核心，一场地下运动在这颗星球上十分活跃。其终极目标在于从我们的帝国中完全独立。"
+
+cc_arrested_guru:0 "被逮捕的著名长老"
+
+
+
+#Materialist
+
+cc_colony_events.7.name:0 "[root.GetName]上的知名学者"
+cc_colony_events.7.desc.pos:0 "一个新生的殖民地对于雄心勃勃的人来说总是意味着一次进取的机会。\n\n在[root.GetName]上，情况正是如此。[cc_colony_leader.GetName]是一位前大学教授，素来以其创造性思维而闻名。[cc_colony_leader.GetSheHeCap]在新殖民者们之中声望日隆。大家在各种事项上寻求[cc_colony_leader.GetHimHer]意见，许多急迫难题都因[cc_colony_leader.GetSheHe]提出的天才方案而得以解决。[cc_colony_leader.GetSheHe]逐渐开始指导殖民地的日常运转，全身心地投入到为殖民地谋求成功的使命中。[cc_colony_leader.GetSheHe]坚信除非[root.GetName]民众共同为教育和知识而努力，这颗星球永远无法在银河中占据重要地位。"
+cc_colony_events.7.desc.neut:0 "一个新生的殖民地对于雄心勃勃的人来说总是意味着一次进取的机会。\n\n在[root.GetName]上，情况正是如此。[cc_colony_leader.GetName]是一位前大学教授，素来以其创造性思维而闻名。[cc_colony_leader.GetSheHeCap]在新殖民者们之中声望日隆。大家在各种事项上寻求[cc_colony_leader.GetHimHer]意见，许多急迫难题都因[cc_colony_leader.GetSheHe]提出的天才方案而得以解决。[cc_colony_leader.GetSheHe]逐渐开始指导殖民地的日常运转，全身心地投入到为殖民地谋求成功的使命中。[cc_colony_leader.GetSheHe]坚信除非[root.GetName]民众共同为教育和知识而努力，这颗星球永远无法在银河中占据重要地位。\n\n尽管他的功绩不容忽视，当地政府仍然担忧[cc_colony_leader.GetName]的哲学与[root.owner.GetName]主流并不完全相容,或许[cc_colony_leader.GetSheHe]会将民众引向歧途。\n\n我们应如何对待[cc_colony_leader.GetHimHer]?"
+cc_colony_events.7.desc.neg:0 "一个新生的殖民地总是意味着一次进取的机会,尤其是对那些难以在政治结构更为稳固的旧世界中取得显赫地位的人来说。\n\n在[root.GetName]上，情况正是如此。[cc_colony_leader.GetName]是一位前大学教授，素来以其创造性思维而闻名。[cc_colony_leader.GetSheHeCap]在新殖民者们之中声望日隆。大家在各种事项上寻求[cc_colony_leader.GetHimHer]意见，许多急迫难题都因[cc_colony_leader.GetSheHe]提出的天才方案而得以解决。[cc_colony_leader.GetSheHe]也由此逐渐开始指导殖民地的日常运转。\n\n当地政府为其日益增长的影响力而感到焦虑，担心这颗星球上的民众被他引向歧途，因为尽管[root.owner.GetName]政府向来认为唯心主义才是所有善良[root.owner.GetSpeciesNamePlural]所应追寻的理念，他却坚信除非大家全都投身于对教育和知识的追求之中，否则[root.GetName]永远难成大器。\n\n我们应如何对待[cc_colony_leader.GetHimHer]?"
+
+cc_colony_events.7.B:0 "$cc_colony_events.3.B$"
+cc_colony_events.7.C:0 "Arrest[cc_colony_leader.GetHimHer]."
+cc_colony_events.7.C.tooltip:0 "$CC_COLONY_UNPREDICTABLE$"
+
+#(65%)
+cc_colony_events.71.name:0 "$cc_colony_events.21.name$"
+cc_colony_events.71.desc:0 "由于[cc_colony_leader.GetName]被捕，[Root.GetName]上近来产生了小规模抗议活动，但并没有传播开来。大部分人认可了我们对[cc_colony_leader.GetHimHer]的指控。看来[cc_colony_leader.GetHisHer]的教导并没有像我们想象的那样广受推崇!"
+
+#(20%)
+cc_colony_events.72.name:0 "$cc_colony_events.22.name$"
+cc_colony_events.72.desc:0 "$cc_colony_events.22.desc$"
+cc_colony_events.72.A:0 "$cc_colony_events.22.A$"
+cc_colony_events.72.A.tooltip:0 "$cc_colony_events.22.A.tooltip$"
+cc_colony_events.72.B:0 "Release[cc_colony_leader.GetHimHer]."
+
+cc_colony_events.721.name:0 "信任危机在[Root.GetName]上持续"
+cc_colony_events.721.desc:0 "$cc_colony_events.221.desc$"
+
+#(15%)
+cc_colony_events.73.name:0 "$cc_colony_events.23.name$"
+cc_colony_events.73.desc:0 "$cc_colony_events.23.desc$"
+cc_colony_events.73.A:0 "$cc_colony_events.63.A$"
+cc_colony_events.73.B:0 "$cc_colony_events.63.B$"
+cc_colony_events.73.C:0 "全力镇压唯物主义者"
+
+cc_colony_events.731.name:0 "$cc_colony_events.231.name$"
+cc_colony_events.731.desc:0 "$cc_colony_events.231.desc$"
+cc_colony_events.731.option:0 "$CC_GOODIGUESS$"
+
+cc_colony_events.732.name:0 "$cc_colony_events.232.name$"
+cc_colony_events.732.desc:0 "$cc_colony_events.332.desc$"
+
+cc_colony_events.733.name:0 "$cc_colony_events.233.name$"
+cc_colony_events.733.desc:0 "$cc_colony_events.233.desc$"
+
+cc_colony_events.734.name:0 "$cc_colony_events.234.name$"
+cc_colony_events.734.desc:0 "$cc_colony_events.234.desc$"
+
+
+cc_colony_events.75.name:0 "$cc_colony_events.25.name$"
+cc_colony_events.75.desc:0 "[cc_colony_leader.GetName],许多人眼中[root.GetName]的奠基者,在一次短暂的病发后于今天离世。[root.GetName]上的民众为此陷入悲伤。[cc_colony_leader.GetHisHerCap]生前最后的愿望是在[root.GetName]上建立一座宏伟的大学，以期自己辛勤耕耘的下一代思想家们能够茁壮成长。[root.GetName]上的地方官员已经向我们呈交了实现这一愿望的计划。\n\n我们应该为这所大学投资吗?"
+cc_colony_events.75.A: "当然!"
+cc_colony_events.75.B: "$cc_colony_events.25.B$"
+
+cc_colony_events.75.B.tooltip:0 "[cc_colony_leader.GetName]的影响将在30年内消退。"
+
+cc_colony_events.751.name:0 "[root.GetName]上的大学揭幕"
+cc_colony_events.751.desc:0 "为纪念[cc_colony_leader.GetName]而建的大学已经完工。殖民地民众为其揭幕仪式而欢呼雀跃，他们相信[root.GetName]已经作为[root.owner.GetName]中的重要智识中心而声名远播。[root.owner.GetName]境内各地的唯物主义者也为此而欢欣鼓舞，将之视为[root.owner.GetRulerTitle]追求科学进步的明证。"
+
+cc_university_will_be_built:0 "\n大学会在5年后完工。将给予以下调整值： §Y$cc_university$§!，效果:\n$tile_resource_physics_research_mult$: §G+33%§!\n$tile_resource_society_research_mult$: §G+33%§!\n$tile_resource_engineering_research_mult$: §G+33%§!\n$MOD_PLANET_MIGRATION_ALL_PULL$: §G+25%§!\n$pop_ethic_materialist_attraction_mult$: §Y+150%§!"
+
+
+cc_founder_materialist:0 "知名学者"
+cc_founder_materialist_desc:0 "这颗星球的奠基者是一位前大学教授。他深受民众支持，他的教导被广泛遵循。"
+cc_minor_protests_materialist:0 "$cc_minor_protests_militarist$"
+cc_minor_protests_materialist_desc:0 "这颗星球正在经历因一名知名学者被捕而引起的小规模抗议。"
+cc_major_protests_materialist:0 "$cc_major_protests_militarist$"
+cc_major_protests_materialist_desc:0 "这颗星球正在经历因一名知名学者被捕而引起的大规模抗议。"
+cc_underground_materialist_movement_1:0 "地下唯物主义运动"
+cc_underground_materialist_movement_1_desc:0 "以一名异见学者的教导为核心，一场地下运动在这颗星球上十分活跃。其宗旨在于传播相悖于我们帝国理念的思想。"
+cc_underground_materialist_movement_2:0 "Underground Intellectual Movement"
+cc_underground_materialist_movement_2_desc:0 "以一名异见学者的教导为核心，一场地下抵抗运动在这颗星球上十分活跃。其终极目标在于从我们的帝国中完全独立。"
+cc_building_university:0 "正在建设大学"
+cc_building_university_desc:0 "这颗星球上正在建设一所宏伟大学。"
+cc_university:0 "智识中心"
+cc_university_desc:0 "这颗星球上的大学是一处重要的智识中心，学生与学者们跨越许多光年前来参观、学习。"
+cc_university_built_faction:0 "已建成大学"
+cc_founders_memory_disrespected_1_materialist:0 "本地学者不受尊敬"
+cc_founders_memory_disrespected_1_materialist_desc:0 "这颗星球上的民众因母星系对待一位著名本土学者的方式而深感不满。"
+
+cc_materialists_offended:0 "被冒犯的唯物主义者们"
+cc_materialists_offended_desc:0 "这颗星球上的唯物主义人口因新政权的态度而深受冒犯。"
+
+
+#Authoritarian (monarchy):
+cc_colony_events.8.name:0 "[root.GetName]上的君主制"
+cc_colony_events.8.desc.pos1:0 "一个新生的殖民地对于雄心勃勃的人来说总是意味着一次进取的机会。\n\n在[root.GetName]上，情况正是如此。天资卓绝的[cc_colony_leader.GetName]以其无与伦比的领袖能力征服了新殖民者们，民众开始以皇室礼节待[cc_colony_leader.GetHimHer]。幸运的是，[cc_colony_leader.GetSheHe]似乎并不准备滥用其人望以挑战[root.owner.GetName]政府的权威。事实上，当地官员已向中央政府请愿正式给予[cc_colony_leader.GetName]"[root.GetName]亲王"的身份，以确保星球得到妥善治理。" 
+cc_colony_events.8.desc.pos2:0 "一个新生的殖民地对于雄心勃勃的人来说总是意味着一次进取的机会。\n\n在[root.GetName]上，情况正是如此。天资卓绝的[cc_colony_leader.GetName]以其无与伦比的领袖能力征服了新殖民者们，民众开始以皇室礼节待[cc_colony_leader.GetHimHer]。幸运的是，[cc_colony_leader.GetSheHe]似乎并不准备滥用其人望以挑战[root.owner.GetName]政府的权威。事实上，当地官员已向中央政府请愿正式给予[cc_colony_leader.GetName]"[root.GetName]亲王"的身份，以确保星球得到妥善治理。"
+cc_colony_events.8.desc.neut1:0 "一个新生的殖民地总是意味着一次进取的机会,尤其是对那些难以在政治结构更为稳固的旧世界中取得显赫地位的人来说。\n\n在[root.GetName]上，情况正是如此。天资卓绝的[cc_colony_leader.GetName]以其无与伦比的领袖能力征服了新殖民者们，民众开始以皇室礼节待[cc_colony_leader.GetHimHer]。[cc_colony_leader.GetSheHeCap]目前还没有将自己新近建立的权威用以反对[root.owner.GetName]——事实上，[cc_colony_leader.GetSheHe]与我们的当地官员合作良好——但是将[cc_colony_leader.GetHisHer]"[root.GetName]亲王" 的地位予以官方认可的请愿 (这并不符合我们的通常做法) 获得了广泛支持。\n\n我们应该如何回应这一请愿?" 
+cc_colony_events.8.desc.neut2:0 "一个新生的殖民地总是意味着一次进取的机会,尤其是对那些难以在政治结构更为稳固的旧世界中取得显赫地位的人来说。\n\n在[root.GetName]上，情况正是如此。天资卓绝的[cc_colony_leader.GetName]以其无与伦比的领袖能力征服了新殖民者们，民众开始以皇室礼节待[cc_colony_leader.GetHimHer]。[cc_colony_leader.GetSheHeCap]目前还没有将自己新近建立的权威用以反对[root.owner.GetName]——事实上，[cc_colony_leader.GetSheHe]与我们的当地官员合作良好——但是将[cc_colony_leader.GetHisHer]"[root.GetName]亲王" 的地位予以官方认可的请愿 (这并不符合我们的通常做法) 获得了广泛支持。\n\n我们应该如何回应这一请愿?"
+cc_colony_events.8.desc.neg1:0 "一个新生的殖民地总是意味着一次进取的机会,尤其是对那些难以在政治结构更为稳固的旧世界中取得显赫地位的人来说。\n\n在[root.GetName]上，情况正是如此。天资卓绝的[cc_colony_leader.GetName]以其无与伦比的领袖能力征服了新殖民者们，民众开始以皇室礼节待[cc_colony_leader.GetHimHer]。[cc_colony_leader.GetName]十分享受自己新近获得的权威，被我们的地方官员称作"麻烦人物"。[cc_colony_leader.GetSheHe]支持了一项将其"[root.GetName]亲王" 的地位予以官方认可的请愿。不幸的是，尽管与[root.GetName]的治理原则背道而驰，此事获得了广泛支持。\n\n我们应该如何回应这一请愿?" 
+cc_colony_events.8.desc.neg2:0 "一个新生的殖民地总是意味着一次进取的机会,尤其是对那些难以在政治结构更为稳固的旧世界中取得显赫地位的人来说。\n\n在[root.GetName]上，情况正是如此。天资卓绝的[cc_colony_leader.GetName]以其无与伦比的领袖能力征服了新殖民者们，民众开始以皇室礼节待[cc_colony_leader.GetHimHer]。[cc_colony_leader.GetName]十分享受自己新近获得的权威，被我们的地方官员称作"麻烦人物"。[cc_colony_leader.GetSheHe]支持了一项将其"[root.GetName]亲王" 的地位予以官方认可的请愿。不幸的是，尽管与[root.GetName]的治理原则背道而驰，此事获得了广泛支持。\n\n我们应该如何回应这一请愿?"
+
+cc_colony_events.8.A1:0 "为[Root.GetName]亲王欢呼!" 
+cc_colony_events.8.A2:0 "为[Root.GetName]亲王欢呼!"
+cc_colony_events.8.B:0 "[root.owner.GetRulerTitle]绝不容忍任何篡权之举。"
+cc_colony_events.8.C:0 "批准请愿。"
+cc_colony_events.8.D:0 "$cc_colony_events.3.C$"
+cc_colony_events.8.D.tooltip:0 "$CC_COLONY_UNPREDICTABLE$"
+
+cc_colony_events.81.name:0 "$cc_colony_events.21.name$"
+cc_colony_events.81.desc:0 "由于[cc_colony_leader.GetName]被捕，[Root.GetName]上近来产生了小规模抗议活动，但并没有传播开来。大部分人认可了我们对[cc_colony_leader.GetHimHer]的指控。看来[cc_colony_leader.GetHimHer]并不像我们想象的那样广受尊崇!"
+
+cc_colony_events.82.name:0 "$cc_colony_events.22.name$"
+cc_colony_events.82.desc:0 "$cc_colony_events.22.desc$"
+cc_colony_events.82.A:0 "$cc_colony_events.22.A$"
+cc_colony_events.82.A.tooltip:0 "$cc_colony_events.22.A.tooltip$"
+cc_colony_events.82.B1:0 "释放[cc_colony_leader.GetHimHer]，承认[cc_colony_leader.GetHimHer]的亲王地位。" 
+cc_colony_events.82.B2:0 "释放[cc_colony_leader.GetHimHer]，承认[cc_colony_leader.GetHimHer]的亲王地位。"
+
+cc_colony_events.821.name:0 "$cc_colony_events.221.name$"
+cc_colony_events.821.desc:0 "$cc_colony_events.221.desc$"
+
+cc_colony_events.83.name:0 "$cc_colony_events.23.name$"
+cc_colony_events.83.desc:0 "$cc_colony_events.23.desc$"
+cc_colony_events.83.A:0 "$cc_colony_events.63.A$"
+cc_colony_events.83.B:0 "$cc_colony_events.63.B$"
+cc_colony_events.83.C:0 "全力镇压保皇主义者。"
+
+cc_colony_events.831.name:0 "$cc_colony_events.231.name$"
+cc_colony_events.831.desc:0 "$cc_colony_events.231.desc$"
+cc_colony_events.831.option:0 "$CC_GOODIGUESS$"
+
+cc_colony_events.832.name:0 "$cc_colony_events.232.name$"
+cc_colony_events.832.desc:0 "$cc_colony_events.332.desc$"
+
+cc_colony_events.833.name:0 "$cc_colony_events.233.name$"
+cc_colony_events.833.desc:0 "$cc_colony_events.233.desc$"
+
+cc_colony_events.834.name:0 "$cc_colony_events.234.name$"
+cc_colony_events.834.desc:0 "$cc_colony_events.234.desc$"
+
+
+
+cc_colony_events.85.name:0 "$cc_colony_events.25.name$"
+cc_colony_events.85.desc1:0 "[root.GetName]亲王[cc_colony_leader.GetName]在一次短暂病发后于今天离世。[cc_colony_leader.GetSheHeCap]是这颗星球公认的领袖，以其公正与智慧引领大家共度艰难与繁荣。[root.GetName]上的民众为痛失伟人而陷入悲伤。[cc_colony_leader.GetHisHerCap]的儿子已获[root.GetName]大多数民众的支持，要求继承其父的亲王头衔，继续他的统治。\n\n我们应该同意这一愿望吗?"
+cc_colony_events.85.desc2:0 "[root.GetName]亲王[cc_colony_leader.GetName]在一次短暂病发后于今天离世。[cc_colony_leader.GetSheHeCap]是这颗星球公认的领袖，以其公正与智慧引领大家共度艰难与繁荣。[root.GetName]上的民众为痛失伟人而陷入悲伤。[cc_colony_leader.GetHisHerCap]的女儿已获[root.GetName]大多数民众的支持，要求继承其母的亲王头衔，继续她的统治。\n\n我们应该同意这一愿望吗?"
+cc_colony_events.85.A: "当然!"
+cc_colony_events.85.A.tooltip:0 "调整值 $cc_colony_monarchy$ 将会延续，期限不定。"
+cc_colony_events.85.B: "让[root.GetName]再次回到我们的直接统治之下。"
+cc_colony_events.85.B.tooltip:0 "民众可能会长时间的不满"
+
+cc_colony_events.851.name:0 "[cc_colony_leader.GetName]上的保皇运动持续"
+cc_colony_events.851.desc1:0 "在我们决定无视[root.GetName]民众的意愿，取消这颗星球的公国地位后，抗逆情绪不出所料地四处传播。现在已故亲王的儿子已经组织了一场地下运动，意图重获公国地位。未来一段时间恐怕会麻烦不断。"
+cc_colony_events.851.desc2:0 "在我们决定无视[root.GetName]民众的意愿，取消这颗星球的公国地位后，抗逆情绪不出所料地四处传播。现在已故亲王的女儿已经组织了一场地下运动，意图重获公国地位。未来一段时间恐怕会麻烦不断。"
+
+cc_colony_monarchy:0 "公国"
+cc_colony_monarchy_desc:0 "这块殖民地由一位当地君主统治。"
+cc_colony_monarchy_unhappy:0 "公国地位取消"
+cc_colony_monarchy_unhappy_desc:0 "这块殖民地因为当地的君主制被现政权推翻而不满。"
+
+cc_minor_protests_authoritarian:0 "$cc_minor_protests_militarist$"
+cc_minor_protests_authoritarian_desc:0 "这颗星球正在经历因当地君主制被推翻而造成的小规模抗议。"
+cc_major_protests_authoritarian:0 "$cc_major_protests_militarist$"
+cc_major_protests_authoritarian_desc:0 "这颗星球正在经历因当地君主制被推翻而造成的大规模抗议。"
+cc_underground_authoritarian_movement_1:0 "地下保皇运动"
+cc_underground_authoritarian_movement_1_desc:0 "一场以重建当地君主制为中心的地下运动在这颗星球上十分活跃，试图传播有悖于我们帝国理念的思想。"
+cc_underground_authoritarian_movement_2:0 "地下保皇运动"
+cc_underground_authoritarian_movement_2_desc:0 "一场以重建当地君主制为中心的地下运动在这颗星球上十分活跃，其终极目标在于从我们的帝国中彻底独立。"
+
+#Egalitarian
+cc_colony_events.9.name:0 "[root.GetName]上的直接民主"
+cc_colony_events.9.desc.pos:0 "[root.GetName]上的公民经自主决议，设立了直接民主体系，以管理殖民地的日常运转。大部分政策问题都经由全体人口直接投票决定(拜如今科技所赐，只需动动念头即可完成投票)；只有一些需要协作的基础任务仍由官员完成，他们经由全体公民选举产生。这样的体系无疑将会增强当地的凝聚力，更易作出为全体人民所乐见的决策。"
+cc_colony_events.9.desc.neut:0 "[root.GetName]上的公民经自主决议，设立了直接民主体系，以管理殖民地的日常运转。大部分政策问题都经由全体人口直接投票决定(拜如今科技所赐，只需动动念头即可完成投票)；只有一些需要协作的基础任务仍由官员完成，他们经由全体公民选举产生。当地民众认为这样的体系将会增强当地的凝聚力，更易作出为全体人民所乐见的决策。然而[root.owner.GetSpeciesAdj]政府中的许多人对此感到不悦，认为它有违[root.owner.GetSpeciesAdj]天性。\n\n我们应该允许这种做法继续吗？"
+cc_colony_events.9.desc.neg:0 "[root.GetName]上的民众们显露出了令人担忧的独立思想。他们设立了直接民主体系，以管理殖民地的日常运转。大部分政策问题都经由全体人口直接投票决定(拜如今科技所赐，只需动动念头即可完成投票)；只有一些需要协作的基础任务仍由官员完成，他们经由全体公民选举产生。当地民众声称这样的体系将会增强当地的凝聚力，更易作出为全体人民所乐见的决策。然而[root.owner.GetSpeciesAdj]政府中的许多人认为这是一个危险的实验，完全违背了[root.owner.GetName]的价值观，甚至可能会威胁帝国的稳定。\n\n我们应该如何应对此事?"
+cc_colony_events.9.B:0 "这种做法可以继续。"
+cc_colony_events.9.C:0 "把它禁止。"
+cc_colony_events.9.C.tooltip:0 "民众对此举动的回应难以预料。"
+
+cc_colony_events.91.name:0 "$cc_colony_events.21.name$"
+cc_colony_events.91.desc:0 "由于当地的直接民主体系实验被禁止，[Root.GetName]上爆发了小规模抗议，但并没有传播开来。大部分人接受了[root.owner.GetName]的更高权威。看来他们的"民主" 并非像我们想象的那样备受珍视！"
+
+cc_colony_events.92.name:0 "$cc_colony_events.22.name$"
+cc_colony_events.92.desc:0 "由于当地的直接民主体系实验被强制终止，[Root.GetName]上爆发了大规模抗议，要求将其恢复的呼声广为传播。示威活动开始逐渐掺入了暴力成分，我们的当地官员对控制民众感到力不从心。他们向执政官请求指导处理这一事件。"
+cc_colony_events.92.A:0 "镇压抗议活动!"
+cc_colony_events.92.B:0 "抗议会逐渐平息的。" 
+cc_colony_events.92.C:0 "恢复[root.GetName]上的直接民主制。"
+
+cc_colony_events.921.name:0 "$cc_colony_events.233.name$"
+cc_colony_events.921.desc:0 "[root.GetName]上的民主主义抗议已被成功镇压。他们的头目已经全部被捕或被杀，任何蠢到胆敢反抗我们的示威者也被同样处理。他们的流毒已被从我们的殖民地清除。然而，重新赢得当地民众的支持与信任将是一个漫长的过程。"
+
+cc_colony_events.922.name:0 "$cc_colony_events.234.name$"
+cc_colony_events.922.desc:0 "对[root.GetName]民主主义抗议活动的镇压遭遇失败。当地头目们事先得到风声，与他们的许多忠诚追随者一道销声匿迹。他们已经展开了一场地下抵抗活动，旨在谋求从[Root.Owner.GetName]中独立。未来一段时间恐怕会麻烦不断。"
+
+cc_colony_events.923.name:0 "$cc_colony_events.221.name$"
+cc_colony_events.923.desc:0 "数年时间已经过去，[root.GetName]上因直接民主体制被强行终止而引发的抗议已经平息。但这段历史并未被遗忘。[root.GetName]的民主自治时期在[root.GetName]的传统故事中已化作了一段金色的纯真年代，它的突然终止引起了无尽哀痛。这里的殖民者很可能再也不会毫无保留地信任母星系了。"
+
+cc_colony_events.924.name:0 "[Root.GetName]上的地下运动"
+cc_colony_events.924.desc:0 "[root.GetName]上的抗议活动并像预期那样地结束。示威者持续掀起波澜，直到当地政府不得不强制驱散人群。自此之后，活动转向地下，试图从阴影中获取民众的支持，重新恢复民主制度。"
+
+
+
+cc_colony_direct_democracy:0 "直接民主制"
+cc_colony_direct_democracy_desc:0 "这块殖民地由全球直接民主体系治理。"
+cc_colony_democracy_unhappy:0 "直接民主制被废止"
+cc_colony_democracy_unhappy_desc:0 "这块殖民地因其直接民主自治体系被现政权终止而不满。"
+
+cc_minor_protests_egalitarian:0 "$cc_minor_protests_militarist$"
+cc_minor_protests_egalitarian_desc:0 "这颗星球正在经历因其直接民主体系被废止而引起的小规模抗议。"
+cc_major_protests_egalitarian:0 "$cc_major_protests_militarist$"
+cc_major_protests_egalitarian_desc:0 "这颗星球正在经历因其直接民主体系被废止而引起的大规模抗议。"
+cc_underground_egalitarian_movement_1:0 "地下民主主义运动"
+cc_underground_egalitarian_movement_1_desc:0 "以恢复直接民主为核心，一场地下运动在这颗星球上十分活跃。其宗旨在于传播有悖于我们帝国理念的思想。"
+cc_underground_egalitarian_movement_2:0 "地下民主主义运动"
+cc_underground_egalitarian_movement_2_desc:0 "以恢复直接民主为核心，一场地下运动在这颗星球上十分活跃，其终极目标在于从我们的帝国中彻底独立。"
+
+
+
+#Generic
+
+CC_COLONY_UNPREDICTABLE:0 "[cc_colony_leader.GetName]已被解决。此举后果难以预料。"
+
+CC_GOODIGUESS:0 "很好……大概吧。"
+
+#Cleanup
+#cc_cleanup_events.response.servitor:0 "只要能让他们开心就行。"
+#cc_cleanup_events.response.servitor2:0 "他们过往的问题无关紧要。他们的需求会得到满足。"
+#cc_cleanup_events.response.servitor2.tooltip:0 "民众会很快忘记其不满。"
+
+cc_cleanup_events.2.name:0 "[root.GetName]上的著名长老"
+cc_cleanup_events.2.desc:0 "[root.GetName]上活跃着一名著名长老。这颗星球上的唯心主义组织影响广泛，长老则居于中心地位。我们应该默许其目前的地位吗?"
+
+cc_cleanup_events.3.name:0 "[root.GetName]著名长老的陵墓"
+cc_cleanup_events.3.desc:0 "[root.GetName]的前任政权之前正在为当地一位著名长老建设陵墓。此地的唯心主义组织影响广泛，如果陵墓完工，就将成为其中心。我们应该继续建造吗？"
+cc_cleanup_events.3.tooltip:0 "完工之后，陵墓会增加这颗星球的凝聚力产出、幸福度和唯心主义吸引力。"
+
+cc_cleanup_events.4.name:0 "[root.GetName]著名长老的陵墓"
+cc_cleanup_events.4.desc:0 "[root.GetName]的前任政权为当地一位著名长老建设了一座陵墓。此地的唯心主义组织影响广泛，这座陵墓则居于其中心地位。我们应该保护该建筑免于毁灭吗？"
+
+cc_cleanup_events.5.name:0 "[root.GetName]缅怀著名长老"
+cc_cleanup_events.5.desc:0 "[root.GetName]的前任政权拒绝为当地一位著名长老建造陵墓，因而冒犯了[root.GetName]的唯心主义民众。我们应该接手其建造吗？ "
+
+cc_cleanup_events.51.name:0 "[root.GetName]上的陵墓完工"
+cc_cleanup_events.51.desc:0 "为纪念[root.GetName]著名长老而建的陵墓已经完工。[root.GetName]民众现在有了缅怀他们精神领袖教导与成就的地方。"
+
+cc_cleanup_events.6.name:0 "[root.GetName]上的地下唯心主义运动"
+cc_cleanup_events.6.desc:0 "一场地下唯心主义运动为[Root.GetName]的前任政权制造了许多麻烦。他们的代表已经与这颗星球的新主人进行了会面，表示愿意放弃武装，条件是给予当地唯心主义者一些特权。\n\n我们是否应该同意这一要求?"
+
+cc_cleanup_events.7.name:0 "[root.GetName]是一处唯心主义保护领"
+cc_cleanup_events.7.desc:0 "[root.GetName]的前任政权给予了当地唯心主义民众一系列特权。这些特权应被保留吗?"
+
+cc_cleanup_events.8.name:0 "[root.GetName]上的直接民主制"
+cc_cleanup_events.8.desc:0 "[root.GetName]目前由一种全球直接民主体系管理。我们是否应该准许这种自治体系延续?"
+
+cc_cleanup_events.9.name:0 "[root.GetName]上的地下民主主义运动"
+cc_cleanup_events.9.desc:0 "一场地下民主主义运动为[Root.GetName]的前任政权制造了许多麻烦。他们的代表已经与这颗星球的新主人进行了会面，表示愿意放弃武装，条件是恢复他们心心念念的直接民主体系。\n\n我们是否应该满足他们的愿望?"
+
+cc_cleanup_events.10.name:0 "恢复[root.GetName]的直接民主制?"
+cc_cleanup_events.10.desc:0 "[root.GetName]的前任政权因废止了此地的直接民主体系而冒犯了[root.GetName]上的进步主义民众。我们应当恢复这一体制吗?"
+
+
+cc_cleanup_events.11.name:0 "[root.GetName]上的大学"
+cc_cleanup_events.11.desc:0 "[root.GetName]的前任政权之前正在建设一座宏伟大学。此地的知识分子组织影响广泛，如果大学完工，就将成为其中心。我们应该继续建造吗？"
+cc_cleanup_events.11.tooltip:0 "\n完工之后，大学会添加调整值 §Y$cc_university$§!，效果:\n$tile_resource_physics_research_mult$: §G+33%§!\n$tile_resource_society_research_mult$: §G+33%§!\n$tile_resource_engineering_research_mult$: §G+33%§!\n$MOD_PLANET_MIGRATION_ALL_PULL$: §G+25%§!\n$pop_ethic_materialist_attraction_mult$: §Y+150%§!"
+
+cc_cleanup_events.12.name:0 "[root.GetName]上的大学"
+cc_cleanup_events.12.desc:0 "[root.GetName]的前任政权在当地建设了一座宏伟大学。此地的知识分子组织影响广泛，这所大学则居于其中心地位。我们应该保护该建筑免于毁灭吗？"
+
+cc_cleanup_events.13.name:0 "[root.GetName]上的知名学者"
+cc_cleanup_events.13.desc:0 "[root.GetName]上活跃着一名著名学者。这颗星球上的知识分子组织影响广泛，这位学者则居于中心地位。我们应该默许其目前的地位吗?"
+
+cc_cleanup_events.14.name:0 "[root.GetName]上的地下唯物主义运动"
+cc_cleanup_events.14.desc:0 "一场地下唯物主义运动为[Root.GetName]的前任政权制造了许多麻烦。他们的代表已经与这颗星球的新主人进行了会面，表示愿意放弃武装，条件是在当地建设一所大学。\n\n我们是否应该同意这一要求?"
+
+cc_cleanup_events.15.name:0 "[root.GetName]缅怀著名学者"
+cc_cleanup_events.15.desc:0 "[root.GetName]的前任政权拒绝以当地一位著名学者之名建造一所大学，因而冒犯了[root.GetName]的唯物主义民众。我们应该接手其建造吗？"
+
+cc_cleanup_events.151.name:0 "[root.GetName]上的大学揭幕"
+cc_cleanup_events.151.desc:0 "为纪念[cc_colony_leader.GetName]而建的大学已经完工。殖民地民众为其揭幕仪式而欢呼雀跃，他们相信[root.GetName]已经作为[root.owner.GetName]中的重要智识中心而声名远播。[root.owner.GetName]境内各地的唯物主义者也为此而欢欣鼓舞，将之视为[root.owner.GetRulerTitle]追求科学进步的明证。"
+
+
+cc_cleanup_events.16.name:0 "[root.GetName]的公国地位"
+cc_cleanup_events.16.desc:0 "[root.GetName]目前拥有公国地位，由一位当地君主统治。此地的政治架构应该予以保留吗？ "
+
+cc_cleanup_events.17.name:0 "[root.GetName]上的地下保皇运动"
+cc_cleanup_events.17.desc:0 "一场地下保皇运动为[Root.GetName]的前任政权制造了许多麻烦。他们的代表已经与这颗星球的新主人进行了会面，表示愿意放弃武装，条件是给予其领袖"[root.GetName]亲王"的称号，允许他负责这颗星球的基础管理。\n\n我们是否应该满足他们的愿望?"
+
+cc_cleanup_events.18.name:0 "恢复[root.GetName]上的君主制?"
+cc_cleanup_events.18.desc:0 "[root.GetName]的前任政权因废立了此地的君主制而冒犯了[root.GetName]上的保皇主义民众。我们应当恢复这一半自治公国体系吗? "
+
+
+
+cc_cleanup_events.19.name:0 "[root.GetName]上的军事学院"
+cc_cleanup_events.19.desc:0 "[root.GetName]的前任政权在此地建设了一座宏伟的军事学院。此地的军国主义组织影响广泛，这座学院则居于其中心地位。我们应该保护该建筑免于毁灭吗？"
+
+cc_cleanup_events.20.name:0 "[root.GetName]使节"
+cc_cleanup_events.20.desc:0 "一位声望卓著的前舰队军官目前拥有"[root.GetName]使节"的称号，深受民众拥戴。此地的军国主义组织影响广泛，他是其中核心人物。我们应该默许其目前的地位吗?"
+
+cc_cleanup_events.21.name:0 "[root.GetName]上的地下军国主义运动"
+cc_cleanup_events.21.desc:0 "一场地下军国主义运动为[Root.GetName]的前任政权制造了许多麻烦。他们的代表已经与这颗星球的新主人进行了会面，表示愿意放弃武装，条件是在当地建设一座宏伟的军事学院。\n\n我们是否应该同意这一要求?"
+
+cc_cleanup_events.22.name:0 "[root.GetName]缅怀退役舰队军官"
+cc_cleanup_events.22.desc:0 "[root.GetName]的前任政权拒绝以当地一位著名退役舰队军官之名建造一所军事学院，因而冒犯了[root.GetName]的军国主义民众。我们应该接手其建造吗？"
+
+cc_cleanup_events.23.name:0 "[root.GetName]上的军事学院揭幕"
+cc_cleanup_events.23.desc:0 "[root.GetName]上的军事学院已经完工，已故领袖的巨大雕像矗立其中。殖民地民众为此而欢呼雀跃，他们相信[root.GetName]已经作为[root.owner.GetName]的重要军事中心而声名远播。不仅如此，[root.owner.GetName]境内各地的服役人员和他们的支持者们也感到欢欣鼓舞，将之视为[root.owner.GerRulerTitle]向所有为国效力的将士们进行的致意。"
+
+cc_cleanup_events.24.name:0 "[root.GetName]上的军事学院"
+cc_cleanup_events.24.desc:0 "[root.GetName]的前任政权之前正在当地建设一座宏伟的军事学院。此地的军国主义组织影响广泛，如果学院完工，就将成为其中心。我们应该继续其建造吗？"
+cc_cleanup_events.24.tooltip:0 "\n完工后，军事学院会添加调整值§Y$cc_milacademy$§!, 效果：\n$MOD_PLANET_ORBITAL_BOMBARDMENT_DAMAGE$: §G-20%§!\n$MOD_PLANET_ARMY_BUILD_SPEED_MULT$: §G+50%§!\n$MOD_PLANET_ARMY_BUILD_COST_MULT$: §G-15%§!\n$MOD_POP_CITIZEN_HAPPINESS$: §G+10%§!\n$pop_ethic_militarist_attraction_mult$: §Y+150%§!"
+
+
+
+
+cc_cleanup_events.25.name:0 "[root.GetName]上的著名和平主义活动家"
+cc_cleanup_events.25.desc:0 "[root.GetName]上活跃着一名著名和平主义活动家。这颗星球上和平主义组织"新甘地主义者"影响广泛，此人居于中心地位。我们应该默许其目前的地位吗?"
+
+cc_cleanup_events.26.name:0 "[root.GetName]上著名活动家的纪念碑"
+cc_cleanup_events.26.desc:0 "[root.GetName]的前任政权之前正在为当地一位著名和平主义活动家建造纪念碑。此地的和平主义组织"新甘地主义者"影响广泛，如果纪念碑完工，就将成为其中心。我们应该继续其建造吗？"
+cc_cleanup_events.26.tooltip:0 "完工后，纪念碑为增加这颗星球的凝聚力产出、幸福度及和平主义派系吸引力。"
+
+cc_cleanup_events.27.name:0 "[root.GetName]上著名活动家的纪念碑"
+cc_cleanup_events.27.desc:0 "[root.GetName]的前任政权为当地一位著名和平主义活动家建造了一座纪念碑。此地的和平主义组织"新甘地主义者"影响广泛，这座纪念碑则居于其中心地位。我们应该保护该建筑免于毁灭吗？"
+
+cc_cleanup_events.28.name:0 "[root.GetName]缅怀著名活动家"
+cc_cleanup_events.28.desc:0 "[root.GetName]的前任政权拒绝为当地一位著名活动家建造纪念碑，因而冒犯了[root.GetName]的和平主义民众。我们应该接手其建造吗？"
+
+cc_cleanup_events.29.name:0 "[root.GetName]上的纪念碑完工"
+cc_cleanup_events.29.desc:0 "为纪念[root.GetName]著名和平主义活动家而建的纪念碑已经完工。[root.GetName]民众现在有了缅怀领袖教导与成就的地方。"
+
+cc_cleanup_events.30.name:0 "[root.GetName]上的地下和平主义运动"
+cc_cleanup_events.30.desc:0 "一场地下和平主义运动为[Root.GetName]的前任政权制造了许多麻烦。他们的代表已经与这颗星球的新主人进行了会面，表示愿意放弃武装，条件是给予当地和平主义者一些特权。\n\n我们是否应该同意这一要求?"
+
+cc_cleanup_events.31.name:0 "[root.GetName]是一处和平主义保护领"
+cc_cleanup_events.31.desc:0 "[root.GetName]的前任政权给予了当地和平主义民众一系列特权。这些特权应被保留吗?"
+
+
+
+cc_cleanup_events.32.name:0 "[root.GetName]上的著名排外主义政治家自杀身亡"
+cc_cleanup_events.32.desc:0 "在[root.GetName]被征服之前，当地活跃着一位著名的排外主义政治家。他被称作这颗星球的"霸权家"，声称将保护此地免受外星人的影响。如今这一梦想被现实无情碾碎，他在承受更多的羞辱前结束了自己的生命。"
+cc_cleanup_events.32.option:0 "麻烦解决了自己。"
+
+cc_cleanup_events.33.name:0 "[root.GetName]上的霸权家学院"
+cc_cleanup_events.33.desc:0 "[root.GetName]的前任政权之前正在以当地一位著名政治家之名建设一座学院，他凭恶毒的排外主义言论挣得大名。如果完工，学院本将成为民族主义者聚集的中心。在自己斜阳将落的前夕建造这样的建筑，如今看来真是讽刺。我们的行星政府已经终止了学院的建设。"
+
+cc_cleanup_events.34.name:0 "[root.GetName]上的霸权家学院"
+cc_cleanup_events.34.desc:0 "[root.GetName]的前任政权以当地一位著名政治家之名建立了一座学院。尽管这名政治家持有极端排外观点，被征服民众的代表企求我们不要摧毁这座备受珍视的建筑。我们应该保留这座建筑吗？"
+cc_cleanup_events.34.B:0 "最好不要。"
+cc_cleanup_events.34.A:0 "让他们留住自己的英雄吧。"
+
+
+cc_cleanup_events.35.name:0 "[root.GetName]上的地下排外主义运动"
+cc_cleanup_events.35.desc:0 "一场地下排外主义运动为[Root.GetName]的前任政权制造了许多麻烦。如今我们征服了这里，他们感到自己以往的行动被证实确有远见，对自己的理念越发坚定，计划加倍努力地保护这颗星球免受外星人的影响。"
+
+
+cc_cleanup_events.36.name:0 "[root.GetName]上的著名亲外主义活动家"
+cc_cleanup_events.36.desc:0 "[root.GetName]上活跃着一位的著名亲外主义活动家。这颗星球上致力于物种间和平与协作的运动影响广泛，这位活动家居于中心地位。我们应该默许其目前的地位吗?"
+
+cc_cleanup_events.37.name:0 "[root.GetName]上的文化交流中心"
+cc_cleanup_events.37.desc:0 "为纪念当地一位著名亲外主义活动家，[root.GetName]的前任政权之前正在建设一处文化交流中心。如果完工，它将帮助这颗星球建立起跨物种多元文化天堂的声誉。我们应该对此进行支持吗?"
+cc_cleanup_events.37.tooltip:0 "如果完工，文化交流中心将会添加调整值§Y$cc_xenophile_institute$§!，效果：\n$MOD_POP_HAPPINESS$: §G+5%§!\n$MOD_PLANET_MIGRATION_XENO_PULL$: §G+100%§!\n$tile_resource_unity_mult$: §G+25%§!\n$pop_ethic_xenophile_attraction_mult$: §Y+150%§!"
+
+cc_cleanup_events.38.name:0 "[root.GetName]上的文化交流中心"
+cc_cleanup_events.38.desc:0 "为纪念当地一位著名亲外主义活动家，[root.GetName]的前任政权设立一处文化交流中心。它象征着活动家的宝贵遗产，为这颗星球赢得了跨物种多元文化天堂的声誉。我们应该保留这一建筑吗?"
+
+cc_cleanup_events.39.name:0 "[root.GetName]缅怀著名活动家"
+cc_cleanup_events.39.desc:0 "[root.GetName]上一位新近离世的著名亲外主义活动家生前一直希望建立一座文化交流中心，但此地的前任政权拒绝了这一请求，因而冒犯了[root.GetName]的亲外主义民众。我们应该着手建造吗？ "
+
+cc_cleanup_events.40.name:0 "[root.GetName]上的地下亲外主义运动"
+cc_cleanup_events.40.desc:0 "一场地下亲外主义运动为[Root.GetName]的前任政权制造了许多麻烦。他们的代表已经与这颗星球的新主人进行了会面，表示愿意放弃武装，条件是建立一座文化交流中心，使这里成为象征物种间善意与和平的天堂。\n\n我们是否应该同意这一要求?"
+
+cc_cleanup_events.41.name:0 "[root.GetName]上的文化交流中心完工"
+cc_cleanup_events.41.desc:0 "为纪念[root.GetName]著名和平主义活动家而建的文化交流中心已经完工。[root.GetName]民众现在有了缅怀领袖教导与成就的地方。他们确信在自己的星球上，物种间的和平与善意将会长存。"
+
+
+#General Modifiers
+cc_colony_distrusts:0 "对母星系的猜忌"
+cc_colony_distrusts_desc:0 "鉴于这块殖民地上的某些历史事件，这里的许多人对母星系充满不信任感。"
+
+cc_lingering_oppression:0 "镇压导致的不满徘徊难消"
+cc_oppression:0 "被镇压的目标"
+
+cc_planet_oppression:0 "严厉镇压"
+cc_planet_oppression_desc:0 "政府已针对这颗星球上的异见者进行了严厉镇压。"

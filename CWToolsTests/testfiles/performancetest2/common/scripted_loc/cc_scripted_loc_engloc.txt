@@ -1,0 +1,86 @@
+############################################
+###   SCRIPTED LOCALIZATION FOR ENGLISH  ###
+###     Scripted by Caligula Caesar      ###
+############################################
+
+##To apply, use [event_target.GetXIn] or [scope.Leader.GetXInDE]
+
+#Used for species with no gender dimorphism
+
+#Ex: "he/she is / they are"
+defined_text = {
+	name = GetIsAre
+	text = {
+		trigger = { cc_loc_leader_genders = yes }
+		localization_key = ENGLOC_is
+	}
+	text = {
+		trigger = { cc_loc_leader_nogenders = yes }
+		localization_key = ENGLOC_are
+	}
+}
+
+#Ex: "he/she has / they have"
+defined_text = {
+	name = GetHasHave
+	text = {
+		trigger = { cc_loc_leader_genders = yes }
+		localization_key = ENGLOC_has
+	}
+	text = {
+		trigger = { cc_loc_leader_nogenders = yes }
+		localization_key = ENGLOC_have
+	}
+}
+
+#Ex: "he/she has / they have"
+defined_text = {
+	name = GetDoesDo
+	text = {
+		trigger = { cc_loc_leader_genders = yes }
+		localization_key = ENGLOC_does
+	}
+	text = {
+		trigger = { cc_loc_leader_nogenders = yes }
+		localization_key = ENGLOC_do
+	}
+}
+
+#Ex: "he/she has / they have"
+defined_text = {
+	name = GetWasWere
+	text = {
+		trigger = { cc_loc_leader_genders = yes }
+		localization_key = ENGLOC_was
+	}
+	text = {
+		trigger = { cc_loc_leader_nogenders = yes }
+		localization_key = ENGLOC_were
+	}
+}
+
+#Ex: "he/she has / they have"
+defined_text = {
+	name = GetFVes
+	text = {
+		trigger = { cc_loc_leader_genders = yes }
+		localization_key = ENGLOC_f
+	}
+	text = {
+		trigger = { cc_loc_leader_nogenders = yes }
+		localization_key = ENGLOC_ves
+	}
+}
+
+#Ex: "he/she support[s] / they support[]"
+defined_text = {
+	name = GetSXX
+	text = {
+		trigger = { cc_loc_leader_genders = yes }
+		localization_key = ENGLOC_s
+	}
+	text = {
+		trigger = { cc_loc_leader_nogenders = yes }
+		localization_key = ENGLOC_xx
+	}
+}

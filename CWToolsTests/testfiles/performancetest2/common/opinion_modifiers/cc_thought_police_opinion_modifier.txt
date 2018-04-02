@@ -1,0 +1,25 @@
+
+
+# Country is using the thought police edict
+triggered_opinion_cc_thought_police = {
+
+	trigger = {
+		OR = {
+			has_ethic = ethic_egalitarian
+			has_ethic = ethic_fanatic_egalitarian
+		}
+		
+		FROM = {
+			has_edict = cc_thought_police
+		}
+	}
+
+	opinion = {
+		base = -30
+		modifier = {			
+			add = -30
+			has_ethic = ethic_fanatic_egalitarian
+		}
+	}
+}
+

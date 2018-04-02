@@ -1,0 +1,82 @@
+﻿l_braz_por:
+
+dpe_scandal.1.name:0 "Fundos estaduais concedidos aos improdutivos"
+dpe_scandal.1.desc:0 "O [root.GetName] está perplexo com a revelação de que [root.GetRulerTitle] [root.GetRulerName] redistribuia fundos estatais para ajudar a situação dos pobres. Muitos cidadãos estão enojados com o pensamento de que o dinheiro do contribuinte foi gasto com os indignos, algo considerado um pecado capital na cultura [root.GetSpeciesAdj]. No entanto, outras vozes (antes marginalizadas) celebram a generosidade de [root.GetRulerTitle]. Eles estão muito empolgados com o estabelecimento de um estado de bem estar em [root.GetName], e veem a situação como um cenário ideal para estabelece-lo, se [root.GetRulerTitle] tiver a coragem para tal."
+dpe_scandal.1.A:0 "Negar as acusações categoricamente."
+dpe_scandal.1.B:0 "Um estado mais compassivo seria um coisa boa."
+dpe_scandal.1.C:0 "Renunciar em vergonha."
+dpe_scandal.1.C.tooltip:0 "$CCREMOVERULER.tooltip$"
+
+dpe_charity_unpopular_ruler:0 "Governante Impopular"
+dpe_charity_unpopular_ruler_desc:0 "O governante estava envolvido num escândalo onde alegaram que ele agiu contra o espírito do estado. Apesar da negação categórica das alegações, muitos são céticos com essas negativas e desconfiam do governante."
+
+dpe_charity_faction_undeserving:0 "Fundos estatais concedidos aos indignos "
+
+
+#This one is adapted from the blackmail -> corruption scandal. Difference is the lack of blackmail and only 2 people caught
+
+dpe_scandal.2.name:0 "Escândalo de Corrupção!"
+dpe_scandal.2.desc:0 "Os relatórios chegaram ao público de que dois importantes oficiais [root.GetSpeciesAdj] estão envolvidos em atividades corruptas. Parece que eles estão desviando grandes porções dos orçamentos governamentais de seus departamentos para seus próprios bolsos, e de lá para os paraísos fiscais em asteróides fora do planeta, custando ao estado milhões. Há uma indignação generalizada nessa revelação, e os suspeitos rapidamente chamaram os acusadores de conspiração. \n\nComo lidaremos com a situação?"
+dpe_scandal.2.A:0 "Eles devem deixar o governo e enfrentar o julgamento."
+dpe_scandal.2.A.tooltip:0 "[cc_first_corrupt.GetName] e [cc_second_corrupt.GetName] serão removidos do jogo."
+dpe_scandal.2.B:0 "Seus serviços são muito valiosos. Mantenha-os em suas posições."
+
+#weakened it by 25%
+cc_outrage_at_corruption_1:0 "$cc_outrage_at_corruption$"
+cc_outrage_at_corruption_1_desc:0 "$cc_outrage_at_corruption_desc$"
+
+
+dpe_scandal.3.name:0 "[root.GetRulerTitle] [root.GetRulerName] não acredita!"
+dpe_scandal.3.desc:0 " A crença na religião e no mundo espiritual sempre esteve no coração da sociedade [root.GetSpeciesAdj]... É por isso que a sociedade está profundamente chocada com a revelação de que [root.GetRulerTitle] [root.GetRulerName] não compartilha dessas crenças. Na verdade, [root.leader.GetSheHe] foi peg[root.leader.GetOALead] em ponto de derrubar princípios básicos da religião [root.GetSpeciesAdj] e se orgulhar de como foi fácil manipular "tolos que acreditam em mágica". Os líderes religiosos moveram-se rapidamente para denunciar [root.GetRulerName], e exigem que [root.leader.GetSheHe] seja considerado incapaz de liderar [root.GetName]. Muitos cidadãos reagiram atrás dessas chamadas. No entanto, os apoiadores de [root.GetRulerTitle] tem defendido [root.leader.GetHimHer], apontando que [root.leader.GetSheHe] foi um dos governantes de [root.GetName] mais capazes de todos os tempos, e é bem respeitado entre os colegas [root.leader.GetHisHer] no âmbito galáctico.\n\nO que devemos fazer diante dessa situação?"
+dpe_scandal.3.A:0 "A religião é para tolos. Devemos abandonar a superstição."
+dpe_scandal.3.A.tooltip:0 "Os espiritualistas ficarão muito chateados."
+dpe_scandal.3.B:0 "Talvez possamos elaborar um cessar-fogo."
+dpe_scandal.3.B.tooltip:0 "[root.GetRulerTitle] [root.GetRulerName] ficará em silêncio sobre a religião se os líderes religiosos permanecerem em silêncio sobre [root.leader.GetHimHer]."
+dpe_scandal.3.C:0 "[root.GetRulerTitle] [root.GetRulerName] deve se afastar."
+dpe_scandal.3.C.tooltip:0 "$CCREMOVERULER.tooltip$"
+
+dpe_unbelief_faction:0 "Governante Incrédulo"
+dpe_unbelief_empire:0 "Governante Impopular"
+dpe_unbelief_empire_desc:0 "Vazou a informação de que o Governante não acredita na religião e no espiritualismo, um pilar chave da sociedade. Embora tenham se apegado à sua posição, eles estão amplamente desconfiados com a situação."
+
+dpe_scandal.4.name:0 "[root.GetRulerTitle] [root.GetRulerName] Excomungado!"
+dpe_scandal.4.desc:0 "Para [root.GetRulerName] (já não reconhecemos o título que você ocupa),\n\nEstamos declarando a sua excomunhão de todas as instituições religiosas [root.GetSpeciesAdj]. Além disso, após uma votação unânime, o Conselho decretou que você está oficialmente condenado ao inferno. Que os espíritos de nossos antepassados tenham piedade de você.\n\nO Grande Conselho de Assuntos Espirituais"
+
+dpe_damned_to_hell_faction:0 "Governante Condenado ao Inferno"
+dpe_damned_to_hell_empire:0 "Governante Condenado ao Inferno "
+dpe_damned_to_hell_empire_desc:0 "Depois que o Governante abraçou abertamente e desconsideravelmente as crenças ateias, as principais autoridades religiosas do estado se moveram para excomungá-lo."
+
+
+dpe_scandal.10.name:0 "Revelações Mal-vindas"
+dpe_scandal.10.desc:0 "Meu [root.GetRulerTitle], poderia ver isso rapidamente?"\n\nConforme [root.GetRulerTitle] [root.GetRulerName] lê o documento, os olhos [root.leader.GetHisHer] arregalam-se em horror. "Esta evidência foi destruída. Eu me certifiquei," [root.leader.GetSheHe] sussurra.\n\nA figura sombria sorri friamente. "E no entanto, está aqui."\n\n---\n\nNo que parece ter sido uma operação de espionagem bem organizada, a oposição de [root.GetRulerTitle] encontrou evidências de que a biografia oficial [root.leader.GetHisHer] foi totalmente fabricada: [root.leader.GetSheHeCap] é, na verdade, um escravo fugitivo que reescreveu sistemática e cruelmente o passado [root.leader.GetHisHer], um passado que na verdade, envolve uma série de fraudes e assassinatos que, em última análise, serviram para facilitar a ascensão [root.leader.GetHisHer] ao poder. Infelizmente, a evidência é completa e em grande medida precisa. Se fosse amplamente divulgada, provavelmente seria o fim do governo de [root.GetRulerTitle] [root.GetRulerName], uma vez que as a elite [root.GetSpeciesAdj] jamais aceitaria ordens de um ex-escravo."
+dpe_scandal.10.A:0 "Prenda o conspirador e destrua as evidências."
+dpe_scandal.10.A.tooltip:0 "Existe um risco elevado de que a evidência vaze de qualquer maneira."
+dpe_scandal.10.B:0 "O que você quer?"
+
+dpe_scandal.11.name:0 "Conspiração Suprimida"
+dpe_scandal.11.desc:0 "Parece que a conspiração foi tramada com muito menos competência do que parecia a primeira vez. Através de uma ação rápida e implacável, a evidência foi destruída."
+
+leader_trait_dpe_ruthless:0 "Cruel"
+leader_trait_dpe_ruthless_desc:0 "Este líder não hesitará em fazer o que é necessário."
+
+dpe_scandal.12.name:0 "Supressão da conspiração falhou"
+dpe_scandal.12.desc:0 ""Idiota! Você realmente pensou que eu estava agindo sozinho??"\n\nEmbora o espião tenha sido preso, em poucos minutos você recebe relatórios alarmados de que cópias das provas foram enviadas a todos os principais centros de comunicação em [root.GetName] - bem como a vários de rivais [root.GetName]. Pouco tempo depois, são abertas as portas dos apartamentos privados de [root.GetRulerTitle]. O grupo que entra tem representantes de praticamente todos os grupos de poder de [root.GetName]. [root.GetRulerName] olha para os antigos seguidores [root.leader.GetHisHer] pedindo socorro, mas os olhos deles estão frios e impiedosos.\n\n"Este é o fim," diz o Vice-Chanceler [random_guy.GetName], e aponta uma arma diretamente para [root.GetRulerTitle] [root.GetRulerName]. "Renda-se ou morra.""
+dpe_scandal.12.A:0 "Desista."
+dpe_scandal.12.A.tooltip:0 "[root.GetRulerName] está vendido como um escravo."
+dpe_scandal.12.B:0 "Resista até o fim."
+dpe_scandal.12.B.tooltip:0 "A morte é melhor que as humilhações que os conspiradores infligirão."
+
+dpe_scandal.14.name:0 "Exigências dos Conspiradores"
+dpe_scandal.14.desc.generic:0 "Uma grande quantia em dinheiro pode comprar nosso silêncio."
+#cc_paid_blackmail modifier
+dpe_scandal.14.desc.egal:0 "Abdique e permita que as eleições aconteçam e nós pouparemos você."
+dpe_scandal.14.desc.spir:0 " Preste o devido respeito aos deuses, e manteremos o nosso silêncio."
+dpe_scandal.14.desc.mil:0 "Nós ficaremos em silêncio se o Estado tomar uma posição hostil contra seus inimigos."
+dpe_scandal.14.desc.pac:0 "Acabe com todas as guerras, ou vazaremos as evidências."
+dpe_scandal.14.desc.mat:0 "Abra o mercado, e nós vamos perdoar suas falhas."
+dpe_scandal.14.desc.phobe:0 "Xenos não tem lugar no estado [root.GetSpeciesAdj]. Livre-se deles."
+dpe_scandal.14.desc.phile:0 "An end to xenophobia would keep us quiet."
+
+dpe_scandal.14.A:0 "Muito bem. Será feito."
+dpe_scandal.14.B:0 "Inaceitável! Prenda o conspirador e esconda as evidências."
+dpe_scandal.14.B.tooltip: "$dpe_scandal.10.A.tooltip$"

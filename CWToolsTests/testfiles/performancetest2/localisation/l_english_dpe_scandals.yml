@@ -1,0 +1,84 @@
+﻿l_english:
+
+dpe_scandal.1.name:0 "State Funds given to the Undeserving"
+dpe_scandal.1.desc:0 "The [root.GetName] is abuzz with the revelation that [root.GetRulerTitle] [root.GetRulerName] has been redistributing state funds to help the plight of the poor. Many citizens are disgusted at the thought that taxpayer money has been spent on the undeserving, something considered a cardinal sin in [root.GetSpeciesAdj] culture. However, other (previously marginal) voices celebrate the generosity of the [root.GetRulerTitle]. They have long agitated for the establishment of a basic welfare state in the [root.GetName], and see this as the ideal opportunity to establish one, if the [root.GetRulerTitle] has the courage to seize it."
+dpe_scandal.1.A:0 "Deny the allegations categorically."
+dpe_scandal.1.B:0 "A more compassionate state would be a good thing."
+dpe_scandal.1.C:0 "Resign in shame."
+dpe_scandal.1.C.tooltip:0 "$CCREMOVERULER.tooltip$"
+
+dpe_charity_unpopular_ruler:0 "Unpopular Ruler"
+dpe_charity_unpopular_ruler_desc:0 "The ruler was engulfed in a scandal when it was alleged that they had acted against the spirit of the state. Despite their categorical denial of the allegations, many are sceptical of these denials and now distrust the ruler."
+
+dpe_charity_faction_undeserving:0 "State funds given to the undeserving"
+
+
+#This one is adapted from the blackmail -> corruption scandal. Difference is the lack of blackmail and only 2 people caught
+
+dpe_scandal.2.name:0 "Corruption Scandal!"
+dpe_scandal.2.desc:0 "Reports have reached the public that two prominent [root.GetSpeciesAdj] officials have been engaging in corrupt activities. It seems that they have been channelling large portions of their departments' government budgets into their own pockets, and from there into off-world asteroid tax havens, costing the state millions. There is widespread outrage at this revelation, and troublemakers are quick to accuse those who appointed them of collusion. \n\nHow will you deal with the situation?"
+dpe_scandal.2.A:0 "They must stand down and face trial."
+dpe_scandal.2.A.tooltip:0 "[cc_first_corrupt.GetName] and [cc_second_corrupt.GetName] will be removed from the game."
+dpe_scandal.2.B:0 "Their services are too valuable. Keep them in their positions."
+
+#weakened it by 25%
+cc_outrage_at_corruption_1:0 "$cc_outrage_at_corruption$"
+cc_outrage_at_corruption_1_desc:0 "$cc_outrage_at_corruption_desc$"
+
+
+dpe_scandal.3.name:0 "[root.GetRulerTitle] [root.GetRulerName] does not Believe!"
+dpe_scandal.3.desc:0 "Belief in religion and the spiritual world has always been at the heart of [root.GetSpeciesAdj] society... Which is why society is shocked to the core by the revelation that [root.GetRulerTitle] [root.GetRulerName] does not share these beliefs. Indeed, [root.leader.GetSheHe] [root.leader.GetWasWere] caught on tape deriding key tenets of the [root.GetSpeciesAdj] religion and boasting at how easy it was to manipulate "fools who believe in magic". Religious leaders have moved swiftly to denounce [root.GetRulerName], and have demanded that [root.leader.GetSheHe] be deemed unfit to lead the [root.GetName]. Many citizens have rallied behind these calls. However, the [root.GetRulerTitle]'s supporters have rallied around [root.leader.GetHimHer], pointing out that [root.leader.GetSheHe] [root.leader.GetHasHave] been one of the [root.GetName]'s most capable leaders ever, and is well-respected among [root.leader.GetHisHer] peers on the galactic stage.\n\nWhat should be done about the situation?"
+dpe_scandal.3.A:0 "Religion is for fools. We must abandon superstition."
+dpe_scandal.3.A.tooltip:0 "Spiritualists will be very upset."
+dpe_scandal.3.B:0 "Maybe we can work out a ceasefire."
+dpe_scandal.3.B.tooltip:0 "[root.GetRulerTitle] [root.GetRulerName] will stay silent about religion if religious leaders stay silent about [root.leader.GetHimHer]."
+dpe_scandal.3.C:0 "[root.GetRulerTitle] [root.GetRulerName] must step aside."
+dpe_scandal.3.C.tooltip:0 "$CCREMOVERULER.tooltip$"
+
+dpe_unbelief_faction:0 "Ruler does not Believe"
+dpe_unbelief_empire:0 "Unpopular Ruler"
+dpe_unbelief_empire_desc:0 "It has emerged that the Ruler does not believe in religion and spiritualism, a key pillar of society. Although they managed to cling on to their position, they are widely mistrusted as a result."
+
+dpe_scandal.4.name:0 "[root.GetRulerTitle] [root.GetRulerName] Excommunicated!"
+dpe_scandal.4.desc:0 "To [root.GetRulerName] (we no longer recognise the title you take),\n\nWe hereby declare your excommunication from all [root.GetSpeciesAdj] religious institutions. Furthermore, following a unanimous vote, the Council has decreed that you are hereby officially damned to Hell. May our forefathers' spirits have mercy on you.\n\nThe Grand Council of Spiritual Affairs"
+
+dpe_damned_to_hell_faction:0 "Ruler damned to Hell"
+dpe_damned_to_hell_empire:0 "Ruler damned to Hell"
+dpe_damned_to_hell_empire_desc:0 "After the Ruler openly and unapologetically espoused atheist beliefs, the state's main religious authorities moved to excommunicate them."
+
+
+dpe_scandal.10.name:0 "Unwelcome Revelations"
+dpe_scandal.10.desc:0 "My [root.GetRulerTitle], would you just look at this quickly?"\n\nAs [root.GetRulerTitle] [root.GetRulerName] reads the document, [root.leader.GetHisHer] eyes widen in horror. "This evidence was destroyed. I saw to it," [root.leader.GetSheHe] whisper[root.leader.GetSXX].\n\nThe shadowy figure smiles coldly. "And yet, here it is."\n\n---\n\nIn what appears to be a well-planned espionage operation, opponents of the [root.GetRulerTitle] have produced evidence that [root.leader.GetHisHer] official biography is extensively fabricated: [root.leader.GetSheHeCap] [root.leader.GetIsAre], in fact, a runaway slave who systematically and ruthlessly rewrote [root.leader.GetHisHer] past through a long string of frauds and murders that ultimately served to facilitate [root.leader.GetHisHer] rise to power. Unfortunately, the evidence is both compelling and largely accurate. If it were to become widely known, it would likely spell the end of [root.GetRulerTitle] [root.GetRulerName]'s rule, as none of the [root.GetSpeciesAdj] elites would accept obeying a runaway slave's orders."
+dpe_scandal.10.A:0 "Arrest the conspirator and suppress the evidence."
+dpe_scandal.10.A.tooltip:0 "There is a high risk that the evidence will leak out anyway."
+dpe_scandal.10.B:0 "What do you want?"
+
+dpe_scandal.11.name:0 "Conspiracy Suppressed"
+dpe_scandal.11.desc:0 "It appears that the conspiracy was operated with a lot less competence than it first appeared. Through quick and ruthless action, the evidence has been suppressed."
+
+leader_trait_dpe_ruthless:0 "Ruthless"
+leader_trait_dpe_ruthless_desc:0 "This leader will not hesitate to do what is necessary."
+
+dpe_scandal.12.name:0 "Suppression of Conspiracy fails"
+dpe_scandal.12.desc:0 ""Fool! Did you really think I was acting alone?"\n\nAlthough the spy is arrested, within minutes you receive alarmed reports that copies of the evidence have been sent to every major distribution node in the [root.GetName] - as well as to several of the [root.GetName]'s rivals. Not long afterwards, the door to the [root.GetRulerTitle]'s private apartments bursts open. The group that enters has representatives of virtually every power grouping in the [root.GetName]. [root.GetRulerName] looks to [root.leader.GetHisHer] former supporters for succour, but their eyes are cold and pitiless.\n\n"It's over," Vice-Chancellor [random_guy.GetName] says, and points a blaster directly at [root.GetRulerTitle] [root.GetRulerName]. "Surrender or die.""
+dpe_scandal.12.A:0 "Surrender."
+dpe_scandal.12.A.tooltip:0 "[root.GetRulerName] is sold as a slave."
+dpe_scandal.12.B:0 "Resist to the last."
+dpe_scandal.12.B.tooltip:0 "Death is better than the humiliations the conspirators would inflict."
+
+dpe_scandal.14.name:0 "The Conspirators' Demands"
+dpe_scandal.14.desc.generic:0 "A large sum of money can buy our silence."
+#cc_paid_blackmail modifier
+dpe_scandal.14.desc.egal:0 "Step down and allow elections to take place, and we will spare you."
+dpe_scandal.14.desc.spir:0 "Pay proper respect to the Gods, and we will keep our silence."
+dpe_scandal.14.desc.mil:0 "We will stay silent if the state takes a hostile stance against its foes."
+dpe_scandal.14.desc.pac:0 "End all warmongering, or we will leak the evidence."
+dpe_scandal.14.desc.mat:0 "Open up the market, and we will forgive your flaws."
+dpe_scandal.14.desc.phobe:0 "Xenos have no place in the [root.GetSpeciesAdj] state. Get rid of them."
+dpe_scandal.14.desc.phile:0 "An end to xenophobia would keep us quiet."
+
+dpe_scandal.14.A:0 "Very well. It will be done."
+dpe_scandal.14.B:0 "Unacceptable! Arrest the conspirator and suppress the evidence."
+dpe_scandal.14.B.tooltip: "$dpe_scandal.10.A.tooltip$"
+
+

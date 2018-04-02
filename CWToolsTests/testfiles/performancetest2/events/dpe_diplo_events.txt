@@ -1,0 +1,1511 @@
+
+namespace = dpe_diplo
+
+#test with 15
+
+#triggered in perf
+country_event = {
+	id = dpe_diplo.1
+	title = dpe_diplo.1.name
+	desc = {
+		trigger = { event_target:enemy = { NOT = { has_ethic = ethic_gestalt_consciousness } } }
+		text = dpe_diplo.1.desc
+	}
+	desc = {
+		trigger = { event_target:enemy = { has_authority = auth_machine_intelligence } }
+		text = dpe_diplo.1.desc.machine
+	}
+	desc = {
+		trigger = { event_target:enemy = { has_authority = auth_hive_mind } }
+		text = dpe_diplo.1.desc.hive
+	}
+	
+	picture = GFX_evt_cc_military_ceremony
+
+	is_triggered_only = yes
+
+	trigger = {
+		is_country_type = default
+		NOT = { has_country_flag = dpe_recent_militarists_want_war }
+		is_at_war = no
+		is_subject = no
+		OR = {
+			has_ethic = ethic_fanatic_militarist
+			has_ethic = ethic_militarist
+			AND = {
+				has_faction = imperialist
+				count_pop_factions = {
+					limit = {
+						is_pop_faction_type = imperialist
+						support > 0.22
+					}
+					count = 1
+				}
+			}
+		}
+		years_of_peace = {
+			value > 15
+			delay = 20
+		}
+		has_federation = no
+		any_relation = {
+			is_country_type = default
+			root = {
+				OR = {
+					is_rival = prev
+					is_hostile_to = prev
+					is_domineering_to = prev
+				}
+				NOT = { has_truce = prev }
+			}
+			any_owned_planet = {
+				is_neighbor_of = prevprev
+			}
+			NOR = {
+				relative_power = {
+					who = prev
+					category = fleet
+					value = superior
+				}
+				relative_power = {
+					who = prev
+					category = fleet
+					value = overwhelming
+				}
+			}
+			NOT = {
+				any_relation = {
+					has_communications = prevprev
+					OR = {
+						has_defensive_pact = prev
+						is_in_federation_with = prev
+						is_guaranteeing = prev
+					}
+					relative_power = {
+						who = prevprev
+						category = fleet
+						value = overwhelming
+					}
+				}
+			}
+			NOT = {
+				count_potential_war_participants = {
+					attacker = prev
+					defender = this
+					side = this
+					limit = {
+						OR = {
+							relative_power = {
+								who = prev
+								category = fleet
+								value = equivalent
+							}
+							relative_power = {
+								who = prev
+								category = fleet
+								value = superior
+							}
+						}
+					}
+					count > 2
+				}
+			}
+		}
+	}
+	
+	immediate = {
+		set_timed_country_flag = {
+			flag = dpe_recent_militarists_want_war
+			years = 60
+		}
+		random_relation = {
+			limit = {
+				is_country_type = default
+				root = {
+					OR = {
+						is_rival = prev
+						is_hostile_to = prev
+						is_domineering_to = prev
+					}
+					NOT = { has_truce = prev }
+				}
+				any_owned_planet = {
+					is_neighbor_of = prevprev
+				}
+				NOR = {
+					relative_power = {
+						who = prev
+						category = fleet
+						value = superior
+					}
+					relative_power = {
+						who = prev
+						category = fleet
+						value = overwhelming
+					}
+				}
+				NOT = {
+					any_relation = {
+						has_communications = prevprev
+						OR = {
+							has_defensive_pact = prev
+							is_in_federation_with = prev
+							is_guaranteeing = prev
+						}
+						relative_power = {
+							who = prevprev
+							category = fleet
+							value = overwhelming
+						}
+					}
+				}
+				NOT = {
+					count_potential_war_participants = {
+						attacker = prev
+						defender = this
+						side = this
+						limit = {
+							OR = {
+								relative_power = {
+									who = prev
+									category = fleet
+									value = equivalent
+								}
+								relative_power = {
+									who = prev
+									category = fleet
+									value = superior
+								}
+							}
+						}
+						count > 2
+					}
+				}
+			}
+			save_event_target_as = enemy
+			
+			every_owned_planet = {
+				limit = { is_neighbor_of = prevprev }
+				set_timed_planet_flag = {
+					flag = dpe_will_cede_in_war
+					days = 5
+				}
+			}
+		}
+	}
+	
+	option = { #declare war immediately
+		name = dpe_diplo.1.A
+
+		event_target:enemy = {
+			every_system_within_border = {
+				limit = {
+					is_neighbor_of = root
+					NOT = { root = { has_claim = prev } }
+				}
+				add_claims = {
+					who = root
+					num_of_claims = 1
+					show_notification = no
+				}
+			}
+		}
+		declare_war = {
+			target = event_target:enemy
+			attacker_war_goal = wg_conquest
+		}
+		
+		
+		hidden_effect = {
+			country_event = { id = dpe_diplo.100 }
+			event_target:enemy = { country_event = { id = dpe_diplo.101 } }
+		}
+		ai_chance = {
+			factor = 1
+			modifier = {
+				factor = 0
+				event_target:enemy = {
+					any_relation = {
+						has_communications = prevprev
+						OR = {
+							has_defensive_pact = prev
+							is_in_federation_with = prev
+							is_guaranteeing = prev
+						}
+						relative_power = {
+							who = prevprev
+							category = fleet
+							value = superior
+						}
+					}
+				}
+			}
+			modifier = {
+				factor = 2.5
+				event_target:enemy = {
+					OR = {
+						relative_power = {
+							who = prev
+							category = fleet
+							value = inferior
+						}
+						relative_power = {
+							who = prev
+							category = fleet
+							value = pathetic
+						}
+					}
+				}
+			}
+		}
+	}
+	option = { #declare war on own terms
+		name = dpe_diplo.1.B
+		custom_tooltip = dpe_diplo.1.B.tooltip
+		
+		hidden_effect = { country_event = { id = dpe_diplo.2 days = 360 } }
+		
+		ai_chance = {
+			factor = 0
+		}
+	}
+	option = { #refuse
+		name = dpe_diplo.1.C
+		
+		add_modifier = {
+			modifier = dpe_ruler_looks_weak
+			days = 360
+		}
+		
+		random_pop_faction = {
+			limit = { is_pop_faction_type = imperialist }
+			add_modifier = {
+				modifier = dpe_ruler_looks_weak_faction
+				days = 360
+			}
+		}
+		
+		hidden_effect = {
+			every_owned_planet = {
+				limit = {
+					is_neighbor_of = event_target:enemy
+					count_pops = {
+						limit = {
+							has_citizenship_rights = yes
+							has_ethic = ethic_militarist
+						}
+						count > 4
+					}
+				}
+				if = {
+					limit = {
+						owner = { is_ai = no }
+						event_target:enemy = { is_ai = yes }
+					}
+					planet_event = { id = dpe_diplo.3 days = 45 random = 10 }
+				}
+			}
+			if = {
+				limit = {
+					owner = { is_ai = yes }
+					event_target:enemy = { is_ai = no }
+				}
+				event_target:enemy = { country_event = { id = dpe_diplo.5 days = 270 random = 180 } }
+			}
+		}
+		ai_chance = {
+			factor = 1
+		}
+	}
+}
+
+
+
+country_event = {
+	id = dpe_diplo.2
+	title = dpe_diplo.2.name
+	desc = dpe_diplo.2.desc
+	
+	picture = GFX_evt_cc_military_ceremony
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		is_at_war = no
+		is_subject = no
+		has_federation = no
+		exists = event_target:enemy
+		event_target:enemy = {
+			root = {
+				OR = {
+					is_rival = prev
+					is_hostile_to = prev
+					is_domineering_to = prev
+				}
+			}
+		}
+	}
+	
+	option = {
+		name = UNFORTUNATE
+		
+		add_modifier = {
+			modifier = dpe_ruler_looks_weak
+			days = 360
+		}
+		
+		random_pop_faction = {
+			limit = { is_pop_faction_type = imperialist }
+			add_modifier = {
+				modifier = dpe_ruler_looks_weak_and_breaks_promises_faction
+				days = 360
+			}
+		}
+		
+		hidden_effect = {
+			every_owned_planet = {
+				limit = {
+					is_neighbor_of = event_target:enemy
+					count_pops = {
+						limit = {
+							has_citizenship_rights = yes
+							has_ethic = ethic_militarist
+						}
+						count > 4
+					}
+				}
+				set_timed_planet_flag = {
+					flag = dpe_militarists_want_war_planet
+					days = 496
+				}
+				if = {
+					limit = {
+						owner = { is_ai = no }
+						event_target:enemy = { is_ai = yes }
+					}
+					planet_event = { id = dpe_diplo.3 days = 45 random = 10 }
+				}
+			}
+		}
+	}
+}
+
+
+
+
+
+planet_event = {
+	id = dpe_diplo.3
+	hide_window = yes
+	is_triggered_only = yes
+	
+	trigger = {
+		has_planet_flag = dpe_militarists_want_war_planet
+		is_neighbor_of = event_target:enemy
+		owner = {
+			is_ai = no
+			NOT = { has_country_flag = dpe_recent_militarists_hijack }
+			is_at_war = no
+			is_subject = no
+			has_federation = no
+			exists = event_target:enemy
+			event_target:enemy = {
+				prev = {
+					OR = {
+						is_rival = prev
+						is_hostile_to = prev
+						is_domineering_to = prev
+					}
+				}
+			}
+		}
+		count_pops = {
+			limit = {
+				has_ethic = ethic_militarist
+				has_citizenship_rights = yes
+			}
+			count > 3
+		}
+	}
+	
+	immediate = {
+		random_list = {
+			4 = {
+				planet_event = { id = dpe_diplo.4 }
+				modifier = {
+					factor = 1.5
+					unrest > 0
+				}
+				modifier = {
+					factor = 1.5
+					unrest > 30
+				}
+				modifier = {
+					factor = 2
+					count_pops = {
+						limit = {
+							has_citizenship_rights = yes
+							has_ethic = ethic_militarist
+						}
+						count > 6
+					}
+				}
+			}
+			96 = { planet_event = { id = dpe_diplo.3 days = 30 } }
+		}
+	}
+}
+
+
+planet_event = {
+	id = dpe_diplo.4
+	title = dpe_diplo.4.name
+	desc = dpe_diplo.4.desc
+	
+	picture = GFX_evt_cc_military_ceremony
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		owner = {
+			set_timed_country_flag = {
+				flag = dpe_recent_militarists_hijack
+				days = 720
+			}
+		}
+	}
+	
+	option = {
+		name = dpe_diplo.4.A
+		
+		owner = {
+			event_target:enemy = {
+				every_system_within_border = {
+					limit = {
+						is_neighbor_of = root.owner
+						NOT = { root.owner = { has_claim = prev } }
+					}
+					add_claims = {
+						who = root.owner
+						num_of_claims = 1
+						show_notification = no
+					}
+				}
+			}
+			declare_war = {
+				target = event_target:enemy
+				attacker_war_goal = wg_conquest
+			}
+		}
+		
+		hidden_effect = {
+			owner = {
+				country_event = { id = dpe_diplo.10000 }
+			}
+		}
+	}
+	option = {
+		name = dpe_diplo.4.B
+		
+		owner = {
+			capital_scope = {
+				add_modifier = {
+					modifier = dpe_indemnity_paid
+					days = 360
+				}
+			}
+			add_modifier = {
+				modifier = humiliated
+				days = 3600
+			}
+		}
+		
+		add_modifier = {
+			modifier = dpe_militarist_unrest
+			days = 360
+		}
+		
+		event_target:enemy = {
+			capital_scope = {
+				add_modifier = {
+					modifier = dpe_indemnity_receive
+					days = 360
+				}
+			}
+		}
+		
+		hidden_effect = {
+			owner = {
+				remove_modifier = dpe_ruler_looks_weak
+#				declare_war	= { who = event_target:enemy } #doesn't work
+#				declare_white_peace_with = event_target:enemy
+			}
+		}
+	}
+}
+
+country_event = {
+	id = dpe_diplo.10000
+	is_triggered_only = yes
+	hide_window = yes
+	
+	immediate = { country_event = { id = dpe_diplo.100 } }
+}
+
+#also triggered separately via perf, because I wanted a bit of a higher chance of it happening
+#these guys raided us, how to respond?
+country_event = {
+	id = dpe_diplo.5
+	title = dpe_diplo.5.name
+	desc = {
+		trigger = { NOT = { has_ethic = ethic_gestalt_consciousness } }
+		text = dpe_diplo.5.desc
+	}
+	desc = {
+		trigger = { has_authority = auth_machine_intelligence }
+		text = dpe_diplo.5.desc.machine
+	}
+	desc = {
+		trigger = { has_authority = auth_hive_mind }
+		text = dpe_diplo.5.desc.hive
+	}
+	picture = GFX_evt_exploding_ship
+	
+	is_triggered_only = yes
+
+	trigger = {
+		NOT = { is_at_war_with = from }
+		NOT = { has_country_flag = dpe_recent_militarists_incident }
+		has_federation = no
+		has_policy_flag = unrestricted_wars
+			
+		from = {
+			OR = {
+				is_rival = root
+				is_hostile_to = root
+				is_domineering_to = root
+			}
+		}
+		any_owned_planet = { is_neighbor_of = from }
+	}
+	
+	immediate = {
+		set_timed_country_flag = {
+			flag = dpe_recent_militarists_incident
+			years = 40
+		}
+		random_owned_planet = {
+			limit = { is_neighbor_of = from }
+			save_event_target_as = attacked_planet
+			
+			solar_system = {
+				random_fleet_in_system = {
+					limit = {
+						any_owned_ship = {
+							OR = {
+								is_ship_size = mining_station
+								is_ship_size = research_station
+							}
+						}
+					}
+					destroy_fleet = this
+				}
+			}
+		}
+		from = {
+			every_owned_planet = {
+				limit = { is_neighbor_of = root }
+				set_timed_planet_flag = {
+					flag = dpe_will_cede_in_war
+					days = 5
+				}
+			}
+		}
+	}
+	
+	option = { #demand justice
+		name = dpe_diplo.5.A
+		
+		custom_tooltip = dpe_diplo.5.A.tooltip		
+			
+		hidden_effect = { from = { country_event = { id = dpe_diplo.6 } } }
+	}
+	option = { #try to ease the tensions
+		name = dpe_diplo.5.B
+		
+		from = {
+			add_opinion_modifier = {
+				who = root
+				modifier = dpe_eased_tensions
+			}
+		}
+		
+		add_modifier = {
+			modifier = dpe_ruler_looks_weak
+			days = 3600
+		}
+		trigger = {
+			NOR = {
+				has_valid_civic = civic_fanatic_purifiers
+				has_valid_civic = civic_hive_devouring_swarm
+				has_valid_civic = civic_machine_terminator
+			}
+		}
+	}
+}
+
+country_event = { #AI-only event
+	id = dpe_diplo.6
+	title = OK
+	desc = OK
+	
+	picture = GFX_evt_exploding_ship #picked randomly
+	
+	is_triggered_only = yes
+	
+	option = { #pay up
+		name = OK
+		
+		capital_scope = {
+			add_modifier = {
+				modifier = dpe_indemnity_paid
+				days = 360
+			}
+		}
+		
+		from = {
+			capital_scope = {
+				add_modifier = {
+					modifier = dpe_indemnity_receive
+					days = 360
+				}
+			}
+		}
+		
+		add_modifier = {
+			modifier = humiliated
+			days = 3600
+		}
+		hidden_effect = { remove_modifier = dpe_ruler_looks_weak }
+		
+		#test this: (tooltip: a truce will be declared) #doesn't work
+#		hidden_effect = {
+#			declare_war	= { who = event_target:enemy }
+#			declare_white_peace_with = event_target:enemy
+#		}
+		
+		from = { country_event = { id = dpe_diplo.7 } }
+		
+		
+		ai_chance = {
+			factor = 1
+			modifier = {
+				factor = 2.5
+				from = {
+					OR = {
+						relative_power = {
+							who = prev
+							category = fleet
+							value = superior
+						}
+						relative_power = {
+							who = prev
+							category = fleet
+							value = overwhelming
+						}
+						any_relation = {
+							has_communications = prevprev
+							OR = {
+								has_defensive_pact = prev
+								is_in_federation_with = prev
+								is_guaranteeing = prev
+							}
+							OR = {
+								relative_power = {
+									who = prevprev
+									category = fleet
+									value = superior
+								}
+								relative_power = {
+									who = prevprev
+									category = fleet
+									value = overwhelming
+								}
+							}
+						}
+					}
+				}
+			}
+			modifier = {
+				factor = 0
+				from = {
+					OR = {
+						relative_power = {
+							who = prev
+							category = fleet
+							value = inferior
+						}
+						relative_power = {
+							who = prev
+							category = fleet
+							value = pathetic
+						}
+					}
+				}
+			}
+		}
+	}
+	option = { #accept war
+		name = OK
+		
+		every_system_within_border = {
+			limit = {
+				is_neighbor_of = from
+				NOT = { from = { has_claim = prev } }
+			}
+			add_claims = {
+				who = from
+				num_of_claims = 1
+				show_notification = no
+			}
+		}
+		from = {
+			declare_war = {
+				target = root
+				attacker_war_goal = wg_conquest
+			}
+		}
+			
+		from = { country_event = { id = dpe_diplo.102 } }
+		
+		ai_chance = {
+			factor = 1
+			modifier = {
+				factor = 0
+				from = {
+					OR = {
+						relative_power = {
+							who = prev
+							category = fleet
+							value = superior
+						}
+						relative_power = {
+							who = prev
+							category = fleet
+							value = overwhelming
+						}
+						any_relation = {
+							has_communications = prevprev
+							OR = {
+								has_defensive_pact = prev
+								is_in_federation_with = prev
+								is_guaranteeing = prev
+							}
+							OR = {
+								relative_power = {
+									who = prevprev
+									category = fleet
+									value = superior
+								}
+								relative_power = {
+									who = prevprev
+									category = fleet
+									value = overwhelming
+								}
+							}
+						}
+					}
+				}
+			}
+			modifier = {
+				factor = 2.5
+				from = {
+					OR = {
+						relative_power = {
+							who = prev
+							category = fleet
+							value = inferior
+						}
+						relative_power = {
+							who = prev
+							category = fleet
+							value = pathetic
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+
+#Indemnity Paid
+country_event = {
+	id = dpe_diplo.7
+	title = dpe_diplo.7.name
+	desc = {
+		trigger = { NOT = { has_authority = auth_machine_intelligence } }
+		text = dpe_diplo.7.desc
+	}
+	desc = {
+		trigger = { has_authority = auth_machine_intelligence }
+		text = dpe_diplo.7.desc.machine
+	}
+	
+	is_triggered_only = yes
+	diplomatic = yes
+	
+	picture_event_data = {
+		portrait = from
+		planet_background = from
+		graphical_culture = from
+		city_level = from
+		room = from.ruler
+	}
+	
+	option = {
+		name = CCEXCELLENT
+		
+		tooltip = {
+			capital_scope = {
+				add_modifier = {
+					modifier = dpe_indemnity_receive
+					days = 360
+				}
+			}
+		}
+	}
+}
+
+
+
+#In case they actually declare war
+country_event = {
+	id = dpe_diplo.8
+	hide_window = yes
+	is_triggered_only = yes
+	
+	trigger = {
+		has_modifier = humiliated
+		any_owned_planet = { has_modifier = dpe_indemnity_paid }
+	}
+	
+	immediate = {
+		from = {
+			every_war_participant = {
+				set_timed_country_flag = {
+					flag = dpe_war_opponent
+					days = 10
+				}
+			}
+		}
+		if = {
+			limit = {
+				any_country = {
+					has_country_flag = dpe_war_opponent
+					from = {	
+						NOT = {
+							is_war_participant = {
+								who = prev
+								side = root
+							}
+						}
+					}
+					any_owned_planet = { has_modifier = dpe_indemnity_receive }
+				}
+			}
+			random_owned_planet = {
+				limit = { has_modifier = dpe_indemnity_paid }
+				remove_modifier = dpe_indemnity_paid
+			}
+			random_country = {
+				limit = {
+					has_country_flag = dpe_war_opponent
+					from = {	
+						NOT = {
+							is_war_participant = {
+								who = prev
+								side = root
+							}
+						}
+					}
+					any_owned_planet = { has_modifier = dpe_indemnity_receive }
+				}
+				random_owned_planet = {
+					limit = { has_modifier = dpe_indemnity_receive }
+					remove_modifier = dpe_indemnity_receive
+				}
+			}
+		}
+	}
+}
+
+#this sorts out scopes
+country_event = {
+	id = dpe_diplo.102
+	hide_window = yes
+	is_triggered_only = yes
+	
+	immediate = {
+		from = { save_event_target_as = enemy }
+		country_event = { id = dpe_diplo.10000 }
+	}
+}
+
+country_event = {
+	id = dpe_diplo.100
+	title = dpe_diplo.100.name
+	
+	desc = {
+		trigger = {
+			event_target:enemy = {
+				NOT = { has_ethic = ethic_gestalt_consciousness }
+				NOT = { 
+					is_same_species = FROM
+					OR = {
+						has_ethic = ethic_pacifist
+						has_ethic = ethic_fanatic_pacifist
+					}
+				}
+				OR = {
+					is_hostile_to = FROM
+					is_domineering_to = FROM
+					is_unfriendly_to = FROM
+				}
+			}
+		}
+		text = 01_DOW_ACCEPT
+	}
+	desc = {
+		trigger = {
+			event_target:enemy = {
+				NOT = { has_ethic = ethic_gestalt_consciousness }
+				NOT = { 
+					is_same_species = FROM
+					OR = {
+						has_ethic = ethic_pacifist
+						has_ethic = ethic_fanatic_pacifist
+					}
+				}
+				OR = {
+					is_neutral_to = FROM
+					is_threatened_to = FROM
+				}
+			}
+		}
+		text = 04_DOW_ACCEPT
+	}
+	desc = {
+		trigger = {
+			event_target:enemy = {
+				NOT = { has_ethic = ethic_gestalt_consciousness }
+				NOT = { 
+					is_same_species = FROM
+					OR = {
+						has_ethic = ethic_pacifist
+						has_ethic = ethic_fanatic_pacifist
+					}
+				}
+				OR = {
+					is_friendly_to = FROM
+					is_cordial_to = FROM
+					is_protective_to = FROM
+				}
+			}
+		}
+		text = 07_DOW_ACCEPT
+	}
+	desc = {
+		trigger = {
+			event_target:enemy = {
+				NOT = { has_ethic = ethic_gestalt_consciousness }
+				NOT = { is_same_species = FROM }
+				OR = {
+					has_ethic = ethic_pacifist
+					has_ethic = ethic_fanatic_pacifist
+				}
+				OR = {
+					is_hostile_to = FROM
+					is_domineering_to = FROM
+					is_unfriendly_to = FROM
+				}
+			}
+		}
+		text = 10_DOW_ACCEPT
+	}
+	desc = {
+		trigger = {
+			event_target:enemy = {
+				NOT = { has_ethic = ethic_gestalt_consciousness }
+				NOT = { is_same_species = FROM }
+				OR = {
+					has_ethic = ethic_pacifist
+					has_ethic = ethic_fanatic_pacifist
+				}
+				OR = {
+					is_neutral_to = FROM
+					is_threatened_to = FROM
+				}
+			}
+		}
+		text = 11_DOW_ACCEPT
+	}
+	desc = {
+		trigger = {
+			event_target:enemy = {
+				NOT = { has_ethic = ethic_gestalt_consciousness }
+				NOT = { is_same_species = FROM }
+				OR = {
+					has_ethic = ethic_pacifist
+					has_ethic = ethic_fanatic_pacifist
+				}
+				OR = {
+					is_friendly_to = FROM
+					is_cordial_to = FROM
+					is_protective_to = FROM
+				}
+			}
+		}
+		text = 12_DOW_ACCEPT
+	}
+	desc = {
+		trigger = {
+			event_target:enemy = {
+				NOT = { has_ethic = ethic_gestalt_consciousness }
+				is_same_species = FROM
+				OR = {
+					has_ethic = ethic_pacifist
+					has_ethic = ethic_fanatic_pacifist
+				}
+			}
+		}
+		text = 13_DOW_ACCEPT
+	}
+	desc = {
+		trigger = {
+			event_target:enemy = {
+				has_ai_personality = devouring_swarm
+				FROM = { 
+					NOT = {
+						is_species_class = ROBOT
+						has_authority = auth_machine_intelligence
+					}
+				}
+			}
+		}
+		text = DS_DOW_ACCEPT
+	}
+	desc = {
+		trigger = {
+			event_target:enemy = {
+				has_ai_personality = devouring_swarm
+				FROM = {
+					OR = {
+						is_species_class = ROBOT
+						has_authority = auth_machine_intelligence
+					}
+				}
+			}
+		}
+		text = DS_MECH_DOW_ACCEPT
+	}
+	desc = {
+		trigger = {
+			event_target:enemy = {
+				has_ai_personality = hive_mind
+			}
+		}
+		text = HM_DOW_ACCEPT_DPE
+	}
+	desc = {
+		trigger = {
+			event_target:enemy = {
+				has_ai_personality = exterminators
+			}
+		}
+		text = E_DOW_ACCEPT_01
+	}
+	desc = {
+		trigger = {
+			event_target:enemy = {
+				has_ai_personality = servitors
+			}
+		}
+		text = S_DOW_ACCEPT_02
+	}
+	desc = {
+		trigger = {
+			event_target:enemy = {
+				has_ai_personality = assimilators
+			}
+		}
+		text = A_DOW_ACCEPT_01
+	}
+	desc = {
+		trigger = {
+			event_target:enemy = {
+				OR = {
+					is_species_class = ROBOT
+					has_authority = auth_machine_intelligence
+				}
+				NOR = {
+					has_ai_personality = exterminators
+					has_ai_personality = servitors
+					has_ai_personality = assimilators
+				}
+			}
+		}
+		text = MECH_DOW_ACCEPT_01
+	}
+	desc = {
+		trigger = {
+			event_target:enemy = {
+				NOR = {
+					is_species_class = ROBOT
+					has_authority = auth_machine_intelligence
+					has_authority = auth_hive_mind
+				}
+				FROM = {
+					OR = {
+						is_species_class = ROBOT
+						has_authority = auth_machine_intelligence
+					}
+				}
+			}
+		}
+		text = ORG_TO_MECH_DOW_ACCEPT_03
+	}
+	
+	is_triggered_only = yes
+	diplomatic = yes
+	
+	picture_event_data = {
+		portrait = event_target:enemy
+		planet_background = event_target:enemy
+		graphical_culture = event_target:enemy
+		city_level = event_target:enemy
+		room = event_target:enemy.ruler
+	}
+	
+	option = { name = dpe_diplo.100.option }
+}
+
+country_event = {
+	id = dpe_diplo.101
+	title = dpe_diplo.101.name
+	
+	desc = {
+		trigger = {
+			OR = {
+				AND = {
+					FROM = {
+						is_fallen_machine_empire = no
+						NOR = {
+							has_ethic = ethic_gestalt_consciousness
+							has_ethic = ethic_xenophobe
+							has_ethic = ethic_fanatic_xenophobe
+							has_ai_personality = honorbound_warriors
+							has_ai_personality = evangelising_zealots
+							has_ai_personality = democratic_crusaders
+							has_ai_personality = hegemonic_imperialists
+							has_ai_personality = ruthless_capitalists
+							has_ai_personality = migrating_flock
+							has_ai_personality = erudite_explorers
+						}
+					}
+					ROOT = {
+						NOT = {
+							is_species_class = ROBOT
+							has_authority = auth_machine_intelligence
+						}
+					}
+				}
+				AND = {
+					FROM = {
+						OR = {
+							has_ai_personality = evangelising_zealots
+							has_ai_personality = democratic_crusaders
+						}
+						NOT = {
+							OR = {
+								has_ethic = ethic_xenophobe
+								has_ethic = ethic_fanatic_xenophobe
+							}
+						}
+					}
+					NOT = { has_authority = auth_hive_mind }
+				}
+				AND = {
+					FROM = {
+						has_authority = auth_machine_intelligence
+						is_fallen_machine_empire = no
+					}
+					ROOT = {
+						NOT = {
+							is_species_class = ROBOT
+							has_authority = auth_machine_intelligence
+						}
+					}
+				}
+			}
+		}
+		text = 01_DOW_PROPOSE
+	}
+	desc = {
+		trigger = {
+			FROM = {
+				is_fallen_machine_empire = no
+				OR = {
+					has_ethic = ethic_xenophobe
+					has_ethic = ethic_fanatic_xenophobe
+				}
+				NOT = { has_ai_personality = fanatic_purifiers }
+			}
+			NOR = {
+				has_authority = auth_machine_intelligence
+				is_species_class = ROBOT
+			}
+		}
+		text = 03_DOW_PROPOSE
+	}
+	desc = {
+		trigger = {
+			FROM = {
+				has_ai_personality = honorbound_warriors
+				NOT = {
+					OR = {
+						has_ethic = ethic_xenophobe
+						has_ethic = ethic_fanatic_xenophobe
+					}
+				}
+			}
+			ROOT = {
+				NOT = {
+					is_species_class = ROBOT
+					has_authority = auth_machine_intelligence
+				}
+			}
+		}
+		text = 04_DOW_PROPOSE
+	}
+	desc = {
+		trigger = {
+			FROM = {
+				OR = {
+					has_ai_personality = evangelising_zealots
+					has_ai_personality = democratic_crusaders
+				}
+				NOT = {
+					OR = {
+						has_ethic = ethic_xenophobe
+						has_ethic = ethic_fanatic_xenophobe
+					}
+				}
+			}
+			NOT = { has_ethic = ethic_gestalt_consciousness }
+		}
+		text = 05_DOW_PROPOSE
+	}
+	desc = {
+		trigger = {
+			FROM = {
+				has_ai_personality = hegemonic_imperialists
+				NOT = {
+					OR = {
+						has_ethic = ethic_xenophobe
+						has_ethic = ethic_fanatic_xenophobe
+					}
+				}
+			}
+			ROOT = {
+				NOT = {
+					is_species_class = ROBOT
+					has_authority = auth_machine_intelligence
+				}
+			}
+		}
+		text = 06_DOW_PROPOSE
+	}
+	desc = {
+		trigger = {
+			FROM = {
+				has_ai_personality = fanatic_purifiers
+			}
+			ROOT = {
+				NOT = {
+					is_species_class = ROBOT
+					has_authority = auth_machine_intelligence
+				}
+			}
+		}
+		text = 07_DOW_PROPOSE
+	}
+	desc = {
+		trigger = {
+			FROM = {
+				has_ai_personality = erudite_explorers
+				NOT = {
+					OR = {
+						has_ethic = ethic_xenophobe
+						has_ethic = ethic_fanatic_xenophobe
+					}
+				}
+			}
+			ROOT = {
+				NOT = {
+					is_species_class = ROBOT
+					has_authority = auth_machine_intelligence
+				}
+			}
+		}
+		text = 08_DOW_PROPOSE
+	}
+	desc = {
+		trigger = {
+			FROM = {
+				has_ai_personality = migrating_flock
+				NOT = {
+					OR = {
+						has_ethic = ethic_xenophobe
+						has_ethic = ethic_fanatic_xenophobe
+					}
+				}
+			}
+			ROOT = {
+				NOT = {
+					is_species_class = ROBOT
+					has_authority = auth_machine_intelligence
+				}
+			}
+		}
+		text = 10_DOW_PROPOSE
+	}
+	desc = {
+		trigger = {
+			FROM = {
+				has_ai_personality = ruthless_capitalists
+				NOT = {
+					OR = {
+						has_ethic = ethic_xenophobe
+						has_ethic = ethic_fanatic_xenophobe
+					}
+				}
+			}
+			ROOT = {
+				NOT = {
+					is_species_class = ROBOT
+					has_authority = auth_machine_intelligence
+				}
+			}
+		}
+		text = 11_DOW_PROPOSE
+	}
+	
+	desc = {
+		trigger = {
+			FROM = {
+				has_ai_personality = hive_mind
+			}
+			NOT = {
+				has_authority = auth_machine_intelligence
+				is_species_class = ROBOT
+			}
+		}
+		text = 09_DOW_PROPOSE
+	}
+	desc = {
+		trigger = {
+			FROM = {
+				has_ai_personality = devouring_swarm
+			}
+			NOT = {
+				has_authority = auth_machine_intelligence
+				is_species_class = ROBOT
+			}
+		}
+		text = 12_DOW_PROPOSE
+	}
+	desc = {
+		trigger = {
+			FROM = { has_ai_personality = exterminators }
+			ROOT = {
+				NOT = {
+					is_species_class = ROBOT
+					has_authority = auth_machine_intelligence
+				}
+			}
+		}
+		text = E_DOW_PROPOSE_02
+	}
+	desc = {
+		trigger = {
+			FROM = { has_ai_personality = servitors }
+			ROOT = {
+				NOT = {
+					is_species_class = ROBOT
+					has_authority = auth_machine_intelligence
+				}
+			}
+		}
+		text = S_DOW_PROPOSE_02
+	}
+	desc = {
+		trigger = {
+			FROM = { has_ai_personality = assimilators }
+			ROOT = {
+				NOT = {
+					is_species_class = ROBOT
+					has_authority = auth_machine_intelligence
+				}
+			}
+		}
+		text = A_DOW_PROPOSE_01
+	}
+	desc = {
+		trigger = {
+			FROM = {
+				has_authority = auth_machine_intelligence
+				is_fallen_machine_empire = no
+				NOR = {
+					has_ai_personality = assimilators
+					has_ai_personality = servitors
+					has_ai_personality = exterminators
+				}
+			}
+			ROOT = {
+				NOT = {
+					is_species_class = ROBOT
+					has_authority = auth_machine_intelligence
+				}
+			}
+		}
+		text = MECH_DOW_PROPOSE_01
+	}
+	desc = {
+		trigger = {
+			FROM = {
+				NOR = {
+					has_authority = auth_machine_intelligence
+					is_species_class = ROBOT
+				}
+			}
+			has_authority = auth_machine_intelligence
+		}
+		text = ORG_TO_MECH_DOW_PROPOSE_02
+	}
+	
+	
+	is_triggered_only = yes
+	diplomatic = yes
+	
+	picture_event_data = {
+		portrait = from
+		planet_background = from
+		graphical_culture = from
+		city_level = from
+		room = from.ruler
+	}
+	
+	option = { name = dpe_diplo.101.option }
+}
+

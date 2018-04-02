@@ -1,0 +1,318 @@
+############################################
+###   SCRIPTED LOCALIZATION FOR GERMAN   ###
+###     Scripted by Caligula Caesar      ###
+############################################
+
+##To apply, use [event_target.GetXIn] or [scope.Leader.GetXInDE]
+
+#Ex.: "He is a student => "Er ist ein student[X] / Sie ist eine student[in]."
+defined_text = {
+	name = GetXInDE
+	text = {
+		trigger = { cc_loc_leader_masc = yes }
+		localization_key = DELOC_X
+	}
+	text = {
+		trigger = { cc_loc_leader_fem = yes }
+		localization_key = DELOC_in
+	}
+}
+
+#Nominative
+
+#Ex.: "[The] student." => "[Der] Student / [Die] Studentin." (upper case)
+defined_text = {
+	name = GetDerDieDECap
+	text = {
+		trigger = { cc_loc_leader_masc = yes }
+		localization_key = DELOC_Der
+	}
+	text = {
+		trigger = { cc_loc_leader_fem = yes }
+		localization_key = DELOC_Die
+	}
+}
+
+#Ex.: "He is [the] student." => "Er ist [der] Student / Sie ist [die] Studentin." (lower case)
+defined_text = {
+	name = GetDerDieDE
+	text = {
+		trigger = { cc_loc_leader_masc = yes }
+		localization_key = DELOC_der
+	}
+	text = {
+		trigger = { cc_loc_leader_fem = yes }
+		localization_key = DELOC_die
+	}
+}
+
+#Genitive
+
+#Ex.: "[Of the] student." => "[Des] Studenten / [Der] Studentin." (upper case)
+defined_text = {
+	name = GetDesDerDECap
+	text = {
+		trigger = { cc_loc_leader_masc = yes }
+		localization_key = DELOC_Des
+	}
+	text = {
+		trigger = { cc_loc_leader_fem = yes }
+		localization_key = DELOC_Der
+	}
+}
+
+#Ex.: "The pen [of the] student." => "Der Stift [des] Studenten / [der] Studentin." (lower case)
+defined_text = {
+	name = GetDesDerDE
+	text = {
+		trigger = { cc_loc_leader_masc = yes }
+		localization_key = DELOC_des
+	}
+	text = {
+		trigger = { cc_loc_leader_fem = yes }
+		localization_key = DELOC_der
+	}
+}
+
+#Dative
+
+#Ex.: "[To the] student." => "[Dem] Studenten / [Der] Studentin." (upper case)
+defined_text = {
+	name = GetDemDerDECap
+	text = {
+		trigger = { cc_loc_leader_masc = yes }
+		localization_key = DELOC_Dem
+	}
+	text = {
+		trigger = { cc_loc_leader_fem = yes }
+		localization_key = DELOC_Der
+	}
+}
+
+#Ex.: "He said [to the] student." => "Er sagte [dem] Studenten / [der] Studentin." (lower case)
+defined_text = {
+	name = GetDemDerDE
+	text = {
+		trigger = { cc_loc_leader_masc = yes }
+		localization_key = DELOC_dem
+	}
+	text = {
+		trigger = { cc_loc_leader_fem = yes }
+		localization_key = DELOC_der
+	}
+}
+
+#Accusative
+
+#sorry, mind drew a blank on proper examples
+#Ex.: "[The] student." => "[Den] Studenten / [Die] Studentin." (upper case)
+defined_text = {
+	name = GetDenDieDECap
+	text = {
+		trigger = { cc_loc_leader_masc = yes }
+		localization_key = DELOC_Den
+	}
+	text = {
+		trigger = { cc_loc_leader_fem = yes }
+		localization_key = DELOC_Die
+	}
+}
+
+#Ex.: "...[the] student" => "...[den] Studenten / [die] Studentin." (lower case)
+defined_text = {
+	name = GetDenDieDE
+	text = {
+		trigger = { cc_loc_leader_masc = yes }
+		localization_key = DELOC_den
+	}
+	text = {
+		trigger = { cc_loc_leader_fem = yes }
+		localization_key = DELOC_die
+	}
+}
+
+
+#Nominative
+
+#Ex: "[A] student" => "Ein[X] Student / Ein[e] Studentin"
+defined_text = {
+	name = GetXEDE
+	text = {
+		trigger = { cc_loc_leader_masc = yes }
+		localization_key = DELOC_X
+	}
+	text = {
+		trigger = { cc_loc_leader_fem = yes }
+		localization_key = DELOC_e
+	}
+}
+
+#Ex: "A [good] student" => "Ein gut[er] Student / Eine gut[e] Studentin"
+defined_text = {
+	name = GetErEDE
+	text = {
+		trigger = { cc_loc_leader_masc = yes }
+		localization_key = DELOC_er
+	}
+	text = {
+		trigger = { cc_loc_leader_fem = yes }
+		localization_key = DELOC_e
+	}
+}
+
+#Genitive
+
+#Ex: "[Of a] student" => "Ein[es] Studenten / Ein[er] Studentin"
+defined_text = {
+	name = GetEsErDE
+	text = {
+		trigger = { cc_loc_leader_masc = yes }
+		localization_key = DELOC_es
+	}
+	text = {
+		trigger = { cc_loc_leader_fem = yes }
+		localization_key = DELOC_er
+	}
+}
+
+#En/En not needed obviously
+
+#Dative
+
+#Ex: "[To a] student" => "Ein[em] Studenten / Ein[er] Studentin"
+defined_text = {
+	name = GetEmErDE
+	text = {
+		trigger = { cc_loc_leader_masc = yes }
+		localization_key = DELOC_em
+	}
+	text = {
+		trigger = { cc_loc_leader_fem = yes }
+		localization_key = DELOC_er
+	}
+}
+
+#En/En not needed obviously
+
+#Accusative
+
+#Ex: "[A] student" => "Ein[en] Studenten / Ein[e] Studentin"
+defined_text = {
+	name = GetEnEDE
+	text = {
+		trigger = { cc_loc_leader_masc = yes }
+		localization_key = DELOC_en
+	}
+	text = {
+		trigger = { cc_loc_leader_fem = yes }
+		localization_key = DELOC_e
+	}
+}
+
+
+
+#Ex: "the doctor" => "der [A]rzt / die [Ä]rztin"
+defined_text = {
+	name = GetAAeDECap
+	text = {
+		trigger = { cc_loc_leader_masc = yes }
+		localization_key = DELOC_A
+	}
+	text = {
+		trigger = { cc_loc_leader_fem = yes }
+		localization_key = DELOC_Ae
+	}
+}
+
+#Ex: "the eye doctor" => "der Augen[a]rzt / die Augen[ä]rztin"
+defined_text = {
+	name = GetAAeDE
+	text = {
+		trigger = { cc_loc_leader_masc = yes }
+		localization_key = DELOC_a
+	}
+	text = {
+		trigger = { cc_loc_leader_fem = yes }
+		localization_key = DELOC_ae
+	}
+}
+
+
+#Ex: "...ihm / ihr"
+defined_text = {
+	name = GetIhmIhrDE
+	text = {
+		trigger = { cc_loc_leader_masc = yes }
+		localization_key = DELOC_ihm
+	}
+	text = {
+		trigger = { cc_loc_leader_fem = yes }
+		localization_key = DELOC_ihr
+	}
+}
+
+#Ex: "Ihm / Ihr"
+defined_text = {
+	name = GetIhmIhrDECap
+	text = {
+		trigger = { cc_loc_leader_masc = yes }
+		localization_key = DELOC_Ihm
+	}
+	text = {
+		trigger = { cc_loc_leader_fem = yes }
+		localization_key = DELOC_Ihr
+	}
+}
+
+#Ex: "...ihn / sie"
+defined_text = {
+	name = GetIhnSieDE
+	text = {
+		trigger = { cc_loc_leader_masc = yes }
+		localization_key = DELOC_ihm
+	}
+	text = {
+		trigger = { cc_loc_leader_fem = yes }
+		localization_key = DELOC_ihr
+	}
+}
+
+#Ex: "Ihm / Ihr"
+defined_text = {
+	name = GetIhnSieDECap
+	text = {
+		trigger = { cc_loc_leader_masc = yes }
+		localization_key = DELOC_Ihm
+	}
+	text = {
+		trigger = { cc_loc_leader_fem = yes }
+		localization_key = DELOC_Ihr
+	}
+}
+
+#Ex: "en - innen"
+defined_text = {
+	name = GetInInnenDECap
+	text = {
+		trigger = { cc_loc_leader_masc = yes }
+		localization_key = DELOC_in
+	}
+	text = {
+		trigger = { cc_loc_leader_fem = yes }
+		localization_key = DELOC_innen
+	}
+}
+
+
+#Ex: "dessen / deren"
+defined_text = {
+	name = GetDessenDerenDE
+	text = {
+		trigger = { cc_loc_leader_masc = yes }
+		localization_key = DELOC_dessen
+	}
+	text = {
+		trigger = { cc_loc_leader_fem = yes }
+		localization_key = DELOC_deren
+	}
+}

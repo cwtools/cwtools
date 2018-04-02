@@ -1,0 +1,1469 @@
+
+namespace = cc_emancipation
+
+#triggered in performance now
+planet_event = {
+	id = cc_emancipation.1
+	title = cc_emancipation.1.name
+	desc = {
+		trigger = { exists = event_target:neighbour_that_is_egalitarian }
+		text = cc_emancipation.1.desc.A
+	}
+	desc = {
+		trigger = { NOT = { exists = event_target:neighbour_that_is_egalitarian } }
+		text = cc_emancipation.1.desc.B
+	}
+	
+	picture = GFX_evt_cc_emancipation
+	location = root
+	
+	is_triggered_only = yes
+
+	trigger = {
+		exists = owner
+		has_owner = yes
+		owner = {
+			is_country_type = default
+			allows_slavery = yes
+			has_faction = progressive
+			NOR = {
+				has_country_flag = cc_emancipation_movement
+				has_country_flag = cc_recent_emancipation_movement
+				has_country_flag = cc_emancipation_first_strike
+			}
+		}
+		unrest > 0
+		NOT = { has_planet_flag = cc_emancipation_movement }
+		any_owned_pop = {
+			is_enslaved = yes
+			species = { pops_have_happiness = yes }
+			happiness < 0.4
+		}
+		any_owned_pop = {
+			has_ethic = ethic_egalitarian
+			is_enslaved = no
+		}
+	}
+	
+	immediate = {
+		set_timed_planet_flag = {
+			flag = cc_emancipation_movement
+			years = 15
+		}
+		owner = {
+			random_neighbor_country = {
+				limit = {
+					OR = {
+						has_ethic = ethic_egalitarian
+						has_ethic = ethic_fanatic_egalitarian
+					}
+				}
+				save_event_target_as = neighbour_that_is_egalitarian
+			}
+			set_timed_country_flag = {
+				flag = cc_emancipation_first_strike
+				years = 10
+			}
+		}
+		#oops:
+		save_event_target_as = slaveryplanet
+		save_event_target_as = emancipation_planet
+	}
+
+	option = {
+		name = cc_emancipation.1.A
+		
+		
+		add_modifier = {
+			modifier = cc_emancipation_celebration
+			years = 10
+		}
+		
+		owner = {
+			shift_ethic = ethic_egalitarian
+			set_policy = {
+				policy = slavery
+				option = slavery_not_allowed
+				cooldown = yes
+			}
+			add_modifier = {
+				modifier = cc_emancipated
+				days = 3600
+			}
+			random_pop_faction = {
+				limit = { is_pop_faction_type = progressive }
+				add_modifier = { modifier = embraced_faction days = 3600 }
+				hidden_effect = { 
+					add_modifier = { modifier = embraced_faction_timer days = 3600 }
+					owner = {
+						every_pop_faction = {
+							limit = {
+								NOR = {
+									is_same_value = prevprev
+									is_pop_faction_type = totalitarian
+								}
+							}
+							add_modifier = { modifier = embraced_another_faction days = 3600 }
+						}
+					}
+				}
+			}
+			random_pop_faction = {
+				limit = { is_pop_faction_type = totalitarian }
+				add_modifier = { modifier = cc_emancipation_furious days = 3600 }
+			}
+		}
+		
+		
+		trigger = {
+			owner = {
+				NOR = {
+					has_valid_civic = civic_fanatic_purifiers
+					has_ethic = ethic_fanatic_authoritarian
+				}
+			}
+		}
+		
+		ai_chance = { factor = 0 }
+	}
+	option = {
+		name = cc_emancipation.1.B
+		
+		add_modifier = {
+			modifier = cc_emancipation_movement
+			years = 10
+		}
+		
+		hidden_effect = {
+			owner = {
+				every_owned_planet = {
+					limit = {
+						NOT = { is_same_value = root }
+						unrest > 0
+						NOR = {
+							has_planet_flag = cc_emancipation_movement
+							owner = { has_country_flag = cc_emancipation_movement }
+						}
+						any_owned_pop = {
+							is_enslaved = yes
+							species = { pops_have_happiness = yes }
+							happiness < 0.4
+						}
+						any_owned_pop = {
+							has_ethic = ethic_egalitarian
+							is_enslaved = no
+						}
+					}
+					planet_event = { id = cc_emancipation.2 days = 15 }
+				}
+			}
+		}
+		
+		custom_tooltip = cc_emancipation.1.tooltip
+		
+		ai_chance = { factor = 2 }
+	}
+	option = {
+		name = CCOPPRESS
+		
+#		trigger = {
+#			OR = {
+#				has_ethic = ethic_authoritarian
+#				has_ethic = ethic_fanatic_authoritarian
+#			}
+#		}
+		
+		add_modifier = {
+			modifier = cc_emancipation_movement
+			years = 10
+		}
+		
+		add_modifier = {
+			modifier = cc_planet_oppression
+			years = 10
+		}
+		every_owned_pop = {
+			limit = {
+				has_ethic = ethic_egalitarian
+				is_enslaved = no
+			}
+			
+			add_modifier = {
+				modifier = cc_oppression
+				years = 10
+			}
+		}
+		
+		hidden_effect = {
+			owner = {
+				every_owned_planet = {
+					limit = {
+						NOT = { is_same_value = root }
+						unrest > 0
+						NOR = {
+							has_planet_flag = cc_emancipation_movement
+							owner = { has_country_flag = cc_emancipation_movement }
+						}
+						any_owned_pop = {
+							is_enslaved = yes
+							species = { pops_have_happiness = yes }
+							happiness < 0.4
+						}
+						any_owned_pop = {
+							has_ethic = ethic_egalitarian
+							is_enslaved = no
+						}
+					}
+					planet_event = { id = cc_emancipation.3 days = 15 }
+				}
+			}
+		}
+		
+		custom_tooltip = cc_emancipation.1.tooltip.C
+		
+		ai_chance = {
+			factor = 1
+			modifier = {
+				factor = 2
+				unrest > 30
+			}
+			modifier = {
+				factor = 2
+				unrest > 50
+			}
+			modifier = {
+				factor = 2
+				unrest > 80
+				owner = {
+					NOR = {
+						has_valid_civic = civic_fanatic_purifiers
+						has_ethic = ethic_fanatic_authoritarian
+						AND = {
+							has_ethic = ethic_authoritarian
+							OR = {
+								has_ethic = ethic_fanatic_xenophobe
+								has_ethic = ethic_fanatic_militarist
+								AND = {
+									has_ethic = ethic_xenophobe
+									has_ethic = ethic_militarist
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+	option = {
+		name = CCKILLALL
+		
+		trigger = {
+			owner = {
+				OR = {
+					has_valid_civic = civic_fanatic_purifiers
+					has_ethic = ethic_fanatic_authoritarian
+					AND = {
+						has_ethic = ethic_authoritarian
+						OR = {
+							has_ethic = ethic_fanatic_xenophobe
+							has_ethic = ethic_fanatic_militarist
+							AND = {
+								has_ethic = ethic_xenophobe
+								has_ethic = ethic_militarist
+							}
+						}
+					}
+				}
+			}
+		}
+		
+		every_owned_pop = {
+			limit = {
+				has_ethic = ethic_egalitarian
+				is_enslaved = no
+			}
+			kill_pop = yes
+			
+			hidden_effect = {
+				every_country = {
+					limit = {
+						has_communications = root.owner
+						NOT = { is_country = root.owner }
+						NOT = { has_ai_personality_behaviour = purger }
+						NOT = {
+							OR = {
+								has_ethic = ethic_fanatic_authoritarian
+								AND = {
+									has_ethic = ethic_authoritarian
+									OR = {
+										has_ethic = ethic_fanatic_xenophobe
+										has_ethic = ethic_fanatic_militarist
+										AND = {
+											has_ethic = ethic_xenophobe
+											has_ethic = ethic_militarist
+										}
+									}
+								}
+							}
+						}
+						OR = {
+							is_country_type = default
+							has_ai_personality = awakened_fallen_empire_xenophile				
+						}	
+					}
+					add_opinion_modifier = { who = root.owner modifier = opinion_genocidal }
+				}
+			}
+		}
+		owner = {
+			if = {
+				limit = { has_faction = progressive }
+				random_pop_faction = {
+					limit = { is_pop_faction_type = progressive }
+					add_modifier = {
+						modifier = cc_empire_terror_faction
+						years = 10
+					}
+				}
+			}
+		}
+		custom_tooltip = cc_emancipation.1.D.tooltip
+		
+		ai_chance = { factor = 10 }
+	}
+}
+
+planet_event = {
+	id = cc_emancipation.2
+	hide_window = yes
+	is_triggered_only = yes
+	
+	trigger = { 
+		NOR = {
+			has_planet_flag = cc_emancipation_movement
+			owner = { has_country_flag = cc_emancipation_movement }
+		}
+		owner = { allows_slavery = yes }
+	}
+	
+	immediate = {
+		random = {
+			chance = 10
+			planet_event = { id = cc_emancipation.4 days = 15 random = 10 }
+		}
+		
+		if = {
+			limit = { NOT = { owner = { has_country_flag = cc_enough_emancipation_12 } } }
+			planet_event = { id = cc_emancipation.2 days = 30 }
+		}
+		owner = {
+			if = {
+				limit = { 
+					has_country_flag = cc_enough_emancipation_11
+					NOT = { has_country_flag = cc_enough_emancipation_12 }
+				}
+				set_timed_country_flag = {
+					flag = cc_enough_emancipation_12
+					years = 2
+				}
+			}
+			if = {
+				limit = { 
+					has_country_flag = cc_enough_emancipation_10
+					NOT = { has_country_flag = cc_enough_emancipation_11 }
+				}
+				set_timed_country_flag = {
+					flag = cc_enough_emancipation_11
+					years = 2
+				}
+			}
+			if = {
+				limit = { 
+					has_country_flag = cc_enough_emancipation_9
+					NOT = { has_country_flag = cc_enough_emancipation_10 }
+				}
+				set_timed_country_flag = {
+					flag = cc_enough_emancipation_10
+					years = 2
+				}
+			}
+			if = {
+				limit = { 
+					has_country_flag = cc_enough_emancipation_8
+					NOT = { has_country_flag = cc_enough_emancipation_9 }
+				}
+				set_timed_country_flag = {
+					flag = cc_enough_emancipation_9
+					years = 2
+				}
+			}
+			if = {
+				limit = { 
+					has_country_flag = cc_enough_emancipation_7
+					NOT = { has_country_flag = cc_enough_emancipation_8 }
+				}
+				set_timed_country_flag = {
+					flag = cc_enough_emancipation_8
+					years = 2
+				}
+			}
+			if = {
+				limit = { 
+					has_country_flag = cc_enough_emancipation_6
+					NOT = { has_country_flag = cc_enough_emancipation_7 }
+				}
+				set_timed_country_flag = {
+					flag = cc_enough_emancipation_7
+					years = 2
+				}
+			}
+			if = {
+				limit = { 
+					has_country_flag = cc_enough_emancipation_5
+					NOT = { has_country_flag = cc_enough_emancipation_6 }
+				}
+				set_timed_country_flag = {
+					flag = cc_enough_emancipation_6
+					years = 2
+				}
+			}
+			if = {
+				limit = { 
+					has_country_flag = cc_enough_emancipation_4
+					NOT = { has_country_flag = cc_enough_emancipation_5 }
+				}
+				set_timed_country_flag = {
+					flag = cc_enough_emancipation_5
+					years = 2
+				}
+			}
+			if = {
+				limit = { 
+					has_country_flag = cc_enough_emancipation_3
+					NOT = { has_country_flag = cc_enough_emancipation_4 }
+				}
+				set_timed_country_flag = {
+					flag = cc_enough_emancipation_4
+					years = 2
+				}
+			}
+			if = {
+				limit = { 
+					has_country_flag = cc_enough_emancipation_2
+					NOT = { has_country_flag = cc_enough_emancipation_3 }
+				}
+				set_timed_country_flag = {
+					flag = cc_enough_emancipation_3
+					years = 2
+				}
+			}
+			if = {
+				limit = { 
+					has_country_flag = cc_enough_emancipation_1
+					NOT = { has_country_flag = cc_enough_emancipation_2 }
+				}
+				set_timed_country_flag = {
+					flag = cc_enough_emancipation_2
+					years = 2
+				}
+			}
+			if = {
+				limit = { 
+					NOT = { has_country_flag = cc_enough_emancipation_1 }
+				}
+				set_timed_country_flag = {
+					flag = cc_enough_emancipation_1
+					years = 2
+				}
+			}
+		}
+	}
+}
+
+planet_event = {
+	id = cc_emancipation.3
+	hide_window = yes
+	is_triggered_only = yes
+	
+	trigger = { 
+		NOR = {
+			has_planet_flag = cc_emancipation_movement
+			owner = { has_country_flag = cc_emancipation_movement }
+		}
+		owner = { allows_slavery = yes }
+	}
+	
+	immediate = {
+		random = {
+			chance = 5
+			planet_event = { id = cc_emancipation.4 days = 15 random = 10 }
+		}
+		
+		if = {
+			limit = { NOT = { owner = { has_country_flag = cc_enough_emancipation_12 } } }
+			planet_event = { id = cc_emancipation.2 days = 30 }
+		}
+		owner = {
+			if = {
+				limit = { 
+					has_country_flag = cc_enough_emancipation_11
+					NOT = { has_country_flag = cc_enough_emancipation_12 }
+				}
+				set_timed_country_flag = {
+					flag = cc_enough_emancipation_12
+					years = 2
+				}
+			}
+			if = {
+				limit = { 
+					has_country_flag = cc_enough_emancipation_10
+					NOT = { has_country_flag = cc_enough_emancipation_11 }
+				}
+				set_timed_country_flag = {
+					flag = cc_enough_emancipation_11
+					years = 2
+				}
+			}
+			if = {
+				limit = { 
+					has_country_flag = cc_enough_emancipation_9
+					NOT = { has_country_flag = cc_enough_emancipation_10 }
+				}
+				set_timed_country_flag = {
+					flag = cc_enough_emancipation_10
+					years = 2
+				}
+			}
+			if = {
+				limit = { 
+					has_country_flag = cc_enough_emancipation_8
+					NOT = { has_country_flag = cc_enough_emancipation_9 }
+				}
+				set_timed_country_flag = {
+					flag = cc_enough_emancipation_9
+					years = 2
+				}
+			}
+			if = {
+				limit = { 
+					has_country_flag = cc_enough_emancipation_7
+					NOT = { has_country_flag = cc_enough_emancipation_8 }
+				}
+				set_timed_country_flag = {
+					flag = cc_enough_emancipation_8
+					years = 2
+				}
+			}
+			if = {
+				limit = { 
+					has_country_flag = cc_enough_emancipation_6
+					NOT = { has_country_flag = cc_enough_emancipation_7 }
+				}
+				set_timed_country_flag = {
+					flag = cc_enough_emancipation_7
+					years = 2
+				}
+			}
+			if = {
+				limit = { 
+					has_country_flag = cc_enough_emancipation_5
+					NOT = { has_country_flag = cc_enough_emancipation_6 }
+				}
+				set_timed_country_flag = {
+					flag = cc_enough_emancipation_6
+					years = 2
+				}
+			}
+			if = {
+				limit = { 
+					has_country_flag = cc_enough_emancipation_4
+					NOT = { has_country_flag = cc_enough_emancipation_5 }
+				}
+				set_timed_country_flag = {
+					flag = cc_enough_emancipation_5
+					years = 2
+				}
+			}
+			if = {
+				limit = { 
+					has_country_flag = cc_enough_emancipation_3
+					NOT = { has_country_flag = cc_enough_emancipation_4 }
+				}
+				set_timed_country_flag = {
+					flag = cc_enough_emancipation_4
+					years = 2
+				}
+			}
+			if = {
+				limit = { 
+					has_country_flag = cc_enough_emancipation_2
+					NOT = { has_country_flag = cc_enough_emancipation_3 }
+				}
+				set_timed_country_flag = {
+					flag = cc_enough_emancipation_3
+					years = 2
+				}
+			}
+			if = {
+				limit = { 
+					has_country_flag = cc_enough_emancipation_1
+					NOT = { has_country_flag = cc_enough_emancipation_2 }
+				}
+				set_timed_country_flag = {
+					flag = cc_enough_emancipation_2
+					years = 2
+				}
+			}
+			if = {
+				limit = { 
+					NOT = { has_country_flag = cc_enough_emancipation_1 }
+				}
+				set_timed_country_flag = {
+					flag = cc_enough_emancipation_1
+					years = 2
+				}
+			}
+		}
+	}
+}
+	
+planet_event = {
+	id = cc_emancipation.4
+	hide_window = yes
+	is_triggered_only = yes
+	
+	trigger = { owner = { allows_slavery = yes } }
+	
+	immediate = {
+		if = {
+			limit = {
+				owner = { NOT = { any_owned_planet = { has_planet_flag = cc_second_emancipation_planet } } }
+			}
+			planet_event = { id = cc_emancipation.5 }
+
+			else = {
+				owner = {
+					if = {
+						limit = { NOT = { has_country_flag = cc_emancipation_movement } }
+						country_event = { id = cc_emancipation.6 }
+					}
+				}
+			}
+		}
+	}
+}
+
+
+##Second event
+planet_event = {
+	id = cc_emancipation.5
+	title = cc_emancipation.5.name
+	desc = cc_emancipation.5.desc
+	picture = GFX_evt_cc_emancipation
+	
+	is_triggered_only = yes
+	location = root
+	
+	trigger = {
+		any_owned_pop = {
+			is_enslaved = yes
+			species = { pops_have_happiness = yes }
+			happiness < 0.4
+		}
+		any_owned_pop = {
+			has_ethic = ethic_egalitarian
+			is_enslaved = no
+		}
+	}
+	
+	immediate = {
+		set_timed_planet_flag = {
+			flag = cc_emancipation_movement
+			years = 15
+		}
+		set_timed_planet_flag = {
+			flag = cc_second_emancipation_planet
+			years = 5
+		}
+	}
+	
+
+	option = {
+		name = cc_emancipation.1.A
+		
+		
+		add_modifier = {
+			modifier = cc_emancipation_celebration
+			years = 10
+		}
+
+		owner = {
+			shift_ethic = ethic_egalitarian
+			set_policy = {
+				policy = slavery
+				option = slavery_not_allowed
+				cooldown = yes
+			}
+			add_modifier = {
+				modifier = cc_emancipated
+				days = 3600
+			}
+			every_owned_planet = {
+				limit = { has_modifier = cc_emancipation_movement }
+				remove_modifier = cc_emancipation_movement
+				add_modifier = {
+					modifier = cc_emancipation_celebration
+					years = 10
+				}
+			}
+			random_pop_faction = {
+				limit = { is_pop_faction_type = progressive }
+				add_modifier = { modifier = embraced_faction days = 3600 }
+				hidden_effect = { 
+					add_modifier = { modifier = embraced_faction_timer days = 3600 }
+					owner = {
+						every_pop_faction = {
+							limit = {
+								NOR = {
+									is_same_value = prevprev
+									is_pop_faction_type = totalitarian
+								}
+							}
+							add_modifier = { modifier = embraced_another_faction days = 3600 }
+						}
+					}
+				}
+			}
+			random_pop_faction = {
+				limit = { is_pop_faction_type = totalitarian }
+				add_modifier = { modifier = cc_emancipation_furious days = 3600 }
+			}
+		}
+		
+		
+		trigger = {
+			owner = {
+				NOR = {
+					has_valid_civic = civic_fanatic_purifiers
+					has_ethic = ethic_fanatic_authoritarian
+				}
+			}
+		}
+		
+		ai_chance = { factor = 0 }
+	}
+	option = {
+		name = cc_emancipation.1.B
+		
+		add_modifier = {
+			modifier = cc_emancipation_movement
+			years = 10
+		}
+		
+		ai_chance = { factor = 2 }
+	}
+	option = {
+		name = CCOPPRESS
+		
+		add_modifier = {
+			modifier = cc_emancipation_movement
+			years = 10
+		}
+		
+		add_modifier = {
+			modifier = cc_planet_oppression
+			years = 10
+		}
+		
+		every_owned_pop = {
+			limit = {
+				has_ethic = ethic_egalitarian
+				is_enslaved = no
+			}
+			
+			add_modifier = {
+				modifier = cc_oppression
+				years = 10
+			}
+		}
+		
+		ai_chance = {
+			factor = 1
+			modifier = {
+				factor = 2
+				unrest > 30
+			}
+			modifier = {
+				factor = 2
+				unrest > 50
+			}
+			modifier = {
+				factor = 2
+				unrest > 80
+				owner = {
+					NOR = {
+						has_valid_civic = civic_fanatic_purifiers
+						has_ethic = ethic_fanatic_authoritarian
+						AND = {
+							has_ethic = ethic_authoritarian
+							OR = {
+								has_ethic = ethic_fanatic_xenophobe
+								has_ethic = ethic_fanatic_militarist
+								AND = {
+									has_ethic = ethic_xenophobe
+									has_ethic = ethic_militarist
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+	option = {
+		name = CCKILLALL
+		
+		trigger = {
+			owner = {
+				OR = {
+					has_valid_civic = civic_fanatic_purifiers
+					has_ethic = ethic_fanatic_authoritarian
+					AND = {
+						has_ethic = ethic_authoritarian
+						OR = {
+							has_ethic = ethic_fanatic_xenophobe
+							has_ethic = ethic_fanatic_militarist
+							AND = {
+								has_ethic = ethic_xenophobe
+								has_ethic = ethic_militarist
+							}
+						}
+					}
+				}
+			}
+		}
+		
+		every_owned_pop = {
+			limit = {
+				has_ethic = ethic_egalitarian
+				is_enslaved = no
+			}
+			kill_pop = yes
+			
+			hidden_effect = {
+				every_country = {
+					limit = {
+						has_communications = root.owner
+						NOT = { is_country = root.owner }
+						NOT = { has_ai_personality_behaviour = purger }
+						NOT = {
+							OR = {
+								has_ethic = ethic_fanatic_authoritarian
+								AND = {
+									has_ethic = ethic_authoritarian
+									OR = {
+										has_ethic = ethic_fanatic_xenophobe
+										has_ethic = ethic_fanatic_militarist
+										AND = {
+											has_ethic = ethic_xenophobe
+											has_ethic = ethic_militarist
+										}
+									}
+								}
+							}
+						}
+						OR = {
+							is_country_type = default
+							has_ai_personality = awakened_fallen_empire_xenophile				
+						}	
+					}
+					add_opinion_modifier = { who = root.owner modifier = opinion_genocidal }
+				}
+			}
+		}
+		owner = {
+			if = {
+				limit = { has_faction = progressive }
+				random_pop_faction = {
+					limit = { is_pop_faction_type = progressive }
+					add_modifier = {
+						modifier = cc_empire_terror_faction
+						years = 10
+					}
+				}
+			}
+		}
+		custom_tooltip = cc_emancipation.1.D.tooltip
+		
+		ai_chance = { factor = 10 }
+	}
+}
+		
+
+##Country-wide event on third planet being triggered
+country_event = {
+	id = cc_emancipation.6
+	title = cc_emancipation.6.name
+	desc = cc_emancipation.6.desc
+	picture = GFX_evt_cc_emancipation
+	
+	is_triggered_only = yes			
+	
+	immediate = {
+		set_timed_country_flag = {
+			flag = cc_emancipation_movement
+			years = 10
+		}
+		set_timed_country_flag = {
+			flag = cc_recent_emancipation_movement
+			years = 50
+		}
+		if = {
+			limit = { NOT = { has_country_flag = cc_has_had_emancipation_crisis } }
+			set_country_flag = cc_has_had_emancipation_crisis
+		}
+	}
+	option = {
+		name = cc_emancipation.1.A
+		
+
+		shift_ethic = ethic_egalitarian
+		set_policy = {
+			policy = slavery
+			option = slavery_not_allowed
+			cooldown = yes
+		}
+		add_modifier = {
+			modifier = cc_emancipated
+			days = 3600
+		}
+		every_owned_planet = {
+			limit = { has_modifier = cc_emancipation_movement }
+			remove_modifier = cc_emancipation_movement
+			add_modifier = {
+				modifier = cc_emancipation_celebration
+				years = 10
+			}
+		}
+		random_pop_faction = {
+			limit = { is_pop_faction_type = progressive }
+			add_modifier = { modifier = embraced_faction days = 3600 }
+			hidden_effect = { 
+				add_modifier = { modifier = embraced_faction_timer days = 3600 }
+				owner = {
+					every_pop_faction = {
+						limit = {
+							NOR = {
+								is_same_value = prevprev
+								is_pop_faction_type = totalitarian
+							}
+						}
+						add_modifier = { modifier = embraced_another_faction days = 3600 }
+					}
+				}
+			}
+		}
+		random_pop_faction = {
+			limit = { is_pop_faction_type = totalitarian }
+			add_modifier = { modifier = cc_emancipation_furious days = 3600 }
+		}
+		
+		
+		trigger = {
+			NOR = {
+				has_valid_civic = civic_fanatic_purifiers
+				has_ethic = ethic_fanatic_authoritarian
+			}
+		}
+		
+		ai_chance = { factor = 0 }
+	}
+	option = {
+		name = cc_emancipation.1.B
+		
+		add_modifier = {
+			modifier = cc_empire_emancipation_movement
+			years = 10
+		}
+		every_owned_planet = {
+			limit = {
+				NOT = { has_modifier = cc_emancipation_movement }
+				
+				any_owned_pop = {
+					is_enslaved = yes
+					species = { pops_have_happiness = yes }
+					happiness < 0.4
+				}
+				any_owned_pop = {
+					has_ethic = ethic_egalitarian
+					is_enslaved = no
+				}
+			}
+			add_modifier = {
+				modifier = cc_emancipation_movement
+				years = 10
+			}
+		}
+		
+		ai_chance = { factor = 2 }
+	}
+	option = {
+		name = CCOPPRESS
+		
+		add_modifier = {
+			modifier = cc_empire_emancipation_movement
+			years = 10
+		}
+		every_owned_planet = {
+			limit = {
+				NOT = { has_modifier = cc_emancipation_movement }
+				
+				any_owned_pop = {
+					is_enslaved = yes
+					species = { pops_have_happiness = yes }
+					happiness < 0.4
+				}
+				any_owned_pop = {
+					has_ethic = ethic_egalitarian
+					is_enslaved = no
+				}
+			}
+			add_modifier = {
+				modifier = cc_emancipation_movement
+				years = 10
+			}
+			add_modifier = {
+				modifier = cc_planet_oppression
+				years = 10
+			}
+			hidden_effect = {
+				every_owned_pop = {
+					limit = {
+						has_ethic = ethic_egalitarian
+						is_enslaved = no
+					}
+					
+					add_modifier = {
+						modifier = cc_oppression
+						years = 10
+					}
+				}
+			}
+		}
+		
+		if = {
+			limit = { has_faction = progressive }
+			random_pop_faction = {
+				limit = { is_pop_faction_type = progressive }
+				add_modifier = {
+					modifier = cc_faction_oppressed
+					days = 3600
+				}
+			}
+		}
+		
+		set_timed_country_flag = {
+			flag = cc_emancipation_oppress
+			years = 10
+		}
+		
+		custom_tooltip = cc_emancipation.6.C.tooltip
+		
+		ai_chance = {
+			factor = 1
+			modifier = {
+				factor = 0.5
+				count_pop_factions = {
+					limit = {
+						is_pop_faction_type = progressive
+						support > 0.15
+					}
+					count = 1
+				}
+			}
+			modifier = {
+				factor = 2
+				any_owned_planet = {
+					unrest > 30
+					any_owned_pop = {
+						is_enslaved = yes
+						species = { pops_have_happiness = yes }
+						happiness < 0.4
+					}
+					any_owned_pop = {
+						has_ethic = ethic_egalitarian
+						is_enslaved = no
+					}
+				}
+			}
+			modifier = {
+				factor = 2
+				any_owned_planet = {
+					unrest > 50
+					any_owned_pop = {
+						is_enslaved = yes
+						species = { pops_have_happiness = yes }
+						happiness < 0.4
+					}
+					any_owned_pop = {
+						has_ethic = ethic_egalitarian
+						is_enslaved = no
+					}
+				}
+			}
+			modifier = {
+				factor = 2
+				any_owned_planet = {
+					unrest > 80
+					any_owned_pop = {
+						is_enslaved = yes
+						species = { pops_have_happiness = yes }
+						happiness < 0.4
+					}
+					any_owned_pop = {
+						has_ethic = ethic_egalitarian
+						is_enslaved = no
+					}
+				}
+				NOR = {
+					has_valid_civic = civic_fanatic_purifiers
+					has_ethic = ethic_fanatic_authoritarian
+					AND = {
+						has_ethic = ethic_authoritarian
+						OR = {
+							has_ethic = ethic_fanatic_xenophobe
+							has_ethic = ethic_fanatic_militarist
+							AND = {
+								has_ethic = ethic_xenophobe
+								has_ethic = ethic_militarist
+							}
+						}
+					}
+				}
+			}
+		}
+		
+		trigger = {
+			owner = {
+				NOR = {
+					has_ethic = ethic_egalitarian
+					has_ethic = ethic_fanatic_egalitarian
+					has_ethic = ethic_pacifist
+					has_ethic = ethic_fanatic_pacifist
+				}
+			}
+		}
+	}
+	option = {
+		name = CCKILLALL
+		
+		trigger = {
+			OR = {
+				has_valid_civic = civic_fanatic_purifiers
+				has_ethic = ethic_fanatic_authoritarian
+				AND = {
+					has_ethic = ethic_authoritarian
+					OR = {
+						has_ethic = ethic_fanatic_xenophobe
+						has_ethic = ethic_fanatic_militarist
+						AND = {
+							has_ethic = ethic_xenophobe
+							has_ethic = ethic_militarist
+						}
+					}
+				}
+			}
+		}
+		
+		add_modifier = {
+			modifier = cc_empire_terror
+			years = 10
+		}
+		
+		hidden_effect = {
+			every_owned_planet = {
+				limit = {
+					any_owned_pop = {
+						is_enslaved = yes
+						species = { pops_have_happiness = yes }
+						happiness < 0.4
+					}
+					any_owned_pop = {
+						has_ethic = ethic_egalitarian
+						is_enslaved = no
+					}
+				}
+				every_owned_pop = {
+					limit = {
+						has_ethic = ethic_egalitarian
+						is_enslaved = no
+					}
+					kill_pop = yes
+				
+					every_country = {
+						limit = {
+							has_communications = root
+							NOT = { is_country = root }
+							NOT = { has_ai_personality_behaviour = purger }
+							NOT = {
+								OR = {
+									has_ethic = ethic_fanatic_authoritarian
+									AND = {
+										has_ethic = ethic_authoritarian
+										OR = {
+											has_ethic = ethic_fanatic_xenophobe
+											has_ethic = ethic_fanatic_militarist
+											AND = {
+												has_ethic = ethic_xenophobe
+												has_ethic = ethic_militarist
+											}
+										}
+									}
+								}
+							}
+							OR = {
+								is_country_type = default
+								has_ai_personality = awakened_fallen_empire_xenophile				
+							}	
+						}
+						add_opinion_modifier = { who = root modifier = opinion_genocidal }
+					}
+				}
+			}
+		}
+		if = {
+			limit = { has_faction = progressive }
+			random_pop_faction = {
+				limit = { is_pop_faction_type = progressive }
+				add_modifier = {
+					modifier = cc_empire_terror_faction
+					years = 10
+				}
+			}
+		}
+		custom_tooltip = cc_emancipation.6.D.tooltip
+		
+		ai_chance = { factor = 10 }
+	}
+}
+	
+
+	
+	
+	
+#Get rid of emancipation modifiers if the country gives up slavery randomly - maybe replace them with celebrations.
+
+event = {
+	id = cc_emancipation.99
+	hide_window = yes
+	is_triggered_only = yes
+		
+	immediate = {
+		every_country = { 
+			limit = {
+				has_modifier = cc_empire_emancipation_movement
+				allows_slavery = no
+			}
+			remove_modifier = cc_empire_emancipation_movement
+		}
+		every_country = {
+			limit = {
+				allows_slavery = no
+				any_owned_planet = { has_modifier = cc_emancipation_movement }
+			}
+			every_owned_planet = {
+				limit = { has_modifier = cc_emancipation_movement }
+				remove_modifier = cc_emancipation_movement
+				add_modifier = {
+					modifier = cc_emancipation_celebration
+					years = 10
+				}
+			}
+		}
+		every_country = {
+			limit = {
+				allows_slavery = yes
+				any_owned_planet = { has_modifier = cc_emancipation_celebration }
+			}
+			every_owned_planet = {
+				limit = { has_modifier = cc_emancipation_celebration }
+				remove_modifier = cc_emancipation_celebration
+				add_modifier = {
+					modifier = cc_emancipation_movement
+					years = 5
+				}
+			}
+		}
+		every_country = {
+			limit = { has_modifier = cc_empire_emancipation_movement }
+			every_owned_planet = {
+				limit = {
+					NOT = { has_modifier = cc_emancipation_movement }
+					
+					any_owned_pop = {
+						is_enslaved = yes
+						species = { pops_have_happiness = yes }
+						happiness < 0.4
+					}
+					any_owned_pop = {
+						has_ethic = ethic_egalitarian
+						is_enslaved = no
+					}
+				}
+				add_modifier = {
+					modifier = cc_emancipation_movement
+					years = 5
+				}
+				if = {
+					limit = { owner = { has_country_flag = cc_emancipation_oppress } }
+					
+					add_modifier = {
+						modifier = cc_planet_oppression
+						years = 5
+					}
+					every_owned_pop = {
+						limit = {
+							has_ethic = ethic_egalitarian
+							is_enslaved = no
+						}
+						
+						add_modifier = {
+							modifier = cc_oppression
+							years = 5
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+
+#extra setup event
+country_event = {
+	id = cc_emancipation.20
+	title = cc_emancipation.20.name
+	desc = {
+		trigger = {
+			any_relation = { has_country_flag = slave_rebels }
+		}
+		text = cc_emancipation.20.desc.breakaways
+	}
+	desc = {
+		trigger = {
+			NOT = { any_relation = { has_country_flag = slave_rebels } }
+			any_neighbor_country = { has_ethic = ethic_fanatic_egalitarian }
+		}
+		text = cc_emancipation.20.desc.neighbour
+	}
+
+	picture = GFX_evt_cc_emancipation
+	
+	trigger = {
+		is_country_type = default
+		allows_slavery = yes
+		NOR = {
+			has_country_flag = cc_emancipation_movement
+			has_country_flag = cc_recent_emancipation_movement
+			has_country_flag = cc_recent_preemancipation_event
+		}
+		
+		OR = {
+			any_relation = { has_country_flag = slave_rebels }
+			any_neighbor_country = { has_ethic = ethic_fanatic_egalitarian }
+		}
+		
+		any_owned_pop = {
+			is_enslaved = yes
+			species = { pops_have_happiness = yes }
+		}
+	}
+	
+	mean_time_to_happen = {
+		years = 10
+		modifier = {
+			factor = 0.75
+			any_neighbor_country = { has_country_flag = slave_rebels }
+		}
+		modifier = {
+			factor = 2
+			NOT = { has_faction = progressive }
+		}
+		modifier = {
+			factor = 0.75
+			has_country_flag = cc_enough_egalitarians
+		}
+		modifier = {
+			factor = 1.5
+			has_country_flag = cc_many2_authoritarians
+		}
+	}
+	
+	immediate = {
+		set_timed_country_flag = {
+			flag = cc_recent_preemancipation_event
+			years = 50
+		}
+		
+		if = {
+			limit = { any_relation = { has_country_flag = slave_rebels } }
+			random_relation = { 
+				limit = { has_country_flag = slave_rebels }
+				save_event_target_as = breakaway_slaves
+			}
+			else = {
+				random_neighbor_country = {
+					limit = { has_ethic = ethic_fanatic_egalitarian }
+					save_event_target_as = egalitarian_neighbour
+				}
+			}
+		}
+		every_owned_pop = {
+			limit = {
+				is_enslaved = no
+				species = { pops_have_happiness = yes }
+			}
+			pop_event = { id = cc_emancipation.21 }
+		}
+	}
+	
+	option = {
+		name = UNFORTUNATE
+		
+		if = {
+			limit = {
+				any_neighbor_country = { has_country_flag = slave_rebels }
+			}
+			custom_tooltip = cc_emancipation.20.tooltip.A
+			else = { custom_tooltip = cc_emancipation.20.tooltip.B }
+		}
+	}
+}
+
+pop_event = {
+	id = cc_emancipation.21
+	hide_window = yes
+	is_triggered_only = yes
+	
+	immediate = {
+		if = {
+			limit = { exists = event_target:breakaway_slaves }
+			random = {
+				chance = 33
+				add_modifier = {
+					modifier = cc_worried_about_slaves
+					days = 5400
+				}
+			}
+			else = {
+				random = {
+					chance = 25
+					add_modifier = {
+						modifier = cc_worried_about_slaves
+						days = 5400
+					}
+				}
+			}
+		}
+	}
+}

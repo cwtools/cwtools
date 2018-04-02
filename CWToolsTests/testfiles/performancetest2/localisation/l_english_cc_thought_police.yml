@@ -1,0 +1,12 @@
+﻿l_english:
+
+edict_cc_thought_police:0 "Thought Police"
+edict_cc_thought_police_desc:0 "Use modern technology to police the thoughts of the population and, if necessary, suppress disruptive elements.\n\n£pops  Pops with less than 40% happiness that do not share the ruling ethics will gradually be purged or forced to leave. This will not count as purging for the purposes of bonuses and penalties, but it will annoy egalitarian empires."
+
+	
+cc_thought_police.2.name:0 "Political Refugees Arrive from the [RefugeeEscapedFrom.GetName]"
+cc_thought_police.2.desc:0 "A battered fleet of small civilian vessels carrying §Y[Root.GetSpeciesNamePlural]§! fleeing from the §Y[RefugeeEscapedFrom.GetName]§! have arrived in our space. After we supplied them with food and provided medical attention to their wounded, the refugees were allowed to settle on §H[Root.Planet.GetName]§!.\n\nThese ragged and frightened refugees were political dissidents in the [RefugeeEscapedFrom.GetName], where they were pursued by the [RefugeeEscapedFrom.GetSpeciesName] thought police. They realised that the [RefugeeEscapedFrom.GetSpeciesName] authorities were onto them and that they had to leave immediately or they would be made to "disappear". They only made it out thanks to the efforts of a hastily organized underground railroad and a few sympathetic merchant skippers."
+cc_thought_police.2.a:0 "They are welcome here."
+
+
+triggered_opinion_cc_thought_police:0 "Active Thought Police"

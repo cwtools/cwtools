@@ -1,0 +1,17 @@
+﻿l_english:
+
+
+CCWORRYING:0 "令人担忧"
+CCGOOD:0 "很好，知道了。"
+CCGOOD2:0 "很高兴得知此事"
+CCGOODGOOD:0 "很好"
+CCEXCELLENT:0 "棒极了"
+CCUNPREDICTABLE.tooltip:0 "此举后果难以预料。"
+CCKILLALL:0 "一·个·不·留   全·部·杀·掉"
+CCYES:0 "好"
+CCNO:0 "不"
+CCOPPRESS:0 "镇压他们"
+
+CCKILLALL.tooltip:0 "其他国家可能感到不满"
+
+CCREMOVERULER.tooltip:0 "[root.GetRulerTitle] [root.GetRulerName]被从游戏中移除"

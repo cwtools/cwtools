@@ -1,0 +1,216 @@
+﻿l_german:
+
+###Modifiers
+
+cc_country_factional_unrest:0 "Fraktionen Unruhe"
+cc_country_factional_unrest_desc:0 "Das Imperium wird von erheblichen fraktionsbasierten Unruhen erschüttert."
+
+cc_seditious_talk_militarist:0 "Aufrührerische Reden"
+cc_seditious_talk_pacifist:0 "$cc_seditious_talk_militarist$"
+cc_seditious_talk_xenophobe:0 "$cc_seditious_talk_militarist$"
+cc_seditious_talk_xenophile:0 "$cc_seditious_talk_militarist$"
+cc_seditious_talk_egalitarian:0 "$cc_seditious_talk_militarist$"
+cc_seditious_talk_authoritarian:0 "$cc_seditious_talk_militarist$"
+cc_seditious_talk_spiritualist:0 "$cc_seditious_talk_militarist$"
+cc_seditious_talk_materialist:0 "$cc_seditious_talk_militarist$"
+
+cc_seditious_talk_militarist_desc:0 "Aufrührerische Reden die, so vermuten wir, durch die mit der militaristischen Fraktion affiliierten Bevölkerung verbreitet werden, kursieren auf dieser Welt."
+cc_seditious_talk_pacifist_desc:0 "Aufrührerische Reden die, wie so vermuten wir, durch die mit der pazifistischen Fraktion affiliierten Bevölkerung verbreitet werden, kursieren auf dieser Welt."
+cc_seditious_talk_xenophobe_desc:0 "Aufrührerische Reden die, so vermuten wir, durch die mit der xenophoben Fraktion affiliierten Bevölkerung verbreitet werden, kursieren auf dieser Welt."
+cc_seditious_talk_xenophile_desc:0 "Aufrührerische Reden die, so vermuten wir, durch die mit der xenophilen Fraktion affiliierten Bevölkerung verbreitet werden, kursieren auf dieser Welt."
+cc_seditious_talk_egalitarian_desc:0 "Aufrührerische Reden die, so vermuten wir, durch die mit der egalitären Fraktion affiliierten Bevölkerung verbreitet werden, kursieren auf dieser Welt."
+cc_seditious_talk_authoritarian_desc:0 "Aufrührerische Reden die, so vermuten wir, durch die mit der autoritären Fraktion affiliierten Bevölkerung verbreitet werden, kursieren auf dieser Welt."
+cc_seditious_talk_spiritualist_desc:0 "Aufrührerische Reden die, so vermuten wir, durch die mit der spiritualistischen Fraktion affiliierten Bevölkerung verbreitet werden, kursieren auf dieser Welt."
+cc_seditious_talk_materialist_desc:0 "Aufrührerische Reden die, so vermuten wir, durch die mit der materialistischen Fraktion affiliierten Bevölkerung verbreitet werden, kursieren auf dieser Welt."
+
+#imo this sounds better?
+ cc_faction_stronghold_xenoist:0 "Hochburg der Xenoisten"
+ cc_faction_stronghold_supremacist:0 "Hochburg der Rassisten"
+ cc_faction_stronghold_isolationist:0 "Hochburg der Isolationisten"
+ cc_faction_stronghold_totalitarian:0 "Hochburg der Totalitaristen"
+ cc_faction_stronghold_progressive:0 "Hochburg der Progressivisten"
+ cc_faction_stronghold_technologist:0 "Hochburg der Technokraten"
+ cc_faction_stronghold_traditionalist:0 "Hochburg der Traditionalisten"
+ cc_faction_stronghold_imperialist:0 "Hochburg der Imperialisten"
+ cc_faction_stronghold_prosperity:0 "Hochburg der Wohlstandsfraktion"
+
+ cc_faction_stronghold_xenoist_desc:0 "Dieser Planet ist eine Hochburg der regierungskritischen Xenoistenfraktion."
+ cc_faction_stronghold_supremacist_desc:0 "Dieser Planet ist eine Hochburg der regierungskritischen Rassistenfraktion."
+ cc_faction_stronghold_isolationist_desc:0 "Dieser Planet ist eine Hochburg der regierungskritischen Isolationistenfraktion."
+ cc_faction_stronghold_totalitarian_desc:0 "Dieser Planet ist eine Hochburg der regierungskritischen Totalitaristenfraktion."
+ cc_faction_stronghold_progressive_desc:0 "Dieser Planet ist eine Hochburg der regierungskritischen Progressivistenfraktion."
+ cc_faction_stronghold_technologist_desc:0 "Dieser Planet ist eine Hochburg der regierungskritischen Technokratenfraktion."
+ cc_faction_stronghold_traditionalist_desc:0 "Dieser Planet ist eine Hochburg der regierungskritischen Traditionalistenfraktion."
+ cc_faction_stronghold_imperialist_desc:0 "Dieser Planet ist eine Hochburg der regierungskritischen Imperialistenfraktion."
+ cc_faction_stronghold_prosperity_desc:0 "Dieser Planet ist eine Hochburg der regierungskritischen Wohlstandsfraktion."
+
+ cc_faction_sympathies_xenoist:0 "Xenoistische Zuneigung"
+ cc_faction_sympathies_supremacist:0 "Rassistische Zuneigung"
+ cc_faction_sympathies_isolationist:0 "Isolationistische Zuneigung"
+ cc_faction_sympathies_totalitarian:0 "Totalitaristische Zuneigung"
+ cc_faction_sympathies_progressive:0 "Progressive Zuneigung"
+ cc_faction_sympathies_technologist:0 "Technokratische Zuneigung"
+ cc_faction_sympathies_traditionalist:0 "Traditionalistische Zuneigung"
+ cc_faction_sympathies_imperialist:0 "Imperialistische Zuneigung"
+ cc_faction_sympathies_prosperity:0 "Zuneigung zur Wohlstandsfraktion"
+
+ cc_faction_sympathies_xenoist_desc:0 "Die Bevölkerung dieses Planeten hat erhebliche Zuneigung zur regierungskritischen Xenoistenfraktion."
+ cc_faction_sympathies_supremacist_desc:0 "Die Bevölkerung dieses Planeten hat erhebliche Zuneigung zur regierungskritischen Rassistenfraktion."
+ cc_faction_sympathies_isolationist_desc:0 "Die Bevölkerung dieses Planeten hat erhebliche Zuneigung zur regierungskritischen Isolationistenfraktion."
+ cc_faction_sympathies_totalitarian_desc:0 "Die Bevölkerung dieses Planeten hat erhebliche Zuneigung zur regierungskritischen Totalitaristenfraktion."
+ cc_faction_sympathies_progressive_desc:0 "Die Bevölkerung dieses Planeten hat erhebliche Zuneigung zur regierungskritischen Progressivistenfraktion."
+ cc_faction_sympathies_technologist_desc:0 "Die Bevölkerung dieses Planeten hat erhebliche Zuneigung zur regierungskritischen Technokratenfraktion."
+ cc_faction_sympathies_traditionalist_desc:0 "Die Bevölkerung dieses Planeten hat erhebliche Zuneigung zur regierungskritischen Traditionalistenfraktion."
+ cc_faction_sympathies_imperialist_desc:0 "Die Bevölkerung dieses Planeten hat erhebliche Zuneigung zur regierungskritischen Imperialistenfraktion."
+ cc_faction_sympathies_prosperity_desc:0 "Die Bevölkerung dieses Planeten hat erhebliche Zuneigung zur regierungskritischen Wohlstandsfraktion."
+
+ cc_faction_sedition_xenoist:0 "Xenoistische Volksverhetzung"
+ cc_faction_sedition_supremacist:0 "Rassistische Volksverhetzung"
+ cc_faction_sedition_isolationist:0 "Isolationistische Volksverhetzung"
+ cc_faction_sedition_totalitarian:0 "Totalitaristische Volksverhetzung"
+ cc_faction_sedition_progressive:0 "Progressive Volksverhetzung"
+ cc_faction_sedition_technologist:0 "Materialistische Volksverhetzung"
+ cc_faction_sedition_traditionalist:0 "Traditionalistische Volksverhetzung"
+ cc_faction_sedition_imperialist:0 "Imperialistische Volksverhetzung"
+ cc_faction_sedition_prosperity:0 "Pazifistische Volksverhetzung"
+
+cc_faction_sedition_xenoist_desc:0 "Die xenoistische Fraktion nutzt eine ihrer nahegelegenen Hochburgen um aufrührerische Propaganda auf dieser Welt in Umlauf zu bringen."
+cc_faction_sedition_supremacist_desc:0 "Die rassistische Fraktion nutzt eine ihrer nahegelegenen Hochburgen um aufrührerische Propaganda auf dieser Welt in Umlauf zu bringen."
+cc_faction_sedition_isolationist_desc:0 "Die isolationistische Fraktion nutzt eine ihrer nahegelegenen Hochburgen um aufrührerische Propaganda auf dieser Welt in Umlauf zu bringen."
+cc_faction_sedition_totalitarian_desc:0 "Die totalitäre Fraktion nutzt eine ihrer nahegelegenen Hochburgen um aufrührerische Propaganda auf dieser Welt in Umlauf zu bringen."
+cc_faction_sedition_progressive_desc:0 "Die progressive Fraktion nutzt eine ihrer nahegelegenen Hochburgen um aufrührerische Propaganda auf dieser Welt in Umlauf zu bringen."
+cc_faction_sedition_technologist_desc:0 "Die technokratische Fraktion nutzt eine ihrer nahegelegenen Hochburgen um aufrührerische Propaganda auf dieser Welt in Umlauf zu bringen."
+cc_faction_sedition_traditionalist_desc:0 "Die traditionalistische Fraktion nutzt eine ihrer nahegelegenen Hochburgen um aufrührerische Propaganda auf dieser Welt in Umlauf zu bringen."
+cc_faction_sedition_imperialist_desc:0 "Die imperialistische Fraktion nutzt eine ihrer nahegelegenen Hochburgen um aufrührerische Propaganda auf dieser Welt in Umlauf zu bringen."
+cc_faction_sedition_prosperity_desc:0 "Die Wohlstandsfraktion nutzt eine ihrer nahegelegenen Hochburgen um aufrührerische Propaganda auf dieser Welt in Umlauf zu bringen."
+
+cc_faction_acute_unrest:0 "Akute Fraktionsunruhe"
+cc_faction_acute_unrest_desc:0 "Wir haben Grund zu der Annahme, dass die auf dieser Welt dominante Fraktion in naher Zukunft versuchen könnte, die Macht an sich zu reißen."
+
+cc_failed_factional_revolt:0 "Fehlgeschlagene Fraktionsrevolte"
+cc_failed_factional_revolt_desc:0 "Die Bevölkerung wendet sich von der rebellierenden Fraktion, die dieser Welt nichts als Aufruhr und Unruhen gebracht hat, ab."
+
+cc_breakaway_sympathy:0 "Zustimmung für den Seperatistenstaat"
+cc_breakaway_sympathy_desc:0 "Die abtrünnige Fraktion auf dieser Welt genießt nennenswerte Unterstützung durch einen Großteil der ansässigen Bevölkerung. Dies könnte zu Problemen führen." 
+
+cc_empire_terror:0 "Schreckensstaat"
+cc_empire_terror_desc:0 "Der Staat hat seine eigene Bevölkerung massakriert."
+
+cc_empire_terror_faction:0 "Massakrierte Bevölkerung"
+
+cc_oppress_faction:0 "Weitverbreitete Unterdrückung"
+
+cc_bribed_planet:0 "Finanzielle Anreize"
+cc_bribed_planet_desc:0 "Der Staat hat dieser Welt beträchtliche finanzielle Zuwendungen gewährt um dessen Loyalität zu sichern."
+
+###Events
+
+#these go in the place of [cc_rebellious_faction.GetFactionTypeAdj]
+ ccloc_xenophilic:0 "xenophilistisch"
+ ccloc_supremacist:0 "rassistisch"
+ ccloc_isolationist:0 "isolationistisch"
+ ccloc_progressive:0 "progressiv"
+ ccloc_totalitarian:0 "totalitaristisch"
+ ccloc_imperialist:0 "imperialistisch"
+ ccloc_pacifistic:0 "pazifistisch"
+ ccloc_traditionalist:0 "traditionalistisch"
+ ccloc_materialistic:0 "materialistisch"
+
+ccfaction.1.name:0 "Fraktionsgetriebene Volksverhetzung"
+ ccfaction.1.desc:0 "In der Bevölkerung hat sich Unzufriedenheit über die Regierung der [root.GetName] verbreitet. Heimlich wird eine mehr [cc_rebellious_faction.GetFactionTypeAdj]e Ansicht befürwortet. Wir halten es für wahrscheinlich, dass eine Gruppe von Extremisten, die mit der [cc_rebellious_faction.GetName] affiliiert sind, die Quelle dieser Unruhen sind und das Ziel haben, sich von der [root.GetName] abzuspalten. Die [cc_rebellious_faction.GetName] bestreitet diese Vorwurfe."
+
+ ccfaction.2.name:0 "Die [cc_rebellious_faction.GetName] konsolidiert ihre Macht"
+ ccfaction.2.desc:0 "Die aufrührerische Reden, die eine [cc_rebellious_faction.GetFactionTypeAdj]e Regierung fordern, haben sich verbreitet und in Teile der [root.GetName] Wurzeln geschlagen. Die [cc_rebellious_faction.GetName] hat uns ein Manifest übermittelt, worin sie ihre Forderungen auflisten. Sie behaupten, einen populären Mandat zu haben, diese Planeten zu repräsentieren, und haben verschleierte Drohungen von Separatismus gemacht, falls ihre Forderungen nicht erfüllt werden. Wir müssen dringend handeln, um den Staat wieder standsicher zusammenzubringen!"
+
+
+ ccfaction.21.name:0 "Ende der fraktionsgetriebenen Volksverhetzungen"
+ ccfaction.21.desc.fail:0 "Die heimliche Volksverhetzungen der [cc_rebellious_faction.GetName] sind zu nichts gekommen und haben sich friedlich in Luft aufgelöst."
+ ccfaction.21.desc.succeed:0 "Die Aktionen der [cc_rebellious_faction.GetName] haben die Leitung der [root.GetName] überzeugt, die Regierung neuzugestalten, um besser die [cc_rebellious_faction.GetFactionTypeAdj]en Forderungen der [cc_rebellious_faction.GetName] zu gleichen. Ihre Vorsitzende sind mit diesen Änderungen zufrieden, und haben ihre heimlichen Volksverhetzungen beendet."
+
+ ccfaction.3.name:0 "Die [cc_new_reb_faction.GetName] hat sich mit der [cc_rebellious_faction.GetName] verbündet" 
+ ccfaction.3.desc:0 "Die [cc_new_reb_faction.GetName], die bis jetzt nur ein kleines, regierungskritisches Element in der [root.GetName] repräsentierte, hat sich mit der [cc_rebellious_faction.GetName], die aktiv für große Änderungen hetzt, ein Bündnis geschlossen. Sie haben ausreichende Gemeinsamkeit gefunden, um ihre Stimmen zusammenzubinden. Hiermit hoffen sie, den Rückhalt zu sichern, um ihre Vision eines [cc_rebellious_faction.GetFactionTypeAdj]en-[cc_new_reb_faction.GetFactionTypeAdj]en Staat zu verwirklichen - ob innerhalb der [root.GetName] oder als eigener Staat."
+
+ ccfaction.4.name:0 "Die [cc_rebellious_faction.GetName] versucht sich abzuspalten!"
+ ccfaction.4.dual.desc:0 "Ein Deserteur der [cc_rebellious_faction.GetName] hat ihre Pläne verraten: Sie haben vor, ihre Träume einer [cc_rebellious_faction.GetFactionTypeAdj]en, [cc_new_reb_faction.GetFactionTypeAdj]en Gesellschaft zu verwirklichen, indem sie sich von der [root.GetName] abspalten. Es ist ihnen wahrscheinlich bekannt, dass wir jetzt von ihren Plänen wissen, eine Rebellionsversuch könnte daher jeden Moment kommen. Wir müssen etwas tun!"
+
+ ccfaction.4.single.desc:0 "Ein Deserteur der [cc_rebellious_faction.GetName] hat ihre Pläne verraten: Sie haben vor, ihre Träume einer [cc_rebellious_faction.GetFactionTypeAdj]en Gesellschaft zu verwirklichen, indem sie sich von der [root.GetName] abspalten. Es ist ihnen wahrscheinlich bekannt, dass wir jetzt von ihren Plänen wissen, eine Rebellionsversuch könnte daher jeden Moment kommen. Wir müssen etwas tun!"
+
+ ccfaction.41.name:0 "Ende der fraktionsgetriebenen Volksverhetzungen"
+ ccfaction.41.dual.fail.desc:0 "Die Versuche der [cc_rebellious_faction.GetName] und der [cc_new_reb_faction.GetName], die Regierung zu politischem Wechsel zu zwingen, sind zu nichts gekommen und haben sich friedlich in Luft aufgelöst."
+ ccfaction.41.single.fail.desc:0 "Die Versuche der [cc_rebellious_faction.GetName], die Regierung zu politischem Wechsel zu zwingen, sind zu nichts gekommen und haben sich friedlich in Luft aufgelöst."
+ ccfaction.41.dual.succeed.desc:0 "Die Versuche der [cc_rebellious_faction.GetName] und der [cc_new_reb_faction.GetName], die Regierung zu politischem Wechsel zu zwingen, sind ohne Anlass zur Gewalt erfolgt: Die Regierung hat versprochen, den Staat neuzugestalten und in Zukunft in einer Weise, die den [cc_rebellious_faction.GetFactionTypeAdj]en und den [cc_new_reb_faction.GetFactionTypeAdj]en Staatsbürgern angenehmer ist, zu regieren."
+ ccfaction.41.single.succeed.desc:0 "Die Versuche der [cc_rebellious_faction.GetName], die Regierung zu politischem Wechsel zu zwingen, sind ohne Anlass zur Gewalt erfolgt: Die Regierung hat versprochen, den Staat neuzugestalten und in Zukunft in einer Weise, die den [cc_rebellious_faction.GetFactionTypeAdj]en Staatsbürgern angenehmer ist, zu regieren."
+
+
+ ccfaction.42.name:0 "Revolte der [cc_rebellious_faction.GetName] scheitert"
+ ccfaction.42.dual.fail.desc:0 "Versuche der [cc_rebellious_faction.GetName] und der [cc_new_reb_faction.GetName], ihre Forderungen durch Unabhängigkeit von der [root.GetName] durchzusetzen, sind gescheitert. Sie hatten einfach nicht die Unterstützung, die nötig wäre, um mit ihrer Revolte Erfolg zu haben. Die [root.GetName] hat den Sturm gewittert und ist geeint geblieben."
+ ccfaction.42.single.fail.desc:0 "Versuche der [cc_rebellious_faction.GetName], ihre Forderungen durch Unabhängigkeit von der [root.GetName] durchzusetzen, sind gescheitert. Sie hatten einfach nicht die Unterstützung, die nötig wäre, um mit ihrer Revolte Erfolg zu haben. Die [root.GetName] hat den Sturm gewittert und ist vereint geblieben."
+ ccfaction.42.dual.succeed.desc:0 "Die Drohung der [cc_rebellious_faction.GetName] und der [cc_new_reb_faction.GetName], dass sie die Unabhängigkeit erklären könnten, hat endlich die Regierung der [Root.GetName] überzeugt, ihre Meinungen in Betracht zu nehmen. Nachdem die höchsten Beamten verbindlich versprochen haben, dass sie die Regierung gemäß die Forderungen der regimekritischen Faktionen neugestalten werden, haben die [cc_rebellious_faction.GetName] und die [cc_new_reb_faction.GetName] sich einverstanden gegeben, die Revolte abzubrechen."
+ ccfaction.42.single.succeed.desc:0 "Die Drohung der [cc_rebellious_faction.GetName], dass sie die Unabhängigkeit erklären könnten, hat endlich die Regierung der [Root.GetName] überzeugt, ihre Meinung im Betracht zu nehmen. Nachdem die höchsten Beamten verbindlich versprochen haben, dass sie die Regierung gemäß die Forderungen der regimekritischen Faktionen neugestalten werden, hat die [cc_rebellious_faction.GetName] sich einverstanden gegeben, die Revolte abzubrechen."
+
+
+#Revolt happens
+ ccfaction.6.name:0 "Die [cc_rebellious_faction.GetName] rebelliert!"
+ ccfaction.6.desc.succeed.single:0 "[cc_rebellious_faction.GetName]-affiliierte Politiker haben durch einem unblutigen Staatsstreich auf [cc_rebel_faction_capital.GetName] die Macht ergriffen und Unabhängigkeit erklärt. Sie beklagen, dass die Regierung der [root.GetName] langjährig die Forderungen ihrer Mitbürger ignoriert hat, und nennen sich jetzt die [cc_breakaway_country.GetName]. Die Vorsitzenden der [cc_rebellious_faction.GetName] unterstützen den abtrünnigen Staat öffentlich, und haben ihre Anhänger aufgerufen, ihnen vordringlich in den Kampf für ihren Unabhängigkeit beizutreten. Eine Zeit des Tumults steht vor uns."
+ ccfaction.6.desc.succeed.dual:0 "[cc_rebellious_faction.GetName]- und [cc_new_reb_faction.GetName]-affiliierte Politiker haben durch einem unblutigen Staatsstreich auf [cc_rebel_faction_capital.GetName] die Macht ergriffen und Unabhängigkeit erklärt. Sie beklagen, dass die Regierung der [root.GetName] langjährig die Forderungen ihrer Mitbürger ignoriert hat, und nennen sich jetzt die [cc_breakaway_country.GetName]. Die Vorsitzenden der [cc_rebellious_faction.GetName] und der [cc_new_reb_faction.GetName] unterstützen den abtrünnigen Staat öffentlich, und haben ihre Anhänger aufgerufen, ihnen vordringlich in den Kampf für ihren Unabhängigkeit beizutreten. Eine Zeit des Tumults steht vor uns."
+
+ ccfaction.6.desc.attempt.single:0 "Anhänger der [cc_rebellious_faction.GetName] haben eine bewaffnete Revolte gegen unsere Regierung auf [cc_rebel_faction_capital.GetName] unternommen. Sie nennen sich jetzt die [cc_breakaway_country.GetName], und kämpfen um die Kontrolle über den Planeten. Ein Großteil der Vorsitzenden der [cc_rebellious_faction.GetName] haben sich zurückgehalten und zögern, öffentlich die Revolutionäre zu befürworten. Jedoch nehmen unsere Nachrichtendienste an, dass sie sich ihnen schnell anschließen werden, sollte die Rebellion gelingen."
+ ccfaction.6.desc.attempt.dual:0 "Anhänger der [cc_rebellious_faction.GetName] und der [cc_new_reb_faction.GetName] haben eine bewaffnete Revolte gegen unsere Regierung auf [cc_rebel_faction_capital.GetName] unternommen. Sie nennen sich jetzt die [cc_breakaway_country.GetName], und kämpfen um die Kontrolle über den Planeten. Ein Großteil der Vorsitzenden der [cc_rebellious_faction.GetName] und der [cc_new_reb_faction.GetName] haben sich zurückgehalten und zögern, öffentlich die Revolutionäre zu befürworten. Jedoch nehmen unsere Nachrichtendienste an, dass sie sich ihnen schnell anschließen werden, sollte die Rebellion gelingen."
+
+ ccfaction.601.name:0 "Treuebruch!"
+ ccfaction.601.desc.both:0 "[cc_rebellious_faction_leader.GetTitle] [cc_rebellious_faction_leader.GetName] und [cc_new_reb_faction_leader.GetTitle] [cc_new_reb_faction_leader.GetName] sind zu der [cc_breakaway_country.GetName] überlaufen."
+ ccfaction.601.desc.only1:0 "[cc_rebellious_faction_leader.GetTitle] [cc_rebellious_faction_leader.GetName] ist zu der [cc_breakaway_country.GetName] überlaufen und leitet jetzt die Rebellion gegen uns."
+ ccfaction.601.desc.only2:0 "[cc_new_reb_faction_leader.GetTitle] [cc_new_reb_faction_leader.GetName] ist zu der [cc_breakaway_country.GetName] überlaufen."
+
+ ccfaction.61.name:0 "[root.GetName] ist zu der [cc_breakaway_country.GetName] überlaufen!"
+ ccfaction.61.desc:0 "Nach massiven, wochenlangen Demonstrationen, die das Ausmaß der öffentlichen Meinung zugunsten [cc_breakaway_country.GetName] klar gemacht haben, hat sich die planetare Regierung [root.GetName]s hat sich den Forderungen ihrer Bevölkerung gebeugt. Sie haben bekanntgemacht, dass sie sich den Separatisten anschließen werden."
+ ccfaction.62.name:0 "Anhänger der [cc_breakaway_country.GetName] versuchen auf [root.GetName] die Macht an sich zu reißen!" 
+ ccfaction.62.desc:0 "Anhänger der [cc_breakaway_country.GetName] haben den Ruf zur Auflehnung ihrer Anführer gehorcht und sind jetzt in bewaffneter Rebellion gegen uns. Ihr Ziel ist sich den Separatisten anzuschließen."
+
+
+#first wave revolt breaks free
+ ccfaction.64.name:0 "[fromfrom.GetName] hat sich abgespalten!"
+ ccfaction.64.desc:0 "Unsere Behörden haben die Kontrolle über [fromfrom.GetName] verloren. Der Planet ist jetzt von der [cc_rebellious_faction.GetName] - die den Namen "[cc_breakaway_country.GetName]" angenommen hat - regiert. Sie haben alle Anhänger der [cc_rebellious_faction.GetName] aufgerufen, ihnen im Unabhängigkeitskrieg gegen der [root.GetName] zu unterstützen."
+
+
+#second wave revolt breaks free
+ ccfaction.67.name:0 "Rebellen auf [fromfrom.GetName] haben sich der [cc_breakaway_country.GetName] angeschlossen!"
+ ccfaction.67.desc:0 "Unsere Behörden haben die Kontrolle über [fromfrom.GetName] verloren. Die neuen Besitzer des Planeten haben sich der [cc_breakaway_country.GetName] angeschlossen und ist somit dem Aufstand gegen uns beigetreten."
+
+#It fails
+ ccfaction.68.name:0 "Fraktionsgetriebene Revolutionäre sind am Ergreifen [fromfrom.GetName]s gescheitert"
+ ccfaction.68.desc.first:0 "Unsere Behörden auf [fromfrom.GetName] haben gegen revolutionäre Anhänger der [cc_rebellious_faction.GetName] gesiegt. Sie hatten vor sich der [cc_breakaway_country.GetName] anzuschließen. Die Ordnung ist wiederhergestellt worden."
+ ccfaction.68.desc.second:0 "Unsere Behörden auf [fromfrom.GetName] haben gegen revolutionäre Anhänger der [cc_rebellious_faction.GetName] gesiegt. Sie hatten vor, sich von uns abzutrennen und ihren eigenen Staat zu gründen. Die Ordnung ist wiederhergestellt worden."
+
+
+#What to do with the sympathies planets?
+ ccfaction.7.name:0 "Sympathisanten der [cc_breakaway_country.GetName]"
+ ccfaction.7.desc:0 "Eine erhebliche Minderheit auf [random_sympathies_planet.GetName] und anderen Planeten unterstützt insgeheim die [cc_breakaway_country.GetName]. Die Anhänger der seperatistischen Fraktion mobilisieren und werden gewiss Unruhe stiften, sollten wir ihenen die Gelegenheit dazu geben. Wie sollen wir mit ihnen umgehen?"
+ ccfaction.7.A.tooltip:0 "Alle Anhänger der abtrünnigen Faktion auf diesen Planeten werden umgebracht. Andere Staaten könnten Anstoß nehmen."
+ ccfaction.7.B.tooltip:0 "Alle Anhänger der abtrünnigen Faktion auf diesen Planeten bekommen den Modifikator §R$cc_oppression$§!: -50% Produktion aller Ressourcen."
+ ccfaction.7.C:0 "Gebt ihnen eine großzügige Subvention."
+ ccfaction.7.C.tooltip:0 "Hoffentlich erinnert sie das an die Vorteile, Teil der [root.GetName] zu sein."
+ ccfaction.7.D:0 "Tue nichts."
+
+ ccfaction.900.name:0 "Die Volksverhetzung der [cc_rebellious_faction.GetName] ist vorbei"
+ ccfaction.900.exists.desc:0 "Die [root.GetName] ist durch die von der Volksverhetzung der [cc_rebellious_faction.GetName] versachten Tumult geschwächt worden: Die [cc_rebellious_faction.GetName] ist abgespalten. Mit dieser Abspaltung haben jedoch die Mehrheit der aufrührerischen Elemente die [root.GetName] verlassen. Obwohl die Situation längst nicht ideal ist, haben wir zumindest innerhalb der [root.GetName] etwas Ordnung wiederhergestellt."
+ ccfaction.900.doesnotexist.desc:0 "Die [root.GetName] hat eine Zeit des Tumults, die von der Volksverhetzungen der [cc_rebellious_faction.GetName] verursacht wurden, überstanden. Zwar ist es zu Rebellionsversuche gekommen, diese wurden aber im Keim erstickt. Ordnung innerhalb der [root.GetName] ist somit wiederhergestellt."
+
+ CCWORRYING:0 "Beunruhigend."
+ CCGOOD:0 "Gut zu wissen."
+ CCGOOD2:0 "Das sind gute Nachrichten."
+
+
+ ccfaction.9993.name:0 "Hochburg auf [root.GetName] bezwingt"
+ ccfaction.9993.desc:0 "Wir haben [root.GetName] wieder unter unserem Einfluss gebracht. Es zählt nun nicht mehr zu den Hochburgen der [cc_rebellious_faction.GetName]. Unsere Kontrolle über den Planeten ist dadurch sicherer geworden."
+ ccfaction.99931.desc:0 "Wir haben [root.GetName] wieder unter unserem Einfluss gebracht. Es zählt nun nicht mehr zu den Hochburgen der [cc_new_reb_faction.GetName]. Unsere Kontrolle über den Planeten ist dadurch sicherer geworden."
+ ccfaction.9994.name:0 "[root.GetName] wird zu einer Hochburg der [cc_rebellious_faction.GetName]"
+ ccfaction.9994.desc:0 "Die [cc_rebellious_faction.GetName] hat ausreichend Einfluss auf [root.GetName] aufgebaut, dass der Planet jetzt zu einer ihrer Hochburgen gezählt werden kann. Wir müssen dringend Maßnahmen ergreifen, sonst riskieren wir, Kontrolle über den Planeten verlieren."
+ ccfaction.99941.desc:0 "Die [cc_new_reb_faction.GetName] hat ausreichend Einfluss auf [root.GetName] aufgebaut, dass der Planet jetzt zu einer ihrer Hochburgen gezählt werden kann. Wir müssen dringend Maßnahmen ergreifen, sonst riskieren wir, Kontrolle über den Planeten verlieren."
+
+
+ cc_faction_revolt_modifiers_removed:0 "Alle planetare Modifikatoren, die mit der Fraktionsrevolte zu tun haben, werden entfernt."
+ 
+
+war_goal_wg_dpe_faction_revolt:0 "Fraktionsrevolte"
+war_goal_wg_dpe_faction_revolt_desc:0 "Führt Krieg, um die jetzige Regime zu stürzen."

@@ -1,0 +1,22 @@
+
+wg_dpe_faction_revolt = {
+	casus_belli = cb_event
+	
+	total_war = yes
+	
+	surrender_acceptance = -1000
+	war_exhaustion = 0.75
+	
+	set_defender_wargoal = wg_dpe_faction_revolt
+
+	potential = {
+		always = no # event only
+	}
+	possible = {
+		always = yes
+	}
+	
+	ai_weight = {
+		weight = 100
+	}
+}

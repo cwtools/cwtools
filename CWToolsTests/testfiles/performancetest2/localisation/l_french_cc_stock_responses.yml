@@ -1,0 +1,15 @@
+﻿l_french:
+
+
+CCWORRYING:0 "Inquiétant."
+CCGOOD:0 "Bon à savoir."
+CCGOOD2:0 "C'est une bonne nouvelle."
+CCGOODGOOD:0 "Bien."
+CCEXCELLENT:0 "Excellent."
+CCUNPREDICTABLE.tooltip:0 "Les conséquences de ces mesures sont imprévisibles."
+CCKILLALL:0 "Tuez. Les. Tous."
+CCYES:0 "Oui."
+CCNO:0 "Non."
+CCOPPRESS:0 "Opprimez-les."
+CCREMOVERULER.tooltip:0 "[root.GetRulerTitle] [root.GetRulerName] est retiré du jeu."
+CCKILLALL.tooltip:0 "Cela risque de contrarier d'autres pays."

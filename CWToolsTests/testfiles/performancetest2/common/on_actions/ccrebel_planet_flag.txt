@@ -1,0 +1,12 @@
+
+on_game_start = {
+	events = {
+		ccrebel_sow_unrest.998
+	}
+}
+
+on_yearly_pulse = {
+	events = {
+		ccrebel_sow_unrest.998
+	}
+}

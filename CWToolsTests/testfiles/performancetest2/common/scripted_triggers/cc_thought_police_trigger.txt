@@ -1,0 +1,99 @@
+
+is_valid_TP_refugee_pop = {
+	is_robot_pop = no
+	NOR = { 
+		has_trait = trait_hive_mind 
+		has_trait = trait_nerve_stapled
+	}
+	exists = owner
+	owner = {
+		any_relation = {
+			is_country_type = default
+			NOT = { has_policy_flag = refugees_not_allowed } 
+			root = {
+				OR = { 
+					has_citizenship_type = { type = citizenship_full country = prev }
+					has_citizenship_type = { type = citizenship_caste_system country = prev }
+					AND = {
+						OR = {
+							has_citizenship_type = { type = citizenship_limited country = prev }
+							has_citizenship_type = { type = citizenship_caste_system_limited country = prev }
+						}
+						prev = { has_policy_flag = refugees_allowed }
+					}	
+				}
+				OR = {
+					prev = {
+						OR = {
+							has_ethic = ethic_egalitarian
+							has_ethic = ethic_fanatic_egalitarian
+						}
+					}
+					AND = {
+						has_ethic = ethic_militarist
+						prev = {
+							OR = {
+								has_ethic = ethic_militarist
+								has_ethic = ethic_fanatic_militarist
+							}
+						}
+					}
+					AND = {
+						has_ethic = ethic_pacifist
+						prev = {
+							OR = {
+								has_ethic = ethic_pacifist
+								has_ethic = ethic_fanatic_pacifist
+							}
+						}
+					}
+					AND = {
+						has_ethic = ethic_spiritualist
+						prev = {
+							OR = {
+								has_ethic = ethic_spiritualist
+								has_ethic = ethic_fanatic_spiritualist
+							}
+						}
+					}
+					AND = {
+						has_ethic = ethic_materialist
+						prev = {
+							OR = {
+								has_ethic = ethic_materialist
+								has_ethic = ethic_fanatic_materialist
+							}
+						}
+					}
+					AND = {
+						has_ethic = ethic_xenophile
+						prev = {
+							OR = {
+								has_ethic = ethic_xenophile
+								has_ethic = ethic_fanatic_xenophile
+							}
+						}
+					}
+					AND = {
+						has_ethic = ethic_xenophobe
+						prev = {
+							OR = {
+								has_ethic = ethic_xenophobe
+								has_ethic = ethic_fanatic_xenophobe
+							}
+						}
+					}
+				}
+			}
+			any_owned_planet = {
+				habitability = { who = root value > 0.2 }
+				any_tile = {
+					has_blocker = no
+					has_pop = no
+				}
+			}
+		}		
+	}
+}
+
+

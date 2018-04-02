@@ -1,0 +1,395 @@
+﻿l_english:
+
+cc_events_mod.1.name:0 "排外主义言论"
+cc_events_mod.1.desc:0 "[root.GetRulerTitle] [root.GetRulerName]近日发表排外主义言论时不慎被人录像。他对[discriminated_species.GetSpeciesNamePlural]的智力与外表大加嘲讽，称它们永远无法与[root.GetSpeciesNamePlural]相提并论。[discriminated_species.GetSpeciesName]社群对此义愤填膺，以[xenoist_faction.GetName]为首的外星权益活动家们公开要求[root.GetRulerTitle] [root.GetRulerName]辞职下台。"
+cc_events_mod.1.HUM:0 "[root.GetRulerTitle] [root.GetRulerName]近日发表排外主义言论时不慎被人录像。他对[discriminated_species.GetSpeciesNamePlural]的智力与外表大加嘲讽，称这些"愚蠢的猴子"臭气冲天，生仔跟老鼠一样快，超过两位数的加减法就能叫它们抓耳挠腮。[discriminated_species.GetSpeciesName]社群对此义愤填膺，以[xenoist_faction.GetName]为首的外星权益活动家们公开要求[root.GetRulerTitle] [root.GetRulerName]辞职下台。"
+cc_events_mod.1.MAM:0 "[root.GetRulerTitle] [root.GetRulerName]近日发表排外主义言论时不慎被人录像。他对[discriminated_species.GetSpeciesNamePlural]的智力与外表大加嘲讽，称它们生仔跟老鼠一样快，存在的唯一价值就是让老鼠显得不那么令人讨厌。[discriminated_species.GetSpeciesName]社群对此义愤填膺，以[xenoist_faction.GetName]为首的外星权益活动家们公开要求[root.GetRulerTitle] [root.GetRulerName]辞职下台。"
+cc_events_mod.1.REP:0 "[root.GetRulerTitle] [root.GetRulerName]近日发表排外主义言论时不慎被人录像。他对[discriminated_species.GetSpeciesNamePlural]的智力与外表大加嘲讽，称这些"愚蠢的蜥蜴"面目丑恶，只适合干些蠢活杂事，所有实验室都应该小心不要让它们混进来。[discriminated_species.GetSpeciesName]社群对此义愤填膺，以[xenoist_faction.GetName]为首的外星权益活动家们公开要求[root.GetRulerTitle] [root.GetRulerName]辞职下台。"
+cc_events_mod.1.AVI:0 "[root.GetRulerTitle] [root.GetRulerName]近日发表排外主义言论时不慎被人录像。他对[discriminated_species.GetSpeciesNamePlural]的智力与外表大加嘲讽，称这些"愚蠢的家禽"外表与大脑都与肉鸡无异，永远无法与[root.GetSpeciesNamePlural]相提并论。[discriminated_species.GetSpeciesName]社群对此义愤填膺，以[xenoist_faction.GetName]为首的外星权益活动家们公开要求[root.GetRulerTitle] [root.GetRulerName]辞职下台。"
+cc_events_mod.1.ART:0 "[root.GetRulerTitle] [root.GetRulerName]近日发表排外主义言论时不慎被人录像。他对[discriminated_species.GetSpeciesNamePlural]的智力与外表大加嘲讽，称这些"愚蠢的臭虫"令人作呕，它们的存在仿佛[root.GetName]长了皮癣。[discriminated_species.GetSpeciesName]社群对此义愤填膺，以[xenoist_faction.GetName]为首的外星权益活动家们公开要求[root.GetRulerTitle] [root.GetRulerName]辞职下台。"
+cc_events_mod.1.MOL:0 "[root.GetRulerTitle] [root.GetRulerName]近日发表排外主义言论时不慎被人录像。他对[discriminated_species.GetSpeciesNamePlural]的智力与外表大加嘲讽，称它们令人作呕，似乎总是在分泌黏液，它们的存在仿佛[root.GetName]长了湿疹。[discriminated_species.GetSpeciesName]社群对此义愤填膺，以[xenoist_faction.GetName]为首的外星权益活动家们公开要求[root.GetRulerTitle] [root.GetRulerName]辞职下台。"
+cc_events_mod.1.FUN:0 "[root.GetRulerTitle] [root.GetRulerName]近日发表排外主义言论时不慎被人录像。他对[discriminated_species.GetSpeciesNamePlural]的智力与外表大加嘲讽，称这些"愚蠢的香菇"不知怎么被算作了智慧生物，永远不可能与 [root.GetSpeciesNamePlural]相提并论。[discriminated_species.GetSpeciesName]社群对此义愤填膺，以[xenoist_faction.GetName]为首的外星权益活动家们公开要求[root.GetRulerTitle] [root.GetRulerName]辞职下台。"
+cc_events_mod.1.PLANT:0 "[root.GetRulerTitle] [root.GetRulerName]近日发表排外主义言论时不慎被人录像。他对[discriminated_species.GetSpeciesNamePlural]的智力与外表大加嘲讽，称这些"愚蠢的盆栽植物"不过是长了些神经细胞的树墩，永远不可能与 [root.GetSpeciesNamePlural]相提并论。[discriminated_species.GetSpeciesName]社群对此义愤填膺，以[xenoist_faction.GetName]为首的外星权益活动家们公开要求[root.GetRulerTitle] [root.GetRulerName]辞职下台。"
+
+cc_events_mod.1.A:0 "退出公共生活。"
+cc_events_mod.1.A.tooltip:0 "将[root.GetRulerTitle] [root.GetRulerName]从游戏中移除。 添加调整值 §Y25%§! $pop_ethic_xenophile_attraction_mult$  持续10年"
+cc_events_mod.1.B:0 "[root.GetRulerTitle]只是实话实话。"
+cc_events_mod.1.B.tooltip:0 "维护[root.GetRulerTitle]的声誉，声明其言论是广泛共识。 \n\n转向排外主义。[xenoist_faction.GetName]派系和[discriminated_species.GetSpeciesNamePlural]民众将会§R怒火滔天§!。"
+cc_events_mod.1.C:0 "[root.GetRulerTitle]还有更重要的事要操心。"
+cc_events_mod.1.C.tooltip:0 "[xenoist_faction.GetName]和[discriminated_species.GetSpeciesNamePlural]将会§R不满§!。"
+
+
+cc_events_mod.2.desc:0 "[root.GetRulerTitle] [root.GetRulerName]近日发表排外主义言论时不慎被人录像。他对[discriminated_species.GetSpeciesNamePlural]的智力与外表大加嘲讽，称它们永远无法与[root.GetSpeciesNamePlural]相提并论。[discriminated_species.GetSpeciesName]社群对此义愤填膺，以[xenoist_faction.GetName]为首的外星权益活动家们代表[discriminated_species.GetSpeciesNamePlural]要求[root.GetRulerTitle]作出正式道歉。"
+cc_events_mod.2.HUM:0 "[root.GetRulerTitle] [root.GetRulerName]近日发表排外主义言论时不慎被人录像。他对[discriminated_species.GetSpeciesNamePlural]的智力与外表大加嘲讽，称这些"愚蠢的猴子"臭气冲天，生仔跟老鼠一样快，超过两位数的加减法就能叫它们抓耳挠腮。[discriminated_species.GetSpeciesName]社群对此义愤填膺，以[xenoist_faction.GetName]为首的外星权益活动家们代表[discriminated_species.GetSpeciesNamePlural]要求[root.GetRulerTitle]作出正式道歉。"
+cc_events_mod.2.MAM:0 "[root.GetRulerTitle] [root.GetRulerName]近日发表排外主义言论时不慎被人录像。他贬损了[discriminated_species.GetSpeciesNamePlural]的智力与外表，称它们生仔跟老鼠一样快，存在的唯一价值就是让老鼠显得不那么令人讨厌。[discriminated_species.GetSpeciesName]社群对此义愤填膺，以[xenoist_faction.GetName]为首的外星权益活动家们代表[discriminated_species.GetSpeciesNamePlural]要求[root.GetRulerTitle]作出正式道歉。"
+cc_events_mod.2.REP:0 "[root.GetRulerTitle] [root.GetRulerName]近日发表排外主义言论时不慎被人录像。他贬损了[discriminated_species.GetSpeciesNamePlural]的智力与外表，称这些"愚蠢的蜥蜴"面目丑恶，只适合干些蠢活杂事，所有实验室都应该小心不要让它们混进来。[discriminated_species.GetSpeciesName]社群对此义愤填膺，以[xenoist_faction.GetName]为首的外星权益活动家们代表[discriminated_species.GetSpeciesNamePlural]要求[root.GetRulerTitle]作出正式道歉。"
+cc_events_mod.2.AVI:0 "[root.GetRulerTitle] [root.GetRulerName]近日发表排外主义言论时不慎被人录像。他贬损了[discriminated_species.GetSpeciesNamePlural]的智力与外表，称这些"愚蠢的家禽"外表与大脑都与肉鸡无异，永远无法与[root.GetSpeciesNamePlural]相提并论。[discriminated_species.GetSpeciesName]社群对此义愤填膺，以[xenoist_faction.GetName]为首的外星权益活动家们代表[discriminated_species.GetSpeciesNamePlural]要求[root.GetRulerTitle]作出正式道歉。"
+cc_events_mod.2.ART:0 "[root.GetRulerTitle] [root.GetRulerName]近日发表排外主义言论时不慎被人录像。他贬损了[discriminated_species.GetSpeciesNamePlural]的智力与外表，称这些"愚蠢的臭虫"令人作呕，它们的存在仿佛[root.GetName]长了皮癣。[discriminated_species.GetSpeciesName]社群对此义愤填膺，以[xenoist_faction.GetName]为首的外星权益活动家们代表[discriminated_species.GetSpeciesNamePlural]要求[root.GetRulerTitle]作出正式道歉。"
+cc_events_mod.2.MOL:0 "[root.GetRulerTitle] [root.GetRulerName]近日发表排外主义言论时不慎被人录像。他贬损了[discriminated_species.GetSpeciesNamePlural]的智力与外表，称它们令人作呕，似乎总是在分泌黏液，它们的存在仿佛[root.GetName]长了湿疹。[discriminated_species.GetSpeciesName]社群对此义愤填膺，以[xenoist_faction.GetName]为首的外星权益活动家们代表[discriminated_species.GetSpeciesNamePlural]要求[root.GetRulerTitle]作出正式道歉。"
+cc_events_mod.2.FUN:0 "[root.GetRulerTitle] [root.GetRulerName]近日发表排外主义言论时不慎被人录像。他贬损了[discriminated_species.GetSpeciesNamePlural]的智力与外表，称这些"愚蠢的香菇"不知怎么被算作了智慧生物，永远不可能与 [root.GetSpeciesNamePlural]相提并论。[discriminated_species.GetSpeciesName]社群对此义愤填膺，以[xenoist_faction.GetName]为首的外星权益活动家们代表[discriminated_species.GetSpeciesNamePlural]要求[root.GetRulerTitle]作出正式道歉。"
+cc_events_mod.2.PLANT:0 "[root.GetRulerTitle] [root.GetRulerName]近日发表排外主义言论时不慎被人录像。他贬损了[discriminated_species.GetSpeciesNamePlural]的智力与外表，称这些"愚蠢的盆栽植物"不过是长了些神经细胞的树墩，永远不可能与 [root.GetSpeciesNamePlural]相提并论。[discriminated_species.GetSpeciesName]社群对此义愤填膺，以[xenoist_faction.GetName]为首的外星权益活动家们代表[discriminated_species.GetSpeciesNamePlural]要求[root.GetRulerTitle]作出正式道歉。"
+
+cc_events_mod.2.A:0 "进行诚挚道歉。"
+cc_events_mod.2.B:0 "[root.GetRulerTitle]从不道歉。"
+cc_events_mod.2.B.tooltip:0 "[xenoist_faction.GetName]派系和[discriminated_species.GetSpeciesNamePlural]民众将会§R不满§!。"
+cc_events_mod.2.C:0 "[root.GetRulerTitle]已经清楚表达了自己的看法。"
+cc_events_mod.2.C.tooltip:0 "转向排外主义。亲外主义派系[xenoist_faction.GetName]和[discriminated_species.GetSpeciesNamePlural]民众将会§R怒火滔天§!。"
+
+
+
+
+cc_events_mod.4.name:0 "[root.GetRulerTitle] [root.GetRulerName]广受崇敬!"
+cc_events_mod.4.desc:0 "今天，[root.Capital.GetName]上数百万民众自发参与了[root.GetRulerTitle]的生日庆祝活动。[root.Leader.GetSheHeCap]被众人顶礼膜拜，奉若神明，甚至受到了上千位追求者的求婚(尽管[root.Leader.GetSheHeCap]已经结婚)。毫无疑问，[root.GetRulerName]是史上最受欢迎的[root.GetRulerTitle]。"
+cc_events_mod.4.A:0 "愿[root.Leader.GetHisHer]统治长青!"
+cc_events_mod.4.B:0 "[root.GetRulerTitle] [root.GetRulerName]即是神祗!"
+
+cc_events_mod.6.name:0 "是否应该允许统治者崇拜延续？ "
+cc_events_mod.6.desc:0 "[root.GetRulerTitle] [cc_ruler_culted_ruler.GetName]备受爱戴，因其伟大功绩而被尊奉为神。[cc_ruler_culted_ruler.GetHisHer]继承人[root.GetRulerName]还未赢得如此威望，任何自我神化的举动都可能会冒犯唯心主义民众。然而有一些声音认为，位列神明应被视作[root.Leader.GetHisHer]与生俱来的权利，因此应被永久承认。我们应采取何种立场?"
+cc_events_mod.6.A:0 "神位是[root.GetRulerName]的血统权利!"
+cc_events_mod.6.A.desc:0 "只要我们采取§YImperial§! 政体，统治者崇拜就将永存。\n\n唯心主义派系遭受 §R-15%§! 幸福度，持续5年"
+cc_events_mod.6.B:0 "统治者崇拜必须被终结！ "
+
+
+
+cc_events_mod.7.name:0 "允许跨物种婚姻?"
+cc_events_mod.7.desc_nophobe:0 "随着[root.GetName]迈向星辰大海,许多拥有完整公民权的外星智慧物种已在[root.GetName]境内定居。随着[root.GetSpeciesNamePlural]民众与异星同伴们逐渐熟悉、亲近起来，一些喜爱异域风情的[root.GetSpeciesNamePlural]自然而然地与其他种族个体坠入爱河。亲外派系领导人[xenophile_faction.GetName]已经代表该团体向政府请愿立法承认跨物种婚姻——尽管许多这样的结合已经存在了一段时间，但由于现行法律并未涉及跨物种婚姻，政府到目前为止并未给予官方认可。迥异的DNA结构意味着异种伴侣几乎不可能生儿育女，但一部分民众仍然对这样的关系心怀芥蒂。"
+cc_events_mod.7.desc_phobe:0 "随着[root.GetName]迈向星辰大海,许多拥有完整公民权的外星智慧物种已在[root.GetName]境内定居。随着[root.GetSpeciesNamePlural]民众与异星同伴们逐渐熟悉、亲近起来，一些喜爱异域风情的[root.GetSpeciesNamePlural]自然而然地与其他种族个体坠入爱河。亲外派系领导人[xenophile_faction.GetName]已经代表该团体向政府请愿立法承认跨物种婚姻——尽管许多这样的结合已经存在了一段时间，但由于现行法律并未涉及跨物种婚姻，政府到目前为止并未给予官方认可。迥异的DNA结构意味着异种伴侣几乎不可能生儿育女，但一部分民众仍然对这样的关系心怀芥蒂——甚至极为反感，排外派系领导人[xenophobe_faction.GetName]已经发起一项对立请愿，不但要求否决跨物种婚姻，甚至希望禁止所有形式的跨物种亲密关系。"
+cc_events_mod.7.A:0 "允许跨物种婚姻。"
+cc_events_mod.7.B:0 "拥抱如此转变的时机尚未成熟。"
+cc_events_mod.7.C:0 "禁止跨物种伴侣关系。"
+
+cc_events_mod.121.name:0 "亲外主义广泛传播"
+cc_events_mod.121.desc:0 "现在[root.GetName]中的许多人都开始拥抱亲外主义，民众们不仅接受这一理念，更是对此身体力行——[root.capital.GetName]城市中的跨物种伴侣随处可见。这意味着亲外主义思潮如今已经深入人心。然而由于遗传物质——有时是生殖器官-难以兼容，这股潮流降低了生育率。"
+
+cc_events_mod.131.name:0 "[Root.GetSpeciesName]难民到达"
+cc_events_mod.131.desc:0 "一队搭载着§Y[Root.GetSpeciesName]§!难民的小型民用舰队抵达了我们境内。他们来自§Y[RefugeeEscapedFrom.GetName]§!，已获准在§H[Root.Planet.GetName]§!定居。\n\n这些不幸的被放逐者被 [RefugeeEscapedFrom.GetSpeciesName]政府迫害，只因他们心中所爱——外星人。眼见无法追寻自己向往的生活，他们背井离乡，来到我们更加文明进步的社会中寻求庇护。"
+cc_events_mod.131.a:0 "欢迎他们。"
+
+cc_events_mod.16.name:0 "令人瞩目的跨物种婚姻"
+cc_events_mod.16.desc:0 "[cc_happy_partner.GetName]已经宣布将与一位名叫[cc_bride_or_groom.GetName]的[marriage_species.GetSpeciesName]喜结连理。尽管部分民众仍然憎恶这种结合，其他人则为此欢呼雀跃，将之视为[root.GetName]拥抱物种多元价值观的证明。"
+
+cc_events_mod.16.option:0 "祝愿他们幸福美满！ "
+
+#Xeno Sex Scandal
+cc_events_mod.17.name:0 "[root.GetRulerTitle] [root.GetRulerName]卷入外星性丑闻"
+cc_events_mod.17.desc:0 "[root.GetSpeciesAdj]主流媒体今天早晨投下重磅炸弹： 一段[root.GetRulerTitle] [root.GetRulerName]与一名[xeno.GetSpeciesName]巫山云雨的录像。不幸的是，这些指控铁证如山，难以辩驳。与外星人进行性行为违反了 [root.GetSpeciesAdj]法律，其惩罚从高额罚款直至极刑，视情节严重程度而定。尽管[root.GetRulerTitle]的身份使[root.GetRulerName]拥有对大部分法律的豁免权，但要求[root.leader.GetHimHer]立刻辞职并接受审判的呼声愈演愈烈，称[root.leader.GetSheHe] 已在[root.GetSpeciesAdj]民众的眼中失去了"统治合法性"。 \n\n你将如何回应?"
+cc_events_mod.17.A:0 "是时候改善我们对外星人的态度了。"
+cc_events_mod.17.B:0 "退出公共生活，接受审判。"
+cc_events_mod.17.C:0 "无视法律，继续掌权。"
+
+cc_events_mod.17.D:0 "打压媒体公司。"
+cc_events_mod.17.D.tooltip:0 "声明此次事件纯属编造，借此宣称清白，压制反对声音。"
+
+cc_events_mod.18.name:0 "[cc_scandal_leader.GetTitle] [cc_scandal_leader.GetName] 卷入外星性丑闻"
+cc_events_mod.18.desc:0 "[root.GetSpeciesAdj]主流媒体揭露，revealed that [cc_scandal_leader.GetTitle][cc_scandal_leader.GetName]与多名[xeno.GetSpeciesNamePlural]纠缠不清，关系暧昧。不幸的是，这些指控铁证如山，难以辩驳:云雨欢爱的图片已经四处流传。与外星人进行性行为违反了 [root.GetSpeciesAdj]法律，其惩罚从高额罚款直至极刑，视情节严重程度而定。尽管[root.GetRulerTitle]的身份使[root.GetRulerName]拥有对大部分法律的豁免权，但要求[root.leader.GetHimHer]立刻辞职、为自己的罪行接受审判的呼声愈演愈烈 \n\n你将如何回应?"
+cc_events_mod.18.A:0 "是时候改善我们对外星人的态度了。"
+cc_events_mod.18.B:0 "让[cc_scandal_leader.GetTitle] [cc_scandal_leader.GetName]退出公共生活，接受审判。"
+cc_events_mod.18.C:0 "允许[cc_scandal_leader.GetTitle] [cc_scandal_leader.GetName]继续执政，无视法律。"
+
+
+#Government Blackmail Crisis
+cc_events_blackmail.20.name:0 "政府勒索危机"
+cc_events_blackmail.20.desc:0 "昨日，一种数据病毒瘫痪了[root.Capital.GetName]政府的电脑系统。尽管此次攻击几个小时后就得到了控制，其背后更为奸险的企图却很快显现：数名高官的大量私人信息已被窃取。数据窃贼留下威胁，勒索大量钱财，否则就将公布手中的信息。目前尚不清楚具体何种信息遭到泄露，但数名涉事要员已经私下表达了严重关切。"
+cc_events_blackmail.20.A:0 "付钱。"
+cc_events_blackmail.20.B:0 "承受风险。我们绝不向罪犯付钱。"
+
+cc_events_blackmail.201.name:0 "贪污丑闻!"
+cc_events_blackmail.201.desc:0 "黑客泄露了一起贪腐丑闻的细节，涉及我们数名身居要职的官员。看来他们长期以来从自己部门的政府预算中切出很大一块，挪进了自己的口袋，金额达数百万之巨。此事立刻激起了广泛愤怒，一些麻烦人物们迅速跳了出来，指责任命了这些的官员的上层也是同谋。\n\n你将如何处理这一局面?"
+cc_events_blackmail.201.A:0 "他们必须下台，接受审判。"
+cc_events_blackmail.201.B:0 "他们的职责太重要了。让他们继续任职。"
+
+cc_events_blackmail.202.name:0 "警察暴力丑闻曝光!"
+cc_events_blackmail.202.desc:0 "[root.GetName]上的民众对执法机关下手过重的倾向素有耳闻，但实际情况之恶劣，远超大多数人的想象。近期黑客泄露了一系列数据，涉及警察部门的种种暴行，包括以严重暴力对抗示威者，就地处决轻微违法者，以及坐视监狱中惨无人道的环境。即使最为忠顺的公民也对此感到震惊，而平权主义民众已开始激烈抗议，向政府施加压力，要求作出改变。"
+cc_events_blackmail.202.option:0 "我们必须采取改善措施！ "
+
+cc_events_blackmail.203.name:0 "神职人员腐败丑闻！"
+cc_events_blackmail.203.desc:0 "黑客泄露了大量数据，将[root.GetSpeciesAdj]神职阶层的严重腐败丑闻曝光。看来许多重要神职人员一直以来都在滥用职权，中饱私囊，还向自己本应忠心服务的民众索取好处（包括要求肉身侍奉的事例）。不论是否信奉唯心主义，各地民众都对此义愤填膺。"
+
+cc_events_blackmail.204.name:0 "银河制霸计划泄露！ "
+cc_events_blackmail.204.desc:0 "黑客曝光了政府与数个邻邦开战的秘密计划，目标直指征服别国星球，成为银河武力主宰。数家此前与我们并无过节的友邦也被列为目标。被涉及的国家戒惧震愤，多名大使纷纷要求我们立刻作出解释。未来很多年内我们都将难以与它们建立积极的外交关系。"
+
+cc_events_blackmail.205.name:0 "选举舞弊曝光！ "
+cc_events_blackmail.205.desc:0 "黑客曝光了重磅证据，表明政府涉及操控[root.GetName]高层官员的选举，甚至直接篡改竞选结果。民众们大为震愤，对民主的信仰遭受了沉重一击。"
+
+cc_events_blackmail.206.name:0 "顶级科学家被曝欺名盗世!"
+cc_events_blackmail.206.desc:0 "黑客泄露出重磅证据，曝光了我们数名顶级科学家的本质：一群诈骗犯！尽管在公众面前向来以勤勉天才的形象示人，他们实际上从未贡献过任何原创性思考，只是依靠大规模黑客手段窃取别国的技术。这样的所作所为使民众们对我们整个种族的正直与诚实都产生了怀疑，而邻邦则愤而要求我们解雇这几名科学家，把他们投入监狱。"
+cc_events_blackmail.206.A:0 "让这些科学家继续工作——他们干得挺好的。"
+cc_events_blackmail.206.B:0 "将这些科学家解职。"
+
+cc_events_blackmail.207.name:0 "种族歧视档案泄露!"
+cc_events_blackmail.207.desc:0 "黑客曝光了一系列政府档案，详细揭露了在人事任命和福利分配等方面[root.GetName]境内各地官员如何系统性歧视其他种族公民。非[root.GetSpeciesName]种族的公民长期以来都在控诉遭受不公平对待，但他们的呼声却一直被置若罔闻。现在他们感到自己的怀疑终于得到了证实，这个号称多元的政府确实只是徒具虚名，并开始呼吁大规模改革"
+cc_events_blackmail.207.tooltip:0 "所有非主体民族的人口£pop 获得调整值 §R$cc_outrage_at_discrimination$§!, 效果： -15% 幸福度， +50% 排外主义吸引力。"
+
+cc_events_blackmail.208.name:0 "监狱安保密码遭泄露!"
+cc_events_blackmail.208.desc:0 "事实证明，黑客窃取的信息是[root.GetName]数座最高安全等级监狱的安保密码和详细布局。今天，一次策划周密的袭击同时攻破了其中几所。多位重量级麻烦人物脱狱，一些凶残罪犯也趁机逃离。"
+cc_events_blackmail.208.option:0 "我们必须控制局势！ "
+
+cc_events_blackmail.209.name:0 "舰船设计被泄露给对手!"
+cc_events_blackmail.209.desc:0 "黑客将我们数种舰船的详细资料——包括其弱点——泄露给了我们的敌人。现在它们面对敌人的炮火时将十分脆弱！ "
+
+cc_events_blackmail.210.name:0 "[from.GetSpeciesAdj]舰船设计泄露!"
+cc_events_blackmail.210.desc:0 "[from.GetName]内部的颠覆分子将他们数种舰船的详细资料——包括其弱点——泄露给了我们。在他们修改舰船设计前，我们应当立刻出击，充分利用这一优势！"
+
+#Emancipation Movement
+
+cc_emancipation.1.name:0 "[root.GetName]上的奴隶解放运动"
+cc_emancipation.1.desc.A:0 "[slaveryplanet.GetName]上的一群活动家中了[neighbour_that_is_egalitarian.GetName]上的平等主义流毒，开始憎恶[root.GetName]繁荣的基石——奴隶制。他们组织了一系列越发惹人厌烦的非暴力抗议活动，扰乱了政府运作和其他勤劳正直的公民们的日常生活。与此同时，他们还鼓动奴隶群体，甚至帮助他们逃亡。不幸的是，他们可笑的理想主义宣传似乎吸引了越来越多的支持。\n\n我们应该如何对待他们?"
+cc_emancipation.1.desc.B:0 "[slaveryplanet.GetName]上的一群活动家不知中了什么邪，开始憎恶[root.GetName]繁荣的基石——奴隶制。他们组织了一系列越发惹人厌烦的非暴力抗议活动，扰乱了政府运作和其他勤劳正直的公民们的日常生活。与此同时，他们还鼓动奴隶群体，甚至帮助他们逃亡。不幸的是，他们可笑的理想主义宣传似乎吸引了越来越多的支持。\n\n我们应该如何对待他们?"
+cc_emancipation.1.A:0 "也许他们是正确的。"
+cc_emancipation.1.B:0 "无视他们——这股风潮会过去的。"
+
+cc_emancipation.1.tooltip:0 "奴隶解放运动可能传播到别的星球。"
+cc_emancipation.1.tooltip.C:0 "奴隶解放运动传播到其他星球的可能性减小。"
+cc_emancipation.1.D.tooltip:0 "其他国家可能会不满。"
+
+cc_emancipation.5.name:0 "奴隶解放运动在[root.GetName]中传播"
+cc_emancipation.5.desc:0 "受到[emancipation_planet.GetName]上事例的鼓舞,一群自称"活动家"的蠢货在[root.GetName]开展了一场鼓动奴隶反抗的运动，试图迫使我们废止奴隶制。我们应该如何对待他们?"
+
+cc_emancipation.6.name:0 "奴隶解放运动扩展至帝国全境"
+cc_emancipation.6.desc:0 "受到[emancipation_planet.GetName]及其他星球上的奴隶解放运动鼓舞，[root.GetName]境内各地想法相近的人们开始采取同样的行动。更糟的是，他们公关宣传确有蛊惑人心的力量，甚至连正直善良的[root.GetSpeciesName]民众也开始质疑奴隶制是否还应该被允许存续，尽管它曾为[root.GetName]的繁荣奠定基础。[root.GetSpeciesAdj]的光荣传统面临存废威胁！ \n\n应该如何应对?"
+
+cc_emancipation.6.C.tooltip:0 "这些星球上的所有奴隶解放运动支持者获得调整值： §R$cc_oppression$§!: -50% 所有资源产出"
+cc_emancipation.6.D.tooltip:0 "所有奴隶解放运动支持者都将被清洗。其他国家可能产生不满。"
+
+cc_emancipation.20.name:0 "奴隶制遭受道德质疑"
+cc_emancipation.20.desc.breakaways:0 "[breakaway_slaves.GetName]上的反叛在[root.GetSpeciesAdj]部分民众间激起了担忧，各个[breakaway_slaves.GetSpeciesAdj]星球上的前奴隶主们遭遇的可怕报复尤为令人心惊，使人怀疑奴隶制是否还能延续。与此同时， [breakaway_slaves.GetSpeciesAdj]的宣传攻势则大肆渲染奴隶制的邪恶和奴隶主们惨无人道的暴行，俘获了相当一部分民众的心。一份呼吁废止奴隶制和其他压迫性体制的地下宣言广为流传。尽管当局政府努力阻止其流传并积极追寻源头，还是有越来越多的人开始拥抱这样的理念。"
+cc_emancipation.20.desc.neighbour:0 "由于长期以来与[egalitarian_neighbour.GetName]接触交流，暴露在他们邪恶的宣传攻势之中， [root.GetName]中的部分民众开始重新思考奴隶制的问题。尽管奴隶制无疑是 [root.GetSpeciesAdj]经济体系的重要支柱，越来越多的人开始对此产生道德质疑。完全征服一个智慧生命个体，使之彻底臣服于另一个个体的意志，这种做法究竟是否可以接受？一份呼吁废止奴隶制和其他压迫性体制的地下宣言广为流传。尽管当局政府努力阻止其流传并积极追寻源头，还是有越来越多的人开始拥抱这样的理念。"
+cc_emancipation.20.tooltip.A:0 "三分之一的非奴隶人口£pops 将获得调整值 §R$cc_worried_about_slaves$§! 持续15年时间，效果：§R+200%§! $pop_ethic_egalitarian_attraction_mult$。"
+cc_emancipation.20.tooltip.B:0 "四分之一的非奴隶人口£pops 将获得调整值 §R$cc_worried_about_slaves$§! 持续15年时间，效果：§R+200%§! $pop_ethic_egalitarian_attraction_mult$。"
+
+
+
+#Ludditism
+cc_luddite.1.name:0 "卢德主义者在[root.GetName]上打砸机器人"
+cc_luddite.1.desc:0 "一群只能被称为卢德主义者的乌合之众——头脑原始、抵触抗拒科技进步的家伙——正在[root.GetName]上大肆打砸机器人，声称它们违背自然、危险难测，抢走了自己的工作。他们要求立即禁用所有机械单元，以有机工人取代它们！"
+
+cc_luddite.2.name:0 "卢德主义者在[root.GetName]上打砸机器人"
+cc_luddite.2.desc:0 "尽管他们的要求可笑无理，"卢德主义者"们似乎还是获得了不少支持，盲目模仿者们可能会在其他星球展开类似的行动。我们必须采取行动！\n\n我们应该如何处理他们?"
+cc_luddite.2.A:0 "没有机器人我们也可以经营好[root.GetName]"
+cc_luddite.2.A.tooltip:0 "所有机器人人口 £pops 将会被清洗。如果再建造任何新的机器人人口，将会在[root.GetName]造成不满。此外，卢德主义有较高可能性传播到其他星球。"
+cc_luddite.2.B:0 "无视这群人——他们最终会向历史进程低头的。"
+cc_luddite.2.B.tooltip:0 "这颗星球及其他星球有可能再次发生类似事件。"
+cc_luddite.2.C.tooltip:0 "这颗星球及其他星球有较小可能性再次发生类似事件。"
+
+cc_luddite.6.name:0 "[root.GetName]举行抗议"
+cc_luddite.6.desc:0 "尊敬的[root.owner.GetRulerTitle] [root.owner.GetRulerName]：\n\n我想向您表达对最近[from.GetName]事态的担忧。机器人在我们的国家中扮演着重要角色，对我们民族的繁荣不可或缺。我们不能坐视历史进步的巨轮被阻塞停滞！ \n\n向您致敬，\n[root.leader.GetName],\n [root.GetName]的领袖。"
+
+cc_luddite.7.name:0 "[root.GetName]举行抗议"
+cc_luddite.7.desc:0 "尊敬的[root.owner.GetRulerTitle] [root.owner.GetRulerName]：\n\n我想向您表达对最近[from.GetName]事态的担忧。尽管您或许不赞同这些抗议活动，但他们的担忧合情合理，他们的声音应被倾听。所有正直善良的人对您治下的政府所采取的严酷镇压都只能予以谴责！ \n\n向您致敬，\n[root.leader.GetName],\n [root.GetName]的领袖"
+
+cc_luddite.8.name:0 "[root.GetName]上的卢德主义再度生事"
+cc_luddite.8.desc:0 "卢德主义者们又一次在[root.GetName]上开展了破坏行动"
+
+cc_luddite.9.name:0 "卢德主义传播至[root.GetName]"
+cc_luddite.9.desc:0 "最近的卢德主义浪潮传播到了[root.GetName]."
+
+cc_luddite.11.name:0 "卢德主义传播至[root.GetName]"
+cc_luddite.11.desc:0 "受到[first_luddite_planet.GetName]上事件的鼓动，一群心理同样扭曲的乌合之众在[root.GetName]上也进行了一系列类似的破坏活动，捣毁了大量机械劳工。"
+cc_luddite.12.name:0 "卢德主义传播至[root.GetName]"
+cc_luddite.12.desc:0 "我们能采取什么措施以阻止卢德主义浪潮继续扩散？"
+cc_luddite.12.A:0 "我们在[root.GetName]上也可以舍弃机器人。"
+cc_luddite.12.A.tooltip:0 "所有机器人人口 £pops 将会被清洗。如果再建造任何新的机器人口，将会在[root.GetName]造成不满。"
+cc_luddite.12.B:0 "无视这群人——他们最终也会向历史进程低头的。"
+cc_luddite.12.B.tooltip:0 "这颗星球上有可能再次发生类似事件。"
+cc_luddite.12.C.tooltip:0 "这颗星球上有较小可能性再次发生类似事件。"
+
+cc_luddite.13.name:0 "卢德主义扩散至帝国全境"
+cc_luddite.13.desc:0 "随着卢德主义传播至[from.GetName],现在我们必须正视这一危机——卢德主义已经席卷帝国全境。卢德主义者们在数颗星球上继续着破坏机器人的行动，我们能否继续应用机械劳工已然成疑。\n\n我们应该如何应对这一局势?"
+cc_luddite.13.A:0 "我们必须倾听人民的呼声。"
+cc_luddite.13.B:0 "我们必须保持镇定。"
+cc_luddite.13.B.tooltip:0 "卢德主义很可能继续传播。"
+cc_luddite.13.C.tooltip:0 "镇压所有的卢德主义活动。"
+cc_luddite.13.D.tooltip:0 "清洗所有参与卢德主义运动的人口£pops  不再允许新的卢德主义运动发生。"
+
+cc_luddite.15.name:0 "[root.GetName]上的卢德主义者感到遭受背叛"
+cc_luddite.15.desc:0 "尽管我们先前承诺在[root.GetName]上不再使用机器人，当局政府还是建造了新的机器人口£pops  民众对我们违背诺言感到愤怒。"
+cc_luddite.15.option:0 "好吧。"
+
+cc_luddite.20.name:0 "机械劳工引起担忧戒惧"
+cc_luddite.20.desc.uprising:0 "在[machine_uprising_victims.GetName]发生"机械起义"后，许多公民开始对[root.GetName]中的非智慧机械劳工心怀疑虑。尽管我们的政府已经迅速采取行动，向大家证明[machine_uprising_victims.GetName]上的起义是一次孤例，与[root.GetName]上的情形毫无相似之处，许多人仍然觉得自己的家园就像[machine_uprising_victims.GetSpeciesNamePlural]一样危机四伏。有小部分民众一直以来都对机械劳工心怀芥蒂，称它们将有机人口推向边缘化，将会让大家都变得冗余无用。现在他们抓住了这一舆论风潮，其观点得到了越来越多的大众共鸣。"
+cc_luddite.20.desc.exterminators:0 "与[machine_exterminators.GetName]建立接触后,许多公民开始对[root.GetName]中的非智慧机械劳工心怀疑虑。尽管我们的政府已经迅速采取行动，向大家证明"石心灭绝者帝国"是一个孤例，[root.GetName]上的机器人与之毫无任何相似性，许多人仍然开始认为依赖机械劳工的做法对所有有机物种来说都潜藏着灭顶之灾的危险。有小部分民众一直以来都对机械劳工心怀芥蒂，称它们将有机人口推向边缘化，将会让大家都变得冗余无用。现在他们抓住了这一舆论风潮，其观点得到了越来越多的大众共鸣。"
+cc_luddite.20.tooltip:0 "三分之一非奴隶人口£pops 将获得调整值§R$cc_worried_about_machines$§! 持续15年时间，给予 §R+200% $pop_ethic_spiritualist_attraction_mult$§!."
+
+
+#Peace Protests
+cc_peace.1.name:0 "反战运动"
+cc_peace.1.desc:0 "民众中正酝酿着因与[cc_war_enemy.GetName]战争而生的不满情绪。他们认为这是一场掠夺性的侵略战争。和平主义派系领袖[peace_faction.GetName]领导着大规模的非暴力抗议活动，反战游行遍及[cc_peace_planet.GetName]和其他星球,造成了越来越多的麻烦。有传言称他们正在组织一场以[cc_peace_planet.GetName]政府大楼为目标的游行，计划占领附近的广场，直到达成和平协议。此举将会严重扰乱政府运作。\n\n我们应当如何回应?"
+cc_peace.1.A:0 "承诺带来和平。"
+cc_peace.1.A.tooltip:0 "反战运动将会同意暂停活动一年，条件是你需在此时间之内结束战争。"
+cc_peace.1.B:0 "无视他们。"
+cc_peace.1.oppress.tooltip:0 "所有参加抗议的和平主义人口£pops 将会遭到镇压。他们的产出降低50%。"
+cc_peace.1.D.tooltip:0 "所有参加抗议的和平主义人口£pops 将会被消灭。"
+		
+cc_peace.2.name:0 "反战运动遭到背叛"
+cc_peace.2.desc:0 "政府违背了快速达成和平的承诺。反战运动人群感到遭受背叛，怒火再度点燃，开始了新一轮抗议。"
+	
+cc_peace.4.name:0 "和平达成"
+cc_peace.4.desc:0 "政府遵守承诺，在一年内结束了战争。反战运动为此大受鼓舞，此前抗议频发的各星球上现在正在举行大型庆祝活动。"
+cc_peace.4.tooltip:0 "反战运动期望和平至少持续5年时间。"
+ 
+cc_peace.5.name:0 "反战运动遭到背叛"
+cc_peace.5.desc:0 "反战运动者们曾经迫使政府结束战争，他们原本希望这一成功能够为[root.GetName]政府的统治及其外交关系带来长久的改变。然而，不到5年时间，又一场战争开始了。他们感到遭受了背叛，怒火再度点燃。新一轮抗议开始了。"
+
+
+cc_events_mod.18.B.tooltip:0 "[cc_scandal_leader.GetTitle] [cc_scandal_leader.GetName]被从游戏中移除。"
+cc_events_blackmail.201.A.tooltip:0 "[cc_first_corrupt.GetTitle] [cc_first_corrupt.GetName]被从游戏中移除。\n[cc_second_corrupt.GetTitle] [cc_second_corrupt.GetName]被从游戏中移除。\n[cc_third_corrupt.GetTitle] [cc_third_corrupt.GetName]被从游戏中移除。"
+cc_events_blackmail.201.A.tooltip2:0 "[cc_fourth_corrupt.GetTitle] [cc_fourth_corrupt.GetName]被从游戏中移除。"
+cc_events_mod.17.B.tooltip:0 "$CCREMOVERULER.tooltip$"
+
+
+#Modifiers ——————————————————————————————————————————————————————————————————————————————————————————————————————————
+
+cc_made_peace:0 "向反战运动让步"
+cc_made_peace_desc:0 "政府向反战运动低头，达成了和平。"
+cc_faction_peace_celebration:0 "反战运动的胜利"
+cc_peace_celebrations:0 "庆祝反战运动胜利"
+cc_peace_celebrations_desc:0 "这颗星球上的反战人士正在庆祝活动成功。"
+cc_peace_protests:0 "反战运动"
+cc_peace_protests_desc:0 "反战运动活跃于这颗星球"
+cc_country_peace_protests:0 "反战运动"
+cc_country_peace_protests_desc:0 "一场反战活动正在抗议当前的冲突"
+cc_faction_peace_protests:0 "反战抗议"
+cc_faction_oppressed:0 "派系遭镇压"
+cc_peace_faction_betrayed:0 "承诺遭违背"
+cc_promises_to_pacifists:0 "承诺达成和平"
+cc_promises_to_pacifists_desc:0 "政府已经承诺尽快结束战争"
+
+cc_luddite_celebration:0 "庆祝卢德主义运动成功"
+cc_luddite_celebration_desc:0 "这颗星球上的卢德主义者们正在庆祝活动成功。"
+cc_luddite_movement:0 "卢德主义运动"
+cc_luddite_movement_desc:0 "这颗星球上活跃着一场要求拆除所有机械劳工的运动——采取暴力手段，如果需要的话"
+cc_bowed_to_luddism:0 "被迫舍弃机器人"
+cc_bowed_to_luddism_desc:0 "民众们已迫使这个国家放弃使用机械劳工"
+cc_empire_luddite_movement:0 "卢德主义运动"
+cc_empire_luddite_movement_desc:0 "帝国全境活跃着一场要求拆除所有机械劳工的运动——采取暴力手段，如果需要的话"
+cc_bowed_to_luddism_faction_pos:0 "放弃使用机器人"
+cc_bowed_to_luddism_faction_neg:0 "向卢德主义者屈服"
+cc_luddite_faction_displeasure:0 "向卢德主义者屈服"
+cc_luddite_oppress_faction_displeasure:0 "卢德主义者遭镇压"
+cc_worried_about_machines:0 "对机械感到担忧"
+
+cc_emancipation_movement:0 "奴隶解放运动"
+cc_emancipation_movement_desc:0 "这颗星球上活跃着一场要求解放奴隶的运动。"
+cc_emancipation_furious:0 "因奴隶解放运动胜利而愤怒"
+cc_emancipated:0 "拥抱奴隶解放"
+cc_emancipated_desc:0 "这个国家放弃了奴隶制，正在探索自身的自由主义倾向。"
+cc_emancipation_celebration:0 "庆祝奴隶解放运动成功"
+cc_emancipation_celebration_desc:0 "这颗星球上的废奴主义活动者们正在庆祝胜利。"
+cc_empire_emancipation_movement:0 "奴隶解放运动"
+cc_empire_emancipation_movement_desc:0 "帝国全境活跃着一场鼓动奴隶、寻求终结奴隶制的运动"
+cc_worried_about_slaves:0 "为奴隶制感到担忧"
+
+cc_ruler_humiliated:0 "统治者被羞辱"
+cc_ruler_humiliated_desc:0 "这个帝国的统治者不得不忍受屈辱，向治下的子民道歉。"
+cc_xenophobic_offence_1:0 "统治者的排外倾向"
+cc_xenophobic_offence_2:0 "统治者的排外倾向"
+cc_acceeded_to_demands_xenophile:0 "接受亲外主义者的要求"
+cc_acceeded_to_demands_xenophile_desc:0 "亲外主义者们成功迫使前任统治者因发表排外言论而下台，为此大受鼓舞。"
+cc_species_insulted_1:0 "被侮辱"
+cc_species_insulted_2:0 "被侮辱"
+cc_ruler_cult_offended:0 "因统治者崇拜延续而遭到冒犯"
+cc_ruler_revered:0 "统治者广受崇敬"
+cc_ruler_revered_desc:0 "帝国统治者目前备受爱戴"
+cc_ruler_cult:0 "统治者崇拜"
+cc_ruler_cult_desc:0 "帝国统治者被尊为现世神明"
+
+cc_literally_xenophile_country:0 "践行亲外主义的众多少数派"
+cc_literally_xenophile_country_desc:0 "这个国家至少15%的人口践行着亲外主义的生活方式，也就是说，拥有他族伴侣。"
+
+cc_practising_xenophile:0 "践行亲外主义"
+cc_practising_xenophile_desc:0 "此人口£pop 与其他种族的伴侣公开交往，并为居住在一个允许这种生活方式的开明国家而快乐。"
+cc_secretly_practising_xenophile:0 "秘密践行亲外主义"
+cc_secretly_practising_xenophile:0 "此人口£pop 拥有其他种族的伴侣，但只是秘密交往，因为现行法律目前并不承认这种关系。"
+cc_secret_xenophile:0 "被压抑的亲外主义倾向"
+cc_secret_xenophile_desc:0 "此人口£pop 希望能拥有其他种族的伴侣，但国家法律禁止此类关系。可能试图逃往更为开放的国家。"
+
+cc_xeno_marriage_allowed_xenoist:0 "跨物种婚姻被允许"
+cc_xeno_marriage_allowed_supremacist:0 "违逆自然的结合被允许"
+cc_xeno_marriage_not_allowed_xenoist:0 "跨物种婚姻不被允许"
+cc_xeno_marriage_not_allowed_supremacist:0 "违逆自然的婚姻不被允许"
+cc_xeno_marriage_banned_xenoist:0 "跨物种性行为被禁止"
+cc_xeno_marriage_banned_supremacist:0 "违逆自然的性行为被禁止"
+
+cc_recent_xenophile_wedding:0 "新近发生的跨物种婚姻"
+cc_recent_xenophile_wedding_desc:0 "最近发生了一场受人瞩目的跨物种婚姻。它使得公众意见的两极分化越发明显：尽管部分民众仍然憎恶这种结合，其他人则为此欢呼雀跃，将之视为[root.GetName]拥抱物种多元价值观的证明。"
+cc_recent_xenophile_wedding_xenophile:0 "庆祝新近发生的跨物种婚姻"
+cc_recent_xenophile_wedding_xenophobe:0 "厌恶新近发生的跨物种婚姻"
+
+cc_ruler_humiliated1:0 "政权遭受羞辱"
+cc_ruler_humiliated1_desc:0 "帝国的统治者因一场性丑闻被迫下台"
+cc_recent_sex_scandal_hostile:0 "回应性丑闻"
+cc_recent_sex_scandal_unfriendly:0 "回应性丑闻"
+cc_recent_sex_scandal_friendly:0 "回应性丑闻"
+cc_defiance_of_law:0 "公然对抗法律"
+cc_defiance_of_law_desc:0 "政府公然违背国家法律"
+cc_defiance_of_law_egals:0 "公然对抗法律"
+
+cc_defiance_of_law_mega:0 "与真相开战"
+cc_defiance_of_law_mega_desc:0 "政府发动了压制异见声音的运动，由关闭大型独立媒体公司开始。"
+cc_defiance_of_law_egal_mega:0 "压制反对声浪"
+
+cc_recent_sex_scandal_hostile1:0 "$cc_recent_sex_scandal_hostile$"
+cc_recent_sex_scandal_unfriendly1:0 "$cc_recent_sex_scandal_unfriendly$"
+cc_recent_sex_scandal_friendly1:0 "$cc_recent_sex_scandal_friendly$"
+cc_defiance_of_law1:0 "$cc_defiance_of_law$"
+cc_defiance_of_law1_desc:0 "政府违背国家法律，保护一名官员免受应得的法律制裁"
+cc_defiance_of_law_egals1:0 "$cc_defiance_of_law_egals$"
+
+
+#(Blackmail Crisis)
+cc_paid_blackmail:0 "暴富的勒索者"
+cc_paid_blackmail_desc:0 "政府正向勒索者付钱，以保护其秘密免遭泄露。"
+
+cc_outrage_at_corruption:0 "贪腐激起怒火"
+cc_outrage_at_corruption_desc:0 "政权核心贪腐横行，民众因迟迟未见任何应对措施而怒火滔天。"
+
+cc_outrage_at_police_violence:0 "国家暴力激起怒火"
+cc_outrage_at_police_violence_desc:0 "国家秘密机关滥用暴力的可怕内幕遭曝光，在民众间激起滔天怒火，现行的威权主流思潮面临分崩离析。"
+
+cc_outrage_at_police_violence_faction:0 "因国家暴力而愤怒"
+
+cc_outrage_at_priesthood_corruption:0 "神职人员腐败丑闻激起怒火"
+cc_outrage_at_priesthood_corruption_desc:0 "主流教派中的众多领袖阶层人物近日被爆广涉丑闻，激起了民众大范围的不满。教会的形象彻底幻灭，教义的虚伪显露无疑。"
+
+cc_outrage_at_electoral_manipulation:0 "选举操控激起怒火"
+cc_outrage_at_electoral_manipulation_desc:0 "政府长期以来操控选举结果的秘密被曝光，民众怒火滔天，对民主的信仰烟消云散。"
+
+cc_outrage_at_electoral_manipulation_faction:0 "因选举被操控而愤怒"
+
+cc_loss_of_faith_in_ingenuity:0 "对种族才智的自我怀疑"
+cc_loss_of_faith_in_ingenuity_desc:0 "近日曝光的学术剽窃丑闻使得民众开始怀疑我们种族的才智，许多人放弃了追求创新。"
+
+cc_other_states_watching_scientists:0 "科学家遭受严密监视"
+cc_other_states_watching_scientists_desc:0 "我们的大多数科技突破都是依靠剽窃他国而来的丑闻曝光后，其他国家对待我们的科学家犹如防贼。"
+
+cc_outrage_at_discrimination:0 "因歧视而愤怒"
+
+cc_prison_security_breach:0 "高安全等级监狱被攻破"
+cc_prison_security_breach_desc:0 "一座监狱已被攻破，众多凶残罪犯与麻烦人物不知所踪。正直的公民们为此担惊受怕，不法之徒则因头目纷纷回归而气焰大炽。"
+
+cc_ship_designs_compromised:0 "舰船设计遭泄露"
+cc_ship_designs_compromised_desc:0 "我们的舰船设计——及其弱点——被泄露给了敌人。"
+
+#Opinion Modifiers ——————————————————————————————————————————————————————————————————————————————————————————————————
+
+cc_opinion_outrage_at_plans_to_conquer:0 "因征服计划而愤怒"
+
+cc_opinion_stole_our_technology:0 "窃取我们的技术"
+
+
+#Policies ——————————————————————————————————————————————————————————————————————————————————————————————————————————
+
+policy_cc_interspecies_marriage:0 "跨物种关系"
+policy_cc_interspecies_marriage_desc:0 "我们可以决定是否允许不同种族的人口£pops  交往甚至结婚。"
+
+allow_im:0 "允许跨物种婚姻"
+allow_im_desc:0 "将跨物种婚姻合法化\n\n注:亲外主义人口£pops 将会为此感到高兴，跨物种结合很可能会增加，但如果流行开来，可能导致生育率下降。"
+allows_im_name:0 "允许跨物种婚姻"
+
+do_not_allow_im:0 "不承认跨物种婚姻"
+do_not_allow_im_desc:0 "不承认跨物种婚姻的法律地位，但不禁止这种关系或跨物种性行为。"
+does_not_allow_im_name:0 "不承认跨物种婚姻"
+
+ban_im_completely:0 "禁止跨物种性行为"
+ban_im_completely_desc:0 "禁止所有跨物种性行为\n\n注:亲外主义人口£pops 会感到遭受压迫，并可能逃往其他跨物种婚姻合法的国家。"
+bans_im_completely_name:0 "禁止跨物种性行为"

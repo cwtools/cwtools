@@ -1,0 +1,7 @@
+
+# Initial rebels manage to take control of the planet, happens after the new owner is set, after the war is created.
+on_rebels_take_planet_owner_switched = {
+	events = {
+		rebellionscript.35
+	}
+}

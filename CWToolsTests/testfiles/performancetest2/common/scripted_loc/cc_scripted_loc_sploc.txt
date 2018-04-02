@@ -1,0 +1,22 @@
+############################################
+###   SCRIPTED LOCALIZATION FOR FRENCH   ###
+###     Scripted by Caligula Caesar      ###
+############################################
+
+##To apply, use [event_target.GetLeLaLead] or [scope.Leader.GetLeLaLead]
+
+#Ex.: "professor[]/professor[a]"
+defined_text = {
+	name = GetXALead
+	text = {
+		trigger = { cc_loc_leader_masc = yes }
+		localization_key = SPLOC_X
+	}
+	text = {
+		trigger = { cc_loc_leader_fem = yes }
+		localization_key = SPLOC_a
+	}
+}
+
+
+#For -o / -a, use GetOALead

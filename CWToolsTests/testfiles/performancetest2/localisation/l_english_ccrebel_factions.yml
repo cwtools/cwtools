@@ -1,0 +1,215 @@
+﻿l_english:
+
+###Modifiers
+
+cc_country_factional_unrest:0 "Factional Unrest"
+cc_country_factional_unrest_desc:0 "The empire is experiencing considerable faction-based unrest."
+
+cc_seditious_talk_militarist:0 "Seditious Talk"
+cc_seditious_talk_pacifist:0 "$cc_seditious_talk_militarist$"
+cc_seditious_talk_xenophobe:0 "$cc_seditious_talk_militarist$"
+cc_seditious_talk_xenophile:0 "$cc_seditious_talk_militarist$"
+cc_seditious_talk_egalitarian:0 "$cc_seditious_talk_militarist$"
+cc_seditious_talk_authoritarian:0 "$cc_seditious_talk_militarist$"
+cc_seditious_talk_spiritualist:0 "$cc_seditious_talk_militarist$"
+cc_seditious_talk_materialist:0 "$cc_seditious_talk_militarist$"
+
+cc_seditious_talk_militarist_desc:0 "Seditious talk that we believe is emanating from the militarist-affiliated population is circulating on this planet."
+cc_seditious_talk_pacifist_desc:0 "Seditious talk that we believe is emanating from the pacifist-affiliated population is circulating on this planet."
+cc_seditious_talk_xenophobe_desc:0 "Seditious talk that we believe is emanating from the xenophobe-affiliated population is circulating on this planet."
+cc_seditious_talk_xenophile_desc:0 "Seditious talk that we believe is emanating from the xenophile-affiliated population is circulating on this planet."
+cc_seditious_talk_egalitarian_desc:0 "Seditious talk that we believe is emanating from the egalitarian-affiliated population is circulating on this planet."
+cc_seditious_talk_authoritarian_desc:0 "Seditious talk that we believe is emanating from the authoritarian-affiliated population is circulating on this planet."
+cc_seditious_talk_spiritualist_desc:0 "Seditious talk that we believe is emanating from the spiritualist-affiliated population is circulating on this planet."
+cc_seditious_talk_materialist_desc:0 "Seditious talk that we believe is emanating from the materialist-affiliated population is circulating on this planet."
+
+cc_faction_stronghold_xenoist:0 "Xenoist Stronghold"
+cc_faction_stronghold_supremacist:0 "Supremacist Stronghold"
+cc_faction_stronghold_isolationist:0 "Isolationist Stronghold"
+cc_faction_stronghold_totalitarian:0 "Totalitarian Stronghold"
+cc_faction_stronghold_progressive:0 "Progressive Stronghold"
+cc_faction_stronghold_technologist:0 "Technologist Stronghold"
+cc_faction_stronghold_traditionalist:0 "Traditionalist Stronghold"
+cc_faction_stronghold_imperialist:0 "Imperialist Stronghold"
+cc_faction_stronghold_prosperity:0 "Prosperity Factional Stronghold"
+
+cc_faction_stronghold_xenoist_desc:0 "This planet is a stronghold of the dissident Xenoist Faction."
+cc_faction_stronghold_supremacist_desc:0 "This planet is a stronghold of the dissident Supremacist Faction."
+cc_faction_stronghold_isolationist_desc:0 "This planet is a stronghold of the dissident Isolationist Faction."
+cc_faction_stronghold_totalitarian_desc:0 "This planet is a stronghold of the dissident Totalitarian Faction."
+cc_faction_stronghold_progressive_desc:0 "This planet is a stronghold of the dissident Progressive Faction."
+cc_faction_stronghold_technologist_desc:0 "This planet is a stronghold of the dissident Technologist Faction."
+cc_faction_stronghold_traditionalist_desc:0 "This planet is a stronghold of the dissident Traditionalist Faction."
+cc_faction_stronghold_imperialist_desc:0 "This planet is a stronghold of the dissident Imperialist Faction."
+cc_faction_stronghold_prosperity_desc:0 "This planet is a stronghold of the dissident Prosperity Faction."
+
+cc_faction_sympathies_xenoist:0 "Xenoist Sympathies"
+cc_faction_sympathies_supremacist:0 "Supremacist Sympathies"
+cc_faction_sympathies_isolationist:0 "Isolationist Sympathies"
+cc_faction_sympathies_totalitarian:0 "Totalitarian Sympathies"
+cc_faction_sympathies_progressive:0 "Progressive Sympathies"
+cc_faction_sympathies_technologist:0 "Technologist Sympathies"
+cc_faction_sympathies_traditionalist:0 "Traditionalist Sympathies"
+cc_faction_sympathies_imperialist:0 "Imperialist Sympathies"
+cc_faction_sympathies_prosperity:0 "Prosperity Factional Sympathies"
+
+cc_faction_sympathies_xenoist_desc:0 "There is considerable sympathy for the Xenoist Faction's cause on this planet."
+cc_faction_sympathies_supremacist_desc:0 "There is considerable sympathy for the Supremacist Faction's cause on this planet."
+cc_faction_sympathies_isolationist_desc:0 "There is considerable sympathy for the Isolationist Faction's cause on this planet."
+cc_faction_sympathies_totalitarian_desc:0 "There is considerable sympathy for the Totalitarian Faction's cause on this planet."
+cc_faction_sympathies_progressive_desc:0 "There is considerable sympathy for the Progressive Faction's cause on this planet."
+cc_faction_sympathies_technologist_desc:0 "There is considerable sympathy for the Technologist Faction's cause on this planet."
+cc_faction_sympathies_traditionalist_desc:0 "There is considerable sympathy for the Traditionalist Faction's cause on this planet."
+cc_faction_sympathies_imperialist_desc:0 "There is considerable sympathy for the Imperialist Faction's cause on this planet."
+cc_faction_sympathies_prosperity_desc:0 "There is considerable sympathy for the Prosperity Faction's cause on this planet."
+
+cc_faction_sedition_xenoist:0 "Xenoist Seditions"
+cc_faction_sedition_supremacist:0 "Supremacist Seditions"
+cc_faction_sedition_isolationist:0 "Isolationist Seditions"
+cc_faction_sedition_totalitarian:0 "Totalitarian Seditions"
+cc_faction_sedition_progressive:0 "Progressive Seditions"
+cc_faction_sedition_technologist:0 "Technologist Seditions"
+cc_faction_sedition_traditionalist:0 "Traditionalist Seditions"
+cc_faction_sedition_imperialist:0 "Imperialist Seditions"
+cc_faction_sedition_prosperity:0 "Prosperity Factional Seditions"
+
+cc_faction_sedition_xenoist_desc:0 "The Xenoist Faction is using one of its nearby strongholds to spread seditious rumours on this planet."
+cc_faction_sedition_supremacist_desc:0 "The Supremacist Faction is using one of its nearby strongholds to spread seditious rumours on this planet."
+cc_faction_sedition_isolationist_desc:0 "The Isolationist Faction is using one of its nearby strongholds to spread seditious rumours on this planet."
+cc_faction_sedition_totalitarian_desc:0 "The Totalitarian Faction is using one of its nearby strongholds to spread seditious rumours on this planet."
+cc_faction_sedition_progressive_desc:0 "The Progressive Faction is using one of its nearby strongholds to spread seditious rumours on this planet."
+cc_faction_sedition_technologist_desc:0 "The Technologist Faction is using one of its nearby strongholds to spread seditious rumours on this planet."
+cc_faction_sedition_traditionalist_desc:0 "The Traditionalist Faction is using one of its nearby strongholds to spread seditious rumours on this planet."
+cc_faction_sedition_imperialist_desc:0 "The Imperialist Faction is using one of its nearby strongholds to spread seditious rumours on this planet."
+cc_faction_sedition_prosperity_desc:0 "The Prosperity Faction is using one of its nearby strongholds to spread seditious rumours on this planet."
+
+cc_faction_acute_unrest:0 "Acute Factional Unrest"
+cc_faction_acute_unrest_desc:0 "We have reason to believe that the faction that is dominant on this planet will soon try to take it over."
+
+cc_failed_factional_revolt:0 "Failed Factional Revolt"
+cc_failed_factional_revolt_desc:0 "The population is turning away from the rebellious faction, which only brought turmoil to this planet."
+
+
+cc_breakaway_sympathy:0 "Sympathy with Breakaway State"
+cc_breakaway_sympathy_desc:0 "There is considerable support for the breakaway faction among elements of this planet's population. They may try to cause trouble."
+
+cc_empire_terror:0 "Terror State"
+cc_empire_terror_desc:0 "The state massacred its own population."
+
+cc_empire_terror_faction:0 "Massacred Population"
+
+cc_oppress_faction:0 "Widespread use of Oppression"
+
+cc_bribed_planet:0 "Financial Incentives"
+cc_bribed_planet_desc:0 "The state has given this planet massive financial incentives to remain loyal."
+
+###Events
+
+#these go in the place of [cc_rebellious_faction.GetFactionTypeAdj]
+ccloc_xenophilic:0 "xenophilic"
+ccloc_supremacist:0 "supremacist"
+ccloc_isolationist:0 "isolationist"
+ccloc_progressive:0 "progressive"
+ccloc_totalitarian:0 "totalitarian"
+ccloc_imperialist:0 "imperialist"
+ccloc_pacifistic:0 "pacifistic"
+ccloc_traditionalist:0 "traditionalist"
+ccloc_materialistic:0 "materialistic"
+
+ccfaction.1.name:0 "Factional Sedition"
+ccfaction.1.desc:0 "A wave of dissatisfaction at the way the Empire is being governed has spread across the population, with clandestine calls for a more [cc_rebellious_faction.GetFactionTypeAdj] outlook. We believe that a hardcore group of activists affiliated to the [cc_rebellious_faction.GetName] are behind this agitation and are plotting to seek to break away from the [root.GetName], but the [cc_rebellious_faction.GetName] denies these accusations."
+
+ccfaction.2.name:0 "The [cc_rebellious_faction.GetName] consolidates its Power"
+ccfaction.2.desc:0 "The agitations for a more [cc_rebellious_faction.GetFactionTypeAdj] focus to the government have spread and taken root in parts of the [root.GetName]. The [cc_rebellious_faction.GetName] has presented us with an official list of demands, claiming to have a popular mandate to represent these parts of the Empire and issuing veiled threats of separatism if their demands are not met. Urgent action is required to bring the Empire back together!"
+
+
+ccfaction.21.name:0 "Factional Agitations Over"
+ccfaction.21.desc.fail:0 "The clandestine agitations of the [cc_rebellious_faction.GetName] have come to nothing and petered out peacefully."
+ccfaction.21.desc.succeed:0 "The agitations of the [cc_rebellious_faction.GetName] have convinced the leadership of the [root.GetName] to reform the government to have a more [cc_rebellious_faction.GetFactionTypeAdj] outlook that is more acceptable to the dissident group. The [cc_rebellious_faction.GetName]'s leaders are satisfied with the changes, and have ceased to agitate for change."
+
+ccfaction.3.name:0 "The [cc_new_reb_faction.GetName] has allied with the [cc_rebellious_faction.GetName]" 
+ccfaction.3.desc:0 "The [cc_new_reb_faction.GetName], which has until now been a small dissident element within the [root.GetName], has concluded an alliance with the [cc_rebellious_faction.GetName], which has been actively agitating for major change. They have found sufficient common ground to join their voices together, which they hope will allow them to form an unstoppable force with which to see their vision of a [cc_rebellious_faction.GetFactionTypeAdj]-[cc_new_reb_faction.GetFactionTypeAdj] state realised - within the [root.GetName] or outside of it."
+
+
+ccfaction.4.name:0 "The [cc_rebellious_faction.GetName] is attempting to secede!"
+ccfaction.4.dual.desc:0 "A deserter from the [cc_rebellious_faction.GetName] has revealed our opponents' intentions: They, together with the [cc_new_reb_faction.GetName], plan to realise their dream of reshaping society towards a [cc_rebellious_faction.GetFactionTypeAdj]-[cc_new_reb_faction.GetFactionTypeAdj] outlook by splitting from the [root.GetName]. They likely know that we have learnt of their plans, so the revolt could come at any moment. We must take urgent action!"
+ccfaction.4.single.desc:0 "A deserter from the [cc_rebellious_faction.GetName] has revealed our opponents' intentions: They plan to realise their dream of reshaping society towards a more [cc_rebellious_faction.GetFactionTypeAdj] outlook by splitting from the [root.GetName]. They likely know that we have learnt of their plans, so the revolt could come at any moment. We must take urgent action!"
+
+ccfaction.41.name:0 "Factional Agitations Over"
+ccfaction.41.dual.fail.desc:0 "The agitations by the [cc_rebellious_faction.GetName] and the [cc_new_reb_faction.GetName] to force changes in the [root.GetName] have petered out without violence breaking out."
+ccfaction.41.single.fail.desc:0 "The agitations by the [cc_rebellious_faction.GetName] to force changes in the [root.GetName] have petered out without violence breaking out."
+ccfaction.41.dual.succeed.desc:0 "The agitations by the [cc_rebellious_faction.GetName] and the [cc_new_reb_faction.GetName] to force changes in the [root.GetName] have resulted in success without the need for violence: The government has promised to reform and govern in a manner more acceptable to [cc_rebellious_faction.GetFactionTypeAdj] and [cc_new_reb_faction.GetFactionTypeAdj]-minded citizens in future."
+ccfaction.41.single.succeed.desc:0 "The agitations by the [cc_rebellious_faction.GetName] to force changes in the [root.GetName] have resulted in success without the need for violence: The government has promised to reform and govern in a manner more acceptable to [cc_rebellious_faction.GetFactionTypeAdj]-minded citizens in future."
+
+ccfaction.42.name:0 "Revolt by the [cc_rebellious_faction.GetName] fails"
+ccfaction.42.dual.fail.desc:0 "The attempts by the [cc_rebellious_faction.GetName] and the [cc_new_reb_faction.GetName] to force through their demands by gaining independence from the [root.GetName] have failed. They simply didn't have the support necessary for the revolt to succeed, so the [root.GetName] has weathered the storm and remained united."
+ccfaction.42.single.fail.desc:0 "The attempts by the [cc_rebellious_faction.GetName] to force through their demands by gaining independence from the [root.GetName] have failed. They simply didn't have the support necessary for the revolt to succeed, so the [root.GetName] has weathered the storm and remained united."
+ccfaction.42.dual.succeed.desc:0 "The threat of a declaration of independence by the [cc_rebellious_faction.GetName] and the [cc_new_reb_faction.GetName] has finally pushed the government of the [Root.GetName] to take their views into consideration. After key officials gave binding promises that the government would be reformed according to their demands, the [cc_rebellious_faction.GetName] and the [cc_new_reb_faction.GetName] agreed to call off the revolt."
+ccfaction.42.single.succeed.desc:0 "The threat of a declaration of independence by the [cc_rebellious_faction.GetName] has finally pushed the government of the [Root.GetName] to take their views into consideration. After key officials gave binding promises that the government would be reformed according to their demands, the [cc_rebellious_faction.GetName] agreed to call off the revolt."
+
+
+#Revolt happens
+ccfaction.6.name:0 "The [cc_rebellious_faction.GetName] Revolts!"
+ccfaction.6.desc.succeed.single:0 "In a bloodless coup, politicians affiliated with the [cc_rebellious_faction.GetName] have seized power on [cc_rebel_faction_capital.GetName] and declared independence, citing the consistent and longstanding failure of the [root.GetName]'s government to listen to the demands of their constituents. They now call themselves the [cc_breakaway_country.GetName]. The leadership of the [cc_rebellious_faction.GetName] has thrown itself behind the breakaway country, and has appealed for its followers to act now and join them in their struggle for independence. A period of turmoil lies ahead."
+ccfaction.6.desc.succeed.dual:0 "In a bloodless coup, politicians affiliated with the [cc_rebellious_faction.GetName] and the [cc_new_reb_faction.GetName] have seized power on [cc_rebel_faction_capital.GetName] and declared independence, citing the consistent and longstanding failure of the [root.GetName]'s government to listen to the demands of their constituents. They now call themselves the [cc_breakaway_country.GetName]. The leadership of the rebellious factions have thrown themselves behind the breakaway country, and have appealed for their followers to act now and join them in their struggle for independence. A period of turmoil lies ahead."
+#ccfaction.6.desc.succeed.leader.single:0 ""
+#ccfaction.6.desc.succeed.leader.dual:0 ""
+ccfaction.6.desc.attempt.single:0 "Elements of the [cc_rebellious_faction.GetName] have launched an armed revolt against authorities on [cc_rebel_faction_capital.GetName]. They now style themselves as the [cc_breakaway_country.GetName], and are fighting for control of the planet. Most of the leadership of the [cc_rebellious_faction.GetName] has held back from wholeheartedly supporting the revolutionaries, but our intelligence services expect them to throw themselves behind them should the rebellion succeed."
+ccfaction.6.desc.attempt.dual:0 "Elements of the [cc_rebellious_faction.GetName] and the [cc_new_reb_faction.GetName] have launched an armed revolt against authorities on [cc_rebel_faction_capital.GetName]. They now style themselves as the [cc_breakaway_country.GetName], and are fighting for control of the planet. Most of the leadership of the [cc_rebellious_faction.GetName] and the [cc_new_reb_faction.GetName] have held back from wholeheartedly supporting the revolutionaries, but our intelligence services expect them to throw themselves behind them should the rebellion succeed."
+
+ccfaction.601.name:0 "Defections!"
+ccfaction.601.desc.both:0 "[cc_rebellious_faction_leader.GetTitle] [cc_rebellious_faction_leader.GetName] and [cc_new_reb_faction_leader.GetTitle] [cc_new_reb_faction_leader.GetName] have defected to the [cc_breakaway_country.GetName]."
+ccfaction.601.desc.only1:0 "[cc_rebellious_faction_leader.GetTitle] [cc_rebellious_faction_leader.GetName] has defected to the [cc_breakaway_country.GetName] to become their leader."
+ccfaction.601.desc.only2:0 "[cc_new_reb_faction_leader.GetTitle] [cc_new_reb_faction_leader.GetName] has defected to the [cc_breakaway_country.GetName]."
+
+ccfaction.61.name:0 "[root.GetName] defects to the [cc_breakaway_country.GetName]"
+ccfaction.61.desc:0 "The administration of [root.GetName] has bowed to the demands of its populace after massive week-long demonstrations showed the scale of their support for the [cc_breakaway_country.GetName]. They have announced that they will be joining the secessionists."
+
+ccfaction.62.name:0 "Sympathisers of the [cc_breakaway_country.GetName] attempt to seize power on [root.GetName]"
+ccfaction.62.desc:0 "Supporters of the [cc_breakaway_country.GetName] have heeded the call to arms of their leaders, and have launched an armed revolt with the aim of joining the breakaway country."
+
+
+#first wave revolt breaks free
+ccfaction.64.name:0 "[fromfrom.GetName] lost to the [cc_breakaway_country.GetName]"
+ccfaction.64.desc:0 "Our authorities have lost control of [fromfrom.GetName], which has fallen under the control of the [cc_rebellious_faction.GetName]. The new owners of the planet are now calling themselves the [cc_breakaway_country.GetName], and have appealed for all supporters of the [cc_rebellious_faction.GetName] to join them in their fight for independence from the [root.GetName]."
+
+
+#second wave revolt breaks free
+ccfaction.67.name:0 "Rebels on [fromfrom.GetName] have joined the [cc_breakaway_country.GetName]"
+ccfaction.67.desc:0 "Our authorities have lost control of [fromfrom.GetName]. The new owners of the planet have ceded themselves to the [cc_breakaway_country.GetName] and have joined them in their revolt against us."
+
+#It fails
+ccfaction.68.name:0 "Factional Revolutionaries fail to seize [fromfrom.GetName]"
+ccfaction.68.desc.first:0 "Our authorities have defeated revolutionaries affiliated with the [cc_rebellious_faction.GetName] on [fromfrom.GetName] that sought to secede and join the [cc_breakaway_country.GetName]. Order has been re-established."
+ccfaction.68.desc.second:0 "Our authorities have defeated revolutionaries affiliated with the [cc_rebellious_faction.GetName] on [fromfrom.GetName] that sought to secede and found their own breakaway state. Order has been re-established."
+
+
+#What to do with the sympathies planets?
+ccfaction.7.name:0 "The [cc_breakaway_country.GetName] Sympathisers"
+ccfaction.7.desc:0 "There is considerable minority support for the [cc_breakaway_country.GetName] on [random_sympathies_planet.GetName] and other planets. The supporters of the breakaway faction are mobilising and will surely cause trouble if allowed to. How should we deal with them?"
+ccfaction.7.A.tooltip:0 "All supporters of the breakaway faction on these planets will be killed. Other countries may be upset."
+ccfaction.7.B.tooltip:0 "All supporters of the breakaway faction on these planets will gain the modifier §R$cc_oppression$§!: -50% output of all resources."
+ccfaction.7.C:0 "Give them a generous subsidy."
+ccfaction.7.C.tooltip:0 "This will hopefully remind them of the benefits of being part of the [root.GetName]."
+ccfaction.7.D:0 "Do nothing."
+
+ccfaction.900.name:0 "Unrest caused by the [cc_rebellious_faction.GetName] is over"
+ccfaction.900.exists.desc:0 "The [root.GetName] has seen a period of tumult caused by the agitations of the [cc_rebellious_faction.GetName], which led to the secession of the [cc_breakaway_country.GetName]. However, with this secession, most of the troublesome elements have now left the [root.GetName]. Whilst the situation is far from ideal, we have at least been able to restore internal order."
+ccfaction.900.doesnotexist.desc:0 "The [root.GetName] has seen a period of tumult caused by the agitations of the [cc_rebellious_faction.GetName], which led to attempts at secession. These have been nipped in the bud, and internal order within the [root.GetName] has been restored."
+
+CCWORRYING:0 "Worrying."
+CCGOOD:0 "Good to know."
+CCGOOD2:0 "This comes as welcome news."
+
+ccfaction.9993.name:0 "Stronghold at [root.GetName] Won Back"
+ccfaction.9993.desc:0 "We have managed to exert our influence over [root.GetName] to the degree that it can no longer be considered as a Stronghold of the [cc_rebellious_faction.GetName]. Our control over the planet is now more secure."
+ccfaction.99931.desc:0 "We have managed to exert our influence over [root.GetName] to the degree that it can no longer be considered as a Stronghold of the [cc_new_reb_faction.GetName]. Our control over the planet is now more secure."
+ccfaction.9994.name:0 "[root.GetName] becomes a Stronghold of the [cc_rebellious_faction.GetName]"
+ccfaction.9994.desc:0 "The [cc_rebellious_faction.GetName] has gained in influence on [root.GetName] to the degree that it can be considered their Stronghold. We must take action urgently, or the planet might be lost to us."
+ccfaction.99941.desc:0 "The [cc_new_reb_faction.GetName] has gained in influence on [root.GetName] to the degree that it can be considered their Stronghold. We must take action urgently, or the planet might be lost to us."
+
+
+cc_faction_revolt_modifiers_removed:0 "All planetary modifiers relating to factional revolts will be removed."
+
+war_goal_wg_dpe_faction_revolt:0 "Factional Revolt"
+war_goal_wg_dpe_faction_revolt_desc:0 "War is waged to overthrow the current regime."

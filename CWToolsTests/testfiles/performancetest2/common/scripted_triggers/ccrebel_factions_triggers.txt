@@ -1,0 +1,658 @@
+
+has_a_factional_revolt_active = {
+	OR = {
+		has_country_flag = cc_imperialist_revolt_active
+		has_country_flag = cc_prosperity_revolt_active
+		has_country_flag = cc_totalitarian_revolt_active
+		has_country_flag = cc_progressive_revolt_active
+		has_country_flag = cc_technologist_revolt_active
+		has_country_flag = cc_traditionalist_revolt_active
+		has_country_flag = cc_xenoist_revolt_active
+		has_country_flag = cc_supremacist_revolt_active
+		has_country_flag = cc_isolationist_revolt_active
+	}
+}
+
+has_secondary_factional_revolt_active = {
+	OR = {
+		has_country_flag = cc_imperialist_secondary_revolt_active
+		has_country_flag = cc_prosperity_secondary_revolt_active
+		has_country_flag = cc_totalitarian_secondary_revolt_active
+		has_country_flag = cc_progressive_secondary_revolt_active
+		has_country_flag = cc_technologist_secondary_revolt_active
+		has_country_flag = cc_traditionalist_secondary_revolt_active
+		has_country_flag = cc_xenoist_secondary_revolt_active
+		has_country_flag = cc_supremacist_secondary_revolt_active
+		has_country_flag = cc_isolationist_secondary_revolt_active
+	}
+}
+
+has_seditious_talk = {
+	OR = {
+		has_modifier = cc_seditious_talk_xenophile
+		has_modifier = cc_seditious_talk_xenophobe
+		has_modifier = cc_seditious_talk_egalitarian
+		has_modifier = cc_seditious_talk_authoritarian
+		has_modifier = cc_seditious_talk_materialist
+		has_modifier = cc_seditious_talk_spiritualist
+		has_modifier = cc_seditious_talk_militarist
+		has_modifier = cc_seditious_talk_pacifist
+	}
+}
+
+is_faction_stronghold = {
+	OR = {
+		has_modifier = cc_faction_stronghold_xenoist
+		has_modifier = cc_faction_stronghold_supremacist
+		has_modifier = cc_faction_stronghold_isolationist
+		has_modifier = cc_faction_stronghold_totalitarian
+		has_modifier = cc_faction_stronghold_progressive
+		has_modifier = cc_faction_stronghold_technologist
+		has_modifier = cc_faction_stronghold_traditionalist
+		has_modifier = cc_faction_stronghold_imperialist
+		has_modifier = cc_faction_stronghold_prosperity
+	}
+}
+
+has_faction_sympathies = {
+	OR = {
+		has_modifier = cc_faction_sympathies_xenoist
+		has_modifier = cc_faction_sympathies_supremacist
+		has_modifier = cc_faction_sympathies_isolationist
+		has_modifier = cc_faction_sympathies_totalitarian
+		has_modifier = cc_faction_sympathies_progressive
+		has_modifier = cc_faction_sympathies_technologist
+		has_modifier = cc_faction_sympathies_traditionalist
+		has_modifier = cc_faction_sympathies_imperialist
+		has_modifier = cc_faction_sympathies_prosperity
+	}
+}
+
+has_faction_sedition = {
+	OR = {
+		has_modifier = cc_faction_sedition_xenoist
+		has_modifier = cc_faction_sedition_supremacist
+		has_modifier = cc_faction_sedition_isolationist
+		has_modifier = cc_faction_sedition_totalitarian
+		has_modifier = cc_faction_sedition_progressive
+		has_modifier = cc_faction_sedition_technologist
+		has_modifier = cc_faction_sedition_traditionalist
+		has_modifier = cc_faction_sedition_imperialist
+		has_modifier = cc_faction_sedition_prosperity
+	}
+}
+
+has_factional_revolt_stage1 = {
+	OR = {
+		has_country_flag = cc_xenoist_seditions_active
+		has_country_flag = cc_supremacist_seditions_active
+		has_country_flag = cc_isolationist_seditions_active
+		has_country_flag = cc_totalitarian_seditions_active
+		has_country_flag = cc_progressive_seditions_active
+		has_country_flag = cc_technologist_seditions_active
+		has_country_flag = cc_traditionalist_seditions_active
+		has_country_flag = cc_imperialist_seditions_active
+		has_country_flag = cc_prosperity_seditions_active
+	}
+}
+
+has_factional_revolt_stage2 = {
+	OR = {
+		has_country_flag = cc_xenoist_stage2_active
+		has_country_flag = cc_supremacist_stage2_active
+		has_country_flag = cc_isolationist_stage2_active
+		has_country_flag = cc_totalitarian_stage2_active
+		has_country_flag = cc_progressive_stage2_active
+		has_country_flag = cc_technologist_stage2_active
+		has_country_flag = cc_traditionalist_stage2_active
+		has_country_flag = cc_imperialist_stage2_active
+		has_country_flag = cc_prosperity_stage2_active
+	}
+}
+
+has_factional_revolt_stage3 = {
+	OR = {
+		has_country_flag = cc_xenoist_stage3_active
+		has_country_flag = cc_supremacist_stage3_active
+		has_country_flag = cc_isolationist_stage3_active
+		has_country_flag = cc_totalitarian_stage3_active
+		has_country_flag = cc_progressive_stage3_active
+		has_country_flag = cc_technologist_stage3_active
+		has_country_flag = cc_traditionalist_stage3_active
+		has_country_flag = cc_imperialist_stage3_active
+		has_country_flag = cc_prosperity_stage3_active
+	}
+}
+
+#necessary as pop_percentage = { limit = { member_of_faction = x } } appears to default to 'yes' if no pop is a member of a faction
+valid_factional_revolt_target = {
+	any_owned_pop = {
+		AND = {
+			species = { pops_have_happiness = yes }
+			member_of_faction = yes
+		}
+	}
+}
+
+any_pop_has_happiness_gauge = {
+	any_owned_pop = { species = { pops_have_happiness = yes } }
+}
+
+
+is_a_vanilla_faction = {
+	OR = {
+		is_pop_faction_type = imperialist
+		is_pop_faction_type = isolationist
+		is_pop_faction_type = progressive
+		is_pop_faction_type = prosperity
+		is_pop_faction_type = supremacist
+		is_pop_faction_type = technologist
+		is_pop_faction_type = totalitarian
+		is_pop_faction_type = traditionalist
+		is_pop_faction_type = xenoist
+	}
+}
+
+has_same_ethic_as_faction = {
+	if = {
+		limit = { owner = { has_country_flag = cc_totalitarian_revolt_active } }
+		has_ethic = ethic_authoritarian
+	}
+	if = {
+		limit = { owner = { has_country_flag = cc_progressive_revolt_active } }
+		has_ethic = ethic_egalitarian
+	}
+	if = {
+		limit = { owner = { has_country_flag = cc_prosperity_revolt_active } }
+		has_ethic = ethic_pacifist
+	}
+	if = {
+		limit = { owner = { has_country_flag = cc_imperialist_revolt_active } }
+		has_ethic = ethic_militarist
+	}
+	if = {
+		limit = { owner = { has_country_flag = cc_technologist_revolt_active } }
+		has_ethic = ethic_materialist
+	}
+	if = {
+		limit = { owner = { has_country_flag = cc_traditionalist_revolt_active } }
+		has_ethic = ethic_spiritualist
+	}
+	if = {
+		limit = { owner = { has_country_flag = cc_xenoist_revolt_active } }
+		has_ethic = ethic_xenophile
+	}
+	if = {
+		limit = { owner = { has_country_flag = cc_supremacist_revolt_active } }
+		has_ethic = ethic_xenophobe
+	}
+	if = {
+		limit = { owner = { has_country_flag = cc_isolationist_revolt_active } }
+		has_ethic = ethic_xenophobe
+	}
+}
+
+has_same_ethic_as_2nd_faction = {
+	if = {
+		limit = { owner = { has_country_flag = cc_totalitarian_secondary_revolt_active } }
+		has_ethic = ethic_authoritarian
+	}
+	if = {
+		limit = { owner = { has_country_flag = cc_progressive_secondary_revolt_active } }
+		has_ethic = ethic_egalitarian
+	}
+	if = {
+		limit = { owner = { has_country_flag = cc_prosperity_secondary_revolt_active } }
+		has_ethic = ethic_pacifist
+	}
+	if = {
+		limit = { owner = { has_country_flag = cc_imperialist_secondary_revolt_active } }
+		has_ethic = ethic_militarist
+	}
+	if = {
+		limit = { owner = { has_country_flag = cc_technologist_secondary_revolt_active } }
+		has_ethic = ethic_materialist
+	}
+	if = {
+		limit = { owner = { has_country_flag = cc_traditionalist_secondary_revolt_active } }
+		has_ethic = ethic_spiritualist
+	}
+	if = {
+		limit = { owner = { has_country_flag = cc_xenoist_secondary_revolt_active } }
+		has_ethic = ethic_xenophile
+	}
+	if = {
+		limit = { owner = { has_country_flag = cc_supremacist_secondary_revolt_active } }
+		has_ethic = ethic_xenophobe
+	}
+	if = {
+		limit = { owner = { has_country_flag = cc_isolationist_secondary_revolt_active } }
+		has_ethic = ethic_xenophobe
+	}
+}
+
+has_same_faction_as_faction = {
+	OR = {
+		AND = {
+			owner = { has_country_flag = cc_totalitarian_revolt_active }
+#			member_of_faction = totalitarian
+			has_ethic = ethic_authoritarian
+			is_enslaved = no
+			is_being_purged = no
+			has_culture_shock = no
+		}
+		AND = {
+			owner = { has_country_flag = cc_progressive_revolt_active }
+#			member_of_faction = progressive
+			has_ethic = ethic_egalitarian
+			is_enslaved = no
+			is_being_purged = no
+			has_culture_shock = no
+		}
+		AND = {
+			owner = { has_country_flag = cc_prosperity_revolt_active }
+#			member_of_faction = prosperity
+			has_ethic = ethic_pacifist
+			is_enslaved = no
+			is_being_purged = no
+			has_culture_shock = no
+		}
+		AND = {
+			owner = { has_country_flag = cc_imperialist_revolt_active }
+#			member_of_faction = imperialist
+			has_ethic = ethic_militarist
+			is_enslaved = no
+			is_being_purged = no
+			has_culture_shock = no
+		}
+		AND = {
+			owner = { has_country_flag = cc_technologist_revolt_active }
+#			member_of_faction = technologist
+			has_ethic = ethic_materialist
+			is_enslaved = no
+			is_being_purged = no
+			has_culture_shock = no
+		}
+		AND = {
+			owner = { has_country_flag = cc_traditionalist_revolt_active }
+#			member_of_faction = traditionalist
+			has_ethic = ethic_spiritualist
+			is_enslaved = no
+			is_being_purged = no
+			has_culture_shock = no
+		}
+		AND = {
+			owner = { has_country_flag = cc_xenoist_revolt_active }
+#			member_of_faction = xenoist
+			has_ethic = ethic_xenophile
+			is_enslaved = no
+			is_being_purged = no
+			has_culture_shock = no
+		}
+		AND = {
+			owner = { has_country_flag = cc_supremacist_revolt_active }
+#			member_of_faction = supremacist
+			has_ethic = ethic_xenophobe
+			is_enslaved = no
+			is_being_purged = no
+			has_culture_shock = no
+			
+			owner = {
+				NOR = {
+					has_ethic = ethic_pacifist
+					has_ethic = ethic_fanatic_pacifist
+				}
+			}
+			is_same_species = owner_species
+		}
+		AND = {
+			owner = { has_country_flag = cc_isolationist_revolt_active }
+#			member_of_faction = isolationist
+			has_ethic = ethic_xenophobe
+			is_enslaved = no
+			is_being_purged = no
+			has_culture_shock = no
+			
+			OR = {
+				NOT = { is_same_species = owner_species }
+				owner = {
+					OR = {
+						has_ethic = ethic_pacifist
+						has_ethic = ethic_fanatic_pacifist
+					}
+				}
+			}
+		}
+	}
+}
+
+has_same_faction_as_2nd_faction = {
+	OR = {
+		AND = {
+			owner = { has_country_flag = cc_totalitarian_secondary_revolt_active }
+#			member_of_faction = totalitarian
+			has_ethic = ethic_authoritarian
+			is_enslaved = no
+			is_being_purged = no
+			has_culture_shock = no
+		}
+		AND = {
+			owner = { has_country_flag = cc_progressive_secondary_revolt_active }
+#			member_of_faction = progressive
+			has_ethic = ethic_egalitarian
+			is_enslaved = no
+			is_being_purged = no
+			has_culture_shock = no
+		}
+		AND = {
+			owner = { has_country_flag = cc_prosperity_secondary_revolt_active }
+#			member_of_faction = prosperity
+			has_ethic = ethic_pacifist
+		}
+		AND = {
+			owner = { has_country_flag = cc_imperialist_secondary_revolt_active }
+#			member_of_faction = imperialist
+			has_ethic = ethic_militarist
+			is_enslaved = no
+			is_being_purged = no
+			has_culture_shock = no
+		}
+		AND = {
+			owner = { has_country_flag = cc_technologist_secondary_revolt_active }
+#			member_of_faction = technologist
+			has_ethic = ethic_materialist
+			is_enslaved = no
+			is_being_purged = no
+			has_culture_shock = no
+		}
+		AND = {
+			owner = { has_country_flag = cc_traditionalist_secondary_revolt_active }
+#			member_of_faction = traditionalist
+			has_ethic = ethic_spiritualist
+			is_enslaved = no
+			is_being_purged = no
+			has_culture_shock = no
+		}
+		AND = {
+			owner = { has_country_flag = cc_xenoist_revolt_secondary_active }
+#			member_of_faction = xenoist
+			has_ethic = ethic_xenophile
+			is_enslaved = no
+			is_being_purged = no
+			has_culture_shock = no
+		}
+		AND = {
+			owner = { has_country_flag = cc_supremacist_secondary_revolt_active }
+#			member_of_faction = supremacist
+			has_ethic = ethic_xenophobe
+			is_enslaved = no
+			is_being_purged = no
+			has_culture_shock = no
+			
+			owner = {
+				NOR = {
+					has_ethic = ethic_pacifist
+					has_ethic = ethic_fanatic_pacifist
+				}
+			}
+			is_same_species = owner_species
+		}
+		AND = {
+			owner = { has_country_flag = cc_isolationist_secondary_revolt_active }
+#			member_of_faction = isolationist
+			has_ethic = ethic_xenophobe
+			is_enslaved = no
+			is_being_purged = no
+			has_culture_shock = no
+			
+			OR = {
+				NOT = { is_same_species = owner_species }
+				owner = {
+					OR = {
+						has_ethic = ethic_pacifist
+						has_ethic = ethic_fanatic_pacifist
+					}
+				}
+			}
+		}
+	}
+}
+
+has_2nd_faction_stronghold = {
+	if = {
+		limit = { owner = { has_country_flag = cc_totalitarian_secondary_revolt_active } }
+		has_modifier = cc_faction_stronghold_totalitarian
+	}
+	if = {
+		limit = { owner = { has_country_flag = cc_progressive_secondary_revolt_active } }
+		has_modifier = cc_faction_stronghold_progressive
+	}
+	if = {
+		limit = { owner = { has_country_flag = cc_prosperity_secondary_revolt_active } }
+		has_modifier = cc_faction_stronghold_prosperity
+	}
+	if = {
+		limit = { owner = { has_country_flag = cc_imperialist_secondary_revolt_active } }
+		has_modifier = cc_faction_stronghold_imperialist
+	}
+	if = {
+		limit = { owner = { has_country_flag = cc_technologist_secondary_revolt_active } }
+		has_modifier = cc_faction_stronghold_technologist
+	}
+	if = {
+		limit = { owner = { has_country_flag = cc_traditionalist_secondary_revolt_active } }
+		has_modifier = cc_faction_stronghold_traditionalist
+	}
+	if = {
+		limit = { owner = { has_country_flag = cc_xenoist_secondary_revolt_active } }
+		has_modifier = cc_faction_stronghold_xenoist
+	}
+	if = {
+		limit = { owner = { has_country_flag = cc_supremacist_secondary_revolt_active } }
+		has_modifier = cc_faction_stronghold_supremacist
+	}
+	if = {
+		limit = { owner = { has_country_flag = cc_isolationist_secondary_revolt_active } }
+		has_modifier = cc_faction_stronghold_isolationist
+	}	
+}
+
+has_2nd_faction_sympathies = {
+	if = {
+		limit = { owner = { has_country_flag = cc_totalitarian_secondary_revolt_active } }
+		has_modifier = cc_faction_sympathies_totalitarian
+	}
+	if = {
+		limit = { owner = { has_country_flag = cc_progressive_secondary_revolt_active } }
+		has_modifier = cc_faction_sympathies_progressive
+	}
+	if = {
+		limit = { owner = { has_country_flag = cc_prosperity_secondary_revolt_active } }
+		has_modifier = cc_faction_sympathies_prosperity
+	}
+	if = {
+		limit = { owner = { has_country_flag = cc_imperialist_secondary_revolt_active } }
+		has_modifier = cc_faction_sympathies_imperialist
+	}
+	if = {
+		limit = { owner = { has_country_flag = cc_technologist_secondary_revolt_active } }
+		has_modifier = cc_faction_sympathies_technologist
+	}
+	if = {
+		limit = { owner = { has_country_flag = cc_traditionalist_secondary_revolt_active } }
+		has_modifier = cc_faction_sympathies_traditionalist
+	}
+	if = {
+		limit = { owner = { has_country_flag = cc_xenoist_secondary_revolt_active } }
+		has_modifier = cc_faction_sympathies_xenoist
+	}
+	if = {
+		limit = { owner = { has_country_flag = cc_supremacist_secondary_revolt_active } }
+		has_modifier = cc_faction_sympathies_supremacist
+	}
+	if = {
+		limit = { owner = { has_country_flag = cc_isolationist_secondary_revolt_active } }
+		has_modifier = cc_faction_sympathies_isolationist
+	}	
+}
+
+has_2nd_faction_sedition = {
+	if = {
+		limit = { owner = { has_country_flag = cc_totalitarian_secondary_revolt_active } }
+		has_modifier = cc_faction_sedition_totalitarian
+	}
+	if = {
+		limit = { owner = { has_country_flag = cc_progressive_secondary_revolt_active } }
+		has_modifier = cc_faction_sedition_progressive
+	}
+	if = {
+		limit = { owner = { has_country_flag = cc_prosperity_secondary_revolt_active } }
+		has_modifier = cc_faction_sedition_prosperity
+	}
+	if = {
+		limit = { owner = { has_country_flag = cc_imperialist_secondary_revolt_active } }
+		has_modifier = cc_faction_sedition_imperialist
+	}
+	if = {
+		limit = { owner = { has_country_flag = cc_technologist_secondary_revolt_active } }
+		has_modifier = cc_faction_sedition_technologist
+	}
+	if = {
+		limit = { owner = { has_country_flag = cc_traditionalist_secondary_revolt_active } }
+		has_modifier = cc_faction_sedition_traditionalist
+	}
+	if = {
+		limit = { owner = { has_country_flag = cc_xenoist_secondary_revolt_active } }
+		has_modifier = cc_faction_sedition_xenoist
+	}
+	if = {
+		limit = { owner = { has_country_flag = cc_supremacist_secondary_revolt_active } }
+		has_modifier = cc_faction_sedition_supremacist
+	}
+	if = {
+		limit = { owner = { has_country_flag = cc_isolationist_secondary_revolt_active } }
+		has_modifier = cc_faction_sedition_isolationist
+	}	
+}
+
+
+
+has_1st_faction_stronghold = {
+	OR = {
+		AND = {
+			owner = { has_country_flag = cc_totalitarian_revolt_active }
+			has_modifier = cc_faction_stronghold_totalitarian
+		}
+		AND = {
+			owner = { has_country_flag = cc_progressive_revolt_active }
+			has_modifier = cc_faction_stronghold_progressive
+		}
+		AND = {
+			owner = { has_country_flag = cc_prosperity_revolt_active }
+			has_modifier = cc_faction_stronghold_prosperity
+		}
+		AND = {
+			owner = { has_country_flag = cc_imperialist_revolt_active }
+			has_modifier = cc_faction_stronghold_imperialist
+		}
+		AND = {
+			owner = { has_country_flag = cc_technologist_revolt_active }
+			has_modifier = cc_faction_stronghold_technologist
+		}
+		AND = {
+			owner = { has_country_flag = cc_traditionalist_revolt_active }
+			has_modifier = cc_faction_stronghold_traditionalist
+		}
+		AND = {
+			owner = { has_country_flag = cc_xenoist_revolt_active }
+			has_modifier = cc_faction_stronghold_xenoist
+		}
+		AND = {
+			owner = { has_country_flag = cc_supremacist_revolt_active }
+			has_modifier = cc_faction_stronghold_supremacist
+		}
+		AND = {
+			owner = { has_country_flag = cc_isolationist_revolt_active }
+			has_modifier = cc_faction_stronghold_isolationist
+		}
+	}
+}
+
+has_1st_faction_sympathies = {
+	if = {
+		limit = { owner = { has_country_flag = cc_totalitarian_revolt_active } }
+		has_modifier = cc_faction_sympathies_totalitarian
+	}
+	if = {
+		limit = { owner = { has_country_flag = cc_progressive_revolt_active } }
+		has_modifier = cc_faction_sympathies_progressive
+	}
+	if = {
+		limit = { owner = { has_country_flag = cc_prosperity_revolt_active } }
+		has_modifier = cc_faction_sympathies_prosperity
+	}
+	if = {
+		limit = { owner = { has_country_flag = cc_imperialist_revolt_active } }
+		has_modifier = cc_faction_sympathies_imperialist
+	}
+	if = {
+		limit = { owner = { has_country_flag = cc_technologist_revolt_active } }
+		has_modifier = cc_faction_sympathies_technologist
+	}
+	if = {
+		limit = { owner = { has_country_flag = cc_traditionalist_revolt_active } }
+		has_modifier = cc_faction_sympathies_traditionalist
+	}
+	if = {
+		limit = { owner = { has_country_flag = cc_xenoist_revolt_active } }
+		has_modifier = cc_faction_sympathies_xenoist
+	}
+	if = {
+		limit = { owner = { has_country_flag = cc_supremacist_revolt_active } }
+		has_modifier = cc_faction_sympathies_supremacist
+	}
+	if = {
+		limit = { owner = { has_country_flag = cc_isolationist_revolt_active } }
+		has_modifier = cc_faction_sympathies_isolationist
+	}	
+}
+
+has_1st_faction_sedition = {
+	if = {
+		limit = { owner = { has_country_flag = cc_totalitarian_revolt_active } }
+		has_modifier = cc_faction_sedition_totalitarian
+	}
+	if = {
+		limit = { owner = { has_country_flag = cc_progressive_revolt_active } }
+		has_modifier = cc_faction_sedition_progressive
+	}
+	if = {
+		limit = { owner = { has_country_flag = cc_prosperity_revolt_active } }
+		has_modifier = cc_faction_sedition_prosperity
+	}
+	if = {
+		limit = { owner = { has_country_flag = cc_imperialist_revolt_active } }
+		has_modifier = cc_faction_sedition_imperialist
+	}
+	if = {
+		limit = { owner = { has_country_flag = cc_technologist_revolt_active } }
+		has_modifier = cc_faction_sedition_technologist
+	}
+	if = {
+		limit = { owner = { has_country_flag = cc_traditionalist_revolt_active } }
+		has_modifier = cc_faction_sedition_traditionalist
+	}
+	if = {
+		limit = { owner = { has_country_flag = cc_xenoist_revolt_active } }
+		has_modifier = cc_faction_sedition_xenoist
+	}
+	if = {
+		limit = { owner = { has_country_flag = cc_supremacist_revolt_active } }
+		has_modifier = cc_faction_sedition_supremacist
+	}
+	if = {
+		limit = { owner = { has_country_flag = cc_isolationist_revolt_active } }
+		has_modifier = cc_faction_sedition_isolationist
+	}	
+}
+

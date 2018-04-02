@@ -1,0 +1,18 @@
+
+#also used in PRE
+has_a_happiness_gauge = {
+	NOR = {
+		has_trait = trait_machine_unit
+		has_trait = trait_hive_mind
+		has_trait = trait_nerve_stapled
+		is_non_sapient_robot = yes
+		is_sapient = no
+		AND = {
+			owner = {
+				has_authority = auth_machine_intelligence
+				has_civic = civic_machine_assimilator # Assimilator empire
+			}
+			has_trait = trait_cybernetic # Cyborg pop
+		}
+	}
+}

@@ -1,0 +1,17 @@
+﻿l_braz_por:
+
+
+CCWORRYING:0 "Preocupado."
+CCGOOD:0 "Bom Saber."
+CCGOOD2:0 "Essas são boas notícias."
+CCGOODGOOD:0 "Bom."
+CCEXCELLENT:0 "Excelente."
+CCUNPREDICTABLE.tooltip:0 "As consequências destas ações são imprevisíveis."
+CCKILLALL:0 "Mate. Todos. Eles."
+CCYES:0 "Sim."
+CCNO:0 "Não."
+CCOPPRESS:0 "Oprima-os."
+
+CCKILLALL.tooltip:0 "Outras nações podem estar descontentes."
+
+CCREMOVERULER.tooltip:0 "[root.GetRulerTitle] [root.GetRulerName] foi removida do jogo."

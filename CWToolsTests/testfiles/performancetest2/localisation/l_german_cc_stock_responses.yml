@@ -1,0 +1,17 @@
+﻿l_german:
+
+
+CCWORRYING:0 "Beunruhigend."
+CCGOOD:0 "Gut zu wissen."
+CCGOOD2:0 "Das sind gute Nachrichten."
+CCGOODGOOD:0 "Gut."
+CCEXCELLENT:0 "Ausgezeichnet."
+CCUNPREDICTABLE.tooltip:0 "Die Auswirkungen dieser Vorgehensweise sind nicht vorhersehbar."
+CCKILLALL:0 "Tötet.Sie.Alle."
+CCYES:0 "Ja."
+CCNO:0 "Nein."
+CCOPPRESS:0 "Unterdrückt Sie."
+
+CCKILLALL.tooltip:0 "Andere Staaten könnten Anstoß nehmen."
+
+CCREMOVERULER.tooltip:0 "[root.GetRulerTitle] [root.GetRulerName] wird vom Spiel entfernt."

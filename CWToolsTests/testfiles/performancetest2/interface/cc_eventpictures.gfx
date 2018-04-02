@@ -1,0 +1,68 @@
+spriteTypes = {	
+	spriteType = {
+		name = "GFX_evt_cc_assassination"
+		texturefile = "gfx/event_pictures/cc_assassination.dds"
+		masking_texture = "gfx/interface/situation_log/event_mask.dds"
+		alwaystransparent = yes		
+	}
+	spriteType = {
+		name = "GFX_evt_cc_mausoleum"
+		texturefile = "gfx/event_pictures/cc_mausoleum.dds"
+		masking_texture = "gfx/interface/situation_log/event_mask.dds"
+		alwaystransparent = yes		
+	}
+	spriteType = {
+		name = "GFX_evt_cc_priesthood"
+		texturefile = "gfx/event_pictures/cc_priesthood.dds"
+		masking_texture = "gfx/interface/situation_log/event_mask.dds"
+		alwaystransparent = yes		
+	}
+	spriteType = {
+		name = "GFX_evt_cc_alien_union"
+		texturefile = "gfx/event_pictures/cc_alien_union.dds"
+		masking_texture = "gfx/interface/situation_log/event_mask.dds"
+		alwaystransparent = yes		
+	}
+	spriteType = {
+		name = "GFX_evt_cc_university"
+		texturefile = "gfx/event_pictures/cc_university.dds"
+		masking_texture = "gfx/interface/situation_log/event_mask.dds"
+		alwaystransparent = yes		
+	}
+	spriteType = {
+		name = "GFX_evt_cc_emancipation"
+		texturefile = "gfx/event_pictures/cc_emancipation.dds"
+		masking_texture = "gfx/interface/situation_log/event_mask.dds"
+		alwaystransparent = yes		
+	}
+	spriteType = {
+		name = "GFX_evt_cc_peace_march"
+		texturefile = "gfx/event_pictures/cc_peace_march.dds"
+		masking_texture = "gfx/interface/situation_log/event_mask.dds"
+		alwaystransparent = yes		
+	}
+	spriteType = {
+		name = "GFX_evt_cc_throne_room"
+		texturefile = "gfx/event_pictures/cc_throne_room.dds"
+		masking_texture = "gfx/interface/situation_log/event_mask.dds"
+		alwaystransparent = yes		
+	}
+	spriteType = {
+		name = "GFX_evt_cc_military_ceremony"
+		texturefile = "gfx/event_pictures/cc_military_ceremony.dds"
+		masking_texture = "gfx/interface/situation_log/event_mask.dds"
+		alwaystransparent = yes		
+	}
+	spriteType = {
+		name = "GFX_evt_cc_espionage"
+		texturefile = "gfx/event_pictures/cc_espionage.dds"
+		masking_texture = "gfx/interface/situation_log/event_mask.dds"
+		alwaystransparent = yes		
+	}
+	spriteType = {
+		name = "GFX_evt_cc_execution"
+		texturefile = "gfx/event_pictures/cc_execution.dds"
+		masking_texture = "gfx/interface/situation_log/event_mask.dds"
+		alwaystransparent = yes		
+	}
+}

@@ -1,0 +1,17 @@
+﻿l_english:
+
+
+CCWORRYING:0 "Worrying."
+CCGOOD:0 "Good to know."
+CCGOOD2:0 "This comes as welcome news."
+CCGOODGOOD:0 "Good."
+CCEXCELLENT:0 "Excellent."
+CCUNPREDICTABLE.tooltip:0 "The consequences of this course of action are unpredictable."
+CCKILLALL:0 "Kill. Them. All."
+CCYES:0 "Yes."
+CCNO:0 "No."
+CCOPPRESS:0 "Oppress them."
+
+CCKILLALL.tooltip:0 "Other countries may be upset."
+
+CCREMOVERULER.tooltip:0 "[root.GetRulerTitle] [root.GetRulerName] is removed from the game."

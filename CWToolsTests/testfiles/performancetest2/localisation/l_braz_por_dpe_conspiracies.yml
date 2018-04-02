@@ -1,0 +1,131 @@
+﻿l_braz_por:
+
+
+dpe_conspiracy.20.name:0 "Conversa Traiçoeira"
+dpe_conspiracy.20.desc:0 "Mais cedo, [authoritarian.GetTitle] [authoritarian.GetName] fez um grande discurso que foi transmitido nos principais canais de comunicação. Nele, [authoritarian.GetSheHe] chegou muito perto de expor ideias subversivas: [authoritarian.GetSheHeCap] pintou uma imagem de [root.GetName] encarando desafios, enquanto o governo, fraco e dividido, fica impotente e não faz nada. Para resolver esta situação, [authoritarian.GetSheHe] defendeu a necessidade de uma nova forma de governo, com um executivo forte - capaz de tomar as decisões difíceis necessárias para restaurar a grandeza [root.GetSpeciesAdj]. [authoritarian.GetSheHeCap] insinuou que se o governo não agisse, "cidadãos preocupados e patriotas" teriam que mudar as coisas por suas próprias mãos.\n\nDesde então, [authoritarian.GetName] sumiu. O destino [authoritarian.GetHisHerCap] é desconhecido, mas [authoritarian.GetSheHe] deixou uma mensagem altamente criptografada pedindo desculpas pelo segredo, mas explicando que [authoritarian.GetSheHe] teme pela vida [authoritarian.GetHisHer] no clima político atual. [authoritarian.GetSheHeCap] também deixou detalhes sobre como entrar em contato com [authoritarian.GetHimHer] caso nós "víssemos razões para isso".\n\nComo devemos reagir?"
+dpe_conspiracy.20.A:0 "Prenda [authoritarian.GetOALead] traidor[authoritarian.GetXALead]!"
+dpe_conspiracy.20.A.tooltip:0 "O Serviço de Inteligência tentará rastrear e deter [authoritarian.GetName]."
+dpe_conspiracy.20.B:0 "Peça uma explicação."
+dpe_conspiracy.20.C:0 "[authoritarian.GetSheHeCap] está cert[authoritarian.GetOALead]!"
+dpe_conspiracy.20.D:0 "Ignore-[authoritarian.GetOALead]."
+
+dpe_conspiracy.21.name:0 "[authoritarian.GetName] Preso!"
+dpe_conspiracy.21.desc:0 "O Serviço de Inteligência foi capaz de rastrear e deter [authoritarian.GetName]. [authoritarian.GetSheHeCap] agora está sendo julgad[authoritarian.GetOALead] por traição. Espero que esta seja a última vez que ouvimos falar deste assunto."
+
+dpe_conspiracy.211.name:0 "[authoritarian.GetName] Admite Conspiração!"
+dpe_conspiracy.211.desc:0 "Depois de enfrentar interrogatórios rigorosos, [authoritarian.GetName] admitiu fazer parte de uma conspiração contra [root.GetRulerTitle]. No entanto, uma vez que conseguimos obter nomes [authoritarian.GetHisHer], rapidamente ficou claro que a maioria dos conspiradores se assustaram com a prisão de [authoritarian.GetName] e agora estão em exílio voluntário em [rival.GetName]. Nossas forças fronteiriças foram instruídas a não permitir a reentrada deles em [root.GetName]. Cidadãos [root.GetSpeciesAdj] já podem respirar aliviados."
+
+dpe_conspiracy.22.name:0 "Prisão de [authoritarian.GetName] falhou!"
+dpe_conspiracy.22.desc:0 "Nosso Serviço de Inteligência não conseguiu rastrear [authoritarian.GetName]. O paradeiro [authoritarian.GetHisHerCap] - e atividades atuais - são desconhecidos. Quem sabe o que [authoritarian.GetSheHe] pode estar tramando?"
+
+dpe_conspiracy.23.name:0 "[authoritarian.GetName] Responde"
+dpe_conspiracy.23.desc:0 "Me desculpe, [root.GetRulerName]... mas é a mais pura verdade, e foi meu dever aponta-la. Eu não hesitarei em agir para garantir o futuro do Estado [root.GetSpeciesAdj]."
+dpe_conspiracy.23.option:0 "Mantenha [authoritarian.GetHimHer] falando."
+
+dpe_conspiracy.24.name:0 "$dpe_conspiracy.23.name$"
+dpe_conspiracy.24.desc:0 "Saiba que tenho planejado isso há muito tempo. Sua única chance de salvar sua pele é desistir e deixar que as mãos mais capazes assumam."
+dpe_conspiracy.24.A:0 "Sem chance. Prenda o traidor!"
+dpe_conspiracy.24.A.tooltip:0 "$dpe_conspiracy.20.A.tooltip$"
+dpe_conspiracy.24.A.response:0 "Que assim seja."
+dpe_conspiracy.24.B:0 "Talvez [authoritarian.GetSheHe] esteja cert[authoritarian.GetOALead]..."
+dpe_conspiracy.24.B.tooltip:0 "$dpe_conspiracy.27.A.tooltip$"
+dpe_conspiracy.24.B.response:0 "Excelente. Minha fé em [root.GetName] foi restaurada."
+dpe_conspiracy.24.C:0 "Fique atent[authoritarian.GetOALead]."
+
+dpe_conspiracy.25.name:0 "Conspiração Descoberta!"
+dpe_conspiracy.25.desc:0 "A Agência de Inteligência [root.GetSpeciesAdj] descobriu uma grande trama para estabelecer uma forma de governo autoritária em [root.GetName]. [authoritarian.GetName] está no comando, mas parece ter um número muito grande de influentes apoiadores [root.GetSpeciesNamePlural], e uma facção importante dentro das forças armadas. Se nada for feito, é provável que em breve eles estejam em posição de derrubar o sistema atual e criar um regime autoritário."
+dpe_conspiracy.25.A:0 "Aplicar um bloqueio total."
+dpe_conspiracy.25.A.tooltip:0 "Os conspiradores terão dificuldades para escapar do bloqueio."
+dpe_conspiracy.25.B:0 "Redobre nossos esforços para capturar os conspiradores."
+
+dpe_state_in_lockdown:0 "Estado em Bloqueio"
+dpe_state_in_lockdown_desc:0 "O governo bloqueou a maioria das atividades não essenciais em um esforço para rastrear e suprimir uma conspiração."
+dpe_state_in_lockdown_faction:0 "Civil Liberties Curtailed"
+
+dpe_conspiracy.26.name:0 "Os Líderes da Conspiração Foram Presos!"
+dpe_conspiracy.26.desc:0 "A Agência de Segurança e o Serviço de Inteligencia [root.GetSpeciesAdj] conseguiram identificar as identidades e o destino de vários líderes da Conspiração Autoritária. Com essas informações eles conseguiram deter os conspiradores - inclusive o [authoritarian.GetName] - e efetivamente eliminar a trama."
+
+dpe_conspiracy.27.name:0 "Conspiração!"
+dpe_conspiracy.27.desc:0 ""Não queria ter chegado a isso. Mas não vou deixar você destruir [root.GetName]."\n\n[root.GetRulerTitle] [root.GetRulerName] foi cercado. [authoritarian.GetName] está aqui, com um revólver apontado para [root.GetRulerName]. "Não se desgaste chamando os guardas. Eles estão do meu lado," [authoritarian.GetName] disse friamente. "Agora, já que vossa excelência é amigo meu vou lhe dar duas opções. Você pode assinar este documento em apoio ao novo regime e fugir para o exílio; ou eu atiro em você aqui e agora. Você decide.""
+dpe_conspiracy.27.desc.clever:0 "" Não queria ter chegado a isso. Mas não vou deixar você destruir [root.GetName]."\n\n[root.GetRulerTitle] [root.GetRulerName] foi cercado. [authoritarian.GetName] está aqui, com um revólver apontado para [root.GetRulerName]. "Você!"\n\n[authoritarian.GetName] sorri friamente. "Sim, eu. Vossa excelência quase me pegou, você sabe. Foi suficiente para eu quase duvidar que conseguiria o que quero. Quase." [authoritarian.GetSheHeCap] suspira teatralmente. "Não tente chamar os guardas, eles estão comigo. Agora, vossa excelência tem duas escolhas. Você pode assinar este documento dando seu apoio ao novo regime e fugir para o exílio; ou atiro em você aqui e agora. Você decide.""
+dpe_conspiracy.27.desc.stupid:0 "" Não queria ter chegado a isso. Mas não vou deixar você destruir [root.GetName]."\n\n[root.GetRulerTitle] [root.GetRulerName] está cercado. [authoritarian.GetName] está aqui, com um revólver apontado para [root.GetRulerName].\n\n"Não vi você chegar," [root.GetRulerName] diz.\n\n[authoritarian.GetName] sorri friamente. "Esse é exatamente o problema. Você sempre foi muito fraco para fazer o que é necessário." [authoritarian.GetSheHeCap] suspira teatralmente. "Não adianta chamar pelos guardas. Eles estão comigo. Agora, vossa excelência tem duas opções. Pode assinar este documento apoiando o novo regime, e depois fugir em exílio; ou atiro em você aqui e agora. A decisão é sua.""
+dpe_conspiracy.27.A:0 "Go quietly."
+dpe_conspiracy.27.A.tooltip:0 "[root.GetRulerTitle] [root.GetRulerName] cai e foge para o exílio."
+dpe_conspiracy.27.B:0 "Lutarei até o fim."
+
+dpe_illegitimate_regime:0 "Regime Ilegítimo"
+dpe_illegitimate_regime_desc:0 "O regime atual entrou no poder através de uma conspiração que culminou com o assassinato do ex-governante."
+
+dpe_seized_control_faction:0 "Tomou o Controle"
+dpe_lost_control_faction:0 "Perdeu o controle para a conspiração"
+
+dpe_conspiracy.28.name:0 "A Conspiração Desapareceu"
+dpe_conspiracy.28.desc:0 "Houve rumores separatistas quando [authoritarian.GetName] sumiu. No entanto, nosso serviço de inteligência permanecem leais e frustraram todas as tentativas de conspiração. As atividades rebeldes acabaram, e [authoritarian.GetName] foi avistado se exilando em [rival.GetName], tendo renunciado a [authoritarian.GetHimHer] ao fracasso."
+
+
+
+
+dpe_conspiracy.1.name:0 "A Marinha Solicita o Governo"
+dpe_conspiracy.1.desc:0 "Para [root.GetRulerTitle] [root.GetRulerName],\n\neste é o momento para reconhecer a vital contribuição que a frota desempenha para garantir a segurança e a estabilidade de [root.GetName], e sua posição política na galáxia. Somos uma força poderosa que trabalha incansavelmente para combater ameaças ao Estado e aos seus cidadãos. Nossas equipes altamente treinadas estão entre as mais habilidosas da galáxia, e nossos navios de guerra de última geração são inigualáveis.\n\nÉ, portanto, com profundo arrependimento que eu vejo a situação da marinha na política interna [root.GetSpeciesAdj]. É muito claro, mesmo para os nossos sub-oficiais - e muito mais aos nossos generais - que a marinha está marginalizada até o ponto de ser considerada como garantida. Não só os nossos marinheiros e oficiais são mal pagos, mas também há uma interferência civil excessiva em suas atividades: os órgãos civis determinam nossas atribuições, bem como nossas políticas de recrutamento e promoção, e podem até mesmo condenar comandantes de sucesso por supostas indiscrições durante o trabalho. Em questões que interesses vitais da frota são afetados a frota simplesmente não tem voz.\n\nIsso impede a marinha de realizar seu trabalho em garantir a proteção de [root.GetName] de ameaças. Não é algo que está dentro dos seus interesses como [root.GetRulerTitle] deixar como está. Se não houver mudanças nessa situação, não poderemos garantir a existência do estado e nem do seu governo.\n\nAtenciosamente,\n[militarist.GetName],\nLíder da [militarist_faction.GetName!] e porta-voz escolhido da Marinha [root.GetSpeciesAdj]"
+dpe_conspiracy.1.A:0 "É hora de adotar uma visão mais militarista."
+dpe_conspiracy.1.B:0 "Talvez a frota precisa ser mais bem paga."
+dpe_extra_naval_expenses:0 "Despesas Navais Extras"
+dpe_extra_naval_expenses_desc:0 "O governo está sendo forçado a investir mais fundos para a frota para garantir a sua lealdade."
+dpe_conspiracy.1.C:0 "A frota e o governo devem ser mantidos separados."
+dpe_conspiracy.1.C.tooltip:0 "Os oficiais navais ficarão incomodados. Devem ser tomadas medidas para reduzir a influência da frota (reduzir seu tamanho) ou de outras maneiras agradar a facção militarista."
+dpe_military_petition_rejected:0 "Petição Rejeitada"
+
+dpe_conspiracy.2.name:0 "Oficiais Navais Desobedientes"
+dpe_conspiracy.2.desc:0 "Parece que vários oficiais navais de alta patente estão ignorando suas ordens. Você não pode se comunicar com eles por qualquer meio de comunicação. Seus conselheiros se preocupam com o que isso pode significar. Você entrou em contato com outros oficiais de nível inferior, mas eles afirmam não saber de nada."
+#CCWORRYING
+
+#(2 days later)
+dpe_conspiracy.3.name:0 "Cúpula Militar!"
+dpe_conspiracy.3.desc:0 "Aqui é [militarist.GetName]. Eu falo em nome da Marinha [root.GetSpeciesAdj]. Nossos almirantes decidiram unanimemente que o governo [root.GetSpeciesAdj] precisa ser colocado sub sua proteção para o bem do estado. Nossos canhões estão travados em você, e nossas forças terrestres formaram um perímetro ao redor de [root.GetGovtBuilding]. Você não pode escapar de nós. Se você não render-se agora, vamos explodir você junto com [root.GetGovtBuilding]. Você tem uma hora para nos dar uma resposta."
+dpe_conspiracy.3.option:0 "Não temos opções."
+dpe_conspiracy.3.tooltip:0 "[root.GetRulerTitle] [root.GetRulerName] parte para o exílio."
+
+#GetGovtBuilding:
+ccloc_democracy_building:0 "Parlamento"
+ccloc_oligarchy_building:0 "os Edifícios do Conselho"
+ccloc_others_building:0 "Seu Palácio"
+
+dpe_military_coup_faction:0 "Cúpula Militar"
+
+#Follow-up event (Paid ransom): 
+dpe_conspiracy.4.name:0 "A Marinha busca mais financiamentos"
+dpe_conspiracy.4.desc:0 "Para [root.GetRulerTitle] [root.GetRulerName],\n\nFaz algum tempo que você concordou em ajudar a fortalecer nossos militares gloriosos e valentes, e agora precisamos de mais. Com a expansão da nossa frota, os navios envelhecidos, a nova tecnologia e o desejo dos almitantes de criar novos Projetos de Naves e Tecnologia, todo o dinheiro que você investiu nos militares, todos esses anos atrás, está mais ou menos comprometido. Por isso, fui enviado para informá-lo de que exigiremos urgentemente mais alguns créditos para proteger nossa segurança nacional. Não podemos parar de pagar as pessoas que correm o risco de sacrificar suas vidas pela nossa grande nação agora, podemos?\n\nAtenciosamente,\n[militarist.GetName],\nLíder da [militarist_faction.GetName!] e porta-voz escolhido pela Marinha [root.GetSpeciesAdj]"
+dpe_conspiracy.4.A:0 "Tudo bem, leve seu suborno. A frota deve continuar seguindo as ordens e defendendo nossas fronteiras."
+dpe_conspiracy.4.B:0 "Os militares estão subservientes ao governo civil; o almirantado faria bem em se lembrarem disso!"
+dpe_conspiracy.4.B.tooltip:0 "$dpe_conspiracy.1.C.tooltip$"
+dpe_conspiracy.4.C:0 "Você mencionou Projetos de Naves e Tecnologias?"
+
+dpe_extra_naval_expenses_2:0 "$dpe_extra_naval_expenses$"
+dpe_extra_naval_expenses_2_desc:0 "$dpe_extra_naval_expenses_desc$"
+
+dpe_conspiracy.5.name:0 "Projetos de Naves e Tecnologia"
+dpe_conspiracy.5.desc:0 "O almirantado compreende que a frota consome uma parcela significativa do orçamento da nação. Como tal, eles decidiram tentar transformar nossa frota na frota mais avançada da galáxia - modelo de uma frota moderna. No entanto, cientistas, laboratórios e materiais não são baratos, especialmente com um padrão tão alto quanto o nosso. Uma vez que começarmos a receber os fundos necessários, poderemos começar a melhorar nossas forças armadas e eventualmente alcançar nosso objetivo de causar inveja a todas as espécies sencientes."
+dpe_conspiracy.5.A:0 "Nós certamente podemos investir recursos nessa iniciativa."
+dpe_conspiracy.5.B:0 "A nação não pode pagar por isso."
+dpe_conspiracy.5.B.tooltip:0 "$dpe_conspiracy.1.C.tooltip$"
+
+dpe_navy_RandD:0 "Investindo no Desenvolvimento Naval"
+dpe_navy_RandD_desc:0 "O Estado está investindo na modernização das frotas."
+
+
+dpe_conspiracy.6.name:0 "Despesas Navais Extras atoa?"
+dpe_conspiracy.6.desc:0 "Após a derrota nas mãos do [fromfrom.GetName], muitos questionaram se o dinheiro extra dado à marinha está sendo bem gasto - afinal, a mesma marinha não conseguiu trazer a vitória a [root.GetName]. Já, outros departamentos estão pressionando por mais recursos, alegando que poderão ter um impacto maior em garantir que [nome da raiz. GetName] restaure a sua antiga glória."
+dpe_conspiracy.6.A:0 "A frota ainda precisa de recursos."
+#only if the fleet has taken a beating
+dpe_conspiracy.6.B:0 "O dinheiro deve ser usado para reconstruir a frota."
+dpe_conspiracy.6.C:0 "O dinheiro pode mesmo ser melhor gasto em outros lugares."
+#only if the fleet is still fully intact
+dpe_conspiracy.6.C.tooltip:0 "$dpe_conspiracy.1.C.tooltip$"
+dpe_conspiracy.6.C.tooltip2:0 "Os Oficiais da Marinha estão muito chateados. Devem ser tomadas medidas para garantir que a influência da frota não cresça o suficiente para desestabilizar o governo, e, paralelamente, que a facção militarista seja agradada de outra forma, se este caminho for possível."
+
+dpe_rebuilding_fleet:0 "Reconstruir a Frota"
+dpe_rebuilding_fleet_desc:0 "O estado está desviando fundos para recosntruir a frota após uma derrota."
+dpe_rebuilding_fleet_2:0 "$dpe_rebuilding_fleet$"
+dpe_rebuilding_fleet_2_desc:0 "$dpe_rebuilding_fleet_desc$"
+dpe_naval_pay_cut_faction:0 "Salário Naval cortado"
+dpe_navy_privileges_cut_faction:0 "Privilégios da Marinha Cortados"

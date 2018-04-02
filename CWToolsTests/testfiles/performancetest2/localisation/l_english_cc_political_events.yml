@@ -1,0 +1,395 @@
+﻿l_english:
+
+cc_events_mod.1.name:0 "Xenophobic Comments"
+cc_events_mod.1.desc:0 "[root.GetRulerTitle] [root.GetRulerName] has been caught on film making xenophobic comments about the intelligence and appearance of the [discriminated_species.GetSpeciesNamePlural], and suggested that they will never be true equals of the [root.GetSpeciesNamePlural]. The [discriminated_species.GetSpeciesName] community is up in arms about the comments, and xeno rights activists, led by the [xenoist_faction.GetName], are calling for [root.GetRulerTitle] [root.GetRulerName] to step down."
+cc_events_mod.1.HUM:0 "[root.GetRulerTitle] [root.GetRulerName] has been caught on film making xenophobic comments about the intelligence and appearance of the [discriminated_species.GetSpeciesNamePlural]. Apparently, the "stupid monkeys" smell bad, breed like rats and are barely capable of sentient thought. The [discriminated_species.GetSpeciesName] community is up in arms about the comments, and xeno rights activists, led by the [xenoist_faction.GetName], are calling for [root.GetRulerTitle] [root.GetRulerName] to step down."
+cc_events_mod.1.MAM:0 "[root.GetRulerTitle] [root.GetRulerName] has been caught on film making xenophobic comments about the intelligence and appearance of the [discriminated_species.GetSpeciesNamePlural]. Apparently, they breed like rats and are worth no more than them. The [discriminated_species.GetSpeciesName] community is up in arms about the comments, and xeno rights activists, led by the [xenoist_faction.GetName], are calling for [root.GetRulerTitle] [root.GetRulerName] to step down."
+cc_events_mod.1.REP:0 "[root.GetRulerTitle] [root.GetRulerName] has been caught on film making xenophobic comments about the intelligence and appearance of the [discriminated_species.GetSpeciesNamePlural]. Apparently, the "stupid lizards" are unpleasant to look at, and should be kept out of laboratories as they are only suited for manual labour. The [discriminated_species.GetSpeciesName] community is up in arms about the comments, and xeno rights activists, led by the [xenoist_faction.GetName], are calling for [root.GetRulerTitle] [root.GetRulerName] to step down."
+cc_events_mod.1.AVI:0 "[root.GetRulerTitle] [root.GetRulerName] has been caught on film making xenophobic comments about the intelligence and appearance of the [discriminated_species.GetSpeciesNamePlural]. Apparently, the "stupid birds" resemble chickens in both looks and intellect, and will never be seen as equals of the [root.GetSpeciesNamePlural]. The [discriminated_species.GetSpeciesName] community is up in arms about the comments, and xeno rights activists, led by the [xenoist_faction.GetName], are calling for [root.GetRulerTitle] [root.GetRulerName] to step down."
+cc_events_mod.1.ART:0 "[root.GetRulerTitle] [root.GetRulerName] has been caught on film making xenophobic comments about the intelligence and appearance of the [discriminated_species.GetSpeciesNamePlural]. Apparently, the "stupid bugs" are unsightly, and their way of life is a blight on the natural order of the [root.GetName]. The [discriminated_species.GetSpeciesName] community is up in arms about the comments, and xeno rights activists, led by the [xenoist_faction.GetName], are calling for [root.GetRulerTitle] [root.GetRulerName] to step down."
+cc_events_mod.1.MOL:0 "[root.GetRulerTitle] [root.GetRulerName] has been caught on film making xenophobic comments about the intelligence and appearance of the [discriminated_species.GetSpeciesNamePlural]. Apparently, they are unpleasant to look at, and the slime they allegedly produce tarnishes the natural order of the [root.GetName]. The [discriminated_species.GetSpeciesName] community is up in arms about the comments, and xeno rights activists, led by the [xenoist_faction.GetName], are calling for [root.GetRulerTitle] [root.GetRulerName] to step down."
+cc_events_mod.1.FUN:0 "[root.GetRulerTitle] [root.GetRulerName] has been caught on film making xenophobic comments about the intelligence and appearance of the [discriminated_species.GetSpeciesNamePlural]. Apparently, the "stupid toadstools" barely qualify as sentient life forms, let alone being equals of the [root.GetSpeciesNamePlural]. The [discriminated_species.GetSpeciesName] community is up in arms about the comments, and xeno rights activists, led by the [xenoist_faction.GetName], are calling for [root.GetRulerTitle] [root.GetRulerName] to step down."
+cc_events_mod.1.PLANT:0 "[root.GetRulerTitle] [root.GetRulerName] has been caught on film making xenophobic comments about the intelligence and appearance of the [discriminated_species.GetSpeciesNamePlural]. Apparently, the "stupid potplants" are thicker than a tree stump, both in appearance and in intelligence, and will never be true equals of the [root.GetSpeciesNamePlural]. The [discriminated_species.GetSpeciesName] community is up in arms about the comments, and xeno rights activists, led by the [xenoist_faction.GetName], are calling for [root.GetRulerTitle] [root.GetRulerName] to step down."
+
+cc_events_mod.1.A:0 "Withdraw from public life."
+cc_events_mod.1.A.tooltip:0 "[root.GetRulerTitle] [root.GetRulerName] is removed from the game. Adds §Y25%§! $pop_ethic_xenophile_attraction_mult$ for 10 years."
+cc_events_mod.1.B:0 "The [root.GetRulerTitle] said nothing wrong."
+cc_events_mod.1.B.tooltip:0 "Defend the [root.GetRulerTitle]'s reputation by pointing out that the stated opinions are widely shared.\n\nShift to Xenophobe. The [xenoist_faction.GetName] and the [discriminated_species.GetSpeciesNamePlural] will be §Rvery upset§!."
+cc_events_mod.1.C:0 "The [root.GetRulerTitle] has more important matters to worry about."
+cc_events_mod.1.C.tooltip:0 "The [xenoist_faction.GetName] and the [discriminated_species.GetSpeciesNamePlural] will be §Rupset§!."
+
+
+cc_events_mod.2.desc:0 "[root.GetRulerTitle] [root.GetRulerName] has been caught on film making xenophobic comments about the intelligence and appearance of the [discriminated_species.GetSpeciesName], and suggested that they will never be true equals of the [root.GetSpeciesNamePlural]. The [discriminated_species.GetSpeciesName] community is up in arms about the comments, and xeno rights activists, led by the [xenoist_faction.GetName], are representing the [discriminated_species.GetSpeciesNamePlural] to demand a formal apology on their behalf."
+cc_events_mod.2.HUM:0 "[root.GetRulerTitle] [root.GetRulerName] has been caught on film making xenophobic comments about the intelligence and appearance of the [discriminated_species.GetSpeciesName]. Apparently, the "stupid monkeys" smell bad, breed like rats and are barely capable of sentient thought. The [discriminated_species.GetSpeciesName] community is up in arms about the comments, and xeno rights activists, led by the [xenoist_faction.GetName], are representing the [discriminated_species.GetSpeciesNamePlural] to demand a formal apology on their behalf."
+cc_events_mod.2.MAM:0 "[root.GetRulerTitle] [root.GetRulerName] has been caught on film making xenophobic comments about the intelligence and appearance of the [discriminated_species.GetSpeciesName]. Apparently, they breed like rats and are worth no more than them. The [discriminated_species.GetSpeciesName] community is up in arms about the comments, and xeno rights activists, led by the [xenoist_faction.GetName], are representing the [discriminated_species.GetSpeciesNamePlural] to demand a formal apology on their behalf."
+cc_events_mod.2.REP:0 "[root.GetRulerTitle] [root.GetRulerName] has been caught on film making xenophobic comments about the intelligence and appearance of the [discriminated_species.GetSpeciesName]. Apparently, the "stupid lizards" are unpleasant to look at, and should be kept out of laboratories as they are only suited for manual labour. The [discriminated_species.GetSpeciesName] community is up in arms about the comments, and xeno rights activists, led by the [xenoist_faction.GetName], are representing the [discriminated_species.GetSpeciesNamePlural] to demand a formal apology on their behalf."
+cc_events_mod.2.AVI:0 "[root.GetRulerTitle] [root.GetRulerName] has been caught on film making xenophobic comments about the intelligence and appearance of the [discriminated_species.GetSpeciesName]. Apparently, the "stupid birds" resemble chickens in both looks and intellect, and will never be seen as equals of the [root.GetSpeciesNamePlural]. The [discriminated_species.GetSpeciesName] community is up in arms about the comments, and xeno rights activists, led by the [xenoist_faction.GetName], are representing the [discriminated_species.GetSpeciesNamePlural] to demand a formal apology on their behalf."
+cc_events_mod.2.ART:0 "[root.GetRulerTitle] [root.GetRulerName] has been caught on film making xenophobic comments about the intelligence and appearance of the [discriminated_species.GetSpeciesName]. Apparently, the "stupid bugs" are unsightly, and their way of life is a blight on the natural order of the [root.GetName]. The [discriminated_species.GetSpeciesName] community is up in arms about the comments, and xeno rights activists, led by the [xenoist_faction.GetName], are representing the [discriminated_species.GetSpeciesNamePlural] to demand a formal apology on their behalf."
+cc_events_mod.2.MOL:0 "[root.GetRulerTitle] [root.GetRulerName] has been caught on film making xenophobic comments about the intelligence and appearance of the [discriminated_species.GetSpeciesName]. Apparently, they are unpleasant to look at, and the slime they allegedly produce tarnishes the natural order of the [root.GetName]. The [discriminated_species.GetSpeciesName] community is up in arms about the comments, and xeno rights activists, led by the [xenoist_faction.GetName], are representing the [discriminated_species.GetSpeciesNamePlural] to demand a formal apology on their behalf."
+cc_events_mod.2.FUN:0 "[root.GetRulerTitle] [root.GetRulerName] has been caught on film making xenophobic comments about the intelligence and appearance of the [discriminated_species.GetSpeciesName]. Apparently, the "stupid toadstools" barely qualify as sentient life forms, let alone being equals of the [root.GetSpeciesNamePlural]. The [discriminated_species.GetSpeciesName] community is up in arms about the comments, and xeno rights activists, led by the [xenoist_faction.GetName], are representing the [discriminated_species.GetSpeciesNamePlural] to demand a formal apology on their behalf."
+cc_events_mod.2.PLANT:0 "[root.GetRulerTitle] [root.GetRulerName] has been caught on film making xenophobic comments about the intelligence and appearance of the [discriminated_species.GetSpeciesName]. Apparently, the "stupid potplants" are thicker than a tree stump, both in appearance and in intelligence, and will never be true equals of the [root.GetSpeciesNamePlural]. The [discriminated_species.GetSpeciesName] community is up in arms about the comments, and xeno rights activists, led by the [xenoist_faction.GetName], are representing the [discriminated_species.GetSpeciesNamePlural] to demand a formal apology on their behalf."
+
+cc_events_mod.2.A:0 "Offer a sincere apology."
+cc_events_mod.2.B:0 "The [root.GetRulerTitle] does not apologise."
+cc_events_mod.2.B.tooltip:0 "The [xenoist_faction.GetName] and the [discriminated_species.GetSpeciesNamePlural] will be §Rupset§!."
+cc_events_mod.2.C:0 "The [root.GetRulerTitle] has made [root.Leader.GetHisHer] opinion clear."
+cc_events_mod.2.C.tooltip:0 "Shift to Xenophobe. The [xenoist_faction.GetName] and the [discriminated_species.GetSpeciesNamePlural] will be §Rvery upset§!."
+
+
+
+
+cc_events_mod.4.name:0 "[root.GetRulerTitle] [root.GetRulerName] is revered!"
+cc_events_mod.4.desc:0 "Millions have turned out in [root.Capital.GetName] to celebrate the [root.GetRulerTitle]'s birthday today. [root.Leader.GetSheHeCap] [root.Leader.GetWasWere] celebrated with honours usually only reserved for the Gods, and, bizarrely, [root.Leader.GetSheHe] received over a thousand marriage proposals (despite already being married). It is clear that [root.GetRulerName] is the most popular [root.GetRulerTitle] ever."
+cc_events_mod.4.A:0 "Long may [root.Leader.GetHisHer] rule last!"
+cc_events_mod.4.B:0 "[root.GetRulerTitle] [root.GetRulerName] is a God!"
+
+cc_events_mod.6.name:0 "Should the Ruler Cult continue?"
+cc_events_mod.6.desc:0 "[root.GetRulerTitle] [cc_ruler_culted_ruler.GetName] was highly popular and was rewarded for [cc_ruler_culted_ruler.GetHisHer] great deeds with a ruler cult. [cc_ruler_culted_ruler.GetHisHer] heir, [root.GetRulerName], has not yet made the same impression, and any attempt to claim a ruler cult for [root.Leader.GetHisHer]self will likely cause offence. There are some suggestions, however, that the ruler cult should be seen as [root.Leader.GetHisHer] birthright and thus made permanent. What course should be taken?"
+cc_events_mod.6.A:0 "The Ruler Cult is [root.GetRulerName]'s Birthright!"
+cc_events_mod.6.A.desc:0 "The Ruler Cult is kept in place permanently as long as the government keeps an §YImperial§! authority.\n\nThe Spiritualist Faction gets §R-15%§! happiness for 5 years."
+cc_events_mod.6.B:0 "The Ruler Cult must be earned!"
+
+
+
+cc_events_mod.7.name:0 "Allow Interspecies Marriages?"
+cc_events_mod.7.desc_nophobe:0 "With the expansion of the [root.GetName] across the stars, sentient alien species have come to live in the [root.GetName] in large numbers with full citizen rights. As the [root.GetSpeciesNamePlural] and their alien brethren have gotten to know each other better, some [root.GetSpeciesNamePlural] with exotic tastes have naturally been drawn to individuals from other species. The [xenophile_faction.GetName] has petitioned the government on behalf of this group to legalise interspecies marriage - although a number of such relationships have existed for some time, authorities have refused to give them their official blessing, as there is no provision for interspecies marriage in [root.GetSpeciesAdj] law. Different DNA structures mean that there is no realistic prospect of any children resulting from these partnerships; nevertheless, elements of the population are uncomfortable."
+cc_events_mod.7.desc_phobe:0 "With the expansion of the [root.GetName] across the stars, sentient alien species have come to live in the [root.GetName] in large numbers with full citizen rights. As the [root.GetSpeciesNamePlural] and their alien brethren have gotten to know each other better, some [root.GetSpeciesNamePlural] with exotic tastes have naturally been drawn to individuals from other species. The [xenophile_faction.GetName] has petitioned the government on behalf of this group to legalise interspecies marriage - although a number of such relationships have existed for some time, authorities have refused to give them their official blessing, as there is no provision for interspecies marriage in [root.GetSpeciesAdj] law. Different DNA structures mean that there is no realistic prospect of any children resulting from these partnerships; nevertheless, elements of the population are uncomfortable - sometimes deeply so - about them, and the [xenophobe_faction.GetName] has launched a counter-petition to ban not only interspecies marriage but also all forms of intimacy between species."
+cc_events_mod.7.A:0 "Allow interspecies marriage."
+cc_events_mod.7.B:0 "The time has not yet come to embrace this change"
+cc_events_mod.7.C:0 "Ban interspecies partnerships"
+
+cc_events_mod.121.name:0 "Widespread Xenophilia"
+cc_events_mod.121.desc:0 "The [root.GetName] now has a very large minority that has embraced xenophilia, not only as an idea, but in practice. It is no longer unusual to see mixed-species couples in the cities of [root.capital.GetName]. This means that the xenophilic philosophy is now firmly entrenched. However, due to persistant and apparently unresolvable difficulties in making genetic codes - and reproductive organs, in some cases - compatible with each other, this has hit the birth rate."
+
+cc_events_mod.131.name:0 "[Root.GetSpeciesName] Refugees Arrive"
+cc_events_mod.131.desc:0 "A flotilla of civilian transports carrying §Y[Root.GetSpeciesName]§! refugees from the §Y[RefugeeEscapedFrom.GetName]§! have arrived in our space. They have been allowed to settle on §H[Root.Planet.GetName]§!.\n\nThese unfortunate outcasts were persecuted by the [RefugeeEscapedFrom.GetSpeciesName] authorities because of whom they loved - xenos. Unable to live the life they wanted to, they left and have sought refuge in our more enlightened society."
+cc_events_mod.131.a:0 "They are welcome here."
+
+cc_events_mod.16.name:0 "Prominent Interspecies Marriage"
+cc_events_mod.16.desc:0 "[cc_happy_partner.GetName] has announced that [cc_happy_partner.GetSheHe] will marry [cc_bride_or_groom.GetName], a [marriage_species.GetSpeciesName]. Although some elements of the population still abhor the very concept of such a union, others are delighted and see it as proof that the [root.GetName] has embraced the values of a modern, multispecies state."
+
+cc_events_mod.16.option:0 "We wish them the best of luck!"
+
+#Xeno Sex Scandal
+cc_events_mod.17.name:0 "[root.GetRulerTitle] [root.GetRulerName] embroiled in Xeno Sex Scandal"
+cc_events_mod.17.desc:0 "The main [root.GetSpeciesAdj] media company has dropped a bombshell this morning: [root.GetRulerTitle] [root.GetRulerName] has been caught on camera satisfying [root.leader.GetHisHer] carnal lusts with a [xeno.GetSpeciesName]. Unfortunately, there is little room to deny the allegations. Intercourse with xenos is illegal under [root.GetSpeciesAdj] law, with the prescribed punishment ranging from severe fines all the way up to the maximum penalty, depending on the circumstances. Although being [root.GetRulerTitle] grants [root.GetRulerName] immunity from most laws, there are already widespread calls for [root.leader.GetHimHer] to resign immediately and face trial, as [root.leader.GetSheHe] [root.leader.GetHasHave] allegedly "lost legitimacy" in the eyes of the [root.GetSpeciesAdj] population. \n\nHow will you respond?"
+cc_events_mod.17.A:0 "It is time to loosen up our attitude to xenos."
+cc_events_mod.17.B:0 "Withdraw from public life and face trial."
+cc_events_mod.17.C:0 "Stay in power in defiance of the law."
+
+cc_events_mod.17.D:0 "Clamp down on the media company."
+cc_events_mod.17.D.tooltip:0 "Frame the story as a fabrication and use it as a justification to shut down dissenting voices."
+
+cc_events_mod.18.name:0 "[cc_scandal_leader.GetTitle] [cc_scandal_leader.GetName] embroiled in Xeno Sex Scandal"
+cc_events_mod.18.desc:0 "The main [root.GetSpeciesAdj] media company has revealed that [cc_scandal_leader.GetTitle] [cc_scandal_leader.GetName] has been pursuing sordid affairs with [xeno.GetSpeciesNamePlural]. Unfortunately, there is little room to deny the allegations: Images of the intercourse are already circulating. Such intercourse with xenos is illegal under [root.GetSpeciesAdj] law, with the prescribed punishment ranging from severe fines all the way up to the maximum penalty, depending on the circumstances. Although being part of the government theoretically grants [cc_scandal_leader.GetName] immunity from immediate punishment, there are already widespread calls for [cc_scandal_leader.GetHimHer] to resign immediately and face trial for [cc_scandal_leader.GetHisHer] crimes.\n\nHow will you respond?"
+cc_events_mod.18.A:0 "It is time to loosen up our attitude to xenos."
+cc_events_mod.18.B:0 "Withdraw [cc_scandal_leader.GetTitle] [cc_scandal_leader.GetName] from public life and have [cc_scandal_leader.GetHimHer] face trial."
+cc_events_mod.18.C:0 "Allow [cc_scandal_leader.GetTitle] [cc_scandal_leader.GetName] to remain in [cc_scandal_leader.GetHisHer] position in defiance of the law."
+
+
+#Government Blackmail Crisis
+cc_events_blackmail.20.name:0 "Government Blackmail Crisis"
+cc_events_blackmail.20.desc:0 "A data virus knocked out the government's computer systems on [root.Capital.GetName] yesterday. Although the attack was brought under control after just a few hours, it quickly became clear that something more sinister was under way: Large amounts of personal data had been stolen from several important government officials. The data thieves have left a message demanding money - and lots of it - or they will release the data. It is not clear exactly what information has been stolen, but several of the officials in question have privately expressed nervousness."
+cc_events_blackmail.20.A:0 "Pay the money."
+cc_events_blackmail.20.B:0 "Take the risk. We don't give money to criminals."
+
+cc_events_blackmail.201.name:0 "Corruption Scandal!"
+cc_events_blackmail.201.desc:0 "The hackers have leaked details of a corruption scandal involving several of our most prominent officials! It seems that they have been channelling large portions of their departments' government budgets into their own pockets, costing the state millions. There is widespread outrage at this revelation, and troublemakers are quick to accuse those who appointed them of collusion. \n\nHow will you deal with the situation?"
+cc_events_blackmail.201.A:0 "They must stand down and face trial."
+cc_events_blackmail.201.B:0 "Their services are too valuable. Keep them in their positions."
+
+cc_events_blackmail.202.name:0 "Data on Police Violence leaked!"
+cc_events_blackmail.202.desc:0 "The populace of the [root.GetName] has always been dimly aware that the security forces have a tendency of being heavy-handed, but the majority never imagined this to be at anything near the scale of reality. However, the recent hackers have released data documenting various aspects of police violence, including brutal use of force against protestors, summary executions for minor offences, and extremely degrading conditions in the prisons. Even the most loyal citizens are perturbed by the revelations, and the egalitarian-minded citizens are up in arms and putting pressure on the government for change."
+cc_events_blackmail.202.option:0 "We must do something!"
+
+cc_events_blackmail.203.name:0 "Priesthood Corruption Scandal!"
+cc_events_blackmail.203.desc:0 "The hackers have released data which has embroiled the [root.GetSpeciesAdj] clergy in a major corruption scandal. A large number of important clerics appear to have been misusing their positions for personal enrichment, as well as extorting favours (some of a quite sordid nature) from those they were meant to be serving. The revelations have outraged spiritual and non-spiritual citizens alike."
+
+cc_events_blackmail.204.name:0 "Galactic Domination Plans Leaked!"
+cc_events_blackmail.204.desc:0 "The hackers have released secret government plans to make war on a number of our neighbours, including those with whom we have not had previous hostilities, with the aim of conquering their planets and becoming the most powerful state in the galaxy. The states in question are outraged, and their ambassadors are demanding urgent explanations. This will hinder our ability to have positive relations with them for many years to come."
+
+cc_events_blackmail.205.name:0 "Manipulation of Election Results Leaked!"
+cc_events_blackmail.205.desc:0 "The hackers have leaked evidence that the government has been involved in deliberately manipulating and even outright altering the results of elections for high office in the [root.GetName]. The populace is outraged, and faith in democracy has taken a major blow."
+
+cc_events_blackmail.206.name:0 "Leading Scientists Exposed as Fraudsters!"
+cc_events_blackmail.206.desc:0 "The hackers have revealed that our leading scientists are, for want of better words, fraudsters! Despite publicly making displays of their great genius, it turns out that they have never had an original thought in their lives, and had simply copied other states' technologies through the use of an extensive hacking system. The populace's faith in our species' ingenuity is shaken, and our neighbours are demanding that the scientists in question be fired and put in prison."
+cc_events_blackmail.206.A:0 "Keep the scientists in their positions - they are doing just fine."
+cc_events_blackmail.206.B:0 "Fire the scientists."
+
+cc_events_blackmail.207.name:0 "Data on Interspecies Discrimination Revealed!"
+cc_events_blackmail.207.desc:0 "The hackers have revealed data detailing how administrators across the [root.GetName] have systematically discriminated against citizens of other species in allocating positions and benefits. The non-[root.GetSpeciesName] citizens had always claimed that they were not seen as equal, but their complaints had been swept under the doorway. They now feel vindicated in their distrust of the supposedly multicultural state, and are calling for extensive reforms."
+cc_events_blackmail.207.tooltip:0 "Every £pop  Pop that is not of your main species gains the modifier §R$cc_outrage_at_discrimination$§!, giving -15% happiness and +50% xenophobe ethics attaction."
+
+cc_events_blackmail.208.name:0 "Prison Security Codes Leaked!"
+cc_events_blackmail.208.desc:0 "It turns out that the data the hackers stole was the security codes and layouts of the [root.GetName]'s high security prisons. Several of them were struck simultaneously today in a well-organised strike. A large number of prominent troublemakers have been released, as well as some feared criminals."
+cc_events_blackmail.208.option:0 "We must contain the situation!"
+
+cc_events_blackmail.209.name:0 "Ship Designs Leaked to Rivals!"
+cc_events_blackmail.209.desc:0 "The hackers have leaked details about our ship designs - including their weaknesses - to our enemies. Our ships are now vulnerable to attack!"
+
+cc_events_blackmail.210.name:0 "[from.GetSpeciesAdj] Ship Designs Leaked!"
+cc_events_blackmail.210.desc:0 "Subversive elements in the [from.GetName] have leaked their ship designs - including details about their ships' weaknesses - to us. We must attack to press home this advantage, before they can refit their ships!"
+
+#Emancipation Movement
+
+cc_emancipation.1.name:0 "Emancipation Movement on [root.GetName]"
+cc_emancipation.1.desc.A:0 "A group of... activists on [slaveryplanet.GetName] have been inspired by the practices in [neighbour_that_is_egalitarian.GetName] and have come to abhor the practice of slavery, a key founding block of the [root.GetName]. They have organised a series of acts of non-violent resistance that are increasingly becoming a nuisance, disrupting the activities of the government and of good, upstanding citizens. Parallel to this, they have been stirring up the slaves, and even smuggling slaves to freedom. Unfortunately, their grotesque idealist message appears to be attracting considerable support.\n\nWhat should we do about them?"
+cc_emancipation.1.desc.B:0 "A group of... activists on [slaveryplanet.GetName] have, inexplicably, come to abhor the practice of slavery, a key founding block of the [root.GetName]. They have organised a series of acts of non-violent resistance that are increasingly becoming a nuisance, disrupting the activities of the government and of good, upstanding citizens. Parallel to this, they have been stirring up the slaves, and even smuggling slaves to freedom. Unfortunately, their grotesque idealist message appears to be attracting considerable support.\n\nWhat should we do about them?"
+cc_emancipation.1.A:0 "Maybe they are right."
+cc_emancipation.1.B:0 "Ignore them - it'll blow over."
+
+cc_emancipation.1.tooltip:0 "The emancipation movement may spread to other planets."
+cc_emancipation.1.tooltip.C:0 "There is a reduced chance that the emancipation movement may spread to other planets."
+cc_emancipation.1.D.tooltip:0 "Other countries may be upset."
+
+cc_emancipation.5.name:0 "Emancipation Movement spreads to [root.GetName]"
+cc_emancipation.5.desc:0 "Inspired by events on [emancipation_planet.GetName], fools who call themselves "activists" have begun a campaign on [root.GetName] to stir up our slaves and try to force us to end slavery. What should we do about them?"
+
+cc_emancipation.6.name:0 "The Emancipation Movement goes Empire-Wide"
+cc_emancipation.6.desc:0 "The efforts of the emancipation movement on [emancipation_planet.GetName] and other planets has emboldened like-minded individuals across the [root.GetName] to take similar action. Furthermore, their highly effective publicity campaign has led even good [root.GetSpeciesName] citizens to question whether slavery, a fundamental component of the [root.GetName], should be allowed to continue. The [root.GetSpeciesAdj] way of life was we know it is threatened!\n\nWhat can be done?"
+
+cc_emancipation.6.C.tooltip:0 "All supporters of the emancipation movement on these planets will gain the modifier §R$cc_oppression$§!: -50% output of all resources."
+cc_emancipation.6.D.tooltip:0 "All supporters of the emancipation movement will be killed. Other countries may be upset."
+
+cc_emancipation.20.name:0 "Worries about the Ethics of Slavery"
+cc_emancipation.20.desc.breakaways:0 "The rebellion of the [breakaway_slaves.GetName] has sparked worries among elements of the [root.GetSpeciesAdj] about the sustainability of the practice, especially given the violent reprisals that former slaveholders faced on [breakaway_slaves.GetSpeciesAdj] worlds. At the same time, others have been drawn in by [breakaway_slaves.GetSpeciesAdj] propaganda about the evils of slavery and the crimes committed to them by their slaveowners. A shadowy manifesto calling for the end of slavery and other oppressive practices has been widely circuited, and despite efforts by authorities to ban it and track down its source, a growing portion of the population is increasingly receptive to such ideas."
+cc_emancipation.20.desc.neighbour:0 "Prolonged contact with the [egalitarian_neighbour.GetName] and their hostile propaganda has caused elements within the [root.GetName]'s population to rethink the issue of slavery. Despite the fact that slavery constitutes a main pillar of the [root.GetSpeciesAdj]'s economy, many increasingly have moral concerns with the absolute subjugation of a sentient being to the will of another. A shadowy manifesto calling for the end of slavery and other oppressive practices has been widely circuited, and despite efforts by authorities to ban it and track down its source, a growing portion of the population is increasingly receptive to such ideas."
+cc_emancipation.20.tooltip.A:0 "One third of non-slave £pops  Pops will be given the modifier §R$cc_worried_about_slaves$§! for 15 years, giving them §R+200%§! $pop_ethic_egalitarian_attraction_mult$."
+cc_emancipation.20.tooltip.B:0 "One quarter of non-slave £pops  Pops will be given the modifier §R$cc_worried_about_slaves$§! for 15 years, giving them §R+200%§! $pop_ethic_egalitarian_attraction_mult$."
+
+
+
+#Ludditism
+cc_luddite.1.name:0 "Luddites are smashing up Robots on [root.GetName]"
+cc_luddite.1.desc:0 "Groups of what can only be described as luddites - primitive-minded people with a wrongminded distrust of technology - have been going around [root.GetName] smashing up robots, which they claim are unnatural, dangerous and stealing their jobs. They are demanding that all mechanical units be disbanded immediately and be replaced by organic workers!"
+
+cc_luddite.2.name:0 "Luddites are smashing up Robots on [root.GetName]"
+cc_luddite.2.desc:0 "Despite their outrageous demands, the 'luddites' appear to have attracted support, and there are risks of copycat strikes on other planets. We must take action!\n\nWhat should we do about them?"
+cc_luddite.2.A:0 "We can do without robots on [root.GetName]."
+cc_luddite.2.A.tooltip:0 "All robot £pops  Pops will be purged. If any are rebuilt, this will trigger upset on [root.GetName]. Additionally, there is a high chance that Ludditism will spread to other planets."
+cc_luddite.2.B:0 "Ignore them - they will bow to progress, eventually."
+cc_luddite.2.B.tooltip:0 "There is a chance that there will be further strikes on this and other planets."
+cc_luddite.2.C.tooltip:0 "There is a reduced chance that there will be further strikes on this and other planets."
+
+cc_luddite.6.name:0 "The [root.GetName] lodges a Protest"
+cc_luddite.6.desc:0 "Greetings, [root.owner.GetRulerTitle] [root.owner.GetRulerName].\n\nI would like to voice my concerns regarding events on [from.GetName]. Robots play an important role in our country and are vital to our national wellbeing. We cannot allow the wheels of progress to grind to a halt!\n\nRegards,\n[root.leader.GetName],\nLeader of the [root.GetName]"
+
+cc_luddite.7.name:0 "The [root.GetName] lodges a Protest"
+cc_luddite.7.desc:0 "Greetings, [root.owner.GetRulerTitle] [root.owner.GetRulerName].\n\nI would like to voice my concerns regarding events on [from.GetName]. Although you may not agree with the actions of those protesting, they have legitimate concerns and deserve to be listened to. All right-minded people can only condemn your government's heavy-handed response!\n\nRegards,\n[root.leader.GetName],\nLeader of the [root.GetName]"
+
+cc_luddite.8.name:0 "Luddism recurs on [root.GetName]"
+cc_luddite.8.desc:0 "The 'luddites' have struck again on [root.GetName]."
+
+cc_luddite.9.name:0 "Luddism spreads to [root.GetName]"
+cc_luddite.9.desc:0 "The current wave of luddism has spread to [root.GetName]."
+
+cc_luddite.11.name:0 "Luddism spreads to [root.GetName]"
+cc_luddite.11.desc:0 "Inspired by events on [first_luddite_planet.GetName], groups of similarly misguided individuals on [root.GetName] have launched a series of copycat strikes, wiping out a large number of our robotic workers."
+cc_luddite.12.name:0 "Luddism spreads to [root.GetName]"
+cc_luddite.12.desc:0 "What can we do to stop this wave of Luddism spreading further?"
+cc_luddite.12.A:0 "We can do without robots on [root.GetName] too."
+cc_luddite.12.A.tooltip:0 "All robot £pops  Pops will be purged. If any are rebuilt, this will trigger upset on [root.GetName]."
+cc_luddite.12.B:0 "Ignore them - they too will bow to progress."
+cc_luddite.12.B.tooltip:0 "There is a chance that there will be further strikes on this planet."
+cc_luddite.12.C.tooltip:0 "There is a reduced chance that there will be further strikes on this planet."
+
+cc_luddite.13.name:0 "Luddism goes Empire-Wide"
+cc_luddite.13.desc:0 "With the spread of Luddism to [from.GetName], we must now face the reality of an empire-wide Luddite crisis. With luddites actively striking at our robots on several planets, our ability to continue to use robotic workers is in doubt.\n\nHow should we respond to this?"
+cc_luddite.13.A:0 "We must listen to the people."
+cc_luddite.13.B:0 "We must stick the course."
+cc_luddite.13.B.tooltip:0 "Luddism is likely to continue to spread."
+cc_luddite.13.C.tooltip:0 "All future manifestations of Luddism during this crisis will be met with oppression."
+cc_luddite.13.D.tooltip:0 "All £pops  Pops that have taken part in the Luddite movement will be killed. Further Luddism will not be allowed to happen."
+
+cc_luddite.15.name:0 "'Luddites' on [root.GetName] feel betrayed"
+cc_luddite.15.desc:0 "Despite our promises not to carry on using robots on [root.GetName], authorities have built new robotic £pops  Pops. The populace are angry at our broken promises."
+cc_luddite.15.option:0 "Ah well."
+
+cc_luddite.20.name:0 "Worries about Robotic Workers"
+cc_luddite.20.desc.uprising:0 "Following the "Machine Uprising" in the [machine_uprising_victims.GetName], many citizens are worried about the [root.GetName]'s non-sapient machine workers. Although our authorities have moved quickly to demonstrate that the uprising in the [machine_uprising_victims.GetName] was a special case that is in no way similar to that of the [root.GetName]'s machines, many citizens feel that, in fact, they are every bit as vulnerable as the [machine_uprising_victims.GetSpeciesNamePlural]. Elements of the populace who have never been comfortable with the idea of robotic workers, claiming that they are marginalising the organic populace and threaten to make them redundant, have seized the initiative, and find that their views increasingly resound with those of the population as a whole."
+cc_luddite.20.desc.exterminators:0 "Following encounters with the [machine_exterminators.GetName], many citizens are worried about the [root.GetName]'s non-sapient machine workers. Although our authorities have moved quickly to demonstrate that the "Death Robots" are a special case that is in no way similar to that of the [root.GetName]'s machines, many citizens now feel that reliance on robotic workers is a potential existential risk to all organic species. Elements of the populace who have never been comfortable with the idea of robotic workers, claiming that they are marginalising the organic populace and threaten to make them redundant, have seized the initiative, and find that their views increasingly resound with those of the population as a whole."
+cc_luddite.20.tooltip:0 "One third of non-slave £pops  Pops will be given the modifier §R$cc_worried_about_machines$§! for 15 years, giving them §R+200% $pop_ethic_spiritualist_attraction_mult$§!."
+
+
+#Peace Protests
+cc_peace.1.name:0 "Anti-War Movement"
+cc_peace.1.desc:0 "There is discontent among the populace at what they see as a predatory war of aggression against the [cc_war_enemy.GetName]. Anti-war marches are widespread across [cc_peace_planet.GetName] and other planets, with the [peace_faction.GetName] leading massive nonviolent acts of resistance that are increasingly becoming a major nuisance. Word has come that they are planning to march against the government building on [cc_peace_planet.GetName] and occupy the grounds around it until peace is reached. This will cause severe disruption.\n\nHow should we respond?"
+cc_peace.1.A:0 "Promise Peace."
+cc_peace.1.A.tooltip:0 "The Anti-War Movement will agree to suspend its actions for a year on the condition that you end hostilities in this time."
+cc_peace.1.B:0 "Ignore them."
+cc_peace.1.oppress.tooltip:0 "All pacifist £pops  Pops on planets that are protesting will be subjected to oppression. Their output will be cut by 50%."
+cc_peace.1.D.tooltip:0 "All pacifist £pops  Pops on planets that are protesting will be rounded up and killed."
+		
+cc_peace.2.name:0 "Anti-War Movement Betrayed"
+cc_peace.2.desc:0 "The government has broken its promises to make peace quickly. The Anti-War Movement feels betrayed, and has begun protesting with renewed vigour."
+	
+cc_peace.4.name:0 "Peace Made"
+cc_peace.4.desc:0 "The government has kept its promises to end the war within a year. The Anti-War Movement has received a major boost from it, and there are major celebrations on planets where it is active."
+cc_peace.4.tooltip:0 "The Anti-War Movement expects the peace to last for at least 5 years."
+ 
+cc_peace.5.name:0 "Anti-War Movement Betrayed"
+cc_peace.5.desc:0 "The Anti-War Movement had hoped that its success in forcing the government to make peace would bring about a lasting change in the governance of the [root.GetName] and its relations with other states. However, with a fresh declaration of war less than five years after peace was made, they now feel betrayed, and have begun protesting with renewed vigour."
+
+
+cc_events_mod.18.B.tooltip:0 "[cc_scandal_leader.GetTitle] [cc_scandal_leader.GetName] is removed from the game."
+cc_events_blackmail.201.A.tooltip:0 "[cc_first_corrupt.GetTitle] [cc_first_corrupt.GetName] is removed from the game.\n[cc_second_corrupt.GetTitle] [cc_second_corrupt.GetName] is removed from the game.\n[cc_third_corrupt.GetTitle] [cc_third_corrupt.GetName] is removed from the game."
+cc_events_blackmail.201.A.tooltip2:0 "[cc_fourth_corrupt.GetTitle] [cc_fourth_corrupt.GetName] is removed from the game."
+cc_events_mod.17.B.tooltip:0 "$CCREMOVERULER.tooltip$"
+
+
+#Modifiers ----------------------------------------------------------------------------------------------------------
+
+cc_made_peace:0 "Backed down to Anti-War Movement"
+cc_made_peace_desc:0 "The government bowed down to the demands of the Anti-War Movement, and made peace."
+cc_faction_peace_celebration:0 "Victory of Anti-War Movement"
+cc_peace_celebrations:0 "Celebrations at Anti-War Movement's Success"
+cc_peace_celebrations_desc:0 "The Anti-War activists on this planet are celebrating the success of their movement."
+cc_peace_protests:0 "Anti-War Movement"
+cc_peace_protests_desc:0 "The Anti-War Movement is active on this planet."
+cc_country_peace_protests:0 "Anti-War Movement"
+cc_country_peace_protests_desc:0 "An Anti-War Movement is protesting against the current conflict."
+cc_faction_peace_protests:0 "Anti-War Protests"
+cc_faction_oppressed:0 "Faction Oppressed"
+cc_peace_faction_betrayed:0 "Betrayed Promises"
+cc_promises_to_pacifists:0 "Promised Peace"
+cc_promises_to_pacifists_desc:0 "The government has promised that the war will end soon."
+
+cc_luddite_celebration:0 "Celebrations at Luddite Movement's Success"
+cc_luddite_celebration_desc:0 "The Luddite activists on this planet are celebrating the success of their movement."
+cc_luddite_movement:0 "Luddite Movement"
+cc_luddite_movement_desc:0 "There is a movement pushing for the dismantling of all robotic workers on this planet - by force if necessary."
+cc_bowed_to_luddism:0 "Forced to give up Robots"
+cc_bowed_to_luddism_desc:0 "The citizens managed to force this empire to give up on robotic workers."
+cc_empire_luddite_movement:0 "Luddite Movement"
+cc_empire_luddite_movement_desc:0 "There is an empire-wide movement pushing for the dismantling of all robotic workers - by force if necessary."
+cc_bowed_to_luddism_faction_pos:0 "Gave up Robots"
+cc_bowed_to_luddism_faction_neg:0 "Surrendered to Luddites"
+cc_luddite_faction_displeasure:0 "Surrendered to Luddites"
+cc_luddite_oppress_faction_displeasure:0 "Luddites Oppressed"
+cc_worried_about_machines:0 "Worried about Machines"
+
+cc_emancipation_movement:0 "Emancipation Movement"
+cc_emancipation_movement_desc:0 "There is a movement pushing for the liberation of slaves on this planet."
+cc_emancipation_furious:0 "Furious at Surrender to Emancipation Movement"
+cc_emancipated:0 "Embraced Emancipation"
+cc_emancipated_desc:0 "The country is discovering its liberal identity, having given up the institution of slavery."
+cc_emancipation_celebration:0 "Celebrations at Emancipation Movement's Success"
+cc_emancipation_celebration_desc:0 "The Emancipation Movement's activists on this planet are celebrating the success of their movement."
+cc_empire_emancipation_movement:0 "Emancipation Movement"
+cc_empire_emancipation_movement_desc:0 "There is an empire-wide emancipation movement that is stirring up the slaves and raising support for an end to slavery."
+cc_worried_about_slaves:0 "Worried about Slavery"
+
+cc_ruler_humiliated:0 "Ruler Humiliated"
+cc_ruler_humiliated_desc:0 "The Ruler of this Empire was forced into the indignity of making an apology to their subjects."
+cc_xenophobic_offence_1:0 "Ruler's Xenophobia"
+cc_xenophobic_offence_2:0 "Ruler's Xenophobia"
+cc_acceeded_to_demands_xenophile:0 "Acceded to the Xenoists' Demands"
+cc_acceeded_to_demands_xenophile_desc:0 "The Xenoists have received a significant boost after they managed to force the former ruler to step down after making xenophobic comments."
+cc_species_insulted_1:0 "Insulted"
+cc_species_insulted_2:0 "Insulted"
+cc_ruler_cult_offended:0 "Offended at Continuation of Ruler Cult"
+cc_ruler_revered:0 "The Ruler is Revered"
+cc_ruler_revered_desc:0 "The Ruler of this Empire is currently highly popular."
+cc_ruler_cult:0 "Ruler Cult"
+cc_ruler_cult_desc:0 "The Ruler of this Empire is celebrated as a God."
+
+cc_literally_xenophile_country:0 "Large Minority of Practising Xenophiles"
+cc_literally_xenophile_country_desc:0 "At least 15% of the population of this Empire practices xenophilia, i.e. has partners of a different species."
+
+cc_practising_xenophile:0 "Practices Xenophilia"
+cc_practising_xenophile_desc:0 "This £pop  Pop openly has partners of different species, and is glad to live in an enlightened country where such practices are permitted."
+cc_secretly_practising_xenophile:0 "Secretly Practices Xenophilia"
+cc_secretly_practising_xenophile:0 "This £pop  Pop has partners of a different species, but does so secretly, as the laws of this country do not presently officially allow such partnerships."
+cc_secret_xenophile:0 "Secretly Xenophilic"
+cc_secret_xenophile_desc:0 "This £pop  Pop would like to be able to have partners of a different species, but the laws of its country ban such practices. It may try to escape to a more enlightened country."
+
+cc_xeno_marriage_allowed_xenoist:0 "Interspecies Marriage Allowed"
+cc_xeno_marriage_allowed_supremacist:0 "Unnatural Marriages Allowed"
+cc_xeno_marriage_not_allowed_xenoist:0 "Interspecies Marriage Not Allowed"
+cc_xeno_marriage_not_allowed_supremacist:0 "Unnatural Marriages Not Allowed"
+cc_xeno_marriage_banned_xenoist:0 "Interspecies Intercourse Banned"
+cc_xeno_marriage_banned_supremacist:0 "Unnatural Intercourse Banned"
+
+cc_recent_xenophile_wedding:0 "Recent Interspecies Wedding"
+cc_recent_xenophile_wedding_desc:0 "A prominent interspecies wedding recently took place. It had a polarising effect: Although some elements of the population still abhor the very concept of such a union, others are delighted and see it as proof that the Empire has embraced the values of a modern, multispecies state."
+cc_recent_xenophile_wedding_xenophile:0 "Celebrating Recent Xenophilic Wedding"
+cc_recent_xenophile_wedding_xenophobe:0 "Disgusted at Recent Xenophilic Wedding"
+
+cc_ruler_humiliated1:0 "Regime Humiliated"
+cc_ruler_humiliated1_desc:0 "The Ruler of this Empire was forced to step down after a sex scandal."
+cc_recent_sex_scandal_hostile:0 "Response to Sex Scandal"
+cc_recent_sex_scandal_unfriendly:0 "Response to Sex Scandal"
+cc_recent_sex_scandal_friendly:0 "Response to Sex Scandal"
+cc_defiance_of_law:0 "In Defiance of the Law"
+cc_defiance_of_law_desc:0 "The Government is acting in defiance of the laws of the State."
+cc_defiance_of_law_egals:0 "In Defiance of the Law"
+
+cc_defiance_of_law_mega:0 "War on Truth"
+cc_defiance_of_law_mega_desc:0 "The government has launched a campaign to suppress dissenting voices, beginning with the shutting down of the main independent media company."
+cc_defiance_of_law_egal_mega:0 "Clampdown against Opposition Voices"
+
+cc_recent_sex_scandal_hostile1:0 "$cc_recent_sex_scandal_hostile$"
+cc_recent_sex_scandal_unfriendly1:0 "$cc_recent_sex_scandal_unfriendly$"
+cc_recent_sex_scandal_friendly1:0 "$cc_recent_sex_scandal_friendly$"
+cc_defiance_of_law1:0 "$cc_defiance_of_law$"
+cc_defiance_of_law1_desc:0 "The Government has shielded one of its officials from rightful punishment in defiance of the laws of the State."
+cc_defiance_of_law_egals1:0 "$cc_defiance_of_law_egals$"
+
+
+#(Blackmail Crisis)
+cc_paid_blackmail:0 "Paid Blackmailers"
+cc_paid_blackmail_desc:0 "The government is paying blackmailers to keep its secrets hidden."
+
+cc_outrage_at_corruption:0 "Outrage at Corruption"
+cc_outrage_at_corruption_desc:0 "The citizens are outraged that nothing has been done to combat the corruption at the heart of the regime."
+
+cc_outrage_at_police_violence:0 "Outrage at State Violence"
+cc_outrage_at_police_violence_desc:0 "The revelation of the extent of violence used by the state's security forces have caused outrage among the population, which is turning away from the state's current authoritarianism."
+
+cc_outrage_at_police_violence_faction:0 "Outrage at State Violence"
+
+cc_outrage_at_priesthood_corruption:0 "Outrage at Priesthood Corruption Scandal"
+cc_outrage_at_priesthood_corruption_desc:0 "There is widespread outrage at the recent corruption scandal, which implicated most of those in positions of authority in the main church in a variety of misdeeds. This has caused disillusionment in how the church is currently run, and the general hypocrisy of its teachings has been revealed."
+
+cc_outrage_at_electoral_manipulation:0 "Outrage at Electoral Manipulation"
+cc_outrage_at_electoral_manipulation_desc:0 "The citizens are outraged at the revelation that the government has been manipulating electoral results. They have lost faith in democracy as a result."
+
+cc_outrage_at_electoral_manipulation_faction:0 "Outrage at Electoral Manipulation"
+
+cc_loss_of_faith_in_ingenuity:0 "Loss of Faith in Species' Ingenuity"
+cc_loss_of_faith_in_ingenuity_desc:0 "The recent plagiarism scandal has caused our citizens to lose faith in our species' ingenuity and turn away from seeking innovations."
+
+cc_other_states_watching_scientists:0 "Scientists under Surveillance"
+cc_other_states_watching_scientists_desc:0 "Other states are watching our scientists like hawks after the revelation that most of our innovations were stolen from them."
+
+cc_outrage_at_discrimination:0 "Outraged at Discrimination"
+
+cc_prison_security_breach:0 "High-Security Prison Breached"
+cc_prison_security_breach_desc:0 "A number of feared criminals and troublemakers are on the loose following a breach in prison security. The loyal citizens are fearful, whilst those less loyal are bolstered by the release of their ringleaders."
+
+cc_ship_designs_compromised:0 "Ship Designs Compromised"
+cc_ship_designs_compromised_desc:0 "The designs - and weaknesses - of our ships have been compromised to our enemies."
+
+#Opinion Modifiers --------------------------------------------------------------------------------------------------
+
+cc_opinion_outrage_at_plans_to_conquer:0 "Outrage at Plans of Conquest"
+
+cc_opinion_stole_our_technology:0 "Stole our Technology"
+
+
+#Policies ----------------------------------------------------------------------------------------------------------
+
+policy_cc_interspecies_marriage:0 "Interspecies Relationships"
+policy_cc_interspecies_marriage_desc:0 "We can decide whether or not £pops  Pops from different species are allowed to marry or even have relationships with each other."
+
+allow_im:0 "Allow Interspecies Marriage"
+allow_im_desc:0 "Legalise the marriage of amourous couples from different species.\n\nNote: Xenophilic £pops  Pops will be happy at this and xenophilism is likely to increase as a practice, but if it takes hold in large numbers, this could hit the birth rate."
+allows_im_name:0 "Allows Interspecies Marriage"
+
+do_not_allow_im:0 "Do not allow Interspecies Marriage"
+do_not_allow_im_desc:0 "Do not legalise marriage between individuals from different species, but to not outlaw relationships and intercourse between them."
+does_not_allow_im_name:0 "Does not allow Interspecies Marriage"
+
+ban_im_completely:0 "Ban Interspecies Intercourse"
+ban_im_completely_desc:0 "Ban all intercourse between different species.\n\nNote: Xenophilic £pops  Pops will consider themselves oppressed, and may flee to countries where xenophilia is legalised."
+bans_im_completely_name:0 "Bans Interspecies Intercourse"

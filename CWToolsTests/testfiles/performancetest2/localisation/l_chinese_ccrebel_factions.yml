@@ -1,0 +1,216 @@
+﻿l_english:
+
+###Modifiers
+
+cc_country_factional_unrest:0 "派系骚动"
+cc_country_factional_unrest_desc:0 "国内正在经历严重的派系不满"
+
+cc_seditious_talk_militarist:0 "煽动性言论"
+cc_seditious_talk_pacifist:0 "$cc_seditious_talk_militarist$"
+cc_seditious_talk_xenophobe:0 "$cc_seditious_talk_militarist$"
+cc_seditious_talk_xenophile:0 "$cc_seditious_talk_militarist$"
+cc_seditious_talk_egalitarian:0 "$cc_seditious_talk_militarist$"
+cc_seditious_talk_authoritarian:0 "$cc_seditious_talk_militarist$"
+cc_seditious_talk_spiritualist:0 "$cc_seditious_talk_militarist$"
+cc_seditious_talk_materialist:0 "$cc_seditious_talk_militarist$"
+
+cc_seditious_talk_militarist_desc:0 "煽动性言论正在这颗星球上广泛传播，我们相信其来源是军国主义人口。"
+cc_seditious_talk_pacifist_desc:0 "煽动性言论正在这颗星球上广泛传播，我们相信其来源是和平主义人口。"
+cc_seditious_talk_xenophobe_desc:0 "煽动性言论正在这颗星球上广泛传播，我们相信其来源是排外主义人口。"
+cc_seditious_talk_xenophile_desc:0 "煽动性言论正在这颗星球上广泛传播，我们相信其来源是亲外主义人口。"
+cc_seditious_talk_egalitarian_desc:0 "煽动性言论正在这颗星球上广泛传播，我们相信其来源是平权主义人口。"
+cc_seditious_talk_authoritarian_desc:0 "煽动性言论正在这颗星球上广泛传播，我们相信其来源是威权主义人口。"
+cc_seditious_talk_spiritualist_desc:0 "煽动性言论正在这颗星球上广泛传播，我们相信其来源是精神主义人口。"
+cc_seditious_talk_materialist_desc:0 "煽动性言论正在这颗星球上广泛传播，我们相信其来源是唯物主义人口。"
+
+cc_faction_stronghold_xenoist:0 "亲外分子大本营"
+cc_faction_stronghold_supremacist:0 "霸权主义者大本营"
+cc_faction_stronghold_isolationist:0 "孤立主义者大本营"
+cc_faction_stronghold_totalitarian:0 "极权主义者大本营"
+cc_faction_stronghold_progressive:0 "进步主义者大本营"
+cc_faction_stronghold_technologist:0 "技术至上主义者大本营"
+cc_faction_stronghold_traditionalist:0 "传统主义者大本营"
+cc_faction_stronghold_imperialist:0 "帝国主义者大本营"
+cc_faction_stronghold_prosperity:0 "繁荣派系大本营"
+
+cc_faction_stronghold_xenoist_desc:0 "这颗星球是心怀异见的亲外派系大本营"
+cc_faction_stronghold_supremacist_desc:0 "这颗星球是心怀异见的霸权主义派系大本营"
+cc_faction_stronghold_isolationist_desc:0 "这颗星球是心怀异见的孤立主义派系大本营"
+cc_faction_stronghold_totalitarian_desc:0 "这颗星球是心怀异见的极权主义派系大本营"
+cc_faction_stronghold_progressive_desc:0 "这颗星球是心怀异见的进步主义派系大本营"
+cc_faction_stronghold_technologist_desc:0 "这颗星球是心怀异见的技术至上主义派系大本营"
+cc_faction_stronghold_traditionalist_desc:0 "这颗星球是心怀异见的传统主义派系大本营"
+cc_faction_stronghold_imperialist_desc:0 "这颗星球是心怀异见的帝国主义派系大本营"
+cc_faction_stronghold_prosperity_desc:0 "这颗星球是心怀异见的繁荣主义派系大本营"
+
+cc_faction_sympathies_xenoist:0 "支持亲外派系"
+cc_faction_sympathies_supremacist:0 "支持霸权主义派系"
+cc_faction_sympathies_isolationist:0 "支持孤立主义派系"
+cc_faction_sympathies_totalitarian:0 "支持极权主义派系"
+cc_faction_sympathies_progressive:0 "支持进步主义派系"
+cc_faction_sympathies_technologist:0 "支持科技至上主义派系"
+cc_faction_sympathies_traditionalist:0 "支持传统主义派系"
+cc_faction_sympathies_imperialist:0 "支持帝国主义派系"
+cc_faction_sympathies_prosperity:0 "支持繁荣主义派系"
+
+cc_faction_sympathies_xenoist_desc:0 "这颗星球上的许多人赞同亲外派系的诉求"
+cc_faction_sympathies_supremacist_desc:0 "这颗星球上的许多人赞同霸权主义派系的诉求"
+cc_faction_sympathies_isolationist_desc:0 "这颗星球上的许多人赞同孤立主义派系的诉求"
+cc_faction_sympathies_totalitarian_desc:0 "这颗星球上的许多人赞同极权主义派系的诉求"
+cc_faction_sympathies_progressive_desc:0 "这颗星球上的许多人赞同进步主义派系的诉求"
+cc_faction_sympathies_technologist_desc:0 "这颗星球上的许多人赞同科技至上主义派系的诉求"
+cc_faction_sympathies_traditionalist_desc:0 "这颗星球上的许多人赞同传统主义派系的诉求"
+cc_faction_sympathies_imperialist_desc:0 "这颗星球上的许多人赞同帝国主义派系的诉求"
+cc_faction_sympathies_prosperity_desc:0 "这颗星球上的许多人赞同繁荣主义派系的诉求"
+
+cc_faction_sedition_xenoist:0 "亲外主义者挑动骚乱"
+cc_faction_sedition_supremacist:0 "霸权主义者挑动骚乱"
+cc_faction_sedition_isolationist:0 "孤立主义者挑动骚乱"
+cc_faction_sedition_totalitarian:0 "极权主义者挑动骚乱"
+cc_faction_sedition_progressive:0 "进步主义者挑动骚乱"
+cc_faction_sedition_technologist:0 "科技至上主义者挑动骚乱"
+cc_faction_sedition_traditionalist:0 "传统主义者挑动骚乱"
+cc_faction_sedition_imperialist:0 "帝国主义者挑动骚乱"
+cc_faction_sedition_prosperity:0 "繁荣主义者挑动骚乱"
+
+cc_faction_sedition_xenoist_desc:0 "亲外派系正依托附近星球上的大本营在这颗星球上传播煽动性谣言"
+cc_faction_sedition_supremacist_desc:0 "霸权主义派系正依托附近星球上的大本营在这颗星球上传播煽动性谣言"
+cc_faction_sedition_isolationist_desc:0 "孤立主义派系正依托附近星球上的大本营在这颗星球上传播煽动性谣言"
+cc_faction_sedition_totalitarian_desc:0 "极权主义派系正依托附近星球上的大本营在这颗星球上传播煽动性谣言"
+cc_faction_sedition_progressive_desc:0 "进步主义派系正依托附近星球上的大本营在这颗星球上传播煽动性谣言"
+cc_faction_sedition_technologist_desc:0 "科技至上主义派系正依托附近星球上的大本营在这颗星球上传播煽动性谣言"
+cc_faction_sedition_traditionalist_desc:0 "传统主义派系正依托附近星球上的大本营在这颗星球上传播煽动性谣言"
+cc_faction_sedition_imperialist_desc:0 "帝国主义派系正依托附近星球上的大本营在这颗星球上传播煽动性谣言"
+cc_faction_sedition_prosperity_desc:0 "繁荣主义派系正依托附近星球上的大本营在这颗星球上传播煽动性谣言"
+
+cc_faction_acute_unrest:0 "迫在眉睫的派系反叛"
+cc_faction_acute_unrest_desc:0 "我们有理由相信，这颗星球上占据主导地位的派系即将试图反叛，接管星球。"
+
+cc_failed_factional_revolt:0 "派系反叛失败"
+cc_failed_factional_revolt_desc:0 "民众们逐渐背弃意图反叛的派系，在这颗星球上更增动乱。"
+
+
+cc_breakaway_sympathy:0 "认同分裂而出的政权"
+cc_breakaway_sympathy_desc:0 "这颗星球的部分民众对已经分裂出去的派系抱有深切认同。他们可能会制造麻烦。"
+
+cc_empire_terror:0 "恐怖政权"
+cc_empire_terror_desc:0 "这个政权对自己的人民进行了大屠杀"
+
+cc_empire_terror_faction:0 "民众遭屠杀"
+
+cc_oppress_faction:0 "暴力镇压横行"
+
+cc_bribed_planet:0 "财政激励"
+cc_bribed_planet_desc:0 "政府给这颗星球提供了巨额财政激励，力求使它保持忠诚"
+
+###Events
+
+#these go in the place of [cc_rebellious_faction.GetFactionTypeAdj]
+ccloc_xenophilic:0 "亲外主义"
+ccloc_supremacist:0 "霸权主义"
+ccloc_isolationist:0 "孤立主义"
+ccloc_progressive:0 "进步主义"
+ccloc_totalitarian:0 "极权主义"
+ccloc_imperialist:0 "帝国主义"
+ccloc_pacifistic:0 "和平主义"
+ccloc_traditionalist:0 "传统主义"
+ccloc_materialistic:0 "唯物主义"
+
+ccfaction.1.name:0 "派系骚乱"
+ccfaction.1.desc:0 "一股针对帝国运转方式的不满浪潮已在民众间扩散开来，要求采取一条更加偏向[cc_rebellious_faction.GetFactionTypeAdj]道路的秘密呼声四处流传。我们相信一群隶属于[cc_rebellious_faction.GetName]派系的死硬分子在背后推波助澜，寻求脱离 [root.GetName],但[cc_rebellious_faction.GetName]对此予以否认。"
+
+ccfaction.2.name:0 "[cc_rebellious_faction.GetName]派系巩固其权威"
+ccfaction.2.desc:0 "要求政府更加注重[cc_rebellious_faction.GetFactionTypeAdj]的骚动已经扩散开来，并在[root.GetName]部分区域扎下了根。[cc_rebellious_faction.GetName]派系已经向我们正式呈交了一份列有各项要求的清单，自称代表帝国这一区域民众的呼声，并隐晦的威胁，如果要求得不到满足，他们将谋求分裂。必须采取紧急措施，将帝国重新团结起来！"
+
+
+ccfaction.21.name:0 "派系骚乱结束"
+ccfaction.21.desc.fail:0 "[cc_rebellious_faction.GetName]派系的秘密骚动徒劳无功，已经逐渐平息下来。"
+ccfaction.21.desc.succeed:0 "[cc_rebellious_faction.GetName]派系的不满与诉求已经得到了[root.GetName]领导阶层的认同，他们计划改革政府，采取一条更加偏向[cc_rebellious_faction.GetFactionTypeAdj]的道路，以满足异见团体。[cc_rebellious_faction.GetName]派系的领导人们对此十分满意，停止了呼吁变革的骚动。"
+
+ccfaction.3.name:0 "[cc_new_reb_faction.GetName]派系已与[cc_rebellious_faction.GetName]派系结盟" 
+ccfaction.3.desc:0 "[cc_new_reb_faction.GetName]一直以来都只是[root.GetName]境内的一个小型异见团体，他们近来决定与[cc_rebellious_faction.GetName]派系结盟,后者正为实现大规模变革而积极抗争。两者认为双方拥有广泛共识，应当共同进退，希望借此能够成为一股不可阻挡的力量，实现建立一个[cc_rebellious_faction.GetFactionTypeAdj]-[cc_new_reb_faction.GetFactionTypeAdj]国家的愿景——不管是在[root.GetName]内部还是另立门户。"
+
+
+ccfaction.4.name:0 "[cc_rebellious_faction.GetName]计划独立！"
+ccfaction.4.dual.desc:0 "一位来自[cc_rebellious_faction.GetName]派系的投诚者向我们揭露了对手的计划：他们准备与[cc_new_reb_faction.GetName]派系一起从[root.GetName]中分裂出去，以实现其重塑一个[cc_rebellious_faction.GetFactionTypeAdj]-[cc_new_reb_faction.GetFactionTypeAdj]社会的梦想。他们很可能也已经意识到我们洞悉了他们的计划，因此反叛已经迫在眉睫。我必须立刻采取措施！ "
+ccfaction.4.single.desc:0 "一位来自[cc_rebellious_faction.GetName]派系的投诚者向我们揭露了对手的计划：他们准备从[root.GetName]中分裂出去，以实现其重塑一个[cc_rebellious_faction.GetFactionTypeAdj]社会的梦想。他们很可能也已经意识到我们洞悉了他们的计划，因此反叛已经迫在眉睫。我必须立刻采取措施！"
+
+ccfaction.41.name:0 "派系骚乱结束"
+ccfaction.41.dual.fail.desc:0 "由[cc_rebellious_faction.GetName]和 [cc_new_reb_faction.GetName]两派谋求变革而引起的骚动已经逐渐平息，没有暴力事件伴生。"
+ccfaction.41.single.fail.desc:0 "由[cc_rebellious_faction.GetName]派系谋求变革而引起的骚动已经逐渐平息，没有暴力事件伴生。"
+ccfaction.41.dual.succeed.desc:0 "由[cc_rebellious_faction.GetName]和 [cc_new_reb_faction.GetName]两派谋求变革而引起的骚动已经靠和平手段取得了成功：政府承诺改革，未来将会以更符合[cc_rebellious_faction.GetFactionTypeAdj]派系及 [cc_new_reb_faction.GetFactionTypeAdj]民众要求的方式进行治理。"
+ccfaction.41.single.succeed.desc:0 "由[cc_rebellious_faction.GetName]派系谋求变革而引起的骚动已经靠和平手段取得了成功：政府承诺改革，未来将会以更符合[cc_rebellious_faction.GetFactionTypeAdj]民众要求的方式进行治理。"
+
+ccfaction.42.name:0 "[cc_rebellious_faction.GetName]派系叛乱失败"
+ccfaction.42.dual.fail.desc:0 "[cc_rebellious_faction.GetName]和 [cc_new_reb_faction.GetName]两派为强行达成其诉求，发动了从[root.GetName]独立的计划，现在已惨遭失败。他们根本没有举事叛乱所需的民众支持。[root.GetName]已安然度过风暴，团结依旧。"
+ccfaction.42.single.fail.desc:0 "[cc_rebellious_faction.GetName]派系为强行达成其诉求，发动了从[root.GetName]独立的计划，现在已惨遭失败。他们根本没有举事叛乱所需的民众支持。[root.GetName]已安然度过风暴，团结依旧。"
+ccfaction.42.dual.succeed.desc:0 "[cc_rebellious_faction.GetName]及[cc_new_reb_faction.GetName]两派宣称将从帝国中独立的威胁终于迫使[Root.GetName]政府开始认真考虑他们的诉求。政府高层作出了具有约束力的承诺，将依据两派要求开展改革。[cc_rebellious_faction.GetName]和[cc_new_reb_faction.GetName]同意放弃反叛计划。"
+ccfaction.42.single.succeed.desc:0 "[cc_rebellious_faction.GetName]派系宣称将从帝国中独立的威胁终于迫使[Root.GetName]政府开始认真考虑他们的诉求。政府高层作出了具有约束力的承诺，将依据他们的要求开展改革。[cc_rebellious_faction.GetName]派系随后同意放弃反叛计划。"
+
+
+#Revolt happens
+ccfaction.6.name:0 "[cc_rebellious_faction.GetName]派系反叛!"
+ccfaction.6.desc.succeed.single:0 "凭借一场不流血的政变，隶属[cc_rebellious_faction.GetName]派系的政客们已经掌控了[cc_rebel_faction_capital.GetName]，并宣布独立。他们称此举完全正当，因为[root.GetName]政府长期以来对治下民众的呼声置若罔闻。现在他们自称[cc_breakaway_country.GetName]。[cc_rebellious_faction.GetName]派系的领导阶层纷纷投身这个新近分裂出来的国家，呼吁自己的追随者们行动起来，加入他们谋求独立的斗争。迫近的动荡与纷争无可避免。"
+ccfaction.6.desc.succeed.dual:0 "凭借一场不流血的政变，隶属[cc_rebellious_faction.GetName]和[cc_new_reb_faction.GetName]两派的政客们已经掌控了[cc_rebel_faction_capital.GetName]，并宣布独立。他们称此举完全正当，因为[root.GetName]政府长期以来对治下民众的呼声置若罔闻。现在他们自称[cc_breakaway_country.GetName]。两派的领导阶层纷纷投身这个新近分裂出来的政权，呼吁自己的追随者们行动起来，加入他们谋求独立的斗争。迫近的动荡与纷争无可避免。"
+#ccfaction.6.desc.succeed.leader.single:0 ""
+#ccfaction.6.desc.succeed.leader.dual:0 ""
+ccfaction.6.desc.attempt.single:0 "[cc_rebellious_faction.GetName]派系的部分成员在[cc_rebel_faction_capital.GetName]上发动了武装反叛。现在他们自称[cc_breakaway_country.GetName],正在为夺取星球控制权而战斗。目前[cc_rebellious_faction.GetName]派系的大部分领导阶层对此尚持保留态度，但我们的情报认为一旦反叛成功，他们就会彻底投身这个新近分裂出来的政权。"
+ccfaction.6.desc.attempt.dual:0 "[cc_rebellious_faction.GetName] [cc_new_reb_faction.GetName]两派的部分成员在[cc_rebel_faction_capital.GetName]上发动了武装反叛。现在他们自称[cc_breakaway_country.GetName],正在为夺取星球控制权而战斗。目前两派大部分领导阶层对此尚持保留态度，但我们的情报认为一旦反叛成功，他们就会彻底投身这个新近分裂出来的政权。"
+
+ccfaction.601.name:0 "变节!"
+ccfaction.601.desc.both:0 "[cc_rebellious_faction_leader.GetTitle] [cc_rebellious_faction_leader.GetName]及[cc_new_reb_faction_leader.GetTitle] [cc_new_reb_faction_leader.GetName]已经叛逃至[cc_breakaway_country.GetName]。"
+ccfaction.601.desc.only1:0 "[cc_rebellious_faction_leader.GetTitle] [cc_rebellious_faction_leader.GetName]已经叛逃至[cc_breakaway_country.GetName]，成为了他们的领袖。"
+ccfaction.601.desc.only2:0 "[cc_new_reb_faction_leader.GetTitle] [cc_new_reb_faction_leader.GetName]已经叛逃至[cc_breakaway_country.GetName]。"
+
+ccfaction.61.name:0 "[root.GetName]叛投至[cc_breakaway_country.GetName]阵营"
+ccfaction.61.desc:0 "在长达几个星期的大规模抗议示威后，[root.GetName]政府认识到民众对[cc_breakaway_country.GetName]的支持无可违逆，最终向民意低头。他们宣布将会加入那群分裂主义者的阵营。"
+
+ccfaction.62.name:0 "[cc_breakaway_country.GetName]支持者试图在[root.GetName]夺权"
+ccfaction.62.desc:0 "[cc_breakaway_country.GetName]的支持者们相应了他们领袖拿起武器的号召，发动了武装反叛，意图加入分裂出去刚刚建立的国家。"
+
+
+#first wave revolt breaks free
+ccfaction.64.name:0 "[fromfrom.GetName]已被[cc_breakaway_country.GetName]夺取"
+ccfaction.64.desc:0 "我们的政府已经失去了对[fromfrom.GetName]的控制，此地现在已落入[cc_rebellious_faction.GetName]之手。这颗星球的新主人们现在自称 [cc_breakaway_country.GetName]，号召所有[cc_rebellious_faction.GetName]派系的支持者们加入他们，为从[root.GetName]独立而战。"
+
+
+#second wave revolt breaks free
+ccfaction.67.name:0 "[fromfrom.GetName]上的叛党已经加入[cc_breakaway_country.GetName]"
+ccfaction.67.desc:0 "我们的政府已经失去了对[fromfrom.GetName]的控制。这颗星球的新主人们已经投身[cc_breakaway_country.GetName]，加入了他们反抗我们的叛乱。"
+
+#It fails
+ccfaction.68.name:0 "派系叛乱未能夺取[fromfrom.GetName]"
+ccfaction.68.desc.first:0 "我们的政府已经击败了[fromfrom.GetName]上的[cc_rebellious_faction.GetName]派系叛乱者。他们妄图从帝国中分裂，加入[cc_breakaway_country.GetName]。秩序与稳定已被重建。"
+ccfaction.68.desc.second:0 "我们的政府已经击败了[fromfrom.GetName]上的[cc_rebellious_faction.GetName]派系叛乱者。他们妄图从帝国中分裂，建立自己的政权。秩序与稳定已被重建。"
+
+
+#What to do with the sympathies planets?
+ccfaction.7.name:0 "[cc_breakaway_country.GetName]的支持者们"
+ccfaction.7.desc:0 "在[random_sympathies_planet.GetName]及其他星球上有为数不少的[cc_breakaway_country.GetName]支持者。他们正在动员起来。如果放任不管，肯定会造成麻烦。我们应该如何对待他们?"
+ccfaction.7.A.tooltip:0 "杀死这些星球上所有分裂政权的支持者。其他国家可能不满。"
+ccfaction.7.B.tooltip:0 "这些星球上所有分裂政权的支持者获得调整值 §R$cc_oppression$§!: -50% 所有资源产出"
+ccfaction.7.C:0 "给他们一笔丰厚的津贴"
+ccfaction.7.C.tooltip:0 "此举或许可以提醒他们忠于[root.GetName]的好处"
+ccfaction.7.D:0 "静观其变"
+
+ccfaction.900.name:0 "[cc_rebellious_faction.GetName]派系引起的不满已经结束"
+ccfaction.900.exists.desc:0 "由于[cc_rebellious_faction.GetName]派系的骚动, [root.GetName]一段时间以来动荡不安，最终[cc_breakaway_country.GetName]叛离而出。 然而，随着这一分裂，大部分动乱分子现在都已离开了[root.GetName]。尽管局势远非理想，但至少我们恢复了内部秩序。"
+ccfaction.900.doesnotexist.desc:0 "由于[cc_rebellious_faction.GetName]派系的骚动, [root.GetName]一段时间以来动荡不安。最终他们试图从帝国中分裂，但被及早解决。[root.GetName]内部的秩序与稳定已经重建。"
+
+CCWORRYING:0 "令人担忧"
+CCGOOD:0 "很好，知道了"
+CCGOOD2:0 "真是个好消息"
+
+ccfaction.9993.name:0 "赢回[root.GetName]支持"
+ccfaction.9993.desc:0 "我们在[root.GetName]上施展了足够的影响力，成功赢回了民众支持。[cc_rebellious_faction.GetName]派系无法再将这里视作自己的大本营了。现在我们对这颗星球的控制更加稳固了。"
+ccfaction.99931.desc:0 "我们在[root.GetName]上施展了足够的影响力，成功赢回了民众支持。[cc_new_reb_faction.GetName]派系无法再将这里视作自己的大本营了。现在我们对这颗星球的控制更加稳固了。"
+ccfaction.9994.name:0 "[root.GetName]成为[cc_rebellious_faction.GetName]派系大本营"
+ccfaction.9994.desc:0 "[cc_rebellious_faction.GetName]派系在[root.GetName]上影响日益广泛，这里已经成为了他们的大本营。我们必须立即采取措施，否则可能会失去这颗星球。"
+ccfaction.99941.desc:0 "[cc_new_reb_faction.GetName]派系在[root.GetName]上影响日益广泛，这里已经成为了他们的大本营。我们必须立即采取措施，否则可能会失去这颗星球。"
+
+
+cc_faction_revolt_modifiers_removed:0 "所有派系反叛相关的行星调整值将会被移除"
+
+
+war_goal_wg_dpe_faction_revolt:0 "派系反叛"
+war_goal_wg_dpe_faction_revolt_desc:0 "为推翻现任政权，战争已经爆发"

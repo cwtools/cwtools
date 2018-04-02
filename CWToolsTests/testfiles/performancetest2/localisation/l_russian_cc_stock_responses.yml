@@ -1,0 +1,15 @@
+﻿l_russian:
+
+CCWORRYING:0 "Беспокоюсь."
+CCGOOD:0 "Полезно знать."
+CCGOOD2:0 "Это привествуется."
+CCGOODGOOD:0 "Хорошо."
+CCEXCELLENT:0 "Прекрасно."
+CCUNPREDICTABLE.tooltip:0 "Последствия этого выбора будут непредсказуемыми." 
+CCKILLALL:0 "Убить. Их. Всех."
+CCYES:0 "Да."
+CCNO:0 "Нет."
+CCOPPRESS:0 "Давите их."
+CCKILLALL.tooltip:0 "Другие страны могут расстроиться."
+
+CCREMOVERULER.tooltip:0 "[root.GetRulerTitle] [root.GetRulerName] выведен из игры."

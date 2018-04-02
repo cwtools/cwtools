@@ -1,0 +1,202 @@
+############################################
+###   SCRIPTED LOCALIZATION FOR FRENCH   ###
+###     Scripted by Caligula Caesar      ###
+############################################
+
+##To apply, use e.g. [cc_colony_leader.GetOALead] or [root.leader.GetOALead]
+
+#Ex.: "o / a" (definite article or branc[o]/branc[a])
+defined_text = {
+	name = GetOALead
+	text = {
+		trigger = { cc_loc_leader_masc = yes }
+		localization_key = PORLOC_o
+	}
+	text = {
+		trigger = { cc_loc_leader_fem = yes }
+		localization_key = PORLOC_a
+	}
+}
+
+#"O / A"
+defined_text = {
+	name = GetOALeadCap
+	text = {
+		trigger = { cc_loc_leader_masc = yes }
+		localization_key = PORLOC_O
+	}
+	text = {
+		trigger = { cc_loc_leader_fem = yes }
+		localization_key = PORLOC_A
+	}
+}
+
+
+#e.g. "um / uma"
+defined_text = {
+	name = GetUmUmaLead
+	text = {
+		trigger = { cc_loc_leader_masc = yes }
+		localization_key = PORLOC_um
+	}
+	text = {
+		trigger = { cc_loc_leader_fem = yes }
+		localization_key = PORLOC_uma
+	}
+}
+#e.g. "Um / Uma"
+defined_text = {
+	name = GetUmUmaLead
+	text = {
+		trigger = { cc_loc_leader_masc = yes }
+		localization_key = PORLOC_Um
+	}
+	text = {
+		trigger = { cc_loc_leader_fem = yes }
+		localization_key = PORLOC_Uma
+	}
+}
+#e.g. "uns / umas"
+defined_text = {
+	name = GetUmUmaLead
+	text = {
+		trigger = { cc_loc_leader_masc = yes }
+		localization_key = PORLOC_uns
+	}
+	text = {
+		trigger = { cc_loc_leader_fem = yes }
+		localization_key = PORLOC_umas
+	}
+}
+#e.g. "Uns / Umas"
+defined_text = {
+	name = GetUmUmaLead
+	text = {
+		trigger = { cc_loc_leader_masc = yes }
+		localization_key = PORLOC_Uns
+	}
+	text = {
+		trigger = { cc_loc_leader_fem = yes }
+		localization_key = PORLOC_Umas
+	}
+}
+
+
+#"branc[os] / branc[as]"
+defined_text = {
+	name = GetOsAsLead
+	text = {
+		trigger = { cc_loc_leader_masc = yes }
+		localization_key = PORLOC_os
+	}
+	text = {
+		trigger = { cc_loc_leader_fem = yes }
+		localization_key = PORLOC_as
+	}
+}
+
+#franc[ês]	franc[esa]
+defined_text = {
+	name = GetEsEsaLead
+	text = {
+		trigger = { cc_loc_leader_masc = yes }
+		localization_key = PORLOC_ees
+	}
+	text = {
+		trigger = { cc_loc_leader_fem = yes }
+		localization_key = PORLOC_esa
+	}
+}
+
+#frances[es]	frances[as]
+defined_text = {
+	name = GetEsAsLead
+	text = {
+		trigger = { cc_loc_leader_masc = yes }
+		localization_key = PORLOC_es
+	}
+	text = {
+		trigger = { cc_loc_leader_fem = yes }
+		localization_key = PORLOC_as
+	}
+}
+
+#mot[or]	mot[riz]
+defined_text = {
+	name = GetOrRizLead
+	text = {
+		trigger = { cc_loc_leader_masc = yes }
+		localization_key = PORLOC_or
+	}
+	text = {
+		trigger = { cc_loc_leader_fem = yes }
+		localization_key = PORLOC_riz
+	}
+}
+
+#mot[ores]	mot[rizes]
+defined_text = {
+	name = GetOresRizesLead
+	text = {
+		trigger = { cc_loc_leader_masc = yes }
+		localization_key = PORLOC_ores
+	}
+	text = {
+		trigger = { cc_loc_leader_fem = yes }
+		localization_key = PORLOC_rizes
+	}
+}
+
+#grand[ão]	grand[ona]
+defined_text = {
+	name = GetAoOnaLead
+	text = {
+		trigger = { cc_loc_leader_masc = yes }
+		localization_key = PORLOC_ao
+	}
+	text = {
+		trigger = { cc_loc_leader_fem = yes }
+		localization_key = PORLOC_ona
+	}
+}
+
+#grand[ões]	grand[onas]
+defined_text = {
+	name = GetOesOnasLead
+	text = {
+		trigger = { cc_loc_leader_masc = yes }
+		localization_key = PORLOC_oes
+	}
+	text = {
+		trigger = { cc_loc_leader_fem = yes }
+		localization_key = PORLOC_onas
+	}
+}
+
+#conservador / conservador[a] - use GetXALead
+
+#europ[eu]	europ[eia]
+defined_text = {
+	name = GetEuEiaLead
+	text = {
+		trigger = { cc_loc_leader_masc = yes }
+		localization_key = PORLOC_eu
+	}
+	text = {
+		trigger = { cc_loc_leader_fem = yes }
+		localization_key = PORLOC_eia
+	}
+}
+
+#europ[eus]	europ[eias]
+defined_text = {
+	name = GetEusEiasLead
+	text = {
+		trigger = { cc_loc_leader_masc = yes }
+		localization_key = PORLOC_eus
+	}
+	text = {
+		trigger = { cc_loc_leader_fem = yes }
+		localization_key = PORLOC_eias
+	}
+}

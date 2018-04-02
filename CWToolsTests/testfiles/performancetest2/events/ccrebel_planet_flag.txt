@@ -1,0 +1,52 @@
+namespace = ccrebel_sow_unrest
+
+#setting flags so that you can have more unique planets (with a reasonable probability, anyway) in the edict decision thing
+event = {
+	id = ccrebel_sow_unrest.998
+	hide_window = yes
+	is_triggered_only = yes
+	
+	immediate = {
+		every_country = {
+			every_owned_planet = {
+				limit = {
+					NOR = {
+						has_planet_flag = ccrebel_red
+						has_planet_flag = ccrebel_green
+						has_planet_flag = ccrebel_blue
+						has_planet_flag = ccrebel_yellow
+						has_planet_flag = ccrebel_white
+					}
+				}
+				planet_event = { id = ccrebel_sow_unrest.999 }
+			}
+		}
+	}
+}
+	
+
+planet_event = {
+	id = ccrebel_sow_unrest.999
+	hide_window = yes
+	is_triggered_only = yes
+
+	immediate = {
+		random_list = {
+			20 = {
+				set_planet_flag = ccrebel_red
+			}
+			20 = {
+				set_planet_flag = ccrebel_green
+			}
+			20 = {
+				set_planet_flag = ccrebel_blue
+			}
+			20 = {
+				set_planet_flag = ccrebel_yellow
+			}
+			20 = {
+				set_planet_flag = ccrebel_white
+			}
+		}
+	}
+}

@@ -1,0 +1,640 @@
+
+cc_ruler_humiliated = {
+	pop_government_ethic_attraction = -0.3
+	country_resource_unity_mult = -0.2
+}
+
+cc_xenophobic_offence_1 = {
+	faction_happiness = -0.15
+}
+
+cc_xenophobic_offence_2 = {
+	faction_happiness = -0.25
+}
+
+cc_species_insulted_1 = {
+	pop_happiness = -0.2
+}
+
+cc_species_insulted_2 = {
+	pop_happiness = -0.3
+}
+
+cc_acceeded_to_demands_xenophile = {
+	pop_ethic_xenophile_attraction_mult = 0.5
+}
+
+cc_ruler_cult_offended = {
+	faction_happiness = -0.15
+}
+
+cc_ruler_revered = {
+	pop_citizen_happiness = 0.1
+	country_resource_unity_mult = 0.2
+	pop_ethic_authoritarian_attraction_mult = 0.5
+}
+
+cc_ruler_cult = {
+	country_resource_unity_mult = 0.2
+	pop_ethic_authoritarian_attraction_mult = 0.5
+	pop_ethic_spiritualist_attraction_mult = 0.5
+}
+
+
+
+cc_literally_xenophile_country = {
+	pop_growth_speed = -0.15
+	pop_ethic_xenophile_attraction_mult = 0.5
+}
+
+cc_practising_xenophile = {
+	pop_happiness = 0.1
+	pop_ethic_xenophile_attraction_mult = 2
+}
+
+cc_secretly_practising_xenophile = {
+	pop_happiness = -0.1
+	pop_ethic_xenophile_attraction_mult = 2
+}
+
+cc_secret_xenophile = {
+	pop_happiness = -0.25
+	pop_ethic_xenophile_attraction_mult = 2
+}
+
+
+cc_xeno_marriage_allowed_xenoist = {
+	faction_happiness = 0.1
+}
+
+cc_xeno_marriage_allowed_supremacist = {
+	faction_happiness = -0.2
+}
+
+cc_xeno_marriage_not_allowed_xenoist = {
+	faction_happiness = -0.1
+}
+
+cc_xeno_marriage_not_allowed_supremacist = {
+	faction_happiness = 0.05
+}
+
+cc_xeno_marriage_banned_xenoist = {
+	faction_happiness = -0.2
+}
+
+cc_xeno_marriage_banned_supremacist = {
+	faction_happiness = 0.1
+}
+
+cc_recent_xenophile_wedding = {
+	pop_happiness = 0.05
+	pop_ethic_xenophile_attraction_mult = 0.75
+	pop_ethic_xenophobe_attraction_mult = 0.5
+}
+
+cc_recent_xenophile_wedding_xenophile = {
+	faction_happiness = 0.15
+}
+cc_recent_xenophile_wedding_xenophobe = {
+	faction_happiness = -0.15
+}
+
+cc_recent_sex_scandal_hostile = {
+	faction_happiness = -0.25
+}
+
+cc_recent_sex_scandal_hostile1 = {
+	faction_happiness = -0.2
+}
+
+cc_recent_sex_scandal_unfriendly = {
+	faction_happiness = -0.15
+}
+
+cc_recent_sex_scandal_unfriendly1 = {
+	faction_happiness = -0.1
+}
+
+cc_recent_sex_scandal_friendly = {
+	faction_happiness = 0.15
+}
+
+cc_recent_sex_scandal_friendly1 = {
+	faction_happiness = 0.1
+}
+
+cc_ruler_humiliated1 = {
+	country_resource_influence_mult = -0.33
+}
+
+cc_defiance_of_law = {
+	pop_government_ethic_attraction = -0.3
+	pop_ethic_authoritarian_attraction_mult = 0.6
+}
+
+cc_defiance_of_law1 = {
+	pop_government_ethic_attraction = -0.2
+	pop_ethic_authoritarian_attraction_mult = 0.4
+}
+
+cc_defiance_of_law_egals = {
+	faction_happiness = -0.15
+}
+
+cc_defiance_of_law_egals1 = {
+	faction_happiness = -0.1
+}
+
+cc_defiance_of_law_mega = {
+	pop_ethic_authoritarian_attraction_mult = 1
+	pop_citizen_happiness = -0.1
+}
+
+cc_defiance_of_law_egal_mega = {
+	faction_happiness = -0.25
+}
+
+cc_paid_blackmail = {
+	country_resource_minerals_mult = -0.5
+	country_resource_energy_mult = -0.25
+}
+
+cc_outrage_at_corruption = {
+	pop_citizen_happiness = -0.2
+	pop_government_ethic_attraction = -0.5
+}
+
+cc_outrage_at_corruption_1 = {
+	pop_citizen_happiness = -0.15
+	pop_government_ethic_attraction = -0.35
+}
+
+cc_outrage_at_police_violence = {
+	pop_ethic_egalitarian_attraction_mult = 1
+}
+
+cc_outrage_at_police_violence_faction = {
+	faction_happiness = -0.25
+}
+
+cc_outrage_at_priesthood_corruption = {
+	pop_ethic_spiritualist_attraction_mult = -0.75
+	pop_citizen_happiness = -0.1
+}
+
+cc_outrage_at_electoral_manipulation = {
+	pop_citizen_happiness = -0.15
+	pop_government_ethic_attraction = -0.4
+	pop_ethic_egalitarian_attraction_mult = -0.5
+}
+
+cc_outrage_at_electoral_manipulation_faction = {
+	faction_happiness = -0.2
+}
+
+cc_loss_of_faith_in_ingenuity = {
+	pop_ethic_materialist_attraction_mult = -0.5
+}
+
+cc_other_states_watching_scientists = {
+	all_technology_research_speed = -0.1
+}
+
+cc_outrage_at_discrimination = {
+	pop_happiness = -0.15
+	pop_ethic_xenophobe_attraction_mult = 1.5
+}
+
+cc_prison_security_breach = {
+	pop_citizen_happiness = -0.1
+	planet_unrest_add = 20
+	planet_unrest_mult = 0.5
+}
+
+cc_ship_designs_compromised = {
+	ship_weapon_damage = -0.25
+}
+
+cc_emancipation_movement = {
+	planet_unrest_mult = 1
+	pop_ethic_egalitarian_attraction_mult = 1
+	pop_slave_resource_output = -0.25
+	icon_frame = 3
+	icon = "gfx/interface/icons/planet_modifiers/pm_slave_riots.dds"
+}
+
+cc_emancipation_furious = {
+	faction_happiness = -0.3
+}
+
+cc_emancipated = {
+	pop_ethic_egalitarian_attraction_mult = 0.5
+}
+
+cc_emancipation_celebration = {
+	pop_ethic_egalitarian_attraction_mult = 1
+	pop_happiness = 0.1
+	icon_frame = 1
+	icon = "gfx/interface/icons/planet_modifiers/pm_celebration.dds"
+}
+
+cc_empire_emancipation_movement = {
+	pop_ethic_egalitarian_attraction_mult = 0.5
+}
+
+cc_worried_about_slaves = {
+	pop_ethic_egalitarian_attraction_mult = 2
+}
+
+cc_empire_luddite_movement = {
+	pop_ethic_spiritualist_attraction_mult = 0.5
+}
+
+cc_luddite_celebration = {
+	pop_ethic_spiritualist_attraction_mult = 1
+	pop_happiness = 0.1
+	icon_frame = 1
+	icon = "gfx/interface/icons/planet_modifiers/pm_celebration.dds"
+}
+
+cc_luddite_movement = {
+	planet_unrest_mult = 1
+	pop_ethic_spiritualist_attraction_mult = 1
+	pop_robot_production_output = -0.15
+	icon_frame = 3
+	icon = "gfx/interface/icons/planet_modifiers/pm_luddite.dds"
+}
+
+cc_bowed_to_luddism = {
+	pop_ethic_spiritualist_attraction_mult = 0.75
+}
+
+cc_luddite_faction_displeasure = {
+	faction_happiness = -0.1
+}
+
+cc_luddite_oppress_faction_displeasure = {
+	faction_happiness = -0.15
+}
+
+cc_bowed_to_luddism_faction_pos = {
+	faction_happiness = 0.15
+}
+
+cc_bowed_to_luddism_faction_neg = {
+	faction_happiness = -0.15
+}
+
+cc_worried_about_machines = {
+	pop_ethic_spiritualist_attraction_mult = 2
+}
+
+cc_peace_protests = {
+	planet_unrest_mult = 0.5
+	pop_ethic_pacifist_attraction_mult = 1.5
+	tile_resource_energy_mult = -0.25
+	tile_resource_minerals_mult = -0.25
+	icon_frame = 3
+	icon = "gfx/interface/icons/planet_modifiers/pm_slave_riots.dds"
+}
+
+cc_country_peace_protests = {
+	pop_ethic_pacifist_attraction_mult = 1
+	pop_citizen_happiness = -0.1
+}
+
+cc_faction_peace_protests = {
+	faction_happiness = -0.1
+}
+
+cc_faction_oppressed = {
+	faction_happiness = -0.2
+}
+
+cc_peace_faction_betrayed = {
+	faction_happiness = -0.2
+}
+
+cc_promises_to_pacifists = {
+	pop_ethic_pacifist_attraction_mult = 1
+}
+
+cc_made_peace = {
+	pop_ethic_pacifist_attraction_mult = 1
+}
+
+cc_faction_peace_celebration = {
+	faction_happiness = 0.15
+}
+
+cc_peace_celebrations = {
+	pop_ethic_pacifist_attraction_mult = 1
+	pop_happiness = 0.1
+	icon_frame = 1
+	icon = "gfx/interface/icons/planet_modifiers/pm_celebration.dds"
+}
+
+cc_planet_hate_speech = {
+	pop_ethic_xenophobe_attraction_mult = 1
+	planet_unrest_mult = 0.5
+	icon_frame = 3
+	icon = "gfx/interface/icons/planet_modifiers/pm_hate_speech.dds"
+}
+
+cc_planet_interspecies_tensions = {
+	pop_ethic_xenophobe_attraction_mult = 1.5
+	planet_unrest_mult = 1
+	icon_frame = 3
+	icon = "gfx/interface/icons/planet_modifiers/pm_hate_speech.dds"
+}
+
+cc_empire_interspecies_tensions = {
+	pop_ethic_xenophobe_attraction_mult = 0.5
+}
+
+cc_feels_unwelcome = {
+	pop_happiness = -0.2
+}
+
+cc_disrupted_government = {
+	tile_resource_energy_mult = -0.67
+	tile_resource_minerals_mult = -0.67
+	tile_resource_unity_mult = -0.67
+	tile_resource_physics_research_mult = -0.67
+	tile_resource_society_research_mult = -0.67
+	tile_resource_engineering_research_mult = -0.67
+	planet_unrest_mult = 0.5
+	
+	icon_frame = 3
+	icon = "gfx/interface/icons/planet_modifiers/pm_interior_battle.dds"
+}
+
+cc_pop_fears_genocide = {
+	pop_happiness = -0.5
+}
+
+cc_xenos_spared_from_massacre = {
+	faction_happiness = -0.2
+}
+
+cc_xenos_massacred = {
+	faction_happiness = -0.2
+}
+
+cc_xenos_disparaged = {
+	faction_happiness = -0.1
+}
+
+cc_xenos_disparaged_sup = {
+	faction_happiness = 0.1
+}
+
+cc_xenos_encouraged = {
+	faction_happiness = -0.1
+}
+
+cc_martial_law = {
+	tile_resource_unity_mult = -0.33
+	tile_resource_minerals_mult = -0.33
+	tile_resource_energy_mult = -0.33
+	tile_resource_physics_research_mult = -0.33
+	tile_resource_society_research_mult = -0.3
+	tile_resource_engineering_research_mult = -0.33
+	planet_unrest_mult = -0.5
+	icon_frame = 2
+	icon = "gfx/interface/icons/planet_modifiers/pm_unrest.dds"
+}
+
+cc_xeno_reconciliation = {
+	pop_ethic_xenophile_attraction_mult = 0.8
+}
+
+cc_investment_package = {
+	planet_resource_energy_add = -30
+	planet_resource_minerals_add = -30
+	icon_frame = 2
+	icon = "gfx/interface/icons/planet_modifiers/pm_gold_pile.dds"
+}
+
+cc_ruled_against_us_pops = {
+	pop_happiness = -0.1
+}
+
+cc_ruled_in_our_favour_pops = {
+	pop_happiness = 0.1
+}
+
+
+
+dpe_charity_unpopular_ruler = {
+	pop_citizen_happiness = -0.05
+	tile_resource_unity_mult = -0.25
+}
+
+dpe_charity_faction_undeserving = {
+	faction_happiness = -0.15
+}
+
+
+dpe_unbelief_faction = {
+	faction_happiness = -0.1
+}
+
+dpe_unbelief_empire = {
+	country_resource_influence_mult = -0.25
+}
+
+dpe_damned_to_hell_faction = {
+	faction_happiness = -0.15
+}
+
+dpe_damned_to_hell_empire = {
+	pop_citizen_happiness = -0.1
+	country_resource_influence_mult = -0.35
+	tile_resource_unity_mult = -0.25
+}
+
+
+dpe_state_in_lockdown = {
+	pop_citizen_happiness = -0.1
+	country_resource_minerals_mult = -0.33
+	country_resource_influence_add = -1
+	pop_migration_speed = -1
+}
+
+dpe_state_in_lockdown_faction = {
+	faction_happiness = -0.1
+}
+
+dpe_illegitimate_regime = {
+	pop_citizen_happiness = -0.05
+	pop_government_ethic_attraction = -0.2
+}
+
+dpe_seized_control_faction = {
+	faction_happiness = 0.1
+}
+
+dpe_lost_control_faction = {
+	faction_happiness = -0.2
+}
+
+
+
+dpe_extra_naval_expenses = {
+	ship_upkeep_mult = 0.1
+}
+
+dpe_extra_naval_expenses_2 = {
+	ship_upkeep_mult = 0.2
+}
+
+dpe_military_petition_rejected = {
+	faction_happiness = -0.10
+}
+
+dpe_military_coup_faction = {
+	faction_happiness = -0.25
+}
+
+dpe_navy_RandD = {
+	country_resource_energy_mult = -0.05
+	country_resource_minerals_mult = -0.1
+	country_engineering_tech_research_speed = 0.1
+	country_physics_tech_research_speed = 0.1
+}
+
+dpe_rebuilding_fleet = {
+	starbase_shipyard_build_cost_mult = -0.1
+	starbase_shipyard_build_speed_mult = 0.33
+}
+
+dpe_rebuilding_fleet_2 = {
+	starbase_shipyard_build_cost_mult = -0.2
+	starbase_shipyard_build_speed_mult = 0.33
+}
+
+dpe_naval_pay_cut_faction = {
+	faction_happiness = -0.05
+}
+
+dpe_navy_privileges_cut_faction = {
+	faction_happiness = -0.1
+}
+
+dpe_encouraged_competition = {
+	country_resource_energy_mult = 0.05
+}
+
+dpe_disgruntled_CEO = {
+	planet_unrest_add = 20
+	
+	icon_frame = 3
+	icon = "gfx/interface/icons/planet_modifiers/pm_gold_pile.dds"
+}
+
+dpe_patents_national_interest = { faction_happiness = 0.1 }
+dpe_patents_denied_faction = { faction_happiness = -0.1 }
+dpe_innovative_CEO_faction = { faction_happiness = 0.05 }
+
+
+dpe_innovative_CEO = {
+	tile_resource_energy_mult = 0.2
+	tile_resource_physics_research_mult = 0.1
+	
+	icon_frame = 1
+	icon = "gfx/interface/icons/planet_modifiers/pm_gold_pile.dds"
+}
+
+
+dpe_unity_planet = {
+	planet_resource_unity_add = 2
+
+	icon_frame = 1
+	icon = "gfx/interface/icons/planet_modifiers/pm_unity.dds"
+}
+
+dpe_persuasive_leader = {
+	pop_government_ethic_attraction = 0.33
+	country_resource_influence_mult = 0.25
+}
+
+dpe_unpersuasive_leader = {
+	pop_government_ethic_attraction = -0.25
+	country_resource_influence_mult = -0.25
+}
+
+
+
+
+dpe_planet_talented_physicist = {
+	tile_resource_physics_research_mult = 0.2
+	tile_resource_energy_mult = 0.1
+	
+	icon_frame = 1
+	icon = "gfx/interface/icons/planet_modifiers/pm_particle_physics.dds"
+}
+
+dpe_planet_talented_engineer = {
+	tile_resource_engineering_research_mult = 0.2
+	planet_building_cost_mult = -0.1
+
+	icon_frame = 1
+	icon = "gfx/interface/icons/planet_modifiers/pm_luddite.dds"
+}
+
+dpe_planet_talented_biologist = {
+	tile_resource_physics_research_mult = 0.2
+	pop_growth_speed = 0.15
+	
+	icon_frame = 1
+	icon = "gfx/interface/icons/planet_modifiers/pm_genetics.dds"
+}
+
+dpe_planet_talented_compscientist = {
+	tile_resource_society_research_mult = 0.2
+	pop_robot_build_speed_mult = 0.1
+	pop_robot_production_output = 0.1
+	
+	icon_frame = 1
+	icon = "gfx/interface/icons/planet_modifiers/pm_computer_science.dds"
+}
+
+dpe_planet_talented_socscientist = {
+	tile_resource_society_research_mult = 0.2
+	mod_distance_to_capital_static_modifier_efficiency_mult = -0.15
+	planet_migration_all_pull = 0.15
+
+	icon_frame = 1
+	icon = "gfx/interface/icons/planet_modifiers/pm_judge.dds"
+}
+
+dpe_planet_talented_general = {
+	planet_army_build_cost_mult = -0.15
+	planet_army_build_speed_mult = 0.33
+	planet_orbital_bombardment_damage = -0.2
+
+	icon_frame = 1
+	icon = "gfx/interface/icons/planet_modifiers/pm_legate.dds"
+}
+
+dpe_planet_talented_governor = {
+	planet_building_cost_mult = -0.1
+	pop_citizen_happiness = 0.1
+
+	icon_frame = 1
+	icon = "gfx/interface/icons/planet_modifiers/pm_judge.dds"
+}
+
+dpe_starbase_talented_admiral = {
+	ship_hull_mult = 0.1
+	ship_shield_mult = 0.1
+	ship_weapon_damage = 0.1
+	ship_fire_rate_mult = 0.1
+}
+
+dpe_talented_captain = {
+	ship_fire_rate_mult = 0.33
+	ship_evasion_mult = 0.33
+}

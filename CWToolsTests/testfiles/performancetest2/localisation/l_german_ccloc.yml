@@ -1,0 +1,42 @@
+﻿l_german:
+
+#DELOC_:0 ""
+#DELOC_:0 ""
+
+
+DELOC_X:0 ""
+DELOC_in:0 "in"
+
+DELOC_der:0 "der"
+DELOC_die:0 "die"
+DELOC_Der:0 "Der"
+DELOC_Die:0 "Die"
+DELOC_des:0 "des"
+DELOC_Des:0 "Des"
+DELOC_den:0 "den"
+DELOC_Den:0 "Den"
+DELOC_dem:0 "dem"
+DELOC_Dem:0 "Dem"
+
+DELOC_er:0 "er"
+DELOC_e:0 "e"
+DELOC_en:0 "en"
+DELOC_em:0 "em"
+DELOC_es:0 "es"
+
+DELOC_A:0 "A"
+DELOC_Ae:0 "Ä"
+DELOC_a:0 "a"
+DELOC_ae:0 "ä"
+
+DELOC_ihm:0 "ihm"
+DELOC_ihr:0 "ihr"
+DELOC_Ihm:0 "Ihm"
+DELOC_Ihr:0 "Ihr"
+
+DELOC_innen:0 "innen"
+
+DELOC_dessen:0 "dessen"
+DELOC_deren:0 "deren"
+
+#öü |ÖÜ

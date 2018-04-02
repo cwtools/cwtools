@@ -1,0 +1,49 @@
+
+# No scope, like on_game_start
+on_monthly_pulse = {
+	events = {
+		ccfaction.999
+	}
+}
+
+# No scope, like on_game_start
+#on_bi_yearly_pulse = {
+#	events = {
+#		ccfaction.9992
+#	}
+#}
+
+
+
+
+# Triggers country_event for the defender upon victory
+# Root = country, planet owner
+# From = country, attack leader
+# FromFrom = planet
+on_planet_defenders_win = {
+	events = {
+		ccfaction.68
+	}
+}
+
+# Initial rebels manage to take control of the planet, happens before the new owner is set, after the war is created.
+# This = Rebel Country
+# From = Planet
+# FromFrom = War
+on_rebels_take_planet = {
+	events = {
+		ccfaction.63
+		ccfaction.66
+	}
+}
+
+
+# Initial rebels manage to take control of the planet, happens after the new owner is set, after the war is created.
+# This = Rebel Country
+# From = Planet
+# FromFrom = War
+on_rebels_take_planet_owner_switched = {
+	events = {
+		ccfaction.631
+	}
+}

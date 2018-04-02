@@ -1,0 +1,177 @@
+
+
+
+# A war has been won, by force
+# Root = Winner Warleader
+# From = Loser Warleader
+# FromFrom = War
+on_war_won_forced = {
+	events = {
+	}
+	random_events = {
+		3 = 0
+		1 = cc_events_mod.3
+	}
+}
+
+# Executed as a leader has died
+# This = Country
+# From = Leader
+on_leader_death = {
+	events = {
+		cc_events_mod.5
+	}
+}
+
+#no scope
+on_monthly_pulse = {
+	events = {
+		cc_events_performance.1
+	}
+}
+
+
+
+#no scope
+on_yearly_pulse = {
+	events = {
+		cc_events_mod.12
+	}
+}
+
+#no scope
+on_decade_pulse = {
+	events = {
+		cc_events_mod.8
+	}
+}
+
+# Executes after a policy has been changed
+# use last_changed_policy to identify which policy it was
+# This = Country
+on_policy_changed = {
+	events = {
+		cc_events_mod.15
+	}
+}
+
+
+on_colony_10_years_old = {
+	random_events = {
+		75 = 0
+
+		25 = cc_colony_events.1 #colony gets a 'leader'
+	}
+}
+
+
+#Fired whenever a new owner is set for a planet,
+#be it after a war or through a trade
+#From = Country scope (new owner)
+#This = Planet scope
+on_planet_transfer = {
+	events = {
+		cc_cleanup_events.1
+	}
+}
+
+# This = Pop scope
+# From = Planet
+on_purge_begun = {
+	events = {
+		cc_cleanup_events.9997
+	}
+}
+
+# This = Planet scope
+# From = Country
+# FromFrom = Pop
+on_purge_complete = {
+	events = {
+		cc_cleanup_events.9999
+	}
+}
+
+# Planet has reached 0 health
+# This = Planet
+# From = Bombarder
+on_planet_zero_health = {
+	events = {
+		cc_cleanup_events.9998
+	}
+}
+
+# Initial rebels manage to take control of the planet, happens before the new owner is set, after the war is created.
+# This = Rebel Country
+# From = Planet
+# FromFrom = War
+on_rebels_take_planet = {
+	events = {
+		cc_cleanup_events.9996
+	}
+}
+
+# A war has ended
+# Root = Loser
+# From = Main Winner
+on_war_ended = {
+	events = {
+		cc_peace.3
+	}
+}
+
+# A war is beginning, executed for every country in the war.
+# Root = Country
+# From = War
+on_war_beginning = {
+	events = {
+		cc_peace.5
+		dpe_diplo.8
+	}
+}
+
+
+
+
+# A pop has finished migrating to another planet
+# Root = pop
+# From = Tile on the new planet
+# FromFrom = Tile on the old planet
+on_pop_migration_end = {
+	events = {
+		cc_colony_events.552
+	}
+}
+
+
+# Executed as new ruler has been set
+# This = Country
+on_ruler_set = {
+	events = {
+		dpe_scandal.99
+	}
+}
+
+
+
+# A war has been lost
+# Root = Loser Warleader
+# From = Winner Warleader
+# FromFrom = War
+on_war_lost = {
+	events = {
+		dpe_conspiracy.6
+	}
+}
+
+
+
+# This = owner of fleet 1 (combatant)
+# From = owner of fleet 2 (destroyed)
+# FromFrom = fleet 1
+# FromFromFrom = fleet 2
+on_fleet_destroyed_perp = {
+	random_events = { #adds up to about a 10% chance
+		28 = leader.1
+	}
+}

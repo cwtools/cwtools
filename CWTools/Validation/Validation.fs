@@ -91,7 +91,8 @@ module ValidationCore =
         | Invalid e1, Invalid e2 -> Invalid (e1 @ e2)
         | Invalid e, OK | OK, Invalid e -> Invalid e
 
-    let (<&!&>) es f = es |> PSeq.map f |> PSeq.fold (<&&>) OK 
-    // |> PSeq.map (fun s c -> s <&&> (f c)) |> PSeq.fold (<&&>) OK
+    // Parallelising something this small makes it slower!
+    //let (<&!&>) es f = es |> PSeq.map f |> PSeq.fold (<&&>) OK 
+    let (<&!&>) es f = es |> Seq.map f |> Seq.fold (<&&>) OK
 
     

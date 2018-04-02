@@ -1,0 +1,12 @@
+﻿l_english:
+
+edict_cc_thought_police:0 "思想警察"
+edict_cc_thought_police_desc:0 "使用现代科技监管民众的想法，并在必要时解决动乱分子。\n\n幸福度在40%以下，且不认同主流思潮的人口£pops 将会被逐渐清洗或被迫逃离。此政策不会造成常规清洗的惩罚/奖励修正值，但会使平权主义国家不满。"
+
+	
+cc_thought_police.2.name:0 "来自[RefugeeEscapedFrom.GetName]的政治难民抵达"
+cc_thought_police.2.desc:0 "一小队搭载着§Y[Root.GetSpeciesNamePlural]§! 平民的残破舰队从§Y[RefugeeEscapedFrom.GetName]§! 逃离，现在已经抵达我们境内。我们向他们提供了食物，并为其中的伤患进行了医疗救助，之后帮助他们在§H[Root.Planet.GetName]§!上安顿了下来。\n\n这些衣衫褴褛、神情惶恐的难民原本是[RefugeeEscapedFrom.GetName]上的政治异见者。在那里，[RefugeeEscapedFrom.GetSpeciesName]的思维警察对他们“关怀备至”。他们意识到自己已经被[RefugeeEscapedFrom.GetSpeciesName]政府盯上了，如果不立刻逃离，恐怕就会神不知鬼不觉地“消失”。他们能够侥幸逃出，全赖一条仓促组织的地下线路和几位心怀同情的商队船长帮助。"
+cc_thought_police.2.a:0 "他们在这里可以安居。"
+
+
+triggered_opinion_cc_thought_police:0 "猖狂的思维警察"
