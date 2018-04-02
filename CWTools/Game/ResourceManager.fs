@@ -209,13 +209,13 @@ type ResourceManager<'T> (computedDataFunction : (Entity -> 'T)) =
                     |EntityResourceInput e -> e |> ((fun f -> f.scope, f.filepath, f.validate, (fun (t, t2) -> duration (fun () -> CKParser.parseString t2 t)) (f.filepath, f.filetext)) >> matchResult)
                     |FileResourceInput f -> FileResource (f.filepath, { scope = f.scope; filepath = f.filepath })
         
-
+    let shipProcess = STLProcess.shipProcess.ProcessNode<Node>
     let parseEntity (file : Resource) =
         file,
                 match file with
                 |EntityResource (_, {result = Pass(s); filepath = f; validate = v}) ->
                     let entityType = filepathToEntityType f
-                    Some { filepath = f; entity = (STLProcess.shipProcess.ProcessNode<Node>(entityType) "root" (Position.File(f)) s.statements); validate = v; entityType = entityType}
+                    Some { filepath = f; entity = (shipProcess entityType "root" (Position.File(f)) s.statements); validate = v; entityType = entityType}
                 |_ -> None        
 
     let saveResults (resource, entity) =
