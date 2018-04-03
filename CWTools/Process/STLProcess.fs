@@ -358,7 +358,10 @@ module STLProcess =
         |("valid", _, {parents = "obsstation"::_;}) ->  specificScopeProcessNode<TriggerBlock> Scope.Country, "triggerblock", id;
         |("ai_weight", _, {parents = "obsstation"::_;}) ->  processNodeSimple<WeightBlock>, "weightblock", id;
         |("modifier", _, {parents = "weightblock"::"obsstation"::_;}) ->  specificScopeProcessNode<WeightModifierBlock> Scope.Country, "weightmodifierblock", id;
-        //// TODO: Opinion modifiers
+        // Opinion modifiers
+        |(_, _, {complete = false; entityType = EntityType.OpinionModifiers})  ->  processNodeSimple<Node>, "opinionmodifier",  (fun c -> { c with complete = true;});
+        |("opinion", _, {parents = "opinionmodifier"::_;}) ->  processNodeSimple<WeightBlock>, "weightblock", id;
+        |("modifier", _, {parents = "weightblock"::"opinionmodifier"::_;}) ->  specificScopeProcessNode<WeightModifierBlock> Scope.Country, "weightmodifierblock", id;
         //Personalities
         |(_, _, {complete = false; entityType = EntityType.Personalities})  ->  processNodeSimple<Node>, "personality",  (fun c -> { c with complete = true;});
         |("allow", _, {parents = "personality"::_;}) ->  specificScopeProcessNode<TriggerBlock> Scope.Country, "triggerblock", id;

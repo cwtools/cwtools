@@ -280,7 +280,8 @@ module STLLocalisationValidation =
     let valWarGoals : LocalisationValidator =
         fun _ keys es ->
             let wargoals = es.AllOfTypeChildren EntityType.WarGoals
-            wargoals <&!&> checkKeyAndDesc keys
+            let inner = checkLocNodeKeyAdvs keys "war_goal_" [""; "_desc"]
+            wargoals <&!&> inner
 
     let valBuildingTags : LocalisationValidator =
         fun _ keys es ->

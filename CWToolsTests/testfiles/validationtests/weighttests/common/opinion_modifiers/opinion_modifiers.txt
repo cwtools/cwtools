@@ -1,0 +1,30 @@
+##Test locaisation
+cc_opinion_outrage_at_plans_to_conquer = {
+	opinion = {
+		base = -125
+		modifier = {
+			add = -50
+			#error
+			has_planet_flag = yes
+			has_country_flag = yes
+			OR = {
+				is_rival = from
+				is_hostile_to = from
+			}
+		}
+		modifier = {
+			add = 75
+			OR = {
+				has_defensive_pact = from
+				is_in_federation_with = from
+			}
+		}
+		modifier = {
+			add = 50
+			has_non_aggression_pact = from
+		}
+	}
+	decay = {
+		base = 5
+	}
+}
