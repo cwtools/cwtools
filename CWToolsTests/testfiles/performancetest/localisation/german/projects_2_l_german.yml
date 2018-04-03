@@ -1,0 +1,114 @@
+﻿l_german:
+
+ ####################################
+ # Special Projects
+ ####################################
+
+ ### Story Events
+
+ AMOEBAS_1_PROJECT:0 "Beobachtung von Weltraumamöben"
+ AMOEBAS_1_PROJECT_DESC:0 "Beauftragen Sie eine Wissenschaftsabteilung damit, Daten über die Weltraumamöben zu sammeln und zu vergleichen."
+
+ CRYSTALS_1_PROJECT:0 "Beobachtung von Kristallwesen"
+ CRYSTALS_1_PROJECT_DESC:0 "Beauftragen Sie eine Wissenschaftsabteilung damit, Daten über die Kristallwesen zu sammeln und zu vergleichen."
+
+ DRONES_1_PROJECT:0 "Beobachtung von Bergbaudrohnen"
+ DRONES_1_PROJECT_DESC:0 "Beauftragen Sie eine Wissenschaftsabteilung damit, Daten über die uralten Bergbaudrohnen zu sammeln und zu vergleichen."
+
+ CLOUDS_1_PROJECT:0 "Beobachtung von Weltraumwolken"
+ CLOUDS_1_PROJECT_DESC:0 "Beauftragen Sie eine Wissenschaftsabteilung damit, Daten über die Weltraumwolken zu sammeln und zu vergleichen."
+
+ CRYSTAL_CONSTRUCT_PROJECT:0 "Das Kristallkonstrukt"
+ CRYSTAL_CONSTRUCT_PROJECT_DESC:0 "Beauftragen Sie eine Wissenschaftsabteilung damit, Daten über das einzigartige Kristallkonstrukt zu sammeln und zu vergleichen."
+
+ MINING_BASE_PROJECT:0 "Das Verarbeitungszentrum"
+ MINING_BASE_PROJECT_DESC:0 "Beauftragen Sie eine Wissenschaftsabteilung damit, das letzte bekannte Verarbeitungszentrum der uralten Bergbaudrohnen aus der Entfernung zu erforschen."
+
+ ### Anomaly Events
+
+ DEAL_WITH_FLORA:0 "Pflanzenaggression"
+ DEAL_WITH_FLORA_DESC:0 "Die Pflanzenwelt des Planeten ist bemerkenswert gewandt, erschreckend aggressiv, und definitiv eine nähere Untersuchung wert."
+
+ OLD_GODS_BENEFACTRESS_PROJECT:0 "Alte Götter: Die Wohltäterin"
+ OLD_GODS_BENEFACTRESS_PROJECT_DESC:1 "Jede Oberfläche auf dem Schrein der Wohltäterin ist mit einem komplexen Netz aus Piktogrammen bedeckt, die eine weitaus umfangreichere Geschichte zu erzählen scheinen als die molekularen Fabeln, die auf [Root.Owner.Capital.GetName] die Zeit überdauert haben.\n\nObwohl sie mit bekannten uralten [Root.Owner.GetSpeciesName]-Sprachen nur entfernt verwandt sind, sollten wir die Piktogramme - genügend Zeit und Ressourcen vorausgesetzt - mit unserer jetzigen Technologie dechiffrieren können."
+ OLD_GODS_UNDAUNTED_PROJECT:0 "Alte Götter: Der Unverzagte"
+ OLD_GODS_UNDAUNTED_PROJECT_DESC:1 "Der Tempel mit dem Schrein des Unverzagten ist passend zu den Mythen, die sich um ihn ranken, voller Vorrichtungen unbekannten Ursprungs und Nutzens. Sie haben nur wenig gemein mit den einfachen Rätselschachteln und Kraftproben, die einst seine Tempel auf [Root.Owner.Capital.GetName] füllten. Hier werden seine heiligen Texte wirklich nur von den Würdigen gelesen.\n\nAllerdings werden unsere hochentwickelten Analysewerkzeuge mit diesen Rätseln kurzen Prozess machen."
+ OLD_GODS_PERCIPIENT_PROJECT:0 "Alte Götter: Der Wahrnehmende"
+ OLD_GODS_PERCIPIENT_PROJECT_DESC:1 "Die Mauern des Orts, wo sich der Schrein des Wahrnehmenden befindet, sind mit mehreren Schichten eines mineralischen Lacks überzogen, der Schrein selbst aber ist blank.\n\nDie Geschichten des Wahrnehmenden werden nur jenen erzählt, die wahrnehmungsfähig genug sind, sie zu verstehen - es geht nur darum, herauszufinden, was genau wahrgenommen werden muss."
+
+ LIMBO_1_PROJECT:0 "In der Schwebe"
+ LIMBO_1_PROJECT_DESC:0 "Ein Alien-Bunker voller Datenspeichergeräte schreit förmlich nach einer archäologischen Datenbergung."
+
+ PROJECTING_MOON_PROJECT:0 "Täuschend"
+ PROJECTING_MOON_PROJECT_DESC:0 "Ein ungewöhnlicher Planet hat auch einen ungewöhnlichen Mond - die üblichen Scannertechniken bieten keine zufriedenstellenden Resultate. Wir benötigen einen praxisorientierteren Ansatz."
+
+ GRIMACING_PLANET_PROJECT:0 "Aufgewühlter Planet"
+ GRIMACING_PLANET_PROJECT_DESC:0 "Wenn wir bald handeln, können wir die äußerst unruhige Oberfläche dieses Planeten in einen potenziell bewohnbaren Zustand bringen."
+
+ OLFACTORY_PROJECT:0 "Olfaktorisches Studium"
+ OLFACTORY_PROJECT_DESC:0 "Von einem Alien-Artefakt vermutet man, dass es durch aerosolierte aromatische Verbindungen Informationen weitergibt."
+
+ ULTIMATE_WEAPON_PROJECT:0 "Die ultimative Waffe"
+ ULTIMATE_WEAPON_PROJECT_DESC:0 "Irgendwo auf dem Planeten gibt es ein verborgenes Waffenlager. Diese Waffen könnten unserem Reich neue Kriegstechnologien einbringen."
+
+ REFINE_ROCK_PROJECT:0 "Positronenbombardierung"
+ REFINE_ROCK_PROJECT_DESC:0 "Die kontrollierte Verbreitung von Positronen aus dem Orbit könnte die auf dem Planeten einheimischen Mineralien in eine nützlichere Form verwandeln."
+
+ CRYSTAL_CODEX_PROJECT:0 "Kristallkodex"
+ CRYSTAL_CODEX_PROJECT_DESC:0 "In einer Mineralbildung befinden sich hologrammkodierte Informationen. Die Struktur ist vertraut, aber die schiere Datendichte macht die Dekodierung zu einer Herausforderung."
+
+ ALIEN_BARRACKS_PROJECT:0 "Alien-Kasernen"
+ ALIEN_BARRACKS_PROJECT_DESC:0 "Ein genaueres Xeno-sozio-archäologisches Studium dieser Ruinen könnte Erkenntnisse über eine uralte Alien-Kriegsmaschinerie einbringen."
+
+ ROBOT_MINERALS_PROJECT:0 "Von der Natur zurückgefordert"
+ ROBOT_MINERALS_PROJECT_DESC:0 "Eine überwucherte Einrichtung, in der sich wichtige Geheimnisse befinden könnten."
+
+ BALANCE_ECOSYSTEM_PROJECT:0 "Ökosystem-Ausgleich"
+ BALANCE_ECOSYSTEM_PROJECT_DESC:0 "Man hat uns einen Plan vorgelegt, mit dem man den Ausgleich der ungleichgewichtigen Biosphäre des Planeten mit den Bordmitteln eines normalen Forschungsschiffs probieren könnte.\n\nDies könnte jedoch zu ungeahnten Konsequenzen führen."
+
+ HEAD_IN_SAND_PROJECT:0 "Kopf in den Sand"
+ HEAD_IN_SAND_PROJECT_DESC:0 "Eine Militärflotte könnte versuchen, ein tief vergrabenes Schiff zu heben."
+
+ THE_PRINCE_PROJECT:0 "Der Prinz"
+ THE_PRINCE_PROJECT_DESC:0 "In einer Datenbank, die im Weltraum treibend gefunden wurde, befindet sich nichts außer einem langen Textstück, das in einer merkwürdigen und doch vertraut wirkenden Alien-Sprache verfasst wurde."
+
+ EMERGENCY_BUOY_PROJECT:0 "Notfallboje"
+ EMERGENCY_BUOY_PROJECT_DESC:0 "Ein schwer beschädigtes Objekt scheint als eine Art Verstärker für ein Kommunikationssignal zu dienen."
+
+ WRECKED_FLEET_1:0 "Monumentale Übertragung"
+ WRECKED_FLEET_1_DESC:0 "Dekodieren Sie die vom Monolithen ausgehende Nachricht"
+
+ WRECKED_FLEET_2:0 "Uralte Bündnisarmada"
+ WRECKED_FLEET_2_DESC:0 "Schicken Sie Ingenieurteams los, um die bergbaren Schiffe wieder einsatzfähig zu machen."
+
+ MANUFACTORY_PROJECT:0 "Bergbau-Instandsetzung"
+ MANUFACTORY_PROJECT_DESC:0 "Schicken Sie Ingenieurteams los, um eine uralte Orbitalstation wieder betriebsbereit zu nehmen."
+
+### Colony Events
+
+ HELPFUL_DRONES_1_PROJECT:0 "Zurückgelassen"
+ HELPFUL_DRONES_1_PROJECT_DESC:0 "Vom Mond dieses Planeten empfangen wir seltsame Werte. Das muss überhaupt nichts bedeuten.\n\nAber es KÖNNTE etwas bedeuten. Mit einem Schiff im Orbit als Relais werden die Wissenschaftler der Kolonie die Oberfläche des Mondes vorsichtig scannen, um der Angelegenheit auf den Grund zu geben."
+ POLLEN_1_PROJECT:0 "Pflanzenstudium"
+ POLLEN_1_PROJECT_DESC:0 "Einige der einheimischen Pflanzen dieses Planeten verfügen über mehrere potenziell interessante Eigenschaften."
+ POLLEN_2_PROJECT:0 "Laborstudium"
+ POLLEN_2_PROJECT_DESC:0 "Mehrere Studien von renommierten [Root.Owner.GetSpeciesName]-Lehrstühlen präsentieren eine Reihe von Alternativen zum Organisieren zahlreicher Arbeitskräfte. Eine umfassende Meta-Studie dieser neuen Ideen könnte uns eine Lösung für das Problem der nachlassenden Produktivität in schwierigen Kolonie-Umgebungen liefern."
+ POLLEN_3_PROJECT:0 "Ein Gefühl des drohenden Untergangs"
+ POLLEN_3_PROJECT_DESC:0 "Die Situation auf dem pollenverseuchten Planeten ist nun potenziell gefährlich geworden. Es ist von größter Wichtigkeit, dass wir die einzigartige Situation der Kolonie und dabei besonders ihre zunehmend brisanten Umweltfaktoren so schnell wie möglich beurteilen.\n\nSobald wir alle Bedrohungen kennen, können wir innerhalb weniger Stunden einen Aktionsplan aufstellen und umsetzen."
+
+### Starting Events
+
+# Wanderlust
+ ROGUE_SCIENTIST_1_PROJECT:0 "Wanderlust: Was zurückgelassen wurde"
+ ROGUE_SCIENTIST_1_PROJECT_DESC:0 "Die unbemerkte Abreise des Vorsitzenden aus diesem System führte dazu, dass eine verblüffende Menge an Energiesignaturresten in die Solarwinde geworfen wurden.\n\nHoffentlich wird uns eine vollständige Analyse dieser Energien einen Hinweis auf den nächsten Zielort des Vorsitzenden geben, und es einfacher machen, sie in Zukunft bei Bedarf zu verfolgen."
+
+# Mass Extinction
+ MASSEX_1_PROJECT:0 "Analyse: Zerbrochen"
+ MASSEX_1_PROJECT_DESC:0 "Rekonstruieren Sie die traumatische Vergangenheit dieses Himmelskörpers."
+ MASSEX_2_PROJECT:0 "Analyse: Verbrannt"
+ MASSEX_2_PROJECT_DESC:0 "Rekonstruieren Sie die traumatische Vergangenheit dieses Himmelskörpers."
+ MASSEX_3_PROJECT:0 "Analyse: Desolat"
+ MASSEX_3_PROJECT_DESC:0 "Rekonstruieren Sie die traumatische Vergangenheit dieses Himmelskörpers."
+ MASSEX_4_PROJECT:0 "Analyse: Giftig"
+ MASSEX_4_PROJECT_DESC:0 "Rekonstruieren Sie die traumatische Vergangenheit dieses Himmelskörpers."
+ MASSEX_5_PROJECT:0 "Analyse: Frostig"
+ MASSEX_5_PROJECT_DESC:0 "Rekonstruieren Sie die traumatische Vergangenheit dieses Himmelskörpers."

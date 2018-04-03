@@ -1,0 +1,132 @@
+﻿l_russian:
+ 
+ ####################################
+ #COMMON STRINGS
+ ####################################
+ 
+ mandate_unity_reward:0 "£unity  §G(50-1000)§!"
+ 
+ ####################################
+ #MANDATES
+ ####################################
+ 
+ MANDATE_mandate_planet_separatist:0 "Сторонник сепаратистов"
+ MANDATE_mandate_planet_separatist_DESC:0 "Освободить фракцию [Root.GetPopFactionName] и сделать ее независимой империей.\n\nНаграда:\n$mandate_influence_reward_t3$"
+ MANDATE_mandate_emancipation:0 "Великий освободитель"
+ MANDATE_mandate_emancipation_DESC:0 "Искоренить рабство в империи [Root.Owner.GetName].\n\nНаграда:\n$mandate_influence_reward_t3$\n$mandate_happiness_reward_t1$"
+ MANDATE_mandate_emancipation2:0 "Освободитель поселений"
+ MANDATE_mandate_emancipation2_DESC:0 "Освободить всех рабов [Root.Owner.GetSpeciesAdj] в как минимум одном мире.\n\nНаграда:\n$mandate_influence_reward_t3$\n$mandate_happiness_reward_t1$"
+ MANDATE_mandate_orbital_researcher:0 "Орбитальный исследователь"
+ MANDATE_mandate_orbital_researcher_DESC:0 "Ускорить научные исследования империи [Root.Owner.GetName], начав строительство как минимум 4 новых орбитальных научных станций.\n\nНаграда:\n$mandate_influence_reward_t5$"
+ MANDATE_mandate_miner:0 "Космический шахтер"
+ MANDATE_mandate_miner_DESC:0 "Увеличить запасы минералов империи [Root.Owner.GetName], построив как минимум четыре орбитальных добывающих станции.\n\nНаграда:\n$mandate_influence_reward_t5$"
+ MANDATE_mandate_shipwright:0 "Судостроитель"
+ MANDATE_mandate_shipwright_DESC:0 "Обеспечить безопасность и защиту расы [Root.Owner.GetSpeciesAdj], создав к концу правления флотилии, задействующие не менее 75% от нашей общей вместимости флотилий.\n\nНаграда:\n$mandate_influence_reward_t5$"
+ MANDATE_mandate_peacemaker:0 "Миротворец"
+ MANDATE_mandate_peacemaker_DESC:0 "Остановить к концу правления все войны, в которые втянута империя [Root.Owner.GetName].\n\nНаграда:\n$mandate_influence_reward_t5$"
+ MANDATE_mandate_slaver:0 "Рабовладелец"
+ MANDATE_mandate_slaver_DESC:0 "Обеспечить дальнейшее процветание империи [Root.Owner.GetName], легализовав рабство.\n\nНаграда:\n$mandate_influence_reward_t2$"
+ MANDATE_mandate_xenopurger:0 "Борец за чистоту"
+ MANDATE_mandate_xenopurger_DESC:0 "Зачистить чужаков, живущих среди нас, в §Yкак минимум одной колонии§! за время правления.\n\nНаграда:\n$mandate_influence_reward_t2$\n$mandate_happiness_reward_t1$"
+ MANDATE_mandate_nationalist:0 "Репатриатор"
+ MANDATE_mandate_nationalist_DESC:0 "Передать планеты первоначальному владельцу: §Y[parameter:country.GetName]§!.\n\nНаграда:\n$mandate_influence_reward_t3$"
+ 
+ ####################################
+ #MANDATE CHAINS
+ ####################################
+ 
+ mandate_miner_chain_title:0 "Мандат: добыча минералов"
+ mandate_miner_chain_desc:0 "[This.GetRulerTitle] [This.GetRulerName] обещает избирателям, что увеличит £minerals  §Yдобычу минералов§!, построив §Yдобывающие станции§! на орбитах подходящих для этого планет.\n\nНаграда:\n$mandate_unity_reward$"
+ mining_stations_built:0 "Добывающие станции построены"
+ 
+ mandate_orbresearch_chain_title:0 "Мандат: орбитальные исследования"
+ mandate_orbresearch_chain_desc:0 "[This.GetRulerTitle] [This.GetRulerName] обещает избирателям, что увеличит §Yтемп научных исследований§!, построив §Yнаучные станции§! на орбитах подходящих для этого планет.\n\nНаграда:\n$mandate_unity_reward$"
+ orbresearch_built:0 "Научные станции построены"
+ 
+ mandate_xenopurge_chain_title:0 "Мандат: геноцид чужаков"
+ mandate_xenopurge_chain_desc:0 "[This.GetRulerTitle] [This.GetRulerName] обещает избирателям, что §Yочистит§! планету §H[purge_planet.GetName]§! от всех поселений, не относящихся к §Yрасе [Root.GetSpeciesAdj]§!.\n\nНаграда:\n$mandate_influence_reward_t2$\n$mandate_happiness_reward_t1$"
+ world_purged:0 "Планета очищена"
+ 
+ mandate_shipwright_chain_title:0 "Мандат: строительство кораблей"
+ mandate_shipwright_chain_desc:0 "[This.GetRulerTitle] [This.GetRulerName] обещает избирателям увеличить военные расходы и обещает, что §Yк концу его правления будет задействовано как минимум 75% вместимости наших флотилий§!.\n\nНаграда:\n$mandate_influence_reward_t2$"
+ military_presence_maintained:0 "Мандат исполнен"
+ 
+ mandate_fiscal_reserve_chain_title:0 "Мандат: накопление средств"
+ mandate_fiscal_reserve_chain_desc:0 "[This.GetRulerTitle] [This.GetRulerName] обещает избирателям, что будет §Yэкономить§! и §Yразумно расходовать средства§!, и поэтому §H[Root.GetName]§! накопит резерв в размере §Yкак минимум £energy  1000§! энергокредитов §Yк концу правления§!."
+ 
+ mandate_emancipation_chain_title:0 "Мандат: великое освобождение"
+ mandate_emancipation_chain_desc:0 "[This.GetRulerTitle] [This.GetRulerName] обещает избирателям, что §Yотменит рабство§! и сделает его §Yуголовно наказуемым§! за время своего правления.\n\nНаграда:\n$mandate_influence_reward_t3$\n$mandate_happiness_reward_t1$"
+ mandate_fulfilled:0 "Мандат исполнен"
+ 
+ mandate_emancipation2_chain_title:0 "Мандат: освобождение поселений"
+ mandate_emancipation2_chain_desc:0 "[This.GetRulerTitle] [This.GetRulerName] обещает избирателям, что §Yосвободит всех рабов§! на планете §H[free_planet.GetName]§! в ходе своего правления.\n\nНаграда:\n$mandate_influence_reward_t3$\n$mandate_happiness_reward_t1$"
+ planet_freed:0 "Планета освобождена"
+ 
+ mandate_separatist_chain_title:0 "Мандат: сепаратизм"
+ mandate_separatist_chain_desc:0 "[This.GetRulerTitle] [This.GetRulerName] обещает избирателям, что §Yосвободит§! планету §H[release_planet.GetName]§! и сделает ее независимой империей. Обратитесь к списку §Yфракций§! за подробностями.\n\nНаграда:\n$mandate_influence_reward_t3$"
+ empire_released:0 "Империя освобождена"
+ 
+ mandate_peacemaker_chain_title:0 "Мандат: миротворец"
+ mandate_peacemaker_chain_desc:0 "[This.GetRulerTitle] [This.GetRulerName] обещает избирателям, что §Yраса [Root.GetSpeciesAdj] прекратит вмешиваться§! во все войны к концу правления.\n\nНаграда:\n$mandate_influence_reward_t2$"
+ no_engagements:0 "Все конфликты остановлены"
+ 
+ mandate_slaver_chain_title:0 "Мандат: порабощение"
+ mandate_slaver_chain_desc:0 "[This.GetRulerTitle] [This.GetRulerName] обещает избирателям, что §Yпоработит§! как минимум §Y5 поселений§! к концу своего правления.\n\nНаграда:\n$mandate_influence_reward_t2$"
+ pops_enslaved:0 "Поселения порабощены"
+ 
+ mandate_nationalist_chain_title:0 "Мандат: репатриация"
+ mandate_nationalist_chain_desc:0 "[This.GetRulerTitle] [This.GetRulerName] обещает избирателям, что §Yвернет§! империи §H[ceding_empire.GetName]§! ее колонии к концу своего правления. Это можно осуществить с помощью списка фракций.\n\nНаграда:\n$mandate_influence_reward_t3$"
+ planet_ceded:0 "Планета передана"
+ 
+ ####################################
+ #:0 "MANDATE EVENTS"
+ ####################################
+ 
+ mandate.1.title:0 "Мандат нового правителя"
+ mandate.1.desc:0 "[Root.GetRulerName] побеждает на выборах и получает титул §Y[Root.GetRulerTitle]§! империи §H[Root.GetName]§!.\n\nОбратитесь к §Yжурналу§! за подробностями о §Yмандате§!."
+ mandate.2.title:0 "Мандат нарушен"
+ mandate.2.desc:0 "[Root.GetRulerTitle] завершает свое правление, однако предвыборные обещания до сих пор не выполнены."
+ 
+ # Separatist
+ mandate.100.title:0 "Мандат о поддержке сепаратистов исполнен"
+ mandate.100.desc:0 "Выполняя свое обещание, [Root.GetRulerTitle] [Root.GetRulerName] освобождает планету §H[released_planet.GetName]§! в виде империи, являющейся §Yвассалом§! государства §H[Root.GetName].§!"
+ 
+ # Miner
+ mandate.111.title:0 "Мандат о добыче минералов исполнен"
+ mandate.111.desc:0 "Выполняя свое обещание, [Root.GetRulerTitle] [Root.GetRulerName] завершает строительство дополнительных добывающих станций."
+ 
+ # Orbital Researcher
+ mandate.121.title:0 "Мандат по орбитальным исследованиям исполнен"
+ mandate.121.desc:0 "Выполняя свое обещание, [Root.GetRulerTitle] [Root.GetRulerName] завершает строительство дополнительных научных станций."
+ 
+ # Xenopurger
+ mandate.132.title:0 "Мандат о борьбе за чистоту исполнен"
+ mandate.132.desc:0 "Выполняя свое обещание, [Root.GetRulerTitle] [Root.GetRulerName] очищает колонию на планете [From.GetName] от элементов, не относящихся к расе [Root.GetSpeciesAdj]."
+ 
+ # Shipwright
+ mandate.141.title:0 "Мандат о судостроении исполнен"
+ mandate.141.desc:0 "[Root.GetRulerTitle] [Root.GetRulerName] может гордиться выполненным обещанием: наши флотилии задействуют как минимум 75% вместимости флотилий."
+ mandate.142.title:0 "Мандат нарушен"
+ mandate.142.desc:0 "[Root.GetRulerTitle] [Root.GetRulerName] завершает правление, не выполнив свои предвыборные обещания в срок."
+ 
+ # Emancipator 1
+ mandate.150.title:0 "Мандат о великом освобождении исполнен"
+ mandate.150.desc:0 "Выполняя свое обещание, [Root.GetRulerTitle] [Root.GetRulerName] делает §Yрабство§! в империи[Root.GetName] незаконным."
+ 
+ # Emancipator 2
+ mandate.155.title:0 "Мандат по освобождению поселений исполнен"
+ mandate.155.desc:0 "Выполняя свое обещание, [Root.GetRulerTitle] [Root.GetRulerName] полностью освобождает от рабства поселения на планете [From.GetName]."
+ 
+ # Peacemaker
+ mandate.161.title:0 "Мандат о миротворчестве исполнен"
+ mandate.161.desc:0 "Выполняя свое обещание, [Root.GetRulerTitle] [Root.GetRulerName] ограждает империю §H[Root.GetName]§! от участия в текущих конфликтах."
+ mandate.162.title:0 "Мандат нарушен"
+ mandate.162.desc:0 "[Root.GetRulerTitle] [Root.GetRulerName] завершает правление, не выполнив свои предвыборные обещания в срок."
+ 
+ # Slaver
+ mandate.171.title:0 "Мандат о порабощении исполнен"
+ mandate.171.desc:0 "Выполняя свое обещание, [Root.GetRulerTitle] [Root.GetRulerName] порабощает §H5 поселений§!."
+ 
+ # Nationalist
+ mandate.180.title:0 "Мандат о репатриации исполнен"
+ mandate.180.desc:0 "Выполняя свое обещание, [Root.GetRulerTitle] §Y[Root.GetRulerName]§! уступает империи §H[ceding_empire.GetName]§! захваченные колонии."

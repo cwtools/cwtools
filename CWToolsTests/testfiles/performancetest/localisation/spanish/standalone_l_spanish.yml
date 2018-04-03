@@ -1,0 +1,9 @@
+﻿l_spanish:
+ ENTERING_GAME_LOBBY:0 "Entrando en ajustes de partida"
+ SERVER_LAUNCHING_MP:0 "Iniciando multijugador"
+ SERVER_NAME:0 "Nombre del servidor: $NAME$"
+ SERVER_PASSWORD:0 "Contraseña del servidor: $PASSWORD$"
+ LAUNCHING_GAME:0 "Iniciando partida"
+ STANDALONE_WAITING_FOR_PLAYERS:0 "Esperando a $NUM$ jugadores"
+ RECEIVED_GAMESERVER_ID:0 "ID servidor recibida: $SERVERID$"
+ RECEIVED_LOBBY_SERVER:0 "Servidor de salas recibido"

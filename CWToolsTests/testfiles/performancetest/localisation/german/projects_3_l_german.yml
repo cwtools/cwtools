@@ -1,0 +1,43 @@
+﻿l_german:
+
+ ####################################
+ # Special Projects
+ ####################################
+
+ ### Anomaly Events
+ DERELICT_SHIP_PROJECT:0 "Aufgegebenes Schiff"
+ DERELICT_SHIP_PROJECT_DESC:0 "Ein Schiff treibt ohne ein- oder ausgehende Signale im Weltraum. Wenn wir es aus der Nähe betrachten würden, könnte uns das Anhaltspunkte über das Schicksal der Besatzung geben."
+ ODD_STAR_PROJECT:0 "Feuer des Hochofens"
+ ODD_STAR_PROJECT_DESC:0 "Dieser Stern scheint in der Lage zu sein, Beryllium zu entzünden, was nicht möglich sein dürfte."
+ IMPROBABLE_TEAPOT_PROJECT:0 "Unwahrscheinliche Keramik"
+ IMPROBABLE_TEAPOT_PROJECT_DESC:0 "Ein Keramiktopf im Orbit einer Sonne ... das ist mehr als unwahrscheinlich. Herauszufinden, was der Topf dort verloren hat, wird einige Zeit erfordern. Wer weiß, wie die Antwort lautet ... oder ob es überhaupt eine gibt?"
+ AI_ADMIRAL_PROJECT:0 "Krieger aus dem Sand"
+ AI_ADMIRAL_PROJECT_DESC:0 "Auf einem Wüstenplanet ist eine uralte Flotte abgestürzt, aber ihre KI ist noch immer aktiv. Wenn wir nicht versuchen, sie unter Kontrolle zu bringen, könnten sich die Dinge zum Schlimmsten wenden."
+ MINING_GEAR_PROJECT:0 "Amok-Bohrungen"
+ MINING_GEAR_PROJECT_DESC:0 "Ein uralter Bagger gräbt sich tief in einen gigantischen Asteroiden. Wenn wir ihn stoppen, bevor er von Trümmern zerschmettert wird, könnten wir von seiner Konstruktion etwas Lohnendes lernen."
+ ABANDONED_ARRAY_PROJECT:0 "Aufgegebene Sensormatrix"
+ ABANDONED_ARRAY_PROJECT_DESC:0 "Eine aufgegebene Sensorschüssel scheint noch in betriebsfähigem Zustand zu sein. Wenn wir einige Reparaturen durchführen und herausfinden, wie sie funktioniert, könnten wir uns mehr Einblicke in benachbarte Systeme verschaffen."
+ ALIEN_RACER_PROJECT:0 "Treibend"
+ ALIEN_RACER_PROJECT_DESC:0 "In einem Asteroidengürtel treibt ein Alien-Schiff. Es antwortet nicht auf unsere Grußworte. Wir sollten untersuchen, was da vor sich geht."
+ PSIONIC_HORSES_PROJECT:0 "Die Herrscher der Ebenen"
+ PSIONIC_HORSES_PROJECT_DESC:0 "Eine majestätische Säugetierrasse streift über Wassergrasfelder. Sie wirken schreckhaft und scheinen unsere Bewegungen zu erahnen. Sie aus der Nähe zu studieren, sollte uns weitere Informationen verschaffen."
+ ROBOT_CLEANERS_PROJECT:0 "Die zurückgelassenen Maschinen"
+ ROBOT_CLEANERS_PROJECT_DESC:0 "Auf einem weit entfernten Planeten wurde eine Einrichtung voller Roboter gefunden. Wenn wir sie reaktivieren, könnten sie das Geheimnis der Einrichtung offenbaren."
+ ALIEN_MONSTER_ON_SHIP:0 "Alien-Biest an Bord"
+ ALIEN_MONSTER_ON_SHIP_DESC:0 "[Root.Owner.GetMonsterOnShipDesc]" #A custom scripted desc that allows for MI support
+ TREE_OF_LIFE:0 "Der Baum"
+ TREE_OF_LIFE_DESC:0 "Ein Baum treibt trotzig durch die Leere des Weltraums. Er scheint mit seinem Saft Weltraummonster anzulocken. Wir sollten herausfinden, was es mit diesem Baum auf sich hat."
+ MASTERS_WRITINGS_POLITICS:0 "Übersetzung von Siedlertexten"
+ MASTERS_WRITINGS_POLITICS_DESC:0 "Wir haben einen Stapel Dokumente gefunden, die für die mittlerweile ausgestorbene Gemeinschaft anscheinend wichtig gewesen sind. Sie zu übersetzen wird uns sicherlich tiefere Einblicke in ihre Geschichte und Kultur bieten."
+ MASTERS_WRITINGS_PHILOSOPHY:0 "Übersetzung von Entdeckertexten"
+ MASTERS_WRITINGS_PHILOSOPHY_DESC:0 "Wir haben einige Texte gefunden, die von einer Alien-Expedition mitgeführt wurden. Wenn wir sie übersetzen, könnten wir mehr Informationen aufdecken und etwas über die vorherigen Besitzer erfahren. "
+ MASTERS_WRITINGS_DIPLOMACY:0 "Übersetzung von Händlertexten"
+ MASTERS_WRITINGS_DIPLOMACY_DESC:0 "In den Ruinen eines mutmaßlichen interstellaren Handelsknotenpunkts haben wir einige Texte gefunden. Wenn wir diese Dokumente übersetzen, könnten wir mehr über seine Gründer erfahren."
+ MASTERS_WRITINGS_WAR:0 "Übersetzung von Kriegertexten"
+ MASTERS_WRITINGS_WAR_DESC:0 "Auf einem lange verlassenen Schlachtfeld haben wir die Überreste eines Kriegervolks gefunden. Die Leichen hatten Texte bei sich, die für sie wichtig gewesen sein müssen. Wenn wir diese Dokumente übersetzen, könnten wir mehr über dieses Volk und seine Kriege erfahren."
+ CRYOPOD_FOUND_PROJECT:0 "Unterirdischer Bunker"
+ CRYOPOD_FOUND_PROJECT_DESC:0 "Unter einem Berg haben wir einen Bunker gefunden, in dem sich wertvolle Informationen oder Ausrüstungsgegenstände befinden könnten. Um den Berg herum leben aber viele gefährliche Wildtiere, die wir erst zähmen müssen, um den Bunker zu erreichen."
+ CRYOPOD_OPENING_PROJECT:0 "Aufknacken - aber wie?"
+ CRYOPOD_OPENING_PROJECT_DESC:0 "In dem unterirdischen Bunker, den wir gefunden hatten, befand sich nur eine Art Container. Wenn wir herausfinden möchten, was sich darin befindet, müssen wir einen Weg finden, ihn aufzuknacken."
+ ANCIENT_OCEAN_SHIP:0 "Gesunkener Kreuzer"
+ ANCIENT_OCEAN_SHIP_DESC:0 "Unter den Wellen von [Root.GetName] liegt ein Alien-Schlachtkreuzer. Würden wir ihn bergen, könnten wir uns wertvolle Technologien oder Ressourcen sichern."

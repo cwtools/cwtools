@@ -1,0 +1,877 @@
+﻿l_french:
+ ####################################
+ #	Pop factions
+ ####################################
+ # Demand TITLES are run straight from a pop faction with no
+ # assembled event scope, [Owner.GetName] to get country name.
+ # Tooltips, DESCS and events use the usual [Root.Owner.GetName]
+
+ FACTION_COUNTRY_SEPARATIST:0 "Séparatistes [parameter:owner.GetSpeciesAdj]"
+
+ # Generic Actions
+ FACTION_ACTION_SUPPRESS_FOLLOWERS:0 "Répression des fidèles"
+ FACTION_ACTION_SUPPRESS_FOLLOWERS_DESC:0 "Rendre la vie difficile aux sympathisants peut être un moyen de dissuasion efficace."
+ FACTION_ACTION_SUPPRESS_FOLLOWERS_VALID:0 ""
+ FACTION_ACTION_ASSASSINATE_LEADER:0 "Assassiner le meneur"
+ FACTION_ACTION_ASSASSINATE_LEADER_DESC:0 "Priver la faction de son meneur la calmera, pour un certain temps."
+ FACTION_ACTION_ASSASSINATE_LEADER_INVALID:1 "Aucun leader de faction n'a été visé par une tentative d'assassinat au cours des trois derniers mois."
+ FACTION_ACTION_FAVOR:0 "Faveur"
+ FACTION_ACTION_FAVOR_DESC:0 "Décerne vos faveurs à ceux qui sont loyaux au régime."
+ FACTION_ACTION_FAVOR_TOOLTIP:0 "Ajoute le modificateur §YFavorisé§! à toutes les pops de §Y[Root.GetName]§!, augmentant légèrement le bonheur."
+ FACTION_ACTION_FAVOR_INVALID:0 "Nos faveurs ne peuvent être accordées qu'une fois par an, de peur que cela ne devienne un outil inefficace."
+ FACTION_ACTION_TYRANNIZE:0 "Tyranniser"
+ FACTION_ACTION_TYRANNIZE_DESC:0 "Fait baisser de manière délibérée le soutien populaire du régime."
+ FACTION_ACTION_TYRANNIZE_TOOLTIP:0 "Ajoute le modificateur §YTyrannisé§! à toutes les pops de §Y[Root.GetName]§!, faisant considérablement baisser le bonheur.\n"
+ FACTION_ACTION_TYRANNIZE_INVALID:0 "Nous ne pouvons tyranniser nos sujets que tous les six mois, de peur que cela ne devienne un outil inefficace."
+ ACCEPT_DEMANDS_NO_ACTIVE_DEMANDS:1 "§RCette faction n'a aucune question à l'heure actuelle§!"
+
+ # Generic Support Effects
+ SUPPORT_EFFECT_RADICALIZATION:0 "Risque de radicalisation"
+ SUPPORT_EFFECT_RADICALIZATION_DESC:0 "Une poussée de la rhétorique de radicalisation augmente le militantisme de la faction."
+ SUPPORT_EFFECT_REVOLT:0 "Risque de rébellion"
+ SUPPORT_EFFECT_REVOLT_DESC:0 "La faction organise un soulèvement armé sur une colonie."
+ SUPPORT_EFFECT_RIOT:0 "Risque d'émeute"
+ SUPPORT_EFFECT_RIOT_DESC:1 "La faction manifeste violemment, en s'en prenant aux biens d'une colonie."
+
+ # No Demands
+ POP_FACTION_NO_DEMANDS:1 "Pas de question"
+ POP_FACTION_NO_DEMANDS_DESC:1 "Le $FACTION$ est dévoué à la $COUNTRY$ et n'a pour l'heure aucune question particulière à soulever."
+ POP_FACTION_NO_CURRENT_DEMANDS:1 "Pas de question à l'heure actuelle"
+ POP_FACTION_NO_CURRENT_DEMANDS_DESC:1 "Le $FACTION$ n'a pour l'heure aucune question particulière à soulever."
+
+# No effects
+ POP_FACTION_NO_EFFECTS:0 "Pas d'effets"
+ POP_FACTION_NO_EFFECTS_DESC:0 "Les $FACTION$ n'auront jamais d'effets."
+ POP_FACTION_NO_CURRENT_EFFECTS:0 "Pas d'effets en cours"
+ POP_FACTION_NO_CURRENT_EFFECTS_DESC:0 "Les $FACTION$ n'ont pas d'effets en cours."
+
+ ### LOYALISTS
+ pft_loyalist:1 "Loyalistes"
+ pft_loyalist_desc:1 "La faction loyaliste regroupe les membres les plus satisfaits de la population. Ils ne demandent rien de particulier et le statu quo leur convient parfaitement."
+ 
+ ### SEPARATIST
+
+ # Separatist Demands
+ POP_FACTION_SEPARATIST_DEMAND_TITLE_1:0 "Autonomie de §H[parameter:planet.GetName]§!"
+ POP_FACTION_SEPARATIST_DEMAND_DESC_1:0 "Établit un nouveau Secteur avec §H[parameter:planet.GetName]§! comme capitale."
+ POP_FACTION_SEPARATIST_DEMAND_TITLE_2:0 "Indépendance de §H[parameter:planet.GetName]§!"
+ POP_FACTION_SEPARATIST_DEMAND_DESC_2:0 "Libère §H[parameter:planet.GetName]§! comme capitale d'un empire indépendant"
+ 
+ ### PLANET SEPARATISTS
+ POP_FACTION_PLANET_SEPARATIST_DEMAND_TITLE:1 "Indépendance de [parameter:Planet.GetName]"
+ POP_FACTION_PLANET_SEPARATIST_DEMAND_DESC:0 "Les séparatistes exigent l'indépendance de §Y[parameter:Planet.GetName]§!."
+ POP_FACTION_PLANET_SEPARATIST_STRIKES_TITLE:0 "Grèves"
+ POP_FACTION_PLANET_SEPARATIST_STRIKES_DESC:0 "Réduction de la production sur la planète du fait du manque de main-d'oeuvre."
+ POP_FACTION_PLANET_SEPARATIST_REBELLION_TITLE:0 "Rébellion"
+ POP_FACTION_PLANET_SEPARATIST_OCCUPIED:0 "La planète est occupée"
+ POP_FACTION_PLANET_SEPARATIST_COMBAT:0 "Combats au sol"
+ POP_FACTION_PLANET_SEPARATIST_LEADER_IS_RULER:0 "Le meneur de la faction est le dirigeant"
+ POP_FACTION_PLANET_SEPARATIST_REBELLION_DESC:1 "Chacune des pops appartenant à la faction lève une §Rarmée défensive§! pour tenter de prendre le contrôle de la planète."
+ POP_FACTION_PLANET_SEPARATIST_GATHER_SUPPORT:0 "Ralliements"
+ POP_FACTION_PLANET_SEPARATIST_GATHER_SUPPORT_DESC:0 "Les séparatistes rallient de nouveaux partisans en modifiant les éthiques ou en réduisant le bonheur des autres pops."
+ POP_FACTION_PLANET_SEPARATIST_REORGANIZING:0 "Réorganisation"
+ POP_FACTION_PLANET_SEPARATIST_RECENTLY_FULL_SUPPORT:1 "Toutes les pops de la planète appartiennent à la faction"
+ POP_FACTION_PLANET_SEPARATIST_IS_NOT_OCCUPIED:0 "La planète n'est pas occupée"
+ POP_FACTION_PLANET_SEPARATIST_NO_GROUND_COMBAT:0 "Pas de combats au sol sur la planète"
+ POP_FACTION_PLANET_SEPARATIST_GRANT_INDEPENDENCE_TITLE:0 "Accorder l'indépendance"
+ POP_FACTION_PLANET_SEPARATIST_GRANT_INDEPENDENCE_DESC:0 "Accorderait à la colonie de §Y[parameter:Planet.GetName]§! son indépendance en tant qu'empire vassal."
+ POP_FACTION_PLANET_SEPARATIST_SABOTAGE_TITLE:0 "Émeutes"
+ POP_FACTION_PLANET_SEPARATIST_RECENT_SABOTAGE:0 "Émeutes récentes"
+ POP_FACTION_PLANET_SEPARATIST_SABOTAGE_DESC:0 "Les émeutes §Rdétruisent§! un bâtiment sur la planète."
+ POP_FACTION_PLANET_SEPARATIST_NOTHING_TO_RUIN:0 "Plus aucun bâtiment n'est intact"
+ 
+ ### Sector separatists
+ pft_sector_separatists:0 "Séparatistes sectoriels"
+ pft_sector_separatists_desc:0 "Des séparatistes sectoriels peuvent faire leur apparition sur les mondes des secteurs pour tenter de libérer leurs voisins stellaires du joug impérial. S'ils bénéficient d'un soutien populaire suffisant, ils peuvent même prendre les armes.\n\n§HLes séparatistes sectoriels n'apparaîtront jamais dans notre secteur principal.§!"
+ POP_FACTION_SECTOR_SEPARATIST_DEMAND_TITLE:1 "Indépendance du secteur de [parameter:sector.GetName]"
+ POP_FACTION_SECTOR_SEPARATIST_DEMAND_DESC:0 "Les séparatistes sectoriels réclament l'indépendance du secteur §Y[parameter:sector.GetName]!.§!"
+ POP_FACTION_SECTOR_SEPARATIST_GRANT_INDEPENDENCE_TITLE:0 "Accorder l'indépendance au secteur"
+ POP_FACTION_SECTOR_SEPARATIST_GRANT_INDEPENDENCE_DESC:0 "Accordez l'indépendance aux colonies du secteur §Y[parameter:sector.GetName]§!"
+ POP_FACTION_SECTOR_SEPARATIST_IS_NOT_OCCUPIED:0 "Aucune planète du secteur n'est occupée"
+ POP_FACTION_SECTOR_SEPARATIST_NO_GROUND_COMBAT:0 "Aucun combat au sol sur les planètes du secteur"
+ 
+ 
+ 
+ ### NATIONALISTS
+
+ pft_nationalist:0 "Faction de rapatriement"
+ pft_nationalist_desc:0 "Les pops des factions de rapatriement veulent se libérer du joug de notre empire pour former des nations indépendantes et réintégrer l'empire dont elles sont originaires. D'autres pops risquent de suivre leur exemple si elles trouvent une puissance étrangère plus attirante que la nôtre."
+
+ POP_FACTION_NATIONALIST_DEMAND_TITLE:0 "Retour au §Y[parameter:country.GetName]§!"
+ POP_FACTION_NATIONALIST_DEMAND_DESC:0 "Toutes les planètes abritant des pops qui appartiennent à cette faction retournent au §H[parameter:country.GetName]§!."
+ POP_FACTION_NATIONALIST_SABOTAGE_TITLE:0 "Sabotage"
+ POP_FACTION_NATIONALIST_SABOTAGE_DESC:0 "Les membres de cette faction ont §Rdétruit§! un bâtiment."
+ POP_FACTION_NATIONALIST_CORRUPTION_TITLE:0 "Corruption"
+ POP_FACTION_NATIONALIST_CORRUPTION_DESC:1 "Production réduite sur toutes les planètes abritant des pops qui appartiennent à cette faction."
+ POP_FACTION_NATIONALIST_REBELLION_TITLE:0 "Rébellion"
+ POP_FACTION_NATIONALIST_REBELLION_DESC:1 "$POP_FACTION_PLANET_SEPARATIST_REBELLION_DESC$"
+ POP_FACTION_NATIONALIST_LEADER_IS_RULER:1 "Le meneur de la faction est le dirigeant"
+ POP_FACTION_NATIONALIST_RECENT_SABOTAGE:0 "Sabotage récent"
+ POP_FACTION_NATIONALIST_MEMBERS_OCCUPIED:0 "Occupations"
+ POP_FACTION_NATIONALIST_MEMBERS_GROUND_COMBAT:0 "Combat au sol"
+ POP_FACTION_NATIONALIST_INTEGRATION_CAMPAIGN_1_TITLE:0 "Campagne d'intégration 1"
+ POP_FACTION_NATIONALIST_INTEGRATION_CAMPAIGN_1_DESC:0 "Réduisez les frustrations des nationalistes en les aidant à s'intégrer à leur nouvelle société."
+ POP_FACTION_NATIONALIST_INTEGRATION_CAMPAIGN_2_TITLE:0 "Campagne d'intégration 2"
+ POP_FACTION_NATIONALIST_INTEGRATION_CAMPAIGN_2_DESC:0 "Réduisez les frustrations des nationalistes en les aidant à s'intégrer à leur nouvelle société."
+ POP_FACTION_NATIONALIST_INTEGRATION_CAMPAIGN_3_TITLE:0 "Campagne d'intégration 3"
+ POP_FACTION_NATIONALIST_INTEGRATION_CAMPAIGN_3_DESC:0 "Réduisez les frustrations des nationalistes en les aidant à s'intégrer à leur nouvelle société."
+ POP_FACTION_NATIONALIST_RELEASE_PLANETS_TITLE:0 "Retour des planètes"
+ POP_FACTION_NATIONALIST_RELEASE_PLANETS_DESC:0 "Toutes les planètes abritant des pops qui appartiennent à cette faction retournent au §H[parameter:country.GetName]§!."
+ POP_FACTION_NATIONALIST_RELEASE_PLANETS_OCCUPIED:0 "Aucune des planètes n'est occupée"
+ POP_FACTION_NATIONALIST_RELEASE_PLANETS_COMBAT:0 "Aucun combat au sol sur les planètes"
+
+ ### SLAVES
+
+ slave_attraction_title:0 "§R---§!"
+ docile_slaves_attraction_desc:0 "Les pops asservies appartiendront toujours à une faction d'esclaves, à l'exception des pops robotiques non conscientes. Aucune autre pop ne rejoindra cette faction.\n\n§HCette valeur représente l'attraction des esclaves dociles pour les pops asservies.§!"
+
+ malcontent_slaves_attraction_desc:0 "Les pops asservies appartiendront toujours à une faction d'esclaves, à l'exception des pops robotiques non conscientes. Aucune autre pop ne rejoindra cette faction.\n\n§HCette valeur représente l'attraction des esclaves rétifs pour les pops asservies.§!"
+
+ purged_attraction_title:1 "§R---§!"
+ purged_attraction_desc:1 "Les pops faisant l'objet d'une purge appartiendront toujours à la faction anti-purge, à l'exception des pops robotiques.\n\nAucune autre pop ne les rejoindra."
+
+ # Slave Demands
+ pft_slave:1 "Faction des esclaves"
+ pft_slave_desc:1 "La faction des esclaves rassemble les esclaves de notre empire. Leur principale revendication est l'émancipation.\n\n§HToutes les pops réduites en esclavage rejoignent automatiquement cette faction.§!"
+
+ pft_docile_slaves:0 "Faction des esclaves dociles"
+ pft_docile_slaves_desc:0 "La faction des esclaves dociles est composée de tout ou partie des pops asservies de l'empire. Ils sont généralement obéissants et ne souhaitent qu'une amélioration de leurs conditions de travail.\n\n§HTous les esclaves appartiennent soit à la faction des esclaves dociles ou à celle des esclaves rétifs.§!"
+
+ pft_malcontent_slaves:0 "Faction des esclaves rétifs"
+ pft_malcontent_slaves_desc:0 "La faction des esclaves mécontents est composée de tout ou partie des pops asservies de l'empire. Ils sont insoumis et aspirent à l'émancipation.\n\n§HTous les esclaves appartiennent soit à la faction des esclaves dociles, soit à celle des esclaves rétifs.§!"
+
+ pft_emancipation:0 "$POP_FACTION_SLAVE_DEMAND_TITLE_1$"
+ pft_emancipation_desc:1 "Cette faction cherche à mettre un terme à l'esclavage."
+
+ POP_FACTION_DOCILE_SLAVES_DEMAND_TITLE_1:0 "Esclavage réglementé"
+ POP_FACTION_DOCILE_SLAVES_DEMAND_DESC_1:0 "Les pops de cette faction aspirent à une servitude un peu plus agréable grâce à une politique d'§Hesclavage réglementé§!."
+
+ POP_FACTION_MALCONTENT_SLAVES_DEMAND_TITLE_1:0 "$POP_FACTION_SLAVE_DEMAND_TITLE_1$"
+ POP_FACTION_MALCONTENT_SLAVES_DEMAND_DESC_1:0 "$POP_FACTION_SLAVE_DEMAND_DESC_1$"
+
+ POP_FACTION_SLAVE_DEMAND_TITLE_1:1 "Émancipation"
+ POP_FACTION_SLAVE_DEMAND_DESC_1:1 "Les pops de cette faction n'ont qu'une seule revendication : devenir libres."
+ FACTION_ACTION_SLAVE_EMANCIPATE_ALL:0 "Émanciper les esclaves"
+ FACTION_ACTION_SLAVE_EMANCIPATE_ALL_DESC:1 "Émancipez toutes les pops réduites en esclavage."
+
+ # Slave Actions
+
+ FACTION_ACTION_MALCONTENT_SLAVES_INTERSTELLAR_RAILROAD_TOOLTIP_2:1 "La faction compte au moins §R6§! pops."
+ FACTION_ACTION_MALCONTENT_SLAVES_INTERSTELLAR_RAILROAD_TOOLTIP_3:1 "La faction compte au moins §R8§! pops."
+ FACTION_ACTION_MALCONTENT_SLAVES_INTERSTELLAR_RAILROAD_TOOLTIP_4:1 "La faction compte plus de §R10§! pops."
+
+
+ FACTION_ACTION_SLAVE_HARSH_TREATMENT:0 "Mauvais traitements"
+ FACTION_ACTION_SLAVE_HARSH_TREATMENT_DESC:0 "Remet les prisonniers à leur place."
+ FACTION_ACTION_SLAVE_FORCE_FEEDING:0 "Alimentation forcée"
+ FACTION_ACTION_SLAVE_FORCE_FEEDING_DESC:0 "Fournit de force les nutriments nécessaires à tous les grévistes de la faim."
+
+ docile_slaves_demand_fulfilled:0 "Ses exigences étant satisfaites, cette faction n'a plus aucune conséquence et aucune action n'a à être prise contre elle."
+
+ # Slave Support Effects
+
+ POP_FACTION_DOCILE_SLAVES_UNREST:0 "Agitation"
+ POP_FACTION_DOCILE_SLAVES_UNREST_DESC:0 "L'opposition parmi les esclaves réduit la productivité et le bonheur sur une planète disposant de travailleurs asservis."
+ POP_FACTION_DOCILE_SLAVES_RECENT_UNREST:0 "Les braises de l'agitation sont encore fumantes."
+
+ POP_FACTION_DOCILE_SLAVES_ROVING_GANGS:0 "Foules déchaînées"
+ POP_FACTION_DOCILE_SLAVES_ROVING_GANGS_DESC:0 "Les esclaves mécontents abandonnent fréquemment leurs tâches pour affronter d'autres pops."
+ POP_FACTION_DOCILE_SLAVES_RECENT_ROVING_GANGS:0 "Les esclaves mécontents doivent encore se regrouper."
+
+ POP_FACTION_DOCILE_SLAVES_RADICALIZATION:0 "Radicalisation"
+ POP_FACTION_DOCILE_SLAVES_RADICALIZATION_DESC:0 "De nombreux esclaves se radicalisent, rejoignant la dangereuse faction des esclaves rétifs."
+ POP_FACTION_DOCILE_SLAVES_RECENT_RADICALIZATION:0 "Le mécontentement n'a pas encore atteint un niveau critique puisque les esclaves radicalisés ont quitté cette faction."
+
+ POP_FACTION_MALCONTENT_SLAVES_INTERSTELLAR_RAILROAD:0 "Évacuations interstellaires"
+ POP_FACTION_MALCONTENT_SLAVES_INTERSTELLAR_RAILROAD_DESC:0 "Les esclaves se sont organisés pour faire quitter l'empire à de nombreuses pops asservies."
+ POP_FACTION_MALCONTENT_SLAVES_RECENT_INTERSTELLAR_RAILROAD:0 "Les cadres de la faction se font discrets après la dernière opération d'évacuation de pops asservies."
+
+ POP_FACTION_MALCONTENT_SLAVES_RIOTS:0 "Émeutes serviles"
+ POP_FACTION_MALCONTENT_SLAVES_RIOTS_DESC:0 "Les esclaves rebelles provoquent des émeutes, ce qui cause des dégâts importants."
+ POP_FACTION_MALCONTENT_SLAVES_RECENT_RIOTS:0 "Les esclaves rétifs doivent encore se réorganiser après la dernière émeute."
+
+ POP_FACTION_MALCONTENT_SLAVES_REVOLT:0 "Révolte servile"
+ POP_FACTION_MALCONTENT_SLAVES_REVOLT_DESC:0 "Les esclaves rétifs organisent une rébellion armée pour tenter de s'emparer de toutes les colonies sur lesquelles ils travaillent."
+ POP_FACTION_MALCONTENT_SLAVES_RECENT_REVOLT:0 "Les esclaves rétifs doivent recouvrer leurs forces après la dernière révolte."
+
+ SUPPORT_EFFECT_SLAVE_UPRISING:0 "Risque de soulèvement d'esclaves"
+ SUPPORT_EFFECT_SLAVE_UPRISING_DESC:0 "Les esclaves prennent les armes et forment une milice rebelle."
+ SUPPORT_EFFECT_HUNGER_STRIKE:0 "Risque de grève de la faim"
+ SUPPORT_EFFECT_HUNGER_STRIKE_DESC:0 "Les esclaves entament une grève de la faim, diminuant grandement leur productivité."
+
+ ### EMANCIPATION MOVEMENT
+
+ # Emancipation Movement Demands
+ POP_FACTION_EMANCIPATION_DEMAND_TITLE_1:0 "Journée de travail de six heures"
+ POP_FACTION_EMANCIPATION_DEMAND_TITLE_2:0 "Libérer tous les esclaves"
+ POP_FACTION_EMANCIPATION_DEMAND_TITLE_3:0 "Bannir l'esclavage"
+ POP_FACTION_EMANCIPATION_DEMAND_DESC_1:0 "Prolongez les périodes de repos obligatoires."
+ POP_FACTION_EMANCIPATION_DEMAND_DESC_2:0 "Libère de leur servitude tous les esclaves actuels de [Root.Owner.GetName]."
+ POP_FACTION_EMANCIPATION_DEMAND_DESC_3:0 "Désactive la politique d'§Yautorisation de l'esclavage§!"
+
+ # Emancipation Movement Actions
+
+ # Emancipation Movement Support Effects
+
+ POP_FACTION_EMANCIPATION_STOKING_THE_FIRE:0 "Alimenter la colère"
+ POP_FACTION_EMANCIPATION_STOKING_THE_FIRE_DESC:0 "Des agents de la faction cherchent à radicaliser et armer les pops asservies."
+ POP_FACTION_EMANCIPATION_RECENT_STOKING_THE_FIRE:0 "Le mouvement se fait discret après une tentative de radicalisation couronnée de succès."
+ SUPPORT_EFFECT_EMANCIPATION_RADICALIZE_SLAVES:0 "Radicaliser les esclaves"
+ SUPPORT_EFFECT_EMANCIPATION_RADICALIZE_SLAVES_DESC:0 "Une tentative clandestine mais coordonnée de pousser les esclaves à la révolte."
+ SUPPORT_EFFECT_EMANCIPATION_SMUGGLE_OFF_WORLD:0 "Évacuation interstellaire"
+ SUPPORT_EFFECT_EMANCIPATION_SMUGGLE_OFF_WORLD_DESC:0 "Une pop asservie a quitté clandestinement - et définitivement - la planète."
+
+ ### PEACE MOVEMENT
+
+ # Demands
+ POP_FACTION_PEACE_DEMAND_TITLE_1:0 "Terminer la guerre"
+ POP_FACTION_PEACE_DEMAND_DESC_1:0 "Coupe tous les liens diplomatiques apportant leur concours dans le conflit avec [parameter:enemy.GetName] et déclare une paix blanche."
+
+ # Actions
+
+ # Support Effects
+ SUPPORT_EFFECT_PEACE_STRIKE:0 "Grève"
+ SUPPORT_EFFECT_PEACE_STRIKE_DESC:0 "Les contestataires pacifiques peuvent refuser de travailler, ce qui conduit à une baisse de productivité générale."
+ SUPPORT_EFFECT_PEACE_SABOTAGE:0 "Sabotage"
+ SUPPORT_EFFECT_PEACE_SABOTAGE_DESC:0 "Écoutez tous, c'est du sabotage."
+
+ ### PURGED
+
+ pft_purged:0 "Faction anti-purge"
+ pft_purged_desc:1 "Une faction anti-purge rassemble toutes les pops purgées par notre empire ainsi que les pops sensibles à leur malheur. Leur principale revendication est d'avoir le droit de vivre.\n\n§HToutes les pops qui font l'objet d'une purge rejoignent automatiquement cette faction.§!"
+
+ # Demands
+ POP_FACTION_PURGED_DEMAND_TITLE_1:0 "Cesser toutes les purges"
+ POP_FACTION_PURGED_DEMAND_DESC_1:0 "Termine toutes les campagnes d'extermination systématiques contre les pops de [Root.Owner.GetName]."
+
+ # Support Effects
+
+ SUPPORT_EFFECT_PURGED_DEATH_STRUGGLE:0 "Combat à mort"
+ SUPPORT_EFFECT_PURGED_DEATH_STRUGGLE_DESC:0 "Ceux qui sont sur le point d'être purgés et leurs soutiens peuvent commettre des actes de destruction aléatoires."
+ SUPPORT_EFFECT_PURGED_DEATH_REBELLION:0 "Purger la révolte"
+ SUPPORT_EFFECT_PURGED_DEATH_REBELLION_DESC:0 "Ceux qui sont sur le point d'être purgés ne se résigneront pas au silence, et forment plutôt une milice rebelle."
+
+ ### LIBERATE
+
+ # Demands
+ POP_FACTION_LIBERATE_DEMAND_TITLE_1:0 "Libérer §H[parameter:planet.GetName]§!"
+ POP_FACTION_LIBERATE_DEMAND_DESC_1:0 "Déclare la guerre à [parameter.enemy.GetName] afin de reprendre possession de [parameter:planet.GetName]."
+
+ # Support Effects
+ SUPPORT_EFFECT_LIBERATE_INSULT_HIJACK:0 "Détournement de communications"
+ SUPPORT_EFFECT_LIBERATE_INSULT_HIJACK_DESC:0 "[Root.GetName] empoisonne nos relations diplomatiques avec §H[parameter:enemy.GetName]§!."
+ SUPPORT_EFFECT_LIBERATE_HAWKISH_REBELS:0 "Risque de rébellion belliciste"
+ SUPPORT_EFFECT_LIBERATE_HAWKISH_REBELS_DESC:0 "[Root.GetName] se rebelle contre le gouvernement fantoche de [Root.Owner.GetSpeciesAdj]."
+
+ ### XENOSLAVER
+
+ # Demands
+ POP_FACTION_XENOSLAVER_DEMAND_TITLE_1:0 "Asservir les xénos"
+ POP_FACTION_XENOSLAVER_DEMAND_DESC_1:0 "Asservit tous les §H[parameter:xeno.GetSpeciesAdj]§! §YPops§!."
+
+ # Actions
+
+ # Support Effects
+ SUPPORT_EFFECT_XENOSLAVER_TAKE_SLAVES:0 "Asservissement extralégal"
+ SUPPORT_EFFECT_XENOSLAVER_TAKE_SLAVES_DESC:0 "Les membres militant au sein de certaines factions peuvent, en toute illégalité, obliger des pops à se mettre à leur service."
+ SUPPORT_EFFECT_XENOSLAVER_SLAVER_CONFEDERACY:0 "Confédération d'esclavagistes"
+ SUPPORT_EFFECT_XENOSLAVER_SLAVER_CONFEDERACY_DESC:0 "La faction se mobilise pour organiser un soulèvement armé."
+
+ ### CRUSADER
+
+ # Demands
+ POP_FACTION_CRUSADE_DEMAND_TITLE_1:0 "Croisade"
+ POP_FACTION_CRUSADE_DEMAND_DESC_1:0 "Commence une guerre sainte contre les païens de [parameter:heathens.GetName]."
+
+ # Actions
+
+ # Support Effects
+ SUPPORT_EFFECT_CRUSADE_INSULT:0 "Sacrilège sans équivoque"
+ SUPPORT_EFFECT_CRUSADE_INSULT_DESC:0 "[Root.GetName] dénonce les [parameter:heathens.GetName], ce qui détériore les relations diplomatiques."
+ SUPPORT_EFFECT_CRUSADE_INSURRECTION:0 "Insurrection de fanatiques religieux"
+ SUPPORT_EFFECT_CRUSADE_INSURRECTION_DESC:0 "[Root.GetName] organise un putsch sur une colonie."
+
+ ### CONQUEROR
+
+ # Support Effects
+ SUPPORT_EFFECT_CONQUER_INSULT:0 "Communiqué insultant"
+ SUPPORT_EFFECT_CONQUER_INSULT_DESC:0 "[Root.GetName] envoie un communiqué insultant augmentant les tensions entre nous et §H[parameter:foreign_power.GetName]§!."
+
+ ### PRETENDER
+
+ pft_pretender:0 "Faction de prétendants"
+ pft_pretender_desc:0 "Les partisans du prétendant actuel rejoignent cette faction et mettent tout en oeuvre pour le hisser au pouvoir."
+
+ POP_FACTION_PRETENDER_ATTRITION_TITLE:0 "Usure"
+ POP_FACTION_PRETENDER_ATTRITION_DESC:0 "Une pop se désintéresse de la cause et §Gdéserte la faction§!."
+ POP_FACTION_PRETENDER_DEMAND_TITLE:0 "Céder le trône à §Y[parameter:pretender.GetName]§!"
+ POP_FACTION_PRETENDER_DEMAND_DESC:0 "Le [Root.Owner.GetRulerTitle] §Y[Root.Owner.GetRulerName]§! sera exilé et §Y[parameter:pretender.GetName]§! montera sur le trône."
+ POP_FACTION_PRETENDER_INSTALL_TITLE:0 "Installer le prétendant"
+ POP_FACTION_PRETENDER_INSTALL_DESC:0 "Faites monter §Y[parameter:pretender.GetName]§! sur le trône."
+ 
+ ########################################
+ # FACTION EVENTS
+ ########################################
+
+ ### Loyalists
+ faction.4.title:0 "Demandes loyalistes"
+ faction.4.desc:0 "Les loyalistes sont dévoués au [Root.Owner.GetRulerTitle] [Root.Owner.GetRulerName] de [Root.Owner.GetName], et n'ont pas de demandes."
+
+ ### Slaves
+ faction.6.title:0 "Grève de la faim !"
+ faction.6.desc:0 "Les esclaves de [Root.Owner.GetName] ont saboté nos moyens de production - leurs propres corps - en se laissant mourir de faim volontairement. Les membres de la faction [Root.GetName] se §Ypurgent§! eux-mêmes du joug de [Root.Owner.GetName].\n\nSi cette situation n'est pas maîtrisée très vite, nous risquons de perdre une partie significative de nos pops asservies. Nous pouvons soit laisser mourir les misérables, soit trouver une autre façon de nous occuper de cette faction renégate."
+
+ faction.7.title:0 "Révolte d'esclaves !"
+ faction.7.desc:0 "Les esclaves de [slave_planet.GetName] se sont soulevés contre leurs maîtres, formant une coalition rebelle illégale qui cherche à briser l'étreinte légitime de [Root.Owner.GetName] qui pèse sur eux !"
+
+ faction.8.title:0 "Alimentation forcée"
+ faction.8.desc:0 "Le corps d'un esclave ne lui appartient pas.\n\nCette purge irréfléchie est terminée, et tous ceux qui ont été affectés et sont toujours vivants ont reçu une dose adéquate des nutriments."
+
+ faction.10.title:0 "Agitation des esclaves"
+ faction.10.desc:0 "L'agitation généralisée parmi les esclaves de [unrest_planet.GetName] impacte la production."
+ faction.10.desc.colle:0 "Un certain mal-être se répand au sein de l'élément asservi de [Root.Owner.GetName], autour du centre qu'est la [unrest_planet.GetPlanetMoon] [unrest_planet.GetName]."
+ faction.10.a.tooltip:0 "Les §Hpops asservies§! de §H[unrest_planet.GetName]§! reçoivent le modificateur §RAgitation servile§! pour §Y4 ans§!."
+
+ faction.15.title:0 "Violences serviles"
+ faction.15.desc:0 "Des foules très mobiles, composées d'esclaves en fuite, se sont livrées à des affrontements avec d'autres membres de la population de [roving_gangs_planet.GetName], provoquant la mort d'une pop.\n\nIl reste à voir comment les associés des victimes vont réagir à l'incident."
+ faction.15.a.tooltip:0 "[roving_gangs_planet] :\n§Y1 pop§! §Rmeurt§!."
+
+ faction.50.title:0 "Évacuation interstellaire"
+ faction.50.desc:0 "Il semble que les éléments les plus radicalisés au sein de la population servile se sont réunis pour... En fait, pour faire sortir des esclaves de l'espace de [Root.Owner.GetName].\n\nNous ne savons pas encore comment un crime aussi grave a pu être commis, mais il est certain que ces esclaves sont désormais libres, quelque part à l'extérieur des frontières [Root.Owner.GetAdj]."
+ faction.50.desc.colle:0 "Une faction malavisée a cru bien faire sur [Root.Owner.GetName] en les arrachant à leurs tâches et les faisant passer hors des frontières [Root.Owner.GetAdj].\n\nAvec le temps cette blessure sera oubliée, et nous espérons que ces éléments perdus retrouveront leur chemin jusqu'à [Root.Owner.GetName] et leur véritable but dans la vie."
+ faction.50.a:0 "Tout cela est fort regrettable"
+ faction.50.1.tooltip:0 "[Root.Owner.GetName]:\n§R-1§! pop asservie"
+ faction.50.3.tooltip:0 "[Root.Owner.GetName]:\n§R-3§! pops asservies"
+ faction.50.4.tooltip:0 "[Root.Owner.GetName]:\n§R-4§! pops asservies"
+ faction.50.5.tooltip:0 "[Root.Owner.GetName]:\n§R-5§! pops asservies"
+
+ faction.55.title:0 "Émeutes d'esclaves mécontents"
+ faction.55.desc.colle:0 "Certains éléments de la faction [Root.GetName] ont été pris du désir d'atteindre [Root.Owner.GetName] en détruisant une installation productive de [riots_planet.GetName]. Il y a toute raison de croire que c'est bien la tare qui les empêche d'assumer leur place au sein de la société [Root.Owner.GetAdj] qui les pousse aussi à causer leur propre tort."
+ faction.55.desc:0 "Une émeute d'esclaves a causé la destruction d'une installation sur [riots_planet.GetName]. Ce bâtiment doit être réparé avant que la production puisse reprendre."
+
+ faction.60.title:0 "Révolte d'esclaves rétifs"
+ faction.60.desc:0 "Les éléments les plus radicaux de notre population asservie ont pris les armes contre notre gouvernement légitime - ce qui n'est guère une surprise, diraient certains.\n\nLes rapports indiquent que la révolte a commencé sur [revolt_planet.GetName], et pourrait même déjà s'être étendue ailleurs."
+ faction.60.desc.colle:0 "Parmi ceux qui s'occupent des tâches les plus mineures destinées à assurer la gloire et le développement de [Root.Owner.GetName], la dissension a pris des proportions inattendues.\n\nLeur incapacité à comprendre la situation générale et la place qu'ils y occupent les a poussés à se lancer dans une véritable rébellion sur la [revolt_planet.GetPlanetMoon] [revolt_planet.GetName] - et d'autres mondes pourraient suivre, si ce n'est pas déjà le cas."
+ faction.60.a:0 "Un véritable désastre"
+ faction.60.b:0 "Bande d'ignorants..."
+ faction.60.a.tooltip:0 "La faction des §Hesclaves rétifs§! §Yse révolte§! !"
+
+ faction.80.title:0 "Radicalisation des esclaves"
+ faction.80.desc:0 "Les membres d'une section locale de la faction [Root.GetName] semblent avoir réussi à radicaliser plusieurs pops [Root.Owner.GetAdj] asservies, qui ont rejoint les rangs des esclaves rétifs."
+
+ ### Separatists
+ # From = pop faction
+ # Parameters = planet
+
+ pft_planet_separatists:0 "Faction séparatiste planétaire"
+ pft_planet_separatists_desc:0 "Les séparatistes planétaires peuvent apparaître sur des mondes colonisés pour tenter de libérer la planète du joug de l'empire. S'ils bénéficient d'un soutien populaire suffisant, ils peuvent aller jusqu'à prendre les armes.\n\n§HLes séparatistes n'apparaissent que sur les planètes soumises à un contrôle direct.§!"
+
+ # Separatists rebel
+ faction.100.title:0 "Soulèvement séparatiste"
+ faction.100.desc:3 "Les troubles qui secouent [planet.GetName] ont atteint un seuil critique. La faction séparatiste y a pris les armes pour tenter de s'emparer de la planète."
+
+ # Separatists riot
+ faction.101.title:1 "Émeute séparatiste"
+ faction.101.desc:1 "L'agitation sur §Y[planet.GetName]§! s'aggrave, au point que les membres de la faction des [Root.GetName] sont descendus dans la rue pour se livrer au pillage et mettre le feu.\n\nDes rapports indiquent qu'au moins une installation majeure de la colonie a été détruite."
+
+ # Separatist leader assassinated
+ faction.102.title:1 "Meneur de faction assassiné !"
+ faction.102.desc:1 "La confusion règne au [Root.GetName] suite à la mort soudaine de son meneur, [Root.Leader.GetName].\n\nLe grand public [Root.Owner.GetSpeciesAdj] pense que cet assassinat est le fruit d'une lutte interne de pouvoir au sein du [Root.GetName]. Bien qu'une personnalité ait déjà émergé, l'incident s'est traduit par une perte de soutien populaire."
+
+ # Separatist sector created
+ faction.103.title:0 "Secteur créé !"
+ faction.103.desc:0 "Un secteur quasi indépendant a été octroyé à [Root.GetName], avec un gouvernement local basé sur [parameter:planet.GetName]."
+
+ faction.104.title:0 "Empire libéré !"
+ faction.104.desc:0 "Pour apaiser et éliminer avec efficacité les séparatistes, la colonie sur [parameter:planet.GetName] a été libérée de [Root.Owner.GetName].\n\n[Root.GetName] a formé sa nation."
+
+ ### Crusaders
+
+ # Crusaders want to a crusade to against the heathens, conquer their capital
+ faction.200.title:0 "[Root.GetName] marque au fer rouge les [parameter:heathens.GetName] !"
+ faction.200.desc:1 "Ils ont marqué comme point d'intérêt une capitale étrangère et veulent se l'approprier."
+
+ holy_war_title:0 "Guerre sainte"
+ holy_war_desc:0 "Dirige une croisade contre les [parameter:heathens.GetName]."
+ holy_war_1_poi:0 "Capitale du système"
+ holy_war_1_poi_desc:0 "La planète des païens"
+ profane_planets_seized:0 "Planètes profanes purifiées"
+
+ # Capital conquered
+ faction.201.title:0 "Capitale païenne conquise !"
+ faction.201.desc:0 "Leur temples sont défigurés, leurs dieux les ont abandonnés."
+
+ faction.202.title:0 "[parameter:heathens.GetName] insultés"
+ faction.202.desc:0 "Suite à une embarrassante faille de sécurité, [Root.GetName] ont bénéficié d'un bref accès à nos canaux de communication diplomatiques. Ils ont utilisé cette opportunité pour condamner et insulter les [parameter:heathens.GetName] pour plusieurs hérésies et carences morales inhérentes à leurs croyances.\n\nL'incident est vraiment mal passé vis à vis de la foi très profonde des [parameter:heathens.GetSpeciesPlural]."
+ faction.202.a:0 "Comme c'est embarrassant."
+ faction.202.a.tooltip:0 "§Y[parameter:enemy.GetName]§! ajoute le modificateur d'opinion §YInsulte de faction§! envers §votre Empire§!"
+ faction.203.title:0 "Tentative d'insulte"
+ faction.203.desc:0 "Suite à une autre faille de sécurité, encore plus embarrassante, [Root.GetName] ont bénéficié d'un bref accès à nos canaux de communication diplomatiques. Ils ont de nouveau utilisé cette opportunité pour dénigrer les croyances païennes de [parameter:heathens.GetName].\n\nCependant, les [parameter:heathens.GetSpeciesPlural] n'ont cette fois pas été pris par surprise par la répétition de cet incident, et n'en ont pas fait cas."
+ faction.203.a:0 "Ouf..."
+
+ faction.204.title:0 "Insurrection religieuse !"
+ faction.204.desc:0 "Nous avons reçu des rapports indiquant que les éléments radicaux de [Root.GetName] sont en train d'organiser une insurrection armée sur [planet.GetName].\n\nLeur rébellion est toujours en gestation, et il est fortement conseillé de la tuer dans l'oeuf."
+ faction.204.a:0 "Très bien."
+ faction.204.a.tooltip:0 "[planet.GetName] :\nInsurrection!"
+
+ ### Nationalists
+ faction.301.title:2 "Sabotage nationaliste"
+ faction.301.desc:2 "Des membres radicaux de la faction [Root.GetName] ont détruit un bâtiment sur la [planet.GetPlanetMoon] [planet.GetName]."
+ faction.301.desc.phobe:0 "Les brutes xénos de la faction des [Root.GetName] ont détruit un bâtiment de [planet.GetName], dans l'intention de nuire aux intérêts de [Root.Owner.GetName], cherchant visiblement à s'attaquer notre mode de vie."
+ faction.301.desc.phile:0 "Les membres de la faction des [Root.GetName], par ailleurs tout à fait charmants, ont cru bon de montrer leur mécontentement envers le gouvernement en arrêtant - certains iraient même jusqu'à parler de sabotage - une installation de [planet.GetName]."
+
+ faction.302.title:1 "Rébellion nationaliste"
+ faction.302.desc:3 "Encouragée par le soutien de la population, la faction des [Root.GetName] a pris les armes afin de reprendre son territoire par la force."
+ faction.302.desc.phobe:0 "Les xénos de la faction des [Root.GetName] se sont soulevés, cherchant à renverser les autorités [Root.Owner.GetAdj] !"
+ faction.302.desc.phile:0 "Prenant acte de nos échecs répétés à répondre à ses exigences, la faction des [Root.GetName] s'est soulevée."
+
+ ### Peace Movement
+
+ faction.400.title:0 "Flotte sabotée !"
+ faction.400.desc:0 "Certains membres radicaux de [From.GetName] ont infiltré avec succès au moins un vaisseau militaire [Root.Owner.GetSpeciesAdj] pour y planter des explosifs. Ceux-ci ont détruit l'intégralité de [Root.GetName].\n\n[From.Leader.GetName], meneur de [From.GetName], a publié une déclaration dénonçant la nature abjecte de la violence en général, et du conflit armé entre [Root.Owner.GetName] et [From.parameter:enemy.GetName] en particulier."
+ faction.400.a:0 "Hypocrites."
+ faction.400.a.tooltip:0 "§R[Root.GetName] détruite.§!"
+
+ faction.401.title:0 "Fin des hostilités"
+ faction.401.desc:0 "Tous les liens diplomatiques réclamant la poursuite du conflit avec [From.parameter:enemy.GetName] ont été rompus, et nous avons fait une offre de paix blanche."
+ faction.401.a:0 "Nous espérons qu'ils la trouvent satisfaisante."
+
+ faction.402.title:0 "Fin des hostilités"
+ faction.402.desc:0 "Nous avons fait une offre de paix blanche à [From.parameter:enemy.GetName], espérant mettre un terme à la guerre."
+ faction.402.a:0 "À quoi bon ?"
+
+ ### Liberation Faction
+
+ faction.501.title:0 "[parameter:enemy.GetName] insulté"
+ faction.501.desc:0 "Suite à une embarrassante faille de sécurité, [Root.GetName] ont bénéficié d'un bref accès à nos canaux de communication diplomatiques. Ils ont utilisé cette opportunité pour gravement insulter [parameter:enemy.GetName] et demandent le retour immédiat de [parameter:planet.GetName].\n\nCela ne s'est pas très bien passé avec les [parameter:enemy.GetSpeciesPlural]."
+ faction.501.a:0 "Comme c'est embarrassant."
+ faction.501.a.tooltip:0 "§Y[parameter:enemy.GetName]§! ajoute le modificateur d'opinion §YInsulte de faction§! envers §votre Empire§!"
+ faction.502.title:0 "Tentative d'insulte"
+ faction.502.desc:0 "Suite à une autre faille de sécurité, encore plus embarrassante, [Root.GetName] ont bénéficié d'un bref accès à nos canaux de communication diplomatiques. Ils ont utilisé cette opportunité pour à nouveau gravement insulter [parameter:enemy.GetName] et demandent le retour immédiat de [parameter:planet.GetName].\n\nCependant, les [parameter:enemy.GetSpeciesPlural] n'ont pas été pris par surprise par la répétition de cet incident, et n'y ont pas prêté attention."
+ faction.502.a:0 "Ouf..."
+ faction.503.title:0 "Rebelles bellicistes !"
+ faction.503.desc:0 "Nous avons reçu des rapports indiquant que des éléments radicaux de [Root.GetName] ont formé des milices très organisées sur [planet.GetName].\n\nLeur rébellion est toujours en gestation, et il est fortement conseillé de la tuer dans l'oeuf."
+ faction.503.a:0 "Très bien."
+ faction.503.a.tooltip:0 "[planet.GetName] \n§RRébellion !§!"
+
+ ### Emancipation Faction
+ faction.600.title:0 "Esclaves radicalisés"
+ faction.600.desc:0 "Des membres de [Root.GetName] ont prétendument semé les graines de la dissidence parmi les populations asservies. Selon certaines rumeurs, ils entraînent et arment des franges de [parameter:slave_faction.GetName], même si cela semble bien trop outrancier pour être vrai."
+ faction.600.a:0 "Préoccupant, toutefois."
+ faction.600.a.tooltip:0 "[parameter:slave_faction.GetName] :\n§R+50%§! Militantisme\n§R+30%§! Soutien"
+ faction.601.title:0 "Évacuation interstellaire"
+ faction.601.desc:0 "Un rapport indique que certains des membres les plus radicalisés sur [Root.GetName] ont libéré un groupe d'esclaves de [railroad_planet.GetName] pour les mettre hors d'atteinte de [Root.Owner.GetName]."
+ faction.601.a:0 "Nous devons les surveiller de plus près"
+ faction.601.a.tooltip:0 "[railroad_planet.GetName] :\n§R-1§! pop asservie"
+
+ ### Xenoslaver Faction
+ faction.700.title:0 "Mise en servitude !"
+ faction.700.desc:0 "Les enragés de [Root.GetName] ont supposément forcé certaines des populations non [Root.Owner.GetSpeciesAdj] de [Root.Owner.GetName] en esclavage."
+ faction.700.a:0 "C'est un scandale."
+ faction.700.a.tooltip:0 "Esclaves :\n§Y+2§! Pops."
+
+ faction.701.title:0 "La rébellion [parameter:rebelling_faction.GetName] !"
+ faction.701.desc:0 "Apparemment fatigué de la posture molle de [Root.Owner.GetName] vis-à-vis des grossiers aliens qui vivent parmi nous, les aspirants négriers de [parameter:planet.GetName] se sont unis en confédération de communautés, pour déclarer leur indépendance."
+ faction.701.a:0 "Vraiment plus que scandaleux."
+
+ ### Purged Faction
+ faction.801.title:0 "Combats à mort"
+ faction.801.desc:0 "Portés par l'énergie du désespoir, quelques individus victimes de purges sur [riot_planet.GetName] ont trouvé judicieux d'attaquer et de raser l'une des installations de la planète."
+
+ faction.803.title:0 "La révolte de [Root.GetName] !"
+ faction.803.desc:0 "Portés par l'énergie du désespoir, une frange de la population victime de purges sur [death_planet.GetName] a pris les armes contre [Root.Owner.GetName], formant une piteuse force rebelle."
+ #mockup: "\n\n\n§HSuppress Followers§!\nCost: £influence §R150§!\n--------------\n§Y<FactionName>§!:\nMilitancy: §R+10%§!\nSupport: §G-30%§!"
+ #mockup2: "\n\n\n§HSuppress Followers§!\nCost: £influence §Y150§!\n--------------\n§Y<FactionName>§!:\nMilitancy: §R+10%§!\nSupport: §G-30%§!"
+
+
+
+####################
+### TO BE ERASED ###
+####################
+ DEBUG_INCREASE_MILITANCY:0 "[Debug] + Militantisme"
+ DEBUG_INCREASE_SUPPORT:0 "[Debug] + Soutien"
+ DEBUG_DECREASE_MILITANCY:0 "[Debug] - Militantisme"
+ DEBUG_DECREASE_SUPPORT:0 "[Debug] - Soutien"
+ POP_FACTION_PRETENDER_DEMAND_TITLE_1:0 "Céder le trône à [parameter:pretender.GetName]"
+ POP_FACTION_PRETENDER_DEMAND_DESC_1:0 "[Root.Owner.GetRulerTitle] [Root.Owner.GetRulerName] sera exilé et [parameter:pretender.GetName] accédera au trône."
+ SUPPORT_EFFECT_PRETENDER:0 "Guerre de succession"
+ SUPPORT_EFFECT_PRETENDER_DESC:0 "Guerre civile"
+ slave_attraction_desc:0 "Les pops réduites en esclavage appartiendront toujours à la faction des esclaves, à l'exception des pops robotiques.\n\nAucune autre pop ne les rejoindra."
+ FACTION_ACTION_SEPARATIST_MANDATE_VASSAL:0 "Mandat : vassaliser"
+ FACTION_ACTION_SEPARATIST_MANDATE_VASSAL_DESC:0 "Satisfait le mandat en cours en libérant cette faction en un empire vassal."
+ POP_FACTION_NATIONALIST_DEMAND_TITLE_1:0 "Restitution de §Y[parameter:planet.GetName]§!"
+ POP_FACTION_NATIONALIST_DEMAND_DESC_1:0 "Cède §Y[parameter:planet.GetName]§! à §H[parameter:losing_country.GetName]§!."
+ FACTION_ACTION_NATIONALIST_MANDATE_CEDE:0 "Mandat : restituer"
+ FACTION_ACTION_NATIONALIST_MANDATE_CEDE_DESC:0 "Satisfait le mandat en cours en cédant §Y[parameter:planet.GetName]§! à §H[parameter:losing_country.GetName]§!."
+ FACTION_ACTION_MALCONTENT_SLAVES_INTERSTELLAR_RAILROAD_TOOLTIP_1:0 "La faction compte au moins §R4§! pops."
+ pft_supremacist:2 "Faction suprémaciste"
+ pft_supremacist_desc:4 "La faction suprémaciste souhaite la domination totale de l'espèce fondatrice de l'empire. Elle veut que soient promulguées des politiques bénéficiant à leur propre espèce, au détriment des autres.\n\n§LÉthique xénophobe§!"
+ pft_traditionalist:0 "Faction traditionaliste"
+ pft_traditionalist_desc:1 "La faction traditionaliste souhaite un retour aux valeurs traditionnelles qui prévalaient - ou non - avant que l'empire se lance dans l'aventure spatiale. Elle prône l'austérité et rejette certaines avancées technologiques ou valeurs non spirituelles.\n\n§LÉthique spiritualiste§!"
+ pft_progressive:0 "Faction progressiste"
+ pft_progressive_desc:1 "La faction progressiste souhaite la fin de toute discrimination au sein des structures sociales réprouve les régimes politiques non représentatifs.\n\n§LÉthique égalitariste§!"
+ pft_imperialist:0 "Faction impérialiste"
+ pft_imperialist_desc:1 "La faction impérialiste souhaite que l'empire domine tous les autres. Elle milite en faveur des rivalités et de la conquête des autres empires, et n'apprécie pas que l'empire doive compter sur les autres.\n\n§LÉthique militariste§!"
+ pft_isolationist:0 "Faction isolationniste"
+ pft_isolationist_desc:2 "La faction isolationniste souhaite que l'empire s'isole en évitant autant que possible tout contact avec les autres empires. Elle réprouve les guerres d'agression, et n'apprécie pas que l'empire soit considéré comme une proie facile.\n\n§LÉthique xénophobe§!"
+ pft_technologist:0 "Faction technologiste"
+ pft_technologist_desc:1 "La faction technologiste souhaite que l'ensemble de l'empire adopte des avancées technologiques et les bénéfices que cela apporte. Elle réprouve toute interdiction de recherche scientifique pour des motifs politiques, et n'apprécie pas de voir l'empire être dépassé au niveau technologique.\n\n§LÉthique matérialiste§!"
+ pft_totalitarian:0 "Faction totalitariste"
+ pft_totalitarian_desc:1 "La faction totalitariste aspire à une société très hiérarchisée, dirigée par un chef unique et puissant ou un conseil autoritaire. Elle réprouve l'égalité juridique et milite en faveur de l'esclavage.\n\n§LÉthique autoritariste§!"
+ pft_xenoist:0 "Faction xénoïste"
+ pft_xenoist_desc:1 "La faction xénoïste souhaite que plus d'importance soit accordée à la vie et aux cultures aliens. Elle apprécie le cosmopolitisme et les interactions avec les autres espèces, et réprouve l'esclavage et les purges spécistes.\n\n§LÉthique xénophile§!"
+ pft_democratic_election_1:0 "Partis démocratiques"
+ pft_democratic_election_1_desc:0 "Les partis démocratiques se forment lors des élections à la tête de l'empire et se dissolvent peu après, permettant donc que certaines personnalités populaires soient mises en ces circonstances sous le feu des projecteurs."
+ pft_democratic_election_2:0 "$pft_democratic_election_1$"
+ pft_democratic_election_2_desc:0 "$pft_democratic_election_1_desc$"
+ pft_democratic_election_3:0 "$pft_democratic_election_1$"
+ pft_democratic_election_3_desc:0 "$pft_democratic_election_1_desc$"
+ pft_democratic_election_4:0 "$pft_democratic_election_1$"
+ pft_democratic_election_4_desc:0 "$pft_democratic_election_1_desc$"
+ SUPREMACIST_RULER_SAME_SPECIES:0 "[Root.Owner.GetRulerTitle] de l'espèce [Root.Owner.GetSpeciesAdj]"
+ SUPREMACIST_RULER_NOT_SAME_SPECIES:0 "[Root.Owner.GetRulerTitle] xéno"
+ SUPREMACIST_RULER_NOT_SAME_SPECIES_DESC:0 "Le [Root.GetName] veut que le dirigeant appartienne à l'espèce [Root.Owner.GetSpeciesName] et sera mécontent s'il s'agit d'un xéno."
+ SUPREMACIST_UNRESTRICTED_STUDY:0 "Xénoétudes invasives"
+ SUPREMACIST_UNRESTRICTED_STUDY_DESC:0 "Le [Root.GetName] sera satisfait si nous légiférons pour permettre une interférence sans restriction avec les indigènes afin de tirer autant de profit que possible des xénocivilisations primitives."
+ SUPREMACIST_NO_UNRESTRICTED_STUDY:0 "$SUPREMACIST_UNRESTRICTED_STUDY$"
+ SUPREMACIST_SLAVERY_ALLOWED:0 "Esclaves potentiels"
+ SUPREMACIST_SLAVERY_ALLOWED_DESC:0 "Le [Root.GetName] ne croit pas que certains valent plus que d'autres, mais plutôt que certains sont plus adaptés à certaines tâches que d'autres. Prohiber l'§Yesclavage§! va donc le mécontenter."
+ SUPREMACIST_SLAVERY_OUTLAWED:0 "Esclavage proscrit"
+ SUPREMACIST_HAS_ALIEN_SLAVES:0 "Accès à des xénoesclaves"
+ SUPREMACIST_NO_ALIEN_SLAVES:0 "Manque de xénoesclaves"
+ SUPREMACIST_NO_FREE_ALIENS:1 "Xénos privés de droits"
+ SUPREMACIST_HAS_FREE_ALIENS:0 "$SUPREMACIST_NO_FREE_ALIENS$"
+ SUPREMACIST_ALIEN_SLAVES_DESC:1 "Le [Root.GetName] sera satisfait si nous veillosn à ce qu'aucune espèce xéno de l'empire ne jouisse de la pleine citoyenneté."
+ SUPREMACIST_ALL_SLAVERY_ALLOWED:0 "Esclavage des [Root.Owner.GetSpeciesNamePlural] autorisé"
+ SUPREMACIST_ALL_SLAVERY_DESC:0 "Le [Root.GetName] est mécontent que quiconque puisse asservir un membre de l'espèce [Root.Owner.GetSpeciesName], et veut que l'esclavage soit réservé aux seuls xénos."
+ LEADER_IS_OWNER_SPECIES:0 "[Root.Owner.GetRulerTitle] de l'espèce [Root.Owner.GetSpeciesName]"
+ SUPREMACIST_CORE_WORLD_EXCLUSIVITY:0 "Exclusivité sur les mondes centraux"
+ SUPREMACIST_CORE_WORLD_EXCLUSIVITY_DESC:0 "Le [Root.GetName] sera satisfait si nous réservons l'usage exclusif des mondes centraux de l'empire aux [Root.Owner.GetSpeciesNamePlural] et à leurs esclaves."
+ SUPREMACIST_CORE_WORLD_NONEXCLUSIVITY:0 "$SUPREMACIST_CORE_WORLD_EXCLUSIVITY$"
+ SUPREMACIST_DOMINATION:0 "Domination affirmée"
+ SUPREMACIST_DOMINATION_DESC:0 "Le [Root.GetName] sera satisfait si nous déclarons la guerre à un ou plusieurs xénoempires."
+ SUPREMACIST_NO_DOMINATION:0 "$SUPREMACIST_DOMINATION$"
+ SUPREMACIST_GENE_MOD:0 "Pureté génétique"
+ SUPREMACIST_GENE_MOD_DESC:1 "Le [Root.GetName] sera satisfait si nous nous assurons que toutes les pops de [Root.Owner.GetSpeciesNamePlural] partagent exactement les mêmes traits génétiques."
+ SUPREMACIST_IMPURE:0 "Impureté [Root.Owner.GetSpeciesAdj]"
+ SUPREMACIST_NO_HARMONY:0 "Discorde"
+ SUPREMACIST_HARMONY:0 "$SUPREMACIST_NO_HARMONY$"
+ SUPREMACIST_NO_HARMONY_DESC:0 "Le [Root.GetName] sera mécontent si nous adoptons ces traditions d'harmonie qui prônent une supposée égalité avec les espèces inférieures."
+ SUPREMACIST_FANATIC_PURIFIERS:1 "$civic_fanatic_purifiers$"
+ SUPREMACIST_NOT_FANATIC_PURIFIERS:1 "$civic_fanatic_purifiers$"
+ SUPREMACIST_FANATIC_PURIFIERS_DESC:1 "$civic_fanatic_purifiers_desc$"
+ XENOIST_PASSIVE_STUDY:0 "Xénologie indirecte"
+ XENOIST_PASSIVE_STUDY_DESC:0 "Le [Root.GetName] sera satisfait si nous légiférons pour limiter les interférences avec les indigènes à des études passives."
+ XENOIST_NO_PASSIVE_STUDY:0 "$XENOIST_PASSIVE_STUDY$"
+ XENOIST_NO_SLAVES:1 "Pas d'esclavage spéciste"
+ XENOIST_NO_SLAVES_DESC:2 "Le [Root.GetName] sera extrêmement mécontent de l'asservissement d'une espèce entière."
+ XENOIST_SLAVES:0 "$XENOIST_NO_SLAVES$"
+ XENOIST_NO_PURGE:1 "Pas de purges"
+ XENOIST_NO_PURGE_DESC:1 "Le [Root.GetName] sera mécontent de toute purge lancée contre quelque espèce que ce soit."
+ XENOIST_PURGE:0 "$XENOIST_NO_PURGE$"
+ XENOIST_ENCLAVE_BORDERS:0 "Enclaves incorporées"
+ XENOIST_ENCLAVE_BORDERS_DESC:0 "Conserver des stations-enclaves au sein de nos frontières assure les échanges culturels ; le [Root.GetName] sera donc satisfait si nous en conservons une."
+ XENOIST_NO_ENCLAVE_BORDERS:1 "$XENOIST_ENCLAVE_BORDERS$"
+ XENOIST_MULTICULTURALISM:0 "Société multiculturelle"
+ XENOIST_MULTICULTURALISM_DESC:0 "Le [Root.GetName] sera satisfait si l'empire abrite au moins §Y4§! espèces uniques."
+ XENOIST_NO_MULTICULTURALISM:0 "$XENOIST_MULTICULTURALISM$"
+ XENOIST_REFUGEES_WELCOME:0 "Accueil de tous les réfugiés"
+ XENOIST_REFUGEES_WELCOME_DESC:0 "Le [Root.GetName] sera satisfait si les politiques sur les réfugiés autorisent l'accueil sans discrimination de toutes les espèces aliens fuyant les guerres et les purges."
+ XENOIST_REFUGEES_UNWELCOME:0 "$XENOIST_REFUGEES_WELCOME$"
+ XENOIST_DIPLO_TIES:0 "Relations étrangères"
+ XENOIST_DIPLO_TIES_DESC:0 "Le [Root.GetName] sera satisfait si nous entretenons des relations avec tous nos voisins immédiats."
+ XENOIST_FEW_DIPLO_TIES:0 "$XENOIST_DIPLO_TIES$"
+ XENOIST_RECENT_UPLIFT:0 "Provolution récente"
+ XENOIST_RECENT_UPLIFT_DESC:0 "Le [Root.GetName] sera satisfait pour un temps si nous provoluons une espèce animale alien pour qu'elle acquière la conscience."
+ XENOIST_NO_RECENT_UPLIFT:0 "$XENOIST_RECENT_UPLIFT$"
+ XENOIST_RECENT_ENLIGHTENMENT:0 "Illumination récente"
+ XENOIST_RECENT_ENLIGHTENMENT_DESC:0 "Le [Root.GetName] sera satisfait pour un temps si nous illuminions les primitifs aliens aux merveilles de l'âge spatial, de façon aussi discrète que possible."
+ XENOIST_NO_RECENT_ENLIGHTENMENT:0 "$XENOIST_RECENT_ENLIGHTENMENT$"
+ IMPERIALIST_PHILOSOPHY:0 "Diplomatie agressive"
+ IMPERIALIST_PHILOSOPHY_DESC:1 "Le [Root.GetName] sera mécontent si nous n'autorisons pas tous les types de guerres sans restriction."
+ IMPERIALIST_NO_PHILOSOPHY:0 "$IMPERIALIST_PHILOSOPHY$"
+ IMPERIALIST_CONQUEST:2 "Conquête"
+ IMPERIALIST_CONQUEST_DESC:1 "Le [Root.GetName] sera satisfait pour un temps si nous conquérons des mondes aliens."
+ IMPERIALIST_NO_CONQUEST:0 "$IMPERIALIST_CONQUEST$"
+ IMPERIALIST_FRONTIER_OUTPOSTS:0 "Expansion des frontières"
+ IMPERIALIST_FRONTIER_OUTPOSTS_DESC:1 "Le [Root.GetName] sera satisfait pour un temps si nous construisons un §Yavant-poste frontalier§! pour étendre notre espace."
+ IMPERIALIST_NO_RECENT_FRONTIER_OUTPOSTS:0 "$IMPERIALIST_FRONTIER_OUTPOSTS$"
+ IMPERIALIST_RIVALS1:0 "Rivalités locales"
+ IMPERIALIST_RIVALS_DESC1:0 "Le [Root.GetName] sera satisfait si nous nous érigeons en rivaux d'au moins §Y1 empire voisin§!."
+ IMPERIALIST_FEW_RIVALS1:0 "$IMPERIALIST_RIVALS1$"
+ IMPERIALIST_RIVALS2:0 "Rivalités régionales"
+ IMPERIALIST_RIVALS_DESC2:0 "Le [Root.GetName] sera satisfait si nous nous érigeons en rivaux d'au moins §Y2 empires voisins§!."
+ IMPERIALIST_FEW_RIVALS2:0 "$IMPERIALIST_RIVALS2$"
+ IMPERIALIST_RIVALS3:0 "Ennemis galactiques"
+ IMPERIALIST_RIVALS_DESC3:0 "Le [Root.GetName] sera satisfait si nous nous érigeons en rivaux d'au moins §Y3 empires voisins§!."
+ IMPERIALIST_FEW_RIVALS3:0 "$IMPERIALIST_RIVALS3$"
+ SUPREMACIST_ISOLATIONIST_NO_FEDERATION:0 "Plus forts tous seuls"
+ SUPREMACIST_ISOLATIONIST_NO_FEDERATION_DESC:1 "Le [Root.GetName] sera mécontent si nous tolérons que la [Root.Owner.GetName] soit exploitée par des intérêts aliens en §Yintégrant une fédération§!."
+ SUPREMACIST_ISOLATIONIST_FEDERATION:1 "$SUPREMACIST_ISOLATIONIST_NO_FEDERATION$"
+ IMPERIALIST_DOMINATION_TRADITION:0 "Domination traditionnelle"
+ IMPERIALIST_NO_DOMINATION_TRADITION:0 "$IMPERIALIST_DOMINATION_TRADITION$"
+ IMPERIALIST_DOMINATION_TRADITION_DESC:0 "Le [Root.GetName] sera satisfait si nous adoptons la moindre tradition mettant l'accent sur la §Ydomination§!."
+ ISOLATIONIST_PHILOSOPHY:0 "Défense héroïque"
+ ISOLATIONIST_PHILOSOPHY_DESC:1 "Le [Root.GetName] sera satisfait si nous n'autorisons pas les §Yguerres sans restriction§!."
+ ISOLATIONIST_NO_PHILOSOPHY:0 "$ISOLATIONIST_PHILOSOPHY$"
+ ISOLATIONIST_NO_DIPLO:0 "Diplomatie minimale"
+ ISOLATIONIST_NO_DIPLO_DESC:1 "Le [Root.GetName] sera mécontent si nous ne mettons pas fin à toutes les relations inutiles avec les puissances aliens, telles que traités migratoires, conventions de recherche ou pactes défensifs."
+ ISOLATIONIST_DIPLO:0 "$ISOLATIONIST_NO_DIPLO$"
+ ISOLATIONIST_REFUGEES_RESTRICTED:0 "Restrictions sur les réfugiés"
+ ISOLATIONIST_REFUGEES_RESTRICTED_DESC:1 "Le [Root.GetName] sera mécontent si nous ne limitons pas le flux de réfugiés dans l'empire."
+ ISOLATIONIST_REFUGEES_UNRESTRICTED:0 "$ISOLATIONIST_REFUGEES_RESTRICTED$"
+ ISOLATIONIST_NON_AGGRESSION1:0 "Pacte de non-agression"
+ ISOLATIONIST_NON_AGGRESSION_DESC1:0 "Le [Root.GetName] sera satisfait si nous concluons un §Ypacte de non-agression§! avec un empire voisin."
+ ISOLATIONIST_FEW_NON_AGGRESSION1:0 "$ISOLATIONIST_NON_AGGRESSION1$"
+ ISOLATIONIST_NON_AGGRESSION2:0 "Convention de non-agression"
+ ISOLATIONIST_NON_AGGRESSION_DESC2:0 "Les pactes de non-agression avec les empires voisins sont considérés comme nécessaires, aussi le [Root.GetName] sera-t-il satisfait si nous en concluons au moins §Y2§!."
+ ISOLATIONIST_FEW_NON_AGGRESSION2:0 "$ISOLATIONIST_NON_AGGRESSION2$"
+ ISOLATIONIST_NON_AGGRESSION3:0 "Protocole de non-agression"
+ ISOLATIONIST_NON_AGGRESSION_DESC3:0 "Les pactes de non-agression avec les empires voisins sont considérés comme nécessaires, aussi le [Root.GetName] sera-t-il satisfait si nous en concluons au moins §Y3§!."
+ ISOLATIONIST_FEW_NON_AGGRESSION3:0 "$ISOLATIONIST_NON_AGGRESSION3$"
+ ISOLATIONIST_PEACE1:0 "Paix"
+ ISOLATIONIST_PEACE_DESC1:0 "Le [Root.GetName] sera satisfait si nous nous tenons à l'écart des conflits galactiques de grande ampleur pendant §Yau moins 10 ans§!."
+ ISOLATIONIST_NO_PEACE1:0 "$ISOLATIONIST_PEACE1$"
+ ISOLATIONIST_PEACE2:0 "Paix prolongée"
+ ISOLATIONIST_PEACE_DESC2:0 "Le [Root.GetName] sera satisfait si nous nous tenons à l'écart des conflits galactiques de grande ampleur pendant §Yau moins 25 ans§!."
+ ISOLATIONIST_NO_PEACE2:0 "$ISOLATIONIST_PEACE2$"
+ ISOLATIONIST_PEACE3:0 "Paix éternelle"
+ ISOLATIONIST_PEACE_DESC3:0 "Le [Root.GetName] sera satisfait si nous nous tenons à l'écart des conflits galactiques de grande ampleur pendant §Yau moins 50 ans§!."
+ ISOLATIONIST_NO_PEACE3:0 "$ISOLATIONIST_PEACE3$"
+ ISOLATIONIST_STRONG_ARMY:0 "Armée permanente"
+ ISOLATIONIST_STRONG_ARMY_DESC:0 "Le [Root.GetName] sera satisfait si nous stationnons au moins §Y3§! armées défensives sur toutes les planètes de la [Root.Owner.GetName] peuplées d'au moins §Y5§! pops."
+ ISOLATIONIST_WEAK_ARMY:0 "Armées insuffisantes"
+ ISOLATIONIST_DEFENSIVE_STATIONS:0 "Défense spatiale"
+ ISOLATIONIST_DEFENSIVE_STATIONS_DESC:0 "Le [Root.GetName] sera satisfait si nous maintenons au moins §Y1§! station militaire dans chaque système colonisé."
+ ISOLATIONIST_FEW_DEFENSIVE_STATIONS:0 "$ISOLATIONIST_DEFENSIVE_STATIONS$"
+ TRADITIONALIST_NO_ROBOTS:0 "Vie organique"
+ TRADITIONALIST_NO_ROBOTS_DESC:1 "Le [Root.GetName] sera mécontent si le remplacement de la vie organique par des travailleurs robotiques est autorisé."
+ TRADITIONALIST_ROBOTS:0 "Coquilles vides"
+ TRADITIONALIST_SPIRITUALIST_GOVERNMENT:0 "Politique pieuse"
+ TRADITIONALIST_SPIRITUALIST_GOVERNMENT_DESC:1 "Le [Root.GetName] sera satisfait si les valeurs spiritualistes imprègnent les éthiques gouvernementales."
+ TRADITIONALIST_SECULAR_GOVERNMENT:0 "État laïc"
+ TRADITIONALIST_SPIRITUALIST_POPS:0 "Homogénéité"
+ TRADITIONALIST_SPIRITUALIST_POPS_DESC:0 "Les esprits pieux pensent de même, aussi le [Root.GetName] sera-t-il satisfait si au moins §Y25%§! de nos pops sont spiritualistes."
+ TRADITIONALIST_FEW_SPIRITUALIST_POPS:0 "$TRADITIONALIST_SPIRITUALIST_POPS$"
+ TRADITIONALIST_FRUGALITY:0 "Frugalité"
+ TRADITIONALIST_FRUGALITY_DESC:0 "Le [Root.GetName] sera satisfait si nous dépensons peu de biens de consommation."
+ TRADITIONALIST_BIG_SPENDING:0 "Excès déplorables"
+ TRADITIONALIST_NO_TOMB_WORLDS:0 "Sol damné"
+ TRADITIONALIST_NO_TOMB_WORLDS_DESC:0 "Le [Root.GetName] sera mécontent si nous posons le pied sur le moindre §Ymonde mort§!."
+ TRADITIONALIST_TOMB_WORLDS:0 "$TRADITIONALIST_NO_TOMB_WORLDS$"
+ TRADITIONALIST_GAIA_WORLDS:1 "Monde consacré"
+ TRADITIONALIST_GAIA_WORLDS_DESC:1 "Le [Root.GetName] sera satisfait si nous consacrons un §Ymonde Gaïa§!."
+ TRADITIONALIST_NO_GAIA_WORLDS:0 "$TRADITIONALIST_GAIA_WORLDS$"
+ TRADITIONALIST_UNBLISSED:0 "Béatitude pas béate"
+ TRADITIONALIST_BLISSED:0 "$TRADITIONALIST_UNBLISSED$"
+ TRADITIONALIST_UNBLISSED_DESC:0 "Le [Root.GetName] sera satisfait si nous refusons à la population des conditions de vie sous béatitude chimique afin qu'elle reste consciente et bien au fait de ses devoirs et responsabilités."
+ TRADITIONALIST_PLANETBOUND:0 "Résidences planétaires"
+ TRADITIONALIST_PLANETBOUND_DESC:0 "Le [Root.GetName] sera satisfait si nous nous restreignons à des établissements sur des planètes et évitons les habitats dans l'espace lointain."
+ TRADITIONALIST_SPACEBOUND:0 "Vie dans l'obscurité"
+ TRADITIONALIST_FLESH_IS_STRONG:0 "La chair est forte"
+ TRADITIONALIST_FLESH_IS_STRONG_DESC:0 "Le [Root.GetName] sera mécontent si nous désacralisons nos corps naturels par des implants cybernétiques."
+ TRADITIONALIST_FLESH_IS_WEAK:0 "La chair est faible"
+ TRADITIONALIST_PURITY_TRADITION:0 "Pureté traditionnelle"
+ TRADITIONALIST_NO_PURITY_TRADITION:0 "$TRADITIONALIST_PURITY_TRADITION$"
+ TRADITIONALIST_PURITY_TRADITION_DESC:0 "Le [Root.GetName] sera satisfait si nous adoptons la moindre tradition mettant l'accent sur la §Ypureté§!."
+ TRADITIONALIST_PSIONIC_PURSUIT:2 "Études psioniques"
+ TRADITIONALIST_NO_PSIONIC_PURSUIT:1 "$TRADITIONALIST_PSIONIC_PURSUIT$"
+ TRADITIONALIST_PSIONIC_PURSUIT_DESC:2 "Le [Root.GetName] sera satisfait si nous adoptons l'atout de l'ascension §YL'esprit plutôt que la matière§!."
+ TECHNOLOGIST_ROBOTS:0 "Amour des machines"
+ TECHNOLOGIST_ROBOTS_DESC:0 "Le [Root.GetName] sera satisfait si nous maintenons une population d'au moins §Y6§! pops robotiques."
+ TECHNOLOGIST_FEW_ROBOTS:0 "$TECHNOLOGIST_ROBOTS$"
+ TECHNOLOGIST_ROBOTS_ALLOWED:0 "I.A. autorisée"
+ TECHNOLOGIST_ROBOTS_ALLOWED_DESC:1 "Le [Root.GetName] sera satisfait si nous autorisons les études sur l'intelligence artificielle et robotique et leur développement."
+ TECHNOLOGIST_ROBOTS_BANNED:0 "I.A. interdite"
+ TECHNOLOGIST_TECH_LEAP:0 "Technologie de pointe"
+ TECHNOLOGIST_TECH_LEAP_DESC:0 "Le [Root.GetName] sera satisfait si nous restons en tête de la course technologique et ne permettons pas que les autres empires aient un niveau technologique au moins §Ysupérieur§! au nôtre."
+ TECHNOLOGIST_TECH_LAG:0 "Technologie dépassée"
+ TECHNOLOGIST_RESEARCH_TREATIES:0 "Sciences sans frontières"
+ TECHNOLOGIST_RESEARCH_TREATIES_DESC:0 "Le [Root.GetName] sera satisfait si nous concluons des traités scientifiques avec au moins §Y3§! autres empires."
+ TECHNOLOGIST_FEW_RESEARCH_TREATIES:0 "$TECHNOLOGIST_RESEARCH_TREATIES$"
+ TECHNOLOGIST_NO_SYNTH_ENVY:0 "Jalousie synthétique"
+ TECHNOLOGIST_NO_SYNTH_ENVY_DESC:0 "Le [Root.GetName] sera assurément mécontent si nous autorisons d'autres civilisations stellaires à faire étalage de pops robotiques dans notre voisinage alors que nous n'avons pas l'équivalent sur aucun de nos mondes."
+ TECHNOLOGIST_SYNTH_ENVY:0 "$TECHNOLOGIST_NO_SYNTH_ENVY$"
+ PROGRESSIVE_DEMOCRATIC_GOVERNMENT_DESC:1 "Le [Root.GetName] sera satisfait si le gouvernement est élu."
+ PROGRESSIVE_FREE_MOVEMENT:0 "Liberté de déplacement"
+ PROGRESSIVE_NO_FREE_MOVEMENT:0 "$PROGRESSIVE_FREE_MOVEMENT$"
+ PROGRESSIVE_FREE_MOVEMENT_DESC:0 "Le [Root.GetName] sera satisfait si nous autorisons les déplacements libres des pops en autorisant toutes les espèces à accéder aux mondes centraux, en interdisant la réimplantation forcée et en ne contrôlant pas les migrations."
+ PROGRESSIVE_REPRODUCTIVE_FREEDOM:0 "Liberté de reproduction"
+ PROGRESSIVE_NO_REPRODUCTIVE_FREEDOM:1 "$PROGRESSIVE_REPRODUCTIVE_FREEDOM$"
+ PROGRESSIVE_REPRODUCTIVE_FREEDOM_DESC:1 "Le [Root.GetName] sera satisfait si nous nous assurons qu'aucune espèce de l'empire n'est soumise au contrôle de la population."
+ PROGRESSIVE_SLAVERY_BANNED:1 "Proscription de l'esclavage"
+ PROGRESSIVE_SLAVERY_BANNED_DESC:1 "Le [Root.GetName] sera mécontent si nous n'interdisons pas la pratique de l'esclavage."
+ PROGRESSIVE_SLAVERY_ALLOWED:0 "Esclavage autorisé"
+ PROGRESSIVE_NO_ELITISM:0 "Nés égaux"
+ PROGRESSIVE_NO_ELITISM_DESC:0 "Le [Root.GetName] sera satisfait si nous ne promulguons pas de politiques favorisant les élites dirigeantes."
+ PROGRESSIVE_ELITISM:0 "$PROGRESSIVE_NO_ELITISM$"
+ PROGRESSIVE_SOCIAL_EQUALITY:0 "Égalité des droits"
+ PROGRESSIVE_SOCIAL_EQUALITY_DESC:0 "Le [Root.GetName] sera satisfait si nous nous assurons que toutes les espèces de l'empire jouissent de la pleine citoyenneté."
+ PROGRESSIVE_NO_SOCIAL_EQUALITY:0 "$PROGRESSIVE_SOCIAL_EQUALITY$"
+ TOTALITARIAN_MONARCHY:0 "Monarchisme"
+ TOTALITARIAN_MONARCHY_DESC:0 "Le [Root.GetName] sera satisfait si le pouvoir - une §Yautorité impériale§! - est transmis de manière héréditaire."
+ TOTALITARIAN_NO_MONARCHY:0 "$TOTALITARIAN_MONARCHY$"
+ TOTALITARIAN_STRATIFICATION:0 "Société hiérarchisée"
+ TOTALITARIAN_STRATIFICATION_DESC:0 "Le [Root.GetName] sera satisfait si nous nous assurons que la société est bien hiérarchisée, que cela passe par un système de castes, de citoyenneté limitée pour certains, par l'esclavage, ou même les purges."
+ TOTALITARIAN_NO_STRATIFICATION:0 "$TOTALITARIAN_STRATIFICATION$"
+ TOTALITARIAN_SLAVERY:0 "Esclavage banalisé"
+ TOTALITARIAN_SLAVERY_DESC:0 "Le [Root.GetName] sera satisfait si nous maintenons au moins §Y12§! pops asservies."
+ TOTALITARIAN_NO_SLAVERY:0 "$TOTALITARIAN_SLAVERY$"
+ TOTALITARIAN_ELITISM:0 "Élitisme"
+ TOTALITARIAN_ELITISM_DESC:0 "Le [Root.GetName] sera satisfait si nous autorisons les politiques permettant l'amélioration de nos personnalités."
+ TOTALITARIAN_NO_ELITISM:0 "$TOTALITARIAN_ELITISM$"
+ TOTALITARIAN_GOVERNORS:0 "Gouvernance régionale"
+ TOTALITARIAN_GOVERNORS_DESC:0 "Le [Root.GetName] sera satisfait si nous maintenons les secteurs sous contrôle en nous assurant que chacun d'entre eux est dirigé par un §Ygouverneur§!."
+ TOTALITARIAN_FEW_GOVERNORS:0 "$TOTALITARIAN_GOVERNORS$"
+ TOTALITARIAN_STRONG_ARMY:0 "Discipline militaire"
+ TOTALITARIAN_STRONG_ARMY_DESC:0 "Le [Root.GetName] sera satisfait si nous stationnons au moins §Y6§! armées de n'importe quel type sur tous les mondes de la [Root.Owner.GetName] peuplés d'au moins §Y6§! pops."
+ TOTALITARIAN_WEAK_ARMY:0 "$TOTALITARIAN_STRONG_ARMY$"
+ factions.1.title:0 "Formation d'une faction"
+ factions.1.desc:0 "Une nouvelle faction a récemment suscité une certaine adhésion sur la scène politique [Root.Owner.GetAdj]. Elle s'est elle-même baptisée « [Root.GetName] » et, guidée par son fondateur, notre [Root.Leader.GetTitle] [Root.Leader.GetName], ses membres n'ont cessé de faire pression pour que diverses questions leur tenant à coeur soient réglées.\n\nIl est probable que nous verrons apparaître d'autres factions à l'avenir, à mesure que la population va se multiplier et ses éthiques se disperser dans différentes directions. Une faction mécontente risque de nous causer des ennuis, mais toutes celles qui approuveront les actions du gouvernement pourront s'avérer fort utiles..."
+ PROGRESSIVE_AUTO:0 "$PROGRESSIVE_NO_AUTO$"
+ PROSPERITY_NO_LIQUIDITY:0 "$PROSPERITY_LIQUIDITY$"
+ PROSPERITY_NO_STRATEGIC_RESOURCE1:0 "$PROSPERITY_WANTS_STRATEGIC_RESOURCE1$"
+ PROSPERITY_NO_STRATEGIC_RESOURCE2:0 "$PROSPERITY_WANTS_STRATEGIC_RESOURCE2$"
+ PROSPERITY_NO_STRATEGIC_RESOURCE3:0 "$PROSPERITY_WANTS_STRATEGIC_RESOURCE3$"
+ PROSPERITY_NO_TRADITION:0 "$PROSPERITY_TRADITION$"
+ #PROSPERITY_NO_PEACE:0 "$PROSPERITY_KEEP_THE_PEACE$"
+ PROSPERITY_NO_PEACE:0 "$PROSPERITY_PEACE$"
+ pft_prosperity_desc:2 "La faction pléniciste aspire à la croissance économique et à l'acquisition de ressources. Elle apprécie, entre autres, une abondance de crédits énergétiques et de ressources stratégiques. Au contraire, elle désapprouve les conflits armés, qui nuisent au développement intérieur.\n\n§LÉthique pacifiste§!"
+ pft_prosperity:0 "Faction pléniciste"
+ PROGRESSIVE_NO_AUTO:0 "Contre l'autocratie"
+ PROSPERITY_LIQUIDITY:0 "Liquidités solides"
+ PROSPERITY_LIQUIDITY_DESC:0 "Le [Root.GetName] sera satisfait si nous conservons au moins §Y3000§!£energy  en permanence."
+ PROSPERITY_WANTS_STRATEGIC_RESOURCE1:0 "Acquisition de ressources stratégiques"
+ PROSPERITY_WANTS_STRATEGIC_RESOURCE2:0 "Contrôle de ressources stratégiques"
+ PROSPERITY_WANTS_STRATEGIC_RESOURCE3:0 "Domination des ressources stratégiques"
+ PROSPERITY_WANTS_STRATEGIC_RESOURCE_DESC1:0 "Le [Root.GetName] sera satisfait si nous contrôlons au moins §Y1§! ressource stratégique."
+ PROSPERITY_WANTS_STRATEGIC_RESOURCE_DESC2:0 "Le [Root.GetName] sera satisfait si nous contrôlons au moins §Y5§! ressource stratégique."
+ PROSPERITY_WANTS_STRATEGIC_RESOURCE_DESC3:0 "Le [Root.GetName] sera satisfait si nous contrôlons au moins §Y10§! ressource stratégique."
+ PROSPERITY_TRADITION:0 "Prospérité traditionnelle"
+ PROSPERITY_TRADITION_DESC:0 "Le [Root.GetName] sera satisfait si nous adoptons n'importe quelle tradition mettant l'accent sur la §Yprospérité§!."
+ PROSPERITY_PEACE:0 "Maintien de la paix"
+ PROSPERITY_KEEP_THE_PEACE_DESC:0 "La stabilité est indispensable au développement. Le [Root.GetName] sera donc satisfait si nous ne faisons pas la guerre."
+ factions.1.desc.start:0 "Une nouvelle faction a récemment suscité une certaine adhésion sur la scène politique [Root.Owner.GetAdj]. Dirigée par le §H[Root.Leader.GetTitle] [Root.Leader.GetName]§!, elle s'est elle-même donné le nom de §H[Root.GetName]§!. "
+ factions.1.desc.firstfinisher:0 "Une faction mécontente risque de nous causer des ennuis, mais toutes celles qui approuveront les actions du gouvernement pourront s'avérer fort utiles..."
+ factions.1.desc.imperialist:0 "Ses membres nous poussent à affirmer notre domination militaire sur le reste de la galaxie.\n\n"
+ factions.1.desc.isolationist:0 "Ses membres militent pour la fermeture des frontières et le refus de toute ingérance dans les affaires de la galaxie.\n\n"
+ factions.1.desc.progressive:0 "Ses membres oeuvrent pour qu'égalité et justice soient accordées à tous les habitants de l'empire.\n\n"
+ factions.1.desc.prosperity:1 "Ses membres militent pour que l'empire accorde la priorité à la croissance et la stabilité par des moyens pacifiques."
+ factions.1.desc.supremacist:0 "Ses membres cherchent à affirmer la primauté de l'espèce [Root.Owner.GetSpeciesAdj], quite à limiter pour cela les droits des aliens.\n\n"
+ factions.1.desc.technologist:0 "Ses membres défendent avec tous les moyens à leur disposition la mise en valeur des sciences.\n\n"
+ factions.1.desc.totalitarian:0 "Ses membres défendent avec ardeur une centralisation poussée à l'extrême du pouvoir politique et militaire.\n\n"
+ factions.1.desc.traditionalist:0 "Ses membres sont animés par des valeurs spiritualistes et conservatrices.\n\n"
+ factions.1.desc.xenoist:0 "Ses membres militent pour l'ouverture de relations amicales avec les espèces aliens.\n\n"
+ SUPREMACIST_NO_MIGRATION_TREATIES:0 "Aucune immigration"
+ SUPREMACIST_MIGRATION_TREATIES:0 "$SUPREMACIST_NO_MIGRATION_TREATIES$"
+ SUPREMACIST_NO_MIGRATION_TREATIES_DESC:0 "Le [Root.GetName] sera mécontent si nous signons le moindre §Ytraité migratoire§!."
+ SUPREMACIST_DOMINATION_TRADITION:0 "Traditions de domination"
+ SUPREMACIST_NO_DOMINATION_TRADITION:1 "$SUPREMACIST_DOMINATION_TRADITION$"
+ SUPREMACIST_DOMINATION_TRADITION_DESC:0 "Le [Root.GetName] sera satisfait si nous adoptons n'importe quelle §Ytradition de domination§!."
+ SUPREMACIST_GIANT_MASSACRE:0 "Massacre des léviathans"
+ SUPREMACIST_NO_GIANT_MASSACRE:0 "$SUPREMACIST_GIANT_MASSACRE$"
+ SUPREMACIST_GIANT_MASSACRE_DESC:0 "Le [Root.GetName] sera satisfait pour un temps si nous épargnons aux gigantesques §Yléviathans§! plus de souffrances. De façon définitive."
+ XENOIST_DIPLOMACY_TRADITION:1 "Traditions [Root.GetDiplomacyTraditionNameArticle] [Root.GetDiplomacyTraditionName]"
+ XENOIST_NO_DIPLOMACY_TRADITION:0 "$XENOIST_DIPLOMACY_TRADITION$"
+ XENOIST_DIPLOMACY_TRADITION_DESC:1 "Le [Root.GetName] sera satisfait si nous adoptons les §Ytraditions [Root.GetDiplomacyTraditionNameArticle] [Root.GetDiplomacyTraditionName]§!."
+ XENOIST_PRE_SAPIENT_SURVIVAL:0 "Survie des préconscients"
+ XENOIST_NO_PRE_SAPIENT_SURVIVAL:0 "$XENOIST_PRE_SAPIENT_SURVIVAL$"
+ XENOIST_PRE_SAPIENT_SURVIVAL_DESC:0 "Le [Root.GetName] sera mécontent si nous ne parvenons pas à entrer dans la loi la survie des espèces préconscientes."
+ XENOIST_NO_PRIMITIVE_INVASION:0 "Objections aux accaparements"
+ XENOIST_PRIMITIVE_INVASION:0 "$XENOIST_NO_PRIMITIVE_INVASION$"
+ XENOIST_NO_PRIMITIVE_INVASION_DESC:0 "Le [Root.GetName] sera mécontent si nous envahissons purement et simplement des mondes primitifs."
+ XENOIST_FEDERATED:0 "Fédérés"
+ XENOIST_NOT_FEDERATED:0 "$XENOIST_FEDERATED$"
+ XENOIST_FEDERATED_DESC:0 "Le [Root.GetName] sera satisfait si nous intégrons une §Yfédération§!."
+ XENOIST_RECENT_COMMS:0 "Nouveau contact"
+ XENOIST_NO_RECENT_COMMS:0 "$XENOIST_RECENT_COMMS$"
+ XENOIST_RECENT_COMMS_DESC:0 "Le [Root.GetName] sera satisfait pour un temps si nous établissons des communications avec d'autres empires."
+ IMPERIALIST_OVERLORD:0 "Hégémonie impériale"
+ IMPERIALIST_NOT_OVERLORD:0 "$IMPERIALIST_OVERLORD$"
+ IMPERIALIST_OVERLORD_DESC:0 "Le [Root.GetName] si nous établissons notre §Ysuzeraineté§! sur une ou plusieurs xénopuissances."
+ IMPERIALIST_SLAYER:0 "Tueurs de léviathans"
+ IMPRERIALIST_NOT_SLAYER:0 "$IMPERIALIST_SLAYER$"
+ IMPERIALIST_SLAYER_DESC:0 "Le [Root.GetName] sera satisfait pour un temps si nous détruisons un §Yléviathan§! de l'espace."
+ ISOLATIONIST_NO_AGGRESSIVE_WAR:0 "Refus de l'agression"
+ ISOLATIONIST_AGGRESSIVE_WAR:0 "$ISOLATIONIST_NO_AGGRESSIVE_WAR$"
+ ISOLATIONIST_NO_AGGRESSIVE_WAR_DESC:0 "Le [Root.GetName] sera mécontent si nous mettons des vies [Root.Owner.GetAdj]s en danger sur la scène galactique en participant à la moindre guerre d'agression."
+ ISOLATIONIST_NO_DEFENSIVE_WAR:0 "Refus de résistance"
+ ISOLATIONIST_DEFENSIVE_WAR:0 "$ISOLATIONIST_NO_DEFENSIVE_WAR$"
+ ISOLATIONIST_NO_DEFENSIVE_WAR_DESC:0 "Le [Root.GetName] sera mécontent pour un temps si nous prenons les armes, même si cela s'avère nécessaire pour nous défendre."
+ ISOLATIONIST_MOVEMENT_RESTRICTED:0 "Restriction de mouvement"
+ ISOLATIONIST_MOVEMENT_UNRESTRICTED:0 "$ISOLATIONIST_MOVEMENT_RESTRICTED$"
+ ISOLATIONIST_MOVEMENT_RESTRICTED_DESC:0 "Le [Root.GetName] sera mécontent de toute arrivée de xénos - qu'ils soient des réfugiés ou des migrants autorisés par les traités migratoires."
+ TRADITIONALIST_NO_ROBOT_RIGHTS:0 "Aucun droit aux synthétiques"
+ TRADITIONALIST_NO_ROBOT_RIGHTS_DESC:0 "Le [Root.GetName] sera très mécontent si nous ne parvenons pas à faire interdire l'égalité des droits entre synthétiques et organiques."
+ TRADITIONALIST_ROBOT_RIGHTS:0 "$TRADITIONALIST_NO_ROBOT_RIGHTS$"
+ TRADITIONALIST_UNSPIRITUALIST:0 "Minorité assiégée"
+ TRADITIONALIST_NOT_UNSPIRITUALIST:0 "$TRADITIONALIST_UNSPIRITUALIST$"
+ TRADITIONALIST_UNSPIRITUALIST_DESC:0 "Le [Root.GetName] sera mécontent si nous considérons les croyances spiritualistes comme le problème d'une minorité au sein de la [Root.Owner.GetName]."
+ TRADITIONALIST_SHROUD_BOON:0 "Avantage du Suaire"
+ TRADITIONALIST_NO_SHROUD_BOON:0 "$TRADITIONALIST_SHROUD_BOON$"
+ TRADITIONALIST_SHROUD_BOON_DESC:0 "Le [Root.GetName] sera satisfait pour un temps si nous retirons des avantages du Suaire."
+ TRADITIONALIST_SHROUD_CURSE:0 "Malédiction du Suaire"
+ TRADITIONALIST_NO_SHROUD_CURSE:0 "$TRADITIONALIST_SHROUD_CURSE$"
+ TRADITIONALIST_SHROUD_CURSE_DESC:0 "Le [Root.GetName] sera mécontent pour un temps si le Suaire nous cause des soucis."
+ TECHNOLOGIST_DISCOVERY:0 "Traditions de découverte"
+ TECHNOLOGIST_NO_DISCOVERY:0 "$TECHNOLOGIST_DISCOVERY$"
+ TECHNOLOGIST_DISCOVERY_DESC:0 "Le [Root.GetName] sera satisfait si nous adoptons la moindre §Ytradition de découverte§!."
+ TECHNOLOGIST_SECRET_KNOWLEDGE:0 "Savoir secret"
+ TECHNOLOGIST_NO_SECRET_KNOWLEDGE:0 "$TECHNOLOGIST_SECRET_KNOWLEDGE$"
+ TECHNOLOGIST_SECRET_KNOWLEDGE_DESC:0 "Le [Root.GetName] sera satisfait si nous accédons à des connaissances cachées, que ce soit grâce à des §Yconnaissances§! ou à des §Ycaches de données§!."
+ PROGRESSIVE_NO_CASTE:0 "Contre les castes"
+ PROGRESSIVE_NO_CASTE_DESC:0 "Le [Root.GetName] sera très mécontent si nous enfermons n'importe quel habitant de l'empire dans un §Ysystème de caste§!."
+ PROGRESSIVE_CASE:0 "$PROGRESSIVE_NO_CASTE$"
+ TOTALITARIAN_MONARCHY1:0 "$TOTALITARIAN_MONARCHY$"
+ TOTALITARIAN_MONARCHY2:0 "$TOTALITARIAN_MONARCHY$"
+ TOTALITARIAN_MONARCHY3:0 "$TOTALITARIAN_MONARCHY$"
+ TOTALITARIAN_HARMONY:0 "Empire harmonieux"
+ TOTALITARIAN_NO_HARMONY:0 "$TOTALITARIAN_HARMONY$"
+ TOTALITARIAN_HARMONY_DESC:0 "Le [Root.GetName] sera satisfait si nous adoptons n'importe quelle §Ytradition d'harmonie§!."
+ TOTALITARIAN_EXTRANATIONAL_AUTHORITY:0 "Autorité extraimpériale"
+ TOTALITARIAN_NO_EXTRANATIONAL_AUTHORITY:0 "$TOTALITARIAN_EXTRANATIONAL_AUTHORITY$"
+ TOTALITARIAN_EXTRANATIONAL_AUTHORITY_DESC:0 "Le [Root.GetName] sera satisfait si nous étendons notre influence pour dominer des §Ydépendances§!."
+ TOTALITARIAN_UNDERLING:0 "Soumission"
+ TOTALITARIAN_NOT_UNDERLING:0 "$TOTALITARIAN_UNDERLING$"
+ TOTALITARIAN_UNDERLING_DESC:0 "Le [Root.GetName] sera mécontent si nous devenons une dépendance sous §Ysuzeraineté étrangère§!."
+ PROSPERITY_PEACE_DESC:0 "La stabilité est indispensable au développement. Le [Root.GetName] sera donc satisfait si nous ne faisons pas la guerre."
+ PROSPERITY_NOT_AGGRESSOR:0 "Non violence"
+ PROSPERITY_AGGRESSOR:0 "$PROSPERITY_NOT_AGGRESSOR$"
+ PROSPERITY_NOT_AGGRESSOR_DESC:0 "Le [Root.GetName] sera très mécontent si nous gâchons des vies et des ressources dans des guerres d'agression."
+ factions.2000.title:0 "Changements éthiques dans la [TargetFaction.Owner.GetName]"
+ factions.2000.desc.start:0 "Après une longue période de soutien au §Y[TargetFaction.GetName]§!, la §Y[TargetFaction.Owner.GetName]§! a fini par adopter cette faction, faisant siennes toutes les valeurs et politiques qu'elle prônait jusqu'à présent."
+ factions.2000.desc.imperialist:0 "En faisant entrer cette faction au sein de son gouvernement, elle est devenue plus ouvertement §Hmilitariste§!.\n\n"
+ factions.2000.desc.isolationist:0 "En faisant entrer cette faction au sein de son gouvernement, elle est devenue plus ouvertement §Hxénophobe§!.\n\n"
+ factions.2000.desc.progressive:0 "En faisant entrer cette faction au sein de son gouvernement, elle est devenue plus ouvertement §Hégalitariste§!.\n\n"
+ factions.2000.desc.prosperity:0 "En faisant entrer cette faction au sein de son gouvernement, elle est devenue plus ouvertement §Hpacifiste§!.\n\n"
+ factions.2000.desc.supremacist:0 "En faisant entrer cette faction au sein de son gouvernement, elle est devenue plus ouvertement §Hxénophobe§!.\n\n"
+ factions.2000.desc.technologist:0 "En faisant entrer cette faction au sein de son gouvernement, elle est devenue plus ouvertement §Hmatérialiste§!.\n\n"
+ factions.2000.desc.totalitarian:0 "En faisant entrer cette faction au sein de son gouvernement, elle est devenue plus ouvertement §Hautoritariste§!.\n\n"
+ factions.2000.desc.traditionalist:0 "En faisant entrer cette faction au sein de son gouvernement, elle est devenue plus ouvertement §Hspiritualiste§!.\n\n"
+ factions.2000.desc.xenoist:0 "En faisant entrer cette faction au sein de son gouvernement, elle est devenue plus ouvertement §Hxénophile§!.\n\n"
+ henrik.1234.name:0 "§HPrimitifs décalés§! : mise à jour"
+ henrik.1234.desc:0 "Le poste d'observation en orbite de l'étrange monde primitif §YTerra-1444§! a rassemblé dans un rapport les événements récents.\n\n§S--- --- ---§!\n\nAnnée planétaire §Y1698§! :\nUne §Yalliance diplomatique improbable§! a permis d'éviter, au dernier moment, une §Ysituation de guerre§! contre §Yun jeune dirigeant§! du §YNord de l'Europe§!.\n\n§S--- --- ---§!\n\nAnnée planétaire §Y1700§! :\nUne §Ybranche de la sous-espèce Habsbourg, de plus en plus dégénérée§!, s'est éteinte dans la sous-région §Yeuropéenne§! appelée §YEspagne§!.\n\n§S--- --- ---§!\n\nAnnée planétaire §Y1702§! :\nLa fin de l'équilibre des puissances en §YEurope occidentale et sud-occidentale§! a finalement déclenché §Yun conflit meurtrier§!."
+ henrik.1234.a:0 "Prions que ces sauvages ne quittent jamais leur globe"
+ henrik.12344.name:0 "§HPrimitifs§! : mise à jour"
+ henrik.12344.desc:0 "Au terme de la §Y34ème Offensive ryûkyû§!, le monde primitif §YTerra-5§! est sur le point d'être unifié sous la coupe d'un gouvernement global."
+ henrik.12344.b:0 "Pas si on peut l'empêcher, shôgun §RDDRJake§! !"
+ henrik.12344.b.tooltip:0 "Déployons toutes les armées disponibles pour une §Yinvasion spatiale§!"
+ henrik.12344.a:0 "Prions que ces sauvages ne quittent jamais leur globe"
+ TRADITIONALIST_NO_FULL_ROBOT_RIGHTS:0 "Aucun droit aux synthés"
+ TRADITIONALIST_NO_FULL_ROBOT_RIGHTS_DESC:0 "Le [Root.GetName] sera grandement mécontent si les synthétiques sans âme reçoivent la pleine citoyenneté."
+ TRADITIONALIST_FULL_ROBOT_RIGHTS:0 "Machines profanes"
+ IMPERIALIST_SUPREMACY_TRADITION:0 "Traditions de suprématie"
+ IMPERIALIST_NO_SUPREMACY_TRADITION:0 "$IMPERIALIST_SUPREMACY_TRADITION$"
+ IMPERIALIST_SUPREMACY_TRADITION_DESC:0 "Le [Root.GetName] sera satisfait si nous adoptons n'importe quelle §Ytradition de suprématie§!."
+ TRADITIONALIST_HARMONY:0 "Empire harmonieux"
+ TRADITIONALIST_NO_HARMONY:0 "$TRADITIONALIST_HARMONY$"
+ TRADITIONALIST_HARMONY_DESC:0 "Le [Root.GetName] sera satisfait si nous adoptons la moindre §Ytradition d'harmonie§!."
+ TOTALITARIAN_DOMINATION:0 "Domination traditionnelle"
+ TOTALITARIAN_NO_DOMINATION:0 "$TOTALITARIAN_DOMINATION$"
+ TOTALITARIAN_DOMINATION_DESC:0 "Le [Root.GetName] sera satisfait si nous adoptons n'importe quelle §Ytradition de domination§!."
+ TOTALITARIAN_AUTOCRACY:0 "Autocratie"
+ TOTALITARIAN_AUTOCRACY_DESC:0 "Le [Root.GetName] sera satisfait si le régime est autocratique grâce à une §Yautorité impériale ou dictatoriale§!."
+ TOTALITARIAN_NO_AUTOCRACY:0 "$TOTALITARIAN_AUTOCRACY$"
+ TOTALITARIAN_DEMOCRACY:0 "Anti-démocratie"
+ TOTALITARIAN_DEMOCRACY_DESC:0 "Le [Root.GetName] sera extrêmement mécontent si l'§Yautorité est démocratique§!."
+ TOTALITARIAN_NO_DEMOCRACY:0 "$TOTALITARIAN_DEMOCRACY$"

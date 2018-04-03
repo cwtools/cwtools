@@ -1,0 +1,48 @@
+﻿l_russian:
+ 
+ # GetEdibleSpeciesName Test
+ edible_avi:0 "куриный наггетс"
+ edible_avi_plural:0 "куриные наггетсы"
+ edible_mam:0 "бургер"
+ edible_mam_plural:0 "бургеры"
+ edible_rep:0 "ящерица на шампуре"
+ edible_rep_plural:0 "жареные ящерицы"
+ edible_fun:0 "шиитаке"
+ edible_fun_plural:0 "кучки шиитаке"
+ edible_mol:0 "устрица"
+ edible_mol_plural:0 "гребешки"
+ edible_hum:0 "вкусный стейк"
+ edible_hum_plural:0 "сочные подданные"
+ edible_art:0 "хрустящий жук"
+ edible_art_plural:0 "комары в соусе"
+ edible_plant:0 "салат-латук"
+ edible_plants:0 "смесь салатов"
+ edible_fallback:0 "лакомый кусочек"
+ edible_fallback_plural:0 "лакомые кусочки"
+ 
+ test.edible.title:0 "Хотите есть?"
+ test.edible.desc:0 "Даже [Root.GetRulerName], [Root.GetRulerTitle] нашей великой империи - это всего лишь [Root.GetEdibleName], а вокруг [Root.GetEdibleNamePlural]."
+ 
+ getunitdrone_unit:0 "Модуль"
+ getunitdrone_unit_plural:0 "Модули"
+ getunitdrone_drone:0 "Автономный дрон"
+ getunitdrone_drone_plural:0 "Автономные дроны"
+ getunitdrone_leader:0 "Лидер"
+ getunitdrone_leader_plural:0 "Лидеры"
+ 
+ monsteronship_desc:0 "Дикое животное вломилось на наш научный корабль и пытается убить экипаж. Без помощи военных им долго не протянуть!"
+ monsteronship_mach_desc:0 "Дикий органический зверь вломился на наш научный корабль и пытается уничтожить единицы нашего экипажа. Без помощи военных им долго не протянуть!"
+ 
+ getscientist_machine:0 "научный модуль"
+ getscientist_hive:0 "научный трутень"
+ getscientist_normal:0 "ученый"
+ getscientistplural_machine:0 "научные модули"
+ getscientistplural_hive:0 "научные трутни"
+ getscientistplural_normal:0 "ученые"
+ 
+ get1stplanetkiller_cracker:0 "$PLANET_KILLER_CRACKER$"
+ get1stplanetkiller_shielder:0 "$PLANET_KILLER_SHIELDER$"
+ get1stplanetkiller_neutron:0 "$PLANET_KILLER_NEUTRON$"
+ get1stplanetkiller_godray:0 "$PLANET_KILLER_GODRAY$"
+ get1stplanetkiller_nanobots:0 "$PLANET_KILLER_NANOBOTS$"
+ get1stplanetkiller_none:0 "«Убийца планет»"

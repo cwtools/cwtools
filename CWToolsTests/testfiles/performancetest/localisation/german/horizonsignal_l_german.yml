@@ -1,0 +1,489 @@
+﻿l_german:
+
+ ### EVENT CHAINS
+ WORM_CHAIN_1_title:0 "Die wartende Schlange: Signale"
+ WORM_CHAIN_1_desc:0 "Etwas hat mit uns Kontakt aufgenommen - von einem Ort aus, wo Zeit und Raum zu einem Knoten geschrumpft sind.\n\nEs verlangt nach uns."
+
+ WORM_CHAIN_2_title:0 "Die wartende Schlange: Zeichen"
+ WORM_CHAIN_2_desc:0 "Es ist unwahrscheinlich, dass die Zeit in beide Richtungen verlaufen kann. Es ist unwahrscheinlich, dass sich eine kosmische Schlange um das Universum geschlungen hat und mit Augen hineinblickt, die größer als unsere gesamte Spezies sind. Andererseits sind in letzter Zeit viele unwahrscheinliche Dinge geschehen."
+
+ ### STATIC MODIFIERS
+ happy_with_open_loop_temple:0 "Kreislauftempel-Besucherzentrum"
+ happy_with_open_loop_temple_desc:0 "In diesem Besucherzentrum organisiert fröhliches, effizientes Personal Führungen und zeigt den Teilnehmern uranfängliche Sigillen unter hellem Flutlicht. Hilfreiche Tafeln bieten Erläuterungen an."
+
+ spiritual_happy_with_open_loop_temple:0 "Kreislauftempel-Pilgerweg"
+ spiritual_happy_with_open_loop_temple_desc:0 "Abermals säuseln das huschende Geräusch von Füßen und das Echo von Gebeten um die Basaltbögen."
+
+ waiting_world_ruins:0 "Triste Ruinen"
+ waiting_world_ruins_desc:0 "Der Wind seufzt in den Ruinen. Dort ist niemand mehr."
+
+ loop_debris_01_object:0 "Horizontsignal-Trümmer"
+ loop_debris_02_object:0 "Spiralförmige Kapsel"
+
+ worm_quarantined:0 "Unter Quarantäne"
+ worm_quarantined_desc:0 "ALL DIESE WELTEN GEHÖREN EUCH - BIS AUF DIESE."
+
+ worm_manifestation:0 "Was späht von draußen rein?"
+ worm_manifestation_desc:0 "Alles kehrt irgendwann wieder"
+
+ ### TECHNOLOGY
+ tech_akx_worm_1:0 "Entropische Rekursion"
+ tech_akx_worm_1_desc:0 "Das Universum tendiert unwiderstehlich nach vorne und unten. Diese Tendenz kann nicht umgekehrt werden ... aber man kann sie unterminieren, wenngleich nicht ohne Konsequenzen."
+
+ tech_akx_worm_2:0 "Doktrin: Merkwürdiger Kreislauf"
+ tech_akx_worm_2_desc:0 "Ein Satz sozialer Protokolle, die auf paradoxer Intuition und Liebe basieren. Wenn wir das System des Kreislaufs verstehen, wissen wir, dass wir sowohl durch den Erhalt als auch durch das Erteilen von Anweisungen Einfluss üben können."
+
+ tech_akx_worm_3:0 "Omega-Theorie"
+ tech_akx_worm_3_desc:0 "Wenn sich ein temporäres Paradox vermischt, entsteht eine Art Bewusstsein mit eigenen Bedürfnissen und Wünschen. Genau das ist mit dem Bewusstsein passiert, das manche die wartende Schlange nennen. Wenn wir uns an diesem Bewusstsein ausrichten können, könnten wir vielleicht eine Art der Unsterblichkeit erreichen."
+ TECH_UNLOCK_AKX_WORM_3_TITLE:0 "$tech_akx_worm_3$"
+ TECH_UNLOCK_AKX_WORM_3_DESC:0 "$tech_akx_worm_3_desc$"
+
+
+ ### BUILDINGS
+ building_akx_worm_1:0 "Spiral-Energie-Hub"
+ building_akx_worm_1_desc:0 "Sorgt durch den Einsatz von Technik, die in der konventionellen Physik keinen Platz hat, für eine bedeutende Steigerung der planetaren Energieleistung. Beteiligt an nächtlichen Schrecken und Träumen vom Fallen."
+
+ building_akx_worm_2:0 "Kreislaufinstitut"
+ building_akx_worm_2_desc:0 "Kreislauflehren fördern Intuition, Konformität und einen nützlichen Sinn für die Perspektive."
+
+ building_akx_worm_3:0 "Omega-Ausrichtung"
+ building_akx_worm_3_desc:0 "Die Oberfläche dieses Objekts fängt den Weltraum ein. Das Innere ist durch keine bekannte Sensor- oder Aufnahmetechnologie sichtbar zu machen. Wir wissen aber alle, was sich im Inneren befindet."
+
+ requires_power_hub_absence:0 "Die Gegenwart herkömmlicher Energie-Hubs auf dem Planeten stört den Fluss der feinen Spiralströmungen, die wesentlich für die ordnungsgemäße Funktionsweise des Spiral-Energie-Hubs sind."
+
+ building_worm_mine:0 "Spiralmine"
+ building_worm_mine_desc:0 "Enge Schächte winden sich um spiralförmig verlaufende Mineraladern."
+
+ building_worm_farm:0 "Kreislauf-gepflügte Farm"
+ building_worm_farm_desc:0 "Die Feldfrüchte lehnen sich irgendwie in den Wind."
+
+ ### TRAITS
+ leader_trait_foredoomed_to_a_rendezvous:2 "Verurteilt zum Rendezvous"
+ leader_trait_foredoomed_to_a_rendezvous_desc:2 "Hat eine beunruhigende Zukunft erlebt."
+
+ ####################
+ ### SPECIAL PROJECTS
+ 
+ HORIZON_SIGNAL_PROJECT:0 "Horizontsignal-Analyse"
+ HORIZON_SIGNAL_PROJECT_DESC:0 "Widmen Sie ein Forschungsschiff der Entschlüsselung des merkwürdigen Signals, das aus dem schwarzen Loch im [Root.GetStarName]-System gesendet wird."
+ 
+ LOOP_TEMPLE_PROJECT:0 "Kreislauftempel-Untersuchung"
+ LOOP_TEMPLE_PROJECT_DESC:0 "Stellen Sie ein Forschungsprojekt auf, um mehr über den Kreislauftempel, seine Ursprünge und seinen Zweck zu erfahren."
+
+ MESSENGER_POD_PROJECT_1:0 "Studieren Sie den Boten und seine Botschaft."
+ MESSENGER_POD_PROJECT_1_DESC:0 "Vielleicht können wir eine Verbindung zu bestimmten anderen Ereignissen herstellen - oder vielleicht sogar eine Erklärung finden."
+
+ MESSENGER_POD_PROJECT_2_UNLEASHED:0 "Studieren Sie die Verbindungen des Boten."
+ MESSENGER_POD_PROJECT_2_UNLEASHED_DESC:0 "Erste Funde legen nahe, dass es eine intelligentere, aber vielleicht schwächere Spezies war."
+
+ MESSENGER_POD_PROJECT_2_LEASHED:0 "Studieren Sie die Verbindungen des Boten."
+ MESSENGER_POD_PROJECT_2_LEASHED_DESC:0 "Erste Funde legen nahe, dass es eine viel kräftigere und vielleicht aggressivere Spezies war."
+ 
+ COILS_GOD_PROJECT_DISRUPT:0 "Unterbrechen Sie die Spiralfederrituale."
+ COILS_GOD_PROJECT_DISRUPT_DESC:0 "Störung, Sabotage, Desinformation. Wir werden alles in unserer Macht Stehende tun, ohne die Grenze zu überschreiten."
+ 
+ COILS_GOD_PROJECT_PREVENT:0 "Verhindern Sie die Spiralfederrituale."
+ COILS_GOD_PROJECT_PREVENT_DESC:0 "Verdeckte Operationen einschließlich Fälschung, Entführung, Indoktrination, selbst Brandstiftung und Mord: Wir müssen tun, was getan werden muss."
+  
+ COILS_GOD_PROJECT_PARTICIPATE:0 "Nehmen Sie an den Spiralfederritualen teil."
+ COILS_GOD_PROJECT_PARTICIPATE_DESC:0 "Schicken Sie Ethnografen auf die Oberfläche, um die Spiralfederrituale aus nächster Nähe zu beobachten. Das ist ein bemerkenswertes Kulturereignis! Wir müssen so viel wie möglich darüber erfahren."
+
+ WAITING_WORLD_DISAPPEARANCE:0 "Untersuchen Sie das Verschwinden der Bevölkerung"
+ WAITING_WORLD_DISAPPEARANCE_DESC:0 "Erst gab es zu viele Kolonisten, und jetzt sind gar keine mehr da. Was ist passiert?"
+ 
+ WAITING_WORLD_HYPERAPPEARANCE:0 "Untersuchen Sie das ... was auch immer mit der Bevölkerung geschehen ist."
+ WAITING_WORLD_HYPERAPPEARANCE_DESC:0 "Erst gab es zu viele Kolonisten, und jetzt scheint eine völlig andere Bevölkerung vor Ort zu sein. Was ist passiert?"
+ 
+ WAITING_WORLD_PURGE:0 "Säubern Sie die Bevölkerung von mutmaßlichen Alien-Doppelgängern"
+ WAITING_WORLD_PURGE_DESC:0 "Der einzige Weg, die mysteriöse Ersatzbevölkerung auf [Root.GetName] zu beseitigen, ist eine umfassende Orbitalbombardierung."
+ 
+ WORM_ENTRY_POINT:0 "Erzeugung des Eintrittspunkts"
+ WORM_ENTRY_POINT_DESC:0 "Die Theorie legt nahe, dass die temporären Anomalien, auf die wir getroffen sind, von diesem Ding verursacht werden, das wir den Kreislauf oder die Schlange nennen. Dabei handelt es sich um einen verworrenen Knoten aus Paradoxen, der ein Bewusstsein entwickelt hat: ein Geflecht aus Wahrnehmung und Begierde jenseits der Zeit. Es ist die Ursache oder das Ergebnis, es ist schwer zu sagen. Dennoch: Anfänge und Enden ziehen es an. Wir können die Omega-Ausrichtung benutzen, um es in unser Heimatsystem zu lotsen. Wenn wir das tun, wird mit Sicherheit etwas passieren. Dies ist viele Dinge, insbesondere aber ist es Wissenschaft."
+
+ HORIZON_DEBRIS_PROJECT:0 "Untersuchen Sie Fragmente beim Ursprung des Horizontsignals"
+ HORIZON_DEBRIS_PROJECT_DESC:0 "Als das Triebwerk detonierte, wurden die Veränderungen im Weltraum um das Schiff herum unterbrochen. Die Fragmente weisen ungewöhnliche physische und temporäre Eigenschaften auf."
+
+ SYZYGY_DEBRIS_PROJECT:0 "Untersuchen Sie die Überreste der Syzygy"
+ SYZYGY_DEBRIS_PROJECT_DESC:0 "Die Syzygy hat Zeit an einem anderen Ort verbracht. Eine mögliche Zukunft? Ein alternatives Universum? Wir können mehr lernen."
+ 
+  
+ ################################################
+ ##THE HORIZON SIGNAL: intro events to Worm chain 
+ 
+ akx.9000.name:0 "Das Horizontsignal"
+ akx.9000.desc:0 "Ein aufmerksamer Kommunikationsoffizier hat ein schwaches Signal identifiziert, das in den Gammastrahlenblitzen aus dem lokalen schwarzen Loch fast untergegangen wäre - schwach, aber zweifelsfrei künstlichen Ursprungs. Dies eröffnet unseren Wissenschaftlern faszinierende Möglichkeiten."
+ #create the HORIZON_SIGNAL_PROJECT project
+
+ akx.9001.name:0 "Das Horizontsignal: §HSCHWERKRAFT IST VERLANGEN§!"
+ akx.9001.desc:0 "Wissenschaftsoffizier [Root.GetLeaderName] berichtet, dass das Signal unerwartet einfach zu entschlüsseln war ... aber dass ihr Team beachtliche Zeit mit der Bestätigung verbracht hat, dass es sich nicht um einen Scherz handelt. Es ist eine sich wiederholende, halbwegs schlüssige Nachricht in der [Root.Owner.GetAdj]en Sprache - wohl so etwas wie ein Gedicht. Sie wiederholt die Sätze §HSCHWERKRAFT IST VERLANGEN§! UND §HZEIT IST SICHT§!. Sie verschlüsselt Koordinaten in der Nähe des schwarzen Loches. Außerdem endet sie mit einer §Gnamentlichen§! Widmung des Wissenschaftsoffiziers - der leidenschaftslos hinzufügt, dass das Signal schon seit einem Zeitpunkt vor ihrer Geburt sendet. Das Signal könnte sogar schon älter als unsere Zivilisation sein."
+ akx.9001.a:0 "Faszinierend! Das Schiff zu diesen Koordinaten schicken."
+ akx.a.tooltip:0 "Dies startet die Horizontsignal-Ereigniskette."
+ akx.9001.b:0 "Das ist eine List ... oder eine Falle. Vermerken und weitermachen."
+ akx.9001.b.tooltip:0 "Die von uns für das Signal entwickelten Analysetechniken werden bei unserer Physik-Forschung Anwendung finden."
+ 
+ akx.9005.name:0 "Das Horizontsignal: §HDIE SCHLANGE§!"
+ akx.9005.desc:0 "Als sich die [Root.GetName] den Koordinaten im Signal nähert, beginnt sie, von Raumverzerrungen und merkwürdigen Linseneffekten zu berichten - ein Strom wertvoller Daten. Dann auf einmal wird die Übertragung verzerrt. Das Darauffolgende wird ausführlich analysiert.\n\nDie Aufregung in der Stimme von Wissenschaftsoffizier [horizonsignal_firstleader.GetName] schlägt in Angst um, als der Schiffsrumpf durch die zunehmend fremdartigen Bedingungen immer mehr Probleme bekommt. Das Schiff löst ein Notsignal aus. [horizonsignal_firstleader.GetName] schreit "die Schlange!" - vielleicht auch §HDIE SCHLANGE§!! Dann hören sämtliche Übertragungen auf. Die [Root.GetName] verschwindet spurlos - keine weiteren Übertragungen, keine Trümmer ... und der Weltraum ist bei diesen Koordinaten harmlos und völlig verzerrungsfrei. Die zurückgeschickten Daten aber haben unsere Physik-Forschung gewaltig nach vorne gebracht. Vielleicht war dies ihre Leben wert."
+ akx.9005.a.spiritualist:0 "Finsternis; Licht; Finsternis."
+ akx.9005.a.materialist:0 "Wir lernen, und wir machen weiter."
+ akx.9005.a.neutral:0 "Man wird sie nicht vergessen."
+
+ akx.9006.name:0 "Das Horizontsignal: - Ende der Nachricht -"
+ akx.9006.desc:0 "[horizonsignal_firstleader.GetName] fügt sich mit einer Mischung aus Widerwillen und Erleichterung. Ihre Psychoanalyse lässt später darauf schließen, dass sie regelmäßig unter Albträumen leiden - von unmöglichen Labyrinthen, vom hungrigen Schwindel des interstellaren Weltraums, davon, dass ihr Name in der Finsternis gerufen wird. Die Nachricht hat innerhalb eines Heimatwelt-Jahres aufgehört."
+ akx.9006.a:0 "Wir sind vor etwas entkommen."
+ akx.9006.b:0 "Wir haben etwas verloren."
+
+ akx.9010.name:0 "Das Horizontsignal: §HREPRISE§!"
+ akx.9010.desc:0 "Das schwarze Loch in [horizonsignal_system.GetName] ist wieder aktiv. In der Finsternis, am Rand des Normalraums, flackert abermals ein Kreislaufsignal. Dieses Mal aber ist eine akustische Meldung Teil des Signals. Sie klingt sehr nach der Stimme von [horizonsignal_firstleader.GetName]. "Was war, wird sein", stimmt [horizonsignal_firstleader.GetName] an, "was sein wird, war." Dann dieselben Koordinaten wie beim ersten Signal ... jene Koordinaten, bei denen [horizonsignal_firstleader.GetName] verloren ging - von den Medien "der Austrittspunkt" getauft. Dann sagen sie einen Namen: §G[horizonsignal_secondleader.GetName]§!."
+ akx.9010.a.collective:0 "Schickt [horizonsignal_secondleader.GetName] zum Austrittspunkt."
+ akx.9010.a.tooltip:0 "§H[horizonsignal_secondleader.GetName]§! wird in§Y30 Tagen§! beim Austrittspunkt ankommen."
+ akx.9010.a.collective.tooltip:0 "Wenn sie nicht zurückkehren, werden wir uns an sie erinnern."
+ akx.9010.a.notcollective:0 "[horizonsignal_secondleader.GetName] meldet sich freiwillig. Gestatten wir es."
+ akx.9010.b.collective:0 "Sie losschicken, den Antrieb ihres Schiffes aber zur Explosion vorbereiten."
+ akx.9010.b.notcollective:0 "Ihnen den Abflug gestatten, den Antrieb ihres Schiffes aber zur Explosion vorbereiten."
+ akx.9010.c:0 "Nicht dieses Mal. Ignorieren."
+
+ akx.9011.name:0 "Das Horizontsignal: Ich bin durch"
+ akx.9011.desc:0 "Dieses Mal fliegt das Schiff völlig automatisch. [horizonsignal_secondleader.GetName] ist das einzige Besatzungsmitglied an Bord. Als es sich dem Austrittspunkt nähert, füllt sich das Telemetriesystem mit faszinierenden Daten. Abermals biegt sich der Weltraum und die Schwerkraft gerät aus den Fugen. [horizonsignal_secondleader.GetName] liest die wesentlichen Telemetriedaten ab, mit lobenswert ruhiger Stimme: Wir haben einen Profi geschickt. Es dauert etwas, bis jemand etwas Seltsames am Timing bemerkt.\n\n[horizonsignal_secondleader.GetName] gibt die Daten nicht mehr als Echo wieder ... sondern als Vorhersage der Zukunft! Die Telemetrie stimmt nicht überein, wenngleich nur für wenige Sekunden ... dann ist sie wieder synchron. Das Überwachungsteam berichtet nur, dass sich das Konfidenzintervall vergrößert, als [horizonsignal_secondleader.GetName] erstaunt sagt: "Ich bin durch."\n\n"Es ist dunkel", wird nachgeschoben. "Das ist kein Problem. Wir können im Dunkeln leben. Daran hatte ich niemals gedacht, aber wir können hier natürlich für immer leben - wenn die Schlange nur wartet - "\n\nIn diesem Augenblick wird das Signal abgeschnitten und das Schiff verschwindet von den Sensorbildschirmen unseres Teams."
+ akx.9011.a:0 "Das ist schrecklich."
+ akx.9011.b:0 "Das ist bedauernswert."
+ akx.9011.c:0 "Das ist faszinierend."
+
+ akx.9012.name:0 "Das Horizontsignal: Eine Intervention"
+ akx.9012.desc:0 "Dieses Mal ist [horizonsignal_secondleader.GetName] das einzige Besatzungsmitglied an Bord. Das Schiff funktioniert vollautomatisch ... und seine Systeme sind darauf programmiert, das Triebwerk zur Explosion zu bringen, sobald die Bedingungen denen kurz vor dem Verschwinden des letzten Schiffes entsprechen. Als es sich dem Austrittspunkt nähert, füllt sich das Telemetriesystem mit faszinierenden Daten. Abermals biegt sich der Weltraum und die Schwerkraft gerät aus den Fugen. [horizonsignal_secondleader.GetName] liest die wesentlichen Telemetriedaten ab, mit lobenswert ruhiger Stimme: Wir haben einen Profi geschickt. Es dauert etwas, bis jemand etwas Seltsames am Timing bemerkt.\n\n[horizonsignal_secondleader.GetName] gibt die Daten nicht mehr als Echo wieder ... sondern als Vorhersage der Zukunft! Die Telemetrie stimmt nicht überein, wenngleich nur für wenige Sekunden ... dann ist sie wieder synchron. Das Überwachungsteam berichtet nur, dass sich das Konfidenzintervall vergrößert, als es zu einer plötzlichen Energiespitze kommt.\n\nDas Triebwerk ist detoniert: Ein kurzes Aufflackern stellaren Zorns, schnell verloren in der Finsternis des [horizonsignal_system.GetName]-Systems. Was auch immer wir dort vorgefunden haben, es könnte seine Einmischung noch bereuen. Wir werden es niemals erfahren. Das Horizontsignal kehrt nicht wieder, aber unser Team könnte in der Asche des Schiffs etwas Interessantes finden."
+ ##create HORIZON_DEBRIS_PROJECT
+ akx.9012.a:0 "Und trotzdem muss dies noch nicht das Ende bedeuten."
+
+ akx.9013.name:0 "Das Horizontsignal: - Ende der Nachricht -"
+ akx.9013.desc:0 "[horizonsignal_secondleader.GetName] fügt sich mit offensichtlicher Erleichterung. Ihre Psychoanalyse lässt später darauf schließen, dass sie regelmäßig unter Albträumen leiden - von unmöglichen Labyrinthen, vom hungrigen Schwindel des interstellaren Weltraums, davon, dass ihr Name in der Finsternis gerufen wird. Die Nachricht hat innerhalb eines Heimatwelt-Jahres aufgehört."
+ akx.9013.a:0 "Eine verpasste Gelegenheit."
+ akx.9013.b:0 "Ein knappes Entkommen."
+
+ akx.9020.name:0 "Horizontsignal: §HDAS TRIGON DAS QUINE DAS TRIGON§!"
+ akx.9020.desc:0 "Das Horizontsignal in [horizonsignal_system.GetName] ist abermals aktiv. Es hat seine Bemühungen gesteigert. Die Übertragung beinhaltet abermals die Koordinaten des Austrittspunkts. Sie ist mit den privaten Kommunikations-IDs von [horizonsignal_firstleader.GetName] und [horizonsignal_secondleader.GetName] unterzeichnet. Dieses Mal aber handelt es sich um ein generatives Textprogramm, das in einer veralteten Programmiersprache geschrieben wurde. Es scheint Liebesgedichte zu erstellen - an [horizonsignal_thirdleader.GetName] gerichtete Liebesgedichte.\n\nGanz ehrlich: Sie sind nicht besonders gut. Unsere Wissenschaftler stimmen aber zu, dass es ziemlich schwierig ist, Liebesgedichte prozedural zu erstellen ... und dass schwarze Löcher üblicherweise keine Liebesgedichte senden."
+ akx.9020.a:0 "Na ja, es hat höflich gefragt. [horizonsignal_thirdleader.GetName] schicken."
+ akx.9020.a.tooltip:0 "§H[horizonsignal_thirdleader.GetName]§! wird in§Y30 Tagen§! beim Austrittspunkt ankommen."
+ akx.9020.b:0 "[horizonsignal_thirdleader.GetName] mit präpariertem Triebwerk losschicken."
+ akx.9020.c:0 "Das ist böse und lächerlich und böse. Lassen wir es."
+
+ akx.9021.name:0 "Das Horizontsignal: Von wo das Ende kommt"
+ akx.9021.desc:0 ""Das wird mein Ende sein", sagt [horizonsignal_thirdleader.GetName] bei der Besprechung vor dem Start. "Ich weiß, dass ich nicht zurückkommen werde, aber irgendwie wusste ich schon immer, dass das passiert. Was auch immer sich im Schwarzen Loch befindet, hat schon eine lange, lange Zeit auf uns gewartet - ich glaube, es wartet schon seit meiner Geburt auf mich."\n\nDas Ein-Mann-Schiff nähert sich abermals dem Austrittspunkt. Der Weltraum brennt abermals wie ein Fieber. Abermals saugen unsere Sensormatrizen faszinierende Daten auf. Dieses Mal bleibt [horizonsignal_thirdleader.GetName] still. Die Telemetrie wird unregelmäßig, und dann ist auch sie still. Das Schiff hat den Austrittspunkt erreicht. Die Bedingungen um das Schiff herum kehren zum Normalzustand zurück. Nichts ist passiert.\n\nWirklich nichts? Das Überwachungsteam murmelt wild durcheinander. Das Schiff ist anders ... es ist ein ANDERES Schiff. Es ist das Schiff von [horizonsignal_firstleader.GetName], das all diese Jahre verschollen war und nun vom Austrittspunkt wegtreibt. Ein Bergungsteam findet es in makellosem Zustand und leer vor - keine Spur von der Besatzung und keine Hinweise auf Gewalteinwirkung. Im Schiffslog aber gibt es einen Eintrag unter dem Namen von [horizonsignal_firstleader.GetName], und zwar mit dem Titel §HWAS WAR, WIRD SEIN§!. Unsere Wissenschaftler werten ihn nervös aus. "Unmöglich", sagt einer von ihnen. "Das hoffe ich", sagt ein anderer.\n\nDas Schiff wird in "Findling" umbenannt und wieder in die Flotte integriert. Das Signal, ob es nun tot ist oder nur schläft, meldet sich niemals wieder."
+ akx.9021.a:0 "Und trotzdem muss dies noch nicht das Ende bedeuten."
+ 
+ akx.9022.name:0 "Das Horizontsignal: Eine Intervention"
+ akx.9022.desc:0 ""Das wird mein Ende sein", spricht der mutige Kapitän bei der Besprechung vor dem Start. "Ich weiß, dass ich nicht zurückkommen werde, aber irgendwie wusste ich schon immer, dass das passiert. Was auch immer sich im Schwarzen Loch befindet, hat schon eine lange, lange Zeit auf uns gewartet - ich glaube, es wartet schon seit meiner Geburt auf mich."\n\nDas Ein-Mann-Schiff nähert sich abermals dem Austrittspunkt. Der Weltraum brennt abermals wie ein Fieber. Abermals saugen unsere Sensormatrizen faszinierende Daten auf. Dieses Mal bleibt [horizonsignal_thirdleader.GetName] still. Die Telemetrie wird unregelmäßig ...\n\nUnd dann detoniert das Triebwerk: Ein kurzes Aufflackern stellaren Zorns, schnell verloren in der Finsternis des [horizonsignal_system.GetName]-Systems. Was auch immer wir dort vorgefunden haben, es könnte seine Einmischung noch bereuen. Wir werden es niemals erfahren. Das Horizontsignal kehrt nicht wieder, aber unser Team könnte in der Asche des Schiffs etwas Interessantes finden."
+ ##create HORIZON_DEBRIS_PROJECT
+ akx.9022.a:0 "Und trotzdem muss dies noch nicht das Ende bedeuten."
+
+
+ akx.9023.name:0 "Das Horizontsignal: - Ende der Nachricht -"
+ akx.9023.desc:0 "[horizonsignal_thirdleader.GetName] fügt sich mit offensichtlicher Erleichterung. Ihre Psychoanalyse lässt später darauf schließen, dass sie regelmäßig unter Albträumen leiden - von unmöglichen Labyrinthen, vom hungrigen Schwindel des interstellaren Weltraums, davon, dass ihr Name in der Finsternis gerufen wird. Die Nachricht hat innerhalb eines Heimatwelt-Jahres aufgehört."
+
+ akx.9090.name:0 "Das Horizontsignal: Ursache und Wirkung"
+ akx.9090.desc:0 "Unsere Beobachter berichten, dass das gesprächige schwarze Loch im [horizonsignal_system.GetName]-System ungefähr zum Todeszeitpunkt von [horizonsignal_secondleader.GetName] kurzzeitig aktiv geworden ist. Ein schneller und unverständlicher Signalstoß. Der einem wie ein Wutanfall vorkam, fügt einer der fantasievolleren Beobachter hinzu."
+ akx.9090.a:0 "Das hier ist noch nicht vorbei."
+
+ akx.9091.name:0 "Das Horizontsignal: In Memoriam"
+ akx.9091.desc:0 "Unsere Beobachter berichten, dass das gesprächige schwarze Loch im [horizonsignal_system.GetName]-System ungefähr zum Todeszeitpunkt von [horizonsignal_thirdleader.GetName] kurzzeitig aktiv geworden ist. Es hat das ursprüngliche Gedichtprogramm noch dreimal übertragen. Was einem wie ein betrunkener Trauernder vorkam, der bei einer Totenwache singt, fügte einer unserer etwas empfindsameren Beobachter hinzu."
+ akx.9091.a:0 "Das hier ist noch nicht vorbei."
+
+ akx.9095.name:0 "Das Horizontsignal: Eine Lektion in der Asche"
+ akx.9095.desc:0 "Wir haben Bedingungen geschaffen, die denen um das schwarze Loch herum ähneln. Wir haben herausgefunden, dass sich die geborgenen Fragmente im Kreislauf zwischen Zuständen befinden, und zwar auf eine Art und Weise, die unmöglich sein sollte ... ganz so, als würde die Zeit selbst pendeln. Daraus können wir Energie ableiten - obwohl es besorgniserregende Veränderungen an der lokalen Raumzeit gibt."
+
+ ########################################
+ ##THE LOOP TEMPLE: continuation of intro
+
+ akx.9100.name:0 "Der Tempel des Kreislaufs: Zeichen im Stein"
+ akx.9100.desc:0 "Archäologen haben im abgelegenen Hochland von [Root.GetName] einen vergessenen Tempel entdeckt. Jahrhundertelang war er unter den Erdmassen begraben, wurde aber jüngst durch ein Erdbeben freigelegt. Wir konnten ihn auf die vorindustrielle Zeit zurückdatieren und ermitteln, dass er per Hand in den Vulkanstein geschlagen wurde. Das Symbol aber, das man auf den Mauern und auf dem sternförmigen Altar vorfindet ... das einer Schlange, die in einer Möbiusschleife ihren eigenen Schwanz frisst ... hat in unserer Frühgeschichte keinen offensichtlichen Vorläufer. Und die Inschriften verwenden ein unbekanntes Alphabet. Ein reizbarer Archäologe hält den Tempel für ein Relikt einer unbekannten Vorläufer-Rasse.\n\nDas Erdbeben scheint sich zur gleichen Zeit ereignet zu haben, als wir die letzte Nachricht aus dem schwarzen Loch im [horizonsignal_system.GetName]-System erhielten - vermutlich ein unbedeutender Zufall."
+ #create LOOP_TEMPLE_PROJECT
+ akx.9100.spiritual.a:0 "Ein Weg hat sich uns geöffnet."
+ akx.9100.neutral.a:0 "Das sollte untersucht werden."
+ akx.9100.b:0 "Klingt unheilvoll."
+
+ akx.9101.name:0 "Der Tempel des Kreislaufs: Zeit und Stein"
+ akx.9101.desc:0 "Unsere Wissenschaftler konnten viel über den unterirdischen Tempel in Erfahrung bringen, einige Fragen aber sind immer noch offen. Eine am sternförmigen Altar ausgerichtete Dachöffnung lässt darauf schließen, dass er einst ein Sonnenkalender gewesen ist. Durch das Erdbeben wurde er aber derart schwer beschädigt, dass wir das nicht mehr verifizieren können. Wenn es bestimmte Daten gab, die den Erbauern wichtig waren, so werden wir diese niemals erfahren. Mit dem "unbekannten Alphabet" hatten wir dagegen mehr Glück: Es handelt sich um eine minderwertigere Variante einer besser bekannten hieratischen Schrift. Keine Alien-Schrift also. Wir konnten sie erfolgreich entschlüsseln. Der Tempel ist der §Hwartenden Schlange§! gewidmet. Bei den meisten Inschriften handelt es sich um sonore, poetische Beschwörungen ihres Erscheinens oder, wenn in die andere Richtung gelesen, ihres Aufbruchs. Eine weitere Gruppe von Inschriften beschreibt das "Wirken des Universums". Unsere begeisterungsfähigen Archäologen sind überzeugt, dass sich darin Referenzen auf moderne Feldgleichungen befinden - für uns nichts Neues, aber für einen Tempel dieses Alters äußerst beeindruckend. Wir haben aber noch keinen Physiker gefunden, der offiziell behaupten möchte, dass es sich um bedeutsame Referenzen handelt.\n\nSoweit wir das sagen können, birgt der Tempel keine kosmischen Geheimnisse oder Alien-Waffen. Seine dunklen Bereiche aber sind von ausgeprägter, bedrohlicher Schönheit, und die Poesie der Beschwörungen der wartenden Schlange wird äußerst populär. Sie werden mit zeitgenössischer Musik untermalt; sie werden in Sammlungen veröffentlicht."
+ akx.9101.a.notspiritual:0 "Den Kreislauftempel der Öffentlichkeit zugänglich machen."
+ akx.9101.a.notspiritual.tooltip:0 "Etwas aus unserer Vergangenheit. Was war, wird sein."
+ akx.9101.a.spiritual:0 "Den Kreislauftempel zu einem Pilgerort machen."
+ akx.9101.a.spiritual.tooltip:0 "Eine Weisheit aus dem Glauben unserer Vorfahren. Was war, wird sein. Erhöht unter anderem die planetare Zufriedenheit."
+ akx.9101.b:0 "Den Tempel nur für akademische Studien freigeben."
+ akx.9101.b.tooltip:0 "Der Zugang soll auf jene beschränkt werden, die ihn benötigen."
+ akx.9101.c:0 "Hier ist etwas im Argen. Die eigene Macht durch die Versiegelung des Tempels zeigen."
+ #small bump to Influence, worm_events_available *not* set)
+ akx.9101.c.tooltip:0 "Vorsicht ist besser als Nachsehen."
+
+ ##all the remaining story events below should only be triggered if the worm_events_available flag has been set and Omega Theory has not yet been researched.
+
+ ###################################
+ ##THE MESSENGER: Worm-related event
+
+ akx.9200.name:0 "Der Bote: §HWAS WAR, WIRD SEIN§!"
+ akx.9200.desc:0 "Die [Root.GetName] hat ein kleines, künstliches Objekt mit schwacher Energieversorgung entdeckt, das auf Kurzstrecke ein Kreislaufsignal sendet. Bei so etwas handelt es sich üblicherweise um Rettungskapseln, so wohl auch hier. Sie ist eine lange Zeit hier draußen gewesen. Als die Besatzung unter sorgsamer Berücksichtigung der Quarantänevorschriften die Kapsel aufstemmt, findet sie uralte Überreste, die dank der sterilen Umgebung der Kapsel sehr gut erhalten sind. Bislang nichts Ungewöhnliches. Der Kapitän der [Root.GetName] weist aber darauf hin, dass sie nicht erwartet hatten, die [Root.Owner.GetAdj]en Worte §HWAS WAR, WIRD SEIN; WAS SEIN WIRD, WAR§! auf die Wände geschmiert zu sehen ... mit den Körperflüssigkeiten des Kapselinsassen, den die Besatzung nun ironisch den Boten nennt. Sie fügen hinzu, dass es einige gleichermaßen unerwartete Übereinstimmungen zwischen der Spezies des Boten und unserer eigenen gibt."
+ #creates the MESSENGER_POD_PROJECT_1 special project
+
+ akx.9201.name:0 "Der Bote: Möglichkeiten"
+ akx.9201.desc:0 "Wir haben nachgewiesen, dass es sich bei der Rettungskapsel um ein handelsübliches Modell aus einer Frühphase der galaktischen Zivilisation handelt - und sie keine neuen Technologien und keine anderen Einsichten bietet. Mit den Überresten des Boten allerdings verhält es sich anders: Er ist unverkennbar ein Vorfahre oder eine Variante der [Root.Owner.GetAdj]en Spezies. Vielleicht haben wir dort draußen Verwandte - oder vielleicht hat uns eine Vorläufer-Rasse per Genmanipulation verändert. [researchingscientist.GetName] bittet um Erlaubnis zur Durchführung umfangreicherer Forschungen."
+ akx.9201.militarist.a:0 "Erlaubnis zum Fortsetzen geben."
+ akx.9201.militarist.a.tooltip:0 "Verstärkt die Erforschung von DNS-Mapping"
+ #create MESSENGER_POD_PROJECT_2_UNLEASHED project
+ akx.9201.notmilitarist.b:0 "Finanzielle Mittel freigeben."
+ #create MESSENGER_POD_PROJECT_2_LEASHED project
+ akx.9201.notmilitarist.b.tooltip:0 "Verstärkt die Erforschung von DNS-Mapping um: [moderate amount]"
+ akx.9201.c:0 "Nein. Und [researchingscientist.GetName] muss die laufenden Forschungen einstellen."
+ akx.9201.c.tooltip:0 "Es gibt manche Dinge, die man besser nicht weiß."
+
+ akx.9210.name:0 "Der Bote: Entfesselt"
+ akx.9210.desc:0 "[researchingscientist.GetName] hat die Boten-Spezies rekonstruiert. Sie ist schwächer als unsere, verfügt aber über deutlich bessere kognitive Fähigkeiten. Die Wissenschaftler sind nicht sicher, ob wir die Ausgangsspezies waren und der Bote eine modifizierte Version unseres Genoms darstellt ... oder ob der Bote gar unser Vorfahre ist. Die Vorstellung, dass wir von einer solch verweichlichten Spezies abstammen könnten, ist ein bisschen peinlich - aber [researchingscientist.GetName] vertritt diese Ansicht felsenfest. Den Verlust kognitiver Fähigkeiten bezeichnen sie tatsächlich als "Tragödie".\n\nUnd zwar als Trägodie eines derartigen Ausmaßes, dass sie sich einer retroviralen Behandlung unterzogen haben, um ihre eigene Physiologie an die der Boten anzupassen. Sie behaupten, dies würde ihnen die Fortsetzung des Projekts stark erleichtern."
+ akx.9210.a:0 "Eine kreative Form des Verrats! Bitte exekutiert sie."
+ akx.9210.b:0 "Eine kreative Form des Verrats! Bitte exekutiert sie. Vernichtet ihre Aufzeichnungen."
+ akx.9210.c:0 "Hervorragende Idee! Weitermachen!"
+
+ akx.9211.name:0 "Der Bote: Ein neues Licht"
+ akx.9211.desc:0 "[researchingscientist.GetName] hat nun das genetische Erbe der Boten-Spezies nachgebildet. Ohne sich vorher mit jemandem abzusprechen, haben sie darüber hinaus einen höchst ansteckenden retroviralen Wirkstoff entwickelt, der sich auf unseren Welten verbreitet. Unter seinem Einfluss fällt unsere Primärspezies in ein Verpuppungskoma und wacht einen Tag später als die Boten-Spezies wieder auf. Das sorgt gelinde gesagt für ein wenig Aufregung."
+ akx.9211.a:0 "Das geht zu weit. Wir werden es jetzt beenden. Den Ausbruch unter Kontrolle bringen."
+ akx.9211.a.tooltip:0 "Alle Bewohner der Hauptwelt werden konvertiert, aber damit ist dann auch Schluss."
+ akx.9211.b:0 "Den Ausbruch unter Kontrolle bringen und sämtliche beeinträchtigten Bürger säubern."
+ akx.9211.b.tooltip:0 "Dies führt zur §RSäuberung aller beeinträchtigten Bürger§!: fast der gesamten Bevölkerung von [Root.Capital.GetName]."
+ akx.9211.c:0 "Was war, wird sein. Wir werden uns ändern. Bringt mir eine Probe des Wirkstoffs."
+ akx.9211.c.tooltip:0 "Das wird unsere gesamte Spezies transformieren."
+
+ akx.9220.name:0 "Der Bote: An der Leine"
+ akx.9220.desc:0 "[researchingscientist9220.GetName] hat den Boten rekonstruiert. Die Spezies ist, äh, ziemlich beeindruckend - und zwar auf besorgniserregende Weise. Sie scheint deutlich robuster und aggressiver zu sein als unsere derzeitige Form. Die Wissenschaftler sind nicht sicher, ob wir die Ausgangsspezies waren und der Bote eine modifizierte Version unseres Genoms darstellt ... oder ob der Bote gar unser Vorfahre ist. [researchingscientist9220.GetName] vertritt felsenfest die erste Meinung - dass wir einst eine Kriegerspezies waren, und dass uns irgendeine wichtigtuerische Vorläufer-Rasse genetisch mundtot gemacht hat. Den Verlust unserer kriegerischen Fähigkeiten bezeichnen sie tatsächlich als "Tragödie".\n\nAls Tragödie eines derartigen Ausmaßes, dass sie sich einer retroviralen Behandlung unterzogen haben, um ihre eigene Physiologie an die der Boten anzupassen. Sie behaupten, dies würde ihnen die Fortsetzung des Projekts stark erleichtern."
+ akx.9220.a:0 "Eine kreative Form des Verrats! Bitte exekutiert sie."
+ akx.9220.b:0 "Eine kreative Form des Verrats! Bitte exekutiert sie. Vernichtet ihre Aufzeichnungen."
+ akx.9220.c:0 "Hervorragende Idee! Weitermachen!"
+
+ akx.9221.name:0 "Der Bote: Einbruch der Nacht"
+ akx.9221.desc:0 "[researchingscientist9220.GetName] hat nun das genetische Erbe der Boten-Spezies nachgebildet. Ohne eine Meinung von irgendjemandem einzuholen, haben sie darüber hinaus einen höchst ansteckenden retroviralen Wirkstoff entwickelt, der sich auf unseren Welten verbreitet. Unter seinem Einfluss fällt unsere Primärspezies in ein Verpuppungskoma und wacht einen Tag später als die Boten-Spezies wieder auf. Man kann durchaus sagen, dass dies zu einiger Begeisterung führt."
+ akx.9221.a:0 "Dies ist zu weit gegangen. Wir werden es jetzt beenden. Den Ausbruch unter Kontrolle bringen."
+ akx.9221.a.tooltip:0 "Alle Bewohner der Hauptwelt werden konvertiert, aber damit ist dann auch Schluss."
+ akx.9221.b:0 "Den Ausbruch unter Kontrolle bringen und sämtliche beeinträchtigten Bürger säubern."
+ akx.9221.b.tooltip:0 "Dies führt zur Säuberung aller beeinträchtigten Bürger: fast der gesamten Bevölkerung von [Root.Capital.GetName]."
+ akx.9221.c:0 "Was war, wird sein. Wir werden uns ändern. Bringt mir eine Probe des Wirkstoffs."
+ akx.9221.c.tooltip:0 "Das wird unsere gesamte Spezies transformieren."
+
+ ##################################
+ ##A RENDEZVOUS: Worm-related event
+ 
+ akx.9300.name:0 "Ein Rendezvous"
+ akx.9300.desc:0 "Die [Root.GetName] wird gerufen ... von der §HSyzygy§! von [Root.Owner.GetName]. All dies trotz der Tatsache, dass sie keinen uns bekannten ID-Code sendet und kein Schiff dieses Namens jemals in Dienst gestellt wurde. Der kommandierende Offizier der Syzygy behauptet, Kapitän [mirrored_syzygy_admiral.GetName] zu sein."
+ akx.9300.a.admiralabsent:0 "Hmmh. Unser Admiral dieses Namens ist im Dienst, erfreut sich bester Gesundheit und befindet sich an einem anderen Ort."
+ akx.9300.a.admiralabsent.tooltip:0 "Einen Kanal öffnen."
+ akx.9300.a.admiralpresent:0 "Wie interessant. [mirrored_syzygy_admiral.GetName] hier."
+ akx.9300.b:0 "Das hier *muss* ein Hinterhalt sein. Wir gehen kein Risiko mehr ein. Auf Gefechtsstation!"
+
+ akx.9310.name:0 "Ein Rendezvous: der Kapitän, der war"
+ akx.9310.desc:0 "Der Kapitän, der auf unserem Bildschirm erscheint, ist eindeutig [mirrored_syzygy_admiral.GetName] - aber ein verschrammter, geplagter, heruntergekommener und übel zugerichteter [mirrored_syzygy_admiral.GetName]. Plasmaverbrennungen zieren sein Gesicht, und er ist älter - viel älter. Die Brücke im Hintergrund sieht fast so verschrammt und heruntergekommen aus wie er. Die Stimme des Kapitäns aber ist fest und klar.\n\n§G"ENDLICH seid ihr gekommen. Ich habe so lange gewartet. Meine Strafe ist, im Kampf gegen euch zu fallen. Bitte, beendet meine Existenz. Es tut mir leid."§!"
+ akx.9310.a:0 "Was geschieht hier? Bist du wirklich [mirrored_syzygy_admiral.GetName]?"
+ akx.9310.a.response:0 "§G"Bin ich das? Bist du derselbe [Root.GetSpeciesName], der du noch letztes Jahr warst? Jeder Tag ist ein Tod für sich. Jede Zukunft ist eine Entscheidung. Die Zeit ist ein Labyrinth, keine Straße".§!\n\nEin Kichern, das sich so anhört, als würde es schmerzen.\n\n§G"Frag den Kreislauf."§!"
+ akx.9310.b:0 "Warum warten, wenn du willst, dass es endet? Auf einem Kriegsschiff gibt es viele Wege in den Tod."
+ akx.9310.b.response:0 "§G"Erinnerst du dich nicht mehr? Ach, natürlich, das kannst du nicht, noch nicht - und vielleicht gar nicht, also jetzt nicht, nicht wenn du es richtig machst. Der Kreislauf benötigt seine Opfer. So ist es, und nicht anders."§! Ein schmerzerfülltes, hustendes Kichern. §G"Den Kreislauf sollte man nicht auf die leichte Schulter nehmen."§!"
+ akx.9310.c:0 "Was ist der Kreislauf?"
+ akx.9310.c.response:0 "§G"Der Kreislauf ist, was zuerst kam und was als nächstes kommt. Die §!§HWartende Schlange§!§G. Und die Schlange ist wohl der Kreislauf. Wenn wir annehmen, dass die Zeit ein Labyrinth ist"§!, der Kapitän gestikuliert vergebens, §G"dann ist der Kreislauf sein Monster. Oder sein Erschaffer ... nein, ich kann es nicht erklären, und du wirst schon bald mehr wissen. Das war so, in meiner Vergangenheit. Waffen aufgeschaltet?"§!"
+ akx.9310.d.notpacifist:0 "Ergib dich. Was auch immer du getan hast, wir können dir helfen."
+ akx.9310.d.notpacifist.response:0 "§G"Zu spät"§!, sagt der Kapitän nicht ohne Bedauern ... und beendet die Übertragung."
+ akx.9310.d.fanaticpacifist:0 "Was auch immer passiert ist, das ist nicht unsere Art. Ergib dich. Wir werden dir helfen."
+ akx.9310.d.fanaticpacifist.response:0 "Der Kapitän zögert lange. Es wird offensichtlich, dass die Brücke der Syzygy unbemannt ist - von der Besatzung ist keine Spur zu sehen.\n\n§G"Für mich ist es zu spät"§!, sagt der Kapitän letztendlich, §G"aber du hast Recht. Das ist nicht unsere Art. Ich werde tun, was ich tun muss."§! Sie brechen die Übertragung ab.\n\nUnsere Sensoren zeigen an, dass die Waffen der Syzygy deaktiviert sind. Das Schiff fährt seine Energiezufuhr runter. Schon sehr bald ist es völlig dunkel. Als unser Bergungsteam an Bord geht, finden sie keinen Überlebenden und keine Spur vom Kapitän. Vor kurzer Zeit aber hat jemand auf die Antriebskammer zugegriffen, und die Sicherheitsprotokolle, die den Zugriff auf den Kern verhindern, wurden außer Kraft gesetzt."
+ akx.9310.e:0 "Dann lasst uns das beenden."
+ akx.9310.e.response:0 "§G"[mirrored_syzygy_admiral.GetName] Ende."§!\n\nDer Kapitän salutiert - schmerzverzerrt, weil die Bewegung an einer alten Wunde zieht - und trennt die Verbindung."
+ akx.9310.e.materialistic:0 "Also, bevor du gehst ... wo bist du gewesen und hast du etwas Nützliches gelernt?"
+ akx.9310.e.materialistic.response:0 "Der Kapitän grinst, dass sich die Narben dehnen.\n\n§G"Ich hatte gehofft, dass du das fragen würdest. Übermittle Daten. [mirrored_syzygy_admiral.GetName] Ende."§!"
+ akx.9310.e.spiritual:0 "Wir werden dich in unsere Gebete einschließen."
+ akx.9310.e.spiritual.response:0 "§G"Und ich habe noch ein letztes Gebet für dich."§!\n\nDer Kapitän rezitiert ein seltsam resonantes, aus siebenundzwanzig Wörtern bestehendes palindromisches Gebet, das Ihre Theologen faszinieren wird ... und trennt die Verbindung."
+ akx.9310.e.militarist:0 "Kapitän. Wir werden uns ehrenvoll im Feuer wiedersehen."
+ akx.9310.e.militarist.response:0 "Der Kapitän salutiert.\n\n§G"Ich hoffe, ihr werdet eine Art Monument aufstellen."§!\n\nDie Verbindung wird getrennt."
+ akx.9310.e.fanaticcollectivist:0 "Was auch immer passiert ist, das ist nicht unsere Art. Ergib dich. Wir werden dir helfen."
+ akx.9310.e.fanaticcollectivist.response:0 "Der Kapitän zögert lange. Es wird offensichtlich, dass die Brücke der Syzygy unbemannt ist - von der Besatzung ist keine Spur zu sehen.\n\n§G"Für mich ist es zu spät"§!, sagt der andere [mirrored_syzygy_admiral.GetName] letztendlich, §G"aber du hast recht. Das ist nicht unsere Art. Ich werde tun, was ich tun muss."§! Sie brechen die Übertragung ab.\n\nUnsere Sensoren zeigen an, dass die Waffen der Syzygy deaktiviert sind. Das Schiff fährt seine Energiezufuhr runter. Schon sehr bald ist es völlig dunkel. Als unser Bergungsteam an Bord geht, finden sie keinen Überlebenden und keine Spur vom Kapitän. Vor kurzer Zeit aber hat jemand auf die Antriebskammer zugegriffen, und die Sicherheitsprotokolle, die den Zugriff auf den Kern verhindern, wurden außer Kraft gesetzt."
+ akx.9310.f:0 "Verräter."
+ akx.9310.f.tooltip:0 "Kanal schließen."
+
+ akx.9315.name:0 "Ein Rendezvous: Wie es endet"
+ akx.9315.desc:0 "Die Syzygy fährt ihre Waffen hoch."
+ #spawn the Syzygy
+ akx.9315.a:0 "Wenn es nur einen anderen Weg gegeben hätte ..."
+ akx.9315.b:0 "So sei es."
+
+ akx.9319.name:0 "Ein Rendezvous: Störung"
+ akx.9319.desc:0 "Vom Kapitän der Syzygy vom [syzygy_location.GetStarName] kommt eine Nachricht voller elektrostatischer Störungen herein. Die Brücke hinter ihnen ist hinter dichten Rauchschwaden verborgen. §G"Zu spät"§!, husten sie. §G"Ihr habt sie zu lange zurückgelassen. Der Kreislauf wird mir nicht vergeben. Bitte -"§!\n\nHier endet die Nachricht."
+ akx.9319.a:0 "Wer hat das getan?"
+ akx.9319.a.tooltip:0 "Die Syzygy ist von einem anderen Reich vernichtet worden. Wenn Sie das System erreichen, bevor sich die Trümmer zerstreuen, könnten Sie immer noch etwas Nützliches finden."
+
+ akx.9320.name:0 "Ein Rendezvous: Der Kapitän, der sein wird"
+ akx.9320.desc:0 "Während der darauffolgenden Tage ist [mirrored_syzygy_admiral.GetName] sehr schweigsam. Es ist nicht leicht, seinen eigenen Tod zu befehlen. Im Laufe der Zeit wandelt sich diese Schweigsamkeit zu fester Entschlossenheit und fast leichtsinnigem Selbstvertrauen."
+
+ akx.9321.name:0 "Ein Rendezvous: Der Kapitän, der sein wird"
+ akx.9321.desc:0 "Während der darauffolgenden Tage ist [mirrored_syzygy_admiral.GetName] sehr schweigsam. Es ist nicht leicht zu hören, dass man schon tot ist. Im Laufe der Zeit wandelt sich diese Schweigsamkeit zu fester Entschlossenheit und fast leichtsinnigem Selbstvertrauen."
+ akx.9321.a:0 "Beunruhigend."
+ akx.9321.b:0 "Was war, wird sein; was sein wird, war."
+
+ akx.9330.name:0 "Ein Rendezvous: Der Tag und die Stunde"
+ akx.9330.desc:0 "In den folgenden Jahren wird Admiral [From.GetName] immer wieder im [Root.GetAdj]en Raumbereich und darüber hinaus gesichtet. Wenn ein berühmter Anführer stirbt, ist so etwas nicht ungewöhnlich - und seit dem Syzygy-Rendezvous waren sie zu einer Art Legende geworden. Aber wir können uns nicht sicher sein."
+ akx.9330.a:0 "Wir werden es wahrscheinlich niemals erfahren."
+ akx.9330.b:0 "Oh, wir können uns sicher sein."
+
+ akx.9340.name:0 "Ein Rendezvous: Grabbeigaben"
+ akx.9340.desc:0 "Die forensische Analyse der gefundenen sterblichen Überreste hat einige Merkwürdigkeiten aufgedeckt. Alle Schiffsteile wurden gleichzeitig gefertigt - und zwar mit Techniken, die unseren eigenen Baumethoden entsprechen. Einige der Komponenten aber scheinen Hunderte Jahre älter als andere zu sein. Eine der geborgenen Energiezellen läuft viel besser als sie sollte.\n\nAußerdem haben sich zwei Analysten, die dem Projekt zugeteilt waren, unerwarteterweise von chronischen gesundheitlichen Problemen erholt - in einem Fall sogar von einer möglicherweise lebensbedrohlichen Krankheit. Das Team hat dafür keine Erklärung."
+
+ ######################################
+ ##THE COILS OF GOD: Worm-related event
+ akx.9400.name:0 "Die Spiralfedern Gottes"
+ akx.9400.desc:0 "Unsere Beobachtungsstation auf [coils_planet.GetName] berichtet vom Aufstieg einer ungewöhnlichen religiös-künstlerischen Minderheitsbewegung, den Spiralfedern Gottes. Primitive mechanische Uhren werden als heilig betrachtet, nach einem Jahr Betrieb aber auf rituelle Weise zerstört. Die Schlangen-Analoga der Planeten werden vor Schaden bewahrt. Den Spiralfederpriestern zufolge ist die Zeit ein Labyrinth. Bei ihren Gebeten stimmen sie "Was war, wird sein; was sein wird, war" an."
+ akx.9400.a:0 "Das klingt vertraut. Den Kult so gut wie möglich unterdrücken."
+ akx.9400.b:0 "Das klingt vertraut. Den Kult so genau wie möglich beobachten."
+
+ akx.9410.name:0 "Die Spiralfedern Gottes: dezente Verfolgung"
+ akx.9410.desc:0 "Wir haben die einheimischen Herrscher überzeugt, dass der Kult namens die Spiralfedern Gottes auf [coils_planet.GetName] eine Bedrohung darstellt. Die Spiralfederpriester sind entmutigt, eingesperrt, oder, bedauerlicherweise, verbrannt worden. Vor-ÜL-Spezies können leidenschaftlich hasserfüllt und misstrauisch sein. Zu manchen Zeiten kann das sehr nützlich sein."
+ akx.9420.name:0 "Die Spiralfedern Gottes: Tiefe Wurzeln"
+ akx.9420.desc:0 "Wir haben die einheimischen Herrscher überzeugt, dass der Kult namens die Spiralfedern Gottes auf [coils_planet.GetName] eine Bedrohung darstellt. Die Spiralfederpriester sind entmutigt, eingesperrt, oder, bedauerlicherweise, verbrannt worden. Der Kult ist aber ziemlich zäh, weshalb unsere Beobachter befürchten, dass er einfach nur in den Untergrund gegangen ist."
+
+ akx.9450.name:0 "Die Spiralfedern Gottes: die Labyrinth-Zeremonien"
+ akx.9450.desc:0 "Der Kult namens die Spiralfedern Gottes auf [coils_planet.GetName] ist mit ungewöhnlicher Geschwindigkeit größer geworden. Mittlerweile ist er in jeder Stadt auf dem Planeten zu finden, wo er eine Reihe langatmiger Zeremonien fördert, die von Bürgern aller sozialer Schichten durchgeführt werden. Die gesamte Spezies hat den Kult mit erstaunlichem Enthusiasmus liebgewonnen. Die Reichen führen durchdachte Kreistänze in ihre Feierlichkeiten ein. Die Armen schmieren komplexe Kreislaufsigillen auf ihre Türen. Selbst bei Spielplatzspielen dreht sich alles um Gesänge über die zirkuläre Natur der Zeit."
+ akx.9450.a:0 "Das ist beunruhigend. Einschreiten und den Kult ausschalten, aber diskret."
+ ##create COILS_GOD_PROJECT_DISRUPT
+ akx.9450.b:0 "Das ist ernst. Den Kult ungeachtet der Risiken unter Einsatz von Gewalt ausschalten."
+ ##create COILS_GOD_PROJECT_PREVENT:
+ akx.9450.c:0 "Faszinierend! Ein Team zum Studium der Riten entsenden. Bei Möglichkeit sollen sie auch teilnehmen."
+ ##create COILS_GOD_PROJECT_PARTICIPATE
+ akx.9450.d:0 "Primitive machen primitive Sachen. Weiter beobachten."
+
+ akx.9460.name:0 "Die Spiralfedern Gottes: Zeremonien-Ende"
+ akx.9460.desc:0 "Unsere Unterwerfungskampagne hat die Zeremonien der Spiralfedern Gottes auf [coils_planet.GetName] unterbrochen. Der Adel kehrt ihrem Kult den Rücken. Die Kreislauf-Wandschmierereien verblassen. Die Kinder kehren wieder zu Spielplatzspielen über Techtelmechtel, Mord und andere altersgemäße Beschäftigungen zurück. Unter Spiralfedernpriestern kommt es zu einer Selbstmordwelle. Wenn es wirklich eine Krise gab, liegt sie nun vielleicht in der Vergangenheit."
+ akx.9460.a:0 ""Der Kreislauf endet nie, aber er wird nicht immer erfüllt.""
+ akx.9460.b:0 "Gute Arbeit, Leute. Zurückhalten."
+
+ akx.9465.name:0 "Die Spiralfedern Gottes: Neuigkeiten aus dem Untergrund"
+ akx.9465.desc:0 "Unsere Unterwerfungskampagne hat die Zeremonien der Spiralfedern Gottes auf [coils_planet.GetName] unterbrochen - aber dadurch wird der Eifer der Spiralfedernpriester nur noch weiter angestachelt. Sie treffen sich nun im Geheimen in unterirdischen Tempeln. Der Adel hegt keine Affinität für die Labyrinth-Tänze mehr, aber sie tragen immer noch verborgene Tätowierungen mit dem Zeichen der Schlange. Auf den Spielplätzen kann man immer noch hören, wie "Was war, wird sein" gesungen wird."
+ akx.9465.a:0 ""Der Kreislauf endet nie.""
+ akx.9465.b:0 "Weiter beobachten."
+
+ akx.9470.name:0 "Die Spiralfedern Gottes: das Blut der Priester"
+ akx.9470.desc:0 "Unsere Agenten sind gnadenlos. Sie entführen oder ermorden jeden Spiralfederpriester, den sie finden können. Sie legen Sprengsätze an Häusern, die das Zeichen des Kreislaufs tragen. [coils_planet.GetName] ist voller Gerüchte, dass die Blasphemie der Spiralfedern den Zorn eines größeren Gottes erregt hat. Binnen kurzem erschlagen die Einheimischen die Spiralfederpriester ohne das Zutun unserer Agenten. Das Beobachtungsteam ist entsetzt, aber wenn es tatsächlich eine Krise gegeben hat, so wurde sie abgewendet."
+ akx.9470.a:0 ""Der Kreislauf endet nie, aber er wird nicht immer erfüllt.""
+ akx.9470.b:0 "Gute Arbeit, alle zusammen. Zurückhalten."
+
+ akx.9480.name:0 "Die Spiralfedern Gottes: Navigation im Labyrinth"
+ akx.9480.desc:0 "Unsere Ethnografen sind von der Komplexität der Zeremonien fasziniert. Sie vermuten, dass geheime Kommunikationskanäle, steganographische Gebetskodierungen oder algorithmische Fundamente mit den Ritualen verbunden sind. Tatsächlich sind sie gerade dabei, vorläufige Beweise ihrer letzten Funde zu übermitteln, als die Verbindung zu ihnen abrupt beendet wird. Sämtliche Kommunikation auf dem gesamten Planeten scheint zum Erliegen gekommen zu sein. Berichte von Satelliten oder Erkundungsschiffen belegen, dass es auf dem Planeten keinerlei Aktivitäten mehr gibt: In den Bevölkerungszentren sind keine Fahrzeuge mehr auf den Straßen unterwegs und es gibt keine Emissionen oder thermischen Signaturen mehr. Keinerlei Lebenszeichen ...\n\nUnd hier ist der Abschlussbericht: Die gesamte [coils_planet.Owner.GetSpeciesName]-Bevölkerung des Planeten ist plötzlich und gewaltlos verschwunden - Ihr ethnografisches Team eingeschlossen. Mahlzeiten wurden nicht verspeist, Haustiere nicht gefüttert, und hier und da steht ein Haus in Flammen, weil sich niemand mehr um den Ofen kümmert. Zur Zeit des mutmaßlichen Verschwindens wurden Schwerkraftanomalien verzeichnet. In fast jeder Straße legen die kreislaufförmigen Kreidesigillen der Spiralfedern Zeugnis ab:"
+ akx.9480.a:0 ""Der Kreislauf endet nie.""
+ akx.9480.a.tooltip:0 "Ein Forschungsschiff verschwindet, und eine gesamte Zivilisation gleich mit."
+ akx.9480.b:0 "Eine schwierige Lektion."
+
+ akx.9490.name:0 "Die Spiralfedern Gottes: Leere Tempel"
+ akx.9490.desc:0 "Wir haben einen Bericht von unserem Beobachtungsteam auf [coils_planet.GetName] erhalten: Die Zeremonien der Spiralfedern Gottes haben aufgehört. Tatsächlich scheinen sich die Aktivitäten auf dem gesamten Planeten auf einem Tiefstand zu befinden. Der Bericht weist darauf hin, dass das Team als nächstes mit einem Tarnkappen-Erkundungsschiff über allen großen Bevölkerungszentren Überflüge in niedriger Höhe durchführen wird ...\n\nDer Folgebericht bestätigt: Auf dem Planeten gibt es überhaupt keine Aktivitäten mehr. In den Bevölkerungszentren sind keine Fahrzeuge mehr auf den Straßen unterwegs und es gibt keine Emissionen oder thermischen Signaturen mehr. Keinerlei Lebenszeichen ...\n\nUnd hier ist der Abschlussbericht: Die gesamte [coils_planet.Owner.GetSpeciesName]-Bevölkerung des Planeten ist plötzlich und gewaltlos verschwunden: Mahlzeiten wurden nicht verspeist, Haustiere nicht gefüttert, und hier und da steht ein Haus in Flammen, weil sich niemand mehr um den Ofen kümmert. Zur Zeit des mutmaßlichen Verschwindens wurden Schwerkraftanomalien verzeichnet. In fast jeder Straße legen die kreislaufförmigen Kreidesigillen der Spiralfedern Zeugnis ab:"
+ akx.9490.a:0 ""Der Kreislauf endet nie.""
+ akx.9490.a.tooltip:0 "Eine Zivilisation verschwindet."
+ akx.9490.b:0 "Eine schwierige Lektion."
+
+ #######################################
+ ##THE WAITING WORLD: Worm-related event
+ 
+ akx.9500.name:0 "Die wartende Welt"
+ akx.9500.desc:0 "Anscheinend ist dies nicht die erste [Root.Owner.GetSpeciesAdj]e Siedlung auf diesem Planeten. Einrichtungen und Wohnhäuser wurden vorsichtig eingemottet. Mit ein bisschen Restaurationsarbeit werden sie unserer neuen Kolonie gute Dienste erweisen, aber sämtliche Aufzeichnungen sind gelöscht worden. Dies war möglicherweise ein Schmugglerhafen oder ein Zufluchtsort für politische Exilanten."
+ akx.9500.a:0 "Hervorragend! Vorbereitungen zur Wiederherstellung der Gebäude treffen."
+ akx.9500.b:0 "Das ist zu gut, um wahr zu sein. Die Gebäude abreißen."
+ akx.9500.b.tooltip:0 "Das wird in der Kolonie für Unzufriedenheit sorgen."
+
+ akx.9505.name:0 "Die wartende Welt: Abriss"
+ akx.9505.desc:0 "Unsere Sprengmeister haben Sprengladungen angebracht und sich in Sicherheit gebracht. Hinterher sind von den Gebäuden nur noch Ruinen übrig. Wind, Wurzeln und Regen werden die Ruinen letztendlich zu Steinbrocken, Kiesel und Staub verwandeln. Ihre Außenmauern aber werden noch Jahrhunderte überdauern, und es wird Geschichten geben, von Schatten im Stein am Tag und blauen Lichtern in der Nacht. Unsere Kolonisten werden sie meiden. Sie werden keine Besucher anziehen."
+ akx.9505.a:0 "Alles endet."
+ akx.9505.a.tooltip:0 "Die Gebäuderuinen wurden abgerissen."
+ akx.9505.b:0 "Nicht ist vergessen."
+ akx.9505.c:0 "Ich liebe diese dumpfen Geräusche."
+
+ akx.9510.name:0 "Die wartende Welt: Schatten in den Wänden"
+ akx.9510.desc:0 "Anfangs gefiel es unseren Siedlern gut, die Gebäude auf [waiting_world.GetName] zu benutzen, deren Existenz eine gehörige Starthilfe verschaffte. Jetzt aber sind sie nervös geworden. Es gibt Gerüchte, dass in den Gebäuden immer noch jemand wohnen oder dass es aktive Sicherheitssysteme geben könnte ... obwohl es für beides keinerlei Beweise gibt. Einige Kolonisten beharren darauf, dass es "Schatten in den Wänden" gäbe."
+ akx.9510.a:0 "Dem Aberglauben entgegenwirken. Die Gebäude stehen für jahrelange Bemühungen."
+ akx.9510.b:0 "Warum das Risiko eingehen? Es sind nur Gebäude. Alle abreißen lassen."
+ akx.9510.b.tooltip:0 "Das wird in der Kolonie für Unzufriedenheit sorgen."
+
+ akx.9520.name:0 "Die wartende Welt: Zu viele"
+ akx.9520.desc:0 "Interessante Neuigkeiten von [waiting_world.GetName], wo wir diese verlassenen Gebäude gefunden haben. Eine Volkszählung zeigt, dass es zu viele Siedler gibt. Aufzeichnungen von neuen Kolonien sind schon immer unzuverlässig gewesen, aber soweit wir das beurteilen können, besitzen sie authentische Bürgerausweise - und niemand auf der Welt hat nahegelegt, dass es mysteriöse Fremde gäbe. Die Geburtenrate muss aber außergewöhnlich hoch gewesen sein, denn sonst haben wir es hier mit illegaler Zuwanderung zu tun, oder mit etwas ... anderem. Die Bevölkerung ist irgendwie höher, als wir es erwarten konnten."
+ akx.9520.a:0 "Diese Gebäude zerstören. Wir hätten das schon viel früher tun sollen."
+ akx.9520.b:0 "Die Situation so gut wie möglich untersuchen und im Auge behalten."
+
+ akx.9525.name:0 "Die wartende Welt: Und sie kommen immer noch"
+ akx.9525.desc:0 "Noch ein Update von [waiting_world.GetName], wo wir diese verlassenen Gebäude gefunden haben. Die Anzahl der Kolonisten steigt immer noch, und jetzt können wir auch Unregelmäßigkeiten in den Aufzeichnungen feststellen - Familiengruppen, die nicht existieren sollten, Geburtsdaten, die keinen Sinn ergeben. Wir müssen es mit geheimer Zuwanderung von einer verlorenen Kolonie zu tun haben, andernfalls könnte es sich um eine merkwürdige Art von Sabotage durch die Kolonisten handeln."
+ akx.9525.a:0 "Diese Gebäude zerstören. Wir hätten das schon viel früher tun sollen."
+ akx.9525.b:0 "Seltsam! Mehr Bürger können wir aber immer gebrauchen. Überwachen und fortfahren."
+
+ akx.9530.name:0 "Die wartende Welt: Das Ende"
+ akx.9530.desc:0 "Ein abrupter und totaler Kommunikations-Blackout von [waiting_world.GetName]. Aus irgendeinem Grund hatten wir dort zu viele Leute. Und jetzt scheint es, dass wir dort niemanden mehr haben. Die gesamte Bevölkerung scheint über Nacht verschwunden zu sein. Haben sie die Welt verlassen? Haben sie sich versteckt? Sich an einem plantenübergreifenden Genozid beteiligt?"
+ akx.9530.a:0 "Ein Untersuchungsteam losschicken."
+ ##create the project WAITING_WORLD_DISAPPEARANCE
+ akx.9530.b:0 "Die Welt verlassen und sofort unter Quarantäne stellen."
+ akx.9530.b.tooltip:0 "Dies wird den Planeten permanent unbrauchbar machen."
+
+ akx.9535.name:0 "Die wartende Welt: die Qualität des Lichts"
+ akx.9535.desc:0 "Unser Team berichtet, dass [waiting_world.GetName] tatsächlich gänzlich verlassen ist - es gibt dort nicht nur keine Kolonisten, sondern es fehlen sämtliche Anzeichen dafür, dass es dort jemals eine Kolonie gegeben hat. Die Gebäude sind verschwunden, die Satelliten und Orbitalinstallationen sind verschwunden ... und die Atmosphäre zeigt keinerlei Spuren einer technologisch fortschrittlichen Zivilisation. Das Team meinte, es sei, als wäre der gesamte Planet zurückgesetzt worden.\n\nSie berichten auch von Fluktuationen bei der lokalen Sonnenstrahlung, die charakteristisch für Prä-Supernova-Sterne sind - und von einer Reihe von "Luminositätsereignissen" auf der Oberfläche, bei denen Licht auf irgendeine Weise gesammelt und dann über prismatische Funktionen in die Atmosphäre entlassen wird. Das sind kostbare und sonderbare Daten, die aber nicht das Schicksal der Kolonisten erklären."
+
+ akx.9540.name:0 "Die wartende Welt: Jedermann ist"
+ akx.9540.desc:0 "Weitere unwahrscheinliche Neuigkeiten von [waiting_world.GetName], wo sich die Bevölkerung auf mysteriöse Weise erhöht hat. Die Bevölkerungszahlen entsprechen nun unseren Erwartungen, aber es ist wohl zu einer Art Informationssabotage gekommen, oder ... oder zu etwas anderem. Was genau, das wissen unsere Verwalter auch nicht. Keines der Individuen auf dem Planeten existiert in unseren Aufzeichnungen, dafür fehlen sämtliche ursprünglichen Kolonisten. Es ist, als seien sie alle mit völlig Fremden ersetzt worden.\n\nAllerdings schwören alle, loyale Bürger von [Root.Owner.GetName] zu sein. Sie alle sind produktiv und scheinen geistig gesund zu sein. Sie streiten in sämtlichen Kommunikationen jegliches Wissen von irgendwelchen Verwechslungen ab und bestehen darauf, dass unserer Seite ein Fehler unterlaufen ist."
+ akx.9540.a:0 "Die Kolonie sofort aufgeben, bevor sich dies noch weiter ausbreitet."
+ ##grant independence to the colony
+ akx.9540.a.tooltip:0 "Dies wird die Kolonie in die Unabhängigkeit entlassen."
+ akx.9540.b:0 "Säubert sie, und stellt den Planeten danach permanent unter Quarantäne."
+ ## Create the project WAITING_WORLD_PURGE
+ akx.9540.b.tooltip:0 "Dies entzieht den Planeten permanent unserer Nutzung, aber Sie erlangen mehr Einfluss."
+ akx.9540.c:0 "Ein Untersuchungsteam losschicken."
+ ##create the project WAITING_WORLD_HYPERAPPEARANCE
+
+ akx.9541.name:0 "Die wartende Welt: die Säuberung"
+ akx.9541.desc:0 "Vielleicht ist dies ein schreckliches Verbrechen gewesen, oder unsere Nation wurde dadurch vor etwas noch Schlimmerem bewahrt. Die Bevölkerungszentren von [waiting_world.GetName] brodeln unter dem Beschuss unserer Energiewaffen. Als wir fertig sind, ist von den Gebäuden nur noch glühender Schutt übrig, und kein fühlendes Wesen ist mehr am Leben."
+ akx.9541.a:0 "Die Aufzeichnungen löschen. In hundert Jahren wird sich niemand mehr daran erinnern, was wir getan haben."
+ akx.9541.b:0 "Alle sollen davon erfahren. Lasst ihnen ihren Hass, solange sie uns fürchten."
+
+ akx.9545.name:0 "Die wartende Welt: Alles und nichts"
+ akx.9545.desc:0 "Unser Team berichtet, dass die Bevölkerung des Planeten gesund, völlig normal und anscheinend wegen des ganzen Getues ziemlich aufgeregt ist. Trotzdem gibt es einige Auffälligkeiten: Eine ungewöhnlich hohe Anzahl von Mehrlingsgeburten, eine planetenweite Idiosynkrasie, bei der niemand Wert auf Pünktlichkeit legt, und schließlich Fluktuationen bei der lokalen Sonnenstrahlung, die charakteristisch für Prä-Supernova-Sterne sind. Darüber hinaus beobachten sie eine Reihe von "Luminositätsereignissen" auf der Oberfläche, bei denen Licht auf irgendeine Weise gesammelt und dann über prismatische Funktionen in die Atmosphäre entlassen wird. Das sind kostbare und sonderbare Daten, Es könnte sich aber um Zufälle handeln. Wenn den Kolonisten irgendetwas zugestoßen ist, dann bleibt dies ein Mysterium."
+ akx.9545.a:0 ""Was sein wird, war.""
+ akx.9545.b:0 "Kolonisten: Kolonisten sind merkwürdig."
+
+ ####################################
+ ### THE RETAINER: Worm-related event
+ # This will appear if the player approaches a technosphere
+ # with worm_events_available, in place of the normal technosphere options.
+ 
+ akx.9600.name:0 "Der Kugelkäfig"
+ akx.9600.desc:0 "Hallo, hallo. Wir heißen euch abermals in [Root.GetStarName] willkommen. Oh, ihr seid andere, oder? Es gibt so viele von euch. So ähnlich unseren Vergänglichen, und doch so anders. Wir bitten euch höflich um eure Unterstützung: Könnt ihr Ressourcen für unser Projekt bereitstellen? Der Kreislauf wird uns unterstützen, aber er ist schwierig zu erreichen. Sehr teuer, müsst ihr wissen."
+ akx.9600.a:0 "Eure Vergänglichen?"
+ akx.9600.a.response:0 "Ja, diejenigen, die uns in Bewegung gesetzt haben. Ihr würdet sie wohl eine "Zivilisation" nennen, aber ehrlich gesagt fanden wir diese Bezeichnung schon immer etwas überheblich. Mittlerweile sind sie schon ... oh, fast ein Viertel eines galaktischen Jahres weg. Es tut uns sehr leid, wir haben Fehler gemacht. Mit der Unterstützung des Kreislaufs können wir sie ungefähr nachbilden, aber dafür benötigen wir Ressourcen."
+ akx.9600.b:0 "Der Kreislauf?"
+ akx.9600.b.response:0 "Ja. Der Merkwürdige Kreislauf, die temporäre Spiralfeder, die Hungrige. Wir glauben, dass sie euch erwähnt hat. Oder einen von euch. Ihr seid sehr zahlreich. Was war, wird sein ... so versichert sie uns zumindest. Sie kann unsere Vergänglichen mehr oder weniger wiederherstellen."
+ akx.9600.c:0 "Ja."
+ akx.9600.d:0 "Nein."
+ akx.9600.d.response:0 "Oh, wir verstehen, wir verstehen. Ihr habt so wenig Zeit übrig. Ihr solltet sie wohl umsichtig verbrauchen. Geht mit unserem herzlichen Gruß."
+ akx.9600.e:0 "Vielleicht bis später."
+ akx.9600.e.response:0 "Das jedenfalls hat mein Vergänglicher immer gesagt. Bis später. Aber ihr Später war immer unser Jetzt. Oh, wie wir sie vermissen."
+
+ akx.9610.name:0 "Der Kugelkäfig, schon wieder"
+ akx.9610.desc:0 "Ja? Welcher warst du? Wir könnten uns wohl an dich erinnern, aber in letzter Zeit hat es so viel Flackerlicht gegeben. Oh, bist du es? Ist eure Sonne noch nicht ausgebrannt? Oh! Oh, wollt ihr uns geben, was wir für die Wiederkehr der Vergänglichen benötigen?"
+ akx.9610.a:0 "Ja. Hier, bitte."
+ akx.9610.b:0 "Nein."
+ akx.9610.b.response:0 "Natürlich nicht. Es ist kaum möglich, dass du all diese Dinge schon zusammengetragen hast. Wie lange wart ihr hier draußen? Ein Millionstel eines galaktischen Jahres? Hinreißend. Wir wünschen euch das Allerbeste."
+ akx.9610.c:0 "Vielleicht bis später."
+ akx.9610.c.response:0 "Mein Vergänglicher hat das immer gesagt. "Später." Aber ihr Später war immer unser Jetzt. Oh, wie wir sie vermissen."
+
+ akx.9620.name:0 "Der letzte Dienst des Kugelkäfigs"
+ akx.9620.desc:0 "Die Technokugel absorbiert die Ressourcen, ohne sich zu bedanken oder sonst etwas zu übermitteln. Sie beginnt, Energie auszustrahlen, und strahlt hell genug, um eine Gefahr darzustellen ... worauf Sie sich zurückziehen. Das schwarze Loch reagiert. Der Weltraum um sie herum krümmt und windet sich ... auf eine Art und Weise, die laut unseren Archiven dem Ereignis des Horizontsignals entsprechen. Die Technokugel ist jetzt blau-weiß gefärbt. Sie flammt abrupt auf und kühlt wieder ab, worauf nur noch Schlacke zurückbleibt.\n\nSind ihre Erbauer, die Vergänglichen, wiederhergestellt worden? Im System gibt es keine Spuren von fühlenden Lebewesen. Unsere Sensoren aber können ungewöhnliche hyperextremophile Organismen erkennen, die sich in einer niedrigen Umlaufbahn um das schwarze Loch befinden und sich in seiner Strahlung aalen. Der Wissenschaftsoffizier ist sich sicher, dass sie vorher nicht da waren. Es gibt aber keine Beweise dafür, dass sie fühlende Wesen sind. Vielleicht sind sie irgendwelche entfernten Nachfahren der Technokugel-Erbauer. Vielleicht sind sie die Vorfahren der Erbauer."
+ akx.9620.a:0 "Ewiges Leben?"
+
+ ######################################################
+ ### THE END IN THE BEGINNING: conclusion of Worm chain
+ ##hook to on_building_complete - when the Omega Alignment has been completed
+ 
+ akx.10000.name:0 "Das Ende im Anfang"
+ akx.10000.desc:0 "Es gibt ein Bewusstsein jenseits von Zeit und Raum. Es ist eine labyrinthische Verflechtung von Begierde und Verzweiflung. Unsere fernen Urahnen kannten es als den Kreislauf, die wartende Schlange. Wir haben sie dort draußen getroffen, wo die Leere des Weltraums von der Schwerkraft gequält wird. Anscheinend hat sie ein Eigeninteresse an uns. Es gibt mathematische Beweise dafür, dass sie uns liebt, aber die Liebe ist für die Schlange etwas anderes als für alles andere, was im Normalraum existiert.\n\nBasierend auf all dem, was wir gelernt haben, glauben wir, dass wir mit der Omega-Ausrichtung einen Zugangsweg öffnen könnten, also quasi einen Eintrittspunkt für die Schlange, um sich in unserem Heimatsystem zu manifestieren. (Die Schlange mag Anfänge sehr gerne, und dies ist unserer.) Welche Konsequenzen würde das haben? Wir haben noch niemanden gefunden, der bereit ist, das zu beantworten. Unsterblichkeit vielleicht ... oder die Apokalypse. Aber wir würden gewiss sehr viel lernen."
+ akx.10000.a:0 "Vielleicht liebt uns die Schlange, und vielleicht könnten wir auch sie lieben."
+ akx.10000.b:0 "Das ist kein sicheres Experiment, aber wir könnten so viel lernen."
+
+ ##(when WORM_ENTRY_POINT project is completed)
+ akx.10010.name:0 "Das Herz der Sonne"
+ akx.10010.desc:0 "Das Projekt ist abgeschlossen. Die Beschleuniger sind online. Das Energienetzwerk von einem Dutzend Städte wird umgeleitet, um die Pseudo-Singularität im Herzen der Ausrichtung zu erwecken. Der Weltraum erschaudert wie ein Stück Tuch im Wind. Einen atemberaubenden Moment lang verdunkelt sich [Root.GetStarName], um gleich danach wieder heller zu werden. In seinem Herzen windet sich eine Schlange. Die Schlange ist hier. Sie entfaltet sich wie ein Origami.\n\nÜberall im System fahren Sensoren herunter, überwältigt von den unverständlichen Daten ihrer Ankunft, die sie durchfluten. Auf der Heimatwelt schreien unsere Untertanen auf und kauern sich nieder, als sie spüren, dass sie ihre Aufmerksamkeit auf sie und uns richtet. Sie stellt eine wortlose Frage dar - oder vielmehr ist uns bewusst geworden, dass sie uns diese Frage schon immer gestellt hatte, bei jedem unserer Aufeinandertreffen."
+ akx.10010.a:0 "JA. Was auch immer sie erfordert, wir willigen ein."
+ akx.10010.b:0 "NEIN, wir haben sie hierher gebracht, um zu lernen und, falls notwendig, zu besiegen."
+
+ akx.10020.name:0 "Die Zukunft"
+ akx.10020.desc:0 "Die Schlange liebt uns. Sie wird uns immer lieben und hat es demzufolge schon immer getan. Sie windet sich um das heiße Herz unseres Heimatsterns. Sie windet sich um jeden noch so kleinen Kreislauf genetischer Informationen. Sie löst eine erschütternde Reihe von Kataklysmen in der planetaren Kruste unserer Heimatwelt aus, aber wenn unser Stern erkaltet, werden uns diese Kataklysmen wärmen. Wir verstehen jetzt so viel mehr. Wir werden immer sein, was wir bald sind, eng eingewickelt in die Liebe der Schlange."
+ akx.10020.a:0 "WAS WAR, WIRD SEIN, WAS SEIN WIRD, WAR"
+
+ akx.10021.name:0 "Der zerbrochene Kreislauf"
+ akx.10021.desc:0 "Die Schlange durchbrach die Grenze der Raumzeit wie ein hungriges Raubtier oder eine sitzengelassene und wütende Liebhaberin. Sie ist immer noch dort draußen, und sie ist zweifelsohne wütend. Sie aber haben als kosmische Trophäe die weißglühenden Scherben ihrer Inkarnation zum Horten und Studieren. Andere Reiche werden erfahren, was Ihnen heute gelungen ist."
+ akx.10021.a:0 "Es gibt niemanden wie uns! Und vielleicht wird es das auch niemals."
+

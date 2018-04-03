@@ -1,0 +1,503 @@
+﻿l_german:
+ ####################################
+ # Constructions
+ ####################################
+ MESSAGE_CONSTRUCTION_MESSAGE_TYPE_TITLE:1 "Bauvorhaben abgeschlossen"
+ MESSAGE_BUILDING_CONSTRUCTION:1 "Auf dem Planeten $PLANET|Y$ wurde der Bau aller Gebäude in der Auftragsliste abgeschlossen."
+ MESSAGE_BUILDING_CONSTRUCTION_MESSAGE_TYPE_TITLE:2 "Bauvorhaben abgeschlossen"
+ MESSAGE_CONSTRUCTION_FINISH:0 "Planet $PLANET|Y$ hat seine Baureihe beendet."
+ MESSAGE_CONSTRUCTION_FINISH_SPACEPORT:0 "Der Raumhafen von $PLANET|Y$ hat seine Baureihe beendet."
+ MESSAGE_CONSTRUCTION_FINISH_STARBASE:0 "Die Sternenbasis in $SYSTEM|Y$ hat seine Baureihe beendet."
+ MESSAGE_ORDER_FINISH_COLONIZE_PLANET:0 "Wir haben im $SYSTEM|Y$-System die $COLONY|Y$-Kolonie aufgebaut."
+ MESSAGE_SPACEPORT_CONSTRUCTION_MESSAGE_TYPE_TITLE:0 "Bauvorhaben abgeschlossen"
+ MESSAGE_STARBASE_CONSTRUCTION_MESSAGE_TYPE_TITLE:0 "Bauvorhaben abgeschlossen"
+ MESSAGE_ARMY_RECRUITMENT_TITLE:0 "Armeerekrutierung abgeschlossen"
+ MESSAGE_ARMY_RECRUITMENT:0 "Auf $PLANET|Y$ wurde die Armeerekrutierung abgeschlossen."
+ MESSAGE_POP_CONSTRUCTION_MESSAGE_TYPE_TITLE:0 "$MESSAGE_CONSTRUCTION_MESSAGE_TYPE_TITLE$"
+ MESSAGE_POP_CONSTRUCTION_FINISH:0 "Bewohner wurde auf $PLANET|Y$ gebaut."
+
+ ####################################
+ # Fleet Orders
+ ####################################
+ MESSAGE_FLEET_ORDER_FINISH_BUILD_ORBITAL_STATION:0 "§H$FLEET$§! hat im Orbit von $PLANET|Y$ den Bau von (1x) $SHIPCLASS|Y$ abgeschlossen."
+ MESSAGE_FLEET_ORDER_ANOMALY:0 "§H$FLEET$§! hat auf $PLANET|Y$ eine §HAnomalie§! gefunden."
+ MESSAGE_FLEET_ORDER_FINISH_BUILD_SPACE_STATION:0 "§H$FLEET$§! hat im $STAR|Y$-System den Bau von (1x) $SHIPCLASS|Y$ abgeschlossen."
+ MESSAGE_FLEET_ORDER_ANALYZE_FAIL:0 "§H$FLEET$§! ist mit der Analyse der ÜL-Spur gescheitert."
+ MESSAGE_FLEET_ORDER_ANALYZE_FINISH:0 "§H$FLEET$§! hat die ÜL-Spur analysiert."
+ MESSAGE_FLEET_SYSTEM_FULLY_SURVEYED:0 "Das $SYSTEM|Y$-System ist vollständig erkundet worden."
+ MESSAGE_FLEET_ORDER_FINISH_MESSAGE_TYPE_TITLE:0 "Flottenbefehl erfüllt"
+ MESSAGE_SYSTEM_SURVEYED_TITLE:0 "System erkundet"
+ AUTO_EXPLORE_CANCELLED_MESSAGE_TYPE_TITLE:0 "Flottenbefehl widerrufen"
+ MESSAGE_FLEET_ORDER_AUTO_EXPLORE_CANCELLED:0 "§H$FLEET$§! hat ihren Befehl Autom. Erkundung widerrufen. Sie kann keine weiteren unerkundeten Systeme erreichen oder finden."
+ FLEET_BUILD_ORDER_CANCELLED_MESSAGE_TYPE_TITLE:0 "$AUTO_EXPLORE_CANCELLED_MESSAGE_TYPE_TITLE$"
+ MESSAGE_FLEET_BUILD_ORDER_CANCELLED_MESSAGE:0 "$FLEET|H$ konnte keine $STATION|H$ in $SYSTEM|H$ bauen. Die Ressourcen dafür wurden zurückerstattet."
+ MESSAGE_BYPASS_EXPLORED:0 "Wurmloch erkundet"
+ BYPASS_EXPLORED_MESSAGE:0 "Das Wurmloch in $SYSTEM1|Y$ wurde erkundet. Es ist mit dem $SYSTEM2|Y$-System verbunden."
+
+ ####################################
+ # Misc Fleet
+ ####################################
+ MESSAGE_FLEET_REPARATIONS_DONE_MESSAGE_TYPE_TITLE:0 "Reparaturen abgeschlossen"
+ MESSAGE_REPARATIONS_DONE:0 "Die $FLEET|Y$-Flotte ist vollständig repariert worden."
+ MESSAGE_FLEET_UPGRADE_DONE_MESSAGE_TYPE_TITLE:0 "Flotte verbessert"
+ MESSAGE_UPGRADE_DONE:0 "Die $FLEET|Y$-Flotte ist vollständig verbessert worden."
+ MESSAGE_EMERGENCY_FTL_CASUALTIES_TITLE:0 "Not-ÜL-Verluste"
+ EMERGENCY_FTL_CASUALTIES_DESC:1 "Flotte hat Verluste erlitten.\n\nVerlorene Schiffe: $LOST$\nBeschädigte Schiffe: $NEAR_LOST$"
+
+ ####################################
+ # Diplomacy
+ ####################################
+ RIVALRY_INVALID_TITLE:0 "Rivalität ungültig"
+ RIVALRY_INVALID_DESC:0 "$COUNTRY|Y$ ist nicht länger ein gültiger Rivale für Euer Reich"
+ MESSAGE_MADE_FIRST_CONTACT_WE:0 "Wir sind im §H$STAR$§!-System auf die §H$WHO$§! getroffen!"
+ MESSAGE_MADE_FIRST_CONTACT_THEM:0 "Wir haben im §H$STAR$§!-System Kontakt zu den §H$WHO$§! hergestellt!"
+ ACTION_DECLARE_WAR_VOTE_PASSED:0 "Das §H[Actor.GetAllianceName]§!-Kriegserklärungsvotum ist durchgegangen, weswegen wir uns nun mit den §H[Recipient.GetName]§! §Yim Krieg§! befinden!"
+ ACTION_DECLARE_WAR_VOTE_FAILED:0 "Das Kriegserklärungsvotum gegen §H[Recipient.GetName]§! ist gescheitert."
+ ACTION_INVITE_TO_ALLIANCE_VOTE_PASSED:0 "Das §H[Actor.GetAllianceName]§! stimmte dafür, §H[Recipient.GetName]§! in das Bündnis einzuladen."
+ ACTION_INVITE_TO_ALLIANCE_VOTE_FAILED:0 "Das Votum zur §H[Recipient.GetName]§!-Einladung in das §H[Actor.GetAllianceName]§! ist gescheitert."
+ ACTION_KICK_FROM_ALLIANCE_VOTE_PASSED:0 "Das §H[Actor.GetAllianceName]§! stimmte dafür, §H[Recipient.GetName]§! aus dem Bündnis auszuschließen."
+ ACTION_KICK_FROM_ALLIANCE_VOTE_FAILED:0 "Das Votum zum §H[Recipient.GetName]§!-Ausschluss aus dem §H[Actor.GetAllianceName]§! ist gescheitert."
+ ACTION_KICK_FROM_FEDERATION_VOTE_PASSED:0 "Das §H[Actor.GetAllianceName]§! stimmte dafür, §H[Recipient.GetName]§! aus der Föderation auszuschließen."
+ ACTION_KICK_FROM_FEDERATION_VOTE_FAILED:0 "Das Votum zum §H[Recipient.GetName]§!-Ausschluss aus dem §H[Actor.GetAllianceName]§! ist gescheitert."
+ ACTION_INVITE_TO_FEDERATION_VOTE_PASSED:0 "Das §H[Actor.GetAllianceName]§! stimmte dafür, §H[Recipient.GetName]§! in die Föderation einzuladen."
+ ACTION_INVITE_TO_FEDERATION_VOTE_FAILED:0 "Das Votum zur §H[Recipient.GetName]§!-Einladung in das §H[Actor.GetAllianceName]§! ist gescheitert."
+ ACTION_ASK_TO_JOIN_ALLIANCE_VOTE_PASSED:0 "Das §H[Recipient.GetAllianceName]§! stimmte dafür, §H[Actor.GetName]§! in das Bündnis einzuladen."
+ ACTION_ASK_TO_JOIN_ALLIANCE_VOTE_FAILED:0 "Das Votum über die Einladung von §H[Actor.GetName]§! in das §H[Recipient.GetAllianceName]§! ist gescheitert."
+ ACTION_FORM_FEDERATION_VOTE_PASSED:0 "Das §H[Actor.GetAllianceName]§! stimmte ab, eine Föderation zu bilden."
+ ACTION_FORM_FEDERATION_VOTE_FAILED:0 "Das Votum zur Bildung einer Föderation ist gescheitert."
+ ACTION_RELEASE_SUBJECT_PASSED:0 "§H[Actor.GetName]§! hat uns als Untertan entlassen."
+
+ MESSAGE_TRADE_DEAL_END_MISSING_RESOURCE_TITLE:0 "Handelsabkommen beendet, uns fehlen Ressourcen."
+ MESSAGE_TRADE_DEAL_END_MISSING_RESOURCE_THEM_TITLE:0 "Handelsabkommen beendet, ihnen fehlen Ressourcen."
+ MESSAGE_TRADE_DEAL_END_CLOSED_BORDERS_TITLE:0 "Handelsabkommen beendet, wir haben unsere Grenzen geschlossen."
+ MESSAGE_TRADE_DEAL_END_CLOSED_BORDERS_THEM_TITLE:0 "Handelsabkommen beendet, sie haben ihre Grenzen geschlossen."
+ MESSAGE_TRADE_DEAL_END_GUARANTEE_ALLIANCE_TITLE:0 "Handelsabkommen beendet, wir traten einem Bündnis bei."
+ MESSAGE_TRADE_DEAL_END_GUARANTEE_ALLIANCE_THEM_TITLE:0 "Handelsabkommen beendet, sie traten einem Bündnis bei."
+ MESSAGE_TRADE_DEAL_END_SUPPORT_INDEPENDENCE_TITLE:0 "Wir stellten die Unabhängigkeitsunterstützung ein."
+ MESSAGE_TRADE_DEAL_END_SUPPORT_INDEPENDENCE_THEM_TITLE:0 "Sie stellten die Unterstützung unserer Unabhängigkeit ein."
+ MESSAGE_TRADE_DEAL_END_SUBJECT_ACCESS_TITLE:0 "Handelsabkommen beendet, wir wurden Untertanen."
+ MESSAGE_TRADE_DEAL_END_SUBJECT_ACCESS_THEM_TITLE:0 "Handelsabkommen beendet, sie wurden Untertanen."
+ MESSAGE_TRADE_DEAL_END_CANCELLED_TITLE:0 "Handelsabkommen gekündigt"
+ MESSAGE_TRADE_DEAL_END_TIMEOUT_TITLE:1 "Handelsabkommen-Dauer abgelaufen"
+ MESSAGE_CANCEL_SUBJECT_INTEGRATION_TITLE:0 "Integration abgebrochen"
+ ACTION_REQUEST_WAR_PROPOSAL_FAILED_ACTOR:0 "Unser Kriegsvorschlag gegen §H[Third_party.GetName]§! wurde abgelehnt."
+ ACTION_REQUEST_WAR_PROPOSAL_FAILED_ALLIANCE:0 "Der Kriegsvorschlag von §H[Actor.GetName]§! bezüglich §H[Third_party.GetName]§! wurde abgelehnt."
+ ACTION_REQUEST_WAR_PROPOSAL_FAILED_RECIPIENT:1 "Der Kriegsvorschlag von §H[Actor.GetName]§! bezüglich §H[Third_party.GetName]§! ist abgelaufen und wurde automatisch abgelehnt."
+ ACTION_PROPOSE_INVITE_PROPOSAL_FAILED_ACTOR:0 "Unser Einladungsvorschlag für §H[Third_party.GetName]§! wurde abgelehnt."
+ ACTION_PROPOSE_INVITE_PROPOSAL_FAILED_ALLIANCE:0 "Der Einladungsvorschlag von §H[Actor.GetName]§! für §H[Third_party.GetName]§! wurde abgelehnt."
+ ACTION_PROPOSE_INVITE_PROPOSAL_FAILED_RECIPIENT:1 "Der Einladungsvorschlag von §H[Actor.GetName]§! für §H[Third_party.GetName]§! ist abgelaufen und wurde automatisch abgelehnt."
+ ACTION_OFFER_PEACE_PROPOSAL_FAILED_ACTOR:1 "Unser Friedensangebot an §H[Recipient.GetName]§! wurde automatisch abgelehnt."
+ ACTION_OFFER_PEACE_PROPOSAL_FAILED_RECIPIENT:1 "Das Friedensangebot von §H[Actor.GetName]§! wurde automatisch abgelehnt."
+ ACTION_OFFER_PEACE_DIPLOMACY_VIEW_PROPOSAL_FAILED_ACTOR:0 "$ACTION_OFFER_PEACE_PROPOSAL_FAILED_ACTOR$"
+ ACTION_OFFER_PEACE_DIPLOMACY_VIEW_PROPOSAL_FAILED_RECIPIENT:0 "$ACTION_OFFER_PEACE_PROPOSAL_FAILED_RECIPIENT$"
+ ACTION_MAKE_CLAIMS_DIPLOMACY_VIEW_PROPOSAL_FAILED_ACTOR:0 "Unser Versuch, Ansprüche auf §H[Recipient.GetName]§! zu machen ist abgelaufen und wurde automatisch abgelehnt." # Should never be shown in-game
+ ACTION_MAKE_CLAIMS_DIPLOMACY_VIEW_PROPOSAL_FAILED_RECIPIENT:0 "Der Versuch von §H[Actor.GetName]§!, Ansprüche zu machen, ist abgelaufen und wurde automatisch abgelehnt." # Should never be shown in-game
+ ACTION_FORM_DEFENSIVE_PACT_PROPOSAL_FAILED_ACTOR:1 "Unser Angebot, ein Defensivabkommen mit §H[Recipient.GetName]§! abzuschließen ist abgelaufen und wurde automatisch abgelehnt."
+ ACTION_FORM_DEFENSIVE_PACT_PROPOSAL_FAILED_RECIPIENT:1 "Das Angebot, ein Defensivabkommen mit §H[Actor.GetName]§! abzuschließen ist abgelaufen und wurde automatisch abgelehnt."
+ ACTION_FORM_NON_AGGRESSION_PACT_PROPOSAL_FAILED_ACTOR:1 "Unser Angebot, ein Nichtangriffsversprechen mit §H[Recipient.GetName]§! abzuschließen ist abgelaufen und wurde automatisch abgelehnt."
+ ACTION_FORM_NON_AGGRESSION_PACT_PROPOSAL_FAILED_RECIPIENT:1 "Das Angebot, ein Nichtangriffsversprechen mit §H[Actor.GetName]§! abzuschließen ist abgelaufen und wurde automatisch abgelehnt."
+ ACTION_FORM_MIGRATION_PACT_PROPOSAL_FAILED_ACTOR:0 "Unser Angebot, ein Migrationsabkommen mit §H[Recipient.GetName]§! abzuschließen ist abgelaufen und wurde automatisch abgelehnt."
+ ACTION_FORM_MIGRATION_PACT_PROPOSAL_FAILED_RECIPIENT:1 "Das Angebot, ein Migrationsabkommen mit §H[Actor.GetName]§! abzuschließen ist abgelaufen und wurde automatisch abgelehnt."
+ ACTION_INVITE_TO_ALLIANCE_PROPOSAL_FAILED_ACTOR:0 "Unsere Bündniseinladung für §H[Recipient.GetName]§! wurde abgelehnt."
+ ACTION_INVITE_TO_ALLIANCE_PROPOSAL_FAILED_RECIPIENT:0 "Das Angebot von §H[Actor.GetName]§! zum Eintritt in ein Bündnis ist abgelaufen und wurde automatisch abgelehnt."
+ ACTION_KICK_FROM_ALLIANCE_PROPOSAL_FAILED_ACTOR:0 "Unser Vorschlag auf Bündnisausschluss für §H[Recipient.GetName]§! wurde abgelehnt."
+ ACTION_KICK_FROM_ALLIANCE_PROPOSAL_FAILED_RECIPIENT:1 "Der Vorschlag von §H[Actor.GetName]§!, uns aus der Föderation auszuschließen ist abgelaufen und wurde automatisch abgelehnt."
+ ACTION_KICK_FROM_FEDERATION_PROPOSAL_FAILED_ACTOR:0 "Unser Vorschlag auf Föderationsausschluss für §H[Recipient.GetName]§! wurde abgelehnt."
+ ACTION_KICK_FROM_FEDERATION_PROPOSAL_FAILED_RECIPIENT:1 "Der Vorschlag von §H[Actor.GetName]§!, uns aus der Föderation auszuschließen ist abgelaufen und wurde automatisch abgelehnt."
+ ACTION_INVITE_TO_FEDERATION_PROPOSAL_FAILED_ACTOR:0 "Unsere Einladung für §H[Recipient.GetName]§! ins Bündnis einzutreten wurde abgelehnt."
+ ACTION_INVITE_TO_FEDERATION_PROPOSAL_FAILED_RECIPIENT:1 "Die Bündniseinladung von §H[Actor.GetName]§! ist abgelaufen und wurde automatisch abgelehnt."
+ ACTION_ASK_FOR_FEDERATION_ASSOCIATION_PROPOSAL_FAILED_ACTOR:0 "Unsere Anfrage auf Assoziationsstatus beim §H[Recipient.GetAllianceName]§! wurde abgelehnt."
+ ACTION_ASK_FOR_FEDERATION_ASSOCIATION_PROPOSAL_FAILED_RECIPIENT:1 "Die Anfrage von §H[Actor.GetName]§! auf Assoziationsstatus beim §H[Recipient.GetAllianceName]§! ist abgelaufen und wurde automatisch abgelehnt."
+ ACTION_DEMAND_VASSALIZATION_PROPOSAL_FAILED_ACTOR:0 "Unsere Forderung zur Vasallisierung von §H[Recipient.GetName]§! wurde abgelehnt."
+ ACTION_DEMAND_VASSALIZATION_PROPOSAL_FAILED_RECIPIENT:1 "Die Forderung zur Vasallisierung von §H[Actor.GetName]§! ist abgelaufen und wurde automatisch abgelehnt."
+ ACTION_DEMAND_PROTECTORATE_PROPOSAL_FAILED_ACTOR:0 "Unser Angebot, §H[Recipient.GetName]§! Protektoratsstatus zu geben, wurde abgelehnt."
+ ACTION_DEMAND_PROTECTORATE_PROPOSAL_FAILED_RECIPIENT:1 "Das Angebot auf Protektoratsstatus von §H[Actor.GetName]§! ist abgelaufen und wurde automatisch abgelehnt."
+ ACTION_DEMAND_TRIBUTARY_PROPOSAL_FAILED_ACTOR:0 "Unser Angebot, §H[Recipient.GetName]§! Tributpflichtigenstatus zu geben, wurde abgelehnt."
+ ACTION_DEMAND_TRIBUTARY_PROPOSAL_FAILED_RECIPIENT:1 "Das Angebot auf Tributnationsstatus von §H[Actor.GetName]§! ist abgelaufen und wurde automatisch abgelehnt."
+ ACTION_DEMAND_THRALL_PROPOSAL_FAILED_ACTOR:0 "Unser Angebot, §H[Recipient.GetName]§! Knechtschaftsstatus zu geben, wurde abgelehnt."
+ ACTION_DEMAND_THRALL_PROPOSAL_FAILED_RECIPIENT:1 "Das Angebot auf Knechtschaftsstatus von §H[Actor.GetName]§! ist abgelaufen und wurde automatisch abgelehnt."
+ ACTION_DEMAND_DOMINION_PROPOSAL_FAILED_ACTOR:0 "Unser Angebot, §H[Recipient.GetName]§! Herrschaftsstatus zu geben, wurde abgelehnt."
+ ACTION_DEMAND_DOMINION_PROPOSAL_FAILED_RECIPIENT:1 "Das Angebot auf Herrschaftsstatus von §H[Actor.GetName]§! ist abgelaufen und wurde automatisch abgelehnt."
+ ACTION_DEMAND_SIGNATORY_PROPOSAL_FAILED_ACTOR:0 "Unser Angebot, §H[Recipient.GetName]§! Vertragsstatus zu geben, wurde abgelehnt."
+ ACTION_DEMAND_SIGNATORY_PROPOSAL_FAILED_RECIPIENT:1 "Das Angebot auf Vertragsstatus von §H[Actor.GetName]§! ist abgelaufen und wurde automatisch abgelehnt."
+ ACTION_DEMAND_SATELLITE_PROPOSAL_FAILED_ACTOR:0 "Unser Angebot, §H[Recipient.GetName]§! Satellitenstatus zu geben, wurde abgelehnt."
+ ACTION_DEMAND_SATELLITE_PROPOSAL_FAILED_RECIPIENT:1 "Das Angebot auf Satellitenstatus von §H[Actor.GetName]§! ist abgelaufen und wurde automatisch abgelehnt."
+ ACTION_ASK_TO_BECOME_VASSALIZED_PROPOSAL_FAILED_ACTOR:0 "Unsere Anfrage zur Vasallisierung durch §H[Recipient.GetName]§! wurde abgelehnt."
+ ACTION_ASK_TO_BECOME_VASSALIZED_PROPOSAL_FAILED_RECIPIENT:1 "Die Anfrage von §H[Actor.GetName]§!, vasallisiert zu werden ist abgelaufen und wurde automatisch abgelehnt."
+ ACTION_ASK_TO_BECOME_PROTECTORATE_PROPOSAL_FAILED_ACTOR:0 "Unsere Anfrage, ein Protektorat von §H[Recipient.GetName]§! zu werden, wurde abgelehnt."
+ ACTION_ASK_TO_BECOME_PROTECTORATE_PROPOSAL_FAILED_RECIPIENT:1 "Die Anfrage, ein Protektorat von §H[Actor.GetName]§! zu werden ist abgelaufen und wurde automatisch abgelehnt."
+ ACTION_ASK_TO_BECOME_TRIBUTARY_PROPOSAL_FAILED_ACTOR:0 "Unsere Anfrage, eine Tributnation von §H[Recipient.GetName]§! zu werden, wurde abgelehnt."
+ ACTION_ASK_TO_BECOME_TRIBUTARY_PROPOSAL_FAILED_RECIPIENT:1 "Die Anfrage, eine Tributnation von §H[Actor.GetName]§! zu werden ist abgelaufen und wurde automatisch abgelehnt."
+ ACTION_ASK_TO_BECOME_THRALL_PROPOSAL_FAILED_ACTOR:0 "Unsere Anfrage, ein Leibeigener von §H[Recipient.GetName]§! zu werden, wurde abgelehnt."
+ ACTION_ASK_TO_BECOME_THRALL_PROPOSAL_FAILED_RECIPIENT:1 "Die Anfrage, ein Leibeigener von §H[Actor.GetName]§! zu werden ist abgelaufen und wurde automatisch abgelehnt."
+ ACTION_ASK_TO_BECOME_DOMINION_PROPOSAL_FAILED_ACTOR:0 "Unsere Anfrage, ein Herrschaftsgebiet von §H[Recipient.GetName]§! zu werden, wurde abgelehnt."
+ ACTION_ASK_TO_BECOME_DOMINION_PROPOSAL_FAILED_RECIPIENT:1 "Die Anfrage, ein Herrschaftsgebiet von §H[Actor.GetName]§! zu werden ist abgelaufen und wurde automatisch abgelehnt."
+ ACTION_ASK_TO_BECOME_SATELLITE_PROPOSAL_FAILED_ACTOR:0 "Unsere Anfrage, ein Satellitenstaat von §H[Recipient.GetName]§! zu werden, wurde abgelehnt."
+ ACTION_ASK_TO_BECOME_SATELLITE_PROPOSAL_FAILED_RECIPIENT:1 "Die Anfrage, ein Satellitenstaat von §H[Actor.GetName]§! zu werden ist abgelaufen und wurde automatisch abgelehnt."
+ ACTION_ASK_TO_BECOME_SIGNATORY_PROPOSAL_FAILED_ACTOR:0 "Unsere Anfrage, ein Vertragsstaat von §H[Recipient.GetName]§! zu werden, wurde abgelehnt."
+ ACTION_ASK_TO_BECOME_SIGNATORY_PROPOSAL_FAILED_RECIPIENT:1 "Die Anfrage, ein Vertragsstaat von §H[Actor.GetName]§! zu werden ist abgelaufen und wurde automatisch abgelehnt."
+ ACTION_ASK_TO_BE_RELEASED_SUBJECT_PROPOSAL_FAILED_ACTOR:0 "Unsere Anfrage, aus der Unterwerfung von §H[Recipient.GetName]§! entlassen zu werden, wurde abgelehnt."
+ ACTION_ASK_TO_BE_RELEASED_SUBJECT_PROPOSAL_FAILED_RECIPIENT:1 "Unsere Anfrage, aus der Unterwerfung von §H[Actor.GetName]§! entlassen zu werden ist abgelaufen und wurde automatisch abgelehnt."
+ ACTION_ASK_TO_JOIN_FEDERATION_PROPOSAL_FAILED_ACTOR:0 "Unsere Anfrage, dem Bündnis §H[Recipient.GetAllianceName]§! beizutreten, wurde abgelehnt."
+ ACTION_ASK_TO_JOIN_FEDERATION_PROPOSAL_FAILED_ALLIANCE:0 "Die Anfrage von §H[Actor.GetName]§!, dem Bündnis §H[Recipient.GetAllianceName]§! beitreten zu können, wurde abgelehnt."
+ ACTION_ASK_TO_JOIN_FEDERATION_PROPOSAL_FAILED_RECIPIENT:0 "Die Anfrage von §H[Actor.GetName]§!, dem Bündnis §H[Recipient.GetAllianceName]§! beitreten zu können ist abgelaufen und wurde automatisch abgelehnt."
+ ACTION_ASK_TO_JOIN_ALLIANCE_PROPOSAL_FAILED_ACTOR:0 "Unsere Anfrage, dem Bündnis §H[Recipient.GetAllianceName]§! beizutreten, wurde abgelehnt."
+ ACTION_ASK_TO_JOIN_ALLIANCE_PROPOSAL_FAILED_RECIPIENT:0 "Die Anfrage von §H[Actor.GetName]§!, dem Bündnis §H[Recipient.GetAllianceName]§! beitreten zu können ist abgelaufen und wurde automatisch abgelehnt."
+ ACTION_ASK_TO_BECOME_RELEASED_VASSAL_PROPOSAL_FAILED_ACTOR:0 "Unsere Anfrage, von §H[Recipient.GetName]§! entlassen zu werden, wurde abgelehnt."
+ ACTION_ASK_TO_BECOME_RELEASED_VASSAL_PROPOSAL_FAILED_RECIPIENT:1 "Die Anfrage, von §H[Actor.GetName]§! entlassen zu werden ist abgelaufen und wurde automatisch abgelehnt."
+ ACTION_OFFER_TRADE_DEAL_PROPOSAL_FAILED_ACTOR:0 "Unser Handelsangebot an §H[Recipient.GetName]§! wurde abgelehnt."
+ ACTION_OFFER_TRADE_DEAL_PROPOSAL_FAILED_RECIPIENT:1 "Das Handelsangebot von §H[Actor.GetName]§! ist abgelaufen und wurde automatisch abgelehnt."
+
+ MESSAGE_MAKE_RIVAL_TITLE:0 "$RIVALRY$"
+ MESSAGE_RECALL_EMBASSY_TITLE:0 "Botschaft aufgekündigt"
+ MESSAGE_END_RIVALRY_TITLE:0 "$RIVALRY$ beendet"
+ MESSAGE_EMBASSY_TITLE:0 "Botschaft etabliert"
+ MESSAGE_DECLARE_WAR_TITLE:0 "Kriegserklärung"
+ MESSAGE_OFFER_PEACE_TITLE:0 "Friedensangebot"
+ MESSAGE_INVITE_TO_ALLIANCE_TITLE:0 "Bündniseinladung"
+ MESSAGE_KICK_FROM_ALLIANCE_TITLE:0 "Bündnismitglied wurde ausgeschlossen"
+ MESSAGE_KICK_FROM_FEDERATION_TITLE:0 "Föderationsmitglied wurde ausgeschlossen"
+ MESSAGE_ASK_TO_JOIN_ALLIANCE_TITLE:0 "Bündnis-Beitrittsanfrage"
+ MESSAGE_LEAVE_ALLIANCE_TITLE:0 "Bündnismitglied ist ausgetreten"
+ DIPLO_ACTION_LEAVE_ALLIANCE_DESC:0 "Das $ALLIANCE|Y$ wurde von $COUNTRY|Y$ verlassen"
+ DIPLO_ACTION_LEAVE_FEDERATION_DESC:0 "$COUNTRY|Y$ hat $ALLIANCE|Y$ verlassen"
+ MESSAGE_DEMAND_VASSALIZATION_TITLE:0 "Vasallisierung verlangen"
+ MESSAGE_DEMAND_PROTECTORATE_TITLE:0 "Protektoratsstatus anbieten"
+ MESSAGE_DEMAND_TRIBUTARY_TITLE:0 "Tributnationsstatus-Anfrage"
+ MESSAGE_DEMAND_THRALL_TITLE:0 "Knechtschaftsstatus-Anfrage"
+ MESSAGE_DEMAND_DOMINION_TITLE:0 "Herrschaftsstatus anbieten"
+ MESSAGE_DEMAND_SATELLITE_TITLE:0 "Satellitenstatus anbieten"
+ MESSAGE_DEMAND_SIGNATORY_TITLE:0 "Vertragsstatus anbieten"
+ MESSAGE_ASK_TO_BECOME_VASSALIZED_TITLE:0 "Vasallisierungsanfrage"
+ MESSAGE_ASK_TO_BECOME_PROTECTORATE_TITLE:0 "Protektoratsanfrage"
+ MESSAGE_ASK_TO_BECOME_TRIBUTARY_TITLE:0 "Tributnationsstatus-Angebot"
+ MESSAGE_ASK_TO_BECOME_THRALL_TITLE:0 "Knechtschaftsstatus-Angebot"
+ MESSAGE_ASK_TO_BECOME_DOMINION_TITLE:0 "Herrschaftsstatus-Anfrage"
+ MESSAGE_ASK_TO_BECOME_SATELLITE_TITLE:0 "Satellitenstatus-Anfrage"
+ MESSAGE_ASK_TO_BECOME_SIGNATORY_TITLE:0 "Vertragsstatus-Anfrage"
+ MESSAGE_ASK_TO_BE_RELEASED_SUBJECT_TITLE:0 "Anfrage auf Untertanenentlassung"
+ MESSAGE_FORM_FEDERATION_TITLE:0 "Föderationsgründungsvorschlag"
+ MESSAGE_INVITE_TO_FEDERATION_TITLE:0 "Föderationseinladung"
+ MESSAGE_ASK_TO_JOIN_FEDERATION_TITLE:0 "Anfrage auf Föderationsbeitritt"
+ MESSAGE_LEAVE_FEDERATION_TITLE:0 "Föderation verlassen"
+ MESSAGE_OFFER_TRADE_DEAL_TITLE:0 "Handelsangebot"
+ MESSAGE_REQUEST_WAR_TITLE:0 "Kriegsanfrage"
+ MESSAGE_PROPOSE_INVITE_TITLE:0 "Einladungsvorschlag"
+ MESSAGE_ASK_TO_BECOME_RELEASED_SUBJECT_TITLE:0 "Untertanen-Entlassungsanfrage"
+ MESSAGE_RELEASE_SUBJECT_TITLE:0 "Untertan entlassen"
+ MESSAGE_WARNING_NOT_ACTIVE_IN_WAR_TITLE:0 "Warnung: Nicht aktiv im Krieg!"
+ MESSAGE_NOT_ACTIVE_IN_WAR_TITLE:0 "Nicht aktiv im Krieg"
+ MESSAGE_DIPLOMATIC_INSULT_TITLE:0 "Diplomatische Beleidigung"
+ MESSAGE_INTEGRATE_SUBJECT_TITLE:0 "Untertan integrieren"
+ MESSAGE_CANCEL_SUBJECT_INTEGRATION_NOTIFICATION:0 "Untertanenintegration eingeleitet"
+ MESSAGE_FORM_DEFENSIVE_PACT_TITLE:0 "Defensivabkommen-Einladung"
+ MESSAGE_BREAK_DEFENSIVE_PACT_TITLE:0 "Defensivabkommen beendet"
+ MESSAGE_FORM_NON_AGGRESSION_PACT_TITLE:0 "Nichtangriffsversprechen-Einladung"
+ MESSAGE_BREAK_NON_AGGRESSION_PACT_TITLE:0 "Nichtangriffsversprechen-Bruch"
+ MESSAGE_FORM_MIGRATION_PACT_TITLE:0 "Migrationsabkommen-Einladung"
+ MESSAGE_BREAK_MIGRATION_PACT_TITLE:0 "Migrationsabkommen-Bruch"
+ MESSAGE_GUARANTEE_INDEPENDENCE_TITLE:0 "Unabhängigkeit garantiert"
+ MESSAGE_BREAK_GUARANTEE_TITLE:0 "Garantie widerrufen"
+ MESSAGE_SUPPORT_INDEPENDENCE_TITLE:0 "Unabhängigkeit unterstützt"
+ MESSAGE_BREAK_SUPPORT_TITLE:0 "Unterstützung widerrufen"
+ MESSAGE_OPEN_BORDERS_TITLE:0 "Grenzen geöffnet"
+ MESSAGE_CLOSE_BORDERS_TITLE:0 "Grenzen geschlossen"
+
+ ACTION_MAKE_RIVAL_NOTIFICATION:1 "§H[From.GetName]§! hat §H[Root.GetName]§! zum §H$RIVAL$n§! erklärt.\n\nDies wird ihre diplomatischen Beziehungen deutlich verschlechtern."
+ ACTION_END_RIVALRY_NOTIFICATION:2 "§H[From.GetName]§! haben ihre $RIVALRY$ mit §H[Root.GetName]§! beendet.\n\nSie könnten sich auf dem Weg zur Versöhnung befinden."
+ ACTION_EMBASSY_NOTIFICATION:1 "§H[From.GetName]§! hat als permanente Vertretung eine Botschaft nach §H[Root.GetName]§! entsandt.\n\nDies wird ihre Beziehungen im Laufe der Zeit verbessern."
+ ACTION_RECALL_EMBASSY_NOTIFICATION:2 "§H[From.GetName]§! hat ihre Botschaft von §H[Root.GetName]§! zurückgerufen.\n\nIst dies ein Anzeichen für bevorstehende Feindseligkeiten?"
+ ACTION_DECLARE_WAR_NOTIFICATION:3 "§H[From.GetName]§! hat §H[Root.GetName]§! den Krieg erklärt!\n\nJetzt werden wir sehen, welches Reich stärker ist."
+ ACTION_OFFER_PEACE_NOTIFICATION:1 "§H[From.GetName]§! hat mit §H[Root.GetName]§! Frieden geschlossen."
+ ACTION_INVITE_TO_ALLIANCE_NOTIFICATION:2 "§H[Root.GetName]§! ist der Föderation §H[From.GetAllianceName]§! beigetreten.\n\nSie werden jetzt vereint gegen ihre Feinde kämpfen."
+ ACTION_LEAVE_ALLIANCE_NOTIFICATION:2 "§H[From.GetName]§! verließ die Föderation §H[From.GetAllianceName]§!.\n\nDies könnte eine Gelegenheit für uns darstellen ..."
+ ACTION_DEMAND_VASSALIZATION_NOTIFICATION:2 "§H[From.GetName]§! hat §H[Root.GetName]§! vasallisiert.\n\nSie haben ihre Freiheit für Sicherheit eingetauscht."
+ ACTION_ASK_TO_BECOME_VASSALIZED_NOTIFICATION:2 "§H[Root.GetName]§! hat §H[From.GetName]§! vasallisiert.\n\nSie haben ihre Freiheit für Sicherheit eingetauscht."
+ ACTION_DEMAND_PROTECTORATE_NOTIFICATION:2 "§H[From.GetName]§! hat ein Protektorat aus §H[Root.GetName]§! gemacht.\n\nSie haben ihre Freiheit für Sicherheit eingetauscht."
+ ACTION_DEMAND_TRIBUTARY_NOTIFICATION:2 "§H[From.GetName]§! hat §H[Root.GetName]§! zur Tributnation gemacht.\n\nSie zahlen für ihre Freiheit nun einen Teil ihrer Einnahmen."
+ ACTION_DEMAND_THRALL_NOTIFICATION:2 "§H[From.GetName]§! hat §H[Root.GetName]§! zum Knecht gemacht.\n\nSie haben ihre Freiheit für Sicherheit aufgegeben."
+ ACTION_DEMAND_DOMINION_NOTIFICATION:2 "§H[From.GetName]§! hat §H[Root.GetName]§! zum Herrschaftsgebiet gemacht.\n\nSie haben ihre spirituelle Unabhängigkeit für Sicherheit aufgegeben."
+ ACTION_DEMAND_SIGNATORY_NOTIFICATION:2 "§H[From.GetName]§! hat §H[Root.GetName]§! ihren galaktischen Friedensvertrag unterzeichnen lassen.\n\nSie haben ihre diplomatische Unabhängigkeit für Sicherheit aufgegeben."
+ ACTION_DEMAND_SATELLITE_NOTIFICATION:2 "§H[From.GetName]§! hat §H[Root.GetName]§! zum Satellitenstaat gemacht.\n\nSie haben ihre technologische Unabhängigkeit für Sicherheit aufgegeben."
+ ACTION_ASK_TO_BECOME_PROTECTORATE_NOTIFICATION:2 "§H[Root.GetName]§! hat ein Protektorat aus §H[From.GetName]§! gemacht.\n\nSie haben ihre Freiheit für Sicherheit eingetauscht."
+ ACTION_ASK_TO_BECOME_TRIBUTARY_NOTIFICATION:2 "§H[Root.GetName]§! hat §H[From.GetName]§! zur Tributnation gemacht.\n\nSie zahlen für ihre Freiheit nun einen Teil ihrer Einnahmen."
+ ACTION_ASK_TO_BECOME_THRALL_NOTIFICATION:2 "§H[Root.GetName]§! hat §H[From.GetName]§! zum Knecht gemacht.\n\nSie haben ihre Freiheit für Sicherheit aufgegeben."
+ ACTION_ASK_TO_BECOME_DOMINION_NOTIFICATION:2 "§H[Root.GetName]§! hat §H[From.GetName]§! zum Herrschaftsgebiet gemacht.\n\nSie haben ihre spirituelle Unabhängigkeit für Sicherheit aufgegeben."
+ ACTION_ASK_TO_BECOME_SIGNATORY_NOTIFICATION:2 "§H[Root.GetName]§! hat §H[From.GetName]§! ihren galaktischen Friedensvertrag unterzeichnen lassen.\n\nSie haben ihre diplomatische Unabhängigkeit für Sicherheit aufgegeben."
+ ACTION_ASK_TO_BECOME_SATELLITE_NOTIFICATION:2 "§H[Root.GetName]§! hat §H[From.GetName]§! zum Satellitenstaat gemacht.\n\nSie haben ihre technologische Unabhängigkeit für Sicherheit aufgegeben."
+ ACTION_FORM_FEDERATION_NOTIFICATION:2 "§H[From.GetAllianceName]§! hat per Wahl die Gründung einer $FEDERATION$ beschlossen.\n\nSie haben beschlossen, sich in der Galaxie als Einheit zu repräsentieren."
+ ACTION_INVITE_TO_FEDERATION_NOTIFICATION:2 "§H[Root.GetName]§! ist der Föderation §H[From.GetAllianceName]§! beigetreten.\n\nSie werden jetzt vereint gegen ihre Feinde kämpfen."
+ ACTION_ASK_TO_JOIN_FEDERATION_NOTIFICATION:2 "§H[From.GetName]§! ist der Föderation §H[Root.GetAllianceName]§!. beigetreten.\n\nSie werden jetzt vereint gegen ihre Feinde kämpfen."
+ ACTION_LEAVE_FEDERATION_NOTIFICATION:2 "§H[From.GetName]§! hat die Föderation §H[Root.GetAllianceName]§! verlassen.\n\nDies könnte eine Gelegenheit für uns darstellen ..."
+ ACTION_KICK_FROM_FEDERATION_NOTIFICATION:1 "Die Föderation §H[From.GetAllianceName]§! stimmte dafür, §H[Root.GetName]§! aus der Föderation auszuschließen."
+ ACTION_ASK_TO_BE_RELEASED_SUBJECT_NOTIFICATION:2 "§H[Root.GetName]§! hat §H[From.GetName]§! die Unabhängigkeit gegeben.\n\nAnscheinend waren sie zu schwach, ihren Untertan zu kontrollieren."
+ ACTION_RELEASE_SUBJECT_NOTIFICATION:2 "§H[From.GetName]§! hat §H[Root.GetName]§! die Unabhängigkeit gegeben.\n\nAnscheinend waren sie zu schwach, ihren Untertan zu kontrollieren."
+ ACTION_INSULT_NOTIFICATION:2 "§H[From.GetName]§! hat §H[Root.GetName]§! beleidigt.\n\nAnscheinend ist der Konflikt am brodeln ..."
+ ACTION_INTEGRATE_SUBJECT_NOTIFICATION:2 "§H[From.GetName]§! hat begonnen §H[Root.GetName]§! zu integrieren.\n\nSchon bald werden die letzten Reste [Root.GetAdj]er Unabhängigkeit verschwunden sein."
+ ACTION_CANCEL_SUBJECT_INTEGRATION_NOTIFICATION:2 "§H[From.GetName]§! hat die Integration von §H[Root.GetName]§! ausgesetzt.\n\nDie [Root.GetSpeciesNamePlural] scheinen mehr Probleme zu machen, als sie wert sind."
+ ACTION_FORM_DEFENSIVE_PACT_NOTIFICATION:1 "§H[From.GetName]§! hat mit §H[Root.GetName]§! ein Defensivabkommen geschlossen.\n\nSie werden sich jetzt gegenseitig gegen alle Feinde verteidigen."
+ ACTION_BREAK_DEFENSIVE_PACT_NOTIFICATION:1 "§H[From.GetName]§! brach ihr Defensivabkommen mit §H[Root.GetName]§!.\n\nAnscheinend glauben sie, alleine besser dran zu sein."
+ ACTION_FORM_NON_AGGRESSION_PACT_NOTIFICATION:1 "§H[From.GetName]§! hat ein Nichtangriffsversprechen mit §H[Root.GetName]§! geschlossen.\n\nWir werden sehen, ob dieser Frieden von Dauer ist."
+ ACTION_BREAK_NON_AGGRESSION_PACT_NOTIFICATION:1 "§H[From.GetName]§! hat ihr Nichtangriffsversprechen mit §H[Root.GetName]§! gebrochen.\n\nAnscheinend sind sie des Friedens überdrüssig geworden ..."
+ ACTION_FORM_MIGRATION_PACT_NOTIFICATION:1 "§H[From.GetName]§! hat ein Migrationsabkommen mit §H[Root.GetName]§! geschlossen.\n\nIhre Bevölkerungen können sich jetzt in beiden Reichen frei bewegen."
+ ACTION_BREAK_MIGRATION_PACT_NOTIFICATION:1 "§H[From.GetName]§! hat ihr Migrationsabkommen mit §H[Root.GetName]§! gebrochen.\n\nAnscheinend bereuen sie jetzt, ihre Grenzen geöffnet zu haben."
+ ACTION_GUARANTEE_INDEPENDENCE_NOTIFICATION:1 "§H[From.GetName]§! garantiert jetzt die Unabhängigkeit von §H[Root.GetName]§!.\n\nSie werden sie jetzt gegen alle Angriffe verteidigen."
+ ACTION_BREAK_GUARANTEE_NOTIFICATION:1 "§H[From.GetName]§! garantiert die Unabhängigkeit von §H[Root.GetName]§! jetzt nicht mehr.\n\nDies könnte eine Gelegenheit für uns darstellen ..."
+ ACTION_SUPPORT_INDEPENDENCE_NOTIFICATION:1 "§H[From.GetName]§! unterstützt jetzt die Unabhängigkeit von §H[Root.GetName]§!.\n\nDas wird ihrem Oberherrn bestimmt nicht gefallen ..."
+ ACTION_BREAK_SUPPORT_NOTIFICATION:1 "§H[From.GetName]§! unterstützt die Unabhängigkeit von §H[Root.GetName]§! jetzt nicht mehr.\n\n[Root.GetName] scheint es vorherbestimmt, ein Untertan zu bleiben."
+ ACTION_OPEN_BORDERS_NOTIFICATION:1 "§H[From.GetName]§! hat ihre Grenzen für die Flotten von §H[Root.GetName]§! geöffnet.\n\nDies wird ihre diplomatischen Beziehungen verbessern."
+ ACTION_CLOSE_BORDERS_NOTIFICATION:1 "§H[From.GetName]§! hat ihre Grenzen für die Flotten von §H[Root.GetName]§! geschlossen.\n\nDies wird ihre diplomatischen Beziehungen verschlechtern."
+
+ MESSAGE_OFFER_FEDERATION_ASSOCIATION_TITLE:0 "Föderationsassoziation-Angebot"
+ ACTION_OFFER_FEDERATION_ASSOCIATION_NOTIFICATION:2 "§H[Root.GetName]§! hat von §H[From.GetAllianceName]§! Assoziationsstatus bekommen.\n\nAnscheinend wünschen sie engere Beziehungen."
+ MESSAGE_ASK_FOR_FEDERATION_ASSOCIATION_TITLE:0 "Föderationsassoziation-Anfrage"
+ ACTION_ASK_FOR_FEDERATION_ASSOCIATION_NOTIFICATION:2 "§H[Root.GetName]§! hat von §H[From.GetAllianceName]§! Assoziationsstatus bekommen.\n\nAnscheinend wünschen sie engere Beziehungen."
+ MESSAGE_REVOKE_FEDERATION_ASSOCIATION_TITLE:0 "Föderationsassoziation widerrufen"
+ ACTION_REVOKE_FEDERATION_ASSOCIATION_NOTIFICATION:2 "§H[Root.GetName]§! wurde ihr Assoziationsstatus von §H[From.GetAllianceName]§! widerrufen.\n\nIst das ein Anzeichen für bevorstehende Feindseligkeiten?"
+ MESSAGE_END_FEDERATION_ASSOCIATION_TITLE:0 "Föderationsassoziation beendet"
+ ACTION_END_FEDERATION_ASSOCIATION_NOTIFICATION:2 "§H[From.GetName]§! hat beschlossen, ihren Assoziationsstatus mit dem §H[Root.GetAllianceName]§! zu beenden.\n\nIst das ein Anzeichen für bevorstehende Feindseligkeiten?"
+ DIPLO_ACTION_END_FEDERATION_ASSOCIATION_DESC:0 "§H$COUNTRY$§! hat beschlossen, ihren Assoziationsstatus mit dem §H$ALLIANCE$§! zu beenden.\n\nIst das ein Anzeichen für bevorstehende Feindseligkeiten?"
+
+ 
+ MESSAGE_DIPLOMACY_TITLE:0 "Diplomatie"
+
+ ####################################
+ # War
+ ####################################
+ SURRENDER_OUR_SIDE:0 "Unser Kriegsführer hat bedingungslos kapituliert, was zu einem Waffenstillstand geführt hat. Der Feind hat jetzt bis zu sechs Monate, um uns seine Forderungen zu stellen."
+ SURRENDER_THEIR_SIDE:0 "Ihr Kriegsführer hat bedingungslos kapituliert, was zu einem Waffenstillstand geführt hat. Wir haben jetzt bis zu sechs Monate, um unsere Forderungen zu stellen."
+ WAR_END_VICTORY:0 "Wir haben diesen Krieg gewonnen -"
+ WAR_END_DEFEAT:0 "Wir haben diesen Krieg verloren -"
+ WAR_END_STATUS_QUO:0 "Der Krieg ist mit einem Status quo geendet."
+ MESSAGE_OUR_SURRENDER_TITLE:0 "Wir kapitulieren"
+ MESSAGE_THEIR_SURRENDER_TITLE:0 "Sie kapitulieren"
+ MESSAGE_VICTORY_TITLE:1 "§GSieg§!"
+ MESSAGE_DEFEAT_TITLE:1 "§RNiederlage§!"
+ MESSAGE_ALLIED_ENTERED_WAR:1 "Der Angreifer, $ATTACKER|Y$, hat unserem Verbündeten, $CALLER|Y$, den Krieg erklärt.\n\nInfolgedessen befinden wir uns nun mit dem Angreifer, $ATTACKER|Y$, §Y im Krieg§!!"
+ MESSAGE_GUARANTEED_ENTERED_WAR:0 "Garantiepartner wird angegriffen"
+ MESSAGE_GUARANTEER_ENTERED_WAR_DESC:1 "Der Angreifer, $ATTACKER|Y$, hat $CALLER|Y$, dessen Unabhängigkeit wir garantiert haben, den Krieg erklärt.\n\nInfolgedessen befinden wir uns nun mit dem Angreifer, $ATTACKER|Y$, §Yim Krieg§!!"
+ MESSAGE_GUARANTEER_ENTERED_WAR_TITLE:0 "Kriegseintritt von Garantiepartner"
+ MESSAGE_ALLIED_ENTERED_WAR_TITLE:0 "Kriegseintritt von Bündnispartner"
+ MESSAGE_OVERLORD_ENTERED_WAR_TITLE:0 "Kriegseintritt von Lehnsherr"
+ MESSAGE_OVERLORD_ENTERED_WAR_DESC:1 "Der Angreifer $ATTACKER|Y$ hat unserem Oberherrn $CALLER|Y$ den Krieg erklärt.\n\nInfolgedessen befinden wir uns nun mit dem Angreifer $ATTACKER|Y$ §Yim Krieg§!!"
+ MESSAGE_SUBJECT_ENTERED_WAR_TITLE:0 "Kriegseintritt von Untertan"
+ MESSAGE_SUBJECT_ENTERED_WAR_DESC:1 "Der Angreifer $ATTACKER|Y$ hat unserem $SUBJECT_TYPE$ $CALLER|Y$ den Krieg erklärt.\n\nInfolgedessen befinden wir uns nun mit dem Angreifer $ATTACKER|Y$ §Yim Krieg§!!"
+ MESSAGE_OVERLORD_DECLARED_WAR:0 "Kriegserklärung von Lehnsherr"
+ MESSAGE_OVERLORD_DECLARED_WAR_DESC:1 "Unser Lehnsherr $CALLER|Y$ hat $DEFENDER|Y$ den Krieg erklärt.\n\nInfolgedessen befinden wir uns nun mit dem Verteidiger $DEFENDER|Y$ §Yim Krieg§!!"
+ MESSAGE_FEDERATION_DECLARED_WAR:0 "Kriegserklärung von Föderationspräsident"
+ MESSAGE_FEDERATION_DECLARED_WAR_DESC:1 "Unser Föderationspräsident $CALLER|Y$ hat $DEFENDER|Y$ den Krieg erklärt.\n\nInfolgedessen befinden wir uns nun mit dem Verteidiger $DEFENDER|Y$ §Yim Krieg§!!"
+ MESSAGE_SUPPORTED_DECLARED_WAR:1 "Kriegserklärung von Untertan"
+ MESSAGE_SUPPORTED_DECLARED_WAR_DESC:1 "$CALLER|Y$, dessen Unabhängigkeit wir unterstützen, hat $DEFENDER|Y$ den Krieg erklärt!"
+ MESSAGE_OFFENSIVE_PACT_DECLARED_WAR:0 "Angriffskrieg beigetreten"
+ MESSAGE_OFFENSIVE_PACT_DECLARED_WAR_DESC:1 "$CALLER|Y$, deren Unterstützung in ihrem Angriffskrieg wir zugestimmt haben, hat $DEFENDER|Y$! den Krieg erklärt."
+ MESSAGE_WAR_ENDED:0 "Krieg beendet"
+ MESSAGE_WAR_ENDED_DESC_1:1 "Der Krieg zwischen $ATTACKER|Y$ und $DEFENDER|Y$ hat ein Ende gefunden, da $DEFENDER|Y$ von Dritten vasallisiert oder annektiert wurde."
+ MESSAGE_WAR_ENDED_DESC_2:2 "Unser Krieg mit $ENEMY|Y$ ist beendet, weil sie von $OVERLORD|Y$ vassalisiert oder annektiert wurden. Wir sind keinen Waffenstillstand eingegangen."
+ MESSAGE_WAR_ENDED_DESC_3:1 "Wir haben den Krieg gegen $ENEMY|Y$ verlassen, da wir von $OVERLORD|Y$ vasallisiert werden."
+ MESSAGE_VASSAL_ENTER_WAR:0 "Untertan tritt in Krieg ein"
+ MESSAGE_VASSAL_ENTER_WAR_DESC_1:1 "$VASSAL|Y$, der Vasall eines unserer Verbündeten, ist in den Krieg gegen $ENEMY|Y$ eingetreten."
+ MESSAGE_VASSAL_ENTER_WAR_DESC_2:1 "Unser Vasall, $VASSAL|Y$, ist in den Krieg gegen $ENEMY|Y$ eingetreten."
+ MESSAGE_ENEMY_VASSAL_ENTER_WAR:0 "Feindlicher Untertan tritt in Krieg ein"
+ MESSAGE_ENEMY_VASSAL_ENTER_WAR_DESC:1 "$ENEMY|Y$, der Untertan eines unserer Feinde, ist in den Krieg gegen uns eingetreten."
+ MESSAGE_ENEMY_LEAVES_WAR:0 "Feind verlässt Krieg"
+ MESSAGE_ENEMY_LEAVES_WAR_DESC:2 "$ENEMY|Y$ hat den Krieg verlassen, da sie von $OVERLORD|Y$ vassalisiert oder annektiert wurden."
+
+ ####################################
+ # Fleet Detected
+ ####################################
+ MESSAGE_FLEET_DETECTED_WE:0 "Die $WHO|Y$-§H$FLEET$§! wurde auf direktem Kurs nach §Y$TARGET$ entdeckt!§!"
+ MESSAGE_FLEET_DETECTED_MESSAGE_TYPE_TITLE:0 "Flotte entdeckt"
+ MESSAGE_OBJECT_DETECTED_WE:0 "Ein unidentifiziertes Objekt auf direktem Kollisionskurs mit §Y$TARGET$§! ist entdeckt worden!"
+ MESSAGE_OBJECT_DETECTED_MESSAGE_TYPE_TITLE:0 "Unidentifiziertes Objekt entdeckt"
+
+ ####################################
+ # Fleet Evade
+ ####################################
+ MESSAGE_FLEET_EVADE_HOSTILE:0 "$FLEET$ ist im $SYSTEM|H$-System auf eine feindliche $HOSTILE|R$-Flotte getroffen und versucht derzeit, ihr auszuweichen!"
+ MESSAGE_FLEET_EVADE_HOSTILE_FLEET_TYPE:0 "$TYPE$ $NAME|H$"
+ MESSAGE_FLEET_EVADE_HOSTILE_MESSAGE_TYPE_TITLE:0 "Feindflotte ausweichen"
+
+ ####################################
+ # Leaders
+ ####################################
+ FLEET_LEADER_DEATH:0 "$CLASS|Y$ $LEADER|Y$ starb, als sein(e) $SHIP|Y$ vernichtet wurde."
+ ARMY_LEADER_DEATH:0 "Unser $CLASS|Y$, $LEADER|Y$ ist während seiner Kommandierung von $ARMY|Y$ gestorben."
+ PLANET_LEADER_DEATH:0 "Unser $CLASS|Y$, $LEADER|Y$ ist auf $PLANET|Y$ gestorben."
+ COUNTRY_LEADER_DEATH:0 "Unser $CLASS|Y$, $LEADER|Y$ ist gestorben."
+ HEIR_DEATH:0 "$HEIRNAME|Y$, unser §Y$HEIR$§!, ist gestorben!"
+ RULER_ELECTED:0 "Ein neuer Herrscher ist gewählt worden! $TITLE$ $LEADER|Y$ wird bis zur nächsten Wahl in $TIME|Y$ herrschen."
+ RULER_ELECTED_UNTIL_DEATH:0 "$TITLE$ $LEADER|Y$! ist zum neuen Herrscher gewählt worden und wird bis zu seinem Tod regieren."
+ RULER_ELECTED_HEIR:0 "Gemäß der Erbfolge ist $TITLE$ $LEADER|Y$! der neue Anführer."
+ MESSAGE_LEADER_DEATH_TITLE:0 "Anführer verstorben"
+ MESSAGE_RULER_ELECTED_TITLE:0 "Herrscher gewählt"
+ MESSAGE_RULER_ELECTED_UNTIL_DEATH_TITLE:0 "Herrscher gewählt"
+ MESSAGE_RULER_ELECTED_HEIR_TITLE:0 "Neuer Erbfolgeherrscher"
+ MESSAGE_ELECTION_MESSAGE_TYPE_TITLE:0 "Wahl"
+ MESSAGE_DEMOCRATIC_ELECTION_DESC:0 "Bei uns läuft derzeit die öffentliche Wahl des neuen $TITLE$s.\nWahlende: $DATE|Y$."
+ MESSAGE_OLIGARCHIC_ELECTION_DESC:0 "Bei uns gibt es laufende Diskussionen darüber, wer der neue $TITLE$ werden wird.\nDie Entscheidung darüber wird am $DATE|Y$ gefällt."
+ ELECTION_CLICK_FOR_MORE_INFO:0 "Für weitere Informationen klicken."
+ LEADER_DEATH_AGE:0 "$CLASS|Y$ $LEADER|Y$ ist unerwartet im Alter von $AGE|Y$ gestorben."
+ TOOLTIP_KILL_LEADER:0 "$CLASS|Y$ $LEADER|Y$ §Rstirbt§!"
+ MESSAGE_LEADER_EXPERIENCE_TITLE:0 "Ein Anführer hat Erfahrung gewonnen"
+ LEADER_EXPERIENCE_NOTIFICATION_DESC:0 "§T$CLASS|Y$ $LEADER|Y$ hat Kampferfahrung gesammelt\n\n$STATS$§!"
+ MESSAGE_LEADER_LEVEL_UP_TITLE:0 "Ein Anführer hat eine neue Stufe erreicht"
+ LEADER_LEVEL_UP_DESC:0 "$CLASS|Y$ $LEADER|Y$ hat eine neue Stufe erreicht\n\nFähigkeit: $LEVEL|Y$\n"
+ LEADER_LEVEL_UP_NEXT_LEVEL_DESC:0 "$CLASS|Y$ $LEADER|Y$ hat eine neue Stufe erreicht\n\nFähigkeit: $LEVEL|Y$\nFür die nächste Stufe erforderliche Erfahrung: $EXP|Y0$"
+
+ LEADER_ADMIRAL_BASE_EXPERIENCE:0 "§TFlottenangriff: $VAL|0H$ Erfahrung§!"
+ LEADER_ADMIRAL_HOSTILE_KILLED_EXPERIENCE:0 "§TZerstörte Feindflotten: $VAL|0H$ Erfahrung§!"
+ LEADER_ADMIRAL_FRIENDLY_LOST_EXPERIENCE:0 "§TVerlorene eigene Truppen: $VAL|0H$ Erfahrung§!"
+
+ LEADER_GENERAL_BASE_EXPERIENCE:0 "§TBodenangriff: $VAL|0H$ Erfahrung§!"
+ LEADER_GENERAL_HOSTILE_KILLED_EXPERIENCE:0 "§TZerstörte Feindflotten: $VAL|0H$ Erfahrung§!"
+ LEADER_GENERAL_FRIENDLY_LOST_EXPERIENCE:0 "§TVerlorene eigene Truppen: $VAL|0H$ Erfahrung§!"
+ MESSAGE_NEW_HEIR_TITLE:0 "§HNeuer Thronerbe§!"
+ NEW_HEIR_TEXT:0 "§Y$HEIR$§! ist der neue Thronerbe unseres Reichs und wird den Thron nach dem Tod unseres jetzigen Herrschers besteigen."
+
+ ####################################
+ # Technology
+ ####################################
+ MESSAGE_TECHNOLOGY_RESEARCH_FINISH:0 "Wir haben die Erforschung von $TECHNOLOGY|H$ abgeschlossen."
+ MESSAGE_TECHNOLOGY_ORDER_FINISH_MESSAGE_TYPE_TITLE:0 "Technologie erforscht"
+
+ ####################################
+ # Debris
+ ####################################
+ MESSAGE_DEBRIS_ANALYZED_FINISH:0 "Wir haben die Trümmer im $SYSTEM|Y$-System analysiert."
+ MESSAGE_DEBRIS_ANALYZED_FINISH_BONUS:1 "£$AREA_KEY$  §Y$AREA$-Forschung§!: §G+$VAL|0$§! Punkte"
+ MESSAGE_DEBRIS_ANALYZED_FINISH_TECH_PROGRESS:1 "$TECH|Y$: §G+$VAL|%0$§! Fortschritt"
+ MESSAGE_DEBRIS_ANALYZED_FINISH_MESSAGE_TYPE_TITLE:0 "Trümmer analysiert"
+
+ ####################################
+ # Anomaly
+ ####################################
+ MESSAGE_ANOMALY_DETECTED_TYPE_TITLE:0 "Anomalie"
+
+ ####################################
+ # No Access
+ ####################################
+ MESSAGE_WORMHOLE_CLOSED_NO_ACCESS:0 "Das Wurmloch in $FROM|Y$ wurde geschlossen, als es sich in Richtung von $TARGET|Y$ öffnete, da es innerhalb der Grenzen von $WHO|Y$ liegt."
+ MESSAGE_FLEET_LEAVE_SYSTEM_NO_ACCESS:0 "$FLEET|Y$ wurde von $FROM|Y$ zur Rückkehr nach $RETURN|Y$ gezwungen, weil es innerhalb der Grenzen von $WHO|Y$ liegt."
+ MESSAGE_WORMHOLE_CLOSED_NO_ACCESS_TITLE:0 "Wurmloch geschlossen"
+ MESSAGE_FLEET_LEAVE_SYSTEM_NO_ACCESS_TITLE:0 "Kein Zugang"
+
+ ####################################
+ # Revolt
+ ####################################
+ MESSAGE_REVOLT:0 "Die Bevölkerung des Planeten $PLANET|Y$! revoltiert!"
+ MESSAGE_PLANET_REVOLT_TITLE:0 "Revolte!"
+
+ ####################################
+ # Terraforming
+ ####################################
+ MESSAGE_TERRAFORMATION_FINISH:1 "$PLANET|Y$ wurde über Terraforming verändert zu: $PLANET_CLASS|Y$."
+ MESSAGE_TERRAFORMATION_CANCELED:0 "Der Terraforming-Prozess auf $PLANET|Y$ ist unterbrochen worden!"
+ MESSAGE_TERRAFORM_MESSAGE_TYPE_TITLE:0 "Terraforming"
+
+ ####################################
+ # Trade
+ ####################################
+ MESSAGE_TRADE_DEAL_END_NO_ENERGY:0 "Unser Handelsabkommen mit $WITH|Y$ ist geendet, weil uns die Energie-Credits zu seiner Aufrechterhaltung fehlen."
+ MESSAGE_TRADE_DEAL_END_NO_ENERGY_THEM:0 "$WITH|Y$ hat unser Handelsabkommen beendet, da ihnen die Energie-Credits zu seiner Aufrechterhaltung fehlen."
+ MESSAGE_TRADE_DEAL_END_MISSING_RESOURCE:0 "Unser Handelsabkommen mit $WITH|Y$ ist geendet, weil uns zu seiner Aufrechterhaltung $RESOURCE|Y$ fehlen."
+ MESSAGE_TRADE_DEAL_END_MISSING_RESOURCE_THEM:0 "$WITH|Y$ hat unser Handelsabkommen beendet, da ihnen zu seiner Aufrechterhaltung $RESOURCE|Y$ fehlen."
+ MESSAGE_TRADE_DEAL_TITLE:0 "Handelsabkommen"
+ MESSAGE_TRADE_DEAL_END_TIMEOUT:2 "Unser Handelsabkommen mit $WITH|Y$ ist abgelaufen.\n\nWir handelten:\n$OUR_OFFER$\n\nSie handelten:\n$THEIR_OFFER$"
+ MESSAGE_TRADE_DEAL_END_CLOSED_BORDERS:0 "Unser Handelsabkommen mit $WITH|Y$ wurde beendet, weil wir unsere Grenzen für sie geschlossen haben."
+ MESSAGE_TRADE_DEAL_END_CLOSED_BORDERS_THEM:0 "Unser Handelsabkommen mit $WITH|Y$ wurde beendet, weil sie ihre Grenzen für uns geschlossen haben."
+ MESSAGE_TRADE_DEAL_END_SUBJECT_ACCESS:0 "Unser Handelsabkommen mit $WITH|Y$ wurde beendet, weil wir zu Untertanen geworden sind und den Zugang zu unseren Grenzen nicht länger kontrollieren."
+ MESSAGE_TRADE_DEAL_END_SUBJECT_ACCESS_THEM:0 "Unser Handelsabkommen mit $WITH|Y$ wurde beendet, weil sie zu Untertanen geworden sind und den Zugang zu ihren Grenzen nicht länger kontrollieren."
+ MESSAGE_TRADE_DEAL_END_GUARANTEE_ALLIANCE:0 "Unser garantiertes Handelsabkommen mit $WITH|Y$ ist abgelaufen, da wir einem Bündnis beigetreten sind."
+ MESSAGE_TRADE_DEAL_END_GUARANTEE_ALLIANCE_THEM:0 "$WITH|Y$ hat unser garantiertes Handelsabkommen beendet, da sie einem Bündnis beigetreten sind."
+ MESSAGE_TRADE_DEAL_END_SUPPORT_INDEPENDENCE_VASSALAGE:1 "Unser Handelsabkommen mit $WITH|Y$ ist geendet, weil wir zu Vasallen geworden sind und ihre Unabhängigkeit nicht länger unterstützen können."
+ MESSAGE_TRADE_DEAL_END_SUPPORT_INDEPENDENCE_VASSALAGE_THEM:1 "$WITH|Y$ hat unser garantiertes Handelsabkommen beendet, da sie zu Vasallen geworden sind und unsere Unabhängigkeit nicht länger unterstützen können."
+ MESSAGE_TRADE_DEAL_END_SUPPORT_INDEPENDENCE_ALLIANCE:0 "Unser Handelsabkommen mit $WITH|Y$ ist geendet, weil wir einem Bündnis beigetreten sind und ihre Unabhängigkeit nicht länger unterstützen können."
+ MESSAGE_TRADE_DEAL_END_SUPPORT_INDEPENDENCE_ALLIANCE_THEM:0 "$WITH|Y$ hat unser garantiertes Handelsabkommen beendet, da sie einem Bündnis beigetreten sind und unsere Unabhängigkeit nicht länger unterstützen können."
+
+ ####################################
+ # Special Project
+ ####################################
+ MESSAGE_UPLIFTING_FAILED_TITLE:0 "Aufwertungsspezialprojekt gescheitert"
+ MESSAGE_UPLIFTING_FAILED:1 "Unser Projekt zur $SPECIES|Y$-Aufwertung auf $PLANET|Y$ ist gescheitert."
+ MESSAGE_SPECIES_MODIFICATION_FAILED_TITLE:0 "Spezialprojekt Spezies modifizieren gescheitert"
+ MESSAGE_SPECIES_MODIFICATION_FAILED:3 "Unser Projekt, $POPS|Y$ Bewohner auf $PLANETS|Y$ Planeten nach der $TEMPLATE|Y$-Vorlage zu modifizieren, ist fehlgeschlagen."
+ MESSAGE_SPECIAL_PROJECT_AVAILABLE_TITLE:0 "Spezialprojekt verfügbar"
+ SPECIAL_PROJECT_AVAILABLE:0 "Spezialprojekt steht zur Erforschung bereit."
+
+
+ ####################################
+ # Event
+ ####################################
+ MESSAGE_EVENT_MESSAGE_TYPE_TITLE:0 "Ereignis"
+
+ ####################################
+ # Invasion
+ ####################################
+ MESSAGE_INVASION_TITLE:0 "Invasion vorbei"
+ MESSAGE_INVASION_ATTACKER_WIN:0 "Wir hatten mit unserer Invasion von $PLANET|H$ Erfolg."
+ MESSAGE_INVASION_ATTACKER_LOSE:0 "Wir sind mit unserer Invasion von $PLANET|H$ gescheitert."
+ MESSAGE_INVASION_DEFENDER_WIN:0 "Wir hatten Erfolg damit, die Invasoren auf $PLANET|H$ abzuwehren."
+ MESSAGE_INVASION_DEFENDER_LOSE:0 "Wir sind damit gescheitert, die Invasoren auf $PLANET|H$ abzuwehren."
+ MESSAGE_RETREAT_CASUALTIES_TITLE:0 "Armeen bei Rückzug verloren"
+ RETREAT_CASUALTIES_DESC:0 "Wir haben $NUM|Y$ unserer $TOTAL|Y$ Armeen verloren, während sie versucht haben, von $PLANET|H$ zu fliehen\n$LOST$"
+ MESSAGE_LOST_ARMY:0 "$NUMBER$. $NAME|R$"
+
+ 
+ ####################################
+ # Subject changes
+ ####################################
+ MESSAGE_SUBJECT_TYPE_CHANGED_TITLE:0 "Untertanenstatus verändert"
+ MESSAGE_SUBJECT_CHANGED_DESC:0 "$REASON$$SUBJECT|Y$ ist jetzt ein $NEW_TYPE|Y$ unter $OVERLORD|Y$"
+ MESSAGE_SUBJECT_CHANGE_REASON_protectorate_me:0 "Aufgrund unserer technologischen Fortschritte "
+ MESSAGE_SUBJECT_CHANGE_REASON_protectorate:0 "Aufgrund ihrer technologischen Fortschritte "
+
+ ####################################
+ # Triggered Modifiers
+ ####################################
+ MESSAGE_TRIGG_MOD_LOST_TITLE:0 "Konditionaler Effekt verloren"
+ TRIGG_MOD_LOST:1 "Der konditionale Effekt "$NAME|H$" ist nicht mehr in Kraft."
+ MESSAGE_TRIGG_MOD_GAINED_TITLE:0 "Konditionaler Effekt erlangt"
+ TRIGG_MOD_GAINED:1 "$NAME|H$\n\n$DESC$"
+
+ ####################################
+ # Combat Stats
+ ####################################
+ MESSAGE_COMBAT_STATS_TITLE:0 "Flottenkampfstatistik"
+ 
+ ####################################
+ # Edicts
+ ####################################
+ MESSAGE_INVALIDATED_EDICT_TITLE:0 "Erlass abgebrochen"
+ COUNTRY_EDICT_BECAME_INVALID:1 "Der Erlass $EDICT|Y$ würde für ungültig erklärt, weil er die erforderlichen Bedingungen nicht mehr erfüllt."
+ MESSAGE_EXPIRED_EDICT_TITLE:0 "Erlass abgelaufen"
+ COUNTRY_EDICT_EXPIRED:0 "Der Reichserlass $EDICT|Y$ ist abgelaufen."
+ PLANET_EDICT_EXPIRED:0 "Der Erlass $EDICT|Y$, der $PLANET$ beeinflusst hat, ist abgelaufen."
+
+#####################################
+# Megastructures
+#####################################
+
+ MESSAGE_MEGASTRUCTURE_BUILT_TITLE:0 "Megastruktur gebaut"
+ MESSAGE_MEGASTRUCTURE_BUILT:1 "$FLEET|H$ hat den Bau einer $MEGASTRUCTURE|H$ in $SYSTEM|H$ abgeschlossen."
+ MESSAGE_MEGASTRUCTURE_UPGRADED_TITLE:0 "Megastruktur verbessert"
+ MESSAGE_MEGASTRUCTURE_UPGRADED:1 "Verbesserung von $MEGASTRUCTURE|H$ in $SYSTEM|H$ abgeschlossen."
+
+ #####################################
+# Casus Belli
+#####################################
+ MESSAGE_NEW_CASUS_BELLI_HOLDER_TITLE:1 "Neuer Kriegsgrund"
+ MESSAGE_NEW_CASUS_BELLI_HOLDER:1 "Wir können jetzt den Kriegsgrund $CASUS_BELLI|H$ gegen $COUNTRY|H$ einsetzen"
+
+ MESSAGE_NEW_CASUS_BELLI_TARGET_TITLE:1 "Ziel eines Kriegsgrunds"
+ MESSAGE_NEW_CASUS_BELLI_TARGET:1 "$COUNTRY|H$ kann jetzt den Kriegsgrund $CASUS_BELLI|H$ gegen uns verwenden!"
+
+ MESSAGE_LOST_CASUS_BELLI_TITLE:0 "Verlorener Kriegsgrund"
+ MESSAGE_LOST_CASUS_BELLI:1 "Wir können nicht länger den Kriegsgrund $CASUS_BELLI|H$ gegen $COUNTRY|H$ einsetzen"
+
+ #####################################
+# Claims
+#####################################
+ MESSAGE_NEW_CLAIM_ON_SYSTEM_TITLE:1 "Anderes Reich erhebt Anspruch auf unser System"
+ MESSAGE_NEW_CLAIM_ON_SYSTEM:1 "Obwohl es rechtmäßig uns gehört, hat $COUNTRY|H$ einen Anspruch auf das System $SYSTEM|H$ gemacht"
+ MESSAGE_PLANET_DESTROYED:0 "Planet verwüstet"
+ MESSAGE_PLANET_DESTROYED_DESC:0 "$PLANET|Y$ $WEAPON_DESC$ die $WEAPON_NAME|R$ auf $ADJ$ Koloss."

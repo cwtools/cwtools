@@ -1,0 +1,149 @@
+﻿l_german:
+ ####################################
+ # Opinion Modifiers
+ ####################################
+ opinion_graverobber_1:0 "Entweihtes Grab"
+ opinion_graverobber_2:0 "$opinion_graverobber_1$"
+ opinion_graverobber_3:0 "$opinion_graverobber_1$"
+ opinion_crew_saved:0 "Gerettete Besatzung"
+ opinion_abandoned:0 "Verlassene Flüchtlinge"
+ opinion_abandoned_apology:0 "$opinion_abandoned$"
+ opinion_abandoned_insult:0 "$opinion_abandoned$"
+ assassination_forgiven:0 "Vergebene Feindseligkeit"
+
+ ####################################
+ # Empire Modifiers 
+ ####################################
+ media_coverage_positive_high:0 "Extrem positive Medienberichterstattung"
+ media_coverage_positive_medium:0 "Sehr positive Medienberichterstattung"
+ media_coverage_positive_low:0 "Positive Medienberichterstattung"
+ media_coverage_negative_low:0 "Negative Medienberichterstattung"
+ media_coverage_negative_medium:0 "Sehr negative Medienberichterstattung"
+ media_coverage_negative_high:0 "Extrem negative Medienberichterstattung"
+ scientist_team_well_treated:0 "Gut ausgeruhte Wissenschaftler"
+ health_discovery:0 "Pharmazeutische Innovation"
+ solar_harvesting_bacteria:0 "Verstärkte Solarkraft"
+ army_speed_boost:0 "Erhöhte Schiffsgeschwindigkeit"
+ zero_gravity_revelation:0 "Schwerelosigkeitsinnovationen"
+ youthful_elite:0 "Exklusives Elixier des Lebens"
+ youthful_people:0 "Geteiltes Elixier des Lebens"
+ slavery_bad_juju:0 "Das Gesicht der Sklaverei"
+ slavery_very_bad_juju:0 "Aufgedeckte Zukunft eines Sklavenhändlers"
+ fertility_virus:0 "Fruchtbarkeitshemmende Biowaffe"
+ forth_dimension_knowledge:0 "Extradimensionale Einsichten"
+ army_inspiration:0 "Inspirierte Armeerekruten"
+ army_inspiration_mach:0 "Fokussierte Armeeeinheiten-Monteure"
+ science_inspiration:0 "Inspirierte Jungwissenschaftler"
+ streamlined_ship_design:0 "Algorithmus-Optimierung"
+ immigrants_protection:0 "Beschützt Minderheiten"
+ fear_as_control_militarist_p2:0 "Besorgte Verwaltung"
+ alien_genome_research:0 "Alien-DNS-Forschung"
+ syndaw_research_bonus:0 "Rechenbetontes Übertakten"
+ syndaw_production_surplus:0 "Produktionsquotenüberschüsse"
+
+ ####################################
+ # Edicts 
+ ####################################
+ edict_masters_writings_politics:0 "Lehren der Meisterin: Das übergeordnete Wohl"
+ edict_masters_writings_politics_desc:0 "Übersetzungen der Lehren einer Alien-Philosophin. Indem wir ihrem Rat zur Vereinigung des Volks durch Selbstaufopferung folgen, könnten wir bei unserer Infrastruktur große Fortschritte erzielen.\n\n"Eine starke Nation basiert auf dem Opfer der Bequemlichkeit, so lange jedermann angehalten wird, die Last gemeinsam zu tragen." - Telisa, die Geschichtenerzählerin\n\n"
+ edict_masters_writings_philosophy:0 "Lehren der Meisterin: Philosophische Denkweise"
+ edict_masters_writings_philosophy_desc:0 "Übersetzungen der Lehren einer Alien-Philosophin. Sie enthalten mehrere Analysen und Gedanken über die Bedeutung des Lebens und den Zweck des Kosmos. Indem wir unsere Herrscher diese Ratschläge befolgen lassen, können wir fundiertere Entscheidungen treffen.\n\n"Die Antwort über den Zweck des Kosmos übersteigt unser Verständnis. Das ändert jedoch nichts an unserem Streben, sie zu finden. Wir müssen nach Einigkeit streben, um die Antwort über den Ursprung aller Dinge zu erreichen." - Telisa, die Geschichtenerzählerin\n\n"
+ edict_masters_writings_diplomacy:0 "Lehren der Meisterin: Diplomatisches Vertrauen"
+ edict_masters_writings_diplomacy_desc:0 "Übersetzungen der Lehren einer Alien-Philosophin. Ihre Anekdoten von demokratischen Verhandlungen könnten uns als gute Basis für unsere eigenen diplomatischen Bemühungen dienen.\n\n"Die Kinder des Kosmos zu treffen, mag sich erschütternd anfühlen, ist aber letztlich eine Chance auf Hoffnung. Empfangt eure Nachbarn und genießt ihre Existenz, denn der Segen, den sie bringen, bereitet der Isolation in den Weiten des Weltraums ein Ende." - Telisa, die Geschichtenerzählerin\n\n"
+ edict_masters_writings_war:0 "Lehren der Meisterin: Kriegführende Staaten"
+ edict_masters_writings_war_desc:0 "Übersetzungen der Lehren einer Alien-Philosophin. Ihre Darstellung des Krieges und ihre Ideen zu Kampfstrategien könnten hervorragendes Trainingsmaterial für unser Militär darstellen.\n\n"Das Erschaffen der Einheit ist die größte Herausforderung, besonders weil Nachhaltigkeit oft Grenzen erzeugt. Diese Grenzen müssen niedergerissen werden - ein Gefühl, das vielen Angst macht. Genau gegen dieses Gefühl muss man aber angehen, damit sich etwas Stärkeres aus der Asche erheben kann." - Telisa, die Geschichtenerzählerin\n\n"
+ edict_improved_work_environment:0 "Verbesserte Arbeitsumgebung"
+ edict_improved_work_environment_desc:0 "Wenn wir mehr Zeit und Ressourcen auf die Verbesserung der Arbeitsbedingungen unserer Bevölkerung aufwenden, wird das sicherlich zu besseren Resultaten und zufriedeneren Arbeitern führen.\n\n"
+ edict_renewable_energy:0 "Verbesserte Energie-Initiative"
+ edict_renewable_energy_desc:0 "Wir können die Verwendung giftiger Treibstoffe und nicht-erneuerbarer Ressourcen weiter beschränken, um die Erforschung neuer Energieproduktionsmethoden zu fördern. Dies sollte uns näher an einen perfekten Energiezyklus heranbringen und die Umwelt für unsere Bevölkerung verbessern.\n\n"
+ edict_super_sensors:0 "Umfangreiche Sensorsuche"
+ edict_super_sensors_desc:0 "Nachdem wir fortschrittliche Sensortechnologie erforscht haben, besitzen wir nun genügend Informationen, um zusätzliche Ressourcen in die Verbesserung unserer eigenen Sensorsuchmethoden zu stecken. Mit dieser Initiative hätten es unsere Techniker leichter, an den Rändern unserer Systeme interessante Objekte auszumachen.\n\n"
+
+ ####################################
+ # Planet Modifiers 
+ ####################################
+ acid_jungles:0 "Säuredschungel"
+ acid_jungles_desc:0 "Die Evolution hat Bäume und Blätter hervorgebracht, die Säuren absondern. Das macht das Durchqueren des Geländes gefährlich - von der Besiedlung ganz zu schweigen."
+ ex_planet:0 "Ehemaliger Planet"
+ ex_planet_desc:0 "Der Asteroidengürtel war einst ein Planet, auf dem Leben möglich war."
+ ship_graveyard:0 "Raumschiff-Friedhof"
+ ship_graveyard_desc:0 "Hier sind viele Raumschiffe abgestürzt, was bildlich gesprochen zu einem Friedhof voller wiederverwertbarer Materialien geführt hat."
+ ai_fleet:0 "Abgestürzte KI-Flotte"
+ ai_fleet_desc:0 "Eine KI-gesteuerte Flotte liegt zerstört auf dem Planeten, was uns viele technische Daten zum Erforschen einbringt."
+ irradiated_wasteland:0 "Verstrahltes Ödland"
+ irradiated_wasteland_desc:0 "Der Planet wurde mit Strahlung bombardiert, weshalb große Teile für die meisten Lebewesen nicht bewohnbar sind."
+ ancient_one:0 "Der Uralte"
+ ancient_one_desc:0 "Das dominierende Lebewesen dieses Planeten ist ein uraltes Wesen, das tief unter den Wellen lebt."
+ food_rich_planet:0 "Nährstoffreiche Nahrung"
+ food_rich_planet_desc:0 "Die Pflanzenwelt des Planeten bringt viele nahrhafte Früchte und Substanzen hervor, die zur Verbesserung der Lebensbedingungen beitragen."
+ super_sensor_array:0 "Starke Sensormatrix"
+ super_sensor_array_desc:0 "Eine starke Sensormatrix bietet einen besseren Überblick auf die Umgebung."
+ horse_powered_factories_low:0 "Erzwungene Tierarbeit"
+ horse_powered_factories_medium:0 "Widerwillige Tierarbeit"
+ horse_powered_factories_high:0 "Bereitwillige Tierarbeit"
+ horse_powered_factories_low_desc:0 "Gezähmte Vierfüßler helfen bei der Verbesserung der Arbeitsbedingungen, wenn auch nicht freiwillig."
+ horse_powered_factories_medium_desc:0 "Gezähmte Vierfüßler helfen bei der Verbesserung der Arbeitsbedingungen, wenn auch widerwillig."
+ horse_powered_factories_high_desc:0 "Gezähmte, motivierte Vierfüßler helfen bei der Verbesserung der Arbeitsbedingungen."
+ fallen_robots:0 "Roboterüberreste"
+ fallen_robots_desc:0 "Auf diesem Planeten befinden sich alte Roboter einer untergegangenen Zivilisation, was uns technische Daten zum Erforschen einbringt."
+ society_animal_life:0 "Merkwürdige Tierwelt"
+ society_animal_life_desc:0 "Auf diesem Planeten leben besonders merkwürdige Tiere. Für uns stellen sie interessante Gelegenheiten für Sozial-Forschungen dar."
+ hostile_animal_life:0 "Gefährliche Tierwelt"
+ hostile_animal_life_desc:0 "Der Planet ist die Heimat feindseliger Kreaturen, die wenig erfreut über unsere Anwesenheit sind."
+ shifting_sands:0 "Treibsand"
+ shifting_sands_desc:0 "Der Sand dieses Wüstenplaneten ist fast flüssig, was Bauvorhaben extrem schwierig macht."
+ liquid_sands:0 "Flüssiger Sand"
+ liquid_sands_desc:0 "Der Sand, von dem dieser Planet bedeckt wird, ist so fein, dass er wie eine Flüssigkeit wirkt. Die merkwürdige Mineralienzusammensetzung bietet ausreichend Forschungsgelegenheiten."
+ abandoned_mining:0 "Verlassene Bergbaueinrichtung"
+ abandoned_mining_desc:0 "Im Orbit des Planeten befand sich eine alte Bergbaustation. Das lässt darauf schließen, dass hier Ressourcen zu finden sind."
+ gas_rich_planet:0 "Reiche Gasvorkommen"
+ gas_rich_planet_desc:0 "Bauen Sie eine Kolonie auf diesem Planeten auf, um mit der Erschließung seiner Ressource zu beginnen.\nEnergie-Credits: §G+50%§!"
+ gas_rich_planet_fo_realz:0 "Förderung reicher Gasvorkommen"
+ gas_rich_planet_fo_realz_desc:0 "Die spärlichen natürlichen Ressourcen auf diesem Planeten werden gerade zur Förderung der allgemeinen Energieproduktion abgebaut."
+ gas_responsible_mining:0 "Verantwortungsvolle Gasförderung"
+ gas_responsible_mining_desc:0 "Das Erhalten der spärlichen und doch wertvollen Gasressourcen auf diesem Planeten hilft dabei, seine Energieproduktion langfristiger zu sichern."
+ suppressed_opposition:0 "Unterdrückte Opposition"
+ suppressed_opposition_desc:0 "Ein bestimmter Bevölkerungsteil dieses Planeten wird mit Gewalt unterdrückt, weil er sich gegen die Regierung stellt."
+ scared_population:0 "Verängstigte Bevölkerung"
+ scared_population_desc:0 "Die Bevölkerung arbeitet in der Angst, dass eine Alien-Fabrik noch mehr Leben kosten könnte."
+ secured_factory:0 "Sicherheitsüberprüfte Alien-Fabrik"
+ secured_factory_desc:0 "Keine Kosten und Mühen werden gescheut, damit in einer Alien-Fabrik auch wirklich sicher gearbeitet werden kann."
+ fear_as_control:0 "Eiserne Herrschaft"
+ fear_as_control_desc:0 "Missetäter sind als Warnung für die Bevölkerung bestraft worden."
+ fear_as_control_militarist:0 "$fear_as_control$"
+ fear_as_control_militarist_desc:0 "$fear_as_control_desc$"
+ infectious_disease:0 "Infektionskrankheit"
+ infectious_disease_desc:0 "Eine höchst ansteckende Krankheit ist freigesetzt worden. Sie mutiert zu neuen Virensträngen und gefährdet die Bevölkerung."
+ pyramid_wars:0 "Der Himmelsgottkrieg"
+ pyramid_wars_desc:0 "Ein religiöser Konflikt über die wahre Natur des "Himmelsgotts" hat die Bevölkerung in einen totalen Krieg getrieben."
+ syndaw_automated_work:0 "Automatisierte Arbeitsprozesse"
+ syndaw_automated_work_desc:0 "Ob gerechtfertigt oder nicht, Ängste der Arbeitslosigkeit durch Automatisierung beeinflussen diesen Planeten."
+ syndaw_unfriendly_robots:0 "Spannungen durch Integration von Robotern"
+ syndaw_unfriendly_robots_desc:0 "Spannungen zwischen Robotern und organischen Bewohner auf dem Planeten haben unseren £unity Einigkeitsausstoß reduziert."
+ syndaw_research_malus:0 "KI-Versagen"
+ syndaw_research_malus_desc:1 "Ein Labor KI, die mit sozialer Forschung beschäftigt war, hat einen fatalen Hardwareschaden erlitten und wird ersetzt."
+
+ ####################################
+ # Ship/Fleet Modifiers 
+ ####################################
+ ship_survey_boost:0 "Verbesserter Erkundungsscanner"
+ alien_racing_ship:0 "Forschungsschiff"
+ alien_racing_ship_plural:0 "Forschungsschiffe"
+ protege_onboard:0 "Vielversprechende Besatzung"
+ ship_master_cruiser:0 "Vorläufer-Schiffsdesign"
+ ship_excess_power:0 "Überschüssige Energie"
+
+ ####################################
+ # Pop Modifiers
+ ####################################
+ opinion_respected:0 "Meinungen respektiert"
+ opinion_disrespected:0 "Meinungen missachtet"
+ pop_angered:0 "Wütend"
+ pop_pleased:0 "Zufrieden"
+ alien_infection:0 "Alien-Infektion"
+ alien_music:0 "Alien-Musik"
+
+ ####################################
+ # DEBUG STUFF
+ ####################################
+ 

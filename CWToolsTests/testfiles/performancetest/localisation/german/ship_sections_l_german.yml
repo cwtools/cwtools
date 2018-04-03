@@ -1,0 +1,120 @@
+﻿l_german:
+ ####################################
+ # Alpha Naming Convention - WILL LIKELY BE CHANGED IF SECTIONS ARE REDESIGNED
+ #
+ # Mid sections have a flavor-name fitting to number of weapon/utility slots followed by the key-word "Core"
+ # Front sections have a flavor-name followed by the key-word "Breaker"
+ # Rear sections have a flavor-name followed by the key-word "Bulwark"
+ #
+ ####################################
+ 
+ 
+ ####################################
+ # Titan
+ ####################################
+ 
+ TITAN_BOW:0 "Titanen-Bug"
+ TITAN_MID:0 "Titanen-Kern"
+ TITAN_STERN:1 "Titanen-Heck"
+ 
+ ####################################
+ # Battleship
+ ####################################
+ BATTLESHIP_BOW_L1M1S2:1 "Breitseiten-Bug"
+ BATTLESHIP_BOW_L1S4:1 "Titan-Brecher"
+ BATTLESHIP_BOW_L2:1 "Artillerie-Bug"
+ BATTLESHIP_BOW_M1S2SHB:1 "Hangar-Bug"
+ BATTLESHIP_BOW_M2S4:1 "Spinal-Bug"
+ BATTLESHIP_BOW_M3S2:1 "Seelenbrecher"
+ BATTLESHIP_MID_L2S4:1 "Nova-Kern"
+ BATTLESHIP_MID_L1M4:1 "Sturmbringer-Kern"
+ BATTLESHIP_MID_L2M2:1 "Breitseiten-Kern"
+ BATTLESHIP_MID_L3:1 "Artillerie-Kern"
+ BATTLESHIP_MID_M4SHB:1 "Hangar-Kern"
+ BATTLESHIP_MID_S4LHB:1 "Träger-Kern"
+ BATTLESHIP_STERN_M1S2:1 "Aeon-Schutzwand"
+ BATTLESHIP_STERN_L1:1 "Artillerie-Heck"
+ BATTLESHIP_STERN_M2:1 "Breitseiten-Heck"
+ BATTLESHIP_STERN_S4:1 "Zenith-Schutzwand"
+
+ ####################################
+ # Colonizer
+ ####################################
+ COLONIZER_MID_M1S1:1 "Kolonieschiff"
+ COLONIZER_MID_S3:0 "Setzlig-Rumpf"
+ COLONIZER_MID_MU1:0 "Gaia-Rumpf"
+
+ ####################################
+ # Constructor
+ #################################### 
+ CONSTRUCTOR_MID_M1S1:1 "Konstruktionsschiff"
+ CONSTRUCTOR_MID_S3:0 "Entwickler-Rumpf"
+ CONSTRUCTOR_MID_MU1:0 "Fusion-Rumpf"
+
+ ####################################
+ # Corvette
+ #################################### 
+ CORVETTE_MID_M1S1:2 "Raketenboot"
+ CORVETTE_MID_S3:1 "Abfangjäger"
+ CORVETTE_MID_S1:1 "Shifter-Kern"
+ CORVETTE_MID_S2PD1:0 "Wachschiff"
+
+ ####################################
+ # Cruiser
+ #################################### 
+ CRUISER_BOW_L1:1 "Artillerie-Bug"
+ CRUISER_BOW_M1S2:2 "Raketen-Bug"
+ CRUISER_BOW_M2:1 "Breitseiten-Bug"
+ CRUISER_MID_S2HB:1 "Hangar-Kern"
+ CRUISER_MID_L1M1:1 "Artillerie-Kern"
+ CRUISER_MID_M3:1 "Breitseiten-Kern"
+ CRUISER_MID_M2S2:2 "Raketen-Kern"
+ CRUISER_STERN_M1:1 "Breitseiten-Heck"
+ CRUISER_STERN_S2:1 "Kanonenboot-Heck"
+
+ ####################################
+ # Destroyer
+ #################################### 
+ DESTROYER_BOW_M1S2:1 "Kanonenboot-Bug"
+ DESTROYER_BOW_S3:1 "Vorpostenschiff-Bug"
+ DESTROYER_BOW_L1:1 "Artillerie-Bug"
+ DESTROYER_STERN_PD2:0 "Vorpostenschiff-Heck"
+ DESTROYER_STERN_S2:0 "Flash-Schutzwand"
+ DESTROYER_STERN_M1:1 "Kanonenboot-Heck"
+
+ ####################################
+ # Science
+ #################################### 
+ SCIENCE_MID_M1S1:1 "Forschungsschiff"
+ SCIENCE_MID_S3:0 "Vorreiter-Rumpf"
+ SCIENCE_MID_MU1:0 "Einsicht-Rumpf"
+
+ ####################################
+ # Science
+ #################################### 
+ LIGHT_MILITARY_STATION_SECTION:0 "Leichte Stationssektion"
+ PD_MILITARY_STATION_SECTION:0 "Punktverteidigung-Stationsselektion"
+ MEDIUM_MILITARY_STATION_SECTION:0 "Mittlere Stationssektion"
+ MISSILE_MILITARY_STATION_SECTION:0 "Raketen-Stationsselektion"
+ HEAVY_MILITARY_STATION_SECTION:0 "Schwere Stationssektion"
+ HANGAR_MILITARY_STATION_SECTION:0 "Hangar Stationssektion"
+ LIGHT_LARGE_MILITARY_STATION_SECTION:0 "Leichte Stationssektion"
+ MEDIUM_LARGE_MILITARY_STATION_SECTION:0 "Mittlere Stationssektion"
+ HEAVY_LARGE_MILITARY_STATION_SECTION:0 "Schwere Stationssektion"
+ HANGAR_LARGE_MILITARY_STATION_SECTION:0 "Hangar Stationssektion"
+ OUTPOST_STATION_SECTION:0 "Außenposten-Sektion"
+
+ ####################################
+ # Other
+ #################################### 
+ MISSILE_DEFAULT:0 "Raketensektion"
+ DEFAULT_CONSTRUCTION_SECTION:1 "Konstruktionsschiff"
+ DEFAULT_COLONIZATION_SECTION:1 "Kolonieschiff"
+ DEFAULT_SCIENCESHIP_SECTION:1 "Forschungsschiff"
+ DEFAULT_ORBITAL_STATION_SECTION:0 "Orbital-Sektion"
+ DEFAULT_MINING_STATION_SECTION:0 "Bergbau-Sektion"
+ DEFAULT_RESEARCH_STATION_SECTION:0 "Forschungs-Sektion"
+ DEFAULT_WORMHOLE_STATION_SECTION:0 "Wormloch-Sektion"
+ DEFAULT_MILITARY_STATION_SECTION:0 "Militär-Sektion"
+ DEFAULT_TRANSPORT_SECTION:1 "Transportschiff"
+ SHIP_COLOSSUS_SECTION:0 "Koloss"

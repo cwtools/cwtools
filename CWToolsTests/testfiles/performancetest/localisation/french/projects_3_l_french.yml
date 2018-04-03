@@ -1,0 +1,43 @@
+﻿l_french:
+
+ ####################################
+ # Special Projects
+ ####################################
+
+ ### Anomaly Events
+ DERELICT_SHIP_PROJECT:0 "Vaisseau en détresse"
+ DERELICT_SHIP_PROJECT_DESC:0 "Un vaisseau dérive dans l'espace, n'émettant ni ne recevant plus aucun signal. Son exploration pourrait permettre de faire la lumière sur ce qu'il est advenu de son équipage."
+ ODD_STAR_PROJECT:0 "Fusion"
+ ODD_STAR_PROJECT_DESC:0 "L'étoile semble en mesure de fusionner du béryllium, ce qui ne devrait pas être possible."
+ IMPROBABLE_TEAPOT_PROJECT:0 "Céramique improbable"
+ IMPROBABLE_TEAPOT_PROJECT_DESC:0 "Un conteneur en céramique gravite autour d'une étoile... ce qui défie toute logique. Déterminer ce qu'il fait ici risque de prendre du temps. Qui sait quelle sera la réponse à cette énigme, ou même s'il en existe une ?"
+ AI_ADMIRAL_PROJECT:0 "Guerrier des sables"
+ AI_ADMIRAL_PROJECT_DESC:0 "Une ancienne flotte qui s'était écrasée a été repérée sur une planète déserte et son IA est toujours active. À défaut d'en prendre le contrôle, la situation risque de se corser."
+ MINING_GEAR_PROJECT:0 "Redoutable excavation"
+ MINING_GEAR_PROJECT_DESC:0 "Un excavateur fouille le sous-sol d'un astéroïde géant. Si nous parvenons à l'arrêter avant que les débris ne le détruisent, peut-être en apprendrons-nous davantage sur sa construction."
+ ABANDONED_ARRAY_PROJECT:0 "Réseau de capteurs abandonné"
+ ABANDONED_ARRAY_PROJECT_DESC:0 "Une parabole de capteurs abandonnée semble être en état de fonctionnement. En la réparant et en tentant de comprendre comment elle fonctionne, peut-être réussirons-nous à en savoir plus sur les systèmes voisins."
+ ALIEN_RACER_PROJECT:0 "À la dérive"
+ ALIEN_RACER_PROJECT_DESC:0 "Un vaisseau alien dérive à l'intérieur d'une ceinture d'astéroïdes. Il ne répond à aucun appel. Nous devrions tenter de savoir ce qui se passe."
+ PSIONIC_HORSES_PROJECT:0 "Les maîtres des plaines"
+ PSIONIC_HORSES_PROJECT_DESC:0 "De majestueux mammifères errent dans les champs d'herbes d'eau. En nous voyant approcher, ils semblent nerveux. Les étudier nous permettrait d'en savoir plus."
+ ROBOT_CLEANERS_PROJECT:0 "Machines abandonnées"
+ ROBOT_CLEANERS_PROJECT_DESC:0 "Une usine emplie de robots a été découverte sur une lointaine planète. Si nous réussissons à les réactiver, peut-être révéleront-ils les secrets que cache leur monde ?"
+ ALIEN_MONSTER_ON_SHIP:0 "Créature alien à bord"
+ ALIEN_MONSTER_ON_SHIP_DESC:0 "Une créature sauvage est montée à bord de notre vaisseau scientifique et s'attaque aux membres d'équipage. Sans l'intervention de l'armée, ces derniers ne tiendront pas longtemps !"
+ TREE_OF_LIFE:0 "L'arbre"
+ TREE_OF_LIFE_DESC:0 "Un arbre dérive étrangement dans l'espace et sa sève semble attirer des monstres spatiaux. Nous devrions essayer d'en connaître les raisons."
+ MASTERS_WRITINGS_POLITICS:0 "Traduction des textes des colons"
+ MASTERS_WRITINGS_POLITICS_DESC:0 "Nous avons découvert des documents qui semblaient importants pour la société aujourd'hui disparue. Leur traduction nous permettra certainement d'en savoir plus sur son histoire et sa culture."
+ MASTERS_WRITINGS_PHILOSOPHY:0 "Traduction des textes des explorateurs"
+ MASTERS_WRITINGS_PHILOSOPHY_DESC:0 "Nous avons découvert quelques textes provenant d'une expédition alien. Leur traduction devrait nous permettre d'en savoir plus sur leurs précédents propriétaires."
+ MASTERS_WRITINGS_DIPLOMACY:0 "Traduction des textes des marchands"
+ MASTERS_WRITINGS_DIPLOMACY_DESC:0 "Nous avons découvert quelques textes dans des ruines qui ressemblent à une plaque tournante commerciale. Leur traduction devrait nous permettre d'en savoir plus sur ses fondateurs."
+ MASTERS_WRITINGS_WAR:0 "Traduction des textes des guerriers"
+ MASTERS_WRITINGS_WAR_DESC:0 "Sur un champ de bataille depuis longtemps resté à l'abandon, nous avons découvert les vestiges d'un peuple guerrier. Ils portaient sur eux des textes qui revêtaient sans doute une grande importance à leurs yeux. Leur traduction nous permettrait d'en savoir plus sur ce peuple et sur les guerres qu'il a livrées."
+ CRYOPOD_FOUND_PROJECT:0 "Abri souterrain"
+ CRYOPOD_FOUND_PROJECT_DESC:0 "Nous avons découvert une structure cachée sous une montagne et celle-ci semble renfermer de précieuses informations, voire du matériel. Ses abords sont peuplés de dangereux animaux qu'il va nous falloir préalablement maîtriser."
+ CRYOPOD_OPENING_PROJECT:0 "Ouverture forcée"
+ CRYOPOD_OPENING_PROJECT_DESC:0 "L'abri souterrain que nous avons découvert n'est pas facile d'accès. Nous allons devoir trouver un moyen de l'ouvrir de force pour découvrir ce qu'il renferme."
+ ANCIENT_OCEAN_SHIP:0 "Croiseur immergé"
+ ANCIENT_OCEAN_SHIP_DESC:0 "Un croiseur de bataille alien gît sous les vagues de [Root.GetName]. Sa récupération permettrait d'accéder à de précieuses technologies ou ressources."

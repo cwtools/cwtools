@@ -1,0 +1,26 @@
+﻿l_german:
+
+ ####################################
+ # Special Projects
+ ####################################
+
+ hallucinogen_removal:0 "Halluzinogen-Entfernung"
+ hallucinogen_removal_DESC:1 "Versuche unternehmen, das Halluzinogen aus der Atmosphäre von [Root.GetName] zu entfernen."
+ impact_defence_system:0 "Asteroiden-Verteidigungssystem"
+ impact_defence_system_DESC:0 "Wir müssen untersuchen, wie wir die Kolonie auf [Root.GetName] am besten vor den häufigen Asteroideneinschlägen schützen können, die den Planeten heimsuchen."
+ titanic_life_study_normal:0 "Titanisches Leben - Studium"
+ titanic_life_study_normal_DESC:1 "Durch das Studium der titanischen Lebensformen auf [Root.GetName] können wir sie hoffentlich verstehen lernen und möglicherweise sogar mit ihnen kommunizieren."
+ titanic_life_study_mean:0 "Titanisches Leben - Autopsien"
+ titanic_life_study_mean_DESC:1 "Durch das Sezieren der titanischen Lebensformen auf [Root.GetName] sollten wir schon bald wissen, wie wir sie am besten ausbeuten können!"
+ titanic_life_study_nice:0 "Titanisches Leben - Überwachung"
+ titanic_life_study_nice_DESC:1 "Die vorsichtige Überwachung der titanischen Lebensformen auf [Root.GetName] wird uns hoffentlich ermöglichen, in Frieden mit ihnen zu leben."
+ retaliatory_genome_mapping:0 "Vergeltendes DNS-Mapping"
+ retaliatory_genome_mapping_DESC:0 "Wenn wir ein Schiff zur Alien-Heimatwelt schicken, werden wir in der Lage sein, dieselben Daten über sie zu sammeln, die sie vermutlich über uns haben."
+ woodwind_instrument_investigation:0 "Holzblasinstrument-Untersuchung"
+ woodwind_instrument_investigation_DESC:0 "Wir müssen das Ausgangsmaterial eines mysteriösen Musikinstruments finden, das einen entspannenden Effekt auf unsere Biologie zu haben scheint."
+ disappearing_pops_project:0 "Verschwinden auf [missing_pops_planet.GetName]"
+ disappearing_pops_project_DESC:0 "Strafverfolgungsbehörden auf [missing_pops_planet.GetName] benötigen die Unterstützung einer militärischen Einsatztruppe, um Unruhen zu unterdrücken, während sie die mysteriösen Verschwinden untersuchen können."
+ mystery_cream_project:0 "Alterlos"
+ mystery_cream_project_DESC:0 "Die neue Anti-Aging-Creme Alterlos verbreitet sich wie ein Buschfeuer im ganzen Reich und stimuliert die Zellregeneration außerordentlich. Wenn wir den dafür verantwortlichen Wirkstoff identifizieren könnten, könnten wir ihn möglicherweise dazu benutzen, um eine nachhaltigere Wirkung zu erzielen."
+ cream_origin_project:0 "Auf der Suche nach einer faltenfreien Existenz"
+ cream_origin_project_DESC:0 "Wir müssen den Ursprung dieser Lotion finden."

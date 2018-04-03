@@ -1,0 +1,33 @@
+﻿l_french:
+
+ ####################################
+ # Special Projects
+ ####################################
+
+ hallucinogen_removal:0 "Suppression des hallucinogènes"
+ hallucinogen_removal_DESC:1 "Essayez de supprimer les hallucinogènes de l'atmosphère de [Root.GetName]."
+ impact_defence_system:0 "Système défensif de l'astéroïde"
+ impact_defence_system_DESC:0 "Nous devons étudier le meilleur moyen de protéger la colonie de [Root.GetName] des fréquents impacts d'astéroïdes qui frappent la planète."
+ titanic_life_study_normal:0 "Étude des formes de vie titanesques"
+ titanic_life_study_normal_DESC:1 "En étudiant les formes de vie titanesques de [Root.GetName], nous réussirons peut-être à mieux les comprendre, et peut-être même à communiquer avec elles."
+ titanic_life_study_mean:0 "Nécropsie des formes de vie titanesques"
+ titanic_life_study_mean_DESC:1 "En rassemblant les forces de vie titanesques de [Root.GetName], nous devrions rapidement trouver un moyen d'en tirer parti."
+ titanic_life_study_nice:0 "Surveillance des formes de vie titanesques"
+ titanic_life_study_nice_DESC:1 "Surveiller de près les formes de vie titanesques de [Root.GetName] pourrait nous permettre de coexister pacifiquement avec elles."
+ retaliatory_genome_mapping:0 "Cartographie du génome par rétorsion"
+ retaliatory_genome_mapping_DESC:0 "En envoyant un vaisseau vers le monde natal alien, nous serons capables de rassembler le même type de données que celles que nous suspectons qu'ils ont sur nous."
+ woodwind_instrument_investigation:0 "Enquête sur l'instrument de bois"
+ woodwind_instrument_investigation_DESC:0 "Nous devons découvrir le matériau utilisé pour fabriquer ce mystérieux instrument qui paraît avoir un effet relaxant sur nos corps."
+
+
+
+####################
+### TO BE ERASED ###
+####################
+ titanic_life_study_normal_desc:0 "En étudiant les formes de vie titanesques de [Root.GetName], nous réussirons peut-être à mieux les comprendre, voire à communiquer avec elles."
+ disappearing_pops_project:0 "Disparitions sur [missing_pops_planet.GetName]"
+ disappearing_pops_project_DESC:0 "Les forces de l'ordre sur [missing_pops_planet.GetName] ont besoin d'une équipe d'intervention militaire pour apaiser la situation pendant qu'elles enquêtent sur cette vague de disparitions mystérieuses."
+ mystery_cream_project:0 "Sansâge"
+ mystery_cream_project_DESC:0 "Cette nouvelle crème anti-âge « Sansâge » est vendue dans tout l'empire et s'avère très prometteuse pour stimuler la régénération cellulaire. Si nous pouvions identifier ses agents actifs nous pourrions nous en servir pour obtenir des effets plus durables."
+ cream_origin_project:0 "À la recherche de la jeunesse éternelle"
+ cream_origin_project_DESC:0 "Nous devons trouver les origines de cette crème anti-âge."

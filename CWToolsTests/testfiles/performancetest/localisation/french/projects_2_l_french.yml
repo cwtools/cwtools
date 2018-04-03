@@ -1,0 +1,114 @@
+﻿l_french:
+
+ ####################################
+ # Special Projects
+ ####################################
+
+ ### Story Events
+
+ AMOEBAS_1_PROJECT:0 "Observation d'Amibes spatiales"
+ AMOEBAS_1_PROJECT_DESC:0 "Chargez un département scientifique de recueillir et de collationner les données relatives aux Amibes spatiales."
+
+ CRYSTALS_1_PROJECT:0 "Observation d'Entités cristallines"
+ CRYSTALS_1_PROJECT_DESC:0 "Charger un département scientifique de recueillir et de collationner les données relatives aux Entités cristallines."
+
+ DRONES_1_PROJECT:0 "Observation des anciens drones miniers"
+ DRONES_1_PROJECT_DESC:0 "Charger un département scientifique de recueillir et de collationner les données relatives aux anciens drones miniers."
+
+ CLOUDS_1_PROJECT:0 "Observation de Nuages spatiaux"
+ CLOUDS_1_PROJECT_DESC:0 "Charger un département scientifique de recueillir et de collationner les données relatives aux Nuages spatiaux."
+
+ CRYSTAL_CONSTRUCT_PROJECT:0 "Construction cristalline"
+ CRYSTAL_CONSTRUCT_PROJECT_DESC:0 "Nous devrions charger un département scientifique de rassembler des données sur cette construction cristalline unique en son genre afin de l'étudier."
+
+ MINING_BASE_PROJECT:0 "Centre de traitement minier"
+ MINING_BASE_PROJECT_DESC:0 "Nous devrions charger un département scientifique d'étudier à distance le dernier de centre de traitement des anciens drones miniers."
+
+ ### Anomaly Events
+
+ DEAL_WITH_FLORA:0 "Agression végétale"
+ DEAL_WITH_FLORA_DESC:0 "La flore de la planète est remarquablement agile, dangereusement agressive et mérite d'être étudiée de plus près."
+
+ OLD_GODS_BENEFACTRESS_PROJECT:0 "Divinités anciennes : la Bienfaitrice"
+ OLD_GODS_BENEFACTRESS_PROJECT_DESC:1 "Le moindre recoin du sanctuaire dédié à la Bienfaitrice est recouvert d'entrelacs complexes de pictogrammes racontant une histoire visiblement bien plus détaillée que les fables moléculaires qui ont survécu sur [Root.Owner.Capital.GetName].\n\nMême s'ils sont très éloignés des langues anciennes connues de [Root.Owner.GetSpeciesName], la technologie actuelle devrait nous permettre de décrypter ces pictogrammes si nous y consacrons suffisamment de temps et de ressources."
+ OLD_GODS_UNDAUNTED_PROJECT:0 "Divinités anciennes : le Téméraire"
+ OLD_GODS_UNDAUNTED_PROJECT_DESC:1 "Le temple qui abrite le sanctuaire du Téméraire est, comme l'affirment les mythes qui en parlent, rempli d'objets dont on ne connaît ni l'origine ni l'usage. Bien loin des simples boîtes à énigmes et autres épreuves de force qui emplissaient autrefois ses temples sur [Root.Owner.Capital.GetName], ses textes saints sont ici uniquement accessibles à ceux qui s'en montrent dignes.\n\nCeci dit, nos puissants outils d'analyse devraient facilement résoudre ces casse-tête."
+ OLD_GODS_PERCIPIENT_PROJECT:0 "Divinités anciennes : le Perspicace"
+ OLD_GODS_PERCIPIENT_PROJECT_DESC:1 "Les murs du complexe entourant le sanctuaire du Perspicace sont recouverts d'épaisses couches de laque minérale, alors que le sanctuaire à proprement parler en est dépourvu.\n\nLes récits du Perspicace sont uniquement accessibles à ceux qui font preuve de suffisamment de perspicacité pour comprendre leur signification - il ne s'agit en fait que de comprendre ce qui doit être perçu."
+
+ LIMBO_1_PROJECT:0 "Dans les limbes"
+ LIMBO_1_PROJECT_DESC:0 "Une caverne renferme des dispositifs de stockage de données aliens, qui ne demandent qu'à être récupérés par une équipe d'archéologues."
+
+ PROJECTING_MOON_PROJECT:0 "Projection"
+ PROJECTING_MOON_PROJECT_DESC:0 "Une planète inhabituelle possède une lune inhabituelle ; les techniques d'analyse habituelles n'offrent pas de résultats satisfaisants et une approche plus pratique s'impose."
+
+ GRIMACING_PLANET_PROJECT:0 "Planète grimaçante"
+ GRIMACING_PLANET_PROJECT_DESC:0 "La surface contrariée de cette planète peut être stabilisée pour en faire un endroit potentiellement habitable, sous réserve d'agir vite."
+
+ OLFACTORY_PROJECT:0 "Étude olfactive"
+ OLFACTORY_PROJECT_DESC:0 "On soupçonne un artefact alien de relayer des informations via des composés aromatiques par dispersion aérosol."
+
+ ULTIMATE_WEAPON_PROJECT:0 "L'Arme ultime"
+ ULTIMATE_WEAPON_PROJECT_DESC:0 "La planète abrite une cache d'armes. Si nous réussissons à les trouver, peut-être nous fourniront-elles de nouvelles technologies martiales pour notre empire."
+
+ REFINE_ROCK_PROJECT:0 "Bombardement positronique"
+ REFINE_ROCK_PROJECT_DESC:0 "La propagation de positrons, contrôlée depuis l'orbite, pourrait transformer les minéraux de cette planète en ressources plus utiles."
+
+ CRYSTAL_CODEX_PROJECT:0 "Mystérieux cristal"
+ CRYSTAL_CODEX_PROJECT_DESC:0 "Une formation minérale renferme des informations sous forme d'hologrammes. Sa structure est connue, mais la densité de ses données les rendent difficiles à décoder."
+
+ ALIEN_BARRACKS_PROJECT:0 "Caserne alien"
+ ALIEN_BARRACKS_PROJECT_DESC:0 "Une étude xéno-socio-archéologique plus approfondie de ces ruines pourrait permettre de mieux comprendre l'ancienne machine de guerre alien."
+
+ ROBOT_MINERALS_PROJECT:0 "Récupérée par la nature"
+ ROBOT_MINERALS_PROJECT_DESC:0 "Une installation envahie par la végétation peut renfermer bien des secrets."
+
+ BALANCE_ECOSYSTEM_PROJECT:0 "Équilibre de l'écosystème"
+ BALANCE_ECOSYSTEM_PROJECT_DESC:0 "Un plan a été établi pour tenter d'équilibrer la fragile biosphère de la planète à l'aide d'outils disponibles dans tout vaisseau scientifique.\n\nLes conséquences peuvent être imprévisibles."
+
+ HEAD_IN_SAND_PROJECT:0 "La tête dans le sable"
+ HEAD_IN_SAND_PROJECT_DESC:0 "Une flotte militaire peut tenter de récupérer un vaisseau enfoui."
+
+ THE_PRINCE_PROJECT:0 "Le Prince"
+ THE_PRINCE_PROJECT_DESC:0 "Une banque de données flottant dans l'espace ne renferme rien d'autre qu'un long texte rédigé dans une langue alien aussi étrange que familière."
+
+ EMERGENCY_BUOY_PROJECT:0 "Balise de détresse"
+ EMERGENCY_BUOY_PROJECT_DESC:0 "Un objet particulièrement abîmé semble faire office de répétiteur au signal de communication."
+
+ WRECKED_FLEET_1:0 "Transmission monumentale"
+ WRECKED_FLEET_1_DESC:0 "Décodez le message émanant du monolithe."
+
+ WRECKED_FLEET_2:0 "Ancienne armada de l'alliance"
+ WRECKED_FLEET_2_DESC:0 "Déployez des équipes du génie pour remettre les vaisseaux récupérables en état de fonctionnement."
+
+ MANUFACTORY_PROJECT:0 "Restauration d'une station minière"
+ MANUFACTORY_PROJECT_DESC:0 "Déployez des équipes du génie pour remettre une ancienne station orbitale en état de fonctionnement."
+
+### Colony Events
+
+ HELPFUL_DRONES_1_PROJECT:0 "Abandonnés"
+ HELPFUL_DRONES_1_PROJECT_DESC:0 "La lune de la planète envoie d'étranges relevés. Ce n'est peut-être rien.\n\nMais c'est peut-être important. Aidés d'un vaisseau en orbite faisant office de relais, les scientifiques de la colonie analyseront minutieusement la surface de la lune pour accéder au coeur du problème."
+ POLLEN_1_PROJECT:0 "Étude florale"
+ POLLEN_1_PROJECT_DESC:0 "Une partie de la flore de cette planète présente des propriétés qui pourraient s'avérer intéressantes."
+ POLLEN_2_PROJECT:0 "Études organisationnelles"
+ POLLEN_2_PROJECT_DESC:0 "Plusieurs études récentes réalisées par diverses institutions [Root.Owner.GetAdj]s réputées pour leur enseignement présentent un certain nombre de nouveautés pour tout ce qui touche à l'organisation d'une main-d'oeuvre importante. Une méta-étude exhaustive de ces nouvelles idées pourrait répondre aux problèmes de baisse de productivité qui se posent dans les colonies établies dans des environnements difficiles."
+ POLLEN_3_PROJECT:0 "Sentiments apocalyptiques"
+ POLLEN_3_PROJECT_DESC:0 "La situation de cette planète infestée par le pollen devient potentiellement dangereuse. Une rapide évaluation de la situation unique de cette colonie s'impose, notamment pour ce qui concerne ses facteurs environnementaux exceptionnels.\n\nUne fois tous les risques possibles répertoriés, un plan d'action pourra être établi et exécuté en quelques heures."
+
+### Starting Events
+
+# Wanderlust
+ ROGUE_SCIENTIST_1_PROJECT:0 "Soif de nouveaux horizons : ce qui a été abandonné"
+ ROGUE_SCIENTIST_1_PROJECT_DESC:0 "Le départ discret du président de ce système s'est traduit par l'envoi de nombreuses signatures énergétiques résiduelles dans les vents solaires.\n\nNormalement, l'analyse complète de ces énergies devrait permettre de déterminer la prochaine destination du président et, si besoin, de faciliter leur suivi ultérieur."
+
+# Mass Extinction
+ MASSEX_1_PROJECT:0 "Analyse destruction"
+ MASSEX_1_PROJECT_DESC:0 "Reconstitution de la catastrophe ayant frappé ce corps céleste."
+ MASSEX_2_PROJECT:0 "Analyse fusion"
+ MASSEX_2_PROJECT_DESC:0 "Reconstitution de la catastrophe ayant frappé ce corps céleste."
+ MASSEX_3_PROJECT:0 "Analyse désolation"
+ MASSEX_3_PROJECT_DESC:0 "Reconstitution de la catastrophe ayant frappé ce corps céleste."
+ MASSEX_4_PROJECT:0 "Analyse toxicité"
+ MASSEX_4_PROJECT_DESC:0 "Reconstitution de la catastrophe ayant frappé ce corps céleste."
+ MASSEX_5_PROJECT:0 "Analyse glaciation"
+ MASSEX_5_PROJECT_DESC:0 "Reconstitution de la catastrophe ayant frappé ce corps céleste."

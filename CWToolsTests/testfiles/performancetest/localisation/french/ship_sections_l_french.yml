@@ -1,0 +1,115 @@
+﻿l_french:
+ ####################################
+ # Alpha Naming Convention - WILL LIKELY BE CHANGED IF SECTIONS ARE REDESIGNED
+ #
+ # Mid sections have a flavor-name fitting to number of weapon/utility slots followed by the key-word "Core"
+ # Front sections have a flavor-name followed by the key-word "Breaker"
+ # Rear sections have a flavor-name followed by the key-word "Bulwark"
+ #
+ ####################################
+ 
+ 
+ ####################################
+ # Battleship
+ ####################################
+ BATTLESHIP_BOW_L1M1S2:1 "Bordée de proue"
+ BATTLESHIP_BOW_L1S4:1 "Briseur de titan"
+ BATTLESHIP_BOW_L2:1 "Artillerie de proue"
+ BATTLESHIP_BOW_M1S2SHB:1 "Hangar de proue"
+ BATTLESHIP_BOW_M2S4:1 "Proue à canon central"
+ BATTLESHIP_BOW_M3S2:1 "Briseur d'âme"
+ BATTLESHIP_MID_L2S4:1 "Nova centrale"
+ BATTLESHIP_MID_L1M4:1 "Noyau porte-tempête"
+ BATTLESHIP_MID_L2M2:1 "Bordée centrale"
+ BATTLESHIP_MID_L3:1 "Artillerie centrale"
+ BATTLESHIP_MID_M4SHB:1 "Hangar central"
+ BATTLESHIP_MID_S4LHB:1 "Noyau porteur"
+ BATTLESHIP_STERN_M1S2:1 "Bastion éternel"
+ BATTLESHIP_STERN_L1:1 "Artillerie de poupe"
+ BATTLESHIP_STERN_M2:1 "Bordée de poupe"
+ BATTLESHIP_STERN_S4:1 "Bastion zénithal"
+
+ ####################################
+ # Colonizer
+ ####################################
+ COLONIZER_MID_M1S1:1 "Vaisseau colonial"
+ COLONIZER_MID_S3:0 "Noyau graine"
+ COLONIZER_MID_MU1:0 "Noyau Gaia"
+
+ ####################################
+ # Constructor
+ #################################### 
+ CONSTRUCTOR_MID_M1S1:1 "Vaisseau de construction"
+ CONSTRUCTOR_MID_S3:0 "Noyau développeur"
+ CONSTRUCTOR_MID_MU1:0 "Noyau de fusion"
+
+ ####################################
+ # Corvette
+ #################################### 
+ CORVETTE_MID_M1S1:2 "Lance-missiles"
+ CORVETTE_MID_S3:1 "Intercepteur"
+ CORVETTE_MID_S1:1 "Mobile"
+
+ ####################################
+ # Cruiser
+ #################################### 
+ CRUISER_BOW_L1:1 "Artillerie de proue"
+ CRUISER_BOW_M1S2:2 "Lance-missiles de proue"
+ CRUISER_BOW_M2:1 "Bordée de proue"
+ CRUISER_MID_S2HB:1 "Hangar central"
+ CRUISER_MID_L1M1:1 "Artillerie centrale"
+ CRUISER_MID_M3:1 "Bordée centrale"
+ CRUISER_MID_M2S2:2 "Lance-missiles central"
+ CRUISER_STERN_M1:1 "Bordée de poupe"
+ CRUISER_STERN_S2:1 "Batterie de poupe"
+
+ ####################################
+ # Destroyer
+ #################################### 
+ DESTROYER_BOW_M1S2:1 "Batterie de proue"
+ DESTROYER_BOW_S3:1 "Plateforme de proue"
+ DESTROYER_BOW_L1:1 "Artillerie de proue"
+ DESTROYER_STERN_PD2:0 "Plateforme de poupe"
+ DESTROYER_STERN_M1:1 "Batterie de poupe"
+ DESTROYER_STERN_S2:0 "Poupe d'interception"
+
+ ####################################
+ # Science
+ #################################### 
+ SCIENCE_MID_M1S1:1 "Vaisseau scientifique"
+ SCIENCE_MID_S3:0 "Noyau défricheur"
+ SCIENCE_MID_MU1:0 "Noyau de sagacité"
+ 
+ ####################################
+ # Science
+ #################################### 
+ LIGHT_MILITARY_STATION_SECTION:0 "Partie légère de station"
+ MEDIUM_MILITARY_STATION_SECTION:0 "Partie intermédiaire de station"
+ HEAVY_MILITARY_STATION_SECTION:0 "Partie lourde de station"
+ HANGAR_MILITARY_STATION_SECTION:0 "Pan de station-hangar"
+ LIGHT_LARGE_MILITARY_STATION_SECTION:0 "Partie légère de station"
+ MEDIUM_LARGE_MILITARY_STATION_SECTION:0 "Partie intermédiaire de station "
+ HEAVY_LARGE_MILITARY_STATION_SECTION:0 "Partie lourde de station"
+ HANGAR_LARGE_MILITARY_STATION_SECTION:0 "Pan de station-hangar"
+ OUTPOST_STATION_SECTION:0 "Noyau d'avant-poste frontalier"
+
+ ####################################
+ # Other
+ #################################### 
+ MISSILE_DEFAULT:0 "Partie des missiles"
+ DEFAULT_CONSTRUCTION_SECTION:1 "Vaisseau de construction"
+ DEFAULT_COLONIZATION_SECTION:1 "Vaisseau colonial"
+ DEFAULT_SCIENCESHIP_SECTION:1 "Vaisseau scientifique"
+ DEFAULT_ORBITAL_STATION_SECTION:0 "Base de station orbitale"
+ DEFAULT_MINING_STATION_SECTION:0 "Base de station minière"
+ DEFAULT_RESEARCH_STATION_SECTION:0 "Base de station de recherche"
+ DEFAULT_WORMHOLE_STATION_SECTION:0 "Base de station de trou de ver"
+ DEFAULT_MILITARY_STATION_SECTION:0 "Plateforme militaire basique"
+ DEFAULT_TRANSPORT_SECTION:1 "Vaisseau de transport"
+ TITAN_BOW:0 "Proue de titan"
+ TITAN_MID:0 "Coeur de titan"
+ TITAN_STERN:1 "Poupe de titan"
+ PD_MILITARY_STATION_SECTION:0 "Section de défense rapprochée"
+ MISSILE_MILITARY_STATION_SECTION:0 "Section lance-missiles"
+ SHIP_COLOSSUS_SECTION:0 "Colosse"
+ CORVETTE_MID_S2PD1:0 "Proue"

@@ -1,0 +1,48 @@
+﻿l_german:
+
+ # GetEdibleSpeciesName Test
+ edible_avi:0 "Gebratenes Hähnchen"
+ edible_avi_plural:0 "Gebratenes Hähnchen"
+ edible_mam:0 "Burger"
+ edible_mam_plural:0 "Burger"
+ edible_rep:0 "Echse am Spieß"
+ edible_rep_plural:0 "Grill-Echsen"
+ edible_fun:0 "Shiitake"
+ edible_fun_plural:0 "Shiitake-Büschel"
+ edible_mol:0 "Auster"
+ edible_mol_plural:0 "Jakobsmuscheln"
+ edible_hum:0 "Köstliches Steak"
+ edible_hum_plural:0 "Zarte Untertanen"
+ edible_art:0 "Knuspriger Käfer"
+ edible_art_plural:0 "Mücken in Sauce"
+ edible_plant:0 "Eisbergsalat"
+ edible_plants:0 "Gemischte Salate"
+ edible_fallback:0 "Häppchen"
+ edible_fallback_plural:0 "Häppchen"
+
+ test.edible.title:0 "Hungrig?"
+ test.edible.desc:0 "Selbst [Root.GetRulerName], unser großer [Root.GetRulerTitle], ist nichts als ein saftiger [Root.GetEdibleName] unter [Root.GetEdibleNamePlural]."
+
+ getunitdrone_unit:0 "Einheit"
+ getunitdrone_unit_plural:0 "Einheiten"
+ getunitdrone_drone:0 "Autonome Drohne"
+ getunitdrone_drone_plural:0 "Autonome Drohnen"
+ getunitdrone_leader:0 "Anführer"
+ getunitdrone_leader_plural:0 "Anführer"
+
+ monsteronship_desc:0 "Eine wilde Kreatur ist in unser Forschungsschiff eingedrungen und versucht, die Mannschaft zu töten. Sie werden ohne militärische Hilfe nicht lange durchhalten!"
+ monsteronship_mach_desc:0 "Ein wildes organisches Biest ist in unser Forschungsschiff eingedrungen und versucht, unsere Besatzungseinheiten zu zerstören! Sie werden ohne militärische Hilfe nicht lange durchhalten!"
+
+ getscientist_machine:0 "Wissenschaftseinheit"
+ getscientist_hive:0 "Wissenschaftsdrohne"
+ getscientist_normal:0 "Wissenschaftler"
+ getscientistplural_machine:0 "Wissenschaftseinheiten"
+ getscientistplural_hive:0 "Wissenschaftsdrohnen"
+ getscientistplural_normal:0 "Wissenschaftler"
+
+ get1stplanetkiller_cracker:0 "$PLANET_KILLER_CRACKER$"
+ get1stplanetkiller_shielder:0 "$PLANET_KILLER_SHIELDER$"
+ get1stplanetkiller_neutron:0 "$PLANET_KILLER_NEUTRON$"
+ get1stplanetkiller_godray:0 "$PLANET_KILLER_GODRAY$"
+ get1stplanetkiller_nanobots:0 "$PLANET_KILLER_NANOBOTS$"
+ get1stplanetkiller_none:0 "Planetenzerstörer"

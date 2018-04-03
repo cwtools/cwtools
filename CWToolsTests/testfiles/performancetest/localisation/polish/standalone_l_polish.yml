@@ -1,0 +1,9 @@
+﻿l_polish:
+ ENTERING_GAME_LOBBY:0 "Podawanie ustawień gry"
+ SERVER_LAUNCHING_MP:0 "Uruchamianie gry wieloosobowej"
+ SERVER_NAME:0 "Nazwa serwera: $NAME$"
+ SERVER_PASSWORD:0 "Hasło serwera: $PASSWORD$"
+ LAUNCHING_GAME:0 "Uruchamianie gry"
+ STANDALONE_WAITING_FOR_PLAYERS:0 "Oczekiwanie na $NUM$ graczy"
+ RECEIVED_GAMESERVER_ID:0 "Otrzymano identyfikator serwera: $SERVERID$"
+ RECEIVED_LOBBY_SERVER:0 "Otrzymano serwer lobby"

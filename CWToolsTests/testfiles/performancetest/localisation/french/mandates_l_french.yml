@@ -1,0 +1,147 @@
+﻿l_french:
+
+ ####################################
+ #	COMMON STRINGS
+ ####################################
+
+ mandate_influence_reward_t1:0 "§Gréduite (40 à 100 £influence )§!"
+ mandate_influence_reward_t2:0 "§Gmoyenne (80 à 175 £influence )§!"
+ mandate_influence_reward_t3:0 "§Gimportante (125 à 250 £influence )§!"
+ mandate_influence_reward_t4:0 "§Gtrès importante (150 à 300 £influence )§!"
+ mandate_happiness_reward_t1:0 "§G+15%§! de bonheur pendant §Y1 an§!"
+
+ ####################################
+ #	MANDATES
+ ####################################
+
+ MANDATE_mandate_planet_separatist:0 "Soutien aux séparatistes"
+ MANDATE_mandate_planet_separatist_DESC:1 "Libération de [Root.GetPopFactionName] en tant qu'empire indépendant.\n\nRécompense : $mandate_influence_reward_t3$"
+ MANDATE_mandate_emancipation:0 "Affranchissement généralisé"
+ MANDATE_mandate_emancipation_DESC:1 "Fin de la pratique de l'esclavage en [Root.Owner.GetName].\n\nRécompense : $mandate_influence_reward_t3$\n$mandate_happiness_reward_t1$"
+ MANDATE_mandate_emancipation2:0 "Affranchissement populiste"
+ MANDATE_mandate_emancipation2_DESC:1 "Affranchissement de tous les esclaves d'au moins une planète [Root.Owner.GetSpeciesAdj].\n\nRécompense : $mandate_influence_reward_t3$\n$mandate_happiness_reward_t1$"
+ MANDATE_mandate_orbital_researcher:0 "Recherche orbitale"
+ MANDATE_mandate_orbital_researcher_DESC:1 "Renforcement de la recherche scientifique [Root.Owner.GetAdj] en lançant la construction d'au moins 4 nouvelles stations de recherche orbitales.\n\nRécompense : $mandate_influence_reward_t5$"
+ MANDATE_mandate_miner:0 "Mines extraplanétaires"
+ MANDATE_mandate_miner_DESC:1 "Accroissement des réserves de minéraux de [Root.Owner.GetName] en lançant la construction d'au moins 4 nouvelles stations minières orbitales.\n\nRécompense : $mandate_influence_reward_t5$"
+ MANDATE_mandate_shipwright:0 "Développement de la flotte"
+ MANDATE_mandate_shipwright_DESC:2 "Assurer la sécurité de la population [Root.Owner.GetSpeciesAdj] en entretenant une flotte d'au moins 75% de la capacité navale à la fin du mandat.\n\nRécompense : $mandate_influence_reward_t5$"
+ MANDATE_mandate_peacemaker:0 "Processus de paix"
+ MANDATE_mandate_peacemaker_DESC:1 "Mettre un terme à toutes les guerres dans lesquelles les [Root.Owner.GetAdj] sont impliqués avant la fin du mandat.\n\nRécompense : $mandate_influence_reward_t5$"
+ MANDATE_mandate_slaver:0 "Esclavagisme"
+ MANDATE_mandate_slaver_DESC:1 "Préservation de la prospérité de [Root.Owner.GetName] en légalisant l'esclavage.\n\nRécompense : $mandate_influence_reward_t2$"
+ MANDATE_mandate_xenopurger:0 "Xénopurge"
+ MANDATE_mandate_xenopurger_DESC:1 "Purger §Yau moins une colonie§! de l'insidieuse menace alien en notre sein d'ici à la fin du mandat.\n\nRécompense : $mandate_influence_reward_t2$\n$mandate_happiness_reward_t1$"
+ MANDATE_mandate_nationalist:0 "Rétrocession"
+ MANDATE_mandate_nationalist_DESC:1 "Restituer les planètes appartenant à §Y[parameter:country.GetName]§!.\n\nRécompense : $mandate_influence_reward_t3$"
+
+ ####################################
+ #	MANDATE CHAINS
+ ####################################
+
+ mandate_miner_chain_title:0 "Programme minier"
+ mandate_miner_chain_desc:3 "[This.GetLeLaLDirCap] [This.GetRulerTitle] [This.GetRulerName] a été élu[This.GetXEDir] en s'engageant à augmenter la §Yproduction de £minerals£minéraux§! par la construction de §Ystations minières§! en orbite des planétoïdes riches en ressources.\n\nRécompense : $mandate_unity_reward$"
+ mining_stations_built:0 "Stations minières construites "
+
+ mandate_orbresearch_chain_title:0 "Programme de recherche orbitale"
+ mandate_orbresearch_chain_desc:3 "[This.GetLeLaLDirCap] [This.GetRulerTitle] [This.GetRulerName] a été élu[This.GetXEDir] en s'engageant à renforcer la §Yrecherche scientifique§! par la construction de §Ystations scientifiques§! en orbite de planètes intéressantes.\n\nRécompense : $mandate_unity_reward$"
+ orbresearch_built:0 "Stations de recherche construites "
+
+ mandate_xenopurge_chain_title:0 "Programme de xénopurge"
+ mandate_xenopurge_chain_desc:2 "Notre [This.GetRulerTitle] [This.GetRulerName] a été élu en s'engageant à §Ypurger§! §H[purge_planet.GetName]§! de toutes les §Ypops non [Root.GetSpeciesAdj]s§!.\n\nRécompense : $mandate_influence_reward_t2$\n$mandate_happiness_reward_t1$"
+ world_purged:0 "Planète purgée"
+
+ mandate_shipwright_chain_title:0 "Programme de développement de la flotte"
+ mandate_shipwright_chain_desc:2 "Notre [This.GetRulerTitle] [This.GetRulerName] a été élu en s'engageant à augmenter les dépenses militaires, garantissant que §Y75% de notre capacité navale serait utilisée avant la fin de son mandat§!.\n\nRécompense : $mandate_influence_reward_t2$"
+ military_presence_maintained:0 "Programme mené à bien"
+
+ mandate_fiscal_reserve_chain_title:0 "Mandat de réserve fiscale"
+ mandate_fiscal_reserve_chain_desc:1 "Le [This.GetRulerTitle] [This.GetRulerName] a été élu en s'engageant à faire des §Yéconomies§!, à renoncer aux §Ydépenses irréfléchies§! et à fournir au §H[Root.GetName]§! des réserves §Yd'au moins 1 000£energy §! §Yavant la fin de son règne§!."
+
+ mandate_emancipation_chain_title:0 "Programme d'affranchissement généralisé"
+ mandate_emancipation_chain_desc:2 "Notre [This.GetRulerTitle] [This.GetRulerName] a été élu en s'engageant à §Yabolir l'esclavage§! en rendant cette pratique §Yillégale§! au cours de son mandat.\n\nRécompense : $mandate_influence_reward_t3$\n$mandate_happiness_reward_t1$"
+ mandate_fulfilled:0 "Programme mené à bien"
+
+ mandate_emancipation2_chain_title:0 "Programme d'affranchissement populiste"
+ mandate_emancipation2_chain_desc:2 "Notre [This.GetRulerTitle] [This.GetRulerName] a été élu en s'engageant à §Yaffranchir tous les esclaves§! de la planète §H[free_planet.GetName]§! au cours de son mandat.\n\nRécompense : $mandate_influence_reward_t3$\n$mandate_happiness_reward_t1$"
+ planet_freed:0 "Planète affranchie"
+
+ mandate_separatist_chain_title:0 "Programme séparatiste"
+ mandate_separatist_chain_desc:2 "Notre [This.GetRulerTitle] [This.GetRulerName] a été élu en s'engageant à accorder l'indépendance à la planète §H[release_planet.GetName]§! afin qu'elle accède au rang d'empire indépendant. Pour plus d'informations, consulter la §Yliste des factions§!.\n\nRécompense : $mandate_influence_reward_t3$"
+ empire_released:0 "Planète indépendante"
+
+ mandate_peacemaker_chain_title:0 "Programme pacifiste"
+ mandate_peacemaker_chain_desc:2 "Notre [This.GetRulerTitle] [This.GetRulerName] a été élu en s'engageant à §Ymettre fin à toutes les guerres§! dans lesquelles [Root.GetName] était impliqué avant la fin de son mandat.\n\nRécompense : $mandate_influence_reward_t2$"
+ no_engagements:0 "Fin de tous les conflits"
+
+ mandate_slaver_chain_title:0 "Programme esclavagiste"
+ mandate_slaver_chain_desc:2 "Notre [This.GetRulerTitle] [This.GetRulerName] a été élu en s'engageant à §Yasservir§! au moins §Y5 pops§! avant la fin de son mandat.\n\nRécompense : $mandate_influence_reward_t2$"
+ pops_enslaved:0 "Pops asservies"
+
+ mandate_nationalist_chain_title:0 "Programme de rétrocession"
+ mandate_nationalist_chain_desc:2 "Notre [This.GetRulerTitle] [This.GetRulerName] a été élu en s'engageant à §Yrétrocéder§! à §H[ceding_empire.GetName]§! les colonies lui appartenant avant la fin de son mandat. Cette action peut être menée à partir de la §Yliste des factions§!.\n\nRécompense : $mandate_influence_reward_t3$"
+ planet_ceded:0 "Planète rétrocédée"
+
+ ####################################
+ #	MANDATE EVENTS
+ ####################################
+
+ mandate.1.title:0 "Programme de nouveau dirigeant"
+ mandate.1.desc:0 "[Root.GetRulerName] a été élu §Y[Root.GetRulerTitle]§! de la §H[Root.GetName]§!.\n\nPour plus d'informations sur son §Yprogramme§!, consulter le §Yjournal de bord§!."
+ mandate.2.title:0 "Programme non tenu"
+ mandate.2.desc:1 "Notre [Root.GetRulerTitle] [Root.GetRulerName] est arrivé au terme de son mandat, mais les promesses faites au cours sa campagne électorale n'ont pas été tenues."
+
+ # Separatist
+ mandate.100.title:0 "Programme séparatiste tenu"
+ mandate.100.desc:0 "Conformément au programme de notre [Root.GetRulerTitle] [Root.GetRulerName], la planète §H[released_planet.GetName]§! a reçu l'indépendance et est désormais un empire §Yvassal§! de la §H[Root.GetName].§!"
+
+ # Miner
+ mandate.111.title:0 "Programme minier tenu"
+ mandate.111.desc:0 "Conformément au programme de notre [Root.GetRulerTitle] [Root.GetRulerName], de nouvelles stations minières ont été construites."
+
+ # Orbital Researcher
+ mandate.121.title:0 "Programme scientifique tenu"
+ mandate.121.desc:0 "Conformément au programme de notre [Root.GetRulerTitle] [Root.GetRulerName], de nouvelles stations de recherche ont été construites."
+
+ # Xenopurger
+ mandate.132.title:0 "Mandat de purge des aliens rempli"
+ mandate.132.desc:0 "Conformément au mandat du [Root.GetRulerTitle] [Root.GetRulerName], la colonie de [From.GetName] a été purgée de ses éléments non [Root.GetSpeciesAdj]."
+
+ # Shipwright
+ mandate.141.title:0 "Programme naval tenu"
+ mandate.141.desc:1 "Conformément au programme de notre [Root.GetRulerTitle] [Root.GetRulerName], au moins 75% de notre capacité navale est utilisée."
+ mandate.142.title:0 "Programme non tenu"
+ mandate.142.desc:0 "Notre [Root.GetRulerTitle] [Root.GetRulerName] n'a pas atteint les objectifs de son programme dans le délai imparti."
+
+ # Emancipator 1
+ mandate.150.title:0 "Programme d'affranchissement général tenu"
+ mandate.150.desc:0 "Conformément au programme de notre [Root.GetRulerTitle] [Root.GetRulerName], l'§Yesclavage§! a été rendu illégal dans la [Root.GetName]."
+
+ # Emancipator 2
+ mandate.155.title:0 "Programme d'émancipation populiste tenu"
+ mandate.155.desc:0 "Conformément au programme de notre [Root.GetRulerTitle] [Root.GetRulerName], plus aucune pop n'est maintenue asservie sur [From.GetName]."
+
+ # Peacemaker
+ mandate.161.title:0 "Programme de pacification tenu"
+ mandate.161.desc:0 "Conformément au programme de notre [Root.GetRulerTitle] [Root.GetRulerName], la §H[Root.GetName]§! n'est plus impliqué dans aucun conflit."
+ mandate.162.title:0 "Programme non tenu"
+ mandate.162.desc:0 "Notre [Root.GetRulerTitle] [Root.GetRulerName] n'a pas atteint les objectifs de son programme dans le délai imparti."
+
+ # Slaver
+ mandate.171.title:0 "Programme esclavagiste tenu"
+ mandate.171.desc:0 "Conformément au programme de notre [Root.GetRulerTitle] [Root.GetRulerName], §H5 pops§! ont été réduites en esclavage."
+
+ # Nationalist
+ mandate.180.title:0 "Programme de rétrocession tenu"
+ mandate.180.desc:0 "Conformément au programme de notre [Root.GetRulerTitle] [Root.GetRulerName], les colonies conquises ont été rétrocédées à la §H[ceding_empire.GetName]§!."
+
+
+
+####################
+### TO BE ERASED ###
+####################
+
+ MANDATE_mandate_separatist:0 "Soutien de la cause séparatiste"
+ MANDATE_mandate_separatist_DESC:0 "Libérer l'empire vassal [Root.GetPopFactionName].\n\nRécompense :\n$mandate_influence_reward_t3$"
+ mandate_influence_reward_t5:0 "§GTrès importante (250 à 500£influence )§!"
+ mandate_unity_reward:0 "§G(50 à 1000£unity£)§!"

@@ -1,0 +1,9 @@
+﻿l_braz_por:
+ ENTERING_GAME_LOBBY:0 "Entrando na Configuração do Jogo"
+ SERVER_LAUNCHING_MP:0 "Iniciando Multiplayer"
+ SERVER_NAME:0 "Nome do Servidor: $NAME$"
+ SERVER_PASSWORD:0 "Senha do Servidor: $PASSWORD$"
+ LAUNCHING_GAME:0 "Iniciando o Jogo"
+ STANDALONE_WAITING_FOR_PLAYERS:0 "Aguardando $NUM$ Jogadores"
+ RECEIVED_GAMESERVER_ID:0 "ID do Servidor Recebido: $SERVERID$"
+ RECEIVED_LOBBY_SERVER:0 "Servidor do Lobby Recebido"
