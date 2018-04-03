@@ -151,7 +151,7 @@ module CKParser =
 
     // Utility parsers
     // =======
-    let ws = (optional spaces1) <?> "whitespace"
+    let ws = spaces <?> "whitespace"
     let str s = pstring s .>> ws <?> ("string " + s)
     let strSkip s = skipString s .>> ws <?> ("skip string " + s)
     let ch c = pchar c .>> ws <?> ("char " + string c)
@@ -164,7 +164,7 @@ module CKParser =
     // =======
     let operator = choice [chSkip '='; chSkip '>'; chSkip '<'] >>. optional (chSkip '=') <?> "operator"
 
-    let comment = skipChar '#' >>. manyCharsTill anyChar ((newline |>> ignore) <|> eof) .>> ws |>> string <?> "comment"
+    let comment = skipChar '#' >>. restOfLine true .>> ws |>> string <?> "comment"
 
     let key = (many1SatisfyL isidchar "id character") .>> ws |>> Key <?> "id"
     let keyQ =  between (ch '"') (ch '"') (manyStrings (quotedCharSnippet <|> escapedChar)) .>> ws |>> Key <?> "quoted key"
