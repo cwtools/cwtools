@@ -85,3 +85,25 @@ planet_event = {
         }
     }
 }
+
+##Test not children warning
+country_event = {
+    is_triggered_only = yes
+    trigger = {
+        #error
+        NOT = {
+            has_country_flag = yes
+            has_country_flag = test
+        }
+        #error
+        NOT = {
+            has_country_flag = yes
+            NOT = { has_country_flag = yes }
+        }
+        #error
+        NOT = {
+            NOT = { has_country_flag = yes }
+            NOT = { has_country_flag = yes }
+        }
+    }
+}

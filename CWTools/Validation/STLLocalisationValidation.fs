@@ -286,7 +286,8 @@ module STLLocalisationValidation =
     let valBuildingTags : LocalisationValidator =
         fun _ keys es ->
             let buildtags = es.AllOfType EntityType.BuildingTags |> List.map fst
-            buildtags <&!&> (fun bt -> bt.LeafValues <&!&> checkLocLeafValueKeyAdvs keys "" ["_build_cost_mult"; "_construction_speed_mult"])
+            OK
+            //buildtags <&!&> (fun bt -> bt.LeafValues <&!&> checkLocLeafValueKeyAdvs keys "" ["_build_cost_mult"; "_construction_speed_mult"])
 
     let valDiploPhrases : LocalisationValidator =
         fun _ keys es ->

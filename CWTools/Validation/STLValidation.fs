@@ -126,12 +126,17 @@ module STLValidation =
         |None -> Invalid [inv (ErrorCodes.UndefinedStaticModifier modifier) node]
         |Some m -> m.categories <&!&>  (checkCategoryInScope modifier scopes.CurrentScope node)
 
+    let valNotUsage (node : Node) = if (node.Values.Length + node.Children.Length) > 1 then Invalid [inv ErrorCodes.IncorrectNotUsage node] else OK
 
     let valTriggerLeafUsage (modifiers : Modifier list) (scopes : ScopeContext) (leaf : Leaf) =
         match leaf.Key with
         | "has_modifier" -> valStaticModifier modifiers scopes (leaf.Value.ToRawString()) leaf
         | _ -> OK
-
+    
+    let valTriggerNodeUsage (modifiers : Modifier list) (scopes : ScopeContext) (node : Node) =
+        match node.Key with
+        | "NOT" -> valNotUsage node
+        | _ -> OK
     let valEffectLeafUsage (modifiers : Modifier list) (scopes : ScopeContext) (leaf : Leaf) =
         match leaf.Key with
         | "remove_modifier" -> valStaticModifier modifiers scopes (leaf.Value.ToRawString()) leaf
@@ -199,13 +204,16 @@ module STLValidation =
                 OK //Handle later
             |x ->
                 match changeScope effects triggers x scopes with
-                |NewScope (s, ignores) -> valNodeTriggers root triggers effects modifiers s ignores node
+                |NewScope (s, ignores) -> 
+                    valNodeTriggers root triggers effects modifiers s ignores node
+                    <&&>
+                    valTriggerNodeUsage modifiers scopes node
                 |WrongScope ss -> Invalid [inv (ErrorCodes.IncorrectScopeScope x (scopes.CurrentScope.ToString()) (ss |> List.map (fun s -> s.ToString()) |> String.concat ", ")) node]
                 |NotFound ->
                     match triggers.TryFind x with
                     |Some e ->
                         if e.Scopes |> List.contains(scopes.CurrentScope) || scopes.CurrentScope = Scope.Any
-                        then OK
+                        then valTriggerNodeUsage modifiers scopes node
                         else Invalid [inv (ErrorCodes.IncorrectTriggerScope x (scopes.CurrentScope.ToString()) (e.Scopes |> List.map (fun f -> f.ToString()) |> String.concat ", ")) node]
                     // |Some (_, true) -> OK
                     // |Some (t, false) -> Invalid [inv S.Error node (sprintf "%s trigger used in incorrect scope. In %A but expected %s" x scopes.CurrentScope (t.Scopes |> List.map (fun f -> f.ToString()) |> String.concat ", "))]

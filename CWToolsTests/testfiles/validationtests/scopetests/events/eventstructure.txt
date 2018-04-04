@@ -11,7 +11,7 @@ planet_event = {
                 #error
                 has_fleet_order = yes
             }
-            NOT ={
+            NOR ={
                 AND ={
                     #error
                     has_fleet_order = yes
