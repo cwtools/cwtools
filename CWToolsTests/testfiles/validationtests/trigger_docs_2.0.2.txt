@@ -1,3 +1,6 @@
+[22:02:21][game_application.cpp:283]: Game Version: Cherryh v2.0.2
+[22:02:21][defines.cpp:124]: 1304 defines loaded
+[22:03:41][consolecmdimpl.cpp:2701]: 
 == TRIGGER DOCUMENTATION ==
 text - For 'desc={trigger={' use. Shows custom text
 text = <text>
@@ -6,10 +9,10 @@ Supported Targets: none
 
 custom_tooltip - Replaces the tooltips for the enclosed triggers with a custom text
 custom_tooltip = {
-text = <text used as fallback for both fails and successes>
+	text = <text used as fallback for both fails and successes>
 fail_text = <text used for fails["string"/default/none]>
 success_text = <text used for seccesses["string"/default/none]>
-<triggers>
+	<triggers>
 }
 Supported Scopes: all
 Supported Targets: none
@@ -31,10 +34,10 @@ Supported Targets: none
 
 switch - Switch case for a trigger
 switch = {
-trigger = pop_has_ethic
-ethic_xenophile = { <effect> }
-ethic_xenophobe = { <effect> }
-default = { <effect> }
+	trigger = pop_has_ethic
+	ethic_xenophile = { <effect> }
+	ethic_xenophobe = { <effect> }
+	default = { <effect> }
 }
 Supported Scopes: all
 Supported Targets: ???
@@ -115,7 +118,7 @@ Supported Scopes: planet
 Supported Targets: none
 
 distance - Checks the ship/fleet/planet/leader/pop/system's galaxy map distance to target in absolute units
-distance = { source = <target> min = 50 max = 120 }
+distance = { source = <target> min = 50 max = 120 type=<hyperlane/euclidean> uses_bypass=<yes/no> bypass_empire=<empire> min_jumps = 2 max_jumps = 10 }
 Supported Scopes: planet ship pop fleet galactic_object leader
 Supported Targets: none
 
@@ -261,7 +264,7 @@ Supported Scopes: planet tile
 Supported Targets: none
 
 sectors - Checks the country's number of sectors
-sectors < 4
+ sectors < 4
 Supported Scopes: country
 Supported Targets: none
 
@@ -490,6 +493,11 @@ planet_health - Checks the planet's health percentage
 planet_health > 0.9
 Supported Scopes: planet
 Supported Targets: ???
+
+is_alliance_fleet - Checks if the scoped fleet is an alliance fleet.
+is_alliance_fleet = <yes/no>
+Supported Scopes: fleet
+Supported Targets: none
 
 and - all inside trigger must be true
 Supported Scopes: all
@@ -1202,7 +1210,7 @@ Supported Scopes: pop
 Supported Targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL SOLAR_SYSTEM LEADER RANDOM FROMFROM PREVPREV PREVPREVPREV PREVPREVPREVPREV
 
 support - Checks the faction's support level
-support > 0.5
+ support > 0.5
 Supported Scopes: pop_faction
 Supported Targets: none
 
@@ -1258,8 +1266,8 @@ Supported Targets: none
 
 can_declare_war - Checks if the country can declare war against target country
 can_declare_war = {
-target = <target country>
-attacker_war_goal = <war goal>
+	target = <target country>
+	attacker_war_goal = <war goal>
 }
 Supported Scopes: country
 Supported Targets: ???
@@ -1350,7 +1358,7 @@ Supported Scopes: all
 Supported Targets: none
 
 has_monthly_income - Checks the country's monthly income of a specific resource
-has_monthly_income = { resource = engineering_research value < 20 }
+has_monthly_income = { resource = engineering_research  value < 20 }
 Supported Scopes: country
 Supported Targets: ???
 
@@ -1421,8 +1429,8 @@ Supported Targets: ???
 
 custom_tooltip_fail - Shows custom text only when the associated trigger fails
 custom_tooltip_fail = {
-text = <text>
-<triggers>
+	text = <text>
+	<triggers>
 }
 Supported Scopes: all
 Supported Targets: none
@@ -1637,7 +1645,7 @@ Supported Scopes: pop
 Supported Targets: none
 
 years_of_peace - Checks the number of in-game years country has been at peace, with optional parameter to delay from start of game
-years_at_peace = { value > 10 delay = 0 }
+years_of_peace = { value > 10 delay = 0 }
 Supported Scopes: country
 Supported Targets: none
 
@@ -1790,24 +1798,24 @@ Supported Targets: none
 
 custom_tooltip_success - Shows custom text only when the associated trigger passes
 custom_tooltip_success = {
-text = <text>
-<triggers>
+	text = <text>
+	<triggers>
 }
 Supported Scopes: all
 Supported Targets: none
 
 success_text - For 'desc={trigger={' use. Shows custom text when the associated trigger passes.
 success_text = {
-text = <text>
-<triggers>
+	text = <text>
+	<triggers>
 }
 Supported Scopes: all
 Supported Targets: none
 
 fail_text - For 'desc={trigger={' use. Shows custom text when the associated trigger fails.
 fail_text = {
-text = <text>
-<triggers>
+	text = <text>
+	<triggers>
 }
 Supported Scopes: all
 Supported Targets: none
@@ -2161,7 +2169,7 @@ has_notification_modifier = <key>
 Supported Scopes: country
 Supported Targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL SOLAR_SYSTEM LEADER RANDOM FROMFROM PREVPREV PREVPREVPREV PREVPREVPREVPREV
 
-pop_maintenance_cost - Checks the maintenace costs of a pop
+pop_maintenance_cost - Checks the maintenace costs of a pop 
 pop_maintenance_cost > 0
 Supported Scopes: pop
 Supported Targets: none
@@ -2245,10 +2253,10 @@ Supported Scopes: country
 Supported Targets: ???
 
 has_casus_belli - Checks if the country has a valid casus belli (any casus belli or a specific one) on the given country.
-has_casus_belli = {
-target = <country>
-type = <cb_type> #optional
-}
+ has_casus_belli = { 
+	target = <country> 
+	type = <cb_type> #optional
+ }
 Supported Scopes: country
 Supported Targets: THIS
 
@@ -2289,7 +2297,7 @@ Supported Targets: none
 
 count_starbase_sizes - Checks if the scoped country has a specified quantity of a starbase size
 count_starbase_sizes = {
-starbase_size = <starbase_ship_size>
+starbase_size = <starbase_ship_size> 
 count >= 2}
 Supported Scopes: country
 Supported Targets: none
@@ -2461,7 +2469,7 @@ Supported Targets: none
 
 
 =================
-[14:04:39][consolecmdimpl.cpp:2659]:
+[22:03:41][consolecmdimpl.cpp:2702]: 
 == EFFECT DOCUMENTATION ==
 tooltip - Just a tooltip
 Supported Scopes: planet country ship pop
@@ -2614,47 +2622,47 @@ Supported Targets: none
 
 create_species - Creates a new species
 create_species = {
-name = <string>
-plural = <string>
-class = <species class key>
-portrait = <random/portrait id>
-homeworld = <target>
-traits = { <specific/random traits> }
-sapient = <Y/N, determines if species is pre-sapient>
-is_mod = <Y/N, determines if species is a modification of another>
-immortal = <Y/N, determines if species leaders are immortal>
+	name = <string>
+	plural = <string>
+	class = <species class key>
+	portrait = <random/portrait id>
+	homeworld = <target>
+	traits = { <specific/random traits> }
+	sapient = <Y/N, determines if species is pre-sapient>
+	is_mod = <Y/N, determines if species is a modification of another>
+	immortal = <Y/N, determines if species leaders are immortal>
 }
 Supported Scopes: all
 Supported Targets: none
 
 create_country - Creates a new country
 create_country = {
-name = <string/random>
-type = <key>
-auto_delete = <bool>
-name_list = <key>
-ship_prefix = <string>
-authority = <key>
-civics = random / { civic = <key> civic = random }
-species = <target>
-flag = <random / { icon = { category = <key> file = <filename.dds> } background = { category = <key> file = <filename.dds> } colors = { <key> <key> } }
-ethos = <random / { ethic = <key> ethic = <key> }>
-effect = { <effects executed on country> }
+	name = <string/random>
+	type = <key>
+	auto_delete = <bool>
+	name_list = <key>
+	ship_prefix = <string>
+	authority = <key>
+	civics = random / { civic = <key> civic = random }
+	species = <target>
+	flag = <random / { icon = { category = <key> file = <filename.dds> } background = { category = <key> file = <filename.dds> } colors = { <key> <key> } }
+	ethos = <random / { ethic = <key> ethic = <key> }>
+	effect = { <effects executed on country> }
 }
 Supported Scopes: all
 Supported Targets: none
 
 create_fleet - Creates a new fleet
-create_fleet = { name = <string> effect = { <create_ship, set_owner, set_location etc effects go here> } }
+create_fleet = { name = <string> effect = { <create_ship, set_owner, set_location etc effects go here> } } 
 Supported Scopes: all
 Supported Targets: none
 
 create_army - Creates a new army
 create_army = {
-name = <string>
-owner = <target>
-species = <target>
-type = <key>
+	name = <string>
+	owner = <target>
+	species = <target>
+	type = <key>
 }
 Supported Scopes: planet
 Supported Targets: none
@@ -2667,11 +2675,11 @@ Supported Targets: none
 
 create_ship - Creates a new ship
 create_ship = {
-name = <string/random>
-design = <ship design key/target, or use random_existing_design>
-random_existing_design = <ship size key>
-graphical_culture = <graphical culture key>
-prefix = <Y/N, determines if ship name should use owner country prefix>
+	name = <string/random>
+	design = <ship design key/target, or use random_existing_design>
+	random_existing_design = <ship size key>
+	graphical_culture = <graphical culture key>
+	prefix = <Y/N, determines if ship name should use owner country prefix>
 }
 Supported Scopes: fleet starbase
 Supported Targets: none
@@ -2683,7 +2691,7 @@ Supported Targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL SOLAR_SYSTEM LEA
 
 create_pop - Creates a new pop on the scoped tile/planet
 create_pop = {
-species = <target / key>
+	species = <target / key>
 ethos = <random / target / { ethic = <key> ethic = <key> }>
 }
 Supported Scopes: planet tile
@@ -2693,7 +2701,7 @@ create_colony - Creates a colony on the scoped planet
 create_colony_effect = {
 owner = <target>
 species = <target / key>
-ethos = <random / target / { ethic = <key> ethic = <key> }>
+ ethos = <random / target / { ethic = <key> ethic = <key> }>
 }
 Supported Scopes: planet
 Supported Targets: none
@@ -2869,9 +2877,9 @@ Supported Targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL SOLAR_SYSTEM LEA
 
 declare_war - Declares war between the scoped country and target country
 declare_war = {
-target = <target country>
-name = <optional war name>
-attacker_war_goal = <war goal>
+	target = <target country>
+	name = <optional war name>
+	attacker_war_goal = <war goal>
 }
 Supported Scopes: country
 Supported Targets: none
@@ -2970,26 +2978,26 @@ create_ambient_object - Creates a new ambient object
 create_ambient_object = { type = <key> location = <target> }
 For VFX use:
 create_ambient_object = {
-type = <key>
-scale = <float>
-location = <target>
-use_3d_location = <bool, use 3D entity or 2D coordinate of the location entity as base>
-entity_offset = {
-min = <int>
-max = <int>
-}
-entity_offset_angle = {
-min = <int>
-max = <int>
-}
-entity_offset_height = {
-min = <int>
-max = <int>
-}
-entity_face_object = star/FROM/etc
-entity_scale_to_size = yes/no
-target = <target>
-duration = <int, days>
+	type = <key>
+	scale = <float>
+	location = <target>
+	use_3d_location = <bool, use 3D entity or 2D coordinate of the location entity as base>
+	entity_offset = {
+		min = <int>
+		max = <int>
+	}
+	entity_offset_angle = {
+		min = <int>
+		max = <int>
+	}
+	entity_offset_height = {
+		min = <int>
+		max = <int>
+	}
+ entity_face_object = star/FROM/etc
+ entity_scale_to_size = yes/no
+	target = <target>
+	duration = <int, days>
 }
 Supported Scopes: all
 Supported Targets: none
@@ -3011,13 +3019,13 @@ Supported Targets: none
 
 modify_species - Creates a new, modified species based on an already-extant species
 modify_species = {
-species = <target> # species to modify
-base = <target>/auto/none # new base species; default: auto (uses species)
-add_trait = <key> # optional, can specify multiple
-remove_trait = <key> # optional, can specify multiple
-ideal_planet_class = <target or pc_name> # optional
-change_scoped_species = yes/no # modify scoped pops/planet/leader/country; default: yes
-portrait = <target or portrait name> # optional
+	species = <target> # species to modify
+	base = <target>/auto/none # new base species; default: auto (uses species)
+	add_trait = <key> # optional, can specify multiple
+	remove_trait = <key> # optional, can specify multiple
+	ideal_planet_class = <target or pc_name> # optional
+	change_scoped_species = yes/no # modify scoped pops/planet/leader/country; default: yes
+	portrait = <target or portrait name> # optional
 }
 Supported Scopes: planet country pop leader
 Supported Targets: none
@@ -3102,7 +3110,7 @@ every_neighboring_tile = { limit = { <triggers> } <effects> }
 Supported Scopes: tile
 Supported Targets: none
 
-random_neighboring_tile - Executes enclosed effects on a random tile neighboring the scoped tile that meets the limit criteria
+random_neighboring_tile - Executes enclosed effects on a random tile neighboring  the scoped tile that meets the limit criteria
 random_neighboring_tile = { limit = { <triggers> } <effects> }
 Supported Scopes: tile
 Supported Targets: none
@@ -3235,21 +3243,21 @@ Supported Targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL SOLAR_SYSTEM LEA
 
 create_army_transport - Creates a new army in a new transport ship
 create_army_transport = {
-ship_name = <string>
-graphical_culture = <key>
-army_name = <string>
-army_type = <key>
-species = <target>
+	ship_name = <string>
+	graphical_culture = <key>
+	army_name = <string>
+	army_type = <key>
+	species = <target>
 }
 Supported Scopes: fleet
 Supported Targets: none
 
 switch - Executes the first appropriate effect set for a specific trigger
 switch = {
-trigger = <trigger>
-<corresponding key/bool/int> = { <effect> }
-<corresponding key/bool/int> > (less/greater than appear 'reversed') { <effect> }
-default = { <effect> }
+	trigger = <trigger>
+	<corresponding key/bool/int> = { <effect> }
+	<corresponding key/bool/int> > (less/greater than appear 'reversed') { <effect> }
+	default = { <effect> }
 }
 Supported Scopes: all
 Supported Targets: none
@@ -3330,9 +3338,9 @@ Supported Scopes: country
 Supported Targets: none
 
 leave_alliance - Removes scoped country from any alliances it is in
-leave_alliance = yes
+leave_alliance = { override_requirements = yes/no }
 Supported Scopes: country
-Supported Targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL SOLAR_SYSTEM LEADER RANDOM FROMFROM PREVPREV PREVPREVPREV PREVPREVPREVPREV
+Supported Targets: none
 
 create_sector - Creates a sector with a specific capital planet, of a specific type, and with optional additional systems within the scoped country
 create_sector = { capital = <target> type = <string> add = <target> add = <target>}
@@ -3354,7 +3362,7 @@ recruitable = yes
 Supported Scopes: leader
 Supported Targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL SOLAR_SYSTEM LEADER RANDOM FROMFROM PREVPREV PREVPREVPREV PREVPREVPREVPREV
 
-closest_system - Executes enclosed effects on a system -within a specific relative distance span- that meets the limit criteria
+closest_system - Executes enclosed effects on a system -within a specific number of jumps span- that meets the limit criteria. This completely ignores bypasses (wormholes and gateways)
 closest_system = { min_steps = <int, minimum # of systems 'away'> max_steps = <int, maximum # of systems 'away'> limit = { <triggers> } <effects> }
 Supported Scopes: all
 Supported Targets: none
@@ -3495,9 +3503,9 @@ Supported Targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL SOLAR_SYSTEM LEA
 
 start_colony - Starts colonization of the scoped planet
 start_colony = {
-owner = <target>
-species = <target / key>
-ethos = <random / target / { ethic = <key> ethic = <key> }>
+	owner = <target>
+	species = <target / key>
+	ethos = <random / target / { ethic = <key> ethic = <key> }>
 }
 Supported Scopes: planet
 Supported Targets: none
@@ -3559,8 +3567,8 @@ Supported Scopes: country
 Supported Targets: none
 
 add_threat - Adds diplomatic threat from target country
-add_threat = { who = <target> amount = 4 }
-Supported Scopes: planet galactic_object
+add_threat = { who = <system/planet/country> amount = 4 }
+Supported Scopes: planet country galactic_object
 Supported Targets: none
 
 set_mission - Sets the current mission of an observation station
@@ -3728,7 +3736,7 @@ set_species_identity - Sets the current species scopes identity to match the tar
 Supported Scopes: species
 Supported Targets: none
 
-pop_force_add_ethic - Adds a specific ethic to the scoped pop regardless if pop-species allows ethic divergence or not.
+pop_force_add_ethic - Adds a specific ethic to the scoped pop regardless if pop-species allows ethic divergence or not. 
 pop_add_ethic = <key>
 Supported Scopes: pop
 Supported Targets: none
@@ -3755,13 +3763,14 @@ Supported Targets: none
 
 build_pop - Creates a buildable pop on the scoped tile/planet
 create_pop = {
-species = <target / key>
+	species = <target / key>
 ethos = <random / target / { ethic = <key> ethic = <key> }>
 }
 Supported Scopes: planet tile
 Supported Targets: none
 
-create_message - Creates a message
+create_message - Creates a message, can take multiple variables
+create_message = { type = BYPASS_EXPLORED localization = BYPASS_EXPLORED_MESSAGE days = 30 target = root variable = { type = name localization = SYSTEM1 scope = from } variable = { type = name localization = SYSTEM2 scope = fromfrom } }
 Supported Scopes: all
 Supported Targets: none
 
@@ -3778,7 +3787,7 @@ set_planet_entity - Change entity of a planet. set_planet_entity = { entity = <n
 Supported Scopes: planet
 Supported Targets: none
 
-remove_planet - Removes the planet from the scope
+remove_planet - Removes the planet from the scope 
 remove_planet = yes
 Supported Scopes: planet
 Supported Targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL SOLAR_SYSTEM LEADER RANDOM FROMFROM PREVPREV PREVPREVPREV PREVPREVPREVPREV
@@ -3897,11 +3906,11 @@ mutate_species - Randomly mutate a species.
 Supported Scopes: species
 Supported Targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL SOLAR_SYSTEM LEADER RANDOM FROMFROM PREVPREV PREVPREVPREV PREVPREVPREVPREV
 
-rename_species - rename_species = {
-use one of the following:
-name = "an explicit name with [Bracket.Stuff]"
-name = random
-name_list = "key"
+rename_species - rename_species = { 
+	use one of the following:
+	name = "an explicit name with [Bracket.Stuff]"
+	name = random
+	name_list = "key"
 }
 Supported Scopes: species
 Supported Targets: none
@@ -3936,35 +3945,35 @@ Supported Scopes: country
 Supported Targets: none
 
 set_player - Assign the player of the target country to play the scoped country instead
-event_target:new_country = { set_player = event_target:eek:ld_country }
+event_target:new_country = { set_player = event_target:old_country }
 Supported Scopes: country
 Supported Targets: none
 
 change_species_characteristics - Changes the characteristics of a species
 change_species_characteristics = {
-sapient = <Y/N, determines if species is pre-sapient>
-immortal = <Y/N, determines if species leaders are immortal>
-pops_can_be_colonizers = <Y/N, determines if pops of that species can colonize>
-pops_can_migrate = <Y/N, determines if pops of that species can migrate>
-pops_can_reproduce = <Y/N, determines if pops of that species can reproduce>
-pops_can_join_factions = <Y/N, determines if pops of that species can join factions>
-can_generate_leaders = <Y/N, determines if that species can generate leaders>
-pops_can_be_slaves = <Y/N, determines if pops from that species can become slaves>
-pops_have_happiness = <Y/N, determines if pops from that species have happiness>
-consumer_goods = <Y/N, determines if pops from need consumer goods>
-can_be_modified = <Y/N, determines if the species can be modified>
-pops_auto_growth = <1, speed at which the pops from that species grow automatically
-pop_maintenance = <1, amount of energy each pop of that species consume monthly
-new_pop_resource_requirement = { type = food_surplus value = 42 }
-portrait = <key or species event target>
+	sapient = <Y/N, determines if species is pre-sapient>
+	immortal = <Y/N, determines if species leaders are immortal>
+	pops_can_be_colonizers = <Y/N, determines if pops of that species can colonize>
+	pops_can_migrate = <Y/N, determines if pops of that species can migrate>
+	pops_can_reproduce = <Y/N, determines if pops of that species can reproduce>
+	pops_can_join_factions = <Y/N, determines if pops of that species can join factions>
+	can_generate_leaders = <Y/N, determines if that species can generate leaders>
+	pops_can_be_slaves = <Y/N, determines if pops from that species can become slaves>
+	pops_have_happiness = <Y/N, determines if pops from that species have happiness>
+	consumer_goods = <Y/N, determines if pops from need consumer goods>
+	can_be_modified = <Y/N, determines if the species can be modified>
+	pops_auto_growth = <1, speed at which the pops from that species grow automatically
+	pop_maintenance = <1, amount of energy each pop of that species consume monthly
+	new_pop_resource_requirement = { type = food_surplus value = 42 }
+	portrait = <key or species event target>
 
 Supported Scopes: species
 Supported Targets: none
 
 copy_techs_from - Copies all techs from the target country to the scoped country, except for some exceptions listed. Tech weights (and weight modifiers) are honoured, meaning that techs a country should not have will not be copied.
-copy_techs_from = {
-target = country
-except = { tech_1 tech_2 }
+copy_techs_from = { 
+	target = country
+	except = { tech_1 tech_2 }
 }
 Supported Scopes: country
 Supported Targets: none
@@ -3989,11 +3998,11 @@ Supported Targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL SOLAR_SYSTEM LEA
 
 create_starbase - Creates a starbase in orbit of the star of the scoped galactic object
 create_starbase = {
-owner = <target>
-size = <ship_size>
-module = <starbase_module>
-building = <starbase_building>
-effect = { ... }
+	owner = <target>
+	size = <ship_size>
+	module = <starbase_module>
+	building = <starbase_building>
+	effect = { ... }
 }
 Supported Scopes: galactic_object
 Supported Targets: none
@@ -4030,10 +4039,10 @@ Supported Targets: none
 
 effect_on_blob - Executes an effect on systems with planets owned by the scoped country, starting at an origin, and until a certain percentage of owned planets matching the planet_limit has been covered.
 effect_on_blob = {
-center = <system target>
-owned_planets_percentage = 1.0
-planet_limit = { <planet triggers> }
-effect = { <system effects> }
+	center = <system target>
+	owned_planets_percentage = 1.0
+	planet_limit = { <planet triggers> }
+	effect = { <system effects> }
 }
 Supported Scopes: country
 Supported Targets: none
@@ -4043,7 +4052,7 @@ add_seen_bypass_type = bypass_type
 Supported Scopes: country
 Supported Targets: none
 
-add_seen_bypass - Makes the scoped country remember that it has encountered the bypass
+add_seen_bypass - Makes the scoped country remember that it has encountered the bypass 
 add_seen_bypass = FROM
 Supported Scopes: country
 Supported Targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL SOLAR_SYSTEM LEADER RANDOM FROMFROM PREVPREV PREVPREVPREV PREVPREVPREVPREV
@@ -4055,8 +4064,8 @@ Supported Targets: none
 
 check_casus_belli_valid - Re-evaluate the specified casus belli type with given target country
 check_casus_belli_valid = {
-target = none/<optional country target>
-type = <optional casus belli type>
+	target = none/<optional country target>
+	type = <optional casus belli type>
 }
 Supported Scopes: country
 Supported Targets: none
@@ -4068,9 +4077,9 @@ Supported Targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL SOLAR_SYSTEM LEA
 
 clone_leader - Clones the last created leader for the scoped country
 clone_leader = {
-target = <event target>
-#properties to override, see create_leader
-effect = { ... }
+	target = <event target>
+	#properties to override, see create_leader
+	effect = { ... }
 }
 Supported Scopes: country
 Supported Targets: none
@@ -4114,8 +4123,8 @@ change_government - Change the scoped country's government authority and/or civi
 change_government = random
 or
 change_government = {
-authority = random / <key>
-civics = random / { civic = <key> civic = random }
+	authority = random / <key>
+	civics = random / { civic = <key> civic = random }
 }
 Supported Scopes: country
 Supported Targets: none
@@ -4161,11 +4170,11 @@ Supported Targets: none
 
 create_rebels - Creates a rebellion
 create_rebels = {
-name = <random / string>
-authority = <random / key>
-civics = random / { civic = <key> civic = random }
-species = <target>
-ethos = <random / { ethic = <key> ethic = <key> }
+	name = <random / string>
+	authority = <random / key>
+	civics = random / { civic = <key> civic = random }
+	species = <target>
+	ethos = <random / { ethic = <key> ethic = <key> }
 }
 Supported Scopes: planet
 Supported Targets: none
@@ -4175,7 +4184,7 @@ cancel_terraformation = yes
 Supported Scopes: planet
 Supported Targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL SOLAR_SYSTEM LEADER RANDOM FROMFROM PREVPREV PREVPREVPREV PREVPREVPREVPREV
 
-asteroids_distance - Sets an asteroid belt at the distance in the scope
+asteroids_distance - Sets an asteroid belt at the distance in the scope 
 asteroid_distance = N, distance of zero will remove the belt
 Supported Scopes: galactic_object
 Supported Targets: none
@@ -4187,7 +4196,7 @@ Supported Targets: none
 
 while - Repeats enclosed effects while limit criteria are met or until set iteration count is reached
 while = { limit = { <triggers> } <effects> }
-while = { count = [3|Variable] <effects> }
+ while = { count = [3|Variable] <effects> }
 Supported Scopes: all
 Supported Targets: none
 
@@ -4311,8 +4320,8 @@ destroy_country = yes
 Supported Scopes: country
 Supported Targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL SOLAR_SYSTEM LEADER RANDOM FROMFROM PREVPREV PREVPREVPREV PREVPREVPREVPREV
 
-add_static_war_exhaustion - Adds static war exhaustion, scaled with value_for_planet_destruction, to owner of the battle location
-owner = { add_static_war_exhaustion = { attacker = <country> location = <planet> value_for_planet_destruction = <0.0-1.0> #scales the amount WE that is added }}
+add_static_war_exhaustion - Adds static war exhaustion, scaled with value_for_planet_destruction, to owner of the battle location 
+ owner = { add_static_war_exhaustion = { attacker = <country> location = <planet> value_for_planet_destruction = <0.0-1.0> #scales the amount WE that is added }}
 Supported Scopes: country
 Supported Targets: none
 
@@ -4332,19 +4341,19 @@ Supported Scopes: planet
 Supported Targets: none
 
 join_alliance - Join federation with target
-join_alliance = { who = <target> }
+join_alliance = { who = <target> override_requirements = yes/no }
 Supported Scopes: country
 Supported Targets: none
 
 create_leader - Creates a new leader for the scoped country
 create_leader = {
-name = <random / string>
-species = <target / key>
-gender = <optional / gender> #defalut = random
+	name = <random / string>
+	species = <target / key>
+	gender = <optional / gender> #defalut = random
 type = <random / key>
-skill = <random / int>
-set_age = <int>
-traits = { trait = <key> trait = <key> }
+	skill = <random / int>
+	set_age = <int>
+ traits = { trait = <key> trait = <key> }
 }
 Supported Scopes: country
 Supported Targets: none
