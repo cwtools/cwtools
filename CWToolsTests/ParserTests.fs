@@ -23,8 +23,9 @@ let tests =
     testList "localisation parser" [
         //testCase "simple localisation test" <| fun () ->
         testCase "localisation folder" <| fun () ->
-            let settings = {LocalisationSettings.folder = "testfiles//localisationtests/localisation/"}
-            let parsed = STLLocalisationService(settings)
+            let settings = {LocalisationSettings.folder = "testfiles/localisationtests/localisation/"}
+            let parsed = STLLocalisationService(settings).Api (STL STLLang.English)
+            eprintfn "%A" parsed.Results
             ()
         testCase "localisation simple" <| fun () ->
             let parsed = STLLocalisationService({LocalisationSettings.folder = "testfiles/localisationtests/localisation"}).Api (STL STLLang.English)

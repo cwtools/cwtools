@@ -16,7 +16,7 @@ module YAMLLocalisationParser =
     }
     
     //let key = charsTillString ":" true 1000 .>> spaces <?> "key"
-    let key = many1Satisfy ( (=) ':' >> not ) .>> spaces <?> "key"
+    let key = many1Satisfy ( (=) ':' >> not ) .>> pchar ':' .>> spaces <?> "key"
     //let descInner = (charsTillString "§")
     //let stringThenEscaped = pipe2 (manyCharsTill (noneOf ['"']) (pchar '§')) (manyCharsTill anyChar (pstring "§!")) (+) <?> "escaped"
     //let desc = pipe2 (pchar '"') (many ((attempt stringThenEscaped) <|> manyCharsTill anyChar (pchar '"')) |>> List.reduce (+)) (fun a b -> string a + b)
