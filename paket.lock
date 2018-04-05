@@ -27,9 +27,9 @@ NUGET
     FsControl (1.0.9)
     FSharp.Collections.ParallelSeq (1.1)
     FSharp.Core (4.3.4) - restriction: || (>= net45) (>= netstandard2.0)
-    FSharp.Data (2.4.6)
-      FSharp.Core (>= 4.0.0.1) - restriction: && (< net40) (< portable-net45+win8+wp8+wpa81)
-      Zlib.Portable (>= 1.11) - restriction: || (&& (< net40) (>= portable-net45+win8)) (&& (< net40) (< portable-net45+win8) (>= portable-net45+win8+wp8+wpa81))
+    FSharp.Data (3.0.0-beta)
+      FSharp.Core (>= 4.0.0.1) - restriction: >= net45
+      FSharp.Core (>= 4.3.4) - restriction: && (< net45) (>= netstandard2.0)
     FSharpPlus (0.0.4)
       FsControl (>= 1.0.9)
     FSharpx.Collections (1.17)
@@ -1827,7 +1827,6 @@ NUGET
     WindowsAzure.Storage (9.1) - restriction: >= netcoreapp2.0
       NETStandard.Library (>= 1.6.1) - restriction: || (&& (< net45) (>= netstandard1.0) (< netstandard1.3) (< win8) (< wp8) (< wpa81)) (&& (< net45) (>= netstandard1.3) (< win8) (< wpa81))
       Newtonsoft.Json (>= 10.0.2) - restriction: || (>= net45) (&& (>= netstandard1.0) (< netstandard1.3) (< win8)) (&& (< netstandard1.0) (>= win8)) (&& (>= netstandard1.3) (< win8)) (>= wp8) (>= wpa81)
-    Zlib.Portable (1.11) - restriction: || (&& (< net40) (>= portable-net45+win8)) (&& (< net40) (< portable-net45+win8) (>= portable-net45+win8+wp8+wpa81))
 
 GROUP tools
 
