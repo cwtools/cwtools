@@ -28,7 +28,8 @@ module rec Types =
                 | Bool b -> if b then "yes" else "no"
                 | Float f -> sprintf "%A" f
                 | Int i -> sprintf "%A" i
-        memoize id inner
+        //memoize id inner
+        inner
     type KeyValueItem = 
         | KeyValueItem of Key * Value
         override x.ToString() = let (KeyValueItem (id, v)) = x in sprintf "%O = %O" id v

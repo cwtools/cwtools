@@ -110,6 +110,6 @@ type Startup private () =
 
         if HybridSupport.IsElectronActive then
             this.ElectronBootstrap(appSettings, BridgeSettings.WebPort)
-            Electron.App.add_Quitting (fun _ -> Electron.Dialog.ShowMessageBoxAsync("Quitting") |> ignore)
+            Electron.App.add_Quitting (fun _ -> upcast Electron.Dialog.ShowMessageBoxAsync("Quitting"))
 
     member val Configuration : IConfiguration = null with get, set

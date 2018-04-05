@@ -6,6 +6,7 @@ open CWTools.Common
 open CWTools.Parser
 open CWTools.Localisation
 open CWTools.Process.CK2Process
+open CWTools.Parser.Types
 
 module Events =
     let rand = System.Random()

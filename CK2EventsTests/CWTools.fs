@@ -9,7 +9,7 @@ open Newtonsoft.Json
 open CK2Events.Controllers.Utils
 open System.Text
 open CWTools.Common
-open CWTools.Parser
+open CWTools.Parser.Types
 open CWTools.Process
 open CWTools.Localisation
 open CWTools.Localisation.CK2Localisation
@@ -19,8 +19,9 @@ open CWTools
 open System.Diagnostics
 open Microsoft.AspNetCore.Server.Kestrel.Internal.System.Collections.Sequences
 open CWTools.Parser.DocsParser
+open CWTools.Parser
 
-let winFolder = "C:\\Program Files (x86)\\Steam\\steamapps\\common\\"
+let winFolder = "F:\\Games\\Steam\\steamapps\\common\\"
 let linuxFolder = "/home/thomas/.steam/steam/steamapps/common/"
 let steamFolder = winFolder
 let test f =
@@ -64,7 +65,7 @@ let processTests =
         //     List.iter (fun d -> printfn "%A" d |> ignore) duplicates
 
         testCase "STLGame ship validation" <| fun () ->
-            let game = STLGame("CK2EventsTests/stellaris", FilesScope.All, "", [], [], [], [], [], false)
+            let game = STLGame("CK2EventsTests/stellaris", FilesScope.All, "", [], [], [], [], [], false, false)
             let errors = game.ValidationErrors
             Expect.hasCountOf errors 2u (fun _ -> true) "Not enough errors"
             //errors |> List.iter (fun (s, e) -> printfn "%A" (s.ToRaw |> CKPrinter.api.prettyPrintStatements, e, s.Position) |> ignore)

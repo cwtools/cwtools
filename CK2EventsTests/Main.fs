@@ -14,6 +14,7 @@ open CWTools.Process
 open CWTools.Localisation
 open CWTools.Localisation.CK2Localisation
 open CWTools.Process.CK2Process
+open CWTools.Parser.Types
 
 let winFolder = "F:\\Games\\Steam\\steamapps\\common\\"
 let linuxFolder = "/home/thomas/.steam/steam/steamapps/common/"
@@ -94,7 +95,7 @@ let parserTests =
 let localisationTests =
     testList "localisation tests" [
         testCase "localisation folder" <| fun () ->
-            let parsed = CK2LocalisationService({folder = "CK2EventsUI/localization"; language = Lang.CK2 CK2Lang.English})
+            let parsed = CK2LocalisationService({folder = "CK2EventsUI/localization"})
             ()
     ]
 
@@ -109,7 +110,7 @@ let test file =
         Expect.equal v rawAgain "Not equal"
         let eventComment = CK2Process.getEventComments processed
         let immediates = CK2Process.getAllImmediates processed
-        let localisation = CK2LocalisationService({folder="CK2EventsUI/localization"; language= Lang.CK2 CK2Lang.English}).Api 
+        let localisation = CK2LocalisationService({folder="CK2EventsUI/localization"}).Api  CK2Lang.English
         let options = CK2Process.getEventsOptions localisation processed
         let pretties = processed.Events |> List.map (fun e -> (e.ID, CKPrinter.api.prettyPrintStatements e.ToRaw))
         let ck3 = CK2Process.addLocalisedDescAll processed localisation
@@ -125,7 +126,7 @@ let test2 file =
         Expect.equal v rawAgain "Not equal"
         let eventComment = CK2Process.getEventComments processed
         let immediates = CK2Process.getAllImmediates processed
-        let localisation = CK2LocalisationService({folder="CK2EventsUI/localization"; language= Lang.CK2 CK2Lang.English}).Api
+        let localisation = CK2LocalisationService({folder="CK2EventsUI/localization"}).Api CK2Lang.English
         let options = CK2Process.getEventsOptions localisation processed
         let pretties = processed.Events |> List.map (fun e -> (e.ID, CKPrinter.api.prettyPrintStatements e.ToRaw))
         let ck3 = CK2Process.addLocalisedDescAll processed localisation
@@ -145,8 +146,8 @@ let processingTests =
             | _ -> ()
 
         testList "process all" [
-            let folders = ["events"; 
-                            "event test files";
+            let folders = ["CK2EventsTests/events"; 
+                            "CK2EventsTests/event test files";
                             steamFolder + "Stellaris/events";
                             //steamFolder + "Europa Universalis IV/events";
                             steamFolder + "Hearts of Iron IV/events";
@@ -167,7 +168,7 @@ let processingTests =
 
         testCase "addLocalisation" <| fun () ->
             let parsed = parser.parseString "character_event = { desc = LOCTEST }" "test"
-            let service = CK2LocalisationService({folder="CK2EventsTests/localisation test files"; language= Lang.CK2 CK2Lang.English}).Api
+            let service = CK2LocalisationService({folder="CK2EventsTests/localisation test files"}).Api CK2Lang.English
             match parsed with
             |Success(v, _, _) ->
                 let processed = CK2Process.processEventFile v
