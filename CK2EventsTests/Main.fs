@@ -15,6 +15,9 @@ open CWTools.Localisation
 open CWTools.Localisation.CK2Localisation
 open CWTools.Process.CK2Process
 open CWTools.Parser.Types
+open System.Collections.Generic
+
+
 
 let winFolder = "F:\\Games\\Steam\\steamapps\\common\\"
 let linuxFolder = "/home/thomas/.steam/steam/steamapps/common/"
@@ -96,6 +99,12 @@ let localisationTests =
     testList "localisation tests" [
         testCase "localisation folder" <| fun () ->
             let parsed = CK2LocalisationService({folder = "CK2EventsUI/localization"})
+            ()
+        testCase "localisation simple" <| fun () ->
+            let parsed = CK2LocalisationService({folder = "CK2EventsTests/localisation test files"}).Api CK2Lang.English
+            let expectedValues = dict [("#CODE", "ENGLISH"); ("LOCTEST", "Localisation string"); ("TWO", "$magic$")]
+            Expect.equal (parsed.Values |> Seq.map (fun (Microsoft.FSharp.Core.Operators.KeyValue(k,v)) -> (k,v)) |> List.ofSeq) (expectedValues |> Seq.map (fun (Microsoft.FSharp.Core.Operators.KeyValue(k,v)) -> (k,v)) |> List.ofSeq) "Not equal"
+            eprintfn "%A" parsed.Values
             ()
     ]
 

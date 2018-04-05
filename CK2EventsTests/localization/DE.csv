@@ -141,7 +141,7 @@ string_DE_FB_endinga;;;(a);;;;;;;;;;;x
 
 #Rare special cases
 string_DE_Arzt;;;Arzt;;;;;;;;;;;x
-string_DE_Ärztin;;;Ärztin;;;;;;;;;;;x
+string_DE_ï¿½rztin;;;ï¿½rztin;;;;;;;;;;;x
 string_DE_Kannibale;;;Kannibale;;;;;;;;;;;x
 string_DE_Kannibalin;;;Kannibalin;;;;;;;;;;;x
 string_DE_Propheten;;;dem Propheten;;;;;;;;;;;x
@@ -153,8 +153,8 @@ string_DE_Folterin;;;Folterin;;;;;;;;;;;x
 string_DE_Feigling;;;Feigling;;;;;;;;;;;x
 string_DE_Memme;;;Memme;;;;;;;;;;;x
 string_DE_Narr;;;Narr;;;;;;;;;;;x
-string_DE_Närrin;;;Närrin;;;;;;;;;;;x
-string_DE_Krüppel;;;Krüppel;;;;;;;;;;;x
+string_DE_Nï¿½rrin;;;Nï¿½rrin;;;;;;;;;;;x
+string_DE_Krï¿½ppel;;;Krï¿½ppel;;;;;;;;;;;x
 string_DE_Behinderte;;;Behinderte;;;;;;;;;;;x
 string_DE_Esel;;;Esel;;;;;;;;;;;x
 string_DE_Ziege;;;Ziege;;;;;;;;;;;x
@@ -162,16 +162,16 @@ string_DE_Strohmann;;;Strohmann;;;;;;;;;;;x
 string_DE_Vogelscheuche;;;Vogelscheuche;;;;;;;;;;;x
 string_DE_Dschungelbewohner;;;Dschungelbewohner;;;;;;;;;;;x
 string_DE_Dschungelnatter;;;Dschungelnatter;;;;;;;;;;;x
-string_DE_Bücherwurm;;;Bücherwurm;;;;;;;;;;;x
+string_DE_Bï¿½cherwurm;;;Bï¿½cherwurm;;;;;;;;;;;x
 string_DE_Leseratte;;;Leseratte;;;;;;;;;;;x
 string_DE_Bengel;;;Bengel;;;;;;;;;;;x
-string_DE_Göre;;;Göre;;;;;;;;;;;x
+string_DE_Gï¿½re;;;Gï¿½re;;;;;;;;;;;x
 string_DE_Blutsauger;;;Blutsauger;;;;;;;;;;;x
 string_DE_Zecke;;;Zecke;;;;;;;;;;;x
 string_DE_Wurm;;;Wurm;;;;;;;;;;;x
 string_DE_Made;;;Made;;;;;;;;;;;x
-string_DE_Wüstenkäfer;;;Wüstenkäfer;;;;;;;;;;;x
-string_DE_Wüstenratte;;;Wüstenratte;;;;;;;;;;;x
+string_DE_Wï¿½stenkï¿½fer;;;Wï¿½stenkï¿½fer;;;;;;;;;;;x
+string_DE_Wï¿½stenratte;;;Wï¿½stenratte;;;;;;;;;;;x
 string_DE_Fiesling;;;Fiesling;;;;;;;;;;;x
 string_DE_Vettel;;;Vettel;;;;;;;;;;;x
 string_DE_Zuchtstute;;;Zuchtstute;;;;;;;;;;;x
@@ -179,8 +179,8 @@ string_DE_Stohkopf;;;Strohkopf;;;;;;;;;;;x
 string_DE_Hohlbirne;;;Hohlbirne;;;;;;;;;;;x
 string_DE_Gesichtskrapfen;;;Gesichtskrapfen;;;;;;;;;;;x
 string_DE_Hackfresse;;;Hackfresse;;;;;;;;;;;x
-string_DE_Überflieger;;;Überflieger;;;;;;;;;;;x
-string_DE_Koriphäe;;;Koriphäe;;;;;;;;;;;x
+string_DE_ï¿½berflieger;;;ï¿½berflieger;;;;;;;;;;;x
+string_DE_Koriphï¿½e;;;Koriphï¿½e;;;;;;;;;;;x
 
 #English custom loc for german
 #GetHouseOfWorshipeineine
@@ -298,7 +298,7 @@ string_DE_GetHolding_Nomad_1_diedasden;;;das Lager;;;;;;;;;;;x
 string_DE_GetHolding_Nomad_2_diedasden;;;das Feldlager;;;;;;;;;;;x
 string_DE_GetHolding_Nomad_3_diedasden;;;den Palast;;;;;;;;;;;x
 string_DE_GetHolding_Tribal_1_diedasden;;;das Dorf;;;;;;;;;;;x
-string_DE_GetHolding_Tribal_2_diedasden;;;das Städtchen;;;;;;;;;;;x
+string_DE_GetHolding_Tribal_2_diedasden;;;das Stï¿½dtchen;;;;;;;;;;;x
 string_DE_GetHolding_Tribal_3_diedasden;;;die Festung;;;;;;;;;;;x
 string_DE_GetHolding_City_1_diedasden;;;die Stadt;;;;;;;;;;;x
 string_DE_GetHolding_City_2_diedasden;;;die Stadt;;;;;;;;;;;x
@@ -315,7 +315,7 @@ string_DE_GetHolding_Nomad_1_dieserdieses;;;dieses Lagers;;;;;;;;;;;x
 string_DE_GetHolding_Nomad_2_dieserdieses;;;dieses Feldlagers;;;;;;;;;;;x
 string_DE_GetHolding_Nomad_3_dieserdieses;;;dieses Palastes;;;;;;;;;;;x
 string_DE_GetHolding_Tribal_1_dieserdieses;;;dieses Dorfes;;;;;;;;;;;x
-string_DE_GetHolding_Tribal_2_dieserdieses;;;dieses Städtchen;;;;;;;;;;;x
+string_DE_GetHolding_Tribal_2_dieserdieses;;;dieses Stï¿½dtchen;;;;;;;;;;;x
 string_DE_GetHolding_Tribal_3_dieserdieses;;;dieser Festung;;;;;;;;;;;x
 string_DE_GetHolding_City_1_dieserdieses;;;dieser Stadt;;;;;;;;;;;x
 string_DE_GetHolding_City_2_dieserdieses;;;dieser Stadt;;;;;;;;;;;x
