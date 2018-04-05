@@ -145,8 +145,8 @@ module CKParser =
     // =======
     let whitespaceTextChars = " \t\r\n"
     let norseChars =['ö';'ð';'æ';'ó';'ä';'Þ';'Å';'Ö']
-    let isidchar = fun c -> isLetter c || isDigit c || isAnyOf ['_'; ':'; '@'; '.'; '\"'; '-'; '''] c
-    let isvaluechar = fun c -> isLetter c || isDigit c || isAnyOf (['_'; '.'; '-'; ':'; '\''; '['; ']'; '@';'''; '+'; '`'; '%'; '/'; '!'] @ ['š'; 'Š'; '’']) c
+    let idchar = choiceL [letter; digit; anyOf ['_'; ':'; '@'; '.'; '\"'; '-'; ''']] "id character"
+    let valuechar = choiceL [letter; digit; anyOf (['_'; '.'; '-'; ':'; '\''; '['; ']'; '@';'''; '+'; '`'; '%'; '/'; '!'] @ ['š'; 'Š'; '’'])] "value character"
 
 
     // Utility parsers
@@ -166,20 +166,20 @@ module CKParser =
 
     let comment = skipChar '#' >>. restOfLine true .>> ws |>> string <?> "comment"
 
-    let key = (many1SatisfyL isidchar "id character") .>> ws |>> Key <?> "id"
+    let key = (many1Chars idchar) .>> ws |>> Key <?> "id"
     let keyQ =  between (ch '"') (ch '"') (manyStrings (quotedCharSnippet <|> escapedChar)) .>> ws |>> Key <?> "quoted key"
 
-    let valueS = (many1SatisfyL isvaluechar "value character") .>> ws |>> string |>> String <?> "string"
+    let valueS = (many1Chars valuechar) .>> ws |>> string |>> String <?> "string"
 
     let valueQ = between (ch '"') (ch '"') (manyStrings (quotedCharSnippet <|> escapedChar)) |>> QString <?> "quoted string"
 
-    let valueB = ( (skipString "yes") .>> nextCharSatisfiesNot (isvaluechar) .>> ws  |>> (fun _ -> Bool(true))) <|>
-                    ((skipString "no") .>> nextCharSatisfiesNot (isvaluechar) .>> ws  |>> (fun _ -> Bool(false)))
-    let valueBYes = skipString "yes" .>> nextCharSatisfiesNot (isvaluechar) .>> ws |>> (fun _ -> Bool(true))
-    let valueBNo = skipString "no" .>> nextCharSatisfiesNot (isvaluechar) .>> ws |>> (fun _ -> Bool(false))
+    let valueB = ( (skipString "yes") .>> notFollowedBy (valuechar) .>> ws  |>> (fun _ -> Bool(true))) <|>
+                    ((skipString "no") .>> notFollowedBy (valuechar) .>> ws  |>> (fun _ -> Bool(false)))
+    let valueBYes = skipString "yes" .>> notFollowedBy (valuechar) .>> ws |>> (fun _ -> Bool(true))
+    let valueBNo = skipString "no" .>> notFollowedBy (valuechar) .>> ws |>> (fun _ -> Bool(false))
 
-    let valueI = pint64 .>> nextCharSatisfiesNot (isvaluechar) .>> ws |>> int |>> Int
-    let valueF = pfloat .>> nextCharSatisfiesNot (isvaluechar) .>> ws |>> float |>> Float     
+    let valueI = pint64 .>> notFollowedBy (valuechar) .>> ws |>> int |>> Int
+    let valueF = pfloat .>> notFollowedBy (valuechar) .>> ws |>> float |>> Float     
 
     let hsv3 = clause (pipe3 valueF valueF valueF (fun a b c -> Clause [Statement.Value a;Statement.Value b; Statement.Value c]))
     let hsv4 = clause (pipe4 valueF valueF valueF valueF (fun a b c d -> Clause [Statement.Value a;Statement.Value b; Statement.Value c; Statement.Value d]))

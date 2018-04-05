@@ -12,13 +12,13 @@ open CWTools.Common.STLConstants
 module DocsParser =
 
     let idChar = letter <|> anyOf ['_']
-    let isvaluechar = fun c -> CKParser.isvaluechar c || c = '?'
+    let valuechar = CKParser.valuechar <|> pchar '?'
     let header = skipCharsTillString "DOCUMENTATION ==" true 2000 .>> ws <?> "header"
     let name = (many1Chars idChar) .>> ws .>> pchar '-' .>>. restOfLine false .>> ws <?> "name"
     let usage = charsTillString "Supported Scopes:" true 2000 .>> ws <?> "usage"
-    let scope = many1Satisfy isvaluechar .>> many spaces1 <?> "scope"
+    let scope = many1Chars valuechar .>> many spaces1 <?> "scope"
     let scopes = many1Till scope (skipString "Supported Targets:" .>> ws)
-    let target = many1Satisfy isvaluechar .>> many (skipChar ' ') <?> "target"
+    let target = many1Chars valuechar .>> many (skipChar ' ') <?> "target"
     let targets = many1Till target newline .>> ws
     let doc =  pipe4 name usage  scopes  targets (fun (n, d) u s t  -> {name = n; desc = d; usage = u; scopes = s; targets = t}) <?> "doc"
     let footer = skipString "=================" .>> ws

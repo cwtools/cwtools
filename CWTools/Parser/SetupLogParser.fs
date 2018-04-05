@@ -13,19 +13,19 @@ module SetupLogParser =
 
  
     //let idChar = letter <|> anyOf ['_']
-    let isvaluechar = fun c -> CKParser.isvaluechar c || c = '?'
+    let valuechar = CKParser.valuechar <|> pchar '?'
     let str s = pstring s .>> ws <?> ("string " + s)
     let header = skipCharsTillString "Initializing Database: CStaticModifierDatabase" true 2000000 .>> ws <?> "header"
     let pre = skipCharsTillString "Static Modifier #" true 100
     let num = pre >>. pint64 .>> ws |>> int
-    let tag = skipString "tag = " >>. many1Satisfy isvaluechar .>> ws
+    let tag = skipString "tag = " >>. many1Chars valuechar .>> ws
     let name = str "name = " >>. restOfLine true //manyCharsTill valuechar newline .>> ws
 
     let staticModifier = pipe3 num tag name (fun i t n -> {num = i; tag = t; name = n})
 
     let modifierHeader = skipCharsTillString "Printing Modifier Definitions" true 2000000 .>> ws <?> "modifier header"
 
-    let mtag = skipCharsTillString "Tag: " true 500 >>. many1CharsTill (satisfy isvaluechar) (pchar ',') .>> ws
+    let mtag = skipCharsTillString "Tag: " true 500 >>. many1CharsTill valuechar (pchar ',') .>> ws
     let cat = skipString "Categories: " >>. pint64 |>> int
     let modifier = pipe2 mtag cat (fun t c -> {tag = t; category = c} )
 
