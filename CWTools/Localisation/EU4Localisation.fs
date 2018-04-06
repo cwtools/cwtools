@@ -44,6 +44,7 @@ module EU4Localisation =
 
         let recordsLang (lang : Lang) = records |> List.choose (function |(r, l) when l = lang -> Some r |_ -> None)
 
+        let valueMap lang = recordsLang lang |> List.map (fun r -> (r.key, r)) |> Map.ofList
 
         let values l = recordsLang l |> List.map (fun r -> (r.key, r.desc)) |> dict
 
@@ -66,4 +67,5 @@ module EU4Localisation =
                 member __.GetKeys = getKeys lang
                 member __.GetDesc x = getDesc lang x
                 member __.GetLang = lang
+                member __.ValueMap = valueMap lang
             }

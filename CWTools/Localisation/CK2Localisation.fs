@@ -66,7 +66,11 @@ module CK2Localisation =
             |_ -> x.ENGLISH
 
         let getKeys = csv |> Seq.map (fun f -> f.``#CODE``) |> List.ofSeq
-
+        let valueMap lang = 
+            let one = csv |> Seq.map(fun f -> (f.``#CODE``, getForLang lang f))
+            let two = csvFallback |> Seq.map(fun f -> (f.``#CODE``, getForLangFallback lang f))
+            Seq.concat [one; two] |> Seq.map (fun (k, v) -> k, {key = k; value = None; desc = v; position = FParsec.Position("", 0L ,0L ,0L )})
+                                  |> Map.ofSeq
         let values lang = 
             let one = csv |> Seq.map(fun f -> (f.``#CODE``, getForLang lang f))
             let two = csvFallback |> Seq.map(fun f -> (f.``#CODE``, getForLangFallback lang f))
@@ -99,4 +103,5 @@ module CK2Localisation =
                 member __.GetKeys = getKeys
                 member __.GetDesc x = getDesc lang x
                 member __.GetLang = CK2 lang
+                member __.ValueMap = valueMap lang
             }

@@ -51,6 +51,7 @@ module STLLocalisation =
         let addFiles (x : (string * string) list) = List.map (fun (f, t )-> (f, addFile f t)) x
 
         let recordsLang (lang : Lang) = records |> List.choose (function |(r, l) when l = lang -> Some r |_ -> None)
+        let valueMap lang = recordsLang lang |> List.map (fun r -> (r.key, r)) |> Map.ofList
         let values lang = recordsLang lang |> List.map (fun r -> (r.key, r.desc)) |> dict
 
         let getDesc lang x = recordsLang lang |> List.tryPick (fun r -> if r.key = x then Some r.desc else None) |> Option.defaultValue x
@@ -73,8 +74,6 @@ module STLLocalisation =
             | false -> 
                 eprintfn "%s not found" localisationSettings.folder
                 STLLocalisationService([])
-
-
         member __.Api lang = {
             new ILocalisationAPI with
                 member __.Results = results
@@ -82,4 +81,5 @@ module STLLocalisation =
                 member __.GetKeys = getKeys lang
                 member __.GetDesc x = getDesc lang x
                 member __.GetLang = lang
+                member __.ValueMap = valueMap lang
             }

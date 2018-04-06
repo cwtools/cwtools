@@ -57,6 +57,7 @@ module ValidationCore =
         static member UndefinedEvent = fun (event : string) -> { ID = "CW222"; Severity = Severity.Warning; Message = sprintf "the event id %s is not defined" event }
         static member IncorrectNotUsage = { ID = "CW223"; Severity = Severity.Information; Message = "Do not use NOT with multiple children, replace this with either NOR or NAND to avoid ambiguity"}
         static member RedundantBoolean = { ID = "CW224"; Severity = Severity.Information; Message = "This boolean operator is redundant" }
+        static member UndefinedLocReference = fun (thisLoc : string) (otherLoc : string) language -> { ID = "CW225"; Severity = Severity.Error; Message = sprintf "Localisation key \"%s\" references \"%s\" which doesn't exist in %O" thisLoc otherLoc language}
         static member CustomError = fun error -> { ID = "CW999"; Severity = Severity.Error; Message = error}
     type ValidationResult = 
         | OK
@@ -74,6 +75,9 @@ module ValidationCore =
         let pos = lv.Position
         let value = lv.Value.ToString()
         code.ID, code.Severity, pos, value.Length, code.Message, data
+
+    let invManual (code : ErrorCode) (pos : CWTools.Parser.Types.Position) (key : string) (data : string option) =
+        code.ID, code.Severity, pos, key.Length, code.Message, data
         
     // let inline inv (sev : Severity) (l : ^a) (s : string) = 
     //     let pos = (^a : (member Position : CWTools.Parser.Position) l)

@@ -4,11 +4,12 @@ open CWTools.Common
 module YAMLLocalisationParser =
     open FParsec
 
-    type Entry = {
-        key : string
-        value : char option
-        desc : string
-    }
+    // type Entry = {
+    //     key : string
+    //     value : char option
+    //     desc : string
+    //     position : Position
+    // }
 
     type LocFile = {
         key : string
@@ -24,7 +25,7 @@ module YAMLLocalisationParser =
     //let desc = pipe3 (pchar '"' |>> string) (many (attempt stringThenEscaped) |>> List.fold (+) "")  (manyCharsTill (noneOf ['§']) (pchar '"')) (fun a b c -> string a + b + c) <?> "string"
     let desc = restOfLine true .>> spaces <?> "desc"
     let value = digit .>> spaces <?> "version"
-    let entry = pipe3 (key) (opt value) (desc .>> spaces) (fun k v d -> {key = k; value = v; desc = d}) <?> "entry"
+    let entry = pipe4 (getPosition) (key) (opt value) (desc .>> spaces) (fun p k v d -> {key = k; value = v; desc = d; position = p}) <?> "entry"
     let comment = pstring "#" >>. restOfLine true .>> spaces <?> "comment"
     let file = many (attempt comment) >>. pipe2 (key) (many ((attempt comment |>> (fun _ -> None)) <|> (entry |>> Some)) .>> eof) (fun k es -> {key = k; entries = List.choose id es}) <?> "file"
 

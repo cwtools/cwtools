@@ -19,6 +19,7 @@ open CWTools.Validation.STLLocalisationValidation
 open CWTools.Validation.STLEventValidation
 open CWTools.Process.ProcessCore
 open CWTools.Parser.Types
+open CWTools.Validation.STLLocalisationString
 
 
 
@@ -401,17 +402,23 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
         let localisationCheck (entities : (Entity * Lazy<STLComputedData>) list) =
             eprintfn "Localisation check %i files" (entities.Length)
             let keys = localisationAPIs |> List.groupBy (fun l -> l.GetLang) |> List.map (fun (k, g) -> k, g |>List.collect (fun ls -> ls.GetKeys) |> Set.ofList )
+            let entries = localisationAPIs |> List.groupBy (fun l -> l.GetLang) |> List.map (fun (k, g) -> k, g |> List.collect (fun ls -> ls.ValueMap |> Map.toList) |> Map.ofList)
             
             let validators = [valEventLocs; valTechLocs; valCompSetLocs; valCompTempLocs; valBuildingLocs; valTraditionLocCats; valArmiesLoc;
                                  valArmyAttachmentLocs; valDiploPhrases; valShipLoc; valFactionDemands; valSpeciesRightsLocs;
                                  valMapsLocs; valMegastructureLocs; valModifiers; valModules; valTraits; valGoverments; valPersonalities;
                                  valEthics; valPlanetClasses; valEdicts; valPolicies; valSectionTemplates; valSpeciesNames; valStratRes;
-                                 valAmbient; valDeposits; valWarGoals; valEffectLocs; valTriggerLocs; valBuildingTags; valOpinionModifiers]
+                                 valAmbient; valDeposits; valWarGoals; valEffectLocs; valTriggerLocs; valBuildingTags; valOpinionModifiers;]
             let oldEntities = EntitySet (resources.AllEntities())
             let newEntities = EntitySet entities
 
-            validators |> List.map (fun v -> v oldEntities keys newEntities) |> List.fold (<&&>) OK
-                       |> (function |Invalid es -> es |_ -> [])
+            let apiValidators = [validateLocalisation]
+            let apiVs = entries <&!&> (fun l -> apiValidators |> List.fold (fun s v -> s <&&> v l) OK)
+                             |> (function |Invalid es -> es |_ -> [])
+            
+            let vs = (validators |> List.map (fun v -> v oldEntities keys newEntities) |> List.fold (<&&>) OK
+                       |> (function |Invalid es -> es |_ -> []))
+            apiVs @ vs               
              
 
         let updateFile filepath =
