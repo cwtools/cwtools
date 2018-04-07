@@ -142,7 +142,9 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
         // let mutable scriptedTriggers : Effect list = []
         // let mutable scriptedEffects : Effect list = []
         // let mutable staticModifiers : Modifier list = []
-        let mutable localisationAPIs : ILocalisationAPI list = []
+        let mutable localisationAPIs : (bool * ILocalisationAPI) list = []
+        let allLocalisation() = localisationAPIs |> List.map snd
+        let validatableLocalisation() = localisationAPIs |> List.choose (fun (validate, api) -> if validate then Some api else None)
         let mutable localisationErrors : (string * Severity * CWTools.Parser.Types.Position * int * string * string option) list option = None
 
         let rec getAllFolders dirs =
@@ -314,7 +316,7 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
         let updateLocalisation() = 
             localisationAPIs <-
                 let locs = locFolders |> PSeq.ofList |> PSeq.map (fun (folder, _) -> STLLocalisationService({ folder = folder})) |> PSeq.toList
-                let allLocs = locs |> List.collect (fun l -> (STL STLLang.Default :: langs)|> List.map (fun lang -> l.Api(lang)))
+                let allLocs = locs |> List.collect (fun l -> (STL STLLang.Default :: langs)|> List.map (fun lang -> true, l.Api(lang)))
                 match gameDirectory with
                 |Some _ -> allLocs
                 |None ->  
@@ -322,7 +324,7 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
                     |> List.filter (fun (_, fn, _ )-> fn.Contains("localisation"))
                     |> List.map (fun (_, fn, f) -> (fn, f))
                     |> (fun files -> STLLocalisationService(files))
-                    |> (fun l -> (STL STLLang.Default :: langs) |> List.map (fun lang -> l.Api(lang))))
+                    |> (fun l -> (STL STLLang.Default :: langs) |> List.map (fun lang -> false, l.Api(lang))))
             //TODO: Add loc from embedded
 
         let updateDefinedVariables() =
@@ -401,8 +403,9 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
         
         let localisationCheck (entities : (Entity * Lazy<STLComputedData>) list) =
             eprintfn "Localisation check %i files" (entities.Length)
-            let keys = localisationAPIs |> List.groupBy (fun l -> l.GetLang) |> List.map (fun (k, g) -> k, g |>List.collect (fun ls -> ls.GetKeys) |> Set.ofList )
-            let entries = localisationAPIs |> List.groupBy (fun l -> l.GetLang) |> List.map (fun (k, g) -> k, g |> List.collect (fun ls -> ls.ValueMap |> Map.toList) |> Map.ofList)
+            let keys = allLocalisation() |> List.groupBy (fun l -> l.GetLang) |> List.map (fun (k, g) -> k, g |>List.collect (fun ls -> ls.GetKeys) |> Set.ofList )
+            //let allEntries = allLocalisation() |> List.groupBy (fun l -> l.GetLang) |> List.map (fun (k, g) -> k, g |> List.collect (fun ls -> ls.ValueMap |> Map.toList) |> Map.ofList)
+            let validatableEntries = validatableLocalisation() |> List.groupBy (fun l -> l.GetLang) |> List.map (fun (k, g) -> k, g |> List.collect (fun ls -> ls.ValueMap |> Map.toList) |> Map.ofList)
             
             let validators = [valEventLocs; valTechLocs; valCompSetLocs; valCompTempLocs; valBuildingLocs; valTraditionLocCats; valArmiesLoc;
                                  valArmyAttachmentLocs; valDiploPhrases; valShipLoc; valFactionDemands; valSpeciesRightsLocs;
@@ -413,7 +416,7 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
             let newEntities = EntitySet entities
 
             let apiValidators = [validateLocalisation]
-            let apiVs = entries <&!&> (fun l -> apiValidators |> List.fold (fun s v -> s <&&> v l) OK)
+            let apiVs = validatableEntries <&!&> (fun l -> apiValidators |> List.fold (fun s v -> s <&&> v l keys) OK)
                              |> (function |Invalid es -> es |_ -> [])
             
             let vs = (validators |> List.map (fun v -> v oldEntities keys newEntities) |> List.fold (<&&>) OK

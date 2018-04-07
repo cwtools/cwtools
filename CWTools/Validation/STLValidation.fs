@@ -34,8 +34,10 @@ module STLValidation =
             let fNode = (fun (x : Node) acc ->
                             match x with
                             | :? EffectBlock as e -> e::acc
+                            | :? Option as e -> e.AsEffectBlock::acc
                             |_ -> acc
                                 )
+                           
             this.All |> List.collect (foldNode7 fNode)
         member this.AllTriggers= 
             let fNode = (fun (x : Node) acc ->
@@ -315,16 +317,7 @@ module STLValidation =
             else copy value (s.GetValue(target,null))
         )
 
-    let filterOptionToEffects (o : STLProcess.Option) =
-        let optionTriggers = ["trigger"; "allow"; "exclusive_trigger"]
-        let optionEffects = ["tooltip";]
-        let optionExcludes = ["name"; "custom_tooltip"; "response_text"; "is_dialog_only"; "sound"; "ai_chance"; "custom_gui"; "default_hide_option"] @ optionTriggers @ optionEffects
-        let newO = Option(o.Key, o.Position)
-        copy o newO
-        newO.All <- newO.All |> List.filter (function |LeafC l -> (not (List.contains l.Key optionExcludes)) | _ -> true)
-        newO.All <- newO.All |> List.filter (function |NodeC l -> (not (List.contains l.Key optionExcludes)) | _ -> true)
-        newO.Scope <- o.Scope
-        newO :> Node
+
 
     let valEffectsNew (triggers : EffectMap) (effects : EffectMap) (modifiers : Modifier list) (effectBlock : Node) =
         let scope = { Root = effectBlock.Scope; From = []; Scopes = [effectBlock.Scope]}
@@ -548,7 +541,8 @@ module STLValidation =
                     )
         let opts = es.All |> List.collect (foldNode7 foNode) |> List.map filterOptionToEffects
         let effects = es.All |> List.collect (foldNode7 fNode) |> List.map (fun f -> f :> Node)
-        effects @ opts |> List.collect findAllSetVariables  
+        //effects @ opts |> List.collect findAllSetVariables  
+        es.AllEffects |> List.collect findAllSetVariables
 
     let getEntitySetVariables (e : Entity) =
         let fNode = (fun (x : Node) acc ->
@@ -561,7 +555,7 @@ module STLValidation =
                     | (:? Option as x) -> x::acc
                     | _ -> acc
                     )
-        let opts = e.entity |> (foldNode7 foNode) |> List.map filterOptionToEffects
+        let opts = e.entity |> (foldNode7 foNode) |> List.map filterOptionToEffects |> List.map (fun n -> n :> Node)
         let effects = e.entity |> (foldNode7 fNode) |> List.map (fun f -> f :> Node)
         effects @ opts |> List.collect findAllSetVariables
 

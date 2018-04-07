@@ -10,7 +10,7 @@ open DotNet.Globbing
 open System
 open CWTools.Utilities.Utils
 
-module STLProcess =
+module rec STLProcess =
     let toTriggerBlockKeys = ["limit"; "trigger"; "allow"]
     let _targetKeys = ["THIS"; "ROOT"; "PREV"; "FROM"; "OWNER"; "CONTROLLER"; "CAPITAL"; "SOLAR_SYSTEM"; "LEADER"; "RANDOM"; "FROMFROM"; "FROMFROMFROM"; "FROMFROMFROMFROM"; "PREVPREV"; "PREVPREVPREV"; "PREVPREVPREVPREV";
                         "CAPITAL_SCOPE"]//Added used in STH]
@@ -106,6 +106,30 @@ module STLProcess =
         let savetargets = findAllSavedEventTargets node
         let usedtargets = findAllUsedEventTargets node
         ScriptedEffect(node.Key, scopes |> Set.toList, effectType, commentString, globals |> Set.toList, savetargets |> Set.toList, usedtargets |> Set.toList)
+    let rec copy source target =
+        let properties (x:obj) = x.GetType().GetProperties()
+        query {
+            for s in properties source do
+            join t in properties target on (s.Name = t.Name)
+            where t.CanWrite
+            select s }
+        |> Seq.iter (fun s ->
+            let value = s.GetValue(source,null)
+            if value.GetType().FullName.StartsWith("System.") 
+            then s.SetValue(target, value, null)            
+            else copy value (s.GetValue(target,null))
+        )
+    let filterOptionToEffects (o : Option) =
+        let optionTriggers = ["trigger"; "allow"; "exclusive_trigger"]
+        let optionEffects = ["tooltip";]
+        let optionExcludes = ["name"; "custom_tooltip"; "response_text"; "is_dialog_only"; "sound"; "ai_chance"; "custom_gui"; "default_hide_option"] @ optionTriggers @ optionEffects
+        let newO = EffectBlock(o.Key, o.Position)
+        copy o newO
+        newO.All <- newO.All |> List.filter (function |LeafC l -> (not (List.contains l.Key optionExcludes)) | _ -> true)
+        newO.All <- newO.All |> List.filter (function |NodeC l -> (not (List.contains l.Key optionExcludes)) | _ -> true)
+        newO.Scope <- o.Scope
+        newO
+        //newO :> Node
 
     type Ship (key, pos) =
         inherit Node(key, pos)
@@ -135,7 +159,9 @@ module STLProcess =
     type TriggerBlock(key, pos) = 
         inherit Node(key, pos)
         member val InEffectBlock : bool = false with get, set
-    type Option(key, pos) = inherit Node(key, pos)
+    type Option(key, pos) = 
+        inherit Node(key, pos)
+        member this.AsEffectBlock = filterOptionToEffects this
     type ModifierBlock(key, pos) = inherit Node(key, pos)
     type WeightBlock(key, pos) = inherit Node(key, pos)
     type WeightModifierBlock(key, pos) = inherit Node(key, pos)

@@ -19,20 +19,24 @@ module STLLocalisationString =
     | Ref of string
     | Chars of string
     let valueChars = many1Satisfy ( (<>) '$' )
-    let ref = between (skipChar '$') (skipChar '$') (valueChars |>> Ref)
+
+    let dollarChars = many1Satisfy ( isNoneOf ['$'; '|'] )
+    let dollarColour = pchar '|' .>> dollarChars
+    let ref = between (skipChar '$') (skipChar '$') (dollarChars .>> optional dollarColour |>> Ref)
     let locStringParser = many (valueChars |>> Chars <|> ref) .>> eof
 
     let parseLocString fileString filename = runParserOnString locStringParser () filename fileString
 
-    let validateLocalisation (api : (Lang * Map<string, Entry>)) =
+    let validateLocalisation (api : (Lang * Map<string, Entry>)) (keys : (Lang * Set<string>) list) =
         let lang = api |> fst
+        let keys = keys |> List.filter (fun (l, _) -> l = lang) |> List.map snd |> List.fold Set.union Set.empty
         let all = api |> snd
         let extractResult =
             function
             |Success (v, _, _) -> v
             |Failure _ -> []
         let checkRef (entry : Entry) (r : string) =
-            match all.ContainsKey r with
+            match keys.Contains r with
             | true -> OK
             | false ->
                 Invalid [invManual (ErrorCodes.UndefinedLocReference entry.key r (lang :> obj)) (Position.Conv entry.position) entry.key None ]
