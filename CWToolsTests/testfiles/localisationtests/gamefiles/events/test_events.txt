@@ -4,4 +4,7 @@ planet_event = {
         text = "test_required"
     }
     desc = "test_required"
+    after ={
+        save_global_event_target_as = defined_event
+    }
 }

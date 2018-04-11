@@ -98,7 +98,7 @@ let tests =
             testList "with loc" [
                 
                 let locfiles = "localisation/l_english.yml", File.ReadAllText("./testfiles/localisationtests/localisation/l_english.yml")
-                let stl = STLGame("./testfiles/localisationtests/gamefiles", FilesScope.All, "", [], [], [], [locfiles], [STL STLLang.English], false, true)
+                let stl = STLGame("./testfiles/localisationtests/gamefiles", FilesScope.All, "", [], [], [], [locfiles], [STL STLLang.English; STL STLLang.German], false, true)
                 let parseErrors = stl.ParserErrors
                 yield testCase ("parse") <| fun () -> Expect.isEmpty parseErrors (parseErrors |> List.tryHead |> Option.map (sprintf "%A") |> Option.defaultValue "")
 
@@ -110,6 +110,10 @@ let tests =
                     Expect.isEmpty missing (sprintf "Missing required despite having key %s" file)
                     Expect.isEmpty (extra) (sprintf "Incorrect required %s" file)
                 yield! testLocKeys |> List.map (fun (f, t) -> testCase (f.ToString()) <| fun () -> inner (f, t))
+                eprintfn "%A" stl.LocalisationErrors
+                let globalLocError = stl.LocalisationErrors |> List.filter (fun (c, s, n, l, f, k) -> c = "CW225" || c = "CW226")
+                yield testCase "globalLoc" <| fun () ->
+                    Expect.hasCountOf globalLocError 3u (fun f -> true) "wrong number of errors"
             ]
     ]
     

@@ -1,0 +1,10 @@
+l_german:
+  #error
+  missing_ref:0 "Test $notreal$"
+  has_ref:0 "Tets $missing_ref$"
+  #error
+  missing_event:0 "[missing.GetName]"
+  defined_event:0 "[defined_event.GetName]"
+  #error
+  missing_command:0 "[defined_event.NotReal]"
+  defined_scipted_loc:0 "[defined_event.DefLoc]"

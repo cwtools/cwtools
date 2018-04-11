@@ -1,0 +1,15 @@
+defined_text = {
+	name = DefLoc
+	text = {
+		trigger = {
+			has_ethic = ethic_gestalt_consciousness
+		}
+		localization_key = sm_trading_hub_gestalt
+	}
+	text = {
+		trigger = {
+			NOT = { has_ethic = ethic_gestalt_consciousness }
+		}
+		localization_key = sm_trading_hub
+	}
+}
