@@ -11,6 +11,7 @@ open DotNet.Globbing
 open CWTools.Validation.STLValidation
 open System.Xml.Linq
 open System.Threading
+open CWTools.Utilities.Utils
 
 module STLLocalisationValidation =
     type S = Severity

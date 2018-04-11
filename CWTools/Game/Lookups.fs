@@ -14,3 +14,4 @@ type Lookup() =
     member val staticModifiers : Modifier list = [] with get, set
     member val coreModifiers : Modifier list = [] with get, set
     member val definedScriptVariables : string list = [] with get, set
+    member val scriptedLoc : string list = [] with get, set

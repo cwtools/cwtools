@@ -54,6 +54,7 @@ module STLValidation =
     type STLComputedData = {
         eventids : string list
         setvariables : string list
+        savedeventtargets : string list
     }
     type STLEntitySet = EntitySet<STLComputedData>
     type StructureValidator = EntitySet<STLComputedData> -> EntitySet<STLComputedData> -> ValidationResult
@@ -706,10 +707,34 @@ module STLValidation =
         let fCombine = (<&&>)
         es.All <&!&> foldNode2 foNode fCombine OK
 
+    let findAllSavedEventTargets (event : Node) =
+        let fNode = (fun (x : Node) children ->
+                        let inner (leaf : Leaf) = if leaf.Key == "save_event_target_as" || leaf.Key == "save_global_event_target_as" then Some (leaf.Value.ToRawString()) else None
+                        (x.Values |> List.choose inner) @ children
+                        )
+        let fCombine = (@)
+        event |> (foldNode2 fNode fCombine [])
+
+    let findAllSavedEventTargetsInEntity (e : Entity) =
+        let fNode = (fun (x : Node) acc ->
+                    match x with
+                    | (:? EffectBlock as x) -> x::acc
+                    | _ -> acc
+                    )
+        let foNode = (fun (x : Node) acc ->
+                    match x with
+                    | (:? Option as x) -> x::acc
+                    | _ -> acc
+                    )
+        let opts = e.entity |> (foldNode7 foNode) |> List.map filterOptionToEffects |> List.map (fun n -> n :> Node)
+        let effects = e.entity |> (foldNode7 fNode) |> List.map (fun f -> f :> Node)
+        effects @ opts |> List.collect findAllSavedEventTargets
+
 
     let computeSTLData (e : Entity) =
         let eventIds = if e.entityType = EntityType.Events then e.entity.Children |> List.choose (function | :? Event as e -> Some e.ID |_ -> None) else []
         {
             eventids = eventIds
             setvariables = getEntitySetVariables e
+            savedeventtargets = findAllSavedEventTargetsInEntity e
         }

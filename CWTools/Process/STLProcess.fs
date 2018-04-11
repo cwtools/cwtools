@@ -351,6 +351,9 @@ module rec STLProcess =
         |("country_attraction", _, {parents = "ethic"::_;}) ->  processNodeSimple<WeightBlock>, "weightblock",  (fun c -> { c with complete = true; scope = "country"});
         |("pop_attraction", _, {parents = "ethic"::_;}) ->  processNodeSimple<WeightBlock>, "weightblock",  (fun c -> { c with complete = true; scope = "pop"});
         |("modifier", _, {parents = "weightblock"::"ethic"::_;}) ->  scopedProcessNode<WeightModifierBlock>, "weightmodifierblock", id;
+        //Fallen empires
+        |(_, _, {complete = false; entityType = EntityType.FallenEmpires})  ->  processNodeSimple<Node>, "fallenempire",  (fun c -> { c with complete = true;});
+        |("create_country_effect", _, {parents = "fallenempire"::_;}) ->  specificScopeProcessNode<EffectBlock> Scope.Any, "effectblock", id;
         //Government
         |(_, _, {complete = false; entityType = EntityType.Governments})  ->  processNodeSimple<Node>, "government",  (fun c -> { c with complete = true;});
         |("weight", _, {parents = "government"::_;}) ->  processNodeSimple<WeightBlock>, "weightblock", id;
@@ -520,6 +523,7 @@ module rec STLProcess =
         |("ai_weight"), _, {parents = "terraform"::_;} -> processNodeSimple<WeightBlock>, "weightblock", id;
         |("modifier"), _, {parents = "weightblock"::"terraform"::_;} -> specificScopeProcessNode<WeightModifierBlock> Scope.Country, "weightmodifierblock", id;
         //Tile blockers
+        ////I believe from in deposits and tile blockers is planet
         |(_, _, {complete = false; entityType = EntityType.TileBlockers})  ->  processNodeSimple<Node>, "tileblocker",  (fun c -> { c with complete = true;});
         |("spawn_chance"), _, {parents = "tileblocker"::_;} -> processNodeSimple<WeightBlock>, "weightblock", id;
         |("modifier"), _, {parents = "weightblock"::"tileblocker"::_;} -> specificScopeProcessNode<WeightModifierBlock> Scope.Tile, "weightmodifierblock", id;

@@ -2,6 +2,7 @@ namespace CWTools.Process
 
 open NodaTime.TimeZones
 open System
+open CWTools.Localisation
 module STLScopes =
     open CWTools.Common.STLConstants
     open CWTools.Utilities.Utils
@@ -418,3 +419,68 @@ module STLScopes =
                 |None -> None
                 |Some e -> Some e.Scopes
         keys |> List.fold (fun acc k -> match acc with |Some e -> Some e |None -> inner k) None |> Option.defaultValue allScopes
+    
+    type UsageScopeContext = Scope list
+    type ContextResult =
+    | Found of string * (Scope list)
+    | LocNotFound of string
+
+    let scopedLocEffects = [
+        ScopedEffect("capital", allScopes, Scope.Planet, EffectType.Both, defaultDesc, "");
+        ScopedEffect("system", allScopes, Scope.GalacticObject, EffectType.Both, defaultDesc, "");
+        ScopedEffect("solar_system", allScopes, Scope.GalacticObject, EffectType.Both, defaultDesc, "");
+        ScopedEffect("owner", [Scope.Ship; Scope.Pop; Scope.Fleet; Scope.Planet; Scope.PopFaction; Scope.Sector; Scope.Leader; Scope.Country; Scope.Starbase; Scope.Tile; Scope.GalacticObject], Scope.Country, EffectType.Both, "", "");
+        ScopedEffect("planet", [Scope.Pop; Scope.Tile; Scope.Planet], Scope.Planet, EffectType.Both, defaultDesc, "");
+        ScopedEffect("leader", [Scope.Ship; Scope.Planet; Scope.Country; Scope.PopFaction; Scope.Fleet; Scope.Sector], Scope.Leader, EffectType.Both, "", "");
+        ScopedEffect("species", [Scope.Country; Scope.Ship; Scope.Leader; Scope.Pop], Scope.Species, EffectType.Both, defaultDesc, "");
+        ScopedEffect("fleet", [Scope.Ship; Scope.Starbase], Scope.Fleet, EffectType.Both, defaultDesc, "");
+        ScopedEffect("ship", [Scope.Leader], Scope.Ship, EffectType.Both, defaultDesc, "");
+        ScopedEffect("ruler", [Scope.Country], Scope.Leader, EffectType.Both, defaultDesc, "");
+    ]
+    let scopedLocEffectsMap = EffectMap.FromList(STLStringComparer(), scopedLocEffects |> List.map (fun se -> se.Name, se :> Effect))
+
+    
+    let locPrimaryScopes = 
+        let from = fun (s, change) -> {s with Scopes = Scope.Any::s.Scopes}, true
+        let prev = fun (s, change) -> {s with Scopes = s.PopScope}, true
+        [
+        "THIS", id;
+        "ROOT", fun (s, change) -> {s with Scopes = s.Root::s.Scopes}, true;
+        "FROM", from; //TODO Make it actually use FROM
+        "FROMFROM", from >> from;
+        "FROMFROMFROM", from >> from >> from;
+        "FROMFROMFROMFROM", from >> from >> from >> from;
+        "PREV", prev;
+        "PREVPREV", prev >> prev;
+        "PREVPREVPREV", prev >> prev >> prev;
+        "PREVPREVPREVPREV", prev >> prev >> prev >> prev
+        "Recipient", id;
+        "Actor", id;
+        "Third_party", id;
+        ]
+    
+    let localisationCommandContext (commands : string list) (eventtargets : string list) (setvariables : string list) (entry : Entry) (command : string) =
+        let keys = command.Split('.') |> List.ofArray
+        let inner ((first : bool), (rootScope : string), (scopes : Scope list)) (nextKey : string) =
+            let onetoone = locPrimaryScopes |> List.tryFind (fun (k, _) -> k == nextKey)
+            match onetoone with
+            | Some (_) -> Found (nextKey, []), false
+            | None -> 
+                let effectMatch = scopedLocEffectsMap.TryFind nextKey |> Option.bind (function | :? ScopedEffect as e -> Some e |_ -> None)
+                match effectMatch with
+                | Some e -> Found (rootScope, e.Scopes), false
+                | None -> 
+                    let matchedCommand = (commands)  |> List.tryFind (fun c -> c == nextKey)
+                    match matchedCommand, first, nextKey.StartsWith("parameter:", StringComparison.OrdinalIgnoreCase) with
+                    |Some _, _, _ -> Found (rootScope, scopes), false
+                    | _, _, true -> Found (rootScope, scopes), false
+                    |None, false, false -> 
+                        match setvariables |> List.exists (fun sv -> sv == nextKey) with
+                        | true -> Found (rootScope, scopes), false
+                        | false -> LocNotFound (nextKey), false
+                    |None, true, false ->
+                        match eventtargets |> List.exists (fun et -> et == nextKey) with
+                        | true -> Found (rootScope, scopes), false
+                        | false -> LocNotFound (nextKey), false
+        keys |> List.fold (fun r k -> match r with | (Found (r, s) , f) -> inner ((f, r, s)) k |LocNotFound s, _ -> LocNotFound s, false) (Found ("this", []), true) |> fst                
+        //keys |> List.fold (fun (e, r, s) k -> if e then (e, r, s) else inner (e, r, s) k) (false, "this", [])

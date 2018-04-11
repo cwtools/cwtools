@@ -20,6 +20,7 @@ open CWTools.Validation.STLEventValidation
 open CWTools.Process.ProcessCore
 open CWTools.Parser.Types
 open CWTools.Validation.STLLocalisationString
+open CWTools.Utilities.Utils
 
 
 
@@ -311,7 +312,14 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
                 |> List.rev
             let newModifiers = rawModifiers |> List.map (fun e -> STLProcess.getStaticModifierCategory modifiers e)
             lookup.staticModifiers <- newModifiers
-        
+
+        let updateScriptedLoc () =
+            let rawLocs =
+                resources.AllEntities()
+                |> List.choose (function |(f, _) when f.filepath.Contains("scripted_loc") -> Some (f.entity) |_ -> None)
+                |> List.collect (fun n -> n.Children)
+                |> List.map (fun l -> l.TagText "name")
+            lookup.scriptedLoc <- rawLocs
         
         let updateLocalisation() = 
             localisationAPIs <-
@@ -400,42 +408,50 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
             //let etres = getEventChains newEntities |> (function |Invalid es -> es |_ -> [])
             //(validateShips (flattened)) @ (validateEvents (flattened)) @ res @ fres @ eres
             (validateShips (flattened)) @ (validateEvents (flattened)) @ res @ fres @ eres @ tres @ mres @ evres @ wres
-        
         let localisationCheck (entities : (Entity * Lazy<STLComputedData>) list) =
             eprintfn "Localisation check %i files" (entities.Length)
             let keys = allLocalisation() |> List.groupBy (fun l -> l.GetLang) |> List.map (fun (k, g) -> k, g |>List.collect (fun ls -> ls.GetKeys) |> Set.ofList )
             //let allEntries = allLocalisation() |> List.groupBy (fun l -> l.GetLang) |> List.map (fun (k, g) -> k, g |> List.collect (fun ls -> ls.ValueMap |> Map.toList) |> Map.ofList)
-            let validatableEntries = validatableLocalisation() |> List.groupBy (fun l -> l.GetLang) |> List.map (fun (k, g) -> k, g |> List.collect (fun ls -> ls.ValueMap |> Map.toList) |> Map.ofList)
             
             let validators = [valEventLocs; valTechLocs; valCompSetLocs; valCompTempLocs; valBuildingLocs; valTraditionLocCats; valArmiesLoc;
                                  valArmyAttachmentLocs; valDiploPhrases; valShipLoc; valFactionDemands; valSpeciesRightsLocs;
                                  valMapsLocs; valMegastructureLocs; valModifiers; valModules; valTraits; valGoverments; valPersonalities;
                                  valEthics; valPlanetClasses; valEdicts; valPolicies; valSectionTemplates; valSpeciesNames; valStratRes;
                                  valAmbient; valDeposits; valWarGoals; valEffectLocs; valTriggerLocs; valBuildingTags; valOpinionModifiers;]
-            let oldEntities = EntitySet (resources.AllEntities())
             let newEntities = EntitySet entities
-
-            let apiValidators = [validateLocalisation]
-            let apiVs = validatableEntries <&!&> (fun l -> apiValidators |> List.fold (fun s v -> s <&&> v l keys) OK)
-                             |> (function |Invalid es -> es |_ -> [])
-            
+            let oldEntities = EntitySet (resources.AllEntities())
             let vs = (validators |> List.map (fun v -> v oldEntities keys newEntities) |> List.fold (<&&>) OK
                        |> (function |Invalid es -> es |_ -> []))
-            apiVs @ vs               
-             
+            vs
+        
+        let globalLocalisation () =
+            let taggedKeys = allLocalisation() |> List.groupBy (fun l -> l.GetLang) |> List.map (fun (k, g) -> k, g |> List.collect (fun ls -> ls.GetKeys) |> List.fold (fun (s : LocKeySet) v -> s.Add v) (LocKeySet.Empty(STLStringComparer())) )
+
+            let validatableEntries = validatableLocalisation() |> List.groupBy (fun l -> l.GetLang) |> List.map (fun (k, g) -> k, g |> List.collect (fun ls -> ls.ValueMap |> Map.toList) |> Map.ofList)
+            let oldEntities = EntitySet (resources.AllEntities())
+
+            let apiValidators = [validateLocalisation]
+            let apiVs = validatableEntries <&!&> (fun l -> apiValidators |> List.fold (fun s v -> s <&&> v lookup.scriptedEffects lookup.scriptedLoc lookup.definedScriptVariables oldEntities l taggedKeys) OK)
+                             |> (function |Invalid es -> es |_ -> [])
+            apiVs                     
 
         let updateFile filepath =
             eprintfn "%s" filepath
-            let filepath = Path.GetFullPath(filepath)
-            let file = File.ReadAllText filepath
-            let newEntities = resources.UpdateFile (EntityResourceInput {scope = ""; filepath = filepath; filetext = file; validate = true})
             match filepath with
-            |x when x.Contains("scripted_triggers") -> updateScriptedTriggers()
-            |x when x.Contains("scripted_effects") -> updateScriptedEffects()
-            |x when x.Contains("static_modifiers") -> updateStaticodifiers()
-            |_ -> ()
-            updateDefinedVariables()
-            validateAll newEntities @ localisationCheck newEntities
+            |x when x.EndsWith (".yml") ->
+                updateLocalisation()
+                globalLocalisation()
+            | _ ->
+                let filepath = Path.GetFullPath(filepath)
+                let file = File.ReadAllText filepath
+                let newEntities = resources.UpdateFile (EntityResourceInput {scope = ""; filepath = filepath; filetext = file; validate = true})
+                match filepath with
+                |x when x.Contains("scripted_triggers") -> updateScriptedTriggers()
+                |x when x.Contains("scripted_effects") -> updateScriptedEffects()
+                |x when x.Contains("static_modifiers") -> updateStaticodifiers()
+                |_ -> ()
+                updateDefinedVariables()
+                validateAll newEntities @ localisationCheck newEntities
 
         do 
             eprintfn "Parsing %i files" allFilesByPath.Length
@@ -455,6 +471,7 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
             updateScriptedTriggers()
             updateScriptedEffects()
             updateStaticodifiers()
+            updateScriptedLoc()
             updateLocalisation()
             updateDefinedVariables()
             updateModifiers()
@@ -467,7 +484,7 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
             match localisationErrors with
             |Some les -> les
             |None -> 
-                let les = (localisationCheck (resources.ValidatableEntities()))
+                let les = (localisationCheck (resources.ValidatableEntities())) @ globalLocalisation()
                 localisationErrors <- Some les
                 les
         //member __.ValidationWarnings = warningsAll

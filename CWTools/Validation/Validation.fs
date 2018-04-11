@@ -58,6 +58,7 @@ module ValidationCore =
         static member IncorrectNotUsage = { ID = "CW223"; Severity = Severity.Information; Message = "Do not use NOT with multiple children, replace this with either NOR or NAND to avoid ambiguity"}
         static member RedundantBoolean = { ID = "CW224"; Severity = Severity.Information; Message = "This boolean operator is redundant" }
         static member UndefinedLocReference = fun (thisLoc : string) (otherLoc : string) language -> { ID = "CW225"; Severity = Severity.Error; Message = sprintf "Localisation key \"%s\" references \"%s\" which doesn't exist in %O" thisLoc otherLoc language}
+        static member InvalidLocCommand = fun (thisLoc : string) (command : string) -> { ID = "CW226"; Severity = Severity.Error; Message = sprintf "Localisation key \"%s\" uses command \"%s\" which doesn't exist" thisLoc command }
         static member CustomError = fun error -> { ID = "CW999"; Severity = Severity.Error; Message = error}
     type ValidationResult = 
         | OK
