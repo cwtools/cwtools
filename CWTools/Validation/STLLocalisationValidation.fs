@@ -208,6 +208,14 @@ module STLLocalisationValidation =
                     keyres <&&> failtext
             entities |> List.map inner |> List.fold (<&&>) OK
 
+    let valScriptedTriggers : LocalisationValidator =
+        fun _ keys es ->
+            let entities = es.AllOfTypeChildren EntityType.ScriptedTriggers
+            let inner = 
+                fun (node : Node) ->
+                    node.Children <&!&> (getLocKeys keys ["text"; "fail_text"])
+            entities |> List.map inner |> List.fold (<&&>) OK                
+
     let valTraditionLocs (node : Node) (keys : (Lang * Set<string>) list) (starts : string list) (finals : string list) (traditions : string list)= 
         let key = node.Key
         let finishres = 

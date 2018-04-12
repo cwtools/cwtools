@@ -369,34 +369,13 @@ module STLValidation =
         let fCombine = (<&&>)
         es.All <&!&> foldNode2 fNode fCombine OK 
 
-
-
-    // let valEventEffects (triggers : (Effect) list) (effects : (Effect) list) (modifiers : Modifier list) (event : Event) =
-    //     let eventScope = { Root = eventScope event; From = []; Scopes = [eventScope event]}
-    //     // let scopedTriggers = triggers |> List.map (fun e -> e, e.Scopes |> List.exists (fun s -> s = eventScope.CurrentScope)) 
-    //     // let scopedEffects = effects |> List.map (fun e -> e, e.Scopes |> List.exists (fun s -> s = eventScope.CurrentScope)) 
-    //     let desc = 
-    //         event.Childs "desc" 
-    //         <&!&> (fun n ->
-    //                 match n.Child "trigger" with
-    //                 |Some t -> valNodeTriggers event triggers effects modifiers eventScope [] t
-    //                 |None -> OK)
-    //     let imm = 
-    //         match event.Child "immediate" with
-    //         |Some n -> 
-    //             let v = List.map (valEventEffect event triggers effects modifiers eventScope) n.All
-    //             v |> List.fold (<&&>) OK
-    //         |None -> OK
-    //     let aft = 
-    //         match event.Child "after" with
-    //         |Some n -> 
-    //             let v = List.map (valEventEffect event triggers effects modifiers eventScope) n.All
-    //             v |> List.fold (<&&>) OK
-    //         |None -> OK
-    //     let opts = event.Childs "option" |> List.ofSeq |> List.map (fun o -> (valOption o triggers effects modifiers eventScope o))
-    //     let opts2 = opts |> List.fold (<&&>) OK
-    //     desc <&&> imm <&&> aft <&&> opts2
-
+    let valAfterOptionBug (event : Event) =
+        let fNode = (fun (x : Node) (children : bool) ->
+            (x.Values |> List.exists (fun v -> v.Key == "response_text") ) || children
+            )
+        let hasresponse = event |> foldNode2 fNode ((||)) false
+        let hasafter = event.Children |> List.exists (fun v -> v.Key == "after")
+        if hasresponse && hasafter then Invalid [inv (ErrorCodes.CustomError "This event uses after and has an option with response_text, this is bugged in 2.0.2") event] else OK
     /// Make sure an event either has a mean_time_to_happen or is stopped from checking all the time
     /// Not mandatory, but performance reasons, suggested by Caligula
     /// Check "mean_time_to_happen", "is_triggered_only", "fire_only_once" and "trigger = { always = no }".
@@ -412,9 +391,11 @@ module STLValidation =
                 | Some (Bool b) when b = false -> true
                 | _ -> false
             | None -> false
-        match isMTTH || isTrig || isOnce || isAlwaysNo with
-        | false -> Invalid [inv ErrorCodes.EventEveryTick event]
-        | true -> OK
+        let e = 
+            match isMTTH || isTrig || isOnce || isAlwaysNo with
+            | false -> Invalid [inv ErrorCodes.EventEveryTick event]
+            | true -> OK
+        e <&&> valAfterOptionBug event
 
     let valResearchLeader (area : string) (cat : string option) (node : Node) =
         let fNode = (fun (x:Node) children ->

@@ -1,0 +1,6 @@
+test_trigger = {
+    		custom_tooltip = {
+            text = "test_required"
+            fail_text = "test_required"
+		}
+}

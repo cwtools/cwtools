@@ -427,6 +427,7 @@ module STLScopes =
 
     let scopedLocEffects = [
         ScopedEffect("capital", allScopes, Scope.Planet, EffectType.Both, defaultDesc, "");
+        ScopedEffect("capital_scope", allScopes, Scope.Planet, EffectType.Both, defaultDesc, "");
         ScopedEffect("system", allScopes, Scope.GalacticObject, EffectType.Both, defaultDesc, "");
         ScopedEffect("solar_system", allScopes, Scope.GalacticObject, EffectType.Both, defaultDesc, "");
         ScopedEffect("owner", [Scope.Ship; Scope.Pop; Scope.Fleet; Scope.Planet; Scope.PopFaction; Scope.Sector; Scope.Leader; Scope.Country; Scope.Starbase; Scope.Tile; Scope.GalacticObject], Scope.Country, EffectType.Both, "", "");
