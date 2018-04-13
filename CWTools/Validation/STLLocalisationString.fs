@@ -38,7 +38,7 @@ module STLLocalisationString =
         [
             "playername"
         ]
-    let checkRef (lang : Lang) (keys : LocKeySet) (entry : Entry) (r : string) = 
+    let checkRef (lang : Lang) (keys : LocKeySet) (entry : LocEntry) (r : string) = 
         match keys.Contains r with
         | true -> OK
         | false ->
@@ -102,7 +102,7 @@ module STLLocalisationString =
         | ContextResult.Found _ -> OK
         | LocNotFound s -> Invalid [invManual (ErrorCodes.InvalidLocCommand entry.key s) (Position.Conv entry.position) entry.key None ]
 
-    let validateLocalisation (effects : Effect list) (scriptedLoc : string list) (setvariables : string list) (os : STLEntitySet) (api : (Lang * Map<string, Entry>)) (keys : (Lang * LocKeySet) list) =
+    let processLocalisation (effects : Effect list) (scriptedLoc : string list) (setvariables : string list) (os : STLEntitySet) (api : (Lang * Map<string, Entry>)) (keys : (Lang * LocKeySet) list) =
         let lang = api |> fst
         let keys = keys |> List.filter (fun (l, _) -> l = lang) |> List.map snd |> List.fold (fun a b -> LocKeySet.Union (a, b)) (LocKeySet.Empty(STLStringComparer()))
         let all = api |> snd
@@ -113,8 +113,41 @@ module STLLocalisationString =
             function
             |Success (v, _, _) -> v
             |Failure _ -> []
+        let parseLoc (e : Entry) = parseLocString e.desc "" |> extractResult |> List.choose (function |Command s -> Some s |_ -> None)
+        let parseLocRef (e : Entry) = parseLocString e.desc "" |> extractResult |> List.choose (function |Ref s -> Some s |_ -> None)
+        let result = api |> (fun (f, s) -> f, s |> Map.map (fun _ m -> {LocEntry.key = m.key; value = m.value; desc = m.desc; position = m.position; refs = parseLocRef m; scopes = parseLoc m |> List.map (fun s -> localisationCommandContext (scriptedLoc @ commands) eventtargets setvariables m s) }))
+        result
+        // let parsed = all |> Map.map (fun k v -> v, parseLocString v.desc "" |> extractResult)
+        // (parsed |> Map.toList <&!&> (fun (k, (e, v)) -> v |> List.choose (function |Command s -> Some s |_ -> None) <&!&> localisationCommandContext e (scriptedLoc @ commands) eventtargets setvariables ))
+
+    let validateProcessedLocalisation (keys : (Lang * LocKeySet) list) (api : (Lang * Map<string, LocEntry>) list) =
+        let validateContextResult (e : LocEntry) cr =
+            match cr with
+            | ContextResult.Found _ -> OK
+            | LocNotFound s -> Invalid [invManual (ErrorCodes.InvalidLocCommand e.key s) (Position.Conv e.position) e.key None ]
+        let validateLocMap (lang, (m : Map<string, LocEntry>)) = 
+            let keys = keys |> List.filter (fun (l, _) -> l = lang) |> List.map snd |> List.fold (fun a b -> LocKeySet.Union (a, b)) (LocKeySet.Empty(STLStringComparer()))
+            m |> Map.map (fun _ e -> e.refs <&!&> checkRef lang keys e) |> Map.toList |> List.map snd |> List.fold (<&&>) OK
+            <&&>
+            (m |> Map.map (fun _ e -> e.scopes <&!&> validateContextResult e) |> Map.toList |> List.map snd |> List.fold (<&&>) OK)
+        //let validateLocMap2 (l, (m : Map<string, LocEntry>)) = m |> Map.map (fun _ e -> e.refs <&!&> checkRef l keys e) |> Map.toList |> List.map snd |> List.fold (<&&>) OK
+        
+        api <&!&> validateLocMap
+        // <&&>
+        // (api <&!&> (fun (l, m) -> m.refs <&!&> checkRef l keys m))
+    // let validateLocalisation (effects : Effect list) (scriptedLoc : string list) (setvariables : string list) (os : STLEntitySet) (api : (Lang * Map<string, Entry>)) (keys : (Lang * LocKeySet) list) =
+    //     let lang = api |> fst
+    //     let keys = keys |> List.filter (fun (l, _) -> l = lang) |> List.map snd |> List.fold (fun a b -> LocKeySet.Union (a, b)) (LocKeySet.Empty(STLStringComparer()))
+    //     let all = api |> snd
+    //     let eventtargetsnormal = (os.AllWithData |> List.collect (fun (_, d) -> d.Force().savedeventtargets))
+    //     let eventtargetsglobal = effects |> List.choose (function | :? ScriptedEffect as e -> Some e |_ -> None) |> List.collect (fun e -> e.GlobalEventTargets @ e.SavedEventTargets)
+    //     let eventtargets = eventtargetsnormal @ eventtargetsglobal
+    //     let extractResult =
+    //         function
+    //         |Success (v, _, _) -> v
+    //         |Failure _ -> []
                 
-        let parsed = all |> Map.map (fun k v -> v, parseLocString v.desc "" |> extractResult)
-        parsed |> Map.toList <&!&> (fun (k, (e, v)) -> v |> List.choose (function |Ref s -> Some s |_ -> None) <&!&> checkRef lang keys e )
-        <&&>
-        (parsed |> Map.toList <&!&> (fun (k, (e, v)) -> v |> List.choose (function |Command s -> Some s |_ -> None) <&!&> checkCommand e (scriptedLoc @ commands) eventtargets setvariables ))
+    //     let parsed = all |> Map.map (fun k v -> v, parseLocString v.desc "" |> extractResult)
+    //     parsed |> Map.toList <&!&> (fun (k, (e, v)) -> v |> List.choose (function |Ref s -> Some s |_ -> None) <&!&> checkRef lang keys e )
+    //     <&&>
+    //     (parsed |> Map.toList <&!&> (fun (k, (e, v)) -> v |> List.choose (function |Command s -> Some s |_ -> None) <&!&> checkCommand e (scriptedLoc @ commands) eventtargets setvariables ))

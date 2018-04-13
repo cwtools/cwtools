@@ -424,7 +424,15 @@ module STLScopes =
     type ContextResult =
     | Found of string * (Scope list)
     | LocNotFound of string
-
+    //| Failed
+    type LocEntry = {
+        key : string
+        value : char option
+        desc : string
+        position : FParsec.Position
+        scopes : ContextResult list
+        refs : string list
+    }
     let scopedLocEffects = [
         ScopedEffect("capital", allScopes, Scope.Planet, EffectType.Both, defaultDesc, "");
         ScopedEffect("capital_scope", allScopes, Scope.Planet, EffectType.Both, defaultDesc, "");

@@ -293,3 +293,4 @@ module STLConstants =
     |Interface = 87
     |Gfx = 88
     |Other = 89
+

@@ -333,6 +333,9 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
                     |> List.map (fun (_, fn, f) -> (fn, f))
                     |> (fun files -> STLLocalisationService(files))
                     |> (fun l -> (STL STLLang.Default :: langs) |> List.map (fun lang -> false, l.Api(lang))))
+            let taggedKeys = allLocalisation() |> List.groupBy (fun l -> l.GetLang) |> List.map (fun (k, g) -> k, g |> List.collect (fun ls -> ls.GetKeys) |> List.fold (fun (s : LocKeySet) v -> s.Add v) (LocKeySet.Empty(STLStringComparer())) )
+            let validatableEntries = validatableLocalisation() |> List.groupBy (fun l -> l.GetLang) |> List.map (fun (k, g) -> k, g |> List.collect (fun ls -> ls.ValueMap |> Map.toList) |> Map.ofList)
+            lookup.proccessedLoc <- validatableEntries |> List.map (fun f -> processLocalisation lookup.scriptedEffects lookup.scriptedLoc lookup.definedScriptVariables (EntitySet (resources.AllEntities())) f taggedKeys)
             //TODO: Add loc from embedded
 
         let updateDefinedVariables() =
@@ -431,10 +434,11 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
             let validatableEntries = validatableLocalisation() |> List.groupBy (fun l -> l.GetLang) |> List.map (fun (k, g) -> k, g |> List.collect (fun ls -> ls.ValueMap |> Map.toList) |> Map.ofList)
             let oldEntities = EntitySet (resources.AllEntities())
 
-            let apiValidators = [validateLocalisation]
-            let apiVs = validatableEntries <&!&> (fun l -> apiValidators |> List.fold (fun s v -> s <&&> v lookup.scriptedEffects lookup.scriptedLoc lookup.definedScriptVariables oldEntities l taggedKeys) OK)
-                             |> (function |Invalid es -> es |_ -> [])
-            apiVs                     
+            // let apiValidators = [validateLocalisation]
+            // let apiVs = validatableEntries <&!&> (fun l -> apiValidators |> List.fold (fun s v -> s <&&> v lookup.scriptedEffects lookup.scriptedLoc lookup.definedScriptVariables oldEntities l taggedKeys) OK)
+            //                  |> (function |Invalid es -> es |_ -> [])
+            //apiVs    
+            lookup.proccessedLoc |> validateProcessedLocalisation taggedKeys |> (function |Invalid es -> es |_ -> [])          
 
         let updateFile filepath =
             eprintfn "%s" filepath
