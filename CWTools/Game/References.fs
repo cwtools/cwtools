@@ -7,6 +7,9 @@ open CWTools.Parser
 open CWTools.Process.STLProcess
 open CWTools.Process.STLScopes
 
+
+
+
 type References<'T>(resourceManager : IResourceAPI<'T>, lookup : Lookup) =
     let entities() = resourceManager.AllEntities() |> List.map (fun (e, _) -> e.entity)
     let events() = 
@@ -23,3 +26,4 @@ type References<'T>(resourceManager : IResourceAPI<'T>, lookup : Lookup) =
     member __.EffectNames = effects()
     member __.ScopeNames = oneToOneScopes |> List.map (fun (n, _) -> n)
     member __.ScriptVariableNames = lookup.definedScriptVariables |> List.distinct
+    member __.Technologies = lookup.technologies

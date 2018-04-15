@@ -344,6 +344,9 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
         let updateModifiers() =
             lookup.coreModifiers <- addGeneratedModifiers modifiers (EntitySet (resources.AllEntities()))
 
+        let updateTechnologies() =
+            lookup.technologies <- getTechnologies (EntitySet (resources.AllEntities()))
+
         let findDuplicates (sl : Statement list) =
             let node = ProcessCore.processNodeBasic "root" Position.Empty sl
             node.Children |> List.groupBy (fun c -> c.Key)
@@ -390,7 +393,7 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
             let allEntitiesByFile = entities |> List.map (fun (f, _) -> f.entity)
             let flattened = allEntitiesByFile |> List.map (fun n -> n.Children) |> List.collect id
 
-            let validators = [validateVariables, "var"; valTechnology, "tech"; valButtonEffects, "but"; valSprites, "sprite"; valVariables, "var2"; valEventCalls, "event"]
+            let validators = [validateVariables, "var"; valTechnology, "tech"; valButtonEffects, "but"; valSprites, "sprite"; valVariables, "var2"; valEventCalls, "event"; validateShipDesigns, "designs"]
             let oldEntities = EntitySet (resources.AllEntities())
             let newEntities = EntitySet entities
             let runValidators f (validators : (StructureValidator * string) list) =
@@ -480,6 +483,7 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
             updateLocalisation()
             updateDefinedVariables()
             updateModifiers()
+            updateTechnologies()
 
         //member __.Results = parseResults
         member __.Duplicates = validateDuplicates

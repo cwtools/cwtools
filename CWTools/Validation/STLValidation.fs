@@ -719,3 +719,69 @@ module STLValidation =
             setvariables = getEntitySetVariables e
             savedeventtargets = findAllSavedEventTargetsInEntity e
         }
+
+    let getTechnologies (es : STLEntitySet) =
+        let techs = es.AllOfTypeChildren EntityType.Technology
+        let inner = 
+            fun (t : Node) ->
+                let name = t.Key
+                let prereqs = t.Child "prerequisites" |> Option.map (fun c -> c.LeafValues |> Seq.toList |> List.map (fun v -> v.Value.ToRawString()))
+                                                      |> Option.defaultValue []
+                name, prereqs      
+        techs |> List.map inner                                    
+
+
+    let validateShipDesigns : StructureValidator =
+        fun os es ->
+            let ship_designs = es.AllOfTypeChildren EntityType.GlobalShipDesigns
+            let section_templates = os.AllOfTypeChildren EntityType.SectionTemplates @ es.AllOfTypeChildren EntityType.SectionTemplates
+            let weapons = os.AllOfTypeChildren EntityType.ComponentTemplates @ es.AllOfTypeChildren EntityType.ComponentTemplates
+            let getWeaponInfo (w : Node) =
+                match w.Key with
+                | "weapon_component_template"
+                | "strike_craft_component_template"
+                | "utility_component_template" ->
+                    Some (w.TagText "key", w.TagText "size")
+                | _ -> None
+            let weaponInfo = weapons |> List.choose getWeaponInfo |> Map.ofList
+            let getSectionInfo (s : Node) =
+                match s.Key with
+                | "ship_section_template" ->
+                    let inner (n : Node) =  
+                        n.TagText "name", n.TagText "slot_size"
+                    let component_slots = s.Childs "component_slot" |> List.ofSeq |> List.map inner
+                    let createUtilSlot (prefix : string) (size : string) (i : int) =
+                        List.init i (fun i -> prefix + sprintf "%i" (i+1), size)
+                    let smalls = s.Tag "small_utility_slots" |> (function |Some (Value.Int i) -> createUtilSlot "SMALL_UTILITY_" "small" i |_ -> [])
+                    let med = s.Tag "medium_utility_slots" |> (function |Some (Value.Int i) -> createUtilSlot "MEDIUM_UTILITY_" "medium" i |_ -> [])
+                    let large = s.Tag "large_utility_slots" |> (function |Some (Value.Int i) -> createUtilSlot "LARGE_UTILITY_" "large" i |_ -> [])
+                    let aux = s.Tag "aux_utility_slots" |> (function |Some (Value.Int i) -> createUtilSlot "AUX_UTILITY_" "aux" i |_ -> [])
+                    let all = (component_slots @ smalls @ med @ large @ aux ) |> Map.ofList
+                    Some (s.TagText "key", all)
+                | _ -> None
+            let sectionInfo = section_templates |> List.choose getSectionInfo |> Map.ofList
+
+            let validateComponent (section : string) (sectionMap : Collections.Map<string, string>) (c : Node) =
+                let slot = c.TagText "slot"
+                let slotFound = sectionMap |> Map.tryFind slot
+                let template = c.TagText "template"
+                let templateFound = weaponInfo |> Map.tryFind template
+                match slotFound, templateFound with
+                | None, _ -> Invalid [inv (ErrorCodes.MissingSectionSlot section slot) c]
+                | _, None -> Invalid [inv (ErrorCodes.UnknownComponentTemplate template) c]
+                | Some s, Some t ->
+                    if s == t then OK else Invalid [inv (ErrorCodes.MismatchedComponentAndSlot slot s template t) c]
+                    
+            let validateSection (s : Node) =
+                let section = s.TagText "template"
+                let sectionFound = sectionInfo |> Map.tryFind section
+                match sectionFound with
+                | None -> Invalid [inv (ErrorCodes.UnknownSectionTemplate section) s]
+                | Some smap ->
+                    s.Childs "component" <&!&> validateComponent section smap
+
+            let validateDesign (d : Node) =
+                d.Childs "section" <&!&> validateSection
+            
+            ship_designs <&!&> validateDesign
+

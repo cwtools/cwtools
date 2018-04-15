@@ -59,6 +59,11 @@ module ValidationCore =
         static member RedundantBoolean = { ID = "CW224"; Severity = Severity.Information; Message = "This boolean operator is redundant" }
         static member UndefinedLocReference = fun (thisLoc : string) (otherLoc : string) language -> { ID = "CW225"; Severity = Severity.Error; Message = sprintf "Localisation key \"%s\" references \"%s\" which doesn't exist in %O" thisLoc otherLoc language}
         static member InvalidLocCommand = fun (thisLoc : string) (command : string) -> { ID = "CW226"; Severity = Severity.Error; Message = sprintf "Localisation key \"%s\" uses command \"%s\" which doesn't exist" thisLoc command }
+        static member UnknownSectionTemplate = fun (name : string) -> { ID = "CW227"; Severity = Severity.Error; Message = sprintf "Section template %s can not be found" name}
+        static member MissingSectionSlot = fun (section : string) (slot : string) -> { ID = "CW228"; Severity = Severity.Error; Message = sprintf "Section template %s does not have a slot %s" section slot}
+        static member UnknownComponentTemplate = fun (name : string) -> { ID = "CW229"; Severity = Severity.Error; Message = sprintf "Component template %s can not be found" name}
+        static member MismatchedComponentAndSlot = fun (slot : string) (slotsize : string) (template : string) (templatesize : string) -> { ID = "CW230"; Severity = Severity.Error; Message = sprintf "Component and slot do not match, slot %s has size %s and component %s has size %s" slot slotsize template templatesize}
+
         static member CustomError = fun error -> { ID = "CW999"; Severity = Severity.Error; Message = error}
     type ValidationResult = 
         | OK
