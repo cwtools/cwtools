@@ -134,7 +134,7 @@ module STLScopes =
         ScopedEffect("pop_faction", [Scope.Pop; Scope.Leader], Scope.PopFaction, EffectType.Both, defaultDesc, ""); //Leader from vanilla
         ScopedEffect("last_created_pop_faction", allScopes, Scope.PopFaction, EffectType.Both, defaultDesc, "");
         ScopedEffect("core_sector", [], Scope.Sector, EffectType.Both, defaultDesc, "");
-        ScopedEffect("sector", [Scope.Planet], Scope.Sector, EffectType.Both, defaultDesc, "");
+        ScopedEffect("sector", [Scope.Planet; Scope.GalacticObject], Scope.Sector, EffectType.Both, defaultDesc, "");
         ScopedEffect("alliance", [], Scope.Alliance, EffectType.Both, defaultDesc, "");
         ScopedEffect("starbase", [Scope.GalacticObject; Scope.Planet], Scope.Starbase, EffectType.Both, defaultDesc, "");
         ScopedEffect("last_refugee_country", allScopes, Scope.Country, EffectType.Both, defaultDesc, "");
