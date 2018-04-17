@@ -116,7 +116,7 @@ module STLScopes =
         ScopedEffect("home_planet", [Scope.Country; Scope.Species; Scope.Planet], Scope.Planet, EffectType.Both, defaultDesc, "");
         ScopedEffect("star", [Scope.Planet; Scope.Ship; Scope.Fleet; Scope.AmbientObject; Scope.Megastructure; Scope.GalacticObject; Scope.Starbase], Scope.Planet, EffectType.Both, defaultDesc, "");
         ScopedEffect("last_created_ship", allScopes, Scope.Ship, EffectType.Both, defaultDesc, "");
-        ScopedEffect("spaceport", [Scope.Planet], Scope.Fleet, EffectType.Both, defaultDesc, "");
+        //ScopedEffect("spaceport", [Scope.Planet], Scope.Fleet, EffectType.Both, defaultDesc, ""); Removed in 2.0
         ScopedEffect("mining_station", [Scope.Planet], Scope.Fleet, EffectType.Both, defaultDesc, "");
         ScopedEffect("research_station", [Scope.Planet], Scope.Fleet, EffectType.Both, defaultDesc, "");
         ScopedEffect("last_created_fleet", allScopes, Scope.Fleet, EffectType.Both, defaultDesc, "");
