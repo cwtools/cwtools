@@ -98,7 +98,7 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
                     "common/species_names";
                     "common/species_rights";
                     "common/star_classes";
-                    "common/starbase_building";
+                    "common/starbase_buildings";
                     "common/starbase_levels";
                     "common/starbase_modules";
                     "common/starbase_types";
@@ -393,11 +393,13 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
             let allEntitiesByFile = entities |> List.map (fun (f, _) -> f.entity)
             let flattened = allEntitiesByFile |> List.map (fun n -> n.Children) |> List.collect id
 
-            let validators = [validateVariables, "var"; valTechnology, "tech"; valButtonEffects, "but"; valSprites, "sprite"; valVariables, "var2"; valEventCalls, "event"; validateShipDesigns, "designs"]
+            let validators = [validateVariables, "var"; valTechnology, "tech"; validateTechnologies, "tech2"; valButtonEffects, "but"; valSprites, "sprite"; valVariables, "var2"; valEventCalls, "event"]
+            let experimentalvalidators = [validateShipDesigns, "designs"]
             let oldEntities = EntitySet (resources.AllEntities())
             let newEntities = EntitySet entities
             let runValidators f (validators : (StructureValidator * string) list) =
-                validators <&!&> (fun (v, s) -> duration (fun _ -> f v) s) |> (function |Invalid es -> es |_ -> [])
+                (validators <&!&> (fun (v, s) -> duration (fun _ -> f v) s) |> (function |Invalid es -> es |_ -> []))
+                @ (if not experimental then [] else experimentalvalidators <&!&> (fun (v, s) -> duration (fun _ -> f v) s) |> (function |Invalid es -> es |_ -> []))
             eprintfn "Validating misc"
             //let res = validators |> List.map (fun v -> v oldEntities newEntities) |> List.fold (<&&>) OK
             let res = runValidators (fun f -> f oldEntities newEntities) validators

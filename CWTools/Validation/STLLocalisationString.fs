@@ -96,6 +96,8 @@ module STLLocalisationString =
             "GetPersonalityName"; // STNH
             "GetSpeciesPlural"; // STNH
             "GetHisHerCap"; // STNH
+            "MainDefender";
+            "MainAttacker"
         ]
     let checkCommand (entry : Entry) (commands : string list) (eventtargets : string list) (setvariables : string list) (command : string) =
         match localisationCommandContext commands eventtargets setvariables entry command with

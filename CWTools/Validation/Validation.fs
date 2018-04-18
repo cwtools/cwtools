@@ -62,9 +62,10 @@ module ValidationCore =
         static member UnknownSectionTemplate = fun (name : string) -> { ID = "CW227"; Severity = Severity.Error; Message = sprintf "Section template %s can not be found" name}
         static member MissingSectionSlot = fun (section : string) (slot : string) -> { ID = "CW228"; Severity = Severity.Error; Message = sprintf "Section template %s does not have a slot %s" section slot}
         static member UnknownComponentTemplate = fun (name : string) -> { ID = "CW229"; Severity = Severity.Error; Message = sprintf "Component template %s can not be found" name}
-        static member MismatchedComponentAndSlot = fun (slot : string) (slotsize : string) (template : string) (templatesize : string) -> { ID = "CW230"; Severity = Severity.Error; Message = sprintf "Component and slot do not match, slot %s has size %s and component %s has size %s" slot slotsize template templatesize}
+        static member MismatchedComponentAndSlot = fun (slot : string) (slotsize : string) (template : string) (templatesize : string) -> { ID = "CW230"; Severity = Severity.Warning; Message = sprintf "Component and slot do not match, slot %s has size %s and component %s has size %s" slot slotsize template templatesize}
+        static member UnusedTech = fun (tech : string) -> { ID = "CW231"; Severity = Severity.Warning; Message = sprintf "Technology %s is not used" tech}
 
-        static member CustomError = fun error -> { ID = "CW999"; Severity = Severity.Error; Message = error}
+        static member CustomError = fun error severity -> { ID = "CW999"; Severity = severity; Message = error}
     type ValidationResult = 
         | OK
         | Invalid of (string * Severity * CWTools.Parser.Types.Position * int * string * option<string>) list

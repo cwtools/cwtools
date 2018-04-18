@@ -108,7 +108,7 @@ module STLScopes =
         ScopedEffect("last_created_leader", allScopes, Scope.Leader, EffectType.Both, defaultDesc, "");
         ScopedEffect("ruler", [Scope.Country], Scope.Leader, EffectType.Both, defaultDesc, "");
         ScopedEffect("heir", [], Scope.Leader, EffectType.Both, defaultDesc, "");
-        ScopedEffect("solar_system", [Scope.Ship; Scope.Planet; Scope.Country; Scope.Fleet; Scope.AmbientObject; Scope.Tile], Scope.GalacticObject, EffectType.Both, "", ""); //Fleet, Ambient object, Tile from vanilla use
+        ScopedEffect("solar_system", [Scope.Ship; Scope.Planet; Scope.Country; Scope.Fleet; Scope.AmbientObject; Scope.Tile; Scope.Starbase], Scope.GalacticObject, EffectType.Both, "", ""); //Fleet, Ambient object, Tile from vanilla use
         ScopedEffect("last_created_system", allScopes, Scope.GalacticObject, EffectType.Both, defaultDesc, "");
         ScopedEffect("planet", [Scope.Pop; Scope.Tile; Scope.Planet], Scope.Planet, EffectType.Both, defaultDesc, "");
         ScopedEffect("capital_scope", [Scope.Country], Scope.Planet, EffectType.Both, defaultDesc, "");

@@ -164,7 +164,7 @@ type ResourceManager<'T> (computedDataFunction : (Entity -> 'T)) =
         |x when globCheckFilepath "**/common/species_names/*.txt" x -> EntityType.SpeciesNames
         |x when globCheckFilepath "**/common/species_rights/*.txt" x -> EntityType.SpeciesRights
         |x when globCheckFilepath "**/common/star_classes/*.txt" x -> EntityType.StarClasses
-        |x when globCheckFilepath "**/common/starbase_building/*.txt" x -> EntityType.StarbaseBuilding
+        |x when globCheckFilepath "**/common/starbase_buildings/*.txt" x -> EntityType.StarbaseBuilding
         |x when globCheckFilepath "**/common/starbase_levels/*.txt" x -> EntityType.StarbaseLevels
         |x when globCheckFilepath "**/common/starbase_modules/*.txt" x -> EntityType.StarbaseModules
         |x when globCheckFilepath "**/common/starbase_types/*.txt" x -> EntityType.StarbaseTypes

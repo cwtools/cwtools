@@ -46,6 +46,14 @@ module STLValidation =
                             |_ -> acc
                                 )
             this.All |> List.collect (foldNode7 fNode)
+        member this.AllModifiers= 
+            let fNode = (fun (x : Node) acc ->
+                            match x with
+                            | :? WeightModifierBlock as e -> e::acc
+                            |_ -> acc
+                                )
+            this.All |> List.collect (foldNode7 fNode)
+       
 
 
         member __.Raw = entities
@@ -59,8 +67,8 @@ module STLValidation =
     type STLEntitySet = EntitySet<STLComputedData>
     type StructureValidator = EntitySet<STLComputedData> -> EntitySet<STLComputedData> -> ValidationResult
     type FileValidator = IResourceAPI<STLComputedData> -> EntitySet<STLComputedData> -> ValidationResult
-    let shipName (ship : Ship) = if ship.Name = "" then Invalid [(inv (ErrorCodes.CustomError "must have name") ship)] else OK
-    let shipSize (ship : Ship) = if ship.ShipSize = "" then Invalid [(inv (ErrorCodes.CustomError "must have size") ship)] else OK
+    let shipName (ship : Ship) = if ship.Name = "" then Invalid [(inv (ErrorCodes.CustomError "must have name" Severity.Error) ship)] else OK
+    let shipSize (ship : Ship) = if ship.ShipSize = "" then Invalid [(inv (ErrorCodes.CustomError "must have size" Severity.Error) ship)] else OK
 
     let validateShip : Validator<Ship>  = shipName <&> shipSize
 
@@ -375,7 +383,7 @@ module STLValidation =
             )
         let hasresponse = event |> foldNode2 fNode ((||)) false
         let hasafter = event.Children |> List.exists (fun v -> v.Key == "after")
-        if hasresponse && hasafter then Invalid [inv (ErrorCodes.CustomError "This event uses after and has an option with response_text, this is bugged in 2.0.2") event] else OK
+        if hasresponse && hasafter then Invalid [inv (ErrorCodes.CustomError "This event uses after and has an option with response_text, this is bugged in 2.0.2" Severity.Warning) event] else OK
     /// Make sure an event either has a mean_time_to_happen or is stopped from checking all the time
     /// Not mandatory, but performance reasons, suggested by Caligula
     /// Check "mean_time_to_happen", "is_triggered_only", "fire_only_once" and "trigger = { always = no }".
@@ -728,7 +736,47 @@ module STLValidation =
                 let prereqs = t.Child "prerequisites" |> Option.map (fun c -> c.LeafValues |> Seq.toList |> List.map (fun v -> v.Value.ToRawString()))
                                                       |> Option.defaultValue []
                 name, prereqs      
-        techs |> List.map inner                                    
+        techs |> List.map inner
+
+    let getAllTechPreqreqs (es : STLEntitySet) =
+        let fNode =
+            fun (t : Node) children ->
+                let inner ls (l : Leaf) = if l.Key == "has_technology" then l.Value.ToRawString()::ls else ls
+                t.Values |> List.fold inner children
+        (es.AllTriggers |> List.map (fun t -> t :> Node)) @ (es.AllModifiers |> List.map (fun t -> t :> Node)) |> List.collect (foldNode7 fNode)
+
+    
+    let validateTechnologies : StructureValidator =
+        fun os es ->
+            let getPrereqs (b : Node) =
+                match b.Child "prerequisites" with
+                |None -> []
+                |Some p -> 
+                    p.LeafValues |> List.ofSeq |> List.map (fun lv -> lv.Value.ToRawString())
+            let buildingPrereqs = os.AllOfTypeChildren EntityType.Buildings @ es.AllOfTypeChildren EntityType.Buildings |> List.collect getPrereqs
+            let shipsizePrereqs = os.AllOfTypeChildren EntityType.ShipSizes @ es.AllOfTypeChildren EntityType.ShipSizes |> List.collect getPrereqs
+            let compPrereqs = os.AllOfTypeChildren EntityType.ComponentTemplates @ es.AllOfTypeChildren EntityType.ComponentTemplates |> List.collect getPrereqs
+            let stratResPrereqs = os.AllOfTypeChildren EntityType.StrategicResources @ es.AllOfTypeChildren EntityType.StrategicResources |> List.collect getPrereqs
+            let armyPrereqs = os.AllOfTypeChildren EntityType.Armies @ es.AllOfTypeChildren EntityType.Armies |> List.collect getPrereqs
+            let edictPrereqs = os.AllOfTypeChildren EntityType.Edicts @ es.AllOfTypeChildren EntityType.Edicts |> List.collect getPrereqs
+            let tileBlockPrereqs = os.AllOfTypeChildren EntityType.TileBlockers @ es.AllOfTypeChildren EntityType.TileBlockers |> List.collect getPrereqs
+            let allPrereqs = buildingPrereqs @ shipsizePrereqs @ compPrereqs @ stratResPrereqs @ armyPrereqs @ edictPrereqs @ tileBlockPrereqs @ getAllTechPreqreqs os @ getAllTechPreqreqs es
+            let techChildren = getTechnologies os @ getTechnologies es
+                                |> (fun l -> l |> List.map (fun (name, _) -> name, l |> List.exists (fun (_, ts2) -> ts2 |> List.contains name)))
+                                |> List.filter snd
+                                |> List.map fst
+            let techs = es.AllOfTypeChildren EntityType.Technology
+            let inner (t : Node) =
+                let isPreReq = t.Has "prereqfor_desc"
+                let isMod = t.Has "modifier"
+                let hasChildren = techChildren |> List.contains t.Key
+                let isUsedElsewhere = allPrereqs |> List.contains t.Key
+                let isWeightZero = t.Tag "weight" |> (function |Some (Value.Int 0) -> true |_ -> false)
+                let isWeightFactorZero = t.Child "weight_modifier" |> Option.map (fun wm -> wm.Tag "factor" |> (function |Some (Value.Float 0.00) -> true |_ -> false)) |> Option.defaultValue false
+                let hasFeatureFlag = t.Has "feature_flags"
+                if isPreReq || isMod || hasChildren || isUsedElsewhere || isWeightZero || isWeightFactorZero || hasFeatureFlag then OK else Invalid [inv (ErrorCodes.UnusedTech (t.Key)) t]
+            techs <&!&> inner
+
 
 
     let validateShipDesigns : StructureValidator =
@@ -738,20 +786,22 @@ module STLValidation =
             let weapons = os.AllOfTypeChildren EntityType.ComponentTemplates @ es.AllOfTypeChildren EntityType.ComponentTemplates
             let getWeaponInfo (w : Node) =
                 match w.Key with
-                | "weapon_component_template"
-                | "strike_craft_component_template"
+                | "weapon_component_template" ->
+                    Some (w.TagText "key", ("weapon", w.TagText "size"))
+                | "strike_craft_component_template" ->
+                    Some (w.TagText "key", ("strike_craft", w.TagText "size"))
                 | "utility_component_template" ->
-                    Some (w.TagText "key", w.TagText "size")
+                    Some (w.TagText "key", ("utility", w.TagText "size"))
                 | _ -> None
             let weaponInfo = weapons |> List.choose getWeaponInfo |> Map.ofList
             let getSectionInfo (s : Node) =
                 match s.Key with
                 | "ship_section_template" ->
                     let inner (n : Node) =  
-                        n.TagText "name", n.TagText "slot_size"
+                        n.TagText "name", (n.TagText "slot_type", n.TagText "slot_size")
                     let component_slots = s.Childs "component_slot" |> List.ofSeq |> List.map inner
                     let createUtilSlot (prefix : string) (size : string) (i : int) =
-                        List.init i (fun i -> prefix + sprintf "%i" (i+1), size)
+                        List.init i (fun i -> prefix + sprintf "%i" (i+1), ("utility", size))
                     let smalls = s.Tag "small_utility_slots" |> (function |Some (Value.Int i) -> createUtilSlot "SMALL_UTILITY_" "small" i |_ -> [])
                     let med = s.Tag "medium_utility_slots" |> (function |Some (Value.Int i) -> createUtilSlot "MEDIUM_UTILITY_" "medium" i |_ -> [])
                     let large = s.Tag "large_utility_slots" |> (function |Some (Value.Int i) -> createUtilSlot "LARGE_UTILITY_" "large" i |_ -> [])
@@ -761,7 +811,7 @@ module STLValidation =
                 | _ -> None
             let sectionInfo = section_templates |> List.choose getSectionInfo |> Map.ofList
 
-            let validateComponent (section : string) (sectionMap : Collections.Map<string, string>) (c : Node) =
+            let validateComponent (section : string) (sectionMap : Collections.Map<string, (string * string)>) (c : Node) =
                 let slot = c.TagText "slot"
                 let slotFound = sectionMap |> Map.tryFind slot
                 let template = c.TagText "template"
@@ -769,16 +819,18 @@ module STLValidation =
                 match slotFound, templateFound with
                 | None, _ -> Invalid [inv (ErrorCodes.MissingSectionSlot section slot) c]
                 | _, None -> Invalid [inv (ErrorCodes.UnknownComponentTemplate template) c]
-                | Some s, Some t ->
-                    if s == t then OK else Invalid [inv (ErrorCodes.MismatchedComponentAndSlot slot s template t) c]
-                    
+                | Some (sType, sSize), Some (tType, tSize) ->
+                    if sType == tType && sSize == tSize then OK else Invalid [inv (ErrorCodes.MismatchedComponentAndSlot slot sSize template tSize) c]
+
+            let defaultTemplates = [ "DEFAULT_COLONIZATION_SECTION"; "DEFAULT_CONSTRUCTION_SECTION"]            
             let validateSection (s : Node) =
                 let section = s.TagText "template"
-                let sectionFound = sectionInfo |> Map.tryFind section
-                match sectionFound with
-                | None -> Invalid [inv (ErrorCodes.UnknownSectionTemplate section) s]
-                | Some smap ->
-                    s.Childs "component" <&!&> validateComponent section smap
+                if defaultTemplates |> List.contains section then OK else
+                    let sectionFound = sectionInfo |> Map.tryFind section
+                    match sectionFound with
+                    | None -> Invalid [inv (ErrorCodes.UnknownSectionTemplate section) s]
+                    | Some smap ->
+                        s.Childs "component" <&!&> validateComponent section smap
 
             let validateDesign (d : Node) =
                 d.Childs "section" <&!&> validateSection
