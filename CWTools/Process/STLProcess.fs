@@ -434,6 +434,11 @@ module rec STLProcess =
         |("attraction", _, {parents = "popfaction"::_;}) ->  processNodeSimple<WeightBlock>, "weightblock",  (fun c -> { c with complete = true; scope = "pop"});
         |("leader", _, {parents = "popfaction"::_;}) ->  processNodeSimple<WeightBlock>, "weightblock",  (fun c -> { c with complete = true; scope = "leader"});
         |("modifier", _, {parents = "weightblock"::"popfaction"::_;}) ->  scopedProcessNode<WeightModifierBlock>, "weightmodifierblock", id;
+        //Scripted effects
+        |(_, _, {complete = false; entityType = EntityType.ScriptedEffects})  ->  specificScopeProcessNode<EffectBlock> Scope.Any, "",  (fun c -> { c with complete = true;});
+        //Scripted triggers
+        |(_, _, {complete = false; entityType = EntityType.ScriptedTriggers})  ->  specificScopeProcessNode<TriggerBlock> Scope.Any, "",  (fun c -> { c with complete = true;});
+
         //Section templates
         |(_, _, {complete = false; entityType = EntityType.SectionTemplates})  ->  processNodeSimple<Node>, "sectiontemplate",  (fun c -> { c with complete = true;});
         |("ai_weight", _, {parents = "sectiontemplate"::_;}) ->  processNodeSimple<WeightBlock>, "weightblock", id;

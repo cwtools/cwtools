@@ -1,0 +1,4 @@
+##Test effect for set_variable
+test = {
+    set_variable = { which = scriptedeffect value = 5}
+}

@@ -8,6 +8,7 @@ planet_event = {
         check_variable = { which = test_defined2 value > 0 }
         check_variable = { which = test_defined3 value > 0 }
         check_variable = { which = test_defined4 value > 0 }
+        check_variable = { which = scriptedeffect value > 0 }
 
         #error
         check_variable = { which = test_undefined value > 0 }

@@ -4,13 +4,13 @@ resource_silo = {
 	construction_days = 180
 	
     potential = {
-        has_starbase_flag = yes
+        owner = { has_country_flag = yes }
         #error
         has_country_flag = yes
     }
 
     possible = {
-        has_starbase_flag = yes
+        owner = { has_country_flag = yes }
         #error
         has_country_flag = yes
     }

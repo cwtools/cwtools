@@ -355,10 +355,10 @@ module STLValidation =
         //<&&>
         let b = (es.All <&!&> foldNode2 fNode fCombine OK)
         //<&&>
-        let c = (es.AllOfTypeChildren EntityType.ScriptedEffects <&!&> fseNode)
-        //<&&>
-        let d = (es.AllOfTypeChildren EntityType.ScriptedTriggers <&!&> fstNode)
-        b <&&> c <&&> d
+        // let c = (es.AllOfTypeChildren EntityType.ScriptedEffects <&!&> fseNode)
+        // //<&&>
+        // let d = (es.AllOfTypeChildren EntityType.ScriptedTriggers <&!&> fstNode)
+        b //<&&> c <&&> d
 
 
     let valTriggersNew (triggers : EffectMap) (effects : EffectMap) (modifiers : Modifier list) (effectBlock : Node) =
