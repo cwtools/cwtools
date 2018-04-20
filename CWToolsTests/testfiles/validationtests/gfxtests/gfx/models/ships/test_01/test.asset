@@ -1,0 +1,20 @@
+entity = {
+	name = "test_entity"
+	pdxmesh = "test_entity_mesh"
+	
+	default_state = idle
+	state = { name = "idle" animation = "idle" }
+	
+	scale = 1.25
+}
+
+entity = {
+	name = "test_entity_fake_2"
+    #error
+	pdxmesh = "test_entity_fake_2_mesh"
+	
+	default_state = idle
+	state = { name = "idle" animation = "idle" }
+	
+	scale = 1.25
+}

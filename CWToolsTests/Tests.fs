@@ -145,6 +145,7 @@ let testFolder folder testsname =
 let folderTests =
     testList "validation" [
         testFolder "./testfiles/validationtests/interfacetests" "interface"
+        testFolder "./testfiles/validationtests/gfxtests" "gfx"
         testFolder "./testfiles/validationtests/scopetests" "scopes"
         testFolder "./testfiles/validationtests/variabletests" "variables"
         testFolder "./testfiles/validationtests/modifiertests" "modifiers"

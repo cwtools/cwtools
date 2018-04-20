@@ -188,8 +188,10 @@ type ResourceManager<'T> (computedDataFunction : (Entity -> 'T)) =
         |x when globCheckFilepath "**/map/galaxy/*.txt" x -> EntityType.MapGalaxy
         |x when globCheckFilepath "**/map/setup_scenarios/*.txt" x -> EntityType.MapSetupScenarios
         |x when globCheckFilepath "**/prescripted_countries/*.txt" x -> EntityType.PrescriptedCountries
-        |x when globCheckFilepath "**/interface/*.txt" x -> EntityType.Interface
-        |x when globCheckFilepath "**/gfx/*.txt" x -> EntityType.Gfx
+        |x when globCheckFilepath "**/interface/**/*.gfx" x -> EntityType.Interface
+        |x when globCheckFilepath "**/interface/*.gfx" x -> EntityType.Interface
+        |x when globCheckFilepath "**/gfx/**/*.gfx" x -> EntityType.Gfx
+        |x when globCheckFilepath "**/gfx/*.gfx" x -> EntityType.Gfx
         |_ -> EntityType.Other
 
     let mutable fileMap : Map<string, Resource> = Map.empty

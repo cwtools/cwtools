@@ -1,0 +1,29 @@
+objectTypes = {
+
+	
+	pdxmesh = {
+        name = "test_entity_mesh"
+		file = "gfx/models/ships/test_01/test_entity.mesh"
+		scale = 1.0
+			meshsettings = {
+			shader = "PdxMeshShip"
+			
+			
+		}
+		
+    }	
+
+	pdxmesh = {
+        name = "test_entity_fake_mesh"
+        #error
+		file = "gfx/models/ships/test_01/test_entity_fake.mesh"
+		scale = 1.0
+			meshsettings = {
+			shader = "PdxMeshShip"
+			
+			
+		}
+		
+	}		
+	
+}

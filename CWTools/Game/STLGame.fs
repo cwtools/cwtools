@@ -202,7 +202,8 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
                 if modFolders.Length > 0 then modFolders
                 else 
                     eprintfn "Couldn't find the game directory or any mods"
-                    let foundAnyFolders = Directory.EnumerateDirectories scopeDirectory |> List.ofSeq |> List.exists (fun f -> f.Contains("common") || f.Contains("events"))
+                    let checkIsGameFolder = (fun (f : string) -> f.Contains "common" || f.Contains "events" || f.Contains "interface" || f.Contains "gfx" || f.Contains "localisation")
+                    let foundAnyFolders = Directory.EnumerateDirectories scopeDirectory |> List.ofSeq |> List.exists checkIsGameFolder
                     match foundAnyFolders with
                     | true ->
                         eprintfn "I think you opened a mod folder directly"
@@ -215,7 +216,7 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
             |Some s, Vanilla -> ["vanilla", s]
         let locFolders = allDirs |> List.filter(fun (_, folder) -> folder.ToLower() = "localisation" || folder.ToLower() = "localisation_synced")
         
-        let getEmbeddedFiles = embeddedFiles |> List.map (fun (fn, f) -> "embedded", "embeddedfiles/" + fn, f)
+        let getEmbeddedFiles() = embeddedFiles |> List.map (fun (fn, f) -> "embedded", "embeddedfiles/" + fn, f)
         let allFilesByPath = 
             let getAllFiles (scope, path) =
                 scriptFolders
@@ -226,15 +227,18 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
                 match Path.GetExtension(filepath) with
                 |".txt"
                 |".gui"
-                |".gfx" ->
+                |".gfx"
+                |".asset" ->
                     Some (EntityResourceInput { scope = scope; filepath = filepath; filetext = File.ReadAllText filepath; validate = true})
                 |".dds"
                 |".tga"
                 |".shader"
                 |".lua"
-                |".png" ->
+                |".png"
+                |".mesh" ->
                     Some (FileResourceInput { scope = scope; filepath = filepath })
                 |_ -> None
+            allFolders |> List.iter (eprintfn "%A")
             let allFiles = List.map getAllFiles allFolders |> List.collect id |> List.choose fileToResourceInput
             allFiles
 
@@ -328,7 +332,7 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
                 match gameDirectory with
                 |Some _ -> allLocs
                 |None ->  
-                    allLocs @ (getEmbeddedFiles 
+                    allLocs @ (getEmbeddedFiles() 
                     |> List.filter (fun (_, fn, _ )-> fn.Contains("localisation"))
                     |> List.map (fun (_, fn, f) -> (fn, f))
                     |> (fun files -> STLLocalisationService(files))
@@ -405,7 +409,7 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
             let res = runValidators (fun f -> f oldEntities newEntities) validators
             //let res = validators <&!&> (fun v -> v oldEntities newEntities) |> (function |Invalid es -> es |_ -> [])
             eprintfn "Validating files"
-            let fileValidators = [valSpriteFiles]
+            let fileValidators = [valSpriteFiles; valMeshFiles; valAssetFiles]
             let fres = fileValidators <&!&> (fun v -> v resources newEntities) |> (function |Invalid es -> es |_ -> [])
             eprintfn "Validating effects/triggers"
             let eres = duration (fun _ -> valAllEffects (lookup.scriptedTriggers) (lookup.scriptedEffects) (lookup.staticModifiers) newEntities  |> (function |Invalid es -> es |_ -> [])) "effects"
