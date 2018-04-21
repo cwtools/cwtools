@@ -221,7 +221,6 @@ type ResourceManager<'T> (computedDataFunction : (Entity -> 'T)) =
                 match file with
                 |EntityResource (_, {result = Pass(s); filepath = f; validate = v}) ->
                     let entityType = filepathToEntityType f
-                    if entityType = EntityType.GfxGfx then eprintfn "%s" f else ()
                     Some { filepath = f; entity = (shipProcess entityType "root" (Position.File(f)) statements); validate = v; entityType = entityType}
                 |_ -> None        
 

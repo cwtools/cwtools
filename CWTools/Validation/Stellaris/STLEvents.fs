@@ -1,4 +1,4 @@
-namespace CWTools.Validation
+namespace CWTools.Validation.Stellaris
 open CWTools.Validation.ValidationCore
 open CWTools.Process.STLProcess
 open CWTools.Process

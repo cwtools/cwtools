@@ -2,6 +2,7 @@ namespace CWTools.Validation
 open CWTools.Process
 open FSharp.Collections.ParallelSeq
 open CWTools.Parser
+open Newtonsoft.Json.Converters
 
 module ValidationCore =
     
@@ -65,6 +66,9 @@ module ValidationCore =
         static member MismatchedComponentAndSlot = fun (slot : string) (slotsize : string) (template : string) (templatesize : string) -> { ID = "CW230"; Severity = Severity.Warning; Message = sprintf "Component and slot do not match, slot %s has size %s and component %s has size %s" slot slotsize template templatesize}
         static member UnusedTech = fun (tech : string) -> { ID = "CW231"; Severity = Severity.Warning; Message = sprintf "Technology %s is not used" tech}
         static member UndefinedPDXMesh = fun (mesh : string) -> { ID = "CW232"; Severity = Severity.Error; Message = sprintf "Mesh %s is not defined" mesh }
+        static member UndefinedSectionEntity = fun (entity : string) (culture : string) -> { ID = "CW233"; Severity = Severity.Error; Message = sprintf "Entity %s is not defined for culture %s" entity culture}
+        static member UndefinedSectionEntityFallback = fun (entity : string) (fallback : string) (culture : string)-> { ID = "CW233"; Severity = Severity.Error; Message = sprintf "Entity %s is not defined for culture %s (nor is fallback %s)" entity culture fallback}
+        static member UndefinedEntity = fun (entity : string) -> { ID = "CW233"; Severity = Severity.Error; Message = sprintf "Entity %s is not defined" entity }
 
         static member CustomError = fun error severity -> { ID = "CW999"; Severity = severity; Message = error}
     type ValidationResult = 

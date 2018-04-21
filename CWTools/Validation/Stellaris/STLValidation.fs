@@ -1,4 +1,4 @@
-namespace CWTools.Validation
+namespace CWTools.Validation.Stellaris
 open CWTools.Validation.ValidationCore
 open CWTools.Process.STLProcess
 open CWTools.Process
@@ -839,35 +839,3 @@ module STLValidation =
             
             ship_designs <&!&> validateDesign
 
-    let valMeshFiles : FileValidator =
-        fun rm es ->
-            let pdxmesh = es.AllOfTypeChildren EntityType.GfxGfx
-                            |> List.filter (fun e -> e.Key == "objectTypes")
-                            |> List.collect (fun e -> e.Children |> List.choose (fun c -> if c.Key == "pdxmesh" then Some c else None))
-            let filenames = rm.GetResources() |> List.choose (function |FileResource (f, _) -> Some f |EntityResource (f, _) -> Some f)
-            let inner = 
-                fun (x : Node) ->
-                    match x.Leafs "file" |> Seq.tryHead with
-                    |None -> OK
-                    |Some fn -> 
-                        let filename = fn.Value.ToRawString().Replace("/","\\")
-                        match filenames |> List.exists (fun f -> f.EndsWith(filename)) with
-                        | true -> OK
-                        | false -> Invalid [inv (ErrorCodes.MissingFile (filename)) fn]
-            pdxmesh <&!&> inner
-
-    let valAssetFiles : FileValidator =
-        fun rm es ->
-            let os = EntitySet (rm.AllEntities())
-            let pdxmesh =   os.AllOfTypeChildren EntityType.GfxGfx @
-                            es.AllOfTypeChildren EntityType.GfxGfx
-                            |> List.filter (fun e -> e.Key == "objectTypes")
-                            |> List.collect (fun e -> e.Children |> List.choose (fun c -> if c.Key == "pdxmesh" then Some c else None))
-            let names = pdxmesh |> List.map (fun m -> m.Tag "name") |> List.choose (fun t -> t |> Option.map(fun t2 -> t2.ToRawString()))
-            let assets = es.AllOfTypeChildren EntityType.GfxAsset
-            let inner =
-                fun (x : Node) ->
-                    match x.Leafs "pdxmesh" |> Seq.tryHead with
-                    |None -> OK
-                    |Some lv -> if names |> List.contains (lv.Value.ToRawString()) then OK else Invalid [inv (ErrorCodes.UndefinedPDXMesh (lv.Value.ToRawString())) lv]
-            assets <&!&> inner

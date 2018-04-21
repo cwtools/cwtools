@@ -5,7 +5,7 @@ open System.IO
 open FParsec
 open CWTools.Process
 open CWTools.Process.STLProcess
-open CWTools.Validation.STLValidation
+open CWTools.Validation.Stellaris.STLValidation
 open CWTools.Validation.ValidationCore
 open FSharp.Collections.ParallelSeq
 open CWTools.Localisation
@@ -15,12 +15,13 @@ open CWTools.Common.STLConstants
 open CWTools.Process.STLScopes
 open DotNet.Globbing
 open System.Collections.Specialized
-open CWTools.Validation.STLLocalisationValidation
-open CWTools.Validation.STLEventValidation
+open CWTools.Validation.Stellaris.STLLocalisationValidation
+open CWTools.Validation.Stellaris.STLEventValidation
 open CWTools.Process.ProcessCore
 open CWTools.Parser.Types
-open CWTools.Validation.STLLocalisationString
+open CWTools.Validation.Stellaris.STLLocalisationString
 open CWTools.Utilities.Utils
+open CWTools.Validation.Stellaris.Graphics
 
 
 
@@ -397,7 +398,8 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
             let allEntitiesByFile = entities |> List.map (fun (f, _) -> f.entity)
             let flattened = allEntitiesByFile |> List.map (fun n -> n.Children) |> List.collect id
 
-            let validators = [validateVariables, "var"; valTechnology, "tech"; validateTechnologies, "tech2"; valButtonEffects, "but"; valSprites, "sprite"; valVariables, "var2"; valEventCalls, "event"]
+            let validators = [validateVariables, "var"; valTechnology, "tech"; validateTechnologies, "tech2"; valButtonEffects, "but"; valSprites, "sprite"; valVariables, "var2"; valEventCalls, "event"; valSectionGraphics, "sections"
+                                ;valComponentGraphics, "component"; validateAmbientGraphics, "ambient"]
             let experimentalvalidators = [validateShipDesigns, "designs"]
             let oldEntities = EntitySet (resources.AllEntities())
             let newEntities = EntitySet entities

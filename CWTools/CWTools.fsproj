@@ -24,10 +24,11 @@
     <Compile Include="Game/Lookups.fs" />
     <Compile Include="Game/References.fs" />
     <Compile Include="Validation/Validation.fs" />
-    <Compile Include="Validation/STLValidation.fs" />
-    <Compile Include="Validation/STLLocalisationString.fs" />
-    <Compile Include="Validation/STLLocalisationValidation.fs" />
-    <Compile Include="Validation/STLEvents.fs" />
+    <Compile Include="Validation/Stellaris/STLValidation.fs" />
+    <Compile Include="Validation/Stellaris/STLLocalisationString.fs" />
+    <Compile Include="Validation/Stellaris/STLLocalisationValidation.fs" />
+    <Compile Include="Validation/Stellaris/STLEvents.fs" />
+    <Compile Include="Validation/Stellaris/Graphics.fs" />
     <Compile Include="Game/STLGame.fs" />
     <Compile Include="CSharp/Extensions.fs" />
   </ItemGroup>
