@@ -351,17 +351,17 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
         let updateTechnologies() =
             lookup.technologies <- getTechnologies (EntitySet (resources.AllEntities()))
 
-        let findDuplicates (sl : Statement list) =
-            let node = ProcessCore.processNodeBasic "root" Position.Empty sl
-            node.Children |> List.groupBy (fun c -> c.Key)
-                          |> List.filter (fun (_,v) -> v.Length > 1)
-                          |> List.map (fun (k,_) -> k)
+        // let findDuplicates (sl : Statement list) =
+        //     let node = ProcessCore.processNodeBasic "root" Position.Empty sl
+        //     node.Children |> List.groupBy (fun c -> c.Key)
+        //                   |> List.filter (fun (_,v) -> v.Length > 1)
+        //                   |> List.map (fun (k,_) -> k)
 
-        let validateDuplicates files =
-            files |> List.choose (function |(file, parsed) -> Some (file, parsed.statements))
-                |> List.groupBy (fun (k,_) -> k)
-                |> List.map ((fun (k, vs) -> k, List.collect (fun (_, vs2) -> vs2) vs)
-                    >> (fun (k, vs) -> k, findDuplicates vs))
+        // let validateDuplicates files =
+        //     files |> List.choose (function |(file, parsed) -> Some (file, parsed.statements))
+        //         |> List.groupBy (fun (k,_) -> k)
+        //         |> List.map ((fun (k, vs) -> k, List.collect (fun (_, vs2) -> vs2) vs)
+        //             >> (fun (k, vs) -> k, findDuplicates vs))
 
         let validateShips (entities : Node list) = 
             let ships = entities |> List.choose (function | :? Ship as s -> Some s |_ -> None)
@@ -477,7 +477,6 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
             let filteredfiles = if validateVanilla then files else files |> List.choose (function |FileResourceInput f -> Some (FileResourceInput f) |EntityResourceInput f -> if f.scope = "vanilla" then Some (EntityResourceInput {f with validate = false}) else Some (EntityResourceInput f))
             resources.UpdateFiles(filteredfiles) |> ignore
             let embedded = embeddedFiles |> List.map (fun (f, ft) -> if ft = "" then FileResourceInput { scope = "embedded"; filepath = f } else EntityResourceInput {scope = "embedded"; filepath = f; filetext = ft; validate = false})
-           
             match gameDirectory with
             |None -> resources.UpdateFiles(embedded) |> ignore
             | _ -> ()
@@ -492,7 +491,6 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
             updateTechnologies()
 
         //member __.Results = parseResults
-        member __.Duplicates = validateDuplicates
         member __.ParserErrors = parseErrors()
         member __.ValidationErrors = (validateAll (resources.ValidatableEntities()))
         member __.LocalisationErrors= 

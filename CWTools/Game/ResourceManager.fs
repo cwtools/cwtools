@@ -28,7 +28,6 @@ type ResourceInput =
 
 
 type PassFileResult = {
-    statements : Statement list
     parseTime : int64
 }
 type FailFileResult = {
@@ -93,7 +92,9 @@ type ResourceManager<'T> (computedDataFunction : (Entity -> 'T)) =
                 dict.Add(keyFunction(n), temp)
                 temp
     let globCheckFilepathI (pattern : string) =
-        let glob = Glob.Parse(pattern)
+        let options = new GlobOptions();
+        options.Evaluation.CaseInsensitive <- true;
+        let glob = Glob.Parse(pattern, options)
         (fun (p : string) -> glob.IsMatch(p))
 
     let globCheckFilepath pattern = (memoize id globCheckFilepathI) pattern
@@ -190,8 +191,10 @@ type ResourceManager<'T> (computedDataFunction : (Entity -> 'T)) =
         |x when globCheckFilepath "**/prescripted_countries/*.txt" x -> EntityType.PrescriptedCountries
         |x when globCheckFilepath "**/interface/**/*.gfx" x -> EntityType.Interface
         |x when globCheckFilepath "**/interface/*.gfx" x -> EntityType.Interface
-        |x when globCheckFilepath "**/gfx/**/*.gfx" x -> EntityType.Gfx
-        |x when globCheckFilepath "**/gfx/*.gfx" x -> EntityType.Gfx
+        |x when globCheckFilepath "**\\gfx\\**\\*.gfx" x -> EntityType.GfxGfx
+        |x when globCheckFilepath "**/gfx/*.gfx" x -> EntityType.GfxGfx
+        |x when globCheckFilepath "**\\gfx\\**\\*.asset" x -> EntityType.GfxAsset
+        |x when globCheckFilepath "**/gfx/*.asset" x -> EntityType.GfxAsset
         |_ -> EntityType.Other
 
     let mutable fileMap : Map<string, Resource> = Map.empty
@@ -204,21 +207,22 @@ type ResourceManager<'T> (computedDataFunction : (Entity -> 'T)) =
 
     let matchResult (scope : string, file : string, validate : bool, (parseResult, time)) = 
         match parseResult with
-        | Success(parsed, _, _) -> EntityResource (file, { scope = scope; filepath = file; validate = validate; result = Pass({statements = parsed; parseTime = time}) })
-        | Failure(msg, pe, _) -> EntityResource (file, { scope = scope; filepath = file; validate = validate; result = Fail({error = msg; position = pe.Position; parseTime = time})})
+        | Success(parsed, _, _) -> EntityResource (file, { scope = scope; filepath = file; validate = validate; result = Pass({parseTime = time}) }), parsed
+        | Failure(msg, pe, _) -> EntityResource (file, { scope = scope; filepath = file; validate = validate; result = Fail({error = msg; position = pe.Position; parseTime = time})}), []
 
     let parseFile (file : ResourceInput) = 
          match file with
                     |EntityResourceInput e -> e |> ((fun f -> f.scope, f.filepath, f.validate, (fun (t, t2) -> duration (fun () -> CKParser.parseString t2 t)) (f.filepath, f.filetext)) >> matchResult)
-                    |FileResourceInput f -> FileResource (f.filepath, { scope = f.scope; filepath = f.filepath })
+                    |FileResourceInput f -> FileResource (f.filepath, { scope = f.scope; filepath = f.filepath }), []
         
     let shipProcess = STLProcess.shipProcess.ProcessNode<Node>
-    let parseEntity (file : Resource) =
+    let parseEntity ((file, statements) : Resource * Statement list) =
         file,
                 match file with
                 |EntityResource (_, {result = Pass(s); filepath = f; validate = v}) ->
                     let entityType = filepathToEntityType f
-                    Some { filepath = f; entity = (shipProcess entityType "root" (Position.File(f)) s.statements); validate = v; entityType = entityType}
+                    if entityType = EntityType.GfxGfx then eprintfn "%s" f else ()
+                    Some { filepath = f; entity = (shipProcess entityType "root" (Position.File(f)) statements); validate = v; entityType = entityType}
                 |_ -> None        
 
     let saveResults (resource, entity) =

@@ -1,0 +1,1 @@
+dotnet run --no-build --directory "F:\Games\Steam\steamapps\common\Stellaris" --game stl --scope vanilla list --sort path files

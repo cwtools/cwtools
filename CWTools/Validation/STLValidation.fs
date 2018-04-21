@@ -20,7 +20,9 @@ module STLValidation =
     type S = Severity
     type EntitySet<'T>(entities : (Entity * Lazy<'T>) list) =
         member __.GlobMatch(pattern : string) =
-            let glob = Glob.Parse(pattern)
+            let options = new GlobOptions();
+            options.Evaluation.CaseInsensitive <- true;
+            let glob = Glob.Parse(pattern, options)
             entities |> List.choose (fun (es, _) -> if glob.IsMatch(es.filepath) then Some es.entity else None)
         member this.GlobMatchChildren(pattern : string) =
             this.GlobMatch(pattern) |> List.map (fun e -> e.Children) |> List.collect id
@@ -839,8 +841,8 @@ module STLValidation =
 
     let valMeshFiles : FileValidator =
         fun rm es ->
-            let pdxmesh = es.GlobMatchChildren("**\\gfx\\**\\*.gfx") @ es.GlobMatchChildren("**/gfx/*.gfx")
-                            |> List.filter (fun e -> e.Key = "objectTypes")
+            let pdxmesh = es.AllOfTypeChildren EntityType.GfxGfx
+                            |> List.filter (fun e -> e.Key == "objectTypes")
                             |> List.collect (fun e -> e.Children |> List.choose (fun c -> if c.Key == "pdxmesh" then Some c else None))
             let filenames = rm.GetResources() |> List.choose (function |FileResource (f, _) -> Some f |EntityResource (f, _) -> Some f)
             let inner = 
@@ -856,12 +858,13 @@ module STLValidation =
 
     let valAssetFiles : FileValidator =
         fun rm es ->
-            let pdxmesh = es.GlobMatchChildren("**\\gfx\\**\\*.gfx") @ es.GlobMatchChildren("**/gfx/*.gfx")
-                            |> List.filter (fun e -> e.Key = "objectTypes")
+            let os = EntitySet (rm.AllEntities())
+            let pdxmesh =   os.AllOfTypeChildren EntityType.GfxGfx @
+                            es.AllOfTypeChildren EntityType.GfxGfx
+                            |> List.filter (fun e -> e.Key == "objectTypes")
                             |> List.collect (fun e -> e.Children |> List.choose (fun c -> if c.Key == "pdxmesh" then Some c else None))
             let names = pdxmesh |> List.map (fun m -> m.Tag "name") |> List.choose (fun t -> t |> Option.map(fun t2 -> t2.ToRawString()))
-            let assets = es.GlobMatchChildren("**\\gfx\\**\\*.asset") @ es.GlobMatchChildren("**/gfx/*.asset")
-            eprintfn "%A" assets
+            let assets = es.AllOfTypeChildren EntityType.GfxAsset
             let inner =
                 fun (x : Node) ->
                     match x.Leafs "pdxmesh" |> Seq.tryHead with

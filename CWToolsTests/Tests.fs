@@ -63,10 +63,6 @@ let getLocTestInfo node =
     let req, noreq = getAllTestLocs node
     let comments = getNodeComments node |> List.filter(fun (p, c) -> not (List.isEmpty c)) |> List.collect (fun (f, c) -> c |> List.map (fun cc -> f, cc)) |> List.map fst
     req, noreq, comments
-let parseEntities validfiles =
-    validfiles
-    |> List.map ((fun (file, _, parsed) -> (file, parsed.statements, parsed.parseTime))
-    >> (fun (f, parsed, _) ->  f, (STLProcess.shipProcess.ProcessNode<Node>() "root" (Position.File(f)) parsed)))
 
 [<Tests>]
 let tests =

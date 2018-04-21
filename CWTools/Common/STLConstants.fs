@@ -291,6 +291,7 @@ module STLConstants =
     |MapSetupScenarios = 85
     |PrescriptedCountries = 86
     |Interface = 87
-    |Gfx = 88
+    |GfxGfx = 88
     |Other = 89
+    |GfxAsset = 90
 
