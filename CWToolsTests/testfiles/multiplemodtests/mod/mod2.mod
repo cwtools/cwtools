@@ -1,0 +1,10 @@
+name="mod2"
+path="mod/mod2"
+tags={
+	"Gameplay"
+	"Buildings"
+	"Utilities"
+}
+picture="UU.jpg"
+remote_file_id="1217770254"
+supported_version="2.0.*"

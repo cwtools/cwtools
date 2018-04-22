@@ -218,6 +218,20 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
         let locFolders = allDirs |> List.filter(fun (_, folder) -> folder.ToLower() = "localisation" || folder.ToLower() = "localisation_synced")
         
         let getEmbeddedFiles() = embeddedFiles |> List.map (fun (fn, f) -> "embedded", "embeddedfiles/" + fn, f)
+
+        let convertPathToLogicalPath =
+            fun (path : string) ->
+                let matches = 
+                    [
+                        if path.Contains "common" then let i = path.IndexOf "common" in yield i, path.Substring(i) else ();
+                        if path.Contains "interface" then let i = path.IndexOf "interface" in yield i, path.Substring(i) else ();
+                        if path.Contains "gfx" then let i = path.IndexOf "gfx" in yield i, path.Substring(i) else ();
+                        if path.Contains "events" then let i = path.IndexOf "events" in yield i, path.Substring(i) else ();
+                        if path.Contains "localisation" then let i = path.IndexOf "localisation" in yield i, path.Substring(i) else ();
+                        if path.Contains "localisation_synced" then let i = path.IndexOf "localisation_synced" in yield i, path.Substring(i) else ();
+                        if path.Contains "map" then let i = path.IndexOf "map" in yield i, path.Substring(i) else ();
+                    ]
+                if matches.IsEmpty then path else matches |> List.minBy fst |> snd
         let allFilesByPath = 
             let getAllFiles (scope, path) =
                 scriptFolders
@@ -230,7 +244,8 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
                 |".gui"
                 |".gfx"
                 |".asset" ->
-                    Some (EntityResourceInput { scope = scope; filepath = filepath; filetext = File.ReadAllText filepath; validate = true})
+                    let rootedpath = filepath.Substring(filepath.IndexOf(scopeDirectory) + (scopeDirectory.Length) + 2)
+                    Some (EntityResourceInput { scope = scope; filepath = filepath; logicalpath = (convertPathToLogicalPath rootedpath); filetext = File.ReadAllText filepath; validate = true})
                 |".dds"
                 |".tga"
                 |".shader"
@@ -460,7 +475,10 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
             | _ ->
                 let filepath = Path.GetFullPath(filepath)
                 let file = File.ReadAllText filepath
-                let newEntities = resources.UpdateFile (EntityResourceInput {scope = ""; filepath = filepath; filetext = file; validate = true})
+                let rootedpath = filepath.Substring(filepath.IndexOf(scopeDirectory) + (scopeDirectory.Length))
+                let logicalpath = convertPathToLogicalPath rootedpath
+                // eprintfn "%s %s" logicalpath filepath
+                let newEntities = resources.UpdateFile (EntityResourceInput {scope = ""; filepath = filepath; logicalpath = logicalpath; filetext = file; validate = true})
                 match filepath with
                 |x when x.Contains("scripted_triggers") -> updateScriptedTriggers()
                 |x when x.Contains("scripted_effects") -> updateScriptedEffects()
@@ -478,7 +496,7 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
             let files = allFilesByPath
             let filteredfiles = if validateVanilla then files else files |> List.choose (function |FileResourceInput f -> Some (FileResourceInput f) |EntityResourceInput f -> if f.scope = "vanilla" then Some (EntityResourceInput {f with validate = false}) else Some (EntityResourceInput f))
             resources.UpdateFiles(filteredfiles) |> ignore
-            let embedded = embeddedFiles |> List.map (fun (f, ft) -> if ft = "" then FileResourceInput { scope = "embedded"; filepath = f } else EntityResourceInput {scope = "embedded"; filepath = f; filetext = ft; validate = false})
+            let embedded = embeddedFiles |> List.map (fun (f, ft) -> if ft = "" then FileResourceInput { scope = "embedded"; filepath = f } else EntityResourceInput {scope = "embedded"; filepath = f; logicalpath = (convertPathToLogicalPath f); filetext = ft; validate = false})
             match gameDirectory with
             |None -> resources.UpdateFiles(embedded) |> ignore
             | _ -> ()

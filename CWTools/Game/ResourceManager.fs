@@ -14,6 +14,7 @@ type EntityResourceInput =
     {
         scope : string
         filepath : string
+        logicalpath : string
         filetext : string
         validate : bool
     }
@@ -40,11 +41,17 @@ type FileResult =
     |Fail of result : FailFileResult
     //|Embedded of file : string * statements : Statement list
 
+type Overwrite =
+    |No
+    |Overwrote
+    |Overwritten
 type EntityResource =
     {
         scope : string
         filepath : string
+        logicalpath : string
         result : FileResult
+        overwrite : Overwrite
         validate : bool
     }
 
@@ -64,6 +71,7 @@ type Entity =
         entity : Node
         validate : bool
         entityType : EntityType
+        overwrite : Overwrite
     }
 
 type UpdateFile<'T> = ResourceInput -> (Entity * Lazy<'T>) list
@@ -205,14 +213,16 @@ type ResourceManager<'T> (computedDataFunction : (Entity -> 'T)) =
         let returnValue = f()
         (returnValue  , timer.ElapsedMilliseconds) 
 
-    let matchResult (scope : string, file : string, validate : bool, (parseResult, time)) = 
+    let matchResult (scope : string, file : string, logicalpath : string, validate : bool, (parseResult, time)) = 
         match parseResult with
-        | Success(parsed, _, _) -> EntityResource (file, { scope = scope; filepath = file; validate = validate; result = Pass({parseTime = time}) }), parsed
-        | Failure(msg, pe, _) -> EntityResource (file, { scope = scope; filepath = file; validate = validate; result = Fail({error = msg; position = pe.Position; parseTime = time})}), []
+        | Success(parsed, _, _) -> EntityResource (file, { scope = scope; filepath = file; logicalpath = logicalpath; validate = validate; result = Pass({parseTime = time}); overwrite = No }), parsed
+        | Failure(msg, pe, _) -> EntityResource (file, { scope = scope; filepath = file; logicalpath = logicalpath; validate = validate; result = Fail({error = msg; position = pe.Position; parseTime = time}); overwrite = No }), []
 
     let parseFile (file : ResourceInput) = 
          match file with
-                    |EntityResourceInput e -> e |> ((fun f -> f.scope, f.filepath, f.validate, (fun (t, t2) -> duration (fun () -> CKParser.parseString t2 t)) (f.filepath, f.filetext)) >> matchResult)
+                    |EntityResourceInput e -> 
+                        // eprintfn "%A %A" e.logicalpath e.filepath
+                        e |> ((fun f -> f.scope, f.filepath, f.logicalpath, f.validate, (fun (t, t2) -> duration (fun () -> CKParser.parseString t2 t)) (f.filepath, f.filetext)) >> matchResult)
                     |FileResourceInput f -> FileResource (f.filepath, { scope = f.scope; filepath = f.filepath }), []
         
     let shipProcess = STLProcess.shipProcess.ProcessNode<Node>
@@ -221,7 +231,7 @@ type ResourceManager<'T> (computedDataFunction : (Entity -> 'T)) =
                 match file with
                 |EntityResource (_, {result = Pass(s); filepath = f; validate = v}) ->
                     let entityType = filepathToEntityType f
-                    Some { filepath = f; entity = (shipProcess entityType "root" (Position.File(f)) statements); validate = v; entityType = entityType}
+                    Some { filepath = f; entity = (shipProcess entityType "root" (Position.File(f)) statements); validate = v; entityType = entityType; overwrite = No}
                 |_ -> None        
 
     let saveResults (resource, entity) =
@@ -236,14 +246,41 @@ type ResourceManager<'T> (computedDataFunction : (Entity -> 'T)) =
                 entitiesMap <- entitiesMap.Add(e.filepath, item); yield item
             |None -> ()
         }
+    
+    let updateOverwrite() =
+        let filelist = fileMap |> Map.toList |> List.map snd
+        let entities = filelist |> List.choose (function |EntityResource (s, e) -> Some ((s, e)) |_ -> None)
+        let processGroup (key, (es : (string * EntityResource) list)) =
+            match es with
+            | [s,e] -> [s, {e with overwrite = No}]
+            | es ->
+                let sorted = es |> List.sortByDescending (fun (s, e) -> if e.scope = "embedded" then "" else if e.scope = "" then "ZZZZZZZZ" else e.scope)
+                let first = sorted |> List.head |> (fun (s, h) -> s, {h with overwrite = Overwrite.Overwrote})
+                // eprintfn "overwrote: %s" (first |> fst)
+                let rest = sorted |> List.skip 1 |> List.map (fun (s, r) -> s, {r with overwrite = Overwrite.Overwritten})
+                // rest |> List.iter (fun (s, _) -> eprintfn "overwritten: %s" s)
+                first::rest
+        let res = entities |> List.groupBy (fun (s, e) -> e.logicalpath)
+                           |> List.collect processGroup
+        fileMap <- res |> List.fold (fun fm (s, e) -> fm.Add(s, EntityResource (s, e))) fileMap
+        let entityMap em (s, (e : EntityResource)) =
+            match Map.tryFind s em with
+            |None -> em
+            |Some (olde, oldl) ->
+                 em.Add(s, ({olde with Entity.overwrite = e.overwrite}, oldl))
+        entitiesMap <- res |> List.fold entityMap entitiesMap
+        eprintfn "print all"
+        entitiesMap |> Map.toList |> List.map fst |> List.sortBy id |> List.iter (eprintfn "%s")
 
     let updateFiles files =
-        files |> PSeq.ofList |> PSeq.map (parseFile >> parseEntity) |> Seq.collect saveResults |> Seq.toList
+        let news = files |> PSeq.ofList |> PSeq.map (parseFile >> parseEntity) |> Seq.collect saveResults |> Seq.toList
+        updateOverwrite()
+        news
 
     let getResources() = fileMap |> Map.toList |> List.map snd
     let validatableFiles() = fileMap |> Map.toList |> List.map snd |> List.choose (function |EntityResource (_, e) -> Some e |_ -> None) |> List.filter (fun f -> f.validate)
-    let allEntities() = entitiesMap |> Map.toList |> List.map snd
-    let validatableEntities() = entitiesMap |> Map.toList |> List.map snd |> List.filter (fun (e, _) -> e.validate)
+    let allEntities() = entitiesMap |> Map.toList |> List.map snd |> List.filter (fun (e, _) -> e.overwrite <> Overwritten)
+    let validatableEntities() = entitiesMap |> Map.toList |> List.map snd  |> List.filter (fun (e, _) -> e.overwrite <> Overwritten) |> List.filter (fun (e, _) -> e.validate)
         
     member __.Api = {
         new IResourceAPI<'T> with

@@ -147,6 +147,7 @@ let folderTests =
         testFolder "./testfiles/validationtests/modifiertests" "modifiers"
         testFolder "./testfiles/validationtests/eventtests" "events"
         testFolder "./testfiles/validationtests/weighttests" "weights"
+        testFolder "./testfiles/multiplemodtests" "multiple"
     ]
 
 [<Tests>]
@@ -215,7 +216,7 @@ let embeddedTests =
                                 |> (fun f -> (new StreamReader(f)).ReadToEnd().Split(Environment.NewLine))
                                 |> Array.toList |> List.map (fun f -> f, "")
         // eprintfn "%A" filelist               
-        let embeddedFileNames = Assembly.GetEntryAssembly().GetManifestResourceNames() |> Array.filter (fun f -> f.Contains("common") || f.Contains("localisation") || f.Contains("interface"))
+        let embeddedFileNames = Assembly.GetEntryAssembly().GetManifestResourceNames() |> Array.filter (fun f -> f.Contains("embeddedtest") && (f.Contains("common") || f.Contains("localisation") || f.Contains("interface")))
         let embeddedFiles = embeddedFileNames |> List.ofArray |> List.map (fun f -> fixEmbeddedFileName f, (new StreamReader(Assembly.GetEntryAssembly().GetManifestResourceStream(f))).ReadToEnd())
         let stlE = STLGame("./testfiles/embeddedtest/test", FilesScope.All, "", [], [], [], embeddedFiles @ filelist, [STL STLLang.English], false, true)
         let stlNE = STLGame("./testfiles/embeddedtest/test", FilesScope.All, "", [], [], [], [], [STL STLLang.English], false, true)
@@ -236,6 +237,29 @@ let embeddedTests =
             Expect.isEmpty (missing) (sprintf "Following lines are expected to have an error %A" missing)
         yield! netestVals |> List.map (fun (f, t) -> testCase ("no embed" + f.ToString()) <| fun () -> neinner (f, t))
 
+    ]
+
+[<Tests>]
+let overwriteTests =
+    testList "overwrite" [
+        // eprintfn "%A" filelist               
+        let triggers, effects = parseDocsFile "./testfiles/validationtests/trigger_docs_2.0.2.txt" |> (function |Success(p, _, _) -> DocsParser.processDocs p)
+        let modifiers = SetupLogParser.parseLogsFile "./testfiles/validationtests/setup.log" |> (function |Success(p, _, _) -> SetupLogParser.processLogs p)
+        let embeddedFileNames = Assembly.GetEntryAssembly().GetManifestResourceNames() |> Array.filter (fun f -> f.Contains("overwritetest") && (f.Contains("common") || f.Contains("localisation") || f.Contains("interface")))
+        let embeddedFiles = embeddedFileNames |> List.ofArray |> List.map (fun f -> fixEmbeddedFileName f, (new StreamReader(Assembly.GetEntryAssembly().GetManifestResourceStream(f))).ReadToEnd())
+        let stl = STLGame("./testfiles/overwritetest/test", FilesScope.All, "", triggers, effects, modifiers, embeddedFiles, [STL STLLang.English], false, true)
+        let errors = stl.ValidationErrors |> List.map (fun (c, s, n, l, f, k) -> f, Position.UnConv n) //>> (fun p -> FParsec.Position(p.StreamName, p.Index, p.Line, 1L)))
+        let testVals = stl.AllEntities |> List.map (fun (e, _) -> e.filepath, getNodeComments e.entity |> List.map fst)
+        let inner (file, ((nodekeys : FParsec.Position list)) )=
+            let expected = nodekeys  //|> List.map (fun p -> FParsec.Position(p.StreamName, p.Index, p.Line, 1L))
+            let fileErrors = errors |> List.filter (fun (c, f) -> f.StreamName = file )
+            let fileErrorPositions = fileErrors |> List.map snd
+            let missing = remove_all expected fileErrorPositions
+            let extras = remove_all fileErrorPositions expected
+            //eprintfn "%A" fileErrors
+            Expect.isEmpty (extras) (sprintf "Following lines are not expected to have an error %A, all %A" extras expected )
+            Expect.isEmpty (missing) (sprintf "Following lines are expected to have an error %A" missing)
+        yield! testVals |> List.map (fun (f, t) -> testCase (f.ToString()) <| fun () -> inner (f, t))
     ]
 
 

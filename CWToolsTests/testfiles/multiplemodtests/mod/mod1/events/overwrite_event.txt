@@ -1,0 +1,9 @@
+##To be overwritten
+namespace = test
+country_event = {
+    is_triggered_only = yes
+    id = test.1
+    trigger = {
+        has_planet_flag = yes
+    }
+}
