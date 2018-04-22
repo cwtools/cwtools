@@ -6,11 +6,13 @@ open System.IO
 open CWTools.Parser
 open CWTools.Process.STLProcess
 open CWTools.Process.STLScopes
+open CWTools.Localisation
+open CWTools.Common
 
 
 
 
-type References<'T>(resourceManager : IResourceAPI<'T>, lookup : Lookup) =
+type References<'T>(resourceManager : IResourceAPI<'T>, lookup : Lookup, localisation : ILocalisationAPI list) =
     let entities() = resourceManager.AllEntities() |> List.map (fun (e, _) -> e.entity)
     let events() = 
         entities()
@@ -20,6 +22,9 @@ type References<'T>(resourceManager : IResourceAPI<'T>, lookup : Lookup) =
     let modifiers() = lookup.staticModifiers |> List.map(fun m -> m.tag)
     let triggers() = lookup.scriptedTriggers |> List.map(fun t -> t.Name)
     let effects() = lookup.scriptedEffects |> List.map(fun e -> e.Name)
+    let localisation() = 
+        localisation |> List.filter (fun l -> l.GetLang = ((STL STLLang.English)))
+                     |> List.collect (fun l -> l.ValueMap |> Map.toList)
     member __.EventIDs = eventIDs()
     member __.ModifierNames = modifiers()
     member __.TriggerNames = triggers()
@@ -27,3 +32,4 @@ type References<'T>(resourceManager : IResourceAPI<'T>, lookup : Lookup) =
     member __.ScopeNames = oneToOneScopes |> List.map (fun (n, _) -> n)
     member __.ScriptVariableNames = lookup.definedScriptVariables |> List.distinct
     member __.Technologies = lookup.technologies
+    member __.Localisation = localisation()

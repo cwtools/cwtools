@@ -534,7 +534,7 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
         member __.StaticModifiers = lookup.staticModifiers
         member __.UpdateFile file = updateFile file
         member __.AllEntities = resources.AllEntities()
-        member __.References = References<STLComputedData>(resources, lookup)
+        member __.References = References<STLComputedData>(resources, lookup, (localisationAPIs |> List.map snd))
        
 
         //member __.ScriptedTriggers = parseResults |> List.choose (function |Pass(f, p, t) when f.Contains("scripted_triggers") -> Some p |_ -> None) |> List.map (fun t -> )
