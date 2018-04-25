@@ -15,6 +15,7 @@ open System
 open Microsoft.FSharp.Collections.Tagged
 open System.Collections
 open STLValidation
+open FSharpx.Collections
 
 
 module Graphics =
@@ -74,8 +75,10 @@ module Graphics =
         fun os es ->
             let shipsizes = os.AllOfTypeChildren EntityType.ShipSizes
                             |> List.map (fun ss -> ss, ss.Key, (ss.Child "graphical_culture" |> Option.map (fun gc -> gc.LeafValues |> Seq.map (fun lv -> lv.Value.ToRawString()) |> List.ofSeq) |> Option.defaultValue []))
-                            
-            let sections = os.AllOfTypeChildren EntityType.SectionTemplates
+            let shipsizesV = es.AllOfTypeChildren EntityType.ShipSizes
+                            |> List.map (fun ss -> ss, ss.Key, (ss.Child "graphical_culture" |> Option.map (fun gc -> gc.LeafValues |> Seq.map (fun lv -> lv.Value.ToRawString()) |> List.ofSeq) |> Option.defaultValue []))
+                
+            let sections = es.AllOfTypeChildren EntityType.SectionTemplates
             let cultures = getGraphicalCultures os
             let assets = os.AllOfTypeChildren EntityType.GfxAsset
                             |> List.map (fun a -> a.TagText "name")
@@ -93,14 +96,14 @@ module Graphics =
                             
             sections <&!&> inner
             <&&>
-            (shipsizes <&!&> (fun (ss, n, c) -> c <&!&> validateEntityCulture assets cultures (n + "_entity") ss))
+            (shipsizesV <&!&> (fun (ss, n, c) -> c <&!&> validateEntityCulture assets cultures (n + "_entity") ss))
 
     let valComponentGraphics : StructureValidator =
         fun os es ->
             let shipsizes = os.AllOfTypeChildren EntityType.ShipSizes
                             |> List.map (fun ss -> ss, ss.Key, (ss.Child "graphical_culture" |> Option.map (fun gc -> gc.LeafValues |> Seq.map (fun lv -> lv.Value.ToRawString()) |> List.ofSeq) |> Option.defaultValue []))
                             
-            let components = os.AllOfTypeChildren EntityType.ComponentTemplates
+            let components = es.AllOfTypeChildren EntityType.ComponentTemplates
                                 |> List.filter (fun c -> (c.Tag "hidden") |> Option.bind (function |Value.Bool x -> Some (not x) |_ -> Some true) |> Option.defaultValue true)
             let cultures = getGraphicalCultures os
             let assets = os.AllOfTypeChildren EntityType.GfxAsset
@@ -122,3 +125,65 @@ module Graphics =
             es.AllOfTypeChildren EntityType.AmbientObjects
             |> List.collect (fun ao -> ao.Leafs "entity" |> List.ofSeq)
             <&!&> (fun l -> validateEntity assets (l.Value.ToRawString()) l)
+    let valIconLeaf (sprites : Collections.Set<string>) (leaf : Leaf) =
+        if Set.contains (leaf.Value.ToRawString()) sprites then OK else Invalid [inv (ErrorCodes.SpriteMissing (leaf.Value.ToString())) leaf]
+
+    let valIcon (sprites : Collections.Set<string>) (key : string) (node : Node) =
+        let results =
+            match node.Leafs key |> List.ofSeq with
+            | [] -> OK
+            | xs -> 
+                xs <&!&> valIconLeaf sprites
+        results
+
+    type gfxFolders =
+    |Buildings
+
+    let doesFileExist (files : Collections.Set<string>) (folder : gfxFolders) (file : string) =
+        let path =
+            match folder with
+            |Buildings -> "gfx\\interface\\icons\\buildings\\" + file + ".dds"
+        files |> Set.contains path
+
+    let valIconWithInterface (sprites : Collections.Set<string>) (files : Collections.Set<string>) (folder : gfxFolders) (key : string) (node : Node) =
+        let inner = 
+            fun (leaf : Leaf) ->
+                let value = leaf.Value.ToRawString()
+                if doesFileExist files folder value then OK
+                else valIconLeaf sprites leaf
+        node.Leafs key <&!&> inner
+
+    let valComponentIcons : FileValidator = 
+        //let spriteKeys = ["spriteType"; "portraitType"; "corneredTileSpriteType"; "flagSpriteType"]
+        fun res es ->
+            let os = EntitySet (res.AllEntities())
+            let files = res.GetResources() |> List.choose (function |FileResource (_, f) -> Some f.logicalpath |EntityResource (_, f) -> Some f.logicalpath) |> Set.ofList
+            let sprites = os.GlobMatchChildren("**/interface/*.gfx") @ os.GlobMatchChildren("**/interface/*/*.gfx")
+                            |> List.filter (fun e -> e.Key = "spriteTypes")
+                            |> List.collect (fun e -> e.Children)
+            let spriteNames = sprites |> Seq.collect (fun s -> s.TagsText "name") |> Set.ofSeq
+            files |> Set.iter (eprintfn "%s")
+            let components = es.AllOfTypeChildren EntityType.ComponentTemplates
+            let componentsets = es.AllOfTypeChildren EntityType.ComponentSets
+            // let fNode = (fun (x : Node) children ->
+            //                 let results =
+            //                     match x.Leafs "icon" |> List.ofSeq with
+            //                     | [] -> OK
+            //                     | xs -> 
+            //                         xs <&!&> (fun e -> if List.contains (e.Value.ToRawString()) spriteNames then OK else Invalid [inv (ErrorCodes.SpriteMissing (e.Value.ToString())) e])
+            //                 results <&&> children
+            //                     )
+            // let fCombine = (<&&>)
+            components <&!&> valIcon spriteNames "icon"
+            <&&>
+            (componentsets <&!&> valIcon spriteNames "icon")
+            <&&>
+            (es.AllOfTypeChildren EntityType.Buildings <&!&> valIconWithInterface spriteNames files Buildings "icon")
+            <&&>
+            (es.AllOfTypeChildren EntityType.MapModes <&!&> valIcon spriteNames "icon")
+            <&&>
+            (es.AllOfTypeChildren EntityType.SectionTemplates <&!&> valIcon spriteNames "icon")
+            <&&>
+            (es.AllOfTypeChildren EntityType.StarbaseBuilding <&!&> valIcon spriteNames "icon")
+            <&&>
+            (es.AllOfTypeChildren EntityType.StarbaseModules <&!&> valIcon spriteNames "icon")

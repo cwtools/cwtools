@@ -1,0 +1,8 @@
+
+building_test = {
+    icon = "building_test"
+}
+
+building_test2 = {
+    icon = "building_test_sprite"
+}

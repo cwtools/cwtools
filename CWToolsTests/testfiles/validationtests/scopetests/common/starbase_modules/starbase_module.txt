@@ -1,7 +1,6 @@
 ##Test triggers
 missile_battery = {
 	section = "MISSILE_STARBASE_SECTION"
-	icon = "GFX_starbase_missile_battery"
 	construction_days = 180	
 	
     potential = {

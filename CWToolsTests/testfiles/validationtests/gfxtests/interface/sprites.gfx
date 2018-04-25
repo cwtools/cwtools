@@ -1,0 +1,6 @@
+spriteTypes = {
+    spriteType = {
+        name = "building_test_sprite"
+        textureFile = "gfx/interface/icons/buildings/building_test.dds"
+    }
+}

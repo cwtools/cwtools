@@ -22,6 +22,7 @@ type FileResourceInput =
     {
         scope : string
         filepath : string
+        logicalpath : string
     }
 type ResourceInput =
     |EntityResourceInput of EntityResourceInput
@@ -59,6 +60,7 @@ type FileResource =
     {
         scope : string
         filepath : string   
+        logicalpath : string
     }
 
 type Resource =
@@ -223,7 +225,7 @@ type ResourceManager<'T> (computedDataFunction : (Entity -> 'T)) =
                     |EntityResourceInput e -> 
                         // eprintfn "%A %A" e.logicalpath e.filepath
                         e |> ((fun f -> f.scope, f.filepath, f.logicalpath, f.validate, (fun (t, t2) -> duration (fun () -> CKParser.parseString t2 t)) (f.filepath, f.filetext)) >> matchResult)
-                    |FileResourceInput f -> FileResource (f.filepath, { scope = f.scope; filepath = f.filepath }), []
+                    |FileResourceInput f -> FileResource (f.filepath, { scope = f.scope; filepath = f.filepath; logicalpath = f.logicalpath }), []
         
     let shipProcess = STLProcess.shipProcess.ProcessNode<Node>
     let parseEntity ((file, statements) : Resource * Statement list) =
@@ -269,8 +271,8 @@ type ResourceManager<'T> (computedDataFunction : (Entity -> 'T)) =
             |Some (olde, oldl) ->
                  em.Add(s, ({olde with Entity.overwrite = e.overwrite}, oldl))
         entitiesMap <- res |> List.fold entityMap entitiesMap
-        eprintfn "print all"
-        entitiesMap |> Map.toList |> List.map fst |> List.sortBy id |> List.iter (eprintfn "%s")
+        // eprintfn "print all"
+        // entitiesMap |> Map.toList |> List.map fst |> List.sortBy id |> List.iter (eprintfn "%s")
 
     let updateFiles files =
         let news = files |> PSeq.ofList |> PSeq.map (parseFile >> parseEntity) |> Seq.collect saveResults |> Seq.toList

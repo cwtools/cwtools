@@ -34,6 +34,8 @@ type FilesScope =
 //type GameFile = GameFile of result : FileResult
 
 type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, triggers : DocEffect list, effects : DocEffect list, modifiers : Modifier list, embeddedFiles : (string * string) list, langs : Lang list, validateVanilla : bool, experimental : bool ) =
+
+        let normalisedScopeDirectory = scopeDirectory.Replace("/","\\").TrimStart('.')
         let scriptFolders = [
                     "common/agendas";
                     "common/ambient_objects";
@@ -244,7 +246,7 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
                 |".gui"
                 |".gfx"
                 |".asset" ->
-                    let rootedpath = filepath.Substring(filepath.IndexOf(scopeDirectory) + (scopeDirectory.Length) + 2)
+                    let rootedpath = filepath.Substring(filepath.IndexOf(normalisedScopeDirectory) + (normalisedScopeDirectory.Length) + 1)
                     Some (EntityResourceInput { scope = scope; filepath = filepath; logicalpath = (convertPathToLogicalPath rootedpath); filetext = File.ReadAllText filepath; validate = true})
                 |".dds"
                 |".tga"
@@ -252,7 +254,12 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
                 |".lua"
                 |".png"
                 |".mesh" ->
-                    Some (FileResourceInput { scope = scope; filepath = filepath })
+                    eprintfn "%A" scopeDirectory
+                    eprintfn "%A" filepath
+                    let rootedpath = filepath.Substring(filepath.IndexOf(normalisedScopeDirectory) + (normalisedScopeDirectory.Length) + 1)
+                    eprintfn "%A" rootedpath
+                    
+                    Some (FileResourceInput { scope = scope; filepath = filepath; logicalpath = convertPathToLogicalPath rootedpath })
                 |_ -> None
             allFolders |> List.iter (eprintfn "%A")
             let allFiles = List.map getAllFiles allFolders |> List.collect id |> List.choose fileToResourceInput
@@ -414,7 +421,7 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
             let flattened = allEntitiesByFile |> List.map (fun n -> n.Children) |> List.collect id
 
             let validators = [validateVariables, "var"; valTechnology, "tech"; validateTechnologies, "tech2"; valButtonEffects, "but"; valSprites, "sprite"; valVariables, "var2"; valEventCalls, "event"; 
-                                validateAmbientGraphics, "ambient"; validateShipDesigns, "designs"]
+                                validateAmbientGraphics, "ambient"; validateShipDesigns, "designs"; ]
             let experimentalvalidators = [valSectionGraphics, "sections"; valComponentGraphics, "component"; ]
             let oldEntities = EntitySet (resources.AllEntities())
             let newEntities = EntitySet entities
@@ -426,7 +433,7 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
             let res = runValidators (fun f -> f oldEntities newEntities) validators
             //let res = validators <&!&> (fun v -> v oldEntities newEntities) |> (function |Invalid es -> es |_ -> [])
             eprintfn "Validating files"
-            let fileValidators = [valSpriteFiles; valMeshFiles; valAssetFiles]
+            let fileValidators = [valSpriteFiles; valMeshFiles; valAssetFiles; valComponentIcons]
             let fres = fileValidators <&!&> (fun v -> v resources newEntities) |> (function |Invalid es -> es |_ -> [])
             eprintfn "Validating effects/triggers"
             let eres = duration (fun _ -> valAllEffects (lookup.scriptedTriggers) (lookup.scriptedEffects) (lookup.staticModifiers) newEntities  |> (function |Invalid es -> es |_ -> [])) "effects"
@@ -475,7 +482,7 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
             | _ ->
                 let filepath = Path.GetFullPath(filepath)
                 let file = File.ReadAllText filepath
-                let rootedpath = filepath.Substring(filepath.IndexOf(scopeDirectory) + (scopeDirectory.Length))
+                let rootedpath = filepath.Substring(filepath.IndexOf(normalisedScopeDirectory) + (normalisedScopeDirectory.Length))
                 let logicalpath = convertPathToLogicalPath rootedpath
                 // eprintfn "%s %s" logicalpath filepath
                 let newEntities = resources.UpdateFile (EntityResourceInput {scope = ""; filepath = filepath; logicalpath = logicalpath; filetext = file; validate = true})
@@ -496,7 +503,7 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
             let files = allFilesByPath
             let filteredfiles = if validateVanilla then files else files |> List.choose (function |FileResourceInput f -> Some (FileResourceInput f) |EntityResourceInput f -> if f.scope = "vanilla" then Some (EntityResourceInput {f with validate = false}) else Some (EntityResourceInput f))
             resources.UpdateFiles(filteredfiles) |> ignore
-            let embedded = embeddedFiles |> List.map (fun (f, ft) -> if ft = "" then FileResourceInput { scope = "embedded"; filepath = f } else EntityResourceInput {scope = "embedded"; filepath = f; logicalpath = (convertPathToLogicalPath f); filetext = ft; validate = false})
+            let embedded = embeddedFiles |> List.map (fun (f, ft) -> if ft = "" then FileResourceInput { scope = "embedded"; filepath = f; logicalpath = (convertPathToLogicalPath f) } else EntityResourceInput {scope = "embedded"; filepath = f; logicalpath = (convertPathToLogicalPath f); filetext = ft; validate = false})
             match gameDirectory with
             |None -> resources.UpdateFiles(embedded) |> ignore
             | _ -> ()

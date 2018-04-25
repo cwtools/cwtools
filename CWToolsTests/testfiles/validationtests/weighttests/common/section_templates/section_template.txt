@@ -4,7 +4,6 @@ ship_section_template = {
 	ship_size = cruiser
 	fits_on_slot = mid
 	entity = "cruiser_mid_S2HB_entity"
-	icon = "GFX_ship_part_core_mid"
 	
 	ai_weight = {
 		modifier = {

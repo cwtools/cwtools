@@ -1,6 +1,5 @@
 ##Test weights
 anchorage = {
-	icon = "GFX_starbase_anchorage"
 	section = "ANCHORAGE_STARBASE_SECTION"
 	construction_days = 180
 	

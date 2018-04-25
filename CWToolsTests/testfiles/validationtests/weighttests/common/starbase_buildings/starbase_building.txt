@@ -1,6 +1,5 @@
 ##Test weights
 offworld_trading_company = {
-	icon = "GFX_starbase_offworld_trading_company"
 	construction_days = 360
 
 	

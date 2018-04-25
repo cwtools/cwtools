@@ -2,7 +2,6 @@
 utility_component_template = {
 	key = "SENSOR_4"
 	size = medium
-	icon = "GFX_ship_part_sensor_4"
 	icon_frame = 1
 	power = 5
 	cost = 5

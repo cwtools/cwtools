@@ -2,7 +2,6 @@
 utility_component_template = {
 	key = "SHIP_AURA_TARGETING_GRID"
 	size = medium
-	icon = "GFX_ship_part_aura_nanobot"
 	icon_frame = 1
 	power = 0
 	cost = 0
