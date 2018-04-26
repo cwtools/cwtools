@@ -503,10 +503,10 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
             updateScriptedEffects()
             updateStaticodifiers()
             updateScriptedLoc()
-            updateLocalisation()
             updateDefinedVariables()
             updateModifiers()
             updateTechnologies()
+            updateLocalisation()
 
         //member __.Results = parseResults
         member __.ParserErrors = parseErrors()
