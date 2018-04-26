@@ -254,15 +254,12 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
                 |".lua"
                 |".png"
                 |".mesh" ->
-                    eprintfn "%A" scopeDirectory
-                    eprintfn "%A" filepath
                     let rootedpath = filepath.Substring(filepath.IndexOf(normalisedScopeDirectory) + (normalisedScopeDirectory.Length) + 1)
-                    eprintfn "%A" rootedpath
                     
                     Some (FileResourceInput { scope = scope; filepath = filepath; logicalpath = convertPathToLogicalPath rootedpath })
                 |_ -> None
-            allFolders |> List.iter (eprintfn "%A")
-            let allFiles = List.map getAllFiles allFolders |> List.collect id |> List.choose fileToResourceInput
+            let allFiles = duration (fun _ -> PSeq.map getAllFiles allFolders |> PSeq.collect id |> PSeq.choose fileToResourceInput |> List.ofSeq ) "Load files"
+            // let allFiles = List.map getAllFiles allFolders |> List.collect id |> List.choose fileToResourceInput
             allFiles
 
         let getChildrenWithComments (root : Node) =
@@ -410,12 +407,6 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
                    |> List.collect id
         let snood = snd
         let validateAll (entities : (Entity * Lazy<STLComputedData>) list)  = 
-            let duration f s = 
-                let timer = new System.Diagnostics.Stopwatch()
-                timer.Start()
-                let returnValue = f()
-                eprintfn "Elapsed Time: %i %s" timer.ElapsedMilliseconds s
-                returnValue
             eprintfn "Validating %i files" (entities.Length)
             let allEntitiesByFile = entities |> List.map (fun (f, _) -> f.entity)
             let flattened = allEntitiesByFile |> List.map (fun n -> n.Children) |> List.collect id
@@ -433,8 +424,8 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
             let res = runValidators (fun f -> f oldEntities newEntities) validators
             //let res = validators <&!&> (fun v -> v oldEntities newEntities) |> (function |Invalid es -> es |_ -> [])
             eprintfn "Validating files"
-            let fileValidators = [valSpriteFiles; valMeshFiles; valAssetFiles; valComponentIcons]
-            let fres = fileValidators <&!&> (fun v -> v resources newEntities) |> (function |Invalid es -> es |_ -> [])
+            let fileValidators = [valSpriteFiles, "sprites"; valMeshFiles, "mesh"; valAssetFiles, "asset"; valComponentIcons, "compicon"]
+            let fres = fileValidators <&!&> (fun (v, s) -> duration (fun _ -> v resources newEntities) s) |> (function |Invalid es -> es |_ -> [])
             eprintfn "Validating effects/triggers"
             let eres = duration (fun _ -> valAllEffects (lookup.scriptedTriggers) (lookup.scriptedEffects) (lookup.staticModifiers) newEntities  |> (function |Invalid es -> es |_ -> [])) "effects"
             let tres = duration (fun _ ->  valAllTriggers (lookup.scriptedTriggers) (lookup.scriptedEffects) (lookup.staticModifiers) newEntities  |> (function |Invalid es -> es |_ -> [])) "triggers"

@@ -57,11 +57,19 @@ module Graphics =
                                  |> Option.map (fun k -> k + "_" + entity)
         let firstkey = culture + "_" + entity
         match (entities.Contains entity) || (entities.Contains firstkey), secondKey with
-        |true, _ -> OK
+        |true, _ -> None
         |false, None ->
-            Invalid [inv (ErrorCodes.UndefinedSectionEntity firstkey culture) leaf]
+            Some (Invalid [inv (ErrorCodes.UndefinedSectionEntity firstkey culture) leaf])
         |false, Some fallback ->
-            if entities.Contains fallback then OK else Invalid [inv (ErrorCodes.UndefinedSectionEntityFallback firstkey fallback culture ) leaf]
+            if entities.Contains fallback then None else Some (Invalid [inv (ErrorCodes.UndefinedSectionEntityFallback firstkey fallback culture ) leaf])
+    
+    let inline validateEntityCultures (entities : Collections.Set<string>) (allcultures : (string * string) list) (entity : string) (leaf) (cultures : string list) =
+        let errors = cultures |> List.choose (validateEntityCulture entities allcultures entity leaf)
+        match errors with
+        |[] -> OK
+        |[x] -> x
+        |[x1; x2] -> x1 <&&> x2
+        |x1::x2::_ -> x1 <&&> x2 <&&> (Invalid [inv (ErrorCodes.CustomError "and more errors hidden" Severity.Error) leaf])
 
     let inline validateEntity (entities : Collections.Set<string>) (entity : string) (node) =
         if entities.Contains entity then OK else Invalid [inv (ErrorCodes.UndefinedEntity entity) node]
@@ -92,11 +100,11 @@ module Graphics =
                         match shipsizes |> List.tryFind (fun (_, n, _) -> n == shipsize) with
                         |None -> OK
                         |Some (_, _, shipsizeinfo) ->
-                            shipsizeinfo <&!&> validateEntityCulture assets cultures (s.TagText "entity") entity
+                            shipsizeinfo |> validateEntityCultures assets cultures (s.TagText "entity") entity
                             
             sections <&!&> inner
             <&&>
-            (shipsizesV <&!&> (fun (ss, n, c) -> c <&!&> validateEntityCulture assets cultures (n + "_entity") ss))
+            (shipsizesV <&!&> (fun (ss, n, c) -> c |> validateEntityCultures assets cultures (n + "_entity") ss))
 
     let valComponentGraphics : StructureValidator =
         fun os es ->
@@ -114,7 +122,7 @@ module Graphics =
                     match s.Leafs "entity" |> Seq.tryHead with
                     |None -> OK
                     |Some entity ->
-                        (cultures |> List.map fst) <&!&> validateEntityCulture assets cultures (s.TagText "entity") entity                            
+                        (cultures |> List.map fst) |> validateEntityCultures assets cultures (s.TagText "entity") entity                            
             components <&!&> inner
 
     let validateAmbientGraphics : StructureValidator = 
@@ -162,9 +170,9 @@ module Graphics =
                             |> List.filter (fun e -> e.Key = "spriteTypes")
                             |> List.collect (fun e -> e.Children)
             let spriteNames = sprites |> Seq.collect (fun s -> s.TagsText "name") |> Set.ofSeq
-            files |> Set.iter (eprintfn "%s")
             let components = es.AllOfTypeChildren EntityType.ComponentTemplates
             let componentsets = es.AllOfTypeChildren EntityType.ComponentSets
+                                |> List.filter (fun cs -> cs.Tag "required_component_set" |> Option.map (function |Value.Bool b -> not b |_ -> false) |> Option.defaultValue false)
             // let fNode = (fun (x : Node) children ->
             //                 let results =
             //                     match x.Leafs "icon" |> List.ofSeq with
@@ -181,8 +189,6 @@ module Graphics =
             (es.AllOfTypeChildren EntityType.Buildings <&!&> valIconWithInterface spriteNames files Buildings "icon")
             <&&>
             (es.AllOfTypeChildren EntityType.MapModes <&!&> valIcon spriteNames "icon")
-            <&&>
-            (es.AllOfTypeChildren EntityType.SectionTemplates <&!&> valIcon spriteNames "icon")
             <&&>
             (es.AllOfTypeChildren EntityType.StarbaseBuilding <&!&> valIcon spriteNames "icon")
             <&&>

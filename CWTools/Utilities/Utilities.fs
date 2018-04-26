@@ -20,3 +20,25 @@ module Utils =
                 let temp = memFunction(n)
                 dict.Add(keyFunction(n), temp)
                 temp
+
+    let duration f s = 
+        let timer = new System.Diagnostics.Stopwatch()
+        timer.Start()
+        let returnValue = f()
+        eprintfn "Elapsed Time: %i %s" timer.ElapsedMilliseconds s
+        returnValue
+
+
+    type LogLevel =
+    |Silent
+    |Verbose
+
+    let mutable loglevel = Silent
+
+    let log format =
+        match loglevel with
+        |Silent -> ignore
+        |Verbose -> Printf.eprintfn format
+    
+    let logVerbose format = log format
+

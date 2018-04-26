@@ -490,7 +490,8 @@ module STLValidation =
                    Seq.append (x.Leafs "textureFile") (Seq.append (x.Leafs "texturefile") (x.Leafs "effectFile"))
                     <&!&> (fun l ->
                         let filename = l.Value.ToRawString().Replace("/","\\")
-                        match filenames |> List.exists (fun f -> f.EndsWith(filename) || f.EndsWith(filename.Replace(".lua",".shader").Replace(".tga",".dds"))) with
+                        let filenamefallback = filename.Replace(".lua",".shader").Replace(".tga",".dds")
+                        match filenames |> List.exists (fun f -> f.EndsWith(filename) || f.EndsWith(filenamefallback)) with
                         | true -> OK
                         | false -> Invalid [inv (ErrorCodes.MissingFile (l.Value.ToRawString())) l])
             sprites <&!&> inner
