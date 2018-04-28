@@ -224,7 +224,7 @@ type ResourceManager<'T> (computedDataFunction : (Entity -> 'T)) =
          match file with
                     |EntityResourceInput e -> 
                         // eprintfn "%A %A" e.logicalpath e.filepath
-                        e |> ((fun f -> f.scope, f.filepath, f.logicalpath, f.validate, (fun (t, t2) -> duration (fun () -> CKParser.parseString t2 t)) (f.filepath, f.filetext)) >> matchResult)
+                        e |> ((fun f -> f.scope, f.filepath, f.logicalpath, f.validate, (fun (t, t2) -> duration (fun () -> CKParser.parseString t2 (System.String.Intern(t)))) (f.filepath, f.filetext)) >> matchResult)
                     |FileResourceInput f -> FileResource (f.filepath, { scope = f.scope; filepath = f.filepath; logicalpath = f.logicalpath }), []
         
     let shipProcess = STLProcess.shipProcess.ProcessNode<Node>
