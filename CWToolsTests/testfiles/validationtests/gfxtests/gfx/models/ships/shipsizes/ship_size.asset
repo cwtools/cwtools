@@ -1,0 +1,7 @@
+##Dummies for shipsize tests
+entity = {
+	name = "humanoid_01_corvette_entity"
+}
+entity = {
+	name = "mammalian_01_corvette_entity"
+}

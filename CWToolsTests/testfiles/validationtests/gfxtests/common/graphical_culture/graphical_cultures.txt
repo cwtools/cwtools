@@ -1,0 +1,45 @@
+humanoid_01 = {
+	randomized = { host_has_dlc = "Humanoids Species Pack" }
+	selectable = { local_has_dlc = "Humanoids Species Pack" }
+
+	ship_color = yes
+	fallback = mammalian_01
+	ship_lighting = {
+		cam_light_1_dir = { 0.6 -0.2 0.1 }
+		cam_light_2_dir = { -0.4 0.0 0.0 }
+		cam_light_3_dir = { 0.4 -1.0 -0.1 }
+		
+		intensity_near = 1.0
+		intensity_far = 5.0
+		near_value = 100
+		far_value = 4000
+		rim_start_near = 0.5
+		rim_stop_near = 0.99
+		rim_start_far = 0.3
+		rim_stop_far = 0.99
+		ambient_near = 0.1
+		ambient_far = 0.0
+	}
+}
+
+
+mammalian_01 = {
+
+	ship_color = yes
+	ship_lighting = {
+		cam_light_1_dir = { 1.0 0.0 0.5 }
+		cam_light_2_dir = { -0.5 0.2 0.0 }
+		cam_light_3_dir = { 0.5 -1.0 0.0 }
+		
+		intensity_near = 0.1
+		intensity_far = 1.0
+		near_value = 700
+		far_value = 4000
+		rim_start_near = 0.5
+		rim_stop_near = 0.99
+		rim_start_far = 0.3
+		rim_stop_far = 0.99
+		ambient_near = 0.1
+		ambient_far = 20.0
+	}
+}

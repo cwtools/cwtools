@@ -84,8 +84,11 @@ module Graphics =
             let shipsizes = os.AllOfTypeChildren EntityType.ShipSizes
                             |> List.map (fun ss -> ss, ss.Key, (ss.Child "graphical_culture" |> Option.map (fun gc -> gc.LeafValues |> Seq.map (fun lv -> lv.Value.ToRawString()) |> List.ofSeq) |> Option.defaultValue []))
             let shipsizesV = es.AllOfTypeChildren EntityType.ShipSizes
+                            |> List.filter (fun ss -> not (ss.Has "entity"))
                             |> List.map (fun ss -> ss, ss.Key, (ss.Child "graphical_culture" |> Option.map (fun gc -> gc.LeafValues |> Seq.map (fun lv -> lv.Value.ToRawString()) |> List.ofSeq) |> Option.defaultValue []))
-                
+            let shipsizesEV = es.AllOfTypeChildren EntityType.ShipSizes
+                            |> List.filter (fun ss -> (ss.Has "entity"))
+            
             let sections = es.AllOfTypeChildren EntityType.SectionTemplates
             let cultures = getGraphicalCultures os
             let assets = os.AllOfTypeChildren EntityType.GfxAsset
@@ -102,9 +105,14 @@ module Graphics =
                         |Some (_, _, shipsizeinfo) ->
                             shipsizeinfo |> validateEntityCultures assets cultures (s.TagText "entity") entity
                             
+            let ssinner = 
+                fun (s : Node) ->
+                    s.Leafs "entity" <&!&> fun e -> if assets |> Set.contains (e.Value.ToRawString()) then OK else Invalid [inv (ErrorCodes.UndefinedEntity (e.Value.ToRawString())) e]
             sections <&!&> inner
             <&&>
             (shipsizesV <&!&> (fun (ss, n, c) -> c |> validateEntityCultures assets cultures (n + "_entity") ss))
+            <&&>
+            (shipsizesEV <&!&> ssinner)
 
     let valComponentGraphics : StructureValidator =
         fun os es ->
