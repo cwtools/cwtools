@@ -260,16 +260,10 @@ module STLEventValidation =
             
 
     let getEventChains (reffects : Effect list) (os : STLEntitySet) (es : STLEntitySet) =
-        let seffects = reffects |> List.choose (function | :? ScriptedEffect as e -> Some e |_ -> None)
-        let allevents = os.GlobMatchChildren("**/events/*.txt") |> List.choose (function | :? Event as e -> Some e |_ -> None)
+       
         let events = es.GlobMatchChildren("**/events/*.txt") |> List.choose (function | :? Event as e -> Some e |_ -> None)
-        let projects = os.GlobMatchChildren("**/common/special_projects/*.txt") @ es.GlobMatchChildren("**/common/special_projects/*.txt")
-        let effects = os.AllEffects @ es.AllEffects
-        let globalScriptedEffects = seffects |> List.collect (fun se -> se.GlobalEventTargets) |> Set.ofList
-        let globals = Set.union globalScriptedEffects (effects |> List.map findAllSavedGlobalEventTargets |> List.fold (Set.union) (Set.empty))
-        let sinits = os.GlobMatchChildren("**\\common\\solar_system_initializers\\**\\*.txt") @ es.GlobMatchChildren("**\\common\\solar_system_initializers\\**\\*.txt")
-        //eprintfn "%s" (globals |> Set.toList |> String.concat ", ")
         let eids = events |> List.map (fun e -> e.ID) |> Set.ofList
+        let projects = os.GlobMatchChildren("**/common/special_projects/*.txt") @ es.GlobMatchChildren("**/common/special_projects/*.txt")
         let chains = events |> List.collect (fun (event) -> findAllReferencedEvents projects event |> List.map (fun f -> event.ID, f))
                     |> List.filter (fun (_, f) -> Set.contains f eids)
                     //|> (fun f -> eprintfn "%A" f; f)
@@ -279,7 +273,14 @@ module STLEventValidation =
                     |> connectedComponents
                     //|> (fun f -> eprintfn "%A" f; f)
                     |> List.map (fun set -> set |> List.map (fun (event, targets) -> events |> List.find (fun e -> e.ID = event)))
-        chains <&!&> checkEventChain seffects sinits projects globals
+        if chains |> List.isEmpty then OK else
+            let seffects = reffects |> List.choose (function | :? ScriptedEffect as e -> Some e |_ -> None)
+            let effects = os.AllEffects @ es.AllEffects
+            let globalScriptedEffects = seffects |> List.collect (fun se -> se.GlobalEventTargets) |> Set.ofList
+            let globals = Set.union globalScriptedEffects (effects |> List.map findAllSavedGlobalEventTargets |> List.fold (Set.union) (Set.empty))
+            let sinits = os.GlobMatchChildren("**\\common\\solar_system_initializers\\**\\*.txt") @ es.GlobMatchChildren("**\\common\\solar_system_initializers\\**\\*.txt")
+            //eprintfn "%s" (globals |> Set.toList |> String.concat ", ")
+            chains <&!&> checkEventChain seffects sinits projects globals
         
         
     let valEventCalls : StructureValidator =
