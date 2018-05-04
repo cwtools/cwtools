@@ -22,13 +22,13 @@ module STLLocalisationValidation =
         match key = "" || key.Contains(" ") || (key.StartsWith("[") && key.EndsWith("]")), Set.contains key keys with
         | true, _ -> OK
         | _, true -> OK
-        | _, false -> Invalid [invData (ErrorCodes.MissingLocalisation key (lang :> obj)) leaf (Some key)]
+        | _, false -> Invalid [invData (ErrorCodes.MissingLocalisation key (lang)) leaf (Some key)]
 
     let checkLocName (leaf : Leaf) (keys : Set<string>) (lang : Lang) key  =
         match key = "" || key.Contains(" ") || (key.StartsWith("[") && key.EndsWith("]")), Set.contains key keys with
         | true, _ -> OK
         | _, true -> OK
-        | _, false -> Invalid [invData (ErrorCodes.MissingLocalisation key (lang :> obj)) leaf (Some key)]
+        | _, false -> Invalid [invData (ErrorCodes.MissingLocalisation key (lang)) leaf (Some key)]
 
     let checkLocKeys (keys : (Lang * Set<string>) list) (leaf : Leaf) =
         let key = leaf.Value |> (function |QString s -> s |s -> s.ToString())
@@ -64,14 +64,14 @@ module STLLocalisationValidation =
             match key = "" || key.Contains(" ") || (key.StartsWith("[") && key.EndsWith("]")), Set.contains key keys with
             | true, _ -> OK
             | _, true -> OK
-            | _, false -> Invalid [invLeafValue (ErrorCodes.MissingLocalisation key (lang :> obj)) lv (Some key)]
+            | _, false -> Invalid [invLeafValue (ErrorCodes.MissingLocalisation key (lang)) lv (Some key)]
 
     let checkLocNode (keys : Set<string>) (lang : Lang) key (node : Node) =
         if lang = STL STLLang.Default then OK else
             match key = "" || key.Contains(" ") || (key.StartsWith("[") && key.EndsWith("]")), Set.contains key keys with
             | true, _ -> OK
             | _, true -> OK
-            | _, false -> Invalid [invData (ErrorCodes.MissingLocalisation key (lang :> obj)) node (Some key)]
+            | _, false -> Invalid [invData (ErrorCodes.MissingLocalisation key (lang)) node (Some key)]
     
     let checkLocLeafValueS (keys : (Lang * Set<string>) list) key (lv : LeafValue) =
          keys |> List.fold (fun state (l, keys)  -> state <&&> checkLocLeafValue keys l key lv) OK

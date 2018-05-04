@@ -3,6 +3,7 @@ open CWTools.Process
 open FSharp.Collections.ParallelSeq
 open CWTools.Parser
 open Newtonsoft.Json.Converters
+open CWTools.Common
 
 module ValidationCore =
     
@@ -20,7 +21,10 @@ module ValidationCore =
         }
 
     type ErrorCodes =
-        static member MissingLocalisation = fun key language -> { ID = "CW100"; Severity = Severity.Warning; Message = sprintf "Localisation key %s is not defined for %O" key language}
+        static member MissingLocalisation = 
+            fun key language -> 
+                let lang = if language = Lang.STL STLLang.Default then "Default (localisation_synced)" else language.ToString()
+                { ID = "CW100"; Severity = Severity.Warning; Message = sprintf "Localisation key %s is not defined for %s" key lang}
         static member UndefinedVariable = fun variable -> { ID = "CW101"; Severity = Severity.Error; Message = sprintf "%s is not defined" variable }
         static member UndefinedTrigger = fun trigger -> { ID = "CW102"; Severity = Severity.Error; Message = sprintf "unknown trigger %s used." trigger }
         static member UndefinedEffect = fun effect -> { ID = "CW103"; Severity = Severity.Error; Message = sprintf "unknown effect %s used." effect }
