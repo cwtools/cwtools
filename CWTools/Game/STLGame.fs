@@ -22,6 +22,8 @@ open CWTools.Parser.Types
 open CWTools.Validation.Stellaris.STLLocalisationString
 open CWTools.Utilities.Utils
 open CWTools.Validation.Stellaris.Graphics
+open CWTools.Game.Stellaris
+open CWTools.Game.Stellaris.STLLookup
 
 
 
@@ -262,71 +264,12 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
             // let allFiles = List.map getAllFiles allFolders |> List.collect id |> List.choose fileToResourceInput
             allFiles
 
-        let getChildrenWithComments (root : Node) =
-            let findComment t s (a : Child) =
-                match (s, a) with
-                | ((b, c), _) when b -> (b, c)
-                | ((_, c), CommentC nc) -> (false, nc::c)
-                | ((_, c), NodeC n) when n.Key = t -> (true, c)
-                | ((_, _), _) -> (false, [])
-            root.Children |> List.map (fun e -> e, root.All |> List.rev |> List.fold (findComment e.Key) (false, []) |> snd)
-
-        // let getChildrenWithComments (node : Node) =
-        //     let findComments t s (a : Child) =
-        //             match (s, a) with
-        //             | ((b, c), _) when b -> (b, c)
-        //             | ((_, c), CommentC nc) -> (false, nc::c)
-        //             | ((_, c), NodeC n) when n.Position = t -> (true, c)
-        //             | ((_, c), LeafC v) when v.Position = t -> (true, c)
-        //             | ((_, _), _) -> (false, [])
-        //     let fNode = (fun (node:Node) (children) ->
-        //             let one = node.Values |> List.map (fun e -> node.All |> List.rev |> List.fold (findComments e.Position) (false, []) |> snd) |> List.collect id
-        //             let two = node.Children |> List.map (fun e ->  node.All |> List.rev |> List.fold (findComments e.Position) (false, []) |> snd) |> List.collect id
-        //             let new2 = one @ two
-        //             new2 @ children
-        //                 )
-        //     let fCombine = (@)
-        //     node |> fun c -> c, (foldNode2 fNode fCombine [] c)
-
-        let updateScriptedTriggers () = 
-            let rawTriggers = 
-                resources.AllEntities()
-                |> List.choose (function |(f, _) when f.filepath.Contains("scripted_triggers") -> Some (f.entity) |_ -> None)
-                |> List.collect getChildrenWithComments
-                |> List.rev
-            let mutable final = vanillaTriggers
-            let mutable i = 0
-            let mutable first = true
-            let ff() = 
-                i <- i + 1
-                let before = final
-                final <- rawTriggers |> List.map (fun t -> (STLProcess.getScriptedTriggerScope first EffectType.Trigger final final t) :> Effect)
-                first <- false
-                before = final || i > 10
-                //((before |> Set.ofList) = (final |> Set.ofList)) || i > 10
-            while (not (ff())) do ()
-            lookup.scriptedTriggers <- final @ vanillaTriggers
+        let updateScriptedTriggers () =
+            lookup.scriptedTriggers <- STLLookup.updateScriptedTriggers resources vanillaTriggers
 
 
         let updateScriptedEffects () =
-            let rawEffects = 
-                resources.AllEntities()
-                |> List.choose (function |(f, _) when f.filepath.Contains("scripted_effects") -> Some (f.entity) |_ -> None)
-                |> List.collect getChildrenWithComments
-                //|> List.collect (fun n -> n.Children)
-                |> List.rev
-            let mutable final = vanillaEffects
-            let mutable i = 0
-            let mutable first = true
-            let ff() = 
-                i <- i + 1
-                let before = final
-                final <- rawEffects |>  List.map (fun e -> (STLProcess.getScriptedTriggerScope first EffectType.Effect final lookup.scriptedTriggers e) :> Effect)
-                first <- false
-                before = final || i > 10
-                //((before |> Set.ofList) = (final |> Set.ofList)) || i > 10
-            while (not (ff())) do ()
-            lookup.scriptedEffects <- final @ vanillaEffects
+            lookup.scriptedEffects <- STLLookup.updateScriptedEffects resources vanillaEffects (lookup.scriptedTriggers)
 
         let updateStaticodifiers () =
             let rawModifiers =

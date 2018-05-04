@@ -14,6 +14,7 @@ open CWTools.Utilities.Utils
 open System
 open Microsoft.FSharp.Collections.Tagged
 open System.Collections
+open CWTools.Game.Stellaris.STLLookup
 
 
 module STLValidation =
@@ -61,11 +62,6 @@ module STLValidation =
         member __.Raw = entities
         member this.Merge(y : EntitySet<'T>) = EntitySet(this.Raw @ y.Raw)
 
-    type STLComputedData = {
-        eventids : string list
-        setvariables : string list
-        savedeventtargets : string list
-    }
     type STLEntitySet = EntitySet<STLComputedData>
     type StructureValidator = EntitySet<STLComputedData> -> EntitySet<STLComputedData> -> ValidationResult
     type FileValidator = IResourceAPI<STLComputedData> -> EntitySet<STLComputedData> -> ValidationResult
