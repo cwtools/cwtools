@@ -547,6 +547,8 @@ module rec STLProcess =
         |("modifier", _, {parents = "tradswap"::"trad"::_; previous = "tradition_swap"}) ->  specificScopeProcessNode<ModifierBlock> Scope.Country, "modifierblock", id;
         |("ai_weight"), _, {parents = "trad"::_;} -> processNodeSimple<WeightBlock>, "weightblock", id;
         |("modifier"), _, {parents = "weightblock"::"trad"::_;} -> specificScopeProcessNode<WeightModifierBlock> Scope.Country, "weightmodifierblock", id;
+        |("on_enabled"), _, {parents = "trad"::_;} -> specificScopeProcessNode<EffectBlock> Scope.Country, "effectblock", id;
+        |("on_enabled"), _, {parents = "tradswap"::"trad"::_;} -> specificScopeProcessNode<EffectBlock> Scope.Country, "effectblock", id;
         //Traits
         ////TODO: traits ai_weight
         |(_, _, {complete = false; entityType = EntityType.Traits})  ->  processNodeSimple<Node>, "trait",  (fun c -> { c with complete = true;});

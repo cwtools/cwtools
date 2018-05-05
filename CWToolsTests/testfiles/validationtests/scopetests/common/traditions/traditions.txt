@@ -10,6 +10,12 @@ tr_diplomacy_entente_coordination = {
 		invalid = yes
 	}
 	
+	on_enabled = {
+		#error
+		set_planet_flag = yes
+		set_country_flag = yes
+	}
+
 	tradition_swap = {
 		name = tr_adaptability_survival_fittest
 		inherit_effects = no
@@ -29,6 +35,11 @@ tr_diplomacy_entente_coordination = {
 		}
 		weight = {
 			factor = 1
+		}
+		on_enabled = {
+			#error
+			set_planet_flag = yes
+			set_country_flag = yes
 		}
 	}
 }
