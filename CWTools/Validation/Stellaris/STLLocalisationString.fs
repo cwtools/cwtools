@@ -136,9 +136,11 @@ module STLLocalisationString =
             m |> Map.map (fun _ e -> e.refs <&!&> checkRef lang keys e) |> Map.toList |> List.map snd |> List.fold (<&&>) OK
             <&&>
             (m |> Map.map (fun _ e -> e.scopes <&!&> validateContextResult e) |> Map.toList |> List.map snd |> List.fold (<&&>) OK)
-        //let validateLocMap2 (l, (m : Map<string, LocEntry>)) = m |> Map.map (fun _ e -> e.refs <&!&> checkRef l keys e) |> Map.toList |> List.map snd |> List.fold (<&&>) OK
+
+        let validateReplaceMe (lang, (m : Map<string, LocEntry>)) =
+            m |> Map.toList |> List.fold (fun s (k, v) -> if v.desc == "\"REPLACE_ME\"" then s <&&> Invalid [invManual (ErrorCodes.ReplaceMeLoc v.key lang) (Position.Conv v.position) v.key None ] else s ) OK
         
-        api <&!&> validateLocMap
+        api <&!&> validateLocMap <&&> (api <&!&> validateReplaceMe)
         // <&&>
         // (api <&!&> (fun (l, m) -> m.refs <&!&> checkRef l keys m))
     // let validateLocalisation (effects : Effect list) (scriptedLoc : string list) (setvariables : string list) (os : STLEntitySet) (api : (Lang * Map<string, Entry>)) (keys : (Lang * LocKeySet) list) =

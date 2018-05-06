@@ -73,6 +73,9 @@ module ValidationCore =
         static member UndefinedSectionEntity = fun (entity : string) (culture : string) -> { ID = "CW233"; Severity = Severity.Error; Message = sprintf "Entity %s is not defined for culture %s" entity culture}
         static member UndefinedSectionEntityFallback = fun (entity : string) (fallback : string) (culture : string)-> { ID = "CW233"; Severity = Severity.Error; Message = sprintf "Entity %s is not defined for culture %s (nor is fallback %s)" entity culture fallback}
         static member UndefinedEntity = fun (entity : string) -> { ID = "CW233"; Severity = Severity.Error; Message = sprintf "Entity %s is not defined" entity }
+        static member ReplaceMeLoc = fun (key : string) (language : Lang) -> 
+            let lang = if language = Lang.STL STLLang.Default then "Default (localisation_synced)" else language.ToString()
+            { ID = "CW234"; Severity = Severity.Information; Message = sprintf "Localisation key %s is \"REPLACE_ME\" for %s" key lang }
 
         static member CustomError = fun error severity -> { ID = "CW999"; Severity = severity; Message = error}
     type ValidationResult = 
