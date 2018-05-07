@@ -200,7 +200,9 @@ type ResourceManager<'T> (computedDataFunction : (Entity -> 'T)) =
         |x when globCheckFilepath "**/map/setup_scenarios/*.txt" x -> EntityType.MapSetupScenarios
         |x when globCheckFilepath "**/prescripted_countries/*.txt" x -> EntityType.PrescriptedCountries
         |x when globCheckFilepath "**/interface/**/*.gfx" x -> EntityType.Interface
+        |x when globCheckFilepath "**/interface/**/*.gui" x -> EntityType.Interface
         |x when globCheckFilepath "**/interface/*.gfx" x -> EntityType.Interface
+        |x when globCheckFilepath "**/interface/*.gui" x -> EntityType.Interface
         |x when globCheckFilepath "**\\gfx\\**\\*.gfx" x -> EntityType.GfxGfx
         |x when globCheckFilepath "**/gfx/*.gfx" x -> EntityType.GfxGfx
         |x when globCheckFilepath "**\\gfx\\**\\*.asset" x -> EntityType.GfxAsset

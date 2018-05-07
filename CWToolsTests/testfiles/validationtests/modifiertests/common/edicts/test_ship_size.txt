@@ -4,6 +4,8 @@ country_edict = {
         shipsize_xindi_weapon_hull_add = 10
         #error
         shipsize_fake_hull_add = 10
+		#error
+		shipsize_xindi_weapon_hull_add = 0
 	}
 	
 	cost = { influence = 5 }

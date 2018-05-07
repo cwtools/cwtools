@@ -76,6 +76,7 @@ module ValidationCore =
         static member ReplaceMeLoc = fun (key : string) (language : Lang) -> 
             let lang = if language = Lang.STL STLLang.Default then "Default (localisation_synced)" else language.ToString()
             { ID = "CW234"; Severity = Severity.Information; Message = sprintf "Localisation key %s is \"REPLACE_ME\" for %s" key lang }
+        static member ZeroModifier = fun (modif : string) -> { ID = "CW235"; Severity = Severity.Warning; Message = sprintf "Modifier %s has value 0. Modifiers are additive so likely doesn't do anything" modif }
 
         static member CustomError = fun error severity -> { ID = "CW999"; Severity = severity; Message = error}
     type ValidationResult = 

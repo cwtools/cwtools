@@ -418,7 +418,7 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
                 let file = File.ReadAllText filepath
                 let rootedpath = filepath.Substring(filepath.IndexOf(normalisedScopeDirectory) + (normalisedScopeDirectory.Length))
                 let logicalpath = convertPathToLogicalPath rootedpath
-                // eprintfn "%s %s" logicalpath filepath
+                //eprintfn "%s %s" logicalpath filepath
                 let newEntities = resources.UpdateFile (EntityResourceInput {scope = ""; filepath = filepath; logicalpath = logicalpath; filetext = file; validate = true})
                 match filepath with
                 |x when x.Contains("scripted_triggers") -> updateScriptedTriggers()

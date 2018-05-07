@@ -594,7 +594,9 @@ module STLValidation =
     let valModifier (modifiers : Modifier list) (scope : Scope) (leaf : Leaf) =
         match modifiers |> List.tryFind (fun m -> m.tag == leaf.Key) with
         |None -> Invalid [inv (ErrorCodes.UndefinedModifier (leaf.Key)) leaf]
-        |Some m -> m.categories <&!&> checkModifierInScope (leaf.Key) (scope) leaf
+        |Some m -> 
+            m.categories <&!&> checkModifierInScope (leaf.Key) (scope) leaf
+            <&&> (leaf.Value |> (function |Value.Int x when x = 0 -> Invalid [inv (ErrorCodes.ZeroModifier leaf.Key) leaf] | _ -> OK))
             // match m.categories |> List.contains (modifierCategory) with
             // |true -> OK
             // |false -> Invalid [inv (ErrorCodes.IncorrectModifierScope (leaf.Key) (modifierCategory.ToString()) (m.categories.ToString())) leaf]
