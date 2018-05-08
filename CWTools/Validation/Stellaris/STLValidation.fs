@@ -107,7 +107,7 @@ module STLValidation =
             //x |> List.fold (<&&>) OK
 
     let categoryScopeList = [
-        ModifierCategory.Army, [Scope.Army; Scope.Country]
+        ModifierCategory.Army, [Scope.Army; Scope.Planet; Scope.Country]
         ModifierCategory.Country, [Scope.Country]
         ModifierCategory.Leader, [Scope.Leader; Scope.Country]
         ModifierCategory.Megastructure, [Scope.Megastructure; Scope.Country]

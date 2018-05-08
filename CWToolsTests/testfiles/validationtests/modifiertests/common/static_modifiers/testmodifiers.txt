@@ -7,3 +7,15 @@ test_ship_generated = {
 	##TODO error
 	shipsize_fake_hull_add = 10
 }
+
+recruiting_world = {
+        planet_army_build_speed_mult = 0.50
+        planet_army_build_cost_mult = -0.50
+        pop_ethic_militarist_attraction_mult = 0.25
+        army_starting_experience_add = 100            
+        tile_resource_minerals_mult = -0.50
+        tile_resource_energy_mult = -0.25        
+        tile_resource_society_research_mult = -0.75            
+        tile_resource_physics_research_mult = -0.75                
+         
+ }

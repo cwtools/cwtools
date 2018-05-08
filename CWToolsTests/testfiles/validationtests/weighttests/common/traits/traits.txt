@@ -1,0 +1,49 @@
+##Test weights
+trait_vdl_semimechanized = {
+	cost = 0
+	sorting_priority = 9
+
+	initial = yes
+	randomized = yes
+	advanced_trait = yes
+
+	opposites = { 
+		"trait_latent_psionic"
+		"trait_psionic"		
+		"trait_vdl_vampiric"
+		"trait_vdl_mineral_organism"
+		"trait_vdl_energy_slime"
+		"trait_vdl_parasite"	
+		"trait_vdl_artificial_spirits"	
+		"trait_vdl_shadow_creatures"
+		"trait_vdl_abomination"
+		"trait_vdl_futurespawns"
+		"trait_vdl_ghosts"
+		"trait_vdl_mirror_images"
+		"trait_vdl_last_children"
+		"trait_vdl_paradise_lost"		
+	}
+	allowed_archetypes = { BIOLOGICAL }
+	ai_weight = {
+		factor = 5
+		modifier = {
+			factor = 2.0
+			OR = {
+				has_ethic = ethic_materialist
+				has_ethic = ethic_fanatic_materialist
+			}
+		}
+		modifier = {
+			factor = 4.0
+			has_valid_civic = civic_mechanists
+            #error
+            has_planet_flag = yes
+		}
+	}
+
+	modifier = {
+		pop_environment_tolerance = 0.07
+		leader_age = 10
+		pop_consumer_goods_mult = 0.25
+	}
+}

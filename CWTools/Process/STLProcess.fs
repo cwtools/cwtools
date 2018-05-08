@@ -556,6 +556,8 @@ module rec STLProcess =
         |("species_potential_add", _, {parents = "trait"::_;}) ->  specificScopeProcessNode<TriggerBlock> Scope.Species, "triggerblock", id;
         |("species_potential_remove", _, {parents = "trait"::_;}) ->  specificScopeProcessNode<TriggerBlock> Scope.Species, "triggerblock", id;
         |("modifier", _, {parents = "trait"::_;}) ->  specificScopeProcessNode<ModifierBlock> Scope.Country, "modifierblock", id;
+        |("ai_weight"), _, {parents = "trait"::_;} -> processNodeSimple<WeightBlock>, "weightblock", id;
+        |("modifier"), _, {parents = "weightblock"::"trait"::_;} -> specificScopeProcessNode<WeightModifierBlock> Scope.Country, "weightmodifierblock", id;
         //War goals
         |(_, _, {complete = false; entityType = EntityType.WarGoals})  ->  processNodeSimple<Node>, "wargoal",  (fun c -> { c with complete = true;});
         |("potential", _, {parents = "wargoal"::_;}) ->  specificScopeProcessNode<TriggerBlock> Scope.Country, "triggerblock", id;

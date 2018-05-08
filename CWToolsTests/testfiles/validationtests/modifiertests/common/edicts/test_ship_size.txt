@@ -23,3 +23,12 @@ country_edict = {
 		weight = 0
 	}	
 }
+
+planet_edict = {
+	effect = {
+		add_modifier = {
+					modifier = recruiting_world
+					days = -1
+				}
+	}
+}
