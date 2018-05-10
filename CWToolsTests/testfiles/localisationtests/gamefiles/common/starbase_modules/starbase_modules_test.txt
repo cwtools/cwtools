@@ -1,0 +1,36 @@
+#key
+#key_desc
+anchorage = {
+	icon = "GFX_starbase_anchorage"
+	section = "ANCHORAGE_STARBASE_SECTION"
+	construction_days = 180
+	
+	cost = {
+		minerals = 100
+	}
+	
+	upkeep_resources = {
+		energy = 1
+	}
+	
+	country_modifier = {
+		country_naval_cap_add = 4
+	}
+	triggered_country_modifier = {
+		potential = { has_starbase_building = naval_logistics_office }
+		country_naval_cap_add = 2
+	}
+	
+	ai_build_at_chokepoint = no
+	ai_build_outside_chokepoint = yes
+	ai_weight = {
+		weight = 20
+		modifier = {
+			factor = 2
+			count_starbase_modules = {
+				type = anchorage
+				count < 2
+			}
+		}		
+	}
+}

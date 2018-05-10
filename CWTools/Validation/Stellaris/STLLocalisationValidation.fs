@@ -368,8 +368,8 @@ module STLLocalisationValidation =
 
     let valModules : LocalisationValidator = 
         fun _ keys es ->
-            let mods = es.GlobMatchChildren("**/common/spaceport_modules/*.txt")
-            let inner = checkLocNodeKeyAdvs keys "sm_" [""]
+            let mods = es.AllOfTypeChildren EntityType.StarbaseModules @ (es.AllOfTypeChildren EntityType.StarbaseBuilding)
+            let inner = checkLocNodeKeyAdvs keys "sm_" [""; "_desc"]
             mods <&!&> inner
     let valOpinionModifiers : LocalisationValidator = 
         fun _ keys es ->
@@ -397,6 +397,12 @@ module STLLocalisationValidation =
             let pers = es.GlobMatchChildren("**/common/personalities/*.txt")
             let inner = checkLocNodeKeyAdvs keys "personality_" [""; "_desc"]
             pers <&!&> inner
+
+    let valSpecialProjects : LocalisationValidator =
+        fun _ keys es ->
+            let projs = es.AllOfTypeChildren EntityType.SpecialProjects
+            let inner = checkLocNodeTagAdvs keys "" [""; "_DESC"] "key"
+            projs <&!&> inner
 
     let valEthics : LocalisationValidator =
         fun _ keys es ->
@@ -481,3 +487,7 @@ module STLLocalisationValidation =
         fun _ keys es ->
             let res = es.GlobMatchChildren("**/common/deposits/*.txt") |> List.filter (fun c -> c.Tag "is_null" |> (function |Some (Bool b) when b -> false |_ -> true))
             res <&!&> (checkLocNodeKeyAdvs keys "" [""])
+
+    let valStarbaseType : LocalisationValidator =
+        fun _ keys es ->
+            es.AllOfTypeChildren EntityType.StarbaseTypes <&!&> checkLocNodeKeyAdvs keys "" [""]
