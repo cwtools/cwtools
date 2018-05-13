@@ -55,7 +55,7 @@ module rec STLProcess =
                             function
                             | x when x.Key.StartsWith("@", StringComparison.OrdinalIgnoreCase) -> allScopesSet
                             | x when x.Key = root -> allScopesSet
-                            | x -> effects |> List.tryFind (fun e -> e.Name = x.Key) |> (function |Some e -> e.ScopesSet |None -> Set.empty)
+                            | x -> (effects @ triggers) |> List.tryFind (fun e -> e.Name = x.Key) |> (function |Some e -> e.ScopesSet |None -> Set.empty)
                            )
         let combinedScopes = nodeScopes @ valueScopes |> List.map (function | x when Set.isEmpty x -> (if strict then Set.empty else allScopesSet) |x -> x)
         combinedScopes |> List.fold Set.intersect allScopesSet
@@ -100,7 +100,7 @@ module rec STLProcess =
         event |> (foldNode2 fNode fCombine []) |> Set.ofList
 
     let getScriptedTriggerScope (firstRun: bool) (effectType : EffectType) (effects : Effect list) (triggers : Effect list) ((node, comments) : Node * string list) =
-        let scopes = scriptedTriggerScope firstRun effects triggers node.Key node
+        let scopes = scriptedTriggerScope (not firstRun) effects triggers node.Key node
         let commentString = comments |> List.truncate 5 |> String.concat("\n")
         let globals = findAllSavedGlobalEventTargets node
         let savetargets = findAllSavedEventTargets node

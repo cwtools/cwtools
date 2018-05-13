@@ -177,6 +177,11 @@ module STLScopes =
         "every_pop",  Scope.Pop;
         "random_pop",  Scope.Pop;
 
+        "any_owned_pop",  Scope.Pop;
+        "every_owned_pop",  Scope.Pop;
+        "random_owned_pop",  Scope.Pop;
+
+
         "any_owned_ship",  Scope.Ship;
         "every_owned_ship",  Scope.Ship;
         "random_owned_ship",  Scope.Ship;

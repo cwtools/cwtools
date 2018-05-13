@@ -39,7 +39,7 @@ module STLLookup =
         let ff() = 
             i <- i + 1
             let before = final
-            final <- rawTriggers |> List.map (fun t -> (STLProcess.getScriptedTriggerScope first EffectType.Trigger final final t) :> Effect)
+            final <- rawTriggers |> List.map (fun t -> (STLProcess.getScriptedTriggerScope first EffectType.Trigger (final) (vanillaTriggers @ final) t) :> Effect)
             first <- false
             before = final || i > 10
         while (not (ff())) do ()
@@ -67,7 +67,7 @@ module STLLookup =
         let ff() = 
             i <- i + 1
             let before = final
-            final <- rawEffects |>  List.map (fun e -> (STLProcess.getScriptedTriggerScope first EffectType.Effect final scriptedTriggers e) :> Effect)
+            final <- rawEffects |>  List.map (fun e -> (STLProcess.getScriptedTriggerScope first EffectType.Effect (final @ vanillaEffects) scriptedTriggers e) :> Effect)
             first <- false
             before = final || i > 10
         while (not (ff())) do ()

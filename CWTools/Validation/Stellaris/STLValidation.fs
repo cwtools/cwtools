@@ -756,12 +756,13 @@ module STLValidation =
                     p.LeafValues |> List.ofSeq |> List.map (fun lv -> lv.Value.ToRawString())
             let buildingPrereqs = os.AllOfTypeChildren EntityType.Buildings @ es.AllOfTypeChildren EntityType.Buildings |> List.collect getPrereqs
             let shipsizePrereqs = os.AllOfTypeChildren EntityType.ShipSizes @ es.AllOfTypeChildren EntityType.ShipSizes |> List.collect getPrereqs
+            let sectPrereqs = os.AllOfTypeChildren EntityType.SectionTemplates @ es.AllOfTypeChildren EntityType.SectionTemplates |> List.collect getPrereqs
             let compPrereqs = os.AllOfTypeChildren EntityType.ComponentTemplates @ es.AllOfTypeChildren EntityType.ComponentTemplates |> List.collect getPrereqs
             let stratResPrereqs = os.AllOfTypeChildren EntityType.StrategicResources @ es.AllOfTypeChildren EntityType.StrategicResources |> List.collect getPrereqs
             let armyPrereqs = os.AllOfTypeChildren EntityType.Armies @ es.AllOfTypeChildren EntityType.Armies |> List.collect getPrereqs
             let edictPrereqs = os.AllOfTypeChildren EntityType.Edicts @ es.AllOfTypeChildren EntityType.Edicts |> List.collect getPrereqs
             let tileBlockPrereqs = os.AllOfTypeChildren EntityType.TileBlockers @ es.AllOfTypeChildren EntityType.TileBlockers |> List.collect getPrereqs
-            let allPrereqs = buildingPrereqs @ shipsizePrereqs @ compPrereqs @ stratResPrereqs @ armyPrereqs @ edictPrereqs @ tileBlockPrereqs @ getAllTechPreqreqs os @ getAllTechPreqreqs es
+            let allPrereqs = buildingPrereqs @ shipsizePrereqs @ sectPrereqs @ compPrereqs @ stratResPrereqs @ armyPrereqs @ edictPrereqs @ tileBlockPrereqs @ getAllTechPreqreqs os @ getAllTechPreqreqs es
             let techChildren = getTechnologies os @ getTechnologies es
                                 |> (fun l -> l |> List.map (fun (name, _) -> name, l |> List.exists (fun (_, ts2) -> ts2 |> List.contains name)))
                                 |> List.filter snd

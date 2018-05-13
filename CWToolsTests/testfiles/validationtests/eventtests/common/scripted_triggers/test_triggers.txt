@@ -37,3 +37,8 @@ exists_intimidated_state = {
 
 	}
 }
+
+##A country scope trigger
+country_trigger_test = {
+	has_country_flag = test
+}

@@ -42,7 +42,7 @@ module STLLocalisation =
             | Success({key = key; entries = entries}, _, _) ->
                 match keyToLanguage key with
                 |Some l -> 
-                    let es = entries |> List.map (fun e -> e, STL l)
+                    let es = entries |> List.map (fun e -> (e, STL l))
                     records <- es@records; (true, es.Length, "")
                 |None ->
                     (true, entries.Length, "")
