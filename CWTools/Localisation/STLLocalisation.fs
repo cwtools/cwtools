@@ -35,22 +35,23 @@ module STLLocalisation =
             |"l_default" -> Some STLLang.Default
             |_ -> None
         let mutable results : IDictionary<string, (bool * int * string)> = upcast new Dictionary<string, (bool * int * string)>()
-        let mutable records : (Entry * Lang) list = []
+        let mutable recordsL : struct (Entry * Lang) list = []
+        let mutable records : struct (Entry * Lang) array = [||]
         let addFile f t = 
             //eprintfn "%s" f
             match parseLocText t f with
             | Success({key = key; entries = entries}, _, _) ->
                 match keyToLanguage key with
                 |Some l -> 
-                    let es = entries |> List.map (fun e -> (e, STL l))
-                    records <- es@records; (true, es.Length, "")
+                    let es = entries |> List.map (fun e -> struct (e, STL l))
+                    recordsL <- es@recordsL; (true, es.Length, "")
                 |None ->
                     (true, entries.Length, "")
             | Failure(msg, _, _) -> 
                 (false, 0, msg)
         let addFiles (x : (string * string) list) = List.map (fun (f, t )-> (f, addFile f t)) x
 
-        let recordsLang (lang : Lang) = records |> List.choose (function |(r, l) when l = lang -> Some r |_ -> None)
+        let recordsLang (lang : Lang) = records |> Array.choose (function |struct (r, l) when l = lang -> Some r |_ -> None) |> List.ofArray
         let valueMap lang = recordsLang lang |> List.map (fun r -> (r.key, r)) |> Map.ofList
         let values lang = recordsLang lang |> List.map (fun r -> (r.key, r.desc)) |> dict
 
@@ -60,6 +61,8 @@ module STLLocalisation =
         
         do
             results <- addFiles files |> dict
+            records <- recordsL |> Array.ofList
+            recordsL <- []
 
         new(localisationSettings : LocalisationSettings) =
             eprintfn "Loading STL localisation in %s" localisationSettings.folder 

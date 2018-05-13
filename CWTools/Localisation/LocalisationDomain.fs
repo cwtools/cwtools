@@ -2,6 +2,7 @@ namespace CWTools.Localisation
 open System.Collections.Generic
 open CWTools.Common
 
+[<Struct>]
 type Entry = {
     key : string
     value : char option

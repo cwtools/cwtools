@@ -67,6 +67,7 @@ type Resource =
     |EntityResource of string * EntityResource
     |FileResource of string * FileResource
 
+[<Struct>]
 type Entity =
     {
         filepath : string
