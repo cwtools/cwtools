@@ -30,7 +30,7 @@ module STLLookup =
     let updateScriptedTriggers (resources : IResourceAPI<STLComputedData>) (vanillaTriggers : Effect list) = 
         let rawTriggers = 
             resources.AllEntities()
-            |> List.choose (function |(f, _) when f.filepath.Contains("scripted_triggers") -> Some (f.entity) |_ -> None)
+            |> List.choose (function |struct (f, _) when f.filepath.Contains("scripted_triggers") -> Some (f.entity) |_ -> None)
             |> List.collect getChildrenWithComments
             |> List.rev
         let mutable final = vanillaTriggers
@@ -58,7 +58,7 @@ module STLLookup =
     let updateScriptedEffects (resources : IResourceAPI<STLComputedData>) (vanillaEffects : Effect list) (scriptedTriggers : Effect list) =
         let rawEffects = 
             resources.AllEntities()
-            |> List.choose (function |(f, _) when f.filepath.Contains("scripted_effects") -> Some (f.entity) |_ -> None)
+            |> List.choose (function |struct (f, _) when f.filepath.Contains("scripted_effects") -> Some (f.entity) |_ -> None)
             |> List.collect getChildrenWithComments
             |> List.rev
         let mutable final = vanillaEffects

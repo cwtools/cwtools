@@ -274,7 +274,7 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
         let updateStaticodifiers () =
             let rawModifiers =
                 resources.AllEntities()
-                |> List.choose (function |(f, _) when f.filepath.Contains("static_modifiers") -> Some (f.entity) |_ -> None)
+                |> List.choose (function |struct (f, _) when f.filepath.Contains("static_modifiers") -> Some (f.entity) |_ -> None)
                 |> List.collect (fun n -> n.Children)
                 |> List.rev
             let newModifiers = rawModifiers |> List.map (fun e -> STLProcess.getStaticModifierCategory modifiers e)
@@ -283,7 +283,7 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
         let updateScriptedLoc () =
             let rawLocs =
                 resources.AllEntities()
-                |> List.choose (function |(f, _) when f.filepath.Contains("scripted_loc") -> Some (f.entity) |_ -> None)
+                |> List.choose (function |struct (f, _) when f.filepath.Contains("scripted_loc") -> Some (f.entity) |_ -> None)
                 |> List.collect (fun n -> n.Children)
                 |> List.map (fun l -> l.TagText "name")
             lookup.scriptedLoc <- rawLocs
@@ -306,7 +306,7 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
             //TODO: Add loc from embedded
 
         let updateDefinedVariables() =
-            lookup.definedScriptVariables <- (resources.AllEntities()) |> List.collect (fun (_, d) -> d.Force().setvariables)
+            lookup.definedScriptVariables <- (resources.AllEntities()) |> List.collect (fun struct (_, d) -> d.Force().setvariables)
                 
         let updateModifiers() =
             lookup.coreModifiers <- addGeneratedModifiers modifiers (EntitySet (resources.AllEntities()))
@@ -349,9 +349,9 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
                    |> List.choose (function |Invalid es -> Some es |_ -> None)
                    |> List.collect id
         let snood = snd
-        let validateAll (entities : (Entity * Lazy<STLComputedData>) list)  = 
+        let validateAll (entities : struct (Entity * Lazy<STLComputedData>) list)  = 
             eprintfn "Validating %i files" (entities.Length)
-            let allEntitiesByFile = entities |> List.map (fun (f, _) -> f.entity)
+            let allEntitiesByFile = entities |> List.map (fun struct (f, _) -> f.entity)
             let flattened = allEntitiesByFile |> List.map (fun n -> n.Children) |> List.collect id
 
             let validators = [validateVariables, "var"; valTechnology, "tech"; validateTechnologies, "tech2"; valButtonEffects, "but"; valSprites, "sprite"; valVariables, "var2"; valEventCalls, "event"; 
@@ -378,7 +378,7 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
             //let etres = getEventChains newEntities |> (function |Invalid es -> es |_ -> [])
             //(validateShips (flattened)) @ (validateEvents (flattened)) @ res @ fres @ eres
             (validateShips (flattened)) @ (validateEvents (flattened)) @ res @ fres @ eres @ tres @ mres @ evres @ wres
-        let localisationCheck (entities : (Entity * Lazy<STLComputedData>) list) =
+        let localisationCheck (entities : struct (Entity * Lazy<STLComputedData>) list) =
             eprintfn "Localisation check %i files" (entities.Length)
             let keys = allLocalisation() |> List.groupBy (fun l -> l.GetLang) |> List.map (fun (k, g) -> k, g |>List.collect (fun ls -> ls.GetKeys) |> Set.ofList )
             //let allEntries = allLocalisation() |> List.groupBy (fun l -> l.GetLang) |> List.map (fun (k, g) -> k, g |> List.collect (fun ls -> ls.ValueMap |> Map.toList) |> Map.ofList)

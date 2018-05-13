@@ -13,7 +13,7 @@ open CWTools.Common
 
 
 type References<'T>(resourceManager : IResourceAPI<'T>, lookup : Lookup, localisation : ILocalisationAPI list) =
-    let entities() = resourceManager.AllEntities() |> List.map (fun (e, _) -> e.entity)
+    let entities() = resourceManager.AllEntities() |> List.map (fun struct (e, _) -> e.entity)
     let events() = 
         entities()
         |> List.collect(fun e -> e.Children)

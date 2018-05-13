@@ -77,12 +77,12 @@ type Entity =
         overwrite : Overwrite
     }
 
-type UpdateFile<'T> = ResourceInput -> (Entity * Lazy<'T>) list
-type UpdateFiles<'T> = ResourceInput list -> (Entity * Lazy<'T>) list
+type UpdateFile<'T> = ResourceInput -> struct (Entity * Lazy<'T>) list
+type UpdateFiles<'T> = ResourceInput list -> struct (Entity * Lazy<'T>) list
 type GetResources = unit -> Resource list
 type ValidatableFiles = unit -> EntityResource list
-type AllEntities<'T> = unit -> (Entity * Lazy<'T>) list
-type ValidatableEntities<'T> = unit -> (Entity * Lazy<'T>) list
+type AllEntities<'T> = unit -> struct (Entity * Lazy<'T>) list
+type ValidatableEntities<'T> = unit -> struct (Entity * Lazy<'T>) list
 
 type IResourceAPI<'T> =
     abstract UpdateFile : UpdateFile<'T>
@@ -211,7 +211,7 @@ type ResourceManager<'T> (computedDataFunction : (Entity -> 'T)) =
         |_ -> EntityType.Other
 
     let mutable fileMap : Map<string, Resource> = Map.empty
-    let mutable entitiesMap : Map<string, Entity * Lazy<'T>> = Map.empty
+    let mutable entitiesMap : Map<string, struct (Entity * Lazy<'T>)> = Map.empty
     let duration f = 
         let timer = System.Diagnostics.Stopwatch()
         timer.Start()
@@ -247,7 +247,7 @@ type ResourceManager<'T> (computedDataFunction : (Entity -> 'T)) =
                 |FileResource (f, _) -> fileMap.Add(f, resource)
             match entity with
             |Some e -> 
-                let item = e, lazy (computedDataFunction e)
+                let item = struct(e, lazy (computedDataFunction e))
                 entitiesMap <- entitiesMap.Add(e.filepath, item); yield item
             |None -> ()
         }
@@ -271,8 +271,8 @@ type ResourceManager<'T> (computedDataFunction : (Entity -> 'T)) =
         let entityMap em (s, (e : EntityResource)) =
             match Map.tryFind s em with
             |None -> em
-            |Some (olde, oldl) ->
-                 em.Add(s, ({olde with Entity.overwrite = e.overwrite}, oldl))
+            |Some struct (olde, oldl) ->
+                 em.Add(s, struct ({olde with Entity.overwrite = e.overwrite}, oldl))
         entitiesMap <- res |> List.fold entityMap entitiesMap
         // eprintfn "print all"
         // entitiesMap |> Map.toList |> List.map fst |> List.sortBy id |> List.iter (eprintfn "%s")
@@ -284,8 +284,8 @@ type ResourceManager<'T> (computedDataFunction : (Entity -> 'T)) =
 
     let getResources() = fileMap |> Map.toList |> List.map snd
     let validatableFiles() = fileMap |> Map.toList |> List.map snd |> List.choose (function |EntityResource (_, e) -> Some e |_ -> None) |> List.filter (fun f -> f.validate)
-    let allEntities() = entitiesMap |> Map.toList |> List.map snd |> List.filter (fun (e, _) -> e.overwrite <> Overwritten)
-    let validatableEntities() = entitiesMap |> Map.toList |> List.map snd  |> List.filter (fun (e, _) -> e.overwrite <> Overwritten) |> List.filter (fun (e, _) -> e.validate)
+    let allEntities() = entitiesMap |> Map.toList |> List.map snd |> List.filter (fun struct (e, _) -> e.overwrite <> Overwritten)
+    let validatableEntities() = entitiesMap |> Map.toList |> List.map snd  |> List.filter (fun struct (e, _) -> e.overwrite <> Overwritten) |> List.filter (fun struct (e, _) -> e.validate)
         
     member __.Api = {
         new IResourceAPI<'T> with

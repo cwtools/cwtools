@@ -430,6 +430,7 @@ module STLScopes =
     | Found of string * (Scope list)
     | LocNotFound of string
     //| Failed
+    [<Struct>]
     type LocEntry = {
         key : string
         value : char option

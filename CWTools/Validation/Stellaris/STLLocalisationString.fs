@@ -18,7 +18,7 @@ open CWTools.Utilities.Utils
 
 module STLLocalisationString =
     type LocKeySet = Microsoft.FSharp.Collections.Tagged.Set<string, STLStringComparer>
-
+    
     type LocElement =
     | Ref of string
     | Command of string

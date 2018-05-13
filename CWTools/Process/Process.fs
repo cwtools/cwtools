@@ -22,16 +22,19 @@ module List =
     match result with
     | Some ls -> ls
     | None -> add::xs
- 
-type Leaf(keyvalueitem : KeyValueItem, ?pos : Position) =
-    let (KeyValueItem (Key(key), value)) = keyvalueitem
-    member val Key = key with get, set
-    member val Value = value with get, set
-    member val Position = defaultArg pos Position.Empty
+[<Struct>]
+type Leaf =
+    val mutable Key : string
+    val mutable Value : Value
+    val mutable Position : Position
     [<JsonIgnore>]
     member this.ToRaw = KeyValueItem(Key(this.Key), this.Value)
-    new(key : string, value : Value) = Leaf(KeyValueItem(Key(key), value))
-    static member Create key value = LeafC(Leaf(KeyValueItem(Key(key), value)))
+    new(key : string, value : Value, pos : Position) = { Key = key; Value = value; Position = pos }
+    //new(key : string, value : Value) = Leaf(key, value, Position.Empty)
+    new(keyvalueitem : KeyValueItem, ?pos : Position) = 
+        let (KeyValueItem (Key(key), value)) = keyvalueitem
+        Leaf(key, value, pos |> Option.defaultValue Position.Empty)
+    static member Create key value = LeafC(Leaf(key, value))
 and LeafValue(value : Value, ?pos : Position) =
     member val Value = value with get, set
     member val Position = defaultArg pos Position.Empty
@@ -39,7 +42,7 @@ and LeafValue(value : Value, ?pos : Position) =
     member this.ToRaw = Value(this.Value)
     static member Create value = LeafValue value
    
-and Child = |NodeC of Node | LeafC of Leaf |CommentC of string |LeafValueC of LeafValue
+and [<Struct>] Child = |NodeC of node : Node | LeafC of leaf : Leaf |CommentC of comment : string |LeafValueC of lefavalue : LeafValue
 and Node (key : string, pos : Position) =
     let bothFind x = function |NodeC n when n.Key = x -> true |LeafC l when l.Key = x -> true |_ -> false
     let mutable all : Child array = Array.empty

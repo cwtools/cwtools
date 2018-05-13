@@ -14,7 +14,7 @@ module rec Types =
         static member File(fileName) = Position (FParsec.Position(fileName, 0L, 0L, 0L))
         static member Conv(pos : FParsec.Position) = Position (pos)
         static member UnConv(pos : Position) = let (Position p) = pos in p
-
+    [<Struct>]
     type Key =
         | Key of string
         override x.ToString() = let (Key v) = x in sprintf "%s" v;  
@@ -31,6 +31,7 @@ module rec Types =
                 | Int i -> sprintf "%A" i
         //memoize id inner
         inner
+    [<Struct>]    
     type KeyValueItem = 
         | KeyValueItem of Key * Value
         override x.ToString() = let (KeyValueItem (id, v)) = x in sprintf "%O = %O" id v
@@ -51,7 +52,7 @@ module rec Types =
             | Bool b -> sprintf "%A" b
             | Float f -> sprintf "%A" f
             | Int i -> sprintf "%A" i
-    and [<CustomEquality; CustomComparison>] PosKeyValue  = 
+    and [<CustomEquality; CustomComparison; Struct>] PosKeyValue  = 
         | PosKeyValue of Position * KeyValueItem
         override x.Equals(y) =
             match y with

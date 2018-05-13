@@ -19,20 +19,20 @@ open CWTools.Game.Stellaris.STLLookup
 
 module STLValidation =
     type S = Severity
-    type EntitySet<'T>(entities : (Entity * Lazy<'T>) list) =
+    type EntitySet<'T>(entities : struct (Entity * Lazy<'T>) list) =
         member __.GlobMatch(pattern : string) =
             let options = new GlobOptions();
             options.Evaluation.CaseInsensitive <- true;
             let glob = Glob.Parse(pattern, options)
-            entities |> List.choose (fun (es, _) -> if glob.IsMatch(es.filepath) then Some es.entity else None)
+            entities |> List.choose (fun struct (es, _) -> if glob.IsMatch(es.filepath) then Some es.entity else None)
         member this.GlobMatchChildren(pattern : string) =
             this.GlobMatch(pattern) |> List.map (fun e -> e.Children) |> List.collect id
         member __.AllOfType (entityType : EntityType) =
-            entities |> List.choose(fun (es, d) -> if es.entityType = entityType then Some (es.entity, d)  else None)
+            entities |> List.choose(fun struct (es, d) -> if es.entityType = entityType then Some (es.entity, d)  else None)
         member this.AllOfTypeChildren (entityType : EntityType) =
             this.AllOfType(entityType) |> List.map (fun (e, d) -> e.Children) |> List.collect id
-        member __.All = entities |> List.map (fun (es, _) -> es.entity)
-        member __.AllWithData = entities |> List.map (fun (es, d) -> es.entity, d)
+        member __.All = entities |> List.map (fun struct (es, _) -> es.entity)
+        member __.AllWithData = entities |> List.map (fun struct (es, d) -> es.entity, d)
         member this.AllEffects= 
             let fNode = (fun (x : Node) acc ->
                             match x with
