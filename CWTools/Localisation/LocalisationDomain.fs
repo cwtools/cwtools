@@ -1,13 +1,14 @@
 namespace CWTools.Localisation
 open System.Collections.Generic
 open CWTools.Common
+open Microsoft.FSharp.Compiler.Range
 
 [<Struct>]
 type Entry = {
     key : string
     value : char option
     desc : string
-    position : FParsec.Position
+    position : range
 }
 
 type GetDesc = string -> string

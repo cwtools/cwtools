@@ -4,6 +4,7 @@ namespace CWTools.Parser
 open FParsec
 open System.IO
 open CWTools.Utilities.Utils
+open Microsoft.FSharp.Compiler.Range
 
     
 module rec Types =
@@ -53,7 +54,7 @@ module rec Types =
             | Float f -> sprintf "%A" f
             | Int i -> sprintf "%A" i
     and [<CustomEquality; CustomComparison; Struct>] PosKeyValue  = 
-        | PosKeyValue of Position * KeyValueItem
+        | PosKeyValue of range * KeyValueItem
         override x.Equals(y) =
             match y with
             | :? PosKeyValue as y ->
@@ -253,8 +254,8 @@ module CKParser =
 
     do valueimpl := valueCustom
         //choiceL [valueQ; (attempt valueB); (attempt valueI); (attempt valueF); (attempt hsv); (attempt rgb); (attempt valueS); (attempt valueBlock); valueClause;] "value"
-    
-    do keyvalueimpl := pipe3 (getPosition) ((keyQ <|> key) .>> operator) (value) (fun pos id value -> KeyValue(PosKeyValue(Position pos, KeyValueItem(id, value))))
+    let getRange (start: FParsec.Position) (endp : FParsec.Position) = mkRange start.StreamName (mkPos (int start.Line) (int start.Column)) (mkPos (int endp.Line) (int endp.Column))
+    do keyvalueimpl := pipe4 (getPosition) ((keyQ <|> key) .>> operator) (value) (getPosition) (fun start id value endp -> KeyValue(PosKeyValue(getRange start endp, KeyValueItem(id, value))))
     let alle = ws >>. many statement .>> eof |>> (fun f -> (EventFile f : EventFile))
     let valuelist = many1 ((comment |>> Comment) <|> (value |>> Value)) .>> eof
     let statementlist = (many statement) .>> eof

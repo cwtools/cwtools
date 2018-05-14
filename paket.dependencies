@@ -24,6 +24,7 @@ nuget FSharp.Collections.ParallelSeq
 nuget FSharpPlus
 nuget DotNet.Glob
 nuget FSharpx.Collections
+nuget FSharp.Compiler.Service
 
 group tools
     source https://api.nuget.org/v3/index.json

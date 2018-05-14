@@ -1,5 +1,6 @@
 namespace CWTools.Localisation
 open CWTools.Common
+open Microsoft.FSharp.Compiler.Range
 
 module YAMLLocalisationParser =
     open FParsec
@@ -25,7 +26,9 @@ module YAMLLocalisationParser =
     //let desc = pipe3 (pchar '"' |>> string) (many (attempt stringThenEscaped) |>> List.fold (+) "")  (manyCharsTill (noneOf ['§']) (pchar '"')) (fun a b c -> string a + b + c) <?> "string"
     let desc = restOfLine true .>> spaces <?> "desc"
     let value = digit .>> spaces <?> "version"
-    let entry = pipe4 (getPosition) (key) (opt value) (desc .>> spaces) (fun p k v d -> {key = k; value = v; desc = d; position = p}) <?> "entry"
+    let getRange (start: FParsec.Position) (endp : FParsec.Position) = mkRange start.StreamName (mkPos (int start.Line) (int start.Column)) (mkPos (int endp.Line) (int endp.Column))
+
+    let entry = pipe5 (getPosition) (key) (opt value) (desc .>> spaces) (getPosition) (fun s k v d e -> {key = k; value = v; desc = d; position = getRange s e}) <?> "entry"
     let comment = pstring "#" >>. restOfLine true .>> spaces <?> "comment"
     let file = many (attempt comment) >>. pipe2 (key) (many ((attempt comment |>> (fun _ -> None)) <|> (entry |>> Some)) .>> eof) (fun k es -> {key = k; entries = List.choose id es}) <?> "file"
 

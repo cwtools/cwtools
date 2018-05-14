@@ -24,6 +24,7 @@ open CWTools.Utilities.Utils
 open CWTools.Validation.Stellaris.Graphics
 open CWTools.Game.Stellaris
 open CWTools.Game.Stellaris.STLLookup
+open Microsoft.FSharp.Compiler.Range
 
 
 
@@ -151,7 +152,7 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
         let mutable localisationAPIs : (bool * ILocalisationAPI) list = []
         let allLocalisation() = localisationAPIs |> List.map snd
         let validatableLocalisation() = localisationAPIs |> List.choose (fun (validate, api) -> if validate then Some api else None)
-        let mutable localisationErrors : (string * Severity * CWTools.Parser.Types.Position * int * string * string option) list option = None
+        let mutable localisationErrors : (string * Severity * range * int * string * string option) list option = None
 
         let rec getAllFolders dirs =
             if Seq.isEmpty dirs then Seq.empty else
@@ -177,7 +178,7 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
                         |> List.filter (fun f -> Path.GetExtension(f) = ".mod")
                         |> List.map CKParser.parseFile
                         |> List.choose ( function | Success(p, _, _) -> Some p | _ -> None )
-                        |> List.map ((ProcessCore.processNodeBasic "mod" Position.Empty) >> (fun s -> s.TagText "name", s.TagText "path", modDir))
+                        |> List.map ((ProcessCore.processNodeBasic "mod" range.Zero) >> (fun s -> s.TagText "name", s.TagText "path", modDir))
 
 
             let modDirs = allDirs |> List.filter(fun (_, folder) -> folder.ToLower() = "mod" || folder.ToLower() = "mods")

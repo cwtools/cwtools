@@ -43,7 +43,7 @@ module STLLocalisationString =
         | true -> OK
         | false ->
             match r |> seq |> Seq.exists (fun c -> Char.IsLower(c)) && not (List.contains r hardcodedLocalisation) with
-            | true -> Invalid [invManual (ErrorCodes.UndefinedLocReference entry.key r (lang :> obj)) (Position.Conv entry.position) entry.key None ]
+            | true -> Invalid [invManual (ErrorCodes.UndefinedLocReference entry.key r (lang :> obj)) (entry.position) entry.key None ]
             | false -> OK
     
     let commands = 
@@ -106,7 +106,7 @@ module STLLocalisationString =
     let checkCommand (entry : Entry) (commands : string list) (eventtargets : string list) (setvariables : string list) (command : string) =
         match localisationCommandContext commands eventtargets setvariables entry command with
         | ContextResult.Found _ -> OK
-        | LocNotFound s -> Invalid [invManual (ErrorCodes.InvalidLocCommand entry.key s) (Position.Conv entry.position) entry.key None ]
+        | LocNotFound s -> Invalid [invManual (ErrorCodes.InvalidLocCommand entry.key s) (entry.position) entry.key None ]
 
     let processLocalisation (effects : Effect list) (scriptedLoc : string list) (setvariables : string list) (os : STLEntitySet) (api : (Lang * Map<string, Entry>)) (keys : (Lang * LocKeySet) list) =
         let lang = api |> fst
@@ -130,7 +130,7 @@ module STLLocalisationString =
         let validateContextResult (e : LocEntry) cr =
             match cr with
             | ContextResult.Found _ -> OK
-            | LocNotFound s -> Invalid [invManual (ErrorCodes.InvalidLocCommand e.key s) (Position.Conv e.position) e.key None ]
+            | LocNotFound s -> Invalid [invManual (ErrorCodes.InvalidLocCommand e.key s) (e.position) e.key None ]
         let validateLocMap (lang, (m : Map<string, LocEntry>)) = 
             let keys = keys |> List.filter (fun (l, _) -> l = lang) |> List.map snd |> List.fold (fun a b -> LocKeySet.Union (a, b)) (LocKeySet.Empty(STLStringComparer()))
             m |> Map.map (fun _ e -> e.refs <&!&> checkRef lang keys e) |> Map.toList |> List.map snd |> List.fold (<&&>) OK
@@ -138,7 +138,7 @@ module STLLocalisationString =
             (m |> Map.map (fun _ e -> e.scopes <&!&> validateContextResult e) |> Map.toList |> List.map snd |> List.fold (<&&>) OK)
 
         let validateReplaceMe (lang, (m : Map<string, LocEntry>)) =
-            m |> Map.toList |> List.fold (fun s (k, v) -> if v.desc == "\"REPLACE_ME\"" then s <&&> Invalid [invManual (ErrorCodes.ReplaceMeLoc v.key lang) (Position.Conv v.position) v.key None ] else s ) OK
+            m |> Map.toList |> List.fold (fun s (k, v) -> if v.desc == "\"REPLACE_ME\"" then s <&&> Invalid [invManual (ErrorCodes.ReplaceMeLoc v.key lang) (v.position) v.key None ] else s ) OK
         
         api <&!&> validateLocMap <&&> (api <&!&> validateReplaceMe)
         // <&&>

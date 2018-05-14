@@ -4,3 +4,4 @@ Newtonsoft.Json.FSharp
 FSharp.Collections.ParallelSeq
 DotNet.Glob
 FSharpx.Collections
+FSharp.Compiler.Service

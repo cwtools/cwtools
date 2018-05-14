@@ -4,6 +4,7 @@ open CWTools.Localisation
 open CWTools.Process.ProcessCore
 open CWTools.Process
 open System.Text
+open Microsoft.FSharp.Compiler.Range
 
 module CK2Process =
     type Option(key, pos) = 
@@ -17,12 +18,12 @@ module CK2Process =
         member this.Hidden = this.Tag "hide_window" |> (function | Some (Bool b) -> b | _ -> false)
 
     type EventRoot(key, pos) =
-        inherit Node("events", Position.Empty)
+        inherit Node("events", range.Zero)
         member __.Events : Event list = base.All |> List.choose (function |NodeC n -> Some n |_ -> None) |> List.choose (function | :? Event as e -> Some e |_ -> None)
         member this.Namespace = this.Tag "namespace" |> (function |Some (String s) -> s | _ -> "")
 
     type ArtifactFile(key, pos) =
-        inherit Node("artifacts", Position.Empty)
+        inherit Node("artifacts", range.Zero)
         member this.Slots = this.Child "slots" |> (function |Some c -> c.ToRaw | _ -> [])
         member __.Weapons = base.All |> List.choose (function |NodeC n when n.Key <> "slots" -> Some n |_ -> None)
 
@@ -43,9 +44,9 @@ module CK2Process =
     
     let processEventFile (ev : EventFile) = 
         let (EventFile e) = ev
-        (ck2Process.ProcessNode<EventRoot>()) "" Position.Empty e :?> EventRoot
+        (ck2Process.ProcessNode<EventRoot>()) "" range.Zero e :?> EventRoot
 
-    let processArtifact = (ck2Process.ProcessNode<ArtifactFile>()) "" Position.Empty >> (fun n -> n :?> ArtifactFile) 
+    let processArtifact = (ck2Process.ProcessNode<ArtifactFile>()) "" range.Zero >> (fun n -> n :?> ArtifactFile) 
 
 
     let getTriggeredEvents (event:Event) =

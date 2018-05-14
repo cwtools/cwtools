@@ -4,6 +4,7 @@ open FSharp.Collections.ParallelSeq
 open CWTools.Parser
 open Newtonsoft.Json.Converters
 open CWTools.Common
+open Microsoft.FSharp.Compiler.Range
 
 module ValidationCore =
     
@@ -81,10 +82,10 @@ module ValidationCore =
         static member CustomError = fun error severity -> { ID = "CW999"; Severity = severity; Message = error}
     type ValidationResult = 
         | OK
-        | Invalid of (string * Severity * CWTools.Parser.Types.Position * int * string * option<string>) list
+        | Invalid of (string * Severity * range * int * string * option<string>) list
 
     let inline invData (code : ErrorCode) (l : ^a) (data : option<string>) =
-        let pos = (^a : (member Position : CWTools.Parser.Types.Position) l)
+        let pos = (^a : (member Position : range) l)
         let key = (^a : (member Key : string) l)
         code.ID, code.Severity, pos, key.Length, code.Message, data
 
@@ -96,7 +97,7 @@ module ValidationCore =
         let value = lv.Value.ToString()
         code.ID, code.Severity, pos, value.Length, code.Message, data
 
-    let invManual (code : ErrorCode) (pos : CWTools.Parser.Types.Position) (key : string) (data : string option) =
+    let invManual (code : ErrorCode) (pos : range) (key : string) (data : string option) =
         code.ID, code.Severity, pos, key.Length, code.Message, data
         
     // let inline inv (sev : Severity) (l : ^a) (s : string) = 

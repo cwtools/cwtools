@@ -3,6 +3,7 @@ namespace CWTools.Process
 open NodaTime.TimeZones
 open System
 open CWTools.Localisation
+open Microsoft.FSharp.Compiler.Range
 module STLScopes =
     open CWTools.Common.STLConstants
     open CWTools.Utilities.Utils
@@ -435,7 +436,7 @@ module STLScopes =
         key : string
         value : char option
         desc : string
-        position : FParsec.Position
+        position : range
         scopes : ContextResult list
         refs : string list
     }

@@ -5,6 +5,7 @@ open Newtonsoft.Json
 open System
 open CWTools.Common.STLConstants
 open CWTools.Parser.Types
+open Microsoft.FSharp.Compiler.Range
 
 module List =
   let replace f sub xs = 
@@ -26,31 +27,31 @@ module List =
 type Leaf =
     val mutable Key : string
     val mutable Value : Value
-    val mutable Position : Position
+    val mutable Position : range
     [<JsonIgnore>]
     member this.ToRaw = KeyValueItem(Key(this.Key), this.Value)
-    new(key : string, value : Value, pos : Position) = { Key = key; Value = value; Position = pos }
+    new(key : string, value : Value, pos : range) = { Key = key; Value = value; Position = pos }
     //new(key : string, value : Value) = Leaf(key, value, Position.Empty)
-    new(keyvalueitem : KeyValueItem, ?pos : Position) = 
+    new(keyvalueitem : KeyValueItem, ?pos : range) = 
         let (KeyValueItem (Key(key), value)) = keyvalueitem
-        Leaf(key, value, pos |> Option.defaultValue Position.Empty)
+        Leaf(key, value, pos |> Option.defaultValue range.Zero)
     static member Create key value = LeafC(Leaf(key, value))
-and LeafValue(value : Value, ?pos : Position) =
+and LeafValue(value : Value, ?pos : range) =
     member val Value = value with get, set
-    member val Position = defaultArg pos Position.Empty
+    member val Position = defaultArg pos range.Zero
     [<JsonIgnore>]
     member this.ToRaw = Value(this.Value)
     static member Create value = LeafValue value
    
 and [<Struct>] Child = |NodeC of node : Node | LeafC of leaf : Leaf |CommentC of comment : string |LeafValueC of lefavalue : LeafValue
-and Node (key : string, pos : Position) =
+and Node (key : string, pos : range) =
     let bothFind x = function |NodeC n when n.Key = x -> true |LeafC l when l.Key = x -> true |_ -> false
     let mutable all : Child array = Array.empty
     let mutable _leaves : Lazy<Leaf array> = lazy ( Array.empty )
     let reset() =
         _leaves <- lazy (all |> Array.choose (function |LeafC l -> Some l |_ -> None))
     let leaves() = _leaves.Force()
-    new(key : string) = Node(key, Position.Empty)
+    new(key : string) = Node(key, range.Zero)
     member val Key = key
     member val Position = pos
     member val Scope : Scope = Scope.Any with get, set
@@ -89,7 +90,7 @@ and Node (key : string, pos : Position) =
 
 module ProcessCore =
 
-    let processNode< 'T when 'T :> Node > (postinit : 'T -> 'T) inner (key : string) (pos : Position) (sl : Statement list) : Node =
+    let processNode< 'T when 'T :> Node > (postinit : 'T -> 'T) inner (key : string) (pos : range) (sl : Statement list) : Node =
         // let node = match key with
         //             |"" -> Activator.CreateInstance(typeof<'T>) :?> Node
         //             |x -> Activator.CreateInstance(typeof<'T>, x) :?> Node
@@ -102,7 +103,7 @@ module ProcessCore =
     
     type LookupContext = { complete : bool; parents : string list; scope : string; previous : string; entityType : EntityType }
     let processNodeSimple<'T when 'T :> Node> _ = processNode<'T> id
-    type NodeTypeMap = ((string * Position * LookupContext)) -> (LookupContext -> ((Node -> Statement -> unit) -> string -> Position -> Statement list -> Node)) * string * (LookupContext -> LookupContext)
+    type NodeTypeMap = ((string * range * LookupContext)) -> (LookupContext -> ((Node -> Statement -> unit) -> string -> range -> Statement list -> Node)) * string * (LookupContext -> LookupContext)
     
     let fst3 (x, _, _) = x
     let snd3 (_, x, _) = x
@@ -115,7 +116,7 @@ module ProcessCore =
 
     type BaseProcess (maps : NodeTypeMap ) =
         let rec lookup =
-            (fun (key : string) (pos : Position) (context : LookupContext) ->
+            (fun (key : string) (pos : range) (context : LookupContext) ->
                 match maps (key, pos, context) with
                 |(t, n, c) -> t context (processNodeInner (updateContext c n key context)) key pos
                 // match maps |> List.tryFind (fun (a, _, _, _) -> a (key, pos, context)) with
