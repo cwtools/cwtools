@@ -22,7 +22,7 @@ let perf(b) =
     let triggers, effects = parseDocsFile "./testfiles/validationtests/trigger_docs_2.0.2.txt" |> (function |Success(p, _, _) -> DocsParser.processDocs p)
     let stl = STLGame("./testfiles/performancetest/", FilesScope.All, "", triggers, effects, [], [], [STL STLLang.English], false, true)
     if b then
-        let errors = stl.ValidationErrors |> List.map (fun (c, s, n, l, f, k) -> Position.UnConv n)
+        let errors = stl.ValidationErrors |> List.map (fun (c, s, n, l, f, k) -> n)
         let testVals = stl.AllEntities
         ()
     else ()
@@ -35,7 +35,7 @@ let perf2(b) =
     let triggers, effects = parseDocsFile "./testfiles/validationtests/trigger_docs_2.0.2.txt" |> (function |Success(p, _, _) -> DocsParser.processDocs p)
     let stl = STLGame("./testfiles/performancetest2/", FilesScope.All, "", triggers, effects, [], [], [STL STLLang.English], false, true)
     if b then
-        let errors = stl.ValidationErrors |> List.map (fun (c, s, n, l, f, k) -> Position.UnConv n)
+        let errors = stl.ValidationErrors |> List.map (fun (c, s, n, l, f, k) -> n)
         let testVals = stl.AllEntities
         ()
     else ()

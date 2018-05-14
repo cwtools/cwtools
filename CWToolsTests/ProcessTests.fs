@@ -15,6 +15,7 @@ open CWTools.Parser.SetupLogParser
 open CWTools.Common.STLConstants
 open System
 open CWTools.Process.STLProcess
+open Microsoft.FSharp.Compiler.Range
 
 
 [<Tests>]
@@ -29,7 +30,7 @@ let tests =
                                         }}}}}"
             match CKParser.parseString input "test" with
             |Success(r, _, _) ->
-                let node = (STLProcess.shipProcess.ProcessNode<Node>() "root" (Position.File("test")) r)
+                let node = (STLProcess.shipProcess.ProcessNode<Node>() "root" (range.Zero) r)
                 let event = node.Children |> List.head
                 let option = event.Children |> List.head
                 let anyplanet = option.Children |> List.head
@@ -45,7 +46,7 @@ let tests =
                                         }}}"
             match CKParser.parseString input "test" with
             |Success(r, _, _) ->
-                let node = (STLProcess.shipProcess.ProcessNode<Node>() "root" (Position.File("test")) r)
+                let node = (STLProcess.shipProcess.ProcessNode<Node>() "root" (range.Zero) r)
                 let event = node.Children |> List.head
                 let desc = event.Children |> List.head
                 let trigger = desc.Children |> List.head
