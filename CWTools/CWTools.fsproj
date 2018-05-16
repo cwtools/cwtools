@@ -7,7 +7,9 @@
     <Compile Include="Utilities/Utilities.fs" />
     <Compile Include="Common/Constants.fs" />
     <Compile Include="Common/STLConstants.fs" />
+    <Compile Include="Parser/Types.fs" />
     <Compile Include="Parser/CKParser.fs" />
+    <Compile Include="Parser/Printer.fs" />
     <Compile Include="Parser/DocsParser.fs" />
     <Compile Include="Parser/SetupLogParser.fs" />
     <Compile Include="Localisation/LocalisationDomain.fs" />
