@@ -25,6 +25,7 @@ open CWTools.Validation.Stellaris.Graphics
 open CWTools.Game.Stellaris
 open CWTools.Game.Stellaris.STLLookup
 open Microsoft.FSharp.Compiler.Range
+open CWTools.Validation.Rules
 
 
 
@@ -429,6 +430,13 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
                 updateDefinedVariables()
                 validateAll newEntities @ localisationCheck newEntities
 
+        let completion (pos : pos) filepath =
+            match resources.AllEntities() |> List.tryFind (fun struct (e, _) -> e.filepath == filepath) with
+            |Some struct (e, _) ->
+                let completion = CompletionService([ConfigParser.building])
+                completion.Complete(pos, e.entity)
+            |None -> []
+
         do 
             eprintfn "Parsing %i files" allFilesByPath.Length
             // let efiles = allFilesByPath |> List.filter (fun (_, f, _) -> not(f.EndsWith(".dds"))) 
@@ -477,6 +485,7 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
         member __.UpdateFile file = updateFile file
         member __.AllEntities = resources.AllEntities()
         member __.References = References<STLComputedData>(resources, lookup, (localisationAPIs |> List.map snd))
+        member __.Complete = completion
        
 
         //member __.ScriptedTriggers = parseResults |> List.choose (function |Pass(f, p, t) when f.Contains("scripted_triggers") -> Some p |_ -> None) |> List.map (fun t -> )
