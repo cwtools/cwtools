@@ -12,6 +12,7 @@
     <Compile Include="Parser/Printer.fs" />
     <Compile Include="Parser/DocsParser.fs" />
     <Compile Include="Parser/SetupLogParser.fs" />
+    <Compile Include="Parser/ConfigParser.fs" />
     <Compile Include="Localisation/LocalisationDomain.fs" />
     <Compile Include="Localisation/YAMLLocalisationParser.fs" />
     <Compile Include="Localisation/CK2Localisation.fs" />
@@ -27,6 +28,7 @@
     <Compile Include="Game/References.fs" />
     <Compile Include="Game/Stellaris/STLLookup.fs" />
     <Compile Include="Validation/Validation.fs" />
+    <Compile Include="Validation/Rules.fs" />
     <Compile Include="Validation/Stellaris/STLValidation.fs" />
     <Compile Include="Validation/Stellaris/STLLocalisationString.fs" />
     <Compile Include="Validation/Stellaris/STLLocalisationValidation.fs" />

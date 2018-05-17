@@ -100,6 +100,8 @@ module ValidationCore =
     let invManual (code : ErrorCode) (pos : range) (key : string) (data : string option) =
         code.ID, code.Severity, pos, key.Length, code.Message, data
         
+    let inline invCustom (l : ^a) =
+        invData (ErrorCodes.CustomError "default error" Severity.Error) l None
     // let inline inv (sev : Severity) (l : ^a) (s : string) = 
     //     let pos = (^a : (member Position : CWTools.Parser.Position) l)
     //     let key = (^a : (member Key : string) l)
