@@ -839,3 +839,13 @@ module STLValidation =
             
             ship_designs <&!&> validateDesign
 
+    let validateMixedBlocks : StructureValidator =
+        fun _ es ->
+
+            let fNode = (fun (x : Node) children ->
+                if (x.LeafValues |> Seq.isEmpty |> not && (x.Leaves |> Seq.isEmpty |> not || x.Children |> Seq.isEmpty |> not)) |> not
+                then children
+                else Invalid [inv ErrorCodes.MixedBlock x] <&&> children
+                )
+            let fCombine = (<&&>)
+            es.All <&!&> foldNode2 fNode fCombine OK

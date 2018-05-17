@@ -356,7 +356,7 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
             let flattened = allEntitiesByFile |> List.map (fun n -> n.Children) |> List.collect id
 
             let validators = [validateVariables, "var"; valTechnology, "tech"; validateTechnologies, "tech2"; valButtonEffects, "but"; valSprites, "sprite"; valVariables, "var2"; valEventCalls, "event"; 
-                                validateAmbientGraphics, "ambient"; validateShipDesigns, "designs"; ]
+                                validateAmbientGraphics, "ambient"; validateShipDesigns, "designs"; validateMixedBlocks, "mixed"]
             let experimentalvalidators = [valSectionGraphics, "sections"; valComponentGraphics, "component"; ]
             let oldEntities = EntitySet (resources.AllEntities())
             let newEntities = EntitySet entities

@@ -5,6 +5,8 @@ open CWTools.Process
 open CWTools.Utilities.Utils
 open CWTools.Validation.ValidationCore
 open CWTools.Common.STLConstants
+open Microsoft.FSharp.Compiler
+open Microsoft.FSharp.Compiler.Range
 
 module rec Rules =
     let fst3 (a, _, _) = a
@@ -63,3 +65,37 @@ module rec Rules =
             | Field.ClauseField rs -> applyClauseField rs node
 
         member __.ApplyNodeRule(rule, node) = applyNodeRule rule node
+
+    type CompletionService(effects : Rule list) =
+        let rec getRulePath (pos : pos) (stack : string list) (node : Node) =
+           match node.Children |> List.tryFind (fun c -> Range.rangeContainsPos c.Position pos) with
+           | Some c -> getRulePath pos (c.Key :: stack) c
+           | None -> 
+                match node.Leaves |> Seq.tryFind (fun l -> Range.rangeContainsPos l.Position pos) with
+                | Some l -> l.Key::stack
+                | None -> stack
+
+        and getCompletionFromPath (rules : Rule list) (stack : string list) =
+            let rec findRule (rules : Rule list) (stack) =
+                match stack with
+                |[] -> rules |> List.map fst3
+                |key::rest ->
+                    match rules |> List.tryFind (fun (k,_,_) -> k == key) with
+                    |Some (_,_,f) ->
+                        match f with
+                        |Field.EffectField -> findRule effects rest
+                        |Field.ClauseField rs -> findRule rs rest
+                        |Field.ObjectField et ->
+                            match et with
+                            |EntityType.ShipSizes -> ["large"; "medium"]
+                            |_ -> []
+                        |_ -> []
+                    |None -> rules |> List.map fst3
+            findRule rules stack
+
+        let complete (pos : pos) (node : Node) =
+            let path = getRulePath pos [] node |> List.rev
+            let completion = getCompletionFromPath effects path
+            completion 
+
+        member __.Complete(pos : pos, node : Node) = complete pos node

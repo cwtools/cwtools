@@ -137,5 +137,35 @@ let testsv =
                 | OK -> ()
                 | Invalid es -> Expect.equal (es.Length) 0 (sprintf "Following lines are not expected to have an error %A" es )
             |Failure(e, _, _) -> Expect.isTrue false e
+        testCase "test rhs completion" <| fun () ->
+            let input =    "create_starbase = {\n\
+                            owner = this \n\
+                            size = large \n\
+                            }"
+            match CKParser.parseString input "test" with
+            |Success(r, _, _) ->
+                let node = (STLProcess.shipProcess.ProcessNode<Node>() "root" (range.Zero) r)
+                let comp = CompletionService([ConfigParser.createStarbase])
+                let pos = mkPos 3 8
+                let suggestions = comp.Complete(pos, node) |> Seq.sort
+                let expected = ["medium"; "large"] |> Seq.sort
+                Expect.sequenceEqual suggestions expected "Completion should match"
+            |Failure(e, _, _) -> Expect.isTrue false e
+        testCase "test lhs completion" <| fun () ->
+            let input =    "create_starbase = {\n\
+                            owner = this \n\
+                            size \n\
+                            }"
+            match CKParser.parseString input "test" with
+            |Success(r, _, _) ->
+                let node = (STLProcess.shipProcess.ProcessNode<Node>() "root" (range.Zero) r)
+                let comp = CompletionService([ConfigParser.createStarbase])
+                let pos = mkPos 3 3
+                let suggestions = comp.Complete(pos, node) |> Seq.sort
+                let expected = ["size"; "owner"; "building"; "effect"; "module"] |> Seq.sort
+                Expect.sequenceEqual suggestions expected "Completion should match"
+            |Failure(e, _, _) -> Expect.isTrue false e
+
+       
 
     ]

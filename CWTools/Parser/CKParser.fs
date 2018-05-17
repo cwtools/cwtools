@@ -114,7 +114,7 @@ module CKParser =
     let keyvalue, keyvalueimpl = createParserForwardedToRef()
     let value, valueimpl = createParserForwardedToRef()
 
-    let statement = comment |>> Comment <|> keyvalue <?> "statement"
+    let statement = comment |>> Comment <|> (attempt keyvalue) <|> (value |>> Value) <?> "statement"
     let valueBlock = clause (many1 ((value |>> Value) <|> (comment |>> Comment))) |>> Clause <?> "value clause"
     
     let valueClause = clause (many statement) |>> Clause <?> "statement clause"
