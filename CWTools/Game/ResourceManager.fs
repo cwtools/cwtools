@@ -8,6 +8,7 @@ open DotNet.Globbing
 open CWTools.Common.STLConstants
 open CWTools.Parser.Types
 open Microsoft.FSharp.Compiler.Range
+open CWTools.Utilities.Utils
 
 
 
@@ -237,7 +238,7 @@ type ResourceManager<'T> (computedDataFunction : (Entity -> 'T)) =
                 match file with
                 |EntityResource (_, {result = Pass(s); filepath = f; validate = v}) ->
                     let entityType = filepathToEntityType f
-                    Some { filepath = f; entity = (shipProcess entityType "root" (range.Zero) statements); validate = v; entityType = entityType; overwrite = No}
+                    Some { filepath = f; entity = (shipProcess entityType "root" (mkZeroFile f) statements); validate = v; entityType = entityType; overwrite = No}
                 |_ -> None        
 
     let saveResults (resource, entity) =

@@ -409,7 +409,7 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
             //apiVs    
             lookup.proccessedLoc |> validateProcessedLocalisation taggedKeys |> (function |Invalid es -> es |_ -> [])          
 
-        let updateFile filepath =
+        let updateFile filepath (filetext : string option) =
             eprintfn "%s" filepath
             match filepath with
             |x when x.EndsWith (".yml") ->
@@ -417,7 +417,7 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
                 globalLocalisation()
             | _ ->
                 let filepath = Path.GetFullPath(filepath)
-                let file = File.ReadAllText filepath
+                let file = filetext |> Option.defaultWith (fun () -> File.ReadAllText filepath)
                 let rootedpath = filepath.Substring(filepath.IndexOf(normalisedScopeDirectory) + (normalisedScopeDirectory.Length))
                 let logicalpath = convertPathToLogicalPath rootedpath
                 //eprintfn "%s %s" logicalpath filepath
@@ -431,9 +431,10 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
                 validateAll newEntities @ localisationCheck newEntities
 
         let completion (pos : pos) filepath =
+            let filepath = Path.GetFullPath(filepath).Replace("/","\\")
             match resources.AllEntities() |> List.tryFind (fun struct (e, _) -> e.filepath == filepath) with
             |Some struct (e, _) ->
-                let completion = CompletionService([ConfigParser.building])
+                let completion = CompletionService([ConfigParser.building; ConfigParser.shipsize])
                 completion.Complete(pos, e.entity)
             |None -> []
 

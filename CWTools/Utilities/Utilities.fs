@@ -1,6 +1,7 @@
 namespace CWTools.Utilities
 open System
 open System.Collections.Generic
+open Microsoft.FSharp.Compiler.Range
 
 module Utils =
 
@@ -42,3 +43,4 @@ module Utils =
     
     let logVerbose format = log format
 
+    let mkZeroFile file = mkRange file (mkPos 0 0) (mkPos 10000 0)

@@ -89,6 +89,8 @@ module rec Rules =
                             match et with
                             |EntityType.ShipSizes -> ["large"; "medium"]
                             |_ -> []
+                        |Field.ValueField (ValueType.Enum es) -> es
+                        |Field.ValueField (ValueType.Bool) -> ["yes"; "no"]
                         |_ -> []
                     |None -> rules |> List.map fst3
             findRule rules stack
