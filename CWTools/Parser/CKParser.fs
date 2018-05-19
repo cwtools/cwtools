@@ -62,7 +62,7 @@ module CKParser =
     let strSkip s = skipString s .>> ws <?> ("skip string " + s)
     let ch c = pchar c .>> ws <?> ("char " + string c)
     let chSkip c = skipChar c .>> ws <?> ("skip char " + string c)
-    let clause inner = betweenL (chSkip '{' <?> "opening brace") (chSkip '}' <?> "closing brace") inner "clause"
+    let clause inner = betweenL (chSkip '{' <?> "opening brace") (skipChar '}' <?> "closing brace") inner "clause"
     let quotedCharSnippet = many1Satisfy (fun c -> c <> '\\' && c <> '"')
     let escapedChar = pstring "\\\"" |>> string
 
@@ -95,7 +95,7 @@ module CKParser =
             match (a, b, c, d) with 
             | (a, b, c, (Some d)) -> Clause [Statement.Value a;Statement.Value b; Statement.Value c; Statement.Value d]
             | (a, b, c, None) -> Clause [Statement.Value a;Statement.Value b; Statement.Value c;]))
-    let hsv = strSkip "hsv" >>. hsvI
+    let hsv = strSkip "hsv" >>. hsvI .>> ws
     let rgbI = clause (pipe4 (valueI .>> ws) (valueI .>> ws) (valueI .>> ws) (opt (valueI .>> ws)) 
             (fun a b c d -> 
             match (a, b, c, d) with 
@@ -105,7 +105,7 @@ module CKParser =
 
     let rgb3 = clause (pipe3 (valueI .>> ws) (valueI .>> ws) (valueI .>> ws) (fun a b c -> Clause [Statement.Value a;Statement.Value b; Statement.Value c])) 
     let rgb4 = clause (pipe4 (valueI .>> ws) (valueI .>> ws) (valueI .>> ws) (valueI .>> ws) (fun a b c d -> Clause [Statement.Value a;Statement.Value b; Statement.Value c; Statement.Value d])) 
-    let rgb = strSkip "rgb" >>. rgbI
+    let rgb = strSkip "rgb" >>. rgbI .>> ws
 
     // Complex types
     // =======
@@ -155,7 +155,7 @@ module CKParser =
 
     do valueimpl := valueCustom <?> "value"
     let getRange (start: FParsec.Position) (endp : FParsec.Position) = mkRange start.StreamName (mkPos (int start.Line) (int start.Column)) (mkPos (int endp.Line) (int endp.Column))
-    do keyvalueimpl := pipe4 (getPosition) ((keyQ <|> key) .>> operator) (value .>> ws) (getPosition .>> ws) (fun start id value endp -> KeyValue(PosKeyValue(getRange start endp, KeyValueItem(id, value))))
+    do keyvalueimpl := pipe4 (getPosition) ((keyQ <|> key) .>> operator) (value) (getPosition .>> ws) (fun start id value endp -> KeyValue(PosKeyValue(getRange start endp, KeyValueItem(id, value))))
     let alle = ws >>. many statement .>> eof |>> (fun f -> (EventFile f : EventFile))
     let valuelist = many1 ((comment |>> Comment) <|> (value .>> ws |>> Value)) .>> eof
     let statementlist = (many statement) .>> eof

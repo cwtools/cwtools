@@ -19,7 +19,9 @@ module rec Rules =
         |ValueType.Enum es -> Some es
         |_ -> None
 
-
+    type CompletionResponse =
+    |Simple of string
+    |Snippet of label : string * snippet : string
     type RuleApplicator(effects : Rule list) =
 
         let rec applyClauseField (rules : Rule list) (node : Node) =
@@ -89,9 +91,19 @@ module rec Rules =
                 | None -> stack
 
         and getCompletionFromPath (rules : Rule list) (stack : string list) =
+            let convRuleToCompletion (rule : Rule) =
+                let s, _, f = rule
+                let clause (inner : string) = Snippet (inner, (sprintf "%s = {\n\t$0\n}" inner))
+                let keyvalue (inner : string) = Snippet (inner, (sprintf "%s = $0" inner))
+                match f with
+                |Field.ClauseField _ -> clause s
+                |Field.EffectField -> clause s
+                |Field.ObjectField _ -> keyvalue s
+                |Field.ValueField _ -> keyvalue s
+                |_ -> Simple s
             let rec findRule (rules : Rule list) (stack) =
                 match stack with
-                |[] -> rules |> List.map fst3
+                |[] -> rules |> List.map convRuleToCompletion
                 |key::rest ->
                     match rules |> List.tryFind (fun (k,_,_) -> k == key) with
                     |Some (_,_,f) ->
@@ -100,11 +112,12 @@ module rec Rules =
                         |Field.ClauseField rs -> findRule rs rest
                         |Field.ObjectField et ->
                             match et with
-                            |EntityType.ShipSizes -> ["large"; "medium"]
+                            |EntityType.ShipSizes -> [Simple "large"; Simple "medium"]
                             |_ -> []
-                        |Field.ValueField v -> getValidValues v |> Option.defaultValue []
+                        |Field.ValueField v -> getValidValues v |> Option.defaultValue [] |> List.map Simple
                         |_ -> []
-                    |None -> rules |> List.map fst3
+                    |None -> 
+                        rules |> List.map convRuleToCompletion
             findRule rules stack
 
         let complete (pos : pos) (node : Node) =
