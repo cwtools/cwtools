@@ -143,7 +143,8 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
             let vt = triggers |> addInnerScope |> List.map (fun e -> e :> Effect)
             se @ vt
 
-        let resources = ResourceManager(computeSTLData).Api
+        let resourceManager = ResourceManager(computeSTLData)
+        let resources = resourceManager.Api
 
         let validatableFiles() = resources.ValidatableFiles
         let lookup = Lookup()
@@ -430,12 +431,19 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
                 updateDefinedVariables()
                 validateAll newEntities @ localisationCheck newEntities
 
-        let completion (pos : pos) filepath =
-            let filepath = Path.GetFullPath(filepath).Replace("/","\\")
-            match resources.AllEntities() |> List.tryFind (fun struct (e, _) -> e.filepath == filepath) with
-            |Some struct (e, _) ->
+        let completion (pos : pos) (filepath : string) (filetext : string) =
+            // let filepath = Path.GetFullPath(filepath).Replace("/","\\")
+            // match resources.AllEntities() |> List.tryFind (fun struct (e, _) -> e.filepath == filepath) with
+            // |Some struct (e, _) ->
+            //     let completion = CompletionService([ConfigParser.building; ConfigParser.shipsize])
+            //     completion.Complete(pos, e.entity)
+            // |None -> []
+            let split = filetext.Split('\n')
+            let filetext = split |> Array.mapi (fun i s -> if i = (pos.Line - 1) then eprintfn "%s" s; s.Insert(pos.Column, "x") else s) |> String.concat "\n"
+            match resourceManager.ManualProcess filetext with
+            |Some e -> 
                 let completion = CompletionService([ConfigParser.building; ConfigParser.shipsize])
-                completion.Complete(pos, e.entity)
+                completion.Complete(pos, e)
             |None -> []
 
         do 

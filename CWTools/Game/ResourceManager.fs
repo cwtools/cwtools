@@ -289,6 +289,13 @@ type ResourceManager<'T> (computedDataFunction : (Entity -> 'T)) =
     let allEntities() = entitiesMap |> Map.toList |> List.map snd |> List.filter (fun struct (e, _) -> e.overwrite <> Overwritten)
     let validatableEntities() = entitiesMap |> Map.toList |> List.map snd  |> List.filter (fun struct (e, _) -> e.overwrite <> Overwritten) |> List.filter (fun struct (e, _) -> e.validate)
         
+    member __.ManualProcess(filetext : string) =
+        let parsed = CKParser.parseString filetext "completion"
+        match parsed with
+        |Failure(_) -> None
+        |Success(s,_,_) -> Some (shipProcess EntityType.Other "root" (mkZeroFile "completion") s)
+
+
     member __.Api = {
         new IResourceAPI<'T> with
             member __.UpdateFiles = updateFiles

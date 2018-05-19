@@ -13,6 +13,13 @@ module rec Rules =
     let snd3 (_, b, _) = b
     let thd3 (_, _, c) = c
 
+    let getValidValues =
+        function
+        |ValueType.Bool -> Some ["yes"; "no"]
+        |ValueType.Enum es -> Some es
+        |_ -> None
+
+
     type RuleApplicator(effects : Rule list) =
 
         let rec applyClauseField (rules : Rule list) (node : Node) =
@@ -38,6 +45,12 @@ module rec Rules =
             <&&>
             (rules <&!&> checkCardinality node)
 
+        and applyValueField (vt : ValueType) (leaf : Leaf) =
+            match getValidValues vt with
+            | Some values -> 
+                let value = leaf.Value.ToString()
+                if values |> List.exists (fun s -> s == value) then OK else Invalid [invCustom leaf]
+            | None -> OK
         and applyObjectField (entityType : EntityType) (leaf : Leaf) =
             let values =
                 match entityType with
@@ -50,7 +63,7 @@ module rec Rules =
 
         and applyLeafRule (rule : Field) (leaf : Leaf) =
             match rule with
-            | Field.ValueField v -> OK
+            | Field.ValueField v -> applyValueField v leaf
             | Field.ObjectField et -> applyObjectField et leaf
             | Field.TargetField -> OK
             | Field.EffectField -> Invalid [invCustom leaf]
@@ -89,8 +102,7 @@ module rec Rules =
                             match et with
                             |EntityType.ShipSizes -> ["large"; "medium"]
                             |_ -> []
-                        |Field.ValueField (ValueType.Enum es) -> es
-                        |Field.ValueField (ValueType.Bool) -> ["yes"; "no"]
+                        |Field.ValueField v -> getValidValues v |> Option.defaultValue []
                         |_ -> []
                     |None -> rules |> List.map fst3
             findRule rules stack
