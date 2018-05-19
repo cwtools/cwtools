@@ -849,3 +849,18 @@ module STLValidation =
                 )
             let fCombine = (<&&>)
             es.All <&!&> foldNode2 fNode fCombine OK
+
+
+    let validateSolarSystemInitializers : StructureValidator =
+        fun _ es ->
+            let inits = es.AllOfTypeChildren EntityType.SolarSystemInitializers
+            let starclasses =
+                 es.AllOfTypeChildren EntityType.StarClasses
+                |> List.map (fun sc -> sc.Key)
+            let fNode =
+                fun (x : Node) ->
+                    match x.Has "class", starclasses |> List.contains (x.TagText "class") with
+                    |true, true -> OK
+                    |false, _ -> Invalid [inv (ErrorCodes.CustomError "This initializer is missing a class" Severity.Error) x]
+                    |_, false -> Invalid [inv (ErrorCodes.CustomError (sprintf "The star class %s does not exist" (x.TagText "class")) Severity.Error) x]
+            inits <&!&> fNode
