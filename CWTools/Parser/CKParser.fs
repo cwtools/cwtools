@@ -68,43 +68,43 @@ module CKParser =
 
     // Base types
     // =======
-    let operator = choice [chSkip '='; chSkip '>'; chSkip '<'] >>. optional (chSkip '=') <?> "operator"
-
+    let operator = choiceL [pchar '='; pchar '>'; pchar '<'] "operator 1" >>. optional (chSkip '=' <?> "operator 2") .>> ws <?> "operator"
+    let operatorLookahead = choice [chSkip '='; chSkip '>'; chSkip '<'] <?> "operator 1"
     let comment = skipChar '#' >>. restOfLine true .>> ws |>> string <?> "comment"
 
     let key = (many1SatisfyL isidchar "id character") .>> ws |>> (fun s -> System.String.Intern(s)) |>> Key <?> "id"
     let keyQ =  between (ch '"') (ch '"') (manyStrings (quotedCharSnippet <|> escapedChar)) .>> ws |>> Key <?> "quoted key"
 
-    let valueS = (many1SatisfyL isvaluechar "value character") .>> ws |>> string |>> (fun s -> System.String.Intern(s)) |>> String <?> "string"
+    let valueS = (many1SatisfyL isvaluechar "value character") |>> string |>> (fun s -> System.String.Intern(s)) |>> String <?> "string"
 
     let valueQ = between (ch '"') (ch '"') (manyStrings (quotedCharSnippet <|> escapedChar)) |>> QString <?> "quoted string"
 
-    let valueB = ( (skipString "yes") .>> nextCharSatisfiesNot (isvaluechar) .>> ws  |>> (fun _ -> Bool(true))) <|>
-                    ((skipString "no") .>> nextCharSatisfiesNot (isvaluechar) .>> ws  |>> (fun _ -> Bool(false)))
-    let valueBYes = skipString "yes" .>> nextCharSatisfiesNot (isvaluechar) .>> ws |>> (fun _ -> Bool(true))
-    let valueBNo = skipString "no" .>> nextCharSatisfiesNot (isvaluechar) .>> ws |>> (fun _ -> Bool(false))
+    // let valueB = ( (skipString "yes") .>> nextCharSatisfiesNot (isvaluechar)  |>> (fun _ -> Bool(true))) <|>
+    //                 ((skipString "no") .>> nextCharSatisfiesNot (isvaluechar)  |>> (fun _ -> Bool(false)))
+    let valueBYes = skipString "yes" .>> nextCharSatisfiesNot (isvaluechar) |>> (fun _ -> Bool(true))
+    let valueBNo = skipString "no" .>> nextCharSatisfiesNot (isvaluechar) |>> (fun _ -> Bool(false))
 
-    let valueI = pint64 .>> nextCharSatisfiesNot (isvaluechar) .>> ws |>> int |>> Int
-    let valueF = pfloat .>> nextCharSatisfiesNot (isvaluechar) .>> ws |>> float |>> Float     
+    let valueI = pint64 .>> nextCharSatisfiesNot (isvaluechar) |>> int |>> Int
+    let valueF = pfloat .>> nextCharSatisfiesNot (isvaluechar) |>> float |>> Float     
 
-    let hsv3 = clause (pipe3 valueF valueF valueF (fun a b c -> Clause [Statement.Value a;Statement.Value b; Statement.Value c]))
-    let hsv4 = clause (pipe4 valueF valueF valueF valueF (fun a b c d -> Clause [Statement.Value a;Statement.Value b; Statement.Value c; Statement.Value d]))
+    let hsv3 = clause (pipe3 ((valueF .>> ws) .>> ws) (valueF .>> ws) (valueF .>> ws) (fun a b c -> Clause [Statement.Value a;Statement.Value b; Statement.Value c]))
+    let hsv4 = clause (pipe4 (valueF .>> ws) (valueF .>> ws) (valueF .>> ws) (valueF .>> ws) (fun a b c d -> Clause [Statement.Value a;Statement.Value b; Statement.Value c; Statement.Value d]))
     let hsvI = 
-        clause (pipe4 valueF valueF valueF (opt valueF) 
+        clause (pipe4 (valueF .>> ws) (valueF .>> ws) (valueF .>> ws) (opt (valueF .>> ws)) 
             (fun a b c d -> 
             match (a, b, c, d) with 
             | (a, b, c, (Some d)) -> Clause [Statement.Value a;Statement.Value b; Statement.Value c; Statement.Value d]
             | (a, b, c, None) -> Clause [Statement.Value a;Statement.Value b; Statement.Value c;]))
     let hsv = strSkip "hsv" >>. hsvI
-    let rgbI = clause (pipe4 valueI valueI valueI (opt valueI) 
+    let rgbI = clause (pipe4 (valueI .>> ws) (valueI .>> ws) (valueI .>> ws) (opt (valueI .>> ws)) 
             (fun a b c d -> 
             match (a, b, c, d) with 
             | (a, b, c, (Some d)) -> Clause [Statement.Value a;Statement.Value b; Statement.Value c; Statement.Value d]
             | (a, b, c, None) -> Clause [Statement.Value a;Statement.Value b; Statement.Value c;]))
 
 
-    let rgb3 = clause (pipe3 valueI valueI valueI (fun a b c -> Clause [Statement.Value a;Statement.Value b; Statement.Value c])) 
-    let rgb4 = clause (pipe4 valueI valueI valueI valueI (fun a b c d -> Clause [Statement.Value a;Statement.Value b; Statement.Value c; Statement.Value d])) 
+    let rgb3 = clause (pipe3 (valueI .>> ws) (valueI .>> ws) (valueI .>> ws) (fun a b c -> Clause [Statement.Value a;Statement.Value b; Statement.Value c])) 
+    let rgb4 = clause (pipe4 (valueI .>> ws) (valueI .>> ws) (valueI .>> ws) (valueI .>> ws) (fun a b c d -> Clause [Statement.Value a;Statement.Value b; Statement.Value c; Statement.Value d])) 
     let rgb = strSkip "rgb" >>. rgbI
 
     // Complex types
@@ -113,9 +113,8 @@ module CKParser =
     // Recursive types
     let keyvalue, keyvalueimpl = createParserForwardedToRef()
     let value, valueimpl = createParserForwardedToRef()
-
-    let statement = comment |>> Comment <|> (attempt keyvalue) <|> (value |>> Value) <?> "statement"
-    let valueBlock = clause (many1 ((value |>> Value) <|> (comment |>> Comment))) |>> Clause <?> "value clause"
+    let statement = comment |>> Comment <|> (attempt (((value .>> ws)) .>> notFollowedBy operatorLookahead |>> Value)) <|> (keyvalue) <?> "statement"
+    let valueBlock = clause (many1 ((value .>> ws |>> Value) <|> (comment |>> Comment))) |>> Clause <?> "value clause"
     
     let valueClause = clause (many statement) |>> Clause <?> "statement clause"
 
@@ -154,12 +153,11 @@ module CKParser =
 
     
 
-    do valueimpl := valueCustom
-        //choiceL [valueQ; (attempt valueB); (attempt valueI); (attempt valueF); (attempt hsv); (attempt rgb); (attempt valueS); (attempt valueBlock); valueClause;] "value"
+    do valueimpl := valueCustom <?> "value"
     let getRange (start: FParsec.Position) (endp : FParsec.Position) = mkRange start.StreamName (mkPos (int start.Line) (int start.Column)) (mkPos (int endp.Line) (int endp.Column))
-    do keyvalueimpl := pipe4 (getPosition) ((keyQ <|> key) .>> operator) (value) (getPosition) (fun start id value endp -> KeyValue(PosKeyValue(getRange start endp, KeyValueItem(id, value))))
+    do keyvalueimpl := pipe4 (getPosition) ((keyQ <|> key) .>> operator) (value .>> ws) (getPosition .>> ws) (fun start id value endp -> KeyValue(PosKeyValue(getRange start endp, KeyValueItem(id, value))))
     let alle = ws >>. many statement .>> eof |>> (fun f -> (EventFile f : EventFile))
-    let valuelist = many1 ((comment |>> Comment) <|> (value |>> Value)) .>> eof
+    let valuelist = many1 ((comment |>> Comment) <|> (value .>> ws |>> Value)) .>> eof
     let statementlist = (many statement) .>> eof
     let all = ws >>. ((attempt valuelist) <|> statementlist)
     let parseEventFile filepath = runParserOnFile alle () filepath (System.Text.Encoding.GetEncoding(1252))
