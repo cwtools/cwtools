@@ -29,6 +29,7 @@ module rec ConfigParser =
     type Options = {
         min : int
         max : int
+        leafvalue : bool
     }
     type Rule = string * Options * Field
     type Field = 
@@ -47,10 +48,10 @@ module rec ConfigParser =
         conditions : Node option
     }
 
-    let requiredSingle = { min = 1; max = 1 }
-    let requiredMany = { min = 1; max = 100 }
-    let optionalSingle = { min = 0; max = 1 }
-    let optionalMany = { min = 0; max = 100 }
+    let requiredSingle = { min = 1; max = 1; leafvalue = false }
+    let requiredMany = { min = 1; max = 100; leafvalue = false }
+    let optionalSingle = { min = 0; max = 1; leafvalue = false }
+    let optionalMany = { min = 0; max = 100; leafvalue = false }
 
     let defaultFloat = ValueField (ValueType.Float (-1000.0, 1000.0))
 
@@ -103,12 +104,13 @@ module rec ConfigParser =
                 |_ -> 1, 100
             |None -> 1, 100
             
-        { min = min; max = max }
+        { min = min; max = max; leafvalue = false }
     let processChildConfig ((child, comments) : Child * string list)  =
         match child with
         |NodeC n when n.Key == "types" -> None
         |NodeC n -> Some (configNode n comments)
         |LeafC l -> Some (configLeaf l comments)
+        |LeafValueC lv -> Some (configLeafValue lv comments)
         |_ -> None
          
     let configNode (node : Node) (comments : string list) =
@@ -132,6 +134,15 @@ module rec ConfigParser =
             |x -> ValueField ValueType.Scalar
         let options = getOptionsFromComments comments
         Rule(leaf.Key, options, field)
+
+    let configLeafValue (leafvalue : LeafValue) (comments : string list) =
+        let field =
+            match leafvalue.Value.ToRawString() with
+            |x when x.StartsWith "<" && x.EndsWith ">" ->
+                TypeField (x.Trim([|'<'; '>'|]))
+            |x -> ValueField (ValueType.Enum [x])
+        let options = { getOptionsFromComments comments with leafvalue = true }
+        Rule("leafvalue", options, field)
 
     // Types
 

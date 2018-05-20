@@ -221,6 +221,7 @@ let testsv =
                 let suggestions = comp.Complete(pos, node) |> Seq.map (function |Simple c -> c |Snippet (l, _) -> l) |> Seq.sort
                 let expected = ["default"; "swarm"] |> Seq.sort
                 Expect.sequenceEqual suggestions expected "Completion should match"
+        
     ]
 
 
@@ -255,5 +256,22 @@ let testsConfig =
             let pos = mkPos 2 20
             let suggestions = stl.Complete pos "test" input |> Seq.map (function |Simple c -> c |Snippet (l, _) -> l) |> Seq.sort
             let expected = ["default"; "swarm"] |> Seq.sort
+            Expect.sequenceEqual suggestions expected "Completion should match"
+
+        testCase "shipsize prerequisits" <| fun () ->
+            let configtext = "./testfiles/configtests/test.cwt", File.ReadAllText "./testfiles/configtests/test.cwt"
+            let folder = "./testfiles/configtests/completiontests"
+            let triggers, effects = parseDocsFile "./testfiles/validationtests/trigger_docs_2.0.4.txt" |> (function |Success(p, _, _) -> DocsParser.processDocs p)
+            let modifiers = SetupLogParser.parseLogsFile "./testfiles/validationtests/setup.log" |> (function |Success(p, _, _) -> SetupLogParser.processLogs p)
+            let stl = STLGame(folder, FilesScope.All, "", triggers, effects, modifiers, [], [configtext], [STL STLLang.English], false, true)
+
+            let input =    "ship_size = {\n\
+                            prerequisites = {\n\
+                            \n\
+                            }\n\
+                            }"
+            let pos = mkPos 3 0
+            let suggestions = stl.Complete pos "test" input |> Seq.map (function |Simple c -> c |Snippet (l, _) -> l) |> Seq.sort
+            let expected = ["tech_one"; "tech_two"] |> Seq.sort
             Expect.sequenceEqual suggestions expected "Completion should match"
     ]

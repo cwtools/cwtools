@@ -38,7 +38,7 @@ ship_size = {
     enable_default_design = bool
     default_behavior = <ship_behavior>
     prerequisites = {
-
+        <technology>
     }
     combat_disengage_chance = float
     has_mineral_upkeep = bool
@@ -54,5 +54,8 @@ types = {
     data[ship_behavior] = {
         name_field = "name"
         path = "game/common/ship_behaviors"
+    }
+    data[technology] = {
+        path = "game/common/technology"
     }
 }

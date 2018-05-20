@@ -100,18 +100,25 @@ module rec Rules =
 
         and getCompletionFromPath (rules : Rule list) (stack : string list) =
             let convRuleToCompletion (rule : Rule) =
-                let s, _, f = rule
+                let s, o, f = rule
                 let clause (inner : string) = Snippet (inner, (sprintf "%s = {\n\t$0\n}" inner))
                 let keyvalue (inner : string) = Snippet (inner, (sprintf "%s = $0" inner))
-                match f with
-                |Field.ClauseField _ -> clause s
-                |Field.EffectField -> clause s
-                |Field.ObjectField _ -> keyvalue s
-                |Field.ValueField _ -> keyvalue s
-                |_ -> Simple s
+                match o.leafvalue with
+                |false ->
+                    match f with
+                    |Field.ClauseField _ -> [clause s]
+                    |Field.EffectField -> [clause s]
+                    |Field.ObjectField _ -> [keyvalue s]
+                    |Field.ValueField _ -> [keyvalue s]
+                    |_ -> [Simple s]
+                |true ->
+                    match f with
+                    |Field.TypeField t -> types.TryFind(t) |> Option.defaultValue [] |> List.map Simple
+                    |Field.ValueField (Enum e) -> e |> List.map Simple
+                    |_ -> []
             let rec findRule (rules : Rule list) (stack) =
                 match stack with
-                |[] -> rules |> List.map convRuleToCompletion
+                |[] -> rules |> List.collect convRuleToCompletion
                 |key::rest ->
                     match rules |> List.tryFind (fun (k,_,_) -> k == key) with
                     |Some (_,_,f) ->
@@ -126,7 +133,7 @@ module rec Rules =
                         |Field.TypeField t -> types.TryFind(t) |> Option.defaultValue [] |> List.map Simple
                         |_ -> []
                     |None -> 
-                        rules |> List.map convRuleToCompletion
+                        rules |> List.collect convRuleToCompletion
             findRule rules stack
 
         let complete (pos : pos) (node : Node) =
