@@ -1,0 +1,48 @@
+create_starbase = {
+    ## cardinality = 1..1
+    owner = scalar
+
+    ## cardinality = 1..1
+    size = scalar
+
+    ## cardinality = 0..100
+    module = scalar
+
+    ## cardinality = 0..100
+    building = scalar
+
+    ## cardinality = 0..1
+    effect = effect
+}
+
+shipsize = {
+    formation_priority = int
+    max_speed = float
+    acceleration = float
+    rotation_speed = float
+    collision_radius = float
+    max_hitpoints = int
+    modifier = {
+        
+    }
+    size_multiplier = int
+    fleet_slot_size = int
+    section_slots = {
+        
+    }
+    num_target_locators = int
+    is_space_station = bool
+    icon_frame = int
+    base_buildtime = int
+    can_have_federation_design = bool
+    enable_default_design = bool
+    default_behavior = <ship_behavior>
+    prerequisites = {
+
+    }
+    combat_disengage_chance = float
+    has_mineral_upkeep = bool
+    class = scalar
+    construction_type = scalar
+    required_component_set = scalar
+}

@@ -27,6 +27,7 @@ open CWTools.Game.Stellaris.STLLookup
 open Microsoft.FSharp.Compiler.Range
 open CWTools.Validation.Rules
 open CWTools.Parser
+open CWTools.Parser.ConfigParser
 
 
 
@@ -38,7 +39,7 @@ type FilesScope =
 
 //type GameFile = GameFile of result : FileResult
 
-type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, triggers : DocEffect list, effects : DocEffect list, modifiers : Modifier list, embeddedFiles : (string * string) list, langs : Lang list, validateVanilla : bool, experimental : bool ) =
+type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, triggers : DocEffect list, effects : DocEffect list, modifiers : Modifier list, embeddedFiles : (string * string) list, configs : (string * string) list, langs : Lang list, validateVanilla : bool, experimental : bool ) =
 
         let normalisedScopeDirectory = scopeDirectory.Replace("/","\\").TrimStart('.')
         let scriptFolders = [
@@ -319,7 +320,9 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
             lookup.technologies <- getTechnologies (EntitySet (resources.AllEntities()))
 
         let updateTypeDef() =
-            lookup.typeDefInfo <- getTypesFromDefinitions [ConfigParser.shipBehaviorType] (resources.AllEntities() |> List.map (fun struct(e,_) -> e))
+            let config = configs |> List.collect (fun (fn, ft) -> parseConfig fn ft)
+            lookup.configRules <- config
+            lookup.typeDefInfo <- getTypesFromDefinitions [shipBehaviorType] (resources.AllEntities() |> List.map (fun struct(e,_) -> e))
 
         // let findDuplicates (sl : Statement list) =
         //     let node = ProcessCore.processNodeBasic "root" Position.Empty sl
@@ -446,7 +449,7 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
             let filetext = split |> Array.mapi (fun i s -> if i = (pos.Line - 1) then eprintfn "%s" s; s.Insert(pos.Column, "x") else s) |> String.concat "\n"
             match resourceManager.ManualProcess filetext with
             |Some e -> 
-                let completion = CompletionService([ConfigParser.building; ConfigParser.shipsize], lookup.typeDefInfo)
+                let completion = CompletionService(lookup.configRules, lookup.typeDefInfo)
                 completion.Complete(pos, e)
             |None -> []
 

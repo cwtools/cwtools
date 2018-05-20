@@ -73,7 +73,7 @@ let testc =
                           ## cardinality = 0..1\n\
                           effect = effect\n\
                           }"
-            let rules = parseConfig config ""
+            let rules = parseConfig "" config
             let input =    "create_starbase = {\n\
                             owner = this \n\
                             owner = this \n\
@@ -227,10 +227,26 @@ let testsv =
 let testsConfig =
     testList "full config" [
         testCase "basic" <| fun () ->
+            let configtext = "./testfiles/configtests/test.cwt", File.ReadAllText "./testfiles/configtests/test.cwt"
             let folder = "./testfiles/configtests/completiontests"
             let triggers, effects = parseDocsFile "./testfiles/validationtests/trigger_docs_2.0.4.txt" |> (function |Success(p, _, _) -> DocsParser.processDocs p)
             let modifiers = SetupLogParser.parseLogsFile "./testfiles/validationtests/setup.log" |> (function |Success(p, _, _) -> SetupLogParser.processLogs p)
-            let stl = STLGame(folder, FilesScope.All, "", triggers, effects, modifiers, [], [STL STLLang.English], false, true)
+            let stl = STLGame(folder, FilesScope.All, "", triggers, effects, modifiers, [], [configtext], [STL STLLang.English], false, true)
+
+            let input =    "shipsize = {\n\
+                            default_behavior = s \n\
+                            }"
+            let pos = mkPos 2 20
+            let suggestions = stl.Complete pos "test" input |> Seq.map (function |Simple c -> c |Snippet (l, _) -> l) |> Seq.sort
+            let expected = ["default"; "swarm"] |> Seq.sort
+            Expect.sequenceEqual suggestions expected "Completion should match"
+
+        testCase "basic with config load" <| fun () ->
+            let configtext = "./testfiles/configtests/test.cwt", File.ReadAllText "./testfiles/configtests/test.cwt"
+            let folder = "./testfiles/configtests/completiontests"
+            let triggers, effects = parseDocsFile "./testfiles/validationtests/trigger_docs_2.0.4.txt" |> (function |Success(p, _, _) -> DocsParser.processDocs p)
+            let modifiers = SetupLogParser.parseLogsFile "./testfiles/validationtests/setup.log" |> (function |Success(p, _, _) -> SetupLogParser.processLogs p)
+            let stl = STLGame(folder, FilesScope.All, "", triggers, effects, modifiers, [], [configtext], [STL STLLang.English], false, true)
 
             let input =    "shipsize = {\n\
                             default_behavior = s \n\

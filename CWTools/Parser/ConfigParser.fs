@@ -54,7 +54,7 @@ module rec ConfigParser =
 
     let defaultFloat = ValueField (ValueType.Float (-1000.0, 1000.0))
 
-    let parseConfigString fileString filename = runParserOnString CKParser.all () filename fileString
+    let parseConfigString filename fileString = runParserOnString CKParser.all () filename fileString
 
     let getNodeComments (node : Node) =
         let findComments t s (a : Child) =
@@ -97,7 +97,6 @@ module rec ConfigParser =
             match comments |> List.tryFind (fun s -> s.Contains("cardinality")) with
             |Some c ->
                 let nums = c.Substring(c.IndexOf "=" + 1).Trim().Split([|".."|], 2, StringSplitOptions.None)
-                eprintfn "%s %A" c nums
                 try
                     ((int nums.[0]), (int nums.[1]))
                 with
@@ -112,19 +111,19 @@ module rec ConfigParser =
         |_ -> None
          
     let configNode (node : Node) (comments : string list) =
-        eprintfn "%A %A" node.Key comments
         let children = getNodeComments node
         let options = getOptionsFromComments comments
         Rule(node.Key, options, ClauseField(children |> List.choose processChild))
     
     let configLeaf (leaf : Leaf) (comments : string list) =
-        eprintfn "%A %A" leaf.Key comments
         let field =
             match leaf.Value.ToRawString() with
             |"effect" -> EffectField
             |"scalar" -> ValueField ValueType.Scalar
             |"int" -> ValueField ValueType.Int
             |"bool" -> ValueField ValueType.Bool
+            |x when x.StartsWith "<" && x.EndsWith ">" ->
+                TypeField (x.Trim([|'<'; '>'|]))
             |x when x.StartsWith "float" -> 
                 match getFloatSettingFromString x with
                 |Some (min, max) -> ValueField (ValueType.Float (min, max))
@@ -135,10 +134,10 @@ module rec ConfigParser =
     let processConfig (node : Node) =
         getNodeComments node |> List.choose processChild
 
-    let parseConfig fileString filename =
-        let parsed = parseConfigString fileString filename
+    let parseConfig filename fileString =
+        let parsed = parseConfigString filename fileString
         match parsed with
-        |Failure(_) -> []
+        |Failure(e, _, _) -> eprintfn "config file %s failed with %s" filename e; []
         |Success(s,_,_) -> 
             let root = shipProcess.ProcessNode<Node> EntityType.Other "root" (mkZeroFile filename) s
             processConfig root
