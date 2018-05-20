@@ -5,6 +5,14 @@ open FParsec
 open Microsoft.FSharp.Compiler.Range
 open Types
 open CWTools.Common.STLConstants
+open System.IO
+open CWTools.Process.STLProcess
+open CWTools.Process
+open CWTools.Process.ProcessCore
+open CWTools.Utilities.Utils
+open System
+open System.Globalization
+open System.Reflection.Metadata
 
 
 module rec ConfigParser =
@@ -26,11 +34,116 @@ module rec ConfigParser =
     type Field = 
     | ValueField of ValueType
     | ObjectField of EntityType
+    | TypeField of string
     | TargetField
     | ClauseField of Rule list
     | EffectField
     | TriggerField
     type EffectRule = Rule // Add scopes
+    type TypeDefinition = {
+        name : string
+        nameField : string option
+        path : string
+        conditions : Node option
+    }
+
+    let requiredSingle = { min = 1; max = 1 }
+    let requiredMany = { min = 1; max = 100 }
+    let optionalSingle = { min = 0; max = 1 }
+    let optionalMany = { min = 0; max = 100 }
+
+    let defaultFloat = ValueField (ValueType.Float (-1000.0, 1000.0))
+
+    let parseConfigString fileString filename = runParserOnString CKParser.all () filename fileString
+
+    let getNodeComments (node : Node) =
+        let findComments t s (a : Child) =
+                match (s, a) with
+                | ((b, c), _) when b -> (b, c)
+                | ((_, c), CommentC nc) when nc.StartsWith("#") -> (false, nc::c)
+                | ((_, c), CommentC nc) -> (false, c)
+                | ((_, c), NodeC n) when n.Position = t -> (true, c)
+                | ((_, c), LeafC v) when v.Position = t -> (true, c)
+                // | ((_, c), LeafValueC lv) when lv.Position = t -> (true, c)
+                | ((_, _), _) -> (false, [])
+        //let fNode = (fun (node:Node) (children) ->
+        let one = node.Values |> List.map (fun e -> LeafC e, node.All |> List.rev |> List.fold (findComments e.Position) (false, []) |> snd)
+        //eprintfn "%s %A" node.Key (node.All |> List.rev)
+        //eprintfn "%A" one
+        let two = node.Children |> List.map (fun e -> NodeC e, node.All |> List.rev |> List.fold (findComments e.Position) (false, []) |> snd)
+        let three = node.LeafValues |> Seq.toList |> List.map (fun e -> LeafValueC e, node.All |> List.rev |> List.fold (findComments e.Position) (false, []) |> snd)
+        let new2 = one @ two @ three
+        new2
+
+    let getSettingFromString (full : string) (key : string) =
+        let setting = full.Substring(key.Length)
+        if not (setting.StartsWith "[" && setting.EndsWith "]") then None else
+            Some (setting.Trim [|'['; ']'|])
+
+    let getFloatSettingFromString (full : string) =
+        match getSettingFromString full "float" with
+        |Some s -> 
+            let split = s.Split([|".."|], 2, StringSplitOptions.None)
+            if split.Length < 2 then None else
+                try
+                    Some ((float split.[0]), (float split.[1]))
+                with
+                |_ -> None
+        |None -> None
+
+
+    let getOptionsFromComments (comments : string list) =
+        let min, max = 
+            match comments |> List.tryFind (fun s -> s.Contains("cardinality")) with
+            |Some c ->
+                let nums = c.Substring(c.IndexOf "=" + 1).Trim().Split([|".."|], 2, StringSplitOptions.None)
+                eprintfn "%s %A" c nums
+                try
+                    ((int nums.[0]), (int nums.[1]))
+                with
+                |_ -> 1, 100
+            |None -> 1, 100
+            
+        { min = min; max = max }
+    let processChild ((child, comments) : Child * string list)  =
+        match child with
+        |NodeC n -> Some (configNode n comments)
+        |LeafC l -> Some (configLeaf l comments)
+        |_ -> None
+         
+    let configNode (node : Node) (comments : string list) =
+        eprintfn "%A %A" node.Key comments
+        let children = getNodeComments node
+        let options = getOptionsFromComments comments
+        Rule(node.Key, options, ClauseField(children |> List.choose processChild))
+    
+    let configLeaf (leaf : Leaf) (comments : string list) =
+        eprintfn "%A %A" leaf.Key comments
+        let field =
+            match leaf.Value.ToRawString() with
+            |"effect" -> EffectField
+            |"scalar" -> ValueField ValueType.Scalar
+            |"int" -> ValueField ValueType.Int
+            |"bool" -> ValueField ValueType.Bool
+            |x when x.StartsWith "float" -> 
+                match getFloatSettingFromString x with
+                |Some (min, max) -> ValueField (ValueType.Float (min, max))
+                |None -> (defaultFloat)
+            |x -> ValueField ValueType.Scalar
+        let options = getOptionsFromComments comments
+        Rule(leaf.Key, options, field)
+    let processConfig (node : Node) =
+        getNodeComments node |> List.choose processChild
+
+    let parseConfig fileString filename =
+        let parsed = parseConfigString fileString filename
+        match parsed with
+        |Failure(_) -> []
+        |Success(s,_,_) -> 
+            let root = shipProcess.ProcessNode<Node> EntityType.Other "root" (mkZeroFile filename) s
+            processConfig root
+
+
 
 // create_starbase = {
 // 	owner = <target>
@@ -39,9 +152,6 @@ module rec ConfigParser =
 // 	building = <starbase_building>
 // 	effect = { ... }
 // }
-    let requiredSingle = { min = 1; max = 1 }
-    let optionalSingle = { min = 0; max = 1 }
-    let optionalMany = { min = 0; max = 100 }
     let createStarbase = 
         let owner = Rule ("owner", requiredSingle, TargetField )
         let size = Rule ("size", requiredSingle, ObjectField EntityType.ShipSizes)
@@ -113,7 +223,6 @@ module rec ConfigParser =
     // required_component_set = "thruster_components"
     // required_component_set = "sensor_components"
     // required_component_set = "combat_computers"
-    let defaultFloat = ValueField (ValueType.Float (0.0, 1000.0))
     let shipsize =
         let inner =
             [
@@ -133,7 +242,7 @@ module rec ConfigParser =
                 Rule("base_buildtime", requiredSingle, ValueField ValueType.Int);
                 Rule("can_have_federation_design", requiredSingle, ValueField ValueType.Bool);
                 Rule("enable_default_design", requiredSingle, ValueField ValueType.Bool);
-                Rule("default_behavior", requiredSingle, ValueField (ValueType.Enum ["swarm"]));
+                Rule("default_behavior", requiredSingle, TypeField "ship_behavior");
                 Rule("prerequisites", optionalSingle, ClauseField []);
                 Rule("combat_disengage_chance", optionalSingle, defaultFloat);
                 Rule("has_mineral_upkeep", requiredSingle, ValueField ValueType.Bool);
@@ -142,3 +251,20 @@ module rec ConfigParser =
                 Rule("required_component_set", requiredSingle, ValueField ValueType.Scalar);
             ]
         Rule("shipsize", optionalMany, ClauseField inner)
+
+    let shipBehaviorType =
+        {
+            name = "ship_behavior";
+            nameField = Some "name";
+            path = "common/ship_behaviors";
+            conditions = None
+        }
+//  type[leader_trait] = {
+//      path = "game/common/traits"
+//      conditions = {
+//          leader_trait = yes
+//      }
+//  }
+//  type[species_trait] = {
+//      path = "game/common/traits"   
+//  }

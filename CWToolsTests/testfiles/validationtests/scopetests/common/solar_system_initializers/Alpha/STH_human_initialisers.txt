@@ -1,6 +1,6 @@
 ##Test effects and triggers
 basic_init_02 = {
-	class = "rl_standard_stars"
+	class = "test_class"
 	asteroids_distance = 95
 	
 	usage = misc_system_init

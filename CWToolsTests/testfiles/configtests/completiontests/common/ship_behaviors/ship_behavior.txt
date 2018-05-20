@@ -1,0 +1,6 @@
+ship_behavior = {
+    name = "default"
+}
+ship_behavior = {
+    name = "swarm"
+}

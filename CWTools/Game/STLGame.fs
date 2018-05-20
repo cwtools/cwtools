@@ -26,6 +26,7 @@ open CWTools.Game.Stellaris
 open CWTools.Game.Stellaris.STLLookup
 open Microsoft.FSharp.Compiler.Range
 open CWTools.Validation.Rules
+open CWTools.Parser
 
 
 
@@ -317,6 +318,9 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
         let updateTechnologies() =
             lookup.technologies <- getTechnologies (EntitySet (resources.AllEntities()))
 
+        let updateTypeDef() =
+            lookup.typeDefInfo <- getTypesFromDefinitions [ConfigParser.shipBehaviorType] (resources.AllEntities() |> List.map (fun struct(e,_) -> e))
+
         // let findDuplicates (sl : Statement list) =
         //     let node = ProcessCore.processNodeBasic "root" Position.Empty sl
         //     node.Children |> List.groupBy (fun c -> c.Key)
@@ -442,7 +446,7 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
             let filetext = split |> Array.mapi (fun i s -> if i = (pos.Line - 1) then eprintfn "%s" s; s.Insert(pos.Column, "x") else s) |> String.concat "\n"
             match resourceManager.ManualProcess filetext with
             |Some e -> 
-                let completion = CompletionService([ConfigParser.building; ConfigParser.shipsize])
+                let completion = CompletionService([ConfigParser.building; ConfigParser.shipsize], lookup.typeDefInfo)
                 completion.Complete(pos, e)
             |None -> []
 
@@ -468,6 +472,7 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
             updateModifiers()
             updateTechnologies()
             updateLocalisation()
+            updateTypeDef()
 
         //member __.Results = parseResults
         member __.ParserErrors = parseErrors()

@@ -12,7 +12,6 @@
     <Compile Include="Parser/Printer.fs" />
     <Compile Include="Parser/DocsParser.fs" />
     <Compile Include="Parser/SetupLogParser.fs" />
-    <Compile Include="Parser/ConfigParser.fs" />
     <Compile Include="Localisation/LocalisationDomain.fs" />
     <Compile Include="Localisation/YAMLLocalisationParser.fs" />
     <Compile Include="Localisation/CK2Localisation.fs" />
@@ -23,6 +22,7 @@
     <Compile Include="Process/CK2Process.fs" />
     <Compile Include="Process/STLScopes.fs" />
     <Compile Include="Process/STLProcess.fs" />
+    <Compile Include="Parser/ConfigParser.fs" />
     <Compile Include="Game/ResourceManager.fs" />
     <Compile Include="Game/Lookups.fs" />
     <Compile Include="Game/References.fs" />

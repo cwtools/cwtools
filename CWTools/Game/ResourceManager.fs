@@ -73,6 +73,7 @@ type Resource =
 type Entity =
     {
         filepath : string
+        logicalpath : string
         entity : Node
         validate : bool
         entityType : EntityType
@@ -236,10 +237,10 @@ type ResourceManager<'T> (computedDataFunction : (Entity -> 'T)) =
     let parseEntity ((file, statements) : Resource * Statement list) =
         file,
                 match file with
-                |EntityResource (_, {result = Pass(s); filepath = f; validate = v}) ->
+                |EntityResource (_, {result = Pass(s); filepath = f; validate = v; logicalpath = l}) ->
                     let entityType = filepathToEntityType f
-                    Some { filepath = f; entity = (shipProcess entityType "root" (mkZeroFile f) statements); validate = v; entityType = entityType; overwrite = No}
-                |_ -> None        
+                    Some { filepath = f; logicalpath = l; entity = (shipProcess entityType "root" (mkZeroFile f) statements); validate = v; entityType = entityType; overwrite = No}
+                |_ -> None
 
     let saveResults (resource, entity) =
         seq {
