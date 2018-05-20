@@ -17,7 +17,7 @@ module rec Rules =
     let getValidValues =
         function
         |ValueType.Bool -> Some ["yes"; "no"]
-        |ValueType.Enum es -> Some es
+        |ValueType.Enum es -> Some [es]
         |_ -> None
 
     type CompletionResponse =
@@ -89,7 +89,7 @@ module rec Rules =
 
         member __.ApplyNodeRule(rule, node) = applyNodeRule rule node
 
-    type CompletionService(rootRules : Rule list, typedefs : TypeDefinition list , types : Map<string, string list>) =
+    type CompletionService(rootRules : Rule list, typedefs : TypeDefinition list , types : Map<string, string list>, enums : Map<string, string list>) =
         let rec getRulePath (pos : pos) (stack : string list) (node : Node) =
            match node.Children |> List.tryFind (fun c -> Range.rangeContainsPos c.Position pos) with
            | Some c -> getRulePath pos (c.Key :: stack) c
@@ -114,7 +114,7 @@ module rec Rules =
                 |true ->
                     match f with
                     |Field.TypeField t -> types.TryFind(t) |> Option.defaultValue [] |> List.map Simple
-                    |Field.ValueField (Enum e) -> e |> List.map Simple
+                    |Field.ValueField (Enum e) -> enums.TryFind(e) |> Option.defaultValue [] |> List.map Simple
                     |_ -> []
             let rec findRule (rules : Rule list) (stack) =
                 match stack with
@@ -129,6 +129,7 @@ module rec Rules =
                             match et with
                             |EntityType.ShipSizes -> [Simple "large"; Simple "medium"]
                             |_ -> []
+                        |Field.ValueField (Enum e) -> enums.TryFind(e) |> Option.defaultValue [] |> List.map Simple
                         |Field.ValueField v -> getValidValues v |> Option.defaultValue [] |> List.map Simple
                         |Field.TypeField t -> types.TryFind(t) |> Option.defaultValue [] |> List.map Simple
                         |_ -> []

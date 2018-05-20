@@ -21,7 +21,7 @@ module rec ConfigParser =
     | Bool
     | Scalar
     | Int
-    | Enum of string list
+    | Enum of string
     type ObjectType =
     | Tech
     | ShipSize
@@ -47,6 +47,7 @@ module rec ConfigParser =
         path : string
         conditions : Node option
     }
+    type EnumDefinition = string * string list
 
     let requiredSingle = { min = 1; max = 1; leafvalue = false }
     let requiredMany = { min = 1; max = 100; leafvalue = false }
@@ -131,6 +132,10 @@ module rec ConfigParser =
                 match getFloatSettingFromString x with
                 |Some (min, max) -> ValueField (ValueType.Float (min, max))
                 |None -> (defaultFloat)
+            |x when x.StartsWith "enum" -> 
+                match getSettingFromString x "enum" with
+                |Some (name) -> ValueField (ValueType.Enum name)
+                |None -> ValueField (ValueType.Enum "")
             |x -> ValueField ValueType.Scalar
         let options = getOptionsFromComments comments
         Rule(leaf.Key, options, field)
@@ -140,7 +145,7 @@ module rec ConfigParser =
             match leafvalue.Value.ToRawString() with
             |x when x.StartsWith "<" && x.EndsWith ">" ->
                 TypeField (x.Trim([|'<'; '>'|]))
-            |x -> ValueField (ValueType.Enum [x])
+            |x -> ValueField (ValueType.Enum x)
         let options = { getOptionsFromComments comments with leafvalue = true }
         Rule("leafvalue", options, field)
 
@@ -168,16 +173,36 @@ module rec ConfigParser =
                 |_ -> None
             Some (getNodeComments n |> List.choose inner)
         |_ -> None
-     
+   
+    let processEnum (node : Node) (comments : string list) =
+        match node.Key with
+        |x when x.StartsWith("enum") ->
+            let enumname = getSettingFromString node.Key "enum"
+            let values = node.LeafValues |> List.ofSeq |> List.map (fun lv -> lv.Value.ToString())
+            match enumname with
+            |Some en -> Some (en, values)
+            |None -> None
+        |_ -> None
+
+    let processChildEnum ((child, comments) : Child * string list) =
+        match child with
+        |NodeC n when n.Key == "enums" -> 
+            let inner ((child2, comments2) : Child * string list) =
+                match child2 with
+                |NodeC n2 -> (processEnum n2 comments2)
+                |_ -> None
+            Some (getNodeComments n |> List.choose inner)
+        |_ -> None
     let processConfig (node : Node) =
         let rules = getNodeComments node |> List.choose processChildConfig
         let types = getNodeComments node |> List.choose processChildType |> List.collect id
-        rules, types
+        let enums = getNodeComments node |> List.choose processChildEnum |> List.collect id
+        rules, types, enums
 
     let parseConfig filename fileString =
         let parsed = parseConfigString filename fileString
         match parsed with
-        |Failure(e, _, _) -> eprintfn "config file %s failed with %s" filename e; ([], [])
+        |Failure(e, _, _) -> eprintfn "config file %s failed with %s" filename e; ([], [], [])
         |Success(s,_,_) -> 
             let root = shipProcess.ProcessNode<Node> EntityType.Other "root" (mkZeroFile filename) s
             processConfig root

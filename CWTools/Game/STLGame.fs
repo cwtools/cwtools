@@ -320,10 +320,11 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
             lookup.technologies <- getTechnologies (EntitySet (resources.AllEntities()))
 
         let updateTypeDef() =
-            let rules, types = configs |> List.fold (fun (rs, ts) (fn, ft) -> let r2, t2 = parseConfig fn ft in rs@r2, ts@t2) ([], [])
+            let rules, types, enums = configs |> List.fold (fun (rs, ts, es) (fn, ft) -> let r2, t2, e2 = parseConfig fn ft in rs@r2, ts@t2, es@e2) ([], [], [])
             lookup.configRules <- rules
             lookup.typeDefs <- types
             lookup.typeDefInfo <- getTypesFromDefinitions types (resources.AllEntities() |> List.map (fun struct(e,_) -> e))
+            lookup.enumDefs <- enums |> Map.ofList
 
         // let findDuplicates (sl : Statement list) =
         //     let node = ProcessCore.processNodeBasic "root" Position.Empty sl
@@ -450,7 +451,7 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
             let filetext = split |> Array.mapi (fun i s -> if i = (pos.Line - 1) then eprintfn "%s" s; s.Insert(pos.Column, "x") else s) |> String.concat "\n"
             match resourceManager.ManualProcess (convertPathToLogicalPath filepath) filetext with
             |Some e -> 
-                let completion = CompletionService(lookup.configRules, lookup.typeDefs, lookup.typeDefInfo)
+                let completion = CompletionService(lookup.configRules, lookup.typeDefs, lookup.typeDefInfo, lookup.enumDefs)
                 completion.Complete(pos, e)
             |None -> []
 

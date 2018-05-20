@@ -74,7 +74,7 @@ let testc =
                           ## cardinality = 0..1\n\
                           effect = effect\n\
                           }"
-            let rules, types = parseConfig "" config
+            let rules, types, enums = parseConfig "" config
             let input =    "create_starbase = {\n\
                             owner = this \n\
                             owner = this \n\
@@ -179,7 +179,7 @@ let testsv =
             match CKParser.parseString input "test" with
             |Success(r, _, _) ->
                 let node = (STLProcess.shipProcess.ProcessNode<Node>() "root" (range.Zero) r)
-                let comp = CompletionService([ConfigParser.createStarbase], [], Map.empty)
+                let comp = CompletionService([ConfigParser.createStarbase], [], Map.empty, Map.empty)
                 let pos = mkPos 3 8
                 let suggestions = comp.Complete(pos, node) |> Seq.map (function |Simple c -> c |Snippet (l, _) -> l) |> Seq.sort
                 let expected = ["medium"; "large"] |> Seq.sort
@@ -193,7 +193,7 @@ let testsv =
             match CKParser.parseString input "test" with
             |Success(r, _, _) ->
                 let node = (STLProcess.shipProcess.ProcessNode<Node>() "root" (range.Zero) r)
-                let comp = CompletionService([ConfigParser.createStarbase], [], Map.empty)
+                let comp = CompletionService([ConfigParser.createStarbase], [], Map.empty, Map.empty)
                 let pos = mkPos 3 3
                 let suggestions = comp.Complete(pos, node) |> Seq.map (function |Simple c -> c |Snippet (l, _) -> l) |> Seq.sort
                 let expected = ["size"; "owner"; "building"; "effect"; "module"] |> Seq.sort
@@ -217,7 +217,7 @@ let testsv =
                 let typeinfo = getTypesFromDefinitions [shipBehaviorType; shipSizeType] [be]
                 let node = (STLProcess.shipProcess.ProcessNode<Node>() "root" (mkZeroFile "common/ship_sizes/test.txt") r)
                 let pos = mkPos 2 20
-                let comp = CompletionService([ConfigParser.shipsize], [shipBehaviorType; shipSizeType], typeinfo)
+                let comp = CompletionService([ConfigParser.shipsize], [shipBehaviorType; shipSizeType], typeinfo, Map.empty)
                 let suggestions = comp.Complete(pos, node) |> Seq.map (function |Simple c -> c |Snippet (l, _) -> l) |> Seq.sort
                 let expected = ["default"; "swarm"] |> Seq.sort
                 Expect.sequenceEqual suggestions expected "Completion should match"
@@ -274,4 +274,20 @@ let testsConfig =
             let suggestions = stl.Complete pos "test" input |> Seq.map (function |Simple c -> c |Snippet (l, _) -> l) |> Seq.sort
             let expected = ["tech_one"; "tech_two"] |> Seq.sort
             Expect.sequenceEqual suggestions expected "Completion should match"
+
+        testCase "shipsize enum" <| fun () ->
+            let configtext = "./testfiles/configtests/test.cwt", File.ReadAllText "./testfiles/configtests/test.cwt"
+            let folder = "./testfiles/configtests/completiontests"
+            let triggers, effects = parseDocsFile "./testfiles/validationtests/trigger_docs_2.0.4.txt" |> (function |Success(p, _, _) -> DocsParser.processDocs p)
+            let modifiers = SetupLogParser.parseLogsFile "./testfiles/validationtests/setup.log" |> (function |Success(p, _, _) -> SetupLogParser.processLogs p)
+            let stl = STLGame(folder, FilesScope.All, "", triggers, effects, modifiers, [], [configtext], [STL STLLang.English], false, true)
+
+            let input =    "ship_size = {\n\
+                            class = \n\
+                            }"
+            let pos = mkPos 2 8
+            let suggestions = stl.Complete pos "test" input |> Seq.map (function |Simple c -> c |Snippet (l, _) -> l) |> Seq.sort
+            let expected = ["shipclass_military"; "shipclass_transport"] |> Seq.sort
+            Expect.sequenceEqual suggestions expected "Completion should match"
+
     ]
