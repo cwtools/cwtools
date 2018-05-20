@@ -19,6 +19,7 @@ open Microsoft.FSharp.Compiler.Range
 open CWTools.Parser.ConfigParser
 open CWTools.Validation.Rules
 open CWTools.Validation.ValidationCore
+open CWTools.Utilities.Utils
 
 [<Tests>]
 let tests =
@@ -178,7 +179,7 @@ let testsv =
             match CKParser.parseString input "test" with
             |Success(r, _, _) ->
                 let node = (STLProcess.shipProcess.ProcessNode<Node>() "root" (range.Zero) r)
-                let comp = CompletionService([ConfigParser.createStarbase], Map.empty)
+                let comp = CompletionService([ConfigParser.createStarbase], [], Map.empty)
                 let pos = mkPos 3 8
                 let suggestions = comp.Complete(pos, node) |> Seq.map (function |Simple c -> c |Snippet (l, _) -> l) |> Seq.sort
                 let expected = ["medium"; "large"] |> Seq.sort
@@ -192,7 +193,7 @@ let testsv =
             match CKParser.parseString input "test" with
             |Success(r, _, _) ->
                 let node = (STLProcess.shipProcess.ProcessNode<Node>() "root" (range.Zero) r)
-                let comp = CompletionService([ConfigParser.createStarbase], Map.empty)
+                let comp = CompletionService([ConfigParser.createStarbase], [], Map.empty)
                 let pos = mkPos 3 3
                 let suggestions = comp.Complete(pos, node) |> Seq.map (function |Simple c -> c |Snippet (l, _) -> l) |> Seq.sort
                 let expected = ["size"; "owner"; "building"; "effect"; "module"] |> Seq.sort
@@ -200,7 +201,7 @@ let testsv =
             |Failure(e, _, _) -> Expect.isTrue false e
 
         testCase "test test ship_behavior" <| fun () ->
-            let input =    "shipsize = {\n\
+            let input =    "ship_size = {\n\
                             default_behavior = s \n\
                             }"
             let behaviours = "ship_behavior = {\n\
@@ -209,14 +210,14 @@ let testsv =
                               ship_behavior = {\n\
                               name = \"swarm\"\n\
                               }"
-            match CKParser.parseString input "test", CKParser.parseString behaviours "test" with
+            match CKParser.parseString input "common/ship_sizes/test.txt", CKParser.parseString behaviours "common/ship_behaviors/test.txt" with
             |Success(r, _, _), Success(b, _, _) ->
-                let bnode = (STLProcess.shipProcess.ProcessNode<Node>() "root" (range.Zero) b)
+                let bnode = (STLProcess.shipProcess.ProcessNode<Node>() "root" (mkZeroFile "common/ship_behaviors/test.txt") b)
                 let be = { entity = bnode; filepath = "/test/stellaris/common/ship_behaviors/test.txt"; logicalpath = "common/ship_behaviors"; validate = false; entityType = EntityType.ShipBehaviors; overwrite = Overwrite.No}
-                let typeinfo = getTypesFromDefinitions [shipBehaviorType] [be]
-                let node = (STLProcess.shipProcess.ProcessNode<Node>() "root" (range.Zero) r)
+                let typeinfo = getTypesFromDefinitions [shipBehaviorType; shipSizeType] [be]
+                let node = (STLProcess.shipProcess.ProcessNode<Node>() "root" (mkZeroFile "common/ship_sizes/test.txt") r)
                 let pos = mkPos 2 20
-                let comp = CompletionService([ConfigParser.shipsize], typeinfo)
+                let comp = CompletionService([ConfigParser.shipsize], [shipBehaviorType; shipSizeType], typeinfo)
                 let suggestions = comp.Complete(pos, node) |> Seq.map (function |Simple c -> c |Snippet (l, _) -> l) |> Seq.sort
                 let expected = ["default"; "swarm"] |> Seq.sort
                 Expect.sequenceEqual suggestions expected "Completion should match"
@@ -233,7 +234,7 @@ let testsConfig =
             let modifiers = SetupLogParser.parseLogsFile "./testfiles/validationtests/setup.log" |> (function |Success(p, _, _) -> SetupLogParser.processLogs p)
             let stl = STLGame(folder, FilesScope.All, "", triggers, effects, modifiers, [], [configtext], [STL STLLang.English], false, true)
 
-            let input =    "shipsize = {\n\
+            let input =    "ship_size = {\n\
                             default_behavior = s \n\
                             }"
             let pos = mkPos 2 20
@@ -248,7 +249,7 @@ let testsConfig =
             let modifiers = SetupLogParser.parseLogsFile "./testfiles/validationtests/setup.log" |> (function |Success(p, _, _) -> SetupLogParser.processLogs p)
             let stl = STLGame(folder, FilesScope.All, "", triggers, effects, modifiers, [], [configtext], [STL STLLang.English], false, true)
 
-            let input =    "shipsize = {\n\
+            let input =    "ship_size = {\n\
                             default_behavior = s \n\
                             }"
             let pos = mkPos 2 20

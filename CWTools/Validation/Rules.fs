@@ -89,7 +89,7 @@ module rec Rules =
 
         member __.ApplyNodeRule(rule, node) = applyNodeRule rule node
 
-    type CompletionService(effects : Rule list, types : Map<string, string list>) =
+    type CompletionService(rootRules : Rule list, typedefs : TypeDefinition list , types : Map<string, string list>) =
         let rec getRulePath (pos : pos) (stack : string list) (node : Node) =
            match node.Children |> List.tryFind (fun c -> Range.rangeContainsPos c.Position pos) with
            | Some c -> getRulePath pos (c.Key :: stack) c
@@ -116,7 +116,7 @@ module rec Rules =
                     match rules |> List.tryFind (fun (k,_,_) -> k == key) with
                     |Some (_,_,f) ->
                         match f with
-                        |Field.EffectField -> findRule effects rest
+                        |Field.EffectField -> findRule rootRules rest
                         |Field.ClauseField rs -> findRule rs rest
                         |Field.ObjectField et ->
                             match et with
@@ -131,8 +131,12 @@ module rec Rules =
 
         let complete (pos : pos) (node : Node) =
             let path = getRulePath pos [] node |> List.rev
-            let completion = getCompletionFromPath effects path
-            completion 
+            match typedefs |> List.tryFind (fun t -> node.Position.FileName.Replace("/","\\").StartsWith(t.path.Replace("/","\\"))) with
+            |Some typedef ->
+                let typerules = rootRules |> List.filter (fun (name, _, _) -> name == typedef.name)
+                let completion = getCompletionFromPath typerules path
+                completion 
+            |None -> getCompletionFromPath rootRules path
 
         member __.Complete(pos : pos, node : Node) = complete pos node
 

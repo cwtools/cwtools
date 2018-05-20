@@ -322,6 +322,7 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
         let updateTypeDef() =
             let rules, types = configs |> List.fold (fun (rs, ts) (fn, ft) -> let r2, t2 = parseConfig fn ft in rs@r2, ts@t2) ([], [])
             lookup.configRules <- rules
+            lookup.typeDefs <- types
             lookup.typeDefInfo <- getTypesFromDefinitions types (resources.AllEntities() |> List.map (fun struct(e,_) -> e))
 
         // let findDuplicates (sl : Statement list) =
@@ -447,9 +448,9 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
             // |None -> []
             let split = filetext.Split('\n')
             let filetext = split |> Array.mapi (fun i s -> if i = (pos.Line - 1) then eprintfn "%s" s; s.Insert(pos.Column, "x") else s) |> String.concat "\n"
-            match resourceManager.ManualProcess filetext with
+            match resourceManager.ManualProcess (convertPathToLogicalPath filepath) filetext with
             |Some e -> 
-                let completion = CompletionService(lookup.configRules, lookup.typeDefInfo)
+                let completion = CompletionService(lookup.configRules, lookup.typeDefs, lookup.typeDefInfo)
                 completion.Complete(pos, e)
             |None -> []
 

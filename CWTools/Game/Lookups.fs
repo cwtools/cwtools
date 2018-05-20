@@ -23,4 +23,5 @@ type Lookup() =
     member val proccessedLoc : (Lang * Map<string, LocEntry>) list = [] with get, set
     member val technologies : (string * (string list)) list =  [] with get, set
     member val configRules : Rule list = [] with get, set
+    member val typeDefs : TypeDefinition list = [] with get, set
     member val typeDefInfo : Map<string, string list> = Map.empty with get, set

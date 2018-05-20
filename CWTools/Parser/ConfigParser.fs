@@ -136,14 +136,11 @@ module rec ConfigParser =
     // Types
 
     let processType (node : Node) (comments : string list) =
-        eprintfn "%A" node.Key
         match node.Key with
         |x when x.StartsWith("data") ->
-            eprintfn "%A" x
             let typename = getSettingFromString node.Key "data"
             let namefield = if node.Has "name_field" then Some (node.TagText "name_field") else None
             let path = (node.TagText "path").Replace("game/","").Replace("game\\","")
-            eprintfn "%A %A %A" typename namefield path
             match typename with
             |Some tn -> Some { name = tn; nameField = namefield; path = path; conditions = None}
             |None -> None
@@ -281,7 +278,7 @@ module rec ConfigParser =
                 Rule("construction_type", requiredSingle, ValueField ValueType.Scalar);
                 Rule("required_component_set", requiredSingle, ValueField ValueType.Scalar);
             ]
-        Rule("shipsize", optionalMany, ClauseField inner)
+        Rule("ship_size", optionalMany, ClauseField inner)
 
     let shipBehaviorType =
         {
@@ -289,6 +286,13 @@ module rec ConfigParser =
             nameField = Some "name";
             path = "common/ship_behaviors";
             conditions = None
+        }
+    let shipSizeType =
+        {
+            name = "ship_size";
+            path = "common/ship_sizes";
+            nameField = None;
+            conditions = None;
         }
 //  type[ship_behavior] = {
 //      path = "game/common/ship_behaviors"
