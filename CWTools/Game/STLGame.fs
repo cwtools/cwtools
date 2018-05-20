@@ -230,15 +230,17 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
 
         let convertPathToLogicalPath =
             fun (path : string) ->
+                let pathContains (part : string) =
+                    path.Contains ("/"+part+"/" )|| path.Contains( "\\"+part+"\\")
                 let matches = 
                     [
-                        if path.Contains "common" then let i = path.IndexOf "common" in yield i, path.Substring(i) else ();
-                        if path.Contains "interface" then let i = path.IndexOf "interface" in yield i, path.Substring(i) else ();
-                        if path.Contains "gfx" then let i = path.IndexOf "gfx" in yield i, path.Substring(i) else ();
-                        if path.Contains "events" then let i = path.IndexOf "events" in yield i, path.Substring(i) else ();
-                        if path.Contains "localisation" then let i = path.IndexOf "localisation" in yield i, path.Substring(i) else ();
-                        if path.Contains "localisation_synced" then let i = path.IndexOf "localisation_synced" in yield i, path.Substring(i) else ();
-                        if path.Contains "map" then let i = path.IndexOf "map" in yield i, path.Substring(i) else ();
+                        if pathContains "common" then let i = path.IndexOf "common" in yield i, path.Substring(i) else ();
+                        if pathContains "interface" then let i = path.IndexOf "interface" in yield i, path.Substring(i) else ();
+                        if pathContains "gfx" then let i = path.IndexOf "gfx" in yield i, path.Substring(i) else ();
+                        if pathContains "events" then let i = path.IndexOf "events" in yield i, path.Substring(i) else ();
+                        if pathContains "localisation" then let i = path.IndexOf "localisation" in yield i, path.Substring(i) else ();
+                        if pathContains "localisation_synced" then let i = path.IndexOf "localisation_synced" in yield i, path.Substring(i) else ();
+                        if pathContains "map" then let i = path.IndexOf "map" in yield i, path.Substring(i) else ();
                     ]
                 if matches.IsEmpty then path else matches |> List.minBy fst |> snd
         let allFilesByPath = 
@@ -367,7 +369,7 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
             let flattened = allEntitiesByFile |> List.map (fun n -> n.Children) |> List.collect id
 
             let validators = [validateVariables, "var"; valTechnology, "tech"; validateTechnologies, "tech2"; valButtonEffects, "but"; valSprites, "sprite"; valVariables, "var2"; valEventCalls, "event"; 
-                                validateAmbientGraphics, "ambient"; validateShipDesigns, "designs"; validateMixedBlocks, "mixed"; validateSolarSystemInitializers, "solar"]
+                                validateAmbientGraphics, "ambient"; validateShipDesigns, "designs"; validateMixedBlocks, "mixed";] //validateSolarSystemInitializers, "solar"]
             let experimentalvalidators = [valSectionGraphics, "sections"; valComponentGraphics, "component"; ]
             let oldEntities = EntitySet (resources.AllEntities())
             let newEntities = EntitySet entities

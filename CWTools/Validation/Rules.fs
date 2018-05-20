@@ -110,6 +110,7 @@ module rec Rules =
                     |Field.EffectField -> [clause s]
                     |Field.ObjectField _ -> [keyvalue s]
                     |Field.ValueField _ -> [keyvalue s]
+                    |Field.TypeField _ -> [keyvalue s]
                     |_ -> [Simple s]
                 |true ->
                     match f with
@@ -142,7 +143,8 @@ module rec Rules =
             match typedefs |> List.tryFind (fun t -> node.Position.FileName.Replace("/","\\").StartsWith(t.path.Replace("/","\\"))) with
             |Some typedef ->
                 let typerules = rootRules |> List.filter (fun (name, _, _) -> name == typedef.name)
-                let completion = getCompletionFromPath typerules path
+                let fixedpath = if List.isEmpty path then path else typedef.name::(path |> List.tail)
+                let completion = getCompletionFromPath typerules fixedpath
                 completion 
             |None -> getCompletionFromPath rootRules path
 

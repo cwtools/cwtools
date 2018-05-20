@@ -860,7 +860,8 @@ module STLValidation =
             let fNode =
                 fun (x : Node) ->
                     match x.Has "class", starclasses |> List.contains (x.TagText "class") with
-                    |true, true -> OK
+                    |true, true -> Invalid [inv (ErrorCodes.CustomError (sprintf "%s, %s" x.Key (x.TagText "class")) Severity.Warning) x]
+                    |true, false -> Invalid [inv (ErrorCodes.CustomError (sprintf "%s, %s" x.Key (x.TagText "class")) Severity.Warning) x]
                     |false, _ -> Invalid [inv (ErrorCodes.CustomError "This initializer is missing a class" Severity.Error) x]
                     |_, false -> Invalid [inv (ErrorCodes.CustomError (sprintf "The star class %s does not exist" (x.TagText "class")) Severity.Error) x]
             inits <&!&> fNode
