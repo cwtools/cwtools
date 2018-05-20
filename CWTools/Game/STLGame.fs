@@ -230,19 +230,23 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
 
         let convertPathToLogicalPath =
             fun (path : string) ->
-                let pathContains (part : string) =
-                    path.Contains ("/"+part+"/" )|| path.Contains( "\\"+part+"\\")
-                let matches = 
-                    [
-                        if pathContains "common" then let i = path.IndexOf "common" in yield i, path.Substring(i) else ();
-                        if pathContains "interface" then let i = path.IndexOf "interface" in yield i, path.Substring(i) else ();
-                        if pathContains "gfx" then let i = path.IndexOf "gfx" in yield i, path.Substring(i) else ();
-                        if pathContains "events" then let i = path.IndexOf "events" in yield i, path.Substring(i) else ();
-                        if pathContains "localisation" then let i = path.IndexOf "localisation" in yield i, path.Substring(i) else ();
-                        if pathContains "localisation_synced" then let i = path.IndexOf "localisation_synced" in yield i, path.Substring(i) else ();
-                        if pathContains "map" then let i = path.IndexOf "map" in yield i, path.Substring(i) else ();
-                    ]
-                if matches.IsEmpty then path else matches |> List.minBy fst |> snd
+                if path.StartsWith "gfx" then path else 
+                    let pathContains (part : string) =
+                        path.Contains ("/"+part+"/" )|| path.Contains( "\\"+part+"\\")
+                    let pathIndex (part : string) =
+                        let i = if path.IndexOf ("/"+part+"/" ) < 0 then path.IndexOf("\\"+part+"\\") else path.IndexOf ("/"+part+"/" )
+                        i + 1
+                    let matches = 
+                        [
+                            if pathContains "common" then let i = pathIndex "common" in yield i, path.Substring(i) else ();
+                            if pathContains "interface" then let i = pathIndex "interface" in yield i, path.Substring(i) else ();
+                            if pathContains "gfx" then let i = pathIndex "gfx" in yield i, path.Substring(i) else ();
+                            if pathContains "events" then let i = pathIndex "events" in yield i, path.Substring(i) else ();
+                            if pathContains "localisation" then let i = pathIndex "localisation" in yield i, path.Substring(i) else ();
+                            if pathContains "localisation_synced" then let i = pathIndex "localisation_synced" in yield i, path.Substring(i) else ();
+                            if pathContains "map" then let i = pathIndex "map" in yield i, path.Substring(i) else ();
+                        ]
+                    if matches.IsEmpty then path else matches |> List.minBy fst |> snd
         let allFilesByPath = 
             let getAllFiles (scope, path) =
                 scriptFolders
@@ -264,7 +268,6 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
                 |".png"
                 |".mesh" ->
                     let rootedpath = filepath.Substring(filepath.IndexOf(normalisedScopeDirectory) + (normalisedScopeDirectory.Length) + 1)
-                    
                     Some (FileResourceInput { scope = scope; filepath = filepath; logicalpath = convertPathToLogicalPath rootedpath })
                 |_ -> None
             let allFiles = duration (fun _ -> PSeq.map getAllFiles allFolders |> PSeq.collect id |> PSeq.choose fileToResourceInput |> List.ofSeq ) "Load files"
