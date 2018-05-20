@@ -73,7 +73,7 @@ let testc =
                           ## cardinality = 0..1\n\
                           effect = effect\n\
                           }"
-            let rules = parseConfig "" config
+            let rules, types = parseConfig "" config
             let input =    "create_starbase = {\n\
                             owner = this \n\
                             owner = this \n\

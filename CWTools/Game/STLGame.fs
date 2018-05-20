@@ -320,9 +320,9 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
             lookup.technologies <- getTechnologies (EntitySet (resources.AllEntities()))
 
         let updateTypeDef() =
-            let config = configs |> List.collect (fun (fn, ft) -> parseConfig fn ft)
-            lookup.configRules <- config
-            lookup.typeDefInfo <- getTypesFromDefinitions [shipBehaviorType] (resources.AllEntities() |> List.map (fun struct(e,_) -> e))
+            let rules, types = configs |> List.fold (fun (rs, ts) (fn, ft) -> let r2, t2 = parseConfig fn ft in rs@r2, ts@t2) ([], [])
+            lookup.configRules <- rules
+            lookup.typeDefInfo <- getTypesFromDefinitions types (resources.AllEntities() |> List.map (fun struct(e,_) -> e))
 
         // let findDuplicates (sl : Statement list) =
         //     let node = ProcessCore.processNodeBasic "root" Position.Empty sl

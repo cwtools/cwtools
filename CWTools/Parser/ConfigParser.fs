@@ -104,8 +104,9 @@ module rec ConfigParser =
             |None -> 1, 100
             
         { min = min; max = max }
-    let processChild ((child, comments) : Child * string list)  =
+    let processChildConfig ((child, comments) : Child * string list)  =
         match child with
+        |NodeC n when n.Key == "types" -> None
         |NodeC n -> Some (configNode n comments)
         |LeafC l -> Some (configLeaf l comments)
         |_ -> None
@@ -113,7 +114,7 @@ module rec ConfigParser =
     let configNode (node : Node) (comments : string list) =
         let children = getNodeComments node
         let options = getOptionsFromComments comments
-        Rule(node.Key, options, ClauseField(children |> List.choose processChild))
+        Rule(node.Key, options, ClauseField(children |> List.choose processChildConfig))
     
     let configLeaf (leaf : Leaf) (comments : string list) =
         let field =
@@ -131,13 +132,44 @@ module rec ConfigParser =
             |x -> ValueField ValueType.Scalar
         let options = getOptionsFromComments comments
         Rule(leaf.Key, options, field)
+
+    // Types
+
+    let processType (node : Node) (comments : string list) =
+        eprintfn "%A" node.Key
+        match node.Key with
+        |x when x.StartsWith("data") ->
+            eprintfn "%A" x
+            let typename = getSettingFromString node.Key "data"
+            let namefield = if node.Has "name_field" then Some (node.TagText "name_field") else None
+            let path = (node.TagText "path").Replace("game/","").Replace("game\\","")
+            eprintfn "%A %A %A" typename namefield path
+            match typename with
+            |Some tn -> Some { name = tn; nameField = namefield; path = path; conditions = None}
+            |None -> None
+        |_ -> None
+        
+
+
+    let processChildType ((child, comments) : Child * string list) =
+        match child with
+        |NodeC n when n.Key == "types" -> 
+            let inner ((child2, comments2) : Child * string list) =
+                match child2 with
+                |NodeC n2 -> (processType n2 comments2)
+                |_ -> None
+            Some (getNodeComments n |> List.choose inner)
+        |_ -> None
+     
     let processConfig (node : Node) =
-        getNodeComments node |> List.choose processChild
+        let rules = getNodeComments node |> List.choose processChildConfig
+        let types = getNodeComments node |> List.choose processChildType |> List.collect id
+        rules, types
 
     let parseConfig filename fileString =
         let parsed = parseConfigString filename fileString
         match parsed with
-        |Failure(e, _, _) -> eprintfn "config file %s failed with %s" filename e; []
+        |Failure(e, _, _) -> eprintfn "config file %s failed with %s" filename e; ([], [])
         |Success(s,_,_) -> 
             let root = shipProcess.ProcessNode<Node> EntityType.Other "root" (mkZeroFile filename) s
             processConfig root
@@ -258,6 +290,10 @@ module rec ConfigParser =
             path = "common/ship_behaviors";
             conditions = None
         }
+//  type[ship_behavior] = {
+//      path = "game/common/ship_behaviors"
+//      name_field = "name"
+//  }
 //  type[leader_trait] = {
 //      path = "game/common/traits"
 //      conditions = {

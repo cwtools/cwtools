@@ -123,7 +123,7 @@ module rec Rules =
                             |EntityType.ShipSizes -> [Simple "large"; Simple "medium"]
                             |_ -> []
                         |Field.ValueField v -> getValidValues v |> Option.defaultValue [] |> List.map Simple
-                        |Field.TypeField t -> types.[t] |> List.map Simple
+                        |Field.TypeField t -> types.TryFind(t) |> Option.defaultValue [] |> List.map Simple
                         |_ -> []
                     |None -> 
                         rules |> List.map convRuleToCompletion

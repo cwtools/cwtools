@@ -15,7 +15,7 @@ create_starbase = {
     effect = effect
 }
 
-shipsize = {
+ship_size = {
     formation_priority = int
     max_speed = float
     acceleration = float
@@ -45,4 +45,14 @@ shipsize = {
     class = scalar
     construction_type = scalar
     required_component_set = scalar
+}
+
+types = {
+    data[ship_size] = {
+        path = "game/common/ship_sizes"
+    }
+    data[ship_behavior] = {
+        name_field = "name"
+        path = "game/common/ship_behaviors"
+    }
 }
