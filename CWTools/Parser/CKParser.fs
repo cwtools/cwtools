@@ -73,7 +73,7 @@ module CKParser =
     let comment = skipChar '#' >>. restOfLine true .>> ws |>> string <?> "comment"
 
     let key = (many1SatisfyL isidchar "id character") .>> ws |>> (fun s -> System.String.Intern(s)) |>> Key <?> "id"
-    let keyQ =  between (ch '"') (ch '"') (manyStrings (quotedCharSnippet <|> escapedChar)) .>> ws |>> Key <?> "quoted key"
+    let keyQ =  between (ch '"') (ch '"') (manyStrings (quotedCharSnippet <|> escapedChar)) .>> ws |>> (fun s -> "\""+s+"\"") |>> Key <?> "quoted key"
 
     let valueS = (many1SatisfyL isvaluechar "value character") |>> string |>> (fun s -> System.String.Intern(s)) |>> String <?> "string"
 
