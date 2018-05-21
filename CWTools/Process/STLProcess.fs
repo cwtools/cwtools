@@ -264,16 +264,23 @@ module rec STLProcess =
         |("on_queued", _, {parents = "army"::_}) ->  specificScopeProcessNode<EffectBlock> Scope.Country, "effectblock", id;
         |("on_unqueued", _, {parents = "army"::_}) ->  specificScopeProcessNode<EffectBlock> Scope.Country, "effectblock", id;
         //Anomalies
-        |("anomaly", _, {complete = false; entityType = EntityType.Anomalies}) ->  processNodeSimple<Node>, "anomaly",  (fun c -> { c with complete = true});
-        |("potential", _, {parents = "anomaly"::_}) ->  specificScopeProcessNode<TriggerBlock> Scope.Ship, "triggerblock", id;
-        |("anomaly_category", _, {complete = false; entityType = EntityType.Anomalies}) -> processNodeSimple<Node>, "anomalycat",  (fun c -> { c with complete = true});
-        |("potential", _, {parents = "anomalycat"::_}) ->  specificScopeProcessNode<TriggerBlock> Scope.Planet, "triggerblock", id;
-        |("on_spawn", _, {parents = "anomalycat"::_}) ->  specificScopeProcessNode<EffectBlock> Scope.Planet, "effectblock", id;
-        |("on_success", _, {parents = "anomalycat"::_}) ->  specificScopeProcessNode<EffectBlock> Scope.Ship, "effectblock", id;
-        |("on_fail", _, {parents = "anomalycat"::_}) ->  specificScopeProcessNode<EffectBlock> Scope.Ship, "effectblock", id;
-        |("on_critical_fail", _, {parents = "anomalycat"::_}) ->  specificScopeProcessNode<EffectBlock> Scope.Ship, "effectblock", id;
+        |(_, _, {complete = false; entityType = EntityType.Anomalies})  ->  processNodeSimple<Node>, "anomalycat",  (fun c -> { c with complete = true});
         |("spawn_chance", _, {parents = "anomalycat"::_}) ->  processNodeSimple<WeightBlock> , "weightblock", id;
         |("modifier", _, {parents = "weightblock"::"anomalycat"::_}) ->  specificScopeProcessNode<WeightModifierBlock> Scope.Planet , "weightmodifierblock", id;
+        |("on_spawn", _, {parents = "anomalycat"::_}) ->  specificScopeProcessNode<EffectBlock> Scope.Planet, "effectblock", id;
+        |("on_success", _, {parents = "anomalycat"::_}) ->  processNodeSimple<Node>, "onsuccess", id;
+        |("modifier", _, {parents = "onsuccess"::"anomalycat"::_}) ->  specificScopeProcessNode<WeightModifierBlock> Scope.Ship , "weightmodifierblock", id;
+        //
+        // |("anomaly", _, {complete = false; entityType = EntityType.Anomalies}) ->  processNodeSimple<Node>, "anomaly",  (fun c -> { c with complete = true});
+        // |("potential", _, {parents = "anomaly"::_}) ->  specificScopeProcessNode<TriggerBlock> Scope.Ship, "triggerblock", id;
+        // |("anomaly_category", _, {complete = false; entityType = EntityType.Anomalies}) -> processNodeSimple<Node>, "anomalycat",  (fun c -> { c with complete = true});
+        // |("potential", _, {parents = "anomalycat"::_}) ->  specificScopeProcessNode<TriggerBlock> Scope.Planet, "triggerblock", id;
+        // |("on_spawn", _, {parents = "anomalycat"::_}) ->  specificScopeProcessNode<EffectBlock> Scope.Planet, "effectblock", id;
+        // |("on_success", _, {parents = "anomalycat"::_}) ->  specificScopeProcessNode<EffectBlock> Scope.Ship, "effectblock", id;
+        // |("on_fail", _, {parents = "anomalycat"::_}) ->  specificScopeProcessNode<EffectBlock> Scope.Ship, "effectblock", id;
+        // |("on_critical_fail", _, {parents = "anomalycat"::_}) ->  specificScopeProcessNode<EffectBlock> Scope.Ship, "effectblock", id;
+        // |("spawn_chance", _, {parents = "anomalycat"::_}) ->  processNodeSimple<WeightBlock> , "weightblock", id;
+        // |("modifier", _, {parents = "weightblock"::"anomalycat"::_}) ->  specificScopeProcessNode<WeightModifierBlock> Scope.Planet , "weightmodifierblock", id;
         //Ascension perks
         |(_, _, {complete = false; entityType = EntityType.AscensionPerks})  ->  processNodeSimple<Node>, "ascension",  (fun c -> { c with complete = true});
         |("potential", _, {parents = "ascension"::_}) ->  specificScopeProcessNode<TriggerBlock> Scope.Country, "triggerblock", id;
