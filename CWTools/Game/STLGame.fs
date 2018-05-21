@@ -28,6 +28,7 @@ open Microsoft.FSharp.Compiler.Range
 open CWTools.Validation.Rules
 open CWTools.Parser
 open CWTools.Parser.ConfigParser
+open FSharp.Data.Runtime
 
 
 
@@ -230,7 +231,9 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
 
         let convertPathToLogicalPath =
             fun (path : string) ->
-                if path.StartsWith "gfx" then path else 
+                let path = path.Replace("/","\\")
+                if path.Contains(normalisedScopeDirectory) then path.Replace(normalisedScopeDirectory+"\\", "") else
+                    if path.StartsWith "gfx\\" || path.StartsWith "gfx//" then path else
                     let pathContains (part : string) =
                         path.Contains ("/"+part+"/" )|| path.Contains( "\\"+part+"\\")
                     let pathIndex (part : string) =
@@ -456,6 +459,7 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
             let filetext = split |> Array.mapi (fun i s -> if i = (pos.Line - 1) then eprintfn "%s" s; s.Insert(pos.Column, "x") else s) |> String.concat "\n"
             match resourceManager.ManualProcess (convertPathToLogicalPath filepath) filetext with
             |Some e -> 
+                eprintfn "completion %A %A" (convertPathToLogicalPath filepath) filepath
                 let completion = CompletionService(lookup.configRules, lookup.typeDefs, lookup.typeDefInfo, lookup.enumDefs)
                 completion.Complete(pos, e)
             |None -> []
