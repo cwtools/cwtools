@@ -1,4 +1,4 @@
-create_starbase = {
+alias[effect:create_starbase] = {
     ## cardinality = 1..1
     owner = scalar
 
@@ -23,7 +23,7 @@ ship_size = {
     collision_radius = float
     max_hitpoints = int
     modifier = {
-        
+        alias_name[effect] = alias_match_left[effect]
     }
     size_multiplier = int
     fleet_slot_size = int
@@ -48,14 +48,14 @@ ship_size = {
 }
 
 types = {
-    data[ship_size] = {
+    type[ship_size] = {
         path = "game/common/ship_sizes"
     }
-    data[ship_behavior] = {
+    type[ship_behavior] = {
         name_field = "name"
         path = "game/common/ship_behaviors"
     }
-    data[technology] = {
+    type[technology] = {
         path = "game/common/technology"
     }
 }

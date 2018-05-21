@@ -40,6 +40,10 @@ module rec ConfigParser =
     | ClauseField of Rule list
     | EffectField
     | TriggerField
+    | AliasField of string
+    type RootRule =
+    | AliasRule of string * Rule
+    | TypeRule of Rule
     type EffectRule = Rule // Add scopes
     type TypeDefinition = {
         name : string
@@ -92,6 +96,14 @@ module rec ConfigParser =
                 with
                 |_ -> None
         |None -> None
+    
+    let getAliasSettingsFromString (full : string) =
+        match getSettingFromString full "alias" with
+        |Some s ->
+            let split = s.Split([|":"|], 2, StringSplitOptions.None)
+            if split.Length < 2 then None else Some (split.[0], split.[1])
+        |None -> None
+                
 
 
     let getOptionsFromComments (comments : string list) =
@@ -108,16 +120,36 @@ module rec ConfigParser =
         { min = min; max = max; leafvalue = false }
     let processChildConfig ((child, comments) : Child * string list)  =
         match child with
-        |NodeC n when n.Key == "types" -> None
         |NodeC n -> Some (configNode n comments)
         |LeafC l -> Some (configLeaf l comments)
         |LeafValueC lv -> Some (configLeafValue lv comments)
         |_ -> None
-         
+
     let configNode (node : Node) (comments : string list) =
         let children = getNodeComments node
         let options = getOptionsFromComments comments
         Rule(node.Key, options, ClauseField(children |> List.choose processChildConfig))
+    
+    let processChildConfigRoot ((child, comments) : Child * string list) =
+        match child with
+        |NodeC n when n.Key == "types" -> None
+        |NodeC n -> Some (configRootNode n comments)
+        //|LeafC l -> Some (configLeaf l comments)
+        //|LeafValueC lv -> Some (configLeafValue lv comments)
+        |_ -> None
+
+    let configRootNode (node : Node) (comments : string list) =
+        let children = getNodeComments node
+        let options = getOptionsFromComments comments
+        match node.Key with
+        |x when x.StartsWith "alias[" ->
+            match getAliasSettingsFromString x with
+            |Some (a, rn) ->
+                AliasRule (a, (Rule(rn, options, ClauseField(children |> List.choose processChildConfig))))
+            |None ->
+                TypeRule (Rule(x, options, ClauseField(children |> List.choose processChildConfig)))
+        |x ->
+            TypeRule (Rule(x, options, ClauseField(children |> List.choose processChildConfig)))
     
     let configLeaf (leaf : Leaf) (comments : string list) =
         let field =
@@ -136,6 +168,10 @@ module rec ConfigParser =
                 match getSettingFromString x "enum" with
                 |Some (name) -> ValueField (ValueType.Enum name)
                 |None -> ValueField (ValueType.Enum "")
+            |x when x.StartsWith "alias_match_left" ->
+                match getSettingFromString x "alias_match_left" with
+                |Some alias -> AliasField alias
+                |None -> ValueField ValueType.Scalar
             |x -> ValueField ValueType.Scalar
         let options = getOptionsFromComments comments
         Rule(leaf.Key, options, field)
@@ -153,8 +189,8 @@ module rec ConfigParser =
 
     let processType (node : Node) (comments : string list) =
         match node.Key with
-        |x when x.StartsWith("data") ->
-            let typename = getSettingFromString node.Key "data"
+        |x when x.StartsWith("type") ->
+            let typename = getSettingFromString node.Key "type"
             let namefield = if node.Has "name_field" then Some (node.TagText "name_field") else None
             let path = (node.TagText "path").Replace("game/","").Replace("game\\","")
             match typename with
@@ -194,7 +230,7 @@ module rec ConfigParser =
             Some (getNodeComments n |> List.choose inner)
         |_ -> None
     let processConfig (node : Node) =
-        let rules = getNodeComments node |> List.choose processChildConfig
+        let rules = getNodeComments node |> List.choose processChildConfigRoot
         let types = getNodeComments node |> List.choose processChildType |> List.collect id
         let enums = getNodeComments node |> List.choose processChildEnum |> List.collect id
         rules, types, enums

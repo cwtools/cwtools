@@ -75,6 +75,7 @@ let testc =
                           effect = effect\n\
                           }"
             let rules, types, enums = parseConfig "" config
+            let Typerules = rules |> List.choose (function |TypeRule (rs) -> Some (rs) |_ -> None)
             let input =    "create_starbase = {\n\
                             owner = this \n\
                             owner = this \n\
@@ -84,7 +85,7 @@ let testc =
             |Success(r, _, _) ->
                 let node = (STLProcess.shipProcess.ProcessNode<Node>() "root" (range.Zero) r)
                 let apply = RuleApplicator(rules, Map.empty)
-                let errors = apply.ApplyNodeRule(ClauseField rules, node)
+                let errors = apply.ApplyNodeRule(ClauseField Typerules, node)
                 match errors with
                 | OK -> ()
                 | Invalid es -> Expect.equal (es.Length) 1 (sprintf "Following lines are not expected to have an error %A" es )
@@ -103,7 +104,7 @@ let testsv =
             match CKParser.parseString input "test" with
             |Success(r, _, _) ->
                 let node = (STLProcess.shipProcess.ProcessNode<Node>() "root" (range.Zero) r)
-                let rules = RuleApplicator([ConfigParser.createStarbase], Map.empty)
+                let rules = RuleApplicator([TypeRule ConfigParser.createStarbase], Map.empty)
                 let errors = rules.ApplyNodeRule(ClauseField [ConfigParser.createStarbase], node)
                 match errors with
                 | OK -> ()
@@ -119,7 +120,7 @@ let testsv =
             match CKParser.parseString input "test" with
             |Success(r, _, _) ->
                 let node = (STLProcess.shipProcess.ProcessNode<Node>() "root" (range.Zero) r)
-                let rules = RuleApplicator([ConfigParser.createStarbase], Map.empty)
+                let rules = RuleApplicator([TypeRule ConfigParser.createStarbase], Map.empty)
                 let errors = rules.ApplyNodeRule(ClauseField [ConfigParser.createStarbase], node)
                 match errors with
                 | OK -> ()
@@ -131,7 +132,7 @@ let testsv =
             match CKParser.parseString input "test" with
             |Success(r, _, _) ->
                 let node = (STLProcess.shipProcess.ProcessNode<Node>() "root" (range.Zero) r)
-                let rules = RuleApplicator([ConfigParser.createStarbase], Map.empty)
+                let rules = RuleApplicator([TypeRule ConfigParser.createStarbase], Map.empty)
                 let errors = rules.ApplyNodeRule(ClauseField [ConfigParser.createStarbase], node)
                 match errors with
                 | OK -> ()
@@ -146,7 +147,7 @@ let testsv =
             match CKParser.parseString input "test" with
             |Success(r, _, _) ->
                 let node = (STLProcess.shipProcess.ProcessNode<Node>() "root" (range.Zero) r)
-                let rules = RuleApplicator([ConfigParser.createStarbase], Map.empty)
+                let rules = RuleApplicator([TypeRule ConfigParser.createStarbase], Map.empty)
                 let errors = rules.ApplyNodeRule(ClauseField [ConfigParser.createStarbase], node)
                 match errors with
                 | OK -> ()
@@ -165,7 +166,7 @@ let testsv =
             match CKParser.parseString input "test" with
             |Success(r, _, _) ->
                 let node = (STLProcess.shipProcess.ProcessNode<Node>() "root" (range.Zero) r)
-                let rules = RuleApplicator([ConfigParser.createStarbase], Map.empty)
+                let rules = RuleApplicator([TypeRule ConfigParser.createStarbase], Map.empty)
                 let errors = rules.ApplyNodeRule(ClauseField [ConfigParser.createStarbase], node)
                 match errors with
                 | OK -> ()
@@ -179,7 +180,7 @@ let testsv =
             match CKParser.parseString input "test" with
             |Success(r, _, _) ->
                 let node = (STLProcess.shipProcess.ProcessNode<Node>() "root" (range.Zero) r)
-                let comp = CompletionService([ConfigParser.createStarbase], [], Map.empty, Map.empty)
+                let comp = CompletionService([TypeRule ConfigParser.createStarbase], [], Map.empty, Map.empty)
                 let pos = mkPos 3 8
                 let suggestions = comp.Complete(pos, node) |> Seq.map (function |Simple c -> c |Snippet (l, _) -> l) |> Seq.sort
                 let expected = ["medium"; "large"] |> Seq.sort
@@ -193,7 +194,7 @@ let testsv =
             match CKParser.parseString input "test" with
             |Success(r, _, _) ->
                 let node = (STLProcess.shipProcess.ProcessNode<Node>() "root" (range.Zero) r)
-                let comp = CompletionService([ConfigParser.createStarbase], [], Map.empty, Map.empty)
+                let comp = CompletionService([TypeRule ConfigParser.createStarbase], [], Map.empty, Map.empty)
                 let pos = mkPos 3 3
                 let suggestions = comp.Complete(pos, node) |> Seq.map (function |Simple c -> c |Snippet (l, _) -> l) |> Seq.sort
                 let expected = ["size"; "owner"; "building"; "effect"; "module"] |> Seq.sort
@@ -217,7 +218,7 @@ let testsv =
                 let typeinfo = getTypesFromDefinitions [shipBehaviorType; shipSizeType] [be]
                 let node = (STLProcess.shipProcess.ProcessNode<Node>() "root" (mkZeroFile "common/ship_sizes/test.txt") r)
                 let pos = mkPos 2 20
-                let comp = CompletionService([ConfigParser.shipsize], [shipBehaviorType; shipSizeType], typeinfo, Map.empty)
+                let comp = CompletionService([TypeRule ConfigParser.shipsize], [shipBehaviorType; shipSizeType], typeinfo, Map.empty)
                 let suggestions = comp.Complete(pos, node) |> Seq.map (function |Simple c -> c |Snippet (l, _) -> l) |> Seq.sort
                 let expected = ["default"; "swarm"] |> Seq.sort
                 Expect.sequenceEqual suggestions expected "Completion should match"

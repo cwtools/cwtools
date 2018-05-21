@@ -23,7 +23,11 @@ module rec Rules =
     type CompletionResponse =
     |Simple of string
     |Snippet of label : string * snippet : string
-    type RuleApplicator(effects : Rule list, types : Map<string, string list>) =
+    type RuleApplicator(effects : RootRule list, types : Map<string, string list>) =
+        let aliases =
+            effects |> List.choose (function |AliasRule (a, rs) -> Some (a, rs) |_ -> None)
+        let typeRules =
+            effects |> List.choose (function |TypeRule (rs) -> Some (rs) |_ -> None)
 
         let rec applyClauseField (rules : Rule list) (node : Node) =
             let valueFun (leaf : Leaf) =
@@ -84,12 +88,17 @@ module rec Rules =
             | Field.ObjectField et -> Invalid [invCustom node]
             | Field.TargetField -> Invalid [invCustom node]
             | Field.TypeField _ -> Invalid [invCustom node]
-            | Field.EffectField -> applyClauseField effects node
+            | Field.EffectField -> applyClauseField typeRules node
             | Field.ClauseField rs -> applyClauseField rs node
 
         member __.ApplyNodeRule(rule, node) = applyNodeRule rule node
 
-    type CompletionService(rootRules : Rule list, typedefs : TypeDefinition list , types : Map<string, string list>, enums : Map<string, string list>) =
+    type CompletionService(rootRules : RootRule list, typedefs : TypeDefinition list , types : Map<string, string list>, enums : Map<string, string list>) =
+        let aliases =
+            rootRules |> List.choose (function |AliasRule (a, rs) -> Some (a, rs) |_ -> None)
+        let typeRules =
+            rootRules |> List.choose (function |TypeRule (rs) -> Some (rs) |_ -> None)
+         
         let rec getRulePath (pos : pos) (stack : string list) (node : Node) =
            match node.Children |> List.tryFind (fun c -> Range.rangeContainsPos c.Position pos) with
            | Some c -> getRulePath pos (c.Key :: stack) c
@@ -99,7 +108,7 @@ module rec Rules =
                 | None -> stack
 
         and getCompletionFromPath (rules : Rule list) (stack : string list) =
-            let convRuleToCompletion (rule : Rule) =
+            let rec convRuleToCompletion (rule : Rule) =
                 let s, o, f = rule
                 let clause (inner : string) = Snippet (inner, (sprintf "%s = {\n\t$0\n}" inner))
                 let keyvalue (inner : string) = Snippet (inner, (sprintf "%s = $0" inner))
@@ -111,6 +120,7 @@ module rec Rules =
                     |Field.ObjectField _ -> [keyvalue s]
                     |Field.ValueField _ -> [keyvalue s]
                     |Field.TypeField _ -> [keyvalue s]
+                    |Field.AliasField a -> aliases |> List.choose (fun (al, rs) -> if a == al then Some rs else None) |> List.collect convRuleToCompletion
                     |_ -> [Simple s]
                 |true ->
                     match f with
@@ -118,13 +128,14 @@ module rec Rules =
                     |Field.ValueField (Enum e) -> enums.TryFind(e) |> Option.defaultValue [] |> List.map Simple
                     |_ -> []
             let rec findRule (rules : Rule list) (stack) =
+                let expandedRules = rules |> List.collect (function | _,_,(AliasField a) -> (aliases |> List.filter (fun (s,_) -> s == a) |> List.map snd) |x -> [x])
                 match stack with
-                |[] -> rules |> List.collect convRuleToCompletion
+                |[] -> expandedRules |> List.collect convRuleToCompletion
                 |key::rest ->
-                    match rules |> List.tryFind (fun (k,_,_) -> k == key) with
+                    match expandedRules |> List.tryFind (fun (k,_,_) -> k == key) with
                     |Some (_,_,f) ->
                         match f with
-                        |Field.EffectField -> findRule rootRules rest
+                        //|Field.EffectField -> findRule rootRules rest
                         |Field.ClauseField rs -> findRule rs rest
                         |Field.ObjectField et ->
                             match et with
@@ -135,18 +146,18 @@ module rec Rules =
                         |Field.TypeField t -> types.TryFind(t) |> Option.defaultValue [] |> List.map Simple
                         |_ -> []
                     |None -> 
-                        rules |> List.collect convRuleToCompletion
+                        expandedRules |> List.collect convRuleToCompletion
             findRule rules stack
 
         let complete (pos : pos) (node : Node) =
             let path = getRulePath pos [] node |> List.rev
             match typedefs |> List.tryFind (fun t -> node.Position.FileName.Replace("/","\\").StartsWith(t.path.Replace("/","\\"))) with
             |Some typedef ->
-                let typerules = rootRules |> List.filter (fun (name, _, _) -> name == typedef.name)
+                let typerules = typeRules |> List.filter (fun (name, _, _) -> name == typedef.name)
                 let fixedpath = if List.isEmpty path then path else typedef.name::(path |> List.tail)
                 let completion = getCompletionFromPath typerules fixedpath
                 completion 
-            |None -> getCompletionFromPath rootRules path
+            |None -> getCompletionFromPath typeRules path
 
         member __.Complete(pos : pos, node : Node) = complete pos node
 
