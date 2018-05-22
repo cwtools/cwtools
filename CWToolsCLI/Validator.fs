@@ -30,7 +30,7 @@ module Validator =
     type STL (dir : string, scope : CWTools.Games.FilesScope, modFilter : string, triggers : DocEffect list, effects : DocEffect list) =
         //let langs = [Lang.STL STLLang.English; Lang.STL STLLang.German; Lang.STL STLLang.French; Lang.STL STLLang.Spanish; Lang.STL STLLang.Russian; Lang.STL STLLang.Polish; Lang.STL STLLang.BrazPor]
         let langs = [Lang.STL STLLang.English; Lang.STL STLLang.German; Lang.STL STLLang.French; Lang.STL STLLang.Spanish;]
-        let game = STLGame(dir, scope, modFilter, triggers, effects, [], [], langs, true, true)
+        let game = STLGame(dir, scope, modFilter, triggers, effects, [], [], [], langs, true, true)
         let parserErrors = game.ParserErrors
         member val folders = game.Folders
         member val parserErrorList = parserErrors |> List.map (fun (f, e, p) -> {file = f; error = e})

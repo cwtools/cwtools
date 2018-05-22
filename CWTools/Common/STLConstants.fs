@@ -79,6 +79,7 @@ module STLConstants =
             |"starbase" -> Scope.Starbase
             |"any" -> Scope.Any
             |"all" -> Scope.Any
+            |"no_scope" -> Scope.Any
             |x -> failwith ("unexpected scope" + x.ToString()))
 
     let parseScopes =

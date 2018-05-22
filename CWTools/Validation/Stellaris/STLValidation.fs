@@ -852,16 +852,22 @@ module STLValidation =
 
 
     let validateSolarSystemInitializers : StructureValidator =
-        fun _ es ->
+        fun os es ->
             let inits = es.AllOfTypeChildren EntityType.SolarSystemInitializers
             let starclasses =
-                 es.AllOfTypeChildren EntityType.StarClasses
-                |> List.map (fun sc -> sc.Key)
+                 es.AllOfTypeChildren EntityType.StarClasses @ os.AllOfTypeChildren EntityType.StarClasses
+                |> List.map (fun sc -> if sc.Key == "random_list" then sc.TagText "name" else sc.Key)
             let fNode =
                 fun (x : Node) ->
                     match x.Has "class", starclasses |> List.contains (x.TagText "class") with
-                    |true, true -> Invalid [inv (ErrorCodes.CustomError (sprintf "%s, %s" x.Key (x.TagText "class")) Severity.Warning) x]
-                    |true, false -> Invalid [inv (ErrorCodes.CustomError (sprintf "%s, %s" x.Key (x.TagText "class")) Severity.Warning) x]
+                    |true, true -> OK
                     |false, _ -> Invalid [inv (ErrorCodes.CustomError "This initializer is missing a class" Severity.Error) x]
                     |_, false -> Invalid [inv (ErrorCodes.CustomError (sprintf "The star class %s does not exist" (x.TagText "class")) Severity.Error) x]
             inits <&!&> fNode
+
+    let validateAnomaly210 : StructureValidator = 
+        fun _ es ->
+            let anomalies = es.GlobMatchChildren("**/anomalies/*.txt")
+            let fNode = 
+                fun (x : Node) -> if x.Key == "anomaly" || x.Key == "anomaly_category" then Invalid [inv ((ErrorCodes.CustomError "This style of anomaly was removed with 2.1.0, please see vanilla for details") Severity.Error) x] else OK
+            anomalies <&!&> fNode            
