@@ -871,3 +871,15 @@ module STLValidation =
             let fNode = 
                 fun (x : Node) -> if x.Key == "anomaly" || x.Key == "anomaly_category" then Invalid [inv ((ErrorCodes.CustomError "This style of anomaly was removed with 2.1.0, please see vanilla for details") Severity.Error) x] else OK
             anomalies <&!&> fNode            
+
+
+    let validateIfElse210 : StructureValidator = 
+        fun _ es ->
+            let codeBlocks = (es.AllEffects |> List.map (fun n -> n :> Node))// @ (es.AllTriggers |> List.map (fun n -> n :> Node))
+            let fNode = 
+                (fun (x : Node) children ->
+                    let res = if x.Key == "if" && x.Has "else" && not(x.Has "if") then Invalid [inv ErrorCodes.DeprecatedElse x] else OK
+                    let res2 = if x.Key == "if" && x.Has "else" && x.Has "if" then Invalid [inv ErrorCodes.AmbiguousIfElse x] else OK
+                    (res <&&> res2) <&&> children
+                )
+            codeBlocks <&!&> (foldNode2 fNode (<&&>) OK)

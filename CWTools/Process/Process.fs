@@ -6,6 +6,7 @@ open System
 open CWTools.Common.STLConstants
 open CWTools.Parser.Types
 open Microsoft.FSharp.Compiler.Range
+open CWTools.Utilities.Utils
 
 module List =
   let replace f sub xs = 
@@ -45,7 +46,7 @@ and LeafValue(value : Value, ?pos : range) =
    
 and [<Struct>] Child = |NodeC of node : Node | LeafC of leaf : Leaf |CommentC of comment : string |LeafValueC of lefavalue : LeafValue
 and Node (key : string, pos : range) =
-    let bothFind x = function |NodeC n when n.Key = x -> true |LeafC l when l.Key = x -> true |_ -> false
+    let bothFind (x : string) = function |NodeC n when n.Key == x -> true |LeafC l when l.Key == x -> true |_ -> false
     let mutable all : Child array = Array.empty
     let mutable _leaves : Lazy<Leaf array> = lazy ( Array.empty )
     let reset() =
