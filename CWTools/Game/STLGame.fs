@@ -192,7 +192,7 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
             | x ->
                 eprintfn "Found %i mod directories:" x.Length
                 x |> List.iter (fun d -> eprintfn "%s" (fst d))
-            let modFiles = modDirs |> List.collect (fst >> getModFiles)
+            let modFiles = (scopeDirectory, Path.GetFileName scopeDirectory)::modDirs |> List.collect (fst >> getModFiles)
             match modFiles with
             | [] -> eprintfn "%s" "Didn't find any mods"
             | x -> 
