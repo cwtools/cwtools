@@ -16,40 +16,89 @@ alias[effect:create_starbase] = {
 }
 
 ship_size = {
+    ## cardinality = 0..1    
     formation_priority = int
+    ## cardinality = 0..1    
     max_speed = float
+    ## cardinality = 0..1    
     acceleration = float
+    ## cardinality = 0..1    
     rotation_speed = float
+    ## cardinality = 0..1    
     collision_radius = float
+    ## cardinality = 0..1    
     max_hitpoints = int
+    ## cardinality = 0..1    
+    cost = int
+    ## cardinality = 0..1    
+    components_add_to_cost = bool
+    ## cardinality = 0..1    
+    is_designable = bool
+    ## cardinality = 0..1    
+    is_civilian = bool
+    ## cardinality = 0..1    
+    build_block_radius = int
+    ## cardinality = 0..1    
+    can_disable = bool
     modifier = {
-        alias_name[effect] = alias_match_left[effect]
+        alias_name[modifier] = alias_match_left[modifier]
     }
+    ## cardinality = 0..1    
     size_multiplier = int
+    ## cardinality = 0..1    
     fleet_slot_size = int
     section_slots = {
         
     }
+    ## cardinality = 0..1    
+    combat_size_multiplier = int
+    ## cardinality = 0..1    
     num_target_locators = int
+    ## cardinality = 0..1    
     is_space_station = bool
+    ## cardinality = 0..1    
     icon_frame = int
+    ## cardinality = 0..1    
     base_buildtime = int
+    ## cardinality = 0..1    
     can_have_federation_design = bool
+    ## cardinality = 0..1    
     enable_default_design = bool
+    ## cardinality = 0..1
     default_behavior = <ship_behavior>
+    ## cardinality = 0..1
     prerequisites = {
+        ## cardinality = 0..100
         <technology>
     }
-    combat_disengage_chance = float
+    upkeep_override = {
+
+    }
     has_mineral_upkeep = bool
     class = enum[shipsize_class]
     construction_type = scalar
     required_component_set = scalar
+    subtype[starbase]  = {
+        flip_control_on_disable = bool
+    }
+    subtype[ship] = {
+        combat_disengage_chance = float
+    }
+    
 }
 
 types = {
     type[ship_size] = {
         path = "game/common/ship_sizes"
+        subtype[starbase] = {
+            class = shipclass_starbase
+        }
+        subtype[platform] = {
+            class = shipclass_military_station
+        }
+        subtype[ship] = {
+
+        }
     }
     type[ship_behavior] = {
         name_field = "name"
@@ -63,6 +112,8 @@ types = {
 enums = {
     enum[shipsize_class] = {
         shipclass_military
+        shipclass_military_station
         shipclass_transport
+        shipclass_starbase
     }
 }

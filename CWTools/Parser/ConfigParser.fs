@@ -22,6 +22,7 @@ module rec ConfigParser =
     | Scalar
     | Int
     | Enum of string
+    | Specific of string
     type ObjectType =
     | Tech
     | ShipSize
@@ -41,6 +42,7 @@ module rec ConfigParser =
     | EffectField
     | TriggerField
     | AliasField of string
+    | SubtypeField of string * Field
     type RootRule =
     | AliasRule of string * Rule
     | TypeRule of Rule
@@ -50,6 +52,7 @@ module rec ConfigParser =
         nameField : string option
         path : string
         conditions : Node option
+        subtypes : (string * Rule list) list
     }
     type EnumDefinition = string * string list
 
@@ -128,7 +131,14 @@ module rec ConfigParser =
     let configNode (node : Node) (comments : string list) =
         let children = getNodeComments node
         let options = getOptionsFromComments comments
-        Rule(node.Key, options, ClauseField(children |> List.choose processChildConfig))
+        let field = 
+            match node.Key with
+            |x when x.StartsWith "subtype[" ->
+                match getSettingFromString x "subtype" with
+                |Some st -> SubtypeField (st, ClauseField(children |> List.choose processChildConfig))
+                |None -> ClauseField []
+            |_ -> ClauseField(children |> List.choose processChildConfig)
+        Rule(node.Key, options, field)
     
     let processChildConfigRoot ((child, comments) : Child * string list) =
         match child with
@@ -172,7 +182,7 @@ module rec ConfigParser =
                 match getSettingFromString x "alias_match_left" with
                 |Some alias -> AliasField alias
                 |None -> ValueField ValueType.Scalar
-            |x -> ValueField ValueType.Scalar
+            |x -> ValueField (ValueType.Specific x)
         let options = getOptionsFromComments comments
         Rule(leaf.Key, options, field)
 
@@ -188,13 +198,19 @@ module rec ConfigParser =
     // Types
 
     let processType (node : Node) (comments : string list) =
+        let parseSubType (subtype : Node) =
+            match getSettingFromString (subtype.Key) "subtype" with
+            |Some key -> Some (key, (getNodeComments subtype |> List.choose processChildConfig))
+            |None -> None
         match node.Key with
         |x when x.StartsWith("type") ->
             let typename = getSettingFromString node.Key "type"
             let namefield = if node.Has "name_field" then Some (node.TagText "name_field") else None
             let path = (node.TagText "path").Replace("game/","").Replace("game\\","")
+            let subtypes = node.Children |> List.filter (fun c -> c.Key.StartsWith "subtype")
+                                         |> List.choose parseSubType
             match typename with
-            |Some tn -> Some { name = tn; nameField = namefield; path = path; conditions = None}
+            |Some tn -> Some { name = tn; nameField = namefield; path = path; conditions = None; subtypes = subtypes}
             |None -> None
         |_ -> None
         
@@ -357,7 +373,8 @@ module rec ConfigParser =
             name = "ship_behavior";
             nameField = Some "name";
             path = "common/ship_behaviors";
-            conditions = None
+            conditions = None;
+            subtypes = [];
         }
     let shipSizeType =
         {
@@ -365,6 +382,7 @@ module rec ConfigParser =
             path = "common/ship_sizes";
             nameField = None;
             conditions = None;
+            subtypes = [];
         }
 //  type[ship_behavior] = {
 //      path = "game/common/ship_behaviors"

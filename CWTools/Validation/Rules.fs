@@ -27,6 +27,10 @@ module rec Rules =
     type CompletionResponse =
     |Simple of string
     |Snippet of label : string * snippet : string
+    type RuleContext = 
+        {
+            subtype : string option    
+        }
     type RuleApplicator(rootRules : RootRule list, typedefs : TypeDefinition list , types : Map<string, string list>, enums : Map<string, string list>) =
         let aliases =
             rootRules |> List.choose (function |AliasRule (a, rs) -> Some (a, rs) |_ -> None)
@@ -44,25 +48,38 @@ module rec Rules =
             |ValueType.Float (min, max)-> 
                 match value with
                 |Float f -> true
+                |Int _ -> true
                 |_ -> false
+            |ValueType.Specific s -> key = s
             |_ -> true
-        let rec applyClauseField (rules : Rule list) (node : Node) =
+        let rec applyClauseField (enforceCardinality : bool) (ctx : RuleContext) (rules : Rule list) (node : Node) =
+            eprintfn "%A %A" (ctx.subtype) rules
+            let subtypedrules = 
+                match ctx.subtype with
+                |Some st -> rules |> List.collect (fun (s,o,r) -> r |> (function |SubtypeField (key, ClauseField cfs) -> (if key = st then cfs else []) |x -> [(s, o, x)]))
+                |None -> rules |> List.choose (fun (s,o,r) -> r |> (function |SubtypeField (key, cf) -> None |x -> Some (s, o, x)))
+            eprintfn "subtyped %A" subtypedrules
             let valueFun (leaf : Leaf) =
-                match rules |> List.tryFind (fst3 >> (==) leaf.Key) with
+                match subtypedrules |> List.tryFind (fst3 >> (==) leaf.Key) with
                 | Some (_, _, f) -> applyLeafRule f leaf
-                | None -> Invalid [invCustom leaf]
+                | None -> if enforceCardinality then Invalid [invCustom leaf] else OK
             let nodeFun (node : Node) =
-                match rules |> List.tryFind (fst3 >> (==) node.Key) with
-                | Some (_, _, f) -> applyNodeRule f node
-                | None -> Invalid [invCustom node]
+                match subtypedrules |> List.tryFind (fst3 >> (==) node.Key) with
+                | Some (_, _, f) -> applyNodeRule ctx f node
+                | None -> if enforceCardinality then Invalid [invCustom node] else OK
             let checkCardinality (node : Node) (rule : Rule) =
-                let key, opts, _ = rule
-                let leafcount = node.Tags key |> Seq.length
-                let childcount = node.Childs key |> Seq.length
-                let total = leafcount + childcount
-                if opts.min > total then Invalid [inv (ErrorCodes.CustomError (sprintf "Missing %s, requires %i" key opts.min) Severity.Error) node]
-                else if opts.max < total then Invalid [inv (ErrorCodes.CustomError (sprintf "Too many %s, max %i" key opts.max) Severity.Error) node]
-                else OK
+                let key, opts, field = rule
+                match key, field with
+                | "leafvalue", _
+                | _, Field.SubtypeField _
+                | _, Field.AliasField _ -> OK
+                | _ ->
+                    let leafcount = node.Tags key |> Seq.length
+                    let childcount = node.Childs key |> Seq.length
+                    let total = leafcount + childcount
+                    if opts.min > total && enforceCardinality then Invalid [inv (ErrorCodes.CustomError (sprintf "Missing %s, requires %i" key opts.min) Severity.Error) node]
+                    else if opts.max < total then Invalid [inv (ErrorCodes.CustomError (sprintf "Too many %s, max %i" key opts.max) Severity.Error) node]
+                    else OK
             node.Leaves <&!&> valueFun
             <&&>
             (node.Children <&!&> nodeFun)
@@ -70,11 +87,9 @@ module rec Rules =
             (rules <&!&> checkCardinality node)
 
         and applyValueField (vt : ValueType) (leaf : Leaf) =
-            match getValidValues vt with
-            | Some values -> 
-                let value = leaf.Value.ToString()
-                if values |> List.exists (fun s -> s == value) then OK else Invalid [inv (ErrorCodes.CustomError "Invalid value" Severity.Error) leaf]
-            | None -> OK
+            match isValidValue leaf.Value vt with
+            | true -> OK
+            | false -> Invalid [inv (ErrorCodes.CustomError "Invalid value" Severity.Error) leaf]
         and applyObjectField (entityType : EntityType) (leaf : Leaf) =
             let values =
                 match entityType with
@@ -98,15 +113,30 @@ module rec Rules =
             | Field.TypeField t -> applyTypeField t leaf
             | Field.EffectField -> Invalid [invCustom leaf]
             | Field.ClauseField rs -> Invalid [invCustom leaf]
+            | Field.AliasField _ -> OK
 
-        and applyNodeRule (rule : Field) (node : Node) =
+        and applyNodeRule (ctx : RuleContext) (rule : Field) (node : Node) =
             match rule with
             | Field.ValueField v -> Invalid [invCustom node]
             | Field.ObjectField et -> Invalid [invCustom node]
             | Field.TargetField -> Invalid [invCustom node]
             | Field.TypeField _ -> Invalid [invCustom node]
-            | Field.EffectField -> applyClauseField typeRules node
-            | Field.ClauseField rs -> applyClauseField rs node
+            | Field.EffectField -> applyClauseField true ctx typeRules node
+            | Field.ClauseField rs -> applyClauseField true ctx rs node
+            | Field.AliasField _ -> OK
+
+        let testSubtype (subtypes : (string * Rule list) list) (node : Node) =
+            eprintfn "%s %A" (node.Key) subtypes
+            let results = subtypes |> List.map (fun (s, rs) -> s, applyClauseField false {subtype = None} (rs) node)
+            eprintfn "%A" results
+            match results |> List.tryPick (fun (s, res) -> res |> function |Invalid _ -> None |OK -> Some s) with
+            |Some s -> Some s
+            |None -> None
+
+        let applyNodeRuleRoot (typedef : TypeDefinition) (rule : Field) (node : Node) =
+            let subtype = testSubtype (typedef.subtypes) node
+            let context = { subtype = subtype }
+            applyNodeRule context rule node
 
 
         let validate ((path, root) : string * Node) =
@@ -119,16 +149,16 @@ module rec Rules =
                     let expandedRules = typerules |> List.collect (function | _,_,(AliasField a) -> (aliases |> List.filter (fun (s,_) -> s == a) |> List.map snd) |x -> [x])
                     //eprintfn "%A" expandedRules
                     match expandedRules |> List.tryFind (fun (n, _, _) -> n == typedef.name) with
-                    |Some (_, _, f) -> applyNodeRule f node
+                    |Some (_, _, f) -> applyNodeRuleRoot typedef f node
                     |None -> 
                         eprintfn "Couldn't find rules for %s" typedef.name
                         OK
                 |None ->
                     eprintfn "Couldn't find rule for %s" node.Key 
                     OK
-            root.Children <&!&> inner
+            (root.Children <&!&> inner) |> (fun e -> eprintfn "%A" e; e)
 
-        member __.ApplyNodeRule(rule, node) = applyNodeRule rule node
+        member __.ApplyNodeRule(rule, node) = applyNodeRule {subtype = None} rule node
         //member __.ValidateFile(node : Node) = validate node
         member __.RuleValidate : StructureValidator = 
             fun _ es -> es.Raw |> List.map (fun struct(e, _) -> e.logicalpath, e.entity) <&!&> validate
