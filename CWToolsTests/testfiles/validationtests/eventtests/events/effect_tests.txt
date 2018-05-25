@@ -160,9 +160,17 @@ country_event = {
                 limit = {
                     if = {
                         else = {
-                            
+
                         }
                     }
+                }
+            }
+        }
+        AND = {
+            #error
+            if = {
+                else_if = {
+
                 }
             }
         }

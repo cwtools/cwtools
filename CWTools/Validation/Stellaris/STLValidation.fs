@@ -891,7 +891,7 @@ module STLValidation =
             let codeBlocks = (es.AllEffects |> List.map (fun n -> n :> Node))
             let fNode = 
                 (fun (x : Node) children ->
-                    if x.Key == "if" then
+                    if x.Key == "if" && x.Has "else" && not(x.Has "if") then
                         children
                     else
                         let nodes = x.Children |> List.map (fun n -> n.Key)
