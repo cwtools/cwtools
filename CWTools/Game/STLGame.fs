@@ -40,7 +40,7 @@ type FilesScope =
 
 //type GameFile = GameFile of result : FileResult
 
-type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, triggers : DocEffect list, effects : DocEffect list, modifiers : Modifier list, embeddedFiles : (string * string) list, configs : (string * string) list, langs : Lang list, validateVanilla : bool, experimental : bool ) =
+type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, triggers : DocEffect list, effects : DocEffect list, modifiers : Modifier list, embeddedFiles : (string * string) list, configs : (string * string) list, langs : Lang list, validateVanilla : bool, experimental : bool, useConfig : bool ) =
 
         let normalisedScopeDirectory = scopeDirectory.Replace("/","\\").TrimStart('.')
         let scriptFolders = [
@@ -373,6 +373,7 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
                    |> List.collect id
         let snood = snd
         let validateAll (entities : struct (Entity * Lazy<STLComputedData>) list)  = 
+            let ruleApplicator = RuleApplicator(lookup.configRules, lookup.typeDefs, lookup.typeDefInfo, lookup.enumDefs)
             eprintfn "Validating %i files" (entities.Length)
             let allEntitiesByFile = entities |> List.map (fun struct (f, _) -> f.entity)
             let flattened = allEntitiesByFile |> List.map (fun n -> n.Children) |> List.collect id
@@ -380,6 +381,7 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
             let validators = [validateVariables, "var"; valTechnology, "tech"; validateTechnologies, "tech2"; valButtonEffects, "but"; valSprites, "sprite"; valVariables, "var2"; valEventCalls, "event"; 
                                 validateAmbientGraphics, "ambient"; validateShipDesigns, "designs"; validateMixedBlocks, "mixed"; validateSolarSystemInitializers, "solar"; validateAnomaly210, "anom";
                                 validateIfElse210, "ifelse"; validateIfElse, "ifelse2"]
+            let validators = if useConfig then (ruleApplicator.RuleValidate, "rules")::validators else validators
             let experimentalvalidators = [valSectionGraphics, "sections"; valComponentGraphics, "component"; ]
             let oldEntities = EntitySet (resources.AllEntities())
             let newEntities = EntitySet entities

@@ -84,7 +84,7 @@ let testc =
             match CKParser.parseString input "test" with
             |Success(r, _, _) ->
                 let node = (STLProcess.shipProcess.ProcessNode<Node>() "root" (range.Zero) r)
-                let apply = RuleApplicator(rules, Map.empty)
+                let apply = RuleApplicator(rules, [], Map.empty, Map.empty)
                 let errors = apply.ApplyNodeRule(ClauseField Typerules, node)
                 match errors with
                 | OK -> ()
@@ -104,7 +104,7 @@ let testsv =
             match CKParser.parseString input "test" with
             |Success(r, _, _) ->
                 let node = (STLProcess.shipProcess.ProcessNode<Node>() "root" (range.Zero) r)
-                let rules = RuleApplicator([TypeRule ConfigParser.createStarbase], Map.empty)
+                let rules = RuleApplicator([TypeRule ConfigParser.createStarbase], [], Map.empty, Map.empty)
                 let errors = rules.ApplyNodeRule(ClauseField [ConfigParser.createStarbase], node)
                 match errors with
                 | OK -> ()
@@ -120,7 +120,7 @@ let testsv =
             match CKParser.parseString input "test" with
             |Success(r, _, _) ->
                 let node = (STLProcess.shipProcess.ProcessNode<Node>() "root" (range.Zero) r)
-                let rules = RuleApplicator([TypeRule ConfigParser.createStarbase], Map.empty)
+                let rules = RuleApplicator([TypeRule ConfigParser.createStarbase], [], Map.empty, Map.empty)
                 let errors = rules.ApplyNodeRule(ClauseField [ConfigParser.createStarbase], node)
                 match errors with
                 | OK -> ()
@@ -132,7 +132,7 @@ let testsv =
             match CKParser.parseString input "test" with
             |Success(r, _, _) ->
                 let node = (STLProcess.shipProcess.ProcessNode<Node>() "root" (range.Zero) r)
-                let rules = RuleApplicator([TypeRule ConfigParser.createStarbase], Map.empty)
+                let rules = RuleApplicator([TypeRule ConfigParser.createStarbase], [], Map.empty, Map.empty)
                 let errors = rules.ApplyNodeRule(ClauseField [ConfigParser.createStarbase], node)
                 match errors with
                 | OK -> ()
@@ -147,7 +147,7 @@ let testsv =
             match CKParser.parseString input "test" with
             |Success(r, _, _) ->
                 let node = (STLProcess.shipProcess.ProcessNode<Node>() "root" (range.Zero) r)
-                let rules = RuleApplicator([TypeRule ConfigParser.createStarbase], Map.empty)
+                let rules = RuleApplicator([TypeRule ConfigParser.createStarbase], [], Map.empty, Map.empty)
                 let errors = rules.ApplyNodeRule(ClauseField [ConfigParser.createStarbase], node)
                 match errors with
                 | OK -> ()
@@ -166,7 +166,7 @@ let testsv =
             match CKParser.parseString input "test" with
             |Success(r, _, _) ->
                 let node = (STLProcess.shipProcess.ProcessNode<Node>() "root" (range.Zero) r)
-                let rules = RuleApplicator([TypeRule ConfigParser.createStarbase], Map.empty)
+                let rules = RuleApplicator([TypeRule ConfigParser.createStarbase], [], Map.empty, Map.empty)
                 let errors = rules.ApplyNodeRule(ClauseField [ConfigParser.createStarbase], node)
                 match errors with
                 | OK -> ()
@@ -234,7 +234,7 @@ let testsConfig =
             let folder = "./testfiles/configtests/completiontests"
             let triggers, effects = parseDocsFile "./testfiles/validationtests/trigger_docs_2.0.4.txt" |> (function |Success(p, _, _) -> DocsParser.processDocs p)
             let modifiers = SetupLogParser.parseLogsFile "./testfiles/validationtests/setup.log" |> (function |Success(p, _, _) -> SetupLogParser.processLogs p)
-            let stl = STLGame(folder, FilesScope.All, "", triggers, effects, modifiers, [], [configtext], [STL STLLang.English], false, true)
+            let stl = STLGame(folder, FilesScope.All, "", triggers, effects, modifiers, [], [configtext], [STL STLLang.English], false, true, true)
 
             let input =    "ship_size = {\n\
                             default_behavior = s \n\
@@ -249,7 +249,7 @@ let testsConfig =
             let folder = "./testfiles/configtests/completiontests"
             let triggers, effects = parseDocsFile "./testfiles/validationtests/trigger_docs_2.0.4.txt" |> (function |Success(p, _, _) -> DocsParser.processDocs p)
             let modifiers = SetupLogParser.parseLogsFile "./testfiles/validationtests/setup.log" |> (function |Success(p, _, _) -> SetupLogParser.processLogs p)
-            let stl = STLGame(folder, FilesScope.All, "", triggers, effects, modifiers, [], [configtext], [STL STLLang.English], false, true)
+            let stl = STLGame(folder, FilesScope.All, "", triggers, effects, modifiers, [], [configtext], [STL STLLang.English], false, true, true)
 
             let input =    "ship_size = {\n\
                             default_behavior = s \n\
@@ -264,7 +264,7 @@ let testsConfig =
             let folder = "./testfiles/configtests/completiontests"
             let triggers, effects = parseDocsFile "./testfiles/validationtests/trigger_docs_2.0.4.txt" |> (function |Success(p, _, _) -> DocsParser.processDocs p)
             let modifiers = SetupLogParser.parseLogsFile "./testfiles/validationtests/setup.log" |> (function |Success(p, _, _) -> SetupLogParser.processLogs p)
-            let stl = STLGame(folder, FilesScope.All, "", triggers, effects, modifiers, [], [configtext], [STL STLLang.English], false, true)
+            let stl = STLGame(folder, FilesScope.All, "", triggers, effects, modifiers, [], [configtext], [STL STLLang.English], false, true, true)
 
             let input =    "ship_size = {\n\
                             prerequisites = {\n\
@@ -281,7 +281,7 @@ let testsConfig =
             let folder = "./testfiles/configtests/completiontests"
             let triggers, effects = parseDocsFile "./testfiles/validationtests/trigger_docs_2.0.4.txt" |> (function |Success(p, _, _) -> DocsParser.processDocs p)
             let modifiers = SetupLogParser.parseLogsFile "./testfiles/validationtests/setup.log" |> (function |Success(p, _, _) -> SetupLogParser.processLogs p)
-            let stl = STLGame(folder, FilesScope.All, "", triggers, effects, modifiers, [], [configtext], [STL STLLang.English], false, true)
+            let stl = STLGame(folder, FilesScope.All, "", triggers, effects, modifiers, [], [configtext], [STL STLLang.English], false, true, true)
 
             let input =    "ship_size = {\n\
                             class = \n\
@@ -290,5 +290,4 @@ let testsConfig =
             let suggestions = stl.Complete pos "test" input |> Seq.map (function |Simple c -> c |Snippet (l, _) -> l) |> Seq.sort
             let expected = ["shipclass_military"; "shipclass_transport"] |> Seq.sort
             Expect.sequenceEqual suggestions expected "Completion should match"
-
     ]

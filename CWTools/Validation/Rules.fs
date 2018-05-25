@@ -8,6 +8,9 @@ open CWTools.Common.STLConstants
 open Microsoft.FSharp.Compiler
 open Microsoft.FSharp.Compiler.Range
 open CWTools.Games
+open Stellaris.STLValidation
+open FParsec
+open CWTools.Parser.Types
 
 module rec Rules =
     let fst3 (a, _, _) = a
@@ -20,15 +23,29 @@ module rec Rules =
         |ValueType.Enum es -> Some [es]
         |_ -> None
 
+
     type CompletionResponse =
     |Simple of string
     |Snippet of label : string * snippet : string
-    type RuleApplicator(effects : RootRule list, types : Map<string, string list>) =
+    type RuleApplicator(rootRules : RootRule list, typedefs : TypeDefinition list , types : Map<string, string list>, enums : Map<string, string list>) =
         let aliases =
-            effects |> List.choose (function |AliasRule (a, rs) -> Some (a, rs) |_ -> None)
+            rootRules |> List.choose (function |AliasRule (a, rs) -> Some (a, rs) |_ -> None)
         let typeRules =
-            effects |> List.choose (function |TypeRule (rs) -> Some (rs) |_ -> None)
-
+            rootRules |> List.choose (function |TypeRule (rs) -> Some (rs) |_ -> None)
+        let isValidValue (value : Value) =
+            let key = value.ToString()
+            function
+            |ValueType.Bool -> 
+                key = "yes" || key = "no"
+            |ValueType.Enum e ->
+                match enums.TryFind e with
+                |Some es -> es |> List.contains key
+                |None -> true
+            |ValueType.Float (min, max)-> 
+                match value with
+                |Float f -> true
+                |_ -> false
+            |_ -> true
         let rec applyClauseField (rules : Rule list) (node : Node) =
             let valueFun (leaf : Leaf) =
                 match rules |> List.tryFind (fst3 >> (==) leaf.Key) with
@@ -56,7 +73,7 @@ module rec Rules =
             match getValidValues vt with
             | Some values -> 
                 let value = leaf.Value.ToString()
-                if values |> List.exists (fun s -> s == value) then OK else Invalid [invCustom leaf]
+                if values |> List.exists (fun s -> s == value) then OK else Invalid [inv (ErrorCodes.CustomError "Invalid value" Severity.Error) leaf]
             | None -> OK
         and applyObjectField (entityType : EntityType) (leaf : Leaf) =
             let values =
@@ -91,7 +108,31 @@ module rec Rules =
             | Field.EffectField -> applyClauseField typeRules node
             | Field.ClauseField rs -> applyClauseField rs node
 
+
+        let validate ((path, root) : string * Node) =
+            let inner (node : Node) =
+                eprintfn "Looking for %s" (path)
+                match typedefs |> List.tryFind (fun t -> path.Replace("/","\\").StartsWith(t.path.Replace("/","\\"))) with
+                |Some typedef ->
+                    let typerules = typeRules |> List.filter (fun (name, _, _) -> name == typedef.name)
+                    //eprintfn "%A" typerules
+                    let expandedRules = typerules |> List.collect (function | _,_,(AliasField a) -> (aliases |> List.filter (fun (s,_) -> s == a) |> List.map snd) |x -> [x])
+                    //eprintfn "%A" expandedRules
+                    match expandedRules |> List.tryFind (fun (n, _, _) -> n == typedef.name) with
+                    |Some (_, _, f) -> applyNodeRule f node
+                    |None -> 
+                        eprintfn "Couldn't find rules for %s" typedef.name
+                        OK
+                |None ->
+                    eprintfn "Couldn't find rule for %s" node.Key 
+                    OK
+            root.Children <&!&> inner
+
         member __.ApplyNodeRule(rule, node) = applyNodeRule rule node
+        //member __.ValidateFile(node : Node) = validate node
+        member __.RuleValidate : StructureValidator = 
+            fun _ es -> es.Raw |> List.map (fun struct(e, _) -> e.logicalpath, e.entity) <&!&> validate
+
 
     type CompletionService(rootRules : RootRule list, typedefs : TypeDefinition list , types : Map<string, string list>, enums : Map<string, string list>) =
         let aliases =
