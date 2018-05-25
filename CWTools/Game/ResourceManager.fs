@@ -239,7 +239,7 @@ type ResourceManager<'T> (computedDataFunction : (Entity -> 'T)) =
                 match file with
                 |EntityResource (_, {result = Pass(s); filepath = f; validate = v; logicalpath = l}) ->
                     let entityType = filepathToEntityType f
-                    Some { filepath = f; logicalpath = l; entity = (shipProcess entityType "root" (mkZeroFile f) statements); validate = v; entityType = entityType; overwrite = No}
+                    Some { filepath = f; logicalpath = l; entity = (shipProcess entityType "root" (mkZeroFile f) (statements |> List.rev)); validate = v; entityType = entityType; overwrite = No}
                 |_ -> None
 
     let saveResults (resource, entity) =

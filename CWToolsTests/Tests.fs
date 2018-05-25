@@ -36,11 +36,11 @@ let getNodeComments (node : Node) =
             // | ((_, c), LeafValueC lv) when lv.Position = t -> (true, c)
             | ((_, _), _) -> (false, [])
     let fNode = (fun (node:Node) (children) ->
-            let one = node.Values |> List.map (fun e -> e.Position, node.All |> List.rev |> List.fold (findComments e.Position) (false, []) |> snd)
+            let one = node.Values |> List.map (fun e -> e.Position, node.All |> List.fold (findComments e.Position) (false, []) |> snd)
             //eprintfn "%s %A" node.Key (node.All |> List.rev)
             //eprintfn "%A" one
-            let two = node.Children |> List.map (fun e -> e.Position, node.All |> List.rev |> List.fold (findComments e.Position) (false, []) |> snd)
-            let three = node.LeafValues |> Seq.toList |> List.map (fun e -> e.Position, node.All |> List.rev |> List.fold (findComments e.Position) (false, []) |> snd)
+            let two = node.Children |> List.map (fun e -> e.Position, node.All |> List.fold (findComments e.Position) (false, []) |> snd)
+            let three = node.LeafValues |> Seq.toList |> List.map (fun e -> e.Position, node.All |> List.fold (findComments e.Position) (false, []) |> snd)
             let new2 = one @ two @ three |> List.filter (fun (p, c) -> not (List.isEmpty c))
             new2 @ children
                 )
@@ -117,7 +117,7 @@ let tests =
 let testFolder folder testsname =
     testList testsname [
         let configtext = "./testfiles/configtests/test.cwt", File.ReadAllText "./testfiles/configtests/test.cwt"
-        let triggers, effects = parseDocsFile "./testfiles/validationtests/trigger_docs_2.0.4.txt" |> (function |Success(p, _, _) -> DocsParser.processDocs p)
+        let triggers, effects = parseDocsFile "./testfiles/validationtests/trigger_docs_2.1.0.txt" |> (function |Success(p, _, _) -> DocsParser.processDocs p)
         let modifiers = SetupLogParser.parseLogsFile "./testfiles/validationtests/setup.log" |> (function |Success(p, _, _) -> SetupLogParser.processLogs p)
         let stl = STLGame(folder, FilesScope.All, "", triggers, effects, modifiers, [], [configtext], [STL STLLang.English], false, true)
         let errors = stl.ValidationErrors |> List.map (fun (c, s, n, l, f, k) -> f, n) //>> (fun p -> FParsec.Position(p.StreamName, p.Index, p.Line, 1L)))

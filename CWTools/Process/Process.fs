@@ -77,7 +77,7 @@ and Node (key : string, pos : range) =
     member this.Childs x = this.Nodes |> Seq.choose (function |c when c.Key = x -> Some c |_ -> None)
 
     [<JsonIgnore>]
-    member this.ToRaw : Statement list = this.All |> List.rev |>
+    member this.ToRaw : Statement list = this.All |>
                                          List.map (function 
                                            |NodeC n -> KeyValue(PosKeyValue(n.Position, KeyValueItem(Key n.Key, Clause n.ToRaw)))
                                            |LeafValueC lv -> lv.ToRaw
@@ -123,7 +123,7 @@ module ProcessCore =
                 // match maps |> List.tryFind (fun (a, _, _, _) -> a (key, pos, context)) with
                 // |Some (_,t, n, c) -> t context (processNodeInner (updateContext c n key context)) key pos
                 // |None -> processNode<Node> id (processNodeInner {context with previous = key}) key pos
-                ) >> (fun f a b c -> NodeC (f a b c))
+                ) >> (fun f a b c -> NodeC (f a b c |> (fun n -> n.All <- n.All |> List.rev; n)))
         and processNodeInner (c : LookupContext) (node : Node) statement =
             match statement with
             | KeyValue(PosKeyValue(pos, KeyValueItem(Key(k) , Clause(sl)))) -> node.All <- lookup k pos c sl::node.All

@@ -853,7 +853,7 @@ module STLValidation =
 
     let validateSolarSystemInitializers : StructureValidator =
         fun os es ->
-            let inits = es.AllOfTypeChildren EntityType.SolarSystemInitializers
+            let inits = es.AllOfTypeChildren EntityType.SolarSystemInitializers |> List.filter (fun si -> not(si.Key == "random_list"))
             let starclasses =
                  es.AllOfTypeChildren EntityType.StarClasses @ os.AllOfTypeChildren EntityType.StarClasses
                 |> List.map (fun sc -> if sc.Key == "random_list" then sc.TagText "name" else sc.Key)
@@ -878,8 +878,34 @@ module STLValidation =
             let codeBlocks = (es.AllEffects |> List.map (fun n -> n :> Node))// @ (es.AllTriggers |> List.map (fun n -> n :> Node))
             let fNode = 
                 (fun (x : Node) children ->
+                    if x.Key == "limit" then OK else
                     let res = if x.Key == "if" && x.Has "else" && not(x.Has "if") then Invalid [inv ErrorCodes.DeprecatedElse x] else OK
-                    let res2 = if x.Key == "if" && x.Has "else" && x.Has "if" then Invalid [inv ErrorCodes.AmbiguousIfElse x] else OK
-                    (res <&&> res2) <&&> children
+                    let res2 = if x.Key == "else_if" && x.Has "else" && not(x.Has "if") then Invalid [inv ErrorCodes.DeprecatedElse x] else OK
+                    let res3 = if x.Key == "if" && x.Has "else" && x.Has "if" then Invalid [inv ErrorCodes.AmbiguousIfElse x] else OK
+                    (res <&&> res2 <&&> res3) <&&> children
+                )
+            codeBlocks <&!&> (foldNode2 fNode (<&&>) OK)
+
+    let validateIfElse : StructureValidator = 
+        fun _ es ->
+            let codeBlocks = (es.AllEffects |> List.map (fun n -> n :> Node))
+            let fNode = 
+                (fun (x : Node) children ->
+                    if x.Key == "if" then
+                        children
+                    else
+                        let nodes = x.Children |> List.map (fun n -> n.Key)
+                                                |> List.filter (fun n -> n == "if" || n == "else" || n == "else_if")
+                        let checkNext (prevWasIf : bool) (key : string) =
+                            match prevWasIf with
+                            |true -> (key == "if" || key == "else_if"), None
+                            |false ->
+                                match key with
+                                |y when y == "if" -> true, None
+                                |y when y == "else" || y == "else_if" ->
+                                    false, Some (Invalid [inv ErrorCodes.IfElseOrder x])
+                                |_ -> false, None
+                        let _, res = nodes |> List.fold (fun (s, (r : ValidationResult option)) n -> if r.IsSome then s, r else checkNext s n) (false, None)
+                        match res with |None -> children |Some r -> r <&&> children
                 )
             codeBlocks <&!&> (foldNode2 fNode (<&&>) OK)

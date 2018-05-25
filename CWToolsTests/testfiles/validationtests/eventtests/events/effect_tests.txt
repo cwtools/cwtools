@@ -14,11 +14,11 @@ country_event = {
             set_country_flag = test
             #error
             set_ship_flag = test
-            else = {
-                set_country_flag = test
-                #error
-                set_ship_flag = test
-            }
+        }
+        else = {
+            set_country_flag = test
+            #error
+            set_ship_flag = test
         }
     }
 }
@@ -104,6 +104,67 @@ country_event = {
         NOT = {
             NOT = { has_country_flag = yes }
             NOT = { has_country_flag = yes }
+        }
+    }
+}
+
+##Test if/else/else_if order
+country_event = {
+    is_triggered_only = yes
+    immediate = {
+        #error
+        AND = {
+            else = {
+
+            }
+        }
+        #error
+        AND = {
+            else_if = {
+                
+            }
+        }
+        AND = {
+            if = {
+
+            }
+            else_if = {
+
+            }
+            else = {
+
+            }
+        }
+        #error
+        AND = {
+            if = {
+
+            }
+            else ={
+                
+            }
+            else = {
+
+            }
+        }
+        AND = {
+            #error
+            if = {
+                else = {
+
+                }
+            }
+        }
+        AND = {
+            if = {
+                limit = {
+                    if = {
+                        else = {
+                            
+                        }
+                    }
+                }
+            }
         }
     }
 }

@@ -1,7 +1,7 @@
-# Building Tags
-#
-# Building Tags are applied to building types and is used to group buildings together for the use of common modifiers.
-#
+## Building Tags
+##
+## Building Tags are applied to building types and is used to group buildings together for the use of common modifiers.
+##
 
 hydroponics_farm
 mining_network

@@ -81,6 +81,7 @@ module ValidationCore =
         static member ZeroModifier = fun (modif : string) -> { ID = "CW235"; Severity = Severity.Warning; Message = sprintf "Modifier %s has value 0. Modifiers are additive so likely doesn't do anything" modif }
         static member DeprecatedElse = { ID = "CW236"; Severity = Severity.Warning; Message = "Nested if/else in effects was deprecated with 2.1 and will be removed in a future release" }
         static member AmbiguousIfElse = { ID = "CW237"; Severity = Severity.Information; Message = "2.1 changed nested if = { if else } behaviour in effects. Check this still works as expected" }
+        static member IfElseOrder = { ID = "CW238"; Severity = Severity.Error; Message = "An else/else_if is missing a preceding if" }
         static member CustomError = fun error severity -> { ID = "CW999"; Severity = severity; Message = error}
     type ValidationResult = 
         | OK

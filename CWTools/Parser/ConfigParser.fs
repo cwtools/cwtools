@@ -73,11 +73,11 @@ module rec ConfigParser =
                 // | ((_, c), LeafValueC lv) when lv.Position = t -> (true, c)
                 | ((_, _), _) -> (false, [])
         //let fNode = (fun (node:Node) (children) ->
-        let one = node.Values |> List.map (fun e -> LeafC e, node.All |> List.rev |> List.fold (findComments e.Position) (false, []) |> snd)
+        let one = node.Values |> List.map (fun e -> LeafC e, node.All |> List.fold (findComments e.Position) (false, []) |> snd)
         //eprintfn "%s %A" node.Key (node.All |> List.rev)
         //eprintfn "%A" one
-        let two = node.Children |> List.map (fun e -> NodeC e, node.All |> List.rev |> List.fold (findComments e.Position) (false, []) |> snd)
-        let three = node.LeafValues |> Seq.toList |> List.map (fun e -> LeafValueC e, node.All |> List.rev |> List.fold (findComments e.Position) (false, []) |> snd)
+        let two = node.Children |> List.map (fun e -> NodeC e, node.All |> List.fold (findComments e.Position) (false, []) |> snd)
+        let three = node.LeafValues |> Seq.toList |> List.map (fun e -> LeafValueC e, node.All |> List.fold (findComments e.Position) (false, []) |> snd)
         let new2 = one @ two @ three
         new2
 
