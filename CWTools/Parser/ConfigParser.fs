@@ -31,6 +31,7 @@ module rec ConfigParser =
         min : int
         max : int
         leafvalue : bool
+        description : string option
     }
     type Rule = string * Options * Field
     type Field = 
@@ -56,10 +57,11 @@ module rec ConfigParser =
     }
     type EnumDefinition = string * string list
 
-    let requiredSingle = { min = 1; max = 1; leafvalue = false }
-    let requiredMany = { min = 1; max = 100; leafvalue = false }
-    let optionalSingle = { min = 0; max = 1; leafvalue = false }
-    let optionalMany = { min = 0; max = 100; leafvalue = false }
+    let defaultOptions = { min = 0; max = 100; leafvalue = false; description = None }
+    let requiredSingle = { defaultOptions with min = 1; max = 1 }
+    let requiredMany = { defaultOptions with min = 1; max = 100 }
+    let optionalSingle = { defaultOptions with min = 0; max = 1 }
+    let optionalMany = { defaultOptions with min = 0; max = 100 }
 
     let defaultFloat = ValueField (ValueType.Float (-1000.0, 1000.0))
 
@@ -119,8 +121,11 @@ module rec ConfigParser =
                 with
                 |_ -> 1, 100
             |None -> 1, 100
-            
-        { min = min; max = max; leafvalue = false }
+        let description = 
+            match comments |> List.tryFind (fun s -> s.StartsWith "##") with
+            |Some d -> Some (d.Trim('#'))
+            |None -> None
+        { min = min; max = max; leafvalue = false; description = description }
     let processChildConfig ((child, comments) : Child * string list)  =
         match child with
         |NodeC n -> Some (configNode n comments)

@@ -26,8 +26,9 @@ module rec Rules =
 
 
     type CompletionResponse =
-    |Simple of string
-    |Snippet of label : string * snippet : string
+    |Simple of label : string
+    |Detailed of label : string * desc : string option
+    |Snippet of label : string * snippet : string * desc : string option
     type RuleContext = 
         {
             subtype : string option    
@@ -212,8 +213,8 @@ module rec Rules =
         and getCompletionFromPath (rules : Rule list) (stack : string list) =
             let rec convRuleToCompletion (rule : Rule) =
                 let s, o, f = rule
-                let clause (inner : string) = Snippet (inner, (sprintf "%s = {\n\t$0\n}" inner))
-                let keyvalue (inner : string) = Snippet (inner, (sprintf "%s = $0" inner))
+                let clause (inner : string) = Snippet (inner, (sprintf "%s = {\n\t$0\n}" inner), o.description)
+                let keyvalue (inner : string) = Snippet (inner, (sprintf "%s = $0" inner), o.description)
                 match o.leafvalue with
                 |false ->
                     match f with

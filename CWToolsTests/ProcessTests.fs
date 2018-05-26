@@ -182,7 +182,7 @@ let testsv =
                 let node = (STLProcess.shipProcess.ProcessNode<Node>() "root" (range.Zero) r)
                 let comp = CompletionService([TypeRule ConfigParser.createStarbase], [], Map.empty, Map.empty)
                 let pos = mkPos 3 8
-                let suggestions = comp.Complete(pos, node) |> Seq.map (function |Simple c -> c |Snippet (l, _) -> l) |> Seq.sort
+                let suggestions = comp.Complete(pos, node) |> Seq.map (function |Simple c -> c |Snippet (l, _, _) -> l) |> Seq.sort
                 let expected = ["medium"; "large"] |> Seq.sort
                 Expect.sequenceEqual suggestions expected "Completion should match"
             |Failure(e, _, _) -> Expect.isTrue false e
@@ -196,7 +196,7 @@ let testsv =
                 let node = (STLProcess.shipProcess.ProcessNode<Node>() "root" (range.Zero) r)
                 let comp = CompletionService([TypeRule ConfigParser.createStarbase], [], Map.empty, Map.empty)
                 let pos = mkPos 3 3
-                let suggestions = comp.Complete(pos, node) |> Seq.map (function |Simple c -> c |Snippet (l, _) -> l) |> Seq.sort
+                let suggestions = comp.Complete(pos, node) |> Seq.map (function |Simple c -> c |Snippet (l, _, _) -> l) |> Seq.sort
                 let expected = ["size"; "owner"; "building"; "effect"; "module"] |> Seq.sort
                 Expect.sequenceEqual suggestions expected "Completion should match"
             |Failure(e, _, _) -> Expect.isTrue false e
@@ -219,7 +219,7 @@ let testsv =
                 let node = (STLProcess.shipProcess.ProcessNode<Node>() "root" (mkZeroFile "common/ship_sizes/test.txt") r)
                 let pos = mkPos 2 20
                 let comp = CompletionService([TypeRule ConfigParser.shipsize], [shipBehaviorType; shipSizeType], typeinfo, Map.empty)
-                let suggestions = comp.Complete(pos, node) |> Seq.map (function |Simple c -> c |Snippet (l, _) -> l) |> Seq.sort
+                let suggestions = comp.Complete(pos, node) |> Seq.map (function |Simple c -> c |Snippet (l, _, _) -> l) |> Seq.sort
                 let expected = ["default"; "swarm"] |> Seq.sort
                 Expect.sequenceEqual suggestions expected "Completion should match"
         
@@ -240,7 +240,7 @@ let testsConfig =
                             default_behavior = s \n\
                             }"
             let pos = mkPos 2 20
-            let suggestions = stl.Complete pos "test" input |> Seq.map (function |Simple c -> c |Snippet (l, _) -> l) |> Seq.sort
+            let suggestions = stl.Complete pos "test" input |> Seq.map (function |Simple c -> c |Snippet (l, _, _) -> l) |> Seq.sort
             let expected = ["default"; "swarm"] |> Seq.sort
             Expect.sequenceEqual suggestions expected "Completion should match"
 
@@ -255,7 +255,7 @@ let testsConfig =
                             default_behavior = s \n\
                             }"
             let pos = mkPos 2 20
-            let suggestions = stl.Complete pos "test" input |> Seq.map (function |Simple c -> c |Snippet (l, _) -> l) |> Seq.sort
+            let suggestions = stl.Complete pos "test" input |> Seq.map (function |Simple c -> c |Snippet (l, _, _) -> l) |> Seq.sort
             let expected = ["default"; "swarm"] |> Seq.sort
             Expect.sequenceEqual suggestions expected "Completion should match"
 
@@ -272,7 +272,7 @@ let testsConfig =
                             }\n\
                             }"
             let pos = mkPos 3 0
-            let suggestions = stl.Complete pos "test" input |> Seq.map (function |Simple c -> c |Snippet (l, _) -> l) |> Seq.sort
+            let suggestions = stl.Complete pos "test" input |> Seq.map (function |Simple c -> c |Snippet (l, _, _) -> l) |> Seq.sort
             let expected = ["tech_one"; "tech_two"] |> Seq.sort
             Expect.sequenceEqual suggestions expected "Completion should match"
 
@@ -287,7 +287,7 @@ let testsConfig =
                             class = \n\
                             }"
             let pos = mkPos 2 8
-            let suggestions = stl.Complete pos "test" input |> Seq.map (function |Simple c -> c |Snippet (l, _) -> l) |> Seq.sort
+            let suggestions = stl.Complete pos "test" input |> Seq.map (function |Simple c -> c |Snippet (l, _, _) -> l) |> Seq.sort
             let expected = ["shipclass_military"; "shipclass_transport"; "shipclass_military_station"; "shipclass_starbase"] |> Seq.sort
             Expect.sequenceEqual suggestions expected "Completion should match"
     ]

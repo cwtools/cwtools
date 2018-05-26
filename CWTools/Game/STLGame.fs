@@ -331,7 +331,7 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
 
         let updateTypeDef() =
             let rules, types, enums = configs |> List.fold (fun (rs, ts, es) (fn, ft) -> let r2, t2, e2 = parseConfig fn ft in rs@r2, ts@t2, es@e2) ([], [], [])
-            let rulesWithMod = rules @ (lookup.coreModifiers |> List.map (fun c -> AliasRule ("modifier", Rule(c.tag, {min = 0; max = 100; leafvalue = false}, ValueField (ValueType.Float (-1000.0, 1000.0))))))
+            let rulesWithMod = rules @ (lookup.coreModifiers |> List.map (fun c -> AliasRule ("modifier", Rule(c.tag, {min = 0; max = 100; leafvalue = false; description = None}, ValueField (ValueType.Float (-1000.0, 1000.0))))))
             lookup.configRules <- rulesWithMod
             lookup.typeDefs <- types
             lookup.typeDefInfo <- getTypesFromDefinitions types (resources.AllEntities() |> List.map (fun struct(e,_) -> e))

@@ -29,6 +29,7 @@ ship_size = {
     ## cardinality = 0..1    
     max_hitpoints = int
     ## cardinality = 0..1    
+    ### Base cost of building this ship_size
     cost = int
     ## cardinality = 0..1    
     components_add_to_cost = bool
