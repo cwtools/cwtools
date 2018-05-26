@@ -158,9 +158,7 @@ module rec Rules =
             | Field.AliasField _ -> OK
 
         let testSubtype (subtypes : (string * Rule list) list) (node : Node) =
-            eprintfn "%s %A" (node.Key) subtypes
             let results = subtypes |> List.map (fun (s, rs) -> s, applyClauseField false {subtype = None} (rs) node)
-            eprintfn "%A" results
             match results |> List.tryPick (fun (s, res) -> res |> function |Invalid _ -> None |OK -> Some s) with
             |Some s -> Some s
             |None -> None
@@ -173,7 +171,7 @@ module rec Rules =
 
         let validate ((path, root) : string * Node) =
             let inner (node : Node) =
-                eprintfn "Looking for %s" (path)
+                //eprintfn "Looking for %s" (path)
                 match typedefs |> List.tryFind (fun t -> path.Replace("/","\\").StartsWith(t.path.Replace("/","\\"))) with
                 |Some typedef ->
                     let typerules = typeRules |> List.filter (fun (name, _, _) -> name == typedef.name)
@@ -183,10 +181,10 @@ module rec Rules =
                     match expandedRules |> List.tryFind (fun (n, _, _) -> n == typedef.name) with
                     |Some (_, _, f) -> applyNodeRuleRoot typedef f node
                     |None -> 
-                        eprintfn "Couldn't find rules for %s" typedef.name
+                        //eprintfn "Couldn't find rules for %s" typedef.name
                         OK
                 |None ->
-                    eprintfn "Couldn't find rule for %s" node.Key 
+                    //eprintfn "Couldn't find rule for %s" node.Key 
                     OK
             (root.Children <&!&> inner) |> (fun e -> eprintfn "%A" e; e)
 
