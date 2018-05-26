@@ -288,6 +288,6 @@ let testsConfig =
                             }"
             let pos = mkPos 2 8
             let suggestions = stl.Complete pos "test" input |> Seq.map (function |Simple c -> c |Snippet (l, _) -> l) |> Seq.sort
-            let expected = ["shipclass_military"; "shipclass_transport"] |> Seq.sort
+            let expected = ["shipclass_military"; "shipclass_transport"; "shipclass_military_station"; "shipclass_starbase"] |> Seq.sort
             Expect.sequenceEqual suggestions expected "Completion should match"
     ]

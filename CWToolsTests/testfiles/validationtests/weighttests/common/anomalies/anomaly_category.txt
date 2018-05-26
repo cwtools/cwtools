@@ -1,55 +1,34 @@
 ## Test anomaly spawn_chance
-anomaly_category = {
-	key = "AST_DEBRIS_FIELD_1_CAT"
-	desc = "AST_DEBRIS_FIELD_1_DESC"
-	picture = GFX_evt_mining_station
-	level = 2
-
+DISTAR_DEAD_GOD_CAT = {
+	desc = "DISTAR_DEAD_GOD_CAT_DESC"
+	picture = "GFX_evt_ship_in_orbit"
+	level = 1
+	
 	spawn_chance = {
 		modifier = {
-			add = 3
-            is_asteroid = yes
-            #error
-            has_country_flag = yes
-			OR = {
-				any_system = {
-					OR = {
-						has_star_flag = com_sol
-						has_star_flag = nuked_sol
-					}
-				}
-				any_country = {
-					OR = {
-						has_country_flag = human_1
-						has_country_flag = humans_early_space_age
-					}
-				}
-			}
-			FROM = {
-				owner = {
-					NOR = {
-						has_country_flag = found_voyager
-						has_country_flag = found_pioneer
-					}
-				}
-			}
+			add = 1000
+			has_planet_flag = yes
+			#error
+			has_ship_flag = yes
 		}
 	}
 
 	on_spawn = {
-		from = {
-			owner = {
-				set_country_flag = found_voyager
+		set_planet_flag = yes
+		#error
+		set_ship_flag = yes
+	}
+	
+	on_success = {
+		1 = {
+			max_once = yes
+			max_once_global = yes
+			modifier = {
+				add = 5
+				has_ship_flag = yes
+				#error
+				has_planet_flag = yes
 			}
 		}
-	}
-
-	on_success = {
-	}
-
-	on_fail = {
-	}
-
-	on_critical_fail = {
 	}
 }

@@ -129,7 +129,7 @@ module STLScopes =
         ScopedEffect("tile", [Scope.Pop], Scope.Tile, EffectType.Both, defaultDesc, "");
         ScopedEffect("orbital_deposit_tile", [Scope.Planet], Scope.Tile, EffectType.Both, defaultDesc, "");
         ScopedEffect("best_tile_for_pop", [Scope.Planet], Scope.Tile, EffectType.Both, defaultDesc, "");
-        ScopedEffect("owner_species", [Scope.Country], Scope.Species, EffectType.Both, defaultDesc, "");
+        ScopedEffect("owner_species", [Scope.Country; Scope.Leader], Scope.Species, EffectType.Both, defaultDesc, "");
         ScopedEffect("last_created_species", allScopes, Scope.Species, EffectType.Both, defaultDesc, "");
         ScopedEffect("species", [Scope.Country; Scope.Ship; Scope.Leader; Scope.Pop], Scope.Species, EffectType.Both, defaultDesc, "");
         ScopedEffect("pop_faction", [Scope.Pop; Scope.Leader], Scope.PopFaction, EffectType.Both, defaultDesc, ""); //Leader from vanilla

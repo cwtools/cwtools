@@ -11,6 +11,7 @@ open CWTools.Games
 open Stellaris.STLValidation
 open FParsec
 open CWTools.Parser.Types
+open CWTools.Utilities
 
 module rec Rules =
     let fst3 (a, _, _) = a
@@ -52,21 +53,50 @@ module rec Rules =
                 |_ -> false
             |ValueType.Specific s -> key = s
             |_ -> true
+
+        let checkValidValue (leaf : Leaf) (vt : ValueType) =
+            let key = leaf.Value.ToString()
+            if key.StartsWith "@" then OK else
+                match vt with
+                |ValueType.Bool ->
+                    if key = "yes" || key = "no" then OK else Invalid[inv (ErrorCodes.CustomError "Expecting yes or no" Severity.Error) leaf]
+                |ValueType.Enum e ->
+                    match enums.TryFind e with
+                    |Some es -> if es |> List.contains key then OK else Invalid[inv (ErrorCodes.CustomError (sprintf "Expecting one of %A" es) Severity.Error) leaf]
+                    |None -> OK
+                |ValueType.Float (min, max) ->
+                    match leaf.Value with
+                    |Float f -> if f < max && f > min then OK else Invalid[inv (ErrorCodes.CustomError (sprintf "Expecting a value between %f and %f" min max) Severity.Error) leaf]
+                    |Int f -> if float f < max && float f > min then OK else Invalid[inv (ErrorCodes.CustomError (sprintf "Expecting a value between %f and %f" min max) Severity.Error) leaf]
+                    |_ ->
+                        match TryParser.parseDouble key with
+                        |Some f -> if f < max && f > min then OK else Invalid[inv (ErrorCodes.CustomError (sprintf "Expecting a value between %f and %f" min max) Severity.Error) leaf]
+                        |None -> Invalid[inv (ErrorCodes.CustomError "Expecting a number" Severity.Error) leaf]
+                |ValueType.Int ->
+                    match leaf.Value with
+                    |Int _ -> OK
+                    |_ -> Invalid[inv (ErrorCodes.CustomError "Expecting a number" Severity.Error) leaf]
+                |ValueType.Specific s -> if key = s then OK else Invalid [inv (ErrorCodes.CustomError (sprintf "Expecting value %s" s) Severity.Error) leaf]
+                |ValueType.Scalar -> OK
+                |_ -> Invalid [inv (ErrorCodes.CustomError "Invalid value" Severity.Error) leaf]            
         let rec applyClauseField (enforceCardinality : bool) (ctx : RuleContext) (rules : Rule list) (node : Node) =
-            eprintfn "%A %A" (ctx.subtype) rules
             let subtypedrules = 
                 match ctx.subtype with
                 |Some st -> rules |> List.collect (fun (s,o,r) -> r |> (function |SubtypeField (key, ClauseField cfs) -> (if key = st then cfs else []) |x -> [(s, o, x)]))
                 |None -> rules |> List.choose (fun (s,o,r) -> r |> (function |SubtypeField (key, cf) -> None |x -> Some (s, o, x)))
-            eprintfn "subtyped %A" subtypedrules
+            let expandedrules = 
+                subtypedrules |> List.collect (
+                    function 
+                    | _,_,(AliasField a) -> (aliases |> List.filter (fun (s,_) -> s == a) |> List.map snd)
+                    |x -> [x])
             let valueFun (leaf : Leaf) =
-                match subtypedrules |> List.tryFind (fst3 >> (==) leaf.Key) with
+                match expandedrules |> List.tryFind (fst3 >> (==) leaf.Key) with
                 | Some (_, _, f) -> applyLeafRule f leaf
-                | None -> if enforceCardinality then Invalid [invCustom leaf] else OK
+                | None -> if enforceCardinality then Invalid [inv (ErrorCodes.CustomError "Unexpected value" Severity.Error) leaf] else OK
             let nodeFun (node : Node) =
-                match subtypedrules |> List.tryFind (fst3 >> (==) node.Key) with
+                match expandedrules |> List.tryFind (fst3 >> (==) node.Key) with
                 | Some (_, _, f) -> applyNodeRule ctx f node
-                | None -> if enforceCardinality then Invalid [invCustom node] else OK
+                | None -> if enforceCardinality then Invalid [inv (ErrorCodes.CustomError "Unexpected node" Severity.Error) node] else OK
             let checkCardinality (node : Node) (rule : Rule) =
                 let key, opts, field = rule
                 match key, field with
@@ -87,9 +117,10 @@ module rec Rules =
             (rules <&!&> checkCardinality node)
 
         and applyValueField (vt : ValueType) (leaf : Leaf) =
-            match isValidValue leaf.Value vt with
-            | true -> OK
-            | false -> Invalid [inv (ErrorCodes.CustomError "Invalid value" Severity.Error) leaf]
+            checkValidValue leaf vt
+            // match isValidValue leaf.Value vt with
+            // | true -> OK
+            // | false -> Invalid [inv (ErrorCodes.CustomError "Invalid value" Severity.Error) leaf]
         and applyObjectField (entityType : EntityType) (leaf : Leaf) =
             let values =
                 match entityType with
@@ -199,7 +230,12 @@ module rec Rules =
                     |Field.ValueField (Enum e) -> enums.TryFind(e) |> Option.defaultValue [] |> List.map Simple
                     |_ -> []
             let rec findRule (rules : Rule list) (stack) =
-                let expandedRules = rules |> List.collect (function | _,_,(AliasField a) -> (aliases |> List.filter (fun (s,_) -> s == a) |> List.map snd) |x -> [x])
+                let expandedRules = 
+                    rules |> List.collect (
+                        function 
+                        | _,_,(AliasField a) -> (aliases |> List.filter (fun (s,_) -> s == a) |> List.map snd) 
+                        | _,_,(SubtypeField (_, (ClauseField cf))) -> cf
+                        |x -> [x])
                 match stack with
                 |[] -> expandedRules |> List.collect convRuleToCompletion
                 |key::rest ->
