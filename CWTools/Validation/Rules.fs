@@ -186,7 +186,7 @@ module rec Rules =
                 |None ->
                     //eprintfn "Couldn't find rule for %s" node.Key 
                     OK
-            (root.Children <&!&> inner) |> (fun e -> eprintfn "%A" e; e)
+            (root.Children <&!&> inner)
 
         member __.ApplyNodeRule(rule, node) = applyNodeRule {subtype = None} rule node
         //member __.ValidateFile(node : Node) = validate node
