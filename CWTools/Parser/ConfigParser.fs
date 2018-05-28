@@ -43,7 +43,7 @@ module rec ConfigParser =
     | EffectField
     | TriggerField
     | AliasField of string
-    | SubtypeField of string * Field
+    | SubtypeField of string * bool * Field
     type RootRule =
     | AliasRule of string * Rule
     | TypeRule of Rule
@@ -140,7 +140,8 @@ module rec ConfigParser =
             match node.Key with
             |x when x.StartsWith "subtype[" ->
                 match getSettingFromString x "subtype" with
-                |Some st -> SubtypeField (st, ClauseField(children |> List.choose processChildConfig))
+                |Some st when st.StartsWith "!" -> SubtypeField (st.Substring(1), false, ClauseField(children |> List.choose processChildConfig))
+                |Some st -> SubtypeField (st, true, ClauseField(children |> List.choose processChildConfig))
                 |None -> ClauseField []
             |_ -> ClauseField(children |> List.choose processChildConfig)
         Rule(node.Key, options, field)

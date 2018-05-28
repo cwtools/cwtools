@@ -31,7 +31,7 @@ module rec Rules =
     |Snippet of label : string * snippet : string * desc : string option
     type RuleContext = 
         {
-            subtype : string option    
+            subtypes : string list    
         }
     type RuleApplicator(rootRules : RootRule list, typedefs : TypeDefinition list , types : Map<string, string list>, enums : Map<string, string list>) =
         let aliases =
@@ -82,9 +82,11 @@ module rec Rules =
                 |_ -> Invalid [inv (ErrorCodes.CustomError "Invalid value" Severity.Error) leaf]            
         let rec applyClauseField (enforceCardinality : bool) (ctx : RuleContext) (rules : Rule list) (node : Node) =
             let subtypedrules = 
-                match ctx.subtype with
-                |Some st -> rules |> List.collect (fun (s,o,r) -> r |> (function |SubtypeField (key, ClauseField cfs) -> (if key = st then cfs else []) |x -> [(s, o, x)]))
-                |None -> rules |> List.choose (fun (s,o,r) -> r |> (function |SubtypeField (key, cf) -> None |x -> Some (s, o, x)))
+                rules |> List.collect (fun (s,o,r) -> r |> (function |SubtypeField (key, shouldMatch, ClauseField cfs) -> (if (not shouldMatch) <> List.contains key ctx.subtypes then cfs else []) | x -> [(s, o, x)]))
+            // let subtypedrules = 
+            //     match ctx.subtype with
+            //     |Some st -> rules |> List.collect (fun (s,o,r) -> r |> (function |SubtypeField (key, ClauseField cfs) -> (if key = st then cfs else []) |x -> [(s, o, x)]))
+            //     |None -> rules |> List.choose (fun (s,o,r) -> r |> (function |SubtypeField (key, cf) -> None |x -> Some (s, o, x)))
             let expandedrules = 
                 subtypedrules |> List.collect (
                     function 
@@ -108,7 +110,7 @@ module rec Rules =
                     let leafcount = node.Tags key |> Seq.length
                     let childcount = node.Childs key |> Seq.length
                     let total = leafcount + childcount
-                    if opts.min > total && enforceCardinality then Invalid [inv (ErrorCodes.CustomError (sprintf "Missing %s, requires %i" key opts.min) Severity.Error) node]
+                    if opts.min > total then Invalid [inv (ErrorCodes.CustomError (sprintf "Missing %s, requires %i" key opts.min) Severity.Error) node]
                     else if opts.max < total then Invalid [inv (ErrorCodes.CustomError (sprintf "Too many %s, max %i" key opts.max) Severity.Error) node]
                     else OK
             node.Leaves <&!&> valueFun
@@ -158,14 +160,12 @@ module rec Rules =
             | Field.AliasField _ -> OK
 
         let testSubtype (subtypes : (string * Rule list) list) (node : Node) =
-            let results = subtypes |> List.map (fun (s, rs) -> s, applyClauseField false {subtype = None} (rs) node)
-            match results |> List.tryPick (fun (s, res) -> res |> function |Invalid _ -> None |OK -> Some s) with
-            |Some s -> Some s
-            |None -> None
+            let results = subtypes |> List.map (fun (s, rs) -> s, applyClauseField false {subtypes = []} (rs) node)
+            results |> List.map (fun f -> eprintfn "%A" f; f) |> List.choose (fun (s, res) -> res |> function |Invalid _ -> None |OK -> Some s)
 
         let applyNodeRuleRoot (typedef : TypeDefinition) (rule : Field) (node : Node) =
-            let subtype = testSubtype (typedef.subtypes) node
-            let context = { subtype = subtype }
+            let subtypes = testSubtype (typedef.subtypes) node
+            let context = { subtypes = subtypes }
             applyNodeRule context rule node
 
 
@@ -188,7 +188,7 @@ module rec Rules =
                     OK
             (root.Children <&!&> inner)
 
-        member __.ApplyNodeRule(rule, node) = applyNodeRule {subtype = None} rule node
+        member __.ApplyNodeRule(rule, node) = applyNodeRule {subtypes = []} rule node
         //member __.ValidateFile(node : Node) = validate node
         member __.RuleValidate : StructureValidator = 
             fun _ es -> es.Raw |> List.map (fun struct(e, _) -> e.logicalpath, e.entity) <&!&> validate
@@ -233,7 +233,7 @@ module rec Rules =
                     rules |> List.collect (
                         function 
                         | _,_,(AliasField a) -> (aliases |> List.filter (fun (s,_) -> s == a) |> List.map snd) 
-                        | _,_,(SubtypeField (_, (ClauseField cf))) -> cf
+                        | _,_,(SubtypeField (_, _, (ClauseField cf))) -> cf
                         |x -> [x])
                 match stack with
                 |[] -> expandedRules |> List.collect convRuleToCompletion

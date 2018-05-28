@@ -471,6 +471,10 @@ module rec STLProcess =
         //Special projects
         |(_, _, {complete = false; entityType = EntityType.SpecialProjects})  ->  processNodeSimple<Node>, "specialproject",  (fun c -> { c with complete = true;});
         |("on_success", _, {parents = "specialproject"::_;}) ->  specificScopeProcessNode<EffectBlock> Scope.Any, "effectblock", id;
+        |("on_start", _, {parents = "specialproject"::_;}) ->  specificScopeProcessNode<EffectBlock> Scope.Any, "effectblock", id;
+        |("on_progress_25", _, {parents = "specialproject"::_;}) ->  specificScopeProcessNode<EffectBlock> Scope.Any, "effectblock", id;
+        |("on_progress_50", _, {parents = "specialproject"::_;}) ->  specificScopeProcessNode<EffectBlock> Scope.Any, "effectblock", id;
+        |("on_progress_75", _, {parents = "specialproject"::_;}) ->  specificScopeProcessNode<EffectBlock> Scope.Any, "effectblock", id;
         |("on_fail", _, {parents = "specialproject"::_;}) ->  specificScopeProcessNode<EffectBlock> Scope.Country, "effectblock", id;
         |("abort_trigger", _, {parents = "specialproject"::_;}) ->  specificScopeProcessNode<TriggerBlock> Scope.Country, "effectblock", id;
         ///////TODO special project
