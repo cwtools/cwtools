@@ -1,0 +1,30 @@
+special_project = {
+	key = "DAYSHINE_PROJECT"
+	picture = GFX_evt_star_chart
+	cost = 60
+	tech_department = society_technology
+	days_to_research = 0
+	location = no
+	timelimit = -1
+
+	event_scope = planet_event
+
+	requirements = {
+	}
+
+	abort_trigger = {
+		has_country_flag = yes
+		#error
+		has_planet_flag = yes
+	}
+
+	on_success = {
+ 
+	}
+
+	on_fail = {
+		set_country_flag = yes
+		#error
+		set_planet_flag = yes
+	}
+}

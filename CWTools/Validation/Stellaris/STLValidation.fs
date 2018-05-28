@@ -878,7 +878,7 @@ module STLValidation =
             let codeBlocks = (es.AllEffects |> List.map (fun n -> n :> Node))// @ (es.AllTriggers |> List.map (fun n -> n :> Node))
             let fNode = 
                 (fun (x : Node) children ->
-                    if x.Key == "limit" then OK else
+                    if x.Key == "limit" || x.Key == "modifier" then OK else
                     let res = if x.Key == "if" && x.Has "else" && not(x.Has "if") then Invalid [inv ErrorCodes.DeprecatedElse x] else OK
                     let res2 = if x.Key == "else_if" && x.Has "else" && not(x.Has "if") then Invalid [inv ErrorCodes.DeprecatedElse x] else OK
                     let res3 = if x.Key == "if" && x.Has "else" && x.Has "if" then Invalid [inv ErrorCodes.AmbiguousIfElse x] else OK
@@ -909,3 +909,7 @@ module STLValidation =
                         match res with |None -> children |Some r -> r <&&> children
                 )
             codeBlocks <&!&> (foldNode2 fNode (<&&>) OK)
+
+    // let validateOnActions : StructureValidator =
+    //     fun os es ->
+    //         os.Raw |> List.map (fun struct(e, _) -> e.)

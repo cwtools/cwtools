@@ -63,7 +63,7 @@ module rec ConfigParser =
     let optionalSingle = { defaultOptions with min = 0; max = 1 }
     let optionalMany = { defaultOptions with min = 0; max = 100 }
 
-    let defaultFloat = ValueField (ValueType.Float (-100000.0, 100000.0))
+    let defaultFloat = ValueField (ValueType.Float (-1E+12, 1E+12))
 
     let parseConfigString filename fileString = runParserOnString CKParser.all () filename fileString
 
