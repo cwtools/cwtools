@@ -161,7 +161,7 @@ module rec Rules =
 
         let testSubtype (subtypes : (string * Rule list) list) (node : Node) =
             let results = subtypes |> List.map (fun (s, rs) -> s, applyClauseField false {subtypes = []} (rs) node)
-            results |> List.map (fun f -> eprintfn "%A" f; f) |> List.choose (fun (s, res) -> res |> function |Invalid _ -> None |OK -> Some s)
+            results |> List.choose (fun (s, res) -> res |> function |Invalid _ -> None |OK -> Some s)
 
         let applyNodeRuleRoot (typedef : TypeDefinition) (rule : Field) (node : Node) =
             let subtypes = testSubtype (typedef.subtypes) node

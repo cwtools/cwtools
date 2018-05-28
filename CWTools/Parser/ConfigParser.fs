@@ -150,9 +150,21 @@ module rec ConfigParser =
         match child with
         |NodeC n when n.Key == "types" -> None
         |NodeC n -> Some (configRootNode n comments)
-        //|LeafC l -> Some (configLeaf l comments)
+        |LeafC l -> Some (configRootLeaf l comments)
         //|LeafValueC lv -> Some (configLeafValue lv comments)
         |_ -> None
+
+    let configRootLeaf (leaf : Leaf) (comments : string list) =
+        let key, options, field = configLeaf leaf comments
+        match leaf.Key with
+        |x when x.StartsWith "alias[" ->
+            match getAliasSettingsFromString x with
+            |Some (a, rn) ->
+                AliasRule (a, (Rule(rn, options, field)))
+            |None ->
+                TypeRule (Rule(x, options, field))
+        |x ->
+            TypeRule (Rule(x, options, field))
 
     let configRootNode (node : Node) (comments : string list) =
         let children = getNodeComments node

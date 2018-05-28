@@ -396,6 +396,7 @@ module rec STLProcess =
         |("modifier", _, {parents = "weightblock"::"obsstation"::_;}) ->  specificScopeProcessNode<WeightModifierBlock> Scope.Country, "weightmodifierblock", id;
         // Opinion modifiers
         |(_, _, {complete = false; entityType = EntityType.OpinionModifiers})  ->  processNodeSimple<Node>, "opinionmodifier",  (fun c -> { c with complete = true;});
+        |("trigger", _, {parents = "opinionmodifier"::_;}) ->  specificScopeProcessNode<TriggerBlock> Scope.Country, "triggerblock", id;
         |("opinion", _, {parents = "opinionmodifier"::_;}) ->  processNodeSimple<WeightBlock>, "weightblock", id;
         |("modifier", _, {parents = "weightblock"::"opinionmodifier"::_;}) ->  specificScopeProcessNode<WeightModifierBlock> Scope.Country, "weightmodifierblock", id;
         //Personalities
