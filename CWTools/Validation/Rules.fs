@@ -93,7 +93,10 @@ module rec Rules =
                 |ValueType.Int (min, max) ->
                     match leaf.Value with
                     |Int i -> if i <= max && i >= min then OK else Invalid[inv (ErrorCodes.CustomError (sprintf "Expecting a value between %i and %i" min max) Severity.Error) leaf]
-                    |_ -> Invalid[inv (ErrorCodes.CustomError "Expecting a number" Severity.Error) leaf]
+                    |_ -> 
+                        match TryParser.parseInt key with
+                        |Some i ->  if i <= max && i >= min then OK else Invalid[inv (ErrorCodes.CustomError (sprintf "Expecting a value between %i and %i" min max) Severity.Error) leaf]
+                        |None -> Invalid[inv (ErrorCodes.CustomError "Expecting a number" Severity.Error) leaf]
                 |ValueType.Specific s -> if key = s then OK else Invalid [inv (ErrorCodes.CustomError (sprintf "Expecting value %s" s) Severity.Error) leaf]
                 |ValueType.Scalar -> OK
                 |_ -> Invalid [inv (ErrorCodes.CustomError "Invalid value" Severity.Error) leaf]  
