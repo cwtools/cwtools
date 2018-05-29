@@ -38,8 +38,9 @@ module rec ConfigParser =
     | ValueField of ValueType
     | ObjectField of EntityType
     | TypeField of string
-    | TargetField
+    | TargetField of Scope list
     | ClauseField of Rule list
+    | LeftClauseField of ValueType * Rule list
     | EffectField
     | TriggerField
     | AliasField of string
@@ -143,6 +144,12 @@ module rec ConfigParser =
                 |Some st when st.StartsWith "!" -> SubtypeField (st.Substring(1), false, ClauseField(children |> List.choose processChildConfig))
                 |Some st -> SubtypeField (st, true, ClauseField(children |> List.choose processChildConfig))
                 |None -> ClauseField []
+            |"int" -> LeftClauseField (ValueType.Int, children |> List.choose processChildConfig)  
+            |"scalar" -> LeftClauseField (ValueType.Scalar, children |> List.choose processChildConfig)  
+            |x when x.StartsWith "enum[" ->
+                match getSettingFromString x "enum" with
+                |Some e -> LeftClauseField (ValueType.Enum e, children |> List.choose processChildConfig)
+                |None -> ClauseField []
             |_ -> ClauseField(children |> List.choose processChildConfig)
         Rule(node.Key, options, field)
     
@@ -200,6 +207,12 @@ module rec ConfigParser =
                 match getSettingFromString x "alias_match_left" with
                 |Some alias -> AliasField alias
                 |None -> ValueField ValueType.Scalar
+            |x when x.StartsWith "target" ->
+                match getSettingFromString x "target" with
+                |Some targets ->
+                    let scopes = targets.Split ',' |> Seq.toList |> List.map parseScope
+                    TargetField scopes
+                |None -> ValueField ValueType.Scalar                
             |x -> ValueField (ValueType.Specific x)
         let options = getOptionsFromComments comments
         Rule(leaf.Key, options, field)
@@ -287,7 +300,7 @@ module rec ConfigParser =
 // 	effect = { ... }
 // }
     let createStarbase = 
-        let owner = Rule ("owner", requiredSingle, TargetField )
+        let owner = Rule ("owner", requiredSingle, TargetField [] )
         let size = Rule ("size", requiredSingle, ObjectField EntityType.ShipSizes)
         let moduleR = Rule ("module", optionalMany, ObjectField EntityType.StarbaseModules)
         let building = Rule ("building", optionalMany, ObjectField EntityType.StarbaseBuilding)

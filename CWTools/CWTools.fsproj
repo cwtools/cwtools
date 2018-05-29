@@ -29,6 +29,7 @@
     <Compile Include="Game/Stellaris/STLLookup.fs" />
     <Compile Include="Validation/Validation.fs" />
     <Compile Include="Validation/Stellaris/STLValidation.fs" />
+    <Compile Include="Validation/Stellaris/ScopeValidation.fs" />
     <Compile Include="Validation/Stellaris/STLLocalisationString.fs" />
     <Compile Include="Validation/Stellaris/STLLocalisationValidation.fs" />
     <Compile Include="Validation/Stellaris/STLEvents.fs" />

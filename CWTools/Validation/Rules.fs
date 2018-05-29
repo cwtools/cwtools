@@ -24,6 +24,18 @@ module rec Rules =
         |ValueType.Enum es -> Some [es]
         |_ -> None
 
+    let checkValidLeftClauseRule (enums : Map<string, string list>) (field : Field) (key : string) =
+        match field with
+        |LeftClauseField (ValueType.Int, _) ->
+            match TryParser.parseInt key with
+            |Some _ -> true
+            |None -> false
+        |LeftClauseField (ValueType.Enum e, _) ->
+            match enums.TryFind e with
+            |Some es -> es |> List.contains key
+            |None -> false
+        |LeftClauseField (ValueType.Scalar, _) -> true
+        |_ -> false
 
     type CompletionResponse =
     |Simple of label : string
@@ -79,7 +91,10 @@ module rec Rules =
                     |_ -> Invalid[inv (ErrorCodes.CustomError "Expecting a number" Severity.Error) leaf]
                 |ValueType.Specific s -> if key = s then OK else Invalid [inv (ErrorCodes.CustomError (sprintf "Expecting value %s" s) Severity.Error) leaf]
                 |ValueType.Scalar -> OK
-                |_ -> Invalid [inv (ErrorCodes.CustomError "Invalid value" Severity.Error) leaf]            
+                |_ -> Invalid [inv (ErrorCodes.CustomError "Invalid value" Severity.Error) leaf]  
+
+ 
+
         let rec applyClauseField (enforceCardinality : bool) (ctx : RuleContext) (rules : Rule list) (node : Node) =
             let subtypedrules = 
                 rules |> List.collect (fun (s,o,r) -> r |> (function |SubtypeField (key, shouldMatch, ClauseField cfs) -> (if (not shouldMatch) <> List.contains key ctx.subtypes then cfs else []) | x -> [(s, o, x)]))
@@ -99,13 +114,20 @@ module rec Rules =
             let nodeFun (node : Node) =
                 match expandedrules |> List.tryFind (fst3 >> (==) node.Key) with
                 | Some (_, _, f) -> applyNodeRule ctx f node
-                | None -> if enforceCardinality then Invalid [inv (ErrorCodes.CustomError "Unexpected node" Severity.Error) node] else OK
+                | None ->
+                    let leftClauseRule = 
+                        expandedrules |> 
+                        List.tryFind (function |(_, _, LeftClauseField (vt, _)) -> checkValidLeftClauseRule enums (LeftClauseField (vt, [])) node.Key  |_ -> false )
+                    match leftClauseRule with
+                    |Some (_, _, f) -> applyNodeRule ctx f node
+                    |None -> if enforceCardinality then Invalid [inv (ErrorCodes.CustomError "Unexpected node" Severity.Error) node] else OK
             let checkCardinality (node : Node) (rule : Rule) =
                 let key, opts, field = rule
                 match key, field with
                 | "leafvalue", _
                 | _, Field.SubtypeField _
-                | _, Field.AliasField _ -> OK
+                | _, Field.AliasField _ 
+                | _, Field.LeftClauseField _ -> OK
                 | _ ->
                     let leafcount = node.Tags key |> Seq.length
                     let childcount = node.Childs key |> Seq.length
@@ -135,28 +157,32 @@ module rec Rules =
             if values |> List.exists (fun s -> s == value) then OK else Invalid [invCustom leaf]
 
         and applyTypeField (t : string) (leaf : Leaf) =
-            let values = types.[t]
-            let value = leaf.Value.ToString()
-            if values |> List.exists (fun s -> s == value) then OK else Invalid [invCustom leaf]
+            match types.TryFind t with
+            |Some values ->
+                let value = leaf.Value.ToString()
+                if values |> List.exists (fun s -> s == value) then OK else Invalid [invCustom leaf]
+            |None -> OK            
 
         and applyLeafRule (rule : Field) (leaf : Leaf) =
             match rule with
             | Field.ValueField v -> applyValueField v leaf
             | Field.ObjectField et -> applyObjectField et leaf
-            | Field.TargetField -> OK
+            | Field.TargetField _ -> OK
             | Field.TypeField t -> applyTypeField t leaf
             | Field.EffectField -> Invalid [invCustom leaf]
             | Field.ClauseField rs -> Invalid [invCustom leaf]
+            | Field.LeftClauseField _ -> Invalid [invCustom leaf]
             | Field.AliasField _ -> OK
 
         and applyNodeRule (ctx : RuleContext) (rule : Field) (node : Node) =
             match rule with
             | Field.ValueField v -> Invalid [invCustom node]
             | Field.ObjectField et -> Invalid [invCustom node]
-            | Field.TargetField -> Invalid [invCustom node]
+            | Field.TargetField _ -> Invalid [invCustom node]
             | Field.TypeField _ -> Invalid [invCustom node]
             | Field.EffectField -> applyClauseField true ctx typeRules node
             | Field.ClauseField rs -> applyClauseField true ctx rs node
+            | Field.LeftClauseField (_, rs) -> applyClauseField true ctx rs node
             | Field.AliasField _ -> OK
 
         let testSubtype (subtypes : (string * Rule list) list) (node : Node) =
@@ -167,6 +193,8 @@ module rec Rules =
             let subtypes = testSubtype (typedef.subtypes) node
             let context = { subtypes = subtypes }
             applyNodeRule context rule node
+         
+         
 
 
         let validate ((path, root) : string * Node) =
@@ -222,6 +250,7 @@ module rec Rules =
                     |Field.ValueField _ -> [keyvalue s]
                     |Field.TypeField _ -> [keyvalue s]
                     |Field.AliasField a -> aliases |> List.choose (fun (al, rs) -> if a == al then Some rs else None) |> List.collect convRuleToCompletion
+                    |Field.LeftClauseField ((ValueType.Enum e), _) -> enums.TryFind(e) |> Option.defaultValue [] |> List.map clause
                     |_ -> [Simple s]
                 |true ->
                     match f with
@@ -243,6 +272,7 @@ module rec Rules =
                         match f with
                         //|Field.EffectField -> findRule rootRules rest
                         |Field.ClauseField rs -> findRule rs rest
+                        |Field.LeftClauseField (_, rs) -> findRule rs rest
                         |Field.ObjectField et ->
                             match et with
                             |EntityType.ShipSizes -> [Simple "large"; Simple "medium"]
@@ -252,7 +282,16 @@ module rec Rules =
                         |Field.TypeField t -> types.TryFind(t) |> Option.defaultValue [] |> List.map Simple
                         |_ -> []
                     |None -> 
-                        expandedRules |> List.collect convRuleToCompletion
+                        let leftClauseRule = 
+                            expandedRules |> 
+                            List.tryFind (function |(_, _, LeftClauseField (vt, _)) -> checkValidLeftClauseRule enums (LeftClauseField (vt, [])) key  |_ -> false )
+                        match leftClauseRule with
+                        |Some (_, _, f) ->
+                            match f with
+                            |Field.LeftClauseField (_, rs) -> findRule rs rest
+                            |_ -> expandedRules |> List.collect convRuleToCompletion
+                        |None ->                            
+                            expandedRules |> List.collect convRuleToCompletion
             findRule rules stack
 
         let complete (pos : pos) (node : Node) =

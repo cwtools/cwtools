@@ -29,6 +29,7 @@ open CWTools.Validation.Rules
 open CWTools.Parser
 open CWTools.Parser.ConfigParser
 open FSharp.Data.Runtime
+open CWTools.Validation.Stellaris.ScopeValidation
 
 
 
@@ -223,7 +224,7 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
                         (Path.GetFileName scopeDirectory, scopeDirectory)::modFolders
                     | false ->
                         eprintfn "I don't think you opened a mod folder directly"
-                        []
+                        modFolders
             |Some s, All -> ("vanilla", s) :: (modFolders)
             |_, Mods -> (modFolders)
             |Some s, Vanilla -> ["vanilla", s]
@@ -254,6 +255,7 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
                     if matches.IsEmpty then path else matches |> List.minBy fst |> snd
         let allFilesByPath = 
             let getAllFiles (scope, path) =
+                eprintfn "%A" path
                 scriptFolders
                         |> List.map ((fun folder -> scope, Path.GetFullPath(Path.Combine(path, folder)))
                         >> (fun (scope, folder) -> scope, folder, (if Directory.Exists folder then getAllFoldersUnion [folder] |> Seq.collect Directory.EnumerateFiles else Seq.empty )|> List.ofSeq))
