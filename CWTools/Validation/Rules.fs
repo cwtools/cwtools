@@ -26,9 +26,9 @@ module rec Rules =
 
     let checkValidLeftClauseRule (enums : Map<string, string list>) (field : Field) (key : string) =
         match field with
-        |LeftClauseField (ValueType.Int, _) ->
+        |LeftClauseField (ValueType.Int (min, max), _) ->
             match TryParser.parseInt key with
-            |Some _ -> true
+            |Some i -> min <= i && i <= max
             |None -> false
         |LeftClauseField (ValueType.Enum e, _) ->
             match enums.TryFind e with
@@ -79,15 +79,15 @@ module rec Rules =
                     |None -> OK
                 |ValueType.Float (min, max) ->
                     match leaf.Value with
-                    |Float f -> if f < max && f > min then OK else Invalid[inv (ErrorCodes.CustomError (sprintf "Expecting a value between %f and %f" min max) Severity.Error) leaf]
-                    |Int f -> if float f < max && float f > min then OK else Invalid[inv (ErrorCodes.CustomError (sprintf "Expecting a value between %f and %f" min max) Severity.Error) leaf]
+                    |Float f -> if f <= max && f >= min then OK else Invalid[inv (ErrorCodes.CustomError (sprintf "Expecting a value between %f and %f" min max) Severity.Error) leaf]
+                    |Int f -> if float f <= max && float f >= min then OK else Invalid[inv (ErrorCodes.CustomError (sprintf "Expecting a value between %f and %f" min max) Severity.Error) leaf]
                     |_ ->
                         match TryParser.parseDouble key with
                         |Some f -> if f < max && f > min then OK else Invalid[inv (ErrorCodes.CustomError (sprintf "Expecting a value between %f and %f" min max) Severity.Error) leaf]
                         |None -> Invalid[inv (ErrorCodes.CustomError "Expecting a number" Severity.Error) leaf]
-                |ValueType.Int ->
+                |ValueType.Int (min, max) ->
                     match leaf.Value with
-                    |Int _ -> OK
+                    |Int i -> if i <= max && i >= min then OK else Invalid[inv (ErrorCodes.CustomError (sprintf "Expecting a value between %i and %i" min max) Severity.Error) leaf]
                     |_ -> Invalid[inv (ErrorCodes.CustomError "Expecting a number" Severity.Error) leaf]
                 |ValueType.Specific s -> if key = s then OK else Invalid [inv (ErrorCodes.CustomError (sprintf "Expecting value %s" s) Severity.Error) leaf]
                 |ValueType.Scalar -> OK

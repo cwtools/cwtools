@@ -20,7 +20,7 @@ module rec ConfigParser =
     | Float of float * float
     | Bool
     | Scalar
-    | Int
+    | Int of int * int
     | Enum of string
     | Specific of string
     type ObjectType =
@@ -65,6 +65,7 @@ module rec ConfigParser =
     let optionalMany = { defaultOptions with min = 0; max = 100 }
 
     let defaultFloat = ValueField (ValueType.Float (-1E+12, 1E+12))
+    let defaultInt = ValueField (ValueType.Int (Int32.MinValue, Int32.MaxValue))
 
     let parseConfigString filename fileString = runParserOnString CKParser.all () filename fileString
 
@@ -102,7 +103,19 @@ module rec ConfigParser =
                 with
                 |_ -> None
         |None -> None
-    
+
+
+    let getIntSettingFromString (full : string) =
+        match getSettingFromString full "int" with
+        |Some s -> 
+            let split = s.Split([|".."|], 2, StringSplitOptions.None)
+            if split.Length < 2 then None else
+                try
+                    Some ((int split.[0]), (int split.[1]))
+                with
+                |_ -> None
+        |None -> None
+
     let getAliasSettingsFromString (full : string) =
         match getSettingFromString full "alias" with
         |Some s ->
@@ -144,7 +157,7 @@ module rec ConfigParser =
                 |Some st when st.StartsWith "!" -> SubtypeField (st.Substring(1), false, ClauseField(children |> List.choose processChildConfig))
                 |Some st -> SubtypeField (st, true, ClauseField(children |> List.choose processChildConfig))
                 |None -> ClauseField []
-            |"int" -> LeftClauseField (ValueType.Int, children |> List.choose processChildConfig)  
+            |"int" -> LeftClauseField (ValueType.Int (Int32.MinValue, Int32.MaxValue), children |> List.choose processChildConfig)  
             |"scalar" -> LeftClauseField (ValueType.Scalar, children |> List.choose processChildConfig)  
             |x when x.StartsWith "enum[" ->
                 match getSettingFromString x "enum" with
@@ -191,10 +204,13 @@ module rec ConfigParser =
             match leaf.Value.ToRawString() with
             |"effect" -> EffectField
             |"scalar" -> ValueField ValueType.Scalar
-            |"int" -> ValueField ValueType.Int
             |"bool" -> ValueField ValueType.Bool
             |x when x.StartsWith "<" && x.EndsWith ">" ->
                 TypeField (x.Trim([|'<'; '>'|]))
+            |x when x.StartsWith "int" -> 
+                match getIntSettingFromString x with
+                |Some (min, max) -> ValueField (ValueType.Int (min, max))
+                |None -> (defaultFloat)
             |x when x.StartsWith "float" -> 
                 match getFloatSettingFromString x with
                 |Some (min, max) -> ValueField (ValueType.Float (min, max))
@@ -373,20 +389,20 @@ module rec ConfigParser =
     let shipsize =
         let inner =
             [
-                Rule("formation_priority", optionalSingle, ValueField ValueType.Int);
+                Rule("formation_priority", optionalSingle, defaultInt);
                 Rule("max_speed", requiredSingle, defaultFloat);
                 Rule("acceleration", requiredSingle, defaultFloat);
                 Rule("rotation_speed", requiredSingle, defaultFloat);
                 Rule("collision_radius", optionalSingle, defaultFloat);
-                Rule("max_hitpoints", requiredSingle, ValueField ValueType.Int);
+                Rule("max_hitpoints", requiredSingle, defaultInt);
                 Rule("modifier", optionalSingle, ClauseField []);
-                Rule("size_multiplier", requiredSingle, ValueField ValueType.Int);
-                Rule("fleet_slot_size", requiredSingle, ValueField ValueType.Int);
+                Rule("size_multiplier", requiredSingle, defaultInt);
+                Rule("fleet_slot_size", requiredSingle, defaultInt);
                 Rule("section_slots", optionalSingle, ClauseField []);
-                Rule("num_target_locators", requiredSingle, ValueField ValueType.Int);
+                Rule("num_target_locators", requiredSingle, defaultInt);
                 Rule("is_space_station", requiredSingle, ValueField ValueType.Bool);
-                Rule("icon_frame", requiredSingle, ValueField ValueType.Int);
-                Rule("base_buildtime", requiredSingle, ValueField ValueType.Int);
+                Rule("icon_frame", requiredSingle, defaultInt);
+                Rule("base_buildtime", requiredSingle, defaultInt);
                 Rule("can_have_federation_design", requiredSingle, ValueField ValueType.Bool);
                 Rule("enable_default_design", requiredSingle, ValueField ValueType.Bool);
                 Rule("default_behavior", requiredSingle, TypeField "ship_behavior");
