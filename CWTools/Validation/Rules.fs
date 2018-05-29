@@ -37,6 +37,11 @@ module rec Rules =
         |LeftClauseField (ValueType.Scalar, _) -> true
         |_ -> false
 
+    let checkValidLeftTypeRule (types : Map<string, string list>) (field : Field) (key : string) =
+        match field with
+        |LeftTypeField (t, _) -> types.ContainsKey t
+        |_ -> false
+
     type CompletionResponse =
     |Simple of label : string
     |Detailed of label : string * desc : string option
@@ -110,7 +115,14 @@ module rec Rules =
             let valueFun (leaf : Leaf) =
                 match expandedrules |> List.tryFind (fst3 >> (==) leaf.Key) with
                 | Some (_, _, f) -> applyLeafRule f leaf
-                | None -> if enforceCardinality then Invalid [inv (ErrorCodes.CustomError "Unexpected value" Severity.Error) leaf] else OK
+                | None -> 
+                    let leftTypeRule = 
+                        expandedrules |> 
+                        List.tryFind (function |(_, _, LeftTypeField (t, r)) -> checkValidLeftTypeRule types (LeftTypeField (t, r)) node.Key  |_ -> false )
+                    match leftTypeRule with
+                    |Some (_, _, f) -> applyLeafRule f leaf
+                    |_ ->                     
+                        if enforceCardinality then Invalid [inv (ErrorCodes.CustomError "Unexpected value" Severity.Error) leaf] else OK
             let nodeFun (node : Node) =
                 match expandedrules |> List.tryFind (fst3 >> (==) node.Key) with
                 | Some (_, _, f) -> applyNodeRule ctx f node
@@ -118,16 +130,21 @@ module rec Rules =
                     let leftClauseRule = 
                         expandedrules |> 
                         List.tryFind (function |(_, _, LeftClauseField (vt, _)) -> checkValidLeftClauseRule enums (LeftClauseField (vt, [])) node.Key  |_ -> false )
-                    match leftClauseRule with
-                    |Some (_, _, f) -> applyNodeRule ctx f node
-                    |None -> if enforceCardinality then Invalid [inv (ErrorCodes.CustomError "Unexpected node" Severity.Error) node] else OK
+                    let leftTypeRule = 
+                        expandedrules |> 
+                        List.tryFind (function |(_, _, LeftTypeField (t, r)) -> checkValidLeftTypeRule types (LeftTypeField (t, r)) node.Key  |_ -> false )
+                    match leftClauseRule, leftTypeRule with
+                    |Some (_, _, f), _ -> applyNodeRule ctx f node
+                    |_, Some (_, _, f) -> applyNodeRule ctx f node
+                    |None, None -> if enforceCardinality then Invalid [inv (ErrorCodes.CustomError "Unexpected node" Severity.Error) node] else OK
             let checkCardinality (node : Node) (rule : Rule) =
                 let key, opts, field = rule
                 match key, field with
                 | "leafvalue", _
                 | _, Field.SubtypeField _
                 | _, Field.AliasField _ 
-                | _, Field.LeftClauseField _ -> OK
+                | _, Field.LeftClauseField _ 
+                | _, Field.LeftTypeField _ -> OK
                 | _ ->
                     let leafcount = node.Tags key |> Seq.length
                     let childcount = node.Childs key |> Seq.length
@@ -163,16 +180,30 @@ module rec Rules =
                 if values |> List.exists (fun s -> s == value) then OK else Invalid [invCustom leaf]
             |None -> OK            
 
+        and applyLeftTypeFieldLeaf (t : string) (leaf : Leaf) =
+            match types.TryFind t with
+            |Some values ->
+                let value = leaf.Key
+                if values |> List.exists (fun s -> s == value) then OK else Invalid [invCustom leaf]
+            |None -> OK
+        and applyLeftTypeFieldNode (t : string) (node : Node) =
+            match types.TryFind t with
+            |Some values ->
+                let value = node.Key
+                if values |> List.exists (fun s -> s == value) then OK else Invalid [invCustom node]
+            |None -> OK
+
         and applyLeafRule (rule : Field) (leaf : Leaf) =
             match rule with
             | Field.ValueField v -> applyValueField v leaf
             | Field.ObjectField et -> applyObjectField et leaf
             | Field.TargetField _ -> OK
             | Field.TypeField t -> applyTypeField t leaf
-            | Field.EffectField -> Invalid [invCustom leaf]
+            | Field.LeftTypeField (t, f) -> applyLeftTypeFieldLeaf t leaf <&&> applyLeafRule f leaf
             | Field.ClauseField rs -> Invalid [invCustom leaf]
             | Field.LeftClauseField _ -> Invalid [invCustom leaf]
             | Field.AliasField _ -> OK
+            | Field.SubtypeField _ -> OK
 
         and applyNodeRule (ctx : RuleContext) (rule : Field) (node : Node) =
             match rule with
@@ -180,10 +211,11 @@ module rec Rules =
             | Field.ObjectField et -> Invalid [invCustom node]
             | Field.TargetField _ -> Invalid [invCustom node]
             | Field.TypeField _ -> Invalid [invCustom node]
-            | Field.EffectField -> applyClauseField true ctx typeRules node
+            | Field.LeftTypeField (t, f) -> applyLeftTypeFieldNode t node <&&> applyNodeRule ctx f node
             | Field.ClauseField rs -> applyClauseField true ctx rs node
             | Field.LeftClauseField (_, rs) -> applyClauseField true ctx rs node
             | Field.AliasField _ -> OK
+            | Field.SubtypeField _ -> OK
 
         let testSubtype (subtypes : (string * Rule list) list) (node : Node) =
             let results = subtypes |> List.map (fun (s, rs) -> s, applyClauseField false {subtypes = []} (rs) node)
@@ -194,9 +226,6 @@ module rec Rules =
             let context = { subtypes = subtypes }
             applyNodeRule context rule node
          
-         
-
-
         let validate ((path, root) : string * Node) =
             let inner (node : Node) =
                 //eprintfn "Looking for %s" (path)
@@ -245,12 +274,13 @@ module rec Rules =
                 |false ->
                     match f with
                     |Field.ClauseField _ -> [clause s]
-                    |Field.EffectField -> [clause s]
                     |Field.ObjectField _ -> [keyvalue s]
                     |Field.ValueField _ -> [keyvalue s]
                     |Field.TypeField _ -> [keyvalue s]
                     |Field.AliasField a -> aliases |> List.choose (fun (al, rs) -> if a == al then Some rs else None) |> List.collect convRuleToCompletion
                     |Field.LeftClauseField ((ValueType.Enum e), _) -> enums.TryFind(e) |> Option.defaultValue [] |> List.map clause
+                    |Field.LeftTypeField (t, ClauseField _) -> types.TryFind(t) |> Option.defaultValue [] |> List.map clause
+                    |Field.LeftTypeField (t, _) -> types.TryFind(t) |> Option.defaultValue [] |> List.map keyvalue
                     |_ -> [Simple s]
                 |true ->
                     match f with
@@ -267,9 +297,8 @@ module rec Rules =
                 match stack with
                 |[] -> expandedRules |> List.collect convRuleToCompletion
                 |key::rest ->
-                    match expandedRules |> List.tryFind (fun (k,_,_) -> k == key) with
-                    |Some (_,_,f) ->
-                        match f with
+                    let fieldToRules (field : Field) =
+                        match field with
                         //|Field.EffectField -> findRule rootRules rest
                         |Field.ClauseField rs -> findRule rs rest
                         |Field.LeftClauseField (_, rs) -> findRule rs rest
@@ -281,16 +310,26 @@ module rec Rules =
                         |Field.ValueField v -> getValidValues v |> Option.defaultValue [] |> List.map Simple
                         |Field.TypeField t -> types.TryFind(t) |> Option.defaultValue [] |> List.map Simple
                         |_ -> []
+
+                    match expandedRules |> List.tryFind (fun (k,_,_) -> k == key) with
+                    |Some (_,_,f) -> fieldToRules f
                     |None -> 
                         let leftClauseRule = 
                             expandedRules |> 
                             List.tryFind (function |(_, _, LeftClauseField (vt, _)) -> checkValidLeftClauseRule enums (LeftClauseField (vt, [])) key  |_ -> false )
-                        match leftClauseRule with
-                        |Some (_, _, f) ->
+                        let leftTypeRule = 
+                            expandedRules |> 
+                            List.tryFind (function |(_, _, LeftClauseField (vt, f)) -> checkValidLeftTypeRule types (LeftClauseField (vt, f)) key  |_ -> false )
+                        match leftClauseRule, leftTypeRule with
+                        |Some (_, _, f), _ ->
                             match f with
                             |Field.LeftClauseField (_, rs) -> findRule rs rest
                             |_ -> expandedRules |> List.collect convRuleToCompletion
-                        |None ->                            
+                        |_, Some (_, _, f) ->
+                            match f with
+                            |Field.LeftTypeField (_, rs) -> fieldToRules rs
+                            |_ -> expandedRules |> List.collect convRuleToCompletion
+                        |None, None ->                            
                             expandedRules |> List.collect convRuleToCompletion
             findRule rules stack
 

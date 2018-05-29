@@ -38,11 +38,10 @@ module rec ConfigParser =
     | ValueField of ValueType
     | ObjectField of EntityType
     | TypeField of string
+    | LeftTypeField of string * Field
     | TargetField of Scope list
     | ClauseField of Rule list
     | LeftClauseField of ValueType * Rule list
-    | EffectField
-    | TriggerField
     | AliasField of string
     | SubtypeField of string * bool * Field
     type RootRule =
@@ -140,6 +139,7 @@ module rec ConfigParser =
             |Some d -> Some (d.Trim('#'))
             |None -> None
         { min = min; max = max; leafvalue = false; description = description }
+        
     let processChildConfig ((child, comments) : Child * string list)  =
         match child with
         |NodeC n -> Some (configNode n comments)
@@ -163,6 +163,8 @@ module rec ConfigParser =
                 match getSettingFromString x "enum" with
                 |Some e -> LeftClauseField (ValueType.Enum e, children |> List.choose processChildConfig)
                 |None -> ClauseField []
+            |x when x.StartsWith "<" && x.EndsWith ">" ->
+                LeftTypeField(x.Trim([|'<'; '>'|]), ClauseField(children |> List.choose processChildConfig))
             |_ -> ClauseField(children |> List.choose processChildConfig)
         Rule(node.Key, options, field)
     
@@ -200,9 +202,8 @@ module rec ConfigParser =
             TypeRule (Rule(x, options, ClauseField(children |> List.choose processChildConfig)))
     
     let configLeaf (leaf : Leaf) (comments : string list) =
-        let field =
-            match leaf.Value.ToRawString() with
-            |"effect" -> EffectField
+        let rightfield =
+            match leaf.Value.ToString() with
             |"scalar" -> ValueField ValueType.Scalar
             |"bool" -> ValueField ValueType.Bool
             |x when x.StartsWith "<" && x.EndsWith ">" ->
@@ -231,6 +232,11 @@ module rec ConfigParser =
                 |None -> ValueField ValueType.Scalar                
             |x -> ValueField (ValueType.Specific x)
         let options = getOptionsFromComments comments
+        let field =
+            match leaf.Key with
+            |x when x.StartsWith "<" && x.EndsWith ">" ->
+                LeftTypeField (x.Trim([|'<'; '>'|]), rightfield)
+            |_ -> rightfield
         Rule(leaf.Key, options, field)
 
     let configLeafValue (leafvalue : LeafValue) (comments : string list) =
@@ -320,7 +326,7 @@ module rec ConfigParser =
         let size = Rule ("size", requiredSingle, ObjectField EntityType.ShipSizes)
         let moduleR = Rule ("module", optionalMany, ObjectField EntityType.StarbaseModules)
         let building = Rule ("building", optionalMany, ObjectField EntityType.StarbaseBuilding)
-        let effect =  Rule ("effect", optionalSingle, EffectField)
+        let effect =  Rule ("effect", optionalSingle, ValueField ValueType.Scalar)
         EffectRule ("create_starbase", optionalMany, ClauseField [owner; size; moduleR; building; effect])
 
 // # strategic_resource: strategic resource, deprecated, strategic resource used by the building.
@@ -348,7 +354,7 @@ module rec ConfigParser =
     let building =
         let inner = 
             [
-                Rule("allow",  requiredSingle, TriggerField);
+                Rule("allow",  requiredSingle, ValueField ValueType.Scalar);
                 Rule("empire_unique", optionalSingle, ValueField ValueType.Bool)
             ]
         Rule("building", optionalMany, ClauseField inner)
