@@ -322,7 +322,7 @@ module rec Rules =
                             List.tryFind (function |(_, _, LeftClauseField (vt, _)) -> checkValidLeftClauseRule enums (LeftClauseField (vt, [])) key  |_ -> false )
                         let leftTypeRule = 
                             expandedRules |> 
-                            List.tryFind (function |(_, _, LeftClauseField (vt, f)) -> checkValidLeftTypeRule types (LeftClauseField (vt, f)) key  |_ -> false )
+                            List.tryFind (function |(_, _, LeftTypeField (vt, f)) -> checkValidLeftTypeRule types (LeftTypeField (vt, f)) key  |_ -> false )
                         match leftClauseRule, leftTypeRule with
                         |Some (_, _, f), _ ->
                             match f with
