@@ -123,8 +123,17 @@ module ValidationCore =
         | Invalid e1, Invalid e2 -> Invalid (e1 @ e2)
         | Invalid e, OK | OK, Invalid e -> Invalid e
 
+    let (<&?&>) f1 f2 =
+        match f1, f2 with
+        |OK, OK -> OK
+        |Invalid e1, Invalid e2 -> Invalid (e1 @ e2)
+        |Invalid e, OK -> OK
+        |OK, Invalid e -> OK
+
     // Parallelising something this small makes it slower!
     //let (<&!&>) es f = es |> PSeq.map f |> PSeq.fold (<&&>) OK 
     let (<&!&>) es f = es |> Seq.map f |> Seq.fold (<&&>) OK
+
+    let (<&??&>) es f = es |> Seq.map f |> Seq.reduce (<&?&>)
 
     
