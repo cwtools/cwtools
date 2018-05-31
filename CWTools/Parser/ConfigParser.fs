@@ -147,16 +147,16 @@ module rec ConfigParser =
         
     let processChildConfig ((child, comments) : Child * string list)  =
         match child with
-        |NodeC n -> Some (configNode n comments)
-        |LeafC l -> Some (configLeaf l comments)
+        |NodeC n -> Some (configNode n comments (n.Key))
+        |LeafC l -> Some (configLeaf l comments (l.Key))
         |LeafValueC lv -> Some (configLeafValue lv comments)
         |_ -> None
 
-    let configNode (node : Node) (comments : string list) =
+    let configNode (node : Node) (comments : string list) (key : string) =
         let children = getNodeComments node
         let options = getOptionsFromComments comments
         let field = 
-            match node.Key with
+            match key with
             |x when x.StartsWith "subtype[" ->
                 match getSettingFromString x "subtype" with
                 |Some st when st.StartsWith "!" -> SubtypeField (st.Substring(1), false, ClauseField(children |> List.choose processChildConfig))
@@ -171,7 +171,7 @@ module rec ConfigParser =
             |x when x.StartsWith "<" && x.EndsWith ">" ->
                 LeftTypeField(x.Trim([|'<'; '>'|]), ClauseField(children |> List.choose processChildConfig))
             |_ -> ClauseField(children |> List.choose processChildConfig)
-        Rule(node.Key, options, field)
+        Rule(key, options, field)
     
     let processChildConfigRoot ((child, comments) : Child * string list) =
         match child with
@@ -182,12 +182,13 @@ module rec ConfigParser =
         |_ -> None
 
     let configRootLeaf (leaf : Leaf) (comments : string list) =
-        let key, options, field = configLeaf leaf comments
+        let key, options, field = configLeaf leaf comments leaf.Key
         match leaf.Key with
         |x when x.StartsWith "alias[" ->
             match getAliasSettingsFromString x with
             |Some (a, rn) ->
-                AliasRule (a, (Rule(rn, options, field)))
+                let innerRule = configLeaf leaf comments rn
+                AliasRule (a, innerRule)
             |None ->
                 TypeRule (Rule(x, options, field))
         |x ->
@@ -200,13 +201,14 @@ module rec ConfigParser =
         |x when x.StartsWith "alias[" ->
             match getAliasSettingsFromString x with
             |Some (a, rn) ->
-                AliasRule (a, (Rule(rn, options, ClauseField(children |> List.choose processChildConfig))))
+                let innerRule = configNode node comments rn
+                AliasRule (a, innerRule)
             |None ->
                 TypeRule (Rule(x, options, ClauseField(children |> List.choose processChildConfig)))
         |x ->
             TypeRule (Rule(x, options, ClauseField(children |> List.choose processChildConfig)))
     
-    let configLeaf (leaf : Leaf) (comments : string list) =
+    let configLeaf (leaf : Leaf) (comments : string list) (key : string) =
         let rightfield =
             match leaf.Value.ToString() with
             |"scalar" -> ValueField ValueType.Scalar
@@ -238,11 +240,11 @@ module rec ConfigParser =
             |x -> ValueField (ValueType.Specific x)
         let options = getOptionsFromComments comments
         let field =
-            match leaf.Key with
+            match key with
             |x when x.StartsWith "<" && x.EndsWith ">" ->
                 LeftTypeField (x.Trim([|'<'; '>'|]), rightfield)
             |_ -> rightfield
-        Rule(leaf.Key, options, field)
+        Rule(key, options, field)
 
     let configLeafValue (leafvalue : LeafValue) (comments : string list) =
         let field =
