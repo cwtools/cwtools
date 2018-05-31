@@ -43,6 +43,7 @@ module rec ConfigParser =
     | LeftClauseField of ValueType * Rule list
     | ScopeField of Scope
     | LeftScopeField of Rule list
+    | LocalisationField
     | AliasField of string
     | SubtypeField of string * bool * Field
     type RootRule =
@@ -215,6 +216,7 @@ module rec ConfigParser =
             match leaf.Value.ToString() with
             |"scalar" -> ValueField ValueType.Scalar
             |"bool" -> ValueField ValueType.Bool
+            |"localisation" -> LocalisationField
             |x when x.StartsWith "<" && x.EndsWith ">" ->
                 TypeField (x.Trim([|'<'; '>'|]))
             |x when x.StartsWith "int" -> 

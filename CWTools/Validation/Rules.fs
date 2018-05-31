@@ -13,6 +13,8 @@ open FParsec
 open CWTools.Parser.Types
 open CWTools.Utilities
 open CWTools.Process.STLScopes
+open CWTools.Common
+open CWTools.Validation.Stellaris.STLLocalisationValidation
 
 module rec Rules =
     let fst3 (a, _, _) = a
@@ -66,7 +68,7 @@ module rec Rules =
         {
             subtypes : string list    
         }
-    type RuleApplicator(rootRules : RootRule list, typedefs : TypeDefinition list , types : Map<string, string list>, enums : Map<string, string list>) =
+    type RuleApplicator(rootRules : RootRule list, typedefs : TypeDefinition list , types : Map<string, string list>, enums : Map<string, string list>, localisation : (Lang * Set<string>) list) =
         let aliases =
             rootRules |> List.choose (function |AliasRule (a, rs) -> Some (a, rs) |_ -> None)
         let typeRules =
@@ -245,6 +247,7 @@ module rec Rules =
             | Field.LeftClauseField _ -> OK
             | Field.LeftScopeField _ -> OK
             | Field.ScopeField s -> applyScopeField s leaf
+            | Field.LocalisationField -> checkLocKeys localisation leaf
             | Field.AliasField _ -> OK
             | Field.SubtypeField _ -> OK
 
@@ -257,6 +260,7 @@ module rec Rules =
             | Field.ClauseField rs -> applyClauseField enforceCardinality ctx rs node
             | Field.LeftClauseField (_, rs) -> applyClauseField enforceCardinality ctx rs node
             | Field.LeftScopeField rs -> applyClauseField enforceCardinality ctx rs node
+            | Field.LocalisationField -> OK
             | Field.ScopeField _ -> OK
             | Field.AliasField _ -> OK
             | Field.SubtypeField _ -> OK
