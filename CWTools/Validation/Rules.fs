@@ -39,7 +39,10 @@ module rec Rules =
 
     let checkValidLeftTypeRule (types : Map<string, string list>) (field : Field) (key : string) =
         match field with
-        |LeftTypeField (t, _) -> types.ContainsKey t
+        |LeftTypeField (t, _) -> 
+            match types.TryFind t with
+            |Some keys -> keys |> List.contains key
+            |None -> false
         |_ -> false
 
     type CompletionResponse =
@@ -146,10 +149,10 @@ module rec Rules =
                         expandedrules |> 
                         List.tryFind (function |(_, _, LeftTypeField (t, r)) -> checkValidLeftTypeRule types (LeftTypeField (t, r)) node.Key  |_ -> false )
                     match leftClauseRule, leftTypeRule with
-                    |Some (_, _, f), _ -> applyNodeRule ctx f node
-                    |_, Some (_, _, f) -> applyNodeRule ctx f node
+                    |Some (_, _, f), _ -> applyNodeRule enforceCardinality ctx f node
+                    |_, Some (_, _, f) -> applyNodeRule enforceCardinality ctx f node
                     |None, None -> if enforceCardinality then Invalid [inv (ErrorCodes.CustomError "Unexpected node" Severity.Error) node] else OK
-                | rs -> rs <&??&> (fun (_, _, f) -> applyNodeRule ctx f node)
+                | rs -> rs <&??&> (fun (_, _, f) -> applyNodeRule enforceCardinality ctx f node)
             let checkCardinality (node : Node) (rule : Rule) =
                 let key, opts, field = rule
                 match key, field with
@@ -189,7 +192,7 @@ module rec Rules =
         and applyTypeField (t : string) (leaf : Leaf) =
             match types.TryFind t with
             |Some values ->
-                let value = leaf.Value.ToString()
+                let value = leaf.Value.ToString().Trim([|'\"'|])
                 if values |> List.exists (fun s -> s == value) then OK else Invalid [invCustom leaf]
             |None -> OK            
 
@@ -218,15 +221,15 @@ module rec Rules =
             | Field.AliasField _ -> OK
             | Field.SubtypeField _ -> OK
 
-        and applyNodeRule (ctx : RuleContext) (rule : Field) (node : Node) =
+        and applyNodeRule (enforceCardinality : bool) (ctx : RuleContext) (rule : Field) (node : Node) =
             match rule with
             | Field.ValueField v -> Invalid [invCustom node]
             | Field.ObjectField et -> Invalid [invCustom node]
             | Field.TargetField _ -> Invalid [invCustom node]
             | Field.TypeField _ -> Invalid [invCustom node]
-            | Field.LeftTypeField (t, f) -> applyLeftTypeFieldNode t node <&&> applyNodeRule ctx f node
-            | Field.ClauseField rs -> applyClauseField true ctx rs node
-            | Field.LeftClauseField (_, rs) -> applyClauseField true ctx rs node
+            | Field.LeftTypeField (t, f) -> applyLeftTypeFieldNode t node <&&> applyNodeRule enforceCardinality ctx f node
+            | Field.ClauseField rs -> applyClauseField enforceCardinality ctx rs node
+            | Field.LeftClauseField (_, rs) -> applyClauseField enforceCardinality ctx rs node
             | Field.AliasField _ -> OK
             | Field.SubtypeField _ -> OK
 
@@ -239,7 +242,7 @@ module rec Rules =
         let applyNodeRuleRoot (typedef : TypeDefinition) (rule : Field) (node : Node) =
             let subtypes = testSubtype (typedef.subtypes) node
             let context = { subtypes = subtypes }
-            applyNodeRule context rule node
+            applyNodeRule true context rule node
          
         let validate ((path, root) : string * Node) =
             let inner (node : Node) =
@@ -260,7 +263,7 @@ module rec Rules =
                     OK
             (root.Children <&!&> inner)
 
-        member __.ApplyNodeRule(rule, node) = applyNodeRule {subtypes = []} rule node
+        member __.ApplyNodeRule(rule, node) = applyNodeRule true {subtypes = []} rule node
         //member __.ValidateFile(node : Node) = validate node
         member __.RuleValidate : StructureValidator = 
             fun _ es -> es.Raw |> List.map (fun struct(e, _) -> e.logicalpath, e.entity) <&!&> validate
