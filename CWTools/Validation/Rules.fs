@@ -12,6 +12,7 @@ open Stellaris.STLValidation
 open FParsec
 open CWTools.Parser.Types
 open CWTools.Utilities
+open CWTools.Process.STLScopes
 
 module rec Rules =
     let fst3 (a, _, _) = a
@@ -44,6 +45,18 @@ module rec Rules =
             |Some keys -> keys |> List.contains key
             |None -> false
         |_ -> false
+   
+    let checkValidLeftScopeRule (scopes : string list) (field : Field) (key : string) =
+        match field with
+        |LeftScopeField _ -> 
+            match key with
+            |x when x.StartsWith "event_target:" -> true
+            |x ->
+                let xs = x.Split '.'
+                xs |> Array.forall (fun s -> scopes |> List.exists (fun s2 -> s == s2))
+        |_ -> false
+
+    let scopes = (scopedEffects |> List.map (fun se -> se.Name)) @ (oneToOneScopes |> List.map fst)
 
     type CompletionResponse =
     |Simple of label : string
@@ -105,7 +118,6 @@ module rec Rules =
                 |_ -> Invalid [inv (ErrorCodes.CustomError "Invalid value" Severity.Error) leaf]  
 
  
-
         let rec applyClauseField (enforceCardinality : bool) (ctx : RuleContext) (rules : Rule list) (node : Node) =
             let subtypedrules = 
                 rules |> List.collect (fun (s,o,r) -> r |> (function |SubtypeField (key, shouldMatch, ClauseField cfs) -> (if (not shouldMatch) <> List.contains key ctx.subtypes then cfs else []) | x -> [(s, o, x)]))
@@ -148,10 +160,14 @@ module rec Rules =
                     let leftTypeRule = 
                         expandedrules |> 
                         List.tryFind (function |(_, _, LeftTypeField (t, r)) -> checkValidLeftTypeRule types (LeftTypeField (t, r)) node.Key  |_ -> false )
-                    match leftClauseRule, leftTypeRule with
-                    |Some (_, _, f), _ -> applyNodeRule enforceCardinality ctx f node
-                    |_, Some (_, _, f) -> applyNodeRule enforceCardinality ctx f node
-                    |None, None -> if enforceCardinality then Invalid [inv (ErrorCodes.CustomError "Unexpected node" Severity.Error) node] else OK
+                    let leftScopeRule = 
+                        expandedrules |> 
+                        List.tryFind (function |(_, _, LeftScopeField (rs)) -> checkValidLeftScopeRule scopes (LeftScopeField (rs)) node.Key  |_ -> false )
+                    match leftClauseRule, leftTypeRule, leftScopeRule with
+                    |Some (_, _, f), _, _ -> applyNodeRule enforceCardinality ctx f node
+                    |_, Some (_, _, f), _ -> applyNodeRule enforceCardinality ctx f node
+                    |_, _, Some(_, _, f) -> applyNodeRule enforceCardinality ctx f node
+                    |None, None, None -> if enforceCardinality then Invalid [inv (ErrorCodes.CustomError "Unexpected node" Severity.Error) node] else OK
                 | rs -> rs <&??&> (fun (_, _, f) -> applyNodeRule enforceCardinality ctx f node)
             let checkCardinality (node : Node) (rule : Rule) =
                 let key, opts, field = rule
@@ -194,7 +210,7 @@ module rec Rules =
             |Some values ->
                 let value = leaf.Value.ToString().Trim([|'\"'|])
                 if values |> List.exists (fun s -> s == value) then OK else Invalid [invCustom leaf]
-            |None -> OK            
+            |None -> OK     
 
         and applyLeftTypeFieldLeaf (t : string) (leaf : Leaf) =
             match types.TryFind t with
@@ -202,6 +218,16 @@ module rec Rules =
                 let value = leaf.Key
                 if values |> List.exists (fun s -> s == value) then OK else Invalid [invCustom leaf]
             |None -> OK
+
+        and applyScopeField (s : Scope) (leaf : Leaf) =
+            let key = leaf.Value.ToString()
+            match key with
+            |x when x.StartsWith "event_target:" -> OK
+            |x ->
+                let xs = x.Split '.'
+                if xs |> Array.forall (fun s -> scopes |> List.exists (fun s2 -> s == s2)) then OK else Invalid[invCustom leaf]
+
+
         and applyLeftTypeFieldNode (t : string) (node : Node) =
             match types.TryFind t with
             |Some values ->
@@ -213,11 +239,12 @@ module rec Rules =
             match rule with
             | Field.ValueField v -> applyValueField v leaf
             | Field.ObjectField et -> applyObjectField et leaf
-            | Field.TargetField _ -> OK
             | Field.TypeField t -> applyTypeField t leaf
             | Field.LeftTypeField (t, f) -> applyLeftTypeFieldLeaf t leaf <&&> applyLeafRule f leaf
             | Field.ClauseField rs -> Invalid [invCustom leaf]
             | Field.LeftClauseField _ -> Invalid [invCustom leaf]
+            | Field.LeftScopeField _ -> Invalid [invCustom leaf]
+            | Field.ScopeField s -> applyScopeField s leaf
             | Field.AliasField _ -> OK
             | Field.SubtypeField _ -> OK
 
@@ -225,11 +252,12 @@ module rec Rules =
             match rule with
             | Field.ValueField v -> Invalid [invCustom node]
             | Field.ObjectField et -> Invalid [invCustom node]
-            | Field.TargetField _ -> Invalid [invCustom node]
             | Field.TypeField _ -> Invalid [invCustom node]
             | Field.LeftTypeField (t, f) -> applyLeftTypeFieldNode t node <&&> applyNodeRule enforceCardinality ctx f node
             | Field.ClauseField rs -> applyClauseField enforceCardinality ctx rs node
             | Field.LeftClauseField (_, rs) -> applyClauseField enforceCardinality ctx rs node
+            | Field.LeftScopeField rs -> applyClauseField enforceCardinality ctx rs node
+            | Field.ScopeField _ -> Invalid [invCustom node]
             | Field.AliasField _ -> OK
             | Field.SubtypeField _ -> OK
 

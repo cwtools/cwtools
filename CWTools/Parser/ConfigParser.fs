@@ -39,9 +39,10 @@ module rec ConfigParser =
     | ObjectField of EntityType
     | TypeField of string
     | LeftTypeField of string * Field
-    | TargetField of Scope list
     | ClauseField of Rule list
     | LeftClauseField of ValueType * Rule list
+    | ScopeField of Scope
+    | LeftScopeField of Rule list
     | AliasField of string
     | SubtypeField of string * bool * Field
     type RootRule =
@@ -163,7 +164,8 @@ module rec ConfigParser =
                 |Some st -> SubtypeField (st, true, ClauseField(children |> List.choose processChildConfig))
                 |None -> ClauseField []
             |"int" -> LeftClauseField (ValueType.Int (Int32.MinValue, Int32.MaxValue), children |> List.choose processChildConfig)  
-            |"scalar" -> LeftClauseField (ValueType.Scalar, children |> List.choose processChildConfig)  
+            |"scalar" -> LeftClauseField (ValueType.Scalar, children |> List.choose processChildConfig) 
+            |"scope" -> LeftScopeField (children |> List.choose processChildConfig)
             |x when x.StartsWith "enum[" ->
                 match getSettingFromString x "enum" with
                 |Some e -> LeftClauseField (ValueType.Enum e, children |> List.choose processChildConfig)
@@ -231,11 +233,15 @@ module rec ConfigParser =
                 match getSettingFromString x "alias_match_left" with
                 |Some alias -> AliasField alias
                 |None -> ValueField ValueType.Scalar
-            |x when x.StartsWith "target" ->
-                match getSettingFromString x "target" with
-                |Some targets ->
-                    let scopes = targets.Split ',' |> Seq.toList |> List.map parseScope
-                    TargetField scopes
+            |x when x.StartsWith "scope" ->
+                match getSettingFromString x "scope" with
+                |Some target ->
+                    ScopeField (parseScope target)
+                |None -> ValueField ValueType.Scalar                
+            |x when x.StartsWith "event_target" ->
+                match getSettingFromString x "event_target" with
+                |Some target ->
+                    ScopeField (parseScope target)
                 |None -> ValueField ValueType.Scalar                
             |x -> ValueField (ValueType.Specific x)
         let options = getOptionsFromComments comments
@@ -335,7 +341,7 @@ module rec ConfigParser =
 // 	effect = { ... }
 // }
     let createStarbase = 
-        let owner = Rule ("owner", requiredSingle, TargetField [] )
+        let owner = Rule ("owner", requiredSingle, ScopeField Scope.Any )
         let size = Rule ("size", requiredSingle, ObjectField EntityType.ShipSizes)
         let moduleR = Rule ("module", optionalMany, ObjectField EntityType.StarbaseModules)
         let building = Rule ("building", optionalMany, ObjectField EntityType.StarbaseBuilding)
