@@ -209,14 +209,14 @@ module rec Rules =
             match types.TryFind t with
             |Some values ->
                 let value = leaf.Value.ToString().Trim([|'\"'|])
-                if values |> List.exists (fun s -> s == value) then OK else Invalid [invCustom leaf]
+                if values |> List.exists (fun s -> s == value) then OK else Invalid [inv (ErrorCodes.CustomError (sprintf "Expected value of type %s" t) Severity.Error) leaf]
             |None -> OK     
 
         and applyLeftTypeFieldLeaf (t : string) (leaf : Leaf) =
             match types.TryFind t with
             |Some values ->
                 let value = leaf.Key
-                if values |> List.exists (fun s -> s == value) then OK else Invalid [invCustom leaf]
+                if values |> List.exists (fun s -> s == value) then OK else Invalid [inv (ErrorCodes.CustomError (sprintf "Expected key of type %s" t) Severity.Error) leaf]
             |None -> OK
 
         and applyScopeField (s : Scope) (leaf : Leaf) =
@@ -225,14 +225,14 @@ module rec Rules =
             |x when x.StartsWith "event_target:" -> OK
             |x ->
                 let xs = x.Split '.'
-                if xs |> Array.forall (fun s -> scopes |> List.exists (fun s2 -> s == s2)) then OK else Invalid[invCustom leaf]
+                if xs |> Array.forall (fun s -> scopes |> List.exists (fun s2 -> s == s2)) then OK else Invalid[inv (ErrorCodes.CustomError (sprintf "Expected value of scope %s" (s.ToString())) Severity.Error) leaf]
 
 
         and applyLeftTypeFieldNode (t : string) (node : Node) =
             match types.TryFind t with
             |Some values ->
                 let value = node.Key
-                if values |> List.exists (fun s -> s == value) then OK else Invalid [invCustom node]
+                if values |> List.exists (fun s -> s == value) then OK else Invalid [inv (ErrorCodes.CustomError (sprintf "Expected key of type %s" t) Severity.Error) node]
             |None -> OK
 
         and applyLeafRule (rule : Field) (leaf : Leaf) =
@@ -241,23 +241,23 @@ module rec Rules =
             | Field.ObjectField et -> applyObjectField et leaf
             | Field.TypeField t -> applyTypeField t leaf
             | Field.LeftTypeField (t, f) -> applyLeftTypeFieldLeaf t leaf <&&> applyLeafRule f leaf
-            | Field.ClauseField rs -> Invalid [invCustom leaf]
-            | Field.LeftClauseField _ -> Invalid [invCustom leaf]
-            | Field.LeftScopeField _ -> Invalid [invCustom leaf]
+            | Field.ClauseField rs -> OK
+            | Field.LeftClauseField _ -> OK
+            | Field.LeftScopeField _ -> OK
             | Field.ScopeField s -> applyScopeField s leaf
             | Field.AliasField _ -> OK
             | Field.SubtypeField _ -> OK
 
         and applyNodeRule (enforceCardinality : bool) (ctx : RuleContext) (rule : Field) (node : Node) =
             match rule with
-            | Field.ValueField v -> Invalid [invCustom node]
-            | Field.ObjectField et -> Invalid [invCustom node]
-            | Field.TypeField _ -> Invalid [invCustom node]
+            | Field.ValueField v -> OK
+            | Field.ObjectField et -> OK
+            | Field.TypeField _ -> OK
             | Field.LeftTypeField (t, f) -> applyLeftTypeFieldNode t node <&&> applyNodeRule enforceCardinality ctx f node
             | Field.ClauseField rs -> applyClauseField enforceCardinality ctx rs node
             | Field.LeftClauseField (_, rs) -> applyClauseField enforceCardinality ctx rs node
             | Field.LeftScopeField rs -> applyClauseField enforceCardinality ctx rs node
-            | Field.ScopeField _ -> Invalid [invCustom node]
+            | Field.ScopeField _ -> OK
             | Field.AliasField _ -> OK
             | Field.SubtypeField _ -> OK
 
