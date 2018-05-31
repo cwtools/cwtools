@@ -48,12 +48,17 @@ module rec ConfigParser =
     | AliasRule of string * Rule
     | TypeRule of Rule
     type EffectRule = Rule // Add scopes
+    type SubTypeDefinition = {
+        name : string
+        rules : Rule list
+        typeKeyField : string option
+    }
     type TypeDefinition = {
         name : string
         nameField : string option
         path : string
         conditions : Node option
-        subtypes : (string * Rule list) list
+        subtypes : SubTypeDefinition list
     }
     type EnumDefinition = string * string list
 
@@ -251,17 +256,23 @@ module rec ConfigParser =
     // Types
 
     let processType (node : Node) (comments : string list) =
-        let parseSubType (subtype : Node) =
-            match getSettingFromString (subtype.Key) "subtype" with
-            |Some key -> Some (key, (getNodeComments subtype |> List.choose processChildConfig))
-            |None -> None
+        let parseSubType ((child : Child), comments : string list) =
+            match child with
+            |NodeC subtype when subtype.Key.StartsWith "subtype" -> 
+                let typekeyfilter = 
+                    match comments |> List.tryFind (fun s -> s.Contains "type_key_filter") with
+                    |Some c -> Some (c.Substring(c.IndexOf "=" + 1).Trim())
+                    |None -> None
+                match getSettingFromString (subtype.Key) "subtype" with
+                |Some key -> Some { name = key; rules =  (getNodeComments subtype |> List.choose processChildConfig); typeKeyField = typekeyfilter }
+                |None -> None
+            |_ -> None            
         match node.Key with
         |x when x.StartsWith("type") ->
             let typename = getSettingFromString node.Key "type"
             let namefield = if node.Has "name_field" then Some (node.TagText "name_field") else None
             let path = (node.TagText "path").Replace("game/","").Replace("game\\","")
-            let subtypes = node.Children |> List.filter (fun c -> c.Key.StartsWith "subtype")
-                                         |> List.choose parseSubType
+            let subtypes = getNodeComments node |> List.choose parseSubType
             match typename with
             |Some tn -> Some { name = tn; nameField = namefield; path = path; conditions = None; subtypes = subtypes}
             |None -> None

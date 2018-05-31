@@ -230,8 +230,10 @@ module rec Rules =
             | Field.AliasField _ -> OK
             | Field.SubtypeField _ -> OK
 
-        let testSubtype (subtypes : (string * Rule list) list) (node : Node) =
-            let results = subtypes |> List.map (fun (s, rs) -> s, applyClauseField false {subtypes = []} (rs) node)
+        let testSubtype (subtypes : SubTypeDefinition list) (node : Node) =
+            let results = 
+                subtypes |> List.filter (fun st -> st.typeKeyField |> function |Some tkf -> tkf == node.Key |None -> true)
+                        |> List.map (fun s -> s.name, applyClauseField false {subtypes = []} (s.rules) node)
             results |> List.choose (fun (s, res) -> res |> function |Invalid _ -> None |OK -> Some s)
 
         let applyNodeRuleRoot (typedef : TypeDefinition) (rule : Field) (node : Node) =
