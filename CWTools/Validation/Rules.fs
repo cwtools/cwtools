@@ -137,10 +137,10 @@ module rec Rules =
                 |[] -> 
                     let leftTypeRule = 
                         expandedrules |> 
-                        List.tryFind (function |(_, _, LeftTypeField (t, r)) -> checkValidLeftTypeRule types (LeftTypeField (t, r)) node.Key  |_ -> false )
+                        List.tryFind (function |(_, _, LeftTypeField (t, r)) -> checkValidLeftTypeRule types (LeftTypeField (t, r)) leaf.Key  |_ -> false )
                     match leftTypeRule with
                     |Some (_, _, f) -> applyLeafRule f leaf
-                    |_ ->                     
+                    |_ ->
                         if enforceCardinality then Invalid [inv (ErrorCodes.CustomError "Unexpected value" Severity.Error) leaf] else OK
                 |rs -> rs <&??&> (fun (_, _, f) -> applyLeafRule f leaf)
                 // match expandedrules |> List.tryFind (fst3 >> (==) leaf.Key) with
