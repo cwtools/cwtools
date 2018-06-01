@@ -411,3 +411,19 @@ module rec Rules =
                             e.Children |> List.map inner)
                               
         types |> List.map (fun t -> (t.name, getTypeInfo t)) |> Map.ofList
+
+
+    let getEnumsFromComplexEnums (complexenums : (ComplexEnumDef) list) (es : Entity list) =
+        let rec inner (enumtree : Node) (node : Node) =
+            match enumtree.Children with
+            |head::_ ->
+                node.Children |> List.collect (inner head)
+            |[] ->
+                if enumtree.LeafValues |> Seq.exists (fun lv -> lv.Value.ToRawString() == "enum_name")
+                then node.LeafValues |> Seq.map (fun lv -> lv.Value.ToRawString()) |> List.ofSeq
+                else []
+        let getEnumInfo (complexenum : ComplexEnumDef) =
+            let values = es |> List.choose (fun e -> if e.logicalpath.Replace("/","\\").StartsWith(complexenum.path.Replace("/","\\")) then Some e.entity else None)
+                            |> List.collect (fun e -> e.Children |> List.collect (inner complexenum.nameTree))
+            complexenum.name, values
+        complexenums |> List.map getEnumInfo

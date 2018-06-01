@@ -64,6 +64,11 @@ module rec ConfigParser =
         subtypes : SubTypeDefinition list
     }
     type EnumDefinition = string * string list
+    type ComplexEnumDef = {
+        name : string
+        path : string
+        nameTree : Node
+    }
 
     let defaultOptions = { min = 0; max = 100; leafvalue = false; description = None }
     let requiredSingle = { defaultOptions with min = 1; max = 1 }
@@ -321,16 +326,40 @@ module rec ConfigParser =
                 |_ -> None
             Some (getNodeComments n |> List.choose inner)
         |_ -> None
+
+    let processComplexEnum (node : Node) (comments : string list) =
+        match node.Key with
+        |x when x.StartsWith("complex_enum") ->
+            let enumname = getSettingFromString node.Key "complex_enum"
+            let path = (node.TagText "path").Replace("game/","").Replace("game\\","")
+            let nametree = node.Child "name"
+            match enumname, nametree with
+            |Some en, Some nt -> Some {name = en; path = path; nameTree = nt}
+            |_ -> None
+        |_ -> None
+
+    let processComplexChildEnum ((child, comments) : Child * string list) =
+        match child with
+        |NodeC n when n.Key == "enums" -> 
+            let inner ((child2, comments2) : Child * string list) =
+                match child2 with
+                |NodeC n2 -> (processComplexEnum n2 comments2)
+                |_ -> None
+            Some (getNodeComments n |> List.choose inner)
+        |_ -> None
+
     let processConfig (node : Node) =
         let rules = getNodeComments node |> List.choose processChildConfigRoot
         let types = getNodeComments node |> List.choose processChildType |> List.collect id
         let enums = getNodeComments node |> List.choose processChildEnum |> List.collect id
-        rules, types, enums
+        let complexenums = getNodeComments node |> List.choose processComplexChildEnum |> List.collect id
+        eprintfn "ces %A" complexenums
+        rules, types, enums, complexenums
 
     let parseConfig filename fileString =
         let parsed = parseConfigString filename fileString
         match parsed with
-        |Failure(e, _, _) -> eprintfn "config file %s failed with %s" filename e; ([], [], [])
+        |Failure(e, _, _) -> eprintfn "config file %s failed with %s" filename e; ([], [], [], [])
         |Success(s,_,_) -> 
             let root = shipProcess.ProcessNode<Node> EntityType.Other "root" (mkZeroFile filename) s
             processConfig root

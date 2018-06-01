@@ -332,12 +332,14 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
             lookup.technologies <- getTechnologies (EntitySet (resources.AllEntities()))
 
         let updateTypeDef() =
-            let rules, types, enums = configs |> List.fold (fun (rs, ts, es) (fn, ft) -> let r2, t2, e2 = parseConfig fn ft in rs@r2, ts@t2, es@e2) ([], [], [])
+            let rules, types, enums, complexenums = configs |> List.fold (fun (rs, ts, es, ces) (fn, ft) -> let r2, t2, e2, ce2 = parseConfig fn ft in rs@r2, ts@t2, es@e2, ces@ce2) ([], [], [], [])
             let rulesWithMod = rules @ (lookup.coreModifiers |> List.map (fun c -> AliasRule ("modifier", Rule(c.tag, {min = 0; max = 100; leafvalue = false; description = None}, ValueField (ValueType.Float (-1000.0, 1000.0))))))
+            let complexEnumDefs = getEnumsFromComplexEnums complexenums (resources.AllEntities() |> List.map (fun struct(e,_) -> e))
+            let allEnums = enums @ complexEnumDefs
             lookup.configRules <- rulesWithMod
             lookup.typeDefs <- types
             lookup.typeDefInfo <- getTypesFromDefinitions types (resources.AllEntities() |> List.map (fun struct(e,_) -> e))
-            lookup.enumDefs <- enums |> Map.ofList
+            lookup.enumDefs <- allEnums |> Map.ofList
 
         // let findDuplicates (sl : Statement list) =
         //     let node = ProcessCore.processNodeBasic "root" Position.Empty sl
