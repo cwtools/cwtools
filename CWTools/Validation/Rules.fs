@@ -421,7 +421,10 @@ module rec Rules =
             |[] ->
                 if enumtree.LeafValues |> Seq.exists (fun lv -> lv.Value.ToRawString() == "enum_name")
                 then node.LeafValues |> Seq.map (fun lv -> lv.Value.ToRawString()) |> List.ofSeq
-                else []
+                else 
+                    match enumtree.Leaves |> Seq.tryFind (fun l -> l.Value.ToRawString() == "enum_name") with
+                    |Some leaf -> node.TagsText (leaf.Key) |> List.ofSeq
+                    |None -> []
         let getEnumInfo (complexenum : ComplexEnumDef) =
             let values = es |> List.choose (fun e -> if e.logicalpath.Replace("/","\\").StartsWith(complexenum.path.Replace("/","\\")) then Some e.entity else None)
                             |> List.collect (fun e -> e.Children |> List.collect (inner complexenum.nameTree))
