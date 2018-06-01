@@ -57,7 +57,10 @@ module rec Rules =
                 let xs = x.Split '.'
                 xs |> Array.forall (fun s -> scopes |> List.exists (fun s2 -> s == s2))
         |_ -> false
-
+        
+    let checkFileExists (files : Set<string>) (leaf : Leaf) =
+        let file = leaf.Value.ToRawString().Replace("/","\\")
+        if files.Contains file then OK else Invalid [inv (ErrorCodes.MissingFile file) leaf]
     let scopes = (scopedEffects |> List.map (fun se -> se.Name)) @ (oneToOneScopes |> List.map fst)
 
     type CompletionResponse =
@@ -68,7 +71,7 @@ module rec Rules =
         {
             subtypes : string list    
         }
-    type RuleApplicator(rootRules : RootRule list, typedefs : TypeDefinition list , types : Map<string, string list>, enums : Map<string, string list>, localisation : (Lang * Set<string>) list) =
+    type RuleApplicator(rootRules : RootRule list, typedefs : TypeDefinition list , types : Map<string, string list>, enums : Map<string, string list>, localisation : (Lang * Set<string>) list, files : Set<string>) =
         let aliases =
             rootRules |> List.choose (function |AliasRule (a, rs) -> Some (a, rs) |_ -> None)
         let typeRules =
@@ -248,6 +251,7 @@ module rec Rules =
             | Field.LeftScopeField _ -> OK
             | Field.ScopeField s -> applyScopeField s leaf
             | Field.LocalisationField -> checkLocKeys localisation leaf
+            | Field.FilepathField -> checkFileExists files leaf
             | Field.AliasField _ -> OK
             | Field.SubtypeField _ -> OK
 
@@ -261,6 +265,7 @@ module rec Rules =
             | Field.LeftClauseField (_, rs) -> applyClauseField enforceCardinality ctx rs node
             | Field.LeftScopeField rs -> applyClauseField enforceCardinality ctx rs node
             | Field.LocalisationField -> OK
+            | Field.FilepathField -> OK
             | Field.ScopeField _ -> OK
             | Field.AliasField _ -> OK
             | Field.SubtypeField _ -> OK

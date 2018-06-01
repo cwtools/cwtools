@@ -44,6 +44,7 @@ module rec ConfigParser =
     | ScopeField of Scope
     | LeftScopeField of Rule list
     | LocalisationField
+    | FilepathField
     | AliasField of string
     | SubtypeField of string * bool * Field
     type RootRule =
@@ -217,6 +218,7 @@ module rec ConfigParser =
             |"scalar" -> ValueField ValueType.Scalar
             |"bool" -> ValueField ValueType.Bool
             |"localisation" -> LocalisationField
+            |"filepath" -> FilepathField
             |x when x.StartsWith "<" && x.EndsWith ">" ->
                 TypeField (x.Trim([|'<'; '>'|]))
             |x when x.StartsWith "int" -> 
