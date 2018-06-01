@@ -171,6 +171,7 @@ module rec ConfigParser =
                 |Some st -> SubtypeField (st, true, ClauseField(children |> List.choose processChildConfig))
                 |None -> ClauseField []
             |"int" -> LeftClauseField (ValueType.Int (Int32.MinValue, Int32.MaxValue), children |> List.choose processChildConfig)  
+            |"float" -> LeftClauseField (ValueType.Float (Double.MinValue, Double.MaxValue), children |> List.choose processChildConfig)
             |"scalar" -> LeftClauseField (ValueType.Scalar, children |> List.choose processChildConfig) 
             |"scope" -> LeftScopeField (children |> List.choose processChildConfig)
             |x when x.StartsWith "enum[" ->

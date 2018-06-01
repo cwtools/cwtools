@@ -33,6 +33,10 @@ module rec Rules =
             match TryParser.parseInt key with
             |Some i -> min <= i && i <= max
             |None -> false
+        |LeftClauseField (ValueType.Float (min, max), _) ->
+            match TryParser.parseDouble key with
+            |Some i -> min <= i && i <= max
+            |None -> false
         |LeftClauseField (ValueType.Enum e, _) ->
             match enums.TryFind e with
             |Some es -> es |> List.contains key
@@ -161,18 +165,22 @@ module rec Rules =
                 | [] ->
                     let leftClauseRule = 
                         expandedrules |> 
-                        List.tryFind (function |(_, _, LeftClauseField (vt, _)) -> checkValidLeftClauseRule enums (LeftClauseField (vt, [])) node.Key  |_ -> false )
+                        List.filter (function |(_, _, LeftClauseField (vt, _)) -> checkValidLeftClauseRule enums (LeftClauseField (vt, [])) node.Key  |_ -> false )
                     let leftTypeRule = 
                         expandedrules |> 
-                        List.tryFind (function |(_, _, LeftTypeField (t, r)) -> checkValidLeftTypeRule types (LeftTypeField (t, r)) node.Key  |_ -> false )
+                        List.filter (function |(_, _, LeftTypeField (t, r)) -> checkValidLeftTypeRule types (LeftTypeField (t, r)) node.Key  |_ -> false )
                     let leftScopeRule = 
                         expandedrules |> 
-                        List.tryFind (function |(_, _, LeftScopeField (rs)) -> checkValidLeftScopeRule scopes (LeftScopeField (rs)) node.Key  |_ -> false )
-                    match leftClauseRule, leftTypeRule, leftScopeRule with
-                    |Some (_, _, f), _, _ -> applyNodeRule enforceCardinality ctx f node
-                    |_, Some (_, _, f), _ -> applyNodeRule enforceCardinality ctx f node
-                    |_, _, Some(_, _, f) -> applyNodeRule enforceCardinality ctx f node
-                    |None, None, None -> if enforceCardinality then Invalid [inv (ErrorCodes.CustomError "Unexpected node" Severity.Error) node] else OK
+                        List.filter (function |(_, _, LeftScopeField (rs)) -> checkValidLeftScopeRule scopes (LeftScopeField (rs)) node.Key  |_ -> false )
+                    let leftRules = leftClauseRule @ leftTypeRule @ leftScopeRule
+                    match leftRules with
+                    |[] -> if enforceCardinality then Invalid [inv (ErrorCodes.CustomError "Unexpected node" Severity.Error) node] else OK
+                    |rs -> rs <&??&> (fun (_, _, f) -> applyNodeRule enforceCardinality ctx f node)
+                    // match leftClauseRule, leftTypeRule, leftScopeRule with
+                    // |Some (_, _, f), _, _ -> applyNodeRule enforceCardinality ctx f node
+                    // |_, Some (_, _, f), _ -> applyNodeRule enforceCardinality ctx f node
+                    // |_, _, Some(_, _, f) -> applyNodeRule enforceCardinality ctx f node
+                    // |None, None, None -> if enforceCardinality then Invalid [inv (ErrorCodes.CustomError "Unexpected node" Severity.Error) node] else OK
                 | rs -> rs <&??&> (fun (_, _, f) -> applyNodeRule enforceCardinality ctx f node)
             let checkCardinality (node : Node) (rule : Rule) =
                 let key, opts, field = rule
@@ -417,8 +425,11 @@ module rec Rules =
         let rec inner (enumtree : Node) (node : Node) =
             match enumtree.Children with
             |head::_ ->
+                if enumtree.Children |> List.exists (fun n -> n.Key == "enum_name") 
+                then enumtree.Children |> List.map (fun n -> n.Key) else
                 node.Children |> List.collect (inner head)
             |[] ->
+                
                 if enumtree.LeafValues |> Seq.exists (fun lv -> lv.Value.ToRawString() == "enum_name")
                 then node.LeafValues |> Seq.map (fun lv -> lv.Value.ToRawString()) |> List.ofSeq
                 else 
