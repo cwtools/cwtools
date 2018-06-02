@@ -500,6 +500,18 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
             updateLocalisation()
             updateTypeDef()
 
+            let doctriggers = vanillaTriggers |> List.choose (function | :? DocEffect as de -> Some de |_ -> None)
+            let ruletriggers = lookup.configRules |> List.choose (function |AliasRule (a,(r,_,_)) -> (if a == "trigger" then Some (r.ToLower()) else None) |_ -> None) |> Set.ofList
+            let triggers = doctriggers |> List.map (fun v -> v.Name.ToLower()) |> Set.ofList
+            let missing = Set.difference triggers ruletriggers |> Set.toList
+            missing |> List.iter (fun m -> doctriggers |> List.iter (fun t -> if t.Name == m then (eprintfn "\n#%s\n###%s\nalias[trigger:%s] = scalar" t.Usage t.Desc t.Name) else ()))
+
+            let doceffects = vanillaEffects |> List.choose (function | :? DocEffect as de -> Some de |_ -> None)
+            let ruleeffects = lookup.configRules |> List.choose (function |AliasRule (a,(r,_,_)) -> (if a == "effect" then Some (r.ToLower()) else None) |_ -> None) |> Set.ofList
+            let effects = doceffects |> List.map (fun v -> v.Name.ToLower()) |> Set.ofList
+            let missing = Set.difference effects ruleeffects |> Set.toList
+            missing |> List.iter (fun m -> doceffects |> List.iter (fun t -> if t.Name == m then (eprintfn "\n#%s\n###%s\nalias[effect:%s] = scalar" t.Usage t.Desc t.Name) else ()))
+
         //member __.Results = parseResults
         member __.ParserErrors = parseErrors()
         member __.ValidationErrors = (validateAll (resources.ValidatableEntities()))

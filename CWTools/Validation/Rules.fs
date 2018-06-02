@@ -426,7 +426,7 @@ module rec Rules =
             match enumtree.Children with
             |head::_ ->
                 if enumtree.Children |> List.exists (fun n -> n.Key == "enum_name") 
-                then enumtree.Children |> List.map (fun n -> n.Key) else
+                then node.Children |> List.map (fun n -> n.Key) else
                 node.Children |> List.collect (inner head)
             |[] ->
                 
