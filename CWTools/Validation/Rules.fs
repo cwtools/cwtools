@@ -102,32 +102,32 @@ module rec Rules =
             if key.StartsWith "@" then OK else
                 match vt with
                 |ValueType.Bool ->
-                    if key = "yes" || key = "no" then OK else Invalid[inv (ErrorCodes.CustomError "Expecting yes or no" Severity.Error) leaf]
+                    if key = "yes" || key = "no" then OK else Invalid[inv (ErrorCodes.ConfigRulesUnexpectedValue "Expecting yes or no") leaf]
                 |ValueType.Enum e ->
                     match enums.TryFind e with
-                    |Some es -> if es |> List.contains key then OK else Invalid[inv (ErrorCodes.CustomError (sprintf "Expecting one of %A" es) Severity.Error) leaf]
+                    |Some es -> if es |> List.contains key then OK else Invalid[inv (ErrorCodes.ConfigRulesUnexpectedValue (sprintf "Expecting one of %A" es)) leaf]
                     |None -> OK
                 |ValueType.Float (min, max) ->
                     match leaf.Value with
-                    |Float f -> if f <= max && f >= min then OK else Invalid[inv (ErrorCodes.CustomError (sprintf "Expecting a value between %f and %f" min max) Severity.Error) leaf]
-                    |Int f -> if float f <= max && float f >= min then OK else Invalid[inv (ErrorCodes.CustomError (sprintf "Expecting a value between %f and %f" min max) Severity.Error) leaf]
+                    |Float f -> if f <= max && f >= min then OK else Invalid[inv (ErrorCodes.ConfigRulesUnexpectedValue (sprintf "Expecting a value between %f and %f" min max)) leaf]
+                    |Int f -> if float f <= max && float f >= min then OK else Invalid[inv (ErrorCodes.ConfigRulesUnexpectedValue (sprintf "Expecting a value between %f and %f" min max)) leaf]
                     |_ ->
                         match TryParser.parseDouble key with
-                        |Some f -> if f < max && f > min then OK else Invalid[inv (ErrorCodes.CustomError (sprintf "Expecting a value between %f and %f" min max) Severity.Error) leaf]
-                        |None -> Invalid[inv (ErrorCodes.CustomError "Expecting a number" Severity.Error) leaf]
+                        |Some f -> if f < max && f > min then OK else Invalid[inv (ErrorCodes.ConfigRulesUnexpectedValue (sprintf "Expecting a value between %f and %f" min max)) leaf]
+                        |None -> Invalid[inv (ErrorCodes.ConfigRulesUnexpectedValue "Expecting a number") leaf]
                 |ValueType.Int (min, max) ->
                     match leaf.Value with
-                    |Int i -> if i <= max && i >= min then OK else Invalid[inv (ErrorCodes.CustomError (sprintf "Expecting a value between %i and %i" min max) Severity.Error) leaf]
+                    |Int i -> if i <= max && i >= min then OK else Invalid[inv (ErrorCodes.ConfigRulesUnexpectedValue (sprintf "Expecting a value between %i and %i" min max)) leaf]
                     |_ -> 
                         match TryParser.parseInt key with
-                        |Some i ->  if i <= max && i >= min then OK else Invalid[inv (ErrorCodes.CustomError (sprintf "Expecting a value between %i and %i" min max) Severity.Error) leaf]
-                        |None -> Invalid[inv (ErrorCodes.CustomError "Expecting a number" Severity.Error) leaf]
-                |ValueType.Specific s -> if key.Trim([|'\"'|]) == s then OK else Invalid [inv (ErrorCodes.CustomError (sprintf "Expecting value %s" s) Severity.Error) leaf]
+                        |Some i ->  if i <= max && i >= min then OK else Invalid[inv (ErrorCodes.ConfigRulesUnexpectedValue (sprintf "Expecting a value between %i and %i" min max)) leaf]
+                        |None -> Invalid[inv (ErrorCodes.ConfigRulesUnexpectedValue "Expecting a number") leaf]
+                |ValueType.Specific s -> if key.Trim([|'\"'|]) == s then OK else Invalid [inv (ErrorCodes.ConfigRulesUnexpectedValue (sprintf "Expecting value %s" s)) leaf]
                 |ValueType.Scalar -> OK
-                |_ -> Invalid [inv (ErrorCodes.CustomError "Invalid value" Severity.Error) leaf]  
+                |_ -> Invalid [inv (ErrorCodes.ConfigRulesUnexpectedValue "Invalid value") leaf]  
 
  
-        let rec applyClauseField (enforceCardinality : bool) (ctx : RuleContext) (rules : Rule list) (node : Node) =
+        let rec applyClauseField (enforceCardinality : bool) (ctx : RuleContext) (rules : Rule list) (root : Node) =
             let subtypedrules = 
                 rules |> List.collect (fun (s,o,r) -> r |> (function |SubtypeField (key, shouldMatch, ClauseField cfs) -> (if (not shouldMatch) <> List.contains key ctx.subtypes then cfs else []) | x -> [(s, o, x)]))
             // let subtypedrules = 
@@ -148,7 +148,7 @@ module rec Rules =
                     match leftTypeRule with
                     |Some (_, _, f) -> applyLeafRule f leaf
                     |_ ->
-                        if enforceCardinality then Invalid [inv (ErrorCodes.CustomError "Unexpected value" Severity.Error) leaf] else OK
+                        if enforceCardinality then Invalid [inv (ErrorCodes.ConfigRulesUnexpectedProperty (sprintf "Unexpected node %s in %s" leaf.Key root.Key)) leaf] else OK
                 |rs -> rs <&??&> (fun (_, _, f) -> applyLeafRule f leaf)
                 // match expandedrules |> List.tryFind (fst3 >> (==) leaf.Key) with
                 // | Some (_, _, f) -> applyLeafRule f leaf
@@ -174,7 +174,7 @@ module rec Rules =
                         List.filter (function |(_, _, LeftScopeField (rs)) -> checkValidLeftScopeRule scopes (LeftScopeField (rs)) node.Key  |_ -> false )
                     let leftRules = leftClauseRule @ leftTypeRule @ leftScopeRule
                     match leftRules with
-                    |[] -> if enforceCardinality then Invalid [inv (ErrorCodes.CustomError "Unexpected node" Severity.Error) node] else OK
+                    |[] -> if enforceCardinality then Invalid [inv (ErrorCodes.ConfigRulesUnexpectedProperty (sprintf "Unexpected node %s in %s" node.Key root.Key)) node] else OK
                     |rs -> rs <&??&> (fun (_, _, f) -> applyNodeRule enforceCardinality ctx f node)
                     // match leftClauseRule, leftTypeRule, leftScopeRule with
                     // |Some (_, _, f), _, _ -> applyNodeRule enforceCardinality ctx f node
@@ -194,14 +194,14 @@ module rec Rules =
                     let leafcount = node.Tags key |> Seq.length
                     let childcount = node.Childs key |> Seq.length
                     let total = leafcount + childcount
-                    if opts.min > total then Invalid [inv (ErrorCodes.CustomError (sprintf "Missing %s, requires %i" key opts.min) Severity.Error) node]
-                    else if opts.max < total then Invalid [inv (ErrorCodes.CustomError (sprintf "Too many %s, max %i" key opts.max) Severity.Error) node]
+                    if opts.min > total then Invalid [inv (ErrorCodes.ConfigRulesWrongNumber (sprintf "Missing %s, requires %i" key opts.min)) node]
+                    else if opts.max < total then Invalid [inv (ErrorCodes.ConfigRulesWrongNumber (sprintf "Too many %s, max %i" key opts.max)) node]
                     else OK
-            node.Leaves <&!&> valueFun
+            root.Leaves <&!&> valueFun
             <&&>
-            (node.Children <&!&> nodeFun)
+            (root.Children <&!&> nodeFun)
             <&&>
-            (rules <&!&> checkCardinality node)
+            (rules <&!&> checkCardinality root)
 
         and applyValueField (vt : ValueType) (leaf : Leaf) =
             checkValidValue leaf vt
@@ -222,14 +222,14 @@ module rec Rules =
             match types.TryFind t with
             |Some values ->
                 let value = leaf.Value.ToString().Trim([|'\"'|])
-                if values |> List.exists (fun s -> s == value) then OK else Invalid [inv (ErrorCodes.CustomError (sprintf "Expected value of type %s" t) Severity.Error) leaf]
+                if values |> List.exists (fun s -> s == value) then OK else Invalid [inv (ErrorCodes.ConfigRulesUnexpectedValue (sprintf "Expected value of type %s" t)) leaf]
             |None -> OK     
 
         and applyLeftTypeFieldLeaf (t : string) (leaf : Leaf) =
             match types.TryFind t with
             |Some values ->
                 let value = leaf.Key
-                if values |> List.exists (fun s -> s == value) then OK else Invalid [inv (ErrorCodes.CustomError (sprintf "Expected key of type %s" t) Severity.Error) leaf]
+                if values |> List.exists (fun s -> s == value) then OK else Invalid [inv (ErrorCodes.ConfigRulesUnexpectedValue (sprintf "Expected key of type %s" t)) leaf]
             |None -> OK
 
         and applyScopeField (s : Scope) (leaf : Leaf) =
@@ -238,14 +238,14 @@ module rec Rules =
             |x when x.StartsWith "event_target:" -> OK
             |x ->
                 let xs = x.Split '.'
-                if xs |> Array.forall (fun s -> scopes |> List.exists (fun s2 -> s == s2)) then OK else Invalid[inv (ErrorCodes.CustomError (sprintf "Expected value of scope %s" (s.ToString())) Severity.Error) leaf]
+                if xs |> Array.forall (fun s -> scopes |> List.exists (fun s2 -> s == s2)) then OK else Invalid[inv (ErrorCodes.ConfigRulesUnexpectedValue (sprintf "Expected value of scope %s" (s.ToString()))) leaf]
 
 
         and applyLeftTypeFieldNode (t : string) (node : Node) =
             match types.TryFind t with
             |Some values ->
                 let value = node.Key
-                if values |> List.exists (fun s -> s == value) then OK else Invalid [inv (ErrorCodes.CustomError (sprintf "Expected key of type %s" t) Severity.Error) node]
+                if values |> List.exists (fun s -> s == value) then OK else Invalid [inv (ErrorCodes.ConfigRulesUnexpectedValue (sprintf "Expected key of type %s" t)) node]
             |None -> OK
 
         and applyLeafRule (rule : Field) (leaf : Leaf) =
@@ -431,7 +431,7 @@ module rec Rules =
             |[] ->
                 
                 if enumtree.LeafValues |> Seq.exists (fun lv -> lv.Value.ToRawString() == "enum_name")
-                then node.LeafValues |> Seq.map (fun lv -> lv.Value.ToRawString()) |> List.ofSeq
+                then node.LeafValues |> Seq.map (fun lv -> lv.Value.ToRawString().Trim([|'\"'|])) |> List.ofSeq
                 else 
                     match enumtree.Leaves |> Seq.tryFind (fun l -> l.Value.ToRawString() == "enum_name") with
                     |Some leaf -> node.TagsText (leaf.Key) |> List.ofSeq

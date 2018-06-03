@@ -82,6 +82,9 @@ module ValidationCore =
         static member DeprecatedElse = { ID = "CW236"; Severity = Severity.Warning; Message = "Nested if/else in effects was deprecated with 2.1 and will be removed in a future release" }
         static member AmbiguousIfElse = { ID = "CW237"; Severity = Severity.Information; Message = "2.1 changed nested if = { if else } behaviour in effects. Check this still works as expected" }
         static member IfElseOrder = { ID = "CW238"; Severity = Severity.Error; Message = "An else/else_if is missing a preceding if" }
+        static member ConfigRulesUnexpectedValue = fun message -> { ID = "CW240"; Severity = Severity.Error; Message = message }
+        static member ConfigRulesUnexpectedProperty = fun message -> { ID = "CW241"; Severity = Severity.Error; Message = message }
+        static member ConfigRulesWrongNumber = fun message -> { ID = "CW242"; Severity = Severity.Error; Message = message }
         static member CustomError = fun error severity -> { ID = "CW999"; Severity = severity; Message = error}
     type ValidationResult = 
         | OK

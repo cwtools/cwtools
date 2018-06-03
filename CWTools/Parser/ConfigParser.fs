@@ -312,7 +312,7 @@ module rec ConfigParser =
         match node.Key with
         |x when x.StartsWith("enum") ->
             let enumname = getSettingFromString node.Key "enum"
-            let values = node.LeafValues |> List.ofSeq |> List.map (fun lv -> lv.Value.ToString())
+            let values = node.LeafValues |> List.ofSeq |> List.map (fun lv -> lv.Value.ToString().Trim([|'\"'|]))
             match enumname with
             |Some en -> Some (en, values)
             |None -> None
