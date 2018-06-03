@@ -354,7 +354,6 @@ module rec ConfigParser =
         let types = getNodeComments node |> List.choose processChildType |> List.collect id
         let enums = getNodeComments node |> List.choose processChildEnum |> List.collect id
         let complexenums = getNodeComments node |> List.choose processComplexChildEnum |> List.collect id
-        eprintfn "ces %A" complexenums
         rules, types, enums, complexenums
 
     let parseConfig filename fileString =

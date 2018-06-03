@@ -81,7 +81,7 @@ module rec Rules =
         let typeRules =
             rootRules |> List.choose (function |TypeRule (rs) -> Some (rs) |_ -> None)
         let isValidValue (value : Value) =
-            let key = value.ToString()
+            let key = value.ToString().Trim([|'"'|])
             function
             |ValueType.Bool -> 
                 key = "yes" || key = "no"
@@ -98,7 +98,7 @@ module rec Rules =
             |_ -> true
 
         let checkValidValue (leaf : Leaf) (vt : ValueType) =
-            let key = leaf.Value.ToString()
+            let key = leaf.Value.ToString().Trim([|'"'|])
             if key.StartsWith "@" then OK else
                 match vt with
                 |ValueType.Bool ->
