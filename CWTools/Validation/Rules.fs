@@ -57,6 +57,7 @@ module rec Rules =
         |LeftScopeField _ -> 
             match key with
             |x when x.StartsWith "event_target:" -> true
+            |x when x.StartsWith "parameter:" -> true
             |x ->
                 let xs = x.Split '.'
                 xs |> Array.forall (fun s -> scopes |> List.exists (fun s2 -> s == s2))
@@ -236,6 +237,7 @@ module rec Rules =
             let key = leaf.Value.ToString()
             match key with
             |x when x.StartsWith "event_target:" -> OK
+            |x when x.StartsWith "parameter:" -> OK
             |x ->
                 let xs = x.Split '.'
                 if xs |> Array.forall (fun s -> scopes |> List.exists (fun s2 -> s == s2)) then OK else Invalid[inv (ErrorCodes.ConfigRulesUnexpectedValue (sprintf "Expected value of scope %s" (s.ToString()))) leaf]
