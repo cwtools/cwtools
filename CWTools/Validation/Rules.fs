@@ -321,6 +321,27 @@ module rec Rules =
             rootRules |> List.choose (function |AliasRule (a, rs) -> Some (a, rs) |_ -> None)
         let typeRules =
             rootRules |> List.choose (function |TypeRule (rs) -> Some (rs) |_ -> None)
+
+        let fieldToCompletionList (field : Field) =
+            match field with
+            |Field.ValueField (Enum e) -> enums.TryFind(e) |> Option.bind (List.tryHead) |> Option.defaultValue "x"
+            |Field.ValueField v -> getValidValues v |> Option.bind (List.tryHead) |> Option.defaultValue "x"
+            |Field.TypeField t -> types.TryFind(t) |> Option.bind (List.tryHead) |> Option.defaultValue "x"
+            |Field.ClauseField _ -> "{ }"
+            |Field.ScopeField _ -> "THIS"
+            |_ -> "x"
+
+
+        let createSnippetForClause (rules : Rule list) (description : string option) (key : string) =
+            let filterToCompletion =
+                function
+                |Field.AliasField _ |Field.LeftClauseField _ |Field.LeftClauseField _ |Field.LeftTypeField _ |Field.SubtypeField _ -> false
+                |_ -> true
+            let requiredRules = rules |> List.filter (fun (_,o,f) -> o.min >= 1 && filterToCompletion f)
+                                      |> List.mapi (fun i (k, o, f) -> sprintf "\t%s = ${%i:%s}\n" k (i + 1) (fieldToCompletionList f))
+                                      |> String.concat ""
+            Snippet (key, (sprintf "%s = {\n%s$0}" key requiredRules), description)
+
          
         let rec getRulePath (pos : pos) (stack : (string * bool) list) (node : Node) =
            match node.Children |> List.tryFind (fun c -> Range.rangeContainsPos c.Position pos) with
@@ -333,18 +354,17 @@ module rec Rules =
         and getCompletionFromPath (rules : Rule list) (stack : (string * bool) list) =
             let rec convRuleToCompletion (rule : Rule) =
                 let s, o, f = rule
-                let clause (inner : string) = Snippet (inner, (sprintf "%s = {\n\t$0\n}" inner), o.description)
                 let keyvalue (inner : string) = Snippet (inner, (sprintf "%s = $0" inner), o.description)
                 match o.leafvalue with
                 |false ->
                     match f with
-                    |Field.ClauseField _ -> [clause s]
+                    |Field.ClauseField rs -> [createSnippetForClause rs o.description s]
                     |Field.ObjectField _ -> [keyvalue s]
                     |Field.ValueField _ -> [keyvalue s]
                     |Field.TypeField _ -> [keyvalue s]
                     |Field.AliasField a -> aliases |> List.choose (fun (al, rs) -> if a == al then Some rs else None) |> List.collect convRuleToCompletion
-                    |Field.LeftClauseField ((ValueType.Enum e), _) -> enums.TryFind(e) |> Option.defaultValue [] |> List.map clause
-                    |Field.LeftTypeField (t, ClauseField _) -> types.TryFind(t) |> Option.defaultValue [] |> List.map clause
+                    |Field.LeftClauseField ((ValueType.Enum e), rs) -> enums.TryFind(e) |> Option.defaultValue [] |> List.map (fun s -> createSnippetForClause rs o.description s)
+                    |Field.LeftTypeField (t, ClauseField rs) -> types.TryFind(t) |> Option.defaultValue [] |> List.map (fun s -> createSnippetForClause rs o.description s)
                     |Field.LeftTypeField (t, _) -> types.TryFind(t) |> Option.defaultValue [] |> List.map keyvalue
                     |_ -> [Simple s]
                 |true ->

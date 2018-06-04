@@ -145,8 +145,8 @@ module rec ConfigParser =
                 try
                     ((int nums.[0]), (int nums.[1]))
                 with
-                |_ -> 1, 100
-            |None -> 1, 100
+                |_ -> 1, 1
+            |None -> 1, 1
         let description = 
             match comments |> List.tryFind (fun s -> s.StartsWith "##") with
             |Some d -> Some (d.Trim('#'))
