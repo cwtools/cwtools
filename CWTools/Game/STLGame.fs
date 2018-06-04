@@ -338,8 +338,11 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
             let allEnums = enums @ complexEnumDefs
             lookup.configRules <- rulesWithMod
             lookup.typeDefs <- types
-            lookup.typeDefInfo <- getTypesFromDefinitions types (resources.AllEntities() |> List.map (fun struct(e,_) -> e))
             lookup.enumDefs <- allEnums |> Map.ofList
+            let loc = allLocalisation() |> List.groupBy (fun l -> l.GetLang) |> List.map (fun (k, g) -> k, g |>List.collect (fun ls -> ls.GetKeys) |> Set.ofList )
+            let files = resources.GetResources() |> List.choose (function |FileResource (_, f) -> Some f.logicalpath |EntityResource (_, f) -> Some f.logicalpath) |> Set.ofList
+            let ruleApplicator = RuleApplicator(lookup.configRules, lookup.typeDefs, lookup.typeDefInfo, lookup.enumDefs, loc, files)
+            lookup.typeDefInfo <- getTypesFromDefinitions ruleApplicator types (resources.AllEntities() |> List.map (fun struct(e,_) -> e))
 
         // let findDuplicates (sl : Statement list) =
         //     let node = ProcessCore.processNodeBasic "root" Position.Empty sl

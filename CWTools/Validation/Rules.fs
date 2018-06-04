@@ -311,6 +311,8 @@ module rec Rules =
             (root.Children <&!&> inner)
 
         member __.ApplyNodeRule(rule, node) = applyNodeRule true {subtypes = []} rule node
+        member __.TestSubtype((subtypes : SubTypeDefinition list), (node : Node)) = 
+            testSubtype subtypes node
         //member __.ValidateFile(node : Node) = validate node
         member __.RuleValidate : StructureValidator = 
             fun _ es -> es.Raw |> List.map (fun struct(e, _) -> e.logicalpath, e.entity) <&!&> validate
@@ -430,17 +432,19 @@ module rec Rules =
 
         member __.Complete(pos : pos, node : Node) = complete pos node
 
-    let getTypesFromDefinitions (types : TypeDefinition list) (es : Entity list) =
+    let getTypesFromDefinitions (ruleapplicator : RuleApplicator) (types : TypeDefinition list) (es : Entity list) =
         let getTypeInfo (def : TypeDefinition) =
             es |> List.choose (fun e -> if  e.logicalpath.Replace("/","\\").StartsWith(def.path.Replace("/","\\")) then Some e.entity else None)
                |> List.collect (fun e ->
                             let inner (n : Node) =
-                                match def.nameField with
-                                |Some f -> n.TagText f
-                                |None -> n.Key
-                            e.Children |> List.map inner)
-                              
-        types |> List.map (fun t -> (t.name, getTypeInfo t)) |> Map.ofList
+                                let subtypes = ruleapplicator.TestSubtype(def.subtypes, n) |> List.map (fun s -> def.name + "." + s)
+                                let key =
+                                    match def.nameField with
+                                    |Some f -> n.TagText f
+                                    |None -> n.Key
+                                def.name::subtypes |> List.map (fun n -> n, key)
+                            e.Children |> List.collect inner)
+        types |> List.collect getTypeInfo |> List.fold (fun m (n, k) -> if Map.containsKey n m then Map.add n (k::m.[n]) m else Map.add n [k] m) Map.empty
 
 
     let getEnumsFromComplexEnums (complexenums : (ComplexEnumDef) list) (es : Entity list) =
