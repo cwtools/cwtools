@@ -133,6 +133,18 @@ module ValidationCore =
         |Invalid e, OK -> OK
         |OK, Invalid e -> OK
 
+    let mergeValidationErrors (errorcode : string) =
+        let rec mergeErrorsInner es =
+            match es with
+            | [] -> []
+            | [res] -> [res]
+            | head::head2::tail ->
+                let (e1c, _, e1r, e1l, e1m, e1d), (_, _, _, _, e2m, _) = head, head2
+                mergeErrorsInner ((e1c, Severity.Error, e1r, e1l, sprintf "%s\nor\n%s" e1m e2m, e1d)::tail)
+        function
+        |OK -> OK
+        |Invalid es -> Invalid (mergeErrorsInner es)
+
     // Parallelising something this small makes it slower!
     //let (<&!&>) es f = es |> PSeq.map f |> PSeq.fold (<&&>) OK 
     let (<&!&>) es f = es |> Seq.map f |> Seq.fold (<&&>) OK

@@ -127,7 +127,14 @@ module rec Rules =
                 |ValueType.Scalar -> OK
                 |_ -> Invalid [inv (ErrorCodes.ConfigRulesUnexpectedValue "Invalid value") leaf]  
 
- 
+        let checkLocalisationField (keys : (Lang * Set<string>) list) (synced : bool) (leaf : Leaf) =
+            match synced with
+            |true ->
+                let defaultKeys = keys |> List.choose (fun (l, ks) -> if l = STL STLLang.Default then Some ks else None) |> List.tryHead |> Option.defaultValue Set.empty
+                let key = leaf.Value |> (function |QString s -> s |s -> s.ToString())
+                checkLocName leaf defaultKeys (STL STLLang.Default) key
+            |false ->
+                checkLocKeys keys leaf
         let rec applyClauseField (enforceCardinality : bool) (ctx : RuleContext) (rules : Rule list) (root : Node) =
             let subtypedrules = 
                 rules |> List.collect (fun (s,o,r) -> r |> (function |SubtypeField (key, shouldMatch, ClauseField cfs) -> (if (not shouldMatch) <> List.contains key ctx.subtypes then cfs else []) | x -> [(s, o, x)]))
@@ -150,7 +157,7 @@ module rec Rules =
                     |Some (_, _, f) -> applyLeafRule f leaf
                     |_ ->
                         if enforceCardinality then Invalid [inv (ErrorCodes.ConfigRulesUnexpectedProperty (sprintf "Unexpected node %s in %s" leaf.Key root.Key)) leaf] else OK
-                |rs -> rs <&??&> (fun (_, _, f) -> applyLeafRule f leaf)
+                |rs -> rs <&??&> (fun (_, _, f) -> applyLeafRule f leaf) |> mergeValidationErrors "CW240"
                 // match expandedrules |> List.tryFind (fst3 >> (==) leaf.Key) with
                 // | Some (_, _, f) -> applyLeafRule f leaf
                 // | None -> 
@@ -260,7 +267,7 @@ module rec Rules =
             | Field.LeftClauseField _ -> OK
             | Field.LeftScopeField _ -> OK
             | Field.ScopeField s -> applyScopeField s leaf
-            | Field.LocalisationField -> checkLocKeys localisation leaf
+            | Field.LocalisationField synced -> checkLocalisationField localisation synced leaf
             | Field.FilepathField -> checkFileExists files leaf
             | Field.AliasField _ -> OK
             | Field.SubtypeField _ -> OK
@@ -274,7 +281,7 @@ module rec Rules =
             | Field.ClauseField rs -> applyClauseField enforceCardinality ctx rs node
             | Field.LeftClauseField (_, rs) -> applyClauseField enforceCardinality ctx rs node
             | Field.LeftScopeField rs -> applyClauseField enforceCardinality ctx rs node
-            | Field.LocalisationField -> OK
+            | Field.LocalisationField _ -> OK
             | Field.FilepathField -> OK
             | Field.ScopeField _ -> OK
             | Field.AliasField _ -> OK

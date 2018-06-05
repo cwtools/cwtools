@@ -43,7 +43,7 @@ module rec ConfigParser =
     | LeftClauseField of ValueType * Rule list
     | ScopeField of Scope
     | LeftScopeField of Rule list
-    | LocalisationField
+    | LocalisationField of synced : bool
     | FilepathField
     | AliasField of string
     | SubtypeField of string * bool * Field
@@ -223,7 +223,8 @@ module rec ConfigParser =
             match leaf.Value.ToString() with
             |"scalar" -> ValueField ValueType.Scalar
             |"bool" -> ValueField ValueType.Bool
-            |"localisation" -> LocalisationField
+            |"localisation" -> LocalisationField false
+            |"localisation_synced" -> LocalisationField true
             |"filepath" -> FilepathField
             |x when x.StartsWith "<" && x.EndsWith ">" ->
                 TypeField (x.Trim([|'<'; '>'|]))
