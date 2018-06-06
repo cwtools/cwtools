@@ -300,6 +300,14 @@ module STLScopes =
         "any_system_within_border",  Scope.GalacticObject;
         "every_system_within_border",  Scope.GalacticObject;
         "random_system_within_border",  Scope.GalacticObject;
+
+        "any_system", Scope.GalacticObject;
+        "every_system", Scope.GalacticObject;
+        "random_system", Scope.GalacticObject;
+
+        "any_relation", Scope.Country;
+        "every_relation", Scope.Country;
+        "random_relation", Scope.Country;
                 
         "any_planet_army",  Scope.Army;
         "every_planet_army",  Scope.Army;
@@ -344,7 +352,7 @@ module STLScopes =
 
     type ScopeResult =
         | NewScope of newScope : ScopeContext * ignoreKeys : string list
-        | WrongScope of expected : Scope list
+        | WrongScope of command : string * scope : Scope * expected : Scope list
         | NotFound
 
     let oneToOneScopes = 
@@ -396,7 +404,7 @@ module STLScopes =
                         | _, [], _, _ -> (context, false), NotFound
                         | _, _, true, true -> ({context with Scopes = e.InnerScope context.CurrentScope::context.Scopes}, true), NewScope ({context with Scopes = e.InnerScope context.CurrentScope::context.Scopes}, e.IgnoreChildren)
                         | _, _, true, false -> (context, false), NewScope (context, e.IgnoreChildren)
-                        | _, ss, false, _ -> (context, false), WrongScope ss
+                        | current, ss, false, _ -> (context, false), WrongScope (nextKey, current, ss)
             let inner2 = fun a b -> inner a b |> (fun (c, d) -> c, Some d)
             let res = keys |> Array.fold (fun ((c,b), r) k -> match r with |None -> inner2 (c, b) k |Some (NewScope (x, i)) -> inner2 (x, b) k |Some x -> (c,b), Some x) ((source, false), None)// |> snd |> Option.defaultValue (NotFound)
             let res2 =

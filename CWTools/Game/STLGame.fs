@@ -341,7 +341,7 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
             lookup.enumDefs <- allEnums |> Map.ofList
             let loc = allLocalisation() |> List.groupBy (fun l -> l.GetLang) |> List.map (fun (k, g) -> k, g |>List.collect (fun ls -> ls.GetKeys) |> Set.ofList )
             let files = resources.GetResources() |> List.choose (function |FileResource (_, f) -> Some f.logicalpath |EntityResource (_, f) -> Some f.logicalpath) |> Set.ofList
-            let ruleApplicator = RuleApplicator(lookup.configRules, lookup.typeDefs, lookup.typeDefInfo, lookup.enumDefs, loc, files)
+            let ruleApplicator = RuleApplicator(lookup.configRules, lookup.typeDefs, lookup.typeDefInfo, lookup.enumDefs, loc, files, lookup.scriptedTriggers, lookup.scriptedEffects)
             lookup.typeDefInfo <- getTypesFromDefinitions ruleApplicator types (resources.AllEntities() |> List.map (fun struct(e,_) -> e))
 
         // let findDuplicates (sl : Statement list) =
@@ -382,7 +382,7 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
         let validateAll (entities : struct (Entity * Lazy<STLComputedData>) list)  = 
             let loc = allLocalisation() |> List.groupBy (fun l -> l.GetLang) |> List.map (fun (k, g) -> k, g |>List.collect (fun ls -> ls.GetKeys) |> Set.ofList )
             let files = resources.GetResources() |> List.choose (function |FileResource (_, f) -> Some f.logicalpath |EntityResource (_, f) -> Some f.logicalpath) |> Set.ofList
-            let ruleApplicator = RuleApplicator(lookup.configRules, lookup.typeDefs, lookup.typeDefInfo, lookup.enumDefs, loc, files)
+            let ruleApplicator = RuleApplicator(lookup.configRules, lookup.typeDefs, lookup.typeDefInfo, lookup.enumDefs, loc, files, lookup.scriptedTriggers, lookup.scriptedEffects)
             eprintfn "Validating %i files" (entities.Length)
             let allEntitiesByFile = entities |> List.map (fun struct (f, _) -> f.entity)
             let flattened = allEntitiesByFile |> List.map (fun n -> n.Children) |> List.collect id
@@ -475,6 +475,7 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
             match resourceManager.ManualProcess (convertPathToLogicalPath filepath) filetext with
             |Some e -> 
                 eprintfn "completion %A %A" (convertPathToLogicalPath filepath) filepath
+                eprintfn "scope at cursor %A" (getScopeContextAtPos pos lookup.scriptedTriggers lookup.scriptedEffects e)
                 let completion = CompletionService(lookup.configRules, lookup.typeDefs, lookup.typeDefInfo, lookup.enumDefs)
                 completion.Complete(pos, e)
             |None -> []
@@ -518,7 +519,7 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
         //member __.Results = parseResults
         member __.ParserErrors = parseErrors()
         member __.ValidationErrors = (validateAll (resources.ValidatableEntities()))
-        member __.LocalisationErrors= 
+        member __.LocalisationErrors() = 
             match localisationErrors with
             |Some les -> les
             |None -> 

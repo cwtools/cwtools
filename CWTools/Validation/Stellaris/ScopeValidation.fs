@@ -16,6 +16,7 @@ open Microsoft.FSharp.Collections.Tagged
 open System.Collections
 open CWTools.Game.Stellaris.STLLookup
 open CWTools.Validation.Stellaris.STLValidation
+open Microsoft.FSharp.Compiler.Range
 
 module ScopeValidation =
     let valTriggerLeafUsage (modifiers : Modifier list) (scopes : ScopeContext) (leaf : Leaf) =
@@ -98,7 +99,7 @@ module ScopeValidation =
                     valNodeTriggers root triggers effects modifiers s ignores node
                     <&&>
                     valTriggerNodeUsage modifiers scopes node
-                |WrongScope ss -> Invalid [inv (ErrorCodes.IncorrectScopeScope x (scopes.CurrentScope.ToString()) (ss |> List.map (fun s -> s.ToString()) |> String.concat ", ")) node]
+                |WrongScope (_,_,ss) -> Invalid [inv (ErrorCodes.IncorrectScopeScope x (scopes.CurrentScope.ToString()) (ss |> List.map (fun s -> s.ToString()) |> String.concat ", ")) node]
                 |NotFound ->
                     match triggers.TryFind x with
                     |Some e ->
@@ -128,7 +129,7 @@ module ScopeValidation =
             |x ->
                 match changeScope effects triggers x scopes with
                 |NewScope (s, ignores) -> valNodeEffects node triggers effects modifiers s ignores node
-                |WrongScope ss -> Invalid [inv (ErrorCodes.IncorrectScopeScope x (scopes.CurrentScope.ToString()) (ss |> List.map (fun s -> s.ToString()) |> String.concat ", ")) node]
+                |WrongScope (_,_,ss) -> Invalid [inv (ErrorCodes.IncorrectScopeScope x (scopes.CurrentScope.ToString()) (ss |> List.map (fun s -> s.ToString()) |> String.concat ", ")) node]
                 |NotFound ->
                     match effects.TryFind x with
                     |Some e -> 
@@ -156,20 +157,59 @@ module ScopeValidation =
             |> List.filter (function |NodeC c -> not (List.exists (fun i -> i == c.Key) ignores) |LeafC c -> not (List.exists (fun i -> i == c.Key) ignores) |_ -> false)
         List.map (valEventEffect root triggers effects modifiers scopes) filteredAll |> List.fold (<&&>) OK
 
-    // let getEffectScopeContextAtPos (targetpos : pos) (triggers : EffectMap) (effects : EffectMap) (startingScope : ScopeContext) = 
-    //     let rec getEffectBlock (pos : pos) (node : Node) =
-    //         match node.Children |> List.tryFind (fun c -> Range.rangeContainsPos c.Position pos) with
-    //         | Some (:? EffectBlock as e) -> Some e
-    //         | Some c -> getEffectBlock pos c
-    //         | None -> None
-    //     let rec getPathFromEffectBlockAndPos (pos : pos) (node : Node) =
-    //         match node.Children |> List.tryFind (fun c -> Range.rangeContainsPos c.Position pos) with
-    //         | Some c -> getRulePath pos (c.Key :: stack) c
-    //         | None -> 
-    //             match node.Leaves |> Seq.tryFind (fun l -> Range.rangeContainsPos l.Position pos) with
-    //             | Some l -> l.Key::stack
-    //             | None -> stack
-            
+    //let applyTriggerToScope (triggers : EffectMap) (effects : EffectMap) (scopes : ScopeContext) (key : string) =
+
+    let applyEffectToScope (triggers : EffectMap) (effects : EffectMap) (scopes : ScopeContext) (key : string) =
+        match key with
+        |x when STLProcess.toTriggerBlockKeys |> List.exists (fun t -> t == x) -> true, scopes
+        |x when ["else"] |> List.exists (fun t -> t == x) -> false, scopes
+        |x when x.Contains("parameter:") -> false, scopes
+        |x ->
+            match changeScope effects triggers x scopes with
+                |NewScope (s, _) -> false, s
+                |WrongScope _ -> false, scopes
+                |NotFound -> false, scopes
+
+    let getScopeContextAtPos (targetpos : pos) (triggers : Effect list) (effects : Effect list) (root : Node) = 
+        let triggerMap = triggers |> List.map (fun e -> e.Name, e) |> (fun l -> EffectMap.FromList(STLStringComparer(), l))
+        let effectMap = effects |> List.map (fun e -> e.Name, e) |> (fun l -> EffectMap.FromList(STLStringComparer(), l))
+
+        let rec getBlock (pos : pos) (node : Node) =
+            match node.Children |> List.tryFind (fun c -> rangeContainsPos c.Position pos) with
+            | Some (:? EffectBlock as e) -> Some (false, e :> Node, e.Scope)
+            | Some (:? TriggerBlock as e) -> Some (true, e :> Node, e.Scope)
+            | Some (:? WeightModifierBlock as e) -> Some (true, e :> Node, e.Scope)
+            | Some (:? Option as e) -> Some (true, e.AsEffectBlock :> Node, e.Scope)
+            | Some c -> getBlock pos c
+            | None -> None
+        let rec getPathFromEffectBlockAndPos (pos : pos) (stack : string list) (node : Node) =
+            match node.Children |> List.tryFind (fun c -> rangeContainsPos c.Position pos) with
+            | Some c -> getPathFromEffectBlockAndPos pos (c.Key :: stack) c
+            | None -> 
+                match node.Leaves |> Seq.tryFind (fun l -> rangeContainsPos l.Position pos) with
+                | Some l -> l.Key::stack
+                | None -> stack
+        let rec getScopeFromPath (stack : string list) (scopes : ScopeContext) (isTrigger : bool) =
+            match stack with
+            |[] -> scopes
+            |head::tail ->
+                let trig, newscopes =
+                    match isTrigger with
+                    |true -> applyEffectToScope triggerMap effectMap scopes head
+                    |false -> applyEffectToScope triggerMap effectMap scopes head
+                getScopeFromPath tail newscopes trig
+        match getBlock targetpos root with
+        |Some (isTrigger, startingBlock, scope) ->
+            let path = getPathFromEffectBlockAndPos targetpos [] startingBlock |> List.rev
+            getScopeFromPath path {Root = scope; Scopes = [scope]; From = []} isTrigger
+        |None -> {Root = Scope.Any; From = []; Scopes = [Scope.Any]}
+        // let rec getScopeFromPath (stack : string list) (scopes : ScopeContext) (node : Node) =
+        //     match stack with
+        //     |[] -> scopes
+        //     |head::tail ->
+        //         match node.Child head with
+        //         |Some c -> applyEffectToScope ()
+        //         |None -> scopes
 
     let valOption (root : Node) (triggers : EffectMap) (effects : EffectMap) (modifiers : Modifier list) (scopes : ScopeContext) (node : Node) =
         let optionTriggers = ["trigger"; "allow"]

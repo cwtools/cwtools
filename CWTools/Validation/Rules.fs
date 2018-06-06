@@ -15,6 +15,7 @@ open CWTools.Utilities
 open CWTools.Process.STLScopes
 open CWTools.Common
 open CWTools.Validation.Stellaris.STLLocalisationValidation
+open CWTools.Validation.Stellaris.ScopeValidation
 
 module rec Rules =
     let fst3 (a, _, _) = a
@@ -76,7 +77,10 @@ module rec Rules =
         {
             subtypes : string list    
         }
-    type RuleApplicator(rootRules : RootRule list, typedefs : TypeDefinition list , types : Map<string, string list>, enums : Map<string, string list>, localisation : (Lang * Set<string>) list, files : Set<string>) =
+    type RuleApplicator(rootRules : RootRule list, typedefs : TypeDefinition list , types : Map<string, string list>, enums : Map<string, string list>, localisation : (Lang * Set<string>) list, files : Set<string>, triggers : Effect list, effects : Effect list) =
+        let triggerMap = triggers |> List.map (fun e -> e.Name, e) |> (fun l -> EffectMap.FromList(STLStringComparer(), l))
+        let effectMap = effects |> List.map (fun e -> e.Name, e) |> (fun l -> EffectMap.FromList(STLStringComparer(), l))
+
         let aliases =
             rootRules |> List.choose (function |AliasRule (a, rs) -> Some (a, rs) |_ -> None)
         let typeRules =
@@ -115,14 +119,14 @@ module rec Rules =
                     |_ ->
                         match TryParser.parseDouble key with
                         |Some f -> if f < max && f > min then OK else Invalid[inv (ErrorCodes.ConfigRulesUnexpectedValue (sprintf "Expecting a value between %f and %f" min max)) leaf]
-                        |None -> Invalid[inv (ErrorCodes.ConfigRulesUnexpectedValue "Expecting a number") leaf]
+                        |None -> Invalid[inv (ErrorCodes.ConfigRulesUnexpectedValue (sprintf "Expecting a number, got %s" key)) leaf]
                 |ValueType.Int (min, max) ->
                     match leaf.Value with
                     |Int i -> if i <= max && i >= min then OK else Invalid[inv (ErrorCodes.ConfigRulesUnexpectedValue (sprintf "Expecting a value between %i and %i" min max)) leaf]
                     |_ -> 
                         match TryParser.parseInt key with
                         |Some i ->  if i <= max && i >= min then OK else Invalid[inv (ErrorCodes.ConfigRulesUnexpectedValue (sprintf "Expecting a value between %i and %i" min max)) leaf]
-                        |None -> Invalid[inv (ErrorCodes.ConfigRulesUnexpectedValue "Expecting a number") leaf]
+                        |None -> Invalid[inv (ErrorCodes.ConfigRulesUnexpectedValue (sprintf "Expecting a number, got %s" key)) leaf]
                 |ValueType.Specific s -> if key.Trim([|'\"'|]) == s then OK else Invalid [inv (ErrorCodes.ConfigRulesUnexpectedValue (sprintf "Expecting value %s" s)) leaf]
                 |ValueType.Scalar -> OK
                 |_ -> Invalid [inv (ErrorCodes.ConfigRulesUnexpectedValue "Invalid value") leaf]  
@@ -135,7 +139,7 @@ module rec Rules =
                 checkLocName leaf defaultKeys (STL STLLang.Default) key
             |false ->
                 checkLocKeys keys leaf
-        let rec applyClauseField (enforceCardinality : bool) (ctx : RuleContext) (rules : Rule list) (root : Node) =
+        let rec applyClauseField (root : Node) (enforceCardinality : bool) (ctx : RuleContext) (rules : Rule list) (startNode : Node) =
             let subtypedrules = 
                 rules |> List.collect (fun (s,o,r) -> r |> (function |SubtypeField (key, shouldMatch, ClauseField cfs) -> (if (not shouldMatch) <> List.contains key ctx.subtypes then cfs else []) | x -> [(s, o, x)]))
             // let subtypedrules = 
@@ -154,10 +158,10 @@ module rec Rules =
                         expandedrules |> 
                         List.tryFind (function |(_, _, LeftTypeField (t, r)) -> checkValidLeftTypeRule types (LeftTypeField (t, r)) leaf.Key  |_ -> false )
                     match leftTypeRule with
-                    |Some (_, _, f) -> applyLeafRule f leaf
+                    |Some (_, _, f) -> applyLeafRule root f leaf
                     |_ ->
-                        if enforceCardinality then Invalid [inv (ErrorCodes.ConfigRulesUnexpectedProperty (sprintf "Unexpected node %s in %s" leaf.Key root.Key)) leaf] else OK
-                |rs -> rs <&??&> (fun (_, _, f) -> applyLeafRule f leaf) |> mergeValidationErrors "CW240"
+                        if enforceCardinality then Invalid [inv (ErrorCodes.ConfigRulesUnexpectedProperty (sprintf "Unexpected node %s in %s" leaf.Key startNode.Key)) leaf] else OK
+                |rs -> rs <&??&> (fun (_, _, f) -> applyLeafRule root f leaf) |> mergeValidationErrors "CW240"
                 // match expandedrules |> List.tryFind (fst3 >> (==) leaf.Key) with
                 // | Some (_, _, f) -> applyLeafRule f leaf
                 // | None -> 
@@ -182,14 +186,14 @@ module rec Rules =
                         List.filter (function |(_, _, LeftScopeField (rs)) -> checkValidLeftScopeRule scopes (LeftScopeField (rs)) node.Key  |_ -> false )
                     let leftRules = leftClauseRule @ leftTypeRule @ leftScopeRule
                     match leftRules with
-                    |[] -> if enforceCardinality then Invalid [inv (ErrorCodes.ConfigRulesUnexpectedProperty (sprintf "Unexpected node %s in %s" node.Key root.Key)) node] else OK
-                    |rs -> rs <&??&> (fun (_, _, f) -> applyNodeRule enforceCardinality ctx f node)
+                    |[] -> if enforceCardinality then Invalid [inv (ErrorCodes.ConfigRulesUnexpectedProperty (sprintf "Unexpected node %s in %s" node.Key startNode.Key)) node] else OK
+                    |rs -> rs <&??&> (fun (_, _, f) -> applyNodeRule root enforceCardinality ctx f node)
                     // match leftClauseRule, leftTypeRule, leftScopeRule with
                     // |Some (_, _, f), _, _ -> applyNodeRule enforceCardinality ctx f node
                     // |_, Some (_, _, f), _ -> applyNodeRule enforceCardinality ctx f node
                     // |_, _, Some(_, _, f) -> applyNodeRule enforceCardinality ctx f node
                     // |None, None, None -> if enforceCardinality then Invalid [inv (ErrorCodes.CustomError "Unexpected node" Severity.Error) node] else OK
-                | rs -> rs <&??&> (fun (_, _, f) -> applyNodeRule enforceCardinality ctx f node)
+                | rs -> rs <&??&> (fun (_, _, f) -> applyNodeRule root enforceCardinality ctx f node)
             let checkCardinality (node : Node) (rule : Rule) =
                 let key, opts, field = rule
                 match key, field with
@@ -205,11 +209,11 @@ module rec Rules =
                     if opts.min > total then Invalid [inv (ErrorCodes.ConfigRulesWrongNumber (sprintf "Missing %s, requires %i" key opts.min)) node]
                     else if opts.max < total then Invalid [inv (ErrorCodes.ConfigRulesWrongNumber (sprintf "Too many %s, max %i" key opts.max)) node]
                     else OK
-            root.Leaves <&!&> valueFun
+            startNode.Leaves <&!&> valueFun
             <&&>
-            (root.Children <&!&> nodeFun)
+            (startNode.Children <&!&> nodeFun)
             <&&>
-            (rules <&!&> checkCardinality root)
+            (rules <&!&> checkCardinality startNode)
 
         and applyValueField (vt : ValueType) (leaf : Leaf) =
             checkValidValue leaf vt
@@ -240,14 +244,21 @@ module rec Rules =
                 if values |> List.exists (fun s -> s == value) then OK else Invalid [inv (ErrorCodes.ConfigRulesUnexpectedValue (sprintf "Expected key of type %s" t)) leaf]
             |None -> OK
 
-        and applyScopeField (s : Scope) (leaf : Leaf) =
+        and applyScopeField (root : Node) (s : Scope) (leaf : Leaf) =
+            let scope = getScopeContextAtPos leaf.Position.Start triggers effects root 
             let key = leaf.Value.ToString()
-            match key with
-            |x when x.StartsWith "event_target:" -> OK
-            |x when x.StartsWith "parameter:" -> OK
-            |x ->
-                let xs = x.Split '.'
-                if xs |> Array.forall (fun s -> scopes |> List.exists (fun s2 -> s == s2)) then OK else Invalid[inv (ErrorCodes.ConfigRulesUnexpectedValue (sprintf "Expected value of scope %s" (s.ToString()))) leaf]
+            match changeScope effectMap triggerMap key scope with
+            |NewScope ({Scopes = current::_} ,_) -> if current = s || s = Scope.Any || current = Scope.Any then OK else Invalid [inv (ErrorCodes.ConfigRulesTargetWrongScope (current.ToString()) (s.ToString())) leaf]
+            |NotFound _ -> Invalid [inv (ErrorCodes.ConfigRulesInvalidTarget (s.ToString())) leaf]
+            |WrongScope (command, prevscope, expected) -> Invalid [inv (ErrorCodes.ConfigRulesErrorInTarget command (prevscope.ToString()) (sprintf "%A" expected) ) leaf]
+            |_ -> OK
+            
+            // match key with
+            // |x when x.StartsWith "event_target:" -> OK
+            // |x when x.StartsWith "parameter:" -> OK
+            // |x ->
+            //     let xs = x.Split '.'
+            //     if xs |> Array.forall (fun s -> scopes |> List.exists (fun s2 -> s == s2)) then OK else Invalid[inv (ErrorCodes.ConfigRulesUnexpectedValue (sprintf "Expected value of scope %s" (s.ToString()))) leaf]
 
 
         and applyLeftTypeFieldNode (t : string) (node : Node) =
@@ -257,30 +268,30 @@ module rec Rules =
                 if values |> List.exists (fun s -> s == value) then OK else Invalid [inv (ErrorCodes.ConfigRulesUnexpectedValue (sprintf "Expected key of type %s" t)) node]
             |None -> OK
 
-        and applyLeafRule (rule : Field) (leaf : Leaf) =
+        and applyLeafRule (root : Node) (rule : Field) (leaf : Leaf) =
             match rule with
             | Field.ValueField v -> applyValueField v leaf
             | Field.ObjectField et -> applyObjectField et leaf
             | Field.TypeField t -> applyTypeField t leaf
-            | Field.LeftTypeField (t, f) -> applyLeftTypeFieldLeaf t leaf <&&> applyLeafRule f leaf
+            | Field.LeftTypeField (t, f) -> applyLeftTypeFieldLeaf t leaf <&&> applyLeafRule root f leaf
             | Field.ClauseField rs -> OK
             | Field.LeftClauseField _ -> OK
             | Field.LeftScopeField _ -> OK
-            | Field.ScopeField s -> applyScopeField s leaf
+            | Field.ScopeField s -> applyScopeField root s leaf
             | Field.LocalisationField synced -> checkLocalisationField localisation synced leaf
             | Field.FilepathField -> checkFileExists files leaf
             | Field.AliasField _ -> OK
             | Field.SubtypeField _ -> OK
 
-        and applyNodeRule (enforceCardinality : bool) (ctx : RuleContext) (rule : Field) (node : Node) =
+        and applyNodeRule (root : Node) (enforceCardinality : bool) (ctx : RuleContext) (rule : Field) (node : Node) =
             match rule with
             | Field.ValueField v -> OK
             | Field.ObjectField et -> OK
             | Field.TypeField _ -> OK
-            | Field.LeftTypeField (t, f) -> applyLeftTypeFieldNode t node <&&> applyNodeRule enforceCardinality ctx f node
-            | Field.ClauseField rs -> applyClauseField enforceCardinality ctx rs node
-            | Field.LeftClauseField (_, rs) -> applyClauseField enforceCardinality ctx rs node
-            | Field.LeftScopeField rs -> applyClauseField enforceCardinality ctx rs node
+            | Field.LeftTypeField (t, f) -> applyLeftTypeFieldNode t node <&&> applyNodeRule root enforceCardinality ctx f node
+            | Field.ClauseField rs -> applyClauseField root enforceCardinality ctx rs node
+            | Field.LeftClauseField (_, rs) -> applyClauseField root enforceCardinality ctx rs node
+            | Field.LeftScopeField rs -> applyClauseField root enforceCardinality ctx rs node
             | Field.LocalisationField _ -> OK
             | Field.FilepathField -> OK
             | Field.ScopeField _ -> OK
@@ -290,13 +301,13 @@ module rec Rules =
         let testSubtype (subtypes : SubTypeDefinition list) (node : Node) =
             let results = 
                 subtypes |> List.filter (fun st -> st.typeKeyField |> function |Some tkf -> tkf == node.Key |None -> true)
-                        |> List.map (fun s -> s.name, applyClauseField false {subtypes = []} (s.rules) node)
+                        |> List.map (fun s -> s.name, applyClauseField node false {subtypes = []} (s.rules) node)
             results |> List.choose (fun (s, res) -> res |> function |Invalid _ -> None |OK -> Some s)
 
         let applyNodeRuleRoot (typedef : TypeDefinition) (rule : Field) (node : Node) =
             let subtypes = testSubtype (typedef.subtypes) node
             let context = { subtypes = subtypes }
-            applyNodeRule true context rule node
+            applyNodeRule node true context rule node
          
         let validate ((path, root) : string * Node) =
             let inner (node : Node) =
@@ -317,7 +328,7 @@ module rec Rules =
                     OK
             (root.Children <&!&> inner)
 
-        member __.ApplyNodeRule(rule, node) = applyNodeRule true {subtypes = []} rule node
+        member __.ApplyNodeRule(rule, node) = applyNodeRule node true {subtypes = []} rule node
         member __.TestSubtype((subtypes : SubTypeDefinition list), (node : Node)) = 
             testSubtype subtypes node
         //member __.ValidateFile(node : Node) = validate node

@@ -85,6 +85,9 @@ module ValidationCore =
         static member ConfigRulesUnexpectedValue = fun message -> { ID = "CW240"; Severity = Severity.Error; Message = message }
         static member ConfigRulesUnexpectedProperty = fun message -> { ID = "CW241"; Severity = Severity.Error; Message = message }
         static member ConfigRulesWrongNumber = fun message -> { ID = "CW242"; Severity = Severity.Error; Message = message }
+        static member ConfigRulesTargetWrongScope = fun scope expected -> { ID = "CW243"; Severity = Severity.Error; Message = sprintf "Target has incorrect scope. Is %s but expect %s" scope expected}
+        static member ConfigRulesInvalidTarget = fun expected -> { ID = "CW244"; Severity = Severity.Error; Message = sprintf "This is not a target. Expected a target in scope(s) %s" expected}
+        static member ConfigRulesErrorInTarget = fun command scope expected -> { ID = "CW245"; Severity = Severity.Error; Message = sprintf "Error in target. Command %s was used in scope %s but expected %s" command scope expected}
         static member CustomError = fun error severity -> { ID = "CW999"; Severity = severity; Message = error}
     type ValidationResult = 
         | OK
