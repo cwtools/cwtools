@@ -23,7 +23,7 @@ module ScopeValidation =
         match leaf.Key with
         | "has_modifier" -> valStaticModifier modifiers scopes (leaf.Value.ToRawString()) leaf
         | _ -> OK
-    
+
     let valTriggerNodeUsage (modifiers : Modifier list) (scopes : ScopeContext) (node : Node) =
         match node.Key with
         | "NOT" -> valNotUsage node
@@ -52,12 +52,12 @@ module ScopeValidation =
         match STLProcess.ignoreKeys |> List.tryFind (fun k -> k == key) with
         |Some _ -> OK //Do better
         |None -> if key.StartsWith("@", StringComparison.OrdinalIgnoreCase) then OK else Invalid [inv (ErrorCodes.UndefinedTrigger key) root]
-    
+
     let inline handleUnknownEffect root (key : string) =
         match STLProcess.ignoreKeys |> List.tryFind (fun k -> k == key) with
         |Some _ -> OK //Do better
         |None -> if key.StartsWith("@", StringComparison.OrdinalIgnoreCase) then OK else Invalid [inv (ErrorCodes.UndefinedEffect key) root]
-    
+
     let valTriggerLeaf (triggers : EffectMap) (modifiers : Modifier list) (scopes : ScopeContext) (leaf : Leaf) =
         match triggers.TryFind leaf.Key with
         |Some (:? ScopedEffect as e) -> Invalid [inv (ErrorCodes.IncorrectScopeAsLeaf (e.Name) (leaf.Value.ToRawString())) leaf]
@@ -86,7 +86,7 @@ module ScopeValidation =
             |x when ["else"] |> List.exists (fun t -> t == x) ->
                 valNodeTriggers node triggers effects modifiers scopes [] node
 
-            // |x when STLProcess.isTargetKey x ->  
+            // |x when STLProcess.isTargetKey x ->
             //     valNodeTriggers root triggers effects Scope.Any node
             // |x when x.Contains("event_target:") ->
 
@@ -95,7 +95,7 @@ module ScopeValidation =
                 OK //Handle later
             |x ->
                 match changeScope effects triggers x scopes with
-                |NewScope (s, ignores) -> 
+                |NewScope (s, ignores) ->
                     valNodeTriggers root triggers effects modifiers s ignores node
                     <&&>
                     valTriggerNodeUsage modifiers scopes node
@@ -132,7 +132,7 @@ module ScopeValidation =
                 |WrongScope (_,_,ss) -> Invalid [inv (ErrorCodes.IncorrectScopeScope x (scopes.CurrentScope.ToString()) (ss |> List.map (fun s -> s.ToString()) |> String.concat ", ")) node]
                 |NotFound ->
                     match effects.TryFind x with
-                    |Some e -> 
+                    |Some e ->
                         if e.Scopes |> List.contains(scopes.CurrentScope) || scopes.CurrentScope = Scope.Any
                         then valEffectNodeUsage modifiers scopes node
                         else Invalid [inv (ErrorCodes.IncorrectEffectScope x (scopes.CurrentScope.ToString()) (e.Scopes  |> List.map (fun f -> f.ToString()) |> String.concat ", ")) node]
@@ -140,19 +140,19 @@ module ScopeValidation =
                     // |Some (t, false) -> Invalid [inv S.Error node (sprintf "%s effect used in incorrect scope. In %A but expected %s" x scopes.CurrentScope (t.Scopes  |> List.map (fun f -> f.ToString()) |> String.concat ", "))]
                     |None -> handleUnknownEffect node x
         |_ -> OK
-    
+
     and valNodeTriggers (root : Node) (triggers : EffectMap) (effects : EffectMap) (modifiers : Modifier list) (scopes : ScopeContext) (ignores : string list) (node : Node) =
         // let scopedTriggers = triggers |> List.map (fun (e, _) -> e, scopes.CurrentScope = Scope.Any || e.Scopes |> List.exists (fun s -> s = scopes.CurrentScope))
-        // let scopedEffects = effects |> List.map (fun (e, _) -> e,  scopes.CurrentScope = Scope.Any || e.Scopes |> List.exists (fun s -> s = scopes.CurrentScope)) 
-        let filteredAll = 
+        // let scopedEffects = effects |> List.map (fun (e, _) -> e,  scopes.CurrentScope = Scope.Any || e.Scopes |> List.exists (fun s -> s = scopes.CurrentScope))
+        let filteredAll =
             node.All
             |> List.filter (function |NodeC c -> not (List.exists (fun i -> i == c.Key) ignores) |LeafC c -> not (List.exists (fun i -> i == c.Key) ignores) |_ -> false)
         List.map (valEventTrigger root triggers effects modifiers scopes) filteredAll |> List.fold (<&&>) OK
 
     and valNodeEffects (root : Node) (triggers : EffectMap) (effects : EffectMap) (modifiers : Modifier list) (scopes : ScopeContext) (ignores : string list) (node : Node) =
-        //let scopedTriggers = triggers |> List.map (fun (e, _) -> e, scopes.CurrentScope = Scope.Any || e.Scopes |> List.exists (fun s -> s = scopes.CurrentScope)) 
-        //let scopedEffects = effects |> List.map (fun (e, _) -> e, scopes.CurrentScope = Scope.Any || e.Scopes |> List.exists (fun s -> s = scopes.CurrentScope)) 
-        let filteredAll = 
+        //let scopedTriggers = triggers |> List.map (fun (e, _) -> e, scopes.CurrentScope = Scope.Any || e.Scopes |> List.exists (fun s -> s = scopes.CurrentScope))
+        //let scopedEffects = effects |> List.map (fun (e, _) -> e, scopes.CurrentScope = Scope.Any || e.Scopes |> List.exists (fun s -> s = scopes.CurrentScope))
+        let filteredAll =
             node.All
             |> List.filter (function |NodeC c -> not (List.exists (fun i -> i == c.Key) ignores) |LeafC c -> not (List.exists (fun i -> i == c.Key) ignores) |_ -> false)
         List.map (valEventEffect root triggers effects modifiers scopes) filteredAll |> List.fold (<&&>) OK
@@ -170,7 +170,7 @@ module ScopeValidation =
                 |WrongScope _ -> false, scopes
                 |NotFound -> false, scopes
 
-    let getScopeContextAtPos (targetpos : pos) (triggers : Effect list) (effects : Effect list) (root : Node) = 
+    let getScopeContextAtPos (targetpos : pos) (triggers : Effect list) (effects : Effect list) (root : Node) =
         let triggerMap = triggers |> List.map (fun e -> e.Name, e) |> (fun l -> EffectMap.FromList(STLStringComparer(), l))
         let effectMap = effects |> List.map (fun e -> e.Name, e) |> (fun l -> EffectMap.FromList(STLStringComparer(), l))
 
@@ -185,7 +185,7 @@ module ScopeValidation =
         let rec getPathFromEffectBlockAndPos (pos : pos) (stack : string list) (node : Node) =
             match node.Children |> List.tryFind (fun c -> rangeContainsPos c.Position pos) with
             | Some c -> getPathFromEffectBlockAndPos pos (c.Key :: stack) c
-            | None -> 
+            | None ->
                 match node.Leaves |> Seq.tryFind (fun l -> rangeContainsPos l.Position pos) with
                 | Some l -> l.Key::stack
                 | None -> stack
@@ -201,8 +201,8 @@ module ScopeValidation =
         match getBlock targetpos root with
         |Some (isTrigger, startingBlock, scope) ->
             let path = getPathFromEffectBlockAndPos targetpos [] startingBlock |> List.rev
-            getScopeFromPath path {Root = scope; Scopes = [scope]; From = []} isTrigger
-        |None -> {Root = Scope.Any; From = []; Scopes = [Scope.Any]}
+            Some (getScopeFromPath path {Root = scope; Scopes = [scope]; From = []} isTrigger)
+        |None -> None
         // let rec getScopeFromPath (stack : string list) (scopes : ScopeContext) (node : Node) =
         //     match stack with
         //     |[] -> scopes
@@ -232,19 +232,19 @@ module ScopeValidation =
                     <&!&> (valNodeEffects root triggers effects modifiers scopes [])
         lres <&&> tres <&&> eres <&&> esres
         //children |> List.map (valEventEffect node triggers effects scopes) |> List.fold (<&&>) OK
-        
-    
+
+
     // let valEventTriggers  (triggers : (Effect) list) (effects : (Effect) list) (modifiers : Modifier list) (event : Event) =
     //     let eventScope = { Root = eventScope event; From = []; Scopes = [eventScope event]}
     //     //let eventScope = Seq.append [eventScope event] (Seq.initInfinite (fun _ -> Scope.Any))
-    //     // let scopedTriggers = triggers |> List.map (fun e -> e, e.Scopes |> List.exists (fun s -> s = eventScope.CurrentScope)) 
-    //     // let scopedEffects = effects |> List.map (fun e -> e, e.Scopes |> List.exists (fun s -> s = eventScope.CurrentScope)) 
+    //     // let scopedTriggers = triggers |> List.map (fun e -> e, e.Scopes |> List.exists (fun s -> s = eventScope.CurrentScope))
+    //     // let scopedEffects = effects |> List.map (fun e -> e, e.Scopes |> List.exists (fun s -> s = eventScope.CurrentScope))
     //     match event.Child "trigger" with
-    //     |Some n -> 
+    //     |Some n ->
     //         let v = List.map (valEventTrigger event triggers effects modifiers eventScope) n.All
     //         v |> List.fold (<&&>) OK
     //     |None -> OK
-    /// Flawed, caqn't deal with DU        
+    /// Flawed, caqn't deal with DU
     let rec copy source target =
         let properties (x:obj) = x.GetType().GetProperties()
         query {
@@ -254,8 +254,8 @@ module ScopeValidation =
             select s }
         |> Seq.iter (fun s ->
             let value = s.GetValue(source,null)
-            if value.GetType().FullName.StartsWith("System.") 
-            then s.SetValue(target, value, null)            
+            if value.GetType().FullName.StartsWith("System.")
+            then s.SetValue(target, value, null)
             else copy value (s.GetValue(target,null))
         )
 
@@ -275,7 +275,7 @@ module ScopeValidation =
             | _ -> OK
             <&&> children)
         let fseNode = (fun (x : Node) ->
-            
+
             let scope = { Root = Scope.Any; From = []; Scopes = [Scope.Any]}
             x.Children <&!&> (fun f -> valEventEffect x triggerMap effectMap modifiers scope (NodeC f)))
         let fstNode = (fun (x : Node)  ->
@@ -284,7 +284,7 @@ module ScopeValidation =
 
         let fCombine = (<&&>)
         // let opts = es.All |> List.collect (foldNode2 foNode (@) []) |> List.map filterOptionToEffects
-        // es.All @ opts <&!&> foldNode2 fNode fCombine OK 
+        // es.All @ opts <&!&> foldNode2 fNode fCombine OK
         //<&&>
         let b = (es.All <&!&> foldNode2 fNode fCombine OK)
         //<&&>
@@ -308,7 +308,7 @@ module ScopeValidation =
             | _ -> OK
             <&&> children)
         let fCombine = (<&&>)
-        es.All <&!&> foldNode2 fNode fCombine OK 
+        es.All <&!&> foldNode2 fNode fCombine OK
 
     let filterWeightBlockToTriggers (wmb : STLProcess.WeightModifierBlock) =
         let excludes = ["factor"; "add"; "weight"]

@@ -30,7 +30,7 @@ module YAMLLocalisationParser =
 
     let entry = pipe5 (getPosition) (key) (opt value) (desc .>> spaces) (getPosition) (fun s k v d e -> {key = k; value = v; desc = d; position = getRange s e}) <?> "entry"
     let comment = pstring "#" >>. restOfLine true .>> spaces <?> "comment"
-    let file = many (attempt comment) >>. pipe2 (key) (many ((attempt comment |>> (fun _ -> None)) <|> (entry |>> Some)) .>> eof) (fun k es -> {key = k; entries = List.choose id es}) <?> "file"
+    let file = spaces >>. many (attempt comment) >>. pipe2 (key) (many ((attempt comment |>> (fun _ -> None)) <|> (entry |>> Some)) .>> eof) (fun k es -> {key = k; entries = List.choose id es}) <?> "file"
 
     let parseLocFile filepath = runParserOnFile file () filepath System.Text.Encoding.UTF8
     let parseLocText text name = runParserOnString file () name text

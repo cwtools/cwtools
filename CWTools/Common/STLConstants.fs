@@ -27,6 +27,13 @@ module STLConstants =
         |Starbase
         |Star
         |InvalidScope
+        override x.ToString() =
+            match x with
+            |GalacticObject -> "System"
+            |AmbientObject -> "Ambient object"
+            |PopFaction -> "Pop faction"
+            |Any -> "Any/Unknown"
+            |x -> sprintf "%A" x
 
     let allScopes = [
             Country;
@@ -51,10 +58,10 @@ module STLConstants =
             ]
     let allScopesSet = allScopes |> Set.ofList
     let parseScope =
-        (fun (x : string) -> 
-        x.ToLower() 
+        (fun (x : string) ->
+        x.ToLower()
         |>
-            function    
+            function
             |"country" -> Scope.Country
             |"leader" -> Scope.Leader
             |"galacticobject"
@@ -93,19 +100,19 @@ module STLConstants =
         member val Scopes : Scope list = scopes
         member this.ScopesSet = this.Scopes |> Set.ofList
         member val Type : EffectType = effectType
-        override x.Equals(y) = 
+        override x.Equals(y) =
             match y with
             | :? Effect as y -> x.Name = y.Name && x.Scopes = y.Scopes && x.Type = y.Type
             |_ -> false
         interface System.IComparable with
             member x.CompareTo yobj =
                 match yobj with
-                | :? Effect as y -> 
+                | :? Effect as y ->
                     let r1 = x.Name.CompareTo(y.Name)
                     if r1 = 0 then 0 else List.compareWith compare x.Scopes y.Scopes
                 | _ -> invalidArg "yobj" ("cannot compare values of different types" + yobj.GetType().ToString())
         override x.ToString() = sprintf "%s: %A" x.Name x.Scopes
-    
+
 
     type ScriptedEffect(name, scopes, effectType, comments, globals, settargets, usedtargets) =
         inherit Effect(name, scopes, effectType)
@@ -113,7 +120,7 @@ module STLConstants =
         member val GlobalEventTargets : string list = globals
         member val SavedEventTargets : string list = settargets
         member val UsedEventTargets : string list = usedtargets
-        override x.Equals(y) = 
+        override x.Equals(y) =
             match y with
             | :? ScriptedEffect as y -> x.Name = y.Name && x.Scopes = y.Scopes && x.Type = y.Type
             |_ -> false
@@ -121,7 +128,7 @@ module STLConstants =
             member x.CompareTo yobj =
                 match yobj with
                 | :? Effect as y -> x.Name.CompareTo(y.Name)
-                | _ -> invalidArg "yobj" "cannot compare values of different types" 
+                | _ -> invalidArg "yobj" "cannot compare values of different types"
 
     type DocEffect(name, scopes, effectType, desc, usage) =
         inherit Effect(name, scopes, effectType)
@@ -135,7 +142,7 @@ module STLConstants =
             member x.CompareTo yobj =
                 match yobj with
                 | :? Effect as y -> x.Name.CompareTo(y.Name)
-                | _ -> invalidArg "yobj" "cannot compare values of different types" 
+                | _ -> invalidArg "yobj" "cannot compare values of different types"
         new(rawEffect : RawEffect, effectType) =
             let scopes = rawEffect.scopes |> List.collect parseScopes
             DocEffect(rawEffect.name, scopes, effectType, rawEffect.desc, rawEffect.usage)
@@ -165,19 +172,19 @@ module STLConstants =
         |PlanetClass
         |Starbase
         |Any
-    type RawStaticModifier = 
+    type RawStaticModifier =
         {
             num : int
             tag : string
             name : string
         }
-    type RawModifier = 
+    type RawModifier =
         {
             tag : string
             category : int
         }
 
-    type Modifier = 
+    type Modifier =
         {
             tag : string
             categories : ModifierCategory list
@@ -185,7 +192,7 @@ module STLConstants =
             core : bool
         }
     let createModifier (raw : RawModifier) =
-        let category = 
+        let category =
             match raw.category with
             | 2 -> ModifierCategory.Pop
             | 64 -> ModifierCategory.Science
@@ -203,13 +210,13 @@ module STLConstants =
             |_ -> ModifierCategory.Any
         { tag = raw.tag; categories = [category]; core = true}
 
-    type EntityType = 
+    type EntityType =
     |Agenda = 1
     |AmbientObjects = 2
     |Anomalies = 3
     |Armies = 4
     |ArmyAttachments = 5
-    |AscensionPerks = 6 
+    |AscensionPerks = 6
     |Attitudes = 7
     |BombardmentStances = 8
     |BuildablePops = 9

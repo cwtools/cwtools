@@ -33,7 +33,7 @@ open CWTools.Validation.Stellaris.ScopeValidation
 
 
 
-    
+
 type FilesScope =
     |All
     |Mods
@@ -138,11 +138,11 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
                     ]
 
 
-        let vanillaEffects = 
+        let vanillaEffects =
             let se = scopedEffects |> List.map (fun e -> e :> Effect)
             let ve = effects |> addInnerScope |> List.map (fun e -> e :> Effect)
             se @ ve
-        let vanillaTriggers = 
+        let vanillaTriggers =
             let se = scopedEffects |> List.map (fun e -> e :> Effect)
             let vt = triggers |> addInnerScope |> List.map (fun e -> e :> Effect)
             se @ vt
@@ -165,21 +165,21 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
                 seq { yield! dirs |> Seq.collect Directory.EnumerateDirectories
                       yield! dirs |> Seq.collect Directory.EnumerateDirectories |> getAllFolders }
         let getAllFoldersUnion dirs =
-            seq { 
+            seq {
                 yield! dirs
                 yield! getAllFolders dirs
             }
         do eprintfn "%s %b" scopeDirectory (Directory.Exists scopeDirectory)
         let allDirs = if Directory.Exists scopeDirectory then getAllFoldersUnion [scopeDirectory] |> List.ofSeq |> List.map(fun folder -> folder, Path.GetFileName folder) else []
-        let gameDirectory = 
+        let gameDirectory =
             let dir = allDirs |> List.tryFind (fun (_, folder) -> folder.ToLower() = "stellaris") |> Option.map (fst) |> Option.bind (fun f -> if Directory.Exists (f + (string Path.DirectorySeparatorChar) + "common") then Some f else None)
             match dir with
             |Some s -> eprintfn "Found stellaris directory at %s" s
             |None -> eprintfn "Couldn't find stellaris directory, falling back to embedded vanilla files"
             dir
-        let mods = 
+        let mods =
             let getModFiles modDir =
-                Directory.EnumerateFiles (modDir) 
+                Directory.EnumerateFiles (modDir)
                         |> List.ofSeq
                         |> List.filter (fun f -> Path.GetExtension(f) = ".mod")
                         |> List.map CKParser.parseFile
@@ -189,32 +189,32 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
 
             let modDirs = allDirs |> List.filter(fun (_, folder) -> folder.ToLower() = "mod" || folder.ToLower() = "mods")
             match modDirs with
-            | [] -> eprintfn "%s" "Didn't find any mod directories" 
+            | [] -> eprintfn "%s" "Didn't find any mod directories"
             | x ->
                 eprintfn "Found %i mod directories:" x.Length
                 x |> List.iter (fun d -> eprintfn "%s" (fst d))
             let modFiles = (scopeDirectory, Path.GetFileName scopeDirectory)::modDirs |> List.collect (fst >> getModFiles)
             match modFiles with
             | [] -> eprintfn "%s" "Didn't find any mods"
-            | x -> 
+            | x ->
                 eprintfn "Found %i mods:" x.Length
                 x |> List.iter (fun (n, p, _) -> eprintfn "%s, %s" n p)
-            modFiles
-        let modFolders = 
+            modFiles |> List.distinct
+        let modFolders =
             let folders = mods |> List.filter (fun (n, _, _) -> n.Contains(modFilter))
                                 |> List.map (fun (n, p, r) -> if Path.IsPathRooted p then n, p else n, (Directory.GetParent(r).FullName + (string Path.DirectorySeparatorChar) + p))
-            eprintfn "Mod folders"                            
+            eprintfn "Mod folders"
             folders |> List.iter (fun (n, f) -> eprintfn "%s, %s" n f)
             folders
-          
 
-        let allFolders = 
+
+        let allFolders =
             // let checkIsGameFolder = (fun (f : string) -> f.Contains "common" || f.Contains "events" || f.Contains "interface" || f.Contains "gfx" || f.Contains "localisation")
             // let rootIsGameFolder = Directory.EnumerateDirectories scopeDirectory |> List.ofSeq |> List.exists checkIsGameFolder
             match gameDirectory, scope with
-            |None, _ -> 
+            |None, _ ->
                 // if modFolders.Length > 0 then modFolders
-                // else 
+                // else
                     if modFolders.Length = 0 then eprintfn "Couldn't find the game directory or any mods" else ()
                     let checkIsGameFolder = (fun (f : string) -> f.Contains "common" || f.Contains "events" || f.Contains "interface" || f.Contains "gfx" || f.Contains "localisation")
                     let foundAnyFolders = Directory.EnumerateDirectories scopeDirectory |> List.ofSeq |> List.exists checkIsGameFolder
@@ -229,7 +229,7 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
             |_, Mods -> (modFolders)
             |Some s, Vanilla -> ["vanilla", s]
         let locFolders = allDirs |> List.filter(fun (_, folder) -> folder.ToLower() = "localisation" || folder.ToLower() = "localisation_synced")
-        
+
         let getEmbeddedFiles() = embeddedFiles |> List.map (fun (fn, f) -> "embedded", "embeddedfiles/" + fn, f)
 
         let convertPathToLogicalPath =
@@ -242,7 +242,7 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
                     let pathIndex (part : string) =
                         let i = if path.IndexOf ("/"+part+"/" ) < 0 then path.IndexOf("\\"+part+"\\") else path.IndexOf ("/"+part+"/" )
                         i + 1
-                    let matches = 
+                    let matches =
                         [
                             if pathContains "common" then let i = pathIndex "common" in yield i, path.Substring(i) else ();
                             if pathContains "interface" then let i = pathIndex "interface" in yield i, path.Substring(i) else ();
@@ -253,7 +253,7 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
                             if pathContains "map" then let i = pathIndex "map" in yield i, path.Substring(i) else ();
                         ]
                     if matches.IsEmpty then path else matches |> List.minBy fst |> snd
-        let allFilesByPath = 
+        let allFilesByPath =
             let getAllFiles (scope, path) =
                 eprintfn "%A" path
                 scriptFolders
@@ -304,15 +304,15 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
                 |> List.collect (fun n -> n.Children)
                 |> List.map (fun l -> l.TagText "name")
             lookup.scriptedLoc <- rawLocs
-        
-        let updateLocalisation() = 
+
+        let updateLocalisation() =
             localisationAPIs <-
                 let locs = locFolders |> PSeq.ofList |> PSeq.map (fun (folder, _) -> STLLocalisationService({ folder = folder})) |> PSeq.toList
                 let allLocs = locs |> List.collect (fun l -> (STL STLLang.Default :: langs)|> List.map (fun lang -> true, l.Api(lang)))
                 match gameDirectory with
                 |Some _ -> allLocs
-                |None ->  
-                    allLocs @ (getEmbeddedFiles() 
+                |None ->
+                    allLocs @ (getEmbeddedFiles()
                     |> List.filter (fun (_, fn, _ )-> fn.Contains("localisation"))
                     |> List.map (fun (_, fn, f) -> (fn, f))
                     |> (fun files -> STLLocalisationService(files))
@@ -324,7 +324,7 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
 
         let updateDefinedVariables() =
             lookup.definedScriptVariables <- (resources.AllEntities()) |> List.collect (fun struct (_, d) -> d.Force().setvariables)
-                
+
         let updateModifiers() =
             lookup.coreModifiers <- addGeneratedModifiers modifiers (EntitySet (resources.AllEntities()))
 
@@ -356,30 +356,30 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
         //         |> List.map ((fun (k, vs) -> k, List.collect (fun (_, vs2) -> vs2) vs)
         //             >> (fun (k, vs) -> k, findDuplicates vs))
 
-        let validateShips (entities : Node list) = 
+        let validateShips (entities : Node list) =
             let ships = entities |> List.choose (function | :? Ship as s -> Some s |_ -> None)
             ships |> List.map validateShip
                   |> List.choose (function |Invalid es -> Some es |_ -> None)
                   |> List.collect id
 
-        let parseErrors() = 
+        let parseErrors() =
             resources.GetResources()
                 |> List.choose (function |EntityResource (_, e) -> Some e |_ -> None)
                 |> List.choose (fun r -> r.result |> function |(Fail (result)) when r.validate -> Some (r.filepath, result.error, result.position)  |_ -> None)
 
 
         let validateTechnology (entities : (string * Node) list) =
-            let tech = entities |> List.filter (fun (f, _) -> f.Contains("common/technology/")) 
+            let tech = entities |> List.filter (fun (f, _) -> f.Contains("common/technology/"))
             tech
             // tech |> List.iter (fun (f, t) -> eprintfn "%s" f)
-            
+
         let validateEvents (entities : Node list) =
             let events = entities |> List.choose (function | :? Event as e -> Some e |_ -> None)
             events |> List.map (fun e -> (valEventVals e) )
                    |> List.choose (function |Invalid es -> Some es |_ -> None)
                    |> List.collect id
         let snood = snd
-        let validateAll (entities : struct (Entity * Lazy<STLComputedData>) list)  = 
+        let validateAll (entities : struct (Entity * Lazy<STLComputedData>) list)  =
             let loc = allLocalisation() |> List.groupBy (fun l -> l.GetLang) |> List.map (fun (k, g) -> k, g |>List.collect (fun ls -> ls.GetKeys) |> Set.ofList )
             let files = resources.GetResources() |> List.choose (function |FileResource (_, f) -> Some f.logicalpath |EntityResource (_, f) -> Some f.logicalpath) |> Set.ofList
             let ruleApplicator = RuleApplicator(lookup.configRules, lookup.typeDefs, lookup.typeDefInfo, lookup.enumDefs, loc, files, lookup.scriptedTriggers, lookup.scriptedEffects)
@@ -387,7 +387,7 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
             let allEntitiesByFile = entities |> List.map (fun struct (f, _) -> f.entity)
             let flattened = allEntitiesByFile |> List.map (fun n -> n.Children) |> List.collect id
 
-            let validators = [validateVariables, "var"; valTechnology, "tech"; validateTechnologies, "tech2"; valButtonEffects, "but"; valSprites, "sprite"; valVariables, "var2"; valEventCalls, "event"; 
+            let validators = [validateVariables, "var"; valTechnology, "tech"; validateTechnologies, "tech2"; valButtonEffects, "but"; valSprites, "sprite"; valVariables, "var2"; valEventCalls, "event";
                                 validateAmbientGraphics, "ambient"; validateShipDesigns, "designs"; validateMixedBlocks, "mixed"; validateSolarSystemInitializers, "solar"; validateAnomaly210, "anom";
                                 validateIfElse210, "ifelse"; validateIfElse, "ifelse2"]
             let validators = if useConfig then (ruleApplicator.RuleValidate, "rules")::validators else validators
@@ -417,7 +417,7 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
             eprintfn "Localisation check %i files" (entities.Length)
             let keys = allLocalisation() |> List.groupBy (fun l -> l.GetLang) |> List.map (fun (k, g) -> k, g |>List.collect (fun ls -> ls.GetKeys) |> Set.ofList )
             //let allEntries = allLocalisation() |> List.groupBy (fun l -> l.GetLang) |> List.map (fun (k, g) -> k, g |> List.collect (fun ls -> ls.ValueMap |> Map.toList) |> Map.ofList)
-            
+
             let validators = [valEventLocs; valTechLocs; valCompSetLocs; valCompTempLocs; valBuildingLocs; valTraditionLocCats; valArmiesLoc;
                                  valArmyAttachmentLocs; valDiploPhrases; valShipLoc; valFactionDemands; valSpeciesRightsLocs;
                                  valMapsLocs; valMegastructureLocs; valModifiers; valModules; valTraits; valGoverments; valPersonalities;
@@ -429,7 +429,7 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
             let vs = (validators |> List.map (fun v -> v oldEntities keys newEntities) |> List.fold (<&&>) OK
                        |> (function |Invalid es -> es |_ -> []))
             vs
-        
+
         let globalLocalisation () =
             let taggedKeys = allLocalisation() |> List.groupBy (fun l -> l.GetLang) |> List.map (fun (k, g) -> k, g |> List.collect (fun ls -> ls.GetKeys) |> List.fold (fun (s : LocKeySet) v -> s.Add v) (LocKeySet.Empty(STLStringComparer())) )
 
@@ -439,8 +439,8 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
             // let apiValidators = [validateLocalisation]
             // let apiVs = validatableEntries <&!&> (fun l -> apiValidators |> List.fold (fun s v -> s <&&> v lookup.scriptedEffects lookup.scriptedLoc lookup.definedScriptVariables oldEntities l taggedKeys) OK)
             //                  |> (function |Invalid es -> es |_ -> [])
-            //apiVs    
-            lookup.proccessedLoc |> validateProcessedLocalisation taggedKeys |> (function |Invalid es -> es |_ -> [])          
+            //apiVs
+            lookup.proccessedLoc |> validateProcessedLocalisation taggedKeys |> (function |Invalid es -> es |_ -> [])
 
         let updateFile filepath (filetext : string option) =
             eprintfn "%s" filepath
@@ -473,16 +473,24 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
             let split = filetext.Split('\n')
             let filetext = split |> Array.mapi (fun i s -> if i = (pos.Line - 1) then eprintfn "%s" s; s.Insert(pos.Column, "x") else s) |> String.concat "\n"
             match resourceManager.ManualProcess (convertPathToLogicalPath filepath) filetext with
-            |Some e -> 
+            |Some e ->
                 eprintfn "completion %A %A" (convertPathToLogicalPath filepath) filepath
                 eprintfn "scope at cursor %A" (getScopeContextAtPos pos lookup.scriptedTriggers lookup.scriptedEffects e)
                 let completion = CompletionService(lookup.configRules, lookup.typeDefs, lookup.typeDefInfo, lookup.enumDefs)
                 completion.Complete(pos, e)
             |None -> []
 
-        do 
+        let scopesAtPos (pos : pos) (filepath : string) (filetext : string) =
+            let split = filetext.Split('\n')
+            let filetext = split |> Array.mapi (fun i s -> if i = (pos.Line - 1) then eprintfn "%s" s; s.Insert(pos.Column, "x") else s) |> String.concat "\n"
+            match resourceManager.ManualProcess (convertPathToLogicalPath filepath) filetext with
+            |Some e ->
+                getScopeContextAtPos pos lookup.scriptedTriggers lookup.scriptedEffects e
+            |None -> None
+
+        do
             eprintfn "Parsing %i files" allFilesByPath.Length
-            // let efiles = allFilesByPath |> List.filter (fun (_, f, _) -> not(f.EndsWith(".dds"))) 
+            // let efiles = allFilesByPath |> List.filter (fun (_, f, _) -> not(f.EndsWith(".dds")))
             //             |> List.map (fun (s, f, ft) -> EntityResourceInput {scope = s; filepath = f; filetext = ft; validate = true})
             // let otherfiles = allFilesByPath |> List.filter (fun (_, f, _) -> f.EndsWith(".dds"))
             //                     |> List.map (fun (s, f, _) -> FileResourceInput {scope = s; filepath = f;})
@@ -503,35 +511,22 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
             updateTechnologies()
             updateLocalisation()
             updateTypeDef()
-
-            let doctriggers = vanillaTriggers |> List.choose (function | :? DocEffect as de -> Some de |_ -> None)
-            let ruletriggers = lookup.configRules |> List.choose (function |AliasRule (a,(r,_,_)) -> (if a == "trigger" then Some (r.ToLower()) else None) |_ -> None) |> Set.ofList
-            let triggers = doctriggers |> List.map (fun v -> v.Name.ToLower()) |> Set.ofList
-            let missing = Set.difference triggers ruletriggers |> Set.toList
-            missing |> List.iter (fun m -> doctriggers |> List.iter (fun t -> if t.Name == m then (eprintfn "\n#%s\n###%s\nalias[trigger:%s] = scalar" t.Usage t.Desc t.Name) else ()))
-
-            let doceffects = vanillaEffects |> List.choose (function | :? DocEffect as de -> Some de |_ -> None)
-            let ruleeffects = lookup.configRules |> List.choose (function |AliasRule (a,(r,_,_)) -> (if a == "effect" then Some (r.ToLower()) else None) |_ -> None) |> Set.ofList
-            let effects = doceffects |> List.map (fun v -> v.Name.ToLower()) |> Set.ofList
-            let missing = Set.difference effects ruleeffects |> Set.toList
-            missing |> List.iter (fun m -> doceffects |> List.iter (fun t -> if t.Name == m then (eprintfn "\n#%s\n###%s\nalias[effect:%s] = scalar" t.Usage t.Desc t.Name) else ()))
-
         //member __.Results = parseResults
         member __.ParserErrors = parseErrors()
         member __.ValidationErrors = (validateAll (resources.ValidatableEntities()))
-        member __.LocalisationErrors() = 
+        member __.LocalisationErrors() =
             match localisationErrors with
             |Some les -> les
-            |None -> 
+            |None ->
                 let les = (localisationCheck (resources.ValidatableEntities())) @ globalLocalisation()
                 localisationErrors <- Some les
                 les
         //member __.ValidationWarnings = warningsAll
         member __.Folders = allFolders
-        member __.AllFiles() = 
+        member __.AllFiles() =
             resources.GetResources()
-            // |> List.map 
-            //     (function 
+            // |> List.map
+            //     (function
             //         |EntityResource (f, r) ->  r.result |> function |(Fail (result)) -> (r.filepath, false, result.parseTime) |Pass(result) -> (r.filepath, true, result.parseTime)
             //         |FileResource (f, r) ->  (r.filepath, false, 0L))
             //|> List.map (fun r -> r.result |> function |(Fail (result)) -> (r.filepath, false, result.parseTime) |Pass(result) -> (r.filepath, true, result.parseTime))
@@ -542,6 +537,7 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
         member __.AllEntities = resources.AllEntities()
         member __.References = References<STLComputedData>(resources, lookup, (localisationAPIs |> List.map snd))
         member __.Complete = completion
-       
+        member __.ScopesAtPos = scopesAtPos
+
 
         //member __.ScriptedTriggers = parseResults |> List.choose (function |Pass(f, p, t) when f.Contains("scripted_triggers") -> Some p |_ -> None) |> List.map (fun t -> )
