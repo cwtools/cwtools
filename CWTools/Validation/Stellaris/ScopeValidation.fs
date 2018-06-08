@@ -185,10 +185,7 @@ module ScopeValidation =
         let rec getPathFromEffectBlockAndPos (pos : pos) (stack : string list) (node : Node) =
             match node.Children |> List.tryFind (fun c -> rangeContainsPos c.Position pos) with
             | Some c -> getPathFromEffectBlockAndPos pos (c.Key :: stack) c
-            | None ->
-                match node.Leaves |> Seq.tryFind (fun l -> rangeContainsPos l.Position pos) with
-                | Some l -> l.Key::stack
-                | None -> stack
+            | None -> stack
         let rec getScopeFromPath (stack : string list) (scopes : ScopeContext) (isTrigger : bool) =
             match stack with
             |[] -> scopes

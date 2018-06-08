@@ -60,7 +60,7 @@ let remove_all x y =
 
 
 
-let getLocTestInfo node = 
+let getLocTestInfo node =
     let req, noreq = getAllTestLocs node
     let comments = getNodeComments node |> List.filter(fun (p, c) -> not (List.isEmpty c)) |> List.collect (fun (f, c) -> c |> List.map (fun cc -> f, cc)) |> List.map fst
     req, noreq, comments
@@ -71,7 +71,7 @@ let tests =
         testList "no loc" [
                 let stl = STLGame("./testfiles/localisationtests/gamefiles", FilesScope.All, "", [], [], [], [], [], [STL STLLang.English], true, true, false)
                 let parseErrors = stl.ParserErrors
-                let errors = stl.LocalisationErrors |> List.map (fun (c, s, n, l, f, k) -> n)
+                let errors = stl.LocalisationErrors() |> List.map (fun (c, s, n, l, f, k) -> n)
                 let entities = stl.AllEntities
                 let testLocKeys = entities |> List.map (fun struct (e, _) -> e.filepath, getLocTestInfo e.entity)
                 let nodeComments = entities |> List.collect (fun struct (e, _) -> getNodeComments e.entity) |> List.map fst
@@ -93,13 +93,13 @@ let tests =
                 yield! testLocKeys |> List.map (fun (f, t) -> testCase (f.ToString()) <| fun () -> inner (f, t))
             ];
             testList "with loc" [
-                
+
                 let locfiles = "localisation/l_english.yml", File.ReadAllText("./testfiles/localisationtests/localisation/l_english.yml")
                 let stl = STLGame("./testfiles/localisationtests/gamefiles", FilesScope.All, "", [], [], [], [locfiles], [], [STL STLLang.English; STL STLLang.German], false, true, false)
                 let parseErrors = stl.ParserErrors
                 yield testCase ("parse") <| fun () -> Expect.isEmpty parseErrors (parseErrors |> List.tryHead |> Option.map (sprintf "%A") |> Option.defaultValue "")
 
-                let errors = stl.LocalisationErrors |> List.map (fun (c, s, n, l, f, k) -> n)
+                let errors = stl.LocalisationErrors() |> List.map (fun (c, s, n, l, f, k) -> n)
                 let testLocKeys = stl.AllEntities |> List.map (fun struct (e, _) -> e.filepath, getLocTestInfo e.entity)
                 let inner (file, ((req : range list), (noreq : range list), (nodekeys : range list) ))=
                     let missing = req |> List.filter (fun r -> not (errors |> List.contains r))
@@ -107,13 +107,13 @@ let tests =
                     Expect.isEmpty missing (sprintf "Missing required despite having key %s" file)
                     Expect.isEmpty (extra) (sprintf "Incorrect required %s" file)
                 yield! testLocKeys |> List.map (fun (f, t) -> testCase (f.ToString()) <| fun () -> inner (f, t))
-                eprintfn "%A" stl.LocalisationErrors
-                let globalLocError = stl.LocalisationErrors |> List.filter (fun (c, s, n, l, f, k) -> c = "CW225" || c = "CW226")
+                eprintfn "%A" (stl.LocalisationErrors())
+                let globalLocError = stl.LocalisationErrors() |> List.filter (fun (c, s, n, l, f, k) -> c = "CW225" || c = "CW226")
                 yield testCase "globalLoc" <| fun () ->
                     Expect.hasCountOf globalLocError 3u (fun f -> true) "wrong number of errors"
             ]
     ]
-    
+
 let testFolder folder testsname config =
     testList testsname [
         let configtext = "./testfiles/configtests/test.cwt", File.ReadAllText "./testfiles/configtests/test.cwt"
@@ -122,7 +122,7 @@ let testFolder folder testsname config =
         let stl = STLGame(folder, FilesScope.All, "", triggers, effects, modifiers, [], [configtext], [STL STLLang.English], false, true, config)
         let errors = stl.ValidationErrors |> List.map (fun (c, s, n, l, f, k) -> f, n) //>> (fun p -> FParsec.Position(p.StreamName, p.Index, p.Line, 1L)))
         let testVals = stl.AllEntities |> List.map (fun struct (e, _) -> e.filepath, getNodeComments e.entity |> List.map fst)
-        //printfn "%A" (errors |> List.map (fun (c, f) -> f.StreamName))
+        // printfn "%A" (errors |> List.map (fun (c, f) -> f.StreamName))
         //printfn "%A" (testVals)
 
         // eprintfn "%A" (stl.AllFiles())
@@ -138,7 +138,7 @@ let testFolder folder testsname config =
             Expect.isEmpty (missing) (sprintf "Following lines are expected to have an error %A" missing)
         yield! testVals |> List.map (fun (f, t) -> testCase (f.ToString()) <| fun () -> inner (f, t))
     ]
-    
+
 [<Tests>]
 let folderTests =
     testList "validation" [
@@ -165,7 +165,7 @@ let specialtests =
             Expect.equal stl.StaticModifiers exp ""
     ]
 // [<Tests>]
-// let tests2 = 
+// let tests2 =
 //     testList "validation" [
 //         let stl = STLGame("./testfiles/validationtests/interfacetests", FilesScope.All, "", [], [], [], [], [STL STLLang.English], false)
 //         let errors = stl.ValidationErrors |> List.map (fun (c, s, n, l, f) -> Position.UnConv n)
@@ -184,7 +184,7 @@ let specialtests =
 //     ]
 
 // [<Tests>]
-// let tests3 = 
+// let tests3 =
 //     testList "validation" [
 //         let triggers, effects = parseDocsFile "./testfiles/validationtests/trigger_docs_0.2.txt" |> (function |Success(p, _, _) -> DocsParser.processDocs p)
 //         let stl = STLGame("./testfiles/validationtests/scopetests", FilesScope.All, "", triggers, effects, [], [], [STL STLLang.English], false)
@@ -215,10 +215,10 @@ let fixEmbeddedFileName (s : string) =
 [<Tests>]
 let embeddedTests =
     testList "embedded" [
-        let filelist = Assembly.GetEntryAssembly().GetManifestResourceStream("CWToolsTests.testfiles.embeddedtest.embedded.vanilla_files_test.csv") 
+        let filelist = Assembly.GetEntryAssembly().GetManifestResourceStream("CWToolsTests.testfiles.embeddedtest.embedded.vanilla_files_test.csv")
                                 |> (fun f -> (new StreamReader(f)).ReadToEnd().Split(Environment.NewLine))
                                 |> Array.toList |> List.map (fun f -> f, "")
-        // eprintfn "%A" filelist               
+        // eprintfn "%A" filelist
         let embeddedFileNames = Assembly.GetEntryAssembly().GetManifestResourceNames() |> Array.filter (fun f -> f.Contains("embeddedtest") && (f.Contains("common") || f.Contains("localisation") || f.Contains("interface")))
         let embeddedFiles = embeddedFileNames |> List.ofArray |> List.map (fun f -> fixEmbeddedFileName f, (new StreamReader(Assembly.GetEntryAssembly().GetManifestResourceStream(f))).ReadToEnd())
         let stlE = STLGame("./testfiles/embeddedtest/test", FilesScope.All, "", [], [], [], embeddedFiles @ filelist, [], [STL STLLang.English], false, true, false)
@@ -245,7 +245,7 @@ let embeddedTests =
 [<Tests>]
 let overwriteTests =
     testList "overwrite" [
-        // eprintfn "%A" filelist               
+        // eprintfn "%A" filelist
         let triggers, effects = parseDocsFile "./testfiles/validationtests/trigger_docs_2.0.2.txt" |> (function |Success(p, _, _) -> DocsParser.processDocs p)
         let modifiers = SetupLogParser.parseLogsFile "./testfiles/validationtests/setup.log" |> (function |Success(p, _, _) -> SetupLogParser.processLogs p)
         let embeddedFileNames = Assembly.GetEntryAssembly().GetManifestResourceNames() |> Array.filter (fun f -> f.Contains("overwritetest") && (f.Contains("common") || f.Contains("localisation") || f.Contains("interface")))
@@ -272,7 +272,7 @@ let overwriteTests =
 //         testCase "logFile" <| fun () ->
 //             let logs = parseLogsFile "./testfiles/parsertests/setup.log"
 //             match logs with
-//             |Success((s, m), _, _) -> 
+//             |Success((s, m), _, _) ->
 //                 s |> List.iter (printfn "%A")
 //                 m |> List.iter (printfn "%A")
 //                 m |> List.map (fun x -> x.categories) |> List.distinct |> List.sort |> printfn "%A"

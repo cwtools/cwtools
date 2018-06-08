@@ -101,7 +101,7 @@ module STLScopes =
         ScopedEffect("overlord", [Scope.Country], Scope.Country, EffectType.Both, defaultDesc, "");
         ScopedEffect("defender", [Scope.War], Scope.Country, EffectType.Both, defaultDesc, "");
         ScopedEffect("attacker", [Scope.War], Scope.Country, EffectType.Both, defaultDesc, "");
-        ScopedEffect("owner", [Scope.Ship; Scope.Pop; Scope.Fleet; Scope.Planet; Scope.PopFaction; Scope.Sector; Scope.Leader; Scope.Country; Scope.Starbase; Scope.Tile; Scope.GalacticObject], Scope.Country, EffectType.Both, "", ""); //Fleet, Planet, PopFaction, Sector, Leader, Country, Tile from vanilla use
+        ScopedEffect("owner", [Scope.Species ;Scope.Ship; Scope.Pop; Scope.Fleet; Scope.Planet; Scope.PopFaction; Scope.Sector; Scope.Leader; Scope.Country; Scope.Starbase; Scope.Tile; Scope.GalacticObject], Scope.Country, EffectType.Both, "", ""); //Fleet, Planet, PopFaction, Sector, Leader, Country, Tile from vanilla use
         ScopedEffect("controller", [Scope.Planet], Scope.Country, EffectType.Both, "", ""); //Planet from vanilla use
         ScopedEffect("planet_owner", [Scope.Planet], Scope.Country, EffectType.Both, defaultDesc, "");
         ScopedEffect("last_created_country", allScopes, Scope.Country, EffectType.Both, defaultDesc, "");
@@ -109,7 +109,7 @@ module STLScopes =
         ScopedEffect("last_created_leader", allScopes, Scope.Leader, EffectType.Both, defaultDesc, "");
         ScopedEffect("ruler", [Scope.Country], Scope.Leader, EffectType.Both, defaultDesc, "");
         ScopedEffect("heir", [], Scope.Leader, EffectType.Both, defaultDesc, "");
-        ScopedEffect("solar_system", [Scope.Ship; Scope.Planet; Scope.Country; Scope.Fleet; Scope.AmbientObject; Scope.Tile; Scope.Starbase], Scope.GalacticObject, EffectType.Both, "", ""); //Fleet, Ambient object, Tile from vanilla use
+        ScopedEffect("solar_system", [Scope.Ship; Scope.Planet; Scope.Fleet; Scope.AmbientObject; Scope.Tile; Scope.Starbase], Scope.GalacticObject, EffectType.Both, "", ""); //Fleet, Ambient object, Tile from vanilla use
         ScopedEffect("last_created_system", allScopes, Scope.GalacticObject, EffectType.Both, defaultDesc, "");
         ScopedEffect("planet", [Scope.Pop; Scope.Tile; Scope.Planet], Scope.Planet, EffectType.Both, defaultDesc, "");
         ScopedEffect("capital_scope", [Scope.Country], Scope.Planet, EffectType.Both, defaultDesc, "");
@@ -156,7 +156,7 @@ module STLScopes =
 // any/every/random_mining_station
 // any/every/random_research_station
 // any/every/random_spaceport
-// any/every/random_system_planet    
+// any/every/random_system_planet
 // any/every/random_neighboring_tile
 // any/every/random_tile
 // any/every/random_neighbor_system
@@ -169,7 +169,7 @@ module STLScopes =
 // any/every/random_pop_faction
 // any/every/random_playable_country
 // any/every/random_subject
-    let effectInnerScopes =[ 
+    let effectInnerScopes =[
         //These are from blackninja9939
         "any_ship",  Scope.Ship;
         "every_ship",  Scope.Ship;
@@ -203,100 +203,109 @@ module STLScopes =
         "any_war_attacker",  Scope.Country;
         "every_war_attacker",  Scope.Country;
         "random_war_attacker",  Scope.Country;
-                
+
+        "any_war_participant",  Scope.Country;
+        "every_war_participant",  Scope.Country;
+        "random_war_participant",  Scope.Country;
+
         "any_planet",  Scope.Planet;
         "every_planet",  Scope.Planet;
         "random_planet",  Scope.Planet;
-                
+
         "any_planet_within_border",  Scope.Planet;
         "every_planet_within_border",  Scope.Planet;
         "random_planet_within_border",  Scope.Planet;
-                
+
         "any_ambient_object",  Scope.AmbientObject;
         "every_ambient_object",  Scope.AmbientObject;
         "random_ambient_object",  Scope.AmbientObject;
-                
+
         "any_system_ambient_object",  Scope.AmbientObject;
         "every_system_ambient_object",  Scope.AmbientObject;
         "random_system_ambient_object",  Scope.AmbientObject;
-                
+
         "any_mining_station",  Scope.Fleet;
         "every_mining_station",  Scope.Fleet;
         "random_mining_station",  Scope.Fleet;
-                
+
         "any_research_station",  Scope.Fleet;
         "every_research_station",  Scope.Fleet;
         "random_research_station",  Scope.Fleet;
-                
+
         "any_spaceport",  Scope.Fleet;
         "every_spaceport",  Scope.Fleet;
         "random_spaceport",  Scope.Fleet;
-                
+
         "any_system_planet",  Scope.Planet;
         "every_system_planet",  Scope.Planet;
         "random_system_planet",  Scope.Planet;
-                
+
         "any_neighboring_tile",  Scope.Tile;
         "every_neighboring_tile",  Scope.Tile;
         "random_neighboring_tile",  Scope.Tile;
-                
+
         "any_tile",  Scope.Tile;
         "every_tile",  Scope.Tile;
         "random_tile",  Scope.Tile;
-                                
+
         "any_moon",  Scope.Planet;
         "every_moon",  Scope.Planet;
         "random_moon",  Scope.Planet;
-                
+
         "any_system_in_cluster",  Scope.GalacticObject;
         "every_system_in_cluster",  Scope.GalacticObject;
         "random_system_in_cluster",  Scope.GalacticObject;
-                
+
         "any_owned_leader",  Scope.Leader;
         "every_owned_leader",  Scope.Leader;
         "random_owned_leader",  Scope.Leader;
-                
+
+        "any_pool_leader",  Scope.Leader;
+        "every_pool_leader",  Scope.Leader;
+        "random_pool_leader",  Scope.Leader;
+
+
         "any_sector",  Scope.Sector;
         "every_sector",  Scope.Sector;
         "random_sector",  Scope.Sector;
-                
+
         "any_owned_fleet",  Scope.Fleet;
         "every_owned_fleet",  Scope.Fleet;
         "random_owned_fleet",  Scope.Fleet;
-                
+
         "any_fleet_in_system",  Scope.Fleet;
         "every_fleet_in_system",  Scope.Fleet;
         "random_fleet_in_system",  Scope.Fleet;
-                
+
                 //"any_pop_faction", allScopes, Scope.PopFaction; //Doesn't exist according to caligula
         "every_pop_faction",  Scope.PopFaction;
         "random_pop_faction",  Scope.PopFaction;
-                
+
         "any_playable_country",  Scope.Country;
         "every_playable_country",  Scope.Country;
         "random_playable_country",  Scope.Country;
-                
+
         "any_subject",  Scope.Country;
         "every_subject",  Scope.Country;
         "random_subject",  Scope.Country;
-                
-                ///The following are assumptions 
+
+                ///The following are assumptions
         "any_country",  Scope.Country;
         "every_country",  Scope.Country;
         "random_country",  Scope.Country;
-                
+
         "any_army",  Scope.Army;
         "every_army",  Scope.Army;
         "random_army",  Scope.Army;
-                
+
         "any_rim_system",  Scope.GalacticObject;
         "every_rim_system",  Scope.GalacticObject;
         "random_rim_system",  Scope.GalacticObject;
-                
+
         "any_neighbor_country",  Scope.Country;
         "every_neighbor_country",  Scope.Country;
         "random_neighbor_country",  Scope.Country;
-                
+
         "any_system_within_border",  Scope.GalacticObject;
         "every_system_within_border",  Scope.GalacticObject;
         "random_system_within_border",  Scope.GalacticObject;
@@ -308,10 +317,14 @@ module STLScopes =
         "any_relation", Scope.Country;
         "every_relation", Scope.Country;
         "random_relation", Scope.Country;
-                
+
         "any_planet_army",  Scope.Army;
         "every_planet_army",  Scope.Army;
         "random_planet_army",  Scope.Army;
+
+        "any_megastructure",  Scope.Megastructure;
+        "every_megastructure",  Scope.Megastructure;
+        "random_megastructure",  Scope.Megastructure;
 
         "last_created_ambient_object", Scope.AmbientObject;
         "last_created_country", Scope.Country;
@@ -334,12 +347,12 @@ module STLScopes =
              des |> List.map (fun de ->
                 match effectInnerScopes |> List.tryPick (function | (n, t) when n = de.Name -> Some (fun _ -> t) |_ -> None) with
                 | Some t -> ScopedEffect(de, t, true, []) :> DocEffect
-                | None -> de) 
+                | None -> de)
         withSimple |> List.map (fun de ->
                 match effectInnerScopeFunctions |> List.tryPick (function | (n, t, s) when n = de.Name -> Some (t, s) |_ -> None) with
                 | Some (t, s) -> ScopedEffect(de, t, false, s) :> DocEffect
                 | None -> de)
-        
+
 
     type ScopeContext =
         {
@@ -355,7 +368,7 @@ module STLScopes =
         | WrongScope of command : string * scope : Scope * expected : Scope list
         | NotFound
 
-    let oneToOneScopes = 
+    let oneToOneScopes =
         let from = fun (s, change) -> {s with Scopes = Scope.Any::s.Scopes}, true
         let prev = fun (s, change) -> {s with Scopes = s.PopScope}, true
         [
@@ -378,7 +391,7 @@ module STLScopes =
     ]
     type EffectMap = Map<string, Effect, STLStringComparer>
 
-    let changeScope (effects : EffectMap) (triggers : EffectMap) (key : string) (source : ScopeContext) = 
+    let changeScope (effects : EffectMap) (triggers : EffectMap) (key : string) (source : ScopeContext) =
         let key = if key.StartsWith("hidden:", StringComparison.OrdinalIgnoreCase) then key.Substring(7) else key
         if key.StartsWith("event_target:", StringComparison.OrdinalIgnoreCase) then NewScope ({ source with Scopes = Scope.Any::source.Scopes }, [])
         else
@@ -390,12 +403,12 @@ module STLScopes =
                 | None ->
                     let effectMatch = effects.TryFind nextKey |> Option.bind (function | :? ScopedEffect as e -> Some e |_ -> None)
                     let triggerMatch = triggers.TryFind nextKey |> Option.bind (function | :? ScopedEffect as e -> Some e |_ -> None)
-                    // let effect = (effects @ triggers) 
+                    // let effect = (effects @ triggers)
                     //             |> List.choose (function | :? ScopedEffect as e -> Some e |_ -> None)
                     //             |> List.tryFind (fun e -> e.Name == nextKey)
                     match Option.orElse effectMatch triggerMatch with
                     | None -> (context, false), NotFound
-                    | Some e -> 
+                    | Some e ->
                         let possibleScopes = e.Scopes
                         let exact = possibleScopes |> List.contains context.CurrentScope
                         match context.CurrentScope, possibleScopes, exact, e.IsScopeChange with
@@ -419,22 +432,22 @@ module STLScopes =
     // let sourceScope (scope : string) = scopes
     //                                 |> List.choose (function | (n, s, _) when n == scope -> Some s |_ -> None)
     //                                 |> (function |x when List.contains Scope.Any x -> Some allScopes |[] -> None |x -> Some x)
-    let sourceScope (effects : Effect list) (key : string) = 
+    let sourceScope (effects : Effect list) (key : string) =
         let key = if key.StartsWith("hidden:", StringComparison.OrdinalIgnoreCase) then key.Substring(7) else key
         let keys = key.Split('.') |> List.ofArray
         let inner (nextKey : string) =
             let onetoone = oneToOneScopes |> List.tryFind (fun (k, _) -> k == nextKey)
             match onetoone with
             | Some (_) -> None
-            | None -> 
-                let effect = (effects) 
+            | None ->
+                let effect = (effects)
                             |> List.choose (function | :? ScopedEffect as e -> Some e |_ -> None)
                             |> List.tryFind (fun e -> e.Name == nextKey)
                 match effect with
                 |None -> None
                 |Some e -> Some e.Scopes
         keys |> List.fold (fun acc k -> match acc with |Some e -> Some e |None -> inner k) None |> Option.defaultValue allScopes
-    
+
     type UsageScopeContext = Scope list
     type ContextResult =
     | Found of string * (Scope list)
@@ -463,11 +476,13 @@ module STLScopes =
         ScopedEffect("ruler", [Scope.Country], Scope.Leader, EffectType.Both, defaultDesc, "");
         ScopedEffect("sector", [Scope.Planet; Scope.GalacticObject], Scope.Sector, EffectType.Both, defaultDesc, "");
         ScopedEffect("starbase", [Scope.GalacticObject; Scope.Planet], Scope.Starbase, EffectType.Both, defaultDesc, "");
+        ScopedEffect("home_planet", [Scope.Country; Scope.Species; Scope.Planet], Scope.Planet, EffectType.Both, defaultDesc, "");
+        ScopedEffect("overlord", [Scope.Country], Scope.Country, EffectType.Both, defaultDesc, "");
     ]
     let scopedLocEffectsMap = EffectMap.FromList(STLStringComparer(), scopedLocEffects |> List.map (fun se -> se.Name, se :> Effect))
 
-    
-    let locPrimaryScopes = 
+
+    let locPrimaryScopes =
         let from = fun (s, change) -> {s with Scopes = Scope.Any::s.Scopes}, true
         let prev = fun (s, change) -> {s with Scopes = s.PopScope}, true
         [
@@ -485,23 +500,23 @@ module STLScopes =
         "Actor", id;
         "Third_party", id;
         ]
-    
+
     let localisationCommandContext (commands : string list) (eventtargets : string list) (setvariables : string list) (entry : Entry) (command : string) =
         let keys = command.Split('.') |> List.ofArray
         let inner ((first : bool), (rootScope : string), (scopes : Scope list)) (nextKey : string) =
             let onetoone = locPrimaryScopes |> List.tryFind (fun (k, _) -> k == nextKey)
             match onetoone with
             | Some (_) -> Found (nextKey, []), false
-            | None -> 
+            | None ->
                 let effectMatch = scopedLocEffectsMap.TryFind nextKey |> Option.bind (function | :? ScopedEffect as e -> Some e |_ -> None)
                 match effectMatch with
                 | Some e -> Found (rootScope, e.Scopes), false
-                | None -> 
+                | None ->
                     let matchedCommand = (commands)  |> List.tryFind (fun c -> c == nextKey)
                     match matchedCommand, first, nextKey.StartsWith("parameter:", StringComparison.OrdinalIgnoreCase) with
                     |Some _, _, _ -> Found (rootScope, scopes), false
                     | _, _, true -> Found (rootScope, scopes), false
-                    |None, false, false -> 
+                    |None, false, false ->
                         match setvariables |> List.exists (fun sv -> sv == nextKey) with
                         | true -> Found (rootScope, scopes), false
                         | false -> LocNotFound (nextKey), false
@@ -509,5 +524,5 @@ module STLScopes =
                         match eventtargets |> List.exists (fun et -> et == nextKey) with
                         | true -> Found (rootScope, scopes), false
                         | false -> LocNotFound (nextKey), false
-        keys |> List.fold (fun r k -> match r with | (Found (r, s) , f) -> inner ((f, r, s)) k |LocNotFound s, _ -> LocNotFound s, false) (Found ("this", []), true) |> fst                
+        keys |> List.fold (fun r k -> match r with | (Found (r, s) , f) -> inner ((f, r, s)) k |LocNotFound s, _ -> LocNotFound s, false) (Found ("this", []), true) |> fst
         //keys |> List.fold (fun (e, r, s) k -> if e then (e, r, s) else inner (e, r, s) k) (false, "this", [])

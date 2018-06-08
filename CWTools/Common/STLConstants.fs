@@ -81,7 +81,7 @@ module STLConstants =
             |"sector" -> Scope.Sector
             |"alliance" -> Scope.Country
             |"war" -> Scope.War
-            |"megastructure" -> Scope.Ship
+            |"megastructure" -> Scope.Megastructure
             |"design" -> Scope.Design
             |"starbase" -> Scope.Starbase
             |"any" -> Scope.Any
