@@ -1,0 +1,11 @@
+test_planet_killer = {
+    key = "TEST_PK"
+    type = planet_killer
+}
+
+#error
+#error
+test_planet_killer = {
+    key = "TEST_PK_2"
+    type = planet_killer
+}

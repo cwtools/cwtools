@@ -15,6 +15,7 @@ open CWTools.Parser.SetupLogParser
 open CWTools.Common.STLConstants
 open System
 open Microsoft.FSharp.Compiler.Range
+open CWTools.Games.Files
 
 
 let getAllTestLocs node =
@@ -121,10 +122,10 @@ let testFolder folder testsname config =
         let modifiers = SetupLogParser.parseLogsFile "./testfiles/validationtests/setup.log" |> (function |Success(p, _, _) -> SetupLogParser.processLogs p)
         let stl = STLGame(folder, FilesScope.All, "", triggers, effects, modifiers, [], [configtext], [STL STLLang.English], false, true, config)
         let errors = stl.ValidationErrors |> List.map (fun (c, s, n, l, f, k) -> f, n) //>> (fun p -> FParsec.Position(p.StreamName, p.Index, p.Line, 1L)))
-        let testVals = stl.AllEntities |> List.map (fun struct (e, _) -> e.filepath, getNodeComments e.entity |> List.map fst)
+        let testVals = stl.AllEntities |> List.map (fun struct (e, _) -> e.filepath, getNodeComments e.entity |> List.collect (fun (r, cs) -> cs |> List.map (fun _ -> r)))
         // printfn "%A" (errors |> List.map (fun (c, f) -> f.StreamName))
         //printfn "%A" (testVals)
-
+        //eprintfn "%A" testVals
         // eprintfn "%A" (stl.AllFiles())
         //let nodeComments = entities |> List.collect (fun (f, s) -> getNodeComments s) |> List.map fst
         let inner (file, ((nodekeys : range list)) )=
@@ -133,7 +134,7 @@ let testFolder folder testsname config =
             let fileErrorPositions = fileErrors |> List.map snd
             let missing = remove_all expected fileErrorPositions
             let extras = remove_all fileErrorPositions expected
-            //eprintfn "%A" fileErrors
+            //eprintfn "%A" nodekeys
             Expect.isEmpty (extras) (sprintf "Following lines are not expected to have an error %A, all %A" extras expected )
             Expect.isEmpty (missing) (sprintf "Following lines are expected to have an error %A" missing)
         yield! testVals |> List.map (fun (f, t) -> testCase (f.ToString()) <| fun () -> inner (f, t))
@@ -224,6 +225,7 @@ let embeddedTests =
         let stlE = STLGame("./testfiles/embeddedtest/test", FilesScope.All, "", [], [], [], embeddedFiles @ filelist, [], [STL STLLang.English], false, true, false)
         let stlNE = STLGame("./testfiles/embeddedtest/test", FilesScope.All, "", [], [], [], [], [], [STL STLLang.English], false, true, false)
         let eerrors = stlE.ValidationErrors |> List.map (fun (c, s, n, l, f, k) -> n)
+        eprintfn "%A" (stlE.ValidationErrors)
         let neerrors = stlNE.ValidationErrors |> List.map (fun (c, s, n, l, f, k) -> n)
         let etestVals = stlE.AllEntities |> List.map (fun struct (e, _) -> e.filepath, getNodeComments e.entity |> List.map fst)
         let netestVals = stlNE.AllEntities |> List.map (fun struct (e, _) -> e.filepath, getNodeComments e.entity |> List.map fst)

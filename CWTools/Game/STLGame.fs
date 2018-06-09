@@ -30,114 +30,15 @@ open CWTools.Parser
 open CWTools.Parser.ConfigParser
 open FSharp.Data.Runtime
 open CWTools.Validation.Stellaris.ScopeValidation
+open Files
 
 
 
-
-type FilesScope =
-    |All
-    |Mods
-    |Vanilla
 
 //type GameFile = GameFile of result : FileResult
 
 type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, triggers : DocEffect list, effects : DocEffect list, modifiers : Modifier list, embeddedFiles : (string * string) list, configs : (string * string) list, langs : Lang list, validateVanilla : bool, experimental : bool, useConfig : bool ) =
-
-        let normalisedScopeDirectory = scopeDirectory.Replace("/","\\").TrimStart('.')
-        let scriptFolders = [
-                    "common/agendas";
-                    "common/ambient_objects";
-                    "common/anomalies";
-                    "common/armies";
-                    "common/army_attachments"; //Removed in 2.0?
-                    "common/ascension_perks";
-                    "common/attitudes";
-                    "common/bombardment_stances";
-                    "common/buildable_pops";
-                    "common/building_tags";
-                    "common/buildings";
-                    "common/button_effects";
-                    "common/bypass";
-                    "common/casus_belli";
-                    "common/colors";
-                    "common/component_flags"; //Removed in 2.0?
-                    "common/component_sets";
-                    "common/component_tags";
-                    "common/component_templates";
-                    "common/country_customization";
-                    "common/country_types";
-                    //"common/defines";
-                    "common/deposits";
-                    "common/diplo_phrases";
-                    "common/diplomatic_actions";
-                    "common/edicts";
-                    "common/ethics";
-                    "common/event_chains";
-                    "common/fallen_empires";
-                    "common/game_rules";
-                    "common/global_ship_designs";
-                    "common/governments";
-                    "common/governments/civics";
-                    "common/graphical_culture";
-                    "common/mandates";
-                    "common/map_modes";
-                    "common/megastructures";
-                    "common/name_lists";
-                    "common/notification_modifiers";
-                    "common/observation_station_missions";
-                    "common/on_actions";
-                    "common/opinion_modifiers";
-                    "common/personalities";
-                    "common/planet_classes";
-                    "common/planet_modifiers";
-                    "common/policies";
-                    "common/pop_faction_types";
-                    "common/precursor_civilizations";
-                    //"common/random_names";
-                    "common/scripted_effects";
-                    "common/scripted_loc";
-                    "common/scripted_triggers";
-                    "common/scripted_variables";
-                    "common/section_templates";
-                    "common/sector_types";
-                    "common/ship_behaviors";
-                    "common/ship_sizes";
-                    "common/solar_system_initializers";
-                    "common/special_projects";
-                    "common/species_archetypes";
-                    "common/species_classes";
-                    "common/species_names";
-                    "common/species_rights";
-                    "common/star_classes";
-                    "common/starbase_buildings";
-                    "common/starbase_levels";
-                    "common/starbase_modules";
-                    "common/starbase_types";
-                    "common/spaceport_modules"; //Removed in 2.0
-                    "common/start_screen_messages";
-                    "common/static_modifiers";
-                    "common/strategic_resources";
-                    "common/subjects";
-                    "common/system_types";
-                    "common/technology";
-                    "common/terraform";
-                    "common/tile_blockers";
-                    "common/tradition_categories";
-                    "common/traditions";
-                    "common/traits";
-                    "common/triggered_modifiers"; //Removed in 2.0
-                    "common/war_demand_counters"; //Removed in 2.0
-                    "common/war_demand_types"; //Removed in 2.0
-                    "common/war_goals";
-                    "events";
-                    "map/galaxy";
-                    "map/setup_scenarios";
-                    "prescripted_countries";
-                    "interface";
-                    "gfx";
-                    ]
-
-
+        let fileManager = FileManager(scopeDirectory, modFilter, scope)
         let vanillaEffects =
             let se = scopedEffects |> List.map (fun e -> e :> Effect)
             let ve = effects |> addInnerScope |> List.map (fun e -> e :> Effect)
@@ -152,134 +53,14 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
 
         let validatableFiles() = resources.ValidatableFiles
         let lookup = Lookup()
-        // let mutable scriptedTriggers : Effect list = []
-        // let mutable scriptedEffects : Effect list = []
-        // let mutable staticModifiers : Modifier list = []
         let mutable localisationAPIs : (bool * ILocalisationAPI) list = []
         let allLocalisation() = localisationAPIs |> List.map snd
         let validatableLocalisation() = localisationAPIs |> List.choose (fun (validate, api) -> if validate then Some api else None)
         let mutable localisationErrors : (string * Severity * range * int * string * string option) list option = None
 
-        let rec getAllFolders dirs =
-            if Seq.isEmpty dirs then Seq.empty else
-                seq { yield! dirs |> Seq.collect Directory.EnumerateDirectories
-                      yield! dirs |> Seq.collect Directory.EnumerateDirectories |> getAllFolders }
-        let getAllFoldersUnion dirs =
-            seq {
-                yield! dirs
-                yield! getAllFolders dirs
-            }
-        do eprintfn "%s %b" scopeDirectory (Directory.Exists scopeDirectory)
-        let allDirs = if Directory.Exists scopeDirectory then getAllFoldersUnion [scopeDirectory] |> List.ofSeq |> List.map(fun folder -> folder, Path.GetFileName folder) else []
-        let gameDirectory =
-            let dir = allDirs |> List.tryFind (fun (_, folder) -> folder.ToLower() = "stellaris") |> Option.map (fst) |> Option.bind (fun f -> if Directory.Exists (f + (string Path.DirectorySeparatorChar) + "common") then Some f else None)
-            match dir with
-            |Some s -> eprintfn "Found stellaris directory at %s" s
-            |None -> eprintfn "Couldn't find stellaris directory, falling back to embedded vanilla files"
-            dir
-        let mods =
-            let getModFiles modDir =
-                Directory.EnumerateFiles (modDir)
-                        |> List.ofSeq
-                        |> List.filter (fun f -> Path.GetExtension(f) = ".mod")
-                        |> List.map CKParser.parseFile
-                        |> List.choose ( function | Success(p, _, _) -> Some p | _ -> None )
-                        |> List.map ((ProcessCore.processNodeBasic "mod" range.Zero) >> (fun s -> s.TagText "name", s.TagText "path", modDir))
-
-
-            let modDirs = allDirs |> List.filter(fun (_, folder) -> folder.ToLower() = "mod" || folder.ToLower() = "mods")
-            match modDirs with
-            | [] -> eprintfn "%s" "Didn't find any mod directories"
-            | x ->
-                eprintfn "Found %i mod directories:" x.Length
-                x |> List.iter (fun d -> eprintfn "%s" (fst d))
-            let modFiles = (scopeDirectory, Path.GetFileName scopeDirectory)::modDirs |> List.collect (fst >> getModFiles)
-            match modFiles with
-            | [] -> eprintfn "%s" "Didn't find any mods"
-            | x ->
-                eprintfn "Found %i mods:" x.Length
-                x |> List.iter (fun (n, p, _) -> eprintfn "%s, %s" n p)
-            modFiles |> List.distinct
-        let modFolders =
-            let folders = mods |> List.filter (fun (n, _, _) -> n.Contains(modFilter))
-                                |> List.map (fun (n, p, r) -> if Path.IsPathRooted p then n, p else n, (Directory.GetParent(r).FullName + (string Path.DirectorySeparatorChar) + p))
-            eprintfn "Mod folders"
-            folders |> List.iter (fun (n, f) -> eprintfn "%s, %s" n f)
-            folders
-
-
-        let allFolders =
-            // let checkIsGameFolder = (fun (f : string) -> f.Contains "common" || f.Contains "events" || f.Contains "interface" || f.Contains "gfx" || f.Contains "localisation")
-            // let rootIsGameFolder = Directory.EnumerateDirectories scopeDirectory |> List.ofSeq |> List.exists checkIsGameFolder
-            match gameDirectory, scope with
-            |None, _ ->
-                // if modFolders.Length > 0 then modFolders
-                // else
-                    if modFolders.Length = 0 then eprintfn "Couldn't find the game directory or any mods" else ()
-                    let checkIsGameFolder = (fun (f : string) -> f.Contains "common" || f.Contains "events" || f.Contains "interface" || f.Contains "gfx" || f.Contains "localisation")
-                    let foundAnyFolders = Directory.EnumerateDirectories scopeDirectory |> List.ofSeq |> List.exists checkIsGameFolder
-                    match foundAnyFolders with
-                    | true ->
-                        eprintfn "I think you opened a mod folder directly"
-                        (Path.GetFileName scopeDirectory, scopeDirectory)::modFolders
-                    | false ->
-                        eprintfn "I don't think you opened a mod folder directly"
-                        modFolders
-            |Some s, All -> ("vanilla", s) :: (modFolders)
-            |_, Mods -> (modFolders)
-            |Some s, Vanilla -> ["vanilla", s]
-        let locFolders = allDirs |> List.filter(fun (_, folder) -> folder.ToLower() = "localisation" || folder.ToLower() = "localisation_synced")
 
         let getEmbeddedFiles() = embeddedFiles |> List.map (fun (fn, f) -> "embedded", "embeddedfiles/" + fn, f)
 
-        let convertPathToLogicalPath =
-            fun (path : string) ->
-                let path = path.Replace("/","\\")
-                if path.Contains(normalisedScopeDirectory) then path.Replace(normalisedScopeDirectory+"\\", "") else
-                    if path.StartsWith "gfx\\" || path.StartsWith "gfx//" then path else
-                    let pathContains (part : string) =
-                        path.Contains ("/"+part+"/" )|| path.Contains( "\\"+part+"\\")
-                    let pathIndex (part : string) =
-                        let i = if path.IndexOf ("/"+part+"/" ) < 0 then path.IndexOf("\\"+part+"\\") else path.IndexOf ("/"+part+"/" )
-                        i + 1
-                    let matches =
-                        [
-                            if pathContains "common" then let i = pathIndex "common" in yield i, path.Substring(i) else ();
-                            if pathContains "interface" then let i = pathIndex "interface" in yield i, path.Substring(i) else ();
-                            if pathContains "gfx" then let i = pathIndex "gfx" in yield i, path.Substring(i) else ();
-                            if pathContains "events" then let i = pathIndex "events" in yield i, path.Substring(i) else ();
-                            if pathContains "localisation" then let i = pathIndex "localisation" in yield i, path.Substring(i) else ();
-                            if pathContains "localisation_synced" then let i = pathIndex "localisation_synced" in yield i, path.Substring(i) else ();
-                            if pathContains "map" then let i = pathIndex "map" in yield i, path.Substring(i) else ();
-                        ]
-                    if matches.IsEmpty then path else matches |> List.minBy fst |> snd
-        let allFilesByPath =
-            let getAllFiles (scope, path) =
-                eprintfn "%A" path
-                scriptFolders
-                        |> List.map ((fun folder -> scope, Path.GetFullPath(Path.Combine(path, folder)))
-                        >> (fun (scope, folder) -> scope, folder, (if Directory.Exists folder then getAllFoldersUnion [folder] |> Seq.collect Directory.EnumerateFiles else Seq.empty )|> List.ofSeq))
-                        |> List.collect (fun (scope, _, files) -> files |> List.map (fun f -> scope, Path.GetFullPath(f)))
-            let fileToResourceInput (scope, filepath) =
-                match Path.GetExtension(filepath) with
-                |".txt"
-                |".gui"
-                |".gfx"
-                |".asset" ->
-                    let rootedpath = filepath.Substring(filepath.IndexOf(normalisedScopeDirectory) + (normalisedScopeDirectory.Length) + 1)
-                    Some (EntityResourceInput { scope = scope; filepath = filepath; logicalpath = (convertPathToLogicalPath rootedpath); filetext = File.ReadAllText filepath; validate = true})
-                |".dds"
-                |".tga"
-                |".shader"
-                |".lua"
-                |".png"
-                |".mesh" ->
-                    let rootedpath = filepath.Substring(filepath.IndexOf(normalisedScopeDirectory) + (normalisedScopeDirectory.Length) + 1)
-                    Some (FileResourceInput { scope = scope; filepath = filepath; logicalpath = convertPathToLogicalPath rootedpath })
-                |_ -> None
-            let allFiles = duration (fun _ -> PSeq.map getAllFiles allFolders |> PSeq.collect id |> PSeq.choose fileToResourceInput |> List.ofSeq ) "Load files"
-            // let allFiles = List.map getAllFiles allFolders |> List.collect id |> List.choose fileToResourceInput
-            allFiles
 
         let updateScriptedTriggers () =
             lookup.scriptedTriggers <- STLLookup.updateScriptedTriggers resources vanillaTriggers
@@ -307,11 +88,11 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
 
         let updateLocalisation() =
             localisationAPIs <-
-                let locs = locFolders |> PSeq.ofList |> PSeq.map (fun (folder, _) -> STLLocalisationService({ folder = folder})) |> PSeq.toList
+                let locs = fileManager.LocalisationFiles() |> PSeq.ofList |> PSeq.map (fun (folder, _) -> STLLocalisationService({ folder = folder})) |> PSeq.toList
                 let allLocs = locs |> List.collect (fun l -> (STL STLLang.Default :: langs)|> List.map (fun lang -> true, l.Api(lang)))
-                match gameDirectory with
-                |Some _ -> allLocs
-                |None ->
+                match fileManager.ShouldUseEmbedded with
+                |false -> allLocs
+                |true ->
                     allLocs @ (getEmbeddedFiles()
                     |> List.filter (fun (_, fn, _ )-> fn.Contains("localisation"))
                     |> List.map (fun (_, fn, f) -> (fn, f))
@@ -389,7 +170,7 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
 
             let validators = [validateVariables, "var"; valTechnology, "tech"; validateTechnologies, "tech2"; valButtonEffects, "but"; valSprites, "sprite"; valVariables, "var2"; valEventCalls, "event";
                                 validateAmbientGraphics, "ambient"; validateShipDesigns, "designs"; validateMixedBlocks, "mixed"; validateSolarSystemInitializers, "solar"; validateAnomaly210, "anom";
-                                validateIfElse210, "ifelse"; validateIfElse, "ifelse2"]
+                                validateIfElse210, "ifelse"; validateIfElse, "ifelse2"; validatePlanetKillers, "pk"]
             let validators = if useConfig then (ruleApplicator.RuleValidate, "rules")::validators else validators
             let experimentalvalidators = [valSectionGraphics, "sections"; valComponentGraphics, "component"; ]
             let oldEntities = EntitySet (resources.AllEntities())
@@ -451,8 +232,8 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
             | _ ->
                 let filepath = Path.GetFullPath(filepath)
                 let file = filetext |> Option.defaultWith (fun () -> File.ReadAllText filepath)
-                let rootedpath = filepath.Substring(filepath.IndexOf(normalisedScopeDirectory) + (normalisedScopeDirectory.Length))
-                let logicalpath = convertPathToLogicalPath rootedpath
+                let rootedpath = filepath.Substring(filepath.IndexOf(fileManager.ScopeDirectory) + (fileManager.ScopeDirectory.Length))
+                let logicalpath = fileManager.ConvertPathToLogicalPath rootedpath
                 //eprintfn "%s %s" logicalpath filepath
                 let newEntities = resources.UpdateFile (EntityResourceInput {scope = ""; filepath = filepath; logicalpath = logicalpath; filetext = file; validate = true})
                 match filepath with
@@ -472,9 +253,9 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
             // |None -> []
             let split = filetext.Split('\n')
             let filetext = split |> Array.mapi (fun i s -> if i = (pos.Line - 1) then eprintfn "%s" s; s.Insert(pos.Column, "x") else s) |> String.concat "\n"
-            match resourceManager.ManualProcess (convertPathToLogicalPath filepath) filetext with
+            match resourceManager.ManualProcess (fileManager.ConvertPathToLogicalPath filepath) filetext with
             |Some e ->
-                eprintfn "completion %A %A" (convertPathToLogicalPath filepath) filepath
+                eprintfn "completion %A %A" (fileManager.ConvertPathToLogicalPath filepath) filepath
                 eprintfn "scope at cursor %A" (getScopeContextAtPos pos lookup.scriptedTriggers lookup.scriptedEffects e)
                 let completion = CompletionService(lookup.configRules, lookup.typeDefs, lookup.typeDefInfo, lookup.enumDefs)
                 completion.Complete(pos, e)
@@ -483,24 +264,22 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
         let scopesAtPos (pos : pos) (filepath : string) (filetext : string) =
             let split = filetext.Split('\n')
             let filetext = split |> Array.mapi (fun i s -> if i = (pos.Line - 1) then eprintfn "%s" s; s.Insert(pos.Column, "x") else s) |> String.concat "\n"
-            match resourceManager.ManualProcess (convertPathToLogicalPath filepath) filetext with
+            match resourceManager.ManualProcess (fileManager.ConvertPathToLogicalPath filepath) filetext with
             |Some e ->
                 getScopeContextAtPos pos lookup.scriptedTriggers lookup.scriptedEffects e
             |None -> None
 
         do
-            eprintfn "Parsing %i files" allFilesByPath.Length
+            eprintfn "Parsing %i files" (fileManager.AllFilesByPath().Length)
             // let efiles = allFilesByPath |> List.filter (fun (_, f, _) -> not(f.EndsWith(".dds")))
             //             |> List.map (fun (s, f, ft) -> EntityResourceInput {scope = s; filepath = f; filetext = ft; validate = true})
             // let otherfiles = allFilesByPath |> List.filter (fun (_, f, _) -> f.EndsWith(".dds"))
             //                     |> List.map (fun (s, f, _) -> FileResourceInput {scope = s; filepath = f;})
-            let files = allFilesByPath
+            let files = fileManager.AllFilesByPath()
             let filteredfiles = if validateVanilla then files else files |> List.choose (function |FileResourceInput f -> Some (FileResourceInput f) |EntityResourceInput f -> if f.scope = "vanilla" then Some (EntityResourceInput {f with validate = false}) else Some (EntityResourceInput f))
             resources.UpdateFiles(filteredfiles) |> ignore
-            let embedded = embeddedFiles |> List.map (fun (f, ft) -> if ft = "" then FileResourceInput { scope = "embedded"; filepath = f; logicalpath = (convertPathToLogicalPath f) } else EntityResourceInput {scope = "embedded"; filepath = f; logicalpath = (convertPathToLogicalPath f); filetext = ft; validate = false})
-            match gameDirectory with
-            |None -> resources.UpdateFiles(embedded) |> ignore
-            | _ -> ()
+            let embedded = embeddedFiles |> List.map (fun (f, ft) -> if ft = "" then FileResourceInput { scope = "embedded"; filepath = f; logicalpath = (fileManager.ConvertPathToLogicalPath f) } else EntityResourceInput {scope = "embedded"; filepath = f; logicalpath = (fileManager.ConvertPathToLogicalPath f); filetext = ft; validate = false})
+            if fileManager.ShouldUseEmbedded then resources.UpdateFiles(embedded) |> ignore else ()
 
             updateScriptedTriggers()
             updateScriptedEffects()
@@ -522,7 +301,7 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
                 localisationErrors <- Some les
                 les
         //member __.ValidationWarnings = warningsAll
-        member __.Folders = allFolders
+        member __.Folders = fileManager.AllFolders()
         member __.AllFiles() =
             resources.GetResources()
             // |> List.map

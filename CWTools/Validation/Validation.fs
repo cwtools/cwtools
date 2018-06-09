@@ -7,7 +7,7 @@ open CWTools.Common
 open Microsoft.FSharp.Compiler.Range
 
 module ValidationCore =
-    
+
     type Severity =
         | Error = 1
         | Warning = 2
@@ -23,25 +23,25 @@ module ValidationCore =
 
     type ErrorCodes =
         static member MixedBlock = { ID = "CW002"; Severity = Severity.Error; Message = "This block has mixed key/values and values" }
-        static member MissingLocalisation = 
-            fun key language -> 
+        static member MissingLocalisation =
+            fun key language ->
                 let lang = if language = Lang.STL STLLang.Default then "Default (localisation_synced)" else language.ToString()
                 { ID = "CW100"; Severity = Severity.Warning; Message = sprintf "Localisation key %s is not defined for %s" key lang}
         static member UndefinedVariable = fun variable -> { ID = "CW101"; Severity = Severity.Error; Message = sprintf "%s is not defined" variable }
         static member UndefinedTrigger = fun trigger -> { ID = "CW102"; Severity = Severity.Error; Message = sprintf "unknown trigger %s used." trigger }
         static member UndefinedEffect = fun effect -> { ID = "CW103"; Severity = Severity.Error; Message = sprintf "unknown effect %s used." effect }
-        static member IncorrectTriggerScope = 
+        static member IncorrectTriggerScope =
             fun (trigger : string) (actual : string) (expected : string) ->
             { ID = "CW104"; Severity = Severity.Error; Message = sprintf "%s trigger used in incorrect scope. In %s but expected %s" trigger actual expected}
 
-        static member IncorrectEffectScope = 
+        static member IncorrectEffectScope =
             fun (trigger : string) (actual : string) (expected : string)->
             { ID = "CW105"; Severity = Severity.Error; Message = sprintf "%s effect used in incorrect scope. In %s but expected %s" trigger actual expected}
 
         static member IncorrectScopeScope =
             fun (scope : string) (actual : string) (expected : string) ->
             { ID = "CW106"; Severity = Severity.Error; Message = sprintf "%s scope command used in incorrect scope. In %s but expected %s" scope actual expected}
-        
+
         static member EventEveryTick = { ID = "CW107"; Severity = Severity.Information; Message = "This event might affect performance as it runs on every tick, consider adding 'is_triggered_only', 'fire_only_once' or 'mean_time_to_happen'" }
         static member ResearchLeaderArea = { ID = "CW108"; Severity = Severity.Error; Message = "This research_leader is missing required \"area\"" }
         static member ResearchLeaderTech = fun actual expected -> { ID = "CW109"; Severity = Severity.Information; Message = sprintf "This research_leader uses area %s but the technology uses area %s" actual expected }
@@ -75,7 +75,7 @@ module ValidationCore =
         static member UndefinedSectionEntity = fun (entity : string) (culture : string) -> { ID = "CW233"; Severity = Severity.Error; Message = sprintf "Entity %s is not defined for culture %s" entity culture}
         static member UndefinedSectionEntityFallback = fun (entity : string) (fallback : string) (culture : string)-> { ID = "CW233"; Severity = Severity.Error; Message = sprintf "Entity %s is not defined for culture %s (nor is fallback %s)" entity culture fallback}
         static member UndefinedEntity = fun (entity : string) -> { ID = "CW233"; Severity = Severity.Error; Message = sprintf "Entity %s is not defined" entity }
-        static member ReplaceMeLoc = fun (key : string) (language : Lang) -> 
+        static member ReplaceMeLoc = fun (key : string) (language : Lang) ->
             let lang = if language = Lang.STL STLLang.Default then "Default (localisation_synced)" else language.ToString()
             { ID = "CW234"; Severity = Severity.Information; Message = sprintf "Localisation key %s is \"REPLACE_ME\" for %s" key lang }
         static member ZeroModifier = fun (modif : string) -> { ID = "CW235"; Severity = Severity.Warning; Message = sprintf "Modifier %s has value 0. Modifiers are additive so likely doesn't do anything" modif }
@@ -88,8 +88,9 @@ module ValidationCore =
         static member ConfigRulesTargetWrongScope = fun scope expected -> { ID = "CW243"; Severity = Severity.Error; Message = sprintf "Target has incorrect scope. Is %s but expect %s" scope expected}
         static member ConfigRulesInvalidTarget = fun expected -> { ID = "CW244"; Severity = Severity.Error; Message = sprintf "This is not a target. Expected a target in scope(s) %s" expected}
         static member ConfigRulesErrorInTarget = fun command scope expected -> { ID = "CW245"; Severity = Severity.Error; Message = sprintf "Error in target. Command %s was used in scope %s but expected %s" command scope expected}
+        static member PlanetKillerMissing = fun message -> { ID = "CW250"; Severity = Severity.Error; Message = message }
         static member CustomError = fun error severity -> { ID = "CW999"; Severity = severity; Message = error}
-    type ValidationResult = 
+    type ValidationResult =
         | OK
         | Invalid of (string * Severity * range * int * string * option<string>) list
 
@@ -108,22 +109,22 @@ module ValidationCore =
 
     let invManual (code : ErrorCode) (pos : range) (key : string) (data : string option) =
         code.ID, code.Severity, pos, key.Length, code.Message, data
-        
+
     let inline invCustom (l : ^a) =
         invData (ErrorCodes.CustomError "default error" Severity.Error) l None
-    // let inline inv (sev : Severity) (l : ^a) (s : string) = 
+    // let inline inv (sev : Severity) (l : ^a) (s : string) =
     //     let pos = (^a : (member Position : CWTools.Parser.Position) l)
     //     let key = (^a : (member Key : string) l)
     //     sev, pos, key.Length, s
 
     type Validator<'T when 'T :> Node> = 'T -> ValidationResult
 
-    let (<&>) f1 f2 x = 
+    let (<&>) f1 f2 x =
         match f1 x, f2 x with
         | OK, OK -> OK
         | Invalid e1, Invalid e2 -> Invalid (e1 @ e2)
         | Invalid e, OK | OK, Invalid e -> Invalid e
-    let (<&&>) f1 f2 = 
+    let (<&&>) f1 f2 =
         match f1, f2 with
         | OK, OK -> OK
         | Invalid e1, Invalid e2 -> Invalid (e1 @ e2)
@@ -149,9 +150,9 @@ module ValidationCore =
         |Invalid es -> Invalid (mergeErrorsInner es)
 
     // Parallelising something this small makes it slower!
-    //let (<&!&>) es f = es |> PSeq.map f |> PSeq.fold (<&&>) OK 
+    //let (<&!&>) es f = es |> PSeq.map f |> PSeq.fold (<&&>) OK
     let (<&!&>) es f = es |> Seq.map f |> Seq.fold (<&&>) OK
 
     let (<&??&>) es f = es |> Seq.map f |> Seq.reduce (<&?&>)
 
-    
+

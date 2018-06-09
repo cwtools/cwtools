@@ -20,6 +20,7 @@ open CWTools.Parser.ConfigParser
 open CWTools.Validation.Rules
 open CWTools.Validation.ValidationCore
 open CWTools.Utilities.Utils
+open CWTools.Games.Files
 
 [<Tests>]
 let tests =

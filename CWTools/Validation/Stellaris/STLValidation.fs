@@ -33,30 +33,30 @@ module STLValidation =
             this.AllOfType(entityType) |> List.map (fun (e, d) -> e.Children) |> List.collect id
         member __.All = entities |> List.map (fun struct (es, _) -> es.entity)
         member __.AllWithData = entities |> List.map (fun struct (es, d) -> es.entity, d)
-        member this.AllEffects= 
+        member this.AllEffects=
             let fNode = (fun (x : Node) acc ->
                             match x with
                             | :? EffectBlock as e -> e::acc
                             | :? Option as e -> e.AsEffectBlock::acc
                             |_ -> acc
                                 )
-                           
+
             this.All |> List.collect (foldNode7 fNode)
-        member this.AllTriggers= 
+        member this.AllTriggers=
             let fNode = (fun (x : Node) acc ->
                             match x with
                             | :? TriggerBlock as e -> e::acc
                             |_ -> acc
                                 )
             this.All |> List.collect (foldNode7 fNode)
-        member this.AllModifiers= 
+        member this.AllModifiers=
             let fNode = (fun (x : Node) acc ->
                             match x with
                             | :? WeightModifierBlock as e -> e::acc
                             |_ -> acc
                                 )
             this.All |> List.collect (foldNode7 fNode)
-       
+
 
 
         member __.Raw = entities
@@ -72,7 +72,7 @@ module STLValidation =
 
 
     let getDefinedVariables (node : Node) =
-        let fNode = (fun (x:Node) acc -> 
+        let fNode = (fun (x:Node) acc ->
                         x.Values |> List.fold (fun a n -> if n.Key.StartsWith("@", StringComparison.OrdinalIgnoreCase) then n.Key::a else a) acc
                         )
         node |> (foldNode7 fNode) |> List.ofSeq
@@ -82,13 +82,13 @@ module STLValidation =
                         let values = x.Values |> List.choose (fun v -> match v.Value with |String s when s.StartsWith("@", StringComparison.OrdinalIgnoreCase) -> Some v |_ -> None)
                         match values with
                         | [] -> children
-                        | x -> 
+                        | x ->
                             x |> List.map ((fun f -> f, f.Value.ToString()) >> (fun (l, v) -> if variables |> List.contains v then OK else Invalid [inv (ErrorCodes.UndefinedVariable v) l]))
                               |> List.fold (<&&>) children)
         let fCombine = (<&&>)
         node |> (foldNode2 fNode fCombine OK)
-    
-    
+
+
 
     let validateVariables : StructureValidator =
         fun os es ->
@@ -96,10 +96,10 @@ module STLValidation =
                             |> List.map getDefinedVariables
                             |> Seq.collect id |> List.ofSeq
             es.All <&!&>
-            // let x =  
-            //     es.All  
+            // let x =
+            //     es.All
             //     |> List.map
-                    (fun node -> 
+                    (fun node ->
                         let defined = getDefinedVariables node
                         let errors = checkUsedVariables node (defined @ globalVars)
                         errors
@@ -127,7 +127,7 @@ module STLValidation =
         |None, _ -> OK
         |Some _, s when s = Scope.Any -> OK
         |Some (c, ss), s -> if List.contains s ss then OK else Invalid [inv (ErrorCodes.IncorrectStaticModifierScope modifier (s.ToString()) (ss |> List.map (fun f -> f.ToString()) |> String.concat ", ")) node]
-        
+
 
     let inline valStaticModifier (modifiers : Modifier list) (scopes : ScopeContext) (modifier : string) (node) =
         let exists = modifiers |> List.tryFind (fun m -> m.tag = modifier && not m.core )
@@ -153,14 +153,14 @@ module STLValidation =
         let isMTTH = event.Has "mean_time_to_happen"
         let isTrig = event.Has "is_triggered_only"
         let isOnce = event.Has "fire_only_once"
-        let isAlwaysNo = 
+        let isAlwaysNo =
             match event.Child "trigger" with
-            | Some t -> 
+            | Some t ->
                 match t.Tag "always" with
                 | Some (Bool b) when b = false -> true
                 | _ -> false
             | None -> false
-        let e = 
+        let e =
             match isMTTH || isTrig || isOnce || isAlwaysNo with
             | false -> Invalid [inv ErrorCodes.EventEveryTick event]
             | true -> OK
@@ -168,7 +168,7 @@ module STLValidation =
 
     let valResearchLeader (area : string) (cat : string option) (node : Node) =
         let fNode = (fun (x:Node) children ->
-                        let results = 
+                        let results =
                             match x.Key with
                             | "research_leader" ->
                                 match x.TagText "area" with
@@ -194,7 +194,7 @@ module STLValidation =
                 fun (node : Node) ->
                     let area = node.TagText "area"
                     let cat = node.Child "category" |> Option.bind (fun c -> c.All |> List.tryPick (function |LeafValueC lv -> Some (lv.Value.ToString()) |_ -> None))
-                    let catres = 
+                    let catres =
                         match cat with
                         | None -> Invalid [inv ErrorCodes.TechCatMissing node]
                         | Some _ -> OK
@@ -211,7 +211,7 @@ module STLValidation =
             let fNode = (fun (x : Node) children ->
                             let results =
                                 match x.Key with
-                                | "effectButtonType" -> 
+                                | "effectButtonType" ->
                                     x.Leafs "effect" <&!&> (fun e -> if List.contains (e.Value.ToRawString()) effects then OK else Invalid [inv (ErrorCodes.ButtonEffectMissing (e.Value.ToString())) e])
                                 | _ -> OK
                             results <&&> children
@@ -219,7 +219,7 @@ module STLValidation =
             let fCombine = (<&&>)
             buttons <&!&> (foldNode2 fNode fCombine OK)
 
-    let valSprites : StructureValidator = 
+    let valSprites : StructureValidator =
         //let spriteKeys = ["spriteType"; "portraitType"; "corneredTileSpriteType"; "flagSpriteType"]
         fun os es ->
             let sprites = os.GlobMatchChildren("**/interface/*.gfx") @ os.GlobMatchChildren("**/interface/*/*.gfx")
@@ -231,20 +231,20 @@ module STLValidation =
                             let results =
                                 match x.Leafs "spriteType" |> List.ofSeq with
                                 | [] -> OK
-                                | xs -> 
+                                | xs ->
                                     xs <&!&> (fun e -> if List.contains (e.Value.ToRawString()) spriteNames then OK else Invalid [inv (ErrorCodes.SpriteMissing (e.Value.ToString())) e])
                             results <&&> children
                                 )
             let fCombine = (<&&>)
             gui <&!&> (foldNode2 fNode fCombine OK)
-    
+
     let valSpriteFiles : FileValidator =
         fun rm es ->
             let sprites = es.GlobMatchChildren("**/interface/*.gfx") @ es.GlobMatchChildren("**/interface/*/*.gfx")
                             |> List.filter (fun e -> e.Key = "spriteTypes")
                             |> List.collect (fun e -> e.Children)
             let filenames = rm.GetResources() |> List.choose (function |FileResource (f, _) -> Some f |EntityResource (f, _) -> Some f)
-            let inner = 
+            let inner =
                 fun (x : Node) ->
                    Seq.append (x.Leafs "textureFile") (Seq.append (x.Leafs "texturefile") (x.Leafs "effectFile"))
                     <&!&> (fun l ->
@@ -268,7 +268,7 @@ module STLValidation =
         let fNode = (fun (x : Node) children ->
                     match x.Childs "check_variable" |> List.ofSeq with
                     | [] -> children
-                    | t -> 
+                    | t ->
                         t <&!&> (fun node -> node |> (fun n -> n.Leafs "which" |> List.ofSeq) <&!&> (fun n -> if List.contains (n.Value.ToRawString()) variables then OK else Invalid [inv (ErrorCodes.UndefinedScriptVariable (n.Value.ToRawString())) node] ))
                         <&&> children
                     )
@@ -293,7 +293,7 @@ module STLValidation =
                     )
         let opts = es.All |> List.collect (foldNode7 foNode) |> List.map filterOptionToEffects
         let effects = es.All |> List.collect (foldNode7 fNode) |> List.map (fun f -> f :> Node)
-        //effects @ opts |> List.collect findAllSetVariables  
+        //effects @ opts |> List.collect findAllSetVariables
         es.AllEffects |> List.collect findAllSetVariables
 
     let getEntitySetVariables (e : Entity) =
@@ -324,7 +324,7 @@ module STLValidation =
             triggers <&!&> (validateUsedVariables defVars)
 
 
-    let valTest : StructureValidator = 
+    let valTest : StructureValidator =
         fun os es ->
             let fNode = (fun (x : Node) acc ->
                         match x with
@@ -347,7 +347,7 @@ module STLValidation =
             OK
             // opts @ effects <&!&> (fun x -> Invalid [inv (ErrorCodes.CustomError "effect") x])
             // <&&> (triggers <&!&> (fun x -> Invalid [inv (ErrorCodes.CustomError "trigger") x]))
-            
+
     let inline checkModifierInScope (modifier : string) (scope : Scope) (node : ^a) (cat : ModifierCategory) =
         match List.tryFind (fun (c, _) -> c = cat) categoryScopeList, scope with
         |None, _ -> OK
@@ -357,7 +357,7 @@ module STLValidation =
     let valModifier (modifiers : Modifier list) (scope : Scope) (leaf : Leaf) =
         match modifiers |> List.tryFind (fun m -> m.tag == leaf.Key) with
         |None -> Invalid [inv (ErrorCodes.UndefinedModifier (leaf.Key)) leaf]
-        |Some m -> 
+        |Some m ->
             m.categories <&!&> checkModifierInScope (leaf.Key) (scope) leaf
             <&&> (leaf.Value |> (function |Value.Int x when x = 0 -> Invalid [inv (ErrorCodes.ZeroModifier leaf.Key) leaf] | _ -> OK))
             // match m.categories |> List.contains (modifierCategory) with
@@ -376,13 +376,13 @@ module STLValidation =
             | _ -> OK
             <&&> children)
         let fCombine = (<&&>)
-        es.All <&!&> foldNode2 fNode fCombine OK 
+        es.All <&!&> foldNode2 fNode fCombine OK
 
     let addGeneratedModifiers (modifiers : Modifier list) (es : STLEntitySet) =
         let ships = es.GlobMatchChildren("**/common/ship_sizes/*.txt")
         let shipKeys = ships |> List.map (fun f -> f.Key)
         let shipModifierCreate =
-            (fun k -> 
+            (fun k ->
             [
                 {tag = "shipsize_"+k+"_build_speed_mult"; categories = [ModifierCategory.Starbase]; core = true }
                 {tag = "shipsize_"+k+"_build_cost_mult"; categories = [ModifierCategory.Starbase]; core = true }
@@ -394,7 +394,7 @@ module STLValidation =
 
         let stratres = es.GlobMatchChildren("**/common/strategic_resources/*.txt")
         let srKeys = stratres |> List.map (fun f -> f.Key)
-        let srModifierCreate = 
+        let srModifierCreate =
             (fun k ->
             [
                 {tag = "static_resource_"+k+"_add"; categories = [ModifierCategory.Country]; core = true }
@@ -421,7 +421,7 @@ module STLValidation =
         let pcModifiers = pcKeys |> List.map (fun k -> {tag = k+"_habitability"; categories = [ModifierCategory.PlanetClass]; core = true})
         let buildingTags = es.GlobMatch("**/common/building_tags/*.txt") |> List.collect (fun f -> f.LeafValues |> List.ofSeq)
         let buildingTagModifierCreate =
-            (fun k -> 
+            (fun k ->
             [
                 {tag = k+"_construction_speed_mult"; categories = [ModifierCategory.Planet]; core = true }
                 {tag = k+"_build_cost_mult"; categories = [ModifierCategory.Planet]; core = true }
@@ -433,9 +433,9 @@ module STLValidation =
         let speciesKeys = es.GlobMatchChildren("**/common/species_archetypes/*.txt")
                             |> List.filter (fun s -> not (s.Has "inherit_traits_from"))
                             |> List.map (fun s -> s.Key)
-        let speciesModifiers = speciesKeys |> List.map (fun k -> {tag = k+"_species_trait_points_add"; categories = [ModifierCategory.Country]; core = true})                    
+        let speciesModifiers = speciesKeys |> List.map (fun k -> {tag = k+"_species_trait_points_add"; categories = [ModifierCategory.Country]; core = true})
         shipModifiers @ srModifiers @ pcModifiers @ buildingModifiers @ countryTypeModifiers @ speciesModifiers @ modifiers
-        
+
     let findAllSavedEventTargets (event : Node) =
         let fNode = (fun (x : Node) children ->
                         let inner (leaf : Leaf) = if leaf.Key == "save_event_target_as" || leaf.Key == "save_global_event_target_as" then Some (leaf.Value.ToRawString()) else None
@@ -470,12 +470,12 @@ module STLValidation =
 
     let getTechnologies (es : STLEntitySet) =
         let techs = es.AllOfTypeChildren EntityType.Technology
-        let inner = 
+        let inner =
             fun (t : Node) ->
                 let name = t.Key
                 let prereqs = t.Child "prerequisites" |> Option.map (fun c -> c.LeafValues |> Seq.toList |> List.map (fun v -> v.Value.ToRawString()))
                                                       |> Option.defaultValue []
-                name, prereqs      
+                name, prereqs
         techs |> List.map inner
 
     let getAllTechPreqreqs (es : STLEntitySet) =
@@ -485,13 +485,13 @@ module STLValidation =
                 t.Values |> List.fold inner children
         (es.AllTriggers |> List.map (fun t -> t :> Node)) @ (es.AllModifiers |> List.map (fun t -> t :> Node)) |> List.collect (foldNode7 fNode)
 
-    
+
     let validateTechnologies : StructureValidator =
         fun os es ->
             let getPrereqs (b : Node) =
                 match b.Child "prerequisites" with
                 |None -> []
-                |Some p -> 
+                |Some p ->
                     p.LeafValues |> List.ofSeq |> List.map (fun lv -> lv.Value.ToRawString())
             let buildingPrereqs = os.AllOfTypeChildren EntityType.Buildings @ es.AllOfTypeChildren EntityType.Buildings |> List.collect getPrereqs
             let shipsizePrereqs = os.AllOfTypeChildren EntityType.ShipSizes @ es.AllOfTypeChildren EntityType.ShipSizes |> List.collect getPrereqs
@@ -538,7 +538,7 @@ module STLValidation =
             let getSectionInfo (s : Node) =
                 match s.Key with
                 | "ship_section_template" ->
-                    let inner (n : Node) =  
+                    let inner (n : Node) =
                         n.TagText "name", (n.TagText "slot_type", n.TagText "slot_size")
                     let component_slots = s.Childs "component_slot" |> List.ofSeq |> List.map inner
                     let createUtilSlot (prefix : string) (size : string) (i : int) =
@@ -563,7 +563,7 @@ module STLValidation =
                 | Some (sType, sSize), Some (tType, tSize) ->
                     if sType == tType && sSize == tSize then OK else Invalid [inv (ErrorCodes.MismatchedComponentAndSlot slot sSize template tSize) c]
 
-            let defaultTemplates = [ "DEFAULT_COLONIZATION_SECTION"; "DEFAULT_CONSTRUCTION_SECTION"]            
+            let defaultTemplates = [ "DEFAULT_COLONIZATION_SECTION"; "DEFAULT_CONSTRUCTION_SECTION"]
             let validateSection (s : Node) =
                 let section = s.TagText "template"
                 if defaultTemplates |> List.contains section then OK else
@@ -575,7 +575,7 @@ module STLValidation =
 
             let validateDesign (d : Node) =
                 d.Childs "section" <&!&> validateSection
-            
+
             ship_designs <&!&> validateDesign
 
     let validateMixedBlocks : StructureValidator =
@@ -604,18 +604,32 @@ module STLValidation =
                     |_, false -> Invalid [inv (ErrorCodes.CustomError (sprintf "The star class %s does not exist" (x.TagText "class")) Severity.Error) x]
             inits <&!&> fNode
 
-    let validateAnomaly210 : StructureValidator = 
+    let validatePlanetKillers : StructureValidator =
+        fun os es ->
+            let planetkillers = es.AllOfTypeChildren EntityType.ComponentTemplates |> List.filter (fun ct -> ct.TagText "type" = "planet_killer")
+            let onactions = (os.AllOfTypeChildren EntityType.OnActions @ es.AllOfTypeChildren EntityType.OnActions) |> List.map (fun c -> c.Key)
+            let scriptedtriggers = (os.AllOfTypeChildren EntityType.ScriptedTriggers @ es.AllOfTypeChildren EntityType.ScriptedTriggers) |> List.map (fun c -> c.Key)
+            let inner (node : Node) =
+                let key = node.TagText "key"
+                let on_action = "on_destroy_planet_with_" + key
+                let trigger = "can_destroy_planet_with_" + key
+                if List.exists ((==) on_action) onactions then OK else Invalid [inv (ErrorCodes.PlanetKillerMissing (sprintf "Planet killer %s is missing on_action %s" key on_action)) node]
+                <&&>
+                (if List.exists ((==) trigger) scriptedtriggers then OK else Invalid [inv (ErrorCodes.PlanetKillerMissing (sprintf "Planet killer %s is missing scripted trigger %s" key trigger)) node])
+            planetkillers <&!&> inner
+
+    let validateAnomaly210 : StructureValidator =
         fun _ es ->
             let anomalies = es.GlobMatchChildren("**/anomalies/*.txt")
-            let fNode = 
+            let fNode =
                 fun (x : Node) -> if x.Key == "anomaly" || x.Key == "anomaly_category" then Invalid [inv ((ErrorCodes.CustomError "This style of anomaly was removed with 2.1.0, please see vanilla for details") Severity.Error) x] else OK
-            anomalies <&!&> fNode            
+            anomalies <&!&> fNode
 
 
-    let validateIfElse210 : StructureValidator = 
+    let validateIfElse210 : StructureValidator =
         fun _ es ->
             let codeBlocks = (es.AllEffects |> List.map (fun n -> n :> Node))// @ (es.AllTriggers |> List.map (fun n -> n :> Node))
-            let fNode = 
+            let fNode =
                 (fun (x : Node) children ->
                     if x.Key == "limit" || x.Key == "modifier" then OK else
                     let res = if x.Key == "if" && x.Has "else" && not(x.Has "if") then Invalid [inv ErrorCodes.DeprecatedElse x] else OK
@@ -625,10 +639,10 @@ module STLValidation =
                 )
             codeBlocks <&!&> (foldNode2 fNode (<&&>) OK)
 
-    let validateIfElse : StructureValidator = 
+    let validateIfElse : StructureValidator =
         fun _ es ->
             let codeBlocks = (es.AllEffects |> List.map (fun n -> n :> Node))
-            let fNode = 
+            let fNode =
                 (fun (x : Node) children ->
                     if x.Key == "if" && x.Has "else" && not(x.Has "if") then
                         children
@@ -648,7 +662,3 @@ module STLValidation =
                         match res with |None -> children |Some r -> r <&&> children
                 )
             codeBlocks <&!&> (foldNode2 fNode (<&&>) OK)
-
-    // let validateOnActions : StructureValidator =
-    //     fun os es ->
-    //         os.Raw |> List.map (fun struct(e, _) -> e.)

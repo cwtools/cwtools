@@ -15,8 +15,9 @@ open CWTools.Process.ProcessCore
 open System.IO
 open System.Reflection
 open CWTools.Parser.DocsParser
+open CWTools.Games.Files
 
-let perf(b) = 
+let perf(b) =
     let timer = new System.Diagnostics.Stopwatch()
     timer.Start()
     let triggers, effects = parseDocsFile "./testfiles/validationtests/trigger_docs_2.0.2.txt" |> (function |Success(p, _, _) -> DocsParser.processDocs p)
@@ -29,7 +30,7 @@ let perf(b) =
     eprintfn "Elapsed Time: %i" timer.ElapsedMilliseconds
     ()
 
-let perf2(b) = 
+let perf2(b) =
     let timer = new System.Diagnostics.Stopwatch()
     timer.Start()
     let triggers, effects = parseDocsFile "./testfiles/validationtests/trigger_docs_2.0.2.txt" |> (function |Success(p, _, _) -> DocsParser.processDocs p)

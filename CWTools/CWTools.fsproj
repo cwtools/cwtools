@@ -24,6 +24,7 @@
     <Compile Include="Process/STLProcess.fs" />
     <Compile Include="Parser/ConfigParser.fs" />
     <Compile Include="Game/ResourceManager.fs" />
+    <Compile Include="Game/FileManager.fs" />
     <Compile Include="Game/Lookups.fs" />
     <Compile Include="Game/References.fs" />
     <Compile Include="Game/Stellaris/STLLookup.fs" />

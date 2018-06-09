@@ -5,22 +5,22 @@ test_component_template = {
 	icon_frame = 1
 	power = 0
 	cost = 0
-	
+
 	component_set = "station_small_aura_components"
-	
+
 	friendly_aura = {
 		name = "test_required"
 		apply_on = ships
-		
+
 		stack_info = {
 			id = friendly_support_aura
 			priority = 20
 		}
-		
+
 		modifier = {
 			ship_auto_repair_add = 0.05
 		}
-		
+
 		graphics = {
 			area_effect = {
 				entity = "circle_area_entity"
@@ -32,11 +32,11 @@ test_component_template = {
 			}
 		}
     }
-    
+
     hostile_aura = {
         name = "test_required"
     }
-	
+
 	ai_weight = {
 		weight = 2
 	}
@@ -50,4 +50,13 @@ test_component_template = {
 test_component_template = {
 	key = "test_required"
 	hidden = no
+}
+
+test_planet_killer = {
+	#key_desc
+	#key_action
+	#mesg_key
+	#fleet_key
+	key = "test_required"
+	type = planet_killer
 }
