@@ -204,7 +204,7 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
                                  valMapsLocs; valMegastructureLocs; valModifiers; valModules; valTraits; valGoverments; valPersonalities;
                                  valEthics; valPlanetClasses; valEdicts; valPolicies; valSectionTemplates; valSpeciesNames; valStratRes;
                                  valAmbient; valDeposits; valWarGoals; valEffectLocs; valTriggerLocs; valBuildingTags; valOpinionModifiers;
-                                 valScriptedTriggers; valSpecialProjects; valStarbaseType]
+                                 valScriptedTriggers; valSpecialProjects; valStarbaseType; valTileBlockers]
             let newEntities = EntitySet entities
             let oldEntities = EntitySet (resources.AllEntities())
             let vs = (validators |> List.map (fun v -> v oldEntities keys newEntities) |> List.fold (<&&>) OK

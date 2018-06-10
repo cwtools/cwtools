@@ -246,10 +246,10 @@ module rec Rules =
             |None -> OK
 
         and applyScopeField (root : Node) (ctx : RuleContext) (s : Scope) (leaf : Leaf) =
-            // let scope =
-            //     match getScopeContextAtPos leaf.Position.Start triggers effects root with
-            //     |Some s -> s
-            //     |None -> {Root = Scope.Any; From = []; Scopes = [Scope.Any]}
+            let scope2 =
+                match getScopeContextAtPos leaf.Position.Start triggers effects root with
+                |Some s -> s
+                |None -> {Root = Scope.Any; From = []; Scopes = [Scope.Any]}
             let scope = ctx.scopes
             let key = leaf.Value.ToString()
             match changeScope effectMap triggerMap key scope with
@@ -257,7 +257,12 @@ module rec Rules =
             |NotFound _ -> Invalid [inv (ErrorCodes.ConfigRulesInvalidTarget (s.ToString())) leaf]
             |WrongScope (command, prevscope, expected) -> Invalid [inv (ErrorCodes.ConfigRulesErrorInTarget command (prevscope.ToString()) (sprintf "%A" expected) ) leaf]
             |_ -> OK
-
+            // <&&>
+            // ( match changeScope effectMap triggerMap key scope2 with
+            // |NewScope ({Scopes = current::_} ,_) -> if current = s || s = Scope.Any || current = Scope.Any then OK else Invalid [inv (ErrorCodes.ConfigRulesTargetWrongScope (current.ToString()) (s.ToString())) leaf]
+            // |NotFound _ -> Invalid [inv (ErrorCodes.ConfigRulesInvalidTarget (s.ToString())) leaf]
+            // |WrongScope (command, prevscope, expected) -> Invalid [inv (ErrorCodes.ConfigRulesErrorInTarget command (prevscope.ToString()) (sprintf "%A" expected) ) leaf]
+            // |_ -> OK)
             // match key with
             // |x when x.StartsWith "event_target:" -> OK
             // |x when x.StartsWith "parameter:" -> OK
@@ -298,9 +303,11 @@ module rec Rules =
                 |None ->
                     match options.pushScope with
                     |Some ps ->
-                        eprintfn "ctx %A %A" ps (node.Key)
                         {ctx with scopes = {ctx.scopes with Scopes = ps::ctx.scopes.Scopes}}
-                    |None -> ctx
+                    |None ->
+                        if node.Key.StartsWith "event_target:" || node.Key.StartsWith "parameter:"
+                        then {ctx with scopes = {ctx.scopes with Scopes = Scope.Any::ctx.scopes.Scopes}}
+                        else ctx
             match rule with
             | Field.ValueField v -> OK
             | Field.ObjectField et -> OK
@@ -318,13 +325,14 @@ module rec Rules =
         let testSubtype (subtypes : SubTypeDefinition list) (node : Node) =
             let results =
                 subtypes |> List.filter (fun st -> st.typeKeyField |> function |Some tkf -> tkf == node.Key |None -> true)
-                        |> List.map (fun s -> s.name, applyClauseField node false {subtypes = []; scopes = defaultContext } (s.rules) node)
-            results |> List.choose (fun (s, res) -> res |> function |Invalid _ -> None |OK -> Some s)
+                        |> List.map (fun s -> s.name, s.pushScope, applyClauseField node false {subtypes = []; scopes = defaultContext } (s.rules) node)
+            let res = results |> List.choose (fun (s, ps, res) -> res |> function |Invalid _ -> None |OK -> Some (ps, s))
+            res |> List.tryPick fst, res |> List.map snd
 
         let applyNodeRuleRoot (typedef : TypeDefinition) (rule : Field) (options : Options) (node : Node) =
-            let subtypes = testSubtype (typedef.subtypes) node
+            let pushScope, subtypes = testSubtype (typedef.subtypes) node
             let startingScopeContext =
-                match options.pushScope with
+                match Option.orElse pushScope options.pushScope with
                 |Some ps -> { Root = ps; From = []; Scopes = [] }
                 |None -> defaultContext
             let context = { subtypes = subtypes; scopes = startingScopeContext }
@@ -476,7 +484,7 @@ module rec Rules =
             es |> List.choose (fun e -> if  e.logicalpath.Replace("/","\\").StartsWith(def.path.Replace("/","\\")) then Some e.entity else None)
                |> List.collect (fun e ->
                             let inner (n : Node) =
-                                let subtypes = ruleapplicator.TestSubtype(def.subtypes, n) |> List.map (fun s -> def.name + "." + s)
+                                let subtypes = ruleapplicator.TestSubtype(def.subtypes, n) |> snd |> List.map (fun s -> def.name + "." + s)
                                 let key =
                                     match def.nameField with
                                     |Some f -> n.TagText f

@@ -56,6 +56,7 @@ module rec ConfigParser =
         name : string
         rules : Rule list
         typeKeyField : string option
+        pushScope : Scope option
     }
     type TypeDefinition = {
         name : string
@@ -96,7 +97,7 @@ module rec ConfigParser =
         let one = node.Values |> List.map (fun e -> LeafC e, node.All |> List.fold (findComments e.Position) (false, []) |> snd)
         //eprintfn "%s %A" node.Key (node.All |> List.rev)
         //eprintfn "%A" one
-        let two = node.Children |> List.map (fun e -> NodeC e, node.All |> List.fold (findComments e.Position) (false, []) |> snd |> (fun l -> eprintfn "nc %A %A" (e.Key) l; (l)))
+        let two = node.Children |> List.map (fun e -> NodeC e, node.All |> List.fold (findComments e.Position) (false, []) |> snd |> (fun l -> (l)))
         let three = node.LeafValues |> Seq.toList |> List.map (fun e -> LeafValueC e, node.All |> List.fold (findComments e.Position) (false, []) |> snd)
         let new2 = one @ two @ three
         new2
@@ -287,8 +288,12 @@ module rec ConfigParser =
                     match comments |> List.tryFind (fun s -> s.Contains "type_key_filter") with
                     |Some c -> Some (c.Substring(c.IndexOf "=" + 1).Trim())
                     |None -> None
+                let pushScope =
+                    match comments |> List.tryFind (fun s -> s.Contains("push_scope")) with
+                    |Some s -> s.Substring(s.IndexOf "=" + 1).Trim() |> parseScope |> Some
+                    |None -> None
                 match getSettingFromString (subtype.Key) "subtype" with
-                |Some key -> Some { name = key; rules =  (getNodeComments subtype |> List.choose processChildConfig); typeKeyField = typekeyfilter }
+                |Some key -> Some { name = key; rules =  (getNodeComments subtype |> List.choose processChildConfig); typeKeyField = typekeyfilter; pushScope = pushScope }
                 |None -> None
             |_ -> None
         match node.Key with

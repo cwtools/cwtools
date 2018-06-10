@@ -368,7 +368,11 @@ module STLLocalisationValidation =
     let valModifiers : LocalisationValidator =
         fun _ keys es ->
             let mods = es.GlobMatchChildren("**/common/static_modifiers/*.txt")
+            let inner (node : Node) =
+                if node.Has "icon" then checkLocNodeKeyAdvs keys "" ["_desc"] node else OK
             mods <&!&> (checkLocNodeKeyAdvs keys "" [""])
+            <&&>
+            (mods <&!&> inner)
             //TODO: Add desc back behind a "strict" flag
            // mods |> List.fold (fun s c -> s <&&> checkKeyAndDesc c keys) OK
 
@@ -437,6 +441,12 @@ module STLLocalisationValidation =
             let edicts = es.GlobMatchChildren("**/common/edicts/*.txt")
             let inner = checkLocNodeTagAdvs keys "edict_" [""; "_desc"] "name"
             edicts <&!&> inner
+
+    let valTileBlockers : LocalisationValidator =
+        fun _ keys es ->
+            let tileblockers = es.AllOfTypeChildren EntityType.TileBlockers
+            let inner = checkLocNodeKeyAdvs keys "" [""; "_desc"]
+            tileblockers <&!&> inner
 
     let valPolicies : LocalisationValidator =
         fun _ keys es ->
