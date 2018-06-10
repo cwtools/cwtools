@@ -114,7 +114,7 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
 
         let updateTypeDef() =
             let rules, types, enums, complexenums = configs |> List.fold (fun (rs, ts, es, ces) (fn, ft) -> let r2, t2, e2, ce2 = parseConfig fn ft in rs@r2, ts@t2, es@e2, ces@ce2) ([], [], [], [])
-            let rulesWithMod = rules @ (lookup.coreModifiers |> List.map (fun c -> AliasRule ("modifier", Rule(c.tag, {min = 0; max = 100; leafvalue = false; description = None}, ValueField (ValueType.Float (-100000.0, 100000.0))))))
+            let rulesWithMod = rules @ (lookup.coreModifiers |> List.map (fun c -> AliasRule ("modifier", Rule(c.tag, {min = 0; max = 100; leafvalue = false; description = None; pushScope = None}, ValueField (ValueType.Float (-100000.0, 100000.0))))))
             let complexEnumDefs = getEnumsFromComplexEnums complexenums (resources.AllEntities() |> List.map (fun struct(e,_) -> e))
             let allEnums = enums @ complexEnumDefs
             lookup.configRules <- rulesWithMod

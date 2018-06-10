@@ -113,7 +113,7 @@ module STLScopes =
         ScopedEffect("last_created_system", allScopes, Scope.GalacticObject, EffectType.Both, defaultDesc, "");
         ScopedEffect("planet", [Scope.Pop; Scope.Tile; Scope.Planet], Scope.Planet, EffectType.Both, defaultDesc, "");
         ScopedEffect("capital_scope", [Scope.Country], Scope.Planet, EffectType.Both, defaultDesc, "");
-        ScopedEffect("orbit", [Scope.Fleet; Scope.Ship], Scope.Planet, EffectType.Both, defaultDesc, "");
+        ScopedEffect("orbit", [Scope.Fleet; Scope.Ship; Scope.Megastructure], Scope.Planet, EffectType.Both, defaultDesc, "");
         ScopedEffect("home_planet", [Scope.Country; Scope.Species; Scope.Planet], Scope.Planet, EffectType.Both, defaultDesc, "");
         ScopedEffect("star", [Scope.Planet; Scope.Ship; Scope.Fleet; Scope.AmbientObject; Scope.Megastructure; Scope.GalacticObject; Scope.Starbase], Scope.Planet, EffectType.Both, defaultDesc, "");
         ScopedEffect("last_created_ship", allScopes, Scope.Ship, EffectType.Both, defaultDesc, "");
@@ -362,6 +362,8 @@ module STLScopes =
         }
         member this.CurrentScope = match this.Scopes with |[] -> Scope.Any |x::_ -> x
         member this.PopScope = match this.Scopes with |[] -> [] |_::xs -> xs
+    let defaultContext =
+        { Root = Scope.Any; From = []; Scopes = [] }
 
     type ScopeResult =
         | NewScope of newScope : ScopeContext * ignoreKeys : string list

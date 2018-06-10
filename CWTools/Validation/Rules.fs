@@ -76,6 +76,7 @@ module rec Rules =
     type RuleContext =
         {
             subtypes : string list
+            scopes : ScopeContext
         }
     type RuleApplicator(rootRules : RootRule list, typedefs : TypeDefinition list , types : Map<string, string list>, enums : Map<string, string list>, localisation : (Lang * Set<string>) list, files : Set<string>, triggers : Effect list, effects : Effect list) =
         let triggerMap = triggers |> List.map (fun e -> e.Name, e) |> (fun l -> EffectMap.FromList(STLStringComparer(), l))
@@ -158,10 +159,10 @@ module rec Rules =
                         expandedrules |>
                         List.tryFind (function |(_, _, LeftTypeField (t, r)) -> checkValidLeftTypeRule types (LeftTypeField (t, r)) leaf.Key  |_ -> false )
                     match leftTypeRule with
-                    |Some (_, _, f) -> applyLeafRule root f leaf
+                    |Some (_, _, f) -> applyLeafRule root ctx f leaf
                     |_ ->
                         if enforceCardinality then Invalid [inv (ErrorCodes.ConfigRulesUnexpectedProperty (sprintf "Unexpected node %s in %s" leaf.Key startNode.Key)) leaf] else OK
-                |rs -> rs <&??&> (fun (_, _, f) -> applyLeafRule root f leaf) |> mergeValidationErrors "CW240"
+                |rs -> rs <&??&> (fun (_, _, f) -> applyLeafRule root ctx f leaf) |> mergeValidationErrors "CW240"
                 // match expandedrules |> List.tryFind (fst3 >> (==) leaf.Key) with
                 // | Some (_, _, f) -> applyLeafRule f leaf
                 // | None ->
@@ -187,13 +188,13 @@ module rec Rules =
                     let leftRules = leftClauseRule @ leftTypeRule @ leftScopeRule
                     match leftRules with
                     |[] -> if enforceCardinality then Invalid [inv (ErrorCodes.ConfigRulesUnexpectedProperty (sprintf "Unexpected node %s in %s" node.Key startNode.Key)) node] else OK
-                    |rs -> rs <&??&> (fun (_, _, f) -> applyNodeRule root enforceCardinality ctx f node)
+                    |rs -> rs <&??&> (fun (_, o, f) -> applyNodeRule root enforceCardinality ctx o f node)
                     // match leftClauseRule, leftTypeRule, leftScopeRule with
                     // |Some (_, _, f), _, _ -> applyNodeRule enforceCardinality ctx f node
                     // |_, Some (_, _, f), _ -> applyNodeRule enforceCardinality ctx f node
                     // |_, _, Some(_, _, f) -> applyNodeRule enforceCardinality ctx f node
                     // |None, None, None -> if enforceCardinality then Invalid [inv (ErrorCodes.CustomError "Unexpected node" Severity.Error) node] else OK
-                | rs -> rs <&??&> (fun (_, _, f) -> applyNodeRule root enforceCardinality ctx f node)
+                | rs -> rs <&??&> (fun (_, o, f) -> applyNodeRule root enforceCardinality ctx o f node)
             let checkCardinality (node : Node) (rule : Rule) =
                 let key, opts, field = rule
                 match key, field with
@@ -244,11 +245,12 @@ module rec Rules =
                 if values |> List.exists (fun s -> s == value) then OK else Invalid [inv (ErrorCodes.ConfigRulesUnexpectedValue (sprintf "Expected key of type %s" t)) leaf]
             |None -> OK
 
-        and applyScopeField (root : Node) (s : Scope) (leaf : Leaf) =
-            let scope =
-                match getScopeContextAtPos leaf.Position.Start triggers effects root with
-                |Some s -> s
-                |None -> {Root = Scope.Any; From = []; Scopes = [Scope.Any]}
+        and applyScopeField (root : Node) (ctx : RuleContext) (s : Scope) (leaf : Leaf) =
+            // let scope =
+            //     match getScopeContextAtPos leaf.Position.Start triggers effects root with
+            //     |Some s -> s
+            //     |None -> {Root = Scope.Any; From = []; Scopes = [Scope.Any]}
+            let scope = ctx.scopes
             let key = leaf.Value.ToString()
             match changeScope effectMap triggerMap key scope with
             |NewScope ({Scopes = current::_} ,_) -> if current = s || s = Scope.Any || current = Scope.Any then OK else Invalid [inv (ErrorCodes.ConfigRulesTargetWrongScope (current.ToString()) (s.ToString())) leaf]
@@ -271,30 +273,42 @@ module rec Rules =
                 if values |> List.exists (fun s -> s == value) then OK else Invalid [inv (ErrorCodes.ConfigRulesUnexpectedValue (sprintf "Expected key of type %s" t)) node]
             |None -> OK
 
-        and applyLeafRule (root : Node) (rule : Field) (leaf : Leaf) =
+        and applyLeafRule (root : Node) (ctx : RuleContext) (rule : Field) (leaf : Leaf) =
             match rule with
             | Field.ValueField v -> applyValueField v leaf
             | Field.ObjectField et -> applyObjectField et leaf
             | Field.TypeField t -> applyTypeField t leaf
-            | Field.LeftTypeField (t, f) -> applyLeftTypeFieldLeaf t leaf <&&> applyLeafRule root f leaf
+            | Field.LeftTypeField (t, f) -> applyLeftTypeFieldLeaf t leaf <&&> applyLeafRule root ctx f leaf
             | Field.ClauseField rs -> OK
             | Field.LeftClauseField _ -> OK
             | Field.LeftScopeField _ -> OK
-            | Field.ScopeField s -> applyScopeField root s leaf
+            | Field.ScopeField s -> applyScopeField root ctx s leaf
             | Field.LocalisationField synced -> checkLocalisationField localisation synced leaf
             | Field.FilepathField -> checkFileExists files leaf
             | Field.AliasField _ -> OK
             | Field.SubtypeField _ -> OK
 
-        and applyNodeRule (root : Node) (enforceCardinality : bool) (ctx : RuleContext) (rule : Field) (node : Node) =
+        and applyNodeRule (root : Node) (enforceCardinality : bool) (ctx : RuleContext) (options : Options) (rule : Field) (node : Node) =
+            let newCtx =
+                match oneToOneScopes |> List.tryFind (fun (k, _) -> k == node.Key) with
+                |Some (_, f) ->
+                    match f (ctx.scopes, false) with
+                    |(s, true) -> {ctx with scopes = {ctx.scopes with Scopes = s.CurrentScope::ctx.scopes.Scopes}}
+                    |(s, false) -> {ctx with scopes = s}
+                |None ->
+                    match options.pushScope with
+                    |Some ps ->
+                        eprintfn "ctx %A %A" ps (node.Key)
+                        {ctx with scopes = {ctx.scopes with Scopes = ps::ctx.scopes.Scopes}}
+                    |None -> ctx
             match rule with
             | Field.ValueField v -> OK
             | Field.ObjectField et -> OK
             | Field.TypeField _ -> OK
-            | Field.LeftTypeField (t, f) -> applyLeftTypeFieldNode t node <&&> applyNodeRule root enforceCardinality ctx f node
-            | Field.ClauseField rs -> applyClauseField root enforceCardinality ctx rs node
-            | Field.LeftClauseField (_, rs) -> applyClauseField root enforceCardinality ctx rs node
-            | Field.LeftScopeField rs -> applyClauseField root enforceCardinality ctx rs node
+            | Field.LeftTypeField (t, f) -> applyLeftTypeFieldNode t node <&&> applyNodeRule root enforceCardinality newCtx options f node
+            | Field.ClauseField rs -> applyClauseField root enforceCardinality newCtx rs node
+            | Field.LeftClauseField (_, rs) -> applyClauseField root enforceCardinality newCtx rs node
+            | Field.LeftScopeField rs -> applyClauseField root enforceCardinality newCtx rs node
             | Field.LocalisationField _ -> OK
             | Field.FilepathField -> OK
             | Field.ScopeField _ -> OK
@@ -304,13 +318,17 @@ module rec Rules =
         let testSubtype (subtypes : SubTypeDefinition list) (node : Node) =
             let results =
                 subtypes |> List.filter (fun st -> st.typeKeyField |> function |Some tkf -> tkf == node.Key |None -> true)
-                        |> List.map (fun s -> s.name, applyClauseField node false {subtypes = []} (s.rules) node)
+                        |> List.map (fun s -> s.name, applyClauseField node false {subtypes = []; scopes = defaultContext } (s.rules) node)
             results |> List.choose (fun (s, res) -> res |> function |Invalid _ -> None |OK -> Some s)
 
-        let applyNodeRuleRoot (typedef : TypeDefinition) (rule : Field) (node : Node) =
+        let applyNodeRuleRoot (typedef : TypeDefinition) (rule : Field) (options : Options) (node : Node) =
             let subtypes = testSubtype (typedef.subtypes) node
-            let context = { subtypes = subtypes }
-            applyNodeRule node true context rule node
+            let startingScopeContext =
+                match options.pushScope with
+                |Some ps -> { Root = ps; From = []; Scopes = [] }
+                |None -> defaultContext
+            let context = { subtypes = subtypes; scopes = startingScopeContext }
+            applyNodeRule node true context options rule node
 
         let validate ((path, root) : string * Node) =
             let inner (node : Node) =
@@ -322,7 +340,7 @@ module rec Rules =
                     let expandedRules = typerules |> List.collect (function | _,_,(AliasField a) -> (aliases |> List.filter (fun (s,_) -> s == a) |> List.map snd) |x -> [x])
                     //eprintfn "%A" expandedRules
                     match expandedRules |> List.tryFind (fun (n, _, _) -> n == typedef.name) with
-                    |Some (_, _, f) -> applyNodeRuleRoot typedef f node
+                    |Some (_, o, f) -> applyNodeRuleRoot typedef f o node
                     |None ->
                         //eprintfn "Couldn't find rules for %s" typedef.name
                         OK
@@ -331,7 +349,7 @@ module rec Rules =
                     OK
             (root.Children <&!&> inner)
 
-        member __.ApplyNodeRule(rule, node) = applyNodeRule node true {subtypes = []} rule node
+        member __.ApplyNodeRule(rule, node) = applyNodeRule node true {subtypes = []; scopes = defaultContext } defaultOptions rule node
         member __.TestSubtype((subtypes : SubTypeDefinition list), (node : Node)) =
             testSubtype subtypes node
         //member __.ValidateFile(node : Node) = validate node

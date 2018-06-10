@@ -84,6 +84,7 @@ module STLConstants =
             |"megastructure" -> Scope.Megastructure
             |"design" -> Scope.Design
             |"starbase" -> Scope.Starbase
+            |"star" -> Scope.Star
             |"any" -> Scope.Any
             |"all" -> Scope.Any
             |"no_scope" -> Scope.Any

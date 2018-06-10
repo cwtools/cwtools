@@ -1,6 +1,6 @@
 namespace CWTools.Parser
 
-    
+
 open FParsec
 open Microsoft.FSharp.Compiler.Range
 open Types
@@ -32,9 +32,10 @@ module rec ConfigParser =
         max : int
         leafvalue : bool
         description : string option
+        pushScope : Scope option
     }
     type Rule = string * Options * Field
-    type Field = 
+    type Field =
     | ValueField of ValueType
     | ObjectField of EntityType
     | TypeField of string
@@ -70,7 +71,7 @@ module rec ConfigParser =
         nameTree : Node
     }
 
-    let defaultOptions = { min = 0; max = 100; leafvalue = false; description = None }
+    let defaultOptions = { min = 0; max = 100; leafvalue = false; description = None; pushScope = None }
     let requiredSingle = { defaultOptions with min = 1; max = 1 }
     let requiredMany = { defaultOptions with min = 1; max = 100 }
     let optionalSingle = { defaultOptions with min = 0; max = 1 }
@@ -95,7 +96,7 @@ module rec ConfigParser =
         let one = node.Values |> List.map (fun e -> LeafC e, node.All |> List.fold (findComments e.Position) (false, []) |> snd)
         //eprintfn "%s %A" node.Key (node.All |> List.rev)
         //eprintfn "%A" one
-        let two = node.Children |> List.map (fun e -> NodeC e, node.All |> List.fold (findComments e.Position) (false, []) |> snd)
+        let two = node.Children |> List.map (fun e -> NodeC e, node.All |> List.fold (findComments e.Position) (false, []) |> snd |> (fun l -> eprintfn "nc %A %A" (e.Key) l; (l)))
         let three = node.LeafValues |> Seq.toList |> List.map (fun e -> LeafValueC e, node.All |> List.fold (findComments e.Position) (false, []) |> snd)
         let new2 = one @ two @ three
         new2
@@ -107,7 +108,7 @@ module rec ConfigParser =
 
     let getFloatSettingFromString (full : string) =
         match getSettingFromString full "float" with
-        |Some s -> 
+        |Some s ->
             let split = s.Split([|".."|], 2, StringSplitOptions.None)
             if split.Length < 2 then None else
                 try
@@ -119,7 +120,7 @@ module rec ConfigParser =
 
     let getIntSettingFromString (full : string) =
         match getSettingFromString full "int" with
-        |Some s -> 
+        |Some s ->
             let split = s.Split([|".."|], 2, StringSplitOptions.None)
             if split.Length < 2 then None else
                 try
@@ -134,11 +135,11 @@ module rec ConfigParser =
             let split = s.Split([|":"|], 2, StringSplitOptions.None)
             if split.Length < 2 then None else Some (split.[0], split.[1])
         |None -> None
-                
+
 
 
     let getOptionsFromComments (comments : string list) =
-        let min, max = 
+        let min, max =
             match comments |> List.tryFind (fun s -> s.Contains("cardinality")) with
             |Some c ->
                 let nums = c.Substring(c.IndexOf "=" + 1).Trim().Split([|".."|], 2, StringSplitOptions.None)
@@ -147,12 +148,16 @@ module rec ConfigParser =
                 with
                 |_ -> 1, 1
             |None -> 1, 1
-        let description = 
+        let description =
             match comments |> List.tryFind (fun s -> s.StartsWith "##") with
             |Some d -> Some (d.Trim('#'))
             |None -> None
-        { min = min; max = max; leafvalue = false; description = description }
-        
+        let pushScope =
+            match comments |> List.tryFind (fun s -> s.Contains("push_scope")) with
+            |Some s -> s.Substring(s.IndexOf "=" + 1).Trim() |> parseScope |> Some
+            |None -> None
+        { min = min; max = max; leafvalue = false; description = description; pushScope = pushScope }
+
     let processChildConfig ((child, comments) : Child * string list)  =
         match child with
         |NodeC n -> Some (configNode n comments (n.Key))
@@ -163,16 +168,16 @@ module rec ConfigParser =
     let configNode (node : Node) (comments : string list) (key : string) =
         let children = getNodeComments node
         let options = getOptionsFromComments comments
-        let field = 
+        let field =
             match key with
             |x when x.StartsWith "subtype[" ->
                 match getSettingFromString x "subtype" with
                 |Some st when st.StartsWith "!" -> SubtypeField (st.Substring(1), false, ClauseField(children |> List.choose processChildConfig))
                 |Some st -> SubtypeField (st, true, ClauseField(children |> List.choose processChildConfig))
                 |None -> ClauseField []
-            |"int" -> LeftClauseField (ValueType.Int (Int32.MinValue, Int32.MaxValue), children |> List.choose processChildConfig)  
+            |"int" -> LeftClauseField (ValueType.Int (Int32.MinValue, Int32.MaxValue), children |> List.choose processChildConfig)
             |"float" -> LeftClauseField (ValueType.Float (Double.MinValue, Double.MaxValue), children |> List.choose processChildConfig)
-            |"scalar" -> LeftClauseField (ValueType.Scalar, children |> List.choose processChildConfig) 
+            |"scalar" -> LeftClauseField (ValueType.Scalar, children |> List.choose processChildConfig)
             |"scope" -> LeftScopeField (children |> List.choose processChildConfig)
             |x when x.StartsWith "enum[" ->
                 match getSettingFromString x "enum" with
@@ -182,7 +187,7 @@ module rec ConfigParser =
                 LeftTypeField(x.Trim([|'<'; '>'|]), ClauseField(children |> List.choose processChildConfig))
             |_ -> ClauseField(children |> List.choose processChildConfig)
         Rule(key, options, field)
-    
+
     let processChildConfigRoot ((child, comments) : Child * string list) =
         match child with
         |NodeC n when n.Key == "types" -> None
@@ -217,7 +222,7 @@ module rec ConfigParser =
                 TypeRule (Rule(x, options, ClauseField(children |> List.choose processChildConfig)))
         |x ->
             TypeRule (Rule(x, options, ClauseField(children |> List.choose processChildConfig)))
-    
+
     let configLeaf (leaf : Leaf) (comments : string list) (key : string) =
         let rightfield =
             match leaf.Value.ToString() with
@@ -228,15 +233,15 @@ module rec ConfigParser =
             |"filepath" -> FilepathField
             |x when x.StartsWith "<" && x.EndsWith ">" ->
                 TypeField (x.Trim([|'<'; '>'|]))
-            |x when x.StartsWith "int" -> 
+            |x when x.StartsWith "int" ->
                 match getIntSettingFromString x with
                 |Some (min, max) -> ValueField (ValueType.Int (min, max))
                 |None -> (defaultFloat)
-            |x when x.StartsWith "float" -> 
+            |x when x.StartsWith "float" ->
                 match getFloatSettingFromString x with
                 |Some (min, max) -> ValueField (ValueType.Float (min, max))
                 |None -> (defaultFloat)
-            |x when x.StartsWith "enum" -> 
+            |x when x.StartsWith "enum" ->
                 match getSettingFromString x "enum" with
                 |Some (name) -> ValueField (ValueType.Enum name)
                 |None -> ValueField (ValueType.Enum "")
@@ -248,12 +253,12 @@ module rec ConfigParser =
                 match getSettingFromString x "scope" with
                 |Some target ->
                     ScopeField (parseScope target)
-                |None -> ValueField ValueType.Scalar                
+                |None -> ValueField ValueType.Scalar
             |x when x.StartsWith "event_target" ->
                 match getSettingFromString x "event_target" with
                 |Some target ->
                     ScopeField (parseScope target)
-                |None -> ValueField ValueType.Scalar                
+                |None -> ValueField ValueType.Scalar
             |x -> ValueField (ValueType.Specific x)
         let options = getOptionsFromComments comments
         let field =
@@ -277,15 +282,15 @@ module rec ConfigParser =
     let processType (node : Node) (comments : string list) =
         let parseSubType ((child : Child), comments : string list) =
             match child with
-            |NodeC subtype when subtype.Key.StartsWith "subtype" -> 
-                let typekeyfilter = 
+            |NodeC subtype when subtype.Key.StartsWith "subtype" ->
+                let typekeyfilter =
                     match comments |> List.tryFind (fun s -> s.Contains "type_key_filter") with
                     |Some c -> Some (c.Substring(c.IndexOf "=" + 1).Trim())
                     |None -> None
                 match getSettingFromString (subtype.Key) "subtype" with
                 |Some key -> Some { name = key; rules =  (getNodeComments subtype |> List.choose processChildConfig); typeKeyField = typekeyfilter }
                 |None -> None
-            |_ -> None            
+            |_ -> None
         match node.Key with
         |x when x.StartsWith("type") ->
             let typename = getSettingFromString node.Key "type"
@@ -296,19 +301,19 @@ module rec ConfigParser =
             |Some tn -> Some { name = tn; nameField = namefield; path = path; conditions = None; subtypes = subtypes}
             |None -> None
         |_ -> None
-        
+
 
 
     let processChildType ((child, comments) : Child * string list) =
         match child with
-        |NodeC n when n.Key == "types" -> 
+        |NodeC n when n.Key == "types" ->
             let inner ((child2, comments2) : Child * string list) =
                 match child2 with
                 |NodeC n2 -> (processType n2 comments2)
                 |_ -> None
             Some (getNodeComments n |> List.choose inner)
         |_ -> None
-   
+
     let processEnum (node : Node) (comments : string list) =
         match node.Key with
         |x when x.StartsWith("enum") ->
@@ -321,7 +326,7 @@ module rec ConfigParser =
 
     let processChildEnum ((child, comments) : Child * string list) =
         match child with
-        |NodeC n when n.Key == "enums" -> 
+        |NodeC n when n.Key == "enums" ->
             let inner ((child2, comments2) : Child * string list) =
                 match child2 with
                 |NodeC n2 -> (processEnum n2 comments2)
@@ -342,7 +347,7 @@ module rec ConfigParser =
 
     let processComplexChildEnum ((child, comments) : Child * string list) =
         match child with
-        |NodeC n when n.Key == "enums" -> 
+        |NodeC n when n.Key == "enums" ->
             let inner ((child2, comments2) : Child * string list) =
                 match child2 with
                 |NodeC n2 -> (processComplexEnum n2 comments2)
@@ -361,8 +366,8 @@ module rec ConfigParser =
         let parsed = parseConfigString filename fileString
         match parsed with
         |Failure(e, _, _) -> eprintfn "config file %s failed with %s" filename e; ([], [], [], [])
-        |Success(s,_,_) -> 
-            let root = shipProcess.ProcessNode<Node> EntityType.Other "root" (mkZeroFile filename) s
+        |Success(s,_,_) ->
+            let root = shipProcess.ProcessNode<Node> EntityType.Other "root" (mkZeroFile filename) (s |> List.rev)
             processConfig root
 
 
@@ -374,7 +379,7 @@ module rec ConfigParser =
 // 	building = <starbase_building>
 // 	effect = { ... }
 // }
-    let createStarbase = 
+    let createStarbase =
         let owner = Rule ("owner", requiredSingle, ScopeField Scope.Any )
         let size = Rule ("size", requiredSingle, ObjectField EntityType.ShipSizes)
         let moduleR = Rule ("module", optionalMany, ObjectField EntityType.StarbaseModules)
@@ -405,7 +410,7 @@ module rec ConfigParser =
 // # planet_modifier_with_pop_trigger = { key (optional), potential (scope: pop), modifier }: applies modifier to pops on planet that satisfy condition in trigger
 
     let building =
-        let inner = 
+        let inner =
             [
                 Rule("allow",  requiredSingle, ValueField ValueType.Scalar);
                 Rule("empire_unique", optionalSingle, ValueField ValueType.Bool)
@@ -429,7 +434,7 @@ module rec ConfigParser =
     // icon_frame = 2
     // base_buildtime = 60
     // can_have_federation_design = yes
-    // enable_default_design = yes	#if yes, countries will have an auto-generated design at start	
+    // enable_default_design = yes	#if yes, countries will have an auto-generated design at start
 
     // default_behavior = swarm
 
@@ -501,5 +506,5 @@ module rec ConfigParser =
 //      }
 //  }
 //  type[species_trait] = {
-//      path = "game/common/traits"   
+//      path = "game/common/traits"
 //  }
