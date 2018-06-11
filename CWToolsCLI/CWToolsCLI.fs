@@ -9,6 +9,7 @@ open System.Diagnostics.Tracing
 open System.Reflection
 open CWTools.Localisation
 open CWTools.Localisation.STLLocalisation
+open CWTools.Games.Files
 
 module CWToolsCLI =
     open Argu
@@ -63,7 +64,7 @@ module CWToolsCLI =
     type Arguments =
         | Directory of path : string
         | Game of Game
-        | Scope of CWTools.Games.FilesScope
+        | Scope of FilesScope
         | ModFilter of string
         | DocsPath of string
         | [<CliPrefix(CliPrefix.None)>] Validate of ParseResults<ValidateArgs>
@@ -86,10 +87,10 @@ module CWToolsCLI =
     let parser = ArgumentParser.Create<Arguments>(programName = "CWToolsCLI.exe", errorHandler = new Exiter())
 
     let getEffectsAndTriggers docsPath =
-        let docsParsed = 
+        let docsParsed =
             match docsPath with
             | Some path -> DocsParser.parseDocsFile path
-            | None ->                 
+            | None ->
                 DocsParser.parseDocsStream (Assembly.GetEntryAssembly().GetManifestResourceStream("CWToolsCLI.game_effects_triggers_1.9.1.txt"))
         match docsParsed with
         |Success(p, _, _) -> p |> DocsParser.processDocs
@@ -101,10 +102,10 @@ module CWToolsCLI =
         let sortOrder = results.GetResult <@ Sort @>
         match results.GetResult <@ ListType @> with
         | ListTypes.Folders -> printfn "%A" gameObj.folders
-        | ListTypes.Files -> 
+        | ListTypes.Files ->
             match sortOrder with
             | None
-            | Some ListSort.Path -> 
+            | Some ListSort.Path ->
                 let files = gameObj.allFileList |> List.map (sprintf "%O")
                 File.WriteAllLines("files.csv", files)
                 //gameObj.allFileList |> List.iter (fun f -> printfn "%O" f)
@@ -128,7 +129,7 @@ module CWToolsCLI =
         match valType with
         | ValidateType.ParseErrors -> printfn "%A" gameObj.parserErrorList
         | ValidateType.Errors -> printfn "%A" (gameObj.validationErrorList())
-        | ValidateType.Localisation -> 
+        | ValidateType.Localisation ->
             gameObj.localisationErrorList |> List.iter (fun l -> printfn "%O" l)
             //printfn "%A" (gameObj.localisationErrorList)
         | ValidateType.All -> printfn "%A" gameObj.parserErrorList;  printfn "%A" (gameObj.validationErrorList()); printfn "%A" (gameObj.parserErrorList.Length + (gameObj.validationErrorList().Length))
@@ -154,6 +155,6 @@ module CWToolsCLI =
         | Validate r -> validate game directory scope modFilter docsPath r
         | Directory _
         | Game _ -> failwith "internal error: this code should never be reached"
-        
+
         //printfn "%A" argv
         0 // return an integer exit code

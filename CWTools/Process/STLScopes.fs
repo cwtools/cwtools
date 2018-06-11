@@ -102,6 +102,7 @@ module STLScopes =
         ScopedEffect("defender", [Scope.War], Scope.Country, EffectType.Both, defaultDesc, "");
         ScopedEffect("attacker", [Scope.War], Scope.Country, EffectType.Both, defaultDesc, "");
         ScopedEffect("owner", [Scope.Species ;Scope.Ship; Scope.Pop; Scope.Fleet; Scope.Planet; Scope.PopFaction; Scope.Sector; Scope.Leader; Scope.Country; Scope.Starbase; Scope.Tile; Scope.GalacticObject], Scope.Country, EffectType.Both, "", ""); //Fleet, Planet, PopFaction, Sector, Leader, Country, Tile from vanilla use
+        ScopedEffect("owner_species", [Scope.Species ;Scope.Ship; Scope.Pop; Scope.Fleet; Scope.Planet; Scope.PopFaction; Scope.Sector; Scope.Leader; Scope.Country; Scope.Starbase; Scope.Tile; Scope.GalacticObject], Scope.Species, EffectType.Both, "", ""); //Copied owner
         ScopedEffect("controller", [Scope.Planet], Scope.Country, EffectType.Both, "", ""); //Planet from vanilla use
         ScopedEffect("planet_owner", [Scope.Planet], Scope.Country, EffectType.Both, defaultDesc, "");
         ScopedEffect("last_created_country", allScopes, Scope.Country, EffectType.Both, defaultDesc, "");

@@ -1,0 +1,71 @@
+types = {
+	type[edict] = {
+		name_field = "name"
+		path = "game/common/edicts"
+
+		## type_key_filter = planet_edict
+		subtype[planet_edict] = {
+		}
+
+		## type_key_filter = country_edict
+		subtype[country_edict] = {
+		}
+
+		## type_key_filter = country_edict
+		subtype[country_edict_ambition] = {
+			is_ambition = yes
+		}
+	}
+}
+
+
+edict = {
+	name = scalar
+	length = int
+
+	subtype[!country_edict_ambition] = {
+		cost = { <resource> = int }
+	}
+
+	subtype[country_edict_ambition] = {
+		is_ambition = yes
+	}
+
+	## cardinality = 0..1
+	modifier = {
+		alias_name[modifier] = alias_match_left[modifier]
+	}
+
+	## cardinality = 0..1
+	potential = {
+		alias_name[trigger] = alias_match_left[trigger]
+	}
+
+	## cardinality = 0..1
+	allow = {
+		alias_name[trigger] = alias_match_left[trigger]
+	}
+
+	## cardinality = 0..1
+	prerequisites = {
+		## cardinality = 0..100
+		<technology>
+	}
+
+	## cardinality = 0..1
+	show_tech_unlock_if = {
+		alias_name[trigger] = alias_match_left[trigger]
+	}
+
+	## cardinality = 0..1
+	ai_weight = {
+		weight = float
+		alias_name[modifier_rule] = alias_match_left[modifier_rule]
+	}
+
+	## cardinality = 0..1
+	effect = {
+		alias_name[effect] = alias_match_left[effect]
+	}
+}
+

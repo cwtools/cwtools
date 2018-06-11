@@ -1,0 +1,18 @@
+types = {
+	type[starbase_building] = {
+		path = "game/common/starbase_buildings"
+	}
+	type[starbase_level] = {
+		path = "game/common/starbase_levels"
+	}
+	type[starbase_module] = {
+		path = "game/common/starbase_modules"
+	}
+	type[starbase_type] = {
+		path = "game/common/starbase_types"
+	}
+}
+
+
+
+

@@ -1,0 +1,217 @@
+types = {
+	type[event] = {
+		name_field = "id"
+
+		path = "game/events"
+
+		## type_key_filter = country_event
+		## push_scope = country
+		subtype[country] = {
+		}
+		## type_key_filter = pop_event
+		## push_scope = pop
+		subtype[pop] = {
+		}
+		## type_key_filter = pop_faction_event
+		## push_scope = pop_faction
+		subtype[pop_faction] = {
+		}
+		## type_key_filter = planet_event
+		## push_scope = planet
+		subtype[planet] = {
+		}
+		## type_key_filter = ship_event
+		## push_scope = ship
+		subtype[ship] = {
+		}
+		## type_key_filter = fleet_event
+		## push_scope = fleet
+		subtype[fleet] = {
+		}
+		## type_key_filter = event
+		subtype[scopeless] = {
+		}
+		path = "game/events"
+		subtype[hidden] = {
+			hide_window = yes
+		}
+		subtype[diplomatic] = {
+			diplomatic = yes
+		}
+		subtype[default] = {
+			## cardinality = 0..1
+			hide_window = no
+
+			## cardinality = 0..1
+			diplomatic = no
+		}
+		subtype[triggered] = {
+			is_triggered_only = yes
+		}
+	}
+}
+
+event = {
+	id = scalar
+
+	subtype[!hidden] = {
+		title = localisation
+		desc = localisation
+
+		desc = {
+			trigger = { alias_name[trigger] = alias_match_left[trigger] }
+			text = localisation
+		}
+	}
+
+	subtype[default] = {
+		picture = scalar
+		picture = {
+			picture = scalar
+			trigger = { alias_name[trigger] = alias_match_left[trigger] }
+		}
+	}
+
+	## cardinality = 0..1
+	location = scope[planet]
+	## cardinality = 0..1
+	location = scope[system]
+	## cardinality = 0..1
+	location = scope[ship]
+	## cardinality = 0..1
+	location = scope[fleet]
+	## cardinality = 0..1
+	location = scope[country]
+
+	## cardinality = 0..1
+	show_sound = scalar
+
+	## cardinality = 0..1
+	hide_window = bool
+
+	## cardinality = 0..1
+	diplomatic = bool
+
+	## cardinality = 0..1
+	is_triggered_only = bool
+
+	## cardinality = 0..1
+	fire_only_once = bool
+
+	## cardinality = 0..1
+	trackable = bool
+
+	## cardinality = 0..1
+	is_advisor_event = bool
+
+	## cardinality = 0..1
+	###Forces the event to pop-up even if player has supressed pop ups
+	auto_opens = bool
+
+	subtype[!triggered]
+	## cardinality = 0..1
+	mean_time_to_happen = {
+		## cardinality = 0..1
+		years = int
+
+		## cardinality = 0..1
+		months = int
+
+		## cardinality = 0..1
+		days = int
+
+		## cardinality = 0..100
+		alias_name[modifier_rule] = alias_match_left[modifier_rule]
+	}
+
+	subtype[diplomatic] = {
+		picture_event_data = {
+			#these can all be either a scope (country except for room that is ruler) or a key.
+			## cardinality = 0..1
+			room = scalar
+			## cardinality = 0..1
+			portrait = scalar
+			## cardinality = 0..1
+			planet_background = scalar
+			## cardinality = 0..1
+			graphical_culture = scalar
+			## cardinality = 0..1
+			city_level = scalar
+		}
+		## cardinality = 0..1
+		custom_gui = scalar
+		## cardinality = 0..1
+		###Force a diplomatic event to be viewed
+		force_open = bool
+	}
+
+	## cardinality = 0..1
+	trigger = {
+		alias_name[trigger] = alias_match_left[trigger]
+	}
+
+	## cardinality = 0..1
+	immediate = {
+		alias_name[effect] = alias_match_left[effect]
+	}
+
+	## cardinality = 0..100
+	option = {
+		name = localisation
+
+		## cardinality = 0..1
+		tooltip = {
+			alias_name[effect] = alias_match_left[effect]
+		}
+
+		## cardinality = 0..1
+		trigger = {
+			alias_name[trigger] = alias_match_left[trigger]
+		}
+
+		## cardinality = 0..1
+		allow = {
+			alias_name[trigger] = alias_match_left[trigger]
+		}
+
+		## cardinality = 0..1
+		exclusive_trigger = {
+			alias_name[trigger] = alias_match_left[trigger]
+		}
+
+		## cardinality = 0..1
+		ai_chance = {
+			factor = float[0..10000]
+			##cardinality = 0..100
+			alias_name[modifier_rule] = alias_match_left[modifier_rule]
+		}
+
+		subtype[diplomatic] = {
+			## cardinality = 0..1
+			response_text = localisation
+
+			## cardinality = 0..1
+			is_dialog_only = bool
+
+			## cardinality = 0..1
+			custom_gui = scalar
+
+			## cardinality = 0..1
+			### Binds this option to the "dismiss" action
+			default_hide_option = bool
+		}
+
+		## cardinality = 0..1
+		default_hide_option = bool
+
+		## cardinality = 0..1
+		alias_name[effect] = alias_match_left[effect]
+
+
+	}
+
+	## cardinality = 0..1
+	after = {
+		alias_name[effect] = alias_match_left[effect]
+	}
+}

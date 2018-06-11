@@ -339,7 +339,10 @@ module rec Rules =
             applyNodeRule node true context options rule node
 
         let validate ((path, root) : string * Node) =
+            let timer = new System.Diagnostics.Stopwatch()
+            timer.Start()
             let inner (node : Node) =
+
                 //eprintfn "Looking for %s" (path)
                 match typedefs |> List.tryFind (fun t -> path.Replace("/","\\").StartsWith(t.path.Replace("/","\\"))) with
                 |Some typedef ->
@@ -355,7 +358,10 @@ module rec Rules =
                 |None ->
                     //eprintfn "Couldn't find rule for %s" node.Key
                     OK
-            (root.Children <&!&> inner)
+            let res = (root.Children <&!&> inner)
+            eprintfn "Elapsed Time: %i" timer.ElapsedMilliseconds
+            res
+
 
         member __.ApplyNodeRule(rule, node) = applyNodeRule node true {subtypes = []; scopes = defaultContext } defaultOptions rule node
         member __.TestSubtype((subtypes : SubTypeDefinition list), (node : Node)) =

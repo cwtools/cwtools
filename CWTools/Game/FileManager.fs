@@ -20,24 +20,24 @@ module Files =
         let convertPathToLogicalPath =
             fun (path : string) ->
                 let path = path.Replace("/","\\")
-                if path.Contains(normalisedScopeDirectory) then path.Replace(normalisedScopeDirectory+"\\", "") else
-                    if path.StartsWith "gfx\\" || path.StartsWith "gfx//" then path else
-                    let pathContains (part : string) =
-                        path.Contains ("/"+part+"/" )|| path.Contains( "\\"+part+"\\")
-                    let pathIndex (part : string) =
-                        let i = if path.IndexOf ("/"+part+"/" ) < 0 then path.IndexOf("\\"+part+"\\") else path.IndexOf ("/"+part+"/" )
-                        i + 1
-                    let matches =
-                        [
-                            if pathContains "common" then let i = pathIndex "common" in yield i, path.Substring(i) else ();
-                            if pathContains "interface" then let i = pathIndex "interface" in yield i, path.Substring(i) else ();
-                            if pathContains "gfx" then let i = pathIndex "gfx" in yield i, path.Substring(i) else ();
-                            if pathContains "events" then let i = pathIndex "events" in yield i, path.Substring(i) else ();
-                            if pathContains "localisation" then let i = pathIndex "localisation" in yield i, path.Substring(i) else ();
-                            if pathContains "localisation_synced" then let i = pathIndex "localisation_synced" in yield i, path.Substring(i) else ();
-                            if pathContains "map" then let i = pathIndex "map" in yield i, path.Substring(i) else ();
-                        ]
-                    if matches.IsEmpty then path else matches |> List.minBy fst |> snd
+                let path = if path.Contains(normalisedScopeDirectory) then path.Replace(normalisedScopeDirectory+"\\", "") else path
+                if path.StartsWith "gfx\\" || path.StartsWith "gfx//" then path else
+                let pathContains (part : string) =
+                    path.Contains ("/"+part+"/" )|| path.Contains( "\\"+part+"\\")
+                let pathIndex (part : string) =
+                    let i = if path.IndexOf ("/"+part+"/" ) < 0 then path.IndexOf("\\"+part+"\\") else path.IndexOf ("/"+part+"/" )
+                    i + 1
+                let matches =
+                    [
+                        if pathContains "common" then let i = pathIndex "common" in yield i, path.Substring(i) else ();
+                        if pathContains "interface" then let i = pathIndex "interface" in yield i, path.Substring(i) else ();
+                        if pathContains "gfx" then let i = pathIndex "gfx" in yield i, path.Substring(i) else ();
+                        if pathContains "events" then let i = pathIndex "events" in yield i, path.Substring(i) else ();
+                        if pathContains "localisation" then let i = pathIndex "localisation" in yield i, path.Substring(i) else ();
+                        if pathContains "localisation_synced" then let i = pathIndex "localisation_synced" in yield i, path.Substring(i) else ();
+                        if pathContains "map" then let i = pathIndex "map" in yield i, path.Substring(i) else ();
+                    ]
+                if matches.IsEmpty then path else matches |> List.minBy fst |> snd
 
         let scriptFolders = [
                     "common/agendas";

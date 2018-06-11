@@ -1,0 +1,5 @@
+types = {
+	type[graphical_culture] = {
+		path = "game/common/graphical_culture"
+	}
+}

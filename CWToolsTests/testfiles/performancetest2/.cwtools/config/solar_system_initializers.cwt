@@ -1,0 +1,5 @@
+types = {
+	type[solar_system_initializer] = {
+		path = "game/common/solar_system_initializers"
+	}
+}

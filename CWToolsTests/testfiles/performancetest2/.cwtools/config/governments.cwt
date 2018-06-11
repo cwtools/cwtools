@@ -1,0 +1,305 @@
+types = {
+	type[authority] = {
+		path = "game/common/governments/authorities"
+	}
+	type[civic] = {
+		path = "game/common/governments/civics"
+	}
+	type[government] = {
+		path = "game/common/governments"
+	}
+}
+
+
+
+civic = {
+	## cardinality = 0..1
+	### AND trigger, no scope; use this to prevent the civic from being selectable by the player (UI)
+	playable = {
+		alias_name[trigger] = alias_match_left[trigger]
+	}
+	## cardinality = 0..1
+	icon = filepath #TODO graphics
+	## cardinality = 0..1
+	### requirements list, supports country_type, ethics, authority and civics. See ../readme_requirements.txt
+	potential = {
+		## cardinality = 0..1
+		text = localisation
+
+		## cardinality = 0..1
+		always = bool
+
+		## cardinality = 0..1
+		ethics = {
+			## cardinality = 0..3
+			value = <ethos>
+
+			## cardinality = 0..100
+			OR = {
+				## cardinality = 0..1
+				text = localisation
+				## cardinality = 2..99
+				value = <ethos>
+			}
+			## cardinality = 0..100
+			NOT = {
+				## cardinality = 0..1
+				text = localisation
+				value = <ethos>
+			}
+			## cardinality = 0..100
+			NOR = {
+				## cardinality = 0..1
+				text = localisation
+				## cardinality = 2..99
+				value = <ethos>
+			}
+		}
+
+		## cardinality = 0..1
+		country_type = {
+			## cardinality = 0..1
+			value = <country_type>
+
+			## cardinality = 0..100
+			OR = {
+				## cardinality = 0..1
+				text = localisation
+				## cardinality = 2..99
+				value = <country_type>
+			}
+			## cardinality = 0..100
+			NOT = {
+				## cardinality = 0..1
+				text = localisation
+				value = <country_type>
+			}
+			## cardinality = 0..100
+			NOR = {
+				## cardinality = 0..1
+				text = localisation
+				## cardinality = 2..99
+				value = <country_type>
+			}
+		}
+
+		## cardinality = 0..1
+		authority = {
+			## cardinality = 0..1
+			value = <authority>
+
+			## cardinality = 0..100
+			OR = {
+				## cardinality = 0..1
+				text = localisation
+				## cardinality = 2..99
+				value = <authority>
+			}
+			## cardinality = 0..100
+			NOT = {
+				## cardinality = 0..1
+				text = localisation
+				value = <authority>
+			}
+			## cardinality = 0..100
+			NOR = {
+				## cardinality = 0..1
+				text = localisation
+				## cardinality = 2..99
+				value = <authority>
+			}
+		}
+
+		## cardinality = 0..1
+		civics = {
+			## cardinality = 0..3
+			value = <civic>
+
+			## cardinality = 0..100
+			OR = {
+				## cardinality = 0..1
+				text = localisation
+				## cardinality = 2..99
+				value = <civic>
+			}
+			## cardinality = 0..100
+			NOT = {
+				## cardinality = 0..1
+				text = localisation
+				value = <civic>
+			}
+			## cardinality = 0..100
+			NOR = {
+				## cardinality = 0..1
+				text = localisation
+				## cardinality = 2..99
+				value = <civic>
+			}
+		}
+	}
+	## cardinality = 0..1
+	### requirements list, supports country_type, ethics, authority and civics. See ../readme_requirements.txt
+	possible = {
+		## cardinality = 0..1
+		text = localisation
+
+		## cardinality = 0..1
+		always = bool
+
+		## cardinality = 0..1
+		ethics = {
+			## cardinality = 0..3
+			value = <ethos>
+
+			## cardinality = 0..100
+			OR = {
+				## cardinality = 0..1
+				text = localisation
+				## cardinality = 2..99
+				value = <ethos>
+			}
+			## cardinality = 0..100
+			NOT = {
+				## cardinality = 0..1
+				text = localisation
+				value = <ethos>
+			}
+			## cardinality = 0..100
+			NOR = {
+				## cardinality = 0..1
+				text = localisation
+				## cardinality = 2..99
+				value = <ethos>
+			}
+		}
+
+		## cardinality = 0..1
+		country_type = {
+			## cardinality = 0..1
+			value = <country_type>
+
+			## cardinality = 0..100
+			OR = {
+				## cardinality = 0..1
+				text = localisation
+				## cardinality = 2..99
+				value = <country_type>
+			}
+			## cardinality = 0..100
+			NOT = {
+				## cardinality = 0..1
+				text = localisation
+				value = <country_type>
+			}
+			## cardinality = 0..100
+			NOR = {
+				## cardinality = 0..1
+				text = localisation
+				## cardinality = 2..99
+				value = <country_type>
+			}
+		}
+
+		## cardinality = 0..1
+		authority = {
+			## cardinality = 0..1
+			value = <authority>
+
+			## cardinality = 0..100
+			OR = {
+				## cardinality = 0..1
+				text = localisation
+				## cardinality = 2..99
+				value = <authority>
+			}
+			## cardinality = 0..100
+			NOT = {
+				## cardinality = 0..1
+				text = localisation
+				value = <authority>
+			}
+			## cardinality = 0..100
+			NOR = {
+				## cardinality = 0..1
+				text = localisation
+				## cardinality = 2..99
+				value = <authority>
+			}
+		}
+
+		## cardinality = 0..1
+		civics = {
+			## cardinality = 0..3
+			value = <civic>
+
+			## cardinality = 0..100
+			OR = {
+				## cardinality = 0..1
+				text = localisation
+				## cardinality = 2..99
+				value = <civic>
+			}
+			## cardinality = 0..100
+			NOT = {
+				## cardinality = 0..1
+				text = localisation
+				value = <civic>
+			}
+			## cardinality = 0..100
+			NOR = {
+				## cardinality = 0..1
+				text = localisation
+				## cardinality = 2..99
+				value = <civic>
+			}
+		}
+	}
+	## cardinality = 0..1
+	###default: yes
+	pickable_at_start = bool
+
+	## cardinality = 0..1
+	###default: yes, set to no to prevent adding or removing this after creation of the empire
+	modification = bool
+
+	## cardinality = 0..1
+	### scriptable weight for randomizing a civic; required, else the civic will not get assigned randomly
+	random_weight = {
+		## cardinality = 0..1
+		base = int
+		alias_name[modifier_rule] = alias_match_left[modifier_rule]
+	}
+
+	## cardinality = 0..1
+	### modifier added to the country if the civic is selected and valid
+	modifier = {
+		## cardinality = 0..1
+		alias_name[modifier] = alias_match_left[modifier]
+	}
+
+	## cardinality = 0..1
+	### localisation of custom effects
+	description = localisation
+
+	## cardinality = 0..1
+	###default: no
+	can_build_ruler_ship = yes / no
+
+	## cardinality = 0..1
+	### default: empty; trait set to enforce on the primary species. They cannot be removed, but more can be added if points/picks permit
+	traits = {
+		## cardinality = 1..5
+		trait = <trait>
+	}
+
+	## cardinality = 0..1
+	### default: none; if present, will enable secondary species customization in empire designer and will create secondary species & pops at galaxy generation time (see empire_init_create_capital_secondary_pops)
+	has_secondary_species = {
+		title = localisation
+		## cardinality = 0..1
+		traits = {
+			## cardinality = 1..5
+			trait = <trait>
+		}
+	}
+}

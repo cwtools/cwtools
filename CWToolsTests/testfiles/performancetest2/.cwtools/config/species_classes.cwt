@@ -1,0 +1,5 @@
+types = {
+	type[species_class] = {
+		path = "game/common/species_classes"
+	}
+}

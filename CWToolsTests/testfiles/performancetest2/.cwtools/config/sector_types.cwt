@@ -1,0 +1,31 @@
+
+types = {
+	type[sector_type] = {
+		path = "game/common/sector_types"
+	}
+}
+
+sector_type = {
+
+	## cardinality = 0..1
+	### Sector will focus on producing this resources
+	production_targets = {
+		<resource>
+	}
+
+	## cardinality = 0..1
+	### Sector will build this ships (on planet spaceports)
+	ships = {
+		<ship_size>
+	}
+
+	## cardinality = 0..1
+	### This = Sector
+	ai_weight = {
+		## cardinality = 0..1
+		weight = float
+		## cardinality = 0..1
+		alias_name[modifier_rule] = alias_match_left[modifier_rule]
+	}
+
+}

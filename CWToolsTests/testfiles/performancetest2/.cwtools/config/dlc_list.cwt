@@ -1,0 +1,14 @@
+enums = {
+	enum[DLCs] = {
+		"Plantoid"
+		"Utopia"
+		"Synthetic Dawn Story Pack"
+		"Apocalypse"
+		"Humanoids Species Pack"
+		"Distant Stars Story Pack"
+		"Anniversary Portraits"
+		"Leviathans Story Pack"
+		"Creatures of the Void Portrait Pack"
+		"Arachnoid Portrait Pack"
+	}
+}

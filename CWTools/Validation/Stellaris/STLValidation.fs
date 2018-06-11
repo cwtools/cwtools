@@ -501,17 +501,21 @@ module STLValidation =
             let armyPrereqs = os.AllOfTypeChildren EntityType.Armies @ es.AllOfTypeChildren EntityType.Armies |> List.collect getPrereqs
             let edictPrereqs = os.AllOfTypeChildren EntityType.Edicts @ es.AllOfTypeChildren EntityType.Edicts |> List.collect getPrereqs
             let tileBlockPrereqs = os.AllOfTypeChildren EntityType.TileBlockers @ es.AllOfTypeChildren EntityType.TileBlockers |> List.collect getPrereqs
-            let allPrereqs = buildingPrereqs @ shipsizePrereqs @ sectPrereqs @ compPrereqs @ stratResPrereqs @ armyPrereqs @ edictPrereqs @ tileBlockPrereqs @ getAllTechPreqreqs os @ getAllTechPreqreqs es
-            let techChildren = getTechnologies os @ getTechnologies es
-                                |> (fun l -> l |> List.map (fun (name, _) -> name, l |> List.exists (fun (_, ts2) -> ts2 |> List.contains name)))
+            let allPrereqs = buildingPrereqs @ shipsizePrereqs @ sectPrereqs @ compPrereqs @ stratResPrereqs @ armyPrereqs @ edictPrereqs @ tileBlockPrereqs @ getAllTechPreqreqs os @ getAllTechPreqreqs es |> Set.ofList
+            let techList = getTechnologies os @ getTechnologies es
+            let techPrereqs = techList |> List.collect snd |> Set.ofList
+            let techChildren = techList |> List.map (fun (name, _) -> name, Set.contains name techPrereqs)
+            // let techChildren = getTechnologies os @ getTechnologies es
+            //                     |> (fun l -> l |> List.map (fun (name, _) -> name, l |> List.exists (fun (_, ts2) -> ts2 |> List.contains name)))
                                 |> List.filter snd
                                 |> List.map fst
+                                |> Set.ofList
             let techs = es.AllOfTypeChildren EntityType.Technology
             let inner (t : Node) =
                 let isPreReq = t.Has "prereqfor_desc"
                 let isMod = t.Has "modifier"
-                let hasChildren = techChildren |> List.contains t.Key
-                let isUsedElsewhere = allPrereqs |> List.contains t.Key
+                let hasChildren = techChildren |> Set.contains t.Key
+                let isUsedElsewhere = allPrereqs |> Set.contains t.Key
                 let isWeightZero = t.Tag "weight" |> (function |Some (Value.Int 0) -> true |_ -> false)
                 let isWeightFactorZero = t.Child "weight_modifier" |> Option.map (fun wm -> wm.Tag "factor" |> (function |Some (Value.Float 0.00) -> true |_ -> false)) |> Option.defaultValue false
                 let hasFeatureFlag = t.Has "feature_flags"

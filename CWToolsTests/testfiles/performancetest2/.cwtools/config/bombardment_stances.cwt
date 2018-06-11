@@ -1,0 +1,5 @@
+types = {
+	type[bombardment_stance] = {
+		path = "game/common/bombardment_stances"
+	}
+}

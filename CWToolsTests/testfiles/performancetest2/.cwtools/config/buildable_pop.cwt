@@ -1,0 +1,5 @@
+types = {
+	type[buildable_pop] = {
+		path = "game/common/buildable_pops"
+	}
+}

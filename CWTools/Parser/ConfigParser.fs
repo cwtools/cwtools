@@ -361,10 +361,11 @@ module rec ConfigParser =
         |_ -> None
 
     let processConfig (node : Node) =
-        let rules = getNodeComments node |> List.choose processChildConfigRoot
-        let types = getNodeComments node |> List.choose processChildType |> List.collect id
-        let enums = getNodeComments node |> List.choose processChildEnum |> List.collect id
-        let complexenums = getNodeComments node |> List.choose processComplexChildEnum |> List.collect id
+        let nodes = getNodeComments node
+        let rules = nodes |> List.choose processChildConfigRoot
+        let types = nodes |> List.choose processChildType |> List.collect id
+        let enums = nodes |> List.choose processChildEnum |> List.collect id
+        let complexenums = nodes |> List.choose processComplexChildEnum |> List.collect id
         rules, types, enums, complexenums
 
     let parseConfig filename fileString =

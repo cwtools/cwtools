@@ -1,0 +1,217 @@
+types = {
+	type[pop_faction] = {
+		path = "game/common/pop_faction_types"
+	}
+}
+
+# parameters
+enums = {
+	complex_enum[pop_faction_parameters] = {
+		path = "game/common/pop_faction_types"
+			name = {
+				parameters = {
+					enum_name = {}
+				}
+			}
+	}
+}
+
+# actions
+enums = {
+	complex_enum[pop_faction_actions] = {
+		path = "game/common/pop_faction_types"
+			name = {
+				actions = {
+					enum_name = {}
+				}
+			}
+	}
+}
+
+pop_faction = {
+
+	### Allows to have multiple of this faction type within a single country
+	unique = bool
+
+	## cardinality = 0..1
+	### How much extra weight will receive a candidate from this faction
+	support_multiplier = float
+
+	## cardinality = 0..1
+	### Primary ethic for this faction
+	guiding_ethic = <ethos>
+
+	## cardinality = 0..1
+	### UI color for candidate header
+	election_header = scalar
+
+	## cardinality = 0..1
+	### This = Country. Existance requirements for this faction
+	is_potential = {
+		alias_name[trigger] = alias_match_left[trigger]
+	}
+
+	## cardinality = 0..1
+	# This = Country. Parameters, tied to this faction
+	parameters = {
+		## cardinality = 0..1
+		scalar = {
+			## cardinality = 1..1
+			type = enum[basic_scopes]
+			## cardinality = 0..1
+			valid_objects = {
+				alias_name[trigger] = alias_match_left[trigger]
+			}
+		}
+	}
+
+	## cardinality = 0..1
+	### This = Pop faction. Existance requirements for defined parameter
+	valid = {
+		## cardinality = 0..1
+		alias_name[trigger] = alias_match_left[trigger]
+		## cardinality = 0..1
+		parameter:sector = { ### HAS TO BE REWORKED !!! ###
+			## cardinality = 0..1
+			debug_scope_type = scope[any]
+			## cardinality = 0..1
+			alias_name[trigger] = alias_match_left[trigger]
+		}
+	}
+
+	### This = Pop. Determines, which pops are able to join this faction
+	can_join_faction = {
+		alias_name[trigger] = alias_match_left[trigger]
+	}
+
+	## cardinality = 0..1
+	### This = Pop. Pop's willingness weight to join this faction
+	attraction = {
+
+		## cardinality = 1..1
+		### Basic faction attraction weight
+		base = float
+
+		## cardinality = 0..1
+		alias_name[modifier_rule_add_factor] = alias_match_left[modifier_rule_add_factor]
+		## cardinality = 0..1
+		alias_name[scaled_modifier_rule] = alias_match_left[scaled_modifier_rule]
+
+	}
+
+	## cardinality = 0..1
+	### This = Leader. Pop's willingness weight to join this faction
+	leader = {
+
+		## cardinality = 0..1
+		### Basic weight for leader
+		base = float
+
+		## cardinality = 0..1
+		alias_name[modifier_rule_add_factor] = alias_match_left[modifier_rule_add_factor]
+
+	}
+
+	## cardinality = 0..1
+	### This = Pop faction. Some effects, immediately after faction has been established.
+	on_create = {
+
+		## cardinality = 0..1
+		alias_name[effect] = alias_match_left[effect]
+
+	}
+
+	## cardinality = 0..1
+	### This = Pop faction. Some effects, immediately after faction has been removed.
+	on_destroy = {
+
+		## cardinality = 0..1
+		alias_name[effect] = alias_match_left[effect]
+
+	}
+
+	## cardinality = 0..100
+	### This = Pop faction. Faction dynamic requests & issues.
+	demand = {
+
+		## cardinality = 0..1
+		### Issue title, shown in faction manager screen
+		title = localisation
+
+		## cardinality = 0..1
+		### Unfulfilled issue title, shown in faction manager screen
+		unfulfilled_title = localisation
+
+		## cardinality = 0..1
+		### Issue full description, shown in faction manager screen
+		desc = localisation
+
+		## cardinality = 0..1
+		### Positive happiness effect on faction, if demand is satisfied
+		fulfilled_effect = float
+
+		## cardinality = 0..1
+		### Negative happiness effect on faction, if demand is not satisfied
+		unfulfilled_effect = float
+
+		## cardinality = 0..1
+		### This = Pop faction.
+		potential = {
+			alias_name[trigger] = alias_match_left[trigger]
+		}
+
+		## cardinality = 1..1
+		### This = Pop faction.
+		trigger = {
+			alias_name[trigger] = alias_match_left[trigger]
+		}
+
+	}
+
+	## cardinality = 0..1
+	### This = Pop faction. Actions for this pop faction type (buttons)
+	actions = {
+
+		## cardinality = 0..1
+		scalar = {
+			## cardinality = 0..1
+			title = localisation
+			## cardinality = 0..1
+			description = localisation
+
+			## cardinality = 0..1
+			cost = {
+				<resource> = int
+			}
+
+			## cardinality = 0..1
+			### This = Pop faction.
+			potential = {
+				alias_name[trigger] = alias_match_left[trigger]
+			}
+
+			## cardinality = 0..1
+			### This = Pop faction.
+			valid = {
+				alias_name[trigger] = alias_match_left[trigger]
+			}
+
+			## cardinality = 0..1
+			### This = Pop faction.
+			effect = {
+				alias_name[effect] = alias_match_left[effect]
+			}
+
+			## cardinality = 0..1
+			### This = Pop faction.
+			ai_weight = {
+				## cardinality = 0..1
+				base = float
+				## cardinality = 0..1
+				alias_name[modifier_rule] = alias_match_left[modifier_rule]
+			}
+
+		}
+
+	}
+}

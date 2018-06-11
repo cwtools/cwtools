@@ -1,0 +1,21 @@
+
+enums = {
+	enum[basic_scopes] = {
+		country
+		pop
+		planet
+		pop_faction
+		system
+		leader
+		sector
+		star
+		galactic_object
+		species
+		ambient_object
+		fleet
+		ship
+		war
+		army
+		tile
+	}
+}

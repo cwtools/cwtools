@@ -1,0 +1,72 @@
+
+types = {
+	type[anomaly_category] = {
+		path = "game/common/anomalies"
+	}
+}
+
+
+anomaly_category = {
+	## cardinality = 0..1
+	###Allows AI empires to generate the category. Default: no
+	should_ai_use = bool
+
+	## cardinality = 0..1
+	###Optional. Will use <anomaly_category>_description if not specified.
+	desc = scalar #localisation
+	## cardinality = 0..1
+	desc = {
+		### Scope: planet, from = ship
+		trigger = { alias_name[trigger] = alias_match_left[trigger] }
+		text = scalar #localisation
+	}
+	## cardinality = 0..1
+	###Picture displayed in category window
+	picture = scalar #spritetype
+
+	###Anomaly level, 1 to 10
+	level = int[1..10]
+
+	## cardinality = 0..1
+	###Default 0. 0.0 - 1.0 (0 to 100%) chance category will NOT spawn even if it is picked by the anomaly die roll. Used to make categories for unusual objects (e.g. black holes) actually rare.
+	null_spawn_chance = float[0.0...1.0]
+
+	## cardinality = 0..1
+	###default NO, if true will spawn category only once per empire
+	max_once = bool
+
+	## cardinality = 0..1
+	###default NO, if true will spawn category only once per game
+	max_once_global = bool
+
+	###Chance for this anomaly category to spawn, relative to other valid categories. Default: base = 0. Scope: planet, from = ship
+	spawn_chance = {
+		## cardinality = 0..1
+		base = float
+		alias_name[modifier_rule_add_factor] = alias_match_left[modifier_rule_add_factor]
+	}
+
+	## cardinality = 0..1
+	###Executes immediately when anomaly category is spawned. Scopes are this/root: planet, from: ship. NOTE: on_spawn effects will not run if category is spawned through console
+	on_spawn = { alias_name[effect] = alias_match_left[effect] }
+
+	###Picks anomaly event to fire; similar to random_list
+	on_success = scalar #event ID
+	on_success = {
+		## cardinality = 0..100
+		int = scalar #event ID
+		## cardinality = 0..100
+		int = {
+			## cardinality = 0..1
+			###Individual outcomes default to max_once = yes
+			max_once = bool
+			## cardinality = 0..1
+			###Individual outcomes default to max_once_global = no
+			max_once_global = bool
+
+			alias_name[modifier_rule_add_factor] = alias_match_left[modifier_rule_add_factor]
+
+			anomaly_event = scalar #event ID
+		}
+	}
+}

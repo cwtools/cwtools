@@ -1,0 +1,122 @@
+types = {
+	type[species_rights] = {
+		path = "game/common/species_rights"
+	}
+}
+
+#sub-types don't work here as all sorts of things are bundled into one file without coding divisions between them. But afaik there is no way of adding new ones, they are all hardcoded, so the enums are sufficient.
+
+species_rights = {
+	token = scalar
+	#localisation is complicated. I guess there is a default unless there is a name defined
+	## cardinality = 0..1
+	name = localisation
+
+	## cardinality = 0..1
+	modifier = {
+		alias_name[modifier] = alias_match_left[modifier]
+	}
+
+	## cardinality = 0..1
+	pop_modifier = {
+		alias_name[modifier] = alias_match_left[modifier]
+	}
+
+	## cardinality = 0..1
+	free_pop_modifier = {
+		alias_name[modifier] = alias_match_left[modifier]
+	}
+
+	## cardinality = 0..1
+	potential = {
+		alias_name[trigger] = alias_match_left[trigger]
+	}
+
+	allow = {
+		alias_name[trigger] = alias_match_left[trigger]
+	}
+
+	ai_will_do = {
+		factor = float
+		alias_name[modifier_rule] = alias_match_left[modifier_rule]
+	}
+}
+
+enums = {
+	enum[citizenship_types] = {
+		citizenship_full
+		citizenship_full_machine
+		citizenship_assimilation
+		citizenship_organic_trophy
+		citizenship_limited
+		citizenship_caste_system
+		citizenship_caste_system_limited
+		citizenship_slavery
+		citizenship_purge
+		citizenship_purge_machine
+	}
+	enum[military_service_types] = {
+		military_service_full
+		military_service_limited
+		military_service_none
+	}
+	enum[slavery_types] = {
+		slavery_normal
+		slavery_domestic
+		slavery_military
+		slavery_matrix
+		slavery_livestock
+	}
+	enum[purge_types] = {
+		purge_matrix
+		purge_normal
+		purge_neutering
+		purge_displacement
+		purge_labor_camps
+		purge_processing
+	}
+	enum[living_standards] = {
+		living_standard_deassimilation
+		living_standard_ego_assimilation
+		living_standard_tech_assimilation
+		living_standard_psi_assimilation
+		living_standard_organic_trophy
+		living_standard_chemical_bliss
+		living_standard_academic_privilege
+		living_standard_utopian
+		living_standard_good
+		living_standard_normal
+		living_standard_poor
+		living_standard_subsistence
+		living_standard_servitude
+		living_standard_hive_mind
+		living_standard_none
+	}
+	enum[migration_controls] = {
+		migration_control_yes
+		migration_control_no
+	}
+	enum[population_controls] = {
+		population_control_yes
+		population_control_no
+	}
+	#unused
+	enum[colonization_controls] = {
+		colonization_control_yes
+		colonization_control_no
+	}
+	enum[species_rights_type] = {
+		citizenship
+		military_service
+		slavery
+		purge
+		living_standard
+		migration_control
+		population_control
+		colonization_control
+		none
+	}
+}
+
+
+

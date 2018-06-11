@@ -1,0 +1,276 @@
+ship_size = {
+	## cardinality = 0..2
+	graphical_culture = { <graphical_culture> }
+	## cardinality = 0..2
+	graphical_culture = bool
+	## cardinality = 0..1
+	is_space_object = yes
+	## cardinality = 0..1
+	can_be_inspected = bool
+	## cardinality = 0..1
+	pre_communications_name = localisation
+	## cardinality = 0..1
+	entity = scalar #entity
+	## cardinality = 0..1
+	formation_priority = int
+	## cardinality = 0..1
+	max_speed = float
+	## cardinality = 0..1
+	acceleration = float
+	## cardinality = 0..1
+	rotation_speed = float
+	## cardinality = 0..1
+	collision_radius = float
+	## cardinality = 0..1
+	max_hitpoints = int
+	## cardinality = 0..1
+	is_listed = bool
+	## cardinality = 0..1
+	### The base cost of this ship_size
+	cost = int
+	## cardinality = 0..1
+	components_add_to_cost = bool
+	## cardinality = 0..1
+	is_designable = bool
+	## cardinality = 0..1
+	### may be deprecated, tell Dayshine and Caligula if yes
+	build_time = int
+	## cardinality = 0..1
+	is_civilian = bool
+	## cardinality = 0..1
+	build_block_radius = int
+	## cardinality = 0..1
+	can_disable = bool
+	## cardinality = 0..1
+	modifier = {
+		alias_name[modifier] = alias_match_left[modifier]
+	}
+	## cardinality = 0..1
+	ship_modifier = {
+		alias_name[modifier] = alias_match_left[modifier]
+	}
+	## cardinality = 0..1
+	size_multiplier = int
+	## cardinality = 0..1
+	fleet_slot_size = int
+	## cardinality = 0..1
+	section_slots = { #todo: These should really all be scalar or refer to the entity files. I just made it not bug with Vanilla
+		subtype[starbase] = {
+			"core" = {
+				## cardinality = 1..2
+				locator = scalar
+			}
+			"1" = {
+				## cardinality = 1..2
+				locator = scalar
+			}
+			"2" = {
+				## cardinality = 1..2
+				locator = scalar
+			}
+			"3" = {
+				## cardinality = 1..2
+				locator = scalar
+			}
+			"4" = {
+				## cardinality = 1..2
+				locator = scalar
+			}
+			"5" = {
+				## cardinality = 1..2
+				locator = scalar
+			}
+			"6" = {
+				## cardinality = 1..2
+				locator = scalar
+			}
+		}
+		subtype[station] = {
+			"mid" = {
+				## cardinality = 1..2
+				locator = scalar
+			}
+		}
+		subtype[colossus] = {
+			"ship" = {
+				## cardinality = 1..2
+				locator = scalar
+			}
+		}
+		subtype[ship] = {
+			"bow" = {
+				## cardinality = 1..2
+				locator = scalar
+			}
+			"mid" = {
+				## cardinality = 1..2
+				locator = scalar
+			}
+			"stern" = {
+				## cardinality = 1..2
+				locator = scalar
+			}
+			"bot_1" = {
+				## cardinality = 1..2
+				locator = scalar
+			}
+			"bot_2" = {
+				## cardinality = 1..2
+				locator = scalar
+			}
+			"bot_3" = {
+				## cardinality = 1..2
+				locator = scalar
+			}
+		}
+		subtype[platform] = {
+			## cardinality = 0..1
+			"west" = {
+				## cardinality = 1..2
+				locator = scalar
+			}
+			## cardinality = 0..1
+			"east" = {
+				## cardinality = 1..2
+				locator = scalar
+			}
+			## cardinality = 0..1
+			"north" = {
+				## cardinality = 1..2
+				locator = scalar
+			}
+			## cardinality = 0..1
+			"south" = {
+				## cardinality = 1..2
+				locator = scalar
+			}
+			## cardinality = 0..1
+			"mid" = {
+				## cardinality = 1..2
+				locator = scalar
+			}
+			## cardinality = 0..1
+			"ship" = {
+				## cardinality = 1..2
+				locator = scalar
+			}
+		}
+	}
+	## cardinality = 0..1
+	combat_size_multiplier = int
+	## cardinality = 0..1
+	num_target_locators = int
+	## cardinality = 0..1
+	is_space_station = bool
+	## cardinality = 0..1
+	icon_frame = int
+	## cardinality = 0..1
+	base_buildtime = int
+	## cardinality = 0..1
+	can_have_federation_design = bool
+	## cardinality = 0..1
+	enable_default_design = bool
+	## cardinality = 0..1
+	default_behavior = <ship_behavior>
+	## cardinality = 0..1
+	prerequisites = {
+		## cardinality = 0..100
+		<technology>
+	}
+	## cardinality = 0..1
+	upkeep_override = {
+		energy = int
+		minerals = int
+	}
+	## cardinality = 0..1
+	has_mineral_upkeep = bool
+	class = enum[shipsize_class]
+	subtype[ship]  = {
+	  construction_type = starbase
+	  construction_type = spaceport
+	}
+	## cardinality = 0..100
+	required_component_set = scalar
+	## cardinality = 0..1
+	valid_target_aggressive_stance = bool
+	## cardinality = 0..1
+	auto_upgrade = bool
+	## cardinality = 0..1
+	ship_class_icon_frame = int
+	## cardinality = 0..1
+	uses_name_prefix = bool
+	## cardinality = 0..1
+	takes_name_from_ship_design = bool
+	subtype[starbase]  = {
+		flip_control_on_disable = bool
+	}
+	subtype[platform]  = {
+		construction_type = starbase_defenses
+		## cardinality = 0..1
+		possible_starbase = {
+			has_starbase_size = <ship_size.starbase> #>=
+		}
+	}
+	subtype[ship] = {
+		combat_disengage_chance = float
+
+		## cardinality = 0..1
+		possible_starbase = {
+			has_starbase_size = <ship_size.starbase> #>=
+			has_starbase_building = <starbase_building>
+		}
+
+		## cardinality = 0..1
+		empire_limit = {
+			base = int
+			## cardinality = 0..1
+			max = int
+			## cardinality = 0..1
+			naval_cap_div = int
+		}
+		construction_type = starbase_shipyard
+		construction_type = spaceport
+
+	}
+}
+
+types = {
+	type[ship_size] = {
+		path = "game/common/ship_sizes"
+		subtype[starbase] = {
+			class = shipclass_starbase
+		}
+		subtype[platform] = {
+			class = shipclass_military_station
+		}
+		subtype[station] = {
+			is_space_station = yes
+		}
+		subtype[ship] = {
+			## cardinality = 0..1
+			is_space_station = no
+		}
+		subtype[colossus] = {
+			class = shipclass_military_special
+		}
+	}
+}
+
+enums = {
+	enum[shipsize_class] = {
+		shipclass_military
+		shipclass_military_station
+		shipclass_military_special
+		shipclass_mining_station
+		shipclass_research_station
+		shipclass_terraform_station
+		shipclass_observation_station
+		shipclass_outpost_station
+		shipclass_orbital_station
+		shipclass_transport
+		shipclass_starbase
+		shipclass_constructor
+		shipclass_colonizer
+		shipclass_science_ship
+	}
+}

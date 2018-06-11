@@ -1,0 +1,5 @@
+types = {
+	type[observation_station_mission] = {
+		path = "game/common/observation_station_missions"
+	}
+}

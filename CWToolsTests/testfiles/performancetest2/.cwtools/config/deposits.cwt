@@ -1,0 +1,5 @@
+types = {
+	type[deposit] = {
+		path = "game/common/deposit"
+	}
+}

@@ -1,0 +1,5 @@
+types = {
+	type[name_list] = {
+		path = "game/common/name_lists"
+	}
+}

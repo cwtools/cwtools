@@ -1,0 +1,5 @@
+types = {
+	type[bypass] = {
+		path = "game/common/bypass"
+	}
+}

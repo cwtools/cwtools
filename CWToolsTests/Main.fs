@@ -17,11 +17,24 @@ open System.Reflection
 open CWTools.Parser.DocsParser
 open CWTools.Games.Files
 
+let rec getAllFolders dirs =
+    if Seq.isEmpty dirs then Seq.empty else
+        seq { yield! dirs |> Seq.collect Directory.EnumerateDirectories
+              yield! dirs |> Seq.collect Directory.EnumerateDirectories |> getAllFolders }
+let getAllFoldersUnion dirs =
+    seq {
+        yield! dirs
+        yield! getAllFolders dirs
+    }
+
 let perf(b) =
     let timer = new System.Diagnostics.Stopwatch()
     timer.Start()
     let triggers, effects = parseDocsFile "./testfiles/validationtests/trigger_docs_2.0.2.txt" |> (function |Success(p, _, _) -> DocsParser.processDocs p)
-    let stl = STLGame("./testfiles/performancetest/", FilesScope.All, "", triggers, effects, [], [], [], [STL STLLang.English], false, true, false)
+    let configFiles = (if Directory.Exists "./testfiles/performancetest2/.cwtools" then getAllFoldersUnion (["./testfiles/performancetest2/.cwtools"] |> Seq.ofList) else Seq.empty) |> Seq.collect (Directory.EnumerateFiles)
+    let configFiles = configFiles |> List.ofSeq |> List.filter (fun f -> Path.GetExtension f = ".cwt")
+    let configs = configFiles |> List.map (fun f -> f, File.ReadAllText(f))
+    let stl = STLGame("./testfiles/performancetest/", FilesScope.All, "", triggers, effects, [], [], configs, [STL STLLang.English], false, true, true)
     if b then
         let errors = stl.ValidationErrors |> List.map (fun (c, s, n, l, f, k) -> n)
         let testVals = stl.AllEntities
@@ -34,7 +47,11 @@ let perf2(b) =
     let timer = new System.Diagnostics.Stopwatch()
     timer.Start()
     let triggers, effects = parseDocsFile "./testfiles/validationtests/trigger_docs_2.0.2.txt" |> (function |Success(p, _, _) -> DocsParser.processDocs p)
-    let stl = STLGame("./testfiles/performancetest2/", FilesScope.All, "", triggers, effects, [], [], [], [STL STLLang.English], false, true, false)
+    let configFiles = (if Directory.Exists "./testfiles/performancetest2/.cwtools" then getAllFoldersUnion (["./testfiles/performancetest2/.cwtools"] |> Seq.ofList) else Seq.empty) |> Seq.collect (Directory.EnumerateFiles)
+    let configFiles = configFiles |> List.ofSeq |> List.filter (fun f -> Path.GetExtension f = ".cwt")
+    let configs = configFiles |> List.map (fun f -> f, File.ReadAllText(f))
+
+    let stl = STLGame("./testfiles/performancetest2/", FilesScope.All, "", triggers, effects, [], [], configs, [STL STLLang.English], false, true, true)
     if b then
         let errors = stl.ValidationErrors |> List.map (fun (c, s, n, l, f, k) -> n)
         let testVals = stl.AllEntities

@@ -1,0 +1,140 @@
+types = {
+	type[ai_personality] = {
+		path = "game/common/personalities"
+	}
+}
+
+enums = {
+	enum[ai_personality_behaviours] = {
+		conqueror
+		subjugator
+		liberator
+		opportunist
+		slaver
+		caste_system
+		uplifter
+		purger
+		displacer
+		infiltrator
+		dominator
+		robot_exploiter
+		robot_liberator
+		propagator
+		multispecies
+		crisis_fighter
+		holy_planets
+		demands_clear_borders
+		wants_tribute
+		decadent
+		isolationist
+		attack_neutrals
+		crisis_leader
+		custodian
+		enigmatic
+		limited
+		berserker
+	}
+}
+
+
+
+#needs checking
+ai_personality = {
+	aggressiveness = float
+	trade_willingness = float
+	bravery = float
+	## cardinality = 0..1
+	combat_bravery = float
+
+	## cardinality = 0..1
+	military_spending = float
+	## cardinality = 0..1
+	colony_spending = float
+
+	## cardinality = 0..1
+	federation_acceptance = int
+	## cardinality = 0..1
+	nap_acceptance = int
+	## cardinality = 0..1
+	defensive_pact_acceptance = int
+	## cardinality = 0..1
+	migration_pact_acceptance = int
+
+	## cardinality = 0..1
+	advanced_start_chance = int
+
+	## cardinality = 0..1
+	weapon_preferences = scalar #should check weapon type keys, I don't know where they are defined though. TODO
+
+	## cardinality = 0..1
+	armor_ratio = float
+	## cardinality = 0..1
+	shields_ratio = float
+	## cardinality = 0..1
+	hull_ratio = float
+
+	threat_modifier = float
+	## cardinality = 0..1
+	threat_others_modifier = float
+	friction_modifier = float
+	## cardinality = 0..1
+	claims_modifier = float
+
+	behaviour = {
+		conqueror = bool
+		subjugator = bool
+		liberator = bool
+		opportunist = bool
+		slaver = bool
+		caste_system = bool
+		uplifter = bool
+		purger = bool
+		## cardinality = 0..1
+		displacer = bool
+		infiltrator = bool
+		dominator = bool
+		robot_exploiter = bool
+		robot_liberator = bool
+		propagator = bool
+		## cardinality = 0..1
+		multispecies = bool
+		## cardinality = 0..1
+		crisis_fighter = bool
+		## cardinality = 0..1
+		wants_tribute = bool
+		## cardinality = 0..1
+		decadent = bool
+		## cardinality = 0..1
+		isolationist = bool
+		## cardinality = 0..1
+		attack_neutrals = bool
+		## cardinality = 0..1
+		holy_planets = bool
+		## cardinality = 0..1
+		demands_clear_borders = bool
+		## cardinality = 0..1
+		### special for awakened fallen empires
+		crisis_leader = bool
+		## cardinality = 0..1
+		### special for awakened machine fallen empires, prevents colonization & locks attitude
+		custodian = bool
+		## cardinality = 0..1
+		### special for machine fallen empires
+		enigmatic = bool
+		## cardinality = 0..1
+		### prevents certain AI behaviours
+		limited = bool
+		## cardinality = 0..1
+		### special for awakened machine fallen empires, prevents colonization & locks attitude
+		berserker = bool
+	}
+
+	allow = {
+		alias_name[trigger] = alias_match_left[trigger]
+	}
+
+	weight_modifier = {
+		weight = float
+		alias_name[modifier_rule] = alias_match_left[modifier_rule]
+	}
+}

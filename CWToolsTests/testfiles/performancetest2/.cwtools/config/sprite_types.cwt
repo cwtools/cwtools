@@ -1,0 +1,9 @@
+find a way to do this
+
+#types = {
+#    type[sprite_type] = {
+#        path = "game/interface"
+#        name_field = "name"
+#    }
+#}
+

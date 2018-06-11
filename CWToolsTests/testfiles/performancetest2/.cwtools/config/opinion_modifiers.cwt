@@ -1,0 +1,56 @@
+types = {
+	type[opinion_modifier] = {
+		path = "game/common/opinion_modifiers"
+
+		subtype[triggered_opinion_modifier] = {
+			trigger = { }
+		}
+	}
+}
+
+
+opinion_modifier = {
+	opinion = {
+		## cardinality = 0..1
+		base = int
+
+		###root = country with the opinion, from = country it has the opinion of
+		alias[modifier_rule_add_factor] = alias_match_left[modifier_rule_add_factor]
+	}
+
+	subtype[!triggered_opinion_modifier] = {
+		## cardinality = 0..1
+		decay = {
+			## cardinality = 0..1
+			base = int
+
+			###root = country with the opinion, from = country it has the opinion of
+			alias[modifier_rule_add_factor] = alias_match_left[modifier_rule_add_factor]
+		}
+
+		## cardinality = 0..1
+		###No by default
+		accumulative = bool
+
+		## cardinality = 0..1
+		###For use with accumulative if the base is negative
+		min = int[-9999...-1]
+		## cardinality = 0..1
+		###For use with accumulative if the base is positive
+		max = int[1...999]
+
+		## cardinality = 0..1
+		unique = bool
+
+		##cardinality = 0..1
+		monthly = yes
+
+		##cardinality = 0..1
+		months = int
+	}
+
+	subtype[triggered_opinion_modifier] = {
+		###root = country with the opinion, from = country it has the opinion of
+		trigger = { alias_name[trigger] = alias_match_left[trigger] }
+	}
+}
