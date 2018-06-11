@@ -141,7 +141,8 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
             let ships = entities |> List.choose (function | :? Ship as s -> Some s |_ -> None)
             ships |> List.map validateShip
                   |> List.choose (function |Invalid es -> Some es |_ -> None)
-                  |> List.collect id
+                  |> Seq.collect id
+                  |> List.ofSeq
 
         let parseErrors() =
             resources.GetResources()
@@ -158,7 +159,8 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
             let events = entities |> List.choose (function | :? Event as e -> Some e |_ -> None)
             events |> List.map (fun e -> (valEventVals e) )
                    |> List.choose (function |Invalid es -> Some es |_ -> None)
-                   |> List.collect id
+                   |> Seq.collect id
+                   |> List.ofSeq
         let snood = snd
         let validateAll (entities : struct (Entity * Lazy<STLComputedData>) list)  =
             let loc = allLocalisation() |> List.groupBy (fun l -> l.GetLang) |> List.map (fun (k, g) -> k, g |>List.collect (fun ls -> ls.GetKeys) |> Set.ofList )
@@ -176,21 +178,21 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
             let oldEntities = EntitySet (resources.AllEntities())
             let newEntities = EntitySet entities
             let runValidators f (validators : (StructureValidator * string) list) =
-                (validators <&!&> (fun (v, s) -> duration (fun _ -> f v) s) |> (function |Invalid es -> es |_ -> []))
-                @ (if not experimental then [] else experimentalvalidators <&!&> (fun (v, s) -> duration (fun _ -> f v) s) |> (function |Invalid es -> es |_ -> []))
+                (validators <&!&> (fun (v, s) -> duration (fun _ -> f v) s) |> (function |Invalid es -> es |_ -> Seq.empty) |> List.ofSeq)
+                @ (if not experimental then [] else experimentalvalidators <&!&> (fun (v, s) -> duration (fun _ -> f v) s) |> (function |Invalid es -> es |_ -> Seq.empty) |> List.ofSeq)
             eprintfn "Validating misc"
             //let res = validators |> List.map (fun v -> v oldEntities newEntities) |> List.fold (<&&>) OK
             let res = runValidators (fun f -> f oldEntities newEntities) validators
             //let res = validators <&!&> (fun v -> v oldEntities newEntities) |> (function |Invalid es -> es |_ -> [])
             eprintfn "Validating files"
             let fileValidators = [valSpriteFiles, "sprites"; valMeshFiles, "mesh"; valAssetFiles, "asset"; valComponentIcons, "compicon"]
-            let fres = fileValidators <&!&> (fun (v, s) -> duration (fun _ -> v resources newEntities) s) |> (function |Invalid es -> es |_ -> [])
+            let fres = fileValidators <&!&> (fun (v, s) -> duration (fun _ -> v resources newEntities) s) |> (function |Invalid es -> es |_ -> Seq.empty) |> List.ofSeq
             eprintfn "Validating effects/triggers"
-            let eres = duration (fun _ -> valAllEffects (lookup.scriptedTriggers) (lookup.scriptedEffects) (lookup.staticModifiers) newEntities  |> (function |Invalid es -> es |_ -> [])) "effects"
-            let tres = duration (fun _ ->  valAllTriggers (lookup.scriptedTriggers) (lookup.scriptedEffects) (lookup.staticModifiers) newEntities  |> (function |Invalid es -> es |_ -> [])) "triggers"
-            let wres = duration (fun _ ->  validateModifierBlocks (lookup.scriptedTriggers) (lookup.scriptedEffects) (lookup.staticModifiers) newEntities |> (function |Invalid es -> es |_ -> [])) "weights"
-            let mres = duration (fun _ ->  valAllModifiers (lookup.coreModifiers) newEntities  |> (function |Invalid es -> es |_ -> [])) "modifiers"
-            let evres = duration (fun _ ->  ( if experimental then getEventChains (lookup.scriptedEffects) oldEntities newEntities else OK) |> (function |Invalid es -> es |_ -> [])) "events"
+            let eres = duration (fun _ -> valAllEffects (lookup.scriptedTriggers) (lookup.scriptedEffects) (lookup.staticModifiers) newEntities  |> (function |Invalid es -> es |_ -> Seq.empty)  |> List.ofSeq) "effects"
+            let tres = duration (fun _ ->  valAllTriggers (lookup.scriptedTriggers) (lookup.scriptedEffects) (lookup.staticModifiers) newEntities  |> (function |Invalid es -> es |_ -> Seq.empty) |> List.ofSeq) "triggers"
+            let wres = duration (fun _ ->  validateModifierBlocks (lookup.scriptedTriggers) (lookup.scriptedEffects) (lookup.staticModifiers) newEntities |> (function |Invalid es -> es |_ -> Seq.empty) |> List.ofSeq) "weights"
+            let mres = duration (fun _ ->  valAllModifiers (lookup.coreModifiers) newEntities  |> (function |Invalid es -> es |_ -> Seq.empty) |> List.ofSeq) "modifiers"
+            let evres = duration (fun _ ->  ( if experimental then getEventChains (lookup.scriptedEffects) oldEntities newEntities else OK) |> (function |Invalid es -> es |_ -> Seq.empty) |> List.ofSeq) "events"
             //let etres = getEventChains newEntities |> (function |Invalid es -> es |_ -> [])
             //(validateShips (flattened)) @ (validateEvents (flattened)) @ res @ fres @ eres
             (validateShips (flattened)) @ (validateEvents (flattened)) @ res @ fres @ eres @ tres @ mres @ evres @ wres
@@ -208,8 +210,8 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
             let newEntities = EntitySet entities
             let oldEntities = EntitySet (resources.AllEntities())
             let vs = (validators |> List.map (fun v -> v oldEntities keys newEntities) |> List.fold (<&&>) OK
-                       |> (function |Invalid es -> es |_ -> []))
-            vs
+                       |> (function |Invalid es -> es |_ -> Seq.empty))
+            vs |> List.ofSeq
 
         let globalLocalisation () =
             let taggedKeys = allLocalisation() |> List.groupBy (fun l -> l.GetLang) |> List.map (fun (k, g) -> k, g |> List.collect (fun ls -> ls.GetKeys) |> List.fold (fun (s : LocKeySet) v -> s.Add v) (LocKeySet.Empty(STLStringComparer())) )
@@ -221,7 +223,7 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
             // let apiVs = validatableEntries <&!&> (fun l -> apiValidators |> List.fold (fun s v -> s <&&> v lookup.scriptedEffects lookup.scriptedLoc lookup.definedScriptVariables oldEntities l taggedKeys) OK)
             //                  |> (function |Invalid es -> es |_ -> [])
             //apiVs
-            lookup.proccessedLoc |> validateProcessedLocalisation taggedKeys |> (function |Invalid es -> es |_ -> [])
+            lookup.proccessedLoc |> validateProcessedLocalisation taggedKeys |> (function |Invalid es -> es |_ -> Seq.empty) |> List.ofSeq
 
         let updateFile filepath (filetext : string option) =
             eprintfn "%s" filepath

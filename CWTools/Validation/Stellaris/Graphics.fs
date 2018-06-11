@@ -25,15 +25,15 @@ module Graphics =
                             |> List.filter (fun e -> e.Key == "objectTypes")
                             |> List.collect (fun e -> e.Children |> List.choose (fun c -> if c.Key == "pdxmesh" then Some c else None))
             let filenames = rm.GetResources() |> List.choose (function |FileResource (f, _) -> Some f |EntityResource (f, _) -> Some f)
-            let inner = 
+            let inner =
                 fun (x : Node) ->
                     match x.Leafs "file" |> Seq.tryHead with
                     |None -> OK
-                    |Some fn -> 
+                    |Some fn ->
                         let filename = fn.Value.ToRawString().Replace("/","\\")
                         match filenames |> List.exists (fun f -> f.EndsWith(filename)) with
                         | true -> OK
-                        | false -> Invalid [inv (ErrorCodes.MissingFile (filename)) fn]
+                        | false -> Invalid (seq {yield inv (ErrorCodes.MissingFile (filename)) fn})
             pdxmesh <&!&> inner
 
     let valAssetFiles : FileValidator =
@@ -49,7 +49,7 @@ module Graphics =
                 fun (x : Node) ->
                     match x.Leafs "pdxmesh" |> Seq.tryHead with
                     |None -> OK
-                    |Some lv -> if names |> List.contains (lv.Value.ToRawString()) then OK else Invalid [inv (ErrorCodes.UndefinedPDXMesh (lv.Value.ToRawString())) lv]
+                    |Some lv -> if names |> List.contains (lv.Value.ToRawString()) then OK else Invalid (seq {yield inv (ErrorCodes.UndefinedPDXMesh (lv.Value.ToRawString())) lv})
             assets <&!&> inner
 
     let inline validateEntityCulture (entities : Collections.Set<string>) (cultures : (string * string) list) (entity : string) (leaf) (culture : string) =
@@ -59,26 +59,26 @@ module Graphics =
         match (entities.Contains entity) || (entities.Contains firstkey), secondKey with
         |true, _ -> None
         |false, None ->
-            Some (Invalid [inv (ErrorCodes.UndefinedSectionEntity firstkey culture) leaf])
+            Some (Invalid (seq {yield inv (ErrorCodes.UndefinedSectionEntity firstkey culture) leaf}))
         |false, Some fallback ->
-            if entities.Contains fallback then None else Some (Invalid [inv (ErrorCodes.UndefinedSectionEntityFallback firstkey fallback culture ) leaf])
-    
+            if entities.Contains fallback then None else Some (Invalid (seq {yield inv (ErrorCodes.UndefinedSectionEntityFallback firstkey fallback culture ) leaf}))
+
     let inline validateEntityCultures (entities : Collections.Set<string>) (allcultures : (string * string) list) (entity : string) (leaf) (cultures : string list) =
         let errors = cultures |> List.choose (validateEntityCulture entities allcultures entity leaf)
         match errors with
         |[] -> OK
         |[x] -> x
         |[x1; x2] -> x1 <&&> x2
-        |x1::x2::_ -> x1 <&&> x2 <&&> (Invalid [inv (ErrorCodes.CustomError "and more errors hidden" Severity.Error) leaf])
+        |x1::x2::_ -> x1 <&&> x2 <&&> (Invalid (seq {yield inv (ErrorCodes.CustomError "and more errors hidden" Severity.Error) leaf}))
 
     let inline validateEntity (entities : Collections.Set<string>) (entity : string) (node) =
-        if entities.Contains entity then OK else Invalid [inv (ErrorCodes.UndefinedEntity entity) node]
+        if entities.Contains entity then OK else Invalid (seq {yield inv (ErrorCodes.UndefinedEntity entity) node})
 
 
     let getGraphicalCultures (es : STLEntitySet) =
         es.AllOfTypeChildren EntityType.GraphicalCulture
                         |> List.map (fun c -> c.Key, c.TagText "fallback")
-        
+
     let valSectionGraphics : StructureValidator =
         fun os es ->
             let shipsizes = os.AllOfTypeChildren EntityType.ShipSizes
@@ -88,13 +88,13 @@ module Graphics =
                             |> List.map (fun ss -> ss, ss.Key, (ss.Child "graphical_culture" |> Option.map (fun gc -> gc.LeafValues |> Seq.map (fun lv -> lv.Value.ToRawString()) |> List.ofSeq) |> Option.defaultValue []))
             let shipsizesEV = es.AllOfTypeChildren EntityType.ShipSizes
                             |> List.filter (fun ss -> (ss.Has "entity"))
-            
+
             let sections = es.AllOfTypeChildren EntityType.SectionTemplates
             let cultures = getGraphicalCultures os
             let assets = os.AllOfTypeChildren EntityType.GfxAsset
                             |> List.map (fun a -> a.TagText "name")
                             |> Set.ofList
-            let inner = 
+            let inner =
                 fun (s : Node) ->
                     match s.TagText "ship_size", s.Leafs "entity" |> Seq.tryHead with
                     |"", _ -> OK
@@ -104,10 +104,10 @@ module Graphics =
                         |None -> OK
                         |Some (_, _, shipsizeinfo) ->
                             shipsizeinfo |> validateEntityCultures assets cultures (s.TagText "entity") entity
-                            
-            let ssinner = 
+
+            let ssinner =
                 fun (s : Node) ->
-                    s.Leafs "entity" <&!&> fun e -> if assets |> Set.contains (e.Value.ToRawString()) then OK else Invalid [inv (ErrorCodes.UndefinedEntity (e.Value.ToRawString())) e]
+                    s.Leafs "entity" <&!&> fun e -> if assets |> Set.contains (e.Value.ToRawString()) then OK else Invalid (seq {yield inv (ErrorCodes.UndefinedEntity (e.Value.ToRawString())) e})
             sections <&!&> inner
             <&&>
             (shipsizesV <&!&> (fun (ss, n, c) -> c |> validateEntityCultures assets cultures (n + "_entity") ss))
@@ -118,22 +118,22 @@ module Graphics =
         fun os es ->
             let shipsizes = os.AllOfTypeChildren EntityType.ShipSizes
                             |> List.map (fun ss -> ss, ss.Key, (ss.Child "graphical_culture" |> Option.map (fun gc -> gc.LeafValues |> Seq.map (fun lv -> lv.Value.ToRawString()) |> List.ofSeq) |> Option.defaultValue []))
-                            
+
             let components = es.AllOfTypeChildren EntityType.ComponentTemplates
                                 |> List.filter (fun c -> (c.Tag "hidden") |> Option.bind (function |Value.Bool x -> Some (not x) |_ -> Some true) |> Option.defaultValue true)
             let cultures = getGraphicalCultures os
             let assets = os.AllOfTypeChildren EntityType.GfxAsset
                             |> List.map (fun a -> a.TagText "name")
                             |> Set.ofList
-            let inner = 
+            let inner =
                 fun (s : Node) ->
                     match s.Leafs "entity" |> Seq.tryHead with
                     |None -> OK
                     |Some entity ->
-                        (cultures |> List.map fst) |> validateEntityCultures assets cultures (s.TagText "entity") entity                            
+                        (cultures |> List.map fst) |> validateEntityCultures assets cultures (s.TagText "entity") entity
             components <&!&> inner
 
-    let validateAmbientGraphics : StructureValidator = 
+    let validateAmbientGraphics : StructureValidator =
         fun os es ->
             let assets = os.AllOfTypeChildren EntityType.GfxAsset
                         |> List.map (fun a -> a.TagText "name")
@@ -142,13 +142,13 @@ module Graphics =
             |> List.collect (fun ao -> ao.Leafs "entity" |> List.ofSeq)
             <&!&> (fun l -> validateEntity assets (l.Value.ToRawString()) l)
     let valIconLeaf (sprites : Collections.Set<string>) (leaf : Leaf) =
-        if Set.contains (leaf.Value.ToRawString()) sprites then OK else Invalid [inv (ErrorCodes.SpriteMissing (leaf.Value.ToString())) leaf]
+        if Set.contains (leaf.Value.ToRawString()) sprites then OK else Invalid (seq {yield inv (ErrorCodes.SpriteMissing (leaf.Value.ToString())) leaf})
 
     let valIcon (sprites : Collections.Set<string>) (key : string) (node : Node) =
         let results =
             match node.Leafs key |> List.ofSeq with
             | [] -> OK
-            | xs -> 
+            | xs ->
                 xs <&!&> valIconLeaf sprites
         results
 
@@ -162,14 +162,14 @@ module Graphics =
         files |> Set.contains path
 
     let valIconWithInterface (sprites : Collections.Set<string>) (files : Collections.Set<string>) (folder : gfxFolders) (key : string) (node : Node) =
-        let inner = 
+        let inner =
             fun (leaf : Leaf) ->
                 let value = leaf.Value.ToRawString()
                 if doesFileExist files folder value then OK
                 else valIconLeaf sprites leaf
         node.Leafs key <&!&> inner
 
-    let valComponentIcons : FileValidator = 
+    let valComponentIcons : FileValidator =
         //let spriteKeys = ["spriteType"; "portraitType"; "corneredTileSpriteType"; "flagSpriteType"]
         fun res es ->
             let os = EntitySet (res.AllEntities())
@@ -185,8 +185,8 @@ module Graphics =
             //                 let results =
             //                     match x.Leafs "icon" |> List.ofSeq with
             //                     | [] -> OK
-            //                     | xs -> 
-            //                         xs <&!&> (fun e -> if List.contains (e.Value.ToRawString()) spriteNames then OK else Invalid [inv (ErrorCodes.SpriteMissing (e.Value.ToString())) e])
+            //                     | xs ->
+            //                         xs <&!&> (fun e -> if List.contains (e.Value.ToRawString()) spriteNames then OK else Invalid (seq {yield inv (ErrorCodes.SpriteMissing (e.Value.ToString())) e}))
             //                 results <&&> children
             //                     )
             // let fCombine = (<&&>)

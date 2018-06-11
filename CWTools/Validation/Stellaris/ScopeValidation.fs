@@ -51,29 +51,29 @@ module ScopeValidation =
     let inline handleUnknownTrigger (root : ^a) (key : string) =
         match STLProcess.ignoreKeys |> List.tryFind (fun k -> k == key) with
         |Some _ -> OK //Do better
-        |None -> if key.StartsWith("@", StringComparison.OrdinalIgnoreCase) then OK else Invalid [inv (ErrorCodes.UndefinedTrigger key) root]
+        |None -> if key.StartsWith("@", StringComparison.OrdinalIgnoreCase) then OK else Invalid (seq {yield inv (ErrorCodes.UndefinedTrigger key) root})
 
     let inline handleUnknownEffect root (key : string) =
         match STLProcess.ignoreKeys |> List.tryFind (fun k -> k == key) with
         |Some _ -> OK //Do better
-        |None -> if key.StartsWith("@", StringComparison.OrdinalIgnoreCase) then OK else Invalid [inv (ErrorCodes.UndefinedEffect key) root]
+        |None -> if key.StartsWith("@", StringComparison.OrdinalIgnoreCase) then OK else Invalid (seq {yield inv (ErrorCodes.UndefinedEffect key) root})
 
     let valTriggerLeaf (triggers : EffectMap) (modifiers : Modifier list) (scopes : ScopeContext) (leaf : Leaf) =
         match triggers.TryFind leaf.Key with
-        |Some (:? ScopedEffect as e) -> Invalid [inv (ErrorCodes.IncorrectScopeAsLeaf (e.Name) (leaf.Value.ToRawString())) leaf]
+        |Some (:? ScopedEffect as e) -> Invalid (seq {yield inv (ErrorCodes.IncorrectScopeAsLeaf (e.Name) (leaf.Value.ToRawString())) leaf})
         |Some e ->
             if e.Scopes |> List.contains(scopes.CurrentScope) || scopes.CurrentScope = Scope.Any
             then valTriggerLeafUsage modifiers scopes leaf
-            else Invalid [inv (ErrorCodes.IncorrectTriggerScope leaf.Key (scopes.CurrentScope.ToString()) (e.Scopes |> List.map (fun f -> f.ToString()) |> String.concat ", ")) leaf]
+            else Invalid (seq {yield inv (ErrorCodes.IncorrectTriggerScope leaf.Key (scopes.CurrentScope.ToString()) (e.Scopes |> List.map (fun f -> f.ToString()) |> String.concat ", ")) leaf})
         |None -> handleUnknownTrigger leaf leaf.Key
 
     let valEffectLeaf (effects : EffectMap) (modifiers : Modifier list) (scopes : ScopeContext) (leaf : Leaf) =
         match effects.TryFind leaf.Key with
-            |Some (:? ScopedEffect as e) -> Invalid [inv (ErrorCodes.IncorrectScopeAsLeaf (e.Name) (leaf.Value.ToRawString())) leaf]
+            |Some (:? ScopedEffect as e) -> Invalid (seq {yield inv (ErrorCodes.IncorrectScopeAsLeaf (e.Name) (leaf.Value.ToRawString())) leaf})
             |Some e ->
                 if e.Scopes |> List.contains(scopes.CurrentScope) || scopes.CurrentScope = Scope.Any
                 then valEffectLeafUsage modifiers scopes leaf
-                else Invalid [inv (ErrorCodes.IncorrectEffectScope leaf.Key (scopes.CurrentScope.ToString()) (e.Scopes |> List.map (fun f -> f.ToString()) |> String.concat ", ")) leaf]
+                else Invalid (seq {yield inv (ErrorCodes.IncorrectEffectScope leaf.Key (scopes.CurrentScope.ToString()) (e.Scopes |> List.map (fun f -> f.ToString()) |> String.concat ", ")) leaf})
             |None -> handleUnknownEffect leaf leaf.Key
 
     let rec valEventTrigger (root : Node) (triggers : EffectMap) (effects : EffectMap) (modifiers : Modifier list) (scopes : ScopeContext) (effect : Child) =
@@ -99,15 +99,15 @@ module ScopeValidation =
                     valNodeTriggers root triggers effects modifiers s ignores node
                     <&&>
                     valTriggerNodeUsage modifiers scopes node
-                |WrongScope (_,_,ss) -> Invalid [inv (ErrorCodes.IncorrectScopeScope x (scopes.CurrentScope.ToString()) (ss |> List.map (fun s -> s.ToString()) |> String.concat ", ")) node]
+                |WrongScope (_,_,ss) -> Invalid (seq {yield inv (ErrorCodes.IncorrectScopeScope x (scopes.CurrentScope.ToString()) (ss |> List.map (fun s -> s.ToString()) |> String.concat ", ")) node})
                 |NotFound ->
                     match triggers.TryFind x with
                     |Some e ->
                         if e.Scopes |> List.contains(scopes.CurrentScope) || scopes.CurrentScope = Scope.Any
                         then valTriggerNodeUsage modifiers scopes node
-                        else Invalid [inv (ErrorCodes.IncorrectTriggerScope x (scopes.CurrentScope.ToString()) (e.Scopes |> List.map (fun f -> f.ToString()) |> String.concat ", ")) node]
+                        else Invalid (seq {yield inv (ErrorCodes.IncorrectTriggerScope x (scopes.CurrentScope.ToString()) (e.Scopes |> List.map (fun f -> f.ToString()) |> String.concat ", ")) node})
                     // |Some (_, true) -> OK
-                    // |Some (t, false) -> Invalid [inv S.Error node (sprintf "%s trigger used in incorrect scope. In %A but expected %s" x scopes.CurrentScope (t.Scopes |> List.map (fun f -> f.ToString()) |> String.concat ", "))]
+                    // |Some (t, false) -> Invalid (seq {yield inv S.Error node (sprintf "%s trigger used in incorrect scope. In %A but expected %s" x scopes.CurrentScope (t.Scopes |> List.map (fun f -> f.ToString()) |> String.concat ", "))})
                     |None -> handleUnknownTrigger node x
         |_ -> OK
 
@@ -129,15 +129,15 @@ module ScopeValidation =
             |x ->
                 match changeScope effects triggers x scopes with
                 |NewScope (s, ignores) -> valNodeEffects node triggers effects modifiers s ignores node
-                |WrongScope (_,_,ss) -> Invalid [inv (ErrorCodes.IncorrectScopeScope x (scopes.CurrentScope.ToString()) (ss |> List.map (fun s -> s.ToString()) |> String.concat ", ")) node]
+                |WrongScope (_,_,ss) -> Invalid (seq {yield inv (ErrorCodes.IncorrectScopeScope x (scopes.CurrentScope.ToString()) (ss |> List.map (fun s -> s.ToString()) |> String.concat ", ")) node})
                 |NotFound ->
                     match effects.TryFind x with
                     |Some e ->
                         if e.Scopes |> List.contains(scopes.CurrentScope) || scopes.CurrentScope = Scope.Any
                         then valEffectNodeUsage modifiers scopes node
-                        else Invalid [inv (ErrorCodes.IncorrectEffectScope x (scopes.CurrentScope.ToString()) (e.Scopes  |> List.map (fun f -> f.ToString()) |> String.concat ", ")) node]
+                        else Invalid (seq {yield inv (ErrorCodes.IncorrectEffectScope x (scopes.CurrentScope.ToString()) (e.Scopes  |> List.map (fun f -> f.ToString()) |> String.concat ", ")) node})
                     // |Some(_, true) -> OK
-                    // |Some (t, false) -> Invalid [inv S.Error node (sprintf "%s effect used in incorrect scope. In %A but expected %s" x scopes.CurrentScope (t.Scopes  |> List.map (fun f -> f.ToString()) |> String.concat ", "))]
+                    // |Some (t, false) -> Invalid (seq {yield inv S.Error node (sprintf "%s effect used in incorrect scope. In %A but expected %s" x scopes.CurrentScope (t.Scopes  |> List.map (fun f -> f.ToString()) |> String.concat ", "))})
                     |None -> handleUnknownEffect node x
         |_ -> OK
 
