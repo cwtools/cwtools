@@ -1,6 +1,6 @@
 namespace CWTools.Parser
 
-    
+
 open FParsec
 open Microsoft.FSharp.Compiler.Range
 open Types
@@ -85,26 +85,26 @@ module CKParser =
     let valueBNo = skipString "no" .>> nextCharSatisfiesNot (isvaluechar) |>> (fun _ -> Bool(false))
 
     let valueI = pint64 .>> nextCharSatisfiesNot (isvaluechar) |>> int |>> Int
-    let valueF = pfloat .>> nextCharSatisfiesNot (isvaluechar) |>> float |>> Float     
+    let valueF = pfloat .>> nextCharSatisfiesNot (isvaluechar) |>> float |>> Float
 
     let hsv3 = clause (pipe3 ((valueF .>> ws) .>> ws) (valueF .>> ws) (valueF .>> ws) (fun a b c -> Clause [Statement.Value a;Statement.Value b; Statement.Value c]))
     let hsv4 = clause (pipe4 (valueF .>> ws) (valueF .>> ws) (valueF .>> ws) (valueF .>> ws) (fun a b c d -> Clause [Statement.Value a;Statement.Value b; Statement.Value c; Statement.Value d]))
-    let hsvI = 
-        clause (pipe4 (valueF .>> ws) (valueF .>> ws) (valueF .>> ws) (opt (valueF .>> ws)) 
-            (fun a b c d -> 
-            match (a, b, c, d) with 
+    let hsvI =
+        clause (pipe4 (valueF .>> ws) (valueF .>> ws) (valueF .>> ws) (opt (valueF .>> ws))
+            (fun a b c d ->
+            match (a, b, c, d) with
             | (a, b, c, (Some d)) -> Clause [Statement.Value a;Statement.Value b; Statement.Value c; Statement.Value d]
             | (a, b, c, None) -> Clause [Statement.Value a;Statement.Value b; Statement.Value c;]))
     let hsv = strSkip "hsv" >>. hsvI .>> ws
-    let rgbI = clause (pipe4 (valueI .>> ws) (valueI .>> ws) (valueI .>> ws) (opt (valueI .>> ws)) 
-            (fun a b c d -> 
-            match (a, b, c, d) with 
+    let rgbI = clause (pipe4 (valueI .>> ws) (valueI .>> ws) (valueI .>> ws) (opt (valueI .>> ws))
+            (fun a b c d ->
+            match (a, b, c, d) with
             | (a, b, c, (Some d)) -> Clause [Statement.Value a;Statement.Value b; Statement.Value c; Statement.Value d]
             | (a, b, c, None) -> Clause [Statement.Value a;Statement.Value b; Statement.Value c;]))
 
 
-    let rgb3 = clause (pipe3 (valueI .>> ws) (valueI .>> ws) (valueI .>> ws) (fun a b c -> Clause [Statement.Value a;Statement.Value b; Statement.Value c])) 
-    let rgb4 = clause (pipe4 (valueI .>> ws) (valueI .>> ws) (valueI .>> ws) (valueI .>> ws) (fun a b c d -> Clause [Statement.Value a;Statement.Value b; Statement.Value c; Statement.Value d])) 
+    let rgb3 = clause (pipe3 (valueI .>> ws) (valueI .>> ws) (valueI .>> ws) (fun a b c -> Clause [Statement.Value a;Statement.Value b; Statement.Value c]))
+    let rgb4 = clause (pipe4 (valueI .>> ws) (valueI .>> ws) (valueI .>> ws) (valueI .>> ws) (fun a b c d -> Clause [Statement.Value a;Statement.Value b; Statement.Value c; Statement.Value d]))
     let rgb = strSkip "rgb" >>. rgbI .>> ws
 
     // Complex types
@@ -115,7 +115,7 @@ module CKParser =
     let value, valueimpl = createParserForwardedToRef()
     let statement = comment |>> Comment <|> (attempt (((value .>> ws)) .>> notFollowedBy operatorLookahead |>> Value)) <|> (keyvalue) <?> "statement"
     let valueBlock = clause (many1 ((value .>> ws |>> Value) <|> (comment |>> Comment))) |>> Clause <?> "value clause"
-    
+
     let valueClause = clause (many statement) |>> Clause <?> "statement clause"
 
     let valueCustom : Parser<Value, unit> =
@@ -127,7 +127,7 @@ module CKParser =
         let bnP = attempt valueBNo <|> valueS
         fun (stream: CharStream<_>) ->
             match stream.Peek() with
-            | '{' -> 
+            | '{' ->
                 let vc = (vcP stream)
                 if vc.Status = Ok then vc else
                     let vb = (vbP stream)
@@ -135,13 +135,13 @@ module CKParser =
                 // let vb = (attempt valueBlock stream)
                 // if vb.Status = Ok then vb else valueClause stream
             | '"' -> valueQ stream
-            | x when isDigit x -> 
+            | x when isDigit x || x = '-' ->
                 let i = (iP stream)
                 if i.Status = Ok then i else
                     let f = (fP stream)
                     if f.Status = Ok then f else
                     valueS stream
-            | _ -> 
+            | _ ->
                 match stream.PeekString 3, stream.PeekString 2 with
                 | "rgb", _ -> rgb stream
                 | "hsv", _ -> hsv stream
@@ -151,7 +151,7 @@ module CKParser =
                 //| _ -> choice [(attempt valueB); valueS] stream
                 //choiceL [(attempt valueB); (attempt hsv); (attempt rgb); valueS] "value" stream
 
-    
+
 
     do valueimpl := valueCustom <?> "value"
     let getRange (start: FParsec.Position) (endp : FParsec.Position) = mkRange start.StreamName (mkPos (int start.Line) (int start.Column)) (mkPos (int endp.Line) (int endp.Column))
@@ -195,7 +195,7 @@ module CKParser =
         let hash = (fun (file, name) -> file.GetHashCode(), name)
         (memoize hash inner) (fileString, fileName)
 
-    let getSuccess (result) = 
+    let getSuccess (result) =
         match result with
         |Success(s, _, _) -> s
         |_ -> EventFile []
@@ -205,4 +205,4 @@ module CKParser =
             parseFile = parseEventFile
             parseString = parseEventString
         }
-   
+

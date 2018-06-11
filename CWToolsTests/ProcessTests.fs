@@ -31,6 +31,7 @@ let tests =
                                 any_planet = {\
                                     if = {\
                                         limit = {\
+                                            test = -1.0
                                         }}}}}"
             match CKParser.parseString input "test" with
             |Success(r, _, _) ->
@@ -40,9 +41,12 @@ let tests =
                 let anyplanet = option.Children |> List.head
                 let ifblock = anyplanet.Children |> List.head
                 let limit = ifblock.Children |> List.head
+                let num = limit.Leaves |> Seq.head
+                let value = num.Value |> (function |Value.Float f when f = -1.0 -> Some f |_ -> None)
                 Expect.isTrue (event :? STLProcess.Event) "event not right type"
                 Expect.isTrue (option :? STLProcess.Option) "option not right type"
                 Expect.isTrue (limit :? TriggerBlock) "node not right type"
+                Expect.isTrue (value.IsSome) (sprintf "value is wrong type %A" num.ToRaw)
         testCase "eventdesctrigger" <| fun () ->
             let input =    "planet_event = {\
                             desc = {\
