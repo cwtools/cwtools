@@ -66,7 +66,7 @@ module rec Rules =
 
     let checkFileExists (files : Set<string>) (leaf : Leaf) =
         let file = leaf.Value.ToRawString().Replace("/","\\")
-        if files.Contains file then OK else Invalid (seq {yield inv (ErrorCodes.MissingFile file) leaf})
+        if files.Contains file then OK else Invalid [inv (ErrorCodes.MissingFile file) leaf]
     let scopes = (scopedEffects |> List.map (fun se -> se.Name)) @ (oneToOneScopes |> List.map fst)
 
     type CompletionResponse =
@@ -128,9 +128,9 @@ module rec Rules =
                         match TryParser.parseInt key with
                         |Some i ->  if i <= max && i >= min then OK else Invalid[inv (ErrorCodes.ConfigRulesUnexpectedValue (sprintf "Expecting a value between %i and %i" min max)) leaf]
                         |None -> Invalid[inv (ErrorCodes.ConfigRulesUnexpectedValue (sprintf "Expecting a number, got %s" key)) leaf]
-                |ValueType.Specific s -> if key.Trim([|'\"'|]) == s then OK else Invalid (seq {yield inv (ErrorCodes.ConfigRulesUnexpectedValue (sprintf "Expecting value %s" s)) leaf})
+                |ValueType.Specific s -> if key.Trim([|'\"'|]) == s then OK else Invalid [inv (ErrorCodes.ConfigRulesUnexpectedValue (sprintf "Expecting value %s" s)) leaf]
                 |ValueType.Scalar -> OK
-                |_ -> Invalid (seq {yield inv (ErrorCodes.ConfigRulesUnexpectedValue "Invalid value") leaf})
+                |_ -> Invalid [inv (ErrorCodes.ConfigRulesUnexpectedValue "Invalid value") leaf]
 
         let checkLocalisationField (keys : (Lang * Set<string>) list) (synced : bool) (leaf : Leaf) =
             match synced with
@@ -161,7 +161,7 @@ module rec Rules =
                     match leftTypeRule with
                     |Some (_, _, f) -> applyLeafRule root ctx f leaf
                     |_ ->
-                        if enforceCardinality then Invalid (seq {yield inv (ErrorCodes.ConfigRulesUnexpectedProperty (sprintf "Unexpected node %s in %s" leaf.Key startNode.Key)) leaf}) else OK
+                        if enforceCardinality then Invalid [inv (ErrorCodes.ConfigRulesUnexpectedProperty (sprintf "Unexpected node %s in %s" leaf.Key startNode.Key)) leaf] else OK
                 |rs -> rs <&??&> (fun (_, _, f) -> applyLeafRule root ctx f leaf) |> mergeValidationErrors "CW240"
                 // match expandedrules |> List.tryFind (fst3 >> (==) leaf.Key) with
                 // | Some (_, _, f) -> applyLeafRule f leaf
@@ -172,7 +172,7 @@ module rec Rules =
                 //     match leftTypeRule with
                 //     |Some (_, _, f) -> applyLeafRule f leaf
                 //     |_ ->
-                //         if enforceCardinality then Invalid (seq {yield inv (ErrorCodes.CustomError "Unexpected value" Severity.Error) leaf}) else OK
+                //         if enforceCardinality then Invalid [inv (ErrorCodes.CustomError "Unexpected value" Severity.Error) leaf] else OK
             let nodeFun (node : Node) =
                 match expandedrules |> List.filter (fst3 >> (==) node.Key) with
                 | [] ->
@@ -187,13 +187,13 @@ module rec Rules =
                         List.filter (function |(_, _, LeftScopeField (rs)) -> checkValidLeftScopeRule scopes (LeftScopeField (rs)) node.Key  |_ -> false )
                     let leftRules = leftClauseRule @ leftTypeRule @ leftScopeRule
                     match leftRules with
-                    |[] -> if enforceCardinality then Invalid (seq {yield inv (ErrorCodes.ConfigRulesUnexpectedProperty (sprintf "Unexpected node %s in %s" node.Key startNode.Key)) node}) else OK
+                    |[] -> if enforceCardinality then Invalid [inv (ErrorCodes.ConfigRulesUnexpectedProperty (sprintf "Unexpected node %s in %s" node.Key startNode.Key)) node] else OK
                     |rs -> rs <&??&> (fun (_, o, f) -> applyNodeRule root enforceCardinality ctx o f node)
                     // match leftClauseRule, leftTypeRule, leftScopeRule with
                     // |Some (_, _, f), _, _ -> applyNodeRule enforceCardinality ctx f node
                     // |_, Some (_, _, f), _ -> applyNodeRule enforceCardinality ctx f node
                     // |_, _, Some(_, _, f) -> applyNodeRule enforceCardinality ctx f node
-                    // |None, None, None -> if enforceCardinality then Invalid (seq {yield inv (ErrorCodes.CustomError "Unexpected node" Severity.Error) node}) else OK
+                    // |None, None, None -> if enforceCardinality then Invalid [inv (ErrorCodes.CustomError "Unexpected node" Severity.Error) node] else OK
                 | rs -> rs <&??&> (fun (_, o, f) -> applyNodeRule root enforceCardinality ctx o f node)
             let checkCardinality (node : Node) (rule : Rule) =
                 let key, opts, field = rule
@@ -207,8 +207,8 @@ module rec Rules =
                     let leafcount = node.Tags key |> Seq.length
                     let childcount = node.Childs key |> Seq.length
                     let total = leafcount + childcount
-                    if opts.min > total then Invalid (seq {yield inv (ErrorCodes.ConfigRulesWrongNumber (sprintf "Missing %s, requires %i" key opts.min)) node})
-                    else if opts.max < total then Invalid (seq {yield inv (ErrorCodes.ConfigRulesWrongNumber (sprintf "Too many %s, max %i" key opts.max)) node})
+                    if opts.min > total then Invalid [inv (ErrorCodes.ConfigRulesWrongNumber (sprintf "Missing %s, requires %i" key opts.min)) node]
+                    else if opts.max < total then Invalid [inv (ErrorCodes.ConfigRulesWrongNumber (sprintf "Too many %s, max %i" key opts.max)) node]
                     else OK
             startNode.Leaves <&!&> valueFun
             <&&>
@@ -220,7 +220,7 @@ module rec Rules =
             checkValidValue leaf vt
             // match isValidValue leaf.Value vt with
             // | true -> OK
-            // | false -> Invalid (seq {yield inv (ErrorCodes.CustomError "Invalid value" Severity.Error) leaf})
+            // | false -> Invalid [inv (ErrorCodes.CustomError "Invalid value" Severity.Error) leaf]
         and applyObjectField (entityType : EntityType) (leaf : Leaf) =
             let values =
                 match entityType with
@@ -229,20 +229,20 @@ module rec Rules =
                 | EntityType.StarbaseBuilding -> ["crew"]
                 | _ -> []
             let value = leaf.Value.ToString()
-            if values |> List.exists (fun s -> s == value) then OK else Invalid (seq {yield invCustom leaf})
+            if values |> List.exists (fun s -> s == value) then OK else Invalid [invCustom leaf]
 
         and applyTypeField (t : string) (leaf : Leaf) =
             match types.TryFind t with
             |Some values ->
                 let value = leaf.Value.ToString().Trim([|'\"'|])
-                if values |> List.exists (fun s -> s == value) then OK else Invalid (seq {yield inv (ErrorCodes.ConfigRulesUnexpectedValue (sprintf "Expected value of type %s" t)) leaf})
+                if values |> List.exists (fun s -> s == value) then OK else Invalid [inv (ErrorCodes.ConfigRulesUnexpectedValue (sprintf "Expected value of type %s" t)) leaf]
             |None -> OK
 
         and applyLeftTypeFieldLeaf (t : string) (leaf : Leaf) =
             match types.TryFind t with
             |Some values ->
                 let value = leaf.Key
-                if values |> List.exists (fun s -> s == value) then OK else Invalid (seq {yield inv (ErrorCodes.ConfigRulesUnexpectedValue (sprintf "Expected key of type %s" t)) leaf})
+                if values |> List.exists (fun s -> s == value) then OK else Invalid [inv (ErrorCodes.ConfigRulesUnexpectedValue (sprintf "Expected key of type %s" t)) leaf]
             |None -> OK
 
         and applyScopeField (root : Node) (ctx : RuleContext) (s : Scope) (leaf : Leaf) =
@@ -253,15 +253,15 @@ module rec Rules =
             let scope = ctx.scopes
             let key = leaf.Value.ToString()
             match changeScope effectMap triggerMap key scope with
-            |NewScope ({Scopes = current::_} ,_) -> if current = s || s = Scope.Any || current = Scope.Any then OK else Invalid (seq {yield inv (ErrorCodes.ConfigRulesTargetWrongScope (current.ToString()) (s.ToString())) leaf})
-            |NotFound _ -> Invalid (seq {yield inv (ErrorCodes.ConfigRulesInvalidTarget (s.ToString())) leaf})
-            |WrongScope (command, prevscope, expected) -> Invalid (seq {yield inv (ErrorCodes.ConfigRulesErrorInTarget command (prevscope.ToString()) (sprintf "%A" expected) ) leaf})
+            |NewScope ({Scopes = current::_} ,_) -> if current = s || s = Scope.Any || current = Scope.Any then OK else Invalid [inv (ErrorCodes.ConfigRulesTargetWrongScope (current.ToString()) (s.ToString())) leaf]
+            |NotFound _ -> Invalid [inv (ErrorCodes.ConfigRulesInvalidTarget (s.ToString())) leaf]
+            |WrongScope (command, prevscope, expected) -> Invalid [inv (ErrorCodes.ConfigRulesErrorInTarget command (prevscope.ToString()) (sprintf "%A" expected) ) leaf]
             |_ -> OK
             // <&&>
             // ( match changeScope effectMap triggerMap key scope2 with
-            // |NewScope ({Scopes = current::_} ,_) -> if current = s || s = Scope.Any || current = Scope.Any then OK else Invalid (seq {yield inv (ErrorCodes.ConfigRulesTargetWrongScope (current.ToString()) (s.ToString())) leaf})
-            // |NotFound _ -> Invalid (seq {yield inv (ErrorCodes.ConfigRulesInvalidTarget (s.ToString())) leaf})
-            // |WrongScope (command, prevscope, expected) -> Invalid (seq {yield inv (ErrorCodes.ConfigRulesErrorInTarget command (prevscope.ToString()) (sprintf "%A" expected) ) leaf})
+            // |NewScope ({Scopes = current::_} ,_) -> if current = s || s = Scope.Any || current = Scope.Any then OK else Invalid [inv (ErrorCodes.ConfigRulesTargetWrongScope (current.ToString()) (s.ToString())) leaf]
+            // |NotFound _ -> Invalid [inv (ErrorCodes.ConfigRulesInvalidTarget (s.ToString())) leaf]
+            // |WrongScope (command, prevscope, expected) -> Invalid [inv (ErrorCodes.ConfigRulesErrorInTarget command (prevscope.ToString()) (sprintf "%A" expected) ) leaf]
             // |_ -> OK)
             // match key with
             // |x when x.StartsWith "event_target:" -> OK
@@ -275,7 +275,7 @@ module rec Rules =
             match types.TryFind t with
             |Some values ->
                 let value = node.Key
-                if values |> List.exists (fun s -> s == value) then OK else Invalid (seq {yield inv (ErrorCodes.ConfigRulesUnexpectedValue (sprintf "Expected key of type %s" t)) node})
+                if values |> List.exists (fun s -> s == value) then OK else Invalid [inv (ErrorCodes.ConfigRulesUnexpectedValue (sprintf "Expected key of type %s" t)) node]
             |None -> OK
 
         and applyLeafRule (root : Node) (ctx : RuleContext) (rule : Field) (leaf : Leaf) =

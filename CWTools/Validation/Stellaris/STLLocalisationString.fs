@@ -18,7 +18,7 @@ open CWTools.Utilities.Utils
 
 module STLLocalisationString =
     type LocKeySet = Microsoft.FSharp.Collections.Tagged.Set<string, STLStringComparer>
-
+    
     type LocElement =
     | Ref of string
     | Command of string
@@ -34,19 +34,19 @@ module STLLocalisationString =
 
     let parseLocString fileString filename = runParserOnString locStringParser () filename fileString
 
-    let hardcodedLocalisation =
+    let hardcodedLocalisation = 
         [
             "playername"
         ]
-    let checkRef (lang : Lang) (keys : LocKeySet) (entry : LocEntry) (r : string) =
+    let checkRef (lang : Lang) (keys : LocKeySet) (entry : LocEntry) (r : string) = 
         match keys.Contains r with
         | true -> OK
         | false ->
             match r |> seq |> Seq.exists (fun c -> Char.IsLower(c)) && not (List.contains r hardcodedLocalisation) with
-            | true -> Invalid (seq {yield invManual (ErrorCodes.UndefinedLocReference entry.key r (lang :> obj)) (entry.position) entry.key None })
+            | true -> Invalid [invManual (ErrorCodes.UndefinedLocReference entry.key r (lang :> obj)) (entry.position) entry.key None ]
             | false -> OK
-
-    let commands =
+    
+    let commands = 
         [
             "GetAdj";
             "GetAllianceName";
@@ -106,7 +106,7 @@ module STLLocalisationString =
     let checkCommand (entry : Entry) (commands : string list) (eventtargets : string list) (setvariables : string list) (command : string) =
         match localisationCommandContext commands eventtargets setvariables entry command with
         | ContextResult.Found _ -> OK
-        | LocNotFound s -> Invalid (seq {yield invManual (ErrorCodes.InvalidLocCommand entry.key s) (entry.position) entry.key None })
+        | LocNotFound s -> Invalid [invManual (ErrorCodes.InvalidLocCommand entry.key s) (entry.position) entry.key None ]
 
     let processLocalisation (effects : Effect list) (scriptedLoc : string list) (setvariables : string list) (os : STLEntitySet) (api : (Lang * Map<string, Entry>)) (keys : (Lang * LocKeySet) list) =
         let lang = api |> fst
@@ -130,16 +130,16 @@ module STLLocalisationString =
         let validateContextResult (e : LocEntry) cr =
             match cr with
             | ContextResult.Found _ -> OK
-            | LocNotFound s -> Invalid (seq {yield invManual (ErrorCodes.InvalidLocCommand e.key s) (e.position) e.key None })
-        let validateLocMap (lang, (m : Map<string, LocEntry>)) =
+            | LocNotFound s -> Invalid [invManual (ErrorCodes.InvalidLocCommand e.key s) (e.position) e.key None ]
+        let validateLocMap (lang, (m : Map<string, LocEntry>)) = 
             let keys = keys |> List.filter (fun (l, _) -> l = lang) |> List.map snd |> List.fold (fun a b -> LocKeySet.Union (a, b)) (LocKeySet.Empty(STLStringComparer()))
             m |> Map.map (fun _ e -> e.refs <&!&> checkRef lang keys e) |> Map.toList |> List.map snd |> List.fold (<&&>) OK
             <&&>
             (m |> Map.map (fun _ e -> e.scopes <&!&> validateContextResult e) |> Map.toList |> List.map snd |> List.fold (<&&>) OK)
 
         let validateReplaceMe (lang, (m : Map<string, LocEntry>)) =
-            m |> Map.toList |> List.fold (fun s (k, v) -> if v.desc == "\"REPLACE_ME\"" then s <&&> Invalid (seq {yield invManual (ErrorCodes.ReplaceMeLoc v.key lang) (v.position) v.key None }) else s ) OK
-
+            m |> Map.toList |> List.fold (fun s (k, v) -> if v.desc == "\"REPLACE_ME\"" then s <&&> Invalid [invManual (ErrorCodes.ReplaceMeLoc v.key lang) (v.position) v.key None ] else s ) OK
+        
         api <&!&> validateLocMap <&&> (api <&!&> validateReplaceMe)
         // <&&>
         // (api <&!&> (fun (l, m) -> m.refs <&!&> checkRef l keys m))
@@ -154,7 +154,7 @@ module STLLocalisationString =
     //         function
     //         |Success (v, _, _) -> v
     //         |Failure _ -> []
-
+                
     //     let parsed = all |> Map.map (fun k v -> v, parseLocString v.desc "" |> extractResult)
     //     parsed |> Map.toList <&!&> (fun (k, (e, v)) -> v |> List.choose (function |Ref s -> Some s |_ -> None) <&!&> checkRef lang keys e )
     //     <&&>

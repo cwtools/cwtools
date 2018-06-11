@@ -92,7 +92,7 @@ module ValidationCore =
         static member CustomError = fun error severity -> { ID = "CW999"; Severity = severity; Message = error}
     type ValidationResult =
         | OK
-        | Invalid of (string * Severity * range * int * string * option<string>) seq
+        | Invalid of (string * Severity * range * int * string * option<string>) list
 
     let inline invData (code : ErrorCode) (l : ^a) (data : option<string>) =
         let pos = (^a : (member Position : range) l)
@@ -122,18 +122,18 @@ module ValidationCore =
     let (<&>) f1 f2 x =
         match f1 x, f2 x with
         | OK, OK -> OK
-        | Invalid e1, Invalid e2 -> Invalid (seq {yield! e1; yield! e2})
+        | Invalid e1, Invalid e2 -> Invalid (e1 @ e2)
         | Invalid e, OK | OK, Invalid e -> Invalid e
     let (<&&>) f1 f2 =
         match f1, f2 with
         | OK, OK -> OK
-        | Invalid e1, Invalid e2 -> Invalid (seq {yield! e1; yield! e2})
+        | Invalid e1, Invalid e2 -> Invalid (e1 @ e2)
         | Invalid e, OK | OK, Invalid e -> Invalid e
 
     let (<&?&>) f1 f2 =
         match f1, f2 with
         |OK, OK -> OK
-        |Invalid e1, Invalid e2 -> Invalid (seq {yield! e1; yield! e2})
+        |Invalid e1, Invalid e2 -> Invalid (e1 @ e2)
         |Invalid e, OK -> OK
         |OK, Invalid e -> OK
 
@@ -147,7 +147,7 @@ module ValidationCore =
                 mergeErrorsInner ((e1c, Severity.Error, e1r, e1l, sprintf "%s\nor\n%s" e1m e2m, e1d)::tail)
         function
         |OK -> OK
-        |Invalid es -> Invalid (mergeErrorsInner (es |> List.ofSeq))
+        |Invalid es -> Invalid (mergeErrorsInner es)
 
     // Parallelising something this small makes it slower!
     //let (<&!&>) es f = es |> PSeq.map f |> PSeq.fold (<&&>) OK
