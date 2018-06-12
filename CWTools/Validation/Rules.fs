@@ -129,14 +129,14 @@ module rec Rules =
                     |_ ->
                         match TryParser.parseDouble key with
                         |Some f -> if f < max && f > min then OK else Invalid[inv (ErrorCodes.ConfigRulesUnexpectedValue (sprintf "Expecting a value between %f and %f" min max)) leaf]
-                        |None -> Invalid[inv (ErrorCodes.ConfigRulesUnexpectedValue (sprintf "Expecting a number, got %s" key)) leaf]
+                        |None -> Invalid[inv (ErrorCodes.ConfigRulesUnexpectedValue (sprintf "Expecting a float, got %s" key)) leaf]
                 |ValueType.Int (min, max) ->
                     match leaf.Value with
                     |Int i -> if i <= max && i >= min then OK else Invalid[inv (ErrorCodes.ConfigRulesUnexpectedValue (sprintf "Expecting a value between %i and %i" min max)) leaf]
                     |_ ->
                         match TryParser.parseInt key with
                         |Some i ->  if i <= max && i >= min then OK else Invalid[inv (ErrorCodes.ConfigRulesUnexpectedValue (sprintf "Expecting a value between %i and %i" min max)) leaf]
-                        |None -> Invalid[inv (ErrorCodes.ConfigRulesUnexpectedValue (sprintf "Expecting a number, got %s" key)) leaf]
+                        |None -> Invalid[inv (ErrorCodes.ConfigRulesUnexpectedValue (sprintf "Expecting an integer, got %s" key)) leaf]
                 |ValueType.Specific s -> if key.Trim([|'\"'|]) == s then OK else Invalid [inv (ErrorCodes.ConfigRulesUnexpectedValue (sprintf "Expecting value %s" s)) leaf]
                 |ValueType.Scalar -> OK
                 |_ -> Invalid [inv (ErrorCodes.ConfigRulesUnexpectedValue "Invalid value") leaf]
@@ -333,8 +333,6 @@ module rec Rules =
             applyNodeRule node true context options rule node
 
         let validate ((path, root) : string * Node) =
-            let timer = new System.Diagnostics.Stopwatch()
-            timer.Start()
             let inner (node : Node) =
 
                 //eprintfn "Looking for %s" (path)
@@ -353,7 +351,6 @@ module rec Rules =
                     //eprintfn "Couldn't find rule for %s" node.Key
                     OK
             let res = (root.Children <&!&> inner)
-            eprintfn "Elapsed Time: %i" timer.ElapsedMilliseconds
             res
 
 
@@ -362,7 +359,7 @@ module rec Rules =
             testSubtype subtypes node
         //member __.ValidateFile(node : Node) = validate node
         member __.RuleValidate : StructureValidator =
-            fun _ es -> es.Raw |> List.map (fun struct(e, _) -> e.logicalpath, e.entity) <&!&> validate
+            fun _ es -> es.Raw |> List.map (fun struct(e, _) -> e.logicalpath, e.entity) <&!!&> validate
 
 
     type CompletionService(rootRules : RootRule list, typedefs : TypeDefinition list , types : Collections.Map<string, string list>, enums : Collections.Map<string, string list>) =

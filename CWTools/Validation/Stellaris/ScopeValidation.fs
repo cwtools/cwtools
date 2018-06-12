@@ -283,7 +283,7 @@ module ScopeValidation =
         // let opts = es.All |> List.collect (foldNode2 foNode (@) []) |> List.map filterOptionToEffects
         // es.All @ opts <&!&> foldNode2 fNode fCombine OK
         //<&&>
-        let b = (es.All <&!&> foldNode2 fNode fCombine OK)
+        let b = (es.All <&!!&> foldNode2 fNode fCombine OK)
         //<&&>
         // let c = (es.AllOfTypeChildren EntityType.ScriptedEffects <&!&> fseNode)
         // //<&&>
@@ -305,7 +305,7 @@ module ScopeValidation =
             | _ -> OK
             <&&> children)
         let fCombine = (<&&>)
-        es.All <&!&> foldNode2 fNode fCombine OK
+        es.All <&!!&> foldNode2 fNode fCombine OK
 
     let filterWeightBlockToTriggers (wmb : STLProcess.WeightModifierBlock) =
         let excludes = ["factor"; "add"; "weight"]
@@ -327,4 +327,4 @@ module ScopeValidation =
             | _ -> OK
             <&&> children)
         let fCombine = (<&&>)
-        es.All <&!&> foldNode2 foNode fCombine OK
+        es.All <&!!&> foldNode2 foNode fCombine OK

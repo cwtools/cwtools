@@ -15,6 +15,8 @@ open System
 open Microsoft.FSharp.Collections.Tagged
 open System.Collections
 open CWTools.Game.Stellaris.STLLookup
+open System.Threading.Tasks
+open FSharp.Collections.ParallelSeq
 
 
 module STLValidation =
@@ -95,7 +97,7 @@ module STLValidation =
             let globalVars = os.GlobMatch("**/common/scripted_variables/*.txt") @ es.GlobMatch("**/common/scripted_variables/*.txt")
                             |> List.map getDefinedVariables
                             |> Seq.collect id |> List.ofSeq
-            es.All <&!&>
+            es.All <&!!&>
             // let x =
             //     es.All
             //     |> List.map
@@ -321,7 +323,7 @@ module STLValidation =
             let triggers = es.All |> List.collect (foldNode7 ftNode) |> List.map (fun f -> f :> Node)
             let defVars = (os.AllWithData @ es.AllWithData) |> List.collect (fun (_, d) -> d.Force().setvariables)
             //let defVars = effects @ opts |> List.collect findAllSetVariables
-            triggers <&!&> (validateUsedVariables defVars)
+            triggers <&!!&> (validateUsedVariables defVars)
 
 
     let valTest : StructureValidator =
@@ -376,7 +378,7 @@ module STLValidation =
             | _ -> OK
             <&&> children)
         let fCombine = (<&&>)
-        es.All <&!&> foldNode2 fNode fCombine OK
+        es.All <&!!&> foldNode2 fNode fCombine OK
 
     let addGeneratedModifiers (modifiers : Modifier list) (es : STLEntitySet) =
         let ships = es.GlobMatchChildren("**/common/ship_sizes/*.txt")
@@ -493,15 +495,18 @@ module STLValidation =
                 |None -> []
                 |Some p ->
                     p.LeafValues |> List.ofSeq |> List.map (fun lv -> lv.Value.ToRawString())
-            let buildingPrereqs = os.AllOfTypeChildren EntityType.Buildings @ es.AllOfTypeChildren EntityType.Buildings |> List.collect getPrereqs
-            let shipsizePrereqs = os.AllOfTypeChildren EntityType.ShipSizes @ es.AllOfTypeChildren EntityType.ShipSizes |> List.collect getPrereqs
-            let sectPrereqs = os.AllOfTypeChildren EntityType.SectionTemplates @ es.AllOfTypeChildren EntityType.SectionTemplates |> List.collect getPrereqs
-            let compPrereqs = os.AllOfTypeChildren EntityType.ComponentTemplates @ es.AllOfTypeChildren EntityType.ComponentTemplates |> List.collect getPrereqs
-            let stratResPrereqs = os.AllOfTypeChildren EntityType.StrategicResources @ es.AllOfTypeChildren EntityType.StrategicResources |> List.collect getPrereqs
-            let armyPrereqs = os.AllOfTypeChildren EntityType.Armies @ es.AllOfTypeChildren EntityType.Armies |> List.collect getPrereqs
-            let edictPrereqs = os.AllOfTypeChildren EntityType.Edicts @ es.AllOfTypeChildren EntityType.Edicts |> List.collect getPrereqs
-            let tileBlockPrereqs = os.AllOfTypeChildren EntityType.TileBlockers @ es.AllOfTypeChildren EntityType.TileBlockers |> List.collect getPrereqs
-            let allPrereqs = buildingPrereqs @ shipsizePrereqs @ sectPrereqs @ compPrereqs @ stratResPrereqs @ armyPrereqs @ edictPrereqs @ tileBlockPrereqs @ getAllTechPreqreqs os @ getAllTechPreqreqs es |> Set.ofList
+            let getPrereqsPar lists = lists |> PSeq.collect (fun ns -> List.collect getPrereqs ns) |> List.ofSeq
+
+            let buildingPrereqs = os.AllOfTypeChildren EntityType.Buildings @ es.AllOfTypeChildren EntityType.Buildings// |> List.collect getPrereqs
+            let shipsizePrereqs = os.AllOfTypeChildren EntityType.ShipSizes @ es.AllOfTypeChildren EntityType.ShipSizes// |> List.collect getPrereqs
+            let sectPrereqs = os.AllOfTypeChildren EntityType.SectionTemplates @ es.AllOfTypeChildren EntityType.SectionTemplates// |> List.collect getPrereqs
+            let compPrereqs = os.AllOfTypeChildren EntityType.ComponentTemplates @ es.AllOfTypeChildren EntityType.ComponentTemplates// |> List.collect getPrereqs
+            let stratResPrereqs = os.AllOfTypeChildren EntityType.StrategicResources @ es.AllOfTypeChildren EntityType.StrategicResources// |> List.collect getPrereqs
+            let armyPrereqs = os.AllOfTypeChildren EntityType.Armies @ es.AllOfTypeChildren EntityType.Armies// |> List.collect getPrereqs
+            let edictPrereqs = os.AllOfTypeChildren EntityType.Edicts @ es.AllOfTypeChildren EntityType.Edicts// |> List.collect getPrereqs
+            let tileBlockPrereqs = os.AllOfTypeChildren EntityType.TileBlockers @ es.AllOfTypeChildren EntityType.TileBlockers// |> List.collect getPrereqs
+            let allPrereqs = getPrereqsPar [buildingPrereqs; shipsizePrereqs;sectPrereqs; compPrereqs; stratResPrereqs; armyPrereqs; edictPrereqs; tileBlockPrereqs] |> Set.ofList
+            //let allPrereqs = buildingPrereqs @ shipsizePrereqs @ sectPrereqs @ compPrereqs @ stratResPrereqs @ armyPrereqs @ edictPrereqs @ tileBlockPrereqs @ getAllTechPreqreqs os @ getAllTechPreqreqs es |> Set.ofList
             let techList = getTechnologies os @ getTechnologies es
             let techPrereqs = techList |> List.collect snd |> Set.ofList
             let techChildren = techList |> List.map (fun (name, _) -> name, Set.contains name techPrereqs)
@@ -641,7 +646,7 @@ module STLValidation =
                     let res3 = if x.Key == "if" && x.Has "else" && x.Has "if" then Invalid [inv ErrorCodes.AmbiguousIfElse x] else OK
                     (res <&&> res2 <&&> res3) <&&> children
                 )
-            codeBlocks <&!&> (foldNode2 fNode (<&&>) OK)
+            codeBlocks <&!!&> (foldNode2 fNode (<&&>) OK)
 
     let validateIfElse : StructureValidator =
         fun _ es ->
@@ -665,4 +670,4 @@ module STLValidation =
                         let _, res = nodes |> List.fold (fun (s, (r : ValidationResult option)) n -> if r.IsSome then s, r else checkNext s n) (false, None)
                         match res with |None -> children |Some r -> r <&&> children
                 )
-            codeBlocks <&!&> (foldNode2 fNode (<&&>) OK)
+            codeBlocks <&!!&> (foldNode2 fNode (<&&>) OK)
