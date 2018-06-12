@@ -13,6 +13,7 @@ open Newtonsoft.Json.Linq
 open CWTools.Utilities.Utils
 open STLValidation
 open System
+open QuickGraph
 
 module STLEventValidation =
     type 'a Node = 'a * 'a list
@@ -20,52 +21,34 @@ module STLEventValidation =
 
     type 'a Graph = 'a list * 'a Edge list
 
-    type 'a AdjacencyGraph = 'a Node list   
-    type Color = White = 0 | Gray = 1 | Black = 2
+    type 'a AdjacencyGraph = 'a Node list
 
-    let graph2AdjacencyGraph ((ns, es) : 'a Graph) : 'a AdjacencyGraph = 
-        let nodeMap = ns |> List.map(fun n -> n, []) |> Map.ofList
-        (nodeMap,es) 
-        ||> List.fold(fun map (a,b) -> map |> Map.add a (b::map.[a]) |> Map.add b (a::map.[b]))
-        |> Map.toList
-
-
-    let depthFirstOrder (g : 'a AdjacencyGraph) start = 
-        let nodes = g |> Map.ofList
-        let color = g |> List.map(fun (v,_) -> v, Color.White) |> Map.ofList |> ref
-        let pi = ref [start]
-        //eprintfn "%A" g
-
-        let rec dfs u = 
-            color := Map.add u Color.Gray !color
-            for v in nodes.[u] do
-                //eprintfn "%A" v
-                if (!color).[v] = Color.White then
-                    pi := (v::!pi)
-                    dfs v
-            color := Map.add u Color.Black !color
-
-        dfs start
-        !pi |> List.rev
-    let connectedComponents (g : 'a AdjacencyGraph) =
+    type Vertex<'a> = {string: 'a}
+    let connectedComponents (g : 'a Graph) =
         match g with
-        |[] -> []
-        |g -> 
-            let nodes = g |> List.map fst |> Set.ofList
-            let start = g |> List.head |> fst
-            let rec loop acc g start nodes = 
-                let dfst = depthFirstOrder g start |> Set.ofList
-                let nodes' = Set.difference nodes dfst 
-                if Set.isEmpty nodes' then
-                    g::acc
-                else
-                    // once we have the dfst set we can remove those nodes from the graph and
-                    // add them to the solution and continue with the remaining nodes
-                    let (cg,g') = g |> List.fold(fun (xs,ys) v -> if Set.contains (fst v) dfst then (v::xs,ys) else (xs,v::ys)) ([],[])
-                    let start' = List.head g' |> fst
-                    loop (cg::acc) g' start' nodes'
-            loop [] g start nodes
-            
+        |(_, []) -> []
+        |(_, es) ->
+            let edges = List.map ((fun x -> ({string = fst x}, {string = snd x})) >> Edge<Vertex<'a>>) es
+            let undirGraph = edges.ToUndirectedGraph()
+            let algo = QuickGraph.Algorithms.ConnectedComponents.ConnectedComponentsAlgorithm(undirGraph)
+            algo.Compute()
+            let res = algo.Components |> Seq.groupBy (fun kv -> kv.Value) |> Seq.map (fun (_, vertices) -> vertices |> Seq.map (fun kv -> kv.Key) |> List.ofSeq) |> List.ofSeq
+            res |> List.map (fun vs -> vs |> List.map (fun v -> v.string))
+            // let nodes = g |> List.map fst |> Set.ofList
+            // let start = g |> List.head |> fst
+            // let rec loop acc g start nodes =
+            //     let dfst = depthFirstOrder g start |> Set.ofList
+            //     let nodes' = Set.difference nodes dfst
+            //     if Set.isEmpty nodes' then
+            //         g::acc
+            //     else
+            //         // once we have the dfst set we can remove those nodes from the graph and
+            //         // add them to the solution and continue with the remaining nodes
+            //         let (cg,g') = g |> List.fold(fun (xs,ys) v -> if Set.contains (fst v) dfst then (v::xs,ys) else (xs,v::ys)) ([],[])
+            //         let start' = List.head g' |> fst
+            //         loop (cg::acc) g' start' nodes'
+            // loop [] g start nodes
+
     let findAllReferencedEvents (projects : Node list) (event : Event) =
         let eventEffectKeys = ["ship_event"; "pop_event"; "fleet_event"; "pop_faction_event"; "country_event"; "planet_event"]
         let fNode = (fun (x : Node) children ->
@@ -78,26 +61,26 @@ module STLEventValidation =
                         |"enable_special_project" -> [x.TagText "name"]
                         |_ -> children)
         let fCombine = (@)
-        let directCalls = event.Children |> List.collect (foldNode2 fNode fCombine []) // |> List.fold (@) []
-        let referencedProjects = event.Children |> List.collect (foldNode2 fpNode fCombine [])
+        let directCalls = event.Children |> List.collect (foldNode7 fNode) // |> List.fold (@) []
+        let referencedProjects = event.Children |> List.collect (foldNode7 fpNode)
         //eprintfn "%s projs %A" (event.ID) referencedProjects
         let getProjectTarget (n : Node) =
             let projectKeys = ["on_success"; "on_fail"; "on_start"; "on_progress_25"; "on_progress_50"; "on_progress_75";]
-            n.Children |> List.filter (fun c -> List.contains c.Key projectKeys) |> List.collect (foldNode2 fNode fCombine [])
+            n.Children |> List.filter (fun c -> List.contains c.Key projectKeys) |> List.collect (foldNode7 fNode)
         let projectTargets = projects |> List.filter (fun p -> List.contains (p.TagText "key") referencedProjects) |> List.collect getProjectTarget
         //eprintfn "%s proj targets %A" (event.ID) projectTargets
         directCalls @ projectTargets
-    
+
     let findAllUsedEventTargets (event : Node) =
         let fNode = (fun (x : Node) children ->
                         let targetFromString (k : string) = k.Substring(13).Split('.').[0]
                         let inner (leaf : Leaf) = if leaf.Value.ToRawString().StartsWith("event_target:", StringComparison.OrdinalIgnoreCase) then Some (leaf.Value.ToRawString() |> targetFromString) else None
                         match x.Key with
-                        |k when k.StartsWith("event_target:", StringComparison.OrdinalIgnoreCase) -> 
-                           targetFromString k :: ((x.Values |> List.choose inner) @ children)     
-                        |_ ->                      
-                            ((x.Values |> List.choose inner) @ children)    
-                        
+                        |k when k.StartsWith("event_target:", StringComparison.OrdinalIgnoreCase) ->
+                           targetFromString k :: ((x.Values |> List.choose inner) @ children)
+                        |_ ->
+                            ((x.Values |> List.choose inner) @ children)
+
                         )
         let fCombine = (@)
         event |> (foldNode2 fNode fCombine []) |> Set.ofList
@@ -126,7 +109,7 @@ module STLEventValidation =
         let fCombine = (@)
         event |> (foldNode2 fNode fCombine []) |> Set.ofList
 
-    let addScriptedEffectTargets (effects : ScriptedEffect list) ((e, s, u, r, x) : Event * Set<string> * Set<string> * string list * Set<string>) = 
+    let addScriptedEffectTargets (effects : ScriptedEffect list) ((e, s, u, r, x) : Event * Set<string> * Set<string> * string list * Set<string>) =
         let fNode = (fun (x : Node) (s, u) ->
                         let inner (leaf : Leaf) = effects |> List.tryFind (fun e -> leaf.Key == e.Name) |> Option.map (fun e -> e.SavedEventTargets, e.UsedEventTargets)
                         x.Values |> List.choose inner |> List.fold (fun (s, u) (s2, u2) -> s@s2, u@u2) (s, u))
@@ -137,14 +120,14 @@ module STLEventValidation =
     let addSystemInitializer (sinits : Node list) ((e, s, u, r, x) : Event * Set<string> * Set<string> * string list * Set<string>) =
         let fNode = (fun (x : Node) (s, u) ->
                         match x.Key with
-                        |"spawn_system" -> 
+                        |"spawn_system" ->
                             let initializer = x.TagText "initializer"
                             match sinits |> List.tryFind (fun f -> f.Key == initializer) with
                             |None -> s, u
                             |Some sys -> (findAllSavedEventTargets sys |> Set.toList) @ s, (findAllUsedEventTargets sys |> Set.toList) @ u
                         |_ -> s, u
                         )
-        let fCombine = (fun (s, u) (s2, u2) -> s@s2, u@u2)               
+        let fCombine = (fun (s, u) (s2, u2) -> s@s2, u@u2)
         let s2, u2 = foldNode2 fNode fCombine (s |> Set.toList, u |> Set.toList) e
         (e, s2 |> Set.ofList, u2 |> Set.ofList, r, x)
 
@@ -162,8 +145,8 @@ module STLEventValidation =
                // eprintfn "%A" ret
                 ret
 
-        let getExistsTargets (currentx) (ids : string list) = 
-            let inter = ids |> List.choose (fun x -> current |> List.tryPick (fun (e2,_, _, u2, _, _ ,x2) -> if e2.ID = x then Some (u2, x2) else None)) 
+        let getExistsTargets (currentx) (ids : string list) =
+            let inter = ids |> List.choose (fun x -> current |> List.tryPick (fun (e2,_, _, u2, _, _ ,x2) -> if e2.ID = x then Some (u2, x2) else None))
             let all = inter |> List.fold (fun xs (u, x) -> Set.union(Set.union u x) xs) currentx
             let ret = inter |> List.fold (fun xs (u, x) -> xs |> Set.toList |> List.fold (fun nxs nx -> if Set.contains nx u && not(Set.contains nx x) then nxs else nx::nxs) [] |> Set.ofList) all
             // eprintfn "%A" ret
@@ -179,7 +162,7 @@ module STLEventValidation =
             Set.union x (getExistsTargets (x) r)
         let mutable i = 0
 
-        let step (es) = 
+        let step (es) =
             //eprintfn "%A" current
             i <- i + 1
             let before = current
@@ -212,7 +195,7 @@ module STLEventValidation =
             Set.union x (getSourceExistsTargets e.ID |> (fun f -> if List.isEmpty f then Set.empty else List.reduce (Set.union) f))
         let mutable i = 0
 
-        let step (es) = 
+        let step (es) =
             //eprintfn "%A" current
             i <- i + 1
             let before = current
@@ -231,7 +214,7 @@ module STLEventValidation =
             Set.union x (getSourceExistsTargets e.ID |> (fun f -> if List.isEmpty f then Set.empty else List.reduce (Set.intersect) f))
         let mutable i = 0
 
-        let step (es) = 
+        let step (es) =
             //eprintfn "%A" current
             i <- i + 1
             let before = current
@@ -243,13 +226,13 @@ module STLEventValidation =
        // current |> List.iter (fun (e, os, s, u, r, ox, x) -> eprintfn "%s %A %A %A %A" e.ID s u r x;)
 
         let missing = current |> List.filter (fun (e, os, s, u, r, ox, x) -> not(Set.difference (Set.difference u (Set.union s x)) globals |> Set.isEmpty))
-        let maybeMissing = current |> List.filter (fun (e,os, s, u, r, ox, x) -> 
+        let maybeMissing = current |> List.filter (fun (e,os, s, u, r, ox, x) ->
                                                     not(Set.difference (Set.difference u s) globals |> Set.isEmpty)
                                                     && (Set.difference (Set.difference u (Set.union s x)) globals |> Set.isEmpty))
-        let createError (e : Event, os, s, u, _, _, x) = 
+        let createError (e : Event, os, s, u, _, _, x) =
              let needed = Set.difference (Set.difference u (Set.union s x)) globals |> Set.toList |> String.concat ", "
              Invalid [inv (ErrorCodes.UnsavedEventTarget (e.ID) needed) e]
-        let createWarning (e : Event, os, s, u, _, _, _) = 
+        let createWarning (e : Event, os, s, u, _, _, _) =
              let needed = Set.difference (Set.difference u s) globals |> Set.toList |> String.concat ", "
              Invalid [inv (ErrorCodes.MaybeUnsavedEventTarget (e.ID) needed) e]
         missing <&!&> createError
@@ -257,22 +240,23 @@ module STLEventValidation =
         (maybeMissing <&!&> createWarning)
 
 
-            
+
 
     let getEventChains (reffects : Effect list) (os : STLEntitySet) (es : STLEntitySet) =
-       
+
         let events = es.GlobMatchChildren("**/events/*.txt") |> List.choose (function | :? Event as e -> Some e |_ -> None)
-        let eids = events |> List.map (fun e -> e.ID) |> Set.ofList
+        let eids = events |> List.map (fun e -> e.ID, e) |> Map.ofList
         let projects = os.GlobMatchChildren("**/common/special_projects/*.txt") @ es.GlobMatchChildren("**/common/special_projects/*.txt")
         let chains = events |> List.collect (fun (event) -> findAllReferencedEvents projects event |> List.map (fun f -> event.ID, f))
-                    |> List.filter (fun (_, f) -> Set.contains f eids)
+                    |> List.filter (fun (_, f) -> Map.containsKey f eids)
                     //|> (fun f -> eprintfn "%A" f; f)
                     |> List.collect(fun (s, t) -> [s,t; t,s])
                     //|> (fun f -> eprintfn "%A" f; f)
-                    |> (fun es -> (graph2AdjacencyGraph (events |> List.map (fun f -> f.ID), es)))
+                    //|> (fun es -> (graph2AdjacencyGraph (events |> List.map (fun f -> f.ID), es)))
+                    |> (fun es -> ((events |> List.map (fun f -> f.ID), es)))
                     |> connectedComponents
                     //|> (fun f -> eprintfn "%A" f; f)
-                    |> List.map (fun set -> set |> List.map (fun (event, targets) -> events |> List.find (fun e -> e.ID = event)))
+                    |> List.map (fun set -> set |> List.map (fun (event) -> eids.[event] ))
         if chains |> List.isEmpty then OK else
             let seffects = reffects |> List.choose (function | :? ScriptedEffect as e -> Some e |_ -> None)
             let effects = os.AllEffects @ es.AllEffects
@@ -281,8 +265,8 @@ module STLEventValidation =
             let sinits = os.GlobMatchChildren("**\\common\\solar_system_initializers\\**\\*.txt") @ es.GlobMatchChildren("**\\common\\solar_system_initializers\\**\\*.txt")
             //eprintfn "%s" (globals |> Set.toList |> String.concat ", ")
             chains <&!&> checkEventChain seffects sinits projects globals
-        
-        
+
+
     let valEventCalls : StructureValidator =
         fun os es ->
             let events = (os.AllOfType EntityType.Events @ es.AllOfType EntityType.Events)
