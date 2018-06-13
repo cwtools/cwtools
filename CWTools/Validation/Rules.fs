@@ -388,7 +388,7 @@ module rec Rules =
             let requiredRules = rules |> List.filter (fun (_,o,f) -> o.min >= 1 && filterToCompletion f)
                                       |> List.mapi (fun i (k, o, f) -> sprintf "\t%s = ${%i:%s}\n" k (i + 1) (fieldToCompletionList f))
                                       |> String.concat ""
-            Snippet (key, (sprintf "%s = {\n%s$0}" key requiredRules), description)
+            Snippet (key, (sprintf "%s = {\n%s\t$0\n}" key requiredRules), description)
 
 
         let rec getRulePath (pos : pos) (stack : (string * bool) list) (node : Node) =

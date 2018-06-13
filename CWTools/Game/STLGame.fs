@@ -159,11 +159,9 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
             events |> List.map (fun e -> (valEventVals e) )
                    |> List.choose (function |Invalid es -> Some es |_ -> None)
                    |> List.collect id
-        let snood = snd
-        let validateAll (entities : struct (Entity * Lazy<STLComputedData>) list)  =
-            let loc = allLocalisation() |> List.groupBy (fun l -> l.GetLang) |> List.map (fun (k, g) -> k, g |>List.collect (fun ls -> ls.GetKeys) |> Set.ofList )
-            let files = resources.GetResources() |> List.choose (function |FileResource (_, f) -> Some f.logicalpath |EntityResource (_, f) -> Some f.logicalpath) |> Set.ofList
-            let ruleApplicator = RuleApplicator(lookup.configRules, lookup.typeDefs, lookup.typeDefInfo, lookup.enumDefs, loc, files, lookup.scriptedTriggers, lookup.scriptedEffects)
+        let mutable ruleApplicator : RuleApplicator option = None
+        let validateAll (shallow : bool) (entities : struct (Entity * Lazy<STLComputedData>) list)  =
+            //let ruleApplicator = RuleApplicator(lookup.configRules, lookup.typeDefs, lookup.typeDefInfo, lookup.enumDefs, loc, files, lookup.scriptedTriggers, lookup.scriptedEffects)
             eprintfn "Validating %i files" (entities.Length)
             let allEntitiesByFile = entities |> List.map (fun struct (f, _) -> f.entity)
             let flattened = allEntitiesByFile |> List.map (fun n -> n.Children) |> List.collect id
@@ -171,12 +169,12 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
             let validators = [validateVariables, "var"; valTechnology, "tech"; validateTechnologies, "tech2"; valButtonEffects, "but"; valSprites, "sprite"; valVariables, "var2"; valEventCalls, "event";
                                 validateAmbientGraphics, "ambient"; validateShipDesigns, "designs"; validateMixedBlocks, "mixed"; validateSolarSystemInitializers, "solar"; validateAnomaly210, "anom";
                                 validateIfElse210, "ifelse"; validateIfElse, "ifelse2"; validatePlanetKillers, "pk"]
-            let validators = if useConfig then (ruleApplicator.RuleValidate, "rules")::validators else validators
+            let validators = if useConfig && ruleApplicator.IsSome then (ruleApplicator.Value.RuleValidate, "rules")::validators else validators
             let experimentalvalidators = [valSectionGraphics, "sections"; valComponentGraphics, "component"; ]
             let oldEntities = EntitySet (resources.AllEntities())
             let newEntities = EntitySet entities
             let runValidators f (validators : (StructureValidator * string) list) =
-                (validators <&!&> (fun (v, s) -> duration (fun _ -> f v) s) |> (function |Invalid es -> es |_ -> []))
+                (validators <&!!&> (fun (v, s) -> duration (fun _ -> f v) s) |> (function |Invalid es -> es |_ -> []))
                 @ (if not experimental then [] else experimentalvalidators <&!&> (fun (v, s) -> duration (fun _ -> f v) s) |> (function |Invalid es -> es |_ -> []))
             eprintfn "Validating misc"
             //let res = validators |> List.map (fun v -> v oldEntities newEntities) |> List.fold (<&&>) OK
@@ -190,7 +188,7 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
             let tres = duration (fun _ ->  valAllTriggers (lookup.scriptedTriggers) (lookup.scriptedEffects) (lookup.staticModifiers) newEntities  |> (function |Invalid es -> es |_ -> [])) "triggers"
             let wres = duration (fun _ ->  validateModifierBlocks (lookup.scriptedTriggers) (lookup.scriptedEffects) (lookup.staticModifiers) newEntities |> (function |Invalid es -> es |_ -> [])) "weights"
             let mres = duration (fun _ ->  valAllModifiers (lookup.coreModifiers) newEntities  |> (function |Invalid es -> es |_ -> [])) "modifiers"
-            let evres = duration (fun _ ->  ( if experimental then getEventChains (lookup.scriptedEffects) oldEntities newEntities else OK) |> (function |Invalid es -> es |_ -> [])) "events"
+            let evres = duration (fun _ ->  ( if experimental && (not shallow) then getEventChains (lookup.scriptedEffects) oldEntities newEntities else OK) |> (function |Invalid es -> es |_ -> [])) "events"
             //let etres = getEventChains newEntities |> (function |Invalid es -> es |_ -> [])
             //(validateShips (flattened)) @ (validateEvents (flattened)) @ res @ fres @ eres
             (validateShips (flattened)) @ (validateEvents (flattened)) @ res @ fres @ eres @ tres @ mres @ evres @ wres
@@ -225,25 +223,30 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
 
         let updateFile filepath (filetext : string option) =
             eprintfn "%s" filepath
-            match filepath with
-            |x when x.EndsWith (".yml") ->
-                updateLocalisation()
-                globalLocalisation()
-            | _ ->
-                let filepath = Path.GetFullPath(filepath)
-                let file = filetext |> Option.defaultWith (fun () -> File.ReadAllText filepath)
-                let rootedpath = filepath.Substring(filepath.IndexOf(fileManager.ScopeDirectory) + (fileManager.ScopeDirectory.Length))
-                let logicalpath = fileManager.ConvertPathToLogicalPath rootedpath
-                //eprintfn "%s %s" logicalpath filepath
-                let newEntities = resources.UpdateFile (EntityResourceInput {scope = ""; filepath = filepath; logicalpath = logicalpath; filetext = file; validate = true})
+            let timer = new System.Diagnostics.Stopwatch()
+            timer.Start()
+            let res =
                 match filepath with
-                |x when x.Contains("scripted_triggers") -> updateScriptedTriggers()
-                |x when x.Contains("scripted_effects") -> updateScriptedEffects()
-                |x when x.Contains("static_modifiers") -> updateStaticodifiers()
-                |_ -> ()
-                updateDefinedVariables()
-                validateAll newEntities @ localisationCheck newEntities
-
+                |x when x.EndsWith (".yml") ->
+                    updateLocalisation()
+                    globalLocalisation()
+                | _ ->
+                    let filepath = Path.GetFullPath(filepath)
+                    let file = filetext |> Option.defaultWith (fun () -> File.ReadAllText filepath)
+                    let rootedpath = filepath.Substring(filepath.IndexOf(fileManager.ScopeDirectory) + (fileManager.ScopeDirectory.Length))
+                    let logicalpath = fileManager.ConvertPathToLogicalPath rootedpath
+                    //eprintfn "%s %s" logicalpath filepath
+                    let newEntities = resources.UpdateFile (EntityResourceInput {scope = ""; filepath = filepath; logicalpath = logicalpath; filetext = file; validate = true})
+                    match filepath with
+                    |x when x.Contains("scripted_triggers") -> updateScriptedTriggers()
+                    |x when x.Contains("scripted_effects") -> updateScriptedEffects()
+                    |x when x.Contains("static_modifiers") -> updateStaticodifiers()
+                    |_ -> ()
+                    updateDefinedVariables()
+                    validateAll true newEntities @ localisationCheck newEntities
+            eprintfn "Update Time: %i" timer.ElapsedMilliseconds
+            res
+        let mutable completionService : CompletionService option = None
         let completion (pos : pos) (filepath : string) (filetext : string) =
             // let filepath = Path.GetFullPath(filepath).Replace("/","\\")
             // match resources.AllEntities() |> List.tryFind (fun struct (e, _) -> e.filepath == filepath) with
@@ -253,13 +256,12 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
             // |None -> []
             let split = filetext.Split('\n')
             let filetext = split |> Array.mapi (fun i s -> if i = (pos.Line - 1) then eprintfn "%s" s; s.Insert(pos.Column, "x") else s) |> String.concat "\n"
-            match resourceManager.ManualProcess (fileManager.ConvertPathToLogicalPath filepath) filetext with
-            |Some e ->
+            match resourceManager.ManualProcess (fileManager.ConvertPathToLogicalPath filepath) filetext, completionService with
+            |Some e, Some completion ->
                 eprintfn "completion %A %A" (fileManager.ConvertPathToLogicalPath filepath) filepath
                 eprintfn "scope at cursor %A" (getScopeContextAtPos pos lookup.scriptedTriggers lookup.scriptedEffects e)
-                let completion = CompletionService(lookup.configRules, lookup.typeDefs, lookup.typeDefInfo, lookup.enumDefs)
                 completion.Complete(pos, e)
-            |None -> []
+            |_, _ -> []
 
         let scopesAtPos (pos : pos) (filepath : string) (filetext : string) =
             let split = filetext.Split('\n')
@@ -290,9 +292,15 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
             updateTechnologies()
             updateLocalisation()
             updateTypeDef()
+
+            let loc = allLocalisation() |> List.groupBy (fun l -> l.GetLang) |> List.map (fun (k, g) -> k, g |>List.collect (fun ls -> ls.GetKeys) |> Set.ofList )
+            let files = resources.GetResources() |> List.choose (function |FileResource (_, f) -> Some f.logicalpath |EntityResource (_, f) -> Some f.logicalpath) |> Set.ofList
+            completionService <- Some (CompletionService(lookup.configRules, lookup.typeDefs, lookup.typeDefInfo, lookup.enumDefs))
+            ruleApplicator <- Some (RuleApplicator(lookup.configRules, lookup.typeDefs, lookup.typeDefInfo, lookup.enumDefs, loc, files, lookup.scriptedTriggers, lookup.scriptedEffects))
+
         //member __.Results = parseResults
         member __.ParserErrors = parseErrors()
-        member __.ValidationErrors = (validateAll (resources.ValidatableEntities()))
+        member __.ValidationErrors = (validateAll false (resources.ValidatableEntities()))
         member __.LocalisationErrors() =
             match localisationErrors with
             |Some les -> les

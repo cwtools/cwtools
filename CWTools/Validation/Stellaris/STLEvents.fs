@@ -215,7 +215,7 @@ module STLEventValidation =
         let mutable i = 0
 
         let step (es) =
-            //eprintfn "%A" current
+            //eprintfn "%A" i
             i <- i + 1
             let before = current
             current <- es |> List.map downPessimistic
