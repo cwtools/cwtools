@@ -128,6 +128,7 @@ type STLGame (settings : StellarisSettings) =
             let taggedKeys = allLocalisation() |> List.groupBy (fun l -> l.GetLang) |> List.map (fun (k, g) -> k, g |> List.collect (fun ls -> ls.GetKeys) |> List.fold (fun (s : LocKeySet) v -> s.Add v) (LocKeySet.Empty(STLStringComparer())) )
             let validatableEntries = validatableLocalisation() |> List.groupBy (fun l -> l.GetLang) |> List.map (fun (k, g) -> k, g |> List.collect (fun ls -> ls.ValueMap |> Map.toList) |> Map.ofList)
             lookup.proccessedLoc <- validatableEntries |> List.map (fun f -> processLocalisation lookup.scriptedEffects lookup.scriptedLoc lookup.definedScriptVariables (EntitySet (resources.AllEntities())) f taggedKeys)
+
             //TODO: Add loc from embedded
 
         let updateDefinedVariables() =
@@ -232,7 +233,7 @@ type STLGame (settings : StellarisSettings) =
                                  valMapsLocs; valMegastructureLocs; valModifiers; valModules; valTraits; valGoverments; valPersonalities;
                                  valEthics; valPlanetClasses; valEdicts; valPolicies; valSectionTemplates; valSpeciesNames; valStratRes;
                                  valAmbient; valDeposits; valWarGoals; valEffectLocs; valTriggerLocs; valBuildingTags; valOpinionModifiers;
-                                 valScriptedTriggers; valSpecialProjects; valStarbaseType; valTileBlockers]
+                                 valScriptedTriggers; valSpecialProjects; valStarbaseType; valTileBlockers; valAnomalies]
             let newEntities = EntitySet entities
             let oldEntities = EntitySet (resources.AllEntities())
             let vs = (validators |> List.map (fun v -> v oldEntities keys newEntities) |> List.fold (<&&>) OK
@@ -259,6 +260,8 @@ type STLGame (settings : StellarisSettings) =
                 match filepath with
                 |x when x.EndsWith (".yml") ->
                     updateLocalisation()
+                    let les = (localisationCheck (resources.ValidatableEntities())) @ globalLocalisation()
+                    localisationErrors <- Some les
                     globalLocalisation()
                 | _ ->
                     let filepath = Path.GetFullPath(filepath)
@@ -331,13 +334,15 @@ type STLGame (settings : StellarisSettings) =
         //member __.Results = parseResults
         member __.ParserErrors = parseErrors()
         member __.ValidationErrors = (validateAll false (resources.ValidatableEntities()))
-        member __.LocalisationErrors() =
-            match localisationErrors with
-            |Some les -> les
-            |None ->
+        member __.LocalisationErrors(force : bool) =
+            let generate =
                 let les = (localisationCheck (resources.ValidatableEntities())) @ globalLocalisation()
                 localisationErrors <- Some les
                 les
+            match localisationErrors with
+            |Some les -> if force then generate else les
+            |None -> generate
+
         //member __.ValidationWarnings = warningsAll
         member __.Folders = fileManager.AllFolders()
         member __.AllFiles() =

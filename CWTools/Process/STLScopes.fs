@@ -112,7 +112,7 @@ module STLScopes =
         ScopedEffect("heir", [], Scope.Leader, EffectType.Both, defaultDesc, "");
         ScopedEffect("solar_system", [Scope.Ship; Scope.Planet; Scope.Fleet; Scope.AmbientObject; Scope.Tile; Scope.Starbase; Scope.Megastructure], Scope.GalacticObject, EffectType.Both, "", ""); //Fleet, Ambient object, Tile from vanilla use
         ScopedEffect("last_created_system", allScopes, Scope.GalacticObject, EffectType.Both, defaultDesc, "");
-        ScopedEffect("planet", [Scope.Pop; Scope.Tile; Scope.Planet; Scope.GalacticObject], Scope.Planet, EffectType.Both, defaultDesc, "");
+        ScopedEffect("planet", [Scope.Pop; Scope.Tile; Scope.Planet; Scope.GalacticObject; Scope.Army], Scope.Planet, EffectType.Both, defaultDesc, "");
         ScopedEffect("capital_scope", [Scope.Country], Scope.Planet, EffectType.Both, defaultDesc, "");
         ScopedEffect("orbit", [Scope.Fleet; Scope.Ship; Scope.Megastructure], Scope.Planet, EffectType.Both, defaultDesc, "");
         ScopedEffect("home_planet", [Scope.Country; Scope.Species; Scope.Planet], Scope.Planet, EffectType.Both, defaultDesc, "");
@@ -132,11 +132,11 @@ module STLScopes =
         ScopedEffect("best_tile_for_pop", [Scope.Planet], Scope.Tile, EffectType.Both, defaultDesc, "");
         ScopedEffect("owner_species", [Scope.Country; Scope.Leader], Scope.Species, EffectType.Both, defaultDesc, "");
         ScopedEffect("last_created_species", allScopes, Scope.Species, EffectType.Both, defaultDesc, "");
-        ScopedEffect("species", [Scope.Country; Scope.Ship; Scope.Leader; Scope.Pop], Scope.Species, EffectType.Both, defaultDesc, "");
+        ScopedEffect("species", [Scope.Country; Scope.Ship; Scope.Leader; Scope.Pop; Scope.Army], Scope.Species, EffectType.Both, defaultDesc, "");
         ScopedEffect("pop_faction", [Scope.Pop; Scope.Leader], Scope.PopFaction, EffectType.Both, defaultDesc, ""); //Leader from vanilla
         ScopedEffect("last_created_pop_faction", allScopes, Scope.PopFaction, EffectType.Both, defaultDesc, "");
         ScopedEffect("core_sector", [], Scope.Sector, EffectType.Both, defaultDesc, "");
-        ScopedEffect("sector", [Scope.Planet; Scope.GalacticObject], Scope.Sector, EffectType.Both, defaultDesc, "");
+        ScopedEffect("sector", [Scope.Planet; Scope.GalacticObject; Scope.Leader], Scope.Sector, EffectType.Both, defaultDesc, "");
         ScopedEffect("alliance", [], Scope.Alliance, EffectType.Both, defaultDesc, "");
         ScopedEffect("starbase", [Scope.GalacticObject; Scope.Planet], Scope.Starbase, EffectType.Both, defaultDesc, "");
         ScopedEffect("last_refugee_country", allScopes, Scope.Country, EffectType.Both, defaultDesc, "");

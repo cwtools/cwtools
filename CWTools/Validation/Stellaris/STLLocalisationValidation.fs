@@ -386,6 +386,13 @@ module STLLocalisationValidation =
             let opinionMods = es.AllOfTypeChildren EntityType.OpinionModifiers
             let inner = checkLocNodeKeyAdvs keys "" ["";]
             opinionMods <&!&> inner
+
+    let valAnomalies : LocalisationValidator =
+        fun _ keys es ->
+            let anomalies = es.AllOfTypeChildren EntityType.Anomalies
+            let inner (node : Node) = checkLocNodeKeyAdvs keys "" [""] node <&&> (checkLocNodeTag keys "desc" node)
+            anomalies <&!&> inner
+
     let valTraits : LocalisationValidator =
         fun _ keys es ->
             let traits = es.GlobMatchChildren("**/common/traits/*.txt")
