@@ -396,7 +396,7 @@ module STLScopes =
 
     let changeScope (effects : EffectMap) (triggers : EffectMap) (key : string) (source : ScopeContext) =
         let key = if key.StartsWith("hidden:", StringComparison.OrdinalIgnoreCase) then key.Substring(7) else key
-        if key.StartsWith("event_target:", StringComparison.OrdinalIgnoreCase) then NewScope ({ source with Scopes = Scope.Any::source.Scopes }, [])
+        if key.StartsWith("event_target:", StringComparison.OrdinalIgnoreCase) || key.StartsWith("parameter:", StringComparison.OrdinalIgnoreCase) then NewScope ({ source with Scopes = Scope.Any::source.Scopes }, [])
         else
             let keys = key.Split('.')
             let inner ((context : ScopeContext), (changed : bool)) (nextKey : string) =
