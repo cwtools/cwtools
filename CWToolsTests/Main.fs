@@ -16,6 +16,7 @@ open System.IO
 open System.Reflection
 open CWTools.Parser.DocsParser
 open CWTools.Games.Files
+open CWTools.Game.Stellaris.STLLookup
 let emptyStellarisSettings (rootDirectory) = {
     rootDirectory = rootDirectory
     scope = FilesScope.All
@@ -30,7 +31,7 @@ let emptyStellarisSettings (rootDirectory) = {
         triggers = []
         effects = []
         modifiers = []
-        embeddedFiles = []        
+        embeddedFiles = []
     }
 }
 let rec getAllFolders dirs =
@@ -53,11 +54,11 @@ let perf(b) =
     let settings = emptyStellarisSettings "./testfiles/performancetest/"
     let settings = {settings with embedded = {settings.embedded with triggers = triggers; effects = effects};
                                     rules = Some { validateRules = true; ruleFiles = configs}}
-    let stl = STLGame(settings)
+    let stl = STLGame(settings) :> IGame<STLComputedData>
     // let stl = STLGame("./testfiles/performancetest/", FilesScope.All, "", triggers, effects, [], [], configs, [STL STLLang.English], false, true, true)
     if b then
-        let errors = stl.ValidationErrors |> List.map (fun (c, s, n, l, f, k) -> n)
-        let testVals = stl.AllEntities
+        let errors = stl.ValidationErrors() |> List.map (fun (c, s, n, l, f, k) -> n)
+        let testVals = stl.AllEntities()
         ()
     else ()
     eprintfn "Elapsed Time: %i" timer.ElapsedMilliseconds
@@ -73,12 +74,12 @@ let perf2(b) =
     let settings = emptyStellarisSettings "./testfiles/performancetest2/"
     let settings = {settings with embedded = {settings.embedded with triggers = triggers; effects = effects};
                                     rules = Some { validateRules = true; ruleFiles = configs}}
-    let stl = STLGame(settings)
+    let stl = STLGame(settings) :> IGame<STLComputedData>
 
     // let stl = STLGame("./testfiles/performancetest2/", FilesScope.All, "", triggers, effects, [], [], configs, [STL STLLang.English], false, true, true)
     if b then
-        let errors = stl.ValidationErrors |> List.map (fun (c, s, n, l, f, k) -> n)
-        let testVals = stl.AllEntities
+        let errors = stl.ValidationErrors() |> List.map (fun (c, s, n, l, f, k) -> n)
+        let testVals = stl.AllEntities()
         ()
     else ()
     eprintfn "Elapsed Time: %i" timer.ElapsedMilliseconds

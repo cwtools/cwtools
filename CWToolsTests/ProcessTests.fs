@@ -21,6 +21,8 @@ open CWTools.Validation.Rules
 open CWTools.Validation.ValidationCore
 open CWTools.Utilities.Utils
 open CWTools.Games.Files
+open CWTools.Game.Stellaris.STLLookup
+
 
 
 
@@ -38,7 +40,7 @@ let emptyStellarisSettings (rootDirectory) = {
         triggers = []
         effects = []
         modifiers = []
-        embeddedFiles = []        
+        embeddedFiles = []
     }
 }
 
@@ -263,7 +265,7 @@ let testsConfig =
             let settings = emptyStellarisSettings folder
             let settings = { settings with embedded = { settings.embedded with triggers = triggers; effects = effects; modifiers = modifiers; };
                                             rules = Some { ruleFiles = [configtext]; validateRules = true;}}
-            let stl = STLGame(settings)
+            let stl = STLGame(settings) :> IGame<STLComputedData>
             //let stl = STLGame(folder, FilesScope.All, "", triggers, effects, modifiers, [], [configtext], [STL STLLang.English], false, true, true)
 
             let input =    "ship_size = {\n\
@@ -282,7 +284,7 @@ let testsConfig =
             let settings = emptyStellarisSettings folder
             let settings = { settings with embedded = { settings.embedded with triggers = triggers; effects = effects; modifiers = modifiers; };
                                             rules = Some { ruleFiles = [configtext]; validateRules = true;}}
-            let stl = STLGame(settings)
+            let stl = STLGame(settings) :> IGame<STLComputedData>
 
             let input =    "ship_size = {\n\
                             default_behavior = s \n\
@@ -300,7 +302,7 @@ let testsConfig =
             let settings = emptyStellarisSettings folder
             let settings = { settings with embedded = { settings.embedded with triggers = triggers; effects = effects; modifiers = modifiers; };
                                             rules = Some { ruleFiles = [configtext]; validateRules = true;}}
-            let stl = STLGame(settings)
+            let stl = STLGame(settings) :> IGame<STLComputedData>
 
             let input =    "ship_size = {\n\
                             prerequisites = {\n\
@@ -320,7 +322,7 @@ let testsConfig =
             let settings = emptyStellarisSettings folder
             let settings = { settings with embedded = { settings.embedded with triggers = triggers; effects = effects; modifiers = modifiers; };
                                             rules = Some { ruleFiles = [configtext]; validateRules = true;}}
-            let stl = STLGame(settings)
+            let stl = STLGame(settings) :> IGame<STLComputedData>
 
             let input =    "ship_size = {\n\
                             class = \n\

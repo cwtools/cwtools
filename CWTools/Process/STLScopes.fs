@@ -392,7 +392,7 @@ module STLScopes =
         "hidden_effect", id;
         "hidden_trigger", id;
     ]
-    type EffectMap = Map<string, Effect, STLStringComparer>
+    type EffectMap = Map<string, Effect, InsensitiveStringComparer>
 
     let changeScope (effects : EffectMap) (triggers : EffectMap) (key : string) (source : ScopeContext) =
         let key = if key.StartsWith("hidden:", StringComparison.OrdinalIgnoreCase) then key.Substring(7) else key
@@ -482,7 +482,7 @@ module STLScopes =
         ScopedEffect("home_planet", [Scope.Country; Scope.Species; Scope.Planet], Scope.Planet, EffectType.Both, defaultDesc, "");
         ScopedEffect("overlord", [Scope.Country], Scope.Country, EffectType.Both, defaultDesc, "");
     ]
-    let scopedLocEffectsMap = EffectMap.FromList(STLStringComparer(), scopedLocEffects |> List.map (fun se -> se.Name, se :> Effect))
+    let scopedLocEffectsMap = EffectMap.FromList(InsensitiveStringComparer(), scopedLocEffects |> List.map (fun se -> se.Name, se :> Effect))
 
 
     let locPrimaryScopes =

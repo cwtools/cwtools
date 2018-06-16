@@ -90,9 +90,11 @@ module ValidationCore =
         static member ConfigRulesErrorInTarget = fun command scope expected -> { ID = "CW245"; Severity = Severity.Error; Message = sprintf "Error in target. Command %s was used in scope %s but expected %s" command scope expected}
         static member PlanetKillerMissing = fun message -> { ID = "CW250"; Severity = Severity.Error; Message = message }
         static member CustomError = fun error severity -> { ID = "CW999"; Severity = severity; Message = error}
+
+    type CWError = (string * Severity * range * int * string * option<string>)
     type ValidationResult =
         | OK
-        | Invalid of (string * Severity * range * int * string * option<string>) list
+        | Invalid of CWError list
 
     let inline invData (code : ErrorCode) (l : ^a) (data : option<string>) =
         let pos = (^a : (member Position : range) l)

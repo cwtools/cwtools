@@ -5,12 +5,14 @@ open Microsoft.FSharp.Compiler.Range
 
 module Utils =
 
-    
+
     let inline (==) (x: string) (y: string) = x.Equals(y, StringComparison.OrdinalIgnoreCase)
 
-    type STLStringComparer() = 
+    type InsensitiveStringComparer() =
       interface IComparer<string> with
         member __.Compare(a, b) =  String.Compare(a, b, StringComparison.OrdinalIgnoreCase)
+
+    type LocKeySet = Microsoft.FSharp.Collections.Tagged.Set<string, InsensitiveStringComparer>
 
     let memoize keyFunction memFunction =
         let dict = new System.Collections.Generic.Dictionary<_,_>()
@@ -22,7 +24,7 @@ module Utils =
                 dict.Add(keyFunction(n), temp)
                 temp
 
-    let duration f s = 
+    let duration f s =
         let timer = new System.Diagnostics.Stopwatch()
         timer.Start()
         let returnValue = f()
@@ -40,7 +42,7 @@ module Utils =
         match loglevel with
         |Silent -> ignore
         |Verbose -> Printf.eprintfn format
-    
+
     let logVerbose format = log format
 
     let mkZeroFile file = mkRange file (mkPos 0 0) (mkPos 10000 0)

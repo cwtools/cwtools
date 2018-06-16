@@ -65,7 +65,101 @@ type STLGame (settings : StellarisSettings) =
         let embeddedSettings = settings.embedded
         let validationSettings = settings.validation
         let useRules = settings.rules.IsSome
-        let fileManager = FileManager(settings.rootDirectory, settings.modFilter, settings.scope)
+
+        let scriptFolders = [
+            "common/agendas";
+            "common/ambient_objects";
+            "common/anomalies";
+            "common/armies";
+            "common/army_attachments"; //Removed in 2.0?
+            "common/ascension_perks";
+            "common/attitudes";
+            "common/bombardment_stances";
+            "common/buildable_pops";
+            "common/building_tags";
+            "common/buildings";
+            "common/button_effects";
+            "common/bypass";
+            "common/casus_belli";
+            "common/colors";
+            "common/component_flags"; //Removed in 2.0?
+            "common/component_sets";
+            "common/component_tags";
+            "common/component_templates";
+            "common/country_customization";
+            "common/country_types";
+            //"common/defines";
+            "common/deposits";
+            "common/diplo_phrases";
+            "common/diplomatic_actions";
+            "common/edicts";
+            "common/ethics";
+            "common/event_chains";
+            "common/fallen_empires";
+            "common/game_rules";
+            "common/global_ship_designs";
+            "common/governments";
+            "common/governments/civics";
+            "common/graphical_culture";
+            "common/mandates";
+            "common/map_modes";
+            "common/megastructures";
+            "common/name_lists";
+            "common/notification_modifiers";
+            "common/observation_station_missions";
+            "common/on_actions";
+            "common/opinion_modifiers";
+            "common/personalities";
+            "common/planet_classes";
+            "common/planet_modifiers";
+            "common/policies";
+            "common/pop_faction_types";
+            "common/precursor_civilizations";
+            //"common/random_names";
+            "common/scripted_effects";
+            "common/scripted_loc";
+            "common/scripted_triggers";
+            "common/scripted_variables";
+            "common/section_templates";
+            "common/sector_types";
+            "common/ship_behaviors";
+            "common/ship_sizes";
+            "common/solar_system_initializers";
+            "common/special_projects";
+            "common/species_archetypes";
+            "common/species_classes";
+            "common/species_names";
+            "common/species_rights";
+            "common/star_classes";
+            "common/starbase_buildings";
+            "common/starbase_levels";
+            "common/starbase_modules";
+            "common/starbase_types";
+            "common/spaceport_modules"; //Removed in 2.0
+            "common/start_screen_messages";
+            "common/static_modifiers";
+            "common/strategic_resources";
+            "common/subjects";
+            "common/system_types";
+            "common/technology";
+            "common/terraform";
+            "common/tile_blockers";
+            "common/tradition_categories";
+            "common/traditions";
+            "common/traits";
+            "common/triggered_modifiers"; //Removed in 2.0
+            "common/war_demand_counters"; //Removed in 2.0
+            "common/war_demand_types"; //Removed in 2.0
+            "common/war_goals";
+            "events";
+            "map/galaxy";
+            "map/setup_scenarios";
+            "prescripted_countries";
+            "interface";
+            "gfx";
+            ]
+
+        let fileManager = FileManager(settings.rootDirectory, settings.modFilter, settings.scope, scriptFolders)
         let vanillaEffects =
             let se = scopedEffects |> List.map (fun e -> e :> Effect)
             let ve = settings.embedded.effects |> addInnerScope |> List.map (fun e -> e :> Effect)
@@ -125,7 +219,7 @@ type STLGame (settings : StellarisSettings) =
                     |> List.map (fun (_, fn, f) -> (fn, f))
                     |> (fun files -> STLLocalisationService(files))
                     |> (fun l -> (STL STLLang.Default :: settings.validation.langs) |> List.map (fun lang -> false, l.Api(lang))))
-            let taggedKeys = allLocalisation() |> List.groupBy (fun l -> l.GetLang) |> List.map (fun (k, g) -> k, g |> List.collect (fun ls -> ls.GetKeys) |> List.fold (fun (s : LocKeySet) v -> s.Add v) (LocKeySet.Empty(STLStringComparer())) )
+            let taggedKeys = allLocalisation() |> List.groupBy (fun l -> l.GetLang) |> List.map (fun (k, g) -> k, g |> List.collect (fun ls -> ls.GetKeys) |> List.fold (fun (s : LocKeySet) v -> s.Add v) (LocKeySet.Empty(InsensitiveStringComparer())) )
             let validatableEntries = validatableLocalisation() |> List.groupBy (fun l -> l.GetLang) |> List.map (fun (k, g) -> k, g |> List.collect (fun ls -> ls.ValueMap |> Map.toList) |> Map.ofList)
             lookup.proccessedLoc <- validatableEntries |> List.map (fun f -> processLocalisation lookup.scriptedEffects lookup.scriptedLoc lookup.definedScriptVariables (EntitySet (resources.AllEntities())) f taggedKeys)
 
@@ -154,7 +248,7 @@ type STLGame (settings : StellarisSettings) =
                 let files = resources.GetResources() |> List.choose (function |FileResource (_, f) -> Some f.logicalpath |EntityResource (_, f) -> Some f.logicalpath) |> Set.ofList
                 let ruleApplicator = RuleApplicator(lookup.configRules, lookup.typeDefs, lookup.typeDefInfo, lookup.enumDefs, loc, files, lookup.scriptedTriggers, lookup.scriptedEffects)
                 lookup.typeDefInfo <- getTypesFromDefinitions ruleApplicator types (resources.AllEntities() |> List.map (fun struct(e,_) -> e))
-            |None -> ()            
+            |None -> ()
 
         // let findDuplicates (sl : Statement list) =
         //     let node = ProcessCore.processNodeBasic "root" Position.Empty sl
@@ -241,7 +335,7 @@ type STLGame (settings : StellarisSettings) =
             vs
 
         let globalLocalisation () =
-            let taggedKeys = allLocalisation() |> List.groupBy (fun l -> l.GetLang) |> List.map (fun (k, g) -> k, g |> List.collect (fun ls -> ls.GetKeys) |> List.fold (fun (s : LocKeySet) v -> s.Add v) (LocKeySet.Empty(STLStringComparer())) )
+            let taggedKeys = allLocalisation() |> List.groupBy (fun l -> l.GetLang) |> List.map (fun (k, g) -> k, g |> List.collect (fun ls -> ls.GetKeys) |> List.fold (fun (s : LocKeySet) v -> s.Add v) (LocKeySet.Empty(InsensitiveStringComparer())) )
 
             let validatableEntries = validatableLocalisation() |> List.groupBy (fun l -> l.GetLang) |> List.map (fun (k, g) -> k, g |> List.collect (fun ls -> ls.ValueMap |> Map.toList) |> Map.ofList)
             let oldEntities = EntitySet (resources.AllEntities())
@@ -330,36 +424,36 @@ type STLGame (settings : StellarisSettings) =
             let files = resources.GetResources() |> List.choose (function |FileResource (_, f) -> Some f.logicalpath |EntityResource (_, f) -> Some f.logicalpath) |> Set.ofList
             completionService <- Some (CompletionService(lookup.configRules, lookup.typeDefs, lookup.typeDefInfo, lookup.enumDefs))
             ruleApplicator <- Some (RuleApplicator(lookup.configRules, lookup.typeDefs, lookup.typeDefInfo, lookup.enumDefs, loc, files, lookup.scriptedTriggers, lookup.scriptedEffects))
-
+        interface IGame<STLComputedData> with
         //member __.Results = parseResults
-        member __.ParserErrors = parseErrors()
-        member __.ValidationErrors = (validateAll false (resources.ValidatableEntities()))
-        member __.LocalisationErrors(force : bool) =
-            let generate =
-                let les = (localisationCheck (resources.ValidatableEntities())) @ globalLocalisation()
-                localisationErrors <- Some les
-                les
-            match localisationErrors with
-            |Some les -> if force then generate else les
-            |None -> generate
+            member __.ParserErrors() = parseErrors()
+            member __.ValidationErrors() = (validateAll false (resources.ValidatableEntities()))
+            member __.LocalisationErrors(force : bool) =
+                let generate =
+                    let les = (localisationCheck (resources.ValidatableEntities())) @ globalLocalisation()
+                    localisationErrors <- Some les
+                    les
+                match localisationErrors with
+                |Some les -> if force then generate else les
+                |None -> generate
 
-        //member __.ValidationWarnings = warningsAll
-        member __.Folders = fileManager.AllFolders()
-        member __.AllFiles() =
-            resources.GetResources()
-            // |> List.map
-            //     (function
-            //         |EntityResource (f, r) ->  r.result |> function |(Fail (result)) -> (r.filepath, false, result.parseTime) |Pass(result) -> (r.filepath, true, result.parseTime)
-            //         |FileResource (f, r) ->  (r.filepath, false, 0L))
-            //|> List.map (fun r -> r.result |> function |(Fail (result)) -> (r.filepath, false, result.parseTime) |Pass(result) -> (r.filepath, true, result.parseTime))
-        member __.ScripteTriggers = lookup.scriptedTriggers
-        member __.ScriptedEffects = lookup.scriptedEffects
-        member __.StaticModifiers = lookup.staticModifiers
-        member __.UpdateFile file = updateFile file
-        member __.AllEntities = resources.AllEntities()
-        member __.References = References<STLComputedData>(resources, lookup, (localisationAPIs |> List.map snd))
-        member __.Complete = completion
-        member __.ScopesAtPos = scopesAtPos
+            //member __.ValidationWarnings = warningsAll
+            member __.Folders() = fileManager.AllFolders()
+            member __.AllFiles() =
+                resources.GetResources()
+                // |> List.map
+                //     (function
+                //         |EntityResource (f, r) ->  r.result |> function |(Fail (result)) -> (r.filepath, false, result.parseTime) |Pass(result) -> (r.filepath, true, result.parseTime)
+                //         |FileResource (f, r) ->  (r.filepath, false, 0L))
+                //|> List.map (fun r -> r.result |> function |(Fail (result)) -> (r.filepath, false, result.parseTime) |Pass(result) -> (r.filepath, true, result.parseTime))
+            member __.ScriptedTriggers() = lookup.scriptedTriggers
+            member __.ScriptedEffects() = lookup.scriptedEffects
+            member __.StaticModifiers() = lookup.staticModifiers
+            member __.UpdateFile file text = updateFile file text
+            member __.AllEntities() = resources.AllEntities()
+            member __.References() = References<STLComputedData>(resources, lookup, (localisationAPIs |> List.map snd))
+            member __.Complete pos file text = completion pos file text
+            member __.ScopesAtPos pos file text = scopesAtPos pos file text
 
 
-        //member __.ScriptedTriggers = parseResults |> List.choose (function |Pass(f, p, t) when f.Contains("scripted_triggers") -> Some p |_ -> None) |> List.map (fun t -> )
+            //member __.ScriptedTriggers = parseResults |> List.choose (function |Pass(f, p, t) when f.Contains("scripted_triggers") -> Some p |_ -> None) |> List.map (fun t -> )

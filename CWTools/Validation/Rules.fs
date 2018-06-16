@@ -20,7 +20,7 @@ open Microsoft.FSharp.Collections.Tagged
 open System.IO
 
 module rec Rules =
-    type StringSet = Set<string, STLStringComparer>
+    type StringSet = Set<string, InsensitiveStringComparer>
 
     let fst3 (a, _, _) = a
     let snd3 (_, b, _) = b
@@ -83,8 +83,8 @@ module rec Rules =
             scopes : ScopeContext
         }
     type RuleApplicator(rootRules : RootRule list, typedefs : TypeDefinition list , types : Collections.Map<string, string list>, enums : Collections.Map<string, string list>, localisation : (Lang * Collections.Set<string>) list, files : Collections.Set<string>, triggers : Effect list, effects : Effect list) =
-        let triggerMap = triggers |> List.map (fun e -> e.Name, e) |> (fun l -> EffectMap.FromList(STLStringComparer(), l))
-        let effectMap = effects |> List.map (fun e -> e.Name, e) |> (fun l -> EffectMap.FromList(STLStringComparer(), l))
+        let triggerMap = triggers |> List.map (fun e -> e.Name, e) |> (fun l -> EffectMap.FromList(InsensitiveStringComparer(), l))
+        let effectMap = effects |> List.map (fun e -> e.Name, e) |> (fun l -> EffectMap.FromList(InsensitiveStringComparer(), l))
 
         let aliases =
             rootRules |> List.choose (function |AliasRule (a, rs) -> Some (a, rs) |_ -> None)
@@ -93,8 +93,8 @@ module rec Rules =
                         |> Collections.Map.ofList
         let typeRules =
             rootRules |> List.choose (function |TypeRule (rs) -> Some (rs) |_ -> None)
-        let typesMap = types |> (Map.map (fun _ s -> StringSet.Create(STLStringComparer(), s)))
-        let enumsMap = enums |> (Map.map (fun _ s -> StringSet.Create(STLStringComparer(), s)))
+        let typesMap = types |> (Map.map (fun _ s -> StringSet.Create(InsensitiveStringComparer(), s)))
+        let enumsMap = enums |> (Map.map (fun _ s -> StringSet.Create(InsensitiveStringComparer(), s)))
 
         let isValidValue (value : Value) =
             let key = value.ToString().Trim([|'"'|])
@@ -368,8 +368,8 @@ module rec Rules =
             rootRules |> List.choose (function |AliasRule (a, rs) -> Some (a, rs) |_ -> None)
         let typeRules =
             rootRules |> List.choose (function |TypeRule (rs) -> Some (rs) |_ -> None)
-        let typesMap = types |> (Map.map (fun _ s -> StringSet.Create(STLStringComparer(), s)))
-        let enumsMap = enums |> (Map.map (fun _ s -> StringSet.Create(STLStringComparer(), s)))
+        let typesMap = types |> (Map.map (fun _ s -> StringSet.Create(InsensitiveStringComparer(), s)))
+        let enumsMap = enums |> (Map.map (fun _ s -> StringSet.Create(InsensitiveStringComparer(), s)))
 
         let fieldToCompletionList (field : Field) =
             match field with

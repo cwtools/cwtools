@@ -16,6 +16,7 @@ open CWTools.Common.STLConstants
 open System
 open Microsoft.FSharp.Compiler.Range
 open CWTools.Games.Files
+open CWTools.Game.Stellaris.STLLookup
 
 let emptyStellarisSettings (rootDirectory) = {
     rootDirectory = rootDirectory
@@ -87,14 +88,14 @@ let getLocTestInfo node =
 let tests =
     testList "localisation" [
         testList "no loc" [
-                let stl = STLGame(emptyStellarisSettings "./testfiles/localisationtests/gamefiles")
-                let parseErrors = stl.ParserErrors
+                let stl = STLGame(emptyStellarisSettings "./testfiles/localisationtests/gamefiles") :> IGame<STLComputedData>
+                let parseErrors = stl.ParserErrors()
                 let errors = stl.LocalisationErrors(true) |> List.map (fun (c, s, n, l, f, k) -> n)
-                let entities = stl.AllEntities
+                let entities = stl.AllEntities()
                 let testLocKeys = entities |> List.map (fun struct (e, _) -> e.filepath, getLocTestInfo e.entity)
                 let nodeComments = entities |> List.collect (fun struct (e, _) -> getNodeComments e.entity) |> List.map fst
                 yield testCase ("parse") <| fun () -> Expect.isEmpty parseErrors (parseErrors |> List.tryHead |> Option.map (sprintf "%A") |> Option.defaultValue "")
-                yield testCase ("parse2") <| fun () -> Expect.isEmpty stl.ParserErrors (stl.ParserErrors |> List.tryHead |> Option.map (sprintf "%A") |> Option.defaultValue "")
+                yield testCase ("parse2") <| fun () -> Expect.isEmpty (stl.ParserErrors()) (stl.ParserErrors() |> List.tryHead |> Option.map (sprintf "%A") |> Option.defaultValue "")
                 //eprintfn "%A" testLocKeys
                 // eprintfn "%A" entities
                 //eprintfn "%A" errors
@@ -116,12 +117,12 @@ let tests =
                 let settings = emptyStellarisSettings "./testfiles/localisationtests/gamefiles"
                 let settings = { settings with embedded = { settings.embedded with embeddedFiles = [locfiles] };
                                             validation = {settings.validation with langs = [STL STLLang.English; STL STLLang.German] }}
-                let stl = STLGame(settings)
-                let parseErrors = stl.ParserErrors
+                let stl = STLGame(settings) :> IGame<STLComputedData>
+                let parseErrors = stl.ParserErrors()
                 yield testCase ("parse") <| fun () -> Expect.isEmpty parseErrors (parseErrors |> List.tryHead |> Option.map (sprintf "%A") |> Option.defaultValue "")
 
                 let errors = stl.LocalisationErrors(true) |> List.map (fun (c, s, n, l, f, k) -> n)
-                let testLocKeys = stl.AllEntities |> List.map (fun struct (e, _) -> e.filepath, getLocTestInfo e.entity)
+                let testLocKeys = stl.AllEntities() |> List.map (fun struct (e, _) -> e.filepath, getLocTestInfo e.entity)
                 let inner (file, ((req : range list), (noreq : range list), (nodekeys : range list) ))=
                     let missing = req |> List.filter (fun r -> not (errors |> List.contains r))
                     let extra = noreq |> List.filter (fun r -> errors |> List.contains r)
@@ -144,9 +145,9 @@ let testFolder folder testsname config =
         let settings = emptyStellarisSettings folder
         let settings = { settings with embedded = { settings.embedded with triggers = triggers; effects = effects; modifiers = modifiers; };
                                             rules = if config then Some { ruleFiles = [configtext]; validateRules = config} else None}
-        let stl = STLGame(settings)
-        let errors = stl.ValidationErrors |> List.map (fun (c, s, n, l, f, k) -> f, n) //>> (fun p -> FParsec.Position(p.StreamName, p.Index, p.Line, 1L)))
-        let testVals = stl.AllEntities |> List.map (fun struct (e, _) -> e.filepath, getNodeComments e.entity |> List.collect (fun (r, cs) -> cs |> List.map (fun _ -> r)))
+        let stl = STLGame(settings) :> IGame<STLComputedData>
+        let errors = stl.ValidationErrors() |> List.map (fun (c, s, n, l, f, k) -> f, n) //>> (fun p -> FParsec.Position(p.StreamName, p.Index, p.Line, 1L)))
+        let testVals = stl.AllEntities() |> List.map (fun struct (e, _) -> e.filepath, getNodeComments e.entity |> List.collect (fun (r, cs) -> cs |> List.map (fun _ -> r)))
         // printfn "%A" (errors |> List.map (fun (c, f) -> f.StreamName))
         //printfn "%A" (testVals)
         //eprintfn "%A" testVals
@@ -186,10 +187,10 @@ let specialtests =
             (modfile |> (function |Failure(e, _,_) -> eprintfn "%s" e |_ -> ()))
             let modifiers = (modfile |> (function |Success(p, _, _) -> SetupLogParser.processLogs p))
             let settings = emptyStellarisSettings "./testfiles/scriptedorstatictest"
-            let stl = STLGame({settings with embedded = {settings.embedded with modifiers = modifiers}})
+            let stl = STLGame({settings with embedded = {settings.embedded with modifiers = modifiers}}) :> IGame<STLComputedData>
             // let stl = STLGame("./testfiles/scriptedorstatictest/", FilesScope.All, "", [], [], modifiers, [], [], [STL STLLang.English], false, true, false)
             let exp = [{tag = "test"; categories = [ModifierCategory.Pop]; core = false}]
-            Expect.equal stl.StaticModifiers exp ""
+            Expect.equal (stl.StaticModifiers()) exp ""
     ]
 // [<Tests>]
 // let tests2 =
@@ -251,13 +252,13 @@ let embeddedTests =
         let settings = emptyStellarisSettings "./testfiles/embeddedtest/test"
         let settingsE = { settings with embedded = { settings.embedded with embeddedFiles = embeddedFiles @ filelist };}
 
-        let stlE = STLGame(settingsE)
-        let stlNE = STLGame(settings)
-        let eerrors = stlE.ValidationErrors |> List.map (fun (c, s, n, l, f, k) -> n)
-        eprintfn "%A" (stlE.ValidationErrors)
-        let neerrors = stlNE.ValidationErrors |> List.map (fun (c, s, n, l, f, k) -> n)
-        let etestVals = stlE.AllEntities |> List.map (fun struct (e, _) -> e.filepath, getNodeComments e.entity |> List.map fst)
-        let netestVals = stlNE.AllEntities |> List.map (fun struct (e, _) -> e.filepath, getNodeComments e.entity |> List.map fst)
+        let stlE = STLGame(settingsE) :> IGame<STLComputedData>
+        let stlNE = STLGame(settings) :> IGame<STLComputedData>
+        let eerrors = stlE.ValidationErrors() |> List.map (fun (c, s, n, l, f, k) -> n)
+        eprintfn "%A" (stlE.ValidationErrors())
+        let neerrors = stlNE.ValidationErrors() |> List.map (fun (c, s, n, l, f, k) -> n)
+        let etestVals = stlE.AllEntities() |> List.map (fun struct (e, _) -> e.filepath, getNodeComments e.entity |> List.map fst)
+        let netestVals = stlNE.AllEntities() |> List.map (fun struct (e, _) -> e.filepath, getNodeComments e.entity |> List.map fst)
         let einner (file, ((nodekeys : range list)) )=
             let fileErrors = eerrors |> List.filter (fun f -> f.FileName = file )
             Expect.isEmpty (fileErrors) (sprintf "Following lines are not expected to have an error %A" fileErrors )
@@ -283,9 +284,9 @@ let overwriteTests =
         let embeddedFiles = embeddedFileNames |> List.ofArray |> List.map (fun f -> fixEmbeddedFileName f, (new StreamReader(Assembly.GetEntryAssembly().GetManifestResourceStream(f))).ReadToEnd())
         let settings = emptyStellarisSettings "./testfiles/overwritetest/test"
         let settings = { settings with embedded = { settings.embedded with triggers = triggers; effects = effects; modifiers = modifiers; embeddedFiles = embeddedFiles };}
-        let stl = STLGame(settings)
-        let errors = stl.ValidationErrors |> List.map (fun (c, s, n, l, f, k) -> f, n) //>> (fun p -> FParsec.Position(p.StreamName, p.Index, p.Line, 1L)))
-        let testVals = stl.AllEntities |> List.map (fun struct (e, _) -> e.filepath, getNodeComments e.entity |> List.map fst)
+        let stl = STLGame(settings) :> IGame<STLComputedData>
+        let errors = stl.ValidationErrors() |> List.map (fun (c, s, n, l, f, k) -> f, n) //>> (fun p -> FParsec.Position(p.StreamName, p.Index, p.Line, 1L)))
+        let testVals = stl.AllEntities() |> List.map (fun struct (e, _) -> e.filepath, getNodeComments e.entity |> List.map fst)
         let inner (file, ((nodekeys : range list)) )=
             let expected = nodekeys  //|> List.map (fun p -> FParsec.Position(p.StreamName, p.Index, p.Line, 1L))
             let fileErrors = errors |> List.filter (fun (c, f) -> f.FileName = file )
