@@ -17,6 +17,23 @@ open System
 open Microsoft.FSharp.Compiler.Range
 open CWTools.Games.Files
 
+let emptyStellarisSettings (rootDirectory) = {
+    rootDirectory = rootDirectory
+    scope = FilesScope.All
+    modFilter = None
+    validation = {
+        validateVanilla = false
+        experimental = true
+        langs = [STL STLLang.English]
+    }
+    rules = None
+    embedded = {
+        triggers = []
+        effects = []
+        modifiers = []
+        embeddedFiles = []        
+    }
+}
 
 let getAllTestLocs node =
     let fNode = (fun (x:Node) (req, notreq) ->
@@ -70,7 +87,7 @@ let getLocTestInfo node =
 let tests =
     testList "localisation" [
         testList "no loc" [
-                let stl = STLGame("./testfiles/localisationtests/gamefiles", FilesScope.All, "", [], [], [], [], [], [STL STLLang.English], true, true, false)
+                let stl = STLGame(emptyStellarisSettings "./testfiles/localisationtests/gamefiles")
                 let parseErrors = stl.ParserErrors
                 let errors = stl.LocalisationErrors() |> List.map (fun (c, s, n, l, f, k) -> n)
                 let entities = stl.AllEntities
@@ -96,7 +113,10 @@ let tests =
             testList "with loc" [
 
                 let locfiles = "localisation/l_english.yml", File.ReadAllText("./testfiles/localisationtests/localisation/l_english.yml")
-                let stl = STLGame("./testfiles/localisationtests/gamefiles", FilesScope.All, "", [], [], [], [locfiles], [], [STL STLLang.English; STL STLLang.German], false, true, false)
+                let settings = emptyStellarisSettings "./testfiles/localisationtests/gamefiles"
+                let settings = { settings with embedded = { settings.embedded with embeddedFiles = [locfiles] };
+                                            validation = {settings.validation with langs = [STL STLLang.English; STL STLLang.German] }}
+                let stl = STLGame(settings)
                 let parseErrors = stl.ParserErrors
                 yield testCase ("parse") <| fun () -> Expect.isEmpty parseErrors (parseErrors |> List.tryHead |> Option.map (sprintf "%A") |> Option.defaultValue "")
 
@@ -120,7 +140,11 @@ let testFolder folder testsname config =
         let configtext = "./testfiles/configtests/test.cwt", File.ReadAllText "./testfiles/configtests/test.cwt"
         let triggers, effects = parseDocsFile "./testfiles/validationtests/trigger_docs_2.1.0.txt" |> (function |Success(p, _, _) -> DocsParser.processDocs p)
         let modifiers = SetupLogParser.parseLogsFile "./testfiles/validationtests/setup.log" |> (function |Success(p, _, _) -> SetupLogParser.processLogs p)
-        let stl = STLGame(folder, FilesScope.All, "", triggers, effects, modifiers, [], [configtext], [STL STLLang.English], false, true, config)
+        // let stl = STLGame(folder, FilesScope.All, "", triggers, effects, modifiers, [], [configtext], [STL STLLang.English], false, true, config)
+        let settings = emptyStellarisSettings folder
+        let settings = { settings with embedded = { settings.embedded with triggers = triggers; effects = effects; modifiers = modifiers; };
+                                            rules = if config then Some { ruleFiles = [configtext]; validateRules = config} else None}
+        let stl = STLGame(settings)
         let errors = stl.ValidationErrors |> List.map (fun (c, s, n, l, f, k) -> f, n) //>> (fun p -> FParsec.Position(p.StreamName, p.Index, p.Line, 1L)))
         let testVals = stl.AllEntities |> List.map (fun struct (e, _) -> e.filepath, getNodeComments e.entity |> List.collect (fun (r, cs) -> cs |> List.map (fun _ -> r)))
         // printfn "%A" (errors |> List.map (fun (c, f) -> f.StreamName))
@@ -161,7 +185,9 @@ let specialtests =
             let modfile = SetupLogParser.parseLogsFile "./testfiles/scriptedorstatictest/setup.log"
             (modfile |> (function |Failure(e, _,_) -> eprintfn "%s" e |_ -> ()))
             let modifiers = (modfile |> (function |Success(p, _, _) -> SetupLogParser.processLogs p))
-            let stl = STLGame("./testfiles/scriptedorstatictest/", FilesScope.All, "", [], [], modifiers, [], [], [STL STLLang.English], false, true, false)
+            let settings = emptyStellarisSettings "./testfiles/scriptedorstatictest"
+            let stl = STLGame({settings with embedded = {settings.embedded with modifiers = modifiers}})
+            // let stl = STLGame("./testfiles/scriptedorstatictest/", FilesScope.All, "", [], [], modifiers, [], [], [STL STLLang.English], false, true, false)
             let exp = [{tag = "test"; categories = [ModifierCategory.Pop]; core = false}]
             Expect.equal stl.StaticModifiers exp ""
     ]
@@ -222,8 +248,11 @@ let embeddedTests =
         // eprintfn "%A" filelist
         let embeddedFileNames = Assembly.GetEntryAssembly().GetManifestResourceNames() |> Array.filter (fun f -> f.Contains("embeddedtest") && (f.Contains("common") || f.Contains("localisation") || f.Contains("interface")))
         let embeddedFiles = embeddedFileNames |> List.ofArray |> List.map (fun f -> fixEmbeddedFileName f, (new StreamReader(Assembly.GetEntryAssembly().GetManifestResourceStream(f))).ReadToEnd())
-        let stlE = STLGame("./testfiles/embeddedtest/test", FilesScope.All, "", [], [], [], embeddedFiles @ filelist, [], [STL STLLang.English], false, true, false)
-        let stlNE = STLGame("./testfiles/embeddedtest/test", FilesScope.All, "", [], [], [], [], [], [STL STLLang.English], false, true, false)
+        let settings = emptyStellarisSettings "./testfiles/embeddedtest/test"
+        let settingsE = { settings with embedded = { settings.embedded with embeddedFiles = embeddedFiles @ filelist };}
+
+        let stlE = STLGame(settingsE)
+        let stlNE = STLGame(settings)
         let eerrors = stlE.ValidationErrors |> List.map (fun (c, s, n, l, f, k) -> n)
         eprintfn "%A" (stlE.ValidationErrors)
         let neerrors = stlNE.ValidationErrors |> List.map (fun (c, s, n, l, f, k) -> n)
@@ -252,7 +281,9 @@ let overwriteTests =
         let modifiers = SetupLogParser.parseLogsFile "./testfiles/validationtests/setup.log" |> (function |Success(p, _, _) -> SetupLogParser.processLogs p)
         let embeddedFileNames = Assembly.GetEntryAssembly().GetManifestResourceNames() |> Array.filter (fun f -> f.Contains("overwritetest") && (f.Contains("common") || f.Contains("localisation") || f.Contains("interface")))
         let embeddedFiles = embeddedFileNames |> List.ofArray |> List.map (fun f -> fixEmbeddedFileName f, (new StreamReader(Assembly.GetEntryAssembly().GetManifestResourceStream(f))).ReadToEnd())
-        let stl = STLGame("./testfiles/overwritetest/test", FilesScope.All, "", triggers, effects, modifiers, embeddedFiles, [], [STL STLLang.English], false, true, false)
+        let settings = emptyStellarisSettings "./testfiles/overwritetest/test"
+        let settings = { settings with embedded = { settings.embedded with triggers = triggers; effects = effects; modifiers = modifiers; embeddedFiles = embeddedFiles };}
+        let stl = STLGame(settings)
         let errors = stl.ValidationErrors |> List.map (fun (c, s, n, l, f, k) -> f, n) //>> (fun p -> FParsec.Position(p.StreamName, p.Index, p.Line, 1L)))
         let testVals = stl.AllEntities |> List.map (fun struct (e, _) -> e.filepath, getNodeComments e.entity |> List.map fst)
         let inner (file, ((nodekeys : range list)) )=

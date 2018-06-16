@@ -32,20 +32,47 @@ open FSharp.Data.Runtime
 open CWTools.Validation.Stellaris.ScopeValidation
 open Files
 
+type EmbeddedSettings = {
+    triggers : DocEffect list
+    effects : DocEffect list
+    modifiers : Modifier list
+    embeddedFiles : (string * string) list
+}
 
+type RulesSettings = {
+    ruleFiles : (string * string) list
+    validateRules : bool
+}
 
+type ValidationSettings = {
+    langs : Lang list
+    validateVanilla : bool
+    experimental : bool
+}
+
+type StellarisSettings = {
+    rootDirectory : string
+    scope : FilesScope
+    modFilter : string option
+    embedded : EmbeddedSettings
+    validation : ValidationSettings
+    rules : RulesSettings option
+}
 
 //type GameFile = GameFile of result : FileResult
 
-type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, triggers : DocEffect list, effects : DocEffect list, modifiers : Modifier list, embeddedFiles : (string * string) list, configs : (string * string) list, langs : Lang list, validateVanilla : bool, experimental : bool, useConfig : bool ) =
-        let fileManager = FileManager(scopeDirectory, modFilter, scope)
+type STLGame (settings : StellarisSettings) =
+        let embeddedSettings = settings.embedded
+        let validationSettings = settings.validation
+        let useRules = settings.rules.IsSome
+        let fileManager = FileManager(settings.rootDirectory, settings.modFilter, settings.scope)
         let vanillaEffects =
             let se = scopedEffects |> List.map (fun e -> e :> Effect)
-            let ve = effects |> addInnerScope |> List.map (fun e -> e :> Effect)
+            let ve = settings.embedded.effects |> addInnerScope |> List.map (fun e -> e :> Effect)
             se @ ve
         let vanillaTriggers =
             let se = scopedEffects |> List.map (fun e -> e :> Effect)
-            let vt = triggers |> addInnerScope |> List.map (fun e -> e :> Effect)
+            let vt = settings.embedded.triggers |> addInnerScope |> List.map (fun e -> e :> Effect)
             se @ vt
 
         let resourceManager = ResourceManager(computeSTLData)
@@ -59,7 +86,7 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
         let mutable localisationErrors : (string * Severity * range * int * string * string option) list option = None
 
 
-        let getEmbeddedFiles() = embeddedFiles |> List.map (fun (fn, f) -> "embedded", "embeddedfiles/" + fn, f)
+        let getEmbeddedFiles() = settings.embedded.embeddedFiles |> List.map (fun (fn, f) -> "embedded", "embeddedfiles/" + fn, f)
 
 
         let updateScriptedTriggers () =
@@ -75,7 +102,7 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
                 |> List.choose (function |struct (f, _) when f.filepath.Contains("static_modifiers") -> Some (f.entity) |_ -> None)
                 |> List.collect (fun n -> n.Children)
                 //|> List.rev
-            let newModifiers = rawModifiers |> List.map (fun e -> STLProcess.getStaticModifierCategory modifiers e)
+            let newModifiers = rawModifiers |> List.map (fun e -> STLProcess.getStaticModifierCategory settings.embedded.modifiers e)
             lookup.staticModifiers <- newModifiers
 
         let updateScriptedLoc () =
@@ -89,7 +116,7 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
         let updateLocalisation() =
             localisationAPIs <-
                 let locs = fileManager.LocalisationFiles() |> PSeq.ofList |> PSeq.map (fun (folder, _) -> STLLocalisationService({ folder = folder})) |> PSeq.toList
-                let allLocs = locs |> List.collect (fun l -> (STL STLLang.Default :: langs)|> List.map (fun lang -> true, l.Api(lang)))
+                let allLocs = locs |> List.collect (fun l -> (STL STLLang.Default :: settings.validation.langs)|> List.map (fun lang -> true, l.Api(lang)))
                 match fileManager.ShouldUseEmbedded with
                 |false -> allLocs
                 |true ->
@@ -97,7 +124,7 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
                     |> List.filter (fun (_, fn, _ )-> fn.Contains("localisation"))
                     |> List.map (fun (_, fn, f) -> (fn, f))
                     |> (fun files -> STLLocalisationService(files))
-                    |> (fun l -> (STL STLLang.Default :: langs) |> List.map (fun lang -> false, l.Api(lang))))
+                    |> (fun l -> (STL STLLang.Default :: settings.validation.langs) |> List.map (fun lang -> false, l.Api(lang))))
             let taggedKeys = allLocalisation() |> List.groupBy (fun l -> l.GetLang) |> List.map (fun (k, g) -> k, g |> List.collect (fun ls -> ls.GetKeys) |> List.fold (fun (s : LocKeySet) v -> s.Add v) (LocKeySet.Empty(STLStringComparer())) )
             let validatableEntries = validatableLocalisation() |> List.groupBy (fun l -> l.GetLang) |> List.map (fun (k, g) -> k, g |> List.collect (fun ls -> ls.ValueMap |> Map.toList) |> Map.ofList)
             lookup.proccessedLoc <- validatableEntries |> List.map (fun f -> processLocalisation lookup.scriptedEffects lookup.scriptedLoc lookup.definedScriptVariables (EntitySet (resources.AllEntities())) f taggedKeys)
@@ -107,23 +134,26 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
             lookup.definedScriptVariables <- (resources.AllEntities()) |> List.collect (fun struct (_, d) -> d.Force().setvariables)
 
         let updateModifiers() =
-            lookup.coreModifiers <- addGeneratedModifiers modifiers (EntitySet (resources.AllEntities()))
+            lookup.coreModifiers <- addGeneratedModifiers settings.embedded.modifiers (EntitySet (resources.AllEntities()))
 
         let updateTechnologies() =
             lookup.technologies <- getTechnologies (EntitySet (resources.AllEntities()))
 
         let updateTypeDef() =
-            let rules, types, enums, complexenums = configs |> List.fold (fun (rs, ts, es, ces) (fn, ft) -> let r2, t2, e2, ce2 = parseConfig fn ft in rs@r2, ts@t2, es@e2, ces@ce2) ([], [], [], [])
-            let rulesWithMod = rules @ (lookup.coreModifiers |> List.map (fun c -> AliasRule ("modifier", Rule(c.tag, {min = 0; max = 100; leafvalue = false; description = None; pushScope = None}, ValueField (ValueType.Float (-100000.0, 100000.0))))))
-            let complexEnumDefs = getEnumsFromComplexEnums complexenums (resources.AllEntities() |> List.map (fun struct(e,_) -> e))
-            let allEnums = enums @ complexEnumDefs
-            lookup.configRules <- rulesWithMod
-            lookup.typeDefs <- types
-            lookup.enumDefs <- allEnums |> Map.ofList
-            let loc = allLocalisation() |> List.groupBy (fun l -> l.GetLang) |> List.map (fun (k, g) -> k, g |>List.collect (fun ls -> ls.GetKeys) |> Set.ofList )
-            let files = resources.GetResources() |> List.choose (function |FileResource (_, f) -> Some f.logicalpath |EntityResource (_, f) -> Some f.logicalpath) |> Set.ofList
-            let ruleApplicator = RuleApplicator(lookup.configRules, lookup.typeDefs, lookup.typeDefInfo, lookup.enumDefs, loc, files, lookup.scriptedTriggers, lookup.scriptedEffects)
-            lookup.typeDefInfo <- getTypesFromDefinitions ruleApplicator types (resources.AllEntities() |> List.map (fun struct(e,_) -> e))
+            match settings.rules with
+            |Some rulesSettings ->
+                let rules, types, enums, complexenums = rulesSettings.ruleFiles |> List.fold (fun (rs, ts, es, ces) (fn, ft) -> let r2, t2, e2, ce2 = parseConfig fn ft in rs@r2, ts@t2, es@e2, ces@ce2) ([], [], [], [])
+                let rulesWithMod = rules @ (lookup.coreModifiers |> List.map (fun c -> AliasRule ("modifier", Rule(c.tag, {min = 0; max = 100; leafvalue = false; description = None; pushScope = None}, ValueField (ValueType.Float (-100000.0, 100000.0))))))
+                let complexEnumDefs = getEnumsFromComplexEnums complexenums (resources.AllEntities() |> List.map (fun struct(e,_) -> e))
+                let allEnums = enums @ complexEnumDefs
+                lookup.configRules <- rulesWithMod
+                lookup.typeDefs <- types
+                lookup.enumDefs <- allEnums |> Map.ofList
+                let loc = allLocalisation() |> List.groupBy (fun l -> l.GetLang) |> List.map (fun (k, g) -> k, g |>List.collect (fun ls -> ls.GetKeys) |> Set.ofList )
+                let files = resources.GetResources() |> List.choose (function |FileResource (_, f) -> Some f.logicalpath |EntityResource (_, f) -> Some f.logicalpath) |> Set.ofList
+                let ruleApplicator = RuleApplicator(lookup.configRules, lookup.typeDefs, lookup.typeDefInfo, lookup.enumDefs, loc, files, lookup.scriptedTriggers, lookup.scriptedEffects)
+                lookup.typeDefInfo <- getTypesFromDefinitions ruleApplicator types (resources.AllEntities() |> List.map (fun struct(e,_) -> e))
+            |None -> ()            
 
         // let findDuplicates (sl : Statement list) =
         //     let node = ProcessCore.processNodeBasic "root" Position.Empty sl
@@ -169,13 +199,13 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
             let validators = [validateVariables, "var"; valTechnology, "tech"; validateTechnologies, "tech2"; valButtonEffects, "but"; valSprites, "sprite"; valVariables, "var2"; valEventCalls, "event";
                                 validateAmbientGraphics, "ambient"; validateShipDesigns, "designs"; validateMixedBlocks, "mixed"; validateSolarSystemInitializers, "solar"; validateAnomaly210, "anom";
                                 validateIfElse210, "ifelse"; validateIfElse, "ifelse2"; validatePlanetKillers, "pk"]
-            let validators = if useConfig && ruleApplicator.IsSome then (ruleApplicator.Value.RuleValidate, "rules")::validators else validators
+            let validators = if useRules && ruleApplicator.IsSome then (ruleApplicator.Value.RuleValidate, "rules")::validators else validators
             let experimentalvalidators = [valSectionGraphics, "sections"; valComponentGraphics, "component"; ]
             let oldEntities = EntitySet (resources.AllEntities())
             let newEntities = EntitySet entities
             let runValidators f (validators : (StructureValidator * string) list) =
                 (validators <&!!&> (fun (v, s) -> duration (fun _ -> f v) s) |> (function |Invalid es -> es |_ -> []))
-                @ (if not experimental then [] else experimentalvalidators <&!&> (fun (v, s) -> duration (fun _ -> f v) s) |> (function |Invalid es -> es |_ -> []))
+                @ (if not settings.validation.experimental then [] else experimentalvalidators <&!&> (fun (v, s) -> duration (fun _ -> f v) s) |> (function |Invalid es -> es |_ -> []))
             eprintfn "Validating misc"
             //let res = validators |> List.map (fun v -> v oldEntities newEntities) |> List.fold (<&&>) OK
             let res = runValidators (fun f -> f oldEntities newEntities) validators
@@ -188,7 +218,7 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
             let tres = duration (fun _ ->  valAllTriggers (lookup.scriptedTriggers) (lookup.scriptedEffects) (lookup.staticModifiers) newEntities  |> (function |Invalid es -> es |_ -> [])) "triggers"
             let wres = duration (fun _ ->  validateModifierBlocks (lookup.scriptedTriggers) (lookup.scriptedEffects) (lookup.staticModifiers) newEntities |> (function |Invalid es -> es |_ -> [])) "weights"
             let mres = duration (fun _ ->  valAllModifiers (lookup.coreModifiers) newEntities  |> (function |Invalid es -> es |_ -> [])) "modifiers"
-            let evres = duration (fun _ ->  ( if experimental && (not shallow) then getEventChains (lookup.scriptedEffects) oldEntities newEntities else OK) |> (function |Invalid es -> es |_ -> [])) "events"
+            let evres = duration (fun _ ->  ( if settings.validation.experimental && (not shallow) then getEventChains (lookup.scriptedEffects) oldEntities newEntities else OK) |> (function |Invalid es -> es |_ -> [])) "events"
             //let etres = getEventChains newEntities |> (function |Invalid es -> es |_ -> [])
             //(validateShips (flattened)) @ (validateEvents (flattened)) @ res @ fres @ eres
             (validateShips (flattened)) @ (validateEvents (flattened)) @ res @ fres @ eres @ tres @ mres @ evres @ wres
@@ -278,9 +308,9 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
             // let otherfiles = allFilesByPath |> List.filter (fun (_, f, _) -> f.EndsWith(".dds"))
             //                     |> List.map (fun (s, f, _) -> FileResourceInput {scope = s; filepath = f;})
             let files = fileManager.AllFilesByPath()
-            let filteredfiles = if validateVanilla then files else files |> List.choose (function |FileResourceInput f -> Some (FileResourceInput f) |EntityResourceInput f -> if f.scope = "vanilla" then Some (EntityResourceInput {f with validate = false}) else Some (EntityResourceInput f))
+            let filteredfiles = if settings.validation.validateVanilla then files else files |> List.choose (function |FileResourceInput f -> Some (FileResourceInput f) |EntityResourceInput f -> if f.scope = "vanilla" then Some (EntityResourceInput {f with validate = false}) else Some (EntityResourceInput f))
             resources.UpdateFiles(filteredfiles) |> ignore
-            let embedded = embeddedFiles |> List.map (fun (f, ft) -> if ft = "" then FileResourceInput { scope = "embedded"; filepath = f; logicalpath = (fileManager.ConvertPathToLogicalPath f) } else EntityResourceInput {scope = "embedded"; filepath = f; logicalpath = (fileManager.ConvertPathToLogicalPath f); filetext = ft; validate = false})
+            let embedded = settings.embedded.embeddedFiles |> List.map (fun (f, ft) -> if ft = "" then FileResourceInput { scope = "embedded"; filepath = f; logicalpath = (fileManager.ConvertPathToLogicalPath f) } else EntityResourceInput {scope = "embedded"; filepath = f; logicalpath = (fileManager.ConvertPathToLogicalPath f); filetext = ft; validate = false})
             if fileManager.ShouldUseEmbedded then resources.UpdateFiles(embedded) |> ignore else ()
 
             updateScriptedTriggers()

@@ -15,7 +15,7 @@ module Files =
         |Mods
         |Vanilla
 
-    type FileManager(rootDirectory : string, modFilter : string, scope : FilesScope) =
+    type FileManager(rootDirectory : string, modFilter : string option, scope : FilesScope) =
         let normalisedScopeDirectory = rootDirectory.Replace("/","\\").TrimStart('.')
         let convertPathToLogicalPath =
             fun (path : string) ->
@@ -172,7 +172,7 @@ module Files =
                 x |> List.iter (fun (n, p, _) -> eprintfn "%s, %s" n p)
             dotModFiles |> List.distinct
         let modFolders =
-            let folders = mods |> List.filter (fun (n, _, _) -> n.Contains(modFilter))
+            let folders = mods |> List.filter (fun (n, _, _) -> modFilter |> function |None -> true |Some mf -> n.Contains(mf))
                                 |> List.map (fun (n, p, r) -> if Path.IsPathRooted p then n, p else n, (Directory.GetParent(r).FullName + (string Path.DirectorySeparatorChar) + p))
             eprintfn "Mod folders"
             folders |> List.iter (fun (n, f) -> eprintfn "%s, %s" n f)

@@ -16,7 +16,23 @@ open System.IO
 open System.Reflection
 open CWTools.Parser.DocsParser
 open CWTools.Games.Files
-
+let emptyStellarisSettings (rootDirectory) = {
+    rootDirectory = rootDirectory
+    scope = FilesScope.All
+    modFilter = None
+    validation = {
+        validateVanilla = false
+        experimental = true
+        langs = [STL STLLang.English]
+    }
+    rules = None
+    embedded = {
+        triggers = []
+        effects = []
+        modifiers = []
+        embeddedFiles = []        
+    }
+}
 let rec getAllFolders dirs =
     if Seq.isEmpty dirs then Seq.empty else
         seq { yield! dirs |> Seq.collect Directory.EnumerateDirectories
@@ -34,7 +50,11 @@ let perf(b) =
     let configFiles = (if Directory.Exists "./testfiles/performancetest2/.cwtools" then getAllFoldersUnion (["./testfiles/performancetest2/.cwtools"] |> Seq.ofList) else Seq.empty) |> Seq.collect (Directory.EnumerateFiles)
     let configFiles = configFiles |> List.ofSeq |> List.filter (fun f -> Path.GetExtension f = ".cwt")
     let configs = configFiles |> List.map (fun f -> f, File.ReadAllText(f))
-    let stl = STLGame("./testfiles/performancetest/", FilesScope.All, "", triggers, effects, [], [], configs, [STL STLLang.English], false, true, true)
+    let settings = emptyStellarisSettings "./testfiles/performancetest/"
+    let settings = {settings with embedded = {settings.embedded with triggers = triggers; effects = effects};
+                                    rules = Some { validateRules = true; ruleFiles = configs}}
+    let stl = STLGame(settings)
+    // let stl = STLGame("./testfiles/performancetest/", FilesScope.All, "", triggers, effects, [], [], configs, [STL STLLang.English], false, true, true)
     if b then
         let errors = stl.ValidationErrors |> List.map (fun (c, s, n, l, f, k) -> n)
         let testVals = stl.AllEntities
@@ -50,8 +70,12 @@ let perf2(b) =
     let configFiles = (if Directory.Exists "./testfiles/performancetest2/.cwtools" then getAllFoldersUnion (["./testfiles/performancetest2/.cwtools"] |> Seq.ofList) else Seq.empty) |> Seq.collect (Directory.EnumerateFiles)
     let configFiles = configFiles |> List.ofSeq |> List.filter (fun f -> Path.GetExtension f = ".cwt")
     let configs = configFiles |> List.map (fun f -> f, File.ReadAllText(f))
+    let settings = emptyStellarisSettings "./testfiles/performancetest2/"
+    let settings = {settings with embedded = {settings.embedded with triggers = triggers; effects = effects};
+                                    rules = Some { validateRules = true; ruleFiles = configs}}
+    let stl = STLGame(settings)
 
-    let stl = STLGame("./testfiles/performancetest2/", FilesScope.All, "", triggers, effects, [], [], configs, [STL STLLang.English], false, true, true)
+    // let stl = STLGame("./testfiles/performancetest2/", FilesScope.All, "", triggers, effects, [], [], configs, [STL STLLang.English], false, true, true)
     if b then
         let errors = stl.ValidationErrors |> List.map (fun (c, s, n, l, f, k) -> n)
         let testVals = stl.AllEntities

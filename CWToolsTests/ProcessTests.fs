@@ -22,6 +22,26 @@ open CWTools.Validation.ValidationCore
 open CWTools.Utilities.Utils
 open CWTools.Games.Files
 
+
+
+let emptyStellarisSettings (rootDirectory) = {
+    rootDirectory = rootDirectory
+    scope = FilesScope.All
+    modFilter = None
+    validation = {
+        validateVanilla = false
+        experimental = true
+        langs = [STL STLLang.English]
+    }
+    rules = None
+    embedded = {
+        triggers = []
+        effects = []
+        modifiers = []
+        embeddedFiles = []        
+    }
+}
+
 [<Tests>]
 let tests =
     testList "process stl" [
@@ -240,7 +260,11 @@ let testsConfig =
             let folder = "./testfiles/configtests/completiontests"
             let triggers, effects = parseDocsFile "./testfiles/validationtests/trigger_docs_2.0.4.txt" |> (function |Success(p, _, _) -> DocsParser.processDocs p)
             let modifiers = SetupLogParser.parseLogsFile "./testfiles/validationtests/setup.log" |> (function |Success(p, _, _) -> SetupLogParser.processLogs p)
-            let stl = STLGame(folder, FilesScope.All, "", triggers, effects, modifiers, [], [configtext], [STL STLLang.English], false, true, true)
+            let settings = emptyStellarisSettings folder
+            let settings = { settings with embedded = { settings.embedded with triggers = triggers; effects = effects; modifiers = modifiers; };
+                                            rules = Some { ruleFiles = [configtext]; validateRules = true;}}
+            let stl = STLGame(settings)
+            //let stl = STLGame(folder, FilesScope.All, "", triggers, effects, modifiers, [], [configtext], [STL STLLang.English], false, true, true)
 
             let input =    "ship_size = {\n\
                             default_behavior = s \n\
@@ -255,7 +279,10 @@ let testsConfig =
             let folder = "./testfiles/configtests/completiontests"
             let triggers, effects = parseDocsFile "./testfiles/validationtests/trigger_docs_2.0.4.txt" |> (function |Success(p, _, _) -> DocsParser.processDocs p)
             let modifiers = SetupLogParser.parseLogsFile "./testfiles/validationtests/setup.log" |> (function |Success(p, _, _) -> SetupLogParser.processLogs p)
-            let stl = STLGame(folder, FilesScope.All, "", triggers, effects, modifiers, [], [configtext], [STL STLLang.English], false, true, true)
+            let settings = emptyStellarisSettings folder
+            let settings = { settings with embedded = { settings.embedded with triggers = triggers; effects = effects; modifiers = modifiers; };
+                                            rules = Some { ruleFiles = [configtext]; validateRules = true;}}
+            let stl = STLGame(settings)
 
             let input =    "ship_size = {\n\
                             default_behavior = s \n\
@@ -270,7 +297,10 @@ let testsConfig =
             let folder = "./testfiles/configtests/completiontests"
             let triggers, effects = parseDocsFile "./testfiles/validationtests/trigger_docs_2.0.4.txt" |> (function |Success(p, _, _) -> DocsParser.processDocs p)
             let modifiers = SetupLogParser.parseLogsFile "./testfiles/validationtests/setup.log" |> (function |Success(p, _, _) -> SetupLogParser.processLogs p)
-            let stl = STLGame(folder, FilesScope.All, "", triggers, effects, modifiers, [], [configtext], [STL STLLang.English], false, true, true)
+            let settings = emptyStellarisSettings folder
+            let settings = { settings with embedded = { settings.embedded with triggers = triggers; effects = effects; modifiers = modifiers; };
+                                            rules = Some { ruleFiles = [configtext]; validateRules = true;}}
+            let stl = STLGame(settings)
 
             let input =    "ship_size = {\n\
                             prerequisites = {\n\
@@ -287,7 +317,10 @@ let testsConfig =
             let folder = "./testfiles/configtests/completiontests"
             let triggers, effects = parseDocsFile "./testfiles/validationtests/trigger_docs_2.0.4.txt" |> (function |Success(p, _, _) -> DocsParser.processDocs p)
             let modifiers = SetupLogParser.parseLogsFile "./testfiles/validationtests/setup.log" |> (function |Success(p, _, _) -> SetupLogParser.processLogs p)
-            let stl = STLGame(folder, FilesScope.All, "", triggers, effects, modifiers, [], [configtext], [STL STLLang.English], false, true, true)
+            let settings = emptyStellarisSettings folder
+            let settings = { settings with embedded = { settings.embedded with triggers = triggers; effects = effects; modifiers = modifiers; };
+                                            rules = Some { ruleFiles = [configtext]; validateRules = true;}}
+            let stl = STLGame(settings)
 
             let input =    "ship_size = {\n\
                             class = \n\
