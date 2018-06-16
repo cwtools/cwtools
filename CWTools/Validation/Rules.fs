@@ -17,6 +17,7 @@ open CWTools.Common
 open CWTools.Validation.Stellaris.STLLocalisationValidation
 open CWTools.Validation.Stellaris.ScopeValidation
 open Microsoft.FSharp.Collections.Tagged
+open System.IO
 
 module rec Rules =
     type StringSet = Set<string, STLStringComparer>
@@ -335,8 +336,10 @@ module rec Rules =
         let validate ((path, root) : string * Node) =
             let inner (node : Node) =
 
-                //eprintfn "Looking for %s" (path)
-                match typedefs |> List.tryFind (fun t -> path.Replace("/","\\").StartsWith(t.path.Replace("/","\\"))) with
+                eprintfn "Looking for %s" (path)
+                let pathDir = (Path.GetDirectoryName path).Replace("/","\\")
+                eprintfn "In dir %s" pathDir
+                match typedefs |> List.tryFind (fun t -> pathDir = (t.path.Replace("/","\\"))) with
                 |Some typedef ->
                     let typerules = typeRules |> List.filter (fun (name, _, _) -> name == typedef.name)
                     //eprintfn "%A" typerules
@@ -468,7 +471,8 @@ module rec Rules =
 
         let complete (pos : pos) (node : Node) =
             let path = getRulePath pos [] node |> List.rev
-            match typedefs |> List.tryFind (fun t -> node.Position.FileName.Replace("/","\\").StartsWith(t.path.Replace("/","\\"))) with
+            let pathDir = (Path.GetDirectoryName node.Position.FileName).Replace("/","\\")
+            match typedefs |> List.tryFind (fun t -> pathDir = (t.path.Replace("/","\\"))) with
             |Some typedef ->
                 let typerules = typeRules |> List.filter (fun (name, _, _) -> name == typedef.name)
                 let fixedpath = if List.isEmpty path then path else (typedef.name, true)::(path |> List.tail)
@@ -489,7 +493,9 @@ module rec Rules =
                                     |Some f -> n.TagText f
                                     |None -> n.Key
                                 def.name::subtypes |> List.map (fun n -> n, key)
-                            e.Children |> List.collect inner)
+                            (e.Children |> List.collect inner)
+                            @
+                            (e.LeafValues |> List.ofSeq |> List.map (fun lv -> def.name, lv.Value.ToString())))
         types |> List.collect getTypeInfo |> List.fold (fun m (n, k) -> if Map.containsKey n m then Map.add n (k::m.[n]) m else Map.add n [k] m) Map.empty
 
 
