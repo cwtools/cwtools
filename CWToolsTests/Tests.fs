@@ -31,7 +31,7 @@ let emptyStellarisSettings (rootDirectory) = {
         triggers = []
         effects = []
         modifiers = []
-        embeddedFiles = []        
+        embeddedFiles = []
     }
 }
 
@@ -89,7 +89,7 @@ let tests =
         testList "no loc" [
                 let stl = STLGame(emptyStellarisSettings "./testfiles/localisationtests/gamefiles")
                 let parseErrors = stl.ParserErrors
-                let errors = stl.LocalisationErrors() |> List.map (fun (c, s, n, l, f, k) -> n)
+                let errors = stl.LocalisationErrors(true) |> List.map (fun (c, s, n, l, f, k) -> n)
                 let entities = stl.AllEntities
                 let testLocKeys = entities |> List.map (fun struct (e, _) -> e.filepath, getLocTestInfo e.entity)
                 let nodeComments = entities |> List.collect (fun struct (e, _) -> getNodeComments e.entity) |> List.map fst
@@ -120,7 +120,7 @@ let tests =
                 let parseErrors = stl.ParserErrors
                 yield testCase ("parse") <| fun () -> Expect.isEmpty parseErrors (parseErrors |> List.tryHead |> Option.map (sprintf "%A") |> Option.defaultValue "")
 
-                let errors = stl.LocalisationErrors() |> List.map (fun (c, s, n, l, f, k) -> n)
+                let errors = stl.LocalisationErrors(true) |> List.map (fun (c, s, n, l, f, k) -> n)
                 let testLocKeys = stl.AllEntities |> List.map (fun struct (e, _) -> e.filepath, getLocTestInfo e.entity)
                 let inner (file, ((req : range list), (noreq : range list), (nodekeys : range list) ))=
                     let missing = req |> List.filter (fun r -> not (errors |> List.contains r))
@@ -128,8 +128,8 @@ let tests =
                     Expect.isEmpty missing (sprintf "Missing required despite having key %s" file)
                     Expect.isEmpty (extra) (sprintf "Incorrect required %s" file)
                 yield! testLocKeys |> List.map (fun (f, t) -> testCase (f.ToString()) <| fun () -> inner (f, t))
-                eprintfn "%A" (stl.LocalisationErrors())
-                let globalLocError = stl.LocalisationErrors() |> List.filter (fun (c, s, n, l, f, k) -> c = "CW225" || c = "CW226")
+                eprintfn "%A" (stl.LocalisationErrors(true))
+                let globalLocError = stl.LocalisationErrors(true) |> List.filter (fun (c, s, n, l, f, k) -> c = "CW225" || c = "CW226")
                 yield testCase "globalLoc" <| fun () ->
                     Expect.hasCountOf globalLocError 3u (fun f -> true) "wrong number of errors"
             ]

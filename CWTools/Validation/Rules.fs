@@ -336,9 +336,7 @@ module rec Rules =
         let validate ((path, root) : string * Node) =
             let inner (node : Node) =
 
-                eprintfn "Looking for %s" (path)
                 let pathDir = (Path.GetDirectoryName path).Replace("/","\\")
-                eprintfn "In dir %s" pathDir
                 match typedefs |> List.tryFind (fun t -> pathDir = (t.path.Replace("/","\\"))) with
                 |Some typedef ->
                     let typerules = typeRules |> List.filter (fun (name, _, _) -> name == typedef.name)
