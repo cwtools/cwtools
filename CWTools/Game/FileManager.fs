@@ -15,7 +15,7 @@ module Files =
         |Mods
         |Vanilla
 
-    type FileManager(rootDirectory : string, modFilter : string option, scope : FilesScope, scriptFolders : string list) =
+    type FileManager(rootDirectory : string, modFilter : string option, scope : FilesScope, scriptFolders : string list, gameDirName : string) =
         let normalisedScopeDirectory = rootDirectory.Replace("/","\\").TrimStart('.')
         let convertPathToLogicalPath =
             fun (path : string) ->
@@ -51,10 +51,10 @@ module Files =
         do eprintfn "%s %b" rootDirectory (Directory.Exists rootDirectory)
         let allDirsBelowRoot = if Directory.Exists rootDirectory then getAllFoldersUnion [rootDirectory] |> List.ofSeq |> List.map(fun folder -> folder, Path.GetFileName folder) else []
         let stellarisDirectory =
-            let dir = allDirsBelowRoot |> List.tryFind (fun (_, folder) -> folder.ToLower() = "stellaris") |> Option.map (fst) |> Option.bind (fun f -> if Directory.Exists (f + (string Path.DirectorySeparatorChar) + "common") then Some f else None)
+            let dir = allDirsBelowRoot |> List.tryFind (fun (_, folder) -> folder.ToLower() = gameDirName) |> Option.map (fst) |> Option.bind (fun f -> if Directory.Exists (f + (string Path.DirectorySeparatorChar) + "common") then Some f else None)
             match dir with
-            |Some s -> eprintfn "Found stellaris directory at %s" s
-            |None -> eprintfn "Couldn't find stellaris directory, falling back to embedded vanilla files"
+            |Some s -> eprintfn "Found %s directory at %s" gameDirName s
+            |None -> eprintfn "Couldn't find %s directory, falling back to embedded vanilla files" gameDirName
             dir
         let mods =
             let getModFiles modDir =

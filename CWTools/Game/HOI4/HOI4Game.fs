@@ -74,7 +74,7 @@ type HOI4Game(settings : HOI4Settings) =
         "interface";
     ]
 
-    let fileManager = FileManager(settings.rootDirectory, None, FilesScope.All, scriptFolders)
+    let fileManager = FileManager(settings.rootDirectory, None, FilesScope.All, scriptFolders, "hearts of iron iv")
 
     let computeHOI4Data (e : Entity) = { temp = [] }
     let resourceManager = ResourceManager(computeHOI4Data)

@@ -14,7 +14,7 @@ open CWTools.Utilities.Utils
 open System
 open Microsoft.FSharp.Collections.Tagged
 open System.Collections
-open CWTools.Game.Stellaris.STLLookup
+open CWTools.Games.Stellaris.STLLookup
 open CWTools.Validation.Stellaris.STLValidation
 open Microsoft.FSharp.Compiler.Range
 

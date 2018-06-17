@@ -16,7 +16,8 @@ open CWTools.Common.STLConstants
 open System
 open Microsoft.FSharp.Compiler.Range
 open CWTools.Games.Files
-open CWTools.Game.Stellaris.STLLookup
+open CWTools.Games.Stellaris
+open CWTools.Games.Stellaris.STLLookup
 
 let emptyStellarisSettings (rootDirectory) = {
     rootDirectory = rootDirectory

@@ -3,7 +3,7 @@ open CWTools.Common.STLConstants
 open CWTools.Process.STLScopes
 open CWTools.Validation.Rules
 open CWTools.Validation.ValidationCore
-open CWTools.Game.Stellaris.STLLookup
+open CWTools.Games.Stellaris.STLLookup
 open FParsec
 open Microsoft.FSharp.Compiler.Range
 

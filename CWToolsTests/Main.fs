@@ -16,7 +16,9 @@ open System.IO
 open System.Reflection
 open CWTools.Parser.DocsParser
 open CWTools.Games.Files
-open CWTools.Game.Stellaris.STLLookup
+open CWTools.Games.Stellaris
+open CWTools.Games.Stellaris.STLLookup
+
 let emptyStellarisSettings (rootDirectory) = {
     rootDirectory = rootDirectory
     scope = FilesScope.All

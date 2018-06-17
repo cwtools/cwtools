@@ -21,7 +21,8 @@ open CWTools.Validation.Rules
 open CWTools.Validation.ValidationCore
 open CWTools.Utilities.Utils
 open CWTools.Games.Files
-open CWTools.Game.Stellaris.STLLookup
+open CWTools.Games.Stellaris
+open CWTools.Games.Stellaris.STLLookup
 
 
 

@@ -1,4 +1,4 @@
-namespace CWTools.Game.Stellaris
+namespace CWTools.Games.Stellaris
 open CWTools.Process.ProcessCore
 open CWTools.Parser.Types
 open CWTools.Localisation
@@ -27,8 +27,8 @@ module STLLookup =
             | ((_, _), _) -> (false, [])
         root.Children |> List.map (fun e -> e, root.All |> List.fold (findComment e.Key) (false, []) |> snd)
 
-    let updateScriptedTriggers (resources : IResourceAPI<STLComputedData>) (vanillaTriggers : Effect list) = 
-        let rawTriggers = 
+    let updateScriptedTriggers (resources : IResourceAPI<STLComputedData>) (vanillaTriggers : Effect list) =
+        let rawTriggers =
             resources.AllEntities()
             |> List.choose (function |struct (f, _) when f.filepath.Contains("scripted_triggers") -> Some (f.entity) |_ -> None)
             |> List.collect getChildrenWithComments
@@ -36,14 +36,14 @@ module STLLookup =
         let mutable final = vanillaTriggers
         let mutable i = 0
         let mutable first = true
-        let ff() = 
+        let ff() =
             i <- i + 1
             let before = final
             final <- rawTriggers |> List.map (fun t -> (STLProcess.getScriptedTriggerScope first EffectType.Trigger (final) (vanillaTriggers @ final) t) :> Effect)
             first <- false
             before = final || i > 10
         while (not (ff())) do ()
-        
+
         final @ vanillaTriggers
 
     let manualEffectScopeOverrides =
@@ -56,7 +56,7 @@ module STLLookup =
         ] |> Map.ofList
 
     let updateScriptedEffects (resources : IResourceAPI<STLComputedData>) (vanillaEffects : Effect list) (scriptedTriggers : Effect list) =
-        let rawEffects = 
+        let rawEffects =
             resources.AllEntities()
             |> List.choose (function |struct (f, _) when f.filepath.Contains("scripted_effects") -> Some (f.entity) |_ -> None)
             |> List.collect getChildrenWithComments
@@ -64,17 +64,17 @@ module STLLookup =
         let mutable final = vanillaEffects
         let mutable i = 0
         let mutable first = true
-        let ff() = 
+        let ff() =
             i <- i + 1
             let before = final
             final <- rawEffects |>  List.map (fun e -> (STLProcess.getScriptedTriggerScope first EffectType.Effect (final @ vanillaEffects) scriptedTriggers e) :> Effect)
             first <- false
             before = final || i > 10
         while (not (ff())) do ()
-        let adjustedEffects = 
-            vanillaEffects 
-            |> List.map (function | :? DocEffect as ve when manualEffectScopeOverrides.ContainsKey ve.Name -> 
+        let adjustedEffects =
+            vanillaEffects
+            |> List.map (function | :? DocEffect as ve when manualEffectScopeOverrides.ContainsKey ve.Name ->
                                     let newScopes = manualEffectScopeOverrides.[ve.Name]
                                     (DocEffect(ve.Name, newScopes, ve.Type, ve.Desc, ve.Usage)) :> Effect
-                                  | x -> x)                                        
+                                  | x -> x)
         final @ adjustedEffects

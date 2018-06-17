@@ -1,4 +1,4 @@
-namespace CWTools.Games
+namespace CWTools.Games.Stellaris
 
 open CWTools.Parser
 open System.IO
@@ -22,8 +22,9 @@ open CWTools.Parser.Types
 open CWTools.Validation.Stellaris.STLLocalisationString
 open CWTools.Utilities.Utils
 open CWTools.Validation.Stellaris.Graphics
-open CWTools.Game.Stellaris
-open CWTools.Game.Stellaris.STLLookup
+open CWTools.Games
+open CWTools.Games.Stellaris
+open CWTools.Games.Stellaris.STLLookup
 open Microsoft.FSharp.Compiler.Range
 open CWTools.Validation.Rules
 open CWTools.Parser
@@ -159,7 +160,7 @@ type STLGame (settings : StellarisSettings) =
             "gfx";
             ]
 
-        let fileManager = FileManager(settings.rootDirectory, settings.modFilter, settings.scope, scriptFolders)
+        let fileManager = FileManager(settings.rootDirectory, settings.modFilter, settings.scope, scriptFolders, "stellaris")
         let vanillaEffects =
             let se = scopedEffects |> List.map (fun e -> e :> Effect)
             let ve = settings.embedded.effects |> addInnerScope |> List.map (fun e -> e :> Effect)
