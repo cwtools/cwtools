@@ -9,12 +9,13 @@ open CWTools.Common.STLConstants
 open CWTools.Common
 open CWTools.Process.STLScopes
 open CWTools.Parser.ConfigParser
+open Microsoft.FSharp.Compiler.Range
 
 
 
 type Lookup() =
     member val scriptedTriggers : Effect list = [] with get, set
-    
+
     member val scriptedEffects : Effect list = [] with get, set
     member val staticModifiers : Modifier list = [] with get, set
     member val coreModifiers : Modifier list = [] with get, set
@@ -25,4 +26,4 @@ type Lookup() =
     member val configRules : RootRule list = [] with get, set
     member val typeDefs : TypeDefinition list = [] with get, set
     member val enumDefs : Map<string, string list> = Map.empty with get, set
-    member val typeDefInfo : Map<string, string list> = Map.empty with get, set
+    member val typeDefInfo : Map<string, (string * range) list> = Map.empty with get, set

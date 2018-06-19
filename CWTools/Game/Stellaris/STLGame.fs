@@ -375,6 +375,7 @@ type STLGame (settings : StellarisSettings) =
             eprintfn "Update Time: %i" timer.ElapsedMilliseconds
             res
         let mutable completionService : CompletionService option = None
+        let mutable infoService : TypeInfo option = None
         let completion (pos : pos) (filepath : string) (filetext : string) =
             // let filepath = Path.GetFullPath(filepath).Replace("/","\\")
             // match resources.AllEntities() |> List.tryFind (fun struct (e, _) -> e.filepath == filepath) with
@@ -384,12 +385,22 @@ type STLGame (settings : StellarisSettings) =
             // |None -> []
             let split = filetext.Split('\n')
             let filetext = split |> Array.mapi (fun i s -> if i = (pos.Line - 1) then eprintfn "%s" s; s.Insert(pos.Column, "x") else s) |> String.concat "\n"
-            match resourceManager.ManualProcess (fileManager.ConvertPathToLogicalPath filepath) filetext, completionService with
-            |Some e, Some completion ->
+            match resourceManager.ManualProcess (fileManager.ConvertPathToLogicalPath filepath) filetext, completionService, infoService with
+            |Some e, Some completion, Some info ->
                 eprintfn "completion %A %A" (fileManager.ConvertPathToLogicalPath filepath) filepath
                 eprintfn "scope at cursor %A" (getScopeContextAtPos pos lookup.scriptedTriggers lookup.scriptedEffects e)
                 completion.Complete(pos, e)
-            |_, _ -> []
+            |_, _, _ -> []
+
+        let getInfoAtPos (pos : pos) (filepath : string) (filetext : string) =
+            match resourceManager.ManualProcess (fileManager.ConvertPathToLogicalPath filepath) filetext, infoService with
+            |Some e, Some info ->
+                eprintfn "getInfo %A %A" (fileManager.ConvertPathToLogicalPath filepath) filepath
+                match info.GetInfo(pos, e) with
+                |Some (t, tv) -> lookup.typeDefInfo.[t] |> List.tryPick (fun (n, v) -> if n = tv then Some v else None)
+                |None -> None
+            |_, _ -> None
+
 
         let scopesAtPos (pos : pos) (filepath : string) (filetext : string) =
             let split = filetext.Split('\n')
@@ -424,6 +435,7 @@ type STLGame (settings : StellarisSettings) =
             let loc = allLocalisation() |> List.groupBy (fun l -> l.GetLang) |> List.map (fun (k, g) -> k, g |>List.collect (fun ls -> ls.GetKeys) |> Set.ofList )
             let files = resources.GetResources() |> List.choose (function |FileResource (_, f) -> Some f.logicalpath |EntityResource (_, f) -> Some f.logicalpath) |> Set.ofList
             completionService <- Some (CompletionService(lookup.configRules, lookup.typeDefs, lookup.typeDefInfo, lookup.enumDefs))
+            infoService <- Some (TypeInfo(lookup.configRules, lookup.typeDefs, lookup.typeDefInfo, lookup.enumDefs, loc, files, lookup.scriptedTriggers, lookup.scriptedEffects))
             ruleApplicator <- Some (RuleApplicator(lookup.configRules, lookup.typeDefs, lookup.typeDefInfo, lookup.enumDefs, loc, files, lookup.scriptedTriggers, lookup.scriptedEffects))
         interface IGame<STLComputedData> with
         //member __.Results = parseResults
@@ -455,6 +467,7 @@ type STLGame (settings : StellarisSettings) =
             member __.References() = References<STLComputedData>(resources, lookup, (localisationAPIs |> List.map snd))
             member __.Complete pos file text = completion pos file text
             member __.ScopesAtPos pos file text = scopesAtPos pos file text
+            member __.GoToType pos file text = getInfoAtPos pos file text
 
 
             //member __.ScriptedTriggers = parseResults |> List.choose (function |Pass(f, p, t) when f.Contains("scripted_triggers") -> Some p |_ -> None) |> List.map (fun t -> )

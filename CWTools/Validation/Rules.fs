@@ -82,7 +82,7 @@ module rec Rules =
             subtypes : string list
             scopes : ScopeContext
         }
-    type RuleApplicator(rootRules : RootRule list, typedefs : TypeDefinition list , types : Collections.Map<string, string list>, enums : Collections.Map<string, string list>, localisation : (Lang * Collections.Set<string>) list, files : Collections.Set<string>, triggers : Effect list, effects : Effect list) =
+    type RuleApplicator(rootRules : RootRule list, typedefs : TypeDefinition list , types : Collections.Map<string, (string * range) list>, enums : Collections.Map<string, string list>, localisation : (Lang * Collections.Set<string>) list, files : Collections.Set<string>, triggers : Effect list, effects : Effect list) =
         let triggerMap = triggers |> List.map (fun e -> e.Name, e) |> (fun l -> EffectMap.FromList(InsensitiveStringComparer(), l))
         let effectMap = effects |> List.map (fun e -> e.Name, e) |> (fun l -> EffectMap.FromList(InsensitiveStringComparer(), l))
 
@@ -93,7 +93,7 @@ module rec Rules =
                         |> Collections.Map.ofList
         let typeRules =
             rootRules |> List.choose (function |TypeRule (rs) -> Some (rs) |_ -> None)
-        let typesMap = types |> (Map.map (fun _ s -> StringSet.Create(InsensitiveStringComparer(), s)))
+        let typesMap = types |> (Map.map (fun _ s -> StringSet.Create(InsensitiveStringComparer(), (s |> List.map fst))))
         let enumsMap = enums |> (Map.map (fun _ s -> StringSet.Create(InsensitiveStringComparer(), s)))
 
         let isValidValue (value : Value) =
@@ -362,13 +362,197 @@ module rec Rules =
         member __.RuleValidate : StructureValidator =
             fun _ es -> es.Raw |> List.map (fun struct(e, _) -> e.logicalpath, e.entity) <&!!&> validate
 
+    type TypeInfo(rootRules : RootRule list, typedefs : TypeDefinition list , types : Collections.Map<string, (string * range) list>, enums : Collections.Map<string, string list>, localisation : (Lang * Collections.Set<string>) list, files : Collections.Set<string>, triggers : Effect list, effects : Effect list) =
+        let triggerMap = triggers |> List.map (fun e -> e.Name, e) |> (fun l -> EffectMap.FromList(InsensitiveStringComparer(), l))
+        let effectMap = effects |> List.map (fun e -> e.Name, e) |> (fun l -> EffectMap.FromList(InsensitiveStringComparer(), l))
 
-    type CompletionService(rootRules : RootRule list, typedefs : TypeDefinition list , types : Collections.Map<string, string list>, enums : Collections.Map<string, string list>) =
+        let aliases =
+            rootRules |> List.choose (function |AliasRule (a, rs) -> Some (a, rs) |_ -> None)
+                        |> List.groupBy fst
+                        |> List.map (fun (k, vs) -> k, vs |> List.map snd)
+                        |> Collections.Map.ofList
+
+        let typeRules =
+            rootRules |> List.choose (function |TypeRule (rs) -> Some (rs) |_ -> None)
+        let typesMap = types |> (Map.map (fun _ s -> StringSet.Create(InsensitiveStringComparer(), (s |> List.map fst))))
+        let enumsMap = enums |> (Map.map (fun _ s -> StringSet.Create(InsensitiveStringComparer(), s)))
+
+        let rec getInfoFromNode (pos : pos) (ctx : RuleContext) (options : Options) (rule : Field) (node : Node) =
+            eprintfn "%A %A" rule node.Key
+            let newCtx =
+                match oneToOneScopes |> List.tryFind (fun (k, _) -> k == node.Key) with
+                |Some (_, f) ->
+                    match f (ctx.scopes, false) with
+                    |(s, true) -> {ctx with scopes = {ctx.scopes with Scopes = s.CurrentScope::ctx.scopes.Scopes}}
+                    |(s, false) -> {ctx with scopes = s}
+                |None ->
+                    match options.pushScope with
+                    |Some ps ->
+                        {ctx with scopes = {ctx.scopes with Scopes = ps::ctx.scopes.Scopes}}
+                    |None ->
+                        if node.Key.StartsWith("event_target:", System.StringComparison.OrdinalIgnoreCase) || node.Key.StartsWith("parameter:", System.StringComparison.OrdinalIgnoreCase)
+                        then {ctx with scopes = {ctx.scopes with Scopes = Scope.Any::ctx.scopes.Scopes}}
+                        else ctx
+            match rule with
+            | Field.LeftTypeField (t, f) -> getInfoFromNode pos newCtx options f node
+            | Field.ClauseField rs -> getInfoFromPos pos rs newCtx node
+            | Field.LeftClauseField (_, rs) -> getInfoFromPos pos rs newCtx node
+            | Field.LeftScopeField rs -> getInfoFromPos pos rs newCtx node
+            | _ -> None
+
+
+        and getRulePath (pos : pos) (stack : (string * bool) list) (node : Node) =
+           match node.Children |> List.tryFind (fun c -> Range.rangeContainsPos c.Position pos) with
+           | Some c -> getRulePath pos ((c.Key, false) :: stack) c
+           | None ->
+                match node.Leaves |> Seq.tryFind (fun l -> Range.rangeContainsPos l.Position pos) with
+                | Some l -> (l.Key, true)::stack
+                | None -> stack
+        and getInfoFromLeaf (pos : pos) (field : Field) (ctx : RuleContext) (leaf : Leaf) =
+            //let valueMatch =
+            //TODO check if on left or right hand side of value
+            eprintfn "%A %A" field leaf.Key
+            match field with
+            |Field.TypeField t -> Some (t, leaf.Value.ToString())
+            |_ -> None
+        and getInfoFromPos (pos : pos) (rules : Rule list) (ctx : RuleContext) (node : Node) =
+            eprintfn "ifp %A" node.Key
+            let subtypedrules =
+                rules |> List.collect (fun (s,o,r) -> r |> (function |SubtypeField (key, shouldMatch, ClauseField cfs) -> (if (not shouldMatch) <> List.contains key ctx.subtypes then cfs else []) | x -> [(s, o, x)]))
+            let expandedrules =
+                subtypedrules |> List.collect (
+                    function
+                    | _,_,(AliasField a) -> (aliases.TryFind a |> Option.defaultValue [])
+                    |x -> [x])
+
+            let childMatch = node.Children |> List.tryFind (fun c -> Range.rangeContainsPos c.Position pos)
+            let leafMatch = node.Leaves |> Seq.tryFind (fun l -> Range.rangeContainsPos l.Position pos)
+            let leafValueMatch = node.LeafValues |> Seq.tryFind (fun lv -> Range.rangeContainsPos lv.Position pos)
+            eprintfn "%A %A %A" childMatch leafMatch leafValueMatch
+            match childMatch, leafMatch, leafValueMatch with
+            |Some c, _, _ ->
+                eprintfn "%A" expandedrules
+                match expandedrules |> List.filter (fst3 >> (==) c.Key) with
+                | [] ->
+                    let leftClauseRule =
+                        expandedrules |>
+                        List.filter (function |(_, _, LeftClauseField (vt, _)) -> checkValidLeftClauseRule enumsMap (LeftClauseField (vt, [])) c.Key  |_ -> false )
+                    let leftTypeRule =
+                        expandedrules |>
+                        List.filter (function |(_, _, LeftTypeField (t, r)) -> checkValidLeftTypeRule typesMap (LeftTypeField (t, r)) c.Key  |_ -> false )
+                    let leftScopeRule =
+                        expandedrules |>
+                        List.filter (function |(_, _, LeftScopeField (rs)) -> checkValidLeftScopeRule scopes (LeftScopeField (rs)) c.Key  |_ -> false )
+                    let leftRules = leftClauseRule @ leftTypeRule @ leftScopeRule
+                    match leftRules with
+                    |[] -> None
+                    |rs -> rs |> List.fold (fun acc (_, o, f) -> acc |> Option.orElse (getInfoFromNode pos ctx o f c)) None
+                | rs -> eprintfn "%A" rs; rs |> List.fold (fun acc (_, o, f) -> acc |> Option.orElse (getInfoFromNode pos ctx o f c)) None
+                // match field with
+                // |Field.ClauseField
+                // |Field.LeftClauseField
+                // |Field.
+            |_, Some l, _ ->
+                match expandedrules |> List.filter (fst3 >> (==) l.Key) with
+                |[] ->
+                    let leftTypeRule =
+                        expandedrules |>
+                        List.tryFind (function |(_, _, LeftTypeField (t, r)) -> checkValidLeftTypeRule typesMap (LeftTypeField (t, r)) l.Key  |_ -> false )
+                    match leftTypeRule with
+                    |Some (_, _, f) -> getInfoFromLeaf pos f ctx l
+                    |_ -> None
+                |rs -> rs |> List.fold (fun acc (_, o, f) -> acc |> Option.orElse (getInfoFromLeaf pos f ctx l)) None
+
+                // match rule with
+                // | Field.ValueField v -> applyValueField v leaf
+                // | Field.ObjectField et -> applyObjectField et leaf
+                // | Field.TypeField t -> applyTypeField t leaf
+                // | Field.LeftTypeField (t, f) -> applyLeftTypeFieldLeaf t leaf <&&> applyLeafRule root ctx f leaf
+                // | Field.ScopeField s -> applyScopeField root ctx s leaf
+                // | Field.LocalisationField synced -> checkLocalisationField localisation synced leaf
+                // | Field.FilepathField -> checkFileExists files leaf
+                // |_ -> None
+                // getInfoFromLeaf pos field ctx l
+            |_, _, Some lv ->
+                None
+            |_ -> //Key match!
+                None
+
+        //and getInfoFromPath (rules : Rule list) (stack : (string * bool) list) =
+            // let rec findRule (rules : Rule list) (stack) =
+            //     let expandedRules =
+            //         rules |> List.collect (
+            //             function
+            //             | _,_,(AliasField a) -> (aliases.TryFind a |> Option.defaultValue [])
+            //             | _,_,(SubtypeField (_, _, (ClauseField cf))) -> cf
+            //             |x -> [x])
+            //     match stack with
+            //     |[] -> []//expandedRules |> List.collect convRuleToCompletion
+            //     |(key, isLeaf)::rest ->
+            //         let fieldToRules (field : Field) =
+            //             match field with
+            //             //|Field.EffectField -> findRule rootRules rest
+            //             |Field.ClauseField rs -> findRule rs rest
+            //             |Field.LeftClauseField (_, rs) -> findRule rs rest
+            //             |Field.ObjectField et ->
+            //                 match et with
+            //                 |EntityType.ShipSizes -> [Simple "large"; Simple "medium"]
+            //                 |_ -> []
+            //             |Field.ValueField (Enum e) -> if isLeaf then enums.TryFind(e) |> Option.defaultValue [] |> List.map Simple else []
+            //             |Field.ValueField v -> if isLeaf then getValidValues v |> Option.defaultValue [] |> List.map Simple else []
+            //             |Field.TypeField t -> if isLeaf then types.TryFind(t) |> Option.defaultValue [] |> List.map Simple else []
+            //             |_ -> []
+
+            //         match expandedRules |> List.filter (fun (k,_,_) -> k == key) with
+            //         |[] ->
+            //             let leftClauseRule =
+            //                 expandedRules |>
+            //                 List.tryFind (function |(_, _, LeftClauseField (vt, _)) -> checkValidLeftClauseRule enumsMap (LeftClauseField (vt, [])) key  |_ -> false )
+            //             let leftTypeRule =
+            //                 expandedRules |>
+            //                 List.tryFind (function |(_, _, LeftTypeField (vt, f)) -> checkValidLeftTypeRule typesMap (LeftTypeField (vt, f)) key  |_ -> false )
+            //             match leftClauseRule, leftTypeRule with
+            //             |Some (_, _, f), _ ->
+            //                 match f with
+            //                 |Field.LeftClauseField (_, rs) -> findRule rs rest
+            //                 |_ -> expandedRules |> List.collect convRuleToCompletion
+            //             |_, Some (_, _, f) ->
+            //                 match f with
+            //                 |Field.LeftTypeField (_, rs) -> fieldToRules rs
+            //                 |_ -> expandedRules |> List.collect convRuleToCompletion
+            //             |None, None ->
+            //                 expandedRules |> List.collect convRuleToCompletion
+            //         |fs -> fs |> List.collect (fun (_, _, f) -> fieldToRules f)
+            // findRule rules stack |> List.distinct
+
+
+
+        let getInfo (pos : pos) (node : Node) =
+            let ctx = {subtypes = []; scopes = defaultContext }
+            let path = getRulePath pos [] node |> List.rev
+            let pathDir = (Path.GetDirectoryName node.Position.FileName).Replace("/","\\")
+            let childMatch = node.Children |> List.tryFind (fun c -> Range.rangeContainsPos c.Position pos)
+            eprintfn "%O %A %A" pos pathDir (typedefs |> List.tryHead)
+            match childMatch, typedefs |> List.tryFind (fun t -> pathDir = (t.path.Replace("/","\\"))) with
+            |Some c, Some typedef ->
+                let typerules = typeRules |> List.filter (fun (name, _, _) -> name == typedef.name)
+                match typerules with
+                |[(_, _, ClauseField rs)] ->
+                    eprintfn "%A %O" typedef rs
+                    let completion = getInfoFromPos pos rs ctx c
+                    completion
+                |_ -> None
+            |_, _ -> None
+        member __.GetInfo(pos : pos, node : Node) = getInfo pos node
+
+
+    type CompletionService(rootRules : RootRule list, typedefs : TypeDefinition list , types : Collections.Map<string, (string * range) list>, enums : Collections.Map<string, string list>) =
         let aliases =
             rootRules |> List.choose (function |AliasRule (a, rs) -> Some (a, rs) |_ -> None)
         let typeRules =
             rootRules |> List.choose (function |TypeRule (rs) -> Some (rs) |_ -> None)
-        let typesMap = types |> (Map.map (fun _ s -> StringSet.Create(InsensitiveStringComparer(), s)))
+        let typesMap = types |> (Map.map (fun _ s -> StringSet.Create(InsensitiveStringComparer(), (s |> List.map fst))))
+        let types = types |> Map.map (fun k s -> s |> List.map fst)
         let enumsMap = enums |> (Map.map (fun _ s -> StringSet.Create(InsensitiveStringComparer(), s)))
 
         let fieldToCompletionList (field : Field) =
@@ -490,10 +674,10 @@ module rec Rules =
                                     match def.nameField with
                                     |Some f -> n.TagText f
                                     |None -> n.Key
-                                def.name::subtypes |> List.map (fun n -> n, key)
+                                def.name::subtypes |> List.map (fun s -> s, (key, n.Position))
                             (e.Children |> List.collect inner)
                             @
-                            (e.LeafValues |> List.ofSeq |> List.map (fun lv -> def.name, lv.Value.ToString())))
+                            (e.LeafValues |> List.ofSeq |> List.map (fun lv -> def.name, (lv.Value.ToString(), lv.Position))))
         types |> List.collect getTypeInfo |> List.fold (fun m (n, k) -> if Map.containsKey n m then Map.add n (k::m.[n]) m else Map.add n [k] m) Map.empty
 
 

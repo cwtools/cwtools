@@ -19,6 +19,7 @@ type IGame =
     abstract UpdateFile : string -> string option -> CWError list
     abstract Complete : pos -> string -> string -> CompletionResponse list
     abstract ScopesAtPos : pos -> string -> string -> ScopeContext option
+    abstract GoToType : pos -> string -> string -> range option
 
 type IGame<'T> =
     inherit IGame
