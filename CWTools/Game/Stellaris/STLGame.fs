@@ -294,7 +294,7 @@ type STLGame (settings : StellarisSettings) =
 
             let validators = [validateVariables, "var"; valTechnology, "tech"; validateTechnologies, "tech2"; valButtonEffects, "but"; valSprites, "sprite"; valVariables, "var2"; valEventCalls, "event";
                                 validateAmbientGraphics, "ambient"; validateShipDesigns, "designs"; validateMixedBlocks, "mixed"; validateSolarSystemInitializers, "solar"; validateAnomaly210, "anom";
-                                validateIfElse210, "ifelse"; validateIfElse, "ifelse2"; validatePlanetKillers, "pk"]
+                                validateIfElse210, "ifelse"; validateIfElse, "ifelse2"; validatePlanetKillers, "pk"; validateRedundantAND, "AND"]
             let validators = if useRules && ruleApplicator.IsSome then (ruleApplicator.Value.RuleValidate, "rules")::validators else validators
             let experimentalvalidators = [valSectionGraphics, "sections"; valComponentGraphics, "component"; ]
             let oldEntities = EntitySet (resources.AllEntities())
@@ -397,18 +397,22 @@ type STLGame (settings : StellarisSettings) =
             |Some e, Some info ->
                 eprintfn "getInfo %A %A" (fileManager.ConvertPathToLogicalPath filepath) filepath
                 match info.GetInfo(pos, e) with
-                |Some (t, tv) -> lookup.typeDefInfo.[t] |> List.tryPick (fun (n, v) -> if n = tv then Some v else None)
-                |None -> None
+                |Some (_, Some (t, tv)) -> lookup.typeDefInfo.[t] |> List.tryPick (fun (n, v) -> if n = tv then Some v else None)
+                |_ -> None
             |_, _ -> None
 
 
         let scopesAtPos (pos : pos) (filepath : string) (filetext : string) =
             let split = filetext.Split('\n')
             let filetext = split |> Array.mapi (fun i s -> if i = (pos.Line - 1) then eprintfn "%s" s; s.Insert(pos.Column, "x") else s) |> String.concat "\n"
-            match resourceManager.ManualProcess (fileManager.ConvertPathToLogicalPath filepath) filetext with
-            |Some e ->
-                getScopeContextAtPos pos lookup.scriptedTriggers lookup.scriptedEffects e
-            |None -> None
+            match resourceManager.ManualProcess (fileManager.ConvertPathToLogicalPath filepath) filetext, infoService with
+            |Some e, Some info ->
+                match info.GetInfo(pos, e) with
+                |Some (ctx, _) when ctx.scopes <> { Root = Scope.Any; From = []; Scopes = [] } -> Some (ctx.scopes)
+                |_ -> getScopeContextAtPos pos lookup.scriptedTriggers lookup.scriptedEffects e
+            |Some e, _ -> getScopeContextAtPos pos lookup.scriptedTriggers lookup.scriptedEffects e
+            |_ -> None
+
 
         do
             eprintfn "Parsing %i files" (fileManager.AllFilesByPath().Length)
@@ -435,8 +439,8 @@ type STLGame (settings : StellarisSettings) =
             let loc = allLocalisation() |> List.groupBy (fun l -> l.GetLang) |> List.map (fun (k, g) -> k, g |>List.collect (fun ls -> ls.GetKeys) |> Set.ofList )
             let files = resources.GetResources() |> List.choose (function |FileResource (_, f) -> Some f.logicalpath |EntityResource (_, f) -> Some f.logicalpath) |> Set.ofList
             completionService <- Some (CompletionService(lookup.configRules, lookup.typeDefs, lookup.typeDefInfo, lookup.enumDefs))
-            infoService <- Some (FoldRules(lookup.configRules, lookup.typeDefs, lookup.typeDefInfo, lookup.enumDefs, loc, files, lookup.scriptedTriggers, lookup.scriptedEffects))
             ruleApplicator <- Some (RuleApplicator(lookup.configRules, lookup.typeDefs, lookup.typeDefInfo, lookup.enumDefs, loc, files, lookup.scriptedTriggers, lookup.scriptedEffects))
+            infoService <- Some (FoldRules(lookup.configRules, lookup.typeDefs, lookup.typeDefInfo, lookup.enumDefs, loc, files, lookup.scriptedTriggers, lookup.scriptedEffects, ruleApplicator.Value))
         interface IGame<STLComputedData> with
         //member __.Results = parseResults
             member __.ParserErrors() = parseErrors()

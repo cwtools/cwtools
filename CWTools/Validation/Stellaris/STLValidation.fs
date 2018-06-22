@@ -671,3 +671,12 @@ module STLValidation =
                         match res with |None -> children |Some r -> r <&&> children
                 )
             codeBlocks <&!!&> (foldNode2 fNode (<&&>) OK)
+
+    let validateRedundantAND : StructureValidator =
+        fun _ es ->
+            let effects = (es.AllEffects |> List.map (fun n -> n :> Node))
+            let triggers = (es.AllTriggers |> List.map (fun n -> n :> Node))
+            let fNode =
+                fun (x : Node) ->
+                    if x.Has "and" then Invalid [inv ErrorCodes.UnnecessaryAND x] else OK
+            (effects <&!&> fNode) <&&> (triggers <&!&> fNode)
