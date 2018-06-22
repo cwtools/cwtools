@@ -72,7 +72,7 @@ module rec ConfigParser =
         nameTree : Node
     }
 
-    let defaultOptions = { min = 0; max = 100; leafvalue = false; description = None; pushScope = None }
+    let defaultOptions = { min = 0; max = 1000; leafvalue = false; description = None; pushScope = None }
     let requiredSingle = { defaultOptions with min = 1; max = 1 }
     let requiredMany = { defaultOptions with min = 1; max = 100 }
     let optionalSingle = { defaultOptions with min = 0; max = 1 }
@@ -145,7 +145,9 @@ module rec ConfigParser =
             |Some c ->
                 let nums = c.Substring(c.IndexOf "=" + 1).Trim().Split([|".."|], 2, StringSplitOptions.None)
                 try
-                    ((int nums.[0]), (int nums.[1]))
+                    match nums.[0], nums.[1] with
+                    |min, "inf" -> (int min), 1000
+                    |min, max -> (int min), (int max)
                 with
                 |_ -> 1, 1
             |None -> 1, 1

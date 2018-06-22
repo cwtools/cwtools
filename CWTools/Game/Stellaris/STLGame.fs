@@ -375,7 +375,7 @@ type STLGame (settings : StellarisSettings) =
             eprintfn "Update Time: %i" timer.ElapsedMilliseconds
             res
         let mutable completionService : CompletionService option = None
-        let mutable infoService : TypeInfo option = None
+        let mutable infoService : FoldRules option = None
         let completion (pos : pos) (filepath : string) (filetext : string) =
             // let filepath = Path.GetFullPath(filepath).Replace("/","\\")
             // match resources.AllEntities() |> List.tryFind (fun struct (e, _) -> e.filepath == filepath) with
@@ -435,7 +435,7 @@ type STLGame (settings : StellarisSettings) =
             let loc = allLocalisation() |> List.groupBy (fun l -> l.GetLang) |> List.map (fun (k, g) -> k, g |>List.collect (fun ls -> ls.GetKeys) |> Set.ofList )
             let files = resources.GetResources() |> List.choose (function |FileResource (_, f) -> Some f.logicalpath |EntityResource (_, f) -> Some f.logicalpath) |> Set.ofList
             completionService <- Some (CompletionService(lookup.configRules, lookup.typeDefs, lookup.typeDefInfo, lookup.enumDefs))
-            infoService <- Some (TypeInfo(lookup.configRules, lookup.typeDefs, lookup.typeDefInfo, lookup.enumDefs, loc, files, lookup.scriptedTriggers, lookup.scriptedEffects))
+            infoService <- Some (FoldRules(lookup.configRules, lookup.typeDefs, lookup.typeDefInfo, lookup.enumDefs, loc, files, lookup.scriptedTriggers, lookup.scriptedEffects))
             ruleApplicator <- Some (RuleApplicator(lookup.configRules, lookup.typeDefs, lookup.typeDefInfo, lookup.enumDefs, loc, files, lookup.scriptedTriggers, lookup.scriptedEffects))
         interface IGame<STLComputedData> with
         //member __.Results = parseResults
