@@ -300,9 +300,26 @@ module rec Rules =
                     |Some ps ->
                         {ctx with scopes = {ctx.scopes with Scopes = ps::ctx.scopes.Scopes}}
                     |None ->
-                        if node.Key.StartsWith("event_target:", System.StringComparison.OrdinalIgnoreCase) || node.Key.StartsWith("parameter:", System.StringComparison.OrdinalIgnoreCase)
-                        then {ctx with scopes = {ctx.scopes with Scopes = Scope.Any::ctx.scopes.Scopes}}
-                        else ctx
+                        match options.replaceScopes with
+                        |Some rs ->
+                            let newctx =
+                                match rs.this, rs.froms with
+                                |Some this, Some froms ->
+                                    {ctx with scopes = {ctx.scopes with Scopes = this::(ctx.scopes.PopScope); From = froms}}
+                                |Some this, None ->
+                                    {ctx with scopes = {ctx.scopes with Scopes = this::(ctx.scopes.PopScope)}}
+                                |None, Some froms ->
+                                    {ctx with scopes = {ctx.scopes with From = froms}}
+                                |None, None ->
+                                    ctx
+                            match rs.root with
+                            |Some root ->
+                                {ctx with scopes = {ctx.scopes with Root = root}}
+                            |None -> newctx
+                        |None ->
+                            if node.Key.StartsWith("event_target:", System.StringComparison.OrdinalIgnoreCase) || node.Key.StartsWith("parameter:", System.StringComparison.OrdinalIgnoreCase)
+                            then {ctx with scopes = {ctx.scopes with Scopes = Scope.Any::ctx.scopes.Scopes}}
+                            else ctx
             match rule with
             | Field.ValueField v -> OK
             | Field.ObjectField et -> OK
@@ -475,11 +492,28 @@ module rec Rules =
                         |None ->
                             match options.pushScope with
                             |Some ps ->
-                                {c with scopes = {c.scopes with Scopes = ps::c.scopes.Scopes}}
+                                {ctx with scopes = {ctx.scopes with Scopes = ps::ctx.scopes.Scopes}}
                             |None ->
-                                if n.Key.StartsWith("event_target:", System.StringComparison.OrdinalIgnoreCase) || n.Key.StartsWith("parameter:", System.StringComparison.OrdinalIgnoreCase)
-                                then {c with scopes = {c.scopes with Scopes = Scope.Any::c.scopes.Scopes}}
-                                else c
+                                match options.replaceScopes with
+                                |Some rs ->
+                                    let newctx =
+                                        match rs.this, rs.froms with
+                                        |Some this, Some froms ->
+                                            {ctx with scopes = {ctx.scopes with Scopes = this::(ctx.scopes.PopScope); From = froms}}
+                                        |Some this, None ->
+                                            {ctx with scopes = {ctx.scopes with Scopes = this::(ctx.scopes.PopScope)}}
+                                        |None, Some froms ->
+                                            {ctx with scopes = {ctx.scopes with From = froms}}
+                                        |None, None ->
+                                            ctx
+                                    match rs.root with
+                                    |Some root ->
+                                        {newctx with scopes = {newctx.scopes with Root = root}}
+                                    |None -> newctx
+                                |None ->
+                                    if node.Key.StartsWith("event_target:", System.StringComparison.OrdinalIgnoreCase) || node.Key.StartsWith("parameter:", System.StringComparison.OrdinalIgnoreCase)
+                                    then {ctx with scopes = {ctx.scopes with Scopes = Scope.Any::ctx.scopes.Scopes}}
+                                    else ctx
                     match f with
                     | Field.LeftTypeField (t, f) -> inner f newCtx n
                     | Field.ClauseField rs -> newCtx, res
@@ -535,9 +569,21 @@ module rec Rules =
                     |Some ps ->
                         {ctx with scopes = {ctx.scopes with Scopes = ps::ctx.scopes.Scopes}}
                     |None ->
-                        if node.Key.StartsWith("event_target:", System.StringComparison.OrdinalIgnoreCase) || node.Key.StartsWith("parameter:", System.StringComparison.OrdinalIgnoreCase)
-                        then {ctx with scopes = {ctx.scopes with Scopes = Scope.Any::ctx.scopes.Scopes}}
-                        else ctx
+                        match options.replaceScopes with
+                        |Some rs ->
+                            match rs.this, rs.froms with
+                            |Some this, Some froms ->
+                                {ctx with scopes = {ctx.scopes with Scopes = this::(ctx.scopes.PopScope); From = froms}}
+                            |Some this, None ->
+                                {ctx with scopes = {ctx.scopes with Scopes = this::(ctx.scopes.PopScope)}}
+                            |None, Some froms ->
+                                {ctx with scopes = {ctx.scopes with From = froms}}
+                            |None, None ->
+                                ctx
+                        |None ->
+                            if node.Key.StartsWith("event_target:", System.StringComparison.OrdinalIgnoreCase) || node.Key.StartsWith("parameter:", System.StringComparison.OrdinalIgnoreCase)
+                            then {ctx with scopes = {ctx.scopes with Scopes = Scope.Any::ctx.scopes.Scopes}}
+                            else ctx
             match rule with
             | Field.LeftTypeField (t, f) -> getInfoFromNode pos newCtx options f node
             | Field.ClauseField rs -> getInfoFromPos pos rs newCtx node

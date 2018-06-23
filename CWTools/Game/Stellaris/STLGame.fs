@@ -239,7 +239,7 @@ type STLGame (settings : StellarisSettings) =
             match settings.rules with
             |Some rulesSettings ->
                 let rules, types, enums, complexenums = rulesSettings.ruleFiles |> List.fold (fun (rs, ts, es, ces) (fn, ft) -> let r2, t2, e2, ce2 = parseConfig fn ft in rs@r2, ts@t2, es@e2, ces@ce2) ([], [], [], [])
-                let rulesWithMod = rules @ (lookup.coreModifiers |> List.map (fun c -> AliasRule ("modifier", Rule(c.tag, {min = 0; max = 100; leafvalue = false; description = None; pushScope = None}, ValueField (ValueType.Float (-100000.0, 100000.0))))))
+                let rulesWithMod = rules @ (lookup.coreModifiers |> List.map (fun c -> AliasRule ("modifier", Rule(c.tag, {min = 0; max = 100; leafvalue = false; description = None; pushScope = None; replaceScopes = None}, ValueField (ValueType.Float (-100000.0, 100000.0))))))
                 let complexEnumDefs = getEnumsFromComplexEnums complexenums (resources.AllEntities() |> List.map (fun struct(e,_) -> e))
                 let allEnums = enums @ complexEnumDefs
                 lookup.configRules <- rulesWithMod
@@ -404,7 +404,7 @@ type STLGame (settings : StellarisSettings) =
 
         let scopesAtPos (pos : pos) (filepath : string) (filetext : string) =
             let split = filetext.Split('\n')
-            let filetext = split |> Array.mapi (fun i s -> if i = (pos.Line - 1) then eprintfn "%s" s; s.Insert(pos.Column, "x") else s) |> String.concat "\n"
+            //let filetext = split |> Array.mapi (fun i s -> if i = (pos.Line - 1) then eprintfn "%s" s; s.Insert(pos.Column, "x") else s) |> String.concat "\n"
             match resourceManager.ManualProcess (fileManager.ConvertPathToLogicalPath filepath) filetext, infoService with
             |Some e, Some info ->
                 match info.GetInfo(pos, e) with

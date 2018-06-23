@@ -33,6 +33,7 @@ module rec ConfigParser =
         leafvalue : bool
         description : string option
         pushScope : Scope option
+        replaceScopes : ReplaceScopes option
     }
     type Rule = string * Options * Field
     type Field =
@@ -52,6 +53,11 @@ module rec ConfigParser =
     | AliasRule of string * Rule
     | TypeRule of Rule
     type EffectRule = Rule // Add scopes
+    type ReplaceScopes = {
+        root : Scope option
+        this : Scope option
+        froms : Scope list option
+    }
     type SubTypeDefinition = {
         name : string
         rules : Rule list
@@ -72,7 +78,7 @@ module rec ConfigParser =
         nameTree : Node
     }
 
-    let defaultOptions = { min = 0; max = 1000; leafvalue = false; description = None; pushScope = None }
+    let defaultOptions = { min = 0; max = 1000; leafvalue = false; description = None; pushScope = None; replaceScopes = None }
     let requiredSingle = { defaultOptions with min = 1; max = 1 }
     let requiredMany = { defaultOptions with min = 1; max = 100 }
     let optionalSingle = { defaultOptions with min = 0; max = 1 }
@@ -159,7 +165,28 @@ module rec ConfigParser =
             match comments |> List.tryFind (fun s -> s.Contains("push_scope")) with
             |Some s -> s.Substring(s.IndexOf "=" + 1).Trim() |> parseScope |> Some
             |None -> None
-        { min = min; max = max; leafvalue = false; description = description; pushScope = pushScope }
+        let replaceScopes =
+            match comments |> List.tryFind (fun s -> s.Contains("replace_scope")) with
+            |Some s ->
+                let s = s.Trim('#')
+                let parsed = CKParser.parseString s "config"
+                match parsed with
+                |Failure(_) -> None
+                |Success(s,_,_) ->
+                    let n = (STLProcess.shipProcess.ProcessNode<Node> EntityType.Other "root" (mkZeroFile "config") s)
+                    match n.Child "replace_scope" with
+                    |Some c ->
+                        let this = if c.Has "this" then c.TagText "this" |> parseScope |> Some else None
+                        let root = if c.Has "root" then c.TagText "root" |> parseScope |> Some else None
+                        let from = if c.Has "from" then c.TagText "from" |> parseScope |> Some else None
+                        let fromfrom = if c.Has "fromfrom" then c.TagText "fromfrom" |> parseScope |> Some else None
+                        let fromfromfrom = if c.Has "fromfromfrom" then c.TagText "fromfromfrom" |> parseScope |> Some else None
+                        let fromfromfromfrom = if c.Has "fromfromfromfrom" then c.TagText "fromfromfromfrom" |> parseScope |> Some else None
+                        let froms = [from;fromfrom;fromfromfrom;fromfromfromfrom] |> List.choose id
+                        Some { root = root; this = this; froms = Some froms }
+                    |None -> None
+            |None -> None
+        { min = min; max = max; leafvalue = false; description = description; pushScope = pushScope; replaceScopes = replaceScopes }
 
     let processChildConfig ((child, comments) : Child * string list)  =
         match child with

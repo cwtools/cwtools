@@ -363,6 +363,8 @@ module STLScopes =
         }
         member this.CurrentScope = match this.Scopes with |[] -> Scope.Any |x::_ -> x
         member this.PopScope = match this.Scopes with |[] -> [] |_::xs -> xs
+        member this.GetFrom i =
+            if this.From.Length >= i then (this.From.Item (i - 1)) else Scope.Any
     let defaultContext =
         { Root = Scope.Any; From = []; Scopes = [] }
 
@@ -372,15 +374,15 @@ module STLScopes =
         | NotFound
 
     let oneToOneScopes =
-        let from = fun (s, change) -> {s with Scopes = Scope.Any::s.Scopes}, true
+        let from i = fun (s, change) -> {s with Scopes = (s.GetFrom i)::s.Scopes}, true
         let prev = fun (s, change) -> {s with Scopes = s.PopScope}, true
         [
         "THIS", id;
         "ROOT", fun (s, change) -> {s with Scopes = s.Root::s.Scopes}, true;
-        "FROM", from; //TODO Make it actually use FROM
-        "FROMFROM", from >> from;
-        "FROMFROMFROM", from >> from >> from;
-        "FROMFROMFROMFROM", from >> from >> from >> from;
+        "FROM", from 1;
+        "FROMFROM", from 2;
+        "FROMFROMFROM", from 3;
+        "FROMFROMFROMFROM", from 4;
         "PREV", prev;
         "PREVPREV", prev >> prev;
         "PREVPREVPREV", prev >> prev >> prev;
