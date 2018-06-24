@@ -42,7 +42,7 @@ module rec ConfigParser =
     | TypeField of string
     | LeftTypeField of string * Field
     | ClauseField of Rule list
-    | LeftClauseField of ValueType * Rule list
+    | LeftClauseField of ValueType * Field
     | ScopeField of Scope
     | LeftScopeField of Rule list
     | LocalisationField of synced : bool
@@ -205,13 +205,13 @@ module rec ConfigParser =
                 |Some st when st.StartsWith "!" -> SubtypeField (st.Substring(1), false, ClauseField(children |> List.choose processChildConfig))
                 |Some st -> SubtypeField (st, true, ClauseField(children |> List.choose processChildConfig))
                 |None -> ClauseField []
-            |"int" -> LeftClauseField (ValueType.Int (Int32.MinValue, Int32.MaxValue), children |> List.choose processChildConfig)
-            |"float" -> LeftClauseField (ValueType.Float (Double.MinValue, Double.MaxValue), children |> List.choose processChildConfig)
-            |"scalar" -> LeftClauseField (ValueType.Scalar, children |> List.choose processChildConfig)
+            |"int" -> LeftClauseField (ValueType.Int (Int32.MinValue, Int32.MaxValue), ClauseField (children |> List.choose processChildConfig))
+            |"float" -> LeftClauseField (ValueType.Float (Double.MinValue, Double.MaxValue), ClauseField (children |> List.choose processChildConfig))
+            |"scalar" -> LeftClauseField (ValueType.Scalar, ClauseField (children |> List.choose processChildConfig))
             |"scope" -> LeftScopeField (children |> List.choose processChildConfig)
             |x when x.StartsWith "enum[" ->
                 match getSettingFromString x "enum" with
-                |Some e -> LeftClauseField (ValueType.Enum e, children |> List.choose processChildConfig)
+                |Some e -> LeftClauseField (ValueType.Enum e, ClauseField (children |> List.choose processChildConfig))
                 |None -> ClauseField []
             |x when x.StartsWith "<" && x.EndsWith ">" ->
                 LeftTypeField(x.Trim([|'<'; '>'|]), ClauseField(children |> List.choose processChildConfig))
@@ -295,6 +295,9 @@ module rec ConfigParser =
             match key with
             |x when x.StartsWith "<" && x.EndsWith ">" ->
                 LeftTypeField (x.Trim([|'<'; '>'|]), rightfield)
+            |"int" -> LeftClauseField (ValueType.Int (Int32.MinValue, Int32.MaxValue), rightfield)
+            |"float" -> LeftClauseField (ValueType.Float (Double.MinValue, Double.MaxValue), rightfield)
+            |"scalar" -> LeftClauseField (ValueType.Scalar, rightfield)
             |_ -> rightfield
         Rule(key, options, field)
 
