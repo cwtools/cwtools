@@ -239,7 +239,7 @@ type STLGame (settings : StellarisSettings) =
             match settings.rules with
             |Some rulesSettings ->
                 let rules, types, enums, complexenums = rulesSettings.ruleFiles |> List.fold (fun (rs, ts, es, ces) (fn, ft) -> let r2, t2, e2, ce2 = parseConfig fn ft in rs@r2, ts@t2, es@e2, ces@ce2) ([], [], [], [])
-                let rulesWithMod = rules @ (lookup.coreModifiers |> List.map (fun c -> AliasRule ("modifier", Rule(c.tag, {min = 0; max = 100; leafvalue = false; description = None; pushScope = None; replaceScopes = None}, ValueField (ValueType.Float (-100000.0, 100000.0))))))
+                let rulesWithMod = rules @ (lookup.coreModifiers |> List.map (fun c -> AliasRule ("modifier", Rule(c.tag, {min = 0; max = 100; leafvalue = false; description = None; pushScope = None; replaceScopes = None}, ValueField (ValueType.Float (-1E+12, 1E+12))))))
                 let complexEnumDefs = getEnumsFromComplexEnums complexenums (resources.AllEntities() |> List.map (fun struct(e,_) -> e))
                 let allEnums = enums @ complexEnumDefs
                 lookup.configRules <- rulesWithMod

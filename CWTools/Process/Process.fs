@@ -9,13 +9,13 @@ open Microsoft.FSharp.Compiler.Range
 open CWTools.Utilities.Utils
 
 module List =
-  let replace f sub xs = 
+  let replace f sub xs =
     let rec finish acc = function
       | [] -> acc
       | x::xs -> finish (x::acc) xs
     let rec search acc = function
       | [] -> None
-      | x::xs -> 
+      | x::xs ->
         if f x then Some(finish ((sub x)::xs) acc)
         else search (x::acc) xs
     search [] xs
@@ -33,7 +33,7 @@ type Leaf =
     member this.ToRaw = KeyValueItem(Key(this.Key), this.Value)
     new(key : string, value : Value, pos : range) = { Key = key; Value = value; Position = pos }
     //new(key : string, value : Value) = Leaf(key, value, Position.Empty)
-    new(keyvalueitem : KeyValueItem, ?pos : range) = 
+    new(keyvalueitem : KeyValueItem, ?pos : range) =
         let (KeyValueItem (Key(key), value)) = keyvalueitem
         Leaf(key, value, pos |> Option.defaultValue range.Zero)
     static member Create key value = LeafC(Leaf(key, value))
@@ -43,7 +43,7 @@ and LeafValue(value : Value, ?pos : range) =
     [<JsonIgnore>]
     member this.ToRaw = Value(this.Value)
     static member Create value = LeafValue value
-   
+
 and [<Struct>] Child = |NodeC of node : Node | LeafC of leaf : Leaf |CommentC of comment : string |LeafValueC of lefavalue : LeafValue
 and Node (key : string, pos : range) =
     let bothFind (x : string) = function |NodeC n when n.Key == x -> true |LeafC l when l.Key == x -> true |_ -> false
@@ -67,26 +67,26 @@ and Node (key : string, pos : range) =
     member this.Comments = this.AllChildren |> Seq.choose (function |CommentC c -> Some c |_ -> None)
     member this.LeafValues = this.AllChildren |> Seq.choose(function |LeafValueC lv -> Some lv |_ -> None)
     member this.Has x = this.AllChildren |> (Seq.exists (bothFind x))
-    member __.Tag x = leaves() |> Array.tryPick (function |l when l.Key = x -> Some l.Value |_ -> None)
-    member __.Leafs x = leaves() |> Array.choose (function |l when l.Key = x -> Some l |_ -> None) |> Array.toSeq
-    member __.Tags x = leaves() |> Array.choose (function |l when l.Key = x -> Some l.Value |_ -> None) |> Array.toSeq
+    member __.Tag x = leaves() |> Array.tryPick (function |l when l.Key == x -> Some l.Value |_ -> None)
+    member __.Leafs x = leaves() |> Array.choose (function |l when l.Key == x -> Some l |_ -> None) |> Array.toSeq
+    member __.Tags x = leaves() |> Array.choose (function |l when l.Key == x -> Some l.Value |_ -> None) |> Array.toSeq
     member this.TagText x = this.Tag x |> function |Some (QString s) -> s |Some s -> s.ToString() |None -> ""
     member this.TagsText x = this.Tags x |> Seq.map (function |(QString s) -> s |s -> s.ToString())
     member this.SetTag x v = this.All <- this.AllChildren |> List.ofSeq |>  List.replaceOrAdd (bothFind x) (fun _ -> v) v
-    member this.Child x = this.Nodes |> Seq.tryPick (function |c when c.Key = x -> Some c |_ -> None)
-    member this.Childs x = this.Nodes |> Seq.choose (function |c when c.Key = x -> Some c |_ -> None)
+    member this.Child x = this.Nodes |> Seq.tryPick (function |c when c.Key == x -> Some c |_ -> None)
+    member this.Childs x = this.Nodes |> Seq.choose (function |c when c.Key == x -> Some c |_ -> None)
 
     [<JsonIgnore>]
     member this.ToRaw : Statement list = this.All |>
-                                         List.map (function 
+                                         List.map (function
                                            |NodeC n -> KeyValue(PosKeyValue(n.Position, KeyValueItem(Key n.Key, Clause n.ToRaw)))
                                            |LeafValueC lv -> lv.ToRaw
                                            |LeafC l -> KeyValue(PosKeyValue (l.Position, l.ToRaw))
                                            |CommentC c -> (Comment c))
 
 
-    static member Create key = Node(key)                               
-    
+    static member Create key = Node(key)
+
 
 
 module ProcessCore =
@@ -101,11 +101,11 @@ module ProcessCore =
         let node =  Activator.CreateInstance(typeof<'T>, key, pos) :?> 'T |> postinit :> Node//  |> postinit// :?> Node |> postinit
         sl |> List.iter (fun e -> inner node e) |> ignore
         node
-    
+
     type LookupContext = { complete : bool; parents : string list; scope : string; previous : string; entityType : EntityType }
     let processNodeSimple<'T when 'T :> Node> _ = processNode<'T> id
     type NodeTypeMap = ((string * range * LookupContext)) -> (LookupContext -> ((Node -> Statement -> unit) -> string -> range -> Statement list -> Node)) * string * (LookupContext -> LookupContext)
-    
+
     let fst3 (x, _, _) = x
     let snd3 (_, x, _) = x
     let tri3 (_, _, x) = x
@@ -163,15 +163,15 @@ module ProcessCore =
                         cont(seq {yield! resNode; yield! accTail})))
                 y
                         // cont(fCombine resNode accTail) ))
-            | [] -> 
+            | [] ->
                 let x = cont Seq.empty
                 x
-            
+
         loop [node] id |> List.ofSeq
 
     let foldNode4 fNode (node : Node) =
         let rec loop (nodes : seq<Node>) =
-            seq { 
+            seq {
                 yield! nodes |> Seq.collect fNode
                 let x = nodes |> Seq.collect (fun n -> n.Nodes)
                 yield! loop x
@@ -189,7 +189,7 @@ module ProcessCore =
                         cont(seq {yield! a; yield! resNode; yield! accTail}) ))
             | [] -> cont Seq.empty
         loop [node] id
-    
+
     let foldNode6 fNode (node:Node) =
         let rec loop nodes cont =
             match nodes with
@@ -213,5 +213,4 @@ module ProcessCore =
     let rec cata fNode (node:Node) :'r =
         let recurse = cata fNode
         fNode node (node.Children |> Seq.map recurse)
-    
-   
+

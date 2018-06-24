@@ -89,7 +89,7 @@ module ValidationCore =
         static member ConfigRulesInvalidTarget = fun expected -> { ID = "CW244"; Severity = Severity.Error; Message = sprintf "This is not a target. Expected a target in scope(s) %s" expected}
         static member ConfigRulesErrorInTarget = fun command scope expected -> { ID = "CW245"; Severity = Severity.Error; Message = sprintf "Error in target. Command %s was used in scope %s but expected %s" command scope expected}
         static member PlanetKillerMissing = fun message -> { ID = "CW250"; Severity = Severity.Error; Message = message }
-        static member UnnecessaryAND = { ID = "CW251"; Severity = Severity.Error; Message = "This AND is unnecessary"}
+        static member UnnecessaryAND = { ID = "CW251"; Severity = Severity.Warning; Message = "This AND is unnecessary"}
         static member CustomError = fun error severity -> { ID = "CW999"; Severity = severity; Message = error}
 
     type CWError = (string * Severity * range * int * string * option<string>)

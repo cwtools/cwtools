@@ -18,6 +18,7 @@ open CWTools.Validation.Stellaris.STLLocalisationValidation
 open CWTools.Validation.Stellaris.ScopeValidation
 open Microsoft.FSharp.Collections.Tagged
 open System.IO
+open FSharp.Data.Runtime
 
 module rec Rules =
     type StringSet = Set<string, InsensitiveStringComparer>
@@ -264,7 +265,19 @@ module rec Rules =
             // |x ->
             //     let xs = x.Split '.'
             //     if xs |> Array.forall (fun s -> scopes |> List.exists (fun s2 -> s == s2)) then OK else Invalid[inv (ErrorCodes.ConfigRulesUnexpectedValue (sprintf "Expected value of scope %s" (s.ToString()))) leaf]
-
+        and applyLeftScopeField (root : Node) (enforceCardinality : bool) (ctx : RuleContext) (rules : Rule list) (startNode : Node) =
+            let scope = ctx.scopes
+            let key = startNode.Key
+            match changeScope effectMap triggerMap key scope with
+            |NewScope ({Scopes = current::_} ,_) ->
+                let newCtx = {ctx with scopes = {ctx.scopes with Scopes = current::ctx.scopes.Scopes}}
+                applyClauseField root enforceCardinality newCtx rules startNode
+            |NotFound _ ->
+                Invalid [inv (ErrorCodes.CustomError "This scope command is not valid" Severity.Error) startNode]
+            |WrongScope (command, prevscope, expected) ->
+                Invalid [inv (ErrorCodes.ConfigRulesErrorInTarget command (prevscope.ToString()) (sprintf "%A" expected) ) startNode]
+            |_ -> OK
+               // applyClauseField root enforceCardinality ctx rules startNode
 
         and applyLeftTypeFieldNode (t : string) (node : Node) =
             match typesMap.TryFind t with
@@ -290,12 +303,12 @@ module rec Rules =
 
         and applyNodeRule (root : Node) (enforceCardinality : bool) (ctx : RuleContext) (options : Options) (rule : Field) (node : Node) =
             let newCtx =
-                match oneToOneScopes |> List.tryFind (fun (k, _) -> k == node.Key) with
-                |Some (_, f) ->
-                    match f (ctx.scopes, false) with
-                    |(s, true) -> {ctx with scopes = {ctx.scopes with Scopes = s.CurrentScope::ctx.scopes.Scopes}}
-                    |(s, false) -> {ctx with scopes = s}
-                |None ->
+                // match oneToOneScopes |> List.tryFind (fun (k, _) -> k == node.Key) with
+                // |Some (_, f) ->
+                //     match f (ctx.scopes, false) with
+                //     |(s, true) -> {ctx with scopes = {ctx.scopes with Scopes = s.CurrentScope::ctx.scopes.Scopes}}
+                //     |(s, false) -> {ctx with scopes = s}
+                // |None ->
                     match options.pushScope with
                     |Some ps ->
                         {ctx with scopes = {ctx.scopes with Scopes = ps::ctx.scopes.Scopes}}
@@ -327,7 +340,8 @@ module rec Rules =
             | Field.LeftTypeField (t, f) -> applyLeftTypeFieldNode t node <&&> applyNodeRule root enforceCardinality newCtx options f node
             | Field.ClauseField rs -> applyClauseField root enforceCardinality newCtx rs node
             | Field.LeftClauseField (_, rs) -> applyClauseField root enforceCardinality newCtx rs node
-            | Field.LeftScopeField rs -> applyClauseField root enforceCardinality newCtx rs node
+            | Field.LeftScopeField rs ->
+                applyLeftScopeField root enforceCardinality newCtx rs node
             | Field.LocalisationField _ -> OK
             | Field.FilepathField -> OK
             | Field.ScopeField _ -> OK
@@ -444,7 +458,7 @@ module rec Rules =
                         let leftScopeRule =
                             expandedrules |>
                             List.filter (function |(_, _, LeftScopeField (rs)) -> checkValidLeftScopeRule scopes (LeftScopeField (rs)) c.Key  |_ -> false )
-                        let leftRules = leftClauseRule @ leftTypeRule @ leftScopeRule
+                        let leftRules = leftClauseRule @ leftScopeRule @ leftTypeRule
                         match leftRules with
                         |[] -> Some (NodeC c, (name, options, field))
                         |r::_ -> Some( NodeC c, r)
@@ -482,17 +496,18 @@ module rec Rules =
                 ctx
             let fComment (ctx) _ _ = ctx
             let fNode (ctx, res) (node : Node) ((name, options, field) : Rule) =
+                //eprintfn "nr %A %A %A" name node.Key ctx.scopes
                 let rec inner f c (n : Node) =
                     let newCtx =
-                        match oneToOneScopes |> List.tryFind (fun (k, _) -> k == n.Key) with
-                        |Some (_, f) ->
-                            match f (c.scopes, false) with
-                            |(s, true) -> {c with scopes = {c.scopes with Scopes = s.CurrentScope::c.scopes.Scopes}}
-                            |(s, false) -> {c with scopes = s}
-                        |None ->
+                        // match oneToOneScopes |> List.tryFind (fun (k, _) -> k == n.Key) with
+                        // |Some (_, f) ->
+                        //     match f (c.scopes, false) with
+                        //     |(s, true) -> {c with scopes = {c.scopes with Scopes = s.CurrentScope::c.scopes.Scopes}}
+                        //     |(s, false) -> {c with scopes = s}
+                        // |None ->
                             match options.pushScope with
                             |Some ps ->
-                                {ctx with scopes = {ctx.scopes with Scopes = ps::ctx.scopes.Scopes}}
+                                {ctx with RuleContext.scopes = {ctx.scopes with Scopes = ps::ctx.scopes.Scopes}}
                             |None ->
                                 match options.replaceScopes with
                                 |Some rs ->
@@ -518,7 +533,16 @@ module rec Rules =
                     | Field.LeftTypeField (t, f) -> inner f newCtx n
                     | Field.ClauseField rs -> newCtx, res
                     | Field.LeftClauseField (_, rs) -> newCtx, res
-                    | Field.LeftScopeField rs -> newCtx, res
+                    | Field.LeftScopeField rs ->
+                        let scope = newCtx.scopes
+                        let key = n.Key
+                        let newCtx =
+                            match changeScope effectMap triggerMap key scope with
+                            |NewScope ({Scopes = current::_} ,_) ->
+                                //eprintfn "cs %A %A %A" name node.Key current
+                                {newCtx with scopes = {newCtx.scopes with Scopes = current::newCtx.scopes.Scopes}}
+                            |_ -> newCtx
+                        newCtx, res
                     | _ -> newCtx, res
                 inner field ctx node
 
@@ -557,7 +581,7 @@ module rec Rules =
         let enumsMap = enums |> (Map.map (fun _ s -> StringSet.Create(InsensitiveStringComparer(), s)))
 
         let rec getInfoFromNode (pos : pos) (ctx : RuleContext) (options : Options) (rule : Field) (node : Node) =
-            eprintfn "%A %A" rule node.Key
+            //eprintfn "%A %A" rule node.Key
             let newCtx =
                 match oneToOneScopes |> List.tryFind (fun (k, _) -> k == node.Key) with
                 |Some (_, f) ->
@@ -602,12 +626,12 @@ module rec Rules =
         and getInfoFromLeaf (pos : pos) (field : Field) (ctx : RuleContext) (leaf : Leaf) =
             //let valueMatch =
             //TODO check if on left or right hand side of value
-            eprintfn "%A %A" field leaf.Key
+            //eprintfn "%A %A" field leaf.Key
             match field with
             |Field.TypeField t -> Some (t, leaf.Value.ToString())
             |_ -> None
         and getInfoFromPos (pos : pos) (rules : Rule list) (ctx : RuleContext) (node : Node) =
-            eprintfn "ifp %A" node.Key
+            //eprintfn "ifp %A" node.Key
             let subtypedrules =
                 rules |> List.collect (fun (s,o,r) -> r |> (function |SubtypeField (key, shouldMatch, ClauseField cfs) -> (if (not shouldMatch) <> List.contains key ctx.subtypes then cfs else []) | x -> [(s, o, x)]))
             let expandedrules =
@@ -619,10 +643,10 @@ module rec Rules =
             let childMatch = node.Children |> List.tryFind (fun c -> Range.rangeContainsPos c.Position pos)
             let leafMatch = node.Leaves |> Seq.tryFind (fun l -> Range.rangeContainsPos l.Position pos)
             let leafValueMatch = node.LeafValues |> Seq.tryFind (fun lv -> Range.rangeContainsPos lv.Position pos)
-            eprintfn "%A %A %A" childMatch leafMatch leafValueMatch
+            //eprintfn "%A %A %A" childMatch leafMatch leafValueMatch
             match childMatch, leafMatch, leafValueMatch with
             |Some c, _, _ ->
-                eprintfn "%A" expandedrules
+                //eprintfn "%A" expandedrules
                 match expandedrules |> List.filter (fst3 >> (==) c.Key) with
                 | [] ->
                     let leftClauseRule =
