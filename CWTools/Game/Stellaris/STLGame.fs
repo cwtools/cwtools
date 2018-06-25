@@ -350,6 +350,12 @@ type STLGame (settings : StellarisSettings) =
             //apiVs
             lookup.proccessedLoc |> validateProcessedLocalisation taggedKeys |> (function |Invalid es -> es |_ -> [])
 
+        let makeEntityResourceInput filepath filetext  =
+            let filepath = Path.GetFullPath(filepath)
+            let rootedpath = filepath.Substring(filepath.IndexOf(fileManager.ScopeDirectory) + (fileManager.ScopeDirectory.Length))
+            let logicalpath = fileManager.ConvertPathToLogicalPath rootedpath
+            EntityResourceInput {scope = ""; filepath = filepath; logicalpath = logicalpath; filetext = filetext; validate = true}
+
         let updateFile filepath (filetext : string option) =
             eprintfn "%s" filepath
             let timer = new System.Diagnostics.Stopwatch()
@@ -362,12 +368,13 @@ type STLGame (settings : StellarisSettings) =
                     localisationErrors <- Some les
                     globalLocalisation()
                 | _ ->
-                    let filepath = Path.GetFullPath(filepath)
                     let file = filetext |> Option.defaultWith (fun () -> File.ReadAllText filepath)
-                    let rootedpath = filepath.Substring(filepath.IndexOf(fileManager.ScopeDirectory) + (fileManager.ScopeDirectory.Length))
-                    let logicalpath = fileManager.ConvertPathToLogicalPath rootedpath
+                    let resource = makeEntityResourceInput filepath file
+                    // let filepath = Path.GetFullPath(filepath)
+                    // let rootedpath = filepath.Substring(filepath.IndexOf(fileManager.ScopeDirectory) + (fileManager.ScopeDirectory.Length))
+                    // let logicalpath = fileManager.ConvertPathToLogicalPath rootedpath
                     //eprintfn "%s %s" logicalpath filepath
-                    let newEntities = resources.UpdateFile (EntityResourceInput {scope = ""; filepath = filepath; logicalpath = logicalpath; filetext = file; validate = true})
+                    let newEntities = resources.UpdateFile (resource)
                     match filepath with
                     |x when x.Contains("scripted_triggers") -> updateScriptedTriggers()
                     |x when x.Contains("scripted_effects") -> updateScriptedEffects()
@@ -378,66 +385,52 @@ type STLGame (settings : StellarisSettings) =
             eprintfn "Update Time: %i" timer.ElapsedMilliseconds
             res
         let completion (pos : pos) (filepath : string) (filetext : string) =
-            // let filepath = Path.GetFullPath(filepath).Replace("/","\\")
-            // match resources.AllEntities() |> List.tryFind (fun struct (e, _) -> e.filepath == filepath) with
-            // |Some struct (e, _) ->
-            //     let completion = CompletionService([ConfigParser.building; ConfigParser.shipsize])
-            //     completion.Complete(pos, e.entity)
-            // |None -> []
             let split = filetext.Split('\n')
             let filetext = split |> Array.mapi (fun i s -> if i = (pos.Line - 1) then eprintfn "%s" s; s.Insert(pos.Column, "x") else s) |> String.concat "\n"
-            match resourceManager.ManualProcess (fileManager.ConvertPathToLogicalPath filepath) filetext, completionService, infoService with
-            |Some e, Some completion, Some info ->
+            let resource = makeEntityResourceInput filepath filetext
+            match resourceManager.ManualProcessResource resource, completionService with
+            |Some e, Some completion ->
                 eprintfn "completion %A %A" (fileManager.ConvertPathToLogicalPath filepath) filepath
-                eprintfn "scope at cursor %A" (getScopeContextAtPos pos lookup.scriptedTriggers lookup.scriptedEffects e)
+                //eprintfn "scope at cursor %A" (getScopeContextAtPos pos lookup.scriptedTriggers lookup.scriptedEffects e.entity)
                 completion.Complete(pos, e)
-            |_, _, _ -> []
+            |_, _ -> []
 
 
         let getInfoAtPos (pos : pos) (filepath : string) (filetext : string) =
-            match resourceManager.ManualProcess (fileManager.ConvertPathToLogicalPath filepath) filetext, infoService with
+            let resource = makeEntityResourceInput filepath filetext
+            match resourceManager.ManualProcessResource resource, infoService with
             |Some e, Some info ->
                 eprintfn "getInfo %A %A" (fileManager.ConvertPathToLogicalPath filepath) filepath
-                match info.GetInfo(pos, e, fileManager.ConvertPathToLogicalPath filepath) with
+                match info.GetInfo(pos, e) with
                 |Some (_, Some (t, tv)) ->
                     lookup.typeDefInfo.[t] |> List.tryPick (fun (n, v) -> if n = tv then Some v else None)
                 |_ -> None
             |_, _ -> None
 
         let findAllRefsFromPos (pos : pos) (filepath : string) (filetext : string) =
-            match resourceManager.ManualProcess (filepath) filetext, infoService with
+            let resource = makeEntityResourceInput filepath filetext
+            match resourceManager.ManualProcessResource resource, infoService with
             |Some e, Some info ->
                 eprintfn "findRefs %A %A" (fileManager.ConvertPathToLogicalPath filepath) filepath
-                match info.GetInfo(pos, e, fileManager.ConvertPathToLogicalPath filepath) with
+                match info.GetInfo(pos, e) with
                 |Some (_, Some ((t : string), tv)) ->
-                    eprintfn "tv %A %A" t tv
+                    //eprintfn "tv %A %A" t tv
                     let t = t.Split('.').[0]
-                    let es = EntitySet (resources.ValidatableEntities())
-                    //es.AllWithData |> List.choose (fun (_, l) -> l.Force().referencedtypes.)
-                    //es.AllWithData |> List.choose ((fun (e, l) -> let x = l.Force().referencedtypes in (if x.IsSome then (x.Value.TryFind t) else ((info.GetReferencedTypes e).TryFind t))))
-                    //es.AllWithData |> List.map ((fun (e, l) -> let x = l.Force().referencedtypes in ((info.GetReferencedTypes e))))
                     resources.ValidatableEntities() |> List.choose (fun struct(e, l) -> let x = l.Force().referencedtypes in if x.IsSome then (x.Value.TryFind t) else (info.GetReferencedTypes e).TryFind t)
-                    //[e] |> List.map info.GetReferencedTypes
-                                   //|> List.map (fun x -> eprintfn "z %A" x; x)
-                                   //|> List.collect (fun m -> m |> Map.toList |> List.collect snd)
-                                   //|> List.map (fun x -> eprintfn "x %A" x; x)
                                    |> List.collect id
                                    |> List.choose (fun (tvk, r) -> if tvk == tv then Some r else None)
                                    |> Some
-                    //lookup.typeDefInfo.[t] |> List.tryPick (fun (n, v) -> if n = tv then Some v else None)
                 |_ -> None
             |_, _ -> None
 
         let scopesAtPos (pos : pos) (filepath : string) (filetext : string) =
-            let split = filetext.Split('\n')
-            //let filetext = split |> Array.mapi (fun i s -> if i = (pos.Line - 1) then eprintfn "%s" s; s.Insert(pos.Column, "x") else s) |> String.concat "\n"
-            match resourceManager.ManualProcess (fileManager.ConvertPathToLogicalPath filepath) filetext, infoService with
+            let resource = makeEntityResourceInput filepath filetext
+            match resourceManager.ManualProcessResource resource, infoService with
             |Some e, Some info ->
-                //info.GetReferencedTypes(e) |> ignore
-                match info.GetInfo(pos, e, fileManager.ConvertPathToLogicalPath filepath) with
+                match info.GetInfo(pos, e) with
                 |Some (ctx, _) when ctx.scopes <> { Root = Scope.Any; From = []; Scopes = [] } -> Some (ctx.scopes)
-                |_ -> getScopeContextAtPos pos lookup.scriptedTriggers lookup.scriptedEffects e
-            |Some e, _ -> getScopeContextAtPos pos lookup.scriptedTriggers lookup.scriptedEffects e
+                |_ -> getScopeContextAtPos pos lookup.scriptedTriggers lookup.scriptedEffects e.entity
+            |Some e, _ -> getScopeContextAtPos pos lookup.scriptedTriggers lookup.scriptedEffects e.entity
             |_ -> None
 
 

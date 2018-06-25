@@ -294,7 +294,8 @@ type ResourceManager<'T> (computedDataFunction : (Entity -> 'T)) =
     let allEntities() = entitiesMap |> Map.toList |> List.map snd |> List.filter (fun struct (e, _) -> e.overwrite <> Overwritten)
     let validatableEntities() = entitiesMap |> Map.toList |> List.map snd  |> List.filter (fun struct (e, _) -> e.overwrite <> Overwritten) |> List.filter (fun struct (e, _) -> e.validate)
 
-    member __.ManualProcess(filename : string) (filetext : string) =
+    member __.ManualProcessResource = parseFile >> parseEntity >> snd
+    member __.ManualProcess (filename : string) (filetext : string) =
         let parsed = CKParser.parseString filetext filename
         match parsed with
         |Failure(_) -> None

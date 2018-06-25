@@ -154,7 +154,7 @@ module CKParser =
 
 
     do valueimpl := valueCustom <?> "value"
-    let getRange (start: FParsec.Position) (endp : FParsec.Position) = mkRange start.StreamName (mkPos (int start.Line) (int start.Column)) (mkPos (int endp.Line) (int endp.Column))
+    let getRange (start: FParsec.Position) (endp : FParsec.Position) = mkRange start.StreamName (mkPos (int start.Line) (int start.Column - 1)) (mkPos (int endp.Line) (int endp.Column - 1))
     do keyvalueimpl := pipe4 (getPosition) ((keyQ <|> key) .>> operator) (value) (getPosition .>> ws) (fun start id value endp -> KeyValue(PosKeyValue(getRange start endp, KeyValueItem(id, value))))
     let alle = ws >>. many statement .>> eof |>> (fun f -> (EventFile f : EventFile))
     let valuelist = many1 ((comment |>> Comment) <|> (value .>> ws |>> Value)) .>> eof

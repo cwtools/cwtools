@@ -443,7 +443,7 @@ module rec Rules =
             |CommentC comment ->
                 fComment acc comment rule
 
-        let foldWithPos fLeaf fLeafValue fComment fNode acc (pos : pos) (node : Node) (path : string) =
+        let foldWithPos fLeaf fLeafValue fComment fNode acc (pos : pos) (node : Node) (logicalpath : string) =
             let fChild (node : Node) ((name, options, field) : Rule) =
                 let rules =
                     match field with
@@ -495,7 +495,7 @@ module rec Rules =
                     |r::_ -> Some (LeafC l, r)
                 |_, _, Some lv -> Some (LeafValueC lv, (name, options, field))
                 |None, None, None -> None
-            let pathDir = (Path.GetDirectoryName path).Replace("/","\\")
+            let pathDir = (Path.GetDirectoryName logicalpath).Replace("/","\\")
             let childMatch = node.Children |> List.tryFind (fun c -> Range.rangeContainsPos c.Position pos)
             //eprintfn "%O %A %A" pos pathDir (typedefs |> List.tryHead)
             match childMatch, typedefs |> List.tryFind (fun t -> pathDir = (t.path.Replace("/","\\"))) with
@@ -507,7 +507,7 @@ module rec Rules =
                 |_ -> None
             |_, _ -> None
 
-        let getInfoAtPos (pos : pos) (node : Node) (path : string) =
+        let getInfoAtPos (pos : pos) (entity : Entity) =
             let fLeaf (ctx, res) (leaf : Leaf) ((_, _, field) : Rule) =
                 match field with
                 |Field.TypeField t -> ctx, Some (t, leaf.Value.ToString())
@@ -566,8 +566,8 @@ module rec Rules =
                     | _ -> newCtx, res
                 inner field ctx node
 
-            let pathDir = (path).Replace("/","\\")
-            let childMatch = node.Children |> List.tryFind (fun c -> Range.rangeContainsPos c.Position pos)
+            let pathDir = (Path.GetDirectoryName entity.logicalpath).Replace("/","\\")
+            let childMatch = entity.entity.Children |> List.tryFind (fun c -> Range.rangeContainsPos c.Position pos)
             // eprintfn "%O %A %A %A" pos pathDir (typedefs |> List.tryHead) (childMatch.IsSome)
             let ctx =
                 match childMatch, typedefs |> List.tryFind (fun t -> pathDir = (t.path.Replace("/","\\"))) with
@@ -579,7 +579,7 @@ module rec Rules =
                 |_, _ -> { subtypes = []; scopes = defaultContext }
 
             let ctx = ctx, None
-            foldWithPos fLeaf fLeafValue fComment fNode ctx (pos) (node) path
+            foldWithPos fLeaf fLeafValue fComment fNode ctx (pos) (entity.entity) (entity.logicalpath)
 
 
         let foldCollect fLeaf fLeafValue fComment fNode acc (node : Node) (path: string) =
@@ -665,7 +665,7 @@ module rec Rules =
             //res |> Collections.Map.iter (fun k v -> if v.IsEmpty then () else eprintfn "%A %A" k v)
             res
 
-        member __.GetInfo(pos : pos, node : Node, path : string) = getInfoAtPos pos node path
+        member __.GetInfo(pos : pos, entity : Entity) = getInfoAtPos pos entity
         member __.GetReferencedTypes(entity : Entity) = getTypesInEntity entity
 
 
@@ -774,9 +774,9 @@ module rec Rules =
                     |fs -> fs |> List.collect (fun (_, _, f) -> fieldToRules f)
             findRule rules stack |> List.distinct
 
-        let complete (pos : pos) (node : Node) =
-            let path = getRulePath pos [] node |> List.rev
-            let pathDir = (Path.GetDirectoryName node.Position.FileName).Replace("/","\\")
+        let complete (pos : pos) (entity : Entity) =
+            let path = getRulePath pos [] entity.entity |> List.rev
+            let pathDir = (Path.GetDirectoryName entity.logicalpath).Replace("/","\\")
             match typedefs |> List.tryFind (fun t -> pathDir = (t.path.Replace("/","\\"))) with
             |Some typedef ->
                 let typerules = typeRules |> List.filter (fun (name, _, _) -> name == typedef.name)
@@ -785,7 +785,7 @@ module rec Rules =
                 completion
             |None -> getCompletionFromPath typeRules path
 
-        member __.Complete(pos : pos, node : Node) = complete pos node
+        member __.Complete(pos : pos, entity : Entity) = complete pos entity
 
     let getTypesFromDefinitions (ruleapplicator : RuleApplicator) (types : TypeDefinition list) (es : Entity list) =
         let getTypeInfo (def : TypeDefinition) =
