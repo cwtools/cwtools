@@ -20,6 +20,7 @@ type IGame =
     abstract Complete : pos -> string -> string -> CompletionResponse list
     abstract ScopesAtPos : pos -> string -> string -> ScopeContext option
     abstract GoToType : pos -> string -> string -> range option
+    abstract FindAllRefs : pos -> string -> string -> range list option
 
 type IGame<'T> =
     inherit IGame

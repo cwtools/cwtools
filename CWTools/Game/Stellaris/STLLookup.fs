@@ -10,12 +10,14 @@ open DotNet.Globbing
 open System
 open CWTools.Utilities.Utils
 open CWTools.Games
+open Microsoft.FSharp.Compiler.Range
 
 module STLLookup =
     type STLComputedData = {
         eventids : string list
         setvariables : string list
         savedeventtargets : string list
+        referencedtypes : Map<string, (string  * range) list> option
     }
 
     let getChildrenWithComments (root : Node) =

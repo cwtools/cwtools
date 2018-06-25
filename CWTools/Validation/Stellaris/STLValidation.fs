@@ -21,52 +21,6 @@ open FSharp.Collections.ParallelSeq
 
 module STLValidation =
     type S = Severity
-    type EntitySet<'T>(entities : struct (Entity * Lazy<'T>) list) =
-        member __.GlobMatch(pattern : string) =
-            let options = new GlobOptions();
-            options.Evaluation.CaseInsensitive <- true;
-            let glob = Glob.Parse(pattern, options)
-            entities |> List.choose (fun struct (es, _) -> if glob.IsMatch(es.filepath) then Some es.entity else None)
-        member this.GlobMatchChildren(pattern : string) =
-            this.GlobMatch(pattern) |> List.map (fun e -> e.Children) |> List.collect id
-        member __.AllOfType (entityType : EntityType) =
-            entities |> List.choose(fun struct (es, d) -> if es.entityType = entityType then Some (es.entity, d)  else None)
-        member this.AllOfTypeChildren (entityType : EntityType) =
-            this.AllOfType(entityType) |> List.map (fun (e, d) -> e.Children) |> List.collect id
-        member __.All = entities |> List.map (fun struct (es, _) -> es.entity)
-        member __.AllWithData = entities |> List.map (fun struct (es, d) -> es.entity, d)
-        member this.AllEffects=
-            let fNode = (fun (x : Node) acc ->
-                            match x with
-                            | :? EffectBlock as e -> e::acc
-                            | :? Option as e -> e.AsEffectBlock::acc
-                            |_ -> acc
-                                )
-
-            this.All |> List.collect (foldNode7 fNode)
-        member this.AllTriggers=
-            let fNode = (fun (x : Node) acc ->
-                            match x with
-                            | :? TriggerBlock as e -> e::acc
-                            |_ -> acc
-                                )
-            this.All |> List.collect (foldNode7 fNode)
-        member this.AllModifiers=
-            let fNode = (fun (x : Node) acc ->
-                            match x with
-                            | :? WeightModifierBlock as e -> e::acc
-                            |_ -> acc
-                                )
-            this.All |> List.collect (foldNode7 fNode)
-
-
-
-        member __.Raw = entities
-        member this.Merge(y : EntitySet<'T>) = EntitySet(this.Raw @ y.Raw)
-
-    type STLEntitySet = EntitySet<STLComputedData>
-    type StructureValidator = EntitySet<STLComputedData> -> EntitySet<STLComputedData> -> ValidationResult
-    type FileValidator = IResourceAPI<STLComputedData> -> EntitySet<STLComputedData> -> ValidationResult
     let shipName (ship : Ship) = if ship.Name = "" then Invalid [(inv (ErrorCodes.CustomError "must have name" Severity.Error) ship)] else OK
     let shipSize (ship : Ship) = if ship.ShipSize = "" then Invalid [(inv (ErrorCodes.CustomError "must have size" Severity.Error) ship)] else OK
 
@@ -462,14 +416,6 @@ module STLValidation =
         effects @ opts |> List.collect findAllSavedEventTargets
 
 
-    let computeSTLData (e : Entity) =
-        let eventIds = if e.entityType = EntityType.Events then e.entity.Children |> List.choose (function | :? Event as e -> Some e.ID |_ -> None) else []
-        {
-            eventids = eventIds
-            setvariables = getEntitySetVariables e
-            savedeventtargets = findAllSavedEventTargetsInEntity e
-        }
-
     let getTechnologies (es : STLEntitySet) =
         let techs = es.AllOfTypeChildren EntityType.Technology
         let inner =
@@ -505,7 +451,8 @@ module STLValidation =
             let armyPrereqs = os.AllOfTypeChildren EntityType.Armies @ es.AllOfTypeChildren EntityType.Armies// |> List.collect getPrereqs
             let edictPrereqs = os.AllOfTypeChildren EntityType.Edicts @ es.AllOfTypeChildren EntityType.Edicts// |> List.collect getPrereqs
             let tileBlockPrereqs = os.AllOfTypeChildren EntityType.TileBlockers @ es.AllOfTypeChildren EntityType.TileBlockers// |> List.collect getPrereqs
-            let allPrereqs = getPrereqsPar [buildingPrereqs; shipsizePrereqs;sectPrereqs; compPrereqs; stratResPrereqs; armyPrereqs; edictPrereqs; tileBlockPrereqs] |> Set.ofList
+            let allPrereqs = getPrereqsPar [buildingPrereqs; shipsizePrereqs;sectPrereqs; compPrereqs; stratResPrereqs; armyPrereqs; edictPrereqs; tileBlockPrereqs; ] |> Set.ofList
+            let allPrereqs = (getAllTechPreqreqs os @ getAllTechPreqreqs es) |> List.fold (fun (set : Collections.Set<string>) key -> set.Add key) allPrereqs
             //let allPrereqs = buildingPrereqs @ shipsizePrereqs @ sectPrereqs @ compPrereqs @ stratResPrereqs @ armyPrereqs @ edictPrereqs @ tileBlockPrereqs @ getAllTechPreqreqs os @ getAllTechPreqreqs es |> Set.ofList
             let techList = getTechnologies os @ getTechnologies es
             let techPrereqs = techList |> List.collect snd |> Set.ofList

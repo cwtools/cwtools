@@ -32,6 +32,7 @@ open CWTools.Parser.ConfigParser
 open FSharp.Data.Runtime
 open CWTools.Validation.Stellaris.ScopeValidation
 open Files
+open CWTools.Validation.Stellaris
 
 type EmbeddedSettings = {
     triggers : DocEffect list
@@ -169,8 +170,10 @@ type STLGame (settings : StellarisSettings) =
             let se = scopedEffects |> List.map (fun e -> e :> Effect)
             let vt = settings.embedded.triggers |> addInnerScope |> List.map (fun e -> e :> Effect)
             se @ vt
+        let mutable completionService : CompletionService option = None
+        let mutable infoService : FoldRules option = None
 
-        let resourceManager = ResourceManager(computeSTLData)
+        let resourceManager = ResourceManager(STLCompute.computeSTLData (fun () -> infoService))
         let resources = resourceManager.Api
 
         let validatableFiles() = resources.ValidatableFiles
@@ -374,8 +377,6 @@ type STLGame (settings : StellarisSettings) =
                     validateAll true newEntities @ localisationCheck newEntities
             eprintfn "Update Time: %i" timer.ElapsedMilliseconds
             res
-        let mutable completionService : CompletionService option = None
-        let mutable infoService : FoldRules option = None
         let completion (pos : pos) (filepath : string) (filetext : string) =
             // let filepath = Path.GetFullPath(filepath).Replace("/","\\")
             // match resources.AllEntities() |> List.tryFind (fun struct (e, _) -> e.filepath == filepath) with
@@ -392,22 +393,48 @@ type STLGame (settings : StellarisSettings) =
                 completion.Complete(pos, e)
             |_, _, _ -> []
 
+
         let getInfoAtPos (pos : pos) (filepath : string) (filetext : string) =
             match resourceManager.ManualProcess (fileManager.ConvertPathToLogicalPath filepath) filetext, infoService with
             |Some e, Some info ->
                 eprintfn "getInfo %A %A" (fileManager.ConvertPathToLogicalPath filepath) filepath
-                match info.GetInfo(pos, e) with
-                |Some (_, Some (t, tv)) -> lookup.typeDefInfo.[t] |> List.tryPick (fun (n, v) -> if n = tv then Some v else None)
+                match info.GetInfo(pos, e, fileManager.ConvertPathToLogicalPath filepath) with
+                |Some (_, Some (t, tv)) ->
+                    lookup.typeDefInfo.[t] |> List.tryPick (fun (n, v) -> if n = tv then Some v else None)
                 |_ -> None
             |_, _ -> None
 
+        let findAllRefsFromPos (pos : pos) (filepath : string) (filetext : string) =
+            match resourceManager.ManualProcess (filepath) filetext, infoService with
+            |Some e, Some info ->
+                eprintfn "findRefs %A %A" (fileManager.ConvertPathToLogicalPath filepath) filepath
+                match info.GetInfo(pos, e, fileManager.ConvertPathToLogicalPath filepath) with
+                |Some (_, Some ((t : string), tv)) ->
+                    eprintfn "tv %A %A" t tv
+                    let t = t.Split('.').[0]
+                    let es = EntitySet (resources.ValidatableEntities())
+                    //es.AllWithData |> List.choose (fun (_, l) -> l.Force().referencedtypes.)
+                    //es.AllWithData |> List.choose ((fun (e, l) -> let x = l.Force().referencedtypes in (if x.IsSome then (x.Value.TryFind t) else ((info.GetReferencedTypes e).TryFind t))))
+                    //es.AllWithData |> List.map ((fun (e, l) -> let x = l.Force().referencedtypes in ((info.GetReferencedTypes e))))
+                    resources.ValidatableEntities() |> List.choose (fun struct(e, l) -> let x = l.Force().referencedtypes in if x.IsSome then (x.Value.TryFind t) else (info.GetReferencedTypes e).TryFind t)
+                    //[e] |> List.map info.GetReferencedTypes
+                                   //|> List.map (fun x -> eprintfn "z %A" x; x)
+                                   //|> List.collect (fun m -> m |> Map.toList |> List.collect snd)
+                                   //|> List.map (fun x -> eprintfn "x %A" x; x)
+                                   |> List.collect id
+                                   |> List.choose (fun (tvk, r) -> if tvk == tv then Some r else None)
+                                   |> Some
+                    //lookup.typeDefInfo.[t] |> List.tryPick (fun (n, v) -> if n = tv then Some v else None)
+                |_ -> None
+            |_, _ -> None
 
         let scopesAtPos (pos : pos) (filepath : string) (filetext : string) =
             let split = filetext.Split('\n')
             //let filetext = split |> Array.mapi (fun i s -> if i = (pos.Line - 1) then eprintfn "%s" s; s.Insert(pos.Column, "x") else s) |> String.concat "\n"
             match resourceManager.ManualProcess (fileManager.ConvertPathToLogicalPath filepath) filetext, infoService with
             |Some e, Some info ->
-                match info.GetInfo(pos, e) with
+                //info.GetReferencedTypes(e) |> ignore
+                match info.GetInfo(pos, e, fileManager.ConvertPathToLogicalPath filepath) with
                 |Some (ctx, _) when ctx.scopes <> { Root = Scope.Any; From = []; Scopes = [] } -> Some (ctx.scopes)
                 |_ -> getScopeContextAtPos pos lookup.scriptedTriggers lookup.scriptedEffects e
             |Some e, _ -> getScopeContextAtPos pos lookup.scriptedTriggers lookup.scriptedEffects e
@@ -441,6 +468,7 @@ type STLGame (settings : StellarisSettings) =
             completionService <- Some (CompletionService(lookup.configRules, lookup.typeDefs, lookup.typeDefInfo, lookup.enumDefs))
             ruleApplicator <- Some (RuleApplicator(lookup.configRules, lookup.typeDefs, lookup.typeDefInfo, lookup.enumDefs, loc, files, lookup.scriptedTriggers, lookup.scriptedEffects))
             infoService <- Some (FoldRules(lookup.configRules, lookup.typeDefs, lookup.typeDefInfo, lookup.enumDefs, loc, files, lookup.scriptedTriggers, lookup.scriptedEffects, ruleApplicator.Value))
+            //resources.ForceRecompute()
         interface IGame<STLComputedData> with
         //member __.Results = parseResults
             member __.ParserErrors() = parseErrors()
@@ -472,6 +500,7 @@ type STLGame (settings : StellarisSettings) =
             member __.Complete pos file text = completion pos file text
             member __.ScopesAtPos pos file text = scopesAtPos pos file text
             member __.GoToType pos file text = getInfoAtPos pos file text
+            member __.FindAllRefs pos file text = findAllRefsFromPos pos file text
 
 
             //member __.ScriptedTriggers = parseResults |> List.choose (function |Pass(f, p, t) when f.Contains("scripted_triggers") -> Some p |_ -> None) |> List.map (fun t -> )
