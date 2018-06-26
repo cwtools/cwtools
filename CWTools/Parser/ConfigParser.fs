@@ -70,6 +70,7 @@ module rec ConfigParser =
         path : string
         conditions : Node option
         subtypes : SubTypeDefinition list
+        typeKeyFilter : (string * bool) option
     }
     type EnumDefinition = string * string list
     type ComplexEnumDef = {
@@ -334,8 +335,18 @@ module rec ConfigParser =
             let namefield = if node.Has "name_field" then Some (node.TagText "name_field") else None
             let path = (node.TagText "path").Replace("game/","").Replace("game\\","")
             let subtypes = getNodeComments node |> List.choose parseSubType
+            eprintfn "cs %A" comments
+            let typekeyfilter =
+                match comments |> List.tryFind (fun s -> s.Contains "type_key_filter") with
+                |Some c ->
+                    eprintfn "c %A" c
+                    match c.Contains "=", c.Contains "<>" with
+                    |true, _ -> Some (c.Substring(c.IndexOf "=" + 1).Trim(), false)
+                    |_, true -> Some (c.Substring(c.IndexOf "<>" + 2).Trim(), true)
+                    |_ -> None
+                |None -> None
             match typename with
-            |Some tn -> Some { name = tn; nameField = namefield; path = path; conditions = None; subtypes = subtypes}
+            |Some tn -> Some { name = tn; nameField = namefield; path = path; conditions = None; subtypes = subtypes; typeKeyFilter = typekeyfilter}
             |None -> None
         |_ -> None
 
@@ -524,6 +535,7 @@ module rec ConfigParser =
             path = "common/ship_behaviors";
             conditions = None;
             subtypes = [];
+            typeKeyFilter = None
         }
     let shipSizeType =
         {
@@ -532,6 +544,7 @@ module rec ConfigParser =
             nameField = None;
             conditions = None;
             subtypes = [];
+            typeKeyFilter = None
         }
 //  type[ship_behavior] = {
 //      path = "game/common/ship_behaviors"

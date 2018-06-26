@@ -19,6 +19,7 @@ open CWTools.Validation.Stellaris.ScopeValidation
 open Microsoft.FSharp.Collections.Tagged
 open System.IO
 open FSharp.Data.Runtime
+open QuickGraph
 
 module rec Rules =
     type StringSet = Set<string, InsensitiveStringComparer>
@@ -234,6 +235,7 @@ module rec Rules =
             match typesMap.TryFind t with
             |Some values ->
                 let value = leaf.Value.ToString().Trim([|'\"'|])
+                if value.StartsWith "@" then OK else
                 if values.Contains value then OK else Invalid [inv (ErrorCodes.ConfigRulesUnexpectedValue (sprintf "Expected value of type %s" t)) leaf]
             |None -> OK
 
@@ -379,7 +381,10 @@ module rec Rules =
                     let expandedRules = typerules |> List.collect (function | _,_,(AliasField a) -> (aliases.TryFind a |> Option.defaultValue []) |x -> [x])
                     //eprintfn "%A" expandedRules
                     match expandedRules |> List.tryFind (fun (n, _, _) -> n == typedef.name) with
-                    |Some (_, o, f) -> applyNodeRuleRoot typedef f o node
+                    |Some (_, o, f) ->
+                        match typedef.typeKeyFilter with
+                        |Some (filter, negate) -> if node.Key == filter <> negate then applyNodeRuleRoot typedef f o node else OK
+                        |None -> applyNodeRuleRoot typedef f o node
                     |None ->
                         //eprintfn "Couldn't find rules for %s" typedef.name
                         OK
@@ -650,7 +655,9 @@ module rec Rules =
                 |_ -> res
             let fLeafValue (res : Collections.Map<string, (string * range) list>) (leafvalue : LeafValue) (_, _, field) =
                 match field with
-                |Field.TypeField t -> res |> (fun m -> m.Add(t, (leafvalue.Value.ToString(), leafvalue.Position)::m.[t]))
+                |Field.TypeField t ->
+                    let typename = t.Split('.').[0]
+                    res |> (fun m -> m.Add(t, (leafvalue.Value.ToString(), leafvalue.Position)::(m.TryFind(typename) |> Option.defaultValue [])))
                 |_ -> res
 
             let fComment (res) _ _ = res
@@ -797,7 +804,10 @@ module rec Rules =
                                     match def.nameField with
                                     |Some f -> n.TagText f
                                     |None -> n.Key
-                                def.name::subtypes |> List.map (fun s -> s, (key, n.Position))
+                                let result = def.name::subtypes |> List.map (fun s -> s, (key, n.Position))
+                                match def.typeKeyFilter with
+                                |Some (filter, negate) -> if n.Key == filter <> negate then result else []
+                                |None -> result
                             (e.Children |> List.collect inner)
                             @
                             (e.LeafValues |> List.ofSeq |> List.map (fun lv -> def.name, (lv.Value.ToString(), lv.Position))))
