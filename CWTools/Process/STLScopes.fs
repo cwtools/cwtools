@@ -97,16 +97,17 @@ module STLScopes =
 // parameter:
     let defaultDesc = "Scope (/context) switch"
     let scopedEffects = [
-        ScopedEffect("space_owner", [Scope.GalacticObject; Scope.Planet], Scope.Country, EffectType.Both, defaultDesc, ""); //Planet from MoreEventsMod
+        ScopedEffect("space_owner", [Scope.Ship; Scope.Fleet; Scope.GalacticObject; Scope.Planet], Scope.Country, EffectType.Both, defaultDesc, "");
         ScopedEffect("overlord", [Scope.Country], Scope.Country, EffectType.Both, defaultDesc, "");
         ScopedEffect("defender", [Scope.War], Scope.Country, EffectType.Both, defaultDesc, "");
         ScopedEffect("attacker", [Scope.War], Scope.Country, EffectType.Both, defaultDesc, "");
         ScopedEffect("owner", [Scope.Species ;Scope.Ship; Scope.Pop; Scope.Fleet; Scope.Planet; Scope.PopFaction; Scope.Sector; Scope.Leader; Scope.Country; Scope.Starbase; Scope.Tile; Scope.GalacticObject], Scope.Country, EffectType.Both, "", ""); //Fleet, Planet, PopFaction, Sector, Leader, Country, Tile from vanilla use
-        ScopedEffect("owner_species", [Scope.Species ;Scope.Ship; Scope.Pop; Scope.Fleet; Scope.Planet; Scope.PopFaction; Scope.Sector; Scope.Leader; Scope.Country; Scope.Starbase; Scope.Tile; Scope.GalacticObject], Scope.Species, EffectType.Both, "", ""); //Copied owner
-        ScopedEffect("controller", [Scope.Planet], Scope.Country, EffectType.Both, "", ""); //Planet from vanilla use
+        ScopedEffect("controller", [Scope.Planet; Scope.Country], Scope.Country, EffectType.Both, "", "");
         ScopedEffect("planet_owner", [Scope.Planet], Scope.Country, EffectType.Both, defaultDesc, "");
         ScopedEffect("last_created_country", allScopes, Scope.Country, EffectType.Both, defaultDesc, "");
+        ScopedEffect("last_refugee_country", allScopes, Scope.Country, EffectType.Both, defaultDesc, "");
         ScopedEffect("leader", [Scope.Ship; Scope.Planet; Scope.Country; Scope.PopFaction; Scope.Fleet; Scope.Sector; Scope.Army], Scope.Leader, EffectType.Both, "", ""); //PopFaction, Fleet from vannilla use, Sector from Iyur
+        ScopedEffect("owner_species", [Scope.Species ;Scope.Ship; Scope.Pop; Scope.Fleet; Scope.Planet; Scope.PopFaction; Scope.Sector; Scope.Leader; Scope.Country; Scope.Starbase; Scope.Tile; Scope.GalacticObject], Scope.Species, EffectType.Both, "", ""); //Copied owner
         ScopedEffect("last_created_leader", allScopes, Scope.Leader, EffectType.Both, defaultDesc, "");
         ScopedEffect("ruler", [Scope.Country], Scope.Leader, EffectType.Both, defaultDesc, "");
         ScopedEffect("heir", [Scope.Country], Scope.Leader, EffectType.Both, defaultDesc, "");
@@ -139,7 +140,6 @@ module STLScopes =
         ScopedEffect("sector", [Scope.Planet; Scope.GalacticObject; Scope.Leader], Scope.Sector, EffectType.Both, defaultDesc, "");
         ScopedEffect("alliance", [], Scope.Alliance, EffectType.Both, defaultDesc, "");
         ScopedEffect("starbase", [Scope.GalacticObject; Scope.Planet], Scope.Starbase, EffectType.Both, defaultDesc, "");
-        ScopedEffect("last_refugee_country", allScopes, Scope.Country, EffectType.Both, defaultDesc, "");
         ScopedEffect("system_star", [Scope.GalacticObject], Scope.Planet, EffectType.Both, defaultDesc, "");
         ScopedEffect("no_scope", allScopes, Scope.Any, EffectType.Both, defaultDesc, "")
     ]

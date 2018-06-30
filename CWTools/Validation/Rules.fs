@@ -65,6 +65,7 @@ module rec Rules =
             match key with
             |x when x.StartsWith "event_target:" -> true
             |x when x.StartsWith "parameter:" -> true
+            |x when x.StartsWith "hidden:" -> true
             |x ->
                 let xs = x.Split '.'
                 xs |> Array.forall (fun s -> scopes |> List.exists (fun s2 -> s == s2))
@@ -237,14 +238,14 @@ module rec Rules =
                 let value = leaf.Value.ToString().Trim([|'\"'|])
                 if value.StartsWith "@" then OK else
                 if values.Contains value then OK else Invalid [inv (ErrorCodes.ConfigRulesUnexpectedValue (sprintf "Expected value of type %s" t)) leaf]
-            |None -> OK
+            |None -> Invalid [inv (ErrorCodes.CustomError (sprintf "Unknown type referenced %s" t) Severity.Error) leaf]
 
         and applyLeftTypeFieldLeaf (t : string) (leaf : Leaf) =
             match typesMap.TryFind t with
             |Some values ->
                 let value = leaf.Key
                 if values.Contains value then OK else Invalid [inv (ErrorCodes.ConfigRulesUnexpectedValue (sprintf "Expected key of type %s" t)) leaf]
-            |None -> OK
+            |None -> Invalid [inv (ErrorCodes.CustomError (sprintf "Unknown type referenced %s" t) Severity.Error) leaf]
 
         and applyScopeField (root : Node) (ctx : RuleContext) (s : Scope) (leaf : Leaf) =
             // let scope2 =
@@ -807,23 +808,22 @@ module rec Rules =
                             (e.Children |> List.collect inner)
                             @
                             (e.LeafValues |> List.ofSeq |> List.map (fun lv -> def.name, (lv.Value.ToString(), lv.Position))))
-        types |> List.collect getTypeInfo |> List.fold (fun m (n, k) -> if Map.containsKey n m then Map.add n (k::m.[n]) m else Map.add n [k] m) Map.empty
-
+        let results = types |> List.collect getTypeInfo |> List.fold (fun m (n, k) -> if Map.containsKey n m then Map.add n (k::m.[n]) m else Map.add n [k] m) Map.empty
+        types |> List.map (fun t -> t.name) |> List.fold (fun m k -> if Map.containsKey k m then m else Map.add k [] m ) results
 
     let getEnumsFromComplexEnums (complexenums : (ComplexEnumDef) list) (es : Entity list) =
         let rec inner (enumtree : Node) (node : Node) =
             match enumtree.Children with
             |head::_ ->
                 if enumtree.Children |> List.exists (fun n -> n.Key == "enum_name")
-                then node.Children |> List.map (fun n -> n.Key) else
+                then node.Children |> List.map (fun n -> n.Key.Trim([|'\"'|])) else
                 node.Children |> List.collect (inner head)
             |[] ->
-
                 if enumtree.LeafValues |> Seq.exists (fun lv -> lv.Value.ToRawString() == "enum_name")
                 then node.LeafValues |> Seq.map (fun lv -> lv.Value.ToRawString().Trim([|'\"'|])) |> List.ofSeq
                 else
                     match enumtree.Leaves |> Seq.tryFind (fun l -> l.Value.ToRawString() == "enum_name") with
-                    |Some leaf -> node.TagsText (leaf.Key) |> List.ofSeq
+                    |Some leaf -> node.TagsText (leaf.Key) |> Seq.map (fun k -> k.Trim([|'\"'|])) |> List.ofSeq
                     |None -> []
         let getEnumInfo (complexenum : ComplexEnumDef) =
             let values = es |> List.choose (fun e -> if e.logicalpath.Replace("/","\\").StartsWith(complexenum.path.Replace("/","\\")) then Some e.entity else None)
