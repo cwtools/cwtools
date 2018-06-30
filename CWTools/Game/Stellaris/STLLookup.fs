@@ -18,6 +18,7 @@ module STLLookup =
         setvariables : string list
         savedeventtargets : string list
         referencedtypes : Map<string, (string  * range) list> option
+        hastechs : string list
     }
 
     let getChildrenWithComments (root : Node) =

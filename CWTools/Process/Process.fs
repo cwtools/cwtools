@@ -210,6 +210,23 @@ module ProcessCore =
             //| [] -> acc
         loop [] node
 
+    let foldNode8 fNode fCombine acc (node : Node) =
+        let rec loop acc nodes  =
+            match nodes with
+            | (x : Node) ->
+                let resNode = fNode x acc
+                x.Children |> List.map (loop resNode) |> fCombine
+            //| [] -> acc
+        loop acc node
+
+    let rec foldNodeWithState fNode acc (node : Node) =
+        let recurse = foldNodeWithState fNode
+        let newAcc, res = fNode acc node
+        match res with
+        |None -> (node.Children |> List.collect (recurse newAcc))
+        |Some e -> e ::(node.Children |> List.collect (recurse newAcc))
+        //res::(node.Children |> List.collect (recurse newAcc))
+
     let rec cata fNode (node:Node) :'r =
         let recurse = cata fNode
         fNode node (node.Children |> Seq.map recurse)

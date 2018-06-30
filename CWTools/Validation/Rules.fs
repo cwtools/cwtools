@@ -664,12 +664,8 @@ module rec Rules =
             let fNode (res) (node : Node) ((name, options, field) : Rule) = res
             let fCombine a b = (a |> List.choose id) @ (b |> List.choose id)
 
-            // let pathDir = (Path.GetDirectoryName node.Position.FileName).Replace("/","\\")
-            //let childMatch = node.Children |> List.tryFind (fun c -> Range.rangeContainsPos c.Position pos)
-            //eprintfn "%O %A %A" pos pathDir (typedefs |> List.tryHead)
             let ctx = typedefs |> List.fold (fun (a : Collections.Map<string, (string * range) list>) t -> a.Add(t.name, [])) Collections.Map.empty
             let res = foldCollect fLeaf fLeafValue fComment fNode ctx (entity.entity) (entity.logicalpath)
-            //res |> Collections.Map.iter (fun k v -> if v.IsEmpty then () else eprintfn "%A %A" k v)
             res
 
         member __.GetInfo(pos : pos, entity : Entity) = getInfoAtPos pos entity

@@ -426,12 +426,6 @@ module STLValidation =
                 name, prereqs
         techs |> List.map inner
 
-    let getAllTechPreqreqs (es : STLEntitySet) =
-        let fNode =
-            fun (t : Node) children ->
-                let inner ls (l : Leaf) = if l.Key == "has_technology" then l.Value.ToRawString()::ls else ls
-                t.Values |> List.fold inner children
-        (es.AllTriggers |> List.map (fun t -> t :> Node)) @ (es.AllModifiers |> List.map (fun t -> t :> Node)) |> List.collect (foldNode7 fNode)
 
 
     let validateTechnologies : StructureValidator =
@@ -452,7 +446,8 @@ module STLValidation =
             let edictPrereqs = os.AllOfTypeChildren EntityType.Edicts @ es.AllOfTypeChildren EntityType.Edicts// |> List.collect getPrereqs
             let tileBlockPrereqs = os.AllOfTypeChildren EntityType.TileBlockers @ es.AllOfTypeChildren EntityType.TileBlockers// |> List.collect getPrereqs
             let allPrereqs = getPrereqsPar [buildingPrereqs; shipsizePrereqs;sectPrereqs; compPrereqs; stratResPrereqs; armyPrereqs; edictPrereqs; tileBlockPrereqs; ] |> Set.ofList
-            let allPrereqs = (getAllTechPreqreqs os @ getAllTechPreqreqs es) |> List.fold (fun (set : Collections.Set<string>) key -> set.Add key) allPrereqs
+            let hastechs = (es.AllWithData |> List.collect (fun (_, d) -> d.Force().hastechs)) @ (os.AllWithData |> List.collect (fun (_, d) -> d.Force().hastechs))
+            let allPrereqs = (hastechs) |> List.fold (fun (set : Collections.Set<string>) key -> set.Add key) allPrereqs
             //let allPrereqs = buildingPrereqs @ shipsizePrereqs @ sectPrereqs @ compPrereqs @ stratResPrereqs @ armyPrereqs @ edictPrereqs @ tileBlockPrereqs @ getAllTechPreqreqs os @ getAllTechPreqreqs es |> Set.ofList
             let techList = getTechnologies os @ getTechnologies es
             let techPrereqs = techList |> List.collect snd |> Set.ofList
@@ -619,11 +614,16 @@ module STLValidation =
                 )
             codeBlocks <&!!&> (foldNode2 fNode (<&&>) OK)
 
+    type BoolState = | AND | OR
     let validateRedundantAND : StructureValidator =
         fun _ es ->
             let effects = (es.AllEffects |> List.map (fun n -> n :> Node))
             let triggers = (es.AllTriggers |> List.map (fun n -> n :> Node))
             let fNode =
-                fun (x : Node) ->
-                    if x.Has "and" then Invalid [inv ErrorCodes.UnnecessaryAND x] else OK
-            (effects <&!&> fNode) <&&> (triggers <&!&> fNode)
+                fun (last : BoolState) (x : Node) ->
+                    match last, x.Key with
+                    |AND, k when k == "AND" -> AND, Some (inv (ErrorCodes.UnnecessaryBoolean "AND") x)
+                    |OR, k when k == "OR" -> OR, Some (inv (ErrorCodes.UnnecessaryBoolean "OR") x)
+                    |_, k when k == "OR" || k == "NOR" -> OR, None
+                    |_, _ -> AND, None
+            (effects @ triggers) <&!&> (foldNodeWithState fNode AND >> Invalid)
