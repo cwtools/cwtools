@@ -252,6 +252,7 @@ type STLGame (settings : StellarisSettings) =
                 let files = resources.GetResources() |> List.choose (function |FileResource (_, f) -> Some f.logicalpath |EntityResource (_, f) -> Some f.logicalpath) |> Set.ofList
                 let ruleApplicator = RuleApplicator(lookup.configRules, lookup.typeDefs, lookup.typeDefInfo, lookup.enumDefs, loc, files, lookup.scriptedTriggers, lookup.scriptedEffects)
                 lookup.typeDefInfo <- getTypesFromDefinitions ruleApplicator types (resources.AllEntities() |> List.map (fun struct(e,_) -> e))
+                //types |> List.iter (fun t -> eprintfn "%A %b" t.path (rulesWithMod |> List.exists(function |TypeRule((tr,_,_)) when tr = t.name -> true |_ -> false)))
             |None -> ()
 
         // let findDuplicates (sl : Statement list) =

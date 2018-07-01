@@ -24,11 +24,12 @@ module STLLocalisationValidation =
         | _, true -> OK
         | _, false -> Invalid [invData (ErrorCodes.MissingLocalisation key (lang)) leaf (Some key)]
 
-    let checkLocName (leaf : Leaf) (keys : Set<string>) (lang : Lang) key  =
-        match key = "" || key.Contains(" ") || (key.StartsWith("[") && key.EndsWith("]")), Set.contains key keys with
-        | true, _ -> OK
-        | _, true -> OK
-        | _, false -> Invalid [invData (ErrorCodes.MissingLocalisation key (lang)) leaf (Some key)]
+    let checkLocName (leaf : Leaf) (keys : Set<string>) (lang : Lang) (key : string)  =
+        match (key.Contains (".") || key.Contains("_")) && (key.Contains(" ") |> not), key = "" || key.Contains(" ") || (key.StartsWith("[") && key.EndsWith("]")), Set.contains key keys with
+        | false, _, _ -> OK
+        | _, true, _ -> OK
+        | _, _, true -> OK
+        | _, _, false -> Invalid [invData (ErrorCodes.MissingLocalisation key (lang)) leaf (Some key)]
 
     let checkLocKeys (keys : (Lang * Set<string>) list) (leaf : Leaf) =
         let key = leaf.Value |> (function |QString s -> s |s -> s.ToString())
@@ -478,7 +479,7 @@ module STLLocalisationValidation =
 
     let valSpeciesNames : LocalisationValidator =
         fun _ keys es ->
-            let species = es.GlobMatchChildren("**/common/species_names/*.txt")
+            let species = es.GlobMatchChildren("**/common/species_classes/*.txt")
             let inner =
                 fun (node : Node) ->
                     let key = node.Key

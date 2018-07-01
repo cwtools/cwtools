@@ -335,11 +335,11 @@ module rec ConfigParser =
             let namefield = if node.Has "name_field" then Some (node.TagText "name_field") else None
             let path = (node.TagText "path").Replace("game/","").Replace("game\\","")
             let subtypes = getNodeComments node |> List.choose parseSubType
-            eprintfn "cs %A" comments
+            //eprintfn "cs %A" comments
             let typekeyfilter =
                 match comments |> List.tryFind (fun s -> s.Contains "type_key_filter") with
                 |Some c ->
-                    eprintfn "c %A" c
+                    //eprintfn "c %A" c
                     match c.Contains "=", c.Contains "<>" with
                     |true, _ -> Some (c.Substring(c.IndexOf "=" + 1).Trim(), false)
                     |_, true -> Some (c.Substring(c.IndexOf "<>" + 2).Trim(), true)
