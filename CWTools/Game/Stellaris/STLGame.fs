@@ -159,6 +159,9 @@ type STLGame (settings : StellarisSettings) =
             "prescripted_countries";
             "interface";
             "gfx";
+            "music";
+            "sound";
+            "fonts";
             ]
 
         let fileManager = FileManager(settings.rootDirectory, settings.modFilter, settings.scope, scriptFolders, "stellaris")

@@ -127,8 +127,8 @@ module STLScopes =
         ScopedEffect("tile", [Scope.Pop; Scope.Tile], Scope.Tile, EffectType.Both, defaultDesc, "");
         ScopedEffect("orbital_deposit_tile", [Scope.Planet], Scope.Tile, EffectType.Both, defaultDesc, "");
         ScopedEffect("best_tile_for_pop", [Scope.Planet], Scope.Tile, EffectType.Both, defaultDesc, "");
-        ScopedEffect("owner_species", [Scope.Species ;Scope.Pop; Scope.Leader; Scope.Country], Scope.Species, EffectType.Both, "", ""); //PDX list
-        //ScopedEffect("owner_species", [Scope.Species ;Scope.Ship; Scope.Pop; Scope.Fleet; Scope.Planet; Scope.PopFaction; Scope.Sector; Scope.Leader; Scope.Country; Scope.Starbase; Scope.Tile; Scope.GalacticObject], Scope.Species, EffectType.Both, "", ""); //Copied owner
+        //ScopedEffect("owner_species", [Scope.Species ;Scope.Pop; Scope.Leader; Scope.Country], Scope.Species, EffectType.Both, "", ""); //PDX list
+        ScopedEffect("owner_species", [Scope.Species ;Scope.Ship; Scope.Pop; Scope.Fleet; Scope.Planet; Scope.PopFaction; Scope.Sector; Scope.Leader; Scope.Country; Scope.Starbase; Scope.Tile; Scope.GalacticObject], Scope.Species, EffectType.Both, "", ""); //Copied owner
         ScopedEffect("last_created_species", allScopes, Scope.Species, EffectType.Both, defaultDesc, "");
         ScopedEffect("species", [Scope.Country; Scope.Ship; Scope.Leader; Scope.Pop; Scope.Army], Scope.Species, EffectType.Both, defaultDesc, "");
         ScopedEffect("pop_faction", [Scope.Pop; Scope.Leader], Scope.PopFaction, EffectType.Both, defaultDesc, ""); //Leader from vanilla

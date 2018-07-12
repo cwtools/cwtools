@@ -375,7 +375,11 @@ module rec Rules =
             let inner (node : Node) =
 
                 let pathDir = (Path.GetDirectoryName path).Replace("/","\\")
-                match typedefs |> List.tryFind (fun t -> pathDir = (t.path.Replace("/","\\"))) with
+                let typekeyfilter (td : TypeDefinition) (n : Node) =
+                    match td.typeKeyFilter with
+                    |Some (filter, negate) -> n.Key == filter <> negate
+                    |None -> false
+                match typedefs |> List.tryFind (fun t -> pathDir = (t.path.Replace("/","\\")) && typekeyfilter t node) with
                 |Some typedef ->
                     let typerules = typeRules |> List.filter (fun (name, _, _) -> name == typedef.name)
                     //eprintfn "%A" typerules
@@ -781,7 +785,11 @@ module rec Rules =
         let complete (pos : pos) (entity : Entity) =
             let path = getRulePath pos [] entity.entity |> List.rev
             let pathDir = (Path.GetDirectoryName entity.logicalpath).Replace("/","\\")
-            match typedefs |> List.tryFind (fun t -> pathDir = (t.path.Replace("/","\\"))) with
+            let typekeyfilter (td : TypeDefinition) (n : string) =
+                match td.typeKeyFilter with
+                |Some (filter, negate) -> n == filter <> negate
+                |None -> false
+            match typedefs |> List.tryFind (fun t -> pathDir = (t.path.Replace("/","\\")) && typekeyfilter t (if path.Length > 0 then path.Head |> fst else "")) with
             |Some typedef ->
                 let typerules = typeRules |> List.filter (fun (name, _, _) -> name == typedef.name)
                 let fixedpath = if List.isEmpty path then path else (typedef.name, true)::(path |> List.tail)

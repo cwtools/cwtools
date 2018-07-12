@@ -36,6 +36,9 @@ module Files =
                         if pathContains "localisation" then let i = pathIndex "localisation" in yield i, path.Substring(i) else ();
                         if pathContains "localisation_synced" then let i = pathIndex "localisation_synced" in yield i, path.Substring(i) else ();
                         if pathContains "map" then let i = pathIndex "map" in yield i, path.Substring(i) else ();
+                        if pathContains "music" then let i = pathIndex "music" in yield i, path.Substring(i) else ();
+                        if pathContains "fonts" then let i = pathIndex "fonts" in yield i, path.Substring(i) else ();
+                        if pathContains "sound" then let i = pathIndex "sound" in yield i, path.Substring(i) else ();
                     ]
                 if matches.IsEmpty then path else matches |> List.minBy fst |> snd
 
@@ -127,7 +130,9 @@ module Files =
                 |".shader"
                 |".lua"
                 |".png"
-                |".mesh" ->
+                |".mesh"
+                |".ttf"
+                |".otf" ->
                     let rootedpath = filepath.Substring(filepath.IndexOf(normalisedScopeDirectory) + (normalisedScopeDirectory.Length) + 1)
                     Some (FileResourceInput { scope = scope; filepath = filepath; logicalpath = convertPathToLogicalPath rootedpath })
                 |_ -> None
