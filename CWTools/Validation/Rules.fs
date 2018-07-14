@@ -27,6 +27,10 @@ module rec Rules =
     let fst3 (a, _, _) = a
     let snd3 (_, b, _) = b
     let thd3 (_, _, c) = c
+    let checkPathDir (t : TypeDefinition) (pathDir : string) =
+        match t.path_strict with
+        |true -> pathDir == t.path.Replace("/","\\")
+        |false -> pathDir.StartsWith(t.path.Replace("/","\\"))
 
     let getValidValues =
         function
@@ -127,7 +131,7 @@ module rec Rules =
                     if key = "yes" || key = "no" then OK else Invalid[inv (ErrorCodes.ConfigRulesUnexpectedValue "Expecting yes or no" severity) leaf]
                 |ValueType.Enum e ->
                     match enumsMap.TryFind e with
-                    |Some es -> if es.Contains key then OK else Invalid[inv (ErrorCodes.ConfigRulesUnexpectedValue (sprintf "Expecting one of %A" es) severity) leaf]
+                    |Some es -> if es.Contains key then OK else Invalid[inv (ErrorCodes.ConfigRulesUnexpectedValue (sprintf "Expecting a \"%s\" value, e.g. %A" e es) severity) leaf]
                     |None -> OK
                 |ValueType.Float (min, max) ->
                     match leaf.Value with
@@ -213,7 +217,7 @@ module rec Rules =
                     let leafcount = node.Tags key |> Seq.length
                     let childcount = node.Childs key |> Seq.length
                     let total = leafcount + childcount
-                    if opts.min > total then Invalid [inv (ErrorCodes.ConfigRulesWrongNumber (sprintf "Missing %s, expecting at least %i" key opts.min) Severity.Error) node]
+                    if opts.min > total then Invalid [inv (ErrorCodes.ConfigRulesWrongNumber (sprintf "Missing %s, expecting at least %i" key opts.min) severity) node]
                     else if opts.max < total then Invalid [inv (ErrorCodes.ConfigRulesWrongNumber (sprintf "Too many %s, expecting at most %i" key opts.max) Severity.Warning) node]
                     else OK
             startNode.Leaves <&!&> valueFun
@@ -402,18 +406,18 @@ module rec Rules =
                         OK
 
                 let skipres =
-                    match typedefs |> List.filter (fun t -> pathDir.StartsWith(t.path.Replace("/","\\")) && skiprootkey t node) with
+                    match typedefs |> List.filter (fun t -> checkPathDir t pathDir && skiprootkey t node) with
                     |[] -> OK
                     |xs ->
                         node.Children <&!&>
                             (fun c ->
-                                match xs |> List.tryFind (fun t -> pathDir.StartsWith(t.path.Replace("/","\\")) && typekeyfilter t c) with
+                                match xs |> List.tryFind (fun t -> checkPathDir t pathDir && typekeyfilter t c) with
                                 |Some typedef -> validateType typedef c
                                 |None -> OK
                             )
 
                 let nonskipres =
-                    match typedefs |> List.tryFind (fun t -> pathDir.StartsWith(t.path.Replace("/","\\")) && typekeyfilter t node && t.skipRootKey.IsNone) with
+                    match typedefs |> List.tryFind (fun t -> checkPathDir t pathDir && typekeyfilter t node && t.skipRootKey.IsNone) with
                     |Some typedef -> validateType typedef node
                     |None -> OK
                 skipres <&&> nonskipres
@@ -530,7 +534,7 @@ module rec Rules =
             let pathDir = (Path.GetDirectoryName logicalpath).Replace("/","\\")
             let childMatch = node.Children |> List.tryFind (fun c -> Range.rangeContainsPos c.Position pos)
             //eprintfn "%O %A %A" pos pathDir (typedefs |> List.tryHead)
-            match childMatch, typedefs |> List.tryFind (fun t -> pathDir.StartsWith(t.path.Replace("/","\\"))) with
+            match childMatch, typedefs |> List.tryFind (fun t -> checkPathDir t pathDir) with
             |Some c, Some typedef ->
                 let typerules = typeRules |> List.filter (fun (name, _, _) -> name == typedef.name)
                 match typerules with
@@ -602,7 +606,7 @@ module rec Rules =
             let childMatch = entity.entity.Children |> List.tryFind (fun c -> Range.rangeContainsPos c.Position pos)
             // eprintfn "%O %A %A %A" pos pathDir (typedefs |> List.tryHead) (childMatch.IsSome)
             let ctx =
-                match childMatch, typedefs |> List.tryFind (fun t -> pathDir.StartsWith(t.path.Replace("/","\\"))) with
+                match childMatch, typedefs |> List.tryFind (fun t -> checkPathDir t pathDir) with
                 |Some c, Some typedef ->
                     let pushScope, subtypes = ruleApplicator.TestSubtype (typedef.subtypes, c)
                     match pushScope with
@@ -664,7 +668,7 @@ module rec Rules =
                 (node.Children |> List.choose innerN) @ (node.Leaves |> List.ofSeq |> List.choose innerL) @ (node.LeafValues |> List.ofSeq |> List.choose innerLV)
             let pathDir = (Path.GetDirectoryName path).Replace("/","\\")
             //eprintfn "%A %A" pathDir (typedefs |> List.tryHead)
-            match typedefs |> List.tryFind (fun t -> pathDir.StartsWith(t.path.Replace("/","\\"))) with
+            match typedefs |> List.tryFind (fun t -> checkPathDir t pathDir) with
             |Some typedef ->
                 let typerules = typeRules |> List.filter (fun (name, _, _) -> name == typedef.name)
                 match typerules with
@@ -816,10 +820,10 @@ module rec Rules =
                 |Some key -> n == key
                 |None -> false
             let skipcomp =
-                match typedefs |> List.filter (fun t -> pathDir.StartsWith(t.path.Replace("/","\\")) && skiprootkey t (if path.Length > 0 then path.Head |> fst else "")) with
+                match typedefs |> List.filter (fun t -> checkPathDir t pathDir && skiprootkey t (if path.Length > 0 then path.Head |> fst else "")) with
                 |[] -> None
                 |xs ->
-                    match xs |> List.tryFind (fun t -> pathDir.StartsWith(t.path.Replace("/","\\")) && typekeyfilter t (if path.Length > 1 then path.Tail |> List.head |> fst else "")) with
+                    match xs |> List.tryFind (fun t -> checkPathDir t pathDir && typekeyfilter t (if path.Length > 1 then path.Tail |> List.head |> fst else "")) with
                     |Some typedef ->
                         let typerules = typeRules |> List.filter (fun (name, _, _) -> name == typedef.name)
                         let fixedpath = if List.isEmpty path then path else (typedef.name, true)::(path |> List.tail |> List.tail)
@@ -828,7 +832,7 @@ module rec Rules =
                     |None -> None
             skipcomp |> Option.defaultWith
                 (fun () ->
-                match typedefs |> List.tryFind (fun t -> pathDir.StartsWith(t.path.Replace("/","\\")) && typekeyfilter t (if path.Length > 0 then path.Head |> fst else "")) with
+                match typedefs |> List.tryFind (fun t -> checkPathDir t pathDir && typekeyfilter t (if path.Length > 0 then path.Head |> fst else "")) with
                 |Some typedef ->
                     let typerules = typeRules |> List.filter (fun (name, _, _) -> name == typedef.name)
                     let fixedpath = if List.isEmpty path then path else (typedef.name, true)::(path |> List.tail)
@@ -840,7 +844,7 @@ module rec Rules =
 
     let getTypesFromDefinitions (ruleapplicator : RuleApplicator) (types : TypeDefinition list) (es : Entity list) =
         let getTypeInfo (def : TypeDefinition) =
-            es |> List.choose (fun e -> if  e.logicalpath.Replace("/","\\").StartsWith(def.path.Replace("/","\\")) then Some e.entity else None)
+            es |> List.choose (fun e -> if checkPathDir def ((Path.GetDirectoryName e.logicalpath).Replace("/","\\")) then Some e.entity else None)
                |> List.collect (fun e ->
                             let inner (n : Node) =
                                 let subtypes = ruleapplicator.TestSubtype(def.subtypes, n) |> snd |> List.map (fun s -> def.name + "." + s)

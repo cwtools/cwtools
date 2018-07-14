@@ -70,6 +70,7 @@ module rec ConfigParser =
         name : string
         nameField : string option
         path : string
+        path_strict : bool
         conditions : Node option
         subtypes : SubTypeDefinition list
         typeKeyFilter : (string * bool) option
@@ -340,6 +341,7 @@ module rec ConfigParser =
             let typename = getSettingFromString node.Key "type"
             let namefield = if node.Has "name_field" then Some (node.TagText "name_field") else None
             let path = (node.TagText "path").Replace("game/","").Replace("game\\","")
+            let path_strict = node.TagText "path_strict" == "yes"
             let skiprootkey = if node.Has "skip_root_key" then Some (node.TagText "skip_root_key") else None
             let subtypes = getNodeComments node |> List.choose parseSubType
             let warningOnly = node.TagText "severity" == "warning"
@@ -354,7 +356,7 @@ module rec ConfigParser =
                     |_ -> None
                 |None -> None
             match typename with
-            |Some tn -> Some { name = tn; nameField = namefield; path = path; conditions = None; subtypes = subtypes; typeKeyFilter = typekeyfilter; skipRootKey = skiprootkey; warningOnly = warningOnly}
+            |Some tn -> Some { name = tn; nameField = namefield; path = path; conditions = None; subtypes = subtypes; typeKeyFilter = typekeyfilter; skipRootKey = skiprootkey; warningOnly = warningOnly; path_strict = path_strict}
             |None -> None
         |_ -> None
 
@@ -546,6 +548,7 @@ module rec ConfigParser =
             typeKeyFilter = None
             skipRootKey = None
             warningOnly = false
+            path_strict = false
         }
     let shipSizeType =
         {
@@ -557,6 +560,7 @@ module rec ConfigParser =
             typeKeyFilter = None
             skipRootKey = None
             warningOnly = false
+            path_strict = false
         }
 //  type[ship_behavior] = {
 //      path = "game/common/ship_behaviors"

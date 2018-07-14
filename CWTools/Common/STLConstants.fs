@@ -79,7 +79,7 @@ module STLConstants =
             |"popfaction"
             |"pop_faction" -> Scope.PopFaction
             |"sector" -> Scope.Sector
-            |"alliance" -> Scope.Country
+            |"alliance" -> Scope.Alliance
             |"war" -> Scope.War
             |"megastructure" -> Scope.Megastructure
             |"design" -> Scope.Design
