@@ -94,13 +94,6 @@ module STLValidation =
     let valNotUsage (node : Node) = if (node.Values.Length + node.Children.Length) > 1 then Invalid [inv ErrorCodes.IncorrectNotUsage node] else OK
 
 
-    let valAfterOptionBug (event : Event) =
-        let fNode = (fun (x : Node) (children : bool) ->
-            (x.Values |> List.exists (fun v -> v.Key == "response_text") ) || children
-            )
-        let hasresponse = event |> foldNode2 fNode ((||)) false
-        let hasafter = event.Children |> List.exists (fun v -> v.Key == "after")
-        if hasresponse && hasafter then Invalid [inv (ErrorCodes.CustomError "This event uses after and has an option with response_text, this is bugged in 2.0.2" Severity.Warning) event] else OK
     /// Make sure an event either has a mean_time_to_happen or is stopped from checking all the time
     /// Not mandatory, but performance reasons, suggested by Caligula
     /// Check "mean_time_to_happen", "is_triggered_only", "fire_only_once" and "trigger = { always = no }".
@@ -120,7 +113,7 @@ module STLValidation =
             match isMTTH || isTrig || isOnce || isAlwaysNo with
             | false -> Invalid [inv ErrorCodes.EventEveryTick event]
             | true -> OK
-        e <&&> valAfterOptionBug event
+        e
 
     let valResearchLeader (area : string) (cat : string option) (node : Node) =
         let fNode = (fun (x:Node) children ->
