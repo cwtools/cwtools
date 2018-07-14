@@ -34,7 +34,10 @@ module rec Rules =
         |ValueType.Enum es -> Some [es]
         |_ -> None
 
-    let checkValidLeftClauseRule (enums : Collections.Map<string, StringSet>) (field : Field) (key : string) =
+    let checkFileExists (files : Collections.Set<string>) (leaf : Leaf) =
+        let file = leaf.Value.ToRawString().Trim('"').Replace("/","\\")
+        if files.Contains file then OK else Invalid [inv (ErrorCodes.MissingFile file) leaf]
+    let checkValidLeftClauseRule (files : Collections.Set<string>) (enums : Collections.Map<string, StringSet>) (field : Field) (key : string) =
         match field with
         |LeftClauseField (ValueType.Int (min, max), _) ->
             match TryParser.parseInt key with
@@ -49,6 +52,7 @@ module rec Rules =
             |Some es -> es.Contains key
             |None -> false
         |LeftClauseField (ValueType.Scalar, _) -> true
+        |LeftClauseField (ValueType.Filepath, _) -> files.Contains (key.Trim('"').Replace("/","\\"))
         |_ -> false
 
     let checkValidLeftTypeRule (types : Collections.Map<string, StringSet>) (field : Field) (key : string) =
@@ -71,9 +75,6 @@ module rec Rules =
                 xs |> Array.forall (fun s -> scopes |> List.exists (fun s2 -> s == s2))
         |_ -> false
 
-    let checkFileExists (files : Collections.Set<string>) (leaf : Leaf) =
-        let file = leaf.Value.ToRawString().Replace("/","\\")
-        if files.Contains file then OK else Invalid [inv (ErrorCodes.MissingFile file) leaf]
     let scopes = (scopedEffects |> List.map (fun se -> se.Name)) @ (oneToOneScopes |> List.map fst)
 
     type CompletionResponse =
@@ -84,6 +85,7 @@ module rec Rules =
         {
             subtypes : string list
             scopes : ScopeContext
+            warningOnly : bool
         }
     type RuleApplicator(rootRules : RootRule list, typedefs : TypeDefinition list , types : Collections.Map<string, (string * range) list>, enums : Collections.Map<string, string list>, localisation : (Lang * Collections.Set<string>) list, files : Collections.Set<string>, triggers : Effect list, effects : Effect list) =
         let triggerMap = triggers |> List.map (fun e -> e.Name, e) |> (fun l -> EffectMap.FromList(InsensitiveStringComparer(), l))
@@ -114,36 +116,38 @@ module rec Rules =
                 |Int _ -> true
                 |_ -> false
             |ValueType.Specific s -> key = s
+            |ValueType.Percent -> key.EndsWith("%")
             |_ -> true
 
-        let checkValidValue (leaf : Leaf) (vt : ValueType) =
+        let checkValidValue (severity : Severity) (leaf : Leaf) (vt : ValueType) =
             let key = leaf.Value.ToString().Trim([|'"'|])
             if key.StartsWith "@" then OK else
                 match vt with
                 |ValueType.Bool ->
-                    if key = "yes" || key = "no" then OK else Invalid[inv (ErrorCodes.ConfigRulesUnexpectedValue "Expecting yes or no") leaf]
+                    if key = "yes" || key = "no" then OK else Invalid[inv (ErrorCodes.ConfigRulesUnexpectedValue "Expecting yes or no" severity) leaf]
                 |ValueType.Enum e ->
                     match enumsMap.TryFind e with
-                    |Some es -> if es.Contains key then OK else Invalid[inv (ErrorCodes.ConfigRulesUnexpectedValue (sprintf "Expecting one of %A" es)) leaf]
+                    |Some es -> if es.Contains key then OK else Invalid[inv (ErrorCodes.ConfigRulesUnexpectedValue (sprintf "Expecting one of %A" es) severity) leaf]
                     |None -> OK
                 |ValueType.Float (min, max) ->
                     match leaf.Value with
-                    |Float f -> if f <= max && f >= min then OK else Invalid[inv (ErrorCodes.ConfigRulesUnexpectedValue (sprintf "Expecting a value between %f and %f" min max)) leaf]
-                    |Int f -> if float f <= max && float f >= min then OK else Invalid[inv (ErrorCodes.ConfigRulesUnexpectedValue (sprintf "Expecting a value between %f and %f" min max)) leaf]
+                    |Float f -> if f <= max && f >= min then OK else Invalid[inv (ErrorCodes.ConfigRulesUnexpectedValue (sprintf "Expecting a value between %f and %f" min max) severity) leaf]
+                    |Int f -> if float f <= max && float f >= min then OK else Invalid[inv (ErrorCodes.ConfigRulesUnexpectedValue (sprintf "Expecting a value between %f and %f" min max) severity) leaf]
                     |_ ->
                         match TryParser.parseDouble key with
-                        |Some f -> if f < max && f > min then OK else Invalid[inv (ErrorCodes.ConfigRulesUnexpectedValue (sprintf "Expecting a value between %f and %f" min max)) leaf]
-                        |None -> Invalid[inv (ErrorCodes.ConfigRulesUnexpectedValue (sprintf "Expecting a float, got %s" key)) leaf]
+                        |Some f -> if f < max && f > min then OK else Invalid[inv (ErrorCodes.ConfigRulesUnexpectedValue (sprintf "Expecting a value between %f and %f" min max) severity) leaf]
+                        |None -> Invalid[inv (ErrorCodes.ConfigRulesUnexpectedValue (sprintf "Expecting a float, got %s" key) severity) leaf]
                 |ValueType.Int (min, max) ->
                     match leaf.Value with
-                    |Int i -> if i <= max && i >= min then OK else Invalid[inv (ErrorCodes.ConfigRulesUnexpectedValue (sprintf "Expecting a value between %i and %i" min max)) leaf]
+                    |Int i -> if i <= max && i >= min then OK else Invalid[inv (ErrorCodes.ConfigRulesUnexpectedValue (sprintf "Expecting a value between %i and %i" min max) severity) leaf]
                     |_ ->
                         match TryParser.parseInt key with
-                        |Some i ->  if i <= max && i >= min then OK else Invalid[inv (ErrorCodes.ConfigRulesUnexpectedValue (sprintf "Expecting a value between %i and %i" min max)) leaf]
-                        |None -> Invalid[inv (ErrorCodes.ConfigRulesUnexpectedValue (sprintf "Expecting an integer, got %s" key)) leaf]
-                |ValueType.Specific s -> if key.Trim([|'\"'|]) == s then OK else Invalid [inv (ErrorCodes.ConfigRulesUnexpectedValue (sprintf "Expecting value %s" s)) leaf]
+                        |Some i ->  if i <= max && i >= min then OK else Invalid[inv (ErrorCodes.ConfigRulesUnexpectedValue (sprintf "Expecting a value between %i and %i" min max) severity) leaf]
+                        |None -> Invalid[inv (ErrorCodes.ConfigRulesUnexpectedValue (sprintf "Expecting an integer, got %s" key) severity) leaf]
+                |ValueType.Specific s -> if key.Trim([|'\"'|]) == s then OK else Invalid [inv (ErrorCodes.ConfigRulesUnexpectedValue (sprintf "Expecting value %s" s) severity) leaf]
                 |ValueType.Scalar -> OK
-                |_ -> Invalid [inv (ErrorCodes.ConfigRulesUnexpectedValue "Invalid value") leaf]
+                |ValueType.Percent -> if key.EndsWith("%") then OK else Invalid[inv (ErrorCodes.ConfigRulesUnexpectedValue (sprintf "Expecting an percentage, got %s" key) severity) leaf]
+                |_ -> Invalid [inv (ErrorCodes.ConfigRulesUnexpectedValue "Invalid value" severity) leaf]
 
         let checkLocalisationField (keys : (Lang * Collections.Set<string>) list) (synced : bool) (leaf : Leaf) =
             match synced with
@@ -154,6 +158,7 @@ module rec Rules =
             |false ->
                 checkLocKeys keys leaf
         let rec applyClauseField (root : Node) (enforceCardinality : bool) (ctx : RuleContext) (rules : Rule list) (startNode : Node) =
+            let severity = if ctx.warningOnly then Severity.Warning else Severity.Error
             let subtypedrules =
                 rules |> List.collect (fun (s,o,r) -> r |> (function |SubtypeField (key, shouldMatch, ClauseField cfs) -> (if (not shouldMatch) <> List.contains key ctx.subtypes then cfs else []) | x -> [(s, o, x)]))
             // let subtypedrules =
@@ -170,21 +175,21 @@ module rec Rules =
                 |[] ->
                     let leftClauseRule =
                         expandedrules |>
-                        List.tryFind (function |(_, _, LeftClauseField (vt, _)) -> checkValidLeftClauseRule enumsMap (LeftClauseField (vt, ClauseField [])) leaf.Key  |_ -> false )
+                        List.tryFind (function |(_, _, LeftClauseField (vt, _)) -> checkValidLeftClauseRule files enumsMap (LeftClauseField (vt, ClauseField [])) leaf.Key  |_ -> false )
                     let leftTypeRule =
                         expandedrules |>
                         List.tryFind (function |(_, _, LeftTypeField (t, r)) -> checkValidLeftTypeRule typesMap (LeftTypeField (t, r)) leaf.Key  |_ -> false )
                     match Option.orElse leftClauseRule leftTypeRule with
                     |Some (_, _, f) -> applyLeafRule root ctx f leaf
                     |_ ->
-                        if enforceCardinality then Invalid [inv (ErrorCodes.ConfigRulesUnexpectedProperty (sprintf "Unexpected node %s in %s" leaf.Key startNode.Key)) leaf] else OK
+                        if enforceCardinality && (leaf.Key.StartsWith("@") |> not) then Invalid [inv (ErrorCodes.ConfigRulesUnexpectedProperty (sprintf "Unexpected node %s in %s" leaf.Key startNode.Key) severity) leaf] else OK
                 |rs -> rs <&??&> (fun (_, _, f) -> applyLeafRule root ctx f leaf) |> mergeValidationErrors "CW240"
             let nodeFun (node : Node) =
                 match expandedrules |> List.filter (fst3 >> (==) node.Key) with
                 | [] ->
                     let leftClauseRule =
                         expandedrules |>
-                        List.filter (function |(_, _, LeftClauseField (vt, _)) -> checkValidLeftClauseRule enumsMap (LeftClauseField (vt, ClauseField [])) node.Key  |_ -> false )
+                        List.filter (function |(_, _, LeftClauseField (vt, _)) -> checkValidLeftClauseRule files enumsMap (LeftClauseField (vt, ClauseField [])) node.Key  |_ -> false )
                     let leftTypeRule =
                         expandedrules |>
                         List.filter (function |(_, _, LeftTypeField (t, r)) -> checkValidLeftTypeRule typesMap (LeftTypeField (t, r)) node.Key  |_ -> false )
@@ -193,7 +198,7 @@ module rec Rules =
                         List.filter (function |(_, _, LeftScopeField (rs)) -> checkValidLeftScopeRule scopes (LeftScopeField (rs)) node.Key  |_ -> false )
                     let leftRules = leftClauseRule @ leftTypeRule @ leftScopeRule
                     match leftRules with
-                    |[] -> if enforceCardinality then Invalid [inv (ErrorCodes.ConfigRulesUnexpectedProperty (sprintf "Unexpected node %s in %s" node.Key startNode.Key)) node] else OK
+                    |[] -> if enforceCardinality then Invalid [inv (ErrorCodes.ConfigRulesUnexpectedProperty (sprintf "Unexpected node %s in %s" node.Key startNode.Key) severity) node] else OK
                     |rs -> rs <&??&> (fun (_, o, f) -> applyNodeRule root enforceCardinality ctx o f node)
                 | rs -> rs <&??&> (fun (_, o, f) -> applyNodeRule root enforceCardinality ctx o f node)
             let checkCardinality (node : Node) (rule : Rule) =
@@ -208,8 +213,8 @@ module rec Rules =
                     let leafcount = node.Tags key |> Seq.length
                     let childcount = node.Childs key |> Seq.length
                     let total = leafcount + childcount
-                    if opts.min > total then Invalid [inv (ErrorCodes.ConfigRulesWrongNumber (sprintf "Missing %s, requires %i" key opts.min)) node]
-                    else if opts.max < total then Invalid [inv (ErrorCodes.ConfigRulesWrongNumber (sprintf "Too many %s, max %i" key opts.max)) node]
+                    if opts.min > total then Invalid [inv (ErrorCodes.ConfigRulesWrongNumber (sprintf "Missing %s, expecting at least %i" key opts.min) Severity.Error) node]
+                    else if opts.max < total then Invalid [inv (ErrorCodes.ConfigRulesWrongNumber (sprintf "Too many %s, expecting at most %i" key opts.max) Severity.Warning) node]
                     else OK
             startNode.Leaves <&!&> valueFun
             <&&>
@@ -217,8 +222,8 @@ module rec Rules =
             <&&>
             (rules <&!&> checkCardinality startNode)
 
-        and applyValueField (vt : ValueType) (leaf : Leaf) =
-            checkValidValue leaf vt
+        and applyValueField severity (vt : ValueType) (leaf : Leaf) =
+            checkValidValue severity leaf vt
             // match isValidValue leaf.Value vt with
             // | true -> OK
             // | false -> Invalid [inv (ErrorCodes.CustomError "Invalid value" Severity.Error) leaf]
@@ -232,19 +237,19 @@ module rec Rules =
             let value = leaf.Value.ToString()
             if values |> List.exists (fun s -> s == value) then OK else Invalid [invCustom leaf]
 
-        and applyTypeField (t : string) (leaf : Leaf) =
+        and applyTypeField severity (t : string) (leaf : Leaf) =
             match typesMap.TryFind t with
             |Some values ->
                 let value = leaf.Value.ToString().Trim([|'\"'|])
                 if value.StartsWith "@" then OK else
-                if values.Contains value then OK else Invalid [inv (ErrorCodes.ConfigRulesUnexpectedValue (sprintf "Expected value of type %s" t)) leaf]
+                if values.Contains value then OK else Invalid [inv (ErrorCodes.ConfigRulesUnexpectedValue (sprintf "Expected value of type %s" t) severity) leaf]
             |None -> Invalid [inv (ErrorCodes.CustomError (sprintf "Unknown type referenced %s" t) Severity.Error) leaf]
 
-        and applyLeftTypeFieldLeaf (t : string) (leaf : Leaf) =
+        and applyLeftTypeFieldLeaf severity (t : string) (leaf : Leaf) =
             match typesMap.TryFind t with
             |Some values ->
                 let value = leaf.Key
-                if values.Contains value then OK else Invalid [inv (ErrorCodes.ConfigRulesUnexpectedValue (sprintf "Expected key of type %s" t)) leaf]
+                if values.Contains value then OK else Invalid [inv (ErrorCodes.ConfigRulesUnexpectedValue (sprintf "Expected key of type %s" t) severity) leaf]
             |None -> Invalid [inv (ErrorCodes.CustomError (sprintf "Unknown type referenced %s" t) Severity.Error) leaf]
 
         and applyScopeField (root : Node) (ctx : RuleContext) (s : Scope) (leaf : Leaf) =
@@ -285,19 +290,20 @@ module rec Rules =
             |_ -> OK
                // applyClauseField root enforceCardinality ctx rules startNode
 
-        and applyLeftTypeFieldNode (t : string) (node : Node) =
+        and applyLeftTypeFieldNode severity (t : string) (node : Node) =
             match typesMap.TryFind t with
             |Some values ->
                 let value = node.Key
-                if values.Contains value then OK else Invalid [inv (ErrorCodes.ConfigRulesUnexpectedValue (sprintf "Expected key of type %s" t)) node]
+                if values.Contains value then OK else Invalid [inv (ErrorCodes.ConfigRulesUnexpectedValue (sprintf "Expected key of type %s" t) severity) node]
             |None -> OK
 
         and applyLeafRule (root : Node) (ctx : RuleContext) (rule : Field) (leaf : Leaf) =
+            let severity = if ctx.warningOnly then Severity.Warning else Severity.Error
             match rule with
-            | Field.ValueField v -> applyValueField v leaf
+            | Field.ValueField v -> applyValueField severity v leaf
             | Field.ObjectField et -> applyObjectField et leaf
-            | Field.TypeField t -> applyTypeField t leaf
-            | Field.LeftTypeField (t, f) -> applyLeftTypeFieldLeaf t leaf <&&> applyLeafRule root ctx f leaf
+            | Field.TypeField t -> applyTypeField severity t leaf
+            | Field.LeftTypeField (t, f) -> applyLeftTypeFieldLeaf severity t leaf <&&> applyLeafRule root ctx f leaf
             | Field.ClauseField rs -> OK
             | Field.LeftClauseField (_, field) -> applyLeafRule root ctx field leaf
             | Field.LeftScopeField _ -> OK
@@ -308,6 +314,7 @@ module rec Rules =
             | Field.SubtypeField _ -> OK
 
         and applyNodeRule (root : Node) (enforceCardinality : bool) (ctx : RuleContext) (options : Options) (rule : Field) (node : Node) =
+            let severity = if ctx.warningOnly then Severity.Warning else Severity.Error
             let newCtx =
                 // match oneToOneScopes |> List.tryFind (fun (k, _) -> k == node.Key) with
                 // |Some (_, f) ->
@@ -343,7 +350,7 @@ module rec Rules =
             | Field.ValueField v -> OK
             | Field.ObjectField et -> OK
             | Field.TypeField _ -> OK
-            | Field.LeftTypeField (t, f) -> applyLeftTypeFieldNode t node <&&> applyNodeRule root enforceCardinality newCtx options f node
+            | Field.LeftTypeField (t, f) -> applyLeftTypeFieldNode severity t node <&&> applyNodeRule root enforceCardinality newCtx options f node
             | Field.ClauseField rs -> applyClauseField root enforceCardinality newCtx rs node
             | Field.LeftClauseField (_, ClauseField rs) -> applyClauseField root enforceCardinality newCtx rs node
             | Field.LeftClauseField (_, _) -> OK
@@ -358,7 +365,7 @@ module rec Rules =
         let testSubtype (subtypes : SubTypeDefinition list) (node : Node) =
             let results =
                 subtypes |> List.filter (fun st -> st.typeKeyField |> function |Some tkf -> tkf == node.Key |None -> true)
-                        |> List.map (fun s -> s.name, s.pushScope, applyClauseField node false {subtypes = []; scopes = defaultContext } (s.rules) node)
+                        |> List.map (fun s -> s.name, s.pushScope, applyClauseField node false {subtypes = []; scopes = defaultContext; warningOnly = false } (s.rules) node)
             let res = results |> List.choose (fun (s, ps, res) -> res |> function |Invalid _ -> None |OK -> Some (ps, s))
             res |> List.tryPick fst, res |> List.map snd
 
@@ -368,7 +375,7 @@ module rec Rules =
                 match Option.orElse pushScope options.pushScope with
                 |Some ps -> { Root = ps; From = []; Scopes = [] }
                 |None -> defaultContext
-            let context = { subtypes = subtypes; scopes = startingScopeContext }
+            let context = { subtypes = subtypes; scopes = startingScopeContext; warningOnly = typedef.warningOnly }
             applyNodeRule node true context options rule node
 
         let validate ((path, root) : string * Node) =
@@ -378,29 +385,44 @@ module rec Rules =
                 let typekeyfilter (td : TypeDefinition) (n : Node) =
                     match td.typeKeyFilter with
                     |Some (filter, negate) -> n.Key == filter <> negate
+                    |None -> true
+                let skiprootkey (td : TypeDefinition) (n : Node) =
+                    match td.skipRootKey with
+                    |Some key -> n.Key == key
                     |None -> false
-                match typedefs |> List.tryFind (fun t -> pathDir = (t.path.Replace("/","\\")) && typekeyfilter t node) with
-                |Some typedef ->
+                let validateType (typedef : TypeDefinition) (n : Node) =
                     let typerules = typeRules |> List.filter (fun (name, _, _) -> name == typedef.name)
-                    //eprintfn "%A" typerules
                     let expandedRules = typerules |> List.collect (function | _,_,(AliasField a) -> (aliases.TryFind a |> Option.defaultValue []) |x -> [x])
-                    //eprintfn "%A" expandedRules
                     match expandedRules |> List.tryFind (fun (n, _, _) -> n == typedef.name) with
                     |Some (_, o, f) ->
                         match typedef.typeKeyFilter with
-                        |Some (filter, negate) -> if node.Key == filter <> negate then applyNodeRuleRoot typedef f o node else OK
-                        |None -> applyNodeRuleRoot typedef f o node
+                        |Some (filter, negate) -> if n.Key == filter <> negate then applyNodeRuleRoot typedef f o n else OK
+                        |None -> applyNodeRuleRoot typedef f o n
                     |None ->
-                        //eprintfn "Couldn't find rules for %s" typedef.name
                         OK
-                |None ->
-                    //eprintfn "Couldn't find rule for %s" node.Key
-                    OK
+
+                let skipres =
+                    match typedefs |> List.filter (fun t -> pathDir.StartsWith(t.path.Replace("/","\\")) && skiprootkey t node) with
+                    |[] -> OK
+                    |xs ->
+                        node.Children <&!&>
+                            (fun c ->
+                                match xs |> List.tryFind (fun t -> pathDir.StartsWith(t.path.Replace("/","\\")) && typekeyfilter t c) with
+                                |Some typedef -> validateType typedef c
+                                |None -> OK
+                            )
+
+                let nonskipres =
+                    match typedefs |> List.tryFind (fun t -> pathDir.StartsWith(t.path.Replace("/","\\")) && typekeyfilter t node && t.skipRootKey.IsNone) with
+                    |Some typedef -> validateType typedef node
+                    |None -> OK
+                skipres <&&> nonskipres
+
             let res = (root.Children <&!&> inner)
             res
 
 
-        member __.ApplyNodeRule(rule, node) = applyNodeRule node true {subtypes = []; scopes = defaultContext } defaultOptions rule node
+        member __.ApplyNodeRule(rule, node) = applyNodeRule node true {subtypes = []; scopes = defaultContext; warningOnly = false } defaultOptions rule node
         member __.TestSubtype((subtypes : SubTypeDefinition list), (node : Node)) =
             testSubtype subtypes node
         //member __.ValidateFile(node : Node) = validate node
@@ -478,7 +500,7 @@ module rec Rules =
                     | [] ->
                         let leftClauseRule =
                             expandedrules |>
-                            List.filter (function |(_, _, LeftClauseField (vt, _)) -> checkValidLeftClauseRule enumsMap (LeftClauseField (vt, ClauseField [])) c.Key  |_ -> false )
+                            List.filter (function |(_, _, LeftClauseField (vt, _)) -> checkValidLeftClauseRule files enumsMap (LeftClauseField (vt, ClauseField [])) c.Key  |_ -> false )
                         let leftTypeRule =
                             expandedrules |>
                             List.filter (function |(_, _, LeftTypeField (t, r)) -> checkValidLeftTypeRule typesMap (LeftTypeField (t, r)) c.Key  |_ -> false )
@@ -498,7 +520,7 @@ module rec Rules =
                             List.tryFind (function |(_, _, LeftTypeField (t, r)) -> checkValidLeftTypeRule typesMap (LeftTypeField (t, r)) l.Key  |_ -> false )
                         let leftClauseRule =
                             expandedrules |>
-                            List.tryFind (function |(_, _, LeftClauseField (vt, _)) -> checkValidLeftClauseRule enumsMap (LeftClauseField (vt, ClauseField [])) l.Key  |_ -> false )
+                            List.tryFind (function |(_, _, LeftClauseField (vt, _)) -> checkValidLeftClauseRule files enumsMap (LeftClauseField (vt, ClauseField [])) l.Key  |_ -> false )
                         match Option.orElse leftClauseRule leftTypeRule with
                         |Some r -> Some (LeafC l, r) //#TODO this doesn't correct handle lefttype
                         |_ -> Some (LeafC l, (name, options, field))
@@ -508,7 +530,7 @@ module rec Rules =
             let pathDir = (Path.GetDirectoryName logicalpath).Replace("/","\\")
             let childMatch = node.Children |> List.tryFind (fun c -> Range.rangeContainsPos c.Position pos)
             //eprintfn "%O %A %A" pos pathDir (typedefs |> List.tryHead)
-            match childMatch, typedefs |> List.tryFind (fun t -> pathDir = (t.path.Replace("/","\\"))) with
+            match childMatch, typedefs |> List.tryFind (fun t -> pathDir.StartsWith(t.path.Replace("/","\\"))) with
             |Some c, Some typedef ->
                 let typerules = typeRules |> List.filter (fun (name, _, _) -> name == typedef.name)
                 match typerules with
@@ -580,13 +602,13 @@ module rec Rules =
             let childMatch = entity.entity.Children |> List.tryFind (fun c -> Range.rangeContainsPos c.Position pos)
             // eprintfn "%O %A %A %A" pos pathDir (typedefs |> List.tryHead) (childMatch.IsSome)
             let ctx =
-                match childMatch, typedefs |> List.tryFind (fun t -> pathDir = (t.path.Replace("/","\\"))) with
+                match childMatch, typedefs |> List.tryFind (fun t -> pathDir.StartsWith(t.path.Replace("/","\\"))) with
                 |Some c, Some typedef ->
                     let pushScope, subtypes = ruleApplicator.TestSubtype (typedef.subtypes, c)
                     match pushScope with
-                    |Some ps -> { subtypes = subtypes; scopes = { Root = ps; From = []; Scopes = [ps] }}
-                    |None -> { subtypes = subtypes; scopes = defaultContext }
-                |_, _ -> { subtypes = []; scopes = defaultContext }
+                    |Some ps -> { subtypes = subtypes; scopes = { Root = ps; From = []; Scopes = [ps] }; warningOnly = false}
+                    |None -> { subtypes = subtypes; scopes = defaultContext; warningOnly = false }
+                |_, _ -> { subtypes = []; scopes = defaultContext; warningOnly = false }
 
             let ctx = ctx, None
             foldWithPos fLeaf fLeafValue fComment fNode ctx (pos) (entity.entity) (entity.logicalpath)
@@ -613,7 +635,7 @@ module rec Rules =
                     | [] ->
                         let leftClauseRule =
                             expandedrules |>
-                            List.filter (function |(_, _, LeftClauseField (vt, _)) -> checkValidLeftClauseRule enumsMap (LeftClauseField (vt, ClauseField [])) c.Key  |_ -> false )
+                            List.filter (function |(_, _, LeftClauseField (vt, _)) -> checkValidLeftClauseRule files enumsMap (LeftClauseField (vt, ClauseField [])) c.Key  |_ -> false )
                         let leftTypeRule =
                             expandedrules |>
                             List.filter (function |(_, _, LeftTypeField (t, r)) -> checkValidLeftTypeRule typesMap (LeftTypeField (t, r)) c.Key  |_ -> false )
@@ -633,7 +655,7 @@ module rec Rules =
                             List.tryFind (function |(_, _, LeftTypeField (t, r)) -> checkValidLeftTypeRule typesMap (LeftTypeField (t, r)) l.Key  |_ -> false )
                         let leftClauseRule =
                             expandedrules |>
-                            List.tryFind (function |(_, _, LeftClauseField (vt, _)) -> checkValidLeftClauseRule enumsMap (LeftClauseField (vt, ClauseField [])) l.Key  |_ -> false )
+                            List.tryFind (function |(_, _, LeftClauseField (vt, _)) -> checkValidLeftClauseRule files enumsMap (LeftClauseField (vt, ClauseField [])) l.Key  |_ -> false )
                         match Option.orElse leftClauseRule leftTypeRule with
                         |Some r -> Some (LeafC l, r) //#TODO this doesn't correct handle lefttype
                         |_ -> Some (LeafC l, (name, options, field))
@@ -642,7 +664,7 @@ module rec Rules =
                 (node.Children |> List.choose innerN) @ (node.Leaves |> List.ofSeq |> List.choose innerL) @ (node.LeafValues |> List.ofSeq |> List.choose innerLV)
             let pathDir = (Path.GetDirectoryName path).Replace("/","\\")
             //eprintfn "%A %A" pathDir (typedefs |> List.tryHead)
-            match typedefs |> List.tryFind (fun t -> pathDir = (t.path.Replace("/","\\"))) with
+            match typedefs |> List.tryFind (fun t -> pathDir.StartsWith(t.path.Replace("/","\\"))) with
             |Some typedef ->
                 let typerules = typeRules |> List.filter (fun (name, _, _) -> name == typedef.name)
                 match typerules with
@@ -677,7 +699,7 @@ module rec Rules =
         member __.GetReferencedTypes(entity : Entity) = getTypesInEntity entity
 
 
-    type CompletionService(rootRules : RootRule list, typedefs : TypeDefinition list , types : Collections.Map<string, (string * range) list>, enums : Collections.Map<string, string list>) =
+    type CompletionService(rootRules : RootRule list, typedefs : TypeDefinition list , types : Collections.Map<string, (string * range) list>, enums : Collections.Map<string, string list>, files : Collections.Set<string>)  =
         let aliases =
             rootRules |> List.choose (function |AliasRule (a, rs) -> Some (a, rs) |_ -> None)
         let typeRules =
@@ -764,7 +786,7 @@ module rec Rules =
                     |[] ->
                         let leftClauseRule =
                             expandedRules |>
-                            List.tryFind (function |(_, _, LeftClauseField (vt, _)) -> checkValidLeftClauseRule enumsMap (LeftClauseField (vt, ClauseField [])) key  |_ -> false )
+                            List.tryFind (function |(_, _, LeftClauseField (vt, _)) -> checkValidLeftClauseRule files enumsMap (LeftClauseField (vt, ClauseField [])) key  |_ -> false )
                         let leftTypeRule =
                             expandedRules |>
                             List.tryFind (function |(_, _, LeftTypeField (vt, f)) -> checkValidLeftTypeRule typesMap (LeftTypeField (vt, f)) key  |_ -> false )
@@ -788,14 +810,31 @@ module rec Rules =
             let typekeyfilter (td : TypeDefinition) (n : string) =
                 match td.typeKeyFilter with
                 |Some (filter, negate) -> n == filter <> negate
+                |None -> true
+            let skiprootkey (td : TypeDefinition) (n : string) =
+                match td.skipRootKey with
+                |Some key -> n == key
                 |None -> false
-            match typedefs |> List.tryFind (fun t -> pathDir = (t.path.Replace("/","\\")) && typekeyfilter t (if path.Length > 0 then path.Head |> fst else "")) with
-            |Some typedef ->
-                let typerules = typeRules |> List.filter (fun (name, _, _) -> name == typedef.name)
-                let fixedpath = if List.isEmpty path then path else (typedef.name, true)::(path |> List.tail)
-                let completion = getCompletionFromPath typerules fixedpath
-                completion
-            |None -> getCompletionFromPath typeRules path
+            let skipcomp =
+                match typedefs |> List.filter (fun t -> pathDir.StartsWith(t.path.Replace("/","\\")) && skiprootkey t (if path.Length > 0 then path.Head |> fst else "")) with
+                |[] -> None
+                |xs ->
+                    match xs |> List.tryFind (fun t -> pathDir.StartsWith(t.path.Replace("/","\\")) && typekeyfilter t (if path.Length > 1 then path.Tail |> List.head |> fst else "")) with
+                    |Some typedef ->
+                        let typerules = typeRules |> List.filter (fun (name, _, _) -> name == typedef.name)
+                        let fixedpath = if List.isEmpty path then path else (typedef.name, true)::(path |> List.tail |> List.tail)
+                        let completion = getCompletionFromPath typerules fixedpath
+                        Some completion
+                    |None -> None
+            skipcomp |> Option.defaultWith
+                (fun () ->
+                match typedefs |> List.tryFind (fun t -> pathDir.StartsWith(t.path.Replace("/","\\")) && typekeyfilter t (if path.Length > 0 then path.Head |> fst else "")) with
+                |Some typedef ->
+                    let typerules = typeRules |> List.filter (fun (name, _, _) -> name == typedef.name)
+                    let fixedpath = if List.isEmpty path then path else (typedef.name, true)::(path |> List.tail)
+                    let completion = getCompletionFromPath typerules fixedpath
+                    completion
+                |None -> getCompletionFromPath typeRules path)
 
         member __.Complete(pos : pos, entity : Entity) = complete pos entity
 
@@ -813,7 +852,13 @@ module rec Rules =
                                 match def.typeKeyFilter with
                                 |Some (filter, negate) -> if n.Key == filter <> negate then result else []
                                 |None -> result
-                            (e.Children |> List.collect inner)
+                            let childres =
+                                match def.skipRootKey with
+                                |Some key ->
+                                    e.Children |> List.filter (fun c -> c.Key == key) |> List.collect (fun c -> c.Children |> List.collect inner)
+                                |None ->
+                                    (e.Children |> List.collect inner)
+                            childres
                             @
                             (e.LeafValues |> List.ofSeq |> List.map (fun lv -> def.name, (lv.Value.ToString(), lv.Position))))
         let results = types |> List.collect getTypeInfo |> List.fold (fun m (n, k) -> if Map.containsKey n m then Map.add n (k::m.[n]) m else Map.add n [k] m) Map.empty

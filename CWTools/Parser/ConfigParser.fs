@@ -23,6 +23,8 @@ module rec ConfigParser =
     | Int of int * int
     | Enum of string
     | Specific of string
+    | Percent
+    | Filepath
     type ObjectType =
     | Tech
     | ShipSize
@@ -71,6 +73,8 @@ module rec ConfigParser =
         conditions : Node option
         subtypes : SubTypeDefinition list
         typeKeyFilter : (string * bool) option
+        skipRootKey : string option
+        warningOnly : bool
     }
     type EnumDefinition = string * string list
     type ComplexEnumDef = {
@@ -209,6 +213,7 @@ module rec ConfigParser =
             |"int" -> LeftClauseField (ValueType.Int (Int32.MinValue, Int32.MaxValue), ClauseField (children |> List.choose processChildConfig))
             |"float" -> LeftClauseField (ValueType.Float (Double.MinValue, Double.MaxValue), ClauseField (children |> List.choose processChildConfig))
             |"scalar" -> LeftClauseField (ValueType.Scalar, ClauseField (children |> List.choose processChildConfig))
+            |"filepath" -> LeftClauseField (ValueType.Filepath, ClauseField (children |> List.choose processChildConfig))
             |"scope" -> LeftScopeField (children |> List.choose processChildConfig)
             |x when x.StartsWith "enum[" ->
                 match getSettingFromString x "enum" with
@@ -259,6 +264,7 @@ module rec ConfigParser =
             match leaf.Value.ToString() with
             |"scalar" -> ValueField ValueType.Scalar
             |"bool" -> ValueField ValueType.Bool
+            |"percentage" -> ValueField ValueType.Percent
             |"localisation" -> LocalisationField false
             |"localisation_synced" -> LocalisationField true
             |"filepath" -> FilepathField
@@ -334,7 +340,9 @@ module rec ConfigParser =
             let typename = getSettingFromString node.Key "type"
             let namefield = if node.Has "name_field" then Some (node.TagText "name_field") else None
             let path = (node.TagText "path").Replace("game/","").Replace("game\\","")
+            let skiprootkey = if node.Has "skip_root_key" then Some (node.TagText "skip_root_key") else None
             let subtypes = getNodeComments node |> List.choose parseSubType
+            let warningOnly = node.TagText "severity" == "warning"
             //eprintfn "cs %A" comments
             let typekeyfilter =
                 match comments |> List.tryFind (fun s -> s.Contains "type_key_filter") with
@@ -346,7 +354,7 @@ module rec ConfigParser =
                     |_ -> None
                 |None -> None
             match typename with
-            |Some tn -> Some { name = tn; nameField = namefield; path = path; conditions = None; subtypes = subtypes; typeKeyFilter = typekeyfilter}
+            |Some tn -> Some { name = tn; nameField = namefield; path = path; conditions = None; subtypes = subtypes; typeKeyFilter = typekeyfilter; skipRootKey = skiprootkey; warningOnly = warningOnly}
             |None -> None
         |_ -> None
 
@@ -536,6 +544,8 @@ module rec ConfigParser =
             conditions = None;
             subtypes = [];
             typeKeyFilter = None
+            skipRootKey = None
+            warningOnly = false
         }
     let shipSizeType =
         {
@@ -545,6 +555,8 @@ module rec ConfigParser =
             conditions = None;
             subtypes = [];
             typeKeyFilter = None
+            skipRootKey = None
+            warningOnly = false
         }
 //  type[ship_behavior] = {
 //      path = "game/common/ship_behaviors"

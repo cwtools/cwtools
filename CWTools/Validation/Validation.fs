@@ -89,9 +89,9 @@ module ValidationCore =
         static member DeprecatedElse = { ID = "CW236"; Severity = Severity.Warning; Message = "Nested if/else in effects was deprecated with 2.1 and will be removed in a future release" }
         static member AmbiguousIfElse = { ID = "CW237"; Severity = Severity.Information; Message = "2.1 changed nested if = { if else } behaviour in effects. Check this still works as expected" }
         static member IfElseOrder = { ID = "CW238"; Severity = Severity.Error; Message = "An else/else_if is missing a preceding if" }
-        static member ConfigRulesUnexpectedValue = fun message -> { ID = "CW240"; Severity = Severity.Error; Message = message }
-        static member ConfigRulesUnexpectedProperty = fun message -> { ID = "CW241"; Severity = Severity.Error; Message = message }
-        static member ConfigRulesWrongNumber = fun message -> { ID = "CW242"; Severity = Severity.Error; Message = message }
+        static member ConfigRulesUnexpectedValue = fun message severity -> { ID = "CW240"; Severity = severity; Message = message }
+        static member ConfigRulesUnexpectedProperty = fun message severity -> { ID = "CW241"; Severity = severity; Message = message }
+        static member ConfigRulesWrongNumber = fun message severity -> { ID = "CW242"; Severity = severity; Message = message }
         static member ConfigRulesTargetWrongScope = fun scope expected -> { ID = "CW243"; Severity = Severity.Error; Message = sprintf "Target has incorrect scope. Is %s but expect %s" scope expected}
         static member ConfigRulesInvalidTarget = fun expected -> { ID = "CW244"; Severity = Severity.Error; Message = sprintf "This is not a target. Expected a target in scope(s) %s" expected}
         static member ConfigRulesErrorInTarget = fun command scope expected -> { ID = "CW245"; Severity = Severity.Error; Message = sprintf "Error in target. Command %s was used in scope %s but expected %s" command scope expected}
@@ -153,8 +153,8 @@ module ValidationCore =
             | [] -> []
             | [res] -> [res]
             | head::head2::tail ->
-                let (e1c, _, e1r, e1l, e1m, e1d), (_, _, _, _, e2m, _) = head, head2
-                mergeErrorsInner ((e1c, Severity.Error, e1r, e1l, sprintf "%s\nor\n%s" e1m e2m, e1d)::tail)
+                let (e1c, e1s, e1r, e1l, e1m, e1d), (_, _, _, _, e2m, _) = head, head2
+                mergeErrorsInner ((e1c, e1s, e1r, e1l, sprintf "%s\nor\n%s" e1m e2m, e1d)::tail)
         function
         |OK -> OK
         |Invalid es -> Invalid (mergeErrorsInner es)
