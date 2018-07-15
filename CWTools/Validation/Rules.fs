@@ -39,9 +39,10 @@ module rec Rules =
         |_ -> None
 
     let checkFileExists (files : Collections.Set<string>) (leaf : Leaf) =
-        let file = leaf.Value.ToRawString().Trim('"').Replace("/","\\")
+        let file = leaf.Value.ToRawString().Trim('"').Replace("/","\\").Replace(".lua",".shader")
         if files.Contains file then OK else Invalid [inv (ErrorCodes.MissingFile file) leaf]
     let checkValidLeftClauseRule (files : Collections.Set<string>) (enums : Collections.Map<string, StringSet>) (field : Field) (key : string) =
+        let key = key.Trim('"').Replace("/","\\")
         match field with
         |LeftClauseField (ValueType.Int (min, max), _) ->
             match TryParser.parseInt key with
@@ -56,7 +57,7 @@ module rec Rules =
             |Some es -> es.Contains key
             |None -> false
         |LeftClauseField (ValueType.Scalar, _) -> true
-        |LeftClauseField (ValueType.Filepath, _) -> files.Contains (key.Trim('"').Replace("/","\\"))
+        |LeftClauseField (ValueType.Filepath, _) -> files.Contains (key.Trim('"').Replace("/","\\").Replace(".lua",".shader"))
         |_ -> false
 
     let checkValidLeftTypeRule (types : Collections.Map<string, StringSet>) (field : Field) (key : string) =

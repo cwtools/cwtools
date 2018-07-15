@@ -306,6 +306,12 @@ module rec ConfigParser =
             |"int" -> LeftClauseField (ValueType.Int (Int32.MinValue, Int32.MaxValue), rightfield)
             |"float" -> LeftClauseField (ValueType.Float (Double.MinValue, Double.MaxValue), rightfield)
             |"scalar" -> LeftClauseField (ValueType.Scalar, rightfield)
+            |x when x.StartsWith "enum[" ->
+                match getSettingFromString x "enum" with
+                |Some e -> LeftClauseField (ValueType.Enum e, rightfield)
+                |None -> rightfield
+            |x when x.StartsWith "<" && x.EndsWith ">" ->
+                LeftTypeField(x.Trim([|'<'; '>'|]), rightfield)
             |_ -> rightfield
         Rule(key, options, field)
 

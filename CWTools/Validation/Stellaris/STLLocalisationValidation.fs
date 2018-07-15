@@ -485,6 +485,8 @@ module STLLocalisationValidation =
                     let key = node.Key
                     let suff = ["_desc"; "_plural"; "_insult_01"; "_insult_plural_01"; "_compliment_01";"_compliment_plural_01";"_spawn";"_spawn_plural";
                                 "_sound_01";"_sound_02";"_sound_03";"_sound_04";"_sound_05";"_organ";"_mouth"]
+                    let notplayable = node.Child "playable" |> Option.map (fun p -> p.TagText "always" == "no") |> Option.defaultValue false
+                    if notplayable then OK else
                     suff |> List.fold (fun s c -> s <&&> (keys |> List.fold (fun state (l, keys)  -> state <&&> checkLocNode keys l (key + c) node) OK)) OK
             species |> List.filter (fun s -> s.Key <> "named_lists")
                     <&!&> inner
