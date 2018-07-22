@@ -146,7 +146,8 @@ module STLScopes =
         ScopedEffect("capital_star", [Scope.Country], Scope.Planet, EffectType.Both, defaultDesc, "");
         ScopedEffect("no_scope", allScopes, Scope.Any, EffectType.Both, defaultDesc, "")
         ScopedEffect("megastructure", allScopes, Scope.Megastructure, EffectType.Both, defaultDesc, "")
-        //ScopedEffect("system_star", [Scope.GalacticObject], Scope.Planet, EffectType.Both, defaultDesc, ""); // Not in PDX
+        ScopedEffect("owner_main_species", [Scope.Species ;Scope.Ship; Scope.Pop; Scope.Fleet; Scope.Planet; Scope.PopFaction; Scope.Sector; Scope.Leader; Scope.Country; Scope.Starbase; Scope.Tile; Scope.GalacticObject], Scope.Species, EffectType.Both, defaultDesc, "") //Copied owner
+        ScopedEffect("system_star", [Scope.GalacticObject], Scope.Planet, EffectType.Both, defaultDesc, ""); // Not in PDX
     ]
 // any/every/random_ship
 // any/every/random_pop

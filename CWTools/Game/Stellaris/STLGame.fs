@@ -75,6 +75,7 @@ type STLGame (settings : StellarisSettings) =
             "common/armies";
             "common/army_attachments"; //Removed in 2.0?
             "common/ascension_perks";
+            "common/asteroid_belts"
             "common/attitudes";
             "common/bombardment_stances";
             "common/buildable_pops";
