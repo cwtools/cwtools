@@ -156,7 +156,7 @@ module STLValidation =
             let effects = (os.GlobMatchChildren("**/common/button_effects/*.txt"))
                             |> List.filter (fun e -> e :? Button_Effect)
                             |> List.map (fun e -> e.Key)
-            let buttons = es.GlobMatchChildren("**/interface/*.gui") @ es.GlobMatchChildren("**/interface/**/*.gui")
+            let buttons = es.AllOfTypeChildren EntityType.Interface
             let fNode = (fun (x : Node) children ->
                             let results =
                                 match x.Key with
@@ -189,15 +189,16 @@ module STLValidation =
 
     let valSpriteFiles : FileValidator =
         fun rm es ->
-            let sprites = es.GlobMatchChildren("**/interface/*.gfx") @ es.GlobMatchChildren("**/interface/*/*.gfx")
+            let sprites = es.AllOfTypeChildren EntityType.Interface // es.GlobMatchChildren("**/interface/*.gfx") @ es.GlobMatchChildren("**/interface/*/*.gfx")
                             |> List.filter (fun e -> e.Key = "spriteTypes")
                             |> List.collect (fun e -> e.Children)
             let filenames = rm.GetResources() |> List.choose (function |FileResource (f, _) -> Some f |EntityResource (f, _) -> Some f)
+            eprintfn "sprite filename %A" filenames
             let inner =
                 fun (x : Node) ->
-                   Seq.append (x.Leafs "textureFile") (Seq.append (x.Leafs "texturefile") (x.Leafs "effectFile"))
+                   Seq.append (x.Leafs "textureFile") (x.Leafs "effectFile")
                     <&!&> (fun l ->
-                        let filename = l.Value.ToRawString().Replace("/","\\")
+                        let filename = l.Value.ToRawString().Replace("\\","/")
                         let filenamefallback = filename.Replace(".lua",".shader").Replace(".tga",".dds")
                         match filenames |> List.exists (fun f -> f.EndsWith(filename) || f.EndsWith(filenamefallback)) with
                         | true -> OK

@@ -172,7 +172,7 @@ type ResourceManager<'T> (computedDataFunction : (Entity -> 'T)) =
         |x when globCheckFilepath "**/common/sector_types/*.txt" x -> EntityType.SectorTypes
         |x when globCheckFilepath "**/common/ship_behaviors/*.txt" x -> EntityType.ShipBehaviors
         |x when globCheckFilepath "**/common/ship_sizes/*.txt" x -> EntityType.ShipSizes
-        |x when globCheckFilepath "**\\common\\solar_system_initializers\\**\\*.txt" x -> EntityType.SolarSystemInitializers
+        |x when globCheckFilepath "**/common/solar_system_initializers/**/*.txt" x -> EntityType.SolarSystemInitializers
         |x when globCheckFilepath "**/common/solar_system_initializers/*.txt" x -> EntityType.SolarSystemInitializers
         |x when globCheckFilepath "**/common/special_projects/*.txt" x -> EntityType.SpecialProjects
         |x when globCheckFilepath "**/common/species_archetypes/*.txt" x -> EntityType.SpeciesArchetypes
@@ -208,9 +208,9 @@ type ResourceManager<'T> (computedDataFunction : (Entity -> 'T)) =
         |x when globCheckFilepath "**/interface/**/*.gui" x -> EntityType.Interface
         |x when globCheckFilepath "**/interface/*.gfx" x -> EntityType.Interface
         |x when globCheckFilepath "**/interface/*.gui" x -> EntityType.Interface
-        |x when globCheckFilepath "**\\gfx\\**\\*.gfx" x -> EntityType.GfxGfx
+        |x when globCheckFilepath "**/gfx/**/*.gfx" x -> EntityType.GfxGfx
         |x when globCheckFilepath "**/gfx/*.gfx" x -> EntityType.GfxGfx
-        |x when globCheckFilepath "**\\gfx\\**\\*.asset" x -> EntityType.GfxAsset
+        |x when globCheckFilepath "**/gfx/**/*.asset" x -> EntityType.GfxAsset
         |x when globCheckFilepath "**/gfx/*.asset" x -> EntityType.GfxAsset
         |_ -> EntityType.Other
 

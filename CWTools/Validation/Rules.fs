@@ -29,8 +29,8 @@ module rec Rules =
     let thd3 (_, _, c) = c
     let checkPathDir (t : TypeDefinition) (pathDir : string) =
         match t.path_strict with
-        |true -> pathDir == t.path.Replace("/","\\")
-        |false -> pathDir.StartsWith(t.path.Replace("/","\\"))
+        |true -> pathDir == t.path.Replace("\\","/")
+        |false -> pathDir.StartsWith(t.path.Replace("\\","/"))
 
     let getValidValues =
         function
@@ -39,7 +39,7 @@ module rec Rules =
         |_ -> None
 
     let checkFileExists (files : Collections.Set<string>) (leaf : Leaf) =
-        let file = leaf.Value.ToRawString().Trim('"').Replace("/","\\")
+        let file = leaf.Value.ToRawString().Trim('"').Replace("\\","/")
         if files.Contains file then OK else Invalid [inv (ErrorCodes.MissingFile file) leaf]
     let checkValidLeftClauseRule (files : Collections.Set<string>) (enums : Collections.Map<string, StringSet>) (field : Field) (key : string) =
         match field with
@@ -56,7 +56,7 @@ module rec Rules =
             |Some es -> es.Contains key
             |None -> false
         |LeftClauseField (ValueType.Scalar, _) -> true
-        |LeftClauseField (ValueType.Filepath, _) -> files.Contains (key.Trim('"').Replace("/","\\"))
+        |LeftClauseField (ValueType.Filepath, _) -> files.Contains (key.Trim('"').Replace("\\","/"))
         |_ -> false
 
     let checkValidLeftTypeRule (types : Collections.Map<string, StringSet>) (field : Field) (key : string) =
@@ -385,7 +385,7 @@ module rec Rules =
         let validate ((path, root) : string * Node) =
             let inner (node : Node) =
 
-                let pathDir = (Path.GetDirectoryName path).Replace("/","\\")
+                let pathDir = (Path.GetDirectoryName path).Replace("\\","/")
                 let typekeyfilter (td : TypeDefinition) (n : Node) =
                     match td.typeKeyFilter with
                     |Some (filter, negate) -> n.Key == filter <> negate
@@ -531,7 +531,7 @@ module rec Rules =
                     |r::_ -> Some (LeafC l, r)
                 |_, _, Some lv -> Some (LeafValueC lv, (name, options, field))
                 |None, None, None -> None
-            let pathDir = (Path.GetDirectoryName logicalpath).Replace("/","\\")
+            let pathDir = (Path.GetDirectoryName logicalpath).Replace("\\","/")
             let childMatch = node.Children |> List.tryFind (fun c -> Range.rangeContainsPos c.Position pos)
             //eprintfn "%O %A %A" pos pathDir (typedefs |> List.tryHead)
             match childMatch, typedefs |> List.tryFind (fun t -> checkPathDir t pathDir) with
@@ -602,7 +602,7 @@ module rec Rules =
                     | _ -> newCtx, res
                 inner field ctx node
 
-            let pathDir = (Path.GetDirectoryName entity.logicalpath).Replace("/","\\")
+            let pathDir = (Path.GetDirectoryName entity.logicalpath).Replace("\\","/")
             let childMatch = entity.entity.Children |> List.tryFind (fun c -> Range.rangeContainsPos c.Position pos)
             // eprintfn "%O %A %A %A" pos pathDir (typedefs |> List.tryHead) (childMatch.IsSome)
             let ctx =
@@ -666,7 +666,7 @@ module rec Rules =
                     |r::_ -> Some (LeafC l, r)
                 let innerLV lv = Some (LeafValueC lv, (name, options, field))
                 (node.Children |> List.choose innerN) @ (node.Leaves |> List.ofSeq |> List.choose innerL) @ (node.LeafValues |> List.ofSeq |> List.choose innerLV)
-            let pathDir = (Path.GetDirectoryName path).Replace("/","\\")
+            let pathDir = (Path.GetDirectoryName path).Replace("\\","/")
             //eprintfn "%A %A" pathDir (typedefs |> List.tryHead)
             match typedefs |> List.tryFind (fun t -> checkPathDir t pathDir) with
             |Some typedef ->
@@ -810,11 +810,11 @@ module rec Rules =
 
         let complete (pos : pos) (entity : Entity) =
             let path = getRulePath pos [] entity.entity |> List.rev
-            let pathDir = (Path.GetDirectoryName (Path.GetFullPath(entity.logicalpath))).Replace("/","\\")
-            eprintfn "%A" typedefs
-            eprintfn "%A" pos
-            eprintfn "%A" entity.logicalpath
-            eprintfn "%A" pathDir
+            let pathDir = (Path.GetDirectoryName entity.logicalpath).Replace("\\","/")
+            // eprintfn "%A" typedefs
+            // eprintfn "%A" pos
+            // eprintfn "%A" entity.logicalpath
+            // eprintfn "%A" pathDir
             let typekeyfilter (td : TypeDefinition) (n : string) =
                 match td.typeKeyFilter with
                 |Some (filter, negate) -> n == filter <> negate
@@ -848,7 +848,7 @@ module rec Rules =
 
     let getTypesFromDefinitions (ruleapplicator : RuleApplicator) (types : TypeDefinition list) (es : Entity list) =
         let getTypeInfo (def : TypeDefinition) =
-            es |> List.choose (fun e -> if checkPathDir def ((Path.GetDirectoryName e.logicalpath).Replace("/","\\")) then Some e.entity else None)
+            es |> List.choose (fun e -> if checkPathDir def ((Path.GetDirectoryName e.logicalpath).Replace("\\","/")) then Some e.entity else None)
                |> List.collect (fun e ->
                             let inner (n : Node) =
                                 let subtypes = ruleapplicator.TestSubtype(def.subtypes, n) |> snd |> List.map (fun s -> def.name + "." + s)
@@ -887,7 +887,7 @@ module rec Rules =
                     |Some leaf -> node.TagsText (leaf.Key) |> Seq.map (fun k -> k.Trim([|'\"'|])) |> List.ofSeq
                     |None -> []
         let getEnumInfo (complexenum : ComplexEnumDef) =
-            let values = es |> List.choose (fun e -> if e.logicalpath.Replace("/","\\").StartsWith(complexenum.path.Replace("/","\\")) then Some e.entity else None)
+            let values = es |> List.choose (fun e -> if e.logicalpath.Replace("\\","/").StartsWith(complexenum.path.Replace("\\","/")) then Some e.entity else None)
                             |> List.collect (fun e -> e.Children |> List.collect (inner complexenum.nameTree))
             complexenum.name, values
         complexenums |> List.map getEnumInfo

@@ -7,7 +7,7 @@ planet_event = {
             #error
             has_fleet_order = yes
             has_building_construction = yes
-            AND = {
+            OR = {
                 #error
                 has_fleet_order = yes
             }
@@ -16,7 +16,7 @@ planet_event = {
                     #error
                     has_fleet_order = yes
                 }
-                OR = {
+                AND = {
                     NOR ={
                         #error
                         has_fleet_order = yes
@@ -31,7 +31,7 @@ planet_event = {
         #error
         has_fleet_order = yes
         has_building_construction = yes
-        AND = {
+        OR = {
                 #error
                 has_fleet_order = yes
             }

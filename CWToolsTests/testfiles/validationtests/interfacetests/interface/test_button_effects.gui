@@ -33,7 +33,7 @@ containerWindowType = {
 			quadTextureSprite = "GFX_outliner_sector_settings"
 			position = { x = 320 y = 116 }
             font = "cg_16b"
-            #error
+            # error
 			effect = "test_button_not_effect"
         }
 
@@ -43,7 +43,7 @@ containerWindowType = {
 			quadTextureSprite = "GFX_outliner_sector_settings"
 			position = { x = 320 y = 116 }
             font = "cg_16b"
-            #error
+            # error
 			effect = "test_not_defined"
         }
     }

@@ -147,7 +147,6 @@ let testFolder folder testsname config =
         let settings = { settings with embedded = { settings.embedded with triggers = triggers; effects = effects; modifiers = modifiers; };
                                             rules = if config then Some { ruleFiles = [configtext]; validateRules = config} else None}
         let stl = STLGame(settings) :> IGame<STLComputedData>
-        printfn "Test"
         let errors = stl.ValidationErrors() |> List.map (fun (c, s, n, l, f, k) -> f, n) //>> (fun p -> FParsec.Position(p.StreamName, p.Index, p.Line, 1L)))
         let testVals = stl.AllEntities() |> List.map (fun struct (e, _) -> e.filepath, getNodeComments e.entity |> List.collect (fun (r, cs) -> cs |> List.map (fun _ -> r)))
         // printfn "%A" (errors |> List.map (fun (c, f) -> f.StreamName))
@@ -156,13 +155,14 @@ let testFolder folder testsname config =
         // eprintfn "%A" (stl.AllFiles())
         //let nodeComments = entities |> List.collect (fun (f, s) -> getNodeComments s) |> List.map fst
         let inner (file, ((nodekeys : range list)) )=
-            let expected = nodekeys  //|> List.map (fun p -> FParsec.Position(p.StreamName, p.Index, p.Line, 1L))
+            let expected = nodekeys |> List.map (fun nk -> "", nk)
+             //|> List.map (fun p -> FParsec.Position(p.StreamName, p.Index, p.Line, 1L))
             let fileErrors = errors |> List.filter (fun (c, f) -> f.FileName = file )
-            let fileErrorPositions = fileErrors |> List.map snd
-            let missing = remove_all expected fileErrorPositions
-            let extras = remove_all fileErrorPositions expected
+            let fileErrorPositions = fileErrors //|> List.map snd
+            let missing = remove_all_by expected fileErrorPositions snd
+            let extras = remove_all_by fileErrorPositions expected snd
             //eprintfn "%A" nodekeys
-            Expect.isEmpty (extras) (sprintf "Following lines are not expected to have an error %A, all %A" extras expected )
+            Expect.isEmpty (extras) (sprintf "Following lines are not expected to have an error %A, expected %A, actual %A" extras expected fileErrors)
             Expect.isEmpty (missing) (sprintf "Following lines are expected to have an error %A" missing)
         yield! testVals |> List.map (fun (f, t) -> testCase (f.ToString()) <| fun () -> inner (f, t))
     ]
@@ -258,7 +258,7 @@ let embeddedTests =
         let stlNE = STLGame(settings) :> IGame<STLComputedData>
         let eerrors = stlE.ValidationErrors() |> List.map (fun (c, s, n, l, f, k) -> n)
         eprintfn "%A" (stlE.ValidationErrors())
-        let neerrors = stlNE.ValidationErrors() |> List.map (fun (c, s, n, l, f, k) -> n)
+        let neerrors = stlNE.ValidationErrors() |> List.map (fun (c, s, n, l, f, k) -> f, n)
         let etestVals = stlE.AllEntities() |> List.map (fun struct (e, _) -> e.filepath, getNodeComments e.entity |> List.map fst)
         let netestVals = stlNE.AllEntities() |> List.map (fun struct (e, _) -> e.filepath, getNodeComments e.entity |> List.map fst)
         let einner (file, ((nodekeys : range list)) )=
@@ -266,12 +266,22 @@ let embeddedTests =
             Expect.isEmpty (fileErrors) (sprintf "Following lines are not expected to have an error %A" fileErrors )
         yield! etestVals |> List.map (fun (f, t) -> testCase ("embed" + f.ToString()) <| fun () -> einner (f, t))
         let neinner (file, ((nodekeys : range list)) )=
-            let expected = nodekeys
-            let fileErrors = neerrors |> List.filter (fun f -> f.FileName = file )
-            let missing = remove_all expected fileErrors
-            let extras = remove_all fileErrors expected
-            Expect.isEmpty (extras) (sprintf "Following lines are not expected to have an error %A" extras )
+            // let expected = nodekeys
+            // let fileErrors = neerrors |> List.filter (fun f -> f.FileName = file )
+            // let missing = remove_all expected fileErrors
+            // let extras = remove_all fileErrors expected
+            // Expect.isEmpty (extras) (sprintf "Following lines are not expected to have an error %A" extras )
+            // Expect.isEmpty (missing) (sprintf "Following lines are expected to have an error %A" missing)
+            let expected = nodekeys |> List.map (fun nk -> "", nk)
+            //|> List.map (fun p -> FParsec.Position(p.StreamName, p.Index, p.Line, 1L))
+            let fileErrors = neerrors |> List.filter (fun (c, f) -> f.FileName = file )
+            let fileErrorPositions = fileErrors //|> List.map snd
+            let missing = remove_all_by expected fileErrorPositions snd
+            let extras = remove_all_by fileErrorPositions expected snd
+            //eprintfn "%A" nodekeys
+            Expect.isEmpty (extras) (sprintf "Following lines are not expected to have an error %A, expected %A, actual %A" extras expected fileErrors)
             Expect.isEmpty (missing) (sprintf "Following lines are expected to have an error %A" missing)
+
         yield! netestVals |> List.map (fun (f, t) -> testCase ("no embed" + f.ToString()) <| fun () -> neinner (f, t))
 
     ]

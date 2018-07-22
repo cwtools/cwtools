@@ -450,7 +450,10 @@ type STLGame (settings : StellarisSettings) =
             let files = fileManager.AllFilesByPath()
             let filteredfiles = if settings.validation.validateVanilla then files else files |> List.choose (function |FileResourceInput f -> Some (FileResourceInput f) |EntityResourceInput f -> if f.scope = "vanilla" then Some (EntityResourceInput {f with validate = false}) else Some (EntityResourceInput f))
             resources.UpdateFiles(filteredfiles) |> ignore
-            let embedded = settings.embedded.embeddedFiles |> List.map (fun (f, ft) -> if ft = "" then FileResourceInput { scope = "embedded"; filepath = f; logicalpath = (fileManager.ConvertPathToLogicalPath f) } else EntityResourceInput {scope = "embedded"; filepath = f; logicalpath = (fileManager.ConvertPathToLogicalPath f); filetext = ft; validate = false})
+            let embedded = 
+                settings.embedded.embeddedFiles 
+                |> List.map (fun (f, ft) -> f.Replace("\\","/"), ft)
+                |> List.map (fun (f, ft) -> if ft = "" then FileResourceInput { scope = "embedded"; filepath = f; logicalpath = (fileManager.ConvertPathToLogicalPath f) } else EntityResourceInput {scope = "embedded"; filepath = f; logicalpath = (fileManager.ConvertPathToLogicalPath f); filetext = ft; validate = false})
             if fileManager.ShouldUseEmbedded then resources.UpdateFiles(embedded) |> ignore else ()
 
             printfn "Files parsed"

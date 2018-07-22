@@ -209,10 +209,10 @@ let testsv =
             // match resourceManager.ManualProcessResource resource, infoService with
             // |Some e, Some info ->
 
-            match CKParser.parseString input "test" with
+            match CKParser.parseString input "test.txt" with
             |Success(r, _, _) ->
                 let node = (STLProcess.shipProcess.ProcessNode<Node>() "root" (range.Zero) r)
-                let entity = { filepath = "events"; logicalpath = "events"; entity = node; validate = true; entityType = EntityType.Events; overwrite = Overwrite.No}
+                let entity = { filepath = "events/test.txt"; logicalpath = "events/test.txt"; entity = node; validate = true; entityType = EntityType.Events; overwrite = Overwrite.No}
                 let comp = CompletionService([TypeRule ConfigParser.createStarbase], [], Map.empty, Map.empty, Set.empty)
                 let pos = mkPos 3 8
                 let suggestions = comp.Complete(pos, entity) |> Seq.map (function |Simple c -> c |Snippet (l, _, _) -> l) |> Seq.sort
@@ -224,10 +224,10 @@ let testsv =
                             owner = this \n\
                             size \n\
                             }"
-            match CKParser.parseString input "test" with
+            match CKParser.parseString input "test.txt" with
             |Success(r, _, _) ->
                 let node = (STLProcess.shipProcess.ProcessNode<Node>() "root" (range.Zero) r)
-                let entity = { filepath = "events"; logicalpath = "events"; entity = node; validate = true; entityType = EntityType.Events; overwrite = Overwrite.No}
+                let entity = { filepath = "events/test.txt"; logicalpath = "events/test.txt"; entity = node; validate = true; entityType = EntityType.Events; overwrite = Overwrite.No}
                 let comp = CompletionService([TypeRule ConfigParser.createStarbase], [ConfigParser.createStarbaseTypeDef], Map.empty, Map.empty, Set.empty)
                 let pos = mkPos 3 3
                 let suggestions = comp.Complete(pos, entity) |> Seq.map (function |Simple c -> c |Snippet (l, _, _) -> l) |> Seq.sort
@@ -248,11 +248,11 @@ let testsv =
             match CKParser.parseString input "common/ship_sizes/test.txt", CKParser.parseString behaviours "common/ship_behaviors/test.txt" with
             |Success(r, _, _), Success(b, _, _) ->
                 let bnode = (STLProcess.shipProcess.ProcessNode<Node>() "root" (mkZeroFile "common/ship_behaviors/test.txt") b)
-                let be = { entity = bnode; filepath = "/test/stellaris/common/ship_behaviors/test.txt"; logicalpath = "common/ship_behaviors"; validate = false; entityType = EntityType.ShipBehaviors; overwrite = Overwrite.No}
+                let be = { entity = bnode; filepath = "/test/stellaris/common/ship_behaviors/test.txt"; logicalpath = "common/ship_behaviors/test.txt"; validate = false; entityType = EntityType.ShipBehaviors; overwrite = Overwrite.No}
                 let ruleapplicator = RuleApplicator([TypeRule ConfigParser.createStarbase], [], Map.empty, Map.empty, [], Set.empty, [], [])
                 let typeinfo = getTypesFromDefinitions ruleapplicator [shipBehaviorType; shipSizeType] [be]
                 let node = (STLProcess.shipProcess.ProcessNode<Node>() "root" (mkZeroFile "common/ship_sizes/test.txt") r)
-                let entity = { filepath = "common/ship_sizes"; logicalpath = "common/ship_sizes"; entity = node; validate = true; entityType = EntityType.Events; overwrite = Overwrite.No}
+                let entity = { filepath = "common/ship_sizes/test.txt"; logicalpath = "common/ship_sizes/test.txt"; entity = node; validate = true; entityType = EntityType.Events; overwrite = Overwrite.No}
                 let pos = mkPos 2 20
                 let comp = CompletionService([TypeRule ConfigParser.shipsize], [shipBehaviorType; shipSizeType], typeinfo, Map.empty, Set.empty)
                 let suggestions = comp.Complete(pos, entity) |> Seq.map (function |Simple c -> c |Snippet (l, _, _) -> l) |> Seq.sort
@@ -281,7 +281,7 @@ let testsConfig =
                             }"
             let pos = mkPos 2 20
             let suggestions = stl.Complete pos "common/ship_sizes/test.txt" input 
-            eprintfn "%A" suggestions
+            //eprintfn "%A" suggestions
             let suggestions = suggestions |> Seq.map (function |Simple c -> c |Snippet (l, _, _) -> l) |> Seq.sort
             let expected = ["default"; "swarm"] |> Seq.sort
             Expect.sequenceEqual suggestions expected "Completion should match"

@@ -16,12 +16,13 @@ module Files =
         |Vanilla
 
     type FileManager(rootDirectory : string, modFilter : string option, scope : FilesScope, scriptFolders : string list, gameDirName : string) =
-        let normalisedScopeDirectory = rootDirectory.Replace("/","\\").TrimStart('.')
+        let normalisedScopeDirectory = rootDirectory.Replace("\\","/").TrimStart('.')
         let convertPathToLogicalPath =
             fun (path : string) ->
-                let path = path.Replace("/","\\")
-                let path = if path.Contains(normalisedScopeDirectory) then path.Replace(normalisedScopeDirectory+"\\", "") else path
-                if path.StartsWith "gfx\\" || path.StartsWith "gfx//" then path else
+                let path = path.Replace("\\","/")
+                //eprintfn "conv %A" path
+                let path = if path.Contains(normalisedScopeDirectory) then path.Replace(normalisedScopeDirectory+"/", "") else path
+                if path.StartsWith "gfx\\" || path.StartsWith "gfx/" then path else
                 let pathContains (part : string) =
                     path.Contains ("/"+part+"/" )|| path.Contains( "\\"+part+"\\")
                 let pathIndex (part : string) =

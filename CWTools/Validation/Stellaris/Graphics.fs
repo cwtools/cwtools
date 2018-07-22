@@ -30,7 +30,7 @@ module Graphics =
                     match x.Leafs "file" |> Seq.tryHead with
                     |None -> OK
                     |Some fn -> 
-                        let filename = fn.Value.ToRawString().Replace("/","\\")
+                        let filename = fn.Value.ToRawString().Replace("\\","/")
                         match filenames |> List.exists (fun f -> f.EndsWith(filename)) with
                         | true -> OK
                         | false -> Invalid [inv (ErrorCodes.MissingFile (filename)) fn]
@@ -94,6 +94,7 @@ module Graphics =
             let assets = os.AllOfTypeChildren EntityType.GfxAsset
                             |> List.map (fun a -> a.TagText "name")
                             |> Set.ofList
+            eprintfn "assets %A" assets                        
             let inner = 
                 fun (s : Node) ->
                     match s.TagText "ship_size", s.Leafs "entity" |> Seq.tryHead with
@@ -158,7 +159,8 @@ module Graphics =
     let doesFileExist (files : Collections.Set<string>) (folder : gfxFolders) (file : string) =
         let path =
             match folder with
-            |Buildings -> "gfx\\interface\\icons\\buildings\\" + file + ".dds"
+            |Buildings -> "gfx/interface/icons/buildings/" + file + ".dds"
+        eprintfn "%A" files
         files |> Set.contains path
 
     let valIconWithInterface (sprites : Collections.Set<string>) (files : Collections.Set<string>) (folder : gfxFolders) (key : string) (node : Node) =

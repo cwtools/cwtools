@@ -113,18 +113,18 @@ country_event = {
     is_triggered_only = yes
     immediate = {
         #error
-        AND = {
+        OR = {
             else = {
 
             }
         }
         #error
-        AND = {
+        OR = {
             else_if = {
                 
             }
         }
-        AND = {
+        OR = {
             if = {
 
             }
@@ -136,7 +136,7 @@ country_event = {
             }
         }
         #error
-        AND = {
+        OR = {
             if = {
 
             }
@@ -147,7 +147,7 @@ country_event = {
 
             }
         }
-        AND = {
+        OR = {
             #error
             if = {
                 else = {
@@ -155,7 +155,7 @@ country_event = {
                 }
             }
         }
-        AND = {
+        OR = {
             if = {
                 limit = {
                     if = {
@@ -166,7 +166,7 @@ country_event = {
                 }
             }
         }
-        AND = {
+        OR = {
             #error
             if = {
                 else_if = {
