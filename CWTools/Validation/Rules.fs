@@ -810,7 +810,11 @@ module rec Rules =
 
         let complete (pos : pos) (entity : Entity) =
             let path = getRulePath pos [] entity.entity |> List.rev
-            let pathDir = (Path.GetDirectoryName entity.logicalpath).Replace("/","\\")
+            let pathDir = (Path.GetDirectoryName (Path.GetFullPath(entity.logicalpath))).Replace("/","\\")
+            eprintfn "%A" typedefs
+            eprintfn "%A" pos
+            eprintfn "%A" entity.logicalpath
+            eprintfn "%A" pathDir
             let typekeyfilter (td : TypeDefinition) (n : string) =
                 match td.typeKeyFilter with
                 |Some (filter, negate) -> n == filter <> negate

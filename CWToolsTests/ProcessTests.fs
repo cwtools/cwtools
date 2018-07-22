@@ -205,12 +205,17 @@ let testsv =
                             owner = this \n\
                             size = large \n\
                             }"
+            // let resource = makeEntityResourceInput filepath filetext
+            // match resourceManager.ManualProcessResource resource, infoService with
+            // |Some e, Some info ->
+
             match CKParser.parseString input "test" with
             |Success(r, _, _) ->
                 let node = (STLProcess.shipProcess.ProcessNode<Node>() "root" (range.Zero) r)
-                let comp = CompletionService([TypeRule ConfigParser.createStarbase], [], Map.empty, Map.empty)
+                let entity = { filepath = "events"; logicalpath = "events"; entity = node; validate = true; entityType = EntityType.Events; overwrite = Overwrite.No}
+                let comp = CompletionService([TypeRule ConfigParser.createStarbase], [], Map.empty, Map.empty, Set.empty)
                 let pos = mkPos 3 8
-                let suggestions = comp.Complete(pos, node) |> Seq.map (function |Simple c -> c |Snippet (l, _, _) -> l) |> Seq.sort
+                let suggestions = comp.Complete(pos, entity) |> Seq.map (function |Simple c -> c |Snippet (l, _, _) -> l) |> Seq.sort
                 let expected = ["medium"; "large"] |> Seq.sort
                 Expect.sequenceEqual suggestions expected "Completion should match"
             |Failure(e, _, _) -> Expect.isTrue false e
@@ -222,9 +227,10 @@ let testsv =
             match CKParser.parseString input "test" with
             |Success(r, _, _) ->
                 let node = (STLProcess.shipProcess.ProcessNode<Node>() "root" (range.Zero) r)
-                let comp = CompletionService([TypeRule ConfigParser.createStarbase], [], Map.empty, Map.empty)
+                let entity = { filepath = "events"; logicalpath = "events"; entity = node; validate = true; entityType = EntityType.Events; overwrite = Overwrite.No}
+                let comp = CompletionService([TypeRule ConfigParser.createStarbase], [ConfigParser.createStarbaseTypeDef], Map.empty, Map.empty, Set.empty)
                 let pos = mkPos 3 3
-                let suggestions = comp.Complete(pos, node) |> Seq.map (function |Simple c -> c |Snippet (l, _, _) -> l) |> Seq.sort
+                let suggestions = comp.Complete(pos, entity) |> Seq.map (function |Simple c -> c |Snippet (l, _, _) -> l) |> Seq.sort
                 let expected = ["size"; "owner"; "building"; "effect"; "module"] |> Seq.sort
                 Expect.sequenceEqual suggestions expected "Completion should match"
             |Failure(e, _, _) -> Expect.isTrue false e
@@ -246,9 +252,10 @@ let testsv =
                 let ruleapplicator = RuleApplicator([TypeRule ConfigParser.createStarbase], [], Map.empty, Map.empty, [], Set.empty, [], [])
                 let typeinfo = getTypesFromDefinitions ruleapplicator [shipBehaviorType; shipSizeType] [be]
                 let node = (STLProcess.shipProcess.ProcessNode<Node>() "root" (mkZeroFile "common/ship_sizes/test.txt") r)
+                let entity = { filepath = "common/ship_sizes"; logicalpath = "common/ship_sizes"; entity = node; validate = true; entityType = EntityType.Events; overwrite = Overwrite.No}
                 let pos = mkPos 2 20
-                let comp = CompletionService([TypeRule ConfigParser.shipsize], [shipBehaviorType; shipSizeType], typeinfo, Map.empty)
-                let suggestions = comp.Complete(pos, node) |> Seq.map (function |Simple c -> c |Snippet (l, _, _) -> l) |> Seq.sort
+                let comp = CompletionService([TypeRule ConfigParser.shipsize], [shipBehaviorType; shipSizeType], typeinfo, Map.empty, Set.empty)
+                let suggestions = comp.Complete(pos, entity) |> Seq.map (function |Simple c -> c |Snippet (l, _, _) -> l) |> Seq.sort
                 let expected = ["default"; "swarm"] |> Seq.sort
                 Expect.sequenceEqual suggestions expected "Completion should match"
 
@@ -270,10 +277,12 @@ let testsConfig =
             //let stl = STLGame(folder, FilesScope.All, "", triggers, effects, modifiers, [], [configtext], [STL STLLang.English], false, true, true)
 
             let input =    "ship_size = {\n\
-                            default_behavior = s \n\
+                            default_behavior =  \n\
                             }"
             let pos = mkPos 2 20
-            let suggestions = stl.Complete pos "test" input |> Seq.map (function |Simple c -> c |Snippet (l, _, _) -> l) |> Seq.sort
+            let suggestions = stl.Complete pos "common/ship_sizes/test.txt" input 
+            eprintfn "%A" suggestions
+            let suggestions = suggestions |> Seq.map (function |Simple c -> c |Snippet (l, _, _) -> l) |> Seq.sort
             let expected = ["default"; "swarm"] |> Seq.sort
             Expect.sequenceEqual suggestions expected "Completion should match"
 

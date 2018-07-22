@@ -125,6 +125,7 @@ module ProcessCore =
                 // |None -> processNode<Node> id (processNodeInner {context with previous = key}) key pos
                 ) >> (fun f a b c -> NodeC (f a b c |> (fun n -> n.All <- n.All |> List.rev; n)))
         and processNodeInner (c : LookupContext) (node : Node) statement =
+            //eprintfn "%A" node.Key
             match statement with
             | KeyValue(PosKeyValue(pos, KeyValueItem(Key(k) , Clause(sl)))) -> node.All <- lookup k pos c sl::node.All
             | KeyValue(PosKeyValue(pos, kv)) -> node.All <- LeafC(Leaf(kv, pos))::node.All

@@ -584,6 +584,7 @@ module rec STLProcess =
         |_ -> processNodeSimple<Node>, "", (fun c -> {c with complete = true;});
             
     let shipProcess = BaseProcess(stellarisFunction)
+    let simpleProcess = BaseProcess(fun _ -> processNodeSimple<Node>, "", id)
 
     let staticModifierCategory (modifiers : (string * ModifierCategory list) list) (node : Node) =
         node.Values |> List.filter (fun v -> v.Key <> "icon" && v.Key <> "icon_frame")

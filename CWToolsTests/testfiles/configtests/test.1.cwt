@@ -87,7 +87,7 @@ ship_size = {
         combat_disengage_chance = float
     }
 
- }
+}
 
 types = {
     type[ship_size] = {

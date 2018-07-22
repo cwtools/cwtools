@@ -422,11 +422,14 @@ module rec ConfigParser =
         rules, types, enums, complexenums
 
     let parseConfig filename fileString =
+        //eprintfn "parse"
         let parsed = parseConfigString filename fileString
         match parsed with
         |Failure(e, _, _) -> eprintfn "config file %s failed with %s" filename e; ([], [], [], [])
         |Success(s,_,_) ->
-            let root = shipProcess.ProcessNode<Node> EntityType.Other "root" (mkZeroFile filename) (s |> List.rev)
+            //eprintfn "parsed %A" s 
+            let root = simpleProcess.ProcessNode<Node>() "root" (mkZeroFile filename) (s |> List.rev)
+            //eprintfn "processConfig"
             processConfig root
 
 
@@ -445,7 +448,18 @@ module rec ConfigParser =
         let building = Rule ("building", optionalMany, ObjectField EntityType.StarbaseBuilding)
         let effect =  Rule ("effect", optionalSingle, ValueField ValueType.Scalar)
         EffectRule ("create_starbase", optionalMany, ClauseField [owner; size; moduleR; building; effect])
-
+    let createStarbaseTypeDef = 
+        {
+            name = "create_starbase"
+            nameField = None
+            path = "game/events"
+            path_strict = false
+            conditions = None
+            subtypes = []
+            typeKeyFilter = None
+            skipRootKey = None
+            warningOnly = false
+        }
 // # strategic_resource: strategic resource, deprecated, strategic resource used by the building.
 // # allow: trigger to check for allowing construction of building.
 // # prerequisites: Tech requirements for building.
