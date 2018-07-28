@@ -115,7 +115,7 @@ module Files =
 
         let allFilesByPath =
             let getAllFiles (scope, path) =
-                eprintfn "%A" path
+                //eprintfn "%A" path
                 scriptFolders
                         |> List.map ((fun folder -> scope, Path.GetFullPath(Path.Combine(path, folder)))
                         >> (fun (scope, folder) -> scope, folder, (if Directory.Exists folder then getAllFoldersUnion [folder] |> Seq.collect Directory.EnumerateFiles else Seq.empty )|> List.ofSeq))

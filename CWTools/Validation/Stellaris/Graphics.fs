@@ -94,7 +94,7 @@ module Graphics =
             let assets = os.AllOfTypeChildren EntityType.GfxAsset
                             |> List.map (fun a -> a.TagText "name")
                             |> Set.ofList
-            eprintfn "assets %A" assets
+            //eprintfn "assets %A" assets
             let inner =
                 fun (s : Node) ->
                     match s.TagText "ship_size", s.Leafs "entity" |> Seq.tryHead with
@@ -160,7 +160,7 @@ module Graphics =
         let path =
             match folder with
             |Buildings -> "gfx/interface/icons/buildings/" + file + ".dds"
-        eprintfn "%A" files
+        //eprintfn "%A" files
         files |> Set.contains path
 
     let valIconWithInterface (sprites : Collections.Set<string>) (files : Collections.Set<string>) (folder : gfxFolders) (key : string) (node : Node) =
