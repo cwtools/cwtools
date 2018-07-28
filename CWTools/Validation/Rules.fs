@@ -57,11 +57,7 @@ module rec Rules =
             |Some es -> es.Contains key
             |None -> false
         |LeftClauseField (ValueType.Scalar, _) -> true
-<<<<<<< HEAD
-        |LeftClauseField (ValueType.Filepath, _) -> files.Contains (key.Trim('"').Replace("\\","/"))
-=======
-        |LeftClauseField (ValueType.Filepath, _) -> files.Contains (key.Trim('"').Replace("/","\\").Replace(".lua",".shader").Replace(".tga",".dds"))
->>>>>>> 72448e3f6f02a4bf3778607eb7e343f93759ef64
+        |LeftClauseField (ValueType.Filepath, _) -> files.Contains (key.Trim('"').Replace("\\","/").Replace(".lua",".shader").Replace(".tga",".dds"))
         |_ -> false
 
     let checkValidLeftTypeRule (types : Collections.Map<string, StringSet>) (field : Field) (key : string) =

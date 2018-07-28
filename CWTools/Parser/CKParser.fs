@@ -9,9 +9,9 @@ open Types
 module CKParser =
     let (<!>) (p: Parser<_,_>) label : Parser<_,_> =
         fun stream ->
-            printfn "%A: Entering %s" stream.Position label
+            eprintfn "%A: Entering %s" stream.Position label
             let reply = p stream
-            printfn "%A: Leaving %s (%A)" stream.Position label reply.Status
+            eprintfn "%A: Leaving %s (%A)" stream.Position label reply.Status
             reply
 
     let betweenL (popen: Parser<_,_>) (pclose: Parser<_,_>) (p: Parser<_,_>) label =

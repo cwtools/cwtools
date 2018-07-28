@@ -1,13 +1,12 @@
-named_lists = {
-}
-#key_desc 
-#key_plural 
-#key_insult_01 
-#key_insult_plural_01 
+
+#key_desc
+#key_plural
+#key_insult_01
+#key_insult_plural_01
 #key_compliment_01
 #key_compliment_plural_01
 #key_spawn
-#key_spawn_plural                       
+#key_spawn_plural
 #key_sound_01
 #key_sound_02
 #key_sound_03

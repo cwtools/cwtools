@@ -17,11 +17,13 @@ module Files =
 
     type FileManager(rootDirectory : string, modFilter : string option, scope : FilesScope, scriptFolders : string list, gameDirName : string) =
         let normalisedScopeDirectory = rootDirectory.Replace("\\","/").TrimStart('.')
+        let normalisedScopeDirectoryLength = normalisedScopeDirectory.Length
         let convertPathToLogicalPath =
             fun (path : string) ->
                 let path = path.Replace("\\","/")
                 //eprintfn "conv %A" path
-                let path = if path.Contains(normalisedScopeDirectory) then path.Replace(normalisedScopeDirectory+"/", "") else path
+                let path = let index = path.IndexOf(normalisedScopeDirectory) in if index > 0 then path.Substring(index + normalisedScopeDirectoryLength) else path
+                //let path = if path.Contains(normalisedScopeDirectory) then path.Replace(normalisedScopeDirectory+"/", "") else path
                 if path.StartsWith "gfx\\" || path.StartsWith "gfx/" then path else
                 let pathContains (part : string) =
                     path.Contains ("/"+part+"/" )|| path.Contains( "\\"+part+"\\")
@@ -118,7 +120,7 @@ module Files =
                         |> List.map ((fun folder -> scope, Path.GetFullPath(Path.Combine(path, folder)))
                         >> (fun (scope, folder) -> scope, folder, (if Directory.Exists folder then getAllFoldersUnion [folder] |> Seq.collect Directory.EnumerateFiles else Seq.empty )|> List.ofSeq))
                         |> List.collect (fun (scope, _, files) -> files |> List.map (fun f -> scope, f))
-            let fileToResourceInput (scope, filepath) =
+            let fileToResourceInput (scope, filepath : string) =
                 match Path.GetExtension(filepath) with
                 |".txt"
                 |".gui"

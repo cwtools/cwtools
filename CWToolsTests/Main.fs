@@ -93,6 +93,7 @@ let test() =
     |Failure(a,_,_) -> printfn "%A" a
 [<EntryPoint>]
 let main argv =
+    let config = defaultConfig // with ``parallel`` = false}
     Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
     if Array.tryHead argv = Some "p"
     then perf(true); 0
@@ -102,4 +103,4 @@ let main argv =
     then perf(false); 0
     elif Array.tryHead argv = Some "t"
     then test(); 0
-    else Tests.runTestsInAssembly defaultConfig argv
+    else Tests.runTestsInAssembly config argv

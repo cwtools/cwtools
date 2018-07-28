@@ -1,5 +1,5 @@
 ## Check trigger and effect blocks in building
-building_physics_lab_0 = { 
+building_physics_lab_0 = {
     base_buildtime = 210
     show_tech_unlock_if = { is_nomadic_empire = no }
 
@@ -81,7 +81,7 @@ building_physics_lab_0 = {
 
     planet_modifier_with_pop_trigger = {
         key = building_neuro_electric_amplifier
-        potential = { 
+        potential = {
             has_trait = trait_cybernetic
             #error
             has_planet_flag = yes
@@ -94,7 +94,7 @@ building_physics_lab_0 = {
 
     triggered_planet_modifier = {
         key = building_neuro_electric_amplifier
-        potential = { 
+        potential = {
             has_planet_flag = trait_cybernetic
             #error
             has_starbase_flag = yes
@@ -116,19 +116,19 @@ building_physics_lab_0 = {
 	}
 
 }
-   
+
 ##Check modifiers in buildings
 building_xeno_zoo = {
 	base_buildtime = 240
-	
+
 	cost = {
 		minerals = 150
 	}
-	
+
 	show_tech_unlock_if = { NOT = { has_authority = auth_machine_intelligence } }
 
 	potential = {
-		NOT = { 
+		NOT = {
 			owner = { has_authority = auth_machine_intelligence }
 		}
 		planet = {
@@ -139,17 +139,17 @@ building_xeno_zoo = {
 	destroy_if = {
 		exists = owner
 		owner = { has_authority = auth_machine_intelligence }
-	}	
-	
+	}
+
 	required_resources = {
 		energy = 1
 	}
-	
+
 	produced_resources = {
 		unity = 4
 		society_research = 4
 	}
-	
+
 	planet_modifier = {
 		pop_citizen_happiness = 0.05
 		planet_migration_all_pull = 0.25
@@ -168,9 +168,8 @@ building_xeno_zoo = {
         starbase_upgrade_cost_mult = 0.5
         army_health = 10
     }
-	
+
 	allow = {
-		AND = {
 			custom_tooltip = {
 				fail_text = "requires_building_capital_1"
 				planet = {
@@ -190,9 +189,8 @@ building_xeno_zoo = {
 					}
 				}
 			}
-		}
 	}
-	
+
 	prerequisites = {
 		"tech_alien_life_studies"
 	}
@@ -203,7 +201,7 @@ building_xeno_zoo = {
 
     planet_modifier_with_pop_trigger = {
 		key = building_neuro_electric_amplifier
-		potential = { 
+		potential = {
             has_trait = trait_cybernetic
             #error
             has_planet_flag = yes
@@ -211,14 +209,14 @@ building_xeno_zoo = {
 		modifier = {
 			tile_resource_minerals_mult = 0.15
 			tile_resource_energy_mult = 0.15
-            #error 
+            #error
             starbase_upgrade_cost_mult = 0.5
 		}
 	}
 
     triggered_planet_modifier = {
         key = building_neuro_electric_amplifier
-        potential = { 
+        potential = {
             has_planet_flag = trait_cybernetic
             #error
             has_starbase_flag = yes
@@ -226,10 +224,10 @@ building_xeno_zoo = {
         modifier = {
             tile_resource_minerals_mult = 0.15
 			tile_resource_energy_mult = 0.15
-            #error 
+            #error
             starbase_upgrade_cost_mult = 0.5
         }
     }
 
-    
+
 }

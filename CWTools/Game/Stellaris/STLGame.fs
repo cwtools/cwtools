@@ -246,12 +246,9 @@ type STLGame (settings : StellarisSettings) =
             match settings.rules with
             |Some rulesSettings ->
                 let rules, types, enums, complexenums = rulesSettings.ruleFiles |> List.fold (fun (rs, ts, es, ces) (fn, ft) -> let r2, t2, e2, ce2 = parseConfig fn ft in rs@r2, ts@t2, es@e2, ces@ce2) ([], [], [], [])
-                printfn "after rules"
                 let rulesWithMod = rules @ (lookup.coreModifiers |> List.map (fun c -> AliasRule ("modifier", Rule(c.tag, {min = 0; max = 100; leafvalue = false; description = None; pushScope = None; replaceScopes = None}, ValueField (ValueType.Float (-1E+12, 1E+12))))))
-                printfn "after rulesw"
                 let complexEnumDefs = getEnumsFromComplexEnums complexenums (resources.AllEntities() |> List.map (fun struct(e,_) -> e))
                 let allEnums = enums @ complexEnumDefs
-                printfn "after allenums"
                 lookup.configRules <- rulesWithMod
                 lookup.typeDefs <- types
                 lookup.enumDefs <- allEnums |> Map.ofList
@@ -451,27 +448,23 @@ type STLGame (settings : StellarisSettings) =
             let files = fileManager.AllFilesByPath()
             let filteredfiles = if settings.validation.validateVanilla then files else files |> List.choose (function |FileResourceInput f -> Some (FileResourceInput f) |EntityResourceInput f -> if f.scope = "vanilla" then Some (EntityResourceInput {f with validate = false}) else Some (EntityResourceInput f))
             resources.UpdateFiles(filteredfiles) |> ignore
-            let embedded = 
-                settings.embedded.embeddedFiles 
+            let embedded =
+                settings.embedded.embeddedFiles
                 |> List.map (fun (f, ft) -> f.Replace("\\","/"), ft)
                 |> List.map (fun (f, ft) -> if ft = "" then FileResourceInput { scope = "embedded"; filepath = f; logicalpath = (fileManager.ConvertPathToLogicalPath f) } else EntityResourceInput {scope = "embedded"; filepath = f; logicalpath = (fileManager.ConvertPathToLogicalPath f); filetext = ft; validate = false})
             if fileManager.ShouldUseEmbedded then resources.UpdateFiles(embedded) |> ignore else ()
 
-            printfn "Files parsed"
 
             updateScriptedTriggers()
             updateScriptedEffects()
             updateStaticodifiers()
             updateScriptedLoc()
-            printfn "sloc"
             updateDefinedVariables()
             updateModifiers()
             updateTechnologies()
             updateLocalisation()
-            printfn "loc"
             updateTypeDef()
 
-            printfn "Updates complete"
             let loc = allLocalisation() |> List.groupBy (fun l -> l.GetLang) |> List.map (fun (k, g) -> k, g |>List.collect (fun ls -> ls.GetKeys) |> Set.ofList )
             let files = resources.GetResources() |> List.choose (function |FileResource (_, f) -> Some f.logicalpath |EntityResource (_, f) -> Some f.logicalpath) |> Set.ofList
             completionService <- Some (CompletionService(lookup.configRules, lookup.typeDefs, lookup.typeDefInfo, lookup.enumDefs, files))
