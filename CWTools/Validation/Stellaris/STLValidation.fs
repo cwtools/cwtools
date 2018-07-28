@@ -193,7 +193,7 @@ module STLValidation =
                             |> List.filter (fun e -> e.Key = "spriteTypes")
                             |> List.collect (fun e -> e.Children)
             let filenames = rm.GetResources() |> List.choose (function |FileResource (_, e) -> Some (e.logicalpath) |EntityResource (_, e) -> Some (e.logicalpath))
-            eprintfn "sprite filename %A" filenames
+            //eprintfn "sprite filename %A" filenames
             let inner =
                 fun (x : Node) ->
                    Seq.append (x.Leafs "textureFile") (x.Leafs "effectFile")
@@ -273,6 +273,75 @@ module STLValidation =
             //let defVars = effects @ opts |> List.collect findAllSetVariables
             triggers <&!!&> (validateUsedVariables defVars)
 
+    let hasFlagMap =
+        fun (flags : Collections.Map<FlagType, string list>) (leaf : Leaf) ->
+            let validate (flag : string) (flagType : FlagType) =
+                let flag = if flag.Contains "@" then flag.Split('@').[0] else flag
+                //Hack due to testing files
+                if flag == "yes" || flag == "true" || flag == "test" then OK else
+                flags.TryFind flagType |> Option.map (fun values -> if List.exists (fun f -> f == flag) values then OK else Invalid [inv (ErrorCodes.UndefinedFlag flag flagType) leaf])
+                                       |> Option.defaultValue (Invalid [inv (ErrorCodes.UndefinedFlag flag flagType) leaf])
+            match leaf.Key with
+            |"has_planet_flag" -> validate (leaf.Value.ToRawString()) FlagType.Planet
+            |"has_country_flag" -> validate (leaf.Value.ToRawString()) FlagType.Country
+            |"has_fleet_flag" -> validate (leaf.Value.ToRawString()) FlagType.Fleet
+            |"has_ship_flag" -> validate (leaf.Value.ToRawString()) FlagType.Ship
+            |"has_pop_flag" -> validate (leaf.Value.ToRawString()) FlagType.Pop
+            |"has_global_flag" -> validate (leaf.Value.ToRawString()) FlagType.Global
+            |"has_star_flag" -> validate (leaf.Value.ToRawString()) FlagType.Star
+            |"has_relation_flag" -> validate (leaf.Value.ToRawString()) FlagType.Relation
+            |"has_leader_flag" -> validate (leaf.Value.ToRawString()) FlagType.Leader
+            |"has_ambient_object_flag" -> validate (leaf.Value.ToRawString()) FlagType.AmbientObject
+            |"has_megastructure_flag" -> validate (leaf.Value.ToRawString()) FlagType.Megastructure
+            |"has_species_flag" -> validate (leaf.Value.ToRawString()) FlagType.Species
+            |"has_pop_faction_flag" -> validate (leaf.Value.ToRawString()) FlagType.PopFaction
+            |_ -> OK
+
+    let validateUsedFlags (flags : Collections.Map<FlagType, string list>) (node : Node) =
+        let fNode = (fun (x : Node) children ->
+                        (x.Values <&!&> hasFlagMap flags) <&&> children
+                    )
+        let fCombine = (<&&>)
+        foldNode2 fNode fCombine OK node
+
+
+    let valFlags : StructureValidator =
+        fun os es ->
+            let ftNode = (fun (x : Node) acc ->
+                    match x with
+                    | (:? TriggerBlock as x) -> (x :> Node)::acc
+                    | (:? WeightModifierBlock as x) -> (x :> Node)::acc
+                    | _ -> acc
+                    )
+            let triggers = es.All |> List.collect (foldNode7 ftNode)
+            let precursorflags = os.AllOfTypeChildren EntityType.PrecursorCivilizations |> List.collect (fun n -> n.Values |> List.map (fun v -> FlagType.Star, v.Key))
+            let prescriptedcountriesflags =
+                os.AllOfTypeChildren EntityType.PrescriptedCountries
+                |> List.collect (fun n -> n.Child "flags" |> Option.map (fun c -> c.LeafValues |> List.ofSeq |> List.map (fun lv -> lv.Value.ToRawString())) |> Option.defaultValue [])
+                |> List.map (fun f -> FlagType.Country, f)
+            let fNode = (fun (x : Node) acc ->
+                        let newAcc =
+                            match x.Key with
+                            |"moon"
+                            |"planet" ->
+                                x.Child "flags" |> Option.map (fun c -> c.LeafValues |> List.ofSeq |> List.map (fun lv -> FlagType.Planet, lv.Value.ToRawString())) |> Option.defaultValue []
+                            | _ ->
+                                x.Child "flags" |> Option.map (fun c -> c.LeafValues |> List.ofSeq |> List.map (fun lv -> FlagType.Star, lv.Value.ToRawString())) |> Option.defaultValue []
+                        newAcc @ acc
+                        )
+            let solarsystemflags = os.AllOfTypeChildren EntityType.SolarSystemInitializers |> List.collect (foldNode7 fNode)
+            // let solarsystemflags =
+            //     os.AllOfTypeChildren EntityType.SolarSystemInitializers
+            //     |> List.collect (fun n -> n.Child "flags" |> Option.map (fun c -> c.LeafValues |> List.ofSeq |> List.map (fun lv -> lv.Value.ToRawString())) |> Option.defaultValue [])
+            //     |> List.map (fun f -> FlagType.Star, f)
+            let customFlags = precursorflags @ prescriptedcountriesflags @ solarsystemflags
+            let defFlags =
+                (os.AllWithData @ es.AllWithData) |> List.collect (fun (_, d) -> d.Force().setflags)
+                |> (fun f -> f @ customFlags)
+                |> List.map (fun (k, f) -> k, if f.Contains "@" then f.Split('@').[0] else f)
+                |> List.groupBy fst |> List.map (fun (k, vs) -> k, List.map snd vs) |> Map.ofList
+            //let defVars = effects @ opts |> List.collect findAllSetVariables
+            triggers <&!!&> (validateUsedFlags defFlags)
 
     let valTest : StructureValidator =
         fun os es ->

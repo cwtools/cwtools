@@ -95,7 +95,7 @@ building_physics_lab_0 = {
     triggered_planet_modifier = {
         key = building_neuro_electric_amplifier
         potential = {
-            has_planet_flag = trait_cybernetic
+            has_planet_flag = yes
             #error
             has_starbase_flag = yes
         }
@@ -217,7 +217,7 @@ building_xeno_zoo = {
     triggered_planet_modifier = {
         key = building_neuro_electric_amplifier
         potential = {
-            has_planet_flag = trait_cybernetic
+            has_planet_flag = yes
             #error
             has_starbase_flag = yes
         }

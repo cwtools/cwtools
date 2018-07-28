@@ -97,6 +97,8 @@ module ValidationCore =
         static member ConfigRulesErrorInTarget = fun command scope expected -> { ID = "CW245"; Severity = Severity.Error; Message = sprintf "Error in target. Command %s was used in scope %s but expected %s" command scope expected}
         static member PlanetKillerMissing = fun message -> { ID = "CW250"; Severity = Severity.Error; Message = message }
         static member UnnecessaryBoolean = fun bool -> { ID = "CW251"; Severity = Severity.Warning; Message = sprintf "This %s is unnecessary" bool }
+        static member UndefinedFlag = fun (variable : string) (flagType : FlagType) -> { ID = "CW252"; Severity = Severity.Error; Message = sprintf "%s flag of type %A is never set" variable flagType}
+
         static member CustomError = fun error severity -> { ID = "CW999"; Severity = severity; Message = error}
 
     type CWError = (string * Severity * range * int * string * option<string>)

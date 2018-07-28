@@ -176,7 +176,7 @@ module Graphics =
         fun res es ->
             let os = EntitySet (res.AllEntities())
             let files = res.GetResources() |> List.choose (function |FileResource (_, f) -> Some f.logicalpath |EntityResource (_, f) -> Some f.logicalpath) |> Set.ofList
-            let sprites = os.AllOfTypeChildren EntityType.InterfaceGfx //os.GlobMatchChildren("**/interface/*.gfx") @ os.GlobMatchChildren("**/interface/**/*.gfx")
+            let sprites = os.AllOfTypeChildren EntityType.Interface //os.GlobMatchChildren("**/interface/*.gfx") @ os.GlobMatchChildren("**/interface/**/*.gfx")
                             |> List.filter (fun e -> e.Key = "spriteTypes")
                             |> List.collect (fun e -> e.Children)
             let spriteNames = sprites |> Seq.collect (fun s -> s.TagsText "name") |> Set.ofSeq

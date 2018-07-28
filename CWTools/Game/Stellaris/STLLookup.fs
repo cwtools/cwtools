@@ -13,9 +13,12 @@ open CWTools.Games
 open Microsoft.FSharp.Compiler.Range
 
 module STLLookup =
+    type FlagType = |Country |Planet |Fleet |Ship |Pop |Global |Star |Relation |Leader |AmbientObject |Species |Megastructure |PopFaction
+
     type STLComputedData = {
         eventids : string list
         setvariables : string list
+        setflags : (FlagType * string) list
         savedeventtargets : string list
         referencedtypes : Map<string, (string  * range) list> option
         hastechs : string list

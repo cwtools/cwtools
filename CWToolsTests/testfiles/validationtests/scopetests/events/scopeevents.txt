@@ -89,7 +89,7 @@ fleet_event =
     immediate = {
         OWNER = {
             any_owned_planet = {
-                
+
             }
         }
     }
@@ -128,7 +128,7 @@ country_event = {
     id = ccrebel_sow_unrest.21
     hide_window = yes
     is_triggered_only = yes
-    
+
     immediate = {
         every_country = {
             limit = {
@@ -139,10 +139,10 @@ country_event = {
                 root = {
                     NOT = {
                         any_owned_planet = {
-                            has_planet_flag = ccrebel_planet_being_stirred_up_longer@prevprev
+                            has_planet_flag = yes
                             prevprev = {
                                 any_owned_planet = {
-                                    prevprev = { has_planet_flag = ccrebel_planet_being_stirred_up_longer_planet@prev }
+                                    prevprev = { has_planet_flag = yes }
                                 }
                             }
                         }

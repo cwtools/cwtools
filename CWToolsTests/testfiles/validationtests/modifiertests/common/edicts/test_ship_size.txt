@@ -7,13 +7,13 @@ country_edict = {
 		#error
 		shipsize_xindi_weapon_hull_add = 0
 	}
-	
+
 	cost = { influence = 5 }
 
 	length = 36000
 
 	potential = {
-		has_country_flag = drone_bounty_edict_available
+		has_country_flag = yes
 	}
 
 	allow = {
@@ -21,7 +21,7 @@ country_edict = {
 
 	ai_weight = {
 		weight = 0
-	}	
+	}
 }
 
 planet_edict = {
