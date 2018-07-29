@@ -15,6 +15,8 @@ open System
 let configuration = "Debug"
 let buildDir  = "./build/"
 let appReferences = !! "CWTools/CWTools.fsproj"
+
+let testReferences = !! "CWToolsTests/CWToolsTests.fsproj"
 let mutable dotnetExePath = "dotnet"
 
 let project = "cwtools"
@@ -101,6 +103,14 @@ Target "Build" (fun _ ->
     |> Seq.iter (fun p ->
         let dir = System.IO.Path.GetDirectoryName p
         runDotnet dir "build"
+    )
+)
+
+Target "Test" (fun _ ->
+    testReferences
+    |> Seq.iter (fun p ->
+        let dir = System.IO.Path.GetDirectoryName p
+        runDotnet dir "run"
     )
 )
 

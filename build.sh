@@ -10,13 +10,14 @@ then
   	exit $exit_code
   fi
 
-  packages/FAKE/tools/FAKE.exe $@ --fsiargs build.fsx
+  packages/tools/FAKE/tools/FAKE.exe $@ --fsiargs build.fsx
 else
   # use mono
   mono .paket/paket.exe restore
+  mono .paket/paket.exe restore -g tools
   exit_code=$?
   if [ $exit_code -ne 0 ]; then
   	exit $exit_code
   fi
-  mono packages/FAKE/tools/FAKE.exe $@ --fsiargs -d:MONO build.fsx
+  mono packages/tools/FAKE/tools/FAKE.exe $@ --fsiargs -d:MONO build.fsx
 fi
