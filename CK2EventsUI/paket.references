@@ -1,4 +1,4 @@
-Microsoft.AspNetCore.All
+Microsoft.AspNetCore.App
 FParsec
 Newtonsoft.Json.FSharp
 FSharp.Data

@@ -6,8 +6,7 @@ clitool ElectronNET.CLI
 nuget Expecto >= 5.0
 nuget FParsec 1.0.3
 nuget FSharp.Data 3.0.0-beta
-nuget Microsoft.AspNetCore.All
-clitool Microsoft.DotNet.Watcher.Tools 1.0.0
+nuget Microsoft.AspNetCore.App
 nuget Newtonsoft.Json.FSharp
 nuget NodaTime < 2.0
 nuget runtime.win-x64.Microsoft.NETCore.App
@@ -29,4 +28,4 @@ nuget Sandwych.QuickGraph.Core
 
 group tools
     source https://api.nuget.org/v3/index.json
-   // nuget FAKE
+    nuget FAKE ~> 4

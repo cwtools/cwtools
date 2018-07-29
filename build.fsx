@@ -2,7 +2,8 @@
 // FAKE build script
 // --------------------------------------------------------------------------------------
 
-#r "./packages/FAKE/tools/FakeLib.dll"
+#I "packages/tools/FAKE/tools"
+#r "FakeLib.dll"
 
 open Fake
 open System
@@ -74,13 +75,16 @@ let packParameters name =
 // --------------------------------------------------------------------------------------
 
 Target "Clean" (fun _ ->
-    CleanDirs [buildDir]
+    CleanDirs [buildDir; "bin"]
     appReferences
     |> Seq.iter (fun p ->
         let dir = System.IO.Path.GetDirectoryName p
         runDotnet dir "clean"
     )
     DotNetCli.RunCommand id "clean"
+    !! "**/obj/**/*.nuspec"
+    |> DeleteFiles
+
 )
 
 
@@ -108,7 +112,8 @@ Target "Pack" (fun _ ->
     let name = System.IO.Path.GetFileName path
     DotNetCli.RunCommand id (
       sprintf
-        "pack \"%s\" -c Debug  -o ../bin %s"
+        "pack \"%s\" -o ../bin %s"
+        //"pack \"%s\" -c Debug  -o ../bin %s"
         proj  (packParameters name))
   )
 //   DotNetCli.RunCommand id (
@@ -123,7 +128,10 @@ Target "Pack" (fun _ ->
 
 "Clean"
   ==> "Restore"
+  ==> "Pack"
+
+"Clean"
+  ==> "Restore"
   ==> "Build"
- // ==> "Pack"
 
 RunTargetOrDefault "Build"
