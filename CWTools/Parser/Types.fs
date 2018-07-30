@@ -75,7 +75,7 @@ module rec Types =
         
 
     [<StructuralEquality; StructuralComparison>]
-    type EventFile = |EventFile of  Statement list
+    type EventFile = |EventFile of Statement list
 
     type ParseFile = string -> ParserResult<EventFile, unit>
     type ParseString = string -> string -> ParserResult<EventFile, unit>

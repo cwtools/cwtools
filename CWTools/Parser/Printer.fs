@@ -4,10 +4,10 @@ open Types
 open FParsec
 
 module CKPrinter =
-    let tabs n = String.replicate n "\t"
+    let private tabs n = String.replicate n "\t"
 
-    let printTroop depth t = (tabs depth) + t.ToString()  + "\n"
-    let printValuelist depth is =
+    let private printTroop depth t = (tabs depth) + t.ToString()  + "\n"
+    let private printValuelist depth is =
         let printOne = (fun i -> tabs (depth) + (string i) + "\n")
         List.map printOne is |> List.fold (+) ""
         

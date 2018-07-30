@@ -8,6 +8,7 @@
     <Compile Include="Common/Constants.fs" />
     <Compile Include="Common/STLConstants.fs" />
     <Compile Include="Parser/Types.fs" />
+    <Compile Include="Parser\SharedParsers.fs" />
     <Compile Include="Parser/CKParser.fs" />
     <Compile Include="Parser/Printer.fs" />
     <Compile Include="Parser/DocsParser.fs" />

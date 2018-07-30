@@ -3,7 +3,6 @@ namespace CWTools.Parser
     
 open FParsec
 open System.IO
-open CWTools.Parser.CKParser
 open CWTools.Common
 open CWTools.Common.STLConstants
 
@@ -11,27 +10,25 @@ open CWTools.Common.STLConstants
 
 module SetupLogParser =
 
- 
-    //let idChar = letter <|> anyOf ['_']
-    let isvaluechar = fun c -> CKParser.isvaluechar c || c = '?'
-    let str s = pstring s .>> ws <?> ("string " + s)
-    let header = skipCharsTillString "Initializing Database: CStaticModifierDatabase" true 2000000 .>> ws <?> "header"
-    let pre = skipCharsTillString "Static Modifier #" true 100
-    let num = pre >>. pint64 .>> ws |>> int
-    let tag = skipString "tag = " >>. many1Satisfy isvaluechar .>> ws
-    let name = str "name = " >>. restOfLine true //manyCharsTill valuechar newline .>> ws
+    let private isvaluechar = SharedParsers.isvaluechar 
+    let private str s = pstring s .>> SharedParsers.ws <?> ("string " + s)
+    let private header = skipCharsTillString "Initializing Database: CStaticModifierDatabase" true 2000000 .>> SharedParsers.ws <?> "header"
+    let private pre = skipCharsTillString "Static Modifier #" true 100
+    let private num = pre >>. pint64 .>> SharedParsers.ws |>> int
+    let private tag = skipString "tag = " >>. many1Satisfy isvaluechar .>> SharedParsers.ws
+    let private name = str "name = " >>. restOfLine true //manyCharsTill valuechar newline .>> ws
 
-    let staticModifier = pipe3 num tag name (fun i t n -> {num = i; tag = t; name = n})
+    let private staticModifier = pipe3 num tag name (fun i t n -> {num = i; tag = t; name = n})
 
-    let modifierHeader = skipCharsTillString "Printing Modifier Definitions" true 2000000 .>> ws <?> "modifier header"
+    let private modifierHeader = skipCharsTillString "Printing Modifier Definitions" true 2000000 .>> SharedParsers.ws <?> "modifier header"
 
-    let mtag = skipCharsTillString "Tag: " true 500 >>. many1CharsTill (satisfy isvaluechar) (pchar ',') .>> ws
-    let cat = skipString "Categories: " >>. pint64 |>> int
-    let modifier = pipe2 mtag cat (fun t c -> {tag = t; category = c} )
+    let private mtag = skipCharsTillString "Tag: " true 500 >>. many1CharsTill (satisfy isvaluechar) (pchar ',') .>> SharedParsers.ws
+    let private cat = skipString "Categories: " >>. pint64 |>> int
+    let private modifier = pipe2 mtag cat (fun t c -> {tag = t; category = c} )
 
-    let footer = many1Chars anyChar
+    let private footer = many1Chars anyChar
 
-    let logFile = ws >>. header >>. many1 (attempt staticModifier) .>> modifierHeader .>>. many1 (attempt modifier) .>> footer .>> eof
+    let private logFile = SharedParsers.ws >>. header >>. many1 (attempt staticModifier) .>> modifierHeader .>>. many1 (attempt modifier) .>> footer .>> eof
 
     
     let toDocEffect effectType (x : RawEffect) = DocEffect(x, effectType)
