@@ -295,6 +295,19 @@ module STLValidation =
             |"has_megastructure_flag" -> validate (leaf.Value.ToRawString()) FlagType.Megastructure
             |"has_species_flag" -> validate (leaf.Value.ToRawString()) FlagType.Species
             |"has_pop_faction_flag" -> validate (leaf.Value.ToRawString()) FlagType.PopFaction
+            |"remove_planet_flag" -> validate (leaf.Value.ToRawString()) FlagType.Planet
+            |"remove_country_flag" -> validate (leaf.Value.ToRawString()) FlagType.Country
+            |"remove_fleet_flag" -> validate (leaf.Value.ToRawString()) FlagType.Fleet
+            |"remove_ship_flag" -> validate (leaf.Value.ToRawString()) FlagType.Ship
+            |"remove_pop_flag" -> validate (leaf.Value.ToRawString()) FlagType.Pop
+            |"remove_global_flag" -> validate (leaf.Value.ToRawString()) FlagType.Global
+            |"remove_star_flag" -> validate (leaf.Value.ToRawString()) FlagType.Star
+            |"remove_relation_flag" -> validate (leaf.Value.ToRawString()) FlagType.Relation
+            |"remove_leader_flag" -> validate (leaf.Value.ToRawString()) FlagType.Leader
+            |"remove_ambient_object_flag" -> validate (leaf.Value.ToRawString()) FlagType.AmbientObject
+            |"remove_megastructure_flag" -> validate (leaf.Value.ToRawString()) FlagType.Megastructure
+            |"remove_species_flag" -> validate (leaf.Value.ToRawString()) FlagType.Species
+            |"remove_pop_faction_flag" -> validate (leaf.Value.ToRawString()) FlagType.PopFaction
             |_ -> OK
 
     let validateUsedFlags (flags : Collections.Map<FlagType, string list>) (node : Node) =
