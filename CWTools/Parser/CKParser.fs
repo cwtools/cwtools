@@ -45,6 +45,6 @@ open Types
     let getSuccess (result) =
         match result with
         |Success(s, _, _) -> s
-        |_ -> EventFile []
+        |_ -> ParsedFile []
 
 

@@ -24,12 +24,12 @@ module CKPrinter =
     and printKeyValueList kvl depth =
         kvl |> List.map (fun kv -> printKeyValue kv depth) |> List.fold (+) ""
     let prettyPrint ef =
-        let (EventFile sl) = ef
+        let (ParsedFile sl) = ef
         printKeyValueList sl 0 
     let prettyPrintResult =
         function
         | Success (v,_,_) -> 
-            let (EventFile ev) = v
+            let (ParsedFile ev) = v
             printKeyValueList ev 0
         | Failure (msg, _, _) -> msg
 

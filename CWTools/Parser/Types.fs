@@ -75,13 +75,13 @@ module rec Types =
         
 
     [<StructuralEquality; StructuralComparison>]
-    type EventFile = |EventFile of Statement list
+    type ParsedFile = |ParsedFile of Statement list
 
-    type ParseFile = string -> ParserResult<EventFile, unit>
-    type ParseString = string -> string -> ParserResult<EventFile, unit>
-    type PrettyPrintFile = EventFile -> string
+    type ParseFile = string -> ParserResult<ParsedFile, unit>
+    type ParseString = string -> string -> ParserResult<ParsedFile, unit>
+    type PrettyPrintFile = ParsedFile -> string
     type PrettyPrintStatements = Statement list -> string
-    type PrettyPrintFileResult = ParserResult<EventFile, unit> -> string
+    type PrettyPrintFileResult = ParserResult<ParsedFile, unit> -> string
 
     type ParserAPI =
         {

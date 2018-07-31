@@ -61,7 +61,7 @@ module internal SharedParsers =
     let chSkip c = skipChar c .>> ws <?> ("skip char " + string c)
     let clause inner = betweenL (chSkip '{' <?> "opening brace") (skipChar '}' <?> "closing brace") inner "clause"
     let quotedCharSnippet = many1Satisfy (fun c -> c <> '\\' && c <> '"')
-    let escapedChar = pstring "\\\"" |>> string
+    let escapedChar = (pstring "\\\"" <|> pstring "\\") |>> string
 
     // Base types
     // =======
@@ -153,7 +153,7 @@ module internal SharedParsers =
     valueimpl := valueCustom <?> "value"
     let getRange (start: FParsec.Position) (endp : FParsec.Position) = mkRange start.StreamName (mkPos (int start.Line) (int start.Column - 1)) (mkPos (int endp.Line) (int endp.Column - 1))
     keyvalueimpl := pipe4 (getPosition) ((keyQ <|> key) .>> operator) (value) (getPosition .>> ws) (fun start id value endp -> KeyValue(PosKeyValue(getRange start endp, KeyValueItem(id, value))))
-    let alle = ws >>. many statement .>> eof |>> (fun f -> (EventFile f : EventFile))
+    let alle = ws >>. many statement .>> eof |>> (fun f -> (ParsedFile f : ParsedFile))
     let valuelist = many1 ((comment |>> Comment) <|> (value .>> ws |>> Value)) .>> eof
     let statementlist = (many statement) .>> eof
     let all = ws >>. ((attempt valuelist) <|> statementlist)
