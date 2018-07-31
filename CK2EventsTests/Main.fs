@@ -16,6 +16,7 @@ open CWTools.Localisation.CK2Localisation
 open CWTools.Process.CK2Process
 open CWTools.Parser.Types
 open System.Collections.Generic
+open Microsoft.FSharp.Compiler.Range
 
 
 
@@ -31,12 +32,12 @@ let parseEqualityCheck file =
     let parsedAgain = parser.parseString pretty "test"
     let prettyAgain = printer.prettyPrintFileResult parsedAgain
     match (parsed, parsedAgain) with
-    |( Success(p, _, _), Success(pa, _, _)) -> 
+    |( Success(p, _, _), Success(pa, _, _)) ->
         Expect.equal pretty prettyAgain "Not equal"
         Expect.equal p pa "Not equal"
-    | (Failure(msg, _, _), _) -> 
+    | (Failure(msg, _, _), _) ->
         Expect.isTrue false msg
-    |(_, Failure(msg, _, _)) -> 
+    |(_, Failure(msg, _, _)) ->
         Expect.isTrue false msg
 
 [<Tests>]
@@ -51,7 +52,7 @@ let parserTests =
 
         testCase "parse ten" <| fun () ->
             let parsed = Events.parseTen "CK2EventsTests/events" printer
-            let errors = parsed 
+            let errors = parsed
                             |> List.filter (fun (_, p) -> p.Contains "Error")
             let error = List.isEmpty errors
             let message = if not error then sprintf "%A" (errors.First()) else "No error"
@@ -59,7 +60,7 @@ let parserTests =
 
         testCase "parse all" <| fun () ->
             let parsed = Events.parseAll "CK2EventsTests/events" printer
-            let errors = parsed 
+            let errors = parsed
                             |> List.filter (fun (_, p) -> p.Contains "Error")
             let error = List.isEmpty errors
             let message = if not error then sprintf "%A" (errors.First()) else "No error"
@@ -67,7 +68,7 @@ let parserTests =
 
         testCase "double parse all test files" <| fun () ->
             Directory.EnumerateFiles "CK2EventsTests/event test files" |> List.ofSeq |> List.iter parseEqualityCheck
-        
+
         testCase "double parse all game files" <| fun () ->
             Directory.EnumerateFiles "CK2EventsTests/events" |> List.ofSeq |> List.iter parseEqualityCheck
 
@@ -75,20 +76,20 @@ let parserTests =
             let parsed = (parser.parseFile "CK2EventsTests/wol_business_events.txt")
 
             match parsed with
-                |Success(v,_,_) -> 
+                |Success(v,_,_) ->
                     let root = CK2Process.processEventFile v
                     Expect.equal root.Namespace "WoL" "Namespace wrong"
                     let firstEvent = root.Events |> List.last
                     Expect.equal firstEvent.ID "WoL.10100" "ID wrong"
                    // Expect.equal (firstEvent.Tag "id").Value.Value (String("WoL.10100")) "ID wrong"
-                |Failure(msg, _, _) -> 
+                |Failure(msg, _, _) ->
                     Expect.isTrue false msg
 
         testCase "bool test" <| fun () ->
             let parsed = (parser.parseFile "CK2EventsTests/event test files/bool.txt")
             match parsed with
                 | Success(v,_,_) ->
-                    let target = (EventFile [KeyValue(PosKeyValue(Position.Empty, KeyValueItem(Key("test"),Bool(true))))])
+                    let target = (EventFile [KeyValue(PosKeyValue(range.Zero, KeyValueItem(Key("test"),Bool(true))))])
                     Expect.equal v target "Not equal"
                 | _ -> ()
 
@@ -155,7 +156,7 @@ let processingTests =
             | _ -> ()
 
         testList "process all" [
-            let folders = ["CK2EventsTests/events"; 
+            let folders = ["CK2EventsTests/events";
                             "CK2EventsTests/event test files";
                             steamFolder + "Stellaris/events";
                             //steamFolder + "Europa Universalis IV/events";
@@ -187,7 +188,7 @@ let processingTests =
 
 
     ]
-    
+
 [<EntryPoint>]
 let main argv =
     Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);

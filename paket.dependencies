@@ -4,7 +4,7 @@ source https://api.nuget.org/v3/index.json
 nuget ElectronNET.API
 clitool ElectronNET.CLI
 nuget Expecto >= 5.0
-nuget FParsec 1.0.3
+nuget FParsec 1.0.4-RC3
 nuget FSharp.Data 3.0.0-beta
 nuget Microsoft.AspNetCore.App
 nuget Newtonsoft.Json.FSharp
