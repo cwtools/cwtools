@@ -729,6 +729,7 @@ module rec Rules =
                 |Field.AliasField _ |Field.LeftClauseField _ |Field.LeftClauseField _ |Field.LeftTypeField _ |Field.SubtypeField _ -> false
                 |_ -> true
             let requiredRules = rules |> List.filter (fun (_,o,f) -> o.min >= 1 && filterToCompletion f)
+                                      |> List.distinctBy (fun (k,_,_) -> k)
                                       |> List.mapi (fun i (k, o, f) -> sprintf "\t%s = ${%i:%s}\n" k (i + 1) (fieldToCompletionList f))
                                       |> String.concat ""
             Snippet (key, (sprintf "%s = {\n%s\t$0\n}" key requiredRules), description)

@@ -3,7 +3,7 @@ open FParsec
 open Microsoft.FSharp.Compiler.Range
 open Types
 
-module internal SharedParsers = 
+module internal SharedParsers =
     let (<!>) (p: Parser<_,_>) label : Parser<_,_> =
         fun stream ->
             eprintfn "%A: Entering %s" stream.Position label
@@ -153,7 +153,7 @@ module internal SharedParsers =
     valueimpl := valueCustom <?> "value"
     let getRange (start: FParsec.Position) (endp : FParsec.Position) = mkRange start.StreamName (mkPos (int start.Line) (int start.Column - 1)) (mkPos (int endp.Line) (int endp.Column - 1))
     keyvalueimpl := pipe4 (getPosition) ((keyQ <|> key) .>> operator) (value) (getPosition .>> ws) (fun start id value endp -> KeyValue(PosKeyValue(getRange start endp, KeyValueItem(id, value))))
-    let alle = ws >>. many statement .>> eof |>> (fun f -> (ParsedFile f : ParsedFile))
+    let alle = ws >>. many statement .>> eof |>> (fun f -> ( ParsedFile f ))
     let valuelist = many1 ((comment |>> Comment) <|> (value .>> ws |>> Value)) .>> eof
     let statementlist = (many statement) .>> eof
     let all = ws >>. ((attempt valuelist) <|> statementlist)

@@ -52,18 +52,20 @@ module Graphics =
                     |Some lv -> if names |> List.contains (lv.Value.ToRawString()) then OK else Invalid [inv (ErrorCodes.UndefinedPDXMesh (lv.Value.ToRawString())) lv]
             assets <&!&> inner
 
-    let inline validateEntityCulture (entities : Collections.Set<string>) (cultures : (string * string) list) (entity : string) (leaf) (culture : string) =
+    let inline validateEntityCulture (entities : Collections.Set<string>) (cultures : (string * string list) list) (entity : string) (leaf) (culture : string) =
         let secondKey = cultures |> List.tryPick (fun (c, f) -> if c == culture then Some f else None)
-                                 |> Option.map (fun k -> k + "_" + entity)
+                                 |> Option.defaultValue []
+                                 //|> Option.map (fun k -> k + "_" + entity)
         let firstkey = culture + "_" + entity
-        match (entities.Contains entity) || (entities.Contains firstkey), secondKey with
+        let res = secondKey |> List.fold (fun (s : string option) c -> if s.IsNone || entities.Contains (c + "_" + entity) then None else Some c) (Some firstkey)
+        match (entities.Contains entity) || (entities.Contains firstkey), res with
         |true, _ -> None
-        |false, None ->
-            Some (Invalid [inv (ErrorCodes.UndefinedSectionEntity firstkey culture) leaf])
+        |false, None -> None
+            //Some (Invalid [inv (ErrorCodes.UndefinedSectionEntity firstkey culture) leaf])
         |false, Some fallback ->
             if entities.Contains fallback then None else Some (Invalid [inv (ErrorCodes.UndefinedSectionEntityFallback firstkey fallback culture ) leaf])
 
-    let inline validateEntityCultures (entities : Collections.Set<string>) (allcultures : (string * string) list) (entity : string) (leaf) (cultures : string list) =
+    let inline validateEntityCultures (entities : Collections.Set<string>) (allcultures : (string * string list) list) (entity : string) (leaf) (cultures : string list) =
         let errors = cultures |> List.choose (validateEntityCulture entities allcultures entity leaf)
         match errors with
         |[] -> OK
@@ -91,6 +93,8 @@ module Graphics =
 
             let sections = es.AllOfTypeChildren EntityType.SectionTemplates
             let cultures = getGraphicalCultures os
+            let cultureMap = cultures |> List.filter (fun (_, f) -> f <> "") |> Map.ofList
+            let cultures = cultures |> List.map (fun (c, f) -> c, Seq.unfold (fun nc -> cultureMap.TryFind nc |> Option.map (fun nf -> nf, nf)) c |> List.ofSeq)
             let assets = os.AllOfTypeChildren EntityType.GfxAsset
                             |> List.map (fun a -> a.TagText "name")
                             |> Set.ofList
@@ -123,6 +127,8 @@ module Graphics =
             let components = es.AllOfTypeChildren EntityType.ComponentTemplates
                                 |> List.filter (fun c -> (c.Tag "hidden") |> Option.bind (function |Value.Bool x -> Some (not x) |_ -> Some true) |> Option.defaultValue true)
             let cultures = getGraphicalCultures os
+            let cultureMap = cultures |> List.filter (fun (_, f) -> f <> "") |> Map.ofList
+            let cultures = cultures |> List.map (fun (c, f) -> c, Seq.unfold (fun nc -> cultureMap.TryFind nc |> Option.map (fun nf -> nf, nf)) c |> List.ofSeq)
             let assets = os.AllOfTypeChildren EntityType.GfxAsset
                             |> List.map (fun a -> a.TagText "name")
                             |> Set.ofList
@@ -133,6 +139,27 @@ module Graphics =
                     |Some entity ->
                         (cultures |> List.map fst) |> validateEntityCultures assets cultures (s.TagText "entity") entity
             components <&!&> inner
+
+    let valMegastructureGraphics : StructureValidator =
+        fun os es ->
+            let megastructures = es.AllOfTypeChildren EntityType.Megastructures
+                                    //|> List.collect (fun a -> a.Leafs "entity" |> List.ofSeq)
+            let cultures = getGraphicalCultures os
+            let cultureMap = cultures |> List.filter (fun (_, f) -> f <> "") |> Map.ofList
+            let cultures = cultures |> List.map (fun (c, f) -> c, Seq.unfold (fun nc -> cultureMap.TryFind nc |> Option.map (fun nf -> nf, nf)) c |> List.ofSeq)
+            let assets = os.AllOfTypeChildren EntityType.GfxAsset
+                            |> List.map (fun a -> a.TagText "name")
+                            |> Set.ofList
+            let inner =
+                fun (m : Node) ->
+                    let check =
+                        fun (e : Leaf) ->
+                            (cultures |> List.map fst) |> validateEntityCultures assets cultures (e.Value.ToRawString()) m
+                    m.Leafs "entity" <&!&> check
+                    <&&>
+                    (m.Leafs "construction_entity" <&!&> check)
+
+            megastructures <&!&> inner
 
     let validateAmbientGraphics : StructureValidator =
         fun os es ->
