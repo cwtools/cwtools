@@ -42,8 +42,8 @@ module CK2Process =
     let ck2Process = BaseProcess(maps)
     let processCK2Node = ck2Process.ProcessNode<Node>()
     
-    let processEventFile (ev : EventFile) = 
-        let (EventFile e) = ev
+    let processEventFile (ev : ParsedFile) = 
+        let (ParsedFile e) = ev
         (ck2Process.ProcessNode<EventRoot>()) "" range.Zero e :?> EventRoot
 
     let processArtifact = (ck2Process.ProcessNode<ArtifactFile>()) "" range.Zero >> (fun n -> n :?> ArtifactFile) 

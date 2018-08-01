@@ -8,6 +8,7 @@ open CWTools.Parser.Types
 open Microsoft.FSharp.Compiler.Range
 open CWTools.Utilities.Utils
 
+
 module List =
   let replace f sub xs =
     let rec finish acc = function
@@ -86,7 +87,6 @@ and Node (key : string, pos : range) =
 
 
     static member Create key = Node(key)
-
 
 
 module ProcessCore =

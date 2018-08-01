@@ -93,8 +93,6 @@ module rec ConfigParser =
     let defaultFloat = ValueField (ValueType.Float (-1E+12, 1E+12))
     let defaultInt = ValueField (ValueType.Int (Int32.MinValue, Int32.MaxValue))
 
-    let parseConfigString filename fileString = runParserOnString CKParser.all () filename fileString
-
     let getNodeComments (node : Node) =
         let findComments t s (a : Child) =
                 match (s, a) with
@@ -429,7 +427,7 @@ module rec ConfigParser =
 
     let parseConfig filename fileString =
         //eprintfn "parse"
-        let parsed = parseConfigString filename fileString
+        let parsed = CKParser.parseString fileString filename
         match parsed with
         |Failure(e, _, _) -> eprintfn "config file %s failed with %s" filename e; ([], [], [], [])
         |Success(s,_,_) ->
