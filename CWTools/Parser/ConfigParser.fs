@@ -427,7 +427,7 @@ module rec ConfigParser =
 
     let parseConfig filename fileString =
         //eprintfn "parse"
-        let parsed = CKParser.parseString filename fileString
+        let parsed = CKParser.parseString fileString filename
         match parsed with
         |Failure(e, _, _) -> eprintfn "config file %s failed with %s" filename e; ([], [], [], [])
         |Success(s,_,_) ->
