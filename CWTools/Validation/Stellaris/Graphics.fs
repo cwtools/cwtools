@@ -161,6 +161,14 @@ module Graphics =
 
             megastructures <&!&> inner
 
+    let valPlanetClassGraphics : StructureValidator =
+        fun os es ->
+            let assets = os.AllOfTypeChildren EntityType.GfxAsset
+                        |> List.map (fun a -> a.TagText "name")
+                        |> Set.ofList
+            es.AllOfTypeChildren EntityType.PlanetClasses
+            |> List.collect (fun ao -> ao.Leafs "entity" |> List.ofSeq)
+            <&!&> (fun l -> if assets.Contains (l.Value.ToRawString()) || assets.Contains (l.Value.ToRawString() + "_01_entity") then OK else Invalid [inv (ErrorCodes.UndefinedEntity (l.Value.ToRawString())) l])
     let validateAmbientGraphics : StructureValidator =
         fun os es ->
             let assets = os.AllOfTypeChildren EntityType.GfxAsset
