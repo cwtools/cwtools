@@ -31,10 +31,10 @@ module rec STLProcess =
         let targetKeys = ["THIS"; "ROOT"; "PREV"; "FROM"; "OWNER"; "CONTROLLER"; "CAPITAL"; "SOLAR_SYSTEM"; "LEADER"; "RANDOM"; "FROMFROM"; "FROMFROMFROM"; "FROMFROMFROMFROM"; "PREVPREV"; "PREVPREVPREV"; "PREVPREVPREVPREV"]
         let anyBlockKeys = ["OR"; "AND"; "NOR"; "NAND"; "NOT"; "if"; "else"; "hidden_effect"]
         let triggerBlockKeys = ["limit"] //@ targetKeys
-        let nodeScopes = node.Children 
+        let nodeScopes = node.Children
                         |> List.map (
                             function
-                            | x when x.Key = root -> 
+                            | x when x.Key = root ->
                                 allScopesSet
                             | x when (x.Key.StartsWith("event_target:", StringComparison.OrdinalIgnoreCase)) ->
                                 allScopesSet
@@ -42,14 +42,14 @@ module rec STLProcess =
                             //     allScopes
                             | x when anyBlockKeys |> List.exists (fun y -> y == x.Key) ->
                                 scriptedTriggerScope strict effects triggers root x
-                            | x when triggerBlockKeys |> List.exists (fun y -> y == x.Key) -> 
+                            | x when triggerBlockKeys |> List.exists (fun y -> y == x.Key) ->
                                 scriptedTriggerScope strict triggers triggers root x
                             | x -> STLScopes.sourceScope effects x.Key |> Set.ofList
                                 // match STLScopes.sourceScope x.Key with
                                 // | Some v -> v
                                 // | None -> effects |> List.filter (fun (n, _) -> n = x.Key) |> List.map (fun (_, ss) -> ss) |> List.collect id
                         )
-        let valueScopes = node.Values 
+        let valueScopes = node.Values
                         //|> List.filter (fun v -> v.Key.StartsWith("@"))
                         |> List.map (
                             function
@@ -60,17 +60,17 @@ module rec STLProcess =
         let combinedScopes = nodeScopes @ valueScopes |> List.map (function | x when Set.isEmpty x -> (if strict then Set.empty else allScopesSet) |x -> x)
         combinedScopes |> List.fold Set.intersect allScopesSet
         //combinedScopes |> List.fold (fun a b -> Set.intersect (Set.ofList a) (Set.ofList b) |> Set.toList) allScopes
-        
+
     let findAllUsedEventTargets (event : Node) =
         let fNode = (fun (x : Node) children ->
                         let targetFromString (k : string) = k.Substring(13).Split('.').[0]
                         let inner (leaf : Leaf) = if leaf.Value.ToRawString().StartsWith("event_target:", StringComparison.OrdinalIgnoreCase) then Some (leaf.Value.ToRawString() |> targetFromString) else None
                         match x.Key with
-                        |k when k.StartsWith("event_target:", StringComparison.OrdinalIgnoreCase) -> 
-                           targetFromString k :: ((x.Values |> List.choose inner) @ children)     
-                        |_ ->                      
-                            ((x.Values |> List.choose inner) @ children)    
-                        
+                        |k when k.StartsWith("event_target:", StringComparison.OrdinalIgnoreCase) ->
+                           targetFromString k :: ((x.Values |> List.choose inner) @ children)
+                        |_ ->
+                            ((x.Values |> List.choose inner) @ children)
+
                         )
         let fCombine = (@)
         event |> (foldNode2 fNode fCombine []) |> Set.ofList
@@ -115,8 +115,8 @@ module rec STLProcess =
             select s }
         |> Seq.iter (fun s ->
             let value = s.GetValue(source,null)
-            if value.GetType().FullName.StartsWith("System.") 
-            then s.SetValue(target, value, null)            
+            if value.GetType().FullName.StartsWith("System.")
+            then s.SetValue(target, value, null)
             else copy value (s.GetValue(target,null))
         )
     let filterOptionToEffects (o : Option) =
@@ -135,12 +135,12 @@ module rec STLProcess =
         inherit Node(key, pos)
         member this.Name = this.TagText "name"
         member this.ShipSize = this.TagText "ship_size"
-    
+
     type ShipSection (key, pos) =
         inherit Node(key, pos)
         member this.Template = this.TagText "template"
         member this.Slot = this.TagText "slot"
-    
+
     type ShipComponent (key, pos) =
         inherit Node(key, pos)
         member this.Template = this.TagText "template"
@@ -154,12 +154,12 @@ module rec STLProcess =
         member this.ID = this.TagText "id"
         member this.Desc = this.TagText "desc"
         member this.Hidden = this.Tag "hide_window" |> (function | Some (Bool b) -> b | _ -> false)
-   
+
     type EffectBlock(key, pos) = inherit Node(key, pos)
-    type TriggerBlock(key, pos) = 
+    type TriggerBlock(key, pos) =
         inherit Node(key, pos)
         member val InEffectBlock : bool = false with get, set
-    type Option(key, pos) = 
+    type Option(key, pos) =
         inherit Node(key, pos)
         member this.AsEffectBlock = filterOptionToEffects this
     type ModifierBlock(key, pos) = inherit Node(key, pos)
@@ -182,9 +182,9 @@ module rec STLProcess =
 
     // let modifierScopeProcessNode (modifier : ModifierCategory) (lookup : LookupContext) =
     //     processNode<ModifierBlock> (fun n -> n.ModifierCategory <- modifier; n)
-    
+
     // let triggerProcessNode (lookup : LookupContext) =
-    //     let postinit = 
+    //     let postinit =
     //         match lookup.scope with
     //             |"planet" ->  (fun (n : TriggerBlock) -> n.Scope <- Scope.Planet; n)
     //             |"country" ->  (fun n -> n.Scope <- Scope.Country; n)
@@ -227,6 +227,9 @@ module rec STLProcess =
         |("limit", _, {parents = "option"::_}) ->  processNodeSimple<TriggerBlock>, "triggerblock", id;
         |("ai_chance", _, {parents = "option"::_}) ->  processNodeSimple<WeightBlock>, "weightblock", id;
         |("modifier", _, {parents = "weightblock"::"option"::_}) ->  scopedProcessNode<WeightModifierBlock>, "weightmodifierblock", id;
+        |("queue_actions",_, {parents = "effectblock"::_}) -> processNodeSimple<Node>, "fleet_action", id;
+        |("while", _, {parents = "fleet_action"::_}) -> processNodeSimple<TriggerBlock>, "triggerblock", id;
+        |("trigger", _, {parents = "fleet_action"::_}) -> processNodeSimple<TriggerBlock>, "triggerblock", id;
 
         //Buildings
         |(_, p, {complete = false; entityType = EntityType.Buildings}) ->  processNodeSimple<Node>, "building",  (fun c -> { c with complete = true});
@@ -235,11 +238,11 @@ module rec STLProcess =
         |("ai_allow", _, {parents = "building"::_}) ->  specificScopeProcessNode<TriggerBlock> Scope.Tile, "triggerblock", id;
         |("destroy_if", _, {parents = "building"::_}) ->  specificScopeProcessNode<TriggerBlock> Scope.Tile, "triggerblock", id;
         |("active", _, {parents = "building"::_}) ->  specificScopeProcessNode<TriggerBlock> Scope.Pop, "triggerblock", id;
-        
+
         |("planet_modifier_with_pop_trigger", _, {parents = "building"::_}) ->  processNodeSimple<Node>, "planetmodpop", id;
         |("potential", _, {parents = "planetmodpop"::"building"::_}) ->  specificScopeProcessNode<TriggerBlock> Scope.Pop, "triggerblock", id;
         |("modifier", _, {parents = "planetmodpop"::"building"::_}) ->  specificScopeProcessNode<ModifierBlock> Scope.Planet, "triggerblock", id;
-        
+
         |("triggered_planet_modifier", _, {parents = "building"::_}) ->  processNodeSimple<Node>, "triggeredplanetmod", id;
         |("potential", _, {parents = "triggeredplanetmod"::"building"::_}) ->  specificScopeProcessNode<TriggerBlock> Scope.Planet, "triggerblock", id;
         |("modifier", _, {parents = "triggeredplanetmod"::"building"::_}) ->  specificScopeProcessNode<ModifierBlock> Scope.Planet, "triggerblock", id;
@@ -332,7 +335,7 @@ module rec STLProcess =
         |("orbital_weight", _, {parents = "deposit"::_}) ->  processNodeSimple<WeightBlock>, "weightblock", id;
         |("drop_weight", _, {parents = "deposit"::_}) ->  processNodeSimple<WeightBlock>, "weightblock", id;
         |("modifier", _, {parents = "weightblock"::"deposit"::_}) ->  specificScopeProcessNode<WeightModifierBlock> Scope.Tile, "weightmodifierblock", id;
-        //Diplomatic actions            
+        //Diplomatic actions
         |(_, _, {complete = false; entityType = EntityType.DiplomaticActions})  ->  processNodeSimple<Node>, "diploact",  (fun c -> { c with complete = true});
         |("potential", _, {parents = "diploact"::_;}) ->  specificScopeProcessNode<TriggerBlock> Scope.Country, "triggerblock", id;
         |("possible", _, {parents = "diploact"::_;}) ->  specificScopeProcessNode<TriggerBlock> Scope.Country, "triggerblock", id;
@@ -582,7 +585,7 @@ module rec STLProcess =
         |("ai_weight"), _, {parents = "wargoal"::_;} -> processNodeSimple<WeightBlock>, "weightblock", id;
         |("modifier"), _, {parents = "weightblock"::"wargoal"::_;} -> specificScopeProcessNode<WeightModifierBlock> Scope.Country, "weightmodifierblock", id;
         |_ -> processNodeSimple<Node>, "", (fun c -> {c with complete = true;});
-            
+
     let shipProcess = BaseProcess(stellarisFunction)
     let simpleProcess = BaseProcess(fun _ -> processNodeSimple<Node>, "", id)
 
@@ -598,4 +601,4 @@ module rec STLProcess =
         let category = staticModifierCategory modifiers2 node
         {tag = node.Key; categories = category; core = false}
 
-    
+
