@@ -228,8 +228,8 @@ module rec STLProcess =
         |("ai_chance", _, {parents = "option"::_}) ->  processNodeSimple<WeightBlock>, "weightblock", id;
         |("modifier", _, {parents = "weightblock"::"option"::_}) ->  scopedProcessNode<WeightModifierBlock>, "weightmodifierblock", id;
         |("queue_actions",_, {parents = "effectblock"::_}) -> processNodeSimple<Node>, "fleet_action", id;
-        |("while", _, {parents = "fleet_action"::_}) -> processNodeSimple<TriggerBlock>, "triggerblock", id;
-        |("trigger", _, {parents = "fleet_action"::_}) -> processNodeSimple<TriggerBlock>, "triggerblock", id;
+        // |("while", _, {parents = "fleet_action"::_}) -> processNodeSimple<TriggerBlock>, "triggerblock", id;
+        // |("trigger", _, {parents = "fleet_action"::_}) -> processNodeSimple<TriggerBlock>, "triggerblock", id;
 
         //Buildings
         |(_, p, {complete = false; entityType = EntityType.Buildings}) ->  processNodeSimple<Node>, "building",  (fun c -> { c with complete = true});
