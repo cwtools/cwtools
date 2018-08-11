@@ -41,6 +41,10 @@ module rec Rules =
     let checkFileExists (files : Collections.Set<string>) (leaf : Leaf) =
         let file = leaf.Value.ToRawString().Trim('"').Replace("\\","/").Replace(".lua",".shader").Replace(".tga",".dds")
         if files.Contains file then OK else Invalid [inv (ErrorCodes.MissingFile file) leaf]
+
+    let checkIconExists (files :Collections.Set<string>) (folder : string) (leaf : Leaf) =
+        let value = folder + "/" + leaf.Value.ToRawString() + ".dds"
+        if files.Contains value then OK else Invalid [inv (ErrorCodes.MissingFile value) leaf]
     // let checkValidLeftClauseRule (files : Collections.Set<string>) (enums : Collections.Map<string, StringSet>) (field : Field) (key : string) =
     //     let key = key.Trim('"').Replace("/","\\")
     //     match field with
@@ -151,6 +155,10 @@ module rec Rules =
         let file = key.Trim('"').Replace("\\","/").Replace(".lua",".shader").Replace(".tga",".dds")
         if files.Contains file then OK else Invalid [inv (ErrorCodes.MissingFile file) leafornode]
 
+    let inline checkIconField (files :Collections.Set<string>) (folder : string) (key : string) (leafornode) =
+        let value = folder + "/" + key + ".dds"
+        if files.Contains value then OK else Invalid [inv (ErrorCodes.MissingFile value) leafornode]
+
     let inline checkField enumsMap typesMap effectMap triggerMap localisation files (severity : Severity) (ctx : RuleContext) (field : NewField) (key : string) (leafornode : ^a) =
         match field with
         |ValueField vt -> checkValidValue enumsMap severity vt key leafornode
@@ -158,8 +166,9 @@ module rec Rules =
         |ScopeField s -> checkScopeField effectMap triggerMap ctx s key leafornode
         |LocalisationField synced -> checkLocalisationField localisation synced key leafornode
         |FilepathField -> checkFilepathField files key leafornode
+        |IconField folder -> checkIconField files folder key leafornode
         |_ -> OK
-    
+
     let inline checkLeftField enumsMap typesMap effectMap triggerMap localisation files (ctx : RuleContext) (field : NewField) (key : string) (leafornode : ^a) =
         match checkField enumsMap typesMap effectMap triggerMap localisation files (Severity.Error) ctx field key leafornode with
         |OK -> true
@@ -179,7 +188,7 @@ module rec Rules =
         let typesMap = types |> (Map.map (fun _ s -> StringSet.Create(InsensitiveStringComparer(), (s |> List.map fst))))
         let enumsMap = enums |> (Map.map (fun _ s -> StringSet.Create(InsensitiveStringComparer(), s)))
 
-        
+
         let isValidValue (value : Value) =
             let key = value.ToString().Trim([|'"'|])
             function
@@ -643,7 +652,7 @@ module rec Rules =
                                 //eprintfn "cs %A %A %A" name node.Key current
                                 {newCtx with scopes = {newCtx.scopes with Scopes = current::newCtx.scopes.Scopes}}
                             |_ -> newCtx
-                        newCtx, res                        
+                        newCtx, res
                     | NodeRule (_, f) -> newCtx, res
                     // | Field.LeftTypeField (t, f) -> inner f newCtx n
                     // | Field.ClauseField rs -> newCtx, res

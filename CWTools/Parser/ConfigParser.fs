@@ -31,6 +31,7 @@ module rec ConfigParser =
     | ScopeField of Scope
     | LocalisationField of synced : bool
     | FilepathField
+    | IconField of string
     | AliasField of string
     | SubtypeField of string * bool * NewRule list
     let specificField x = ValueField(ValueType.Specific x)
@@ -66,6 +67,7 @@ module rec ConfigParser =
     // | FilepathField
     // | AliasField of string
     // | SubtypeField of string * bool * Field
+
     type RootRule =
     | AliasRule of string * NewRule
     | TypeRule of string * NewRule
@@ -229,6 +231,10 @@ module rec ConfigParser =
             match getSettingFromString x "enum" with
             |Some (name) -> ValueField (ValueType.Enum name)
             |None -> ValueField (ValueType.Enum "")
+        |x when x.StartsWith "icon" ->
+            match getSettingFromString x "icon" with
+            |Some (folder) -> IconField folder
+            |None -> ValueField (ValueType.Scalar)
         |x when x.StartsWith "alias_match_left" ->
             match getSettingFromString x "alias_match_left" with
             |Some alias -> AliasField alias
@@ -487,7 +493,7 @@ module rec ConfigParser =
         match parsed with
         |Failure(e, _, _) -> eprintfn "config file %s failed with %s" filename e; ([], [], [], [])
         |Success(s,_,_) ->
-            //eprintfn "parsed %A" s 
+            //eprintfn "parsed %A" s
             let root = simpleProcess.ProcessNode<Node>() "root" (mkZeroFile filename) (s |> List.rev)
             //eprintfn "processConfig"
             processConfig root
@@ -510,12 +516,12 @@ module rec ConfigParser =
         let rule = NewRule (NodeRule(specificField "create_starbase", [owner; size; moduleR; building; effect]), optionalMany)
         rule
     let createStarbaseAlias = AliasRule ("effect", createStarbase)
-    let createStarbaseEnums = 
+    let createStarbaseEnums =
         [("size", ["medium"; "large"]);
          ("module", ["trafficControl"]);
          ("building", ["crew"])]
         |> Map.ofList
-    let createStarbaseTypeDef = 
+    let createStarbaseTypeDef =
         {
             name = "create_starbase"
             nameField = None

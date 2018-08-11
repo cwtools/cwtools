@@ -463,7 +463,7 @@ module STLValidation =
         let countryTypeKeys = es.GlobMatchChildren("**/common/country_types/*.txt") |> List.map (fun f -> f.Key)
         let countryTypeModifiers = countryTypeKeys |> List.map (fun k -> {tag = "damage_vs_country_type_"+k+"_mult"; categories = [ModifierCategory.Ship]; core = true})
         let speciesKeys = es.GlobMatchChildren("**/common/species_archetypes/*.txt")
-                            |> List.filter (fun s -> not (s.Has "inherit_traits_from"))
+                            //|> List.filter (fun s -> not (s.Has "inherit_traits_from"))
                             |> List.map (fun s -> s.Key)
         let speciesModifiers = speciesKeys |> List.map (fun k -> {tag = k+"_species_trait_points_add"; categories = [ModifierCategory.Country]; core = true})
         shipModifiers @ srModifiers @ pcModifiers @ buildingModifiers @ countryTypeModifiers @ speciesModifiers @ modifiers
