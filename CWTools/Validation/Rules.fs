@@ -101,7 +101,7 @@ module rec Rules =
         if key.StartsWith "@" then OK else
             match vt with
             |ValueType.Bool ->
-                if key = "yes" || key = "no" then OK else Invalid[inv (ErrorCodes.ConfigRulesUnexpectedValue "Expecting yes or no" severity) leafornode]
+                if key = "yes" || key = "no" then OK else Invalid[inv (ErrorCodes.ConfigRulesUnexpectedValue (sprintf "Expecting yes or no, got %s" key) severity) leafornode]
             |ValueType.Enum e ->
                 match enumsMap.TryFind e with
                 |Some es -> if es.Contains key then OK else Invalid[inv (ErrorCodes.ConfigRulesUnexpectedValue (sprintf "Expecting a \"%s\" value, e.g. %A" e es) severity) leafornode]
@@ -253,6 +253,11 @@ module rec Rules =
                     if enforceCardinality then Invalid [inv (ErrorCodes.ConfigRulesUnexpectedProperty (sprintf "Unexpected node %s in %s" node.Key startNode.Key) severity) node] else OK
                     //|rs -> rs <&??&> (fun (_, o, f) -> applyNodeRule root enforceCardinality ctx o f node)
                 | rs -> rs <&??&> (fun (l, rs, o) -> applyNodeRule enforceCardinality ctx o rs node)
+            let leafvalueFun (leafvalue : LeafValue) =
+                match expandedrules |> List.choose (function |(LeafValueRule (l), o) when checkLeftField enumsMap typesMap effectMap triggerMap localisation files ctx l leafvalue.Key leafvalue -> Some (l, o) |_ -> None) with
+                | [] ->
+                    if enforceCardinality then Invalid [inv (ErrorCodes.ConfigRulesUnexpectedProperty (sprintf "Unexpected node %s in %s" leafvalue.Key startNode.Key) severity) leafvalue] else OK
+                |rs -> rs <&??&> (fun (l, o) -> applyLeafValueRule ctx l leafvalue) |> mergeValidationErrors "CW240"
             let checkCardinality (node : Node) (rule : NewRule) = OK
                 // let r, opts = rule
                 // match r with
@@ -346,6 +351,10 @@ module rec Rules =
         //         let value = node.Key
         //         if values.Contains value then OK else Invalid [inv (ErrorCodes.ConfigRulesUnexpectedValue (sprintf "Expected key of type %s" t) severity) node]
         //     |None -> OK
+
+        and applyLeafValueRule (ctx : RuleContext) (rule : NewField) (leafvalue : LeafValue) =
+            let severity = if ctx.warningOnly then Severity.Warning else Severity.Error
+            checkField enumsMap typesMap effectMap triggerMap localisation files severity ctx rule (leafvalue.Value.ToRawString()) leafvalue
 
         and applyLeafRule (ctx : RuleContext) (rule : NewField) (leaf : Leaf) =
             let severity = if ctx.warningOnly then Severity.Warning else Severity.Error

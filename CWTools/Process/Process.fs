@@ -40,6 +40,7 @@ type Leaf =
     static member Create key value = LeafC(Leaf(key, value))
 and LeafValue(value : Value, ?pos : range) =
     member val Value = value with get, set
+    member this.Key = this.Value.ToRawString()
     member val Position = defaultArg pos range.Zero
     [<JsonIgnore>]
     member this.ToRaw = Value(this.Value)

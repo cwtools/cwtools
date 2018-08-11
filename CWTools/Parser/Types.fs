@@ -13,11 +13,11 @@ module rec Types =
     [<Struct>]
     type Key =
         | Key of string
-        override x.ToString() = let (Key v) = x in sprintf "%s" v;  
-        
+        override x.ToString() = let (Key v) = x in sprintf "%s" v;
+
     let valueToString =
-        let inner = 
-                fun x -> 
+        let inner =
+                fun x ->
                 match x with
                 | Clause b -> "{ " + sprintf "%O" b + " }"
                 | QString s -> "\"" + s + "\""
@@ -27,8 +27,8 @@ module rec Types =
                 | Int i -> sprintf "%A" i
         //memoize id inner
         inner
-    [<Struct>]    
-    type KeyValueItem = 
+    [<Struct>]
+    type KeyValueItem =
         | KeyValueItem of Key * Value
         override x.ToString() = let (KeyValueItem (id, v)) = x in sprintf "%O = %O" id v
     and Value =
@@ -45,10 +45,10 @@ module rec Types =
             | Clause b -> "{ " + sprintf "%O" b + " }"
             | QString s -> s
             | String s -> s
-            | Bool b -> sprintf "%A" b
+            | Bool b -> if b then "yes" else "no"
             | Float f -> sprintf "%A" f
             | Int i -> sprintf "%A" i
-    and [<CustomEquality; CustomComparison; Struct>] PosKeyValue  = 
+    and [<CustomEquality; CustomComparison; Struct>] PosKeyValue  =
         | PosKeyValue of range * KeyValueItem
         override x.Equals(y) =
             match y with
@@ -72,7 +72,7 @@ module rec Types =
         | KeyValue of PosKeyValue
         | Value of Value
 
-        
+
 
     [<StructuralEquality; StructuralComparison>]
     type ParsedFile = |ParsedFile of Statement list
