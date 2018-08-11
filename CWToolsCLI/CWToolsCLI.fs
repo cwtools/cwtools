@@ -29,6 +29,7 @@ module CWToolsCLI =
         | Triggers = 3
         | Effects = 4
         | Localisation = 5
+        | Technology = 6
     type ListSort =
         | Path = 1
     type ListArgs =
@@ -120,6 +121,8 @@ module CWToolsCLI =
             printfn "%A" t
         | ListTypes.Localisation -> ()
             //printfn "%A" loc.GetKeys
+        | ListTypes.Technology ->
+            (gameObj.references().Technologies) |> List.map fst |> List.iter (printfn "%A")
         | _ -> failwith "Unexpected list type"
 
     let validate game directory scope modFilter docsPath (results : ParseResults<_>) =

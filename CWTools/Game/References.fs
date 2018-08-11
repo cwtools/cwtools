@@ -33,3 +33,4 @@ type References<'T>(resourceManager : IResourceAPI<'T>, lookup : Lookup, localis
     member __.ScriptVariableNames = lookup.definedScriptVariables |> List.distinct
     member __.Technologies = lookup.technologies
     member __.Localisation = localisation()
+    member __.TypeMapInfo = lookup.typeDefInfo
