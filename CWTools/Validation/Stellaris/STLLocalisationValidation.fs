@@ -17,19 +17,22 @@ module STLLocalisationValidation =
     type S = Severity
     type LocalisationValidator = STLEntitySet -> (Lang * Set<string>) list -> STLEntitySet -> ValidationResult
 
-    let checkLocKey (leaf : Leaf) (keys : Set<string>) (lang : Lang) key =
+    let inline checkLocKey (leaf : ^a) (keys : Set<string>) (lang : Lang) key =
         if lang = STL STLLang.Default then OK else
         match key = "" || key.Contains(" ") || (key.StartsWith("[") && key.EndsWith("]")), Set.contains key keys with
         | true, _ -> OK
         | _, true -> OK
         | _, false -> Invalid [invData (ErrorCodes.MissingLocalisation key (lang)) leaf (Some key)]
 
-    let checkLocName (leaf : Leaf) (keys : Set<string>) (lang : Lang) (key : string)  =
+    let inline checkLocName (leaf : ^a) (keys : Set<string>) (lang : Lang) (key : string)  =
         match (key.Contains (".") || key.Contains("_")) && (key.Contains(" ") |> not), key = "" || key.Contains(" ") || (key.StartsWith("[") && key.EndsWith("]")), Set.contains key keys with
         | false, _, _ -> OK
         | _, true, _ -> OK
         | _, _, true -> OK
         | _, _, false -> Invalid [invData (ErrorCodes.MissingLocalisation key (lang)) leaf (Some key)]
+    
+    let inline checkLocKeysLeafOrNode (keys : (Lang * Set<string>) list) (key : string) (leafornode : ^a) =
+        keys |> List.fold (fun state (l, keys)  -> state <&&> checkLocKey leafornode keys l key) OK
 
     let checkLocKeys (keys : (Lang * Set<string>) list) (leaf : Leaf) =
         let key = leaf.Value |> (function |QString s -> s |s -> s.ToString())

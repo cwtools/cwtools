@@ -174,7 +174,7 @@ type STLGame (settings : StellarisSettings) =
             let se = scopedEffects |> List.map (fun e -> e :> Effect)
             let vt = settings.embedded.triggers |> addInnerScope |> List.map (fun e -> e :> Effect)
             se @ vt
-        let mutable completionService : CompletionService option = None
+        // let mutable completionService : CompletionService option = None
         let mutable infoService : FoldRules option = None
 
         let resourceManager = ResourceManager(STLCompute.computeSTLData (fun () -> infoService))
@@ -246,7 +246,7 @@ type STLGame (settings : StellarisSettings) =
             match settings.rules with
             |Some rulesSettings ->
                 let rules, types, enums, complexenums = rulesSettings.ruleFiles |> List.fold (fun (rs, ts, es, ces) (fn, ft) -> let r2, t2, e2, ce2 = parseConfig fn ft in rs@r2, ts@t2, es@e2, ces@ce2) ([], [], [], [])
-                let rulesWithMod = rules @ (lookup.coreModifiers |> List.map (fun c -> AliasRule ("modifier", Rule(c.tag, {min = 0; max = 100; leafvalue = false; description = None; pushScope = None; replaceScopes = None}, ValueField (ValueType.Float (-1E+12, 1E+12))))))
+                let rulesWithMod = rules @ (lookup.coreModifiers |> List.map (fun c -> AliasRule ("modifier", NewRule(LeafRule(specificField c.tag, ValueField (ValueType.Float (-1E+12, 1E+12))), {min = 0; max = 100; leafvalue = false; description = None; pushScope = None; replaceScopes = None}))))
                 let complexEnumDefs = getEnumsFromComplexEnums complexenums (resources.AllEntities() |> List.map (fun struct(e,_) -> e))
                 let allEnums = enums @ complexEnumDefs
                 lookup.configRules <- rulesWithMod
@@ -393,12 +393,13 @@ type STLGame (settings : StellarisSettings) =
             let split = filetext.Split('\n')
             let filetext = split |> Array.mapi (fun i s -> if i = (pos.Line - 1) then eprintfn "%s" s; s.Insert(pos.Column, "x") else s) |> String.concat "\n"
             let resource = makeEntityResourceInput filepath filetext
-            match resourceManager.ManualProcessResource resource, completionService with
-            |Some e, Some completion ->
-                eprintfn "completion %A %A" (fileManager.ConvertPathToLogicalPath filepath) filepath
-                //eprintfn "scope at cursor %A" (getScopeContextAtPos pos lookup.scriptedTriggers lookup.scriptedEffects e.entity)
-                completion.Complete(pos, e)
-            |_, _ -> []
+            []
+            // match resourceManager.ManualProcessResource resource, completionService with
+            // |Some e, Some completion ->
+            //     eprintfn "completion %A %A" (fileManager.ConvertPathToLogicalPath filepath) filepath
+            //     //eprintfn "scope at cursor %A" (getScopeContextAtPos pos lookup.scriptedTriggers lookup.scriptedEffects e.entity)
+            //     completion.Complete(pos, e)
+            // |_, _ -> []
 
 
         let getInfoAtPos (pos : pos) (filepath : string) (filetext : string) =
@@ -467,7 +468,7 @@ type STLGame (settings : StellarisSettings) =
 
             let loc = allLocalisation() |> List.groupBy (fun l -> l.GetLang) |> List.map (fun (k, g) -> k, g |>List.collect (fun ls -> ls.GetKeys) |> Set.ofList )
             let files = resources.GetResources() |> List.choose (function |FileResource (_, f) -> Some f.logicalpath |EntityResource (_, f) -> Some f.logicalpath) |> Set.ofList
-            completionService <- Some (CompletionService(lookup.configRules, lookup.typeDefs, lookup.typeDefInfo, lookup.enumDefs, files))
+            // completionService <- Some (CompletionService(lookup.configRules, lookup.typeDefs, lookup.typeDefInfo, lookup.enumDefs, files))
             ruleApplicator <- Some (RuleApplicator(lookup.configRules, lookup.typeDefs, lookup.typeDefInfo, lookup.enumDefs, loc, files, lookup.scriptedTriggers, lookup.scriptedEffects))
             infoService <- Some (FoldRules(lookup.configRules, lookup.typeDefs, lookup.typeDefInfo, lookup.enumDefs, loc, files, lookup.scriptedTriggers, lookup.scriptedEffects, ruleApplicator.Value))
             //resources.ForceRecompute()

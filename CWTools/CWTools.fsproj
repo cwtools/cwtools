@@ -8,7 +8,7 @@
     <Compile Include="Common/Constants.fs" />
     <Compile Include="Common/STLConstants.fs" />
     <Compile Include="Parser/Types.fs" />
-    <Compile Include="Parser\SharedParsers.fs" />
+    <Compile Include="Parser/SharedParsers.fs" />
     <Compile Include="Parser/CKParser.fs" />
     <Compile Include="Parser/Printer.fs" />
     <Compile Include="Parser/DocsParser.fs" />
@@ -43,7 +43,7 @@
     <Compile Include="Game/Stellaris/STLGame.fs" />
     <Compile Include="Game/HOI4/HOI4Game.fs" />
     <Compile Include="CSharp/Extensions.fs" />
-    <Compile Include="ExtensionPoints\StatementVisitor.fs" />
+    <Compile Include="ExtensionPoints/StatementVisitor.fs" />
   </ItemGroup>
   <Import Project="..\.paket\Paket.Restore.targets" />
 </Project>

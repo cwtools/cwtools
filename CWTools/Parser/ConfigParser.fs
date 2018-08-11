@@ -25,10 +25,15 @@ module rec ConfigParser =
     | Specific of string
     | Percent
     | Filepath
-    type ObjectType =
-    | Tech
-    | ShipSize
-    | StarbaseModule
+    type NewField =
+    | ValueField of ValueType
+    | TypeField of string
+    | ScopeField of Scope
+    | LocalisationField of synced : bool
+    | FilepathField
+    | AliasField of string
+    | SubtypeField of string * bool * NewRule list
+    let specificField x = ValueField(ValueType.Specific x)
     type Options = {
         min : int
         max : int
@@ -37,24 +42,34 @@ module rec ConfigParser =
         pushScope : Scope option
         replaceScopes : ReplaceScopes option
     }
-    type Rule = string * Options * Field
-    type Field =
-    | ValueField of ValueType
-    | ObjectField of EntityType
-    | TypeField of string
-    | LeftTypeField of string * Field
-    | ClauseField of Rule list
-    | LeftClauseField of ValueType * Field
-    | ScopeField of Scope
-    | LeftScopeField of Rule list
-    | LocalisationField of synced : bool
-    | FilepathField
-    | AliasField of string
-    | SubtypeField of string * bool * Field
+    type RuleType =
+    |NodeRule of left : NewField * rules : NewRule list
+    |LeafRule of left : NewField * right : NewField
+    |LeafValueRule of right : NewField
+    |SubtypeRule of string * bool * NewRule list
+    type NewRule = RuleType * Options
+    // type ObjectType =
+    // | Tech
+    // | ShipSize
+    // | StarbaseModule
+    // type Rule = string * Options * Field
+    // type Field =
+    // | ValueField of ValueType
+    // | ObjectField of EntityType
+    // | TypeField of string
+    // | LeftTypeField of string * Field
+    // | ClauseField of Rule list
+    // | LeftClauseField of ValueType * Field
+    // | ScopeField of Scope
+    // | LeftScopeField of Rule list
+    // | LocalisationField of synced : bool
+    // | FilepathField
+    // | AliasField of string
+    // | SubtypeField of string * bool * Field
     type RootRule =
-    | AliasRule of string * Rule
-    | TypeRule of Rule
-    type EffectRule = Rule // Add scopes
+    | AliasRule of string * NewRule
+    | TypeRule of string * NewRule
+    // type EffectRule = Rule // Add scopes
     type ReplaceScopes = {
         root : Scope option
         this : Scope option
@@ -62,7 +77,7 @@ module rec ConfigParser =
     }
     type SubTypeDefinition = {
         name : string
-        rules : Rule list
+        rules : NewRule list
         typeKeyField : string option
         pushScope : Scope option
     }
@@ -192,6 +207,45 @@ module rec ConfigParser =
             |None -> None
         { min = min; max = max; leafvalue = false; description = description; pushScope = pushScope; replaceScopes = replaceScopes }
 
+    let processKey =
+        function
+        |"scalar" -> ValueField ValueType.Scalar
+        |"bool" -> ValueField ValueType.Bool
+        |"percentage" -> ValueField ValueType.Percent
+        |"localisation" -> LocalisationField false
+        |"localisation_synced" -> LocalisationField true
+        |"filepath" -> FilepathField
+        |x when x.StartsWith "<" && x.EndsWith ">" ->
+            TypeField (x.Trim([|'<'; '>'|]))
+        |x when x.StartsWith "int" ->
+            match getIntSettingFromString x with
+            |Some (min, max) -> ValueField (ValueType.Int (min, max))
+            |None -> (defaultFloat)
+        |x when x.StartsWith "float" ->
+            match getFloatSettingFromString x with
+            |Some (min, max) -> ValueField (ValueType.Float (min, max))
+            |None -> (defaultFloat)
+        |x when x.StartsWith "enum" ->
+            match getSettingFromString x "enum" with
+            |Some (name) -> ValueField (ValueType.Enum name)
+            |None -> ValueField (ValueType.Enum "")
+        |x when x.StartsWith "alias_match_left" ->
+            match getSettingFromString x "alias_match_left" with
+            |Some alias -> AliasField alias
+            |None -> ValueField ValueType.Scalar
+        |x when x.StartsWith "scope" ->
+            match getSettingFromString x "scope" with
+            |Some target ->
+                ScopeField (parseScope target)
+            |None -> ValueField ValueType.Scalar
+        |x when x.StartsWith "event_target" ->
+            match getSettingFromString x "event_target" with
+            |Some target ->
+                ScopeField (parseScope target)
+            |None -> ValueField ValueType.Scalar
+        |x -> ValueField (ValueType.Specific x)
+
+
     let processChildConfig ((child, comments) : Child * string list)  =
         match child with
         |NodeC n -> Some (configNode n comments (n.Key))
@@ -202,26 +256,28 @@ module rec ConfigParser =
     let configNode (node : Node) (comments : string list) (key : string) =
         let children = getNodeComments node
         let options = getOptionsFromComments comments
-        let field =
+        let innerRules = children |> List.choose processChildConfig
+        let rule =
             match key with
             |x when x.StartsWith "subtype[" ->
                 match getSettingFromString x "subtype" with
-                |Some st when st.StartsWith "!" -> SubtypeField (st.Substring(1), false, ClauseField(children |> List.choose processChildConfig))
-                |Some st -> SubtypeField (st, true, ClauseField(children |> List.choose processChildConfig))
-                |None -> ClauseField []
-            |"int" -> LeftClauseField (ValueType.Int (Int32.MinValue, Int32.MaxValue), ClauseField (children |> List.choose processChildConfig))
-            |"float" -> LeftClauseField (ValueType.Float (Double.MinValue, Double.MaxValue), ClauseField (children |> List.choose processChildConfig))
-            |"scalar" -> LeftClauseField (ValueType.Scalar, ClauseField (children |> List.choose processChildConfig))
-            |"filepath" -> LeftClauseField (ValueType.Filepath, ClauseField (children |> List.choose processChildConfig))
-            |"scope" -> LeftScopeField (children |> List.choose processChildConfig)
-            |x when x.StartsWith "enum[" ->
-                match getSettingFromString x "enum" with
-                |Some e -> LeftClauseField (ValueType.Enum e, ClauseField (children |> List.choose processChildConfig))
-                |None -> ClauseField []
-            |x when x.StartsWith "<" && x.EndsWith ">" ->
-                LeftTypeField(x.Trim([|'<'; '>'|]), ClauseField(children |> List.choose processChildConfig))
-            |_ -> ClauseField(children |> List.choose processChildConfig)
-        Rule(key, options, field)
+                |Some st when st.StartsWith "!" -> SubtypeRule (st.Substring(1), false, (innerRules))
+                |Some st -> SubtypeRule (st, true, (innerRules))
+                |None -> failwith (sprintf "Invalid subtype string %s" x)
+            |x -> NodeRule(processKey x, innerRules)
+            // |"int" -> NodeRule(ValueField(ValueType.Int(Int32.MinValue, Int32.MaxValue)), innerRules)
+            // |"float" -> NodeRule(ValueField(ValueType.Float(Double.MinValue, Double.MaxValue)), innerRules)
+            // |"scalar" -> NodeRule(ValueField(ValueType.Scalar), innerRules)
+            // |"filepath" -> NodeRule(FilepathField, innerRules)
+            // |"scope" -> NodeRule(ScopeField(Scope.Any), innerRules)
+            // |x when x.StartsWith "enum[" ->
+            //     match getSettingFromString x "enum" with
+            //     |Some e -> NodeRule(ValueField(ValueType.Enum e), innerRules)
+            //     |None -> failwith (sprintf "Invalid enum string %s" x)
+            // |x when x.StartsWith "<" && x.EndsWith ">" ->
+            //     NodeRule(TypeField(x.Trim([|'<'; '>'|])), innerRules)
+            // |x -> NodeRule(ValueField(ValueType.Specific x), innerRules)
+        NewRule(rule, options)
 
     let processChildConfigRoot ((child, comments) : Child * string list) =
         match child with
@@ -232,7 +288,7 @@ module rec ConfigParser =
         |_ -> None
 
     let configRootLeaf (leaf : Leaf) (comments : string list) =
-        let key, options, field = configLeaf leaf comments leaf.Key
+        let rule = configLeaf leaf comments leaf.Key
         match leaf.Key with
         |x when x.StartsWith "alias[" ->
             match getAliasSettingsFromString x with
@@ -240,13 +296,14 @@ module rec ConfigParser =
                 let innerRule = configLeaf leaf comments rn
                 AliasRule (a, innerRule)
             |None ->
-                TypeRule (Rule(x, options, field))
+                TypeRule (x, rule)
         |x ->
-            TypeRule (Rule(x, options, field))
+            TypeRule (x, rule)
 
     let configRootNode (node : Node) (comments : string list) =
         let children = getNodeComments node
         let options = getOptionsFromComments comments
+        let innerRules = children |> List.choose processChildConfig
         match node.Key with
         |x when x.StartsWith "alias[" ->
             match getAliasSettingsFromString x with
@@ -254,73 +311,72 @@ module rec ConfigParser =
                 let innerRule = configNode node comments rn
                 AliasRule (a, innerRule)
             |None ->
-                TypeRule (Rule(x, options, ClauseField(children |> List.choose processChildConfig)))
+                TypeRule (x, NewRule(NodeRule(ValueField(ValueType.Specific x), innerRules), options))
         |x ->
-            TypeRule (Rule(x, options, ClauseField(children |> List.choose processChildConfig)))
+            TypeRule (x, NewRule(NodeRule(ValueField(ValueType.Specific x), innerRules), options))
 
     let configLeaf (leaf : Leaf) (comments : string list) (key : string) =
-        let rightfield =
-            match leaf.Value.ToString() with
-            |"scalar" -> ValueField ValueType.Scalar
-            |"bool" -> ValueField ValueType.Bool
-            |"percentage" -> ValueField ValueType.Percent
-            |"localisation" -> LocalisationField false
-            |"localisation_synced" -> LocalisationField true
-            |"filepath" -> FilepathField
-            |x when x.StartsWith "<" && x.EndsWith ">" ->
-                TypeField (x.Trim([|'<'; '>'|]))
-            |x when x.StartsWith "int" ->
-                match getIntSettingFromString x with
-                |Some (min, max) -> ValueField (ValueType.Int (min, max))
-                |None -> (defaultFloat)
-            |x when x.StartsWith "float" ->
-                match getFloatSettingFromString x with
-                |Some (min, max) -> ValueField (ValueType.Float (min, max))
-                |None -> (defaultFloat)
-            |x when x.StartsWith "enum" ->
-                match getSettingFromString x "enum" with
-                |Some (name) -> ValueField (ValueType.Enum name)
-                |None -> ValueField (ValueType.Enum "")
-            |x when x.StartsWith "alias_match_left" ->
-                match getSettingFromString x "alias_match_left" with
-                |Some alias -> AliasField alias
-                |None -> ValueField ValueType.Scalar
-            |x when x.StartsWith "scope" ->
-                match getSettingFromString x "scope" with
-                |Some target ->
-                    ScopeField (parseScope target)
-                |None -> ValueField ValueType.Scalar
-            |x when x.StartsWith "event_target" ->
-                match getSettingFromString x "event_target" with
-                |Some target ->
-                    ScopeField (parseScope target)
-                |None -> ValueField ValueType.Scalar
-            |x -> ValueField (ValueType.Specific x)
+        let rightfield = processKey (leaf.Value.ToString())
+            // match leaf.Value.ToString() with
+            // |"scalar" -> ValueField ValueType.Scalar
+            // |"bool" -> ValueField ValueType.Bool
+            // |"percentage" -> ValueField ValueType.Percent
+            // |"localisation" -> LocalisationField false
+            // |"localisation_synced" -> LocalisationField true
+            // |"filepath" -> FilepathField
+            // |x when x.StartsWith "<" && x.EndsWith ">" ->
+            //     TypeField (x.Trim([|'<'; '>'|]))
+            // |x when x.StartsWith "int" ->
+            //     match getIntSettingFromString x with
+            //     |Some (min, max) -> ValueField (ValueType.Int (min, max))
+            //     |None -> (defaultFloat)
+            // |x when x.StartsWith "float" ->
+            //     match getFloatSettingFromString x with
+            //     |Some (min, max) -> ValueField (ValueType.Float (min, max))
+            //     |None -> (defaultFloat)
+            // |x when x.StartsWith "enum" ->
+            //     match getSettingFromString x "enum" with
+            //     |Some (name) -> ValueField (ValueType.Enum name)
+            //     |None -> ValueField (ValueType.Enum "")
+            // |x when x.StartsWith "alias_match_left" ->
+            //     match getSettingFromString x "alias_match_left" with
+            //     |Some alias -> AliasField alias
+            //     |None -> ValueField ValueType.Scalar
+            // |x when x.StartsWith "scope" ->
+            //     match getSettingFromString x "scope" with
+            //     |Some target ->
+            //         ScopeField (parseScope target)
+            //     |None -> ValueField ValueType.Scalar
+            // |x when x.StartsWith "event_target" ->
+            //     match getSettingFromString x "event_target" with
+            //     |Some target ->
+            //         ScopeField (parseScope target)
+            //     |None -> ValueField ValueType.Scalar
+            // |x -> ValueField (ValueType.Specific x)
         let options = getOptionsFromComments comments
-        let field =
-            match key with
-            |x when x.StartsWith "<" && x.EndsWith ">" ->
-                LeftTypeField (x.Trim([|'<'; '>'|]), rightfield)
-            |"int" -> LeftClauseField (ValueType.Int (Int32.MinValue, Int32.MaxValue), rightfield)
-            |"float" -> LeftClauseField (ValueType.Float (Double.MinValue, Double.MaxValue), rightfield)
-            |"scalar" -> LeftClauseField (ValueType.Scalar, rightfield)
-            |x when x.StartsWith "enum[" ->
-                match getSettingFromString x "enum" with
-                |Some e -> LeftClauseField (ValueType.Enum e, rightfield)
-                |None -> rightfield
-            |x when x.StartsWith "<" && x.EndsWith ">" ->
-                LeftTypeField(x.Trim([|'<'; '>'|]), rightfield)
-            |_ -> rightfield
-        Rule(key, options, field)
+        let field = processKey key
+            // match key with
+            // |x when x.StartsWith "<" && x.EndsWith ">" ->
+            //     TypeField (x.Trim([|'<'; '>'|]))
+            // |"int" -> ValueField (ValueType.Int (Int32.MinValue, Int32.MaxValue))
+            // |"float" -> ValueField (ValueType.Float (Double.MinValue, Double.MaxValue))
+            // |"scalar" -> ValueField (ValueType.Scalar)
+            // |x when x.StartsWith "enum[" ->
+            //     match getSettingFromString x "enum" with
+            //     |Some e -> ValueField (ValueType.Enum e)
+            //     |None -> failwith (sprintf "Invalid enum string %s" x)
+            // |x -> ValueField (ValueType.Specific x)
+        let leafRule = LeafRule(field, rightfield)
+        NewRule(leafRule, options)
 
     let configLeafValue (leafvalue : LeafValue) (comments : string list) =
-        let field =
-            match leafvalue.Value.ToRawString() with
-            |x when x.StartsWith "<" && x.EndsWith ">" ->
-                TypeField (x.Trim([|'<'; '>'|]))
-            |x -> ValueField (ValueType.Enum x)
+        let field = processKey (leafvalue.Value.ToRawString())
+            // match leafvalue.Value.ToRawString() with
+            // |x when x.StartsWith "<" && x.EndsWith ">" ->
+            //     TypeField (x.Trim([|'<'; '>'|]))
+            // |x -> ValueField (ValueType.Enum x)
         let options = { getOptionsFromComments comments with leafvalue = true }
-        Rule("leafvalue", options, field)
+        NewRule(LeafValueRule(field), options)
 
     // Types
 
@@ -446,12 +502,19 @@ module rec ConfigParser =
 // 	effect = { ... }
 // }
     let createStarbase =
-        let owner = Rule ("owner", requiredSingle, ScopeField Scope.Any )
-        let size = Rule ("size", requiredSingle, ObjectField EntityType.ShipSizes)
-        let moduleR = Rule ("module", optionalMany, ObjectField EntityType.StarbaseModules)
-        let building = Rule ("building", optionalMany, ObjectField EntityType.StarbaseBuilding)
-        let effect =  Rule ("effect", optionalSingle, ValueField ValueType.Scalar)
-        EffectRule ("create_starbase", optionalMany, ClauseField [owner; size; moduleR; building; effect])
+        let owner = NewRule (LeafRule(specificField "owner", ScopeField Scope.Any), requiredSingle)
+        let size = NewRule (LeafRule(specificField "size", ValueField(ValueType.Enum "size")), requiredSingle)
+        let moduleR = NewRule (LeafRule(specificField "module", ValueField(ValueType.Enum "module")), optionalMany)
+        let building = NewRule (LeafRule(specificField "building", ValueField(ValueType.Enum "building")), optionalMany)
+        let effect = NewRule (NodeRule(specificField "effect", [(LeafRule (AliasField "effect", AliasField "effect")), optionalMany]), optionalSingle)
+        let rule = NewRule (NodeRule(specificField "create_starbase", [owner; size; moduleR; building; effect]), optionalMany)
+        rule
+    let createStarbaseAlias = AliasRule ("effect", createStarbase)
+    let createStarbaseEnums = 
+        [("size", ["medium"; "large"]);
+         ("module", ["trafficControl"]);
+         ("building", ["crew"])]
+        |> Map.ofList
     let createStarbaseTypeDef = 
         {
             name = "create_starbase"
@@ -489,10 +552,10 @@ module rec ConfigParser =
     let building =
         let inner =
             [
-                Rule("allow",  requiredSingle, ValueField ValueType.Scalar);
-                Rule("empire_unique", optionalSingle, ValueField ValueType.Bool)
+                NewRule (LeafRule(specificField "allow", ValueField ValueType.Scalar), requiredSingle)
+                NewRule (LeafRule(specificField "empire_unique", ValueField ValueType.Bool), optionalSingle)
             ]
-        Rule("building", optionalMany, ClauseField inner)
+        NewRule(NodeRule(specificField "building", inner), optionalMany)
 
     // formation_priority = @corvette_formation_priority
     // max_speed = @speed_very_fast
@@ -530,31 +593,31 @@ module rec ConfigParser =
     let shipsize =
         let inner =
             [
-                Rule("formation_priority", optionalSingle, defaultInt);
-                Rule("max_speed", requiredSingle, defaultFloat);
-                Rule("acceleration", requiredSingle, defaultFloat);
-                Rule("rotation_speed", requiredSingle, defaultFloat);
-                Rule("collision_radius", optionalSingle, defaultFloat);
-                Rule("max_hitpoints", requiredSingle, defaultInt);
-                Rule("modifier", optionalSingle, ClauseField []);
-                Rule("size_multiplier", requiredSingle, defaultInt);
-                Rule("fleet_slot_size", requiredSingle, defaultInt);
-                Rule("section_slots", optionalSingle, ClauseField []);
-                Rule("num_target_locators", requiredSingle, defaultInt);
-                Rule("is_space_station", requiredSingle, ValueField ValueType.Bool);
-                Rule("icon_frame", requiredSingle, defaultInt);
-                Rule("base_buildtime", requiredSingle, defaultInt);
-                Rule("can_have_federation_design", requiredSingle, ValueField ValueType.Bool);
-                Rule("enable_default_design", requiredSingle, ValueField ValueType.Bool);
-                Rule("default_behavior", requiredSingle, TypeField "ship_behavior");
-                Rule("prerequisites", optionalSingle, ClauseField []);
-                Rule("combat_disengage_chance", optionalSingle, defaultFloat);
-                Rule("has_mineral_upkeep", requiredSingle, ValueField ValueType.Bool);
-                Rule("class", requiredSingle, ValueField ValueType.Scalar);
-                Rule("construction_type", requiredSingle, ValueField ValueType.Scalar);
-                Rule("required_component_set", requiredSingle, ValueField ValueType.Scalar);
+                NewRule(LeafRule(specificField "formation_priority", defaultInt), optionalSingle);
+                NewRule(LeafRule(specificField "max_speed", defaultFloat), requiredSingle);
+                NewRule(LeafRule(specificField "acceleration", defaultFloat), requiredSingle);
+                NewRule(LeafRule(specificField "rotation_speed", defaultFloat), requiredSingle);
+                NewRule(LeafRule(specificField "collision_radius", defaultFloat), optionalSingle);
+                NewRule(LeafRule(specificField "max_hitpoints", defaultInt), requiredSingle);
+                NewRule(NodeRule(specificField "modifier", []), optionalSingle);
+                NewRule(LeafRule(specificField "size_multiplier", defaultInt), requiredSingle);
+                NewRule(LeafRule(specificField "fleet_slot_size", defaultInt), requiredSingle);
+                NewRule(NodeRule(specificField "section_slots", []), optionalSingle);
+                NewRule(LeafRule(specificField "num_target_locators", defaultInt), requiredSingle);
+                NewRule(LeafRule(specificField "is_space_station", ValueField ValueType.Bool), requiredSingle);
+                NewRule(LeafRule(specificField "icon_frame", defaultInt), requiredSingle);
+                NewRule(LeafRule(specificField "base_buildtime", defaultInt), requiredSingle);
+                NewRule(LeafRule(specificField "can_have_federation_design", ValueField ValueType.Bool), requiredSingle);
+                NewRule(LeafRule(specificField "enable_default_design", ValueField ValueType.Bool), requiredSingle);
+                NewRule(LeafRule(specificField "default_behavior", TypeField "ship_behavior"), requiredSingle);
+                NewRule(NodeRule(specificField "prerequisites", []), optionalSingle);
+                NewRule(LeafRule(specificField "combat_disengage_chance", defaultFloat), optionalSingle);
+                NewRule(LeafRule(specificField "has_mineral_upkeep", ValueField ValueType.Bool), requiredSingle);
+                NewRule(LeafRule(specificField "class", ValueField ValueType.Scalar), requiredSingle);
+                NewRule(LeafRule(specificField "construction_type", ValueField ValueType.Scalar), requiredSingle);
+                NewRule(LeafRule(specificField "required_component_set", ValueField ValueType.Scalar), requiredSingle);
             ]
-        Rule("ship_size", optionalMany, ClauseField inner)
+        NewRule(NodeRule(specificField "ship_size", inner), optionalMany)
 
     let shipBehaviorType =
         {
