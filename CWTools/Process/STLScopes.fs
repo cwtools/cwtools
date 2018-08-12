@@ -404,7 +404,7 @@ module STLScopes =
     ]
     type EffectMap = Map<string, Effect, InsensitiveStringComparer>
 
-    let changeScope (effects : EffectMap) (triggers : EffectMap) (key : string) (source : ScopeContext) =
+    let changeScope (skipEffect : bool) (effects : EffectMap) (triggers : EffectMap) (key : string) (source : ScopeContext) =
         let key = if key.StartsWith("hidden:", StringComparison.OrdinalIgnoreCase) then key.Substring(7) else key
         if key.StartsWith("event_target:", StringComparison.OrdinalIgnoreCase) || key.StartsWith("parameter:", StringComparison.OrdinalIgnoreCase) then NewScope ({ source with Scopes = Scope.Any::source.Scopes }, [])
         else
@@ -419,6 +419,7 @@ module STLScopes =
                     // let effect = (effects @ triggers)
                     //             |> List.choose (function | :? ScopedEffect as e -> Some e |_ -> None)
                     //             |> List.tryFind (fun e -> e.Name == nextKey)
+                    if skipEffect then (context, false), NotFound else
                     match Option.orElse effectMatch triggerMatch with
                     | None -> (context, false), NotFound
                     | Some e ->

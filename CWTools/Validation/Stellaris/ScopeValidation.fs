@@ -94,7 +94,7 @@ module ScopeValidation =
             |x when x.Contains("parameter:") ->
                 OK //Handle later
             |x ->
-                match changeScope effects triggers x scopes with
+                match changeScope false effects triggers x scopes with
                 |NewScope (s, ignores) ->
                     valNodeTriggers root triggers effects modifiers s ignores node
                     <&&>
@@ -127,7 +127,7 @@ module ScopeValidation =
             |x when x.Contains("parameter:") ->
                 OK //Handle later
             |x ->
-                match changeScope effects triggers x scopes with
+                match changeScope false effects triggers x scopes with
                 |NewScope (s, ignores) -> valNodeEffects node triggers effects modifiers s ignores node
                 |WrongScope (_,_,ss) -> Invalid [inv (ErrorCodes.IncorrectScopeScope x (scopes.CurrentScope.ToString()) (ss |> List.map (fun s -> s.ToString()) |> String.concat ", ")) node]
                 |NotFound ->
@@ -165,7 +165,7 @@ module ScopeValidation =
         |x when ["else"] |> List.exists (fun t -> t == x) -> false, scopes
         |x when x.Contains("parameter:") -> false, scopes
         |x ->
-            match changeScope effects triggers x scopes with
+            match changeScope false effects triggers x scopes with
                 |NewScope (s, _) -> false, s
                 |WrongScope _ -> false, scopes
                 |NotFound -> false, scopes
