@@ -15,6 +15,12 @@ alias[effect:create_starbase] = {
     effect = effect
 }
 
+alias[effect:set_name] = scalar
+alias[effect:solar_system] = {
+    ## cardinality = 0..inf
+    alias_name[effect] = alias_match_left[effect]
+}
+
 ship_size = {
     ## cardinality = 0..1
     formation_priority = int
@@ -42,6 +48,7 @@ ship_size = {
     ## cardinality = 0..1
     can_disable = bool
     modifier = {
+        ## cardinality = 0..inf
         alias_name[modifier] = alias_match_left[modifier]
     }
     ## cardinality = 0..1
@@ -89,6 +96,20 @@ ship_size = {
 
  }
 
+event = {
+    is_triggered_only = bool
+    id = scalar
+    hide_window = bool
+    trigger = {
+        ## cardinality = 0..inf
+        alias_name[trigger] = alias_match_left[trigger]
+    }
+    immediate = {
+        ## cardinality = 0..inf
+        alias_name[effect] = alias_match_left[effect]
+    }
+}
+
 types = {
     type[ship_size] = {
         path = "game/common/ship_sizes"
@@ -108,6 +129,9 @@ types = {
     }
     type[technology] = {
         path = "game/common/technology"
+    }
+    type[event] = {
+        path = "game/events"
     }
 }
 

@@ -253,12 +253,37 @@ module rec Rules =
                     if enforceCardinality then Invalid [inv (ErrorCodes.ConfigRulesUnexpectedProperty (sprintf "Unexpected node %s in %s" node.Key startNode.Key) severity) node] else OK
                     //|rs -> rs <&??&> (fun (_, o, f) -> applyNodeRule root enforceCardinality ctx o f node)
                 | rs -> rs <&??&> (fun (l, rs, o) -> applyNodeRule enforceCardinality ctx o rs node)
-            let leafvalueFun (leafvalue : LeafValue) =
+            let leafValueFun (leafvalue : LeafValue) =
                 match expandedrules |> List.choose (function |(LeafValueRule (l), o) when checkLeftField enumsMap typesMap effectMap triggerMap localisation files ctx l leafvalue.Key leafvalue -> Some (l, o) |_ -> None) with
                 | [] ->
                     if enforceCardinality then Invalid [inv (ErrorCodes.ConfigRulesUnexpectedProperty (sprintf "Unexpected node %s in %s" leafvalue.Key startNode.Key) severity) leafvalue] else OK
                 |rs -> rs <&??&> (fun (l, o) -> applyLeafValueRule ctx l leafvalue) |> mergeValidationErrors "CW240"
-            let checkCardinality (node : Node) (rule : NewRule) = OK
+            let checkCardinality (node : Node) (rule : NewRule) =
+                match rule with
+                |NodeRule(ValueField (ValueType.Specific key), _), opts
+                |LeafRule(ValueField (ValueType.Specific key), _), opts ->
+                    let leafcount = node.Values |> List.filter (fun leaf -> leaf.Key == key) |> List.length
+                    let childcount = node.Children |> List.filter (fun child -> child.Key == key) |> List.length
+                    let total = leafcount + childcount
+                    if opts.min > total then Invalid [inv (ErrorCodes.ConfigRulesWrongNumber (sprintf "Missing %s, expecting at least %i" key opts.min) severity) node]
+                    else if opts.max < total then Invalid [inv (ErrorCodes.ConfigRulesWrongNumber (sprintf "Too many %s, expecting at most %i" key opts.max) Severity.Warning) node]
+                    else OK
+                |NodeRule(l, _), opts ->
+                    let total = node.Children |> List.filter (fun child -> checkLeftField enumsMap typesMap effectMap triggerMap localisation files ctx l child.Key child) |> List.length
+                    if opts.min > total then Invalid [inv (ErrorCodes.ConfigRulesWrongNumber (sprintf "Missing %A, expecting at least %i" l opts.min) severity) node]
+                    else if opts.max < total then Invalid [inv (ErrorCodes.ConfigRulesWrongNumber (sprintf "Too many n %A, expecting at most %i" l opts.max) Severity.Warning) node]
+                    else OK
+                |LeafRule(l, r), opts ->
+                    let total = node.Values |> List.filter (fun leaf -> checkLeftField enumsMap typesMap effectMap triggerMap localisation files ctx l leaf.Key leaf) |> List.length
+                    if opts.min > total then Invalid [inv (ErrorCodes.ConfigRulesWrongNumber (sprintf "Missing %A, expecting at least %i" l opts.min) severity) node]
+                    else if opts.max < total then Invalid [inv (ErrorCodes.ConfigRulesWrongNumber (sprintf "Too many l %A %A, expecting at most %i" l r opts.max) Severity.Warning) node]
+                    else OK
+                |LeafValueRule(l), opts ->
+                    let total = node.LeafValues |> List.ofSeq |> List.filter (fun leafvalue -> checkLeftField enumsMap typesMap effectMap triggerMap localisation files ctx l leafvalue.Key leafvalue) |> List.length
+                    if opts.min > total then Invalid [inv (ErrorCodes.ConfigRulesWrongNumber (sprintf "Missing %A, expecting at least %i" l opts.min) severity) node]
+                    else if opts.max < total then Invalid [inv (ErrorCodes.ConfigRulesWrongNumber (sprintf "Too many lv %A, expecting at most %i" l opts.max) Severity.Warning) node]
+                    else OK
+                |_ -> OK
                 // let r, opts = rule
                 // match r with
                 // | LeafValueRule _ -> OK
@@ -274,6 +299,8 @@ module rec Rules =
             startNode.Leaves <&!&> valueFun
             <&&>
             (startNode.Children <&!&> nodeFun)
+            <&&>
+            (startNode.LeafValues <&!&> leafValueFun)
             <&&>
             (rules <&!&> checkCardinality startNode)
 

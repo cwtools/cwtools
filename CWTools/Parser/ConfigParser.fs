@@ -118,6 +118,7 @@ module rec ConfigParser =
                 | ((_, c), CommentC nc) -> (false, c)
                 | ((_, c), NodeC n) when n.Position = t -> (true, c)
                 | ((_, c), LeafC v) when v.Position = t -> (true, c)
+                | ((_, c), LeafValueC v) when v.Position = t -> (true, c)
                 // | ((_, c), LeafValueC lv) when lv.Position = t -> (true, c)
                 | ((_, _), _) -> (false, [])
         //let fNode = (fun (node:Node) (children) ->
@@ -219,31 +220,33 @@ module rec ConfigParser =
         |"filepath" -> FilepathField
         |x when x.StartsWith "<" && x.EndsWith ">" ->
             TypeField (x.Trim([|'<'; '>'|]))
-        |x when x.StartsWith "int" ->
+        |"int" -> defaultFloat
+        |x when x.StartsWith "int[" ->
             match getIntSettingFromString x with
             |Some (min, max) -> ValueField (ValueType.Int (min, max))
             |None -> (defaultFloat)
+        |"float" -> defaultFloat
         |x when x.StartsWith "float" ->
             match getFloatSettingFromString x with
             |Some (min, max) -> ValueField (ValueType.Float (min, max))
             |None -> (defaultFloat)
-        |x when x.StartsWith "enum" ->
+        |x when x.StartsWith "enum[" ->
             match getSettingFromString x "enum" with
             |Some (name) -> ValueField (ValueType.Enum name)
             |None -> ValueField (ValueType.Enum "")
-        |x when x.StartsWith "icon" ->
+        |x when x.StartsWith "icon[" ->
             match getSettingFromString x "icon" with
             |Some (folder) -> IconField folder
             |None -> ValueField (ValueType.Scalar)
-        |x when x.StartsWith "alias_match_left" ->
+        |x when x.StartsWith "alias_match_left[" ->
             match getSettingFromString x "alias_match_left" with
             |Some alias -> AliasField alias
             |None -> ValueField ValueType.Scalar
-        |x when x.StartsWith "alias_name" ->
+        |x when x.StartsWith "alias_name[" ->
             match getSettingFromString x "alias_name" with
             |Some alias -> AliasField alias
             |None -> ValueField ValueType.Scalar
-        |x when x.StartsWith "scope" ->
+        |x when x.StartsWith "scope[" ->
             match getSettingFromString x "scope" with
             |Some target ->
                 ScopeField (parseScope target)
