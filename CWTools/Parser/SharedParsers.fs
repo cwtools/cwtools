@@ -62,6 +62,9 @@ module internal SharedParsers =
     let clause inner = betweenL (chSkip '{' <?> "opening brace") (skipChar '}' <?> "closing brace") inner "clause"
     let quotedCharSnippet = many1Satisfy (fun c -> c <> '\\' && c <> '"')
     let escapedChar = (pstring "\\\"" <|> pstring "\\") |>> string
+    let getRange (start: FParsec.Position) (endp : FParsec.Position) = mkRange start.StreamName (mkPos (int start.Line) (int start.Column - 1)) (mkPos (int endp.Line) (int endp.Column - 1))
+
+    let parseWithPosition p = pipe3 (getPosition) p (getPosition) (fun s r e -> getRange s e, r)
 
     // Base types
     // =======
@@ -84,24 +87,24 @@ module internal SharedParsers =
     let valueI = pint64 .>> nextCharSatisfiesNot (isvaluechar) |>> int |>> Int
     let valueF = pfloat .>> nextCharSatisfiesNot (isvaluechar) |>> float |>> Float
 
-    let hsv3 = clause (pipe3 ((valueF .>> ws) .>> ws) (valueF .>> ws) (valueF .>> ws) (fun a b c -> Clause [Statement.Value a;Statement.Value b; Statement.Value c]))
-    let hsv4 = clause (pipe4 (valueF .>> ws) (valueF .>> ws) (valueF .>> ws) (valueF .>> ws) (fun a b c d -> Clause [Statement.Value a;Statement.Value b; Statement.Value c; Statement.Value d]))
+    let hsv3 = clause (pipe3 ((parseWithPosition valueF .>> ws) .>> ws) (parseWithPosition valueF .>> ws) (parseWithPosition valueF .>> ws) (fun a b c -> Clause [Statement.Value a;Statement.Value b; Statement.Value c]))
+    let hsv4 = clause (pipe4 (parseWithPosition valueF .>> ws) (parseWithPosition valueF .>> ws) (parseWithPosition valueF .>> ws) (parseWithPosition valueF .>> ws) (fun a b c d -> Clause [Statement.Value a;Statement.Value b; Statement.Value c; Statement.Value d]))
     let hsvI =
-        clause (pipe4 (valueF .>> ws) (valueF .>> ws) (valueF .>> ws) (opt (valueF .>> ws))
+        clause (pipe4 (parseWithPosition valueF .>> ws) (parseWithPosition valueF .>> ws) (parseWithPosition valueF .>> ws) (opt (parseWithPosition valueF .>> ws))
             (fun a b c d ->
             match (a, b, c, d) with
             | (a, b, c, (Some d)) -> Clause [Statement.Value a;Statement.Value b; Statement.Value c; Statement.Value d]
             | (a, b, c, None) -> Clause [Statement.Value a;Statement.Value b; Statement.Value c;]))
     let hsv = strSkip "hsv" >>. hsvI .>> ws
-    let rgbI = clause (pipe4 (valueI .>> ws) (valueI .>> ws) (valueI .>> ws) (opt (valueI .>> ws))
+    let rgbI = clause (pipe4 (parseWithPosition valueI .>> ws) (parseWithPosition valueI .>> ws) (parseWithPosition valueI .>> ws) (opt (parseWithPosition valueI .>> ws))
             (fun a b c d ->
             match (a, b, c, d) with
             | (a, b, c, (Some d)) -> Clause [Statement.Value a;Statement.Value b; Statement.Value c; Statement.Value d]
             | (a, b, c, None) -> Clause [Statement.Value a;Statement.Value b; Statement.Value c;]))
 
 
-    let rgb3 = clause (pipe3 (valueI .>> ws) (valueI .>> ws) (valueI .>> ws) (fun a b c -> Clause [Statement.Value a;Statement.Value b; Statement.Value c]))
-    let rgb4 = clause (pipe4 (valueI .>> ws) (valueI .>> ws) (valueI .>> ws) (valueI .>> ws) (fun a b c d -> Clause [Statement.Value a;Statement.Value b; Statement.Value c; Statement.Value d]))
+    let rgb3 = clause (pipe3 (parseWithPosition valueI .>> ws) (parseWithPosition valueI .>> ws) (parseWithPosition valueI .>> ws) (fun a b c -> Clause [Statement.Value a;Statement.Value b; Statement.Value c]))
+    let rgb4 = clause (pipe4 (parseWithPosition valueI .>> ws) (parseWithPosition valueI .>> ws) (parseWithPosition valueI .>> ws) (parseWithPosition valueI .>> ws) (fun a b c d -> Clause [Statement.Value a;Statement.Value b; Statement.Value c; Statement.Value d]))
     let rgb = strSkip "rgb" >>. rgbI .>> ws
 
     // Complex types
@@ -109,9 +112,10 @@ module internal SharedParsers =
 
     // Recursive types
     let keyvalue, keyvalueimpl = createParserForwardedToRef()
-    let value, valueimpl = createParserForwardedToRef()
-    let statement = comment |>> Comment <|> (attempt (((value .>> ws)) .>> notFollowedBy operatorLookahead |>> Value)) <|> (keyvalue) <?> "statement"
-    let valueBlock = clause (many1 ((value .>> ws |>> Value) <|> (comment |>> Comment))) |>> Clause <?> "value clause"
+    let (value : Parser<Value, unit>), valueimpl = createParserForwardedToRef()
+    let leafValue = pipe3 (getPosition) (value .>> ws) (getPosition) (fun a b c -> (getRange a c ,b))// |>> (fun (p, v) -> p, (Value v)))
+    let statement = comment |>> Comment <|> (attempt (((leafValue)) .>> notFollowedBy operatorLookahead |>> Value)) <|> (keyvalue) <?> "statement"
+    let valueBlock = clause (many1 ((leafValue |>> Value) <|> (comment |>> Comment))) |>> Clause <?> "value clause"
 
     let valueClause = clause (many statement) |>> Clause <?> "statement clause"
 
@@ -151,9 +155,8 @@ module internal SharedParsers =
 
 
     valueimpl := valueCustom <?> "value"
-    let getRange (start: FParsec.Position) (endp : FParsec.Position) = mkRange start.StreamName (mkPos (int start.Line) (int start.Column - 1)) (mkPos (int endp.Line) (int endp.Column - 1))
     keyvalueimpl := pipe4 (getPosition) ((keyQ <|> key) .>> operator) (value) (getPosition .>> ws) (fun start id value endp -> KeyValue(PosKeyValue(getRange start endp, KeyValueItem(id, value))))
     let alle = ws >>. many statement .>> eof |>> (fun f -> ( ParsedFile f ))
-    let valuelist = many1 ((comment |>> Comment) <|> (value .>> ws |>> Value)) .>> eof
+    let valuelist = many1 ((comment |>> Comment) <|> (leafValue |>> (fun (a,b) -> Value(a, b)))) .>> eof
     let statementlist = (many statement) .>> eof
     let all = ws >>. ((attempt valuelist) <|> statementlist)

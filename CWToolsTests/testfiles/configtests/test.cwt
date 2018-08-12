@@ -21,6 +21,12 @@ alias[effect:solar_system] = {
     alias_name[effect] = alias_match_left[effect]
 }
 
+alias[effect:if] = {
+	limit = { alias_name[trigger] = alias_match_left[trigger] }
+	alias_name[effect] = alias_match_left[effect]
+}
+
+
 ship_size = {
     ## cardinality = 0..1
     formation_priority = int

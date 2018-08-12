@@ -48,7 +48,7 @@ module rec Types =
             | Bool b -> if b then "yes" else "no"
             | Float f -> sprintf "%A" f
             | Int i -> sprintf "%A" i
-    and [<CustomEquality; CustomComparison; Struct>] PosKeyValue  =
+    and [<CustomEquality; NoComparison; Struct>] PosKeyValue  =
         | PosKeyValue of range * KeyValueItem
         override x.Equals(y) =
             match y with
@@ -58,23 +58,55 @@ module rec Types =
                 k = k2
             | _ -> false
         override x.GetHashCode() = let (PosKeyValue(_, k)) = x in k.GetHashCode()
-        interface System.IComparable with
-            member x.CompareTo(y) =
-                match y with
-                | :? PosKeyValue as y ->
-                    let (PosKeyValue(_, k)) = x
-                    let (PosKeyValue(_, k2)) = y
-                    compare k k2
-                | _ -> failwith "wrong type"
+        // interface System.IComparable with
+        //     member x.CompareTo(y) =
+        //         match y with
+        //         | :? PosKeyValue as y ->
+        //             let (PosKeyValue(_, k)) = x
+        //             let (PosKeyValue(_, k2)) = y
+        //             compare k k2
+        //         | _ -> failwith "wrong type"
 
-    and Statement =
+    and [<CustomEquality; NoComparison>] Statement =
         | Comment of string
         | KeyValue of PosKeyValue
-        | Value of Value
+        | Value of range * Value
+        override x.Equals(y) =
+            match y with
+            | :? Statement as y ->
+                match x, y with
+                | Comment s1, Comment s2 -> s1 = s2
+                | KeyValue kv1, KeyValue kv2 -> kv1 = kv2
+                | Value (r1, v1), Value (r2, v2) -> r1 = r2 && v1 = v2
+                | _ -> false
+            | _ -> false
+        override x.GetHashCode() =
+            match x with
+            |Comment c -> c.GetHashCode()
+            |KeyValue kv -> kv.GetHashCode()
+            |Value (r, v) -> v.GetHashCode()
+        // interface System.IComparable with
+        //     member x.CompareTo(y) =
+        //         match y with
+        //         | :? Statement as y ->
+        //             match x, y with
+        //             | Comment s1, Comment s2 -> s1.CompareTo(s2)
+        //             | KeyValue kv1, KeyValue kv2 -> kv1.CompareTo(kv2)
+        //             | Value (r1, v1), Value (r2, v2) -> r1.CompareTo(r2) + v1.CompareTo(v2)//r1 = r2 && v1 = v2
+        //             | _ -> false
+        //         | _ -> false
+
+                // match y with
+                // | :? PosKeyValue as y ->
+                //     let (PosKeyValue(_, k)) = x
+                //     let (PosKeyValue(_, k2)) = y
+                //     compare k k2
+                // | _ -> failwith "wrong type"
 
 
 
-    [<StructuralEquality; StructuralComparison>]
+
+    [<StructuralEquality; NoComparison>]
     type ParsedFile = |ParsedFile of Statement list
 
     type ParseFile = string -> ParserResult<ParsedFile, unit>

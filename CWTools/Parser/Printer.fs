@@ -10,7 +10,7 @@ module CKPrinter =
     let private printValuelist depth is =
         let printOne = (fun i -> tabs (depth) + (string i) + "\n")
         List.map printOne is |> List.fold (+) ""
-        
+
 
     let rec printValue v depth =
         match v with
@@ -20,20 +20,20 @@ module CKPrinter =
         match kv with
         | Comment c -> (tabs depth) + "#" + c + "\n"
         | KeyValue (PosKeyValue(_, KeyValueItem (key, v))) -> (tabs depth) + key.ToString() + " = " + (printValue v depth)
-        | Value v -> (tabs depth) + (printValue v depth)
+        | Value (_, v) -> (tabs depth) + (printValue v depth)
     and printKeyValueList kvl depth =
         kvl |> List.map (fun kv -> printKeyValue kv depth) |> List.fold (+) ""
     let prettyPrint ef =
         let (ParsedFile sl) = ef
-        printKeyValueList sl 0 
+        printKeyValueList sl 0
     let prettyPrintResult =
         function
-        | Success (v,_,_) -> 
+        | Success (v,_,_) ->
             let (ParsedFile ev) = v
             printKeyValueList ev 0
         | Failure (msg, _, _) -> msg
 
-    let api = 
+    let api =
         {
         prettyPrintFile = prettyPrint
         prettyPrintStatements = (fun f -> printKeyValueList f 0)

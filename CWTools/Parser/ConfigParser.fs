@@ -246,6 +246,7 @@ module rec ConfigParser =
             match getSettingFromString x "alias_name" with
             |Some alias -> AliasField alias
             |None -> ValueField ValueType.Scalar
+        |"scope" -> ScopeField (Scope.Any)
         |x when x.StartsWith "scope[" ->
             match getSettingFromString x "scope" with
             |Some target ->

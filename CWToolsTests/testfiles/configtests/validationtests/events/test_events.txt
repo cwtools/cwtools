@@ -19,5 +19,8 @@ country_event = {
         #error
         #error
         set_nname = test
+        if = {
+            limit = { }
+        }
     }
 }

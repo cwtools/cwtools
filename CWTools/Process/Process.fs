@@ -43,7 +43,7 @@ and LeafValue(value : Value, ?pos : range) =
     member this.Key = this.Value.ToRawString()
     member val Position = defaultArg pos range.Zero
     [<JsonIgnore>]
-    member this.ToRaw = Value(this.Value)
+    member this.ToRaw = Value(this.Position, this.Value)
     static member Create value = LeafValue value
 
 and [<Struct>] Child = |NodeC of node : Node | LeafC of leaf : Leaf |CommentC of comment : string |LeafValueC of lefavalue : LeafValue
@@ -131,7 +131,7 @@ module ProcessCore =
             | KeyValue(PosKeyValue(pos, KeyValueItem(Key(k) , Clause(sl)))) -> node.All <- lookup k pos c sl::node.All
             | KeyValue(PosKeyValue(pos, kv)) -> node.All <- LeafC(Leaf(kv, pos))::node.All
             | Comment(c) -> node.All <- CommentC c::node.All
-            | Value(v) -> node.All <- LeafValueC(LeafValue(v))::node.All
+            | Value(pos, v) -> node.All <- LeafValueC(LeafValue(v, pos))::node.All
         member __.ProcessNode<'T when 'T :> Node >() = processNode<'T> id (processNodeInner { complete = false; parents = []; scope = ""; previous = ""; entityType = EntityType.Other})
         member __.ProcessNode<'T when 'T :> Node >(entityType : EntityType) = processNode<'T> id (processNodeInner { complete = false; parents = []; scope = ""; previous = ""; entityType = entityType})
 
