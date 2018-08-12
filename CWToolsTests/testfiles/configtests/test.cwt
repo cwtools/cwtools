@@ -26,6 +26,22 @@ alias[effect:if] = {
 	alias_name[effect] = alias_match_left[effect]
 }
 
+## push_scope = tile
+alias[effect:every_tile] = {
+	##cardinality = 0..1
+	limit = { alias_name[trigger] = alias_match_left[trigger] }
+	alias_name[effect] = alias_match_left[effect]
+}
+
+alias[effect:capital_scope] = {
+    alias_name[effect] = alias_match_left[effect]
+}
+alias[effect:owner] = {
+    alias_name[effect] = alias_match_left[effect]
+}
+
+alias[trigger:text] = scalar
+
 
 ship_size = {
     ## cardinality = 0..1
@@ -111,7 +127,6 @@ event = {
         alias_name[trigger] = alias_match_left[trigger]
     }
     immediate = {
-        ## cardinality = 0..inf
         alias_name[effect] = alias_match_left[effect]
     }
 }

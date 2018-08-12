@@ -19,8 +19,17 @@ country_event = {
         #error
         #error
         set_nname = test
-        if = {
-            limit = { }
+        capital_scope = {
+            if = {
+                limit = { text = test }
+                every_tile = {
+                    limit = {
+                        text = test
+                    }
+                    owner = { set_name = test }
+                }
+            }
+
         }
     }
 }

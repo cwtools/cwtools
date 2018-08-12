@@ -214,7 +214,7 @@ module rec ConfigParser =
         function
         |"scalar" -> ValueField ValueType.Scalar
         |"bool" -> ValueField ValueType.Bool
-        |"percentage" -> ValueField ValueType.Percent
+        |"percentage_field" -> ValueField ValueType.Percent
         |"localisation" -> LocalisationField false
         |"localisation_synced" -> LocalisationField true
         |"filepath" -> FilepathField
@@ -323,65 +323,32 @@ module rec ConfigParser =
             match getAliasSettingsFromString x with
             |Some (a, rn) ->
                 let innerRule = configNode node comments rn
+                eprintfn "%s %A" a innerRule
                 AliasRule (a, innerRule)
             |None ->
                 TypeRule (x, NewRule(NodeRule(ValueField(ValueType.Specific x), innerRules), options))
         |x ->
             TypeRule (x, NewRule(NodeRule(ValueField(ValueType.Specific x), innerRules), options))
 
+    let rgbRule = LeafValueRule (ValueField (ValueType.Int (0, 255))), { min = 3; max = 4; leafvalue = true; description = None; pushScope = None; replaceScopes = None }
+    let hsvRule = LeafValueRule (ValueField (ValueType.Float (0.0, 1.0))), { min = 3; max = 4; leafvalue = true; description = None; pushScope = None; replaceScopes = None }
+
     let configLeaf (leaf : Leaf) (comments : string list) (key : string) =
-        let rightfield = processKey (leaf.Value.ToString())
-            // match leaf.Value.ToString() with
-            // |"scalar" -> ValueField ValueType.Scalar
-            // |"bool" -> ValueField ValueType.Bool
-            // |"percentage" -> ValueField ValueType.Percent
-            // |"localisation" -> LocalisationField false
-            // |"localisation_synced" -> LocalisationField true
-            // |"filepath" -> FilepathField
-            // |x when x.StartsWith "<" && x.EndsWith ">" ->
-            //     TypeField (x.Trim([|'<'; '>'|]))
-            // |x when x.StartsWith "int" ->
-            //     match getIntSettingFromString x with
-            //     |Some (min, max) -> ValueField (ValueType.Int (min, max))
-            //     |None -> (defaultFloat)
-            // |x when x.StartsWith "float" ->
-            //     match getFloatSettingFromString x with
-            //     |Some (min, max) -> ValueField (ValueType.Float (min, max))
-            //     |None -> (defaultFloat)
-            // |x when x.StartsWith "enum" ->
-            //     match getSettingFromString x "enum" with
-            //     |Some (name) -> ValueField (ValueType.Enum name)
-            //     |None -> ValueField (ValueType.Enum "")
-            // |x when x.StartsWith "alias_match_left" ->
-            //     match getSettingFromString x "alias_match_left" with
-            //     |Some alias -> AliasField alias
-            //     |None -> ValueField ValueType.Scalar
-            // |x when x.StartsWith "scope" ->
-            //     match getSettingFromString x "scope" with
-            //     |Some target ->
-            //         ScopeField (parseScope target)
-            //     |None -> ValueField ValueType.Scalar
-            // |x when x.StartsWith "event_target" ->
-            //     match getSettingFromString x "event_target" with
-            //     |Some target ->
-            //         ScopeField (parseScope target)
-            //     |None -> ValueField ValueType.Scalar
-            // |x -> ValueField (ValueType.Specific x)
+        let leftfield = processKey key
         let options = getOptionsFromComments comments
-        let field = processKey key
-            // match key with
-            // |x when x.StartsWith "<" && x.EndsWith ">" ->
-            //     TypeField (x.Trim([|'<'; '>'|]))
-            // |"int" -> ValueField (ValueType.Int (Int32.MinValue, Int32.MaxValue))
-            // |"float" -> ValueField (ValueType.Float (Double.MinValue, Double.MaxValue))
-            // |"scalar" -> ValueField (ValueType.Scalar)
-            // |x when x.StartsWith "enum[" ->
-            //     match getSettingFromString x "enum" with
-            //     |Some e -> ValueField (ValueType.Enum e)
-            //     |None -> failwith (sprintf "Invalid enum string %s" x)
-            // |x -> ValueField (ValueType.Specific x)
-        let leafRule = LeafRule(field, rightfield)
-        NewRule(leafRule, options)
+        let rightkey = leaf.Value.ToString()
+        match rightkey with
+        |x when x.StartsWith("colour[") ->
+            let colourRules =
+                match getSettingFromString x "colour" with
+                |Some "rgb" -> [rgbRule]
+                |Some "hsv" -> [hsvRule]
+                |_ -> [rgbRule; hsvRule]
+            NewRule(NodeRule(leftfield, colourRules), options)
+        |x ->
+            let rightfield = processKey rightkey
+            let leafRule = LeafRule(leftfield, rightfield)
+            NewRule(leafRule, options)
 
     let configLeafValue (leafvalue : LeafValue) (comments : string list) =
         let field = processKey (leafvalue.Value.ToRawString())

@@ -163,6 +163,7 @@ type STLGame (settings : StellarisSettings) =
             "music";
             "sound";
             "fonts";
+            "flags";
             ]
 
         let fileManager = FileManager(settings.rootDirectory, settings.modFilter, settings.scope, scriptFolders, "stellaris")

@@ -139,7 +139,7 @@ module rec Rules =
         match typesMap.TryFind t with
         |Some values ->
             let value = key.Trim([|'\"'|])
-            if value.StartsWith "@" then OK else
+            if value.StartsWith("@",System.StringComparison.Ordinal) then OK else
             if values.Contains value then OK else Invalid [inv (ErrorCodes.ConfigRulesUnexpectedValue (sprintf "Expected value of type %s" t) severity) leafornode]
         |None -> Invalid [inv (ErrorCodes.CustomError (sprintf "Unknown type referenced %s" t) Severity.Error) leafornode]
 
@@ -209,13 +209,11 @@ module rec Rules =
 
 
         let rec applyClauseField (enforceCardinality : bool) (ctx : RuleContext) (rules : NewRule list) (startNode : Node) =
+            if startNode.Key == "every_tile" then eprintfn "%s %A %A %A %b" (startNode.Key) rules ctx (startNode.Key) enforceCardinality else ()
+            if startNode.Key == "every_tile" then eprintfn "%A" aliases else ()
             let severity = if ctx.warningOnly then Severity.Warning else Severity.Error
             let subtypedrules =
                 rules |> List.collect (fun (r,o) -> r |> (function |SubtypeRule (key, shouldMatch, cfs) -> (if (not shouldMatch) <> List.contains key ctx.subtypes then cfs else []) | x -> [(r, o)]))
-            // let subtypedrules =
-            //     match ctx.subtype with
-            //     |Some st -> rules |> List.collect (fun (s,o,r) -> r |> (function |SubtypeField (key, ClauseField cfs) -> (if key = st then cfs else []) |x -> [(s, o, x)]))
-            //     |None -> rules |> List.choose (fun (s,o,r) -> r |> (function |SubtypeField (key, cf) -> None |x -> Some (s, o, x)))
             let expandedrules =
                 subtypedrules |> List.collect (
                     function
@@ -225,31 +223,11 @@ module rec Rules =
             let valueFun (leaf : Leaf) =
                 match expandedrules |> List.choose (function |(LeafRule (l, r), o) when checkLeftField enumsMap typesMap effectMap triggerMap localisation files ctx l leaf.Key leaf -> Some (l, r, o) |_ -> None) with
                 |[] ->
-                    // let leftClauseRule =
-                    //     expandedrules |>
-                    //     List.tryFind (function |(_, _, LeftClauseField (vt, _)) -> checkValidLeftClauseRule files enumsMap (LeftClauseField (vt, ClauseField [])) leaf.Key  |_ -> false )
-                    // let leftTypeRule =
-                    //     expandedrules |>
-                    //     List.tryFind (function |(_, _, LeftTypeField (t, r)) -> checkValidLeftTypeRule typesMap (LeftTypeField (t, r)) leaf.Key  |_ -> false )
-                    // match Option.orElse leftClauseRule leftTypeRule with
-                    // |Some (_, _, f) -> applyLeafRule root ctx f leaf
-                    // |_ ->
-                    if enforceCardinality && (leaf.Key.StartsWith("@") |> not) then Invalid [inv (ErrorCodes.ConfigRulesUnexpectedProperty (sprintf "Unexpected node %s in %s" leaf.Key startNode.Key) severity) leaf] else OK
+                    if enforceCardinality && (leaf.Key.StartsWith("@", System.StringComparison.Ordinal) |> not) then Invalid [inv (ErrorCodes.ConfigRulesUnexpectedProperty (sprintf "Unexpected node %s in %s" leaf.Key startNode.Key) severity) leaf] else OK
                 |rs -> rs <&??&> (fun (l, r, o) -> applyLeafRule ctx r leaf) |> mergeValidationErrors "CW240"
             let nodeFun (node : Node) =
                 match expandedrules |> List.choose (function |(NodeRule (l, rs), o) when checkLeftField enumsMap typesMap effectMap triggerMap localisation files ctx l node.Key node -> Some (l, rs, o) |_ -> None) with
                 | [] ->
-                    // let leftClauseRule =
-                    //     expandedrules |>
-                    //     List.filter (function |(_, _, LeftClauseField (vt, _)) -> checkValidLeftClauseRule files enumsMap (LeftClauseField (vt, ClauseField [])) node.Key  |_ -> false )
-                    // let leftTypeRule =
-                    //     expandedrules |>
-                    //     List.filter (function |(_, _, LeftTypeField (t, r)) -> checkValidLeftTypeRule typesMap (LeftTypeField (t, r)) node.Key  |_ -> false )
-                    // let leftScopeRule =
-                    //     expandedrules |>
-                    //     List.filter (function |(_, _, LeftScopeField (rs)) -> checkValidLeftScopeRule scopes (LeftScopeField (rs)) node.Key  |_ -> false )
-                    // let leftRules = leftClauseRule @ leftTypeRule @ leftScopeRule
-                    // match leftRules with
                     if enforceCardinality then Invalid [inv (ErrorCodes.ConfigRulesUnexpectedProperty (sprintf "Unexpected node %s in %s" node.Key startNode.Key) severity) node] else OK
                     //|rs -> rs <&??&> (fun (_, o, f) -> applyNodeRule root enforceCardinality ctx o f node)
                 | rs -> rs <&??&> (fun (l, rs, o) -> applyNodeRule enforceCardinality ctx o rs node)
@@ -309,78 +287,6 @@ module rec Rules =
 
         and applyValueField severity (vt : ValueType) (leaf : Leaf) =
             checkValidValue enumsMap severity vt (leaf.Value.ToRawString()) leaf
-            // match isValidValue leaf.Value vt with
-            // | true -> OK
-            // | false -> Invalid [inv (ErrorCodes.CustomError "Invalid value" Severity.Error) leaf]
-        // and applyObjectField (entityType : EntityType) (leaf : Leaf) =
-        //     let values =
-        //         match entityType with
-        //         | EntityType.ShipSizes -> ["medium"; "large"]
-        //         | EntityType.StarbaseModules -> ["trafficControl"]
-        //         | EntityType.StarbaseBuilding -> ["crew"]
-        //         | _ -> []
-        //     let value = leaf.Value.ToString()
-        //     if values |> List.exists (fun s -> s == value) then OK else Invalid [invCustom leaf]
-
-        // and applyTypeField severity (t : string) (leaf : Leaf) =
-        //     match typesMap.TryFind t with
-        //     |Some values ->
-        //         let value = leaf.Value.ToString().Trim([|'\"'|])
-        //         if value.StartsWith "@" then OK else
-        //         if values.Contains value then OK else Invalid [inv (ErrorCodes.ConfigRulesUnexpectedValue (sprintf "Expected value of type %s" t) severity) leaf]
-        //     |None -> Invalid [inv (ErrorCodes.CustomError (sprintf "Unknown type referenced %s" t) Severity.Error) leaf]
-
-        // and applyLeftTypeFieldLeaf severity (t : string) (leaf : Leaf) =
-        //     match typesMap.TryFind t with
-        //     |Some values ->
-        //         let value = leaf.Key
-        //         if values.Contains value then OK else Invalid [inv (ErrorCodes.ConfigRulesUnexpectedValue (sprintf "Expected key of type %s" t) severity) leaf]
-        //     |None -> Invalid [inv (ErrorCodes.CustomError (sprintf "Unknown type referenced %s" t) Severity.Error) leaf]
-
-        // and applyScopeField (root : Node) (ctx : RuleContext) (s : Scope) (leaf : Leaf) =
-        //     // let scope2 =
-        //     //     match getScopeContextAtPos leaf.Position.Start triggers effects root with
-        //     //     |Some s -> s
-        //     //     |None -> {Root = Scope.Any; From = []; Scopes = [Scope.Any]}
-        //     let scope = ctx.scopes
-        //     let key = leaf.Value.ToString()
-        //     match changeScope effectMap triggerMap key scope with
-        //     |NewScope ({Scopes = current::_} ,_) -> if current = s || s = Scope.Any || current = Scope.Any then OK else Invalid [inv (ErrorCodes.ConfigRulesTargetWrongScope (current.ToString()) (s.ToString())) leaf]
-        //     |NotFound _ -> Invalid [inv (ErrorCodes.ConfigRulesInvalidTarget (s.ToString())) leaf]
-        //     |WrongScope (command, prevscope, expected) -> Invalid [inv (ErrorCodes.ConfigRulesErrorInTarget command (prevscope.ToString()) (sprintf "%A" expected) ) leaf]
-        //     |_ -> OK
-        //     // <&&>
-        //     // ( match changeScope effectMap triggerMap key scope2 with
-        //     // |NewScope ({Scopes = current::_} ,_) -> if current = s || s = Scope.Any || current = Scope.Any then OK else Invalid [inv (ErrorCodes.ConfigRulesTargetWrongScope (current.ToString()) (s.ToString())) leaf]
-        //     // |NotFound _ -> Invalid [inv (ErrorCodes.ConfigRulesInvalidTarget (s.ToString())) leaf]
-        //     // |WrongScope (command, prevscope, expected) -> Invalid [inv (ErrorCodes.ConfigRulesErrorInTarget command (prevscope.ToString()) (sprintf "%A" expected) ) leaf]
-        //     // |_ -> OK)
-        //     // match key with
-        //     // |x when x.StartsWith "event_target:" -> OK
-        //     // |x when x.StartsWith "parameter:" -> OK
-        //     // |x ->
-        //     //     let xs = x.Split '.'
-        //     //     if xs |> Array.forall (fun s -> scopes |> List.exists (fun s2 -> s == s2)) then OK else Invalid[inv (ErrorCodes.ConfigRulesUnexpectedValue (sprintf "Expected value of scope %s" (s.ToString()))) leaf]
-        // and applyLeftScopeField (root : Node) (enforceCardinality : bool) (ctx : RuleContext) (rules : Rule list) (startNode : Node) =
-        //     let scope = ctx.scopes
-        //     let key = startNode.Key
-        //     match changeScope effectMap triggerMap key scope with
-        //     |NewScope ({Scopes = current::_} ,_) ->
-        //         let newCtx = {ctx with scopes = {ctx.scopes with Scopes = current::ctx.scopes.Scopes}}
-        //         applyClauseField root enforceCardinality newCtx rules startNode
-        //     |NotFound _ ->
-        //         Invalid [inv (ErrorCodes.CustomError "This scope command is not valid" Severity.Error) startNode]
-        //     |WrongScope (command, prevscope, expected) ->
-        //         Invalid [inv (ErrorCodes.ConfigRulesErrorInTarget command (prevscope.ToString()) (sprintf "%A" expected) ) startNode]
-        //     |_ -> OK
-        //        // applyClauseField root enforceCardinality ctx rules startNode
-
-        // and applyLeftTypeFieldNode severity (t : string) (node : Node) =
-        //     match typesMap.TryFind t with
-        //     |Some values ->
-        //         let value = node.Key
-        //         if values.Contains value then OK else Invalid [inv (ErrorCodes.ConfigRulesUnexpectedValue (sprintf "Expected key of type %s" t) severity) node]
-        //     |None -> OK
 
         and applyLeafValueRule (ctx : RuleContext) (rule : NewField) (leafvalue : LeafValue) =
             let severity = if ctx.warningOnly then Severity.Warning else Severity.Error
