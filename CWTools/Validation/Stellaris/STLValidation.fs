@@ -703,3 +703,13 @@ module STLValidation =
                     |_, k when k == "OR" || k == "NOR" -> OR, None
                     |_, _ -> AND, None
             (effects @ triggers) <&!&> (foldNodeWithState fNode AND >> Invalid)
+
+    let validateDeprecatedSetName : StructureValidator =
+        fun _ es ->
+            let effects = (es.AllEffects |> List.map (fun n -> n :> Node))
+            let fNode =
+                fun (x : Node) children ->
+                    if x.Key == "set_empire_name" || x.Key == "set_planet_name" then
+                        Invalid [inv ErrorCodes.DeprecatedSetName x] <&&> children
+                    else children
+            effects <&!&> (foldNode2 fNode (<&&>) OK)

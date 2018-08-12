@@ -98,6 +98,7 @@ module ValidationCore =
         static member PlanetKillerMissing = fun message -> { ID = "CW250"; Severity = Severity.Error; Message = message }
         static member UnnecessaryBoolean = fun bool -> { ID = "CW251"; Severity = Severity.Warning; Message = sprintf "This %s is unnecessary" bool }
         static member UndefinedFlag = fun (variable : string) (flagType : FlagType) -> { ID = "CW252"; Severity = Severity.Warning; Message = sprintf "%s flag of type %A is never set" variable flagType}
+        static member DeprecatedSetName = { ID = "CW253"; Severity = Severity.Information; Message = "Consider using \"set_name\" instead for consistency" }
 
         static member CustomError = fun error severity -> { ID = "CW999"; Severity = severity; Message = error}
 
