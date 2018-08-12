@@ -147,17 +147,18 @@ module STLConstants =
         new(rawEffect : RawEffect, effectType) =
             let scopes = rawEffect.scopes |> List.collect parseScopes
             DocEffect(rawEffect.name, scopes, effectType, rawEffect.desc, rawEffect.usage)
-    type ScopedEffect(name, scopes, inner, effectType, desc, usage, isScopeChange, ignoreChildren) =
+    type ScopedEffect(name, scopes, inner, effectType, desc, usage, isScopeChange, ignoreChildren, scopeonlynoteffect) =
         inherit DocEffect(name, scopes, effectType, desc, usage)
         member val InnerScope : Scope -> Scope = inner
         member val IsScopeChange : bool = isScopeChange
         member val IgnoreChildren : string list = ignoreChildren
-        new(de : DocEffect, inner : Scope -> Scope, isScopeChange, ignoreChildren) =
-            ScopedEffect(de.Name, de.Scopes, inner, de.Type, de.Desc, de.Usage, isScopeChange, ignoreChildren)
+        member val ScopeOnlyNotEffect : bool = scopeonlynoteffect
+        new(de : DocEffect, inner : Scope -> Scope, isScopeChange, ignoreChildren, scopeonlynoteffect) =
+            ScopedEffect(de.Name, de.Scopes, inner, de.Type, de.Desc, de.Usage, isScopeChange, ignoreChildren, scopeonlynoteffect)
         new(de : DocEffect, inner : Scope) =
-            ScopedEffect(de.Name, de.Scopes, (fun _ -> inner), de.Type, de.Desc, de.Usage, true, [])
-        new(name, scopes, inner, effectType, desc, usage) =
-            ScopedEffect(name, scopes, (fun _ -> inner), effectType, desc, usage, true, [])
+            ScopedEffect(de.Name, de.Scopes, (fun _ -> inner), de.Type, de.Desc, de.Usage, true, [], false)
+        new(name, scopes, inner, effectType, desc, usage, scopeonlynoteffect) =
+            ScopedEffect(name, scopes, (fun _ -> inner), effectType, desc, usage, true, [], scopeonlynoteffect)
     type ModifierCategory =
         |Pop
         |Science

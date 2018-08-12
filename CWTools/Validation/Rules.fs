@@ -145,7 +145,7 @@ module rec Rules =
 
     let inline checkScopeField (effectMap : Map<_,_,_>) (triggerMap : Map<_,_,_>) (ctx : RuleContext) (s : Scope) key leafornode =
         let scope = ctx.scopes
-        match changeScope effectMap triggerMap key scope with
+        match changeScope true effectMap triggerMap key scope with
         |NewScope ({Scopes = current::_} ,_) -> if current = s || s = Scope.Any || current = Scope.Any then OK else Invalid [inv (ErrorCodes.ConfigRulesTargetWrongScope (current.ToString()) (s.ToString())) leafornode]
         |NotFound _ -> Invalid [inv (ErrorCodes.ConfigRulesInvalidTarget (s.ToString())) leafornode]
         |WrongScope (command, prevscope, expected) -> Invalid [inv (ErrorCodes.ConfigRulesErrorInTarget command (prevscope.ToString()) (sprintf "%A" expected) ) leafornode]
@@ -209,8 +209,8 @@ module rec Rules =
 
 
         let rec applyClauseField (enforceCardinality : bool) (ctx : RuleContext) (rules : NewRule list) (startNode : Node) =
-            if startNode.Key == "every_tile" then eprintfn "%s %A %A %A %b" (startNode.Key) rules ctx (startNode.Key) enforceCardinality else ()
-            if startNode.Key == "every_tile" then eprintfn "%A" aliases else ()
+            // if startNode.Key == "every_tile" then eprintfn "%s %A %A %A %b" (startNode.Key) rules ctx (startNode.Key) enforceCardinality else ()
+            // if startNode.Key == "every_tile" then eprintfn "%A" aliases else ()
             let severity = if ctx.warningOnly then Severity.Warning else Severity.Error
             let subtypedrules =
                 rules |> List.collect (fun (r,o) -> r |> (function |SubtypeRule (key, shouldMatch, cfs) -> (if (not shouldMatch) <> List.contains key ctx.subtypes then cfs else []) | x -> [(r, o)]))
@@ -230,7 +230,7 @@ module rec Rules =
                 | [] ->
                     if enforceCardinality then Invalid [inv (ErrorCodes.ConfigRulesUnexpectedProperty (sprintf "Unexpected node %s in %s" node.Key startNode.Key) severity) node] else OK
                     //|rs -> rs <&??&> (fun (_, o, f) -> applyNodeRule root enforceCardinality ctx o f node)
-                | rs -> rs <&??&> (fun (l, rs, o) -> applyNodeRule enforceCardinality ctx o rs node)
+                | matches -> matches <&??&> (fun (l, rs, o) -> applyNodeRule enforceCardinality ctx o rs node)
             let leafValueFun (leafvalue : LeafValue) =
                 match expandedrules |> List.choose (function |(LeafValueRule (l), o) when checkLeftField enumsMap typesMap effectMap triggerMap localisation files ctx l leafvalue.Key leafvalue -> Some (l, o) |_ -> None) with
                 | [] ->
@@ -592,7 +592,7 @@ module rec Rules =
                         let scope = newCtx.scopes
                         let key = n.Key
                         let newCtx =
-                            match changeScope effectMap triggerMap key scope with
+                            match changeScope false effectMap triggerMap key scope with
                             |NewScope ({Scopes = current::_} ,_) ->
                                 //eprintfn "cs %A %A %A" name node.Key current
                                 {newCtx with scopes = {newCtx.scopes with Scopes = current::newCtx.scopes.Scopes}}
