@@ -280,7 +280,8 @@ let testsConfig =
                             default_behavior =  \n\
                             }"
             let pos = mkPos 2 20
-            let suggestions = stl.Complete pos "common/ship_sizes/test.txt" input 
+            // let suggestions = stl.Complete pos "common/ship_sizes/test.txt" input 
+            let suggestions = stl.Complete pos "test" input 
             //eprintfn "%A" suggestions
             let suggestions = suggestions |> Seq.map (function |Simple c -> c |Snippet (l, _, _) -> l) |> Seq.sort
             let expected = ["default"; "swarm"] |> Seq.sort
