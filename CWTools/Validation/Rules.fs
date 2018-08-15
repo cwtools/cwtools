@@ -779,6 +779,7 @@ module rec Rules =
 
 
         let rec getRulePath (pos : pos) (stack : (string * bool) list) (node : Node) =
+           eprintfn "grp %A %A %A" pos stack (node.Children |> List.map (fun f -> f.ToRaw))
            match node.Children |> List.tryFind (fun c -> Range.rangeContainsPos c.Position pos) with
            | Some c -> getRulePath pos ((c.Key, false) :: stack) c
            | None ->
@@ -826,6 +827,8 @@ module rec Rules =
                 //     |Field.ValueField (Enum e) -> enums.TryFind(e) |> Option.defaultValue [] |> List.map Simple
                 //     |_ -> []
             let fieldToRules (field : NewField) =
+                eprintfn "%A" types
+                eprintfn "%A" field
                 match field with
                 |NewField.ValueField (Enum e) -> enums.TryFind(e) |> Option.defaultValue [] |> List.map Simple
                 |NewField.ValueField v -> getValidValues v |> Option.defaultValue [] |> List.map Simple
@@ -862,7 +865,11 @@ module rec Rules =
                 |(key, true)::rest ->
                     match expandedRules |> List.choose (function |(LeafRule (l, r), o) when checkFieldByKey enumsMap typesMap effectMap triggerMap localisation files { subtypes = []; scopes = defaultContext; warningOnly = false } l key -> Some (l, r, o) |_ -> None) with
                     |[] -> expandedRules |> List.collect convRuleToCompletion
-                    |fs -> fs |> List.collect (fun (_, f, _) -> fieldToRules f)
+                    |fs -> 
+                        eprintfn "%s %A" key fs
+                        let res = fs |> List.collect (fun (_, f, _) -> fieldToRules f)
+                        eprintfn "res %A" res
+                        res
                     // match expandedRules |> List.filter (fun (k,_,_) -> k == key) with
                     // |[] ->
                     //     let leftClauseRule =
@@ -890,7 +897,9 @@ module rec Rules =
                     //     |None, None, None ->
                     //         expandedRules |> List.collect convRuleToCompletion
                     // |fs -> fs |> List.collect (fun (_, _, f) -> fieldToRules f)
-            findRule rules stack |> List.distinct
+            let res = findRule rules stack |> List.distinct
+            eprintfn "res2 %A" res
+            res
 
         let complete (pos : pos) (entity : Entity) =
             let path = getRulePath pos [] entity.entity |> List.rev
@@ -918,15 +927,18 @@ module rec Rules =
                         let completion = getCompletionFromPath typerules fixedpath
                         Some completion
                     |None -> None
-            skipcomp |> Option.defaultWith
-                (fun () ->
-                match typedefs |> List.tryFind (fun t -> checkPathDir t pathDir && typekeyfilter t (if path.Length > 0 then path.Head |> fst else "")) with
-                |Some typedef ->
-                    let typerules = typeRules |> List.choose (function |(name, typerule) when name == typedef.name -> Some typerule |_ -> None)
-                    let fixedpath = if List.isEmpty path then path else (typedef.name, true)::(path |> List.tail)
-                    let completion = getCompletionFromPath typerules fixedpath
-                    completion
-                |None -> getCompletionFromPath (typeRules |> List.map snd) path)
+            let res = 
+                skipcomp |> Option.defaultWith
+                    (fun () ->
+                    match typedefs |> List.tryFind (fun t -> checkPathDir t pathDir && typekeyfilter t (if path.Length > 0 then path.Head |> fst else "")) with
+                    |Some typedef ->
+                        let typerules = typeRules |> List.choose (function |(name, typerule) when name == typedef.name -> Some typerule |_ -> None)
+                        let fixedpath = if List.isEmpty path then path else (typedef.name, true)::(path |> List.tail)
+                        let completion = getCompletionFromPath typerules fixedpath
+                        completion
+                    |None -> getCompletionFromPath (typeRules |> List.map snd) path)
+            eprintfn "res3 %A" res
+            res
 
         member __.Complete(pos : pos, entity : Entity) = complete pos entity
 
