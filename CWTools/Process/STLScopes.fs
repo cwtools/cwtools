@@ -294,6 +294,10 @@ module STLScopes =
         "every_playable_country",  Scope.Country;
         "random_playable_country",  Scope.Country;
 
+        "any_bordering_country", Scope.Country
+        "every_bordering_country", Scope.Country
+        "random_bordering_country", Scope.Country
+
         "any_subject",  Scope.Country;
         "every_subject",  Scope.Country;
         "random_subject",  Scope.Country;
@@ -419,7 +423,7 @@ module STLScopes =
                     // let effect = (effects @ triggers)
                     //             |> List.choose (function | :? ScopedEffect as e -> Some e |_ -> None)
                     //             |> List.tryFind (fun e -> e.Name == nextKey)
-                    if skipEffect then (context, false), NotFound else
+                    // if skipEffect then (context, false), NotFound else
                     match Option.orElse effectMatch triggerMatch with
                     | None -> (context, false), NotFound
                     | Some e ->

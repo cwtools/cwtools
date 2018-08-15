@@ -331,7 +331,7 @@ module rec ConfigParser =
             TypeRule (x, NewRule(NodeRule(ValueField(ValueType.Specific x), innerRules), options))
 
     let rgbRule = LeafValueRule (ValueField (ValueType.Int (0, 255))), { min = 3; max = 4; leafvalue = true; description = None; pushScope = None; replaceScopes = None }
-    let hsvRule = LeafValueRule (ValueField (ValueType.Float (0.0, 1.0))), { min = 3; max = 4; leafvalue = true; description = None; pushScope = None; replaceScopes = None }
+    let hsvRule = LeafValueRule (ValueField (ValueType.Float (0.0, 2.0))), { min = 3; max = 4; leafvalue = true; description = None; pushScope = None; replaceScopes = None }
 
     let configLeaf (leaf : Leaf) (comments : string list) (key : string) =
         let leftfield = processKey key

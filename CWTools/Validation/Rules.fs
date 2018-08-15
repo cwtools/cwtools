@@ -144,6 +144,7 @@ module rec Rules =
         |None -> Invalid [inv (ErrorCodes.CustomError (sprintf "Unknown type referenced %s" t) Severity.Error) leafornode]
 
     let inline checkScopeField (effectMap : Map<_,_,_>) (triggerMap : Map<_,_,_>) (ctx : RuleContext) (s : Scope) key leafornode =
+        // eprintfn "scope %s %A"key ctx
         let scope = ctx.scopes
         match changeScope true effectMap triggerMap key scope with
         |NewScope ({Scopes = current::_} ,_) -> if current = s || s = Scope.Any || current = Scope.Any then OK else Invalid [inv (ErrorCodes.ConfigRulesTargetWrongScope (current.ToString()) (s.ToString())) leafornode]
@@ -173,7 +174,7 @@ module rec Rules =
         match checkField enumsMap typesMap effectMap triggerMap localisation files (Severity.Error) ctx field key leafornode with
         |OK -> true
         |_ -> false
-    
+
     let checkFieldByKey enumsMap typesMap effectMap triggerMap localisation files (ctx : RuleContext) (field : NewField) (key : string) =
         let leaf = LeafValue(Value.String key)
         checkLeftField enumsMap typesMap effectMap triggerMap localisation files ctx field key leaf
@@ -234,7 +235,7 @@ module rec Rules =
                 | [] ->
                     if enforceCardinality then Invalid [inv (ErrorCodes.ConfigRulesUnexpectedProperty (sprintf "Unexpected node %s in %s" node.Key startNode.Key) severity) node] else OK
                     //|rs -> rs <&??&> (fun (_, o, f) -> applyNodeRule root enforceCardinality ctx o f node)
-                | matches -> matches <&??&> (fun (l, rs, o) -> applyNodeRule enforceCardinality ctx o rs node)
+                | matches -> matches <&??&> (fun (l, rs, o) -> applyNodeRule enforceCardinality ctx o l rs node)
             let leafValueFun (leafvalue : LeafValue) =
                 match expandedrules |> List.choose (function |(LeafValueRule (l), o) when checkLeftField enumsMap typesMap effectMap triggerMap localisation files ctx l leafvalue.Key leafvalue -> Some (l, o) |_ -> None) with
                 | [] ->
@@ -313,7 +314,7 @@ module rec Rules =
             // | Field.AliasField _ -> OK
             // | Field.SubtypeField _ -> OK
 
-        and applyNodeRule (enforceCardinality : bool) (ctx : RuleContext) (options : Options) (rules : NewRule list) (node : Node) =
+        and applyNodeRule (enforceCardinality : bool) (ctx : RuleContext) (options : Options) (rule : NewField) (rules : NewRule list) (node : Node) =
             let severity = if ctx.warningOnly then Severity.Warning else Severity.Error
             let newCtx =
                 // match oneToOneScopes |> List.tryFind (fun (k, _) -> k == node.Key) with
@@ -322,31 +323,45 @@ module rec Rules =
                 //     |(s, true) -> {ctx with scopes = {ctx.scopes with Scopes = s.CurrentScope::ctx.scopes.Scopes}}
                 //     |(s, false) -> {ctx with scopes = s}
                 // |None ->
-                    match options.pushScope with
-                    |Some ps ->
-                        {ctx with scopes = {ctx.scopes with Scopes = ps::ctx.scopes.Scopes}}
+                match options.pushScope with
+                |Some ps ->
+                    {ctx with scopes = {ctx.scopes with Scopes = ps::ctx.scopes.Scopes}}
+                |None ->
+                    match options.replaceScopes with
+                    |Some rs ->
+                        let newctx =
+                            match rs.this, rs.froms with
+                            |Some this, Some froms ->
+                                {ctx with scopes = {ctx.scopes with Scopes = this::(ctx.scopes.PopScope); From = froms}}
+                            |Some this, None ->
+                                {ctx with scopes = {ctx.scopes with Scopes = this::(ctx.scopes.PopScope)}}
+                            |None, Some froms ->
+                                {ctx with scopes = {ctx.scopes with From = froms}}
+                            |None, None ->
+                                ctx
+                        match rs.root with
+                        |Some root ->
+                            {ctx with scopes = {ctx.scopes with Root = root}}
+                        |None -> newctx
                     |None ->
-                        match options.replaceScopes with
-                        |Some rs ->
-                            let newctx =
-                                match rs.this, rs.froms with
-                                |Some this, Some froms ->
-                                    {ctx with scopes = {ctx.scopes with Scopes = this::(ctx.scopes.PopScope); From = froms}}
-                                |Some this, None ->
-                                    {ctx with scopes = {ctx.scopes with Scopes = this::(ctx.scopes.PopScope)}}
-                                |None, Some froms ->
-                                    {ctx with scopes = {ctx.scopes with From = froms}}
-                                |None, None ->
-                                    ctx
-                            match rs.root with
-                            |Some root ->
-                                {ctx with scopes = {ctx.scopes with Root = root}}
-                            |None -> newctx
-                        |None ->
-                            if node.Key.StartsWith("event_target:", System.StringComparison.OrdinalIgnoreCase) || node.Key.StartsWith("parameter:", System.StringComparison.OrdinalIgnoreCase)
-                            then {ctx with scopes = {ctx.scopes with Scopes = Scope.Any::ctx.scopes.Scopes}}
-                            else ctx
-            applyClauseField enforceCardinality newCtx rules node
+                        if node.Key.StartsWith("event_target:", System.StringComparison.OrdinalIgnoreCase) || node.Key.StartsWith("parameter:", System.StringComparison.OrdinalIgnoreCase)
+                        then {ctx with scopes = {ctx.scopes with Scopes = Scope.Any::ctx.scopes.Scopes}}
+                        else ctx
+            match rule with
+            |ScopeField s ->
+                let scope = newCtx.scopes
+                let key = node.Key
+                match changeScope true effectMap triggerMap key scope with
+                |NewScope ({Scopes = current::_} ,_) ->
+                    let newCtx = {newCtx with scopes = {newCtx.scopes with Scopes = current::newCtx.scopes.Scopes}}
+                    applyClauseField enforceCardinality newCtx rules node
+                |NotFound _ ->
+                    Invalid [inv (ErrorCodes.CustomError "This scope command is not valid" Severity.Error) node]
+                |WrongScope (command, prevscope, expected) ->
+                    Invalid [inv (ErrorCodes.ConfigRulesErrorInTarget command (prevscope.ToString()) (sprintf "%A" expected) ) node]
+                |_ -> OK
+
+            |_ -> applyClauseField enforceCardinality newCtx rules node
             // match rule with
             // | Field.ValueField v -> OK
             // | Field.ObjectField et -> OK
@@ -377,7 +392,7 @@ module rec Rules =
                 |Some ps -> { Root = ps; From = []; Scopes = [] }
                 |None -> defaultContext
             let context = { subtypes = subtypes; scopes = startingScopeContext; warningOnly = typedef.warningOnly }
-            applyNodeRule true context options rules node
+            applyNodeRule true context options (ValueField (ValueType.Specific "root")) rules node
 
         let validate ((path, root) : string * Node) =
             let inner (node : Node) =
@@ -426,7 +441,7 @@ module rec Rules =
             res
 
 
-        member __.ApplyNodeRule(rule, node) = applyNodeRule true {subtypes = []; scopes = defaultContext; warningOnly = false } defaultOptions rule node
+        member __.ApplyNodeRule(rule, node) = applyNodeRule true {subtypes = []; scopes = defaultContext; warningOnly = false } defaultOptions (ValueField (ValueType.Specific "root")) rule node
         member __.TestSubtype((subtypes : SubTypeDefinition list), (node : Node)) =
             testSubtype subtypes node
         //member __.ValidateFile(node : Node) = validate node
@@ -596,7 +611,7 @@ module rec Rules =
                         let scope = newCtx.scopes
                         let key = n.Key
                         let newCtx =
-                            match changeScope false effectMap triggerMap key scope with
+                            match changeScope true effectMap triggerMap key scope with
                             |NewScope ({Scopes = current::_} ,_) ->
                                 //eprintfn "cs %A %A %A" name node.Key current
                                 {newCtx with scopes = {newCtx.scopes with Scopes = current::newCtx.scopes.Scopes}}
@@ -779,7 +794,7 @@ module rec Rules =
 
 
         let rec getRulePath (pos : pos) (stack : (string * bool) list) (node : Node) =
-           eprintfn "grp %A %A %A" pos stack (node.Children |> List.map (fun f -> f.ToRaw))
+           //eprintfn "grp %A %A %A" pos stack (node.Children |> List.map (fun f -> f.ToRaw))
            match node.Children |> List.tryFind (fun c -> Range.rangeContainsPos c.Position pos) with
            | Some c -> getRulePath pos ((c.Key, false) :: stack) c
            | None ->
@@ -788,12 +803,12 @@ module rec Rules =
                 | None -> stack
 
         and getCompletionFromPath (rules : NewRule list) (stack : (string * bool) list) =
-            eprintfn "%A" stack
+            //eprintfn "%A" stack
             let rec convRuleToCompletion (rule : NewRule) =
                 let r, o = rule
                 let keyvalue (inner : string) = Snippet (inner, (sprintf "%s = $0" inner), o.description)
                 match r with
-                |NodeRule (ValueField(ValueType.Specific s), innerRules) -> 
+                |NodeRule (ValueField(ValueType.Specific s), innerRules) ->
                     [createSnippetForClause innerRules o.description s]
                 |LeafRule (ValueField(ValueType.Specific s), _) ->
                     [keyvalue s]
@@ -804,11 +819,11 @@ module rec Rules =
                     |_ -> []
                 //TODO: Add leafvalue
                 |_ -> []
-                // |LeafValueRule 
+                // |LeafValueRule
                 // |LeafRule (l, _) -> l
                 // |LeafValueRule l -> l
-                // |_ -> failwith "Somehow tried to complete into a subtype rule" 
-                
+                // |_ -> failwith "Somehow tried to complete into a subtype rule"
+
                 // match o.leafvalue with
                 // |false ->
                 //     match f with
@@ -827,13 +842,13 @@ module rec Rules =
                 //     |Field.ValueField (Enum e) -> enums.TryFind(e) |> Option.defaultValue [] |> List.map Simple
                 //     |_ -> []
             let fieldToRules (field : NewField) =
-                eprintfn "%A" types
-                eprintfn "%A" field
+                //eprintfn "%A" types
+                //eprintfn "%A" field
                 match field with
                 |NewField.ValueField (Enum e) -> enums.TryFind(e) |> Option.defaultValue [] |> List.map Simple
                 |NewField.ValueField v -> getValidValues v |> Option.defaultValue [] |> List.map Simple
                 |NewField.TypeField t -> types.TryFind(t) |> Option.defaultValue [] |> List.map Simple
-                |NewField.LocalisationField s -> 
+                |NewField.LocalisationField s ->
                     match s with
                     |true -> localisation |> List.tryFind (fun (lang, _ ) -> lang = (STL STLLang.Default)) |> Option.map (snd >> Set.toList) |> Option.defaultValue [] |> List.map Simple
                     |false -> localisation |> List.tryFind (fun (lang, _ ) -> lang <> (STL STLLang.Default)) |> Option.map (snd >> Set.toList) |> Option.defaultValue [] |> List.map Simple
@@ -858,17 +873,17 @@ module rec Rules =
                         |x -> [x])
                 match stack with
                 |[] -> expandedRules |> List.collect convRuleToCompletion
-                |(key, false)::rest ->                    
+                |(key, false)::rest ->
                     match expandedRules |> List.choose (function |(NodeRule (l, rs), o) when checkFieldByKey enumsMap typesMap effectMap triggerMap localisation files { subtypes = []; scopes = defaultContext; warningOnly = false } l key -> Some (l, rs, o) |_ -> None) with
                     |[] -> expandedRules |> List.collect convRuleToCompletion
                     |fs -> fs |> List.collect (fun (_, innerRules, _) -> findRule innerRules rest)
                 |(key, true)::rest ->
                     match expandedRules |> List.choose (function |(LeafRule (l, r), o) when checkFieldByKey enumsMap typesMap effectMap triggerMap localisation files { subtypes = []; scopes = defaultContext; warningOnly = false } l key -> Some (l, r, o) |_ -> None) with
                     |[] -> expandedRules |> List.collect convRuleToCompletion
-                    |fs -> 
-                        eprintfn "%s %A" key fs
+                    |fs ->
+                        //eprintfn "%s %A" key fs
                         let res = fs |> List.collect (fun (_, f, _) -> fieldToRules f)
-                        eprintfn "res %A" res
+                        //eprintfn "res %A" res
                         res
                     // match expandedRules |> List.filter (fun (k,_,_) -> k == key) with
                     // |[] ->
@@ -898,7 +913,7 @@ module rec Rules =
                     //         expandedRules |> List.collect convRuleToCompletion
                     // |fs -> fs |> List.collect (fun (_, _, f) -> fieldToRules f)
             let res = findRule rules stack |> List.distinct
-            eprintfn "res2 %A" res
+            //eprintfn "res2 %A" res
             res
 
         let complete (pos : pos) (entity : Entity) =
@@ -923,21 +938,23 @@ module rec Rules =
                     match xs |> List.tryFind (fun t -> checkPathDir t pathDir && typekeyfilter t (if path.Length > 1 then path.Tail |> List.head |> fst else "")) with
                     |Some typedef ->
                         let typerules = typeRules |> List.choose (function |(name, typerule) when name == typedef.name -> Some typerule |_ -> None)
-                        let fixedpath = if List.isEmpty path then path else (typedef.name, true)::(path |> List.tail |> List.tail)
+                        //eprintfn "sc %A" path
+                        let fixedpath = if List.isEmpty path then path else (typedef.name, false)::(path |> List.tail |> List.tail)
                         let completion = getCompletionFromPath typerules fixedpath
                         Some completion
                     |None -> None
-            let res = 
+            let res =
                 skipcomp |> Option.defaultWith
                     (fun () ->
                     match typedefs |> List.tryFind (fun t -> checkPathDir t pathDir && typekeyfilter t (if path.Length > 0 then path.Head |> fst else "")) with
                     |Some typedef ->
                         let typerules = typeRules |> List.choose (function |(name, typerule) when name == typedef.name -> Some typerule |_ -> None)
-                        let fixedpath = if List.isEmpty path then path else (typedef.name, true)::(path |> List.tail)
+                        //eprintfn "fc %A" path
+                        let fixedpath = if List.isEmpty path then path else (typedef.name, false)::(path |> List.tail)
                         let completion = getCompletionFromPath typerules fixedpath
                         completion
                     |None -> getCompletionFromPath (typeRules |> List.map snd) path)
-            eprintfn "res3 %A" res
+            //eprintfn "res3 %A" res
             res
 
         member __.Complete(pos : pos, entity : Entity) = complete pos entity

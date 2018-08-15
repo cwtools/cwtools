@@ -42,6 +42,8 @@ module Files =
                         if pathContains "music" then let i = pathIndex "music" in yield i, path.Substring(i) else ();
                         if pathContains "fonts" then let i = pathIndex "fonts" in yield i, path.Substring(i) else ();
                         if pathContains "sound" then let i = pathIndex "sound" in yield i, path.Substring(i) else ();
+                        if pathContains "flags" then let i = pathIndex "flags" in yield i, path.Substring(i) else ();
+                        if pathContains "prescripted_countries" then let i = pathIndex "prescripted_countries" in yield i, path.Substring(i) else ();
                     ]
                 if matches.IsEmpty then path else matches |> List.minBy fst |> snd
 

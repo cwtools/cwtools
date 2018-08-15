@@ -4,7 +4,13 @@ country_event = {
     id = test.1
     is_triggered_only = yes
     hide_window = yes
-    trigger = { }
+    trigger = {
+        any_country = {
+            any_owned_fleet = {
+                valid_planet_killer_target = this
+            }
+        }
+    }
     immediate = {
         set_name = something
         solar_system = {
@@ -31,5 +37,7 @@ country_event = {
             }
 
         }
+
+
     }
 }

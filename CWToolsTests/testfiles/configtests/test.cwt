@@ -42,6 +42,21 @@ alias[effect:owner] = {
 
 alias[trigger:text] = scalar
 
+## push_scope = fleet
+alias[trigger:any_owned_fleet] = {
+	alias_name[trigger] = alias_match_left[trigger]
+	##cardinality = 0..1
+	count = int
+}
+
+## push_scope = country
+alias[trigger:any_country] = {
+	alias_name[trigger] = alias_match_left[trigger]
+	##cardinality = 0..1
+	count = int
+}
+
+alias[trigger:valid_planet_killer_target] = scope[fleet]
 
 ship_size = {
     ## cardinality = 0..1
@@ -154,6 +169,14 @@ types = {
     type[event] = {
         path = "game/events"
     }
+	type[color_define] = {
+		path = "game/flags"
+		skip_root_key = colors
+	}
+	## type_key_filter = randomizable_combo
+	type[randomizable_combo] = {
+		path = "game/flags"
+	}
 }
 
 enums = {
