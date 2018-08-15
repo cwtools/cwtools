@@ -323,7 +323,7 @@ module rec ConfigParser =
             match getAliasSettingsFromString x with
             |Some (a, rn) ->
                 let innerRule = configNode node comments rn
-                eprintfn "%s %A" a innerRule
+                // eprintfn "%s %A" a innerRule
                 AliasRule (a, innerRule)
             |None ->
                 TypeRule (x, NewRule(NodeRule(ValueField(ValueType.Specific x), innerRules), options))

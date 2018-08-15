@@ -419,6 +419,7 @@ module STLScopes =
                     // let effect = (effects @ triggers)
                     //             |> List.choose (function | :? ScopedEffect as e -> Some e |_ -> None)
                     //             |> List.tryFind (fun e -> e.Name == nextKey)
+                    if skipEffect then (context, false), NotFound else
                     match Option.orElse effectMatch triggerMatch with
                     | None -> (context, false), NotFound
                     | Some e ->
