@@ -97,8 +97,10 @@ module rec Rules =
             warningOnly : bool
         }
 
+    let firstCharEquals (c : char) = (fun s -> s |> Seq.tryHead |> Option.map ((=) c) |> Option.defaultValue false)
+
     let inline checkValidValue (enumsMap : Collections.Map<_, Set<_, _>>) (severity : Severity) (vt : ValueType) (key : string) leafornode =
-        if key.StartsWith "@" then OK else
+        if key |> firstCharEquals '@' then OK else
             match vt with
             |ValueType.Bool ->
                 if key = "yes" || key = "no" then OK else Invalid[inv (ErrorCodes.ConfigRulesUnexpectedValue (sprintf "Expecting yes or no, got %s" key) severity) leafornode]
@@ -139,7 +141,7 @@ module rec Rules =
         match typesMap.TryFind t with
         |Some values ->
             let value = key.Trim([|'\"'|])
-            if value.StartsWith("@",System.StringComparison.Ordinal) then OK else
+            if value |> firstCharEquals '@' then OK else
             if values.Contains value then OK else Invalid [inv (ErrorCodes.ConfigRulesUnexpectedValue (sprintf "Expected value of type %s" t) severity) leafornode]
         |None -> Invalid [inv (ErrorCodes.CustomError (sprintf "Unknown type referenced %s" t) Severity.Error) leafornode]
 
@@ -228,7 +230,7 @@ module rec Rules =
             let valueFun (leaf : Leaf) =
                 match expandedrules |> List.choose (function |(LeafRule (l, r), o) when checkLeftField enumsMap typesMap effectMap triggerMap localisation files ctx l leaf.Key leaf -> Some (l, r, o) |_ -> None) with
                 |[] ->
-                    if enforceCardinality && (leaf.Key.StartsWith("@", System.StringComparison.Ordinal) |> not) then Invalid [inv (ErrorCodes.ConfigRulesUnexpectedProperty (sprintf "Unexpected node %s in %s" leaf.Key startNode.Key) severity) leaf] else OK
+                    if enforceCardinality && ((leaf.Key |> Seq.tryHead |> Option.map ((=) '@') |> Option.defaultValue false) |> not) then Invalid [inv (ErrorCodes.ConfigRulesUnexpectedProperty (sprintf "Unexpected node %s in %s" leaf.Key startNode.Key) severity) leaf] else OK
                 |rs -> rs <&??&> (fun (l, r, o) -> applyLeafRule ctx r leaf) |> mergeValidationErrors "CW240"
             let nodeFun (node : Node) =
                 match expandedrules |> List.choose (function |(NodeRule (l, rs), o) when checkLeftField enumsMap typesMap effectMap triggerMap localisation files ctx l node.Key node -> Some (l, rs, o) |_ -> None) with
