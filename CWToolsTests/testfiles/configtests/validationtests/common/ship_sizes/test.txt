@@ -1,6 +1,6 @@
 my_ship = {
     formation_priority = 1
-    max_speed = 0
+    max_speed = 0.4
     acceleration = 0
     rotation_speed = 0
     max_hitpoints = 50000

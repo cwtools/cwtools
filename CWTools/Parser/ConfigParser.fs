@@ -220,11 +220,11 @@ module rec ConfigParser =
         |"filepath" -> FilepathField
         |x when x.StartsWith "<" && x.EndsWith ">" ->
             TypeField (x.Trim([|'<'; '>'|]))
-        |"int" -> defaultFloat
+        |"int" -> defaultInt
         |x when x.StartsWith "int[" ->
             match getIntSettingFromString x with
             |Some (min, max) -> ValueField (ValueType.Int (min, max))
-            |None -> (defaultFloat)
+            |None -> (defaultInt)
         |"float" -> defaultFloat
         |x when x.StartsWith "float" ->
             match getFloatSettingFromString x with

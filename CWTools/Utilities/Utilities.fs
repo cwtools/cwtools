@@ -2,6 +2,7 @@ namespace CWTools.Utilities
 open System
 open System.Collections.Generic
 open Microsoft.FSharp.Compiler.Range
+open System.Globalization
 
 module Utils =
 
@@ -56,7 +57,7 @@ module TryParser =
     let parseDate   = tryParseWith System.DateTime.TryParse
     let parseInt    = tryParseWith System.Int32.TryParse
     let parseSingle = tryParseWith System.Single.TryParse
-    let parseDouble = tryParseWith System.Double.TryParse
+    let parseDouble = tryParseWith (fun s -> (System.Double.TryParse(s, (Globalization.NumberStyles.Float ||| Globalization.NumberStyles.AllowThousands), CultureInfo.InvariantCulture)))
     // etc.
 
     // active patterns for try-parsing strings

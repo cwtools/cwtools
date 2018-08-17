@@ -18,6 +18,8 @@ open CWTools.Parser.DocsParser
 open CWTools.Games.Files
 open CWTools.Games.Stellaris
 open CWTools.Games.Stellaris.STLLookup
+open System.Threading
+open System.Globalization
 
 let emptyStellarisSettings (rootDirectory) = {
     rootDirectory = rootDirectory
@@ -95,6 +97,11 @@ let test() =
 let main argv =
     let config = defaultConfig // with ``parallel`` = false}
     Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+    CultureInfo.DefaultThreadCurrentCulture <-CultureInfo("ru-RU");
+    CultureInfo.DefaultThreadCurrentUICulture <-CultureInfo("ru-RU");
+    Thread.CurrentThread.CurrentCulture <- CultureInfo("ru-RU");
+    Thread.CurrentThread.CurrentUICulture <- CultureInfo("ru-RU");
+
     if Array.tryHead argv = Some "p"
     then perf(true); 0
     elif Array.tryHead argv = Some "u"

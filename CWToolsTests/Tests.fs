@@ -18,6 +18,8 @@ open Microsoft.FSharp.Compiler.Range
 open CWTools.Games.Files
 open CWTools.Games.Stellaris
 open CWTools.Games.Stellaris.STLLookup
+open System.Threading
+open System.Globalization
 
 let emptyStellarisSettings (rootDirectory) = {
     rootDirectory = rootDirectory
@@ -137,8 +139,10 @@ let tests =
             ]
     ]
 
-let testFolder folder testsname config =
-    testList testsname [
+let testFolder folder testsname config (culture : string) =
+    testList (testsname + culture) [
+        Thread.CurrentThread.CurrentCulture <- CultureInfo(culture);
+        Thread.CurrentThread.CurrentUICulture <- CultureInfo(culture);
         let configtext = "./testfiles/configtests/test.cwt", File.ReadAllText "./testfiles/configtests/test.cwt"
         let triggers, effects = parseDocsFile "./testfiles/validationtests/trigger_docs_2.1.0.txt" |> (function |Success(p, _, _) -> DocsParser.processDocs p)
         let modifiers = SetupLogParser.parseLogsFile "./testfiles/validationtests/setup.log" |> (function |Success(p, _, _) -> SetupLogParser.processLogs p)
@@ -170,15 +174,16 @@ let testFolder folder testsname config =
 [<Tests>]
 let folderTests =
     testList "validation" [
-        testFolder "./testfiles/validationtests/interfacetests" "interface" false
-        testFolder "./testfiles/validationtests/gfxtests" "gfx" false
-        testFolder "./testfiles/validationtests/scopetests" "scopes" false
-        testFolder "./testfiles/validationtests/variabletests" "variables" false
-        testFolder "./testfiles/validationtests/modifiertests" "modifiers" false
-        testFolder "./testfiles/validationtests/eventtests" "events" false
-        testFolder "./testfiles/validationtests/weighttests" "weights" false
-        testFolder "./testfiles/multiplemodtests" "multiple" false
-        testFolder "./testfiles/configtests/validationtests" "configrules" true
+        testFolder "./testfiles/validationtests/interfacetests" "interface" false "en-GB"
+        testFolder "./testfiles/validationtests/gfxtests" "gfx" false "en-GB"
+        testFolder "./testfiles/validationtests/scopetests" "scopes" false "en-GB"
+        testFolder "./testfiles/validationtests/variabletests" "variables" false "en-GB"
+        testFolder "./testfiles/validationtests/modifiertests" "modifiers" false "en-GB"
+        testFolder "./testfiles/validationtests/eventtests" "events" false "en-GB"
+        testFolder "./testfiles/validationtests/weighttests" "weights" false "en-GB"
+        testFolder "./testfiles/multiplemodtests" "multiple" false "en-GB"
+        testFolder "./testfiles/configtests/validationtests" "configrules" true "en-GB"
+        testFolder "./testfiles/configtests/validationtests" "configrules" true "ru-RU"
     ]
 
 [<Tests>]
