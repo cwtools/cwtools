@@ -476,7 +476,6 @@ module rec Rules =
                     recurse finalAcc child newRule
                 |None -> finalAcc
             |LeafC leaf ->
-
                 fLeaf acc leaf rule
             |LeafValueC leafvalue ->
                 fLeafValue acc leafvalue rule
@@ -525,31 +524,12 @@ module rec Rules =
                 |Some c, _, _ ->
                     match expandedrules |> List.choose (function |(NodeRule (l, rs), o) when checkLeftField enumsMap typesMap effectMap triggerMap localisation files ctx l node.Key node -> Some (l, rs, o) |_ -> None) with
                     | [] ->
-                        // let leftClauseRule =
-                        //     expandedrules |>
-                        //     List.filter (function |(_, _, LeftClauseField (vt, _)) -> checkValidLeftClauseRule files enumsMap (LeftClauseField (vt, ClauseField [])) c.Key  |_ -> false )
-                        // let leftTypeRule =
-                        //     expandedrules |>
-                        //     List.filter (function |(_, _, LeftTypeField (t, r)) -> checkValidLeftTypeRule typesMap (LeftTypeField (t, r)) c.Key  |_ -> false )
-                        // let leftScopeRule =
-                        //     expandedrules |>
-                        //     List.filter (function |(_, _, LeftScopeField (rs)) -> checkValidLeftScopeRule scopes (LeftScopeField (rs)) c.Key  |_ -> false )
-                        // let leftRules = leftClauseRule @ leftScopeRule @ leftTypeRule
-                        // match leftRules with
-                        Some (NodeC c, (field, options))
+                            eprintfn "fallback match %s %A" (node.Key) expandedrules
+                            Some (NodeC c, (field, options))
                     | (l, rs, o)::_ -> Some (NodeC c, ((NodeRule (l, rs)), o))
                 |_, Some leaf, _ ->
                     match expandedrules |> List.choose (function |(LeafRule (l, r), o) when checkLeftField enumsMap typesMap effectMap triggerMap localisation files ctx l leaf.Key leaf -> Some (l, r, o) |_ -> None) with
-                    //match expandedrules |> List.filter (fst3 >> (==) l.Key) with
                     |[] ->
-                        // let leftTypeRule =
-                        //     expandedrules |>
-                        //     List.tryFind (function |(_, _, LeftTypeField (t, r)) -> checkValidLeftTypeRule typesMap (LeftTypeField (t, r)) l.Key  |_ -> false )
-                        // let leftClauseRule =
-                        //     expandedrules |>
-                        //     List.tryFind (function |(_, _, LeftClauseField (vt, _)) -> checkValidLeftClauseRule files enumsMap (LeftClauseField (vt, ClauseField [])) l.Key  |_ -> false )
-                        // match Option.orElse leftClauseRule leftTypeRule with
-                        // |Some r -> Some (LeafC l, r) //#TODO this doesn't correct handle lefttype
                         Some (LeafC leaf, (field, options))
                     |(l, rs, o)::_ -> Some (LeafC leaf, ((LeafRule (l, rs)), o))
                 |_, _, Some lv -> Some (LeafValueC lv, (field, options))
@@ -557,12 +537,12 @@ module rec Rules =
             let pathDir = (Path.GetDirectoryName logicalpath).Replace("\\","/")
             let childMatch = node.Children |> List.tryFind (fun c -> Range.rangeContainsPos c.Position pos)
             //eprintfn "%O %A %A" pos pathDir (typedefs |> List.tryHead)
-            match childMatch, typedefs |> List.tryFind (fun t -> checkPathDir t pathDir) with
+            match childMatch, typedefs |> List.tryFind (fun t -> (eprintfn "info %s %s" (t.path) pathDir); checkPathDir t pathDir) with
             |Some c, Some typedef ->
                 let typerules = typeRules |> List.filter (fun (name, _) -> name == typedef.name)
                 match typerules with
                 |[(n, (NodeRule (l, rs), o))] ->
-                    Some (singleFoldRules fNode fChild fLeaf fLeafValue fComment acc (NodeC c) ((NodeRule (l, rs), o)))
+                    Some (singleFoldRules fNode fChild fLeaf fLeafValue fComment acc (NodeC c) ((NodeRule (ValueField (ValueType.Specific (c.Key)), rs), o)))
                 |_ -> None
             |_, _ -> None
 
@@ -577,6 +557,7 @@ module rec Rules =
             let fNode (ctx, res) (node : Node) ((field, options) : NewRule) =
                 //eprintfn "nr %A %A %A" name node.Key ctx.scopes
                 let rec inner f c (n : Node) =
+                    eprintfn "info fnode inner %s %A %A" (node.Key) options field
                     let newCtx =
                         // match oneToOneScopes |> List.tryFind (fun (k, _) -> k == n.Key) with
                         // |Some (_, f) ->

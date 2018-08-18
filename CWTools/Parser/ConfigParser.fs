@@ -487,7 +487,7 @@ module rec ConfigParser =
         let size = NewRule (LeafRule(specificField "size", ValueField(ValueType.Enum "size")), requiredSingle)
         let moduleR = NewRule (LeafRule(specificField "module", ValueField(ValueType.Enum "module")), optionalMany)
         let building = NewRule (LeafRule(specificField "building", ValueField(ValueType.Enum "building")), optionalMany)
-        let effect = NewRule (NodeRule(specificField "effect", [(LeafRule (AliasField "effect", AliasField "effect")), optionalMany]), optionalSingle)
+        let effect = NewRule (NodeRule(specificField "effect", [(LeafRule (AliasField "effect", AliasField "effect")), {optionalMany with replaceScopes = Some { froms = None; root = None; this = Some (Scope.Country) }}]), optionalSingle)
         let rule = NewRule (NodeRule(specificField "create_starbase", [owner; size; moduleR; building; effect]), optionalMany)
         rule
     let createStarbaseAlias = AliasRule ("effect", createStarbase)
@@ -500,7 +500,7 @@ module rec ConfigParser =
         {
             name = "create_starbase"
             nameField = None
-            path = "game/events"
+            path = "events"
             path_strict = false
             conditions = None
             subtypes = []

@@ -435,8 +435,12 @@ type STLGame (settings : StellarisSettings) =
             match resourceManager.ManualProcessResource resource, infoService with
             |Some e, Some info ->
                 match info.GetInfo(pos, e) with
-                |Some (ctx, _) when ctx.scopes <> { Root = Scope.Any; From = []; Scopes = [] } -> Some (ctx.scopes)
-                |_ -> getScopeContextAtPos pos lookup.scriptedTriggers lookup.scriptedEffects e.entity
+                |Some (ctx, _) when ctx.scopes <> { Root = Scope.Any; From = []; Scopes = [] } ->
+                    eprintfn "true scopes"
+                    Some (ctx.scopes)
+                |_ ->
+                    eprintfn "fallback scopes"
+                    getScopeContextAtPos pos lookup.scriptedTriggers lookup.scriptedEffects e.entity
             |Some e, _ -> getScopeContextAtPos pos lookup.scriptedTriggers lookup.scriptedEffects e.entity
             |_ -> None
 

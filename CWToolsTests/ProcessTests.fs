@@ -262,6 +262,30 @@ let testsv =
                 let suggestions = res |> Seq.map (function |Simple c -> c |Snippet (l, _, _) -> l) |> Seq.sort
                 let expected = ["default"; "swarm"] |> Seq.sort
                 Expect.sequenceEqual suggestions expected "Completion should match"
+        testCase "test scope at pos" <| fun () ->
+            let eopEffect = AliasRule("effect", (NodeRule((ValueField (ValueType.Specific "every_owned_planet")), [LeafRule ((AliasField "effect"), (AliasField "Effect")), optionalMany]), {optionalMany with pushScope = Some Scope.Planet} ))
+            let input = "create_starbase = {\n\
+                         effect = {\n\
+                         every_owned_planet = { \n\
+                         }\n\
+                         }\n\
+                         }"
+            match CKParser.parseString input "test.txt" with
+            |Success(r, _, _) ->
+                let node = (STLProcess.shipProcess.ProcessNode<Node>() "root" (range.Zero) r)
+                let entity = { filepath = "events/test.txt"; logicalpath = "events/test.txt"; entity = node; validate = true; entityType = EntityType.Events; overwrite = Overwrite.No}
+                let rules = RuleApplicator([TypeRule ("create_starbase", ConfigParser.createStarbase); eopEffect], [ConfigParser.createStarbaseTypeDef], Map.empty, Map.empty, [], Set.empty, [], [])
+                let info = FoldRules([TypeRule ("create_starbase", ConfigParser.createStarbase); eopEffect], [ConfigParser.createStarbaseTypeDef], Map.empty, Map.empty, [], Set.empty, [], [], rules)
+                // let comp = CompletionService([TypeRule ("create_starbase", ConfigParser.createStarbase)], [ConfigParser.createStarbaseTypeDef], Map.empty, Map.empty, [], Set.empty, [], [])
+                let pos = mkPos 3 15
+                let suggestions = info.GetInfo (pos, entity)
+                match suggestions with
+                |None -> Expect.isTrue false "info failed"
+                |Some (context, _) ->
+                    let scopes = context.scopes.Scopes
+                    let expected = [Scope.Planet; Scope.Country;] |> Seq.sort
+                    Expect.sequenceEqual scopes expected "Scopes should match"
+            |Failure(e, _, _) -> Expect.isTrue false e
 
     ]
 
@@ -284,8 +308,8 @@ let testsConfig =
                             default_behavior =  \n\
                             }"
             let pos = mkPos 2 20
-            // let suggestions = stl.Complete pos "common/ship_sizes/test.txt" input 
-            let suggestions = stl.Complete pos "test" input 
+            // let suggestions = stl.Complete pos "common/ship_sizes/test.txt" input
+            let suggestions = stl.Complete pos "test" input
             //eprintfn "%A" suggestions
             let suggestions = suggestions |> Seq.map (function |Simple c -> c |Snippet (l, _, _) -> l) |> Seq.sort
             let expected = ["default"; "swarm"] |> Seq.sort
