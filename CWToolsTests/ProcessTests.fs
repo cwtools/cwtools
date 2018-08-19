@@ -262,7 +262,7 @@ let testsv =
                 let suggestions = res |> Seq.map (function |Simple c -> c |Snippet (l, _, _) -> l) |> Seq.sort
                 let expected = ["default"; "swarm"] |> Seq.sort
                 Expect.sequenceEqual suggestions expected "Completion should match"
-        testCase "test scope at pos" <| fun () ->
+        testCase "test scope at pos simple nodes" <| fun () ->
             let eopEffect = AliasRule("effect", (NodeRule((ValueField (ValueType.Specific "every_owned_planet")), [LeafRule ((AliasField "effect"), (AliasField "Effect")), optionalMany]), {optionalMany with pushScope = Some Scope.Planet} ))
             let input = "create_starbase = {\n\
                          effect = {\n\
@@ -277,13 +277,40 @@ let testsv =
                 let rules = RuleApplicator([TypeRule ("create_starbase", ConfigParser.createStarbase); eopEffect], [ConfigParser.createStarbaseTypeDef], Map.empty, Map.empty, [], Set.empty, [], [])
                 let info = FoldRules([TypeRule ("create_starbase", ConfigParser.createStarbase); eopEffect], [ConfigParser.createStarbaseTypeDef], Map.empty, Map.empty, [], Set.empty, [], [], rules)
                 // let comp = CompletionService([TypeRule ("create_starbase", ConfigParser.createStarbase)], [ConfigParser.createStarbaseTypeDef], Map.empty, Map.empty, [], Set.empty, [], [])
-                let pos = mkPos 3 15
+                let pos = mkPos 3 23
                 let suggestions = info.GetInfo (pos, entity)
                 match suggestions with
                 |None -> Expect.isTrue false "info failed"
                 |Some (context, _) ->
                     let scopes = context.scopes.Scopes
-                    let expected = [Scope.Planet; Scope.Country;] |> Seq.sort
+                    let expected = [Scope.Planet; Scope.Country;]
+                    Expect.sequenceEqual scopes expected "Scopes should match"
+            |Failure(e, _, _) -> Expect.isTrue false e
+        testCase "test scope at pos prev" <| fun () ->
+            let leftScope = AliasRule("effect", (NodeRule((ScopeField Scope.Any), [LeafRule ((AliasField "effect"), (AliasField "Effect")), optionalMany]), optionalMany))
+            let eopEffect = AliasRule("effect", (NodeRule((ValueField (ValueType.Specific "every_owned_planet")), [LeafRule ((AliasField "effect"), (AliasField "Effect")), optionalMany]), {optionalMany with pushScope = Some Scope.Planet} ))
+            let input = "create_starbase = {\n\
+                         effect = {\n\
+                         every_owned_planet = {\n\
+                         prev = { \n\
+                         }\n\
+                         }\n\
+                         }\n\
+                         }"
+            match CKParser.parseString input "test.txt" with
+            |Success(r, _, _) ->
+                let node = (STLProcess.shipProcess.ProcessNode<Node>() "root" (range.Zero) r)
+                let entity = { filepath = "events/test.txt"; logicalpath = "events/test.txt"; entity = node; validate = true; entityType = EntityType.Events; overwrite = Overwrite.No}
+                let rules = RuleApplicator([TypeRule ("create_starbase", ConfigParser.createStarbase); eopEffect; leftScope], [ConfigParser.createStarbaseTypeDef], Map.empty, Map.empty, [], Set.empty, [], [])
+                let info = FoldRules([TypeRule ("create_starbase", ConfigParser.createStarbase); eopEffect; leftScope], [ConfigParser.createStarbaseTypeDef], Map.empty, Map.empty, [], Set.empty, [], [], rules)
+                // let comp = CompletionService([TypeRule ("create_starbase", ConfigParser.createStarbase)], [ConfigParser.createStarbaseTypeDef], Map.empty, Map.empty, [], Set.empty, [], [])
+                let pos = mkPos 4 9
+                let suggestions = info.GetInfo (pos, entity)
+                match suggestions with
+                |None -> Expect.isTrue false "info failed"
+                |Some (context, _) ->
+                    let scopes = context.scopes.Scopes
+                    let expected = [Scope.Country; Scope.Planet; Scope.Country;]
                     Expect.sequenceEqual scopes expected "Scopes should match"
             |Failure(e, _, _) -> Expect.isTrue false e
 
