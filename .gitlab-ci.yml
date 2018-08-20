@@ -10,5 +10,6 @@ stages:
 test:
     stage: test
     script:
+    - ls -A
     - chmod +x ./build.sh
     - ./build.sh Test
