@@ -13,4 +13,4 @@ test:
     - schedules
     - web
     script:
-    - ./.build.sh Test
+    - ./build.sh Test
