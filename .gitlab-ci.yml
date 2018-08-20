@@ -1,0 +1,16 @@
+image: docker
+
+variables:
+  DOCKER_DRIVER: overlay2
+  GIT_DEPTH: "3"
+
+stages:
+  - test
+      
+test:
+    stage: test
+    only:
+    - schedules
+    - web
+    script:
+    - ./.build.sh Test
