@@ -9,8 +9,5 @@ stages:
       
 test:
     stage: test
-    only:
-    - schedules
-    - web
     script:
     - ./build.sh Test
