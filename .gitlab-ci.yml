@@ -12,5 +12,4 @@ test:
     script:
     - ls -A
     - chmod +x ./build.sh
-    - apk add --no-cache bash
     - bash ./build.sh Test
