@@ -1,0 +1,15 @@
+image: tboby/docker-fsharp-mono-netcore-electronnet
+
+variables:
+  DOCKER_DRIVER: overlay2
+  GIT_DEPTH: "3"
+
+stages:
+  - test
+      
+test:
+    stage: test
+    script:
+    - ls -A
+    - chmod +x ./build.sh
+    - bash ./build.sh Test
