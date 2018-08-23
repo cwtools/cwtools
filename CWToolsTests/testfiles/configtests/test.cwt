@@ -146,6 +146,10 @@ event = {
     }
 }
 
+test = {
+    test_empty_quotes = ""
+}
+
 types = {
     type[ship_size] = {
         path = "game/common/ship_sizes"
@@ -176,7 +180,10 @@ types = {
 	## type_key_filter = randomizable_combo
 	type[randomizable_combo] = {
 		path = "game/flags"
-	}
+    }
+    type[test] = {
+        path = "game/common/war_goals"
+    }
 }
 
 enums = {

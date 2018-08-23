@@ -257,7 +257,7 @@ module rec ConfigParser =
             |Some target ->
                 ScopeField (parseScope target)
             |None -> ValueField ValueType.Scalar
-        |x -> ValueField (ValueType.Specific x)
+        |x -> ValueField (ValueType.Specific (x.Trim([|'\"'|])))
 
 
     let processChildConfig ((child, comments) : Child * string list)  =

@@ -31,7 +31,7 @@ module Graphics =
                     |None -> OK
                     |Some fn ->
                         let filename = fn.Value.ToRawString().Replace("\\","/")
-                        match filenames |> List.exists (fun f -> f.EndsWith(filename)) with
+                        match filenames |> List.exists (fun f -> f.EndsWith(filename, StringComparison.OrdinalIgnoreCase)) with
                         | true -> OK
                         | false -> Invalid [inv (ErrorCodes.MissingFile (filename)) fn]
             pdxmesh <&!&> inner
