@@ -15,6 +15,8 @@ open CWTools.Localisation
 open FParsec
 open System
 open CWTools.Utilities.Utils
+open System.IO
+open Microsoft.FSharp.Compiler.Range
 
 module STLLocalisationString =
 
@@ -140,6 +142,47 @@ module STLLocalisationString =
             m |> Map.toList |> List.fold (fun s (k, v) -> if v.desc == "\"REPLACE_ME\"" then s <&&> Invalid [invManual (ErrorCodes.ReplaceMeLoc v.key lang) (v.position) v.key None ] else s ) OK
 
         api <&!&> validateLocMap <&&> (api <&!&> validateReplaceMe)
+
+    let checkFileEncoding (file : string) =
+            use fs = new FileStream(file, FileMode.Open) in
+            let bits = Array.zeroCreate 3
+            fs.Read(bits, 0, 3) |> ignore
+            // UTF8 byte order mark is: 0xEF,0xBB,0xBF
+            if (bits.[0] = byte 0xEF && bits.[1] = byte 0xBB && bits.[2] = byte 0xBF) then OK
+            else 
+                let pos = rangeN file 0
+                Invalid [invManual ErrorCodes.WrongEncoding pos "" None ]   
+    
+    let checkLocFileName (file : string) =
+        let filename = Path.GetFileNameWithoutExtension file
+        let fileHeader = File.ReadLines(file) |> Seq.tryHead |> Option.map (fun h -> h.Trim().Replace(":",""))
+        let keyToLanguage =
+            function
+            |"l_english" -> Some STLLang.English
+            |"l_french" -> Some STLLang.French
+            |"l_spanish" -> Some STLLang.Spanish
+            |"l_german" -> Some STLLang.German
+            |"l_russian" -> Some STLLang.Russian
+            |"l_polish" -> Some STLLang.Polish
+            |"l_braz_por" -> Some STLLang.Braz_Por
+            |"l_default" -> Some STLLang.Default
+            |_ -> None
+        match keyToLanguage filename, Option.bind (keyToLanguage) fileHeader with
+        |None, _ -> Invalid [invManual ErrorCodes.MissingLocFileLang (rangeN file 0) "" None ]  
+        |_, None -> Invalid [invManual ErrorCodes.MissingLocFileLangHeader (rangeN file 0) "" None ]
+        |Some l1, Some l2 when l1 = l2 -> OK
+        |Some l1, Some l2 -> Invalid [invManual (ErrorCodes.LocFileLangMismatch l1 l2) (rangeN file 0) "" None ]
+
+
+
+    let validateLocalisationFiles (locFolder : string) =
+        eprintfn "%s" locFolder
+        let files = Directory.EnumerateDirectories locFolder 
+                    |> List.ofSeq
+                    |> List.collect (Directory.EnumerateFiles >> List.ofSeq)
+        let rootFiles = Directory.EnumerateFiles locFolder |> List.ofSeq
+        let actualFiles = files @ rootFiles //(fun f -> f, (FileInfo f). )//File.ReadAllText(f, System.Text.Encoding.UTF8))
+        actualFiles <&!&> (checkLocFileName <&> checkFileEncoding )
         // <&&>
         // (api <&!&> (fun (l, m) -> m.refs <&!&> checkRef l keys m))
     // let validateLocalisation (effects : Effect list) (scriptedLoc : string list) (setvariables : string list) (os : STLEntitySet) (api : (Lang * Map<string, Entry>)) (keys : (Lang * LocKeySet) list) =

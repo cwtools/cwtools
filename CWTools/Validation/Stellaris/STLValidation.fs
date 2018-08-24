@@ -190,23 +190,17 @@ module STLValidation =
 
     let valSpriteFiles : FileValidator =
         fun rm es ->
-            eprintfn "1"
             let sprites = es.AllOfTypeChildren EntityType.Interface // es.GlobMatchChildren("**/interface/*.gfx") @ es.GlobMatchChildren("**/interface/*/*.gfx")
                             |> List.filter (fun e -> e.Key = "spriteTypes")
                             |> List.collect (fun e -> e.Children)
-            eprintfn "2"
             let filenames = rm.GetResources() |> List.choose (function |FileResource (_, e) -> Some (e.logicalpath) |EntityResource (_, e) -> Some (e.logicalpath))
-            eprintfn "3"
             //eprintfn "sprite filename %A" filenames
             let inner =
                 fun (x : Node) ->
                    Seq.append (x.Leafs "textureFile") (x.Leafs "effectFile")
                     <&!&> (fun l ->
-                        eprintfn "4"    
                         let filename = l.Value.ToRawString().Replace("\\","/")
-                        eprintfn "5"    
                         let filenamefallback = filename.Replace(".lua",".shader").Replace(".tga",".dds")
-                        eprintfn "6"    
                         match filenames |> List.exists (fun f -> f.EndsWith(filename, StringComparison.OrdinalIgnoreCase ) || f.EndsWith(filenamefallback, StringComparison.OrdinalIgnoreCase)) with
                         | true -> OK
                         | false -> Invalid [inv (ErrorCodes.MissingFile (l.Value.ToRawString())) l])

@@ -1,4 +1,4 @@
-l_german:
+﻿l_german:
   #error
   missing_ref:0 "Test $notreal$"
   has_ref:0 "Tets $missing_ref$"

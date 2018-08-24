@@ -341,9 +341,9 @@ type STLGame (settings : StellarisSettings) =
                                  valScriptedTriggers; valSpecialProjects; valStarbaseType; valTileBlockers; valAnomalies]
             let newEntities = EntitySet entities
             let oldEntities = EntitySet (resources.AllEntities())
-            let vs = (validators |> List.map (fun v -> v oldEntities keys newEntities) |> List.fold (<&&>) OK
-                       |> (function |Invalid es -> es |_ -> []))
-            vs
+            let vs = (validators |> List.map (fun v -> v oldEntities keys newEntities) |> List.fold (<&&>) OK)
+            let locFileValidation = (fileManager.LocalisationFiles() |> List.map fst) <&!&> validateLocalisationFiles
+            (vs <&&> locFileValidation) |> (function |Invalid es -> es |_ -> [])
 
         let globalLocalisation () =
             let taggedKeys = allLocalisation() |> List.groupBy (fun l -> l.GetLang) |> List.map (fun (k, g) -> k, g |> List.collect (fun ls -> ls.GetKeys) |> List.fold (fun (s : LocKeySet) v -> s.Add v) (LocKeySet.Empty(InsensitiveStringComparer())) )
