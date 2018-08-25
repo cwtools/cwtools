@@ -1,5 +1,5 @@
 namespace CWTools.Parser
-open Microsoft.FSharp.Compiler.Range
+open CWTools.Utilities.Position
 open FParsec
 
 module rec Types =

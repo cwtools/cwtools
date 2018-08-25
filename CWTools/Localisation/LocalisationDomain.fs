@@ -1,7 +1,7 @@
 namespace CWTools.Localisation
 open System.Collections.Generic
 open CWTools.Common
-open Microsoft.FSharp.Compiler.Range
+open CWTools.Utilities.Position
 
 [<Struct>]
 type Entry = {
@@ -25,7 +25,7 @@ type ILocalisationAPI =
     abstract GetLang : Lang
 
 
-type LocalisationSettings = 
+type LocalisationSettings =
     {
         folder : string
     }

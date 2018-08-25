@@ -14,7 +14,7 @@ open CWTools.Parser.DocsParser
 open CWTools.Parser.SetupLogParser
 open CWTools.Common.STLConstants
 open System
-open Microsoft.FSharp.Compiler.Range
+open CWTools.Utilities.Position
 open CWTools.Games.Files
 open CWTools.Games.Stellaris
 open CWTools.Games.Stellaris.STLLookup

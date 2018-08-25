@@ -9,7 +9,7 @@ open CWTools.Common.STLConstants
 open CWTools.Common
 open CWTools.Process.STLScopes
 open CWTools.Parser.ConfigParser
-open Microsoft.FSharp.Compiler.Range
+open CWTools.Utilities.Position
 
 
 

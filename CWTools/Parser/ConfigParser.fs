@@ -2,7 +2,7 @@ namespace CWTools.Parser
 
 
 open FParsec
-open Microsoft.FSharp.Compiler.Range
+open CWTools.Utilities.Position
 open Types
 open CWTools.Common.STLConstants
 open System.IO
@@ -12,7 +12,6 @@ open CWTools.Process.ProcessCore
 open CWTools.Utilities.Utils
 open System
 open System.Globalization
-open System.Reflection.Metadata
 
 
 module rec ConfigParser =

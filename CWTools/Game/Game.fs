@@ -5,7 +5,7 @@ open CWTools.Validation.Rules
 open CWTools.Validation.ValidationCore
 open CWTools.Games.Stellaris.STLLookup
 open FParsec
-open Microsoft.FSharp.Compiler.Range
+open CWTools.Utilities.Position
 
 type IGame =
     abstract ParserErrors : unit -> (string * string * Position) list

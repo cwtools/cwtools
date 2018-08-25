@@ -4,7 +4,7 @@ open FSharp.Collections.ParallelSeq
 open CWTools.Parser
 open Newtonsoft.Json.Converters
 open CWTools.Common
-open Microsoft.FSharp.Compiler.Range
+open CWTools.Utilities.Position
 open DotNet.Globbing
 open CWTools.Games.Stellaris.STLLookup
 open CWTools.Games

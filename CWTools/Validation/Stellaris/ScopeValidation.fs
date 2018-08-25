@@ -16,7 +16,7 @@ open Microsoft.FSharp.Collections.Tagged
 open System.Collections
 open CWTools.Games.Stellaris.STLLookup
 open CWTools.Validation.Stellaris.STLValidation
-open Microsoft.FSharp.Compiler.Range
+open CWTools.Utilities.Position
 
 module ScopeValidation =
     let valTriggerLeafUsage (modifiers : Modifier list) (scopes : ScopeContext) (leaf : Leaf) =

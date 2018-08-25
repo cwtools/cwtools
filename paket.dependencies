@@ -25,6 +25,7 @@ nuget DotNet.Glob
 nuget FSharpx.Collections
 nuget FSharp.Compiler.Service
 nuget Sandwych.QuickGraph.Core
+nuget FsPickler
 
 group tools
     source https://api.nuget.org/v3/index.json

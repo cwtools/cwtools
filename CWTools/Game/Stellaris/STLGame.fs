@@ -25,7 +25,7 @@ open CWTools.Validation.Stellaris.Graphics
 open CWTools.Games
 open CWTools.Games.Stellaris
 open CWTools.Games.Stellaris.STLLookup
-open Microsoft.FSharp.Compiler.Range
+open CWTools.Utilities.Position
 open CWTools.Validation.Rules
 open CWTools.Parser
 open CWTools.Parser.ConfigParser
@@ -39,6 +39,7 @@ type EmbeddedSettings = {
     effects : DocEffect list
     modifiers : Modifier list
     embeddedFiles : (string * string) list
+    cachedResourceData : (Resource * Entity) list
 }
 
 type RulesSettings = {
@@ -68,103 +69,6 @@ type STLGame (settings : StellarisSettings) =
         let validationSettings = settings.validation
         let useRules = settings.rules.IsSome
 
-        let scriptFolders = [
-            "common/agendas";
-            "common/ambient_objects";
-            "common/anomalies";
-            "common/armies";
-            "common/army_attachments"; //Removed in 2.0?
-            "common/ascension_perks";
-            "common/asteroid_belts"
-            "common/attitudes";
-            "common/bombardment_stances";
-            "common/buildable_pops";
-            "common/building_tags";
-            "common/buildings";
-            "common/button_effects";
-            "common/bypass";
-            "common/casus_belli";
-            "common/colors";
-            "common/component_flags"; //Removed in 2.0?
-            "common/component_sets";
-            "common/component_tags";
-            "common/component_templates";
-            "common/country_customization";
-            "common/country_types";
-            //"common/defines";
-            "common/deposits";
-            "common/diplo_phrases";
-            "common/diplomatic_actions";
-            "common/edicts";
-            "common/ethics";
-            "common/event_chains";
-            "common/fallen_empires";
-            "common/game_rules";
-            "common/global_ship_designs";
-            "common/governments";
-            "common/governments/civics";
-            "common/graphical_culture";
-            "common/mandates";
-            "common/map_modes";
-            "common/megastructures";
-            "common/name_lists";
-            "common/notification_modifiers";
-            "common/observation_station_missions";
-            "common/on_actions";
-            "common/opinion_modifiers";
-            "common/personalities";
-            "common/planet_classes";
-            "common/planet_modifiers";
-            "common/policies";
-            "common/pop_faction_types";
-            "common/precursor_civilizations";
-            //"common/random_names";
-            "common/scripted_effects";
-            "common/scripted_loc";
-            "common/scripted_triggers";
-            "common/scripted_variables";
-            "common/section_templates";
-            "common/sector_types";
-            "common/ship_behaviors";
-            "common/ship_sizes";
-            "common/solar_system_initializers";
-            "common/special_projects";
-            "common/species_archetypes";
-            "common/species_classes";
-            "common/species_names";
-            "common/species_rights";
-            "common/star_classes";
-            "common/starbase_buildings";
-            "common/starbase_levels";
-            "common/starbase_modules";
-            "common/starbase_types";
-            "common/spaceport_modules"; //Removed in 2.0
-            "common/start_screen_messages";
-            "common/static_modifiers";
-            "common/strategic_resources";
-            "common/subjects";
-            "common/system_types";
-            "common/technology";
-            "common/terraform";
-            "common/tile_blockers";
-            "common/tradition_categories";
-            "common/traditions";
-            "common/traits";
-            "common/triggered_modifiers"; //Removed in 2.0
-            "common/war_demand_counters"; //Removed in 2.0
-            "common/war_demand_types"; //Removed in 2.0
-            "common/war_goals";
-            "events";
-            "map/galaxy";
-            "map/setup_scenarios";
-            "prescripted_countries";
-            "interface";
-            "gfx";
-            "music";
-            "sound";
-            "fonts";
-            "flags";
-            ]
 
         let fileManager = FileManager(settings.rootDirectory, settings.modFilter, settings.scope, scriptFolders, "stellaris")
         let vanillaEffects =
@@ -381,10 +285,11 @@ type STLGame (settings : StellarisSettings) =
                     // let rootedpath = filepath.Substring(filepath.IndexOf(fileManager.ScopeDirectory) + (fileManager.ScopeDirectory.Length))
                     // let logicalpath = fileManager.ConvertPathToLogicalPath rootedpath
                     //eprintfn "%s %s" logicalpath filepath
-                    let newEntities = resources.UpdateFile (resource)
+                    let newEntities = resources.UpdateFile (resource) |> List.map snd
                     match filepath with
                     |x when x.Contains("scripted_triggers") -> updateScriptedTriggers()
                     |x when x.Contains("scripted_effects") -> updateScriptedEffects()
+                    |x when x.Contains("scripted_loc") -> updateScriptedLoc()
                     |x when x.Contains("static_modifiers") -> updateStaticodifiers()
                     |_ -> ()
                     updateDefinedVariables()
@@ -447,6 +352,8 @@ type STLGame (settings : StellarisSettings) =
 
         do
             eprintfn "Parsing %i files" (fileManager.AllFilesByPath().Length)
+            let timer = new System.Diagnostics.Stopwatch()
+            timer.Start()
             // let efiles = allFilesByPath |> List.filter (fun (_, f, _) -> not(f.EndsWith(".dds")))
             //             |> List.map (fun (s, f, ft) -> EntityResourceInput {scope = s; filepath = f; filetext = ft; validate = true})
             // let otherfiles = allFilesByPath |> List.filter (fun (_, f, _) -> f.EndsWith(".dds"))
@@ -454,13 +361,21 @@ type STLGame (settings : StellarisSettings) =
             let files = fileManager.AllFilesByPath()
             let filteredfiles = if settings.validation.validateVanilla then files else files |> List.choose (function |FileResourceInput f -> Some (FileResourceInput f) |EntityResourceInput f -> if f.scope = "vanilla" then Some (EntityResourceInput {f with validate = false}) else Some (EntityResourceInput f))
             resources.UpdateFiles(filteredfiles) |> ignore
-            let embedded =
+            let embeddedFiles =
                 settings.embedded.embeddedFiles
                 |> List.map (fun (f, ft) -> f.Replace("\\","/"), ft)
-                |> List.map (fun (f, ft) -> if ft = "" then FileResourceInput { scope = "embedded"; filepath = f; logicalpath = (fileManager.ConvertPathToLogicalPath f) } else EntityResourceInput {scope = "embedded"; filepath = f; logicalpath = (fileManager.ConvertPathToLogicalPath f); filetext = ft; validate = false})
+                |> List.choose (fun (f, ft) -> if ft = "" then Some (FileResourceInput { scope = "embedded"; filepath = f; logicalpath = (fileManager.ConvertPathToLogicalPath f) }) else None)
+            let disableValidate (r, e) : Resource * Entity =
+                match r with
+                |EntityResource (s, er) -> EntityResource (s, { er with validate = false})
+                |x -> x
+                , {e with validate = false}
+            let cached = settings.embedded.cachedResourceData |> List.map (fun (r, e) -> CachedResourceInput (disableValidate (r, e)))
+            let embedded = embeddedFiles @ cached
             if fileManager.ShouldUseEmbedded then resources.UpdateFiles(embedded) |> ignore else ()
 
-
+            eprintfn "Parsing complete in %i" (timer.Elapsed.Seconds)
+            timer.Restart()
             updateScriptedTriggers()
             updateScriptedEffects()
             updateStaticodifiers()
@@ -470,6 +385,7 @@ type STLGame (settings : StellarisSettings) =
             updateTechnologies()
             updateLocalisation()
             updateTypeDef()
+            eprintfn "Initial cache complete in %i" (timer.Elapsed.Seconds)
 
             let loc = allLocalisation() |> List.groupBy (fun l -> l.GetLang) |> List.map (fun (k, g) -> k, g |>List.collect (fun ls -> ls.GetKeys) |> Set.ofList )
             let files = resources.GetResources() |> List.choose (function |FileResource (_, f) -> Some f.logicalpath |EntityResource (_, f) -> Some f.logicalpath) |> Set.ofList

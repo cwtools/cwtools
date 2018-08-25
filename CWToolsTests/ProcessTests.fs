@@ -15,7 +15,7 @@ open CWTools.Parser.SetupLogParser
 open CWTools.Common.STLConstants
 open System
 open CWTools.Process.STLProcess
-open Microsoft.FSharp.Compiler.Range
+open CWTools.Utilities.Position
 open CWTools.Parser.ConfigParser
 open CWTools.Validation.Rules
 open CWTools.Validation.ValidationCore

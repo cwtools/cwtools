@@ -5,7 +5,7 @@ open Newtonsoft.Json
 open System
 open CWTools.Common.STLConstants
 open CWTools.Parser.Types
-open Microsoft.FSharp.Compiler.Range
+open CWTools.Utilities.Position
 open CWTools.Utilities.Utils
 
 

@@ -10,6 +10,12 @@ open System.Reflection
 open CWTools.Localisation
 open CWTools.Localisation.STLLocalisation
 open CWTools.Games.Files
+open CWTools.Common.STLConstants
+open CWTools.Games
+open CWTools.Validation.Stellaris
+open MBrace.FsPickler
+open CWTools.Process
+open CWTools.Utilities.Position
 
 module CWToolsCLI =
     open Argu
@@ -62,6 +68,13 @@ module CWToolsCLI =
             member s.Usage =
                 match s with
                 |File _ -> "file to parse"
+    type SerializeArgs =
+        | [<MainCommand; ExactlyOnce; Last>] Parse of bool
+    with
+        interface IArgParserTemplate with
+            member s.Usage =
+                match s with
+                |Parse _ -> "hack"
     type Arguments =
         | Directory of path : string
         | Game of Game
@@ -71,6 +84,7 @@ module CWToolsCLI =
         | [<CliPrefix(CliPrefix.None)>] Validate of ParseResults<ValidateArgs>
         | [<CliPrefix(CliPrefix.None)>] List of ParseResults<ListArgs>
         | [<CliPrefix(CliPrefix.None)>] Parse of ParseResults<ParseArgs>
+        | [<CliPrefix(CliPrefix.None)>] Serialize of ParseResults<SerializeArgs>
 
     with
         interface IArgParserTemplate with
@@ -84,6 +98,7 @@ module CWToolsCLI =
                 | ModFilter _ -> "filter to mods with this in name"
                 | DocsPath _ -> "path to a custom trigger_docs game.log file"
                 | Parse _ -> "parse a file"
+                | Serialize _ -> "created serialized files for embedding"
 
     let parser = ArgumentParser.Create<Arguments>(programName = "CWToolsCLI.exe", errorHandler = new Exiter())
 
@@ -143,6 +158,23 @@ module CWToolsCLI =
         |Success(_,_,_) -> true, ""
         |Failure(msg,_,_) -> false, msg
 
+    let serialize game directory scope modFilter docsPath =
+        let fileManager = FileManager(directory, Some modFilter, scope, scriptFolders, "stellaris")
+        let files = fileManager.AllFilesByPath()
+        let resources = ResourceManager(STLCompute.computeSTLData (fun () -> None)).Api
+        let entities = resources.UpdateFiles(files) |> List.map (fun (r, (struct (e, _))) -> r, e)
+        let registry = new CustomPicklerRegistry()
+        registry.DeclareSerializable<FParsec.Position>()
+        registry.DeclareSerializable<Lazy<Leaf array>>()
+        let cache = PicklerCache.FromCustomPicklerRegistry registry
+        let binarySerializer = FsPickler.CreateBinarySerializer(picklerResolver = cache)
+        let data = { resources = entities; fileIndexTable = fileIndexTable}
+        let pickle = binarySerializer.Pickle data
+        File.WriteAllBytes("pickled.cwb", pickle)
+
+
+
+
     [<EntryPoint>]
     let main argv =
         Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
@@ -157,6 +189,7 @@ module CWToolsCLI =
         | List r -> list game directory scope modFilter docsPath r
         | Validate r -> validate game directory scope modFilter docsPath r
         | Directory _
+        | Serialize _ -> serialize game directory scope modFilter docsPath
         | Game _ -> failwith "internal error: this code should never be reached"
 
         //printfn "%A" argv

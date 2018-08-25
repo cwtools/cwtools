@@ -48,6 +48,7 @@ module Validator =
                 effects = effects
                 modifiers = []
                 embeddedFiles = []
+                cachedResourceData = []
             }
         }
         let game = STLGame(options) :> IGame<STLComputedData>

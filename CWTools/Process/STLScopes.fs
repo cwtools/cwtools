@@ -3,7 +3,7 @@ namespace CWTools.Process
 open NodaTime.TimeZones
 open System
 open CWTools.Localisation
-open Microsoft.FSharp.Compiler.Range
+open CWTools.Utilities.Position
 module STLScopes =
     open CWTools.Common.STLConstants
     open CWTools.Utilities.Utils

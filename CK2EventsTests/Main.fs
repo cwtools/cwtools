@@ -16,7 +16,7 @@ open CWTools.Localisation.CK2Localisation
 open CWTools.Process.CK2Process
 open CWTools.Parser.Types
 open System.Collections.Generic
-open Microsoft.FSharp.Compiler.Range
+open CWTools.Utilities.Position
 
 
 

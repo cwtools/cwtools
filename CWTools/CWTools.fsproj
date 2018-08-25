@@ -4,6 +4,7 @@
     <TargetFramework>netstandard2.0</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Utilities/Position.fs" />
     <Compile Include="Utilities/Utilities.fs" />
     <Compile Include="Common/Constants.fs" />
     <Compile Include="Common/STLConstants.fs" />

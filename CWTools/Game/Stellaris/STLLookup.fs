@@ -10,7 +10,7 @@ open DotNet.Globbing
 open System
 open CWTools.Utilities.Utils
 open CWTools.Games
-open Microsoft.FSharp.Compiler.Range
+open CWTools.Utilities.Position
 
 module STLLookup =
     type FlagType = |Country |Planet |Fleet |Ship |Pop |Global |Star |Relation |Leader |AmbientObject |Species |Megastructure |PopFaction

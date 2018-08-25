@@ -5,8 +5,7 @@ open CWTools.Process
 open CWTools.Utilities.Utils
 open CWTools.Validation.ValidationCore
 open CWTools.Common.STLConstants
-open Microsoft.FSharp.Compiler
-open Microsoft.FSharp.Compiler.Range
+open CWTools.Utilities.Position
 open CWTools.Games
 open Stellaris.STLValidation
 open FParsec
@@ -68,7 +67,7 @@ module rec Rules =
                 if key = "yes" || key = "no" then OK else Invalid[inv (ErrorCodes.ConfigRulesUnexpectedValue (sprintf "Expecting yes or no, got %s" key) severity) leafornode]
             |ValueType.Enum e ->
                 match enumsMap.TryFind e with
-                |Some es -> if es.Contains key then OK else Invalid[inv (ErrorCodes.ConfigRulesUnexpectedValue (sprintf "Expecting a \"%s\" value, e.g. %A" e es) severity) leafornode]
+                |Some es -> if es.Contains (key.Trim([|'\"'|])) then OK else Invalid[inv (ErrorCodes.ConfigRulesUnexpectedValue (sprintf "Expecting a \"%s\" value, e.g. %A" e es) severity) leafornode]
                 |None -> OK
             |ValueType.Float (min, max) ->
                 match TryParser.parseDouble key with
@@ -423,9 +422,9 @@ module rec Rules =
                         | (LeafRule((AliasField a),_), _) -> (aliases.TryFind a |> Option.defaultValue [])
                         | (NodeRule((AliasField a),_), _) -> (aliases.TryFind a |> Option.defaultValue [])
                         |x -> [x])
-                let childMatch = node.Children |> List.tryFind (fun c -> Range.rangeContainsPos c.Position pos)
-                let leafMatch = node.Leaves |> Seq.tryFind (fun l -> Range.rangeContainsPos l.Position pos)
-                let leafValueMatch = node.LeafValues |> Seq.tryFind (fun lv -> Range.rangeContainsPos lv.Position pos)
+                let childMatch = node.Children |> List.tryFind (fun c -> rangeContainsPos c.Position pos)
+                let leafMatch = node.Leaves |> Seq.tryFind (fun l -> rangeContainsPos l.Position pos)
+                let leafValueMatch = node.LeafValues |> Seq.tryFind (fun lv -> rangeContainsPos lv.Position pos)
                 let ctx = { subtypes = []; scopes = defaultContext; warningOnly = false }
                 match childMatch, leafMatch, leafValueMatch with
                 |Some c, _, _ ->
@@ -442,9 +441,9 @@ module rec Rules =
                 |_, _, Some lv -> Some (LeafValueC lv, (field, options))
                 |None, None, None -> None
             let pathDir = (Path.GetDirectoryName logicalpath).Replace("\\","/")
-            let childMatch = node.Children |> List.tryFind (fun c -> Range.rangeContainsPos c.Position pos)
+            let childMatch = node.Children |> List.tryFind (fun c -> rangeContainsPos c.Position pos)
             //eprintfn "%O %A %A" pos pathDir (typedefs |> List.tryHead)
-            match childMatch, typedefs |> List.tryFind (fun t -> (eprintfn "info %s %s" (t.path) pathDir); checkPathDir t pathDir) with
+            match childMatch, typedefs |> List.tryFind (fun t -> checkPathDir t pathDir) with
             |Some c, Some typedef ->
                 let typerules = typeRules |> List.filter (fun (name, _) -> name == typedef.name)
                 match typerules with
@@ -503,7 +502,7 @@ module rec Rules =
                 | _ -> newCtx, res
 
             let pathDir = (Path.GetDirectoryName entity.logicalpath).Replace("\\","/")
-            let childMatch = entity.entity.Children |> List.tryFind (fun c -> Range.rangeContainsPos c.Position pos)
+            let childMatch = entity.entity.Children |> List.tryFind (fun c -> rangeContainsPos c.Position pos)
             // eprintfn "%O %A %A %A" pos pathDir (typedefs |> List.tryHead) (childMatch.IsSome)
             let ctx =
                 match childMatch, typedefs |> List.tryFind (fun t -> checkPathDir t pathDir) with
@@ -663,10 +662,10 @@ module rec Rules =
 
         let rec getRulePath (pos : pos) (stack : (string * bool) list) (node : Node) =
            //eprintfn "grp %A %A %A" pos stack (node.Children |> List.map (fun f -> f.ToRaw))
-           match node.Children |> List.tryFind (fun c -> Range.rangeContainsPos c.Position pos) with
+           match node.Children |> List.tryFind (fun c -> rangeContainsPos c.Position pos) with
            | Some c -> getRulePath pos ((c.Key, false) :: stack) c
            | None ->
-                match node.Leaves |> Seq.tryFind (fun l -> Range.rangeContainsPos l.Position pos) with
+                match node.Leaves |> Seq.tryFind (fun l -> rangeContainsPos l.Position pos) with
                 | Some l -> (l.Key, true)::stack
                 | None -> stack
 

@@ -21,7 +21,7 @@ open System.Diagnostics
 open CWTools.Parser.DocsParser
 open CWTools.Parser
 open CWTools.Games.Files
-open Microsoft.FSharp.Compiler.Range
+open CWTools.Utilities.Position
 
 let winFolder = "F:\\Games\\Steam\\steamapps\\common\\"
 let linuxFolder = "/home/thomas/.steam/steam/steamapps/common/"

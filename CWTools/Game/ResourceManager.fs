@@ -7,28 +7,8 @@ open CWTools.Parser
 open DotNet.Globbing
 open CWTools.Common.STLConstants
 open CWTools.Parser.Types
-open Microsoft.FSharp.Compiler.Range
+open CWTools.Utilities.Position
 open CWTools.Utilities.Utils
-
-
-
-type EntityResourceInput =
-    {
-        scope : string
-        filepath : string
-        logicalpath : string
-        filetext : string
-        validate : bool
-    }
-type FileResourceInput =
-    {
-        scope : string
-        filepath : string
-        logicalpath : string
-    }
-type ResourceInput =
-    |EntityResourceInput of EntityResourceInput
-    |FileResourceInput of FileResourceInput
 
 
 type PassFileResult = {
@@ -69,6 +49,20 @@ type Resource =
     |EntityResource of string * EntityResource
     |FileResource of string * FileResource
 
+type EntityResourceInput =
+    {
+        scope : string
+        filepath : string
+        logicalpath : string
+        filetext : string
+        validate : bool
+    }
+type FileResourceInput =
+    {
+        scope : string
+        filepath : string
+        logicalpath : string
+    }
 [<Struct>]
 type Entity =
     {
@@ -80,8 +74,20 @@ type Entity =
         overwrite : Overwrite
     }
 
-type UpdateFile<'T> = ResourceInput -> struct (Entity * Lazy<'T>) list
-type UpdateFiles<'T> = ResourceInput list -> struct (Entity * Lazy<'T>) list
+type CachedResourceData = {
+    resources : (Resource * Entity) list
+    fileIndexTable : FileIndexTable
+}
+type ResourceInput =
+    |EntityResourceInput of EntityResourceInput
+    |FileResourceInput of FileResourceInput
+    |CachedResourceInput of Resource * Entity
+
+
+
+
+type UpdateFile<'T> = ResourceInput -> (Resource * struct (Entity * Lazy<'T>)) list
+type UpdateFiles<'T> = ResourceInput list -> (Resource *  struct (Entity * Lazy<'T>)) list
 type GetResources = unit -> Resource list
 type ValidatableFiles = unit -> EntityResource list
 type AllEntities<'T> = unit -> struct (Entity * Lazy<'T>) list
@@ -234,12 +240,13 @@ type ResourceManager<'T> (computedDataFunction : (Entity -> 'T)) =
         | Success(parsed, _, _) -> EntityResource (file, { scope = scope; filepath = file; logicalpath = logicalpath; validate = validate; result = Pass({parseTime = time}); overwrite = No }), parsed
         | Failure(msg, pe, _) -> EntityResource (file, { scope = scope; filepath = file; logicalpath = logicalpath; validate = validate; result = Fail({error = msg; position = pe.Position; parseTime = time}); overwrite = No }), []
 
-    let parseFile (file : ResourceInput) =
-         match file with
-                    |EntityResourceInput e ->
-                        // eprintfn "%A %A" e.logicalpath e.filepath
-                        e |> ((fun f -> f.scope, f.filepath, f.logicalpath, f.validate, (fun (t, t2) -> duration (fun () -> CKParser.parseString t2 (System.String.Intern(t)))) (f.filepath, f.filetext)) >> matchResult)
-                    |FileResourceInput f -> FileResource (f.filepath, { scope = f.scope; filepath = f.filepath; logicalpath = f.logicalpath }), []
+    // let parseFile (file : ResourceInput) =
+    //      match file with
+    //                 |CachedResourceInput (r, s) -> r, s
+    //                 |EntityResourceInput e ->
+    //                     // eprintfn "%A %A" e.logicalpath e.filepath
+    //                     e |> ((fun f -> f.scope, f.filepath, f.logicalpath, f.validate, (fun (t, t2) -> duration (fun () -> CKParser.parseString t2 (System.String.Intern(t)))) (f.filepath, f.filetext)) >> matchResult)
+    //                 |FileResourceInput f -> FileResource (f.filepath, { scope = f.scope; filepath = f.filepath; logicalpath = f.logicalpath }), []
 
     let shipProcess = STLProcess.shipProcess.ProcessNode<Node>
     let parseEntity ((file, statements) : Resource * Statement list) =
@@ -250,6 +257,18 @@ type ResourceManager<'T> (computedDataFunction : (Entity -> 'T)) =
                     Some { filepath = f; logicalpath = l; entity = (shipProcess entityType "root" (mkZeroFile f) (statements |> List.rev)); validate = v; entityType = entityType; overwrite = No}
                 |_ -> None
 
+    let parseFileThenEntity (file : ResourceInput) =
+        match file with
+            |CachedResourceInput (r, e) -> r, Some e
+            |EntityResourceInput e ->
+                // eprintfn "%A %A" e.logicalpath e.filepath
+                e |> ((fun f -> f.scope, f.filepath, f.logicalpath, f.validate, (fun (t, t2) -> duration (fun () -> CKParser.parseString t2 (System.String.Intern(t)))) (f.filepath, f.filetext)) >> matchResult)
+                    |> parseEntity
+            |FileResourceInput f ->
+                (FileResource (f.filepath, { scope = f.scope; filepath = f.filepath; logicalpath = f.logicalpath }), [])
+                 |> parseEntity
+
+
     let saveResults (resource, entity) =
         seq {
             fileMap <-
@@ -259,7 +278,8 @@ type ResourceManager<'T> (computedDataFunction : (Entity -> 'T)) =
             match entity with
             |Some e ->
                 let item = struct(e, lazy (computedDataFunction e))
-                entitiesMap <- entitiesMap.Add(e.filepath, item); yield item
+                entitiesMap <- entitiesMap.Add(e.filepath, item)
+                yield resource, item
             |None -> ()
         }
 
@@ -292,7 +312,7 @@ type ResourceManager<'T> (computedDataFunction : (Entity -> 'T)) =
         entitiesMap <- entitiesMap |> Map.map (fun _ (struct (e, _)) -> struct (e, lazy (computedDataFunction e)))
 
     let updateFiles files =
-        let news = files |> PSeq.ofList |> PSeq.map (parseFile >> parseEntity) |> Seq.collect saveResults |> Seq.toList
+        let news = files |> PSeq.ofList |> PSeq.map (parseFileThenEntity) |> Seq.collect saveResults |> Seq.toList
         updateOverwrite()
         news
 
@@ -301,7 +321,7 @@ type ResourceManager<'T> (computedDataFunction : (Entity -> 'T)) =
     let allEntities() = entitiesMap |> Map.toList |> List.map snd |> List.filter (fun struct (e, _) -> e.overwrite <> Overwritten)
     let validatableEntities() = entitiesMap |> Map.toList |> List.map snd  |> List.filter (fun struct (e, _) -> e.overwrite <> Overwritten) |> List.filter (fun struct (e, _) -> e.validate)
 
-    member __.ManualProcessResource = parseFile >> parseEntity >> snd
+    member __.ManualProcessResource = parseFileThenEntity >> snd
     member __.ManualProcess (filename : string) (filetext : string) =
         let parsed = CKParser.parseString filetext filename
         match parsed with

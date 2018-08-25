@@ -4,10 +4,10 @@ open CWTools.Localisation
 open CWTools.Process.ProcessCore
 open CWTools.Process
 open System.Text
-open Microsoft.FSharp.Compiler.Range
+open CWTools.Utilities.Position
 
 module CK2Process =
-    type Option(key, pos) = 
+    type Option(key, pos) =
         inherit Node(key, pos)
         member this.Name = this.Tag "name" |> (function | Some (String s) -> s | Some (QString s) -> s | _ -> "")
         member this.CustomTooltip = this.TagText "custom_tooltip"
@@ -41,12 +41,12 @@ module CK2Process =
 
     let ck2Process = BaseProcess(maps)
     let processCK2Node = ck2Process.ProcessNode<Node>()
-    
-    let processEventFile (ev : ParsedFile) = 
+
+    let processEventFile (ev : ParsedFile) =
         let (ParsedFile e) = ev
         (ck2Process.ProcessNode<EventRoot>()) "" range.Zero e :?> EventRoot
 
-    let processArtifact = (ck2Process.ProcessNode<ArtifactFile>()) "" range.Zero >> (fun n -> n :?> ArtifactFile) 
+    let processArtifact = (ck2Process.ProcessNode<ArtifactFile>()) "" range.Zero >> (fun n -> n :?> ArtifactFile)
 
 
     let getTriggeredEvents (event:Event) =
@@ -57,7 +57,7 @@ module CK2Process =
         let fCombine = (@)
         (event.ID, event.Children |> List.collect (foldNode2 fNode fCombine []))
 
-    
+
     let getTriggeredEventsAll (root:EventRoot) =
         List.map getTriggeredEvents root.Events
 
@@ -70,7 +70,7 @@ module CK2Process =
         foldNode2 fNode fCombine [] node
 
     let getAllLocalisationKeys (localisation : ILocalisationAPI) (node:Node) =
-        let getDesc x = 
+        let getDesc x =
             match localisation.Values.ContainsKey(x) with
             | true -> localisation.Values.[x]
             | false -> x
@@ -88,13 +88,13 @@ module CK2Process =
           //  match localisation.values.ContainsKey(x) with
           //  | true -> localisation.values.[x]
          //   | false -> x
-        let fNode = (fun (x:Node) _ -> 
+        let fNode = (fun (x:Node) _ ->
                         match x with
-                        | :? Event as e when e.Tag "desc" |> Option.isSome 
+                        | :? Event as e when e.Tag "desc" |> Option.isSome
                             -> e.SetTag "desc" (LeafC (Leaf (KeyValueItem(Key("desc"), Value.String (getDesc e.Desc)))))
                         | :? Event as e when e.Child "desc" |> Option.isSome
-                            -> e.Child "desc" |> 
-                                function 
+                            -> e.Child "desc" |>
+                                function
                                 |Some n -> n.SetTag "text" (LeafC (Leaf (KeyValueItem(Key("text"), Value.String (getDesc (n.TagText "text"))))))
                                 |None -> ()
                         | :? Option as o -> o.SetTag "name" (LeafC (Leaf (KeyValueItem(Key("name"), Value.String (getDesc o.Name)))))
@@ -102,22 +102,22 @@ module CK2Process =
                         )
         let fCombine = (fun _ _ -> ())
         foldNode2 fNode fCombine () node
-    
+
     let addLocalisedDescAll (root:EventRoot) (localisation : ILocalisationAPI) =
         root.Events |> List.iter (addLocalisedDesc localisation)
         root
     let getOption (localisation : ILocalisationAPI) (option:Option) =
         let fNode = (fun (x:Node) ((d, t),i) ->
                         match x with
-                        | :? Option as o -> 
+                        | :? Option as o ->
                             let name =
                                 match o.Name with
-                                |"" -> 
+                                |"" ->
                                     match o.Child  "name" with |Some n -> n.TagText "text" |None -> ""
                                 |a -> a
                             let custom =
                                 match o.CustomTooltip with
-                                |"" -> 
+                                |"" ->
                                     match o.Child  "custom_toolip" with |Some n -> n.TagText "text" |None -> ""
                                 |a -> a
                             match name, custom with
@@ -156,7 +156,7 @@ module CK2Process =
     let getImmediate (event : Event)=
         event.Children |> List.filter (fun c -> c.Key = "immediate" || c.Key = "after")
                        |> List.map getIDs
-    
+
     let getAllImmediates (root : EventRoot) =
         root.Events |> List.map (fun e -> (e.ID, getImmediate e))
 
@@ -167,7 +167,7 @@ module CK2Process =
             //let etype = e.Tag "type" |> (function | Some (String s) -> s | _ -> "")
             let desc =
                 match e.Desc with
-                |"" -> 
+                |"" ->
                     match e.Child "desc" with
                     |Some n -> n.TagText "text"
                     |None -> ""

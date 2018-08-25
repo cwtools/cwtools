@@ -1,6 +1,6 @@
 ﻿namespace CWTools.Parser
 open FParsec
-open Microsoft.FSharp.Compiler.Range
+open CWTools.Utilities.Position
 open Types
 
 module internal SharedParsers =

@@ -2,7 +2,7 @@ namespace CWTools.Games
 open System.IO
 open CWTools.Parser
 open CWTools.Process
-open Microsoft.FSharp.Compiler.Range
+open CWTools.Utilities.Position
 open CWTools.Utilities.Utils
 open FSharp.Collections.ParallelSeq
 open FParsec

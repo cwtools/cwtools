@@ -7,8 +7,8 @@ open CWTools.Common
 open FSharp.Collections.ParallelSeq
 open CWTools.Localisation.HOI4Localisation
 open CWTools.Utilities.Utils
+open CWTools.Utilities.Position
 open System.IO
-open Microsoft.FSharp.Compiler
 
 type EmbeddedSettings = {
     embeddedFiles : (string * string) list
@@ -189,7 +189,7 @@ type HOI4Game(settings : HOI4Settings) =
         member __.References() = References<HOI4ComputedData>(resources, Lookup(), (localisationAPIs |> List.map snd))
         member __.Complete pos file text = [] //completion pos file text
         member __.ScopesAtPos pos file text = None //scopesAtPos pos file text
-        member __.GoToType pos file text = Some Range.range0
-        member __.FindAllRefs pos file text = Some [Range.range0]
+        member __.GoToType pos file text = Some range0
+        member __.FindAllRefs pos file text = Some [range0]
 
             //member __.ScriptedTriggers = parseResults |> List.choose (function |Pass(f, p, t) when f.Contains("scripted_triggers") -> Some p |_ -> None) |> List.map (fun t -> )

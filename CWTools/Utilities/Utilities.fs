@@ -1,7 +1,7 @@
 namespace CWTools.Utilities
 open System
 open System.Collections.Generic
-open Microsoft.FSharp.Compiler.Range
+open CWTools.Utilities.Position
 open System.Globalization
 
 module Utils =

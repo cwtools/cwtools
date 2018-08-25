@@ -16,7 +16,7 @@ open FParsec
 open System
 open CWTools.Utilities.Utils
 open System.IO
-open Microsoft.FSharp.Compiler.Range
+open CWTools.Utilities.Position
 
 module STLLocalisationString =
 
@@ -144,19 +144,19 @@ module STLLocalisationString =
         api <&!&> validateLocMap <&&> (api <&!&> validateReplaceMe)
 
     let checkFileEncoding (file : string) =
-            use fs = new FileStream(file, FileMode.Open) in
+            use fs = new FileStream(file, FileMode.Open, FileAccess.Read, FileShare.ReadWrite) in
             let bits = Array.zeroCreate 3
             fs.Read(bits, 0, 3) |> ignore
             // UTF8 byte order mark is: 0xEF,0xBB,0xBF
             if (bits.[0] = byte 0xEF && bits.[1] = byte 0xBB && bits.[2] = byte 0xBF) then OK
-            else 
+            else
                 let pos = rangeN file 0
-                Invalid [invManual ErrorCodes.WrongEncoding pos "" None ]   
-    
+                Invalid [invManual ErrorCodes.WrongEncoding pos "" None ]
+
     let checkLocFileName (file : string) =
         let filename = Path.GetFileNameWithoutExtension file
         let fileHeader = File.ReadLines(file) |> Seq.tryHead |> Option.map (fun h -> h.Trim().Replace(":",""))
-        eprintfn "lcfn %s %A" filename fileHeader
+        // eprintfn "lcfn %s %A" filename fileHeader
         let keyToLanguage =
             function
             |(x : string) when x.EndsWith("l_english",StringComparison.OrdinalIgnoreCase) -> Some STLLang.English
@@ -169,7 +169,7 @@ module STLLocalisationString =
             |x when x.EndsWith("l_default",StringComparison.OrdinalIgnoreCase) -> Some STLLang.Default
             |_ -> None
         match keyToLanguage filename, Option.bind (keyToLanguage) fileHeader with
-        |None, _ -> Invalid [invManual ErrorCodes.MissingLocFileLang (rangeN file 0) "" None ]  
+        |None, _ -> Invalid [invManual ErrorCodes.MissingLocFileLang (rangeN file 0) "" None ]
         |_, None -> Invalid [invManual ErrorCodes.MissingLocFileLangHeader (rangeN file 0) "" None ]
         |Some l1, Some l2 when l1 = l2 -> OK
         |Some l1, Some l2 -> Invalid [invManual (ErrorCodes.LocFileLangMismatch l1 l2) (rangeN file 0) "" None ]
@@ -178,7 +178,7 @@ module STLLocalisationString =
 
     let validateLocalisationFiles (locFolder : string) =
         eprintfn "%s" locFolder
-        let files = Directory.EnumerateDirectories locFolder 
+        let files = Directory.EnumerateDirectories locFolder
                     |> List.ofSeq
                     |> List.collect (Directory.EnumerateFiles >> List.ofSeq)
         let rootFiles = Directory.EnumerateFiles locFolder |> List.ofSeq
