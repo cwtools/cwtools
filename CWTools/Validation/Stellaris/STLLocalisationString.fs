@@ -156,16 +156,17 @@ module STLLocalisationString =
     let checkLocFileName (file : string) =
         let filename = Path.GetFileNameWithoutExtension file
         let fileHeader = File.ReadLines(file) |> Seq.tryHead |> Option.map (fun h -> h.Trim().Replace(":",""))
+        eprintfn "lcfn %s %A" filename fileHeader
         let keyToLanguage =
             function
-            |"l_english" -> Some STLLang.English
-            |"l_french" -> Some STLLang.French
-            |"l_spanish" -> Some STLLang.Spanish
-            |"l_german" -> Some STLLang.German
-            |"l_russian" -> Some STLLang.Russian
-            |"l_polish" -> Some STLLang.Polish
-            |"l_braz_por" -> Some STLLang.Braz_Por
-            |"l_default" -> Some STLLang.Default
+            |(x : string) when x.EndsWith("l_english",StringComparison.OrdinalIgnoreCase) -> Some STLLang.English
+            |x when x.EndsWith("l_french",StringComparison.OrdinalIgnoreCase) -> Some STLLang.French
+            |x when x.EndsWith("l_spanish",StringComparison.OrdinalIgnoreCase) -> Some STLLang.Spanish
+            |x when x.EndsWith("l_german",StringComparison.OrdinalIgnoreCase) -> Some STLLang.German
+            |x when x.EndsWith("l_russian",StringComparison.OrdinalIgnoreCase) -> Some STLLang.Russian
+            |x when x.EndsWith("l_polish",StringComparison.OrdinalIgnoreCase) -> Some STLLang.Polish
+            |x when x.EndsWith("l_braz_por",StringComparison.OrdinalIgnoreCase) -> Some STLLang.Braz_Por
+            |x when x.EndsWith("l_default",StringComparison.OrdinalIgnoreCase) -> Some STLLang.Default
             |_ -> None
         match keyToLanguage filename, Option.bind (keyToLanguage) fileHeader with
         |None, _ -> Invalid [invManual ErrorCodes.MissingLocFileLang (rangeN file 0) "" None ]  

@@ -16,7 +16,9 @@ module YAMLLocalisationParser =
         key : string
         entries : Entry list
     }
-    
+    let inline isLocValueChar (c: char) =
+        isAsciiLetter c || (c >= '\u0020' && c <= '\u007E') ||  (c >= '\u00A0' && c <= '\u017F') ||  (c >= '\u0401' && c <= '\u045F') || (c >= '\u0490' && c <= '\u0491') || (c >= '\u2013' && c <= '\u2044') 
+
     //let key = charsTillString ":" true 1000 .>> spaces <?> "key"
     let key = many1Satisfy ( (=) ':' >> not ) .>> pchar ':' .>> spaces <?> "key"
     //let descInner = (charsTillString "§")
@@ -24,7 +26,7 @@ module YAMLLocalisationParser =
     //let desc = pipe2 (pchar '"') (many ((attempt stringThenEscaped) <|> manyCharsTill anyChar (pchar '"')) |>> List.reduce (+)) (fun a b -> string a + b)
     //let desc = between (pchar '"') (pchar '"') (charsTillString "\"" false 10000) .>> spaces <?> "desc"
     //let desc = pipe3 (pchar '"' |>> string) (many (attempt stringThenEscaped) |>> List.fold (+) "")  (manyCharsTill (noneOf ['§']) (pchar '"')) (fun a b c -> string a + b + c) <?> "string"
-    let desc = restOfLine true .>> spaces <?> "desc"
+    let desc = many1Satisfy isLocValueChar .>> spaces <?> "desc"
     let value = digit .>> spaces <?> "version"
     let getRange (start: FParsec.Position) (endp : FParsec.Position) = mkRange start.StreamName (mkPos (int start.Line) (int start.Column)) (mkPos (int endp.Line) (int endp.Column))
 

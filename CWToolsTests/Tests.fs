@@ -136,7 +136,7 @@ let tests =
                 let locErrorCodes = [ "CW225"; "CW226"; "CW254"; "CW255"; "CW256"; "CW257"]
                 let globalLocError = stl.LocalisationErrors(true) |> List.filter (fun (c, s, n, l, f, k) -> List.contains c locErrorCodes)
                 yield testCase "globalLoc" <| fun () ->
-                    Expect.hasCountOf globalLocError 9u (fun f -> true) (sprintf "wrong number of errors %A" globalLocError)
+                    Expect.hasCountOf globalLocError 7u (fun f -> true) (sprintf "wrong number of errors %A" globalLocError)
             ]
     ]
 
