@@ -177,7 +177,7 @@ module STLLocalisationString =
 
 
     let validateLocalisationFiles (locFolder : string) =
-        eprintfn "%s" locFolder
+        // eprintfn "%s" locFolder
         let files = Directory.EnumerateDirectories locFolder
                     |> List.ofSeq
                     |> List.collect (Directory.EnumerateFiles >> List.ofSeq)

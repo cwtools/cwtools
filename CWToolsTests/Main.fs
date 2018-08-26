@@ -36,6 +36,7 @@ let emptyStellarisSettings (rootDirectory) = {
         effects = []
         modifiers = []
         embeddedFiles = []
+        cachedResourceData = []
     }
 }
 let rec getAllFolders dirs =
