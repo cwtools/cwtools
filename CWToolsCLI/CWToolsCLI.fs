@@ -163,9 +163,18 @@ module CWToolsCLI =
         let files = fileManager.AllFilesByPath()
         let resources = ResourceManager(STLCompute.computeSTLData (fun () -> None)).Api
         let entities = resources.UpdateFiles(files) |> List.map (fun (r, (struct (e, _))) -> r, e)
+        let mkPickler (resolver : IPicklerResolver) =
+            let arrayPickler = resolver.Resolve<Leaf array> ()
+            let writer (w : WriteState) (ns : Lazy<Leaf array>) =
+                arrayPickler.Write w "value" (ns.Force())
+            let reader (r : ReadState) =
+                let v = arrayPickler.Read r "value" in Lazy.CreateFromValue v
+            Pickler.FromPrimitives(reader, writer)
         let registry = new CustomPicklerRegistry()
+        do registry.RegisterFactory mkPickler
         registry.DeclareSerializable<FParsec.Position>()
-        registry.DeclareSerializable<Lazy<Leaf array>>()
+        // registry.DeclareSerializable<Lazy<Leaf array>>()
+        // registry.DeclareSerializable<System.LazyHelper>()
         let cache = PicklerCache.FromCustomPicklerRegistry registry
         let binarySerializer = FsPickler.CreateBinarySerializer(picklerResolver = cache)
         let data = { resources = entities; fileIndexTable = fileIndexTable}

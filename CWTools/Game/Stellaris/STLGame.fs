@@ -367,7 +367,7 @@ type STLGame (settings : StellarisSettings) =
                 |> List.choose (fun (f, ft) -> if ft = "" then Some (FileResourceInput { scope = "embedded"; filepath = f; logicalpath = (fileManager.ConvertPathToLogicalPath f) }) else None)
             let disableValidate (r, e) : Resource * Entity =
                 match r with
-                |EntityResource (s, er) -> EntityResource (s, { er with validate = false})
+                |EntityResource (s, er) -> EntityResource (s, { er with validate = false; scope = "embedded" })
                 |x -> x
                 , {e with validate = false}
             let cached = settings.embedded.cachedResourceData |> List.map (fun (r, e) -> CachedResourceInput (disableValidate (r, e)))

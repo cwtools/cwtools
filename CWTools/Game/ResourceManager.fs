@@ -278,6 +278,7 @@ type ResourceManager<'T> (computedDataFunction : (Entity -> 'T)) =
             match entity with
             |Some e ->
                 let item = struct(e, lazy (computedDataFunction e))
+                eprintfn "e %A %A %A" e.filepath e.logicalpath e.overwrite
                 entitiesMap <- entitiesMap.Add(e.filepath, item)
                 yield resource, item
             |None -> ()

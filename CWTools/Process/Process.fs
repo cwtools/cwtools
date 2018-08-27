@@ -54,6 +54,9 @@ and Node (key : string, pos : range) =
     let reset() =
         _leaves <- lazy (all |> Array.choose (function |LeafC l -> Some l |_ -> None))
     let leaves() = _leaves.Force()
+
+    do reset()
+
     new(key : string) = Node(key, range.Zero)
     member val Key = key
     member val Position = pos
@@ -85,7 +88,6 @@ and Node (key : string, pos : range) =
                                            |LeafValueC lv -> lv.ToRaw
                                            |LeafC l -> KeyValue(PosKeyValue (l.Position, l.ToRaw))
                                            |CommentC c -> (Comment c))
-
 
     static member Create key = Node(key)
 
