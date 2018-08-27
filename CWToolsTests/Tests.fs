@@ -20,6 +20,8 @@ open CWTools.Games.Stellaris
 open CWTools.Games.Stellaris.STLLookup
 open System.Threading
 open System.Globalization
+open CWTools.Validation.Stellaris
+open MBrace.FsPickler
 
 let emptyStellarisSettings (rootDirectory) = {
     rootDirectory = rootDirectory
@@ -257,9 +259,35 @@ let embeddedTests =
                                 |> Array.toList |> List.map (fun f -> f, "")
         // eprintfn "%A" filelist
         let embeddedFileNames = Assembly.GetEntryAssembly().GetManifestResourceNames() |> Array.filter (fun f -> f.Contains("embeddedtest") && (f.Contains("common") || f.Contains("localisation") || f.Contains("interface")))
+
+        //Test serialization
+        let fileManager = FileManager("./testfiles/embeddedtest/test", Some "", FilesScope.Vanilla, scriptFolders, "stellaris")
+        let files = fileManager.AllFilesByPath()
+        let resources = ResourceManager(STLCompute.computeSTLData (fun () -> None)).Api
+        let entities = resources.UpdateFiles(files) |> List.map (fun (r, (struct (e, _))) -> r, e)
+        let mkPickler (resolver : IPicklerResolver) =
+            let arrayPickler = resolver.Resolve<Leaf array> ()
+            let writer (w : WriteState) (ns : Lazy<Leaf array>) =
+                arrayPickler.Write w "value" (ns.Force())
+            let reader (r : ReadState) =
+                let v = arrayPickler.Read r "value" in Lazy<Leaf array>.CreateFromValue v
+            Pickler.FromPrimitives(reader, writer)
+        let registry = new CustomPicklerRegistry()
+        do registry.RegisterFactory mkPickler
+        registry.DeclareSerializable<FParsec.Position>()
+        let cache = PicklerCache.FromCustomPicklerRegistry registry
+        let binarySerializer = FsPickler.CreateBinarySerializer(picklerResolver = cache)
+        let data = { resources = entities; fileIndexTable = fileIndexTable}
+        let pickle = binarySerializer.Pickle data
+
+        let unpickled = binarySerializer.UnPickle pickle
+        fileIndexTable <- unpickled.fileIndexTable
+        let cached = unpickled.resources
+
+
         let embeddedFiles = embeddedFileNames |> List.ofArray |> List.map (fun f -> fixEmbeddedFileName f, (new StreamReader(Assembly.GetEntryAssembly().GetManifestResourceStream(f))).ReadToEnd())
         let settings = emptyStellarisSettings "./testfiles/embeddedtest/test"
-        let settingsE = { settings with embedded = { settings.embedded with embeddedFiles = embeddedFiles @ filelist };}
+        let settingsE = { settings with embedded = { settings.embedded with embeddedFiles = filelist; cachedResourceData = cached };}
 
         let stlE = STLGame(settingsE) :> IGame<STLComputedData>
         let stlNE = STLGame(settings) :> IGame<STLComputedData>

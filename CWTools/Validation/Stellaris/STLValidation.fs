@@ -201,7 +201,7 @@ module STLValidation =
                     <&!&> (fun l ->
                         let filename = l.Value.ToRawString().Replace("\\","/")
                         let filenamefallback = filename.Replace(".lua",".shader").Replace(".tga",".dds")
-                        match filenames |> List.exists (fun f -> f.EndsWith(filename, StringComparison.OrdinalIgnoreCase ) || f.EndsWith(filenamefallback, StringComparison.OrdinalIgnoreCase)) with
+                        match filenames |> List.exists (fun f -> f.EndsWith(filename, StringComparison.Ordinal ) || f.EndsWith(filenamefallback, StringComparison.Ordinal)) with
                         | true -> OK
                         | false -> Invalid [inv (ErrorCodes.MissingFile (l.Value.ToRawString())) l])
             sprites <&!&> inner
