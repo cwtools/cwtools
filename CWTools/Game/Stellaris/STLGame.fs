@@ -147,22 +147,6 @@ type STLGame (settings : StellarisSettings) =
         let updateTechnologies() =
             lookup.technologies <- getTechnologies (EntitySet (resources.AllEntities()))
 
-        let updateTypeDef() =
-            match settings.rules with
-            |Some rulesSettings ->
-                let rules, types, enums, complexenums = rulesSettings.ruleFiles |> List.fold (fun (rs, ts, es, ces) (fn, ft) -> let r2, t2, e2, ce2 = parseConfig fn ft in rs@r2, ts@t2, es@e2, ces@ce2) ([], [], [], [])
-                let rulesWithMod = rules @ (lookup.coreModifiers |> List.map (fun c -> AliasRule ("modifier", NewRule(LeafRule(specificField c.tag, ValueField (ValueType.Float (-1E+12, 1E+12))), {min = 0; max = 100; leafvalue = false; description = None; pushScope = None; replaceScopes = None}))))
-                let complexEnumDefs = getEnumsFromComplexEnums complexenums (resources.AllEntities() |> List.map (fun struct(e,_) -> e))
-                let allEnums = enums @ complexEnumDefs
-                lookup.configRules <- rulesWithMod
-                lookup.typeDefs <- types
-                lookup.enumDefs <- allEnums |> Map.ofList
-                let loc = allLocalisation() |> List.groupBy (fun l -> l.GetLang) |> List.map (fun (k, g) -> k, g |>List.collect (fun ls -> ls.GetKeys) |> Set.ofList )
-                let files = resources.GetResources() |> List.choose (function |FileResource (_, f) -> Some f.logicalpath |EntityResource (_, f) -> Some f.logicalpath) |> Set.ofList
-                let ruleApplicator = RuleApplicator(lookup.configRules, lookup.typeDefs, lookup.typeDefInfo, lookup.enumDefs, loc, files, lookup.scriptedTriggers, lookup.scriptedEffects)
-                lookup.typeDefInfo <- getTypesFromDefinitions ruleApplicator types (resources.AllEntities() |> List.map (fun struct(e,_) -> e))
-                //types |> List.iter (fun t -> eprintfn "%A %b" t.path (rulesWithMod |> List.exists(function |TypeRule((tr,_,_)) when tr = t.name -> true |_ -> false)))
-            |None -> ()
 
         // let findDuplicates (sl : Statement list) =
         //     let node = ProcessCore.processNodeBasic "root" Position.Empty sl
@@ -350,6 +334,52 @@ type STLGame (settings : StellarisSettings) =
             |_ -> None
 
 
+        let updateTypeDef =
+            let mutable simpleEnums = []
+            let mutable complexEnums = []
+            let mutable tempTypes = []
+            (fun rulesSettings ->
+                let timer = new System.Diagnostics.Stopwatch()
+                timer.Start()
+                match rulesSettings with
+                |Some rulesSettings ->
+                    let rules, types, enums, complexenums = rulesSettings.ruleFiles |> List.fold (fun (rs, ts, es, ces) (fn, ft) -> let r2, t2, e2, ce2 = parseConfig fn ft in rs@r2, ts@t2, es@e2, ces@ce2) ([], [], [], [])
+                    lookup.typeDefs <- types
+                    let rulesWithMod = rules @ (lookup.coreModifiers |> List.map (fun c -> AliasRule ("modifier", NewRule(LeafRule(specificField c.tag, ValueField (ValueType.Float (-1E+12, 1E+12))), {min = 0; max = 100; leafvalue = false; description = None; pushScope = None; replaceScopes = None}))))
+                    lookup.configRules <- rulesWithMod
+                    simpleEnums <- enums
+                    complexEnums <- complexenums
+                    tempTypes <- types
+                    eprintfn "Update config rules def: %i" timer.ElapsedMilliseconds; timer.Restart()
+                |None -> ()
+                let complexEnumDefs = getEnumsFromComplexEnums complexEnums (resources.AllEntities() |> List.map (fun struct(e,_) -> e))
+                let allEnums = simpleEnums @ complexEnumDefs
+                lookup.enumDefs <- allEnums |> Map.ofList
+                eprintfn "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
+                let loc = allLocalisation() |> List.groupBy (fun l -> l.GetLang) |> List.map (fun (k, g) -> k, g |>List.collect (fun ls -> ls.GetKeys) |> Set.ofList )
+                eprintfn "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
+                let files = resources.GetResources() |> List.choose (function |FileResource (_, f) -> Some f.logicalpath |EntityResource (_, f) -> Some f.logicalpath) |> Set.ofList
+                eprintfn "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
+                let tempRuleApplicator = RuleApplicator(lookup.configRules, lookup.typeDefs, lookup.typeDefInfo, lookup.enumDefs, loc, files, lookup.scriptedTriggers, lookup.scriptedEffects)
+                eprintfn "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
+                lookup.typeDefInfo <- getTypesFromDefinitions tempRuleApplicator tempTypes (resources.AllEntities() |> List.map (fun struct(e,_) -> e))
+                completionService <- Some (CompletionService(lookup.configRules, lookup.typeDefs, lookup.typeDefInfo, lookup.enumDefs, loc, files, lookup.scriptedTriggers, lookup.scriptedEffects))
+                eprintfn "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
+                ruleApplicator <- Some (RuleApplicator(lookup.configRules, lookup.typeDefs, lookup.typeDefInfo, lookup.enumDefs, loc, files, lookup.scriptedTriggers, lookup.scriptedEffects))
+                eprintfn "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
+                infoService <- Some (FoldRules(lookup.configRules, lookup.typeDefs, lookup.typeDefInfo, lookup.enumDefs, loc, files, lookup.scriptedTriggers, lookup.scriptedEffects, ruleApplicator.Value))
+                eprintfn "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
+            )
+        let refreshRuleCaches(rules) =
+            updateTypeDef(rules)
+            let timer = new System.Diagnostics.Stopwatch()
+            timer.Start()
+            let loc = allLocalisation() |> List.groupBy (fun l -> l.GetLang) |> List.map (fun (k, g) -> k, g |>List.collect (fun ls -> ls.GetKeys) |> Set.ofList )
+            eprintfn "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
+            let files = resources.GetResources() |> List.choose (function |FileResource (_, f) -> Some f.logicalpath |EntityResource (_, f) -> Some f.logicalpath) |> Set.ofList
+            eprintfn "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
+
+
         do
             eprintfn "Parsing %i files" (fileManager.AllFilesByPath().Length)
             let timer = new System.Diagnostics.Stopwatch()
@@ -384,14 +414,14 @@ type STLGame (settings : StellarisSettings) =
             updateModifiers()
             updateTechnologies()
             updateLocalisation()
-            updateTypeDef()
+            updateTypeDef(settings.rules)
             eprintfn "Initial cache complete in %i" (timer.Elapsed.Seconds)
 
-            let loc = allLocalisation() |> List.groupBy (fun l -> l.GetLang) |> List.map (fun (k, g) -> k, g |>List.collect (fun ls -> ls.GetKeys) |> Set.ofList )
-            let files = resources.GetResources() |> List.choose (function |FileResource (_, f) -> Some f.logicalpath |EntityResource (_, f) -> Some f.logicalpath) |> Set.ofList
-            completionService <- Some (CompletionService(lookup.configRules, lookup.typeDefs, lookup.typeDefInfo, lookup.enumDefs, loc, files, lookup.scriptedTriggers, lookup.scriptedEffects))
-            ruleApplicator <- Some (RuleApplicator(lookup.configRules, lookup.typeDefs, lookup.typeDefInfo, lookup.enumDefs, loc, files, lookup.scriptedTriggers, lookup.scriptedEffects))
-            infoService <- Some (FoldRules(lookup.configRules, lookup.typeDefs, lookup.typeDefInfo, lookup.enumDefs, loc, files, lookup.scriptedTriggers, lookup.scriptedEffects, ruleApplicator.Value))
+            // let loc = allLocalisation() |> List.groupBy (fun l -> l.GetLang) |> List.map (fun (k, g) -> k, g |>List.collect (fun ls -> ls.GetKeys) |> Set.ofList )
+            // let files = resources.GetResources() |> List.choose (function |FileResource (_, f) -> Some f.logicalpath |EntityResource (_, f) -> Some f.logicalpath) |> Set.ofList
+            // completionService <- Some (CompletionService(lookup.configRules, lookup.typeDefs, lookup.typeDefInfo, lookup.enumDefs, loc, files, lookup.scriptedTriggers, lookup.scriptedEffects))
+            // ruleApplicator <- Some (RuleApplicator(lookup.configRules, lookup.typeDefs, lookup.typeDefInfo, lookup.enumDefs, loc, files, lookup.scriptedTriggers, lookup.scriptedEffects))
+            // infoService <- Some (FoldRules(lookup.configRules, lookup.typeDefs, lookup.typeDefInfo, lookup.enumDefs, loc, files, lookup.scriptedTriggers, lookup.scriptedEffects, ruleApplicator.Value))
             //resources.ForceRecompute()
         interface IGame<STLComputedData> with
         //member __.Results = parseResults
@@ -425,6 +455,6 @@ type STLGame (settings : StellarisSettings) =
             member __.ScopesAtPos pos file text = scopesAtPos pos file text
             member __.GoToType pos file text = getInfoAtPos pos file text
             member __.FindAllRefs pos file text = findAllRefsFromPos pos file text
-
+            member __.ReplaceConfigRules rules = refreshRuleCaches(Some { ruleFiles = rules; validateRules = true})
 
             //member __.ScriptedTriggers = parseResults |> List.choose (function |Pass(f, p, t) when f.Contains("scripted_triggers") -> Some p |_ -> None) |> List.map (fun t -> )

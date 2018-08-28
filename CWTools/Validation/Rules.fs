@@ -19,6 +19,7 @@ open Microsoft.FSharp.Collections.Tagged
 open System.IO
 open FSharp.Data.Runtime
 open QuickGraph
+open System
 
 module rec Rules =
     type StringSet = Set<string, InsensitiveStringComparer>
@@ -60,9 +61,9 @@ module rec Rules =
 
     let firstCharEquals (c : char) = (fun s -> s |> Seq.tryHead |> Option.map ((=) c) |> Option.defaultValue false)
 
-    let inline checkValidValue (enumsMap : Collections.Map<_, Set<_, _>>) (severity : Severity) (vt : ValueType) (key : string) leafornode =
+    let inline checkValidValue (enumsMap : Collections.Map<_, Set<_, _>>) (severity : Severity) (vt : CWTools.Parser.ConfigParser.ValueType) (key : string) leafornode =
         if key |> firstCharEquals '@' then OK else
-            match vt with
+            match (vt) with
             |ValueType.Bool ->
                 if key = "yes" || key = "no" then OK else Invalid[inv (ErrorCodes.ConfigRulesUnexpectedValue (sprintf "Expecting yes or no, got %s" key) severity) leafornode]
             |ValueType.Enum e ->
@@ -232,7 +233,7 @@ module rec Rules =
             <&&>
             (rules <&!&> checkCardinality startNode)
 
-        and applyValueField severity (vt : ValueType) (leaf : Leaf) =
+        and applyValueField severity (vt : CWTools.Parser.ConfigParser.ValueType) (leaf : Leaf) =
             checkValidValue enumsMap severity vt (leaf.Value.ToRawString()) leaf
 
         and applyLeafValueRule (ctx : RuleContext) (rule : NewField) (leafvalue : LeafValue) =
@@ -827,9 +828,10 @@ module rec Rules =
         member __.Complete(pos : pos, entity : Entity) = complete pos entity
 
     let getTypesFromDefinitions (ruleapplicator : RuleApplicator) (types : TypeDefinition list) (es : Entity list) =
+        let entities = es |> List.map (fun e -> ((Path.GetDirectoryName e.logicalpath).Replace("\\","/")), e)
         let getTypeInfo (def : TypeDefinition) =
-            es |> List.choose (fun e -> if checkPathDir def ((Path.GetDirectoryName e.logicalpath).Replace("\\","/")) then Some e.entity else None)
-               |> List.collect (fun e ->
+            entities |> List.choose (fun (path, e) -> if checkPathDir def path then Some e.entity else None)
+                     |> List.collect (fun e ->
                             let inner (n : Node) =
                                 let subtypes = ruleapplicator.TestSubtype(def.subtypes, n) |> snd |> List.map (fun s -> def.name + "." + s)
                                 let key =
@@ -853,6 +855,7 @@ module rec Rules =
         types |> List.map (fun t -> t.name) |> List.fold (fun m k -> if Map.containsKey k m then m else Map.add k [] m ) results
 
     let getEnumsFromComplexEnums (complexenums : (ComplexEnumDef) list) (es : Entity list) =
+        let entities = es |> List.map (fun e -> e.logicalpath.Replace("\\","/"), e)
         let rec inner (enumtree : Node) (node : Node) =
             match enumtree.Children with
             |head::_ ->
@@ -867,7 +870,8 @@ module rec Rules =
                     |Some leaf -> node.TagsText (leaf.Key) |> Seq.map (fun k -> k.Trim([|'\"'|])) |> List.ofSeq
                     |None -> []
         let getEnumInfo (complexenum : ComplexEnumDef) =
-            let values = es |> List.choose (fun e -> if e.logicalpath.Replace("\\","/").StartsWith(complexenum.path.Replace("\\","/")) then Some e.entity else None)
-                            |> List.collect (fun e -> e.Children |> List.collect (inner complexenum.nameTree))
+            let cpath = complexenum.path.Replace("\\","/")
+            let values = entities |> List.choose (fun (path, e) -> if path.StartsWith(cpath, StringComparison.OrdinalIgnoreCase) then Some e.entity else None)
+                                  |> List.collect (fun e -> e.Children |> List.collect (inner complexenum.nameTree))
             complexenum.name, values
         complexenums |> List.map getEnumInfo

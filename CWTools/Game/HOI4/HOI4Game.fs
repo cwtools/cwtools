@@ -191,5 +191,6 @@ type HOI4Game(settings : HOI4Settings) =
         member __.ScopesAtPos pos file text = None //scopesAtPos pos file text
         member __.GoToType pos file text = Some range0
         member __.FindAllRefs pos file text = Some [range0]
+        member __.ReplaceConfigRules rules = ()
 
             //member __.ScriptedTriggers = parseResults |> List.choose (function |Pass(f, p, t) when f.Contains("scripted_triggers") -> Some p |_ -> None) |> List.map (fun t -> )

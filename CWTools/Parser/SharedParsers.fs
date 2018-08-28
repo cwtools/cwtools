@@ -77,7 +77,7 @@ module internal SharedParsers =
 
     let valueS = (many1SatisfyL isvaluechar "value character") |>> string |>> (fun s -> System.String.Intern(s)) |>> String <?> "string"
 
-    let valueQ = between (ch '"') (ch '"') (manyStrings (quotedCharSnippet <|> escapedChar)) |>> QString <?> "quoted string"
+    let valueQ = betweenL (ch '"') (ch '"') (manyStrings (quotedCharSnippet <|> escapedChar)) "quoted string" |>> QString <?> "quoted string"
 
     // let valueB = ( (skipString "yes") .>> nextCharSatisfiesNot (isvaluechar)  |>> (fun _ -> Bool(true))) <|>
     //                 ((skipString "no") .>> nextCharSatisfiesNot (isvaluechar)  |>> (fun _ -> Bool(false)))
