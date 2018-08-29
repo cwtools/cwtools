@@ -10,20 +10,39 @@ open CWTools.Common
 open CWTools.Process.STLScopes
 open CWTools.Parser.ConfigParser
 open CWTools.Utilities.Position
+open CWTools.Utilities.Utils
+open Microsoft.FSharp.Collections.Tagged
 
 
 
 type Lookup() =
-    member val scriptedTriggers : Effect list = [] with get, set
+    let mutable _scriptedTriggers : Effect list = []
 
-    member val scriptedEffects : Effect list = [] with get, set
+    let mutable _scriptedTriggersMap : Lazy<Map<string,Effect,InsensitiveStringComparer>> = lazy ( Map<string,Effect,InsensitiveStringComparer>.Empty (InsensitiveStringComparer()) )
+    let resetTriggers() =
+        _scriptedTriggersMap <- lazy (_scriptedTriggers|> List.map (fun e -> e.Name, e) |> (fun l -> EffectMap.FromList(InsensitiveStringComparer(), l)))
+
+    let mutable _scriptedEffects : Effect list = []
+
+    let mutable _scriptedEffectsMap : Lazy<Map<string,Effect,InsensitiveStringComparer>> = lazy ( Map<string,Effect,InsensitiveStringComparer>.Empty (InsensitiveStringComparer()) )
+    let resetEffects() =
+        _scriptedEffectsMap <- lazy (_scriptedTriggers|> List.map (fun e -> e.Name, e) |> (fun l -> EffectMap.FromList(InsensitiveStringComparer(), l)))
+    member __.scriptedTriggers
+        with get () = _scriptedTriggers
+        and set (value) = resetTriggers(); _scriptedTriggers <- value
+    member this.scriptedTriggersMap with get() = _scriptedTriggersMap.Force()
+    member __.scriptedEffects
+        with get () = _scriptedEffects
+        and set (value) = resetEffects(); _scriptedEffects <- value
+    member this.scriptedEffectsMap with get() = _scriptedEffectsMap.Force()
+
     member val staticModifiers : Modifier list = [] with get, set
     member val coreModifiers : Modifier list = [] with get, set
     member val definedScriptVariables : string list = [] with get, set
     member val scriptedLoc : string list = [] with get, set
-    member val proccessedLoc : (Lang * Map<string, LocEntry>) list = [] with get, set
+    member val proccessedLoc : (Lang * Collections.Map<string, LocEntry>) list = [] with get, set
     member val technologies : (string * (string list)) list =  [] with get, set
     member val configRules : RootRule list = [] with get, set
     member val typeDefs : TypeDefinition list = [] with get, set
-    member val enumDefs : Map<string, string list> = Map.empty with get, set
-    member val typeDefInfo : Map<string, (string * range) list> = Map.empty with get, set
+    member val enumDefs : Collections.Map<string, string list> = Map.empty with get, set
+    member val typeDefInfo : Collections.Map<string, (string * range) list> = Map.empty with get, set

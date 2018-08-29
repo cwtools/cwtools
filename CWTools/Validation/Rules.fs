@@ -20,6 +20,8 @@ open System.IO
 open FSharp.Data.Runtime
 open QuickGraph
 open System
+open FSharp.Collections.ParallelSeq
+
 
 module rec Rules =
     type StringSet = Set<string, InsensitiveStringComparer>
@@ -136,9 +138,9 @@ module rec Rules =
         let leaf = LeafValue(Value.String key)
         checkLeftField enumsMap typesMap effectMap triggerMap localisation files ctx field key leaf
 
-    type RuleApplicator(rootRules : RootRule list, typedefs : TypeDefinition list , types : Collections.Map<string, (string * range) list>, enums : Collections.Map<string, string list>, localisation : (Lang * Collections.Set<string>) list, files : Collections.Set<string>, triggers : Effect list, effects : Effect list) =
-        let triggerMap = triggers |> List.map (fun e -> e.Name, e) |> (fun l -> EffectMap.FromList(InsensitiveStringComparer(), l))
-        let effectMap = effects |> List.map (fun e -> e.Name, e) |> (fun l -> EffectMap.FromList(InsensitiveStringComparer(), l))
+    type RuleApplicator(rootRules : RootRule list, typedefs : TypeDefinition list , types : Collections.Map<string, StringSet>, enums : Collections.Map<string, StringSet>, localisation : (Lang * Collections.Set<string>) list, files : Collections.Set<string>, triggers : Map<string,Effect,InsensitiveStringComparer>, effects : Map<string,Effect,InsensitiveStringComparer>) =
+        let triggerMap = triggers //|> List.map (fun e -> e.Name, e) |> (fun l -> EffectMap.FromList(InsensitiveStringComparer(), l))
+        let effectMap = effects //|> List.map (fun e -> e.Name, e) |> (fun l -> EffectMap.FromList(InsensitiveStringComparer(), l))
 
         let aliases =
             rootRules |> List.choose (function |AliasRule (a, rs) -> Some (a, rs) |_ -> None)
@@ -147,8 +149,8 @@ module rec Rules =
                         |> Collections.Map.ofList
         let typeRules =
             rootRules |> List.choose (function |TypeRule (k, rs) -> Some (k, rs) |_ -> None)
-        let typesMap = types |> (Map.map (fun _ s -> StringSet.Create(InsensitiveStringComparer(), (s |> List.map fst))))
-        let enumsMap = enums |> (Map.map (fun _ s -> StringSet.Create(InsensitiveStringComparer(), s)))
+        let typesMap = types //|> Map.toSeq |> PSeq.map (fun (k, s) -> k, StringSet.Create(InsensitiveStringComparer(), (s |> List.map fst))) |> Map.ofSeq
+        let enumsMap = enums //|> Map.toSeq |> PSeq.map (fun (k, s) -> k, StringSet.Create(InsensitiveStringComparer(), s)) |> Map.ofSeq
 
 
         let isValidValue (value : Value) =
@@ -358,9 +360,9 @@ module rec Rules =
             fun _ es -> es.Raw |> List.map (fun struct(e, _) -> e.logicalpath, e.entity) <&!!&> validate
 
 
-    type FoldRules(rootRules : RootRule list, typedefs : TypeDefinition list , types : Collections.Map<string, (string * range) list>, enums : Collections.Map<string, string list>, localisation : (Lang * Collections.Set<string>) list, files : Collections.Set<string>, triggers : Effect list, effects : Effect list, ruleApplicator : RuleApplicator) =
-        let triggerMap = triggers |> List.map (fun e -> e.Name, e) |> (fun l -> EffectMap.FromList(InsensitiveStringComparer(), l))
-        let effectMap = effects |> List.map (fun e -> e.Name, e) |> (fun l -> EffectMap.FromList(InsensitiveStringComparer(), l))
+    type FoldRules(rootRules : RootRule list, typedefs : TypeDefinition list , types : Collections.Map<string, StringSet>, enums : Collections.Map<string, StringSet>, localisation : (Lang * Collections.Set<string>) list, files : Collections.Set<string>, triggers : Map<string,Effect,InsensitiveStringComparer>, effects : Map<string,Effect,InsensitiveStringComparer>, ruleApplicator : RuleApplicator) =
+        let triggerMap = triggers //|> List.map (fun e -> e.Name, e) |> (fun l -> EffectMap.FromList(InsensitiveStringComparer(), l))
+        let effectMap = effects //|> List.map (fun e -> e.Name, e) |> (fun l -> EffectMap.FromList(InsensitiveStringComparer(), l))
 
         let aliases =
             rootRules |> List.choose (function |AliasRule (a, rs) -> Some (a, rs) |_ -> None)
@@ -370,8 +372,8 @@ module rec Rules =
         let typeRules =
             rootRules |> List.choose (function |TypeRule (k, rs) -> Some (k, rs) |_ -> None)
 
-        let typesMap = types |> (Map.map (fun _ s -> StringSet.Create(InsensitiveStringComparer(), (s |> List.map fst))))
-        let enumsMap = enums |> (Map.map (fun _ s -> StringSet.Create(InsensitiveStringComparer(), s)))
+        let typesMap = types// |> Map.toSeq |> PSeq.map (fun (k,s) -> k, StringSet.Create(InsensitiveStringComparer(), (s |> List.map fst))) |> Map.ofSeq
+        let enumsMap = enums //|> Map.toSeq |> PSeq.map (fun (k,s) -> k, StringSet.Create(InsensitiveStringComparer(), s)) |> Map.ofSeq
 
         let rec singleFoldRules fNode fChild fLeaf fLeafValue fComment acc child rule :'r =
             let recurse = singleFoldRules fNode fChild fLeaf fLeafValue fComment
@@ -616,7 +618,7 @@ module rec Rules =
 
     // type FoldRules(rootRules : RootRule list, typedefs : TypeDefinition list , types : Collections.Map<string, (string * range) list>, enums : Collections.Map<string, string list>, localisation : (Lang * Collections.Set<string>) list, files : Collections.Set<string>, triggers : Effect list, effects : Effect list, ruleApplicator : RuleApplicator) =
 
-    type CompletionService(rootRules : RootRule list, typedefs : TypeDefinition list , types : Collections.Map<string, (string * range) list>, enums : Collections.Map<string, string list>, localisation : (Lang * Collections.Set<string>) list, files : Collections.Set<string>, triggers : Effect list, effects : Effect list)  =
+    type CompletionService(rootRules : RootRule list, typedefs : TypeDefinition list , types : Collections.Map<string, StringSet>, enums : Collections.Map<string, StringSet>, localisation : (Lang * Collections.Set<string>) list, files : Collections.Set<string>, triggers : Map<string,Effect,InsensitiveStringComparer>, effects : Map<string,Effect,InsensitiveStringComparer>)  =
         let aliases =
             rootRules |> List.choose (function |AliasRule (a, rs) -> Some (a, rs) |_ -> None)
                         |> List.groupBy fst
@@ -624,16 +626,18 @@ module rec Rules =
                         |> Collections.Map.ofList
         let typeRules =
             rootRules |> List.choose (function |TypeRule (k, rs) -> Some (k, rs) |_ -> None)
+        let typesMap = types //|> Map.toSeq |> PSeq.map (fun (k, s) -> k, StringSet.Create(InsensitiveStringComparer(), (s |> List.map fst))) |> Map.ofSeq
 
-        let typesMap = types |> (Map.map (fun _ s -> StringSet.Create(InsensitiveStringComparer(), (s |> List.map fst))))
-        let enumsMap = enums |> (Map.map (fun _ s -> StringSet.Create(InsensitiveStringComparer(), s)))
-        let types = types |> Map.map (fun k s -> s |> List.map fst)
-        let triggerMap = triggers |> List.map (fun e -> e.Name, e) |> (fun l -> EffectMap.FromList(InsensitiveStringComparer(), l))
-        let effectMap = effects |> List.map (fun e -> e.Name, e) |> (fun l -> EffectMap.FromList(InsensitiveStringComparer(), l))
+        //let typesMap = types |> (Map.map (fun _ s -> StringSet.Create(InsensitiveStringComparer(), (s |> List.map fst))))
+        let enumsMap = enums // |> Map.toSeq |> PSeq.map (fun (k, s) -> k, StringSet.Create(InsensitiveStringComparer(), s)) |> Map.ofSeq
+        let types = types |> Map.map (fun _ s -> s.ToList())
+
+        let triggerMap = triggers// |> List.map (fun e -> e.Name, e) |> (fun l -> EffectMap.FromList(InsensitiveStringComparer(), l))
+        let effectMap = effects// |> List.map (fun e -> e.Name, e) |> (fun l -> EffectMap.FromList(InsensitiveStringComparer(), l))
 
         let fieldToCompletionList (field : NewField) =
             match field with
-            |ValueField (Enum e) -> enums.TryFind(e) |> Option.bind (List.tryHead) |> Option.defaultValue "x"
+            |ValueField (Enum e) -> enums.TryFind(e) |> Option.bind (fun s -> if s.IsEmpty then None else Some (s.MaximumElement)) |> Option.defaultValue "x"
             |ValueField v -> getValidValues v |> Option.bind (List.tryHead) |> Option.defaultValue "x"
             |TypeField t -> types.TryFind(t) |> Option.bind (List.tryHead) |> Option.defaultValue "x"
             |ScopeField _ -> "THIS"
@@ -683,7 +687,7 @@ module rec Rules =
                 |LeafValueRule lv ->
                     match lv with
                     |NewField.TypeField t -> types.TryFind(t) |> Option.defaultValue [] |> List.map Simple
-                    |NewField.ValueField (Enum e) -> enums.TryFind(e) |> Option.defaultValue [] |> List.map Simple
+                    |NewField.ValueField (Enum e) -> enums.TryFind(e) |> Option.map (fun s -> s.ToList()) |> Option.defaultValue [] |> List.map Simple
                     |_ -> []
                 //TODO: Add leafvalue
                 |_ -> []
@@ -713,7 +717,7 @@ module rec Rules =
                 //eprintfn "%A" types
                 //eprintfn "%A" field
                 match field with
-                |NewField.ValueField (Enum e) -> enums.TryFind(e) |> Option.defaultValue [] |> List.map Simple
+                |NewField.ValueField (Enum e) -> enums.TryFind(e) |> Option.map (fun s -> s.ToList()) |> Option.defaultValue [] |> List.map Simple
                 |NewField.ValueField v -> getValidValues v |> Option.defaultValue [] |> List.map Simple
                 |NewField.TypeField t -> types.TryFind(t) |> Option.defaultValue [] |> List.map Simple
                 |NewField.LocalisationField s ->
@@ -851,7 +855,7 @@ module rec Rules =
                             childres
                             @
                             (e.LeafValues |> List.ofSeq |> List.map (fun lv -> def.name, (lv.Value.ToString(), lv.Position))))
-        let results = types |> List.collect getTypeInfo |> List.fold (fun m (n, k) -> if Map.containsKey n m then Map.add n (k::m.[n]) m else Map.add n [k] m) Map.empty
+        let results = types |> Seq.ofList |> PSeq.collect getTypeInfo |> List.ofSeq |> List.fold (fun m (n, k) -> if Map.containsKey n m then Map.add n (k::m.[n]) m else Map.add n [k] m) Map.empty
         types |> List.map (fun t -> t.name) |> List.fold (fun m k -> if Map.containsKey k m then m else Map.add k [] m ) results
 
     let getEnumsFromComplexEnums (complexenums : (ComplexEnumDef) list) (es : Entity list) =
@@ -859,14 +863,14 @@ module rec Rules =
         let rec inner (enumtree : Node) (node : Node) =
             match enumtree.Children with
             |head::_ ->
-                if enumtree.Children |> List.exists (fun n -> n.Key == "enum_name")
+                if enumtree.Children |> List.exists (fun n -> n.Key = "enum_name")
                 then node.Children |> List.map (fun n -> n.Key.Trim([|'\"'|])) else
                 node.Children |> List.collect (inner head)
             |[] ->
-                if enumtree.LeafValues |> Seq.exists (fun lv -> lv.Value.ToRawString() == "enum_name")
+                if enumtree.LeafValues |> Seq.exists (fun lv -> lv.Value.ToRawString() = "enum_name")
                 then node.LeafValues |> Seq.map (fun lv -> lv.Value.ToRawString().Trim([|'\"'|])) |> List.ofSeq
                 else
-                    match enumtree.Leaves |> Seq.tryFind (fun l -> l.Value.ToRawString() == "enum_name") with
+                    match enumtree.Leaves |> Seq.tryFind (fun l -> l.Value.ToRawString() = "enum_name") with
                     |Some leaf -> node.TagsText (leaf.Key) |> Seq.map (fun k -> k.Trim([|'\"'|])) |> List.ofSeq
                     |None -> []
         let getEnumInfo (complexenum : ComplexEnumDef) =
@@ -874,4 +878,4 @@ module rec Rules =
             let values = entities |> List.choose (fun (path, e) -> if path.StartsWith(cpath, StringComparison.OrdinalIgnoreCase) then Some e.entity else None)
                                   |> List.collect (fun e -> e.Children |> List.collect (inner complexenum.nameTree))
             complexenum.name, values
-        complexenums |> List.map getEnumInfo
+        complexenums |> List.toSeq |> PSeq.map getEnumInfo |> List.ofSeq

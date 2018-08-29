@@ -90,6 +90,8 @@ type STLGame (settings : StellarisSettings) =
         let mutable localisationAPIs : (bool * ILocalisationAPI) list = []
         let allLocalisation() = localisationAPIs |> List.map snd
         let validatableLocalisation() = localisationAPIs |> List.choose (fun (validate, api) -> if validate then Some api else None)
+        let mutable localisationKeys = []
+        let mutable taggedLocalisationKeys = []
         let mutable localisationErrors : (string * Severity * range * int * string * string option) list option = None
 
 
@@ -132,9 +134,10 @@ type STLGame (settings : StellarisSettings) =
                     |> List.map (fun (_, fn, f) -> (fn, f))
                     |> (fun files -> STLLocalisationService(files))
                     |> (fun l -> (STL STLLang.Default :: settings.validation.langs) |> List.map (fun lang -> false, l.Api(lang))))
-            let taggedKeys = allLocalisation() |> List.groupBy (fun l -> l.GetLang) |> List.map (fun (k, g) -> k, g |> List.collect (fun ls -> ls.GetKeys) |> List.fold (fun (s : LocKeySet) v -> s.Add v) (LocKeySet.Empty(InsensitiveStringComparer())) )
+            localisationKeys <-allLocalisation() |> List.groupBy (fun l -> l.GetLang) |> List.map (fun (k, g) -> k, g |>List.collect (fun ls -> ls.GetKeys) |> Set.ofList )
+            taggedLocalisationKeys <- allLocalisation() |> List.groupBy (fun l -> l.GetLang) |> List.map (fun (k, g) -> k, g |> List.collect (fun ls -> ls.GetKeys) |> List.fold (fun (s : LocKeySet) v -> s.Add v) (LocKeySet.Empty(InsensitiveStringComparer())) )
             let validatableEntries = validatableLocalisation() |> List.groupBy (fun l -> l.GetLang) |> List.map (fun (k, g) -> k, g |> List.collect (fun ls -> ls.ValueMap |> Map.toList) |> Map.ofList)
-            lookup.proccessedLoc <- validatableEntries |> List.map (fun f -> processLocalisation lookup.scriptedEffects lookup.scriptedLoc lookup.definedScriptVariables (EntitySet (resources.AllEntities())) f taggedKeys)
+            lookup.proccessedLoc <- validatableEntries |> List.map (fun f -> processLocalisation lookup.scriptedEffects lookup.scriptedLoc lookup.definedScriptVariables (EntitySet (resources.AllEntities())) f taggedLocalisationKeys)
 
             //TODO: Add loc from embedded
 
@@ -218,7 +221,7 @@ type STLGame (settings : StellarisSettings) =
             (validateShips (flattened)) @ (validateEvents (flattened)) @ res @ fres @ eres @ tres @ mres @ evres @ wres
         let localisationCheck (entities : struct (Entity * Lazy<STLComputedData>) list) =
             eprintfn "Localisation check %i files" (entities.Length)
-            let keys = allLocalisation() |> List.groupBy (fun l -> l.GetLang) |> List.map (fun (k, g) -> k, g |>List.collect (fun ls -> ls.GetKeys) |> Set.ofList )
+            //let keys = allLocalisation() |> List.groupBy (fun l -> l.GetLang) |> List.map (fun (k, g) -> k, g |>List.collect (fun ls -> ls.GetKeys) |> Set.ofList )
             //let allEntries = allLocalisation() |> List.groupBy (fun l -> l.GetLang) |> List.map (fun (k, g) -> k, g |> List.collect (fun ls -> ls.ValueMap |> Map.toList) |> Map.ofList)
 
             let validators = [valEventLocs; valTechLocs; valCompSetLocs; valCompTempLocs; valBuildingLocs; valTraditionLocCats; valArmiesLoc;
@@ -229,21 +232,21 @@ type STLGame (settings : StellarisSettings) =
                                  valScriptedTriggers; valSpecialProjects; valStarbaseType; valTileBlockers; valAnomalies]
             let newEntities = EntitySet entities
             let oldEntities = EntitySet (resources.AllEntities())
-            let vs = (validators |> List.map (fun v -> v oldEntities keys newEntities) |> List.fold (<&&>) OK)
+            let vs = (validators |> List.map (fun v -> v oldEntities localisationKeys newEntities) |> List.fold (<&&>) OK)
             let locFileValidation = (fileManager.LocalisationFiles() |> List.map fst) <&!&> validateLocalisationFiles
             (vs <&&> locFileValidation) |> (function |Invalid es -> es |_ -> [])
 
         let globalLocalisation () =
-            let taggedKeys = allLocalisation() |> List.groupBy (fun l -> l.GetLang) |> List.map (fun (k, g) -> k, g |> List.collect (fun ls -> ls.GetKeys) |> List.fold (fun (s : LocKeySet) v -> s.Add v) (LocKeySet.Empty(InsensitiveStringComparer())) )
+            // let taggedKeys = allLocalisation() |> List.groupBy (fun l -> l.GetLang) |> List.map (fun (k, g) -> k, g |> List.collect (fun ls -> ls.GetKeys) |> List.fold (fun (s : LocKeySet) v -> s.Add v) (LocKeySet.Empty(InsensitiveStringComparer())) )
 
-            let validatableEntries = validatableLocalisation() |> List.groupBy (fun l -> l.GetLang) |> List.map (fun (k, g) -> k, g |> List.collect (fun ls -> ls.ValueMap |> Map.toList) |> Map.ofList)
-            let oldEntities = EntitySet (resources.AllEntities())
+            // let validatableEntries = validatableLocalisation() |> List.groupBy (fun l -> l.GetLang) |> List.map (fun (k, g) -> k, g |> List.collect (fun ls -> ls.ValueMap |> Map.toList) |> Map.ofList)
+            // let oldEntities = EntitySet (resources.AllEntities())
 
             // let apiValidators = [validateLocalisation]
             // let apiVs = validatableEntries <&!&> (fun l -> apiValidators |> List.fold (fun s v -> s <&&> v lookup.scriptedEffects lookup.scriptedLoc lookup.definedScriptVariables oldEntities l taggedKeys) OK)
             //                  |> (function |Invalid es -> es |_ -> [])
             //apiVs
-            lookup.proccessedLoc |> validateProcessedLocalisation taggedKeys |> (function |Invalid es -> es |_ -> [])
+            lookup.proccessedLoc |> validateProcessedLocalisation taggedLocalisationKeys |> (function |Invalid es -> es |_ -> [])
 
         let makeEntityResourceInput filepath filetext  =
             let filepath = Path.GetFullPath(filepath)
@@ -338,6 +341,8 @@ type STLGame (settings : StellarisSettings) =
             let mutable simpleEnums = []
             let mutable complexEnums = []
             let mutable tempTypes = []
+            let mutable tempTypeMap = [("", StringSet.Empty(InsensitiveStringComparer()))] |> Map.ofList
+            let mutable tempEnumMap = [("", StringSet.Empty(InsensitiveStringComparer()))] |> Map.ofList
             (fun rulesSettings ->
                 let timer = new System.Diagnostics.Stopwatch()
                 timer.Start()
@@ -353,31 +358,40 @@ type STLGame (settings : StellarisSettings) =
                     eprintfn "Update config rules def: %i" timer.ElapsedMilliseconds; timer.Restart()
                 |None -> ()
                 let complexEnumDefs = getEnumsFromComplexEnums complexEnums (resources.AllEntities() |> List.map (fun struct(e,_) -> e))
+                // eprintfn "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
                 let allEnums = simpleEnums @ complexEnumDefs
+                // eprintfn "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
                 lookup.enumDefs <- allEnums |> Map.ofList
-                eprintfn "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
-                let loc = allLocalisation() |> List.groupBy (fun l -> l.GetLang) |> List.map (fun (k, g) -> k, g |>List.collect (fun ls -> ls.GetKeys) |> Set.ofList )
-                eprintfn "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
+                // eprintfn "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
+                tempEnumMap <- lookup.enumDefs |> Map.toSeq |> PSeq.map (fun (k, s) -> k, StringSet.Create(InsensitiveStringComparer(), (s))) |> Map.ofSeq
+                // eprintfn "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
+                let loc = localisationKeys
+                // eprintfn "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
                 let files = resources.GetResources() |> List.choose (function |FileResource (_, f) -> Some f.logicalpath |EntityResource (_, f) -> Some f.logicalpath) |> Set.ofList
-                eprintfn "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
-                let tempRuleApplicator = RuleApplicator(lookup.configRules, lookup.typeDefs, lookup.typeDefInfo, lookup.enumDefs, loc, files, lookup.scriptedTriggers, lookup.scriptedEffects)
-                eprintfn "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
-                lookup.typeDefInfo <- getTypesFromDefinitions tempRuleApplicator tempTypes (resources.AllEntities() |> List.map (fun struct(e,_) -> e))
-                completionService <- Some (CompletionService(lookup.configRules, lookup.typeDefs, lookup.typeDefInfo, lookup.enumDefs, loc, files, lookup.scriptedTriggers, lookup.scriptedEffects))
-                eprintfn "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
-                ruleApplicator <- Some (RuleApplicator(lookup.configRules, lookup.typeDefs, lookup.typeDefInfo, lookup.enumDefs, loc, files, lookup.scriptedTriggers, lookup.scriptedEffects))
-                eprintfn "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
-                infoService <- Some (FoldRules(lookup.configRules, lookup.typeDefs, lookup.typeDefInfo, lookup.enumDefs, loc, files, lookup.scriptedTriggers, lookup.scriptedEffects, ruleApplicator.Value))
-                eprintfn "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
+                // eprintfn "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
+                let tempRuleApplicator = RuleApplicator(lookup.configRules, lookup.typeDefs, tempTypeMap, tempEnumMap, loc, files, lookup.scriptedTriggersMap, lookup.scriptedEffectsMap)
+                // eprintfn "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
+                let allentities = resources.AllEntities() |> List.map (fun struct(e,_) -> e)
+                // eprintfn "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
+                lookup.typeDefInfo <- getTypesFromDefinitions tempRuleApplicator tempTypes allentities
+                // eprintfn "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
+                tempTypeMap <- lookup.typeDefInfo |> Map.toSeq |> PSeq.map (fun (k, s) -> k, StringSet.Create(InsensitiveStringComparer(), (s |> List.map fst))) |> Map.ofSeq
+                // eprintfn "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
+                completionService <- Some (CompletionService(lookup.configRules, lookup.typeDefs, tempTypeMap, tempEnumMap, loc, files, lookup.scriptedTriggersMap, lookup.scriptedEffectsMap))
+                // eprintfn "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
+                ruleApplicator <- Some (RuleApplicator(lookup.configRules, lookup.typeDefs, tempTypeMap, tempEnumMap, loc, files, lookup.scriptedTriggersMap, lookup.scriptedEffectsMap))
+                // eprintfn "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
+                infoService <- Some (FoldRules(lookup.configRules, lookup.typeDefs, tempTypeMap, tempEnumMap, loc, files, lookup.scriptedTriggersMap, lookup.scriptedEffectsMap, ruleApplicator.Value))
+                // eprintfn "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
             )
         let refreshRuleCaches(rules) =
             updateTypeDef(rules)
-            let timer = new System.Diagnostics.Stopwatch()
-            timer.Start()
-            let loc = allLocalisation() |> List.groupBy (fun l -> l.GetLang) |> List.map (fun (k, g) -> k, g |>List.collect (fun ls -> ls.GetKeys) |> Set.ofList )
-            eprintfn "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
-            let files = resources.GetResources() |> List.choose (function |FileResource (_, f) -> Some f.logicalpath |EntityResource (_, f) -> Some f.logicalpath) |> Set.ofList
-            eprintfn "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
+            // let timer = new System.Diagnostics.Stopwatch()
+            // timer.Start()
+            // let loc = allLocalisation() |> List.groupBy (fun l -> l.GetLang) |> List.map (fun (k, g) -> k, g |>List.collect (fun ls -> ls.GetKeys) |> Set.ofList )
+            // eprintfn "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
+            // let files = resources.GetResources() |> List.choose (function |FileResource (_, f) -> Some f.logicalpath |EntityResource (_, f) -> Some f.logicalpath) |> Set.ofList
+            // eprintfn "Refresh rule caches time: %i" timer.ElapsedMilliseconds; timer.Restart()
 
 
         do
@@ -456,5 +470,6 @@ type STLGame (settings : StellarisSettings) =
             member __.GoToType pos file text = getInfoAtPos pos file text
             member __.FindAllRefs pos file text = findAllRefsFromPos pos file text
             member __.ReplaceConfigRules rules = refreshRuleCaches(Some { ruleFiles = rules; validateRules = true})
+            member __.RefreshCaches() = refreshRuleCaches None
 
             //member __.ScriptedTriggers = parseResults |> List.choose (function |Pass(f, p, t) when f.Contains("scripted_triggers") -> Some p |_ -> None) |> List.map (fun t -> )
