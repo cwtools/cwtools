@@ -58,6 +58,10 @@ alias[trigger:any_country] = {
 
 alias[trigger:valid_planet_killer_target] = scope[fleet]
 
+alias[trigger:scope_field] = {
+    ## cardinality = 0..inf
+    alias_name[trigger] = alias_match_left[trigger]
+}
 ship_size = {
     ## cardinality = 0..1
     formation_priority = int

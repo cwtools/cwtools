@@ -10,6 +10,14 @@ country_event = {
                 valid_planet_killer_target = this
             }
         }
+        NOT = {
+            #error
+            exists = test
+        }
+        owner = {
+            #error
+            exists = test
+        }
     }
     immediate = {
         set_name = something

@@ -278,14 +278,14 @@ module rec Rules =
                 let scope = newCtx.scopes
                 let key = node.Key
                 match changeScope true effectMap triggerMap key scope with
-                |NewScope ({Scopes = current::_} ,_) ->
-                    let newCtx = {newCtx with scopes = {newCtx.scopes with Scopes = current::newCtx.scopes.Scopes}}
+                |NewScope (newScopes ,_) ->
+                    let newCtx = {newCtx with scopes = newScopes}
                     applyClauseField enforceCardinality newCtx rules node
                 |NotFound _ ->
                     Invalid [inv (ErrorCodes.CustomError "This scope command is not valid" Severity.Error) node]
                 |WrongScope (command, prevscope, expected) ->
                     Invalid [inv (ErrorCodes.ConfigRulesErrorInTarget command (prevscope.ToString()) (sprintf "%A" expected) ) node]
-                |_ -> OK
+                |_ -> Invalid [inv (ErrorCodes.CustomError "Something went wrong with this scope change" Severity.Hint) node]
 
             |_ -> applyClauseField enforceCardinality newCtx rules node
 
@@ -306,9 +306,9 @@ module rec Rules =
             applyNodeRule true context options (ValueField (ValueType.Specific "root")) rules node
 
         let validate ((path, root) : string * Node) =
+            let pathDir = (Path.GetDirectoryName path).Replace("\\","/")
             let inner (node : Node) =
 
-                let pathDir = (Path.GetDirectoryName path).Replace("\\","/")
                 let typekeyfilter (td : TypeDefinition) (n : Node) =
                     match td.typeKeyFilter with
                     |Some (filter, negate) -> n.Key == filter <> negate
