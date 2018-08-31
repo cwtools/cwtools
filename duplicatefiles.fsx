@@ -21,6 +21,6 @@ let MD5 filename =
 let outFile = new StreamWriter("out.csv")
 
 allFilesUnder @"C:\Users\Thomas\Documents\Paradox Interactive\Stellaris\mod\newhorizons3\gfx"
-|> Seq.map (fun fn -> fn, MD5 fn)
-|> Seq.iter (fun (fn, hash) -> outFile.WriteLine(sprintf "%A, %A" fn hash ))
+|> Seq.map (fun fn -> fn, MD5 fn, FileInfo(fn).Length)
+|> Seq.iter (fun (fn, hash, fs) -> outFile.WriteLine(sprintf "%A, %A, %A" fn hash fs ))
 outFile.Flush()
