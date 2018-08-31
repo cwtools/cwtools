@@ -213,6 +213,8 @@ module Graphics =
         fun res es ->
             let os = EntitySet (res.AllEntities())
             let files = res.GetResources() |> List.choose (function |FileResource (_, f) -> Some f.logicalpath |EntityResource (_, f) -> Some f.logicalpath) |> Set.ofList
+            eprintfn "%A" files
+            files |> Set.filter (fun s -> s.Contains("great")) |> eprintfn "%A"
             let sprites = os.AllOfTypeChildren EntityType.Interface //os.GlobMatchChildren("**/interface/*.gfx") @ os.GlobMatchChildren("**/interface/**/*.gfx")
                             |> List.filter (fun e -> e.Key = "spriteTypes")
                             |> List.collect (fun e -> e.Children)
