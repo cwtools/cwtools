@@ -16,7 +16,7 @@ type IGame =
     abstract ScriptedTriggers : unit -> Effect list
     abstract ScriptedEffects : unit -> Effect list
     abstract StaticModifiers : unit -> Modifier list
-    abstract UpdateFile : string -> string option -> CWError list
+    abstract UpdateFile : bool -> string -> string option -> CWError list
     abstract Complete : pos -> string -> string -> CompletionResponse list
     abstract ScopesAtPos : pos -> string -> string -> ScopeContext option
     abstract GoToType : pos -> string -> string -> range option

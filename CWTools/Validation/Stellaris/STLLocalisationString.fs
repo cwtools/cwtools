@@ -155,24 +155,38 @@ module STLLocalisationString =
 
     let checkLocFileName (file : string) =
         let filename = Path.GetFileNameWithoutExtension file
+        if filename = "languages.yml" then OK else
         let fileHeader = File.ReadLines(file) |> Seq.tryHead |> Option.map (fun h -> h.Trim().Replace(":",""))
         // eprintfn "lcfn %s %A" filename fileHeader
         let keyToLanguage =
             function
-            |(x : string) when x.EndsWith("l_english",StringComparison.OrdinalIgnoreCase) -> Some STLLang.English
-            |x when x.EndsWith("l_french",StringComparison.OrdinalIgnoreCase) -> Some STLLang.French
-            |x when x.EndsWith("l_spanish",StringComparison.OrdinalIgnoreCase) -> Some STLLang.Spanish
-            |x when x.EndsWith("l_german",StringComparison.OrdinalIgnoreCase) -> Some STLLang.German
-            |x when x.EndsWith("l_russian",StringComparison.OrdinalIgnoreCase) -> Some STLLang.Russian
-            |x when x.EndsWith("l_polish",StringComparison.OrdinalIgnoreCase) -> Some STLLang.Polish
-            |x when x.EndsWith("l_braz_por",StringComparison.OrdinalIgnoreCase) -> Some STLLang.Braz_Por
-            |x when x.EndsWith("l_default",StringComparison.OrdinalIgnoreCase) -> Some STLLang.Default
+            |(x : string) when x.IndexOf("l_english",StringComparison.OrdinalIgnoreCase) >= 0 -> Some STLLang.English
+            |x when x.IndexOf("l_french",StringComparison.OrdinalIgnoreCase) >= 0 -> Some STLLang.French
+            |x when x.IndexOf("l_spanish",StringComparison.OrdinalIgnoreCase) >= 0 -> Some STLLang.Spanish
+            |x when x.IndexOf("l_german",StringComparison.OrdinalIgnoreCase) >= 0 -> Some STLLang.German
+            |x when x.IndexOf("l_russian",StringComparison.OrdinalIgnoreCase) >= 0 -> Some STLLang.Russian
+            |x when x.IndexOf("l_polish",StringComparison.OrdinalIgnoreCase) >= 0 -> Some STLLang.Polish
+            |x when x.IndexOf("l_braz_por",StringComparison.OrdinalIgnoreCase) >= 0 -> Some STLLang.Braz_Por
+            |x when x.IndexOf("l_default",StringComparison.OrdinalIgnoreCase) >= 0 -> Some STLLang.Default
             |_ -> None
+        let keyAtEnd =
+            function
+            |(x : string) when x.EndsWith("l_english",StringComparison.OrdinalIgnoreCase) -> true
+            |x when x.EndsWith("l_french",StringComparison.OrdinalIgnoreCase) -> true
+            |x when x.EndsWith("l_spanish",StringComparison.OrdinalIgnoreCase) -> true
+            |x when x.EndsWith("l_german",StringComparison.OrdinalIgnoreCase) -> true
+            |x when x.EndsWith("l_russian",StringComparison.OrdinalIgnoreCase) -> true
+            |x when x.EndsWith("l_polish",StringComparison.OrdinalIgnoreCase) -> true
+            |x when x.EndsWith("l_braz_por",StringComparison.OrdinalIgnoreCase) -> true
+            |x when x.EndsWith("l_default",StringComparison.OrdinalIgnoreCase) -> true
+            |_ -> false
         match keyToLanguage filename, Option.bind (keyToLanguage) fileHeader with
-        |None, _ -> Invalid [invManual ErrorCodes.MissingLocFileLang (rangeN file 0) "" None ]
-        |_, None -> Invalid [invManual ErrorCodes.MissingLocFileLangHeader (rangeN file 0) "" None ]
+        |_ , Some STLLang.Default -> OK
+        |_, None -> Invalid [invManual ErrorCodes.MissingLocFileLangHeader (rangeN file 1) "" None ]
+        |None, _ -> Invalid [invManual ErrorCodes.MissingLocFileLang (rangeN file 1) "" None ]
+        |Some l1, Some l2 when not (keyAtEnd filename) -> Invalid [invManual ErrorCodes.LocFileLangWrongPlace (rangeN file 1) "" None ]
         |Some l1, Some l2 when l1 = l2 -> OK
-        |Some l1, Some l2 -> Invalid [invManual (ErrorCodes.LocFileLangMismatch l1 l2) (rangeN file 0) "" None ]
+        |Some l1, Some l2 -> Invalid [invManual (ErrorCodes.LocFileLangMismatch l1 l2) (rangeN file 1) "" None ]
 
 
 
@@ -182,7 +196,7 @@ module STLLocalisationString =
                     |> List.ofSeq
                     |> List.collect (Directory.EnumerateFiles >> List.ofSeq)
         let rootFiles = Directory.EnumerateFiles locFolder |> List.ofSeq
-        let actualFiles = files @ rootFiles //(fun f -> f, (FileInfo f). )//File.ReadAllText(f, System.Text.Encoding.UTF8))
+        let actualFiles = (files @ rootFiles) |> List.filter (fun f -> f.EndsWith ".yml")//(fun f -> f, (FileInfo f). )//File.ReadAllText(f, System.Text.Encoding.UTF8))
         actualFiles <&!&> (checkLocFileName <&> checkFileEncoding )
         // <&&>
         // (api <&!&> (fun (l, m) -> m.refs <&!&> checkRef l keys m))
